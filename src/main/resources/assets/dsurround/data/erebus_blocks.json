@@ -1,0 +1,45 @@
+{
+	"entries":[
+		{
+			"blocks":[
+				"erebus:plankStairAsper",
+				"erebus:plankStairBamboo",
+				"erebus:plankStairBaobab",
+				"erebus:plankStairCypress",
+				"erebus:plankStairEucalyptus",
+				"erebus:plankStairMahogany",
+				"erebus:plankStairMarshwood",
+				"erebus:plankStairMossbark",
+				"erebus:plankStairRotten",
+				"erebus:plankStairSap",
+				"erebus:plankStairWhite",
+				"erebus:planks",
+				"erebus:planks_scorched",
+				"erebus:planks_varnished",
+				"erebus:slabPlanksAsper",
+				"erebus:slabPlanksBamboo",
+				"erebus:slabPlanksBaobab",
+				"erebus:slabPlanksCypress",
+				"erebus:slabPlanksEucalyptus",
+				"erebus:slabPlanksMahogany",
+				"erebus:slabPlanksMarshwood",
+				"erebus:slabPlanksMossbark",
+				"erebus:slabPlanksRotten",
+				"erebus:slabPlanksSap",
+				"erebus:slabPlanksWhite"
+			],
+			"stepChance":150,
+			"sounds":[
+				{
+					"sound":"dsurround:floorsqueak",
+					"soundType":"step",
+					"volume":0.2,
+					"variable":true
+				}
+				
+			]
+			
+		}
+		
+	]
+}

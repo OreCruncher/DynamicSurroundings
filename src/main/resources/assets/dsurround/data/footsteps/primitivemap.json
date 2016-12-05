@@ -1,0 +1,13 @@
+{
+	"stone":"brickstone",
+	"wood":"wood",
+	"gravel":"gravel",
+	"grass":"grass",
+	"stone@1.00_1.50":"hardmetal",
+	"stone@break_random.glass":"glass",
+	"cloth":"rug",
+	"sand":"sand",
+	"snow":"snow",
+	"ladder":"ladder",
+	"anvil":"hardmetal"
+}

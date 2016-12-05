@@ -1,0 +1,40 @@
+{
+	"entries":[
+		{
+			"blocks":[
+				"Forestry:planks",
+				"Forestry:stairs",
+				"Forestry:planksFireproof",
+				"Forestry:stairsFireproof"
+			],
+			"stepChance":150,
+			"sounds":[
+				{
+					"sound":"dsurround:floorsqueak",
+					"soundType":"step",
+					"volume":0.2,
+					"variable":true
+				}
+				
+			]
+			
+		},
+		{
+			"blocks":[
+				"Forestry:beehives"
+			],
+			"chance":5,
+			"sounds":[
+				{
+					"sound":"dsurround:bees",
+					"conditions":"(?i)(?!.*#raining#.*)(.*#day#.*)",
+					"volume":0.2,
+					"variable":true
+				}
+				
+			]
+			
+		}
+		
+	]
+}

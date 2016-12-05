@@ -1,0 +1,70 @@
+{
+	"entries":[
+		{
+			"blocks":[
+				"biomesoplenty:blood"
+			],
+			"effects":[
+				{
+					"effect":"fountain",
+					"chance":500
+				},
+				{
+					"effect":"bubble",
+					"chance":1800
+				}
+				
+			]
+			
+		},
+		{
+			"blocks":[
+				"biomesoplenty:planks_0",
+				"biomesoplenty:cherry_stairs",
+				"biomesoplenty:ebony_stairs",
+				"biomesoplenty:ethereal_stairs",
+				"biomesoplenty:eucalyptus_stairs",
+				"biomesoplenty:fir_stairs",
+				"biomesoplenty:hellbark_stairs",
+				"biomesoplenty:jacaranda_stairs",
+				"biomesoplenty:magic_stairs",
+				"biomesoplenty:mahogany_stairs",
+				"biomesoplenty:mangrove_stairs",
+				"biomesoplenty:palm_stairs",
+				"biomesoplenty:pine_stairs",
+				"biomesoplenty:redwood_stairs",
+				"biomesoplenty:sacred_oak_stairs",
+				"biomesoplenty:umbran_stairs",
+				"biomesoplenty:willow_stairs"
+			],
+			"stepChance":150,
+			"sounds":[
+				{
+					"sound":"dsurround:floorsqueak",
+					"soundType":"step",
+					"volume":0.2,
+					"variable":true
+				}
+				
+			]
+			
+		},
+		{
+			"blocks":[
+				"BiomesOPlenty:foliage"
+			],
+			"chance":25000,
+			"sounds":[
+				{
+					"sound":"dsurround:hiss",
+					"conditions":"(?i)(?!.*raining.*|.*cold.*|.*freezing.*)(.*#day#.*)",
+					"volume":1.0,
+					"variable":true
+				}
+				
+			]
+			
+		}
+		
+	]
+}

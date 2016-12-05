@@ -1,0 +1,25 @@
+{
+	"entries":[
+		{
+			"blocks":[
+				"thaumcraft:plank",
+				"thaumcraft:slab_wood",
+				"thaumcraft:slab_wood_double",
+				"thaumcraft:greatwood_stairs",
+				"thaumcraft:silverwood_stairs"
+			],
+			"stepChance":150,
+			"sounds":[
+				{
+					"sound":"dsurround:floorsqueak",
+					"soundType":"step",
+					"volume":0.2,
+					"variable":true
+				}
+				
+			]
+			
+		}
+		
+	]
+}

@@ -1,0 +1,40 @@
+{
+	"entries":[
+		{
+			"blocks":[
+				"Growthcraft|Bamboo:grc.bambooBlock",
+				"Growthcraft|Bamboo:grc.bambooStairs"
+			],
+			"stepChance":150,
+			"sounds":[
+				{
+					"sound":"dsurround:floorsqueak",
+					"soundType":"step",
+					"volume":0.2,
+					"variable":true
+				}
+				
+			]
+			
+		},
+		{
+			"blocks":[
+				"Growthcraft|Bees:grc.beeBox",
+				"harvestcraft:apiary"
+			],
+			"chance":5,
+			"sounds":[
+				{
+					"sound":"dsurround:bees",
+					"conditions":"(?i)(?!.*#raining#.*)(.*#day#.*)",
+					"volume":0.2,
+					"variable":true
+				}
+				
+			]
+			
+		}
+		
+		
+	]
+}

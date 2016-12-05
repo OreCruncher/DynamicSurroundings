@@ -1,0 +1,16 @@
+{
+	"type"	: "pack_footsteps",
+	"engineversion"	: 0,
+	"metadata"	: {
+		"name"	: "Presence",
+		"author"	: "Ha3",
+		"website"	: "http://presencefootsteps.ha3.eu"
+	},
+	"isolator" : {
+		"blockmap"	: "DEFAULT",
+		"solver"	: "DEFAULT",
+		"acoustics"	: "DEFAULT",
+		"soundplayer"	: "DEFAULT",
+		"defaultstepplayer"	: "DEFAULT"
+	}
+}

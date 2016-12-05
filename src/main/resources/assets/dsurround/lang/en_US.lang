@@ -1,0 +1,11 @@
+# US English Translations
+msg.dsurround=Dynamic Surroundings
+
+msg.RainIntensitySet=§9Rain intensity set to %s
+msg.MinRainIntensitySet=§9Minimum rain intensity set to %s
+msg.MaxRainIntensitySet=§9Maximum rain intensity set to %s
+msg.RainReset=§9World rain parameters have been reset
+msg.BiomeReload=§9Biome configuration has been reloaded
+
+# Version checking strings
+msg.NewVersionAvailable.dsurround=["§6Update Available: §9[",{"text":"§2%s §ev%s§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Click for CurseForge Project Page","color":"aqua"}},"clickEvent":{"action":"open_url","value":"http://minecraft.curseforge.com/projects/%s"}},"§9]"]

@@ -1,12 +1,41 @@
-*.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+/bin/
+/run/
+/build/
+/config/
+/crash-reports/
+/eclipse/
+/logs/
+/CREDITS-fml.txt
+/gradlew
+/gradlew.bat
+/LICENSE-new.txt
+/MinecraftForge-Credits.txt
+/MinecraftForge-License.txt
+/ModpackInfo.json
+/ModpackInfo.txt
+/options.txt
+/README.txt
+/usernamecache.json
+/saves/
+/.classpath
+/.gradle/
+/.project
+/.settings/
+/eula.txt
+/world/
+/banned-ips.json
+/banned-players.json
+/server.properties
+/usercache.json
+/whitelist.json
+/ops.json
+/mods/
+/dumps/
+/asm/
+/screenshots/
+/scripts/
+/minetweaker.log
+/forge-1.10.2-12.18.2.2179-changelog.txt
+/Paulscode IBXM Library License.txt
+/Paulscode SoundSystem CodecIBXM License.txt
+/*.launch

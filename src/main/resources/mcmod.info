@@ -1,0 +1,16 @@
+[
+{
+  "modid": "dsurround",
+  "name": "Dynamic Surroundings",
+  "description": "Improving Minecraft's sight and sound experience",
+  "version": "$version",
+  "mcversion": "$mcversion",
+  "url": "https://github.com/OreCruncher/BetterRain/wiki",
+  "updateUrl": "",
+  "authorList": ["OreCruncher"],
+  "credits": "Wirsbo for BetterRain; MrRube for Aurora Rubealis; Hurricaaane for Presence Footsteps",
+  "logoFile": "assets/dsurround/textures/logo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]

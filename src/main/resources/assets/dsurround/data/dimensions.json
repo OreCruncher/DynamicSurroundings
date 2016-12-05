@@ -1,0 +1,25 @@
+{
+	"entries":[
+		{
+			"dimId":-1,
+			"weather":true,
+			"haze":false,
+			"aurora":false,
+			"seaLevel":0
+		},
+		{
+			"dimId":1,
+			"weather":false,
+			"haze":false,
+			"aurora":false,
+			"seaLevel":0,
+			"cloudHeight":128
+		},
+		{
+			"name":"Erebus",
+			"seaLevel":24
+		}
+		
+	]
+	
+}
