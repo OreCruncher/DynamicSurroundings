@@ -39,7 +39,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -60,6 +59,7 @@ public class BlockEffectHandler implements IClientEffectHandler {
 		if (Minecraft.getMinecraft().isGamePaused())
 			return;
 
+		// TODO: Test out the new state indexing for block effects and what not
 		final BlockPos playerPos = new BlockPos(player);
 		final String conditions = EnvironState.getConditions();
 		final int RANGE = ModOptions.specialEffectRange;
@@ -68,28 +68,30 @@ public class BlockEffectHandler implements IClientEffectHandler {
 		for (int i = 0; i < CHECK_COUNT; i++) {
 			final BlockPos pos = playerPos.add(random.nextInt(RANGE) - random.nextInt(RANGE),
 					random.nextInt(RANGE) - random.nextInt(RANGE), random.nextInt(RANGE) - random.nextInt(RANGE));
-			final IBlockState state = world.getBlockState(pos);
-			final Block block = MCHelper.getBlock(world, pos);
-			if (block != Blocks.AIR) {
-				final List<BlockEffect> chain = BlockRegistry.getEffects(block);
-				if (chain != null) {
-					for (final BlockEffect effect : chain)
-						if (effect.trigger(block, world, pos, random))
-							effect.doEffect(block, world, pos, random);
-				}
+			
+			if (world.isAirBlock(pos))
+				continue;
 
-				final SoundEffect sound = BlockRegistry.getSound(block, random, conditions);
-				if (sound != null)
-					sound.doEffect(state, world, pos, SoundCategory.BLOCKS, random);
+			final IBlockState state = world.getBlockState(pos);
+
+			final List<BlockEffect> chain = BlockRegistry.getEffects(state);
+			if (chain != null) {
+				final Block block = state.getBlock();
+				for (final BlockEffect effect : chain)
+					if (effect.trigger(block, world, pos, random))
+						effect.doEffect(block, world, pos, random);
 			}
+
+			final SoundEffect sound = BlockRegistry.getSound(state, random, conditions);
+			if (sound != null)
+				sound.doEffect(state, world, pos, SoundCategory.BLOCKS, random);
 		}
 
 		if (EnvironState.isPlayerOnGround() && EnvironState.isPlayerMoving()) {
 			final BlockPos pos = playerPos.down(1);
 			final IBlockState state = world.getBlockState(pos);
-			final Block block = MCHelper.getBlock(world, pos);
 			if (!MCHelper.isAirBlock(state, world, pos) && !state.getMaterial().isLiquid()) {
-				final SoundEffect sound = BlockRegistry.getStepSound(block, random, conditions);
+				final SoundEffect sound = BlockRegistry.getStepSound(state, random, conditions);
 				if (sound != null)
 					sound.doEffect(state, world, pos, SoundCategory.BLOCKS, random);
 			}

@@ -129,43 +129,6 @@ public final class BiomeRegistry {
 		return entry;
 	}
 
-	/*
-	public static boolean hasDust(final Biome biome) {
-		return get(biome).getHasDust();
-	}
-
-	public static boolean hasPrecipitation(final Biome biome) {
-		return get(biome).getHasPrecipitation();
-	}
-
-	public static boolean hasAurora(final Biome biome) {
-		return get(biome).getHasAurora();
-	}
-
-	public static boolean hasFog(final Biome biome) {
-		return get(biome).getHasFog();
-	}
-
-	public static Color getDustColor(final Biome biome) {
-		return get(biome).getDustColor();
-	}
-
-	public static Color getFogColor(final Biome biome) {
-		return get(biome).getFogColor();
-	}
-
-	public static float getFogDensity(final Biome biome) {
-		return get(biome).getFogDensity();
-	}
-
-	public static SoundEffect getSound(final Biome biome, final String conditions) {
-		return get(biome).findSoundMatch(conditions);
-	}
-
-	public static List<SoundEffect> getSounds(final Biome biome, final String conditions) {
-		return get(biome).findSoundMatches(conditions);
-	}
-*/
 	private static void processConfig() {
 		try {
 			process(BiomeConfig.load(Module.MOD_ID));

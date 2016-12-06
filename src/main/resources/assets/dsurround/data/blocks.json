@@ -2,10 +2,13 @@
 	"entries":[
 		{
 			"blocks":[
-				"minecraft:stone",
-				"minecraft:dirt",
+				"minecraft:stone:0",
+				"minecraft:stone:1",
+				"minecraft:stone:3",
+				"minecraft:stone:5",
+				"minecraft:dirt:*",
 				"minecraft:gravel",
-				"minecraft:sand"
+				"minecraft:sand:*"
 			],
 			"effects":[
 				{

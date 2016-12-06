@@ -39,80 +39,37 @@ import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.fx.JetEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect.SoundType;
-import org.blockartistry.mod.DynSurround.compat.MCHelper;
 import org.blockartistry.mod.DynSurround.data.config.BlockConfig;
 import org.blockartistry.mod.DynSurround.data.config.BlockConfig.Effect;
 
 import org.blockartistry.mod.DynSurround.data.config.SoundConfig;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
 public final class BlockRegistry {
 
-	private static final Map<Block, Entry> registry = new IdentityHashMap<Block, Entry>();
-
-	private static final class Entry {
-		public final Block block;
-		public int chance = 100;
-		public int stepChance = 100;
-		public final List<SoundEffect> sounds = new ArrayList<SoundEffect>();
-		public final List<SoundEffect> stepSounds = new ArrayList<SoundEffect>();
-		public final List<BlockEffect> effects = new ArrayList<BlockEffect>();
-
-		public Entry(final Block block) {
-			this.block = block;
-		}
-
-		@Override
-		public String toString() {
-			final StringBuilder builder = new StringBuilder();
-			builder.append(String.format("Block [%s]:", this.block.getUnlocalizedName()));
-
-			if (!this.sounds.isEmpty()) {
-				builder.append(" chance:").append(this.chance);
-				builder.append("; sounds [");
-				for (final SoundEffect sound : this.sounds)
-					builder.append(sound.toString()).append(',');
-				builder.append(']');
-			}
-
-			if (!this.stepSounds.isEmpty()) {
-				builder.append(" chance:").append(this.stepChance);
-				builder.append("; step sounds [");
-				for (final SoundEffect sound : this.stepSounds)
-					builder.append(sound.toString()).append(',');
-				builder.append(']');
-			}
-
-			if (!this.effects.isEmpty()) {
-				builder.append("; effects [");
-				for (final BlockEffect effect : this.effects)
-					builder.append(effect.toString()).append(',');
-				builder.append(']');
-			}
-
-			return builder.toString();
-		}
-	}
+	private static final Map<Block, BlockProfile> registry = new IdentityHashMap<Block, BlockProfile>();
 
 	public static void initialize() {
 
 		registry.clear();
 		processConfig();
 
+		// TODO: Implement toString()...
 		if (ModOptions.enableDebugLogging) {
 			ModLog.info("*** BLOCK REGISTRY ***");
-			for (final Entry entry : registry.values())
+			for (final BlockProfile entry : registry.values())
 				ModLog.info(entry.toString());
 		}
 	}
 
-	public static List<BlockEffect> getEffects(final Block block) {
-		final Entry entry = registry.get(block);
-		return entry != null ? entry.effects : null;
+	public static List<BlockEffect> getEffects(final IBlockState state) {
+		final BlockProfile entry = registry.get(state.getBlock());
+		return entry != null ? entry.getEffects(state) : null;
 	}
 
 	private static SoundEffect getRandomSound(final List<SoundEffect> list, final Random random,
@@ -138,18 +95,18 @@ public final class BlockRegistry {
 		return candidates.get(i - 1);
 	}
 
-	public static SoundEffect getSound(final Block block, final Random random, final String conditions) {
-		final Entry entry = registry.get(block);
+	public static SoundEffect getSound(final IBlockState state, final Random random, final String conditions) {
+		final BlockProfile entry = registry.get(state.getBlock());
 		if (entry == null || entry.sounds.isEmpty() || random.nextInt(entry.chance) != 0)
 			return null;
-		return getRandomSound(entry.sounds, random, conditions);
+		return getRandomSound(entry.getSounds(state), random, conditions);
 	}
 
-	public static SoundEffect getStepSound(final Block block, final Random random, final String conditions) {
-		final Entry entry = registry.get(block);
+	public static SoundEffect getStepSound(final IBlockState state, final Random random, final String conditions) {
+		final BlockProfile entry = registry.get(state.getBlock());
 		if (entry == null || entry.stepSounds.isEmpty() || random.nextInt(entry.stepChance) != 0)
 			return null;
-		return getRandomSound(entry.stepSounds, random, conditions);
+		return getRandomSound(entry.getStepSounds(state), random, conditions);
 	}
 
 	private static void processConfig() {
@@ -196,38 +153,39 @@ public final class BlockRegistry {
 				continue;
 
 			for (final String blockName : entry.blocks) {
-				final Block block = MCHelper.getBlockByName(blockName);
+				final BlockInfo blockInfo = BlockInfo.create(blockName);
+				final Block block = blockInfo.getBlock();
 				if (block == null || block == Blocks.AIR) {
 					ModLog.warn("Unknown block [%s] in block config file", blockName);
 					continue;
 				}
 
-				Entry blockData = registry.get(block);
+				BlockProfile blockData = registry.get(block);
 				if (blockData == null) {
-					blockData = new Entry(block);
+					blockData = BlockProfile.createProfile(blockInfo);
 					registry.put(block, blockData);
 				}
 
 				// Reset of a block clears all registry
 				if (entry.soundReset != null && entry.soundReset.booleanValue())
-					blockData.sounds.clear();
+					blockData.clearSounds(blockInfo);
 				if (entry.stepSoundReset != null && entry.stepSoundReset.booleanValue())
-					blockData.stepSounds.clear();
+					blockData.clearStepSounds(blockInfo);
 				if (entry.effectReset != null && entry.effectReset.booleanValue())
-					blockData.effects.clear();
+					blockData.clearEffects(blockInfo);
 
 				if (entry.chance != null)
-					blockData.chance = entry.chance.intValue();
+					blockData.setChance(blockInfo, entry.chance.intValue());
 				if (entry.stepChance != null)
-					blockData.stepChance = entry.stepChance.intValue();
+					blockData.setStepChance(blockInfo, entry.stepChance.intValue());
 
 				for (final SoundConfig sr : entry.sounds) {
 					if (sr.sound != null && !SoundRegistry.isSoundBlocked(sr.sound)) {
 						final SoundEffect eff = new SoundEffect(sr);
 						if (eff.type == SoundType.STEP)
-							blockData.stepSounds.add(eff);
+							blockData.addStepSound(blockInfo, eff);
 						else
-							blockData.sounds.add(eff);
+							blockData.addSound(blockInfo, eff);
 					}
 				}
 
@@ -251,7 +209,7 @@ public final class BlockRegistry {
 						continue;
 					}
 
-					blockData.effects.add(blockEffect);
+					blockData.addEffect(blockInfo, blockEffect);
 				}
 			}
 		}

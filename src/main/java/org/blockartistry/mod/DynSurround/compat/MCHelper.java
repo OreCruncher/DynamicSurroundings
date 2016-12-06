@@ -24,10 +24,14 @@
 
 package org.blockartistry.mod.DynSurround.compat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -81,4 +85,17 @@ public class MCHelper {
 		return block.isOpaqueCube(null);
 	}
 
+	public static boolean hasVariants(final Block block) {
+		final Item item = Item.getItemFromBlock(block);
+		if(item == null)
+			return false;
+		
+		final List<ItemStack> stacks = new ArrayList<ItemStack>();
+		block.getSubBlocks(item, null, stacks);
+		return stacks.size() > 1;
+	}
+	
+	public static IBlockState createBlockState(final Block block, final int meta) {
+		return block.getStateFromMeta(meta);
+	}
 }
