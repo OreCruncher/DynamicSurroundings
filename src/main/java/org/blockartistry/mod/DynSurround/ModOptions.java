@@ -64,7 +64,7 @@ public final class ModOptions {
 	@RestartRequired
 	public static boolean enableVersionChecking = true;
 
-	public static final String CATEGORY_RAIN = "RAIN";
+	public static final String CATEGORY_RAIN = "rain";
 	public static final String CONFIG_RAIN_VOLUME = "Sound Level";
 	public static final String CONFIG_RAIN_PARTICLE_BASE = "Particle Count Base";
 	public static final String CONFIG_ALWAYS_OVERRIDE_SOUND = "Always Override Sound";
@@ -75,17 +75,17 @@ public final class ModOptions {
 
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_VOLUME, defaultValue = "1.0")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
-	@Comment("Factor to apply to RAIN sound level to adjust")
+	@Comment("Factor to apply to rain sound level to adjust")
 	public static float soundLevel = 1.0F;
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_PARTICLE_BASE, defaultValue = "100")
 	@MinMaxInt(min = 0, max = 500)
-	@Comment("Base count of RAIN splash particles to generate per tick")
+	@Comment("Base count of rain splash particles to generate per tick")
 	public static int particleCountBase = 100;
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_ALWAYS_OVERRIDE_SOUND, defaultValue = "true")
-	@Comment("Always override Vanilla RAIN sound even when dimension is blacklisted")
+	@Comment("Always override Vanilla rain sound even when dimension is blacklisted")
 	public static boolean alwaysOverrideSound = true;
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RESET_RAIN_ON_SLEEP, defaultValue = "true")
-	@Comment("Reset RAIN/thunder when all players sleep")
+	@Comment("Reset rain/thunder when all players sleep")
 	public static boolean resetRainOnSleep = true;
 
 	public static final String CATEGORY_FOG = "fog";
@@ -135,11 +135,11 @@ public final class ModOptions {
 
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_MIN_RAIN_STRENGTH, defaultValue = "0.0")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
-	@Comment("Default minimum RAIN strength for a dimension")
+	@Comment("Default minimum rain strength for a dimension")
 	public static float defaultMinRainStrength = 0.0F;
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_MAX_RAIN_STRENGTH, defaultValue = "1.0")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
-	@Comment("Default maximum RAIN strength for a dimension")
+	@Comment("Default maximum rain strength for a dimension")
 	public static float defaultMaxRainStrength = 1.0F;
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_FX_RANGE, defaultValue = "16")
 	@MinMaxInt(min = 16, max = 64)
@@ -272,10 +272,10 @@ public final class ModOptions {
 	@Comment("Enable footstep sounds")
 	@RestartRequired
 	public static boolean enableFootstepSounds = true;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_FOOTSTEPS_SOUND_FACTOR, defaultValue = "0.05")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_FOOTSTEPS_SOUND_FACTOR, defaultValue = "0.2")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Sound scale factor for footstep sounds")
-	public static float footstepsSoundFactor = 0.05F;
+	public static float footstepsSoundFactor = 0.2F;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_SOUND_CULL_THRESHOLD, defaultValue = "20")
 	@MinMaxInt(min = 0)
 	@Comment("Ticks between culled sound events (0 to disable culling)")
@@ -363,7 +363,7 @@ public final class ModOptions {
 		// CATEGORY: Rain
 		config.setCategoryRequiresMcRestart(CATEGORY_RAIN, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_RAIN, false);
-		config.setCategoryComment(CATEGORY_RAIN, "Options that control RAIN effects in the client");
+		config.setCategoryComment(CATEGORY_RAIN, "Options that control rain effects in the client");
 		config.setCategoryPropertyOrder(CATEGORY_RAIN, new ArrayList<String>(rainSort));
 
 		// CATEGORY: General
