@@ -63,7 +63,7 @@ public enum StormProperties {
 		this.rainTexture = EntityRenderer.RAIN_TEXTURES;
 		this.snowTexture = EntityRenderer.SNOW_TEXTURES;
 		this.dustTexture = new ResourceLocation(Module.RESOURCE_ID, "textures/environment/dust_calm.png");
-		this.rainSound = SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, "RAIN"));
+		this.rainSound = SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, "rain"));
 		this.dustSound = SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, "dust"));
 	}
 
@@ -75,7 +75,7 @@ public enum StormProperties {
 				String.format("textures/environment/snow_%s.png", intensity));
 		this.dustTexture = new ResourceLocation(Module.RESOURCE_ID,
 				String.format("textures/environment/dust_%s.png", intensity));
-		this.rainSound = SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, "RAIN"));
+		this.rainSound = SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, "rain"));
 		this.dustSound = SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, "dust"));
 	}
 
