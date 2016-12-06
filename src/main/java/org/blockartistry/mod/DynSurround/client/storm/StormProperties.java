@@ -63,7 +63,7 @@ public enum StormProperties {
 		this.rainTexture = EntityRenderer.RAIN_TEXTURES;
 		this.snowTexture = EntityRenderer.SNOW_TEXTURES;
 		this.dustTexture = new ResourceLocation(Module.RESOURCE_ID, "textures/environment/dust_calm.png");
-		this.rainSound = SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, "rain"));
+		this.rainSound = SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, "RAIN"));
 		this.dustSound = SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, "dust"));
 	}
 
@@ -75,7 +75,7 @@ public enum StormProperties {
 				String.format("textures/environment/snow_%s.png", intensity));
 		this.dustTexture = new ResourceLocation(Module.RESOURCE_ID,
 				String.format("textures/environment/dust_%s.png", intensity));
-		this.rainSound = SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, "rain"));
+		this.rainSound = SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, "RAIN"));
 		this.dustSound = SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, "dust"));
 	}
 
@@ -116,7 +116,7 @@ public enum StormProperties {
 	}
 
 	/**
-	 * Sets the rain intensity based on the intensityLevel level provided. This
+	 * Sets the RAIN intensity based on the intensityLevel level provided. This
 	 * is called by the packet handler when the server wants to set the
 	 * intensity level on the client.
 	 */

@@ -26,9 +26,8 @@ package org.blockartistry.mod.DynSurround.client.storm;
 
 import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFactory;
-import org.blockartistry.mod.DynSurround.compat.MCHelper;
-
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.util.SoundEvent;
@@ -47,7 +46,7 @@ public class NetherSplashRenderer extends StormSplashRenderer {
 	protected Particle getBlockParticle(final IBlockState state, final boolean dust, final World world, final double x,
 			final double y, final double z) {
 		if (dust)
-			return ParticleFactory.smoke.createParticle(0, world, x, y, z, 0, 0, 0);
+			return ParticleFactory.SMOKE.createParticle(0, world, x, y, z, 0, 0, 0);
 		return null;
 	}
 
@@ -58,9 +57,10 @@ public class NetherSplashRenderer extends StormSplashRenderer {
 		for (int i = range; i >= -range; i--) {
 			final BlockPos p = new BlockPos(pos.getX(), y + i, pos.getZ());
 			final IBlockState state = world.getBlockState(p);
-			if (airBlockFound && !MCHelper.isAirBlock(state, world, p) && state.getMaterial().isSolid())
+			final Material material = state.getMaterial();
+			if (airBlockFound && material != Material.AIR && material.isSolid())
 				return p.up();
-			if (MCHelper.isAirBlock(state, world, p))
+			if (material == Material.AIR)
 				airBlockFound = true;
 		}
 

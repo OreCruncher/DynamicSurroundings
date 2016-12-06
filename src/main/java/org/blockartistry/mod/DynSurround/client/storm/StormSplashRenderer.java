@@ -97,11 +97,11 @@ public class StormSplashRenderer {
 		} else if (block == Blocks.SOUL_SAND) {
 			factory = null;
 		} else if (block == Blocks.NETHERRACK && RANDOM.nextInt(20) == 0) {
-			factory = ParticleFactory.lavaSpark;
+			factory = ParticleFactory.LAVA_SPARK;
 		} else if (state.getMaterial() == Material.LAVA) {
-			factory = ParticleFactory.smoke;
+			factory = ParticleFactory.SMOKE;
 		} else if (state.getMaterial() != Material.AIR) {
-			factory = ParticleFactory.rain;
+			factory = ParticleFactory.RAIN;
 		}
 
 		return factory != null ? factory.createParticle(0, world, x, y, z, 0, 0, 0) : null;

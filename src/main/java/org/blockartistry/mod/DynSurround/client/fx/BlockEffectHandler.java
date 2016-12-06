@@ -30,12 +30,11 @@ import java.util.Random;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.mod.DynSurround.compat.MCHelper;
 import org.blockartistry.mod.DynSurround.client.IClientEffectHandler;
 import org.blockartistry.mod.DynSurround.data.BlockRegistry;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,7 +50,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class BlockEffectHandler implements IClientEffectHandler {
 
-	private static final Random random = new XorShiftRandom();
+	private static final Random RANDOM = new XorShiftRandom();
 	private static final double RATIO = 0.0335671847202175D;
 
 	@Override
@@ -59,41 +58,39 @@ public class BlockEffectHandler implements IClientEffectHandler {
 		if (Minecraft.getMinecraft().isGamePaused())
 			return;
 
-		// TODO: Test out the new state indexing for block effects and what not
 		final BlockPos playerPos = new BlockPos(player);
 		final String conditions = EnvironState.getConditions();
 		final int RANGE = ModOptions.specialEffectRange;
 		final int CHECK_COUNT = (int) (Math.pow(RANGE * 2 - 1, 3) * RATIO);
 
 		for (int i = 0; i < CHECK_COUNT; i++) {
-			final BlockPos pos = playerPos.add(random.nextInt(RANGE) - random.nextInt(RANGE),
-					random.nextInt(RANGE) - random.nextInt(RANGE), random.nextInt(RANGE) - random.nextInt(RANGE));
-			
-			if (world.isAirBlock(pos))
-				continue;
+			final BlockPos pos = playerPos.add(RANDOM.nextInt(RANGE) - RANDOM.nextInt(RANGE),
+					RANDOM.nextInt(RANGE) - RANDOM.nextInt(RANGE), RANDOM.nextInt(RANGE) - RANDOM.nextInt(RANGE));
 
 			final IBlockState state = world.getBlockState(pos);
-
+			if(state.getMaterial() == Material.AIR)
+				continue;
+			
 			final List<BlockEffect> chain = BlockRegistry.getEffects(state);
+
 			if (chain != null) {
-				final Block block = state.getBlock();
 				for (final BlockEffect effect : chain)
-					if (effect.trigger(block, world, pos, random))
-						effect.doEffect(block, world, pos, random);
+					effect.process(state, world, pos, RANDOM);
 			}
 
-			final SoundEffect sound = BlockRegistry.getSound(state, random, conditions);
+			final SoundEffect sound = BlockRegistry.getSound(state, RANDOM, conditions);
 			if (sound != null)
-				sound.doEffect(state, world, pos, SoundCategory.BLOCKS, random);
+				sound.doEffect(state, world, pos, SoundCategory.BLOCKS, RANDOM);
 		}
 
 		if (EnvironState.isPlayerOnGround() && EnvironState.isPlayerMoving()) {
 			final BlockPos pos = playerPos.down(1);
 			final IBlockState state = world.getBlockState(pos);
-			if (!MCHelper.isAirBlock(state, world, pos) && !state.getMaterial().isLiquid()) {
-				final SoundEffect sound = BlockRegistry.getStepSound(state, random, conditions);
+			final Material material = state.getMaterial();
+			if (!(material == Material.AIR || material.isLiquid())) {
+				final SoundEffect sound = BlockRegistry.getStepSound(state, RANDOM, conditions);
 				if (sound != null)
-					sound.doEffect(state, world, pos, SoundCategory.BLOCKS, random);
+					sound.doEffect(state, world, pos, SoundCategory.BLOCKS, RANDOM);
 			}
 		}
 	}

@@ -50,7 +50,7 @@ public final class RenderWeather {
 	}
 
 	/*
-	 * Render rain particles.
+	 * Render RAIN particles.
 	 * 
 	 * Redirect from EntityRenderer.
 	 */

@@ -163,7 +163,7 @@ public class FogEffectHandler implements IClientEffectHandler {
 
 	/*
 	 * Hook the fog density event so that the fog settings can be reset based on
-	 * rain intensity. This routine will overwrite what the vanilla code has
+	 * RAIN intensity. This routine will overwrite what the vanilla code has
 	 * done in terms of fog.
 	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)

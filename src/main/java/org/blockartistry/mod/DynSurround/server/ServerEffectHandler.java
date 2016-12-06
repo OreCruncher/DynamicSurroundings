@@ -71,7 +71,7 @@ public final class ServerEffectHandler {
 		final float sendIntensity = DimensionRegistry.hasWeather(world) ? DimensionEffectData.get(world).getRainIntensity()
 				: RESET;
 
-		// Set the rain intensity for all players in the current
+		// Set the RAIN intensity for all players in the current
 		// dimension.
 		Network.sendRainIntensity(sendIntensity, dimensionId);
 	}

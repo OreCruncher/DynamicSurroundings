@@ -29,6 +29,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -53,21 +54,8 @@ public class MCHelper {
 		return Block.REGISTRY.getObject(new ResourceLocation(blockName));
 	}
 	
-	public static Block getBlock(final World world, final BlockPos pos) {
-		return world.getBlockState(pos).getBlock();
-	}
-
-	public static int getBlockMetadata(final World world, final BlockPos pos) {
-		final IBlockState state = world.getBlockState(pos);
-		return state.getBlock().getMetaFromState(state);
-	}
-	
 	public static boolean isAirBlock(final IBlockState state, final World world, final BlockPos pos) {
-		return world.isAirBlock(pos);
-	}
-	
-	public static boolean isLeafBlock(final World world, final BlockPos pos) {
-		return getBlock(world, pos).isLeaves(world.getBlockState(pos), world, pos);
+		return state.getMaterial() == Material.AIR;
 	}
 	
 	public static boolean isLiquid(final Block block) {
@@ -93,9 +81,5 @@ public class MCHelper {
 		final List<ItemStack> stacks = new ArrayList<ItemStack>();
 		block.getSubBlocks(item, null, stacks);
 		return stacks.size() > 1;
-	}
-	
-	public static IBlockState createBlockState(final Block block, final int meta) {
-		return block.getStateFromMeta(meta);
 	}
 }

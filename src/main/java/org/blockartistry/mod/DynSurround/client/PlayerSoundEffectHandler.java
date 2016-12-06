@@ -154,7 +154,7 @@ public class PlayerSoundEffectHandler implements IClientEffectHandler {
 	}
 
 	/*
-	 * Intercept the sound events and patch up the rain sound. If the rain
+	 * Intercept the sound events and patch up the RAIN sound. If the RAIN
 	 * experience is to be Vanilla let it just roll on through.
 	 */
 	@SubscribeEvent

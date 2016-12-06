@@ -38,14 +38,14 @@ import net.minecraft.world.storage.WorldInfo;
 public class WorldHandler {
 
 	private static final float STRENGTH_ADJUST = 0.01F;
-	private static final Random random = new XorShiftRandom();
+	private static final Random RANDOM = new XorShiftRandom();
 
 	private static int nextThunderInterval(final boolean isThundering) {
-		return random.nextInt(isThundering ? 12000 : 168000) + (isThundering ? 3600 : 12000);
+		return RANDOM.nextInt(isThundering ? 12000 : 168000) + (isThundering ? 3600 : 12000);
 	}
 
 	private static int nextRainInterval(final boolean isRaining) {
-		return random.nextInt(isRaining ? 12000 : 168000) + 12000;
+		return RANDOM.nextInt(isRaining ? 12000 : 168000) + 12000;
 	}
 
 	public static void updateWeatherBody(final World world) {
@@ -99,7 +99,7 @@ public class WorldHandler {
 
 		if (info.isRaining() && data.getRainIntensity() == 0.0F) {
 			data.randomizeRain();
-			ModLog.debug(String.format("dim %d rain strength set to %f", dimensionId, data.getRainIntensity()));
+			ModLog.debug(String.format("dim %d RAIN strength set to %f", dimensionId, data.getRainIntensity()));
 		}
 
 		world.prevRainingStrength = world.rainingStrength;
@@ -119,7 +119,7 @@ public class WorldHandler {
 				world.rainingStrength = 0.0F;
 		} else if (data.getRainIntensity() > 0.0F) {
 			data.setRainIntensity(0.0F);
-			ModLog.debug(String.format("dim %d rain has stopped", dimensionId));
+			ModLog.debug(String.format("dim %d RAIN has stopped", dimensionId));
 		}
 	}
 }

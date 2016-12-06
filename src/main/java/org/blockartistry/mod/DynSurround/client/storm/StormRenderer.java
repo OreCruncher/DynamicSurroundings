@@ -53,7 +53,7 @@ public class StormRenderer implements IAtmosRenderer {
 
 	private static final XorShiftRandom random = new XorShiftRandom();
 
-	public static ResourceLocation locationRainPng = new ResourceLocation("textures/environment/rain.png");
+	public static ResourceLocation locationRainPng = new ResourceLocation("textures/environment/RAIN.png");
 	public static ResourceLocation locationSnowPng = new ResourceLocation("textures/environment/snow.png");
 	public static ResourceLocation locationDustPng = new ResourceLocation(Module.MOD_ID,
 			"textures/environment/dust.png");
@@ -80,7 +80,7 @@ public class StormRenderer implements IAtmosRenderer {
 	}
 
 	/**
-	 * Render rain and snow
+	 * Render RAIN and snow
 	 */
 	public void render(final EntityRenderer renderer, final float partialTicks) {
 

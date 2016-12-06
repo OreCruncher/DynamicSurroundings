@@ -33,7 +33,6 @@ import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFountainJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleSteamJet;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -47,11 +46,11 @@ public abstract class JetEffect extends BlockEffect {
 
 	protected final BlockPos.MutableBlockPos pos1 = new BlockPos.MutableBlockPos();
 
-	protected int countBlocks(final World world, final BlockPos pos, final Block block, final int dir) {
+	protected int countBlocks(final World world, final BlockPos pos, final IBlockState state, final int dir) {
 		int count = 0;
 		int idx = pos.getY();
 		while (count < MAX_STRENGTH) {
-			if (world.getBlockState(pos1.setPos(pos.getX(), idx, pos.getZ())).getBlock() != block)
+			if (world.getBlockState(pos1.setPos(pos.getX(), idx, pos.getZ())).getBlock() != state.getBlock())
 				return count;
 			count++;
 			idx += dir;
@@ -81,12 +80,12 @@ public abstract class JetEffect extends BlockEffect {
 		}
 
 		@Override
-		public boolean trigger(final Block block, final World world, final BlockPos pos, final Random random) {
-			return super.trigger(block, world, pos, random) && world.isAirBlock(pos.up());
+		public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+			return super.trigger(state, world, pos, random) && world.isAirBlock(pos.up());
 		}
 
-		public void doEffect(final Block block, final World world, final BlockPos pos, final Random random) {
-			final int lavaBlocks = countBlocks(world, pos, block, -1);
+		public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+			final int lavaBlocks = countBlocks(world, pos, state, -1);
 			final double spawnHeight = jetSpawnHeight(world, pos);
 			final ParticleJet effect = new ParticleFireJet(lavaBlocks, world, pos.getX() + 0.5D, spawnHeight,
 					pos.getZ() + 0.5D);
@@ -100,13 +99,12 @@ public abstract class JetEffect extends BlockEffect {
 		}
 
 		@Override
-		public boolean trigger(final Block block, final World world, final BlockPos pos, final Random random) {
-			return super.trigger(block, world, pos, random)
-					&& world.getBlockState(pos.down()).getMaterial().isSolid();
+		public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+			return super.trigger(state, world, pos, random) && world.getBlockState(pos.down()).getMaterial().isSolid();
 		}
 
-		public void doEffect(final Block block, final World world, final BlockPos pos, final Random random) {
-			final int waterBlocks = countBlocks(world, pos, block, 1);
+		public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+			final int waterBlocks = countBlocks(world, pos, state, 1);
 			final ParticleJet effect = new ParticleBubbleJet(waterBlocks, world, pos.getX() + 0.5D, pos.getY() + 0.1D,
 					pos.getZ() + 0.5D);
 			addEffect(effect);
@@ -131,14 +129,14 @@ public abstract class JetEffect extends BlockEffect {
 		}
 
 		@Override
-		public boolean trigger(final Block block, final World world, final BlockPos pos, final Random random) {
-			if (!super.trigger(block, world, pos, random) || !world.isAirBlock(pos.up()))
+		public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+			if (!super.trigger(state, world, pos, random) || !world.isAirBlock(pos.up()))
 				return false;
 
 			return lavaCount(world, pos) != 0;
 		}
 
-		public void doEffect(final Block block, final World world, final BlockPos pos, final Random random) {
+		public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
 			final int strength = lavaCount(world, pos);
 			final double spawnHeight = jetSpawnHeight(world, pos);
 			final ParticleJet effect = new ParticleSteamJet(strength, world, pos.getX() + 0.5D, spawnHeight,
@@ -154,12 +152,11 @@ public abstract class JetEffect extends BlockEffect {
 		}
 
 		@Override
-		public boolean trigger(final Block block, final World world, final BlockPos pos, final Random random) {
-			return super.trigger(block, world, pos, random) && world.isAirBlock(pos.down());
+		public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+			return super.trigger(state, world, pos, random) && world.isAirBlock(pos.down());
 		}
 
-		public void doEffect(final Block block, final World world, final BlockPos pos, final Random random) {
-			final IBlockState state = world.getBlockState(pos);
+		public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
 			final ParticleJet effect = new ParticleDustJet(2, world, pos.getX() + 0.5D, pos.getY() - 0.2D,
 					pos.getZ() + 0.5D, state);
 			addEffect(effect);
@@ -172,12 +169,11 @@ public abstract class JetEffect extends BlockEffect {
 		}
 
 		@Override
-		public boolean trigger(final Block block, final World world, final BlockPos pos, final Random random) {
-			return super.trigger(block, world, pos, random) && world.isAirBlock(pos.up());
+		public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+			return super.trigger(state, world, pos, random) && world.isAirBlock(pos.up());
 		}
 
-		public void doEffect(final Block block, final World world, final BlockPos pos, final Random random) {
-			final IBlockState state = world.getBlockState(pos);
+		public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
 			final ParticleJet effect = new ParticleFountainJet(5, world, pos.getX() + 0.5D, pos.getY() + 1.1D,
 					pos.getZ() + 0.5D, state);
 			addEffect(effect);

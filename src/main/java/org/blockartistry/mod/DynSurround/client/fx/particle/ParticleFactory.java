@@ -38,8 +38,8 @@ public class ParticleFactory {
 	private ParticleFactory() {
 	}
 
-	public static final IParticleFactory lavaSpark = new ParticleLava.Factory();
-	public static final IParticleFactory smoke = new ParticleSmokeNormal.Factory();
-	public static final IParticleFactory rain = new ParticleRain.Factory();
-	
+	public static final IParticleFactory LAVA_SPARK = new ParticleLava.Factory();
+	public static final IParticleFactory SMOKE = new ParticleSmokeNormal.Factory();
+	public static final IParticleFactory RAIN = new ParticleRain.Factory();
+
 }

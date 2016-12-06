@@ -41,7 +41,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 /**
- * Per world effect data for better rain effects
+ * Per world effect data for better RAIN effects
  */
 public final class DimensionEffectData implements INBTSerialization {
 
