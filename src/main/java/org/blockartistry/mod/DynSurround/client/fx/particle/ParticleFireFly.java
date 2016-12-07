@@ -37,39 +37,35 @@ import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 // Started with ParticleFireWork.Spark as a basis.
 @SideOnly(Side.CLIENT)
 public class ParticleFireFly extends ParticleSimpleAnimated {
-	
+
 	private static final XorShiftRandom RANDOM = new XorShiftRandom();
 	private static final int startColorRGB = Color.YELLOW.rgb();
 	private static final int fadeColorRGB = Color.LGREEN.rgb();
-	
-	private static final float XZ_MOTION_DELTA = 0.2F;
-	private static final float Y_MOTION_DELTA = 0.1F;
 
-	private boolean trail;
-	private boolean twinkle;
-	private float fadeColourRed;
-	private float fadeColourGreen;
-	private float fadeColourBlue;
-	private boolean hasFadeColour;
+	private static final float XZ_MOTION_DELTA = 0.2F;
+	private static final float Y_MOTION_DELTA = XZ_MOTION_DELTA / 2.0F;
+	private static final float ACCELERATION = 0.004F;
+
+	private double xAcceleration;
+	private double yAcceleration;
+	private double zAcceleration;
 
 	public ParticleFireFly(final World world, double xCoord, double yCoord, double zCoord) {
 		super(world, xCoord, yCoord, zCoord, 160, 8, 0.0F);
+
 		this.motionX = RANDOM.nextGaussian() * XZ_MOTION_DELTA;
 		this.motionZ = RANDOM.nextGaussian() * XZ_MOTION_DELTA;
 		this.motionY = RANDOM.nextGaussian() * Y_MOTION_DELTA;
-		this.particleScale *= 0.75F * 0.5F;
+
+		this.xAcceleration = RANDOM.nextGaussian() * ACCELERATION;
+		this.yAcceleration = RANDOM.nextGaussian() * ACCELERATION;
+		this.zAcceleration = RANDOM.nextGaussian() * ACCELERATION;
+
+		this.particleScale *= 0.75F * 0.25F;
 		this.particleMaxAge = 48 + this.rand.nextInt(12);
 
 		this.setColor(startColorRGB);
 		this.setColorFade(fadeColorRGB);
-	}
-
-	public void setTrail(boolean trailIn) {
-		this.trail = trailIn;
-	}
-
-	public void setTwinkle(boolean twinkleIn) {
-		this.twinkle = twinkleIn;
 	}
 
 	public boolean isTransparent() {
@@ -81,7 +77,7 @@ public class ParticleFireFly extends ParticleSimpleAnimated {
 	 */
 	public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX,
 			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		if (!this.twinkle || this.particleAge < this.particleMaxAge / 3
+		if (this.particleAge < this.particleMaxAge / 3
 				|| (this.particleAge + this.particleMaxAge) / 3 % 2 == 0) {
 			super.renderParticle(worldRendererIn, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY,
 					rotationXZ);
@@ -89,24 +85,11 @@ public class ParticleFireFly extends ParticleSimpleAnimated {
 	}
 
 	public void onUpdate() {
+
+		this.motionX += this.xAcceleration;
+		this.motionY += this.yAcceleration;
+		this.motionZ += this.zAcceleration;
+
 		super.onUpdate();
-
-		if (this.trail && this.particleAge < this.particleMaxAge / 2
-				&& (this.particleAge + this.particleMaxAge) % 2 == 0) {
-			final ParticleFireFly fly = new ParticleFireFly(this.worldObj, this.posX, this.posY, this.posZ);
-			fly.setAlphaF(0.99F);
-			fly.setRBGColorF(this.particleRed, this.particleGreen, this.particleBlue);
-			fly.particleAge = fly.particleMaxAge / 2;
-
-			if (this.hasFadeColour) {
-				fly.hasFadeColour = true;
-				fly.fadeColourRed = this.fadeColourRed;
-				fly.fadeColourGreen = this.fadeColourGreen;
-				fly.fadeColourBlue = this.fadeColourBlue;
-			}
-
-			fly.twinkle = this.twinkle;
-			ParticleHelper.addParticle(fly);
-		}
 	}
 }
