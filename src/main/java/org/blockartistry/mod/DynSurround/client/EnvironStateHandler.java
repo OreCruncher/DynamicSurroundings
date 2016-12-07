@@ -51,6 +51,9 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemFishingRod;
+import net.minecraft.item.ItemPickaxe;
+import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.SoundCategory;
@@ -58,7 +61,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -389,7 +391,7 @@ public class EnvironStateHandler implements IClientEffectHandler {
 	}
 
 	@SubscribeEvent
-	public void onItemUse(final AttackEntityEvent event) {
+	public void onItemSwing(final PlayerInteractEvent.LeftClickEmpty event) {
 		if (SWORD == null || event.getEntityPlayer() == null || event.getEntityPlayer().worldObj == null)
 			return;
 
@@ -398,9 +400,9 @@ public class EnvironStateHandler implements IClientEffectHandler {
 			if (currentItem != null) {
 				SoundEffect sound = null;
 				final Item item = currentItem.getItem();
-				if (item instanceof ItemSword)
+				if (item instanceof ItemSword || item instanceof ItemSpade || item instanceof ItemFishingRod)
 					sound = SWORD;
-				else if (item instanceof ItemAxe)
+				else if (item instanceof ItemAxe || item instanceof ItemPickaxe)
 					sound = AXE;
 
 				if (sound != null)

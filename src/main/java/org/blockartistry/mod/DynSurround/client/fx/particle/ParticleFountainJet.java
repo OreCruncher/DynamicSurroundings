@@ -34,10 +34,10 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class ParticleFountainJet extends ParticleJet {
 
-	protected static final class EntityFoundtainParitcleFX extends ParticleBlockDust {
+	protected static final class ParticleFountain extends ParticleBlockDust {
 
-		public EntityFoundtainParitcleFX(final World world, final double x, final double y, final double z,
-				final double dX, final double dY, final double dZ, final IBlockState block) {
+		public ParticleFountain(final World world, final double x, final double y, final double z, final double dX,
+				final double dY, final double dZ, final IBlockState block) {
 			super(world, x + RANDOM.nextGaussian() * 0.2D, y, z + RANDOM.nextGaussian() * 0.2D, dX, dY, dZ, block);
 			this.multipleParticleScaleBy((float) (0.3F + RANDOM.nextGaussian() / 10.0F));
 			this.setPosition(this.posX, this.posY, this.posZ);
@@ -54,11 +54,12 @@ public class ParticleFountainJet extends ParticleJet {
 	}
 
 	@Override
-	protected Particle getJetParticle() {
+	protected void spawnJetParticle() {
 		final double motionX = RANDOM.nextGaussian() * 0.03D;
 		final double motionZ = RANDOM.nextGaussian() * 0.03D;
-		return new EntityFoundtainParitcleFX(this.worldObj, this.posX, this.posY, this.posZ, motionX, 0.5D, motionZ,
-				this.block).init();
+		final Particle particle = new ParticleFountain(this.worldObj, this.posX, this.posY, this.posZ, motionX, 0.5D,
+				motionZ, this.block).init();
+		ParticleHelper.addParticle(particle);
 	}
 
 }

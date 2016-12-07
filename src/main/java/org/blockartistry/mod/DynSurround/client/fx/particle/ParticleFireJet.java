@@ -30,9 +30,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleFlame;
-import net.minecraft.client.particle.ParticleLava;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -59,13 +58,13 @@ public class ParticleFireJet extends ParticleJet {
 	}
 
 	@Override
-	protected Particle getJetParticle() {
+	protected void spawnJetParticle() {
 		if (this.isLava) {
-			return new ParticleLava.Factory().createParticle(0, this.worldObj, this.posX, this.posY, this.posZ, 0, 0, 0);
+			ParticleHelper.spawnParticle(EnumParticleTypes.LAVA, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+		} else {
+			final ParticleFlame flame = (ParticleFlame) ParticleHelper.spawnParticle(EnumParticleTypes.FLAME, this.posX,
+					this.posY, this.posZ, this.jetStrength / 10.0D);
+			flame.flameScale *= this.jetStrength;
 		}
-		final ParticleFlame flame = (ParticleFlame) new ParticleFlame.Factory().createParticle(0, this.worldObj, this.posX,
-				this.posY, this.posZ, 0.0D, this.jetStrength / 10.0D, 0.0D);
-		flame.flameScale *= this.jetStrength;
-		return flame;
 	}
 }

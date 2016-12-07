@@ -30,7 +30,6 @@ import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
@@ -74,7 +73,7 @@ public abstract class ParticleJet extends Particle {
 	/*
 	 * Override in derived class to provide particle for the jet.
 	 */
-	protected abstract Particle getJetParticle();
+	protected abstract void spawnJetParticle();
 
 	/*
 	 * Hook to play sound when the jet is created
@@ -91,7 +90,7 @@ public abstract class ParticleJet extends Particle {
 
 		// Check to see if a particle needs to be generated
 		if (this.particleAge % this.updateFrequency == 0) {
-			Minecraft.getMinecraft().effectRenderer.addEffect(getJetParticle());
+			spawnJetParticle();
 		}
 
 		if (this.particleAge++ >= this.particleMaxAge) {

@@ -26,8 +26,7 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleBubble;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
 @SideOnly(Side.CLIENT)
@@ -38,8 +37,8 @@ public class ParticleBubbleJet extends ParticleJet {
 	}
 
 	@Override
-	protected Particle getJetParticle() {
-		return new ParticleBubble.Factory().createParticle(0, this.worldObj, this.posX, this.posY, this.posZ, 0.0D,
-				0.5D + this.jetStrength / 10.0D, 0.0D);
+	protected void spawnJetParticle() {
+		ParticleHelper.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX, this.posY, this.posZ,
+				0.5D + this.jetStrength / 10.0D);
 	}
 }

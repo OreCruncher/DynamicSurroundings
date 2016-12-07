@@ -32,6 +32,7 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.ClientEffectHandler;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.ForgeDictionary;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.user.GenerateBlockReport;
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 import org.blockartistry.mod.DynSurround.data.BlockRegistry;
@@ -62,6 +63,8 @@ public class ProxyClient extends Proxy {
 		ClientEffectHandler.initialize();
 		GuiHUDHandler.initialize();
 		SoundRegistry.initialize();
+
+		ParticleDripOverride.register();
 	}
 	
 	@Override

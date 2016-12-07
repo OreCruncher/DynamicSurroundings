@@ -24,22 +24,40 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import net.minecraft.client.particle.IParticleFactory;
-import net.minecraft.client.particle.ParticleLava;
-import net.minecraft.client.particle.ParticleRain;
-import net.minecraft.client.particle.ParticleSmokeNormal;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.util.EnumParticleTypes;
 
-@SideOnly(Side.CLIENT)
-public class ParticleFactory {
+public final class ParticleHelper {
 
-	private ParticleFactory() {
+	protected ParticleHelper() {
+
 	}
 
-	public static final IParticleFactory LAVA_SPARK = new ParticleLava.Factory();
-	public static final IParticleFactory SMOKE = new ParticleSmokeNormal.Factory();
-	public static final IParticleFactory RAIN = new ParticleRain.Factory();
+	@Nullable
+	public static Particle spawnParticle(@Nonnull final EnumParticleTypes particleId, double xCoord, double yCoord,
+			double zCoord, double xSpeed, double ySpeed, double zSpeed) {
+		return Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(particleId.getParticleID(), xCoord, yCoord,
+				zCoord, xSpeed, ySpeed, zSpeed);
+	}
+
+	@Nullable
+	public static Particle spawnParticle(@Nonnull final EnumParticleTypes particleId, double xCoord, double yCoord,
+			double zCoord) {
+		return spawnParticle(particleId, xCoord, yCoord, zCoord, 0, 0, 0);
+	}
+
+	@Nullable
+	public static Particle spawnParticle(@Nonnull final EnumParticleTypes particleId, double xCoord, double yCoord,
+			double zCoord, double ySpeed) {
+		return spawnParticle(particleId, xCoord, yCoord, zCoord, 0, ySpeed, 0);
+	}
+
+	public static void addParticle(@Nonnull final Particle particle) {
+		Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+	}
 
 }

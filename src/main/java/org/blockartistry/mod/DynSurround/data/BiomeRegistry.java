@@ -60,8 +60,6 @@ public final class BiomeRegistry {
 	public static final BiomeInfo OUTERSPACE = new BiomeInfo(-7, "OuterSpace");
 	public static final BiomeInfo CLOUDS = new BiomeInfo(-8, "Clouds");
 
-	public static final SoundEffect WATER_DRIP = new SoundEffect(Module.RESOURCE_ID + ":waterdrops");
-
 	// This is for cases when the biome coming in doesn't make sense
 	// and should default to something to avoid crap.
 	private static final BiomeInfo WTF = new BiomeInfo(-256, "(FooBar)");

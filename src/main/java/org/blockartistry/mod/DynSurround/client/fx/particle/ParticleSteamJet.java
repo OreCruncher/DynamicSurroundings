@@ -33,8 +33,8 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class ParticleSteamJet extends ParticleJet {
 
-	protected static final class EntitySteamCloudFX extends ParticleCloud {
-		public EntitySteamCloudFX(final World world, final double x, final double y, final double z, final double dX,
+	protected static final class ParticleSteamCloud extends ParticleCloud {
+		public ParticleSteamCloud(final World world, final double x, final double y, final double z, final double dX,
 				final double dY, final double dZ) {
 			super(world, x, y, z, dX, dY, dZ);
 		}
@@ -67,10 +67,12 @@ public class ParticleSteamJet extends ParticleJet {
 	}
 
 	@Override
-	protected Particle getJetParticle() {
+	protected void spawnJetParticle() {
 		final double motionX = RANDOM.nextGaussian() * 0.02D;
 		final double motionZ = RANDOM.nextGaussian() * 0.02D;
-		return new EntitySteamCloudFX(this.worldObj, this.posX, this.posY, this.posZ, motionX, 0.1F, motionZ);
+		final Particle particle = new ParticleSteamCloud(this.worldObj, this.posX, this.posY, this.posZ, motionX, 0.1F,
+				motionZ);
+		ParticleHelper.addParticle(particle);
 	}
 
 }

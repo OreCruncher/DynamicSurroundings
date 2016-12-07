@@ -27,7 +27,7 @@ package org.blockartistry.mod.DynSurround.client.storm;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.WeatherUtils;
 import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFactory;
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.data.BiomeInfo;
 import org.blockartistry.mod.DynSurround.data.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.data.DimensionRegistry;
@@ -38,12 +38,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.particle.IParticleFactory;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -88,24 +87,23 @@ public class StormSplashRenderer {
 						0.0F, 1.0F);
 	}
 
-	protected Particle getBlockParticle(final IBlockState state, final boolean dust, final World world, final double x,
+	protected void spawnBlockParticle(final IBlockState state, final boolean dust, final World world, final double x,
 			final double y, final double z) {
-		IParticleFactory factory = null;
-		Block block = state.getBlock();
+		final Block block = state.getBlock();
+		EnumParticleTypes particleType = null;
 
-		if (dust) {
-			factory = null;
-		} else if (block == Blocks.SOUL_SAND) {
-			factory = null;
+		if (dust || block == Blocks.SOUL_SAND) {
+			particleType = null;
 		} else if (block == Blocks.NETHERRACK && RANDOM.nextInt(20) == 0) {
-			factory = ParticleFactory.LAVA_SPARK;
+			particleType = EnumParticleTypes.LAVA;
 		} else if (state.getMaterial() == Material.LAVA) {
-			factory = ParticleFactory.SMOKE;
+			particleType = EnumParticleTypes.SMOKE_NORMAL;
 		} else if (state.getMaterial() != Material.AIR) {
-			factory = ParticleFactory.RAIN;
+			particleType = EnumParticleTypes.WATER_SPLASH;
 		}
 
-		return factory != null ? factory.createParticle(0, world, x, y, z, 0, 0, 0) : null;
+		if (particleType != null)
+			ParticleHelper.spawnParticle(particleType, x, y, z);
 	}
 
 	protected SoundEvent getBlockSoundFX(final Block block, final boolean hasDust, final World world) {
@@ -195,9 +193,7 @@ public class StormSplashRenderer {
 						- state.getBoundingBox(EnvironState.getWorld(), blockPos).minY; // block.getBlockBoundsMinY();
 				final double posZ = locZ + RANDOM.nextFloat();
 
-				final Particle particle = getBlockParticle(state, hasDust, worldclient, posX, posY, posZ);
-				if (particle != null)
-					theThis.mc.effectRenderer.addEffect(particle);
+				spawnBlockParticle(state, hasDust, worldclient, posX, posY, posZ);
 
 				if (RANDOM.nextInt(++particlesSpawned) == 0) {
 					spawnX = posX;

@@ -34,9 +34,9 @@ import net.minecraft.world.World;
 @SideOnly(Side.CLIENT)
 public class ParticleDustJet extends ParticleJet {
 
-	protected static final class EntityDustFX extends ParticleBlockDust {
+	protected static final class ParticleDust extends ParticleBlockDust {
 
-		public EntityDustFX(final World world, final double x, final double y, final double z,
+		public ParticleDust(final World world, final double x, final double y, final double z,
 				final IBlockState block) {
 			super(world, x + RANDOM.nextGaussian() * 0.2D, y, z + RANDOM.nextGaussian() * 0.2D, 0, 0, 0, block);
 			this.multipleParticleScaleBy((float) (0.3F + RANDOM.nextGaussian() / 30.0F));
@@ -54,8 +54,10 @@ public class ParticleDustJet extends ParticleJet {
 	}
 
 	@Override
-	protected Particle getJetParticle() {
-		return new EntityDustFX(this.worldObj, this.posX, this.posY, this.posZ, this.blockState).init();
+	protected void spawnJetParticle() {
+		final Particle particle = new ParticleDust(this.worldObj, this.posX, this.posY, this.posZ, this.blockState)
+				.init();
+		ParticleHelper.addParticle(particle);
 	}
 
 }

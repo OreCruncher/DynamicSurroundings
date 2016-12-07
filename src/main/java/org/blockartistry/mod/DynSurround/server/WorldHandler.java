@@ -51,7 +51,7 @@ public class WorldHandler {
 	public static void updateWeatherBody(final World world) {
 
 		// If it is the client, or it has no sky, return.
-		if (world.isRemote || world.provider.getHasNoSky())
+		if (world.isRemote)
 			return;
 
 		final int dimensionId = world.provider.getDimension();
