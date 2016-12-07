@@ -80,7 +80,7 @@ public class SoundBlockHandler implements IClientEffectHandler {
 		}
 	}
 
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void soundEvent(final PlaySoundEvent event) {
 		if (event.getSound() == null)
 			return;

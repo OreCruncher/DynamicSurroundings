@@ -28,6 +28,7 @@ import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.Even
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Association;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -73,7 +74,7 @@ public interface ISolver {
 	 * Returns a string that begins with "_NO_ASSOCIATION" if a matching block
 	 * was found, but has no association in the blockmap.
 	 */
-	public Association findAssociationForLocation(final EntityPlayer ply, final int xx, final int yy, final int zz);
+	public Association findAssociationForLocation(final EntityPlayer ply, final BlockPos pos);
 	
 	/**
 	 * Find an association for a certain block assuming the player is standing
@@ -88,13 +89,13 @@ public interface ISolver {
 	 * valid, but has no association in the blockmap. If the carpet was
 	 * selected, this solves to the carpet.
 	 */
-	public Association findAssociationForBlock(final int xx, final int yy, final int zz);
+	public Association findAssociationForBlock(final BlockPos pos);
 	
 	/**
 	 * Find an association for a certain block assuming the player is standing on it,
 	 * using a custom strategy which strategies are defined by the solver.
 	 */
-	public Association findAssociationForBlock(final int xx, final int yy, final int zz, final String strategy);
+	public Association findAssociationForBlock(final BlockPos pos, final String strategy);
 	
 	/**
 	 * Play special sounds that must stop the usual footstep figuring things out process.

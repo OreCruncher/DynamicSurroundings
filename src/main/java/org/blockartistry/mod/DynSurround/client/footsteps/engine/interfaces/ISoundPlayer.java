@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces;
 
 import java.util.Random;
 
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -34,7 +35,7 @@ public interface ISoundPlayer {
 	/**
 	 * Plays a sound.
 	 */
-	public void playSound(final Object location, final String soundName, final float volume, final float pitch,
+	public void playSound(final Object location, final SoundEvent sound, final float volume, final float pitch,
 			final IOptions options);
 
 	/**

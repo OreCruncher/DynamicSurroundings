@@ -27,23 +27,24 @@ package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
 
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class PendingSound {
 	private final Object location;
-	private final String soundName;
+	private final SoundEvent sound;
 	private final float volume;
 	private final float pitch;
 	private final IOptions options;
 	private final long timeToPlay;
 	private final long maximum;
 
-	public PendingSound(final Object location, final String soundName, final float volume, final float pitch,
+	public PendingSound(final Object location, final SoundEvent sound, final float volume, final float pitch,
 			final IOptions options, final long timeToPlay, final long maximum) {
 		this.location = location;
-		this.soundName = soundName;
+		this.sound = sound;
 		this.volume = volume;
 		this.pitch = pitch;
 		this.options = options;
@@ -58,7 +59,7 @@ public class PendingSound {
 	 * @param player
 	 */
 	public void playSound(final ISoundPlayer player) {
-		player.playSound(this.location, this.soundName, this.volume, this.pitch, this.options);
+		player.playSound(this.location, this.sound, this.volume, this.pitch, this.options);
 	}
 
 	/**

@@ -25,6 +25,8 @@
 package org.blockartistry.mod.DynSurround.client.footsteps.game.system;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -32,11 +34,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class Association {
 	
 	private Block block;
-	private int meta;
-	
-	public int x;
-	public int y;
-	public int z;
+	private IBlockState state;
+	private BlockPos pos;
 	
 	private String data = null;
 	
@@ -46,12 +45,10 @@ public class Association {
 	public Association() {
 	}
 	
-	public Association(final Block block, final int meta, final int xx, final int yy, final int zz) {
+	public Association(final Block block, final IBlockState state, final BlockPos pos) {
 		this.block = block;
-		this.meta = meta;
-		this.x = xx;
-		this.y = yy;
-		this.z = zz;
+		this.state = state;
+		this.pos = pos;
 	}
 	
 	public String getData() {
@@ -87,8 +84,12 @@ public class Association {
 		return this.block;
 	}
 	
-	public int getMeta() {
-		return this.meta;
+	public IBlockState getState() {
+		return this.state;
+	}
+	
+	public BlockPos getPos() {
+		return this.pos;
 	}
 	
 	public boolean isNotEmitter() {

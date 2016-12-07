@@ -30,6 +30,7 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
 
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -43,9 +44,9 @@ public class UserConfigSoundPlayerWrapper implements ISoundPlayer {
 	}
 
 	@Override
-	public void playSound(final Object location, final String soundName, final float volume, final float pitch,
+	public void playSound(final Object location, final SoundEvent sound, final float volume, final float pitch,
 			final IOptions options) {
-		this.wrapped.playSound(location, soundName, volume * ModOptions.footstepsSoundFactor, pitch, options);
+		this.wrapped.playSound(location, sound, volume * ModOptions.footstepsSoundFactor, pitch, options);
 	}
 
 	@Override

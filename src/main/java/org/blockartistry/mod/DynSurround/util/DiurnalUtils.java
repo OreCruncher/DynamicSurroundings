@@ -31,77 +31,30 @@ public final class DiurnalUtils {
 	}
 
 	public static boolean isDaytime(final World world) {
-		// Special case for The End
-		if(world.provider.getDimension() == 1)
-			return false;
-		
-		final float celestialAngle = getCelestialAngle(world, 0.0F);
-		// 0.785 0.260
-		return celestialAngle >= 0.785F || celestialAngle < 0.285F;
+		return !world.provider.getHasNoSky() && world.provider.getSunBrightnessFactor(1.0f) > 0.6f;
 	}
 
 	public static boolean isNighttime(final World world) {
-		// Special case for The End
-		if(world.provider.getDimension() == 1)
-			return true;
-
-		final float celestialAngle = getCelestialAngle(world, 0.0F);
-		// 0.260 0.705
-		return celestialAngle >= 0.285F && celestialAngle < 0.701F;
+		return !world.provider.getHasNoSky() && world.provider.getSunBrightnessFactor(1.0f) < 0.1f;
 	}
 
 	public static boolean isSunrise(final World world) {
-		// Special case for The End
-		if(world.provider.getDimension() == 1)
+		if (world.provider.getHasNoSky())
 			return false;
 
-		final float celestialAngle = getCelestialAngle(world, 0.0F);
-		// 0.705
-		return celestialAngle >= 0.701F && celestialAngle < 0.785F;
+		float brFactor = world.provider.getSunBrightnessFactor(1.0f);
+		return brFactor > 0.1f && brFactor < 0.6f && Math.sin(world.getCelestialAngleRadians(1.0f)) < 0.0;
 	}
 
 	public static boolean isSunset(final World world) {
-		// Special case for The End
-		if(world.provider.getDimension() == 1)
+		if (world.provider.getHasNoSky())
 			return false;
 
-		final float celestialAngle = getCelestialAngle(world, 0.0F);
-		return celestialAngle > 0.215 && celestialAngle <= 0.306F;
-	}
-
-	public static float getCelestialAngle(final World world, final float partialTickTime) {
-		final float angle = world.getCelestialAngle(partialTickTime);
-		return angle >= 1.0F ? angle - 1.0F : angle;
+		float brFactor = world.provider.getSunBrightnessFactor(1.0f);
+		return brFactor > 0.1f && brFactor < 0.6f && Math.sin(world.getCelestialAngleRadians(1.0f)) > 0.0;
 	}
 
 	public static float getMoonPhaseFactor(final World world) {
 		return world.getCurrentMoonPhaseFactor();
 	}
-
-	public static long getClockTime(final World world) {
-		return world.getWorldTime() % 24000L;
-	}
-	
-	
-/*	
-	public boolean isDaytime(final World world) {
-		final long time = DiurnalUtils.getClockTime(world);
-		return time < 13000;
-	}
-
-	public boolean isNighttime(final World world) {
-		final long time = DiurnalUtils.getClockTime(world);
-		return time >= 13000 && time < 22220L;
-	}
-
-	public boolean isSunrise(final World world) {
-		final long time = DiurnalUtils.getClockTime(world);
-		return time >= 22220L;
-	}
-
-	public boolean isSunset(final World world) {
-		final long time = DiurnalUtils.getClockTime(world);
-		return time >= 12000 && time < 14000;
-	}
-	*/
 }

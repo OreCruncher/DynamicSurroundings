@@ -79,7 +79,8 @@
 				"oreColdIron",
 				"oreAdamantine",
 				"oreMercury",
-				"oreFossil"
+				"oreFossil",
+				"oreShadow"
 			]
 			
 		},
@@ -177,7 +178,8 @@
 				"doorStarsteel",
 				"doorSteel",
 				"doorTin",
-				"blockWroughtIron"
+				"blockWroughtIron",
+				"blockVoid"
 			]
 			
 		},
@@ -256,7 +258,9 @@
 			"dictionaryEntries":[
 				"sand",
 				"blockSalt",
-				"blockPsiDust"
+				"blockPsiDust",
+				"denseSand",
+				"dustAsh"
 			]
 			
 		},
@@ -326,7 +330,8 @@
 				"blockChalcedony",
 				"blockTeslaite",
 				"blockJade",
-				"blockPsiGem"
+				"blockPsiGem",
+				"blockNetherStar"
 			]
 			
 		},

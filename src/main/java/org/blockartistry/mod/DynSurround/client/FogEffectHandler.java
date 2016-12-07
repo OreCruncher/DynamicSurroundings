@@ -113,8 +113,8 @@ public class FogEffectHandler implements IClientEffectHandler {
 					biomeFog += b.getFogDensity() * scale;
 					tint.add(Color.scale(b.getFogColor(), brightnessFactor).scale(scale));
 				} else if (ModOptions.allowDesertFog && b.getHasDust()) {
-					final float str = EnvironState.getWorld().getRainStrength(1.0F);
-					dustFog += StormProperties.getFogDensity() * scale * str;
+					final float strength = EnvironState.getWorld().getRainStrength(1.0F);
+					dustFog += StormProperties.getFogDensity() * scale * strength;
 					tint.add(Color.scale(b.getDustColor(), brightnessFactor).scale(scale));
 				} else {
 					tint.add(Color.scale(currentFogColor, scale));
@@ -140,11 +140,10 @@ public class FogEffectHandler implements IClientEffectHandler {
 	 * Hook the fog color event so we can tell the renderer what color the fog
 	 * should be.
 	 */
-	@SuppressWarnings("deprecation")
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void fogColorEvent(final EntityViewRenderEvent.FogColors event) {
 		// Timing is everything...
-		if (currentFogColor == null || event.getResult() != Result.DEFAULT)
+		if (currentFogColor == null)
 			return;
 
 		if (currentFogLevel == 0)
@@ -152,13 +151,12 @@ public class FogEffectHandler implements IClientEffectHandler {
 
 		final IBlockState block = ActiveRenderInfo.getBlockStateAtEntityViewpoint(event.getEntity().worldObj, event.getEntity(),
 				(float) event.getRenderPartialTicks());
-		if (block.getBlock().getMaterial(null) == Material.LAVA || block.getBlock().getMaterial(null) == Material.WATER)
+		if (block.getMaterial() == Material.LAVA || block.getMaterial() == Material.WATER)
 			return;
 
 		event.setRed(currentFogColor.red);
 		event.setGreen(currentFogColor.green);
 		event.setBlue(currentFogColor.blue);
-		event.setResult(Result.ALLOW);
 	}
 
 	/*

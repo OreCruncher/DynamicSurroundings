@@ -44,12 +44,11 @@ import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -77,12 +76,12 @@ public class AcousticsManager extends AcousticsLibrary implements ISoundPlayer, 
 
 	@Override
 	public void playStep(final EntityLivingBase entity, final Association assos) {
-		Block block = assos.getBlock();
-		if (!MCHelper.isLiquid(block) && MCHelper.getSoundType(block) != null) {
-			SoundType soundType = MCHelper.getSoundType(block);
+		final Block block = assos.getBlock();
+		final IBlockState state = assos.getState();
+		SoundType soundType = MCHelper.getSoundType(block);
+		if (!state.getMaterial().isLiquid() && soundType != null) {
 
-			if (EnvironState.getWorld().getBlockState(new BlockPos(assos.x, assos.y + 1, assos.z))
-					.getBlock() == Blocks.SNOW_LAYER) {
+			if (EnvironState.getWorld().getBlockState(assos.getPos().up()).getBlock() == Blocks.SNOW_LAYER) {
 				soundType = MCHelper.getSoundType(Blocks.SNOW_LAYER);
 			}
 
@@ -91,7 +90,7 @@ public class AcousticsManager extends AcousticsLibrary implements ISoundPlayer, 
 	}
 
 	@Override
-	public void playSound(final Object location, final String soundName, final float volume, final float pitch,
+	public void playSound(final Object location, final SoundEvent sound, final float volume, final float pitch,
 			final IOptions options) {
 		if (!(location instanceof Entity))
 			return;
@@ -105,23 +104,22 @@ public class AcousticsManager extends AcousticsLibrary implements ISoundPlayer, 
 					minimum = delay;
 				}
 
-				pending.add(
-						new PendingSound(location, soundName, volume, pitch, null, System.currentTimeMillis() + delay,
-								options.hasOption(Option.SKIPPABLE) ? -1 : (Long) options.getOption(Option.DELAY_MAX)));
+				pending.add(new PendingSound(location, sound, volume, pitch, null, System.currentTimeMillis() + delay,
+						options.hasOption(Option.SKIPPABLE) ? -1 : (Long) options.getOption(Option.DELAY_MAX)));
 			} else {
-				actuallyPlaySound((Entity) location, soundName, volume, pitch);
+				actuallyPlaySound((Entity) location, sound, volume, pitch);
 			}
 		} else {
-			actuallyPlaySound((Entity) location, soundName, volume, pitch);
+			actuallyPlaySound((Entity) location, sound, volume, pitch);
 		}
 	}
 
-	protected void actuallyPlaySound(final Entity location, final String soundName, final float volume,
+	protected void actuallyPlaySound(final Entity location, final SoundEvent sound, final float volume,
 			final float pitch) {
 		if (ModLog.DEBUGGING)
-			ModLog.debug("    Playing sound " + soundName + " ("
+			ModLog.debug("    Playing sound " + sound.getSoundName() + " ("
 					+ String.format(Locale.ENGLISH, "v%.2f, p%.2f", volume, pitch) + ")");
-		location.playSound(new SoundEvent(new ResourceLocation(soundName)), volume, pitch);
+		location.playSound(sound, volume, pitch);
 	}
 
 	private long randAB(final Random rng, final long a, final long b) {

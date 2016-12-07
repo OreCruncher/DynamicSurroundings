@@ -32,6 +32,7 @@ import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.I
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IVariatorSettable;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -267,11 +268,9 @@ public class PFReaderH implements IGenerator, IVariatorSettable {
 		if ((ply.motionX == 0d && ply.motionZ == 0d) || ply.isSneaking())
 			return;
 
-		// if (true || ply.onGround || ply.isOnLadder())
-		// {
 		final int yy = MathHelper.floor_double(ply.posY - 0.1d - ply.getYOffset() - (ply.onGround ? 0d : 0.25d));
-		final Association assos = mod.getSolver().findAssociationForBlock(MathHelper.floor_double(ply.posX), yy,
-				MathHelper.floor_double(ply.posZ), "find_messy_foliage");
+		final Association assos = mod.getSolver().findAssociationForBlock(
+				new BlockPos(MathHelper.floor_double(ply.posX), yy, MathHelper.floor_double(ply.posZ)), "find_messy_foliage");
 		if (assos != null) {
 			if (!this.isMessyFoliage) {
 				this.isMessyFoliage = true;
@@ -282,10 +281,7 @@ public class PFReaderH implements IGenerator, IVariatorSettable {
 				this.isMessyFoliage = false;
 			}
 		}
-		// }
 	}
-
-	//
 
 	protected void playSinglefoot(final EntityPlayer ply, final double verticalOffsetAsMinus, final EventType eventType,
 			final boolean foot) {

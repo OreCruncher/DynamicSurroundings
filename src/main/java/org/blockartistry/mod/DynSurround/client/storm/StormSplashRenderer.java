@@ -31,7 +31,6 @@ import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFactory;
 import org.blockartistry.mod.DynSurround.data.BiomeInfo;
 import org.blockartistry.mod.DynSurround.data.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.data.DimensionRegistry;
-import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -78,13 +77,15 @@ public class StormSplashRenderer {
 	}
 
 	protected static final int PARTICLE_SOUND_CHANCE = 20;
-	protected static final int RANGE = 10;
 	protected static final XorShiftRandom RANDOM = new XorShiftRandom();
 	protected static final NoiseGeneratorSimplex GENERATOR = new NoiseGeneratorSimplex(RANDOM);
 
 	protected static float calculateRainSoundVolume(final World world) {
-		return MathHelper.clamp_float((float) (StormProperties.getCurrentVolume()
-				+ GENERATOR.getValue(DiurnalUtils.getClockTime(world) / 100, 1) / 5.0F), 0.0F, 1.0F);
+		return MathHelper
+				.clamp_float(
+						(float) (StormProperties.getCurrentVolume()
+								+ GENERATOR.getValue(world.getCelestialAngle(1.0f) * 240.0f - 60.0f, 1) / 5.0F),
+						0.0F, 1.0F);
 	}
 
 	protected Particle getBlockParticle(final IBlockState state, final boolean dust, final World world, final double x,
@@ -167,7 +168,10 @@ public class StormSplashRenderer {
 		double spawnZ = 0.0D;
 		int particlesSpawned = 0;
 
-		int particleCount = (int) (ModOptions.particleCountBase * rainStrengthFactor * rainStrengthFactor);
+		final int RANGE = ModOptions.specialEffectRange / 2;
+		final float rangeFactor = (RANGE * RANGE) / 100.0F;
+		int particleCount = (int) (ModOptions.particleCountBase * rainStrengthFactor * rainStrengthFactor
+				* rangeFactor);
 
 		if (theThis.mc.gameSettings.particleSetting == 1)
 			particleCount >>= 1;

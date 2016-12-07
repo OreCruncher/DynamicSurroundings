@@ -26,19 +26,19 @@ package org.blockartistry.mod.DynSurround.client.footsteps.engine.implem;
 
 import java.util.Random;
 
-import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.EventType;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions.Option;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
 
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class BasicAcoustic implements IAcoustic {
-	protected String soundName;
+	protected SoundEvent sound;
 	protected float volMin = 1f;
 	protected float volMax = 1f;
 	protected float pitchMin = 1f;
@@ -51,7 +51,7 @@ public class BasicAcoustic implements IAcoustic {
 			final IOptions inputOptions) {
 		// Special case for intentionally empty sounds (as opposed to fall back
 		// sounds)
-		if (StringUtils.isEmpty(this.soundName))
+		if (this.sound == null)
 			return;
 
 		float volume = generateVolume(player.getRNG());
@@ -67,7 +67,7 @@ public class BasicAcoustic implements IAcoustic {
 			}
 		}
 
-		player.playSound(location, this.soundName, volume, pitch, this.outputOptions);
+		player.playSound(location, this.sound, volume, pitch, this.outputOptions);
 	}
 
 	private float generateVolume(final Random rng) {
@@ -85,10 +85,8 @@ public class BasicAcoustic implements IAcoustic {
 		return a + rng.nextFloat() * (b - a);
 	}
 
-	//
-
-	public void setSoundName(final String soundName) {
-		this.soundName = soundName;
+	public void setSound(final SoundEvent sound) {
+		this.sound = sound;
 	}
 
 	public void setVolMin(final float volMin) {

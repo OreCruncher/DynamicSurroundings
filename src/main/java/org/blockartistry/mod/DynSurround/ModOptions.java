@@ -149,7 +149,7 @@ public final class ModOptions {
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_FX_RANGE, defaultValue = "16")
 	@MinMaxInt(min = 16, max = 64)
 	@Comment("Block radius/range around player for special effect application")
-	public static int specialEffectRange = 32;
+	public static int specialEffectRange = 16;
 
 	public static final String CATEGORY_AURORA = "aurora";
 	public static final String CONFIG_AURORA_ENABLED = "Enabled";
