@@ -65,7 +65,7 @@ public final class CommandRain extends CommandBase {
 			.add(TextFormatting.GOLD + "Dynamic Surroundings command help:").add(TextFormatting.YELLOW + "/ds reset")
 			.add(TextFormatting.YELLOW + "/ds reload").add(TextFormatting.YELLOW + "/ds config")
 			.add(TextFormatting.YELLOW + "/ds status <rain|thunder>")
-			.add(TextFormatting.YELLOW + "/ds settime <rain|thunder> 0-100")
+			.add(TextFormatting.YELLOW + "/ds settime <rain|thunder> 0-1000")
 			.add(TextFormatting.YELLOW + "/ds setstr rain 0-100").add(TextFormatting.YELLOW + "/ds setmin rain 0-100")
 			.add(TextFormatting.YELLOW + "/ds setmax rain 0-100")
 			.add(TextFormatting.YELLOW + "/ds setthreshold thunder 0-100").build();
