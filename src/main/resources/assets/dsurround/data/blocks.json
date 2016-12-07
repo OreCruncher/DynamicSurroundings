@@ -215,7 +215,19 @@
 				
 			]
 			
+		},
+		{
+			"blocks":[
+				"minecraft:red_flower:*",
+				"minecraft:yellow_flower:*",
+				"minecraft:double_plant:*"
+			],
+			"effects":[
+				{
+					"effect":"firefly",
+					"chance":100
+				}
+			]
 		}
-		
 	]
 }

@@ -36,6 +36,7 @@ import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
+import org.blockartistry.mod.DynSurround.client.fx.FireFlyEffect;
 import org.blockartistry.mod.DynSurround.client.fx.JetEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect.SoundType;
@@ -204,6 +205,8 @@ public final class BlockRegistry {
 						blockEffect = new JetEffect.Dust(chance);
 					else if (StringUtils.equalsIgnoreCase("fountain", e.effect))
 						blockEffect = new JetEffect.Fountain(chance);
+					else if(StringUtils.equalsIgnoreCase("firefly", e.effect))
+						blockEffect = new FireFlyEffect(chance);
 					else {
 						ModLog.warn("Unknown effect type in config: '%s'", e.effect);
 						continue;

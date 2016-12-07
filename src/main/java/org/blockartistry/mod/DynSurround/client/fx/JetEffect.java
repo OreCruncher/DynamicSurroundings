@@ -30,12 +30,12 @@ import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleBubbleJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDustJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFireJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFountainJet;
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleSteamJet;
 
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -70,7 +70,7 @@ public abstract class JetEffect extends BlockEffect {
 	}
 
 	protected void addEffect(final ParticleJet fx) {
-		Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+		ParticleHelper.addParticle(fx);
 		fx.playSound();
 	}
 
