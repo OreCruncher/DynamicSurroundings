@@ -40,14 +40,37 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public final class CommandRain extends CommandBase {
 
-	private static final List<String> ALIAS = ImmutableList.<String> builder().add("r", "br").build();
+	private static final String COMMAND = "ds";
+	private static final String COMMAND_OPTION_RAIN = "rain";
+	private static final String COMMAND_OPTION_THUNDER = "thunder";
+	private static final String COMMAND_OPTION_STATUS = "status";
+	private static final String COMMAND_OPTION_RESET = "reset";
+	private static final String COMMAND_OPTION_RELOAD = "reload";
+	private static final String COMMAND_OPTION_SETMIN = "setmin";
+	private static final String COMMAND_OPTION_SETMAX = "setmax";
+	private static final String COMMAND_OPTION_SETSTRENGTH = "setstr";
+	private static final String COMMAND_OPTION_SETTIME = "settime";
+	private static final String COMMAND_OPTION_SETTHRESHOLD = "setthreshold";
+	private static final String COMMAND_OPTION_CONFIG = "config";
+
+	private static final List<String> ALIAS = ImmutableList.<String> builder().add("dsurround", "rain").build();
 	private static final DecimalFormat FORMATTER = new DecimalFormat("0.0");
 
-	public static String statusOutput(final World world, final DimensionEffectData data) {
+	private static final List<String> HELP = ImmutableList.<String> builder()
+			.add(TextFormatting.GOLD + "Dynamic Surroundings command help:").add(TextFormatting.YELLOW + "/ds reset")
+			.add(TextFormatting.YELLOW + "/ds reload").add(TextFormatting.YELLOW + "/ds config")
+			.add(TextFormatting.YELLOW + "/ds status <rain|thunder>")
+			.add(TextFormatting.YELLOW + "/ds settime <rain|thunder> 0-100")
+			.add(TextFormatting.YELLOW + "/ds setstr rain 0-100").add(TextFormatting.YELLOW + "/ds setmin rain 0-100")
+			.add(TextFormatting.YELLOW + "/ds setmax rain 0-100")
+			.add(TextFormatting.YELLOW + "/ds setthreshold thunder 0-100").build();
+
+	public static String rainStatusOutput(final World world, final DimensionEffectData data) {
 		final StringBuilder builder = new StringBuilder();
 		final float minutes = (world.getWorldInfo().getRainTime() / 20.0F) / 60.0F;
 		builder.append(data.toString());
@@ -58,6 +81,21 @@ public final class CommandRain extends CommandBase {
 		return builder.toString();
 	}
 
+	public static String thunderStatusOutput(final World world, final DimensionEffectData data) {
+		final StringBuilder builder = new StringBuilder();
+		final float minutes = (world.getWorldInfo().getThunderTime() / 20.0F) / 60.0F;
+		builder.append("dim ").append(data.getDimensionId());
+		builder.append("; isThundering: ").append(Boolean.toString(world.isThundering()));
+		builder.append("; isSurface: ").append(Boolean.toString(world.provider.isSurfaceWorld()));
+		builder.append("; strength: ").append(FORMATTER.format(world.getThunderStrength(1.0F) * 100));
+		builder.append("; timer: ").append(FORMATTER.format(minutes)).append(" minutes");
+		return builder.toString();
+	}
+
+	public static String config(final World world, final DimensionEffectData data) {
+		return data.configString();
+	}
+
 	@Override
 	public int getRequiredPermissionLevel() {
 		return 2;
@@ -65,7 +103,7 @@ public final class CommandRain extends CommandBase {
 
 	@Override
 	public String getCommandName() {
-		return "rain";
+		return COMMAND;
 	}
 
 	@Override
@@ -74,8 +112,8 @@ public final class CommandRain extends CommandBase {
 	}
 
 	@Override
-	public String getCommandUsage(final ICommandSender p_71518_1_) {
-		return "/rain <status | reset | reload | 1-100 | <<setmax|setmin> 0-100>";
+	public String getCommandUsage(final ICommandSender sender) {
+		return TextFormatting.GOLD + "/ds help" + TextFormatting.BLUE + " -- Help for Dynamic Surroundings";
 	}
 
 	@Override
@@ -86,40 +124,109 @@ public final class CommandRain extends CommandBase {
 			final World world = player.worldObj;
 			final DimensionEffectData data = DimensionEffectData.get(world);
 
-			if (parms.length == 1) {
-				if ("status".compareToIgnoreCase(parms[0]) == 0) {
-					// Dump out some diagnostics for the currentAurora dimension
-					player.addChatMessage(new TextComponentString(statusOutput(world, data)));
-				} else if ("reset".compareToIgnoreCase(parms[0]) == 0) {
-					world.provider.resetRainAndThunder();
-					player.addChatMessage(new TextComponentString(I18n.format("msg.RainReset")));
-				} else if ("reload".compareToIgnoreCase(parms[0]) == 0) {
-					BiomeRegistry.initialize();
-					BlockRegistry.initialize();
-					player.addChatMessage(new TextComponentString(I18n.format("msg.BiomeReload")));
-				} else {
-					final double d = parseDouble(parms[0], 0.0D, 100.0D) / 100.0D;
-					data.setRainIntensity((float) d);
-					player.addChatMessage(new TextComponentString(
-							I18n.format("msg.RainIntensitySet", FORMATTER.format(data.getRainIntensity() * 100))));
+			boolean showHelp = false;
+			TextComponentString feedback = null;
+
+			if (parms.length == 0) {
+				showHelp = true;
+			} else if (COMMAND_OPTION_RESET.compareToIgnoreCase(parms[0]) == 0) {
+				world.provider.resetRainAndThunder();
+				feedback = new TextComponentString(I18n.format("msg.RainReset"));
+			} else if (COMMAND_OPTION_RELOAD.compareToIgnoreCase(parms[0]) == 0) {
+				BiomeRegistry.initialize();
+				BlockRegistry.initialize();
+				feedback = new TextComponentString(I18n.format("msg.BiomeReload"));
+			} else if (COMMAND_OPTION_CONFIG.compareToIgnoreCase(parms[0]) == 0) {
+				feedback = new TextComponentString(config(world, data));
+			} else if (COMMAND_OPTION_STATUS.compareToIgnoreCase(parms[0]) == 0) {
+				if (parms.length < 2) {
+					showHelp = true;
+				} else if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
+					feedback = new TextComponentString(rainStatusOutput(world, data));
+				} else if (COMMAND_OPTION_THUNDER.compareToIgnoreCase(parms[1]) == 0) {
+					feedback = new TextComponentString(thunderStatusOutput(world, data));
 				}
-			} else if (parms.length == 2) {
-				if ("setmin".compareToIgnoreCase(parms[0]) == 0) {
-					final double d = parseDouble(parms[1], 0.0D, 100.0D) / 100.0D;
-					data.setMinRainIntensity((float) d);
-					player.addChatMessage(new TextComponentString(I18n.format("msg.MinRainIntensitySet",
-							FORMATTER.format(data.getMinRainIntensity() * 100))));
-				} else if ("setmax".compareToIgnoreCase(parms[0]) == 0) {
-					final double d = parseDouble(parms[1], 0.0D, 100.0D) / 100.0D;
-					data.setMaxRainIntensity((float) d);
-					player.addChatMessage(new TextComponentString(I18n.format("msg.MaxRainIntensitySet",
-							FORMATTER.format(data.getMaxRainIntensity() * 100))));
+			} else if (COMMAND_OPTION_SETTIME.compareToIgnoreCase(parms[0]) == 0) {
+				if (parms.length < 3) {
+					showHelp = true;
 				} else {
-					throw new CommandException(getCommandUsage(sender));
+					final double d = parseDouble(parms[2], 0.0D, 1000.0D) * 20.0D * 60.0D;
+					if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
+						world.getWorldInfo().setRainTime((int) d);
+						feedback = new TextComponentString(I18n.format("msg.RainTimeSet", FORMATTER.format(d)));
+					} else if (COMMAND_OPTION_THUNDER.compareToIgnoreCase(parms[1]) == 0) {
+						world.getWorldInfo().setThunderTime((int) d);
+						feedback = new TextComponentString(I18n.format("msg.ThunderTimeSet", FORMATTER.format(d)));
+					} else {
+						showHelp = true;
+					}
 				}
+			} else if (COMMAND_OPTION_SETSTRENGTH.compareToIgnoreCase(parms[0]) == 0) {
+				if (parms.length < 3) {
+					showHelp = true;
+				} else {
+					final double d = parseDouble(parms[2], 0.0D, 100.0D) / 100.0D;
+					if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
+						data.setRainIntensity((float) d);
+						feedback = new TextComponentString(
+								I18n.format("msg.RainIntensitySet", FORMATTER.format(data.getRainIntensity() * 100)));
+					} else {
+						showHelp = true;
+					}
+				}
+			} else if (COMMAND_OPTION_SETMIN.compareToIgnoreCase(parms[0]) == 0) {
+				if (parms.length < 3) {
+					showHelp = true;
+				} else {
+					final double d = parseDouble(parms[2], 0.0D, 100.0D) / 100.0D;
+					if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
+						data.setMinRainIntensity((float) d);
+						feedback = new TextComponentString(I18n.format("msg.MinRainIntensitySet",
+								FORMATTER.format(data.getMinRainIntensity() * 100)));
+					} else {
+						showHelp = true;
+					}
+				}
+
+			} else if (COMMAND_OPTION_SETMAX.compareToIgnoreCase(parms[0]) == 0) {
+				if (parms.length < 3) {
+					showHelp = true;
+				} else {
+					final double d = parseDouble(parms[2], 0.0D, 100.0D) / 100.0D;
+					if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
+						data.setMaxRainIntensity((float) d);
+						feedback = new TextComponentString(I18n.format("msg.MaxRainIntensitySet",
+								FORMATTER.format(data.getMaxRainIntensity() * 100)));
+					} else {
+						showHelp = true;
+					}
+				}
+
+			} else if (COMMAND_OPTION_SETTHRESHOLD.compareToIgnoreCase(parms[0]) == 0) {
+				if (parms.length < 3) {
+					showHelp = true;
+				} else {
+					final double d = parseDouble(parms[2], 0.0D, 100.0D) / 100.0D;
+					if (COMMAND_OPTION_THUNDER.compareToIgnoreCase(parms[1]) == 0) {
+						data.setThunderThreshold((float) d);
+						feedback = new TextComponentString(I18n.format("msg.ThunderThresholdSet",
+								FORMATTER.format(data.getThunderThreshold() * 100)));
+					} else {
+						showHelp = true;
+					}
+				}
+
 			} else {
-				player.addChatMessage(new TextComponentString(getCommandUsage(sender)));
+				showHelp = true;
 			}
+
+			if (showHelp) {
+				for (final String line : HELP)
+					sender.addChatMessage(new TextComponentString(line));
+			} else if (feedback != null) {
+				player.addChatMessage(feedback);
+			}
+
 		} catch (final Exception ex) {
 			ex.printStackTrace();
 		}

@@ -41,7 +41,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 /**
- * Per world effect data for better RAIN effects
+ * Per world effect data for effects
  */
 public final class DimensionEffectData implements INBTSerialization {
 
@@ -50,6 +50,8 @@ public final class DimensionEffectData implements INBTSerialization {
 
 	public final static float MIN_INTENSITY = 0.0F;
 	public final static float MAX_INTENSITY = 1.0F;
+	public final static float MIN_THUNDER_THRESHOLD = 0.0F;
+	public final static float MAX_THUNDER_THRESHOLD = 1.0F;
 
 	private final class NBT {
 		public final static String DIMENSION = "d";
@@ -57,12 +59,14 @@ public final class DimensionEffectData implements INBTSerialization {
 		public final static String MIN_INTENSITY = "min";
 		public final static String MAX_INTENSITY = "max";
 		public final static String AURORA_LIST = "al";
+		public final static String THUNDER_THRESHOLD = "tt";
 	};
 
 	private int dimensionId = 0;
 	private float intensity = 0.0F;
 	private float minIntensity = ModOptions.defaultMinRainStrength;
 	private float maxIntensity = ModOptions.defaultMaxRainStrength;
+	private float thunderThreshold = ModOptions.defaultThunderThreshold;
 	private Set<AuroraData> auroras = new HashSet<AuroraData>();
 
 	public DimensionEffectData() {
@@ -100,6 +104,14 @@ public final class DimensionEffectData implements INBTSerialization {
 		this.maxIntensity = MathHelper.clamp_float(intensity, this.minIntensity, MAX_INTENSITY);
 	}
 
+	public float getThunderThreshold() {
+		return this.thunderThreshold;
+	}
+
+	public void setThunderThreshold(final float threshold) {
+		this.thunderThreshold = MathHelper.clamp_float(threshold, MIN_THUNDER_THRESHOLD, MAX_THUNDER_THRESHOLD);
+	}
+
 	public Set<AuroraData> getAuroraList() {
 		return this.auroras;
 	}
@@ -125,6 +137,9 @@ public final class DimensionEffectData implements INBTSerialization {
 		if (nbt.hasKey(NBT.MAX_INTENSITY))
 			this.maxIntensity = MathHelper.clamp_float(nbt.getFloat(NBT.MAX_INTENSITY), this.minIntensity,
 					MAX_INTENSITY);
+		if (nbt.hasKey(NBT.THUNDER_THRESHOLD))
+			this.thunderThreshold = MathHelper.clamp_float(nbt.getFloat(NBT.THUNDER_THRESHOLD), MIN_THUNDER_THRESHOLD,
+					MAX_THUNDER_THRESHOLD);
 		final NBTTagList list = nbt.getTagList(NBT.AURORA_LIST, Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < list.tagCount(); i++) {
 			final NBTTagCompound tag = list.getCompoundTagAt(i);
@@ -140,6 +155,7 @@ public final class DimensionEffectData implements INBTSerialization {
 		nbt.setFloat(NBT.INTENSITY, this.intensity);
 		nbt.setFloat(NBT.MIN_INTENSITY, this.minIntensity);
 		nbt.setFloat(NBT.MAX_INTENSITY, this.maxIntensity);
+		nbt.setFloat(NBT.THUNDER_THRESHOLD, this.thunderThreshold);
 		final NBTTagList list = new NBTTagList();
 		for (final AuroraData data : this.auroras) {
 			final NBTTagCompound tag = new NBTTagCompound();
@@ -153,6 +169,16 @@ public final class DimensionEffectData implements INBTSerialization {
 		return DimensionEffectDataFile.get(world);
 	}
 
+	public String configString() {
+		final StringBuilder builder = new StringBuilder();
+		builder.append("dim ").append(this.dimensionId).append(": ");
+		builder.append("intensity [").append(FORMATTER.format(this.minIntensity * 100));
+		builder.append(",").append(FORMATTER.format(this.maxIntensity * 100));
+		builder.append("]");
+		builder.append(", thunder threshold: ").append(FORMATTER.format(this.thunderThreshold * 100));
+		return builder.toString();
+	}
+	
 	@Override
 	public String toString() {
 		// Dump out some diagnostics for the currentAurora dimension
@@ -162,6 +188,7 @@ public final class DimensionEffectData implements INBTSerialization {
 		builder.append(" [").append(FORMATTER.format(this.minIntensity * 100));
 		builder.append(",").append(FORMATTER.format(this.maxIntensity * 100));
 		builder.append("]");
+		builder.append(", thunder: ").append(FORMATTER.format(this.thunderThreshold * 100));
 		builder.append(", auroras: ").append(this.auroras.size());
 		return builder.toString();
 	}

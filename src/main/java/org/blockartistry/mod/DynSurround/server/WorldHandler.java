@@ -50,7 +50,8 @@ public class WorldHandler {
 
 	public static void updateWeatherBody(final World world) {
 
-		if (world.isRemote)
+		// If it is the client, or it has no sky, return.
+		if (world.isRemote || world.provider.getHasNoSky())
 			return;
 
 		final int dimensionId = world.provider.getDimension();
@@ -99,7 +100,7 @@ public class WorldHandler {
 
 		if (info.isRaining() && data.getRainIntensity() == 0.0F) {
 			data.randomizeRain();
-			ModLog.debug(String.format("dim %d RAIN strength set to %f", dimensionId, data.getRainIntensity()));
+			ModLog.debug(String.format("dim %d rain strength set to %f", dimensionId, data.getRainIntensity()));
 		}
 
 		world.prevRainingStrength = world.rainingStrength;
@@ -119,7 +120,17 @@ public class WorldHandler {
 				world.rainingStrength = 0.0F;
 		} else if (data.getRainIntensity() > 0.0F) {
 			data.setRainIntensity(0.0F);
-			ModLog.debug(String.format("dim %d RAIN has stopped", dimensionId));
+			ModLog.debug(String.format("dim %d rain has stopped", dimensionId));
 		}
 	}
+
+	public static boolean isRaining(final World world) {
+		return (double) world.getRainStrength(1.0F) > 0.2D;
+	}
+
+	public static boolean isThundering(final World world) {
+		final double strength = (double) world.getThunderStrength(1.0F);
+		return world.isRemote ? strength > 0.9D : strength > DimensionEffectDataFile.get(world).getThunderThreshold();
+	}
+
 }

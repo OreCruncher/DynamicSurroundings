@@ -149,7 +149,7 @@ public final class VersionCheck implements Runnable {
 	}
 
 	private static final String CURSE_PROJECT_NAME = "238891";
-	private static final String MOD_NAME_TEMPLATE = "DynamicSurroundings-1.8.9-[].jar";
+	private static final String MOD_NAME_TEMPLATE = "DynamicSurroundings-1.10.2-[].jar";
 
 	public static void register() {
 

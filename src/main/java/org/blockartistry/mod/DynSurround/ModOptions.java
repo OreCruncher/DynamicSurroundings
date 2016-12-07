@@ -128,9 +128,10 @@ public final class ModOptions {
 	public static final String CATEGORY_GENERAL = "general";
 	public static final String CONFIG_MIN_RAIN_STRENGTH = "Default Minimum Rain Strength";
 	public static final String CONFIG_MAX_RAIN_STRENGTH = "Default Maximum Rain Strength";
+	public static final String CONFIG_THUNDER_THRESHOLD = "Default Thunder Effect Threshold";
 	public static final String CONFIG_FX_RANGE = "Special Effect Range";
 	private static final List<String> generalSort = ImmutableList.<String> builder()
-			.add(CONFIG_FX_RANGE, CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH)
+			.add(CONFIG_FX_RANGE, CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH, CONFIG_THUNDER_THRESHOLD)
 			.build();
 
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_MIN_RAIN_STRENGTH, defaultValue = "0.0")
@@ -141,6 +142,10 @@ public final class ModOptions {
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Default maximum rain strength for a dimension")
 	public static float defaultMaxRainStrength = 1.0F;
+	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_THUNDER_THRESHOLD, defaultValue = "0.5")
+	@MinMaxFloat(min = 0.0F, max = 1.0F)
+	@Comment("Default rain threshold for when thunder is triggered")
+	public static float defaultThunderThreshold = 0.5F;
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_FX_RANGE, defaultValue = "16")
 	@MinMaxInt(min = 16, max = 64)
 	@Comment("Block radius/range around player for special effect application")

@@ -80,7 +80,7 @@ public class Transformer implements IClassTransformer {
 		for (final MethodNode m : cn.methods) {
 			if (m.name.equals(names[0])) {
 				logger.debug("Hooking " + names[0]);
-				InsnList list = new InsnList();
+				final InsnList list = new InsnList();
 				list.add(new VarInsnNode(ALOAD, 0));
 				list.add(new VarInsnNode(FLOAD, 1));
 				final String sig = "(Lnet/minecraft/client/renderer/EntityRenderer;F)V";
@@ -90,7 +90,7 @@ public class Transformer implements IClassTransformer {
 				m.instructions.insertBefore(m.instructions.getFirst(), list);
 			} else if (m.name.equals(names[1])) {
 				logger.debug("Hooking " + names[1]);
-				InsnList list = new InsnList();
+				final InsnList list = new InsnList();
 				list.add(new VarInsnNode(ALOAD, 0));
 				final String sig = "(Lnet/minecraft/client/renderer/EntityRenderer;)V";
 				list.add(new MethodInsnNode(INVOKESTATIC, "org/blockartistry/mod/DynSurround/client/RenderWeather",
@@ -142,28 +142,45 @@ public class Transformer implements IClassTransformer {
 		final String names[];
 
 		if (TransformLoader.runtimeDeobEnabled)
-			names = new String[] { "updateWeatherBody" };
+			names = new String[] { "updateWeatherBody", "func_72896_J", "func_72911_I" };
 		else
-			names = new String[] { "updateWeatherBody" };
+			names = new String[] { "updateWeatherBody", "isRaining", "isThundering" };
 
-		final String targetName[] = new String[] { "updateWeatherBody" };
+		final String targetName[] = new String[] { "updateWeatherBody", "isRaining", "isThundering" };
 
 		final ClassReader cr = new ClassReader(classBytes);
 		final ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, 0);
 
 		for (final MethodNode m : cn.methods) {
-			if (m.name.equals(names[0])) {
-				logger.debug("Hooking " + names[0]);
-				InsnList list = new InsnList();
-				list.add(new VarInsnNode(ALOAD, 0));
-				final String sig = "(Lnet/minecraft/world/World;)V";
-				list.add(new MethodInsnNode(INVOKESTATIC, "org/blockartistry/mod/DynSurround/server/WorldHandler",
-						targetName[0], sig, false));
+			logger.debug("METHOD: " + m.name);
+			int idx = -1;
+			if (m.name.equals(names[0]))
+				idx = 0;
+			else if (m.name.equals(names[1]))
+				idx = 1;
+			else if (m.name.equals(names[2]))
+				idx = 2;
+			else
+				continue;
+
+			logger.debug("Hooking " + names[idx]);
+			InsnList list = new InsnList();
+			list.add(new VarInsnNode(ALOAD, 0));
+			final String sig;
+			if(idx == 0)
+				sig = "(Lnet/minecraft/world/World;)V";
+			else
+				sig = "(Lnet/minecraft/world/World;)Z";
+				
+			list.add(new MethodInsnNode(INVOKESTATIC, "org/blockartistry/mod/DynSurround/server/WorldHandler",
+					targetName[idx], sig, false));
+			
+			if(idx == 0)
 				list.add(new InsnNode(RETURN));
-				m.instructions.insertBefore(m.instructions.getFirst(), list);
-				break;
-			}
+			else
+				list.add(new InsnNode(IRETURN));
+			m.instructions.insertBefore(m.instructions.getFirst(), list);
 		}
 
 		final ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);

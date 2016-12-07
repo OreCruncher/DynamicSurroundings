@@ -24,7 +24,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.10.2-12.18.2.2179"
+    version = "${config.version.minecraft}-${config.version.forge}"
     runDir = "run"
     replace '@VERSION@', project.ext.modVersion
     
