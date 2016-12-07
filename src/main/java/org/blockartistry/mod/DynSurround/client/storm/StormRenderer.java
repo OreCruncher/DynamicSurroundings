@@ -55,7 +55,7 @@ public class StormRenderer implements IAtmosRenderer {
 
 	public static ResourceLocation locationRainPng = new ResourceLocation("textures/environment/RAIN.png");
 	public static ResourceLocation locationSnowPng = new ResourceLocation("textures/environment/snow.png");
-	public static ResourceLocation locationDustPng = new ResourceLocation(Module.MOD_ID,
+	public static ResourceLocation locationDustPng = new ResourceLocation(Module.RESOURCE_ID,
 			"textures/environment/dust.png");
 
 	private static final float[] RAIN_X_COORDS = new float[1024];

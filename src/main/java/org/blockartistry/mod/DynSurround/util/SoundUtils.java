@@ -37,7 +37,7 @@ public class SoundUtils {
 	}
 
 	public static SoundEvent getOrRegisterSound(final ResourceLocation location) {
-		ResourceLocation registryName = new ResourceLocation(Module.MOD_ID, location.getResourcePath());
+		ResourceLocation registryName = new ResourceLocation(Module.RESOURCE_ID, location.getResourcePath());
 		if (SoundEvent.REGISTRY.containsKey(registryName))
 			return SoundEvent.REGISTRY.getObject(registryName);
 

@@ -225,7 +225,7 @@ public class AcousticsJsonReader {
 	
 	private void setupSoundName(final BasicAcoustic a, final String soundName) {
 		if (soundName.charAt(0) != '@') {
-			a.setSound(SoundUtils.getOrRegisterSound(Module.MOD_ID + ":" + this.soundRoot + soundName));
+			a.setSound(SoundUtils.getOrRegisterSound(Module.RESOURCE_ID + ":" + this.soundRoot + soundName));
 		} else {
 			a.setSound(SoundUtils.getOrRegisterSound(soundName.replace("@", "")));
 		}

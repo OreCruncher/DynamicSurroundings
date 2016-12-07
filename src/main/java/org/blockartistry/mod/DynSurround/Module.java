@@ -79,22 +79,20 @@ public class Module {
 
 	@EventHandler
 	public void preInit(final FMLPreInitializationEvent event) {
-		
+
 		MinecraftForge.EVENT_BUS.register(this);
 
 		// Load up our configuration
-		dataDirectory = new File(event.getModConfigurationDirectory(),
-				Module.MOD_ID);
+		dataDirectory = new File(event.getModConfigurationDirectory(), Module.MOD_ID);
 		dataDirectory.mkdirs();
-		config = new Configuration(new File(dataDirectory, Module.MOD_ID
-				+ ".cfg"));
+		config = new Configuration(new File(dataDirectory, Module.MOD_ID + ".cfg"));
 
 		config.load();
 		ModOptions.load(config);
 		config.save();
 
 		ModLog.DEBUGGING = ModOptions.enableDebugLogging;
-		
+
 		proxy.preInit(event);
 	}
 

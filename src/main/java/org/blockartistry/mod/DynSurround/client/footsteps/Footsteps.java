@@ -48,8 +48,10 @@ import org.blockartistry.mod.DynSurround.client.footsteps.parsers.AcousticsJsonR
 import org.blockartistry.mod.DynSurround.client.footsteps.parsers.Register;
 import org.blockartistry.mod.DynSurround.client.footsteps.util.property.simple.ConfigProperty;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
+import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -70,6 +72,7 @@ public class Footsteps implements IResourceManagerReloadListener, IClientEffectH
 
 	public Footsteps() {
 		INSTANCE = this;
+		((IReloadableResourceManager)Minecraft.getMinecraft().getResourceManager()).registerReloadListener(this);
 	}
 
 	public void reloadEverything() {
