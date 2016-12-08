@@ -43,7 +43,7 @@ public final class GuiHUDHandler {
 	}
 
 	public static interface IGuiOverlay {
-		void doRender(final RenderGameOverlayEvent event);
+		void doRender(final RenderGameOverlayEvent.Pre event);
 	}
 
 	private static final List<IGuiOverlay> overlays = new ArrayList<IGuiOverlay>();
@@ -60,9 +60,9 @@ public final class GuiHUDHandler {
 
 		MinecraftForge.EVENT_BUS.register(new GuiHUDHandler());
 	}
-
+	
 	@SubscribeEvent(priority = EventPriority.HIGH)
-	public void onRenderExperienceBar(final RenderGameOverlayEvent event) {
+	public void onRenderExperienceBar(final RenderGameOverlayEvent.Pre event) {
 		for (final IGuiOverlay overlay : overlays)
 			overlay.doRender(event);
 	}

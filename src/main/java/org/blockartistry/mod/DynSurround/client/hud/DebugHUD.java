@@ -46,9 +46,9 @@ public class DebugHUD extends Gui implements IGuiOverlay {
 	private static final float GUITOP = 178;
 	private static final float GUILEFT = 2;
 
-	public void doRender(final RenderGameOverlayEvent event) {
+	public void doRender(final RenderGameOverlayEvent.Pre event) {
 
-		if (event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
+		if (event.getType() != ElementType.DEBUG) {
 			return;
 		}
 		

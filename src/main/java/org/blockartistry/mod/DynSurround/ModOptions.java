@@ -326,21 +326,22 @@ public final class ModOptions {
 	public static final String CATEGORY_POTION_HUD = "player.potion hud";
 	public static final String CONFIG_POTION_HUD_ENABLE = "Enable";
 	public static final String CONFIG_POTION_HUD_TRANSPARENCY = "Transparency";
-	public static final String CONFIG_POTION_HUD_LEFT_OFFSET = "Left Offset";
-	public static final String CONFIG_POTION_HUD_TOP_OFFSET = "Top Offset";
+	public static final String CONFIG_POTION_HUD_LEFT_OFFSET = "Horizontal Offset";
+	public static final String CONFIG_POTION_HUD_TOP_OFFSET = "Vertical Offset";
 	public static final String CONFIG_POTION_HUD_SCALE = "Display Scale";
+	public static final String CONFIG_POTION_HUD_ANCHOR = "HUD Location";
 	private static final List<String> potionHudSort = Arrays.asList(CONFIG_POTION_HUD_ENABLE,
-			CONFIG_POTION_HUD_TRANSPARENCY, CONFIG_POTION_HUD_SCALE, CONFIG_POTION_HUD_TOP_OFFSET,
-			CONFIG_POTION_HUD_LEFT_OFFSET);
+			CONFIG_POTION_HUD_TRANSPARENCY, CONFIG_POTION_HUD_SCALE, CONFIG_POTION_HUD_ANCHOR,
+			CONFIG_POTION_HUD_TOP_OFFSET, CONFIG_POTION_HUD_LEFT_OFFSET);
 
 	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_ENABLE, defaultValue = "true")
 	@Comment("Enable display of potion icons in display")
 	@RestartRequired
 	public static boolean potionHudEnabled = true;
-	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_TRANSPARENCY, defaultValue = "0.5")
+	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_TRANSPARENCY, defaultValue = "0.75")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Transparency factor for icons (higher more solid)")
-	public static float potionHudTransparency = 0.5F;
+	public static float potionHudTransparency = 0.75F;
 	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_LEFT_OFFSET, defaultValue = "5")
 	@MinMaxInt(min = 0)
 	@Comment("Offset from left side of screen")
@@ -349,10 +350,14 @@ public final class ModOptions {
 	@MinMaxInt(min = 0)
 	@Comment("Offset from top of screen")
 	public static int potionHudTopOffset = 5;
-	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_SCALE, defaultValue = "0.5")
+	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_SCALE, defaultValue = "0.75")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Size scale of icons (lower is smaller)")
-	public static float potionHudScale = 0.5F;
+	public static float potionHudScale = 0.75F;
+	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_ANCHOR, defaultValue = "1")
+	@MinMaxFloat(min = 0, max = 1)
+	@Comment("Area of the display the Potion HUD is displayed (0 upper left, 1 upper right)")
+	public static int potionHudAnchor = 1;
 
 	public static void load(final Configuration config) {
 
