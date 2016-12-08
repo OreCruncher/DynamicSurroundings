@@ -51,27 +51,10 @@
 		},
 		{
 			"blocks":[
-				"biomesoplenty:foliage"
-			],
-			"chance":25000,
-			"sounds":[
-				{
-					"sound":"dsurround:hiss",
-					"conditions":"(?i)(?!.*raining.*|.*cold.*|.*freezing.*)(.*#day#.*)",
-					"volume":1.0,
-					"variable":true
-				}
-				
-			]
-			
-		},
-		{
-			"blocks":[
 				"biomesoplenty:flower_0:*",
 				"biomesoplenty:flower_1:*",
 				"biomesoplenty:plant_0:*",
 				"biomesoplenty:plant_1:*",
-				"biomesoplenty:plant_2:*",
 				"biomesoplenty:double_plant:*"
 			],
 			"effects":[
