@@ -267,11 +267,11 @@ public class EnvironStateHandler implements IClientEffectHandler {
 		}
 
 		public static boolean isPlayerHurt() {
-			return !isCreative() && getPlayer().getHealth() <= ModOptions.playerHurtThreshold;
+			return ModOptions.playerHurtThreshold != 0 && !isCreative() && getPlayer().getHealth() <= ModOptions.playerHurtThreshold;
 		}
 
 		public static boolean isPlayerHungry() {
-			return !isCreative() && getPlayer().getFoodStats().getFoodLevel() <= ModOptions.playerHungerThreshold;
+			return ModOptions.playerHungerThreshold != 0 && !isCreative() && getPlayer().getFoodStats().getFoodLevel() <= ModOptions.playerHungerThreshold;
 		}
 
 		public static boolean isPlayerBurning() {
@@ -451,10 +451,10 @@ public class EnvironStateHandler implements IClientEffectHandler {
 	public void diagnostics(final DiagnosticEvent.Gather event) {
 		final EntityPlayer player = EnvironState.getPlayer();
 		event.output.add("Dim: " + EnvironState.getDimensionId() + "/" + EnvironState.getDimensionName());
+		event.output.add("Biome: " + EnvironState.getBiomeName());
 		event.output.add("Player: h " + player.getHealth() + "/" + player.getMaxHealth() + "; f "
 				+ player.getFoodStats().getFoodLevel() + "; s " + player.getFoodStats().getSaturationLevel());
 		event.output.add(StormProperties.diagnostic());
-		event.output.add("Biome: " + EnvironState.getBiomeName());
 		event.output.add("Conditions: " + EnvironState.getConditions());
 	}
 

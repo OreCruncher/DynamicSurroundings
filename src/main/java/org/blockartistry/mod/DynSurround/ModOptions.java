@@ -75,7 +75,7 @@ public final class ModOptions {
 
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_VOLUME, defaultValue = "1.0")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
-	@Comment("Factor to apply to rain sound level to adjust")
+	@Comment("Volume scale factor to apply to rain sound level to adjust")
 	public static float soundLevel = 1.0F;
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_PARTICLE_BASE, defaultValue = "100")
 	@MinMaxInt(min = 0, max = 500)
@@ -131,8 +131,7 @@ public final class ModOptions {
 	public static final String CONFIG_THUNDER_THRESHOLD = "Default Thunder Effect Threshold";
 	public static final String CONFIG_FX_RANGE = "Special Effect Range";
 	private static final List<String> generalSort = ImmutableList.<String> builder()
-			.add(CONFIG_FX_RANGE, CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH, CONFIG_THUNDER_THRESHOLD)
-			.build();
+			.add(CONFIG_FX_RANGE, CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH, CONFIG_THUNDER_THRESHOLD).build();
 
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_MIN_RAIN_STRENGTH, defaultValue = "0.0")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
@@ -144,7 +143,7 @@ public final class ModOptions {
 	public static float defaultMaxRainStrength = 1.0F;
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_THUNDER_THRESHOLD, defaultValue = "0.5")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
-	@Comment("Default rain threshold for when thunder is triggered")
+	@Comment("Rain strength threshold for when thunder can be triggered")
 	public static float defaultThunderThreshold = 0.5F;
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_FX_RANGE, defaultValue = "16")
 	@MinMaxInt(min = 16, max = 64)
@@ -241,7 +240,7 @@ public final class ModOptions {
 	public static boolean enableBiomeSounds = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_MASTER_SOUND_FACTOR, defaultValue = "0.5")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
-	@Comment("Master sound scale factor for biome and block sounds")
+	@Comment("Master volume scale factor for biome and block sounds")
 	public static float masterSoundScaleFactor = 0.5F;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_AUTO_CONFIG_CHANNELS, defaultValue = "true")
 	@Comment("Automatically configure sound channels")
@@ -258,29 +257,29 @@ public final class ModOptions {
 	@RestartRequired
 	public static int streamingSoundChannelCount = 4;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_JUMP_SOUND, defaultValue = "true")
-	@Comment("Enable sound effect when jumping")
+	@Comment("Enable player Jump sound effect")
 	@RestartRequired
 	public static boolean enableJumpSound = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_SWING_SOUND, defaultValue = "true")
-	@Comment("Enable weapons swing sound effect when attacking")
+	@Comment("Enable Weapon Swing sound effect")
 	@RestartRequired
 	public static boolean enableSwingSound = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_CRAFTING_SOUND, defaultValue = "true")
-	@Comment("Enable sound when item crafted")
+	@Comment("Enable Item Crafted sound effect")
 	@RestartRequired
 	public static boolean enableCraftingSound = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BOW_PULL_SOUND, defaultValue = "true")
-	@Comment("Enable sound when bow is pulled")
+	@Comment("Enable Bow Pull sound effect")
 	@RestartRequired
 	public static boolean enableBowPullSound = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_FOOTSTEPS_SOUND, defaultValue = "true")
-	@Comment("Enable footstep sounds")
+	@Comment("Enable Footstep sound effects")
 	@RestartRequired
 	public static boolean enableFootstepSounds = true;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_FOOTSTEPS_SOUND_FACTOR, defaultValue = "0.2")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_FOOTSTEPS_SOUND_FACTOR, defaultValue = "0.15")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
-	@Comment("Sound scale factor for footstep sounds")
-	public static float footstepsSoundFactor = 0.2F;
+	@Comment("Volume scale factor for footstep sounds")
+	public static float footstepsSoundFactor = 0.15F;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_SOUND_CULL_THRESHOLD, defaultValue = "20")
 	@MinMaxInt(min = 0)
 	@Comment("Ticks between culled sound events (0 to disable culling)")
@@ -295,7 +294,7 @@ public final class ModOptions {
 	@Hidden
 	public static String[] blockedSounds = { "dsurround:bison" };
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_SOUND_VOLUMES, defaultValue = "")
-	@Comment("Individual sound scaling factors")
+	@Comment("Individual sound volume scaling factors")
 	@Hidden
 	public static String[] soundVolumes = {};
 
@@ -316,11 +315,11 @@ public final class ModOptions {
 	@RestartRequired
 	public static boolean enableDamagePopoffs = true;
 	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_HURT_THRESHOLD, defaultValue = "8")
-	@Comment("Amount of health bar remaining to trigger player hurt sound")
+	@Comment("Amount of health bar remaining to trigger player hurt sound (0 disable)")
 	@MinMaxInt(min = 0, max = 10)
 	public static int playerHurtThreshold = 8;
 	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_HUNGER_THRESHOLD, defaultValue = "8")
-	@Comment("Amount of food bar remaining to trigger player hunger sound")
+	@Comment("Amount of food bar remaining to trigger player hunger sound (0 disable)")
 	@MinMaxInt(min = 0, max = 10)
 	public static int playerHungerThreshold = 8;
 
