@@ -83,15 +83,7 @@ dependencies {
 
     compile "foxie:Calendar:1.10.2-1.5-10:deobf"
     compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
-    
-    //compile "codechicken:CodeChickenLib:1.10.2-2.4.3.162:deobf"
-    //compile "codechicken:CodeChickenCore:1.10.2-2.3.5.93:deobf"
-    //compile "codechicken:NotEnoughItems:1.10.2-2.1.2.174:deobf"
-    
-    // compile against the JEI API
-    //deobfCompile "mezz.jei:jei_1.10.2:3.13.2.+:api"
-    // at runtime, use the full JEI jar
-    //runtime "mezz.jei:jei_1.10.2:3.13.2.+"
+    compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.10.2-5.0.0.2109:deobf"
 }
 
 processResources

@@ -51,7 +51,9 @@ public class MCHelper {
 	}
 
 	public static Block getBlockByName(final String blockName) {
-		return Block.REGISTRY.getObject(new ResourceLocation(blockName));
+		// Yes yes.  I know what I am doing here.  Need to know if the block
+		// doesn't exist because of bad data in a config file or some such.
+		return Block.REGISTRY.getObjectBypass(new ResourceLocation(blockName));
 	}
 	
 	public static boolean isAirBlock(final IBlockState state, final World world, final BlockPos pos) {

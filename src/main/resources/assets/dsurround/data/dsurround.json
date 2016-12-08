@@ -1,7 +1,7 @@
 {
 	"entries":[
 		{
-			"biomeName":"(?i)(?!.*forest.*|.*taiga.*|.*jungle.*|.*\\+.*|.*savanna.*)(.*hills.*|.*plateau.*|.*wasteland.*|.*canyon.*|tundra|highlands)",
+			"biomeName":"(?i)(?!.*forest.*|.*taiga.*|.*jungle.*|.*\\+.*|.*savanna.*)(.*hills.*|.*plateau.*|.*wasteland.*|.*canyon.*|tundra|.*highland.*|.*volcanic.*)",
 			"sounds":[
 				{
 					"sound":"dsurround:wind",
@@ -22,7 +22,7 @@
 			
 		},
 		{
-			"biomeName":"(?i)(.*jungle.*)",
+			"biomeName":"(?i)(.*jungle.*|.*tropical.*)",
 			"spotSoundChance":600,
 			"soundReset":true,
 			"sounds":[
@@ -50,7 +50,7 @@
 			
 		},
 		{
-			"biomeName":"(?i)(?!.*ice.*)(.*plains.*|.*meadow.*|grassland|prairie|.*field.*|.*chaparral.*)",
+			"biomeName":"(?i)(?!.*ice.*)(.*plains.*|.*meadow.*|grassland|brushland|.*shrubland.*|prairie|.*field.*|.*chaparral.*|overgrown cliffs|steppe)",
 			"sounds":[
 				{
 					"sound":"dsurround:crickets",
@@ -82,7 +82,7 @@
 			
 		},
 		{
-			"biomeName":"(?i)(?!.*dead.*|.*flower.*|.*fungi.*|.*frost.*|.*snow.*|.*kelp.*)(.*forest.*|.*cherry.*|.*orchard.*|.*wood.*|.*wetland.*|thicket|grove)",
+			"biomeName":"(?i)(?!.*dead.*|.*flower.*|.*fungi.*|.*frost.*|.*snow.*|.*kelp.*)(.*forest.*|.*cherry.*|.*orchard.*|.*wood.*|.*wetland.*|.*grove.*|.*springs.*)",
 			"sounds":[
 				{
 					"sound":"dsurround:forest",
@@ -104,6 +104,21 @@
 			
 		},
 		{
+			"biomeName":"(?i)(heathland|thicket|land of lakes|mangrove|origin island)",
+			"sounds":[
+				{
+					"sound":"dsurround:forest",
+					"conditions":"(?i)(?!.*#raining#.*).*#day#.*"
+				},
+				{
+					"sound":"dsurround:crickets",
+					"conditions":"(?i)(?!.*#raining#.*).*#night#.*",
+					"volume":0.1
+				}
+			]
+			
+		},
+		{
 			"biomeName":"(?i)(?!.*cold.*|.*snow.*)(.*taiga.*)",
 			"sounds":[
 				{
@@ -116,7 +131,7 @@
 			
 		},
 		{
-			"biomeName":"(?i)(.*taiga.*)",
+			"biomeName":"(?i)(.*taiga.*|.*snow.*forest.*)",
 			"sounds":[
 				{
 					"sound":"dsurround:owl",
@@ -239,7 +254,7 @@
 			
 		},
 		{
-			"biomeName":"(?i)(.*desert.*|.*sand.*|.*mesa.*|.*wasteland.*|.*sahara.*)",
+			"biomeName":"(?i)(.*desert.*|.*sand.*|.*mesa.*|.*wasteland.*|.*sahara.*|outback|oasis)",
 			"dust":true,
 			"dustColor":"204,185,102"
 		},
