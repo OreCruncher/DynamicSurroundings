@@ -52,6 +52,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemFishingRod;
+import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
@@ -390,6 +391,14 @@ public class EnvironStateHandler implements IClientEffectHandler {
 			SoundManager.playSoundAtPlayer(EnvironState.getPlayer(), JUMP, SoundCategory.PLAYERS);
 	}
 
+	private static boolean playSwordSwing(final Item item) {
+		return item instanceof ItemSword || item instanceof ItemSpade || item instanceof ItemHoe || item instanceof ItemFishingRod;
+	}
+
+	private static boolean playAxeSwing(final Item item) {
+		return item instanceof ItemAxe || item instanceof ItemPickaxe;
+	}
+
 	@SubscribeEvent
 	public void onItemSwing(final PlayerInteractEvent.LeftClickEmpty event) {
 		if (SWORD == null || event.getEntityPlayer() == null || event.getEntityPlayer().worldObj == null)
@@ -400,9 +409,9 @@ public class EnvironStateHandler implements IClientEffectHandler {
 			if (currentItem != null) {
 				SoundEffect sound = null;
 				final Item item = currentItem.getItem();
-				if (item instanceof ItemSword || item instanceof ItemSpade || item instanceof ItemFishingRod)
+				if (playSwordSwing(item))
 					sound = SWORD;
-				else if (item instanceof ItemAxe || item instanceof ItemPickaxe)
+				else if (playAxeSwing(item))
 					sound = AXE;
 
 				if (sound != null)
@@ -428,9 +437,9 @@ public class EnvironStateHandler implements IClientEffectHandler {
 	}
 
 	@SubscribeEvent
-	public void onItemUse(final PlayerInteractEvent.RightClickItem  event) {
-		if (BOW_PULL == null || event.getEntityPlayer() == null || event.getEntityPlayer().worldObj == null || event.getItemStack() == null
-				|| event.getItemStack().getItem() == null)
+	public void onItemUse(final PlayerInteractEvent.RightClickItem event) {
+		if (BOW_PULL == null || event.getEntityPlayer() == null || event.getEntityPlayer().worldObj == null
+				|| event.getItemStack() == null || event.getItemStack().getItem() == null)
 			return;
 
 		if (event.getEntityPlayer().worldObj.isRemote && event.getItemStack().getItem() instanceof ItemBow) {
