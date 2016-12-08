@@ -70,6 +70,10 @@ public class MCHelper {
 		return block.getSoundType();
 	}
 	
+	public static SoundType getSoundType(final IBlockState state) {
+		return getSoundType(state.getBlock());
+	}
+	
 	public static boolean isOpaqueCube(final Block block) {
 		// TODO: Look for replacement!
 		return block.isOpaqueCube(null);

@@ -27,7 +27,10 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 import org.blockartistry.mod.DynSurround.util.Color;
 
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ParticleHealPopOff extends ParticleTextPopOff {
 
 	public ParticleHealPopOff(final World world, final double x, final double y, final double z, final int amount) {

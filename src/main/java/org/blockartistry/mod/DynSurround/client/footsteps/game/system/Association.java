@@ -32,66 +32,64 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class Association {
-	
-	private Block block;
+
 	private IBlockState state;
 	private BlockPos pos;
-	
+
 	private String data = null;
-	
+
 	private boolean noAssociation = false;
 	private boolean isPrimative = false;
-	
+
 	public Association() {
 	}
-	
-	public Association(final Block block, final IBlockState state, final BlockPos pos) {
-		this.block = block;
+
+	public Association(final IBlockState state, final BlockPos pos) {
 		this.state = state;
 		this.pos = pos;
 	}
-	
+
 	public String getData() {
 		return this.data;
 	}
-	
+
 	public Association setAssociation(final String association) {
 		this.data = association;
 		this.noAssociation = false;
 		return this;
 	}
-	
+
 	public Association setNoAssociation() {
 		this.noAssociation = true;
 		return this;
 	}
-	
+
 	public boolean getNoAssociation() {
 		return this.noAssociation;
 	}
-	
+
 	public Association setPrimitive(final String primative) {
 		this.data = primative;
 		this.isPrimative = true;
 		return this;
 	}
-	
+
 	public boolean isPrimative() {
 		return this.isPrimative;
 	}
-	
+
 	public Block getBlock() {
-		return this.block;
+		return this.state.getBlock();
 	}
-	
+
 	public IBlockState getState() {
 		return this.state;
 	}
-	
+
 	public BlockPos getPos() {
 		return this.pos;
 	}
-	
+
 	public boolean isNotEmitter() {
 		return this.data != null && this.data.equals("NOT_EMITTER");
 	}

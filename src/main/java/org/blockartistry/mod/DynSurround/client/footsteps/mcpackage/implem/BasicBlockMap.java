@@ -42,6 +42,7 @@ import gnu.trove.map.hash.TCustomHashMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.strategy.IdentityHashingStrategy;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -115,10 +116,10 @@ public class BasicBlockMap implements IBlockMap {
 	}
 
 	@Override
-	public String getBlockMap(final Block block, final int meta) {
-		final TIntObjectHashMap<String> metas = this.metaMap.get(block);
+	public String getBlockMap(final IBlockState state) {
+		final TIntObjectHashMap<String> metas = this.metaMap.get(state.getBlock());
 		if (metas != null) {
-			String result = metas.get(meta);
+			String result = metas.get(state.getBlock().getMetaFromState(state));
 			if (result == null)
 				result = metas.get(-1);
 			return result;
@@ -127,10 +128,10 @@ public class BasicBlockMap implements IBlockMap {
 	}
 
 	@Override
-	public String getBlockMapSubstrate(final Block block, final int meta, final String substrate) {
-		final Map<String, String> sub = this.substrateMap.get(block);
+	public String getBlockMapSubstrate(final IBlockState state, final String substrate) {
+		final Map<String, String> sub = this.substrateMap.get(state.getBlock());
 		if (sub != null) {
-			String result = sub.get(substrate + "." + meta);
+			String result = sub.get(substrate + "." + state.getBlock().getMetaFromState(state));
 			if (result == null)
 				result = sub.get(substrate + ".-1");
 			return result;
@@ -184,20 +185,15 @@ public class BasicBlockMap implements IBlockMap {
 	}
 
 	@Override
-	public boolean hasEntryForBlock(final Block block) {
-		return this.metaMap.containsKey(block) || this.substrateMap.containsKey(block);
-	}
-
-	@Override
-	public void collectData(final Block block, final int meta, final List<String> data) {
-		String temp = this.getBlockMap(block, meta);
+	public void collectData(final IBlockState state, final List<String> data) {
+		String temp = this.getBlockMap(state);
 		if (temp != null)
 			data.add(temp);
 
-		final Map<String, String> subs = this.substrateMap.get(block);
+		final Map<String, String> subs = this.substrateMap.get(state.getBlock());
 		if (subs != null) {
 			final int len = data.size();
-			temp = "." + meta;
+			temp = "." + state.getBlock().getMetaFromState(state);
 			for (final Entry<String, String> entry : subs.entrySet())
 				if (entry.getKey().endsWith(temp))
 					data.add(entry.getValue());

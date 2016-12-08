@@ -29,7 +29,10 @@ import org.blockartistry.mod.DynSurround.Module;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class SoundUtils {
 
 	public static SoundEvent getOrRegisterSound(final String location) {

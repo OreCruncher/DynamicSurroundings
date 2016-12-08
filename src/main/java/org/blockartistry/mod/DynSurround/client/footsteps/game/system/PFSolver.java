@@ -36,12 +36,10 @@ import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.I
 import org.blockartistry.mod.DynSurround.compat.MCHelper;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -175,12 +173,11 @@ public class PFSolver implements ISolver {
 	@Override
 	public Association findAssociationForBlock(final BlockPos immutablePos) {
 		final World world = EnvironState.getWorld();
-		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(immutablePos);
+		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(immutablePos);
 		IBlockState in = world.getBlockState(pos);
 		final IBlockState above = world.getBlockState(pos.up());
 
-		String association = isolator.getBlockMap().getBlockMapSubstrate(above.getBlock(),
-				above.getBlock().getMetaFromState(above), "carpet");
+		String association = isolator.getBlockMap().getBlockMapSubstrate(above, "carpet");
 
 		// PFLog.debugf("Walking on block: %0 -- Being in block: %1", in,
 		// above);
@@ -193,8 +190,7 @@ public class PFSolver implements ISolver {
 
 			if (world.isAirBlock(pos)) {
 				final IBlockState below = world.getBlockState(pos.down());
-				association = this.isolator.getBlockMap().getBlockMapSubstrate(below.getBlock(),
-						below.getBlock().getMetaFromState(below), "bigger");
+				association = this.isolator.getBlockMap().getBlockMapSubstrate(below, "bigger");
 				if (association != null) {
 					pos.move(EnumFacing.DOWN);
 					in = below;
@@ -203,7 +199,7 @@ public class PFSolver implements ISolver {
 			}
 
 			if (association == null) {
-				association = isolator.getBlockMap().getBlockMap(in.getBlock(), in.getBlock().getMetaFromState(in));
+				association = isolator.getBlockMap().getBlockMap(in);
 			}
 
 			if (association != null && !association.equals("NOT_EMITTER")) {
@@ -214,8 +210,7 @@ public class PFSolver implements ISolver {
 				// => this block of code is here, not outside this if else
 				// group.
 
-				String foliage = this.isolator.getBlockMap().getBlockMapSubstrate(above.getBlock(),
-						above.getBlock().getMetaFromState(above), "foliage");
+				String foliage = this.isolator.getBlockMap().getBlockMapSubstrate(above, "foliage");
 				if (foliage != null && !foliage.equals("NOT_EMITTER")) {
 					association = association + "," + foliage;
 					ModLog.debug("Foliage detected: " + foliage);
@@ -237,10 +232,10 @@ public class PFSolver implements ISolver {
 			} else {
 				// PFLog.debugf("Found association for %0 : %1 : %2", in,
 				// association);
-				return (new Association(in.getBlock(), in, pos)).setAssociation(association);
+				return (new Association(in, pos)).setAssociation(association);
 			}
 		} else {
-			String primitive = resolvePrimitive(in.getBlock());
+			String primitive = resolvePrimitive(in);
 			if (primitive != null) {
 				if (primitive.equals("NOT_EMITTER")) {
 					// PFLog.debugf("Primitive for %0 : %1 : %2 is NOT_EMITTER!
@@ -250,22 +245,25 @@ public class PFSolver implements ISolver {
 
 				// PFLog.debugf("Found primitive for %0 : %1 : %2", in,
 				// primitive);
-				return (new Association(in.getBlock(), in, pos)).setPrimitive(primitive);
+				return (new Association(in, pos)).setPrimitive(primitive);
 			} else {
 				// PFLog.debugf("No association for %0 : %1", in);
-				return (new Association(in.getBlock(), in, pos)).setNoAssociation();
+				return (new Association(in, pos)).setNoAssociation();
 			}
 		}
 	}
 
-	private String resolvePrimitive(final Block block) {
-		final SoundType type = MCHelper.getSoundType(block);
+	private String resolvePrimitive(final IBlockState state) {
 
-		if (block == Blocks.AIR || type == null) {
-			return "NOT_EMITTER"; // air block
-		}
+		if (state.getMaterial() == Material.AIR)
+			return "NOT_EMITTER";
 
-		String soundName;
+		final SoundType type = MCHelper.getSoundType(state);
+
+		if (type == null)
+			return "NOT_EMITTER";
+
+		final String soundName;
 		boolean flag = false;
 
 		if (type.getStepSound() == null || type.getStepSound().getSoundName().getResourcePath().isEmpty()) {
@@ -274,13 +272,10 @@ public class PFSolver implements ISolver {
 		} else
 			soundName = type.getStepSound().getSoundName().toString();
 
-		String substrate = String.format(Locale.ENGLISH, "%.2f_%.2f", type.getVolume(), type.getPitch());
+		final String substrate = String.format(Locale.ENGLISH, "%.2f_%.2f", type.getVolume(), type.getPitch());
 
-		String primitive = this.isolator.getPrimitiveMap().getPrimitiveMapSubstrate(soundName, substrate); // Check
-																											// for
-																											// primitive
-																											// in
-																											// register
+		// Check for primitive in register
+		String primitive = this.isolator.getPrimitiveMap().getPrimitiveMapSubstrate(soundName, substrate);
 		if (primitive == null) {
 			if (flag) {
 				primitive = this.isolator.getPrimitiveMap().getPrimitiveMapSubstrate(soundName, "break_" + soundName); // Check
@@ -355,15 +350,13 @@ public class PFSolver implements ISolver {
 		 * => this block of code is here, not outside this if else group.
 		 */
 
-		String foliage = this.isolator.getBlockMap().getBlockMapSubstrate(above.getBlock(),
-				above.getBlock().getMetaFromState(above), "foliage");
+		String foliage = this.isolator.getBlockMap().getBlockMapSubstrate(above, "foliage");
 		if (foliage != null && !foliage.equals("NOT_EMITTER")) {
 			// we discard the normal block association, and mark the foliage as
 			// detected
 			// association = association + "," + foliage;
 			association = foliage;
-			String isMessy = this.isolator.getBlockMap().getBlockMapSubstrate(above.getBlock(),
-					above.getBlock().getMetaFromState(above), "messy");
+			String isMessy = this.isolator.getBlockMap().getBlockMapSubstrate(above, "messy");
 
 			if (isMessy != null && isMessy.equals("MESSY_GROUND"))
 				found = true;

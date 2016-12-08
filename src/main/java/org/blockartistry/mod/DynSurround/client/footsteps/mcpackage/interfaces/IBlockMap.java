@@ -26,7 +26,7 @@ package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -37,18 +37,13 @@ public interface IBlockMap extends IRegistration {
 	 * This will return null if the block is not defined, and NOT_EMITTER if the block is a non-emitting block,
 	 * meaning block resolution must continue on its neighbours.
 	 */
-	public String getBlockMap(final Block block, final int meta);
+	public String getBlockMap(final IBlockState state);
 	
 	/**
 	 * This will return null if the substrate does not resolve in the selected carpet.
 	 */
-	public String getBlockMapSubstrate(final Block block, final int meta, final String substrate);
+	public String getBlockMapSubstrate(final IBlockState state, final String substrate);
 	
-	/**
-	 * Checks if a blockmap entry exists for the given block.
-	 */
-	public boolean hasEntryForBlock(final Block block);
-	
-	public void collectData(final Block block, final int meta, final List<String> data);
+	public void collectData(final IBlockState state, final List<String> data);
 	
 }
