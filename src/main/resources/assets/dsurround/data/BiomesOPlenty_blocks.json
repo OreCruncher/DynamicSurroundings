@@ -51,7 +51,7 @@
 		},
 		{
 			"blocks":[
-				"BiomesOPlenty:foliage"
+				"biomesoplenty:foliage"
 			],
 			"chance":25000,
 			"sounds":[
@@ -64,6 +64,21 @@
 				
 			]
 			
+		},
+		{
+			"blocks":[
+				"biomesoplenty:flower_0:*",
+				"biomesoplenty:flower_1:*",
+				"biomesoplenty:plant_1:*",
+				"biomesoplenty:plant_2:*",
+				"biomesoplenty:double_plant:*"
+			],
+			"effects":[
+				{
+					"effect":"firefly",
+					"chance":75
+				}
+			]
 		}
 		
 	]

@@ -155,6 +155,11 @@ public final class BlockRegistry {
 
 			for (final String blockName : entry.blocks) {
 				final BlockInfo blockInfo = BlockInfo.create(blockName);
+				if(blockInfo == null) {
+					ModLog.warn("Unknown block [%s] in block config file", blockName);
+					continue;
+				}
+				
 				final Block block = blockInfo.getBlock();
 				if (block == null || block == Blocks.AIR) {
 					ModLog.warn("Unknown block [%s] in block config file", blockName);
