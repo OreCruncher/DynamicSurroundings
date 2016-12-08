@@ -32,7 +32,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class PendingSound {
+public class PendingSound implements Comparable<PendingSound> {
+
+	private static final float LATENESS_THRESHOLD_DIVIDER = 1.2f;
+
 	private final Object location;
 	private final SoundEvent sound;
 	private final float volume;
@@ -40,6 +43,7 @@ public class PendingSound {
 	private final IOptions options;
 	private final long timeToPlay;
 	private final long maximum;
+	private final float lateTolerance;
 
 	public PendingSound(final Object location, final SoundEvent sound, final float volume, final float pitch,
 			final IOptions options, final long timeToPlay, final long maximum) {
@@ -51,6 +55,7 @@ public class PendingSound {
 
 		this.timeToPlay = timeToPlay;
 		this.maximum = maximum;
+		this.lateTolerance = maximum / LATENESS_THRESHOLD_DIVIDER;
 	}
 
 	/**
@@ -79,5 +84,25 @@ public class PendingSound {
 	 */
 	public long getMaximumBase() {
 		return this.maximum;
+	}
+
+	public float getLateTolerance() {
+		return this.lateTolerance;
+	}
+
+	public boolean isLate(final long time) {
+		if (this.maximum < 0)
+			return false;
+
+		return (time - this.timeToPlay) > this.lateTolerance;
+	}
+
+	public long howLate(final long time) {
+		return time - this.timeToPlay;
+	}
+
+	@Override
+	public int compareTo(final PendingSound o) {
+		return (int) (this.timeToPlay - o.timeToPlay);
 	}
 }
