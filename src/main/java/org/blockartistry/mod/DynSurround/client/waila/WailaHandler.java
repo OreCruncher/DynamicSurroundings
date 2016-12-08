@@ -71,17 +71,18 @@ public final class WailaHandler implements IWailaDataProvider {
 		text.add(TextFormatting.GOLD + "dsurround");
 
 		final String itemName = MCHelper.nameOf(stack.getItem());
+
 		if (itemName != null) {
 			final StringBuilder builder = new StringBuilder();
+			builder.append("ID: ");
 			builder.append(itemName);
 			if (stack.getHasSubtypes())
 				builder.append(':').append(stack.getItemDamage());
-			if (accessor != null)
-				builder.append('[').append(accessor.getMetadata()).append(']');
 			text.add(builder.toString());
 		}
 
 		if (accessor != null && Footsteps.INSTANCE != null) {
+			text.add("Material: " + MCHelper.getMaterialName(accessor.getBlockState().getMaterial()));
 			final IBlockMap bm = Footsteps.INSTANCE.getBlockMap();
 			if (bm != null) {
 				bm.collectData(accessor.getBlockState(), text);
