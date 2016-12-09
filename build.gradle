@@ -45,7 +45,7 @@ repositories {
     }
     
     maven {
-        url = "http://dvs1.progwml6.com/files/maven"
+        url "http://dvs1.progwml6.com/files/maven"
     }
     
     maven {
@@ -84,6 +84,9 @@ dependencies {
     compile "foxie:Calendar:1.10.2-1.5-10:deobf"
     compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
     compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.10.2-5.0.0.2109:deobf"
+    
+    deobfCompile "mezz.jei:jei_1.10.2:3.13.6.388:api"
+    runtime "mezz.jei:jei_1.10.2:3.13.6.388"
 }
 
 processResources
