@@ -28,7 +28,7 @@ import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ILibrary;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IBlockMap;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IDefaultStepPlayer;
+import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IStepPlayer;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IGenerator;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IGeneratorSettable;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IIsolator;
@@ -47,7 +47,7 @@ public class PFIsolator implements IIsolator, IVariatorSettable, IGeneratorSetta
 	private IBlockMap blockMap;
 	private IPrimitiveMap primitiveMap;
 	private ISoundPlayer soundPlayer;
-	private IDefaultStepPlayer defaultStepPlayer;
+	private IStepPlayer defaultStepPlayer;
 
 	private IVariator VAR;
 
@@ -93,7 +93,7 @@ public class PFIsolator implements IIsolator, IVariatorSettable, IGeneratorSetta
 	}
 
 	@Override
-	public IDefaultStepPlayer getDefaultStepPlayer() {
+	public IStepPlayer getDefaultStepPlayer() {
 		return this.defaultStepPlayer;
 	}
 
@@ -125,7 +125,7 @@ public class PFIsolator implements IIsolator, IVariatorSettable, IGeneratorSetta
 	}
 
 	@Override
-	public void setDefaultStepPlayer(final IDefaultStepPlayer defaultStepPlayer) {
+	public void setDefaultStepPlayer(final IStepPlayer defaultStepPlayer) {
 		this.defaultStepPlayer = defaultStepPlayer;
 	}
 

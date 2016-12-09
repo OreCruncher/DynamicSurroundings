@@ -219,7 +219,7 @@ public class SoundManager {
 		return result;
 	}
 
-	public static float getSoundCategoryVolume(final SoundCategory category) {
+	private static float getSoundCategoryVolume(final SoundCategory category) {
 		return category != null && category != SoundCategory.MASTER
 				? Minecraft.getMinecraft().gameSettings.getSoundLevel(category) : 1.0F;
 	}

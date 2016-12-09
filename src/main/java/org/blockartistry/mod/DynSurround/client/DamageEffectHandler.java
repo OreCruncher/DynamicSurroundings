@@ -31,11 +31,9 @@ import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleCriticalPopOff;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDamagePopOff;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHealPopOff;
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.network.Network;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -94,10 +92,11 @@ public final class DamageEffectHandler {
 	}
 
 	// From the Minecraft code for damage
+	// EntityPlayer.attackTargetEntityWithCurrentItem()
 	private static boolean isCritical(final EntityPlayer player, final Entity target) {
 		return player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater()
-				&& !player.isPotionActive(MobEffects.BLINDNESS) && player.getRidingEntity() == null
-				&& target instanceof EntityLivingBase;
+				&& !player.isPotionActive(MobEffects.BLINDNESS) && !player.isRiding()
+				&& target instanceof EntityLivingBase && !player.isSprinting();
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOW)
@@ -150,28 +149,26 @@ public final class DamageEffectHandler {
 		if (!ModOptions.enableDamagePopoffs)
 			return;
 
-		// Don't show the players pop-offs
-		if (EnvironState.isPlayer(data.entityId))
-			return;
-
 		// Don't want to display if too far away.
 		final double distance = EnvironState.distanceToPlayer(data.posX, data.posY, data.posZ);
 		if (distance >= DISTANCE_THRESHOLD_SQ)
 			return;
 
+		// Don't show the players pop-offs
+		if (EnvironState.isPlayer(data.entityId))
+			return;
+
 		final World world = EnvironState.getWorld();
-		final ParticleManager renderer = Minecraft.getMinecraft().effectRenderer;
-		Particle fx;
 
 		if (data.isCritical) {
-			fx = new ParticleCriticalPopOff(world, data.posX, data.posY, data.posZ);
-			renderer.addEffect(fx);
+			ParticleHelper.addParticle(new ParticleCriticalPopOff(world, data.posX, data.posY, data.posZ));
 		}
+
 		if (data.amount > 0) {
-			fx = new ParticleDamagePopOff(world, data.posX, data.posY, data.posZ, data.amount);
-		} else {
-			fx = new ParticleHealPopOff(world, data.posX, data.posY, data.posZ, MathHelper.abs_int(data.amount));
+			ParticleHelper.addParticle(new ParticleDamagePopOff(world, data.posX, data.posY, data.posZ, data.amount));
+		} else if (data.amount < 0) {
+			ParticleHelper.addParticle(
+					new ParticleHealPopOff(world, data.posX, data.posY, data.posZ, MathHelper.abs_int(data.amount)));
 		}
-		renderer.addEffect(fx);
 	}
 }

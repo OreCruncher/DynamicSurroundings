@@ -48,7 +48,7 @@ public class ParticleTextPopOff extends Particle {
 
 	protected Color renderColor = Color.WHITE;
 	protected String text;
-	protected boolean shouldOnTop = false;
+	protected boolean showOnTop = true;
 	protected boolean grow = true;
 	protected float scale = 1.0F;
 
@@ -86,7 +86,7 @@ public class ParticleTextPopOff extends Particle {
 		final float locZ = ((float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpPosZ));
 
 		GL11.glPushMatrix();
-		if (this.shouldOnTop) {
+		if (this.showOnTop) {
 			GL11.glDepthFunc(519);
 		} else {
 			GL11.glDepthFunc(515);

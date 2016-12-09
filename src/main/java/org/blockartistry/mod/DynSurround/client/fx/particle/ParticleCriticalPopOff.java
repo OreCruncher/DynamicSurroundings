@@ -26,23 +26,36 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
+
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
 public class ParticleCriticalPopOff extends ParticleTextPopOff {
+	
+	public static final Color TEXT_COLOR = Color.GOLD;
+	public static final TextFormatting TEXT_FORMATTING = TextFormatting.GOLD;
 
-	private static final String[] POWER_WORDS = new String[] { "BAM", "BANG", "BONK", "CRRACK", "CRASH", "KRUNCH",
-			"OOOOFF", "POWIE", "SPLATT", "THUNK", "TWAPE", "WHAMMM", "ZAP" };
+	// In case you want to know....
+	// http://www.66batmania.com/trivia/bat-fight-words/
+	private static final String[] POWER_WORDS = new String[] { "AIEEE", "AIIEEE", "ARRGH", "AWK", "AWKKKKKK", "BAM",
+			"BANG", "BANG-ETH", "BIFF", "BLOOP", "BLURP", "BOFF", "BONK", "CLANK", "CLANK-EST", "CLASH", "CLUNK",
+			"CLUNK-ETH", "CRRAACK", "CRASH", "CRRAACK", "CRUNCH", "CRUNCH-ETH", "EEE-YOW", "FLRBBBBB", "GLIPP",
+			"GLURPP", "KAPOW", "KAYO", "KER-SPLOOSH", "KERPLOP", "KLONK", "KLUNK", "KRUNCH", "OOOFF", "OOOOFF", "OUCH",
+			"OUCH-ETH", "OWWW", "OW-ETH", "PAM", "PLOP", "POW", "POWIE", "QUNCKKK", "RAKKK", "RIP", "SLOSH", "SOCK",
+			"SPLATS", "SPLATT", "SPLOOSH", "SWAAP", "SWISH", "SWOOSH", "THUNK", "THWACK", "THWACKE", "THWAPE", "THWAPP",
+			"UGGH", "URKKK", "VRONK", "WHACK", "WHACK-ETH", "WHAM-ETH", "WHAMM", "WHAMMM", "WHAP", "Z-ZWAP", "ZAM",
+			"ZAMM", "ZAMMM", "ZAP", "ZAP-ETH", "ZGRUPPP", "ZLONK", "ZLOPP", "ZLOTT", "ZOK", "ZOWIE", "ZWAPP", "ZZWAP",
+			"ZZZZWAP", "ZZZZZWAP" };
 
 	private static String getPowerWord() {
-		return POWER_WORDS[XorShiftRandom.shared.nextInt(POWER_WORDS.length)];
+		return POWER_WORDS[XorShiftRandom.shared.nextInt(POWER_WORDS.length)] + "!";
 	}
 
 	public ParticleCriticalPopOff(final World world, final double x, final double y, final double z) {
-		super(world, getPowerWord(), Color.ORANGE, 1.0F, x, y, z, 0.001D, 0.05D * BOUNCE_STRENGTH, 0.001D);
-		this.shouldOnTop = true;
+		super(world, getPowerWord(), TEXT_COLOR, 1.0F, x, y, z, 0.001D, 0.05D * BOUNCE_STRENGTH, 0.001D);
 		this.particleGravity = -0.04F;
 		this.scale = 0.5F;
 	}

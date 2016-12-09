@@ -35,7 +35,7 @@ import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOpt
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions.Option;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Association;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IDefaultStepPlayer;
+import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IStepPlayer;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IIsolator;
 import org.blockartistry.mod.DynSurround.compat.MCHelper;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
@@ -55,7 +55,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author Hurry
  */
 @SideOnly(Side.CLIENT)
-public class AcousticsManager extends AcousticsLibrary implements ISoundPlayer, IDefaultStepPlayer {
+public class AcousticsManager extends AcousticsLibrary implements ISoundPlayer, IStepPlayer {
 
 	private static final Random RANDOM = new XorShiftRandom();
 

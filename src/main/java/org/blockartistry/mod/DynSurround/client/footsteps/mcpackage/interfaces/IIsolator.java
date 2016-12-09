@@ -46,7 +46,7 @@ public interface IIsolator
 	
 	public abstract ISoundPlayer getSoundPlayer();
 	
-	public abstract IDefaultStepPlayer getDefaultStepPlayer();
+	public abstract IStepPlayer getDefaultStepPlayer();
 	
 	//
 	
@@ -60,6 +60,6 @@ public interface IIsolator
 	
 	public abstract void setSoundPlayer(final ISoundPlayer soundPlayer);
 	
-	public abstract void setDefaultStepPlayer(final IDefaultStepPlayer defaultStepPlayer);
+	public abstract void setDefaultStepPlayer(final IStepPlayer defaultStepPlayer);
 	
 }

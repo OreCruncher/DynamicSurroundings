@@ -36,7 +36,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author Hurry
  */
 @SideOnly(Side.CLIENT)
-public interface IDefaultStepPlayer {
+public interface IStepPlayer {
 	/**
 	 * Play a step sound from a block.
 	 */

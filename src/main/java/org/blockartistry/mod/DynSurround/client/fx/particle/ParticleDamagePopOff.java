@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import org.blockartistry.mod.DynSurround.util.Color;
 
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -33,7 +34,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleDamagePopOff extends ParticleTextPopOff {
 
+	public static final Color TEXT_COLOR = Color.RED;
+	public static final TextFormatting TEXT_FORMATTING = TextFormatting.RED;
+
 	public ParticleDamagePopOff(final World world, final double x, final double y, final double z, final int amount) {
-		super(world, String.valueOf(amount), Color.RED, 1.0F, x, y, z, 0.001D, 0.05D * BOUNCE_STRENGTH, 0.001D);
+		super(world, String.valueOf(amount), TEXT_COLOR, 1.0F, x, y, z, 0.001D, 0.05D * BOUNCE_STRENGTH, 0.001D);
 	}
 }

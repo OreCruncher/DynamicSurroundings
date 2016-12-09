@@ -52,9 +52,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class PotionHUD extends Gui implements IGuiOverlay {
 
 	private final Color TEXT_POTION_NAME = Color.WHITE;
-	private final Color TEXT_DURATION = new Color(0x7F, 0x7F, 0x74);
+	private final Color TEXT_POTION_NAME_BAD = Color.RED;
+	private final Color TEXT_POTION_NAME_AMBIENT = Color.GOLD;
+	private final Color TEXT_DURATION = new Color(220, 220, 220);
 	private final Color TEXT_DURATION_LOW = Color.RED;
-	private final Color TEXT_AMBIENT = Color.GOLD;
 
 	public void doRender(final RenderGameOverlayEvent.Pre event) {
 
@@ -86,19 +87,16 @@ public class PotionHUD extends Gui implements IGuiOverlay {
 		GlStateManager.scale(SCALE, SCALE, SCALE);
 		GlStateManager.enableAlpha();
 
-		mc.getTextureManager().bindTexture(GuiContainer.INVENTORY_BACKGROUND);
-		GlStateManager.enableBlend();
-
 		int k = 33;
 
 		if (collection.size() > 7) {
 			k = 198 / (collection.size() - 1);
 		}
 
-		for (final PotionEffect potioneffect : Ordering.natural().reverse().sortedCopy(collection)) {
+		for (final PotionEffect effect : Ordering.natural().reverse().sortedCopy(collection)) {
 
-			final Potion potion = potioneffect.getPotion();
-			if (!potion.shouldRenderHUD(potioneffect))
+			final Potion potion = effect.getPotion();
+			if (!potion.shouldRenderHUD(effect))
 				continue;
 
 			mc.getTextureManager().bindTexture(GuiContainer.INVENTORY_BACKGROUND);
@@ -113,39 +111,41 @@ public class PotionHUD extends Gui implements IGuiOverlay {
 			}
 
 			try {
-				potion.renderInventoryEffect(guiLeft, guiTop, potioneffect, mc);
+				potion.renderInventoryEffect(guiLeft, guiTop, effect, mc);
 			} catch (final Exception ex) {
 				;
 			}
 
-			if (!potion.shouldRenderInvText(potioneffect))
+			if (!potion.shouldRenderInvText(effect))
 				continue;
 
 			String s1 = I18n.format(potion.getName(), new Object[0]);
 
-			if (potioneffect.getAmplifier() == 1) {
+			if (effect.getAmplifier() == 1) {
 				s1 = s1 + " " + I18n.format("enchantment.level.2", new Object[0]);
-			} else if (potioneffect.getAmplifier() == 2) {
+			} else if (effect.getAmplifier() == 2) {
 				s1 = s1 + " " + I18n.format("enchantment.level.3", new Object[0]);
-			} else if (potioneffect.getAmplifier() == 3) {
+			} else if (effect.getAmplifier() == 3) {
 				s1 = s1 + " " + I18n.format("enchantment.level.4", new Object[0]);
 			}
 
+			Color color = potion.isBadEffect() ? TEXT_POTION_NAME_BAD
+					: effect.getIsAmbient() ? TEXT_POTION_NAME_AMBIENT : TEXT_POTION_NAME;
 			font.drawStringWithShadow(s1, guiLeft + 10 + 18, guiTop + 6,
-					TEXT_POTION_NAME.rgbWithAlpha(ModOptions.potionHudTransparency));
+					color.rgbWithAlpha(ModOptions.potionHudTransparency));
 
 			float alpha = ModOptions.potionHudTransparency;
-			Color color = potioneffect.getIsAmbient() ? TEXT_AMBIENT : TEXT_DURATION;
-			final int threshold = potioneffect.getIsAmbient() ? 170 : 200;
-			final int duration = potioneffect.getDuration();
+			final int threshold = effect.getIsAmbient() ? 170 : 200;
+			final int duration = effect.getDuration();
 
+			color = TEXT_DURATION;
 			if (duration <= threshold) {
 				color = TEXT_DURATION_LOW;
 				if (((duration / 10) & 1) != 0)
 					alpha /= 3.0F;
 			}
 
-			s1 = Potion.getPotionDurationString(potioneffect, 1.0F);
+			s1 = Potion.getPotionDurationString(effect, 1.0F);
 			font.drawStringWithShadow(s1, guiLeft + 10 + 18, guiTop + 6 + 10, color.rgbWithAlpha(alpha));
 
 			guiTop += k;

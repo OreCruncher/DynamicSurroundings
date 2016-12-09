@@ -28,11 +28,10 @@ import java.util.List;
 
 import org.blockartistry.mod.DynSurround.client.EnvironStateHandler;
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler.IGuiOverlay;
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.relauncher.Side;
@@ -59,16 +58,16 @@ public class DebugHUD extends Gui implements IGuiOverlay {
 		final Minecraft mc = Minecraft.getMinecraft();
 		final FontRenderer font = mc.fontRendererObj;
 
-		GL11.glPushMatrix();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, TRANSPARENCY);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glTranslatef(GUILEFT, GUITOP, 0.0F);
+		GlStateManager.pushMatrix();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, TRANSPARENCY);
+		GlStateManager.disableLighting();
+		GlStateManager.translate(GUILEFT, GUITOP, 0.0F);
 		int offset = 0;
 		for(final String s: output) {
 			font.drawStringWithShadow(s, 0, offset, TEXT_COLOR);
 			offset += font.FONT_HEIGHT;
 		}
 		
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 }

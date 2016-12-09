@@ -53,6 +53,10 @@ public class BlockEffectHandler implements IClientEffectHandler {
 	private static final Random RANDOM = new XorShiftRandom();
 	private static final double RATIO = 0.0335671847202175D;
 
+	private int randomRange(final int range) {
+		return RANDOM.nextInt(range) - RANDOM.nextInt(range);
+	}
+
 	@Override
 	public void process(final World world, final EntityPlayer player) {
 		if (Minecraft.getMinecraft().isGamePaused())
@@ -64,13 +68,12 @@ public class BlockEffectHandler implements IClientEffectHandler {
 		final int CHECK_COUNT = (int) (Math.pow(RANGE * 2 - 1, 3) * RATIO);
 
 		for (int i = 0; i < CHECK_COUNT; i++) {
-			final BlockPos pos = playerPos.add(RANDOM.nextInt(RANGE) - RANDOM.nextInt(RANGE),
-					RANDOM.nextInt(RANGE) - RANDOM.nextInt(RANGE), RANDOM.nextInt(RANGE) - RANDOM.nextInt(RANGE));
+			final BlockPos pos = playerPos.add(randomRange(RANGE), randomRange(RANGE), randomRange(RANGE));
 
 			final IBlockState state = world.getBlockState(pos);
-			if(state.getMaterial() == Material.AIR)
+			if (state.getMaterial() == Material.AIR)
 				continue;
-			
+
 			final List<BlockEffect> chain = BlockRegistry.getEffects(state);
 
 			if (chain != null) {
