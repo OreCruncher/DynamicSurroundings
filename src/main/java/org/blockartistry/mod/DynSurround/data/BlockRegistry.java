@@ -155,11 +155,11 @@ public final class BlockRegistry {
 
 			for (final String blockName : entry.blocks) {
 				final BlockInfo blockInfo = BlockInfo.create(blockName);
-				if(blockInfo == null) {
+				if (blockInfo == null) {
 					ModLog.warn("Unknown block [%s] in block config file", blockName);
 					continue;
 				}
-				
+
 				final Block block = blockInfo.getBlock();
 				if (block == null || block == Blocks.AIR) {
 					ModLog.warn("Unknown block [%s] in block config file", blockName);
@@ -200,19 +200,25 @@ public final class BlockRegistry {
 						continue;
 					BlockEffect blockEffect = null;
 					final int chance = e.chance != null ? e.chance.intValue() : 100;
-					if (StringUtils.equalsIgnoreCase("steam", e.effect))
-						blockEffect = new JetEffect.Steam(chance);
-					else if (StringUtils.equalsIgnoreCase("fire", e.effect))
-						blockEffect = new JetEffect.Fire(chance);
-					else if (StringUtils.equalsIgnoreCase("bubble", e.effect))
-						blockEffect = new JetEffect.Bubble(chance);
-					else if (StringUtils.equalsIgnoreCase("dust", e.effect))
-						blockEffect = new JetEffect.Dust(chance);
-					else if (StringUtils.equalsIgnoreCase("fountain", e.effect))
-						blockEffect = new JetEffect.Fountain(chance);
-					else if(StringUtils.equalsIgnoreCase("firefly", e.effect))
-						blockEffect = new FireFlyEffect(chance);
-					else {
+					if (StringUtils.equalsIgnoreCase("steam", e.effect)) {
+						if (ModOptions.enableSteamJets)
+							blockEffect = new JetEffect.Steam(chance);
+					} else if (StringUtils.equalsIgnoreCase("fire", e.effect)) {
+						if (ModOptions.enableFireJets)
+							blockEffect = new JetEffect.Fire(chance);
+					} else if (StringUtils.equalsIgnoreCase("bubble", e.effect)) {
+						if (ModOptions.enableBubbleJets)
+							blockEffect = new JetEffect.Bubble(chance);
+					} else if (StringUtils.equalsIgnoreCase("dust", e.effect)) {
+						if (ModOptions.enableDustJets)
+							blockEffect = new JetEffect.Dust(chance);
+					} else if (StringUtils.equalsIgnoreCase("fountain", e.effect)) {
+						if (ModOptions.enableFountainJets)
+							blockEffect = new JetEffect.Fountain(chance);
+					} else if (StringUtils.equalsIgnoreCase("firefly", e.effect)) {
+						if (ModOptions.enableFireflies)
+							blockEffect = new FireFlyEffect(chance);
+					} else {
 						ModLog.warn("Unknown effect type in config: '%s'", e.effect);
 						continue;
 					}

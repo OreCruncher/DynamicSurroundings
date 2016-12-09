@@ -51,16 +51,38 @@
 		},
 		{
 			"blocks":[
-				"biomesoplenty:flower_0:*",
-				"biomesoplenty:flower_1:*",
-				"biomesoplenty:plant_0:*",
-				"biomesoplenty:plant_1:*",
-				"biomesoplenty:double_plant:*"
+				"biomesoplenty:flower_0:1",
+				"biomesoplenty:flower_0:3",
+				"biomesoplenty:flower_0:4",
+				"biomesoplenty:flower_0:5",
+				"biomesoplenty:flower_0:6",
+				"biomesoplenty:flower_0:7",
+				"biomesoplenty:flower_0:8",
+				"biomesoplenty:flower_0:9",
+				"biomesoplenty:flower_0:11",
+				"biomesoplenty:flower_0:13",
+				"biomesoplenty:flower_0:14",
+				"biomesoplenty:flower_1:0",
+				"biomesoplenty:flower_1:1",
+				"biomesoplenty:flower_1:2",
+				"biomesoplenty:flower_1:5",
+				"biomesoplenty:plant_0:1",
+				"biomesoplenty:plant_0:2",
+				"biomesoplenty:plant_0:5",
+				"biomesoplenty:plant_0:6",
+				"biomesoplenty:plant_0:7",
+				"biomesoplenty:plant_0:8",
+				"biomesoplenty:plant_1:3",
+				"biomesoplenty:plant_1:4",
+				"biomesoplenty:plant_1:5",
+				"biomesoplenty:plant_1:10",
+				"biomesoplenty:double_plant:0",
+				"biomesoplenty:double_plant:1"
 			],
 			"effects":[
 				{
 					"effect":"firefly",
-					"chance":100
+					"chance":75
 				}
 			]
 		}
