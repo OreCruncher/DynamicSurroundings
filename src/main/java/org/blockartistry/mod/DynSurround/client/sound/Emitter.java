@@ -76,7 +76,7 @@ class Emitter {
 		if (SoundSystemConfig.getMasterGain() <= 0)
 			return;
 
-		final PlayerSound theSound = new PlayerSound(effect);
+		final PlayerSound theSound = new PlayerSound(effect, true);
 		if (this.effect.type == SoundType.PERIODIC) {
 			this.repeatDelay = this.effect.getRepeat(RANDOM);
 		} else {

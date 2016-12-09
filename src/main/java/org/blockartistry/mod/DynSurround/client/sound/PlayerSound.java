@@ -30,9 +30,8 @@ import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import net.minecraft.client.audio.MovingSound;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -40,29 +39,34 @@ import net.minecraftforge.fml.relauncher.Side;
 class PlayerSound extends MovingSound {
 
 	private static final float DONE_VOLUME_THRESHOLD = 0.001F;
-	private static final float FADE_AMOUNT = 0.01F;
+	private static final float FADE_AMOUNT = 0.015F;
 	private static final Random RANDOM = new XorShiftRandom();
 
 	private final SoundEffect sound;
 	private boolean isFading;
+	private float maxVolume;
 
 	public PlayerSound(final SoundEffect sound) {
+		this(sound, false);
+	}
+	
+	public PlayerSound(final SoundEffect sound, final boolean fadeIn) {
 		super(sound.sound, SoundCategory.PLAYERS);
 
 		// Don't set volume to 0; MC will optimize out
 		this.sound = sound;
-		this.volume = sound.volume;
+		this.maxVolume = sound.volume;
+		this.volume = fadeIn ? DONE_VOLUME_THRESHOLD * 2 : sound.volume;
 		this.pitch = sound.getPitch(RANDOM);
 		this.repeat = sound.repeatDelay == 0;
 
 		// Repeat delay
 		this.repeatDelay = 0;
 
-		final EntityPlayer player = EnvironState.getPlayer();
-		// Initial position
-		this.xPosF = MathHelper.floor_double(player.posX);
-		this.yPosF = MathHelper.floor_double(player.posY + 1);
-		this.zPosF = MathHelper.floor_double(player.posZ);
+		final BlockPos position = EnvironState.getPlayerPosition();
+		this.xPosF = position.getX();
+		this.yPosF = position.getY() + 1;
+		this.zPosF = position.getZ();
 	}
 
 	public void fadeAway() {
@@ -80,15 +84,19 @@ class PlayerSound extends MovingSound {
 
 		if (this.isFading) {
 			this.volume -= FADE_AMOUNT;
+		} else if(this.volume < this.maxVolume) {
+			this.volume += FADE_AMOUNT;
+		} else if(this.volume > this.maxVolume) {
+			this.volume = this.maxVolume;
 		}
-
+		
 		if (this.volume <= DONE_VOLUME_THRESHOLD) {
 			this.donePlaying = true;
 		} else if (EnvironState.getPlayer() != null) {
-			final EntityPlayer player = EnvironState.getPlayer();
-			this.xPosF = MathHelper.floor_double(player.posX);
-			this.yPosF = MathHelper.floor_double(player.posY + 1);
-			this.zPosF = MathHelper.floor_double(player.posZ);
+			final BlockPos position = EnvironState.getPlayerPosition();
+			this.xPosF = position.getX();
+			this.yPosF = position.getY() + 1;
+			this.zPosF = position.getZ();
 		}
 	}
 
@@ -98,8 +106,8 @@ class PlayerSound extends MovingSound {
 	}
 
 	public void setVolume(final float volume) {
-		if (volume < this.volume || !this.isFading)
-			this.volume = volume;
+		if (volume < this.maxVolume || !this.isFading)
+			this.maxVolume = volume;
 	}
 
 	@Override

@@ -52,7 +52,7 @@ public final class AreaSurveyHandler implements IClientEffectHandler {
 	// "Finger print" of the last area survey.
 	private static BiomeInfo surveyedBiome = null;
 	private static int surveyedDimension = 0;
-	private static BlockPos surveyedPosition = new BlockPos(0, 0, 0);
+	private static BlockPos surveyedPosition = BlockPos.ORIGIN;
 
 	private static float ceilingCoverageRatio = 0.0F;
 
