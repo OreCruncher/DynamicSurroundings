@@ -130,7 +130,7 @@ public final class ModOptions {
 	public static int stormInactiveTimeConst = 12000;
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_STORM_INACTIVE_TIME_VARIABLE, defaultValue = "168000")
 	@MinMaxInt(min = 0)
-	@Comment("Varible amount of ticks storm (thunder) is inactive, added to the base")
+	@Comment("Variable amount of ticks storm (thunder) is inactive, added to the base")
 	public static int stormInactiveTimeVariable = 12000;
 	
 	public static final String CATEGORY_FOG = "fog";
