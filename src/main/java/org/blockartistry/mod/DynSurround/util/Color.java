@@ -71,6 +71,7 @@ public class Color {
 	public static final Color INDIGO = new ImmutableColor(75, 0, 130);
 	public static final Color NAVY = new ImmutableColor(0, 0, 128);
 	public static final Color TAN = new ImmutableColor(210, 180, 140);
+	public static final Color GOLD = new ImmutableColor(255, 215, 0);
 
 	public float red;
 	public float green;
@@ -129,7 +130,7 @@ public class Color {
 		this.blue = b;
 		return this;
 	}
-	
+
 	public static Color anaglyph(final Color color) {
 		return new Color(color).anaglyph();
 	}
@@ -144,7 +145,7 @@ public class Color {
 	private static float blend(final float c1, final float c2, final float factor) {
 		return (float) Math.sqrt((1.0F - factor) * c1 * c1 + factor * c2 * c2);
 	}
-	
+
 	public Color blend(final Color color, final float factor) {
 		this.red = blend(this.red, color.red, factor);
 		this.green = blend(this.green, color.green, factor);
@@ -183,14 +184,14 @@ public class Color {
 	}
 
 	public int rgb() {
-		final int iRed = (int)(this.red * 255);
-		final int iGreen = (int)(this.green * 255);
-		final int iBlue = (int)(this.blue * 255);
+		final int iRed = (int) (this.red * 255);
+		final int iGreen = (int) (this.green * 255);
+		final int iBlue = (int) (this.blue * 255);
 		return iRed << 16 | iGreen << 8 | iBlue;
 	}
-	
+
 	public int rgbWithAlpha(final float alpha) {
-		final int iAlpha = (int)(alpha * 255);
+		final int iAlpha = (int) (alpha * 255);
 		return rgb() | (iAlpha << 24);
 	}
 

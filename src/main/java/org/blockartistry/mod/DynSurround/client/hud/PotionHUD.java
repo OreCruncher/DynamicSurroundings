@@ -25,10 +25,10 @@
 package org.blockartistry.mod.DynSurround.client.hud;
 
 import java.util.Collection;
+
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler.IGuiOverlay;
-import org.lwjgl.opengl.GL11;
-
+import org.blockartistry.mod.DynSurround.util.Color;
 import com.google.common.collect.Ordering;
 
 import net.minecraft.client.Minecraft;
@@ -36,6 +36,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
@@ -50,6 +51,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class PotionHUD extends Gui implements IGuiOverlay {
 
+	private final Color TEXT_POTION_NAME = Color.WHITE;
+	private final Color TEXT_DURATION = new Color(0x7F, 0x7F, 0x74);
+	private final Color TEXT_DURATION_LOW = Color.RED;
+	private final Color TEXT_AMBIENT = Color.GOLD;
+
 	public void doRender(final RenderGameOverlayEvent.Pre event) {
 
 		if (event.getType() != ElementType.POTION_ICONS) {
@@ -63,27 +69,26 @@ public class PotionHUD extends Gui implements IGuiOverlay {
 		if (collection.isEmpty())
 			return;
 
-		final int TEXT_POTION_NAME = (int) (255 * ModOptions.potionHudTransparency) << 24 | 0xFFFFFF;
-		final int TEXT_DURATION = (int) (255 * ModOptions.potionHudTransparency) << 24 | 0x7F7F7F;
-		final int TEXT_DURATION_LOW = (int) (255 * ModOptions.potionHudTransparency) << 24 | 0xFF0000;
-
 		final ScaledResolution resolution = event.getResolution();
 		final float GUITOP = ModOptions.potionHudTopOffset;
-		final float GUILEFT = ModOptions.potionHudAnchor == 0 ? ModOptions.potionHudLeftOffset : resolution.getScaledWidth() - ModOptions.potionHudLeftOffset - 120 * ModOptions.potionHudScale;
+		final float GUILEFT = ModOptions.potionHudAnchor == 0 ? ModOptions.potionHudLeftOffset
+				: resolution.getScaledWidth() - ModOptions.potionHudLeftOffset - 120 * ModOptions.potionHudScale;
 		final float SCALE = ModOptions.potionHudScale;
 
 		final Minecraft mc = Minecraft.getMinecraft();
 		final FontRenderer font = mc.fontRendererObj;
-		
 
 		final int guiLeft = 2;
 		int guiTop = 2;
 
-		GL11.glPushMatrix();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, ModOptions.potionHudTransparency);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glTranslatef(GUILEFT, GUITOP, 0.0F);
-		GL11.glScalef(SCALE, SCALE, SCALE);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(GUILEFT, GUITOP, 0.0F);
+		GlStateManager.scale(SCALE, SCALE, SCALE);
+		GlStateManager.enableAlpha();
+
+		mc.getTextureManager().bindTexture(GuiContainer.INVENTORY_BACKGROUND);
+		GlStateManager.enableBlend();
+
 		int k = 33;
 
 		if (collection.size() > 7) {
@@ -96,8 +101,10 @@ public class PotionHUD extends Gui implements IGuiOverlay {
 			if (!potion.shouldRenderHUD(potioneffect))
 				continue;
 
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, ModOptions.potionHudTransparency);
 			mc.getTextureManager().bindTexture(GuiContainer.INVENTORY_BACKGROUND);
+			GlStateManager.enableBlend();
+
+			GlStateManager.color(1.0F, 1.0F, 1.0F, ModOptions.potionHudTransparency);
 			this.drawTexturedModalRect(guiLeft, guiTop, 0, 166, 140, 32);
 
 			if (potion.hasStatusIcon()) {
@@ -113,7 +120,7 @@ public class PotionHUD extends Gui implements IGuiOverlay {
 
 			if (!potion.shouldRenderInvText(potioneffect))
 				continue;
-			
+
 			String s1 = I18n.format(potion.getName(), new Object[0]);
 
 			if (potioneffect.getAmplifier() == 1) {
@@ -124,13 +131,25 @@ public class PotionHUD extends Gui implements IGuiOverlay {
 				s1 = s1 + " " + I18n.format("enchantment.level.4", new Object[0]);
 			}
 
-			font.drawStringWithShadow(s1, guiLeft + 10 + 18, guiTop + 6, TEXT_POTION_NAME);
-			String s = Potion.getPotionDurationString(potioneffect, 1.0F);
-			font.drawStringWithShadow(s, guiLeft + 10 + 18, guiTop + 6 + 10,
-					potioneffect.getDuration() <= 200 ? TEXT_DURATION_LOW : TEXT_DURATION);
+			font.drawStringWithShadow(s1, guiLeft + 10 + 18, guiTop + 6,
+					TEXT_POTION_NAME.rgbWithAlpha(ModOptions.potionHudTransparency));
+
+			float alpha = ModOptions.potionHudTransparency;
+			Color color = potioneffect.getIsAmbient() ? TEXT_AMBIENT : TEXT_DURATION;
+			final int threshold = potioneffect.getIsAmbient() ? 170 : 200;
+			final int duration = potioneffect.getDuration();
+
+			if (duration <= threshold) {
+				color = TEXT_DURATION_LOW;
+				if (((duration / 10) & 1) != 0)
+					alpha /= 3.0F;
+			}
+
+			s1 = Potion.getPotionDurationString(potioneffect, 1.0F);
+			font.drawStringWithShadow(s1, guiLeft + 10 + 18, guiTop + 6 + 10, color.rgbWithAlpha(alpha));
 
 			guiTop += k;
 		}
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 }

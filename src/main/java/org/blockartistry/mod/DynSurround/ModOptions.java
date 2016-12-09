@@ -355,7 +355,7 @@ public final class ModOptions {
 	@Comment("Size scale of icons (lower is smaller)")
 	public static float potionHudScale = 0.75F;
 	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_ANCHOR, defaultValue = "1")
-	@MinMaxFloat(min = 0, max = 1)
+	@MinMaxInt(min = 0, max = 1)
 	@Comment("Area of the display the Potion HUD is displayed (0 upper left, 1 upper right)")
 	public static int potionHudAnchor = 1;
 
