@@ -94,7 +94,7 @@ public final class PlayerUtils {
 		return MathHelper.floor_double(player.posY + offset) < DimensionRegistry.getSeaLevel(player.worldObj);
 	}
 
-	private static final int RANGE = 3;
+	private static final int RANGE = 10;
 	private static final int AREA = (RANGE * 2 + 1) * (RANGE * 2 + 1);
 
 	public static float ceilingCoverageRatio(final EntityPlayer entity) {

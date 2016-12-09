@@ -60,7 +60,7 @@
 			"effects":[
 				{
 					"effect":"firefly",
-					"chance":75
+					"chance":100
 				}
 			]
 		}

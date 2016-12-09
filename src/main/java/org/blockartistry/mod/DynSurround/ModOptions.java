@@ -257,6 +257,38 @@ public final class ModOptions {
 	@RestartRequired
 	public static String[] blockConfigFiles = {};
 
+	public static final String CATEGORY_BLOCK_EFFECTS = "block.effects";
+	public static final String CONFIG_BLOCK_EFFECT_STEAM = "Enable Steam";
+	public static final String CONFIG_BLOCK_EFFECT_FIRE = "Enable Fire Jets";
+	public static final String CONFIG_BLOCK_EFFECT_BUBBLE = "Enable Bubbles";
+	public static final String CONFIG_BLOCK_EFFECT_DUST = "Enable Dust Motes";
+	public static final String CONFIG_BLOCK_EFFECT_FOUNTAIN = "Enable Fountain";
+	public static final String CONFIG_BLOCK_EFFECT_FIREFLY = "Enable Fireflies";
+	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_STEAM, defaultValue = "true")
+	@Comment("Enable Steam Jets where lava meets water")
+	@RestartRequired
+	public static boolean enableSteamJets = true;
+	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_FIRE, defaultValue = "true")
+	@Comment("Enable Fire Jets in lava")
+	@RestartRequired
+	public static boolean enableFireJets = true;
+	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_BUBBLE, defaultValue = "true")
+	@Comment("Enable Bubble Jets under water")
+	@RestartRequired
+	public static boolean enableBubbleJets = true;
+	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_DUST, defaultValue = "true")
+	@Comment("Enable Dust motes dropping from blocks")
+	@RestartRequired
+	public static boolean enableDustJets = true;
+	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_FOUNTAIN, defaultValue = "true")
+	@Comment("Enable Fountain jets")
+	@RestartRequired
+	public static boolean enableFountainJets = true;
+	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_FIREFLY, defaultValue = "true")
+	@Comment("Enable Firefly effect around plants")
+	@RestartRequired
+	public static boolean enableFireflies = true;
+	
 	public static final String CATEGORY_SOUND = "sound";
 	public static final String CONFIG_ENABLE_BIOME_SOUNDS = "Enable Biome Sounds";
 	public static final String CONFIG_MASTER_SOUND_FACTOR = "Master Sound Scale Factor";
@@ -460,6 +492,11 @@ public final class ModOptions {
 		config.setCategoryRequiresMcRestart(CATEGORY_BLOCK, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_BLOCK, false);
 		config.setCategoryComment(CATEGORY_BLOCK, "Options for defining block specific sounds/effects");
+		
+		// CATEGORY: Block.effects
+		config.setCategoryRequiresMcRestart(CATEGORY_BLOCK_EFFECTS, true);
+		config.setCategoryRequiresWorldRestart(CATEGORY_BLOCK_EFFECTS, true);
+		config.setCategoryComment(CATEGORY_BLOCK_EFFECTS, "Options for disabling various block effects");
 
 		// CATEGORY: Sound
 		config.setCategoryRequiresMcRestart(CATEGORY_SOUND, false);
