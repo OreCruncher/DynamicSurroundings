@@ -134,6 +134,9 @@ public final class MCHelper {
 		if(item == null)
 			return false;
 		
+		if(item.getHasSubtypes())
+			return true;
+		
 		final List<ItemStack> stacks = new ArrayList<ItemStack>();
 		block.getSubBlocks(item, null, stacks);
 		return stacks.size() > 1;
