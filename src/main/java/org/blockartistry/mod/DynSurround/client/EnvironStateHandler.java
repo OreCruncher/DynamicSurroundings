@@ -121,6 +121,7 @@ public class EnvironStateHandler implements IClientEffectHandler {
 		private static BiomeInfo playerBiome = null;
 		private static int dimensionId;
 		private static String dimensionName;
+		private static BlockPos playerPosition;
 		private static EntityPlayer player;
 		private static boolean freezing;
 		private static boolean fog;
@@ -128,7 +129,7 @@ public class EnvironStateHandler implements IClientEffectHandler {
 		private static boolean dry;
 		private static String temperatureCategory = "";
 		private static boolean inside;
-
+		
 		private static int tickCounter;
 
 		private static final String CONDITION_TOKEN_HURT = "hurt";
@@ -210,12 +211,12 @@ public class EnvironStateHandler implements IClientEffectHandler {
 			EnvironState.biomeName = EnvironState.playerBiome.getBiomeName();
 			EnvironState.dimensionId = world.provider.getDimension();
 			EnvironState.dimensionName = world.provider.getDimensionType().getName();
+			EnvironState.playerPosition = new BlockPos(player.posX, player.posY, player.posZ);
 			EnvironState.fog = FogEffectHandler.currentFogLevel() >= 0.01F;
-			EnvironState.inside = PlayerUtils.isReallyInside(EnvironState.player);
+			EnvironState.inside = AreaSurveyHandler.isReallyInside();
 
-			final BlockPos playerPos = new BlockPos(player.posX, player.posY, player.posZ);
 			final BiomeInfo trueBiome = PlayerUtils.getPlayerBiome(player, true);
-			EnvironState.freezing = trueBiome.getFloatTemperature(playerPos) < 0.15F;
+			EnvironState.freezing = trueBiome.getFloatTemperature(EnvironState.playerPosition) < 0.15F;
 			EnvironState.temperatureCategory = "tc" + trueBiome.getTempCategory().name().toLowerCase();
 			EnvironState.humid = trueBiome.isHighHumidity();
 			EnvironState.dry = trueBiome.getRainfall() == 0;
@@ -248,6 +249,10 @@ public class EnvironStateHandler implements IClientEffectHandler {
 			if (player == null)
 				player = Minecraft.getMinecraft().thePlayer;
 			return player;
+		}
+		
+		public static BlockPos getPlayerPosition() {
+			return playerPosition;
 		}
 
 		public static boolean isPlayer(final Entity entity) {
@@ -321,7 +326,7 @@ public class EnvironStateHandler implements IClientEffectHandler {
 		public static boolean isPlayerInside() {
 			return inside;
 		}
-
+		
 		public static boolean isPlayerUnderground() {
 			return playerBiome == BiomeRegistry.UNDERGROUND;
 		}

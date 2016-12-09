@@ -60,7 +60,7 @@ public class PlayerSoundEffectHandler implements IClientEffectHandler {
 		// Need to collect sounds from all the applicable biomes
 		// along with their weights.
 		final TObjectIntHashMap<SoundEffect> sounds = new TObjectIntHashMap<SoundEffect>();
-		final TObjectIntHashMap<BiomeInfo> weights = BiomeSurveyHandler.getBiomes();
+		final TObjectIntHashMap<BiomeInfo> weights = AreaSurveyHandler.getBiomes();
 		for (final BiomeInfo biome : weights.keySet()) {
 			final List<SoundEffect> bs = biome.findSoundMatches(conditions);
 			for (final SoundEffect sound : bs)
@@ -69,7 +69,7 @@ public class PlayerSoundEffectHandler implements IClientEffectHandler {
 
 		// Scale the volumes in the resulting list based on the weights
 		final List<SoundEffect> result = new ArrayList<SoundEffect>();
-		final int area = BiomeSurveyHandler.getArea();
+		final int area = AreaSurveyHandler.getBiomeArea();
 		for (final SoundEffect sound : sounds.keySet()) {
 			final float scale = 0.3F + 0.7F * ((float) sounds.get(sound) / (float) area);
 			result.add(SoundEffect.scaleVolume(sound, scale));
@@ -85,7 +85,7 @@ public class PlayerSoundEffectHandler implements IClientEffectHandler {
 	@Override
 	public void process(final World world, final EntityPlayer player) {
 		// Dead players hear no sounds
-		if (player.isDead) {
+		if (!player.isEntityAlive()) {
 			resetSounds();
 			return;
 		}

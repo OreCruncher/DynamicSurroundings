@@ -94,29 +94,6 @@ public final class PlayerUtils {
 		return MathHelper.floor_double(player.posY + offset) < DimensionRegistry.getSeaLevel(player.worldObj);
 	}
 
-	private static final int RANGE = 10;
-	private static final int AREA = (RANGE * 2 + 1) * (RANGE * 2 + 1);
-
-	public static float ceilingCoverageRatio(final EntityPlayer entity) {
-		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		final int targetY = (int) entity.posY;
-		int seeSky = 0;
-		for (int x = -RANGE; x <= RANGE; x++)
-			for (int z = -RANGE; z <= RANGE; z++) {
-				final int theX = MathHelper.floor_double(x + entity.posX);
-				final int theZ = MathHelper.floor_double(z + entity.posZ);
-				pos.setPos(theX, 0, theZ);
-				final int y = entity.worldObj.getTopSolidOrLiquidBlock(pos).getY();
-				if ((y - targetY) < 3)
-					++seeSky;
-			}
-		return 1.0F - ((float) seeSky / AREA);
-	}
-
-	public static boolean isReallyInside(final EntityPlayer entity) {
-		return ceilingCoverageRatio(entity) > 0.42F;
-	}
-
 	@SideOnly(Side.CLIENT)
 	public static int getClientPlayerDimension() {
 		return getPlayerDimension(FMLClientHandler.instance().getClient().thePlayer);

@@ -31,7 +31,6 @@ import org.blockartistry.mod.DynSurround.data.BiomeInfo;
 import org.blockartistry.mod.DynSurround.data.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.mod.DynSurround.util.Color;
-import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 import org.lwjgl.opengl.GL11;
 
 import gnu.trove.map.hash.TObjectIntHashMap;
@@ -103,8 +102,8 @@ public class FogEffectHandler implements IClientEffectHandler {
 		if (ModOptions.enableBiomeFog || ModOptions.allowDesertFog) {
 			final float brightnessFactor = world.getSunBrightness(1.0F);
 			final Color tint = new Color(0, 0, 0);
-			final TObjectIntHashMap<BiomeInfo> weights = BiomeSurveyHandler.getBiomes();
-			final int area = BiomeSurveyHandler.getArea();
+			final TObjectIntHashMap<BiomeInfo> weights = AreaSurveyHandler.getBiomes();
+			final int area = AreaSurveyHandler.getBiomeArea();
 
 			for (final BiomeInfo b : weights.keySet()) {
 				final int weight = weights.get(b);
@@ -133,7 +132,7 @@ public class FogEffectHandler implements IClientEffectHandler {
 
 		// Get the max fog level between the three fog types
 		currentFogLevel = Math.max(biomeFog, Math.max(dustFog, heightFog));
-		insideFogOffset = PlayerUtils.ceilingCoverageRatio(player) * 15.0F;
+		insideFogOffset = AreaSurveyHandler.getCeilingCoverageRatio() * 15.0F;
 	}
 
 	/*
