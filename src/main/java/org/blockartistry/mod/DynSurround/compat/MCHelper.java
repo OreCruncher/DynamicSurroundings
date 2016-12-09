@@ -32,10 +32,7 @@ import gnu.trove.map.hash.TCustomHashMap;
 import gnu.trove.strategy.IdentityHashingStrategy;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialLogic;
-import net.minecraft.block.material.MaterialPortal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -117,12 +114,10 @@ public final class MCHelper {
 	}
 	
 	public static boolean isLiquid(final Block block) {
-		// TODO: Look for replacement!
 		return block.getMaterial(null).isLiquid();
 	}
 	
 	public static SoundType getSoundType(final Block block) {
-		// TODO: Look for replacement!
 		return block.getSoundType();
 	}
 	
@@ -131,7 +126,6 @@ public final class MCHelper {
 	}
 	
 	public static boolean isOpaqueCube(final Block block) {
-		// TODO: Look for replacement!
 		return block.isOpaqueCube(null);
 	}
 

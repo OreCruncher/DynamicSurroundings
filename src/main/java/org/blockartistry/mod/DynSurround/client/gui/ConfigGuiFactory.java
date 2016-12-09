@@ -49,7 +49,6 @@ public class ConfigGuiFactory implements IModGuiFactory{
 		return null;
 	}
 
-	// TODO: Remove in 1.11
 	@SuppressWarnings("deprecation")
 	@Override
 	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {

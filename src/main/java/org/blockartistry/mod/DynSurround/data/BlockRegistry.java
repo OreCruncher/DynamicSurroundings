@@ -60,7 +60,6 @@ public final class BlockRegistry {
 		registry.clear();
 		processConfig();
 
-		// TODO: Implement toString()...
 		if (ModOptions.enableDebugLogging) {
 			ModLog.info("*** BLOCK REGISTRY ***");
 			for (final BlockProfile entry : registry.values())
