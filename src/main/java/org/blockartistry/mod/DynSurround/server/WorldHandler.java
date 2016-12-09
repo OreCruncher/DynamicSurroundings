@@ -27,6 +27,7 @@ package org.blockartistry.mod.DynSurround.server;
 import java.util.Random;
 
 import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectDataFile;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
@@ -41,11 +42,15 @@ public class WorldHandler {
 	private static final Random RANDOM = new XorShiftRandom();
 
 	private static int nextThunderInterval(final boolean isThundering) {
-		return RANDOM.nextInt(isThundering ? 12000 : 168000) + (isThundering ? 3600 : 12000);
+		final int base = isThundering ? ModOptions.stormActiveTimeConst : ModOptions.stormInactiveTimeConst;
+		return base + RANDOM
+				.nextInt(isThundering ? ModOptions.stormActiveTimeVariable : ModOptions.stormInactiveTimeVariable);
 	}
 
 	private static int nextRainInterval(final boolean isRaining) {
-		return RANDOM.nextInt(isRaining ? 12000 : 168000) + 12000;
+		final int base = isRaining ? ModOptions.rainActiveTimeConst : ModOptions.rainInactiveTimeConst;
+		return base
+				+ RANDOM.nextInt(isRaining ? ModOptions.rainActiveTimeVariable : ModOptions.rainInactiveTimeVariable);
 	}
 
 	public static void updateWeatherBody(final World world) {

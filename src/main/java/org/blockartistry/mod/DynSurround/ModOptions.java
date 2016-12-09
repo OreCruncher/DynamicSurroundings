@@ -70,8 +70,20 @@ public final class ModOptions {
 	public static final String CONFIG_ALWAYS_OVERRIDE_SOUND = "Always Override Sound";
 	public static final String CONFIG_ALLOW_DESERT_DUST = "Desert Dust";
 	public static final String CONFIG_RESET_RAIN_ON_SLEEP = "Reset Rain on Sleep";
+	public static final String CONFIG_RAIN_ACTIVE_TIME_CONST = "Active duration of rain, constant";
+	public static final String CONFIG_RAIN_ACTIVE_TIME_VARIABLE = "Active duration of rain, variable";
+	public static final String CONFIG_RAIN_INACTIVE_TIME_CONST = "Inactive duration of rain, constant";
+	public static final String CONFIG_RAIN_INACTIVE_TIME_VARIABLE = "Inactive duration of rain, variable";
+	public static final String CONFIG_STORM_ACTIVE_TIME_CONST = "Active duration of thunder, constant";
+	public static final String CONFIG_STORM_ACTIVE_TIME_VARIABLE = "Active duration of thunder, variable";
+	public static final String CONFIG_STORM_INACTIVE_TIME_CONST = "Inactive duration of thunder, constant";
+	public static final String CONFIG_STORM_INACTIVE_TIME_VARIABLE = "Inactive duration of thunder, variable";
+
 	private static final List<String> rainSort = Arrays.asList(CONFIG_RAIN_VOLUME, CONFIG_ALLOW_DESERT_DUST,
-			CONFIG_RESET_RAIN_ON_SLEEP, CONFIG_ALWAYS_OVERRIDE_SOUND, CONFIG_RAIN_PARTICLE_BASE);
+			CONFIG_RESET_RAIN_ON_SLEEP, CONFIG_ALWAYS_OVERRIDE_SOUND, CONFIG_RAIN_PARTICLE_BASE,
+			CONFIG_RAIN_ACTIVE_TIME_CONST, CONFIG_RAIN_ACTIVE_TIME_VARIABLE, CONFIG_RAIN_INACTIVE_TIME_CONST,
+			CONFIG_RAIN_INACTIVE_TIME_VARIABLE, CONFIG_STORM_ACTIVE_TIME_CONST, CONFIG_STORM_ACTIVE_TIME_VARIABLE,
+			CONFIG_STORM_INACTIVE_TIME_CONST, CONFIG_STORM_INACTIVE_TIME_VARIABLE);
 
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_VOLUME, defaultValue = "1.0")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
@@ -88,6 +100,39 @@ public final class ModOptions {
 	@Comment("Reset rain/thunder when all players sleep")
 	public static boolean resetRainOnSleep = true;
 
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_ACTIVE_TIME_CONST, defaultValue = "12000")
+	@MinMaxInt(min = 0)
+	@Comment("Base time rain is active, in ticks")
+	public static int rainActiveTimeConst = 12000;
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_ACTIVE_TIME_VARIABLE, defaultValue = "12000")
+	@MinMaxInt(min = 0)
+	@Comment("Variable amount of ticks rain is active, added to the base")
+	public static int rainActiveTimeVariable = 12000;
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_INACTIVE_TIME_CONST, defaultValue = "12000")
+	@MinMaxInt(min = 0)
+	@Comment("Base time rain is inactive, in ticks")
+	public static int rainInactiveTimeConst = 12000;
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_INACTIVE_TIME_VARIABLE, defaultValue = "168000")
+	@MinMaxInt(min = 0)
+	@Comment("Variable amount of ticks rain is inactive, added to the base")
+	public static int rainInactiveTimeVariable = 168000;
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_STORM_ACTIVE_TIME_CONST, defaultValue = "3600")
+	@MinMaxInt(min = 0)
+	@Comment("Base time storm (thunder) is active, in ticks")
+	public static int stormActiveTimeConst = 3600;
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_STORM_ACTIVE_TIME_VARIABLE, defaultValue = "12000")
+	@MinMaxInt(min = 0)
+	@Comment("Variable amount of ticks storm (thunder) is active, added to the base")
+	public static int stormActiveTimeVariable = 12000;
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_STORM_INACTIVE_TIME_CONST, defaultValue = "12000")
+	@MinMaxInt(min = 0)
+	@Comment("Base time storm (thunder) is inactive, in ticks")
+	public static int stormInactiveTimeConst = 12000;
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_STORM_INACTIVE_TIME_VARIABLE, defaultValue = "168000")
+	@MinMaxInt(min = 0)
+	@Comment("Varible amount of ticks storm (thunder) is inactive, added to the base")
+	public static int stormInactiveTimeVariable = 12000;
+	
 	public static final String CATEGORY_FOG = "fog";
 	public static final String CONFIG_ALLOW_DESERT_FOG = "Desert Fog";
 	public static final String CONFIG_DESERT_FOG_FACTOR = "Desert Fog Factor";
