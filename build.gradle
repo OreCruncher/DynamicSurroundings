@@ -14,7 +14,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 ext.config = parseConfig(file('build.properties'))
 
-ext.modVersion = "${config.version.mod.major}.${config.version.mod.minor}.${config.version.mod.revis}${config.version.mod.patch}"
+version= "${config.version.mod.major}.${config.version.mod.minor}.${config.version.mod.revis}${config.version.mod.patch}"
 group= "${config.group}"
 archivesBaseName = "${config.archive}"
 
@@ -26,7 +26,7 @@ compileJava {
 minecraft {
     version = "${config.version.minecraft}-${config.version.forge}"
     runDir = "run"
-    replace '@VERSION@', project.ext.modVersion
+    replace '@VERSION@', version
     
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.

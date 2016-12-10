@@ -48,7 +48,7 @@ public class FireFlyEffect extends BlockEffect {
 	@Override
 	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
 
-		if (world.isRaining() || !DiurnalUtils.isNighttime(world) || !world.isAirBlock(pos.up()))
+		if (world.isRaining() || !DiurnalUtils.isNighttime(world))
 			return false;
 
 		if (!super.trigger(state, world, pos, random))
@@ -66,7 +66,7 @@ public class FireFlyEffect extends BlockEffect {
 	@Override
 	public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
 		final double posX = pos.getX() + 0.5D;
-		final double posY = pos.getY() + 1.0D;
+		final double posY = pos.getY() + 0.5D;
 		final double posZ = pos.getZ() + 0.5D;
 
 		final ParticleFireFly fly = new ParticleFireFly(world, posX, posY, posZ);

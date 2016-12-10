@@ -28,6 +28,7 @@ import java.util.Map;
 
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
+@IFMLLoadingPlugin.MCVersion("1.10.2")
 @IFMLLoadingPlugin.TransformerExclusions({ "org.blockartistry.mod.DynSurround.asm." })
 @IFMLLoadingPlugin.SortingIndex(10001)
 @IFMLLoadingPlugin.Name("dsurroundcore")
