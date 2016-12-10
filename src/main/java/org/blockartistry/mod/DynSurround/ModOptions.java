@@ -435,6 +435,13 @@ public final class ModOptions {
 	@MinMaxInt(min = 0, max = 1)
 	@Comment("Area of the display the Potion HUD is displayed (0 upper left, 1 upper right)")
 	public static int potionHudAnchor = 1;
+	
+	public static final String CATEGORY_SPEECHBUBBLES = "speechbubbles";
+	public static final String CONFIG_OPTION_ENABLE_SPEECHBUBBLES = "Enable SpeechBubbles";
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_SPEECHBUBBLES, defaultValue = "true")
+	@Comment("Enables/disables speech bubbles above player heads")
+	@RestartRequired
+	public static boolean enableSpeechBubbles = true;
 
 	public static void load(final Configuration config) {
 
@@ -509,6 +516,11 @@ public final class ModOptions {
 		config.setCategoryRequiresWorldRestart(CATEGORY_POTION_HUD, false);
 		config.setCategoryComment(CATEGORY_POTION_HUD, "Options for the Potion HUD overlay");
 		config.setCategoryPropertyOrder(CATEGORY_POTION_HUD, new ArrayList<String>(potionHudSort));
+		
+		// CATEGORY: SpeechBubbles
+		config.setCategoryRequiresMcRestart(CATEGORY_SPEECHBUBBLES, true);
+		config.setCategoryRequiresWorldRestart(CATEGORY_SPEECHBUBBLES, true);
+		config.setCategoryComment(CATEGORY_SPEECHBUBBLES, "Options configuring SpeechBubbles");
 
 		// Iterate through the config list looking for properties without
 		// comments. These will

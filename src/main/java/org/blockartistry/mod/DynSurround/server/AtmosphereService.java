@@ -46,7 +46,7 @@ import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 
-public final class ServerEffectHandler {
+public final class AtmosphereService {
 
 	private static final float RESET = -10.0F;
 
@@ -54,7 +54,7 @@ public final class ServerEffectHandler {
 	private static final long MIN_AURORA_DISTANCE_SQ = 400 * 400;
 
 	public static void initialize() {
-		MinecraftForge.EVENT_BUS.register(new ServerEffectHandler());
+		MinecraftForge.EVENT_BUS.register(new AtmosphereService());
 	}
 
 	@SubscribeEvent

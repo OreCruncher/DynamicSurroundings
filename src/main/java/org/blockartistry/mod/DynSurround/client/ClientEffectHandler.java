@@ -78,6 +78,9 @@ public class ClientEffectHandler {
 
 		if (ModOptions.suppressPotionParticles)
 			register(new PotionParticleScrubHandler());
+		
+		if(ModOptions.enableSpeechBubbles)
+			register(new SpeechBubbleHandler());
 	}
 
 	@SubscribeEvent

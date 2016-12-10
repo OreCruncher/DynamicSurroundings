@@ -22,48 +22,41 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.hud;
+package org.blockartistry.mod.DynSurround.server;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.blockartistry.mod.DynSurround.ModOptions;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import org.blockartistry.mod.DynSurround.network.Network;
+
+import com.google.common.base.Predicate;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.EntitySelectors;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
-public final class GuiHUDHandler {
+public class SpeechBubbleService {
 
-	private GuiHUDHandler() {
-	}
-
-	public static interface IGuiOverlay {
-		void doRender(final RenderGameOverlayEvent.Pre event);
-	}
-
-	private static final List<IGuiOverlay> overlays = new ArrayList<IGuiOverlay>();
-
-	public static void register(final IGuiOverlay overlay) {
-		overlays.add(overlay);
-	}
+	public static final double SPEECH_BUBBLE_RANGE = 16.0D;
 
 	public static void initialize() {
-		if (ModOptions.enableDebugLogging)
-			register(new DebugHUD());
-		if (ModOptions.potionHudEnabled)
-			register(new PotionHUD());
-
-		MinecraftForge.EVENT_BUS.register(new GuiHUDHandler());
+		MinecraftForge.EVENT_BUS.register(new SpeechBubbleService());
 	}
 
-	@SubscribeEvent(priority = EventPriority.HIGH)
-	public void onRenderGameOverlayEvent(final RenderGameOverlayEvent.Pre event) {
-		for (final IGuiOverlay overlay : overlays)
-			overlay.doRender(event);
-	}
+	// Received when the server is processing a regular chat
+	// message - not a command, etc.
+	@SubscribeEvent
+	public void onChatMessageEvent(final ServerChatEvent event) {
 
+		final EntityPlayerMP player = event.getPlayer();
+		final Predicate<Entity> filter = EntitySelectors.withinRange(player.posX, player.posY, player.posZ,
+				SPEECH_BUBBLE_RANGE);
+		final List<EntityPlayerMP> players = event.getPlayer().getEntityWorld().getPlayers(EntityPlayerMP.class,
+				filter);
+
+		for (final EntityPlayerMP target : players)
+			Network.sendChatBubbleUpdate(player.getUniqueID(), event.getMessage(), target);
+	}
 }

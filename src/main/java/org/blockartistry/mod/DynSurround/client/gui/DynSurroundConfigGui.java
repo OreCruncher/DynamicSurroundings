@@ -100,6 +100,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 		this.configElements.add(this.soundVolumeElement);
 
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_GENERAL, "General Settings"));
+		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES, "Speech Bubbles"));
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_RAIN, "Rain Settings"));
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_FOG, "Fog Settings"));
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_AURORA, "Aurora Settings"));

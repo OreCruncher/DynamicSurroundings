@@ -24,10 +24,13 @@
 
 package org.blockartistry.mod.DynSurround.network;
 
+import java.util.UUID;
+
 import org.blockartistry.mod.DynSurround.Module;
-import org.blockartistry.mod.DynSurround.client.DamageEffectHandler.HealthData;
+import org.blockartistry.mod.DynSurround.client.HealthEffectHandler.HealthData;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
 
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -46,6 +49,7 @@ public final class Network {
 		network.registerMessage(PacketRainIntensity.class, PacketRainIntensity.class, ++discriminator, Side.CLIENT);
 		network.registerMessage(PacketAurora.class, PacketAurora.class, ++discriminator, Side.CLIENT);
 		network.registerMessage(PacketHealthChange.class, PacketHealthChange.class, ++discriminator, Side.CLIENT);
+		network.registerMessage(PacketChatBubble.class, PacketChatBubble.class, ++discriminator, Side.CLIENT);
 	}
 
 	public static void sendRainIntensity(final float intensity, final int dimension) {
@@ -58,5 +62,9 @@ public final class Network {
 
 	public static void sendHealthUpdate(final HealthData data, final int dimension) {
 		network.sendToDimension(new PacketHealthChange(data), dimension);
+	}
+	
+	public static void sendChatBubbleUpdate(final UUID playerId, final String message, final EntityPlayerMP target) {
+		network.sendTo(new PacketChatBubble(playerId, message), target);
 	}
 }

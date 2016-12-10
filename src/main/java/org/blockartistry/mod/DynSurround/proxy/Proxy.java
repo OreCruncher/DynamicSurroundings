@@ -25,13 +25,14 @@
 package org.blockartistry.mod.DynSurround.proxy;
 
 import org.blockartistry.mod.DynSurround.VersionCheck;
-import org.blockartistry.mod.DynSurround.client.DamageEffectHandler;
+import org.blockartistry.mod.DynSurround.client.HealthEffectHandler;
 import org.blockartistry.mod.DynSurround.client.waila.WailaHandler;
 import org.blockartistry.mod.DynSurround.commands.CommandRain;
 import org.blockartistry.mod.DynSurround.data.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.data.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.network.Network;
-import org.blockartistry.mod.DynSurround.server.ServerEffectHandler;
+import org.blockartistry.mod.DynSurround.server.AtmosphereService;
+import org.blockartistry.mod.DynSurround.server.SpeechBubbleService;
 
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
@@ -51,8 +52,9 @@ public class Proxy {
 
 	public void init(final FMLInitializationEvent event) {
 		Network.initialize();
-		ServerEffectHandler.initialize();
-		DamageEffectHandler.initialize();
+		AtmosphereService.initialize();
+		HealthEffectHandler.initialize();
+		SpeechBubbleService.initialize();
 		WailaHandler.register();
 	}
 

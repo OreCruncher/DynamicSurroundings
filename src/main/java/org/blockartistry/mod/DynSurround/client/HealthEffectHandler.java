@@ -51,7 +51,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public final class DamageEffectHandler {
+public final class HealthEffectHandler {
 
 	private static final double DISTANCE_THRESHOLD_SQ = 32 * 32;
 
@@ -83,12 +83,12 @@ public final class DamageEffectHandler {
 		}
 	}
 
-	private DamageEffectHandler() {
+	private HealthEffectHandler() {
 	}
 
 	public static void initialize() {
 		if (ModOptions.enableDamagePopoffs)
-			MinecraftForge.EVENT_BUS.register(new DamageEffectHandler());
+			MinecraftForge.EVENT_BUS.register(new HealthEffectHandler());
 	}
 
 	// From the Minecraft code for damage

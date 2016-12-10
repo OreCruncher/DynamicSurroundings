@@ -26,60 +26,45 @@ package org.blockartistry.mod.DynSurround.network;
 
 import java.util.UUID;
 
-import org.blockartistry.mod.DynSurround.client.HealthEffectHandler;
-import org.blockartistry.mod.DynSurround.client.HealthEffectHandler.HealthData;
+import org.blockartistry.mod.DynSurround.client.SpeechBubbleHandler;
+import org.blockartistry.mod.DynSurround.client.SpeechBubbleHandler.SpeechBubbleData;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketHealthChange implements IMessage, IMessageHandler<PacketHealthChange, IMessage> {
+public class PacketChatBubble implements IMessage, IMessageHandler<PacketChatBubble, IMessage> {
 
 	private UUID entityId;
-	private float posX;
-	private float posY;
-	private float posZ;
-	private boolean isCritical;
-	private int amount;
+	private String message;
 
-	public PacketHealthChange() {
-		
-	}
-	
-	public PacketHealthChange(final HealthData data) {
-		this.entityId = data.entityId;
-		this.posX = data.posX;
-		this.posY = data.posY;
-		this.posZ = data.posZ;
-		this.isCritical = data.isCritical;
-		this.amount = data.amount;
+	public PacketChatBubble() {
+
 	}
 
-	public IMessage onMessage(final PacketHealthChange message, final MessageContext ctx) {
-		HealthEffectHandler.handleEvent(new HealthData(message.entityId, message.posX, message.posY, message.posZ, message.isCritical, message.amount));
+	public PacketChatBubble(final UUID playerId, final String message) {
+		this.entityId = playerId;
+		this.message = message;
+	}
+
+	public IMessage onMessage(final PacketChatBubble message, final MessageContext ctx) {
+		SpeechBubbleHandler.addSpeechBubble(new SpeechBubbleData(message.entityId, message.message));
 		return null;
 	}
 
 	@Override
 	public void fromBytes(final ByteBuf buf) {
 		this.entityId = new UUID(buf.readLong(), buf.readLong());
-		this.posX = buf.readFloat();
-		this.posY = buf.readFloat();
-		this.posZ = buf.readFloat();
-		this.isCritical = buf.readBoolean();
-		this.amount = buf.readInt();
+		this.message = ByteBufUtils.readUTF8String(buf);
 	}
 
 	@Override
 	public void toBytes(final ByteBuf buf) {
 		buf.writeLong(this.entityId.getMostSignificantBits());
 		buf.writeLong(this.entityId.getLeastSignificantBits());
-		buf.writeFloat(this.posX);
-		buf.writeFloat(this.posY);
-		buf.writeFloat(this.posZ);
-		buf.writeBoolean(this.isCritical);
-		buf.writeInt(this.amount);
+		ByteBufUtils.writeUTF8String(buf, this.message);
 	}
 
 }
