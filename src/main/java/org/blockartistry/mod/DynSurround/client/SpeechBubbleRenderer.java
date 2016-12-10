@@ -24,7 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.client;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
@@ -54,8 +53,9 @@ public class SpeechBubbleRenderer {
 	private static final Color B_COLOR = Color.SLATEGRAY;
 	private static final float B_COLOR_ALPHA = 0.75F; // 0.25F;
 	private static final Color F_COLOR = Color.GOLD;
-	private static final int MAX_TEXT_WIDTH = 240;
 	private static final int MIN_TEXT_WIDTH = 60;
+	private static final int MAX_TEXT_WIDTH = MIN_TEXT_WIDTH * 4;
+	private static final double BUBBLE_MARGIN = 4.0F;
 
 	private static final double RENDER_RANGE = SpeechBubbleService.SPEECH_BUBBLE_RANGE
 			* SpeechBubbleService.SPEECH_BUBBLE_RANGE;
@@ -67,82 +67,83 @@ public class SpeechBubbleRenderer {
 	public static void initialize() {
 		MinecraftForge.EVENT_BUS.register(new SpeechBubbleRenderer());
 	}
+	
+	public static List<String> scrub(final String message) {
+		final FontRenderer font = Minecraft.getMinecraft().getRenderManager().getFontRenderer();
+		return font.listFormattedStringToWidth(message.replaceAll("(\\xA7.)", ""), MAX_TEXT_WIDTH);
+	}
 
 	// EntityRenderer.drawNameplate()
 	private static void drawText(final FontRenderer font, final List<String> input, final float x, final float y,
 			final float z, final float viewerYaw, final float viewerPitch, final boolean isThirdPersonFrontal,
 			final boolean isSneaking) {
 
-		// TODO: Cache the strings so we don't do this every render
-
-		// Repack the list based on max size of the string.
-		final List<String> list = new ArrayList<String>();
+		final int numberOfMessages = input.size();
 		int maxWidth = MIN_TEXT_WIDTH;
+
 		for (final String s : input) {
 			int strWidth = font.getStringWidth(s);
-			if (strWidth <= MAX_TEXT_WIDTH) {
-				list.add(s);
-				if (strWidth > maxWidth)
-					maxWidth = strWidth;
-			} else {
-				maxWidth = MAX_TEXT_WIDTH;
-				list.addAll(font.listFormattedStringToWidth(s, MAX_TEXT_WIDTH));
-			}
+			if (strWidth > maxWidth)
+				maxWidth = strWidth;
 		}
+		
+		// Calculate scale and position
+		final float scaleBase = 0.8F; // 1.6F;
+		final float scale = scaleBase * 0.016666668F;
+		final double top = -(numberOfMessages) * 9 - BUBBLE_MARGIN;
+		final double bottom = BUBBLE_MARGIN;
+		final double left = -(maxWidth / 2.0D + BUBBLE_MARGIN);
+		final double right = maxWidth / 2.0D + BUBBLE_MARGIN;
 
 		final Tessellator tessellator = Tessellator.getInstance();
 		final VertexBuffer buffer = tessellator.getBuffer();
-		final int i = (maxWidth + 1) / 2;
 
-		float workingY = y + list.size() * 0.125F;
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(x, y, z);
+		GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(-viewerYaw, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate((float) (isThirdPersonFrontal ? -1 : 1) * viewerPitch, 1.0F, 0.0F, 0.0F);
+		GlStateManager.scale(-scale, -scale, scale);
+		GlStateManager.disableLighting();
+		GlStateManager.depthMask(false);
+		GlStateManager.disableDepth();
+		GlStateManager.enableBlend();
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+				GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+				GlStateManager.DestFactor.ZERO);
+		GlStateManager.disableTexture2D();
 
-		for (int j = 0; j < list.size(); j++) {
-			workingY -= 0.125F;
-			final String str = list.get(j);
+		// Draw the background region
+		final float red = B_COLOR.red;
+		final float green = B_COLOR.green;
+		final float blue = B_COLOR.blue;
+		final float alpha = B_COLOR_ALPHA;
 
-			GlStateManager.pushMatrix();
-			GlStateManager.translate(x, workingY, z);
-			GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
-			GlStateManager.rotate(-viewerYaw, 0.0F, 1.0F, 0.0F);
-			GlStateManager.rotate((float) (isThirdPersonFrontal ? -1 : 1) * viewerPitch, 1.0F, 0.0F, 0.0F);
-			// GlStateManager.scale(-0.025F, -0.025F, 0.025F);
-			GlStateManager.scale(-0.0125F, -0.0125F, 0.0125F);
-			GlStateManager.disableLighting();
-			GlStateManager.depthMask(false);
+		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+		buffer.pos(left, top, 0.0D).color(red, green, blue, alpha).endVertex();
+		buffer.pos(left, bottom, 0.0D).color(red, green, blue, alpha).endVertex();
+		buffer.pos(right, bottom, 0.0D).color(red, green, blue, alpha).endVertex();
+		buffer.pos(right, top, 0.0D).color(red, green, blue, alpha).endVertex();
+		tessellator.draw();
+		GlStateManager.enableTexture2D();
 
+		int lines = numberOfMessages;
+		for (int t = 0; t < numberOfMessages; t++) {
+			final String str = input.get(t);
+			final int offset = -lines * 9;
+			final int margin = -font.getStringWidth(str) / 2;
 			GlStateManager.disableDepth();
-
-			GlStateManager.enableBlend();
-			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-					GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-					GlStateManager.DestFactor.ZERO);
-			GlStateManager.disableTexture2D();
-
-			// Draw the background region
-			final float red = B_COLOR.red;
-			final float green = B_COLOR.green;
-			final float blue = B_COLOR.blue;
-			final float alpha = B_COLOR_ALPHA;
-
-			buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-			buffer.pos((double) (-i - 1), (double) (-1), 0.0D).color(red, green, blue, alpha).endVertex();
-			buffer.pos((double) (-i - 1), (double) (8), 0.0D).color(red, green, blue, alpha).endVertex();
-			buffer.pos((double) (i + 1), (double) (8), 0.0D).color(red, green, blue, alpha).endVertex();
-			buffer.pos((double) (i + 1), (double) (-1), 0.0D).color(red, green, blue, alpha).endVertex();
-			tessellator.draw();
-			GlStateManager.enableTexture2D();
-
-			font.drawString(str, -font.getStringWidth(str) / 2, 0, F_COLOR.rgb());
+			font.drawString(str, margin, offset, F_COLOR.rgb());
 			GlStateManager.enableDepth();
-
 			GlStateManager.depthMask(true);
-			font.drawString(str, -font.getStringWidth(str) / 2, 0, F_COLOR.rgb());
-
-			GlStateManager.enableLighting();
-			GlStateManager.disableBlend();
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			GlStateManager.popMatrix();
+			font.drawString(str, margin, offset, F_COLOR.rgb());
+			lines--;
 		}
+
+		GlStateManager.enableLighting();
+		GlStateManager.disableBlend();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.popMatrix();
 	}
 
 	@SubscribeEvent

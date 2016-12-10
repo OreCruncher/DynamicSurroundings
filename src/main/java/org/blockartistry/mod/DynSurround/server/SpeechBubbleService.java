@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.server;
 
 import java.util.List;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.network.Network;
 
 import com.google.common.base.Predicate;
@@ -35,11 +36,12 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EntitySelectors;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class SpeechBubbleService {
 
-	public static final double SPEECH_BUBBLE_RANGE = 16.0D;
+	public static final double SPEECH_BUBBLE_RANGE = ModOptions.speechBubbleRange;
 
 	public static void initialize() {
 		MinecraftForge.EVENT_BUS.register(new SpeechBubbleService());
@@ -47,9 +49,9 @@ public class SpeechBubbleService {
 
 	// Received when the server is processing a regular chat
 	// message - not a command, etc.
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onChatMessageEvent(final ServerChatEvent event) {
-
+		
 		final EntityPlayerMP player = event.getPlayer();
 		final Predicate<Entity> filter = EntitySelectors.withinRange(player.posX, player.posY, player.posZ,
 				SPEECH_BUBBLE_RANGE);

@@ -86,6 +86,8 @@ public class DynSurroundConfigGui extends GuiConfig {
 				ModOptions.CONFIG_ENABLE_FOOTSTEPS_SOUND, "Footstep Sound Effects"));
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_POTION_HUD,
 				ModOptions.CONFIG_POTION_HUD_ENABLE, "Potion HUD Overlay"));
+		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES,
+				ModOptions.CONFIG_OPTION_ENABLE_SPEECHBUBBLES, "Speech Bubbles"));
 
 		this.soundCategory = new ConfigCategory("Blocked Sounds");
 		this.soundCategory.setComment("Sounds that will be blocked from playing");

@@ -132,7 +132,7 @@ public final class ModOptions {
 	@MinMaxInt(min = 0)
 	@Comment("Variable amount of ticks storm (thunder) is inactive, added to the base")
 	public static int stormInactiveTimeVariable = 12000;
-	
+
 	public static final String CATEGORY_FOG = "fog";
 	public static final String CONFIG_ALLOW_DESERT_FOG = "Desert Fog";
 	public static final String CONFIG_DESERT_FOG_FACTOR = "Desert Fog Factor";
@@ -288,7 +288,7 @@ public final class ModOptions {
 	@Comment("Enable Firefly effect around plants")
 	@RestartRequired
 	public static boolean enableFireflies = true;
-	
+
 	public static final String CATEGORY_SOUND = "sound";
 	public static final String CONFIG_ENABLE_BIOME_SOUNDS = "Enable Biome Sounds";
 	public static final String CONFIG_MASTER_SOUND_FACTOR = "Master Sound Scale Factor";
@@ -435,13 +435,26 @@ public final class ModOptions {
 	@MinMaxInt(min = 0, max = 1)
 	@Comment("Area of the display the Potion HUD is displayed (0 upper left, 1 upper right)")
 	public static int potionHudAnchor = 1;
-	
+
 	public static final String CATEGORY_SPEECHBUBBLES = "speechbubbles";
 	public static final String CONFIG_OPTION_ENABLE_SPEECHBUBBLES = "Enable SpeechBubbles";
+	public static final String CONFIG_OPTION_SPEECHBUBBLE_DURATION = "Display Duration";
+	public static final String CONFIG_OPTION_SPEECHBUBBLE_RANGE = "Visibility Range";
 	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_SPEECHBUBBLES, defaultValue = "true")
 	@Comment("Enables/disables speech bubbles above player heads")
-	@RestartRequired
 	public static boolean enableSpeechBubbles = true;
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_SPEECHBUBBLE_DURATION, defaultValue = "7")
+	@MinMaxFloat(min = 5.0F, max = 15.0F)
+	@Comment("Number of seconds to display speech before removing")
+	public static float speechBubbleDuration = 7.0F;
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_SPEECHBUBBLE_RANGE, defaultValue = "32")
+	@MinMaxInt(min = 16, max = 64)
+	@Comment("Range at which a Speech Bubble is visibile.  Filtering occurs server side.")
+	@RestartRequired
+	public static float speechBubbleRange = 32;
+
+	private static final List<String> speechBubbleSort = Arrays.asList(CONFIG_OPTION_ENABLE_SPEECHBUBBLES,
+			CONFIG_OPTION_SPEECHBUBBLE_DURATION, CONFIG_OPTION_SPEECHBUBBLE_RANGE);
 
 	public static void load(final Configuration config) {
 
@@ -499,7 +512,7 @@ public final class ModOptions {
 		config.setCategoryRequiresMcRestart(CATEGORY_BLOCK, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_BLOCK, false);
 		config.setCategoryComment(CATEGORY_BLOCK, "Options for defining block specific sounds/effects");
-		
+
 		// CATEGORY: Block.effects
 		config.setCategoryRequiresMcRestart(CATEGORY_BLOCK_EFFECTS, true);
 		config.setCategoryRequiresWorldRestart(CATEGORY_BLOCK_EFFECTS, true);
@@ -516,11 +529,12 @@ public final class ModOptions {
 		config.setCategoryRequiresWorldRestart(CATEGORY_POTION_HUD, false);
 		config.setCategoryComment(CATEGORY_POTION_HUD, "Options for the Potion HUD overlay");
 		config.setCategoryPropertyOrder(CATEGORY_POTION_HUD, new ArrayList<String>(potionHudSort));
-		
+
 		// CATEGORY: SpeechBubbles
-		config.setCategoryRequiresMcRestart(CATEGORY_SPEECHBUBBLES, true);
-		config.setCategoryRequiresWorldRestart(CATEGORY_SPEECHBUBBLES, true);
+		config.setCategoryRequiresMcRestart(CATEGORY_SPEECHBUBBLES, false);
+		config.setCategoryRequiresWorldRestart(CATEGORY_SPEECHBUBBLES, false);
 		config.setCategoryComment(CATEGORY_SPEECHBUBBLES, "Options configuring SpeechBubbles");
+		config.setCategoryPropertyOrder(CATEGORY_SPEECHBUBBLES, new ArrayList<String>(speechBubbleSort));
 
 		// Iterate through the config list looking for properties without
 		// comments. These will

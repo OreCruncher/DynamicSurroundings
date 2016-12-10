@@ -41,19 +41,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SpeechBubbleHandler implements IClientEffectHandler {
 
-	private static final int KEEP_MSECS = 5000;
 	private static final Map<UUID, List<SpeechBubbleData>> messages = new HashMap<UUID, List<SpeechBubbleData>>();
 	private static long sequence = 0;
 
 	public static class SpeechBubbleData {
 		public final long id = sequence++;
-		public final long expires = System.currentTimeMillis() + KEEP_MSECS;
+		public final long expires = System.currentTimeMillis() + (long) (ModOptions.speechBubbleDuration * 1000F);
 		public final UUID entityId;
-		public final String message;
+		public final List<String> messages;
 
 		public SpeechBubbleData(final UUID sender, final String message) {
 			this.entityId = sender;
-			this.message = message;
+			this.messages = SpeechBubbleRenderer.scrub(message);
 		}
 	}
 
@@ -76,7 +75,7 @@ public class SpeechBubbleHandler implements IClientEffectHandler {
 			return null;
 		final List<String> result = new ArrayList<String>();
 		for (final SpeechBubbleData entry : data)
-			result.add(entry.message);
+			result.addAll(entry.messages);
 		return result;
 	}
 

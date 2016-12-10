@@ -75,6 +75,7 @@ public class Color {
 	public static final Color GRAY = new ImmutableColor(128, 128, 128);
 	public static final Color LGRAY = new ImmutableColor(192, 192, 192);
 	public static final Color SLATEGRAY = new ImmutableColor(112, 128, 144);
+	public static final Color DARKSLATEGRAY = new ImmutableColor(47, 79, 79);
 
 	public float red;
 	public float green;
