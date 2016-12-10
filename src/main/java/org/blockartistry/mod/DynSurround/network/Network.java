@@ -49,7 +49,7 @@ public final class Network {
 		network.registerMessage(PacketRainIntensity.class, PacketRainIntensity.class, ++discriminator, Side.CLIENT);
 		network.registerMessage(PacketAurora.class, PacketAurora.class, ++discriminator, Side.CLIENT);
 		network.registerMessage(PacketHealthChange.class, PacketHealthChange.class, ++discriminator, Side.CLIENT);
-		network.registerMessage(PacketChatBubble.class, PacketChatBubble.class, ++discriminator, Side.CLIENT);
+		network.registerMessage(PacketSpeechBubble.class, PacketSpeechBubble.class, ++discriminator, Side.CLIENT);
 	}
 
 	public static void sendRainIntensity(final float intensity, final int dimension) {
@@ -65,6 +65,6 @@ public final class Network {
 	}
 	
 	public static void sendChatBubbleUpdate(final UUID playerId, final String message, final EntityPlayerMP target) {
-		network.sendTo(new PacketChatBubble(playerId, message), target);
+		network.sendTo(new PacketSpeechBubble(playerId, message), target);
 	}
 }

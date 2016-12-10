@@ -30,12 +30,12 @@ import java.util.List;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.ClientEffectHandler;
-import org.blockartistry.mod.DynSurround.client.SpeechBubbleRenderer;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.ForgeDictionary;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.user.GenerateBlockReport;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
+import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer;
 import org.blockartistry.mod.DynSurround.data.BlockRegistry;
 import org.blockartistry.mod.DynSurround.data.SoundRegistry;
 

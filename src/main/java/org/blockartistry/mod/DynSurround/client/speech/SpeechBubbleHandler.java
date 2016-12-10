@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.client.speech;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
+import org.blockartistry.mod.DynSurround.client.IClientEffectHandler;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.client.speech;
 
 import java.util.List;
 

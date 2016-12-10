@@ -26,8 +26,8 @@ package org.blockartistry.mod.DynSurround.network;
 
 import java.util.UUID;
 
-import org.blockartistry.mod.DynSurround.client.SpeechBubbleHandler;
-import org.blockartistry.mod.DynSurround.client.SpeechBubbleHandler.SpeechBubbleData;
+import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleHandler;
+import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleHandler.SpeechBubbleData;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -35,21 +35,21 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketChatBubble implements IMessage, IMessageHandler<PacketChatBubble, IMessage> {
+public class PacketSpeechBubble implements IMessage, IMessageHandler<PacketSpeechBubble, IMessage> {
 
 	private UUID entityId;
 	private String message;
 
-	public PacketChatBubble() {
+	public PacketSpeechBubble() {
 
 	}
 
-	public PacketChatBubble(final UUID playerId, final String message) {
+	public PacketSpeechBubble(final UUID playerId, final String message) {
 		this.entityId = playerId;
 		this.message = message;
 	}
 
-	public IMessage onMessage(final PacketChatBubble message, final MessageContext ctx) {
+	public IMessage onMessage(final PacketSpeechBubble message, final MessageContext ctx) {
 		SpeechBubbleHandler.addSpeechBubble(new SpeechBubbleData(message.entityId, message.message));
 		return null;
 	}
