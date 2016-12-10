@@ -39,10 +39,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public final class SoundEffect {
 
 	private static final float[] pitchDelta = { -0.2F, 0.0F, 0.0F, 0.2F, 0.2F, 0.2F };
@@ -64,6 +61,8 @@ public final class SoundEffect {
 	}
 
 	public final @Nullable SoundEvent sound;
+	// Hack around SoundEvent.getName() being client sided
+	private final String soundName;
 	public final String conditions;
 	private final Pattern pattern;
 	public final SoundType type;
@@ -88,6 +87,7 @@ public final class SoundEffect {
 
 	public SoundEffect(final String soundName, final float volume, final float pitch, final int repeatDelay,
 			final boolean variable) {
+		this.soundName = soundName;
 		this.sound = SoundUtils.getOrRegisterSound(soundName);
 		this.volume = volume;
 		this.pitch = pitch;
@@ -101,6 +101,7 @@ public final class SoundEffect {
 	}
 
 	public SoundEffect(final SoundEffect effect) {
+		this.soundName = effect.soundName;
 		this.sound = effect.sound;
 		this.volume = effect.volume;
 		this.pitch = effect.pitch;
@@ -114,6 +115,7 @@ public final class SoundEffect {
 	}
 
 	public SoundEffect(final SoundConfig record) {
+		this.soundName = StringUtils.isEmpty(record.sound) ? "NO SOUND SPECIFIED" : record.sound;
 		this.sound = StringUtils.isEmpty(record.sound) ? null : SoundUtils.getOrRegisterSound(record.sound);
 		this.conditions = StringUtils.isEmpty(record.conditions) ? ".*" : record.conditions;
 		this.volume = record.volume == null ? 1.0F : record.volume.floatValue();
@@ -158,7 +160,8 @@ public final class SoundEffect {
 		return this.repeatDelay + rand.nextInt(this.repeatDelayRandom);
 	}
 
-	public void doEffect(final IBlockState state, final World world, final BlockPos pos, @Nullable final SoundCategory categoryOverride, final Random random) {
+	public void doEffect(final IBlockState state, final World world, final BlockPos pos,
+			@Nullable final SoundCategory categoryOverride, final Random random) {
 		SoundManager.playSoundAt(pos, this, 0, categoryOverride);
 	}
 
@@ -185,7 +188,7 @@ public final class SoundEffect {
 
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append('[').append(sound == null? "MISSING_SOUND" : sound.getSoundName());
+		builder.append('[').append(sound == null ? "MISSING_SOUND" : this.soundName);
 		if (!StringUtils.isEmpty(this.conditions))
 			builder.append('(').append(this.conditions).append(')');
 		builder.append(", v:").append(this.volume);

@@ -33,6 +33,7 @@ import org.blockartistry.mod.DynSurround.data.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.server.AtmosphereService;
 import org.blockartistry.mod.DynSurround.server.SpeechBubbleService;
+import org.blockartistry.mod.DynSurround.util.Localization;
 
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
@@ -41,10 +42,18 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class Proxy {
+	
+	protected void registerLanguage() {
+		Localization.initialize(Side.SERVER);
+	}
 
 	public void preInit(final FMLPreInitializationEvent event) {
+		
+		registerLanguage();
+		
 		// Register early to give the background process a good amount
 		// of seed to get the mod version data
 		VersionCheck.register();

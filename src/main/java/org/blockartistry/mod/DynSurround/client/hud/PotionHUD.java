@@ -29,6 +29,8 @@ import java.util.Collection;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler.IGuiOverlay;
 import org.blockartistry.mod.DynSurround.util.Color;
+import org.blockartistry.mod.DynSurround.util.Localization;
+
 import com.google.common.collect.Ordering;
 
 import net.minecraft.client.Minecraft;
@@ -37,7 +39,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -119,14 +120,14 @@ public class PotionHUD extends Gui implements IGuiOverlay {
 			if (!potion.shouldRenderInvText(effect))
 				continue;
 
-			String s1 = I18n.format(potion.getName(), new Object[0]);
+			String s1 = Localization.format(potion.getName(), new Object[0]);
 
 			if (effect.getAmplifier() == 1) {
-				s1 = s1 + " " + I18n.format("enchantment.level.2", new Object[0]);
+				s1 = s1 + " " + Localization.format("enchantment.level.2", new Object[0]);
 			} else if (effect.getAmplifier() == 2) {
-				s1 = s1 + " " + I18n.format("enchantment.level.3", new Object[0]);
+				s1 = s1 + " " + Localization.format("enchantment.level.3", new Object[0]);
 			} else if (effect.getAmplifier() == 3) {
-				s1 = s1 + " " + I18n.format("enchantment.level.4", new Object[0]);
+				s1 = s1 + " " + Localization.format("enchantment.level.4", new Object[0]);
 			}
 
 			Color color = potion.isBadEffect() ? TEXT_POTION_NAME_BAD

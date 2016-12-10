@@ -30,10 +30,10 @@ import java.util.List;
 import org.blockartistry.mod.DynSurround.data.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.data.BlockRegistry;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
+import org.blockartistry.mod.DynSurround.util.Localization;
 
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -131,11 +131,11 @@ public final class CommandRain extends CommandBase {
 				showHelp = true;
 			} else if (COMMAND_OPTION_RESET.compareToIgnoreCase(parms[0]) == 0) {
 				world.provider.resetRainAndThunder();
-				feedback = new TextComponentString(I18n.format("msg.RainReset"));
+				feedback = new TextComponentString(Localization.format("msg.RainReset"));
 			} else if (COMMAND_OPTION_RELOAD.compareToIgnoreCase(parms[0]) == 0) {
 				BiomeRegistry.initialize();
 				BlockRegistry.initialize();
-				feedback = new TextComponentString(I18n.format("msg.BiomeReload"));
+				feedback = new TextComponentString(Localization.format("msg.BiomeReload"));
 			} else if (COMMAND_OPTION_CONFIG.compareToIgnoreCase(parms[0]) == 0) {
 				feedback = new TextComponentString(config(world, data));
 			} else if (COMMAND_OPTION_STATUS.compareToIgnoreCase(parms[0]) == 0) {
@@ -153,10 +153,11 @@ public final class CommandRain extends CommandBase {
 					final double d = parseDouble(parms[2], 0.0D, 1000.0D) * 20.0D * 60.0D;
 					if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
 						world.getWorldInfo().setRainTime((int) d);
-						feedback = new TextComponentString(I18n.format("msg.RainTimeSet", FORMATTER.format(d)));
+						feedback = new TextComponentString(Localization.format("msg.RainTimeSet", FORMATTER.format(d)));
 					} else if (COMMAND_OPTION_THUNDER.compareToIgnoreCase(parms[1]) == 0) {
 						world.getWorldInfo().setThunderTime((int) d);
-						feedback = new TextComponentString(I18n.format("msg.ThunderTimeSet", FORMATTER.format(d)));
+						feedback = new TextComponentString(
+								Localization.format("msg.ThunderTimeSet", FORMATTER.format(d)));
 					} else {
 						showHelp = true;
 					}
@@ -168,8 +169,8 @@ public final class CommandRain extends CommandBase {
 					final double d = parseDouble(parms[2], 0.0D, 100.0D) / 100.0D;
 					if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
 						data.setRainIntensity((float) d);
-						feedback = new TextComponentString(
-								I18n.format("msg.RainIntensitySet", FORMATTER.format(data.getRainIntensity() * 100)));
+						feedback = new TextComponentString(Localization.format("msg.RainIntensitySet",
+								FORMATTER.format(data.getRainIntensity() * 100)));
 					} else {
 						showHelp = true;
 					}
@@ -181,7 +182,7 @@ public final class CommandRain extends CommandBase {
 					final double d = parseDouble(parms[2], 0.0D, 100.0D) / 100.0D;
 					if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
 						data.setMinRainIntensity((float) d);
-						feedback = new TextComponentString(I18n.format("msg.MinRainIntensitySet",
+						feedback = new TextComponentString(Localization.format("msg.MinRainIntensitySet",
 								FORMATTER.format(data.getMinRainIntensity() * 100)));
 					} else {
 						showHelp = true;
@@ -195,7 +196,7 @@ public final class CommandRain extends CommandBase {
 					final double d = parseDouble(parms[2], 0.0D, 100.0D) / 100.0D;
 					if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
 						data.setMaxRainIntensity((float) d);
-						feedback = new TextComponentString(I18n.format("msg.MaxRainIntensitySet",
+						feedback = new TextComponentString(Localization.format("msg.MaxRainIntensitySet",
 								FORMATTER.format(data.getMaxRainIntensity() * 100)));
 					} else {
 						showHelp = true;
@@ -209,7 +210,7 @@ public final class CommandRain extends CommandBase {
 					final double d = parseDouble(parms[2], 0.0D, 100.0D) / 100.0D;
 					if (COMMAND_OPTION_THUNDER.compareToIgnoreCase(parms[1]) == 0) {
 						data.setThunderThreshold((float) d);
-						feedback = new TextComponentString(I18n.format("msg.ThunderThresholdSet",
+						feedback = new TextComponentString(Localization.format("msg.ThunderThresholdSet",
 								FORMATTER.format(data.getThunderThreshold() * 100)));
 					} else {
 						showHelp = true;

@@ -30,6 +30,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.mod.DynSurround.util.Localization;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -39,8 +40,6 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-
-import net.minecraft.client.resources.I18n;
 
 // Modeled after the BuildCraft version check system.
 public final class VersionCheck implements Runnable {
@@ -172,7 +171,7 @@ public final class VersionCheck implements Runnable {
 
 		if (event.player instanceof EntityPlayer) {
 			if (status == UpdateStatus.OUTDATED) {
-				final String msg = I18n.format("msg.NewVersionAvailable.dsurround",
+				final String msg = Localization.format("msg.NewVersionAvailable.dsurround",
 						Module.MOD_NAME, currentVersion, CURSE_PROJECT_NAME);
 				final ITextComponent component = ITextComponent.Serializer.jsonToComponent(msg);
 				event.player.addChatMessage(component);

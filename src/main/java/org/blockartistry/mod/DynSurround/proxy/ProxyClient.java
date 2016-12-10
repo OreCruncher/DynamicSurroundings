@@ -38,6 +38,7 @@ import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer;
 import org.blockartistry.mod.DynSurround.data.BlockRegistry;
 import org.blockartistry.mod.DynSurround.data.SoundRegistry;
+import org.blockartistry.mod.DynSurround.util.Localization;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
@@ -49,6 +50,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ProxyClient extends Proxy {
+
+	@Override
+	protected void registerLanguage() {
+		Localization.initialize(Side.CLIENT);
+	}
 
 	@Override
 	public void preInit(final FMLPreInitializationEvent event) {
