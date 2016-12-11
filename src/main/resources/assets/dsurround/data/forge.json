@@ -179,7 +179,8 @@
 				"doorSteel",
 				"doorTin",
 				"blockWroughtIron",
-				"blockVoid"
+				"blockVoid",
+				"blockDawnstone"
 			]
 			
 		},
@@ -194,7 +195,8 @@
 				"slabBamboo",
 				"stairBamboo",
 				"craftingTableWood",
-				"plankWood"
+				"plankWood",
+				"bookshelf"
 			]
 			
 		},
