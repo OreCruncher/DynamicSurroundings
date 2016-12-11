@@ -29,6 +29,8 @@ import java.util.List;
 import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.server.SpeechBubbleService;
 import org.blockartistry.mod.DynSurround.util.Color;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -51,7 +53,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class SpeechBubbleRenderer {
 
 	private static final Color B_COLOR = Color.SLATEGRAY;
-	private static final float B_COLOR_ALPHA = 0.75F; // 0.25F;
+	private static final float B_COLOR_ALPHA = 0.5F; // 0.25F;
 	private static final Color F_COLOR = Color.GOLD;
 	private static final int MIN_TEXT_WIDTH = 60;
 	private static final int MAX_TEXT_WIDTH = MIN_TEXT_WIDTH * 4;
@@ -67,7 +69,7 @@ public class SpeechBubbleRenderer {
 	public static void initialize() {
 		MinecraftForge.EVENT_BUS.register(new SpeechBubbleRenderer());
 	}
-	
+
 	public static List<String> scrub(final String message) {
 		final FontRenderer font = Minecraft.getMinecraft().getRenderManager().getFontRenderer();
 		return font.listFormattedStringToWidth(message.replaceAll("(\\xA7.)", ""), MAX_TEXT_WIDTH);
@@ -86,7 +88,7 @@ public class SpeechBubbleRenderer {
 			if (strWidth > maxWidth)
 				maxWidth = strWidth;
 		}
-		
+
 		// Calculate scale and position
 		final float scaleBase = 0.8F; // 1.6F;
 		final float scale = scaleBase * 0.016666668F;
@@ -113,7 +115,7 @@ public class SpeechBubbleRenderer {
 				GlStateManager.DestFactor.ZERO);
 		GlStateManager.disableTexture2D();
 
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 0, 240);
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
 
 		// Draw the background region
 		final float red = B_COLOR.red;
@@ -127,8 +129,12 @@ public class SpeechBubbleRenderer {
 		buffer.pos(right, bottom, 0.0D).color(red, green, blue, alpha).endVertex();
 		buffer.pos(right, top, 0.0D).color(red, green, blue, alpha).endVertex();
 		tessellator.draw();
+		
 		GlStateManager.enableTexture2D();
-
+		GlStateManager.translate(0, 0, -0.01F); // no z-fighting!
+		GlStateManager.enableDepth();
+		GlStateManager.depthMask(true);
+		
 		int lines = numberOfMessages;
 		for (int t = 0; t < numberOfMessages; t++) {
 			final String str = input.get(t);
@@ -137,9 +143,9 @@ public class SpeechBubbleRenderer {
 			font.drawString(str, margin, offset, F_COLOR.rgb());
 			lines--;
 		}
-		
-		GlStateManager.enableDepth();
-		GlStateManager.depthMask(true);
+
+		//GlStateManager.enableDepth();
+		//GlStateManager.depthMask(true);
 		GlStateManager.enableLighting();
 		GlStateManager.disableBlend();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
