@@ -6,7 +6,7 @@
 
 I am looking for feedback on the firefly and speech bubble features.  Feel free to send me a message direct with comments.  If you have an issue make an entry in the the [issue tracker](https://github.com/OreCruncher/DynamicSurroundings/issues) so it won't get lost.
 
-I want to thank Abastro for stepping up and providing unofficial builds for those of you that move on to Minecraft 1.9.x+.  I had no intention of dropping support for the mod but sometimes real life things work against you.  No fear, though, things are back to normal - or what passes for normal in the US now a days.
+I want to thank Abastro for stepping up and providing unofficial builds for those of you that moved on to Minecraft 1.9.x+.  I had no intention of dropping the mod but sometimes real life things work against you.  No fear, though, things are back to normal - or what passes for normal in the US now a days.
 
 **Fixes**
 * Block effects (effects and footsteps) are now sensitive to block metadata values.  This means that dust motes will no longer drop from the polished versions of stone.
