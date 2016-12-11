@@ -24,13 +24,12 @@
 
 package org.blockartistry.mod.DynSurround.client.speech;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.server.SpeechBubbleService;
 import org.blockartistry.mod.DynSurround.util.Color;
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -53,7 +52,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class SpeechBubbleRenderer {
 
 	private static final Color B_COLOR = Color.SLATEGRAY;
-	private static final float B_COLOR_ALPHA = 0.5F; // 0.25F;
+	private static final float B_COLOR_ALPHA = 0.4F; // 0.25F;
 	private static final Color F_COLOR = Color.GOLD;
 	private static final int MIN_TEXT_WIDTH = 60;
 	private static final int MAX_TEXT_WIDTH = MIN_TEXT_WIDTH * 4;
@@ -70,35 +69,52 @@ public class SpeechBubbleRenderer {
 		MinecraftForge.EVENT_BUS.register(new SpeechBubbleRenderer());
 	}
 
-	public static List<String> scrub(final String message) {
-		final FontRenderer font = Minecraft.getMinecraft().getRenderManager().getFontRenderer();
-		return font.listFormattedStringToWidth(message.replaceAll("(\\xA7.)", ""), MAX_TEXT_WIDTH);
+	public static class RenderingInfo {
+		public final int messageWidth;
+		public final List<String> text;
+
+		public RenderingInfo(final String message) {
+			final FontRenderer font = Minecraft.getMinecraft().getRenderManager().getFontRenderer();
+			this.text = font.listFormattedStringToWidth(message, MAX_TEXT_WIDTH);
+
+			int maxWidth = MIN_TEXT_WIDTH;
+
+			for (final String s : text) {
+				int strWidth = font.getStringWidth(s);
+				if (strWidth > maxWidth)
+					maxWidth = strWidth;
+			}
+
+			this.messageWidth = maxWidth;
+		}
+	}
+
+	public static RenderingInfo generateRenderInfo(final String message) {
+		return new RenderingInfo(message.replaceAll("(\\xA7.)", ""));
 	}
 
 	// EntityRenderer.drawNameplate()
-	private static void drawText(final FontRenderer font, final List<String> input, final float x, final float y,
+	private static void drawText(final FontRenderer font, final List<RenderingInfo> input, final float x, final float y,
 			final float z, final float viewerYaw, final float viewerPitch, final boolean isThirdPersonFrontal,
 			final boolean isSneaking) {
 
-		final int numberOfMessages = input.size();
 		int maxWidth = MIN_TEXT_WIDTH;
+		final List<String> messages = new ArrayList<String>();
 
-		for (final String s : input) {
-			int strWidth = font.getStringWidth(s);
-			if (strWidth > maxWidth)
-				maxWidth = strWidth;
+		for (final RenderingInfo ri : input) {
+			if (ri.messageWidth > maxWidth)
+				maxWidth = ri.messageWidth;
+			messages.addAll(ri.text);
 		}
 
 		// Calculate scale and position
-		final float scaleBase = 0.8F; // 1.6F;
+		final int numberOfMessages = messages.size();
+		final float scaleBase = 0.6F; // 1.6F;
 		final float scale = scaleBase * 0.016666668F;
 		final double top = -(numberOfMessages) * 9 - BUBBLE_MARGIN;
 		final double bottom = BUBBLE_MARGIN;
 		final double left = -(maxWidth / 2.0D + BUBBLE_MARGIN);
 		final double right = maxWidth / 2.0D + BUBBLE_MARGIN;
-
-		final Tessellator tessellator = Tessellator.getInstance();
-		final VertexBuffer buffer = tessellator.getBuffer();
 
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
@@ -123,29 +139,30 @@ public class SpeechBubbleRenderer {
 		final float blue = B_COLOR.blue;
 		final float alpha = B_COLOR_ALPHA;
 
+		final Tessellator tessellator = Tessellator.getInstance();
+		final VertexBuffer buffer = tessellator.getBuffer();
 		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
 		buffer.pos(left, top, 0.0D).color(red, green, blue, alpha).endVertex();
 		buffer.pos(left, bottom, 0.0D).color(red, green, blue, alpha).endVertex();
 		buffer.pos(right, bottom, 0.0D).color(red, green, blue, alpha).endVertex();
 		buffer.pos(right, top, 0.0D).color(red, green, blue, alpha).endVertex();
 		tessellator.draw();
-		
+
 		GlStateManager.enableTexture2D();
-		GlStateManager.translate(0, 0, -0.01F); // no z-fighting!
 		GlStateManager.enableDepth();
 		GlStateManager.depthMask(true);
-		
+
 		int lines = numberOfMessages;
 		for (int t = 0; t < numberOfMessages; t++) {
-			final String str = input.get(t);
+			final String str = messages.get(t);
 			final int offset = -lines * 9;
 			final int margin = -font.getStringWidth(str) / 2;
 			font.drawString(str, margin, offset, F_COLOR.rgb());
 			lines--;
 		}
 
-		//GlStateManager.enableDepth();
-		//GlStateManager.depthMask(true);
+		GlStateManager.enableDepth();
+		GlStateManager.depthMask(true);
 		GlStateManager.enableLighting();
 		GlStateManager.disableBlend();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -160,12 +177,12 @@ public class SpeechBubbleRenderer {
 			return;
 
 		final EntityPlayer player = EnvironState.getPlayer();
-		if (player.getDistanceSqToEntity(entity) > RENDER_RANGE)
+		if (player.getDistanceSqToEntity(entity) > RENDER_RANGE || entity.isInvisibleToPlayer(player))
 			return;
 
-		final List<String> chatText = SpeechBubbleHandler.getMessagesForPlayer(player);
+		final List<RenderingInfo> chatText = SpeechBubbleHandler.getMessagesForPlayer(player);
 		if (chatText != null) {
-			final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+			final RenderManager renderManager = event.getRenderer().getRenderManager();
 			final boolean flag = player.isSneaking();
 			final float f = renderManager.playerViewY;
 			final float f1 = renderManager.playerViewX;

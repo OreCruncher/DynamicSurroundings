@@ -31,8 +31,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.IClientEffectHandler;
+import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer.RenderingInfo;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -43,40 +45,36 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class SpeechBubbleHandler implements IClientEffectHandler {
 
 	private static final Map<UUID, List<SpeechBubbleData>> messages = new HashMap<UUID, List<SpeechBubbleData>>();
-	private static long sequence = 0;
 
-	public static class SpeechBubbleData {
-		public final long id = sequence++;
+	protected static class SpeechBubbleData {
 		public final long expires = System.currentTimeMillis() + (long) (ModOptions.speechBubbleDuration * 1000F);
-		public final UUID entityId;
-		public final List<String> messages;
+		public final RenderingInfo messages;
 
-		public SpeechBubbleData(final UUID sender, final String message) {
-			this.entityId = sender;
-			this.messages = SpeechBubbleRenderer.scrub(message);
+		public SpeechBubbleData(final String message) {
+			this.messages = SpeechBubbleRenderer.generateRenderInfo(message);
 		}
 	}
 
-	public static void addSpeechBubble(final SpeechBubbleData data) {
-		if (!ModOptions.enableSpeechBubbles)
+	public static void addSpeechBubble(final UUID entityId, final String message) {
+		if (!ModOptions.enableSpeechBubbles || entityId == null || StringUtils.isEmpty(message))
 			return;
 
-		List<SpeechBubbleData> list = messages.get(data.entityId);
+		List<SpeechBubbleData> list = messages.get(entityId);
 		if (list == null) {
-			messages.put(data.entityId, list = new ArrayList<SpeechBubbleData>());
+			messages.put(entityId, list = new ArrayList<SpeechBubbleData>());
 		}
-		list.add(data);
+		list.add(new SpeechBubbleData(message));
 	}
 
 	// Used to retrieve messages that are to be displayed
 	// above the players head.
-	public static List<String> getMessagesForPlayer(final EntityPlayer player) {
+	public static List<RenderingInfo> getMessagesForPlayer(final EntityPlayer player) {
 		final List<SpeechBubbleData> data = messages.get(player.getUniqueID());
 		if (data == null || data.isEmpty())
 			return null;
-		final List<String> result = new ArrayList<String>();
+		final List<RenderingInfo> result = new ArrayList<RenderingInfo>();
 		for (final SpeechBubbleData entry : data)
-			result.addAll(entry.messages);
+			result.add(entry.messages);
 		return result;
 	}
 

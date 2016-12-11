@@ -27,8 +27,6 @@ package org.blockartistry.mod.DynSurround.network;
 import java.util.UUID;
 
 import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleHandler;
-import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleHandler.SpeechBubbleData;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -50,7 +48,7 @@ public class PacketSpeechBubble implements IMessage, IMessageHandler<PacketSpeec
 	}
 
 	public IMessage onMessage(final PacketSpeechBubble message, final MessageContext ctx) {
-		SpeechBubbleHandler.addSpeechBubble(new SpeechBubbleData(message.entityId, message.message));
+		SpeechBubbleHandler.addSpeechBubble(message.entityId, message.message);
 		return null;
 	}
 
