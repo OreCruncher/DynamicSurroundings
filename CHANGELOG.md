@@ -1,3 +1,13 @@
+###DynamicSurroundings-3.1.1.0BETA
+**What's New!**
+* TBD
+
+**Fixes**
+* TBD
+
+**Changes**
+* TBD
+
 ###DynamicSurroundings-3.1.0.0BETA
 **What's New!**
 * Minecraft 1.10.2 support!  Yay!  Works in SP as well as SMP.

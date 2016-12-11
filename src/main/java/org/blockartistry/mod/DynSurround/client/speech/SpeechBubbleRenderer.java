@@ -29,12 +29,12 @@ import java.util.List;
 import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.server.SpeechBubbleService;
 import org.blockartistry.mod.DynSurround.util.Color;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -113,6 +113,8 @@ public class SpeechBubbleRenderer {
 				GlStateManager.DestFactor.ZERO);
 		GlStateManager.disableTexture2D();
 
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 0, 240);
+
 		// Draw the background region
 		final float red = B_COLOR.red;
 		final float green = B_COLOR.green;
@@ -132,14 +134,12 @@ public class SpeechBubbleRenderer {
 			final String str = input.get(t);
 			final int offset = -lines * 9;
 			final int margin = -font.getStringWidth(str) / 2;
-			GlStateManager.disableDepth();
-			font.drawString(str, margin, offset, F_COLOR.rgb());
-			GlStateManager.enableDepth();
-			GlStateManager.depthMask(true);
 			font.drawString(str, margin, offset, F_COLOR.rgb());
 			lines--;
 		}
-
+		
+		GlStateManager.enableDepth();
+		GlStateManager.depthMask(true);
 		GlStateManager.enableLighting();
 		GlStateManager.disableBlend();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
