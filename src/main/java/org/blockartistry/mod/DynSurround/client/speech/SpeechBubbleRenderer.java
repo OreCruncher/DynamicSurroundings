@@ -116,6 +116,8 @@ public class SpeechBubbleRenderer {
 		final double left = -(maxWidth / 2.0D + BUBBLE_MARGIN);
 		final double right = maxWidth / 2.0D + BUBBLE_MARGIN;
 
+		//GL11Debug.dumpAllIsEnabled();
+		
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
 		GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
@@ -132,6 +134,7 @@ public class SpeechBubbleRenderer {
 		GlStateManager.disableTexture2D();
 
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
+		GlStateManager.translate(x, y, z-0.05F);
 
 		// Draw the background region
 		final float red = B_COLOR.red;
@@ -180,9 +183,10 @@ public class SpeechBubbleRenderer {
 		if (player.getDistanceSqToEntity(entity) > RENDER_RANGE || entity.isInvisibleToPlayer(player))
 			return;
 
+		final RenderManager renderManager = event.getRenderer().getRenderManager();
 		final List<RenderingInfo> chatText = SpeechBubbleHandler.getMessagesForPlayer(player);
+
 		if (chatText != null) {
-			final RenderManager renderManager = event.getRenderer().getRenderManager();
 			final boolean flag = player.isSneaking();
 			final float f = renderManager.playerViewY;
 			final float f1 = renderManager.playerViewX;
