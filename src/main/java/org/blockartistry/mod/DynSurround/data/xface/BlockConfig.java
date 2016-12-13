@@ -23,14 +23,14 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
 
 public class BlockConfig {
 	@SerializedName("blocks")
-	public List<String> blocks = ImmutableList.of();
+	public List<String> blocks = new ArrayList<String>();
 	@SerializedName("soundReset")
 	public Boolean soundReset = null;
 	@SerializedName("effectReset")
@@ -42,7 +42,7 @@ public class BlockConfig {
 	@SerializedName("stepChance")
 	public Integer stepChance = null;
 	@SerializedName("sounds")
-	public List<SoundConfig> sounds = ImmutableList.of();
+	public List<SoundConfig> sounds = new ArrayList<SoundConfig>();
 	@SerializedName("effects")
-	public List<BlockEffectConfig> effects = ImmutableList.of();
+	public List<BlockEffectConfig> effects = new ArrayList<BlockEffectConfig>();
 }

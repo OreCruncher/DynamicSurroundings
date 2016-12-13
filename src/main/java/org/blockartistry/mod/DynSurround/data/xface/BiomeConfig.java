@@ -24,9 +24,9 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
 
 public final class BiomeConfig {
@@ -51,5 +51,5 @@ public final class BiomeConfig {
 	@SerializedName("spotSoundChance")
 	public Integer spotSoundChance = null;
 	@SerializedName("sounds")
-	public List<SoundConfig> sounds = ImmutableList.of();
+	public List<SoundConfig> sounds = new ArrayList<SoundConfig>();
 }

@@ -69,8 +69,6 @@ final class MyClassLoader extends ClassLoader {
 			if (!isAllowed(name)) {
 				ModLog.debug("Requested class load '%s'; blocked!", name);
 				throw new ClassNotFoundException();
-			} else {
-				ModLog.debug("Requested class load '%s'", name);
 			}
 			return super.loadClass(name, resolve);
 		}
