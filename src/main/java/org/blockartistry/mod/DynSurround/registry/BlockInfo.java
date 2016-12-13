@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.data;
+package org.blockartistry.mod.DynSurround.registry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.compat.MCHelper;

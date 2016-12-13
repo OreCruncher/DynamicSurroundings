@@ -21,51 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package org.blockartistry.mod.DynSurround.data.config;
+package org.blockartistry.mod.DynSurround.registry;
 
 import java.io.File;
 import java.util.List;
 
+import org.blockartistry.mod.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.mod.DynSurround.util.JsonUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
 
-public final class BiomeConfig {
+public final class BiomeFile {
 
-	public static class Entry {
-		@SerializedName("biomeName")
-		public String biomeName = null;
-		@SerializedName("precipitation")
-		public Boolean hasPrecipitation = null;
-		@SerializedName("dust")
-		public Boolean hasDust = null;
-		@SerializedName("aurora")
-		public Boolean hasAurora = null;
-		@SerializedName("fog")
-		public Boolean hasFog = null;
-		@SerializedName("dustColor")
-		public String dustColor = null;
-		@SerializedName("fogColor")
-		public String fogColor = null;
-		@SerializedName("fogDensity")
-		public Float fogDensity= null;
-		@SerializedName("soundReset")
-		public Boolean soundReset = null;
-		@SerializedName("spotSoundChance")
-		public Integer spotSoundChance = null;
-		@SerializedName("sounds")
-		public List<SoundConfig> sounds = ImmutableList.of();
+	@SerializedName("entries")
+	public List<BiomeConfig> entries = ImmutableList.of();
+
+	public static BiomeFile load(final File file) throws Exception {
+		return JsonUtils.load(file, BiomeFile.class);
 	}
 
-	public List<Entry> entries = ImmutableList.of();
-
-	public static BiomeConfig load(final File file) throws Exception {
-		return JsonUtils.load(file, BiomeConfig.class);
-	}
-
-	public static BiomeConfig load(final String modId) throws Exception {
-		return JsonUtils.load(modId, BiomeConfig.class);
+	public static BiomeFile load(final String modId) throws Exception {
+		return JsonUtils.load(modId, BiomeFile.class);
 	}
 }

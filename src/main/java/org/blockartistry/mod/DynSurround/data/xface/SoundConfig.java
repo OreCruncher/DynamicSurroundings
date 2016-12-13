@@ -1,5 +1,4 @@
-/*
- * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -22,20 +21,35 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.data.xface;
 
-import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
-import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
+import com.google.gson.annotations.SerializedName;
 
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+public class SoundConfig {
+	@SerializedName("sound")
+	public String sound = null;
+	@SerializedName("conditions")
+	public String conditions = ".*";
+	@SerializedName("soundType")
+	public String soundType = null;
+	@SerializedName("volume")
+	public Float volume = null;
+	@SerializedName("pitch")
+	public Float pitch = null;
+	@SerializedName("weight")
+	public Integer weight = null;
+	@SerializedName("variable")
+	public Boolean variable = null;
+	@SerializedName("repeatDelayRandom")
+	public Integer repeatDelayRandom = null;
+	@SerializedName("repeatDelay")
+	public Integer repeatDelay = null;
 
-@SideOnly(Side.CLIENT)
-public class WeatherUtils {
-
-	public static boolean biomeHasDust(final Biome biome) {
-		return ModOptions.allowDesertFog && BiomeRegistry.get(biome).getHasDust() && !StormProperties.doVanilla();
-	}
+	// Deprecation list
+	@SerializedName("skipFade")
+	public Boolean skipFade = null;
+	@SerializedName("spot")
+	public Boolean spotSound = null;
+	@SerializedName("step")
+	public Boolean step = null;
 }

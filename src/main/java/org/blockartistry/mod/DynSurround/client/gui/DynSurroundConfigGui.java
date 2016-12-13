@@ -31,7 +31,7 @@ import java.util.Map.Entry;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.Module;
-import org.blockartistry.mod.DynSurround.data.SoundRegistry;
+import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
 import org.blockartistry.mod.DynSurround.util.ConfigProcessor;
 
 import net.minecraft.client.Minecraft;
@@ -71,9 +71,9 @@ public class DynSurroundConfigGui extends GuiConfig {
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_FOG,
 				ModOptions.CONFIG_ENABLE_ELEVATION_HAZE, "Elevation Haze Feature"));
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_FOG, ModOptions.CONFIG_ENABLE_BIOME_FOG,
-				"Biome Fog Feature"));
+				"Biomes Fog Feature"));
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_SOUND,
-				ModOptions.CONFIG_ENABLE_BIOME_SOUNDS, "Biome Sound Feature"));
+				ModOptions.CONFIG_ENABLE_BIOME_SOUNDS, "Biomes Sound Feature"));
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_JUMP_SOUND,
 				"Player Jump Sound Effect"));
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_SOUND,
@@ -107,7 +107,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_FOG, "Fog Settings"));
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_AURORA, "Aurora Settings"));
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_BLOCK, "Block Settings"));
-		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_BIOMES, "Biome Behaviors"));
+		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_BIOMES, "Biomes Behaviors"));
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_DIMENSIONS, "Dimension Configuration"));
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_SOUND, "Sound Effects"));
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_PLAYER, "Player Effects"));

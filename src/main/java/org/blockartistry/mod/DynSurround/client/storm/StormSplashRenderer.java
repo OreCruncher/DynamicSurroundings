@@ -28,9 +28,9 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.WeatherUtils;
 import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
-import org.blockartistry.mod.DynSurround.data.BiomeInfo;
-import org.blockartistry.mod.DynSurround.data.BiomeRegistry;
-import org.blockartistry.mod.DynSurround.data.DimensionRegistry;
+import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
+import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
+import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import gnu.trove.map.hash.TIntObjectHashMap;

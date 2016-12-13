@@ -32,10 +32,10 @@ import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
-import org.blockartistry.mod.DynSurround.data.BiomeInfo;
-import org.blockartistry.mod.DynSurround.data.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.mod.DynSurround.event.RegistryReloadEvent;
+import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
+import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.client.audio.ISound;

@@ -33,10 +33,10 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
-import org.blockartistry.mod.DynSurround.data.BiomeInfo;
-import org.blockartistry.mod.DynSurround.data.BiomeRegistry;
-import org.blockartistry.mod.DynSurround.data.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.event.DiagnosticEvent;
+import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
+import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
+import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
@@ -456,7 +456,7 @@ public class EnvironStateHandler implements IClientEffectHandler {
 	public void diagnostics(final DiagnosticEvent.Gather event) {
 		final EntityPlayer player = EnvironState.getPlayer();
 		event.output.add("Dim: " + EnvironState.getDimensionId() + "/" + EnvironState.getDimensionName());
-		event.output.add("Biome: " + EnvironState.getBiomeName());
+		event.output.add("Biomes: " + EnvironState.getBiomeName());
 		event.output.add("Player: h " + player.getHealth() + "/" + player.getMaxHealth() + "; f "
 				+ player.getFoodStats().getFoodLevel() + "; s " + player.getFoodStats().getSaturationLevel());
 		event.output.add(StormProperties.diagnostic());

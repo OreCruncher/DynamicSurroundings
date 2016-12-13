@@ -27,9 +27,9 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.data.BiomeInfo;
-import org.blockartistry.mod.DynSurround.data.BiomeRegistry;
-import org.blockartistry.mod.DynSurround.data.DimensionRegistry;
+import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
+import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
+import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;

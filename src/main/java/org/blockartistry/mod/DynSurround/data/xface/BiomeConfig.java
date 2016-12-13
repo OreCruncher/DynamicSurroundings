@@ -22,20 +22,34 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.data.xface;
 
-import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
-import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
+import java.util.List;
 
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.google.common.collect.ImmutableList;
+import com.google.gson.annotations.SerializedName;
 
-@SideOnly(Side.CLIENT)
-public class WeatherUtils {
-
-	public static boolean biomeHasDust(final Biome biome) {
-		return ModOptions.allowDesertFog && BiomeRegistry.get(biome).getHasDust() && !StormProperties.doVanilla();
-	}
+public final class BiomeConfig {
+	@SerializedName("biomeName")
+	public String biomeName = null;
+	@SerializedName("precipitation")
+	public Boolean hasPrecipitation = null;
+	@SerializedName("dust")
+	public Boolean hasDust = null;
+	@SerializedName("aurora")
+	public Boolean hasAurora = null;
+	@SerializedName("fog")
+	public Boolean hasFog = null;
+	@SerializedName("dustColor")
+	public String dustColor = null;
+	@SerializedName("fogColor")
+	public String fogColor = null;
+	@SerializedName("fogDensity")
+	public Float fogDensity = null;
+	@SerializedName("soundReset")
+	public Boolean soundReset = null;
+	@SerializedName("spotSoundChance")
+	public Integer spotSoundChance = null;
+	@SerializedName("sounds")
+	public List<SoundConfig> sounds = ImmutableList.of();
 }

@@ -22,51 +22,25 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.data.config;
+package org.blockartistry.mod.DynSurround.registry;
 
 import java.io.File;
 import java.util.List;
 
+import org.blockartistry.mod.DynSurround.data.xface.BlockConfig;
 import org.blockartistry.mod.DynSurround.util.JsonUtils;
 
 import com.google.common.collect.ImmutableList;
-import com.google.gson.annotations.SerializedName;
 
-public final class BlockConfig {
+public final class BlockFile {
 
-	public static class Effect {
-		@SerializedName("effect")
-		public String effect = null;
-		@SerializedName("chance")
-		public Integer chance = null;
+	public List<BlockConfig> entries = ImmutableList.of();
+
+	public static BlockFile load(final File file) throws Exception {
+		return JsonUtils.load(file, BlockFile.class);
 	}
 
-	public static class Entry {
-		@SerializedName("blocks")
-		public List<String> blocks = ImmutableList.of();
-		@SerializedName("soundReset")
-		public Boolean soundReset = null;
-		@SerializedName("effectReset")
-		public Boolean effectReset = null;
-		@SerializedName("stepSoundReset")
-		public Boolean stepSoundReset = null;
-		@SerializedName("chance")
-		public Integer chance = null;
-		@SerializedName("stepChance")
-		public Integer stepChance = null;
-		@SerializedName("sounds")
-		public List<SoundConfig> sounds = ImmutableList.of();
-		@SerializedName("effects")
-		public List<Effect> effects = ImmutableList.of();
-	}
-
-	public List<Entry> entries = ImmutableList.of();
-
-	public static BlockConfig load(final File file) throws Exception {
-		return JsonUtils.load(file, BlockConfig.class);
-	}
-
-	public static BlockConfig load(final String modId) throws Exception {
-		return JsonUtils.load(modId, BlockConfig.class);
+	public static BlockFile load(final String modId) throws Exception {
+		return JsonUtils.load(modId, BlockFile.class);
 	}
 }

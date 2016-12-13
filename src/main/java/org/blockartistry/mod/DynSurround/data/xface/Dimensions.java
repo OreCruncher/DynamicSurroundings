@@ -1,5 +1,4 @@
-/*
- * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -22,20 +21,31 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.data.xface;
 
-import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
-import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
+import java.util.List;
 
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 
-@SideOnly(Side.CLIENT)
-public class WeatherUtils {
+public final class Dimensions {
+	
+	protected Dimensions() {
+		
+	}
 
-	public static boolean biomeHasDust(final Biome biome) {
-		return ModOptions.allowDesertFog && BiomeRegistry.get(biome).getHasDust() && !StormProperties.doVanilla();
+	public static void register(final DimensionConfig... config) {
+		if(config == null || config.length == 0)
+			return;
+		
+		for(final DimensionConfig c: config)
+			DimensionRegistry.register(c);
+	}
+	
+	public static void register(final List<DimensionConfig> config) {
+		if(config == null || config.size() == 0)
+			return;
+		
+		for(final DimensionConfig c: config)
+			DimensionRegistry.register(c);
 	}
 }

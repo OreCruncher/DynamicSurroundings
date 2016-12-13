@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.data;
+package org.blockartistry.mod.DynSurround.registry;
 
 import java.util.ArrayList;
 import java.util.List;

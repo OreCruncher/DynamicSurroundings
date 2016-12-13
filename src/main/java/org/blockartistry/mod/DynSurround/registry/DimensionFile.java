@@ -1,5 +1,4 @@
-/*
- * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -22,20 +21,27 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.registry;
 
-import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
-import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
+import java.io.File;
+import java.util.List;
 
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
+import org.blockartistry.mod.DynSurround.util.JsonUtils;
 
-@SideOnly(Side.CLIENT)
-public class WeatherUtils {
+import com.google.common.collect.ImmutableList;
+import com.google.gson.annotations.SerializedName;
 
-	public static boolean biomeHasDust(final Biome biome) {
-		return ModOptions.allowDesertFog && BiomeRegistry.get(biome).getHasDust() && !StormProperties.doVanilla();
+public final class DimensionFile {
+
+	@SerializedName("entries")
+	public List<DimensionConfig> entries = ImmutableList.of();
+
+	public static DimensionFile load(final File file) throws Exception {
+		return JsonUtils.load(file, DimensionFile.class);
+	}
+	
+	public static DimensionFile load(final String modId) throws Exception {
+		return JsonUtils.load(modId, DimensionFile.class);
 	}
 }

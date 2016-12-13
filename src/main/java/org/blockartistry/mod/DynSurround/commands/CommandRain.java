@@ -27,9 +27,9 @@ package org.blockartistry.mod.DynSurround.commands;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import org.blockartistry.mod.DynSurround.data.BiomeRegistry;
-import org.blockartistry.mod.DynSurround.data.BlockRegistry;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
+import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
+import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
 import com.google.common.collect.ImmutableList;

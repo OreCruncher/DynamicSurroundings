@@ -28,9 +28,10 @@ import org.blockartistry.mod.DynSurround.VersionCheck;
 import org.blockartistry.mod.DynSurround.client.HealthEffectHandler;
 import org.blockartistry.mod.DynSurround.client.waila.WailaHandler;
 import org.blockartistry.mod.DynSurround.commands.CommandRain;
-import org.blockartistry.mod.DynSurround.data.BiomeRegistry;
-import org.blockartistry.mod.DynSurround.data.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.network.Network;
+import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
+import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
+import org.blockartistry.mod.DynSurround.registry.DataScripts;
 import org.blockartistry.mod.DynSurround.server.AtmosphereService;
 import org.blockartistry.mod.DynSurround.server.SpeechBubbleService;
 import org.blockartistry.mod.DynSurround.util.Localization;
@@ -70,6 +71,7 @@ public class Proxy {
 	public void postInit(final FMLPostInitializationEvent event) {
 		BiomeRegistry.initialize();
 		DimensionRegistry.initialize();
+		DataScripts.initialize();
 	}
 
 	public void serverStarting(final FMLServerStartingEvent event) {

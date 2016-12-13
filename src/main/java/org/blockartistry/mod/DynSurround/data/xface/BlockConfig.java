@@ -1,5 +1,4 @@
-/*
- * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -22,20 +21,28 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.data.xface;
 
-import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
-import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
+import java.util.List;
 
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.google.common.collect.ImmutableList;
+import com.google.gson.annotations.SerializedName;
 
-@SideOnly(Side.CLIENT)
-public class WeatherUtils {
-
-	public static boolean biomeHasDust(final Biome biome) {
-		return ModOptions.allowDesertFog && BiomeRegistry.get(biome).getHasDust() && !StormProperties.doVanilla();
-	}
+public class BlockConfig {
+	@SerializedName("blocks")
+	public List<String> blocks = ImmutableList.of();
+	@SerializedName("soundReset")
+	public Boolean soundReset = null;
+	@SerializedName("effectReset")
+	public Boolean effectReset = null;
+	@SerializedName("stepSoundReset")
+	public Boolean stepSoundReset = null;
+	@SerializedName("chance")
+	public Integer chance = null;
+	@SerializedName("stepChance")
+	public Integer stepChance = null;
+	@SerializedName("sounds")
+	public List<SoundConfig> sounds = ImmutableList.of();
+	@SerializedName("effects")
+	public List<BlockEffectConfig> effects = ImmutableList.of();
 }

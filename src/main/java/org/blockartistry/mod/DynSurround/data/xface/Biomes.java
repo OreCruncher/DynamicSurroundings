@@ -1,5 +1,4 @@
-/*
- * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -22,20 +21,31 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.data.xface;
 
-import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
+import java.util.List;
+
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+public final class Biomes {
 
-@SideOnly(Side.CLIENT)
-public class WeatherUtils {
-
-	public static boolean biomeHasDust(final Biome biome) {
-		return ModOptions.allowDesertFog && BiomeRegistry.get(biome).getHasDust() && !StormProperties.doVanilla();
+	protected Biomes() {
+		
+	}
+	
+	public static void register(final BiomeConfig... config) {
+		if(config == null || config.length == 0)
+			return;
+		
+		for(final BiomeConfig c: config)
+			BiomeRegistry.register(c);
+	}
+	
+	public static void register(final List<BiomeConfig> config) {
+		if(config == null || config.size() == 0)
+			return;
+		
+		for(final BiomeConfig c: config)
+			BiomeRegistry.register(c);
 	}
 }

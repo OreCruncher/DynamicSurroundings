@@ -21,35 +21,31 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.data.config;
+package org.blockartistry.mod.DynSurround.data.xface;
 
-import com.google.gson.annotations.SerializedName;
+import java.util.List;
 
-public class SoundConfig {
-	@SerializedName("sound")
-	public String sound = null;
-	@SerializedName("conditions")
-	public String conditions = ".*";
-	@SerializedName("soundType")
-	public String soundType = null;
-	@SerializedName("volume")
-	public Float volume = null;
-	@SerializedName("pitch")
-	public Float pitch = null;
-	@SerializedName("weight")
-	public Integer weight = null;
-	@SerializedName("variable")
-	public Boolean variable = null;
-	@SerializedName("repeatDelayRandom")
-	public Integer repeatDelayRandom = null;
-	@SerializedName("repeatDelay")
-	public Integer repeatDelay = null;
+import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 
-	// Deprecation list
-	@SerializedName("skipFade")
-	public Boolean skipFade = null;
-	@SerializedName("spot")
-	public Boolean spotSound = null;
-	@SerializedName("step")
-	public Boolean step = null;
+public final class Blocks {
+
+	protected Blocks() {
+		
+	}
+	
+	public static void register(final BlockConfig... config) {
+		if(config == null || config.length == 0)
+			return;
+		
+		for(final BlockConfig c: config)
+			BlockRegistry.register(c);
+	}
+	
+	public static void register(final List<BlockConfig> config) {
+		if(config == null || config.size() == 0)
+			return;
+		
+		for(final BlockConfig c: config)
+			BlockRegistry.register(c);
+	}
 }

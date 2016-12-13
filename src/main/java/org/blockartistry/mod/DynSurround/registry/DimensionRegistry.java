@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.data;
+package org.blockartistry.mod.DynSurround.registry;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import java.util.List;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.Module;
-import org.blockartistry.mod.DynSurround.data.config.DimensionConfig;
+import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 
 import foxie.calendar.api.CalendarAPI;
@@ -49,7 +49,7 @@ public final class DimensionRegistry {
 	private static final boolean CALENDAR_API = Loader.isModLoaded("CalendarAPI");
 	private static final String SEASON_NOT_AVAILABLE = "noseason";
 
-	private static final List<DimensionConfig.Entry> cache = new ArrayList<DimensionConfig.Entry>();
+	private static final List<DimensionConfig> cache = new ArrayList<DimensionConfig>();
 	private static final TIntObjectHashMap<DimensionRegistry> dimensionData = new TIntObjectHashMap<DimensionRegistry>();
 	private static boolean isFlatWorld = false;
 
@@ -66,7 +66,7 @@ public final class DimensionRegistry {
 
 	public static void initialize() {
 		try {
-			process(DimensionConfig.load("dimensions"));
+			process(DimensionFile.load("dimensions"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -75,7 +75,7 @@ public final class DimensionRegistry {
 			final File theFile = new File(Module.dataDirectory(), file);
 			if (theFile.exists()) {
 				try {
-					final DimensionConfig config = DimensionConfig.load(theFile);
+					final DimensionFile config = DimensionFile.load(theFile);
 					if (config != null)
 						process(config);
 					else
@@ -100,8 +100,8 @@ public final class DimensionRegistry {
 		}
 	}
 
-	private static DimensionConfig.Entry getData(final DimensionConfig.Entry entry) {
-		for (final DimensionConfig.Entry e : cache)
+	private static DimensionConfig getData(final DimensionConfig entry) {
+		for (final DimensionConfig e : cache)
 			if ((e.dimensionId != null && e.dimensionId.equals(entry.dimensionId))
 					|| (e.name != null && e.name.equals(entry.name)))
 				return e;
@@ -109,29 +109,33 @@ public final class DimensionRegistry {
 		return entry;
 	}
 
-	private static void process(final DimensionConfig config) {
-		for (final DimensionConfig.Entry entry : config.entries) {
-			if (entry.dimensionId != null || entry.name != null) {
-				final DimensionConfig.Entry data = getData(entry);
-				if (data == entry)
-					continue;
-				if (data.dimensionId == null)
-					data.dimensionId = entry.dimensionId;
-				if (data.name == null)
-					data.name = entry.name;
-				if (entry.hasAurora != null)
-					data.hasAurora = entry.hasAurora;
-				if (entry.hasHaze != null)
-					data.hasHaze = entry.hasHaze;
-				if (entry.hasWeather != null)
-					data.hasWeather = entry.hasWeather;
-				if (entry.cloudHeight != null)
-					data.cloudHeight = entry.cloudHeight;
-				if (entry.seaLevel != null)
-					data.seaLevel = entry.seaLevel;
-				if (entry.skyHeight != null)
-					data.skyHeight = entry.skyHeight;
-			}
+	public static void register(final DimensionConfig entry) {
+		if (entry.dimensionId != null || entry.name != null) {
+			final DimensionConfig data = getData(entry);
+			if (data == entry)
+				return;
+			if (data.dimensionId == null)
+				data.dimensionId = entry.dimensionId;
+			if (data.name == null)
+				data.name = entry.name;
+			if (entry.hasAurora != null)
+				data.hasAurora = entry.hasAurora;
+			if (entry.hasHaze != null)
+				data.hasHaze = entry.hasHaze;
+			if (entry.hasWeather != null)
+				data.hasWeather = entry.hasWeather;
+			if (entry.cloudHeight != null)
+				data.cloudHeight = entry.cloudHeight;
+			if (entry.seaLevel != null)
+				data.seaLevel = entry.seaLevel;
+			if (entry.skyHeight != null)
+				data.skyHeight = entry.skyHeight;
+		}
+	}
+	
+	private static void process(final DimensionFile config) {
+		for (final DimensionConfig entry : config.entries) {
+			register(entry);
 		}
 	}
 
@@ -140,7 +144,7 @@ public final class DimensionRegistry {
 		initialize(world.provider);
 	}
 
-	protected DimensionRegistry(final World world, final DimensionConfig.Entry entry) {
+	protected DimensionRegistry(final World world, final DimensionConfig entry) {
 		this.dimensionId = world.provider.getDimension();
 		this.name = world.provider.getDimensionType().getName();
 		this.seaLevel = entry.seaLevel;
@@ -233,8 +237,8 @@ public final class DimensionRegistry {
 	public static DimensionRegistry getData(final World world) {
 		DimensionRegistry data = dimensionData.get(world.provider.getDimension());
 		if (data == null) {
-			DimensionConfig.Entry entry = null;
-			for (final DimensionConfig.Entry e : cache)
+			DimensionConfig entry = null;
+			for (final DimensionConfig e : cache)
 				if ((e.dimensionId != null && e.dimensionId == world.provider.getDimension())
 						|| (e.name != null && e.name.equals(world.provider.getDimensionType()))) {
 					entry = e;

@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.data;
+package org.blockartistry.mod.DynSurround.registry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -218,7 +218,7 @@ public final class BiomeInfo {
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append(String.format("Biome %d [%s]:", this.biomeId, this.biomeName));
+		builder.append(String.format("Biomes %d [%s]:", this.biomeId, this.biomeName));
 		if (this.hasPrecipitation)
 			builder.append(" PRECIPITATION");
 		if (this.hasDust)

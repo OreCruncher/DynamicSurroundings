@@ -36,8 +36,8 @@ import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDripOverride
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer;
-import org.blockartistry.mod.DynSurround.data.BlockRegistry;
-import org.blockartistry.mod.DynSurround.data.SoundRegistry;
+import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
+import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
 import net.minecraft.client.Minecraft;

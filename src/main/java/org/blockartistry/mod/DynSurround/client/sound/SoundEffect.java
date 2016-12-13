@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.mod.DynSurround.data.config.SoundConfig;
+import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.mod.DynSurround.util.SoundUtils;
 
 import com.google.common.base.Objects;

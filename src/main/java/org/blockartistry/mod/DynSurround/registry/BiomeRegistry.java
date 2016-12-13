@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.data;
+package org.blockartistry.mod.DynSurround.registry;
 
 import java.io.File;
 import java.util.HashMap;
@@ -36,8 +36,8 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect.SoundType;
-import org.blockartistry.mod.DynSurround.data.config.BiomeConfig;
-import org.blockartistry.mod.DynSurround.data.config.SoundConfig;
+import org.blockartistry.mod.DynSurround.data.xface.BiomeConfig;
+import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.mod.DynSurround.event.RegistryReloadEvent;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.MyUtils;
@@ -66,7 +66,7 @@ public final class BiomeRegistry {
 
 	public static String resolveName(final Biome biome) {
 		if (biome == null)
-			return "(Bad Biome)";
+			return "(Bad Biomes)";
 		return biome.getBiomeName();
 	}
 
@@ -115,7 +115,7 @@ public final class BiomeRegistry {
 	public static BiomeInfo get(final Biome biome) {
 		BiomeInfo entry = registry.get(biome == null ? WTF.getBiomeId() : Biome.REGISTRY.getIDForObject(biome));
 		if (entry == null) {
-			ModLog.warn("Biome [%s] was not detected during initial scan! Reloading config...", resolveName(biome));
+			ModLog.warn("Biomes [%s] was not detected during initial scan! Reloading config...", resolveName(biome));
 			initialize();
 			entry = registry.get(Biome.REGISTRY.getIDForObject(biome));
 			if (entry == null) {
@@ -129,7 +129,7 @@ public final class BiomeRegistry {
 
 	private static void processConfig() {
 		try {
-			process(BiomeConfig.load(Module.MOD_ID));
+			process(BiomeFile.load(Module.MOD_ID));
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -139,7 +139,7 @@ public final class BiomeRegistry {
 			final File theFile = new File(Module.dataDirectory(), file);
 			if (theFile.exists()) {
 				try {
-					final BiomeConfig config = BiomeConfig.load(theFile);
+					final BiomeFile config = BiomeFile.load(theFile);
 					if (config != null)
 						process(config);
 					else
@@ -153,56 +153,60 @@ public final class BiomeRegistry {
 		}
 	}
 
-	final static boolean isBiomeMatch(final BiomeConfig.Entry entry, final String biomeName) {
+	final static boolean isBiomeMatch(final BiomeConfig entry, final String biomeName) {
 		if (Pattern.matches(entry.biomeName, biomeName))
 			return true;
 		final String alias = biomeAliases.get(biomeName);
 		return alias == null ? false : Pattern.matches(entry.biomeName, alias);
 	}
+	
+	public static void register(final BiomeConfig entry) {
+		for (final BiomeInfo biomeEntry : registry.valueCollection()) {
+			if (isBiomeMatch(entry, biomeEntry.getBiomeName())) {
+				if (entry.hasPrecipitation != null)
+					biomeEntry.setHasPrecipitation(entry.hasPrecipitation.booleanValue());
+				if (entry.hasAurora != null)
+					biomeEntry.setHasAurora(entry.hasAurora.booleanValue());
+				if (entry.hasDust != null)
+					biomeEntry.setHasDust(entry.hasDust.booleanValue());
+				if (entry.hasFog != null)
+					biomeEntry.setHasFog(entry.hasFog.booleanValue());
+				if (entry.fogDensity != null)
+					biomeEntry.setFogDensity(entry.fogDensity.floatValue());
+				if (entry.fogColor != null) {
+					final int[] rgb = MyUtils.splitToInts(entry.fogColor, ',');
+					if (rgb.length == 3)
+						biomeEntry.setFogColor(new Color(rgb[0], rgb[1], rgb[2]));
+				}
+				if (entry.dustColor != null) {
+					final int[] rgb = MyUtils.splitToInts(entry.dustColor, ',');
+					if (rgb.length == 3)
+						biomeEntry.setDustColor(new Color(rgb[0], rgb[1], rgb[2]));
+				}
+				if (entry.soundReset != null && entry.soundReset.booleanValue()) {
+					biomeEntry.getSounds().clear();
+					biomeEntry.getSpotSounds().clear();
+				}
 
-	private static void process(final BiomeConfig config) {
-		for (final BiomeConfig.Entry entry : config.entries) {
-			for (final BiomeInfo biomeEntry : registry.valueCollection()) {
-				if (isBiomeMatch(entry, biomeEntry.getBiomeName())) {
-					if (entry.hasPrecipitation != null)
-						biomeEntry.setHasPrecipitation(entry.hasPrecipitation.booleanValue());
-					if (entry.hasAurora != null)
-						biomeEntry.setHasAurora(entry.hasAurora.booleanValue());
-					if (entry.hasDust != null)
-						biomeEntry.setHasDust(entry.hasDust.booleanValue());
-					if (entry.hasFog != null)
-						biomeEntry.setHasFog(entry.hasFog.booleanValue());
-					if (entry.fogDensity != null)
-						biomeEntry.setFogDensity(entry.fogDensity.floatValue());
-					if (entry.fogColor != null) {
-						final int[] rgb = MyUtils.splitToInts(entry.fogColor, ',');
-						if (rgb.length == 3)
-							biomeEntry.setFogColor(new Color(rgb[0], rgb[1], rgb[2]));
-					}
-					if (entry.dustColor != null) {
-						final int[] rgb = MyUtils.splitToInts(entry.dustColor, ',');
-						if (rgb.length == 3)
-							biomeEntry.setDustColor(new Color(rgb[0], rgb[1], rgb[2]));
-					}
-					if (entry.soundReset != null && entry.soundReset.booleanValue()) {
-						biomeEntry.getSounds().clear();
-						biomeEntry.getSpotSounds().clear();
-					}
+				if (entry.spotSoundChance != null)
+					biomeEntry.setSpotSoundChance(entry.spotSoundChance.intValue());
 
-					if (entry.spotSoundChance != null)
-						biomeEntry.setSpotSoundChance(entry.spotSoundChance.intValue());
-
-					for (final SoundConfig sr : entry.sounds) {
-						if (SoundRegistry.isSoundBlocked(sr.sound))
-							continue;
-						final SoundEffect s = new SoundEffect(sr);
-						if (s.type == SoundType.SPOT)
-							biomeEntry.getSpotSounds().add(s);
-						else
-							biomeEntry.getSounds().add(s);
-					}
+				for (final SoundConfig sr : entry.sounds) {
+					if (SoundRegistry.isSoundBlocked(sr.sound))
+						continue;
+					final SoundEffect s = new SoundEffect(sr);
+					if (s.type == SoundType.SPOT)
+						biomeEntry.getSpotSounds().add(s);
+					else
+						biomeEntry.getSounds().add(s);
 				}
 			}
+		}
+	}
+
+	private static void process(final BiomeFile config) {
+		for (final BiomeConfig entry : config.entries) {
+			register(entry);
 		}
 	}
 }

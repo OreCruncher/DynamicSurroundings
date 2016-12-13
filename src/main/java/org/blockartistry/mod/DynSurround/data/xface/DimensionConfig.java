@@ -1,5 +1,4 @@
-/*
- * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -22,20 +21,25 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.data.xface;
 
-import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
-import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
+import com.google.gson.annotations.SerializedName;
 
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-@SideOnly(Side.CLIENT)
-public class WeatherUtils {
-
-	public static boolean biomeHasDust(final Biome biome) {
-		return ModOptions.allowDesertFog && BiomeRegistry.get(biome).getHasDust() && !StormProperties.doVanilla();
-	}
+public class DimensionConfig {
+	@SerializedName("dimId")
+	public Integer dimensionId = null;
+	@SerializedName("name")
+	public String name = null;
+	@SerializedName("seaLevel")
+	public Integer seaLevel = null;
+	@SerializedName("skyHeight")
+	public Integer skyHeight = null;
+	@SerializedName("cloudHeight")
+	public Integer cloudHeight = null;
+	@SerializedName("haze")
+	public Boolean hasHaze = null;
+	@SerializedName("aurora")
+	public Boolean hasAurora = null;
+	@SerializedName("weather")
+	public Boolean hasWeather = null;
 }

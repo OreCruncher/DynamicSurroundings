@@ -41,8 +41,8 @@ import org.blockartistry.mod.DynSurround.data.AuroraData;
 import org.blockartistry.mod.DynSurround.data.AuroraPreset;
 import org.blockartistry.mod.DynSurround.data.ColorPair;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
-import org.blockartistry.mod.DynSurround.data.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.network.Network;
+import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 

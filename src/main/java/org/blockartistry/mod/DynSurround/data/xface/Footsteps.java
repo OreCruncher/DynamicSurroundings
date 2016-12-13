@@ -21,45 +21,12 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.data.config;
+package org.blockartistry.mod.DynSurround.data.xface;
 
-import java.io.File;
-import java.util.List;
-
-import org.blockartistry.mod.DynSurround.util.JsonUtils;
-
-import com.google.common.collect.ImmutableList;
-import com.google.gson.annotations.SerializedName;
-
-public final class DimensionConfig {
-
-	public final static class Entry {
-		@SerializedName("dimId")
-		public Integer dimensionId = null;
-		@SerializedName("name")
-		public String name = null;
-		@SerializedName("seaLevel")
-		public Integer seaLevel = null;
-		@SerializedName("skyHeight")
-		public Integer skyHeight = null;
-		@SerializedName("cloudHeight")
-		public Integer cloudHeight = null;
-		@SerializedName("haze")
-		public Boolean hasHaze = null;
-		@SerializedName("aurora")
-		public Boolean hasAurora = null;
-		@SerializedName("weather")
-		public Boolean hasWeather = null;
-	}
-
-	@SerializedName("entries")
-	public List<Entry> entries = ImmutableList.of();
-
-	public static DimensionConfig load(final File file) throws Exception {
-		return JsonUtils.load(file, DimensionConfig.class);
-	}
+public final class Footsteps {
 	
-	public static DimensionConfig load(final String modId) throws Exception {
-		return JsonUtils.load(modId, DimensionConfig.class);
+	protected Footsteps() {
+		
 	}
+
 }

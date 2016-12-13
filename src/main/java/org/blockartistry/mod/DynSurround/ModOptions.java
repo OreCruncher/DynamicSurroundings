@@ -139,8 +139,8 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_ELEVATION_HAZE = "Elevation Haze";
 	public static final String CONFIG_ELEVATION_HAZE_FACTOR = "Elevation Haze Factor";
 	public static final String CONFIG_ELEVATION_HAZE_AS_BAND = "Elevation Haze as Band";
-	public static final String CONFIG_ENABLE_BIOME_FOG = "Biome Fog";
-	public static final String CONFIG_BIOME_FOG_FACTOR = "Biome Fog Factor";
+	public static final String CONFIG_ENABLE_BIOME_FOG = "Biomes Fog";
+	public static final String CONFIG_BIOME_FOG_FACTOR = "Biomes Fog Factor";
 	private static final List<String> fogSort = Arrays.asList(CONFIG_ALLOW_DESERT_FOG, CONFIG_DESERT_FOG_FACTOR,
 			CONFIG_ENABLE_BIOME_FOG, CONFIG_BIOME_FOG_FACTOR, CONFIG_ENABLE_ELEVATION_HAZE,
 			CONFIG_ELEVATION_HAZE_FACTOR, CONFIG_ELEVATION_HAZE_AS_BAND);
@@ -229,15 +229,15 @@ public final class ModOptions {
 
 	public static final String CATEGORY_BIOMES = "biomes";
 	public static final String CONFIG_BIOME_CONFIG_FILES = "Config Files";
-	public static final String CONFIG_BIOME_ALIASES = "Biome Alias";
+	public static final String CONFIG_BIOME_ALIASES = "Biomes Alias";
 	private static final List<String> biomesSort = Arrays.asList(CONFIG_BIOME_CONFIG_FILES, CONFIG_BIOME_ALIASES);
 
 	@Parameter(category = CATEGORY_BIOMES, property = CONFIG_BIOME_CONFIG_FILES, defaultValue = "")
-	@Comment("Configuration files for configuring Biome Registry")
+	@Comment("Configuration files for configuring Biomes Registry")
 	@RestartRequired
 	public static String[] biomeConfigFiles = {};
 	@Parameter(category = CATEGORY_BIOMES, property = CONFIG_BIOME_ALIASES, defaultValue = "")
-	@Comment("Biome alias list")
+	@Comment("Biomes alias list")
 	@RestartRequired
 	public static String[] biomeAliases = {};
 
@@ -290,7 +290,7 @@ public final class ModOptions {
 	public static boolean enableFireflies = true;
 
 	public static final String CATEGORY_SOUND = "sound";
-	public static final String CONFIG_ENABLE_BIOME_SOUNDS = "Enable Biome Sounds";
+	public static final String CONFIG_ENABLE_BIOME_SOUNDS = "Enable Biomes Sounds";
 	public static final String CONFIG_MASTER_SOUND_FACTOR = "Master Sound Scale Factor";
 	public static final String CONFIG_AUTO_CONFIG_CHANNELS = "Autoconfigure Channels";
 	public static final String CONFIG_NORMAL_CHANNEL_COUNT = "Number Normal Channels";

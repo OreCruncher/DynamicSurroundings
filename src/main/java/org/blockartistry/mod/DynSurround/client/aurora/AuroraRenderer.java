@@ -39,7 +39,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.AuroraEffectHandler;
 import org.blockartistry.mod.DynSurround.client.IAtmosRenderer;
-import org.blockartistry.mod.DynSurround.data.DimensionRegistry;
+import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import org.lwjgl.opengl.GL11;

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.data;
+package org.blockartistry.mod.DynSurround.registry;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,10 +40,9 @@ import org.blockartistry.mod.DynSurround.client.fx.FireFlyEffect;
 import org.blockartistry.mod.DynSurround.client.fx.JetEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect.SoundType;
-import org.blockartistry.mod.DynSurround.data.config.BlockConfig;
-import org.blockartistry.mod.DynSurround.data.config.BlockConfig.Effect;
-
-import org.blockartistry.mod.DynSurround.data.config.SoundConfig;
+import org.blockartistry.mod.DynSurround.data.xface.BlockConfig;
+import org.blockartistry.mod.DynSurround.data.xface.BlockEffectConfig;
+import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -113,7 +112,7 @@ public final class BlockRegistry {
 
 		// Load block config for Dynamic Surroundings
 		try {
-			process(BlockConfig.load("blocks"));
+			process(BlockFile.load("blocks"));
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -122,7 +121,7 @@ public final class BlockRegistry {
 		// a config file embedded.
 		for (final ModContainer mod : Loader.instance().getActiveModList()) {
 			try {
-				process(BlockConfig.load(mod.getModId() + "_blocks"));
+				process(BlockFile.load(mod.getModId() + "_blocks"));
 			} catch (final Exception e) {
 				e.printStackTrace();
 			}
@@ -133,7 +132,7 @@ public final class BlockRegistry {
 			final File theFile = new File(Module.dataDirectory(), file);
 			if (theFile.exists()) {
 				try {
-					final BlockConfig config = BlockConfig.load(theFile);
+					final BlockFile config = BlockFile.load(theFile);
 					if (config != null)
 						process(config);
 					else
@@ -146,85 +145,89 @@ public final class BlockRegistry {
 			}
 		}
 	}
-
-	private static void process(final BlockConfig config) {
-		for (final BlockConfig.Entry entry : config.entries) {
-			if (entry.blocks.isEmpty())
+	
+	public static void register(final BlockConfig entry) {
+		if(entry.blocks.isEmpty())
+			return;
+		
+		for (final String blockName : entry.blocks) {
+			final BlockInfo blockInfo = BlockInfo.create(blockName);
+			if (blockInfo == null) {
+				ModLog.warn("Unknown block [%s] in block config file", blockName);
 				continue;
+			}
 
-			for (final String blockName : entry.blocks) {
-				final BlockInfo blockInfo = BlockInfo.create(blockName);
-				if (blockInfo == null) {
-					ModLog.warn("Unknown block [%s] in block config file", blockName);
-					continue;
-				}
+			final Block block = blockInfo.getBlock();
+			if (block == null || block == Blocks.AIR) {
+				ModLog.warn("Unknown block [%s] in block config file", blockName);
+				continue;
+			}
 
-				final Block block = blockInfo.getBlock();
-				if (block == null || block == Blocks.AIR) {
-					ModLog.warn("Unknown block [%s] in block config file", blockName);
-					continue;
-				}
+			BlockProfile blockData = registry.get(block);
+			if (blockData == null) {
+				blockData = BlockProfile.createProfile(blockInfo);
+				registry.put(block, blockData);
+			}
 
-				BlockProfile blockData = registry.get(block);
-				if (blockData == null) {
-					blockData = BlockProfile.createProfile(blockInfo);
-					registry.put(block, blockData);
-				}
+			// Reset of a block clears all registry
+			if (entry.soundReset != null && entry.soundReset.booleanValue())
+				blockData.clearSounds(blockInfo);
+			if (entry.stepSoundReset != null && entry.stepSoundReset.booleanValue())
+				blockData.clearStepSounds(blockInfo);
+			if (entry.effectReset != null && entry.effectReset.booleanValue())
+				blockData.clearEffects(blockInfo);
 
-				// Reset of a block clears all registry
-				if (entry.soundReset != null && entry.soundReset.booleanValue())
-					blockData.clearSounds(blockInfo);
-				if (entry.stepSoundReset != null && entry.stepSoundReset.booleanValue())
-					blockData.clearStepSounds(blockInfo);
-				if (entry.effectReset != null && entry.effectReset.booleanValue())
-					blockData.clearEffects(blockInfo);
+			if (entry.chance != null)
+				blockData.setChance(blockInfo, entry.chance.intValue());
+			if (entry.stepChance != null)
+				blockData.setStepChance(blockInfo, entry.stepChance.intValue());
 
-				if (entry.chance != null)
-					blockData.setChance(blockInfo, entry.chance.intValue());
-				if (entry.stepChance != null)
-					blockData.setStepChance(blockInfo, entry.stepChance.intValue());
-
-				for (final SoundConfig sr : entry.sounds) {
-					if (sr.sound != null && !SoundRegistry.isSoundBlocked(sr.sound)) {
-						final SoundEffect eff = new SoundEffect(sr);
-						if (eff.type == SoundType.STEP)
-							blockData.addStepSound(blockInfo, eff);
-						else
-							blockData.addSound(blockInfo, eff);
-					}
-				}
-
-				for (final Effect e : entry.effects) {
-					if (StringUtils.isEmpty(e.effect))
-						continue;
-					BlockEffect blockEffect = null;
-					final int chance = e.chance != null ? e.chance.intValue() : 100;
-					if (StringUtils.equalsIgnoreCase("steam", e.effect)) {
-						if (ModOptions.enableSteamJets)
-							blockEffect = new JetEffect.Steam(chance);
-					} else if (StringUtils.equalsIgnoreCase("fire", e.effect)) {
-						if (ModOptions.enableFireJets)
-							blockEffect = new JetEffect.Fire(chance);
-					} else if (StringUtils.equalsIgnoreCase("bubble", e.effect)) {
-						if (ModOptions.enableBubbleJets)
-							blockEffect = new JetEffect.Bubble(chance);
-					} else if (StringUtils.equalsIgnoreCase("dust", e.effect)) {
-						if (ModOptions.enableDustJets)
-							blockEffect = new JetEffect.Dust(chance);
-					} else if (StringUtils.equalsIgnoreCase("fountain", e.effect)) {
-						if (ModOptions.enableFountainJets)
-							blockEffect = new JetEffect.Fountain(chance);
-					} else if (StringUtils.equalsIgnoreCase("firefly", e.effect)) {
-						if (ModOptions.enableFireflies)
-							blockEffect = new FireFlyEffect(chance);
-					} else {
-						ModLog.warn("Unknown effect type in config: '%s'", e.effect);
-						continue;
-					}
-
-					blockData.addEffect(blockInfo, blockEffect);
+			for (final SoundConfig sr : entry.sounds) {
+				if (sr.sound != null && !SoundRegistry.isSoundBlocked(sr.sound)) {
+					final SoundEffect eff = new SoundEffect(sr);
+					if (eff.type == SoundType.STEP)
+						blockData.addStepSound(blockInfo, eff);
+					else
+						blockData.addSound(blockInfo, eff);
 				}
 			}
+
+			for (final BlockEffectConfig e : entry.effects) {
+				if (StringUtils.isEmpty(e.effect))
+					continue;
+				BlockEffect blockEffect = null;
+				final int chance = e.chance != null ? e.chance.intValue() : 100;
+				if (StringUtils.equalsIgnoreCase("steam", e.effect)) {
+					if (ModOptions.enableSteamJets)
+						blockEffect = new JetEffect.Steam(chance);
+				} else if (StringUtils.equalsIgnoreCase("fire", e.effect)) {
+					if (ModOptions.enableFireJets)
+						blockEffect = new JetEffect.Fire(chance);
+				} else if (StringUtils.equalsIgnoreCase("bubble", e.effect)) {
+					if (ModOptions.enableBubbleJets)
+						blockEffect = new JetEffect.Bubble(chance);
+				} else if (StringUtils.equalsIgnoreCase("dust", e.effect)) {
+					if (ModOptions.enableDustJets)
+						blockEffect = new JetEffect.Dust(chance);
+				} else if (StringUtils.equalsIgnoreCase("fountain", e.effect)) {
+					if (ModOptions.enableFountainJets)
+						blockEffect = new JetEffect.Fountain(chance);
+				} else if (StringUtils.equalsIgnoreCase("firefly", e.effect)) {
+					if (ModOptions.enableFireflies)
+						blockEffect = new FireFlyEffect(chance);
+				} else {
+					ModLog.warn("Unknown effect type in config: '%s'", e.effect);
+					continue;
+				}
+
+				blockData.addEffect(blockInfo, blockEffect);
+			}
+		}
+	}
+
+	private static void process(final BlockFile config) {
+		for (final BlockConfig entry : config.entries) {
+			register(entry);
 		}
 	}
 
