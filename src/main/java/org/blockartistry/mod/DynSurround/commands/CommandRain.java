@@ -27,9 +27,8 @@ package org.blockartistry.mod.DynSurround.commands;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
-import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
-import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
 import com.google.common.collect.ImmutableList;
@@ -133,8 +132,7 @@ public final class CommandRain extends CommandBase {
 				world.provider.resetRainAndThunder();
 				feedback = new TextComponentString(Localization.format("msg.RainReset"));
 			} else if (COMMAND_OPTION_RELOAD.compareToIgnoreCase(parms[0]) == 0) {
-				BiomeRegistry.initialize();
-				BlockRegistry.initialize();
+				Module.proxy().reloadResources();
 				feedback = new TextComponentString(Localization.format("msg.BiomeReload"));
 			} else if (COMMAND_OPTION_CONFIG.compareToIgnoreCase(parms[0]) == 0) {
 				feedback = new TextComponentString(config(world, data));

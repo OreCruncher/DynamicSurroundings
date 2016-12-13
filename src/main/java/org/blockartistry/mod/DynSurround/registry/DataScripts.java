@@ -27,15 +27,33 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.scripts.ScriptingEngine;
 
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
 public final class DataScripts {
+	
+	public static interface IDependent {
+		void clear();
+	}
+	
+	private static List<IDependent> dependents = new ArrayList<IDependent>();
+	public static void registerDependent(final IDependent dep) {
+		dependents.add(dep);
+	}
+	
+	private static void clearDependents() {
+		for(final IDependent dep: dependents)
+			dep.clear();
+	}
+	
 
 	// Module.dataDirectory()
 	private File dataDirectory;
@@ -49,21 +67,26 @@ public final class DataScripts {
 		this.assetDirectory = assetDirectory;
 	}
 
-	public static void initialize() {
+	public static void initialize(final IResourceManager resources) {
+		clearDependents();
 		final DataScripts scripts = new DataScripts(Module.dataDirectory(), "/assets/dsurround/data/");
 		scripts.init();
 
 		for (final ModContainer mod : Loader.instance().getActiveModList()) {
 			scripts.runFromArchive(mod.getModId());
 		}
+		
+		if(resources != null) {
+			
+		}
 	}
 
-	public boolean init() {
+	private boolean init() {
 		this.exe = new ScriptingEngine();
 		return this.exe.initialize();
 	}
 
-	public void runFromArchive(final String dataFile) {
+	private void runFromArchive(final String dataFile) {
 		final String fileName = dataFile.replaceAll("[^a-zA-Z0-9.-]", "_");
 		InputStream stream = null;
 
@@ -85,7 +108,8 @@ public final class DataScripts {
 		}
 	}
 
-	public void runFromDirectory(final String dataFile) {
+	@SuppressWarnings("unused")
+	private void runFromDirectory(final String dataFile) {
 		final File file = new File(dataDirectory, dataFile);
 		InputStream stream = null;
 
@@ -107,7 +131,7 @@ public final class DataScripts {
 		}
 	}
 
-	public void runFromStream(final InputStream stream) {
+	private void runFromStream(final InputStream stream) {
 		try {
 			if (stream != null)
 				this.exe.eval(new InputStreamReader(stream));

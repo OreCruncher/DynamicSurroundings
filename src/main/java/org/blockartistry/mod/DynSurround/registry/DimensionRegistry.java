@@ -31,40 +31,33 @@ import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
+import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 
-import foxie.calendar.api.CalendarAPI;
-import foxie.calendar.api.ICalendarProvider;
-import foxie.calendar.api.ISeasonProvider;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldType;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.fml.common.Loader;
 
-public final class DimensionRegistry {
-
-	private static final int SPACE_HEIGHT_OFFSET = 32;
-	private static final boolean CALENDAR_API = Loader.isModLoaded("CalendarAPI");
-	private static final String SEASON_NOT_AVAILABLE = "noseason";
+public final class DimensionRegistry implements IDependent {
+	
+	private final static DimensionRegistry INSTANCE = new DimensionRegistry();
+	
+	private DimensionRegistry() {
+		DataScripts.registerDependent(this);
+	}
+	
+	public void clear() {
+		cache.clear();
+		dimensionData.clear();
+	}
 
 	private static final List<DimensionConfig> cache = new ArrayList<DimensionConfig>();
-	private static final TIntObjectHashMap<DimensionRegistry> dimensionData = new TIntObjectHashMap<DimensionRegistry>();
+	private static final TIntObjectHashMap<DimensionInfo> dimensionData = new TIntObjectHashMap<DimensionInfo>();
 	private static boolean isFlatWorld = false;
 
-	protected final int dimensionId;
-	protected boolean initialized;
-	protected String name = "<NOT SET>";
-	protected Integer seaLevel;
-	protected Integer skyHeight;
-	protected Integer cloudHeight;
-	protected Integer spaceHeight;
-	protected Boolean hasHaze;
-	protected Boolean hasAuroras;
-	protected Boolean hasWeather;
-
 	public static void initialize() {
+		INSTANCE.clear();
+		
 		try {
 			process(DimensionFile.load("dimensions"));
 		} catch (Exception e) {
@@ -89,7 +82,7 @@ public final class DimensionRegistry {
 		}
 
 		ModLog.info("*** DIMENSION REGISTRY (delay init) ***");
-		for (final DimensionRegistry reg : dimensionData.valueCollection())
+		for (final DimensionInfo reg : dimensionData.valueCollection())
 			ModLog.info(reg.toString());
 	}
 
@@ -139,103 +132,8 @@ public final class DimensionRegistry {
 		}
 	}
 
-	protected DimensionRegistry(final World world) {
-		this.dimensionId = world.provider.getDimension();
-		initialize(world.provider);
-	}
-
-	protected DimensionRegistry(final World world, final DimensionConfig entry) {
-		this.dimensionId = world.provider.getDimension();
-		this.name = world.provider.getDimensionType().getName();
-		this.seaLevel = entry.seaLevel;
-		this.skyHeight = entry.skyHeight;
-		this.hasHaze = entry.hasHaze;
-		this.hasAuroras = entry.hasAurora;
-		this.hasWeather = entry.hasWeather;
-		this.cloudHeight = entry.cloudHeight;
-		initialize(world.provider);
-	}
-
-	protected DimensionRegistry initialize(final WorldProvider provider) {
-		if (!this.initialized) {
-			this.name = provider.getDimensionType().getName();
-			if (this.seaLevel == null)
-				this.seaLevel = provider.getAverageGroundLevel();
-			if (this.skyHeight == null)
-				this.skyHeight = provider.getHeight();
-			if (this.hasHaze == null)
-				this.hasHaze = !provider.getHasNoSky();
-			if (this.hasAuroras == null)
-				this.hasAuroras = !provider.getHasNoSky();
-			if (this.hasWeather == null)
-				this.hasWeather = !provider.getHasNoSky();
-			if (this.cloudHeight == null)
-				this.cloudHeight = this.hasHaze ? this.skyHeight / 2 : this.skyHeight;
-			if (this.spaceHeight == null)
-				this.spaceHeight = this.skyHeight + SPACE_HEIGHT_OFFSET;
-			this.initialized = true;
-			ModLog.info("Dimension initialized " + this.toString());
-		}
-		return this;
-	}
-
-	public int getDimensionId() {
-		return this.dimensionId;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public int getSeaLevel() {
-		return this.seaLevel.intValue();
-	}
-
-	public int getSkyHeight() {
-		return this.skyHeight.intValue();
-	}
-
-	public int getCloudHeight() {
-		return this.cloudHeight.intValue();
-	}
-
-	public int getSpaceHeight() {
-		return this.spaceHeight.intValue();
-	}
-
-	public boolean getHasHaze() {
-		return this.hasHaze.booleanValue();
-	}
-
-	public boolean getHasAuroras() {
-		return this.hasAuroras.booleanValue();
-	}
-
-	public boolean getHasWeather() {
-		return this.hasWeather.booleanValue();
-	}
-
-	public String getSeason() {
-		if (!CALENDAR_API)
-			return SEASON_NOT_AVAILABLE;
-
-		final ISeasonProvider provider = CalendarAPI.getSeasonProvider(this.dimensionId);
-		if (provider == null)
-			return SEASON_NOT_AVAILABLE;
-
-		final World world = DimensionManager.getWorld(this.dimensionId);
-		if (world == null)
-			return SEASON_NOT_AVAILABLE;
-
-		final ICalendarProvider calendar = CalendarAPI.getCalendarInstance(world);
-		if (calendar == null)
-			return SEASON_NOT_AVAILABLE;
-
-		return provider.getSeason(calendar).getName();
-	}
-
-	public static DimensionRegistry getData(final World world) {
-		DimensionRegistry data = dimensionData.get(world.provider.getDimension());
+	public static DimensionInfo getData(final World world) {
+		DimensionInfo data = dimensionData.get(world.provider.getDimension());
 		if (data == null) {
 			DimensionConfig entry = null;
 			for (final DimensionConfig e : cache)
@@ -245,9 +143,9 @@ public final class DimensionRegistry {
 					break;
 				}
 			if (entry == null) {
-				data = new DimensionRegistry(world);
+				data = new DimensionInfo(world);
 			} else {
-				data = new DimensionRegistry(world, entry);
+				data = new DimensionInfo(world, entry);
 			}
 			dimensionData.put(world.provider.getDimension(), data);
 		}
@@ -308,16 +206,4 @@ public final class DimensionRegistry {
 		return builder.toString();
 	}
 
-	@Override
-	public String toString() {
-		final StringBuilder builder = new StringBuilder();
-		builder.append(this.dimensionId).append('/').append(this.name).append(':');
-		builder.append(" seaLevel:").append(this.seaLevel);
-		builder.append(" cloudH:").append(this.cloudHeight);
-		builder.append(" skyH:").append(this.skyHeight);
-		builder.append(" haze:").append(Boolean.toString(this.hasHaze));
-		builder.append(" aurora:").append(Boolean.toString(this.hasAuroras));
-		builder.append(" weather:").append(Boolean.toString(this.hasWeather));
-		return builder.toString();
-	}
 }

@@ -39,6 +39,7 @@ import org.blockartistry.mod.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundType;
 import org.blockartistry.mod.DynSurround.event.RegistryReloadEvent;
+import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.MyUtils;
 
@@ -46,7 +47,18 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
 
-public final class BiomeRegistry {
+public final class BiomeRegistry implements IDependent {
+	
+	private final static BiomeRegistry INSTANCE = new BiomeRegistry();
+	
+	private BiomeRegistry() {
+		DataScripts.registerDependent(this);
+	}
+	
+	public void clear() {
+		biomeAliases.clear();
+		registry.clear();
+	}
 
 	private static final TIntObjectHashMap<BiomeInfo> registry = new TIntObjectHashMap<BiomeInfo>();
 	private static final Map<String, String> biomeAliases = new HashMap<String, String>();
@@ -72,15 +84,13 @@ public final class BiomeRegistry {
 
 	public static void initialize() {
 
-		biomeAliases.clear();
+		INSTANCE.clear();
 		for (final String entry : ModOptions.biomeAliases) {
 			final String[] parts = StringUtils.split(entry, "=");
 			if (parts.length == 2) {
 				biomeAliases.put(parts[0], parts[1]);
 			}
 		}
-
-		registry.clear();
 
 		for(Iterator<Biome> itr = Biome.REGISTRY.iterator(); itr.hasNext();) {
 			final BiomeInfo e = new BiomeInfo(itr.next());

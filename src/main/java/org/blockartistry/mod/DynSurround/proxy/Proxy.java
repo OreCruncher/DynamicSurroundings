@@ -40,6 +40,7 @@ import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -49,6 +50,10 @@ public class Proxy {
 	
 	protected void registerLanguage() {
 		Localization.initialize(Side.SERVER);
+	}
+	
+	public void reloadResources() {
+		DataScripts.initialize(null);
 	}
 
 	public void preInit(final FMLPreInitializationEvent event) {
@@ -71,7 +76,10 @@ public class Proxy {
 	public void postInit(final FMLPostInitializationEvent event) {
 		BiomeRegistry.initialize();
 		DimensionRegistry.initialize();
-		DataScripts.initialize();
+	}
+	
+	public void loadCompleted(final FMLLoadCompleteEvent event) {
+		reloadResources();
 	}
 
 	public void serverStarting(final FMLServerStartingEvent event) {

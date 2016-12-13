@@ -47,11 +47,9 @@ import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.I
 import org.blockartistry.mod.DynSurround.client.footsteps.parsers.AcousticsJsonReader;
 import org.blockartistry.mod.DynSurround.client.footsteps.parsers.Register;
 import org.blockartistry.mod.DynSurround.client.footsteps.util.property.simple.ConfigProperty;
+import org.blockartistry.mod.DynSurround.registry.DataScripts;
+import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.IResourceManagerReloadListener;
-import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -62,7 +60,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class Footsteps implements IResourceManagerReloadListener, IClientEffectHandler {
+public class Footsteps implements IClientEffectHandler, IDependent {
 
 	public static Footsteps INSTANCE = null;
 
@@ -72,10 +70,10 @@ public class Footsteps implements IResourceManagerReloadListener, IClientEffectH
 
 	public Footsteps() {
 		INSTANCE = this;
-		((IReloadableResourceManager)Minecraft.getMinecraft().getResourceManager()).registerReloadListener(this);
+		DataScripts.registerDependent(this);
 	}
-
-	public void reloadEverything() {
+	
+	public void clear() {
 		this.isolator = new PFIsolator();
 
 		final List<IResourcePack> repo = this.dealer.findResourcePacks();
@@ -83,9 +81,9 @@ public class Footsteps implements IResourceManagerReloadListener, IClientEffectH
 		reloadBlockMap(repo);
 		reloadPrimitiveMap(repo);
 		reloadAcoustics(repo);
-		this.isolator.setSolver(new PFSolver(this.isolator));
 		reloadVariator(repo);
 
+		this.isolator.setSolver(new PFSolver(this.isolator));
 		this.isolator.setGenerator(new PFReaderH(this.isolator));
 		/*
 		 * this.isolator.setGenerator(getConfig().getInteger("custom.stance") ==
@@ -200,15 +198,9 @@ public class Footsteps implements IResourceManagerReloadListener, IClientEffectH
 	}
 
 	@Override
-	public void onResourceManagerReload(final IResourceManager var1) {
-		ModLog.info("Resource Pack reload detected...");
-		reloadEverything();
-	}
-
-	@Override
 	public void process(World world, EntityPlayer player) {
 		if (this.isolator == null)
-			reloadEverything();
+			clear();
 		this.isolator.onFrame();
 		player.nextStepDistance = Integer.MAX_VALUE;
 	}

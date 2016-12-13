@@ -43,6 +43,7 @@ import org.blockartistry.mod.DynSurround.data.xface.BlockConfig;
 import org.blockartistry.mod.DynSurround.data.xface.BlockEffectConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundType;
+import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -50,13 +51,23 @@ import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
-public final class BlockRegistry {
+public final class BlockRegistry implements IDependent {
+	
+	private final static BlockRegistry INSTANCE = new BlockRegistry();
+	
+	private BlockRegistry() {
+		DataScripts.registerDependent(this);
+	}
+	
+	public void clear() {
+		registry.clear();
+	}
 
 	private static final Map<Block, BlockProfile> registry = new IdentityHashMap<Block, BlockProfile>();
 
 	public static void initialize() {
 
-		registry.clear();
+		INSTANCE.clear();
 		processConfig();
 
 		if (ModOptions.enableDebugLogging) {
