@@ -38,7 +38,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class PFReaderH implements IGenerator, IVariatorSettable {
+public class ReaderH implements IGenerator, IVariatorSettable {
 	// Construct
 	final protected IIsolator mod;
 
@@ -67,7 +67,7 @@ public class PFReaderH implements IGenerator, IVariatorSettable {
 	private boolean isMessyFoliage;
 	private long brushesTime;
 
-	public PFReaderH(final IIsolator isolator) {
+	public ReaderH(final IIsolator isolator) {
 		mod = isolator;
 		VAR = new NormalVariator();
 	}

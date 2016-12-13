@@ -63,10 +63,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author Hurry
  */
 @SideOnly(Side.CLIENT)
-public class PFSolver implements ISolver {
+public class Solver implements ISolver {
 	private final IIsolator isolator;
 
-	public PFSolver(final IIsolator isolator) {
+	public Solver(final IIsolator isolator) {
 		this.isolator = isolator;
 	}
 

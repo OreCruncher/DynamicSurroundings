@@ -31,11 +31,12 @@ import java.util.Scanner;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.IClientEffectHandler;
+import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.Manifest;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.ForgeDictionary;
-import org.blockartistry.mod.DynSurround.client.footsteps.game.system.PFIsolator;
-import org.blockartistry.mod.DynSurround.client.footsteps.game.system.PFReaderH;
-import org.blockartistry.mod.DynSurround.client.footsteps.game.system.PFResourcePackDealer;
-import org.blockartistry.mod.DynSurround.client.footsteps.game.system.PFSolver;
+import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Isolator;
+import org.blockartistry.mod.DynSurround.client.footsteps.game.system.ReaderH;
+import org.blockartistry.mod.DynSurround.client.footsteps.game.system.ResourcePacks;
+import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Solver;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.UserConfigSoundPlayerWrapper;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.AcousticsManager;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.BasicPrimitiveMap;
@@ -49,6 +50,7 @@ import org.blockartistry.mod.DynSurround.client.footsteps.parsers.Register;
 import org.blockartistry.mod.DynSurround.client.footsteps.util.property.simple.ConfigProperty;
 import org.blockartistry.mod.DynSurround.registry.DataScripts;
 import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
+import org.blockartistry.mod.DynSurround.util.JsonUtils;
 
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.entity.player.EntityPlayer;
@@ -65,30 +67,56 @@ public class Footsteps implements IClientEffectHandler, IDependent {
 	public static Footsteps INSTANCE = null;
 
 	// System
-	private PFResourcePackDealer dealer = new PFResourcePackDealer();
-	private PFIsolator isolator;
+	private ResourcePacks dealer = new ResourcePacks();
+	private Isolator isolator;
 
 	public Footsteps() {
 		INSTANCE = this;
 		DataScripts.registerDependent(this);
 	}
-	
+
 	public void clear() {
-		this.isolator = new PFIsolator();
+		this.isolator = new Isolator();
 
 		final List<IResourcePack> repo = this.dealer.findResourcePacks();
 
+		reloadManifests(repo);
 		reloadBlockMap(repo);
 		reloadPrimitiveMap(repo);
 		reloadAcoustics(repo);
 		reloadVariator(repo);
 
-		this.isolator.setSolver(new PFSolver(this.isolator));
-		this.isolator.setGenerator(new PFReaderH(this.isolator));
+		this.isolator.setSolver(new Solver(this.isolator));
+		this.isolator.setGenerator(new ReaderH(this.isolator));
 		/*
 		 * this.isolator.setGenerator(getConfig().getInteger("custom.stance") ==
-		 * 0 ? new PFReaderH(this.isolator) : new PFReaderQP(this.isolator));
+		 * 0 ? new ReaderH(this.isolator) : new ReaderQP(this.isolator));
 		 */
+	}
+
+	private void reloadManifests(final List<IResourcePack> repo) {
+		for (final IResourcePack pack : repo) {
+			InputStream stream = null;
+			try {
+				stream = this.dealer.openPackDescriptor(pack);
+				if (stream != null) {
+					final Manifest manifest = JsonUtils.load(stream, Manifest.class);
+					if (manifest != null) {
+						ModLog.info("Resource pack %s: %s by %s (%s)", pack.getPackName(), manifest.getName(),
+								manifest.getAuthor(), manifest.getWebsite());
+					}
+				}
+			} catch (final Exception e) {
+				ModLog.debug("Unable to load variator data from pack %s", pack.getPackName());
+			} finally {
+				if (stream != null)
+					try {
+						stream.close();
+					} catch (final IOException e) {
+						;
+					}
+			}
+		}
 	}
 
 	private void reloadVariator(final List<IResourcePack> repo) {

@@ -45,14 +45,14 @@ import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class PFResourcePackDealer {
+public class ResourcePacks {
 
-	// Used for existing packs that have been configured for Presence Footsteps
-	private final ResourceLocation pf_pack = new ResourceLocation("footsteps", "pf_pack.json");
-	private final ResourceLocation acoustics = new ResourceLocation("footsteps", "acoustics.json");
-	private final ResourceLocation blockmap = new ResourceLocation("footsteps", "blockmap.json");
-	private final ResourceLocation primitivemap = new ResourceLocation("footsteps", "primitivemap.json");
-	private final ResourceLocation variator = new ResourceLocation("footsteps", "variator.json");
+	private final ResourceLocation manifest = new ResourceLocation(Module.RESOURCE_ID, "manifest.json");
+	private final ResourceLocation acoustics = new ResourceLocation(Module.RESOURCE_ID, "acoustics.json");
+	private final ResourceLocation primitivemap = new ResourceLocation(Module.RESOURCE_ID, "primitivemap.json");
+	private final ResourceLocation variator = new ResourceLocation(Module.RESOURCE_ID, "variator.json");
+
+	private final ResourceLocation configuration = new ResourceLocation(Module.RESOURCE_ID, "blockmap.json");
 
 	// Resource pack reference for the built in pack.
 	private static class DefaultPack implements IResourcePack {
@@ -117,12 +117,12 @@ public class PFResourcePackDealer {
 		final List<IResourcePack> foundEntries = new ArrayList<IResourcePack>();
 		foundEntries.add(new DefaultPack());
 
-		// Tack on loaded mods
-		// Check for each of the loaded mods to see if there is
-		// a config file embedded.
+		// Add a default back for mods that are loaded - there may be a default
+		// configuration privided in the archive
 		for (final ModContainer mod : Loader.instance().getActiveModList())
 			foundEntries.add(new DefaultPack(mod.getModId()));
 
+		// Look in other resource packs for more configuration data
 		for (final ResourcePackRepository.Entry pack : repo) {
 			ModLog.debug("Resource Pack: %s", pack.getResourcePackName());
 			if (checkCompatible(pack)) {
@@ -134,11 +134,11 @@ public class PFResourcePackDealer {
 	}
 
 	private boolean checkCompatible(final ResourcePackRepository.Entry pack) {
-		return pack.getResourcePack().resourceExists(this.pf_pack);
+		return pack.getResourcePack().resourceExists(this.manifest);
 	}
 
 	public InputStream openPackDescriptor(final IResourcePack pack) throws IOException {
-		return pack.getInputStream(this.pf_pack);
+		return pack.getInputStream(this.manifest);
 	}
 
 	public InputStream openAcoustics(final IResourcePack pack) throws IOException {
@@ -146,7 +146,7 @@ public class PFResourcePackDealer {
 	}
 
 	public InputStream openBlockMap(final IResourcePack pack) throws IOException {
-		return pack.getInputStream(this.blockmap);
+		return pack.getInputStream(this.configuration);
 	}
 
 	public InputStream openPrimitiveMap(final IResourcePack pack) throws IOException {

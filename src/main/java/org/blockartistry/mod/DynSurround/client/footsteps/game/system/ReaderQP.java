@@ -34,13 +34,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class PFReaderQP extends PFReaderH {
+public class ReaderQP extends ReaderH {
 	private int hoof = 0;
 	private int USE_FUNCTION = 2;
 	private float nextWalkDistanceMultiplier = 0.05f;
 	private final Random rand = new Random();
 	
-	public PFReaderQP(IIsolator isolator) {
+	public ReaderQP(IIsolator isolator) {
 		super(isolator);
 	}
 	

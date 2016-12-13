@@ -41,7 +41,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class PFIsolator implements IIsolator, IVariatorSettable, IGeneratorSettable {
+public class Isolator implements IIsolator, IVariatorSettable, IGeneratorSettable {
 	private ILibrary acoustics;
 	private ISolver solver;
 	private IBlockMap blockMap;
@@ -53,7 +53,7 @@ public class PFIsolator implements IIsolator, IVariatorSettable, IGeneratorSetta
 
 	private IGenerator generator;
 
-	public PFIsolator() {
+	public Isolator() {
 	}
 
 	@Override
