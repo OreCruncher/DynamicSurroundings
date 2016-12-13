@@ -36,23 +36,23 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
 public final class DataScripts {
-	
+
 	// Module.dataDirectory()
 	private File dataDirectory;
-	
+
 	// "/assets/dsurround/data/"
 	private String assetDirectory;
 	private ScriptingEngine exe;
-	
+
 	public DataScripts(final File file, final String assetDirectory) {
 		this.dataDirectory = file;
 		this.assetDirectory = assetDirectory;
 	}
-	
+
 	public static void initialize() {
-		final DataScripts scripts = new DataScripts(Module.dataDirectory(),"/assets/dsurround/data/");
+		final DataScripts scripts = new DataScripts(Module.dataDirectory(), "/assets/dsurround/data/");
 		scripts.init();
-		
+
 		for (final ModContainer mod : Loader.instance().getActiveModList()) {
 			scripts.runFromArchive(mod.getModId());
 		}
@@ -62,16 +62,19 @@ public final class DataScripts {
 		this.exe = new ScriptingEngine();
 		return this.exe.initialize();
 	}
-	
+
 	public void runFromArchive(final String dataFile) {
 		final String fileName = dataFile.replaceAll("[^a-zA-Z0-9.-]", "_");
 		InputStream stream = null;
 
 		try {
 			stream = DataScripts.class.getResourceAsStream(assetDirectory + fileName + ".scala");
-			runFromStream(stream);
-		} catch(final Throwable t) {
-			ModLog.error("Unable to run scala script!", t);
+			if (stream != null) {
+				ModLog.info("Executing script for mod [%s]", dataFile);
+				runFromStream(stream);
+			}
+		} catch (final Throwable t) {
+			ModLog.error("Unable to run script!", t);
 		} finally {
 			try {
 				if (stream != null)
@@ -81,16 +84,19 @@ public final class DataScripts {
 			}
 		}
 	}
-	
+
 	public void runFromDirectory(final String dataFile) {
 		final File file = new File(dataDirectory, dataFile);
 		InputStream stream = null;
 
 		try {
 			stream = new FileInputStream(file);
-			runFromStream(stream);
-		} catch(final Throwable t) {
-			ModLog.error("Unable to run scala script!", t);
+			if (stream != null) {
+				ModLog.info("Executing script [%s] from directory", dataFile);
+				runFromStream(stream);
+			}
+		} catch (final Throwable t) {
+			ModLog.error("Unable to run script!", t);
 		} finally {
 			try {
 				if (stream != null)
@@ -100,13 +106,13 @@ public final class DataScripts {
 			}
 		}
 	}
-	
+
 	public void runFromStream(final InputStream stream) {
 		try {
 			if (stream != null)
 				this.exe.eval(new InputStreamReader(stream));
-		} catch(final Throwable t) {
-			ModLog.error("Unable to run scala script!", t);
+		} catch (final Throwable t) {
+			ModLog.error("Unable to run script!", t);
 		}
 	}
 }

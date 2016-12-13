@@ -26,7 +26,7 @@ package org.blockartistry.mod.DynSurround.client.sound;
 import java.util.Random;
 
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.client.sound.SoundEffect.SoundType;
+import org.blockartistry.mod.DynSurround.data.xface.SoundType;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import net.minecraft.client.Minecraft;

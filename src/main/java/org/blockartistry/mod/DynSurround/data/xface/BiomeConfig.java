@@ -52,4 +52,62 @@ public final class BiomeConfig {
 	public Integer spotSoundChance = null;
 	@SerializedName("sounds")
 	public List<SoundConfig> sounds = new ArrayList<SoundConfig>();
+
+	public BiomeConfig setBiomeName(final String name) {
+		this.biomeName = name;
+		return this;
+	}
+
+	public BiomeConfig setHasPrecipitation(final boolean flag) {
+		this.hasPrecipitation = flag;
+		return this;
+	}
+
+	public BiomeConfig setHasDust(final boolean flag) {
+		this.hasDust = flag;
+		return this;
+	}
+
+	public BiomeConfig setDustColor(final int red, final int green, final int blue) {
+		this.dustColor = String.format("%d,%d,%d", red, green, blue);
+		return this;
+	}
+
+	public BiomeConfig setHasAurora(final boolean flag) {
+		this.hasAurora = flag;
+		return this;
+	}
+
+	public BiomeConfig setHasFog(final boolean flag) {
+		this.hasFog = flag;
+		return this;
+	}
+
+	public BiomeConfig setFogColor(final int red, final int green, final int blue) {
+		this.fogColor = String.format("%d,%d,%d", red, green, blue);
+		return this;
+	}
+
+	public BiomeConfig setFogDensity(final float density) {
+		this.fogDensity = density;
+		return this;
+	}
+
+	public BiomeConfig setResetSound(final boolean flag) {
+		this.soundReset = flag;
+		return this;
+	}
+
+	public BiomeConfig setSpotSoundChance(final int chance) {
+		this.spotSoundChance = chance;
+		return this;
+	}
+
+	public BiomeConfig addSounds(final SoundConfig... sounds) {
+		if (sounds != null) {
+			for (int i = 0; i < sounds.length; i++)
+				this.sounds.add(sounds[i]);
+		}
+		return this;
+	}
 }

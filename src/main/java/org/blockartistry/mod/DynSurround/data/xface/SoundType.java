@@ -1,5 +1,4 @@
-/*
- * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -24,22 +23,28 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
-import com.google.gson.annotations.SerializedName;
+public enum SoundType {
+	BACKGROUND("BACKGROUND"), SPOT("SPOT"), STEP("STEP"), PERIODIC("PERIODIC");
 
-public final class BlockEffectConfig {
-	
-	@SerializedName("effect")
-	public String effect = null;
-	@SerializedName("chance")
-	public Integer chance = null;
-	
-	public BlockEffectConfig setEffectType(final BlockEffectType type) {
-		this.effect = type.getName();
-		return this;
+	protected final String name;
+
+	SoundType(final String name) {
+		this.name = name;
 	}
-	
-	public BlockEffectConfig setEffectChance(final int chance) {
-		this.chance = chance;
-		return this;
+
+	public String getName() {
+		return this.name;
+	}
+
+	public static SoundType getType(final String soundType) {
+		if (soundType == null)
+			return BACKGROUND;
+
+		try {
+			return SoundType.valueOf(soundType.toUpperCase());
+		} catch (final Throwable ex) {
+			ex.printStackTrace();
+		}
+		return BACKGROUND;
 	}
 }

@@ -24,22 +24,19 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
-import com.google.gson.annotations.SerializedName;
+import org.blockartistry.mod.DynSurround.ModLog;
 
-public final class BlockEffectConfig {
-	
-	@SerializedName("effect")
-	public String effect = null;
-	@SerializedName("chance")
-	public Integer chance = null;
-	
-	public BlockEffectConfig setEffectType(final BlockEffectType type) {
-		this.effect = type.getName();
-		return this;
+public final class Log {
+
+	protected Log() {
 	}
-	
-	public BlockEffectConfig setEffectChance(final int chance) {
-		this.chance = chance;
-		return this;
+
+	public static void info(final String format, final Object... parms) {
+		ModLog.info(format, parms);
 	}
+
+	public static void warn(final String format, final Object... parms) {
+		ModLog.warn(format, parms);
+	}
+
 }

@@ -45,4 +45,54 @@ public class BlockConfig {
 	public List<SoundConfig> sounds = new ArrayList<SoundConfig>();
 	@SerializedName("effects")
 	public List<BlockEffectConfig> effects = new ArrayList<BlockEffectConfig>();
+
+	public BlockConfig addBlocks(final String... blocks) {
+		if (blocks != null) {
+			for (int i = 0; i < blocks.length; i++)
+				this.blocks.add(blocks[i]);
+		}
+		return this;
+	}
+
+	public BlockConfig setResetSounds(final boolean flag) {
+		this.soundReset = flag;
+		return this;
+	}
+
+	public BlockConfig setResetEffects(final boolean flag) {
+		this.effectReset = flag;
+		return this;
+	}
+
+	public BlockConfig setResetStepSounds(final boolean flag) {
+		this.stepSoundReset = flag;
+		return this;
+	}
+
+	public BlockConfig setStepSoundChance(final int chance) {
+		this.stepChance = chance;
+		return this;
+	}
+
+	public BlockConfig setSoundChance(final int chance) {
+		this.chance = chance;
+		return this;
+	}
+
+	public BlockConfig addSounds(final SoundConfig... sounds) {
+		if (sounds != null) {
+			for (int i = 0; i < sounds.length; i++)
+				this.sounds.add(sounds[i]);
+		}
+		return this;
+
+	}
+
+	public BlockConfig addEffects(final BlockEffectConfig... effects) {
+		if (effects != null) {
+			for (int i = 0; i < effects.length; i++)
+				this.effects.add(effects[i]);
+		}
+		return this;
+	}
 }

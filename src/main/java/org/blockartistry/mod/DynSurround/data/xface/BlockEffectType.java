@@ -24,22 +24,16 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
-import com.google.gson.annotations.SerializedName;
+public enum BlockEffectType {
+	STEAM("steam"), FIRE("fire"), BUBBLE("bubble"), DUST("dust"), FOUNTAIN("fountain"), FIREFLY("firefly");
 
-public final class BlockEffectConfig {
-	
-	@SerializedName("effect")
-	public String effect = null;
-	@SerializedName("chance")
-	public Integer chance = null;
-	
-	public BlockEffectConfig setEffectType(final BlockEffectType type) {
-		this.effect = type.getName();
-		return this;
+	protected final String name;
+
+	BlockEffectType(final String name) {
+		this.name = name;
 	}
 	
-	public BlockEffectConfig setEffectChance(final int chance) {
-		this.chance = chance;
-		return this;
+	public String getName() {
+		return this.name;
 	}
 }

@@ -39,10 +39,10 @@ import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.fx.FireFlyEffect;
 import org.blockartistry.mod.DynSurround.client.fx.JetEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.mod.DynSurround.client.sound.SoundEffect.SoundType;
 import org.blockartistry.mod.DynSurround.data.xface.BlockConfig;
 import org.blockartistry.mod.DynSurround.data.xface.BlockEffectConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
+import org.blockartistry.mod.DynSurround.data.xface.SoundType;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

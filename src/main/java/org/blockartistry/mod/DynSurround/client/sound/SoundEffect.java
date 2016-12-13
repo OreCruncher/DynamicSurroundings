@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
+import org.blockartistry.mod.DynSurround.data.xface.SoundType;
 import org.blockartistry.mod.DynSurround.util.SoundUtils;
 
 import com.google.common.base.Objects;
@@ -43,22 +44,6 @@ import net.minecraft.world.World;
 public final class SoundEffect {
 
 	private static final float[] pitchDelta = { -0.2F, 0.0F, 0.0F, 0.2F, 0.2F, 0.2F };
-
-	public static enum SoundType {
-		BACKGROUND, SPOT, STEP, PERIODIC;
-
-		public static SoundType getType(final String soundType) {
-			if (soundType == null)
-				return BACKGROUND;
-
-			try {
-				return SoundType.valueOf(soundType.toUpperCase());
-			} catch (final Throwable ex) {
-				ex.printStackTrace();
-			}
-			return BACKGROUND;
-		}
-	}
 
 	public final @Nullable SoundEvent sound;
 	// Hack around SoundEvent.getName() being client sided

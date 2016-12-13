@@ -42,4 +42,44 @@ public class DimensionConfig {
 	public Boolean hasAurora = null;
 	@SerializedName("weather")
 	public Boolean hasWeather = null;
+
+	public DimensionConfig setDimensionId(final int id) {
+		this.dimensionId = id;
+		return this;
+	}
+
+	public DimensionConfig setDimensionName(final String name) {
+		this.name = name;
+		return this;
+	}
+
+	public DimensionConfig setSeaLevel(final int level) {
+		this.seaLevel = level;
+		return this;
+	}
+
+	public DimensionConfig setSkyHeight(final int height) {
+		this.skyHeight = height;
+		return this;
+	}
+
+	public DimensionConfig setCloudHeight(final int height) {
+		this.cloudHeight = height;
+		return this;
+	}
+
+	public DimensionConfig setHasCloudHaze(final boolean flag) {
+		this.hasHaze = flag;
+		return this;
+	}
+
+	public DimensionConfig setHasWeather(final boolean flag) {
+		this.hasWeather = flag;
+		return this;
+	}
+
+	public DimensionConfig setHasAuroras(final boolean flag) {
+		this.hasAurora = flag;
+		return this;
+	}
 }

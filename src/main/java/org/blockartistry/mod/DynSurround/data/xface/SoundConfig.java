@@ -44,12 +44,63 @@ public class SoundConfig {
 	public Integer repeatDelayRandom = null;
 	@SerializedName("repeatDelay")
 	public Integer repeatDelay = null;
-
-	// Deprecation list
-	@SerializedName("skipFade")
-	public Boolean skipFade = null;
 	@SerializedName("spot")
 	public Boolean spotSound = null;
 	@SerializedName("step")
 	public Boolean step = null;
+
+	public SoundConfig setSoundName(final String name) {
+		this.sound = name;
+		return this;
+	}
+
+	public SoundConfig setConditions(final String conditions) {
+		this.conditions = conditions;
+		return this;
+	}
+
+	public SoundConfig setSoundType(final SoundType type) {
+		this.soundType = type.getName();
+		return this;
+	}
+
+	public SoundConfig setVolume(final float volume) {
+		this.volume = volume;
+		return this;
+	}
+
+	public SoundConfig setPitch(final float pitch) {
+		this.pitch = pitch;
+		return this;
+	}
+
+	public SoundConfig setWeight(final int weight) {
+		this.weight = weight;
+		return this;
+	}
+
+	public SoundConfig setRepeatDelayRandom(final int delay) {
+		this.repeatDelayRandom = delay;
+		return this;
+	}
+
+	public SoundConfig setRepeatDelay(final int delay) {
+		this.repeatDelay = delay;
+		return this;
+	}
+
+	public SoundConfig setIsVariable(final boolean flag) {
+		this.variable = flag;
+		return this;
+	}
+
+	public SoundConfig setIsSpotSound(final boolean flag) {
+		this.spotSound = flag;
+		return this;
+	}
+
+	public SoundConfig setIsStepSound(final boolean flag) {
+		this.step = flag;
+		return this;
+	}
 }
