@@ -82,4 +82,8 @@ public class DimensionConfig {
 		this.hasAurora = flag;
 		return this;
 	}
+	
+	public void register() {
+		Dimensions.register(this);
+	}
 }

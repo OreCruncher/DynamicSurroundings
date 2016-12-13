@@ -48,6 +48,14 @@ public class SoundConfig {
 	public Boolean spotSound = null;
 	@SerializedName("step")
 	public Boolean step = null;
+	
+	public SoundConfig() {
+		
+	}
+	
+	public SoundConfig(final String soundName) {
+		this.sound = soundName;
+	}
 
 	public SoundConfig setSoundName(final String name) {
 		this.sound = name;

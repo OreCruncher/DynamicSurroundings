@@ -67,7 +67,7 @@ public final class DataScripts {
 		this.assetDirectory = assetDirectory;
 	}
 
-	public static void initialize(final IResourceManager resources) {
+	public static void initialize(final Object resources) {
 		clearDependents();
 		final DataScripts scripts = new DataScripts(Module.dataDirectory(), "/assets/dsurround/data/");
 		scripts.init();
@@ -76,6 +76,7 @@ public final class DataScripts {
 			scripts.runFromArchive(mod.getModId());
 		}
 		
+		// TODO: Handle client vs. server load RE: resource pack support
 		if(resources != null) {
 			
 		}

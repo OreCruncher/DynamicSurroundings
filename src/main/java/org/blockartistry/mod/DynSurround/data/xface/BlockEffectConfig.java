@@ -33,6 +33,14 @@ public final class BlockEffectConfig {
 	@SerializedName("chance")
 	public Integer chance = null;
 	
+	public BlockEffectConfig() {
+		
+	}
+	
+	public BlockEffectConfig(final BlockEffectType type) {
+		this.setEffectType(type);
+	}
+	
 	public BlockEffectConfig setEffectType(final BlockEffectType type) {
 		this.effect = type.getName();
 		return this;

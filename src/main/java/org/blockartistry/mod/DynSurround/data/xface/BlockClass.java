@@ -79,7 +79,7 @@ public enum BlockClass {
 	STANDINGBANNER("rug,straw,squeakywood"),
 	WALLBANNER("rug,straw"),
 	
-	SAPLINGS("#saplings"),
+	SAPLINGS("#sapling"),
 	REED("#reed"),
 	WHEAT("#wheat"),
 	CROP("#crop"),

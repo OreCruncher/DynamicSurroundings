@@ -205,4 +205,10 @@ public class BasicBlockMap implements IBlockMap {
 			}
 		}
 	}
+
+	@Override
+	public void clear() {
+		this.metaMap.clear();
+		this.substrateMap.clear();
+	}
 }

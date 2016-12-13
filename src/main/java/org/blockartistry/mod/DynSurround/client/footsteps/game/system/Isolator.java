@@ -27,6 +27,7 @@ package org.blockartistry.mod.DynSurround.client.footsteps.game.system;
 import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ILibrary;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
+import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.LegacyCapableBlockMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IBlockMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IStepPlayer;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IGenerator;
@@ -54,6 +55,7 @@ public class Isolator implements IIsolator, IVariatorSettable, IGeneratorSettabl
 	private IGenerator generator;
 
 	public Isolator() {
+		this.blockMap = new LegacyCapableBlockMap();
 	}
 
 	@Override

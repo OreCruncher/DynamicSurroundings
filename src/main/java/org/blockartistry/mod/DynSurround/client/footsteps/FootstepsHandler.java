@@ -22,33 +22,27 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces;
+package org.blockartistry.mod.DynSurround.client.footsteps;
 
-import java.util.List;
+import org.blockartistry.mod.DynSurround.client.IClientEffectHandler;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// Simple shim to forward to the Footsteps engine.  Needed to seperate
+// because of startup issues.
 @SideOnly(Side.CLIENT)
-public interface IBlockMap extends IRegistration {
-	
-	/**
-	 * This will return null if the block is not defined, and NOT_EMITTER if the block is a non-emitting block,
-	 * meaning block resolution must continue on its neighbours.
-	 */
-	public String getBlockMap(final IBlockState state);
-	
-	/**
-	 * This will return null if the substrate does not resolve in the selected carpet.
-	 */
-	public String getBlockMapSubstrate(final IBlockState state, final String substrate);
-	
-	public void collectData(final IBlockState state, final List<String> data);
-	
-	/**
-	 * This will dump the contents of the map and start from scratch
-	 */
-	public void clear();
-	
+public class FootstepsHandler implements IClientEffectHandler {
+
+	@Override
+	public void process(final World world, final EntityPlayer player) {
+		Footsteps.INSTANCE.process(world, player);
+	}
+
+	@Override
+	public boolean hasEvents() {
+		return false;
+	}
 }

@@ -53,7 +53,14 @@ public final class BiomeConfig {
 	@SerializedName("sounds")
 	public List<SoundConfig> sounds = new ArrayList<SoundConfig>();
 
-	public BiomeConfig setBiomeName(final String name) {
+	public BiomeConfig() {
+		
+	}
+	
+	public BiomeConfig(final String nameFilter) {
+		this.biomeName = nameFilter;
+	}
+	public BiomeConfig setBiomeNameFilter(final String name) {
 		this.biomeName = name;
 		return this;
 	}
@@ -109,5 +116,9 @@ public final class BiomeConfig {
 				this.sounds.add(sounds[i]);
 		}
 		return this;
+	}
+	
+	public void register() {
+		Biomes.register(this);
 	}
 }

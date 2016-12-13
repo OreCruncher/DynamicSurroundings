@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.client.IClientEffectHandler;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.Manifest;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.ForgeDictionary;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Isolator;
@@ -55,33 +54,31 @@ import org.blockartistry.mod.DynSurround.util.JsonUtils;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
-@SideOnly(Side.CLIENT)
-public class Footsteps implements IClientEffectHandler, IDependent {
+public class Footsteps implements IDependent {
 
 	public static Footsteps INSTANCE = null;
 
 	// System
 	private ResourcePacks dealer = new ResourcePacks();
-	private Isolator isolator;
+	private final Isolator isolator;
 
 	public Footsteps() {
-		INSTANCE = this;
+		this.isolator = new Isolator();
 		DataScripts.registerDependent(this);
+	}
+	
+	public static void initialize() {
+		INSTANCE = new Footsteps();
 	}
 
 	public void clear() {
-		this.isolator = new Isolator();
 
+		this.getBlockMap().clear();
 		final List<IResourcePack> repo = this.dealer.findResourcePacks();
 
 		reloadManifests(repo);
-		reloadBlockMap(repo);
+		//reloadBlockMap(repo);
 		reloadPrimitiveMap(repo);
 		reloadAcoustics(repo);
 		reloadVariator(repo);
@@ -143,6 +140,7 @@ public class Footsteps implements IClientEffectHandler, IDependent {
 		this.isolator.setVariator(var);
 	}
 
+	@SuppressWarnings("unused")
 	private void reloadBlockMap(final List<IResourcePack> repo) {
 		final IBlockMap blockMap = new LegacyCapableBlockMap();
 		this.isolator.setBlockMap(blockMap);
@@ -225,23 +223,11 @@ public class Footsteps implements IClientEffectHandler, IDependent {
 		this.isolator.setDefaultStepPlayer(acoustics);
 	}
 
-	@Override
 	public void process(World world, EntityPlayer player) {
 		if (this.isolator == null)
 			clear();
 		this.isolator.onFrame();
 		player.nextStepDistance = Integer.MAX_VALUE;
-	}
-
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void onWorldUnload(final WorldEvent.Unload event) {
-		if (event.getWorld().provider.getDimension() == 0)
-			this.isolator = null;
-	}
-
-	@Override
-	public boolean hasEvents() {
-		return false;
 	}
 
 	public IBlockMap getBlockMap() {

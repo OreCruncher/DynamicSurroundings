@@ -121,12 +121,14 @@ public final class BlockRegistry implements IDependent {
 
 	private static void processConfig() {
 
+		// TODO: Deprecate when the scala script system
+		// is validated.
 		// Load block config for Dynamic Surroundings
-		try {
-			process(BlockFile.load("blocks"));
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
+		//try {
+		//	process(BlockFile.load("blocks"));
+		//} catch (final Exception e) {
+		//	e.printStackTrace();
+		//}
 
 		// Check for each of the loaded mods to see if there is
 		// a config file embedded.

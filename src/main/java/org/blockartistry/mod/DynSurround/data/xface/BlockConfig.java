@@ -46,6 +46,14 @@ public class BlockConfig {
 	@SerializedName("effects")
 	public List<BlockEffectConfig> effects = new ArrayList<BlockEffectConfig>();
 
+	public BlockConfig() {
+		
+	}
+
+	public BlockConfig(final String... blocks) {
+		this.addBlocks(blocks);
+	}
+	
 	public BlockConfig addBlocks(final String... blocks) {
 		if (blocks != null) {
 			for (int i = 0; i < blocks.length; i++)
@@ -94,5 +102,9 @@ public class BlockConfig {
 				this.effects.add(effects[i]);
 		}
 		return this;
+	}
+	
+	public void register() {
+		Blocks.register(this);
 	}
 }
