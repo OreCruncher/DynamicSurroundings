@@ -11,6 +11,7 @@ import org.blockartistry.mod.DynSurround.data.xface.{ BiomeConfig, SoundConfig, 
 import org.blockartistry.mod.DynSurround.data.xface.{ BlockConfig, BlockEffectConfig, BlockEffectType, Blocks }
 
 // Imports to handle footsteps
+import org.blockartistry.mod.DynSurround.data.xface.{ BlockClass, Footsteps }
 
 // Imports to handle dimensions
 import org.blockartistry.mod.DynSurround.data.xface.{ DimensionConfig, Dimensions }
@@ -44,7 +45,9 @@ Blocks.register(block);
 // FOOTSTEP CONFIGURATION
 //
 /////////////////////////////
+Footsteps.registerForgeEntries(BlockClass.MARBLE, "blockQuartz", "marble", "stoneMarble", "blockMarble");
 
+Footsteps.registerFootsteps(BlockClass.NOT_EMITTER, "minecraft:barrier");
 
 /////////////////////////////
 //

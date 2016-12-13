@@ -27,8 +27,10 @@ package org.blockartistry.mod.DynSurround.client.footsteps.game.system;
 import java.io.File;
 import java.util.List;
 import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.mod.DynSurround.client.footsteps.Footsteps;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IBlockMap;
 import org.blockartistry.mod.DynSurround.compat.MCHelper;
+import org.blockartistry.mod.DynSurround.data.xface.BlockClass;
 import org.blockartistry.mod.DynSurround.util.JsonUtils;
 
 import com.google.common.collect.ImmutableList;
@@ -93,6 +95,19 @@ public final class ForgeDictionary {
 
 		} catch (final Throwable e) {
 			ModLog.error("Unable to process Forge dictionary alias JSON", e);
+		}
+	}
+	
+	public static void register(final BlockClass blockClass, final String dictionaryName) {
+		final List<ItemStack> stacks = OreDictionary.getOres(dictionaryName, false);
+		for (final ItemStack stack : stacks) {
+			final Block block = Block.getBlockFromItem(stack.getItem());
+			if (block != null) {
+				String blockName = MCHelper.nameOf(block);
+				if (stack.getHasSubtypes() && stack.getItemDamage() != OreDictionary.WILDCARD_VALUE)
+					blockName += "^" + stack.getItemDamage();
+				Footsteps.INSTANCE.getBlockMap().register(blockName, blockClass.getName());
+			}
 		}
 	}
 

@@ -119,7 +119,7 @@ public class Footsteps implements IResourceManagerReloadListener, IClientEffectH
 
 	private void reloadBlockMap(final List<IResourcePack> repo) {
 		final IBlockMap blockMap = new LegacyCapableBlockMap();
-
+		this.isolator.setBlockMap(blockMap);
 		ForgeDictionary.initialize(blockMap);
 
 		for (final IResourcePack pack : repo) {
@@ -140,7 +140,6 @@ public class Footsteps implements IResourceManagerReloadListener, IClientEffectH
 			}
 		}
 
-		this.isolator.setBlockMap(blockMap);
 	}
 
 	private void reloadPrimitiveMap(final List<IResourcePack> repo) {
