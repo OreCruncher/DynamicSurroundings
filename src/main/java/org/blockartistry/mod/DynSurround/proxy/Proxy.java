@@ -55,6 +55,10 @@ public class Proxy {
 	public void reloadResources() {
 		DataScripts.initialize(null);
 	}
+	
+	public boolean isRunningAsServer() {
+		return true;
+	}
 
 	public void preInit(final FMLPreInitializationEvent event) {
 		

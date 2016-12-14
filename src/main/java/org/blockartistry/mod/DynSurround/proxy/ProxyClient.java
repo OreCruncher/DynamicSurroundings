@@ -67,6 +67,12 @@ public class ProxyClient extends Proxy {
 	}
 
 	@Override
+	public boolean isRunningAsServer() {
+		return false;
+	}
+
+
+	@Override
 	public void preInit(final FMLPreInitializationEvent event) {
 		super.preInit(event);
 

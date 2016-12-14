@@ -104,7 +104,7 @@ public class BlockConfig {
 		return this;
 	}
 	
-	public void register() {
+	public void register() throws InvalidArgument {
 		Blocks.register(this);
 	}
 }

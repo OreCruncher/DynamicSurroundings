@@ -1,4 +1,5 @@
-/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/*
+ * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -23,29 +24,10 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
-import java.util.List;
-
-import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
-
-public final class Dimensions {
+@SuppressWarnings("serial")
+public class InvalidArgument extends Exception {
 	
-	protected Dimensions() {
-		
-	}
-
-	public static void register(final DimensionConfig... config) throws InvalidArgument {
-		if(config == null || config.length == 0)
-			throw new InvalidArgument("config");
-		
-		for(final DimensionConfig c: config)
-			DimensionRegistry.register(c);
-	}
-	
-	public static void register(final List<DimensionConfig> config) throws InvalidArgument {
-		if(config == null || config.size() == 0)
-			throw new InvalidArgument("config");
-		
-		for(final DimensionConfig c: config)
-			DimensionRegistry.register(c);
+	public InvalidArgument(final String arg) {
+		super(String.format("The parameter '%s' is invalid.", arg));
 	}
 }

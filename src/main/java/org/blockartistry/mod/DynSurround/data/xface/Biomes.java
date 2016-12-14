@@ -25,6 +25,7 @@ package org.blockartistry.mod.DynSurround.data.xface;
 
 import java.util.List;
 
+import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 
 public final class Biomes {
@@ -33,17 +34,23 @@ public final class Biomes {
 		
 	}
 	
-	public static void register(final BiomeConfig... config) {
-		if(config == null || config.length == 0)
+	public static void register(final BiomeConfig... config) throws InvalidArgument {
+		if(Module.proxy().isRunningAsServer())
 			return;
+		
+		if(config == null || config.length == 0)
+			throw new InvalidArgument("config");
 		
 		for(final BiomeConfig c: config)
 			BiomeRegistry.register(c);
 	}
 	
-	public static void register(final List<BiomeConfig> config) {
-		if(config == null || config.size() == 0)
+	public static void register(final List<BiomeConfig> config) throws InvalidArgument {
+		if(Module.proxy().isRunningAsServer())
 			return;
+
+		if(config == null || config.size() == 0)
+			throw new InvalidArgument("config");
 		
 		for(final BiomeConfig c: config)
 			BiomeRegistry.register(c);

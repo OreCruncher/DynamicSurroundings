@@ -25,6 +25,7 @@ package org.blockartistry.mod.DynSurround.data.xface;
 
 import java.util.List;
 
+import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 
 public final class Blocks {
@@ -33,17 +34,23 @@ public final class Blocks {
 		
 	}
 	
-	public static void register(final BlockConfig... config) {
-		if(config == null || config.length == 0)
+	public static void register(final BlockConfig... config) throws InvalidArgument {
+		if(Module.proxy().isRunningAsServer())
 			return;
+
+		if(config == null || config.length == 0)
+			throw new InvalidArgument("config");
 		
 		for(final BlockConfig c: config)
 			BlockRegistry.register(c);
 	}
 	
-	public static void register(final List<BlockConfig> config) {
-		if(config == null || config.size() == 0)
+	public static void register(final List<BlockConfig> config) throws InvalidArgument {
+		if(Module.proxy().isRunningAsServer())
 			return;
+
+		if(config == null || config.size() == 0)
+			throw new InvalidArgument("config");
 		
 		for(final BlockConfig c: config)
 			BlockRegistry.register(c);
