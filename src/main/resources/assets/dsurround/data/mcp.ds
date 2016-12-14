@@ -1,5 +1,7 @@
 // Configures Vanilla Minecraft sounds and effects.  This script should run first
-// before any other scripts run.  Don't change the name from mcp!
+// before any other scripts run.
+//
+// Don't change the name from mcp!
 
 // For logging and misc
 import org.blockartistry.mod.DynSurround.data.xface.Log

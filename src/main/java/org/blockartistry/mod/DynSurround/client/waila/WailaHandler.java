@@ -29,6 +29,7 @@
 
 package org.blockartistry.mod.DynSurround.client.waila;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.blockartistry.mod.DynSurround.ModLog;
@@ -51,6 +52,7 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.oredict.OreDictionary;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
@@ -58,6 +60,13 @@ import mcp.mobius.waila.api.IWailaRegistrar;
 
 @Optional.Interface(iface = "mcp.mobius.waila.api.IWailaDataProvider", modid = "Waila")
 public final class WailaHandler implements IWailaDataProvider {
+
+	private List<String> gatherOreNames(final ItemStack stack) {
+		final List<String> result = new ArrayList<String>();
+		for (int i : OreDictionary.getOreIDs(stack))
+			result.add(OreDictionary.getOreName(i));
+		return result;
+	}
 
 	private List<String> gatherText(final ItemStack stack, final List<String> text, final IWailaDataAccessor accessor,
 			final IWailaConfigHandler config) {
@@ -85,6 +94,10 @@ public final class WailaHandler implements IWailaDataProvider {
 				bm.collectData(accessor.getBlockState(), text);
 			}
 		}
+		
+		for(final String ore: gatherOreNames(stack))
+			text.add(TextFormatting.GREEN + ore);
+		
 		return text;
 	}
 

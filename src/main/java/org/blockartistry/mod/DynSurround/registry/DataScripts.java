@@ -30,6 +30,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.scripts.ScriptingEngine;
@@ -39,21 +40,21 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
 public final class DataScripts {
-	
+
 	public static interface IDependent {
 		void clear();
 	}
-	
+
 	private static List<IDependent> dependents = new ArrayList<IDependent>();
+
 	public static void registerDependent(final IDependent dep) {
 		dependents.add(dep);
 	}
-	
+
 	private static void clearDependents() {
-		for(final IDependent dep: dependents)
+		for (final IDependent dep : dependents)
 			dep.clear();
 	}
-	
 
 	// Module.dataDirectory()
 	private File dataDirectory;
@@ -75,10 +76,10 @@ public final class DataScripts {
 		for (final ModContainer mod : Loader.instance().getActiveModList()) {
 			scripts.runFromArchive(mod.getModId());
 		}
-		
+
 		// TODO: Handle client vs. server load RE: resource pack support
-		if(resources != null) {
-			
+		if (resources != null) {
+
 		}
 	}
 
@@ -92,7 +93,10 @@ public final class DataScripts {
 		InputStream stream = null;
 
 		try {
-			stream = DataScripts.class.getResourceAsStream(assetDirectory + fileName + ".scala");
+			String name = assetDirectory + fileName;
+			if (!name.endsWith(".ds"))
+				name = name + ".ds";
+			stream = DataScripts.class.getResourceAsStream(name);
 			if (stream != null) {
 				ModLog.info("Executing script for mod [%s]", dataFile);
 				runFromStream(stream);
@@ -111,7 +115,7 @@ public final class DataScripts {
 
 	@SuppressWarnings("unused")
 	private void runFromDirectory(final String dataFile) {
-		final File file = new File(dataDirectory, dataFile);
+		final File file = new File(dataDirectory, StringUtils.appendIfMissing(dataFile, ".ds"));
 		InputStream stream = null;
 
 		try {
