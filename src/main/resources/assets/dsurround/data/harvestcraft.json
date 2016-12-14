@@ -1,0 +1,49 @@
+{
+	"blocks":[
+		{
+			"blocks":[
+				"harvestcraft:beehive",
+				"harvestcraft:apiary"
+			],
+			"chance":5,
+			"sounds":[
+				{
+					"sound":"dsurround:bees",
+					"conditions":"(?i)(?!.*#raining#.*)(.*#day#.*)",
+					"volume":0.2,
+					"variable":true
+				}
+				
+			]
+			
+		}
+		
+	],
+	"footsteps":{
+		"harvestcraft:honeycomb":"organic_dry",
+		"harvestcraft:pressedwax":"organic_dry",
+		"harvestcraft:honey":"organic_dry",
+		"harvestcraft:waxcomb":"organic_dry",
+		"harvestcraft:presser":"stonemachine",
+		"harvestcraft:watertrap":"squeakywood",
+		"harvestcraft:groundtrap":"squeakywood",
+		"harvestcraft:aridgarden+messy":"MESSY_GROUND",
+		"minecraft:aridgarden":"NOT_EMITTER",
+		"minecraft:aridgarden+foliage":"straw",
+		"harvestcraft:frostgarden+messy":"MESSY_GROUND",
+		"minecraft:frostgarden":"NOT_EMITTER",
+		"minecraft:frostgarden+foliage":"straw",
+		"harvestcraft:shadedgarden+messy":"MESSY_GROUND",
+		"minecraft:shadedgarden":"NOT_EMITTER",
+		"minecraft:shadedgarden+foliage":"straw",
+		"harvestcraft:soggygarden+messy":"MESSY_GROUND",
+		"minecraft:soggygarden":"NOT_EMITTER",
+		"minecraft:soggygarden+foliage":"straw",
+		"harvestcraft:tropicalgarden+messy":"MESSY_GROUND",
+		"minecraft:tropicalgarden":"NOT_EMITTER",
+		"minecraft:tropicalgarden+foliage":"straw",
+		"harvestcraft:windygarden+messy":"MESSY_GROUND",
+		"minecraft:windygarden":"NOT_EMITTER",
+		"minecraft:windygarden+foliage":"straw"
+	}
+}
