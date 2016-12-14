@@ -23,6 +23,7 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
+import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.ForgeDictionary;
 
@@ -32,29 +33,37 @@ public final class Footsteps {
 
 	}
 
-	public static void registerForgeEntries(final BlockClass blockClass, final String... dictionaryEntries) throws InvalidArgument {
+	public static void registerForgeEntries(final BlockClass blockClass, final String... dictionaryEntries) {
 		if(Module.proxy().isRunningAsServer())
 			return;
 
-		if(blockClass == null)
-			throw new InvalidArgument("blockClass");
+		if(blockClass == null) {
+			ModLog.warn("The parameter 'blockClass' is invalid.");
+			return;
+		}
 		
-		if (dictionaryEntries == null || dictionaryEntries.length == 0)
-			throw new InvalidArgument("dictionaryEntries");
+		if (dictionaryEntries == null || dictionaryEntries.length == 0) {
+			ModLog.warn("The parameter 'dictionaryEntries' is invalid.");
+			return;
+		}
 
 		for (final String s : dictionaryEntries)
 			ForgeDictionary.register(blockClass, s);
 	}
 
-	public static void registerFootsteps(final BlockClass blockClass, final String... blocks) throws InvalidArgument {
+	public static void registerFootsteps(final BlockClass blockClass, final String... blocks) {
 		if(Module.proxy().isRunningAsServer())
 			return;
 
-		if(blockClass == null)
-			throw new InvalidArgument("blockClass");
-
-		if (blocks == null || blocks.length == 0)
-			throw new InvalidArgument("blocks");
+		if(blockClass == null) {
+			ModLog.warn("The parameter 'blockClass' is invalid.");
+			return;
+		}
+		
+		if (blocks == null || blocks.length == 0){
+			ModLog.warn("The parameter 'blocks' is invalid.");
+			return;
+		}
 
 		for (final String s : blocks)
 			org.blockartistry.mod.DynSurround.client.footsteps.Footsteps.INSTANCE.getBlockMap().register(s,

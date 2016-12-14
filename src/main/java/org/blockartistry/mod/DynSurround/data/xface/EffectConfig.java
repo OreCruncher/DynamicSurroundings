@@ -24,10 +24,30 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
-@SuppressWarnings("serial")
-public class InvalidArgument extends Exception {
+import com.google.gson.annotations.SerializedName;
+
+public final class EffectConfig {
 	
-	public InvalidArgument(final String arg) {
-		super(String.format("The parameter '%s' is invalid.", arg));
+	@SerializedName("effect")
+	public String effect = null;
+	@SerializedName("chance")
+	public Integer chance = null;
+	
+	public EffectConfig() {
+		
+	}
+	
+	public EffectConfig(final EffectType type) {
+		this.setEffectType(type);
+	}
+	
+	public EffectConfig setEffectType(final EffectType type) {
+		this.effect = type.getName();
+		return this;
+	}
+	
+	public EffectConfig setEffectChance(final int chance) {
+		this.chance = chance;
+		return this;
 	}
 }

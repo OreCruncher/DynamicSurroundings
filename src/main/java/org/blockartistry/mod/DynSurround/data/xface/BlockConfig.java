@@ -44,21 +44,21 @@ public class BlockConfig {
 	@SerializedName("sounds")
 	public List<SoundConfig> sounds = new ArrayList<SoundConfig>();
 	@SerializedName("effects")
-	public List<BlockEffectConfig> effects = new ArrayList<BlockEffectConfig>();
+	public List<EffectConfig> effects = new ArrayList<EffectConfig>();
 
 	public BlockConfig() {
-		
+
 	}
 
 	public BlockConfig(final String... blocks) {
-		this.addBlocks(blocks);
+		if (blocks != null)
+			for (final String b : blocks)
+				this.addBlock(b);
 	}
-	
-	public BlockConfig addBlocks(final String... blocks) {
-		if (blocks != null) {
-			for (int i = 0; i < blocks.length; i++)
-				this.blocks.add(blocks[i]);
-		}
+
+	public BlockConfig addBlock(final String block) {
+		if (blocks != null)
+			this.blocks.add(block);
 		return this;
 	}
 
@@ -87,24 +87,19 @@ public class BlockConfig {
 		return this;
 	}
 
-	public BlockConfig addSounds(final SoundConfig... sounds) {
-		if (sounds != null) {
-			for (int i = 0; i < sounds.length; i++)
-				this.sounds.add(sounds[i]);
-		}
-		return this;
-
-	}
-
-	public BlockConfig addEffects(final BlockEffectConfig... effects) {
-		if (effects != null) {
-			for (int i = 0; i < effects.length; i++)
-				this.effects.add(effects[i]);
-		}
+	public BlockConfig addSound(final SoundConfig sound) {
+		if (sounds != null)
+			this.sounds.add(sound);
 		return this;
 	}
-	
-	public void register() throws InvalidArgument {
+
+	public BlockConfig addEffect(final EffectConfig effect) {
+		if (effects != null)
+			this.effects.add(effect);
+		return this;
+	}
+
+	public void register() {
 		Blocks.register(this);
 	}
 }

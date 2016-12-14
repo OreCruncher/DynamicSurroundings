@@ -110,15 +110,13 @@ public final class BiomeConfig {
 		return this;
 	}
 
-	public BiomeConfig addSounds(final SoundConfig... sounds) {
-		if (sounds != null) {
-			for (int i = 0; i < sounds.length; i++)
-				this.sounds.add(sounds[i]);
-		}
+	public BiomeConfig addSound(final SoundConfig sound) {
+		if (sounds != null)
+			this.sounds.add(sound);
 		return this;
 	}
 	
-	public void register() throws InvalidArgument {
+	public void register() {
 		Biomes.register(this);
 	}
 }

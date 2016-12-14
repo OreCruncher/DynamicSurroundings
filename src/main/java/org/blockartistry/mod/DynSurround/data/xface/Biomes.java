@@ -23,36 +23,25 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
-import java.util.List;
-
+import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 
 public final class Biomes {
 
 	protected Biomes() {
-		
+
 	}
-	
-	public static void register(final BiomeConfig... config) throws InvalidArgument {
-		if(Module.proxy().isRunningAsServer())
-			return;
-		
-		if(config == null || config.length == 0)
-			throw new InvalidArgument("config");
-		
-		for(final BiomeConfig c: config)
-			BiomeRegistry.register(c);
-	}
-	
-	public static void register(final List<BiomeConfig> config) throws InvalidArgument {
-		if(Module.proxy().isRunningAsServer())
+
+	public static void register(final BiomeConfig biome) {
+		if (Module.proxy().isRunningAsServer())
 			return;
 
-		if(config == null || config.size() == 0)
-			throw new InvalidArgument("config");
-		
-		for(final BiomeConfig c: config)
-			BiomeRegistry.register(c);
+		if (biome == null) {
+			ModLog.warn("The parameter 'biome' cannot be null.");
+			return;
+		}
+
+		BiomeRegistry.register(biome);
 	}
 }

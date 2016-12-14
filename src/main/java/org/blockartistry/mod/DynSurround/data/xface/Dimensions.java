@@ -23,8 +23,7 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
-import java.util.List;
-
+import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 
 public final class Dimensions {
@@ -33,19 +32,12 @@ public final class Dimensions {
 		
 	}
 
-	public static void register(final DimensionConfig... config) throws InvalidArgument {
-		if(config == null || config.length == 0)
-			throw new InvalidArgument("config");
+	public static void register(final DimensionConfig dimension) {
+		if(dimension == null) {
+			ModLog.warn("The parameter 'dimension' cannot be null.");
+			return;
+		}
 		
-		for(final DimensionConfig c: config)
-			DimensionRegistry.register(c);
-	}
-	
-	public static void register(final List<DimensionConfig> config) throws InvalidArgument {
-		if(config == null || config.size() == 0)
-			throw new InvalidArgument("config");
-		
-		for(final DimensionConfig c: config)
-			DimensionRegistry.register(c);
+		DimensionRegistry.register(dimension);
 	}
 }

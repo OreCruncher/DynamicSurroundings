@@ -83,7 +83,7 @@ public class DimensionConfig {
 		return this;
 	}
 	
-	public void register() throws InvalidArgument {
+	public void register() {
 		Dimensions.register(this);
 	}
 }

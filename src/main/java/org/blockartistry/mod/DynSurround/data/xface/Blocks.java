@@ -23,8 +23,7 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
-import java.util.List;
-
+import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 
@@ -34,25 +33,15 @@ public final class Blocks {
 		
 	}
 	
-	public static void register(final BlockConfig... config) throws InvalidArgument {
+	public static void register(final BlockConfig block) {
 		if(Module.proxy().isRunningAsServer())
 			return;
 
-		if(config == null || config.length == 0)
-			throw new InvalidArgument("config");
-		
-		for(final BlockConfig c: config)
-			BlockRegistry.register(c);
-	}
-	
-	public static void register(final List<BlockConfig> config) throws InvalidArgument {
-		if(Module.proxy().isRunningAsServer())
+		if(block == null) {
+			ModLog.warn("The parameter 'block' cannot be null.");
 			return;
-
-		if(config == null || config.size() == 0)
-			throw new InvalidArgument("config");
+		}
 		
-		for(final BlockConfig c: config)
-			BlockRegistry.register(c);
+		BlockRegistry.register(block);
 	}
 }

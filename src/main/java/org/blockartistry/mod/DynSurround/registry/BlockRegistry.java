@@ -40,7 +40,7 @@ import org.blockartistry.mod.DynSurround.client.fx.FireFlyEffect;
 import org.blockartistry.mod.DynSurround.client.fx.JetEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.data.xface.BlockConfig;
-import org.blockartistry.mod.DynSurround.data.xface.BlockEffectConfig;
+import org.blockartistry.mod.DynSurround.data.xface.EffectConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundType;
 import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
@@ -205,7 +205,7 @@ public final class BlockRegistry implements IDependent {
 				}
 			}
 
-			for (final BlockEffectConfig e : entry.effects) {
+			for (final EffectConfig e : entry.effects) {
 				if (StringUtils.isEmpty(e.effect))
 					continue;
 				BlockEffect blockEffect = null;

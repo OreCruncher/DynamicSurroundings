@@ -24,12 +24,11 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
-public enum BlockEffectType {
+public enum EffectType {
 	STEAM("steam"), FIRE("fire"), BUBBLE("bubble"), DUST("dust"), FOUNTAIN("fountain"), FIREFLY("firefly");
 
 	protected final String name;
-
-	BlockEffectType(final String name) {
+	private EffectType(final String name) {
 		this.name = name;
 	}
 	

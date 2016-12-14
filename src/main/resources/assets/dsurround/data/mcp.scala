@@ -1,7 +1,7 @@
 // Configures Vanilla Minecraft sounds and effects.  This script should run first
 // before any other scripts run.  Don't change the name from mcp!
 
-// For logging
+// For logging and misc
 import org.blockartistry.mod.DynSurround.data.xface.Log
 
 // Imports for sounds
@@ -11,7 +11,7 @@ import org.blockartistry.mod.DynSurround.data.xface.{ SoundConfig, SoundType }
 import org.blockartistry.mod.DynSurround.data.xface.{ BiomeConfig, Biomes }
 
 // Imports to handle blocks
-import org.blockartistry.mod.DynSurround.data.xface.{ BlockConfig, BlockEffectConfig, BlockEffectType, Blocks }
+import org.blockartistry.mod.DynSurround.data.xface.{ BlockConfig, EffectConfig, EffectType, Blocks }
 
 // Imports to handle footsteps
 import org.blockartistry.mod.DynSurround.data.xface.{ BlockClass, Footsteps }
@@ -35,57 +35,57 @@ var soundInsectBuzz = new SoundConfig("dsurround:insectbuzz").setConditions("(?i
 var soundWolf = new SoundConfig("dsurround:wolf").setConditions("(?i)(?!.*#raining#.*).*#night#.*").setSoundType(SoundType.SPOT).setVolume(0.3F);
 
 var biome = new BiomeConfig("(?i)(?!.*forest.*|.*taiga.*|.*jungle.*|.*\\+.*|.*savanna.*)(.*hills.*|.*plateau.*|.*wasteland.*|.*canyon.*|tundra|.*highland.*|.*volcanic.*)");
-biome.addSounds(new SoundConfig("dsurround:wind").setVolume(0.5F));
+biome.addSound(new SoundConfig("dsurround:wind").setVolume(0.5F));
 Biomes.register(biome);
 
 biome = new BiomeConfig("(?i)(.*mountain.*|.*hills\\+.*|crag|alps)");
-biome.addSounds(new SoundConfig("dsurround:wind"));
+biome.addSound(new SoundConfig("dsurround:wind"));
 biome.register();
 
 biome = new BiomeConfig("(?i)(.*jungle.*|.*tropical.*)");
 biome.setSpotSoundChance(600);
 biome.setResetSound(true);
-biome.addSounds(new SoundConfig("dsurround:jungle").setConditions("(?i)(?!.*#raining#.*)(.*)").setVolume(0.3F).setPitch(0.8F));
-biome.addSounds(soundInsectBuzz);
-biome.addSounds(new SoundConfig("dsurround:primates").setConditions("(?i)(?!.*#raining#.*)(.*#day#.*)").setSoundType(SoundType.SPOT).setVolume(0.3F));
+biome.addSound(new SoundConfig("dsurround:jungle").setConditions("(?i)(?!.*#raining#.*)(.*)").setVolume(0.3F).setPitch(0.8F));
+biome.addSound(soundInsectBuzz);
+biome.addSound(new SoundConfig("dsurround:primates").setConditions("(?i)(?!.*#raining#.*)(.*#day#.*)").setSoundType(SoundType.SPOT).setVolume(0.3F));
 biome.register();
 
 biome = new BiomeConfig("(?i)(?!.*ice.*)(.*plains.*|.*meadow.*|grassland|brushland|.*shrubland.*|prairie|.*field.*|.*chaparral.*|overgrown cliffs|steppe)");
-biome.addSounds(soundCrickets, soundInsectBuzz);
+biome.addSound(soundCrickets).addSound(soundInsectBuzz);
 biome.register();
 
 biome = new BiomeConfig("(?i)(?!.*ice.*)(.*plains.*|grassland|prairie)");
-biome.addSounds(new SoundConfig("dsurround:bison").setConditions("(?i)(?!.*#raining#.*)(.*#day#.*)").setSoundType(SoundType.SPOT).setVolume(0.5F));
+biome.addSound(new SoundConfig("dsurround:bison").setConditions("(?i)(?!.*#raining#.*)(.*#day#.*)").setSoundType(SoundType.SPOT).setVolume(0.5F));
 biome.register();
 
 biome = new BiomeConfig("(?i)(?!.*dead.*|.*flower.*|.*fungi.*|.*frost.*|.*snow.*|.*kelp.*)(.*forest.*|.*cherry.*|.*orchard.*|.*wood.*|.*wetland.*|.*grove.*|.*springs.*)");
-biome.addSounds(soundForest, soundCrickets, soundOwl);
+biome.addSound(soundForest).addSound(soundCrickets).addSound(soundOwl);
 biome.register();
 
 biome = new BiomeConfig("(?i)(heathland|thicket|land of lakes|mangrove|origin island)");
-biome.addSounds(soundForest, soundCrickets);
+biome.addSound(soundForest).addSound(soundCrickets);
 biome.register();
 
 biome = new BiomeConfig("(?i)(?!.*cold.*|.*snow.*)(.*taiga.*)");
-biome.addSounds(new SoundConfig("dsurround:taiga").setConditions("(?i)(?!.*#raining#.*).*#day#.*").setVolume(0.7F));
+biome.addSound(new SoundConfig("dsurround:taiga").setConditions("(?i)(?!.*#raining#.*).*#day#.*").setVolume(0.7F));
 biome.register();
 
 biome = new BiomeConfig("(?i)(.*taiga.*|.*snow.*forest.*)");
-biome.addSounds(soundOwl, soundWolf);
+biome.addSound(soundOwl).addSound(soundWolf);
 biome.register();
 
 biome = new BiomeConfig("(?i)(?!.*frozen.*|.*cold.*)(.*beach.*|.*ocean.*|.*kelp.*|.*reef.*)");
-biome.addSounds(new SoundConfig("dsurround:beach"));
-biome.addSounds(new SoundConfig("dsurround:seagulls").setConditions("(?i).*#day#.*").setSoundType(SoundType.SPOT).setVolume(0.3F));
+biome.addSound(new SoundConfig("dsurround:beach"));
+biome.addSound(new SoundConfig("dsurround:seagulls").setConditions("(?i).*#day#.*").setSoundType(SoundType.SPOT).setVolume(0.3F));
 biome.register();
 
 biome = new BiomeConfig("(?i)(?!.*frozen.*|.*dry.*)(.*river.*)");
-biome.addSounds(new SoundConfig("dsurround:river"), soundInsectBuzz);
+biome.addSound(new SoundConfig("dsurround:river")).addSound(soundInsectBuzz);
 biome.register();
 
 biome = new BiomeConfig("Deep Ocean");
 biome.setResetSound(true);
-biome.addSounds(new SoundConfig("dsurround:beach").setPitch(0.4F));
+biome.addSound(new SoundConfig("dsurround:beach").setPitch(0.4F));
 biome.register();
 
 biome = new BiomeConfig("(?i)(.*swamp.*)");
@@ -94,17 +94,17 @@ biome.register();
 
 biome = new BiomeConfig("(?i)(?!.*dead.*)(.*swamp.*)");
 biome.setSpotSoundChance(600);
-biome.addSounds(soundCrickets, soundInsectBuzz);
+biome.addSound(soundCrickets).addSound(soundInsectBuzz);
 biome.register();
 
 biome = new BiomeConfig("(?i)(.*fen.*|.*bog.*|.*marsh.*|.*moor.*|.*bayou.*|quagmire|silkglades)");
 biome.setSpotSoundChance(600);
-biome.addSounds(soundCrickets, soundInsectBuzz);
+biome.addSound(soundCrickets).addSound(soundInsectBuzz);
 biome.setHasFog(true).setFogColor(128,128,128).setFogDensity(0.02F);
 biome.register();
 
 biome = new BiomeConfig("(?i)(?!.*dead.*)(.*swamp.*|.*marsh.*|.*bayou.*)");
-biome.addSounds(new SoundConfig("dsurround:crocodile").setSoundType(SoundType.SPOT).setVolume(0.7F));
+biome.addSound(new SoundConfig("dsurround:crocodile").setSoundType(SoundType.SPOT).setVolume(0.7F));
 biome.register();
 
 biome = new BiomeConfig("(?i)(.*desert.*|.*sand.*|.*mesa.*|.*wasteland.*|.*sahara.*|outback|oasis)");
@@ -112,17 +112,17 @@ biome.setHasDust(true).setDustColor(204,185,102);
 biome.register();
 
 biome = new BiomeConfig("(?i)(?!.*cold.*|.*frozen.*)(.*desert.*|.*sand.*|.*mesa.*)");
-biome.addSounds(new SoundConfig("dsurround:rattlesnake").setConditions("(?i)(?!.*#raining#.*).*#day#.*").setSoundType(SoundType.SPOT).setVolume(1.0F));
+biome.addSound(new SoundConfig("dsurround:rattlesnake").setConditions("(?i)(?!.*#raining#.*).*#day#.*").setSoundType(SoundType.SPOT).setVolume(1.0F));
 biome.register();
 
 biome = new BiomeConfig("(?i)(.*savanna.*)");
-biome.addSounds(new SoundConfig("dsurround:elephant").setConditions("(?i).*#day#.*").setSoundType(SoundType.SPOT).setVolume(0.7F));
-biome.addSounds(new SoundConfig("dsurround:insectbuzz").setConditions("(?i)(.*)").setSoundType(SoundType.SPOT).setVolume(0.5F).setWeight(20).setIsVariable(true));
+biome.addSound(new SoundConfig("dsurround:elephant").setConditions("(?i).*#day#.*").setSoundType(SoundType.SPOT).setVolume(0.7F));
+biome.addSound(new SoundConfig("dsurround:insectbuzz").setConditions("(?i)(.*)").setSoundType(SoundType.SPOT).setVolume(0.5F).setWeight(20).setIsVariable(true));
 biome.register();
 
 biome = new BiomeConfig("(?i)(the end|sky)");
 biome.setHasAurora(false);
-biome.addSounds(new SoundConfig("dsurround:theend").setVolume(0.2F));
+biome.addSound(new SoundConfig("dsurround:theend").setVolume(0.2F));
 biome.register();
 
 biome = new BiomeConfig("(?i)(.*taiga.*|.*frozen.*|.*ice.*|.*tundra.*|.*polar.*|.*snow.*|.*glacier.*|.*arctic.*)");
@@ -134,27 +134,27 @@ biome.setHasDust(true).setDustColor(255,0,0);
 biome.register();
 
 biome = new BiomeConfig("Underground");
-biome.addSounds(new SoundConfig("dsurround:underground").setVolume(0.2F));
-biome.addSounds(new SoundConfig("dsurround:rockfall").setSoundType(SoundType.SPOT).setVolume(0.3F).setWeight(30));
-biome.addSounds(new SoundConfig("dsurround:monstergrowl").setConditions("(?i).*#night#.*").setSoundType(SoundType.SPOT).setVolume(0.3F).setWeight(10));
+biome.addSound(new SoundConfig("dsurround:underground").setVolume(0.2F));
+biome.addSound(new SoundConfig("dsurround:rockfall").setSoundType(SoundType.SPOT).setVolume(0.3F).setWeight(30));
+biome.addSound(new SoundConfig("dsurround:monstergrowl").setConditions("(?i).*#night#.*").setSoundType(SoundType.SPOT).setVolume(0.3F).setWeight(10));
 biome.register();
 
 biome = new BiomeConfig("UnderOCN");
-biome.addSounds(new SoundConfig("dsurround:underocean").setVolume(0.1F));
+biome.addSound(new SoundConfig("dsurround:underocean").setVolume(0.1F));
 biome.register();
 
 biome = new BiomeConfig("UnderDOCN");
-biome.addSounds(new SoundConfig("dsurround:underdeepocean").setVolume(0.1F));
-biome.addSounds(new SoundConfig("dsurround:whale").setSoundType(SoundType.SPOT).setVolume(0.3F));
+biome.addSound(new SoundConfig("dsurround:underdeepocean").setVolume(0.1F));
+biome.addSound(new SoundConfig("dsurround:whale").setSoundType(SoundType.SPOT).setVolume(0.3F));
 biome.register();
 
 biome = new BiomeConfig("UnderRVR");
-biome.addSounds(new SoundConfig("dsurround:underriver").setVolume(0.1F).setPitch(1.5F));
+biome.addSound(new SoundConfig("dsurround:underriver").setVolume(0.1F).setPitch(1.5F));
 biome.register();
 
 biome = new BiomeConfig("Player");
-biome.addSounds(new SoundConfig("dsurround:heartbeat").setConditions("(?i).*#hurt#.*"));
-biome.addSounds(new SoundConfig("dsurround:tummy").setConditions("(?i).*#hungry#.*").setSoundType(SoundType.PERIODIC).setRepeatDelay(300));
+biome.addSound(new SoundConfig("dsurround:heartbeat").setConditions("(?i).*#hurt#.*"));
+biome.addSound(new SoundConfig("dsurround:tummy").setConditions("(?i).*#hungry#.*").setSoundType(SoundType.PERIODIC).setRepeatDelay(300));
 biome.register();
 
 /////////////////////////////
@@ -163,68 +163,68 @@ biome.register();
 //
 /////////////////////////////
 var block = new BlockConfig("minecraft:stone:0","minecraft:stone:1","minecraft:stone:3","minecraft:stone:5","minecraft:dirt:*","minecraft:gravel","minecraft:sand:*");
-block.addEffects(new BlockEffectConfig(BlockEffectType.DUST).setEffectChance(500));
+block.addEffect(new EffectConfig(EffectType.DUST).setEffectChance(500));
 block.register();
 
 block = new BlockConfig("minecraft:lava");
-block.addEffects(new BlockEffectConfig(BlockEffectType.FIRE).setEffectChance(1800));
+block.addEffect(new EffectConfig(EffectType.FIRE).setEffectChance(1800));
 block.register();
 
 block = new BlockConfig("minecraft:water");
-block.addEffects(new BlockEffectConfig(BlockEffectType.STEAM).setEffectChance(10));
-block.addEffects(new BlockEffectConfig(BlockEffectType.BUBBLE).setEffectChance(1800));
+block.addEffect(new EffectConfig(EffectType.STEAM).setEffectChance(10));
+block.addEffect(new EffectConfig(EffectType.BUBBLE).setEffectChance(1800));
 block.register();
 
 block = new BlockConfig("minecraft:ice","minecraft:packed_ice");
 block.setSoundChance(10000);
-block.addSounds(new SoundConfig("dsurround:ice").setVolume(0.5F).setPitch(1.0F).setIsVariable(false));
+block.addSound(new SoundConfig("dsurround:ice").setVolume(0.5F).setPitch(1.0F).setIsVariable(false));
 block.register();
 
 block = new BlockConfig("minecraft:waterlily");
 block.setSoundChance(25);
-block.addSounds(new SoundConfig("dsurround:frog").setConditions("(?i)(?!.*#inside#.*)(.*)").setVolume(0.4F).setPitch(1.0F).setIsVariable(true));
+block.addSound(new SoundConfig("dsurround:frog").setConditions("(?i)(?!.*#inside#.*)(.*)").setVolume(0.4F).setPitch(1.0F).setIsVariable(true));
 block.register();
 
 block = new BlockConfig("minecraft:soul_sand");
 block.setSoundChance(8000);
-block.addSounds(new SoundConfig("dsurround:soulsand").setVolume(0.2F).setPitch(1.0F).setIsVariable(true));
+block.addSound(new SoundConfig("dsurround:soulsand").setVolume(0.2F).setPitch(1.0F).setIsVariable(true));
 block.register();
 
 block = new BlockConfig("minecraft:planks","minecraft:oak_stairs","minecraft:spruce_stairs","minecraft:jungle_stairs","minecraft:birch_stairs","minecraft:acacia_stairs","minecraft:dark_oak_stairs");
 block.setStepSoundChance(150);
-block.addSounds(new SoundConfig("dsurround:floorsqueak").setSoundType(SoundType.STEP).setVolume(0.2F).setIsVariable(true));
+block.addSound(new SoundConfig("dsurround:floorsqueak").setSoundType(SoundType.STEP).setVolume(0.2F).setIsVariable(true));
 block.register();
 
 block = new BlockConfig("minecraft:nether_brick","minecraft:nether_brick_fence","minecraft:nether_brick_stairs");
 block.setSoundChance(8000);
-block.addSounds(new SoundConfig("dsurround:breathing").setConditions("(?i)(.*#nether#.*)").setVolume(0.5F).setIsVariable(true));
+block.addSound(new SoundConfig("dsurround:breathing").setConditions("(?i)(.*#nether#.*)").setVolume(0.5F).setIsVariable(true));
 block.register();
 
 block = new BlockConfig("minecraft:tallgrass");
 block.setSoundChance(25000);
-block.addSounds(new SoundConfig("dsurround:hiss").setConditions("(?i)(?!.*raining.*|.*cold.*|.*freezing.*)(.*#day#.*)").setVolume(1.0F).setIsVariable(true));
+block.addSound(new SoundConfig("dsurround:hiss").setConditions("(?i)(?!.*raining.*|.*cold.*|.*freezing.*)(.*#day#.*)").setVolume(1.0F).setIsVariable(true));
 block.register();
 
 block = new BlockConfig("minecraft:monster_egg");
 block.setSoundChance(600);
-block.addSounds(new SoundConfig("dsurround:hiss").setVolume(1.0F).setIsVariable(true));
-block.addSounds(new SoundConfig("dsurround:insectcrawl").setVolume(1.0F).setIsVariable(true));
+block.addSound(new SoundConfig("dsurround:hiss").setVolume(1.0F).setIsVariable(true));
+block.addSound(new SoundConfig("dsurround:insectcrawl").setVolume(1.0F).setIsVariable(true));
 block.register();
 
 block = new BlockConfig("minecraft:bookshelf");
 block.setSoundChance(500);
-block.addSounds(new SoundConfig("dsurround:bookshelf").setVolume(0.7F));
+block.addSound(new SoundConfig("dsurround:bookshelf").setVolume(0.7F));
 block.register();
 
 block = new BlockConfig("minecraft:deadbush");
 block.setSoundChance(200);
-block.addSounds(new SoundConfig("dsurround:rattlesnake").setConditions("(?i)(?!.*#raining#.*).*#day#.*#tcwarm#.*").setVolume(1.0F));
-block.addSounds(new SoundConfig("dsurround:hiss").setConditions("(?i)(?!.*#raining#.*).*#day#.*#tcwarm#.*").setVolume(1.0F).setIsVariable(true));
-block.addSounds(new SoundConfig("dsurround:insectcrawl").setConditions("(?i)(?!.*#raining#.*).*#day#.*#tcwarm#.*").setVolume(1.0F).setIsVariable(true));
+block.addSound(new SoundConfig("dsurround:rattlesnake").setConditions("(?i)(?!.*#raining#.*).*#day#.*#tcwarm#.*").setVolume(1.0F));
+block.addSound(new SoundConfig("dsurround:hiss").setConditions("(?i)(?!.*#raining#.*).*#day#.*#tcwarm#.*").setVolume(1.0F).setIsVariable(true));
+block.addSound(new SoundConfig("dsurround:insectcrawl").setConditions("(?i)(?!.*#raining#.*).*#day#.*#tcwarm#.*").setVolume(1.0F).setIsVariable(true));
 block.register();
 
 block = new BlockConfig("minecraft:red_flower:*","minecraft:yellow_flower:*","minecraft:double_plant:*");
-block.addEffects(new BlockEffectConfig(BlockEffectType.FIREFLY).setEffectChance(50));
+block.addEffect(new EffectConfig(EffectType.FIREFLY).setEffectChance(50));
 block.register();
 
 /////////////////////////////
