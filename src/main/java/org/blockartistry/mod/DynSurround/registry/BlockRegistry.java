@@ -67,7 +67,7 @@ public final class BlockRegistry implements IDependent {
 			ModLog.info("*** BLOCK REGISTRY ***");
 			for (final BlockProfile entry : registry.values())
 				ModLog.info(entry.toString());
-			
+
 			ModLog.info("**** FORGE ORE DICTIONARY NAMES ****");
 			for (final String oreName : OreDictionary.getOreNames())
 				ModLog.info(oreName);
@@ -110,16 +110,32 @@ public final class BlockRegistry implements IDependent {
 
 	public static SoundEffect getSound(final IBlockState state, final Random random, final String conditions) {
 		final BlockProfile entry = registry.get(state.getBlock());
-		if (entry == null || entry.sounds.isEmpty() || random.nextInt(entry.chance) != 0)
+		if (entry == null)
 			return null;
-		return getRandomSound(entry.getSounds(state), random, conditions);
+
+		final List<SoundEffect> sounds = entry.getSounds(state);
+		if (sounds.isEmpty())
+			return null;
+
+		if (random.nextInt(entry.getChance(state)) != 0)
+			return null;
+
+		return getRandomSound(sounds, random, conditions);
 	}
 
 	public static SoundEffect getStepSound(final IBlockState state, final Random random, final String conditions) {
 		final BlockProfile entry = registry.get(state.getBlock());
-		if (entry == null || entry.stepSounds.isEmpty() || random.nextInt(entry.stepChance) != 0)
+		if (entry == null)
 			return null;
-		return getRandomSound(entry.getStepSounds(state), random, conditions);
+
+		final List<SoundEffect> sounds = entry.getStepSounds(state);
+		if (sounds.isEmpty())
+			return null;
+
+		if (random.nextInt(entry.getStepChance(state)) != 0)
+			return null;
+
+		return getRandomSound(sounds, random, conditions);
 	}
 
 	public static void register(final BlockConfig entry) {
