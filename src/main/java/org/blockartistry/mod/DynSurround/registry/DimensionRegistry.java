@@ -23,13 +23,11 @@
 
 package org.blockartistry.mod.DynSurround.registry;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
 import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
@@ -39,16 +37,26 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 
 public final class DimensionRegistry implements IDependent {
-	
+
 	private final static DimensionRegistry INSTANCE = new DimensionRegistry();
-	
+
 	private DimensionRegistry() {
 		DataScripts.registerDependent(this);
 	}
-	
-	public void clear() {
+
+	@Override
+	public void preInit() {
 		cache.clear();
 		dimensionData.clear();
+	}
+
+	@Override
+	public void postInit() {
+		if (ModOptions.enableDebugLogging) {
+			ModLog.info("*** DIMENSION REGISTRY (cache) ***");
+			for (final DimensionConfig reg : cache)
+				ModLog.info(reg.toString());
+		}
 	}
 
 	private static final List<DimensionConfig> cache = new ArrayList<DimensionConfig>();
@@ -56,36 +64,10 @@ public final class DimensionRegistry implements IDependent {
 	private static boolean isFlatWorld = false;
 
 	public static void initialize() {
-		INSTANCE.clear();
-		
-		try {
-			process(DimensionFile.load("dimensions"));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		for (final String file : ModOptions.dimensionConfigFiles) {
-			final File theFile = new File(Module.dataDirectory(), file);
-			if (theFile.exists()) {
-				try {
-					final DimensionFile config = DimensionFile.load(theFile);
-					if (config != null)
-						process(config);
-					else
-						ModLog.warn("Unable to process dimension config file " + file);
-				} catch (final Exception ex) {
-					ModLog.error("Unable to process dimension config file " + file, ex);
-				}
-			} else {
-				ModLog.warn("Could not locate dimension config file [%s]", file);
-			}
-		}
-
-		ModLog.info("*** DIMENSION REGISTRY (delay init) ***");
-		for (final DimensionInfo reg : dimensionData.valueCollection())
-			ModLog.info(reg.toString());
+		INSTANCE.preInit();
 	}
 
+	// TODO: Need to hook into world load to get FLAT?
 	public static void loading(final World world) {
 		getData(world).initialize(world.provider);
 		if (world.provider.getDimension() == 0) {
@@ -125,7 +107,8 @@ public final class DimensionRegistry implements IDependent {
 				data.skyHeight = entry.skyHeight;
 		}
 	}
-	
+
+	@SuppressWarnings("unused")
 	private static void process(final DimensionFile config) {
 		for (final DimensionConfig entry : config.entries) {
 			register(entry);
@@ -205,5 +188,4 @@ public final class DimensionRegistry implements IDependent {
 		builder.append(CONDITION_SEPARATOR);
 		return builder.toString();
 	}
-
 }

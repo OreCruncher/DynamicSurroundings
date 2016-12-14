@@ -27,22 +27,26 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.Module;
-import org.blockartistry.mod.DynSurround.scripts.ScriptingEngine;
+import org.blockartistry.mod.DynSurround.scripts.IScriptingEngine;
+import org.blockartistry.mod.DynSurround.scripts.JsonScriptingEngine;
 
-import net.minecraft.client.resources.IResourceManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
 public final class DataScripts {
 
 	public static interface IDependent {
-		void clear();
+		void preInit();
+
+		void postInit();
 	}
 
 	private static List<IDependent> dependents = new ArrayList<IDependent>();
@@ -51,9 +55,14 @@ public final class DataScripts {
 		dependents.add(dep);
 	}
 
-	private static void clearDependents() {
+	private static void issuePreInit() {
 		for (final IDependent dep : dependents)
-			dep.clear();
+			dep.preInit();
+	}
+
+	private static void issuePostInit() {
+		for (final IDependent dep : dependents)
+			dep.postInit();
 	}
 
 	// Module.dataDirectory()
@@ -61,7 +70,7 @@ public final class DataScripts {
 
 	// "/assets/dsurround/data/"
 	private String assetDirectory;
-	private ScriptingEngine exe;
+	private IScriptingEngine exe;
 
 	public DataScripts(final File file, final String assetDirectory) {
 		this.dataDirectory = file;
@@ -69,7 +78,7 @@ public final class DataScripts {
 	}
 
 	public static void initialize(final Object resources) {
-		clearDependents();
+		issuePreInit();
 		final DataScripts scripts = new DataScripts(Module.dataDirectory(), "/assets/dsurround/data/");
 		scripts.init();
 
@@ -78,68 +87,59 @@ public final class DataScripts {
 		}
 
 		// TODO: Handle client vs. server load RE: resource pack support
+		// resources ==> IResourceManager
 		if (resources != null) {
 
 		}
+
+		// Load scripts specified in the configuration
+		final String[] configFiles = ModOptions.externalScriptFiles;
+		for (final String file : configFiles) {
+			scripts.runFromDirectory(file);
+		}
+
+		issuePostInit();
 	}
 
 	private boolean init() {
-		this.exe = new ScriptingEngine();
+		this.exe = new JsonScriptingEngine();
 		return this.exe.initialize();
 	}
 
 	private void runFromArchive(final String dataFile) {
-		final String fileName = dataFile.replaceAll("[^a-zA-Z0-9.-]", "_");
-		InputStream stream = null;
+		final String fileName = StringUtils.appendIfMissing(assetDirectory + dataFile.replaceAll("[^a-zA-Z0-9.-]", "_"),
+				this.exe.preferredExtension());
 
-		try {
-			String name = assetDirectory + fileName;
-			if (!name.endsWith(".ds"))
-				name = name + ".ds";
-			stream = DataScripts.class.getResourceAsStream(name);
+		try (final InputStream stream = DataScripts.class.getResourceAsStream(fileName)) {
 			if (stream != null) {
 				ModLog.info("Executing script for mod [%s]", dataFile);
-				runFromStream(stream);
-			}
-		} catch (final Throwable t) {
-			ModLog.error("Unable to run script!", t);
-		} finally {
-			try {
-				if (stream != null)
-					stream.close();
-			} catch (final Throwable t) {
-				;
-			}
-		}
-	}
-
-	@SuppressWarnings("unused")
-	private void runFromDirectory(final String dataFile) {
-		final File file = new File(dataDirectory, StringUtils.appendIfMissing(dataFile, ".ds"));
-		InputStream stream = null;
-
-		try {
-			stream = new FileInputStream(file);
-			if (stream != null) {
-				ModLog.info("Executing script [%s] from directory", dataFile);
-				runFromStream(stream);
-			}
-		} catch (final Throwable t) {
-			ModLog.error("Unable to run script!", t);
-		} finally {
-			try {
-				if (stream != null)
-					stream.close();
-			} catch (final Throwable t) {
-				;
-			}
-		}
-	}
-
-	private void runFromStream(final InputStream stream) {
-		try {
-			if (stream != null)
 				this.exe.eval(new InputStreamReader(stream));
+			}
+		} catch (final Throwable t) {
+			ModLog.error("Unable to run script!", t);
+		}
+	}
+
+	private void runFromDirectory(final String dataFile) {
+		// Make sure there is no path prefix and that it is
+		// properly terminated with ".ds". External scripts
+		// MUST be in the mod configuration directory.
+		final String workingFile = StringUtils.appendIfMissing(Paths.get(dataFile).getFileName().toString(),
+				this.exe.preferredExtension());
+		final File file = new File(dataDirectory, workingFile);
+		if (!file.exists()) {
+			ModLog.warn("Could not locate script file [%s]", file.toString());
+			return;
+		}
+
+		if (!file.isFile()) {
+			ModLog.warn("Script file [%s] is not a file", file.toString());
+			return;
+		}
+
+		try (final InputStream stream = new FileInputStream(file)) {
+			ModLog.info("Executing script [%s]", file.toString());
+			this.exe.eval(new InputStreamReader(stream));
 		} catch (final Throwable t) {
 			ModLog.error("Unable to run script!", t);
 		}

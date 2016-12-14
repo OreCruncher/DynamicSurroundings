@@ -171,12 +171,14 @@ public final class ModOptions {
 	public static float biomeFogFactor = 1.0F;
 
 	public static final String CATEGORY_GENERAL = "general";
+	public static final String CONFIG_EXTERNAL_SCRIPTS = "External Configuration Files";
 	public static final String CONFIG_MIN_RAIN_STRENGTH = "Default Minimum Rain Strength";
 	public static final String CONFIG_MAX_RAIN_STRENGTH = "Default Maximum Rain Strength";
 	public static final String CONFIG_THUNDER_THRESHOLD = "Default Thunder Effect Threshold";
 	public static final String CONFIG_FX_RANGE = "Special Effect Range";
-	private static final List<String> generalSort = ImmutableList.<String> builder()
-			.add(CONFIG_FX_RANGE, CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH, CONFIG_THUNDER_THRESHOLD).build();
+	private static final List<String> generalSort = ImmutableList.<String> builder().add(CONFIG_FX_RANGE,
+			CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH, CONFIG_THUNDER_THRESHOLD, CONFIG_EXTERNAL_SCRIPTS)
+			.build();
 
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_MIN_RAIN_STRENGTH, defaultValue = "0.0")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
@@ -194,6 +196,10 @@ public final class ModOptions {
 	@MinMaxInt(min = 16, max = 64)
 	@Comment("Block radius/range around player for special effect application")
 	public static int specialEffectRange = 16;
+	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_EXTERNAL_SCRIPTS, defaultValue = "")
+	@Comment("Configuration files for customization")
+	@RestartRequired
+	public static String[] externalScriptFiles = {};
 
 	public static final String CATEGORY_AURORA = "aurora";
 	public static final String CONFIG_AURORA_ENABLED = "Enabled";
@@ -228,26 +234,13 @@ public final class ModOptions {
 	public static int auroraSpawnOffset = 150;
 
 	public static final String CATEGORY_BIOMES = "biomes";
-	public static final String CONFIG_BIOME_CONFIG_FILES = "Config Files";
 	public static final String CONFIG_BIOME_ALIASES = "Biomes Alias";
-	private static final List<String> biomesSort = Arrays.asList(CONFIG_BIOME_CONFIG_FILES, CONFIG_BIOME_ALIASES);
+	private static final List<String> biomesSort = Arrays.asList(CONFIG_BIOME_ALIASES);
 
-	@Parameter(category = CATEGORY_BIOMES, property = CONFIG_BIOME_CONFIG_FILES, defaultValue = "")
-	@Comment("Configuration files for configuring Biomes Registry")
-	@RestartRequired
-	public static String[] biomeConfigFiles = {};
 	@Parameter(category = CATEGORY_BIOMES, property = CONFIG_BIOME_ALIASES, defaultValue = "")
 	@Comment("Biomes alias list")
 	@RestartRequired
 	public static String[] biomeAliases = {};
-
-	public static final String CATEGORY_DIMENSIONS = "dimensions";
-	public static final String CONFIG_DIMENSION_CONFIG_FILES = "Config Files";
-
-	@Parameter(category = CATEGORY_DIMENSIONS, property = CONFIG_DIMENSION_CONFIG_FILES, defaultValue = "")
-	@Comment("Configuration files for configuring Dimension Registry")
-	@RestartRequired
-	public static String[] dimensionConfigFiles = {};
 
 	public static final String CATEGORY_BLOCK = "block";
 	public static final String CONFIG_BLOCK_CONFIG_FILES = "Config Files";
@@ -501,12 +494,6 @@ public final class ModOptions {
 		config.setCategoryRequiresWorldRestart(CATEGORY_BIOMES, false);
 		config.setCategoryComment(CATEGORY_BIOMES, "Options for controlling biome sound/effects");
 		config.setCategoryPropertyOrder(CATEGORY_BIOMES, new ArrayList<String>(biomesSort));
-
-		// CATEGORY: Dimensions
-		config.setCategoryRequiresMcRestart(CATEGORY_DIMENSIONS, false);
-		config.setCategoryRequiresWorldRestart(CATEGORY_DIMENSIONS, false);
-		config.setCategoryComment(CATEGORY_DIMENSIONS,
-				"Options for defining per dimension parameters for Dynamic Surroundings");
 
 		// CATEGORY: Block
 		config.setCategoryRequiresMcRestart(CATEGORY_BLOCK, false);

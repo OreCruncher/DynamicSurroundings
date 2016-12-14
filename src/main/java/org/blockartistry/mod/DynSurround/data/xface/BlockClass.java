@@ -23,6 +23,9 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum BlockClass {
 
 	NOT_EMITTER("NOT_EMITTER"),
@@ -92,5 +95,15 @@ public enum BlockClass {
 	
 	public String getName() {
 		return this.name;
+	}
+	
+	private static final Map<String,BlockClass> lookup = new HashMap<String,BlockClass>();
+	public static BlockClass lookup(final String name) {
+		if(lookup.size() == 0) {
+			for(final BlockClass bc: BlockClass.values())
+				lookup.put(bc.name, bc);
+		}
+		
+		return lookup.get(name);
 	}
 }

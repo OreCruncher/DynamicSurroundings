@@ -28,6 +28,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+
+import org.blockartistry.mod.DynSurround.ModLog;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -72,24 +75,28 @@ public class JsonUtils {
 		return (T) clazz.newInstance();
 	}
 
-	public static <T> T load(final InputStream stream, final Class<T> clazz) {
-		InputStreamReader reader = null;
-		JsonReader reader2 = null;
+	public static <T> T load(final Reader stream, final Class<T> clazz) {
 
-		try {
-			reader = new InputStreamReader(stream);
-			reader2 = new JsonReader(reader);
-			return (T) new Gson().fromJson(reader, clazz);
-		} finally {
-			try {
-				if (reader2 != null)
-					reader2.close();
-				if (reader != null)
-					reader.close();
-			} catch (final Exception ex) {
-				;
-			}
+		T result = null;
+		try (final JsonReader reader = new JsonReader(stream)) {
+			result = new Gson().fromJson(reader, clazz);
+		} catch (final Throwable t) {
+			ModLog.error("Unable to process Json from stream", t);;
 		}
+		return result;
+	}
+
+	public static <T> T load(final InputStream stream, final Class<T> clazz) {
+
+		T result = null;
+
+		try (final InputStreamReader reader = new InputStreamReader(stream)) {
+			result = load(reader, clazz);
+		} catch (final Throwable t) {
+			ModLog.error("Unable to process Json from stream", t);;
+		}
+
+		return result;
 	}
 
 }

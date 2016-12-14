@@ -108,7 +108,6 @@ public class DynSurroundConfigGui extends GuiConfig {
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_AURORA, "Aurora Settings"));
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_BLOCK, "Block Settings"));
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_BIOMES, "Biomes Behaviors"));
-		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_DIMENSIONS, "Dimension Configuration"));
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_SOUND, "Sound Effects"));
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_PLAYER, "Player Effects"));
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_LOGGING_CONTROL, "Logging Options"));

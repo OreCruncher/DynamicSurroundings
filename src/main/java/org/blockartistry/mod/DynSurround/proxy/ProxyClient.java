@@ -31,7 +31,6 @@ import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.ClientEffectHandler;
 import org.blockartistry.mod.DynSurround.client.footsteps.Footsteps;
-import org.blockartistry.mod.DynSurround.client.footsteps.game.system.ForgeDictionary;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.user.GenerateBlockReport;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler;
@@ -112,9 +111,6 @@ public class ProxyClient extends Proxy {
 			for (final String entry : report.getBlockNames()) {
 				ModLog.info(entry);
 			}
-			
-			ForgeDictionary.dumpOreNames();
 		}
 	}
-
 }

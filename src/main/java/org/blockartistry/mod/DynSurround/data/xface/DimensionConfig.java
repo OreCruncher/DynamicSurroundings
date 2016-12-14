@@ -82,8 +82,30 @@ public class DimensionConfig {
 		this.hasAurora = flag;
 		return this;
 	}
-	
+
 	public void register() {
 		Dimensions.register(this);
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder builder = new StringBuilder();
+		if (this.dimensionId != null)
+			builder.append("dimensionId: ").append(this.dimensionId.intValue()).append(" ");
+		if (this.name != null)
+			builder.append("name: ").append(this.name).append(" ");
+		if (this.seaLevel != null)
+			builder.append("seaLevel: ").append(this.seaLevel.intValue()).append(" ");
+		if (this.skyHeight != null)
+			builder.append("skyHeight: ").append(this.skyHeight.intValue()).append(" ");
+		if (this.cloudHeight != null)
+			builder.append("cloudHeight: ").append(this.cloudHeight.intValue()).append(" ");
+		if (this.hasAurora != null)
+			builder.append("hasAurora: ").append(Boolean.toString(this.hasAurora.booleanValue())).append(" ");
+		if (this.hasHaze != null)
+			builder.append("hasHaze: ").append(Boolean.toString(this.hasHaze.booleanValue())).append(" ");
+		if (this.hasWeather != null)
+			builder.append("hasWeather: ").append(Boolean.toString(this.hasWeather.booleanValue())).append(" ");
+		return builder.toString();
 	}
 }

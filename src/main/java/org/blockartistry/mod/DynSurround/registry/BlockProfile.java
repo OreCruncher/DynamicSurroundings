@@ -108,7 +108,7 @@ public class BlockProfile {
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append(String.format("Block [%s]:", this.block.getUnlocalizedName()));
+		builder.append("Block [").append(MCHelper.nameOf(this.block)).append("]");
 
 		if (!this.sounds.isEmpty()) {
 			boolean commaFlag = false;

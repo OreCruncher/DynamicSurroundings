@@ -24,7 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.registry;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -34,7 +33,6 @@ import java.util.Random;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.fx.FireFlyEffect;
 import org.blockartistry.mod.DynSurround.client.fx.JetEffect;
@@ -48,33 +46,38 @@ import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.oredict.OreDictionary;
 
 public final class BlockRegistry implements IDependent {
-	
+
 	private final static BlockRegistry INSTANCE = new BlockRegistry();
-	
+
 	private BlockRegistry() {
 		DataScripts.registerDependent(this);
 	}
-	
-	public void clear() {
+
+	@Override
+	public void preInit() {
 		registry.clear();
+	}
+
+	@Override
+	public void postInit() {
+		if (ModOptions.enableDebugLogging) {
+			ModLog.info("*** BLOCK REGISTRY ***");
+			for (final BlockProfile entry : registry.values())
+				ModLog.info(entry.toString());
+			
+			ModLog.info("**** FORGE ORE DICTIONARY NAMES ****");
+			for (final String oreName : OreDictionary.getOreNames())
+				ModLog.info(oreName);
+		}
 	}
 
 	private static final Map<Block, BlockProfile> registry = new IdentityHashMap<Block, BlockProfile>();
 
 	public static void initialize() {
-
-		INSTANCE.clear();
-		processConfig();
-
-		if (ModOptions.enableDebugLogging) {
-			ModLog.info("*** BLOCK REGISTRY ***");
-			for (final BlockProfile entry : registry.values())
-				ModLog.info(entry.toString());
-		}
+		INSTANCE.preInit();
 	}
 
 	public static List<BlockEffect> getEffects(final IBlockState state) {
@@ -119,50 +122,10 @@ public final class BlockRegistry implements IDependent {
 		return getRandomSound(entry.getStepSounds(state), random, conditions);
 	}
 
-	private static void processConfig() {
-
-		// TODO: Deprecate when the scala script system
-		// is validated.
-		// Load block config for Dynamic Surroundings
-		//try {
-		//	process(BlockFile.load("blocks"));
-		//} catch (final Exception e) {
-		//	e.printStackTrace();
-		//}
-
-		// Check for each of the loaded mods to see if there is
-		// a config file embedded.
-		for (final ModContainer mod : Loader.instance().getActiveModList()) {
-			try {
-				process(BlockFile.load(mod.getModId() + "_blocks"));
-			} catch (final Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		final String[] configFiles = ModOptions.blockConfigFiles;
-		for (final String file : configFiles) {
-			final File theFile = new File(Module.dataDirectory(), file);
-			if (theFile.exists()) {
-				try {
-					final BlockFile config = BlockFile.load(theFile);
-					if (config != null)
-						process(config);
-					else
-						ModLog.warn("Unable to process block config file " + file);
-				} catch (final Exception ex) {
-					ModLog.error("Unable to process block config file " + file, ex);
-				}
-			} else {
-				ModLog.warn("Could not locate block config file [%s]", file);
-			}
-		}
-	}
-	
 	public static void register(final BlockConfig entry) {
-		if(entry.blocks.isEmpty())
+		if (entry.blocks.isEmpty())
 			return;
-		
+
 		for (final String blockName : entry.blocks) {
 			final BlockInfo blockInfo = BlockInfo.create(blockName);
 			if (blockInfo == null) {
@@ -237,11 +200,4 @@ public final class BlockRegistry implements IDependent {
 			}
 		}
 	}
-
-	private static void process(final BlockFile config) {
-		for (final BlockConfig entry : config.entries) {
-			register(entry);
-		}
-	}
-
 }

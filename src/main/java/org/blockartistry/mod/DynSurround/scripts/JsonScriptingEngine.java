@@ -25,60 +25,36 @@
 package org.blockartistry.mod.DynSurround.scripts;
 
 import java.io.Reader;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 
-import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.scripts.json.ConfigurationScript;
 
-import scala.Some;
-import scala.tools.nsc.Settings;
-import scala.tools.nsc.interpreter.IMain;
-import scala.tools.nsc.settings.MutableSettings.BooleanSetting;
+public class JsonScriptingEngine implements IScriptingEngine {
 
-public final class ScriptingEngine {
-
-	private IMain engine;
-
-	public ScriptingEngine() {
-		this.engine = (IMain) new ScriptEngineManager().getEngineByName("scala");
-		final Settings settings = this.engine.settings();
-		((BooleanSetting) settings.usejavacp()).value_$eq(true);
-		settings.explicitParentLoader_$eq(new Some<ClassLoader>(new MyClassLoader()));
-	}
-
+	@Override
 	public String getEngineName() {
-		return this.engine != null ? this.engine.getFactory().getEngineName() : "UNKNOWN";
+		return "Json Scripting Engine";
 	}
 
+	@Override
 	public String getEngineVersion() {
-		return this.engine != null ? this.engine.getFactory().getEngineVersion() : "UNKNOWN";
+		return Module.VERSION;
+	}
+	
+	@Override
+	public String preferredExtension() {
+		return ".json";
 	}
 
+	@Override
 	public boolean initialize() {
-		if (this.engine == null)
-			return false;
-
-		ModLog.debug("ScriptEngine: %s %s", getEngineName(), getEngineVersion());
 		return true;
 	}
 
-	public Object eval(final String command) {
-		Object result = null;
-		try {
-			result = this.engine.eval(command);
-		} catch (ScriptException e) {
-			e.printStackTrace();
-		}
-		return result;
+	@Override
+	public Object eval(final Reader reader) {
+		ConfigurationScript.process(reader);
+		return null;
 	}
 
-	public Object eval(final Reader reader) {
-		Object result = null;
-		try {
-			result = this.engine.eval(reader);
-		} catch (ScriptException e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
 }

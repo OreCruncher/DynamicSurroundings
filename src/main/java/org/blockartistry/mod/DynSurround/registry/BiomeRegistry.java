@@ -24,7 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.registry;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -33,7 +32,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
@@ -48,16 +46,54 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
 
 public final class BiomeRegistry implements IDependent {
-	
+
 	private final static BiomeRegistry INSTANCE = new BiomeRegistry();
-	
+
 	private BiomeRegistry() {
 		DataScripts.registerDependent(this);
 	}
-	
-	public void clear() {
+
+	@Override
+	public void preInit() {
 		biomeAliases.clear();
 		registry.clear();
+
+		for (final String entry : ModOptions.biomeAliases) {
+			final String[] parts = StringUtils.split(entry, "=");
+			if (parts.length == 2) {
+				biomeAliases.put(parts[0], parts[1]);
+			}
+		}
+
+		for (Iterator<Biome> itr = Biome.REGISTRY.iterator(); itr.hasNext();) {
+			final BiomeInfo e = new BiomeInfo(itr.next());
+			registry.put(e.getBiomeId(), e);
+		}
+
+		// Add our fake biomes
+		registry.put(UNDERGROUND.getBiomeId(), UNDERGROUND);
+		registry.put(UNDERWATER.getBiomeId(), UNDERWATER);
+		registry.put(UNDEROCEAN.getBiomeId(), UNDEROCEAN);
+		registry.put(UNDERDEEPOCEAN.getBiomeId(), UNDERDEEPOCEAN);
+		registry.put(UNDERRIVER.getBiomeId(), UNDERRIVER);
+		registry.put(OUTERSPACE.getBiomeId(), OUTERSPACE);
+		registry.put(CLOUDS.getBiomeId(), CLOUDS);
+		registry.put(PLAYER.getBiomeId(), PLAYER);
+		registry.put(WTF.getBiomeId(), WTF);
+	}
+
+	@Override
+	public void postInit() {
+		if (ModOptions.enableDebugLogging) {
+			ModLog.info("*** BIOME REGISTRY ***");
+			for (final BiomeInfo entry : registry.valueCollection())
+				ModLog.info(entry.toString());
+		}
+
+		// Free memory because we no longer need
+		biomeAliases.clear();
+		
+		MinecraftForge.EVENT_BUS.post(new RegistryReloadEvent.Biome());
 	}
 
 	private static final TIntObjectHashMap<BiomeInfo> registry = new TIntObjectHashMap<BiomeInfo>();
@@ -83,43 +119,7 @@ public final class BiomeRegistry implements IDependent {
 	}
 
 	public static void initialize() {
-
-		INSTANCE.clear();
-		for (final String entry : ModOptions.biomeAliases) {
-			final String[] parts = StringUtils.split(entry, "=");
-			if (parts.length == 2) {
-				biomeAliases.put(parts[0], parts[1]);
-			}
-		}
-
-		for(Iterator<Biome> itr = Biome.REGISTRY.iterator(); itr.hasNext();) {
-			final BiomeInfo e = new BiomeInfo(itr.next());
-			registry.put(e.getBiomeId(), e);
-		}
-
-		// Add our fake biomes
-		registry.put(UNDERGROUND.getBiomeId(), UNDERGROUND);
-		registry.put(UNDERWATER.getBiomeId(), UNDERWATER);
-		registry.put(UNDEROCEAN.getBiomeId(), UNDEROCEAN);
-		registry.put(UNDERDEEPOCEAN.getBiomeId(), UNDERDEEPOCEAN);
-		registry.put(UNDERRIVER.getBiomeId(), UNDERRIVER);
-		registry.put(OUTERSPACE.getBiomeId(), OUTERSPACE);
-		registry.put(CLOUDS.getBiomeId(), CLOUDS);
-		registry.put(PLAYER.getBiomeId(), PLAYER);
-		registry.put(WTF.getBiomeId(), WTF);
-
-		processConfig();
-
-		if (ModOptions.enableDebugLogging) {
-			ModLog.info("*** BIOME REGISTRY ***");
-			for (final BiomeInfo entry : registry.valueCollection())
-				ModLog.info(entry.toString());
-		}
-
-		// Free memory because we no longer need
-		biomeAliases.clear();
-
-		MinecraftForge.EVENT_BUS.post(new RegistryReloadEvent.Biome());
+		INSTANCE.preInit();
 	}
 
 	public static BiomeInfo get(final Biome biome) {
@@ -137,39 +137,13 @@ public final class BiomeRegistry implements IDependent {
 		return entry;
 	}
 
-	private static void processConfig() {
-		try {
-			process(BiomeFile.load(Module.MOD_ID));
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-
-		final String[] configFiles = ModOptions.biomeConfigFiles;
-		for (final String file : configFiles) {
-			final File theFile = new File(Module.dataDirectory(), file);
-			if (theFile.exists()) {
-				try {
-					final BiomeFile config = BiomeFile.load(theFile);
-					if (config != null)
-						process(config);
-					else
-						ModLog.warn("Unable to process biome config file " + file);
-				} catch (final Exception ex) {
-					ModLog.error("Unable to process biome config file " + file, ex);
-				}
-			} else {
-				ModLog.warn("Could not locate biome config file [%s]", file);
-			}
-		}
-	}
-
 	final static boolean isBiomeMatch(final BiomeConfig entry, final String biomeName) {
 		if (Pattern.matches(entry.biomeName, biomeName))
 			return true;
 		final String alias = biomeAliases.get(biomeName);
 		return alias == null ? false : Pattern.matches(entry.biomeName, alias);
 	}
-	
+
 	public static void register(final BiomeConfig entry) {
 		for (final BiomeInfo biomeEntry : registry.valueCollection()) {
 			if (isBiomeMatch(entry, biomeEntry.getBiomeName())) {
@@ -211,12 +185,6 @@ public final class BiomeRegistry implements IDependent {
 						biomeEntry.getSounds().add(s);
 				}
 			}
-		}
-	}
-
-	private static void process(final BiomeFile config) {
-		for (final BiomeConfig entry : config.entries) {
-			register(entry);
 		}
 	}
 }

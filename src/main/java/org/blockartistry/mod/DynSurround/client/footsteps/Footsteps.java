@@ -31,7 +31,6 @@ import java.util.Scanner;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.Manifest;
-import org.blockartistry.mod.DynSurround.client.footsteps.game.system.ForgeDictionary;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Isolator;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.ReaderH;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.ResourcePacks;
@@ -47,13 +46,18 @@ import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.I
 import org.blockartistry.mod.DynSurround.client.footsteps.parsers.AcousticsJsonReader;
 import org.blockartistry.mod.DynSurround.client.footsteps.parsers.Register;
 import org.blockartistry.mod.DynSurround.client.footsteps.util.property.simple.ConfigProperty;
+import org.blockartistry.mod.DynSurround.compat.MCHelper;
+import org.blockartistry.mod.DynSurround.data.xface.BlockClass;
 import org.blockartistry.mod.DynSurround.registry.DataScripts;
 import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
 import org.blockartistry.mod.DynSurround.util.JsonUtils;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class Footsteps implements IDependent {
 
@@ -67,18 +71,17 @@ public class Footsteps implements IDependent {
 		this.isolator = new Isolator();
 		DataScripts.registerDependent(this);
 	}
-	
+
 	public static void initialize() {
 		INSTANCE = new Footsteps();
 	}
 
-	public void clear() {
+	public void preInit() {
 
 		this.getBlockMap().clear();
 		final List<IResourcePack> repo = this.dealer.findResourcePacks();
 
 		reloadManifests(repo);
-		//reloadBlockMap(repo);
 		reloadPrimitiveMap(repo);
 		reloadAcoustics(repo);
 		reloadVariator(repo);
@@ -144,7 +147,6 @@ public class Footsteps implements IDependent {
 	private void reloadBlockMap(final List<IResourcePack> repo) {
 		final IBlockMap blockMap = new LegacyCapableBlockMap();
 		this.isolator.setBlockMap(blockMap);
-		ForgeDictionary.initialize(blockMap);
 
 		for (final IResourcePack pack : repo) {
 			InputStream stream = null;
@@ -225,12 +227,37 @@ public class Footsteps implements IDependent {
 
 	public void process(World world, EntityPlayer player) {
 		if (this.isolator == null)
-			clear();
+			preInit();
 		this.isolator.onFrame();
 		player.nextStepDistance = Integer.MAX_VALUE;
 	}
 
 	public IBlockMap getBlockMap() {
 		return this.isolator.getBlockMap();
+	}
+
+	@Override
+	public void postInit() {
+		// TODO Implement dumpState()
+	}
+
+	public static void registerForgeEntries(final BlockClass blockClass, final String... entries) {
+		for (final String dictionaryName : entries) {
+			final List<ItemStack> stacks = OreDictionary.getOres(dictionaryName, false);
+			for (final ItemStack stack : stacks) {
+				final Block block = Block.getBlockFromItem(stack.getItem());
+				if (block != null) {
+					String blockName = MCHelper.nameOf(block);
+					if (stack.getHasSubtypes() && stack.getItemDamage() != OreDictionary.WILDCARD_VALUE)
+						blockName += "^" + stack.getItemDamage();
+					INSTANCE.getBlockMap().register(blockName, blockClass.getName());
+				}
+			}
+		}
+	}
+
+	public static void registerBlocks(final BlockClass blockClass, final String... blocks) {
+		for (final String s : blocks)
+			INSTANCE.getBlockMap().register(s, blockClass.getName());
 	}
 }

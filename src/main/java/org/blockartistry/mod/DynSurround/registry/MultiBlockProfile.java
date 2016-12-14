@@ -160,7 +160,7 @@ public class MultiBlockProfile extends BlockProfile {
 		builder.append("DEFAULT ").append(super.toString());
 		for (final TIntObjectIterator<BlockProfile> itr = blockData.iterator(); itr.hasNext();) {
 			itr.advance();
-			builder.append("\nVARIANT ").append(itr.key()).append(" ").append(itr.value().toString());
+			builder.append("\nMETA ").append(itr.key()).append(" ").append(itr.value().toString());
 		}
 		return builder.toString();
 	}
