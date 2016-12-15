@@ -37,10 +37,9 @@ import org.blockartistry.mod.DynSurround.client.footsteps.game.system.ResourcePa
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Solver;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.UserConfigSoundPlayerWrapper;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.AcousticsManager;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.BasicPrimitiveMap;
+import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.PrimitiveMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.BlockMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.NormalVariator;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IPrimitiveMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IVariator;
 import org.blockartistry.mod.DynSurround.client.footsteps.parsers.AcousticsJsonReader;
 import org.blockartistry.mod.DynSurround.client.footsteps.parsers.Register;
@@ -142,7 +141,7 @@ public class Footsteps implements IDependent {
 	}
 
 	private void reloadPrimitiveMap(final List<IResourcePack> repo) {
-		final IPrimitiveMap primitiveMap = new BasicPrimitiveMap();
+		final PrimitiveMap primitiveMap = new PrimitiveMap();
 
 		for (final IResourcePack pack : repo) {
 			InputStream stream = null;

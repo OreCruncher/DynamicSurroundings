@@ -153,7 +153,6 @@ public class Transformer implements IClassTransformer {
 		cr.accept(cn, 0);
 
 		for (final MethodNode m : cn.methods) {
-			logger.debug("METHOD: " + m.name);
 			int idx = -1;
 			if (m.name.equals(names[0]))
 				idx = 0;

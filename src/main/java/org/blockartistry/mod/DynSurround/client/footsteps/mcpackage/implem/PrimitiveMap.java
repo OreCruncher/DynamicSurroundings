@@ -22,21 +22,31 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces;
+package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public interface IPrimitiveMap extends IRegistration {
-	/**
-	 * This will return null if the primitive is not defined.
-	 */
-	public String getPrimitiveMap(final String primitive);
+public class PrimitiveMap {
 
-	/**
-	 * This will return null if the substrate does not resolve.
-	 */
-	public String getPrimitiveMapSubstrate(final String primitive, final String substrate);
+	private final Map<String, String> primitiveMap = new LinkedHashMap<String, String>();
 
+	public PrimitiveMap() {
+	}
+
+	public String getPrimitiveMap(final String primitive) {
+		return this.primitiveMap.get(primitive);
+	}
+
+	public String getPrimitiveMapSubstrate(final String primitive, final String substrate) {
+		return this.primitiveMap.get(primitive + "@" + substrate);
+	}
+
+	public void register(final String key, final String value) {
+		this.primitiveMap.put(key, value);
+	}
 }

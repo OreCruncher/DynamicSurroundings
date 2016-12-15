@@ -24,13 +24,18 @@
 
 package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem;
 
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Random;
 
+import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.implem.AcousticsLibrary;
+import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.EventType;
+import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
+import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.INamedAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions.Option;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
@@ -55,15 +60,49 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author Hurry
  */
 @SideOnly(Side.CLIENT)
-public class AcousticsManager extends AcousticsLibrary implements ISoundPlayer, IStepPlayer {
+public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	private static final Random RANDOM = new XorShiftRandom();
 
+	private final Map<String, IAcoustic> acoustics = new LinkedHashMap<String, IAcoustic>();
 	private final PriorityQueue<PendingSound> pending = new PriorityQueue<PendingSound>();
 	private final IIsolator isolator;
 
 	public AcousticsManager(final IIsolator isolator) {
 		this.isolator = isolator;
+	}
+
+	public void addAcoustic(final INamedAcoustic acoustic) {
+		this.acoustics.put(acoustic.getName(), acoustic);
+	}
+
+	public void playAcoustic(final Object location, final Association acousticName, final EventType event) {
+		playAcoustic(location, acousticName.getData(), event, null);
+	}
+
+	public void playAcoustic(final Object location, final String acousticName, final EventType event,
+			final IOptions inputOptions) {
+		if(StringUtils.isEmpty(acousticName)) {
+			ModLog.debug("Attempt to play acoustic with no name");
+			return;
+		}
+		
+		final String fragments[] = acousticName.split(",");
+		for (final String fragment : fragments) {
+			final IAcoustic acoustic = this.acoustics.get(fragment);
+			if (acoustic == null) {
+				onAcousticNotFound(location, fragment, event, inputOptions);
+			} else {
+				if (ModLog.DEBUGGING)
+					ModLog.debug("  Playing acoustic " + acousticName + " for event " + event.toString().toUpperCase());
+				acoustic.playSound(mySoundPlayer(), location, event, inputOptions);
+			}
+		}
+	}
+
+	protected void onAcousticNotFound(final Object location, final String acousticName, final EventType event,
+			final IOptions inputOptions) {
+		ModLog.debug("Tried to play a missing acoustic: " + acousticName);
 	}
 
 	@Override
@@ -118,7 +157,6 @@ public class AcousticsManager extends AcousticsLibrary implements ISoundPlayer, 
 		return RANDOM;
 	}
 
-	@Override
 	public void think() {
 
 		final long time = System.currentTimeMillis();
@@ -134,7 +172,6 @@ public class AcousticsManager extends AcousticsLibrary implements ISoundPlayer, 
 		}
 	}
 
-	@Override
 	protected ISoundPlayer mySoundPlayer() {
 		return isolator.getSoundPlayer();
 	}

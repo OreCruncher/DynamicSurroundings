@@ -24,9 +24,10 @@
 
 package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces;
 
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ILibrary;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
+import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.AcousticsManager;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.BlockMap;
+import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.PrimitiveMap;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,13 +38,13 @@ public interface IIsolator
 	
 	public abstract void onFrame();
 	
-	public abstract ILibrary getAcoustics();
+	public abstract AcousticsManager getAcoustics();
 	
 	public abstract ISolver getSolver();
 	
 	public abstract BlockMap getBlockMap();
 	
-	public abstract IPrimitiveMap getPrimitiveMap();
+	public abstract PrimitiveMap getPrimitiveMap();
 	
 	public abstract ISoundPlayer getSoundPlayer();
 	
@@ -51,13 +52,13 @@ public interface IIsolator
 	
 	//
 	
-	public abstract void setAcoustics(final ILibrary acoustics);
+	public abstract void setAcoustics(final AcousticsManager acoustics);
 	
 	public abstract void setSolver(final ISolver solver);
 	
 	public abstract void setBlockMap(final BlockMap blockMap);
 	
-	public abstract void setPrimitiveMap(final IPrimitiveMap primitiveMap);
+	public abstract void setPrimitiveMap(final PrimitiveMap primitiveMap);
 	
 	public abstract void setSoundPlayer(final ISoundPlayer soundPlayer);
 	

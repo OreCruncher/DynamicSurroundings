@@ -37,7 +37,7 @@ import org.blockartistry.mod.DynSurround.client.footsteps.engine.implem.Probabil
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.implem.SimultaneousAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.EventType;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ILibrary;
+import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.AcousticsManager;
 import org.blockartistry.mod.DynSurround.util.SoundUtils;
 
 import com.google.gson.JsonArray;
@@ -74,7 +74,7 @@ public class AcousticsJsonReader {
 		soundRoot = root;
 	}
 	
-	public void parseJSON(final String jasonString, final ILibrary lib) {
+	public void parseJSON(final String jasonString, final AcousticsManager lib) {
 		try {
 			parseJSONUnsafe(jasonString, lib);
 		} catch (Exception e) {
@@ -82,7 +82,7 @@ public class AcousticsJsonReader {
 		}
 	}
 	
-	private void parseJSONUnsafe(final String jsonString, final ILibrary lib) throws JsonParseException {
+	private void parseJSONUnsafe(final String jsonString, final AcousticsManager lib) throws JsonParseException {
 		JsonObject json = new JsonParser().parse(jsonString).getAsJsonObject();
 		
 		if (!json.get("type").getAsString().equals("library"))

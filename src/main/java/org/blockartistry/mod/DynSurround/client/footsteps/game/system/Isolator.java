@@ -25,14 +25,14 @@
 package org.blockartistry.mod.DynSurround.client.footsteps.game.system;
 
 import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ILibrary;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
+import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.AcousticsManager;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.BlockMap;
+import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.PrimitiveMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IStepPlayer;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IGenerator;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IGeneratorSettable;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IIsolator;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IPrimitiveMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.ISolver;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IVariator;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IVariatorSettable;
@@ -42,10 +42,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class Isolator implements IIsolator, IVariatorSettable, IGeneratorSettable {
-	private ILibrary acoustics;
+	private AcousticsManager acoustics;
 	private ISolver solver;
 	private BlockMap blockMap;
-	private IPrimitiveMap primitiveMap;
+	private PrimitiveMap primitiveMap;
 	private ISoundPlayer soundPlayer;
 	private IStepPlayer defaultStepPlayer;
 
@@ -68,8 +68,7 @@ public class Isolator implements IIsolator, IVariatorSettable, IGeneratorSettabl
 
 	//
 
-	@Override
-	public ILibrary getAcoustics() {
+	public AcousticsManager getAcoustics() {
 		return this.acoustics;
 	}
 
@@ -84,7 +83,7 @@ public class Isolator implements IIsolator, IVariatorSettable, IGeneratorSettabl
 	}
 
 	@Override
-	public IPrimitiveMap getPrimitiveMap() {
+	public PrimitiveMap getPrimitiveMap() {
 		return this.primitiveMap;
 	}
 
@@ -100,8 +99,7 @@ public class Isolator implements IIsolator, IVariatorSettable, IGeneratorSettabl
 
 	//
 
-	@Override
-	public void setAcoustics(final ILibrary acoustics) {
+	public void setAcoustics(final AcousticsManager acoustics) {
 		this.acoustics = acoustics;
 	}
 
@@ -116,7 +114,7 @@ public class Isolator implements IIsolator, IVariatorSettable, IGeneratorSettabl
 	}
 
 	@Override
-	public void setPrimitiveMap(final IPrimitiveMap primitiveMap) {
+	public void setPrimitiveMap(final PrimitiveMap primitiveMap) {
 		this.primitiveMap = primitiveMap;
 	}
 
