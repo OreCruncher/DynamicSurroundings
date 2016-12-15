@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.registry;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -37,6 +38,7 @@ import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.fx.FireFlyEffect;
 import org.blockartistry.mod.DynSurround.client.fx.JetEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.mod.DynSurround.compat.MCHelper;
 import org.blockartistry.mod.DynSurround.data.xface.BlockConfig;
 import org.blockartistry.mod.DynSurround.data.xface.EffectConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
@@ -71,6 +73,11 @@ public final class BlockRegistry implements IDependent {
 			ModLog.info("**** FORGE ORE DICTIONARY NAMES ****");
 			for (final String oreName : OreDictionary.getOreNames())
 				ModLog.info(oreName);
+
+			ModLog.info("**** BLOCKS REGISTERED WITH FORGE ****");
+			final Iterator<Block> itr = Block.REGISTRY.iterator();
+			while (itr.hasNext())
+				ModLog.info(MCHelper.nameOf(itr.next()));
 		}
 	}
 

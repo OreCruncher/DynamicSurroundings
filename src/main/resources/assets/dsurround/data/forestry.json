@@ -5,7 +5,8 @@
 				"forestry:planks.0",
 				"forestry:planks.1",
 				"forestry:planks.fireproof.0",
-				"forestry:planks.fireproof.1"
+				"forestry:planks.fireproof.1",
+				"forestry:planks.vanilla.fireproof.0"
 			],
 			"stepChance":150,
 			"sounds":[
@@ -38,13 +39,42 @@
 		
 	],
 	"footsteps":{
+		"forestry:ffarm":"stoneutility",
 		"forestry:beehives":"organic_dry",
+		"forestry:cocoon":"organic_dry",
+		"forestry:cocoon.solid":"organic_dry",
+		"forestry:pods.cocoa":"organic_dry",
+		"forestry:pods.dates":"organic_dry",
+		"forestry:pods.papaya":"organic_dry",
 		"forestry:bee_chest":"squeakywood",
 		"forestry:tree_chest":"squeakywood",
 		"forestry:butterfly_chest":"squeakywood",
 		"forestry:apiary":"woodutility",
 		"forestry:bee_house":"woodutility",
 		"forestry:worktable":"woodutility",
-		"forestry:escritoire":"woodutility"
+		"forestry:escritoire":"woodutility",
+		"forestry:alveary.plain":"woodutility",
+		"forestry:alveary.swarmer":"woodutility",
+		"forestry:alveary.fan":"woodutility",
+		"forestry:alveary.heater":"woodutility",
+		"forestry:alveary.hygro":"woodutility",
+		"forestry:alveary.stabiliser":"woodutility",
+		"forestry:alveary.sieve":"woodutility",
+		"forestry:greenhouse.plain":"stoneutility",
+		"forestry:greenhouse.glass":"stoneutility",
+		"forestry:greenhouse.hatch_input":"stoneutility",
+		"forestry:greenhouse.hatch_output":"stoneutility",
+		"forestry:greenhouse.gearbox":"stoneutility",
+		"forestry:greenhouse.valve":"stoneutility",
+		"forestry:greenhouse.fan":"stoneutility",
+		"forestry:greenhouse.heater":"stoneutility",
+		"forestry:greenhouse.dryer":"stoneutility",
+		"forestry:greenhouse.control":"stoneutility",
+		"forestry:greenhouse.sprinkler":"stoneutility",
+		"forestry:greenhouse.door":"stoneutility",
+		"forestry:greenhouse.climate_control":"stoneutility",
+		"forestry:greenhouse.window":"stoneutility",
+		"forestry:greenhouse.window_up":"stoneutility",
+		"forestry:greenhouse.butterfly_hatch":"stoneutility"
 	}
 }

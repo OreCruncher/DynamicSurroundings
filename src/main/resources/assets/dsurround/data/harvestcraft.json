@@ -44,6 +44,7 @@
 		"harvestcraft:tropicalgarden+foliage":"straw",
 		"harvestcraft:windygarden+messy":"MESSY_GROUND",
 		"harvestcraft:windygarden":"NOT_EMITTER",
-		"harvestcraft:windygarden+foliage":"straw"
+		"harvestcraft:windygarden+foliage":"straw",
+		"harvestcraft:shippingbin":"squeakywood"
 	}
 }

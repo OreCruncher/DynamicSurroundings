@@ -2,7 +2,8 @@
 	"blocks":[
 		{
 			"blocks":[
-				"biomesoplenty:blood"
+				"biomesoplenty:blood",
+				"biomesoplenty:poison"
 			],
 			"effects":[
 				{
