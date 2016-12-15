@@ -30,11 +30,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.mod.DynSurround.data.xface.Biomes;
-import org.blockartistry.mod.DynSurround.data.xface.BlockClass;
 import org.blockartistry.mod.DynSurround.data.xface.BlockConfig;
 import org.blockartistry.mod.DynSurround.data.xface.Blocks;
 import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
@@ -48,8 +46,8 @@ import com.google.gson.annotations.SerializedName;
 public final class ConfigurationScript {
 
 	public static class ForgeEntry {
-		@SerializedName("blockClass")
-		public String blockClass = null;
+		@SerializedName("accousticProfile")
+		public String accousticProfile = null;
 
 		@SerializedName("dictionaryEntries")
 		public List<String> dictionaryEntries = ImmutableList.of();
@@ -88,23 +86,12 @@ public final class ConfigurationScript {
 					Blocks.register(block);
 
 				for (final Entry<String, String> entry : script.footsteps.entrySet()) {
-					final BlockClass blockClass = BlockClass.lookup(entry.getValue());
-					if (blockClass == null) {
-						ModLog.warn("Invalid blockClass for footsteps detected in script: %s", entry.getValue());
-						continue;
-					}
-					Footsteps.registerFootsteps(blockClass, entry.getKey());
+					Footsteps.registerFootsteps(entry.getValue(), entry.getKey());
 				}
 
 				for (final ForgeEntry entry : script.forgeMappings) {
-					final BlockClass blockClass = BlockClass.lookup(entry.blockClass);
-					if (blockClass == null) {
-						ModLog.warn("Invalid blockClass for forgeMappings detected in script: %s", entry.blockClass);
-						continue;
-					}
-
 					for (final String name : entry.dictionaryEntries)
-						Footsteps.registerForgeEntries(blockClass, name);
+						Footsteps.registerForgeEntries(entry.accousticProfile, name);
 				}
 			}
 		}

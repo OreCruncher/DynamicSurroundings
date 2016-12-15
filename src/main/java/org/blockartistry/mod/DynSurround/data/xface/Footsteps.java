@@ -32,12 +32,12 @@ public final class Footsteps {
 
 	}
 
-	public static void registerForgeEntries(final BlockClass blockClass, final String... dictionaryEntries) {
+	public static void registerForgeEntries(final String profile, final String... dictionaryEntries) {
 		if (Module.proxy().isRunningAsServer())
 			return;
 
-		if (blockClass == null) {
-			ModLog.warn("The parameter 'blockClass' is invalid.");
+		if (profile == null) {
+			ModLog.warn("The parameter 'accousticProfile' is invalid.");
 			return;
 		}
 
@@ -46,16 +46,16 @@ public final class Footsteps {
 			return;
 		}
 
-		org.blockartistry.mod.DynSurround.client.footsteps.Footsteps.registerForgeEntries(blockClass,
+		org.blockartistry.mod.DynSurround.client.footsteps.Footsteps.registerForgeEntries(profile,
 				dictionaryEntries);
 	}
 
-	public static void registerFootsteps(final BlockClass blockClass, final String... blocks) {
+	public static void registerFootsteps(final String profile, final String... blocks) {
 		if (Module.proxy().isRunningAsServer())
 			return;
 
-		if (blockClass == null) {
-			ModLog.warn("The parameter 'blockClass' is invalid.");
+		if (profile == null) {
+			ModLog.warn("The parameter 'accousticProfile' is invalid.");
 			return;
 		}
 
@@ -64,6 +64,6 @@ public final class Footsteps {
 			return;
 		}
 
-		org.blockartistry.mod.DynSurround.client.footsteps.Footsteps.registerBlocks(blockClass, blocks);
+		org.blockartistry.mod.DynSurround.client.footsteps.Footsteps.registerBlocks(profile, blocks);
 	}
 }

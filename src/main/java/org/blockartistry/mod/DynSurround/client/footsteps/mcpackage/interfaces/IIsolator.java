@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces;
 
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ILibrary;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
+import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.BlockMap;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -40,7 +41,7 @@ public interface IIsolator
 	
 	public abstract ISolver getSolver();
 	
-	public abstract IBlockMap getBlockMap();
+	public abstract BlockMap getBlockMap();
 	
 	public abstract IPrimitiveMap getPrimitiveMap();
 	
@@ -54,7 +55,7 @@ public interface IIsolator
 	
 	public abstract void setSolver(final ISolver solver);
 	
-	public abstract void setBlockMap(final IBlockMap blockMap);
+	public abstract void setBlockMap(final BlockMap blockMap);
 	
 	public abstract void setPrimitiveMap(final IPrimitiveMap primitiveMap);
 	

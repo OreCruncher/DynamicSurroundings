@@ -942,7 +942,7 @@
 	},
 	"forgeMappings":[
 		{
-			"blockClass":"ore",
+			"accousticProfile":"ore",
 			"dictionaryEntries":[
 				"oreIron",
 				"oreGold",
@@ -1026,7 +1026,7 @@
 			
 		},
 		{
-			"blockClass":"hardmetal",
+			"accousticProfile":"hardmetal",
 			"dictionaryEntries":[
 				"blockIron",
 				"blockGold",
@@ -1130,7 +1130,7 @@
 			
 		},
 		{
-			"blockClass":"wood",
+			"accousticProfile":"wood",
 			"dictionaryEntries":[
 				"logWood",
 				"planksWood",
@@ -1146,14 +1146,14 @@
 			
 		},
 		{
-			"blockClass":"glass",
+			"accousticProfile":"glass",
 			"dictionaryEntries":[
 				"blockGlass"
 			]
 			
 		},
 		{
-			"blockClass":"#sapling",
+			"accousticProfile":"#sapling",
 			"dictionaryEntries":[
 				"treeSaplings",
 				"saplingTree"
@@ -1161,7 +1161,7 @@
 			
 		},
 		{
-			"blockClass":"leaves",
+			"accousticProfile":"leaves",
 			"dictionaryEntries":[
 				"treeLeaves",
 				"leavesTree",
@@ -1170,7 +1170,7 @@
 			
 		},
 		{
-			"blockClass":"stone",
+			"accousticProfile":"stone",
 			"dictionaryEntries":[
 				"stone",
 				"cobblestone",
@@ -1190,7 +1190,7 @@
 			
 		},
 		{
-			"blockClass":"sandstone",
+			"accousticProfile":"sandstone",
 			"dictionaryEntries":[
 				"sandstone",
 				"blockPrismarine",
@@ -1201,7 +1201,7 @@
 			
 		},
 		{
-			"blockClass":"sand",
+			"accousticProfile":"sand",
 			"dictionaryEntries":[
 				"sand",
 				"blockSalt",
@@ -1212,7 +1212,7 @@
 			
 		},
 		{
-			"blockClass":"squeakywood",
+			"accousticProfile":"squeakywood",
 			"dictionaryEntries":[
 				"chest",
 				"chestWood",
@@ -1221,7 +1221,7 @@
 			
 		},
 		{
-			"blockClass":"rug",
+			"accousticProfile":"rug",
 			"dictionaryEntries":[
 				"wool",
 				"blockClothRock",
@@ -1230,7 +1230,7 @@
 			
 		},
 		{
-			"blockClass":"#fence",
+			"accousticProfile":"#fence",
 			"dictionaryEntries":[
 				"fenceWood",
 				"fenceGateWood"
@@ -1238,7 +1238,7 @@
 			
 		},
 		{
-			"blockClass":"mud",
+			"accousticProfile":"mud",
 			"dictionaryEntries":[
 				"blockSlime",
 				"blockCheese"
@@ -1246,7 +1246,7 @@
 			
 		},
 		{
-			"blockClass":"obsidian",
+			"accousticProfile":"obsidian",
 			"dictionaryEntries":[
 				"oreSunstone",
 				"blockGraphite",
@@ -1258,7 +1258,7 @@
 			
 		},
 		{
-			"blockClass":"composite",
+			"accousticProfile":"composite",
 			"dictionaryEntries":[
 				"blockDiamond",
 				"blockEmerald",
@@ -1284,7 +1284,7 @@
 			
 		},
 		{
-			"blockClass":"marble",
+			"accousticProfile":"marble",
 			"dictionaryEntries":[
 				"blockQuartz",
 				"marble",
@@ -1294,7 +1294,7 @@
 			
 		},
 		{
-			"blockClass":"bluntwood",
+			"accousticProfile":"bluntwood",
 			"dictionaryEntries":[
 				"doorWood"
 			]

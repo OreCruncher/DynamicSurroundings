@@ -38,15 +38,13 @@ import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Solver;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.UserConfigSoundPlayerWrapper;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.AcousticsManager;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.BasicPrimitiveMap;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.LegacyCapableBlockMap;
+import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.BlockMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.NormalVariator;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IBlockMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IPrimitiveMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IVariator;
 import org.blockartistry.mod.DynSurround.client.footsteps.parsers.AcousticsJsonReader;
 import org.blockartistry.mod.DynSurround.client.footsteps.parsers.Register;
 import org.blockartistry.mod.DynSurround.client.footsteps.util.property.simple.ConfigProperty;
-import org.blockartistry.mod.DynSurround.data.xface.BlockClass;
 import org.blockartistry.mod.DynSurround.registry.DataScripts;
 import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
 import org.blockartistry.mod.DynSurround.util.JsonUtils;
@@ -143,31 +141,6 @@ public class Footsteps implements IDependent {
 		this.isolator.setVariator(var);
 	}
 
-	@SuppressWarnings("unused")
-	private void reloadBlockMap(final List<IResourcePack> repo) {
-		final IBlockMap blockMap = new LegacyCapableBlockMap();
-		this.isolator.setBlockMap(blockMap);
-
-		for (final IResourcePack pack : repo) {
-			InputStream stream = null;
-			try {
-				stream = this.dealer.openBlockMap(pack);
-				if (stream != null)
-					Register.setup(ConfigProperty.fromStream(stream), blockMap);
-			} catch (final IOException e) {
-				ModLog.debug("Unable to load block map data from pack %s", pack.getPackName());
-			} finally {
-				if (stream != null)
-					try {
-						stream.close();
-					} catch (final IOException e) {
-						;
-					}
-			}
-		}
-
-	}
-
 	private void reloadPrimitiveMap(final List<IResourcePack> repo) {
 		final IPrimitiveMap primitiveMap = new BasicPrimitiveMap();
 
@@ -232,7 +205,7 @@ public class Footsteps implements IDependent {
 		player.nextStepDistance = Integer.MAX_VALUE;
 	}
 
-	public IBlockMap getBlockMap() {
+	public BlockMap getBlockMap() {
 		return this.isolator.getBlockMap();
 	}
 
@@ -241,7 +214,7 @@ public class Footsteps implements IDependent {
 		// TODO Implement dumpState()
 	}
 
-	public static void registerForgeEntries(final BlockClass blockClass, final String... entries) {
+	public static void registerForgeEntries(final String blockClass, final String... entries) {
 		for (final String dictionaryName : entries) {
 			final List<ItemStack> stacks = OreDictionary.getOres(dictionaryName, false);
 			for (final ItemStack stack : stacks) {
@@ -250,14 +223,14 @@ public class Footsteps implements IDependent {
 					String blockName = MCHelper.nameOf(block);
 					if (stack.getHasSubtypes() && stack.getItemDamage() != OreDictionary.WILDCARD_VALUE)
 						blockName += "^" + stack.getItemDamage();
-					INSTANCE.getBlockMap().register(blockName, blockClass.getName());
+					INSTANCE.getBlockMap().register(blockName, blockClass);
 				}
 			}
 		}
 	}
 
-	public static void registerBlocks(final BlockClass blockClass, final String... blocks) {
+	public static void registerBlocks(final String blockClass, final String... blocks) {
 		for (final String s : blocks)
-			INSTANCE.getBlockMap().register(s, blockClass.getName());
+			INSTANCE.getBlockMap().register(s, blockClass);
 	}
 }

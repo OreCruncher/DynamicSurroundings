@@ -27,8 +27,7 @@ package org.blockartistry.mod.DynSurround.client.footsteps.game.system;
 import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ILibrary;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.LegacyCapableBlockMap;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IBlockMap;
+import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.BlockMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IStepPlayer;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IGenerator;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IGeneratorSettable;
@@ -45,7 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class Isolator implements IIsolator, IVariatorSettable, IGeneratorSettable {
 	private ILibrary acoustics;
 	private ISolver solver;
-	private IBlockMap blockMap;
+	private BlockMap blockMap;
 	private IPrimitiveMap primitiveMap;
 	private ISoundPlayer soundPlayer;
 	private IStepPlayer defaultStepPlayer;
@@ -55,7 +54,7 @@ public class Isolator implements IIsolator, IVariatorSettable, IGeneratorSettabl
 	private IGenerator generator;
 
 	public Isolator() {
-		this.blockMap = new LegacyCapableBlockMap();
+		this.blockMap = new BlockMap();
 	}
 
 	@Override
@@ -80,7 +79,7 @@ public class Isolator implements IIsolator, IVariatorSettable, IGeneratorSettabl
 	}
 
 	@Override
-	public IBlockMap getBlockMap() {
+	public BlockMap getBlockMap() {
 		return this.blockMap;
 	}
 
@@ -112,7 +111,7 @@ public class Isolator implements IIsolator, IVariatorSettable, IGeneratorSettabl
 	}
 
 	@Override
-	public void setBlockMap(final IBlockMap blockMap) {
+	public void setBlockMap(final BlockMap blockMap) {
 		this.blockMap = blockMap;
 	}
 

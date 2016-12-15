@@ -35,7 +35,7 @@ import java.util.List;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.Footsteps;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IBlockMap;
+import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.BlockMap;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import net.minecraft.block.Block;
@@ -89,7 +89,7 @@ public final class WailaHandler implements IWailaDataProvider {
 
 		if (accessor != null && Footsteps.INSTANCE != null) {
 			text.add("Material: " + MCHelper.getMaterialName(accessor.getBlockState().getMaterial()));
-			final IBlockMap bm = Footsteps.INSTANCE.getBlockMap();
+			final BlockMap bm = Footsteps.INSTANCE.getBlockMap();
 			if (bm != null) {
 				bm.collectData(accessor.getBlockState(), text);
 			}

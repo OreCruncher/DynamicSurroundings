@@ -35,7 +35,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IBlockMap;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import gnu.trove.map.hash.TCustomHashMap;
@@ -47,7 +46,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class BasicBlockMap implements IBlockMap {
+public class BlockMap {
 	private static final Pattern pattern = Pattern.compile("([^:]+:[^^+]+)\\^?(\\d+)?\\+?(\\w+)?");
 
 	private final Map<Block, TIntObjectHashMap<String>> metaMap = new TCustomHashMap<Block, TIntObjectHashMap<String>>(
@@ -112,10 +111,9 @@ public class BasicBlockMap implements IBlockMap {
 		macros.put("#fence", entries);
 	}
 
-	public BasicBlockMap() {
+	public BlockMap() {
 	}
 
-	@Override
 	public String getBlockMap(final IBlockState state) {
 		final TIntObjectHashMap<String> metas = this.metaMap.get(state.getBlock());
 		if (metas != null) {
@@ -127,7 +125,6 @@ public class BasicBlockMap implements IBlockMap {
 		return null;
 	}
 
-	@Override
 	public String getBlockMapSubstrate(final IBlockState state, final String substrate) {
 		final Map<String, String> sub = this.substrateMap.get(state.getBlock());
 		if (sub != null) {
@@ -163,7 +160,6 @@ public class BasicBlockMap implements IBlockMap {
 		}
 	}
 
-	@Override
 	public void register(final String key, final String value) {
 		final Matcher matcher = pattern.matcher(key);
 		if (matcher.matches()) {
@@ -184,7 +180,6 @@ public class BasicBlockMap implements IBlockMap {
 		}
 	}
 
-	@Override
 	public void collectData(final IBlockState state, final List<String> data) {
 		String temp = this.getBlockMap(state);
 		if (temp != null)
@@ -206,7 +201,6 @@ public class BasicBlockMap implements IBlockMap {
 		}
 	}
 
-	@Override
 	public void clear() {
 		this.metaMap.clear();
 		this.substrateMap.clear();
