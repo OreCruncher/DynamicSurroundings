@@ -1121,7 +1121,11 @@
 				"doorTin",
 				"blockWroughtIron",
 				"blockVoid",
-				"blockDawnstone"
+				"blockDawnstone",
+				"blockCobalt",
+				"blockArdite",
+				"blockManyullyn",
+				"blockPigiron"
 			]
 			
 		},
