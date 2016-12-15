@@ -108,7 +108,7 @@ public final class DataScripts {
 
 	private void runFromArchive(final String dataFile) {
 		final String fileName = StringUtils.appendIfMissing(assetDirectory + dataFile.replaceAll("[^a-zA-Z0-9.-]", "_"),
-				this.exe.preferredExtension());
+				this.exe.preferredExtension()).toLowerCase();
 
 		try (final InputStream stream = DataScripts.class.getResourceAsStream(fileName)) {
 			if (stream != null) {

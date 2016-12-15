@@ -1,0 +1,50 @@
+{
+	"blocks":[
+		{
+			"blocks":[
+				"forestry:planks.0",
+				"forestry:planks.1",
+				"forestry:planks.fireproof.0",
+				"forestry:planks.fireproof.1"
+			],
+			"stepChance":150,
+			"sounds":[
+				{
+					"sound":"dsurround:floorsqueak",
+					"soundType":"step",
+					"volume":0.2,
+					"variable":true
+				}
+				
+			]
+			
+		},
+		{
+			"blocks":[
+				"forestry:beehives:*"
+			],
+			"chance":5,
+			"sounds":[
+				{
+					"sound":"dsurround:bees",
+					"conditions":"(?i)(?!.*#raining#.*)(.*#day#.*)",
+					"volume":0.2,
+					"variable":true
+				}
+				
+			]
+			
+		}
+		
+	],
+	"footsteps":{
+		"forestry:beehives":"organic_dry",
+		"forestry:bee_chest":"squeakywood",
+		"forestry:tree_chest":"squeakywood",
+		"forestry:butterfly_chest":"squeakywood",
+		"forestry:apiary":"woodutility",
+		"forestry:bee_house":"woodutility",
+		"forestry:worktable":"woodutility",
+		"forestry:escritoire":"woodutility"
+	}
+}

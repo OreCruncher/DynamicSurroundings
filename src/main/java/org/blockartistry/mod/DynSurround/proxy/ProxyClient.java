@@ -31,7 +31,6 @@ import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.ClientEffectHandler;
 import org.blockartistry.mod.DynSurround.client.footsteps.Footsteps;
-import org.blockartistry.mod.DynSurround.client.footsteps.game.user.GenerateBlockReport;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
@@ -105,12 +104,6 @@ public class ProxyClient extends Proxy {
 			ModLog.info("*** SOUND REGISTRY ***");
 			for (final String sound : sounds)
 				ModLog.info(sound);
-			
-			ModLog.info("*** REGISTERED BLOCK NAMES ***");
-			final GenerateBlockReport report = new GenerateBlockReport();
-			for (final String entry : report.getBlockNames()) {
-				ModLog.info(entry);
-			}
 		}
 	}
 }

@@ -113,10 +113,6 @@ public final class MCHelper {
 		return state.getMaterial() == Material.AIR;
 	}
 	
-	public static boolean isLiquid(final Block block) {
-		return block.getMaterial(null).isLiquid();
-	}
-	
 	public static SoundType getSoundType(final Block block) {
 		return block.getSoundType();
 	}
@@ -125,10 +121,6 @@ public final class MCHelper {
 		return getSoundType(state.getBlock());
 	}
 	
-	public static boolean isOpaqueCube(final Block block) {
-		return block.isOpaqueCube(null);
-	}
-
 	public static boolean hasVariants(final Block block) {
 		final Item item = Item.getItemFromBlock(block);
 		if(item == null)

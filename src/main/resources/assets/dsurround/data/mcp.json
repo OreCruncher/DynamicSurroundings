@@ -1288,6 +1288,12 @@
 				"blockMarble"
 			]
 			
+		},
+		{
+			"blockClass":"bluntwood",
+			"dictionaryEntries":[
+				"doorWood"
+			]
 		}
 		
 	]
