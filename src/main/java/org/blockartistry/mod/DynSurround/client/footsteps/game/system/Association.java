@@ -24,6 +24,10 @@
 
 package org.blockartistry.mod.DynSurround.client.footsteps.game.system;
 
+import java.util.List;
+
+import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -36,7 +40,7 @@ public class Association {
 	private IBlockState state;
 	private BlockPos pos;
 
-	private String data = null;
+	private List<IAcoustic> data = null;
 
 	private boolean noAssociation = false;
 	private boolean isPrimative = false;
@@ -49,11 +53,11 @@ public class Association {
 		this.pos = pos;
 	}
 
-	public String getData() {
+	public List<IAcoustic> getData() {
 		return this.data;
 	}
 
-	public Association setAssociation(final String association) {
+	public Association setAssociation(final List<IAcoustic> association) {
 		this.data = association;
 		this.noAssociation = false;
 		return this;
@@ -68,7 +72,7 @@ public class Association {
 		return this.noAssociation;
 	}
 
-	public Association setPrimitive(final String primative) {
+	public Association setPrimitive(final List<IAcoustic> primative) {
 		this.data = primative;
 		this.isPrimative = true;
 		return this;

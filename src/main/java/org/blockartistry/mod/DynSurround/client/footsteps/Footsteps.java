@@ -79,8 +79,8 @@ public class Footsteps implements IDependent {
 		final List<IResourcePack> repo = this.dealer.findResourcePacks();
 
 		reloadManifests(repo);
-		reloadPrimitiveMap(repo);
 		reloadAcoustics(repo);
+		reloadPrimitiveMap(repo);
 		reloadVariator(repo);
 
 		this.isolator.setSolver(new Solver(this.isolator));
@@ -141,7 +141,7 @@ public class Footsteps implements IDependent {
 	}
 
 	private void reloadPrimitiveMap(final List<IResourcePack> repo) {
-		final PrimitiveMap primitiveMap = new PrimitiveMap();
+		final PrimitiveMap primitiveMap = new PrimitiveMap(this.isolator);
 
 		for (final IResourcePack pack : repo) {
 			InputStream stream = null;

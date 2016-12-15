@@ -54,7 +54,7 @@ public class Isolator implements IIsolator, IVariatorSettable, IGeneratorSettabl
 	private IGenerator generator;
 
 	public Isolator() {
-		this.blockMap = new BlockMap();
+		this.blockMap = new BlockMap(this);
 	}
 
 	@Override

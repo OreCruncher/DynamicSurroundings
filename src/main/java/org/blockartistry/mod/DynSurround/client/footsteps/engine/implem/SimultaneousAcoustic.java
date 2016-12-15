@@ -43,6 +43,11 @@ public class SimultaneousAcoustic implements IAcoustic {
 	public SimultaneousAcoustic(final Collection<IAcoustic> acoustics) {
 		this.acoustics = new ArrayList<IAcoustic>(acoustics);
 	}
+	
+	@Override
+	public String getAcousticName() {
+		return "Simultaneous Acoustic";
+	}
 
 	@Override
 	public void playSound(final ISoundPlayer player, final Object location, final EventType event, final IOptions inputOptions) {

@@ -38,6 +38,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class BasicAcoustic implements IAcoustic {
+	
+	protected String acousticName;
 	protected SoundEvent sound;
 	protected float volMin = 1f;
 	protected float volMax = 1f;
@@ -45,6 +47,19 @@ public class BasicAcoustic implements IAcoustic {
 	protected float pitchMax = 1f;
 
 	protected IOptions outputOptions;
+	
+	public BasicAcoustic() {
+		this("Unnamed");
+	}
+	
+	public BasicAcoustic(final String name) {
+		this.acousticName = name;
+	}
+	
+	@Override
+	public String getAcousticName() {
+		return this.acousticName;
+	}
 
 	@Override
 	public void playSound(final ISoundPlayer player, final Object location, final EventType event,

@@ -29,12 +29,13 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
+import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Isolator;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import gnu.trove.map.hash.TCustomHashMap;
@@ -49,9 +50,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockMap {
 	private static final Pattern pattern = Pattern.compile("([^:]+:[^^+]+)\\^?(\\d+)?\\+?(\\w+)?");
 
-	private final Map<Block, TIntObjectHashMap<String>> metaMap = new TCustomHashMap<Block, TIntObjectHashMap<String>>(
+	private final Isolator isolator;
+	private final Map<Block, TIntObjectHashMap<List<IAcoustic>>> metaMap = new TCustomHashMap<Block, TIntObjectHashMap<List<IAcoustic>>>(
 			IdentityHashingStrategy.INSTANCE);
-	private final Map<Block, Map<String, String>> substrateMap = new TCustomHashMap<Block, Map<String, String>>(
+	private final Map<Block, Map<String, List<IAcoustic>>> substrateMap = new TCustomHashMap<Block, Map<String, List<IAcoustic>>>(
 			IdentityHashingStrategy.INSTANCE);
 
 	private static class MacroEntry {
@@ -111,13 +113,14 @@ public class BlockMap {
 		macros.put("#fence", entries);
 	}
 
-	public BlockMap() {
+	public BlockMap(final Isolator isolator) {
+		this.isolator = isolator;
 	}
 
-	public String getBlockMap(final IBlockState state) {
-		final TIntObjectHashMap<String> metas = this.metaMap.get(state.getBlock());
+	public List<IAcoustic> getBlockMap(final IBlockState state) {
+		final TIntObjectHashMap<List<IAcoustic>> metas = this.metaMap.get(state.getBlock());
 		if (metas != null) {
-			String result = metas.get(state.getBlock().getMetaFromState(state));
+			List<IAcoustic> result = metas.get(state.getBlock().getMetaFromState(state));
 			if (result == null)
 				result = metas.get(-1);
 			return result;
@@ -125,10 +128,10 @@ public class BlockMap {
 		return null;
 	}
 
-	public String getBlockMapSubstrate(final IBlockState state, final String substrate) {
-		final Map<String, String> sub = this.substrateMap.get(state.getBlock());
+	public List<IAcoustic> getBlockMapSubstrate(final IBlockState state, final String substrate) {
+		final Map<String, List<IAcoustic>> sub = this.substrateMap.get(state.getBlock());
 		if (sub != null) {
-			String result = sub.get(substrate + "." + state.getBlock().getMetaFromState(state));
+			List<IAcoustic> result = sub.get(substrate + "." + state.getBlock().getMetaFromState(state));
 			if (result == null)
 				result = sub.get(substrate + ".-1");
 			return result;
@@ -137,16 +140,19 @@ public class BlockMap {
 	}
 
 	private void put(final Block block, final int meta, final String substrate, final String value) {
+		
+		final List<IAcoustic> acoustics = this.isolator.getAcoustics().compileAcoustics(value);
+		
 		if (StringUtils.isEmpty(substrate)) {
-			TIntObjectHashMap<String> metas = this.metaMap.get(block);
+			TIntObjectHashMap<List<IAcoustic>> metas = this.metaMap.get(block);
 			if (metas == null)
-				this.metaMap.put(block, metas = new TIntObjectHashMap<String>());
-			metas.put(meta, value);
+				this.metaMap.put(block, metas = new TIntObjectHashMap<List<IAcoustic>>());
+			metas.put(meta, acoustics);
 		} else {
-			Map<String, String> sub = this.substrateMap.get(block);
+			Map<String, List<IAcoustic>> sub = this.substrateMap.get(block);
 			if (sub == null)
-				this.substrateMap.put(block, sub = new HashMap<String, String>());
-			sub.put(substrate + "." + meta, value);
+				this.substrateMap.put(block, sub = new HashMap<String, List<IAcoustic>>());
+			sub.put(substrate + "." + meta, acoustics);
 		}
 	}
 
@@ -181,24 +187,7 @@ public class BlockMap {
 	}
 
 	public void collectData(final IBlockState state, final List<String> data) {
-		String temp = this.getBlockMap(state);
-		if (temp != null)
-			data.add(temp);
-
-		final Map<String, String> subs = this.substrateMap.get(state.getBlock());
-		if (subs != null) {
-			final int len = data.size();
-			temp = "." + state.getBlock().getMetaFromState(state);
-			for (final Entry<String, String> entry : subs.entrySet())
-				if (entry.getKey().endsWith(temp))
-					data.add(entry.getValue());
-			if (data.size() == len) {
-				temp = ".-1";
-				for (final Entry<String, String> entry : subs.entrySet())
-					if (entry.getKey().endsWith(temp))
-						data.add(entry.getKey() + ":" + entry.getValue());
-			}
-		}
+		// TODO: Need to sort this based on precompiled data
 	}
 
 	public void clear() {

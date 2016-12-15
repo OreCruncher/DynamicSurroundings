@@ -24,18 +24,18 @@
 
 package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Random;
 
-import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.EventType;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.INamedAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions.Option;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
@@ -68,38 +68,63 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	private final PriorityQueue<PendingSound> pending = new PriorityQueue<PendingSound>();
 	private final IIsolator isolator;
 
+	// Special sentinals for equating
+	public static final List<IAcoustic> NOT_EMITTER = new ArrayList<IAcoustic>();
+	public static final List<IAcoustic> MESSY_GROUND = new ArrayList<IAcoustic>();
+
 	public AcousticsManager(final IIsolator isolator) {
 		this.isolator = isolator;
 	}
 
-	public void addAcoustic(final INamedAcoustic acoustic) {
-		this.acoustics.put(acoustic.getName(), acoustic);
+	public void addAcoustic(final IAcoustic acoustic) {
+		this.acoustics.put(acoustic.getAcousticName(), acoustic);
 	}
 
 	public void playAcoustic(final Object location, final Association acousticName, final EventType event) {
 		playAcoustic(location, acousticName.getData(), event, null);
 	}
 
-	public void playAcoustic(final Object location, final String acousticName, final EventType event,
+	public void playAcoustic(final Object location, final List<IAcoustic> acoustics, final EventType event,
 			final IOptions inputOptions) {
-		if(StringUtils.isEmpty(acousticName)) {
+		if(acoustics == null || acoustics.size() == 0) {
 			ModLog.debug("Attempt to play acoustic with no name");
 			return;
 		}
 		
+		// TODO: Checkit
+		if (ModLog.DEBUGGING) {
+			final StringBuilder builder = new StringBuilder();
+			for(final IAcoustic acoustic: acoustics)
+				builder.append(acoustic.getAcousticName()).append(",");
+			ModLog.debug("  Playing acoustic " + builder.toString() + " for event " + event.toString().toUpperCase());
+		}
+		
+		for(final IAcoustic acoustic: acoustics) {
+			acoustic.playSound(mySoundPlayer(), location, event, inputOptions);
+		}
+	}
+
+	public List<IAcoustic> compileAcoustics(final String acousticName) {
+		if(acousticName.equals("NOT_EMITTER"))
+			return NOT_EMITTER;
+		else if(acousticName.equals("MESSY_GROUND"))
+			return MESSY_GROUND;
+
+		final List<IAcoustic> acoustics = new ArrayList<IAcoustic>();
+
 		final String fragments[] = acousticName.split(",");
 		for (final String fragment : fragments) {
 			final IAcoustic acoustic = this.acoustics.get(fragment);
 			if (acoustic == null) {
-				onAcousticNotFound(location, fragment, event, inputOptions);
+				ModLog.warn("Acoustic '%s' not found!", fragment);
 			} else {
-				if (ModLog.DEBUGGING)
-					ModLog.debug("  Playing acoustic " + acousticName + " for event " + event.toString().toUpperCase());
-				acoustic.playSound(mySoundPlayer(), location, event, inputOptions);
+				acoustics.add(acoustic);
 			}
 		}
+		
+		return acoustics;
 	}
-
+	
 	protected void onAcousticNotFound(final Object location, final String acousticName, final EventType event,
 			final IOptions inputOptions) {
 		ModLog.debug("Tried to play a missing acoustic: " + acousticName);

@@ -24,13 +24,17 @@
 
 package org.blockartistry.mod.DynSurround.client.footsteps.game.system;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.implem.ConfigOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.EventType;
+import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions.Option;
+import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.AcousticsManager;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IIsolator;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.ISolver;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
@@ -177,12 +181,12 @@ public class Solver implements ISolver {
 		IBlockState in = world.getBlockState(pos);
 		final IBlockState above = world.getBlockState(pos.up());
 
-		String association = isolator.getBlockMap().getBlockMapSubstrate(above, "carpet");
+		List<IAcoustic> association = isolator.getBlockMap().getBlockMapSubstrate(above, "carpet");
 
 		// PFLog.debugf("Walking on block: %0 -- Being in block: %1", in,
 		// above);
 
-		if (association == null || association.equals("NOT_EMITTER")) {
+		if (association == null || association == AcousticsManager.NOT_EMITTER) {
 			// This condition implies that if the carpet is NOT_EMITTER, solving
 			// will CONTINUE with the actual block surface the player is walking
 			// on
@@ -194,7 +198,7 @@ public class Solver implements ISolver {
 				if (association != null) {
 					pos.move(EnumFacing.DOWN);
 					in = below;
-					ModLog.debug("Fence detected: " + association);
+					ModLog.debug("Fence detected");
 				}
 			}
 
@@ -202,7 +206,7 @@ public class Solver implements ISolver {
 				association = isolator.getBlockMap().getBlockMap(in);
 			}
 
-			if (association != null && !association.equals("NOT_EMITTER")) {
+			if (association != null && association != AcousticsManager.NOT_EMITTER) {
 				// This condition implies that foliage over a NOT_EMITTER block
 				// CANNOT PLAY
 				// This block most not be executed if the association is a
@@ -210,10 +214,11 @@ public class Solver implements ISolver {
 				// => this block of code is here, not outside this if else
 				// group.
 
-				String foliage = this.isolator.getBlockMap().getBlockMapSubstrate(above, "foliage");
-				if (foliage != null && !foliage.equals("NOT_EMITTER")) {
-					association = association + "," + foliage;
-					ModLog.debug("Foliage detected: " + foliage);
+				List<IAcoustic> foliage = this.isolator.getBlockMap().getBlockMapSubstrate(above, "foliage");
+				if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
+					association = new ArrayList<IAcoustic>(association);
+					association.addAll(foliage);
+					ModLog.debug("Foliage detected");
 				}
 			}
 		} else {
@@ -223,7 +228,7 @@ public class Solver implements ISolver {
 		}
 
 		if (association != null) {
-			if (association.equals("NOT_EMITTER")) {
+			if (association == AcousticsManager.NOT_EMITTER) {
 				// if (in.getBlock() != Blocks.air) { // air block
 				// PFLog.debugf("Not emitter for %0 : %1", in);
 				// }
@@ -235,9 +240,9 @@ public class Solver implements ISolver {
 				return (new Association(in, pos)).setAssociation(association);
 			}
 		} else {
-			String primitive = resolvePrimitive(in);
+			List<IAcoustic> primitive = resolvePrimitive(in);
 			if (primitive != null) {
-				if (primitive.equals("NOT_EMITTER")) {
+				if (primitive == AcousticsManager.NOT_EMITTER) {
 					// PFLog.debugf("Primitive for %0 : %1 : %2 is NOT_EMITTER!
 					// Following behavior is uncertain.", in, primitive);
 					return null;
@@ -253,15 +258,15 @@ public class Solver implements ISolver {
 		}
 	}
 
-	private String resolvePrimitive(final IBlockState state) {
+	private List<IAcoustic> resolvePrimitive(final IBlockState state) {
 
 		if (state.getMaterial() == Material.AIR)
-			return "NOT_EMITTER";
+			return AcousticsManager.NOT_EMITTER;
 
 		final SoundType type = MCHelper.getSoundType(state);
 
 		if (type == null)
-			return "NOT_EMITTER";
+			return AcousticsManager.NOT_EMITTER;
 
 		final String soundName;
 		boolean flag = false;
@@ -275,7 +280,7 @@ public class Solver implements ISolver {
 		final String substrate = String.format(Locale.ENGLISH, "%.2f_%.2f", type.getVolume(), type.getPitch());
 
 		// Check for primitive in register
-		String primitive = this.isolator.getPrimitiveMap().getPrimitiveMapSubstrate(soundName, substrate);
+		List<IAcoustic> primitive = this.isolator.getPrimitiveMap().getPrimitiveMapSubstrate(soundName, substrate);
 		if (primitive == null) {
 			if (flag) {
 				primitive = this.isolator.getPrimitiveMap().getPrimitiveMapSubstrate(soundName, "break_" + soundName); // Check
@@ -304,7 +309,9 @@ public class Solver implements ISolver {
 			final ConfigOptions options = new ConfigOptions();
 			options.getMap().put(Option.GLIDING_VOLUME, volume > 1 ? 1 : volume);
 			// material water, see EntityLivingBase line 286
-			this.isolator.getAcoustics().playAcoustic(ply, "_SWIM",
+			// TODO: Need to cache somewhere
+			final List<IAcoustic> swim = this.isolator.getAcoustics().compileAcoustics("_SWIM");
+			this.isolator.getAcoustics().playAcoustic(ply, swim,
 					ply.isInsideOfMaterial(Material.WATER) ? EventType.SWIM : EventType.WALK, options);
 			return true;
 		}
@@ -325,7 +332,7 @@ public class Solver implements ISolver {
 		final World world = EnvironState.getWorld();
 		final IBlockState above = world.getBlockState(pos.up());
 
-		String association = null;
+		List<IAcoustic> association = null;
 		boolean found = false;
 		// Try to see if the block above is a carpet...
 		/*
@@ -350,15 +357,15 @@ public class Solver implements ISolver {
 		 * => this block of code is here, not outside this if else group.
 		 */
 
-		String foliage = this.isolator.getBlockMap().getBlockMapSubstrate(above, "foliage");
-		if (foliage != null && !foliage.equals("NOT_EMITTER")) {
+		List<IAcoustic> foliage = this.isolator.getBlockMap().getBlockMapSubstrate(above, "foliage");
+		if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 			// we discard the normal block association, and mark the foliage as
 			// detected
 			// association = association + "," + foliage;
 			association = foliage;
-			String isMessy = this.isolator.getBlockMap().getBlockMapSubstrate(above, "messy");
+			List<IAcoustic> isMessy = this.isolator.getBlockMap().getBlockMapSubstrate(above, "messy");
 
-			if (isMessy != null && isMessy.equals("MESSY_GROUND"))
+			if (isMessy != null && isMessy == AcousticsManager.MESSY_GROUND)
 				found = true;
 		}
 		/*
@@ -367,7 +374,7 @@ public class Solver implements ISolver {
 		 */
 
 		if (found && association != null) {
-			return association.equals("NOT_EMITTER") ? null : (new Association()).setAssociation(association);
+			return association == AcousticsManager.NOT_EMITTER ? null : (new Association()).setAssociation(association);
 		}
 		return null;
 	}

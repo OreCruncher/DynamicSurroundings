@@ -28,7 +28,6 @@ import java.util.Map;
 
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.EventType;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.INamedAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
 
@@ -38,7 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class EventSelectorAcoustics implements INamedAcoustic {
+public class EventSelectorAcoustics implements IAcoustic {
 	private final String name;
 
 	private final Map<EventType, IAcoustic> pairs = new TCustomHashMap<EventType, IAcoustic>(
@@ -49,7 +48,7 @@ public class EventSelectorAcoustics implements INamedAcoustic {
 	}
 
 	@Override
-	public String getName() {
+	public String getAcousticName() {
 		return this.name;
 	}
 

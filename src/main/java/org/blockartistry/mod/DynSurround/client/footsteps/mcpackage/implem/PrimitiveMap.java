@@ -25,7 +25,11 @@
 package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
+import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Isolator;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -33,20 +37,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class PrimitiveMap {
 
-	private final Map<String, String> primitiveMap = new LinkedHashMap<String, String>();
+	private final Isolator isolator;
+	private final Map<String, List<IAcoustic>> primitiveMap = new LinkedHashMap<String, List<IAcoustic>>();
 
-	public PrimitiveMap() {
+	public PrimitiveMap(final Isolator isolator) {
+		this.isolator = isolator;
 	}
 
-	public String getPrimitiveMap(final String primitive) {
+	public List<IAcoustic> getPrimitiveMap(final String primitive) {
 		return this.primitiveMap.get(primitive);
 	}
 
-	public String getPrimitiveMapSubstrate(final String primitive, final String substrate) {
+	public List<IAcoustic> getPrimitiveMapSubstrate(final String primitive, final String substrate) {
 		return this.primitiveMap.get(primitive + "@" + substrate);
 	}
 
 	public void register(final String key, final String value) {
-		this.primitiveMap.put(key, value);
+		this.primitiveMap.put(key, this.isolator.getAcoustics().compileAcoustics(value));
 	}
 }

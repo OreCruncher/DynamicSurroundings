@@ -34,6 +34,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public interface IAcoustic {
+	
+	public String getAcousticName();
+	
 	/**
 	 * Plays a sound.
 	 */
