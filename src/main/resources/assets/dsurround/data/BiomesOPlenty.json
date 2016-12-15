@@ -258,8 +258,10 @@
 		"biomesoplenty:plant_1^9+foliage":"leaves",
 		"biomesoplenty:double_plant":"NOT_EMITTER",
 		"biomesoplenty:double_plant+messy":"MESSY_GROUND",
-		"biomesoplenty:double_plant^0+foliage":"brush",
-		"biomesoplenty:double_plant^1+foliage":"straw",
-		"biomesoplenty:double_plant^2+foliage":"organic"
+		"biomesoplenty:double_plant^0+foliage":"brush_straw_transition",
+		"biomesoplenty:double_plant^1+foliage":"brush_straw_transition",
+		"biomesoplenty:double_plant^2+foliage":"organic",
+		"biomesoplenty:double_plant^8+foliage":"brush",
+		"biomesoplenty:double_plant^9+foliage":"brush"
 	}
 }
