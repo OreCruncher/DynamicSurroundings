@@ -309,9 +309,7 @@ public class Solver implements ISolver {
 			final ConfigOptions options = new ConfigOptions();
 			options.getMap().put(Option.GLIDING_VOLUME, volume > 1 ? 1 : volume);
 			// material water, see EntityLivingBase line 286
-			// TODO: Need to cache somewhere
-			final List<IAcoustic> swim = this.isolator.getAcoustics().compileAcoustics("_SWIM");
-			this.isolator.getAcoustics().playAcoustic(ply, swim,
+			this.isolator.getAcoustics().playAcoustic(ply, AcousticsManager.SWIM,
 					ply.isInsideOfMaterial(Material.WATER) ? EventType.SWIM : EventType.WALK, options);
 			return true;
 		}

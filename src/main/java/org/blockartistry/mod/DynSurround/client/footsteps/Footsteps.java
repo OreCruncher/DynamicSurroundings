@@ -75,6 +75,8 @@ public class Footsteps implements IDependent {
 
 	public void preInit() {
 
+		// It's a hack - needs refactor
+		AcousticsManager.SWIM = null;
 		this.getBlockMap().clear();
 		final List<IResourcePack> repo = this.dealer.findResourcePacks();
 

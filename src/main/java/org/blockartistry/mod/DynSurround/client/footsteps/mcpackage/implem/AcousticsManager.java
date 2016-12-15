@@ -71,6 +71,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	// Special sentinals for equating
 	public static final List<IAcoustic> NOT_EMITTER = new ArrayList<IAcoustic>();
 	public static final List<IAcoustic> MESSY_GROUND = new ArrayList<IAcoustic>();
+	public static List<IAcoustic> SWIM;
 
 	public AcousticsManager(final IIsolator isolator) {
 		this.isolator = isolator;
@@ -91,11 +92,16 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 			return;
 		}
 		
-		// TODO: Checkit
 		if (ModLog.DEBUGGING) {
 			final StringBuilder builder = new StringBuilder();
-			for(final IAcoustic acoustic: acoustics)
-				builder.append(acoustic.getAcousticName()).append(",");
+			boolean doComma = false;
+			for(final IAcoustic acoustic: acoustics) {
+				if(doComma)
+					builder.append(",");
+				else
+					doComma = true;
+				builder.append(acoustic.getAcousticName());
+			}
 			ModLog.debug("  Playing acoustic " + builder.toString() + " for event " + event.toString().toUpperCase());
 		}
 		
@@ -125,11 +131,6 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		return acoustics;
 	}
 	
-	protected void onAcousticNotFound(final Object location, final String acousticName, final EventType event,
-			final IOptions inputOptions) {
-		ModLog.debug("Tried to play a missing acoustic: " + acousticName);
-	}
-
 	@Override
 	public void playStep(final EntityLivingBase entity, final Association assos) {
 		final IBlockState state = assos.getState();
@@ -183,6 +184,9 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	}
 
 	public void think() {
+		
+		if(SWIM == null)
+			SWIM = compileAcoustics("_SWIM");
 
 		final long time = System.currentTimeMillis();
 
