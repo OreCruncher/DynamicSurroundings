@@ -33,7 +33,7 @@ import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.Even
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions.Option;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IIsolator;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.ISolver;
-import org.blockartistry.mod.DynSurround.compat.MCHelper;
+import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 
 import net.minecraft.block.SoundType;

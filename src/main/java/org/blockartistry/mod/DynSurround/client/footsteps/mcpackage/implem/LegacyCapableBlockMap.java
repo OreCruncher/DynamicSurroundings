@@ -25,7 +25,7 @@
 package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem;
 
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.compat.MCHelper;
+import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.relauncher.Side;

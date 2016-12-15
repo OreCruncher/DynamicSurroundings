@@ -37,7 +37,7 @@ import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISou
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Association;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IStepPlayer;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IIsolator;
-import org.blockartistry.mod.DynSurround.compat.MCHelper;
+import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import net.minecraft.block.SoundType;

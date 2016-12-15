@@ -46,11 +46,11 @@ import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.I
 import org.blockartistry.mod.DynSurround.client.footsteps.parsers.AcousticsJsonReader;
 import org.blockartistry.mod.DynSurround.client.footsteps.parsers.Register;
 import org.blockartistry.mod.DynSurround.client.footsteps.util.property.simple.ConfigProperty;
-import org.blockartistry.mod.DynSurround.compat.MCHelper;
 import org.blockartistry.mod.DynSurround.data.xface.BlockClass;
 import org.blockartistry.mod.DynSurround.registry.DataScripts;
 import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
 import org.blockartistry.mod.DynSurround.util.JsonUtils;
+import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.IResourcePack;

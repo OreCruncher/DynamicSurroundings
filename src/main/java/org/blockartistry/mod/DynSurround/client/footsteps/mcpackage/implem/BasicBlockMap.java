@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IBlockMap;
-import org.blockartistry.mod.DynSurround.compat.MCHelper;
+import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import gnu.trove.map.hash.TCustomHashMap;
 import gnu.trove.map.hash.TIntObjectHashMap;

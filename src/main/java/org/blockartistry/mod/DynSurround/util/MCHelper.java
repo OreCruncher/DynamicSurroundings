@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.compat;
+package org.blockartistry.mod.DynSurround.util;
 
 import java.util.ArrayList;
 import java.util.List;
