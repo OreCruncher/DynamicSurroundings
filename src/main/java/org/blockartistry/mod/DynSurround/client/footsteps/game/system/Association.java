@@ -27,6 +27,7 @@ package org.blockartistry.mod.DynSurround.client.footsteps.game.system;
 import java.util.List;
 
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
+import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.AcousticsManager;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -95,6 +96,6 @@ public class Association {
 	}
 
 	public boolean isNotEmitter() {
-		return this.data != null && this.data.equals("NOT_EMITTER");
+		return this.data == AcousticsManager.NOT_EMITTER;
 	}
 }
