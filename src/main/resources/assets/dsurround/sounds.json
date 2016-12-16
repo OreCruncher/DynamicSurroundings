@@ -798,49 +798,73 @@
 	"wind":{
 		"category":"ambient",
 		"sounds":[
-			"dsurround:ambient/outside/wind"
+			{
+				"name":"dsurround:ambient/outside/wind",
+				"stream":true
+			}
+			
 		]
 		
 	},
 	"crickets":{
 		"category":"ambient",
 		"sounds":[
-			"dsurround:ambient/outside/crickets"
+			{
+				"name":"dsurround:ambient/outside/crickets",
+				"stream":true
+			}
+			
 		]
 		
 	},
 	"forest":{
 		"category":"ambient",
 		"sounds":[
-			"dsurround:ambient/outside/forest"
+			{
+				"name":"dsurround:ambient/outside/forest",
+				"stream":true
+			}
+			
 		]
 		
 	},
 	"beach":{
 		"category":"ambient",
 		"sounds":[
-			"dsurround:ambient/outside/beach"
+			{
+				"name":"dsurround:ambient/outside/beach",
+				"stream":true
+			}
 		]
 		
 	},
 	"river":{
 		"category":"ambient",
 		"sounds":[
-			"dsurround:ambient/outside/river"
+			{
+				"name":"dsurround:ambient/outside/river",
+				"stream":true
+			}
 		]
 		
 	},
 	"taiga":{
 		"category":"ambient",
 		"sounds":[
-			"dsurround:ambient/outside/taiga"
+			{
+				"name":"dsurround:ambient/outside/taiga",
+				"stream":true
+			}
 		]
 		
 	},
 	"jungle":{
 		"category":"ambient",
 		"sounds":[
-			"dsurround:ambient/outside/jungle"
+			{
+				"name":"dsurround:ambient/outside/jungle",
+				"stream":true
+			}
 		]
 		
 	},
@@ -856,7 +880,10 @@
 	"theend":{
 		"category":"ambient",
 		"sounds":[
-			"dsurround:ambient/end/end"
+			{
+				"name":"dsurround:ambient/end/end",
+				"stream":true
+			}
 		]
 		
 	},
@@ -872,7 +899,10 @@
 	"underground":{
 		"category":"ambient",
 		"sounds":[
-			"dsurround:ambient/underground/ambient"
+			{
+				"name":"dsurround:ambient/underground/ambient",
+				"stream":true
+			}
 		]
 		
 	},
@@ -922,21 +952,30 @@
 	"underdeepocean":{
 		"category":"ambient",
 		"sounds":[
-			"dsurround:ambient/underwater/deepocean"
+			{
+				"name":"dsurround:ambient/underwater/deepocean",
+				"stream":true
+			}
 		]
 		
 	},
 	"underocean":{
 		"category":"ambient",
 		"sounds":[
-			"dsurround:ambient/underwater/ocean"
+			{
+				"name":"dsurround:ambient/underwater/ocean",
+				"stream":true
+			}
 		]
 		
 	},
 	"underriver":{
 		"category":"ambient",
 		"sounds":[
-			"dsurround:ambient/underwater/river"
+			{
+				"name":"dsurround:ambient/underwater/river",
+				"stream":true
+			}
 		]
 		
 	},
