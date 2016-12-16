@@ -243,12 +243,6 @@ public final class ModOptions {
 	public static String[] biomeAliases = {};
 
 	public static final String CATEGORY_BLOCK = "block";
-	public static final String CONFIG_BLOCK_CONFIG_FILES = "Config Files";
-
-	@Parameter(category = CATEGORY_BLOCK, property = CONFIG_BLOCK_CONFIG_FILES, defaultValue = "")
-	@Comment("Configuration files for configuring Block sounds and behavior")
-	@RestartRequired
-	public static String[] blockConfigFiles = {};
 
 	public static final String CATEGORY_BLOCK_EFFECTS = "block.effects";
 	public static final String CONFIG_BLOCK_EFFECT_STEAM = "Enable Steam";
