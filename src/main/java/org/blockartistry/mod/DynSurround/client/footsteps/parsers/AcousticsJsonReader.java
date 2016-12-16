@@ -29,7 +29,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.implem.BasicAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.implem.DelayedAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.implem.EventSelectorAcoustics;
@@ -225,9 +224,9 @@ public class AcousticsJsonReader {
 	
 	private void setupSoundName(final BasicAcoustic a, final String soundName) {
 		if (soundName.charAt(0) != '@') {
-			a.setSound(SoundUtils.getOrRegisterSound(Module.RESOURCE_ID + ":" + this.soundRoot + soundName));
+			a.setSound(SoundUtils.getOrRegisterSound(this.soundRoot + soundName));
 		} else {
-			a.setSound(SoundUtils.getOrRegisterSound(soundName.replace("@", "")));
+			a.setSound(SoundUtils.getOrRegisterSound("minecraft:" + soundName.substring(1)));
 		}
 	}
 	

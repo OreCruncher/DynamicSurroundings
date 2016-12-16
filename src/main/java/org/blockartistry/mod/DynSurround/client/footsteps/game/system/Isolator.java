@@ -30,18 +30,13 @@ import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.Acous
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.BlockMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.PrimitiveMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IStepPlayer;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IGenerator;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IGeneratorSettable;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IIsolator;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.ISolver;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IVariator;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IVariatorSettable;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class Isolator implements IIsolator, IVariatorSettable, IGeneratorSettable {
+public class Isolator implements IIsolator {
 	private AcousticsManager acoustics;
 	private ISolver solver;
 	private BlockMap blockMap;
@@ -49,9 +44,7 @@ public class Isolator implements IIsolator, IVariatorSettable, IGeneratorSettabl
 	private ISoundPlayer soundPlayer;
 	private IStepPlayer defaultStepPlayer;
 
-	private IVariator VAR;
-
-	private IGenerator generator;
+	private Generator generator;
 
 	public Isolator() {
 		this.blockMap = new BlockMap(this);
@@ -130,31 +123,7 @@ public class Isolator implements IIsolator, IVariatorSettable, IGeneratorSettabl
 
 	//
 
-	@Override
-	public void setVariator(final IVariator var) {
-		this.VAR = var;
-		fixVariator(this.generator);
-	}
-
-	//
-
-	@Override
-	public void setGenerator(final IGenerator generator) {
+	public void setGenerator(final Generator generator) {
 		this.generator = generator;
-		fixVariator(this.generator);
-	}
-
-	/**
-	 * Propagate variators.
-	 * 
-	 * @param possiblyAVariator
-	 */
-	private void fixVariator(final Object possiblyAVariator) {
-		if (possiblyAVariator == null)
-			return;
-
-		if (possiblyAVariator instanceof IVariatorSettable) {
-			((IVariatorSettable) possiblyAVariator).setVariator(this.VAR);
-		}
 	}
 }

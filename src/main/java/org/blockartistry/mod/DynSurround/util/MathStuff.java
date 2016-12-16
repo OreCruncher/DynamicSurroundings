@@ -100,9 +100,9 @@ public class MathStuff {
 	}
 
 	public static final double tan(final double rad) {
-		return tan((float)rad);
+		return tan((float) rad);
 	}
-	
+
 	public static final float atan2(float y, float x) {
 		final float add, mul;
 
@@ -156,7 +156,57 @@ public class MathStuff {
 		return radians * RAD_TO_DEG;
 	}
 
+	public static float wrapDegrees(float value) {
+		value = value % 360.0F;
+
+		if (value >= 180.0F) {
+			value -= 360.0F;
+		}
+
+		if (value < -180.0F) {
+			value += 360.0F;
+		}
+
+		return value;
+	}
+
+	public static double wrapDegrees(double value) {
+		value = value % 360.0D;
+
+		if (value >= 180.0D) {
+			value -= 360.0D;
+		}
+
+		if (value < -180.0D) {
+			value += 360.0D;
+		}
+
+		return value;
+	}
+
 	public static final float abs(final float val) {
 		return val < 0.0F ? -val : val;
 	}
+
+	public static final double abs(final double val) {
+		return val < 0.0F ? -val : val;
+	}
+
+	public static float sqrt_float(final float value) {
+		return (float) Math.sqrt((double) value);
+	}
+
+	public static float sqrt_double(final double value) {
+		return (float) Math.sqrt(value);
+	}
+
+	public static int floor_double(final double value) {
+		final int i = (int) value;
+		return value < (double) i ? i - 1 : i;
+	}
+
+	public static float clamp_float(final float num, final float min, final float max) {
+		return num < min ? min : (num > max ? max : num);
+	}
+
 }

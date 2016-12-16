@@ -32,15 +32,13 @@ import java.util.Scanner;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.Manifest;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Isolator;
-import org.blockartistry.mod.DynSurround.client.footsteps.game.system.ReaderH;
+import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Generator;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.ResourcePacks;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Solver;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.UserConfigSoundPlayerWrapper;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.AcousticsManager;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.PrimitiveMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.BlockMap;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.NormalVariator;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IVariator;
 import org.blockartistry.mod.DynSurround.client.footsteps.parsers.AcousticsJsonReader;
 import org.blockartistry.mod.DynSurround.client.footsteps.parsers.Register;
 import org.blockartistry.mod.DynSurround.client.footsteps.util.property.simple.ConfigProperty;
@@ -83,13 +81,12 @@ public class Footsteps implements IDependent {
 		reloadManifests(repo);
 		reloadAcoustics(repo);
 		reloadPrimitiveMap(repo);
-		reloadVariator(repo);
 
 		this.isolator.setSolver(new Solver(this.isolator));
-		this.isolator.setGenerator(new ReaderH(this.isolator));
+		this.isolator.setGenerator(new Generator(this.isolator));
 		/*
 		 * this.isolator.setGenerator(getConfig().getInteger("custom.stance") ==
-		 * 0 ? new ReaderH(this.isolator) : new ReaderQP(this.isolator));
+		 * 0 ? new Generator(this.isolator) : new GeneratorQP(this.isolator));
 		 */
 	}
 
@@ -116,30 +113,6 @@ public class Footsteps implements IDependent {
 					}
 			}
 		}
-	}
-
-	private void reloadVariator(final List<IResourcePack> repo) {
-		final IVariator var = new NormalVariator();
-
-		for (final IResourcePack pack : repo) {
-			InputStream stream = null;
-			try {
-				stream = this.dealer.openVariator(pack);
-				if (stream != null)
-					var.loadConfig(ConfigProperty.fromStream(stream));
-			} catch (final Exception e) {
-				ModLog.debug("Unable to load variator data from pack %s", pack.getPackName());
-			} finally {
-				if (stream != null)
-					try {
-						stream.close();
-					} catch (final IOException e) {
-						;
-					}
-			}
-		}
-
-		this.isolator.setVariator(var);
 	}
 
 	private void reloadPrimitiveMap(final List<IResourcePack> repo) {

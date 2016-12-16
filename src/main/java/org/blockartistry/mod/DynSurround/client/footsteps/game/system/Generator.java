@@ -26,23 +26,21 @@ package org.blockartistry.mod.DynSurround.client.footsteps.game.system;
 
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.EventType;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.NormalVariator;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IGenerator;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IIsolator;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IVariator;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IVariatorSettable;
+import org.blockartistry.mod.DynSurround.util.MathStuff;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ReaderH implements IGenerator, IVariatorSettable {
+public class Generator {
+	
+	private static final NormalVariator VAR = new NormalVariator();
+
 	// Construct
 	final protected IIsolator mod;
-
-	protected NormalVariator VAR;
 
 	// Footsteps
 	protected float dmwBase;
@@ -67,19 +65,10 @@ public class ReaderH implements IGenerator, IVariatorSettable {
 	private boolean isMessyFoliage;
 	private long brushesTime;
 
-	public ReaderH(final IIsolator isolator) {
+	public Generator(final IIsolator isolator) {
 		mod = isolator;
-		VAR = new NormalVariator();
 	}
 
-	@Override
-	public void setVariator(final IVariator variator) {
-		if (variator instanceof NormalVariator) {
-			VAR = (NormalVariator) variator;
-		}
-	}
-
-	@Override
 	public void generateFootsteps(final EntityPlayer ply) {
 		simulateFootsteps(ply);
 		simulateAirborne(ply);
@@ -140,7 +129,7 @@ public class ReaderH implements IGenerator, IVariatorSettable {
 
 			if (ply.isOnLadder() && !ply.onGround) {
 				distance = VAR.DISTANCE_LADDER;
-			} else if (!ply.isInWater() && Math.abs(this.yPosition - ply.posY) > 0.4d // &&
+			} else if (!ply.isInWater() && MathStuff.abs(this.yPosition - ply.posY) > 0.4d // &&
 																						// Math.abs(this.yPosition
 																						// -
 																						// ply.posY)
@@ -268,9 +257,9 @@ public class ReaderH implements IGenerator, IVariatorSettable {
 		if ((ply.motionX == 0d && ply.motionZ == 0d) || ply.isSneaking())
 			return;
 
-		final int yy = MathHelper.floor_double(ply.posY - 0.1d - ply.getYOffset() - (ply.onGround ? 0d : 0.25d));
-		final Association assos = mod.getSolver().findAssociationForBlock(
-				new BlockPos(MathHelper.floor_double(ply.posX), yy, MathHelper.floor_double(ply.posZ)), "find_messy_foliage");
+		final int yy = MathStuff.floor_double(ply.posY - 0.1d - ply.getYOffset() - (ply.onGround ? 0d : 0.25d));
+		final Association assos = mod.getSolver().findAssociationMessyFoliage(
+				new BlockPos(MathStuff.floor_double(ply.posX), yy, MathStuff.floor_double(ply.posZ)));
 		if (assos != null) {
 			if (!this.isMessyFoliage) {
 				this.isMessyFoliage = true;
@@ -305,6 +294,6 @@ public class ReaderH implements IGenerator, IVariatorSettable {
 	}
 
 	protected float scalex(final float number, final float min, final float max) {
-		return MathHelper.clamp_float((number - min) / (max - min), 0.0F, 1.0F);
+		return MathStuff.clamp_float((number - min) / (max - min), 0.0F, 1.0F);
 	}
 }

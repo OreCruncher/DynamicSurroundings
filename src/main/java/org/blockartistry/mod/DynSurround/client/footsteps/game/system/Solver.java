@@ -40,15 +40,12 @@ import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.I
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 
-import com.google.common.collect.ImmutableList;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -90,28 +87,28 @@ public class Solver implements ISolver {
 	@Override
 	public Association findAssociationForPlayer(final EntityPlayer ply, final double verticalOffsetAsMinus,
 			final boolean isRightFoot) {
-		final int yy = MathHelper.floor_double(ply.getEntityBoundingBox().minY - 0.1d - verticalOffsetAsMinus);
-		final double rot = MathStuff.toRadians(MathHelper.wrapDegrees(ply.rotationYaw));
+		final int yy = MathStuff.floor_double(ply.getEntityBoundingBox().minY - 0.1d - verticalOffsetAsMinus);
+		final double rot = MathStuff.toRadians(MathStuff.wrapDegrees(ply.rotationYaw));
 		final double xn = MathStuff.cos(rot);
 		final double zn = MathStuff.sin(rot);
 		final float feetDistanceToCenter = 0.2f * (isRightFoot ? -1 : 1);
-		final int xx = MathHelper.floor_double(ply.posX + xn * feetDistanceToCenter);
-		final int zz = MathHelper.floor_double(ply.posZ + zn * feetDistanceToCenter);
+		final int xx = MathStuff.floor_double(ply.posX + xn * feetDistanceToCenter);
+		final int zz = MathStuff.floor_double(ply.posZ + zn * feetDistanceToCenter);
 
 		return findAssociationForLocation(ply, new BlockPos(xx, yy, zz));
 	}
 
 	@Override
 	public Association findAssociationForPlayer(final EntityPlayer ply, final double verticalOffsetAsMinus) {
-		final int yy = MathHelper.floor_double(ply.posY - 0.1d - ply.getYOffset() - verticalOffsetAsMinus);
-		final int xx = MathHelper.floor_double(ply.posX);
-		final int zz = MathHelper.floor_double(ply.posZ);
+		final int yy = MathStuff.floor_double(ply.posY - 0.1d - ply.getYOffset() - verticalOffsetAsMinus);
+		final int xx = MathStuff.floor_double(ply.posX);
+		final int zz = MathStuff.floor_double(ply.posZ);
 		return findAssociationForLocation(ply, new BlockPos(xx, yy, zz));
 	}
 
 	@Override
 	public Association findAssociationForLocation(final EntityPlayer player, final BlockPos pos) {
-		if (Math.abs(player.motionY) < 0.02)
+		if (MathStuff.abs(player.motionY) < 0.02)
 			return null; // Don't play sounds on every tiny bounce
 		if (player.isInWater())
 			ModLog.debug(
@@ -142,9 +139,9 @@ public class Solver implements ISolver {
 			// V z
 
 			// If the player is at the edge of that
-			if (Math.max(Math.abs(xdang), Math.abs(zdang)) > 0.2f) {
+			if (Math.max(MathStuff.abs(xdang), MathStuff.abs(zdang)) > 0.2f) {
 				// Find the maximum absolute value of X or Z
-				boolean isXdangMax = Math.abs(xdang) > Math.abs(zdang);
+				boolean isXdangMax = MathStuff.abs(xdang) > MathStuff.abs(zdang);
 				// --------------------- ^ maxofZ-
 				// | . . |
 				// | . . |
@@ -305,7 +302,7 @@ public class Solver implements ISolver {
 	@Override
 	public boolean playSpecialStoppingConditions(final EntityPlayer ply) {
 		if (ply.isInWater()) {
-			final float volume = MathHelper.sqrt_double(
+			final float volume = MathStuff.sqrt_double(
 					ply.motionX * ply.motionX * 0.2d + ply.motionY * ply.motionY + ply.motionZ * ply.motionZ * 0.2d)
 					* 0.35f;
 			final ConfigOptions options = new ConfigOptions();
@@ -325,9 +322,7 @@ public class Solver implements ISolver {
 	}
 
 	@Override
-	public Association findAssociationForBlock(final BlockPos pos, String strategy) {
-		if (!strategy.equals("find_messy_foliage"))
-			return null;
+	public Association findAssociationMessyFoliage(final BlockPos pos) {
 
 		final World world = EnvironState.getWorld();
 		final IBlockState above = world.getBlockState(pos.up());

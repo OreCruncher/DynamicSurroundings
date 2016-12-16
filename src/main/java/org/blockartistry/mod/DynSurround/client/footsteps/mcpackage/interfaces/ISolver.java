@@ -95,7 +95,7 @@ public interface ISolver {
 	 * Find an association for a certain block assuming the player is standing on it,
 	 * using a custom strategy which strategies are defined by the solver.
 	 */
-	public Association findAssociationForBlock(final BlockPos pos, final String strategy);
+	public Association findAssociationMessyFoliage(final BlockPos pos);
 	
 	/**
 	 * Play special sounds that must stop the usual footstep figuring things out process.

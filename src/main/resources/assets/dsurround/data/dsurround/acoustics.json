@@ -13,14 +13,14 @@
 		},
 		"_SWIM" : {
 			"swim" : {
-				"name"  : "@game.player.swim",
+				"name"  : "@entity.player.swim",
 				"vol_min"   : 10,
 				"vol_max"   : 100,
 				"pitch_min" : 90,
 				"pitch_max" : 110
 			},
 			"walk"  : {
-				"name"  : "@game.player.swim",
+				"name"  : "@entity.player.swim",
 				"vol_min"   : 10,
 				"vol_max"   : 100,
 				"pitch_min" : 90,
@@ -996,7 +996,7 @@
 		},
 		"ladder_default" : {
 			"walk"  : {
-				"name"  : "@step.ladder",
+				"name"  : "@block.ladder.step",
 				"pitch_min" : 95,
 				"pitch_max" : 105
 			},
@@ -1004,14 +1004,14 @@
 				"type"  : "simultaneous",
 				"array" : [
 					{
-						"name"  : "@step.ladder",
+						"name"  : "@block.ladder.step",
 						"pitch_min" : 95,
 						"pitch_max" : 105
 					},
 					{
 						"type"  : "delayed",
 						"delay" : 50,
-						"name"  : "@step.ladder",
+						"name"  : "@block.ladder.step",
 						"pitch_min" : 95,
 						"pitch_max" : 105
 					}
