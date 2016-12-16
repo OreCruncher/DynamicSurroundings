@@ -50,9 +50,11 @@ class Emitter {
 	protected PlayerSound activeSound;
 
 	protected int repeatDelay = 0;
+	protected boolean shouldFadeIn;
 
 	public Emitter(final SoundEffect sound) {
 		this.effect = sound;
+		this.shouldFadeIn = true;
 	}
 
 	public void update() {
@@ -64,8 +66,10 @@ class Emitter {
 			this.activeSound.fadeAway();
 			this.activeSound = null;
 			this.repeatDelay = this.effect.getRepeat(RANDOM);
-			if (this.repeatDelay > 0)
+			if (this.repeatDelay > 0) {
+				this.shouldFadeIn = true;
 				return;
+			}
 		} else if (this.repeatDelay > 0) {
 			if (--this.repeatDelay > 0)
 				return;
@@ -76,7 +80,8 @@ class Emitter {
 		if (SoundSystemConfig.getMasterGain() <= 0)
 			return;
 
-		final PlayerSound theSound = new PlayerSound(effect, true);
+		final PlayerSound theSound = new PlayerSound(effect, this.shouldFadeIn);
+		this.shouldFadeIn = false;
 		if (this.effect.type == SoundType.PERIODIC) {
 			this.repeatDelay = this.effect.getRepeat(RANDOM);
 		} else {
