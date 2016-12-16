@@ -143,6 +143,10 @@ public final class BiomeRegistry implements IDependent {
 		final String alias = biomeAliases.get(biomeName);
 		return alias == null ? false : Pattern.matches(entry.biomeName, alias);
 	}
+	
+	public static void registerBiomeAlias(final String alias, final String biome) {
+		biomeAliases.put(alias, biome);
+	}
 
 	public static void register(final BiomeConfig entry) {
 		for (final BiomeInfo biomeEntry : registry.valueCollection()) {

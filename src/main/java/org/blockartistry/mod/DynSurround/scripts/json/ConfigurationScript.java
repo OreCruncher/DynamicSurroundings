@@ -38,6 +38,7 @@ import org.blockartistry.mod.DynSurround.data.xface.Blocks;
 import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
 import org.blockartistry.mod.DynSurround.data.xface.Dimensions;
 import org.blockartistry.mod.DynSurround.data.xface.Footsteps;
+import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.util.JsonUtils;
 
 import com.google.common.collect.ImmutableList;
@@ -55,7 +56,10 @@ public final class ConfigurationScript {
 
 	@SerializedName("biomes")
 	public List<BiomeConfig> biomes = ImmutableList.of();
-
+	
+	@SerializedName("biomeAlias")
+	public Map<String, String> biomeAlias = new HashMap<String, String>();
+	
 	@SerializedName("blocks")
 	public List<BlockConfig> blocks = ImmutableList.of();
 
@@ -79,6 +83,12 @@ public final class ConfigurationScript {
 			// We don't want to process these items if the mod is running
 			// on the server - they apply only to client side.
 			if (!Module.proxy().isRunningAsServer()) {
+				
+				// Do this first - config may want to alias biomes and that
+				// needs to happen before processing actual biomes
+				for(final Entry<String, String> entry: script.biomeAlias.entrySet())
+					BiomeRegistry.registerBiomeAlias(entry.getKey(), entry.getValue());
+				
 				for (final BiomeConfig biome : script.biomes)
 					Biomes.register(biome);
 
@@ -88,7 +98,7 @@ public final class ConfigurationScript {
 				for (final Entry<String, String> entry : script.footsteps.entrySet()) {
 					Footsteps.registerFootsteps(entry.getValue(), entry.getKey());
 				}
-
+				
 				for (final ForgeEntry entry : script.forgeMappings) {
 					for (final String name : entry.dictionaryEntries)
 						Footsteps.registerForgeEntries(entry.accousticProfile, name);
