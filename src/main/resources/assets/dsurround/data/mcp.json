@@ -255,7 +255,7 @@
 			
 		},
 		{
-			"biomeName":"(?i)(.*desert.*|.*sand.*|.*mesa.*|.*wasteland.*|.*sahara.*|outback|oasis)",
+			"biomeName":"(?i)(.*desert.*|.*sand.*|.*mesa.*|.*wasteland.*|.*sahara.*|outback)",
 			"dust":true,
 			"dustColor":"204,185,102"
 		},
