@@ -1,0 +1,16 @@
+#PARSE_ESCAPES
+# German Translations
+msg.dsurround=Dynamic Surroundings
+
+msg.RainIntensitySet=§9Regenintensität auf %s gesetzt
+msg.MinRainIntensitySet=§9Minimale Regenintensität auf %s gesetzt
+msg.MaxRainIntensitySet=§9Maximale Regenintensität auf %s gesetzt
+msg.RainReset=§9Welt-Regenparameter wurden zurückgesetzt
+msg.BiomeReload=§9Biomkonfiguration wurde neugeladen
+
+msg.RainTimeSet=§9Regenzeit auf %s gesetzt
+msg.ThunderTimeSet=§9Gewitterzeit auf %s gesetzt
+msg.ThunderThresholdSet=§9Gewitterschwelle auf %s gesetzt
+
+# Version checking strings
+msg.NewVersionAvailable.dsurround=["§6Update verfügbar: §9[",{"text":"§2%s §ev%s§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Für CurseForge-Projektseite klicken","color":"aqua"}},"clickEvent":{"action":"open_url","value":"http://minecraft.curseforge.com/projects/%s"}},"§9]"]
