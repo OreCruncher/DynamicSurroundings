@@ -1,12 +1,15 @@
 ###DynamicSurroundings-3.1.1.0BETA
 **What's New!**
-* TBD
+* The configuration system received a major overhaul.  Biome and dimension tweak files have been combined into a single file.  Additionally, Footstep and Forge mapping can be done in the same file. [See the wiki for details.](https://github.com/OreCruncher/DynamicSurroundings/wiki/Tutorial:-Configuration-Files)
+* Biomes O'Plenty, Tinkers Construct, Forestry, and Pam's HarvestCraft support built in.  There were changes in these mods for 1.10.2 that required some maintenance.
+* German translations - thanks Hendrik!
 
 **Fixes**
-* TBD
+* Fixed up Minecraft sound names that changed since the prior versions.  Ladder climbing and swimming should now work.
+* There were some issues with the meta data sensitive block registry. 
 
 **Changes**
-* TBD
+* Some of the longer playing sounds have been tagged as "stream".  This should reduce/eliminate perceived lag spikes when crossing biome boundaries.
 
 ###DynamicSurroundings-3.1.0.0BETA
 **What's New!**
