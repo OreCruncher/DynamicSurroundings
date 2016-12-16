@@ -34,6 +34,7 @@ import java.util.Random;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.client.footsteps.engine.implem.BasicAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.EventType;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions;
@@ -44,6 +45,8 @@ import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.I
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IIsolator;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
+
+import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -69,8 +72,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	private final IIsolator isolator;
 
 	// Special sentinals for equating
-	public static final List<IAcoustic> NOT_EMITTER = new ArrayList<IAcoustic>();
-	public static final List<IAcoustic> MESSY_GROUND = new ArrayList<IAcoustic>();
+	public static final List<IAcoustic> NOT_EMITTER = ImmutableList.of((IAcoustic) new BasicAcoustic());
+	public static final List<IAcoustic> MESSY_GROUND = ImmutableList.of((IAcoustic) new BasicAcoustic());
 	public static List<IAcoustic> SWIM;
 
 	public AcousticsManager(final IIsolator isolator) {
@@ -87,16 +90,16 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	public void playAcoustic(final Object location, final List<IAcoustic> acoustics, final EventType event,
 			final IOptions inputOptions) {
-		if(acoustics == null || acoustics.size() == 0) {
+		if (acoustics == null || acoustics.size() == 0) {
 			ModLog.debug("Attempt to play acoustic with no name");
 			return;
 		}
-		
+
 		if (ModLog.DEBUGGING) {
 			final StringBuilder builder = new StringBuilder();
 			boolean doComma = false;
-			for(final IAcoustic acoustic: acoustics) {
-				if(doComma)
+			for (final IAcoustic acoustic : acoustics) {
+				if (doComma)
 					builder.append(",");
 				else
 					doComma = true;
@@ -104,16 +107,16 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 			}
 			ModLog.debug("  Playing acoustic " + builder.toString() + " for event " + event.toString().toUpperCase());
 		}
-		
-		for(final IAcoustic acoustic: acoustics) {
+
+		for (final IAcoustic acoustic : acoustics) {
 			acoustic.playSound(mySoundPlayer(), location, event, inputOptions);
 		}
 	}
 
 	public List<IAcoustic> compileAcoustics(final String acousticName) {
-		if(acousticName.equals("NOT_EMITTER"))
+		if (acousticName.equals("NOT_EMITTER"))
 			return NOT_EMITTER;
-		else if(acousticName.equals("MESSY_GROUND"))
+		else if (acousticName.equals("MESSY_GROUND"))
 			return MESSY_GROUND;
 
 		final List<IAcoustic> acoustics = new ArrayList<IAcoustic>();
@@ -127,10 +130,10 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 				acoustics.add(acoustic);
 			}
 		}
-		
-		return acoustics;
+
+		return ImmutableList.copyOf(acoustics);
 	}
-	
+
 	@Override
 	public void playStep(final EntityLivingBase entity, final Association assos) {
 		final IBlockState state = assos.getState();
@@ -184,8 +187,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	}
 
 	public void think() {
-		
-		if(SWIM == null)
+
+		if (SWIM == null)
 			SWIM = compileAcoustics("_SWIM");
 
 		final long time = System.currentTimeMillis();

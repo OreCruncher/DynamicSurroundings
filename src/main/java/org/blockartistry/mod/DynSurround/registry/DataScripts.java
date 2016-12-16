@@ -49,7 +49,7 @@ public final class DataScripts {
 		void postInit();
 	}
 
-	private static List<IDependent> dependents = new ArrayList<IDependent>();
+	private static final List<IDependent> dependents = new ArrayList<IDependent>();
 
 	public static void registerDependent(final IDependent dep) {
 		dependents.add(dep);

@@ -40,6 +40,8 @@ import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.I
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
