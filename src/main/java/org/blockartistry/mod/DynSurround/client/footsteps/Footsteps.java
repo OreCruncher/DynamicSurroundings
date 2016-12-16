@@ -40,7 +40,6 @@ import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.Acous
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.PrimitiveMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.BlockMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.parsers.AcousticsJsonReader;
-import org.blockartistry.mod.DynSurround.client.footsteps.parsers.Register;
 import org.blockartistry.mod.DynSurround.client.footsteps.util.property.simple.ConfigProperty;
 import org.blockartistry.mod.DynSurround.registry.DataScripts;
 import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
@@ -123,7 +122,7 @@ public class Footsteps implements IDependent {
 			try {
 				stream = this.dealer.openPrimitiveMap(pack);
 				if (stream != null)
-					Register.setup(ConfigProperty.fromStream(stream), primitiveMap);
+					primitiveMap.setup(ConfigProperty.fromStream(stream));
 			} catch (final IOException e) {
 				ModLog.debug("Unable to load primitive map data from pack %s", pack.getPackName());
 			} finally {

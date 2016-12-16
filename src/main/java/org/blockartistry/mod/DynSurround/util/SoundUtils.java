@@ -24,7 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.util;
 
-import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.Module;
 
 import net.minecraft.util.ResourceLocation;
@@ -48,8 +47,7 @@ public class SoundUtils {
 		if (SoundEvent.REGISTRY.containsKey(location))
 			return SoundEvent.REGISTRY.getObject(location);
 
-		ModLog.info("registering sound '%s'", location.toString());
-		SoundEvent sound = new SoundEvent(location).setRegistryName(location);
+		final SoundEvent sound = new SoundEvent(location).setRegistryName(location);
 		GameRegistry.register(sound);
 		return sound;
 	}

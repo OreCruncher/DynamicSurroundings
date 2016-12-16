@@ -27,9 +27,12 @@ package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Isolator;
+import org.blockartistry.mod.DynSurround.client.footsteps.util.property.simple.ConfigProperty;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -55,4 +58,16 @@ public class PrimitiveMap {
 	public void register(final String key, final String value) {
 		this.primitiveMap.put(key, this.isolator.getAcoustics().compileAcoustics(value));
 	}
+	
+	public void setup(final ConfigProperty props) {
+		final Map<String, String> properties = props.getAllProperties();
+		for (final Entry<String, String> entry : properties.entrySet()) {
+			try {
+				register(entry.getKey(), entry.getValue());
+			} catch (final Exception e) {
+				ModLog.info("Error making registration " + entry.getKey() + ": " + e.getMessage());
+			}
+		}
+	}
+
 }
