@@ -150,7 +150,7 @@ public class PlayerSoundEffectHandler implements IClientEffectHandler {
 	 * Determines if the sound needs to be replaced by the event handler.
 	 */
 	private static boolean replaceRainSound(final String name) {
-		return "ambient.weather.rain".equals(name);
+		return "weather.rain".equals(name);
 	}
 
 	/*
