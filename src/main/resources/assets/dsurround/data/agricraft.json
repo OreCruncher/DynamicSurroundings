@@ -1,0 +1,17 @@
+{
+	"footsteps":{
+		"agricraft:crop":"NOT_EMITTER",
+		"agricraft:seed_analyzer":"woodutility",
+		"agricraft:water_pad_normal":"dirt",
+		"agricraft:water_pad_full":"waterfine",
+		"agricraft:water_pad_full+carpet":"waterfine",
+		"agricraft:water_tank":"woodutility",
+		"agricraft:water_channel_normal":"woodutility",
+		"agricraft:water_channel_full":"woodutility",
+		"agricraft:water_channel_valve":"woodutility",
+		"agricraft:sprinkler":"metalbar",
+		"agricraft:fence":"#fence",
+		"agricraft:fence_gate":"#fence",
+		"agricraft:grate":"squeakywood"
+	}
+}
