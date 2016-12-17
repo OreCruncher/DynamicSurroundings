@@ -47,8 +47,8 @@ import com.google.gson.annotations.SerializedName;
 public final class ConfigurationScript {
 
 	public static class ForgeEntry {
-		@SerializedName("accousticProfile")
-		public String accousticProfile = null;
+		@SerializedName("acousticProfile")
+		public String acousticProfile = null;
 
 		@SerializedName("dictionaryEntries")
 		public List<String> dictionaryEntries = ImmutableList.of();
@@ -101,7 +101,7 @@ public final class ConfigurationScript {
 				
 				for (final ForgeEntry entry : script.forgeMappings) {
 					for (final String name : entry.dictionaryEntries)
-						Footsteps.registerForgeEntries(entry.accousticProfile, name);
+						Footsteps.registerForgeEntries(entry.acousticProfile, name);
 				}
 			}
 		}

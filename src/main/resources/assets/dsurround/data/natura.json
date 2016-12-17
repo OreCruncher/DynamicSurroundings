@@ -1,0 +1,48 @@
+{
+	"blocks":[
+	    {
+			"blocks":[
+				"natura:overworld_planks:*",
+				"natura:nether_planks:*"
+			],
+			"stepChance":150,
+			"sounds":[
+				{
+					"sound":"dsurround:floorsqueak",
+					"soundType":"step",
+					"volume":0.2,
+					"variable":true
+				}
+				
+			]
+			
+		}
+	],
+	"footsteps":{
+		"natura:blaze_hopper":"metalbar",
+		"natura:colored_grass":"grass",
+		"natura:colored_grass_slab":"grass",
+		"natura:colored_grass_stairs_topiary":"grass",
+		"natura:colored_grass_stairs_bluegrass":"grass",
+		"natura:colored_grass_stairs_autumnal":"grass",
+		"natura:respawn_obelisk":"woodutility",
+		"natura:overworld_berrybush_raspberry":"leaves",
+		"natura:overworld_berrybush_blueberry":"leaves",
+		"natura:overworld_berrybush_blackberry":"leaves",
+		"natura:overworld_berrybush_maloberry":"leaves",
+		"natura:nether_berrybush_blightberry":"leaves",
+		"natura:nether_berrybush_duskberry":"leaves",
+		"natura:nether_berrybush_skyberry":"leaves",
+		"natura:nether_berrybush_stingberry":"leaves",
+		"natura:nether_glass":"glass",
+		"natura:nether_heat_sand":"sand"
+	},
+	"forgeMappings":[
+		{
+			"acousticProfile":"gravel",
+			"dictionaryEntries":[
+				"taintedSoil"
+			]
+		}
+	]
+}

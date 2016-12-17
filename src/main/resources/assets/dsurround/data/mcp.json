@@ -943,7 +943,7 @@
 	},
 	"forgeMappings":[
 		{
-			"accousticProfile":"ore",
+			"acousticProfile":"ore",
 			"dictionaryEntries":[
 				"oreIron",
 				"oreGold",
@@ -1027,7 +1027,7 @@
 			
 		},
 		{
-			"accousticProfile":"hardmetal",
+			"acousticProfile":"hardmetal",
 			"dictionaryEntries":[
 				"blockIron",
 				"blockGold",
@@ -1131,7 +1131,7 @@
 			
 		},
 		{
-			"accousticProfile":"wood",
+			"acousticProfile":"wood",
 			"dictionaryEntries":[
 				"logWood",
 				"planksWood",
@@ -1147,14 +1147,14 @@
 			
 		},
 		{
-			"accousticProfile":"glass",
+			"acousticProfile":"glass",
 			"dictionaryEntries":[
 				"blockGlass"
 			]
 			
 		},
 		{
-			"accousticProfile":"#sapling",
+			"acousticProfile":"#sapling",
 			"dictionaryEntries":[
 				"treeSaplings",
 				"saplingTree"
@@ -1162,7 +1162,7 @@
 			
 		},
 		{
-			"accousticProfile":"leaves",
+			"acousticProfile":"leaves",
 			"dictionaryEntries":[
 				"treeLeaves",
 				"leavesTree",
@@ -1171,7 +1171,7 @@
 			
 		},
 		{
-			"accousticProfile":"stone",
+			"acousticProfile":"stone",
 			"dictionaryEntries":[
 				"stone",
 				"cobblestone",
@@ -1191,7 +1191,7 @@
 			
 		},
 		{
-			"accousticProfile":"sandstone",
+			"acousticProfile":"sandstone",
 			"dictionaryEntries":[
 				"sandstone",
 				"blockPrismarine",
@@ -1202,7 +1202,7 @@
 			
 		},
 		{
-			"accousticProfile":"sand",
+			"acousticProfile":"sand",
 			"dictionaryEntries":[
 				"sand",
 				"blockSalt",
@@ -1213,7 +1213,7 @@
 			
 		},
 		{
-			"accousticProfile":"squeakywood",
+			"acousticProfile":"squeakywood",
 			"dictionaryEntries":[
 				"chest",
 				"chestWood",
@@ -1222,7 +1222,7 @@
 			
 		},
 		{
-			"accousticProfile":"rug",
+			"acousticProfile":"rug",
 			"dictionaryEntries":[
 				"wool",
 				"blockClothRock",
@@ -1231,7 +1231,7 @@
 			
 		},
 		{
-			"accousticProfile":"#fence",
+			"acousticProfile":"#fence",
 			"dictionaryEntries":[
 				"fenceWood",
 				"fenceGateWood"
@@ -1239,7 +1239,7 @@
 			
 		},
 		{
-			"accousticProfile":"mud",
+			"acousticProfile":"mud",
 			"dictionaryEntries":[
 				"blockSlime",
 				"blockCheese"
@@ -1247,7 +1247,7 @@
 			
 		},
 		{
-			"accousticProfile":"obsidian",
+			"acousticProfile":"obsidian",
 			"dictionaryEntries":[
 				"oreSunstone",
 				"blockGraphite",
@@ -1259,7 +1259,7 @@
 			
 		},
 		{
-			"accousticProfile":"composite",
+			"acousticProfile":"composite",
 			"dictionaryEntries":[
 				"blockDiamond",
 				"blockEmerald",
@@ -1285,7 +1285,7 @@
 			
 		},
 		{
-			"accousticProfile":"marble",
+			"acousticProfile":"marble",
 			"dictionaryEntries":[
 				"blockQuartz",
 				"marble",
@@ -1295,7 +1295,7 @@
 			
 		},
 		{
-			"accousticProfile":"bluntwood",
+			"acousticProfile":"bluntwood",
 			"dictionaryEntries":[
 				"doorWood"
 			]
