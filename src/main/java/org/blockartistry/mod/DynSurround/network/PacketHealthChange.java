@@ -30,6 +30,7 @@ import org.blockartistry.mod.DynSurround.client.HealthEffectHandler;
 import org.blockartistry.mod.DynSurround.client.HealthEffectHandler.HealthData;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -44,9 +45,9 @@ public class PacketHealthChange implements IMessage, IMessageHandler<PacketHealt
 	private int amount;
 
 	public PacketHealthChange() {
-		
+
 	}
-	
+
 	public PacketHealthChange(final HealthData data) {
 		this.entityId = data.entityId;
 		this.posX = data.posX;
@@ -57,7 +58,13 @@ public class PacketHealthChange implements IMessage, IMessageHandler<PacketHealt
 	}
 
 	public IMessage onMessage(final PacketHealthChange message, final MessageContext ctx) {
-		HealthEffectHandler.handleEvent(new HealthData(message.entityId, message.posX, message.posY, message.posZ, message.isCritical, message.amount));
+		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+			public void run() {
+				HealthEffectHandler.handleEvent(new HealthData(message.entityId, message.posX, message.posY,
+						message.posZ, message.isCritical, message.amount));
+			}
+		});
+
 		return null;
 	}
 

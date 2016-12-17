@@ -50,14 +50,12 @@ public final class AuroraEffectHandler implements IClientEffectHandler {
 		if (!ModOptions.auroraEnable)
 			return;
 
-		synchronized (auroras) {
-			if (auroraDimension != data.dimensionId || EnvironState.getDimensionId() != data.dimensionId) {
-				auroras.clear();
-				currentAurora = null;
-				auroraDimension = data.dimensionId;
-			}
-			auroras.add(data);
+		if (auroraDimension != data.dimensionId || EnvironState.getDimensionId() != data.dimensionId) {
+			auroras.clear();
+			currentAurora = null;
+			auroraDimension = data.dimensionId;
 		}
+		auroras.add(data);
 	}
 
 	public AuroraEffectHandler() {

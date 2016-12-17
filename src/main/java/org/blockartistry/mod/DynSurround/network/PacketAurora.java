@@ -28,6 +28,7 @@ import org.blockartistry.mod.DynSurround.client.AuroraEffectHandler;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -48,7 +49,8 @@ public final class PacketAurora implements IMessage, IMessageHandler<PacketAuror
 		this(data.dimensionId, data.seed, data.posX, data.posZ, data.colorSet, data.preset);
 	}
 
-	public PacketAurora(final int dimensionId, final long seed, final int posX, final int posZ, final int colorSet, final int preset) {
+	public PacketAurora(final int dimensionId, final long seed, final int posX, final int posZ, final int colorSet,
+			final int preset) {
 		this.dimension = dimensionId;
 		this.seed = seed;
 		this.posX = posX;
@@ -77,7 +79,12 @@ public final class PacketAurora implements IMessage, IMessageHandler<PacketAuror
 
 	@Override
 	public IMessage onMessage(final PacketAurora message, final MessageContext ctx) {
-		AuroraEffectHandler.addAurora(new AuroraData(message.dimension, message.posX, message.posZ, message.seed, message.colorSet, message.preset));
+		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+			public void run() {
+				AuroraEffectHandler.addAurora(new AuroraData(message.dimension, message.posX, message.posZ,
+						message.seed, message.colorSet, message.preset));
+			}
+		});
 		return null;
 	}
 }

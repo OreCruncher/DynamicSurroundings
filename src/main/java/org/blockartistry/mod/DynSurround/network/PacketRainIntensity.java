@@ -28,6 +28,7 @@ import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -67,7 +68,11 @@ public final class PacketRainIntensity implements IMessage, IMessageHandler<Pack
 		// If the player is in the dimension set the intensity.  Otherwise
 		// ignore.
 		if (message.dimension == PlayerUtils.getClientPlayerDimension()) {
-			StormProperties.setIntensity(message.intensity);
+			Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+				public void run() {
+					StormProperties.setIntensity(message.intensity);
+				}
+			});
 		}
 		return null;
 	}
