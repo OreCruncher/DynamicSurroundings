@@ -72,8 +72,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	private final IIsolator isolator;
 
 	// Special sentinals for equating
-	public static final List<IAcoustic> NOT_EMITTER = ImmutableList.of((IAcoustic) new BasicAcoustic());
-	public static final List<IAcoustic> MESSY_GROUND = ImmutableList.of((IAcoustic) new BasicAcoustic());
+	public static final List<IAcoustic> NOT_EMITTER = ImmutableList.of((IAcoustic) new BasicAcoustic("NOT_EMITTER"));
+	public static final List<IAcoustic> MESSY_GROUND = ImmutableList.of((IAcoustic) new BasicAcoustic("MESSY_GROUND"));
 	public static List<IAcoustic> SWIM;
 
 	public AcousticsManager(final IIsolator isolator) {

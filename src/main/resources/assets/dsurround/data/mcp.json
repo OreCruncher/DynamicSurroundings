@@ -888,7 +888,7 @@
 		"minecraft:flower_pot":"brickstone",
 		"minecraft:carrots":"#crop",
 		"minecraft:potatoes":"#crop",
-		"minecraft:beetroots":"#crop",
+		"minecraft:beetroots":"#beets",
 		"minecraft:wooden_button":"NOT_EMITTER",
 		"minecraft:skull":"organic",
 		"minecraft:anvil":"metalcompressed,hardmetal",

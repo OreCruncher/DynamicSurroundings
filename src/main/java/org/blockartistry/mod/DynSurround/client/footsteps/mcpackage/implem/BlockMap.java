@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -109,6 +110,15 @@ public class BlockMap {
 		macros.put("#crop", entries);
 
 		entries = new ArrayList<MacroEntry>();
+		entries.add(new MacroEntry(null, "NOT_EMITTER"));
+		entries.add(new MacroEntry("messy", "MESSY_GROUND"));
+		entries.add(new MacroEntry(0, "foliage", "NOT_EMITTER"));
+		entries.add(new MacroEntry(1, "foliage", "NOT_EMITTER"));
+		entries.add(new MacroEntry(2, "foliage", "brush"));
+		entries.add(new MacroEntry(3, "foliage", "brush"));
+		macros.put("#beets", entries);
+
+		entries = new ArrayList<MacroEntry>();
 		entries.add(new MacroEntry("bigger", "bluntwood"));
 		macros.put("#fence", entries);
 	}
@@ -140,9 +150,9 @@ public class BlockMap {
 	}
 
 	private void put(final Block block, final int meta, final String substrate, final String value) {
-		
+
 		final List<IAcoustic> acoustics = this.isolator.getAcoustics().compileAcoustics(value);
-		
+
 		if (StringUtils.isEmpty(substrate)) {
 			TIntObjectHashMap<List<IAcoustic>> metas = this.metaMap.get(block);
 			if (metas == null)
@@ -186,8 +196,42 @@ public class BlockMap {
 		}
 	}
 
+	private static String combine(final List<IAcoustic> acoustics) {
+		final StringBuilder builder = new StringBuilder();
+		boolean addComma = false;
+		for (final IAcoustic a : acoustics) {
+			if (addComma)
+				builder.append(",");
+			else
+				addComma = true;
+			builder.append(a.getAcousticName());
+		}
+		return builder.toString();
+	}
+
 	public void collectData(final IBlockState state, final List<String> data) {
-		// TODO: Need to sort this based on precompiled data
+
+		final Block block = state.getBlock();
+		final int meta = state.getBlock().getMetaFromState(state);
+
+		List<IAcoustic> temp = this.getBlockMap(state);
+		if (temp != null)
+			data.add(combine(temp));
+
+		final Map<String, List<IAcoustic>> subs = this.substrateMap.get(block);
+		if (subs != null) {
+			final int len = data.size();
+			String key = "." + meta;
+			for (final Entry<String, List<IAcoustic>> entry : subs.entrySet())
+				if (entry.getKey().endsWith(key))
+					data.add(combine(entry.getValue()));
+			if (data.size() == len) {
+				key = ".-1";
+				for (final Entry<String, List<IAcoustic>> entry : subs.entrySet())
+					if (entry.getKey().endsWith(key))
+						data.add(entry.getKey() + ":" + combine(entry.getValue()));
+			}
+		}
 	}
 
 	public void clear() {

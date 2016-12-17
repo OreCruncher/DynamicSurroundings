@@ -39,7 +39,9 @@ import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.Block
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -71,33 +73,55 @@ public final class WailaHandler implements IWailaDataProvider {
 	private List<String> gatherText(final ItemStack stack, final List<String> text, final IWailaDataAccessor accessor,
 			final IWailaConfigHandler config) {
 
-		if (stack == null || stack.getItem() == null)
-			return text;
+		text.add(TextFormatting.GOLD + "----------");
 
-		text.add(TextFormatting.GOLD + "dsurround");
+		if (stack != null) {
+			final Item item = stack.getItem();
+			final String itemName = MCHelper.nameOf(item);
 
-		final String itemName = MCHelper.nameOf(stack.getItem());
-
-		if (itemName != null) {
-			final StringBuilder builder = new StringBuilder();
-			builder.append("ID: ");
-			builder.append(itemName);
-			if (stack.getHasSubtypes())
-				builder.append(':').append(stack.getItemDamage());
-			text.add(builder.toString());
+			if (itemName != null) {
+				final StringBuilder builder = new StringBuilder();
+				builder.append("ITEM: ").append(itemName);
+				if (stack.getHasSubtypes())
+					builder.append(':').append(stack.getItemDamage());
+				text.add(builder.toString());
+			}
 		}
 
-		if (accessor != null && Footsteps.INSTANCE != null) {
+		if (accessor != null) {
+			final IBlockState state = accessor.getBlockState();
+			final String blockName = MCHelper.nameOf(state.getBlock());
+
+			if (blockName != null) {
+				final StringBuilder builder = new StringBuilder();
+				builder.append("BLOCK: ").append(blockName);
+				if (MCHelper.hasVariants(state.getBlock()))
+					builder.append(':').append(state.getBlock().getMetaFromState(state));
+				text.add(builder.toString());
+			}
+
 			text.add("Material: " + MCHelper.getMaterialName(accessor.getBlockState().getMaterial()));
 			final BlockMap bm = Footsteps.INSTANCE.getBlockMap();
 			if (bm != null) {
-				bm.collectData(accessor.getBlockState(), text);
+				final List<String> data = new ArrayList<String>();
+				bm.collectData(accessor.getBlockState(), data);
+				if(data.size() > 0) {
+					text.add(TextFormatting.YELLOW + "Footsteps");
+					for (final String s : data)
+						text.add(TextFormatting.YELLOW + s);
+				}
 			}
 		}
 		
-		for(final String ore: gatherOreNames(stack))
-			text.add(TextFormatting.GREEN + ore);
-		
+		final List<String> oreNames = gatherOreNames(stack);
+		if(oreNames.size() > 0) {
+			text.add(TextFormatting.GREEN + "Dictionary Names");
+			for (final String ore : gatherOreNames(stack))
+				text.add(TextFormatting.GREEN + ore);
+		}
+
+		text.add(TextFormatting.GOLD + "----------");
+
 		return text;
 	}
 
