@@ -22,14 +22,14 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.client.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.event.SoundConfigEvent;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
 
@@ -45,12 +45,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class SoundBlockHandler implements IClientEffectHandler {
+public class SoundCullHandler extends ClientEffectBase {
 
 	private final List<String> soundsToBlock = new ArrayList<String>();
 	private final TObjectIntHashMap<String> soundCull = new TObjectIntHashMap<String>();
 
-	public SoundBlockHandler() {
+	public SoundCullHandler() {
 	}
 
 	@Override

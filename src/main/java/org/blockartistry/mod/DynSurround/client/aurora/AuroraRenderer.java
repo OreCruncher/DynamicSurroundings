@@ -37,8 +37,8 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.AuroraEffectHandler;
 import org.blockartistry.mod.DynSurround.client.IAtmosRenderer;
+import org.blockartistry.mod.DynSurround.client.handlers.AuroraEffectHandler;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;

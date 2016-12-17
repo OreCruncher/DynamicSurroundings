@@ -24,7 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.network;
 
-import org.blockartistry.mod.DynSurround.client.AuroraEffectHandler;
+import org.blockartistry.mod.DynSurround.client.handlers.AuroraEffectHandler;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
 
 import io.netty.buffer.ByteBuf;

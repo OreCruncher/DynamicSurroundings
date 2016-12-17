@@ -22,10 +22,10 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.client.handlers;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
 import org.blockartistry.mod.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
@@ -49,7 +49,7 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class FogEffectHandler implements IClientEffectHandler {
+public class FogEffectHandler extends ClientEffectBase {
 
 	private static final int HAZE_THRESHOLD = 15;
 
@@ -67,10 +67,12 @@ public class FogEffectHandler implements IClientEffectHandler {
 	}
 
 	@Override
-	public boolean hasEvents() {
-		return true;
+	public void onConnect() {
+		currentFogLevel = 0.0F;
+		insideFogOffset = 0.0F;
+		currentFogColor = null;
 	}
-
+	
 	private static float calcHazeBand(final World world, final EntityPlayer player) {
 		final float distance = MathHelper
 				.abs(DimensionRegistry.getCloudHeight(world) - (float) (player.posY + player.getEyeHeight()));

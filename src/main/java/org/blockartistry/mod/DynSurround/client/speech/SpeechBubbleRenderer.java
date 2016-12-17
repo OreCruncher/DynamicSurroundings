@@ -27,7 +27,8 @@ package org.blockartistry.mod.DynSurround.client.speech;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.client.handlers.SpeechBubbleHandler;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.server.services.SpeechBubbleService;
 import org.blockartistry.mod.DynSurround.util.Color;
 import net.minecraft.client.Minecraft;

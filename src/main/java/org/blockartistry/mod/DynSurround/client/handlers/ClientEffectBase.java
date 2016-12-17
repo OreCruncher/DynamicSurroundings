@@ -22,25 +22,52 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.client.handlers;
 
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class PotionParticleScrubHandler implements IClientEffectHandler {
-
-	@Override
-	public void process(final World world, final EntityPlayer player) {
-		player.getDataManager().set(EntityLivingBase.HIDE_PARTICLES, true);
-	}
-
-	@Override
+public abstract class ClientEffectBase {
+	
+	public abstract void process(final World world, final EntityPlayer player);
+	
+	// Indicates if the object implements events and should be registered.
+	// Override to prevent automatic registration.
 	public boolean hasEvents() {
-		return false;
+		return true;
+	}
+	
+	// Called when the client is connecting to a server.  Useful for initializing
+	// data to a baseline state (i.e. flushing out the crap).
+	public void onConnect() {
+		
+	}
+	
+	// Called when the client disconnects from a server.  Useful for cleaning up
+	// state space.
+	public void onDisconnect() {
+		
+	}
+	
+	//////////////////////////////
+	//
+	//  DO NOT HOOK THESE EVENTS!
+	//
+	//////////////////////////////
+	@SubscribeEvent
+	public void onClientConnect(final ClientConnectedToServerEvent event) {
+		this.onConnect();
+	}
+	
+	@SubscribeEvent
+	public void onClientDisconnect(final ClientDisconnectionFromServerEvent event) {
+		this.onDisconnect();
 	}
 
 }

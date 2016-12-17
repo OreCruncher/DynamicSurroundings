@@ -62,7 +62,7 @@ public final class AuroraService {
 				processAuroras(event);
 	}
 	
-	private static boolean isAuroraInRange(final EntityPlayerMP player, final Set<AuroraData> data) {
+	private boolean isAuroraInRange(final EntityPlayerMP player, final Set<AuroraData> data) {
 		for (final AuroraData aurora : data) {
 			if (aurora.distanceSq(player, -ModOptions.auroraSpawnOffset) <= MIN_AURORA_DISTANCE_SQ)
 				return true;
@@ -75,12 +75,12 @@ public final class AuroraService {
 	 * Only OK to spawn an aurora when it is night time and the moon brightness
 	 * is less than half full.
 	 */
-	private static boolean okToSpawnAurora(final World world) {
+	private boolean okToSpawnAurora(final World world) {
 		return DiurnalUtils.isNighttime(world);
 	}
 
 	private static final int CHECK_INTERVAL = 100; // Ticks
-	private static TIntIntHashMap tickCounters = new TIntIntHashMap();
+	private TIntIntHashMap tickCounters = new TIntIntHashMap();
 
 	protected void processAuroras(final TickEvent.WorldTickEvent event) {
 

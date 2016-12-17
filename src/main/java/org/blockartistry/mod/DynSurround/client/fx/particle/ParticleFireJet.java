@@ -40,7 +40,7 @@ import net.minecraft.world.World;
 @SideOnly(Side.CLIENT)
 public class ParticleFireJet extends ParticleJet {
 
-	private static final SoundEffect FIRE = new SoundEffect("minecraft:fire.fire");
+	private static final SoundEffect FIRE = new SoundEffect("minecraft:block.fire.ambient");
 
 	protected final boolean isLava;
 

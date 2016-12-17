@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.client.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +70,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class EnvironStateHandler implements IClientEffectHandler {
+public class EnvironStateHandler extends ClientEffectBase {
 
 	private static final SoundEffect JUMP;
 	private static final SoundEffect SWORD;
@@ -383,10 +383,10 @@ public class EnvironStateHandler implements IClientEffectHandler {
 	}
 
 	@Override
-	public boolean hasEvents() {
-		return true;
+	public void onConnect() {
+		diagnostics = new ArrayList<String>();
 	}
-
+	
 	@SubscribeEvent
 	public void onJump(final LivingJumpEvent event) {
 		if (JUMP == null || event.getEntity() == null || event.getEntity().worldObj == null)

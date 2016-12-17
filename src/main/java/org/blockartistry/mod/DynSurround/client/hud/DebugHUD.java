@@ -26,7 +26,7 @@ package org.blockartistry.mod.DynSurround.client.hud;
 
 import java.util.List;
 
-import org.blockartistry.mod.DynSurround.client.EnvironStateHandler;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler;
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler.IGuiOverlay;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

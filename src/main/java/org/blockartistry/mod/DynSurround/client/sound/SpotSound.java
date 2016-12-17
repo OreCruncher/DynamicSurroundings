@@ -25,7 +25,7 @@
 package org.blockartistry.mod.DynSurround.client.sound;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.entity.player.EntityPlayer;

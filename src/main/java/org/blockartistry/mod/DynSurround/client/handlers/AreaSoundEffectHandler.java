@@ -22,13 +22,13 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.client.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
@@ -50,7 +50,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class PlayerSoundEffectHandler implements IClientEffectHandler {
+public class AreaSoundEffectHandler extends ClientEffectBase {
 
 	private static boolean doBiomeSounds() {
 		return EnvironState.isPlayerUnderground() || !EnvironState.isPlayerInside();
@@ -114,10 +114,15 @@ public class PlayerSoundEffectHandler implements IClientEffectHandler {
 	}
 
 	@Override
-	public boolean hasEvents() {
-		return true;
+	public void onConnect() {
+		SoundManager.clearSounds();
 	}
-
+	
+	@Override
+	public void onDisconnect() {
+		SoundManager.clearSounds();
+	}
+	
 	/*
 	 * Fired when the underlying biome config is reloaded.
 	 */
@@ -167,7 +172,6 @@ public class PlayerSoundEffectHandler implements IClientEffectHandler {
 			event.setResultSound(new PositionedSoundRecord(StormProperties.getCurrentStormSound(),
 					SoundCategory.WEATHER, StormProperties.getCurrentVolume(), sound.getPitch(), sound.getXPosF(),
 					sound.getYPosF(), sound.getZPosF()));
-			return;
 		}
 	}
 }

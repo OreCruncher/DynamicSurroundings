@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;

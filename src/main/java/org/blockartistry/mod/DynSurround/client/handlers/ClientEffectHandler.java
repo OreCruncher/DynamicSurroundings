@@ -22,14 +22,11 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.client.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.footsteps.FootstepsHandler;
-import org.blockartistry.mod.DynSurround.client.fx.BlockEffectHandler;
-import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleHandler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,9 +42,9 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class ClientEffectHandler {
 
-	private static final List<IClientEffectHandler> effectHandlers = new ArrayList<IClientEffectHandler>();
+	private static final List<ClientEffectBase> effectHandlers = new ArrayList<ClientEffectBase>();
 
-	public static void register(final IClientEffectHandler handler) {
+	public static void register(final ClientEffectBase handler) {
 		effectHandlers.add(handler);
 		if (handler.hasEvents()) {
 			MinecraftForge.EVENT_BUS.register(handler);
@@ -67,7 +64,7 @@ public class ClientEffectHandler {
 		register(new BlockEffectHandler());
 
 		if (ModOptions.blockedSounds.length > 0 || ModOptions.culledSounds.length > 0)
-			register(new SoundBlockHandler());
+			register(new SoundCullHandler());
 
 		if (ModOptions.enableFootstepSounds)
 			register(new FootstepsHandler());
@@ -76,7 +73,7 @@ public class ClientEffectHandler {
 			register(new AuroraEffectHandler());
 
 		if (ModOptions.enableBiomeSounds)
-			register(new PlayerSoundEffectHandler());
+			register(new AreaSoundEffectHandler());
 
 		if (ModOptions.suppressPotionParticles)
 			register(new PotionParticleScrubHandler());
@@ -96,7 +93,7 @@ public class ClientEffectHandler {
 
 		if (event.phase == Phase.START) {
 			final EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
-			for (final IClientEffectHandler handler : effectHandlers)
+			for (final ClientEffectBase handler : effectHandlers)
 				handler.process(world, player);
 		}
 	}

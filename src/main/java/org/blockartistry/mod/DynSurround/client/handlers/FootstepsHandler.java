@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps;
+package org.blockartistry.mod.DynSurround.client.handlers;
 
-import org.blockartistry.mod.DynSurround.client.IClientEffectHandler;
+import org.blockartistry.mod.DynSurround.client.footsteps.Footsteps;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -34,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 // Simple shim to forward to the Footsteps engine.  Needed to seperate
 // because of startup issues.
 @SideOnly(Side.CLIENT)
-public class FootstepsHandler implements IClientEffectHandler {
+public class FootstepsHandler extends ClientEffectBase {
 
 	@Override
 	public void process(final World world, final EntityPlayer player) {

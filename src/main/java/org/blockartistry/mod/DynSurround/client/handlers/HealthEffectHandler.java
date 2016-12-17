@@ -22,14 +22,14 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.client.handlers;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleCriticalPopOff;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDamagePopOff;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHealPopOff;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.data.HealthData;
 
 import net.minecraft.util.math.MathHelper;

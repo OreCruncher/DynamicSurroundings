@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.client.handlers;
 
-import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 
@@ -36,7 +36,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public final class AreaSurveyHandler implements IClientEffectHandler {
+public final class AreaSurveyHandler extends ClientEffectBase {
 
 	private static final int BIOME_SURVEY_RANGE = 6;
 	private static final int INSIDE_SURVEY_RANGE = 3;
@@ -137,8 +137,7 @@ public final class AreaSurveyHandler implements IClientEffectHandler {
 	}
 
 	@Override
-	public boolean hasEvents() {
-		return false;
+	public void onConnect() {
+		intervalTicker = SURVEY_INTERVAL;
 	}
-
 }

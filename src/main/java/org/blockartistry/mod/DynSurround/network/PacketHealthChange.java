@@ -26,7 +26,7 @@ package org.blockartistry.mod.DynSurround.network;
 
 import java.util.UUID;
 
-import org.blockartistry.mod.DynSurround.client.HealthEffectHandler;
+import org.blockartistry.mod.DynSurround.client.handlers.HealthEffectHandler;
 import org.blockartistry.mod.DynSurround.data.HealthData;
 
 import io.netty.buffer.ByteBuf;

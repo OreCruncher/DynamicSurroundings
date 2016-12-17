@@ -24,8 +24,8 @@
 
 package org.blockartistry.mod.DynSurround.client.storm;
 
-import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

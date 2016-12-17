@@ -22,15 +22,15 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.client.handlers;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.aurora.Aurora;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,7 +39,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public final class AuroraEffectHandler implements IClientEffectHandler {
+public final class AuroraEffectHandler extends ClientEffectBase {
 
 	// Aurora information
 	private static int auroraDimension = 0;
@@ -56,9 +56,6 @@ public final class AuroraEffectHandler implements IClientEffectHandler {
 			auroraDimension = data.dimensionId;
 		}
 		auroras.add(data);
-	}
-
-	public AuroraEffectHandler() {
 	}
 
 	private Aurora getClosestAurora(final World world) {
@@ -103,10 +100,19 @@ public final class AuroraEffectHandler implements IClientEffectHandler {
 	}
 
 	@Override
-	public boolean hasEvents() {
-		return false;
+	public void onConnect() {
+		auroraDimension = 0;
+		currentAurora = null;
+		auroras.clear();
 	}
-
+	
+	@Override
+	public void onDisconnect() {
+		auroraDimension = 0;
+		currentAurora = null;
+		auroras.clear();
+	}
+	
 	/*
 	 * Need to get called every tick to process the dust fade timer as well as
 	 * aurora processing.

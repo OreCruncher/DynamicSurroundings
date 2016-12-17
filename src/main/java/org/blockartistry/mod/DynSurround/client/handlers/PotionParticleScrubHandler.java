@@ -22,18 +22,25 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.client.handlers;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public interface IClientEffectHandler {
-	
-	void process(final World world, final EntityPlayer player);
-	
-	boolean hasEvents();
+public class PotionParticleScrubHandler extends ClientEffectBase {
+
+	@Override
+	public void process(final World world, final EntityPlayer player) {
+		player.getDataManager().set(EntityLivingBase.HIDE_PARTICLES, true);
+	}
+
+	@Override
+	public boolean hasEvents() {
+		return false;
+	}
 
 }

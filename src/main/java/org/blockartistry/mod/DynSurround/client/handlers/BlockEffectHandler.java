@@ -22,16 +22,16 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.fx;
+package org.blockartistry.mod.DynSurround.client.handlers;
 
 import java.util.List;
 import java.util.Random;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
-import org.blockartistry.mod.DynSurround.client.IClientEffectHandler;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import net.minecraft.block.material.Material;
@@ -48,7 +48,7 @@ import net.minecraftforge.fml.relauncher.Side;
  * Based on doVoidParticles().
  */
 @SideOnly(Side.CLIENT)
-public class BlockEffectHandler implements IClientEffectHandler {
+public class BlockEffectHandler extends ClientEffectBase {
 
 	private static final Random RANDOM = new XorShiftRandom();
 	private static final double RATIO = 0.0335671847202175D;

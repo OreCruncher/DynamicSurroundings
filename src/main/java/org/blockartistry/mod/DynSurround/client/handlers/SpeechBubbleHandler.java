@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.speech;
+package org.blockartistry.mod.DynSurround.client.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +33,8 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.IClientEffectHandler;
-import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer;
 import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer.RenderingInfo;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
@@ -51,7 +51,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class SpeechBubbleHandler implements IClientEffectHandler {
+public class SpeechBubbleHandler extends ClientEffectBase {
 
 	public static class ExpireFilter implements Predicate<SpeechBubbleData> {
 
@@ -134,9 +134,14 @@ public class SpeechBubbleHandler implements IClientEffectHandler {
 				entityData.remove();
 		}
 	}
-
+	
 	@Override
-	public boolean hasEvents() {
-		return false;
+	public void onConnect() {
+		messages.clear();
+	}
+	
+	@Override
+	public void onDisconnect() {
+		messages.clear();
 	}
 }

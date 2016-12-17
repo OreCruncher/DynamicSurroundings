@@ -27,8 +27,8 @@ package org.blockartistry.mod.DynSurround.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.aurora.AuroraRenderer;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.storm.StormRenderer;
 import org.blockartistry.mod.DynSurround.client.storm.StormSplashRenderer;
 import net.minecraft.client.renderer.EntityRenderer;
