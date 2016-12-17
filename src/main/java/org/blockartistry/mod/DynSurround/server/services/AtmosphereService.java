@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.server;
+package org.blockartistry.mod.DynSurround.server.services;
 
 import gnu.trove.map.hash.TIntIntHashMap;
 import net.minecraft.entity.player.EntityPlayerMP;

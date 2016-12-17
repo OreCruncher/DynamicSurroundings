@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.server;
+package org.blockartistry.mod.DynSurround.server.services;
 
 import java.util.List;
 

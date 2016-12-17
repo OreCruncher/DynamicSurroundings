@@ -30,10 +30,10 @@ import org.blockartistry.mod.DynSurround.commands.CommandRain;
 import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
+import org.blockartistry.mod.DynSurround.server.services.AtmosphereService;
+import org.blockartistry.mod.DynSurround.server.services.HealthEffectService;
+import org.blockartistry.mod.DynSurround.server.services.SpeechBubbleService;
 import org.blockartistry.mod.DynSurround.registry.DataScripts;
-import org.blockartistry.mod.DynSurround.server.AtmosphereService;
-import org.blockartistry.mod.DynSurround.server.HealthEffectService;
-import org.blockartistry.mod.DynSurround.server.SpeechBubbleService;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
 import net.minecraft.command.ICommandManager;
