@@ -27,8 +27,8 @@ package org.blockartistry.mod.DynSurround.network;
 import java.util.UUID;
 
 import org.blockartistry.mod.DynSurround.Module;
-import org.blockartistry.mod.DynSurround.client.HealthEffectHandler.HealthData;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
+import org.blockartistry.mod.DynSurround.data.HealthData;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.NetworkRegistry;

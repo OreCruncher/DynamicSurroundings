@@ -27,7 +27,7 @@ package org.blockartistry.mod.DynSurround.network;
 import java.util.UUID;
 
 import org.blockartistry.mod.DynSurround.client.HealthEffectHandler;
-import org.blockartistry.mod.DynSurround.client.HealthEffectHandler.HealthData;
+import org.blockartistry.mod.DynSurround.data.HealthData;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -57,17 +57,6 @@ public class PacketHealthChange implements IMessage, IMessageHandler<PacketHealt
 		this.amount = data.amount;
 	}
 
-	public IMessage onMessage(final PacketHealthChange message, final MessageContext ctx) {
-		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
-			public void run() {
-				HealthEffectHandler.handleEvent(new HealthData(message.entityId, message.posX, message.posY,
-						message.posZ, message.isCritical, message.amount));
-			}
-		});
-
-		return null;
-	}
-
 	@Override
 	public void fromBytes(final ByteBuf buf) {
 		this.entityId = new UUID(buf.readLong(), buf.readLong());
@@ -89,4 +78,15 @@ public class PacketHealthChange implements IMessage, IMessageHandler<PacketHealt
 		buf.writeInt(this.amount);
 	}
 
+	@Override
+	public IMessage onMessage(final PacketHealthChange message, final MessageContext ctx) {
+		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+			public void run() {
+				HealthEffectHandler.handleEvent(new HealthData(message.entityId, message.posX, message.posY,
+						message.posZ, message.isCritical, message.amount));
+			}
+		});
+
+		return null;
+	}
 }
