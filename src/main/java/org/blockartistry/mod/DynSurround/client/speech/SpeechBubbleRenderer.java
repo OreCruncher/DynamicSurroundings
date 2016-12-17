@@ -31,8 +31,6 @@ import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState
 import org.blockartistry.mod.DynSurround.server.SpeechBubbleService;
 import org.blockartistry.mod.DynSurround.util.Color;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -40,7 +38,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -54,6 +52,7 @@ public class SpeechBubbleRenderer {
 	private static final Color B_COLOR = Color.SLATEGRAY;
 	private static final float B_COLOR_ALPHA = 0.4F; // 0.25F;
 	private static final Color F_COLOR = Color.GOLD;
+	private static final Color F_COLOR_DEPTH = Color.GRAY;
 	private static final int MIN_TEXT_WIDTH = 60;
 	private static final int MAX_TEXT_WIDTH = MIN_TEXT_WIDTH * 4;
 	private static final double BUBBLE_MARGIN = 4.0F;
@@ -116,8 +115,8 @@ public class SpeechBubbleRenderer {
 		final double left = -(maxWidth / 2.0D + BUBBLE_MARGIN);
 		final double right = maxWidth / 2.0D + BUBBLE_MARGIN;
 
-		//GL11Debug.dumpAllIsEnabled();
-		
+		// GL11Debug.dumpAllIsEnabled();
+
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
 		GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
@@ -134,7 +133,7 @@ public class SpeechBubbleRenderer {
 		GlStateManager.disableTexture2D();
 
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
-		GlStateManager.translate(x, y, z-0.05F);
+		GlStateManager.translate(x, y, z - 0.05F);
 
 		// Draw the background region
 		final float red = B_COLOR.red;
@@ -160,6 +159,11 @@ public class SpeechBubbleRenderer {
 			final String str = messages.get(t);
 			final int offset = -lines * 9;
 			final int margin = -font.getStringWidth(str) / 2;
+			GlStateManager.disableDepth();
+			GlStateManager.depthMask(false);
+			font.drawString(str, margin, offset, F_COLOR_DEPTH.rgb());
+			GlStateManager.enableDepth();
+			GlStateManager.depthMask(true);
 			font.drawString(str, margin, offset, F_COLOR.rgb());
 			lines--;
 		}
@@ -173,25 +177,23 @@ public class SpeechBubbleRenderer {
 	}
 
 	@SubscribeEvent
-	public void onEntityRender(final RenderLivingEvent.Post<AbstractClientPlayer> event) {
+	public void onEntityRender(final RenderLivingEvent.Post<EntityLivingBase> event) {
 
-		final Entity entity = event.getEntity();
-		if (!(entity instanceof EntityPlayerSP))
-			return;
-
+		final EntityLivingBase entity = (EntityLivingBase) event.getEntity();
 		final EntityPlayer player = EnvironState.getPlayer();
+
 		if (player.getDistanceSqToEntity(entity) > RENDER_RANGE || entity.isInvisibleToPlayer(player))
 			return;
 
 		final RenderManager renderManager = event.getRenderer().getRenderManager();
-		final List<RenderingInfo> chatText = SpeechBubbleHandler.getMessagesForPlayer(player);
+		final List<RenderingInfo> chatText = SpeechBubbleHandler.getMessages(entity);
 
 		if (chatText != null) {
-			final boolean flag = player.isSneaking();
+			final boolean flag = entity.isSneaking();
 			final float f = renderManager.playerViewY;
 			final float f1 = renderManager.playerViewX;
 			final boolean flag1 = renderManager.options.thirdPersonView == 2;
-			final float f2 = player.height + 0.5F - (flag ? 0.25F : 0.0F);
+			final float f2 = entity.height + 0.5F - (flag ? 0.25F : 0.0F);
 			drawText(renderManager.getFontRenderer(), chatText, (float) event.getX(), (float) event.getY() + f2,
 					(float) event.getZ(), f, f1, flag1, flag);
 

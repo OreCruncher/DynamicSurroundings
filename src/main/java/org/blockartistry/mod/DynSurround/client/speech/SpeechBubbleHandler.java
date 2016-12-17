@@ -35,7 +35,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.IClientEffectHandler;
 import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer.RenderingInfo;
+import org.blockartistry.mod.DynSurround.util.Localization;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -55,6 +57,11 @@ public class SpeechBubbleHandler implements IClientEffectHandler {
 		}
 	}
 
+	public static void addSpeechBubbleFormatted(final UUID entityId, final String message, final Object... parms) {
+		final String xlated = Localization.format(message, parms);
+		addSpeechBubble(entityId, xlated);
+	}
+	
 	public static void addSpeechBubble(final UUID entityId, final String message) {
 		if (!ModOptions.enableSpeechBubbles || entityId == null || StringUtils.isEmpty(message))
 			return;
@@ -68,8 +75,8 @@ public class SpeechBubbleHandler implements IClientEffectHandler {
 
 	// Used to retrieve messages that are to be displayed
 	// above the players head.
-	public static List<RenderingInfo> getMessagesForPlayer(final EntityPlayer player) {
-		final List<SpeechBubbleData> data = messages.get(player.getUniqueID());
+	public static List<RenderingInfo> getMessages(final EntityLivingBase entity) {
+		final List<SpeechBubbleData> data = messages.get(entity.getUniqueID());
 		if (data == null || data.isEmpty())
 			return null;
 		final List<RenderingInfo> result = new ArrayList<RenderingInfo>();
