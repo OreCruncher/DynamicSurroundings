@@ -2,11 +2,15 @@
 # US English Translations
 msg.dsurround=Dynamic Surroundings
 
-msg.RainIntensitySet=§9Rain intensity set to %s
-msg.MinRainIntensitySet=§9Minimum rain intensity set to %s
-msg.MaxRainIntensitySet=§9Maximum rain intensity set to %s
+msg.RainIntensitySet=§9Rain intensity set to %1$s
+msg.MinRainIntensitySet=§9Minimum rain intensity set to %1$s
+msg.MaxRainIntensitySet=§9Maximum rain intensity set to %1$s
 msg.RainReset=§9World rain parameters have been reset
 msg.BiomeReload=§9Biome configuration has been reloaded
 
+msg.RainTimeSet=§9Rain time set to %1$s
+msg.ThunderTimeSet=§9Thunder time set to %1$s
+msg.ThunderThresholdSet=§9Thunder threshold set to %1$s
+
 # Version checking strings
-msg.NewVersionAvailable.dsurround=["§6Update Available: §9[",{"text":"§2%s §ev%s§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Click for CurseForge Project Page","color":"aqua"}},"clickEvent":{"action":"open_url","value":"http://minecraft.curseforge.com/projects/%s"}},"§9]"]
+msg.NewVersionAvailable.dsurround=["§6Update Available: §9[",{"text":"§2%1$s §ev%2$s§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Click for CurseForge Project Page","color":"aqua"}},"clickEvent":{"action":"open_url","value":"http://minecraft.curseforge.com/projects/%3$s"}},"§9]"]
