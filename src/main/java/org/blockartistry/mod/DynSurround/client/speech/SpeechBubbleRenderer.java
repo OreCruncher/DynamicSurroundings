@@ -185,10 +185,10 @@ public class SpeechBubbleRenderer {
 		if (player.getDistanceSqToEntity(entity) > RENDER_RANGE || entity.isInvisibleToPlayer(player))
 			return;
 
-		final RenderManager renderManager = event.getRenderer().getRenderManager();
 		final List<RenderingInfo> chatText = SpeechBubbleHandler.getMessages(entity);
 
 		if (chatText != null) {
+			final RenderManager renderManager = event.getRenderer().getRenderManager();
 			final boolean flag = entity.isSneaking();
 			final float f = renderManager.playerViewY;
 			final float f1 = renderManager.playerViewX;

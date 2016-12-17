@@ -25,18 +25,25 @@
 package org.blockartistry.mod.DynSurround.client.speech;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.IClientEffectHandler;
+import org.blockartistry.mod.DynSurround.client.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer.RenderingInfo;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
+import gnu.trove.iterator.TIntObjectIterator;
+import gnu.trove.map.hash.TIntObjectHashMap;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -46,7 +53,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SpeechBubbleHandler implements IClientEffectHandler {
 
-	private static final Map<UUID, List<SpeechBubbleData>> messages = new HashMap<UUID, List<SpeechBubbleData>>();
+	public static class ExpireFilter implements Predicate<SpeechBubbleData> {
+
+		private final long timeThreshold;
+
+		public ExpireFilter(final long threshhold) {
+			this.timeThreshold = threshhold;
+		}
+
+		@Override
+		public boolean apply(final SpeechBubbleData input) {
+			return this.timeThreshold > input.expires;
+		}
+	};
+
+	private static final TIntObjectHashMap<List<SpeechBubbleData>> messages = new TIntObjectHashMap<List<SpeechBubbleData>>();
 
 	protected static class SpeechBubbleData {
 		public final long expires = System.currentTimeMillis() + (long) (ModOptions.speechBubbleDuration * 1000F);
@@ -57,26 +78,42 @@ public class SpeechBubbleHandler implements IClientEffectHandler {
 		}
 	}
 
-	public static void addSpeechBubbleFormatted(final UUID entityId, final String message, final Object... parms) {
+	@Nullable
+	private static Entity locateEntity(@Nonnull final World world, @Nonnull final UUID entityId) {
+		for (final Entity e : world.getLoadedEntityList())
+			if (e.getUniqueID().equals(entityId))
+				return e;
+		return null;
+	}
+
+	public static void addSpeechBubbleFormatted(@Nonnull final UUID entityId, @Nonnull final String message, final Object... parms) {
+		if (!ModOptions.enableSpeechBubbles)
+			return;
+
 		final String xlated = Localization.format(message, parms);
 		addSpeechBubble(entityId, xlated);
 	}
-	
-	public static void addSpeechBubble(final UUID entityId, final String message) {
+
+	public static void addSpeechBubble(@Nonnull final UUID entityId, @Nonnull final String message) {
 		if (!ModOptions.enableSpeechBubbles || entityId == null || StringUtils.isEmpty(message))
 			return;
 
-		List<SpeechBubbleData> list = messages.get(entityId);
+		final Entity entity = locateEntity(EnvironState.getWorld(), entityId);
+		if (entity == null)
+			return;
+
+		List<SpeechBubbleData> list = messages.get(entity.getEntityId());
 		if (list == null) {
-			messages.put(entityId, list = new ArrayList<SpeechBubbleData>());
+			messages.put(entity.getEntityId(), list = new ArrayList<SpeechBubbleData>());
 		}
 		list.add(new SpeechBubbleData(message));
 	}
 
 	// Used to retrieve messages that are to be displayed
 	// above the players head.
-	public static List<RenderingInfo> getMessages(final EntityLivingBase entity) {
-		final List<SpeechBubbleData> data = messages.get(entity.getUniqueID());
+	@Nullable
+	public static List<RenderingInfo> getMessages(@Nonnull final EntityLivingBase entity) {
+		final List<SpeechBubbleData> data = messages.get(entity.getEntityId());
 		if (data == null || data.isEmpty())
 			return null;
 		final List<RenderingInfo> result = new ArrayList<RenderingInfo>();
@@ -86,17 +123,15 @@ public class SpeechBubbleHandler implements IClientEffectHandler {
 	}
 
 	@Override
-	public void process(final World world, final EntityPlayer player) {
-		final long timeStamp = System.currentTimeMillis();
-		for (final List<SpeechBubbleData> list : messages.values()) {
-			final Iterator<SpeechBubbleData> itr = list.iterator();
-			while (itr.hasNext()) {
-				final SpeechBubbleData data = itr.next();
-				if (timeStamp > data.expires)
-					itr.remove();
-				else
-					break;
-			}
+	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+		final ExpireFilter filter = new ExpireFilter(System.currentTimeMillis());
+		final TIntObjectIterator<List<SpeechBubbleData>> entityData = messages.iterator();
+		while (entityData.hasNext()) {
+			entityData.advance();
+			if (!entityData.value().isEmpty())
+				Iterables.removeIf(entityData.value(), filter);
+			else
+				entityData.remove();
 		}
 	}
 

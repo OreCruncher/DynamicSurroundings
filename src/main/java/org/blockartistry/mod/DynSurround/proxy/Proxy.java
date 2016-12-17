@@ -31,6 +31,7 @@ import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.server.services.AtmosphereService;
+import org.blockartistry.mod.DynSurround.server.services.AuroraService;
 import org.blockartistry.mod.DynSurround.server.services.HealthEffectService;
 import org.blockartistry.mod.DynSurround.server.services.SpeechBubbleService;
 import org.blockartistry.mod.DynSurround.registry.DataScripts;
@@ -72,6 +73,7 @@ public class Proxy {
 	public void init(final FMLInitializationEvent event) {
 		Network.initialize();
 		AtmosphereService.initialize();
+		AuroraService.initialize();
 		HealthEffectService.initialize();
 		SpeechBubbleService.initialize();
 		WailaHandler.register();

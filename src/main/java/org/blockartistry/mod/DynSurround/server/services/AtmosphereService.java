@@ -24,34 +24,19 @@
 
 package org.blockartistry.mod.DynSurround.server.services;
 
-import gnu.trove.map.hash.TIntIntHashMap;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
-import java.util.List;
-import java.util.Set;
-
-import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.data.AuroraData;
-import org.blockartistry.mod.DynSurround.data.AuroraPreset;
-import org.blockartistry.mod.DynSurround.data.ColorPair;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
 import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
-import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 
 public final class AtmosphereService {
 
 	private static final float RESET = -10.0F;
-
-	// Minimum distance between auroras, squared
-	private static final long MIN_AURORA_DISTANCE_SQ = 400 * 400;
 
 	public static void initialize() {
 		MinecraftForge.EVENT_BUS.register(new AtmosphereService());
@@ -60,11 +45,8 @@ public final class AtmosphereService {
 	@SubscribeEvent
 	public void tickEvent(final TickEvent.WorldTickEvent event) {
 
-		if (event.phase == Phase.END) {
-			if (ModOptions.auroraEnable)
-				processAuroras(event);
+		if (event.phase == Phase.END)
 			return;
-		}
 
 		final World world = event.world;
 		final int dimensionId = world.provider.getDimension();
@@ -76,66 +58,4 @@ public final class AtmosphereService {
 		Network.sendRainIntensity(sendIntensity, dimensionId);
 	}
 
-	private static boolean isAuroraInRange(final EntityPlayerMP player, final Set<AuroraData> data) {
-		for (final AuroraData aurora : data) {
-			if (aurora.distanceSq(player, -ModOptions.auroraSpawnOffset) <= MIN_AURORA_DISTANCE_SQ)
-				return true;
-		}
-
-		return false;
-	}
-
-	/*
-	 * Only OK to spawn an aurora when it is night time and the moon brightness
-	 * is less than half full.
-	 */
-	private static boolean okToSpawnAurora(final World world) {
-		return DiurnalUtils.isNighttime(world);
-	}
-
-	private static final int CHECK_INTERVAL = 100; // Ticks
-	private static TIntIntHashMap tickCounters = new TIntIntHashMap();
-
-	protected void processAuroras(final TickEvent.WorldTickEvent event) {
-
-		final World world = event.world;
-		if (world == null || !DimensionRegistry.hasAuroras(world))
-			return;
-
-		final Set<AuroraData> data = DimensionEffectData.get(world).getAuroraList();
-
-		// Daylight hours clear the aurora list
-		if (DiurnalUtils.isDaytime(world)) {
-			data.clear();
-		} else {
-			final int tickCount = tickCounters.get(world.provider.getDimension()) + 1;
-			tickCounters.put(world.provider.getDimension(), tickCount);
-			if (tickCount % CHECK_INTERVAL == 0) {
-				if (okToSpawnAurora(world)) {
-					
-					final List<EntityPlayerMP> players = event.world.getMinecraftServer().getPlayerList().getPlayerList();
-
-					for (final EntityPlayerMP player : players) {
-						if (!PlayerUtils.getPlayerBiome(player, false).getHasAurora())
-							continue;
-						if (isAuroraInRange(player, data))
-							continue;
-
-						final int colorSet = ColorPair.randomId();
-						final int preset = AuroraPreset.randomId();
-						// final int colorSet = ColorPair.testId();
-						// final int preset = AuroraPreset.testId();
-						final AuroraData aurora = new AuroraData(player, -ModOptions.auroraSpawnOffset, colorSet, preset);
-						if (data.add(aurora)) {
-							ModLog.debug("Spawned new aurora: " + aurora.toString());
-						}
-					}
-				}
-
-				for (final AuroraData a : data) {
-					Network.sendAurora(a, world.provider.getDimension());
-				}
-			}
-		}
-	}
 }
