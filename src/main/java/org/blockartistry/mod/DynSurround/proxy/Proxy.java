@@ -32,6 +32,7 @@ import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.server.services.AtmosphereService;
 import org.blockartistry.mod.DynSurround.server.services.AuroraService;
+import org.blockartistry.mod.DynSurround.server.services.ChattyEntityService;
 import org.blockartistry.mod.DynSurround.server.services.HealthEffectService;
 import org.blockartistry.mod.DynSurround.server.services.SpeechBubbleService;
 import org.blockartistry.mod.DynSurround.registry.DataScripts;
@@ -76,6 +77,7 @@ public class Proxy {
 		AuroraService.initialize();
 		HealthEffectService.initialize();
 		SpeechBubbleService.initialize();
+		ChattyEntityService.initialize();
 		WailaHandler.register();
 	}
 

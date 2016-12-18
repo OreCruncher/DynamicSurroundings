@@ -109,7 +109,7 @@ public class SpeechBubbleRenderer {
 
 		// Calculate scale and position
 		final int numberOfMessages = messages.size();
-		final float scaleBase = 0.6F; // 1.6F;
+		final float scaleBase = 0.8F; // 1.6F;
 		final float scale = scaleBase * 0.016666668F;
 		final double top = -(numberOfMessages) * 9 - BUBBLE_MARGIN;
 		final double bottom = BUBBLE_MARGIN;
@@ -182,7 +182,7 @@ public class SpeechBubbleRenderer {
 
 		final EntityLivingBase entity = (EntityLivingBase) event.getEntity();
 		final EntityPlayer player = EnvironState.getPlayer();
-
+		
 		if (player.getDistanceSqToEntity(entity) > RENDER_RANGE || entity.isInvisibleToPlayer(player))
 			return;
 

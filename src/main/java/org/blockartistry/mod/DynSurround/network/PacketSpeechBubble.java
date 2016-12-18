@@ -39,20 +39,25 @@ public class PacketSpeechBubble implements IMessage, IMessageHandler<PacketSpeec
 
 	private UUID entityId;
 	private String message;
+	private boolean translate;
 
 	public PacketSpeechBubble() {
 
 	}
 
-	public PacketSpeechBubble(final UUID playerId, final String message) {
+	public PacketSpeechBubble(final UUID playerId, final String message, final boolean translate) {
 		this.entityId = playerId;
 		this.message = message;
+		this.translate = translate;
 	}
 
 	public IMessage onMessage(final PacketSpeechBubble message, final MessageContext ctx) {
 		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
 			public void run() {
-				SpeechBubbleHandler.addSpeechBubble(message.entityId, message.message);
+				if (message.translate)
+					SpeechBubbleHandler.addSpeechBubbleFormatted(message.entityId, message.message);
+				else
+					SpeechBubbleHandler.addSpeechBubble(message.entityId, message.message);
 			}
 		});
 		return null;
@@ -62,6 +67,7 @@ public class PacketSpeechBubble implements IMessage, IMessageHandler<PacketSpeec
 	public void fromBytes(final ByteBuf buf) {
 		this.entityId = new UUID(buf.readLong(), buf.readLong());
 		this.message = ByteBufUtils.readUTF8String(buf);
+		this.translate = buf.readBoolean();
 	}
 
 	@Override
@@ -69,6 +75,7 @@ public class PacketSpeechBubble implements IMessage, IMessageHandler<PacketSpeec
 		buf.writeLong(this.entityId.getMostSignificantBits());
 		buf.writeLong(this.entityId.getLeastSignificantBits());
 		ByteBufUtils.writeUTF8String(buf, this.message);
+		buf.writeBoolean(this.translate);
 	}
 
 }

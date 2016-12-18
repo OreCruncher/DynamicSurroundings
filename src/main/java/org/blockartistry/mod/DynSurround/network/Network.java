@@ -64,7 +64,7 @@ public final class Network {
 		network.sendToDimension(new PacketHealthChange(data), dimension);
 	}
 	
-	public static void sendChatBubbleUpdate(final UUID playerId, final String message, final EntityPlayerMP target) {
-		network.sendTo(new PacketSpeechBubble(playerId, message), target);
+	public static void sendChatBubbleUpdate(final UUID playerId, final String message, final boolean translate, final EntityPlayerMP target) {
+		network.sendTo(new PacketSpeechBubble(playerId, message, translate), target);
 	}
 }
