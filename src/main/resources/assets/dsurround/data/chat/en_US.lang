@@ -1,7 +1,20 @@
 #PARSE_ESCAPES
 # US English Translations
-# Mob chat text - Dont translate yet!
-
+#
+# Format:
+#
+# messageId=weight,text
+#
+# messageId: Must be prefixed with "chat." and terminated with a sequential number (e.g. ".0")  The
+#            stuff in between is the Entity class name registered in EntityList.  (villager.flee is
+#            a special case).
+#
+# weight:    Relative weight of the entry being selected from the weight table.  The higher the number
+#            the greater chance of selection vs. its peers.
+#
+# text:      The stuff that gets displayed in the client.  Though the server side makes the message
+#            selection language translation does not occur until it get's client side.
+#
 chat.villager.0=10,I like living in Dynamic Surroundings.
 chat.villager.1=15,I used to be a miner until I took a creeper to the face.
 chat.villager.2=20,Don't fear the creepers.  Be terrified!
@@ -17,7 +30,7 @@ chat.villager.11=20,I could have had hands, but the designers were lazy.
 chat.villager.12=15,Nothing up my sleeves.  No, really.  I mean that.
 chat.villager.13=15,Never spend your diamonds on a hoe.  I read that somewhere.
 chat.villager.14=15,Did you see Villager Number 9 on TV?
-chat.villager.15=20,....and there was this time I ate a poisoned potato...
+chat.villager.15=20,...and there was this time I ate a poisoned potato...
 chat.villager.16=10,This isn't my nose, it's a false one.
 chat.villager.17=15,I would have had more in stock but a skeleton shot my supplier.
 chat.villager.18=10,When nature calls you have to go, and fast!
@@ -28,8 +41,8 @@ chat.villager.22=15,It could have been worse.  We could be growing brussel sprou
 chat.villager.23=10,Gazebo!
 chat.villager.24=15,Klaatu... Verata... Necktie!
 chat.villager.25=10,So much rotten flesh! Not so many ideas...
-chat.villager.26=15,I'm sorry.  It's my implementation.
-chat.villager.27=20,I wish I had a voice like Villager Number 4.
+chat.villager.26=20,I'm sorry.  It's my implementation.
+chat.villager.27=15,I wish I had a voice like Villager Number 4.
 chat.villager.28=20,Yes, it's true.  I use mental powers to harvest crops.
 chat.villager.29=5,Tell OreCruncher that we need better lines.
 chat.villager.30=10,I found a book titled "FOOBIE BLETCH".  I wish I knew what that meant.
@@ -37,6 +50,8 @@ chat.villager.31=5,Hey! Eyes up here!
 chat.villager.32=10,On the plus side we do not have flatulating cows.
 chat.villager.33=15,Let's play the quiet game.
 chat.villager.34=15,Who is this Squidward everyone keeps talking about?
+chat.villager.35=20,The union said we had to trade flint for gravel and an emerald.
+chat.villager.36=15,This is, like, the opposite of what I wanted to do today.
 
 chat.villager.flee.0=20,Run away! Run away!
 chat.villager.flee.1=20,!!! HELP !!!
@@ -50,15 +65,18 @@ chat.villager.flee.8=5,If only I had a wheelbarrow and a holocaust cloak!
 chat.villager.flee.9=15,I have no brain! Why are you chasing me?!?
 chat.villager.flee.10=5,Seems like the Benny Hill theme song would be appropriate about now.
 chat.villager.flee.11=10,He's got an arm off!
-chat.villager.flee.12=15,Every villager for themself!
+chat.villager.flee.12=15,It's every villager for themselves!
 chat.villager.flee.13=10,Wow, these fellas really let themselves go.
+chat.villager.flee.14=15,It seems I was doing this very thing yesterday.
+chat.villager.flee.15=5,And that's our cue to ski-doo!
+chat.villager.flee.16=10,Exit! Stage left!
 
 chat.zombie.0=25,BBBBBRRRRRAAAAAIIIIIINNNNNNSSSS!
 chat.zombie.1=20,Grrrrrr
 chat.zombie.2=10,I need a better gig.
 chat.zombie.3=5,In short, in matters vegetable, animal, and mineral, I am the very model of a modern Major-General.
 chat.zombie.4=10,Anyone have a throat lozenge?
-chat.zombie.5=2,
+chat.zombie.5=10,** Sigh **
 
 chat.squid.0=20,Derp!
 chat.squid.1=20,Herp a Derp!

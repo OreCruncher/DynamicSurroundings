@@ -56,19 +56,23 @@ public class EntityAIChat extends EntityAIBase {
 	protected static final long RESCHEDULE_THRESHOLD = 100;
 
 	private static class EntityChatData {
-		public int baseInterval = 400;
-		public int baseRandom = 1200;
-		public MessageTable table = new MessageTable();
+		public static final int DEFAULT_INTERVAL = 400;
+		public static final int DEFAULT_RANDOM = 1200;
+
+		public int baseInterval = DEFAULT_INTERVAL;
+		public int baseRandom = DEFAULT_RANDOM;
+
+		public final MessageTable table = new MessageTable();
 	}
 
 	private static final Map<String, EntityChatData> messages = new HashMap<String, EntityChatData>();
 
-	private static class ProcessPred implements Predicate<Entry<String, String>> {
+	private static class WeightTableBuilder implements Predicate<Entry<String, String>> {
 
 		private final Pattern TYPE_PATTERN = Pattern.compile("chat\\.([a-zA-Z.]*)\\.[0-9]*$");
 		private final Pattern WEIGHT_PATTERN = Pattern.compile("^([0-9]*),(.*)");
 
-		public ProcessPred() {
+		public WeightTableBuilder() {
 		}
 
 		@Override
@@ -95,21 +99,33 @@ public class EntityAIChat extends EntityAIBase {
 
 	}
 
+	protected static String getEntityClassName(final Class<? extends EntityLiving> entityClass) {
+		return EntityList.getEntityStringFromClass(entityClass).toLowerCase();
+	}
+
+	private static void setTimers(final Class<? extends EntityLiving> entity, final int base, final int random) {
+		setTimers(getEntityClassName(entity), base, random);
+	}
+
+	private static void setTimers(final String entity, final int base, final int random) {
+		final EntityChatData data = messages.get(entity);
+		if (data != null) {
+			data.baseInterval = base;
+			data.baseRandom = random;
+		}
+	}
+
 	static {
 		final Translations xlate = new Translations();
 		xlate.load("/assets/dsurround/data/chat/", Translations.DEFAULT_LANGUAGE);
-		xlate.forAll(new ProcessPred());
+		xlate.forAll(new WeightTableBuilder());
 
-		EntityChatData data = messages.get(EntityList.getEntityStringFromClass(EntitySquid.class).toLowerCase());
-		data.baseRandom = 600;
-
-		data = messages.get("villager.flee");
-		data.baseInterval = 75;
-		data.baseRandom = 75;
+		setTimers(EntitySquid.class, 600, EntityChatData.DEFAULT_RANDOM);
+		setTimers("villager.flee", 100, 75);
 	}
 
-	public static boolean hasMessages(final Entity entity) {
-		return messages.get(entity.getName().toLowerCase()) != null;
+	public static boolean hasMessages(final EntityLiving entity) {
+		return messages.get(getEntityClassName(entity.getClass())) != null;
 	}
 
 	private int getBase() {
@@ -129,8 +145,7 @@ public class EntityAIChat extends EntityAIBase {
 	}
 
 	public EntityAIChat(final EntityLiving entity, final String entityName) {
-		final String theName = StringUtils.isEmpty(entityName) ? EntityList.getEntityStringFromClass(entity.getClass()).toLowerCase()
-				: entityName;
+		final String theName = StringUtils.isEmpty(entityName) ? getEntityClassName(entity.getClass()) : entityName;
 		this.data = messages.get(theName);
 		this.theEntity = entity;
 		this.lastChat = entity.getEntityWorld().getTotalWorldTime() + getNextChatTime();
