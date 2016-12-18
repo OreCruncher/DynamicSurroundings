@@ -26,7 +26,7 @@ package org.blockartistry.mod.DynSurround.proxy;
 
 import org.blockartistry.mod.DynSurround.VersionCheck;
 import org.blockartistry.mod.DynSurround.client.waila.WailaHandler;
-import org.blockartistry.mod.DynSurround.commands.CommandRain;
+import org.blockartistry.mod.DynSurround.commands.CommandDS;
 import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
@@ -94,6 +94,6 @@ public class Proxy {
 		final MinecraftServer server = event.getServer();
 		final ICommandManager command = server.getCommandManager();
 		final ServerCommandManager serverCommand = (ServerCommandManager) command;
-		serverCommand.registerCommand(new CommandRain());
+		serverCommand.registerCommand(new CommandDS());
 	}
 }

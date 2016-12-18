@@ -29,6 +29,7 @@ import java.util.List;
 
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
+import org.blockartistry.mod.DynSurround.server.services.AuroraService;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
 import com.google.common.collect.ImmutableList;
@@ -42,11 +43,12 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
-public final class CommandRain extends CommandBase {
+public final class CommandDS extends CommandBase {
 
 	private static final String COMMAND = "ds";
 	private static final String COMMAND_OPTION_RAIN = "rain";
 	private static final String COMMAND_OPTION_THUNDER = "thunder";
+	private static final String COMMAND_OPTION_AURORA = "aurora";
 	private static final String COMMAND_OPTION_STATUS = "status";
 	private static final String COMMAND_OPTION_RESET = "reset";
 	private static final String COMMAND_OPTION_RELOAD = "reload";
@@ -63,7 +65,7 @@ public final class CommandRain extends CommandBase {
 	private static final List<String> HELP = ImmutableList.<String> builder()
 			.add(TextFormatting.GOLD + "Dynamic Surroundings command help:").add(TextFormatting.YELLOW + "/ds reset")
 			.add(TextFormatting.YELLOW + "/ds reload").add(TextFormatting.YELLOW + "/ds config")
-			.add(TextFormatting.YELLOW + "/ds status <rain|thunder>")
+			.add(TextFormatting.YELLOW + "/ds status <rain|thunder|aurora>")
 			.add(TextFormatting.YELLOW + "/ds settime <rain|thunder> 0-1000")
 			.add(TextFormatting.YELLOW + "/ds setstr rain 0-100").add(TextFormatting.YELLOW + "/ds setmin rain 0-100")
 			.add(TextFormatting.YELLOW + "/ds setmax rain 0-100")
@@ -143,6 +145,8 @@ public final class CommandRain extends CommandBase {
 					feedback = new TextComponentString(rainStatusOutput(world, data));
 				} else if (COMMAND_OPTION_THUNDER.compareToIgnoreCase(parms[1]) == 0) {
 					feedback = new TextComponentString(thunderStatusOutput(world, data));
+				} else if (COMMAND_OPTION_AURORA.compareToIgnoreCase(parms[1]) == 0) {
+					feedback = new TextComponentString(AuroraService.getAuroraData(player));
 				}
 			} else if (COMMAND_OPTION_SETTIME.compareToIgnoreCase(parms[0]) == 0) {
 				if (parms.length < 3) {

@@ -39,6 +39,7 @@ import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 
 import gnu.trove.map.hash.TIntIntHashMap;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -55,13 +56,13 @@ public final class AuroraService {
 		if (ModOptions.auroraEnable)
 			MinecraftForge.EVENT_BUS.register(new AuroraService());
 	}
-	
+
 	@SubscribeEvent
 	public void tickEvent(final TickEvent.WorldTickEvent event) {
 		if (event.phase == Phase.END)
-				processAuroras(event);
+			processAuroras(event);
 	}
-	
+
 	private boolean isAuroraInRange(final EntityPlayerMP player, final Set<AuroraData> data) {
 		for (final AuroraData aurora : data) {
 			if (aurora.distanceSq(player, -ModOptions.auroraSpawnOffset) <= MIN_AURORA_DISTANCE_SQ)
@@ -98,8 +99,9 @@ public final class AuroraService {
 			tickCounters.put(world.provider.getDimension(), tickCount);
 			if (tickCount % CHECK_INTERVAL == 0) {
 				if (okToSpawnAurora(world)) {
-					
-					final List<EntityPlayerMP> players = event.world.getMinecraftServer().getPlayerList().getPlayerList();
+
+					final List<EntityPlayerMP> players = event.world.getMinecraftServer().getPlayerList()
+							.getPlayerList();
 
 					for (final EntityPlayerMP player : players) {
 						if (!PlayerUtils.getPlayerBiome(player, false).getHasAurora())
@@ -111,7 +113,8 @@ public final class AuroraService {
 						final int preset = AuroraPreset.randomId();
 						// final int colorSet = ColorPair.testId();
 						// final int preset = AuroraPreset.testId();
-						final AuroraData aurora = new AuroraData(player, -ModOptions.auroraSpawnOffset, colorSet, preset);
+						final AuroraData aurora = new AuroraData(player, -ModOptions.auroraSpawnOffset, colorSet,
+								preset);
 						if (data.add(aurora)) {
 							ModLog.debug("Spawned new aurora: " + aurora.toString());
 						}
@@ -123,5 +126,18 @@ public final class AuroraService {
 				}
 			}
 		}
+	}
+
+	public static String getAuroraData(final EntityPlayer player) {
+		final StringBuilder builder = new StringBuilder();
+		final Set<AuroraData> data = DimensionEffectData.get(player.getEntityWorld()).getAuroraList();
+		if (data.size() == 0) {
+			builder.append("NO AURORAS");
+		} else {
+			for (final AuroraData ad : data) {
+				builder.append(ad.toString()).append("\n");
+			}
+		}
+		return builder.toString();
 	}
 }

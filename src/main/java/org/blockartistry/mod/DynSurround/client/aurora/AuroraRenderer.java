@@ -30,8 +30,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,7 +39,6 @@ import org.blockartistry.mod.DynSurround.client.IAtmosRenderer;
 import org.blockartistry.mod.DynSurround.client.handlers.AuroraEffectHandler;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.util.Color;
-import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
@@ -54,17 +51,10 @@ public final class AuroraRenderer implements IAtmosRenderer {
 		}
 	}
 
-	public static float moonlightFactor(final World world) {
-		final float moonFactor = 1.0F - DiurnalUtils.getMoonPhaseFactor(world) * 1.1F;
-		if (moonFactor <= 0.0F)
-			return 0.0F;
-		return MathHelper.clamp_float(moonFactor * moonFactor, 0.0F, 1.0F);
-	}
-
 	public static void renderAurora(final float partialTick, final Aurora aurora) {
 
 		final Minecraft mc = FMLClientHandler.instance().getClient();
-		final float alpha = (aurora.getAlpha() * moonlightFactor(mc.theWorld)) / 255.0F;
+		final float alpha = aurora.getAlpha() / 255.0F;
 		if (alpha <= 0.0F)
 			return;
 

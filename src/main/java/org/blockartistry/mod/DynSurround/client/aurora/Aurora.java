@@ -285,4 +285,5 @@ public final class Aurora {
 			nodeList[i].findAngles(nodeList[i + 1]);
 		nodeList[nodeList.length - 1].findAngles(null);
 	}
+	
 }
