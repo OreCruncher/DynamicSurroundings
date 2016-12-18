@@ -86,8 +86,9 @@ public class SpeechBubbleHandler extends ClientEffectBase {
 		return null;
 	}
 
-	public static void addSpeechBubbleFormatted(@Nonnull final UUID entityId, @Nonnull final String message, final Object... parms) {
-		if (!ModOptions.enableSpeechBubbles)
+	public static void addSpeechBubbleFormatted(@Nonnull final UUID entityId, @Nonnull final String message,
+			final Object... parms) {
+		if (!ModOptions.enableSpeechBubbles && !ModOptions.enableEntityChat)
 			return;
 
 		final String xlated = Localization.format(message, parms);
@@ -95,7 +96,8 @@ public class SpeechBubbleHandler extends ClientEffectBase {
 	}
 
 	public static void addSpeechBubble(@Nonnull final UUID entityId, @Nonnull final String message) {
-		if (!ModOptions.enableSpeechBubbles || entityId == null || StringUtils.isEmpty(message))
+		if (!(ModOptions.enableSpeechBubbles || ModOptions.enableEntityChat) || entityId == null
+				|| StringUtils.isEmpty(message))
 			return;
 
 		final Entity entity = locateEntity(EnvironState.getWorld(), entityId);
@@ -134,12 +136,12 @@ public class SpeechBubbleHandler extends ClientEffectBase {
 				entityData.remove();
 		}
 	}
-	
+
 	@Override
 	public void onConnect() {
 		messages.clear();
 	}
-	
+
 	@Override
 	public void onDisconnect() {
 		messages.clear();

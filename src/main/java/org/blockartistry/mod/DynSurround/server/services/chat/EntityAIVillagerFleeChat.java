@@ -38,9 +38,12 @@ import net.minecraft.util.math.AxisAlignedBB;
 public class EntityAIVillagerFleeChat extends EntityAIChat {
 
 	public static final int PRIORITY = 900;
-	
+
+	private static final int BASE_CHAT_INTERVAL = 75;
+	private static final int RANDOM_CHAT_INTERVAL = 75;
+
 	private static final MessageTable MESSAGES = new MessageTable();
-	
+
 	static {
 		MESSAGES.add(20, "chat.villager.flee0");
 		MESSAGES.add(20, "chat.villager.flee1");
@@ -51,7 +54,7 @@ public class EntityAIVillagerFleeChat extends EntityAIChat {
 
 	protected final Predicate<Entity> canBeSeenSelector;
 	protected final Predicate<Entity>[] preds;
-
+	
 	@SuppressWarnings("unchecked")
 	public EntityAIVillagerFleeChat(final EntityLiving entity) {
 		super(entity);
@@ -74,7 +77,7 @@ public class EntityAIVillagerFleeChat extends EntityAIChat {
 
 	@Override
 	protected int getNextChatTime() {
-		return 75 + RANDOM.nextInt(75);
+		return BASE_CHAT_INTERVAL + RANDOM.nextInt(RANDOM_CHAT_INTERVAL);
 	}
 
 	protected boolean villagerThreatened() {
@@ -84,7 +87,19 @@ public class EntityAIVillagerFleeChat extends EntityAIChat {
 	}
 
 	@Override
+	public void updateTask() {
+		if (getWorldTicks() < this.lastChat)
+			return;
+		super.startExecuting();
+	}
+	
+	@Override
 	public boolean shouldExecute() {
-		return super.shouldExecute() && villagerThreatened();
+		return villagerThreatened();
+	}
+
+	@Override
+	public void startExecuting() {
+		this.lastChat = getWorldTicks();
 	}
 }

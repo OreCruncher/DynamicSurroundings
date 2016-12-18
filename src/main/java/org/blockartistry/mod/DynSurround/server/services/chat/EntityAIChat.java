@@ -48,6 +48,7 @@ public class EntityAIChat extends EntityAIBase {
 	public static final int PRIORITY = 1000;
 
 	protected static final XorShiftRandom RANDOM = new XorShiftRandom();
+	protected static final long RESCHEDULE_THRESHOLD = 100;
 
 	private static class EntityChatData {
 		public int baseInterval = 400;
@@ -124,6 +125,10 @@ public class EntityAIChat extends EntityAIBase {
 		this.setMutexBits(1 << 27);
 	}
 
+	protected long getWorldTicks() {
+		return this.theEntity.getEntityWorld().getTotalWorldTime();
+	}
+	
 	protected String getChatMessage() {
 		return this.data.table.next().messageId;
 	}
@@ -144,14 +149,18 @@ public class EntityAIChat extends EntityAIBase {
 				for (final EntityPlayerMP player : players)
 					Network.sendChatBubbleUpdate(entity.getPersistentID(), message, true, player);
 			}
-			this.lastChat = entity.getEntityWorld().getTotalWorldTime() + getNextChatTime();
+			this.lastChat = getWorldTicks() + getNextChatTime();
 		}
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		final long currentTime = this.theEntity.worldObj.getTotalWorldTime();
-		return currentTime > lastChat;
+		final long delta = this.lastChat - getWorldTicks();
+		if(delta <= -RESCHEDULE_THRESHOLD) {
+			this.lastChat = getWorldTicks() + getNextChatTime();
+			return false;
+		}
+		return delta <= 0;
 	}
 
 }
