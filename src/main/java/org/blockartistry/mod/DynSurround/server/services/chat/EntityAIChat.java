@@ -24,22 +24,27 @@
 
 package org.blockartistry.mod.DynSurround.server.services.chat;
 
-import java.util.IdentityHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.server.services.SpeechBubbleService;
+import org.blockartistry.mod.DynSurround.util.Translations;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import com.google.common.base.Predicate;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EntitySelectors;
 
@@ -56,61 +61,62 @@ public class EntityAIChat extends EntityAIBase {
 		public MessageTable table = new MessageTable();
 	}
 
-	private static final Map<Class<?>, EntityChatData> messages = new IdentityHashMap<Class<?>, EntityChatData>();
+	private static final Map<String, EntityChatData> messages = new HashMap<String, EntityChatData>();
+
+	private static class ProcessPred implements Predicate<Entry<String, String>> {
+
+		private final Pattern TYPE_PATTERN = Pattern.compile("chat\\.([a-zA-Z.]*)\\.[0-9]*$");
+		private final Pattern WEIGHT_PATTERN = Pattern.compile("^([0-9]*),(.*)");
+
+		public ProcessPred() {
+		}
+
+		@Override
+		public boolean apply(final Entry<String, String> input) {
+			final Matcher matcher1 = TYPE_PATTERN.matcher(input.getKey());
+			if (matcher1.matches()) {
+				final String key = matcher1.group(1).toLowerCase();
+				final Matcher matcher2 = WEIGHT_PATTERN.matcher(input.getValue());
+				if (matcher2.matches()) {
+					EntityChatData data = messages.get(key);
+					if (data == null)
+						messages.put(key, data = new EntityChatData());
+					final String weight = matcher2.group(1);
+					data.table.add(Integer.parseInt(weight), input.getKey());
+				} else {
+					ModLog.warn("Invalid value in language file: %s", input.getValue());
+				}
+			} else {
+				ModLog.warn("Invalid key in language file: %s", input.getKey());
+			}
+
+			return true;
+		}
+
+	}
 
 	static {
-		EntityChatData data = new EntityChatData();
-		data.table.add(10, "chat.villager0");
-		data.table.add(15, "chat.villager1");
-		data.table.add(20, "chat.villager2");
-		data.table.add(20, "chat.villager3");
-		data.table.add(10, "chat.villager4");
-		data.table.add(10, "chat.villager5");
-		data.table.add(15, "chat.villager6");
-		data.table.add(10, "chat.villager7");
-		data.table.add(15, "chat.villager8");
-		data.table.add(15, "chat.villager9");
-		data.table.add(20, "chat.villager10");
-		data.table.add(20, "chat.villager11");
-		data.table.add(15, "chat.villager12");
-		data.table.add(15, "chat.villager13");
-		data.table.add(15, "chat.villager14");
-		data.table.add(20, "chat.villager15");
-		data.table.add(10, "chat.villager16");
-		data.table.add(15, "chat.villager17");
-		data.table.add(10, "chat.villager18");
-		data.table.add(10, "chat.villager19");
-		data.table.add(15, "chat.villager20");
-		data.table.add(20, "chat.villager21");
-		data.table.add(15, "chat.villager22");
-		data.table.add(10, "chat.villager23");
-		data.table.add(15, "chat.villager24");
-		data.table.add(10, "chat.villager25");
-		messages.put(EntityVillager.class, data);
+		final Translations xlate = new Translations();
+		xlate.load("/assets/dsurround/data/chat/", Translations.DEFAULT_LANGUAGE);
+		xlate.forAll(new ProcessPred());
 
-		data = new EntityChatData();
-		data.table.add(25, "chat.zombie0");
-		data.table.add(20, "chat.zombie1");
-		data.table.add(10, "chat.zombie2");
-		data.table.add(5, "chat.zombie3");
-		messages.put(EntityZombie.class, data);
-
-		data = new EntityChatData();
+		EntityChatData data = messages.get(EntityList.getEntityStringFromClass(EntitySquid.class).toLowerCase());
 		data.baseRandom = 600;
-		data.table.add(10, "chat.squid0");
-		data.table.add(10, "chat.squid1");
-		messages.put(EntitySquid.class, data);
-	}
-	
-	public static boolean hasMessages(final Entity entity) {
-		return messages.get(entity.getClass()) != null;
+
+		data = messages.get("villager.flee");
+		data.baseInterval = 75;
+		data.baseRandom = 75;
 	}
 
-	private int getBase(final EntityLiving entity) {
+	public static boolean hasMessages(final Entity entity) {
+		return messages.get(entity.getName().toLowerCase()) != null;
+	}
+
+	private int getBase() {
 		return this.data.baseInterval;
 	}
 
-	private int getRandom(final EntityLiving entity) {
+	private int getRandom() {
 		return this.data.baseRandom;
 	}
 
@@ -119,7 +125,13 @@ public class EntityAIChat extends EntityAIBase {
 	protected long lastChat;
 
 	public EntityAIChat(final EntityLiving entity) {
-		this.data = messages.get(entity.getClass());
+		this(entity, null);
+	}
+
+	public EntityAIChat(final EntityLiving entity, final String entityName) {
+		final String theName = StringUtils.isEmpty(entityName) ? EntityList.getEntityStringFromClass(entity.getClass()).toLowerCase()
+				: entityName;
+		this.data = messages.get(theName);
 		this.theEntity = entity;
 		this.lastChat = entity.getEntityWorld().getTotalWorldTime() + getNextChatTime();
 		this.setMutexBits(1 << 27);
@@ -128,13 +140,13 @@ public class EntityAIChat extends EntityAIBase {
 	protected long getWorldTicks() {
 		return this.theEntity.getEntityWorld().getTotalWorldTime();
 	}
-	
+
 	protected String getChatMessage() {
 		return this.data.table.next().messageId;
 	}
 
 	protected int getNextChatTime() {
-		return getBase(this.theEntity) + RANDOM.nextInt(getRandom(this.theEntity));
+		return getBase() + RANDOM.nextInt(getRandom());
 	}
 
 	@Override
@@ -156,7 +168,7 @@ public class EntityAIChat extends EntityAIBase {
 	@Override
 	public boolean shouldExecute() {
 		final long delta = this.lastChat - getWorldTicks();
-		if(delta <= -RESCHEDULE_THRESHOLD) {
+		if (delta <= -RESCHEDULE_THRESHOLD) {
 			this.lastChat = getWorldTicks() + getNextChatTime();
 			return false;
 		}

@@ -37,47 +37,20 @@ import net.minecraft.util.math.AxisAlignedBB;
 
 public class EntityAIVillagerFleeChat extends EntityAIChat {
 
-	public static final int PRIORITY = 900;
+	public static final int PRIORITY = 990;
 
-	private static final int BASE_CHAT_INTERVAL = 75;
-	private static final int RANDOM_CHAT_INTERVAL = 75;
-
-	private static final MessageTable MESSAGES = new MessageTable();
-
-	static {
-		MESSAGES.add(20, "chat.villager.flee0");
-		MESSAGES.add(20, "chat.villager.flee1");
-		MESSAGES.add(5, "chat.villager.flee2");
-		MESSAGES.add(15, "chat.villager.flee3");
-		MESSAGES.add(10, "chat.villager.flee4");
-	}
-
-	protected final Predicate<Entity> canBeSeenSelector;
 	protected final Predicate<Entity>[] preds;
-	
+
 	@SuppressWarnings("unchecked")
 	public EntityAIVillagerFleeChat(final EntityLiving entity) {
-		super(entity);
+		super(entity, "villager.flee");
 
-		this.canBeSeenSelector = new Predicate<Entity>() {
+		this.preds = new Predicate[] { EntitySelectors.CAN_AI_TARGET, new Predicate<Entity>() {
 			public boolean apply(@Nullable Entity entity) {
 				return entity.isEntityAlive()
 						&& EntityAIVillagerFleeChat.this.theEntity.getEntitySenses().canSee(entity);
 			}
-		};
-
-		this.preds = new Predicate[] { EntitySelectors.CAN_AI_TARGET, this.canBeSeenSelector,
-				Predicates.<Entity> alwaysTrue() };
-	}
-
-	@Override
-	protected String getChatMessage() {
-		return MESSAGES.getMessage();
-	}
-
-	@Override
-	protected int getNextChatTime() {
-		return BASE_CHAT_INTERVAL + RANDOM.nextInt(RANDOM_CHAT_INTERVAL);
+		}, Predicates.<Entity> alwaysTrue() };
 	}
 
 	protected boolean villagerThreatened() {
@@ -92,7 +65,7 @@ public class EntityAIVillagerFleeChat extends EntityAIChat {
 			return;
 		super.startExecuting();
 	}
-	
+
 	@Override
 	public boolean shouldExecute() {
 		return villagerThreatened();

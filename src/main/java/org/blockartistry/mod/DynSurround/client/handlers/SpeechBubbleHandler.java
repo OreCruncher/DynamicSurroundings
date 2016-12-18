@@ -26,6 +26,9 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
@@ -38,6 +41,7 @@ import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer;
 import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer.RenderingInfo;
 import org.blockartistry.mod.DynSurround.util.Translations;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
@@ -69,8 +73,31 @@ public class SpeechBubbleHandler extends ClientEffectBase {
 	};
 
 	private static final TIntObjectHashMap<List<SpeechBubbleData>> messages = new TIntObjectHashMap<List<SpeechBubbleData>>();
-	private static Translations xlate;
+	private static Translations xlate = new Translations();
 
+	private static class Stripper implements Function<Entry<String,String>,String> {
+
+		private final Pattern WEIGHT_PATTERN = Pattern.compile("^([0-9]*),(.*)");
+
+		@Override
+		public String apply(final Entry<String, String> input) {
+			final Matcher matcher = WEIGHT_PATTERN.matcher(input.getValue());
+			return matcher.matches() ? matcher.group(2) : input.getValue();
+		}
+		
+	}
+	
+	private static void processTranslations() {
+		final String[] langs;
+		if (Minecraft.getMinecraft().gameSettings.language.equals(Translations.DEFAULT_LANGUAGE))
+			langs = new String[] { Translations.DEFAULT_LANGUAGE };
+		else
+			langs = new String[] { Translations.DEFAULT_LANGUAGE, Minecraft.getMinecraft().gameSettings.language };
+
+		xlate.load("/assets/dsurround/data/chat/", langs);
+		xlate.transform(new Stripper());
+	}
+	
 	protected static class SpeechBubbleData {
 		public final long expires = System.currentTimeMillis() + (long) (ModOptions.speechBubbleDuration * 1000F);
 		public final RenderingInfo messages;
@@ -81,13 +108,7 @@ public class SpeechBubbleHandler extends ClientEffectBase {
 	}
 
 	public SpeechBubbleHandler() {
-		final String[] langs;
-		if (Minecraft.getMinecraft().gameSettings.language.equals(Translations.DEFAULT_LANGUAGE))
-			langs = new String[] { Translations.DEFAULT_LANGUAGE };
-		else
-			langs = new String[] { Translations.DEFAULT_LANGUAGE, Minecraft.getMinecraft().gameSettings.language };
-
-		xlate = Translations.load("/assets/dsurround/data/chat/", langs);
+		processTranslations();
 	}
 
 	@Nullable

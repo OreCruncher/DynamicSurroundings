@@ -46,17 +46,19 @@ public final class ChattyEntityService {
 	}
 
 	protected void addSpecialAI(final EntityLiving entity) {
-		if (entity instanceof EntityVillager)
+		if (entity instanceof EntityVillager) {
 			entity.tasks.addTask(EntityAIVillagerFleeChat.PRIORITY, new EntityAIVillagerFleeChat(entity));
+		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onJoinWorld(final EntityJoinWorldEvent event) {
 		if (event.getEntity() instanceof EntityLiving) {
 			final EntityLiving entity = (EntityLiving) event.getEntity();
-			if (EntityAIChat.hasMessages(entity))
+			if (EntityAIChat.hasMessages(entity)) {
 				entity.tasks.addTask(EntityAIChat.PRIORITY, new EntityAIChat(entity));
-			addSpecialAI(entity);
+				addSpecialAI(entity);
+			}
 		}
 	}
 }

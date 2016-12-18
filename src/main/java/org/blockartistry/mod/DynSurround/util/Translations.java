@@ -28,17 +28,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+
 public class Translations {
-	
+
 	public static final String DEFAULT_LANGUAGE = "en_US";
 
-	private final Map<String, String> lookup = new HashMap<String, String>();
+	private Map<String, String> lookup = new HashMap<String, String>();
 
-	protected Translations() {
+	public Translations() {
 
 	}
 
@@ -46,22 +50,37 @@ public class Translations {
 		net.minecraftforge.fml.common.FMLCommonHandler.instance().loadLanguage(this.lookup, stream);
 	}
 
-	public static Translations load(final String assetRoot, final String... languages) {
-		final Translations instance = new Translations();
+	public void load(final String assetRoot, final String... languages) {
 		for (final String lang : languages) {
 			final String assetName = StringUtils.appendIfMissing(assetRoot, "/") + lang + ".lang";
 			try (final InputStream stream = Translations.class.getResourceAsStream(assetName)) {
 				if (stream != null)
-					instance.merge(stream);
+					merge(stream);
 			} catch (final Throwable t) {
 				ModLog.error("Error merging language " + assetName, t);
 			}
 		}
-		return instance;
 	}
 
 	public String format(final String translateKey, final Object... parameters) {
 		final String xlated = this.lookup.get(translateKey);
 		return xlated == null ? translateKey : String.format(xlated, parameters);
+	}
+
+	public void put(final String key, final String value) {
+		this.lookup.put(key, value);
+	}
+
+	public void forAll(final Predicate<Entry<String, String>> pred) {
+		for (final Entry<String, String> e : this.lookup.entrySet())
+			pred.apply(e);
+	}
+
+	public void transform(final Function<Entry<String, String>, String> func) {
+		final Map<String, String> old = this.lookup;
+		this.lookup = new HashMap<String, String>();
+		for (final Entry<String, String> e : old.entrySet()) {
+			this.lookup.put(e.getKey(), func.apply(e));
+		}
 	}
 }
