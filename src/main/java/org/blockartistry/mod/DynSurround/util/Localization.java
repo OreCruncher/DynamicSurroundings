@@ -24,11 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -52,33 +47,19 @@ public final class Localization {
 
 	// Manually loads the en_US language file. Not looking for translations -
 	// just want to reuse the strings in the language file.
+	
+	// TODO: Need to test with a server to make sure it loads right!
 	private static class ServerImpl extends Local {
-
-		private final Map<String, String> lookup = new HashMap<String, String>();
+		
+		private final Translations xlate;
 
 		public ServerImpl() {
-			InputStream stream = null;
-
-			try {
-				stream = ServerImpl.class.getResourceAsStream("/assets/dsurround/lang/en_US.lang");
-				if (stream != null)
-					net.minecraftforge.fml.common.FMLCommonHandler.instance().loadLanguage(lookup, stream);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					if (stream != null)
-						stream.close();
-				} catch (final Throwable t) {
-					;
-				}
-			}
+			this.xlate = Translations.load("/assets/dsurround/lang/", Translations.DEFAULT_LANGUAGE);
 		}
 
 		@Override
 		public String format(final String translateKey, final Object... parameters) {
-			final String xlated = lookup.get(translateKey);
-			return xlated == null ? translateKey : String.format(xlated, parameters);
+			return this.xlate.format(translateKey, parameters);
 		}
 	}
 

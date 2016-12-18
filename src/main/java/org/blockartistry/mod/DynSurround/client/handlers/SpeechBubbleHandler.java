@@ -36,13 +36,14 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer;
 import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer.RenderingInfo;
-import org.blockartistry.mod.DynSurround.util.Localization;
+import org.blockartistry.mod.DynSurround.util.Translations;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -68,6 +69,7 @@ public class SpeechBubbleHandler extends ClientEffectBase {
 	};
 
 	private static final TIntObjectHashMap<List<SpeechBubbleData>> messages = new TIntObjectHashMap<List<SpeechBubbleData>>();
+	private static Translations xlate;
 
 	protected static class SpeechBubbleData {
 		public final long expires = System.currentTimeMillis() + (long) (ModOptions.speechBubbleDuration * 1000F);
@@ -76,6 +78,16 @@ public class SpeechBubbleHandler extends ClientEffectBase {
 		public SpeechBubbleData(final String message) {
 			this.messages = SpeechBubbleRenderer.generateRenderInfo(message);
 		}
+	}
+
+	public SpeechBubbleHandler() {
+		final String[] langs;
+		if (Minecraft.getMinecraft().gameSettings.language.equals(Translations.DEFAULT_LANGUAGE))
+			langs = new String[] { Translations.DEFAULT_LANGUAGE };
+		else
+			langs = new String[] { Translations.DEFAULT_LANGUAGE, Minecraft.getMinecraft().gameSettings.language };
+
+		xlate = Translations.load("/assets/dsurround/data/chat/", langs);
 	}
 
 	@Nullable
@@ -91,7 +103,7 @@ public class SpeechBubbleHandler extends ClientEffectBase {
 		if (!ModOptions.enableSpeechBubbles && !ModOptions.enableEntityChat)
 			return;
 
-		final String xlated = Localization.format(message, parms);
+		final String xlated = xlate.format(message, parms);
 		addSpeechBubble(entityId, xlated);
 	}
 
