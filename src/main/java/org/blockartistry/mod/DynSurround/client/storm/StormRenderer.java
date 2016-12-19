@@ -116,9 +116,9 @@ public class StormRenderer implements IAtmosRenderer {
 		final VertexBuffer worldrenderer = tess.getBuffer();
 
 		GlStateManager.disableCull();
-		GL11.glNormal3f(0.0F, 1.0F, 0.0F);
+		GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
 		GlStateManager.enableBlend();
-		GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.alphaFunc(516, 0.1F);
 
 		final double spawnX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) partialTicks;

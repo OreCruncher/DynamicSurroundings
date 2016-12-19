@@ -35,8 +35,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class ParticleCriticalPopOff extends ParticleTextPopOff {
 	
-	public static final Color TEXT_COLOR = Color.GOLD;
-	public static final TextFormatting TEXT_FORMATTING = TextFormatting.GOLD;
+	public static final Color TEXT_COLOR = Color.getColor(TextFormatting.GOLD);
 
 	// In case you want to know....
 	// http://www.66batmania.com/trivia/bat-fight-words/

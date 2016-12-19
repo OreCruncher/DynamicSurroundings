@@ -30,6 +30,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
@@ -54,7 +55,11 @@ public class ParticleTextPopOff extends Particle {
 
 	protected float rotationYaw = 0.0F;
 	protected float rotationPitch = 0.0F;
-	
+
+	protected final FontRenderer font;
+	protected final float drawX;
+	protected final float drawY;
+
 	public ParticleTextPopOff(final World world, final String text, final Color color, final float scale,
 			final double x, final double y, final double z, final double dX, final double dY, final double dZ) {
 		super(world, x, y, z, dX, dY, dZ);
@@ -74,10 +79,15 @@ public class ParticleTextPopOff extends Particle {
 		this.particleGravity = GRAVITY;
 		this.particleScale = SIZE;
 		this.particleMaxAge = LIFESPAN;
+
+		this.font = Minecraft.getMinecraft().fontRendererObj;
+		this.drawX = -MathHelper.floor_float(this.font.getStringWidth(this.text) / 2.0F) + 1;
+		this.drawY = -MathHelper.floor_float(this.font.FONT_HEIGHT / 2.0F) + 1;
 	}
 
 	@Override
-    public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+	public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX,
+			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		this.rotationYaw = (-Minecraft.getMinecraft().thePlayer.rotationYaw);
 		this.rotationPitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
 
@@ -85,42 +95,40 @@ public class ParticleTextPopOff extends Particle {
 		final float locY = ((float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY));
 		final float locZ = ((float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpPosZ));
 
-		GL11.glPushMatrix();
-		if (this.showOnTop) {
-			GL11.glDepthFunc(519);
-		} else {
-			GL11.glDepthFunc(515);
-		}
-		GL11.glTranslatef(locX, locY, locZ);
-		GL11.glRotatef(this.rotationYaw, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(this.rotationPitch, 1.0F, 0.0F, 0.0F);
+		GlStateManager.pushMatrix();
+		GlStateManager.pushAttrib();
 
-		GL11.glScalef(-1.0F, -1.0F, 1.0F);
-		GL11.glScaled(this.particleScale * 0.008D, this.particleScale * 0.008D, this.particleScale * 0.008D);
-		GL11.glScaled(this.scale, this.scale, this.scale);
+		if (this.showOnTop) {
+			GlStateManager.depthFunc(GL11.GL_ALWAYS);
+		} else {
+			GlStateManager.depthFunc(GL11.GL_LEQUAL);
+		}
+
+		GlStateManager.translate(locX, locY, locZ);
+		GlStateManager.rotate(this.rotationYaw, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(this.rotationPitch, 1.0F, 0.0F, 0.0F);
+
+		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
+		GlStateManager.scale(this.particleScale * 0.008D, this.particleScale * 0.008D, this.particleScale * 0.008D);
+		GlStateManager.scale(this.scale, this.scale, this.scale);
 
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 0.003662109F);
-		GL11.glEnable(3553);
-		GL11.glDisable(3042);
-		GL11.glDepthMask(true);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glEnable(3553);
-		GL11.glEnable(2929);
-		GL11.glDisable(2896);
-		GL11.glBlendFunc(770, 771);
-		GL11.glEnable(3042);
-		GL11.glEnable(3008);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		final FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
-		fontRenderer.drawStringWithShadow(this.text,
-				-MathHelper.floor_float(fontRenderer.getStringWidth(this.text) / 2.0F) + 1,
-				-MathHelper.floor_float(fontRenderer.FONT_HEIGHT / 2.0F) + 1, this.renderColor.rgb());
+		GlStateManager.enableTexture2D();
+		GlStateManager.disableLighting();
+		GlStateManager.depthMask(true);
+		GlStateManager.enableDepth();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.enableAlpha();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glDepthFunc(515);
+		this.font.drawStringWithShadow(this.text, this.drawX, this.drawY, this.renderColor.rgb());
 
-		GL11.glPopMatrix();
+		GlStateManager.depthFunc(GL11.GL_LEQUAL);
+		GlStateManager.popAttrib();
+		GlStateManager.popMatrix();
+
 		if (this.grow) {
 			this.particleScale *= 1.08F;
 			if (this.particleScale > SIZE * 3.0D) {
