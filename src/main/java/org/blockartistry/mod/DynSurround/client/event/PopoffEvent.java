@@ -22,27 +22,29 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.event;
+package org.blockartistry.mod.DynSurround.client.event;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-public class DiagnosticEvent extends Event {
-	
-	public static class Gather extends DiagnosticEvent {
-		
-		public final World world;
-		public final EntityPlayer player;
-		public final List<String> output = new ArrayList<String>();
-		
-		public Gather(final World world, final EntityPlayer player) {
-			super();
-			this.world = world;
-			this.player = player;
-		}
+public class PopoffEvent extends Event {
+
+	public final UUID entityId;
+	public final float posX;
+	public final float posY;
+	public final float posZ;
+	public final boolean isCritical;
+	public final int amount;
+
+	public PopoffEvent(final UUID id, final float x, final float y, final float z, final boolean isCritical,
+			final int amount) {
+		this.entityId = id;
+		this.posX = x;
+		this.posY = y;
+		this.posZ = z;
+		this.isCritical = isCritical;
+		this.amount = amount;
 	}
+
 }

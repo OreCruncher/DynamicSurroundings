@@ -25,7 +25,6 @@
 package org.blockartistry.mod.DynSurround.server.services.chat;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -40,13 +39,11 @@ import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import com.google.common.base.Predicate;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.EntitySelectors;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class EntityAIChat extends EntityAIBase {
 
@@ -166,18 +163,9 @@ public class EntityAIChat extends EntityAIBase {
 
 	@Override
 	public void startExecuting() {
-		final EntityLiving entity = this.theEntity;
-		final Predicate<Entity> filter = EntitySelectors.withinRange(entity.posX, entity.posY, entity.posZ,
-				SpeechBubbleService.SPEECH_BUBBLE_RANGE);
-		final List<EntityPlayerMP> players = entity.getEntityWorld().getPlayers(EntityPlayerMP.class, filter);
-		if (!players.isEmpty()) {
-			final String message = getChatMessage();
-			if (message != null) {
-				for (final EntityPlayerMP player : players)
-					Network.sendChatBubbleUpdate(entity.getPersistentID(), message, true, player);
-			}
-			this.lastChat = getWorldTicks() + getNextChatTime();
-		}
+		final TargetPoint point = Network.getTargetPoint(this.theEntity, SpeechBubbleService.SPEECH_BUBBLE_RANGE);
+		Network.sendChatBubbleUpdate(this.theEntity.getPersistentID(), getChatMessage(), true, point);
+		this.lastChat = getWorldTicks() + getNextChatTime();
 	}
 
 	@Override

@@ -29,8 +29,8 @@ import java.util.List;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
+import org.blockartistry.mod.DynSurround.client.event.SoundConfigEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.event.SoundConfigEvent;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
 
 import gnu.trove.map.hash.TObjectIntHashMap;

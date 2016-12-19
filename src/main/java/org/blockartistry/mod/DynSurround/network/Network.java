@@ -29,10 +29,11 @@ import java.util.UUID;
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.Entity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -43,14 +44,22 @@ public final class Network {
 	private Network() {
 	}
 
-	public static SimpleNetworkWrapper network;
+	private static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Module.MOD_ID);
 
 	public static void initialize() {
-		network = NetworkRegistry.INSTANCE.newSimpleChannel(Module.MOD_ID);
-		network.registerMessage(PacketRainIntensity.class, PacketRainIntensity.class, ++discriminator, Side.CLIENT);
-		network.registerMessage(PacketAurora.class, PacketAurora.class, ++discriminator, Side.CLIENT);
-		network.registerMessage(PacketHealthChange.class, PacketHealthChange.class, ++discriminator, Side.CLIENT);
-		network.registerMessage(PacketSpeechBubble.class, PacketSpeechBubble.class, ++discriminator, Side.CLIENT);
+
+		NETWORK.registerMessage(PacketRainIntensity.PacketHandler.class, PacketRainIntensity.class, ++discriminator,
+				Side.CLIENT);
+		NETWORK.registerMessage(PacketAurora.PacketHandler.class, PacketAurora.class, ++discriminator, Side.CLIENT);
+		NETWORK.registerMessage(PacketHealthChange.PacketHandler.class, PacketHealthChange.class, ++discriminator,
+				Side.CLIENT);
+		NETWORK.registerMessage(PacketSpeechBubble.PacketHandler.class, PacketSpeechBubble.class, ++discriminator,
+				Side.CLIENT);
+	}
+
+	public static TargetPoint getTargetPoint(final Entity entity, final double range) {
+		return new TargetPoint(entity.getEntityWorld().provider.getDimension(), entity.posX, entity.posY, entity.posZ,
+				range);
 	}
 
 	// Package level helper method to fire events based on incoming packets
@@ -63,20 +72,20 @@ public final class Network {
 	}
 
 	public static void sendRainIntensity(final float intensity, final int dimension) {
-		network.sendToDimension(new PacketRainIntensity(intensity, dimension), dimension);
+		NETWORK.sendToDimension(new PacketRainIntensity(intensity, dimension), dimension);
 	}
 
 	public static void sendAurora(final AuroraData data, final int dimension) {
-		network.sendToDimension(new PacketAurora(data), dimension);
+		NETWORK.sendToDimension(new PacketAurora(data), dimension);
 	}
 
 	public static void sendHealthUpdate(final UUID id, final float x, final float y, final float z,
-			final boolean isCritical, final int amount, final int dimension) {
-		network.sendToDimension(new PacketHealthChange(id, x, y, z, isCritical, amount), dimension);
+			final boolean isCritical, final int amount, final TargetPoint point) {
+		NETWORK.sendToAllAround(new PacketHealthChange(id, x, y, z, isCritical, amount), point);
 	}
 
 	public static void sendChatBubbleUpdate(final UUID playerId, final String message, final boolean translate,
-			final EntityPlayerMP target) {
-		network.sendTo(new PacketSpeechBubble(playerId, message, translate), target);
+			final TargetPoint point) {
+		NETWORK.sendToAllAround(new PacketSpeechBubble(playerId, message, translate), point);
 	}
 }

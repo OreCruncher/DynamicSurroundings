@@ -25,12 +25,12 @@
 package org.blockartistry.mod.DynSurround.client.handlers;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
+import org.blockartistry.mod.DynSurround.client.event.PopoffEvent;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleCriticalPopOff;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDamagePopOff;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHealPopOff;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.event.PopoffEvent;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
@@ -42,7 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class PopoffEffectHandler extends EffectHandlerBase {
 
-	private static final double DISTANCE_THRESHOLD_SQ = 32 * 32;
+	public static final double DISTANCE = 32;
 
 	public PopoffEffectHandler() {
 	}
@@ -54,7 +54,7 @@ public final class PopoffEffectHandler extends EffectHandlerBase {
 
 		// Don't want to display if too far away.
 		final double distance = EnvironState.distanceToPlayer(data.posX, data.posY, data.posZ);
-		if (distance >= DISTANCE_THRESHOLD_SQ)
+		if (distance >= (DISTANCE * DISTANCE))
 			return;
 
 		// Don't show the players pop-offs

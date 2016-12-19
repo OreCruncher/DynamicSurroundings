@@ -22,29 +22,27 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.event;
-
-import java.util.UUID;
+package org.blockartistry.mod.DynSurround.client.event;
 
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-public class PopoffEvent extends Event {
-
-	public final UUID entityId;
-	public final float posX;
-	public final float posY;
-	public final float posZ;
-	public final boolean isCritical;
-	public final int amount;
-
-	public PopoffEvent(final UUID id, final float x, final float y, final float z, final boolean isCritical,
-			final int amount) {
-		this.entityId = id;
+public class AuroraSpawnEvent extends Event {
+	
+	public final int dimensionId;
+	public final int posX;
+	public final int posZ;
+	public final long seed;
+	public final int colorSet;
+	public final int preset;
+	
+	public AuroraSpawnEvent(final int dimensionId, final int x, final int z, final long seed, final int colorSet, final int preset) {
+		this.dimensionId = dimensionId;
 		this.posX = x;
-		this.posY = y;
 		this.posZ = z;
-		this.isCritical = isCritical;
-		this.amount = amount;
+		this.seed = seed;
+		this.colorSet = colorSet;
+		this.preset = preset;
+		
 	}
 
 }

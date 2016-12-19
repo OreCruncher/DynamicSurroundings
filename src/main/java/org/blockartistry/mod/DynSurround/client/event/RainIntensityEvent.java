@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.event;
+package org.blockartistry.mod.DynSurround.client.event;
 
 import net.minecraftforge.fml.common.eventhandler.Event;
 

@@ -22,27 +22,26 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.event;
+package org.blockartistry.mod.DynSurround.client.event;
+
+import java.util.UUID;
 
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-public class AuroraSpawnEvent extends Event {
+public class SpeechTextEvent extends Event {
 	
-	public final int dimensionId;
-	public final int posX;
-	public final int posZ;
-	public final long seed;
-	public final int colorSet;
-	public final int preset;
+	public final UUID entityId;
+	public final String message;
+	public final boolean translate;
 	
-	public AuroraSpawnEvent(final int dimensionId, final int x, final int z, final long seed, final int colorSet, final int preset) {
-		this.dimensionId = dimensionId;
-		this.posX = x;
-		this.posZ = z;
-		this.seed = seed;
-		this.colorSet = colorSet;
-		this.preset = preset;
-		
+	public SpeechTextEvent(final UUID id, final String message) {
+		this(id, message, false);
+	}
+	
+	public SpeechTextEvent(final UUID id, final String message, final boolean translate) {
+		this.entityId = id;
+		this.message = message;
+		this.translate = translate;
 	}
 
 }

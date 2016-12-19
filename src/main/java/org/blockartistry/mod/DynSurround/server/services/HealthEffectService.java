@@ -39,8 +39,11 @@ import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public final class HealthEffectService {
+
+	public static final double RANGE = 32;
 
 	protected HealthEffectService() {
 	}
@@ -85,8 +88,9 @@ public final class HealthEffectService {
 		}
 
 		final Entity entity = event.getEntityLiving();
-		Network.sendHealthUpdate(entity.getUniqueID(), (float) entity.posX, (float) entity.posY, (float) entity.posZ,
-				isCrit, (int) event.getAmount(), entity.worldObj.provider.getDimension());
+		final TargetPoint point = Network.getTargetPoint(entity, RANGE);
+		Network.sendHealthUpdate(entity.getUniqueID(), (float) entity.posX, (float) entity.posY + entity.height,
+				(float) entity.posZ, isCrit, (int) event.getAmount(), point);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOW)
@@ -101,8 +105,9 @@ public final class HealthEffectService {
 			return;
 
 		final Entity entity = event.getEntityLiving();
-		Network.sendHealthUpdate(entity.getUniqueID(), (float) entity.posX, (float) entity.posY + entity.height, (float) entity.posZ,
-				false, -(int) event.getAmount(), entity.worldObj.provider.getDimension());
+		final TargetPoint point = Network.getTargetPoint(entity, RANGE);
+		Network.sendHealthUpdate(entity.getUniqueID(), (float) entity.posX, (float) entity.posY + entity.height,
+				(float) entity.posZ, false, -(int) event.getAmount(), point);
 	}
 
 }

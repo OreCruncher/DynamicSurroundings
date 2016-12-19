@@ -24,13 +24,22 @@
 
 package org.blockartistry.mod.DynSurround.network;
 
-import org.blockartistry.mod.DynSurround.event.RainIntensityEvent;
+import org.blockartistry.mod.DynSurround.client.event.RainIntensityEvent;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public final class PacketRainIntensity implements IMessage, IMessageHandler<PacketRainIntensity, IMessage> {
+public final class PacketRainIntensity implements IMessage  {
+	
+	public static class PacketHandler implements IMessageHandler<PacketRainIntensity, IMessage> {
+		@Override
+		public IMessage onMessage(final PacketRainIntensity message, final MessageContext ctx) {
+			Network.postEvent(new RainIntensityEvent(message.dimension, message.intensity));
+			return null;
+		}
+	}
 
 	/**
 	 * Strength of rainfall
@@ -50,19 +59,16 @@ public final class PacketRainIntensity implements IMessage, IMessageHandler<Pack
 		this.dimension = dimension;
 	}
 
+	@Override
 	public void fromBytes(final ByteBuf buf) {
 		this.intensity = buf.readFloat();
 		this.dimension = buf.readInt();
 	}
 
+	@Override
 	public void toBytes(final ByteBuf buf) {
 		buf.writeFloat(this.intensity);
 		buf.writeInt(this.dimension);
 	}
 
-	@Override
-	public IMessage onMessage(final PacketRainIntensity message, final MessageContext ctx) {
-		Network.postEvent(new RainIntensityEvent(message.dimension, message.intensity));
-		return null;
-	}
 }

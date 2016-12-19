@@ -24,42 +24,29 @@
 
 package org.blockartistry.mod.DynSurround.server.services;
 
-import java.util.List;
-
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.network.Network;
 
-import com.google.common.base.Predicate;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.EntitySelectors;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class SpeechBubbleService {
 
 	public static final double SPEECH_BUBBLE_RANGE = ModOptions.speechBubbleRange;
 
 	public static void initialize() {
-		if(ModOptions.enableSpeechBubbles)
+		if (ModOptions.enableSpeechBubbles)
 			MinecraftForge.EVENT_BUS.register(new SpeechBubbleService());
 	}
-	
+
 	// Received when the server is processing a regular chat
 	// message - not a command, etc.
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onChatMessageEvent(final ServerChatEvent event) {
-		
-		final EntityPlayerMP player = event.getPlayer();
-		final Predicate<Entity> filter = EntitySelectors.withinRange(player.posX, player.posY, player.posZ,
-				SPEECH_BUBBLE_RANGE);
-		final List<EntityPlayerMP> players = event.getPlayer().getEntityWorld().getPlayers(EntityPlayerMP.class,
-				filter);
-
-		for (final EntityPlayerMP target : players)
-			Network.sendChatBubbleUpdate(player.getUniqueID(), event.getMessage(), false, target);
+		final TargetPoint point = Network.getTargetPoint(event.getPlayer(), SPEECH_BUBBLE_RANGE);
+		Network.sendChatBubbleUpdate(event.getPlayer().getUniqueID(), event.getMessage(), false, point);
 	}
 }

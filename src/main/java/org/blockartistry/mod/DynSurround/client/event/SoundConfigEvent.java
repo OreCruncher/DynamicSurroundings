@@ -22,26 +22,17 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.event;
-
-import java.util.UUID;
+package org.blockartistry.mod.DynSurround.client.event;
 
 import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class SpeechTextEvent extends Event {
-	
-	public final UUID entityId;
-	public final String message;
-	public final boolean translate;
-	
-	public SpeechTextEvent(final UUID id, final String message) {
-		this(id, message, false);
-	}
-	
-	public SpeechTextEvent(final UUID id, final String message, final boolean translate) {
-		this.entityId = id;
-		this.message = message;
-		this.translate = translate;
+@SideOnly(Side.CLIENT)
+public class SoundConfigEvent extends Event {
+
+	public static class Reload extends SoundConfigEvent {
+
 	}
 
 }

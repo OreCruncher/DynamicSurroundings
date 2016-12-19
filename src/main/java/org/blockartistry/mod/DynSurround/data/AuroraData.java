@@ -26,7 +26,7 @@ package org.blockartistry.mod.DynSurround.data;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.event.AuroraSpawnEvent;
+import org.blockartistry.mod.DynSurround.client.event.AuroraSpawnEvent;
 import org.blockartistry.mod.DynSurround.util.INBTSerialization;
 
 import net.minecraft.entity.Entity;

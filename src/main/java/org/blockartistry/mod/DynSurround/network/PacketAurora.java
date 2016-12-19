@@ -24,15 +24,24 @@
 
 package org.blockartistry.mod.DynSurround.network;
 
+import org.blockartistry.mod.DynSurround.client.event.AuroraSpawnEvent;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
-import org.blockartistry.mod.DynSurround.event.AuroraSpawnEvent;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public final class PacketAurora implements IMessage, IMessageHandler<PacketAurora, IMessage> {
+public final class PacketAurora implements IMessage {
+	
+	public static class PacketHandler implements IMessageHandler<PacketAurora, IMessage> {
+		@Override
+		public IMessage onMessage(final PacketAurora message, final MessageContext ctx) {
+			Network.postEvent(new AuroraSpawnEvent(message.dimension, message.posX, message.posZ, message.seed,
+					message.colorSet, message.preset));
+			return null;
+		}
+	}
 
 	private int dimension;
 	private long seed;
@@ -58,6 +67,7 @@ public final class PacketAurora implements IMessage, IMessageHandler<PacketAuror
 		this.preset = preset;
 	}
 
+	@Override
 	public void fromBytes(final ByteBuf buf) {
 		this.dimension = buf.readInt();
 		this.seed = buf.readLong();
@@ -67,6 +77,7 @@ public final class PacketAurora implements IMessage, IMessageHandler<PacketAuror
 		this.preset = buf.readByte();
 	}
 
+	@Override
 	public void toBytes(final ByteBuf buf) {
 		buf.writeInt(this.dimension);
 		buf.writeLong(this.seed);
@@ -76,10 +87,4 @@ public final class PacketAurora implements IMessage, IMessageHandler<PacketAuror
 		buf.writeByte(this.preset);
 	}
 
-	@Override
-	public IMessage onMessage(final PacketAurora message, final MessageContext ctx) {
-		Network.postEvent(new AuroraSpawnEvent(message.dimension, message.posX, message.posZ, message.seed,
-				message.colorSet, message.preset));
-		return null;
-	}
 }

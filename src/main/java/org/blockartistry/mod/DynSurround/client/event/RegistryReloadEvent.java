@@ -22,13 +22,13 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.event;
+package org.blockartistry.mod.DynSurround.client.event;
 
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-public class SoundConfigEvent extends Event {
+public class RegistryReloadEvent extends Event {
 
-	public static class Reload extends SoundConfigEvent {
+	public static class Biome extends RegistryReloadEvent {
 
 	}
 

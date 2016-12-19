@@ -29,7 +29,6 @@ import java.util.List;
 
 import org.blockartistry.mod.DynSurround.client.handlers.SpeechBubbleHandler;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.server.services.SpeechBubbleService;
 import org.blockartistry.mod.DynSurround.util.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -58,9 +57,6 @@ public class SpeechBubbleRenderer {
 	private static final int MIN_TEXT_WIDTH = 60;
 	private static final int MAX_TEXT_WIDTH = MIN_TEXT_WIDTH * 4;
 	private static final double BUBBLE_MARGIN = 4.0F;
-
-	private static final double RENDER_RANGE = SpeechBubbleService.SPEECH_BUBBLE_RANGE
-			* SpeechBubbleService.SPEECH_BUBBLE_RANGE;
 
 	protected SpeechBubbleRenderer() {
 
@@ -184,7 +180,7 @@ public class SpeechBubbleRenderer {
 		final EntityLivingBase entity = (EntityLivingBase) event.getEntity();
 		final EntityPlayer player = EnvironState.getPlayer();
 
-		if (player.getDistanceSqToEntity(entity) > RENDER_RANGE || entity.isInvisibleToPlayer(player))
+		if (entity.isInvisibleToPlayer(player))
 			return;
 
 		final List<RenderingInfo> chatText = SpeechBubbleHandler.getMessages(entity);

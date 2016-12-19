@@ -26,14 +26,23 @@ package org.blockartistry.mod.DynSurround.network;
 
 import java.util.UUID;
 
-import org.blockartistry.mod.DynSurround.event.PopoffEvent;
+import org.blockartistry.mod.DynSurround.client.event.PopoffEvent;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketHealthChange implements IMessage, IMessageHandler<PacketHealthChange, IMessage> {
+public class PacketHealthChange implements IMessage {
+	
+	public static class PacketHandler implements IMessageHandler<PacketHealthChange, IMessage> {
+		@Override
+		public IMessage onMessage(final PacketHealthChange message, final MessageContext ctx) {
+			Network.postEvent(new PopoffEvent(message.entityId, message.posX, message.posY, message.posZ,
+					message.isCritical, message.amount));
+			return null;
+		}
+	}
 
 	private UUID entityId;
 	private float posX;
@@ -77,10 +86,4 @@ public class PacketHealthChange implements IMessage, IMessageHandler<PacketHealt
 		buf.writeInt(this.amount);
 	}
 
-	@Override
-	public IMessage onMessage(final PacketHealthChange message, final MessageContext ctx) {
-		Network.postEvent(new PopoffEvent(message.entityId, message.posX, message.posY, message.posZ,
-				message.isCritical, message.amount));
-		return null;
-	}
 }

@@ -26,7 +26,7 @@ package org.blockartistry.mod.DynSurround.network;
 
 import java.util.UUID;
 
-import org.blockartistry.mod.DynSurround.event.SpeechTextEvent;
+import org.blockartistry.mod.DynSurround.client.event.SpeechTextEvent;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -34,7 +34,15 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketSpeechBubble implements IMessage, IMessageHandler<PacketSpeechBubble, IMessage> {
+public class PacketSpeechBubble implements IMessage {
+	
+	public static class PacketHandler implements IMessageHandler<PacketSpeechBubble, IMessage> {
+		@Override
+		public IMessage onMessage(final PacketSpeechBubble message, final MessageContext ctx) {
+			Network.postEvent(new SpeechTextEvent(message.entityId, message.message, message.translate));
+			return null;
+		}
+	}
 
 	private UUID entityId;
 	private String message;
@@ -48,11 +56,6 @@ public class PacketSpeechBubble implements IMessage, IMessageHandler<PacketSpeec
 		this.entityId = playerId;
 		this.message = message;
 		this.translate = translate;
-	}
-
-	public IMessage onMessage(final PacketSpeechBubble message, final MessageContext ctx) {
-		Network.postEvent(new SpeechTextEvent(message.entityId, message.message, message.translate));
-		return null;
 	}
 
 	@Override
