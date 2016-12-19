@@ -59,8 +59,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class SpeechBubbleHandler extends EffectHandlerBase {
+	
+	public static SpeechBubbleHandler INSTANCE;
 
-	public static class ExpireFilter implements Predicate<SpeechBubbleData> {
+	private static class ExpireFilter implements Predicate<SpeechBubbleData> {
 
 		private final long timeThreshold;
 
@@ -69,47 +71,48 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		}
 
 		@Override
-		public boolean apply(final SpeechBubbleData input) {
+		public boolean apply(@Nonnull final SpeechBubbleData input) {
 			return this.timeThreshold > input.expires;
 		}
 	};
-
-	private static final TIntObjectHashMap<List<SpeechBubbleData>> messages = new TIntObjectHashMap<List<SpeechBubbleData>>();
-	private static Translations xlate = new Translations();
 
 	private static class Stripper implements Function<Entry<String, String>, String> {
 
 		private final Pattern WEIGHT_PATTERN = Pattern.compile("^([0-9]*),(.*)");
 
 		@Override
-		public String apply(final Entry<String, String> input) {
+		public String apply(@Nonnull final Entry<String, String> input) {
 			final Matcher matcher = WEIGHT_PATTERN.matcher(input.getValue());
 			return matcher.matches() ? matcher.group(2) : input.getValue();
 		}
 
 	}
 
-	private static void processTranslations() {
+	private final TIntObjectHashMap<List<SpeechBubbleData>> messages = new TIntObjectHashMap<List<SpeechBubbleData>>();
+	private final Translations xlate = new Translations();
+
+	private void processTranslations() {
 		final String[] langs;
 		if (Minecraft.getMinecraft().gameSettings.language.equals(Translations.DEFAULT_LANGUAGE))
 			langs = new String[] { Translations.DEFAULT_LANGUAGE };
 		else
 			langs = new String[] { Translations.DEFAULT_LANGUAGE, Minecraft.getMinecraft().gameSettings.language };
 
-		xlate.load("/assets/dsurround/data/chat/", langs);
-		xlate.transform(new Stripper());
+		this.xlate.load("/assets/dsurround/data/chat/", langs);
+		this.xlate.transform(new Stripper());
 	}
 
 	protected static class SpeechBubbleData {
-		public final long expires = System.currentTimeMillis() + (long) (ModOptions.speechBubbleDuration * 1000F);
+		public final long expires = EnvironState.getTickCounter() + (long) (ModOptions.speechBubbleDuration * 20F);
 		public final RenderingInfo messages;
 
-		public SpeechBubbleData(final String message) {
+		public SpeechBubbleData(@Nonnull final String message) {
 			this.messages = SpeechBubbleRenderer.generateRenderInfo(message);
 		}
 	}
 
 	public SpeechBubbleHandler() {
+		INSTANCE = this;
 		processTranslations();
 	}
 
@@ -121,7 +124,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		return null;
 	}
 
-	private static void addSpeechBubbleFormatted(@Nonnull final UUID entityId, @Nonnull final String message,
+	private void addSpeechBubbleFormatted(@Nonnull final UUID entityId, @Nonnull final String message,
 			final Object... parms) {
 		if (!ModOptions.enableSpeechBubbles && !ModOptions.enableEntityChat)
 			return;
@@ -130,7 +133,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		addSpeechBubble(entityId, xlated);
 	}
 
-	private static void addSpeechBubble(@Nonnull final UUID entityId, @Nonnull final String message) {
+	private void addSpeechBubble(@Nonnull final UUID entityId, @Nonnull final String message) {
 		if (!(ModOptions.enableSpeechBubbles || ModOptions.enableEntityChat) || entityId == null
 				|| StringUtils.isEmpty(message))
 			return;
@@ -139,9 +142,9 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		if (entity == null)
 			return;
 
-		List<SpeechBubbleData> list = messages.get(entity.getEntityId());
+		List<SpeechBubbleData> list = this.messages.get(entity.getEntityId());
 		if (list == null) {
-			messages.put(entity.getEntityId(), list = new ArrayList<SpeechBubbleData>());
+			this.messages.put(entity.getEntityId(), list = new ArrayList<SpeechBubbleData>());
 		}
 		list.add(new SpeechBubbleData(message));
 	}
@@ -149,8 +152,8 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 	// Used to retrieve messages that are to be displayed
 	// above the players head.
 	@Nullable
-	public static List<RenderingInfo> getMessages(@Nonnull final EntityLivingBase entity) {
-		final List<SpeechBubbleData> data = messages.get(entity.getEntityId());
+	public List<RenderingInfo> getMessages(@Nonnull final EntityLivingBase entity) {
+		final List<SpeechBubbleData> data = this.messages.get(entity.getEntityId());
 		if (data == null || data.isEmpty())
 			return null;
 		final List<RenderingInfo> result = new ArrayList<RenderingInfo>();
@@ -166,7 +169,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
-		final ExpireFilter filter = new ExpireFilter(System.currentTimeMillis());
+		final ExpireFilter filter = new ExpireFilter(EnvironState.getTickCounter());
 		final TIntObjectIterator<List<SpeechBubbleData>> entityData = messages.iterator();
 		while (entityData.hasNext()) {
 			entityData.advance();
@@ -188,7 +191,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 	}
 
 	@SubscribeEvent
-	public void onSpeechTextEvent(final SpeechTextEvent event) {
+	public void onSpeechTextEvent(@Nonnull final SpeechTextEvent event) {
 		if (event.translate)
 			addSpeechBubbleFormatted(event.entityId, event.message);
 		else

@@ -27,6 +27,8 @@ package org.blockartistry.mod.DynSurround.client.speech;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.client.handlers.SpeechBubbleHandler;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.Color;
@@ -70,7 +72,7 @@ public class SpeechBubbleRenderer {
 		public final int messageWidth;
 		public final List<String> text;
 
-		public RenderingInfo(final String message) {
+		public RenderingInfo(@Nonnull final String message) {
 			final FontRenderer font = Minecraft.getMinecraft().getRenderManager().getFontRenderer();
 			this.text = font.listFormattedStringToWidth(message, MAX_TEXT_WIDTH);
 
@@ -86,12 +88,12 @@ public class SpeechBubbleRenderer {
 		}
 	}
 
-	public static RenderingInfo generateRenderInfo(final String message) {
+	public static RenderingInfo generateRenderInfo(@Nonnull final String message) {
 		return new RenderingInfo(message.replaceAll("(\\xA7.)", ""));
 	}
 
 	// EntityRenderer.drawNameplate()
-	private static void drawText(final FontRenderer font, final List<RenderingInfo> input, final float x, final float y,
+	private static void drawText(@Nonnull final FontRenderer font, @Nonnull final List<RenderingInfo> input, final float x, final float y,
 			final float z, final float viewerYaw, final float viewerPitch, final boolean isThirdPersonFrontal,
 			final boolean isSneaking) {
 
@@ -175,7 +177,7 @@ public class SpeechBubbleRenderer {
 	}
 
 	@SubscribeEvent
-	public void onEntityRender(final RenderLivingEvent.Post<EntityLivingBase> event) {
+	public void onEntityRender(@Nonnull final RenderLivingEvent.Post<EntityLivingBase> event) {
 
 		final EntityLivingBase entity = (EntityLivingBase) event.getEntity();
 		final EntityPlayer player = EnvironState.getPlayer();
@@ -183,9 +185,9 @@ public class SpeechBubbleRenderer {
 		if (entity.isInvisibleToPlayer(player))
 			return;
 
-		final List<RenderingInfo> chatText = SpeechBubbleHandler.getMessages(entity);
+		final List<RenderingInfo> chatText = SpeechBubbleHandler.INSTANCE.getMessages(entity);
 
-		if (chatText != null) {
+		if (chatText != null && !chatText.isEmpty()) {
 			final RenderManager renderManager = event.getRenderer().getRenderManager();
 			final boolean flag = entity.isSneaking();
 			final float f = renderManager.playerViewY;

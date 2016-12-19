@@ -24,6 +24,8 @@
 
 package org.blockartistry.mod.DynSurround.server.services.chat;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.util.WeightTable;
 
 public final class MessageTable extends WeightTable<MessageTable.MessageTableEntry> {
@@ -32,14 +34,14 @@ public final class MessageTable extends WeightTable<MessageTable.MessageTableEnt
 
 		protected final String messageId;
 		
-		public MessageTableEntry(final int weight, final String messageId) {
+		public MessageTableEntry(final int weight, @Nonnull final String messageId) {
 			super(weight);
 			this.messageId = messageId;
 		}
 		
 	}
 	
-	public MessageTable.MessageTableEntry add(final int weight, final String messageId) {
+	public MessageTable.MessageTableEntry add(final int weight, @Nonnull final String messageId) {
 		final MessageTableEntry entry = new MessageTableEntry(weight, messageId);
 		this.add(entry);
 		return entry;

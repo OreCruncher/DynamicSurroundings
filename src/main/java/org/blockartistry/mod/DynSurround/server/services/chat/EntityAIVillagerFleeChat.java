@@ -24,6 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.server.services.chat;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
@@ -42,7 +43,7 @@ public class EntityAIVillagerFleeChat extends EntityAIChat {
 	protected final Predicate<Entity>[] preds;
 
 	@SuppressWarnings("unchecked")
-	public EntityAIVillagerFleeChat(final EntityLiving entity) {
+	public EntityAIVillagerFleeChat(@Nonnull final EntityLiving entity) {
 		super(entity, "villager.flee");
 
 		this.preds = new Predicate[] { EntitySelectors.CAN_AI_TARGET, new Predicate<Entity>() {
@@ -61,7 +62,7 @@ public class EntityAIVillagerFleeChat extends EntityAIChat {
 
 	@Override
 	public void updateTask() {
-		if (getWorldTicks() < this.lastChat)
+		if (getWorldTicks() < this.nextChat)
 			return;
 		super.startExecuting();
 	}
@@ -73,6 +74,6 @@ public class EntityAIVillagerFleeChat extends EntityAIChat {
 
 	@Override
 	public void startExecuting() {
-		this.lastChat = getWorldTicks();
+		this.nextChat = getWorldTicks();
 	}
 }

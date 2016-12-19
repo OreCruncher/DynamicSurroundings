@@ -30,6 +30,9 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.network.Network;
@@ -121,7 +124,7 @@ public class EntityAIChat extends EntityAIBase {
 		setTimers("villager.flee", 100, 75);
 	}
 
-	public static boolean hasMessages(final EntityLiving entity) {
+	public static boolean hasMessages(@Nonnull final EntityLiving entity) {
 		return messages.get(getEntityClassName(entity.getClass())) != null;
 	}
 
@@ -135,17 +138,17 @@ public class EntityAIChat extends EntityAIBase {
 
 	protected final EntityChatData data;
 	protected final EntityLiving theEntity;
-	protected long lastChat;
+	protected long nextChat;
 
-	public EntityAIChat(final EntityLiving entity) {
+	public EntityAIChat(@Nonnull final EntityLiving entity) {
 		this(entity, null);
 	}
 
-	public EntityAIChat(final EntityLiving entity, final String entityName) {
+	public EntityAIChat(@Nonnull final EntityLiving entity, @Nullable final String entityName) {
 		final String theName = StringUtils.isEmpty(entityName) ? getEntityClassName(entity.getClass()) : entityName;
 		this.data = messages.get(theName);
 		this.theEntity = entity;
-		this.lastChat = entity.getEntityWorld().getTotalWorldTime() + getNextChatTime();
+		this.nextChat = getWorldTicks() + getNextChatTime();
 		this.setMutexBits(1 << 27);
 	}
 
@@ -165,14 +168,14 @@ public class EntityAIChat extends EntityAIBase {
 	public void startExecuting() {
 		final TargetPoint point = Network.getTargetPoint(this.theEntity, SpeechBubbleService.SPEECH_BUBBLE_RANGE);
 		Network.sendChatBubbleUpdate(this.theEntity.getPersistentID(), getChatMessage(), true, point);
-		this.lastChat = getWorldTicks() + getNextChatTime();
+		this.nextChat = getWorldTicks() + getNextChatTime();
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		final long delta = this.lastChat - getWorldTicks();
+		final long delta = this.nextChat - getWorldTicks();
 		if (delta <= -RESCHEDULE_THRESHOLD) {
-			this.lastChat = getWorldTicks() + getNextChatTime();
+			this.nextChat = getWorldTicks() + getNextChatTime();
 			return false;
 		}
 		return delta <= 0;

@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 public class WeightTable<T extends WeightTable.Item> {
 
 	protected final XorShiftRandom random = new XorShiftRandom();
@@ -47,7 +49,7 @@ public class WeightTable<T extends WeightTable.Item> {
 	public WeightTable() {
 	}
 
-	public void add(final T entry) {
+	public void add(@Nonnull final T entry) {
 		assert entry != null;
 		assert entry.itemWeight > 0;
 		
@@ -56,7 +58,7 @@ public class WeightTable<T extends WeightTable.Item> {
 		this.items.add(entry);
 	}
 
-	public void remove(final T entry) {
+	public void remove(@Nonnull final T entry) {
 		if(this.items.remove(entry))
 			this.totalWeight -= entry.itemWeight;
 	}
@@ -78,6 +80,7 @@ public class WeightTable<T extends WeightTable.Item> {
 		return this.items.get(i - 1);
 	}
 
+	@Nonnull
 	public List<T> getEntries() {
 		return Collections.unmodifiableList(items);
 	}
