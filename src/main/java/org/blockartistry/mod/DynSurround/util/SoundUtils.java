@@ -24,7 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.util;
 
-import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.Module;
 
 import net.minecraft.util.ResourceLocation;
@@ -44,11 +43,6 @@ public class SoundUtils {
 	}
 
 	public static SoundEvent getOrRegisterSound(final ResourceLocation location) {
-
-		if(StringUtils.isEmpty(location.getResourcePath())) {
-			int x = 0;
-		}
-		
 		if (SoundEvent.REGISTRY.containsKey(location))
 			return SoundEvent.REGISTRY.getObject(location);
 
