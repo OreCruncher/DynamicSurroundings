@@ -223,7 +223,9 @@ public class AcousticsJsonReader {
 	}
 	
 	private void setupSoundName(final BasicAcoustic a, final String soundName) {
-		if (soundName.charAt(0) != '@') {
+		if("@".equals(soundName)) {
+			a.setSound(SoundUtils.getOrRegisterSound("MISSING"));
+		} else if (soundName.charAt(0) != '@') {
 			a.setSound(SoundUtils.getOrRegisterSound(this.soundRoot + soundName));
 		} else {
 			a.setSound(SoundUtils.getOrRegisterSound("minecraft:" + soundName.substring(1)));

@@ -41,6 +41,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -50,10 +51,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SpeechBubbleRenderer {
 
-	private static final Color B_COLOR = Color.SLATEGRAY;
+	private static final Color B_COLOR = Color.getColor(TextFormatting.DARK_GRAY);
 	private static final float B_COLOR_ALPHA = 0.4F; // 0.25F;
-	private static final Color F_COLOR = Color.GOLD;
-	private static final Color F_COLOR_DEPTH = Color.GRAY;
+	private static final Color F_COLOR = Color.getColor(TextFormatting.GOLD);
+	private static final Color F_COLOR_DEPTH = Color.getColor(TextFormatting.GRAY);
 	private static final int MIN_TEXT_WIDTH = 60;
 	private static final int MAX_TEXT_WIDTH = MIN_TEXT_WIDTH * 4;
 	private static final double BUBBLE_MARGIN = 4.0F;
@@ -182,7 +183,7 @@ public class SpeechBubbleRenderer {
 
 		final EntityLivingBase entity = (EntityLivingBase) event.getEntity();
 		final EntityPlayer player = EnvironState.getPlayer();
-		
+
 		if (player.getDistanceSqToEntity(entity) > RENDER_RANGE || entity.isInvisibleToPlayer(player))
 			return;
 

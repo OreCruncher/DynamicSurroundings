@@ -24,7 +24,11 @@
 
 package org.blockartistry.mod.DynSurround.util;
 
+import java.util.IdentityHashMap;
+import java.util.Map;
+
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextFormatting;
 
 /**
  * Holds an RGB triple. See: http://www.rapidtables.com/web/color/RGB_Color.htm
@@ -77,6 +81,47 @@ public class Color {
 	public static final Color SLATEGRAY = new ImmutableColor(112, 128, 144);
 	public static final Color DARKSLATEGRAY = new ImmutableColor(47, 79, 79);
 
+	// Minecraft colors mapped to codes
+	public static final Color MC_BLACK = new ImmutableColor(0, 0, 0);
+	public static final Color MC_DARKBLUE = new ImmutableColor(0, 0, 170);
+	public static final Color MC_DARKGREEN = new ImmutableColor(0, 170, 0);
+	public static final Color MC_DARKAQUA = new ImmutableColor(0, 170, 170);
+	public static final Color MC_DARKRED = new ImmutableColor(170, 0, 0);
+	public static final Color MC_DARKPURPLE = new ImmutableColor(170, 0, 170);
+	public static final Color MC_GOLD = new ImmutableColor(255, 170, 0);
+	public static final Color MC_GRAY = new ImmutableColor(170, 170, 170);
+	public static final Color MC_DARKGRAY = new ImmutableColor(85, 85, 85);
+	public static final Color MC_BLUE = new ImmutableColor(85, 85, 255);
+	public static final Color MC_GREEN = new ImmutableColor(85, 255, 85);
+	public static final Color MC_AQUA = new ImmutableColor(85, 255, 255);
+	public static final Color MC_RED = new ImmutableColor(255, 85, 85);
+	public static final Color MC_LIGHTPURPLE = new ImmutableColor(255, 85, 255);
+	public static final Color MC_YELLOW = new ImmutableColor(255, 255, 85);
+	public static final Color MC_WHITE = new ImmutableColor(255, 255, 255);
+
+	private static final Map<TextFormatting, Color> colorLookup = new IdentityHashMap<TextFormatting, Color>();
+	static {
+		colorLookup.put(TextFormatting.BLACK, MC_BLACK);
+		colorLookup.put(TextFormatting.DARK_BLUE, MC_DARKBLUE);
+		colorLookup.put(TextFormatting.DARK_GREEN, MC_DARKGREEN);
+		colorLookup.put(TextFormatting.DARK_AQUA, MC_DARKAQUA);
+		colorLookup.put(TextFormatting.DARK_RED, MC_DARKRED);
+		colorLookup.put(TextFormatting.DARK_PURPLE, MC_DARKPURPLE);
+		colorLookup.put(TextFormatting.GOLD, MC_GOLD);
+		colorLookup.put(TextFormatting.GRAY, MC_GRAY);
+		colorLookup.put(TextFormatting.DARK_GRAY, MC_DARKGRAY);
+		colorLookup.put(TextFormatting.BLUE, MC_BLUE);
+		colorLookup.put(TextFormatting.GREEN, MC_GREEN);
+		colorLookup.put(TextFormatting.AQUA, MC_AQUA);
+		colorLookup.put(TextFormatting.RED, MC_RED);
+		colorLookup.put(TextFormatting.LIGHT_PURPLE, MC_LIGHTPURPLE);
+		colorLookup.put(TextFormatting.YELLOW, MC_YELLOW);
+		colorLookup.put(TextFormatting.WHITE, MC_WHITE);
+	}
+	public static Color getColor(final TextFormatting format) {
+		return colorLookup.get(format);
+	}
+
 	public float red;
 	public float green;
 	public float blue;
@@ -123,20 +168,6 @@ public class Color {
 
 	public static Color scale(final Color color, final float scaleFactor) {
 		return new Color(color).scale(scaleFactor);
-	}
-
-	public Color anaglyph() {
-		final float r = (this.red * 30.0F + this.green * 59.0F + this.blue * 11.0F) / 100.0F;
-		final float g = (this.red * 30.0F + this.green * 70.0F) / 100.0F;
-		final float b = (this.red * 30.0F + this.blue * 70.0F) / 100.0F;
-		this.red = r;
-		this.green = g;
-		this.blue = b;
-		return this;
-	}
-
-	public static Color anaglyph(final Color color) {
-		return new Color(color).anaglyph();
 	}
 
 	public Color add(final Color color) {
