@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.data;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.event.AuroraSpawnEvent;
 import org.blockartistry.mod.DynSurround.util.INBTSerialization;
 
 import net.minecraft.entity.Entity;
@@ -51,6 +52,15 @@ public final class AuroraData implements INBTSerialization {
 	public int preset;
 
 	public AuroraData() {
+	}
+	
+	public AuroraData(final AuroraSpawnEvent event) {
+		this.dimensionId = event.dimensionId;
+		this.posX = event.posX;
+		this.posZ = event.posZ;
+		this.seed = event.seed;
+		this.colorSet = event.colorSet;
+		this.preset = event.preset;
 	}
 
 	public AuroraData(@Nonnull final EntityPlayer player, final int zOffset, final int colorSet, final int preset) {

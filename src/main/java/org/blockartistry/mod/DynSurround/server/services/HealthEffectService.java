@@ -25,7 +25,6 @@
 package org.blockartistry.mod.DynSurround.server.services;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.data.HealthData;
 import org.blockartistry.mod.DynSurround.network.Network;
 
 import net.minecraft.entity.Entity;
@@ -45,7 +44,7 @@ public final class HealthEffectService {
 
 	protected HealthEffectService() {
 	}
-	
+
 	public static void initialize() {
 		if (ModOptions.enableDamagePopoffs)
 			MinecraftForge.EVENT_BUS.register(new HealthEffectService());
@@ -85,8 +84,9 @@ public final class HealthEffectService {
 			}
 		}
 
-		final HealthData data = new HealthData(event.getEntityLiving(), isCrit, (int) event.getAmount());
-		Network.sendHealthUpdate(data, event.getEntity().worldObj.provider.getDimension());
+		final Entity entity = event.getEntityLiving();
+		Network.sendHealthUpdate(entity.getUniqueID(), (float) entity.posX, (float) entity.posY, (float) entity.posZ,
+				isCrit, (int) event.getAmount(), entity.worldObj.provider.getDimension());
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOW)
@@ -100,8 +100,9 @@ public final class HealthEffectService {
 				|| event.getEntityLiving().getHealth() == event.getEntityLiving().getMaxHealth())
 			return;
 
-		final HealthData data = new HealthData(event.getEntityLiving(), false, -(int) event.getAmount());
-		Network.sendHealthUpdate(data, event.getEntity().worldObj.provider.getDimension());
+		final Entity entity = event.getEntityLiving();
+		Network.sendHealthUpdate(entity.getUniqueID(), (float) entity.posX, (float) entity.posY + entity.height, (float) entity.posZ,
+				false, -(int) event.getAmount(), entity.worldObj.provider.getDimension());
 	}
-	
+
 }

@@ -22,30 +22,29 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.handlers;
+package org.blockartistry.mod.DynSurround.event;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import java.util.UUID;
 
-@SideOnly(Side.CLIENT)
-public class PotionParticleScrubHandler extends EffectHandlerBase {
+import net.minecraftforge.fml.common.eventhandler.Event;
 
-	@Override
-	public String getHandlerName() {
-		return "PotionParticleScrubHandler";
-	}
+public class PopoffEvent extends Event {
 
-	@Override
-	public void process(final World world, final EntityPlayer player) {
-		player.getDataManager().set(EntityLivingBase.HIDE_PARTICLES, true);
-	}
+	public final UUID entityId;
+	public final float posX;
+	public final float posY;
+	public final float posZ;
+	public final boolean isCritical;
+	public final int amount;
 
-	@Override
-	public boolean hasEvents() {
-		return false;
+	public PopoffEvent(final UUID id, final float x, final float y, final float z, final boolean isCritical,
+			final int amount) {
+		this.entityId = id;
+		this.posX = x;
+		this.posY = y;
+		this.posZ = z;
+		this.isCritical = isCritical;
+		this.amount = amount;
 	}
 
 }

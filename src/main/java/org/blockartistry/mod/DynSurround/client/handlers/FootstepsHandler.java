@@ -34,7 +34,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 // Simple shim to forward to the Footsteps engine.  Needed to seperate
 // because of startup issues.
 @SideOnly(Side.CLIENT)
-public class FootstepsHandler extends ClientEffectBase {
+public class FootstepsHandler extends EffectHandlerBase {
+
+	@Override
+	public String getHandlerName() {
+		return "FootstepsHandler";
+	}
 
 	@Override
 	public void process(final World world, final EntityPlayer player) {

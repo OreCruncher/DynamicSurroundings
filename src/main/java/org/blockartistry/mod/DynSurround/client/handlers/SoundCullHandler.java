@@ -45,12 +45,17 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class SoundCullHandler extends ClientEffectBase {
+public class SoundCullHandler extends EffectHandlerBase {
 
 	private final List<String> soundsToBlock = new ArrayList<String>();
 	private final TObjectIntHashMap<String> soundCull = new TObjectIntHashMap<String>();
 
 	public SoundCullHandler() {
+	}
+
+	@Override
+	public String getHandlerName() {
+		return "SoundCullHandler";
 	}
 
 	@Override

@@ -22,36 +22,18 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.data;
+package org.blockartistry.mod.DynSurround.event;
 
-import java.util.UUID;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
-import net.minecraft.entity.Entity;
-
-public final class HealthData {
-	public final UUID entityId;
-	public final float posX;
-	public final float posY;
-	public final float posZ;
-	public final boolean isCritical;
-	public final int amount;
-
-	public HealthData(final Entity entity, final boolean isCritical, final int amount) {
-		this.entityId = entity.getUniqueID();
-		this.posX = (float) entity.posX;
-		this.posY = (float) entity.posY + entity.height;
-		this.posZ = (float) entity.posZ;
-		this.isCritical = isCritical;
-		this.amount = amount;
+public class RainIntensityEvent extends Event {
+	
+	public final int dimensionId;
+	public final float intensity;
+	
+	public RainIntensityEvent(final int dimension, final float intensity) {
+		this.dimensionId = dimension;
+		this.intensity = intensity;
 	}
 
-	public HealthData(final UUID id, final float x, final float y, final float z, final boolean isCritical,
-			final int amount) {
-		this.entityId = id;
-		this.posX = x;
-		this.posY = y;
-		this.posZ = z;
-		this.isCritical = isCritical;
-		this.amount = amount;
-	}
 }

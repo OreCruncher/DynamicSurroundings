@@ -48,13 +48,18 @@ import net.minecraftforge.fml.relauncher.Side;
  * Based on doVoidParticles().
  */
 @SideOnly(Side.CLIENT)
-public class BlockEffectHandler extends ClientEffectBase {
+public class BlockEffectHandler extends EffectHandlerBase {
 
 	private static final Random RANDOM = new XorShiftRandom();
 	private static final double RATIO = 0.0335671847202175D;
 
 	private int randomRange(final int range) {
 		return RANDOM.nextInt(range) - RANDOM.nextInt(range);
+	}
+	
+	@Override
+	public String getHandlerName() {
+		return "BlockEffectHandler";
 	}
 
 	@Override

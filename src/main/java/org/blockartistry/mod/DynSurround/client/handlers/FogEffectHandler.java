@@ -49,7 +49,7 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class FogEffectHandler extends ClientEffectBase {
+public class FogEffectHandler extends EffectHandlerBase {
 
 	private static final int HAZE_THRESHOLD = 15;
 
@@ -90,6 +90,11 @@ public class FogEffectHandler extends ClientEffectBase {
 		final float ratio = (MathHelper.floor_double(player.posY + player.getEyeHeight()) - groundLevel)
 				/ (skyHeight - groundLevel);
 		return ratio * ratio * ratio * ratio * ModOptions.elevationHazeFactor;
+	}
+
+	@Override
+	public String getHandlerName() {
+		return "FogEffectHandler";
 	}
 
 	@Override

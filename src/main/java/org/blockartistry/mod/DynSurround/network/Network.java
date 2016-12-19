@@ -28,17 +28,18 @@ import java.util.UUID;
 
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
-import org.blockartistry.mod.DynSurround.data.HealthData;
-
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
 public final class Network {
-	
+
 	private static int discriminator = 0;
-	
+
 	private Network() {
 	}
 
@@ -52,19 +53,30 @@ public final class Network {
 		network.registerMessage(PacketSpeechBubble.class, PacketSpeechBubble.class, ++discriminator, Side.CLIENT);
 	}
 
+	// Package level helper method to fire events based on incoming packets
+	static void postEvent(final Event event) {
+		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+			public void run() {
+				MinecraftForge.EVENT_BUS.post(event);
+			}
+		});
+	}
+
 	public static void sendRainIntensity(final float intensity, final int dimension) {
 		network.sendToDimension(new PacketRainIntensity(intensity, dimension), dimension);
 	}
-	
+
 	public static void sendAurora(final AuroraData data, final int dimension) {
 		network.sendToDimension(new PacketAurora(data), dimension);
 	}
 
-	public static void sendHealthUpdate(final HealthData data, final int dimension) {
-		network.sendToDimension(new PacketHealthChange(data), dimension);
+	public static void sendHealthUpdate(final UUID id, final float x, final float y, final float z,
+			final boolean isCritical, final int amount, final int dimension) {
+		network.sendToDimension(new PacketHealthChange(id, x, y, z, isCritical, amount), dimension);
 	}
-	
-	public static void sendChatBubbleUpdate(final UUID playerId, final String message, final boolean translate, final EntityPlayerMP target) {
+
+	public static void sendChatBubbleUpdate(final UUID playerId, final String message, final boolean translate,
+			final EntityPlayerMP target) {
 		network.sendTo(new PacketSpeechBubble(playerId, message, translate), target);
 	}
 }

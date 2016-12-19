@@ -39,6 +39,7 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer;
 import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer.RenderingInfo;
+import org.blockartistry.mod.DynSurround.event.SpeechTextEvent;
 import org.blockartistry.mod.DynSurround.util.Translations;
 
 import com.google.common.base.Function;
@@ -52,11 +53,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class SpeechBubbleHandler extends ClientEffectBase {
+public class SpeechBubbleHandler extends EffectHandlerBase {
 
 	public static class ExpireFilter implements Predicate<SpeechBubbleData> {
 
@@ -75,7 +77,7 @@ public class SpeechBubbleHandler extends ClientEffectBase {
 	private static final TIntObjectHashMap<List<SpeechBubbleData>> messages = new TIntObjectHashMap<List<SpeechBubbleData>>();
 	private static Translations xlate = new Translations();
 
-	private static class Stripper implements Function<Entry<String,String>,String> {
+	private static class Stripper implements Function<Entry<String, String>, String> {
 
 		private final Pattern WEIGHT_PATTERN = Pattern.compile("^([0-9]*),(.*)");
 
@@ -84,9 +86,9 @@ public class SpeechBubbleHandler extends ClientEffectBase {
 			final Matcher matcher = WEIGHT_PATTERN.matcher(input.getValue());
 			return matcher.matches() ? matcher.group(2) : input.getValue();
 		}
-		
+
 	}
-	
+
 	private static void processTranslations() {
 		final String[] langs;
 		if (Minecraft.getMinecraft().gameSettings.language.equals(Translations.DEFAULT_LANGUAGE))
@@ -97,7 +99,7 @@ public class SpeechBubbleHandler extends ClientEffectBase {
 		xlate.load("/assets/dsurround/data/chat/", langs);
 		xlate.transform(new Stripper());
 	}
-	
+
 	protected static class SpeechBubbleData {
 		public final long expires = System.currentTimeMillis() + (long) (ModOptions.speechBubbleDuration * 1000F);
 		public final RenderingInfo messages;
@@ -119,7 +121,7 @@ public class SpeechBubbleHandler extends ClientEffectBase {
 		return null;
 	}
 
-	public static void addSpeechBubbleFormatted(@Nonnull final UUID entityId, @Nonnull final String message,
+	private static void addSpeechBubbleFormatted(@Nonnull final UUID entityId, @Nonnull final String message,
 			final Object... parms) {
 		if (!ModOptions.enableSpeechBubbles && !ModOptions.enableEntityChat)
 			return;
@@ -128,7 +130,7 @@ public class SpeechBubbleHandler extends ClientEffectBase {
 		addSpeechBubble(entityId, xlated);
 	}
 
-	public static void addSpeechBubble(@Nonnull final UUID entityId, @Nonnull final String message) {
+	private static void addSpeechBubble(@Nonnull final UUID entityId, @Nonnull final String message) {
 		if (!(ModOptions.enableSpeechBubbles || ModOptions.enableEntityChat) || entityId == null
 				|| StringUtils.isEmpty(message))
 			return;
@@ -158,6 +160,11 @@ public class SpeechBubbleHandler extends ClientEffectBase {
 	}
 
 	@Override
+	public String getHandlerName() {
+		return "SpeechBubbleHandler";
+	}
+
+	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 		final ExpireFilter filter = new ExpireFilter(System.currentTimeMillis());
 		final TIntObjectIterator<List<SpeechBubbleData>> entityData = messages.iterator();
@@ -178,5 +185,13 @@ public class SpeechBubbleHandler extends ClientEffectBase {
 	@Override
 	public void onDisconnect() {
 		messages.clear();
+	}
+
+	@SubscribeEvent
+	public void onSpeechTextEvent(final SpeechTextEvent event) {
+		if (event.translate)
+			addSpeechBubbleFormatted(event.entityId, event.message);
+		else
+			addSpeechBubble(event.entityId, event.message);
 	}
 }

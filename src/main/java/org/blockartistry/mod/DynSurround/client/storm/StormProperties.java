@@ -157,7 +157,7 @@ public enum StormProperties {
 	}
 
 	/**
-	 * Set precipitation textures based on the currentAurora intensity. This is
+	 * Set precipitation textures based on the current intensity. This is
 	 * invoked before rendering takes place.
 	 */
 	public static void setTextures() {

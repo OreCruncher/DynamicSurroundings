@@ -34,6 +34,7 @@ import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
 import org.blockartistry.mod.DynSurround.event.DiagnosticEvent;
+import org.blockartistry.mod.DynSurround.event.RainIntensityEvent;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
@@ -70,7 +71,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class EnvironStateHandler extends ClientEffectBase {
+public class EnvironStateHandler extends EffectHandlerBase {
 
 	private static final SoundEffect JUMP;
 	private static final SoundEffect SWORD;
@@ -371,6 +372,11 @@ public class EnvironStateHandler extends ClientEffectBase {
 	}
 
 	@Override
+	public String getHandlerName() {
+		return "EnvironStateEffectHandler";
+	}
+
+	@Override
 	public void process(final World world, final EntityPlayer player) {
 		EnvironState.tick(world, player);
 
@@ -463,4 +469,10 @@ public class EnvironStateHandler extends ClientEffectBase {
 		event.output.add("Conditions: " + EnvironState.getConditions());
 	}
 
+	@SubscribeEvent
+	public void onRainIntensityEvent(final RainIntensityEvent event) {
+		if(EnvironState.getDimensionId() != event.dimensionId)
+			return;
+		StormProperties.setIntensity(event.intensity);
+	}
 }

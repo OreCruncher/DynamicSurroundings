@@ -24,11 +24,8 @@
 
 package org.blockartistry.mod.DynSurround.network;
 
-import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
-import org.blockartistry.mod.DynSurround.util.PlayerUtils;
-
+import org.blockartistry.mod.DynSurround.event.RainIntensityEvent;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -65,15 +62,7 @@ public final class PacketRainIntensity implements IMessage, IMessageHandler<Pack
 
 	@Override
 	public IMessage onMessage(final PacketRainIntensity message, final MessageContext ctx) {
-		// If the player is in the dimension set the intensity.  Otherwise
-		// ignore.
-		if (message.dimension == PlayerUtils.getClientPlayerDimension()) {
-			Minecraft.getMinecraft().addScheduledTask(new Runnable() {
-				public void run() {
-					StormProperties.setIntensity(message.intensity);
-				}
-			});
-		}
+		Network.postEvent(new RainIntensityEvent(message.dimension, message.intensity));
 		return null;
 	}
 }

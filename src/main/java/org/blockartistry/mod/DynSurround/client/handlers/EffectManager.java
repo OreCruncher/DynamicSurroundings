@@ -26,8 +26,9 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.blockartistry.mod.DynSurround.ModOptions;
 
+import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.mod.DynSurround.ModOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -40,22 +41,22 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class ClientEffectHandler {
+public class EffectManager {
 
-	private static final List<ClientEffectBase> effectHandlers = new ArrayList<ClientEffectBase>();
+	private static final List<EffectHandlerBase> effectHandlers = new ArrayList<EffectHandlerBase>();
 
-	public static void register(final ClientEffectBase handler) {
+	public static void register(final EffectHandlerBase handler) {
 		effectHandlers.add(handler);
 		if (handler.hasEvents()) {
 			MinecraftForge.EVENT_BUS.register(handler);
 		}
 	}
 
-	private ClientEffectHandler() {
+	private EffectManager() {
 	}
 
 	public static void initialize() {
-		final ClientEffectHandler handler = new ClientEffectHandler();
+		final EffectManager handler = new EffectManager();
 		MinecraftForge.EVENT_BUS.register(handler);
 
 		register(new EnvironStateHandler());
@@ -78,10 +79,18 @@ public class ClientEffectHandler {
 		if (ModOptions.suppressPotionParticles)
 			register(new PotionParticleScrubHandler());
 		
+		if (ModOptions.enableDamagePopoffs)
+			register(new PopoffEffectHandler());
+
 		if(ModOptions.enableSpeechBubbles)
 			register(new SpeechBubbleHandler());
+		
+		ModLog.info("Registered client handlers:");
+		for(final EffectHandlerBase h: effectHandlers) {
+			ModLog.info("* %s", h.getHandlerName());
+		}
 	}
-
+	
 	@SubscribeEvent
 	public void clientTick(final TickEvent.ClientTickEvent event) {
 		if (Minecraft.getMinecraft().isGamePaused())
@@ -93,7 +102,7 @@ public class ClientEffectHandler {
 
 		if (event.phase == Phase.START) {
 			final EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
-			for (final ClientEffectBase handler : effectHandlers)
+			for (final EffectHandlerBase handler : effectHandlers)
 				handler.process(world, player);
 		}
 	}

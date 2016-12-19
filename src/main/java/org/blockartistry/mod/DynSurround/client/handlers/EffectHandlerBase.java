@@ -33,8 +33,12 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnection
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public abstract class ClientEffectBase {
+public abstract class EffectHandlerBase {
 	
+	// Used to obtain the name of the handler for logging purposes
+	public abstract String getHandlerName();
+	
+	// The meat of the processing logic.  Invoked every client tick.
 	public abstract void process(final World world, final EntityPlayer player);
 	
 	// Indicates if the object implements events and should be registered.

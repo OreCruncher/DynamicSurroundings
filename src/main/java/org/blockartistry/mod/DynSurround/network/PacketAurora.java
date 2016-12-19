@@ -24,11 +24,10 @@
 
 package org.blockartistry.mod.DynSurround.network;
 
-import org.blockartistry.mod.DynSurround.client.handlers.AuroraEffectHandler;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
+import org.blockartistry.mod.DynSurround.event.AuroraSpawnEvent;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -79,12 +78,8 @@ public final class PacketAurora implements IMessage, IMessageHandler<PacketAuror
 
 	@Override
 	public IMessage onMessage(final PacketAurora message, final MessageContext ctx) {
-		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
-			public void run() {
-				AuroraEffectHandler.addAurora(new AuroraData(message.dimension, message.posX, message.posZ,
-						message.seed, message.colorSet, message.preset));
-			}
-		});
+		Network.postEvent(new AuroraSpawnEvent(message.dimension, message.posX, message.posZ, message.seed,
+				message.colorSet, message.preset));
 		return null;
 	}
 }

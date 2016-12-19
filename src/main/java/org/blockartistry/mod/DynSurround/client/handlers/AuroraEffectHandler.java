@@ -32,27 +32,31 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.aurora.Aurora;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
+import org.blockartistry.mod.DynSurround.event.AuroraSpawnEvent;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public final class AuroraEffectHandler extends ClientEffectBase {
+public final class AuroraEffectHandler extends EffectHandlerBase {
 
 	// Aurora information
 	private static int auroraDimension = 0;
 	private static final Set<AuroraData> auroras = new HashSet<AuroraData>();
-	public static Aurora currentAurora;
+	private static Aurora current;
+	
+	public static Aurora getCurrentAurora() {
+		return current;
+	}
 
-	public static void addAurora(final AuroraData data) {
-		if (!ModOptions.auroraEnable)
-			return;
+	private static void addAurora(final AuroraData data) {
 
 		if (auroraDimension != data.dimensionId || EnvironState.getDimensionId() != data.dimensionId) {
 			auroras.clear();
-			currentAurora = null;
+			current = null;
 			auroraDimension = data.dimensionId;
 		}
 		auroras.add(data);
@@ -62,57 +66,60 @@ public final class AuroraEffectHandler extends ClientEffectBase {
 
 		AuroraData ad = null;
 
-		synchronized (auroras) {
-			if (auroraDimension != EnvironState.getDimensionId() || DiurnalUtils.isDaytime(world)) {
-				auroras.clear();
-			}
+		if (auroraDimension != EnvironState.getDimensionId() || DiurnalUtils.isDaytime(world)) {
+			auroras.clear();
+		}
 
-			if (auroras.size() == 0) {
-				currentAurora = null;
-				return null;
-			}
+		if (auroras.size() == 0) {
+			current = null;
+			return null;
+		}
 
-			final EntityPlayer player = EnvironState.getPlayer();
-			final int playerX = (int) player.posX;
-			final int playerZ = (int) player.posZ;
-			boolean started = false;
-			int distanceSq = 0;
-			for (final AuroraData data : auroras) {
-				final int deltaX = data.posX - playerX;
-				final int deltaZ = data.posZ - playerZ;
-				final int d = deltaX * deltaX + deltaZ * deltaZ;
-				if (!started || distanceSq > d) {
-					started = true;
-					distanceSq = d;
-					ad = data;
-				}
+		final EntityPlayer player = EnvironState.getPlayer();
+		final int playerX = (int) player.posX;
+		final int playerZ = (int) player.posZ;
+		boolean started = false;
+		int distanceSq = 0;
+		for (final AuroraData data : auroras) {
+			final int deltaX = data.posX - playerX;
+			final int deltaZ = data.posZ - playerZ;
+			final int d = deltaX * deltaX + deltaZ * deltaZ;
+			if (!started || distanceSq > d) {
+				started = true;
+				distanceSq = d;
+				ad = data;
 			}
 		}
 
 		if (ad == null) {
-			currentAurora = null;
-		} else if (currentAurora == null || (currentAurora.posX != ad.posX && currentAurora.posZ != ad.posZ)) {
+			current = null;
+		} else if (current == null || (current.posX != ad.posX && current.posZ != ad.posZ)) {
 			ModLog.debug("New aurora: " + ad.toString());
-			currentAurora = new Aurora(ad);
+			current = new Aurora(ad);
 		}
 
-		return currentAurora;
+		return current;
 	}
 
 	@Override
 	public void onConnect() {
 		auroraDimension = 0;
-		currentAurora = null;
+		current = null;
 		auroras.clear();
 	}
-	
+
 	@Override
 	public void onDisconnect() {
 		auroraDimension = 0;
-		currentAurora = null;
+		current = null;
 		auroras.clear();
 	}
-	
+
+	@Override
+	public String getHandlerName() {
+		return "AuroraEffectHandler";
+	}
+
 	/*
 	 * Need to get called every tick to process the dust fade timer as well as
 	 * aurora processing.
@@ -127,5 +134,13 @@ public final class AuroraEffectHandler extends ClientEffectBase {
 				aurora.die();
 			}
 		}
+	}
+
+	@SubscribeEvent
+	public void onAuroraSpawnEvent(final AuroraSpawnEvent event) {
+		if (!ModOptions.auroraEnable)
+			return;
+
+		addAurora(new AuroraData(event));
 	}
 }

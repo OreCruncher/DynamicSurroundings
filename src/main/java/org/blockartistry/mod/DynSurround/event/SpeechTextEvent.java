@@ -22,30 +22,26 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.handlers;
+package org.blockartistry.mod.DynSurround.event;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import java.util.UUID;
 
-@SideOnly(Side.CLIENT)
-public class PotionParticleScrubHandler extends EffectHandlerBase {
+import net.minecraftforge.fml.common.eventhandler.Event;
 
-	@Override
-	public String getHandlerName() {
-		return "PotionParticleScrubHandler";
+public class SpeechTextEvent extends Event {
+	
+	public final UUID entityId;
+	public final String message;
+	public final boolean translate;
+	
+	public SpeechTextEvent(final UUID id, final String message) {
+		this(id, message, false);
 	}
-
-	@Override
-	public void process(final World world, final EntityPlayer player) {
-		player.getDataManager().set(EntityLivingBase.HIDE_PARTICLES, true);
-	}
-
-	@Override
-	public boolean hasEvents() {
-		return false;
+	
+	public SpeechTextEvent(final UUID id, final String message, final boolean translate) {
+		this.entityId = id;
+		this.message = message;
+		this.translate = translate;
 	}
 
 }

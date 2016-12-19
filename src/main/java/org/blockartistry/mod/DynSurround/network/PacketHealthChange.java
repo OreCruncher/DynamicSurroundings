@@ -26,11 +26,9 @@ package org.blockartistry.mod.DynSurround.network;
 
 import java.util.UUID;
 
-import org.blockartistry.mod.DynSurround.client.handlers.HealthEffectHandler;
-import org.blockartistry.mod.DynSurround.data.HealthData;
+import org.blockartistry.mod.DynSurround.event.PopoffEvent;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -48,13 +46,14 @@ public class PacketHealthChange implements IMessage, IMessageHandler<PacketHealt
 
 	}
 
-	public PacketHealthChange(final HealthData data) {
-		this.entityId = data.entityId;
-		this.posX = data.posX;
-		this.posY = data.posY;
-		this.posZ = data.posZ;
-		this.isCritical = data.isCritical;
-		this.amount = data.amount;
+	public PacketHealthChange(final UUID id, final float x, final float y, final float z, final boolean isCritical,
+			final int amount) {
+		this.entityId = id;
+		this.posX = x;
+		this.posY = y;
+		this.posZ = z;
+		this.isCritical = isCritical;
+		this.amount = amount;
 	}
 
 	@Override
@@ -80,13 +79,8 @@ public class PacketHealthChange implements IMessage, IMessageHandler<PacketHealt
 
 	@Override
 	public IMessage onMessage(final PacketHealthChange message, final MessageContext ctx) {
-		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
-			public void run() {
-				HealthEffectHandler.handleEvent(new HealthData(message.entityId, message.posX, message.posY,
-						message.posZ, message.isCritical, message.amount));
-			}
-		});
-
+		Network.postEvent(new PopoffEvent(message.entityId, message.posX, message.posY, message.posZ,
+				message.isCritical, message.amount));
 		return null;
 	}
 }

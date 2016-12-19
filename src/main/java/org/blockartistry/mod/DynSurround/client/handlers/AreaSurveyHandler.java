@@ -36,7 +36,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public final class AreaSurveyHandler extends ClientEffectBase {
+public final class AreaSurveyHandler extends EffectHandlerBase {
 
 	private static final int BIOME_SURVEY_RANGE = 6;
 	private static final int INSIDE_SURVEY_RANGE = 3;
@@ -111,6 +111,11 @@ public final class AreaSurveyHandler extends ClientEffectBase {
 					weights.adjustOrPutValue(biome, 1, 1);
 				}
 		}
+	}
+
+	@Override
+	public String getHandlerName() {
+		return "AreaSurveyEffectHandler";
 	}
 
 	// Analyzes the area around the player and caches the results.

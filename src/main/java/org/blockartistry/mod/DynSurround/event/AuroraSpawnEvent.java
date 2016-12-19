@@ -22,30 +22,27 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.handlers;
+package org.blockartistry.mod.DynSurround.event;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
-@SideOnly(Side.CLIENT)
-public class PotionParticleScrubHandler extends EffectHandlerBase {
-
-	@Override
-	public String getHandlerName() {
-		return "PotionParticleScrubHandler";
-	}
-
-	@Override
-	public void process(final World world, final EntityPlayer player) {
-		player.getDataManager().set(EntityLivingBase.HIDE_PARTICLES, true);
-	}
-
-	@Override
-	public boolean hasEvents() {
-		return false;
+public class AuroraSpawnEvent extends Event {
+	
+	public final int dimensionId;
+	public final int posX;
+	public final int posZ;
+	public final long seed;
+	public final int colorSet;
+	public final int preset;
+	
+	public AuroraSpawnEvent(final int dimensionId, final int x, final int z, final long seed, final int colorSet, final int preset) {
+		this.dimensionId = dimensionId;
+		this.posX = x;
+		this.posZ = z;
+		this.seed = seed;
+		this.colorSet = colorSet;
+		this.preset = preset;
+		
 	}
 
 }

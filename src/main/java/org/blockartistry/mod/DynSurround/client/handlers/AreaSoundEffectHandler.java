@@ -50,7 +50,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class AreaSoundEffectHandler extends ClientEffectBase {
+public class AreaSoundEffectHandler extends EffectHandlerBase {
 
 	private static boolean doBiomeSounds() {
 		return EnvironState.isPlayerUnderground() || !EnvironState.isPlayerInside();
@@ -80,6 +80,11 @@ public class AreaSoundEffectHandler extends ClientEffectBase {
 
 	private static void resetSounds() {
 		SoundManager.clearSounds();
+	}
+	
+	@Override
+	public String getHandlerName() {
+		return "AreaSoundEffectHandler";
 	}
 
 	@Override

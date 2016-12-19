@@ -46,8 +46,8 @@ public final class AuroraRenderer implements IAtmosRenderer {
 
 	@Override
 	public void render(final EntityRenderer renderer, final float partialTick) {
-		if (AuroraEffectHandler.currentAurora != null) {
-			renderAurora(partialTick, AuroraEffectHandler.currentAurora);
+		if (AuroraEffectHandler.getCurrentAurora() != null) {
+			renderAurora(partialTick, AuroraEffectHandler.getCurrentAurora());
 		}
 	}
 
@@ -89,7 +89,8 @@ public final class AuroraRenderer implements IAtmosRenderer {
 		GlStateManager.disableTexture2D();
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
+				GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.disableAlpha();
 		GlStateManager.disableCull();
 		GlStateManager.depthMask(false);

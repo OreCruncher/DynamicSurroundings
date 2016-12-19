@@ -181,7 +181,7 @@ public final class DimensionEffectData implements INBTSerialization {
 	
 	@Override
 	public String toString() {
-		// Dump out some diagnostics for the currentAurora dimension
+		// Dump out some diagnostics for the current dimension
 		final StringBuilder builder = new StringBuilder();
 		builder.append("dim ").append(this.dimensionId).append(": ");
 		builder.append("intensity: ").append(FORMATTER.format(this.intensity * 100));

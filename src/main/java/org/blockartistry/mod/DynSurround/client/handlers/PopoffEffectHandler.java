@@ -30,22 +30,25 @@ import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDamagePopOff
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHealPopOff;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.data.HealthData;
+import org.blockartistry.mod.DynSurround.event.PopoffEvent;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public final class HealthEffectHandler {
+public final class PopoffEffectHandler extends EffectHandlerBase {
 
 	private static final double DISTANCE_THRESHOLD_SQ = 32 * 32;
 
-	private HealthEffectHandler() {
+	public PopoffEffectHandler() {
 	}
 
-	public static void handleEvent(final HealthData data) {
+	@SubscribeEvent
+	public void handleEvent(final PopoffEvent data) {
 		if (!ModOptions.enableDamagePopoffs)
 			return;
 
@@ -70,5 +73,14 @@ public final class HealthEffectHandler {
 			ParticleHelper.addParticle(
 					new ParticleHealPopOff(world, data.posX, data.posY, data.posZ, MathHelper.abs_int(data.amount)));
 		}
+	}
+
+	@Override
+	public String getHandlerName() {
+		return "PopoffEffectHandler";
+	}
+
+	@Override
+	public void process(final World world, final EntityPlayer player) {
 	}
 }
