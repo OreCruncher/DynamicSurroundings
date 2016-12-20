@@ -73,7 +73,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	private final PriorityQueue<PendingSound> pending = new PriorityQueue<PendingSound>();
 	private final Isolator isolator;
 
-	// Special sentinals for equating
+	// Special sentinels for equating
 	public static final List<IAcoustic> NOT_EMITTER = ImmutableList.of((IAcoustic) new BasicAcoustic("NOT_EMITTER"));
 	public static final List<IAcoustic> MESSY_GROUND = ImmutableList.of((IAcoustic) new BasicAcoustic("MESSY_GROUND"));
 	public static List<IAcoustic> SWIM;

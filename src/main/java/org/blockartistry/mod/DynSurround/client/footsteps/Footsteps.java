@@ -42,7 +42,7 @@ import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.ResourcePacks;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Solver;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.UserConfigSoundPlayerWrapper;
-import org.blockartistry.mod.DynSurround.client.footsteps.util.property.simple.ConfigProperty;
+import org.blockartistry.mod.DynSurround.client.footsteps.util.ConfigProperty;
 import org.blockartistry.mod.DynSurround.registry.DataScripts;
 import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
 import org.blockartistry.mod.DynSurround.util.JsonUtils;

@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
-import org.blockartistry.mod.DynSurround.client.footsteps.util.property.simple.ConfigProperty;
+import org.blockartistry.mod.DynSurround.client.footsteps.util.ConfigProperty;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
