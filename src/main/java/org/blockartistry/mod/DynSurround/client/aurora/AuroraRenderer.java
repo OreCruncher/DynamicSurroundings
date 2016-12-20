@@ -33,6 +33,8 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.IAtmosRenderer;
 import org.blockartistry.mod.DynSurround.client.handlers.AuroraEffectHandler;
@@ -44,15 +46,15 @@ import org.lwjgl.opengl.GL11;
 public final class AuroraRenderer implements IAtmosRenderer {
 
 	@Override
-	public void render(final EntityRenderer renderer, final float partialTick) {
+	public void render(@Nonnull final EntityRenderer renderer, final float partialTick) {
 		if (AuroraEffectHandler.getCurrentAurora() != null) {
 			renderAurora(partialTick, AuroraEffectHandler.getCurrentAurora());
 		}
 	}
 
-	public static void renderAurora(final float partialTick, final Aurora aurora) {
+	public static void renderAurora(final float partialTick, @Nonnull final Aurora aurora) {
 
-		final float alpha = aurora.getAlpha() / 255.0F;
+		final float alpha = aurora.getAlphaf();
 		if (alpha <= 0.0F)
 			return;
 

@@ -34,8 +34,8 @@ import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 import net.minecraft.util.math.MathHelper;
 
 /**
- * Preset geometry of an Aurora.  A preset is selected by the server
- * when an Aurora spawns.
+ * Preset geometry of an Aurora. A preset is selected by the server when an
+ * Aurora spawns.
  */
 public final class AuroraPreset {
 
@@ -43,23 +43,35 @@ public final class AuroraPreset {
 	public final float nodeLength;
 	public final float nodeWidth;
 	public final int bandOffset;
+	public final int alphaMod;
 
 	private static final List<AuroraPreset> PRESET = new ArrayList<AuroraPreset>();
 
 	static {
 		// 10/5; 90/45
-		PRESET.add(new AuroraPreset(128, 30.0F, 2.0F, 45));
-		PRESET.add(new AuroraPreset(128, 15.0F, 2.0F, 27));
+		PRESET.add(new AuroraPreset(128, 30.0F, 2.0F, 45, 10));
+		PRESET.add(new AuroraPreset(128, 15.0F, 2.0F, 27, 10));
+		PRESET.add(new AuroraPreset(64, 30.0F, 2.0F, 45, 10));
+		PRESET.add(new AuroraPreset(64, 15.0F, 2.0F, 27, 10));
 
-		PRESET.add(new AuroraPreset(64, 30.0F, 2.0F, 45));
-		PRESET.add(new AuroraPreset(64, 15.0F, 2.0F, 27));
+		PRESET.add(new AuroraPreset(128, 30.0F, 2.0F, 45, 15));
+		PRESET.add(new AuroraPreset(128, 15.0F, 2.0F, 27, 15));
+		PRESET.add(new AuroraPreset(64, 30.0F, 2.0F, 45, 15));
+		PRESET.add(new AuroraPreset(64, 15.0F, 2.0F, 27, 15));
+
+		PRESET.add(new AuroraPreset(128, 30.0F, 2.0F, 45, 20));
+		PRESET.add(new AuroraPreset(128, 15.0F, 2.0F, 27, 20));
+		PRESET.add(new AuroraPreset(64, 30.0F, 2.0F, 45, 20));
+		PRESET.add(new AuroraPreset(64, 15.0F, 2.0F, 27, 20));
 	}
 
-	private AuroraPreset(final int length, final float nodeLength, final float nodeWidth, final int bandOffset) {
+	private AuroraPreset(final int length, final float nodeLength, final float nodeWidth, final int bandOffset,
+			final int alphaMod) {
 		this.length = length;
 		this.nodeLength = nodeLength;
 		this.nodeWidth = nodeWidth;
 		this.bandOffset = bandOffset;
+		this.alphaMod = alphaMod;
 	}
 
 	@Nonnull
@@ -73,5 +85,17 @@ public final class AuroraPreset {
 
 	public static int testId() {
 		return PRESET.size() - 1;
+	}
+
+	@Override
+	@Nonnull
+	public String toString() {
+		final StringBuilder builder = new StringBuilder();
+		builder.append("bandLength:").append(this.length);
+		builder.append(";nodeLength:").append(this.nodeLength);
+		builder.append(";nodeWidth:").append(this.nodeWidth);
+		builder.append(";bandOffset:").append(this.bandOffset);
+		builder.append(";alphaMod:").append(this.alphaMod);
+		return builder.toString();
 	}
 }

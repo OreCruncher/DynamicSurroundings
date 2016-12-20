@@ -26,6 +26,8 @@ package org.blockartistry.mod.DynSurround.client.aurora;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
 import org.blockartistry.mod.DynSurround.data.AuroraPreset;
@@ -47,6 +49,12 @@ public final class Aurora {
 	private static final float AURORA_SPEED = 0.75F;
 	private static final float AURORA_AMPLITUDE = 18.0F;
 	private static final float AURORA_WAVELENGTH = 8.0F;
+	
+	// Modulus applied to the fade in/out timer to adjust
+	// the aurora alpha value.  Higher values reduce the
+	// alpha progression rate as well as max alpha; lower
+	// values increase the progression and max alpha.
+	private static final int ALPHA_INCREMENT_MOD = 10;
 
 	public float posX;
 	public float posZ;
@@ -55,6 +63,7 @@ public final class Aurora {
 	private long seed;
 	private float cycle = 0.0F;
 	private int fadeTimer = 0;
+	private int alphaMod = ALPHA_INCREMENT_MOD;
 	private boolean isAlive = true;
 	private int length;
 	private float nodeLength;
@@ -68,7 +77,7 @@ public final class Aurora {
 	// Alpha setting of the aurora for fade
 	private int alpha = 1;
 
-	public Aurora(final AuroraData data) {
+	public Aurora(@Nonnull final AuroraData data) {
 		this(data.posX, data.posZ, data.seed, data.colorSet, data.preset);
 	}
 
@@ -88,6 +97,7 @@ public final class Aurora {
 		translate(0);
 	}
 
+	@Nonnull
 	public Node[][] getNodeList() {
 		return this.bands;
 	}
@@ -98,18 +108,25 @@ public final class Aurora {
 		this.nodeLength = p.nodeLength;
 		this.nodeWidth = p.nodeWidth;
 		this.bandOffset = p.bandOffset;
+		this.alphaMod = p.alphaMod;
 	}
 
+	@Nonnull
 	public Color getBaseColor() {
 		return this.baseColor;
 	}
 
+	@Nonnull
 	public Color getFadeColor() {
 		return this.fadeColor;
 	}
 
 	public int getAlpha() {
 		return this.alpha;
+	}
+	
+	public float getAlphaf() {
+		return (float) this.alpha / 255.0F;
 	}
 
 	public boolean isAlive() {
@@ -125,7 +142,7 @@ public final class Aurora {
 
 	public void update() {
 		if (this.fadeTimer < FADE_LIMIT) {
-			if (this.fadeTimer % 10 == 0 && this.alpha > 0)
+			if (this.fadeTimer % this.alphaMod == 0 && this.alpha > 0)
 				this.alpha += this.isAlive ? 1 : -1;
 			this.fadeTimer++;
 		}
@@ -170,13 +187,15 @@ public final class Aurora {
 		}
 	}
 
-	private static Node[] populateFromTemplate(final Node[] template, final int offset) {
+	@Nonnull
+	private static Node[] populateFromTemplate(@Nonnull final Node[] template, final int offset) {
 		final Node[] tet = new Node[template.length];
 		for (int i = 0; i < template.length; i++)
 			tet[i] = new Node(template[i], offset);
 		return tet;
 	}
 
+	@Nonnull
 	private Node[] populate() {
 		final Node[] nodeList = new Node[this.length];
 		final XorShiftRandom nodeRand = new XorShiftRandom(this.seed);
@@ -279,7 +298,7 @@ public final class Aurora {
 		}
 	}
 
-	private static void findAngles(final Node[] nodeList) {
+	private static void findAngles(@Nonnull final Node[] nodeList) {
 		nodeList[0].findAngles(null);
 		for (int i = 1; i < nodeList.length - 1; i++)
 			nodeList[i].findAngles(nodeList[i + 1]);

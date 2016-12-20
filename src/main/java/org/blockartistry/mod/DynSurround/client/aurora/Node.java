@@ -26,12 +26,14 @@ package org.blockartistry.mod.DynSurround.client.aurora;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public final class Node {
+final class Node {
 
 	private static final float COS_DEG90_FACTOR = MathStuff.cos(MathStuff.PI_F / 2.0F);
 	private static final float COS_DEG270_FACTOR = MathStuff.cos(MathStuff.PI_F / 2.0F + MathStuff.PI_F);
@@ -56,7 +58,7 @@ public final class Node {
 	public float tetZ = 0.0F;
 	public float tetZ2 = 0.0F;
 
-	public Node(final Node template, final int offset) {
+	public Node(@Nonnull final Node template, final int offset) {
 		final float rads = MathStuff.toRadians(90.0F + template.angle);
 		this.posX = template.posX + MathStuff.cos(rads) * offset;
 		this.posY = template.posY - 2.0F;
