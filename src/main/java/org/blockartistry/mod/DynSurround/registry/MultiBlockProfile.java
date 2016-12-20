@@ -68,10 +68,13 @@ public class MultiBlockProfile extends BlockProfile {
 		return profile != null ? profile.getChance(state) : super.getChance(state);
 	}
 
-	// TODO: This looks fishy.  Should it look at an entry?
 	@Override
 	public void setStepChance(@Nonnull final BlockInfo blockInfo, final int chance) {
-		this.stepChance = chance;
+		if (blockInfo.isGeneric()) {
+			super.setStepChance(blockInfo, chance);
+			return;
+		}
+		getProfileWithCreate(blockInfo).setStepChance(blockInfo, chance);
 	}
 
 	@Override
