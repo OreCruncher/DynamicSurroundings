@@ -80,11 +80,7 @@ public class StormSplashRenderer {
 	protected static final NoiseGeneratorSimplex GENERATOR = new NoiseGeneratorSimplex(RANDOM);
 
 	protected static float calculateRainSoundVolume(final World world) {
-		return MathHelper
-				.clamp_float(
-						(float) (StormProperties.getCurrentVolume()
-								+ GENERATOR.getValue(world.getCelestialAngle(1.0f) * 240.0f - 60.0f, 1) / 5.0F),
-						0.0F, 1.0F);
+		return StormProperties.getCurrentVolume();
 	}
 
 	protected void spawnBlockParticle(final IBlockState state, final boolean dust, final World world, final double x,
