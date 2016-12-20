@@ -1,13 +1,16 @@
 {
-	"stone":"brickstone",
-	"wood":"wood",
-	"gravel":"gravel",
-	"grass":"grass",
-	"stone@1.00_1.50":"hardmetal",
-	"stone@break_random.glass":"glass",
-	"cloth":"rug",
-	"sand":"sand",
-	"snow":"snow",
-	"ladder":"ladder",
-	"anvil":"hardmetal"
+	"minecraft:block.stone.step":"brickstone",
+	"minecraft:block.wood.step":"wood",
+	"minecraft:block.gravel.step":"gravel",
+	"minecraft:block.grass.step":"grass",
+	"minecraft:block.metal.step":"hardmetal",
+	"minecraft:block.glass.step":"glass",
+	"minecraft:block.cloth.step":"rug",
+	"minecraft:block.sand.step":"sand",
+	"minecraft:block.snow.step":"snow",
+	"minecraft:block.ladder.step":"ladder",
+	"minecraft:block.anvil.step":"metalcompressed,hardmetal",
+	"minecraft:block.slime.step":"mud",
+	"minecraf:block.stone.step@1.00_1.50":"hardmetal",
+	"minecraft:block.stone.step@break_random.glass":"glass"
 }
