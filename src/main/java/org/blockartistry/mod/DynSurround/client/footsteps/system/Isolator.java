@@ -22,25 +22,26 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.game.system;
+package org.blockartistry.mod.DynSurround.client.footsteps.system;
 
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.AcousticsManager;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.BlockMap;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.PrimitiveMap;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IStepPlayer;
+import javax.annotation.Nonnull;
+
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.AcousticsManager;
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.BlockMap;
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.PrimitiveMap;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.ISoundPlayer;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IStepPlayer;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IIsolator;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.ISolver;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class Isolator implements IIsolator {
+public class Isolator {
 	private AcousticsManager acoustics;
-	private ISolver solver;
+	private Solver solver;
 	private BlockMap blockMap;
 	private PrimitiveMap primitiveMap;
+
 	private ISoundPlayer soundPlayer;
 	private IStepPlayer defaultStepPlayer;
 
@@ -50,7 +51,6 @@ public class Isolator implements IIsolator {
 		this.blockMap = new BlockMap(this);
 	}
 
-	@Override
 	public void onFrame() {
 		if (this.generator == null)
 			return;
@@ -61,69 +61,65 @@ public class Isolator implements IIsolator {
 
 	//
 
+	@Nonnull
 	public AcousticsManager getAcoustics() {
 		return this.acoustics;
 	}
 
-	@Override
-	public ISolver getSolver() {
+	@Nonnull
+	public Solver getSolver() {
 		return this.solver;
 	}
 
-	@Override
+	@Nonnull
 	public BlockMap getBlockMap() {
 		return this.blockMap;
 	}
 
-	@Override
+	@Nonnull
 	public PrimitiveMap getPrimitiveMap() {
 		return this.primitiveMap;
 	}
 
-	@Override
+	@Nonnull
 	public ISoundPlayer getSoundPlayer() {
 		return this.soundPlayer;
 	}
 
-	@Override
+	@Nonnull
 	public IStepPlayer getDefaultStepPlayer() {
 		return this.defaultStepPlayer;
 	}
 
 	//
 
-	public void setAcoustics(final AcousticsManager acoustics) {
+	public void setAcoustics(@Nonnull final AcousticsManager acoustics) {
 		this.acoustics = acoustics;
 	}
 
-	@Override
-	public void setSolver(final ISolver solver) {
+	public void setSolver(@Nonnull final Solver solver) {
 		this.solver = solver;
 	}
 
-	@Override
-	public void setBlockMap(final BlockMap blockMap) {
+	public void setBlockMap(@Nonnull final BlockMap blockMap) {
 		this.blockMap = blockMap;
 	}
 
-	@Override
-	public void setPrimitiveMap(final PrimitiveMap primitiveMap) {
+	public void setPrimitiveMap(@Nonnull final PrimitiveMap primitiveMap) {
 		this.primitiveMap = primitiveMap;
 	}
 
-	@Override
-	public void setSoundPlayer(final ISoundPlayer soundPlayer) {
+	public void setSoundPlayer(@Nonnull final ISoundPlayer soundPlayer) {
 		this.soundPlayer = soundPlayer;
 	}
 
-	@Override
-	public void setDefaultStepPlayer(final IStepPlayer defaultStepPlayer) {
+	public void setDefaultStepPlayer(@Nonnull final IStepPlayer defaultStepPlayer) {
 		this.defaultStepPlayer = defaultStepPlayer;
 	}
 
 	//
 
-	public void setGenerator(final Generator generator) {
+	public void setGenerator(@Nonnull final Generator generator) {
 		this.generator = generator;
 	}
 }

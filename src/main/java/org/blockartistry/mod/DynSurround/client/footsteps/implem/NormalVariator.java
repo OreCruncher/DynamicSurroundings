@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem;
+package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

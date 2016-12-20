@@ -29,17 +29,19 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.Manifest;
-import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Isolator;
-import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Generator;
-import org.blockartistry.mod.DynSurround.client.footsteps.game.system.ResourcePacks;
-import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Solver;
-import org.blockartistry.mod.DynSurround.client.footsteps.game.system.UserConfigSoundPlayerWrapper;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.AcousticsManager;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.PrimitiveMap;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.BlockMap;
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.AcousticsManager;
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.BlockMap;
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.Manifest;
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.PrimitiveMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.parsers.AcousticsJsonReader;
+import org.blockartistry.mod.DynSurround.client.footsteps.system.Generator;
+import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
+import org.blockartistry.mod.DynSurround.client.footsteps.system.ResourcePacks;
+import org.blockartistry.mod.DynSurround.client.footsteps.system.Solver;
+import org.blockartistry.mod.DynSurround.client.footsteps.system.UserConfigSoundPlayerWrapper;
 import org.blockartistry.mod.DynSurround.client.footsteps.util.property.simple.ConfigProperty;
 import org.blockartistry.mod.DynSurround.registry.DataScripts;
 import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
@@ -89,7 +91,7 @@ public class Footsteps implements IDependent {
 		 */
 	}
 
-	private void reloadManifests(final List<IResourcePack> repo) {
+	private void reloadManifests(@Nonnull final List<IResourcePack> repo) {
 		for (final IResourcePack pack : repo) {
 			InputStream stream = null;
 			try {
@@ -114,7 +116,7 @@ public class Footsteps implements IDependent {
 		}
 	}
 
-	private void reloadPrimitiveMap(final List<IResourcePack> repo) {
+	private void reloadPrimitiveMap(@Nonnull final List<IResourcePack> repo) {
 		final PrimitiveMap primitiveMap = new PrimitiveMap(this.isolator);
 
 		for (final IResourcePack pack : repo) {
@@ -138,7 +140,7 @@ public class Footsteps implements IDependent {
 		this.isolator.setPrimitiveMap(primitiveMap);
 	}
 
-	private void reloadAcoustics(final List<IResourcePack> repo) {
+	private void reloadAcoustics(@Nonnull final List<IResourcePack> repo) {
 		AcousticsManager acoustics = new AcousticsManager(this.isolator);
 		Scanner scanner = null;
 		InputStream stream = null;
@@ -171,13 +173,14 @@ public class Footsteps implements IDependent {
 		this.isolator.setDefaultStepPlayer(acoustics);
 	}
 
-	public void process(World world, EntityPlayer player) {
+	public void process(@Nonnull World world, @Nonnull EntityPlayer player) {
 		if (this.isolator == null)
 			preInit();
 		this.isolator.onFrame();
 		player.nextStepDistance = Integer.MAX_VALUE;
 	}
 
+	@Nonnull
 	public BlockMap getBlockMap() {
 		return this.isolator.getBlockMap();
 	}
@@ -187,7 +190,7 @@ public class Footsteps implements IDependent {
 		// TODO Implement dumpState()
 	}
 
-	public static void registerForgeEntries(final String blockClass, final String... entries) {
+	public static void registerForgeEntries(@Nonnull final String blockClass, @Nonnull final String... entries) {
 		for (final String dictionaryName : entries) {
 			final List<ItemStack> stacks = OreDictionary.getOres(dictionaryName, false);
 			for (final ItemStack stack : stacks) {
@@ -202,7 +205,7 @@ public class Footsteps implements IDependent {
 		}
 	}
 
-	public static void registerBlocks(final String blockClass, final String... blocks) {
+	public static void registerBlocks(@Nonnull final String blockClass, @Nonnull final String... blocks) {
 		for (final String s : blocks)
 			INSTANCE.getBlockMap().register(s, blockClass);
 	}

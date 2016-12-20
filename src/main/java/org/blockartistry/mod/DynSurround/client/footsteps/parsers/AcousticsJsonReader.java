@@ -29,14 +29,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.implem.BasicAcoustic;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.implem.DelayedAcoustic;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.implem.EventSelectorAcoustics;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.implem.ProbabilityWeightsAcoustic;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.implem.SimultaneousAcoustic;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.EventType;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.AcousticsManager;
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.AcousticsManager;
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.BasicAcoustic;
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.DelayedAcoustic;
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.EventSelectorAcoustics;
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.ProbabilityWeightsAcoustic;
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.SimultaneousAcoustic;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.EventType;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.util.SoundUtils;
 
 import com.google.gson.JsonArray;

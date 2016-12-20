@@ -22,20 +22,21 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.game.system;
+package org.blockartistry.mod.DynSurround.client.footsteps.system;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.implem.ConfigOptions;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.EventType;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions.Option;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.AcousticsManager;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IIsolator;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.ISolver;
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.AcousticsManager;
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.ConfigOptions;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.EventType;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IOptions.Option;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
@@ -66,15 +67,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author Hurry
  */
 @SideOnly(Side.CLIENT)
-public class Solver implements ISolver {
-	private final IIsolator isolator;
+public class Solver {
+	private final Isolator isolator;
 
-	public Solver(final IIsolator isolator) {
+	public Solver(@Nonnull final Isolator isolator) {
 		this.isolator = isolator;
 	}
 
-	@Override
-	public void playAssociation(final EntityPlayer ply, final Association assos, final EventType eventType) {
+	/**
+	 * Play an association.
+	 */
+	public void playAssociation(@Nonnull final EntityPlayer ply, @Nullable final Association assos, @Nonnull final EventType eventType) {
 		if (assos != null && !assos.isNotEmitter()) {
 			if (assos.getNoAssociation()) {
 				this.isolator.getDefaultStepPlayer().playStep(ply, assos);
@@ -84,8 +87,19 @@ public class Solver implements ISolver {
 		}
 	}
 
-	@Override
-	public Association findAssociationForPlayer(final EntityPlayer ply, final double verticalOffsetAsMinus,
+	/**
+	 * Find an association for a player particular foot. This will fetch the
+	 * player angle and use it as a basis to find out what block is below their
+	 * feet (or which block is likely to be below their feet if the player is
+	 * walking on the edge of a block when walking over non-emitting blocks like
+	 * air or water).<br>
+	 * <br>
+	 * Returns null if no blocks are valid emitting blocks.<br>
+	 * Returns a string that begins with "_NO_ASSOCIATION" if a matching block
+	 * was found, but has no association in the blockmap.
+	 */
+	@Nonnull
+	public Association findAssociationForPlayer(@Nonnull final EntityPlayer ply, final double verticalOffsetAsMinus,
 			final boolean isRightFoot) {
 		final int yy = MathStuff.floor_double(ply.getEntityBoundingBox().minY - 0.1d - verticalOffsetAsMinus);
 		final double rot = MathStuff.toRadians(MathStuff.wrapDegrees(ply.rotationYaw));
@@ -98,16 +112,18 @@ public class Solver implements ISolver {
 		return findAssociationForLocation(ply, new BlockPos(xx, yy, zz));
 	}
 
-	@Override
-	public Association findAssociationForPlayer(final EntityPlayer ply, final double verticalOffsetAsMinus) {
-		final int yy = MathStuff.floor_double(ply.posY - 0.1d - ply.getYOffset() - verticalOffsetAsMinus);
-		final int xx = MathStuff.floor_double(ply.posX);
-		final int zz = MathStuff.floor_double(ply.posZ);
-		return findAssociationForLocation(ply, new BlockPos(xx, yy, zz));
-	}
-
-	@Override
-	public Association findAssociationForLocation(final EntityPlayer player, final BlockPos pos) {
+	/**
+	 * Find an association for a player, and a location. This will try to find
+	 * the best matching block on that location, or near that location, for
+	 * instance if the player is walking on the edge of a block when walking
+	 * over non-emitting blocks like air or water)<br>
+	 * <br>
+	 * Returns null if no blocks are valid emitting blocks.<br>
+	 * Returns a string that begins with "_NO_ASSOCIATION" if a matching block
+	 * was found, but has no association in the blockmap.
+	 */
+	@Nonnull
+	public Association findAssociationForLocation(@Nonnull final EntityPlayer player, @Nonnull final BlockPos pos) {
 		if (MathStuff.abs(player.motionY) < 0.02)
 			return null; // Don't play sounds on every tiny bounce
 		if (player.isInWater())
@@ -173,8 +189,21 @@ public class Solver implements ISolver {
 		return worked;
 	}
 
-	@Override
-	public Association findAssociationForBlock(final BlockPos immutablePos) {
+	/**
+	 * Find an association for a certain block assuming the player is standing
+	 * on it. This will sometimes select the block above because some block act
+	 * like carpets. This also applies when the block targeted by the location
+	 * is actually not emitting, such as lilypads on water.<br>
+	 * <br>
+	 * Returns null if the block is not a valid emitting block (this causes the
+	 * engine to continue looking for valid blocks). This also happens if the
+	 * carpet is non-emitting.<br>
+	 * Returns a string that begins with "_NO_ASSOCIATION" if the block is
+	 * valid, but has no association in the blockmap. If the carpet was
+	 * selected, this solves to the carpet.
+	 */
+	@Nonnull 
+	public Association findAssociationForBlock(@Nonnull final BlockPos immutablePos) {
 		final World world = EnvironState.getWorld();
 		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(immutablePos);
 		IBlockState in = world.getBlockState(pos);
@@ -257,7 +286,8 @@ public class Solver implements ISolver {
 		}
 	}
 
-	private List<IAcoustic> resolvePrimitive(final IBlockState state) {
+	@Nonnull 
+	private List<IAcoustic> resolvePrimitive(@Nonnull final IBlockState state) {
 
 		if (state.getMaterial() == Material.AIR)
 			return AcousticsManager.NOT_EMITTER;
@@ -299,8 +329,10 @@ public class Solver implements ISolver {
 		return null;
 	}
 
-	@Override
-	public boolean playSpecialStoppingConditions(final EntityPlayer ply) {
+	/**
+	 * Play special sounds that must stop the usual footstep figuring things out process.
+	 */
+	public boolean playSpecialStoppingConditions(@Nonnull final EntityPlayer ply) {
 		if (ply.isInWater()) {
 			final float volume = MathStuff.sqrt_double(
 					ply.motionX * ply.motionX * 0.2d + ply.motionY * ply.motionY + ply.motionZ * ply.motionZ * 0.2d)
@@ -316,13 +348,19 @@ public class Solver implements ISolver {
 		return false;
 	}
 
-	@Override
-	public boolean hasSpecialStoppingConditions(final EntityPlayer ply) {
+	/**
+	 * Tells if footsteps can be played.
+	 */
+	public boolean hasSpecialStoppingConditions(@Nonnull final EntityPlayer ply) {
 		return ply.isInWater();
 	}
 
-	@Override
-	public Association findAssociationMessyFoliage(final BlockPos pos) {
+	/**
+	 * Find an association for a certain block assuming the player is standing on it,
+	 * using a custom strategy which strategies are defined by the solver.
+	 */
+	@Nonnull 
+	public Association findAssociationMessyFoliage(@Nonnull final BlockPos pos) {
 
 		final World world = EnvironState.getWorld();
 		final IBlockState above = world.getBlockState(pos.up());

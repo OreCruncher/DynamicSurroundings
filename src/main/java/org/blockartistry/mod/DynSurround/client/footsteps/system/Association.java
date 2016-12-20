@@ -22,12 +22,14 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.game.system;
+package org.blockartistry.mod.DynSurround.client.footsteps.system;
 
 import java.util.List;
 
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.AcousticsManager;
+import javax.annotation.Nonnull;
+
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.AcousticsManager;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -49,31 +51,36 @@ public class Association {
 	public Association() {
 	}
 
-	public Association(final IBlockState state, final BlockPos pos) {
+	public Association(@Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
 		this.state = state;
 		this.pos = pos;
 	}
 
+	@Nonnull
 	public List<IAcoustic> getData() {
 		return this.data;
 	}
 
-	public Association setAssociation(final List<IAcoustic> association) {
+	@Nonnull
+	public Association setAssociation(@Nonnull final List<IAcoustic> association) {
 		this.data = association;
 		this.noAssociation = false;
 		return this;
 	}
 
+	@Nonnull
 	public Association setNoAssociation() {
 		this.noAssociation = true;
 		return this;
 	}
 
+	@Nonnull
 	public boolean getNoAssociation() {
 		return this.noAssociation;
 	}
 
-	public Association setPrimitive(final List<IAcoustic> primative) {
+	@Nonnull
+	public Association setPrimitive(@Nonnull final List<IAcoustic> primative) {
 		this.data = primative;
 		this.isPrimative = true;
 		return this;
@@ -87,10 +94,12 @@ public class Association {
 		return this.state.getBlock();
 	}
 
+	@Nonnull
 	public IBlockState getState() {
 		return this.state;
 	}
 
+	@Nonnull
 	public BlockPos getPos() {
 		return this.pos;
 	}

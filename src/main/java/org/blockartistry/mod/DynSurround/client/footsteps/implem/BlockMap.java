@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem;
+package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,10 +33,13 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
-import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Isolator;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
+import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import gnu.trove.map.hash.TCustomHashMap;
@@ -62,11 +65,11 @@ public class BlockMap {
 		public final String substrate;
 		public final String value;
 
-		public MacroEntry(final String substrate, final String value) {
+		public MacroEntry(@Nonnull final String substrate, final @Nonnull String value) {
 			this(-1, substrate, value);
 		}
 
-		public MacroEntry(final int meta, final String substrate, final String value) {
+		public MacroEntry(final int meta, @Nonnull final String substrate, @Nonnull final String value) {
 			this.meta = meta;
 			this.substrate = substrate;
 			this.value = value;
@@ -123,11 +126,12 @@ public class BlockMap {
 		macros.put("#fence", entries);
 	}
 
-	public BlockMap(final Isolator isolator) {
+	public BlockMap(@Nonnull final Isolator isolator) {
 		this.isolator = isolator;
 	}
 
-	public List<IAcoustic> getBlockMap(final IBlockState state) {
+	@Nullable
+	public List<IAcoustic> getBlockMap(@Nonnull final IBlockState state) {
 		final TIntObjectHashMap<List<IAcoustic>> metas = this.metaMap.get(state.getBlock());
 		if (metas != null) {
 			List<IAcoustic> result = metas.get(state.getBlock().getMetaFromState(state));
@@ -138,7 +142,8 @@ public class BlockMap {
 		return null;
 	}
 
-	public List<IAcoustic> getBlockMapSubstrate(final IBlockState state, final String substrate) {
+	@Nullable
+	public List<IAcoustic> getBlockMapSubstrate(@Nonnull final IBlockState state, @Nonnull final String substrate) {
 		final Map<String, List<IAcoustic>> sub = this.substrateMap.get(state.getBlock());
 		if (sub != null) {
 			List<IAcoustic> result = sub.get(substrate + "." + state.getBlock().getMetaFromState(state));
@@ -149,7 +154,8 @@ public class BlockMap {
 		return null;
 	}
 
-	private void put(final Block block, final int meta, final String substrate, final String value) {
+	private void put(@Nonnull final Block block, final int meta, @Nonnull final String substrate,
+			@Nonnull final String value) {
 
 		final List<IAcoustic> acoustics = this.isolator.getAcoustics().compileAcoustics(value);
 
@@ -166,7 +172,7 @@ public class BlockMap {
 		}
 	}
 
-	private void expand(final Block block, final String value) {
+	private void expand(@Nonnull final Block block, @Nonnull final String value) {
 		final List<MacroEntry> macro = macros.get(value);
 		if (macro != null) {
 			for (final MacroEntry entry : macro)
@@ -176,7 +182,7 @@ public class BlockMap {
 		}
 	}
 
-	public void register(final String key, final String value) {
+	public void register(@Nonnull final String key, @Nonnull final String value) {
 		final Matcher matcher = pattern.matcher(key);
 		if (matcher.matches()) {
 			final String blockName = matcher.group(1);
@@ -196,7 +202,8 @@ public class BlockMap {
 		}
 	}
 
-	private static String combine(final List<IAcoustic> acoustics) {
+	@Nonnull
+	private static String combine(@Nonnull final List<IAcoustic> acoustics) {
 		final StringBuilder builder = new StringBuilder();
 		boolean addComma = false;
 		for (final IAcoustic a : acoustics) {
@@ -209,7 +216,7 @@ public class BlockMap {
 		return builder.toString();
 	}
 
-	public void collectData(final IBlockState state, final List<String> data) {
+	public void collectData(@Nonnull final IBlockState state, @Nonnull final List<String> data) {
 
 		final Block block = state.getBlock();
 		final int meta = state.getBlock().getMetaFromState(state);

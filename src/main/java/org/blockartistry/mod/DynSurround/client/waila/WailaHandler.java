@@ -35,7 +35,7 @@ import java.util.List;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.Footsteps;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.BlockMap;
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import net.minecraft.block.Block;

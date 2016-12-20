@@ -22,16 +22,19 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem;
+package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
-import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Isolator;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
+import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.mod.DynSurround.client.footsteps.util.property.simple.ConfigProperty;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -43,23 +46,25 @@ public class PrimitiveMap {
 	private final Isolator isolator;
 	private final Map<String, List<IAcoustic>> primitiveMap = new LinkedHashMap<String, List<IAcoustic>>();
 
-	public PrimitiveMap(final Isolator isolator) {
+	public PrimitiveMap(@Nonnull final Isolator isolator) {
 		this.isolator = isolator;
 	}
 
-	public List<IAcoustic> getPrimitiveMap(final String primitive) {
+	@Nullable
+	public List<IAcoustic> getPrimitiveMap(@Nonnull final String primitive) {
 		return this.primitiveMap.get(primitive);
 	}
 
-	public List<IAcoustic> getPrimitiveMapSubstrate(final String primitive, final String substrate) {
+	@Nullable
+	public List<IAcoustic> getPrimitiveMapSubstrate(@Nonnull final String primitive, @Nonnull final String substrate) {
 		return this.primitiveMap.get(primitive + "@" + substrate);
 	}
 
-	public void register(final String key, final String value) {
+	public void register(@Nonnull final String key, @Nonnull final String value) {
 		this.primitiveMap.put(key, this.isolator.getAcoustics().compileAcoustics(value));
 	}
-	
-	public void setup(final ConfigProperty props) {
+
+	public void setup(@Nonnull final ConfigProperty props) {
 		final Map<String, String> properties = props.getAllProperties();
 		for (final Entry<String, String> entry : properties.entrySet()) {
 			try {

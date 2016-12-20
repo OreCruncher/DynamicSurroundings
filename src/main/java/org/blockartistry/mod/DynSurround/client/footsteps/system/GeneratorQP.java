@@ -22,12 +22,11 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.game.system;
+package org.blockartistry.mod.DynSurround.client.footsteps.system;
 
 import java.util.Random;
 
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.EventType;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IIsolator;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.EventType;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,7 +39,7 @@ public class GeneratorQP extends Generator {
 	private float nextWalkDistanceMultiplier = 0.05f;
 	private final Random rand = new Random();
 	
-	public GeneratorQP(IIsolator isolator) {
+	public GeneratorQP(Isolator isolator) {
 		super(isolator);
 	}
 	

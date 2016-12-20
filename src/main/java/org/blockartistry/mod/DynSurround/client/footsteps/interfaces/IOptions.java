@@ -22,36 +22,24 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.game.system;
+package org.blockartistry.mod.DynSurround.client.footsteps.interfaces;
 
-import java.util.Random;
-
-import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
-
-import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class UserConfigSoundPlayerWrapper implements ISoundPlayer {
+public interface IOptions {
+	
+	public static enum Option {
+		DELAY_MIN,
+		DELAY_MAX,
+		SKIPPABLE,
+		GLIDING_VOLUME,
+		GLIDING_PITCH
+		
+	};
+	
+	public boolean hasOption(final Option option);
 
-	private ISoundPlayer wrapped;
-
-	public UserConfigSoundPlayerWrapper(final ISoundPlayer wrapped) {
-		this.wrapped = wrapped;
-	}
-
-	@Override
-	public void playSound(final Object location, final SoundEvent sound, final float volume, final float pitch,
-			final IOptions options) {
-		this.wrapped.playSound(location, sound, volume * ModOptions.footstepsSoundFactor, pitch, options);
-	}
-
-	@Override
-	public Random getRNG() {
-		return this.wrapped.getRNG();
-	}
-
+	public Object getOption(final Option option);
 }

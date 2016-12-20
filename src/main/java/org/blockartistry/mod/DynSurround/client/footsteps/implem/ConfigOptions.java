@@ -22,38 +22,39 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.engine.implem;
+package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IOptions;
+
+import gnu.trove.map.hash.TCustomHashMap;
+import gnu.trove.strategy.IdentityHashingStrategy;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class DelayedAcoustic extends BasicAcoustic implements IOptions {
-	protected long delayMin = 0;
-	protected long delayMax = 0;
+public class ConfigOptions implements IOptions {
+	private final Map<Option, Object> map = new TCustomHashMap<Option, Object>(IdentityHashingStrategy.INSTANCE);
 
-	public DelayedAcoustic() {
-		super();
+	public ConfigOptions() {
+	}
 
-		this.outputOptions = this;
+	public Map<Option, Object> getMap() {
+		return this.map;
 	}
 
 	@Override
-	public boolean hasOption(final Option option) {
-		return option == Option.DELAY_MIN || option == Option.DELAY_MAX;
+	public boolean hasOption(@Nonnull final Option option) {
+		return this.map.containsKey(option);
 	}
 
 	@Override
-	public Object getOption(final Option option) {
-		return option == Option.DELAY_MIN ? this.delayMin : option == Option.DELAY_MAX ? this.delayMax : null;
-	}
-
-	public void setDelayMin(final long delay) {
-		this.delayMin = delay;
-	}
-
-	public void setDelayMax(final long delay) {
-		this.delayMax = delay;
+	@Nullable
+	public Object getOption(@Nonnull final Option option) {
+		return this.map.get(option);
 	}
 }

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.game.system;
+package org.blockartistry.mod.DynSurround.client.footsteps.system;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -30,6 +30,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.Module;
@@ -50,9 +53,6 @@ public class ResourcePacks {
 	private final ResourceLocation manifest = new ResourceLocation(Module.RESOURCE_ID, "manifest.json");
 	private final ResourceLocation acoustics = new ResourceLocation(Module.RESOURCE_ID, "acoustics.json");
 	private final ResourceLocation primitivemap = new ResourceLocation(Module.RESOURCE_ID, "primitivemap.json");
-	private final ResourceLocation variator = new ResourceLocation(Module.RESOURCE_ID, "variator.json");
-
-	private final ResourceLocation configuration = new ResourceLocation(Module.RESOURCE_ID, "blockmap.json");
 
 	// Resource pack reference for the built in pack.
 	private static class DefaultPack implements IResourcePack {
@@ -63,12 +63,12 @@ public class ResourcePacks {
 			this.mod = null;
 		}
 
-		public DefaultPack(final String mod) {
+		public DefaultPack(@Nonnull final String mod) {
 			this.mod = mod;
 		}
 
 		@Override
-		public InputStream getInputStream(final ResourceLocation loc) throws IOException {
+		public InputStream getInputStream(@Nonnull final ResourceLocation loc) throws IOException {
 			final StringBuilder builder = new StringBuilder();
 			builder.append("/assets/dsurround/data/");
 			builder.append(loc.getResourceDomain());
@@ -80,22 +80,25 @@ public class ResourcePacks {
 		}
 
 		@Override
-		public boolean resourceExists(final ResourceLocation loc) {
+		public boolean resourceExists(@Nonnull final ResourceLocation loc) {
 			return true;
 		}
 
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		@Override
+		@Nullable
 		public Set getResourceDomains() {
 			return null;
 		}
 
 		@Override
+		@Nullable
 		public BufferedImage getPackImage() throws IOException {
 			return null;
 		}
 
 		@Override
+		@Nonnull
 		public String getPackName() {
 			if (this.mod == null)
 				return "DEFAULT";
@@ -103,6 +106,7 @@ public class ResourcePacks {
 		}
 
 		@Override
+		@Nullable
 		public <T extends IMetadataSection> T getPackMetadata(MetadataSerializer metadataSerializer,
 				String metadataSectionName) throws IOException {
 			return null;
@@ -110,6 +114,7 @@ public class ResourcePacks {
 
 	}
 
+	@Nonnull 
 	public List<IResourcePack> findResourcePacks() {
 		final List<ResourcePackRepository.Entry> repo = Minecraft.getMinecraft().getResourcePackRepository()
 				.getRepositoryEntries();
@@ -133,27 +138,22 @@ public class ResourcePacks {
 		return foundEntries;
 	}
 
-	private boolean checkCompatible(final ResourcePackRepository.Entry pack) {
+	private boolean checkCompatible(@Nonnull final ResourcePackRepository.Entry pack) {
 		return pack.getResourcePack().resourceExists(this.manifest);
 	}
 
-	public InputStream openPackDescriptor(final IResourcePack pack) throws IOException {
+	@Nullable
+	public InputStream openPackDescriptor(@Nonnull final IResourcePack pack) throws IOException {
 		return pack.getInputStream(this.manifest);
 	}
 
-	public InputStream openAcoustics(final IResourcePack pack) throws IOException {
+	@Nullable
+	public InputStream openAcoustics(@Nonnull final IResourcePack pack) throws IOException {
 		return pack.getInputStream(this.acoustics);
 	}
 
-	public InputStream openBlockMap(final IResourcePack pack) throws IOException {
-		return pack.getInputStream(this.configuration);
-	}
-
-	public InputStream openPrimitiveMap(final IResourcePack pack) throws IOException {
+	@Nullable
+	public InputStream openPrimitiveMap(@Nonnull final IResourcePack pack) throws IOException {
 		return pack.getInputStream(this.primitivemap);
-	}
-
-	public InputStream openVariator(final IResourcePack pack) throws IOException {
-		return pack.getInputStream(this.variator);
 	}
 }

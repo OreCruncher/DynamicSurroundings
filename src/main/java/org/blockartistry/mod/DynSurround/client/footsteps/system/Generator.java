@@ -22,11 +22,13 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.game.system;
+package org.blockartistry.mod.DynSurround.client.footsteps.system;
 
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.EventType;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.NormalVariator;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IIsolator;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.blockartistry.mod.DynSurround.client.footsteps.implem.NormalVariator;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,7 +42,7 @@ public class Generator {
 	private static final NormalVariator VAR = new NormalVariator();
 
 	// Construct
-	final protected IIsolator mod;
+	final protected Isolator mod;
 
 	// Footsteps
 	protected float dmwBase;
@@ -65,11 +67,11 @@ public class Generator {
 	private boolean isMessyFoliage;
 	private long brushesTime;
 
-	public Generator(final IIsolator isolator) {
+	public Generator(@Nonnull final Isolator isolator) {
 		mod = isolator;
 	}
 
-	public void generateFootsteps(final EntityPlayer ply) {
+	public void generateFootsteps(@Nonnull final EntityPlayer ply) {
 		simulateFootsteps(ply);
 		simulateAirborne(ply);
 		simulateBrushes(ply);
@@ -89,7 +91,7 @@ public class Generator {
 		return false;
 	}
 
-	protected void simulateFootsteps(final EntityPlayer ply) {
+	protected void simulateFootsteps(@Nonnull final EntityPlayer ply) {
 		final float distanceReference = ply.distanceWalkedOnStepModified;
 
 		stepThisFrame = false;
@@ -172,11 +174,11 @@ public class Generator {
 		}
 	}
 
-	protected void produceStep(final EntityPlayer ply, final EventType event) {
+	protected void produceStep(@Nonnull final EntityPlayer ply, @Nonnull final EventType event) {
 		produceStep(ply, event, 0d);
 	}
 
-	protected void produceStep(final EntityPlayer ply, EventType event, final double verticalOffsetAsMinus) {
+	protected void produceStep(@Nonnull final EntityPlayer ply, @Nullable EventType event, final double verticalOffsetAsMinus) {
 		if (!mod.getSolver().playSpecialStoppingConditions(ply)) {
 			if (event == null)
 				event = speedDisambiguator(ply, EventType.WALK, EventType.RUN);
@@ -188,14 +190,14 @@ public class Generator {
 		stepThisFrame = true;
 	}
 
-	protected void stepped(final EntityPlayer ply, final EventType event) {
+	protected void stepped(@Nonnull final EntityPlayer ply, @Nonnull final EventType event) {
 	}
 
-	protected float reevaluateDistance(final EventType event, final float distance) {
+	protected float reevaluateDistance(@Nonnull final EventType event, final float distance) {
 		return distance;
 	}
 
-	protected void simulateAirborne(final EntityPlayer ply) {
+	protected void simulateAirborne(@Nonnull final EntityPlayer ply) {
 		if ((ply.onGround || ply.isOnLadder()) == isFlying) {
 			isFlying = !isFlying;
 			simulateJumpingLanding(ply);
@@ -205,7 +207,7 @@ public class Generator {
 			fallDistance = ply.fallDistance;
 	}
 
-	protected void simulateJumpingLanding(final EntityPlayer ply) {
+	protected void simulateJumpingLanding(@Nonnull final EntityPlayer ply) {
 		if (mod.getSolver().hasSpecialStoppingConditions(ply))
 			return;
 
@@ -243,12 +245,12 @@ public class Generator {
 		}
 	}
 
-	protected EventType speedDisambiguator(final EntityPlayer ply, final EventType walk, final EventType run) {
+	protected EventType speedDisambiguator(@Nonnull final EntityPlayer ply, @Nonnull final EventType walk, @Nonnull final EventType run) {
 		double velocity = ply.motionX * ply.motionX + ply.motionZ * ply.motionZ;
 		return velocity > VAR.SPEED_TO_RUN ? run : walk;
 	}
 
-	private void simulateBrushes(final EntityPlayer ply) {
+	private void simulateBrushes(@Nonnull final EntityPlayer ply) {
 		if (brushesTime > System.currentTimeMillis())
 			return;
 
@@ -272,13 +274,13 @@ public class Generator {
 		}
 	}
 
-	protected void playSinglefoot(final EntityPlayer ply, final double verticalOffsetAsMinus, final EventType eventType,
+	protected void playSinglefoot(@Nonnull final EntityPlayer ply, final double verticalOffsetAsMinus, @Nonnull final EventType eventType,
 			final boolean foot) {
 		final Association assos = mod.getSolver().findAssociationForPlayer(ply, verticalOffsetAsMinus, isRightFoot);
 		mod.getSolver().playAssociation(ply, assos, eventType);
 	}
 
-	protected void playMultifoot(final EntityPlayer ply, final double verticalOffsetAsMinus,
+	protected void playMultifoot(@Nonnull final EntityPlayer ply, final double verticalOffsetAsMinus,
 			final EventType eventType) {
 		// STILL JUMP
 		final Association leftFoot = mod.getSolver().findAssociationForPlayer(ply, verticalOffsetAsMinus, false);

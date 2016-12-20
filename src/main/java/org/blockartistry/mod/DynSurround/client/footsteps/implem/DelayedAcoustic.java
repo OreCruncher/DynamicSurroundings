@@ -22,24 +22,43 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces;
+package org.blockartistry.mod.DynSurround.client.footsteps.implem;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IOptions;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Something that has the ability to play sounds.
- * 
- * @author Hurry
- */
 @SideOnly(Side.CLIENT)
-public interface IAcoustic {
-	
-	public String getAcousticName();
-	
-	/**
-	 * Plays a sound.
-	 */
-	public void playSound(ISoundPlayer player, Object location, EventType event, IOptions inputOptions);
+public class DelayedAcoustic extends BasicAcoustic implements IOptions {
+	protected long delayMin = 0;
+	protected long delayMax = 0;
 
+	public DelayedAcoustic() {
+		super();
+
+		this.outputOptions = this;
+	}
+
+	@Override
+	public boolean hasOption(@Nonnull final Option option) {
+		return option == Option.DELAY_MIN || option == Option.DELAY_MAX;
+	}
+
+	@Override
+	@Nullable
+	public Object getOption(@Nonnull final Option option) {
+		return option == Option.DELAY_MIN ? this.delayMin : option == Option.DELAY_MAX ? this.delayMax : null;
+	}
+
+	public void setDelayMin(final long delay) {
+		this.delayMin = delay;
+	}
+
+	public void setDelayMax(final long delay) {
+		this.delayMax = delay;
+	}
 }

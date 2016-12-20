@@ -22,39 +22,60 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.engine.implem;
+package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.EventType;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.EventType;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IOptions;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class SimultaneousAcoustic implements IAcoustic {
+public class ProbabilityWeightsAcoustic implements IAcoustic {
+	
 	protected final List<IAcoustic> acoustics;
+	protected final int[] weights;
+	protected final int totalWeight;
 
-	public SimultaneousAcoustic(final Collection<IAcoustic> acoustics) {
+	public ProbabilityWeightsAcoustic(@Nonnull final List<IAcoustic> acoustics, @Nonnull final List<Integer> weights) {
 		this.acoustics = new ArrayList<IAcoustic>(acoustics);
+		this.weights = new int[weights.size()];
+
+		int tWeight = 0;
+		for (int i = 0; i < weights.size(); i++) {
+			this.weights[i] = weights.get(i).intValue();
+			tWeight += this.weights[i];
+		}
+
+		this.totalWeight = tWeight;
+	}
+
+	@Override
+	@Nonnull
+	public String getAcousticName() {
+		return "Probability Weights Acoustic";
 	}
 	
 	@Override
-	public String getAcousticName() {
-		return "Simultaneous Acoustic";
+	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Object location, @Nonnull final EventType event,
+			@Nullable final IOptions inputOptions) {
+		if (this.totalWeight <= 0)
+			return;
+
+		int targetWeight = player.getRNG().nextInt(this.totalWeight);
+
+		int i = 0;
+		for (i = this.weights.length; (targetWeight -= this.weights[i - 1]) >= 0; i--)
+			;
+
+		this.acoustics.get(i - 1).playSound(player, location, event, inputOptions);
 	}
-
-	@Override
-	public void playSound(final ISoundPlayer player, final Object location, final EventType event, final IOptions inputOptions) {
-		for (final IAcoustic acoustic : this.acoustics) {
-			acoustic.playSound(player, location, event, inputOptions);
-		}
-
-	}
-
 }

@@ -22,35 +22,51 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.engine.implem;
+package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
 import java.util.Map;
 
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.EventType;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IOptions;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 
 import gnu.trove.map.hash.TCustomHashMap;
 import gnu.trove.strategy.IdentityHashingStrategy;
-import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class ConfigOptions implements IOptions {
-	private final Map<Option, Object> map = new TCustomHashMap<Option, Object>(IdentityHashingStrategy.INSTANCE);
+public class EventSelectorAcoustics implements IAcoustic {
+	private final String name;
 
-	public ConfigOptions() {
-	}
+	private final Map<EventType, IAcoustic> pairs = new TCustomHashMap<EventType, IAcoustic>(
+			IdentityHashingStrategy.INSTANCE);
 
-	public Map<Option, Object> getMap() {
-		return this.map;
-	}
-
-	@Override
-	public boolean hasOption(final Option option) {
-		return this.map.containsKey(option);
+	public EventSelectorAcoustics(@Nonnull final String acousticName) {
+		this.name = acousticName;
 	}
 
 	@Override
-	public Object getOption(final Option option) {
-		return this.map.get(option);
+	public String getAcousticName() {
+		return this.name;
 	}
+
+	@Override
+	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Object location,
+			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
+		final IAcoustic acoustic = this.pairs.get(event);
+		if (acoustic != null)
+			acoustic.playSound(player, location, event, inputOptions);
+		else if (event.canTransition())
+			playSound(player, location, event.getTransitionDestination(), inputOptions);
+	}
+
+	public void setAcousticPair(@Nonnull final EventType type, @Nonnull final IAcoustic acoustic) {
+		this.pairs.put(type, acoustic);
+	}
+
 }

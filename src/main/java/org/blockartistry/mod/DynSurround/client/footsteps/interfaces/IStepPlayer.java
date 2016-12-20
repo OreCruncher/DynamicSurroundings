@@ -22,24 +22,23 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces;
+package org.blockartistry.mod.DynSurround.client.footsteps.interfaces;
 
+import org.blockartistry.mod.DynSurround.client.footsteps.system.Association;
+
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * Can generate footsteps using the default Minecraft function.
+ * 
+ * @author Hurry
+ */
 @SideOnly(Side.CLIENT)
-public interface IOptions {
-	
-	public static enum Option {
-		DELAY_MIN,
-		DELAY_MAX,
-		SKIPPABLE,
-		GLIDING_VOLUME,
-		GLIDING_PITCH
-		
-	};
-	
-	public boolean hasOption(final Option option);
-
-	public Object getOption(final Option option);
+public interface IStepPlayer {
+	/**
+	 * Play a step sound from a block.
+	 */
+	public void playStep(final EntityLivingBase entity, final Association non);
 }

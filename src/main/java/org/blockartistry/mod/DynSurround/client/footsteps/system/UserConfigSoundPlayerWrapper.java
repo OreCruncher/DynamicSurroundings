@@ -22,46 +22,39 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces;
+package org.blockartistry.mod.DynSurround.client.footsteps.system;
 
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.AcousticsManager;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.BlockMap;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem.PrimitiveMap;
+import java.util.Random;
 
+import javax.annotation.Nonnull;
+
+import org.blockartistry.mod.DynSurround.ModOptions;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IOptions;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.ISoundPlayer;
+
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public interface IIsolator
-{
-	
-	public abstract void onFrame();
-	
-	public abstract AcousticsManager getAcoustics();
-	
-	public abstract ISolver getSolver();
-	
-	public abstract BlockMap getBlockMap();
-	
-	public abstract PrimitiveMap getPrimitiveMap();
-	
-	public abstract ISoundPlayer getSoundPlayer();
-	
-	public abstract IStepPlayer getDefaultStepPlayer();
-	
-	//
-	
-	public abstract void setAcoustics(final AcousticsManager acoustics);
-	
-	public abstract void setSolver(final ISolver solver);
-	
-	public abstract void setBlockMap(final BlockMap blockMap);
-	
-	public abstract void setPrimitiveMap(final PrimitiveMap primitiveMap);
-	
-	public abstract void setSoundPlayer(final ISoundPlayer soundPlayer);
-	
-	public abstract void setDefaultStepPlayer(final IStepPlayer defaultStepPlayer);
-	
+public class UserConfigSoundPlayerWrapper implements ISoundPlayer {
+
+	private final ISoundPlayer wrapped;
+
+	public UserConfigSoundPlayerWrapper(@Nonnull final ISoundPlayer wrapped) {
+		this.wrapped = wrapped;
+	}
+
+	@Override
+	public void playSound(@Nonnull final Object location, @Nonnull final SoundEvent sound, final float volume,
+			final float pitch, final IOptions options) {
+		this.wrapped.playSound(location, sound, volume * ModOptions.footstepsSoundFactor, pitch, options);
+	}
+
+	@Override
+	@Nonnull
+	public Random getRNG() {
+		return this.wrapped.getRNG();
+	}
+
 }

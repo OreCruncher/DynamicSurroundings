@@ -22,10 +22,13 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem;
+package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IOptions;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -45,8 +48,8 @@ public class PendingSound implements Comparable<PendingSound> {
 	private final long maximum;
 	private final float lateTolerance;
 
-	public PendingSound(final Object location, final SoundEvent sound, final float volume, final float pitch,
-			final IOptions options, final long timeToPlay, final long maximum) {
+	public PendingSound(@Nonnull final Object location, @Nonnull final SoundEvent sound, final float volume, final float pitch,
+			@Nullable final IOptions options, final long timeToPlay, final long maximum) {
 		this.location = location;
 		this.sound = sound;
 		this.volume = volume;
@@ -63,7 +66,7 @@ public class PendingSound implements Comparable<PendingSound> {
 	 * 
 	 * @param player
 	 */
-	public void playSound(final ISoundPlayer player) {
+	public void playSound(@Nonnull final ISoundPlayer player) {
 		player.playSound(this.location, this.sound, this.volume, this.pitch, this.options);
 	}
 
@@ -102,7 +105,7 @@ public class PendingSound implements Comparable<PendingSound> {
 	}
 
 	@Override
-	public int compareTo(final PendingSound o) {
+	public int compareTo(@Nonnull final PendingSound o) {
 		return (int) (this.timeToPlay - o.timeToPlay);
 	}
 }

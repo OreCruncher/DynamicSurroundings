@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.implem;
+package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -32,17 +32,19 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.implem.BasicAcoustic;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.EventType;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IAcoustic;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.IOptions.Option;
-import org.blockartistry.mod.DynSurround.client.footsteps.engine.interfaces.ISoundPlayer;
-import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Association;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IStepPlayer;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.EventType;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IOptions;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.ISoundPlayer;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IStepPlayer;
+import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IOptions.Option;
+import org.blockartistry.mod.DynSurround.client.footsteps.system.Association;
+import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces.IIsolator;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
@@ -69,27 +71,28 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	private final Map<String, IAcoustic> acoustics = new LinkedHashMap<String, IAcoustic>();
 	private final PriorityQueue<PendingSound> pending = new PriorityQueue<PendingSound>();
-	private final IIsolator isolator;
+	private final Isolator isolator;
 
 	// Special sentinals for equating
 	public static final List<IAcoustic> NOT_EMITTER = ImmutableList.of((IAcoustic) new BasicAcoustic("NOT_EMITTER"));
 	public static final List<IAcoustic> MESSY_GROUND = ImmutableList.of((IAcoustic) new BasicAcoustic("MESSY_GROUND"));
 	public static List<IAcoustic> SWIM;
 
-	public AcousticsManager(final IIsolator isolator) {
+	public AcousticsManager(@Nonnull final Isolator isolator) {
 		this.isolator = isolator;
 	}
 
-	public void addAcoustic(final IAcoustic acoustic) {
+	public void addAcoustic(@Nonnull final IAcoustic acoustic) {
 		this.acoustics.put(acoustic.getAcousticName(), acoustic);
 	}
 
-	public void playAcoustic(final Object location, final Association acousticName, final EventType event) {
+	public void playAcoustic(@Nonnull final Object location, @Nonnull final Association acousticName,
+			@Nonnull final EventType event) {
 		playAcoustic(location, acousticName.getData(), event, null);
 	}
 
-	public void playAcoustic(final Object location, final List<IAcoustic> acoustics, final EventType event,
-			final IOptions inputOptions) {
+	public void playAcoustic(@Nonnull final Object location, @Nonnull final List<IAcoustic> acoustics,
+			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
 		if (acoustics == null || acoustics.size() == 0) {
 			ModLog.debug("Attempt to play acoustic with no name");
 			return;
@@ -113,7 +116,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		}
 	}
 
-	public List<IAcoustic> compileAcoustics(final String acousticName) {
+	@Nonnull
+	public List<IAcoustic> compileAcoustics(@Nonnull final String acousticName) {
 		if (acousticName.equals("NOT_EMITTER"))
 			return NOT_EMITTER;
 		else if (acousticName.equals("MESSY_GROUND"))
@@ -135,7 +139,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	}
 
 	@Override
-	public void playStep(final EntityLivingBase entity, final Association assos) {
+	public void playStep(@Nonnull final EntityLivingBase entity, @Nonnull final Association assos) {
 		final IBlockState state = assos.getState();
 		SoundType soundType = MCHelper.getSoundType(state);
 		if (!state.getMaterial().isLiquid() && soundType != null) {
@@ -149,8 +153,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	}
 
 	@Override
-	public void playSound(final Object location, final SoundEvent sound, final float volume, final float pitch,
-			final IOptions options) {
+	public void playSound(@Nonnull final Object location, @Nonnull final SoundEvent sound, final float volume,
+			final float pitch, @Nullable final IOptions options) {
 		if (!(location instanceof Entity))
 			return;
 
@@ -169,19 +173,20 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		}
 	}
 
-	protected void actuallyPlaySound(final Entity location, final SoundEvent sound, final float volume,
-			final float pitch) {
+	protected void actuallyPlaySound(@Nonnull final Entity location, @Nonnull final SoundEvent sound,
+			final float volume, final float pitch) {
 		if (ModLog.DEBUGGING)
 			ModLog.debug("    Playing sound " + sound.getSoundName() + " ("
 					+ String.format(Locale.ENGLISH, "v%.2f, p%.2f", volume, pitch) + ")");
 		location.playSound(sound, volume, pitch);
 	}
 
-	private long randAB(final Random rng, final long a, final long b) {
+	private long randAB(@Nonnull final Random rng, final long a, final long b) {
 		return a >= b ? a : a + rng.nextInt((int) b + 1);
 	}
 
 	@Override
+	@Nonnull
 	public Random getRNG() {
 		return RANDOM;
 	}
@@ -204,6 +209,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		}
 	}
 
+	@Nonnull
 	protected ISoundPlayer mySoundPlayer() {
 		return isolator.getSoundPlayer();
 	}

@@ -22,23 +22,24 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.mcpackage.interfaces;
+package org.blockartistry.mod.DynSurround.client.footsteps.interfaces;
 
-import org.blockartistry.mod.DynSurround.client.footsteps.game.system.Association;
-
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * Can generate footsteps using the default Minecraft function.
+ * Something that has the ability to play sounds.
  * 
  * @author Hurry
  */
 @SideOnly(Side.CLIENT)
-public interface IStepPlayer {
+public interface IAcoustic {
+	
+	public String getAcousticName();
+	
 	/**
-	 * Play a step sound from a block.
+	 * Plays a sound.
 	 */
-	public void playStep(final EntityLivingBase entity, final Association non);
+	public void playSound(ISoundPlayer player, Object location, EventType event, IOptions inputOptions);
+
 }
