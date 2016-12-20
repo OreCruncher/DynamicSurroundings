@@ -38,29 +38,47 @@ import net.minecraft.util.math.MathHelper;
 public final class ColorPair {
 
 	/**
-	 * Color that forms the base of the aurora and is the
-	 * brightest.
+	 * Color that forms the base of the aurora and is the brightest.
 	 */
 	public final Color baseColor;
-	
+
 	/**
-	 * Color that forms the top of the aurora and usually
-	 * fades to black.
+	 * Color that forms the top of the aurora and usually fades to black.
 	 */
 	public final Color fadeColor;
 
 	private static final List<ColorPair> PAIRS = new ArrayList<ColorPair>();
 
+	private static final float WARMER = 0.3F;
+	private static final float COOLER = -0.3F;
+
 	static {
 		PAIRS.add(new ColorPair(new Color(0x0, 0xff, 0x99), new Color(0x33, 0xff, 0x00)));
 		PAIRS.add(new ColorPair(Color.BLUE, Color.GREEN));
-		PAIRS.add(new ColorPair(Color.TURQOISE, Color.LGREEN));
-		PAIRS.add(new ColorPair(Color.YELLOW, Color.RED));
-		PAIRS.add(new ColorPair(Color.NAVY, Color.INDIGO));
-		PAIRS.add(new ColorPair(Color.GREEN, Color.YELLOW));
 		PAIRS.add(new ColorPair(Color.MAGENTA, Color.GREEN));
 		PAIRS.add(new ColorPair(Color.INDIGO, Color.GREEN));
+		PAIRS.add(new ColorPair(Color.TURQOISE, Color.LGREEN));
+		PAIRS.add(new ColorPair(Color.YELLOW, Color.RED));
+		PAIRS.add(new ColorPair(Color.GREEN, Color.RED));
+		PAIRS.add(new ColorPair(Color.GREEN, Color.YELLOW));
+		PAIRS.add(new ColorPair(Color.RED, Color.YELLOW));
+		PAIRS.add(new ColorPair(Color.NAVY, Color.INDIGO));
 		PAIRS.add(new ColorPair(Color.CYAN, Color.MAGENTA));
+
+		// Warmer versions
+		PAIRS.add(new ColorPair(Color.YELLOW.luminance(WARMER).asImmutable(), Color.RED.luminance(WARMER).asImmutable()));
+		PAIRS.add(new ColorPair(Color.GREEN.luminance(WARMER).asImmutable(), Color.RED.luminance(WARMER).asImmutable()));
+		PAIRS.add(new ColorPair(Color.GREEN.luminance(WARMER).asImmutable(), Color.YELLOW.luminance(WARMER).asImmutable()));
+		PAIRS.add(new ColorPair(Color.BLUE.luminance(WARMER).asImmutable(), Color.GREEN.luminance(WARMER).asImmutable()));
+		PAIRS.add(new ColorPair(Color.INDIGO.luminance(WARMER).asImmutable(), Color.GREEN.luminance(WARMER).asImmutable()));
+		
+		// Cooler versions
+		PAIRS.add(new ColorPair(Color.YELLOW.luminance(COOLER).asImmutable(), Color.RED.luminance(COOLER).asImmutable()));
+		PAIRS.add(new ColorPair(Color.GREEN.luminance(COOLER).asImmutable(), Color.RED.luminance(COOLER).asImmutable()));
+		PAIRS.add(new ColorPair(Color.GREEN.luminance(COOLER).asImmutable(), Color.YELLOW.luminance(COOLER).asImmutable()));
+		PAIRS.add(new ColorPair(Color.BLUE.luminance(COOLER).asImmutable(), Color.GREEN.luminance(COOLER).asImmutable()));
+		PAIRS.add(new ColorPair(Color.INDIGO.luminance(COOLER).asImmutable(), Color.GREEN.luminance(COOLER).asImmutable()));
+
 	}
 
 	private ColorPair(final Color base, final Color fade) {

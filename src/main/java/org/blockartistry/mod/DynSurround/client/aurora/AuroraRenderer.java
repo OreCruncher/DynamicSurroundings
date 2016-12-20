@@ -31,7 +31,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
@@ -53,11 +52,11 @@ public final class AuroraRenderer implements IAtmosRenderer {
 
 	public static void renderAurora(final float partialTick, final Aurora aurora) {
 
-		final Minecraft mc = FMLClientHandler.instance().getClient();
 		final float alpha = aurora.getAlpha() / 255.0F;
 		if (alpha <= 0.0F)
 			return;
 
+		final Minecraft mc = Minecraft.getMinecraft();
 		final Tessellator tess = Tessellator.getInstance();
 		final VertexBuffer renderer = tess.getBuffer();
 		final float tranY;
@@ -94,6 +93,7 @@ public final class AuroraRenderer implements IAtmosRenderer {
 		GlStateManager.disableAlpha();
 		GlStateManager.disableCull();
 		GlStateManager.depthMask(false);
+		GlStateManager.disableFog();
 
 		for (final Node[] array : aurora.getNodeList()) {
 			for (int i = 0; i < array.length - 1; i++) {
@@ -151,6 +151,7 @@ public final class AuroraRenderer implements IAtmosRenderer {
 			}
 		}
 
+		GlStateManager.enableFog();
 		GlStateManager.scale(3.5D, 25.0D, 3.5D);
 		GlStateManager.depthMask(true);
 		GlStateManager.enableCull();

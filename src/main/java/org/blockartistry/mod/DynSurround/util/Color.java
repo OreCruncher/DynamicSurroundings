@@ -35,9 +35,13 @@ import net.minecraft.util.text.TextFormatting;
  */
 public class Color {
 
-	private static class ImmutableColor extends Color {
+	public static final class ImmutableColor extends Color {
 
-		public ImmutableColor(final int red, final int green, final int blue) {
+		ImmutableColor(final Color color) {
+			super(color);
+		}
+		
+		ImmutableColor(final int red, final int green, final int blue) {
 			super(red, green, blue);
 		}
 
@@ -217,6 +221,14 @@ public class Color {
 		}
 		return this;
 	}
+	
+	// Adjust luminance based on the specified percent.  > 0 brightens; < 0 darkens
+	public Color luminance(final float percent) {
+		final float r = Math.min(Math.max(0, this.red + (this.red * percent)), 1.0F);
+		final float g = Math.min(Math.max(0, this.green + (this.green * percent)), 1.0F);
+		final float b = Math.min(Math.max(0, this.blue + (this.blue * percent)), 1.0F);
+		return new Color(r, g, b);
+	}
 
 	public int rgb() {
 		final int iRed = (int) (this.red * 255);
@@ -236,6 +248,10 @@ public class Color {
 			return false;
 		final Color color = (Color) anObject;
 		return this.red == color.red && this.green == color.green && this.blue == color.blue;
+	}
+	
+	public Color asImmutable() {
+		return new ImmutableColor(this);
 	}
 
 	@Override
