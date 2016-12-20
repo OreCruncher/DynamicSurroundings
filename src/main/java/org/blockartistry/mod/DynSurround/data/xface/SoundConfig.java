@@ -23,6 +23,8 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
+import javax.annotation.Nonnull;
+
 import com.google.gson.annotations.SerializedName;
 
 public class SoundConfig {
@@ -53,60 +55,71 @@ public class SoundConfig {
 		
 	}
 	
-	public SoundConfig(final String soundName) {
+	public SoundConfig(@Nonnull final String soundName) {
 		this.sound = soundName;
 	}
 
-	public SoundConfig setSoundName(final String name) {
+	@Nonnull
+	public SoundConfig setSoundName(@Nonnull final String name) {
 		this.sound = name;
 		return this;
 	}
 
-	public SoundConfig setConditions(final String conditions) {
+	@Nonnull
+	public SoundConfig setConditions(@Nonnull final String conditions) {
 		this.conditions = conditions;
 		return this;
 	}
 
-	public SoundConfig setSoundType(final SoundType type) {
+	@Nonnull
+	public SoundConfig setSoundType(@Nonnull final SoundType type) {
 		this.soundType = type.getName();
 		return this;
 	}
 
+	@Nonnull
 	public SoundConfig setVolume(final float volume) {
 		this.volume = volume;
 		return this;
 	}
 
+	@Nonnull
 	public SoundConfig setPitch(final float pitch) {
 		this.pitch = pitch;
 		return this;
 	}
 
+	@Nonnull
 	public SoundConfig setWeight(final int weight) {
 		this.weight = weight;
 		return this;
 	}
 
+	@Nonnull
 	public SoundConfig setRepeatDelayRandom(final int delay) {
 		this.repeatDelayRandom = delay;
 		return this;
 	}
 
+	@Nonnull
 	public SoundConfig setRepeatDelay(final int delay) {
 		this.repeatDelay = delay;
 		return this;
 	}
 
+	@Nonnull
 	public SoundConfig setIsVariable(final boolean flag) {
 		this.variable = flag;
 		return this;
 	}
 
+	@Nonnull
 	public SoundConfig setIsSpotSound(final boolean flag) {
 		this.spotSound = flag;
 		return this;
 	}
 
+	@Nonnull
 	public SoundConfig setIsStepSound(final boolean flag) {
 		this.step = flag;
 		return this;

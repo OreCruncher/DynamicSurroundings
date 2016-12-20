@@ -165,10 +165,11 @@ public final class DimensionEffectData implements INBTSerialization {
 		nbt.setTag(NBT.AURORA_LIST, list);
 	}
 
-	public static DimensionEffectData get(final World world) {
+	public static DimensionEffectData get(@Nonnull final World world) {
 		return DimensionEffectDataFile.get(world);
 	}
 
+	@Nonnull
 	public String configString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("dim ").append(this.dimensionId).append(": ");
@@ -180,6 +181,7 @@ public final class DimensionEffectData implements INBTSerialization {
 	}
 	
 	@Override
+	@Nonnull
 	public String toString() {
 		// Dump out some diagnostics for the current dimension
 		final StringBuilder builder = new StringBuilder();

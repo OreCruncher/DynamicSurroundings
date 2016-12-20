@@ -23,20 +23,25 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public enum SoundType {
 	BACKGROUND("BACKGROUND"), SPOT("SPOT"), STEP("STEP"), PERIODIC("PERIODIC");
 
 	protected final String name;
 
-	SoundType(final String name) {
+	SoundType(@Nonnull final String name) {
 		this.name = name;
 	}
 
+	@Nonnull
 	public String getName() {
 		return this.name;
 	}
 
-	public static SoundType getType(final String soundType) {
+	@Nonnull
+	public static SoundType getType(@Nullable final String soundType) {
 		if (soundType == null)
 			return BACKGROUND;
 

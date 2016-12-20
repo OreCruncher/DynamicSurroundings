@@ -23,6 +23,8 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.Module;
 
@@ -32,7 +34,7 @@ public final class Footsteps {
 
 	}
 
-	public static void registerForgeEntries(final String profile, final String... dictionaryEntries) {
+	public static void registerForgeEntries(@Nonnull final String profile, @Nonnull final String... dictionaryEntries) {
 		if (Module.proxy().isRunningAsServer())
 			return;
 
@@ -50,7 +52,7 @@ public final class Footsteps {
 				dictionaryEntries);
 	}
 
-	public static void registerFootsteps(final String profile, final String... blocks) {
+	public static void registerFootsteps(@Nonnull final String profile, @Nonnull final String... blocks) {
 		if (Module.proxy().isRunningAsServer())
 			return;
 

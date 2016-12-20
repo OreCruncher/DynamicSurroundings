@@ -23,6 +23,8 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
@@ -33,7 +35,7 @@ public final class Biomes {
 
 	}
 
-	public static void register(final BiomeConfig biome) {
+	public static void register(@Nonnull final BiomeConfig biome) {
 		if (Module.proxy().isRunningAsServer())
 			return;
 

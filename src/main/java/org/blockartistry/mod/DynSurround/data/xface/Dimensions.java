@@ -23,6 +23,8 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 
@@ -32,7 +34,7 @@ public final class Dimensions {
 		
 	}
 
-	public static void register(final DimensionConfig dimension) {
+	public static void register(@Nonnull final DimensionConfig dimension) {
 		if(dimension == null) {
 			ModLog.warn("The parameter 'dimension' cannot be null.");
 			return;

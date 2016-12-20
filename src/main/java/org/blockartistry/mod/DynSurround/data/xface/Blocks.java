@@ -23,6 +23,8 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
@@ -33,7 +35,7 @@ public final class Blocks {
 		
 	}
 	
-	public static void register(final BlockConfig block) {
+	public static void register(@Nonnull final BlockConfig block) {
 		if(Module.proxy().isRunningAsServer())
 			return;
 

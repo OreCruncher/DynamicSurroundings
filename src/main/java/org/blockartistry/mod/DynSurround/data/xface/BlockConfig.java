@@ -26,6 +26,9 @@ package org.blockartistry.mod.DynSurround.data.xface;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 public class BlockConfig {
@@ -50,50 +53,58 @@ public class BlockConfig {
 
 	}
 
-	public BlockConfig(final String... blocks) {
+	public BlockConfig(@Nullable final String... blocks) {
 		if (blocks != null)
 			for (final String b : blocks)
 				this.addBlock(b);
 	}
 
-	public BlockConfig addBlock(final String block) {
+	@Nonnull
+	public BlockConfig addBlock(@Nonnull final String block) {
 		if (blocks != null)
 			this.blocks.add(block);
 		return this;
 	}
 
+	@Nonnull
 	public BlockConfig setResetSounds(final boolean flag) {
 		this.soundReset = flag;
 		return this;
 	}
 
+	@Nonnull
 	public BlockConfig setResetEffects(final boolean flag) {
 		this.effectReset = flag;
 		return this;
 	}
 
+	@Nonnull
 	public BlockConfig setResetStepSounds(final boolean flag) {
 		this.stepSoundReset = flag;
 		return this;
 	}
 
+	@Nonnull
 	public BlockConfig setStepSoundChance(final int chance) {
 		this.stepChance = chance;
 		return this;
 	}
 
+	@Nonnull
 	public BlockConfig setSoundChance(final int chance) {
 		this.chance = chance;
 		return this;
 	}
 
-	public BlockConfig addSound(final SoundConfig sound) {
+	@Nonnull
+	public BlockConfig addSound(@Nonnull final SoundConfig sound) {
 		if (sounds != null)
 			this.sounds.add(sound);
 		return this;
 	}
 
-	public BlockConfig addEffect(final EffectConfig effect) {
+	@Nonnull
+	public BlockConfig addEffect(@Nonnull final EffectConfig effect) {
 		if (effects != null)
 			this.effects.add(effect);
 		return this;

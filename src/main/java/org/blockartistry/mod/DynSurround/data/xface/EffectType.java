@@ -24,14 +24,17 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
+import javax.annotation.Nonnull;
+
 public enum EffectType {
 	STEAM("steam"), FIRE("fire"), BUBBLE("bubble"), DUST("dust"), FOUNTAIN("fountain"), FIREFLY("firefly");
 
 	protected final String name;
-	private EffectType(final String name) {
+	private EffectType(@Nonnull final String name) {
 		this.name = name;
 	}
 	
+	@Nonnull
 	public String getName() {
 		return this.name;
 	}

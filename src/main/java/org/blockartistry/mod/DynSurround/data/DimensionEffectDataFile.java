@@ -53,6 +53,7 @@ public final class DimensionEffectDataFile extends WorldSavedData {
 		super(id);
 	}
 
+	@Nonnull
 	private static DimensionEffectDataFile getFile(@Nonnull final World world) {
 		DimensionEffectDataFile data = (DimensionEffectDataFile) world.loadItemData(DimensionEffectDataFile.class, IDENTIFIER);
 		if (data == null) {
@@ -63,6 +64,7 @@ public final class DimensionEffectDataFile extends WorldSavedData {
 		return data;
 	}
 
+	@Nonnull
 	private DimensionEffectData getData(final int dimensionId) {
 		DimensionEffectData data = this.dataList.get(dimensionId);
 		if (data != null)
@@ -72,6 +74,7 @@ public final class DimensionEffectDataFile extends WorldSavedData {
 		return data;
 	}
 
+	@Nonnull
 	public static DimensionEffectData get(@Nonnull final World world) {
 		return getFile(world).getData(world.provider.getDimension());
 	}

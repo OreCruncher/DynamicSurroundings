@@ -27,6 +27,8 @@ package org.blockartistry.mod.DynSurround.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
@@ -81,11 +83,12 @@ public final class ColorPair {
 
 	}
 
-	private ColorPair(final Color base, final Color fade) {
+	private ColorPair(@Nonnull final Color base, @Nonnull final Color fade) {
 		this.baseColor = base;
 		this.fadeColor = fade;
 	}
 
+	@Nonnull
 	public static ColorPair get(final int id) {
 		return PAIRS.get(MathHelper.clamp_int(id, 0, PAIRS.size() - 1));
 	}

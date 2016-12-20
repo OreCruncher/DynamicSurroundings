@@ -24,6 +24,9 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.blockartistry.mod.DynSurround.ModLog;
 
 public final class Log {
@@ -31,11 +34,11 @@ public final class Log {
 	protected Log() {
 	}
 
-	public static void info(final String format, final Object... parms) {
+	public static void info(@Nonnull final String format, @Nullable final Object... parms) {
 		ModLog.info(format, parms);
 	}
 
-	public static void warn(final String format, final Object... parms) {
+	public static void warn(@Nonnull final String format, @Nullable final Object... parms) {
 		ModLog.warn(format, parms);
 	}
 

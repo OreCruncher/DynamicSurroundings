@@ -27,6 +27,8 @@ package org.blockartistry.mod.DynSurround.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import net.minecraft.util.math.MathHelper;
@@ -60,6 +62,7 @@ public final class AuroraPreset {
 		this.bandOffset = bandOffset;
 	}
 
+	@Nonnull
 	public static AuroraPreset get(final int id) {
 		return PRESET.get(MathHelper.clamp_int(id, 0, PRESET.size() - 1));
 	}

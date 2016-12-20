@@ -54,7 +54,7 @@ public final class AuroraData implements INBTSerialization {
 	public AuroraData() {
 	}
 	
-	public AuroraData(final AuroraSpawnEvent event) {
+	public AuroraData(@Nonnull final AuroraSpawnEvent event) {
 		this.dimensionId = event.dimensionId;
 		this.posX = event.posX;
 		this.posZ = event.posZ;
@@ -105,7 +105,7 @@ public final class AuroraData implements INBTSerialization {
 	}
 
 	@Override
-	public boolean equals(final Object anObj) {
+	public boolean equals(@Nonnull final Object anObj) {
 		if (!(anObj instanceof AuroraData))
 			return false;
 		final AuroraData a = (AuroraData) anObj;
@@ -113,6 +113,7 @@ public final class AuroraData implements INBTSerialization {
 	}
 
 	@Override
+	@Nonnull
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("[x: ").append(this.posX).append(", z: ").append(this.posZ).append(']');
