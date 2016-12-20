@@ -24,6 +24,9 @@
 
 package org.blockartistry.mod.DynSurround.util;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -63,7 +66,7 @@ public final class Localization {
 		}
 	}
 
-	public static void initialize(final Side side) {
+	public static void initialize(@Nonnull final Side side) {
 		if (side == Side.SERVER) {
 			impl = new ServerImpl();
 		} else {
@@ -71,7 +74,8 @@ public final class Localization {
 		}
 	}
 
-	public static String format(final String translateKey, final Object... parameters) {
+	@Nonnull
+	public static String format(@Nonnull final String translateKey, @Nullable final Object... parameters) {
 		return impl.format(translateKey, parameters);
 	}
 }

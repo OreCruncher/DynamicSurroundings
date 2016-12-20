@@ -34,6 +34,7 @@ public final class MyUtils {
 	private MyUtils() {
 	}
 
+	@Nonnull
 	public static int[] splitToInts(@Nonnull final String str, final char splitChar) {
 
 		final String[] tokens = StringUtils.split(str, splitChar);

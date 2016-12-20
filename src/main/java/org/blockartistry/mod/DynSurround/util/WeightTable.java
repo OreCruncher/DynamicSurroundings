@@ -63,6 +63,7 @@ public class WeightTable<T extends WeightTable.Item> {
 			this.totalWeight -= entry.itemWeight;
 	}
 
+	@Nonnull
 	public T next() {
 
 		assert this.totalWeight > 0;

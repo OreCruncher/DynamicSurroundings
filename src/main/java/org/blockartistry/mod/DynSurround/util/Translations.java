@@ -30,6 +30,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 
@@ -46,11 +49,11 @@ public class Translations {
 
 	}
 
-	protected void merge(final InputStream stream) throws IOException {
+	protected void merge(@Nonnull final InputStream stream) throws IOException {
 		net.minecraftforge.fml.common.FMLCommonHandler.instance().loadLanguage(this.lookup, stream);
 	}
 
-	public void load(final String assetRoot, final String... languages) {
+	public void load(@Nonnull final String assetRoot, @Nonnull final String... languages) {
 		for (final String lang : languages) {
 			final String assetName = StringUtils.appendIfMissing(assetRoot, "/") + lang + ".lang";
 			try (final InputStream stream = Translations.class.getResourceAsStream(assetName)) {
@@ -62,21 +65,22 @@ public class Translations {
 		}
 	}
 
-	public String format(final String translateKey, final Object... parameters) {
+	@Nonnull
+	public String format(@Nonnull final String translateKey, @Nullable final Object... parameters) {
 		final String xlated = this.lookup.get(translateKey);
 		return xlated == null ? translateKey : String.format(xlated, parameters);
 	}
 
-	public void put(final String key, final String value) {
+	public void put(@Nonnull final String key, @Nonnull final String value) {
 		this.lookup.put(key, value);
 	}
 
-	public void forAll(final Predicate<Entry<String, String>> pred) {
+	public void forAll(@Nonnull final Predicate<Entry<String, String>> pred) {
 		for (final Entry<String, String> e : this.lookup.entrySet())
 			pred.apply(e);
 	}
 
-	public void transform(final Function<Entry<String, String>, String> func) {
+	public void transform(@Nonnull final Function<Entry<String, String>, String> func) {
 		final Map<String, String> old = this.lookup;
 		this.lookup = new HashMap<String, String>();
 		for (final Entry<String, String> e : old.entrySet()) {

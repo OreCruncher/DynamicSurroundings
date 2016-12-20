@@ -27,6 +27,8 @@ package org.blockartistry.mod.DynSurround.util;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 
@@ -37,10 +39,10 @@ public class Color {
 
 	public static final class ImmutableColor extends Color {
 
-		ImmutableColor(final Color color) {
+		ImmutableColor(@Nonnull final Color color) {
 			super(color);
 		}
-		
+
 		ImmutableColor(final int red, final int green, final int blue) {
 			super(red, green, blue);
 		}
@@ -56,7 +58,7 @@ public class Color {
 		}
 
 		@Override
-		public Color adjust(final Vec3d adjust, final Color target) {
+		public Color adjust(@Nonnull final Vec3d adjust, @Nonnull final Color target) {
 			throw new UnsupportedOperationException();
 		}
 	}
@@ -122,6 +124,7 @@ public class Color {
 		colorLookup.put(TextFormatting.YELLOW, MC_YELLOW);
 		colorLookup.put(TextFormatting.WHITE, MC_WHITE);
 	}
+
 	public static Color getColor(final TextFormatting format) {
 		return colorLookup.get(format);
 	}
@@ -130,7 +133,7 @@ public class Color {
 	public float green;
 	public float blue;
 
-	public Color(final Color color) {
+	public Color(@Nonnull final Color color) {
 		this(color.red, color.green, color.blue);
 	}
 
@@ -138,7 +141,7 @@ public class Color {
 		this(red / 255.0F, green / 255.0F, blue / 255.0F);
 	}
 
-	public Color(final Vec3d vec) {
+	public Color(@Nonnull final Vec3d vec) {
 		this((float) vec.xCoord, (float) vec.yCoord, (float) vec.zCoord);
 	}
 
@@ -148,6 +151,7 @@ public class Color {
 		this.blue = blue;
 	}
 
+	@Nonnull
 	public Vec3d toVec3d() {
 		return new Vec3d(this.red, this.green, this.blue);
 	}
@@ -156,13 +160,15 @@ public class Color {
 	 * Calculates the RGB adjustments to make to the color to arrive at the
 	 * target color after the specified number of iterations.
 	 */
-	public Vec3d transitionTo(final Color target, final int iterations) {
+	@Nonnull
+	public Vec3d transitionTo(@Nonnull final Color target, final int iterations) {
 		final double deltaRed = (target.red - this.red) / iterations;
 		final double deltaGreen = (target.green - this.green) / iterations;
 		final double deltaBlue = (target.blue - this.blue) / iterations;
 		return new Vec3d(deltaRed, deltaGreen, deltaBlue);
 	}
 
+	@Nonnull
 	public Color scale(final float scaleFactor) {
 		this.red *= scaleFactor;
 		this.green *= scaleFactor;
@@ -170,11 +176,13 @@ public class Color {
 		return this;
 	}
 
-	public static Color scale(final Color color, final float scaleFactor) {
+	@Nonnull
+	public static Color scale(@Nonnull final Color color, final float scaleFactor) {
 		return new Color(color).scale(scaleFactor);
 	}
 
-	public Color add(final Color color) {
+	@Nonnull
+	public Color add(@Nonnull final Color color) {
 		this.red += color.red;
 		this.green += color.green;
 		this.blue += color.blue;
@@ -185,17 +193,20 @@ public class Color {
 		return (float) Math.sqrt((1.0F - factor) * c1 * c1 + factor * c2 * c2);
 	}
 
-	public Color blend(final Color color, final float factor) {
+	@Nonnull
+	public Color blend(@Nonnull final Color color, final float factor) {
 		this.red = blend(this.red, color.red, factor);
 		this.green = blend(this.green, color.green, factor);
 		this.blue = blend(this.blue, color.blue, factor);
 		return this;
 	}
 
-	public Color mix(final Color color) {
+	@Nonnull
+	public Color mix(@Nonnull final Color color) {
 		return mix(color.red, color.green, color.blue);
 	}
 
+	@Nonnull
 	public Color mix(final float red, final float green, final float blue) {
 		this.red = (this.red + red) / 2.0F;
 		this.green = (this.green + green) / 2.0F;
@@ -203,7 +214,8 @@ public class Color {
 		return this;
 	}
 
-	public Color adjust(final Vec3d adjust, final Color target) {
+	@Nonnull
+	public Color adjust(@Nonnull final Vec3d adjust, @Nonnull final Color target) {
 		this.red += adjust.xCoord;
 		if ((adjust.xCoord < 0.0F && this.red < target.red) || (adjust.xCoord > 0.0F && this.red > target.red)) {
 			this.red = target.red;
@@ -221,8 +233,10 @@ public class Color {
 		}
 		return this;
 	}
-	
-	// Adjust luminance based on the specified percent.  > 0 brightens; < 0 darkens
+
+	// Adjust luminance based on the specified percent. > 0 brightens; < 0
+	// darkens
+	@Nonnull
 	public Color luminance(final float percent) {
 		final float r = Math.min(Math.max(0, this.red + (this.red * percent)), 1.0F);
 		final float g = Math.min(Math.max(0, this.green + (this.green * percent)), 1.0F);
@@ -249,12 +263,14 @@ public class Color {
 		final Color color = (Color) anObject;
 		return this.red == color.red && this.green == color.green && this.blue == color.blue;
 	}
-	
+
+	@Nonnull
 	public Color asImmutable() {
 		return new ImmutableColor(this);
 	}
 
 	@Override
+	@Nonnull
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("[r:").append((int) (this.red * 255));

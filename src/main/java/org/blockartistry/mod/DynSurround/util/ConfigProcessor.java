@@ -30,6 +30,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import net.minecraftforge.common.config.Configuration;
@@ -82,12 +85,13 @@ public final class ConfigProcessor {
 	public static @interface Hidden {
 
 	}
-	
-	public static void process(final Configuration config, final Class<?> clazz) {
+
+	public static void process(@Nonnull final Configuration config, @Nonnull final Class<?> clazz) {
 		process(config, clazz, null);
 	}
 
-	public static void process(final Configuration config, final Class<?> clazz, final Object parameters) {
+	public static void process(@Nonnull final Configuration config, @Nonnull final Class<?> clazz,
+			@Nullable final Object parameters) {
 		for (final Field field : clazz.getFields()) {
 			final Parameter annotation = field.getAnnotation(Parameter.class);
 			if (annotation != null) {
@@ -128,7 +132,7 @@ public final class ConfigProcessor {
 						field.set(parameters, config.getStringList(property, category,
 								StringUtils.split(annotation.defaultValue(), ','), comment));
 					}
-					
+
 					// Configure restart settings
 					final Property prop = config.getCategory(category).get(property);
 					if (field.getAnnotation(RestartRequired.class) != null) {
@@ -139,7 +143,7 @@ public final class ConfigProcessor {
 						prop.setRequiresMcRestart(false);
 						prop.setRequiresWorldRestart(false);
 					}
-					
+
 					prop.setShowInGui(field.getAnnotation(Hidden.class) == null);
 
 				} catch (final Throwable t) {

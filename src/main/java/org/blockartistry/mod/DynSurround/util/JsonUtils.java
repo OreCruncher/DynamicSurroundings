@@ -30,73 +30,58 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.blockartistry.mod.DynSurround.ModLog;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
-public class JsonUtils {
+public final class JsonUtils {
 
-	@SuppressWarnings({ "unused" })
-	public static <T> T load(final File file, final Class<T> clazz) throws Exception {
-		InputStream stream = null;
-
-		try {
-			stream = new FileInputStream(file);
+	private JsonUtils() {
+		
+	}
+	
+	@SuppressWarnings("unused")
+	@Nonnull
+	public static <T> T load(@Nonnull final File file, @Nonnull final Class<T> clazz) throws Exception {
+		try(final InputStream stream = new FileInputStream(file)) {
 			if (stream != null)
 				return load(stream, clazz);
-		} finally {
-			try {
-				if (stream != null)
-					stream.close();
-			} catch (final Throwable t) {
-				;
-			}
 		}
 		return (T) clazz.newInstance();
 	}
 
-	public static <T> T load(final String modId, final Class<T> clazz) throws Exception {
+	@Nonnull
+	public static <T> T load(@Nonnull final String modId, @Nonnull final Class<T> clazz) throws Exception {
 		final String fileName = modId.replaceAll("[^a-zA-Z0-9.-]", "_");
-		InputStream stream = null;
-
-		try {
-			stream = clazz.getResourceAsStream("/assets/dsurround/data/" + fileName + ".json");
+		try(final InputStream stream = clazz.getResourceAsStream("/assets/dsurround/data/" + fileName + ".json")) {
 			if (stream != null)
 				return load(stream, clazz);
-		} finally {
-			try {
-				if (stream != null)
-					stream.close();
-			} catch (final Throwable t) {
-				;
-			}
 		}
 		return (T) clazz.newInstance();
 	}
 
-	public static <T> T load(final Reader stream, final Class<T> clazz) {
-
-		T result = null;
+	@Nullable
+	public static <T> T load(@Nonnull final Reader stream, @Nonnull final Class<T> clazz) throws Exception {
 		try (final JsonReader reader = new JsonReader(stream)) {
-			result = new Gson().fromJson(reader, clazz);
+			return new Gson().fromJson(reader, clazz);
 		} catch (final Throwable t) {
 			ModLog.error("Unable to process Json from stream", t);;
 		}
-		return result;
+		return (T) clazz.newInstance();
 	}
 
-	public static <T> T load(final InputStream stream, final Class<T> clazz) {
-
-		T result = null;
-
+	@Nullable
+	public static <T> T load(@Nonnull final InputStream stream, @Nonnull final Class<T> clazz) throws Exception {
 		try (final InputStreamReader reader = new InputStreamReader(stream)) {
-			result = load(reader, clazz);
+			return load(reader, clazz);
 		} catch (final Throwable t) {
 			ModLog.error("Unable to process Json from stream", t);;
 		}
-
-		return result;
+		return (T) clazz.newInstance();
 	}
 
 }

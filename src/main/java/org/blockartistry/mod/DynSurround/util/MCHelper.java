@@ -28,6 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import gnu.trove.map.hash.TCustomHashMap;
 import gnu.trove.strategy.IdentityHashingStrategy;
 import net.minecraft.block.Block;
@@ -94,34 +97,38 @@ public final class MCHelper {
 		
 	}
 	
-	
-	public static String nameOf(final Block block) {
+	@Nonnull
+	public static String nameOf(@Nonnull final Block block) {
 		return Block.REGISTRY.getNameForObject(block).toString();
 	}
 	
-	public static String nameOf(final Item item) {
+	@Nonnull
+	public static String nameOf(@Nonnull final Item item) {
 		return Item.REGISTRY.getNameForObject(item).toString();
 	}
 
-	public static Block getBlockByName(final String blockName) {
+	@Nonnull
+	public static Block getBlockByName(@Nonnull final String blockName) {
 		// Yes yes.  I know what I am doing here.  Need to know if the block
 		// doesn't exist because of bad data in a config file or some such.
 		return Block.REGISTRY.getObjectBypass(new ResourceLocation(blockName));
 	}
 	
-	public static boolean isAirBlock(final IBlockState state, final World world, final BlockPos pos) {
+	public static boolean isAirBlock(@Nonnull final IBlockState state, @Nullable final World world, @Nullable final BlockPos pos) {
 		return state.getMaterial() == Material.AIR;
 	}
 	
-	public static SoundType getSoundType(final Block block) {
+	@Nullable
+	public static SoundType getSoundType(@Nonnull final Block block) {
 		return block.getSoundType();
 	}
 	
-	public static SoundType getSoundType(final IBlockState state) {
+	@Nullable
+	public static SoundType getSoundType(@Nonnull final IBlockState state) {
 		return getSoundType(state.getBlock());
 	}
 	
-	public static boolean hasVariants(final Block block) {
+	public static boolean hasVariants(@Nonnull final Block block) {
 		final Item item = Item.getItemFromBlock(block);
 		if(item == null)
 			return false;
@@ -134,7 +141,8 @@ public final class MCHelper {
 		return stacks.size() > 1;
 	}
 	
-	public static String getMaterialName(final Material material) {
+	@Nonnull
+	public static String getMaterialName(@Nullable final Material material) {
 		if(material == null)
 			return MATERIAL_NONE;
 		final String materialName = materialMap.get(material);

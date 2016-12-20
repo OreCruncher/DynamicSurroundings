@@ -24,15 +24,22 @@
 
 package org.blockartistry.mod.DynSurround.util;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.Module;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class SoundUtils {
+public final class SoundUtils {
 
-	public static SoundEvent getOrRegisterSound(final String location) {
+	private SoundUtils() {
+		
+	}
+	
+	@Nonnull
+	public static SoundEvent getOrRegisterSound(@Nonnull final String location) {
 		final ResourceLocation rl;
 		if (location.contains(":")) {
 			rl = new ResourceLocation(location);
@@ -42,7 +49,8 @@ public class SoundUtils {
 		return getOrRegisterSound(rl);
 	}
 
-	public static SoundEvent getOrRegisterSound(final ResourceLocation location) {
+	@Nonnull
+	public static SoundEvent getOrRegisterSound(@Nonnull final ResourceLocation location) {
 		if (SoundEvent.REGISTRY.containsKey(location))
 			return SoundEvent.REGISTRY.getObject(location);
 

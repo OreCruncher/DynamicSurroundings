@@ -34,7 +34,6 @@ import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,11 +49,12 @@ public final class PlayerUtils {
 	private PlayerUtils() {
 	}
 
-	public static BiomeInfo getPlayerBiome(final EntityPlayer player, final boolean getTrue) {
+	@Nonnull
+	public static BiomeInfo getPlayerBiome(@Nonnull final EntityPlayer player, final boolean getTrue) {
 
-		final int theX = MathHelper.floor_double(player.posX);
-		final int theY = MathHelper.floor_double(player.posY);
-		final int theZ = MathHelper.floor_double(player.posZ);
+		final int theX = MathStuff.floor_double(player.posX);
+		final int theY = MathStuff.floor_double(player.posY);
+		final int theZ = MathStuff.floor_double(player.posZ);
 		BiomeInfo biome = BiomeRegistry.get(player.worldObj.getBiome(new BlockPos(theX, 0, theZ)));
 
 		if (!getTrue) {
@@ -83,15 +83,15 @@ public final class PlayerUtils {
 		return player.worldObj.provider.getDimension();
 	}
 
-	public static boolean isUnderWater(final EntityPlayer player) {
-		final int x = MathHelper.floor_double(player.posX);
-		final int y = MathHelper.floor_double(player.posY + player.getEyeHeight());
-		final int z = MathHelper.floor_double(player.posZ);
+	public static boolean isUnderWater(@Nonnull final EntityPlayer player) {
+		final int x = MathStuff.floor_double(player.posX);
+		final int y = MathStuff.floor_double(player.posY + player.getEyeHeight());
+		final int z = MathStuff.floor_double(player.posZ);
 		return player.worldObj.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.WATER;
 	}
 
-	public static boolean isUnderGround(final EntityPlayer player, final int offset) {
-		return MathHelper.floor_double(player.posY + offset) < DimensionRegistry.getSeaLevel(player.worldObj);
+	public static boolean isUnderGround(@Nonnull final EntityPlayer player, final int offset) {
+		return MathStuff.floor_double(player.posY + offset) < DimensionRegistry.getSeaLevel(player.worldObj);
 	}
 
 	@SideOnly(Side.CLIENT)

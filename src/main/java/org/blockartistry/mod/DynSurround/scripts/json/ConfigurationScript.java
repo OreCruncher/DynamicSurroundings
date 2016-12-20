@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.mod.DynSurround.data.xface.Biomes;
@@ -56,10 +57,10 @@ public final class ConfigurationScript {
 
 	@SerializedName("biomes")
 	public List<BiomeConfig> biomes = ImmutableList.of();
-	
+
 	@SerializedName("biomeAlias")
 	public Map<String, String> biomeAlias = new HashMap<String, String>();
-	
+
 	@SerializedName("blocks")
 	public List<BlockConfig> blocks = ImmutableList.of();
 
@@ -73,37 +74,39 @@ public final class ConfigurationScript {
 	public List<ForgeEntry> forgeMappings = ImmutableList.of();
 
 	public static void process(final Reader reader) {
-		final ConfigurationScript script = JsonUtils.load(reader, ConfigurationScript.class);
 
-		if (script != null) {
+		try {
+			final ConfigurationScript script = JsonUtils.load(reader, ConfigurationScript.class);
 
 			for (final DimensionConfig dimension : script.dimensions)
 				Dimensions.register(dimension);
 
 			// We don't want to process these items if the mod is running
 			// on the server - they apply only to client side.
-			if (!Module.proxy().isRunningAsServer()) {
-				
-				// Do this first - config may want to alias biomes and that
-				// needs to happen before processing actual biomes
-				for(final Entry<String, String> entry: script.biomeAlias.entrySet())
-					BiomeRegistry.registerBiomeAlias(entry.getKey(), entry.getValue());
-				
-				for (final BiomeConfig biome : script.biomes)
-					Biomes.register(biome);
+			if (Module.proxy().isRunningAsServer())
+				return;
 
-				for (final BlockConfig block : script.blocks)
-					Blocks.register(block);
+			// Do this first - config may want to alias biomes and that
+			// needs to happen before processing actual biomes
+			for (final Entry<String, String> entry : script.biomeAlias.entrySet())
+				BiomeRegistry.registerBiomeAlias(entry.getKey(), entry.getValue());
 
-				for (final Entry<String, String> entry : script.footsteps.entrySet()) {
-					Footsteps.registerFootsteps(entry.getValue(), entry.getKey());
-				}
-				
-				for (final ForgeEntry entry : script.forgeMappings) {
-					for (final String name : entry.dictionaryEntries)
-						Footsteps.registerForgeEntries(entry.acousticProfile, name);
-				}
+			for (final BiomeConfig biome : script.biomes)
+				Biomes.register(biome);
+
+			for (final BlockConfig block : script.blocks)
+				Blocks.register(block);
+
+			for (final Entry<String, String> entry : script.footsteps.entrySet()) {
+				Footsteps.registerFootsteps(entry.getValue(), entry.getKey());
 			}
+
+			for (final ForgeEntry entry : script.forgeMappings) {
+				for (final String name : entry.dictionaryEntries)
+					Footsteps.registerForgeEntries(entry.acousticProfile, name);
+			}
+		} catch (final Throwable t) {
+			ModLog.error("Unable to process configuration script", t);
 		}
 	}
 }

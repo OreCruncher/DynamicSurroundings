@@ -24,14 +24,17 @@
 
 package org.blockartistry.mod.DynSurround.client.sound;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.util.MathStuff;
 
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -43,8 +46,9 @@ public class SpotSound extends PositionedSound {
 	private final SoundEffect sound;
 	private final int timeMark;
 
-	public SpotSound(final BlockPos pos, final SoundEffect sound, final int delay, SoundCategory categoryOverride) {
-		super(sound.sound, categoryOverride != null? categoryOverride : SoundCategory.BLOCKS);
+	public SpotSound(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int delay,
+			@Nullable SoundCategory categoryOverride) {
+		super(sound.sound, categoryOverride != null ? categoryOverride : SoundCategory.BLOCKS);
 
 		this.sound = sound;
 		this.volume = sound.volume;
@@ -59,8 +63,13 @@ public class SpotSound extends PositionedSound {
 		this.timeMark = EnvironState.getTickCounter() + delay;
 	}
 
-	public SpotSound(final EntityPlayer player, final SoundEffect sound, SoundCategory categoryOverride) {
-		super(sound.sound, categoryOverride != null? categoryOverride : SoundCategory.PLAYERS);
+	private static int randomRange(final int range) {
+		return EnvironState.RANDOM.nextInt(range) - EnvironState.RANDOM.nextInt(range);
+	}
+
+	public SpotSound(@Nonnull final EntityPlayer player, @Nonnull final SoundEffect sound,
+			@Nullable final SoundCategory categoryOverride) {
+		super(sound.sound, categoryOverride != null ? categoryOverride : SoundCategory.PLAYERS);
 
 		this.sound = sound;
 		this.volume = sound.volume;
@@ -68,12 +77,9 @@ public class SpotSound extends PositionedSound {
 		this.repeat = false;
 		this.repeatDelay = 0;
 
-		this.xPosF = MathHelper.floor_double(player.posX + EnvironState.RANDOM.nextInt(SPOT_SOUND_RANGE)
-				- EnvironState.RANDOM.nextInt(SPOT_SOUND_RANGE));
-		this.yPosF = MathHelper.floor_double(player.posY + 1 + EnvironState.RANDOM.nextInt(SPOT_SOUND_RANGE)
-				- EnvironState.RANDOM.nextInt(SPOT_SOUND_RANGE));
-		this.zPosF = MathHelper.floor_double(player.posZ + EnvironState.RANDOM.nextInt(SPOT_SOUND_RANGE)
-				- EnvironState.RANDOM.nextInt(SPOT_SOUND_RANGE));
+		this.xPosF = MathStuff.floor_double(player.posX + randomRange(SPOT_SOUND_RANGE));
+		this.yPosF = MathStuff.floor_double(player.posY + player.eyeHeight + randomRange(SPOT_SOUND_RANGE));
+		this.zPosF = MathStuff.floor_double(player.posZ + randomRange(SPOT_SOUND_RANGE));
 
 		this.timeMark = EnvironState.getTickCounter();
 	}

@@ -23,6 +23,8 @@
 
 package org.blockartistry.mod.DynSurround.util;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.world.World;
 
 public final class DiurnalUtils {
@@ -30,15 +32,15 @@ public final class DiurnalUtils {
 	private DiurnalUtils() {
 	}
 
-	public static boolean isDaytime(final World world) {
+	public static boolean isDaytime(@Nonnull final World world) {
 		return !world.provider.getHasNoSky() && world.provider.getSunBrightnessFactor(1.0f) > 0.6f;
 	}
 
-	public static boolean isNighttime(final World world) {
+	public static boolean isNighttime(@Nonnull final World world) {
 		return !world.provider.getHasNoSky() && world.provider.getSunBrightnessFactor(1.0f) < 0.1f;
 	}
 
-	public static boolean isSunrise(final World world) {
+	public static boolean isSunrise(@Nonnull final World world) {
 		if (world.provider.getHasNoSky())
 			return false;
 
@@ -46,7 +48,7 @@ public final class DiurnalUtils {
 		return brFactor > 0.1f && brFactor < 0.6f && Math.sin(world.getCelestialAngleRadians(1.0f)) < 0.0;
 	}
 
-	public static boolean isSunset(final World world) {
+	public static boolean isSunset(@Nonnull final World world) {
 		if (world.provider.getHasNoSky())
 			return false;
 
@@ -54,7 +56,7 @@ public final class DiurnalUtils {
 		return brFactor > 0.1f && brFactor < 0.6f && Math.sin(world.getCelestialAngleRadians(1.0f)) > 0.0;
 	}
 
-	public static float getMoonPhaseFactor(final World world) {
+	public static float getMoonPhaseFactor(@Nonnull final World world) {
 		return world.getCurrentMoonPhaseFactor();
 	}
 }
