@@ -27,6 +27,9 @@ package org.blockartistry.mod.DynSurround.proxy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.Footsteps;
@@ -71,7 +74,7 @@ public class ProxyClient extends Proxy {
 
 
 	@Override
-	public void preInit(final FMLPreInitializationEvent event) {
+	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		super.preInit(event);
 
 		SoundManager.configureSound();
@@ -91,7 +94,7 @@ public class ProxyClient extends Proxy {
 	}
 
 	@Override
-	public void postInit(final FMLPostInitializationEvent event) {
+	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
 		super.postInit(event);
 
 		if (ModOptions.enableDebugLogging) {

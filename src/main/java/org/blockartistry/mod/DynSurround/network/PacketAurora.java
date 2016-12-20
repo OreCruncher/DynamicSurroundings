@@ -24,6 +24,9 @@
 
 package org.blockartistry.mod.DynSurround.network;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.blockartistry.mod.DynSurround.client.event.AuroraSpawnEvent;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
 
@@ -36,7 +39,8 @@ public final class PacketAurora implements IMessage {
 	
 	public static class PacketHandler implements IMessageHandler<PacketAurora, IMessage> {
 		@Override
-		public IMessage onMessage(final PacketAurora message, final MessageContext ctx) {
+		@Nullable
+		public IMessage onMessage(@Nonnull final PacketAurora message, @Nullable final MessageContext ctx) {
 			Network.postEvent(new AuroraSpawnEvent(message.dimension, message.posX, message.posZ, message.seed,
 					message.colorSet, message.preset));
 			return null;
@@ -53,7 +57,7 @@ public final class PacketAurora implements IMessage {
 	public PacketAurora() {
 	}
 
-	public PacketAurora(final AuroraData data) {
+	public PacketAurora(@Nonnull final AuroraData data) {
 		this(data.dimensionId, data.seed, data.posX, data.posZ, data.colorSet, data.preset);
 	}
 
@@ -68,7 +72,7 @@ public final class PacketAurora implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(final ByteBuf buf) {
+	public void fromBytes(@Nonnull final ByteBuf buf) {
 		this.dimension = buf.readInt();
 		this.seed = buf.readLong();
 		this.posX = buf.readInt();
@@ -78,7 +82,7 @@ public final class PacketAurora implements IMessage {
 	}
 
 	@Override
-	public void toBytes(final ByteBuf buf) {
+	public void toBytes(@Nonnull final ByteBuf buf) {
 		buf.writeInt(this.dimension);
 		buf.writeLong(this.seed);
 		buf.writeInt(this.posX);

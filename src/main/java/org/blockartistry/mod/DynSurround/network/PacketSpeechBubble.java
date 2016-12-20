@@ -26,6 +26,9 @@ package org.blockartistry.mod.DynSurround.network;
 
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.blockartistry.mod.DynSurround.client.event.SpeechTextEvent;
 
 import io.netty.buffer.ByteBuf;
@@ -38,7 +41,8 @@ public class PacketSpeechBubble implements IMessage {
 	
 	public static class PacketHandler implements IMessageHandler<PacketSpeechBubble, IMessage> {
 		@Override
-		public IMessage onMessage(final PacketSpeechBubble message, final MessageContext ctx) {
+		@Nullable
+		public IMessage onMessage(@Nonnull final PacketSpeechBubble message, @Nullable final MessageContext ctx) {
 			Network.postEvent(new SpeechTextEvent(message.entityId, message.message, message.translate));
 			return null;
 		}
@@ -52,21 +56,21 @@ public class PacketSpeechBubble implements IMessage {
 
 	}
 
-	public PacketSpeechBubble(final UUID playerId, final String message, final boolean translate) {
+	public PacketSpeechBubble(@Nonnull final UUID playerId, @Nonnull final String message, final boolean translate) {
 		this.entityId = playerId;
 		this.message = message;
 		this.translate = translate;
 	}
 
 	@Override
-	public void fromBytes(final ByteBuf buf) {
+	public void fromBytes(@Nonnull final ByteBuf buf) {
 		this.entityId = new UUID(buf.readLong(), buf.readLong());
 		this.message = ByteBufUtils.readUTF8String(buf);
 		this.translate = buf.readBoolean();
 	}
 
 	@Override
-	public void toBytes(final ByteBuf buf) {
+	public void toBytes(@Nonnull final ByteBuf buf) {
 		buf.writeLong(this.entityId.getMostSignificantBits());
 		buf.writeLong(this.entityId.getLeastSignificantBits());
 		ByteBufUtils.writeUTF8String(buf, this.message);

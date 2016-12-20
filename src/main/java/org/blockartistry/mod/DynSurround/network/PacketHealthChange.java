@@ -26,6 +26,9 @@ package org.blockartistry.mod.DynSurround.network;
 
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.blockartistry.mod.DynSurround.client.event.PopoffEvent;
 
 import io.netty.buffer.ByteBuf;
@@ -37,7 +40,8 @@ public class PacketHealthChange implements IMessage {
 	
 	public static class PacketHandler implements IMessageHandler<PacketHealthChange, IMessage> {
 		@Override
-		public IMessage onMessage(final PacketHealthChange message, final MessageContext ctx) {
+		@Nullable
+		public IMessage onMessage(@Nonnull final PacketHealthChange message, @Nullable final MessageContext ctx) {
 			Network.postEvent(new PopoffEvent(message.entityId, message.posX, message.posY, message.posZ,
 					message.isCritical, message.amount));
 			return null;
@@ -55,7 +59,7 @@ public class PacketHealthChange implements IMessage {
 
 	}
 
-	public PacketHealthChange(final UUID id, final float x, final float y, final float z, final boolean isCritical,
+	public PacketHealthChange(@Nonnull final UUID id, final float x, final float y, final float z, final boolean isCritical,
 			final int amount) {
 		this.entityId = id;
 		this.posX = x;
@@ -66,7 +70,7 @@ public class PacketHealthChange implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(final ByteBuf buf) {
+	public void fromBytes(@Nonnull final ByteBuf buf) {
 		this.entityId = new UUID(buf.readLong(), buf.readLong());
 		this.posX = buf.readFloat();
 		this.posY = buf.readFloat();
@@ -76,7 +80,7 @@ public class PacketHealthChange implements IMessage {
 	}
 
 	@Override
-	public void toBytes(final ByteBuf buf) {
+	public void toBytes(@Nonnull final ByteBuf buf) {
 		buf.writeLong(this.entityId.getMostSignificantBits());
 		buf.writeLong(this.entityId.getLeastSignificantBits());
 		buf.writeFloat(this.posX);

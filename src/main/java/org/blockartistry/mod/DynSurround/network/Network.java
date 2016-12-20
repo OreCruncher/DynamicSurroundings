@@ -26,6 +26,8 @@ package org.blockartistry.mod.DynSurround.network;
 
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
 import net.minecraft.client.Minecraft;
@@ -57,13 +59,14 @@ public final class Network {
 				Side.CLIENT);
 	}
 
-	public static TargetPoint getTargetPoint(final Entity entity, final double range) {
+	@Nonnull
+	public static TargetPoint getTargetPoint(@Nonnull final Entity entity, final double range) {
 		return new TargetPoint(entity.getEntityWorld().provider.getDimension(), entity.posX, entity.posY, entity.posZ,
 				range);
 	}
 
 	// Package level helper method to fire events based on incoming packets
-	static void postEvent(final Event event) {
+	static void postEvent(@Nonnull final Event event) {
 		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
 			public void run() {
 				MinecraftForge.EVENT_BUS.post(event);
@@ -75,17 +78,17 @@ public final class Network {
 		NETWORK.sendToDimension(new PacketRainIntensity(intensity, dimension), dimension);
 	}
 
-	public static void sendAurora(final AuroraData data, final int dimension) {
+	public static void sendAurora(@Nonnull final AuroraData data, final int dimension) {
 		NETWORK.sendToDimension(new PacketAurora(data), dimension);
 	}
 
-	public static void sendHealthUpdate(final UUID id, final float x, final float y, final float z,
-			final boolean isCritical, final int amount, final TargetPoint point) {
+	public static void sendHealthUpdate(@Nonnull final UUID id, final float x, final float y, final float z,
+			final boolean isCritical, final int amount, @Nonnull final TargetPoint point) {
 		NETWORK.sendToAllAround(new PacketHealthChange(id, x, y, z, isCritical, amount), point);
 	}
 
-	public static void sendChatBubbleUpdate(final UUID playerId, final String message, final boolean translate,
-			final TargetPoint point) {
+	public static void sendChatBubbleUpdate(@Nonnull final UUID playerId, @Nonnull final String message,
+			final boolean translate, @Nonnull final TargetPoint point) {
 		NETWORK.sendToAllAround(new PacketSpeechBubble(playerId, message, translate), point);
 	}
 }

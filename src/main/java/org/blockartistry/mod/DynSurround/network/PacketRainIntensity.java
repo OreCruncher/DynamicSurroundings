@@ -24,6 +24,9 @@
 
 package org.blockartistry.mod.DynSurround.network;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.blockartistry.mod.DynSurround.client.event.RainIntensityEvent;
 
 import io.netty.buffer.ByteBuf;
@@ -35,7 +38,8 @@ public final class PacketRainIntensity implements IMessage  {
 	
 	public static class PacketHandler implements IMessageHandler<PacketRainIntensity, IMessage> {
 		@Override
-		public IMessage onMessage(final PacketRainIntensity message, final MessageContext ctx) {
+		@Nullable
+		public IMessage onMessage(@Nonnull final PacketRainIntensity message, @Nullable final MessageContext ctx) {
 			Network.postEvent(new RainIntensityEvent(message.dimension, message.intensity));
 			return null;
 		}
@@ -60,13 +64,13 @@ public final class PacketRainIntensity implements IMessage  {
 	}
 
 	@Override
-	public void fromBytes(final ByteBuf buf) {
+	public void fromBytes(@Nonnull final ByteBuf buf) {
 		this.intensity = buf.readFloat();
 		this.dimension = buf.readInt();
 	}
 
 	@Override
-	public void toBytes(final ByteBuf buf) {
+	public void toBytes(@Nonnull final ByteBuf buf) {
 		buf.writeFloat(this.intensity);
 		buf.writeInt(this.dimension);
 	}

@@ -24,6 +24,8 @@
 
 package org.blockartistry.mod.DynSurround.proxy;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.VersionCheck;
 import org.blockartistry.mod.DynSurround.client.waila.WailaHandler;
 import org.blockartistry.mod.DynSurround.commands.CommandDS;
@@ -62,7 +64,7 @@ public class Proxy {
 		return true;
 	}
 
-	public void preInit(final FMLPreInitializationEvent event) {
+	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		
 		registerLanguage();
 		
@@ -71,7 +73,7 @@ public class Proxy {
 		VersionCheck.register();
 	}
 
-	public void init(final FMLInitializationEvent event) {
+	public void init(@Nonnull final FMLInitializationEvent event) {
 		Network.initialize();
 		AtmosphereService.initialize();
 		AuroraService.initialize();
@@ -81,16 +83,16 @@ public class Proxy {
 		WailaHandler.register();
 	}
 
-	public void postInit(final FMLPostInitializationEvent event) {
+	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
 		BiomeRegistry.initialize();
 		DimensionRegistry.initialize();
 	}
 	
-	public void loadCompleted(final FMLLoadCompleteEvent event) {
+	public void loadCompleted(@Nonnull final FMLLoadCompleteEvent event) {
 		reloadResources();
 	}
 
-	public void serverStarting(final FMLServerStartingEvent event) {
+	public void serverStarting(@Nonnull final FMLServerStartingEvent event) {
 		final MinecraftServer server = event.getServer();
 		final ICommandManager command = server.getCommandManager();
 		final ServerCommandManager serverCommand = (ServerCommandManager) command;
