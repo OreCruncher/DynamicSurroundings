@@ -31,7 +31,6 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
-import org.blockartistry.mod.DynSurround.data.DimensionEffectDataFile;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import net.minecraft.util.math.MathHelper;
@@ -62,7 +61,7 @@ public class WorldHandler {
 			return;
 
 		final int dimensionId = world.provider.getDimension();
-		final DimensionEffectData data = DimensionEffectDataFile.get(world);
+		final DimensionEffectData data = DimensionEffectData.get(world);
 		final WorldInfo info = world.getWorldInfo();
 
 		// Interesting bit added to 1.8.9
@@ -137,7 +136,7 @@ public class WorldHandler {
 
 	public static boolean isThundering(@Nonnull final World world) {
 		final double strength = (double) world.getThunderStrength(1.0F);
-		return world.isRemote ? strength > 0.9D : strength > DimensionEffectDataFile.get(world).getThunderThreshold();
+		return world.isRemote ? strength > 0.9D : strength > DimensionEffectData.get(world).getThunderThreshold();
 	}
 
 }

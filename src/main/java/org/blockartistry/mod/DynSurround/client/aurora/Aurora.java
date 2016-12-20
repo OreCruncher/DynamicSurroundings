@@ -45,16 +45,10 @@ public final class Aurora {
 
 	private static final float ANGLE1 = MathStuff.PI_F / 16.0F;
 	private static final float ANGLE2 = MathStuff.toRadians(90.0F / 7.0F);
-	private static final int FADE_LIMIT = 1280;
 	private static final float AURORA_SPEED = 0.75F;
 	private static final float AURORA_AMPLITUDE = 18.0F;
 	private static final float AURORA_WAVELENGTH = 8.0F;
-	
-	// Modulus applied to the fade in/out timer to adjust
-	// the aurora alpha value.  Higher values reduce the
-	// alpha progression rate as well as max alpha; lower
-	// values increase the progression and max alpha.
-	private static final int ALPHA_INCREMENT_MOD = 10;
+	private static final int ALPHA_INCREMENT_MOD = 8;
 
 	public float posX;
 	public float posZ;
@@ -63,7 +57,8 @@ public final class Aurora {
 	private long seed;
 	private float cycle = 0.0F;
 	private int fadeTimer = 0;
-	private int alphaMod = ALPHA_INCREMENT_MOD;
+	private int alphaLimit = 128;
+	private int fadeLimit = 128 * ALPHA_INCREMENT_MOD;
 	private boolean isAlive = true;
 	private int length;
 	private float nodeLength;
@@ -108,7 +103,8 @@ public final class Aurora {
 		this.nodeLength = p.nodeLength;
 		this.nodeWidth = p.nodeWidth;
 		this.bandOffset = p.bandOffset;
-		this.alphaMod = p.alphaMod;
+		this.alphaLimit = p.alphaLimit;
+		this.fadeLimit = this.alphaLimit * ALPHA_INCREMENT_MOD;
 	}
 
 	@Nonnull
@@ -124,7 +120,7 @@ public final class Aurora {
 	public int getAlpha() {
 		return this.alpha;
 	}
-	
+
 	public float getAlphaf() {
 		return (float) this.alpha / 255.0F;
 	}
@@ -140,11 +136,20 @@ public final class Aurora {
 		}
 	}
 
+	public boolean isComplete() {
+		return !this.isAlive() && this.fadeTimer >= this.fadeLimit;
+	}
+
 	public void update() {
-		if (this.fadeTimer < FADE_LIMIT) {
-			if (this.fadeTimer % this.alphaMod == 0 && this.alpha > 0)
+		if (this.fadeTimer < this.fadeLimit) {
+			
+			if ((this.fadeTimer % ALPHA_INCREMENT_MOD) == 0 && this.alpha >= 0)
 				this.alpha += this.isAlive ? 1 : -1;
-			this.fadeTimer++;
+			
+			if (this.alpha <= 0)
+				this.fadeTimer = this.fadeLimit;
+			else
+				this.fadeTimer++;
 		}
 
 		if ((this.cycle += AURORA_SPEED) >= 360.0F)
@@ -169,7 +174,7 @@ public final class Aurora {
 		int count = 0;
 		for (int i = 0; i < this.length; i++) {
 			// Scale the widths at the head and tail of the
-			// aurora band.  This makes them taper.
+			// aurora band. This makes them taper.
 			final float width;
 			if (i < lowerBound) {
 				width = MathStuff.sin(factor * count++) * this.nodeWidth;
@@ -304,5 +309,5 @@ public final class Aurora {
 			nodeList[i].findAngles(nodeList[i + 1]);
 		nodeList[nodeList.length - 1].findAngles(null);
 	}
-	
+
 }

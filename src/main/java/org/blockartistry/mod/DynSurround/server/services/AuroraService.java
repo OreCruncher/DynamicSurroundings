@@ -40,7 +40,10 @@ import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 
+import com.google.common.base.Predicates;
+
 import gnu.trove.map.hash.TIntIntHashMap;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
@@ -48,6 +51,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.relauncher.Side;
 
 public final class AuroraService {
 
@@ -59,12 +63,6 @@ public final class AuroraService {
 			MinecraftForge.EVENT_BUS.register(new AuroraService());
 	}
 
-	@SubscribeEvent
-	public void tickEvent(@Nonnull final TickEvent.WorldTickEvent event) {
-		if (event.phase == Phase.END)
-			processAuroras(event);
-	}
-
 	private boolean isAuroraInRange(@Nonnull final EntityPlayerMP player, @Nonnull final Set<AuroraData> data) {
 		for (final AuroraData aurora : data) {
 			if (aurora.distanceSq(player, -ModOptions.auroraSpawnOffset) <= MIN_AURORA_DISTANCE_SQ)
@@ -74,57 +72,52 @@ public final class AuroraService {
 		return false;
 	}
 
-	/*
-	 * Only OK to spawn an aurora when it is night time and the moon brightness
-	 * is less than half full.
-	 */
-	private boolean okToSpawnAurora(@Nonnull final World world) {
-		return DiurnalUtils.isNighttime(world);
-	}
-
-	private static final int CHECK_INTERVAL = 100; // Ticks
+	private static final int CHECK_INTERVAL = 20; // Ticks
 	private final TIntIntHashMap tickCounters = new TIntIntHashMap();
 
-	protected void processAuroras(@Nonnull final TickEvent.WorldTickEvent event) {
+	@SubscribeEvent
+	public void tickEvent(@Nonnull final TickEvent.WorldTickEvent event) {
+		if (event.phase != Phase.END || event.side != Side.SERVER)
+			return;
 
 		final World world = event.world;
 		if (world == null || !DimensionRegistry.hasAuroras(world))
 			return;
 
-		final Set<AuroraData> data = DimensionEffectData.get(world).getAuroraList();
-
 		// Daylight hours clear the aurora list
-		if (DiurnalUtils.isDaytime(world)) {
-			data.clear();
+		if (DiurnalUtils.isAuroraInvisible(world)) {
+			DimensionEffectData.get(world).clearAuroraList();
 		} else {
 			final int tickCount = tickCounters.get(world.provider.getDimension()) + 1;
 			tickCounters.put(world.provider.getDimension(), tickCount);
 			if (tickCount % CHECK_INTERVAL == 0) {
-				if (okToSpawnAurora(world)) {
+				final List<EntityPlayerMP> players = event.world.getPlayers(EntityPlayerMP.class,
+						Predicates.<Entity> alwaysTrue());
+				if (players.size() > 0) {
+					if (DiurnalUtils.isAuroraVisible(world)) {
+						final DimensionEffectData data = DimensionEffectData.get(world);
+						final Set<AuroraData> auroraData = data.getAuroraList();
 
-					final List<EntityPlayerMP> players = event.world.getMinecraftServer().getPlayerList()
-							.getPlayerList();
+						for (final EntityPlayerMP player : players) {
+							if (!PlayerUtils.getPlayerBiome(player, false).getHasAurora())
+								continue;
+							if (isAuroraInRange(player, auroraData))
+								continue;
 
-					for (final EntityPlayerMP player : players) {
-						if (!PlayerUtils.getPlayerBiome(player, false).getHasAurora())
-							continue;
-						if (isAuroraInRange(player, data))
-							continue;
-
-						final int colorSet = ColorPair.randomId();
-						final int preset = AuroraPreset.randomId();
-						// final int colorSet = ColorPair.testId();
-						// final int preset = AuroraPreset.testId();
-						final AuroraData aurora = new AuroraData(player, -ModOptions.auroraSpawnOffset, colorSet,
-								preset);
-						if (data.add(aurora)) {
-							ModLog.debug("Spawned new aurora: " + aurora.toString());
+							final int colorSet = ColorPair.randomId();
+							final int preset = AuroraPreset.randomId();
+							final AuroraData aurora = new AuroraData(player, -ModOptions.auroraSpawnOffset, colorSet,
+									preset);
+							if (data.addAuroraData(aurora)) {
+								ModLog.debug("Spawned new aurora: " + aurora.toString());
+							}
 						}
 					}
-				}
 
-				for (final AuroraData a : data) {
-					Network.sendAurora(a, world.provider.getDimension());
+					final Set<AuroraData> data = DimensionEffectData.get(world).getAuroraList();
+					for (final AuroraData a : data) {
+						Network.sendAurora(a, a.dimensionId);
+					}
 				}
 			}
 		}

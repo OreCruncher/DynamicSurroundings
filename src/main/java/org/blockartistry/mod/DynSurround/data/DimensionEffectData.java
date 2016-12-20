@@ -31,19 +31,23 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.util.INBTSerialization;
+import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
+
+import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldSavedData;
+import net.minecraft.world.storage.MapStorage;
 import net.minecraftforge.common.util.Constants;
 
 /**
  * Per world effect data for effects
  */
-public final class DimensionEffectData implements INBTSerialization {
+public final class DimensionEffectData extends WorldSavedData {
 
 	private static final XorShiftRandom random = new XorShiftRandom();
 	private static final DecimalFormat FORMATTER = new DecimalFormat("0");
@@ -67,13 +71,15 @@ public final class DimensionEffectData implements INBTSerialization {
 	private float minIntensity = ModOptions.defaultMinRainStrength;
 	private float maxIntensity = ModOptions.defaultMaxRainStrength;
 	private float thunderThreshold = ModOptions.defaultThunderThreshold;
-	private Set<AuroraData> auroras = new HashSet<AuroraData>();
+	private final Set<AuroraData> auroras = new HashSet<AuroraData>();
 
-	public DimensionEffectData() {
+	private DimensionEffectData(final int dimension) {
+		this(Module.MOD_ID);
+		this.dimensionId = dimension;
 	}
 
-	public DimensionEffectData(final int dimensionId) {
-		this.dimensionId = dimensionId;
+	public DimensionEffectData(@Nonnull final String identifier) {
+		super(identifier);
 	}
 
 	public int getDimensionId() {
@@ -86,6 +92,7 @@ public final class DimensionEffectData implements INBTSerialization {
 
 	public void setRainIntensity(final float intensity) {
 		this.intensity = MathHelper.clamp_float(intensity, MIN_INTENSITY, MAX_INTENSITY);
+		this.setDirty(true);
 	}
 
 	public float getMinRainIntensity() {
@@ -94,6 +101,7 @@ public final class DimensionEffectData implements INBTSerialization {
 
 	public void setMinRainIntensity(final float intensity) {
 		this.minIntensity = MathHelper.clamp_float(intensity, MIN_INTENSITY, this.maxIntensity);
+		this.setDirty(true);
 	}
 
 	public float getMaxRainIntensity() {
@@ -102,6 +110,7 @@ public final class DimensionEffectData implements INBTSerialization {
 
 	public void setMaxRainIntensity(final float intensity) {
 		this.maxIntensity = MathHelper.clamp_float(intensity, this.minIntensity, MAX_INTENSITY);
+		this.setDirty(true);
 	}
 
 	public float getThunderThreshold() {
@@ -110,10 +119,32 @@ public final class DimensionEffectData implements INBTSerialization {
 
 	public void setThunderThreshold(final float threshold) {
 		this.thunderThreshold = MathHelper.clamp_float(threshold, MIN_THUNDER_THRESHOLD, MAX_THUNDER_THRESHOLD);
+		this.setDirty(true);
 	}
 
+	@Nonnull
 	public Set<AuroraData> getAuroraList() {
-		return this.auroras;
+		return ImmutableSet.copyOf(this.auroras);
+	}
+
+	public void clearAuroraList() {
+		if (this.auroras.size() > 0) {
+			this.auroras.clear();
+			this.setDirty(true);
+		}
+	}
+
+	public boolean addAuroraData(@Nonnull final AuroraData aurora) {
+		if (this.auroras.add(aurora)) {
+			this.setDirty(true);
+			return true;
+		}
+		return false;
+	}
+
+	public void removeAuroraData(@Nonnull final AuroraData aurora) {
+		if (this.auroras.remove(aurora))
+			this.setDirty(true);
 	}
 
 	public void randomizeRain() {
@@ -150,7 +181,8 @@ public final class DimensionEffectData implements INBTSerialization {
 	}
 
 	@Override
-	public void writeToNBT(@Nonnull final NBTTagCompound nbt) {
+	@Nonnull
+	public NBTTagCompound writeToNBT(@Nonnull final NBTTagCompound nbt) {
 		nbt.setInteger(NBT.DIMENSION, this.dimensionId);
 		nbt.setFloat(NBT.INTENSITY, this.intensity);
 		nbt.setFloat(NBT.MIN_INTENSITY, this.minIntensity);
@@ -163,10 +195,7 @@ public final class DimensionEffectData implements INBTSerialization {
 			list.appendTag(tag);
 		}
 		nbt.setTag(NBT.AURORA_LIST, list);
-	}
-
-	public static DimensionEffectData get(@Nonnull final World world) {
-		return DimensionEffectDataFile.get(world);
+		return nbt;
 	}
 
 	@Nonnull
@@ -179,7 +208,7 @@ public final class DimensionEffectData implements INBTSerialization {
 		builder.append(", thunder threshold: ").append(FORMATTER.format(this.thunderThreshold * 100));
 		return builder.toString();
 	}
-	
+
 	@Override
 	@Nonnull
 	public String toString() {
@@ -194,4 +223,17 @@ public final class DimensionEffectData implements INBTSerialization {
 		builder.append(", auroras: ").append(this.auroras.size());
 		return builder.toString();
 	}
+
+	@Nonnull
+	public static DimensionEffectData get(@Nonnull final World world) {
+		final MapStorage storage = world.getPerWorldStorage();
+		DimensionEffectData data = (DimensionEffectData) storage.getOrLoadData(DimensionEffectData.class,
+				Module.MOD_ID);
+		if (data == null) {
+			data = new DimensionEffectData(world.provider.getDimension());
+			storage.setData(Module.MOD_ID, data);
+		}
+		return data;
+	}
+
 }

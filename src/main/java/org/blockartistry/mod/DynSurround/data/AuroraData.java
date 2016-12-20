@@ -111,6 +111,11 @@ public final class AuroraData implements INBTSerialization {
 		final AuroraData a = (AuroraData) anObj;
 		return (this.dimensionId == a.dimensionId) && (this.posX == a.posX) && (this.posZ == a.posZ);
 	}
+	
+	@Override
+	public int hashCode() {
+		return this.posX ^ this.posZ;
+	}
 
 	@Override
 	@Nonnull

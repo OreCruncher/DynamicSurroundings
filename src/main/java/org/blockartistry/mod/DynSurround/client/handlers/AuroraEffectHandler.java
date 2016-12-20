@@ -27,6 +27,9 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.aurora.Aurora;
@@ -34,6 +37,7 @@ import org.blockartistry.mod.DynSurround.client.event.AuroraSpawnEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -47,33 +51,18 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	private static int auroraDimension = 0;
 	private static final Set<AuroraData> auroras = new HashSet<AuroraData>();
 	private static Aurora current;
-	
+
+	@Nullable
 	public static Aurora getCurrentAurora() {
 		return current;
 	}
 
-	private static void addAurora(final AuroraData data) {
-
-		if (auroraDimension != data.dimensionId || EnvironState.getDimensionId() != data.dimensionId) {
-			auroras.clear();
-			current = null;
-			auroraDimension = data.dimensionId;
-		}
-		auroras.add(data);
-	}
-
-	private Aurora getClosestAurora(final World world) {
+	@Nullable
+	private Aurora getClosestAurora(@Nonnull final World world) {
+		if (auroras.size() == 0)
+			return current;
 
 		AuroraData ad = null;
-
-		if (auroraDimension != EnvironState.getDimensionId() || DiurnalUtils.isDaytime(world)) {
-			auroras.clear();
-		}
-
-		if (auroras.size() == 0) {
-			current = null;
-			return null;
-		}
 
 		final EntityPlayer player = EnvironState.getPlayer();
 		final int playerX = (int) player.posX;
@@ -116,20 +105,32 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	}
 
 	@Override
+	@Nonnull
 	public String getHandlerName() {
 		return "AuroraEffectHandler";
 	}
 
-	/*
-	 * Need to get called every tick to process the dust fade timer as well as
-	 * aurora processing.
-	 */
+	protected void scrubAuroraList(@Nonnull final World world) {
+		if (EnvironState.getDimensionId() != auroraDimension) {
+			auroras.clear();
+			current = null;
+			auroraDimension = EnvironState.getDimensionId();
+		} else if (DiurnalUtils.isAuroraInvisible(world)) {
+			auroras.clear();
+		}
+
+		if (current != null && current.isComplete()) {
+			current = null;
+		}
+	}
+
 	@Override
-	public void process(final World world, final EntityPlayer player) {
+	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+		scrubAuroraList(world);
 		final Aurora aurora = getClosestAurora(world);
 		if (aurora != null) {
 			aurora.update();
-			if (aurora.isAlive() && DiurnalUtils.isSunrise(world)) {
+			if (aurora.isAlive() && DiurnalUtils.isAuroraInvisible(world)) {
 				ModLog.debug("Aurora fade...");
 				aurora.die();
 			}
@@ -141,6 +142,8 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		if (!ModOptions.auroraEnable)
 			return;
 
-		addAurora(new AuroraData(event));
+		if (EnvironState.getDimensionId() == event.dimensionId) {
+			auroras.add(new AuroraData(event));
+		}
 	}
 }

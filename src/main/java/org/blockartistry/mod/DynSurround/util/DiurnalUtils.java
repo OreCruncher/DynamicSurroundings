@@ -59,4 +59,12 @@ public final class DiurnalUtils {
 	public static float getMoonPhaseFactor(@Nonnull final World world) {
 		return world.getCurrentMoonPhaseFactor();
 	}
+	
+	public static boolean isAuroraVisible(@Nonnull final World world) {
+		return !isAuroraInvisible(world);
+	}
+	
+	public static boolean isAuroraInvisible(@Nonnull final World world) {
+		return world.provider.getHasNoSky() || isSunrise(world) || isDaytime(world);
+	}
 }

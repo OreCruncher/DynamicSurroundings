@@ -43,35 +43,35 @@ public final class AuroraPreset {
 	public final float nodeLength;
 	public final float nodeWidth;
 	public final int bandOffset;
-	public final int alphaMod;
+	public final int alphaLimit;
 
 	private static final List<AuroraPreset> PRESET = new ArrayList<AuroraPreset>();
 
 	static {
 		// 10/5; 90/45
-		PRESET.add(new AuroraPreset(128, 30.0F, 2.0F, 45, 10));
-		PRESET.add(new AuroraPreset(128, 15.0F, 2.0F, 27, 10));
-		PRESET.add(new AuroraPreset(64, 30.0F, 2.0F, 45, 10));
-		PRESET.add(new AuroraPreset(64, 15.0F, 2.0F, 27, 10));
+		PRESET.add(new AuroraPreset(128, 30.0F, 2.0F, 45, 128));
+		PRESET.add(new AuroraPreset(128, 15.0F, 2.0F, 27, 128));
+		PRESET.add(new AuroraPreset(64, 30.0F, 2.0F, 45, 128));
+		PRESET.add(new AuroraPreset(64, 15.0F, 2.0F, 27, 128));
 
-		PRESET.add(new AuroraPreset(128, 30.0F, 2.0F, 45, 15));
-		PRESET.add(new AuroraPreset(128, 15.0F, 2.0F, 27, 15));
-		PRESET.add(new AuroraPreset(64, 30.0F, 2.0F, 45, 15));
-		PRESET.add(new AuroraPreset(64, 15.0F, 2.0F, 27, 15));
+		PRESET.add(new AuroraPreset(128, 30.0F, 2.0F, 45, 96));
+		PRESET.add(new AuroraPreset(128, 15.0F, 2.0F, 27, 96));
+		PRESET.add(new AuroraPreset(64, 30.0F, 2.0F, 45, 96));
+		PRESET.add(new AuroraPreset(64, 15.0F, 2.0F, 27, 96));
 
-		PRESET.add(new AuroraPreset(128, 30.0F, 2.0F, 45, 20));
-		PRESET.add(new AuroraPreset(128, 15.0F, 2.0F, 27, 20));
-		PRESET.add(new AuroraPreset(64, 30.0F, 2.0F, 45, 20));
-		PRESET.add(new AuroraPreset(64, 15.0F, 2.0F, 27, 20));
+		PRESET.add(new AuroraPreset(128, 30.0F, 2.0F, 45, 64));
+		PRESET.add(new AuroraPreset(128, 15.0F, 2.0F, 27, 64));
+		PRESET.add(new AuroraPreset(64, 30.0F, 2.0F, 45, 64));
+		PRESET.add(new AuroraPreset(64, 15.0F, 2.0F, 27, 64));
 	}
 
 	private AuroraPreset(final int length, final float nodeLength, final float nodeWidth, final int bandOffset,
-			final int alphaMod) {
+			final int alphaLimit) {
 		this.length = length;
 		this.nodeLength = nodeLength;
 		this.nodeWidth = nodeWidth;
 		this.bandOffset = bandOffset;
-		this.alphaMod = alphaMod;
+		this.alphaLimit = alphaLimit;
 	}
 
 	@Nonnull
@@ -95,7 +95,7 @@ public final class AuroraPreset {
 		builder.append(";nodeLength:").append(this.nodeLength);
 		builder.append(";nodeWidth:").append(this.nodeWidth);
 		builder.append(";bandOffset:").append(this.bandOffset);
-		builder.append(";alphaMod:").append(this.alphaMod);
+		builder.append(";alphaLimit:").append(this.alphaLimit);
 		return builder.toString();
 	}
 }
