@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.data.xface.BiomeConfig;
@@ -73,7 +75,7 @@ public final class ConfigurationScript {
 	@SerializedName("forgeMappings")
 	public List<ForgeEntry> forgeMappings = ImmutableList.of();
 
-	public static void process(final Reader reader) {
+	public static void process(@Nonnull final Reader reader) {
 
 		try {
 			final ConfigurationScript script = JsonUtils.load(reader, ConfigurationScript.class);

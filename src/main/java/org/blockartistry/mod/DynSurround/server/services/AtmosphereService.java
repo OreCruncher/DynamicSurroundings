@@ -30,6 +30,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
 import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
@@ -43,7 +45,7 @@ public final class AtmosphereService {
 	}
 
 	@SubscribeEvent
-	public void tickEvent(final TickEvent.WorldTickEvent event) {
+	public void tickEvent(@Nonnull final TickEvent.WorldTickEvent event) {
 
 		if (event.phase == Phase.END)
 			return;

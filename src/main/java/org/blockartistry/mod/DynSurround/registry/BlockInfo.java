@@ -24,6 +24,9 @@
 
 package org.blockartistry.mod.DynSurround.registry;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
@@ -37,15 +40,16 @@ public final class BlockInfo {
 	protected Block block;
 	protected int meta;
 
-	public BlockInfo(final Block block, final int meta) {
+	public BlockInfo(@Nonnull final Block block, final int meta) {
 		this.block = block;
 		this.meta = meta;
 	}
 
-	public BlockInfo(final Block block) {
+	public BlockInfo(@Nonnull final Block block) {
 		this(block, NO_SUBTYPE);
 	}
 
+	@Nonnull
 	public Block getBlock() {
 		return this.block;
 	}
@@ -64,7 +68,8 @@ public final class BlockInfo {
 		return this.block == key.block && this.meta == key.meta;
 	}
 
-	public static BlockInfo create(final String blockId) {
+	@Nullable
+	public static BlockInfo create(@Nonnull final String blockId) {
 		String workingName = blockId;
 		int subType = NO_SUBTYPE;
 

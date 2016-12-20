@@ -24,6 +24,8 @@
 
 package org.blockartistry.mod.DynSurround.registry;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
 
@@ -52,12 +54,12 @@ public final class DimensionInfo {
 	protected Boolean hasAuroras;
 	protected Boolean hasWeather;
 
-	public DimensionInfo(final World world) {
+	public DimensionInfo(@Nonnull final World world) {
 		this.dimensionId = world.provider.getDimension();
 		initialize(world.provider);
 	}
 
-	public DimensionInfo(final World world, final DimensionConfig entry) {
+	public DimensionInfo(@Nonnull final World world, @Nonnull final DimensionConfig entry) {
 		this.dimensionId = world.provider.getDimension();
 		this.name = world.provider.getDimensionType().getName();
 		this.seaLevel = entry.seaLevel;
@@ -69,7 +71,7 @@ public final class DimensionInfo {
 		initialize(world.provider);
 	}
 
-	public DimensionInfo initialize(final WorldProvider provider) {
+	public DimensionInfo initialize(@Nonnull final WorldProvider provider) {
 		if (!this.initialized) {
 			this.name = provider.getDimensionType().getName();
 			if (this.seaLevel == null)
@@ -148,6 +150,7 @@ public final class DimensionInfo {
 	}
 
 	@Override
+	@Nonnull
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append(this.dimensionId).append('/').append(this.name).append(':');

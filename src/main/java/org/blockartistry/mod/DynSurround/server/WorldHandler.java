@@ -26,6 +26,8 @@ package org.blockartistry.mod.DynSurround.server;
 
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
@@ -53,7 +55,7 @@ public class WorldHandler {
 				+ RANDOM.nextInt(isRaining ? ModOptions.rainActiveTimeVariable : ModOptions.rainInactiveTimeVariable);
 	}
 
-	public static void updateWeatherBody(final World world) {
+	public static void updateWeatherBody(@Nonnull final World world) {
 
 		// If it is the client, or it has no sky, return.
 		if (world.isRemote)
@@ -129,11 +131,11 @@ public class WorldHandler {
 		}
 	}
 
-	public static boolean isRaining(final World world) {
+	public static boolean isRaining(@Nonnull final World world) {
 		return (double) world.getRainStrength(1.0F) > 0.2D;
 	}
 
-	public static boolean isThundering(final World world) {
+	public static boolean isThundering(@Nonnull final World world) {
 		final double strength = (double) world.getThunderStrength(1.0F);
 		return world.isRemote ? strength > 0.9D : strength > DimensionEffectDataFile.get(world).getThunderThreshold();
 	}

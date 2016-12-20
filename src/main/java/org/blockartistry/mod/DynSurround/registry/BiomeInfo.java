@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.util.Color;
 
@@ -101,7 +104,7 @@ public final class BiomeInfo {
 		return this.fogColor;
 	}
 	
-	public void setFogColor(final Color color) {
+	public void setFogColor(@Nonnull final Color color) {
 		this.fogColor = color;
 	}
 	
@@ -117,6 +120,7 @@ public final class BiomeInfo {
 	private int spotSoundChance;
 	private List<SoundEffect> spotSounds;
 	
+	@Nonnull
 	public List<SoundEffect> getSounds() {
 		return this.sounds;
 	}
@@ -129,11 +133,12 @@ public final class BiomeInfo {
 		this.spotSoundChance = chance;
 	}
 	
+	@Nonnull
 	public List<SoundEffect> getSpotSounds() {
 		return this.spotSounds;
 	}
 	
-	public BiomeInfo(final int biomeId, final String biomeName) {
+	public BiomeInfo(final int biomeId, @Nonnull final String biomeName) {
 		this.biome = null;
 		this.biomeId = biomeId;
 		this.biomeName = biomeName;
@@ -143,7 +148,7 @@ public final class BiomeInfo {
 		this.spotSoundChance = 1200;
 	}
 
-	public BiomeInfo(final Biome biome) {
+	public BiomeInfo(@Nonnull final Biome biome) {
 
 		this.biome = biome;
 		this.biomeId = Biome.getIdForBiome(biome);
@@ -159,7 +164,7 @@ public final class BiomeInfo {
 		return this.biome == null;
 	}
 	
-	public float getFloatTemperature(final BlockPos pos) {
+	public float getFloatTemperature(@Nonnull final BlockPos pos) {
 		return isFake() ? 0.0F : this.biome.getFloatTemperature(pos);
 	}
 
@@ -175,14 +180,16 @@ public final class BiomeInfo {
 		return isFake() ? 0.0F : this.biome.getRainfall();
 	}
 
-	public SoundEffect findSoundMatch(final String conditions) {
+	@Nullable
+	public SoundEffect findSoundMatch(@Nonnull final String conditions) {
 		for (final SoundEffect sound : this.sounds)
 			if (sound.matches(conditions))
 				return sound;
 		return null;
 	}
 
-	public List<SoundEffect> findSoundMatches(final String conditions) {
+	@Nonnull
+	public List<SoundEffect> findSoundMatches(@Nonnull final String conditions) {
 		final List<SoundEffect> results = new ArrayList<SoundEffect>();
 		for (final SoundEffect sound : this.sounds)
 			if (sound.matches(conditions))
@@ -190,7 +197,8 @@ public final class BiomeInfo {
 		return results;
 	}
 	
-	public SoundEffect getSpotSound(final String conditions, final Random random) {
+	@Nullable
+	public SoundEffect getSpotSound(@Nonnull final String conditions, @Nonnull final Random random) {
 		if (this.getSpotSounds().isEmpty() || random.nextInt(this.getSpotSoundChance()) != 0)
 			return null;
 
@@ -216,6 +224,7 @@ public final class BiomeInfo {
 	}
 
 	@Override
+	@Nonnull
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append(String.format("Biomes %d [%s]:", this.biomeId, this.biomeName));

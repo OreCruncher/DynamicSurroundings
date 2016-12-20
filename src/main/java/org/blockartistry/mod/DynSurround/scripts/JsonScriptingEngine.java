@@ -26,6 +26,8 @@ package org.blockartistry.mod.DynSurround.scripts;
 
 import java.io.Reader;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.scripts.json.ConfigurationScript;
 
@@ -52,7 +54,7 @@ public class JsonScriptingEngine implements IScriptingEngine {
 	}
 
 	@Override
-	public Object eval(final Reader reader) {
+	public Object eval(@Nonnull final Reader reader) {
 		ConfigurationScript.process(reader);
 		return null;
 	}

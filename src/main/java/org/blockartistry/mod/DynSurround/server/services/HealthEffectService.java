@@ -24,6 +24,8 @@
 
 package org.blockartistry.mod.DynSurround.server.services;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.network.Network;
 
@@ -55,14 +57,14 @@ public final class HealthEffectService {
 
 	// From the Minecraft code for damage
 	// EntityPlayer.attackTargetEntityWithCurrentItem()
-	private static boolean isCritical(final EntityPlayer player, final Entity target) {
+	private static boolean isCritical(@Nonnull final EntityPlayer player, @Nonnull final Entity target) {
 		return player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater()
 				&& !player.isPotionActive(MobEffects.BLINDNESS) && !player.isRiding()
 				&& target instanceof EntityLivingBase && !player.isSprinting();
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOW)
-	public void onLivingHurt(final LivingHurtEvent event) {
+	public void onLivingHurt(@Nonnull final LivingHurtEvent event) {
 		if (event == null || event.getEntity() == null || event.getEntity().worldObj == null
 				|| event.getEntity().worldObj.isRemote)
 			return;
@@ -94,7 +96,7 @@ public final class HealthEffectService {
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOW)
-	public void onLivingHeal(final LivingHealEvent event) {
+	public void onLivingHeal(@Nonnull final LivingHealEvent event) {
 		if (event == null || event.getEntity() == null || event.getEntity().worldObj == null
 				|| event.getEntity().worldObj.isRemote)
 			return;

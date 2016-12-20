@@ -26,6 +26,8 @@ package org.blockartistry.mod.DynSurround.registry;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 
@@ -37,11 +39,12 @@ public class MultiBlockProfile extends BlockProfile {
 
 	protected final TIntObjectHashMap<BlockProfile> blockData = new TIntObjectHashMap<BlockProfile>();
 
-	public MultiBlockProfile(final BlockInfo blockInfo) {
+	public MultiBlockProfile(@Nonnull final BlockInfo blockInfo) {
 		super(blockInfo);
 	}
 
-	protected BlockProfile getProfileWithCreate(final BlockInfo blockInfo) {
+	@Nonnull
+	protected BlockProfile getProfileWithCreate(@Nonnull final BlockInfo blockInfo) {
 		BlockProfile profile = blockData.get(blockInfo.meta);
 		if (profile == null) {
 			profile = new BlockProfile(blockInfo);
@@ -51,7 +54,7 @@ public class MultiBlockProfile extends BlockProfile {
 	}
 
 	@Override
-	public void setChance(final BlockInfo blockInfo, final int chance) {
+	public void setChance(@Nonnull final BlockInfo blockInfo, final int chance) {
 		if (blockInfo.isGeneric()) {
 			super.setChance(blockInfo, chance);
 			return;
@@ -60,24 +63,25 @@ public class MultiBlockProfile extends BlockProfile {
 	}
 
 	@Override
-	public int getChance(final IBlockState state) {
+	public int getChance(@Nonnull final IBlockState state) {
 		final BlockProfile profile = blockData.get(state.getBlock().getMetaFromState(state));
 		return profile != null ? profile.getChance(state) : super.getChance(state);
 	}
 
+	// TODO: This looks fishy.  Should it look at an entry?
 	@Override
-	public void setStepChance(final BlockInfo blockInfo, final int chance) {
+	public void setStepChance(@Nonnull final BlockInfo blockInfo, final int chance) {
 		this.stepChance = chance;
 	}
 
 	@Override
-	public int getStepChance(final IBlockState state) {
+	public int getStepChance(@Nonnull final IBlockState state) {
 		final BlockProfile profile = blockData.get(state.getBlock().getMetaFromState(state));
 		return profile != null ? profile.getStepChance(state) : super.getStepChance(state);
 	}
 
 	@Override
-	public void addSound(final BlockInfo blockInfo, final SoundEffect sound) {
+	public void addSound(@Nonnull final BlockInfo blockInfo, @Nonnull final SoundEffect sound) {
 		if (blockInfo.meta == BlockInfo.GENERIC) {
 			super.addSound(blockInfo, sound);
 			return;
@@ -86,7 +90,7 @@ public class MultiBlockProfile extends BlockProfile {
 	}
 
 	@Override
-	public void clearSounds(final BlockInfo blockInfo) {
+	public void clearSounds(@Nonnull final BlockInfo blockInfo) {
 		if (blockInfo.meta == BlockInfo.GENERIC) {
 			super.clearSounds(blockInfo);
 			return;
@@ -97,13 +101,14 @@ public class MultiBlockProfile extends BlockProfile {
 	}
 
 	@Override
-	public List<SoundEffect> getSounds(final IBlockState state) {
+	@Nonnull
+	public List<SoundEffect> getSounds(@Nonnull final IBlockState state) {
 		final BlockProfile profile = blockData.get(state.getBlock().getMetaFromState(state));
 		return profile != null ? profile.getSounds(state) : super.getSounds(state);
 	}
 
 	@Override
-	public void addStepSound(final BlockInfo blockInfo, final SoundEffect sound) {
+	public void addStepSound(@Nonnull final BlockInfo blockInfo, @Nonnull final SoundEffect sound) {
 		if (blockInfo.meta == BlockInfo.GENERIC) {
 			super.addStepSound(blockInfo, sound);
 			return;
@@ -112,7 +117,7 @@ public class MultiBlockProfile extends BlockProfile {
 	}
 
 	@Override
-	public void clearStepSounds(final BlockInfo blockInfo) {
+	public void clearStepSounds(@Nonnull final BlockInfo blockInfo) {
 		if (blockInfo.meta == BlockInfo.GENERIC) {
 			super.clearStepSounds(blockInfo);
 			return;
@@ -123,13 +128,14 @@ public class MultiBlockProfile extends BlockProfile {
 	}
 
 	@Override
-	public List<SoundEffect> getStepSounds(final IBlockState state) {
+	@Nonnull
+	public List<SoundEffect> getStepSounds(@Nonnull final IBlockState state) {
 		final BlockProfile profile = blockData.get(state.getBlock().getMetaFromState(state));
 		return profile != null ? profile.getStepSounds(state) : super.getStepSounds(state);
 	}
 
 	@Override
-	public void addEffect(final BlockInfo blockInfo, final BlockEffect effect) {
+	public void addEffect(@Nonnull final BlockInfo blockInfo, @Nonnull final BlockEffect effect) {
 		if (blockInfo.meta == BlockInfo.GENERIC) {
 			super.addEffect(blockInfo, effect);
 			return;
@@ -138,7 +144,7 @@ public class MultiBlockProfile extends BlockProfile {
 	}
 
 	@Override
-	public void clearEffects(final BlockInfo blockInfo) {
+	public void clearEffects(@Nonnull final BlockInfo blockInfo) {
 		if (blockInfo.meta == BlockInfo.GENERIC) {
 			super.clearEffects(blockInfo);
 			return;
@@ -149,12 +155,14 @@ public class MultiBlockProfile extends BlockProfile {
 	}
 
 	@Override
-	public List<BlockEffect> getEffects(final IBlockState state) {
+	@Nonnull
+	public List<BlockEffect> getEffects(@Nonnull final IBlockState state) {
 		final BlockProfile profile = blockData.get(state.getBlock().getMetaFromState(state));
 		return profile != null ? profile.getEffects(state) : super.getEffects(state);
 	}
 
 	@Override
+	@Nonnull
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("DEFAULT ").append(super.toString());

@@ -24,6 +24,8 @@
 
 package org.blockartistry.mod.DynSurround.server.services;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.server.services.chat.EntityAIChat;
 import org.blockartistry.mod.DynSurround.server.services.chat.EntityAIVillagerFleeChat;
@@ -45,14 +47,14 @@ public final class ChattyEntityService {
 			MinecraftForge.EVENT_BUS.register(new ChattyEntityService());
 	}
 
-	protected void addSpecialAI(final EntityLiving entity) {
+	protected void addSpecialAI(@Nonnull final EntityLiving entity) {
 		if (entity instanceof EntityVillager) {
 			entity.tasks.addTask(EntityAIVillagerFleeChat.PRIORITY, new EntityAIVillagerFleeChat(entity));
 		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public void onJoinWorld(final EntityJoinWorldEvent event) {
+	public void onJoinWorld(@Nonnull final EntityJoinWorldEvent event) {
 		if (event.getEntity() instanceof EntityLiving) {
 			final EntityLiving entity = (EntityLiving) event.getEntity();
 			if (EntityAIChat.hasMessages(entity)) {

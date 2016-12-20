@@ -27,6 +27,8 @@ package org.blockartistry.mod.DynSurround.registry;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
@@ -36,7 +38,7 @@ import net.minecraft.block.state.IBlockState;
 
 public class BlockProfile {
 
-	public static BlockProfile createProfile(final BlockInfo blockInfo) {
+	public static BlockProfile createProfile(@Nonnull final BlockInfo blockInfo) {
 		if (MCHelper.hasVariants(blockInfo.block))
 			return new MultiBlockProfile(blockInfo);
 		return new BlockProfile(blockInfo);
@@ -49,63 +51,67 @@ public class BlockProfile {
 	protected final List<SoundEffect> stepSounds = new ArrayList<SoundEffect>();
 	protected final List<BlockEffect> effects = new ArrayList<BlockEffect>();
 
-	public BlockProfile(final BlockInfo blockInfo) {
+	public BlockProfile(@Nonnull final BlockInfo blockInfo) {
 		this.block = blockInfo.block;
 	}
 
-	public void setChance(final BlockInfo blockInfo, final int chance) {
+	public void setChance(@Nonnull final BlockInfo blockInfo, final int chance) {
 		this.chance = chance;
 	}
 
-	public int getChance(final IBlockState blockInfo) {
+	public int getChance(@Nonnull final IBlockState blockInfo) {
 		return this.chance;
 	}
 
-	public void setStepChance(final BlockInfo blockInfo, final int chance) {
+	public void setStepChance(@Nonnull final BlockInfo blockInfo, final int chance) {
 		this.stepChance = chance;
 	}
 
-	public int getStepChance(final IBlockState blockInfo) {
+	public int getStepChance(@Nonnull final IBlockState blockInfo) {
 		return this.stepChance;
 	}
 
-	public void addSound(final BlockInfo blockInfo, final SoundEffect sound) {
+	public void addSound(@Nonnull final BlockInfo blockInfo, @Nonnull final SoundEffect sound) {
 		this.sounds.add(sound);
 	}
 
-	public void clearSounds(final BlockInfo blockInfo) {
+	public void clearSounds(@Nonnull final BlockInfo blockInfo) {
 		this.sounds.clear();
 	}
 
-	public List<SoundEffect> getSounds(final IBlockState state) {
+	@Nonnull
+	public List<SoundEffect> getSounds(@Nonnull final IBlockState state) {
 		return this.sounds;
 	}
 
-	public void addStepSound(final BlockInfo blockInfo, final SoundEffect sound) {
+	public void addStepSound(@Nonnull final BlockInfo blockInfo, @Nonnull final SoundEffect sound) {
 		this.stepSounds.add(sound);
 	}
 
-	public void clearStepSounds(final BlockInfo blockInfo) {
+	public void clearStepSounds(@Nonnull final BlockInfo blockInfo) {
 		this.stepSounds.clear();
 	}
 
-	public List<SoundEffect> getStepSounds(final IBlockState state) {
+	@Nonnull
+	public List<SoundEffect> getStepSounds(@Nonnull final IBlockState state) {
 		return this.stepSounds;
 	}
 
-	public void addEffect(final BlockInfo blockInfo, final BlockEffect effect) {
+	public void addEffect(@Nonnull final BlockInfo blockInfo, @Nonnull final BlockEffect effect) {
 		this.effects.add(effect);
 	}
 
-	public void clearEffects(final BlockInfo blockInfo) {
+	public void clearEffects(@Nonnull final BlockInfo blockInfo) {
 		this.effects.clear();
 	}
 
-	public List<BlockEffect> getEffects(final IBlockState state) {
+	@Nonnull
+	public List<BlockEffect> getEffects(@Nonnull final IBlockState state) {
 		return this.effects;
 	}
 
 	@Override
+	@Nonnull
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("Block [").append(MCHelper.nameOf(this.block)).append("]");

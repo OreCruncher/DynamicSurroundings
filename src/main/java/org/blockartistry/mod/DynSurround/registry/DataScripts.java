@@ -31,6 +31,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
@@ -51,7 +54,7 @@ public final class DataScripts {
 
 	private static final List<IDependent> dependents = new ArrayList<IDependent>();
 
-	public static void registerDependent(final IDependent dep) {
+	public static void registerDependent(@Nonnull final IDependent dep) {
 		dependents.add(dep);
 	}
 
@@ -72,12 +75,12 @@ public final class DataScripts {
 	private String assetDirectory;
 	private IScriptingEngine exe;
 
-	public DataScripts(final File file, final String assetDirectory) {
+	public DataScripts(@Nonnull final File file, @Nonnull final String assetDirectory) {
 		this.dataDirectory = file;
 		this.assetDirectory = assetDirectory;
 	}
 
-	public static void initialize(final Object resources) {
+	public static void initialize(@Nullable final Object resources) {
 		issuePreInit();
 		final DataScripts scripts = new DataScripts(Module.dataDirectory(), "/assets/dsurround/data/");
 		scripts.init();
@@ -106,7 +109,7 @@ public final class DataScripts {
 		return this.exe.initialize();
 	}
 
-	private void runFromArchive(final String dataFile) {
+	private void runFromArchive(@Nonnull final String dataFile) {
 		final String fileName = StringUtils.appendIfMissing(assetDirectory + dataFile.replaceAll("[^a-zA-Z0-9.-]", "_"),
 				this.exe.preferredExtension()).toLowerCase();
 
@@ -120,10 +123,7 @@ public final class DataScripts {
 		}
 	}
 
-	private void runFromDirectory(final String dataFile) {
-		// Make sure there is no path prefix and that it is
-		// properly terminated with ".ds". External scripts
-		// MUST be in the mod configuration directory.
+	private void runFromDirectory(@Nonnull final String dataFile) {
 		final String workingFile = StringUtils.appendIfMissing(Paths.get(dataFile).getFileName().toString(),
 				this.exe.preferredExtension());
 		final File file = new File(dataDirectory, workingFile);

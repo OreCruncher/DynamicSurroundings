@@ -41,12 +41,14 @@ public final class MessageTable extends WeightTable<MessageTable.MessageTableEnt
 		
 	}
 	
+	@Nonnull
 	public MessageTable.MessageTableEntry add(final int weight, @Nonnull final String messageId) {
 		final MessageTableEntry entry = new MessageTableEntry(weight, messageId);
 		this.add(entry);
 		return entry;
 	}
 	
+	@Nonnull
 	public String getMessage() {
 		return this.next().messageId;
 	}

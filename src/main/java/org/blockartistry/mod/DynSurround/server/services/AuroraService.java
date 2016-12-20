@@ -27,6 +27,8 @@ package org.blockartistry.mod.DynSurround.server.services;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
@@ -58,12 +60,12 @@ public final class AuroraService {
 	}
 
 	@SubscribeEvent
-	public void tickEvent(final TickEvent.WorldTickEvent event) {
+	public void tickEvent(@Nonnull final TickEvent.WorldTickEvent event) {
 		if (event.phase == Phase.END)
 			processAuroras(event);
 	}
 
-	private boolean isAuroraInRange(final EntityPlayerMP player, final Set<AuroraData> data) {
+	private boolean isAuroraInRange(@Nonnull final EntityPlayerMP player, @Nonnull final Set<AuroraData> data) {
 		for (final AuroraData aurora : data) {
 			if (aurora.distanceSq(player, -ModOptions.auroraSpawnOffset) <= MIN_AURORA_DISTANCE_SQ)
 				return true;
@@ -76,14 +78,14 @@ public final class AuroraService {
 	 * Only OK to spawn an aurora when it is night time and the moon brightness
 	 * is less than half full.
 	 */
-	private boolean okToSpawnAurora(final World world) {
+	private boolean okToSpawnAurora(@Nonnull final World world) {
 		return DiurnalUtils.isNighttime(world);
 	}
 
 	private static final int CHECK_INTERVAL = 100; // Ticks
-	private TIntIntHashMap tickCounters = new TIntIntHashMap();
+	private final TIntIntHashMap tickCounters = new TIntIntHashMap();
 
-	protected void processAuroras(final TickEvent.WorldTickEvent event) {
+	protected void processAuroras(@Nonnull final TickEvent.WorldTickEvent event) {
 
 		final World world = event.world;
 		if (world == null || !DimensionRegistry.hasAuroras(world))
@@ -128,7 +130,8 @@ public final class AuroraService {
 		}
 	}
 
-	public static String getAuroraData(final EntityPlayer player) {
+	@Nonnull
+	public static String getAuroraData(@Nonnull final EntityPlayer player) {
 		final StringBuilder builder = new StringBuilder();
 		final Set<AuroraData> data = DimensionEffectData.get(player.getEntityWorld()).getAuroraList();
 		if (data.size() == 0) {

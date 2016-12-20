@@ -24,6 +24,8 @@
 
 package org.blockartistry.mod.DynSurround.server.services;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.network.Network;
 
@@ -45,7 +47,7 @@ public class SpeechBubbleService {
 	// Received when the server is processing a regular chat
 	// message - not a command, etc.
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public void onChatMessageEvent(final ServerChatEvent event) {
+	public void onChatMessageEvent(@Nonnull final ServerChatEvent event) {
 		final TargetPoint point = Network.getTargetPoint(event.getPlayer(), SPEECH_BUBBLE_RANGE);
 		Network.sendChatBubbleUpdate(event.getPlayer().getUniqueID(), event.getMessage(), false, point);
 	}

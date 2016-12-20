@@ -31,6 +31,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
@@ -87,13 +90,15 @@ public final class BlockRegistry implements IDependent {
 		INSTANCE.preInit();
 	}
 
-	public static List<BlockEffect> getEffects(final IBlockState state) {
+	@Nullable
+	public static List<BlockEffect> getEffects(@Nonnull final IBlockState state) {
 		final BlockProfile entry = registry.get(state.getBlock());
 		return entry != null ? entry.getEffects(state) : null;
 	}
 
-	private static SoundEffect getRandomSound(final List<SoundEffect> list, final Random random,
-			final String conditions) {
+	@Nonnull
+	private static SoundEffect getRandomSound(@Nonnull final List<SoundEffect> list, @Nonnull final Random random,
+			@Nonnull final String conditions) {
 		int totalWeight = 0;
 		final List<SoundEffect> candidates = new ArrayList<SoundEffect>();
 		for (final SoundEffect s : list)
@@ -115,7 +120,9 @@ public final class BlockRegistry implements IDependent {
 		return candidates.get(i - 1);
 	}
 
-	public static SoundEffect getSound(final IBlockState state, final Random random, final String conditions) {
+	@Nullable
+	public static SoundEffect getSound(@Nonnull final IBlockState state, @Nonnull final Random random,
+			@Nonnull final String conditions) {
 		final BlockProfile entry = registry.get(state.getBlock());
 		if (entry == null)
 			return null;
@@ -130,7 +137,9 @@ public final class BlockRegistry implements IDependent {
 		return getRandomSound(sounds, random, conditions);
 	}
 
-	public static SoundEffect getStepSound(final IBlockState state, final Random random, final String conditions) {
+	@Nullable
+	public static SoundEffect getStepSound(@Nonnull final IBlockState state, @Nonnull final Random random,
+			@Nonnull final String conditions) {
 		final BlockProfile entry = registry.get(state.getBlock());
 		if (entry == null)
 			return null;
@@ -145,7 +154,7 @@ public final class BlockRegistry implements IDependent {
 		return getRandomSound(sounds, random, conditions);
 	}
 
-	public static void register(final BlockConfig entry) {
+	public static void register(@Nonnull final BlockConfig entry) {
 		if (entry.blocks.isEmpty())
 			return;
 

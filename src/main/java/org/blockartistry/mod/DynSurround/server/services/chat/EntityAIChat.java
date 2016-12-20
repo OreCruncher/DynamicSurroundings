@@ -76,7 +76,7 @@ public class EntityAIChat extends EntityAIBase {
 		}
 
 		@Override
-		public boolean apply(final Entry<String, String> input) {
+		public boolean apply(@Nonnull final Entry<String, String> input) {
 			final Matcher matcher1 = TYPE_PATTERN.matcher(input.getKey());
 			if (matcher1.matches()) {
 				final String key = matcher1.group(1).toLowerCase();
@@ -99,15 +99,16 @@ public class EntityAIChat extends EntityAIBase {
 
 	}
 
-	protected static String getEntityClassName(final Class<? extends EntityLiving> entityClass) {
+	@Nonnull
+	protected static String getEntityClassName(@Nonnull final Class<? extends EntityLiving> entityClass) {
 		return EntityList.getEntityStringFromClass(entityClass).toLowerCase();
 	}
 
-	private static void setTimers(final Class<? extends EntityLiving> entity, final int base, final int random) {
+	private static void setTimers(@Nonnull final Class<? extends EntityLiving> entity, final int base, final int random) {
 		setTimers(getEntityClassName(entity), base, random);
 	}
 
-	private static void setTimers(final String entity, final int base, final int random) {
+	private static void setTimers(@Nonnull final String entity, final int base, final int random) {
 		final EntityChatData data = messages.get(entity);
 		if (data != null) {
 			data.baseInterval = base;

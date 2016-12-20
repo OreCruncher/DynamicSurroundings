@@ -29,6 +29,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
@@ -112,7 +115,8 @@ public final class BiomeRegistry implements IDependent {
 	// and should default to something to avoid crap.
 	private static final BiomeInfo WTF = new BiomeInfo(-256, "(FooBar)");
 
-	public static String resolveName(final Biome biome) {
+	@Nonnull
+	public static String resolveName(@Nullable final Biome biome) {
 		if (biome == null)
 			return "(Bad Biomes)";
 		return biome.getBiomeName();
@@ -122,7 +126,8 @@ public final class BiomeRegistry implements IDependent {
 		INSTANCE.preInit();
 	}
 
-	public static BiomeInfo get(final Biome biome) {
+	@Nullable
+	public static BiomeInfo get(@Nonnull final Biome biome) {
 		BiomeInfo entry = registry.get(biome == null ? WTF.getBiomeId() : Biome.REGISTRY.getIDForObject(biome));
 		if (entry == null) {
 			ModLog.warn("Biomes [%s] was not detected during initial scan! Reloading config...", resolveName(biome));
@@ -137,18 +142,18 @@ public final class BiomeRegistry implements IDependent {
 		return entry;
 	}
 
-	final static boolean isBiomeMatch(final BiomeConfig entry, final String biomeName) {
+	final static boolean isBiomeMatch(@Nonnull final BiomeConfig entry, @Nonnull final String biomeName) {
 		if (Pattern.matches(entry.biomeName, biomeName))
 			return true;
 		final String alias = biomeAliases.get(biomeName);
 		return alias == null ? false : Pattern.matches(entry.biomeName, alias);
 	}
 	
-	public static void registerBiomeAlias(final String alias, final String biome) {
+	public static void registerBiomeAlias(@Nonnull final String alias, @Nonnull final String biome) {
 		biomeAliases.put(alias, biome);
 	}
 
-	public static void register(final BiomeConfig entry) {
+	public static void register(@Nonnull final BiomeConfig entry) {
 		for (final BiomeInfo biomeEntry : registry.valueCollection()) {
 			if (isBiomeMatch(entry, biomeEntry.getBiomeName())) {
 				if (entry.hasPrecipitation != null)

@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
@@ -84,21 +86,21 @@ public final class SoundRegistry {
 
 	}
 
-	public static boolean isSoundCulled(final String sound) {
+	public static boolean isSoundCulled(@Nonnull final String sound) {
 		for (final Pattern pattern : cullSoundNamePatterns)
 			if (pattern.matcher(sound).matches())
 				return true;
 		return false;
 	}
 
-	public static boolean isSoundBlocked(final String sound) {
+	public static boolean isSoundBlocked(@Nonnull final String sound) {
 		for (final Pattern pattern : blockSoundNamePatterns)
 			if (pattern.matcher(sound).matches())
 				return true;
 		return false;
 	}
 
-	public static float getVolumeScale(final String soundName) {
+	public static float getVolumeScale(@Nonnull final String soundName) {
 		return volumeControl.contains(soundName) ? volumeControl.get(soundName) : 1.0F;
 	}
 

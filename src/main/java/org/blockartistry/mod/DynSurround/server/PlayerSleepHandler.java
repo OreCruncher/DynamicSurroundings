@@ -24,13 +24,15 @@
 
 package org.blockartistry.mod.DynSurround.server;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModOptions;
 
 import net.minecraft.world.WorldServer;
 
 public class PlayerSleepHandler {
 	
-	public static void resetRainAndThunder(final WorldServer world) {
+	public static void resetRainAndThunder(@Nonnull final WorldServer world) {
 		if(ModOptions.resetRainOnSleep)
 			world.provider.resetRainAndThunder();
 	}
