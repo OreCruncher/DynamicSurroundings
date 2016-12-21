@@ -33,10 +33,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import gnu.trove.map.hash.TObjectFloatHashMap;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+//@SideOnly(Side.CLIENT)
 public final class SoundRegistry extends Registry {
 
 	private final List<Pattern> cullSoundNamePatterns = new ArrayList<Pattern>();

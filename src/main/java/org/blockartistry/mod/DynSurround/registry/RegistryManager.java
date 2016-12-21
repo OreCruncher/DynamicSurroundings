@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.event.RegistryEvent;
 
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -54,22 +55,37 @@ public final class RegistryManager {
 		final Side side = FMLCommonHandler.instance().getEffectiveSide();
 		final int idx = side == Side.CLIENT ? 1 : 0;
 		if (managers[idx] == null) {
+			// Separate lines. The initialize will cause a recursion into
+			// this method and the array slot needs to be initialized to
+			// avoid infinite recursion.
 			managers[idx] = new RegistryManager(side);
-			managers[idx].initialize();
+			managers[idx].reload();
 		}
+		// Do a reload/check to ensure state
 		return managers[idx];
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public static <T> T get(@Nonnull RegistryType type) {
-		return (T)getManager().getRegistry(type);
+	public static <T extends Registry> T get(@Nonnull RegistryType type) {
+		return (T) getManager().getRegistry(type);
 	}
 
 	public static void reloadResources() {
-		if (managers[0] != null)
+		// Reload the server side.  This should be called
+		// by the server thread and not the client because
+		// the /ds command runs server side.
+		if (managers[0] != null) {
 			managers[0].reload();
-		if (managers[1] != null)
-			managers[1].reload();
+		}
+		
+		// Schedule reload on the client thread
+		if (managers[1] != null) {
+			Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+				public void run() {
+					managers[1].reload();
+				}
+			});
+		}
 	}
 
 	private final Side side;
@@ -77,29 +93,28 @@ public final class RegistryManager {
 
 	RegistryManager(final Side side) {
 		this.side = side;
+		this.registries[RegistryType.DIMENSION.getId()] = new DimensionRegistry();
+		this.registries[RegistryType.BIOME.getId()] = new BiomeRegistry();
+		this.registries[RegistryType.SOUND.getId()] = new SoundRegistry();
+
+		if(this.side == Side.CLIENT) {
+			this.registries[RegistryType.BLOCK.getId()] = new BlockRegistry();
+			this.registries[RegistryType.FOOTSTEPS.getId()] = new FootstepsRegistry();
+		}
 	}
 
-	RegistryManager initialize() {
-		this.registries[RegistryType.SOUND.getId()] = new SoundRegistry();
-		this.registries[RegistryType.BIOME.getId()] = new BiomeRegistry();
-		this.registries[RegistryType.BLOCK.getId()] = new BlockRegistry();
-		this.registries[RegistryType.DIMENSION.getId()] = new DimensionRegistry();
-		this.registries[RegistryType.FOOTSTEPS.getId()] = new FootstepsRegistry();
-		reload();
-		return this;
-	}
-	
 	void reload() {
 		for (final Registry r : this.registries)
-			r.init();
+			if(r != null)
+				r.init();
 
 		new DataScripts(this.side).execute(null);
 
 		for (final Registry r : this.registries)
-			r.initComplete();
-		
-		if(this.side == Side.CLIENT)
-			MinecraftForge.EVENT_BUS.post(new RegistryEvent.Reload());
+			if(r != null)
+				r.initComplete();
+
+		MinecraftForge.EVENT_BUS.post(new RegistryEvent.Reload(this.side));
 	}
 
 	@SuppressWarnings("unchecked")

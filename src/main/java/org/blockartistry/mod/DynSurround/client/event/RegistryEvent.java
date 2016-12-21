@@ -24,14 +24,24 @@
 
 package org.blockartistry.mod.DynSurround.client.event;
 
+import javax.annotation.Nonnull;
+
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public class RegistryEvent extends Event {
 
 	public static class Reload extends RegistryEvent {
+		
+		private final Side side;
+		public Reload(@Nonnull final Side side) {
+			this.side = side;
+		}
+		
+		@Nonnull
+		public Side getSide() {
+			return this.side;
+		}
 
 	}
 

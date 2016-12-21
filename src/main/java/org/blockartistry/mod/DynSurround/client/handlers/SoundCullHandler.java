@@ -80,7 +80,7 @@ public class SoundCullHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void soundConfigReload(final RegistryEvent.Reload event) {
-		if (getSoundRegistry() != null)
+		if (event.getSide() == Side.CLIENT && getSoundRegistry() != null)
 			onConnect();
 	}
 
