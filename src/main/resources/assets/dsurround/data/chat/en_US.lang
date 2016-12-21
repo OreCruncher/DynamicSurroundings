@@ -47,7 +47,7 @@ chat.villager.28=20,Yes, it's true.  I use mental powers to harvest crops.
 chat.villager.29=5,Tell OreCruncher that we need better lines.
 chat.villager.30=10,I found a book titled "FOOBIE BLETCH".  I wish I knew what that meant.
 chat.villager.31=5,Hey! Eyes up here!
-chat.villager.32=10,On the plus side we do not have flatulating cows.
+chat.villager.32=10,On the plus side we don't have flatulating cows.
 chat.villager.33=15,Let's play the quiet game.
 chat.villager.34=15,Who is this Squidward everyone keeps talking about?
 chat.villager.35=20,The union said we had to trade flint for gravel and an emerald.
@@ -68,6 +68,9 @@ chat.villager.49=15,I was fired because I forgot to put a cover sheet on a TPS r
 chat.villager.50=10,I always wanted to be somebody, but now I realize I should have been more specific.
 chat.villager.51=15,I never said most of the things I said.
 chat.villager.52=15,Impressive.
+chat.villager.53=15,Any problem can be solved with the suitable application of redstone and pumpkin pie.
+chat.villager.54=10,"First... cut my son's buns!"  That was a funny.
+chat.villager.55=10,Yeah.
 
 chat.villager.flee.0=20,Run away! Run away!
 chat.villager.flee.1=20,!!! HELP !!!
@@ -93,6 +96,8 @@ chat.zombie.2=10,I need a better gig.
 chat.zombie.3=5,In short, in matters vegetable, animal, and mineral, I am the very model of a modern Major-General.
 chat.zombie.4=10,Anyone have a throat lozenge?
 chat.zombie.5=10,** Sigh **
+chat.zombie.6=5,Stay away from the light!
+chat.zombie.7=10,Can't resist! Must...chase...villager!
 
 chat.squid.0=20,Derp!
 chat.squid.1=20,Herp a Derp!
