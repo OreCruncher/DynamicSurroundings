@@ -34,6 +34,7 @@ import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
@@ -68,17 +69,20 @@ public class ProxyClient extends Proxy {
 	}
 
 	@Override
-	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
+	public void loadCompleted(@Nonnull final FMLLoadCompleteEvent event) {
 		EffectManager.register();
 		GuiHUDHandler.register();
 		SpeechBubbleRenderer.register();
 	}
+
+	@Override
+	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
+		
+	}
 	
 	@Override
 	public void clientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
-		EffectManager.unregister();
-		GuiHUDHandler.unregister();
-		SpeechBubbleRenderer.unregister();
+		
 	}
 
 }

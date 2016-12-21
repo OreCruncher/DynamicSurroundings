@@ -54,8 +54,8 @@ public final class SpeechBubbleRenderer {
 	
 	private static SpeechBubbleRenderer INSTANCE = null;
 
-	private static final Color B_COLOR = Color.getColor(TextFormatting.DARK_GRAY);
-	private static final float B_COLOR_ALPHA = 0.4F; // 0.25F;
+	private static final Color B_COLOR = Color.getColor(TextFormatting.BLACK);
+	private static final float B_COLOR_ALPHA = 0.5F; // 0.25F;
 	private static final Color F_COLOR = Color.getColor(TextFormatting.GOLD);
 	private static final Color F_COLOR_DEPTH = Color.getColor(TextFormatting.GRAY);
 	private static final int MIN_TEXT_WIDTH = 60;
