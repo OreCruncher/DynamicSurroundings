@@ -1,3 +1,24 @@
+###DynamicSurroundings-3.1.2.0BETA
+**What's New!**
+* Natura and Agricraft support built in.
+* Russian translations.  Thanks Xottab-DUTY!
+* [Villagers can be chatty](https://github.com/OreCruncher/DynamicSurroundings/wiki/Entity-Chat).  Need feedback!
+* [Configuration Json files will be loaded from a resource pack if provided](https://github.com/OreCruncher/DynamicSurroundings/wiki/Tutorial:-Resource-Packs).
+
+**Fixes**
+* Beetroots have 4 growth stages, not 7 like other crops.
+* Fixes for concurrency issues related to network packet handling.
+* Fixed Speech Bubbles rendering for incorrect entity.
+* Fixed reference to Minecraft ambient fire sound.
+* Updated Footstep primitive map based on new Minecraft sound names.  Should improve footstep sounds for modded blocks that do not have direct support within Dynamic Surroundings.  Example, if a modded block has a step sound of SoundType.WOOD Footsteps will apply the "wood" acoustic to the block.
+
+**Changes**
+* Additional information in Waila HUD when debug is enabled.  Helps out when trying to figure out what a block is called and what Footsteps acoustics are associated.
+* Removed moonlight alpha scaling when rendering Auroras.  I may introduce back when I come up with a better
+scheme to dim the aurora when the moon is bright.
+* Added more Aurora color pairs, and disabled fog when rendering.  Auroras should stand out pretty well now.
+* Converted sounds from stero to mono.  Works better with point sounds and reduces overall size of JAR.
+
 ###DynamicSurroundings-3.1.1.0BETA
 **What's New!**
 * The configuration system received a major overhaul.  Biome and dimension tweak files have been combined into a single file.  Additionally, Footstep and Forge mapping can be done in the same file. [See the wiki for details.](https://github.com/OreCruncher/DynamicSurroundings/wiki/Tutorial:-Configuration-Files)
