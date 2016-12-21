@@ -74,7 +74,7 @@ public final class AuroraService extends Service {
 		return false;
 	}
 
-	private static final int CHECK_INTERVAL = 20; // Ticks
+	private static final int CHECK_INTERVAL = 40; // Ticks
 	private final TIntIntHashMap tickCounters = new TIntIntHashMap();
 
 	@SubscribeEvent
