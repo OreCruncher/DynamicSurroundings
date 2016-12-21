@@ -30,14 +30,7 @@ import org.blockartistry.mod.DynSurround.VersionCheck;
 import org.blockartistry.mod.DynSurround.client.waila.WailaHandler;
 import org.blockartistry.mod.DynSurround.commands.CommandDS;
 import org.blockartistry.mod.DynSurround.network.Network;
-import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
-import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.mod.DynSurround.server.services.AtmosphereService;
-import org.blockartistry.mod.DynSurround.server.services.AuroraService;
-import org.blockartistry.mod.DynSurround.server.services.ChattyEntityService;
-import org.blockartistry.mod.DynSurround.server.services.HealthEffectService;
-import org.blockartistry.mod.DynSurround.server.services.SpeechBubbleService;
-import org.blockartistry.mod.DynSurround.registry.DataScripts;
+import org.blockartistry.mod.DynSurround.server.services.ServiceManager;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
 import net.minecraft.command.ICommandManager;
@@ -47,17 +40,16 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class Proxy {
 	
 	protected void registerLanguage() {
 		Localization.initialize(Side.SERVER);
-	}
-	
-	public void reloadResources() {
-		DataScripts.initialize(null);
 	}
 	
 	public boolean isRunningAsServer() {
@@ -75,21 +67,17 @@ public class Proxy {
 
 	public void init(@Nonnull final FMLInitializationEvent event) {
 		Network.initialize();
-		AtmosphereService.initialize();
-		AuroraService.initialize();
-		HealthEffectService.initialize();
-		SpeechBubbleService.initialize();
-		ChattyEntityService.initialize();
 		WailaHandler.register();
 	}
 
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
-		BiomeRegistry.initialize();
-		DimensionRegistry.initialize();
 	}
 	
 	public void loadCompleted(@Nonnull final FMLLoadCompleteEvent event) {
-		reloadResources();
+	}
+
+	public void serverAboutToStart(@Nonnull final FMLServerAboutToStartEvent event) {
+		ServiceManager.initialize();
 	}
 
 	public void serverStarting(@Nonnull final FMLServerStartingEvent event) {
@@ -98,4 +86,13 @@ public class Proxy {
 		final ServerCommandManager serverCommand = (ServerCommandManager) command;
 		serverCommand.registerCommand(new CommandDS());
 	}
+	
+	public void serverStopping(@Nonnull final FMLServerStoppingEvent event) {
+
+	}
+	
+	public void serverStopped(@Nonnull final FMLServerStoppedEvent event) {
+		ServiceManager.deinitialize();
+	}
+
 }

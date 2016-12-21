@@ -29,6 +29,8 @@ import org.blockartistry.mod.DynSurround.client.IAtmosRenderer;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 import org.lwjgl.opengl.GL11;
@@ -79,6 +81,9 @@ public class StormRenderer implements IAtmosRenderer {
 		return world.getPrecipitationHeight(pos);
 	}
 
+	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
+	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
+
 	/**
 	 * Render RAIN and snow
 	 */
@@ -93,7 +98,7 @@ public class StormRenderer implements IAtmosRenderer {
 			return;
 		}
 
-		if (!DimensionRegistry.hasWeather(world))
+		if (!this.dimensions.hasWeather(world))
 			return;
 
 		final float rainStrength = world.getRainStrength(partialTicks);
@@ -140,7 +145,7 @@ public class StormRenderer implements IAtmosRenderer {
 				final double rainX = (double) RAIN_X_COORDS[idx] * 0.5D;
 				final double rainY = (double) RAIN_Y_COORDS[idx] * 0.5D;
 				mutable.setPos(gridX, 0, gridZ);
-				final BiomeInfo biome = BiomeRegistry.get(world.getBiome(mutable));
+				final BiomeInfo biome = this.biomes.get(world.getBiome(mutable));
 				final boolean hasDust = biome.getHasDust();
 
 				if (hasDust || biome.getHasPrecipitation()) {

@@ -31,8 +31,16 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.scripts.json.ConfigurationScript;
 
+import net.minecraftforge.fml.relauncher.Side;
+
 public class JsonScriptingEngine implements IScriptingEngine {
 
+	private final Side side;
+	
+	public JsonScriptingEngine(@Nonnull final Side side) {
+		this.side = side;
+	}
+	
 	@Override
 	public String getEngineName() {
 		return "Json Scripting Engine";
@@ -55,7 +63,7 @@ public class JsonScriptingEngine implements IScriptingEngine {
 
 	@Override
 	public Object eval(@Nonnull final Reader reader) {
-		ConfigurationScript.process(reader);
+		ConfigurationScript.process(this.side, reader);
 		return null;
 	}
 

@@ -36,6 +36,8 @@ import javax.annotation.Nullable;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;
@@ -208,7 +210,8 @@ public class SoundManager {
 		} else {
 			final String soundName = sound.getSoundLocation().toString();
 			try {
-				final float volumeScale = SoundRegistry.getVolumeScale(soundName);
+				final SoundRegistry registry = RegistryManager.get(RegistryType.SOUND);
+				final float volumeScale = registry.getVolumeScale(soundName);
 				result = (float) MathHelper.clamp_double(
 						(double) sound.getVolume() * (double) getSoundCategoryVolume(sound.getCategory()) * volumeScale,
 						0.0D, 1.0D);

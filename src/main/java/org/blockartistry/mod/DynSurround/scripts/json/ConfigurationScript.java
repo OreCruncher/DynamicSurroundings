@@ -33,19 +33,21 @@ import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.data.xface.BiomeConfig;
-import org.blockartistry.mod.DynSurround.data.xface.Biomes;
 import org.blockartistry.mod.DynSurround.data.xface.BlockConfig;
-import org.blockartistry.mod.DynSurround.data.xface.Blocks;
 import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
-import org.blockartistry.mod.DynSurround.data.xface.Dimensions;
-import org.blockartistry.mod.DynSurround.data.xface.Footsteps;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
+import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
+import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
+import org.blockartistry.mod.DynSurround.registry.FootstepsRegistry;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.JsonUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
+
+import net.minecraftforge.fml.relauncher.Side;
 
 public final class ConfigurationScript {
 
@@ -75,38 +77,44 @@ public final class ConfigurationScript {
 	@SerializedName("forgeMappings")
 	public List<ForgeEntry> forgeMappings = ImmutableList.of();
 
-	public static void process(@Nonnull final Reader reader) {
+	public static void process(@Nonnull Side side, @Nonnull final Reader reader) {
 
 		try {
+			
 			final ConfigurationScript script = JsonUtils.load(reader, ConfigurationScript.class);
+			final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 
 			for (final DimensionConfig dimension : script.dimensions)
-				Dimensions.register(dimension);
-
-			// We don't want to process these items if the mod is running
-			// on the server - they apply only to client side.
-			if (Module.proxy().isRunningAsServer())
-				return;
+				dimensions.register(dimension);
 
 			// Do this first - config may want to alias biomes and that
 			// needs to happen before processing actual biomes
+			final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
 			for (final Entry<String, String> entry : script.biomeAlias.entrySet())
-				BiomeRegistry.registerBiomeAlias(entry.getKey(), entry.getValue());
+				biomes.registerBiomeAlias(entry.getKey(), entry.getValue());
 
 			for (final BiomeConfig biome : script.biomes)
-				Biomes.register(biome);
+				biomes.register(biome);
 
+			// We don't want to process these items if the mod is running
+			// on the server - they apply only to client side.
+			if(side == Side.SERVER)
+				return;
+
+			final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
 			for (final BlockConfig block : script.blocks)
-				Blocks.register(block);
+				blocks.register(block);
 
+			final FootstepsRegistry footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
 			for (final Entry<String, String> entry : script.footsteps.entrySet()) {
-				Footsteps.registerFootsteps(entry.getValue(), entry.getKey());
+				footsteps.registerBlocks(entry.getValue(), entry.getKey());
 			}
 
 			for (final ForgeEntry entry : script.forgeMappings) {
 				for (final String name : entry.dictionaryEntries)
-					Footsteps.registerForgeEntries(entry.acousticProfile, name);
+					footsteps.registerForgeEntries(entry.acousticProfile, name);
 			}
+			
 		} catch (final Throwable t) {
 			ModLog.error("Unable to process configuration script", t);
 		}

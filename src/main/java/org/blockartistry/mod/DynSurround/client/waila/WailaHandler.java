@@ -34,8 +34,10 @@ import java.util.List;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.footsteps.Footsteps;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.BlockMap;
+import org.blockartistry.mod.DynSurround.registry.FootstepsRegistry;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import net.minecraft.block.Block;
@@ -101,12 +103,13 @@ public final class WailaHandler implements IWailaDataProvider {
 			}
 
 			text.add("Material: " + MCHelper.getMaterialName(accessor.getBlockState().getMaterial()));
-			final BlockMap bm = Footsteps.INSTANCE.getBlockMap();
+			final FootstepsRegistry footsteps  = RegistryManager.get(RegistryType.FOOTSTEPS);
+			final BlockMap bm = footsteps.getBlockMap();
 			if (bm != null) {
 				final List<String> data = new ArrayList<String>();
 				bm.collectData(accessor.getBlockState(), data);
 				if(data.size() > 0) {
-					text.add(TextFormatting.YELLOW + "Footsteps");
+					text.add(TextFormatting.YELLOW + "FootstepsRegistry");
 					for (final String s : data)
 						text.add(TextFormatting.YELLOW + s);
 				}

@@ -32,20 +32,15 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.footsteps.Footsteps;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.mod.DynSurround.client.handlers.EffectManager;
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer;
-import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
-import org.blockartistry.mod.DynSurround.registry.DataScripts;
-import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -58,13 +53,6 @@ public class ProxyClient extends Proxy {
 	@Override
 	protected void registerLanguage() {
 		Localization.initialize(Side.CLIENT);
-	}
-
-	@Override
-	public void reloadResources() {
-		final Minecraft minecraft = Minecraft.getMinecraft();
-		final IReloadableResourceManager reloadableResourceManager = (IReloadableResourceManager) minecraft.getResourceManager();
-		DataScripts.initialize(reloadableResourceManager);
 	}
 
 	@Override
@@ -83,11 +71,9 @@ public class ProxyClient extends Proxy {
 	@Override
 	public void init(final FMLInitializationEvent event) {
 		super.init(event);
-		BlockRegistry.initialize();
-		Footsteps.initialize();
+
 		EffectManager.initialize();
 		GuiHUDHandler.initialize();
-		SoundRegistry.initialize();
 		SpeechBubbleRenderer.initialize();
 
 		ParticleDripOverride.register();

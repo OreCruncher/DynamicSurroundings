@@ -31,29 +31,25 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
-import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 
-public final class DimensionRegistry implements IDependent {
+public final class DimensionRegistry extends Registry {
 
-	private final static DimensionRegistry INSTANCE = new DimensionRegistry();
-
-	private DimensionRegistry() {
-		DataScripts.registerDependent(this);
+	DimensionRegistry() {
 	}
 
 	@Override
-	public void preInit() {
-		cache.clear();
-		dimensionData.clear();
+	public void init() {
+		this.cache.clear();
+		this.dimensionData.clear();
 	}
 
 	@Override
-	public void postInit() {
+	public void initComplete() {
 		if (ModOptions.enableDebugLogging) {
 			ModLog.info("*** DIMENSION REGISTRY (cache) ***");
 			for (final DimensionConfig reg : cache)
@@ -61,33 +57,33 @@ public final class DimensionRegistry implements IDependent {
 		}
 	}
 
-	private static final List<DimensionConfig> cache = new ArrayList<DimensionConfig>();
-	private static final TIntObjectHashMap<DimensionInfo> dimensionData = new TIntObjectHashMap<DimensionInfo>();
-	private static boolean isFlatWorld = false;
-
-	public static void initialize() {
-		INSTANCE.preInit();
+	@Override
+	public void fini() {
+		
 	}
+	
+	private final List<DimensionConfig> cache = new ArrayList<DimensionConfig>();
+	private final TIntObjectHashMap<DimensionInfo> dimensionData = new TIntObjectHashMap<DimensionInfo>();
+	private boolean isFlatWorld = false;
 
-	// TODO: Need to hook into world load to get FLAT?
-	public static void loading(@Nonnull final World world) {
+	public void loading(@Nonnull final World world) {
 		getData(world).initialize(world.provider);
 		if (world.provider.getDimension() == 0) {
-			isFlatWorld = world.getWorldInfo().getTerrainType() == WorldType.FLAT;
+			this.isFlatWorld = world.getWorldInfo().getTerrainType() == WorldType.FLAT;
 		}
 	}
 
 	@Nonnull
-	private static DimensionConfig getData(@Nonnull final DimensionConfig entry) {
-		for (final DimensionConfig e : cache)
+	private DimensionConfig getData(@Nonnull final DimensionConfig entry) {
+		for (final DimensionConfig e : this.cache)
 			if ((e.dimensionId != null && e.dimensionId.equals(entry.dimensionId))
 					|| (e.name != null && e.name.equals(entry.name)))
 				return e;
-		cache.add(entry);
+		this.cache.add(entry);
 		return entry;
 	}
 
-	public static void register(@Nonnull final DimensionConfig entry) {
+	public void register(@Nonnull final DimensionConfig entry) {
 		if (entry.dimensionId != null || entry.name != null) {
 			final DimensionConfig data = getData(entry);
 			if (data == entry)
@@ -112,11 +108,11 @@ public final class DimensionRegistry implements IDependent {
 	}
 
 	@Nonnull
-	public static DimensionInfo getData(@Nonnull final World world) {
-		DimensionInfo data = dimensionData.get(world.provider.getDimension());
+	public DimensionInfo getData(@Nonnull final World world) {
+		DimensionInfo data = this.dimensionData.get(world.provider.getDimension());
 		if (data == null) {
 			DimensionConfig entry = null;
-			for (final DimensionConfig e : cache)
+			for (final DimensionConfig e : this.cache)
 				if ((e.dimensionId != null && e.dimensionId == world.provider.getDimension())
 						|| (e.name != null && e.name.equals(world.provider.getDimensionType()))) {
 					entry = e;
@@ -132,37 +128,37 @@ public final class DimensionRegistry implements IDependent {
 		return data;
 	}
 
-	public static boolean hasHaze(@Nonnull final World world) {
+	public boolean hasHaze(@Nonnull final World world) {
 		return getData(world).getHasHaze();
 	}
 
-	public static int getSeaLevel(@Nonnull final World world) {
-		if (world.provider.getDimension() == 0 && isFlatWorld)
+	public int getSeaLevel(@Nonnull final World world) {
+		if (world.provider.getDimension() == 0 && this.isFlatWorld)
 			return 0;
 		return getData(world).getSeaLevel();
 	}
 
-	public static int getSkyHeight(@Nonnull final World world) {
+	public int getSkyHeight(@Nonnull final World world) {
 		return getData(world).getSkyHeight();
 	}
 
-	public static int getCloudHeight(@Nonnull final World world) {
+	public int getCloudHeight(@Nonnull final World world) {
 		return getData(world).getCloudHeight();
 	}
 
-	public static int getSpaceHeight(@Nonnull final World world) {
+	public int getSpaceHeight(@Nonnull final World world) {
 		return getData(world).getSpaceHeight();
 	}
 
-	public static boolean hasAuroras(@Nonnull final World world) {
+	public boolean hasAuroras(@Nonnull final World world) {
 		return getData(world).getHasAuroras();
 	}
 
-	public static boolean hasWeather(@Nonnull final World world) {
+	public boolean hasWeather(@Nonnull final World world) {
 		return getData(world).getHasWeather();
 	}
 
-	public static String getSeason(@Nonnull final World world) {
+	public String getSeason(@Nonnull final World world) {
 		return getData(world).getSeason();
 	}
 
@@ -172,7 +168,7 @@ public final class DimensionRegistry implements IDependent {
 	private static final char CONDITION_SEPARATOR = '#';
 
 	@Nonnull
-	public static String getConditions(@Nonnull final World world) {
+	public String getConditions(@Nonnull final World world) {
 		final StringBuilder builder = new StringBuilder();
 		builder.append(CONDITION_SEPARATOR);
 		if (DiurnalUtils.isDaytime(world))

@@ -26,6 +26,8 @@ package org.blockartistry.mod.DynSurround;
 
 import java.io.File;
 
+import javax.annotation.Nonnull;
+
 import org.apache.logging.log4j.LogManager;
 import org.blockartistry.mod.DynSurround.proxy.Proxy;
 import net.minecraftforge.common.MinecraftForge;
@@ -37,7 +39,10 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
 @net.minecraftforge.fml.common.Mod(modid = Module.MOD_ID, useMetadata = true, dependencies = Module.DEPENDENCIES, version = Module.VERSION, guiFactory = Module.GUI_FACTORY)
 public class Module {
@@ -51,6 +56,7 @@ public class Module {
 	@Instance(MOD_ID)
 	protected static Module instance;
 
+	@Nonnull
 	public static Module instance() {
 		return instance;
 	}
@@ -58,18 +64,21 @@ public class Module {
 	@SidedProxy(clientSide = "org.blockartistry.mod.DynSurround.proxy.ProxyClient", serverSide = "org.blockartistry.mod.DynSurround.proxy.Proxy")
 	protected static Proxy proxy;
 
+	@Nonnull
 	public static Proxy proxy() {
 		return proxy;
 	}
 
 	protected static Configuration config;
 
+	@Nonnull
 	public static Configuration config() {
 		return config;
 	}
 
 	protected static File dataDirectory;
 
+	@Nonnull
 	public static File dataDirectory() {
 		return dataDirectory;
 	}
@@ -79,7 +88,7 @@ public class Module {
 	}
 
 	@EventHandler
-	public void preInit(final FMLPreInitializationEvent event) {
+	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 
 		MinecraftForge.EVENT_BUS.register(this);
 
@@ -98,23 +107,43 @@ public class Module {
 	}
 
 	@EventHandler
-	public void init(final FMLInitializationEvent event) {
+	public void init(@Nonnull final FMLInitializationEvent event) {
 		proxy.init(event);
 	}
 
 	@EventHandler
-	public void postInit(final FMLPostInitializationEvent event) {
+	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
 		proxy.postInit(event);
 		config.save();
 	}
 
 	@EventHandler
-	public void loadCompleted(final FMLLoadCompleteEvent event) {
+	public void loadCompleted(@Nonnull final FMLLoadCompleteEvent event) {
 		proxy.loadCompleted(event);
 	}
 
+	////////////////////////
+	//
+	// Server state events
+	//
+	////////////////////////
 	@EventHandler
-	public void serverStarting(final FMLServerStartingEvent event) {
+	public void serverAboutToStart(@Nonnull final FMLServerAboutToStartEvent event) {
+		proxy.serverAboutToStart(event);
+	}
+	
+	@EventHandler
+	public void serverStarting(@Nonnull final FMLServerStartingEvent event) {
 		proxy.serverStarting(event);
+	}
+	
+	@EventHandler
+	public void serverStopping(@Nonnull final FMLServerStoppingEvent event) {
+		proxy.serverStopping(event);
+	}
+	
+	@EventHandler
+	public void serverStopped(@Nonnull final FMLServerStoppedEvent event) {
+		proxy.serverStopped(event);
 	}
 }

@@ -45,7 +45,7 @@ import org.blockartistry.mod.DynSurround.data.xface.BlockConfig;
 import org.blockartistry.mod.DynSurround.data.xface.EffectConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundType;
-import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import net.minecraft.block.Block;
@@ -53,24 +53,21 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.oredict.OreDictionary;
 
-public final class BlockRegistry implements IDependent {
+public final class BlockRegistry extends Registry {
 
-	private final static BlockRegistry INSTANCE = new BlockRegistry();
-
-	private BlockRegistry() {
-		DataScripts.registerDependent(this);
+	BlockRegistry() {
 	}
 
 	@Override
-	public void preInit() {
+	public void init() {
 		registry.clear();
 	}
 
 	@Override
-	public void postInit() {
+	public void initComplete() {
 		if (ModOptions.enableDebugLogging) {
 			ModLog.info("*** BLOCK REGISTRY ***");
-			for (final BlockProfile entry : registry.values())
+			for (final BlockProfile entry : this.registry.values())
 				ModLog.info(entry.toString());
 
 			ModLog.info("**** FORGE ORE DICTIONARY NAMES ****");
@@ -84,20 +81,21 @@ public final class BlockRegistry implements IDependent {
 		}
 	}
 
-	private static final Map<Block, BlockProfile> registry = new IdentityHashMap<Block, BlockProfile>();
-
-	public static void initialize() {
-		INSTANCE.preInit();
+	@Override
+	public void fini() {
+		
 	}
 
+	private final Map<Block, BlockProfile> registry = new IdentityHashMap<Block, BlockProfile>();
+
 	@Nullable
-	public static List<BlockEffect> getEffects(@Nonnull final IBlockState state) {
-		final BlockProfile entry = registry.get(state.getBlock());
+	public List<BlockEffect> getEffects(@Nonnull final IBlockState state) {
+		final BlockProfile entry = this.registry.get(state.getBlock());
 		return entry != null ? entry.getEffects(state) : null;
 	}
 
 	@Nonnull
-	private static SoundEffect getRandomSound(@Nonnull final List<SoundEffect> list, @Nonnull final Random random,
+	private SoundEffect getRandomSound(@Nonnull final List<SoundEffect> list, @Nonnull final Random random,
 			@Nonnull final String conditions) {
 		int totalWeight = 0;
 		final List<SoundEffect> candidates = new ArrayList<SoundEffect>();
@@ -121,9 +119,9 @@ public final class BlockRegistry implements IDependent {
 	}
 
 	@Nullable
-	public static SoundEffect getSound(@Nonnull final IBlockState state, @Nonnull final Random random,
+	public SoundEffect getSound(@Nonnull final IBlockState state, @Nonnull final Random random,
 			@Nonnull final String conditions) {
-		final BlockProfile entry = registry.get(state.getBlock());
+		final BlockProfile entry = this.registry.get(state.getBlock());
 		if (entry == null)
 			return null;
 
@@ -138,9 +136,9 @@ public final class BlockRegistry implements IDependent {
 	}
 
 	@Nullable
-	public static SoundEffect getStepSound(@Nonnull final IBlockState state, @Nonnull final Random random,
+	public SoundEffect getStepSound(@Nonnull final IBlockState state, @Nonnull final Random random,
 			@Nonnull final String conditions) {
-		final BlockProfile entry = registry.get(state.getBlock());
+		final BlockProfile entry = this.registry.get(state.getBlock());
 		if (entry == null)
 			return null;
 
@@ -154,9 +152,11 @@ public final class BlockRegistry implements IDependent {
 		return getRandomSound(sounds, random, conditions);
 	}
 
-	public static void register(@Nonnull final BlockConfig entry) {
+	public void register(@Nonnull final BlockConfig entry) {
 		if (entry.blocks.isEmpty())
 			return;
+
+		final SoundRegistry soundRegistry = RegistryManager.getManager().getRegistry(RegistryType.SOUND);
 
 		for (final String blockName : entry.blocks) {
 			final BlockInfo blockInfo = BlockInfo.create(blockName);
@@ -171,7 +171,7 @@ public final class BlockRegistry implements IDependent {
 				continue;
 			}
 
-			BlockProfile blockData = registry.get(block);
+			BlockProfile blockData = this.registry.get(block);
 			if (blockData == null) {
 				blockData = BlockProfile.createProfile(blockInfo);
 				registry.put(block, blockData);
@@ -191,7 +191,7 @@ public final class BlockRegistry implements IDependent {
 				blockData.setStepChance(blockInfo, entry.stepChance.intValue());
 
 			for (final SoundConfig sr : entry.sounds) {
-				if (sr.sound != null && !SoundRegistry.isSoundBlocked(sr.sound)) {
+				if (sr.sound != null && !soundRegistry.isSoundBlocked(sr.sound)) {
 					final SoundEffect eff = new SoundEffect(sr);
 					if (eff.type == SoundType.STEP)
 						blockData.addStepSound(blockInfo, eff);

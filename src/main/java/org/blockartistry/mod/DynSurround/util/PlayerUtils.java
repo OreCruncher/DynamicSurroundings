@@ -30,6 +30,8 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -52,10 +54,13 @@ public final class PlayerUtils {
 	@Nonnull
 	public static BiomeInfo getPlayerBiome(@Nonnull final EntityPlayer player, final boolean getTrue) {
 
+		final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
+		final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
+		
 		final int theX = MathStuff.floor_double(player.posX);
 		final int theY = MathStuff.floor_double(player.posY);
 		final int theZ = MathStuff.floor_double(player.posZ);
-		BiomeInfo biome = BiomeRegistry.get(player.worldObj.getBiome(new BlockPos(theX, 0, theZ)));
+		BiomeInfo biome = biomes.get(player.worldObj.getBiome(new BlockPos(theX, 0, theZ)));
 
 		if (!getTrue) {
 			if (isUnderWater(player)) {
@@ -69,9 +74,9 @@ public final class PlayerUtils {
 					biome = BiomeRegistry.UNDERWATER;
 			} else if (isUnderGround(player, INSIDE_Y_ADJUST))
 				biome = BiomeRegistry.UNDERGROUND;
-			else if (theY >= DimensionRegistry.getSpaceHeight(player.worldObj))
+			else if (theY >= dimensions.getSpaceHeight(player.worldObj))
 				biome = BiomeRegistry.OUTERSPACE;
-			else if (theY >= DimensionRegistry.getCloudHeight(player.worldObj))
+			else if (theY >= dimensions.getCloudHeight(player.worldObj))
 				biome = BiomeRegistry.CLOUDS;
 		}
 		return biome;
@@ -91,7 +96,8 @@ public final class PlayerUtils {
 	}
 
 	public static boolean isUnderGround(@Nonnull final EntityPlayer player, final int offset) {
-		return MathStuff.floor_double(player.posY + offset) < DimensionRegistry.getSeaLevel(player.worldObj);
+		final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
+		return MathStuff.floor_double(player.posY + offset) < dimensions.getSeaLevel(player.worldObj);
 	}
 
 	@SideOnly(Side.CLIENT)

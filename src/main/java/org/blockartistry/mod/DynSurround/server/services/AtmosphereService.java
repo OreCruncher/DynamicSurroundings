@@ -25,7 +25,6 @@
 package org.blockartistry.mod.DynSurround.server.services;
 
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -35,13 +34,17 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
 import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 
-public final class AtmosphereService {
+public final class AtmosphereService extends Service {
 
 	private static final float RESET = -10.0F;
-
-	public static void initialize() {
-		MinecraftForge.EVENT_BUS.register(new AtmosphereService());
+	
+	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
+	
+	AtmosphereService() {
+		super("AtmosphereService");
 	}
 
 	@SubscribeEvent
@@ -52,7 +55,7 @@ public final class AtmosphereService {
 
 		final World world = event.world;
 		final int dimensionId = world.provider.getDimension();
-		final float sendIntensity = DimensionRegistry.hasWeather(world) ? DimensionEffectData.get(world).getRainIntensity()
+		final float sendIntensity = dimensions.hasWeather(world) ? DimensionEffectData.get(world).getRainIntensity()
 				: RESET;
 
 		// Set the RAIN intensity for all players in the current

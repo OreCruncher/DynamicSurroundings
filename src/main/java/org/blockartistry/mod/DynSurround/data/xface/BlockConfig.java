@@ -109,8 +109,4 @@ public class BlockConfig {
 			this.effects.add(effect);
 		return this;
 	}
-
-	public void register() {
-		Blocks.register(this);
-	}
 }

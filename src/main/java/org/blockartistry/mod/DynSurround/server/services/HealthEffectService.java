@@ -26,7 +26,6 @@ package org.blockartistry.mod.DynSurround.server.services;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.network.Network;
 
 import net.minecraft.entity.Entity;
@@ -36,23 +35,18 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public final class HealthEffectService {
+public final class HealthEffectService extends Service {
 
 	public static final double RANGE = 32;
 
 	protected HealthEffectService() {
-	}
-
-	public static void initialize() {
-		if (ModOptions.enableDamagePopoffs)
-			MinecraftForge.EVENT_BUS.register(new HealthEffectService());
+		super("HealthEffectService");
 	}
 
 	// From the Minecraft code for damage

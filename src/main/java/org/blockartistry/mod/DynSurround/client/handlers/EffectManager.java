@@ -47,9 +47,7 @@ public class EffectManager {
 
 	public static void register(final EffectHandlerBase handler) {
 		effectHandlers.add(handler);
-		if (handler.hasEvents()) {
-			MinecraftForge.EVENT_BUS.register(handler);
-		}
+		MinecraftForge.EVENT_BUS.register(handler);
 	}
 
 	private EffectManager() {
@@ -78,19 +76,19 @@ public class EffectManager {
 
 		if (ModOptions.suppressPotionParticles)
 			register(new PotionParticleScrubHandler());
-		
+
 		if (ModOptions.enableDamagePopoffs)
 			register(new PopoffEffectHandler());
 
-		if(ModOptions.enableSpeechBubbles)
+		if (ModOptions.enableSpeechBubbles)
 			register(new SpeechBubbleHandler());
-		
+
 		ModLog.info("Registered client handlers:");
-		for(final EffectHandlerBase h: effectHandlers) {
+		for (final EffectHandlerBase h : effectHandlers) {
 			ModLog.info("* %s", h.getHandlerName());
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void clientTick(final TickEvent.ClientTickEvent event) {
 		if (Minecraft.getMinecraft().isGamePaused())
@@ -106,4 +104,5 @@ public class EffectManager {
 				handler.process(world, player);
 		}
 	}
+
 }

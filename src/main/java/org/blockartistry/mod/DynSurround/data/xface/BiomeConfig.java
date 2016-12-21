@@ -131,7 +131,4 @@ public final class BiomeConfig {
 		return this;
 	}
 	
-	public void register() {
-		Biomes.register(this);
-	}
 }

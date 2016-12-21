@@ -31,6 +31,8 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -48,7 +50,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.NoiseGeneratorSimplex;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -57,6 +58,8 @@ public class StormSplashRenderer {
 
 	private static final TIntObjectHashMap<StormSplashRenderer> splashRenderers = new TIntObjectHashMap<StormSplashRenderer>();
 	private static final StormSplashRenderer DEFAULT = new StormSplashRenderer();
+	protected static final int PARTICLE_SOUND_CHANCE = 20;
+	protected static final XorShiftRandom RANDOM = new XorShiftRandom();
 
 	static {
 		splashRenderers.put(0, DEFAULT);
@@ -71,13 +74,12 @@ public class StormSplashRenderer {
 		splash.addRainParticles(renderer);
 	}
 
+	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
+	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
+	
 	protected StormSplashRenderer() {
 
 	}
-
-	protected static final int PARTICLE_SOUND_CHANCE = 20;
-	protected static final XorShiftRandom RANDOM = new XorShiftRandom();
-	protected static final NoiseGeneratorSimplex GENERATOR = new NoiseGeneratorSimplex(RANDOM);
 
 	protected static float calculateRainSoundVolume(final World world) {
 		return StormProperties.getCurrentVolume();
@@ -141,7 +143,7 @@ public class StormSplashRenderer {
 		if (theThis.mc.gameSettings.particleSetting == 2)
 			return;
 
-		if (!DimensionRegistry.hasWeather(EnvironState.getWorld()))
+		if (!this.dimensions.hasWeather(EnvironState.getWorld()))
 			return;
 
 		float rainStrengthFactor = theThis.mc.theWorld.getRainStrength(1.0F);
@@ -176,7 +178,7 @@ public class StormSplashRenderer {
 			final int locZ = playerZ + RANDOM.nextInt(RANGE) - RANDOM.nextInt(RANGE);
 			posXZ.setPos(locX, 0, locZ);
 			final BlockPos precipHeight = getPrecipitationHeight(worldclient, RANGE / 2, posXZ);
-			final BiomeInfo biome = BiomeRegistry.get(worldclient.getBiome(posXZ));
+			final BiomeInfo biome = this.biomes.get(worldclient.getBiome(posXZ));
 			final boolean hasDust = biome.getHasDust();
 
 			if (precipHeight.getY() <= playerY + RANGE && precipHeight.getY() >= playerY - RANGE

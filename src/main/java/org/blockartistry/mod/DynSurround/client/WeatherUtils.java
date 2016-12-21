@@ -27,6 +27,8 @@ package org.blockartistry.mod.DynSurround.client;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
@@ -36,6 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class WeatherUtils {
 
 	public static boolean biomeHasDust(final Biome biome) {
-		return ModOptions.allowDesertFog && BiomeRegistry.get(biome).getHasDust() && !StormProperties.doVanilla();
+		final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
+		return ModOptions.allowDesertFog && biomes.get(biome).getHasDust() && !StormProperties.doVanilla();
 	}
 }

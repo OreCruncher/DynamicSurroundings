@@ -29,21 +29,19 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.network.Network;
 
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class SpeechBubbleService {
+public final class SpeechBubbleService extends Service {
 
 	public static final double SPEECH_BUBBLE_RANGE = ModOptions.speechBubbleRange;
 
-	public static void initialize() {
-		if (ModOptions.enableSpeechBubbles)
-			MinecraftForge.EVENT_BUS.register(new SpeechBubbleService());
+	SpeechBubbleService() {
+		super("SpeechBubbleService");
 	}
-
+	
 	// Received when the server is processing a regular chat
 	// message - not a command, etc.
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)

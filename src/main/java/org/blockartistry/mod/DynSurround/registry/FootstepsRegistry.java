@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps;
+package org.blockartistry.mod.DynSurround.registry;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,8 +43,6 @@ import org.blockartistry.mod.DynSurround.client.footsteps.system.ResourcePacks;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Solver;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.UserConfigSoundPlayerWrapper;
 import org.blockartistry.mod.DynSurround.client.footsteps.util.ConfigProperty;
-import org.blockartistry.mod.DynSurround.registry.DataScripts;
-import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
 import org.blockartistry.mod.DynSurround.util.JsonUtils;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
@@ -55,24 +53,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class Footsteps implements IDependent {
-
-	public static Footsteps INSTANCE = null;
+public class FootstepsRegistry extends Registry {
 
 	// System
 	private ResourcePacks dealer = new ResourcePacks();
 	private final Isolator isolator;
 
-	public Footsteps() {
+	public FootstepsRegistry() {
 		this.isolator = new Isolator();
-		DataScripts.registerDependent(this);
 	}
 
-	public static void initialize() {
-		INSTANCE = new Footsteps();
-	}
-
-	public void preInit() {
+	@Override
+	public void init() {
 
 		// It's a hack - needs refactor
 		AcousticsManager.SWIM = null;
@@ -89,6 +81,16 @@ public class Footsteps implements IDependent {
 		 * this.isolator.setGenerator(getConfig().getInteger("custom.stance") ==
 		 * 0 ? new Generator(this.isolator) : new GeneratorQP(this.isolator));
 		 */
+	}
+	
+	@Override
+	public void initComplete() {
+		// TODO: Implement dumpstate
+	}
+	
+	@Override
+	public void fini() {
+		
 	}
 
 	private void reloadManifests(@Nonnull final List<IResourcePack> repo) {
@@ -174,8 +176,6 @@ public class Footsteps implements IDependent {
 	}
 
 	public void process(@Nonnull World world, @Nonnull EntityPlayer player) {
-		if (this.isolator == null)
-			preInit();
 		this.isolator.onFrame();
 		player.nextStepDistance = Integer.MAX_VALUE;
 	}
@@ -185,12 +185,7 @@ public class Footsteps implements IDependent {
 		return this.isolator.getBlockMap();
 	}
 
-	@Override
-	public void postInit() {
-		// TODO Implement dumpState()
-	}
-
-	public static void registerForgeEntries(@Nonnull final String blockClass, @Nonnull final String... entries) {
+	public void registerForgeEntries(@Nonnull final String blockClass, @Nonnull final String... entries) {
 		for (final String dictionaryName : entries) {
 			final List<ItemStack> stacks = OreDictionary.getOres(dictionaryName, false);
 			for (final ItemStack stack : stacks) {
@@ -199,14 +194,14 @@ public class Footsteps implements IDependent {
 					String blockName = MCHelper.nameOf(block);
 					if (stack.getHasSubtypes() && stack.getItemDamage() != OreDictionary.WILDCARD_VALUE)
 						blockName += "^" + stack.getItemDamage();
-					INSTANCE.getBlockMap().register(blockName, blockClass);
+					getBlockMap().register(blockName, blockClass);
 				}
 			}
 		}
 	}
 
-	public static void registerBlocks(@Nonnull final String blockClass, @Nonnull final String... blocks) {
+	public void registerBlocks(@Nonnull final String blockClass, @Nonnull final String... blocks) {
 		for (final String s : blocks)
-			INSTANCE.getBlockMap().register(s, blockClass);
+			getBlockMap().register(s, blockClass);
 	}
 }

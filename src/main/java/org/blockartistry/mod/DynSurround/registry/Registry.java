@@ -22,24 +22,23 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.data.xface;
+package org.blockartistry.mod.DynSurround.registry;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+public abstract class Registry {
 
-import org.blockartistry.mod.DynSurround.ModLog;
-
-public final class Log {
-
-	protected Log() {
+	Registry() {
+		
 	}
-
-	public static void info(@Nonnull final String format, @Nullable final Object... parms) {
-		ModLog.info(format, parms);
+	
+	public void init() {
+		
 	}
-
-	public static void warn(@Nonnull final String format, @Nullable final Object... parms) {
-		ModLog.warn(format, parms);
+	
+	public void initComplete() {
+		
 	}
-
+	
+	public void fini() {
+		
+	}
 }

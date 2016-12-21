@@ -28,9 +28,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -43,30 +40,9 @@ import org.blockartistry.mod.DynSurround.scripts.JsonScriptingEngine;
 
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.relauncher.Side;
 
 public final class DataScripts {
-
-	public static interface IDependent {
-		void preInit();
-
-		void postInit();
-	}
-
-	private static final List<IDependent> dependents = new ArrayList<IDependent>();
-
-	public static void registerDependent(@Nonnull final IDependent dep) {
-		dependents.add(dep);
-	}
-
-	private static void issuePreInit() {
-		for (final IDependent dep : dependents)
-			dep.preInit();
-	}
-
-	private static void issuePostInit() {
-		for (final IDependent dep : dependents)
-			dep.postInit();
-	}
 
 	// Module.dataDirectory()
 	private File dataDirectory;
@@ -74,19 +50,25 @@ public final class DataScripts {
 	// "/assets/dsurround/data/"
 	private String assetDirectory;
 	private IScriptingEngine exe;
+	private Side side;
 
-	public DataScripts(@Nonnull final File file, @Nonnull final String assetDirectory) {
+	public DataScripts(final Side side) {
+		this(side, Module.dataDirectory(), "/assets/dsurround/data/");
+	}
+
+	public DataScripts(@Nonnull Side side, @Nonnull final File file, @Nonnull final String assetDirectory) {
+		this.side = side;
 		this.dataDirectory = file;
 		this.assetDirectory = assetDirectory;
 	}
 
-	public static void initialize(@Nullable final Object resources) {
-		issuePreInit();
-		final DataScripts scripts = new DataScripts(Module.dataDirectory(), "/assets/dsurround/data/");
-		scripts.init();
+	public boolean execute(@Nullable final Object resources) {
+
+		if (!this.init())
+			return false;
 
 		for (final ModContainer mod : Loader.instance().getActiveModList()) {
-			scripts.runFromArchive(mod.getModId());
+			runFromArchive(mod.getModId());
 		}
 
 		// TODO: Handle client vs. server load RE: resource pack support
@@ -98,24 +80,25 @@ public final class DataScripts {
 		// Load scripts specified in the configuration
 		final String[] configFiles = ModOptions.externalScriptFiles;
 		for (final String file : configFiles) {
-			scripts.runFromDirectory(file);
+			runFromDirectory(file);
 		}
 
-		issuePostInit();
+		return true;
 	}
 
 	private boolean init() {
-		this.exe = new JsonScriptingEngine();
+		this.exe = new JsonScriptingEngine(this.side);
 		return this.exe.initialize();
 	}
 
 	private void runFromArchive(@Nonnull final String dataFile) {
-		final String fileName = StringUtils.appendIfMissing(assetDirectory + dataFile.replaceAll("[^a-zA-Z0-9.-]", "_"),
+		final String fileName = StringUtils.appendIfMissing(
+				StringUtils.appendIfMissing(assetDirectory, "/") + dataFile.replaceAll("[^a-zA-Z0-9.-]", "_"),
 				this.exe.preferredExtension()).toLowerCase();
 
 		try (final InputStream stream = DataScripts.class.getResourceAsStream(fileName)) {
 			if (stream != null) {
-				ModLog.info("Executing script for mod [%s]", dataFile);
+				ModLog.info("%s: Executing script for mod [%s]", this.side.toString(), dataFile);
 				this.exe.eval(new InputStreamReader(stream));
 			}
 		} catch (final Throwable t) {
@@ -138,7 +121,7 @@ public final class DataScripts {
 		}
 
 		try (final InputStream stream = new FileInputStream(file)) {
-			ModLog.info("Executing script [%s]", file.toString());
+			ModLog.info("%s: Executing script [%s]", this.side.toString(), file.toString());
 			this.exe.eval(new InputStreamReader(stream));
 		} catch (final Throwable t) {
 			ModLog.error("Unable to run script!", t);

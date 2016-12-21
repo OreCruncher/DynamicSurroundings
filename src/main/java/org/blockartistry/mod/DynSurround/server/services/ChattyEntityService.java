@@ -26,25 +26,18 @@ package org.blockartistry.mod.DynSurround.server.services;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.server.services.chat.EntityAIChat;
 import org.blockartistry.mod.DynSurround.server.services.chat.EntityAIVillagerFleeChat;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public final class ChattyEntityService {
+public final class ChattyEntityService extends Service {
 
-	protected ChattyEntityService() {
-
-	}
-
-	public static void initialize() {
-		if (ModOptions.enableEntityChat)
-			MinecraftForge.EVENT_BUS.register(new ChattyEntityService());
+	ChattyEntityService() {
+		super("ChattyEntityService");
 	}
 
 	protected void addSpecialAI(@Nonnull final EntityLiving entity) {

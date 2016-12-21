@@ -27,8 +27,8 @@ package org.blockartistry.mod.DynSurround.commands;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.server.services.AuroraService;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
@@ -134,7 +134,7 @@ public final class CommandDS extends CommandBase {
 				world.provider.resetRainAndThunder();
 				feedback = new TextComponentString(Localization.format("msg.RainReset"));
 			} else if (COMMAND_OPTION_RELOAD.compareToIgnoreCase(parms[0]) == 0) {
-				Module.proxy().reloadResources();
+				RegistryManager.reloadResources();
 				feedback = new TextComponentString(Localization.format("msg.BiomeReload"));
 			} else if (COMMAND_OPTION_CONFIG.compareToIgnoreCase(parms[0]) == 0) {
 				feedback = new TextComponentString(config(world, data));

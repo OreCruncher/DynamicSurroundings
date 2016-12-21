@@ -131,7 +131,7 @@ public class ResourcePacks {
 		for (final ResourcePackRepository.Entry pack : repo) {
 			ModLog.debug("Resource Pack: %s", pack.getResourcePackName());
 			if (checkCompatible(pack)) {
-				ModLog.debug("Found Footsteps resource pack: %s", pack.getResourcePackName());
+				ModLog.debug("Found FootstepsRegistry resource pack: %s", pack.getResourcePackName());
 				foundEntries.add(pack.getResourcePack());
 			}
 		}

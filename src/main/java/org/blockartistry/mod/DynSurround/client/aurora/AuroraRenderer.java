@@ -39,11 +39,15 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.IAtmosRenderer;
 import org.blockartistry.mod.DynSurround.client.handlers.AuroraEffectHandler;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public final class AuroraRenderer implements IAtmosRenderer {
+	
+	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 
 	@Override
 	public void render(@Nonnull final EntityRenderer renderer, final float partialTick) {
@@ -52,7 +56,7 @@ public final class AuroraRenderer implements IAtmosRenderer {
 		}
 	}
 
-	public static void renderAurora(final float partialTick, @Nonnull final Aurora aurora) {
+	protected void renderAurora(final float partialTick, @Nonnull final Aurora aurora) {
 
 		final float alpha = aurora.getAlphaf();
 		if (alpha <= 0.0F)
@@ -67,7 +71,7 @@ public final class AuroraRenderer implements IAtmosRenderer {
 			tranY = ModOptions.playerFixedHeight;
 		} else {
 			// Adjust to keep aurora at the same altitude
-			tranY = DimensionRegistry.getCloudHeight(mc.theWorld) + 5 - (float) (mc.thePlayer.lastTickPosY
+			tranY = this.dimensions.getCloudHeight(mc.theWorld) + 5 - (float) (mc.thePlayer.lastTickPosY
 					+ (mc.thePlayer.posY - mc.thePlayer.lastTickPosY) * partialTick);
 		}
 

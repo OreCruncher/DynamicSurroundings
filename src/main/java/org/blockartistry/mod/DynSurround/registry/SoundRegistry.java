@@ -32,21 +32,23 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.event.SoundConfigEvent;
-
 import gnu.trove.map.hash.TObjectFloatHashMap;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public final class SoundRegistry {
+public final class SoundRegistry extends Registry {
 
-	private static final List<Pattern> cullSoundNamePatterns = new ArrayList<Pattern>();
-	private static final List<Pattern> blockSoundNamePatterns = new ArrayList<Pattern>();
-	private static final TObjectFloatHashMap<String> volumeControl = new TObjectFloatHashMap<String>();
+	private final List<Pattern> cullSoundNamePatterns = new ArrayList<Pattern>();
+	private final List<Pattern> blockSoundNamePatterns = new ArrayList<Pattern>();
+	private final TObjectFloatHashMap<String> volumeControl = new TObjectFloatHashMap<String>();
 
-	public static void initialize() {
+	SoundRegistry() {
+
+	}
+	
+	@Override
+	public void init() {
 		cullSoundNamePatterns.clear();
 		blockSoundNamePatterns.clear();
 		volumeControl.clear();
@@ -78,30 +80,29 @@ public final class SoundRegistry {
 				}
 			}
 		}
-		
-		MinecraftForge.EVENT_BUS.post(new SoundConfigEvent.Reload());
 	}
 
-	private SoundRegistry() {
+	@Override
+	public void fini() {
 
 	}
 
-	public static boolean isSoundCulled(@Nonnull final String sound) {
-		for (final Pattern pattern : cullSoundNamePatterns)
+	public boolean isSoundCulled(@Nonnull final String sound) {
+		for (final Pattern pattern : this.cullSoundNamePatterns)
 			if (pattern.matcher(sound).matches())
 				return true;
 		return false;
 	}
 
-	public static boolean isSoundBlocked(@Nonnull final String sound) {
-		for (final Pattern pattern : blockSoundNamePatterns)
+	public boolean isSoundBlocked(@Nonnull final String sound) {
+		for (final Pattern pattern : this.blockSoundNamePatterns)
 			if (pattern.matcher(sound).matches())
 				return true;
 		return false;
 	}
 
-	public static float getVolumeScale(@Nonnull final String soundName) {
-		return volumeControl.contains(soundName) ? volumeControl.get(soundName) : 1.0F;
+	public float getVolumeScale(@Nonnull final String soundName) {
+		return this.volumeControl.contains(soundName) ? this.volumeControl.get(soundName) : 1.0F;
 	}
 
 }

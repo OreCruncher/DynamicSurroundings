@@ -37,6 +37,8 @@ import org.blockartistry.mod.DynSurround.data.ColorPair;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
 import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 
@@ -47,20 +49,20 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 
-public final class AuroraService {
+public final class AuroraService extends Service {
 
 	// Minimum distance between auroras, squared
 	private static final long MIN_AURORA_DISTANCE_SQ = 400 * 400;
 
-	public static void initialize() {
-		if (ModOptions.auroraEnable)
-			MinecraftForge.EVENT_BUS.register(new AuroraService());
+	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
+
+	AuroraService() {
+		super("AuroraService");
 	}
 
 	private boolean isAuroraInRange(@Nonnull final EntityPlayerMP player, @Nonnull final Set<AuroraData> data) {
@@ -81,7 +83,7 @@ public final class AuroraService {
 			return;
 
 		final World world = event.world;
-		if (world == null || !DimensionRegistry.hasAuroras(world))
+		if (world == null || !dimensions.hasAuroras(world))
 			return;
 
 		// Daylight hours clear the aurora list

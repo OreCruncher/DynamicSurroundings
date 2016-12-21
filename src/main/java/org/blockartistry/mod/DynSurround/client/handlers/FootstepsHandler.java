@@ -24,18 +24,22 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers;
 
-import org.blockartistry.mod.DynSurround.client.footsteps.Footsteps;
+import org.blockartistry.mod.DynSurround.registry.FootstepsRegistry;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-// Simple shim to forward to the Footsteps engine.  Needed to seperate
+// Simple shim to forward to the FootstepsRegistry engine.  Needed to seperate
 // because of startup issues.
 @SideOnly(Side.CLIENT)
 public class FootstepsHandler extends EffectHandlerBase {
 
+	private FootstepsRegistry footsteps;
+	
 	@Override
 	public String getHandlerName() {
 		return "FootstepsHandler";
@@ -43,11 +47,16 @@ public class FootstepsHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(final World world, final EntityPlayer player) {
-		Footsteps.INSTANCE.process(world, player);
+		this.footsteps.process(world, player);
 	}
-
+	
 	@Override
-	public boolean hasEvents() {
-		return false;
+	public void onConnect() {
+		this.footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
+	}
+	
+	@Override
+	public void onDisconnect() {
+		this.footsteps = null;
 	}
 }

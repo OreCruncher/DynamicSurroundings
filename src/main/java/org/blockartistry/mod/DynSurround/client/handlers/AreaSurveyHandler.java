@@ -26,8 +26,6 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
-import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
-
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -43,8 +41,8 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	private static final int INSIDE_AREA = (INSIDE_SURVEY_RANGE * 2 + 1) * (INSIDE_SURVEY_RANGE * 2 + 1);
 
 	// Used to throttle processing
-	private static final int SURVEY_INTERVAL = 2;
-	private static int intervalTicker = SURVEY_INTERVAL;
+	private final int SURVEY_INTERVAL = 2;
+	private int intervalTicker = SURVEY_INTERVAL;
 	
 	private static int biomeArea;
 	private static final TObjectIntHashMap<BiomeInfo> weights = new TObjectIntHashMap<BiomeInfo>();
@@ -91,7 +89,7 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	/*
 	 * Perform a biome survey around the player at the specified range.
 	 */
-	private static void doSurvey() {
+	private void doSurvey() {
 		biomeArea = 0;
 		weights.clear();
 
@@ -107,7 +105,7 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 				for (int dZ = -BIOME_SURVEY_RANGE; dZ <= BIOME_SURVEY_RANGE; dZ++) {
 					biomeArea++;
 					pos.setPos(x + dX, 0, z + dZ);
-					final BiomeInfo biome = BiomeRegistry.get(EnvironState.getWorld().getBiome(pos));
+					final BiomeInfo biome = getBiomeRegistry().get(EnvironState.getWorld().getBiome(pos));
 					weights.adjustOrPutValue(biome, 1, 1);
 				}
 		}

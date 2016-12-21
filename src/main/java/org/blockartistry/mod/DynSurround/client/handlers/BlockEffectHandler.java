@@ -31,7 +31,6 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import net.minecraft.block.material.Material;
@@ -79,14 +78,14 @@ public class BlockEffectHandler extends EffectHandlerBase {
 			if (state.getMaterial() == Material.AIR)
 				continue;
 
-			final List<BlockEffect> chain = BlockRegistry.getEffects(state);
+			final List<BlockEffect> chain = getBlockRegistry().getEffects(state);
 
 			if (chain != null) {
 				for (final BlockEffect effect : chain)
 					effect.process(state, world, pos, RANDOM);
 			}
 
-			final SoundEffect sound = BlockRegistry.getSound(state, RANDOM, conditions);
+			final SoundEffect sound = getBlockRegistry().getSound(state, RANDOM, conditions);
 			if (sound != null)
 				sound.doEffect(state, world, pos, SoundCategory.BLOCKS, RANDOM);
 		}
@@ -96,15 +95,11 @@ public class BlockEffectHandler extends EffectHandlerBase {
 			final IBlockState state = world.getBlockState(pos);
 			final Material material = state.getMaterial();
 			if (!(material == Material.AIR || material.isLiquid())) {
-				final SoundEffect sound = BlockRegistry.getStepSound(state, RANDOM, conditions);
+				final SoundEffect sound = getBlockRegistry().getStepSound(state, RANDOM, conditions);
 				if (sound != null)
 					sound.doEffect(state, world, pos, SoundCategory.BLOCKS, RANDOM);
 			}
 		}
 	}
 
-	@Override
-	public boolean hasEvents() {
-		return false;
-	}
 }

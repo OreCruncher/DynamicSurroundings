@@ -38,6 +38,8 @@ import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
@@ -206,8 +208,9 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		private static void tick(final World world, final EntityPlayer player) {
+			final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 			EnvironState.player = player;
-			EnvironState.conditions = DimensionRegistry.getConditions(world) + getPlayerConditions(player);
+			EnvironState.conditions = dimensions.getConditions(world) + getPlayerConditions(player);
 			EnvironState.playerBiome = PlayerUtils.getPlayerBiome(player, false);
 			EnvironState.biomeName = EnvironState.playerBiome.getBiomeName();
 			EnvironState.dimensionId = world.provider.getDimension();

@@ -286,8 +286,8 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_SWING_SOUND = "Swing Sound";
 	public static final String CONFIG_ENABLE_CRAFTING_SOUND = "Crafting Sound";
 	public static final String CONFIG_ENABLE_BOW_PULL_SOUND = "Bow Pull Sound";
-	public static final String CONFIG_ENABLE_FOOTSTEPS_SOUND = "Footsteps";
-	public static final String CONFIG_FOOTSTEPS_SOUND_FACTOR = "Footsteps Sound Factor";
+	public static final String CONFIG_ENABLE_FOOTSTEPS_SOUND = "FootstepsRegistry";
+	public static final String CONFIG_FOOTSTEPS_SOUND_FACTOR = "FootstepsRegistry Sound Factor";
 	public static final String CONFIG_SOUND_CULL_THRESHOLD = "Sound Culling Threshold";
 	public static final String CONFIG_CULLED_SOUNDS = "Culled Sounds";
 	public static final String CONFIG_BLOCKED_SOUNDS = "Blocked Sounds";

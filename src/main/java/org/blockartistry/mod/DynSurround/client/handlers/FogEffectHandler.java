@@ -29,7 +29,6 @@ import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
-import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.lwjgl.opengl.GL11;
 
@@ -56,9 +55,9 @@ public class FogEffectHandler extends EffectHandlerBase {
 	// The delta indicates how much per tick the density will shift
 	// toward the target.
 	private static float currentFogLevel = 0.0F;
-	private static float insideFogOffset = 0.0F;
-	private static Color currentFogColor = null;
-
+	private float insideFogOffset = 0.0F;
+	private Color currentFogColor = null;
+	
 	public static float currentFogLevel() {
 		return currentFogLevel;
 	}
@@ -73,9 +72,9 @@ public class FogEffectHandler extends EffectHandlerBase {
 		currentFogColor = null;
 	}
 	
-	private static float calcHazeBand(final World world, final EntityPlayer player) {
+	private float calcHazeBand(final World world, final EntityPlayer player) {
 		final float distance = MathHelper
-				.abs(DimensionRegistry.getCloudHeight(world) - (float) (player.posY + player.getEyeHeight()));
+				.abs(getDimensionRegistry().getCloudHeight(world) - (float) (player.posY + player.getEyeHeight()));
 		final float hazeBandRange = HAZE_THRESHOLD * (1.0F + world.getRainStrength(1.0F) * 2);
 		if (distance < hazeBandRange)
 			return (hazeBandRange - distance) / 50.0F / hazeBandRange * ModOptions.elevationHazeFactor;
@@ -83,10 +82,10 @@ public class FogEffectHandler extends EffectHandlerBase {
 		return 0.0F;
 	}
 
-	private static float calcHazeGradient(final World world, final EntityPlayer player) {
+	private float calcHazeGradient(final World world, final EntityPlayer player) {
 		final float factor = 1.0F + world.getRainStrength(1.0F);
-		final float skyHeight = DimensionRegistry.getSkyHeight(world) / factor;
-		final float groundLevel = DimensionRegistry.getSeaLevel(world);
+		final float skyHeight = getDimensionRegistry().getSkyHeight(world) / factor;
+		final float groundLevel = getDimensionRegistry().getSeaLevel(world);
 		final float ratio = (MathHelper.floor_double(player.posY + player.getEyeHeight()) - groundLevel)
 				/ (skyHeight - groundLevel);
 		return ratio * ratio * ratio * ratio * ModOptions.elevationHazeFactor;
@@ -133,7 +132,7 @@ public class FogEffectHandler extends EffectHandlerBase {
 		biomeFog *= ModOptions.biomeFogFactor;
 		dustFog *= ModOptions.desertFogFactor;
 
-		if (ModOptions.enableElevationHaze && DimensionRegistry.hasHaze(world)) {
+		if (ModOptions.enableElevationHaze && getDimensionRegistry().hasHaze(world)) {
 			heightFog = ModOptions.elevationHazeAsBand ? calcHazeBand(world, player) : calcHazeGradient(world, player);
 		}
 

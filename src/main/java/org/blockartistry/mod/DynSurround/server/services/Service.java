@@ -1,4 +1,5 @@
-/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/*
+ * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -21,29 +22,37 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.data.xface;
+package org.blockartistry.mod.DynSurround.server.services;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.Module;
-import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
-
-public final class Blocks {
-
-	protected Blocks() {
+public abstract class Service {
+	
+	protected final String serviceName;
+	
+	protected Service(@Nonnull final String serviceName) {
+		this.serviceName = serviceName;
+	}
+	
+	public String getServiceName() {
+		return this.serviceName;
+	}
+	
+	/*
+	 * Called by the service manager when services are starting up.
+	 * It's an appropriate time to initialize state before execution
+	 * starts.
+	 */
+	public void init() {
 		
 	}
 	
-	public static void register(@Nonnull final BlockConfig block) {
-		if(Module.proxy().isRunningAsServer())
-			return;
-
-		if(block == null) {
-			ModLog.warn("The parameter 'block' cannot be null.");
-			return;
-		}
+	/*
+	 * Called by the service manager when services are shutting down.
+	 * It's an appropriate time to cleanup state before being
+	 * released.
+	 */
+	public void fini() {
 		
-		BlockRegistry.register(block);
 	}
 }

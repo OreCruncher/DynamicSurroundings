@@ -31,7 +31,9 @@ import java.util.Map.Entry;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.ConfigProcessor;
 
 import net.minecraft.client.Minecraft;
@@ -59,7 +61,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 
 	private final ConfigElement soundVolumeElement;
 	private final ConfigCategory soundVolumeCategory;
-
+	
 	public DynSurroundConfigGui(final GuiScreen parentScreen) {
 		super(parentScreen, new ArrayList<IConfigElement>(), Module.MOD_ID, false, false, Module.MOD_NAME);
 		this.titleLine2 = this.config.getConfigFile().getAbsolutePath();
@@ -134,7 +136,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 			saveSoundVolumeList();
 			this.config.save();
 			ConfigProcessor.process(this.config, ModOptions.class);
-			SoundRegistry.initialize();
+			RegistryManager.reloadResources();
 		}
 	}
 
@@ -171,12 +173,13 @@ public class DynSurroundConfigGui extends GuiConfig {
 			sounds.add(resource.toString());
 		Collections.sort(sounds);
 
+		final SoundRegistry registry = RegistryManager.get(RegistryType.SOUND);
 		for (final String sound : sounds) {
 			final Property prop = new Property(sound, "false", Property.Type.BOOLEAN);
 			prop.setDefaultValue(false);
 			prop.setRequiresMcRestart(false);
 			prop.setRequiresWorldRestart(false);
-			prop.set(SoundRegistry.isSoundBlocked(sound));
+			prop.set(registry.isSoundBlocked(sound));
 			cat.put(sound, prop);
 		}
 	}
@@ -191,6 +194,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 			sounds.add(resource.toString());
 		Collections.sort(sounds);
 
+		final SoundRegistry registry = RegistryManager.get(RegistryType.SOUND);
 		for (final String sound : sounds) {
 			final Property prop = new Property(sound, "100", Property.Type.INTEGER);
 			prop.setMinValue(0);
@@ -198,7 +202,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 			prop.setDefaultValue(100);
 			prop.setRequiresMcRestart(false);
 			prop.setRequiresWorldRestart(false);
-			prop.set(MathHelper.floor_float(SoundRegistry.getVolumeScale(sound) * 100));
+			prop.set(MathHelper.floor_float(registry.getVolumeScale(sound) * 100));
 			prop.setConfigEntryClass(NumberSliderEntry.class);
 			cat.put(sound, prop);
 		}

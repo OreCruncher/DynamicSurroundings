@@ -44,7 +44,7 @@ public class Generator {
 	// Construct
 	final protected Isolator mod;
 
-	// Footsteps
+	// FootstepsRegistry
 	protected float dmwBase;
 	protected float dwmYChange;
 	protected double yPosition;

@@ -43,9 +43,4 @@ public class PotionParticleScrubHandler extends EffectHandlerBase {
 		player.getDataManager().set(EntityLivingBase.HIDE_PARTICLES, true);
 	}
 
-	@Override
-	public boolean hasEvents() {
-		return false;
-	}
-
 }

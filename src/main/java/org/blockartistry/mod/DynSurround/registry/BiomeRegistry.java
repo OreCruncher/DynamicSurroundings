@@ -40,7 +40,7 @@ import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundType;
-import org.blockartistry.mod.DynSurround.registry.DataScripts.IDependent;
+import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.MyUtils;
 
@@ -48,16 +48,13 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
 
-public final class BiomeRegistry implements IDependent {
+public final class BiomeRegistry extends Registry {
 
-	private final static BiomeRegistry INSTANCE = new BiomeRegistry();
-
-	private BiomeRegistry() {
-		DataScripts.registerDependent(this);
+	BiomeRegistry() {
 	}
-
+	
 	@Override
-	public void preInit() {
+	public void init() {
 		biomeAliases.clear();
 		registry.clear();
 
@@ -86,7 +83,7 @@ public final class BiomeRegistry implements IDependent {
 	}
 
 	@Override
-	public void postInit() {
+	public void initComplete() {
 		if (ModOptions.enableDebugLogging) {
 			ModLog.info("*** BIOME REGISTRY ***");
 			for (final BiomeInfo entry : registry.valueCollection())
@@ -99,8 +96,13 @@ public final class BiomeRegistry implements IDependent {
 		MinecraftForge.EVENT_BUS.post(new RegistryReloadEvent.Biome());
 	}
 
-	private static final TIntObjectHashMap<BiomeInfo> registry = new TIntObjectHashMap<BiomeInfo>();
-	private static final Map<String, String> biomeAliases = new HashMap<String, String>();
+	@Override
+	public void fini() {
+		
+	}
+
+	private final TIntObjectHashMap<BiomeInfo> registry = new TIntObjectHashMap<BiomeInfo>();
+	private final Map<String, String> biomeAliases = new HashMap<String, String>();
 
 	public static final BiomeInfo UNDERGROUND = new BiomeInfo(-1, "Underground");
 	public static final BiomeInfo PLAYER = new BiomeInfo(-2, "Player");
@@ -122,39 +124,32 @@ public final class BiomeRegistry implements IDependent {
 		return biome.getBiomeName();
 	}
 
-	public static void initialize() {
-		INSTANCE.preInit();
-	}
-
 	@Nullable
-	public static BiomeInfo get(@Nonnull final Biome biome) {
+	public BiomeInfo get(@Nonnull final Biome biome) {
 		BiomeInfo entry = registry.get(biome == null ? WTF.getBiomeId() : Biome.REGISTRY.getIDForObject(biome));
 		if (entry == null) {
-			ModLog.warn("Biomes [%s] was not detected during initial scan! Reloading config...", resolveName(biome));
-			initialize();
-			entry = registry.get(Biome.REGISTRY.getIDForObject(biome));
-			if (entry == null) {
-				ModLog.warn("Still can't find biome [%s]! Explicitly adding at defaults", resolveName(biome));
-				entry = new BiomeInfo(biome);
-				registry.put(entry.getBiomeId(), entry);
-			}
+			ModLog.warn("Biome [%s] was not detected during scan! Explicitly adding at defaults", resolveName(biome));
+			entry = new BiomeInfo(biome);
+			this.registry.put(entry.getBiomeId(), entry);
 		}
 		return entry;
 	}
 
-	final static boolean isBiomeMatch(@Nonnull final BiomeConfig entry, @Nonnull final String biomeName) {
+	final boolean isBiomeMatch(@Nonnull final BiomeConfig entry, @Nonnull final String biomeName) {
 		if (Pattern.matches(entry.biomeName, biomeName))
 			return true;
-		final String alias = biomeAliases.get(biomeName);
+		final String alias = this.biomeAliases.get(biomeName);
 		return alias == null ? false : Pattern.matches(entry.biomeName, alias);
 	}
 	
-	public static void registerBiomeAlias(@Nonnull final String alias, @Nonnull final String biome) {
-		biomeAliases.put(alias, biome);
+	public void registerBiomeAlias(@Nonnull final String alias, @Nonnull final String biome) {
+		this.biomeAliases.put(alias, biome);
 	}
 
-	public static void register(@Nonnull final BiomeConfig entry) {
-		for (final BiomeInfo biomeEntry : registry.valueCollection()) {
+	public void register(@Nonnull final BiomeConfig entry) {
+		final SoundRegistry soundRegistry = RegistryManager.getManager().getRegistry(RegistryType.SOUND);
+		
+		for (final BiomeInfo biomeEntry : this.registry.valueCollection()) {
 			if (isBiomeMatch(entry, biomeEntry.getBiomeName())) {
 				if (entry.hasPrecipitation != null)
 					biomeEntry.setHasPrecipitation(entry.hasPrecipitation.booleanValue());
@@ -185,7 +180,7 @@ public final class BiomeRegistry implements IDependent {
 					biomeEntry.setSpotSoundChance(entry.spotSoundChance.intValue());
 
 				for (final SoundConfig sr : entry.sounds) {
-					if (SoundRegistry.isSoundBlocked(sr.sound))
+					if (soundRegistry.isSoundBlocked(sr.sound))
 						continue;
 					final SoundEffect s = new SoundEffect(sr);
 					if (s.type == SoundType.SPOT)

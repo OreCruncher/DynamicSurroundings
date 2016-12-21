@@ -1,4 +1,5 @@
-/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/*
+ * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -21,25 +22,17 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.data.xface;
+package org.blockartistry.mod.DynSurround.client.event;
 
-import javax.annotation.Nonnull;
+import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
+@SideOnly(Side.CLIENT)
+public class RegistryEvent extends Event {
 
-public final class Dimensions {
-	
-	protected Dimensions() {
-		
+	public static class Reload extends RegistryEvent {
+
 	}
 
-	public static void register(@Nonnull final DimensionConfig dimension) {
-		if(dimension == null) {
-			ModLog.warn("The parameter 'dimension' cannot be null.");
-			return;
-		}
-		
-		DimensionRegistry.register(dimension);
-	}
 }

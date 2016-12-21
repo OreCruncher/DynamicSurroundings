@@ -93,10 +93,6 @@ public class DimensionConfig {
 		return this;
 	}
 
-	public void register() {
-		Dimensions.register(this);
-	}
-
 	@Override
 	@Nonnull
 	public String toString() {
