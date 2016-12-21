@@ -76,13 +76,21 @@ public final class SpeechBubbleRenderer {
 		INSTANCE = null;
 	}
 
-	public static class RenderingInfo {
-		public final int messageWidth;
-		public final List<String> text;
+	public static final class RenderingInfo {
+		
+		private boolean cached;
+		private String message;
+		private int messageWidth;
+		private List<String> text;
 
 		public RenderingInfo(@Nonnull final String message) {
+			this.cached = false;
+			this.message = message;
+		}
+		
+		private void processText() {
 			final FontRenderer font = Minecraft.getMinecraft().getRenderManager().getFontRenderer();
-			this.text = font.listFormattedStringToWidth(message, MAX_TEXT_WIDTH);
+			this.text = font.listFormattedStringToWidth(this.message, MAX_TEXT_WIDTH);
 
 			int maxWidth = MIN_TEXT_WIDTH;
 
@@ -93,9 +101,24 @@ public final class SpeechBubbleRenderer {
 			}
 
 			this.messageWidth = maxWidth;
+			this.message = null;
+			this.cached = true;
+		}
+		
+		public List<String> getText() {
+			if(!this.cached)
+				processText();
+			return this.text;
+		}
+		
+		public int getWidth() {
+			if(!this.cached)
+				processText();
+			return this.messageWidth;
 		}
 	}
 
+	@Nonnull
 	public static RenderingInfo generateRenderInfo(@Nonnull final String message) {
 		return new RenderingInfo(message.replaceAll("(\\xA7.)", ""));
 	}
@@ -109,9 +132,9 @@ public final class SpeechBubbleRenderer {
 		final List<String> messages = new ArrayList<String>();
 
 		for (final RenderingInfo ri : input) {
-			if (ri.messageWidth > maxWidth)
+			if (ri.getWidth() > maxWidth)
 				maxWidth = ri.messageWidth;
-			messages.addAll(ri.text);
+			messages.addAll(ri.getText());
 		}
 
 		// Calculate scale and position
