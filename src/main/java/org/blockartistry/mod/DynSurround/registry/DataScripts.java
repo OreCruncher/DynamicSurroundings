@@ -27,10 +27,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.file.Paths;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.List;
 
+import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
@@ -62,7 +63,7 @@ public final class DataScripts {
 		this.assetDirectory = assetDirectory;
 	}
 
-	public boolean execute(@Nullable final Object resources) {
+	public boolean execute(@Nonnull final List<InputStream> resources) {
 
 		if (!this.init())
 			return false;
@@ -71,12 +72,14 @@ public final class DataScripts {
 			runFromArchive(mod.getModId());
 		}
 
-		// TODO: Handle client vs. server load RE: resource pack support
-		// resources ==> IResourceManager
-		if (resources != null) {
-
+		for(final InputStream stream: resources) {
+			try(final InputStreamReader reader = new InputStreamReader(stream)) {
+				runFromStream(reader);
+			} catch (final Throwable t) {
+				ModLog.error("Unable to read script from resource pack!", t);
+			}
 		}
-
+		
 		// Load scripts specified in the configuration
 		final String[] configFiles = ModOptions.externalScriptFiles;
 		for (final String file : configFiles) {
@@ -91,6 +94,11 @@ public final class DataScripts {
 		return this.exe.initialize();
 	}
 
+	private void runFromStream(@Nonnull final Reader reader) {
+		if(reader != null)
+			this.exe.eval(reader);
+	}
+	
 	private void runFromArchive(@Nonnull final String dataFile) {
 		final String fileName = StringUtils.appendIfMissing(
 				StringUtils.appendIfMissing(assetDirectory, "/") + dataFile.replaceAll("[^a-zA-Z0-9.-]", "_"),

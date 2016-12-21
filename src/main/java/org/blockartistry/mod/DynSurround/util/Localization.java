@@ -50,8 +50,6 @@ public final class Localization {
 
 	// Manually loads the en_US language file. Not looking for translations -
 	// just want to reuse the strings in the language file.
-
-	// TODO: Need to test with a server to make sure it loads right!
 	private static class ServerImpl extends Local {
 
 		private final Translations xlate = new Translations();

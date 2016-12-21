@@ -24,16 +24,21 @@
 
 package org.blockartistry.mod.DynSurround.registry;
 
+import java.io.InputStream;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.event.RegistryEvent;
+
+import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
-public final class RegistryManager {
+public class RegistryManager {
 
 	public static enum RegistryType {
 		SOUND(0), BIOME(1), BLOCK(2), DIMENSION(3), FOOTSTEPS(4);
@@ -53,16 +58,19 @@ public final class RegistryManager {
 
 	static RegistryManager getManager() {
 		final Side side = FMLCommonHandler.instance().getEffectiveSide();
-		final int idx = side == Side.CLIENT ? 1 : 0;
-		if (managers[idx] == null) {
-			// Separate lines. The initialize will cause a recursion into
-			// this method and the array slot needs to be initialized to
-			// avoid infinite recursion.
-			managers[idx] = new RegistryManager(side);
-			managers[idx].reload();
+		if(side == Side.CLIENT) {
+			if(managers[1] == null) {
+				managers[1] = new RegistryManagerClient();
+				managers[1].reload();
+			}
+			return managers[1];
+		} else {
+			if(managers[0] == null) {
+				managers[0] = new RegistryManager();
+				managers[0].reload();
+			}
+			return managers[0];
 		}
-		// Do a reload/check to ensure state
-		return managers[idx];
 	}
 
 	@SuppressWarnings("unchecked")
@@ -78,7 +86,9 @@ public final class RegistryManager {
 			managers[0].reload();
 		}
 		
-		// Schedule reload on the client thread
+		// Schedule reload on the client thread.  If this is a
+		// dedicated server there won't be a ResourceManager for
+		// this array slot thus it won't pass the test.
 		if (managers[1] != null) {
 			Minecraft.getMinecraft().addScheduledTask(new Runnable() {
 				public void run() {
@@ -88,19 +98,18 @@ public final class RegistryManager {
 		}
 	}
 
-	private final Side side;
-	private final Registry[] registries = new Registry[RegistryType.values().length];
+	protected final Side side;
+	protected final Registry[] registries = new Registry[RegistryType.values().length];
+	
+	RegistryManager() {
+		this(Side.SERVER);
+	}
 
 	RegistryManager(final Side side) {
 		this.side = side;
 		this.registries[RegistryType.DIMENSION.getId()] = new DimensionRegistry();
 		this.registries[RegistryType.BIOME.getId()] = new BiomeRegistry();
 		this.registries[RegistryType.SOUND.getId()] = new SoundRegistry();
-
-		if(this.side == Side.CLIENT) {
-			this.registries[RegistryType.BLOCK.getId()] = new BlockRegistry();
-			this.registries[RegistryType.FOOTSTEPS.getId()] = new FootstepsRegistry();
-		}
 	}
 
 	void reload() {
@@ -108,7 +117,7 @@ public final class RegistryManager {
 			if(r != null)
 				r.init();
 
-		new DataScripts(this.side).execute(null);
+		new DataScripts(this.side).execute(getAdditionalScripts());
 
 		for (final Registry r : this.registries)
 			if(r != null)
@@ -120,6 +129,10 @@ public final class RegistryManager {
 	@SuppressWarnings("unchecked")
 	public <T> T getRegistry(final RegistryType type) {
 		return (T) this.registries[type.getId()];
+	}
+
+	public List<InputStream> getAdditionalScripts() {
+		return ImmutableList.of();
 	}
 
 }
