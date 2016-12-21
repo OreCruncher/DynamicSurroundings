@@ -37,8 +37,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public final class GuiHUDHandler {
+	
+	private static GuiHUDHandler INSTANCE;
 
 	private GuiHUDHandler() {
+		if (ModOptions.enableDebugLogging)
+			register(new DebugHUD());
+		if (ModOptions.potionHudEnabled)
+			register(new PotionHUD());
 	}
 
 	public static interface IGuiOverlay {
@@ -51,13 +57,14 @@ public final class GuiHUDHandler {
 		overlays.add(overlay);
 	}
 
-	public static void initialize() {
-		if (ModOptions.enableDebugLogging)
-			register(new DebugHUD());
-		if (ModOptions.potionHudEnabled)
-			register(new PotionHUD());
-
+	public static void register() {
+		INSTANCE = new GuiHUDHandler();
 		MinecraftForge.EVENT_BUS.register(new GuiHUDHandler());
+	}
+	
+	public static void unregister() {
+		MinecraftForge.EVENT_BUS.unregister(INSTANCE);
+		INSTANCE = null;
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)

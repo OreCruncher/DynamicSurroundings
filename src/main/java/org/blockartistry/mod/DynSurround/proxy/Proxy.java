@@ -44,6 +44,8 @@ import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class Proxy {
@@ -74,6 +76,14 @@ public class Proxy {
 	}
 	
 	public void loadCompleted(@Nonnull final FMLLoadCompleteEvent event) {
+	}
+
+	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
+		// NOTHING SHOULD BE HERE - OVERRIDE IN ProxyClient!
+	}
+	
+	public void clientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
+		// NOTHING SHOULD BE HERE - OVERRIDE IN ProxyClient!
 	}
 
 	public void serverAboutToStart(@Nonnull final FMLServerAboutToStartEvent event) {

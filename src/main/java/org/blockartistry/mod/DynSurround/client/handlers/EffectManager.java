@@ -43,50 +43,66 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class EffectManager {
 
-	private static final List<EffectHandlerBase> effectHandlers = new ArrayList<EffectHandlerBase>();
-
-	public static void register(final EffectHandlerBase handler) {
-		effectHandlers.add(handler);
-		MinecraftForge.EVENT_BUS.register(handler);
-	}
+	private static EffectManager INSTANCE = null;
+	
+	private final List<EffectHandlerBase> effectHandlers = new ArrayList<EffectHandlerBase>();
 
 	private EffectManager() {
 	}
-
-	public static void initialize() {
-		final EffectManager handler = new EffectManager();
-		MinecraftForge.EVENT_BUS.register(handler);
-
-		register(new EnvironStateHandler());
-		register(new AreaSurveyHandler());
-		register(new FogEffectHandler());
-		register(new BlockEffectHandler());
+	
+	private void init() {
+		this.effectHandlers.add(new EnvironStateHandler());
+		this.effectHandlers.add(new AreaSurveyHandler());
+		this.effectHandlers.add(new FogEffectHandler());
+		this.effectHandlers.add(new BlockEffectHandler());
 
 		if (ModOptions.blockedSounds.length > 0 || ModOptions.culledSounds.length > 0)
-			register(new SoundCullHandler());
+			this.effectHandlers.add(new SoundCullHandler());
 
 		if (ModOptions.enableFootstepSounds)
-			register(new FootstepsHandler());
+			this.effectHandlers.add(new FootstepsHandler());
 
 		if (ModOptions.auroraEnable)
-			register(new AuroraEffectHandler());
+			this.effectHandlers.add(new AuroraEffectHandler());
 
 		if (ModOptions.enableBiomeSounds)
-			register(new AreaSoundEffectHandler());
+			this.effectHandlers.add(new AreaSoundEffectHandler());
 
 		if (ModOptions.suppressPotionParticles)
-			register(new PotionParticleScrubHandler());
+			this.effectHandlers.add(new PotionParticleScrubHandler());
 
 		if (ModOptions.enableDamagePopoffs)
-			register(new PopoffEffectHandler());
+			this.effectHandlers.add(new PopoffEffectHandler());
 
 		if (ModOptions.enableSpeechBubbles)
-			register(new SpeechBubbleHandler());
+			this.effectHandlers.add(new SpeechBubbleHandler());
 
 		ModLog.info("Registered client handlers:");
-		for (final EffectHandlerBase h : effectHandlers) {
+		for (final EffectHandlerBase h : this.effectHandlers) {
 			ModLog.info("* %s", h.getHandlerName());
+			h.connect0();
+			MinecraftForge.EVENT_BUS.register(h);
 		}
+	}
+	
+	private void fini() {
+		for (final EffectHandlerBase h : this.effectHandlers) {
+			MinecraftForge.EVENT_BUS.unregister(h);
+			h.disconnect0();
+		}
+		this.effectHandlers.clear();
+	}
+
+	public static void register() {
+		INSTANCE = new EffectManager();
+		INSTANCE.init();
+		MinecraftForge.EVENT_BUS.register(INSTANCE);
+	}
+	
+	public static void unregister() {
+		MinecraftForge.EVENT_BUS.unregister(INSTANCE);
+		INSTANCE.fini();
+		INSTANCE = null;
 	}
 
 	@SubscribeEvent

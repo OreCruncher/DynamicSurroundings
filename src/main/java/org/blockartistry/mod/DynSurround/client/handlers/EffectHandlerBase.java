@@ -34,9 +34,6 @@ import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
@@ -84,8 +81,7 @@ public abstract class EffectHandlerBase {
 	//  DO NOT HOOK THESE EVENTS!
 	//
 	//////////////////////////////
-	@SubscribeEvent
-	public void onClientConnect(final ClientConnectedToServerEvent event) {
+	public void connect0() {
 		this.biomes = RegistryManager.get(RegistryType.BIOME);
 		this.blocks = RegistryManager.get(RegistryType.BLOCK);
 		this.dimensions = RegistryManager.get(RegistryType.DIMENSION);
@@ -93,8 +89,7 @@ public abstract class EffectHandlerBase {
 		this.onConnect();
 	}
 	
-	@SubscribeEvent
-	public void onClientDisconnect(final ClientDisconnectionFromServerEvent event) {
+	public void disconnect0() {
 		this.onDisconnect();
 		this.biomes = null;
 		this.blocks = null;

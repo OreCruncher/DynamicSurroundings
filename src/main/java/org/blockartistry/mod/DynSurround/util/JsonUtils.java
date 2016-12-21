@@ -36,7 +36,6 @@ import javax.annotation.Nullable;
 import org.blockartistry.mod.DynSurround.ModLog;
 
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 
 public final class JsonUtils {
 
@@ -66,8 +65,8 @@ public final class JsonUtils {
 
 	@Nullable
 	public static <T> T load(@Nonnull final Reader stream, @Nonnull final Class<T> clazz) throws Exception {
-		try (final JsonReader reader = new JsonReader(stream)) {
-			return new Gson().fromJson(reader, clazz);
+		try {
+			return new Gson().fromJson(stream, clazz);
 		} catch (final Throwable t) {
 			ModLog.error("Unable to process Json from stream", t);;
 		}
@@ -77,7 +76,7 @@ public final class JsonUtils {
 	@Nullable
 	public static <T> T load(@Nonnull final InputStream stream, @Nonnull final Class<T> clazz) throws Exception {
 		try (final InputStreamReader reader = new InputStreamReader(stream)) {
-			return load(reader, clazz);
+			return new Gson().fromJson(reader, clazz);
 		} catch (final Throwable t) {
 			ModLog.error("Unable to process Json from stream", t);;
 		}

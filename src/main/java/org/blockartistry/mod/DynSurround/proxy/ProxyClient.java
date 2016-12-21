@@ -24,14 +24,8 @@
 
 package org.blockartistry.mod.DynSurround.proxy;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.mod.DynSurround.client.handlers.EffectManager;
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler;
@@ -39,11 +33,10 @@ import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -64,35 +57,28 @@ public class ProxyClient extends Proxy {
 	@Override
 	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		super.preInit(event);
-
 		SoundManager.configureSound();
 	}
 
 	@Override
-	public void init(final FMLInitializationEvent event) {
+	public void init(@Nonnull final FMLInitializationEvent event) {
 		super.init(event);
-
-		EffectManager.initialize();
-		GuiHUDHandler.initialize();
-		SpeechBubbleRenderer.initialize();
-
+		SoundManager.initializeRegistry();
 		ParticleDripOverride.register();
 	}
 
 	@Override
-	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
-		super.postInit(event);
-
-		if (ModOptions.enableDebugLogging) {
-			final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
-			final List<String> sounds = new ArrayList<String>();
-			for (final Object resource : handler.soundRegistry.getKeys())
-				sounds.add(resource.toString());
-			Collections.sort(sounds);
-
-			ModLog.info("*** SOUND REGISTRY ***");
-			for (final String sound : sounds)
-				ModLog.info(sound);
-		}
+	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
+		EffectManager.register();
+		GuiHUDHandler.register();
+		SpeechBubbleRenderer.register();
 	}
+	
+	@Override
+	public void clientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
+		EffectManager.unregister();
+		GuiHUDHandler.unregister();
+		SpeechBubbleRenderer.unregister();
+	}
+
 }

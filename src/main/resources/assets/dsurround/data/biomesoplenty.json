@@ -156,7 +156,7 @@
 		"biomesoplenty:hellbark_fence":"#fence",
 		"biomesoplenty:hellbark_fence_gate":"#fence",
 		"biomesoplenty:hellbark_stairs":"wood",
-		"biomesoplenty:hive":"wood",
+		"biomesoplenty:hive":"organic_dry",
 		"biomesoplenty:honey":"NOT_EMITTER",
 		"biomesoplenty:honey_block":"glass",
 		"biomesoplenty:hot_spring_water":"NOT_EMITTER",

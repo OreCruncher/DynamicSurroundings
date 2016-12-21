@@ -24,8 +24,13 @@
 
 package org.blockartistry.mod.DynSurround.client.sound;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -35,18 +40,23 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
+import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
+import org.blockartistry.mod.DynSurround.util.SoundUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALC11;
 
+import com.google.gson.Gson;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -198,7 +208,49 @@ public class SoundManager {
 				totalChannels == -1 ? "UNKNOWN" : Integer.toString(totalChannels));
 		SoundSystemConfig.setNumberNormalChannels(normalChannels);
 		SoundSystemConfig.setNumberStreamingChannels(streamChannels);
+	}
 
+	// Not entirely sure why they changed things.  This reads the mods sounds.json
+	// and forces registration of all the mod sounds.  Code generally comes from
+	// the Minecraft sound processing logic.
+	public static void initializeRegistry() {
+		final ParameterizedType TYPE = new ParameterizedType() {
+			public Type[] getActualTypeArguments() {
+				return new Type[] { String.class, Object.class };
+			}
+
+			public Type getRawType() {
+				return Map.class;
+			}
+
+			public Type getOwnerType() {
+				return null;
+			}
+		};
+
+		try(final InputStream stream = SoundManager.class.getResourceAsStream("/assets/dsurround/sounds.json")) {
+			if(stream != null) {
+				@SuppressWarnings("unchecked")
+				final Map<String, Object> sounds = (Map<String, Object>)new Gson().fromJson(new InputStreamReader(stream), TYPE);
+				for(final String s: sounds.keySet())
+					SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, s));
+				
+			}
+		} catch(final Throwable t) {
+			ModLog.error("Unable to read the mod sound file!", t);
+		}
+		
+		if (ModOptions.enableDebugLogging) {
+			final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
+			final List<String> sounds = new ArrayList<String>();
+			for (final Object resource : handler.soundRegistry.getKeys())
+				sounds.add(resource.toString());
+			Collections.sort(sounds);
+
+			ModLog.info("*** SOUND REGISTRY ***");
+			for (final String sound : sounds)
+				ModLog.info(sound);
+		}
 	}
 
 	// Redirect hook from Minecraft's SoundManager so we can scale the volume

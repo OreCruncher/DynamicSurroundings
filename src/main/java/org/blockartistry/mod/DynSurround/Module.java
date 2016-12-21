@@ -43,6 +43,9 @@ import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 
 @net.minecraftforge.fml.common.Mod(modid = Module.MOD_ID, useMetadata = true, dependencies = Module.DEPENDENCIES, version = Module.VERSION, guiFactory = Module.GUI_FACTORY)
 public class Module {
@@ -121,6 +124,21 @@ public class Module {
 	public void loadCompleted(@Nonnull final FMLLoadCompleteEvent event) {
 		proxy.loadCompleted(event);
 	}
+	
+	////////////////////////
+	//
+	// Client state events
+	//
+	////////////////////////
+	@SubscribeEvent
+	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
+		proxy.clientConnect(event);
+	}
+	
+	@SubscribeEvent
+	public void clientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
+		proxy.clientDisconnect(event);
+	}
 
 	////////////////////////
 	//
@@ -146,4 +164,5 @@ public class Module {
 	public void serverStopped(@Nonnull final FMLServerStoppedEvent event) {
 		proxy.serverStopped(event);
 	}
+	
 }

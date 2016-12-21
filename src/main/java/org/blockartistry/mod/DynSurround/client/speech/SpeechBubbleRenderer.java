@@ -50,7 +50,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class SpeechBubbleRenderer {
+public final class SpeechBubbleRenderer {
+	
+	private static SpeechBubbleRenderer INSTANCE = null;
 
 	private static final Color B_COLOR = Color.getColor(TextFormatting.DARK_GRAY);
 	private static final float B_COLOR_ALPHA = 0.4F; // 0.25F;
@@ -60,12 +62,18 @@ public class SpeechBubbleRenderer {
 	private static final int MAX_TEXT_WIDTH = MIN_TEXT_WIDTH * 4;
 	private static final double BUBBLE_MARGIN = 4.0F;
 
-	protected SpeechBubbleRenderer() {
+	private SpeechBubbleRenderer() {
 
 	}
 
-	public static void initialize() {
-		MinecraftForge.EVENT_BUS.register(new SpeechBubbleRenderer());
+	public static void register() {
+		INSTANCE = new SpeechBubbleRenderer();
+		MinecraftForge.EVENT_BUS.register(INSTANCE);
+	}
+	
+	public static void unregister() {
+		MinecraftForge.EVENT_BUS.unregister(INSTANCE);
+		INSTANCE = null;
 	}
 
 	public static class RenderingInfo {
