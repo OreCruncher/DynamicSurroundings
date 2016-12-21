@@ -85,8 +85,9 @@ public final class HealthEffectService extends Service {
 
 		final Entity entity = event.getEntityLiving();
 		final TargetPoint point = Network.getTargetPoint(entity, RANGE);
-		Network.sendHealthUpdate(entity.getUniqueID(), (float) entity.posX, (float) entity.posY + entity.height,
-				(float) entity.posZ, isCrit, (int) event.getAmount(), point);
+		Network.sendHealthUpdate(entity.getUniqueID(), (float) entity.posX,
+				(float) entity.posY + (entity.height / 2.0F), (float) entity.posZ, isCrit, (int) event.getAmount(),
+				point);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOW)
@@ -102,8 +103,9 @@ public final class HealthEffectService extends Service {
 
 		final Entity entity = event.getEntityLiving();
 		final TargetPoint point = Network.getTargetPoint(entity, RANGE);
-		Network.sendHealthUpdate(entity.getUniqueID(), (float) entity.posX, (float) entity.posY + entity.height,
-				(float) entity.posZ, false, -(int) event.getAmount(), point);
+		Network.sendHealthUpdate(entity.getUniqueID(), (float) entity.posX,
+				(float) entity.posY + (entity.height / 2.0F), (float) entity.posZ, false, -(int) event.getAmount(),
+				point);
 	}
 
 }
