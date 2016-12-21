@@ -27,6 +27,7 @@ package org.blockartistry.mod.DynSurround.proxy;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.VersionCheck;
+import org.blockartistry.mod.DynSurround.client.waila.WailaEntityHandler;
 import org.blockartistry.mod.DynSurround.client.waila.WailaHandler;
 import org.blockartistry.mod.DynSurround.commands.CommandDS;
 import org.blockartistry.mod.DynSurround.network.Network;
@@ -70,6 +71,7 @@ public class Proxy {
 	public void init(@Nonnull final FMLInitializationEvent event) {
 		Network.initialize();
 		WailaHandler.register();
+		WailaEntityHandler.register();
 	}
 
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {

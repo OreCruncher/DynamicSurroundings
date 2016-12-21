@@ -21,12 +21,6 @@
  * THE SOFTWARE.
  */
 
-//
-// Thank you Darkhax!
-//
-// https://github.com/Minecraft-Forge-Tutorials/Waila-Integration
-//
-
 package org.blockartistry.mod.DynSurround.client.waila;
 
 import java.util.ArrayList;
@@ -130,7 +124,7 @@ public final class WailaHandler implements IWailaDataProvider {
 
 	@Optional.Method(modid = "Waila")
 	public static void callbackRegister(final IWailaRegistrar register) {
-		ModLog.info("Registering Waila handler...");
+		ModLog.info("Registering Waila Block/Item handler...");
 		final WailaHandler instance = new WailaHandler();
 		register.registerTailProvider(instance, Block.class);
 	}
