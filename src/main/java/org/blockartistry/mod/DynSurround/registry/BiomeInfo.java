@@ -222,6 +222,12 @@ public final class BiomeInfo {
 
 		return candidates.get(i - 1);
 	}
+	
+	public void resetSounds() {
+		this.sounds.clear();
+		this.spotSounds.clear();
+		this.spotSoundChance = 1200;
+	}
 
 	@Override
 	@Nonnull

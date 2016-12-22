@@ -80,6 +80,17 @@ public final class BiomeRegistry extends Registry {
 		registry.put(CLOUDS.getBiomeId(), CLOUDS);
 		registry.put(PLAYER.getBiomeId(), PLAYER);
 		registry.put(WTF.getBiomeId(), WTF);
+		
+		// Make sure they are clean from the previous run
+		UNDERGROUND.resetSounds();
+		UNDERWATER.resetSounds();
+		UNDEROCEAN.resetSounds();
+		UNDERDEEPOCEAN.resetSounds();
+		UNDERRIVER.resetSounds();
+		OUTERSPACE.resetSounds();
+		CLOUDS.resetSounds();
+		PLAYER.resetSounds();
+		WTF.resetSounds();
 	}
 
 	@Override
