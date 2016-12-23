@@ -24,6 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -61,7 +62,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class SpeechBubbleHandler extends EffectHandlerBase {
-	
+
 	public static SpeechBubbleHandler INSTANCE;
 
 	private static class ExpireFilter implements Predicate<SpeechBubbleData> {
@@ -90,7 +91,23 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 
 	}
 
-	private final TIntObjectHashMap<List<SpeechBubbleData>> messages = new TIntObjectHashMap<List<SpeechBubbleData>>();
+	private static final Function<Integer, List<String>> ACCESSOR = new Function<Integer, List<String>>() {
+
+		@Override
+		public List<String> apply(@Nonnull final Integer input) {
+			final List<String> result = new ArrayList<String>();
+			final List<RenderingInfo> info = INSTANCE.getMessages(input.intValue());
+
+			if (info != null)
+				for (final RenderingInfo ri : info)
+					result.addAll(ri.getText());
+
+			return result;
+		}
+
+	};
+
+	private final TIntObjectHashMap<SpeechBubbleContext> messages = new TIntObjectHashMap<SpeechBubbleContext>();
 	private final Translations xlate = new Translations();
 
 	private void processTranslations() {
@@ -111,6 +128,11 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		public SpeechBubbleData(@Nonnull final String message) {
 			this.messages = SpeechBubbleRenderer.generateRenderInfo(message);
 		}
+	}
+	
+	protected static class SpeechBubbleContext {
+		public final List<SpeechBubbleData> data = new ArrayList<SpeechBubbleData>();
+		public WeakReference<ParticleBillboard> bubble;
 	}
 
 	public SpeechBubbleHandler() {
@@ -136,29 +158,32 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		if (entity == null)
 			return;
 
-		boolean createParticle = false;
-		List<SpeechBubbleData> list = this.messages.get(entity.getEntityId());
-		if (list == null) {
-			createParticle = true;
-			this.messages.put(entity.getEntityId(), list = new ArrayList<SpeechBubbleData>());
+		SpeechBubbleContext ctx = this.messages.get(entity.getEntityId());
+		if(ctx == null) {
+			this.messages.put(entity.getEntityId(), ctx = new SpeechBubbleContext());
 		}
-		list.add(new SpeechBubbleData(message));
 		
-		if(createParticle) {
-			final ParticleBillboard particle = new ParticleBillboard(entity);
+		ctx.data.add(new SpeechBubbleData(message));
+		
+		if (ctx.bubble == null || ctx.bubble.isEnqueued()) {
+			final ParticleBillboard particle = new ParticleBillboard(entity, ACCESSOR);
 			ParticleHelper.addParticle(particle);
+			ctx.bubble = new WeakReference<ParticleBillboard>(particle);
 		}
 	}
 
-	// Used to retrieve messages that are to be displayed
-	// above the players head.
 	@Nullable
 	public List<RenderingInfo> getMessages(@Nonnull final Entity entity) {
-		final List<SpeechBubbleData> data = this.messages.get(entity.getEntityId());
-		if (data == null || data.isEmpty())
+		return getMessages(entity.getEntityId());
+	}
+
+	@Nullable
+	public List<RenderingInfo> getMessages(final int entityId) {
+		final SpeechBubbleContext ctx = this.messages.get(entityId);
+		if (ctx == null || ctx.data == null || ctx.data.isEmpty())
 			return null;
 		final List<RenderingInfo> result = new ArrayList<RenderingInfo>();
-		for (final SpeechBubbleData entry : data)
+		for (final SpeechBubbleData entry : ctx.data)
 			result.add(entry.messages);
 		return result;
 	}
@@ -171,11 +196,11 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 		final ExpireFilter filter = new ExpireFilter(EnvironState.getTickCounter());
-		final TIntObjectIterator<List<SpeechBubbleData>> entityData = messages.iterator();
+		final TIntObjectIterator<SpeechBubbleContext> entityData = messages.iterator();
 		while (entityData.hasNext()) {
 			entityData.advance();
-			if (!entityData.value().isEmpty())
-				Iterables.removeIf(entityData.value(), filter);
+			if (!entityData.value().data.isEmpty())
+				Iterables.removeIf(entityData.value().data, filter);
 			else
 				entityData.remove();
 		}

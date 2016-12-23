@@ -80,6 +80,7 @@ public final class SpeechBubbleRenderer {
 		
 		private boolean cached;
 		private String message;
+		// TODO: Remove once particle billboards are in
 		private int messageWidth;
 		private List<String> text;
 

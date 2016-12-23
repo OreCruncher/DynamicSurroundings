@@ -25,13 +25,15 @@
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.blockartistry.mod.DynSurround.client.handlers.SpeechBubbleHandler;
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer.RenderingInfo;
 import org.blockartistry.mod.DynSurround.util.Color;
+
+import com.google.common.base.Function;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.particle.Particle;
@@ -58,17 +60,15 @@ public class ParticleBillboard extends Particle {
 	private final FontRenderer font;
 	private final float scale;
 	private final WeakReference<Entity> subject;
-	private List<RenderingInfo> renderInfo;
+	private final Function<Integer, List<String>> accessor;
 	private List<String> text;
 	private int textWidth;
-	
-	private boolean thirdPerson;
-	private float pitch;
-	private float yaw;
 
-	public ParticleBillboard(final Entity entity) {
+	public ParticleBillboard(@Nonnull final Entity entity, @Nonnull final Function<Integer, List<String>> accessor) {
 		super(entity.getEntityWorld(), entity.posX, entity.posY, entity.posZ);
 
+		this.accessor = accessor;
+		
 		final double newY = entity.posY + entity.height + 0.5D - (entity.isSneaking() ? 0.25D : 0);
 		this.setPosition(entity.posX, newY, entity.posZ);
 		this.prevPosX = entity.posX;
@@ -82,11 +82,11 @@ public class ParticleBillboard extends Particle {
 		this.subject = new WeakReference<Entity>(entity);
 
 		this.font = Minecraft.getMinecraft().fontRendererObj;
-		this.scale = 1F; // 0.8F * 0.016666668F;
+		this.scale = 1F;
 	}
 
 	protected boolean shouldExpire() {
-		if (this.subject.isEnqueued())
+		if (this.subject.isEnqueued() || this.accessor == null)
 			return true;
 
 		final Entity entity = this.subject.get();
@@ -94,8 +94,8 @@ public class ParticleBillboard extends Particle {
 		if (entity.isInvisibleToPlayer(EnvironState.getPlayer()))
 			return true;
 
-		this.renderInfo = SpeechBubbleHandler.INSTANCE.getMessages(entity);
-		return this.renderInfo == null;
+		this.text = this.accessor.apply(entity.getEntityId());
+		return this.text == null || this.text.isEmpty();
 	}
 
 	@Override
@@ -115,18 +115,10 @@ public class ParticleBillboard extends Particle {
 		this.setPosition(entity.posX, newY, entity.posZ);
 
 		this.textWidth = MIN_TEXT_WIDTH;
-		this.text = new ArrayList<String>();
 
-		for (final RenderingInfo ri : this.renderInfo) {
-			if (ri.getWidth() > this.textWidth)
-				this.textWidth = ri.getWidth();
-			this.text.addAll(ri.getText());
+		for (final String s : this.text) {
+			this.textWidth = Math.max(this.textWidth, this.font.getStringWidth(s));
 		}
-
-		final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-		this.thirdPerson = renderManager.options.thirdPersonView == 2;
-		this.pitch = renderManager.playerViewX * (this.thirdPerson ? -1 : 1);
-		this.yaw = -renderManager.playerViewY;
 	}
 
 	@Override
@@ -138,6 +130,11 @@ public class ParticleBillboard extends Particle {
 			return;
 
 		// Calculate scale and position
+		final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+		final boolean thirdPerson = renderManager.options.thirdPersonView == 2;
+		final float pitch = renderManager.playerViewX * (thirdPerson ? -1 : 1);
+		final float yaw = -renderManager.playerViewY;
+
 		final int numberOfMessages = this.text.size();
 		final double top = -(numberOfMessages) * 9 - BUBBLE_MARGIN;
 		final double bottom = BUBBLE_MARGIN;
@@ -152,20 +149,16 @@ public class ParticleBillboard extends Particle {
 		GlStateManager.pushAttrib();
 
 		GlStateManager.translate(locX, locY, locZ);
-		GlStateManager.rotate(this.yaw, 0.0F, 1.0F, 0.0F);
-		GlStateManager.rotate(this.pitch, 1.0F, 0.0F, 0.0F);
-
-		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
-		GlStateManager.scale(this.particleScale * 0.008D, this.particleScale * 0.008D, this.particleScale * 0.008D);
-		GlStateManager.scale(this.scale, this.scale, this.scale);
+		GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);
+		GlStateManager.scale(-this.scale * 0.015D, -this.scale * 0.015F, this.scale * 0.015D);
 
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 0.003662109F);
 
 		GlStateManager.disableTexture2D();
 		GlStateManager.disableLighting();
-		GlStateManager.disableLighting();
-		GlStateManager.depthMask(false);
 		GlStateManager.disableDepth();
+		GlStateManager.depthMask(false);
 
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
