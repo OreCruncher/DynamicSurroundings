@@ -37,6 +37,8 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.event.SpeechTextEvent;
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleBillboard;
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer;
 import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer.RenderingInfo;
@@ -51,7 +53,6 @@ import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -135,17 +136,24 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		if (entity == null)
 			return;
 
+		boolean createParticle = false;
 		List<SpeechBubbleData> list = this.messages.get(entity.getEntityId());
 		if (list == null) {
+			createParticle = true;
 			this.messages.put(entity.getEntityId(), list = new ArrayList<SpeechBubbleData>());
 		}
 		list.add(new SpeechBubbleData(message));
+		
+		if(createParticle) {
+			final ParticleBillboard particle = new ParticleBillboard(entity);
+			ParticleHelper.addParticle(particle);
+		}
 	}
 
 	// Used to retrieve messages that are to be displayed
 	// above the players head.
 	@Nullable
-	public List<RenderingInfo> getMessages(@Nonnull final EntityLivingBase entity) {
+	public List<RenderingInfo> getMessages(@Nonnull final Entity entity) {
 		final List<SpeechBubbleData> data = this.messages.get(entity.getEntityId());
 		if (data == null || data.isEmpty())
 			return null;

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.server.services.emoji;
+package org.blockartistry.mod.DynSurround.entity.ai;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +35,7 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.mod.DynSurround.entity.MessageTable;
 import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.server.services.SpeechBubbleService;
 import org.blockartistry.mod.DynSurround.util.Translations;
@@ -158,7 +159,7 @@ public class EntityAIChat extends EntityAIBase {
 	}
 
 	protected String getChatMessage() {
-		return this.data.table.next().messageId;
+		return this.data.table.getMessage();
 	}
 
 	protected int getNextChatTime() {

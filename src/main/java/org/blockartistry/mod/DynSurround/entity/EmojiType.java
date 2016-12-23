@@ -22,34 +22,29 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.server.services.emoji;
+package org.blockartistry.mod.DynSurround.entity;
 
-import javax.annotation.Nonnull;
+import gnu.trove.map.hash.TObjectIntHashMap;
 
-import org.blockartistry.mod.DynSurround.util.WeightTable;
+public enum EmojiType {
 
-public final class MessageTable extends WeightTable<MessageTable.MessageTableEntry> {
-	
-	static class MessageTableEntry extends WeightTable.Item {
+	NONE, ATTACK, PANIC, HAPPY, SAD, CONTEMPLATE, FARM, WORK;
 
-		protected final String messageId;
-		
-		public MessageTableEntry(final int weight, @Nonnull final String messageId) {
-			super(weight);
-			this.messageId = messageId;
+	private static final TObjectIntHashMap<EmojiType> map = new TObjectIntHashMap<EmojiType>();
+
+	public static EmojiType get(int id) {
+		final EmojiType[] v = EmojiType.values();
+		if (id > v.length || id < 0)
+			return null;
+		return v[id];
+	}
+
+	public static int getId(final EmojiType state) {
+		if (map.size() == 0) {
+			for (int x = 0; x < EmojiType.values().length; x++)
+				map.put(EmojiType.values()[x], x);
 		}
-		
+		return map.get(state);
 	}
-	
-	@Nonnull
-	public MessageTable.MessageTableEntry add(final int weight, @Nonnull final String messageId) {
-		final MessageTableEntry entry = new MessageTableEntry(weight, messageId);
-		this.add(entry);
-		return entry;
-	}
-	
-	@Nonnull
-	public String getMessage() {
-		return this.next().messageId;
-	}
+
 }

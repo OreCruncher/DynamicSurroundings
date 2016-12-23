@@ -22,8 +22,12 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.server.services.emoji;
+package org.blockartistry.mod.DynSurround.entity.ai;
 
+import org.blockartistry.mod.DynSurround.entity.ActionState;
+import org.blockartistry.mod.DynSurround.entity.EmojiDataTables;
+import org.blockartistry.mod.DynSurround.entity.EmojiType;
+import org.blockartistry.mod.DynSurround.entity.EmotionalState;
 import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.server.services.SpeechBubbleService;
 import org.blockartistry.mod.DynSurround.util.EntityUtils;

@@ -30,9 +30,9 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
-import org.blockartistry.mod.DynSurround.server.services.emoji.ActionState;
-import org.blockartistry.mod.DynSurround.server.services.emoji.EmojiType;
-import org.blockartistry.mod.DynSurround.server.services.emoji.EmotionalState;
+import org.blockartistry.mod.DynSurround.entity.ActionState;
+import org.blockartistry.mod.DynSurround.entity.EmojiType;
+import org.blockartistry.mod.DynSurround.entity.EmotionalState;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;

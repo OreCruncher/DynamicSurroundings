@@ -30,9 +30,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.client.event.EntityEmojiEvent;
-import org.blockartistry.mod.DynSurround.server.services.emoji.ActionState;
-import org.blockartistry.mod.DynSurround.server.services.emoji.EmojiType;
-import org.blockartistry.mod.DynSurround.server.services.emoji.EmotionalState;
+import org.blockartistry.mod.DynSurround.entity.ActionState;
+import org.blockartistry.mod.DynSurround.entity.EmojiType;
+import org.blockartistry.mod.DynSurround.entity.EmotionalState;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

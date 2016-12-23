@@ -26,9 +26,9 @@ package org.blockartistry.mod.DynSurround.server.services;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.server.services.emoji.EntityAIChat;
-import org.blockartistry.mod.DynSurround.server.services.emoji.EntityAIEmoji;
-import org.blockartistry.mod.DynSurround.server.services.emoji.EntityAIVillagerFleeChat;
+import org.blockartistry.mod.DynSurround.entity.ai.EntityAIChat;
+import org.blockartistry.mod.DynSurround.entity.ai.EntityAIEmoji;
+import org.blockartistry.mod.DynSurround.entity.ai.EntityAIVillagerFleeChat;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntitySkeleton;

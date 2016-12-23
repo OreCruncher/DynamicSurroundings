@@ -30,7 +30,6 @@ import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDripOverride
 import org.blockartistry.mod.DynSurround.client.handlers.EffectManager;
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
-import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -71,14 +70,16 @@ public class ProxyClient extends Proxy {
 	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
 		EffectManager.register();
 		GuiHUDHandler.register();
-		SpeechBubbleRenderer.register();
+		// TODO: Remove once ParticleBillboard is running well
+		//SpeechBubbleRenderer.register();
 	}
 	
 	@Override
 	public void clientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
 		EffectManager.unregister();
 		GuiHUDHandler.unregister();
-		SpeechBubbleRenderer.unregister();
+		// TODO: Remove once ParticleBillboard is running well
+		//SpeechBubbleRenderer.unregister();
 	}
 
 }

@@ -45,10 +45,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Remove once ParticleBillboard is working
 @SideOnly(Side.CLIENT)
 public final class SpeechBubbleRenderer {
 	
@@ -133,7 +133,7 @@ public final class SpeechBubbleRenderer {
 
 		for (final RenderingInfo ri : input) {
 			if (ri.getWidth() > maxWidth)
-				maxWidth = ri.messageWidth;
+				maxWidth = ri.getWidth();
 			messages.addAll(ri.getText());
 		}
 
@@ -207,7 +207,7 @@ public final class SpeechBubbleRenderer {
 		GlStateManager.popMatrix();
 	}
 
-	@SubscribeEvent
+	//@SubscribeEvent
 	public void onEntityRender(@Nonnull final RenderLivingEvent.Post<EntityLivingBase> event) {
 
 		final EntityLivingBase entity = (EntityLivingBase) event.getEntity();
