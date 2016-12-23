@@ -70,16 +70,12 @@ public class ProxyClient extends Proxy {
 	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
 		EffectManager.register();
 		GuiHUDHandler.register();
-		// TODO: Remove once ParticleBillboard is running well
-		//SpeechBubbleRenderer.register();
 	}
 	
 	@Override
 	public void clientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
 		EffectManager.unregister();
 		GuiHUDHandler.unregister();
-		// TODO: Remove once ParticleBillboard is running well
-		//SpeechBubbleRenderer.unregister();
 	}
 
 }

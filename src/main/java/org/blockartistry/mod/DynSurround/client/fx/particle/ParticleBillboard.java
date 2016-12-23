@@ -68,7 +68,7 @@ public class ParticleBillboard extends Particle {
 		super(entity.getEntityWorld(), entity.posX, entity.posY, entity.posZ);
 
 		this.accessor = accessor;
-		
+
 		final double newY = entity.posY + entity.height + 0.5D - (entity.isSneaking() ? 0.25D : 0);
 		this.setPosition(entity.posX, newY, entity.posZ);
 		this.prevPosX = entity.posX;
@@ -90,6 +90,8 @@ public class ParticleBillboard extends Particle {
 			return true;
 
 		final Entity entity = this.subject.get();
+		if (entity == null || entity.isDead)
+			return true;
 
 		if (entity.isInvisibleToPlayer(EnvironState.getPlayer()))
 			return true;
@@ -102,22 +104,21 @@ public class ParticleBillboard extends Particle {
 	public void onUpdate() {
 		if (shouldExpire()) {
 			this.setExpired();
-			return;
-		}
+		} else {
 
-		final Entity entity = this.subject.get();
+			final Entity entity = this.subject.get();
 
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
+			this.prevPosX = this.posX;
+			this.prevPosY = this.posY;
+			this.prevPosZ = this.posZ;
 
-		final double newY = entity.posY + entity.height + 0.5D - (entity.isSneaking() ? 0.25D : 0);
-		this.setPosition(entity.posX, newY, entity.posZ);
+			final double newY = entity.posY + entity.height + 0.5D - (entity.isSneaking() ? 0.25D : 0);
+			this.setPosition(entity.posX, newY, entity.posZ);
 
-		this.textWidth = MIN_TEXT_WIDTH;
+			this.textWidth = MIN_TEXT_WIDTH;
 
-		for (final String s : this.text) {
-			this.textWidth = Math.max(this.textWidth, this.font.getStringWidth(s));
+			for (final String s : this.text)
+				this.textWidth = Math.max(this.textWidth, this.font.getStringWidth(s));
 		}
 	}
 
@@ -126,6 +127,7 @@ public class ParticleBillboard extends Particle {
 			final float rotationX, final float rotationZ, final float rotationYZ, final float rotationXY,
 			final float rotationXZ) {
 
+		// Fail safe...
 		if (this.text == null || this.text.isEmpty())
 			return;
 
