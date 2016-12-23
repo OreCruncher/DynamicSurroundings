@@ -76,6 +76,8 @@ public class EffectManager {
 
 		if (ModOptions.enableSpeechBubbles)
 			this.effectHandlers.add(new SpeechBubbleHandler());
+		
+		this.effectHandlers.add(new EntityEmojiHandler());
 
 		ModLog.info("Registered client handlers:");
 		for (final EffectHandlerBase h : this.effectHandlers) {

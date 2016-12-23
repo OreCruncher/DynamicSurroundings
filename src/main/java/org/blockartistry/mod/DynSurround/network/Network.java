@@ -30,6 +30,10 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.Module;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
+import org.blockartistry.mod.DynSurround.server.services.emoji.ActionState;
+import org.blockartistry.mod.DynSurround.server.services.emoji.EmojiType;
+import org.blockartistry.mod.DynSurround.server.services.emoji.EmotionalState;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.common.MinecraftForge;
@@ -56,6 +60,8 @@ public final class Network {
 		NETWORK.registerMessage(PacketHealthChange.PacketHandler.class, PacketHealthChange.class, ++discriminator,
 				Side.CLIENT);
 		NETWORK.registerMessage(PacketSpeechBubble.PacketHandler.class, PacketSpeechBubble.class, ++discriminator,
+				Side.CLIENT);
+		NETWORK.registerMessage(PacketEntityEmote.PacketHandler.class, PacketEntityEmote.class, ++discriminator,
 				Side.CLIENT);
 	}
 
@@ -90,5 +96,10 @@ public final class Network {
 	public static void sendChatBubbleUpdate(@Nonnull final UUID playerId, @Nonnull final String message,
 			final boolean translate, @Nonnull final TargetPoint point) {
 		NETWORK.sendToAllAround(new PacketSpeechBubble(playerId, message, translate), point);
+	}
+
+	public static void sendEntityEmoteUpdate(@Nonnull final UUID id, @Nonnull final ActionState action,
+			@Nonnull final EmotionalState emotion, @Nonnull final EmojiType type, @Nonnull final TargetPoint point) {
+		NETWORK.sendToAllAround(new PacketEntityEmote(id, action, emotion, type), point);
 	}
 }

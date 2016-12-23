@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.server.services.chat;
+package org.blockartistry.mod.DynSurround.server.services.emoji;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

@@ -1,5 +1,4 @@
-/*
- * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -22,34 +21,24 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.server.services.chat;
+package org.blockartistry.mod.DynSurround.util;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.util.WeightTable;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.potion.PotionEffect;
 
-public final class MessageTable extends WeightTable<MessageTable.MessageTableEntry> {
+public final class EntityUtils {
 	
-	static class MessageTableEntry extends WeightTable.Item {
-
-		protected final String messageId;
-		
-		public MessageTableEntry(final int weight, @Nonnull final String messageId) {
-			super(weight);
-			this.messageId = messageId;
-		}
+	private EntityUtils() {
 		
 	}
 	
-	@Nonnull
-	public MessageTable.MessageTableEntry add(final int weight, @Nonnull final String messageId) {
-		final MessageTableEntry entry = new MessageTableEntry(weight, messageId);
-		this.add(entry);
-		return entry;
+	public static boolean hasNegativePotionEffects(@Nonnull final EntityLiving entity) {
+		for(final PotionEffect effect:entity.getActivePotionEffects())
+			if(effect.getPotion().isBadEffect())
+				return true;
+		return false;
 	}
-	
-	@Nonnull
-	public String getMessage() {
-		return this.next().messageId;
-	}
+
 }

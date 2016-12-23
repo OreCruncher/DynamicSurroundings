@@ -22,38 +22,40 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.server.services;
+package org.blockartistry.mod.DynSurround.client.handlers;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.server.services.chat.EntityAIChat;
-import org.blockartistry.mod.DynSurround.server.services.chat.EntityAIVillagerFleeChat;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import org.blockartistry.mod.DynSurround.client.event.EntityEmojiEvent;
+import org.blockartistry.mod.DynSurround.client.event.SpeechTextEvent;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.util.WorldUtils;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public final class ChattyEntityService extends Service {
+public class EntityEmojiHandler extends EffectHandlerBase {
 
-	ChattyEntityService() {
-		super("ChattyEntityService");
+	@Override
+	public String getHandlerName() {
+		return "EntityEmojiHandler";
 	}
 
-	protected void addSpecialAI(@Nonnull final EntityLiving entity) {
-		if (entity instanceof EntityVillager) {
-			entity.tasks.addTask(EntityAIVillagerFleeChat.PRIORITY, new EntityAIVillagerFleeChat(entity));
-		}
+	@Override
+	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public void onJoinWorld(@Nonnull final EntityJoinWorldEvent event) {
-		if (event.getEntity() instanceof EntityLiving) {
-			final EntityLiving entity = (EntityLiving) event.getEntity();
-			if (EntityAIChat.hasMessages(entity)) {
-				entity.tasks.addTask(EntityAIChat.PRIORITY, new EntityAIChat(entity));
-				addSpecialAI(entity);
-			}
+	@SubscribeEvent
+	public void onEntityEmojiEvent(@Nonnull final EntityEmojiEvent event) {
+		
+		final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), event.entityId);
+		if(entity != null) {
+			final String message = String.format("%s %s %s", event.actionState.toString(), event.emotionalState.toString(), event.emojiType.toString());
+			MinecraftForge.EVENT_BUS.post(new SpeechTextEvent(event.entityId, message));
 		}
+		
 	}
 }

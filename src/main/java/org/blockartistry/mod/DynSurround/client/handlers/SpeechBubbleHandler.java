@@ -41,6 +41,7 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer;
 import org.blockartistry.mod.DynSurround.client.speech.SpeechBubbleRenderer.RenderingInfo;
 import org.blockartistry.mod.DynSurround.util.Translations;
+import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -116,14 +117,6 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		processTranslations();
 	}
 
-	@Nullable
-	private static Entity locateEntity(@Nonnull final World world, @Nonnull final UUID entityId) {
-		for (final Entity e : world.getLoadedEntityList())
-			if (e.getUniqueID().equals(entityId))
-				return e;
-		return null;
-	}
-
 	private void addSpeechBubbleFormatted(@Nonnull final UUID entityId, @Nonnull final String message,
 			final Object... parms) {
 		if (!ModOptions.enableSpeechBubbles && !ModOptions.enableEntityChat)
@@ -138,7 +131,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 				|| StringUtils.isEmpty(message))
 			return;
 
-		final Entity entity = locateEntity(EnvironState.getWorld(), entityId);
+		final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), entityId);
 		if (entity == null)
 			return;
 

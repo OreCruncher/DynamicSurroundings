@@ -28,7 +28,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
-
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaEntityAccessor;
 import mcp.mobius.waila.api.IWailaEntityProvider;
@@ -54,37 +53,41 @@ public class WailaEntityHandler implements IWailaEntityProvider {
 
 	public WailaEntityHandler() {
 	}
-	
-    @Override
-    public Entity getWailaOverride(final IWailaEntityAccessor accessor, final IWailaConfigHandler config) {
-        return null;
-    }
 
-    @Override
-    public List<String> getWailaHead(final Entity entity, List<String> currenttip, final IWailaEntityAccessor accessor, final IWailaConfigHandler config) {
-        return currenttip;
-    }
+	@Override
+	public Entity getWailaOverride(final IWailaEntityAccessor accessor, final IWailaConfigHandler config) {
+		return null;
+	}
 
-    @Override
-    public List<String> getWailaBody(final Entity entity, final List<String> currenttip, final IWailaEntityAccessor accessor, final IWailaConfigHandler config) {
-        final Entity currentEntity = accessor.getEntity();
-        final String entityName = EntityList.getEntityStringFromClass(currentEntity.getClass());
-        if(!StringUtils.isEmpty(entityName)) {
-        	currenttip.add(TextFormatting.GOLD + entityName);
-        }
-        return currenttip;
-    }
+	@Override
+	public List<String> getWailaHead(final Entity entity, List<String> currenttip, final IWailaEntityAccessor accessor,
+			final IWailaConfigHandler config) {
+		return currenttip;
+	}
 
-    @Override
-    public List<String> getWailaTail(Entity entity, List<String> currenttip, IWailaEntityAccessor accessor, IWailaConfigHandler config) {
-        return currenttip;
-    }
+	@Override
+	public List<String> getWailaBody(final Entity entity, final List<String> currenttip,
+			final IWailaEntityAccessor accessor, final IWailaConfigHandler config) {
+		final Entity currentEntity = accessor.getEntity();
+		final String entityName = EntityList.getEntityStringFromClass(currentEntity.getClass());
+		if (!StringUtils.isEmpty(entityName)) {
+			currenttip.add(TextFormatting.GOLD + entityName);
+		}
+
+		return currenttip;
+	}
+
+	@Override
+	public List<String> getWailaTail(Entity entity, List<String> currenttip, IWailaEntityAccessor accessor,
+			IWailaConfigHandler config) {
+		return currenttip;
+	}
 
 	@Override
 	public NBTTagCompound getNBTData(EntityPlayerMP player, Entity ent, NBTTagCompound tag, World world) {
 		return null;
 	}
-	
+
 	public static void register() {
 		if (ModOptions.enableDebugLogging)
 			FMLInterModComms.sendMessage("Waila", "register", WailaEntityHandler.class.getName() + ".callbackRegister");
