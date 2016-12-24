@@ -195,9 +195,11 @@ public class ParticleEmoji extends Particle {
 
 	@Override
 	public int getBrightnessForRender(float partialTick) {
-		final int FULL_BRIGHTNESS_VALUE = 0xf000f0;
-		return FULL_BRIGHTNESS_VALUE;
+		//final int FULL_BRIGHTNESS_VALUE = 0xf000f0;
+		//return FULL_BRIGHTNESS_VALUE;
 
+		return this.subject.get().getBrightnessForRender(partialTick);
+		
 		// if you want the brightness to be the local illumination (from block
 		// light and sky light) you can just use
 		// Entity.getBrightnessForRender() base method, which contains:
