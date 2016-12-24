@@ -32,9 +32,12 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.mod.DynSurround.ModLog;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
+import net.minecraft.entity.monster.EntityEnderman;
 
 public final class EmojiDataTables {
 
@@ -85,7 +88,7 @@ public final class EmojiDataTables {
 		actions.put(EntityAIBeg.class, ActionState.BEGGING);
 		actions.put(EntityAIBreakDoor.class, ActionState.NONE);
 		actions.put(EntityAICreeperSwell.class, ActionState.EXPLODE);
-		actions.put(EntityAIDefendVillage.class, ActionState.WORKING);
+		actions.put(EntityAIDefendVillage.class, ActionState.NONE);
 		actions.put(EntityAIDoorInteract.class, ActionState.NONE);
 		actions.put(EntityAIEatGrass.class, ActionState.EATING);
 		actions.put(EntityAIFindEntityNearest.class, ActionState.LOOKING);
@@ -130,6 +133,10 @@ public final class EmojiDataTables {
 		actions.put(EntityAIWatchClosest2.class, ActionState.LOOKING);
 		actions.put(EntityAIZombieAttack.class, ActionState.NONE);
 
+		// Special embedded AI tasks
+		registerSpecial(EntityEnderman.class, "AIFindPlayer", ActionState.ANGRY);
+
+		// Mappings to figure out an applicable EmojiType to display
 		emojiMap.put(new EmojiKey(ActionState.ATTACKING, null), EmojiType.ATTACK);
 		emojiMap.put(new EmojiKey(ActionState.EXPLODE, null), EmojiType.ANGRY);
 		emojiMap.put(new EmojiKey(ActionState.PANIC, null), EmojiType.PANIC);
@@ -141,6 +148,31 @@ public final class EmojiDataTables {
 		emojiMap.put(new EmojiKey(ActionState.TRADING, null), EmojiType.TRADE);
 		emojiMap.put(new EmojiKey(null, EmotionalState.ANGRY), EmojiType.ANGRY);
 		emojiMap.put(new EmojiKey(ActionState.EATING, null), EmojiType.EAT);
+		emojiMap.put(new EmojiKey(ActionState.WORKING, null), EmojiType.WORK);
+	}
+
+	private static void registerSpecial(@Nonnull final Class<? extends EntityLiving> clazz, @Nonnull final String className,
+			@Nonnull final ActionState state) {
+
+		final Class<? extends EntityAIBase> ai = findInternalClass(clazz, className);
+		if(ai != null)
+			actions.put(ai, state);
+		else
+			ModLog.warn("Unable to locate class '%s' inside [%s]", className, clazz.toGenericString());
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	private static Class<? extends EntityAIBase> findInternalClass(@Nonnull Class<? extends EntityLiving> clazz,
+			@Nonnull final String className) {
+
+		Class<?>[] classes = clazz.getDeclaredClasses();
+		for (final Class<?> c : classes) {
+			if (c.getName().endsWith(className) && EntityAIBase.class.isAssignableFrom(c))
+				return (Class<? extends EntityAIBase>) c;
+		}
+
+		return null;
+
 	}
 
 	@Nonnull

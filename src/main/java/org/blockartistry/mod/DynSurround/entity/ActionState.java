@@ -30,21 +30,22 @@ public enum ActionState {
 
 	NONE(0, EmotionalState.NEUTRAL),
 	IDLE(1, EmotionalState.NEUTRAL),
+	ANGRY(2, EmotionalState.ANGRY),
 	ATTACKING(1000, EmotionalState.ANGRY),
 	EXPLODE(2000, EmotionalState.ANGRY),
-	FARMING(2, EmotionalState.BUSY),
 	LOOKING(3, EmotionalState.NEUTRAL),
-	PANIC(4, EmotionalState.AFRAID),
-	TEMPT(5, EmotionalState.HAPPY),
-	MATING(6, EmotionalState.HAPPY),
-	CRAZY(7, EmotionalState.AFRAID),
-	TRADING(8, EmotionalState.HAPPY),
-	PLAYING(9, EmotionalState.HAPPY),
-	BEGGING(10, EmotionalState.HAPPY),
-	WORKING(11, EmotionalState.BUSY),
-	EATING(12, EmotionalState.HAPPY),
-	FOLLOWING(13, EmotionalState.NEUTRAL),
-	MOVING(14, EmotionalState.NEUTRAL);
+	FARMING(4, EmotionalState.BUSY),
+	PANIC(5, EmotionalState.AFRAID),
+	TEMPT(6, EmotionalState.HAPPY),
+	MATING(7, EmotionalState.HAPPY),
+	CRAZY(8, EmotionalState.AFRAID),
+	TRADING(9, EmotionalState.HAPPY),
+	PLAYING(10, EmotionalState.HAPPY),
+	BEGGING(11, EmotionalState.HAPPY),
+	WORKING(12, EmotionalState.BUSY),
+	EATING(13, EmotionalState.HAPPY),
+	FOLLOWING(14, EmotionalState.NEUTRAL),
+	MOVING(15, EmotionalState.NEUTRAL);
 
 	private static final TObjectIntHashMap<ActionState> map = new TObjectIntHashMap<ActionState>();
 
