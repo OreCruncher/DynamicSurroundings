@@ -426,6 +426,7 @@ public final class ModOptions {
 	public static final String CATEGORY_SPEECHBUBBLES = "speechbubbles";
 	public static final String CONFIG_OPTION_ENABLE_SPEECHBUBBLES = "Enable SpeechBubbles";
 	public static final String CONFIG_OPTION_ENABLE_ENTITY_CHAT = "Enable Entity Chat";
+	public static final String CONFIG_OPTION_ENABLE_EMOJIS = "Enable Entity Emojis";
 	public static final String CONFIG_OPTION_SPEECHBUBBLE_DURATION = "Display Duration";
 	public static final String CONFIG_OPTION_SPEECHBUBBLE_RANGE = "Visibility Range";
 	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_SPEECHBUBBLES, defaultValue = "true")
@@ -434,6 +435,9 @@ public final class ModOptions {
 	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_ENTITY_CHAT, defaultValue = "true")
 	@Comment("Enables/disables entity chat bubbles")
 	public static boolean enableEntityChat = true;
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_EMOJIS, defaultValue = "true")
+	@Comment("Enables/disables entity emojis")
+	public static boolean enableEntityEmojis = true;
 	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_SPEECHBUBBLE_DURATION, defaultValue = "7")
 	@MinMaxFloat(min = 5.0F, max = 15.0F)
 	@Comment("Number of seconds to display speech before removing")

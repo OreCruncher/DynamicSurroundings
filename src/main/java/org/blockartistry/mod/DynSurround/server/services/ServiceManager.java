@@ -82,7 +82,7 @@ public final class ServiceManager extends Service {
 		INSTANCE.addService(new AtmosphereService());
 		if (ModOptions.auroraEnable)
 			INSTANCE.addService(new AuroraService());
-		if (ModOptions.enableEntityChat)
+		if (ModOptions.enableEntityChat || ModOptions.enableEntityEmojis)
 			INSTANCE.addService(new EntityEmojiService());
 		if (ModOptions.enableDamagePopoffs)
 			INSTANCE.addService(new HealthEffectService());

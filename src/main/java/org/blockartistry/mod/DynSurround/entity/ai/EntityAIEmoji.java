@@ -40,7 +40,7 @@ public class EntityAIEmoji extends EntityAIBase {
 
 	public static final int PRIORITY = 400;
 	
-	private static final int INTERVAL = 5;
+	private static final int INTERVAL = 2;
 
 	protected final EntityLiving subject;
 	protected ActionState actionState = ActionState.NONE;

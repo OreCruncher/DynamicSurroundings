@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.server.services;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.entity.ai.EntityAIChat;
 import org.blockartistry.mod.DynSurround.entity.ai.EntityAIEmoji;
 import org.blockartistry.mod.DynSurround.entity.ai.EntityAIVillagerEmoji;
@@ -33,6 +34,7 @@ import org.blockartistry.mod.DynSurround.entity.ai.EntityAIVillagerFleeChat;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -45,25 +47,28 @@ public final class EntityEmojiService extends Service {
 		super("EntityEmojiService");
 	}
 
-	protected void addSpecialAI(@Nonnull final EntityLiving entity) {
-		if (entity instanceof EntityVillager) {
+	protected void addChatAI(@Nonnull final EntityLiving entity) {
+		if(EntityAIChat.hasMessages(entity))
+			entity.tasks.addTask(EntityAIChat.PRIORITY, new EntityAIChat(entity));
+		if (entity instanceof EntityVillager)
 			entity.tasks.addTask(EntityAIVillagerFleeChat.PRIORITY, new EntityAIVillagerFleeChat(entity));
+	}
+	
+	protected void addEmojiAI(@Nonnull final EntityLiving entity) {
+		if(entity instanceof EntityVillager)
 			entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIVillagerEmoji(entity));
-		} else if (entity instanceof EntityZombie) {
+		else if(entity instanceof EntityZombie || entity instanceof EntitySkeleton || entity instanceof EntitySpider)
 			entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIEmoji(entity));
-		} else if (entity instanceof EntitySkeleton) {
-			entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIEmoji(entity));
-		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onJoinWorld(@Nonnull final EntityJoinWorldEvent event) {
 		if (event.getEntity() instanceof EntityLiving) {
 			final EntityLiving entity = (EntityLiving) event.getEntity();
-			if (EntityAIChat.hasMessages(entity)) {
-				entity.tasks.addTask(EntityAIChat.PRIORITY, new EntityAIChat(entity));
-			}
-			addSpecialAI(entity);
+			if(ModOptions.enableEntityChat)
+				addChatAI(entity);
+			if(ModOptions.enableEntityEmojis)
+				addEmojiAI(entity);
 		}
 	}
 
