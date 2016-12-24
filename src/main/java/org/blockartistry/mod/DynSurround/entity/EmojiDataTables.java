@@ -38,6 +38,13 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntityGhast;
+import net.minecraft.entity.monster.EntityGuardian;
+import net.minecraft.entity.monster.EntityPolarBear;
+import net.minecraft.entity.monster.EntityShulker;
+import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.monster.EntitySpider;
+import net.minecraft.entity.passive.EntityRabbit;
 
 public final class EmojiDataTables {
 
@@ -135,6 +142,17 @@ public final class EmojiDataTables {
 
 		// Special embedded AI tasks
 		registerSpecial(EntityEnderman.class, "AIFindPlayer", ActionState.ANGRY);
+		registerSpecial(EntityGhast.class, "AIFireballAttack", ActionState.ATTACKING);
+		registerSpecial(EntityGuardian.class, "AIGuardianAttack", ActionState.ATTACKING);
+		registerSpecial(EntityPolarBear.class, "AIMeleeAttack", ActionState.ATTACKING);
+		registerSpecial(EntityPolarBear.class, "AIPanic", ActionState.PANIC);
+		registerSpecial(EntityPolarBear.class, "AIAttackPlayer", ActionState.ATTACKING);
+		registerSpecial(EntityShulker.class, "AIAttackNearest", ActionState.ATTACKING);
+		registerSpecial(EntitySlime.class, "AISlimeAttack", ActionState.ATTACKING);
+		registerSpecial(EntitySlime.class, "AISlimeHop", ActionState.MOVING);
+		registerSpecial(EntitySpider.class, "AISpiderAttack", ActionState.ATTACKING);
+		registerSpecial(EntityRabbit.class, "AIAvoidEntity", ActionState.PANIC);
+		registerSpecial(EntityRabbit.class, "AIRaidFarm", ActionState.EATING);
 
 		// Mappings to figure out an applicable EmojiType to display
 		emojiMap.put(new EmojiKey(ActionState.ATTACKING, null), EmojiType.ATTACK);
