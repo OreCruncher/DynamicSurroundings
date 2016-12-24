@@ -35,7 +35,7 @@ public enum EmojiType {
 
 	NONE("none"),
 	ATTACK("emoji_attack"),
-	PANIC("emoji_panic"),
+	FLEE("emoji_flee"),
 	HAPPY("emoji_happy"),
 	SAD("emoji_sad"),
 	SICK("emoji_sick"),

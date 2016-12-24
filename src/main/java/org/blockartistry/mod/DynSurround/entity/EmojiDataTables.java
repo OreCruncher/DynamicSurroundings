@@ -157,7 +157,7 @@ public final class EmojiDataTables {
 		// Mappings to figure out an applicable EmojiType to display
 		emojiMap.put(new EmojiKey(ActionState.ATTACKING, null), EmojiType.ATTACK);
 		emojiMap.put(new EmojiKey(ActionState.EXPLODE, null), EmojiType.ANGRY);
-		emojiMap.put(new EmojiKey(ActionState.PANIC, null), EmojiType.PANIC);
+		emojiMap.put(new EmojiKey(ActionState.PANIC, null), EmojiType.FLEE);
 		emojiMap.put(new EmojiKey(ActionState.LOOKING, null), EmojiType.WATCH);
 		emojiMap.put(new EmojiKey(null, EmotionalState.HAPPY), EmojiType.HAPPY);
 		emojiMap.put(new EmojiKey(null, EmotionalState.SAD), EmojiType.SAD);

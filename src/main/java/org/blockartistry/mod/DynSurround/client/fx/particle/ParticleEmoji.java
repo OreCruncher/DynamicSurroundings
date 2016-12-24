@@ -53,7 +53,7 @@ public class ParticleEmoji extends Particle {
 	
 	// Number of ticks to keep the icon around until
 	// the particle is dismissed.
-	private static final int HOLD_TICK_COUNT = 30;
+	private static final int HOLD_TICK_COUNT = 40;
 
 	private final Entity subject;
 	private final IEntityEmoji emoji;
