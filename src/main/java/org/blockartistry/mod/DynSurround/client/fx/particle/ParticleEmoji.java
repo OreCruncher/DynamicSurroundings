@@ -158,34 +158,36 @@ public class ParticleEmoji extends Particle {
 		float y = ((float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY));
 		float z = ((float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpPosZ));
 
-		// Calculate the location of our proxy particle based
+		// Calculate the location of the drawn particle based
 		// on the current period.
 		final float degrees = MathStuff.wrapDegrees(this.period + ORBITAL_TICK * partialTicks);
-		x = MathStuff.cos(MathStuff.toRadians(degrees)) * this.radius + x;
-		z = MathStuff.sin(MathStuff.toRadians(degrees)) * this.radius + z;
-		y = MathStuff.cos(MathStuff.toRadians(degrees)) * 0.25F + y;
+		final float cosine = MathStuff.cos(MathStuff.toRadians(degrees));
+		final float sine = MathStuff.sin(MathStuff.toRadians(degrees));
+		x = cosine * this.radius + x;
+		z = sine * this.radius + z;
+		y = cosine * 0.25F + y;
 
 		final int combinedBrightness = this.getBrightnessForRender(partialTicks);
-		final int skyLightTimes16 = combinedBrightness >> 16 & 65535;
-		final int blockLightTimes16 = combinedBrightness & 65535;
+		final int slX16 = combinedBrightness >> 16 & 65535;
+		final int blX16 = combinedBrightness & 65535;
 		
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		buffer.pos(x - edgeLRdirectionX * scaleLR - edgeUDdirectionX * scaleUD, y - edgeUDdirectionY * scaleUD,
 				z - edgeLRdirectionZ * scaleLR - edgeUDdirectionZ * scaleUD).tex(maxU, maxV)
 				.color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
-				.lightmap(skyLightTimes16, blockLightTimes16).endVertex();
+				.lightmap(slX16, blX16).endVertex();
 		buffer.pos(x - edgeLRdirectionX * scaleLR + edgeUDdirectionX * scaleUD, y + edgeUDdirectionY * scaleUD,
 				z - edgeLRdirectionZ * scaleLR + edgeUDdirectionZ * scaleUD).tex(maxU, minV)
 				.color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
-				.lightmap(skyLightTimes16, blockLightTimes16).endVertex();
+				.lightmap(slX16, blX16).endVertex();
 		buffer.pos(x + edgeLRdirectionX * scaleLR + edgeUDdirectionX * scaleUD, y + edgeUDdirectionY * scaleUD,
 				z + edgeLRdirectionZ * scaleLR + edgeUDdirectionZ * scaleUD).tex(minU, minV)
 				.color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
-				.lightmap(skyLightTimes16, blockLightTimes16).endVertex();
+				.lightmap(slX16, blX16).endVertex();
 		buffer.pos(x + edgeLRdirectionX * scaleLR - edgeUDdirectionX * scaleUD, y - edgeUDdirectionY * scaleUD,
 				z + edgeLRdirectionZ * scaleLR - edgeUDdirectionZ * scaleUD).tex(minU, maxV)
 				.color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
-				.lightmap(skyLightTimes16, blockLightTimes16).endVertex();
+				.lightmap(slX16, blX16).endVertex();
 		Tessellator.getInstance().draw();
 	}
 
