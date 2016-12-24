@@ -44,5 +44,10 @@ public final class WorldUtils {
 				return e;
 		return null;
 	}
+	
+	@Nullable
+	public static Entity locateEntity(@Nonnull final World world, final int entityId) {
+		return world.getEntityByID(entityId);
+	}
 
 }

@@ -46,6 +46,7 @@ import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
 import gnu.trove.iterator.TIntObjectIterator;
@@ -121,6 +122,8 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		public List<String> getText() {
 			if (this.messages == null) {
 				final FontRenderer font = Minecraft.getMinecraft().getRenderManager().getFontRenderer();
+				if(font == null)
+					return ImmutableList.of();
 				this.messages = font.listFormattedStringToWidth(this.incomingText, MAX_TEXT_WIDTH);
 				this.incomingText = null;
 			}

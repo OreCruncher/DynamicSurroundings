@@ -39,11 +39,13 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 public class EntityAIEmoji extends EntityAIBase {
 
 	public static final int PRIORITY = 400;
+	
+	private static final int INTERVAL = 5;
 
-	private final EntityLiving subject;
-	private ActionState actionState = ActionState.NONE;
-	private EmotionalState emotionalState = EmotionalState.NEUTRAL;
-	private EmojiType emoji = EmojiType.NONE;
+	protected final EntityLiving subject;
+	protected ActionState actionState = ActionState.NONE;
+	protected EmotionalState emotionalState = EmotionalState.NEUTRAL;
+	protected EmojiType emoji = EmojiType.NONE;
 	private long nextChat;
 
 	public EntityAIEmoji(final EntityLiving subject) {
@@ -70,8 +72,9 @@ public class EntityAIEmoji extends EntityAIBase {
 		updateEmoji();
 
 		final TargetPoint point = Network.getTargetPoint(this.subject, SpeechBubbleService.SPEECH_BUBBLE_RANGE);
-		Network.sendEntityEmoteUpdate(this.subject.getPersistentID(), this.actionState, this.emotionalState, this.emoji, point);
-		this.nextChat = this.subject.getEntityWorld().getTotalWorldTime() + 20;
+		Network.sendEntityEmoteUpdate(this.subject.getPersistentID(), this.actionState, this.emotionalState, this.emoji,
+				point);
+		this.nextChat = this.subject.getEntityWorld().getTotalWorldTime() + INTERVAL;
 	}
 
 	protected void updateActionState() {
@@ -89,7 +92,7 @@ public class EntityAIEmoji extends EntityAIBase {
 
 		this.emotionalState = newState;
 	}
-	
+
 	protected void updateEmoji() {
 		this.emoji = EmojiDataTables.getEmoji(this.actionState, this.emotionalState);
 	}

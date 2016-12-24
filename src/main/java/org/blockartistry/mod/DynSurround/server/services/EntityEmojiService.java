@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.entity.ai.EntityAIChat;
 import org.blockartistry.mod.DynSurround.entity.ai.EntityAIEmoji;
+import org.blockartistry.mod.DynSurround.entity.ai.EntityAIVillagerEmoji;
 import org.blockartistry.mod.DynSurround.entity.ai.EntityAIVillagerFleeChat;
 
 import net.minecraft.entity.EntityLiving;
@@ -47,11 +48,11 @@ public final class EntityEmojiService extends Service {
 	protected void addSpecialAI(@Nonnull final EntityLiving entity) {
 		if (entity instanceof EntityVillager) {
 			entity.tasks.addTask(EntityAIVillagerFleeChat.PRIORITY, new EntityAIVillagerFleeChat(entity));
-			//entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIEmoji(entity));
-		} else if(entity instanceof EntityZombie) {
-			//entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIEmoji(entity));
-		} else if(entity instanceof EntitySkeleton) {
-			//entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIEmoji(entity));
+			entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIVillagerEmoji(entity));
+		} else if (entity instanceof EntityZombie) {
+			entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIEmoji(entity));
+		} else if (entity instanceof EntitySkeleton) {
+			entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIEmoji(entity));
 		}
 	}
 
@@ -65,5 +66,5 @@ public final class EntityEmojiService extends Service {
 			addSpecialAI(entity);
 		}
 	}
-	
+
 }

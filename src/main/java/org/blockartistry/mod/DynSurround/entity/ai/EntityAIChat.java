@@ -123,7 +123,7 @@ public class EntityAIChat extends EntityAIBase {
 		xlate.forAll(new WeightTableBuilder());
 
 		setTimers(EntitySquid.class, 600, EntityChatData.DEFAULT_RANDOM);
-		setTimers("villager.flee", 100, 75);
+		setTimers("villager.flee", 250, 200);
 	}
 
 	public static boolean hasMessages(@Nonnull final EntityLiving entity) {

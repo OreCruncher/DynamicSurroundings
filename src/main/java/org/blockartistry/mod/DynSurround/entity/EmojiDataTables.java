@@ -137,6 +137,7 @@ public final class EmojiDataTables {
 		emojiMap.put(new EmojiKey(null, EmotionalState.SAD), EmojiType.SAD);
 		emojiMap.put(new EmojiKey(ActionState.FARMING, null), EmojiType.FARM);
 		emojiMap.put(new EmojiKey(null, EmotionalState.BUSY), EmojiType.WORK);
+		emojiMap.put(new EmojiKey(ActionState.TRADING, null), EmojiType.TRADE);
 	}
 
 	@Nonnull

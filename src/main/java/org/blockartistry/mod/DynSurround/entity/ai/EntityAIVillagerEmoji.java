@@ -22,46 +22,27 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.entity;
+package org.blockartistry.mod.DynSurround.entity.ai;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.entity.ActionState;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.passive.EntityVillager;
 
-import gnu.trove.map.hash.TObjectIntHashMap;
-import net.minecraft.util.ResourceLocation;
+public class EntityAIVillagerEmoji extends EntityAIEmoji {
 
-public enum EmojiType {
-
-	NONE("none"), ATTACK("emoji_attack"), PANIC("emoji_panic"), HAPPY("emoji_happy"), SAD("emoji_sad"), CONTEMPLATE(
-			"emoji_contemplate"), FARM("emoji_farm"), WORK("emoji_work"), TRADE("emoji_trade"), ANGRY("emoji_angry");
-
-	private static final TObjectIntHashMap<EmojiType> map = new TObjectIntHashMap<EmojiType>();
-
-	private final ResourceLocation resource;
-
-	private EmojiType(@Nonnull final String texture) {
-		this.resource = new ResourceLocation(Module.RESOURCE_ID, "textures/particles/" + texture + ".png");
+	public EntityAIVillagerEmoji(@Nonnull final EntityLiving subject) {
+		super(subject);
 	}
 
-	@Nonnull
-	public ResourceLocation getResource() {
-		return this.resource;
-	}
-
-	public static EmojiType get(int id) {
-		final EmojiType[] v = EmojiType.values();
-		if (id > v.length || id < 0)
-			return null;
-		return v[id];
-	}
-
-	public static int getId(final EmojiType state) {
-		if (map.size() == 0) {
-			for (int x = 0; x < EmojiType.values().length; x++)
-				map.put(EmojiType.values()[x], x);
-		}
-		return map.get(state);
+	@Override
+	protected void updateActionState() {
+		final EntityVillager villager = (EntityVillager) this.subject;
+		if (villager.isTrading())
+			this.actionState = ActionState.TRADING;
+		else
+			super.updateActionState();
 	}
 
 }

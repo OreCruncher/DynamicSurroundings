@@ -73,6 +73,8 @@ public class WailaEntityHandler implements IWailaEntityProvider {
 		if (!StringUtils.isEmpty(entityName)) {
 			currenttip.add(TextFormatting.GOLD + entityName);
 		}
+		
+		currenttip.add(TextFormatting.GOLD + "#" + entity.getEntityId());
 
 		return currenttip;
 	}
