@@ -22,27 +22,30 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.entity.ai;
+package org.blockartistry.mod.DynSurround.entity;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.entity.ActionState;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class EntityAIVillagerEmoji extends EntityAIEmoji {
-
-	public EntityAIVillagerEmoji(@Nonnull final EntityLiving subject) {
-		super(subject);
+public final class EntityEventHandler {
+	
+	private EntityEventHandler() {
+		
+	}
+	
+	public static void register() {
+		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 	}
 
-	@Override
-	protected void updateActionState() {
-		final EntityVillager villager = (EntityVillager) this.subject;
-		if (villager.isTrading())
-			this.data.setActionState(ActionState.TRADING);
-		else
-			super.updateActionState();
+	@SuppressWarnings("deprecation")
+	@SubscribeEvent
+	public void onAttachCapabilities(@Nonnull final AttachCapabilitiesEvent.Entity event) {
+		if(event.getObject() instanceof EntityLiving)
+			event.addCapability(EntityEmojiData.CAPABILITY_ID, new EntityEmojiData());
 	}
-
+	
 }

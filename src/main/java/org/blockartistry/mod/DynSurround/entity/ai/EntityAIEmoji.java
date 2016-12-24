@@ -24,10 +24,10 @@
 
 package org.blockartistry.mod.DynSurround.entity.ai;
 
-import org.blockartistry.mod.DynSurround.entity.ActionState;
 import org.blockartistry.mod.DynSurround.entity.EmojiDataTables;
-import org.blockartistry.mod.DynSurround.entity.EmojiType;
 import org.blockartistry.mod.DynSurround.entity.EmotionalState;
+import org.blockartistry.mod.DynSurround.entity.EntityEmojiCapability;
+import org.blockartistry.mod.DynSurround.entity.IEntityEmojiSettable;
 import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.server.services.SpeechBubbleService;
 import org.blockartistry.mod.DynSurround.util.EntityUtils;
@@ -39,25 +39,16 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 public class EntityAIEmoji extends EntityAIBase {
 
 	public static final int PRIORITY = 400;
-	
+
 	private static final int INTERVAL = 2;
 
 	protected final EntityLiving subject;
-	protected ActionState actionState = ActionState.NONE;
-	protected EmotionalState emotionalState = EmotionalState.NEUTRAL;
-	protected EmojiType emoji = EmojiType.NONE;
+	protected IEntityEmojiSettable data;
 	private long nextChat;
 
 	public EntityAIEmoji(final EntityLiving subject) {
 		this.subject = subject;
-	}
-
-	public ActionState getActionState() {
-		return this.actionState;
-	}
-
-	public EmotionalState getEmotionalState() {
-		return this.emotionalState;
+		this.data = (IEntityEmojiSettable) subject.getCapability(EntityEmojiCapability.CAPABILIITY, null);
 	}
 
 	@Override
@@ -71,18 +62,22 @@ public class EntityAIEmoji extends EntityAIBase {
 		updateEmotionalState();
 		updateEmoji();
 
-		final TargetPoint point = Network.getTargetPoint(this.subject, SpeechBubbleService.SPEECH_BUBBLE_RANGE);
-		Network.sendEntityEmoteUpdate(this.subject.getPersistentID(), this.actionState, this.emotionalState, this.emoji,
-				point);
+		if (this.data.isDirty()) {
+			final TargetPoint point = Network.getTargetPoint(this.subject, SpeechBubbleService.SPEECH_BUBBLE_RANGE);
+			Network.sendEntityEmoteUpdate(this.subject.getPersistentID(), this.data.getActionState(),
+					this.data.getEmotionalState(), this.data.getEmojiType(), point);
+			this.data.clearDirty();
+		}
+
 		this.nextChat = this.subject.getEntityWorld().getTotalWorldTime() + INTERVAL;
 	}
 
 	protected void updateActionState() {
-		this.actionState = EmojiDataTables.assess(this.subject);
+		this.data.setActionState(EmojiDataTables.assess(this.subject));
 	}
 
 	protected void updateEmotionalState() {
-		EmotionalState newState = this.actionState.getState();
+		EmotionalState newState = this.data.getActionState().getState();
 
 		if (this.subject.getHealth() <= this.subject.getMaxHealth() / 2.0F) {
 			newState = EmotionalState.SAD;
@@ -90,11 +85,11 @@ public class EntityAIEmoji extends EntityAIBase {
 			newState = EmotionalState.SAD;
 		}
 
-		this.emotionalState = newState;
+		this.data.setEmotionalState(newState);
 	}
 
 	protected void updateEmoji() {
-		this.emoji = EmojiDataTables.getEmoji(this.actionState, this.emotionalState);
+		this.data.setEmojiType(EmojiDataTables.getEmoji(this.data.getActionState(), this.data.getEmotionalState()));
 	}
 
 }

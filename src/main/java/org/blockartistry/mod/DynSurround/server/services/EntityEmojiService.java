@@ -33,9 +33,6 @@ import org.blockartistry.mod.DynSurround.entity.ai.EntityAIVillagerEmoji;
 import org.blockartistry.mod.DynSurround.entity.ai.EntityAIVillagerFleeChat;
 
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -57,8 +54,14 @@ public final class EntityEmojiService extends Service {
 	protected void addEmojiAI(@Nonnull final EntityLiving entity) {
 		if(entity instanceof EntityVillager)
 			entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIVillagerEmoji(entity));
-		else if(entity instanceof EntityZombie || entity instanceof EntitySkeleton || entity instanceof EntitySpider)
+		else
 			entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIEmoji(entity));
+		
+//		else if(entity instanceof EntityZombie || entity instanceof EntitySkeleton || entity instanceof EntitySpider)
+//			entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIEmoji(entity));
+//		else if(entity instanceof EntitySheep)
+//			entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIEmoji(entity));
+			
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)

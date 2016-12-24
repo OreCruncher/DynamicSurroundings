@@ -26,18 +26,14 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 
 import java.lang.ref.WeakReference;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.blockartistry.mod.DynSurround.client.event.EntityEmojiEvent;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleEmoji;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.entity.ActionState;
 import org.blockartistry.mod.DynSurround.entity.EmojiType;
-import org.blockartistry.mod.DynSurround.entity.EmotionalState;
+import org.blockartistry.mod.DynSurround.entity.EntityEmojiCapability;
+import org.blockartistry.mod.DynSurround.entity.IEntityEmojiSettable;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
-
-import com.google.common.base.Function;
 
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -47,28 +43,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class EntityEmojiHandler extends EffectHandlerBase {
-	
-	private static class EntityEmojiData {
-		
-		@SuppressWarnings("unused")
-		protected ActionState actionState;
-		@SuppressWarnings("unused")
-		protected EmotionalState emotionalState;
-		protected EmojiType emojiType;
-		protected WeakReference<ParticleEmoji> particle;
-		
-		public EntityEmojiData(@Nonnull final ActionState action, @Nonnull final EmotionalState emotion, @Nonnull EmojiType type) {
-			this.actionState = action;
-			this.emotionalState = emotion;
-			this.emojiType = type;
-		}
-	}
 
-	private final TIntObjectHashMap<EntityEmojiData> emojiData = new TIntObjectHashMap<EntityEmojiData>();
+	private final TIntObjectHashMap<WeakReference<ParticleEmoji>> emojiParticles = new TIntObjectHashMap<WeakReference<ParticleEmoji>>();
 
 	public EntityEmojiHandler() {
 	}
-	
+
 	@Override
 	public String getHandlerName() {
 		return "EntityEmojiHandler";
@@ -76,12 +56,12 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
-		// Clear out the old emoji data for entities that no
-		// longer exist.
-		final TIntObjectIterator<EntityEmojiData> data = this.emojiData.iterator();
+		// Get rid of dead particles
+		final TIntObjectIterator<WeakReference<ParticleEmoji>> data = this.emojiParticles.iterator();
 		while (data.hasNext()) {
 			data.advance();
-			if(WorldUtils.locateEntity(player.getEntityWorld(), data.key()) == null) {
+			final ParticleEmoji particle = data.value().get();
+			if (particle == null || !particle.isAlive()) {
 				data.remove();
 			}
 		}
@@ -90,47 +70,35 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void onEntityEmojiEvent(@Nonnull final EntityEmojiEvent event) {
-		
+
 		final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), event.entityId);
-		if(entity != null) {
-
-			EntityEmojiData data = this.emojiData.get(entity.getEntityId());
-			if(data == null) {
-				this.emojiData.put(entity.getEntityId(), data = new EntityEmojiData(event.actionState, event.emotionalState, event.emojiType));
-			} else {
-				data.actionState = event.actionState;
-				data.emotionalState = event.emotionalState;
-				data.emojiType = event.emojiType;
-			}
+		if (entity != null) {
+			final IEntityEmojiSettable data = (IEntityEmojiSettable) entity
+					.getCapability(EntityEmojiCapability.CAPABILIITY, null);
+			data.setActionState(event.actionState);
+			data.setEmotionalState(event.emotionalState);
+			data.setEmojiType(event.emojiType);
 			
-			if((data.particle == null || data.particle.get() == null || !data.particle.get().isAlive()) && data.emojiType != EmojiType.NONE) {
-				
-				final Function<Integer, EmojiType> ACCESSOR = new Function<Integer, EmojiType>() {
+			final WeakReference<ParticleEmoji> particle = this.emojiParticles.get(entity.getEntityId());
 
-					@Override
-					@Nullable
-					public EmojiType apply(@Nonnull final Integer input) {
-						final EntityEmojiData data = EntityEmojiHandler.this.emojiData.get(input.intValue());
-						return data == null ? null : data.emojiType;
-					}
+			if ((particle == null || particle.get() == null || !particle.get().isAlive())
+					&& data.getEmojiType() != EmojiType.NONE) {
 
-				};
-				
-				final ParticleEmoji particle = new ParticleEmoji(entity, ACCESSOR);
-				data.particle = new WeakReference<ParticleEmoji>(particle);
-				ParticleHelper.addParticle(particle);
+				final ParticleEmoji p = new ParticleEmoji(entity);
+				this.emojiParticles.put(entity.getEntityId(), new WeakReference<ParticleEmoji>(p));
+				ParticleHelper.addParticle(p);
 			}
 		}
-		
+
 	}
-	
+
 	@Override
 	public void onConnect() {
-		this.emojiData.clear();
+		this.emojiParticles.clear();
 	}
-	
+
 	@Override
 	public void onDisconnect() {
-		this.emojiData.clear();
+		this.emojiParticles.clear();
 	}
 }

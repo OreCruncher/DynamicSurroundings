@@ -29,10 +29,10 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.entity.EmojiType;
+import org.blockartistry.mod.DynSurround.entity.EntityEmojiCapability;
+import org.blockartistry.mod.DynSurround.entity.IEntityEmoji;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.lwjgl.opengl.GL11;
-
-import com.google.common.base.Function;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -57,18 +57,15 @@ public class ParticleEmoji extends Particle {
 	private static final int HOLD_TICK_COUNT = 60;
 
 	private final WeakReference<Entity> subject;
-	private final Function<Integer, EmojiType> accessor;
-	private EmojiType emoji;
+	private final IEntityEmoji emoji;
 	private ResourceLocation activeTexture;
 
 	private int holdTicks;
 	private float period;
 	private float radius;
 
-	public ParticleEmoji(@Nonnull final Entity entity, @Nonnull final Function<Integer, EmojiType> accessor) {
+	public ParticleEmoji(@Nonnull final Entity entity) {
 		super(entity.getEntityWorld(), entity.posX, entity.posY, entity.posZ);
-
-		this.accessor = accessor;
 
 		final double newY = entity.posY + entity.height - (entity.isSneaking() ? 0.25D : 0);
 		this.setPosition(entity.posX, newY, entity.posZ);
@@ -84,13 +81,14 @@ public class ParticleEmoji extends Particle {
 
 		this.particleAlpha = 0.99F;
 		this.radius = (entity.width / 2.0F) + 0.25F;
+		this.period = this.rand.nextFloat() * 360.0F;
 		
-		this.emoji = this.accessor.apply(entity.getEntityId());
-		this.activeTexture = this.emoji.getResource();
+		this.emoji = entity.getCapability(EntityEmojiCapability.CAPABILIITY, null);
+		this.activeTexture = this.emoji.getEmojiType().getResource();
 	}
 
 	protected boolean shouldExpire() {
-		if (this.isExpired || this.subject.isEnqueued() || this.accessor == null)
+		if (!this.isAlive() || this.subject.isEnqueued())
 			return true;
 
 		final Entity entity = this.subject.get();
@@ -100,7 +98,6 @@ public class ParticleEmoji extends Particle {
 		if (entity.isInvisibleToPlayer(EnvironState.getPlayer()))
 			return true;
 
-		this.emoji = this.accessor.apply(entity.getEntityId());
 		return this.emoji == null;
 	}
 
@@ -124,7 +121,7 @@ public class ParticleEmoji extends Particle {
 
 			// If there is no emoji we want to keep the current one
 			// around for a period of time to give a better feel.
-			if(this.emoji == EmojiType.NONE) {
+			if(this.emoji.getEmojiType() == EmojiType.NONE) {
 				this.holdTicks++;
 				if(this.holdTicks >= HOLD_TICK_COUNT) {
 					this.setExpired();
@@ -134,7 +131,7 @@ public class ParticleEmoji extends Particle {
 			
 			// Reset the hold counter and set the texture
 			this.holdTicks = 0;
-			this.activeTexture = this.emoji.getResource();
+			this.activeTexture = this.emoji.getEmojiType().getResource();
 
 		}
 	}

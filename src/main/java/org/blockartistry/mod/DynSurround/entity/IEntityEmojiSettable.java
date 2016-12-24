@@ -22,27 +22,14 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.entity.ai;
+package org.blockartistry.mod.DynSurround.entity;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.entity.ActionState;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.passive.EntityVillager;
-
-public class EntityAIVillagerEmoji extends EntityAIEmoji {
-
-	public EntityAIVillagerEmoji(@Nonnull final EntityLiving subject) {
-		super(subject);
-	}
-
-	@Override
-	protected void updateActionState() {
-		final EntityVillager villager = (EntityVillager) this.subject;
-		if (villager.isTrading())
-			this.data.setActionState(ActionState.TRADING);
-		else
-			super.updateActionState();
-	}
-
+public interface IEntityEmojiSettable extends IEntityEmoji {
+	void setActionState(@Nonnull final ActionState state);
+	void setEmotionalState(@Nonnull final EmotionalState state);
+	void setEmojiType(@Nonnull final EmojiType type);
+	boolean isDirty();
+	void clearDirty();
 }

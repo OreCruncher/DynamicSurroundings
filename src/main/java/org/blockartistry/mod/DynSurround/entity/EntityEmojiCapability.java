@@ -22,27 +22,45 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.entity.ai;
+package org.blockartistry.mod.DynSurround.entity;
 
-import javax.annotation.Nonnull;
+import java.util.concurrent.Callable;
 
-import org.blockartistry.mod.DynSurround.entity.ActionState;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 
-public class EntityAIVillagerEmoji extends EntityAIEmoji {
+public class EntityEmojiCapability {
+	
+	@CapabilityInject(IEntityEmoji.class)
+	public static Capability<IEntityEmoji> CAPABILIITY;
+	
+	public static final class Storage implements Capability.IStorage<IEntityEmoji> {
 
-	public EntityAIVillagerEmoji(@Nonnull final EntityLiving subject) {
-		super(subject);
+		@Override
+		public NBTBase writeNBT(Capability<IEntityEmoji> capability, IEntityEmoji instance, EnumFacing side) {
+			return null;
+		}
+
+		@Override
+		public void readNBT(Capability<IEntityEmoji> capability, IEntityEmoji instance, EnumFacing side, NBTBase nbt) {
+		}
+		
 	}
+	
+	public static final class Factory implements Callable<IEntityEmoji> {
 
-	@Override
-	protected void updateActionState() {
-		final EntityVillager villager = (EntityVillager) this.subject;
-		if (villager.isTrading())
-			this.data.setActionState(ActionState.TRADING);
-		else
-			super.updateActionState();
+		@Override
+		public IEntityEmoji call() throws Exception {
+			return new EntityEmojiData();
+		}
+		
+	}
+	
+	public static void register() {
+		CapabilityManager.INSTANCE.register(IEntityEmoji.class, new Storage(), new Factory());
 	}
 
 }

@@ -84,7 +84,7 @@ public final class EmojiDataTables {
 		actions.put(EntityAIAvoidEntity.class, ActionState.PANIC);
 		actions.put(EntityAIBeg.class, ActionState.BEGGING);
 		actions.put(EntityAIBreakDoor.class, ActionState.NONE);
-		actions.put(EntityAICreeperSwell.class, ActionState.ATTACKING);
+		actions.put(EntityAICreeperSwell.class, ActionState.EXPLODE);
 		actions.put(EntityAIDefendVillage.class, ActionState.WORKING);
 		actions.put(EntityAIDoorInteract.class, ActionState.NONE);
 		actions.put(EntityAIEatGrass.class, ActionState.EATING);
@@ -131,6 +131,7 @@ public final class EmojiDataTables {
 		actions.put(EntityAIZombieAttack.class, ActionState.NONE);
 
 		emojiMap.put(new EmojiKey(ActionState.ATTACKING, null), EmojiType.ATTACK);
+		emojiMap.put(new EmojiKey(ActionState.EXPLODE, null), EmojiType.ANGRY);
 		emojiMap.put(new EmojiKey(ActionState.PANIC, null), EmojiType.PANIC);
 		emojiMap.put(new EmojiKey(ActionState.LOOKING, null), EmojiType.CONTEMPLATE);
 		emojiMap.put(new EmojiKey(null, EmotionalState.HAPPY), EmojiType.HAPPY);
@@ -139,6 +140,7 @@ public final class EmojiDataTables {
 		emojiMap.put(new EmojiKey(null, EmotionalState.BUSY), EmojiType.WORK);
 		emojiMap.put(new EmojiKey(ActionState.TRADING, null), EmojiType.TRADE);
 		emojiMap.put(new EmojiKey(null, EmotionalState.ANGRY), EmojiType.ANGRY);
+		emojiMap.put(new EmojiKey(ActionState.EATING, null), EmojiType.EAT);
 	}
 
 	@Nonnull
@@ -158,13 +160,14 @@ public final class EmojiDataTables {
 	@Nonnull
 	public static ActionState assess(@Nonnull final EntityLiving entity) {
 
-		if (entity.attackTarget != null)
-			return ActionState.ATTACKING;
-
 		final ActionState first = eval(entity.tasks.executingTaskEntries);
 		final ActionState second = eval(entity.targetTasks.executingTaskEntries);
 
-		return first.getPriority() > second.getPriority() ? first : second;
+		ActionState result = first.getPriority() > second.getPriority() ? first : second;
+		if (entity.attackTarget != null && ActionState.ATTACKING.getPriority() > result.getPriority())
+			result = ActionState.ATTACKING;
+
+		return result;
 	}
 
 	@Nonnull

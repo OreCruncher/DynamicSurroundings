@@ -33,8 +33,17 @@ import net.minecraft.util.ResourceLocation;
 
 public enum EmojiType {
 
-	NONE("none"), ATTACK("emoji_attack"), PANIC("emoji_panic"), HAPPY("emoji_happy"), SAD("emoji_sad"), CONTEMPLATE(
-			"emoji_contemplate"), FARM("emoji_farm"), WORK("emoji_work"), TRADE("emoji_trade"), ANGRY("emoji_angry");
+	NONE("none"),
+	ATTACK("emoji_attack"),
+	PANIC("emoji_panic"),
+	HAPPY("emoji_happy"),
+	SAD("emoji_sad"),
+	CONTEMPLATE("emoji_contemplate"),
+	FARM("emoji_farm"),
+	WORK("emoji_work"),
+	TRADE("emoji_trade"),
+	ANGRY("emoji_angry"),
+	EAT("emoji_eat");
 
 	private static final TObjectIntHashMap<EmojiType> map = new TObjectIntHashMap<EmojiType>();
 

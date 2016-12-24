@@ -31,6 +31,7 @@ public enum ActionState {
 	NONE(0, EmotionalState.NEUTRAL),
 	IDLE(1, EmotionalState.NEUTRAL),
 	ATTACKING(1000, EmotionalState.ANGRY),
+	EXPLODE(2000, EmotionalState.ANGRY),
 	FARMING(2, EmotionalState.BUSY),
 	LOOKING(3, EmotionalState.NEUTRAL),
 	PANIC(4, EmotionalState.AFRAID),
