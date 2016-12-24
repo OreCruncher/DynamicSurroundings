@@ -24,7 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -133,7 +132,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 
 	private static class EntityBubbleContext {
 		public final List<SpeechBubbleData> data = new ArrayList<SpeechBubbleData>();
-		public WeakReference<ParticleBillboard> bubble;
+		public ParticleBillboard bubble;
 	}
 
 	private void processTranslations() {
@@ -177,10 +176,10 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 
 		ctx.data.add(new SpeechBubbleData(message));
 
-		if (ctx.bubble == null || ctx.bubble.get() == null) {
+		if (ctx.bubble == null || ctx.bubble.shouldExpire()) {
 			final ParticleBillboard particle = new ParticleBillboard(entity, ACCESSOR);
 			ParticleHelper.addParticle(particle);
-			ctx.bubble = new WeakReference<ParticleBillboard>(particle);
+			ctx.bubble = particle;
 		}
 	}
 

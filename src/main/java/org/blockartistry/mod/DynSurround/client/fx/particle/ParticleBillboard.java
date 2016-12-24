@@ -24,7 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -59,7 +58,7 @@ public class ParticleBillboard extends Particle {
 
 	private final FontRenderer font;
 	private final float scale;
-	private final WeakReference<Entity> subject;
+	private final Entity subject;
 	private final Function<Integer, List<String>> accessor;
 	private List<String> text;
 	private int textWidth;
@@ -79,24 +78,23 @@ public class ParticleBillboard extends Particle {
 		this.motionX = 0.0D;
 		this.motionY = 0.0D;
 		this.motionZ = 0.0D;
-		this.subject = new WeakReference<Entity>(entity);
+		this.subject = entity;
 
 		this.font = Minecraft.getMinecraft().fontRendererObj;
 		this.scale = 1F;
 	}
 
-	protected boolean shouldExpire() {
-		if (this.subject.isEnqueued() || this.accessor == null)
+	public boolean shouldExpire() {
+		if (!this.isAlive())
+			return true;
+		
+		if(this.subject == null || !this.subject.isEntityAlive())
 			return true;
 
-		final Entity entity = this.subject.get();
-		if (entity == null || entity.isDead)
+		if (this.subject.isInvisibleToPlayer(EnvironState.getPlayer()))
 			return true;
 
-		if (entity.isInvisibleToPlayer(EnvironState.getPlayer()))
-			return true;
-
-		this.text = this.accessor.apply(entity.getEntityId());
+		this.text = this.accessor.apply(this.subject.getEntityId());
 		return this.text == null || this.text.isEmpty();
 	}
 
@@ -106,14 +104,12 @@ public class ParticleBillboard extends Particle {
 			this.setExpired();
 		} else {
 
-			final Entity entity = this.subject.get();
-
 			this.prevPosX = this.posX;
 			this.prevPosY = this.posY;
 			this.prevPosZ = this.posZ;
 
-			final double newY = entity.posY + entity.height + 0.5D - (entity.isSneaking() ? 0.25D : 0);
-			this.setPosition(entity.posX, newY, entity.posZ);
+			final double newY = this.subject.posY + this.subject.height + 0.5D - (this.subject.isSneaking() ? 0.25D : 0);
+			this.setPosition(this.subject.posX, newY, this.subject.posZ);
 
 			this.textWidth = MIN_TEXT_WIDTH;
 
