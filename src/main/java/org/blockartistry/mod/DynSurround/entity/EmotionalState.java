@@ -33,7 +33,8 @@ public enum EmotionalState {
 	SAD,
 	ANGRY,
 	AFRAID,
-	BUSY;
+	BUSY,
+	SICK;
 
 	private static final TObjectIntHashMap<EmotionalState> map = new TObjectIntHashMap<EmotionalState>();
 

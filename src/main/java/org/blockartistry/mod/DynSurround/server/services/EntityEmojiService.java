@@ -56,12 +56,6 @@ public final class EntityEmojiService extends Service {
 			entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIVillagerEmoji(entity));
 		else
 			entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIEmoji(entity));
-		
-//		else if(entity instanceof EntityZombie || entity instanceof EntitySkeleton || entity instanceof EntitySpider)
-//			entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIEmoji(entity));
-//		else if(entity instanceof EntitySheep)
-//			entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIEmoji(entity));
-			
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)

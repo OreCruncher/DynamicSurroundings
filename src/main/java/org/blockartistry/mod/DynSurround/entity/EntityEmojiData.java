@@ -37,12 +37,12 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 public final class EntityEmojiData implements ICapabilityProvider, IEntityEmojiSettable {
 
 	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(Module.MOD_ID, "entityEmojiData");
-	
+
 	private boolean isDirty = false;
 	private ActionState actionState = ActionState.NONE;
 	private EmotionalState emotionalState = EmotionalState.NEUTRAL;
 	private EmojiType emojiType = EmojiType.NONE;
-	
+
 	@Override
 	public boolean hasCapability(@Nonnull final Capability<?> capability, @Nullable final EnumFacing facing) {
 		return capability == EntityEmojiCapability.CAPABILIITY;
@@ -50,23 +50,25 @@ public final class EntityEmojiData implements ICapabilityProvider, IEntityEmojiS
 
 	@SuppressWarnings("unchecked")
 	@Override
-	@Nonnull
+	@Nullable
 	public <T> T getCapability(@Nonnull final Capability<T> capability, @Nullable final EnumFacing facing) {
-		return (T)this;
+		if (capability == EntityEmojiCapability.CAPABILIITY)
+			return (T) this;
+		return null;
 	}
 
 	@Override
 	public void setActionState(@Nonnull final ActionState state) {
-		if(this.actionState != state) {
+		if (this.actionState != state) {
 			this.actionState = state;
 			this.isDirty = true;
 		}
-		
+
 	}
 
 	@Override
 	public void setEmotionalState(EmotionalState state) {
-		if(this.emotionalState != state) {
+		if (this.emotionalState != state) {
 			this.emotionalState = state;
 			this.isDirty = true;
 		}
@@ -74,7 +76,7 @@ public final class EntityEmojiData implements ICapabilityProvider, IEntityEmojiS
 
 	@Override
 	public void setEmojiType(EmojiType type) {
-		if(this.emojiType != type) {
+		if (this.emojiType != type) {
 			this.emojiType = type;
 			this.isDirty = true;
 		}
@@ -84,7 +86,7 @@ public final class EntityEmojiData implements ICapabilityProvider, IEntityEmojiS
 	public boolean isDirty() {
 		return this.isDirty;
 	}
-	
+
 	@Override
 	public void clearDirty() {
 		this.isDirty = false;

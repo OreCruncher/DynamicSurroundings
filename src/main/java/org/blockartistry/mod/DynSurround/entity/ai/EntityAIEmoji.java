@@ -40,7 +40,7 @@ public class EntityAIEmoji extends EntityAIBase {
 
 	public static final int PRIORITY = 400;
 
-	private static final int INTERVAL = 2;
+	private static final int INTERVAL = 20;
 
 	protected final EntityLiving subject;
 	protected IEntityEmojiSettable data;
@@ -53,23 +53,26 @@ public class EntityAIEmoji extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		return this.subject.getEntityWorld().getTotalWorldTime() >= this.nextChat;
+		return true;
 	}
 
 	@Override
 	public void startExecuting() {
+	}
+
+	@Override
+	public void updateTask() {
 		updateActionState();
 		updateEmotionalState();
 		updateEmoji();
 
-		if (this.data.isDirty()) {
+		if (this.data.isDirty() || this.subject.getEntityWorld().getWorldTime() > this.nextChat) {
 			final TargetPoint point = Network.getTargetPoint(this.subject, SpeechBubbleService.SPEECH_BUBBLE_RANGE);
 			Network.sendEntityEmoteUpdate(this.subject.getPersistentID(), this.data.getActionState(),
 					this.data.getEmotionalState(), this.data.getEmojiType(), point);
 			this.data.clearDirty();
+			this.nextChat = this.subject.getEntityWorld().getTotalWorldTime() + INTERVAL;
 		}
-
-		this.nextChat = this.subject.getEntityWorld().getTotalWorldTime() + INTERVAL;
 	}
 
 	protected void updateActionState() {
@@ -80,9 +83,9 @@ public class EntityAIEmoji extends EntityAIBase {
 		EmotionalState newState = this.data.getActionState().getState();
 
 		if (this.subject.getHealth() <= this.subject.getMaxHealth() / 2.0F) {
-			newState = EmotionalState.SAD;
+			newState = EmotionalState.SICK;
 		} else if (EntityUtils.hasNegativePotionEffects(this.subject)) {
-			newState = EmotionalState.SAD;
+			newState = EmotionalState.SICK;
 		}
 
 		this.data.setEmotionalState(newState);

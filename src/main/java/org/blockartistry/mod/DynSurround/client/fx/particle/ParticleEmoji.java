@@ -24,7 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
-import java.lang.ref.WeakReference;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -54,9 +53,9 @@ public class ParticleEmoji extends Particle {
 	
 	// Number of ticks to keep the icon around until
 	// the particle is dismissed.
-	private static final int HOLD_TICK_COUNT = 60;
+	private static final int HOLD_TICK_COUNT = 30;
 
-	private final WeakReference<Entity> subject;
+	private final Entity subject;
 	private final IEntityEmoji emoji;
 	private ResourceLocation activeTexture;
 
@@ -77,7 +76,7 @@ public class ParticleEmoji extends Particle {
 		this.motionX = 0.0D;
 		this.motionY = 0.0D;
 		this.motionZ = 0.0D;
-		this.subject = new WeakReference<Entity>(entity);
+		this.subject = entity;
 
 		this.particleAlpha = 0.99F;
 		this.radius = (entity.width / 2.0F) + 0.25F;
@@ -87,15 +86,14 @@ public class ParticleEmoji extends Particle {
 		this.activeTexture = this.emoji.getEmojiType().getResource();
 	}
 
-	protected boolean shouldExpire() {
-		if (!this.isAlive() || this.subject.isEnqueued())
+	public boolean shouldExpire() {
+		if (!this.isAlive())
+			return true;
+		
+		if(this.subject == null || !this.subject.isEntityAlive())
 			return true;
 
-		final Entity entity = this.subject.get();
-		if (entity == null || entity.isDead)
-			return true;
-
-		if (entity.isInvisibleToPlayer(EnvironState.getPlayer()))
+		if (this.subject.isInvisibleToPlayer(EnvironState.getPlayer()))
 			return true;
 
 		return this.emoji == null;
@@ -107,14 +105,12 @@ public class ParticleEmoji extends Particle {
 			this.setExpired();
 		} else {
 			
-			final Entity entity = this.subject.get();
-
 			this.prevPosX = this.posX;
 			this.prevPosY = this.posY;
 			this.prevPosZ = this.posZ;
 
-			final double newY = entity.posY + entity.height - (entity.isSneaking() ? 0.25D : 0);
-			this.setPosition(entity.posX, newY, entity.posZ);
+			final double newY = this.subject.posY + this.subject.height - (this.subject.isSneaking() ? 0.25D : 0);
+			this.setPosition(this.subject.posX, newY, this.subject.posZ);
 
 			// Calculate the current period values
 			this.period = MathStuff.wrapDegrees(this.period + ORBITAL_TICK);
@@ -198,7 +194,7 @@ public class ParticleEmoji extends Particle {
 		//final int FULL_BRIGHTNESS_VALUE = 0xf000f0;
 		//return FULL_BRIGHTNESS_VALUE;
 
-		return this.subject.get().getBrightnessForRender(partialTick);
+		return this.subject.getBrightnessForRender(partialTick);
 		
 		// if you want the brightness to be the local illumination (from block
 		// light and sky light) you can just use

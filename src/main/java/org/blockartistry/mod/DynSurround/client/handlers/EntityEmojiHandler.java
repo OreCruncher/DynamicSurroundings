@@ -24,7 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers;
 
-import java.lang.ref.WeakReference;
 import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.client.event.EntityEmojiEvent;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleEmoji;
@@ -44,7 +43,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class EntityEmojiHandler extends EffectHandlerBase {
 
-	private final TIntObjectHashMap<WeakReference<ParticleEmoji>> emojiParticles = new TIntObjectHashMap<WeakReference<ParticleEmoji>>();
+	private final TIntObjectHashMap<ParticleEmoji> emojiParticles = new TIntObjectHashMap<ParticleEmoji>();
 
 	public EntityEmojiHandler() {
 	}
@@ -57,13 +56,11 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 		// Get rid of dead particles
-		final TIntObjectIterator<WeakReference<ParticleEmoji>> data = this.emojiParticles.iterator();
+		final TIntObjectIterator<ParticleEmoji> data = this.emojiParticles.iterator();
 		while (data.hasNext()) {
 			data.advance();
-			final ParticleEmoji particle = data.value().get();
-			if (particle == null || !particle.isAlive()) {
+			if (data.value().shouldExpire())
 				data.remove();
-			}
 		}
 
 	}
@@ -78,14 +75,12 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 			data.setActionState(event.actionState);
 			data.setEmotionalState(event.emotionalState);
 			data.setEmojiType(event.emojiType);
-			
-			final WeakReference<ParticleEmoji> particle = this.emojiParticles.get(entity.getEntityId());
 
-			if ((particle == null || particle.get() == null || !particle.get().isAlive())
-					&& data.getEmojiType() != EmojiType.NONE) {
+			final ParticleEmoji particle = this.emojiParticles.get(entity.getEntityId());
 
+			if (particle == null && data.getEmojiType() != EmojiType.NONE) {
 				final ParticleEmoji p = new ParticleEmoji(entity);
-				this.emojiParticles.put(entity.getEntityId(), new WeakReference<ParticleEmoji>(p));
+				this.emojiParticles.put(entity.getEntityId(), p);
 				ParticleHelper.addParticle(p);
 			}
 		}

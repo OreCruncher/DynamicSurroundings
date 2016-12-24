@@ -158,9 +158,10 @@ public final class EmojiDataTables {
 		emojiMap.put(new EmojiKey(ActionState.ATTACKING, null), EmojiType.ATTACK);
 		emojiMap.put(new EmojiKey(ActionState.EXPLODE, null), EmojiType.ANGRY);
 		emojiMap.put(new EmojiKey(ActionState.PANIC, null), EmojiType.PANIC);
-		emojiMap.put(new EmojiKey(ActionState.LOOKING, null), EmojiType.CONTEMPLATE);
+		emojiMap.put(new EmojiKey(ActionState.LOOKING, null), EmojiType.WATCH);
 		emojiMap.put(new EmojiKey(null, EmotionalState.HAPPY), EmojiType.HAPPY);
 		emojiMap.put(new EmojiKey(null, EmotionalState.SAD), EmojiType.SAD);
+		emojiMap.put(new EmojiKey(null, EmotionalState.SICK), EmojiType.SICK);
 		emojiMap.put(new EmojiKey(ActionState.FARMING, null), EmojiType.FARM);
 		emojiMap.put(new EmojiKey(null, EmotionalState.BUSY), EmojiType.WORK);
 		emojiMap.put(new EmojiKey(ActionState.TRADING, null), EmojiType.TRADE);
