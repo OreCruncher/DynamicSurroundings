@@ -30,6 +30,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.Color;
+import org.lwjgl.opengl.GL11;
 
 import com.google.common.base.Function;
 
@@ -52,16 +53,24 @@ public class ParticleBillboard extends Particle {
 	private static final Color B_COLOR = Color.getColor(TextFormatting.BLACK);
 	private static final float B_COLOR_ALPHA = 0.5F; // 0.25F;
 	private static final Color F_COLOR = Color.getColor(TextFormatting.GOLD);
+	private static final float F_COLOR_ALPHA = 0.99F;
 	private static final Color F_COLOR_DEPTH = Color.getColor(TextFormatting.GRAY);
 	private static final int MIN_TEXT_WIDTH = 60;
 	private static final double BUBBLE_MARGIN = 4.0F;
 
+	private final RenderManager renderManager;
 	private final FontRenderer font;
 	private final float scale;
 	private final Entity subject;
 	private final Function<Integer, List<String>> accessor;
 	private List<String> text;
+	
 	private int textWidth;
+	private int numberOfMessages;
+	private double top;
+	private double bottom;
+	private double left;
+	private double right;
 
 	public ParticleBillboard(@Nonnull final Entity entity, @Nonnull final Function<Integer, List<String>> accessor) {
 		super(entity.getEntityWorld(), entity.posX, entity.posY, entity.posZ);
@@ -80,6 +89,7 @@ public class ParticleBillboard extends Particle {
 		this.motionZ = 0.0D;
 		this.subject = entity;
 
+		this.renderManager = Minecraft.getMinecraft().getRenderManager();
 		this.font = Minecraft.getMinecraft().fontRendererObj;
 		this.scale = 1F;
 	}
@@ -87,8 +97,8 @@ public class ParticleBillboard extends Particle {
 	public boolean shouldExpire() {
 		if (!this.isAlive())
 			return true;
-		
-		if(this.subject == null || !this.subject.isEntityAlive())
+
+		if (this.subject == null || !this.subject.isEntityAlive())
 			return true;
 
 		if (this.subject.isInvisibleToPlayer(EnvironState.getPlayer()))
@@ -108,13 +118,21 @@ public class ParticleBillboard extends Particle {
 			this.prevPosY = this.posY;
 			this.prevPosZ = this.posZ;
 
-			final double newY = this.subject.posY + this.subject.height + 0.5D - (this.subject.isSneaking() ? 0.25D : 0);
+			final double newY = this.subject.posY + this.subject.height + 0.5D
+					- (this.subject.isSneaking() ? 0.25D : 0);
 			this.setPosition(this.subject.posX, newY, this.subject.posZ);
 
 			this.textWidth = MIN_TEXT_WIDTH;
 
 			for (final String s : this.text)
 				this.textWidth = Math.max(this.textWidth, this.font.getStringWidth(s));
+			
+			this.numberOfMessages = this.text.size();
+			this.top = -(numberOfMessages) * 9 - BUBBLE_MARGIN;
+			this.bottom = BUBBLE_MARGIN;
+			this.left = -(this.textWidth / 2.0D + BUBBLE_MARGIN);
+			this.right = this.textWidth / 2.0D + BUBBLE_MARGIN;
+
 		}
 	}
 
@@ -128,16 +146,9 @@ public class ParticleBillboard extends Particle {
 			return;
 
 		// Calculate scale and position
-		final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-		final boolean thirdPerson = renderManager.options.thirdPersonView == 2;
-		final float pitch = renderManager.playerViewX * (thirdPerson ? -1 : 1);
-		final float yaw = -renderManager.playerViewY;
-
-		final int numberOfMessages = this.text.size();
-		final double top = -(numberOfMessages) * 9 - BUBBLE_MARGIN;
-		final double bottom = BUBBLE_MARGIN;
-		final double left = -(this.textWidth / 2.0D + BUBBLE_MARGIN);
-		final double right = this.textWidth / 2.0D + BUBBLE_MARGIN;
+		final boolean thirdPerson = this.renderManager.options.thirdPersonView == 2;
+		final float pitch = this.renderManager.playerViewX * (thirdPerson ? -1 : 1);
+		final float yaw = -this.renderManager.playerViewY;
 
 		final float locX = ((float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX));
 		final float locY = ((float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY));
@@ -169,11 +180,11 @@ public class ParticleBillboard extends Particle {
 		final float blue = B_COLOR.blue;
 		final float alpha = B_COLOR_ALPHA;
 
-		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		buffer.pos(left, top, 0.0D).color(red, green, blue, alpha).endVertex();
-		buffer.pos(left, bottom, 0.0D).color(red, green, blue, alpha).endVertex();
-		buffer.pos(right, bottom, 0.0D).color(red, green, blue, alpha).endVertex();
-		buffer.pos(right, top, 0.0D).color(red, green, blue, alpha).endVertex();
+		buffer.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_COLOR);
+		buffer.pos(this.left, this.top, 0.0D).color(red, green, blue, alpha).endVertex();
+		buffer.pos(this.left, this.bottom, 0.0D).color(red, green, blue, alpha).endVertex();
+		buffer.pos(this.right, this.top, 0.0D).color(red, green, blue, alpha).endVertex();
+		buffer.pos(this.right, this.bottom, 0.0D).color(red, green, blue, alpha).endVertex();
 		Tessellator.getInstance().draw();
 
 		GlStateManager.enableTexture2D();
@@ -181,17 +192,17 @@ public class ParticleBillboard extends Particle {
 		GlStateManager.depthMask(true);
 		GlStateManager.translate(0, 0, -0.05F);
 
-		int lines = numberOfMessages;
-		for (int t = 0; t < numberOfMessages; t++) {
+		int lines = this.numberOfMessages;
+		for (int t = 0; t < this.numberOfMessages; t++) {
 			final String str = this.text.get(t);
 			final int offset = -lines * 9;
-			final int margin = -font.getStringWidth(str) / 2;
+			final int margin = -this.font.getStringWidth(str) / 2;
 			GlStateManager.disableDepth();
 			GlStateManager.depthMask(false);
-			this.font.drawString(str, margin, offset, F_COLOR_DEPTH.rgb());
+			this.font.drawString(str, margin, offset, F_COLOR_DEPTH.rgbWithAlpha(F_COLOR_ALPHA));
 			GlStateManager.enableDepth();
 			GlStateManager.depthMask(true);
-			this.font.drawString(str, margin, offset, F_COLOR.rgb());
+			this.font.drawString(str, margin, offset, F_COLOR.rgbWithAlpha(F_COLOR_ALPHA));
 			lines--;
 		}
 
@@ -202,6 +213,11 @@ public class ParticleBillboard extends Particle {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.popAttrib();
 		GlStateManager.popMatrix();
+	}
+
+	@Override
+	public int getBrightnessForRender(final float partialTick) {
+		return this.subject.getBrightnessForRender(partialTick);
 	}
 
 	@Override
