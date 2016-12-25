@@ -95,12 +95,11 @@ public final class BlockRegistry extends Registry {
 	}
 
 	@Nonnull
-	private SoundEffect getRandomSound(@Nonnull final List<SoundEffect> list, @Nonnull final Random random,
-			@Nonnull final String conditions) {
+	private SoundEffect getRandomSound(@Nonnull final List<SoundEffect> list, @Nonnull final Random random) {
 		int totalWeight = 0;
 		final List<SoundEffect> candidates = new ArrayList<SoundEffect>();
 		for (final SoundEffect s : list)
-			if (s.matches(conditions)) {
+			if (s.matches()) {
 				candidates.add(s);
 				totalWeight += s.weight;
 			}
@@ -119,8 +118,7 @@ public final class BlockRegistry extends Registry {
 	}
 
 	@Nullable
-	public SoundEffect getSound(@Nonnull final IBlockState state, @Nonnull final Random random,
-			@Nonnull final String conditions) {
+	public SoundEffect getSound(@Nonnull final IBlockState state, @Nonnull final Random random) {
 		final BlockProfile entry = this.registry.get(state.getBlock());
 		if (entry == null)
 			return null;
@@ -132,12 +130,11 @@ public final class BlockRegistry extends Registry {
 		if (random.nextInt(entry.getChance(state)) != 0)
 			return null;
 
-		return getRandomSound(sounds, random, conditions);
+		return getRandomSound(sounds, random);
 	}
 
 	@Nullable
-	public SoundEffect getStepSound(@Nonnull final IBlockState state, @Nonnull final Random random,
-			@Nonnull final String conditions) {
+	public SoundEffect getStepSound(@Nonnull final IBlockState state, @Nonnull final Random random) {
 		final BlockProfile entry = this.registry.get(state.getBlock());
 		if (entry == null)
 			return null;
@@ -149,7 +146,7 @@ public final class BlockRegistry extends Registry {
 		if (random.nextInt(entry.getStepChance(state)) != 0)
 			return null;
 
-		return getRandomSound(sounds, random, conditions);
+		return getRandomSound(sounds, random);
 	}
 
 	public void register(@Nonnull final BlockConfig entry) {

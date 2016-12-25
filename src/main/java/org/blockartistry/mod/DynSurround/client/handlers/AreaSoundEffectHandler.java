@@ -56,13 +56,13 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		return EnvironState.isPlayerUnderground() || !EnvironState.isPlayerInside();
 	}
 
-	private static List<SoundEffect> getBiomeSounds(final String conditions) {
+	private static List<SoundEffect> getBiomeSounds() {
 		// Need to collect sounds from all the applicable biomes
 		// along with their weights.
 		final TObjectIntHashMap<SoundEffect> sounds = new TObjectIntHashMap<SoundEffect>();
 		final TObjectIntHashMap<BiomeInfo> weights = AreaSurveyHandler.getBiomes();
 		for (final BiomeInfo biome : weights.keySet()) {
-			final List<SoundEffect> bs = biome.findSoundMatches(conditions);
+			final List<SoundEffect> bs = biome.findSoundMatches();
 			for (final SoundEffect sound : bs)
 				sounds.put(sound, sounds.get(sound) + weights.get(biome));
 		}
@@ -96,22 +96,21 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		}
 
 		final BiomeInfo playerBiome = EnvironState.getPlayerBiome();
-		final String conditions = EnvironState.getConditions();
-
 		final List<SoundEffect> sounds = new ArrayList<SoundEffect>();
+		
 		if (doBiomeSounds())
-			sounds.addAll(getBiomeSounds(conditions));
-		sounds.addAll(BiomeRegistry.PLAYER.findSoundMatches(conditions));
+			sounds.addAll(getBiomeSounds());
+		sounds.addAll(BiomeRegistry.PLAYER.findSoundMatches());
 
 		SoundManager.queueAmbientSounds(sounds);
 
 		if (doBiomeSounds()) {
-			SoundEffect sound = playerBiome.getSpotSound(conditions, EnvironState.RANDOM);
+			SoundEffect sound = playerBiome.getSpotSound(EnvironState.RANDOM);
 			if (sound != null)
 				SoundManager.playSoundAtPlayer(player, sound, SoundCategory.AMBIENT);
 		}
 
-		SoundEffect sound = BiomeRegistry.PLAYER.getSpotSound(conditions, EnvironState.RANDOM);
+		SoundEffect sound = BiomeRegistry.PLAYER.getSpotSound(EnvironState.RANDOM);
 		if (sound != null)
 			SoundManager.playSoundAtPlayer(player, sound, SoundCategory.AMBIENT);
 

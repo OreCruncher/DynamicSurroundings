@@ -24,13 +24,12 @@
 package org.blockartistry.mod.DynSurround.client.sound;
 
 import java.util.Random;
-import java.util.regex.Pattern;
-
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundType;
+import org.blockartistry.mod.DynSurround.registry.Evaluator;
 import org.blockartistry.mod.DynSurround.util.SoundUtils;
 
 import com.google.common.base.Objects;
@@ -49,7 +48,6 @@ public final class SoundEffect {
 	// Hack around SoundEvent.getName() being client sided
 	private final String soundName;
 	public final String conditions;
-	private final Pattern pattern;
 	public final SoundType type;
 	public float volume;
 	public final float pitch;
@@ -77,7 +75,6 @@ public final class SoundEffect {
 		this.volume = volume;
 		this.pitch = pitch;
 		this.conditions = ".*";
-		this.pattern = null;
 		this.weight = 1;
 		this.type = SoundType.SPOT;
 		this.variable = variable;
@@ -91,7 +88,6 @@ public final class SoundEffect {
 		this.volume = effect.volume;
 		this.pitch = effect.pitch;
 		this.conditions = effect.conditions;
-		this.pattern = effect.pattern;
 		this.weight = effect.weight;
 		this.type = effect.type;
 		this.variable = effect.variable;
@@ -105,7 +101,6 @@ public final class SoundEffect {
 		this.conditions = StringUtils.isEmpty(record.conditions) ? ".*" : record.conditions;
 		this.volume = record.volume == null ? 1.0F : record.volume.floatValue();
 		this.pitch = record.pitch == null ? 1.0F : record.pitch.floatValue();
-		this.pattern = Pattern.compile(this.conditions);
 		this.weight = record.weight == null ? 10 : record.weight.intValue();
 		this.variable = record.variable != null && record.variable.booleanValue();
 		this.repeatDelayRandom = record.repeatDelayRandom == null ? 0 : record.repeatDelayRandom.intValue();
@@ -125,10 +120,10 @@ public final class SoundEffect {
 		}
 	}
 
-	public boolean matches(final String conditions) {
-		return pattern.matcher(conditions).matches();
+	public boolean matches() {
+		return Evaluator.check(this.conditions);
 	}
-
+	
 	public float getVolume() {
 		return this.volume;
 	}

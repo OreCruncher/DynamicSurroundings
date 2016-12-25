@@ -33,6 +33,7 @@ import org.blockartistry.mod.DynSurround.commands.CommandDS;
 import org.blockartistry.mod.DynSurround.entity.EntityEmojiCapability;
 import org.blockartistry.mod.DynSurround.entity.EntityEventHandler;
 import org.blockartistry.mod.DynSurround.network.Network;
+import org.blockartistry.mod.DynSurround.registry.Evaluator;
 import org.blockartistry.mod.DynSurround.server.services.ServiceManager;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
@@ -71,6 +72,8 @@ public class Proxy {
 	}
 
 	public void init(@Nonnull final FMLInitializationEvent event) {
+		Evaluator.initialize();
+		
 		Network.initialize();
 		WailaHandler.register();
 		WailaEntityHandler.register();

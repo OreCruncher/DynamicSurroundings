@@ -181,31 +181,31 @@ public final class BiomeInfo {
 	}
 
 	@Nullable
-	public SoundEffect findSoundMatch(@Nonnull final String conditions) {
+	public SoundEffect findSoundMatch() {
 		for (final SoundEffect sound : this.sounds)
-			if (sound.matches(conditions))
+			if (sound.matches())
 				return sound;
 		return null;
 	}
 
 	@Nonnull
-	public List<SoundEffect> findSoundMatches(@Nonnull final String conditions) {
+	public List<SoundEffect> findSoundMatches() {
 		final List<SoundEffect> results = new ArrayList<SoundEffect>();
 		for (final SoundEffect sound : this.sounds)
-			if (sound.matches(conditions))
+			if (sound.matches())
 				results.add(sound);
 		return results;
 	}
 	
 	@Nullable
-	public SoundEffect getSpotSound(@Nonnull final String conditions, @Nonnull final Random random) {
+	public SoundEffect getSpotSound(@Nonnull final Random random) {
 		if (this.getSpotSounds().isEmpty() || random.nextInt(this.getSpotSoundChance()) != 0)
 			return null;
 
 		int totalWeight = 0;
 		final List<SoundEffect> candidates = new ArrayList<SoundEffect>();
 		for (final SoundEffect s : getSpotSounds())
-			if (s.matches(conditions)) {
+			if (s.matches()) {
 				candidates.add(s);
 				totalWeight += s.weight;
 			}

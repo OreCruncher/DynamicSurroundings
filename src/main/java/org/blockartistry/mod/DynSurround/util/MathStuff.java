@@ -55,6 +55,7 @@ public class MathStuff {
 	private static final float DEG_TO_RAD = (float) (Math.PI / 180.0D);
 
 	public static final float PI_F = (float) Math.PI;
+	public static final float E_F = (float) Math.E;
 
 	static {
 
@@ -203,6 +204,11 @@ public class MathStuff {
 	public static int floor_double(final double value) {
 		final int i = (int) value;
 		return value < (double) i ? i - 1 : i;
+	}
+	
+	public static int floor_float(final float value) {
+		final int i = (int)value;
+		return value < (float) i ? i - 1 : i;
 	}
 
 	public static float clamp_float(final float num, final float min, final float max) {

@@ -67,7 +67,6 @@ public class BlockEffectHandler extends EffectHandlerBase {
 			return;
 
 		final BlockPos playerPos = new BlockPos(player);
-		final String conditions = EnvironState.getConditions();
 		final int RANGE = ModOptions.specialEffectRange;
 		final int CHECK_COUNT = (int) (Math.pow(RANGE * 2 - 1, 3) * RATIO);
 
@@ -85,7 +84,7 @@ public class BlockEffectHandler extends EffectHandlerBase {
 					effect.process(state, world, pos, RANDOM);
 			}
 
-			final SoundEffect sound = getBlockRegistry().getSound(state, RANDOM, conditions);
+			final SoundEffect sound = getBlockRegistry().getSound(state, RANDOM);
 			if (sound != null)
 				sound.doEffect(state, world, pos, SoundCategory.BLOCKS, RANDOM);
 		}
@@ -95,7 +94,7 @@ public class BlockEffectHandler extends EffectHandlerBase {
 			final IBlockState state = world.getBlockState(pos);
 			final Material material = state.getMaterial();
 			if (!(material == Material.AIR || material.isLiquid())) {
-				final SoundEffect sound = getBlockRegistry().getStepSound(state, RANDOM, conditions);
+				final SoundEffect sound = getBlockRegistry().getStepSound(state, RANDOM);
 				if (sound != null)
 					sound.doEffect(state, world, pos, SoundCategory.BLOCKS, RANDOM);
 			}
