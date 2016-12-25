@@ -38,6 +38,7 @@ import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
+import org.blockartistry.mod.DynSurround.registry.Evaluator;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
@@ -470,6 +471,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 				+ player.getFoodStats().getFoodLevel() + "; s " + player.getFoodStats().getSaturationLevel());
 		event.output.add(StormProperties.diagnostic());
 		event.output.add("Conditions: " + EnvironState.getConditions());
+		final List<String> badScripts = Evaluator.getNaughtyList();
+		for(final String s: badScripts) {
+			event.output.add("BAD SCRIPT: " + s);
+		}
 	}
 
 	@SubscribeEvent

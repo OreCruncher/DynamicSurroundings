@@ -23,6 +23,8 @@
 
 package org.blockartistry.mod.DynSurround.registry;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
@@ -123,6 +125,11 @@ public class Evaluator {
 		});
 	}
 
+	private static final List<String> naughtyList = new ArrayList<String>();
+	public static List<String> getNaughtyList() {
+		return naughtyList;
+	}
+	
 	public static boolean check(@Nonnull final String conditions) {
 		// Existing default regex - short circuit to make it faster
 		if (StringUtils.isEmpty(conditions) || conditions.startsWith(".*"))
@@ -134,6 +141,11 @@ public class Evaluator {
 			final String ev = EnvironState.getConditions();
 			return Pattern.matches(conditions, ev);
 		}
+		
+		// If it was bad the first time around it is doubtful it
+		// changed it's ways.
+		if(naughtyList.contains(conditions))
+			return false;
 
 		// New stuff. Compile the expression and evaluate
 		try {
@@ -141,6 +153,7 @@ public class Evaluator {
 			return result.floatValue() != 0.0F;
 		} catch (final Throwable t) {
 			ModLog.error("Unable to execute check: " + conditions, t);
+			naughtyList.add(conditions);
 		}
 
 		// Something bad happened, so return no match
