@@ -41,6 +41,7 @@ import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.Evaluator;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
+import org.blockartistry.mod.DynSurround.registry.SeasonRegistry;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
@@ -123,6 +124,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static String conditions = "";
 		private static String biomeName = "";
 		private static BiomeInfo playerBiome = null;
+		private static String season = null;
 		private static int dimensionId;
 		private static String dimensionName;
 		private static BlockPos playerPosition;
@@ -210,10 +212,12 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		private static void tick(final World world, final EntityPlayer player) {
 			final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
+			final SeasonRegistry seasons = RegistryManager.get(RegistryType.SEASON);
 			EnvironState.player = player;
 			EnvironState.conditions = dimensions.getConditions(world) + getPlayerConditions(player);
 			EnvironState.playerBiome = PlayerUtils.getPlayerBiome(player, false);
 			EnvironState.biomeName = EnvironState.playerBiome.getBiomeName();
+			EnvironState.season = seasons.getData(world).getSeason();
 			EnvironState.dimensionId = world.provider.getDimension();
 			EnvironState.dimensionName = world.provider.getDimensionType().getName();
 			EnvironState.playerPosition = new BlockPos(player.posX, player.posY, player.posZ);
@@ -242,6 +246,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			return biomeName;
 		}
 
+		public static String getSeason() {
+			return season;
+		}
+		
 		public static int getDimensionId() {
 			return dimensionId;
 		}

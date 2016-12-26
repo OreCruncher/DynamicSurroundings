@@ -41,7 +41,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class RegistryManager {
 
 	public static enum RegistryType {
-		SOUND(0), BIOME(1), BLOCK(2), DIMENSION(3), FOOTSTEPS(4);
+		SOUND(0), BIOME(1), BLOCK(2), DIMENSION(3), FOOTSTEPS(4), SEASON(5);
 
 		private final int id;
 
@@ -110,6 +110,7 @@ public class RegistryManager {
 		this.registries[RegistryType.DIMENSION.getId()] = new DimensionRegistry();
 		this.registries[RegistryType.BIOME.getId()] = new BiomeRegistry();
 		this.registries[RegistryType.SOUND.getId()] = new SoundRegistry();
+		this.registries[RegistryType.SEASON.getId()] = new SeasonRegistry();
 	}
 
 	void reload() {

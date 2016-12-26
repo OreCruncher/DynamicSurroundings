@@ -294,6 +294,12 @@ public class Evaluator {
 				return !EnvironState.getWorld().provider.getHasNoSky() ? Expression.ONE : Expression.ZERO;
 			}
 		});
+		Expression.addBuiltInVariable("season", new Expression.LazyNumber() {
+			@Override
+			public Variant eval() {
+				return new Variant(EnvironState.getSeason());
+			}
+		});
 		
 	}
 

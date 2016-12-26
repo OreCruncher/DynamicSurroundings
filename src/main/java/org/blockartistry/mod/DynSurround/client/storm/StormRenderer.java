@@ -31,6 +31,7 @@ import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
+import org.blockartistry.mod.DynSurround.registry.SeasonRegistry;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 import org.lwjgl.opengl.GL11;
@@ -54,7 +55,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class StormRenderer implements IAtmosRenderer {
 
 	private static final XorShiftRandom random = new XorShiftRandom();
-
+	
 	public static ResourceLocation locationRainPng = new ResourceLocation("textures/environment/rain.png");
 	public static ResourceLocation locationSnowPng = new ResourceLocation("textures/environment/snow.png");
 	public static ResourceLocation locationDustPng = new ResourceLocation(Module.RESOURCE_ID,
@@ -75,14 +76,13 @@ public class StormRenderer implements IAtmosRenderer {
 		}
 	}
 
-	private static BlockPos getPrecipitationHeight(final World world, final BlockPos pos) {
-		if (world.provider.getDimension() == -1)
-			return new BlockPos(pos.getX(), 0, pos.getZ());
-		return world.getPrecipitationHeight(pos);
-	}
-
 	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
+	private final SeasonRegistry season = RegistryManager.get(RegistryType.SEASON);
+
+	private BlockPos getPrecipitationHeight(final World world, final BlockPos pos) {
+		return this.season.getPrecipitationHeight(world, pos);
+	}
 
 	/**
 	 * Render RAIN and snow
@@ -171,11 +171,9 @@ public class StormRenderer implements IAtmosRenderer {
 						random.setSeed((long) (gridX * gridX * 3121 + gridX * 45238971
 								^ gridZ * gridZ * 418711 + gridZ * 13761));
 						mutable.setPos(gridX, k2, gridZ);
-						final float biomeTemp = biome.getFloatTemperature(mutable);
-						final float heightTemp = world.getBiomeProvider().getTemperatureAtHeight(biomeTemp,
-								precipHeight);
+						final boolean canSnow = this.season.canWaterFreeze(world, mutable);
 
-						if (!hasDust && heightTemp >= 0.15F) {
+						if (!hasDust && !canSnow) {
 							if (j1 != 0) {
 								if (j1 >= 0) {
 									tess.draw();
@@ -219,7 +217,7 @@ public class StormRenderer implements IAtmosRenderer {
 								// If cold enough the dust texture will be
 								// snow that blows sideways
 								ResourceLocation texture = locationSnowPng;
-								if (hasDust && heightTemp >= 0.15F)
+								if (hasDust && !canSnow)
 									texture = locationDustPng;
 
 								j1 = 1;

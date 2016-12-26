@@ -22,24 +22,33 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.registry.season;
 
-import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
-import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
-import org.blockartistry.mod.DynSurround.registry.RegistryManager;
-import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
+import javax.annotation.Nonnull;
 
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
-@SideOnly(Side.CLIENT)
-public class WeatherUtils {
-
-	public static boolean biomeHasDust(final Biome biome) {
-		final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
-		return ModOptions.allowDesertFog && biomes.get(biome).getHasDust() && !StormProperties.doVanilla();
+public class SeasonInfoNether extends SeasonInfo {
+	
+	public SeasonInfoNether(@Nonnull final World world) {
+		super(world);
 	}
 
+	@Override
+	public String getSeason() {
+		return "hell";
+	}
+
+	@Override
+	@Nonnull
+	public BlockPos getPrecipitationHeight(@Nonnull final BlockPos pos) {
+		return new BlockPos(pos.getX(), 0, pos.getZ());
+	}
+	
+	@Override
+	public boolean canWaterFreeze(@Nonnull final BlockPos pos) {
+		return false;
+	}
+	
 }

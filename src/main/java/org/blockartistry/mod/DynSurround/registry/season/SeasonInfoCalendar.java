@@ -22,24 +22,37 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.registry.season;
 
-import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
-import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
-import org.blockartistry.mod.DynSurround.registry.RegistryManager;
-import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
+import javax.annotation.Nonnull;
 
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import foxie.calendar.api.CalendarAPI;
+import foxie.calendar.api.ICalendarProvider;
+import foxie.calendar.api.ISeasonProvider;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
-@SideOnly(Side.CLIENT)
-public class WeatherUtils {
+public class SeasonInfoCalendar extends SeasonInfo {
 
-	public static boolean biomeHasDust(final Biome biome) {
-		final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
-		return ModOptions.allowDesertFog && biomes.get(biome).getHasDust() && !StormProperties.doVanilla();
+	private final ICalendarProvider calendarProvider;
+	private final ISeasonProvider seasonProvider;
+
+	public SeasonInfoCalendar(@Nonnull final World world) {
+		super(world);
+
+		this.seasonProvider = CalendarAPI.getSeasonProvider(this.world.provider.getDimension());
+		this.calendarProvider = CalendarAPI.getCalendarInstance(this.world);
+	}
+
+	@Override
+	@Nonnull
+	public String getSeason() {
+		return this.seasonProvider.getSeason(this.calendarProvider).getName();
+	}
+
+	@Override
+	public float getTemperature(@Nonnull final BlockPos pos) {
+		return this.seasonProvider.getTemperature(this.world, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 }

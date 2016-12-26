@@ -33,6 +33,7 @@ import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
+import org.blockartistry.mod.DynSurround.registry.SeasonRegistry;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -60,7 +61,7 @@ public class StormSplashRenderer {
 	private static final StormSplashRenderer DEFAULT = new StormSplashRenderer();
 	protected static final int PARTICLE_SOUND_CHANCE = 20;
 	protected static final XorShiftRandom RANDOM = new XorShiftRandom();
-
+	
 	static {
 		splashRenderers.put(0, DEFAULT);
 		splashRenderers.put(-1, new NetherSplashRenderer());
@@ -76,6 +77,7 @@ public class StormSplashRenderer {
 
 	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
+	private final SeasonRegistry season = RegistryManager.get(RegistryType.SEASON);
 	
 	protected StormSplashRenderer() {
 
@@ -113,7 +115,7 @@ public class StormSplashRenderer {
 	}
 
 	protected BlockPos getPrecipitationHeight(final World world, final int range, final BlockPos pos) {
-		return world.getPrecipitationHeight(pos);
+		return this.season.getPrecipitationHeight(world, pos);
 	}
 
 	protected void playSplashSound(final EntityRenderer renderer, final WorldClient world, final Entity player,
@@ -180,9 +182,10 @@ public class StormSplashRenderer {
 			final BlockPos precipHeight = getPrecipitationHeight(worldclient, RANGE / 2, posXZ);
 			final BiomeInfo biome = this.biomes.get(worldclient.getBiome(posXZ));
 			final boolean hasDust = biome.getHasDust();
+			final boolean canSnow = season.getData(worldclient).canWaterFreeze(precipHeight);
 
 			if (precipHeight.getY() <= playerY + RANGE && precipHeight.getY() >= playerY - RANGE
-					&& (hasDust || (biome.getHasPrecipitation() && biome.getFloatTemperature(precipHeight) >= 0.15F))) {
+					&& (hasDust || (biome.getHasPrecipitation() && !canSnow))) {
 
 				final BlockPos blockPos = precipHeight.down();
 				final IBlockState state = worldclient.getBlockState(blockPos);
