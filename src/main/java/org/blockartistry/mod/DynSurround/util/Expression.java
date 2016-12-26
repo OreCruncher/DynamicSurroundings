@@ -40,13 +40,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 
 public class Expression {
 
-	public static final Float PI = MathStuff.PI_F;
-	public static final Float e = MathStuff.E_F;
-	public static final Float ZERO = 0.0F;
-	public static final Float ONE = 1.0F;
+	public static final Variant PI = new Variant(MathStuff.PI_F);
+	public static final Variant e = new Variant(MathStuff.E_F);
+	public static final Variant ZERO = new Variant(0.0F);
+	public static final Variant ONE = new Variant(1.0F);
 
 	// Built-in operators, functions, and variables. Allows for
 	// the application to predefine items that will be used over and
@@ -66,7 +67,7 @@ public class Expression {
 		builtInFunctions.put(func.getName(), func);
 	}
 
-	public static void addBuiltInVariable(final String name, final Float val) {
+	public static void addBuiltInVariable(final String name, final Variant val) {
 		addBuiltInVariable(name, new Constant(val));
 	}
 
@@ -77,37 +78,37 @@ public class Expression {
 	static {
 		addBuiltInOperator(new Operator("+", 20, true) {
 			@Override
-			public Float eval(Float v1, Float v2) {
-				return v1 + v2;
+			public Variant eval(final Variant v1, final Variant v2) {
+				return new Variant(v1.asFloat() + v2.asFloat());
 			}
 		});
 		addBuiltInOperator(new Operator("-", 20, true) {
 			@Override
-			public Float eval(Float v1, Float v2) {
-				return v1 - v2;
+			public Variant eval(final Variant v1, final Variant v2) {
+				return new Variant(v1.asFloat() - v2.asFloat());
 			}
 		});
 		addBuiltInOperator(new Operator("*", 30, true) {
 			@Override
-			public Float eval(Float v1, Float v2) {
-				return v1 * v2;
+			public Variant eval(final Variant v1, final Variant v2) {
+				return new Variant(v1.asFloat() * v2.asFloat());
 			}
 		});
 		addBuiltInOperator(new Operator("/", 30, true) {
 			@Override
-			public Float eval(Float v1, Float v2) {
-				return v1 / v2;
+			public Variant eval(final Variant v1, final Variant v2) {
+				return new Variant(v1.asFloat() / v2.asFloat());
 			}
 		});
 		addBuiltInOperator(new Operator("%", 30, true) {
 			@Override
-			public Float eval(Float v1, Float v2) {
-				return v1 % v2;
+			public Variant eval(final Variant v1, final Variant v2) {
+				return new Variant(v1.asFloat() % v2.asFloat());
 			}
 		});
 		addBuiltInOperator(new Operator("&&", 4, false) {
 			@Override
-			public Float eval(Float v1, Float v2) {
+			public Variant eval(final Variant v1, final Variant v2) {
 				final boolean b1 = !v1.equals(ZERO);
 				final boolean b2 = !v2.equals(ZERO);
 				return b1 && b2 ? ONE : ZERO;
@@ -116,7 +117,7 @@ public class Expression {
 
 		addBuiltInOperator(new Operator("||", 2, false) {
 			@Override
-			public Float eval(Float v1, Float v2) {
+			public Variant eval(final Variant v1, final Variant v2) {
 				final boolean b1 = !v1.equals(ZERO);
 				final boolean b2 = !v2.equals(ZERO);
 				return b1 || b2 ? ONE : ZERO;
@@ -125,61 +126,69 @@ public class Expression {
 
 		addBuiltInOperator(new Operator(">", 10, false) {
 			@Override
-			public Float eval(Float v1, Float v2) {
+			public Variant eval(final Variant v1, final Variant v2) {
 				return v1.compareTo(v2) == 1 ? ONE : ZERO;
 			}
 		});
 
 		addBuiltInOperator(new Operator(">=", 10, false) {
 			@Override
-			public Float eval(Float v1, Float v2) {
+			public Variant eval(final Variant v1, final Variant v2) {
 				return v1.compareTo(v2) >= 0 ? ONE : ZERO;
 			}
 		});
 
 		addBuiltInOperator(new Operator("<", 10, false) {
 			@Override
-			public Float eval(Float v1, Float v2) {
+			public Variant eval(final Variant v1, final Variant v2) {
 				return v1.compareTo(v2) == -1 ? ONE : ZERO;
 			}
 		});
 
 		addBuiltInOperator(new Operator("<=", 10, false) {
 			@Override
-			public Float eval(Float v1, Float v2) {
+			public Variant eval(final Variant v1, final Variant v2) {
 				return v1.compareTo(v2) <= 0 ? ONE : ZERO;
 			}
 		});
 
 		addBuiltInOperator(new Operator("=", 7, false) {
 			@Override
-			public Float eval(Float v1, Float v2) {
+			public Variant eval(final Variant v1, final Variant v2) {
 				return v1.compareTo(v2) == 0 ? ONE : ZERO;
 			}
 		});
 		addBuiltInOperator(new Operator("==", 7, false) {
 			@Override
-			public Float eval(Float v1, Float v2) {
+			public Variant eval(final Variant v1, final Variant v2) {
 				return v1.compareTo(v2) == 0 ? ONE : ZERO;
 			}
 		});
 
 		addBuiltInOperator(new Operator("!=", 7, false) {
 			@Override
-			public Float eval(Float v1, Float v2) {
+			public Variant eval(final Variant v1, final Variant v2) {
 				return v1.compareTo(v2) != 0 ? ONE : ZERO;
 			}
 		});
 		addBuiltInOperator(new Operator("<>", 7, false) {
 			@Override
-			public Float eval(Float v1, Float v2) {
+			public Variant eval(final Variant v1, final Variant v2) {
 				return v1.compareTo(v2) != 0 ? ONE : ZERO;
 			}
 		});
 
+		addBuiltInFunction(new Function("MATCH", 2) {
+			@Override
+			public Variant eval(List<Variant> parameters) {
+				final String regex = parameters.get(0).asString();
+				final String input = parameters.get(1).asString();
+				return Pattern.matches(regex, input) ? ONE : ZERO;
+			}
+		});
 		addBuiltInFunction(new Function("NOT", 1) {
 			@Override
-			public Float eval(List<Float> parameters) {
+			public Variant eval(List<Variant> parameters) {
 				final boolean zero = parameters.get(0).compareTo(ZERO) == 0;
 				return zero ? ONE : ZERO;
 			}
@@ -195,96 +204,99 @@ public class Expression {
 
 		addBuiltInFunction(new Function("RANDOM", 0) {
 			@Override
-			public Float eval(List<Float> parameters) {
-				final double d = Math.random();
-				return new Float(d);
+			public Variant eval(List<Variant> parameters) {
+				final float d = (float) Math.random();
+				return new Variant(d);
 			}
 		});
 		addBuiltInFunction(new Function("SIN", 1) {
 			@Override
-			public Float eval(List<Float> parameters) {
-				final double d = MathStuff.sin(MathStuff.toRadians(parameters.get(0)));
-				return new Float(d);
+			public Variant eval(List<Variant> parameters) {
+				final float d = MathStuff.sin(MathStuff.toRadians(parameters.get(0).asFloat()));
+				return new Variant(d);
 			}
 		});
 		addBuiltInFunction(new Function("COS", 1) {
 			@Override
-			public Float eval(List<Float> parameters) {
-				final double d = MathStuff.cos(MathStuff.toRadians(parameters.get(0)));
-				return new Float(d);
+			public Variant eval(List<Variant> parameters) {
+				final float d = MathStuff.cos(MathStuff.toRadians(parameters.get(0).asFloat()));
+				return new Variant(d);
 			}
 		});
 		addBuiltInFunction(new Function("TAN", 1) {
 			@Override
-			public Float eval(List<Float> parameters) {
-				final double d = MathStuff.tan(MathStuff.toRadians(parameters.get(0)));
-				return new Float(d);
+			public Variant eval(List<Variant> parameters) {
+				final float d = MathStuff.tan(MathStuff.toRadians(parameters.get(0).asFloat()));
+				return new Variant(d);
 			}
 		});
-//		addBuiltInFunction(new Function("ASIN", 1) { // added by av
-//			@Override
-//			public Float eval(List<Float> parameters) {
-//				double d = Math.toDegrees(Math.asin(parameters.get(0).doubleValue()));
-//				return new Float(d);
-//			}
-//		});
-//		addBuiltInFunction(new Function("ACOS", 1) { // added by av
-//			@Override
-//			public Float eval(List<Float> parameters) {
-//				double d = Math.toDegrees(Math.acos(parameters.get(0).doubleValue()));
-//				return new Float(d);
-//			}
-//		});
-//		addBuiltInFunction(new Function("ATAN", 1) { // added by av
-//			@Override
-//			public Float eval(List<Float> parameters) {
-//				double d = Math.toDegrees(Math.atan(parameters.get(0).doubleValue()));
-//				return new Float(d);
-//			}
-//		});
-//		addBuiltInFunction(new Function("SINH", 1) {
-//			@Override
-//			public Float eval(List<Float> parameters) {
-//				double d = Math.sinh(parameters.get(0).doubleValue());
-//				return new Float(d);
-//			}
-//		});
-//		addBuiltInFunction(new Function("COSH", 1) {
-//			@Override
-//			public Float eval(List<Float> parameters) {
-//				double d = Math.cosh(parameters.get(0).doubleValue());
-//				return new Float(d);
-//			}
-//		});
-//		addBuiltInFunction(new Function("TANH", 1) {
-//			@Override
-//			public Float eval(List<Float> parameters) {
-//				double d = Math.tanh(parameters.get(0).doubleValue());
-//				return new Float(d);
-//			}
-//		});
+		// addBuiltInFunction(new Function("ASIN", 1) { // added by av
+		// @Override
+		// public Float eval(List<Float> parameters) {
+		// double d =
+		// Math.toDegrees(Math.asin(parameters.get(0).doubleValue()));
+		// return new Float(d);
+		// }
+		// });
+		// addBuiltInFunction(new Function("ACOS", 1) { // added by av
+		// @Override
+		// public Float eval(List<Float> parameters) {
+		// double d =
+		// Math.toDegrees(Math.acos(parameters.get(0).doubleValue()));
+		// return new Float(d);
+		// }
+		// });
+		// addBuiltInFunction(new Function("ATAN", 1) { // added by av
+		// @Override
+		// public Float eval(List<Float> parameters) {
+		// double d =
+		// Math.toDegrees(Math.atan(parameters.get(0).doubleValue()));
+		// return new Float(d);
+		// }
+		// });
+		// addBuiltInFunction(new Function("SINH", 1) {
+		// @Override
+		// public Float eval(List<Float> parameters) {
+		// double d = Math.sinh(parameters.get(0).doubleValue());
+		// return new Float(d);
+		// }
+		// });
+		// addBuiltInFunction(new Function("COSH", 1) {
+		// @Override
+		// public Float eval(List<Float> parameters) {
+		// double d = Math.cosh(parameters.get(0).doubleValue());
+		// return new Float(d);
+		// }
+		// });
+		// addBuiltInFunction(new Function("TANH", 1) {
+		// @Override
+		// public Float eval(List<Float> parameters) {
+		// double d = Math.tanh(parameters.get(0).doubleValue());
+		// return new Float(d);
+		// }
+		// });
 		addBuiltInFunction(new Function("RAD", 1) {
 			@Override
-			public Float eval(List<Float> parameters) {
-				final double d = Math.toRadians(parameters.get(0).doubleValue());
-				return new Float(d);
+			public Variant eval(List<Variant> parameters) {
+				final float d = MathStuff.toRadians(parameters.get(0).asFloat());
+				return new Variant(d);
 			}
 		});
 		addBuiltInFunction(new Function("DEG", 1) {
 			@Override
-			public Float eval(List<Float> parameters) {
-				final double d = MathStuff.toDegrees(parameters.get(0));
-				return new Float(d);
+			public Variant eval(List<Variant> parameters) {
+				final float d = MathStuff.toDegrees(parameters.get(0).asFloat());
+				return new Variant(d);
 			}
 		});
 		addBuiltInFunction(new Function("MAX", -1) {
 			@Override
-			public Float eval(List<Float> parameters) {
+			public Variant eval(List<Variant> parameters) {
 				if (parameters.size() == 0) {
 					throw new ExpressionException("MAX requires at least one parameter");
 				}
-				Float max = null;
-				for (Float parameter : parameters) {
+				Variant max = null;
+				for (Variant parameter : parameters) {
 					if (max == null || parameter.compareTo(max) > 0) {
 						max = parameter;
 					}
@@ -294,12 +306,12 @@ public class Expression {
 		});
 		addBuiltInFunction(new Function("MIN", -1) {
 			@Override
-			public Float eval(List<Float> parameters) {
+			public Variant eval(List<Variant> parameters) {
 				if (parameters.size() == 0) {
 					throw new ExpressionException("MIN requires at least one parameter");
 				}
-				Float min = null;
-				for (Float parameter : parameters) {
+				Variant min = null;
+				for (Variant parameter : parameters) {
 					if (min == null || parameter.compareTo(min) < 0) {
 						min = parameter;
 					}
@@ -309,59 +321,59 @@ public class Expression {
 		});
 		addBuiltInFunction(new Function("ABS", 1) {
 			@Override
-			public Float eval(List<Float> parameters) {
-				return MathStuff.abs(parameters.get(0));
+			public Variant eval(List<Variant> parameters) {
+				return new Variant(MathStuff.abs(parameters.get(0).asFloat()));
 			}
 		});
-//		addBuiltInFunction(new Function("LOG", 1) {
-//			@Override
-//			public Float eval(List<Float> parameters) {
-//				double d = Math.log(parameters.get(0).doubleValue());
-//				return new Float(d);
-//			}
-//		});
-//		addBuiltInFunction(new Function("LOG10", 1) {
-//			@Override
-//			public Float eval(List<Float> parameters) {
-//				double d = Math.log10(parameters.get(0).doubleValue());
-//				return new Float(d);
-//			}
-//		});
+		// addBuiltInFunction(new Function("LOG", 1) {
+		// @Override
+		// public Float eval(List<Float> parameters) {
+		// double d = Math.log(parameters.get(0).doubleValue());
+		// return new Float(d);
+		// }
+		// });
+		// addBuiltInFunction(new Function("LOG10", 1) {
+		// @Override
+		// public Float eval(List<Float> parameters) {
+		// double d = Math.log10(parameters.get(0).doubleValue());
+		// return new Float(d);
+		// }
+		// });
 		addBuiltInFunction(new Function("ROUND", 1) {
 			@Override
-			public Float eval(List<Float> parameters) {
-				final Float toRound = parameters.get(0);
-				return new Float(Math.round(toRound));
+			public Variant eval(List<Variant> parameters) {
+				final float toRound = parameters.get(0).asFloat();
+				return new Variant(Math.round(toRound));
 			}
 		});
 		addBuiltInFunction(new Function("FLOOR", 1) {
 			@Override
-			public Float eval(List<Float> parameters) {
-				final Float toRound = parameters.get(0);
-				return new Float(Math.floor(toRound));
+			public Variant eval(List<Variant> parameters) {
+				final float toRound = parameters.get(0).asFloat();
+				return new Variant(Math.floor(toRound));
 			}
 		});
 		addBuiltInFunction(new Function("CEILING", 1) {
 			@Override
-			public Float eval(List<Float> parameters) {
-				final Float toRound = parameters.get(0);
-				return new Float(Math.ceil(toRound));
+			public Variant eval(List<Variant> parameters) {
+				final Float toRound = parameters.get(0).asFloat();
+				return new Variant(Math.ceil(toRound));
 			}
 		});
 		addBuiltInFunction(new Function("SQRT", 1) {
 			@Override
-			public Float eval(List<Float> parameters) {
-				final Float x = parameters.get(0);
-				return new Float(Math.sqrt(x));
+			public Variant eval(List<Variant> parameters) {
+				final Float x = parameters.get(0).asFloat();
+				return new Variant(Math.sqrt(x));
 			}
 		});
 		addBuiltInFunction(new Function("CLAMP", 3) {
 			@Override
-			public Float eval(List<Float> parameters) {
-				final Float val = parameters.get(0);
-				final Float low = parameters.get(1);
-				final Float high = parameters.get(2);
-				return new Float(MathStuff.clamp_float(val, low, high));
+			public Variant eval(List<Variant> parameters) {
+				final Float val = parameters.get(0).asFloat();
+				final Float low = parameters.get(1).asFloat();
+				final Float high = parameters.get(2).asFloat();
+				return new Variant(MathStuff.clamp_float(val, low, high));
 			}
 		});
 
@@ -417,7 +429,7 @@ public class Expression {
 	 * varying numbers of function parameters.
 	 */
 	private static final LazyNumber PARAMS_START = new LazyNumber() {
-		public Float eval() {
+		public Variant eval() {
 			return null;
 		}
 	};
@@ -433,27 +445,70 @@ public class Expression {
 		}
 	}
 
+	public final static class Variant {
+
+		private final Object value;
+
+		public Variant(final String value) {
+			this.value = value;
+		}
+
+		public Variant(final float value) {
+			this.value = new Float(value);
+		}
+
+		public Variant(final double value) {
+			this.value = new Float(value);
+		}
+
+		public Variant(final Float value) {
+			this.value = value;
+		}
+
+		public Float asFloat() {
+			if (this.value instanceof Float) {
+				return (Float) this.value;
+			}
+			return Float.parseFloat(this.value.toString());
+		}
+
+		public int compareTo(final Variant variant) {
+			if (this.value instanceof Float) {
+				return Float.compare(this.asFloat(), variant.asFloat());
+			}
+			return this.asString().compareTo(variant.asString());
+		}
+
+		public String asString() {
+			return this.value.toString();
+		}
+	}
+
 	/**
 	 * LazyNumber interface created for lazily evaluated functions
 	 */
 	public static interface LazyNumber {
-		Float eval();
+		Variant eval();
 	}
 
 	public static class Constant implements LazyNumber {
 
-		private final Float value;
+		private final Variant value;
 
 		public Constant(final Float val) {
-			this.value = val;
+			this.value = new Variant(val);
 		}
 
 		public Constant(final float val) {
-			this.value = new Float(val);
+			this.value = new Variant(val);
+		}
+
+		public Constant(final Variant val) {
+			this.value = val;
 		}
 
 		@Override
-		public Float eval() {
+		public Variant eval() {
 			return this.value;
 		}
 
@@ -511,12 +566,12 @@ public class Expression {
 		}
 
 		public LazyNumber lazyEval(final List<LazyNumber> lazyParams) {
-			final List<Float> params = new ArrayList<Float>();
+			final List<Variant> params = new ArrayList<Variant>();
 			for (final LazyNumber lazyParam : lazyParams) {
 				params.add(lazyParam.eval());
 			}
 			return new LazyNumber() {
-				public Float eval() {
+				public Variant eval() {
 					return Function.this.eval(params);
 				}
 			};
@@ -525,13 +580,13 @@ public class Expression {
 		/**
 		 * Implementation for this function.
 		 *
-		 * @param parameters
+		 * @param params
 		 *            Parameters will be passed by the expression evaluator as a
 		 *            {@link List} of {@link Float} values.
 		 * @return The function must return a new {@link Float} value as a
 		 *         computing result.
 		 */
-		public abstract Float eval(final List<Float> parameters);
+		public abstract Variant eval(final List<Variant> params);
 	}
 
 	/**
@@ -590,7 +645,7 @@ public class Expression {
 		 *            Operand 2.
 		 * @return The result of the operation.
 		 */
-		public abstract Float eval(final Float v1, final Float v2);
+		public abstract Variant eval(final Variant v1, final Variant v2);
 	}
 
 	/**
@@ -667,11 +722,22 @@ public class Expression {
 				pos++;
 				token.append(next());
 			} else if (Character.isLetter(ch) || (ch == '_')) {
-				while ((Character.isLetter(ch) || Character.isDigit(ch) || (ch == '_') || (ch == '.')) && (pos < input.length())) {
+				while ((Character.isLetter(ch) || Character.isDigit(ch) || (ch == '_') || (ch == '.'))
+						&& (pos < input.length())) {
 					token.append(input.charAt(pos++));
 					ch = pos == input.length() ? 0 : input.charAt(pos);
 				}
 			} else if (ch == '(' || ch == ')' || ch == ',') {
+				token.append(ch);
+				pos++;
+			} else if (ch == '"') {
+				token.append(ch);
+				pos++;
+				ch = pos == input.length() ? 0 : input.charAt(pos);
+				while (ch != '"' && (pos < input.length())) {
+					token.append(input.charAt(pos++));
+					ch = pos == input.length() ? 0 : input.charAt(pos);
+				}
 				token.append(ch);
 				pos++;
 			} else {
@@ -734,7 +800,7 @@ public class Expression {
 	// be set unless there is an Expression instance. Symbols
 	// in the built-in tables will work, however.
 	//
-	// Expressions are cached.  If multiple requests come in for
+	// Expressions are cached. If multiple requests come in for
 	// the same expression an older one is reused.
 	public static Expression compile(final String expression) {
 		Expression exp = cache.get(expression);
@@ -787,6 +853,8 @@ public class Expression {
 		while (tokenizer.hasNext()) {
 			String token = tokenizer.next();
 			if (isNumber(token)) {
+				outputQueue.add(token);
+			} else if (token.charAt(0) == '"') {
 				outputQueue.add(token);
 			} else if (this.variables.containsKey(token)) {
 				outputQueue.add(token);
@@ -870,7 +938,7 @@ public class Expression {
 	 * 
 	 * @return The result of the expression.
 	 */
-	public Float eval() {
+	public Variant eval() {
 
 		if (this.exp == null) {
 			final Stack<LazyNumber> stack = new Stack<LazyNumber>();
@@ -881,14 +949,14 @@ public class Expression {
 					final LazyNumber v2 = stack.pop();
 					final Operator op = this.operators.get(token);
 					final LazyNumber number = new LazyNumber() {
-						public Float eval() {
+						public Variant eval() {
 							return op.eval(v2.eval(), v1.eval());
 						}
 					};
 					stack.push(number);
 				} else if (this.variables.containsKey(token)) {
 					stack.push(new LazyNumber() {
-						public Float eval() {
+						public Variant eval() {
 							return Expression.this.variables.get(token).eval();
 						}
 					});
@@ -905,17 +973,24 @@ public class Expression {
 						stack.pop();
 					}
 					final LazyNumber fResult = new LazyNumber() {
-						public Float eval() {
+						public Variant eval() {
 							return f.lazyEval(p).eval();
 						}
 					};
 					stack.push(fResult);
 				} else if ("(".equals(token)) {
 					stack.push(PARAMS_START);
+				} else if (token.charAt(0) == '"') {
+					final String s = token.substring(1, token.length() - 1);
+					stack.push(new LazyNumber() {
+						public Variant eval() {
+							return new Variant(s);
+						}
+					});
 				} else {
 					stack.push(new LazyNumber() {
-						public Float eval() {
-							return new Float(token);
+						public Variant eval() {
+							return new Variant(token);
 						}
 					});
 				}
