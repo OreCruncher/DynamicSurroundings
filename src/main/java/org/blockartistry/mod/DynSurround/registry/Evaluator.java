@@ -210,6 +210,12 @@ public class Evaluator {
 				return new Variant(EnvironState.getDimensionId());
 			}
 		});
+		Expression.addBuiltInVariable("player.dimensionName", new Expression.LazyNumber() {
+			@Override
+			public Variant eval() {
+				return new Variant(EnvironState.getDimensionName());
+			}
+		});
 		Expression.addBuiltInVariable("player.Y", new Expression.LazyNumber() {
 			@Override
 			public Variant eval() {
@@ -220,6 +226,36 @@ public class Evaluator {
 			@Override
 			public Variant eval() {
 				return new Variant(EnvironState.getBiomeName());
+			}
+		});
+		Expression.addBuiltInVariable("player.health", new Expression.LazyNumber() {
+			@Override
+			public Variant eval() {
+				return new Variant(EnvironState.getPlayer().getHealth());
+			}
+		});
+		Expression.addBuiltInVariable("player.maxHealth", new Expression.LazyNumber() {
+			@Override
+			public Variant eval() {
+				return new Variant(EnvironState.getPlayer().getMaxHealth());
+			}
+		});
+		Expression.addBuiltInVariable("player.luck", new Expression.LazyNumber() {
+			@Override
+			public Variant eval() {
+				return new Variant(EnvironState.getPlayer().getLuck());
+			}
+		});
+		Expression.addBuiltInVariable("player.food.saturation", new Expression.LazyNumber() {
+			@Override
+			public Variant eval() {
+				return new Variant(EnvironState.getPlayer().getFoodStats().getSaturationLevel());
+			}
+		});
+		Expression.addBuiltInVariable("player.food.level", new Expression.LazyNumber() {
+			@Override
+			public Variant eval() {
+				return new Variant(EnvironState.getPlayer().getFoodStats().getFoodLevel());
 			}
 		});
 		Expression.addBuiltInVariable("isFoggy", new Expression.LazyNumber() {
@@ -258,6 +294,7 @@ public class Evaluator {
 				return !EnvironState.getWorld().provider.getHasNoSky() ? Expression.ONE : Expression.ZERO;
 			}
 		});
+		
 	}
 
 	private static final List<String> naughtyList = new ArrayList<String>();

@@ -482,6 +482,11 @@ public class Expression {
 		public String asString() {
 			return this.value.toString();
 		}
+		
+		@Override
+		public String toString() {
+			return this.value.toString();
+		}
 	}
 
 	/**
@@ -738,6 +743,8 @@ public class Expression {
 					token.append(input.charAt(pos++));
 					ch = pos == input.length() ? 0 : input.charAt(pos);
 				}
+				if(ch == 0)
+					throw new ExpressionException("String not terminated '" + token + "'");
 				token.append(ch);
 				pos++;
 			} else {
