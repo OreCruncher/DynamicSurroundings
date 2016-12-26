@@ -82,10 +82,10 @@ public class EntityAIEmoji extends EntityAIBase {
 	protected void updateEmotionalState() {
 		EmotionalState newState = this.data.getActionState().getState();
 
-		if (this.subject.getHealth() <= this.subject.getMaxHealth() / 2.0F) {
+		if (EntityUtils.hasNegativePotionEffects(this.subject)) {
 			newState = EmotionalState.SICK;
-		} else if (EntityUtils.hasNegativePotionEffects(this.subject)) {
-			newState = EmotionalState.SICK;
+		} else if (this.subject.getHealth() <= (this.subject.getMaxHealth() / 2.0F)) {
+			newState = EmotionalState.HURT;
 		}
 
 		this.data.setEmotionalState(newState);

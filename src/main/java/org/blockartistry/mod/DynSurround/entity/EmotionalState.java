@@ -28,13 +28,7 @@ import gnu.trove.map.hash.TObjectIntHashMap;
 
 public enum EmotionalState {
 
-	NEUTRAL,
-	HAPPY,
-	SAD,
-	ANGRY,
-	AFRAID,
-	BUSY,
-	SICK;
+	NEUTRAL, HAPPY, SAD, ANGRY, AFRAID, BUSY, SICK, HURT;
 
 	private static final TObjectIntHashMap<EmotionalState> map = new TObjectIntHashMap<EmotionalState>();
 

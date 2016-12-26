@@ -39,6 +39,7 @@ public enum EmojiType {
 	HAPPY("emoji_happy"),
 	SAD("emoji_sad"),
 	SICK("emoji_sick"),
+	HURT("emoji_hurt"),
 	WATCH("emoji_watch"),
 	FARM("emoji_farm"),
 	WORK("emoji_work"),
