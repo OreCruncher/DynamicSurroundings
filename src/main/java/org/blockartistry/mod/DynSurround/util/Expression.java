@@ -667,7 +667,7 @@ public class Expression {
 				pos++;
 				token.append(next());
 			} else if (Character.isLetter(ch) || (ch == '_')) {
-				while ((Character.isLetter(ch) || Character.isDigit(ch) || (ch == '_')) && (pos < input.length())) {
+				while ((Character.isLetter(ch) || Character.isDigit(ch) || (ch == '_') || (ch == '.')) && (pos < input.length())) {
 					token.append(input.charAt(pos++));
 					ch = pos == input.length() ? 0 : input.charAt(pos);
 				}

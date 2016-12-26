@@ -77,25 +77,109 @@ public class Evaluator {
 				return DiurnalUtils.isSunset(EnvironState.getWorld()) ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("isPlayerHurt", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isHurt", new Expression.LazyNumber() {
 			@Override
 			public Float eval() {
 				return EnvironState.isPlayerHurt() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("isPlayerHungry", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isHungry", new Expression.LazyNumber() {
 			@Override
 			public Float eval() {
 				return EnvironState.isPlayerHungry() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("isPlayerInside", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isBurning", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return EnvironState.isPlayerBurning() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("player.isSuffocating", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return EnvironState.isPlayerSuffocating() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("player.isFlying", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return EnvironState.isPlayerFlying() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("player.isSprinting", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return EnvironState.isPlayerSprinting() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("player.isInLava", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return EnvironState.isPlayerInLava() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("player.isInvisible", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return EnvironState.isPlayerInvisible() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("player.isBlind", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return EnvironState.isPlayerBlind() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("player.isInWater", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return EnvironState.isPlayerInWater() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("player.isRiding", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return EnvironState.isPlayerRiding() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("player.isOnGround", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return EnvironState.isPlayerOnGround() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("player.isMoving", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return EnvironState.isPlayerMoving() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("player.isInside", new Expression.LazyNumber() {
 			@Override
 			public Float eval() {
 				return EnvironState.isPlayerInside() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("isPlayerFreezing", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isUnderground", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return EnvironState.isPlayerUnderground() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("player.isInSpace", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return EnvironState.isPlayerInSpace() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("player.isInClouds", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return EnvironState.isPlayerInClouds() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("player.isFreezing", new Expression.LazyNumber() {
 			@Override
 			public Float eval() {
 				final boolean flag = PlayerUtils.getPlayerBiome(EnvironState.getPlayer(), true)
@@ -103,33 +187,78 @@ public class Evaluator {
 				return flag ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("isPlayerCold", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isCold", new Expression.LazyNumber() {
 			@Override
 			public Float eval() {
-				final boolean flag = PlayerUtils.getPlayerBiome(EnvironState.getPlayer(), true).getTempCategory() == TempCategory.COLD;
+				final boolean flag = PlayerUtils.getPlayerBiome(EnvironState.getPlayer(), true)
+						.getTempCategory() == TempCategory.COLD;
 				return flag ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("isPlayerWarm", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isWarm", new Expression.LazyNumber() {
 			@Override
 			public Float eval() {
-				final boolean flag = PlayerUtils.getPlayerBiome(EnvironState.getPlayer(), true).getTempCategory() == TempCategory.WARM;
+				final boolean flag = PlayerUtils.getPlayerBiome(EnvironState.getPlayer(), true)
+						.getTempCategory() == TempCategory.WARM;
 				return flag ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("playerDimension", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.dimension", new Expression.LazyNumber() {
 			@Override
 			public Float eval() {
 				return new Float(EnvironState.getDimensionId());
 			}
 		});
+		Expression.addBuiltInVariable("player.Y", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return new Float(EnvironState.getPlayerPosition().getY());
+			}
+		});
+		Expression.addBuiltInVariable("isFoggy", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return EnvironState.isFoggy() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("isHumid", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return EnvironState.isHumid() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("isDry", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return EnvironState.isDry() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("isAuroraVisible", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return DiurnalUtils.isAuroraVisible(EnvironState.getWorld()) ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("moonPhaseFactor", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return DiurnalUtils.getMoonPhaseFactor(EnvironState.getWorld());
+			}
+		});
+		Expression.addBuiltInVariable("hasSky", new Expression.LazyNumber() {
+			@Override
+			public Float eval() {
+				return !EnvironState.getWorld().provider.getHasNoSky() ? Expression.ONE : Expression.ZERO;
+			}
+		});
 	}
 
 	private static final List<String> naughtyList = new ArrayList<String>();
+
 	public static List<String> getNaughtyList() {
 		return naughtyList;
 	}
-	
+
 	public static boolean check(@Nonnull final String conditions) {
 		// Existing default regex - short circuit to make it faster
 		if (StringUtils.isEmpty(conditions) || conditions.startsWith(".*"))
@@ -141,10 +270,10 @@ public class Evaluator {
 			final String ev = EnvironState.getConditions();
 			return Pattern.matches(conditions, ev);
 		}
-		
+
 		// If it was bad the first time around it is doubtful it
 		// changed it's ways.
-		if(naughtyList.contains(conditions))
+		if (naughtyList.contains(conditions))
 			return false;
 
 		// New stuff. Compile the expression and evaluate

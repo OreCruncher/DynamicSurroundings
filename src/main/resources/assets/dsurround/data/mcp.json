@@ -392,11 +392,11 @@
 			"sounds":[
 				{
 					"sound":"dsurround:heartbeat",
-					"conditions":"isPlayerHurt"
+					"conditions":"player.isHurt"
 				},
 				{
 					"sound":"dsurround:tummy",
-					"conditions":"isPlayerHungry",
+					"conditions":"player.isHungry",
 					"soundType":"periodic",
 					"repeatDelay":300
 				}
@@ -481,7 +481,7 @@
 			"sounds":[
 				{
 					"sound":"dsurround:frog",
-					"conditions":"NOT(isPlayerInside)",
+					"conditions":"NOT(player.isInside)",
 					"volume":0.4,
 					"pitch":1.0,
 					"variable":true
@@ -538,7 +538,7 @@
 			"sounds":[
 				{
 					"sound":"dsurround:breathing",
-					"conditions":"playerDimension == -1",
+					"conditions":"player.dimension == -1",
 					"volume":0.5,
 					"variable":true
 				}
@@ -554,7 +554,7 @@
 			"sounds":[
 				{
 					"sound":"dsurround:hiss",
-					"conditions":"isNotRaining && isDay && NOT(isPlayerFreezing || isPlayerCold)",
+					"conditions":"isNotRaining && isDay && NOT(player.isFreezing || player.isCold)",
 					"volume":1.0,
 					"variable":true
 				}
@@ -604,18 +604,18 @@
 			"sounds":[
 				{
 					"sound":"dsurround:rattlesnake",
-					"conditions":"isNotRaining && isDay && isPlayerWarm",
+					"conditions":"isNotRaining && isDay && player.isWarm",
 					"volume":1.0
 				},
 				{
 					"sound":"dsurround:hiss",
-					"conditions":"isNotRaining && isDay && isPlayerWarm",
+					"conditions":"isNotRaining && isDay && player.isWarm",
 					"volume":1.0,
 					"variable":true
 				},
 				{
 					"sound":"dsurround:insectcrawl",
-					"conditions":"isNotRaining && isDay && isPlayerWarm",
+					"conditions":"isNotRaining && isDay && player.isWarm",
 					"volume":1.0,
 					"variable":true
 				}
