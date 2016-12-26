@@ -1,3 +1,14 @@
+###DynamicSurroundings-3.1.3.0BETA
+**What's New!**
+* Want to know what mobs are thinking?  Look at the emojis!  This is WIP and subject to change.  Entities will have emoji particles orbiting their head indicating what they are thinking.  Works in SP and SMP where the server has Dynamic Surroundings installed.
+* [Enhanced condition strings for configuration files](https://github.com/OreCruncher/DynamicSurroundings/wiki/Tutorial:-Condition-Strings).
+
+**Fixes**
+* Should no longer "buzz" when player health gets low.
+
+**Changes**
+* Speech bubbles are rendered as particles.  Address some rendering quirks and improves performance a little bit.
+
 ###DynamicSurroundings-3.1.2.0BETA
 **What's New!**
 * Natura and Agricraft support built in.
