@@ -180,7 +180,7 @@ public class Expression {
 
 		addBuiltInFunction(new Function("MATCH", 2) {
 			@Override
-			public Variant eval(List<Variant> parameters) {
+			public Variant eval(final List<Variant> parameters) {
 				final String regex = parameters.get(0).asString();
 				final String input = parameters.get(1).asString();
 				return Pattern.matches(regex, input) ? ONE : ZERO;
@@ -188,7 +188,7 @@ public class Expression {
 		});
 		addBuiltInFunction(new Function("NOT", 1) {
 			@Override
-			public Variant eval(List<Variant> parameters) {
+			public Variant eval(final List<Variant> parameters) {
 				final boolean zero = parameters.get(0).compareTo(ZERO) == 0;
 				return zero ? ONE : ZERO;
 			}
@@ -196,7 +196,7 @@ public class Expression {
 
 		addBuiltInFunction(new LazyFunction("IF", 3) {
 			@Override
-			public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
+			public LazyNumber lazyEval(final List<LazyNumber> lazyParams) {
 				final boolean isTrue = !lazyParams.get(0).eval().equals(ZERO);
 				return isTrue ? lazyParams.get(1) : lazyParams.get(2);
 			}
@@ -204,28 +204,28 @@ public class Expression {
 
 		addBuiltInFunction(new Function("RANDOM", 0) {
 			@Override
-			public Variant eval(List<Variant> parameters) {
+			public Variant eval(final List<Variant> parameters) {
 				final float d = (float) Math.random();
 				return new Variant(d);
 			}
 		});
 		addBuiltInFunction(new Function("SIN", 1) {
 			@Override
-			public Variant eval(List<Variant> parameters) {
+			public Variant eval(final List<Variant> parameters) {
 				final float d = MathStuff.sin(MathStuff.toRadians(parameters.get(0).asFloat()));
 				return new Variant(d);
 			}
 		});
 		addBuiltInFunction(new Function("COS", 1) {
 			@Override
-			public Variant eval(List<Variant> parameters) {
+			public Variant eval(final List<Variant> parameters) {
 				final float d = MathStuff.cos(MathStuff.toRadians(parameters.get(0).asFloat()));
 				return new Variant(d);
 			}
 		});
 		addBuiltInFunction(new Function("TAN", 1) {
 			@Override
-			public Variant eval(List<Variant> parameters) {
+			public Variant eval(final List<Variant> parameters) {
 				final float d = MathStuff.tan(MathStuff.toRadians(parameters.get(0).asFloat()));
 				return new Variant(d);
 			}
@@ -277,21 +277,21 @@ public class Expression {
 		// });
 		addBuiltInFunction(new Function("RAD", 1) {
 			@Override
-			public Variant eval(List<Variant> parameters) {
+			public Variant eval(final List<Variant> parameters) {
 				final float d = MathStuff.toRadians(parameters.get(0).asFloat());
 				return new Variant(d);
 			}
 		});
 		addBuiltInFunction(new Function("DEG", 1) {
 			@Override
-			public Variant eval(List<Variant> parameters) {
+			public Variant eval(final List<Variant> parameters) {
 				final float d = MathStuff.toDegrees(parameters.get(0).asFloat());
 				return new Variant(d);
 			}
 		});
 		addBuiltInFunction(new Function("MAX", -1) {
 			@Override
-			public Variant eval(List<Variant> parameters) {
+			public Variant eval(final List<Variant> parameters) {
 				if (parameters.size() == 0) {
 					throw new ExpressionException("MAX requires at least one parameter");
 				}
@@ -306,7 +306,7 @@ public class Expression {
 		});
 		addBuiltInFunction(new Function("MIN", -1) {
 			@Override
-			public Variant eval(List<Variant> parameters) {
+			public Variant eval(final List<Variant> parameters) {
 				if (parameters.size() == 0) {
 					throw new ExpressionException("MIN requires at least one parameter");
 				}
@@ -321,7 +321,7 @@ public class Expression {
 		});
 		addBuiltInFunction(new Function("ABS", 1) {
 			@Override
-			public Variant eval(List<Variant> parameters) {
+			public Variant eval(final List<Variant> parameters) {
 				return new Variant(MathStuff.abs(parameters.get(0).asFloat()));
 			}
 		});
@@ -341,35 +341,35 @@ public class Expression {
 		// });
 		addBuiltInFunction(new Function("ROUND", 1) {
 			@Override
-			public Variant eval(List<Variant> parameters) {
+			public Variant eval(final List<Variant> parameters) {
 				final float toRound = parameters.get(0).asFloat();
 				return new Variant(Math.round(toRound));
 			}
 		});
 		addBuiltInFunction(new Function("FLOOR", 1) {
 			@Override
-			public Variant eval(List<Variant> parameters) {
+			public Variant eval(final List<Variant> parameters) {
 				final float toRound = parameters.get(0).asFloat();
 				return new Variant(Math.floor(toRound));
 			}
 		});
 		addBuiltInFunction(new Function("CEILING", 1) {
 			@Override
-			public Variant eval(List<Variant> parameters) {
+			public Variant eval(final List<Variant> parameters) {
 				final Float toRound = parameters.get(0).asFloat();
 				return new Variant(Math.ceil(toRound));
 			}
 		});
 		addBuiltInFunction(new Function("SQRT", 1) {
 			@Override
-			public Variant eval(List<Variant> parameters) {
+			public Variant eval(final List<Variant> parameters) {
 				final Float x = parameters.get(0).asFloat();
 				return new Variant(Math.sqrt(x));
 			}
 		});
 		addBuiltInFunction(new Function("CLAMP", 3) {
 			@Override
-			public Variant eval(List<Variant> parameters) {
+			public Variant eval(final List<Variant> parameters) {
 				final Float val = parameters.get(0).asFloat();
 				final Float low = parameters.get(1).asFloat();
 				final Float high = parameters.get(2).asFloat();
