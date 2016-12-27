@@ -27,24 +27,19 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.mod.DynSurround.client.event.RegistryReloadEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
-import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 
 import gnu.trove.map.hash.TObjectIntHashMap;
-import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -155,27 +150,4 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		}
 	}
 
-	/*
-	 * Determines if the sound needs to be replaced by the event handler.
-	 */
-	private static boolean replaceRainSound(final String name) {
-		return "weather.rain".equals(name);
-	}
-
-	/*
-	 * Intercept the sound events and patch up the RAIN sound. If the RAIN
-	 * experience is to be Vanilla let it just roll on through.
-	 */
-	@SubscribeEvent
-	public void soundEvent(final PlaySoundEvent event) {
-		if (event.getSound() == null)
-			return;
-
-		if ((ModOptions.alwaysOverrideSound || !StormProperties.doVanilla()) && replaceRainSound(event.getName())) {
-			final ISound sound = event.getSound();
-			event.setResultSound(new PositionedSoundRecord(StormProperties.getCurrentStormSound(),
-					SoundCategory.WEATHER, StormProperties.getCurrentVolume(), sound.getPitch(), sound.getXPosF(),
-					sound.getYPosF(), sound.getZPosF()));
-		}
-	}
 }

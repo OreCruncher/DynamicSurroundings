@@ -67,7 +67,6 @@ public final class ModOptions {
 	public static final String CATEGORY_RAIN = "rain";
 	public static final String CONFIG_RAIN_VOLUME = "Sound Level";
 	public static final String CONFIG_RAIN_PARTICLE_BASE = "Particle Count Base";
-	public static final String CONFIG_ALWAYS_OVERRIDE_SOUND = "Always Override Sound";
 	public static final String CONFIG_ALLOW_DESERT_DUST = "Desert Dust";
 	public static final String CONFIG_RESET_RAIN_ON_SLEEP = "Reset Rain on Sleep";
 	public static final String CONFIG_RAIN_ACTIVE_TIME_CONST = "Active duration of rain, constant";
@@ -80,7 +79,7 @@ public final class ModOptions {
 	public static final String CONFIG_STORM_INACTIVE_TIME_VARIABLE = "Inactive duration of thunder, variable";
 
 	private static final List<String> rainSort = Arrays.asList(CONFIG_RAIN_VOLUME, CONFIG_ALLOW_DESERT_DUST,
-			CONFIG_RESET_RAIN_ON_SLEEP, CONFIG_ALWAYS_OVERRIDE_SOUND, CONFIG_RAIN_PARTICLE_BASE,
+			CONFIG_RESET_RAIN_ON_SLEEP, CONFIG_RAIN_PARTICLE_BASE,
 			CONFIG_RAIN_ACTIVE_TIME_CONST, CONFIG_RAIN_ACTIVE_TIME_VARIABLE, CONFIG_RAIN_INACTIVE_TIME_CONST,
 			CONFIG_RAIN_INACTIVE_TIME_VARIABLE, CONFIG_STORM_ACTIVE_TIME_CONST, CONFIG_STORM_ACTIVE_TIME_VARIABLE,
 			CONFIG_STORM_INACTIVE_TIME_CONST, CONFIG_STORM_INACTIVE_TIME_VARIABLE);
@@ -93,9 +92,6 @@ public final class ModOptions {
 	@MinMaxInt(min = 0, max = 500)
 	@Comment("Base count of rain splash particles to generate per tick")
 	public static int particleCountBase = 100;
-	@Parameter(category = CATEGORY_RAIN, property = CONFIG_ALWAYS_OVERRIDE_SOUND, defaultValue = "true")
-	@Comment("Always override Vanilla rain sound even when dimension is blacklisted")
-	public static boolean alwaysOverrideSound = true;
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RESET_RAIN_ON_SLEEP, defaultValue = "true")
 	@Comment("Reset rain/thunder when all players sleep")
 	public static boolean resetRainOnSleep = true;
