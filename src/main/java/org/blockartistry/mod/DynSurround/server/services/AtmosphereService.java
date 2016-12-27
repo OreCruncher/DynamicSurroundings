@@ -58,7 +58,7 @@ public final class AtmosphereService extends Service {
 		final float sendIntensity = dimensions.hasWeather(world) ? DimensionEffectData.get(world).getRainIntensity()
 				: RESET;
 
-		// Set the RAIN intensity for all players in the current
+		// Set the RAIN rainIntensity for all players in the current
 		// dimension.
 		Network.sendRainIntensity(sendIntensity, dimensionId);
 	}

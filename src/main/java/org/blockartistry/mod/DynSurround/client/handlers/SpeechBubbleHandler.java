@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.event.SpeechTextEvent;
+import org.blockartistry.mod.DynSurround.api.events.SpeechTextEvent;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleBillboard;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -55,6 +55,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -224,7 +225,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		this.messages.clear();
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onSpeechTextEvent(@Nonnull final SpeechTextEvent event) {
 		if (event.translate)
 			addSpeechBubbleFormatted(event.entityId, event.message);

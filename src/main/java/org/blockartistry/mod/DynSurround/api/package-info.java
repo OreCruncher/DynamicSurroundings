@@ -22,10 +22,8 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.entity;
+@API(owner = Module.MOD_ID, provides = Module.API_ID, apiVersion = "1.0")
+package org.blockartistry.mod.DynSurround.api;
 
-public interface IEntityEmoji {
-	ActionState getActionState();
-	EmotionalState getEmotionalState();
-	EmojiType getEmojiType();
-}
+import net.minecraftforge.fml.common.API;
+import org.blockartistry.mod.DynSurround.Module;

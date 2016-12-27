@@ -22,19 +22,56 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.entity;
+package org.blockartistry.mod.DynSurround.api.events;
+
+import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.api.entity.ActionState;
 import org.blockartistry.mod.DynSurround.api.entity.EmojiType;
 import org.blockartistry.mod.DynSurround.api.entity.EmotionalState;
-import org.blockartistry.mod.DynSurround.api.entity.IEntityEmoji;
 
-public interface IEntityEmojiSettable extends IEntityEmoji {
-	void setActionState(@Nonnull final ActionState state);
-	void setEmotionalState(@Nonnull final EmotionalState state);
-	void setEmojiType(@Nonnull final EmojiType type);
-	boolean isDirty();
-	void clearDirty();
+import net.minecraftforge.fml.common.eventhandler.Event;
+
+/**
+ * Fires when there is an update to an entities emoji state.
+ * Will only fire client side.
+ */
+public class EntityEmojiEvent extends Event {
+
+	/**
+	 * Persistent ID of the entity this event is associated with.
+	 */
+	public final UUID entityId;
+	
+	/**
+	 * New ActionState of the Entity.
+	 * 
+	 * @see org.blockartistry.mod.DynSurround.api.entity.ActionState
+	 */
+	public final ActionState actionState;
+	
+	/**
+	 * New EmotionalState of the Entity.
+	 * 
+	 * @see org.blockartistry.mod.DynSurround.api.entity.EmotionalState
+	 */
+	public final EmotionalState emotionalState;
+	
+	/**
+	 * New EmojiType for the Entity.
+	 * 
+	 * @see org.blockartistry.mod.DynSurround.api.entity.EmojiType
+	 */
+	public final EmojiType emojiType;
+
+	public EntityEmojiEvent(@Nonnull final UUID id, @Nonnull final ActionState action,
+			@Nonnull final EmotionalState emotion, @Nonnull final EmojiType emojiType) {
+		this.entityId = id;
+		this.actionState = action;
+		this.emotionalState = emotion;
+		this.emojiType = emojiType;
+	}
+
 }

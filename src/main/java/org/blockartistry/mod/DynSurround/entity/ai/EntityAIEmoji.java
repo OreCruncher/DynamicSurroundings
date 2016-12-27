@@ -24,9 +24,9 @@
 
 package org.blockartistry.mod.DynSurround.entity.ai;
 
+import org.blockartistry.mod.DynSurround.api.entity.EmotionalState;
+import org.blockartistry.mod.DynSurround.api.entity.EntityCapability;
 import org.blockartistry.mod.DynSurround.entity.EmojiDataTables;
-import org.blockartistry.mod.DynSurround.entity.EmotionalState;
-import org.blockartistry.mod.DynSurround.entity.EntityEmojiCapability;
 import org.blockartistry.mod.DynSurround.entity.IEntityEmojiSettable;
 import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.server.services.SpeechBubbleService;
@@ -48,7 +48,7 @@ public class EntityAIEmoji extends EntityAIBase {
 
 	public EntityAIEmoji(final EntityLiving subject) {
 		this.subject = subject;
-		this.data = (IEntityEmojiSettable) subject.getCapability(EntityEmojiCapability.CAPABILIITY, null);
+		this.data = (IEntityEmojiSettable) subject.getCapability(EntityCapability.EMOJI, null);
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class EntityAIEmoji extends EntityAIBase {
 	}
 
 	protected void updateEmotionalState() {
-		EmotionalState newState = this.data.getActionState().getState();
+		EmotionalState newState = this.data.getActionState().getEmotionalState();
 
 		if (EntityUtils.hasNegativePotionEffects(this.subject)) {
 			newState = EmotionalState.SICK;

@@ -22,32 +22,43 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.entity;
+package org.blockartistry.mod.DynSurround.api.entity;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.Module;
 
-import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.util.ResourceLocation;
 
 public enum EmojiType {
 
+	/** No emoji will be displayed */
 	NONE("none"),
+	/** The attack emoji will be displayed */
 	ATTACK("emoji_attack"),
+	/** The flee emoji will be displayed */
 	FLEE("emoji_flee"),
+	/** The happy emoji will be displayed */
 	HAPPY("emoji_happy"),
+	/** The sad emoji will be displayed */
 	SAD("emoji_sad"),
+	/** The sick emoji will be displayed */
 	SICK("emoji_sick"),
+	/** The hurt emoji will be displayed */
 	HURT("emoji_hurt"),
+	/** The watch emoji will be displayed */
 	WATCH("emoji_watch"),
+	/** The farm farm will be displayed */
 	FARM("emoji_farm"),
+	/** The work emoji will be displayed */
 	WORK("emoji_work"),
+	/** The trade emoji will be displayed */
 	TRADE("emoji_trade"),
+	/** The angry emoji will be displayed */
 	ANGRY("emoji_angry"),
+	/** The eat emoji will be displayed */
 	EAT("emoji_eat");
-
-	private static final TObjectIntHashMap<EmojiType> map = new TObjectIntHashMap<EmojiType>();
 
 	private final ResourceLocation resource;
 
@@ -60,6 +71,7 @@ public enum EmojiType {
 		return this.resource;
 	}
 
+	@Nullable
 	public static EmojiType get(int id) {
 		final EmojiType[] v = EmojiType.values();
 		if (id > v.length || id < 0)
@@ -67,12 +79,8 @@ public enum EmojiType {
 		return v[id];
 	}
 
-	public static int getId(final EmojiType state) {
-		if (map.size() == 0) {
-			for (int x = 0; x < EmojiType.values().length; x++)
-				map.put(EmojiType.values()[x], x);
-		}
-		return map.get(state);
+	public static int getId(@Nonnull final EmojiType state) {
+		return state.ordinal();
 	}
 
 }

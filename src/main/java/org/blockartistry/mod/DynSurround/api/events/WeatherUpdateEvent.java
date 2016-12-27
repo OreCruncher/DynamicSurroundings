@@ -22,26 +22,31 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.event;
+package org.blockartistry.mod.DynSurround.api.events;
 
-import java.util.UUID;
-
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-public class SpeechTextEvent extends Event {
-	
-	public final UUID entityId;
-	public final String message;
-	public final boolean translate;
-	
-	public SpeechTextEvent(final UUID id, final String message) {
-		this(id, message, false);
-	}
-	
-	public SpeechTextEvent(final UUID id, final String message, final boolean translate) {
-		this.entityId = id;
-		this.message = message;
-		this.translate = translate;
+/**
+ * Fires when there is an update to Dynamic Surroundings weather effects. The
+ * event will only fire client side.
+ */
+public class WeatherUpdateEvent extends Event {
+
+	/**
+	 * The dimension for which this event is intended.
+	 */
+	public final int dimensionId;
+
+	/**
+	 * The new rain intensity that is being set.  0 means
+	 * no intensity, and 1.0F means full.
+	 */
+	public final float rainIntensity;
+
+	public WeatherUpdateEvent(final int dimension, final float rainIntensity) {
+		this.dimensionId = dimension;
+		this.rainIntensity = MathHelper.clamp_float(rainIntensity, 0.0F, 1.0F);
 	}
 
 }

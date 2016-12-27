@@ -25,12 +25,13 @@
 package org.blockartistry.mod.DynSurround.client.handlers;
 
 import javax.annotation.Nonnull;
-import org.blockartistry.mod.DynSurround.client.event.EntityEmojiEvent;
+
+import org.blockartistry.mod.DynSurround.api.entity.EmojiType;
+import org.blockartistry.mod.DynSurround.api.entity.EntityCapability;
+import org.blockartistry.mod.DynSurround.api.events.EntityEmojiEvent;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleEmoji;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.entity.EmojiType;
-import org.blockartistry.mod.DynSurround.entity.EntityEmojiCapability;
 import org.blockartistry.mod.DynSurround.entity.IEntityEmojiSettable;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
@@ -71,7 +72,7 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 		final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), event.entityId);
 		if (entity != null) {
 			final IEntityEmojiSettable data = (IEntityEmojiSettable) entity
-					.getCapability(EntityEmojiCapability.CAPABILIITY, null);
+					.getCapability(EntityCapability.EMOJI, null);
 			data.setActionState(event.actionState);
 			data.setEmotionalState(event.emotionalState);
 			data.setEmojiType(event.emojiType);

@@ -33,6 +33,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.mod.DynSurround.api.entity.ActionState;
+import org.blockartistry.mod.DynSurround.api.entity.EmojiType;
+import org.blockartistry.mod.DynSurround.api.entity.EmotionalState;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.*;
@@ -87,58 +90,63 @@ public final class EmojiDataTables {
 	private final static Map<Class<? extends EntityAIBase>, ActionState> actions = new IdentityHashMap<>();
 	private final static Map<EmojiKey, EmojiType> emojiMap = new HashMap<EmojiKey, EmojiType>();
 
+	public static void add(@Nonnull final Class<? extends EntityAIBase> clazz, @Nonnull final ActionState state) {
+		if (!actions.containsKey(clazz))
+			actions.put(clazz, state);
+	}
+
 	static {
-		actions.put(EntityAIAttackMelee.class, ActionState.ATTACKING);
-		actions.put(EntityAIAttackRanged.class, ActionState.ATTACKING);
-		actions.put(EntityAIAttackRangedBow.class, ActionState.ATTACKING);
-		actions.put(EntityAIAvoidEntity.class, ActionState.PANIC);
-		actions.put(EntityAIBeg.class, ActionState.BEGGING);
-		actions.put(EntityAIBreakDoor.class, ActionState.NONE);
-		actions.put(EntityAICreeperSwell.class, ActionState.EXPLODE);
-		actions.put(EntityAIDefendVillage.class, ActionState.NONE);
-		actions.put(EntityAIDoorInteract.class, ActionState.NONE);
-		actions.put(EntityAIEatGrass.class, ActionState.EATING);
-		actions.put(EntityAIFindEntityNearest.class, ActionState.LOOKING);
-		actions.put(EntityAIFindEntityNearestPlayer.class, ActionState.LOOKING);
-		actions.put(EntityAIFleeSun.class, ActionState.PANIC);
-		actions.put(EntityAIFollowGolem.class, ActionState.FOLLOWING);
-		actions.put(EntityAIFollowOwner.class, ActionState.FOLLOWING);
-		actions.put(EntityAIFollowParent.class, ActionState.FOLLOWING);
-		actions.put(EntityAIHarvestFarmland.class, ActionState.FARMING);
-		actions.put(EntityAIHurtByTarget.class, ActionState.NONE);
-		actions.put(EntityAILeapAtTarget.class, ActionState.ATTACKING);
-		actions.put(EntityAILookAtTradePlayer.class, ActionState.LOOKING);
-		actions.put(EntityAILookAtVillager.class, ActionState.LOOKING);
-		actions.put(EntityAILookIdle.class, ActionState.IDLE);
-		actions.put(EntityAIMate.class, ActionState.MATING);
-		actions.put(EntityAIMoveIndoors.class, ActionState.MOVING);
-		actions.put(EntityAIMoveThroughVillage.class, ActionState.MOVING);
-		actions.put(EntityAIMoveToBlock.class, ActionState.MOVING);
-		actions.put(EntityAIMoveTowardsRestriction.class, ActionState.MOVING);
-		actions.put(EntityAIMoveTowardsTarget.class, ActionState.MOVING);
-		actions.put(EntityAINearestAttackableTarget.class, ActionState.NONE);
-		actions.put(EntityAIOcelotAttack.class, ActionState.ATTACKING);
-		actions.put(EntityAIOcelotSit.class, ActionState.IDLE);
-		actions.put(EntityAIOpenDoor.class, ActionState.IDLE);
-		actions.put(EntityAIOwnerHurtByTarget.class, ActionState.ATTACKING);
-		actions.put(EntityAIPanic.class, ActionState.PANIC);
-		actions.put(EntityAIPlay.class, ActionState.PLAYING);
-		actions.put(EntityAIRestrictOpenDoor.class, ActionState.NONE);
-		actions.put(EntityAIRestrictSun.class, ActionState.NONE);
-		actions.put(EntityAIRunAroundLikeCrazy.class, ActionState.CRAZY);
-		actions.put(EntityAISit.class, ActionState.IDLE);
-		actions.put(EntityAISkeletonRiders.class, ActionState.NONE);
-		actions.put(EntityAISwimming.class, ActionState.MOVING);
-		actions.put(EntityAITarget.class, ActionState.NONE);
-		actions.put(EntityAITargetNonTamed.class, ActionState.NONE);
-		actions.put(EntityAITempt.class, ActionState.TEMPT);
-		actions.put(EntityAITradePlayer.class, ActionState.TRADING);
-		actions.put(EntityAIVillagerInteract.class, ActionState.NONE);
-		actions.put(EntityAIVillagerMate.class, ActionState.MATING);
-		actions.put(EntityAIWander.class, ActionState.MOVING);
-		actions.put(EntityAIWatchClosest.class, ActionState.LOOKING);
-		actions.put(EntityAIWatchClosest2.class, ActionState.LOOKING);
-		actions.put(EntityAIZombieAttack.class, ActionState.NONE);
+		add(EntityAIAttackMelee.class, ActionState.ATTACKING);
+		add(EntityAIAttackRanged.class, ActionState.ATTACKING);
+		add(EntityAIAttackRangedBow.class, ActionState.ATTACKING);
+		add(EntityAIAvoidEntity.class, ActionState.PANIC);
+		add(EntityAIBeg.class, ActionState.BEGGING);
+		add(EntityAIBreakDoor.class, ActionState.NONE);
+		add(EntityAICreeperSwell.class, ActionState.EXPLODE);
+		add(EntityAIDefendVillage.class, ActionState.NONE);
+		add(EntityAIDoorInteract.class, ActionState.NONE);
+		add(EntityAIEatGrass.class, ActionState.EATING);
+		add(EntityAIFindEntityNearest.class, ActionState.LOOKING);
+		add(EntityAIFindEntityNearestPlayer.class, ActionState.LOOKING);
+		add(EntityAIFleeSun.class, ActionState.PANIC);
+		add(EntityAIFollowGolem.class, ActionState.FOLLOWING);
+		add(EntityAIFollowOwner.class, ActionState.FOLLOWING);
+		add(EntityAIFollowParent.class, ActionState.FOLLOWING);
+		add(EntityAIHarvestFarmland.class, ActionState.FARMING);
+		add(EntityAIHurtByTarget.class, ActionState.NONE);
+		add(EntityAILeapAtTarget.class, ActionState.ATTACKING);
+		add(EntityAILookAtTradePlayer.class, ActionState.LOOKING);
+		add(EntityAILookAtVillager.class, ActionState.LOOKING);
+		add(EntityAILookIdle.class, ActionState.IDLE);
+		add(EntityAIMate.class, ActionState.MATING);
+		add(EntityAIMoveIndoors.class, ActionState.MOVING);
+		add(EntityAIMoveThroughVillage.class, ActionState.MOVING);
+		add(EntityAIMoveToBlock.class, ActionState.MOVING);
+		add(EntityAIMoveTowardsRestriction.class, ActionState.MOVING);
+		add(EntityAIMoveTowardsTarget.class, ActionState.MOVING);
+		add(EntityAINearestAttackableTarget.class, ActionState.NONE);
+		add(EntityAIOcelotAttack.class, ActionState.ATTACKING);
+		add(EntityAIOcelotSit.class, ActionState.IDLE);
+		add(EntityAIOpenDoor.class, ActionState.IDLE);
+		add(EntityAIOwnerHurtByTarget.class, ActionState.ATTACKING);
+		add(EntityAIPanic.class, ActionState.PANIC);
+		add(EntityAIPlay.class, ActionState.PLAYING);
+		add(EntityAIRestrictOpenDoor.class, ActionState.NONE);
+		add(EntityAIRestrictSun.class, ActionState.NONE);
+		add(EntityAIRunAroundLikeCrazy.class, ActionState.CRAZY);
+		add(EntityAISit.class, ActionState.IDLE);
+		add(EntityAISkeletonRiders.class, ActionState.NONE);
+		add(EntityAISwimming.class, ActionState.MOVING);
+		add(EntityAITarget.class, ActionState.NONE);
+		add(EntityAITargetNonTamed.class, ActionState.NONE);
+		add(EntityAITempt.class, ActionState.TEMPT);
+		add(EntityAITradePlayer.class, ActionState.TRADING);
+		add(EntityAIVillagerInteract.class, ActionState.NONE);
+		add(EntityAIVillagerMate.class, ActionState.MATING);
+		add(EntityAIWander.class, ActionState.MOVING);
+		add(EntityAIWatchClosest.class, ActionState.LOOKING);
+		add(EntityAIWatchClosest2.class, ActionState.LOOKING);
+		add(EntityAIZombieAttack.class, ActionState.NONE);
 
 		// Special embedded AI tasks
 		registerSpecial(EntityEnderman.class, "AIFindPlayer", ActionState.ANGRY);
@@ -171,11 +179,11 @@ public final class EmojiDataTables {
 		emojiMap.put(new EmojiKey(ActionState.WORKING, null), EmojiType.WORK);
 	}
 
-	private static void registerSpecial(@Nonnull final Class<? extends EntityLiving> clazz, @Nonnull final String className,
-			@Nonnull final ActionState state) {
+	private static void registerSpecial(@Nonnull final Class<? extends EntityLiving> clazz,
+			@Nonnull final String className, @Nonnull final ActionState state) {
 
 		final Class<? extends EntityAIBase> ai = findInternalClass(clazz, className);
-		if(ai != null)
+		if (ai != null)
 			actions.put(ai, state);
 		else
 			ModLog.warn("Unable to locate class '%s' inside [%s]", className, clazz.toGenericString());

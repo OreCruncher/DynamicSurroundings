@@ -27,7 +27,7 @@ package org.blockartistry.mod.DynSurround.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.mod.DynSurround.client.event.AuroraSpawnEvent;
+import org.blockartistry.mod.DynSurround.api.events.AuroraSpawnEvent;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
 
 import io.netty.buffer.ByteBuf;
@@ -73,7 +73,7 @@ public final class PacketAurora implements IMessage {
 
 	@Override
 	public void fromBytes(@Nonnull final ByteBuf buf) {
-		this.dimension = buf.readInt();
+		this.dimension = buf.readShort();
 		this.seed = buf.readLong();
 		this.posX = buf.readInt();
 		this.posZ = buf.readInt();
@@ -83,7 +83,7 @@ public final class PacketAurora implements IMessage {
 
 	@Override
 	public void toBytes(@Nonnull final ByteBuf buf) {
-		buf.writeInt(this.dimension);
+		buf.writeShort(this.dimension);
 		buf.writeLong(this.seed);
 		buf.writeInt(this.posX);
 		buf.writeInt(this.posZ);

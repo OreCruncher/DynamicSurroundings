@@ -22,37 +22,57 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.entity;
+package org.blockartistry.mod.DynSurround.api.entity;
 
-import gnu.trove.map.hash.TObjectIntHashMap;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+/**
+ * Describes the current action that the entity is taking.
+ */
 public enum ActionState {
 
+	/** Not doing anything */
 	NONE(0, EmotionalState.NEUTRAL),
+	/** Moving various model parts around, like shifting head orientation */
 	IDLE(1, EmotionalState.NEUTRAL),
+	/** Entity is angry and doing something related to that anger.  Enderman agitation is an example. */
 	ANGRY(2, EmotionalState.ANGRY),
+	/** The entity has a target and is attempting to attack. */
 	ATTACKING(1000, EmotionalState.ANGRY),
+	/** The entity is in the process of exploding.  Creeper swell is an example. */
 	EXPLODE(2000, EmotionalState.ANGRY),
+	/** The entity is looking at something, either a player, mob, block, etc. */
 	LOOKING(3, EmotionalState.NEUTRAL),
+	/** The villager is attempting to farm mature crops. */
 	FARMING(4, EmotionalState.BUSY),
+	/** The entity is fleeing, such as a villager from a zombie. */
 	PANIC(5, EmotionalState.AFRAID),
+	/** The entity is being tempted.  Usually applies to passive mobs when player holds out food. */
 	TEMPT(6, EmotionalState.HAPPY),
+	/** Needs no explanation. */
 	MATING(7, EmotionalState.HAPPY),
+	/** When a mob runs around like crazy. */
 	CRAZY(8, EmotionalState.AFRAID),
+	/** Villager is engaged in a trade with a player. */
 	TRADING(9, EmotionalState.HAPPY),
+	/** Child villager is playing. */
 	PLAYING(10, EmotionalState.HAPPY),
+	/** Pet is begging */
 	BEGGING(11, EmotionalState.HAPPY),
+	/** Currently not used */
 	WORKING(12, EmotionalState.BUSY),
+	/** The entity is eating, such as a sheep cropping grass. */
 	EATING(13, EmotionalState.HAPPY),
+	/** The entity is following, like a leashed passive. */
 	FOLLOWING(14, EmotionalState.NEUTRAL),
+	/** The entity is on the move. */
 	MOVING(15, EmotionalState.NEUTRAL);
-
-	private static final TObjectIntHashMap<ActionState> map = new TObjectIntHashMap<ActionState>();
 
 	private final int priority;
 	private final EmotionalState state;
 
-	ActionState(final int priority, final EmotionalState state) {
+	ActionState(final int priority, @Nonnull final EmotionalState state) {
 		this.priority = priority;
 		this.state = state;
 	}
@@ -61,10 +81,12 @@ public enum ActionState {
 		return this.priority;
 	}
 
-	public EmotionalState getState() {
+	@Nonnull
+	public EmotionalState getEmotionalState() {
 		return this.state;
 	}
 
+	@Nullable
 	public static ActionState get(int id) {
 		final ActionState[] v = ActionState.values();
 		if (id > v.length || id < 0)
@@ -72,12 +94,8 @@ public enum ActionState {
 		return v[id];
 	}
 
-	public static int getId(final ActionState state) {
-		if (map.size() == 0) {
-			for (int x = 0; x < ActionState.values().length; x++)
-				map.put(ActionState.values()[x], x);
-		}
-		return map.get(state);
+	public static int getId(@Nonnull final ActionState state) {
+		return state.ordinal();
 	}
 
 }

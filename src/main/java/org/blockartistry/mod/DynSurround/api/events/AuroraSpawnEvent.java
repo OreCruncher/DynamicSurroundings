@@ -22,18 +22,58 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.event;
+package org.blockartistry.mod.DynSurround.api.events;
 
+import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-public class RainIntensityEvent extends Event {
+/**
+ * Event raised when an aurora spawns.  This event will only fire
+ * client side.
+ * 
+ * Can be canceled.
+ */
+@Cancelable
+public class AuroraSpawnEvent extends Event {
 	
+	/**
+	 * Dimension for which this event is intended.
+	 */
 	public final int dimensionId;
-	public final float intensity;
 	
-	public RainIntensityEvent(final int dimension, final float intensity) {
-		this.dimensionId = dimension;
-		this.intensity = intensity;
+	/**
+	 * Location of the Aurora
+	 */
+	public final int posX;
+	public final int posZ;
+	
+	/**
+	 * Random seed to use when generating the Aurora visuals.
+	 */
+	public final long seed;
+	
+	/**
+	 * Which color set to apply when rendering the Aurora.
+	 * 
+	 * @see org.blockartistry.mod.DynSurround.data.ColorPair
+	 */
+	public final int colorSet;
+	
+	/**
+	 * Geometry preset of the Aurora.
+	 * 
+	 * @see org.blockartistry.mod.DynSurround.data.AuroraPreset
+	 */
+	public final int preset;
+	
+	public AuroraSpawnEvent(final int dimensionId, final int x, final int z, final long seed, final int colorSet, final int preset) {
+		this.dimensionId = dimensionId;
+		this.posX = x;
+		this.posZ = z;
+		this.seed = seed;
+		this.colorSet = colorSet;
+		this.preset = preset;
+		
 	}
 
 }

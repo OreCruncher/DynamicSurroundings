@@ -28,6 +28,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.api.entity.ActionState;
+import org.blockartistry.mod.DynSurround.api.entity.EmojiType;
+import org.blockartistry.mod.DynSurround.api.entity.EmotionalState;
+import org.blockartistry.mod.DynSurround.api.entity.EntityCapability;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -45,14 +49,14 @@ public final class EntityEmojiData implements ICapabilityProvider, IEntityEmojiS
 
 	@Override
 	public boolean hasCapability(@Nonnull final Capability<?> capability, @Nullable final EnumFacing facing) {
-		return capability == EntityEmojiCapability.CAPABILIITY;
+		return capability == EntityCapability.EMOJI;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	@Nullable
 	public <T> T getCapability(@Nonnull final Capability<T> capability, @Nullable final EnumFacing facing) {
-		if (capability == EntityEmojiCapability.CAPABILIITY)
+		if (capability == EntityCapability.EMOJI)
 			return (T) this;
 		return null;
 	}

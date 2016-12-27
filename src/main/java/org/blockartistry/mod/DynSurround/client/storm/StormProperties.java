@@ -116,9 +116,9 @@ public enum StormProperties {
 	}
 
 	/**
-	 * Sets the RAIN intensity based on the intensityLevel level provided. This
+	 * Sets the RAIN rainIntensity based on the intensityLevel level provided. This
 	 * is called by the packet handler when the server wants to set the
-	 * intensity level on the client.
+	 * rainIntensity level on the client.
 	 */
 	public static void setIntensity(float level) {
 
@@ -157,7 +157,7 @@ public enum StormProperties {
 	}
 
 	/**
-	 * Set precipitation textures based on the current intensity. This is
+	 * Set precipitation textures based on the current rainIntensity. This is
 	 * invoked before rendering takes place.
 	 */
 	public static void setTextures() {

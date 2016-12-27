@@ -30,8 +30,8 @@ import java.util.Random;
 import java.util.UUID;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
+import org.blockartistry.mod.DynSurround.api.events.WeatherUpdateEvent;
 import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
-import org.blockartistry.mod.DynSurround.client.event.RainIntensityEvent;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
@@ -516,9 +516,9 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	}
 
 	@SubscribeEvent
-	public void onRainIntensityEvent(final RainIntensityEvent event) {
+	public void onWeatherUpdateEvent(final WeatherUpdateEvent event) {
 		if(EnvironState.getDimensionId() != event.dimensionId)
 			return;
-		StormProperties.setIntensity(event.intensity);
+		StormProperties.setIntensity(event.rainIntensity);
 	}
 }

@@ -29,10 +29,10 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.api.entity.ActionState;
+import org.blockartistry.mod.DynSurround.api.entity.EmojiType;
+import org.blockartistry.mod.DynSurround.api.entity.EmotionalState;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
-import org.blockartistry.mod.DynSurround.entity.ActionState;
-import org.blockartistry.mod.DynSurround.entity.EmojiType;
-import org.blockartistry.mod.DynSurround.entity.EmotionalState;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -54,7 +54,7 @@ public final class Network {
 
 	public static void initialize() {
 
-		NETWORK.registerMessage(PacketRainIntensity.PacketHandler.class, PacketRainIntensity.class, ++discriminator,
+		NETWORK.registerMessage(PacketWeatherUpdate.PacketHandler.class, PacketWeatherUpdate.class, ++discriminator,
 				Side.CLIENT);
 		NETWORK.registerMessage(PacketAurora.PacketHandler.class, PacketAurora.class, ++discriminator, Side.CLIENT);
 		NETWORK.registerMessage(PacketHealthChange.PacketHandler.class, PacketHealthChange.class, ++discriminator,
@@ -81,7 +81,7 @@ public final class Network {
 	}
 
 	public static void sendRainIntensity(final float intensity, final int dimension) {
-		NETWORK.sendToDimension(new PacketRainIntensity(intensity, dimension), dimension);
+		NETWORK.sendToDimension(new PacketWeatherUpdate(intensity, dimension), dimension);
 	}
 
 	public static void sendAurora(@Nonnull final AuroraData data, final int dimension) {

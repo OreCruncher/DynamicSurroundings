@@ -22,29 +22,33 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.entity;
+package org.blockartistry.mod.DynSurround.api.entity;
 
-import gnu.trove.map.hash.TObjectIntHashMap;
+import javax.annotation.Nonnull;
 
-public enum EmotionalState {
-
-	NEUTRAL, HAPPY, SAD, ANGRY, AFRAID, BUSY, SICK, HURT;
-
-	private static final TObjectIntHashMap<EmotionalState> map = new TObjectIntHashMap<EmotionalState>();
-
-	public static EmotionalState get(int id) {
-		final EmotionalState[] v = EmotionalState.values();
-		if (id > v.length || id < 0)
-			return null;
-		return v[id];
-	}
-
-	public static int getId(final EmotionalState state) {
-		if (map.size() == 0) {
-			for (int x = 0; x < EmotionalState.values().length; x++)
-				map.put(EmotionalState.values()[x], x);
-		}
-		return map.get(state);
-	}
-
+public interface IEntityEmoji {
+	
+	/**
+	 * The current ActionState of the entity
+	 * 
+	 * @return Current ActionState of the entity
+	 */
+	@Nonnull
+	ActionState getActionState();
+	
+	/**
+	 * The current EmotionalState of the entity
+	 * 
+	 * @return Current EmotionalState of the entity
+	 */
+	@Nonnull
+	EmotionalState getEmotionalState();
+	
+	/**
+	 * The current emoji associated with the entity
+	 * 
+	 * @return Current EmojiType of the entity
+	 */
+	@Nonnull
+	EmojiType getEmojiType();
 }

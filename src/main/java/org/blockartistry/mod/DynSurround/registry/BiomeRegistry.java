@@ -35,7 +35,6 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.event.RegistryReloadEvent;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
@@ -46,7 +45,6 @@ import org.blockartistry.mod.DynSurround.util.MyUtils;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.MinecraftForge;
 
 public final class BiomeRegistry extends Registry {
 
@@ -103,8 +101,6 @@ public final class BiomeRegistry extends Registry {
 
 		// Free memory because we no longer need
 		biomeAliases.clear();
-		
-		MinecraftForge.EVENT_BUS.post(new RegistryReloadEvent.Biome());
 	}
 
 	@Override

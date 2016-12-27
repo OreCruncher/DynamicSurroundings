@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
-import org.blockartistry.mod.DynSurround.client.event.RegistryReloadEvent;
+import org.blockartistry.mod.DynSurround.client.event.RegistryEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
@@ -126,7 +126,7 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 	 * Fired when the underlying biome config is reloaded.
 	 */
 	@SubscribeEvent
-	public void registryReloadEvent(final RegistryReloadEvent.Biome event) {
+	public void registryReloadEvent(final RegistryEvent.Reload event) {
 		resetSounds();
 	}
 

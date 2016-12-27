@@ -29,7 +29,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.mod.DynSurround.client.event.SpeechTextEvent;
+import org.blockartistry.mod.DynSurround.api.events.SpeechTextEvent;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.ByteBufUtils;

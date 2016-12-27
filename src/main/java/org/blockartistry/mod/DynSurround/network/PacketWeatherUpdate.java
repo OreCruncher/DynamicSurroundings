@@ -27,20 +27,20 @@ package org.blockartistry.mod.DynSurround.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.mod.DynSurround.client.event.RainIntensityEvent;
+import org.blockartistry.mod.DynSurround.api.events.WeatherUpdateEvent;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public final class PacketRainIntensity implements IMessage  {
+public final class PacketWeatherUpdate implements IMessage  {
 	
-	public static class PacketHandler implements IMessageHandler<PacketRainIntensity, IMessage> {
+	public static class PacketHandler implements IMessageHandler<PacketWeatherUpdate, IMessage> {
 		@Override
 		@Nullable
-		public IMessage onMessage(@Nonnull final PacketRainIntensity message, @Nullable final MessageContext ctx) {
-			Network.postEvent(new RainIntensityEvent(message.dimension, message.intensity));
+		public IMessage onMessage(@Nonnull final PacketWeatherUpdate message, @Nullable final MessageContext ctx) {
+			Network.postEvent(new WeatherUpdateEvent(message.dimension, message.intensity));
 			return null;
 		}
 	}
@@ -55,24 +55,24 @@ public final class PacketRainIntensity implements IMessage  {
 	 */
 	private int dimension;
 	
-	public PacketRainIntensity() {
+	public PacketWeatherUpdate() {
 	}
 
-	public PacketRainIntensity(final float intensity, final int dimension) {
+	public PacketWeatherUpdate(final float intensity, final int dimension) {
 		this.intensity = intensity;
 		this.dimension = dimension;
 	}
 
 	@Override
 	public void fromBytes(@Nonnull final ByteBuf buf) {
+		this.dimension = buf.readShort();
 		this.intensity = buf.readFloat();
-		this.dimension = buf.readInt();
 	}
 
 	@Override
 	public void toBytes(@Nonnull final ByteBuf buf) {
+		buf.writeShort(this.dimension);
 		buf.writeFloat(this.intensity);
-		buf.writeInt(this.dimension);
 	}
 
 }

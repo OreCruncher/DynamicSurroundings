@@ -22,27 +22,45 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.event;
+package org.blockartistry.mod.DynSurround.api.entity;
 
-import net.minecraftforge.fml.common.eventhandler.Event;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-public class AuroraSpawnEvent extends Event {
-	
-	public final int dimensionId;
-	public final int posX;
-	public final int posZ;
-	public final long seed;
-	public final int colorSet;
-	public final int preset;
-	
-	public AuroraSpawnEvent(final int dimensionId, final int x, final int z, final long seed, final int colorSet, final int preset) {
-		this.dimensionId = dimensionId;
-		this.posX = x;
-		this.posZ = z;
-		this.seed = seed;
-		this.colorSet = colorSet;
-		this.preset = preset;
-		
+/**
+ * Describes how an Entity "feels".  Though an ActionState has a default
+ * EmotionalState, the EntityAI may select a different EmotionalState based
+ * on other factors.
+ */
+public enum EmotionalState {
+
+	/** The Entity has no real opinion at the moment. */
+	NEUTRAL,
+	/** The Entity is happy, like when being tempted with food. */
+	HAPPY,
+	/** The entity is sad. */
+	SAD,
+	/** The Entity is angry such as when attacking. */
+	ANGRY,
+	/** The Entity is afraid, such as when fleeing. */
+	AFRAID,
+	/** The Entity is busy with an activity, like Farming. */
+	BUSY,
+	/** The Entity feels sick because of a negative potion effect. */
+	SICK,
+	/** The Entity feels hurt because it's health has been reduced. */
+	HURT;
+
+	@Nullable
+	public static EmotionalState get(int id) {
+		final EmotionalState[] v = EmotionalState.values();
+		if (id > v.length || id < 0)
+			return null;
+		return v[id];
+	}
+
+	public static int getId(@Nonnull final EmotionalState state) {
+		return state.ordinal();
 	}
 
 }

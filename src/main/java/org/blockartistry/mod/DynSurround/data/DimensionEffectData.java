@@ -202,7 +202,7 @@ public final class DimensionEffectData extends WorldSavedData {
 	public String configString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("dim ").append(this.dimensionId).append(": ");
-		builder.append("intensity [").append(FORMATTER.format(this.minIntensity * 100));
+		builder.append("rainIntensity [").append(FORMATTER.format(this.minIntensity * 100));
 		builder.append(",").append(FORMATTER.format(this.maxIntensity * 100));
 		builder.append("]");
 		builder.append(", thunder threshold: ").append(FORMATTER.format(this.thunderThreshold * 100));
@@ -215,7 +215,7 @@ public final class DimensionEffectData extends WorldSavedData {
 		// Dump out some diagnostics for the current dimension
 		final StringBuilder builder = new StringBuilder();
 		builder.append("dim ").append(this.dimensionId).append(": ");
-		builder.append("intensity: ").append(FORMATTER.format(this.intensity * 100));
+		builder.append("rainIntensity: ").append(FORMATTER.format(this.intensity * 100));
 		builder.append(" [").append(FORMATTER.format(this.minIntensity * 100));
 		builder.append(",").append(FORMATTER.format(this.maxIntensity * 100));
 		builder.append("]");

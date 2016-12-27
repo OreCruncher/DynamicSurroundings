@@ -22,31 +22,33 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.event;
-
-import java.util.UUID;
+package org.blockartistry.mod.DynSurround.api;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.entity.ActionState;
-import org.blockartistry.mod.DynSurround.entity.EmojiType;
-import org.blockartistry.mod.DynSurround.entity.EmotionalState;
+import org.blockartistry.mod.DynSurround.api.entity.ActionState;
+import org.blockartistry.mod.DynSurround.entity.EmojiDataTables;
 
-import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraft.entity.ai.EntityAIBase;
 
-public class EntityEmojiEvent extends Event {
-
-	public final UUID entityId;
-	public final ActionState actionState;
-	public final EmotionalState emotionalState;
-	public final EmojiType emojiType;
-
-	public EntityEmojiEvent(@Nonnull final UUID id, @Nonnull final ActionState action,
-			@Nonnull final EmotionalState emotion, @Nonnull final EmojiType emojiType) {
-		this.entityId = id;
-		this.actionState = action;
-		this.emotionalState = emotion;
-		this.emojiType = emojiType;
+/**
+ * Encapsulates the configuration API available with Dynamic Surroundings.
+ */
+public final class Configure {
+	private Configure() {
+		
 	}
 
+	/**
+	 * Dynamic Surroundings determines what ActionState to set for an Entity based
+	 * on it's currently executing EntityAI tasks.  If a mod adds custom AI for a mob
+	 * it can be registered using this API so that it can be recognized by the
+	 * ActionState routines.
+	 * 
+	 * @param clazz EntityAIBase class for which an ActionState is being set.
+	 * @param state  ActionState to set.
+	 */
+	public static void addEntityAIMapping(@Nonnull final Class<? extends EntityAIBase> clazz, @Nonnull final ActionState state) {
+		EmojiDataTables.add(clazz, state);
+	}
 }

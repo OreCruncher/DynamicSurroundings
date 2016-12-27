@@ -26,16 +26,14 @@ package org.blockartistry.mod.DynSurround.entity;
 
 import java.util.concurrent.Callable;
 
+import org.blockartistry.mod.DynSurround.api.entity.IEntityEmoji;
+
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
 public class EntityEmojiCapability {
-	
-	@CapabilityInject(IEntityEmoji.class)
-	public static Capability<IEntityEmoji> CAPABILIITY;
 	
 	public static final class Storage implements Capability.IStorage<IEntityEmoji> {
 

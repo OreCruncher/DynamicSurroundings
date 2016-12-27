@@ -28,9 +28,8 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.entity.EntityEmojiCapability;
-import org.blockartistry.mod.DynSurround.entity.IEntityEmoji;
-
+import org.blockartistry.mod.DynSurround.api.entity.EntityCapability;
+import org.blockartistry.mod.DynSurround.api.entity.IEntityEmoji;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaEntityAccessor;
 import mcp.mobius.waila.api.IWailaEntityProvider;
@@ -79,7 +78,7 @@ public class WailaEntityHandler implements IWailaEntityProvider {
 
 		currenttip.add(TextFormatting.GOLD + "#" + entity.getEntityId());
 
-		final IEntityEmoji emoji = entity.getCapability(EntityEmojiCapability.CAPABILIITY, null);
+		final IEntityEmoji emoji = entity.getCapability(EntityCapability.EMOJI, null);
 		if (emoji != null) {
 			currenttip.add(TextFormatting.GREEN + "Action: " + emoji.getActionState().toString());
 			currenttip.add(TextFormatting.GREEN + "Emotion: " + emoji.getEmotionalState().toString());

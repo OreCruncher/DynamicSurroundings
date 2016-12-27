@@ -50,6 +50,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnection
 @net.minecraftforge.fml.common.Mod(modid = Module.MOD_ID, useMetadata = true, dependencies = Module.DEPENDENCIES, version = Module.VERSION, guiFactory = Module.GUI_FACTORY)
 public class Module {
 	public static final String MOD_ID = "dsurround";
+	public static final String API_ID = MOD_ID + "API";
 	public static final String RESOURCE_ID = "dsurround";
 	public static final String MOD_NAME = "Dynamic Surroundings";
 	public static final String VERSION = "@VERSION@";

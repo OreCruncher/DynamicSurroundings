@@ -32,8 +32,8 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
+import org.blockartistry.mod.DynSurround.api.events.AuroraSpawnEvent;
 import org.blockartistry.mod.DynSurround.client.aurora.Aurora;
-import org.blockartistry.mod.DynSurround.client.event.AuroraSpawnEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
@@ -41,6 +41,7 @@ import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -137,7 +138,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		}
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onAuroraSpawnEvent(final AuroraSpawnEvent event) {
 		if (!ModOptions.auroraEnable)
 			return;

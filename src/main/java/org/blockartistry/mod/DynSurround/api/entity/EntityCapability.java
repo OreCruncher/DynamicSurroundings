@@ -22,14 +22,15 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.event;
+package org.blockartistry.mod.DynSurround.api.entity;
 
-import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 
-public class RegistryReloadEvent extends Event {
-
-	public static class Biome extends RegistryReloadEvent {
-
-	}
+public class EntityCapability {
+	
+	@CapabilityInject(IEntityEmoji.class)
+	public static final Capability<IEntityEmoji> EMOJI = null;
+	
 
 }

@@ -26,10 +26,10 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.api.entity.EmojiType;
+import org.blockartistry.mod.DynSurround.api.entity.EntityCapability;
+import org.blockartistry.mod.DynSurround.api.entity.IEntityEmoji;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.entity.EmojiType;
-import org.blockartistry.mod.DynSurround.entity.EntityEmojiCapability;
-import org.blockartistry.mod.DynSurround.entity.IEntityEmoji;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.lwjgl.opengl.GL11;
 
@@ -82,7 +82,7 @@ public class ParticleEmoji extends Particle {
 		this.radius = (entity.width / 2.0F) + 0.25F;
 		this.period = this.rand.nextFloat() * 360.0F;
 		
-		this.emoji = entity.getCapability(EntityEmojiCapability.CAPABILIITY, null);
+		this.emoji = entity.getCapability(EntityCapability.EMOJI, null);
 		this.activeTexture = this.emoji.getEmojiType().getResource();
 	}
 
