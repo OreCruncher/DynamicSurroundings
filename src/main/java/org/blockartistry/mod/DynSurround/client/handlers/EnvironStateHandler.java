@@ -411,7 +411,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		EnvironState.tick(world, player);
 
 		// Gather diagnostics if needed
-		if (ModOptions.enableDebugLogging) {
+		if (ModOptions.enableDebugLogging && Minecraft.getMinecraft().gameSettings.showDebugInfo) {
 			final DiagnosticEvent.Gather gather = new DiagnosticEvent.Gather(world, player);
 			MinecraftForge.EVENT_BUS.post(gather);
 			diagnostics = gather.output;
@@ -494,7 +494,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		"'Dim: ' + player.dimension + '/' + player.dimensionName",
 		"'Biome: ' + player.biome + '; Temp ' + biome.temperature",
 		"'Season: ' + season + IF(isRaining,' raining','') + IF(isNight,' night',' day') + IF(player.isInside,' inside',' outside')",
-		"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','')",
+		"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','') + ' Y: ' + player.Y",
 	};
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)

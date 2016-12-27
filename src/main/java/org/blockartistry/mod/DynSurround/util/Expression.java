@@ -488,11 +488,18 @@ public class Expression {
 		}
 
 		public String asString() {
-			return this.value.toString();
+			return this.toString();
 		}
 
 		@Override
 		public String toString() {
+			if (this.value instanceof Float) {
+				final Float f = (Float) this.value;
+				final int v = (int) f.floatValue();
+				if (f == v) {
+					return String.format("%d", v);
+				}
+			}
 			return this.value.toString();
 		}
 
