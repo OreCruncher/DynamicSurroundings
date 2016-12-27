@@ -502,7 +502,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		
 		for(final String s: scripts) {
 			final String result = Evaluator.eval(s).toString();
-			event.output.add(result.toString());
+			event.output.add(result);
 		}
 		
 		event.output.add(StormProperties.diagnostic());

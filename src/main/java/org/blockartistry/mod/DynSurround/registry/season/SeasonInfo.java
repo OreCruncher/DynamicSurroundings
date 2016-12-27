@@ -51,7 +51,7 @@ public class SeasonInfo {
 	}
 
 	public static enum TemperatureRating {
-		ICY("icy", 0.0F), COOL("cool", 0.3F), MILD("mild", 0.8F), WARM("warm", 1.2F), HOT("hot", 100.F);
+		ICY("icy", 0.0F), COOL("cool", 0.3F), MILD("mild", 1.0F), WARM("warm", 1.3F), HOT("hot", 100.F);
 
 		private final String val;
 		private final float tempRange;
