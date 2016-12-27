@@ -13,4 +13,4 @@ msg.ThunderTimeSet=§9Время грозы: %1$s
 msg.ThunderThresholdSet=§9Порог грозы: %1$s
 
 # Version checking strings
-msg.NewVersionAvailable.dsurround=["§6Доступно обновление: §9[",{"text":"§2%1$s §ev%2$s§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Нажмите, чтобы открыть страницу мода на CurseForge","color":"aqua"}},"clickEvent":{"action":"open_url","value":"http://minecraft.curseforge.com/projects/%3$s"}},"§9]"]
+msg.NewVersion.dsurround=["§6Доступно обновление: §9[",{"text":"§2%1$s §ev%2$s§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Нажмите, чтобы открыть страницу мода на CurseForge","color":"aqua"}},"clickEvent":{"action":"open_url","value":"%3$s"}},"§9]"]

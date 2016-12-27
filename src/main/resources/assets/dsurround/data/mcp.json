@@ -451,6 +451,10 @@
 				{
 					"effect":"bubble",
 					"chance":1800
+				},
+				{
+					"effect":"splash",
+					"chance":1
 				}
 				
 			]

@@ -13,4 +13,4 @@ msg.ThunderTimeSet=§9Thunder time set to %1$s
 msg.ThunderThresholdSet=§9Thunder threshold set to %1$s
 
 # Version checking strings
-msg.NewVersionAvailable.dsurround=["§6Update Available: §9[",{"text":"§2%1$s §ev%2$s§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Click for CurseForge Project Page","color":"aqua"}},"clickEvent":{"action":"open_url","value":"http://minecraft.curseforge.com/projects/%3$s"}},"§9]"]
+msg.NewVersion.dsurround=["§6Update Available: §9[",{"text":"§2%1$s §ev%2$s§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Click for CurseForge Project Page","color":"aqua"}},"clickEvent":{"action":"open_url","value":"%3$s"}},"§9]"]

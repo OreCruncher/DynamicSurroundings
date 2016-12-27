@@ -247,6 +247,7 @@ public final class ModOptions {
 	public static final String CONFIG_BLOCK_EFFECT_DUST = "Enable Dust Motes";
 	public static final String CONFIG_BLOCK_EFFECT_FOUNTAIN = "Enable Fountain";
 	public static final String CONFIG_BLOCK_EFFECT_FIREFLY = "Enable Fireflies";
+	public static final String CONFIG_BLOCK_EFFECT_SPLASH = "Enable Water Splash";
 	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_STEAM, defaultValue = "true")
 	@Comment("Enable Steam Jets where lava meets water")
 	@RestartRequired
@@ -271,6 +272,10 @@ public final class ModOptions {
 	@Comment("Enable Firefly effect around plants")
 	@RestartRequired
 	public static boolean enableFireflies = true;
+	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_SPLASH, defaultValue = "true")
+	@Comment("Enable Water Splash effects when water spills down")
+	@RestartRequired
+	public static boolean enableWaterSplash = true;
 
 	public static final String CATEGORY_SOUND = "sound";
 	public static final String CONFIG_ENABLE_BIOME_SOUNDS = "Enable Biomes Sounds";

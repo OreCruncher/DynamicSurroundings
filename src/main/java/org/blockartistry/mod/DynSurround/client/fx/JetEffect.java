@@ -33,6 +33,7 @@ import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFountainJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleSteamJet;
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleWaterSplash;
 
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -183,4 +184,27 @@ public abstract class JetEffect extends BlockEffect {
 		}
 
 	}
+	
+	public static class WaterSplash extends JetEffect {
+		public WaterSplash(final int chance) {
+			super(chance);
+		}
+
+		@Override
+		public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+			boolean flag = world.getBlockState(pos.up()).getBlock() == Blocks.FLOWING_WATER;
+			if(flag) {
+				int x = 0;
+			}
+			return flag && super.trigger(state, world, pos, random);
+		}
+
+		public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+			final IBlockState flowingWater = Blocks.FLOWING_WATER.getDefaultState();
+			final int strength = countBlocks(world, pos.up(), flowingWater, 1);
+			final ParticleJet effect = new ParticleWaterSplash(strength, world, pos.getX() + 0.5D, pos.getY() + 1.1D,
+					pos.getZ() + 0.5D);
+			addEffect(effect);
+		}
+}
 }

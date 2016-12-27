@@ -26,7 +26,6 @@ package org.blockartistry.mod.DynSurround.proxy;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.VersionCheck;
 import org.blockartistry.mod.DynSurround.client.waila.WailaEntityHandler;
 import org.blockartistry.mod.DynSurround.client.waila.WailaHandler;
 import org.blockartistry.mod.DynSurround.commands.CommandDS;
@@ -63,12 +62,7 @@ public class Proxy {
 	}
 
 	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
-		
 		registerLanguage();
-		
-		// Register early to give the background process a good amount
-		// of seed to get the mod version data
-		VersionCheck.register();
 	}
 
 	public void init(@Nonnull final FMLInitializationEvent event) {

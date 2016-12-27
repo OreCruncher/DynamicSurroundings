@@ -83,7 +83,7 @@ public final class BlockRegistry extends Registry {
 
 	@Override
 	public void fini() {
-		
+
 	}
 
 	private final Map<Block, BlockProfile> registry = new IdentityHashMap<Block, BlockProfile>();
@@ -220,6 +220,9 @@ public final class BlockRegistry extends Registry {
 				} else if (StringUtils.equalsIgnoreCase("firefly", e.effect)) {
 					if (ModOptions.enableFireflies)
 						blockEffect = new FireFlyEffect(chance);
+				} else if (StringUtils.equalsIgnoreCase("splash", e.effect)) {
+					if (ModOptions.enableWaterSplash)
+						blockEffect = new JetEffect.WaterSplash(chance);
 				} else {
 					ModLog.warn("Unknown effect type in config: '%s'", e.effect);
 					continue;
