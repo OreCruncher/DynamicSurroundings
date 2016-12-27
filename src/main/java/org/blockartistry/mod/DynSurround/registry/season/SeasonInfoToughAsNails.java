@@ -38,8 +38,7 @@ import toughasnails.api.temperature.TemperatureHelper;
 public class SeasonInfoToughAsNails extends SeasonInfo {
 
 	// Lifted from the 1.11.x branch of TaN. Will be removed when Dynamic
-	// Surroundings
-	// gets to 1.11.x
+	// Surroundings gets to 1.11.x
 	// TODO: Cleanup for 1.11.x version of Dynamic Surroundings
 	private static class Hooks {
 
@@ -104,12 +103,15 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 		}
 	}
 
+	private Season getSeasonData() {
+		return SeasonHelper.getSeasonData(this.world).getSubSeason().getSeason();
+	}
+
 	@Override
 	public float getTemperature(@Nonnull final BlockPos pos) {
-		final Season season = SeasonHelper.getSeasonData(this.world).getSubSeason().getSeason();
 		final Biome biome = this.world.getBiome(pos);
 
-		if (biome.getTemperature() <= 0.7F && season == Season.WINTER)
+		if (biome.getTemperature() <= 0.7F && getSeasonData() == Season.WINTER)
 			return 0.0F;
 
 		return biome.getFloatTemperature(pos);
@@ -143,8 +145,7 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 	 */
 	@Override
 	public boolean isRainingAt(@Nonnull final BlockPos pos) {
-		final Season season = SeasonHelper.getSeasonData(this.world).getSubSeason().getSeason();
-		return Hooks.isRainingAtInSeason(this.world, pos, season);
+		return Hooks.isRainingAtInSeason(this.world, pos, getSeasonData());
 	}
 
 	/*
@@ -162,12 +163,10 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 	 * Essentially snow layer stuff.
 	 */
 	public boolean canSnowAt(@Nonnull final BlockPos pos) {
-		final Season season = SeasonHelper.getSeasonData(this.world).getSubSeason().getSeason();
-		return Hooks.canSnowAtInSeason(this.world, pos, true, season);
+		return Hooks.canSnowAtInSeason(this.world, pos, true, getSeasonData());
 	}
 
 	public boolean canBlockFreeze(@Nonnull final BlockPos pos, final boolean noWaterAdjacent) {
-		final Season season = SeasonHelper.getSeasonData(this.world).getSubSeason().getSeason();
-		return Hooks.canBlockFreezeInSeason(this.world, pos, noWaterAdjacent, season);
+		return Hooks.canBlockFreezeInSeason(this.world, pos, noWaterAdjacent, getSeasonData());
 	}
 }
