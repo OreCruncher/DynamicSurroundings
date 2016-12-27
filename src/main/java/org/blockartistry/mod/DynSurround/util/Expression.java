@@ -180,7 +180,6 @@ public class Expression {
 				return v1.compareTo(v2) != 0 ? ONE : ZERO;
 			}
 		});
-
 		addBuiltInFunction(new Function("MATCH", 2) {
 			@Override
 			public Variant eval(final List<Variant> parameters) {
@@ -305,6 +304,20 @@ public class Expression {
 					}
 				}
 				return max;
+			}
+		});
+		addBuiltInFunction(new Function("ONEOF", -1) {
+			@Override
+			public Variant eval(final List<Variant> parameters) {
+				if (parameters.size() < 2) {
+					throw new ExpressionException("ONEOF requires at least two parameters");
+				}
+				final Variant selector = parameters.get(0);
+				for (int i = 1; i < parameters.size(); i++) {
+					if (selector.compareTo(parameters.get(i)) == 0)
+						return ONE;
+				}
+				return ZERO;
 			}
 		});
 		addBuiltInFunction(new Function("MIN", -1) {

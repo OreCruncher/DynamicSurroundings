@@ -554,7 +554,7 @@
 			"sounds":[
 				{
 					"sound":"dsurround:hiss",
-					"conditions":"isNotRaining && isDay && NOT(biome.temperature == 'icy' || biome.temperature == 'cold')",
+					"conditions":"isNotRaining && isDay && NOT(ONEOF(biome.temperature, 'icy', 'cold'))",
 					"volume":1.0,
 					"variable":true
 				}
@@ -604,18 +604,18 @@
 			"sounds":[
 				{
 					"sound":"dsurround:rattlesnake",
-					"conditions":"isNotRaining && isDay && (biome.temperature == 'warm' || biome.temperature == 'hot')",
+					"conditions":"isNotRaining && isDay && ONEOF(biome.temperature, 'warm', 'hot')",
 					"volume":1.0
 				},
 				{
 					"sound":"dsurround:hiss",
-					"conditions":"isNotRaining && isDay && (biome.temperature == 'warm' || biome.temperature == 'hot')",
+					"conditions":"isNotRaining && isDay && ONEOF(biome.temperature, 'warm', 'hot')",
 					"volume":1.0,
 					"variable":true
 				},
 				{
 					"sound":"dsurround:insectcrawl",
-					"conditions":"isNotRaining && isDay && (biome.temperature == 'warm' || biome.temperature == 'hot')",
+					"conditions":"isNotRaining && isDay && ONEOF(biome.temperature, 'warm', 'hot')",
 					"volume":1.0,
 					"variable":true
 				}
