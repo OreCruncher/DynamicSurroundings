@@ -175,6 +175,10 @@ public final class BiomeInfo {
 		return isFake() ? 0.0F : this.biome.getFloatTemperature(pos);
 	}
 
+	public float getTemperature() {
+		return isFake() ? 0.0F : this.biome.getTemperature();
+	}
+	
 	public TempCategory getTempCategory() {
 		return isFake() ? TempCategory.COLD : this.biome.getTempCategory();
 	}
@@ -241,6 +245,7 @@ public final class BiomeInfo {
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append(String.format("Biomes %d [%s]:", this.biomeId, this.biomeName));
+		builder.append(" temp: ").append(this.getTemperature());
 		if (this.hasPrecipitation)
 			builder.append(" PRECIPITATION");
 		if (this.hasDust)

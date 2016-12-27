@@ -30,47 +30,52 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.mod.DynSurround.util.PlayerUtils;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome.TempCategory;
 
 public class SeasonInfo {
-	
+
 	public static enum SeasonType {
-		NONE("noseason"),
-		SPRING("spring"),
-		SUMMER("summer"),
-		AUTUMN("autumn"),
-		WINTER("winter");
-		
+		NONE("noseason"), SPRING("spring"), SUMMER("summer"), AUTUMN("autumn"), WINTER("winter");
+
 		private final String val;
+
 		SeasonType(@Nonnull final String val) {
 			this.val = val;
 		}
-		
+
 		@Nonnull
 		public String getValue() {
 			return this.val;
 		}
 	}
-	
-	public static enum PlayerTemperature {
-		ICY("icy"),
-		COOL("cool"),
-		MILD("mild"),
-		WARM("warm"),
-		HOT("hot");
-		
+
+	public static enum TemperatureRating {
+		ICY("icy", 0.0F), COOL("cool", 0.3F), MILD("mild", 0.8F), WARM("warm", 1.2F), HOT("hot", 100.F);
+
 		private final String val;
-		PlayerTemperature(@Nonnull final String val) {
+		private final float tempRange;
+
+		TemperatureRating(@Nonnull final String val, final float tempRange) {
 			this.val = val;
+			this.tempRange = tempRange;
 		}
-		
+
 		@Nonnull
 		public String getValue() {
 			return this.val;
+		}
+
+		public float getTempRange() {
+			return this.tempRange;
+		}
+
+		@Nonnull
+		public static TemperatureRating fromTemp(final float temp) {
+			for (final TemperatureRating rating : values())
+				if (temp <= rating.getTempRange())
+					return rating;
+			return TemperatureRating.MILD;
 		}
 	}
 
@@ -86,29 +91,20 @@ public class SeasonInfo {
 	public SeasonType getSeasonType() {
 		return SeasonType.NONE;
 	}
-	
+
 	@Nonnull
 	public String getSeasonName() {
 		return getSeasonType().getValue();
 	}
-	
+
 	@Nonnull
-	public PlayerTemperature getPlayerTemperature() {
-		final float temp = getTemperature(EnvironState.getPlayerPosition());
-		final TempCategory cat = PlayerUtils.getPlayerBiome(EnvironState.getPlayer(), true).getTempCategory();
-		switch(cat) {
-		case COLD:
-			return PlayerTemperature.COOL;
-		case MEDIUM:
-			return PlayerTemperature.MILD;
-		case WARM:
-			return PlayerTemperature.WARM;
-		default:
-			if(temp < 0.15F)
-				return PlayerTemperature.ICY;
-			else
-				return PlayerTemperature.HOT;
-		}
+	public TemperatureRating getPlayerTemperature() {
+		return getBiomeTemperature(EnvironState.getPlayerPosition());
+	}
+
+	@Nonnull
+	public TemperatureRating getBiomeTemperature(@Nonnull final BlockPos pos) {
+		return TemperatureRating.fromTemp(getTemperature(pos));
 	}
 
 	@Nonnull
@@ -122,31 +118,31 @@ public class SeasonInfo {
 				getPrecipitationHeight(pos).getY());
 		return heightTemp;
 	}
-	
+
 	/*
 	 * Indicates if rain is striking at the specified position.
 	 */
 	public boolean isRainingAt(@Nonnull final BlockPos pos) {
 		return this.world.isRainingAt(pos);
 	}
-	
+
 	/*
-	 * Indicates if it is cold enough that water can freeze.  Could result
-	 * in snow or frozen ice.  Does not take into account any other environmental
-	 * factors - just whether its cold enough.  If environmental sensitive
+	 * Indicates if it is cold enough that water can freeze. Could result in
+	 * snow or frozen ice. Does not take into account any other environmental
+	 * factors - just whether its cold enough. If environmental sensitive
 	 * versions are needed look at canBlockFreeze() and canSnowAt().
 	 */
 	public boolean canWaterFreeze(@Nonnull final BlockPos pos) {
 		return getTemperature(pos) < 0.15F;
 	}
-	
+
 	/*
 	 * Essentially snow layer stuff.
 	 */
 	public boolean canSnowAt(@Nonnull final BlockPos pos) {
 		return this.world.canSnowAt(pos, false);
 	}
-	
+
 	public boolean canBlockFreeze(@Nonnull final BlockPos pos, final boolean noWaterAdjacent) {
 		return this.world.canBlockFreeze(pos, noWaterAdjacent);
 	}

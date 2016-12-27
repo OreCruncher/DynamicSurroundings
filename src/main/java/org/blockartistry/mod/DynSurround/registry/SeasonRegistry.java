@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo;
-import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo.PlayerTemperature;
+import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo.TemperatureRating;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfoCalendar;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfoNether;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfoToughAsNails;
@@ -77,8 +77,13 @@ public final class SeasonRegistry extends Registry {
 	}
 
 	@Nonnull
-	public PlayerTemperature getPlayerTemperature(@Nonnull final World world) {
+	public TemperatureRating getPlayerTemperature(@Nonnull final World world) {
 		return getData(world).getPlayerTemperature();
+	}
+	
+	@Nonnull
+	public TemperatureRating getBiomeTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return getData(world).getBiomeTemperature(pos);
 	}
 	
 	@Nonnull

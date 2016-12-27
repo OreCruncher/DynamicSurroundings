@@ -42,7 +42,7 @@ import org.blockartistry.mod.DynSurround.registry.Evaluator;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SeasonRegistry;
-import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo.PlayerTemperature;
+import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo.TemperatureRating;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo.SeasonType;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
@@ -135,7 +135,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static boolean fog;
 		private static boolean humid;
 		private static boolean dry;
-		private static PlayerTemperature playerTemperature = PlayerTemperature.MILD;
+		private static TemperatureRating playerTemperature = TemperatureRating.MILD;
+		private static TemperatureRating biomeTemperature = TemperatureRating.MILD;
 		private static boolean inside;
 		
 		private static int tickCounter;
@@ -233,6 +234,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			final BiomeInfo trueBiome = PlayerUtils.getPlayerBiome(player, true);
 			EnvironState.freezing = trueBiome.getFloatTemperature(EnvironState.playerPosition) < 0.15F;
 			EnvironState.playerTemperature = seasons.getPlayerTemperature(world);
+			EnvironState.biomeTemperature = seasons.getBiomeTemperature(world, getPlayerPosition());
 			EnvironState.humid = trueBiome.isHighHumidity();
 			EnvironState.dry = trueBiome.getRainfall() == 0;
 
@@ -258,8 +260,12 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			return season;
 		}
 		
-		public static PlayerTemperature getPlayerTemperature() {
+		public static TemperatureRating getPlayerTemperature() {
 			return playerTemperature;
+		}
+		
+		public static TemperatureRating getBiomeTemperature() {
+			return biomeTemperature;
 		}
 		
 		public static int getDimensionId() {
@@ -482,15 +488,27 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 	}
 
+	// Use the new scripting system to pull out data to display
+	// for debug.  Good for testing.
+	private final static String[] scripts = {
+		"'Dim: ' + player.dimension + '/' + player.dimensionName",
+		"'Biome: ' + player.biome + '; Temp ' + biome.temperature",
+		"'Season: ' + season + IF(isRaining,' raining','') + IF(isNight,' night',' day') + IF(player.isInside,' inside',' outside')",
+		"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','')",
+	};
+	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void diagnostics(final DiagnosticEvent.Gather event) {
-		final EntityPlayer player = EnvironState.getPlayer();
-		event.output.add("Dim: " + EnvironState.getDimensionId() + "/" + EnvironState.getDimensionName());
-		event.output.add("Biomes: " + EnvironState.getBiomeName());
-		event.output.add("Player: h " + player.getHealth() + "/" + player.getMaxHealth() + "; f "
-				+ player.getFoodStats().getFoodLevel() + "; s " + player.getFoodStats().getSaturationLevel());
+		
+		for(final String s: scripts) {
+			final String result = Evaluator.eval(s).toString();
+			event.output.add(result.toString());
+		}
+		
 		event.output.add(StormProperties.diagnostic());
 		event.output.add("Conditions: " + EnvironState.getConditions());
+		
+		
 		final List<String> badScripts = Evaluator.getNaughtyList();
 		for(final String s: badScripts) {
 			event.output.add("BAD SCRIPT: " + s);

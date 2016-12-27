@@ -42,6 +42,8 @@ import java.util.Stack;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+
 public class Expression {
 
 	public static final Variant PI = new Variant(MathStuff.PI_F);
@@ -56,7 +58,7 @@ public class Expression {
 			String.CASE_INSENSITIVE_ORDER);
 	private static final Map<String, LazyFunction> builtInFunctions = new TreeMap<String, LazyFunction>(
 			String.CASE_INSENSITIVE_ORDER);
-	private static final Map<String, LazyNumber> builtInVariables = new TreeMap<String, LazyNumber>(
+	private static final Map<String, LazyVariant> builtInVariables = new TreeMap<String, LazyVariant>(
 			String.CASE_INSENSITIVE_ORDER);
 
 	public static void addBuiltInOperator(final Operator op) {
@@ -71,7 +73,7 @@ public class Expression {
 		addBuiltInVariable(name, new Constant(val));
 	}
 
-	public static void addBuiltInVariable(final String name, final LazyNumber number) {
+	public static void addBuiltInVariable(final String name, final LazyVariant number) {
 		builtInVariables.put(name, number);
 	}
 
@@ -79,7 +81,8 @@ public class Expression {
 		addBuiltInOperator(new Operator("+", 20, true) {
 			@Override
 			public Variant eval(final Variant v1, final Variant v2) {
-				return new Variant(v1.asFloat() + v2.asFloat());
+				return v1.add(v2);
+				// return new Variant(v1.asFloat() + v2.asFloat());
 			}
 		});
 		addBuiltInOperator(new Operator("-", 20, true) {
@@ -196,7 +199,7 @@ public class Expression {
 
 		addBuiltInFunction(new LazyFunction("IF", 3) {
 			@Override
-			public LazyNumber lazyEval(final List<LazyNumber> lazyParams) {
+			public LazyVariant lazyEval(final List<LazyVariant> lazyParams) {
 				final boolean isTrue = !lazyParams.get(0).eval().equals(ZERO);
 				return isTrue ? lazyParams.get(1) : lazyParams.get(2);
 			}
@@ -412,7 +415,7 @@ public class Expression {
 	/**
 	 * All defined variables with name and value.
 	 */
-	private Map<String, LazyNumber> variables = new TreeMap<String, LazyNumber>(String.CASE_INSENSITIVE_ORDER);
+	private Map<String, LazyVariant> variables = new TreeMap<String, LazyVariant>(String.CASE_INSENSITIVE_ORDER);
 
 	/**
 	 * What character to use for decimal separators.
@@ -428,12 +431,12 @@ public class Expression {
 	 * What character to use for enclosing a string literal
 	 */
 	private static final char quote = '\'';
-	
+
 	/**
 	 * The Float representation of the left parenthesis, used for parsing
 	 * varying numbers of function parameters.
 	 */
-	private static final LazyNumber PARAMS_START = new LazyNumber() {
+	private static final LazyVariant PARAMS_START = new LazyVariant() {
 		public Variant eval() {
 			return null;
 		}
@@ -487,21 +490,28 @@ public class Expression {
 		public String asString() {
 			return this.value.toString();
 		}
-		
+
 		@Override
 		public String toString() {
 			return this.value.toString();
 		}
+
+		// Operator support in case of strings
+		public Variant add(@Nonnull final Variant term) {
+			if (this.value instanceof String || term.value instanceof String)
+				return new Variant(((String) this.value).concat(term.toString()));
+			return new Variant(this.asFloat() + term.asFloat());
+		}
 	}
 
 	/**
-	 * LazyNumber interface created for lazily evaluated functions
+	 * LazyVariant interface created for lazily evaluated functions
 	 */
-	public static interface LazyNumber {
+	public static interface LazyVariant {
 		Variant eval();
 	}
 
-	public static class Constant implements LazyNumber {
+	public static class Constant implements LazyVariant {
 
 		private final Variant value;
 
@@ -561,7 +571,7 @@ public class Expression {
 			return this.numParams < 0;
 		}
 
-		public abstract LazyNumber lazyEval(final List<LazyNumber> lazyParams);
+		public abstract LazyVariant lazyEval(final List<LazyVariant> lazyParams);
 	}
 
 	/**
@@ -575,12 +585,12 @@ public class Expression {
 			super(name, numParams);
 		}
 
-		public LazyNumber lazyEval(final List<LazyNumber> lazyParams) {
+		public LazyVariant lazyEval(final List<LazyVariant> lazyParams) {
 			final List<Variant> params = new ArrayList<Variant>();
-			for (final LazyNumber lazyParam : lazyParams) {
+			for (final LazyVariant lazyParam : lazyParams) {
 				params.add(lazyParam.eval());
 			}
-			return new LazyNumber() {
+			return new LazyVariant() {
 				public Variant eval() {
 					return Function.this.eval(params);
 				}
@@ -748,7 +758,7 @@ public class Expression {
 					token.append(input.charAt(pos++));
 					ch = pos == input.length() ? 0 : input.charAt(pos);
 				}
-				if(ch == 0)
+				if (ch == 0)
 					throw new ExpressionException("String not terminated '" + token + "'");
 				token.append(ch);
 				pos++;
@@ -943,7 +953,7 @@ public class Expression {
 		return outputQueue;
 	}
 
-	private LazyNumber exp;
+	private LazyVariant exp;
 
 	/**
 	 * Evaluates the expression.
@@ -953,28 +963,28 @@ public class Expression {
 	public Variant eval() {
 
 		if (this.exp == null) {
-			final Stack<LazyNumber> stack = new Stack<LazyNumber>();
+			final Stack<LazyVariant> stack = new Stack<LazyVariant>();
 
 			for (final String token : getRPN()) {
 				if (this.operators.containsKey(token)) {
-					final LazyNumber v1 = stack.pop();
-					final LazyNumber v2 = stack.pop();
+					final LazyVariant v1 = stack.pop();
+					final LazyVariant v2 = stack.pop();
 					final Operator op = this.operators.get(token);
-					final LazyNumber number = new LazyNumber() {
+					final LazyVariant number = new LazyVariant() {
 						public Variant eval() {
 							return op.eval(v2.eval(), v1.eval());
 						}
 					};
 					stack.push(number);
 				} else if (this.variables.containsKey(token)) {
-					stack.push(new LazyNumber() {
+					stack.push(new LazyVariant() {
 						public Variant eval() {
 							return Expression.this.variables.get(token).eval();
 						}
 					});
 				} else if (this.functions.containsKey(token.toUpperCase(Locale.ROOT))) {
 					final LazyFunction f = this.functions.get(token.toUpperCase(Locale.ROOT));
-					final ArrayList<LazyNumber> p = new ArrayList<LazyNumber>(
+					final ArrayList<LazyVariant> p = new ArrayList<LazyVariant>(
 							!f.numParamsVaries() ? f.getNumParams() : 0);
 					// pop parameters off the stack until we hit the start of
 					// this function's parameter list
@@ -984,7 +994,7 @@ public class Expression {
 					if (stack.peek() == PARAMS_START) {
 						stack.pop();
 					}
-					final LazyNumber fResult = new LazyNumber() {
+					final LazyVariant fResult = new LazyVariant() {
 						public Variant eval() {
 							return f.lazyEval(p).eval();
 						}
@@ -994,13 +1004,13 @@ public class Expression {
 					stack.push(PARAMS_START);
 				} else if (token.charAt(0) == quote) {
 					final String s = token.substring(1, token.length() - 1);
-					stack.push(new LazyNumber() {
+					stack.push(new LazyVariant() {
 						public Variant eval() {
 							return new Variant(s);
 						}
 					});
 				} else {
-					stack.push(new LazyNumber() {
+					stack.push(new LazyVariant() {
 						public Variant eval() {
 							return new Variant(token);
 						}

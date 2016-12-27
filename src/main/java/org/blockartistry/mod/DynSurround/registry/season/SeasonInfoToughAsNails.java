@@ -119,24 +119,24 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 
 	@Nonnull
 	@Override
-	public PlayerTemperature getPlayerTemperature() {
+	public TemperatureRating getPlayerTemperature() {
 		final ITemperature data = TemperatureHelper.getTemperatureData(EnvironState.getPlayer());
 		if (data == null)
 			return super.getPlayerTemperature();
 
 		switch (data.getTemperature().getRange()) {
 		case ICY:
-			return PlayerTemperature.ICY;
+			return TemperatureRating.ICY;
 		case COOL:
-			return PlayerTemperature.COOL;
+			return TemperatureRating.COOL;
 		case MILD:
-			return PlayerTemperature.MILD;
+			return TemperatureRating.MILD;
 		case WARM:
-			return PlayerTemperature.WARM;
+			return TemperatureRating.WARM;
 		case HOT:
-			return PlayerTemperature.HOT;
+			return TemperatureRating.HOT;
 		default:
-			return PlayerTemperature.MILD;
+			return TemperatureRating.MILD;
 		}
 	}
 

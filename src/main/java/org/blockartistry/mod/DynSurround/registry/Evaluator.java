@@ -39,244 +39,250 @@ import org.blockartistry.mod.DynSurround.util.Expression.Variant;
 public class Evaluator {
 
 	public static void initialize() {
-		Expression.addBuiltInVariable("isRaining", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("isRaining", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.getWorld().getRainStrength(1.0F) > 0.0F ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("isNotRaining", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("isNotRaining", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.getWorld().getRainStrength(1.0F) <= 0.0F ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("isDay", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("isDay", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return DiurnalUtils.isDaytime(EnvironState.getWorld()) ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("isNight", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("isNight", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return DiurnalUtils.isNighttime(EnvironState.getWorld()) ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("isSunrise", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("isSunrise", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return DiurnalUtils.isSunrise(EnvironState.getWorld()) ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("isSunset", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("isSunset", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return DiurnalUtils.isSunset(EnvironState.getWorld()) ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isHurt", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isHurt", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isPlayerHurt() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isHungry", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isHungry", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isPlayerHungry() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isBurning", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isBurning", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isPlayerBurning() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isSuffocating", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isSuffocating", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isPlayerSuffocating() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isFlying", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isFlying", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isPlayerFlying() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isSprinting", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isSprinting", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isPlayerSprinting() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isInLava", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isInLava", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isPlayerInLava() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isInvisible", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isInvisible", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isPlayerInvisible() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isBlind", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isBlind", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isPlayerBlind() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isInWater", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isInWater", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isPlayerInWater() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isRiding", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isRiding", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isPlayerRiding() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isOnGround", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isOnGround", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isPlayerOnGround() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isMoving", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isMoving", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isPlayerMoving() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isInside", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isInside", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isPlayerInside() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isUnderground", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isUnderground", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isPlayerUnderground() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isInSpace", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isInSpace", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isPlayerInSpace() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isInClouds", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.isInClouds", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isPlayerInClouds() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.temperature", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.temperature", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return new Variant(EnvironState.getPlayerTemperature().getValue());
 			}
 		});
-		Expression.addBuiltInVariable("player.dimension", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.dimension", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return new Variant(EnvironState.getDimensionId());
 			}
 		});
-		Expression.addBuiltInVariable("player.dimensionName", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.dimensionName", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return new Variant(EnvironState.getDimensionName());
 			}
 		});
-		Expression.addBuiltInVariable("player.Y", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.Y", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return new Variant(EnvironState.getPlayerPosition().getY());
 			}
 		});
-		Expression.addBuiltInVariable("player.biome", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.biome", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return new Variant(EnvironState.getBiomeName());
 			}
 		});
-		Expression.addBuiltInVariable("player.health", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.health", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return new Variant(EnvironState.getPlayer().getHealth());
 			}
 		});
-		Expression.addBuiltInVariable("player.maxHealth", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.maxHealth", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return new Variant(EnvironState.getPlayer().getMaxHealth());
 			}
 		});
-		Expression.addBuiltInVariable("player.luck", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.luck", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return new Variant(EnvironState.getPlayer().getLuck());
 			}
 		});
-		Expression.addBuiltInVariable("player.food.saturation", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.food.saturation", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return new Variant(EnvironState.getPlayer().getFoodStats().getSaturationLevel());
 			}
 		});
-		Expression.addBuiltInVariable("player.food.level", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.food.level", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return new Variant(EnvironState.getPlayer().getFoodStats().getFoodLevel());
 			}
 		});
-		Expression.addBuiltInVariable("isFoggy", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("isFoggy", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isFoggy() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("isHumid", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("isHumid", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isHumid() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("isDry", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("isDry", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return EnvironState.isDry() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("isAuroraVisible", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("isAuroraVisible", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return DiurnalUtils.isAuroraVisible(EnvironState.getWorld()) ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("moonPhaseFactor", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("moonPhaseFactor", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return new Variant(DiurnalUtils.getMoonPhaseFactor(EnvironState.getWorld()));
 			}
 		});
-		Expression.addBuiltInVariable("hasSky", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("hasSky", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return !EnvironState.getWorld().provider.getHasNoSky() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("season", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("season", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
 				return new Variant(EnvironState.getSeason().getValue());
+			}
+		});
+		Expression.addBuiltInVariable("biome.temperature", new Expression.LazyVariant() {
+			@Override
+			public Variant eval() {
+				return new Variant(EnvironState.getBiomeTemperature().getValue());
 			}
 		});
 		
@@ -286,6 +292,10 @@ public class Evaluator {
 
 	public static List<String> getNaughtyList() {
 		return naughtyList;
+	}
+	
+	public static Variant eval(@Nonnull final String script) {
+		return Expression.compile(script).eval();
 	}
 	
 	public static boolean check(@Nonnull final String conditions) {
@@ -307,7 +317,7 @@ public class Evaluator {
 
 		// New stuff. Compile the expression and evaluate
 		try {
-			final Variant result = Expression.compile(conditions).eval();
+			final Variant result = eval(conditions);
 			return result.asFloat() != 0.0F;
 		} catch (final Throwable t) {
 			ModLog.error("Unable to execute check: " + conditions, t);
