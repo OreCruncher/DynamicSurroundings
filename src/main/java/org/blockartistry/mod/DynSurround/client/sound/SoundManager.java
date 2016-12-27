@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
@@ -233,7 +233,7 @@ public class SoundManager {
 				@SuppressWarnings("unchecked")
 				final Map<String, Object> sounds = (Map<String, Object>)new Gson().fromJson(new InputStreamReader(stream), TYPE);
 				for(final String s: sounds.keySet())
-					SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, s));
+					SoundUtils.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, s));
 				
 			}
 		} catch(final Throwable t) {

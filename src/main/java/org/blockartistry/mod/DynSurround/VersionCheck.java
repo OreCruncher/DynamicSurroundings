@@ -52,7 +52,7 @@ public final class VersionCheck implements Runnable {
 		UNKNOWN, CURRENT, OUTDATED, COMM_ERROR
 	}
 
-	public static final SoftwareVersion modVersion = new SoftwareVersion(Module.VERSION);
+	public static final SoftwareVersion modVersion = new SoftwareVersion(DSurround.VERSION);
 	public static SoftwareVersion currentVersion = new SoftwareVersion();
 	public static UpdateStatus status = UpdateStatus.UNKNOWN;
 
@@ -156,7 +156,7 @@ public final class VersionCheck implements Runnable {
 			final NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setString("curseProjectName", CURSE_PROJECT_NAME);
 			nbt.setString("curseFilenameParser", MOD_NAME_TEMPLATE);
-			FMLInterModComms.sendRuntimeMessage(Module.MOD_ID, "VersionChecker", "addVersionCheck", nbt);
+			FMLInterModComms.sendRuntimeMessage(DSurround.MOD_ID, "VersionChecker", "addVersionCheck", nbt);
 		}
 
 		if (ModOptions.enableVersionChecking) {
@@ -172,7 +172,7 @@ public final class VersionCheck implements Runnable {
 		if (event.player instanceof EntityPlayer) {
 			if (status == UpdateStatus.OUTDATED) {
 				final String msg = Localization.format("msg.NewVersionAvailable.dsurround",
-						Module.MOD_NAME, currentVersion, CURSE_PROJECT_NAME);
+						DSurround.MOD_NAME, currentVersion, CURSE_PROJECT_NAME);
 				final ITextComponent component = ITextComponent.Serializer.jsonToComponent(msg);
 				event.player.addChatMessage(component);
 			}

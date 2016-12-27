@@ -1,5 +1,5 @@
 /*
- * This file is part of Module, licensed under the MIT License (MIT).
+ * This file is part of DSurround, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *

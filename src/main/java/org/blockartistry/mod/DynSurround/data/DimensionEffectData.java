@@ -31,7 +31,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import com.google.common.collect.ImmutableSet;
@@ -74,7 +74,7 @@ public final class DimensionEffectData extends WorldSavedData {
 	private final Set<AuroraData> auroras = new HashSet<AuroraData>();
 
 	private DimensionEffectData(final int dimension) {
-		this(Module.MOD_ID);
+		this(DSurround.MOD_ID);
 		this.dimensionId = dimension;
 	}
 
@@ -228,10 +228,10 @@ public final class DimensionEffectData extends WorldSavedData {
 	public static DimensionEffectData get(@Nonnull final World world) {
 		final MapStorage storage = world.getPerWorldStorage();
 		DimensionEffectData data = (DimensionEffectData) storage.getOrLoadData(DimensionEffectData.class,
-				Module.MOD_ID);
+				DSurround.MOD_ID);
 		if (data == null) {
 			data = new DimensionEffectData(world.provider.getDimension());
-			storage.setData(Module.MOD_ID, data);
+			storage.setData(DSurround.MOD_ID, data);
 		}
 		return data;
 	}

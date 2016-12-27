@@ -26,7 +26,7 @@ package org.blockartistry.mod.DynSurround.util;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.DSurround;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -44,7 +44,7 @@ public final class SoundUtils {
 		if (location.contains(":")) {
 			rl = new ResourceLocation(location);
 		} else {
-			rl = new ResourceLocation(Module.RESOURCE_ID, location);
+			rl = new ResourceLocation(DSurround.RESOURCE_ID, location);
 		}
 		return getOrRegisterSound(rl);
 	}

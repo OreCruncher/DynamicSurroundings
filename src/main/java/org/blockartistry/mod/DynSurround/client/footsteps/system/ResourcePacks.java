@@ -35,7 +35,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.DSurround;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.ResourcePackRepository;
@@ -50,9 +50,9 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class ResourcePacks {
 
-	private final ResourceLocation manifest = new ResourceLocation(Module.RESOURCE_ID, "manifest.json");
-	private final ResourceLocation acoustics = new ResourceLocation(Module.RESOURCE_ID, "acoustics.json");
-	private final ResourceLocation primitivemap = new ResourceLocation(Module.RESOURCE_ID, "primitivemap.json");
+	private final ResourceLocation manifest = new ResourceLocation(DSurround.RESOURCE_ID, "manifest.json");
+	private final ResourceLocation acoustics = new ResourceLocation(DSurround.RESOURCE_ID, "acoustics.json");
+	private final ResourceLocation primitivemap = new ResourceLocation(DSurround.RESOURCE_ID, "primitivemap.json");
 
 	// Resource pack reference for the built in pack.
 	private static class DefaultPack implements IResourcePack {
@@ -76,7 +76,7 @@ public class ResourcePacks {
 			if (this.mod != null)
 				builder.append(this.mod).append('_');
 			builder.append(loc.getResourcePath());
-			return Module.class.getResourceAsStream(builder.toString());
+			return DSurround.class.getResourceAsStream(builder.toString());
 		}
 
 		@Override

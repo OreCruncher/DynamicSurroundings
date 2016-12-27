@@ -22,8 +22,8 @@
  * THE SOFTWARE.
  */
 
-@API(owner = Module.MOD_ID, provides = Module.API_ID, apiVersion = "1.0")
+@API(owner = DSurround.MOD_ID, provides = DSurround.API_ID, apiVersion = "1.0")
 package org.blockartistry.mod.DynSurround.api;
 
 import net.minecraftforge.fml.common.API;
-import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.DSurround;

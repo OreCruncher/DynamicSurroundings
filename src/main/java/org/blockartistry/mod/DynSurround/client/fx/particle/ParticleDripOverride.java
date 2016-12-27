@@ -24,7 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
-import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 import net.minecraft.block.Block;
@@ -45,7 +45,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleDripOverride extends ParticleDrip {
 
-	private static final SoundEffect WATER_DRIP = new SoundEffect(Module.RESOURCE_ID + ":waterdrops");
+	private static final SoundEffect WATER_DRIP = new SoundEffect(DSurround.RESOURCE_ID + ":waterdrops");
 
 	private boolean firstTime = true;
 

@@ -35,7 +35,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.scripts.IScriptingEngine;
 import org.blockartistry.mod.DynSurround.scripts.JsonScriptingEngine;
 
@@ -45,7 +45,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public final class DataScripts {
 
-	// Module.dataDirectory()
+	// DSurround.dataDirectory()
 	private File dataDirectory;
 
 	// "/assets/dsurround/data/"
@@ -54,7 +54,7 @@ public final class DataScripts {
 	private Side side;
 
 	public DataScripts(final Side side) {
-		this(side, Module.dataDirectory(), "/assets/dsurround/data/");
+		this(side, DSurround.dataDirectory(), "/assets/dsurround/data/");
 	}
 
 	public DataScripts(@Nonnull Side side, @Nonnull final File file, @Nonnull final String assetDirectory) {

@@ -33,7 +33,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.DSurround;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
@@ -43,7 +43,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 class RegistryManagerClient extends RegistryManager {
 
-	private static final ResourceLocation SCRIPT = new ResourceLocation(Module.RESOURCE_ID, "configure.json");
+	private static final ResourceLocation SCRIPT = new ResourceLocation(DSurround.RESOURCE_ID, "configure.json");
 
 	RegistryManagerClient() {
 		super(Side.CLIENT);

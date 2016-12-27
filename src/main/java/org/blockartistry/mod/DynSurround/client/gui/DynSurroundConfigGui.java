@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
@@ -54,7 +54,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class DynSurroundConfigGui extends GuiConfig {
 
-	private final Configuration config = Module.config();
+	private final Configuration config = DSurround.config();
 
 	private final ConfigElement soundElement;
 	private final ConfigCategory soundCategory;
@@ -63,7 +63,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 	private final ConfigCategory soundVolumeCategory;
 	
 	public DynSurroundConfigGui(final GuiScreen parentScreen) {
-		super(parentScreen, new ArrayList<IConfigElement>(), Module.MOD_ID, false, false, Module.MOD_NAME);
+		super(parentScreen, new ArrayList<IConfigElement>(), DSurround.MOD_ID, false, false, DSurround.MOD_NAME);
 		this.titleLine2 = this.config.getConfigFile().getAbsolutePath();
 
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_AURORA, ModOptions.CONFIG_AURORA_ENABLED,

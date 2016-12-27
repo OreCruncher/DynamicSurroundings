@@ -28,7 +28,7 @@ import java.io.Reader;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.scripts.json.ConfigurationScript;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -48,7 +48,7 @@ public class JsonScriptingEngine implements IScriptingEngine {
 
 	@Override
 	public String getEngineVersion() {
-		return Module.VERSION;
+		return DSurround.VERSION;
 	}
 	
 	@Override

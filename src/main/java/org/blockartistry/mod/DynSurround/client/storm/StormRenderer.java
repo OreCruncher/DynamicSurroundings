@@ -24,7 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.client.storm;
 
-import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.IAtmosRenderer;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
@@ -58,7 +58,7 @@ public class StormRenderer implements IAtmosRenderer {
 	
 	public static ResourceLocation locationRainPng = new ResourceLocation("textures/environment/rain.png");
 	public static ResourceLocation locationSnowPng = new ResourceLocation("textures/environment/snow.png");
-	public static ResourceLocation locationDustPng = new ResourceLocation(Module.RESOURCE_ID,
+	public static ResourceLocation locationDustPng = new ResourceLocation(DSurround.RESOURCE_ID,
 			"textures/environment/dust.png");
 
 	private static final float[] RAIN_X_COORDS = new float[1024];

@@ -27,7 +27,7 @@ package org.blockartistry.mod.DynSurround.api.entity;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.DSurround;
 
 import net.minecraft.util.ResourceLocation;
 
@@ -63,7 +63,7 @@ public enum EmojiType {
 	private final ResourceLocation resource;
 
 	private EmojiType(@Nonnull final String texture) {
-		this.resource = new ResourceLocation(Module.RESOURCE_ID, "textures/particles/" + texture + ".png");
+		this.resource = new ResourceLocation(DSurround.RESOURCE_ID, "textures/particles/" + texture + ".png");
 	}
 
 	@Nonnull

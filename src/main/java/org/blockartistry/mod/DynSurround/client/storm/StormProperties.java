@@ -25,7 +25,7 @@
 package org.blockartistry.mod.DynSurround.client.storm;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
 import org.blockartistry.mod.DynSurround.util.SoundUtils;
@@ -62,21 +62,21 @@ public enum StormProperties {
 		this.level = -10.0F;
 		this.rainTexture = EntityRenderer.RAIN_TEXTURES;
 		this.snowTexture = EntityRenderer.SNOW_TEXTURES;
-		this.dustTexture = new ResourceLocation(Module.RESOURCE_ID, "textures/environment/dust_calm.png");
-		this.rainSound = SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, "rain"));
-		this.dustSound = SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, "dust"));
+		this.dustTexture = new ResourceLocation(DSurround.RESOURCE_ID, "textures/environment/dust_calm.png");
+		this.rainSound = SoundUtils.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "rain"));
+		this.dustSound = SoundUtils.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "dust"));
 	}
 
 	private StormProperties(final float level, final String intensity) {
 		this.level = level;
-		this.rainTexture = new ResourceLocation(Module.RESOURCE_ID,
+		this.rainTexture = new ResourceLocation(DSurround.RESOURCE_ID,
 				String.format("textures/environment/rain_%s.png", intensity));
-		this.snowTexture = new ResourceLocation(Module.RESOURCE_ID,
+		this.snowTexture = new ResourceLocation(DSurround.RESOURCE_ID,
 				String.format("textures/environment/snow_%s.png", intensity));
-		this.dustTexture = new ResourceLocation(Module.RESOURCE_ID,
+		this.dustTexture = new ResourceLocation(DSurround.RESOURCE_ID,
 				String.format("textures/environment/dust_%s.png", intensity));
-		this.rainSound = SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, "rain"));
-		this.dustSound = SoundUtils.getOrRegisterSound(new ResourceLocation(Module.RESOURCE_ID, "dust"));
+		this.rainSound = SoundUtils.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "rain"));
+		this.dustSound = SoundUtils.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "dust"));
 	}
 
 	public static StormProperties getIntensity() {

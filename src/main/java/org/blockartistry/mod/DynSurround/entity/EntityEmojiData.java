@@ -27,7 +27,7 @@ package org.blockartistry.mod.DynSurround.entity;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.api.entity.ActionState;
 import org.blockartistry.mod.DynSurround.api.entity.EmojiType;
 import org.blockartistry.mod.DynSurround.api.entity.EmotionalState;
@@ -40,7 +40,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 public final class EntityEmojiData implements ICapabilityProvider, IEntityEmojiSettable {
 
-	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(Module.MOD_ID, "entityEmojiData");
+	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(DSurround.MOD_ID, "entityEmojiData");
 
 	private boolean isDirty = false;
 	private ActionState actionState = ActionState.NONE;

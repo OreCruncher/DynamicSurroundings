@@ -6,7 +6,7 @@
   "version": "$version",
   "mcversion": "$mcversion",
   "url": "https://github.com/OreCruncher/DynamicSurroundings/wiki",
-  "updateUrl": "",
+  "updateUrl":"https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json",
   "authorList": ["OreCruncher","Abastro"],
   "credits": "Wirsbo for BetterRain; MrRube for Aurora Rubealis; Hurricaaane for Presence Footsteps",
   "logoFile": "assets/dsurround/textures/logo.png",

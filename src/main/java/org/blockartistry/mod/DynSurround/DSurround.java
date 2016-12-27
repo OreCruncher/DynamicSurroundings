@@ -47,8 +47,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 
-@net.minecraftforge.fml.common.Mod(modid = Module.MOD_ID, useMetadata = true, dependencies = Module.DEPENDENCIES, version = Module.VERSION, guiFactory = Module.GUI_FACTORY)
-public class Module {
+@net.minecraftforge.fml.common.Mod(modid = DSurround.MOD_ID, useMetadata = true, dependencies = DSurround.DEPENDENCIES, version = DSurround.VERSION, guiFactory = DSurround.GUI_FACTORY, updateJSON = DSurround.UPDATE_URL)
+public class DSurround {
 	public static final String MOD_ID = "dsurround";
 	public static final String API_ID = MOD_ID + "API";
 	public static final String RESOURCE_ID = "dsurround";
@@ -56,12 +56,13 @@ public class Module {
 	public static final String VERSION = "@VERSION@";
 	public static final String DEPENDENCIES = "";
 	public static final String GUI_FACTORY = "org.blockartistry.mod.DynSurround.client.gui.ConfigGuiFactory";
+	public static final String UPDATE_URL = "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json";
 
 	@Instance(MOD_ID)
-	protected static Module instance;
+	protected static DSurround instance;
 
 	@Nonnull
-	public static Module instance() {
+	public static DSurround instance() {
 		return instance;
 	}
 
@@ -87,7 +88,7 @@ public class Module {
 		return dataDirectory;
 	}
 
-	public Module() {
+	public DSurround() {
 		ModLog.setLogger(LogManager.getLogger(MOD_ID));
 	}
 
@@ -97,9 +98,9 @@ public class Module {
 		MinecraftForge.EVENT_BUS.register(this);
 
 		// Load up our configuration
-		dataDirectory = new File(event.getModConfigurationDirectory(), Module.MOD_ID);
+		dataDirectory = new File(event.getModConfigurationDirectory(), DSurround.MOD_ID);
 		dataDirectory.mkdirs();
-		config = new Configuration(new File(dataDirectory, Module.MOD_ID + ".cfg"));
+		config = new Configuration(new File(dataDirectory, DSurround.MOD_ID + ".cfg"));
 
 		config.load();
 		ModOptions.load(config);

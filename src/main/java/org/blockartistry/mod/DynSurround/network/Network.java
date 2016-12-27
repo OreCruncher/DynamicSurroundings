@@ -28,7 +28,7 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.Module;
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.api.entity.ActionState;
 import org.blockartistry.mod.DynSurround.api.entity.EmojiType;
 import org.blockartistry.mod.DynSurround.api.entity.EmotionalState;
@@ -50,7 +50,7 @@ public final class Network {
 	private Network() {
 	}
 
-	private static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Module.MOD_ID);
+	private static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(DSurround.MOD_ID);
 
 	public static void initialize() {
 
