@@ -46,8 +46,21 @@ public class SeasonInfoCalendar extends SeasonInfo {
 
 	@Override
 	@Nonnull
-	public String getSeason() {
-		return this.seasonProvider.getSeason(this.calendarProvider).getName();
+	public SeasonType getSeasonType() {
+		final String name = this.seasonProvider.getSeason(this.calendarProvider).getName();
+		switch (name) {
+		case "summer":
+			return SeasonType.SUMMER;
+		case "autumn":
+			return SeasonType.AUTUMN;
+		case "winter":
+			return SeasonType.WINTER;
+		case "spring":
+			return SeasonType.SPRING;
+		default:
+			return SeasonType.NONE;
+		}
+
 	}
 
 	@Override

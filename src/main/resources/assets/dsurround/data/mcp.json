@@ -554,7 +554,7 @@
 			"sounds":[
 				{
 					"sound":"dsurround:hiss",
-					"conditions":"isNotRaining && isDay && NOT(player.isFreezing || player.isCold)",
+					"conditions":"isNotRaining && isDay && NOT(player.temperature == 'icy' || player.temperature == 'cold')",
 					"volume":1.0,
 					"variable":true
 				}

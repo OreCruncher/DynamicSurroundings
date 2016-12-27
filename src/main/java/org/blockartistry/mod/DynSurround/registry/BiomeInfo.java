@@ -57,7 +57,15 @@ public final class BiomeInfo {
 	private boolean hasFog;
 	
 	public boolean getHasPrecipitation() {
-		return this.hasPrecipitation;
+		return canRain() || getEnableSnow();
+	}
+	
+	public boolean canRain() {
+		return this.biome != null ? this.biome.canRain() : false;
+	}
+	
+	public boolean getEnableSnow() {
+		return this.biome != null ? this.biome.getEnableSnow() : false;
 	}
 	
 	public void setHasPrecipitation(final boolean flag) {
@@ -154,7 +162,6 @@ public final class BiomeInfo {
 		this.biomeId = Biome.getIdForBiome(biome);
 		this.biomeName = biome.getBiomeName();
 
-		this.hasPrecipitation = biome.canRain() || biome.getEnableSnow();
 		this.sounds = new ArrayList<SoundEffect>();
 		this.spotSounds = new ArrayList<SoundEffect>();
 		this.spotSoundChance = 1200;

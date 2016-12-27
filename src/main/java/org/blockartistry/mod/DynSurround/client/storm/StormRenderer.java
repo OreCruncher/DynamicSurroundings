@@ -146,9 +146,8 @@ public class StormRenderer implements IAtmosRenderer {
 				final double rainY = (double) RAIN_Y_COORDS[idx] * 0.5D;
 				mutable.setPos(gridX, 0, gridZ);
 				final BiomeInfo biome = this.biomes.get(world.getBiome(mutable));
-				final boolean hasDust = biome.getHasDust();
 
-				if (hasDust || biome.getHasPrecipitation()) {
+				if (biome.getHasDust() || biome.getHasPrecipitation()) {
 					final int precipHeight = getPrecipitationHeight(world, mutable).getY();
 					int k2 = playerY - range;
 					int l2 = playerY + range;
@@ -173,7 +172,7 @@ public class StormRenderer implements IAtmosRenderer {
 						mutable.setPos(gridX, k2, gridZ);
 						final boolean canSnow = this.season.canWaterFreeze(world, mutable);
 
-						if (!hasDust && !canSnow) {
+						if (!biome.getHasDust() && !canSnow) {
 							if (j1 != 0) {
 								if (j1 >= 0) {
 									tess.draw();
@@ -217,7 +216,7 @@ public class StormRenderer implements IAtmosRenderer {
 								// If cold enough the dust texture will be
 								// snow that blows sideways
 								ResourceLocation texture = locationSnowPng;
-								if (hasDust && !canSnow)
+								if (biome.getHasDust() && !canSnow)
 									texture = locationDustPng;
 
 								j1 = 1;
@@ -240,7 +239,7 @@ public class StormRenderer implements IAtmosRenderer {
 							// affects the horizontal
 							// movement of particles, which works well for
 							// dust.
-							final float factor = hasDust ? 0.2F : 0.01F;
+							final float factor = biome.getHasDust() ? 0.2F : 0.01F;
 							double d9 = random.nextDouble()
 									+ (double) f1 * factor * (double) ((float) random.nextGaussian());
 							double d10 = random.nextDouble() + (double) (f1 * (float) random.nextGaussian()) * 0.001D;

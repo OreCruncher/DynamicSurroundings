@@ -26,16 +26,19 @@ package org.blockartistry.mod.DynSurround.registry.season;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
+import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome.TempCategory;
 
 public class SeasonInfo {
 	
-	public static enum Season {
+	public static enum SeasonType {
 		NONE("noseason"),
 		SPRING("spring"),
 		SUMMER("summer"),
@@ -43,7 +46,25 @@ public class SeasonInfo {
 		WINTER("winter");
 		
 		private final String val;
-		Season(@Nonnull final String val) {
+		SeasonType(@Nonnull final String val) {
+			this.val = val;
+		}
+		
+		@Nonnull
+		public String getValue() {
+			return this.val;
+		}
+	}
+	
+	public static enum PlayerTemperature {
+		ICY("icy"),
+		COOL("cool"),
+		MILD("mild"),
+		WARM("warm"),
+		HOT("hot");
+		
+		private final String val;
+		PlayerTemperature(@Nonnull final String val) {
 			this.val = val;
 		}
 		
@@ -61,8 +82,33 @@ public class SeasonInfo {
 		this.biomes = RegistryManager.get(RegistryType.BIOME);
 	}
 
-	public String getSeason() {
-		return Season.NONE.getValue();
+	@Nonnull
+	public SeasonType getSeasonType() {
+		return SeasonType.NONE;
+	}
+	
+	@Nonnull
+	public String getSeasonName() {
+		return getSeasonType().getValue();
+	}
+	
+	@Nonnull
+	public PlayerTemperature getPlayerTemperature() {
+		final float temp = getTemperature(EnvironState.getPlayerPosition());
+		final TempCategory cat = PlayerUtils.getPlayerBiome(EnvironState.getPlayer(), true).getTempCategory();
+		switch(cat) {
+		case COLD:
+			return PlayerTemperature.COOL;
+		case MEDIUM:
+			return PlayerTemperature.MILD;
+		case WARM:
+			return PlayerTemperature.WARM;
+		default:
+			if(temp < 0.15F)
+				return PlayerTemperature.ICY;
+			else
+				return PlayerTemperature.HOT;
+		}
 	}
 
 	@Nonnull

@@ -26,12 +26,12 @@ package org.blockartistry.mod.DynSurround.registry;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo;
+import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo.PlayerTemperature;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfoCalendar;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfoNether;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfoToughAsNails;
-import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo.Season;
-
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -40,24 +40,33 @@ import net.minecraftforge.fml.common.Loader;
 public final class SeasonRegistry extends Registry {
 
 	private static final boolean CALENDAR_API = Loader.isModLoaded("CalendarAPI");
-	private static final boolean TOUGHASNAILS_API = Loader.isModLoaded("toughasnails");
+	private static final boolean TOUGHASNAILS_API = Loader.isModLoaded("ToughAsNails");
 
 	private final TIntObjectHashMap<SeasonInfo> seasonData = new TIntObjectHashMap<SeasonInfo>();
 
 	protected SeasonInfo factory(@Nonnull final World world) {
 
-		if (world.provider.getDimension() == -1)
+		if (world.provider.getDimension() == -1) {
+			ModLog.info("Creating Nether SeasonInfo");
 			return new SeasonInfoNether(world);
+		}
 
-		if (TOUGHASNAILS_API)
+		if (TOUGHASNAILS_API) {
+			ModLog.info("Creating Tough as Nails SeasonInfo for dimension %s",
+					world.provider.getDimensionType().getName());
 			return new SeasonInfoToughAsNails(world);
+		}
 
-		if (CALENDAR_API)
+		if (CALENDAR_API) {
+			ModLog.info("Creating Calendar SeasonInfo for dimension %s", world.provider.getDimensionType().getName());
 			return new SeasonInfoCalendar(world);
+		}
 
+		ModLog.info("Creating default SeasonInfo for dimension %s", world.provider.getDimensionType().getName());
 		return new SeasonInfo(world);
 	}
 
+	@Nonnull
 	public SeasonInfo getData(@Nonnull final World world) {
 		SeasonInfo result = this.seasonData.get(world.provider.getDimension());
 		if (result == null) {
@@ -66,9 +75,15 @@ public final class SeasonRegistry extends Registry {
 		}
 		return result;
 	}
+
+	@Nonnull
+	public PlayerTemperature getPlayerTemperature(@Nonnull final World world) {
+		return getData(world).getPlayerTemperature();
+	}
 	
-	public String getSeason() {
-		return Season.NONE.getValue();
+	@Nonnull
+	public String getSeasonName(@Nonnull final World world) {
+		return getData(world).getSeasonName();
 	}
 
 	@Nonnull
@@ -79,25 +94,26 @@ public final class SeasonRegistry extends Registry {
 	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getData(world).getTemperature(pos);
 	}
-	
+
 	/*
-	 * Indicates if it is cold enough that water can freeze.  Could result
-	 * in snow or frozen ice.  Does not take into account any other environmental
-	 * factors - just whether its cold enough.  If environmental sensitive
+	 * Indicates if it is cold enough that water can freeze. Could result in
+	 * snow or frozen ice. Does not take into account any other environmental
+	 * factors - just whether its cold enough. If environmental sensitive
 	 * versions are needed look at canBlockFreeze() and canSnowAt().
 	 */
 	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getData(world).canWaterFreeze(pos);
 	}
-	
+
 	/*
 	 * Essentially snow layer stuff.
 	 */
 	public boolean canSnowAt(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getData(world).canSnowAt(pos);
 	}
-	
-	public boolean canBlockFreeze(@Nonnull final World world, @Nonnull final BlockPos pos, final boolean noWaterAdjacent) {
+
+	public boolean canBlockFreeze(@Nonnull final World world, @Nonnull final BlockPos pos,
+			final boolean noWaterAdjacent) {
 		return getData(world).canBlockFreeze(pos, noWaterAdjacent);
 	}
 }

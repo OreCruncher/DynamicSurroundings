@@ -28,20 +28,12 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
-
-import foxie.calendar.api.CalendarAPI;
-import foxie.calendar.api.ICalendarProvider;
-import foxie.calendar.api.ISeasonProvider;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.fml.common.Loader;
 
 public final class DimensionInfo {
 
 	private static final int SPACE_HEIGHT_OFFSET = 32;
-	private static final boolean CALENDAR_API = Loader.isModLoaded("CalendarAPI");
-	private static final String SEASON_NOT_AVAILABLE = "noseason";
 
 	protected final int dimensionId;
 	protected boolean initialized;
@@ -128,25 +120,6 @@ public final class DimensionInfo {
 
 	public boolean getHasWeather() {
 		return this.hasWeather.booleanValue();
-	}
-
-	public String getSeason() {
-		if (!CALENDAR_API)
-			return SEASON_NOT_AVAILABLE;
-
-		final ISeasonProvider provider = CalendarAPI.getSeasonProvider(this.dimensionId);
-		if (provider == null)
-			return SEASON_NOT_AVAILABLE;
-
-		final World world = DimensionManager.getWorld(this.dimensionId);
-		if (world == null)
-			return SEASON_NOT_AVAILABLE;
-
-		final ICalendarProvider calendar = CalendarAPI.getCalendarInstance(world);
-		if (calendar == null)
-			return SEASON_NOT_AVAILABLE;
-
-		return provider.getSeason(calendar).getName();
 	}
 
 	@Override

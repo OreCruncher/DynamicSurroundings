@@ -35,9 +35,6 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import org.blockartistry.mod.DynSurround.util.Expression;
 import org.blockartistry.mod.DynSurround.util.Expression.Variant;
-import org.blockartistry.mod.DynSurround.util.PlayerUtils;
-
-import net.minecraft.world.biome.Biome.TempCategory;
 
 public class Evaluator {
 
@@ -180,28 +177,10 @@ public class Evaluator {
 				return EnvironState.isPlayerInClouds() ? Expression.ONE : Expression.ZERO;
 			}
 		});
-		Expression.addBuiltInVariable("player.isFreezing", new Expression.LazyNumber() {
+		Expression.addBuiltInVariable("player.temperature", new Expression.LazyNumber() {
 			@Override
 			public Variant eval() {
-				final boolean flag = PlayerUtils.getPlayerBiome(EnvironState.getPlayer(), true)
-						.getFloatTemperature(EnvironState.getPlayerPosition()) < 0.15F;
-				return flag ? Expression.ONE : Expression.ZERO;
-			}
-		});
-		Expression.addBuiltInVariable("player.isCold", new Expression.LazyNumber() {
-			@Override
-			public Variant eval() {
-				final boolean flag = PlayerUtils.getPlayerBiome(EnvironState.getPlayer(), true)
-						.getTempCategory() == TempCategory.COLD;
-				return flag ? Expression.ONE : Expression.ZERO;
-			}
-		});
-		Expression.addBuiltInVariable("player.isWarm", new Expression.LazyNumber() {
-			@Override
-			public Variant eval() {
-				final boolean flag = PlayerUtils.getPlayerBiome(EnvironState.getPlayer(), true)
-						.getTempCategory() == TempCategory.WARM;
-				return flag ? Expression.ONE : Expression.ZERO;
+				return new Variant(EnvironState.getPlayerTemperature().getValue());
 			}
 		});
 		Expression.addBuiltInVariable("player.dimension", new Expression.LazyNumber() {
@@ -297,7 +276,7 @@ public class Evaluator {
 		Expression.addBuiltInVariable("season", new Expression.LazyNumber() {
 			@Override
 			public Variant eval() {
-				return new Variant(EnvironState.getSeason());
+				return new Variant(EnvironState.getSeason().getValue());
 			}
 		});
 		

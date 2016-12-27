@@ -425,6 +425,11 @@ public class Expression {
 	private static final char minusSign = '-';
 
 	/**
+	 * What character to use for enclosing a string literal
+	 */
+	private static final char quote = '\'';
+	
+	/**
 	 * The Float representation of the left parenthesis, used for parsing
 	 * varying numbers of function parameters.
 	 */
@@ -735,11 +740,11 @@ public class Expression {
 			} else if (ch == '(' || ch == ')' || ch == ',') {
 				token.append(ch);
 				pos++;
-			} else if (ch == '"') {
+			} else if (ch == quote) {
 				token.append(ch);
 				pos++;
 				ch = pos == input.length() ? 0 : input.charAt(pos);
-				while (ch != '"' && (pos < input.length())) {
+				while (ch != quote && (pos < input.length())) {
 					token.append(input.charAt(pos++));
 					ch = pos == input.length() ? 0 : input.charAt(pos);
 				}
@@ -861,7 +866,7 @@ public class Expression {
 			String token = tokenizer.next();
 			if (isNumber(token)) {
 				outputQueue.add(token);
-			} else if (token.charAt(0) == '"') {
+			} else if (token.charAt(0) == quote) {
 				outputQueue.add(token);
 			} else if (this.variables.containsKey(token)) {
 				outputQueue.add(token);
@@ -987,7 +992,7 @@ public class Expression {
 					stack.push(fResult);
 				} else if ("(".equals(token)) {
 					stack.push(PARAMS_START);
-				} else if (token.charAt(0) == '"') {
+				} else if (token.charAt(0) == quote) {
 					final String s = token.substring(1, token.length() - 1);
 					stack.push(new LazyNumber() {
 						public Variant eval() {

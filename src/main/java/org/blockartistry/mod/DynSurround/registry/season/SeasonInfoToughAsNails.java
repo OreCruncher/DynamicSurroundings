@@ -26,13 +26,148 @@ package org.blockartistry.mod.DynSurround.registry.season;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import toughasnails.api.season.Season;
+import toughasnails.api.season.SeasonHelper;
+import toughasnails.api.stat.capability.ITemperature;
+import toughasnails.api.temperature.TemperatureHelper;
 
-// TODO: Change when API is available
 public class SeasonInfoToughAsNails extends SeasonInfo {
+
+	// Lifted from the 1.11.x branch of TaN. Will be removed when Dynamic
+	// Surroundings
+	// gets to 1.11.x
+	// TODO: Cleanup for 1.11.x version of Dynamic Surroundings
+	private static class Hooks {
+
+		public static boolean canSnowAtInSeason(World world, BlockPos pos, boolean checkLight, Season season) {
+			try {
+				return (Boolean) Class.forName("toughasnails.season.SeasonASMHelper")
+						.getMethod("canSnowAtInSeason", World.class, BlockPos.class, Boolean.class, Season.class)
+						.invoke(null, world, pos, checkLight, season);
+			} catch (Exception e) {
+				throw new RuntimeException("An error occurred calling canSnowAtInSeason", e);
+			}
+		}
+
+		public static boolean canBlockFreezeInSeason(World world, BlockPos pos, boolean noWaterAdj, Season season) {
+			try {
+				return (Boolean) Class.forName("toughasnails.season.SeasonASMHelper")
+						.getMethod("canBlockFreezeInSeason", World.class, BlockPos.class, Boolean.class, Season.class)
+						.invoke(null, world, pos, noWaterAdj, season);
+			} catch (Exception e) {
+				throw new RuntimeException("An error occurred calling canBlockFreezeInSeason", e);
+			}
+		}
+
+		public static boolean isRainingAtInSeason(World world, BlockPos pos, Season season) {
+			try {
+				return (Boolean) Class.forName("toughasnails.season.SeasonASMHelper")
+						.getMethod("isRainingAtInSeason", World.class, BlockPos.class, Season.class)
+						.invoke(null, world, pos, season);
+			} catch (Exception e) {
+				throw new RuntimeException("An error occurred calling isRainingAtInSeason", e);
+			}
+		}
+	}
 
 	public SeasonInfoToughAsNails(@Nonnull final World world) {
 		super(world);
 	}
 
+	@Override
+	@Nonnull
+	public SeasonType getSeasonType() {
+		final Season.SubSeason season = SeasonHelper.getSeasonData(this.world).getSubSeason();
+		switch (season) {
+		case EARLY_SUMMER:
+		case MID_SUMMER:
+		case LATE_SUMMER:
+			return SeasonType.SUMMER;
+		case EARLY_AUTUMN:
+		case MID_AUTUMN:
+		case LATE_AUTUMN:
+			return SeasonType.AUTUMN;
+		case EARLY_WINTER:
+		case MID_WINTER:
+		case LATE_WINTER:
+			return SeasonType.WINTER;
+		case EARLY_SPRING:
+		case MID_SPRING:
+		case LATE_SPRING:
+			return SeasonType.SPRING;
+		default:
+			return SeasonType.NONE;
+		}
+	}
+
+	@Override
+	public float getTemperature(@Nonnull final BlockPos pos) {
+		final Season season = SeasonHelper.getSeasonData(this.world).getSubSeason().getSeason();
+		final Biome biome = this.world.getBiome(pos);
+
+		if (biome.getTemperature() <= 0.7F && season == Season.WINTER)
+			return 0.0F;
+
+		return biome.getFloatTemperature(pos);
+	}
+
+	@Nonnull
+	@Override
+	public PlayerTemperature getPlayerTemperature() {
+		final ITemperature data = TemperatureHelper.getTemperatureData(EnvironState.getPlayer());
+		if (data == null)
+			return super.getPlayerTemperature();
+
+		switch (data.getTemperature().getRange()) {
+		case ICY:
+			return PlayerTemperature.ICY;
+		case COOL:
+			return PlayerTemperature.COOL;
+		case MILD:
+			return PlayerTemperature.MILD;
+		case WARM:
+			return PlayerTemperature.WARM;
+		case HOT:
+			return PlayerTemperature.HOT;
+		default:
+			return PlayerTemperature.MILD;
+		}
+	}
+
+	/*
+	 * Indicates if rain is striking at the specified position.
+	 */
+	@Override
+	public boolean isRainingAt(@Nonnull final BlockPos pos) {
+		final Season season = SeasonHelper.getSeasonData(this.world).getSubSeason().getSeason();
+		return Hooks.isRainingAtInSeason(this.world, pos, season);
+	}
+
+	/*
+	 * Indicates if it is cold enough that water can freeze. Could result in
+	 * snow or frozen ice. Does not take into account any other environmental
+	 * factors - just whether its cold enough. If environmental sensitive
+	 * versions are needed look at canBlockFreeze() and canSnowAt().
+	 */
+	@Override
+	public boolean canWaterFreeze(@Nonnull final BlockPos pos) {
+		return getTemperature(pos) < 0.15F;
+	}
+
+	/*
+	 * Essentially snow layer stuff.
+	 */
+	public boolean canSnowAt(@Nonnull final BlockPos pos) {
+		final Season season = SeasonHelper.getSeasonData(this.world).getSubSeason().getSeason();
+		return Hooks.canSnowAtInSeason(this.world, pos, true, season);
+	}
+
+	public boolean canBlockFreeze(@Nonnull final BlockPos pos, final boolean noWaterAdjacent) {
+		final Season season = SeasonHelper.getSeasonData(this.world).getSubSeason().getSeason();
+		return Hooks.canBlockFreezeInSeason(this.world, pos, noWaterAdjacent, season);
+	}
 }

@@ -36,7 +36,7 @@ public class SeasonInfoNether extends SeasonInfo {
 	}
 
 	@Override
-	public String getSeason() {
+	public String getSeasonName() {
 		return "hell";
 	}
 

@@ -42,6 +42,8 @@ import org.blockartistry.mod.DynSurround.registry.Evaluator;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SeasonRegistry;
+import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo.PlayerTemperature;
+import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo.SeasonType;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
@@ -124,7 +126,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static String conditions = "";
 		private static String biomeName = "";
 		private static BiomeInfo playerBiome = null;
-		private static String season = null;
+		private static SeasonType season = SeasonType.NONE;
 		private static int dimensionId;
 		private static String dimensionName;
 		private static BlockPos playerPosition;
@@ -133,7 +135,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static boolean fog;
 		private static boolean humid;
 		private static boolean dry;
-		private static String temperatureCategory = "";
+		private static PlayerTemperature playerTemperature = PlayerTemperature.MILD;
 		private static boolean inside;
 		
 		private static int tickCounter;
@@ -162,6 +164,9 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		private static String getPlayerConditions(final EntityPlayer player) {
 			final StringBuilder builder = new StringBuilder();
+			
+			builder.append(CONDITION_SEPARATOR).append(season.getValue());
+			
 			if (isPlayerHurt())
 				builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_HURT);
 			if (isPlayerHungry())
@@ -205,19 +210,20 @@ public class EnvironStateHandler extends EffectHandlerBase {
 				else
 					builder.append(CONDITION_TOKEN_RIDING);
 			}
-			builder.append(CONDITION_SEPARATOR).append(temperatureCategory);
+			builder.append(CONDITION_SEPARATOR).append(playerTemperature.getValue());
 			builder.append(CONDITION_SEPARATOR);
 			return builder.toString();
 		}
 
 		private static void tick(final World world, final EntityPlayer player) {
+			
 			final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 			final SeasonRegistry seasons = RegistryManager.get(RegistryType.SEASON);
+			
 			EnvironState.player = player;
-			EnvironState.conditions = dimensions.getConditions(world) + getPlayerConditions(player);
 			EnvironState.playerBiome = PlayerUtils.getPlayerBiome(player, false);
 			EnvironState.biomeName = EnvironState.playerBiome.getBiomeName();
-			EnvironState.season = seasons.getData(world).getSeason();
+			EnvironState.season = seasons.getData(world).getSeasonType();
 			EnvironState.dimensionId = world.provider.getDimension();
 			EnvironState.dimensionName = world.provider.getDimensionType().getName();
 			EnvironState.playerPosition = new BlockPos(player.posX, player.posY, player.posZ);
@@ -226,9 +232,11 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 			final BiomeInfo trueBiome = PlayerUtils.getPlayerBiome(player, true);
 			EnvironState.freezing = trueBiome.getFloatTemperature(EnvironState.playerPosition) < 0.15F;
-			EnvironState.temperatureCategory = "tc" + trueBiome.getTempCategory().name().toLowerCase();
+			EnvironState.playerTemperature = seasons.getPlayerTemperature(world);
 			EnvironState.humid = trueBiome.isHighHumidity();
 			EnvironState.dry = trueBiome.getRainfall() == 0;
+
+			EnvironState.conditions = dimensions.getConditions(world) + getPlayerConditions(player);
 
 			if (!Minecraft.getMinecraft().isGamePaused())
 				EnvironState.tickCounter++;
@@ -246,8 +254,12 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			return biomeName;
 		}
 
-		public static String getSeason() {
+		public static SeasonType getSeason() {
 			return season;
+		}
+		
+		public static PlayerTemperature getPlayerTemperature() {
+			return playerTemperature;
 		}
 		
 		public static int getDimensionId() {
