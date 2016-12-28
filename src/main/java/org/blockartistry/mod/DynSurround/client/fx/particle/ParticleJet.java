@@ -43,15 +43,15 @@ public abstract class ParticleJet extends ParticleSystem {
 		this(0, strength, world, x, y, z, 3);
 	}
 
-	public ParticleJet(final int layer, final int strength, final World world, final double x, final double y, final double z,
-			final int freq) {
+	public ParticleJet(final int layer, final int strength, final World world, final double x, final double y,
+			final double z, final int freq) {
 		super(layer, world, x, y, z);
 
 		this.setAlphaF(0.0F);
 		this.jetStrength = strength;
 		this.updateFrequency = freq;
 		this.particleMaxAge = (RANDOM.nextInt(strength) + 2) * 20;
-		this.particleLimit = (strength * strength * strength);
+		this.setParticleLimit(strength * strength * 5);
 	}
 
 	/*
@@ -62,7 +62,7 @@ public abstract class ParticleJet extends ParticleSystem {
 	public boolean shouldDie() {
 		return this.particleAge >= this.particleMaxAge;
 	}
-	
+
 	/*
 	 * During update see if a particle needs to be spawned so that it can rise
 	 * up.

@@ -96,7 +96,7 @@ public class ParticleWaterSplash extends ParticleJet {
 			}
 		}
 
-		int splashCount = this.particleLimit - this.myParticles.size();
+		int splashCount = this.getParticleLimit() - this.myParticles.size();
 
 		for (int j = 0; (float) j < splashCount; ++j) {
 			final double xOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);

@@ -35,6 +35,7 @@ import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
@@ -54,7 +55,7 @@ public abstract class ParticleSystem extends Particle {
 	protected final Vec3d location;
 	protected final BlockPos position;
 	protected final List<Particle> myParticles = new ArrayList<Particle>();
-	protected int particleLimit;
+	private int particleLimit;
 
 	protected ParticleSystem(final World worldIn, final double posXIn, final double posYIn, final double posZIn) {
 		this(0, worldIn, posXIn, posYIn, posZIn);
@@ -74,6 +75,17 @@ public abstract class ParticleSystem extends Particle {
 	@Nonnull
 	public BlockPos getPos() {
 		return this.position;
+	}
+	
+	public void setParticleLimit(final int limit) {
+		this.particleLimit = limit;
+	}
+	
+	public int getParticleLimit() {
+		final int setting = Minecraft.getMinecraft().gameSettings.particleSetting;
+		if(setting == 2)
+			return 0;
+		return setting == 0 ? this.particleLimit : this.particleLimit / 2;
 	}
 	
 	public boolean inBox(final AxisAlignedBB box) {
