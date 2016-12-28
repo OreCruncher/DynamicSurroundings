@@ -25,12 +25,12 @@
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import org.blockartistry.mod.DynSurround.DSurround;
-import org.blockartistry.mod.DynSurround.util.SoundUtils;
+import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleSplash;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,8 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleWaterSplash extends ParticleJet {
 
-	private static final SoundEvent splashSound = SoundUtils
-			.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "rain"));
+	private static final ResourceLocation splashSound = new ResourceLocation(DSurround.RESOURCE_ID, "rain");
 
 	private static class ParticleWaterSpray extends ParticleSplash {
 
@@ -67,19 +66,18 @@ public class ParticleWaterSplash extends ParticleJet {
 	public boolean shouldDie() {
 		return false;
 	}
-	
+
 	// Entity.resetHeight()
 	@Override
 	protected void spawnJetParticle() {
 
-		final float factor = this.jetStrength / 3.0F;
-
-		if (++this.soundCount % 15 == 0) {
-			final float volume = factor > 1.0F ? 1.0F : factor;
-			final float pitch = 1.0F - 0.9F * factor + (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F;
-
-			this.worldObj.playSound(this.posX, this.posY, this.posZ, splashSound, SoundCategory.BLOCKS, volume, pitch,
-					false);
+		if (++this.soundCount % 20 == 0) {
+			final float volume = this.jetStrength / 3.0F;
+			if (SoundManager.canSoundBeHeard(this.getPos(), volume)) {
+				final float pitch = 1.0F - 0.7F * (volume / 3.0F) + (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F;
+				final SoundEffect effect = new SoundEffect(splashSound, volume, pitch);
+				SoundManager.playSoundAt(this.getPos(), effect, 0, SoundCategory.BLOCKS);
+			}
 		}
 
 		// final int bubbleCount = (int) (factor * 2.0F);

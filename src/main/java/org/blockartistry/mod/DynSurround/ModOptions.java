@@ -79,10 +79,10 @@ public final class ModOptions {
 	public static final String CONFIG_STORM_INACTIVE_TIME_VARIABLE = "Inactive duration of thunder, variable";
 
 	private static final List<String> rainSort = Arrays.asList(CONFIG_RAIN_VOLUME, CONFIG_ALLOW_DESERT_DUST,
-			CONFIG_RESET_RAIN_ON_SLEEP, CONFIG_RAIN_PARTICLE_BASE,
-			CONFIG_RAIN_ACTIVE_TIME_CONST, CONFIG_RAIN_ACTIVE_TIME_VARIABLE, CONFIG_RAIN_INACTIVE_TIME_CONST,
-			CONFIG_RAIN_INACTIVE_TIME_VARIABLE, CONFIG_STORM_ACTIVE_TIME_CONST, CONFIG_STORM_ACTIVE_TIME_VARIABLE,
-			CONFIG_STORM_INACTIVE_TIME_CONST, CONFIG_STORM_INACTIVE_TIME_VARIABLE);
+			CONFIG_RESET_RAIN_ON_SLEEP, CONFIG_RAIN_PARTICLE_BASE, CONFIG_RAIN_ACTIVE_TIME_CONST,
+			CONFIG_RAIN_ACTIVE_TIME_VARIABLE, CONFIG_RAIN_INACTIVE_TIME_CONST, CONFIG_RAIN_INACTIVE_TIME_VARIABLE,
+			CONFIG_STORM_ACTIVE_TIME_CONST, CONFIG_STORM_ACTIVE_TIME_VARIABLE, CONFIG_STORM_INACTIVE_TIME_CONST,
+			CONFIG_STORM_INACTIVE_TIME_VARIABLE);
 
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_VOLUME, defaultValue = "1.0")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
@@ -349,11 +349,12 @@ public final class ModOptions {
 	@MinMaxInt(min = 0)
 	@Comment("Ticks between culled sound events (0 to disable culling)")
 	public static int soundCullingThreshold = 20;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_CULLED_SOUNDS, defaultValue = "^minecraft:liquid.*,minecraft:mob.sheep.say,minecraft:mob.chicken.say,minecraft:mob.cow.say,minecraft:mob.pig.say")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_CULLED_SOUNDS, defaultValue = "minecraft:block.water.ambient,minecraft:block.lava.ambient,minecraft:entity.sheep.ambient,minecraft:entity.chicken.ambient,minecraft:entity.cow.ambient,minecraft:entity.pig.ambient")
 	@Comment("Sounds to cull from frequent playing")
 	@RestartRequired
-	public static String[] culledSounds = { "^minecraft:liquid.*", "minecraft:mob.sheep.say",
-			"minecraft:mob.chicken.say", "minecraft:mob.cow.say", "minecraft:mob.pig.say" };
+	public static String[] culledSounds = { "minecraft:block.water.ambient", "minecraft:block.lava.ambient",
+			"minecraft:entity.sheep.ambient", "minecraft:entity.chicken.ambient", "minecraft:entity.cow.ambient",
+			"minecraft:entity.pig.ambient" };
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_BLOCKED_SOUNDS, defaultValue = "dsurround:bison")
 	@Comment("Sounds to block from playing")
 	@Hidden

@@ -51,6 +51,8 @@ public abstract class ParticleSystem extends Particle {
 	protected static final Random RANDOM = new XorShiftRandom();
 
 	protected final int fxLayer;
+	protected final Vec3d location;
+	protected final BlockPos position;
 	protected final List<Particle> myParticles = new ArrayList<Particle>();
 
 	protected ParticleSystem(final World worldIn, final double posXIn, final double posYIn, final double posZIn) {
@@ -62,15 +64,17 @@ public abstract class ParticleSystem extends Particle {
 		super(worldIn, posXIn, posYIn, posZIn);
 
 		this.fxLayer = renderPass;
+		this.location = new Vec3d(this.posX, this.posY, this.posZ);
+		this.position = new BlockPos(this.posX, this.posY, this.posZ);
 	}
 
 	@Nonnull
 	public BlockPos getPos() {
-		return new BlockPos(this.posX, this.posY, this.posZ);
+		return this.position;
 	}
 	
 	public boolean inBox(final AxisAlignedBB box) {
-		return box.isVecInside(new Vec3d(this.posX, this.posY, this.posZ));
+		return box.isVecInside(this.location);
 	}
 
 	public void addParticle(final Particle particle) {
@@ -78,14 +82,6 @@ public abstract class ParticleSystem extends Particle {
 			throw new RuntimeException("Invalid particle for fx layer!");
 		}
 		this.myParticles.add(particle);
-		playSound();
-	}
-
-	/**
-	 * Hook to play a sound when a particle is spawned
-	 */
-	public void playSound() {
-
 	}
 
 	@Override

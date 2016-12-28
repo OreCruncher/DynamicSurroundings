@@ -36,8 +36,6 @@ import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.client.particle.ParticleLava;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 @SideOnly(Side.CLIENT)
@@ -48,6 +46,7 @@ public class ParticleFireJet extends ParticleJet {
 	protected final boolean isLava;
 	protected final IParticleFactory factory;
 	protected final int particleId;
+	protected boolean soundFired;
 
 	public ParticleFireJet(final int strength, final World world, final double x, final double y, final double z) {
 		super(strength, world, x, y, z);
@@ -62,14 +61,6 @@ public class ParticleFireJet extends ParticleJet {
 	}
 
 	@Override
-	public void playSound() {
-		final int x = MathHelper.floor_double(this.posX);
-		final int y = MathHelper.floor_double(this.posY);
-		final int z = MathHelper.floor_double(this.posZ);
-		SoundManager.playSoundAt(new BlockPos(x, y, z), FIRE, 0, SoundCategory.BLOCKS);
-	}
-
-	@Override
 	protected void spawnJetParticle() {
 		final double speedY = this.isLava ? 0 : this.jetStrength / 10.0D;
 		final Particle particle = this.factory.createParticle(this.particleId, this.worldObj, this.posX, this.posY,
@@ -79,5 +70,9 @@ public class ParticleFireJet extends ParticleJet {
 			flame.flameScale *= this.jetStrength;
 		}
 		addParticle(particle);
+		if(!soundFired) {
+			soundFired = true;
+			SoundManager.playSoundAt(this.getPos(), FIRE, 0, SoundCategory.BLOCKS);
+		}
 	}
 }

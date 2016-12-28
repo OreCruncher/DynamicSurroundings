@@ -35,6 +35,7 @@ import org.blockartistry.mod.DynSurround.util.SoundUtils;
 import com.google.common.base.Objects;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -57,21 +58,38 @@ public final class SoundEffect {
 	public final int repeatDelay;
 
 	public SoundEffect(final String soundName) {
-		this(soundName, 1.0F, 1.0F, 0, false);
+		this(new ResourceLocation(soundName), 1.0F, 1.0F, 0, false);
+	}
+
+	public SoundEffect(final ResourceLocation resource) {
+		this(resource, 1.0F, 1.0F, 0, false);
 	}
 
 	public SoundEffect(final String soundName, final float volume, final float pitch) {
-		this(soundName, volume, pitch, 0, false);
+		this(new ResourceLocation(soundName), volume, pitch, 0, false);
+	}
+
+	public SoundEffect(final ResourceLocation resource, final float volume, final float pitch) {
+		this(resource, volume, pitch, 0, false);
 	}
 
 	public SoundEffect(final String soundName, final float volume, final float pitch, final boolean variable) {
-		this(soundName, volume, pitch, 0, variable);
+		this(new ResourceLocation(soundName), volume, pitch, 0, variable);
+	}
+
+	public SoundEffect(final ResourceLocation resource, final float volume, final float pitch, final boolean variable) {
+		this(resource, volume, pitch, 0, variable);
 	}
 
 	public SoundEffect(final String soundName, final float volume, final float pitch, final int repeatDelay,
 			final boolean variable) {
-		this.soundName = soundName;
-		this.sound = SoundUtils.getOrRegisterSound(soundName);
+		this(new ResourceLocation(soundName), volume, pitch, repeatDelay, variable);
+	}
+
+	public SoundEffect(final ResourceLocation resource, final float volume, final float pitch, final int repeatDelay,
+			final boolean variable) {
+		this.soundName = resource.toString();
+		this.sound = SoundUtils.getOrRegisterSound(resource);
 		this.volume = volume;
 		this.pitch = pitch;
 		this.conditions = ".*";
@@ -123,7 +141,7 @@ public final class SoundEffect {
 	public boolean matches() {
 		return Evaluator.check(this.conditions);
 	}
-	
+
 	public float getVolume() {
 		return this.volume;
 	}

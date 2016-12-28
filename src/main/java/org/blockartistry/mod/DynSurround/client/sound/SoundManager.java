@@ -157,9 +157,27 @@ public class SoundManager {
 			playSound(s);
 	}
 
+	/**
+	 * Estimate whether a sound can be heard based on it's volume and distance.
+	 */
+	public static boolean canSoundBeHeard(final BlockPos soundPos, final float volume) {
+		if(volume == 0.0F)
+			return false;
+		final BlockPos playerPos = EnvironState.getPlayerPosition();
+		final double distanceSq = playerPos.distanceSq(soundPos);
+		final double DROPOFF = 16 * 16;
+		if(distanceSq <= DROPOFF)
+			return true;
+		final double power = volume * DROPOFF;
+		return distanceSq <= power;
+	}
+	
 	public static void playSoundAt(final BlockPos pos, final SoundEffect sound, final int tickDelay,
 			@Nullable final SoundCategory categoryOverride) {
 		if (tickDelay > 0 && !canFitSound())
+			return;
+		
+		if(!canSoundBeHeard(pos, sound.getVolume()))
 			return;
 
 		final SpotSound s = new SpotSound(pos, sound, tickDelay, categoryOverride);
