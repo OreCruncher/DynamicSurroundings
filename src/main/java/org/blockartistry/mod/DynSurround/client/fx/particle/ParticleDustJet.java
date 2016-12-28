@@ -49,7 +49,7 @@ public class ParticleDustJet extends ParticleJet {
 
 	public ParticleDustJet(final int strength, final World world, final double x, final double y, final double z,
 			final IBlockState state) {
-		super(strength, world, x, y, z, 2);
+		super(1, strength, world, x, y, z, 2);
 		this.blockState = state;
 	}
 
@@ -57,7 +57,7 @@ public class ParticleDustJet extends ParticleJet {
 	protected void spawnJetParticle() {
 		final Particle particle = new ParticleDust(this.worldObj, this.posX, this.posY, this.posZ, this.blockState)
 				.init();
-		ParticleHelper.addParticle(particle);
+		addParticle(particle);
 	}
 
 }

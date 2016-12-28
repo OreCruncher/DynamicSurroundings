@@ -55,6 +55,7 @@ public class EffectManager {
 		this.effectHandlers.add(new AreaSurveyHandler());
 		this.effectHandlers.add(new FogEffectHandler());
 		this.effectHandlers.add(new BlockEffectHandler());
+		this.effectHandlers.add(new ParticleSystemHandler());
 
 		if (ModOptions.blockedSounds.length > 0 || ModOptions.culledSounds.length > 0)
 			this.effectHandlers.add(new SoundCullHandler());

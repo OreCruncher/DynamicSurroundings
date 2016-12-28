@@ -30,10 +30,11 @@ import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleBubbleJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDustJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFireJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFountainJet;
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleSteamJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleWaterSplash;
+import org.blockartistry.mod.DynSurround.client.handlers.ParticleSystemHandler;
+
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -74,8 +75,12 @@ public abstract class JetEffect extends BlockEffect {
 	}
 
 	protected void addEffect(final ParticleJet fx) {
-		ParticleHelper.addParticle(fx);
-		fx.playSound();
+		ParticleSystemHandler.INSTANCE.addSystem(fx);
+	}
+
+	@Override
+	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+		return ParticleSystemHandler.INSTANCE.okToSpawn(pos) && super.trigger(state, world, pos, random);
 	}
 
 	public static class Fire extends JetEffect {
@@ -224,11 +229,11 @@ public abstract class JetEffect extends BlockEffect {
 			// when water blocks are receding.
 			if (strength <= 0)
 				return;
-			
+
 			final double y = jetSpawnHeight(state, pos) - (isUnboundedLiquid(world, pos) ? 1 : 0);
 
-			final ParticleJet effect = new ParticleWaterSplash(strength, world, pos.getX() + 0.5D,
-					y + 0.5D, pos.getZ() + 0.5D);
+			final ParticleJet effect = new ParticleWaterSplash(strength, world, pos.getX() + 0.5D, y + 0.5D,
+					pos.getZ() + 0.5D);
 			addEffect(effect);
 		}
 	}

@@ -24,15 +24,8 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
-import java.util.Random;
-
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
-
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
 /*
@@ -41,33 +34,23 @@ import net.minecraft.world.World;
  * serves as a particle factory.
  */
 @SideOnly(Side.CLIENT)
-public abstract class ParticleJet extends Particle {
-
-	protected static final Random RANDOM = new XorShiftRandom();
+public abstract class ParticleJet extends ParticleSystem {
 
 	protected final int jetStrength;
 	protected final int updateFrequency;
 
 	public ParticleJet(final int strength, final World world, final double x, final double y, final double z) {
-		this(strength, world, x, y, z, 3);
+		this(0, strength, world, x, y, z, 3);
 	}
 
-	public ParticleJet(final int strength, final World world, final double x, final double y, final double z,
+	public ParticleJet(final int layer, final int strength, final World world, final double x, final double y, final double z,
 			final int freq) {
-		super(world, x, y, z);
+		super(layer, world, x, y, z);
 
 		this.setAlphaF(0.0F);
 		this.jetStrength = strength;
 		this.updateFrequency = freq;
-		this.particleMaxAge = (XorShiftRandom.shared.nextInt(strength) + 2) * 20;
-	}
-
-	/*
-	 * Nothing to render so optimize out
-	 */
-	@Override
-	public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float p_180434_4_,
-			float p_180434_5_, float p_180434_6_, float p_180434_7_, float p_180434_8_) {
+		this.particleMaxAge = (RANDOM.nextInt(strength) + 2) * 20;
 	}
 
 	/*
@@ -75,26 +58,23 @@ public abstract class ParticleJet extends Particle {
 	 */
 	protected abstract void spawnJetParticle();
 
-	/*
-	 * Hook to play sound when the jet is created
-	 */
-	public void playSound() {
+	public boolean shouldDie() {
+		return this.particleAge >= this.particleMaxAge;
 	}
-
+	
 	/*
 	 * During update see if a particle needs to be spawned so that it can rise
 	 * up.
 	 */
 	@Override
-	public void onUpdate() {
+	public void think() {
 
 		// Check to see if a particle needs to be generated
 		if (this.particleAge % this.updateFrequency == 0) {
 			spawnJetParticle();
 		}
 
-		if (this.particleAge++ >= this.particleMaxAge) {
-			this.setExpired();
-		}
+		// Grow older
+		this.particleAge++;
 	}
 }

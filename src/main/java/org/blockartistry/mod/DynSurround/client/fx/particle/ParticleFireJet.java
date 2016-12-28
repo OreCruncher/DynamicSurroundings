@@ -30,7 +30,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 
+import net.minecraft.client.particle.IParticleFactory;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleFlame;
+import net.minecraft.client.particle.ParticleLava;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -43,10 +46,19 @@ public class ParticleFireJet extends ParticleJet {
 	private static final SoundEffect FIRE = new SoundEffect("minecraft:block.fire.ambient");
 
 	protected final boolean isLava;
+	protected final IParticleFactory factory;
+	protected final int particleId;
 
 	public ParticleFireJet(final int strength, final World world, final double x, final double y, final double z) {
 		super(strength, world, x, y, z);
 		this.isLava = RANDOM.nextInt(3) == 0;
+
+		this.particleId = this.isLava ? EnumParticleTypes.LAVA.getParticleID()
+				: EnumParticleTypes.FLAME.getParticleID();
+		if (this.isLava)
+			this.factory = new ParticleLava.Factory();
+		else
+			this.factory = new ParticleFlame.Factory();
 	}
 
 	@Override
@@ -59,12 +71,13 @@ public class ParticleFireJet extends ParticleJet {
 
 	@Override
 	protected void spawnJetParticle() {
-		if (this.isLava) {
-			ParticleHelper.spawnParticle(EnumParticleTypes.LAVA, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
-		} else {
-			final ParticleFlame flame = (ParticleFlame) ParticleHelper.spawnParticle(EnumParticleTypes.FLAME, this.posX,
-					this.posY, this.posZ, this.jetStrength / 10.0D);
+		final double speedY = this.isLava ? 0 : this.jetStrength / 10.0D;
+		final Particle particle = this.factory.createParticle(this.particleId, this.worldObj, this.posX, this.posY,
+				this.posZ, 0D, speedY, 0D);
+		if (!this.isLava) {
+			final ParticleFlame flame = (ParticleFlame) particle;
 			flame.flameScale *= this.jetStrength;
 		}
+		addParticle(particle);
 	}
 }

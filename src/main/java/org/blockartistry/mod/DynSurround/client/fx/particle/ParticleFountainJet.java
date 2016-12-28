@@ -49,7 +49,7 @@ public class ParticleFountainJet extends ParticleJet {
 
 	public ParticleFountainJet(final int strength, final World world, final double x, final double y, final double z,
 			final IBlockState block) {
-		super(strength, world, x, y, z, 1);
+		super(1, strength, world, x, y, z, 1);
 		this.block = block;
 	}
 
@@ -59,7 +59,7 @@ public class ParticleFountainJet extends ParticleJet {
 		final double motionZ = RANDOM.nextGaussian() * 0.03D;
 		final Particle particle = new ParticleFountain(this.worldObj, this.posX, this.posY, this.posZ, motionX, 0.5D,
 				motionZ, this.block).init();
-		ParticleHelper.addParticle(particle);
+		addParticle(particle);
 	}
 
 }
