@@ -24,10 +24,17 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleBubble;
-import net.minecraft.util.math.BlockPos;
+import java.util.Random;
+
+import org.blockartistry.mod.DynSurround.DSurround;
+import org.blockartistry.mod.DynSurround.util.MathStuff;
+import org.blockartistry.mod.DynSurround.util.SoundUtils;
+import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
+
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -35,48 +42,51 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleWaterSplash extends ParticleJet {
 
-	protected static final class ParticleWaterBubbles extends ParticleBubble {
+	private static final Random RANDOM = XorShiftRandom.shared;
+	private static final SoundEvent splashSound = SoundUtils
+			.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "rain"));
 
-		protected ParticleWaterBubbles(final World worldIn, final double x, final double y, final double z,
-				final double dX, final double dY, final double dZ) {
-			super(worldIn, x, y, z, dX, dY, dZ);
-		}
-
-		@Override
-		public void onUpdate() {
-			this.prevPosX = this.posX;
-			this.prevPosY = this.posY;
-			this.prevPosZ = this.posZ;
-			this.motionY += 0.002D;
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
-			this.motionX *= 0.8500000238418579D;
-			this.motionY *= 0.8500000238418579D;
-			this.motionZ *= 0.8500000238418579D;
-
-			if (this.worldObj.getBlockState(new BlockPos(this.posX, this.posY, this.posZ))
-					.getMaterial() != Material.WATER) {
-				this.setExpired();
-			}
-
-			if (this.particleMaxAge-- <= 0) {
-				this.setExpired();
-			}
-		}
-
-	}
-
+	private int soundCount = -1;
 	public ParticleWaterSplash(final int strength, final World world, final double x, final double y, final double z) {
-		super(strength, world, x, y, z, 6 - (strength / 2));
+		super(strength, world, x, y, z);
 	}
 
+	// Entity.resetHeight()
 	@Override
 	protected void spawnJetParticle() {
-		final double motionX = RANDOM.nextGaussian() * 0.02D;
-		final double motionZ = RANDOM.nextGaussian() * 0.02D;
-		final Particle particle = new ParticleWaterBubbles(this.worldObj, this.posX, this.posY, this.posZ, motionX,
-				0.1F, motionZ);
-		ParticleHelper.addParticle(particle);
+		final float factor = this.jetStrength / 3.0F;
+		
+		if(++soundCount % 3 == 0) {
+			final float volume = factor > 1.0F ? 1.0F : factor;
+			final float pitch = 1.0F - 0.9F * factor + (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F;
+	
+			this.worldObj.playSound(this.posX, this.posY, this.posZ, splashSound, SoundCategory.BLOCKS, volume, pitch,
+					false);
+		}
 
+		//final int bubbleCount = (int) (factor * 2.0F);
+		final int splashCount = (int) (factor * 10.0F);
+
+//		for (int i = 0; (float) i < bubbleCount; ++i) {
+//			final double xOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
+//			final double zOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
+//			final double motionX = 0;
+//			final double motionY = 0 - (double) (RANDOM.nextFloat() * 0.2F);
+//			final double motionZ = 0;
+//			ParticleHelper.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX + xOffset, (double) (this.posY),
+//					this.posZ + (double) zOffset, motionX, motionY, motionZ);
+//		}
+
+		for (int j = 0; (float) j < splashCount; ++j) {
+			final double xOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
+			final double zOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
+			final double radians = MathStuff.toRadians(RANDOM.nextInt(360));
+			final double motionX = MathStuff.sin(radians) * this.jetStrength / 20.0F;
+			final double motionY = this.jetStrength / 20.0F;
+			final double motionZ = MathStuff.cos(radians) * this.jetStrength / 20.0F;
+			ParticleHelper.spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX + xOffset, (double) (this.posY),
+					this.posZ + zOffset, motionX, motionY, motionZ);
+		}
 	}
 
 }

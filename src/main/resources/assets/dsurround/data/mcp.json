@@ -451,10 +451,19 @@
 				{
 					"effect":"bubble",
 					"chance":1800
-				},
+				}
+				
+			]
+			
+		},
+		{
+			"blocks":[
+				"minecraft:water"
+			],
+			"effects":[
 				{
 					"effect":"splash",
-					"chance":1
+					"chance":15
 				}
 				
 			]
@@ -1302,6 +1311,7 @@
 			"dictionaryEntries":[
 				"doorWood"
 			]
+			
 		}
 		
 	]
