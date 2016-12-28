@@ -208,8 +208,10 @@ public abstract class JetEffect extends BlockEffect {
 			if (!isLiquidBlock(state.getBlock()))
 				return false;
 
+			// getLiquidHeightPercent() returns the percentage of *air* in the block,
+			// not how much water is in it.
 			final float height = BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state));
-			return height < 0.8F;
+			return height >= 0.12F;
 		}
 
 		private static boolean isUnboundedLiquid(final World world, final BlockPos pos) {
