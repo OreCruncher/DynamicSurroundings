@@ -54,9 +54,12 @@ public abstract class ParticleSystem extends Particle {
 	protected final Vec3d location;
 	protected final BlockPos position;
 	protected final List<Particle> myParticles = new ArrayList<Particle>();
+	protected int particleLimit;
 
 	protected ParticleSystem(final World worldIn, final double posXIn, final double posYIn, final double posZIn) {
 		this(0, worldIn, posXIn, posYIn, posZIn);
+		
+		this.particleLimit = 6;
 	}
 
 	protected ParticleSystem(final int renderPass, final World worldIn, final double posXIn, final double posYIn,
@@ -80,8 +83,9 @@ public abstract class ParticleSystem extends Particle {
 	public void addParticle(final Particle particle) {
 		if (particle.getFXLayer() != this.getFXLayer()) {
 			throw new RuntimeException("Invalid particle for fx layer!");
+		} else if(this.myParticles.size() < this.particleLimit) {
+			this.myParticles.add(particle);
 		}
-		this.myParticles.add(particle);
 	}
 
 	@Override

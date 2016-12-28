@@ -35,11 +35,12 @@ import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleSteamJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleWaterSplash;
 import org.blockartistry.mod.DynSurround.client.handlers.ParticleSystemHandler;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockDynamicLiquid;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.BlockStaticLiquid;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -195,9 +196,25 @@ public abstract class JetEffect extends BlockEffect {
 			super(chance);
 		}
 
-		private boolean isUnboundedLiquid(final World world, final BlockPos pos) {
-			return world.isAirBlock(pos.north()) || world.isAirBlock(pos.south()) || world.isAirBlock(pos.east())
-					|| world.isAirBlock(pos.west());
+		private static boolean isLiquidBlock(final Block block) {
+			return BlockLiquid.class.isAssignableFrom(block.getClass());
+		}
+
+		private static boolean partialLiquidOrAir(final World world, final BlockPos pos) {
+			final IBlockState state = world.getBlockState(pos);
+			if (state.getMaterial() == Material.AIR)
+				return true;
+
+			if (!isLiquidBlock(state.getBlock()))
+				return false;
+
+			final float height = BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state));
+			return height < 0.8F;
+		}
+
+		private static boolean isUnboundedLiquid(final World world, final BlockPos pos) {
+			return partialLiquidOrAir(world, pos.north()) || partialLiquidOrAir(world, pos.south())
+					|| partialLiquidOrAir(world, pos.east()) || partialLiquidOrAir(world, pos.west());
 		}
 
 		private int liquidBlockCount(final World world, final BlockPos pos) {
@@ -206,7 +223,7 @@ public abstract class JetEffect extends BlockEffect {
 			int count;
 			for (count = 0; count < MAX_STRENGTH; count++) {
 				final IBlockState state = world.getBlockState(workBlock);
-				if (!(state.getBlock() instanceof BlockLiquid) || !isUnboundedLiquid(world, workBlock))
+				if (!isLiquidBlock(state.getBlock()) || !isUnboundedLiquid(world, workBlock))
 					break;
 				workBlock = workBlock.up();
 			}
@@ -214,23 +231,39 @@ public abstract class JetEffect extends BlockEffect {
 			return count;
 		}
 
+		public static boolean isValidSpawnBlock(final World world, final BlockPos pos) {
+			if (world.getBlockState(pos).getMaterial() != Material.WATER)
+				return false;
+			final boolean unbounded = isUnboundedLiquid(world, pos);
+			return (unbounded && world.getBlockState(pos.down()).getMaterial().isSolid())
+					|| (!unbounded && world.getBlockState(pos.up()).getBlock() instanceof BlockDynamicLiquid);
+		}
+
 		@Override
 		public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-			if (!(state.getBlock() instanceof BlockStaticLiquid) || !super.trigger(state, world, pos, random))
+			if (!(state.getBlock() instanceof BlockLiquid) || !super.trigger(state, world, pos, random))
 				return false;
 
-			final boolean unbounded = isUnboundedLiquid(world, pos);
-			return !unbounded || world.isSideSolid(pos.down(), EnumFacing.UP);
+			return isValidSpawnBlock(world, pos);
 		}
 
 		public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-			final int strength = liquidBlockCount(world, pos.up());
+			final boolean isUnbounded = isUnboundedLiquid(world, pos);
+			final int strength = liquidBlockCount(world, pos.up()) + (isUnbounded ? 1 : 0);
+
 			// Not sure how this can happen. Appears to happen
 			// when water blocks are receding.
 			if (strength <= 0)
 				return;
 
-			final double y = jetSpawnHeight(state, pos) - (isUnboundedLiquid(world, pos) ? 1 : 0);
+			final float height = BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state));
+			final double y;
+			if (isUnbounded && height < 0.8)
+				y = pos.getY() + height + 0.1D;
+			else if (!isUnbounded)
+				y = pos.getY() + 1.1D;
+			else
+				y = pos.getY() + 0.1D;
 
 			final ParticleJet effect = new ParticleWaterSplash(strength, world, pos.getX() + 0.5D, y,
 					pos.getZ() + 0.5D);

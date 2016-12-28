@@ -25,10 +25,12 @@
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import org.blockartistry.mod.DynSurround.DSurround;
+import org.blockartistry.mod.DynSurround.client.fx.JetEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
+
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleSplash;
+import net.minecraft.client.particle.ParticleRain;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
@@ -40,15 +42,32 @@ public class ParticleWaterSplash extends ParticleJet {
 
 	private static final ResourceLocation splashSound = new ResourceLocation(DSurround.RESOURCE_ID, "rain");
 
-	private static class ParticleWaterSpray extends ParticleSplash {
+	private static class ParticleWaterSpray extends ParticleRain {
 
 		protected ParticleWaterSpray(final World world, final double x, final double y, final double z, double speedX,
 				final double speedY, final double speedZ) {
-			super(world, x, y, z, speedX, speedY, speedZ);
+			super(world, x, y, z);
 
 			this.motionX = speedX;
 			this.motionY = speedY;
 			this.motionZ = speedZ;
+
+			this.canCollide = false;
+		}
+
+		public void onUpdate() {
+			this.prevPosX = this.posX;
+			this.prevPosY = this.posY;
+			this.prevPosZ = this.posZ;
+			this.motionY -= (double) this.particleGravity;
+			this.moveEntity(this.motionX, this.motionY, this.motionZ);
+			this.motionX *= 0.9800000190734863D;
+			this.motionY *= 0.9800000190734863D;
+			this.motionZ *= 0.9800000190734863D;
+
+			if (this.particleMaxAge-- <= 0) {
+				this.setExpired();
+			}
 		}
 
 	}
@@ -59,12 +78,9 @@ public class ParticleWaterSplash extends ParticleJet {
 		super(strength, world, x, y, z);
 	}
 
-	/**
-	 * Water splash systems stay around indefinitely doing their thing.
-	 */
 	@Override
 	public boolean shouldDie() {
-		return false;
+		return !JetEffect.WaterSplash.isValidSpawnBlock(this.worldObj, this.getPos());
 	}
 
 	// Entity.resetHeight()
@@ -80,28 +96,14 @@ public class ParticleWaterSplash extends ParticleJet {
 			}
 		}
 
-		// final int bubbleCount = (int) (factor * 2.0F);
-		int splashCount = (int) (this.jetStrength * this.jetStrength / 1.5F);
-		if (splashCount < 1)
-			splashCount = 1;
-
-		// for (int i = 0; (float) i < bubbleCount; ++i) {
-		// final double xOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
-		// final double zOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
-		// final double motionX = 0;
-		// final double motionY = 0 - (double) (RANDOM.nextFloat() * 0.2F);
-		// final double motionZ = 0;
-		// ParticleHelper.spawnParticle(EnumParticleTypes.WATER_BUBBLE,
-		// this.posX + xOffset, (double) (this.posY),
-		// this.posZ + (double) zOffset, motionX, motionY, motionZ);
-		// }
+		int splashCount = this.particleLimit - this.myParticles.size();
 
 		for (int j = 0; (float) j < splashCount; ++j) {
 			final double xOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
 			final double zOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
-			final double motionX = xOffset * this.jetStrength / 40.0D;
-			final double motionY = (RANDOM.nextFloat()) * this.jetStrength / 30.0D;
-			final double motionZ = zOffset * this.jetStrength / 40.D;
+			final double motionX = xOffset * (this.jetStrength / 40.0D);
+			final double motionY = 0.1D + RANDOM.nextFloat() * this.jetStrength / 20.0D;
+			final double motionZ = zOffset * (this.jetStrength / 40.D);
 			final Particle particle = new ParticleWaterSpray(this.worldObj, this.posX + xOffset, (double) (this.posY),
 					this.posZ + zOffset, motionX, motionY, motionZ);
 			addParticle(particle);

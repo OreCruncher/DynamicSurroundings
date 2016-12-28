@@ -51,6 +51,7 @@ public abstract class ParticleJet extends ParticleSystem {
 		this.jetStrength = strength;
 		this.updateFrequency = freq;
 		this.particleMaxAge = (RANDOM.nextInt(strength) + 2) * 20;
+		this.particleLimit = (strength * strength * strength);
 	}
 
 	/*
