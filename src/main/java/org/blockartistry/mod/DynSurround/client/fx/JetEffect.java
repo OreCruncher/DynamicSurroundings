@@ -232,7 +232,7 @@ public abstract class JetEffect extends BlockEffect {
 
 			final double y = jetSpawnHeight(state, pos) - (isUnboundedLiquid(world, pos) ? 1 : 0);
 
-			final ParticleJet effect = new ParticleWaterSplash(strength, world, pos.getX() + 0.5D, y + 0.5D,
+			final ParticleJet effect = new ParticleWaterSplash(strength, world, pos.getX() + 0.5D, y,
 					pos.getZ() + 0.5D);
 			addEffect(effect);
 		}

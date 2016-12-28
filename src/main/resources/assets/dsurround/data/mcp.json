@@ -463,7 +463,7 @@
 			"effects":[
 				{
 					"effect":"splash",
-					"chance":15
+					"chance":3
 				}
 				
 			]
