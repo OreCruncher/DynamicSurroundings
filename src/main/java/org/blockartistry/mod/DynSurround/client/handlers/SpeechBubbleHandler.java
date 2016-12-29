@@ -24,6 +24,8 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -34,6 +36,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.events.SpeechTextEvent;
@@ -52,8 +55,10 @@ import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.resources.IResource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -67,9 +72,12 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 
 	private static final int MIN_TEXT_WIDTH = 60;
 	private static final int MAX_TEXT_WIDTH = MIN_TEXT_WIDTH * 3;
+	private static final String SPLASH_TOKEN = "$MINECRAFT$";
+	private static final ResourceLocation SPLASH_TEXT = new ResourceLocation("texts/splashes.txt");
 
 	private final TIntObjectHashMap<EntityBubbleContext> messages = new TIntObjectHashMap<EntityBubbleContext>();
 	private final Translations xlate = new Translations();
+	private final List<String> minecraftSplashText = new ArrayList<String>();
 
 	private static class ExpireFilter implements Predicate<SpeechBubbleData> {
 
@@ -122,7 +130,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		public List<String> getText() {
 			if (this.messages == null) {
 				final FontRenderer font = Minecraft.getMinecraft().getRenderManager().getFontRenderer();
-				if(font == null)
+				if (font == null)
 					return ImmutableList.of();
 				this.messages = font.listFormattedStringToWidth(this.incomingText, MAX_TEXT_WIDTH);
 				this.incomingText = null;
@@ -136,7 +144,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		public ParticleBillboard bubble;
 	}
 
-	private void processTranslations() {
+	private void loadText() {
 		final String[] langs;
 		if (Minecraft.getMinecraft().gameSettings.language.equals(Translations.DEFAULT_LANGUAGE))
 			langs = new String[] { Translations.DEFAULT_LANGUAGE };
@@ -145,11 +153,28 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 
 		this.xlate.load("/assets/dsurround/data/chat/", langs);
 		this.xlate.transform(new Stripper());
+
+		try (final IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(SPLASH_TEXT)) {
+			final BufferedReader bufferedreader = new BufferedReader(
+					new InputStreamReader(resource.getInputStream(), Charsets.UTF_8));
+			String s;
+
+			while ((s = bufferedreader.readLine()) != null) {
+				s = s.trim();
+
+				if (!s.isEmpty()) {
+					this.minecraftSplashText.add(s);
+				}
+			}
+
+		} catch (final Throwable t) {
+			;
+		}
 	}
 
 	public SpeechBubbleHandler() {
 		INSTANCE = this;
-		processTranslations();
+		loadText();
 	}
 
 	private void addSpeechBubbleFormatted(@Nonnull final UUID entityId, @Nonnull final String message,
@@ -157,7 +182,9 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		if (!ModOptions.enableSpeechBubbles && !ModOptions.enableEntityChat)
 			return;
 
-		final String xlated = xlate.format(message, parms);
+		String xlated = this.xlate.format(message, parms);
+		if (SPLASH_TOKEN.equals(xlated))
+			xlated = this.minecraftSplashText.get(RANDOM.nextInt(this.minecraftSplashText.size()));
 		addSpeechBubble(entityId, xlated);
 	}
 

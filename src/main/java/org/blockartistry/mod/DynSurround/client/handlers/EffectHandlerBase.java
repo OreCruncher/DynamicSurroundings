@@ -24,12 +24,15 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers;
 
+import java.util.Random;
+
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
+import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -38,6 +41,9 @@ import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
 public abstract class EffectHandlerBase {
+	
+	// Shared RANDOM with other effect handlers
+	protected static final Random RANDOM = new XorShiftRandom();
 	
 	private BiomeRegistry biomes;
 	private BlockRegistry blocks;

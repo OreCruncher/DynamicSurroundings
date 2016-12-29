@@ -100,12 +100,12 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		SoundManager.queueAmbientSounds(sounds);
 
 		if (doBiomeSounds()) {
-			SoundEffect sound = playerBiome.getSpotSound(EnvironState.RANDOM);
+			SoundEffect sound = playerBiome.getSpotSound(RANDOM);
 			if (sound != null)
 				SoundManager.playSoundAtPlayer(player, sound, SoundCategory.AMBIENT);
 		}
 
-		SoundEffect sound = BiomeRegistry.PLAYER.getSpotSound(EnvironState.RANDOM);
+		SoundEffect sound = BiomeRegistry.PLAYER.getSpotSound(RANDOM);
 		if (sound != null)
 			SoundManager.playSoundAtPlayer(player, sound, SoundCategory.AMBIENT);
 

@@ -19,7 +19,7 @@ chat.villager.0=10,I like living in Dynamic Surroundings.
 chat.villager.1=15,I used to be a miner until I took a creeper to the face.
 chat.villager.2=20,Don't fear the creepers.  Be terrified!
 chat.villager.3=20,Beet soup for dinner.  Again.
-chat.villager.4=10,Villager TV has a decent program on tonight.
+chat.villager.4=10,Villager TV has a decent program on tonight.  It's called Credits.
 chat.villager.5=10,Only one thing you can do about zombies - run!
 chat.villager.6=15,Why doesn't anyone listen to me?
 chat.villager.7=10,Is this really worth the server ticks?
@@ -71,6 +71,11 @@ chat.villager.52=15,Impressive.
 chat.villager.53=15,Any problem can be solved with the suitable application of redstone and pumpkin pie.
 chat.villager.54=10,"First... cut my son's buns!"  That was a funny.
 chat.villager.55=10,Yeah.
+chat.villager.56=15,...and I drank this stuff called Fel Slider Cider.  It was a mistake...
+chat.villager.57=10,The axe forgets; the tree remembers.
+chat.villager.58=15,Never dig straight down.
+chat.villager.59,10,Don't Panic.
+chat.villager.60=5,More cow bell!
 
 chat.villager.flee.0=20,Run away! Run away!
 chat.villager.flee.1=20,!!! HELP !!!
@@ -89,6 +94,8 @@ chat.villager.flee.13=10,Wow, these fellas really let themselves go.
 chat.villager.flee.14=15,It seems I was doing this very thing yesterday.
 chat.villager.flee.15=5,And that's our cue to ski-doo!
 chat.villager.flee.16=10,Exit! Stage left!
+chat.villager.flee.17=10,You figure this village would have had walls by now.
+chat.villager.flee.18=10,Somebody set up us the bomb!
 
 chat.zombie.0=25,BBBBBRRRRRAAAAAIIIIIINNNNNNSSSS!
 chat.zombie.1=20,Grrrrrr
@@ -98,7 +105,20 @@ chat.zombie.4=10,Anyone have a throat lozenge?
 chat.zombie.5=10,** Sigh **
 chat.zombie.6=5,Stay away from the light!
 chat.zombie.7=10,Can't resist! Must...chase...villager!
+chat.zombie.8=15,My arms are getting tired.
+chat.zombie.9=10,Oh no!  Not again!
+chat.zombie.10=5,All your base are belong to us
 
-chat.squid.0=20,Derp!
-chat.squid.1=20,Herp a Derp!
-chat.squid.2=5,Just keep swimming!
+chat.skeleton.0=10,The short fortune teller who escaped from prison was a small medium at large…
+chat.skeleton.1=10,I don't know where I keep my arrows.  It's a mystery, like villagers having no hands.
+chat.skeleton.2=15,It's not like I had a choice or anything.
+chat.skeleton.3=5,What? You expected intelligent conversation?
+chat.skeleton.4=15,I just got lost in thought. It was unfamiliar territory.
+chat.skeleton.5=15,If everything seems to be going well, you have obviously overlooked something.
+chat.skeleton.6=15,I was trying to daydream, but my mind kept wandering.
+chat.skeleton.7=10,Whoever said nothing was impossible obviously never tried slamming a revolving door.
+chat.skeleton.8=10,Knowledge is realizing that the street is one-way, wisdom is looking both directions anyway.
+chat.skeleton.9=10,You keep using that word.  I don't think it means what you think it means.
+
+# Special token for using splash screen sayings - don't translate!
+chat.squid.0=20,$MINECRAFT$

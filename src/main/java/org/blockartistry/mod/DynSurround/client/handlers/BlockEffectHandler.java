@@ -25,14 +25,10 @@
 package org.blockartistry.mod.DynSurround.client.handlers;
 
 import java.util.List;
-import java.util.Random;
-
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -49,7 +45,6 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class BlockEffectHandler extends EffectHandlerBase {
 
-	private static final Random RANDOM = new XorShiftRandom();
 	private static final double RATIO = 0.0335671847202175D;
 
 	private int randomRange(final int range) {

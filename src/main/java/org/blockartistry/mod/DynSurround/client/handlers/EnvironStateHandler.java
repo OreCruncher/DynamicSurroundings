@@ -26,7 +26,6 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
@@ -45,8 +44,6 @@ import org.blockartistry.mod.DynSurround.registry.SeasonRegistry;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo.TemperatureRating;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo.SeasonType;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityBoat;
@@ -118,8 +115,6 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	}
 
 	public static class EnvironState {
-
-		public static final Random RANDOM = new XorShiftRandom();
 
 		// State that is gathered from the various sources
 		// to avoid requery. Used during the tick.
