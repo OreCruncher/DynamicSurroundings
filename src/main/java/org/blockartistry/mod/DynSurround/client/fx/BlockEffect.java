@@ -25,6 +25,9 @@ package org.blockartistry.mod.DynSurround.client.fx;
 
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.mod.DynSurround.api.events.BlockEffectEvent;
 import org.blockartistry.mod.DynSurround.registry.Evaluator;
@@ -46,20 +49,22 @@ public abstract class BlockEffect {
 		this(100);
 	}
 
-	public BlockEffect(final int chance) {
+	protected BlockEffect(final int chance) {
 		this.chance = chance;
 	}
-	
+
+	@Nonnull
 	public abstract BlockEffectType getEffectType();
 
-	public void setConditions(final String conditions) {
-		this.conditions = conditions;
+	public void setConditions(@Nullable final String conditions) {
+		this.conditions = conditions == null ? ".*" : conditions;
 	}
-	
+
+	@Nonnull
 	public String getConditions() {
 		return this.conditions;
 	}
-	
+
 	public void setChance(final int chance) {
 		this.chance = chance;
 	}
@@ -68,26 +73,32 @@ public abstract class BlockEffect {
 		return this.chance;
 	}
 
-	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		if(Evaluator.check(this.conditions) && random.nextInt(getChance()) == 0) {
-			final BlockEffectEvent event = new BlockEffectEvent(world, this.getEffectType(), pos);
+	public boolean trigger(@Nonnull final IBlockState state, @Nonnull final World world, @Nonnull final BlockPos pos,
+			@Nonnull final Random random) {
+		if (random.nextInt(getChance()) == 0 && Evaluator.check(getConditions())) {
+			final BlockEffectEvent event = new BlockEffectEvent(world, getEffectType(), pos);
 			return !MinecraftForge.EVENT_BUS.post(event);
 		}
-		
+
 		return false;
 	}
 
-	public abstract void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random);
+	public abstract void doEffect(@Nonnull final IBlockState state, @Nonnull final World world,
+			@Nonnull final BlockPos pos, @Nonnull final Random random);
 
-	public void process(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+	public void process(@Nonnull final IBlockState state, @Nonnull final World world, @Nonnull final BlockPos pos,
+			@Nonnull final Random random) {
 		if (trigger(state, world, pos, random))
 			doEffect(state, world, pos, random);
 	}
 
 	@Override
+	@Nonnull
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append("chance:").append(this.chance);
+		builder.append("type: ").append(getEffectType().getName());
+		builder.append(" conditions: [").append(getConditions()).append(']');
+		builder.append("; chance:").append(getChance());
 		builder.append(' ').append(this.getClass().getSimpleName());
 		return builder.toString();
 	}

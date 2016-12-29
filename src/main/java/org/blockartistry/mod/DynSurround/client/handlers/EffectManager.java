@@ -51,7 +51,10 @@ public class EffectManager {
 	}
 	
 	private void init() {
+		// These two first in this order
 		this.effectHandlers.add(new EnvironStateHandler());
+		this.effectHandlers.add(new ExpressionStateHandler());
+		
 		this.effectHandlers.add(new AreaSurveyHandler());
 		this.effectHandlers.add(new FogEffectHandler());
 		this.effectHandlers.add(new BlockEffectHandler());

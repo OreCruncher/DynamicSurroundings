@@ -41,18 +41,21 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	private static final int INSIDE_AREA = (INSIDE_SURVEY_RANGE * 2 + 1) * (INSIDE_SURVEY_RANGE * 2 + 1);
 
 	// Used to throttle processing
-	private final int SURVEY_INTERVAL = 2;
+	private static final int SURVEY_INTERVAL = 2;
 	private int intervalTicker = SURVEY_INTERVAL;
 	
 	private static int biomeArea;
 	private static final TObjectIntHashMap<BiomeInfo> weights = new TObjectIntHashMap<BiomeInfo>();
+	private static final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
 	// "Finger print" of the last area survey.
 	private static BiomeInfo surveyedBiome = null;
 	private static int surveyedDimension = 0;
 	private static BlockPos surveyedPosition = BlockPos.ORIGIN;
 
+	private static final float INSIDE_THRESHOLD = 0.42F;
 	private static float ceilingCoverageRatio = 0.0F;
+	private static boolean reallyInside = false;
 
 	public static int getBiomeArea() {
 		return biomeArea;
@@ -63,7 +66,7 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	}
 
 	public static boolean isReallyInside() {
-		return ceilingCoverageRatio > 0.42F;
+		return reallyInside;
 	}
 
 	public static TObjectIntHashMap<BiomeInfo> getBiomes() {
@@ -73,17 +76,17 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	private static void doCeilingCoverageRatio() {
 		final World world = EnvironState.getWorld();
 		final BlockPos position = EnvironState.getPlayerPosition();
-		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		final int targetY = position.getY();
 		int seeSky = 0;
 		for (int x = -INSIDE_SURVEY_RANGE; x <= INSIDE_SURVEY_RANGE; x++)
 			for (int z = -INSIDE_SURVEY_RANGE; z <= INSIDE_SURVEY_RANGE; z++) {
-				pos.setPos(x + position.getX(), 0, z + position.getZ());
-				final int y = world.getTopSolidOrLiquidBlock(pos).getY();
+				mutable.setPos(x + position.getX(), 0, z + position.getZ());
+				final int y = world.getTopSolidOrLiquidBlock(mutable).getY();
 				if ((y - targetY) < 3)
 					++seeSky;
 			}
 		ceilingCoverageRatio = 1.0F - ((float) seeSky / INSIDE_AREA);
+		reallyInside = ceilingCoverageRatio > INSIDE_THRESHOLD;
 	}
 
 	/*
@@ -97,15 +100,14 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 			biomeArea = 1;
 			weights.put(EnvironState.getPlayerBiome(), 1);
 		} else {
-			final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 			final int x = surveyedPosition.getX();
 			final int z = surveyedPosition.getZ();
 
 			for (int dX = -BIOME_SURVEY_RANGE; dX <= BIOME_SURVEY_RANGE; dX++)
 				for (int dZ = -BIOME_SURVEY_RANGE; dZ <= BIOME_SURVEY_RANGE; dZ++) {
 					biomeArea++;
-					pos.setPos(x + dX, 0, z + dZ);
-					final BiomeInfo biome = getBiomeRegistry().get(EnvironState.getWorld().getBiome(pos));
+					mutable.setPos(x + dX, 0, z + dZ);
+					final BiomeInfo biome = getBiomeRegistry().get(EnvironState.getWorld().getBiome(mutable));
 					weights.adjustOrPutValue(biome, 1, 1);
 				}
 		}
@@ -142,5 +144,6 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	@Override
 	public void onConnect() {
 		intervalTicker = SURVEY_INTERVAL;
+		weights.clear();
 	}
 }
