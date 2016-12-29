@@ -32,6 +32,8 @@ public final class EffectConfig {
 	
 	@SerializedName("effect")
 	public String effect = null;
+	@SerializedName("conditions")
+	public String conditions = null;
 	@SerializedName("chance")
 	public Integer chance = null;
 	
@@ -52,6 +54,12 @@ public final class EffectConfig {
 	@Nonnull
 	public EffectConfig setEffectChance(final int chance) {
 		this.chance = chance;
+		return this;
+	}
+	
+	@Nonnull
+	public EffectConfig setCondition(final String condition) {
+		this.conditions = condition;
 		return this;
 	}
 }

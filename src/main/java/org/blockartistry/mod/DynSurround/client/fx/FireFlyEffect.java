@@ -28,13 +28,9 @@ import java.util.Random;
 
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFireFly;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
-import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -47,20 +43,7 @@ public class FireFlyEffect extends BlockEffect {
 
 	@Override
 	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-
-		if (world.isRaining() || !DiurnalUtils.isNighttime(world))
-			return false;
-
-		if (!super.trigger(state, world, pos, random))
-			return false;
-
-		final Biome blockBiome = world.getBiome(pos);
-		if (blockBiome.isSnowyBiome() || blockBiome.getRainfall() < 0.4F)
-			return false;
-
-		final TempCategory temp = blockBiome.getTempCategory();
-
-		return (temp == TempCategory.MEDIUM || temp == TempCategory.WARM);
+		return super.trigger(state, world, pos, random);
 	}
 
 	@Override

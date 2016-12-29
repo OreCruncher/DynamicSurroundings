@@ -237,24 +237,6 @@ public class Evaluator {
 				return new Variant(EnvironState.getPlayer().getFoodStats().getFoodLevel());
 			}
 		});
-		Expression.addBuiltInVariable("isFoggy", new Expression.LazyVariant() {
-			@Override
-			public Variant eval() {
-				return EnvironState.isFoggy() ? Expression.ONE : Expression.ZERO;
-			}
-		});
-		Expression.addBuiltInVariable("isHumid", new Expression.LazyVariant() {
-			@Override
-			public Variant eval() {
-				return EnvironState.isHumid() ? Expression.ONE : Expression.ZERO;
-			}
-		});
-		Expression.addBuiltInVariable("isDry", new Expression.LazyVariant() {
-			@Override
-			public Variant eval() {
-				return EnvironState.isDry() ? Expression.ONE : Expression.ZERO;
-			}
-		});
 		Expression.addBuiltInVariable("isAuroraVisible", new Expression.LazyVariant() {
 			@Override
 			public Variant eval() {
@@ -285,7 +267,24 @@ public class Evaluator {
 				return new Variant(EnvironState.getBiomeTemperature().getValue());
 			}
 		});
-		
+		Expression.addBuiltInVariable("biome.isFoggy", new Expression.LazyVariant() {
+			@Override
+			public Variant eval() {
+				return EnvironState.isFoggy() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("biome.isHumid", new Expression.LazyVariant() {
+			@Override
+			public Variant eval() {
+				return EnvironState.isHumid() ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		Expression.addBuiltInVariable("biome.isDry", new Expression.LazyVariant() {
+			@Override
+			public Variant eval() {
+				return EnvironState.isDry() ? Expression.ONE : Expression.ZERO;
+			}
+		});
 	}
 
 	private static final List<String> naughtyList = new ArrayList<String>();

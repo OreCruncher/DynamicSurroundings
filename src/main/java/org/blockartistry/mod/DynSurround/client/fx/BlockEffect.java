@@ -25,6 +25,8 @@ package org.blockartistry.mod.DynSurround.client.fx;
 
 import java.util.Random;
 
+import org.blockartistry.mod.DynSurround.registry.Evaluator;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -35,6 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class BlockEffect {
 
 	private int chance;
+	protected String conditions = ".*";
 
 	public BlockEffect() {
 		this(100);
@@ -44,6 +47,14 @@ public abstract class BlockEffect {
 		this.chance = chance;
 	}
 
+	public void setConditions(final String conditions) {
+		this.conditions = conditions;
+	}
+	
+	public String getConditions() {
+		return this.conditions;
+	}
+	
 	public void setChance(final int chance) {
 		this.chance = chance;
 	}
@@ -53,7 +64,7 @@ public abstract class BlockEffect {
 	}
 
 	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		return random.nextInt(getChance()) == 0;
+		return Evaluator.check(this.conditions) && random.nextInt(getChance()) == 0;
 	}
 
 	public abstract void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random);

@@ -98,6 +98,20 @@ public final class BlockRegistry extends Registry {
 		final BlockProfile entry = this.registry.get(state.getBlock());
 		return entry != null ? entry.getEffects(state) : null;
 	}
+	
+	@Nullable
+	public List<BlockEffect> findEffectMatches(@Nonnull final IBlockState state) {
+		final List<BlockEffect> effects = getEffects(state);
+		if(effects == null)
+			return null;
+		
+		final List<BlockEffect> results = new ArrayList<BlockEffect>();
+		for(final BlockEffect e: effects)
+			if(Evaluator.check(e.getConditions()))
+				results.add(e);
+		
+		return results;
+	}
 
 	@Nonnull
 	private SoundEffect getRandomSound(@Nonnull final List<SoundEffect> list, @Nonnull final Random random) {
@@ -232,6 +246,9 @@ public final class BlockRegistry extends Registry {
 					ModLog.warn("Unknown effect type in config: '%s'", e.effect);
 					continue;
 				}
+				
+				if(e.conditions != null)
+					blockEffect.setConditions(e.conditions);
 
 				blockData.addEffect(blockInfo, blockEffect);
 			}

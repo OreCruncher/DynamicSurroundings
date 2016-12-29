@@ -55,7 +55,7 @@ public class BlockEffectHandler extends EffectHandlerBase {
 	private int randomRange(final int range) {
 		return RANDOM.nextInt(range) - RANDOM.nextInt(range);
 	}
-	
+
 	@Override
 	public String getHandlerName() {
 		return "BlockEffectHandler";
@@ -77,7 +77,7 @@ public class BlockEffectHandler extends EffectHandlerBase {
 			if (state.getMaterial() == Material.AIR)
 				continue;
 
-			final List<BlockEffect> chain = getBlockRegistry().getEffects(state);
+			final List<BlockEffect> chain = getBlockRegistry().findEffectMatches(state);
 
 			if (chain != null) {
 				for (final BlockEffect effect : chain)
