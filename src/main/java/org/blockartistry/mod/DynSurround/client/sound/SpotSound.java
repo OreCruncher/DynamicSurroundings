@@ -24,12 +24,15 @@
 
 package org.blockartistry.mod.DynSurround.client.sound;
 
+import java.util.Random;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
+import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,6 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SpotSound extends PositionedSound {
 
+	private static final Random RANDOM = new XorShiftRandom();
 	private static final int SPOT_SOUND_RANGE = 6;
 
 	private final SoundEffect sound;
@@ -52,7 +56,7 @@ public class SpotSound extends PositionedSound {
 
 		this.sound = sound;
 		this.volume = sound.volume;
-		this.pitch = sound.getPitch(EnvironState.RANDOM);
+		this.pitch = sound.getPitch(RANDOM);
 		this.repeat = false;
 		this.repeatDelay = 0;
 
@@ -64,7 +68,7 @@ public class SpotSound extends PositionedSound {
 	}
 
 	private static int randomRange(final int range) {
-		return EnvironState.RANDOM.nextInt(range) - EnvironState.RANDOM.nextInt(range);
+		return RANDOM.nextInt(range) - RANDOM.nextInt(range);
 	}
 
 	public SpotSound(@Nonnull final EntityPlayer player, @Nonnull final SoundEffect sound,
@@ -73,7 +77,7 @@ public class SpotSound extends PositionedSound {
 
 		this.sound = sound;
 		this.volume = sound.volume;
-		this.pitch = sound.getPitch(EnvironState.RANDOM);
+		this.pitch = sound.getPitch(RANDOM);
 		this.repeat = false;
 		this.repeatDelay = 0;
 
