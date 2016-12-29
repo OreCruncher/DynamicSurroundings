@@ -69,7 +69,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_AURORA, ModOptions.CONFIG_AURORA_ENABLED,
 				"Aurora Feature"));
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_FOG, ModOptions.CONFIG_ALLOW_DESERT_FOG,
-				"Desert Dust Feature"));
+				"Desert DustJetEffect Feature"));
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_FOG,
 				ModOptions.CONFIG_ENABLE_ELEVATION_HAZE, "Elevation Haze Feature"));
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_FOG, ModOptions.CONFIG_ENABLE_BIOME_FOG,

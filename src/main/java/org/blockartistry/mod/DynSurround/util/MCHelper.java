@@ -66,7 +66,7 @@ public final class MCHelper {
 		materialMap.put(Material.CORAL, "Coral");
 		materialMap.put(Material.CRAFTED_SNOW, "Crafted Snow");
 		materialMap.put(Material.DRAGON_EGG, "Dragon Egg");
-		materialMap.put(Material.FIRE, "Fire");
+		materialMap.put(Material.FIRE, "FireJetEffect");
 		materialMap.put(Material.GLASS, "Glass");
 		materialMap.put(Material.GOURD, "Gourd");
 		materialMap.put(Material.GRASS, "Grass");

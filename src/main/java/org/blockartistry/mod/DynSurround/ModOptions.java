@@ -67,7 +67,7 @@ public final class ModOptions {
 	public static final String CATEGORY_RAIN = "rain";
 	public static final String CONFIG_RAIN_VOLUME = "Sound Level";
 	public static final String CONFIG_RAIN_PARTICLE_BASE = "Particle Count Base";
-	public static final String CONFIG_ALLOW_DESERT_DUST = "Desert Dust";
+	public static final String CONFIG_ALLOW_DESERT_DUST = "Desert DustJetEffect";
 	public static final String CONFIG_RESET_RAIN_ON_SLEEP = "Reset Rain on Sleep";
 	public static final String CONFIG_RAIN_ACTIVE_TIME_CONST = "Active duration of rain, constant";
 	public static final String CONFIG_RAIN_ACTIVE_TIME_VARIABLE = "Active duration of rain, variable";
@@ -242,10 +242,10 @@ public final class ModOptions {
 
 	public static final String CATEGORY_BLOCK_EFFECTS = "block.effects";
 	public static final String CONFIG_BLOCK_EFFECT_STEAM = "Enable Steam";
-	public static final String CONFIG_BLOCK_EFFECT_FIRE = "Enable Fire Jets";
+	public static final String CONFIG_BLOCK_EFFECT_FIRE = "Enable FireJetEffect Jets";
 	public static final String CONFIG_BLOCK_EFFECT_BUBBLE = "Enable Bubbles";
-	public static final String CONFIG_BLOCK_EFFECT_DUST = "Enable Dust Motes";
-	public static final String CONFIG_BLOCK_EFFECT_FOUNTAIN = "Enable Fountain";
+	public static final String CONFIG_BLOCK_EFFECT_DUST = "Enable DustJetEffect Motes";
+	public static final String CONFIG_BLOCK_EFFECT_FOUNTAIN = "Enable FountainJetEffect";
 	public static final String CONFIG_BLOCK_EFFECT_FIREFLY = "Enable Fireflies";
 	public static final String CONFIG_BLOCK_EFFECT_SPLASH = "Enable Water Splash";
 	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_STEAM, defaultValue = "true")
@@ -253,19 +253,19 @@ public final class ModOptions {
 	@RestartRequired
 	public static boolean enableSteamJets = true;
 	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_FIRE, defaultValue = "true")
-	@Comment("Enable Fire Jets in lava")
+	@Comment("Enable FireJetEffect Jets in lava")
 	@RestartRequired
 	public static boolean enableFireJets = true;
 	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_BUBBLE, defaultValue = "true")
-	@Comment("Enable Bubble Jets under water")
+	@Comment("Enable BubbleJetEffect Jets under water")
 	@RestartRequired
 	public static boolean enableBubbleJets = true;
 	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_DUST, defaultValue = "true")
-	@Comment("Enable Dust motes dropping from blocks")
+	@Comment("Enable DustJetEffect motes dropping from blocks")
 	@RestartRequired
 	public static boolean enableDustJets = true;
 	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_FOUNTAIN, defaultValue = "true")
-	@Comment("Enable Fountain jets")
+	@Comment("Enable FountainJetEffect jets")
 	@RestartRequired
 	public static boolean enableFountainJets = true;
 	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_FIREFLY, defaultValue = "true")
@@ -446,7 +446,7 @@ public final class ModOptions {
 	public static float speechBubbleDuration = 7.0F;
 	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_SPEECHBUBBLE_RANGE, defaultValue = "32")
 	@MinMaxInt(min = 16, max = 64)
-	@Comment("Range at which a Speech Bubble is visibile.  Filtering occurs server side.")
+	@Comment("Range at which a Speech BubbleJetEffect is visibile.  Filtering occurs server side.")
 	@RestartRequired
 	public static float speechBubbleRange = 32;
 

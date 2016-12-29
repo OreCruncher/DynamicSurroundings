@@ -27,51 +27,47 @@ package org.blockartistry.mod.DynSurround.client.fx;
 import java.util.Random;
 
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
-import org.blockartistry.mod.DynSurround.client.handlers.ParticleSystemHandler;
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleSteamJet;
 
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public abstract class JetEffect extends BlockEffect {
+public class SteamJetEffect extends JetEffect {
 
-	protected static final int MAX_STRENGTH = 10;
-
-	protected static final BlockPos.MutableBlockPos pos1 = new BlockPos.MutableBlockPos();
-
-	protected static int countBlocks(final World world, final BlockPos pos, final IBlockState state, final int dir) {
-		int count = 0;
-		int idx = pos.getY();
-		while (count < MAX_STRENGTH) {
-			if (world.getBlockState(pos1.setPos(pos.getX(), idx, pos.getZ())).getBlock() != state.getBlock())
-				return count;
-			count++;
-			idx += dir;
-		}
-		return count;
-	}
-
-	// Takes into account partial blocks because of flow
-	protected static double jetSpawnHeight(final IBlockState state, final BlockPos pos) {
-		final int meta = state.getBlock().getMetaFromState(state);
-		return 1.1D - BlockLiquid.getLiquidHeightPercent(meta) + pos.getY();
-	}
-
-	public JetEffect(final int chance) {
+	public SteamJetEffect(final int chance) {
 		super(chance);
 	}
 
-	protected void addEffect(final ParticleJet fx) {
-		ParticleSystemHandler.INSTANCE.addSystem(fx);
+	protected int lavaCount(final World world, final BlockPos pos) {
+		int blockCount = 0;
+		for (int i = -1; i <= 1; i++)
+			for (int j = -1; j <= 1; j++)
+				for (int k = -1; k <= 1; k++) {
+					if (world.getBlockState(pos.add(i, j, k)).getBlock() == Blocks.LAVA)
+						blockCount++;
+				}
+		return blockCount;
 	}
 
 	@Override
 	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		return ParticleSystemHandler.INSTANCE.okToSpawn(pos) && super.trigger(state, world, pos, random);
+		if (!super.trigger(state, world, pos, random) || !world.isAirBlock(pos.up()))
+			return false;
+
+		return lavaCount(world, pos) != 0;
 	}
 
+	@Override
+	public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+		final int strength = lavaCount(world, pos);
+		final double spawnHeight = jetSpawnHeight(state, pos);
+		final ParticleJet effect = new ParticleSteamJet(strength, world, pos.getX() + 0.5D, spawnHeight,
+				pos.getZ() + 0.5D);
+		addEffect(effect);
+	}
 }

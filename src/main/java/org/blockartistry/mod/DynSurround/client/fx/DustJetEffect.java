@@ -26,10 +26,9 @@ package org.blockartistry.mod.DynSurround.client.fx;
 
 import java.util.Random;
 
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDustJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
-import org.blockartistry.mod.DynSurround.client.handlers.ParticleSystemHandler;
 
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -37,41 +36,21 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public abstract class JetEffect extends BlockEffect {
+public class DustJetEffect extends JetEffect {
 
-	protected static final int MAX_STRENGTH = 10;
-
-	protected static final BlockPos.MutableBlockPos pos1 = new BlockPos.MutableBlockPos();
-
-	protected static int countBlocks(final World world, final BlockPos pos, final IBlockState state, final int dir) {
-		int count = 0;
-		int idx = pos.getY();
-		while (count < MAX_STRENGTH) {
-			if (world.getBlockState(pos1.setPos(pos.getX(), idx, pos.getZ())).getBlock() != state.getBlock())
-				return count;
-			count++;
-			idx += dir;
-		}
-		return count;
-	}
-
-	// Takes into account partial blocks because of flow
-	protected static double jetSpawnHeight(final IBlockState state, final BlockPos pos) {
-		final int meta = state.getBlock().getMetaFromState(state);
-		return 1.1D - BlockLiquid.getLiquidHeightPercent(meta) + pos.getY();
-	}
-
-	public JetEffect(final int chance) {
+	public DustJetEffect(final int chance) {
 		super(chance);
-	}
-
-	protected void addEffect(final ParticleJet fx) {
-		ParticleSystemHandler.INSTANCE.addSystem(fx);
 	}
 
 	@Override
 	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		return ParticleSystemHandler.INSTANCE.okToSpawn(pos) && super.trigger(state, world, pos, random);
+		return super.trigger(state, world, pos, random) && world.isAirBlock(pos.down());
 	}
 
+	@Override
+	public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+		final ParticleJet effect = new ParticleDustJet(2, world, pos.getX() + 0.5D, pos.getY() - 0.2D,
+				pos.getZ() + 0.5D, state);
+		addEffect(effect);
+	}
 }

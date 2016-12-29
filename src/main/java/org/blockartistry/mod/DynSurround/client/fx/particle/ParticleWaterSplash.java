@@ -25,7 +25,7 @@
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import org.blockartistry.mod.DynSurround.DSurround;
-import org.blockartistry.mod.DynSurround.client.fx.JetEffect;
+import org.blockartistry.mod.DynSurround.client.fx.WaterSplashJetEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 
@@ -80,7 +80,7 @@ public class ParticleWaterSplash extends ParticleJet {
 
 	@Override
 	public boolean shouldDie() {
-		return !JetEffect.WaterSplash.isValidSpawnBlock(this.worldObj, this.getPos());
+		return !WaterSplashJetEffect.isValidSpawnBlock(this.worldObj, this.getPos());
 	}
 
 	// Entity.resetHeight()
