@@ -29,6 +29,8 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
+import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
+import org.blockartistry.mod.DynSurround.api.events.BlockEffectEvent;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleSystem;
 
@@ -39,6 +41,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ParticleSystemHandler extends EffectHandlerBase {
 
@@ -87,19 +91,21 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 		this.systems.clear();
 	}
 
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void onBlockEffectEvent(@Nonnull final BlockEffectEvent event) {
+		if (event.effect == BlockEffectType.SPLASH_JET && !okToSpawn(event.location))
+			event.setCanceled(true);
+	}
+
 	// Determines if it is OK to spawn a particle system at the specified
 	// location. Generally only a single system can occupy a block.
 	public boolean okToSpawn(@Nonnull final BlockPos pos) {
-		return !this.systems.containsKey(pos);
+		return !(this.systems.containsKey(pos) || this.systems.containsKey(pos.up()));
 	}
 
 	public void addSystem(@Nonnull final ParticleSystem system) {
 		final BlockPos pos = system.getPos();
 		if (!okToSpawn(pos)) {
-			// TODO: Best to not even get here...This is because
-			// the trigger looks at one block when the partcile
-			// spawns above.
-			//ModLog.warn("More than one system in a block");
 			return;
 		}
 		this.systems.put(pos, system);

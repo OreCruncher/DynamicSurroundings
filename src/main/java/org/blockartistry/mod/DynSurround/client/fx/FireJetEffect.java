@@ -26,6 +26,9 @@ package org.blockartistry.mod.DynSurround.client.fx;
 
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+
+import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFireJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
 
@@ -40,6 +43,12 @@ public class FireJetEffect extends JetEffect {
 
 	public FireJetEffect(final int chance) {
 		super(chance);
+	}
+
+	@Override
+	@Nonnull
+	public BlockEffectType getEffectType() {
+		return BlockEffectType.FIRE_JET;
 	}
 
 	@Override

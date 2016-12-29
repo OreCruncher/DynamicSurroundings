@@ -25,11 +25,14 @@ package org.blockartistry.mod.DynSurround.client.fx;
 
 import java.util.Random;
 
+import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
+import org.blockartistry.mod.DynSurround.api.events.BlockEffectEvent;
 import org.blockartistry.mod.DynSurround.registry.Evaluator;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -46,6 +49,8 @@ public abstract class BlockEffect {
 	public BlockEffect(final int chance) {
 		this.chance = chance;
 	}
+	
+	public abstract BlockEffectType getEffectType();
 
 	public void setConditions(final String conditions) {
 		this.conditions = conditions;
@@ -64,7 +69,12 @@ public abstract class BlockEffect {
 	}
 
 	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		return Evaluator.check(this.conditions) && random.nextInt(getChance()) == 0;
+		if(Evaluator.check(this.conditions) && random.nextInt(getChance()) == 0) {
+			final BlockEffectEvent event = new BlockEffectEvent(world, this.getEffectType(), pos);
+			return !MinecraftForge.EVENT_BUS.post(event);
+		}
+		
+		return false;
 	}
 
 	public abstract void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random);

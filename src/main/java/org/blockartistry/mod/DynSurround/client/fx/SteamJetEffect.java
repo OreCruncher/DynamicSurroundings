@@ -26,6 +26,9 @@ package org.blockartistry.mod.DynSurround.client.fx;
 
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+
+import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleSteamJet;
 
@@ -52,6 +55,12 @@ public class SteamJetEffect extends JetEffect {
 						blockCount++;
 				}
 		return blockCount;
+	}
+
+	@Override
+	@Nonnull
+	public BlockEffectType getEffectType() {
+		return BlockEffectType.STEAM_JET;
 	}
 
 	@Override

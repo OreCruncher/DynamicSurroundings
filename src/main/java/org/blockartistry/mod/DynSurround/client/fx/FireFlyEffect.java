@@ -26,6 +26,9 @@ package org.blockartistry.mod.DynSurround.client.fx;
 
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+
+import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFireFly;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import net.minecraft.block.state.IBlockState;
@@ -39,6 +42,12 @@ public class FireFlyEffect extends BlockEffect {
 
 	public FireFlyEffect(int chance) {
 		super(chance);
+	}
+
+	@Override
+	@Nonnull
+	public BlockEffectType getEffectType() {
+		return BlockEffectType.FIREFLY;
 	}
 
 	@Override

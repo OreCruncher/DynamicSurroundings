@@ -26,6 +26,9 @@ package org.blockartistry.mod.DynSurround.client.fx;
 
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+
+import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleBubbleJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
 
@@ -43,6 +46,12 @@ public class BubbleJetEffect extends JetEffect {
 	}
 
 	@Override
+	@Nonnull
+	public BlockEffectType getEffectType() {
+		return BlockEffectType.BUBBLE_JET;
+	}
+
+	@Override
 	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
 		return super.trigger(state, world, pos, random) && world.getBlockState(pos.down()).getMaterial().isSolid();
 	}
@@ -54,4 +63,5 @@ public class BubbleJetEffect extends JetEffect {
 				pos.getZ() + 0.5D);
 		addEffect(effect);
 	}
+
 }

@@ -26,6 +26,8 @@ package org.blockartistry.mod.DynSurround.data.xface;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
+
 import com.google.gson.annotations.SerializedName;
 
 public final class EffectConfig {
@@ -41,12 +43,12 @@ public final class EffectConfig {
 		
 	}
 	
-	public EffectConfig(@Nonnull final EffectType type) {
+	public EffectConfig(@Nonnull final BlockEffectType type) {
 		this.setEffectType(type);
 	}
 	
 	@Nonnull
-	public EffectConfig setEffectType(@Nonnull final EffectType type) {
+	public EffectConfig setEffectType(@Nonnull final BlockEffectType type) {
 		this.effect = type.getName();
 		return this;
 	}

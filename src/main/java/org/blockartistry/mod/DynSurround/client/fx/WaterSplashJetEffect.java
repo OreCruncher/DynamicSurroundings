@@ -26,6 +26,9 @@ package org.blockartistry.mod.DynSurround.client.fx;
 
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+
+import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleWaterSplash;
 
@@ -45,6 +48,13 @@ public class WaterSplashJetEffect extends JetEffect {
 	public WaterSplashJetEffect(final int chance) {
 		super(chance);
 	}
+
+	@Override
+	@Nonnull
+	public BlockEffectType getEffectType() {
+		return BlockEffectType.SPLASH_JET;
+	}
+
 
 	private static boolean isLiquidBlock(final Block block) {
 		return BlockLiquid.class.isAssignableFrom(block.getClass());

@@ -22,45 +22,42 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.fx;
-
-import java.util.Random;
+package org.blockartistry.mod.DynSurround.api.effects;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFountainJet;
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
+/**
+ * Describes the various types of block effects that can be generated.
+ */
+public enum BlockEffectType {
+	
+	/**
+	 * Not used currently
+	 */
+	SOUND("sound"),
+	
+	/**
+	 * Firefly mote effect
+	 */
+	FIREFLY("firefly"),
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+	/**
+	 * Various jet like particle effects
+	 */
+	STEAM_JET("steam"),
+	FIRE_JET("fire"),
+	BUBBLE_JET("bubble"),
+	DUST_JET("dust"),
+	FOUNTAIN_JET("fountain"),
+	SPLASH_JET("splash");
 
-@SideOnly(Side.CLIENT)
-public class FountainJetEffect extends JetEffect {
-
-	public FountainJetEffect(final int chance) {
-		super(chance);
+	protected final String name;
+	private BlockEffectType(@Nonnull final String name) {
+		this.name = name;
 	}
-
-	@Override
+	
 	@Nonnull
-	public BlockEffectType getEffectType() {
-		return BlockEffectType.FOUNTAIN_JET;
+	public String getName() {
+		return this.name;
 	}
-
-	@Override
-	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		return super.trigger(state, world, pos, random) && world.isAirBlock(pos.up());
-	}
-
-	@Override
-	public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		final ParticleJet effect = new ParticleFountainJet(5, world, pos.getX() + 0.5D, pos.getY() + 1.1D,
-				pos.getZ() + 0.5D, state);
-		addEffect(effect);
-	}
-
 }

@@ -81,7 +81,7 @@ public abstract class EffectHandlerBase {
 	//  DO NOT HOOK THESE EVENTS!
 	//
 	//////////////////////////////
-	public void connect0() {
+	final void connect0() {
 		this.biomes = RegistryManager.get(RegistryType.BIOME);
 		this.blocks = RegistryManager.get(RegistryType.BLOCK);
 		this.dimensions = RegistryManager.get(RegistryType.DIMENSION);
@@ -89,7 +89,7 @@ public abstract class EffectHandlerBase {
 		this.onConnect();
 	}
 	
-	public void disconnect0() {
+	final void disconnect0() {
 		this.onDisconnect();
 		this.biomes = null;
 		this.blocks = null;
