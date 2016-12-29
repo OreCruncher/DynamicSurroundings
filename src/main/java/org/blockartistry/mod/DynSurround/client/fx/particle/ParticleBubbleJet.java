@@ -45,7 +45,7 @@ public class ParticleBubbleJet extends ParticleJet {
 
 	@Override
 	protected void spawnJetParticle() {
-		final Particle particle = this.factory.createParticle(EnumParticleTypes.WATER_BUBBLE.getParticleID(), this.worldObj, this.posX, this.posY, this.posZ, 0D, 0D, 0.5D + this.jetStrength / 10.0D);
+		final Particle particle = this.factory.createParticle(EnumParticleTypes.WATER_BUBBLE.getParticleID(), this.worldObj, this.posX, this.posY, this.posZ, 0D, 0.5D + this.jetStrength / 10.0D, 0D);
 		addParticle(particle);
 	}
 
