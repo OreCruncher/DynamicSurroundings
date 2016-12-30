@@ -31,8 +31,6 @@ import java.util.UUID;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.events.WeatherUpdateEvent;
 import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
-import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
@@ -52,60 +50,16 @@ import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemAxe;
-import net.minecraft.item.ItemBow;
-import net.minecraft.item.ItemFishingRod;
-import net.minecraft.item.ItemHoe;
-import net.minecraft.item.ItemPickaxe;
-import net.minecraft.item.ItemSpade;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
 public class EnvironStateHandler extends EffectHandlerBase {
-
-	private static final SoundEffect JUMP;
-	private static final SoundEffect SWORD;
-	private static final SoundEffect AXE;
-	private static final SoundEffect CRAFTING;
-	private static final SoundEffect BOW_PULL;
-
-	static {
-		if (ModOptions.enableJumpSound)
-			JUMP = new SoundEffect("dsurround:jump", 0.4F, 1.0F, true);
-		else
-			JUMP = null;
-
-		if (ModOptions.enableSwingSound) {
-			SWORD = new SoundEffect("dsurround:swoosh", 1.0F, 1.0F);
-			AXE = new SoundEffect("dsurround:swoosh", 1.0F, 0.5F);
-		} else {
-			SWORD = null;
-			AXE = null;
-		}
-
-		if (ModOptions.enableCraftingSound)
-			CRAFTING = new SoundEffect("dsurround:crafting");
-		else
-			CRAFTING = null;
-
-		if (ModOptions.enableBowPullSound)
-			BOW_PULL = new SoundEffect("dsurround:bowpull");
-		else
-			BOW_PULL = null;
-	}
 
 	// Diagnostic strings to display in the debug HUD
 	private static List<String> diagnostics = new ArrayList<String>();
@@ -418,71 +372,6 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		diagnostics = new ArrayList<String>();
 	}
 	
-	@SubscribeEvent
-	public void onJump(final LivingJumpEvent event) {
-		if (JUMP == null || event.getEntity() == null || event.getEntity().worldObj == null)
-			return;
-
-		if (event.getEntity().worldObj.isRemote && EnvironState.isPlayer(event.getEntity()))
-			SoundManager.playSoundAtPlayer(EnvironState.getPlayer(), JUMP, SoundCategory.PLAYERS);
-	}
-
-	private static boolean playSwordSwing(final Item item) {
-		return item instanceof ItemSword || item instanceof ItemSpade || item instanceof ItemHoe || item instanceof ItemFishingRod;
-	}
-
-	private static boolean playAxeSwing(final Item item) {
-		return item instanceof ItemAxe || item instanceof ItemPickaxe;
-	}
-
-	@SubscribeEvent
-	public void onItemSwing(final PlayerInteractEvent.LeftClickEmpty event) {
-		if (SWORD == null || event.getEntityPlayer() == null || event.getEntityPlayer().worldObj == null)
-			return;
-
-		if (event.getEntityPlayer().worldObj.isRemote && EnvironState.isPlayer(event.getEntityPlayer())) {
-			final ItemStack currentItem = event.getEntityPlayer().getHeldItemMainhand();
-			if (currentItem != null) {
-				SoundEffect sound = null;
-				final Item item = currentItem.getItem();
-				if (playSwordSwing(item))
-					sound = SWORD;
-				else if (playAxeSwing(item))
-					sound = AXE;
-
-				if (sound != null)
-					SoundManager.playSoundAtPlayer(EnvironState.getPlayer(), sound, SoundCategory.PLAYERS);
-			}
-		}
-	}
-
-	private int craftSoundThrottle = 0;
-
-	@SubscribeEvent
-	public void onCrafting(final ItemCraftedEvent event) {
-		if (CRAFTING == null || event.player == null || event.player.worldObj == null)
-			return;
-
-		if (event.player.worldObj.isRemote && EnvironState.isPlayer(event.player)) {
-			if (craftSoundThrottle < (EnvironState.getTickCounter() - 30)) {
-				craftSoundThrottle = EnvironState.getTickCounter();
-				SoundManager.playSoundAtPlayer(EnvironState.getPlayer(), CRAFTING, SoundCategory.PLAYERS);
-			}
-		}
-
-	}
-
-	@SubscribeEvent
-	public void onItemUse(final PlayerInteractEvent.RightClickItem event) {
-		if (BOW_PULL == null || event.getEntityPlayer() == null || event.getEntityPlayer().worldObj == null
-				|| event.getItemStack() == null || event.getItemStack().getItem() == null)
-			return;
-
-		if (event.getEntityPlayer().worldObj.isRemote && event.getItemStack().getItem() instanceof ItemBow) {
-			SoundManager.playSoundAtPlayer(EnvironState.getPlayer(), BOW_PULL, SoundCategory.PLAYERS);
-		}
-	}
-
 	// Use the new scripting system to pull out data to display
 	// for debug.  Good for testing.
 	private final static String[] scripts = {

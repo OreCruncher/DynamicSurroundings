@@ -41,7 +41,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class RegistryManager {
 
 	public static enum RegistryType {
-		SOUND(0), BIOME(1), BLOCK(2), DIMENSION(3), FOOTSTEPS(4), SEASON(5);
+		SOUND(0), BIOME(1), BLOCK(2), DIMENSION(3), FOOTSTEPS(4), SEASON(5), ITEMS(6);
 
 		private final int id;
 

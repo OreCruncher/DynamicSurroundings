@@ -655,6 +655,21 @@
 		}
 		
 	],
+	"itemConfig":{
+		"axeSound":[
+			"net.minecraft.item.ItemAxe",
+			"net.minecraft.item.ItemPickaxe"
+		],
+		"bowSound":[
+			"net.minecraft.item.ItemBow"
+		],
+		"swordSound":[
+			"net.minecraft.item.ItemSword",
+			"net.minecraft.item.ItemSpade",
+			"net.minecraft.item.ItemHoe",
+			"net.minecraft.item.ItemFishingRod"
+		]
+	},
 	"dimensions":[
 		{
 			"dimId":-1,

@@ -49,6 +49,7 @@ class RegistryManagerClient extends RegistryManager {
 		super(Side.CLIENT);
 		this.registries[RegistryType.BLOCK.getId()] = new BlockRegistry();
 		this.registries[RegistryType.FOOTSTEPS.getId()] = new FootstepsRegistry();
+		this.registries[RegistryType.ITEMS.getId()] = new ItemRegistry();
 	}
 
 	private boolean checkCompatible(@Nonnull final ResourcePackRepository.Entry pack) {

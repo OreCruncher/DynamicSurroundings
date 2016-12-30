@@ -36,10 +36,12 @@ import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.mod.DynSurround.data.xface.BlockConfig;
 import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
+import org.blockartistry.mod.DynSurround.data.xface.ItemConfig;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.FootstepsRegistry;
+import org.blockartistry.mod.DynSurround.registry.ItemRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.JsonUtils;
@@ -76,6 +78,9 @@ public final class ConfigurationScript {
 
 	@SerializedName("forgeMappings")
 	public List<ForgeEntry> forgeMappings = ImmutableList.of();
+	
+	@SerializedName("itemConfig")
+	public ItemConfig itemConfig = new ItemConfig();
 
 	public static void process(@Nonnull Side side, @Nonnull final Reader reader) {
 
@@ -114,6 +119,9 @@ public final class ConfigurationScript {
 				for (final String name : entry.dictionaryEntries)
 					footsteps.registerForgeEntries(entry.acousticProfile, name);
 			}
+			
+			final ItemRegistry itemRegistry = RegistryManager.get(RegistryType.ITEMS);
+			itemRegistry.register(script.itemConfig);
 			
 		} catch (final Throwable t) {
 			ModLog.error("Unable to process configuration script", t);
