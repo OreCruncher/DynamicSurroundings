@@ -42,12 +42,12 @@ import net.minecraftforge.fml.relauncher.Side;
  * cancels the sound.
  */
 @SideOnly(Side.CLIENT)
-class Emitter {
+public class Emitter {
 
 	protected static final Random RANDOM = new XorShiftRandom();
 
 	protected final SoundEffect effect;
-	protected PlayerSound activeSound;
+	protected TrackingSound activeSound;
 
 	protected int repeatDelay = 0;
 	protected boolean shouldFadeIn;
@@ -80,7 +80,7 @@ class Emitter {
 		if (SoundSystemConfig.getMasterGain() <= 0)
 			return;
 
-		final PlayerSound theSound = new PlayerSound(effect, this.shouldFadeIn);
+		final TrackingSound theSound = new TrackingSound(effect, this.shouldFadeIn);
 		this.shouldFadeIn = false;
 		if (this.effect.type == SoundType.PERIODIC) {
 			this.repeatDelay = this.effect.getRepeat(RANDOM);

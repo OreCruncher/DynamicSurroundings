@@ -31,13 +31,13 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -45,7 +45,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class SpotSound extends PositionedSound {
 
 	private static final Random RANDOM = new XorShiftRandom();
-	private static final int SPOT_SOUND_RANGE = 6;
+	private static final int SPOT_SOUND_RANGE = 8;
 
 	private final SoundEffect sound;
 	private final int timeMark;
@@ -67,7 +67,7 @@ public class SpotSound extends PositionedSound {
 		this.timeMark = EnvironState.getTickCounter() + delay;
 	}
 
-	private static int randomRange(final int range) {
+	private static float randomRange(final int range) {
 		return RANDOM.nextInt(range) - RANDOM.nextInt(range);
 	}
 
@@ -81,9 +81,10 @@ public class SpotSound extends PositionedSound {
 		this.repeat = false;
 		this.repeatDelay = 0;
 
-		this.xPosF = MathStuff.floor_double(player.posX + randomRange(SPOT_SOUND_RANGE));
-		this.yPosF = MathStuff.floor_double(player.posY + player.eyeHeight + randomRange(SPOT_SOUND_RANGE));
-		this.zPosF = MathStuff.floor_double(player.posZ + randomRange(SPOT_SOUND_RANGE));
+		final Vec3d point = player.getEntityBoundingBox().getCenter();
+		this.xPosF = (float) point.xCoord + randomRange(SPOT_SOUND_RANGE);
+		this.yPosF = (float) point.yCoord + randomRange(SPOT_SOUND_RANGE);
+		this.zPosF = (float) point.zCoord + randomRange(SPOT_SOUND_RANGE);
 
 		this.timeMark = EnvironState.getTickCounter();
 	}

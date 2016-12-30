@@ -29,29 +29,39 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
-import net.minecraft.client.audio.MovingSound;
+import net.minecraft.client.audio.ITickableSound;
+import net.minecraft.client.audio.PositionedSound;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-class PlayerSound extends MovingSound {
+public class TrackingSound extends PositionedSound implements ITickableSound {
 
 	private static final float DONE_VOLUME_THRESHOLD = 0.001F;
 	private static final float FADE_AMOUNT = 0.015F;
 	private static final Random RANDOM = new XorShiftRandom();
 
+	private final EntityLivingBase attachedTo;
 	private final SoundEffect sound;
 	private boolean isFading;
 	private float maxVolume;
+	private boolean isDonePlaying;
 
-	public PlayerSound(final SoundEffect sound) {
-		this(sound, false);
+	public TrackingSound(final SoundEffect sound) {
+		this(EnvironState.getPlayer(), sound, false);
 	}
-	
-	public PlayerSound(final SoundEffect sound, final boolean fadeIn) {
+
+	public TrackingSound(final SoundEffect sound, final boolean fadeIn) {
+		this(EnvironState.getPlayer(), sound, fadeIn);
+	}
+
+	public TrackingSound(final EntityLivingBase attachedTo, final SoundEffect sound, final boolean fadeIn) {
 		super(sound.sound, SoundCategory.PLAYERS);
+
+		this.attachedTo = attachedTo;
 
 		// Don't set volume to 0; MC will optimize out
 		this.sound = sound;
@@ -62,41 +72,55 @@ class PlayerSound extends MovingSound {
 
 		// Repeat delay
 		this.repeatDelay = 0;
-
-		final BlockPos position = EnvironState.getPlayerPosition();
-		this.xPosF = position.getX();
-		this.yPosF = position.getY() + 1;
-		this.zPosF = position.getZ();
+		
+		updateLocation();
 	}
 
 	public void fadeAway() {
 		this.isFading = true;
 	}
 
+	public boolean isFading() {
+		return this.isFading;
+	}
+	
+	public boolean isDonePlaying() {
+		return this.isDonePlaying;
+	}
+
 	public boolean sameSound(final SoundEffect snd) {
 		return this.sound.equals(snd);
 	}
 
+	public void updateLocation() {
+		final Vec3d point = this.attachedTo.getEntityBoundingBox().getCenter();
+		this.xPosF = (float) point.xCoord;
+		this.yPosF = (float) point.yCoord;
+		this.zPosF = (float) point.zCoord;
+	}
+
 	@Override
 	public void update() {
-		if (this.donePlaying)
+		if (this.isDonePlaying())
 			return;
+		
+		if(!this.attachedTo.isEntityAlive()) {
+			this.isDonePlaying = true;
+			return;
+		}
 
-		if (this.isFading) {
+		if (this.isFading()) {
 			this.volume -= FADE_AMOUNT;
-		} else if(this.volume < this.maxVolume) {
+		} else if (this.volume < this.maxVolume) {
 			this.volume += FADE_AMOUNT;
-		} else if(this.volume > this.maxVolume) {
+		} else if (this.volume > this.maxVolume) {
 			this.volume = this.maxVolume;
 		}
-		
+
 		if (this.volume <= DONE_VOLUME_THRESHOLD) {
-			this.donePlaying = true;
-		} else if (EnvironState.getPlayer() != null) {
-			final BlockPos position = EnvironState.getPlayerPosition();
-			this.xPosF = position.getX();
-			this.yPosF = position.getY() + 1;
-			this.zPosF = position.getZ();
+			this.isDonePlaying = true;
+		} else {
+			updateLocation();
 		}
 	}
 
@@ -119,8 +143,8 @@ class PlayerSound extends MovingSound {
 	public boolean equals(final Object anObj) {
 		if (this == anObj)
 			return true;
-		if (anObj instanceof PlayerSound)
-			return this.sameSound(((PlayerSound) anObj).sound);
+		if (anObj instanceof TrackingSound)
+			return this.sameSound(((TrackingSound) anObj).sound);
 		if (anObj instanceof SoundEffect)
 			return this.sameSound((SoundEffect) anObj);
 		return false;
