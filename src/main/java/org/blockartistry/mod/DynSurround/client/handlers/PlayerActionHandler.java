@@ -2,6 +2,7 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
@@ -12,6 +13,7 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
@@ -24,12 +26,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class PlayerActionHandler extends EffectHandlerBase {
 
-	private static final SoundEffect JUMP = new SoundEffect("dsurround:jump", 0.4F, 1.0F, true);;
-	private static final SoundEffect CRAFTING = new SoundEffect("dsurround:crafting");
+	private static final SoundEffect JUMP = new SoundEffect(new ResourceLocation(DSurround.RESOURCE_ID, "jump"), 0.4F,
+			1.0F, true);;
+	private static final SoundEffect CRAFTING = new SoundEffect(
+			new ResourceLocation(DSurround.RESOURCE_ID, "crafting"));
 
-	private static final SoundEffect SWORD = new SoundEffect("dsurround:swoosh", 1.0F, 1.0F);
-	private static final SoundEffect AXE = new SoundEffect("dsurround:swoosh", 1.0F, 0.5F);
-	private static final SoundEffect BOW_PULL = new SoundEffect("dsurround:bowpull");
+	private static final SoundEffect SWORD = new SoundEffect(new ResourceLocation(DSurround.RESOURCE_ID, "swoosh"),
+			1.0F, 1.0F);
+	private static final SoundEffect AXE = new SoundEffect(new ResourceLocation(DSurround.RESOURCE_ID, "swoosh"), 1.0F,
+			0.5F);
+	private static final SoundEffect BOW_PULL = new SoundEffect(new ResourceLocation(DSurround.RESOURCE_ID, "bowpull"));
 
 	private ItemRegistry itemRegistry;
 
@@ -94,8 +100,8 @@ public class PlayerActionHandler extends EffectHandlerBase {
 	public void onCrafting(@Nonnull final ItemCraftedEvent event) {
 		if (!ModOptions.enableCraftingSound)
 			return;
-		
-		if(this.craftSoundThrottle >= (EnvironState.getTickCounter() - 30))
+
+		if (this.craftSoundThrottle >= (EnvironState.getTickCounter() - 30))
 			return;
 
 		if (event.player == null || event.player.worldObj == null)

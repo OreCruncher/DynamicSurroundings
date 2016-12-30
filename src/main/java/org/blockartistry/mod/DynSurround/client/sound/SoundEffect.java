@@ -57,33 +57,16 @@ public final class SoundEffect {
 	public final int repeatDelayRandom;
 	public final int repeatDelay;
 
-	public SoundEffect(final String soundName) {
-		this(new ResourceLocation(soundName), 1.0F, 1.0F, 0, false);
-	}
-
 	public SoundEffect(final ResourceLocation resource) {
 		this(resource, 1.0F, 1.0F, 0, false);
-	}
-
-	public SoundEffect(final String soundName, final float volume, final float pitch) {
-		this(new ResourceLocation(soundName), volume, pitch, 0, false);
 	}
 
 	public SoundEffect(final ResourceLocation resource, final float volume, final float pitch) {
 		this(resource, volume, pitch, 0, false);
 	}
 
-	public SoundEffect(final String soundName, final float volume, final float pitch, final boolean variable) {
-		this(new ResourceLocation(soundName), volume, pitch, 0, variable);
-	}
-
 	public SoundEffect(final ResourceLocation resource, final float volume, final float pitch, final boolean variable) {
 		this(resource, volume, pitch, 0, variable);
-	}
-
-	public SoundEffect(final String soundName, final float volume, final float pitch, final int repeatDelay,
-			final boolean variable) {
-		this(new ResourceLocation(soundName), volume, pitch, repeatDelay, variable);
 	}
 
 	public SoundEffect(final ResourceLocation resource, final float volume, final float pitch, final int repeatDelay,

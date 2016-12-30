@@ -35,6 +35,7 @@ import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleDrip;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -45,7 +46,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleDripOverride extends ParticleDrip {
 
-	private static final SoundEffect WATER_DRIP = new SoundEffect(DSurround.RESOURCE_ID + ":waterdrops");
+	private static final SoundEffect WATER_DRIP = new SoundEffect(
+			new ResourceLocation(DSurround.RESOURCE_ID, "waterdrops"));
 
 	private boolean firstTime = true;
 

@@ -35,13 +35,14 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.client.particle.ParticleLava;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 @SideOnly(Side.CLIENT)
 public class ParticleFireJet extends ParticleJet {
 
-	private static final SoundEffect FIRE = new SoundEffect("minecraft:block.fire.ambient");
+	private static final SoundEffect FIRE = new SoundEffect(new ResourceLocation("minecraft:block.fire.ambient"));
 
 	protected final boolean isLava;
 	protected final IParticleFactory factory;
