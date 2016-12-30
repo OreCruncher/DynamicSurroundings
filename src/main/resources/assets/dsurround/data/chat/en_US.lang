@@ -119,6 +119,23 @@ chat.skeleton.6=15,I was trying to daydream, but my mind kept wandering.
 chat.skeleton.7=10,Whoever said nothing was impossible obviously never tried slamming a revolving door.
 chat.skeleton.8=10,Knowledge is realizing that the street is one-way, wisdom is looking both directions anyway.
 chat.skeleton.9=10,You keep using that word.  I don't think it means what you think it means.
+chat.skeleton.10=10,Chicken!  Fight like a skeleton!
+
+chat.witch.0=10,Yes, I can drive a stick.
+chat.witch.1=15,By the pricking of my thumbs, something wicked this way comes.
+chat.witch.2=10,Do not judge my path, you haven't walked in my shoes...or ridden my broom.
+chat.witch.3=15,All trespassers will be used as ingredients in the brew!
+chat.witch.4=10,Fair is foul, and foul is fair.
+chat.witch.5=10,Going so soon? I wouldn't hear of it. Why my little party's just beginning.
+chat.witch.6=15,Why do I have to look like a normal villager?
+chat.witch.7=15,I think I will keep it under my hat for now.
+chat.witch.8=10,I will get you and your little dog, too!  You have a dog, right?
+chat.witch.9=10,Don't ask me where I keep all these potions.  Where do you keep all that dirt?
+chat.witch.10=10,I wish I had a flying monkey.
+chat.witch.11=15,Have you ever had a rock as a familiar?  It was the rage back in the day.
+chat.witch.12=15,It's not a wart! It's a beauty mark!
+chat.witch.13=10,Some days I think my nose has a life of it's own.
+chat.witch.14=15,My work is never done...
 
 # Special token for using splash screen sayings - don't translate!
 chat.squid.0=20,$MINECRAFT$

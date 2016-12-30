@@ -44,6 +44,7 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextFormatting;
 
 // Billboard is a text rendering that hovers and follows an entity as
@@ -64,7 +65,7 @@ public class ParticleBillboard extends Particle {
 	private final Entity subject;
 	private final Function<Integer, List<String>> accessor;
 	private List<String> text;
-	
+
 	private int textWidth;
 	private int numberOfMessages;
 	private double top;
@@ -75,19 +76,18 @@ public class ParticleBillboard extends Particle {
 	public ParticleBillboard(@Nonnull final Entity entity, @Nonnull final Function<Integer, List<String>> accessor) {
 		super(entity.getEntityWorld(), entity.posX, entity.posY, entity.posZ);
 
+		this.subject = entity;
 		this.accessor = accessor;
-
-		final double newY = entity.posY + entity.height + 0.5D - (entity.isSneaking() ? 0.25D : 0);
-		this.setPosition(entity.posX, newY, entity.posZ);
-		this.prevPosX = entity.posX;
-		this.prevPosY = newY;
-		this.prevPosZ = entity.posZ;
-
 		this.canCollide = false;
+
+		updatePosition();
+		this.prevPosX = this.posX;
+		this.prevPosY = this.posY;
+		this.prevPosZ = this.posZ;
+
 		this.motionX = 0.0D;
 		this.motionY = 0.0D;
 		this.motionZ = 0.0D;
-		this.subject = entity;
 
 		this.renderManager = Minecraft.getMinecraft().getRenderManager();
 		this.font = Minecraft.getMinecraft().fontRendererObj;
@@ -108,25 +108,29 @@ public class ParticleBillboard extends Particle {
 		return this.text == null || this.text.isEmpty();
 	}
 
+	private void updatePosition() {
+		this.prevPosX = this.posX;
+		this.prevPosY = this.posY;
+		this.prevPosZ = this.posZ;
+
+		final AxisAlignedBB box = this.subject.getEntityBoundingBox();
+		final double newY = box.maxY + (this.subject.isSneaking() ? 0.25D : 0.5D);
+		this.setPosition(this.subject.posX, newY, this.subject.posZ);
+	}
+
 	@Override
 	public void onUpdate() {
 		if (shouldExpire()) {
 			this.setExpired();
 		} else {
 
-			this.prevPosX = this.posX;
-			this.prevPosY = this.posY;
-			this.prevPosZ = this.posZ;
-
-			final double newY = this.subject.posY + this.subject.height + 0.5D
-					- (this.subject.isSneaking() ? 0.25D : 0);
-			this.setPosition(this.subject.posX, newY, this.subject.posZ);
+			updatePosition();
 
 			this.textWidth = MIN_TEXT_WIDTH;
 
 			for (final String s : this.text)
 				this.textWidth = Math.max(this.textWidth, this.font.getStringWidth(s));
-			
+
 			this.numberOfMessages = this.text.size();
 			this.top = -(numberOfMessages) * 9 - BUBBLE_MARGIN;
 			this.bottom = BUBBLE_MARGIN;
