@@ -28,11 +28,13 @@ import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.fx.WaterSplashJetEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleRain;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -66,6 +68,8 @@ public class ParticleWaterSplash extends ParticleJet {
 			this.motionZ *= 0.9800000190734863D;
 
 			if (this.particleMaxAge-- <= 0) {
+				this.setExpired();
+			} else if (WorldUtils.isSolidBlock(this.worldObj, new BlockPos(this.posX, this.posY, this.posZ))) {
 				this.setExpired();
 			}
 		}
@@ -101,6 +105,10 @@ public class ParticleWaterSplash extends ParticleJet {
 		for (int j = 0; (float) j < splashCount; ++j) {
 			final double xOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
 			final double zOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
+			if (WorldUtils.isSolidBlock(this.worldObj,
+					new BlockPos(this.posX + xOffset, this.posY, this.posZ + zOffset)))
+				continue;
+
 			final double motionX = xOffset * (this.jetStrength / 40.0D);
 			final double motionY = 0.1D + RANDOM.nextFloat() * this.jetStrength / 20.0D;
 			final double motionZ = zOffset * (this.jetStrength / 40.D);

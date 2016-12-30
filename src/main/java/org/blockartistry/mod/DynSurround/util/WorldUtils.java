@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public final class WorldUtils {
@@ -48,6 +49,10 @@ public final class WorldUtils {
 	@Nullable
 	public static Entity locateEntity(@Nonnull final World world, final int entityId) {
 		return world.getEntityByID(entityId);
+	}
+	
+	public static boolean isSolidBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return world.getBlockState(pos).getMaterial().isSolid();
 	}
 
 }
