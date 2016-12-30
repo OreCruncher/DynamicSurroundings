@@ -28,8 +28,8 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.mod.DynSurround.client.handlers.EffectManager;
+import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler;
-import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -56,13 +56,12 @@ public class ProxyClient extends Proxy {
 	@Override
 	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		super.preInit(event);
-		SoundManager.configureSound();
+		SoundEffectHandler.configureSound();
 	}
 
 	@Override
 	public void init(@Nonnull final FMLInitializationEvent event) {
 		super.init(event);
-		SoundManager.initializeRegistry();
 		ParticleDripOverride.register();
 	}
 

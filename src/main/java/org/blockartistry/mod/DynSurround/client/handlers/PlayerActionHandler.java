@@ -6,7 +6,6 @@ import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 import org.blockartistry.mod.DynSurround.registry.ItemRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
@@ -68,7 +67,7 @@ public class PlayerActionHandler extends EffectHandlerBase {
 			return;
 
 		if (event.getEntity().worldObj.isRemote && EnvironState.isPlayer(event.getEntity()))
-			SoundManager.playSoundAtPlayer(EnvironState.getPlayer(), JUMP, SoundCategory.PLAYERS);
+			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), JUMP, SoundCategory.PLAYERS);
 	}
 
 	@SubscribeEvent
@@ -89,7 +88,8 @@ public class PlayerActionHandler extends EffectHandlerBase {
 					sound = AXE;
 
 				if (sound != null)
-					SoundManager.playSoundAtPlayer(EnvironState.getPlayer(), sound, SoundCategory.PLAYERS);
+					SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), sound,
+							SoundCategory.PLAYERS);
 			}
 		}
 	}
@@ -109,7 +109,7 @@ public class PlayerActionHandler extends EffectHandlerBase {
 
 		if (event.player.worldObj.isRemote && EnvironState.isPlayer(event.player)) {
 			craftSoundThrottle = EnvironState.getTickCounter();
-			SoundManager.playSoundAtPlayer(EnvironState.getPlayer(), CRAFTING, SoundCategory.PLAYERS);
+			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), CRAFTING, SoundCategory.PLAYERS);
 		}
 
 	}
@@ -123,7 +123,7 @@ public class PlayerActionHandler extends EffectHandlerBase {
 			return;
 
 		if (event.getEntityPlayer().worldObj.isRemote && this.itemRegistry.doBowSound(event.getItemStack())) {
-			SoundManager.playSoundAtPlayer(EnvironState.getPlayer(), BOW_PULL, SoundCategory.PLAYERS);
+			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), BOW_PULL, SoundCategory.PLAYERS);
 		}
 	}
 

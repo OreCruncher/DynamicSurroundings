@@ -27,8 +27,8 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
+import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
@@ -73,7 +73,7 @@ public class ParticleFireJet extends ParticleJet {
 		addParticle(particle);
 		if(!soundFired) {
 			soundFired = true;
-			SoundManager.playSoundAt(this.getPos(), FIRE, 0, SoundCategory.BLOCKS);
+			SoundEffectHandler.INSTANCE.playSoundAt(this.getPos(), FIRE, 0, SoundCategory.BLOCKS);
 		}
 	}
 }

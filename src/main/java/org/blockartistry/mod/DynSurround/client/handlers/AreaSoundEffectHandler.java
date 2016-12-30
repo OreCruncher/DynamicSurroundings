@@ -27,11 +27,8 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
-import org.blockartistry.mod.DynSurround.client.event.RegistryEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 
@@ -40,8 +37,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
@@ -73,10 +68,6 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		return result;
 	}
 
-	private static void resetSounds() {
-		SoundManager.clearSounds();
-	}
-	
 	@Override
 	public String getHandlerName() {
 		return "AreaSoundEffectHandler";
@@ -86,68 +77,27 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 	public void process(final World world, final EntityPlayer player) {
 		// Dead players hear no sounds
 		if (!player.isEntityAlive()) {
-			resetSounds();
 			return;
 		}
 
 		final BiomeInfo playerBiome = EnvironState.getPlayerBiome();
 		final List<SoundEffect> sounds = new ArrayList<SoundEffect>();
-		
+
 		if (doBiomeSounds())
 			sounds.addAll(getBiomeSounds());
 		sounds.addAll(BiomeRegistry.PLAYER.findSoundMatches());
 
-		SoundManager.queueAmbientSounds(sounds);
+		SoundEffectHandler.INSTANCE.queueAmbientSounds(sounds);
 
 		if (doBiomeSounds()) {
 			SoundEffect sound = playerBiome.getSpotSound(RANDOM);
 			if (sound != null)
-				SoundManager.playSoundAtPlayer(player, sound, SoundCategory.AMBIENT);
+				SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound, SoundCategory.AMBIENT);
 		}
 
 		SoundEffect sound = BiomeRegistry.PLAYER.getSpotSound(RANDOM);
 		if (sound != null)
-			SoundManager.playSoundAtPlayer(player, sound, SoundCategory.AMBIENT);
-
-		SoundManager.update();
-	}
-
-	@Override
-	public void onConnect() {
-		SoundManager.clearSounds();
-	}
-	
-	@Override
-	public void onDisconnect() {
-		SoundManager.clearSounds();
-	}
-	
-	/*
-	 * Fired when the underlying biome config is reloaded.
-	 */
-	@SubscribeEvent
-	public void registryReloadEvent(final RegistryEvent.Reload event) {
-		resetSounds();
-	}
-
-	/*
-	 * Fired when the player joins a world, such as when the dimension changes.
-	 */
-	@SubscribeEvent
-	public void playerJoinWorldEvent(final EntityJoinWorldEvent event) {
-		if (event.getEntity().worldObj.isRemote && EnvironState.isPlayer(event.getEntity()))
-			resetSounds();
-	}
-
-	@SubscribeEvent
-	public void diagnostics(final DiagnosticEvent.Gather event) {
-		final StringBuilder builder = new StringBuilder();
-		builder.append("SoundSystem: ").append(SoundManager.currentSoundCount()).append('/')
-				.append(SoundManager.maxSoundCount());
-		event.output.add(builder.toString());
-		for (final String sound : SoundManager.getSounds()) {
-			event.output.add(sound);
-		}
+			SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound, SoundCategory.AMBIENT);
 	}
 
 }

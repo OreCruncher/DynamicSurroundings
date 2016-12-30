@@ -28,6 +28,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -65,9 +66,9 @@ public class Emitter {
 			this.activeSound = new TrackingSound(effect, true);
 
 		// If it isn't playing send it to the sound engine
-		if(!SoundManager.isSoundPlaying(this.activeSound)) {
+		if(!SoundEffectHandler.INSTANCE.isSoundPlaying(this.activeSound)) {
 			try {
-				SoundManager.playSound(this.activeSound);
+				SoundEffectHandler.INSTANCE.playSound(this.activeSound);
 			} catch (final Throwable t) {
 				ModLog.error("Unable to play sound", t);;
 			}

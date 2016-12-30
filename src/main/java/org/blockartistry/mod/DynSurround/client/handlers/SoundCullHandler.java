@@ -91,7 +91,7 @@ public class SoundCullHandler extends EffectHandlerBase {
 
 		final String resource = event.getSound().getSoundLocation().toString();
 		if (this.soundsToBlock.contains(resource)) {
-			event.setResult(null);
+			event.setResultSound(null);
 			return;
 		}
 
@@ -105,7 +105,7 @@ public class SoundCullHandler extends EffectHandlerBase {
 
 		final int currentTick = EnvironState.getTickCounter();
 		if ((currentTick - lastOccurance) < ModOptions.soundCullingThreshold) {
-			event.setResult(null);
+			event.setResultSound(null);
 		} else {
 			this.soundCull.put(resource, currentTick);
 		}

@@ -26,8 +26,8 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.fx.WaterSplashJetEffect;
+import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleRain;
@@ -89,10 +89,10 @@ public class ParticleWaterSplash extends ParticleJet {
 
 		if (++this.soundCount % 20 == 0) {
 			final float volume = this.jetStrength / 3.0F;
-			if (SoundManager.canSoundBeHeard(this.getPos(), volume)) {
+			if (SoundEffectHandler.canSoundBeHeard(this.getPos(), volume)) {
 				final float pitch = 1.0F - 0.7F * (volume / 3.0F) + (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F;
 				final SoundEffect effect = new SoundEffect(splashSound, volume, pitch);
-				SoundManager.playSoundAt(this.getPos(), effect, 0, SoundCategory.BLOCKS);
+				SoundEffectHandler.INSTANCE.playSoundAt(this.getPos(), effect, 0, SoundCategory.BLOCKS);
 			}
 		}
 

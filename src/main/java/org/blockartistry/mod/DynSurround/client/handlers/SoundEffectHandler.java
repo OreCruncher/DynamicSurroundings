@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.sound;
+package org.blockartistry.mod.DynSurround.client.handlers;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,8 +41,13 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.DSurround;
+import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
+import org.blockartistry.mod.DynSurround.client.event.RegistryEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.client.sound.Emitter;
+import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.mod.DynSurround.client.sound.SpotSound;
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
@@ -55,41 +60,97 @@ import org.lwjgl.openal.ALC11;
 import com.google.gson.Gson;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.ISoundEventListener;
+import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.SoundSystemConfig;
 
 @SideOnly(Side.CLIENT)
-public class SoundManager {
+public class SoundEffectHandler extends EffectHandlerBase implements ISoundEventListener {
 
 	private static final int AGE_THRESHOLD_TICKS = 5;
 	private static final int SOUND_QUEUE_SLACK = 6;
-	private static final Map<SoundEffect, Emitter> emitters = new HashMap<SoundEffect, Emitter>();
+	
+	public static SoundEffectHandler INSTANCE = null;
 
-	private static final List<SpotSound> pending = new ArrayList<SpotSound>();
+	private final Map<SoundEffect, Emitter> emitters = new HashMap<SoundEffect, Emitter>();
+	private final List<SpotSound> pending = new ArrayList<SpotSound>();
 
-	public static void clearSounds() {
-		for (final Emitter emit : emitters.values())
-			emit.fade();
-		emitters.clear();
-		pending.clear();
+	public SoundEffectHandler() {
+		INSTANCE = this;
+		initializeRegistry();
 	}
 
-	public static void queueAmbientSounds(final List<SoundEffect> sounds) {
+	@Override
+	public String getHandlerName() {
+		return "SoundEffectHandler";
+	}
+
+	@Override
+	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+
+		// Dead players hear no sounds...
+		if (!player.isEntityAlive()) {
+			clearSounds();
+			return;
+		}
+
+		for (final Emitter emitter : this.emitters.values())
+			emitter.update();
+
+		final Iterator<SpotSound> pitr = this.pending.iterator();
+		while (pitr.hasNext()) {
+			final SpotSound sound = pitr.next();
+			if (sound.getTickAge() >= AGE_THRESHOLD_TICKS) {
+				ModLog.debug("AGING: " + sound.toString());
+				pitr.remove();
+			} else if (sound.getTickAge() >= 0 && canFitSound()) {
+				playSound(sound);
+				pitr.remove();
+			}
+		}
+	}
+
+	@Override
+	public void onConnect() {
+		clearSounds();
+		Minecraft.getMinecraft().getSoundHandler().addListener(this);
+	}
+
+	@Override
+	public void onDisconnect() {
+		Minecraft.getMinecraft().getSoundHandler().removeListener(this);
+		clearSounds();
+		// TODO: Need to vet this
+		INSTANCE = null;
+	}
+
+	public void clearSounds() {
+		for (final Emitter emit : this.emitters.values())
+			emit.fade();
+		this.emitters.clear();
+		this.pending.clear();
+	}
+
+	public void queueAmbientSounds(@Nonnull final List<SoundEffect> sounds) {
 		// Need to remove sounds that are active but not
 		// in the incoming list
-		final List<SoundEffect> active = new ArrayList<SoundEffect>(emitters.keySet());
+		final List<SoundEffect> active = new ArrayList<SoundEffect>(this.emitters.keySet());
 		for (final SoundEffect effect : active) {
 			if (!sounds.contains(effect))
-				emitters.remove(effect).fade();
+				this.emitters.remove(effect).fade();
 			else {
-				final Emitter emitter = emitters.get(effect);
+				final Emitter emitter = this.emitters.get(effect);
 				SoundEffect incoming = null;
 				for (final SoundEffect sound : sounds)
 					if (sound.equals(effect)) {
@@ -104,39 +165,25 @@ public class SoundManager {
 		// Add sounds from the incoming list that are not
 		// active.
 		for (final SoundEffect sound : sounds)
-			emitters.put(sound, new Emitter(sound));
+			this.emitters.put(sound, new Emitter(sound));
 	}
 
-	public static void update() {
-		for (final Emitter emitter : emitters.values())
-			emitter.update();
-
-		final Iterator<SpotSound> pitr = pending.iterator();
-		while (pitr.hasNext()) {
-			final SpotSound sound = pitr.next();
-			if (sound.getTickAge() >= AGE_THRESHOLD_TICKS) {
-				ModLog.debug("AGING: " + sound.toString());
-				pitr.remove();
-			} else if (sound.getTickAge() >= 0 && canFitSound()) {
-				playSound(sound);
-				pitr.remove();
-			}
-		}
+	public void update() {
 	}
 
-	public static int currentSoundCount() {
+	public int currentSoundCount() {
 		return Minecraft.getMinecraft().getSoundHandler().sndManager.playingSounds.size();
 	}
 
-	public static int maxSoundCount() {
+	public int maxSoundCount() {
 		return SoundSystemConfig.getNumberNormalChannels() + SoundSystemConfig.getNumberStreamingChannels();
 	}
 
-	private static boolean canFitSound() {
+	private boolean canFitSound() {
 		return currentSoundCount() < (SoundSystemConfig.getNumberNormalChannels() - SOUND_QUEUE_SLACK);
 	}
 
-	public static boolean isSoundPlaying(@Nonnull final ISound sound) {
+	public boolean isSoundPlaying(@Nonnull final ISound sound) {
 		// Have to find the hidden sound in the sound engine to see if Minecraft
 		// is still working with it.
 		final net.minecraft.client.audio.SoundManager mgr = Minecraft.getMinecraft().getSoundHandler().sndManager;
@@ -144,7 +191,7 @@ public class SoundManager {
 				|| mgr.delayedSounds.containsKey(sound);
 	}
 
-	static void playSound(final ISound sound) {
+	public void playSound(@Nonnull final ISound sound) {
 		if (sound != null) {
 			if (ModOptions.enableDebugLogging)
 				ModLog.debug("PLAYING: " + sound.toString());
@@ -152,7 +199,7 @@ public class SoundManager {
 		}
 	}
 
-	public static void playSoundAtPlayer(EntityPlayer player, final SoundEffect sound,
+	public void playSoundAtPlayer(@Nullable EntityPlayer player, @Nonnull final SoundEffect sound,
 			@Nullable final SoundCategory categoryOverride) {
 
 		if (player == null)
@@ -161,7 +208,7 @@ public class SoundManager {
 		final SpotSound s = new SpotSound(player, sound, categoryOverride);
 
 		if (!canFitSound())
-			pending.add(s);
+			this.pending.add(s);
 		else
 			playSound(s);
 	}
@@ -169,7 +216,7 @@ public class SoundManager {
 	/**
 	 * Estimate whether a sound can be heard based on it's volume and distance.
 	 */
-	public static boolean canSoundBeHeard(final BlockPos soundPos, final float volume) {
+	public static boolean canSoundBeHeard(@Nonnull final BlockPos soundPos, final float volume) {
 		if (volume == 0.0F)
 			return false;
 		final BlockPos playerPos = EnvironState.getPlayerPosition();
@@ -181,7 +228,7 @@ public class SoundManager {
 		return distanceSq <= power;
 	}
 
-	public static void playSoundAt(final BlockPos pos, final SoundEffect sound, final int tickDelay,
+	public void playSoundAt(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int tickDelay,
 			@Nullable final SoundCategory categoryOverride) {
 		if (tickDelay > 0 && !canFitSound())
 			return;
@@ -195,15 +242,6 @@ public class SoundManager {
 			pending.add(s);
 		else
 			playSound(s);
-	}
-
-	public static List<String> getSounds() {
-		final List<String> result = new ArrayList<String>();
-		for (final SoundEffect effect : emitters.keySet())
-			result.add("EMITTER: " + effect.toString() + "[vol:" + emitters.get(effect).getVolume() + "]");
-		for (final SpotSound effect : pending)
-			result.add((effect.getTickAge() < 0 ? "DELAYED: " : "PENDING: ") + effect.getSoundEffect().toString());
-		return result;
 	}
 
 	public static void configureSound() {
@@ -241,7 +279,7 @@ public class SoundManager {
 	// sounds.json
 	// and forces registration of all the mod sounds. Code generally comes from
 	// the Minecraft sound processing logic.
-	public static void initializeRegistry() {
+	protected void initializeRegistry() {
 		final ParameterizedType TYPE = new ParameterizedType() {
 			public Type[] getActualTypeArguments() {
 				return new Type[] { String.class, Object.class };
@@ -256,7 +294,7 @@ public class SoundManager {
 			}
 		};
 
-		try (final InputStream stream = SoundManager.class.getResourceAsStream("/assets/dsurround/sounds.json")) {
+		try (final InputStream stream = SoundEffectHandler.class.getResourceAsStream("/assets/dsurround/sounds.json")) {
 			if (stream != null) {
 				@SuppressWarnings("unchecked")
 				final Map<String, Object> sounds = (Map<String, Object>) new Gson()
@@ -282,9 +320,10 @@ public class SoundManager {
 		}
 	}
 
-	// Redirect hook from Minecraft's SoundManager so we can scale the volume
+	// Redirect hook from Minecraft's SoundEffectHandler so we can scale the
+	// volume
 	// for each individual sound.
-	public static float getClampedVolume(final ISound sound) {
+	public static float getClampedVolume(@Nonnull final ISound sound) {
 		float result = 0.0F;
 		if (sound == null) {
 			ModLog.warn("getNormalizedVolume(): Null sound parameter");
@@ -303,9 +342,50 @@ public class SoundManager {
 		return result;
 	}
 
-	private static float getSoundCategoryVolume(final SoundCategory category) {
+	private static float getSoundCategoryVolume(@Nullable final SoundCategory category) {
 		return category != null && category != SoundCategory.MASTER
 				? Minecraft.getMinecraft().gameSettings.getSoundLevel(category) : 1.0F;
+	}
+
+	/*
+	 * Fired when the underlying biome config is reloaded.
+	 */
+	@SubscribeEvent
+	public void registryReloadEvent(@Nonnull final RegistryEvent.Reload event) {
+		clearSounds();
+	}
+
+	/*
+	 * Fired when the player joins a world, such as when the dimension changes.
+	 */
+	@SubscribeEvent
+	public void playerJoinWorldEvent(@Nonnull final EntityJoinWorldEvent event) {
+		if (event.getEntity().worldObj.isRemote && EnvironState.isPlayer(event.getEntity()))
+			clearSounds();
+	}
+
+	@SubscribeEvent
+	public void diagnostics(@Nonnull final DiagnosticEvent.Gather event) {
+		final StringBuilder builder = new StringBuilder();
+		builder.append("SoundSystem: ").append(currentSoundCount()).append('/').append(maxSoundCount());
+		event.output.add(builder.toString());
+
+		for (final SoundEffect effect : this.emitters.keySet())
+			event.output.add("EMITTER: " + effect.toString() + "[vol:" + this.emitters.get(effect).getVolume() + "]");
+		for (final SpotSound effect : pending)
+			event.output
+					.add((effect.getTickAge() < 0 ? "DELAYED: " : "PENDING: ") + effect.getSoundEffect().toString());
+	}
+
+	@Override
+	public void soundPlay(@Nonnull final ISound soundIn, @Nonnull final SoundEventAccessor accessor) {
+		if(!ModOptions.enableDebugLogging)
+			return;
+		
+		if(soundIn.getSoundLocation().getResourceDomain().equals(DSurround.RESOURCE_ID))
+			return;
+		
+		ModLog.debug("Sound callback: [%s]", soundIn.getSoundLocation().toString());
 	}
 
 }

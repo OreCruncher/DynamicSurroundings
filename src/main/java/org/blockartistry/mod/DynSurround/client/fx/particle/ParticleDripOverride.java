@@ -25,8 +25,9 @@
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import org.blockartistry.mod.DynSurround.DSurround;
+import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.mod.DynSurround.client.sound.SoundManager;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -80,7 +81,8 @@ public class ParticleDripOverride extends ParticleDrip {
 
 					if (soundPos.getY() > 0 && state.getMaterial().isSolid()) {
 						final int distance = y - soundPos.getY();
-						SoundManager.playSoundAt(soundPos.up(), WATER_DRIP, 40 + distance * 2, SoundCategory.AMBIENT);
+						SoundEffectHandler.INSTANCE.playSoundAt(soundPos.up(), WATER_DRIP, 40 + distance * 2,
+								SoundCategory.AMBIENT);
 					}
 				}
 

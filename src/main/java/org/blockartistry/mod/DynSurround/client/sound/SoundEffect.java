@@ -27,6 +27,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundType;
 import org.blockartistry.mod.DynSurround.registry.Evaluator;
@@ -140,14 +141,14 @@ public final class SoundEffect {
 			return this.repeatDelay;
 		return this.repeatDelay + rand.nextInt(this.repeatDelayRandom);
 	}
-	
+
 	public boolean isRepeatable() {
 		return this.type == SoundType.PERIODIC;
 	}
 
 	public void doEffect(final IBlockState state, final World world, final BlockPos pos,
 			@Nullable final SoundCategory categoryOverride, final Random random) {
-		SoundManager.playSoundAt(pos, this, 0, categoryOverride);
+		SoundEffectHandler.INSTANCE.playSoundAt(pos, this, 0, categoryOverride);
 	}
 
 	@Override

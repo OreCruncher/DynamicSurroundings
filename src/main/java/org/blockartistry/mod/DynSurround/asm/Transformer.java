@@ -56,7 +56,7 @@ public class Transformer implements IClassTransformer {
 			logger.debug("Transforming World...");
 			return transformWorld(basicClass);
 		} else if ("net.minecraft.client.audio.SoundManager".equals(name) || "bzu".equals(name) || "byt".equals(name)) {
-			logger.debug("Transforming SoundManager...");
+			logger.debug("Transforming SoundEffectHandler...");
 			return transformSoundManager(basicClass);
 		}
 
@@ -207,7 +207,7 @@ public class Transformer implements IClassTransformer {
 				final InsnList list = new InsnList();
 				list.add(new VarInsnNode(ALOAD, 1));
 				final String sig = "(Lnet/minecraft/client/audio/ISound;)F";
-				list.add(new MethodInsnNode(INVOKESTATIC, "org/blockartistry/mod/DynSurround/client/sound/SoundManager",
+				list.add(new MethodInsnNode(INVOKESTATIC, "org/blockartistry/mod/DynSurround/client/handlers/SoundEffectHandler",
 						targetName[0], sig, false));
 				list.add(new InsnNode(FRETURN));
 				m.instructions.insertBefore(m.instructions.getFirst(), list);

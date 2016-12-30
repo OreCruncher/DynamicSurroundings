@@ -84,6 +84,9 @@ public class EffectManager {
 		
 		if(ModOptions.enableEntityEmojis)
 			this.effectHandlers.add(new EntityEmojiHandler());
+		
+		// Add this one last so it goes last
+		this.effectHandlers.add(new SoundEffectHandler());
 
 		ModLog.info("Registered client handlers:");
 		for (final EffectHandlerBase h : this.effectHandlers) {
