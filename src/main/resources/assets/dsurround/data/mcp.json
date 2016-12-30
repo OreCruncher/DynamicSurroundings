@@ -318,6 +318,7 @@
 			"sounds":[
 				{
 					"sound":"dsurround:underground",
+					"conditions":"player.isInside && player.Y < 33",
 					"volume":0.3
 				},
 				{

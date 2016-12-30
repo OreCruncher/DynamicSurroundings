@@ -24,8 +24,16 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
+import org.blockartistry.mod.DynSurround.util.MathStuff;
+
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -38,12 +46,70 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 
 	private static final int BIOME_SURVEY_RANGE = 6;
 	private static final int INSIDE_SURVEY_RANGE = 3;
-	private static final int INSIDE_AREA = (INSIDE_SURVEY_RANGE * 2 + 1) * (INSIDE_SURVEY_RANGE * 2 + 1);
+
+	private static final class Cell implements Comparable<Cell> {
+
+		private final BlockPos offset;
+		private final float points;
+
+		public Cell(@Nonnull final BlockPos offset, final int range) {
+			this.offset = offset;
+
+			final float xV = range - MathStuff.abs(offset.getX()) + 1;
+			final float zV = range - MathStuff.abs(offset.getZ()) + 1;
+			float candidate = Math.min(xV, zV);
+			this.points = candidate * candidate;
+		}
+
+		public float potentialPoints() {
+			return this.points;
+		}
+
+		public float score(@Nonnull final BlockPos playerPos) {
+			final BlockPos coord = playerPos.add(this.offset);
+			final int y = EnvironState.getWorld().getTopSolidOrLiquidBlock(coord).getY();
+			return ((y - playerPos.getY()) < 3) ? this.points : 0.0F;
+		}
+
+		@Override
+		public int compareTo(@Nonnull final Cell cell) {
+			// Want big scores first in the list
+			return -Float.compare(this.potentialPoints(), cell.potentialPoints());
+		}
+
+		@Override
+		@Nonnull
+		public String toString() {
+			final StringBuilder builder = new StringBuilder();
+			builder.append(this.offset.toString());
+			builder.append(" points: ").append(this.points);
+			return builder.toString();
+		}
+
+	}
+
+	private static final List<Cell> cellList = new ArrayList<Cell>();
+	private static final float TOTAL_POINTS;
+
+	static {
+		// Build our cell map
+		for (int x = -INSIDE_SURVEY_RANGE; x <= INSIDE_SURVEY_RANGE; x++)
+			for (int z = -INSIDE_SURVEY_RANGE; z <= INSIDE_SURVEY_RANGE; z++)
+				cellList.add(new Cell(new BlockPos(x, 0, z), INSIDE_SURVEY_RANGE));
+
+		// Sort so the highest score cells are first
+		Collections.sort(cellList);
+
+		float totalPoints = 0.0F;
+		for (final Cell c : cellList)
+			totalPoints += c.potentialPoints();
+		TOTAL_POINTS = totalPoints;
+	}
 
 	// Used to throttle processing
 	private static final int SURVEY_INTERVAL = 2;
 	private int intervalTicker = SURVEY_INTERVAL;
-	
+
 	private static int biomeArea;
 	private static final TObjectIntHashMap<BiomeInfo> weights = new TObjectIntHashMap<BiomeInfo>();
 	private static final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
@@ -53,7 +119,7 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	private static int surveyedDimension = 0;
 	private static BlockPos surveyedPosition = BlockPos.ORIGIN;
 
-	private static final float INSIDE_THRESHOLD = 0.42F;
+	private static final float INSIDE_THRESHOLD = 1.0F - 65.0F / 176.0F;
 	private static float ceilingCoverageRatio = 0.0F;
 	private static boolean reallyInside = false;
 
@@ -74,18 +140,11 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	}
 
 	private static void doCeilingCoverageRatio() {
-		final World world = EnvironState.getWorld();
-		final BlockPos position = EnvironState.getPlayerPosition();
-		final int targetY = position.getY();
-		int seeSky = 0;
-		for (int x = -INSIDE_SURVEY_RANGE; x <= INSIDE_SURVEY_RANGE; x++)
-			for (int z = -INSIDE_SURVEY_RANGE; z <= INSIDE_SURVEY_RANGE; z++) {
-				mutable.setPos(x + position.getX(), 0, z + position.getZ());
-				final int y = world.getTopSolidOrLiquidBlock(mutable).getY();
-				if ((y - targetY) < 3)
-					++seeSky;
-			}
-		ceilingCoverageRatio = 1.0F - ((float) seeSky / INSIDE_AREA);
+		float score = 0.0F;
+		for (final Cell c : cellList)
+			score += c.score(EnvironState.getPlayerPosition());
+
+		ceilingCoverageRatio = 1.0F - (score / TOTAL_POINTS);
 		reallyInside = ceilingCoverageRatio > INSIDE_THRESHOLD;
 	}
 
@@ -124,10 +183,10 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	public void process(final World world, final EntityPlayer player) {
 		// Only process on the correct interval
 		intervalTicker++;
-		if(intervalTicker < SURVEY_INTERVAL)
+		if (intervalTicker < SURVEY_INTERVAL)
 			return;
 		intervalTicker = 0;
-		
+
 		final BlockPos position = EnvironState.getPlayerPosition();
 
 		if (surveyedBiome != EnvironState.getPlayerBiome() || surveyedDimension != EnvironState.getDimensionId()
