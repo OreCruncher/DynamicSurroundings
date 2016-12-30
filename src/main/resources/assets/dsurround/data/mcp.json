@@ -393,7 +393,9 @@
 			"sounds":[
 				{
 					"sound":"dsurround:heartbeat",
-					"conditions":"player.isHurt"
+					"conditions":"player.isHurt",
+					"soundType":"periodic",
+					"repeatDelay":0
 				},
 				{
 					"sound":"dsurround:tummy",

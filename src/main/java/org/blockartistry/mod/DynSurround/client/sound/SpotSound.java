@@ -55,7 +55,7 @@ public class SpotSound extends PositionedSound {
 		super(sound.sound, categoryOverride != null ? categoryOverride : SoundCategory.BLOCKS);
 
 		this.sound = sound;
-		this.volume = sound.volume;
+		this.volume = sound.getVolume();
 		this.pitch = sound.getPitch(RANDOM);
 		this.repeat = false;
 		this.repeatDelay = 0;
@@ -76,7 +76,7 @@ public class SpotSound extends PositionedSound {
 		super(sound.sound, categoryOverride != null ? categoryOverride : SoundCategory.PLAYERS);
 
 		this.sound = sound;
-		this.volume = sound.volume;
+		this.volume = sound.getVolume();
 		this.pitch = sound.getPitch(RANDOM);
 		this.repeat = false;
 		this.repeatDelay = 0;

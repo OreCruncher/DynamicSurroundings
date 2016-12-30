@@ -140,6 +140,10 @@ public final class SoundEffect {
 			return this.repeatDelay;
 		return this.repeatDelay + rand.nextInt(this.repeatDelayRandom);
 	}
+	
+	public boolean isRepeatable() {
+		return this.type == SoundType.PERIODIC;
+	}
 
 	public void doEffect(final IBlockState state, final World world, final BlockPos pos,
 			@Nullable final SoundCategory categoryOverride, final Random random) {

@@ -25,12 +25,11 @@ package org.blockartistry.mod.DynSurround.client.sound;
 
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.data.xface.SoundType;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.SoundSystemConfig;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,48 +49,28 @@ public class Emitter {
 	protected TrackingSound activeSound;
 
 	protected int repeatDelay = 0;
-	protected boolean shouldFadeIn;
 
-	public Emitter(final SoundEffect sound) {
+	public Emitter(@Nonnull final SoundEffect sound) {
 		this.effect = sound;
-		this.shouldFadeIn = true;
 	}
 
 	public void update() {
-		final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
-		if (this.activeSound != null) {
-			if (handler.isSoundPlaying(this.activeSound))
-				return;
-			ModLog.debug("FADE: " + this.activeSound.toString());
-			this.activeSound.fadeAway();
-			this.activeSound = null;
-			this.repeatDelay = this.effect.getRepeat(RANDOM);
-			if (this.repeatDelay > 0) {
-				this.shouldFadeIn = true;
-				return;
-			}
-		} else if (this.repeatDelay > 0) {
-			if (--this.repeatDelay > 0)
-				return;
-		}
-
 		// If the volume is turned off don't send
 		// down a sound.
 		if (SoundSystemConfig.getMasterGain() <= 0)
 			return;
+		
+		// Allocate a new sound to send down if needed
+		if(this.activeSound == null)
+			this.activeSound = new TrackingSound(effect, true);
 
-		final TrackingSound theSound = new TrackingSound(effect, this.shouldFadeIn);
-		this.shouldFadeIn = false;
-		if (this.effect.type == SoundType.PERIODIC) {
-			this.repeatDelay = this.effect.getRepeat(RANDOM);
-		} else {
-			this.activeSound = theSound;
-		}
-
-		try {
-			SoundManager.playSound(theSound);
-		} catch (final Throwable t) {
-			;
+		// If it isn't playing send it to the sound engine
+		if(!SoundManager.isSoundPlaying(this.activeSound)) {
+			try {
+				SoundManager.playSound(this.activeSound);
+			} catch (final Throwable t) {
+				ModLog.error("Unable to play sound", t);;
+			}
 		}
 	}
 
@@ -105,7 +84,9 @@ public class Emitter {
 	}
 
 	public void fade() {
-		if (this.activeSound != null)
+		if (this.activeSound != null) {
+			ModLog.debug("FADE: " + this.activeSound.toString());
 			this.activeSound.fadeAway();
+		}
 	}
 }

@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.ModLog;
@@ -135,6 +136,14 @@ public class SoundManager {
 		return currentSoundCount() < (SoundSystemConfig.getNumberNormalChannels() - SOUND_QUEUE_SLACK);
 	}
 
+	public static boolean isSoundPlaying(@Nonnull final ISound sound) {
+		// Have to find the hidden sound in the sound engine to see if Minecraft
+		// is still working with it.
+		final net.minecraft.client.audio.SoundManager mgr = Minecraft.getMinecraft().getSoundHandler().sndManager;
+		return mgr.isSoundPlaying(sound) || mgr.playingSounds.containsValue(sound)
+				|| mgr.delayedSounds.containsKey(sound);
+	}
+
 	static void playSound(final ISound sound) {
 		if (sound != null) {
 			if (ModOptions.enableDebugLogging)
@@ -161,23 +170,23 @@ public class SoundManager {
 	 * Estimate whether a sound can be heard based on it's volume and distance.
 	 */
 	public static boolean canSoundBeHeard(final BlockPos soundPos, final float volume) {
-		if(volume == 0.0F)
+		if (volume == 0.0F)
 			return false;
 		final BlockPos playerPos = EnvironState.getPlayerPosition();
 		final double distanceSq = playerPos.distanceSq(soundPos);
 		final double DROPOFF = 16 * 16;
-		if(distanceSq <= DROPOFF)
+		if (distanceSq <= DROPOFF)
 			return true;
 		final double power = volume * DROPOFF;
 		return distanceSq <= power;
 	}
-	
+
 	public static void playSoundAt(final BlockPos pos, final SoundEffect sound, final int tickDelay,
 			@Nullable final SoundCategory categoryOverride) {
 		if (tickDelay > 0 && !canFitSound())
 			return;
-		
-		if(!canSoundBeHeard(pos, sound.getVolume()))
+
+		if (!canSoundBeHeard(pos, sound.getVolume()))
 			return;
 
 		final SpotSound s = new SpotSound(pos, sound, tickDelay, categoryOverride);
@@ -228,8 +237,9 @@ public class SoundManager {
 		SoundSystemConfig.setNumberStreamingChannels(streamChannels);
 	}
 
-	// Not entirely sure why they changed things.  This reads the mods sounds.json
-	// and forces registration of all the mod sounds.  Code generally comes from
+	// Not entirely sure why they changed things. This reads the mods
+	// sounds.json
+	// and forces registration of all the mod sounds. Code generally comes from
 	// the Minecraft sound processing logic.
 	public static void initializeRegistry() {
 		final ParameterizedType TYPE = new ParameterizedType() {
@@ -246,18 +256,19 @@ public class SoundManager {
 			}
 		};
 
-		try(final InputStream stream = SoundManager.class.getResourceAsStream("/assets/dsurround/sounds.json")) {
-			if(stream != null) {
+		try (final InputStream stream = SoundManager.class.getResourceAsStream("/assets/dsurround/sounds.json")) {
+			if (stream != null) {
 				@SuppressWarnings("unchecked")
-				final Map<String, Object> sounds = (Map<String, Object>)new Gson().fromJson(new InputStreamReader(stream), TYPE);
-				for(final String s: sounds.keySet())
+				final Map<String, Object> sounds = (Map<String, Object>) new Gson()
+						.fromJson(new InputStreamReader(stream), TYPE);
+				for (final String s : sounds.keySet())
 					SoundUtils.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, s));
-				
+
 			}
-		} catch(final Throwable t) {
+		} catch (final Throwable t) {
 			ModLog.error("Unable to read the mod sound file!", t);
 		}
-		
+
 		if (ModOptions.enableDebugLogging) {
 			final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
 			final List<String> sounds = new ArrayList<String>();

@@ -65,15 +65,21 @@ public class TrackingSound extends PositionedSound implements ITickableSound {
 
 		// Don't set volume to 0; MC will optimize out
 		this.sound = sound;
-		this.maxVolume = sound.volume;
-		this.volume = fadeIn ? DONE_VOLUME_THRESHOLD * 2 : sound.volume;
+		this.maxVolume = sound.getVolume();
+		this.volume = fadeIn ? DONE_VOLUME_THRESHOLD * 2 : this.maxVolume;
 		this.pitch = sound.getPitch(RANDOM);
-		this.repeat = sound.repeatDelay == 0;
 
-		// Repeat delay
-		this.repeatDelay = 0;
-		
 		updateLocation();
+	}
+
+	@Override
+	public boolean canRepeat() {
+		return this.sound.isRepeatable();
+	}
+
+	@Override
+	public int getRepeatDelay() {
+		return this.sound.getRepeat(RANDOM);
 	}
 
 	public void fadeAway() {
@@ -83,7 +89,7 @@ public class TrackingSound extends PositionedSound implements ITickableSound {
 	public boolean isFading() {
 		return this.isFading;
 	}
-	
+
 	public boolean isDonePlaying() {
 		return this.isDonePlaying;
 	}
@@ -103,8 +109,8 @@ public class TrackingSound extends PositionedSound implements ITickableSound {
 	public void update() {
 		if (this.isDonePlaying())
 			return;
-		
-		if(!this.attachedTo.isEntityAlive()) {
+
+		if (!this.attachedTo.isEntityAlive()) {
 			this.isDonePlaying = true;
 			return;
 		}
@@ -118,7 +124,11 @@ public class TrackingSound extends PositionedSound implements ITickableSound {
 		}
 
 		if (this.volume <= DONE_VOLUME_THRESHOLD) {
+			// Make sure the volume is 0 so a repeating
+			// sound won't make a last gasp in the sound
+			// engine.
 			this.isDonePlaying = true;
+			this.volume = 0.0F;
 		} else {
 			updateLocation();
 		}
