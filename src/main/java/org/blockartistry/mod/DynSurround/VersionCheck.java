@@ -56,16 +56,23 @@ public final class VersionCheck {
 		return null;
 	}
 
+	private static boolean dontPrintMessage(@Nonnull final CheckResult result) {
+		return result == null || result.status == null || result.target == null || result.url == null
+				|| result.status == Status.UP_TO_DATE || result.status == Status.AHEAD
+				|| result.status == Status.PENDING || result.status == Status.FAILED;
+	}
+
 	@Nullable
 	private static String getUpdateMessage(@Nonnull final String modId) {
 		final ModContainer mod = findModContainer(modId);
 		if (mod == null)
 			return null;
 		final CheckResult result = ForgeVersion.getResult(mod);
-		if (result.status == Status.UP_TO_DATE)
+		if (dontPrintMessage(result))
 			return null;
-		return Localization.format("msg.NewVersion.dsurround", DSurround.MOD_NAME, result.target.toString(),
-				result.url.toString());
+		final String t = result.target.toString();
+		final String u = result.url.toString();
+		return Localization.format("msg.NewVersion.dsurround", DSurround.MOD_NAME, t, u);
 	}
 
 	@SubscribeEvent
