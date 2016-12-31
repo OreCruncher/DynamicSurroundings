@@ -1,3 +1,8 @@
+###DynamicSurroundings-3.1.4.1BETA
+**Fixes**
+* Improved error checking around the Forge version check information.
+* Fixed syntax error in entity chat data file.
+
 ###DynamicSurroundings-3.1.4.0BETA
 **What's New!**
 * Better support for Tough as Nails.  Dynamic Surroundings will use the temperature information from TAN to determine weather rendering effects as well as player temperature settings.
