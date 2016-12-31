@@ -35,7 +35,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -131,7 +130,6 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	public void onDisconnect() {
 		Minecraft.getMinecraft().getSoundHandler().removeListener(this);
 		clearSounds();
-		// TODO: Need to vet this
 		INSTANCE = null;
 	}
 
@@ -310,13 +308,15 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		if (ModOptions.enableDebugLogging) {
 			final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
 			final List<String> sounds = new ArrayList<String>();
-			for (final Object resource : handler.soundRegistry.getKeys())
+			for (final ResourceLocation resource : handler.soundRegistry.getKeys()) {
 				sounds.add(resource.toString());
+			}
 			Collections.sort(sounds);
 
 			ModLog.info("*** SOUND REGISTRY ***");
 			for (final String sound : sounds)
 				ModLog.info(sound);
+			
 		}
 	}
 
