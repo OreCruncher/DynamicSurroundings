@@ -76,7 +76,7 @@ public class ParticleWaterSplash extends ParticleJet {
 
 	}
 
-	private int soundCount = -1;
+	private String soundId = null;
 
 	public ParticleWaterSplash(final int strength, final World world, final double x, final double y, final double z) {
 		super(strength, world, x, y, z);
@@ -91,15 +91,15 @@ public class ParticleWaterSplash extends ParticleJet {
 	@Override
 	protected void spawnJetParticle() {
 
-		if (++this.soundCount % 20 == 0) {
+		if (!SoundEffectHandler.INSTANCE.isSoundPlaying(this.soundId)) {
 			final float volume = this.jetStrength / 3.0F;
 			if (SoundEffectHandler.canSoundBeHeard(this.getPos(), volume)) {
 				final float pitch = 1.0F - 0.7F * (volume / 3.0F) + (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F;
 				final SoundEffect effect = new SoundEffect(splashSound, volume, pitch);
-				SoundEffectHandler.INSTANCE.playSoundAt(this.getPos(), effect, 0, SoundCategory.BLOCKS);
+				this.soundId = SoundEffectHandler.INSTANCE.playSoundAt(this.getPos(), effect, 0, SoundCategory.BLOCKS);
 			}
 		}
-
+		
 		int splashCount = this.getParticleLimit() - this.myParticles.size();
 
 		for (int j = 0; (float) j < splashCount; ++j) {

@@ -114,9 +114,7 @@ public class WaterSplashJetEffect extends JetEffect {
 		final boolean isUnbounded = isUnboundedLiquid(world, pos);
 		final int strength = liquidBlockCount(world, pos.up()) + (isUnbounded ? 1 : 0);
 
-		// Not sure how this can happen. Appears to happen
-		// when water blocks are receding.
-		if (strength <= 0)
+		if (strength < 2)
 			return;
 
 		final float height = BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state));

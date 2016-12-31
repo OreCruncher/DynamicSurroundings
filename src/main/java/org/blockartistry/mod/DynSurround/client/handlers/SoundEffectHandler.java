@@ -46,6 +46,7 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.client.sound.Emitter;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SpotSound;
+import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
@@ -68,6 +69,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -79,7 +81,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 	private static final int AGE_THRESHOLD_TICKS = 5;
 	private static final int SOUND_QUEUE_SLACK = 6;
-	
+
 	public static SoundEffectHandler INSTANCE = null;
 
 	private final Map<SoundEffect, Emitter> emitters = new HashMap<SoundEffect, Emitter>();
@@ -189,26 +191,56 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 				|| mgr.delayedSounds.containsKey(sound);
 	}
 
-	public void playSound(@Nonnull final ISound sound) {
+	public boolean isSoundPlaying(@Nonnull final String soundId) {
+		if (StringUtils.isEmpty(soundId))
+			return false;
+		final net.minecraft.client.audio.SoundManager mgr = Minecraft.getMinecraft().getSoundHandler().sndManager;
+		return mgr.playingSounds.containsKey(soundId);
+	}
+
+	private ISound currentSound;
+	private String soundId;
+
+	@Nullable
+	public String playSound(@Nonnull final ISound sound) {
 		if (sound != null) {
 			if (ModOptions.enableDebugLogging)
 				ModLog.debug("PLAYING: " + sound.toString());
+			this.currentSound = sound;
+			this.soundId = null;
 			Minecraft.getMinecraft().getSoundHandler().playSound(sound);
+		} else {
+			this.soundId = null;
 		}
+		this.currentSound = null;
+		return this.soundId;
 	}
 
-	public void playSoundAtPlayer(@Nullable EntityPlayer player, @Nonnull final SoundEffect sound,
+	/**
+	 * This event hook attempts to associate the internal UUID of the sound play
+	 * event with a sound.
+	 */
+	@SubscribeEvent
+	public void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
+		if (event.getSound() == this.currentSound)
+			this.soundId = event.getUuid();
+	}
+
+	@Nullable
+	public String playSoundAtPlayer(@Nullable EntityPlayer player, @Nonnull final SoundEffect sound,
 			@Nullable final SoundCategory categoryOverride) {
 
 		if (player == null)
 			player = EnvironState.getPlayer();
 
 		final SpotSound s = new SpotSound(player, sound, categoryOverride);
+		String soundId = null;
 
 		if (!canFitSound())
 			this.pending.add(s);
 		else
-			playSound(s);
+			soundId = playSound(s);
+		return soundId;
 	}
 
 	/**
@@ -226,20 +258,23 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		return distanceSq <= power;
 	}
 
-	public void playSoundAt(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int tickDelay,
+	@Nullable
+	public String playSoundAt(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int tickDelay,
 			@Nullable final SoundCategory categoryOverride) {
 		if (tickDelay > 0 && !canFitSound())
-			return;
+			return null;
 
 		if (!canSoundBeHeard(pos, sound.getVolume()))
-			return;
+			return null;
 
 		final SpotSound s = new SpotSound(pos, sound, tickDelay, categoryOverride);
+		String soundId = null;
 
 		if (tickDelay > 0 || !canFitSound())
 			pending.add(s);
 		else
-			playSound(s);
+			soundId = playSound(s);
+		return soundId;
 	}
 
 	public static void configureSound() {
@@ -316,7 +351,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 			ModLog.info("*** SOUND REGISTRY ***");
 			for (final String sound : sounds)
 				ModLog.info(sound);
-			
+
 		}
 	}
 
@@ -379,12 +414,12 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 	@Override
 	public void soundPlay(@Nonnull final ISound soundIn, @Nonnull final SoundEventAccessor accessor) {
-		if(!ModOptions.enableDebugLogging)
+		if (!ModOptions.enableDebugLogging)
 			return;
-		
-		if(soundIn.getSoundLocation().getResourceDomain().equals(DSurround.RESOURCE_ID))
+
+		if (soundIn.getSoundLocation().getResourceDomain().equals(DSurround.RESOURCE_ID))
 			return;
-		
+
 		ModLog.debug("Sound callback: [%s]", soundIn.getSoundLocation().toString());
 	}
 
