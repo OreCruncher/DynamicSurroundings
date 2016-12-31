@@ -30,7 +30,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -62,7 +61,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ISoundEventListener;
 import net.minecraft.client.audio.SoundEventAccessor;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -89,7 +87,6 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 	public SoundEffectHandler() {
 		INSTANCE = this;
-		initializeRegistry();
 	}
 
 	@Override
@@ -312,7 +309,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	// sounds.json
 	// and forces registration of all the mod sounds. Code generally comes from
 	// the Minecraft sound processing logic.
-	protected void initializeRegistry() {
+	public static void initializeRegistry() {
 		final ParameterizedType TYPE = new ParameterizedType() {
 			public Type[] getActualTypeArguments() {
 				return new Type[] { String.class, Object.class };
@@ -340,19 +337,6 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 			ModLog.error("Unable to read the mod sound file!", t);
 		}
 
-		if (ModOptions.enableDebugLogging) {
-			final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
-			final List<String> sounds = new ArrayList<String>();
-			for (final ResourceLocation resource : handler.soundRegistry.getKeys()) {
-				sounds.add(resource.toString());
-			}
-			Collections.sort(sounds);
-
-			ModLog.info("*** SOUND REGISTRY ***");
-			for (final String sound : sounds)
-				ModLog.info(sound);
-
-		}
 	}
 
 	// Redirect hook from Minecraft's SoundEffectHandler so we can scale the

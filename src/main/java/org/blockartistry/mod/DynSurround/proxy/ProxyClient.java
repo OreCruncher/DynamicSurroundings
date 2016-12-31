@@ -57,6 +57,7 @@ public class ProxyClient extends Proxy {
 	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		super.preInit(event);
 		SoundEffectHandler.configureSound();
+		SoundEffectHandler.initializeRegistry();
 	}
 
 	@Override

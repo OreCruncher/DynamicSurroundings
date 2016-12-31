@@ -24,6 +24,7 @@
 package org.blockartistry.mod.DynSurround.registry;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -33,6 +34,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import gnu.trove.map.hash.TObjectFloatHashMap;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.util.ResourceLocation;
 
 //@SideOnly(Side.CLIENT)
 public final class SoundRegistry extends Registry {
@@ -44,7 +48,7 @@ public final class SoundRegistry extends Registry {
 	SoundRegistry() {
 
 	}
-	
+
 	@Override
 	public void init() {
 		cullSoundNamePatterns.clear();
@@ -78,6 +82,21 @@ public final class SoundRegistry extends Registry {
 				}
 			}
 		}
+
+		if (ModOptions.enableDebugLogging) {
+			final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
+			final List<String> sounds = new ArrayList<String>();
+			for (final ResourceLocation resource : handler.soundRegistry.getKeys()) {
+				sounds.add(resource.toString());
+			}
+			Collections.sort(sounds);
+
+			ModLog.info("*** SOUND REGISTRY ***");
+			for (final String sound : sounds)
+				ModLog.info(sound);
+
+		}
+
 	}
 
 	@Override
