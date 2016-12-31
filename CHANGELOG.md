@@ -1,3 +1,20 @@
+###DynamicSurroundings-3.1.4.0BETA
+**What's New!**
+* Better support for Tough as Nails.  Dynamic Surroundings will use the temperature information from TAN to determine weather rendering effects as well as player temperature settings.
+* Tap into Forge's version check capability to check for Dynamic Surrounding updates.  Starting with this version of the mod, any new version will cause Forge to indicate new mod availability.  Disabling version checking in the Dynamic Surroundings config will cause the chat notice to be suppressed but will not block Forge online checking.
+* Waterfall splash and sound effect.  Will occur when water is flowing down and hits a solid or liquid surface.  Can be sound and particle intensive depending on the size of the waterfall.  I recommend blocking the sound "minecraft:block.water.ambient" if you have the waterfall splash enabled.
+* Witches and skeletons have speech text.
+* Started making a "public" API for mod integration.
+
+**Fixes**
+* The default sounds for sound culling were incorrect.  Updated to match the new Minecraft sound names.  It is recommended that you delete the option in the config file and let Dynamic Surroundings regenerate the default settings for the option.
+* The Forge event that the culling/blocking logic was using changed so culling/blocking didn't take place. :\
+
+**Changes**
+* Scripting now uses the apostrophe ' to mark a string.  Using the quote became a pain especially since it had to be escaped in the Json config file.
+* Tweaked "inside" detection algorithm.  Gives more weight to blocks above and around the player than those further out. Helps a bit with heavy forests though there are cases where the player will still be considered "inside".  Usually occurs when the tree has lots of logs in the canopy.
+* Modified the "underground" background ambient sound to only play when the player's Y is <= 32 (i.e. going deeper).  The rock slide and monster growl sounds are unaffected.
+
 ###DynamicSurroundings-3.1.3.0BETA
 **What's New!**
 * Want to know what mobs are thinking?  Look at the emojis!  This is WIP and subject to change.  Entities will have emoji particles orbiting their head indicating what they are thinking.  Works in SP and SMP where the server has Dynamic Surroundings installed.
