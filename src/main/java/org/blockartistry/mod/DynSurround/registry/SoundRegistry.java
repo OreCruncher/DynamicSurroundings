@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import gnu.trove.map.hash.TObjectFloatHashMap;
@@ -88,7 +89,7 @@ public final class SoundRegistry extends Registry {
 			}
 		}
 
-		if (ModOptions.enableDebugLogging) {
+		if (ModOptions.enableDebugLogging && !DSurround.proxy().isRunningAsServer()) {
 			final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
 			final List<String> sounds = new ArrayList<String>();
 			final List<String> smells = new ArrayList<String>();
