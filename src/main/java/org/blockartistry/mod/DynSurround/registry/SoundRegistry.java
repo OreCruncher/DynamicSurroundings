@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.registry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
@@ -35,7 +36,11 @@ import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISoundEventAccessor;
+import net.minecraft.client.audio.Sound;
+import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
 
 //@SideOnly(Side.CLIENT)
@@ -86,14 +91,32 @@ public final class SoundRegistry extends Registry {
 		if (ModOptions.enableDebugLogging) {
 			final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
 			final List<String> sounds = new ArrayList<String>();
-			for (final ResourceLocation resource : handler.soundRegistry.getKeys()) {
-				sounds.add(resource.toString());
+			final List<String> smells = new ArrayList<String>();
+			for (final Entry<ResourceLocation, SoundEventAccessor> e : handler.soundRegistry.soundRegistry.entrySet()) {
+				sounds.add(e.getKey().toString());
+
+				for (final ISoundEventAccessor<Sound> x : e.getValue().accessorList) {
+					final ResourceLocation ogg = x.cloneEntry().getSoundAsOggLocation();
+					try (final IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(ogg)) {
+						resource.getInputStream();
+					} catch (final Throwable t) {
+						smells.add(String.format("INACCESSABLE [%s] [%s]", e.getKey().toString(), ogg.toString()));
+
+					}
+				}
 			}
 			Collections.sort(sounds);
 
 			ModLog.info("*** SOUND REGISTRY ***");
 			for (final String sound : sounds)
 				ModLog.info(sound);
+
+			if (smells.size() > 0) {
+				Collections.sort(smells);
+				ModLog.info("*** SOUND SMELLS ***");
+				for (final String smell : smells)
+					ModLog.info(smell);
+			}
 
 		}
 
