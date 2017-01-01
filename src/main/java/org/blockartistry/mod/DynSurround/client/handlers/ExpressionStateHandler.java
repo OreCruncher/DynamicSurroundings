@@ -359,19 +359,19 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		for (final DynamicVariable dv : variables)
 			dv.update();
 		
-		if(ModOptions.showScriptVariables)
+		if(ModOptions.showDebugDialog)
 			DiagnosticPanel.refresh();
 	}
 	
 	@Override
 	public void onConnect() {
-		if(ModOptions.showScriptVariables)
+		if(ModOptions.showDebugDialog)
 			DiagnosticPanel.create();
 	}
 	
 	@Override
 	public void onDisconnect() {
-		if(ModOptions.showScriptVariables)
+		if(ModOptions.showDebugDialog)
 			DiagnosticPanel.destroy();
 	}
 
