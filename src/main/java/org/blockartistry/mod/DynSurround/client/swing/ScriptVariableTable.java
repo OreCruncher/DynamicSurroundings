@@ -31,7 +31,12 @@ import javax.swing.table.TableModel;
 
 import org.blockartistry.mod.DynSurround.client.handlers.ExpressionStateHandler;
 import org.blockartistry.mod.DynSurround.client.handlers.ExpressionStateHandler.DynamicVariable;
+import org.blockartistry.mod.DynSurround.util.Expression.Variant;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
 public class ScriptVariableTable implements TableModel  {
 	
 	private static final String[] columnNames = { "Variable", "Value" };
@@ -72,7 +77,10 @@ public class ScriptVariableTable implements TableModel  {
 		final DynamicVariable v = variables.get(rowIndex);
 		if(v == null)
 			return "";
-		return columnIndex == 0 ? v.getName() : v.eval().toString();
+		if(columnIndex == 0)
+			return v.getName();
+		final Variant result = v.eval();
+		return result == null ? "" : result.toString();
 	}
 
 	@Override

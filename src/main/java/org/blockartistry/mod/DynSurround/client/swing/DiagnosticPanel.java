@@ -25,52 +25,58 @@
 package org.blockartistry.mod.DynSurround.client.swing;
 
 import java.awt.BorderLayout;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.WindowConstants;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SuppressWarnings("serial")
+@SideOnly(Side.CLIENT)
 public class DiagnosticPanel extends JPanel {
-	
-	protected JFrame frame = null;
-	protected JTable table = null;
-	
+
+	protected final JFrame frame;
+	protected final JTable table;
+
 	protected DiagnosticPanel() {
-        
-        this.setLayout(new BorderLayout());
-		
-        this.frame = new JFrame("Script Environment Variables");
-        this.table = new JTable(new ScriptVariableTable());
 
-        final JScrollPane tableContainer = new JScrollPane(table);
+		this.setLayout(new BorderLayout());
 
-        this.add(tableContainer, BorderLayout.CENTER);
+		this.frame = new JFrame("Script Variable Values");
+		this.frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		this.table = new JTable(new ScriptVariableTable());
 
-        frame.getContentPane().add(this);
-        frame.pack();
-        frame.setVisible(true);
-    }
-	
+		final JScrollPane tableContainer = new JScrollPane(this.table);
+
+		this.add(tableContainer, BorderLayout.CENTER);
+
+		this.frame.getContentPane().add(this);
+		this.frame.pack();
+		this.frame.setAutoRequestFocus(false);
+		this.frame.setVisible(true);
+	}
+
 	public void close() {
 		this.setVisible(false);
 		this.frame.dispose();
 	}
-	
+
 	private static DiagnosticPanel INSTANCE = null;
-	
+
 	public static void create() {
 		INSTANCE = new DiagnosticPanel();
 	}
-	
+
 	public static void refresh() {
-		if(INSTANCE != null)
+		if (INSTANCE != null)
 			INSTANCE.repaint();
 	}
-	
+
 	public static void destroy() {
-		if(INSTANCE != null) {
+		if (INSTANCE != null) {
 			INSTANCE.close();
 			INSTANCE = null;
 		}
