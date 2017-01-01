@@ -28,6 +28,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.lwjgl.opengl.GL11;
@@ -95,17 +96,20 @@ public class ParticleBillboard extends Particle {
 		this.font = Minecraft.getMinecraft().fontRendererObj;
 		this.scale = 1F;
 
-		this.canBeSeen = EnvironState.getPlayer().canEntityBeSeen(this.subject);
+		this.canBeSeen = canBeSeen();
+	}
+
+	private boolean canBeSeen() {
+		if (this.subject.isInvisibleToPlayer(EnvironState.getPlayer()))
+			return false;
+		if (!EnvironState.getPlayer().canEntityBeSeen(this.subject))
+			return false;
+		final double range = ModOptions.speechBubbleRange * ModOptions.speechBubbleRange;
+		return EnvironState.getPlayer().getDistanceSqToEntity(this.subject) <= range;
 	}
 
 	public boolean shouldExpire() {
-		if (!this.isAlive())
-			return true;
-
-		if (this.subject == null || !this.subject.isEntityAlive())
-			return true;
-
-		if (this.subject.isInvisibleToPlayer(EnvironState.getPlayer()))
+		if (!this.isAlive() || !this.subject.isEntityAlive())
 			return true;
 
 		this.text = this.accessor.apply(this.subject.getEntityId());
@@ -129,7 +133,7 @@ public class ParticleBillboard extends Particle {
 		} else {
 
 			updatePosition();
-			this.canBeSeen = EnvironState.getPlayer().canEntityBeSeen(this.subject);
+			this.canBeSeen = canBeSeen();
 
 			if (this.canBeSeen) {
 				this.textWidth = MIN_TEXT_WIDTH;
