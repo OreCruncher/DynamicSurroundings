@@ -86,6 +86,7 @@
 				"biomesoplenty:flower_1:5",
 				"biomesoplenty:plant_0:1",
 				"biomesoplenty:plant_0:2",
+				"biomesoplenty:plant_0:3",
 				"biomesoplenty:plant_0:5",
 				"biomesoplenty:plant_0:6",
 				"biomesoplenty:plant_0:7",
@@ -101,7 +102,7 @@
 				{
 					"effect":"firefly",
 					"conditions":"isNotRaining && isNight && ONEOF(biome.temperature,'mild','warm') && NOT(biome.isDry)",
-					"chance":75
+					"chance":50
 				}
 				
 			]

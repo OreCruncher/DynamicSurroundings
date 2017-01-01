@@ -156,6 +156,18 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 				this.value = new Variant(EnvironState.getBiomeTemperature().getValue());
 			}
 		});
+		register(new DynamicVariable("biome.rainfall") {
+			@Override
+			public void update() {
+				this.value = new Variant(EnvironState.getPlayerBiome().getRainfall());
+			}
+		});
+		register(new DynamicVariable("biome.temperatureValue") {
+			@Override
+			public void update() {
+				this.value = new Variant(EnvironState.getPlayerBiome().getTemperature());
+			}
+		});
 		register(new DynamicVariable("biome.isFoggy") {
 			@Override
 			public void update() {

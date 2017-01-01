@@ -29,6 +29,8 @@ import java.util.List;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.BlockMap;
+import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
+import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.registry.FootstepsRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
@@ -97,21 +99,28 @@ public final class WailaHandler implements IWailaDataProvider {
 			}
 
 			text.add("Material: " + MCHelper.getMaterialName(accessor.getBlockState().getMaterial()));
-			final FootstepsRegistry footsteps  = RegistryManager.get(RegistryType.FOOTSTEPS);
+			final FootstepsRegistry footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
 			final BlockMap bm = footsteps.getBlockMap();
 			if (bm != null) {
 				final List<String> data = new ArrayList<String>();
 				bm.collectData(accessor.getBlockState(), data);
-				if(data.size() > 0) {
+				if (data.size() > 0) {
 					text.add(TextFormatting.YELLOW + "FootstepsRegistry");
 					for (final String s : data)
 						text.add(TextFormatting.YELLOW + s);
 				}
 			}
+
+			final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
+			final List<BlockEffect> effects = blocks.getEffects(state);
+			if(effects != null)
+				for (final BlockEffect e : effects) {
+					text.add(TextFormatting.RED + e.getEffectType().getName());
+				}
 		}
-		
+
 		final List<String> oreNames = gatherOreNames(stack);
-		if(oreNames.size() > 0) {
+		if (oreNames.size() > 0) {
 			text.add(TextFormatting.GREEN + "Dictionary Names");
 			for (final String ore : gatherOreNames(stack))
 				text.add(TextFormatting.GREEN + ore);

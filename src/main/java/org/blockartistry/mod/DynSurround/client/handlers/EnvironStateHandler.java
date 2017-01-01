@@ -376,7 +376,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	// for debug.  Good for testing.
 	private final static String[] scripts = {
 		"'Dim: ' + player.dimension + '/' + player.dimensionName",
-		"'Biome: ' + biome.name + '; Temp ' + biome.temperature",
+		"'Biome: ' + biome.name + '; Temp ' + biome.temperature + '; rainfall ' + biome.rainfall + ' temperature ' + biome.temperatureValue",
 		"'Season: ' + season + IF(isRaining,' raining','') + IF(isNight,' night',' day') + IF(player.isInside,' inside',' outside')",
 		"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','') + ' Y: ' + player.Y",
 	};
