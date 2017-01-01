@@ -43,6 +43,7 @@ import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
 
 //@SideOnly(Side.CLIENT)
 public final class SoundRegistry extends Registry {
@@ -51,7 +52,8 @@ public final class SoundRegistry extends Registry {
 	private final List<Pattern> blockSoundNamePatterns = new ArrayList<Pattern>();
 	private final TObjectFloatHashMap<String> volumeControl = new TObjectFloatHashMap<String>();
 
-	SoundRegistry() {
+	public SoundRegistry(@Nonnull final Side side) {
+		super(side);
 
 	}
 
@@ -89,22 +91,11 @@ public final class SoundRegistry extends Registry {
 			}
 		}
 
-		if (ModOptions.enableDebugLogging && !DSurround.proxy().isRunningAsServer()) {
+		if (ModOptions.enableDebugLogging && this.side == Side.CLIENT) {
 			final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
 			final List<String> sounds = new ArrayList<String>();
-			final List<String> smells = new ArrayList<String>();
 			for (final Entry<ResourceLocation, SoundEventAccessor> e : handler.soundRegistry.soundRegistry.entrySet()) {
 				sounds.add(e.getKey().toString());
-
-				for (final ISoundEventAccessor<Sound> x : e.getValue().accessorList) {
-					final ResourceLocation ogg = x.cloneEntry().getSoundAsOggLocation();
-					try (final IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(ogg)) {
-						resource.getInputStream();
-					} catch (final Throwable t) {
-						smells.add(String.format("INACCESSABLE [%s] [%s]", e.getKey().toString(), ogg.toString()));
-
-					}
-				}
 			}
 			Collections.sort(sounds);
 
@@ -112,12 +103,45 @@ public final class SoundRegistry extends Registry {
 			for (final String sound : sounds)
 				ModLog.info(sound);
 
-			if (smells.size() > 0) {
-				Collections.sort(smells);
-				ModLog.info("*** SOUND SMELLS ***");
-				for (final String smell : smells)
-					ModLog.info(smell);
-			}
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+
+					final List<String> smells = new ArrayList<String>();
+					try {
+						for (final Entry<ResourceLocation, SoundEventAccessor> e : handler.soundRegistry.soundRegistry
+								.entrySet()) {
+							for (final ISoundEventAccessor<Sound> x : e.getValue().accessorList) {
+								final ResourceLocation ogg = x.cloneEntry().getSoundAsOggLocation();
+								try (final IResource resource = Minecraft.getMinecraft().getResourceManager()
+										.getResource(ogg)) {
+									resource.getInputStream();
+								} catch (final Throwable t) {
+									smells.add(String.format("INACCESSABLE [%s] [%s]", e.getKey().toString(),
+											ogg.toString()));
+								}
+							}
+						}
+
+					} catch (final Throwable t) {
+
+					}
+
+					if (smells.size() > 0) {
+						Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+							@Override
+							public void run() {
+								Collections.sort(smells);
+								ModLog.info("*** SOUND SMELLS ***");
+								for (final String smell : smells)
+									ModLog.info(smell);
+							}
+						});
+					}
+				}
+
+			}).start();
 
 		}
 

@@ -36,10 +36,12 @@ import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
+import net.minecraftforge.fml.relauncher.Side;
 
 public final class DimensionRegistry extends Registry {
 
-	DimensionRegistry() {
+	DimensionRegistry(@Nonnull final Side side) {
+		super(side);
 	}
 
 	@Override

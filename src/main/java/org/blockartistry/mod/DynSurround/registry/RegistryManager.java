@@ -107,10 +107,10 @@ public class RegistryManager {
 
 	RegistryManager(final Side side) {
 		this.side = side;
-		this.registries[RegistryType.DIMENSION.getId()] = new DimensionRegistry();
-		this.registries[RegistryType.BIOME.getId()] = new BiomeRegistry();
-		this.registries[RegistryType.SOUND.getId()] = new SoundRegistry();
-		this.registries[RegistryType.SEASON.getId()] = new SeasonRegistry();
+		this.registries[RegistryType.DIMENSION.getId()] = new DimensionRegistry(side);
+		this.registries[RegistryType.BIOME.getId()] = new BiomeRegistry(side);
+		this.registries[RegistryType.SOUND.getId()] = new SoundRegistry(side);
+		this.registries[RegistryType.SEASON.getId()] = new SeasonRegistry(side);
 	}
 
 	void reload() {

@@ -24,10 +24,16 @@
 
 package org.blockartistry.mod.DynSurround.registry;
 
+import javax.annotation.Nonnull;
+
+import net.minecraftforge.fml.relauncher.Side;
+
 public abstract class Registry {
 
-	Registry() {
-		
+	public final Side side;
+	
+	Registry(@Nonnull Side side) {
+		this.side = side;
 	}
 	
 	public void init() {

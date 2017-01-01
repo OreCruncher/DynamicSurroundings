@@ -35,6 +35,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.relauncher.Side;
 
 public final class SeasonRegistry extends Registry {
 
@@ -42,6 +43,10 @@ public final class SeasonRegistry extends Registry {
 	private static final boolean TOUGHASNAILS_API = Loader.isModLoaded("ToughAsNails");
 
 	private final TIntObjectHashMap<SeasonInfo> seasonData = new TIntObjectHashMap<SeasonInfo>();
+	
+	public SeasonRegistry(@Nonnull final Side side) {
+		super(side);
+	}
 
 	protected SeasonInfo factory(@Nonnull final World world) {
 

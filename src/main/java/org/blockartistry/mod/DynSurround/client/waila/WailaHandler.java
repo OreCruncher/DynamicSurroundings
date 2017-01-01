@@ -105,25 +105,27 @@ public final class WailaHandler implements IWailaDataProvider {
 				final List<String> data = new ArrayList<String>();
 				bm.collectData(accessor.getBlockState(), data);
 				if (data.size() > 0) {
-					text.add(TextFormatting.YELLOW + "FootstepsRegistry");
+					text.add(TextFormatting.YELLOW + "Footstep Accoustics");
 					for (final String s : data)
-						text.add(TextFormatting.YELLOW + s);
+						text.add(TextFormatting.YELLOW + " " + s);
 				}
 			}
 
 			final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
 			final List<BlockEffect> effects = blocks.getEffects(state);
-			if(effects != null)
+			if(effects != null && effects.size() > 0) {
+				text.add(TextFormatting.RED + "Block Effects");
 				for (final BlockEffect e : effects) {
-					text.add(TextFormatting.RED + e.getEffectType().getName());
+					text.add(TextFormatting.RED + " " + e.getEffectType().getName());
 				}
+			}
 		}
 
 		final List<String> oreNames = gatherOreNames(stack);
 		if (oreNames.size() > 0) {
 			text.add(TextFormatting.GREEN + "Dictionary Names");
 			for (final String ore : gatherOreNames(stack))
-				text.add(TextFormatting.GREEN + ore);
+				text.add(TextFormatting.GREEN + " " + ore);
 		}
 
 		text.add(TextFormatting.GOLD + "----------");

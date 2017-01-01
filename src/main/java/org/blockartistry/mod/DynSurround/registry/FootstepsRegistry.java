@@ -51,6 +51,7 @@ import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class FootstepsRegistry extends Registry {
@@ -59,7 +60,8 @@ public class FootstepsRegistry extends Registry {
 	private ResourcePacks dealer = new ResourcePacks();
 	private final Isolator isolator;
 
-	public FootstepsRegistry() {
+	public FootstepsRegistry(@Nonnull final Side side) {
+		super(side);
 		this.isolator = new Isolator();
 	}
 

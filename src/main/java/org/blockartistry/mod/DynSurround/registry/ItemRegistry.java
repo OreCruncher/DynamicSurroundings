@@ -33,12 +33,17 @@ import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.data.xface.ItemConfig;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class ItemRegistry extends Registry {
 	
 	private final List<Class<?>> swordItems = new ArrayList<Class<?>>();
 	private final List<Class<?>> axeItems = new ArrayList<Class<?>>();
 	private final List<Class<?>> bowItems = new ArrayList<Class<?>>();
+	
+	public ItemRegistry(@Nonnull final Side side) {
+		super(side);
+	}
 
 	@Override
 	public void init() {

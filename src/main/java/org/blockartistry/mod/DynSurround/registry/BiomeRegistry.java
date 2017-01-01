@@ -45,10 +45,12 @@ import org.blockartistry.mod.DynSurround.util.MyUtils;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.relauncher.Side;
 
 public final class BiomeRegistry extends Registry {
 
-	BiomeRegistry() {
+	BiomeRegistry(@Nonnull final Side side) {
+		super(side);
 	}
 	
 	@Override

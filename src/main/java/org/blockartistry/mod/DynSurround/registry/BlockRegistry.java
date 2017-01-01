@@ -56,11 +56,13 @@ import org.blockartistry.mod.DynSurround.util.MCHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 
 public final class BlockRegistry extends Registry {
 
-	BlockRegistry() {
+	BlockRegistry(@Nonnull final Side side) {
+		super(side);
 	}
 
 	@Override
