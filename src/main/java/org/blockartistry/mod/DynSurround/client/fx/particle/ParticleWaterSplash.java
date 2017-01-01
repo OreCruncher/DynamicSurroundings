@@ -42,7 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleWaterSplash extends ParticleJet {
 
-	private static final ResourceLocation splashSound = new ResourceLocation(DSurround.RESOURCE_ID, "rain");
+	private static final ResourceLocation splashSound = new ResourceLocation(DSurround.RESOURCE_ID, "waterfall");
 
 	private static class ParticleWaterSpray extends ParticleRain {
 
@@ -92,7 +92,7 @@ public class ParticleWaterSplash extends ParticleJet {
 	protected void spawnJetParticle() {
 
 		if (!SoundEffectHandler.INSTANCE.isSoundPlaying(this.soundId)) {
-			final float volume = this.jetStrength / 3.0F;
+			final float volume = this.jetStrength / 10.0F;
 			if (SoundEffectHandler.canSoundBeHeard(this.getPos(), volume)) {
 				final float pitch = 1.0F - 0.7F * (volume / 3.0F) + (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F;
 				final SoundEffect effect = new SoundEffect(splashSound, volume, pitch);

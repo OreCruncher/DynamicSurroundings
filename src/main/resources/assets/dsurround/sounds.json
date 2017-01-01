@@ -1200,6 +1200,11 @@
 			"dsurround:ambient/steve/bowpull4"
 		]
 		
+	},
+	"waterfall":{
+		"category":"ambient",
+		"sounds":[
+			"dsurround:ambient/stream/waterfall"
+		]
 	}
-	
 }
