@@ -26,6 +26,8 @@ package org.blockartistry.mod.DynSurround.registry.season;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.registry.SeasonType;
+
 import foxie.calendar.api.CalendarAPI;
 import foxie.calendar.api.ICalendarProvider;
 import foxie.calendar.api.ISeasonProvider;

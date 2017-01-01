@@ -27,6 +27,9 @@ package org.blockartistry.mod.DynSurround.registry.season;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.registry.SeasonType;
+import org.blockartistry.mod.DynSurround.registry.TemperatureRating;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;

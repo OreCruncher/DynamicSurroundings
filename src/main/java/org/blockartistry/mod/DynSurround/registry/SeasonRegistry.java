@@ -28,7 +28,6 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo;
-import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo.TemperatureRating;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfoCalendar;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfoNether;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfoToughAsNails;

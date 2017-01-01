@@ -43,114 +43,20 @@ public final class BiomeInfo {
 	private final String biomeName;
 	private final Biome biome;
 
-	public int getBiomeId() {
-		return this.biomeId;
-	}
-
-	public String getBiomeName() {
-		return this.biomeName;
-	}
-
 	private boolean hasPrecipitation;
 	private boolean hasDust;
 	private boolean hasAurora;
 	private boolean hasFog;
-	
-	public boolean getHasPrecipitation() {
-		return canRain() || getEnableSnow();
-	}
-	
-	public boolean canRain() {
-		return this.biome != null ? this.biome.canRain() : false;
-	}
-	
-	public boolean getEnableSnow() {
-		return this.biome != null ? this.biome.getEnableSnow() : false;
-	}
-	
-	public void setHasPrecipitation(final boolean flag) {
-		this.hasPrecipitation = flag;
-	}
-	
-	public boolean getHasDust() {
-		return this.hasDust;
-	}
-	
-	public void setHasDust(final boolean flag) {
-		this.hasDust = flag;
-	}
-	
-	public boolean getHasAurora() {
-		return this.hasAurora;
-	}
-	
-	public void setHasAurora(final boolean flag) {
-		this.hasAurora = flag;
-	}
-	
-	public boolean getHasFog() {
-		return this.hasFog;
-	}
-	
-	public void setHasFog(final boolean flag) {
-		this.hasFog = flag;
-	}
 
-	private Color dustColor;
-	private Color fogColor;
-	private float fogDensity;
-	
-	public Color getDustColor() {
-		return this.dustColor;
-	}
-
-	public void setDustColor(final Color color) {
-		this.dustColor = color;
-	}
-	
-	public Color getFogColor() {
-		return this.fogColor;
-	}
-	
-	public void setFogColor(@Nonnull final Color color) {
-		this.fogColor = color;
-	}
-	
-	public float getFogDensity() {
-		return this.fogDensity;
-	}
-	
-	public void setFogDensity(final float density) {
-		this.fogDensity = density;
-	}
-	
 	private List<SoundEffect> sounds;
 	private int spotSoundChance;
 	private List<SoundEffect> spotSounds;
-	
-	@Nonnull
-	public List<SoundEffect> getSounds() {
-		return this.sounds;
-	}
-	
-	public int getSpotSoundChance() {
-		return this.spotSoundChance;
-	}
-	
-	public void setSpotSoundChance(final int chance) {
-		this.spotSoundChance = chance;
-	}
-	
-	@Nonnull
-	public List<SoundEffect> getSpotSounds() {
-		return this.spotSounds;
-	}
-	
+
 	public BiomeInfo(final int biomeId, @Nonnull final String biomeName) {
 		this.biome = null;
 		this.biomeId = biomeId;
 		this.biomeName = biomeName;
-		
+
 		this.sounds = new ArrayList<SoundEffect>();
 		this.spotSounds = new ArrayList<SoundEffect>();
 		this.spotSoundChance = 1200;
@@ -165,12 +71,108 @@ public final class BiomeInfo {
 		this.sounds = new ArrayList<SoundEffect>();
 		this.spotSounds = new ArrayList<SoundEffect>();
 		this.spotSoundChance = 1200;
+		
+		this.hasPrecipitation = canRain() || getEnableSnow();
+	}
+
+	public int getBiomeId() {
+		return this.biomeId;
+	}
+
+	public String getBiomeName() {
+		return this.biomeName;
+	}
+
+	public boolean getHasPrecipitation() {
+		return this.hasPrecipitation;
+	}
+
+	public boolean canRain() {
+		return this.biome != null ? this.biome.canRain() : false;
+	}
+
+	public boolean getEnableSnow() {
+		return this.biome != null ? this.biome.getEnableSnow() : false;
+	}
+
+	public void setHasPrecipitation(final boolean flag) {
+		this.hasPrecipitation = flag;
+	}
+
+	public boolean getHasDust() {
+		return this.hasDust;
+	}
+
+	public void setHasDust(final boolean flag) {
+		this.hasDust = flag;
+	}
+
+	public boolean getHasAurora() {
+		return this.hasAurora;
+	}
+
+	public void setHasAurora(final boolean flag) {
+		this.hasAurora = flag;
+	}
+
+	public boolean getHasFog() {
+		return this.hasFog;
+	}
+
+	public void setHasFog(final boolean flag) {
+		this.hasFog = flag;
+	}
+
+	private Color dustColor;
+	private Color fogColor;
+	private float fogDensity;
+
+	public Color getDustColor() {
+		return this.dustColor;
+	}
+
+	public void setDustColor(final Color color) {
+		this.dustColor = color;
+	}
+
+	public Color getFogColor() {
+		return this.fogColor;
+	}
+
+	public void setFogColor(@Nonnull final Color color) {
+		this.fogColor = color;
+	}
+
+	public float getFogDensity() {
+		return this.fogDensity;
+	}
+
+	public void setFogDensity(final float density) {
+		this.fogDensity = density;
+	}
+
+	@Nonnull
+	public List<SoundEffect> getSounds() {
+		return this.sounds;
+	}
+
+	public int getSpotSoundChance() {
+		return this.spotSoundChance;
+	}
+
+	public void setSpotSoundChance(final int chance) {
+		this.spotSoundChance = chance;
+	}
+
+	@Nonnull
+	public List<SoundEffect> getSpotSounds() {
+		return this.spotSounds;
 	}
 
 	public boolean isFake() {
 		return this.biome == null;
 	}
-	
+
 	public float getFloatTemperature(@Nonnull final BlockPos pos) {
 		return isFake() ? 0.0F : this.biome.getFloatTemperature(pos);
 	}
@@ -178,9 +180,13 @@ public final class BiomeInfo {
 	public float getTemperature() {
 		return isFake() ? 0.0F : this.biome.getTemperature();
 	}
-	
+
 	public TempCategory getTempCategory() {
 		return isFake() ? TempCategory.COLD : this.biome.getTempCategory();
+	}
+
+	public TemperatureRating getTemperatureRating() {
+		return TemperatureRating.fromTemp(getTemperature());
 	}
 
 	public boolean isHighHumidity() {
@@ -207,7 +213,7 @@ public final class BiomeInfo {
 				results.add(sound);
 		return results;
 	}
-	
+
 	@Nullable
 	public SoundEffect getSpotSound(@Nonnull final Random random) {
 		if (this.getSpotSounds().isEmpty() || random.nextInt(this.getSpotSoundChance()) != 0)
@@ -233,7 +239,7 @@ public final class BiomeInfo {
 
 		return candidates.get(i - 1);
 	}
-	
+
 	public void resetSounds() {
 		this.sounds.clear();
 		this.spotSounds.clear();
@@ -245,7 +251,9 @@ public final class BiomeInfo {
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append(String.format("Biomes %d [%s]:", this.biomeId, this.biomeName));
-		builder.append(" temp: ").append(this.getTemperature());
+		builder.append(" temp: ").append(this.getTemperature()).append(" (").append(getTemperatureRating().getValue())
+				.append(")");
+		builder.append(" rain: ").append(this.getRainfall());
 		if (this.hasPrecipitation)
 			builder.append(" PRECIPITATION");
 		if (this.hasDust)

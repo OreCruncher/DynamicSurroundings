@@ -30,54 +30,13 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
+import org.blockartistry.mod.DynSurround.registry.SeasonType;
+import org.blockartistry.mod.DynSurround.registry.TemperatureRating;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class SeasonInfo {
-
-	public static enum SeasonType {
-		NONE("noseason"), SPRING("spring"), SUMMER("summer"), AUTUMN("autumn"), WINTER("winter");
-
-		private final String val;
-
-		SeasonType(@Nonnull final String val) {
-			this.val = val;
-		}
-
-		@Nonnull
-		public String getValue() {
-			return this.val;
-		}
-	}
-
-	public static enum TemperatureRating {
-		ICY("icy", 0.0F), COOL("cool", 0.3F), MILD("mild", 1.0F), WARM("warm", 1.3F), HOT("hot", 100.F);
-
-		private final String val;
-		private final float tempRange;
-
-		TemperatureRating(@Nonnull final String val, final float tempRange) {
-			this.val = val;
-			this.tempRange = tempRange;
-		}
-
-		@Nonnull
-		public String getValue() {
-			return this.val;
-		}
-
-		public float getTempRange() {
-			return this.tempRange;
-		}
-
-		@Nonnull
-		public static TemperatureRating fromTemp(final float temp) {
-			for (final TemperatureRating rating : values())
-				if (temp <= rating.getTempRange())
-					return rating;
-			return TemperatureRating.MILD;
-		}
-	}
 
 	protected final BiomeRegistry biomes;
 	protected final World world;
