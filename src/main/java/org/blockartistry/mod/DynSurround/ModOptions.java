@@ -48,6 +48,24 @@ public final class ModOptions {
 
 	private ModOptions() {
 	}
+	
+	public static final String CATEGORY_ASM = "asm";
+	public static final String CONFIG_ENABLE_WEATHER = "Enable Weather Control";
+	public static final String CONFIG_ENABLE_SOUND_VOLUME_SCALING = "Enable Sound Volume Scaling Control";
+	public static final String CONFIG_ENABLE_RESET_WEATHER_ON_SLEEP = "Enable Weather Reset on Sleep Control";
+	
+	@Parameter(category = CATEGORY_ASM, property = CONFIG_ENABLE_WEATHER, defaultValue = "true")
+	@Comment("Enable ASM transformations to permit weather (rain, snow, splash, dust storms, auroras)")
+	@RestartRequired(server = true)
+	public static boolean enableWeatherASM = true;
+	@Parameter(category = CATEGORY_ASM, property = CONFIG_ENABLE_SOUND_VOLUME_SCALING, defaultValue = "true")
+	@Comment("Enable ASM transformations for sound volume scaling")
+	@RestartRequired(server = true)
+	public static boolean enableSoundVolumeASM = true;
+	@Parameter(category = CATEGORY_ASM, property = CONFIG_ENABLE_RESET_WEATHER_ON_SLEEP, defaultValue = "true")
+	@Comment("Enable ASM transformations to allow control of player sleep impact on weather reset")
+	@RestartRequired(server = true)
+	public static boolean enableResetOnSleepASM = true;
 
 	public static final String CATEGORY_LOGGING_CONTROL = "logging";
 	public static final String CONFIG_ENABLE_DEBUG_LOGGING = "Enable Debug Logging";
@@ -451,6 +469,11 @@ public final class ModOptions {
 	public static void load(final Configuration config) {
 
 		ConfigProcessor.process(config, ModOptions.class);
+
+		// CATEGORY: asm
+		config.setCategoryRequiresMcRestart(CATEGORY_ASM, true);
+		config.setCategoryRequiresWorldRestart(CATEGORY_ASM, true);
+		config.setCategoryComment(CATEGORY_ASM, "Controls ASM transforms Dynamic Surroundings performs at startup");
 
 		// CATEGORY: Logging
 		config.setCategoryRequiresMcRestart(CATEGORY_LOGGING_CONTROL, false);

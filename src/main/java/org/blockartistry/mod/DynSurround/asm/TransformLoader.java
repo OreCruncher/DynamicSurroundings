@@ -24,12 +24,17 @@
 
 package org.blockartistry.mod.DynSurround.asm;
 
+import java.io.File;
 import java.util.Map;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
+
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 @IFMLLoadingPlugin.MCVersion("1.10.2")
-@IFMLLoadingPlugin.TransformerExclusions({ "org.blockartistry.mod.DynSurround.asm." })
+@IFMLLoadingPlugin.TransformerExclusions({ "org.blockartistry.mod.DynSurround.asm.",
+		"org.blockartistry.mod.DynSurround.ModOptions" })
 @IFMLLoadingPlugin.SortingIndex(10001)
 @IFMLLoadingPlugin.Name("DynamicSurroundingsCore")
 public class TransformLoader implements IFMLLoadingPlugin {
@@ -58,6 +63,11 @@ public class TransformLoader implements IFMLLoadingPlugin {
 		if (v != null) {
 			runtimeDeobEnabled = ((Boolean) v).booleanValue();
 		}
+
+		// Tickle the configuration so we can get some options initialized
+		final File configFile = new File((File) map.get("mcLocation"), "/config/dsurround/dsurround.cfg");
+		final Configuration config = new Configuration(configFile);
+		ModOptions.load(config);
 	}
 
 	@Override

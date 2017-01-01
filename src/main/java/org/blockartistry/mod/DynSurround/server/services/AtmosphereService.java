@@ -31,6 +31,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
 import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
@@ -49,6 +50,9 @@ public final class AtmosphereService extends Service {
 
 	@SubscribeEvent
 	public void tickEvent(@Nonnull final TickEvent.WorldTickEvent event) {
+		
+		if(!ModOptions.enableWeatherASM)
+			return;
 
 		if (event.phase == Phase.END)
 			return;
@@ -58,7 +62,7 @@ public final class AtmosphereService extends Service {
 		final float sendIntensity = dimensions.hasWeather(world) ? DimensionEffectData.get(world).getRainIntensity()
 				: RESET;
 
-		// Set the RAIN rainIntensity for all players in the current
+		// Set the rain rainIntensity for all players in the current
 		// dimension.
 		Network.sendRainIntensity(sendIntensity, dimensionId);
 	}

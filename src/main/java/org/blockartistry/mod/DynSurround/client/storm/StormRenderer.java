@@ -36,7 +36,6 @@ import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -48,7 +47,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
@@ -85,18 +83,12 @@ public class StormRenderer implements IAtmosRenderer {
 	}
 
 	/**
-	 * Render RAIN and snow
+	 * Render rain and snow
 	 */
 	public void render(final EntityRenderer renderer, final float partialTicks) {
 
 		StormProperties.setTextures();
 		final World world = renderer.mc.theWorld;
-
-		IRenderHandler r = world.provider.getWeatherRenderer();
-		if (r != null) {
-			r.render(partialTicks, (WorldClient) world, renderer.mc);
-			return;
-		}
 
 		if (!this.dimensions.hasWeather(world))
 			return;

@@ -103,6 +103,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 		generateSoundVolumeList(this.soundVolumeCategory);
 		this.configElements.add(this.soundVolumeElement);
 
+		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_ASM, "ASM Transform Settings"));
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_GENERAL, "General Settings"));
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES, "Speech Bubbles"));
 		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_RAIN, "Rain Settings"));

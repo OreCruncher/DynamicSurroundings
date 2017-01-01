@@ -161,7 +161,6 @@ public enum StormProperties {
 	 * invoked before rendering takes place.
 	 */
 	public static void setTextures() {
-		// AT transform removed final and made public.
 		StormRenderer.locationRainPng = intensity.rainTexture;
 		StormRenderer.locationSnowPng = intensity.snowTexture;
 		StormRenderer.locationDustPng = intensity.dustTexture;

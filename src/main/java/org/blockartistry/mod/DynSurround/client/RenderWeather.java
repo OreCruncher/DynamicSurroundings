@@ -27,44 +27,82 @@ package org.blockartistry.mod.DynSurround.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.aurora.AuroraRenderer;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.storm.StormRenderer;
 import org.blockartistry.mod.DynSurround.client.storm.StormSplashRenderer;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.world.WorldProvider;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.client.IRenderHandler;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public final class RenderWeather {
+@Mod.EventBusSubscriber
+public final class RenderWeather extends IRenderHandler {
 
 	private static final List<IAtmosRenderer> renderList = new ArrayList<IAtmosRenderer>();
 
-	public static void register(final IAtmosRenderer renderer) {
+	private static void register(final IAtmosRenderer renderer) {
 		renderList.add(renderer);
 	}
 
-	static {
-		register(new StormRenderer());
-		register(new AuroraRenderer());
+	protected final IRenderHandler previous;
+	
+	protected RenderWeather(@Nullable final IRenderHandler former) {
+		this.previous = former;
 	}
 
-	/*
-	 * Render RAIN particles.
-	 * 
-	 * Redirect from EntityRenderer.
+	/**
+	 * Render rain particles. Redirect from EntityRenderer.  Why can't there be a hook
+	 * like that for rain/snow rendering?
 	 */
 	public static void addRainParticles(final EntityRenderer theThis) {
 		StormSplashRenderer.renderStormSplashes(EnvironState.getDimensionId(), theThis);
 	}
 
-	/*
-	 * Render atmospheric effects.
+	/**
+	 * Render atmospheric effects.  Redirect from EntityRenderer.
 	 * 
-	 * Redirect from EntityRenderer.
+	 * Currently not used.  Leaving in place in case there is a revert.
 	 */
 	public static void renderRainSnow(final EntityRenderer theThis, final float partialTicks) {
 		for (final IAtmosRenderer renderer : renderList)
 			renderer.render(theThis, partialTicks);
 	}
+	
+	@Override
+	public void render(final float partialTicks, @Nonnull final WorldClient world, @Nonnull final Minecraft mc) {
+		for (final IAtmosRenderer r : renderList)
+			r.render(mc.entityRenderer, partialTicks);
+	}
+
+	/**
+	 * Hook the weather renderer for the loading world.
+	 */
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void onWorldLoad(final WorldEvent.Load e) {
+		
+		if(!ModOptions.enableWeatherASM)
+			return;
+		
+		if(renderList.size() == 0) {
+			register(new StormRenderer());
+			register(new AuroraRenderer());
+		}
+		final WorldProvider provider = e.getWorld().provider;
+		provider.setWeatherRenderer(new RenderWeather(provider.getWeatherRenderer()));
+	}
+
 }
