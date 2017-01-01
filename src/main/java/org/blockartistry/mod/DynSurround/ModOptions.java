@@ -415,10 +415,10 @@ public final class ModOptions {
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Size scale of icons (lower is smaller)")
 	public static float potionHudScale = 0.75F;
-	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_ANCHOR, defaultValue = "1")
+	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_ANCHOR, defaultValue = "0")
 	@MinMaxInt(min = 0, max = 1)
 	@Comment("Area of the display the Potion HUD is displayed (0 upper left, 1 upper right)")
-	public static int potionHudAnchor = 1;
+	public static int potionHudAnchor = 0;
 
 	public static final String CATEGORY_SPEECHBUBBLES = "speechbubbles";
 	public static final String CONFIG_OPTION_ENABLE_SPEECHBUBBLES = "Enable SpeechBubbles";

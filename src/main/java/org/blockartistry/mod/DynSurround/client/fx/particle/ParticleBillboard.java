@@ -73,6 +73,8 @@ public class ParticleBillboard extends Particle {
 	private double left;
 	private double right;
 
+	private boolean canBeSeen;
+
 	public ParticleBillboard(@Nonnull final Entity entity, @Nonnull final Function<Integer, List<String>> accessor) {
 		super(entity.getEntityWorld(), entity.posX, entity.posY, entity.posZ);
 
@@ -92,6 +94,8 @@ public class ParticleBillboard extends Particle {
 		this.renderManager = Minecraft.getMinecraft().getRenderManager();
 		this.font = Minecraft.getMinecraft().fontRendererObj;
 		this.scale = 1F;
+
+		this.canBeSeen = EnvironState.getPlayer().canEntityBeSeen(this.subject);
 	}
 
 	public boolean shouldExpire() {
@@ -125,17 +129,20 @@ public class ParticleBillboard extends Particle {
 		} else {
 
 			updatePosition();
+			this.canBeSeen = EnvironState.getPlayer().canEntityBeSeen(this.subject);
 
-			this.textWidth = MIN_TEXT_WIDTH;
+			if (this.canBeSeen) {
+				this.textWidth = MIN_TEXT_WIDTH;
 
-			for (final String s : this.text)
-				this.textWidth = Math.max(this.textWidth, this.font.getStringWidth(s));
+				for (final String s : this.text)
+					this.textWidth = Math.max(this.textWidth, this.font.getStringWidth(s));
 
-			this.numberOfMessages = this.text.size();
-			this.top = -(numberOfMessages) * 9 - BUBBLE_MARGIN;
-			this.bottom = BUBBLE_MARGIN;
-			this.left = -(this.textWidth / 2.0D + BUBBLE_MARGIN);
-			this.right = this.textWidth / 2.0D + BUBBLE_MARGIN;
+				this.numberOfMessages = this.text.size();
+				this.top = -(numberOfMessages) * 9 - BUBBLE_MARGIN;
+				this.bottom = BUBBLE_MARGIN;
+				this.left = -(this.textWidth / 2.0D + BUBBLE_MARGIN);
+				this.right = this.textWidth / 2.0D + BUBBLE_MARGIN;
+			}
 
 		}
 	}
@@ -147,6 +154,9 @@ public class ParticleBillboard extends Particle {
 
 		// Fail safe...
 		if (this.text == null || this.text.isEmpty())
+			return;
+
+		if (!this.canBeSeen)
 			return;
 
 		// Calculate scale and position
