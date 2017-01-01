@@ -26,15 +26,17 @@ package org.blockartistry.mod.DynSurround.registry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
+
+import com.google.common.collect.ImmutableMap;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISoundEventAccessor;
@@ -94,7 +96,14 @@ public final class SoundRegistry extends Registry {
 		if (ModOptions.enableDebugLogging && this.side == Side.CLIENT) {
 			final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
 			final List<String> sounds = new ArrayList<String>();
-			for (final Entry<ResourceLocation, SoundEventAccessor> e : handler.soundRegistry.soundRegistry.entrySet()) {
+
+			// Make a map copy.  The sound registry should be baked but don't
+			// trust it.  The map reference will be used in a separate thread to detect
+			// bogus entries.
+			final Map<ResourceLocation, SoundEventAccessor> theClone = ImmutableMap
+					.copyOf(handler.soundRegistry.soundRegistry);
+			
+			for (final Entry<ResourceLocation, SoundEventAccessor> e : theClone.entrySet()) {
 				sounds.add(e.getKey().toString());
 			}
 			Collections.sort(sounds);
@@ -110,8 +119,7 @@ public final class SoundRegistry extends Registry {
 
 					final List<String> smells = new ArrayList<String>();
 					try {
-						for (final Entry<ResourceLocation, SoundEventAccessor> e : handler.soundRegistry.soundRegistry
-								.entrySet()) {
+						for (final Entry<ResourceLocation, SoundEventAccessor> e : theClone.entrySet()) {
 							for (final ISoundEventAccessor<Sound> x : e.getValue().accessorList) {
 								final ResourceLocation ogg = x.cloneEntry().getSoundAsOggLocation();
 								try (final IResource resource = Minecraft.getMinecraft().getResourceManager()
