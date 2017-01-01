@@ -24,12 +24,12 @@
 
 package org.blockartistry.mod.DynSurround.entity.ai;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.entity.EmotionalState;
 import org.blockartistry.mod.DynSurround.api.entity.EntityCapability;
 import org.blockartistry.mod.DynSurround.entity.EmojiDataTables;
 import org.blockartistry.mod.DynSurround.entity.IEntityEmojiSettable;
 import org.blockartistry.mod.DynSurround.network.Network;
-import org.blockartistry.mod.DynSurround.server.services.SpeechBubbleService;
 import org.blockartistry.mod.DynSurround.util.EntityUtils;
 
 import net.minecraft.entity.EntityLiving;
@@ -67,7 +67,7 @@ public class EntityAIEmoji extends EntityAIBase {
 		updateEmoji();
 
 		if (this.data.isDirty() || this.subject.getEntityWorld().getWorldTime() > this.nextChat) {
-			final TargetPoint point = Network.getTargetPoint(this.subject, SpeechBubbleService.SPEECH_BUBBLE_RANGE);
+			final TargetPoint point = Network.getTargetPoint(this.subject, ModOptions.speechBubbleRange);
 			Network.sendEntityEmoteUpdate(this.subject.getPersistentID(), this.data.getActionState(),
 					this.data.getEmotionalState(), this.data.getEmojiType(), point);
 			this.data.clearDirty();

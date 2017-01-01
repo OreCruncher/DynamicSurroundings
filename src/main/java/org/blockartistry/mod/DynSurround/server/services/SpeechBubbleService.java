@@ -36,8 +36,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public final class SpeechBubbleService extends Service {
 
-	public static final double SPEECH_BUBBLE_RANGE = ModOptions.speechBubbleRange;
-
 	SpeechBubbleService() {
 		super("SpeechBubbleService");
 	}
@@ -46,7 +44,10 @@ public final class SpeechBubbleService extends Service {
 	// message - not a command, etc.
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onChatMessageEvent(@Nonnull final ServerChatEvent event) {
-		final TargetPoint point = Network.getTargetPoint(event.getPlayer(), SPEECH_BUBBLE_RANGE);
+		if(!ModOptions.enableSpeechBubbles)
+			return;
+		
+		final TargetPoint point = Network.getTargetPoint(event.getPlayer(), ModOptions.speechBubbleRange);
 		Network.sendChatBubbleUpdate(event.getPlayer().getUniqueID(), event.getMessage(), false, point);
 	}
 }

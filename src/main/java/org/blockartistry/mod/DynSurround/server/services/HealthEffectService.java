@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.server.services;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.network.Network;
 
 import net.minecraft.entity.Entity;
@@ -59,6 +60,9 @@ public final class HealthEffectService extends Service {
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onLivingHurt(@Nonnull final LivingHurtEvent event) {
+		if(!ModOptions.enableDamagePopoffs)
+			return;
+		
 		if (event == null || event.getEntity() == null || event.getEntity().worldObj == null
 				|| event.getEntity().worldObj.isRemote)
 			return;
@@ -92,6 +96,9 @@ public final class HealthEffectService extends Service {
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onLivingHeal(@Nonnull final LivingHealEvent event) {
+		if(!ModOptions.enableDamagePopoffs)
+			return;
+
 		if (event == null || event.getEntity() == null || event.getEntity().worldObj == null
 				|| event.getEntity().worldObj.isRemote)
 			return;

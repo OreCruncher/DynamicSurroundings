@@ -77,7 +77,7 @@ public final class ConfigProcessor {
 	public static @interface RestartRequired {
 		boolean world() default true;
 
-		boolean server() default true;
+		boolean server() default false;
 	}
 
 	@Retention(RetentionPolicy.RUNTIME)

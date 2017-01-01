@@ -79,6 +79,9 @@ public final class AuroraService extends Service {
 
 	@SubscribeEvent
 	public void tickEvent(@Nonnull final TickEvent.WorldTickEvent event) {
+		if(!ModOptions.auroraEnable)
+			return;
+		
 		if (event.phase != Phase.END || event.side != Side.SERVER)
 			return;
 

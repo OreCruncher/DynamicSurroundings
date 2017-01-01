@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.entity.EmojiType;
 import org.blockartistry.mod.DynSurround.api.entity.EntityCapability;
 import org.blockartistry.mod.DynSurround.api.events.EntityEmojiEvent;
@@ -68,6 +69,8 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void onEntityEmojiEvent(@Nonnull final EntityEmojiEvent event) {
+		if(!ModOptions.enableEntityEmojis)
+			return;
 
 		final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), event.entityId);
 		if (entity != null) {

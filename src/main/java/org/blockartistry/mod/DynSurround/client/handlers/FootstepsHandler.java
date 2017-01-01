@@ -24,6 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.registry.FootstepsRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
@@ -47,7 +48,10 @@ public class FootstepsHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(final World world, final EntityPlayer player) {
-		this.footsteps.process(world, player);
+		if(ModOptions.enableFootstepSounds)
+			this.footsteps.process(world, player);
+		else if(player.nextStepDistance == Integer.MAX_VALUE)
+			player.nextStepDistance = 0;
 	}
 	
 	@Override

@@ -177,7 +177,7 @@ public final class ModOptions {
 	public static final String CONFIG_MAX_RAIN_STRENGTH = "Default Maximum Rain Strength";
 	public static final String CONFIG_THUNDER_THRESHOLD = "Default Thunder Effect Threshold";
 	public static final String CONFIG_FX_RANGE = "Special Effect Range";
-	private static final List<String> generalSort = ImmutableList.<String> builder().add(CONFIG_FX_RANGE,
+	private static final List<String> generalSort = ImmutableList.<String>builder().add(CONFIG_FX_RANGE,
 			CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH, CONFIG_THUNDER_THRESHOLD, CONFIG_EXTERNAL_SCRIPTS)
 			.build();
 
@@ -214,7 +214,7 @@ public final class ModOptions {
 
 	@Parameter(category = CATEGORY_AURORA, property = CONFIG_AURORA_ENABLED, defaultValue = "true")
 	@Comment("Whether to enable Aurora processing on server/client")
-	@RestartRequired
+	@RestartRequired(server = true)
 	public static boolean auroraEnable = true;
 	@Parameter(category = CATEGORY_AURORA, property = CONFIG_Y_PLAYER_RELATIVE, defaultValue = "true")
 	@Comment("true to keep the aurora at a height above player; false to fix it to an altitude")
@@ -292,8 +292,8 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_SWING_SOUND = "Swing Sound";
 	public static final String CONFIG_ENABLE_CRAFTING_SOUND = "Crafting Sound";
 	public static final String CONFIG_ENABLE_BOW_PULL_SOUND = "Bow Pull Sound";
-	public static final String CONFIG_ENABLE_FOOTSTEPS_SOUND = "FootstepsRegistry";
-	public static final String CONFIG_FOOTSTEPS_SOUND_FACTOR = "FootstepsRegistry Sound Factor";
+	public static final String CONFIG_ENABLE_FOOTSTEPS_SOUND = "Footsteps";
+	public static final String CONFIG_FOOTSTEPS_SOUND_FACTOR = "Footsteps Sound Factor";
 	public static final String CONFIG_SOUND_CULL_THRESHOLD = "Sound Culling Threshold";
 	public static final String CONFIG_CULLED_SOUNDS = "Culled Sounds";
 	public static final String CONFIG_BLOCKED_SOUNDS = "Blocked Sounds";
@@ -306,7 +306,6 @@ public final class ModOptions {
 
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BIOME_SOUNDS, defaultValue = "true")
 	@Comment("Enable biome background and spot sounds")
-	@RestartRequired
 	public static boolean enableBiomeSounds = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_MASTER_SOUND_FACTOR, defaultValue = "0.5")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
@@ -314,37 +313,32 @@ public final class ModOptions {
 	public static float masterSoundScaleFactor = 0.5F;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_AUTO_CONFIG_CHANNELS, defaultValue = "true")
 	@Comment("Automatically configure sound channels")
-	@RestartRequired
+	@RestartRequired(server = true)
 	public static boolean autoConfigureChannels = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_NORMAL_CHANNEL_COUNT, defaultValue = "28")
 	@MinMaxInt(min = 28)
 	@Comment("Number of normal sound channels to configure in the sound system (manual)")
-	@RestartRequired
+	@RestartRequired(server = true)
 	public static int normalSoundChannelCount = 28;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_STREAMING_CHANNEL_COUNT, defaultValue = "4")
 	@MinMaxInt(min = 4)
 	@Comment("Number of streaming sound channels to configure in the sound system (manual)")
-	@RestartRequired
+	@RestartRequired(server = true)
 	public static int streamingSoundChannelCount = 4;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_JUMP_SOUND, defaultValue = "true")
 	@Comment("Enable player Jump sound effect")
-	@RestartRequired
 	public static boolean enableJumpSound = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_SWING_SOUND, defaultValue = "true")
 	@Comment("Enable Weapon Swing sound effect")
-	@RestartRequired
 	public static boolean enableSwingSound = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_CRAFTING_SOUND, defaultValue = "true")
 	@Comment("Enable Item Crafted sound effect")
-	@RestartRequired
 	public static boolean enableCraftingSound = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BOW_PULL_SOUND, defaultValue = "true")
 	@Comment("Enable Bow Pull sound effect")
-	@RestartRequired
 	public static boolean enableBowPullSound = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_FOOTSTEPS_SOUND, defaultValue = "true")
 	@Comment("Enable Footstep sound effects")
-	@RestartRequired
 	public static boolean enableFootstepSounds = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_FOOTSTEPS_SOUND_FACTOR, defaultValue = "0.15")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
@@ -356,7 +350,6 @@ public final class ModOptions {
 	public static int soundCullingThreshold = 20;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_CULLED_SOUNDS, defaultValue = "minecraft:block.water.ambient,minecraft:block.lava.ambient,minecraft:entity.sheep.ambient,minecraft:entity.chicken.ambient,minecraft:entity.cow.ambient,minecraft:entity.pig.ambient")
 	@Comment("Sounds to cull from frequent playing")
-	@RestartRequired
 	public static String[] culledSounds = { "minecraft:block.water.ambient", "minecraft:block.lava.ambient",
 			"minecraft:entity.sheep.ambient", "minecraft:entity.chicken.ambient", "minecraft:entity.cow.ambient",
 			"minecraft:entity.pig.ambient" };
@@ -379,11 +372,9 @@ public final class ModOptions {
 
 	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_SUPPRESS_POTION_PARTICLES, defaultValue = "false")
 	@Comment("Suppress player's potion particles from rendering")
-	@RestartRequired
 	public static boolean suppressPotionParticles = false;
 	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_ENABLE_POPOFFS, defaultValue = "true")
 	@Comment("Controls display of damage pop-offs when an entity is damaged")
-	@RestartRequired
 	public static boolean enableDamagePopoffs = true;
 	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_HURT_THRESHOLD, defaultValue = "8")
 	@Comment("Amount of health bar remaining to trigger player hurt sound (0 disable)")
@@ -407,7 +398,6 @@ public final class ModOptions {
 
 	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_ENABLE, defaultValue = "true")
 	@Comment("Enable display of potion icons in display")
-	@RestartRequired
 	public static boolean potionHudEnabled = true;
 	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_TRANSPARENCY, defaultValue = "0.75")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
@@ -444,16 +434,16 @@ public final class ModOptions {
 	public static boolean enableEntityChat = true;
 	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_EMOJIS, defaultValue = "true")
 	@Comment("Enables/disables entity emojis")
+	@RestartRequired(server = true)
 	public static boolean enableEntityEmojis = true;
 	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_SPEECHBUBBLE_DURATION, defaultValue = "7")
 	@MinMaxFloat(min = 5.0F, max = 15.0F)
 	@Comment("Number of seconds to display speech before removing")
 	public static float speechBubbleDuration = 7.0F;
-	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_SPEECHBUBBLE_RANGE, defaultValue = "32")
-	@MinMaxInt(min = 16, max = 64)
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_SPEECHBUBBLE_RANGE, defaultValue = "16")
+	@MinMaxInt(min = 16, max = 32)
 	@Comment("Range at which a Speech BubbleJetEffect is visibile.  Filtering occurs server side.")
-	@RestartRequired
-	public static float speechBubbleRange = 32;
+	public static float speechBubbleRange = 16;
 
 	private static final List<String> speechBubbleSort = Arrays.asList(CONFIG_OPTION_ENABLE_SPEECHBUBBLES,
 			CONFIG_OPTION_ENABLE_ENTITY_CHAT, CONFIG_OPTION_SPEECHBUBBLE_DURATION, CONFIG_OPTION_SPEECHBUBBLE_RANGE);
@@ -510,7 +500,7 @@ public final class ModOptions {
 		config.setCategoryComment(CATEGORY_BLOCK, "Options for defining block specific sounds/effects");
 
 		// CATEGORY: Block.effects
-		config.setCategoryRequiresMcRestart(CATEGORY_BLOCK_EFFECTS, true);
+		config.setCategoryRequiresMcRestart(CATEGORY_BLOCK_EFFECTS, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_BLOCK_EFFECTS, true);
 		config.setCategoryComment(CATEGORY_BLOCK_EFFECTS, "Options for disabling various block effects");
 

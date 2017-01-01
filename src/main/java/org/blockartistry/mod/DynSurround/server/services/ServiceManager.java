@@ -27,8 +27,6 @@ package org.blockartistry.mod.DynSurround.server.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
@@ -57,12 +55,6 @@ public final class ServiceManager extends Service {
 		this.services.clear();
 	}
 	
-	private void dumpServices() {
-		ModLog.info("Dynamic Surrounding Services");
-		for(final Service s: this.services)
-			ModLog.info("* %s", s.getServiceName());
-	}
-
 	private void init0() {
 		for(final Service s: this.services) {
 			s.init();
@@ -80,16 +72,10 @@ public final class ServiceManager extends Service {
 	public static void initialize() {
 		INSTANCE.addService(INSTANCE);
 		INSTANCE.addService(new AtmosphereService());
-		if (ModOptions.auroraEnable)
-			INSTANCE.addService(new AuroraService());
-		if (ModOptions.enableEntityChat || ModOptions.enableEntityEmojis)
-			INSTANCE.addService(new EntityEmojiService());
-		if (ModOptions.enableDamagePopoffs)
-			INSTANCE.addService(new HealthEffectService());
-		if (ModOptions.enableSpeechBubbles)
-			INSTANCE.addService(new SpeechBubbleService());
-		
-		INSTANCE.dumpServices();
+		INSTANCE.addService(new AuroraService());
+		INSTANCE.addService(new EntityEmojiService());
+		INSTANCE.addService(new HealthEffectService());
+		INSTANCE.addService(new SpeechBubbleService());
 		INSTANCE.init0();
 	}
 	

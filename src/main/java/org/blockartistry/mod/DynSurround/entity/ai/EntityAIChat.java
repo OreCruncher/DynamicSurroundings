@@ -35,9 +35,9 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.entity.MessageTable;
 import org.blockartistry.mod.DynSurround.network.Network;
-import org.blockartistry.mod.DynSurround.server.services.SpeechBubbleService;
 import org.blockartistry.mod.DynSurround.util.Translations;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
@@ -173,7 +173,7 @@ public class EntityAIChat extends EntityAIBase {
 
 	@Override
 	public void startExecuting() {
-		final TargetPoint point = Network.getTargetPoint(this.theEntity, SpeechBubbleService.SPEECH_BUBBLE_RANGE);
+		final TargetPoint point = Network.getTargetPoint(this.theEntity, ModOptions.speechBubbleRange);
 		Network.sendChatBubbleUpdate(this.theEntity.getPersistentID(), getChatMessage(), true, point);
 		this.nextChat = getWorldTicks() + getNextChatTime();
 	}

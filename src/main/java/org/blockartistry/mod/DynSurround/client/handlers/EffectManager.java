@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.ModOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -44,58 +43,41 @@ import net.minecraftforge.fml.relauncher.Side;
 public class EffectManager {
 
 	private static EffectManager INSTANCE = null;
-	
+
 	private final List<EffectHandlerBase> effectHandlers = new ArrayList<EffectHandlerBase>();
 
 	private EffectManager() {
 	}
-	
+
 	private void init() {
 		// These two first in this order
 		this.effectHandlers.add(new EnvironStateHandler());
 		this.effectHandlers.add(new ExpressionStateHandler());
-		
+
 		this.effectHandlers.add(new AreaSurveyHandler());
 		this.effectHandlers.add(new FogEffectHandler());
 		this.effectHandlers.add(new BlockEffectHandler());
 		this.effectHandlers.add(new ParticleSystemHandler());
 		this.effectHandlers.add(new PlayerActionHandler());
+		this.effectHandlers.add(new SoundCullHandler());
+		this.effectHandlers.add(new PotionParticleScrubHandler());
+		this.effectHandlers.add(new PopoffEffectHandler());
+		this.effectHandlers.add(new FootstepsHandler());
+		this.effectHandlers.add(new AreaSoundEffectHandler());
+		this.effectHandlers.add(new EntityEmojiHandler());
+		this.effectHandlers.add(new AuroraEffectHandler());
+		this.effectHandlers.add(new SpeechBubbleHandler());
 
-		if (ModOptions.blockedSounds.length > 0 || ModOptions.culledSounds.length > 0)
-			this.effectHandlers.add(new SoundCullHandler());
-
-		if (ModOptions.enableFootstepSounds)
-			this.effectHandlers.add(new FootstepsHandler());
-
-		if (ModOptions.auroraEnable)
-			this.effectHandlers.add(new AuroraEffectHandler());
-
-		if (ModOptions.enableBiomeSounds)
-			this.effectHandlers.add(new AreaSoundEffectHandler());
-
-		if (ModOptions.suppressPotionParticles)
-			this.effectHandlers.add(new PotionParticleScrubHandler());
-
-		if (ModOptions.enableDamagePopoffs)
-			this.effectHandlers.add(new PopoffEffectHandler());
-
-		if (ModOptions.enableSpeechBubbles)
-			this.effectHandlers.add(new SpeechBubbleHandler());
-		
-		if(ModOptions.enableEntityEmojis)
-			this.effectHandlers.add(new EntityEmojiHandler());
-		
 		// Add this one last so it goes last
 		this.effectHandlers.add(new SoundEffectHandler());
 
-		ModLog.info("Registered client handlers:");
 		for (final EffectHandlerBase h : this.effectHandlers) {
-			ModLog.info("* %s", h.getHandlerName());
+			ModLog.debug("CLIENT HANDLER [%s]", h.getHandlerName());
 			h.connect0();
 			MinecraftForge.EVENT_BUS.register(h);
 		}
 	}
-	
+
 	private void fini() {
 		for (final EffectHandlerBase h : this.effectHandlers) {
 			MinecraftForge.EVENT_BUS.unregister(h);
@@ -109,7 +91,7 @@ public class EffectManager {
 		INSTANCE.init();
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
 	}
-	
+
 	public static void unregister() {
 		MinecraftForge.EVENT_BUS.unregister(INSTANCE);
 		INSTANCE.fini();
