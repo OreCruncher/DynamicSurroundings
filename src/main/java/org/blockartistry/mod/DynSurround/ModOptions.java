@@ -52,6 +52,7 @@ public final class ModOptions {
 	public static final String CATEGORY_LOGGING_CONTROL = "logging";
 	public static final String CONFIG_ENABLE_DEBUG_LOGGING = "Enable Debug Logging";
 	public static final String CONFIG_ENABLE_ONLINE_VERSION_CHECK = "Enable Online Version Check";
+	public static final String CONFIG_ENABLE_SCRIPT_DIALOG = "Enable Script Variable Dialog";
 	private static final List<String> loggingSort = Arrays.asList(CONFIG_ENABLE_ONLINE_VERSION_CHECK,
 			CONFIG_ENABLE_DEBUG_LOGGING);
 
@@ -63,6 +64,10 @@ public final class ModOptions {
 	@Comment("Enables/disables online version checking")
 	@RestartRequired
 	public static boolean enableVersionChecking = true;
+	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_ENABLE_SCRIPT_DIALOG, defaultValue = "false")
+	@Comment("Enables/disables display of script variable dialog")
+	@RestartRequired
+	public static boolean showScriptVariables = false;
 
 	public static final String CATEGORY_RAIN = "rain";
 	public static final String CONFIG_RAIN_VOLUME = "Sound Level";

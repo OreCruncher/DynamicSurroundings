@@ -29,6 +29,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.swing.DiagnosticPanel;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
@@ -346,17 +347,20 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		for (final DynamicVariable dv : variables)
 			dv.update();
 		
-		DiagnosticPanel.refresh();
+		if(ModOptions.showScriptVariables)
+			DiagnosticPanel.refresh();
 	}
 	
 	@Override
 	public void onConnect() {
-		DiagnosticPanel.create();
+		if(ModOptions.showScriptVariables)
+			DiagnosticPanel.create();
 	}
 	
 	@Override
 	public void onDisconnect() {
-		DiagnosticPanel.destroy();
+		if(ModOptions.showScriptVariables)
+			DiagnosticPanel.destroy();
 	}
 
 }
