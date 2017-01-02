@@ -22,24 +22,17 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client;
+package org.blockartistry.mod.DynSurround.client.weather;
 
-import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
-import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
-import org.blockartistry.mod.DynSurround.registry.RegistryManager;
-import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
+import javax.annotation.Nonnull;
 
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class WeatherUtils {
-
-	public static boolean biomeHasDust(final Biome biome) {
-		final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
-		return ModOptions.allowDesertFog && biomes.get(biome).getHasDust() && !StormProperties.doVanilla();
-	}
+public interface IAtmosRenderer {
+	
+	public void render(@Nonnull final EntityRenderer renderer, final float partialTicks);
 
 }

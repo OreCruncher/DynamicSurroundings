@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.aurora;
+package org.blockartistry.mod.DynSurround.client.weather;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
 

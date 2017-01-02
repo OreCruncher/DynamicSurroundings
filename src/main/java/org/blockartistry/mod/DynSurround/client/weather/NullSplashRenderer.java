@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.storm;
+package org.blockartistry.mod.DynSurround.client.weather;
 
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraftforge.fml.relauncher.Side;
