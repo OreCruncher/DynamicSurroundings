@@ -29,6 +29,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModEnvironment;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
@@ -79,7 +80,7 @@ public final class AuroraService extends Service {
 
 	@SubscribeEvent
 	public void tickEvent(@Nonnull final TickEvent.WorldTickEvent event) {
-		if(!ModOptions.auroraEnable || !ModOptions.enableWeatherASM)
+		if(!ModOptions.auroraEnable || !ModOptions.enableWeatherASM || ModEnvironment.Weather2.isLoaded())
 			return;
 		
 		if (event.phase != Phase.END || event.side != Side.SERVER)

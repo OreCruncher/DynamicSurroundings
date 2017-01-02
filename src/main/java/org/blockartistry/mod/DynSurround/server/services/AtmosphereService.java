@@ -36,6 +36,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModEnvironment;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
@@ -69,8 +70,11 @@ public final class AtmosphereService extends Service {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void tickEvent(@Nonnull final TickEvent.WorldTickEvent event) {
+		
+		if(!ModOptions.enableWeatherASM || ModEnvironment.Weather2.isLoaded())
+			return;
 
-		if (event.side != Side.SERVER || !ModOptions.enableWeatherASM || event.phase == Phase.START)
+		if (event.side != Side.SERVER || event.phase == Phase.START)
 			return;
 
 		final World world = event.world;

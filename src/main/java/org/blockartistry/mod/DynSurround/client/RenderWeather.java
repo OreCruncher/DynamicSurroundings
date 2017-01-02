@@ -30,6 +30,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.mod.DynSurround.ModEnvironment;
+import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.aurora.AuroraRenderer;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -59,29 +61,29 @@ public final class RenderWeather extends IRenderHandler {
 	}
 
 	protected final IRenderHandler previous;
-	
+
 	protected RenderWeather(@Nullable final IRenderHandler former) {
 		this.previous = former;
 	}
 
 	/**
-	 * Render rain particles. Redirect from EntityRenderer.  Why can't there be a hook
-	 * like that for rain/snow rendering?
+	 * Render rain particles. Redirect from EntityRenderer. Why can't there be a
+	 * hook like that for rain/snow rendering?
 	 */
 	public static void addRainParticles(final EntityRenderer theThis) {
 		StormSplashRenderer.renderStormSplashes(EnvironState.getDimensionId(), theThis);
 	}
 
 	/**
-	 * Render atmospheric effects.  Redirect from EntityRenderer.
+	 * Render atmospheric effects. Redirect from EntityRenderer.
 	 * 
-	 * Currently not used.  Leaving in place in case there is a revert.
+	 * Currently not used. Leaving in place in case there is a revert.
 	 */
 	public static void renderRainSnow(final EntityRenderer theThis, final float partialTicks) {
 		for (final IAtmosRenderer renderer : renderList)
 			renderer.render(theThis, partialTicks);
 	}
-	
+
 	@Override
 	public void render(final float partialTicks, @Nonnull final WorldClient world, @Nonnull final Minecraft mc) {
 		for (final IAtmosRenderer r : renderList)
@@ -93,16 +95,23 @@ public final class RenderWeather extends IRenderHandler {
 	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onWorldLoad(final WorldEvent.Load e) {
-		
-		if(!ModOptions.enableWeatherASM)
+
+		if (!ModOptions.enableWeatherASM || ModEnvironment.Weather2.isLoaded())
 			return;
-		
-		if(renderList.size() == 0) {
+
+		if (renderList.size() == 0) {
 			register(new StormRenderer());
 			register(new AuroraRenderer());
 		}
+		
+		// Only want to hook if the provider doesn't have special
+		// weather handling.
 		final WorldProvider provider = e.getWorld().provider;
-		provider.setWeatherRenderer(new RenderWeather(provider.getWeatherRenderer()));
+		if (provider.getWeatherRenderer() == null) {
+			provider.setWeatherRenderer(new RenderWeather(provider.getWeatherRenderer()));
+		} else {
+			ModLog.info("Not hooking weather renderer for dimension [%s]", provider.getDimensionType().getName());
+		}
 	}
 
 }

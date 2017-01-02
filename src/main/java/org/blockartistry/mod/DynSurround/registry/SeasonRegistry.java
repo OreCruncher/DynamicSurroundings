@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.registry;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModEnvironment;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfoCalendar;
@@ -34,13 +35,9 @@ import org.blockartistry.mod.DynSurround.registry.season.SeasonInfoToughAsNails;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 
 public final class SeasonRegistry extends Registry {
-
-	private static final boolean CALENDAR_API = Loader.isModLoaded("CalendarAPI");
-	private static final boolean TOUGHASNAILS_API = Loader.isModLoaded("ToughAsNails");
 
 	private final TIntObjectHashMap<SeasonInfo> seasonData = new TIntObjectHashMap<SeasonInfo>();
 	
@@ -55,13 +52,13 @@ public final class SeasonRegistry extends Registry {
 			return new SeasonInfoNether(world);
 		}
 
-		if (TOUGHASNAILS_API) {
+		if (ModEnvironment.ToughAsNails.isLoaded()) {
 			ModLog.info("Creating Tough as Nails SeasonInfo for dimension %s",
 					world.provider.getDimensionType().getName());
 			return new SeasonInfoToughAsNails(world);
 		}
 
-		if (CALENDAR_API) {
+		if (ModEnvironment.CalendarAPI.isLoaded()) {
 			ModLog.info("Creating Calendar SeasonInfo for dimension %s", world.provider.getDimensionType().getName());
 			return new SeasonInfoCalendar(world);
 		}
