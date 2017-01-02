@@ -46,6 +46,14 @@ whether LPs can be monetized on the various streaming services.
      <li>S: <a href="https://www.freesound.org/people/c97059890/sounds/21754/">Fiji Beach (Stereo)128kbps.mp3</a> by <a href="https://www.freesound.org/people/c97059890/">c97059890</a> | License: Creative Commons 0</li> 
 </ul>
 
+*dsurround:bigrockslide / dsurround:rockslide*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/Benboncan/sounds/60085/">Rockfall in mine.wav</a> by <a href="https://www.freesound.org/people/Benboncan/">Benboncan</a> | License: Attribution</li> 
+     <li>S: <a href="https://www.freesound.org/people/gfrog/sounds/190505/">Rocks falling over rocks, over a steep hill, like a cliff.flac</a> by <a href="https://www.freesound.org/people/gfrog/">gfrog</a> | License: Creative Commons 0</li> 
+     <li>S: <a href="https://www.freesound.org/people/adamgryu/sounds/336023/">Rocks.wav</a> by <a href="https://www.freesound.org/people/adamgryu/">adamgryu</a> | License: Creative Commons 0</li>
+</ul>
+
 *dsurround:bowpull*
 
 <ul>

@@ -866,9 +866,16 @@
 	"rockfall": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/underground/rockfall1",
-			"dsurround:ambient/underground/rockfall2",
-			"dsurround:ambient/underground/rockfall3"
+			"dsurround:ambient/underground/smallslide1",
+			"dsurround:ambient/underground/smallslide2",
+			"dsurround:ambient/underground/smallslide3"
+		]
+	},
+	"bigrockfall": {
+		"category": "ambient",
+		"sounds": [
+			"dsurround:ambient/underground/bigslide1",
+			"dsurround:ambient/underground/bigslide2"
 		]
 	},
 	"monstergrowl": {

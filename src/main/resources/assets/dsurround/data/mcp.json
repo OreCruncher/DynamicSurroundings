@@ -320,8 +320,13 @@
 				{
 					"sound":"dsurround:rockfall",
 					"soundType":"spot",
-					"volume":0.3,
 					"weight":30
+				},
+				{
+					"sound":"dsurround:bigrockfall",
+					"soundType":"spot",
+					"volume":0.4,
+					"weight":15
 				},
 				{
 					"sound":"dsurround:monstergrowl",
