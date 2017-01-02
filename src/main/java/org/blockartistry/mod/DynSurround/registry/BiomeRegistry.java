@@ -113,18 +113,18 @@ public final class BiomeRegistry extends Registry {
 	private final TIntObjectHashMap<BiomeInfo> registry = new TIntObjectHashMap<BiomeInfo>();
 	private final Map<String, String> biomeAliases = new HashMap<String, String>();
 
-	public static final BiomeInfo UNDERGROUND = new BiomeInfo(-1, "Underground");
-	public static final BiomeInfo PLAYER = new BiomeInfo(-2, "Player");
-	public static final BiomeInfo UNDERWATER = new BiomeInfo(-3, "Underwater");
-	public static final BiomeInfo UNDEROCEAN = new BiomeInfo(-4, "UnderOCN");
-	public static final BiomeInfo UNDERDEEPOCEAN = new BiomeInfo(-5, "UnderDOCN");
-	public static final BiomeInfo UNDERRIVER = new BiomeInfo(-6, "UnderRVR");
-	public static final BiomeInfo OUTERSPACE = new BiomeInfo(-7, "OuterSpace");
-	public static final BiomeInfo CLOUDS = new BiomeInfo(-8, "Clouds");
+	public static final FakeBiomeInfo UNDERGROUND = new FakeBiomeInfo(-1, "Underground");
+	public static final FakeBiomeInfo PLAYER = new FakeBiomeInfo(-2, "Player");
+	public static final FakeBiomeInfo UNDERWATER = new FakeBiomeInfo(-3, "Underwater");
+	public static final FakeBiomeInfo UNDEROCEAN = new FakeBiomeInfo(-4, "UnderOCN");
+	public static final FakeBiomeInfo UNDERDEEPOCEAN = new FakeBiomeInfo(-5, "UnderDOCN");
+	public static final FakeBiomeInfo UNDERRIVER = new FakeBiomeInfo(-6, "UnderRVR");
+	public static final FakeBiomeInfo OUTERSPACE = new FakeBiomeInfo(-7, "OuterSpace");
+	public static final FakeBiomeInfo CLOUDS = new FakeBiomeInfo(-8, "Clouds");
 
 	// This is for cases when the biome coming in doesn't make sense
 	// and should default to something to avoid crap.
-	private static final BiomeInfo WTF = new BiomeInfo(-256, "(FooBar)");
+	private static final FakeBiomeInfo WTF = new FakeBiomeInfo(-256, "(FooBar)");
 
 	@Nonnull
 	public static String resolveName(@Nullable final Biome biome) {

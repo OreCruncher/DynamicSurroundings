@@ -25,12 +25,14 @@
 package org.blockartistry.mod.DynSurround.client.handlers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
 import org.blockartistry.mod.DynSurround.client.swing.DiagnosticPanel;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import org.blockartistry.mod.DynSurround.util.Expression;
@@ -49,7 +51,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ExpressionStateHandler extends EffectHandlerBase {
 
-	public abstract static class DynamicVariable implements Expression.LazyVariant {
+	public abstract static class DynamicVariable implements Comparable<DynamicVariable>, Expression.LazyVariant {
 
 		protected final String name;
 		protected Variant value;
@@ -67,6 +69,11 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 			return this.value;
 		}
 
+		@Override
+		public int compareTo(@Nonnull final DynamicVariable var) {
+			return this.name.compareTo(var.name);
+		}
+
 		public abstract void update();
 	}
 
@@ -82,18 +89,6 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 	}
 
 	static {
-		register(new DynamicVariable("isRaining") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getWorld().getRainStrength(1.0F) > 0.0F ? Expression.ONE : Expression.ZERO;
-			}
-		});
-		register(new DynamicVariable("isNotRaining") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getWorld().getRainStrength(1.0F) <= 0.0F ? Expression.ONE : Expression.ZERO;
-			}
-		});
 		register(new DynamicVariable("isDay") {
 			@Override
 			public void update() {
@@ -344,6 +339,37 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 				this.value = new Variant(EnvironState.getPlayer().getFoodStats().getFoodLevel());
 			}
 		});
+
+		// Weather variables
+		register(new DynamicVariable("weather.isRaining") {
+			@Override
+			public void update() {
+				this.value = StormProperties.getIntensityLevel() > 0.0F ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		register(new DynamicVariable("weather.isNotRaining") {
+			@Override
+			public void update() {
+				this.value = StormProperties.getIntensityLevel() <= 0.0F ? Expression.ONE : Expression.ZERO;
+			}
+		});
+		register(new DynamicVariable("weather.rainfall") {
+			@Override
+			public void update() {
+				this.value = new Variant(StormProperties.getIntensityLevel());
+			}
+		});
+		register(new DynamicVariable("weather.temperature") {
+			@Override
+			public void update() {
+				this.value = new Variant(
+						EnvironState.getPlayerBiome().getFloatTemperature(EnvironState.getPlayerPosition()));
+			}
+		});
+
+		// Sort them for easy display
+		Collections.sort(variables);
+
 	}
 
 	@Override
@@ -358,20 +384,20 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		// expression evaluations.
 		for (final DynamicVariable dv : variables)
 			dv.update();
-		
-		if(ModOptions.showDebugDialog)
+
+		if (ModOptions.showDebugDialog)
 			DiagnosticPanel.refresh();
 	}
-	
+
 	@Override
 	public void onConnect() {
-		if(ModOptions.showDebugDialog)
+		if (ModOptions.showDebugDialog)
 			DiagnosticPanel.create();
 	}
-	
+
 	@Override
 	public void onDisconnect() {
-		if(ModOptions.showDebugDialog)
+		if (ModOptions.showDebugDialog)
 			DiagnosticPanel.destroy();
 	}
 

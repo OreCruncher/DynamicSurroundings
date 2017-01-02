@@ -28,20 +28,20 @@
 			"sounds":[
 				{
 					"sound":"dsurround:jungle",
-					"conditions":"isNotRaining",
+					"conditions":"weather.isNotRaining",
 					"volume":0.3,
 					"pitch":0.8
 				},
 				{
 					"sound":"dsurround:insectbuzz",
-					"conditions":"isNotRaining",
+					"conditions":"weather.isNotRaining",
 					"soundType":"spot",
 					"volume":0.5,
 					"variable":true
 				},
 				{
 					"sound":"dsurround:primates",
-					"conditions":"isNotRaining && isDay",
+					"conditions":"weather.isNotRaining && isDay",
 					"soundType":"spot",
 					"volume":0.3
 				}
@@ -54,12 +54,12 @@
 			"sounds":[
 				{
 					"sound":"dsurround:crickets",
-					"conditions":"isNotRaining && isNight",
+					"conditions":"weather.isNotRaining && isNight",
 					"volume":0.1
 				},
 				{
 					"sound":"dsurround:insectbuzz",
-					"conditions":"isNotRaining",
+					"conditions":"weather.isNotRaining",
 					"soundType":"spot",
 					"volume":0.5,
 					"variable":true
@@ -73,7 +73,7 @@
 			"sounds":[
 				{
 					"sound":"dsurround:bison",
-					"conditions":"isNotRaining && isDay",
+					"conditions":"weather.isNotRaining && isDay",
 					"soundType":"spot",
 					"volume":0.5
 				}
@@ -86,16 +86,16 @@
 			"sounds":[
 				{
 					"sound":"dsurround:forest",
-					"conditions":"isNotRaining && isDay"
+					"conditions":"weather.isNotRaining && isDay"
 				},
 				{
 					"sound":"dsurround:crickets",
-					"conditions":"isNotRaining && isNight",
+					"conditions":"weather.isNotRaining && isNight",
 					"volume":0.1
 				},
 				{
 					"sound":"dsurround:owl",
-					"conditions":"isNotRaining && isNight",
+					"conditions":"weather.isNotRaining && isNight",
 					"soundType":"spot",
 					"volume":0.3
 				}
@@ -108,11 +108,11 @@
 			"sounds":[
 				{
 					"sound":"dsurround:forest",
-					"conditions":"isNotRaining && isDay"
+					"conditions":"weather.isNotRaining && isDay"
 				},
 				{
 					"sound":"dsurround:crickets",
-					"conditions":"isNotRaining && isNight",
+					"conditions":"weather.isNotRaining && isNight",
 					"volume":0.1
 				}
 				
@@ -124,7 +124,7 @@
 			"sounds":[
 				{
 					"sound":"dsurround:taiga",
-					"conditions":"isNotRaining && isDay",
+					"conditions":"weather.isNotRaining && isDay",
 					"volume":0.7
 				}
 				
@@ -136,13 +136,13 @@
 			"sounds":[
 				{
 					"sound":"dsurround:owl",
-					"conditions":"isNotRaining && isNight",
+					"conditions":"weather.isNotRaining && isNight",
 					"soundType":"spot",
 					"volume":0.3
 				},
 				{
 					"sound":"dsurround:wolf",
-					"conditions":"isNotRaining && isNight",
+					"conditions":"weather.isNotRaining && isNight",
 					"soundType":"spot",
 					"volume":0.3
 				}
@@ -174,7 +174,7 @@
 				},
 				{
 					"sound":"dsurround:insectbuzz",
-					"conditions":"isNotRaining",
+					"conditions":"weather.isNotRaining",
 					"soundType":"spot",
 					"volume":0.5,
 					"variable":true
@@ -211,7 +211,7 @@
 				},
 				{
 					"sound":"dsurround:insectbuzz",
-					"conditions":"isNotRaining",
+					"conditions":"weather.isNotRaining",
 					"soundType":"spot",
 					"volume":0.5,
 					"variable":true
@@ -231,7 +231,7 @@
 				},
 				{
 					"sound":"dsurround:insectbuzz",
-					"conditions":"isNotRaining",
+					"conditions":"weather.isNotRaining",
 					"soundType":"spot",
 					"volume":0.5,
 					"variable":true
@@ -264,7 +264,7 @@
 			"sounds":[
 				{
 					"sound":"dsurround:rattlesnake",
-					"conditions":"isNotRaining && isDay",
+					"conditions":"weather.isNotRaining && isDay",
 					"soundType":"spot",
 					"volume":1.0
 				}
@@ -570,7 +570,7 @@
 			"sounds":[
 				{
 					"sound":"dsurround:hiss",
-					"conditions":"isNotRaining && isDay && NOT(ONEOF(biome.temperature, 'icy', 'cold'))",
+					"conditions":"weather.isNotRaining && isDay && NOT(ONEOF(biome.temperature, 'icy', 'cold'))",
 					"volume":1.0,
 					"variable":true
 				}
@@ -620,18 +620,18 @@
 			"sounds":[
 				{
 					"sound":"dsurround:rattlesnake",
-					"conditions":"isNotRaining && isDay && ONEOF(biome.temperature, 'warm', 'hot')",
+					"conditions":"weather.isNotRaining && isDay && ONEOF(biome.temperature, 'warm', 'hot')",
 					"volume":1.0
 				},
 				{
 					"sound":"dsurround:hiss",
-					"conditions":"isNotRaining && isDay && ONEOF(biome.temperature, 'warm', 'hot')",
+					"conditions":"weather.isNotRaining && isDay && ONEOF(biome.temperature, 'warm', 'hot')",
 					"volume":1.0,
 					"variable":true
 				},
 				{
 					"sound":"dsurround:insectcrawl",
-					"conditions":"isNotRaining && isDay && ONEOF(biome.temperature, 'warm', 'hot')",
+					"conditions":"weather.isNotRaining && isDay && ONEOF(biome.temperature, 'warm', 'hot')",
 					"volume":1.0,
 					"variable":true
 				}
@@ -648,7 +648,7 @@
 			"effects":[
 				{
 					"effect":"firefly",
-					"conditions":"isNotRaining && isNight && ONEOF(biome.temperature,'mild','warm') && NOT(biome.isDry)",
+					"conditions":"weather.isNotRaining && isNight && ONEOF(biome.temperature,'mild','warm') && NOT(biome.isDry)",
 					"chance":50
 				}
 				

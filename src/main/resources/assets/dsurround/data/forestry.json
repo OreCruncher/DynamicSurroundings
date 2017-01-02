@@ -28,7 +28,7 @@
 			"sounds":[
 				{
 					"sound":"dsurround:bees",
-					"conditions":"isDay && isNotRaining",
+					"conditions":"isDay && weather.isNotRaining",
 					"volume":0.2,
 					"variable":true
 				}

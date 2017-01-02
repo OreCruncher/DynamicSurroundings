@@ -101,7 +101,7 @@
 			"effects":[
 				{
 					"effect":"firefly",
-					"conditions":"isNotRaining && isNight && ONEOF(biome.temperature,'mild','warm') && NOT(biome.isDry)",
+					"conditions":"weather.isNotRaining && isNight && ONEOF(biome.temperature,'mild','warm') && NOT(biome.isDry)",
 					"chance":50
 				}
 				

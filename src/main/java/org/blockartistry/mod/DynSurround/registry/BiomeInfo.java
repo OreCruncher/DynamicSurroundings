@@ -37,22 +37,22 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
 
-public final class BiomeInfo {
+public class BiomeInfo {
 
-	private final int biomeId;
-	private final String biomeName;
-	private final Biome biome;
+	protected final int biomeId;
+	protected final String biomeName;
+	protected final Biome biome;
 
-	private boolean hasPrecipitation;
-	private boolean hasDust;
-	private boolean hasAurora;
-	private boolean hasFog;
+	protected boolean hasPrecipitation;
+	protected boolean hasDust;
+	protected boolean hasAurora;
+	protected boolean hasFog;
 
-	private List<SoundEffect> sounds;
-	private int spotSoundChance;
-	private List<SoundEffect> spotSounds;
+	protected List<SoundEffect> sounds;
+	protected int spotSoundChance;
+	protected List<SoundEffect> spotSounds;
 
-	public BiomeInfo(final int biomeId, @Nonnull final String biomeName) {
+	protected BiomeInfo(final int biomeId, @Nonnull final String biomeName) {
 		this.biome = null;
 		this.biomeId = biomeId;
 		this.biomeName = biomeName;
@@ -88,11 +88,11 @@ public final class BiomeInfo {
 	}
 
 	public boolean canRain() {
-		return this.biome != null ? this.biome.canRain() : false;
+		return this.biome.canRain();
 	}
 
 	public boolean getEnableSnow() {
-		return this.biome != null ? this.biome.getEnableSnow() : false;
+		return this.biome.getEnableSnow();
 	}
 
 	public void setHasPrecipitation(final boolean flag) {
@@ -170,19 +170,19 @@ public final class BiomeInfo {
 	}
 
 	public boolean isFake() {
-		return this.biome == null;
+		return false;
 	}
 
 	public float getFloatTemperature(@Nonnull final BlockPos pos) {
-		return isFake() ? 0.0F : this.biome.getFloatTemperature(pos);
+		return this.biome.getFloatTemperature(pos);
 	}
 
 	public float getTemperature() {
-		return isFake() ? 0.0F : this.biome.getTemperature();
+		return this.biome.getTemperature();
 	}
 
 	public TempCategory getTempCategory() {
-		return isFake() ? TempCategory.COLD : this.biome.getTempCategory();
+		return this.biome.getTempCategory();
 	}
 
 	public TemperatureRating getTemperatureRating() {
@@ -190,11 +190,11 @@ public final class BiomeInfo {
 	}
 
 	public boolean isHighHumidity() {
-		return isFake() ? false : this.biome.isHighHumidity();
+		return this.biome.isHighHumidity();
 	}
 
 	public float getRainfall() {
-		return isFake() ? 0.0F : this.biome.getRainfall();
+		return this.biome.getRainfall();
 	}
 
 	@Nullable
@@ -251,9 +251,14 @@ public final class BiomeInfo {
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append(String.format("Biomes %d [%s]:", this.biomeId, this.biomeName));
-		builder.append(" temp: ").append(this.getTemperature()).append(" (").append(getTemperatureRating().getValue())
-				.append(")");
-		builder.append(" rain: ").append(this.getRainfall());
+		if(this.isFake()) {
+			builder.append(" FAKE ");
+		} else {
+			builder.append(" temp: ").append(this.getTemperature()).append(" (").append(getTemperatureRating().getValue())
+					.append(")");
+			builder.append(" rain: ").append(this.getRainfall());
+		}
+		
 		if (this.hasPrecipitation)
 			builder.append(" PRECIPITATION");
 		if (this.hasDust)
