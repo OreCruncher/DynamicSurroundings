@@ -25,6 +25,7 @@
 package org.blockartistry.mod.DynSurround.client.storm;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
+import org.blockartistry.mod.DynSurround.api.events.WeatherUpdateEvent;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
@@ -34,23 +35,25 @@ import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
+@Mod.EventBusSubscriber
 public enum StormProperties {
 
 	VANILLA, NONE(0.0F, "calm"), CALM(0.1F, "calm"), LIGHT(0.33F, "light"), NORMAL(0.66F, "normal"), HEAVY(1.0F,
 			"heavy");
 
+	private static boolean serverSideSupport = false;
 	private static float intensityLevel = 0.0F;
+	private static float maxIntensityLevel = 0.0F;
 	private static StormProperties intensity = VANILLA;
 	private static float fogDensity = 0.0F;
 		
-	public static void initialize() {
-
-	}
-
 	private final float level;
 	private final ResourceLocation rainTexture;
 	private final ResourceLocation snowTexture;
@@ -84,7 +87,11 @@ public enum StormProperties {
 	}
 
 	public static float getIntensityLevel() {
-		return intensityLevel;
+		return serverSideSupport ? intensityLevel : EnvironState.getWorld().getRainStrength(1.0F);
+	}
+	
+	public static float getMaxIntensityLevel() {
+		return serverSideSupport ? maxIntensityLevel : 1.0F;
 	}
 
 	public static float getFogDensity() {
@@ -116,11 +123,19 @@ public enum StormProperties {
 	}
 
 	/**
-	 * Sets the RAIN rainIntensity based on the intensityLevel level provided. This
+	 * Sets the maximum intensity possible for the current
+	 * weather phenomenon.
+	 */
+	public static void setMaximumIntensity(float level) {
+		maxIntensityLevel = level;
+	}
+	
+	/**
+	 * Sets the rainIntensity based on the intensityLevel level provided. This
 	 * is called by the packet handler when the server wants to set the
 	 * rainIntensity level on the client.
 	 */
-	public static void setIntensity(float level) {
+	public static void setCurrentIntensity(float level) {
 
 		// If the level is Vanilla it means that
 		// the rainfall in the dimension is to be
@@ -155,6 +170,23 @@ public enum StormProperties {
 				intensity = HEAVY;
 		}
 	}
+	
+	@SubscribeEvent
+	public static void onWeatherUpdateEvent(final WeatherUpdateEvent event) {
+		serverSideSupport = true;
+		if(EnvironState.getDimensionId() != event.dimensionId)
+			return;
+		setMaximumIntensity(event.maxRainIntensity);
+		setCurrentIntensity(event.rainIntensity);
+	}
+	
+	@SubscribeEvent
+	public static void onClientDisconnect(final ClientDisconnectionFromServerEvent event) {
+		serverSideSupport = false;
+		setMaximumIntensity(1.0F);
+		setCurrentIntensity(VANILLA.level);
+	}
+
 
 	/**
 	 * Set precipitation textures based on the current rainIntensity. This is
@@ -169,7 +201,7 @@ public enum StormProperties {
 	public static String diagnostic() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("Storm: ").append(intensity.name());
-		builder.append(" level:").append(intensityLevel);
+		builder.append(" level: ").append(intensityLevel).append('/').append(maxIntensityLevel);
 		builder.append(" dust:").append(fogDensity);
 		builder.append(" str:").append(EnvironState.getWorld().getRainStrength(1.0F));
 		return builder.toString();

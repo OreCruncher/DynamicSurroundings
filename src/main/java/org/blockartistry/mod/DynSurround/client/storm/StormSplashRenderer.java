@@ -61,7 +61,7 @@ public class StormSplashRenderer {
 	private static final StormSplashRenderer DEFAULT = new StormSplashRenderer();
 	protected static final int PARTICLE_SOUND_CHANCE = 20;
 	protected static final XorShiftRandom RANDOM = new XorShiftRandom();
-	
+
 	static {
 		splashRenderers.put(0, DEFAULT);
 		splashRenderers.put(-1, new NetherSplashRenderer());
@@ -78,7 +78,7 @@ public class StormSplashRenderer {
 	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 	private final SeasonRegistry season = RegistryManager.get(RegistryType.SEASON);
-	
+
 	protected StormSplashRenderer() {
 
 	}
@@ -148,7 +148,7 @@ public class StormSplashRenderer {
 		if (!this.dimensions.hasWeather(EnvironState.getWorld()))
 			return;
 
-		float rainStrengthFactor = theThis.mc.theWorld.getRainStrength(1.0F);
+		float rainStrengthFactor = StormProperties.getIntensityLevel();
 		if (!theThis.mc.gameSettings.fancyGraphics)
 			rainStrengthFactor /= 2.0F;
 

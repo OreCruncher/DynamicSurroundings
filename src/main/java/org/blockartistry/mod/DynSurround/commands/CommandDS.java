@@ -56,7 +56,6 @@ public final class CommandDS extends CommandBase {
 	private static final String COMMAND_OPTION_SETMAX = "setmax";
 	private static final String COMMAND_OPTION_SETSTRENGTH = "setstr";
 	private static final String COMMAND_OPTION_SETTIME = "settime";
-	private static final String COMMAND_OPTION_SETTHRESHOLD = "setthreshold";
 	private static final String COMMAND_OPTION_CONFIG = "config";
 
 	private static final List<String> ALIAS = ImmutableList.<String> builder().add("dsurround", "rain").build();
@@ -68,8 +67,7 @@ public final class CommandDS extends CommandBase {
 			.add(TextFormatting.YELLOW + "/ds status <rain|thunder|aurora>")
 			.add(TextFormatting.YELLOW + "/ds settime <rain|thunder> 0-1000")
 			.add(TextFormatting.YELLOW + "/ds setstr rain 0-100").add(TextFormatting.YELLOW + "/ds setmin rain 0-100")
-			.add(TextFormatting.YELLOW + "/ds setmax rain 0-100")
-			.add(TextFormatting.YELLOW + "/ds setthreshold thunder 0-100").build();
+			.add(TextFormatting.YELLOW + "/ds setmax rain 0-100").build();
 
 	public static String rainStatusOutput(final World world, final DimensionEffectData data) {
 		final StringBuilder builder = new StringBuilder();
@@ -200,20 +198,6 @@ public final class CommandDS extends CommandBase {
 						data.setMaxRainIntensity((float) d);
 						feedback = new TextComponentString(Localization.format("msg.MaxRainIntensitySet",
 								FORMATTER.format(data.getMaxRainIntensity() * 100)));
-					} else {
-						showHelp = true;
-					}
-				}
-
-			} else if (COMMAND_OPTION_SETTHRESHOLD.compareToIgnoreCase(parms[0]) == 0) {
-				if (parms.length < 3) {
-					showHelp = true;
-				} else {
-					final double d = parseDouble(parms[2], 0.0D, 100.0D) / 100.0D;
-					if (COMMAND_OPTION_THUNDER.compareToIgnoreCase(parms[1]) == 0) {
-						data.setThunderThreshold((float) d);
-						feedback = new TextComponentString(Localization.format("msg.ThunderThresholdSet",
-								FORMATTER.format(data.getThunderThreshold() * 100)));
 					} else {
 						showHelp = true;
 					}

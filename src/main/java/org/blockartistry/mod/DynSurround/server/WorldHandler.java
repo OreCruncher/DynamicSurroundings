@@ -37,6 +37,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldInfo;
 
+// TODO: Remove because of handling rain/thunder differently
 public class WorldHandler {
 
 	private static final float STRENGTH_ADJUST = 0.01F;
@@ -135,8 +136,7 @@ public class WorldHandler {
 	}
 
 	public static boolean isThundering(@Nonnull final World world) {
-		final double strength = (double) world.getThunderStrength(1.0F);
-		return world.isRemote ? strength > 0.9D : strength > DimensionEffectData.get(world).getThunderThreshold();
+		return world.getThunderStrength(1.0F) > 0.9D;
 	}
 
 }

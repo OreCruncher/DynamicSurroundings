@@ -49,28 +49,26 @@ import net.minecraftforge.common.util.Constants;
  */
 public final class DimensionEffectData extends WorldSavedData {
 
-	private static final XorShiftRandom random = new XorShiftRandom();
+	private static final XorShiftRandom RANDOM = new XorShiftRandom();
 	private static final DecimalFormat FORMATTER = new DecimalFormat("0");
 
 	public final static float MIN_INTENSITY = 0.0F;
 	public final static float MAX_INTENSITY = 1.0F;
-	public final static float MIN_THUNDER_THRESHOLD = 0.0F;
-	public final static float MAX_THUNDER_THRESHOLD = 1.0F;
 
 	private final class NBT {
 		public final static String DIMENSION = "d";
 		public final static String INTENSITY = "s";
+		public final static String CURRENT_INTENSITY = "ci";
 		public final static String MIN_INTENSITY = "min";
 		public final static String MAX_INTENSITY = "max";
 		public final static String AURORA_LIST = "al";
-		public final static String THUNDER_THRESHOLD = "tt";
 	};
 
 	private int dimensionId = 0;
 	private float intensity = 0.0F;
+	private float currentIntensity = 0.0F;
 	private float minIntensity = ModOptions.defaultMinRainStrength;
 	private float maxIntensity = ModOptions.defaultMaxRainStrength;
-	private float thunderThreshold = ModOptions.defaultThunderThreshold;
 	private final Set<AuroraData> auroras = new HashSet<AuroraData>();
 
 	private DimensionEffectData(final int dimension) {
@@ -90,8 +88,17 @@ public final class DimensionEffectData extends WorldSavedData {
 		return this.intensity;
 	}
 
+	public float getCurrentRainIntensity() {
+		return this.currentIntensity;
+	}
+
 	public void setRainIntensity(final float intensity) {
 		this.intensity = MathHelper.clamp_float(intensity, MIN_INTENSITY, MAX_INTENSITY);
+		this.setDirty(true);
+	}
+
+	public void setCurrentRainIntensity(final float intensity) {
+		this.currentIntensity = MathHelper.clamp_float(intensity, 0, this.intensity);
 		this.setDirty(true);
 	}
 
@@ -110,15 +117,6 @@ public final class DimensionEffectData extends WorldSavedData {
 
 	public void setMaxRainIntensity(final float intensity) {
 		this.maxIntensity = MathHelper.clamp_float(intensity, this.minIntensity, MAX_INTENSITY);
-		this.setDirty(true);
-	}
-
-	public float getThunderThreshold() {
-		return this.thunderThreshold;
-	}
-
-	public void setThunderThreshold(final float threshold) {
-		this.thunderThreshold = MathHelper.clamp_float(threshold, MIN_THUNDER_THRESHOLD, MAX_THUNDER_THRESHOLD);
 		this.setDirty(true);
 	}
 
@@ -154,23 +152,23 @@ public final class DimensionEffectData extends WorldSavedData {
 			result = (float) this.minIntensity;
 		} else {
 			final float mid = delta / 2.0F;
-			result = random.nextFloat() * mid + random.nextFloat() * mid;
+			result = RANDOM.nextFloat() * mid + RANDOM.nextFloat() * mid;
 		}
 		setRainIntensity(MathHelper.clamp_float(result, 0.01F, MAX_INTENSITY));
+		setCurrentRainIntensity(0.0F);
 	}
 
 	@Override
 	public void readFromNBT(@Nonnull final NBTTagCompound nbt) {
 		this.dimensionId = nbt.getInteger(NBT.DIMENSION);
 		this.intensity = MathHelper.clamp_float(nbt.getFloat(NBT.INTENSITY), MIN_INTENSITY, MAX_INTENSITY);
+		if (nbt.hasKey(NBT.CURRENT_INTENSITY))
+			this.currentIntensity = MathHelper.clamp_float(nbt.getFloat(NBT.CURRENT_INTENSITY), 0, this.intensity);
 		if (nbt.hasKey(NBT.MIN_INTENSITY))
 			this.minIntensity = MathHelper.clamp_float(nbt.getFloat(NBT.MIN_INTENSITY), MIN_INTENSITY, MAX_INTENSITY);
 		if (nbt.hasKey(NBT.MAX_INTENSITY))
 			this.maxIntensity = MathHelper.clamp_float(nbt.getFloat(NBT.MAX_INTENSITY), this.minIntensity,
 					MAX_INTENSITY);
-		if (nbt.hasKey(NBT.THUNDER_THRESHOLD))
-			this.thunderThreshold = MathHelper.clamp_float(nbt.getFloat(NBT.THUNDER_THRESHOLD), MIN_THUNDER_THRESHOLD,
-					MAX_THUNDER_THRESHOLD);
 		final NBTTagList list = nbt.getTagList(NBT.AURORA_LIST, Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < list.tagCount(); i++) {
 			final NBTTagCompound tag = list.getCompoundTagAt(i);
@@ -185,9 +183,9 @@ public final class DimensionEffectData extends WorldSavedData {
 	public NBTTagCompound writeToNBT(@Nonnull final NBTTagCompound nbt) {
 		nbt.setInteger(NBT.DIMENSION, this.dimensionId);
 		nbt.setFloat(NBT.INTENSITY, this.intensity);
+		nbt.setFloat(NBT.CURRENT_INTENSITY, this.currentIntensity);
 		nbt.setFloat(NBT.MIN_INTENSITY, this.minIntensity);
 		nbt.setFloat(NBT.MAX_INTENSITY, this.maxIntensity);
-		nbt.setFloat(NBT.THUNDER_THRESHOLD, this.thunderThreshold);
 		final NBTTagList list = new NBTTagList();
 		for (final AuroraData data : this.auroras) {
 			final NBTTagCompound tag = new NBTTagCompound();
@@ -205,7 +203,6 @@ public final class DimensionEffectData extends WorldSavedData {
 		builder.append("rainIntensity [").append(FORMATTER.format(this.minIntensity * 100));
 		builder.append(",").append(FORMATTER.format(this.maxIntensity * 100));
 		builder.append("]");
-		builder.append(", thunder threshold: ").append(FORMATTER.format(this.thunderThreshold * 100));
 		return builder.toString();
 	}
 
@@ -219,7 +216,6 @@ public final class DimensionEffectData extends WorldSavedData {
 		builder.append(" [").append(FORMATTER.format(this.minIntensity * 100));
 		builder.append(",").append(FORMATTER.format(this.maxIntensity * 100));
 		builder.append("]");
-		builder.append(", thunder: ").append(FORMATTER.format(this.thunderThreshold * 100));
 		builder.append(", auroras: ").append(this.auroras.size());
 		return builder.toString();
 	}

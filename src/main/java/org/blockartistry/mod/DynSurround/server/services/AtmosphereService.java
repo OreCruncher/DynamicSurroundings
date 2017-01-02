@@ -25,46 +25,119 @@
 package org.blockartistry.mod.DynSurround.server.services;
 
 import net.minecraft.world.World;
+import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
 import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
+import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 public final class AtmosphereService extends Service {
 
-	private static final float RESET = -10.0F;
-	
+	private static final Random RANDOM = new XorShiftRandom();
+
+	private static int nextThunderInterval(final boolean isThundering) {
+		final int base = isThundering ? ModOptions.stormActiveTimeConst : ModOptions.stormInactiveTimeConst;
+		return base + RANDOM
+				.nextInt(isThundering ? ModOptions.stormActiveTimeVariable : ModOptions.stormInactiveTimeVariable);
+	}
+
+	private static int nextRainInterval(final boolean isRaining) {
+		final int base = isRaining ? ModOptions.rainActiveTimeConst : ModOptions.rainInactiveTimeConst;
+		return base
+				+ RANDOM.nextInt(isRaining ? ModOptions.rainActiveTimeVariable : ModOptions.rainInactiveTimeVariable);
+	}
+
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
-	
+
 	AtmosphereService() {
 		super("AtmosphereService");
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void tickEvent(@Nonnull final TickEvent.WorldTickEvent event) {
-		
-		if(!ModOptions.enableWeatherASM)
-			return;
 
-		if (event.phase == Phase.END)
+		if (event.side != Side.SERVER || !ModOptions.enableWeatherASM || event.phase == Phase.START)
 			return;
 
 		final World world = event.world;
-		final int dimensionId = world.provider.getDimension();
-		final float sendIntensity = dimensions.hasWeather(world) ? DimensionEffectData.get(world).getRainIntensity()
-				: RESET;
+		final DimensionEffectData data = DimensionEffectData.get(world);
+
+		if (!this.dimensions.hasWeather(world))
+			return;
+
+		// If we get here and the world has no sky we have a dimension
+		// like the Nether.  We need to turn the crank manually to get
+		// Minecraft to do what we need.
+		if(world.provider.getHasNoSky()) {
+			world.provider.hasNoSky = false;
+			try {
+				world.updateWeatherBody();
+			} catch(final Throwable t) {
+				;
+			}
+			world.provider.hasNoSky = true;
+		}
+		
+		final WorldInfo info = world.getWorldInfo();
+
+		// Tackle the rain and thunder timers.  We toggle on remaining
+		// time of 2 since updateWeatherBody() triggers on 0.  We
+		// want to control the timers.
+		
+		final int rain = info.getRainTime();
+		if(rain <= 2) {
+			info.setRaining(!info.isRaining());
+			info.setRainTime(nextRainInterval(info.isRaining()));
+		}
+
+		final int thunder = info.getThunderTime();
+		if (thunder <= 2) {
+			info.setThundering(!info.isThundering());
+			info.setThunderTime(nextThunderInterval(info.isThundering()));
+		}
+
+		// Track our rain intensity values
+		if (info.isRaining()) {
+			// If our intensity is 0 it means that we need to establish
+			// a strength.
+			if (data.getRainIntensity() == 0.0F) {
+				data.randomizeRain();
+				info.setRainTime(nextRainInterval(true));
+				ModLog.debug("dim %d rain intensity set to %f, duration %d ticks", data.getDimensionId(),
+						data.getRainIntensity(), info.getRainTime());
+			}
+			data.setCurrentRainIntensity(world.getRainStrength(1.0F));
+		} else if (world.getRainStrength(1.0F) > 0.0F) {
+			// It's not raining and the world has strength. Means that it is on
+			// the way out so reflect the worlds strength.
+			data.setCurrentRainIntensity(world.getRainStrength(1.0F));
+		} else if (data.getCurrentRainIntensity() > 0) {
+			// We get here the world is not raining and there is no strength,
+			// but our record indicates something. Means we stopped.
+			data.setRainIntensity(0);
+			data.setCurrentRainIntensity(0);
+			info.setRainTime(nextRainInterval(false));
+			ModLog.debug("dim %d rain has stopped, next rain %d ticks", data.getDimensionId(),
+					world.getWorldInfo().getRainTime());
+		}
 
 		// Set the rain rainIntensity for all players in the current
 		// dimension.
-		Network.sendRainIntensity(sendIntensity, dimensionId);
+		Network.sendRainIntensity(data.getCurrentRainIntensity(), data.getRainIntensity(), data.getDimensionId());
 	}
 
 }

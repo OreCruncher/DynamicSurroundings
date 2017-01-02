@@ -40,7 +40,7 @@ public final class PacketWeatherUpdate implements IMessage  {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketWeatherUpdate message, @Nullable final MessageContext ctx) {
-			Network.postEvent(new WeatherUpdateEvent(message.dimension, message.intensity));
+			Network.postEvent(new WeatherUpdateEvent(message.dimension, message.intensity, message.maxIntensity));
 			return null;
 		}
 	}
@@ -49,6 +49,7 @@ public final class PacketWeatherUpdate implements IMessage  {
 	 * Strength of rainfall
 	 */
 	private float intensity;
+	private float maxIntensity;
 
 	/**
 	 * Dimension where the rainfall is occurring
@@ -58,8 +59,9 @@ public final class PacketWeatherUpdate implements IMessage  {
 	public PacketWeatherUpdate() {
 	}
 
-	public PacketWeatherUpdate(final float intensity, final int dimension) {
+	public PacketWeatherUpdate(final float intensity, final float maxIntensity, final int dimension) {
 		this.intensity = intensity;
+		this.maxIntensity = maxIntensity;
 		this.dimension = dimension;
 	}
 
@@ -67,12 +69,14 @@ public final class PacketWeatherUpdate implements IMessage  {
 	public void fromBytes(@Nonnull final ByteBuf buf) {
 		this.dimension = buf.readShort();
 		this.intensity = buf.readFloat();
+		this.maxIntensity = buf.readFloat();
 	}
 
 	@Override
 	public void toBytes(@Nonnull final ByteBuf buf) {
 		buf.writeShort(this.dimension);
 		buf.writeFloat(this.intensity);
+		buf.writeFloat(this.maxIntensity);
 	}
 
 }

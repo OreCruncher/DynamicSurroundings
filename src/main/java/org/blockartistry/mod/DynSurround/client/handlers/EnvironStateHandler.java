@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.api.events.WeatherUpdateEvent;
 import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
@@ -399,10 +398,4 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 	}
 
-	@SubscribeEvent
-	public void onWeatherUpdateEvent(final WeatherUpdateEvent event) {
-		if(EnvironState.getDimensionId() != event.dimensionId)
-			return;
-		StormProperties.setIntensity(event.rainIntensity);
-	}
 }

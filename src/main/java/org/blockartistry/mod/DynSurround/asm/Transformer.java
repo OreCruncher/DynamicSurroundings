@@ -57,11 +57,12 @@ public class Transformer implements IClassTransformer {
 				logger.debug("Transforming WorldServer...");
 				return transformWorldServer(basicClass);
 			}
-		} else if ("net.minecraft.world.World".equals(name) || "aid".equals(name) || "aht".equals(name)) {
-			if (ModOptions.enableWeatherASM) {
-				logger.debug("Transforming World...");
-				return transformWorld(basicClass);
-			}
+// TODO: Remove once vetted
+//		} else if ("net.minecraft.world.World".equals(name) || "aid".equals(name) || "aht".equals(name)) {
+//			if (ModOptions.enableWeatherASM) {
+//				logger.debug("Transforming World...");
+//				return transformWorld(basicClass);
+//			}
 		} else if ("net.minecraft.client.audio.SoundManager".equals(name) || "bzu".equals(name) || "byt".equals(name)) {
 			if (ModOptions.enableSoundVolumeASM) {
 				logger.debug("Transforming SoundEffectHandler...");
@@ -147,6 +148,8 @@ public class Transformer implements IClassTransformer {
 		return cw.toByteArray();
 	}
 
+	// TODO: Remove once vetted
+	@SuppressWarnings("unused")
 	private byte[] transformWorld(final byte[] classBytes) {
 		final String names[];
 

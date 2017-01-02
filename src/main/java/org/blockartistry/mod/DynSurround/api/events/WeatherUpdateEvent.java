@@ -39,14 +39,21 @@ public class WeatherUpdateEvent extends Event {
 	public final int dimensionId;
 
 	/**
-	 * The new rain intensity that is being set.  0 means
+	 * The current rain intensity that is being set.  0 means
 	 * no intensity, and 1.0F means full.
 	 */
 	public final float rainIntensity;
+	
+	/**
+	 * The max possible intensity of the storm.  0 means none,
+	 * and 1.0F means full.
+	 */
+	public final float maxRainIntensity;
 
-	public WeatherUpdateEvent(final int dimension, final float rainIntensity) {
+	public WeatherUpdateEvent(final int dimension, final float rainIntensity, final float maxRainIntensity) {
 		this.dimensionId = dimension;
-		this.rainIntensity = MathHelper.clamp_float(rainIntensity, 0.0F, 1.0F);
+		this.maxRainIntensity = MathHelper.clamp_float(maxRainIntensity, 0, 1.0F);
+		this.rainIntensity = MathHelper.clamp_float(rainIntensity, 0.0F, this.maxRainIntensity);
 	}
 
 }

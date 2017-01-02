@@ -80,8 +80,8 @@ public final class Network {
 		});
 	}
 
-	public static void sendRainIntensity(final float intensity, final int dimension) {
-		NETWORK.sendToDimension(new PacketWeatherUpdate(intensity, dimension), dimension);
+	public static void sendRainIntensity(final float intensity, final float maxIntensity, final int dimension) {
+		NETWORK.sendToDimension(new PacketWeatherUpdate(intensity, maxIntensity, dimension), dimension);
 	}
 
 	public static void sendAurora(@Nonnull final AuroraData data, final int dimension) {
