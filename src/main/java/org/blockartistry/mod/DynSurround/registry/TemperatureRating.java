@@ -29,9 +29,9 @@ import javax.annotation.Nonnull;
 public enum TemperatureRating {
 	
 	ICY("icy", 0.0F),
-	COOL("cool", 0.3F),
+	COOL("cool", 0.2F),
 	MILD("mild", 1.0F),
-	WARM("warm", 1.3F),
+	WARM("warm", 1.8F),
 	HOT("hot", 100.F);
 
 	private final String val;
@@ -54,7 +54,7 @@ public enum TemperatureRating {
 	@Nonnull
 	public static TemperatureRating fromTemp(final float temp) {
 		for (final TemperatureRating rating : values())
-			if (temp <= rating.getTempRange())
+			if (temp < rating.getTempRange())
 				return rating;
 		return TemperatureRating.MILD;
 	}
