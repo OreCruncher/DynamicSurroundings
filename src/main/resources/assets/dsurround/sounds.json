@@ -1,7 +1,7 @@
 {
-	"fs.bluntwood.bluntwood_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.bluntwood.bluntwood_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/bluntwood/bluntwood_walk1",
 			"dsurround:footsteps/bluntwood/bluntwood_walk10",
 			"dsurround:footsteps/bluntwood/bluntwood_walk11",
@@ -14,22 +14,20 @@
 			"dsurround:footsteps/bluntwood/bluntwood_walk8",
 			"dsurround:footsteps/bluntwood/bluntwood_walk9"
 		]
-		
 	},
-	"fs.bluntwood.bluntwood_wander":{
-		"category":"player",
-		"sounds":[
+	"fs.bluntwood.bluntwood_wander": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/bluntwood/bluntwood_wander1",
 			"dsurround:footsteps/bluntwood/bluntwood_wander2",
 			"dsurround:footsteps/bluntwood/bluntwood_wander3",
 			"dsurround:footsteps/bluntwood/bluntwood_wander4",
 			"dsurround:footsteps/bluntwood/bluntwood_wander5"
 		]
-		
 	},
-	"fs.brush.brush_through":{
-		"category":"player",
-		"sounds":[
+	"fs.brush.brush_through": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/brush/brush_through1",
 			"dsurround:footsteps/brush/brush_through10",
 			"dsurround:footsteps/brush/brush_through11",
@@ -42,11 +40,10 @@
 			"dsurround:footsteps/brush/brush_through8",
 			"dsurround:footsteps/brush/brush_through9"
 		]
-		
 	},
-	"fs.concrete.concrete_run":{
-		"category":"player",
-		"sounds":[
+	"fs.concrete.concrete_run": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/concrete/concrete_run1",
 			"dsurround:footsteps/concrete/concrete_run10",
 			"dsurround:footsteps/concrete/concrete_run11",
@@ -59,11 +56,10 @@
 			"dsurround:footsteps/concrete/concrete_run8",
 			"dsurround:footsteps/concrete/concrete_run9"
 		]
-		
 	},
-	"fs.concrete.concrete_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.concrete.concrete_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/concrete/concrete_walk1",
 			"dsurround:footsteps/concrete/concrete_walk10",
 			"dsurround:footsteps/concrete/concrete_walk11",
@@ -76,22 +72,20 @@
 			"dsurround:footsteps/concrete/concrete_walk8",
 			"dsurround:footsteps/concrete/concrete_walk9"
 		]
-		
 	},
-	"fs.concrete.concrete_wander":{
-		"category":"player",
-		"sounds":[
+	"fs.concrete.concrete_wander": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/concrete/concrete_wander1",
 			"dsurround:footsteps/concrete/concrete_wander2",
 			"dsurround:footsteps/concrete/concrete_wander3",
 			"dsurround:footsteps/concrete/concrete_wander4",
 			"dsurround:footsteps/concrete/concrete_wander5"
 		]
-		
 	},
-	"fs.deckwood.deckwood_run":{
-		"category":"player",
-		"sounds":[
+	"fs.deckwood.deckwood_run": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/deckwood/deckwood_run1",
 			"dsurround:footsteps/deckwood/deckwood_run10",
 			"dsurround:footsteps/deckwood/deckwood_run11",
@@ -104,21 +98,19 @@
 			"dsurround:footsteps/deckwood/deckwood_run8",
 			"dsurround:footsteps/deckwood/deckwood_run9"
 		]
-		
 	},
-	"fs.dirt.dirt_land":{
-		"category":"player",
-		"sounds":[
+	"fs.dirt.dirt_land": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/dirt/dirt_land1",
 			"dsurround:footsteps/dirt/dirt_land2",
 			"dsurround:footsteps/dirt/dirt_land3",
 			"dsurround:footsteps/dirt/dirt_land4"
 		]
-		
 	},
-	"fs.dirt.dirt_run":{
-		"category":"player",
-		"sounds":[
+	"fs.dirt.dirt_run": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/dirt/dirt_run1",
 			"dsurround:footsteps/dirt/dirt_run10",
 			"dsurround:footsteps/dirt/dirt_run11",
@@ -131,11 +123,10 @@
 			"dsurround:footsteps/dirt/dirt_run8",
 			"dsurround:footsteps/dirt/dirt_run9"
 		]
-		
 	},
-	"fs.dirt.dirt_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.dirt.dirt_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/dirt/dirt_walk1",
 			"dsurround:footsteps/dirt/dirt_walk10",
 			"dsurround:footsteps/dirt/dirt_walk11",
@@ -148,47 +139,42 @@
 			"dsurround:footsteps/dirt/dirt_walk8",
 			"dsurround:footsteps/dirt/dirt_walk9"
 		]
-		
 	},
-	"fs.dirt.dirt_wander":{
-		"category":"player",
-		"sounds":[
+	"fs.dirt.dirt_wander": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/dirt/dirt_wander1",
 			"dsurround:footsteps/dirt/dirt_wander2",
 			"dsurround:footsteps/dirt/dirt_wander3",
 			"dsurround:footsteps/dirt/dirt_wander4",
 			"dsurround:footsteps/dirt/dirt_wander5"
 		]
-		
 	},
-	"fs.glass.glass_hard":{
-		"category":"player",
-		"sounds":[
+	"fs.glass.glass_hard": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/glass/glass_hard1"
 		]
-		
 	},
-	"fs.glass.glass_hit":{
-		"category":"player",
-		"sounds":[
+	"fs.glass.glass_hit": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/glass/glass_hit1",
 			"dsurround:footsteps/glass/glass_hit2"
 		]
-		
 	},
-	"fs.grass.grass_run":{
-		"category":"player",
-		"sounds":[
+	"fs.grass.grass_run": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/grass/grass_run1",
 			"dsurround:footsteps/grass/grass_run2",
 			"dsurround:footsteps/grass/grass_run3",
 			"dsurround:footsteps/grass/grass_run4"
 		]
-		
 	},
-	"fs.grass.grass_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.grass.grass_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/grass/grass_walk1",
 			"dsurround:footsteps/grass/grass_walk10",
 			"dsurround:footsteps/grass/grass_walk2",
@@ -200,11 +186,10 @@
 			"dsurround:footsteps/grass/grass_walk8",
 			"dsurround:footsteps/grass/grass_walk9"
 		]
-		
 	},
-	"fs.grass.grass_wander":{
-		"category":"player",
-		"sounds":[
+	"fs.grass.grass_wander": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/grass/grass_wander1",
 			"dsurround:footsteps/grass/grass_wander2",
 			"dsurround:footsteps/grass/grass_wander3",
@@ -212,19 +197,17 @@
 			"dsurround:footsteps/grass/grass_wander5",
 			"dsurround:footsteps/grass/grass_wander6"
 		]
-		
 	},
-	"fs.gravel.gravel_land":{
-		"category":"player",
-		"sounds":[
+	"fs.gravel.gravel_land": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/gravel/gravel_land1",
 			"dsurround:footsteps/gravel/gravel_land2"
 		]
-		
 	},
-	"fs.gravel.gravel_run":{
-		"category":"player",
-		"sounds":[
+	"fs.gravel.gravel_run": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/gravel/gravel_run1",
 			"dsurround:footsteps/gravel/gravel_run10",
 			"dsurround:footsteps/gravel/gravel_run11",
@@ -237,11 +220,10 @@
 			"dsurround:footsteps/gravel/gravel_run8",
 			"dsurround:footsteps/gravel/gravel_run9"
 		]
-		
 	},
-	"fs.gravel.gravel_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.gravel.gravel_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/gravel/gravel_walk1",
 			"dsurround:footsteps/gravel/gravel_walk10",
 			"dsurround:footsteps/gravel/gravel_walk11",
@@ -254,20 +236,18 @@
 			"dsurround:footsteps/gravel/gravel_walk8",
 			"dsurround:footsteps/gravel/gravel_walk9"
 		]
-		
 	},
-	"fs.gravel.gravel_wander":{
-		"category":"player",
-		"sounds":[
+	"fs.gravel.gravel_wander": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/gravel/gravel_wander1",
 			"dsurround:footsteps/gravel/gravel_wander2",
 			"dsurround:footsteps/gravel/gravel_wander3"
 		]
-		
 	},
-	"fs.leaves.leaves_through":{
-		"category":"player",
-		"sounds":[
+	"fs.leaves.leaves_through": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/leaves/leaves_through1",
 			"dsurround:footsteps/leaves/leaves_through2",
 			"dsurround:footsteps/leaves/leaves_through3",
@@ -276,11 +256,10 @@
 			"dsurround:footsteps/leaves/leaves_through6",
 			"dsurround:footsteps/leaves/leaves_through7"
 		]
-		
 	},
-	"fs.lino.lino_run":{
-		"category":"player",
-		"sounds":[
+	"fs.lino.lino_run": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/lino/lino_run1",
 			"dsurround:footsteps/lino/lino_run2",
 			"dsurround:footsteps/lino/lino_run3",
@@ -288,11 +267,10 @@
 			"dsurround:footsteps/lino/lino_run5",
 			"dsurround:footsteps/lino/lino_run6"
 		]
-		
 	},
-	"fs.lino.lino_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.lino.lino_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/lino/lino_walk1",
 			"dsurround:footsteps/lino/lino_walk2",
 			"dsurround:footsteps/lino/lino_walk3",
@@ -302,11 +280,10 @@
 			"dsurround:footsteps/lino/lino_walk7",
 			"dsurround:footsteps/lino/lino_walk8"
 		]
-		
 	},
-	"fs.marble.marble_run":{
-		"category":"player",
-		"sounds":[
+	"fs.marble.marble_run": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/marble/marble_run1",
 			"dsurround:footsteps/marble/marble_run10",
 			"dsurround:footsteps/marble/marble_run11",
@@ -319,11 +296,10 @@
 			"dsurround:footsteps/marble/marble_run8",
 			"dsurround:footsteps/marble/marble_run9"
 		]
-		
 	},
-	"fs.marble.marble_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.marble.marble_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/marble/marble_walk1",
 			"dsurround:footsteps/marble/marble_walk10",
 			"dsurround:footsteps/marble/marble_walk11",
@@ -336,11 +312,10 @@
 			"dsurround:footsteps/marble/marble_walk8",
 			"dsurround:footsteps/marble/marble_walk9"
 		]
-		
 	},
-	"fs.marble.marble_wander":{
-		"category":"player",
-		"sounds":[
+	"fs.marble.marble_wander": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/marble/marble_wander1",
 			"dsurround:footsteps/marble/marble_wander2",
 			"dsurround:footsteps/marble/marble_wander3",
@@ -349,18 +324,16 @@
 			"dsurround:footsteps/marble/marble_wander6",
 			"dsurround:footsteps/marble/marble_wander7"
 		]
-		
 	},
-	"fs.metalbar.metalbar_land":{
-		"category":"player",
-		"sounds":[
+	"fs.metalbar.metalbar_land": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/metalbar/metalbar_land1"
 		]
-		
 	},
-	"fs.metalbar.metalbar_run":{
-		"category":"player",
-		"sounds":[
+	"fs.metalbar.metalbar_run": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/metalbar/metalbar_run1",
 			"dsurround:footsteps/metalbar/metalbar_run10",
 			"dsurround:footsteps/metalbar/metalbar_run11",
@@ -373,11 +346,10 @@
 			"dsurround:footsteps/metalbar/metalbar_run8",
 			"dsurround:footsteps/metalbar/metalbar_run9"
 		]
-		
 	},
-	"fs.metalbar.metalbar_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.metalbar.metalbar_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/metalbar/metalbar_walk1",
 			"dsurround:footsteps/metalbar/metalbar_walk10",
 			"dsurround:footsteps/metalbar/metalbar_walk11",
@@ -390,11 +362,10 @@
 			"dsurround:footsteps/metalbar/metalbar_walk8",
 			"dsurround:footsteps/metalbar/metalbar_walk9"
 		]
-		
 	},
-	"fs.metalbar.metalbar_wander":{
-		"category":"player",
-		"sounds":[
+	"fs.metalbar.metalbar_wander": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/metalbar/metalbar_wander1",
 			"dsurround:footsteps/metalbar/metalbar_wander2",
 			"dsurround:footsteps/metalbar/metalbar_wander3",
@@ -402,11 +373,10 @@
 			"dsurround:footsteps/metalbar/metalbar_wander5",
 			"dsurround:footsteps/metalbar/metalbar_wander6"
 		]
-		
 	},
-	"fs.metalbox.metalbox_run":{
-		"category":"player",
-		"sounds":[
+	"fs.metalbox.metalbox_run": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/metalbox/metalbox_run1",
 			"dsurround:footsteps/metalbox/metalbox_run10",
 			"dsurround:footsteps/metalbox/metalbox_run2",
@@ -418,11 +388,10 @@
 			"dsurround:footsteps/metalbox/metalbox_run8",
 			"dsurround:footsteps/metalbox/metalbox_run9"
 		]
-		
 	},
-	"fs.metalbox.metalbox_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.metalbox.metalbox_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/metalbox/metalbox_walk1",
 			"dsurround:footsteps/metalbox/metalbox_walk2",
 			"dsurround:footsteps/metalbox/metalbox_walk3",
@@ -433,21 +402,19 @@
 			"dsurround:footsteps/metalbox/metalbox_walk8",
 			"dsurround:footsteps/metalbox/metalbox_walk9"
 		]
-		
 	},
-	"fs.metalbox.metalbox_wander":{
-		"category":"player",
-		"sounds":[
+	"fs.metalbox.metalbox_wander": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/metalbox/metalbox_wander1",
 			"dsurround:footsteps/metalbox/metalbox_wander2",
 			"dsurround:footsteps/metalbox/metalbox_wander3",
 			"dsurround:footsteps/metalbox/metalbox_wander4"
 		]
-		
 	},
-	"fs.mud.mud_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.mud.mud_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/mud/mud_walk1",
 			"dsurround:footsteps/mud/mud_walk2",
 			"dsurround:footsteps/mud/mud_walk3",
@@ -455,21 +422,19 @@
 			"dsurround:footsteps/mud/mud_walk5",
 			"dsurround:footsteps/mud/mud_walk6"
 		]
-		
 	},
-	"fs.mud.mud_wander":{
-		"category":"player",
-		"sounds":[
+	"fs.mud.mud_wander": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/mud/mud_wander1",
 			"dsurround:footsteps/mud/mud_wander2",
 			"dsurround:footsteps/mud/mud_wander3",
 			"dsurround:footsteps/mud/mud_wander4"
 		]
-		
 	},
-	"fs.muffledice.muffledice_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.muffledice.muffledice_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/muffledice/muffledice_walk1",
 			"dsurround:footsteps/muffledice/muffledice_walk10",
 			"dsurround:footsteps/muffledice/muffledice_walk2",
@@ -481,11 +446,10 @@
 			"dsurround:footsteps/muffledice/muffledice_walk8",
 			"dsurround:footsteps/muffledice/muffledice_walk9"
 		]
-		
 	},
-	"fs.quicksand.quicksand_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.quicksand.quicksand_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/quicksand/quicksand_walk1",
 			"dsurround:footsteps/quicksand/quicksand_walk10",
 			"dsurround:footsteps/quicksand/quicksand_walk11",
@@ -498,11 +462,10 @@
 			"dsurround:footsteps/quicksand/quicksand_walk8",
 			"dsurround:footsteps/quicksand/quicksand_walk9"
 		]
-		
 	},
-	"fs.rug.rug_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.rug.rug_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/rug/rug_walk1",
 			"dsurround:footsteps/rug/rug_walk10",
 			"dsurround:footsteps/rug/rug_walk11",
@@ -515,11 +478,10 @@
 			"dsurround:footsteps/rug/rug_walk8",
 			"dsurround:footsteps/rug/rug_walk9"
 		]
-		
 	},
-	"fs.sand.sand_run":{
-		"category":"player",
-		"sounds":[
+	"fs.sand.sand_run": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/sand/sand_run1",
 			"dsurround:footsteps/sand/sand_run10",
 			"dsurround:footsteps/sand/sand_run11",
@@ -532,11 +494,10 @@
 			"dsurround:footsteps/sand/sand_run8",
 			"dsurround:footsteps/sand/sand_run9"
 		]
-		
 	},
-	"fs.sand.sand_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.sand.sand_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/sand/sand_walk1",
 			"dsurround:footsteps/sand/sand_walk10",
 			"dsurround:footsteps/sand/sand_walk11",
@@ -549,11 +510,10 @@
 			"dsurround:footsteps/sand/sand_walk8",
 			"dsurround:footsteps/sand/sand_walk9"
 		]
-		
 	},
-	"fs.snow.snow_run":{
-		"category":"player",
-		"sounds":[
+	"fs.snow.snow_run": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/snow/snow_run1",
 			"dsurround:footsteps/snow/snow_run10",
 			"dsurround:footsteps/snow/snow_run11",
@@ -566,11 +526,10 @@
 			"dsurround:footsteps/snow/snow_run8",
 			"dsurround:footsteps/snow/snow_run9"
 		]
-		
 	},
-	"fs.snow.snow_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.snow.snow_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/snow/snow_walk1",
 			"dsurround:footsteps/snow/snow_walk10",
 			"dsurround:footsteps/snow/snow_walk11",
@@ -583,22 +542,20 @@
 			"dsurround:footsteps/snow/snow_walk8",
 			"dsurround:footsteps/snow/snow_walk9"
 		]
-		
 	},
-	"fs.snow.snow_wander":{
-		"category":"player",
-		"sounds":[
+	"fs.snow.snow_wander": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/snow/snow_wander1",
 			"dsurround:footsteps/snow/snow_wander2",
 			"dsurround:footsteps/snow/snow_wander3",
 			"dsurround:footsteps/snow/snow_wander4",
 			"dsurround:footsteps/snow/snow_wander5"
 		]
-		
 	},
-	"fs.squeakywood.squeakywood_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.squeakywood.squeakywood_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/squeakywood/squeakywood_walk1",
 			"dsurround:footsteps/squeakywood/squeakywood_walk10",
 			"dsurround:footsteps/squeakywood/squeakywood_walk11",
@@ -611,11 +568,10 @@
 			"dsurround:footsteps/squeakywood/squeakywood_walk8",
 			"dsurround:footsteps/squeakywood/squeakywood_walk9"
 		]
-		
 	},
-	"fs.squeakywood.squeakywood_wander":{
-		"category":"player",
-		"sounds":[
+	"fs.squeakywood.squeakywood_wander": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/squeakywood/squeakywood_wander1",
 			"dsurround:footsteps/squeakywood/squeakywood_wander2",
 			"dsurround:footsteps/squeakywood/squeakywood_wander3",
@@ -624,11 +580,10 @@
 			"dsurround:footsteps/squeakywood/squeakywood_wander6",
 			"dsurround:footsteps/squeakywood/squeakywood_wander7"
 		]
-		
 	},
-	"fs.stone.stone_run":{
-		"category":"player",
-		"sounds":[
+	"fs.stone.stone_run": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/stone/stone_run1",
 			"dsurround:footsteps/stone/stone_run10",
 			"dsurround:footsteps/stone/stone_run11",
@@ -641,11 +596,10 @@
 			"dsurround:footsteps/stone/stone_run8",
 			"dsurround:footsteps/stone/stone_run9"
 		]
-		
 	},
-	"fs.stone.stone_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.stone.stone_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/stone/stone_walk1",
 			"dsurround:footsteps/stone/stone_walk10",
 			"dsurround:footsteps/stone/stone_walk11",
@@ -658,22 +612,20 @@
 			"dsurround:footsteps/stone/stone_walk8",
 			"dsurround:footsteps/stone/stone_walk9"
 		]
-		
 	},
-	"fs.stone.stone_wander":{
-		"category":"player",
-		"sounds":[
+	"fs.stone.stone_wander": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/stone/stone_wander1",
 			"dsurround:footsteps/stone/stone_wander2",
 			"dsurround:footsteps/stone/stone_wander3",
 			"dsurround:footsteps/stone/stone_wander4",
 			"dsurround:footsteps/stone/stone_wander5"
 		]
-		
 	},
-	"fs.water.water_through":{
-		"category":"player",
-		"sounds":[
+	"fs.water.water_through": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/water/water_through1",
 			"dsurround:footsteps/water/water_through10",
 			"dsurround:footsteps/water/water_through11",
@@ -686,22 +638,20 @@
 			"dsurround:footsteps/water/water_through8",
 			"dsurround:footsteps/water/water_through9"
 		]
-		
 	},
-	"fs.water.water_wander":{
-		"category":"player",
-		"sounds":[
+	"fs.water.water_wander": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/water/water_wander1",
 			"dsurround:footsteps/water/water_wander2",
 			"dsurround:footsteps/water/water_wander3",
 			"dsurround:footsteps/water/water_wander4",
 			"dsurround:footsteps/water/water_wander5"
 		]
-		
 	},
-	"fs.water_stereofix.water_through":{
-		"category":"player",
-		"sounds":[
+	"fs.water_stereofix.water_through": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/water_stereofix/water_through1",
 			"dsurround:footsteps/water_stereofix/water_through10",
 			"dsurround:footsteps/water_stereofix/water_through11",
@@ -714,22 +664,20 @@
 			"dsurround:footsteps/water_stereofix/water_through8",
 			"dsurround:footsteps/water_stereofix/water_through9"
 		]
-		
 	},
-	"fs.water_stereofix.water_wander":{
-		"category":"player",
-		"sounds":[
+	"fs.water_stereofix.water_wander": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/water_stereofix/water_wander1",
 			"dsurround:footsteps/water_stereofix/water_wander2",
 			"dsurround:footsteps/water_stereofix/water_wander3",
 			"dsurround:footsteps/water_stereofix/water_wander4",
 			"dsurround:footsteps/water_stereofix/water_wander5"
 		]
-		
 	},
-	"fs.weakice.weakice_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.weakice.weakice_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/weakice/weakice_walk1",
 			"dsurround:footsteps/weakice/weakice_walk10",
 			"dsurround:footsteps/weakice/weakice_walk2",
@@ -741,11 +689,10 @@
 			"dsurround:footsteps/weakice/weakice_walk8",
 			"dsurround:footsteps/weakice/weakice_walk9"
 		]
-		
 	},
-	"fs.wood.wood_walk":{
-		"category":"player",
-		"sounds":[
+	"fs.wood.wood_walk": {
+		"category": "player",
+		"sounds": [
 			"dsurround:footsteps/wood/wood_walk1",
 			"dsurround:footsteps/wood/wood_walk10",
 			"dsurround:footsteps/wood/wood_walk11",
@@ -758,395 +705,379 @@
 			"dsurround:footsteps/wood/wood_walk8",
 			"dsurround:footsteps/wood/wood_walk9"
 		]
-		
 	},
-	"rain":{
-		"category":"weather",
-		"sounds":[
+	"rain": {
+		"category": "weather",
+		"sounds": [
 			"dsurround:ambient/weather/rain_calm1",
 			"dsurround:ambient/weather/rain_calm2",
 			"dsurround:ambient/weather/rain_calm3",
 			"dsurround:ambient/weather/rain_calm4"
 		]
-		
 	},
-	"dust":{
-		"category":"weather",
-		"sounds":[
+	"thunder": {
+		"category": "weather",
+		"sounds": [
+			{
+				"name": "dsurround:ambient/weather/thunder1",
+				"stream": true
+			},
+			{
+				"name": "dsurround:ambient/weather/thunder2",
+				"stream": true
+			},
+			{
+				"name": "dsurround:ambient/weather/thunder3",
+				"stream": true
+			},
+			{
+				"name": "dsurround:ambient/weather/thunder4",
+				"stream": true
+			},
+			{
+				"name": "dsurround:ambient/weather/thunder5",
+				"stream": true
+			},
+			{
+				"name": "dsurround:ambient/weather/thunder6",
+				"stream": true
+			}
+		]
+	},
+	"dust": {
+		"category": "weather",
+		"sounds": [
 			"dsurround:ambient/weather/dust"
 		]
-		
 	},
-	"ice":{
-		"category":"ambient",
-		"sounds":[
+	"ice": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/ice/crack1",
 			"dsurround:ambient/ice/crack2",
 			"dsurround:ambient/ice/crack3"
 		]
-		
 	},
-	"frog":{
-		"category":"ambient",
-		"sounds":[
+	"frog": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/frog/croak1",
 			"dsurround:ambient/frog/croak2",
 			"dsurround:ambient/frog/croak3"
 		]
-		
 	},
-	"wind":{
-		"category":"ambient",
-		"sounds":[
+	"wind": {
+		"category": "ambient",
+		"sounds": [
 			{
-				"name":"dsurround:ambient/outside/wind",
-				"stream":true
-			}
-			
-		]
-		
-	},
-	"crickets":{
-		"category":"ambient",
-		"sounds":[
-			{
-				"name":"dsurround:ambient/outside/crickets",
-				"stream":true
-			}
-			
-		]
-		
-	},
-	"forest":{
-		"category":"ambient",
-		"sounds":[
-			{
-				"name":"dsurround:ambient/outside/forest",
-				"stream":true
-			}
-			
-		]
-		
-	},
-	"beach":{
-		"category":"ambient",
-		"sounds":[
-			{
-				"name":"dsurround:ambient/outside/beach",
-				"stream":true
+				"name": "dsurround:ambient/outside/wind",
+				"stream": true
 			}
 		]
-		
 	},
-	"river":{
-		"category":"ambient",
-		"sounds":[
+	"crickets": {
+		"category": "ambient",
+		"sounds": [
 			{
-				"name":"dsurround:ambient/outside/river",
-				"stream":true
+				"name": "dsurround:ambient/outside/crickets",
+				"stream": true
 			}
 		]
-		
 	},
-	"taiga":{
-		"category":"ambient",
-		"sounds":[
+	"forest": {
+		"category": "ambient",
+		"sounds": [
 			{
-				"name":"dsurround:ambient/outside/taiga",
-				"stream":true
+				"name": "dsurround:ambient/outside/forest",
+				"stream": true
 			}
 		]
-		
 	},
-	"jungle":{
-		"category":"ambient",
-		"sounds":[
+	"beach": {
+		"category": "ambient",
+		"sounds": [
 			{
-				"name":"dsurround:ambient/outside/jungle",
-				"stream":true
+				"name": "dsurround:ambient/outside/beach",
+				"stream": true
 			}
 		]
-		
 	},
-	"soulsand":{
-		"category":"ambient",
-		"sounds":[
+	"river": {
+		"category": "ambient",
+		"sounds": [
+			{
+				"name": "dsurround:ambient/outside/river",
+				"stream": true
+			}
+		]
+	},
+	"taiga": {
+		"category": "ambient",
+		"sounds": [
+			{
+				"name": "dsurround:ambient/outside/taiga",
+				"stream": true
+			}
+		]
+	},
+	"jungle": {
+		"category": "ambient",
+		"sounds": [
+			{
+				"name": "dsurround:ambient/outside/jungle",
+				"stream": true
+			}
+		]
+	},
+	"soulsand": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/soulsand/soulsand1",
 			"dsurround:ambient/soulsand/soulsand2",
 			"dsurround:ambient/soulsand/soulsand3"
 		]
-		
 	},
-	"theend":{
-		"category":"ambient",
-		"sounds":[
+	"theend": {
+		"category": "ambient",
+		"sounds": [
 			{
-				"name":"dsurround:ambient/end/end",
-				"stream":true
+				"name": "dsurround:ambient/end/end",
+				"stream": true
 			}
 		]
-		
 	},
-	"owl":{
-		"category":"ambient",
-		"sounds":[
+	"owl": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/owl/owl1",
 			"dsurround:ambient/owl/owl2",
 			"dsurround:ambient/owl/owl3"
 		]
-		
 	},
-	"underground":{
-		"category":"ambient",
-		"sounds":[
+	"underground": {
+		"category": "ambient",
+		"sounds": [
 			{
-				"name":"dsurround:ambient/underground/ambient",
-				"stream":true
+				"name": "dsurround:ambient/underground/ambient",
+				"stream": true
 			}
 		]
-		
 	},
-	"rockfall":{
-		"category":"ambient",
-		"sounds":[
+	"rockfall": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/underground/rockfall1",
 			"dsurround:ambient/underground/rockfall2",
 			"dsurround:ambient/underground/rockfall3"
 		]
-		
 	},
-	"monstergrowl":{
-		"category":"ambient",
-		"sounds":[
+	"monstergrowl": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/underground/monster_growl1"
 		]
-		
 	},
-	"waterdrops":{
-		"category":"ambient",
-		"sounds":[
+	"waterdrops": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/droplets/water1",
 			"dsurround:ambient/droplets/water2",
 			"dsurround:ambient/droplets/water3"
 		]
-		
 	},
-	"seagulls":{
-		"category":"ambient",
-		"sounds":[
+	"seagulls": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/seagulls/seagulls1",
 			"dsurround:ambient/seagulls/seagulls2"
 		]
-		
 	},
-	"wolf":{
-		"category":"ambient",
-		"sounds":[
+	"wolf": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/wolf/wolf1",
 			"dsurround:ambient/wolf/wolf2",
 			"dsurround:ambient/wolf/wolf3",
 			"dsurround:ambient/wolf/wolf4"
 		]
-		
 	},
-	"underdeepocean":{
-		"category":"ambient",
-		"sounds":[
+	"underdeepocean": {
+		"category": "ambient",
+		"sounds": [
 			{
-				"name":"dsurround:ambient/underwater/deepocean",
-				"stream":true
+				"name": "dsurround:ambient/underwater/deepocean",
+				"stream": true
 			}
 		]
-		
 	},
-	"underocean":{
-		"category":"ambient",
-		"sounds":[
+	"underocean": {
+		"category": "ambient",
+		"sounds": [
 			{
-				"name":"dsurround:ambient/underwater/ocean",
-				"stream":true
+				"name": "dsurround:ambient/underwater/ocean",
+				"stream": true
 			}
 		]
-		
 	},
-	"underriver":{
-		"category":"ambient",
-		"sounds":[
+	"underriver": {
+		"category": "ambient",
+		"sounds": [
 			{
-				"name":"dsurround:ambient/underwater/river",
-				"stream":true
+				"name": "dsurround:ambient/underwater/river",
+				"stream": true
 			}
 		]
-		
 	},
-	"whale":{
-		"category":"ambient",
-		"sounds":[
+	"whale": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/whale/whale1",
 			"dsurround:ambient/whale/whale2",
 			"dsurround:ambient/whale/whale3",
 			"dsurround:ambient/whale/whale4",
 			"dsurround:ambient/whale/whale5"
 		]
-		
 	},
-	"heartbeat":{
-		"category":"player",
-		"sounds":[
+	"heartbeat": {
+		"category": "player",
+		"sounds": [
 			"dsurround:ambient/steve/heartbeat"
 		]
-		
 	},
-	"tummy":{
-		"category":"player",
-		"sounds":[
+	"tummy": {
+		"category": "player",
+		"sounds": [
 			"dsurround:ambient/steve/tummy1",
 			"dsurround:ambient/steve/tummy2",
 			"dsurround:ambient/steve/tummy3"
 		]
-		
 	},
-	"floorsqueak":{
-		"category":"ambient",
-		"sounds":[
+	"floorsqueak": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/miscblocks/floorsqueak1",
 			"dsurround:ambient/miscblocks/floorsqueak2",
 			"dsurround:ambient/miscblocks/floorsqueak3"
 		]
-		
 	},
-	"breathing":{
-		"category":"ambient",
-		"sounds":[
+	"breathing": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/miscblocks/breathing1",
 			"dsurround:ambient/miscblocks/breathing2"
 		]
-		
 	},
-	"jump":{
-		"category":"player",
-		"sounds":[
+	"jump": {
+		"category": "player",
+		"sounds": [
 			"dsurround:ambient/steve/jump"
 		]
-		
 	},
-	"bees":{
-		"category":"ambient",
-		"sounds":[
+	"bees": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/insects/bee1"
 		]
-		
 	},
-	"insectcrawl":{
-		"category":"ambient",
-		"sounds":[
+	"insectcrawl": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/insects/crawl1",
 			"dsurround:ambient/insects/crawl2",
 			"dsurround:ambient/insects/crawl3"
 		]
-		
 	},
-	"swoosh":{
-		"category":"player",
-		"sounds":[
+	"swoosh": {
+		"category": "player",
+		"sounds": [
 			"dsurround:ambient/steve/swoosh1",
 			"dsurround:ambient/steve/swoosh2",
 			"dsurround:ambient/steve/swoosh3",
 			"dsurround:ambient/steve/swoosh4",
 			"dsurround:ambient/steve/swoosh5",
-			"dsurround:ambient/steve/swoosh6"
+			"dsurround:ambient/steve/swoosh6",
+			"dsurround:ambient/steve/swoosh7"
 		]
-		
 	},
-	"insectbuzz":{
-		"category":"ambient",
-		"sounds":[
+	"insectbuzz": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/insects/gnatt1",
 			"dsurround:ambient/insects/grasshopper1"
 		]
-		
 	},
-	"gnatt":{
-		"category":"ambient",
-		"sounds":[
+	"gnatt": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/insects/gnatt1"
 		]
-		
 	},
-	"grasshopper":{
-		"category":"ambient",
-		"sounds":[
+	"grasshopper": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/insects/grasshopper1"
 		]
-		
 	},
-	"crocodile":{
-		"category":"ambient",
-		"sounds":[
+	"crocodile": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/crock/crocodile1",
 			"dsurround:ambient/crock/crocodile2",
 			"dsurround:ambient/crock/crocodile3",
 			"dsurround:ambient/crock/crocodile4"
 		]
-		
 	},
-	"rattlesnake":{
-		"category":"ambient",
-		"sounds":[
+	"rattlesnake": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/snake/rattlesnake1",
 			"dsurround:ambient/snake/rattlesnake2",
 			"dsurround:ambient/snake/rattlesnake3"
 		]
-		
 	},
-	"elephant":{
-		"category":"ambient",
-		"sounds":[
+	"elephant": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/elephant/elephant1",
 			"dsurround:ambient/elephant/elephant2",
 			"dsurround:ambient/elephant/elephant3"
 		]
-		
 	},
-	"hiss":{
-		"category":"ambient",
-		"sounds":[
+	"hiss": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/miscblocks/hiss1",
 			"dsurround:ambient/miscblocks/hiss2",
 			"dsurround:ambient/miscblocks/hiss3",
 			"dsurround:ambient/miscblocks/hiss4"
 		]
-		
 	},
-	"newsprint":{
-		"category":"ambient",
-		"sounds":[
+	"newsprint": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/book/newsprint1",
 			"dsurround:ambient/book/newsprint2"
 		]
-		
 	},
-	"pageflip":{
-		"category":"ambient",
-		"sounds":[
+	"pageflip": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/book/pageflip1",
 			"dsurround:ambient/book/pageflip2",
 			"dsurround:ambient/book/pageflip3"
 		]
-		
 	},
-	"pageflipheavy":{
-		"category":"ambient",
-		"sounds":[
+	"pageflipheavy": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/book/pageflipheavy1",
 			"dsurround:ambient/book/pageflipheavy2",
 			"dsurround:ambient/book/pageflipheavy3"
 		]
-		
 	},
-	"bookshelf":{
-		"category":"ambient",
-		"sounds":[
+	"bookshelf": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/book/newsprint1",
 			"dsurround:ambient/book/newsprint2",
 			"dsurround:ambient/book/pageflip1",
@@ -1156,11 +1087,10 @@
 			"dsurround:ambient/book/pageflipheavy2",
 			"dsurround:ambient/book/pageflipheavy3"
 		]
-		
 	},
-	"crafting":{
-		"category":"ambient",
-		"sounds":[
+	"crafting": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/steve/crafthammer1",
 			"dsurround:ambient/steve/crafthammer2",
 			"dsurround:ambient/steve/craftsaw1",
@@ -1168,42 +1098,49 @@
 			"dsurround:ambient/steve/craftsand1",
 			"dsurround:ambient/steve/craftsand2"
 		]
-		
 	},
-	"bison":{
-		"category":"ambient",
-		"sounds":[
+	"bison": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/bison/bison1",
 			"dsurround:ambient/bison/bison2",
 			"dsurround:ambient/bison/bison3",
 			"dsurround:ambient/bison/bison4"
 		]
-		
 	},
-	"primates":{
-		"category":"ambient",
-		"sounds":[
+	"primates": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/primate/primate1",
 			"dsurround:ambient/primate/primate2",
 			"dsurround:ambient/primate/primate3",
 			"dsurround:ambient/primate/primate4",
 			"dsurround:ambient/primate/primate5"
 		]
-		
 	},
-	"bowpull":{
-		"category":"player",
-		"sounds":[
-			"dsurround:ambient/steve/bowpull1",
-			"dsurround:ambient/steve/bowpull2",
-			"dsurround:ambient/steve/bowpull3",
-			"dsurround:ambient/steve/bowpull4"
+	"bowpull": {
+		"category": "player",
+		"sounds": [
+			{
+				"name": "dsurround:ambient/steve/bowpull1"
+			},
+			{
+				"name": "dsurround:ambient/steve/bowpull1",
+				"pitch": 1.25
+			},
+			{
+				"name": "dsurround:ambient/steve/bowpull1",
+				"pitch": 1.5
+			},
+			{
+				"name": "dsurround:ambient/steve/bowpull1",
+				"pitch": 1.75
+			}
 		]
-		
 	},
-	"waterfall":{
-		"category":"ambient",
-		"sounds":[
+	"waterfall": {
+		"category": "ambient",
+		"sounds": [
 			"dsurround:ambient/stream/waterfall"
 		]
 	}

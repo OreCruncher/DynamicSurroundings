@@ -5,7 +5,8 @@
 			"sounds":[
 				{
 					"sound":"dsurround:wind",
-					"volume":0.5
+					"volume":0.3,
+					"pitch":1.5
 				}
 				
 			]
@@ -36,7 +37,7 @@
 					"sound":"dsurround:insectbuzz",
 					"conditions":"weather.isNotRaining",
 					"soundType":"spot",
-					"volume":0.5,
+					"volume":0.2,
 					"variable":true
 				},
 				{
@@ -54,14 +55,13 @@
 			"sounds":[
 				{
 					"sound":"dsurround:crickets",
-					"conditions":"weather.isNotRaining && isNight",
-					"volume":0.1
+					"conditions":"weather.isNotRaining && isNight"
 				},
 				{
 					"sound":"dsurround:insectbuzz",
 					"conditions":"weather.isNotRaining",
 					"soundType":"spot",
-					"volume":0.5,
+					"volume":0.2,
 					"variable":true
 				}
 				
@@ -90,8 +90,7 @@
 				},
 				{
 					"sound":"dsurround:crickets",
-					"conditions":"weather.isNotRaining && isNight",
-					"volume":0.1
+					"conditions":"weather.isNotRaining && isNight"
 				},
 				{
 					"sound":"dsurround:owl",
@@ -112,8 +111,7 @@
 				},
 				{
 					"sound":"dsurround:crickets",
-					"conditions":"weather.isNotRaining && isNight",
-					"volume":0.1
+					"conditions":"weather.isNotRaining && isNight"
 				}
 				
 			]
@@ -176,7 +174,7 @@
 					"sound":"dsurround:insectbuzz",
 					"conditions":"weather.isNotRaining",
 					"soundType":"spot",
-					"volume":0.5,
+					"volume":0.2,
 					"variable":true
 				}
 				
@@ -206,14 +204,13 @@
 			"spotSoundChance":600,
 			"sounds":[
 				{
-					"sound":"dsurround:crickets",
-					"volume":0.1
+					"sound":"dsurround:crickets"
 				},
 				{
 					"sound":"dsurround:insectbuzz",
 					"conditions":"weather.isNotRaining",
 					"soundType":"spot",
-					"volume":0.5,
+					"volume":0.2,
 					"variable":true
 				}
 				
@@ -226,14 +223,13 @@
 			"sounds":[
 				{
 					"sound":"dsurround:crickets",
-					"conditions":"isNight",
-					"volume":0.1
+					"conditions":"isNight"
 				},
 				{
 					"sound":"dsurround:insectbuzz",
 					"conditions":"weather.isNotRaining",
 					"soundType":"spot",
-					"volume":0.5,
+					"volume":0.2,
 					"variable":true
 				}
 				
@@ -284,7 +280,7 @@
 				{
 					"sound":"dsurround:insectbuzz",
 					"soundType":"spot",
-					"volume":0.5,
+					"volume":0.2,
 					"weight":20,
 					"variable":true
 				}
@@ -381,8 +377,7 @@
 			"biomeName":"Clouds",
 			"sounds":[
 				{
-					"sound":"dsurround:wind",
-					"volume":1.0
+					"sound":"dsurround:wind"
 				}
 				
 			]

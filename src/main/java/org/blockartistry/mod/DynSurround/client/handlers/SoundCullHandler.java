@@ -88,7 +88,7 @@ public class SoundCullHandler extends EffectHandlerBase {
 	public void soundEvent(final PlaySoundEvent event) {
 		if (event.getSound() == null)
 			return;
-
+		
 		final String resource = event.getSound().getSoundLocation().toString();
 		if (this.soundsToBlock.contains(resource)) {
 			event.setResultSound(null);

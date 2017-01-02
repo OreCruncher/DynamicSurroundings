@@ -47,6 +47,7 @@ import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SpotSound;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.DSurround;
+import org.blockartistry.mod.DynSurround.ModEnvironment;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
@@ -60,13 +61,16 @@ import com.google.gson.Gson;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ISoundEventListener;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -79,6 +83,9 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 	private static final int AGE_THRESHOLD_TICKS = 5;
 	private static final int SOUND_QUEUE_SLACK = 6;
+
+	private static final SoundEvent THUNDER = SoundUtils
+			.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "thunder"));
 
 	public static SoundEffectHandler INSTANCE = null;
 
@@ -221,6 +228,20 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	public void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
 		if (event.getSound() == this.currentSound)
 			this.soundId = event.getUuid();
+	}
+
+	@SubscribeEvent
+	public void soundPlay(@Nonnull final PlaySoundEvent e) {
+		// Don't patch up - Weather2 has it's own sound
+		if(ModEnvironment.Weather2.isLoaded())
+			return;
+		
+		if (e.getName().equals("entity.lightning.thunder")) {
+			final ISound sound = e.getSound();
+			final ISound newSound = new PositionedSoundRecord(THUNDER, sound.getCategory(), 1.0F, 1.0F,
+					sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
+			e.setResultSound(newSound);
+		}
 	}
 
 	@Nullable

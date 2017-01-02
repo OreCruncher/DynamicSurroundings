@@ -143,7 +143,7 @@ public final class SoundEffect {
 	}
 
 	public boolean isRepeatable() {
-		return this.type == SoundType.PERIODIC;
+		return this.type == SoundType.PERIODIC || this.type == SoundType.BACKGROUND;
 	}
 
 	public void doEffect(final IBlockState state, final World world, final BlockPos pos,
