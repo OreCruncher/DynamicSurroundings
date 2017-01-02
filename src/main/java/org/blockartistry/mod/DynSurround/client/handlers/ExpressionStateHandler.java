@@ -34,6 +34,7 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.storm.StormProperties;
 import org.blockartistry.mod.DynSurround.client.swing.DiagnosticPanel;
+import org.blockartistry.mod.DynSurround.registry.TemperatureRating;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import org.blockartistry.mod.DynSurround.util.Expression;
 import org.blockartistry.mod.DynSurround.util.Expression.Variant;
@@ -364,6 +365,14 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 			public void update() {
 				this.value = new Variant(
 						EnvironState.getPlayerBiome().getFloatTemperature(EnvironState.getPlayerPosition()));
+			}
+		});
+		register(new DynamicVariable("weather.temperatureValue") {
+			@Override
+			public void update() {
+				this.value = new Variant(TemperatureRating
+						.fromTemp(EnvironState.getPlayerBiome().getFloatTemperature(EnvironState.getPlayerPosition()))
+						.getValue());
 			}
 		});
 

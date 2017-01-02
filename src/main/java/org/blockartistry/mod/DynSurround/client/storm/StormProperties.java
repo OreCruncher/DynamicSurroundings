@@ -201,7 +201,7 @@ public enum StormProperties {
 	public static String diagnostic() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("Storm: ").append(intensity.name());
-		builder.append(" level: ").append(intensityLevel).append('/').append(maxIntensityLevel);
+		builder.append(" level: ").append(getIntensity()).append('/').append(getMaxIntensityLevel());
 		builder.append(" dust:").append(fogDensity);
 		builder.append(" str:").append(EnvironState.getWorld().getRainStrength(1.0F));
 		return builder.toString();
