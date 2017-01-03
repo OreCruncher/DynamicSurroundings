@@ -335,7 +335,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static World getWorld() {
-			return getPlayer().worldObj;
+			final EntityPlayer player = getPlayer();
+			return player != null ? player.worldObj : null;
 		}
 
 		public static int getTickCounter() {

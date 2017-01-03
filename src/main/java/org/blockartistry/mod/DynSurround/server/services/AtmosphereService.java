@@ -64,14 +64,14 @@ public final class AtmosphereService extends Service {
 				+ RANDOM.nextInt(isRaining ? ModOptions.rainActiveTimeVariable : ModOptions.rainInactiveTimeVariable);
 	}
 
-	private static int nextThunderEvent(final float rainItensity) {
-		final float scale = 2.0F - rainItensity;
-		return RANDOM.nextInt((int) (600 * scale)) + 300;
+	private static int nextThunderEvent(final float rainIntensity) {
+		final float scale = 2.0F - rainIntensity;
+		return RANDOM.nextInt((int) (450 * scale)) + 300;
 	}
 
 	private static boolean doFlash(final float rainIntensity) {
-		final int randee = (int) ((1.0F - rainIntensity) * 4.0F) + 2;
-		return RANDOM.nextInt(randee) == 0;
+		final int randee = (int)(rainIntensity * 100.0F);
+		return RANDOM.nextInt(150) <= randee;
 	}
 
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
