@@ -48,7 +48,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(value = { Side.CLIENT })
 public final class RenderWeather extends IRenderHandler {
 
 	private static final List<IAtmosRenderer> renderList = new ArrayList<IAtmosRenderer>();
@@ -100,7 +100,7 @@ public final class RenderWeather extends IRenderHandler {
 			register(new StormRenderer());
 			register(new AuroraRenderer());
 		}
-		
+
 		// Only want to hook if the provider doesn't have special
 		// weather handling.
 		final WorldProvider provider = e.getWorld().provider;

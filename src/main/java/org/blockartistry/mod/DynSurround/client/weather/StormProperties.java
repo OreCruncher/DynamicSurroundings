@@ -42,7 +42,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(value = { Side.CLIENT })
 public enum StormProperties {
 
 	VANILLA, NONE(0.0F, "calm"), CALM(0.1F, "calm"), LIGHT(0.33F, "light"), NORMAL(0.66F, "normal"), HEAVY(1.0F,
@@ -53,7 +53,7 @@ public enum StormProperties {
 	private static float maxIntensityLevel = 0.0F;
 	private static StormProperties intensity = VANILLA;
 	private static float fogDensity = 0.0F;
-		
+
 	private final float level;
 	private final ResourceLocation rainTexture;
 	private final ResourceLocation snowTexture;
@@ -89,7 +89,7 @@ public enum StormProperties {
 	public static float getIntensityLevel() {
 		return serverSideSupport ? intensityLevel : EnvironState.getWorld().getRainStrength(1.0F);
 	}
-	
+
 	public static float getMaxIntensityLevel() {
 		return serverSideSupport ? maxIntensityLevel : 1.0F;
 	}
@@ -123,13 +123,12 @@ public enum StormProperties {
 	}
 
 	/**
-	 * Sets the maximum intensity possible for the current
-	 * weather phenomenon.
+	 * Sets the maximum intensity possible for the current weather phenomenon.
 	 */
 	public static void setMaximumIntensity(float level) {
 		maxIntensityLevel = level;
 	}
-	
+
 	/**
 	 * Sets the rainIntensity based on the intensityLevel level provided. This
 	 * is called by the packet handler when the server wants to set the
@@ -170,23 +169,22 @@ public enum StormProperties {
 				intensity = HEAVY;
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onWeatherUpdateEvent(final WeatherUpdateEvent event) {
 		serverSideSupport = true;
-		if(EnvironState.getDimensionId() != event.world.provider.getDimension())
+		if (EnvironState.getDimensionId() != event.world.provider.getDimension())
 			return;
 		setMaximumIntensity(event.maxRainIntensity);
 		setCurrentIntensity(event.rainIntensity);
 	}
-	
+
 	@SubscribeEvent
 	public static void onClientDisconnect(final ClientDisconnectionFromServerEvent event) {
 		serverSideSupport = false;
 		setMaximumIntensity(1.0F);
 		setCurrentIntensity(VANILLA.level);
 	}
-
 
 	/**
 	 * Set precipitation textures based on the current rainIntensity. This is

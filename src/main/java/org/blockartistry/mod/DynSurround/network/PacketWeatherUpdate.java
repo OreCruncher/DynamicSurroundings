@@ -28,22 +28,21 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.api.events.WeatherUpdateEvent;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
-
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public final class PacketWeatherUpdate implements IMessage  {
-	
+public final class PacketWeatherUpdate implements IMessage {
+
 	public static class PacketHandler implements IMessageHandler<PacketWeatherUpdate, IMessage> {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketWeatherUpdate message, @Nullable final MessageContext ctx) {
-			final World world = WorldUtils.getWorld(message.dimension);
-			if(world != null)
+			final World world = EnvironState.getWorld();
+			if (world != null && world.provider.getDimension() == message.dimension)
 				Network.postEvent(new WeatherUpdateEvent(world, message.intensity, message.maxIntensity));
 			return null;
 		}
@@ -59,7 +58,7 @@ public final class PacketWeatherUpdate implements IMessage  {
 	 * Dimension where the rainfall is occurring
 	 */
 	private int dimension;
-	
+
 	public PacketWeatherUpdate() {
 	}
 

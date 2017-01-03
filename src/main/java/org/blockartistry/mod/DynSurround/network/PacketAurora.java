@@ -28,9 +28,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.api.events.AuroraSpawnEvent;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -38,15 +37,15 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public final class PacketAurora implements IMessage {
-	
+
 	public static class PacketHandler implements IMessageHandler<PacketAurora, IMessage> {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketAurora message, @Nullable final MessageContext ctx) {
-			final World world = WorldUtils.getWorld(message.dimension);
-			if(world != null)
-			Network.postEvent(new AuroraSpawnEvent(world, message.posX, message.posZ, message.seed,
-					message.colorSet, message.preset));
+			final World world = EnvironState.getWorld();
+			if (world != null && world.provider.getDimension() == message.dimension)
+				Network.postEvent(new AuroraSpawnEvent(world, message.posX, message.posZ, message.seed,
+						message.colorSet, message.preset));
 			return null;
 		}
 	}
