@@ -54,15 +54,15 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_SOUND_VOLUME_SCALING = "Enable Sound Volume Scaling Control";
 	public static final String CONFIG_ENABLE_RESET_WEATHER_ON_SLEEP = "Enable Weather Reset on Sleep Control";
 
-	@Parameter(category = CATEGORY_ASM, property = CONFIG_ENABLE_WEATHER, defaultValue = "true")
+	@Parameter(category = CATEGORY_ASM, property = CONFIG_ENABLE_WEATHER, defaultValue = "true", lang = "cfg.asm.EnableWeather")
 	@Comment("Enable ASM transformations to permit weather (rain, snow, splash, dust storms, auroras)")
 	@RestartRequired(server = true)
 	public static boolean enableWeatherASM = true;
-	@Parameter(category = CATEGORY_ASM, property = CONFIG_ENABLE_SOUND_VOLUME_SCALING, defaultValue = "true")
+	@Parameter(category = CATEGORY_ASM, property = CONFIG_ENABLE_SOUND_VOLUME_SCALING, defaultValue = "true", lang = "cfg.asm.EnableSoundScaling")
 	@Comment("Enable ASM transformations for sound volume scaling")
 	@RestartRequired(server = true)
 	public static boolean enableSoundVolumeASM = true;
-	@Parameter(category = CATEGORY_ASM, property = CONFIG_ENABLE_RESET_WEATHER_ON_SLEEP, defaultValue = "true")
+	@Parameter(category = CATEGORY_ASM, property = CONFIG_ENABLE_RESET_WEATHER_ON_SLEEP, defaultValue = "true", lang = "cfg.asm.EnableSleepReset")
 	@Comment("Enable ASM transformations to allow control of player sleep impact on weather reset")
 	@RestartRequired(server = true)
 	public static boolean enableResetOnSleepASM = true;
@@ -74,15 +74,15 @@ public final class ModOptions {
 	private static final List<String> loggingSort = Arrays.asList(CONFIG_ENABLE_ONLINE_VERSION_CHECK,
 			CONFIG_ENABLE_DEBUG_LOGGING);
 
-	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_ENABLE_DEBUG_LOGGING, defaultValue = "false")
+	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_ENABLE_DEBUG_LOGGING, defaultValue = "false", lang = "cfg.logging.EnableDebug")
 	@Comment("Enables/disables debug logging of the mod")
 	@RestartRequired
 	public static boolean enableDebugLogging = false;
-	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_ENABLE_ONLINE_VERSION_CHECK, defaultValue = "true")
-	@Comment("Enables/disables online version checking")
+	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_ENABLE_ONLINE_VERSION_CHECK, defaultValue = "true", lang = "cfg.logging.VersionCheck")
+	@Comment("Enables/disables display of version check information")
 	@RestartRequired
 	public static boolean enableVersionChecking = true;
-	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_ENABLE_DEBUG_DIALOG, defaultValue = "false")
+	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_ENABLE_DEBUG_DIALOG, defaultValue = "false", lang = "cfg.logging.DebugDialog")
 	@Comment("Enables/disables display of debug dialog")
 	@RestartRequired
 	public static boolean showDebugDialog = false;
@@ -109,53 +109,53 @@ public final class ModOptions {
 			CONFIG_STORM_ACTIVE_TIME_CONST, CONFIG_STORM_ACTIVE_TIME_VARIABLE, CONFIG_STORM_INACTIVE_TIME_CONST,
 			CONFIG_STORM_INACTIVE_TIME_VARIABLE, CONFIG_ENABLE_BACKGROUND_THUNDER, CONFIG_THUNDER_THRESHOLD);
 
-	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_VOLUME, defaultValue = "1.0")
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_VOLUME, defaultValue = "1.0", lang = "cfg.rain.RainVolume")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Volume scale factor to apply to rain sound level to adjust")
 	public static float soundLevel = 1.0F;
-	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_PARTICLE_BASE, defaultValue = "100")
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_PARTICLE_BASE, defaultValue = "100", lang = "cfg.rain.ParticleCount")
 	@MinMaxInt(min = 0, max = 500)
 	@Comment("Base count of rain splash particles to generate per tick")
 	public static int particleCountBase = 100;
-	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RESET_RAIN_ON_SLEEP, defaultValue = "true")
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RESET_RAIN_ON_SLEEP, defaultValue = "true", lang = "cfg.rain.ResetOnSleep")
 	@Comment("Reset rain/thunder when all players sleep")
 	public static boolean resetRainOnSleep = true;
-	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_ACTIVE_TIME_CONST, defaultValue = "12000")
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_ACTIVE_TIME_CONST, defaultValue = "12000", lang = "cfg.rain.ActiveTimeConst")
 	@MinMaxInt(min = 0)
 	@Comment("Base time rain is active, in ticks")
 	public static int rainActiveTimeConst = 12000;
-	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_ACTIVE_TIME_VARIABLE, defaultValue = "12000")
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_ACTIVE_TIME_VARIABLE, defaultValue = "12000", lang = "cfg.rain.ActiveTimeVariable")
 	@MinMaxInt(min = 0)
 	@Comment("Variable amount of ticks rain is active, added to the base")
 	public static int rainActiveTimeVariable = 12000;
-	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_INACTIVE_TIME_CONST, defaultValue = "12000")
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_INACTIVE_TIME_CONST, defaultValue = "12000", lang = "cfg.rain.InactiveTimeConst")
 	@MinMaxInt(min = 0)
 	@Comment("Base time rain is inactive, in ticks")
 	public static int rainInactiveTimeConst = 12000;
-	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_INACTIVE_TIME_VARIABLE, defaultValue = "168000")
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_INACTIVE_TIME_VARIABLE, defaultValue = "168000", lang = "cfg.rain.InactiveTimeVariable")
 	@MinMaxInt(min = 0)
 	@Comment("Variable amount of ticks rain is inactive, added to the base")
 	public static int rainInactiveTimeVariable = 168000;
-	@Parameter(category = CATEGORY_RAIN, property = CONFIG_STORM_ACTIVE_TIME_CONST, defaultValue = "3600")
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_STORM_ACTIVE_TIME_CONST, defaultValue = "3600", lang = "cfg.rain.StormActiveTimeConst")
 	@MinMaxInt(min = 0)
 	@Comment("Base time storm (thunder) is active, in ticks")
 	public static int stormActiveTimeConst = 3600;
-	@Parameter(category = CATEGORY_RAIN, property = CONFIG_STORM_ACTIVE_TIME_VARIABLE, defaultValue = "12000")
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_STORM_ACTIVE_TIME_VARIABLE, defaultValue = "12000", lang = "cfg.rain.StormActiveTimeVariable")
 	@MinMaxInt(min = 0)
 	@Comment("Variable amount of ticks storm (thunder) is active, added to the base")
 	public static int stormActiveTimeVariable = 12000;
-	@Parameter(category = CATEGORY_RAIN, property = CONFIG_STORM_INACTIVE_TIME_CONST, defaultValue = "12000")
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_STORM_INACTIVE_TIME_CONST, defaultValue = "12000", lang = "cfg.rain.StormInactiveTimeConst")
 	@MinMaxInt(min = 0)
 	@Comment("Base time storm (thunder) is inactive, in ticks")
 	public static int stormInactiveTimeConst = 12000;
-	@Parameter(category = CATEGORY_RAIN, property = CONFIG_STORM_INACTIVE_TIME_VARIABLE, defaultValue = "168000")
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_STORM_INACTIVE_TIME_VARIABLE, defaultValue = "168000", lang = "cfg.rain.StormInactiveTimeVariable")
 	@MinMaxInt(min = 0)
 	@Comment("Variable amount of ticks storm (thunder) is inactive, added to the base")
 	public static int stormInactiveTimeVariable = 12000;
-	@Parameter(category = CATEGORY_RAIN, property = CONFIG_ENABLE_BACKGROUND_THUNDER, defaultValue = "true")
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_ENABLE_BACKGROUND_THUNDER, defaultValue = "true", lang = "cfg.rain.EnableThunder")
 	@Comment("Allow background thunder when storming")
 	public static boolean allowBackgroundThunder = true;
-	@Parameter(category = CATEGORY_RAIN, property = CONFIG_THUNDER_THRESHOLD, defaultValue = "0.75")
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_THUNDER_THRESHOLD, defaultValue = "0.75", lang = "cfg.rain.ThunderThreshold")
 	@MinMaxFloat(min = 0)
 	@Comment("Minimum rain intensity level for background thunder to occur")
 	public static float stormThunderThreshold = 0.75F;
@@ -172,27 +172,27 @@ public final class ModOptions {
 			CONFIG_ENABLE_BIOME_FOG, CONFIG_BIOME_FOG_FACTOR, CONFIG_ENABLE_ELEVATION_HAZE,
 			CONFIG_ELEVATION_HAZE_FACTOR, CONFIG_ELEVATION_HAZE_AS_BAND);
 
-	@Parameter(category = CATEGORY_FOG, property = CONFIG_ALLOW_DESERT_FOG, defaultValue = "true")
-	@Comment("Allow desert fog when raining")
+	@Parameter(category = CATEGORY_FOG, property = CONFIG_ALLOW_DESERT_FOG, defaultValue = "true", lang = "cfg.fog.DesertFog")
+	@Comment("Enable/disable desert fog when raining")
 	public static boolean allowDesertFog = true;
-	@Parameter(category = CATEGORY_FOG, property = CONFIG_DESERT_FOG_FACTOR, defaultValue = "1.0")
+	@Parameter(category = CATEGORY_FOG, property = CONFIG_DESERT_FOG_FACTOR, defaultValue = "1.0", lang = "cfg.fog.DesertFogFactor")
 	@MinMaxFloat(min = 0.0F, max = 5.0F)
 	@Comment("Visibility factor to apply to desert fog (higher is thicker)")
 	public static float desertFogFactor = 1.0F;
-	@Parameter(category = CATEGORY_FOG, property = CONFIG_ENABLE_ELEVATION_HAZE, defaultValue = "true")
+	@Parameter(category = CATEGORY_FOG, property = CONFIG_ENABLE_ELEVATION_HAZE, defaultValue = "true", lang = "cfg.fog.ElevationHaze")
 	@Comment("Higher the player elevation the more haze that is experienced")
 	public static boolean enableElevationHaze = true;
-	@Parameter(category = CATEGORY_FOG, property = CONFIG_ELEVATION_HAZE_FACTOR, defaultValue = "1.0")
+	@Parameter(category = CATEGORY_FOG, property = CONFIG_ELEVATION_HAZE_FACTOR, defaultValue = "1.0", lang = "cfg.fog.ElevationHazFactor")
 	@MinMaxFloat(min = 0.0F, max = 5.0F)
 	@Comment("Visibility factor to apply to elevation haze (higher is thicker)")
 	public static float elevationHazeFactor = 1.0F;
-	@Parameter(category = CATEGORY_FOG, property = CONFIG_ELEVATION_HAZE_AS_BAND, defaultValue = "true")
+	@Parameter(category = CATEGORY_FOG, property = CONFIG_ELEVATION_HAZE_AS_BAND, defaultValue = "true", lang = "cfg.fog.ElevationHazeBand")
 	@Comment("Calculate haze as a band at cloud height rather than gradient to build height")
 	public static boolean elevationHazeAsBand = true;
-	@Parameter(category = CATEGORY_FOG, property = CONFIG_ENABLE_BIOME_FOG, defaultValue = "true")
+	@Parameter(category = CATEGORY_FOG, property = CONFIG_ENABLE_BIOME_FOG, defaultValue = "true", lang = "cfg.fog.BiomeFog")
 	@Comment("Enable biome specific fog density and color")
 	public static boolean enableBiomeFog = true;
-	@Parameter(category = CATEGORY_FOG, property = CONFIG_BIOME_FOG_FACTOR, defaultValue = "1.0")
+	@Parameter(category = CATEGORY_FOG, property = CONFIG_BIOME_FOG_FACTOR, defaultValue = "1.0", lang = "cfg.fog.BiomeFogFactor")
 	@MinMaxFloat(min = 0.0F, max = 5.0F)
 	@Comment("Visibility factor to apply to biome fog (higher is thicker)")
 	public static float biomeFogFactor = 1.0F;
@@ -205,19 +205,19 @@ public final class ModOptions {
 	private static final List<String> generalSort = ImmutableList.<String>builder()
 			.add(CONFIG_FX_RANGE, CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH, CONFIG_EXTERNAL_SCRIPTS).build();
 
-	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_MIN_RAIN_STRENGTH, defaultValue = "0.0")
+	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_MIN_RAIN_STRENGTH, defaultValue = "0.0", lang = "cfg.general.MinRainStrength")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Default minimum rain strength for a dimension")
 	public static float defaultMinRainStrength = 0.0F;
-	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_MAX_RAIN_STRENGTH, defaultValue = "1.0")
+	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_MAX_RAIN_STRENGTH, defaultValue = "1.0", lang = "cfg.general.MaxRainStrength")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Default maximum rain strength for a dimension")
 	public static float defaultMaxRainStrength = 1.0F;
-	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_FX_RANGE, defaultValue = "16")
+	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_FX_RANGE, defaultValue = "16", lang = "cfg.general.FXRange")
 	@MinMaxInt(min = 16, max = 64)
 	@Comment("Block radius/range around player for special effect application")
 	public static int specialEffectRange = 16;
-	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_EXTERNAL_SCRIPTS, defaultValue = "")
+	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_EXTERNAL_SCRIPTS, defaultValue = "", lang = "cfg.general.ExternalScripts")
 	@Comment("Configuration files for customization")
 	@RestartRequired
 	public static String[] externalScriptFiles = {};
@@ -232,24 +232,24 @@ public final class ModOptions {
 	private static final List<String> auroraSort = Arrays.asList(CONFIG_AURORA_ENABLED, CONFIG_AURORA_ANIMATE,
 			CONFIG_MULTIPLE_BANDS, CONFIG_Y_PLAYER_RELATIVE, CONFIG_PLAYER_FIXED_HEIGHT, CONFIG_AURORA_SPAWN_OFFSET);
 
-	@Parameter(category = CATEGORY_AURORA, property = CONFIG_AURORA_ENABLED, defaultValue = "true")
-	@Comment("Whether to enable Aurora processing on server/client")
+	@Parameter(category = CATEGORY_AURORA, property = CONFIG_AURORA_ENABLED, defaultValue = "true", lang = "cfg.aurora.EnableAurora")
+	@Comment("Enable/disable Aurora processing on server/client")
 	@RestartRequired(server = true)
 	public static boolean auroraEnable = true;
-	@Parameter(category = CATEGORY_AURORA, property = CONFIG_Y_PLAYER_RELATIVE, defaultValue = "true")
+	@Parameter(category = CATEGORY_AURORA, property = CONFIG_Y_PLAYER_RELATIVE, defaultValue = "true", lang = "cfg.aurora.HeightRelative")
 	@Comment("true to keep the aurora at a height above player; false to fix it to an altitude")
 	public static boolean auroraHeightPlayerRelative = true;
-	@Parameter(category = CATEGORY_AURORA, property = CONFIG_PLAYER_FIXED_HEIGHT, defaultValue = "64.0")
+	@Parameter(category = CATEGORY_AURORA, property = CONFIG_PLAYER_FIXED_HEIGHT, defaultValue = "64.0", lang = "cfg.aurora.FixedHeight")
 	@MinMaxFloat(min = 16.0F, max = 2048.0F)
 	@Comment("Number of blocks to say fixed above player if Aurora is player relative")
 	public static float playerFixedHeight = 64.0F;
-	@Parameter(category = CATEGORY_AURORA, property = CONFIG_MULTIPLE_BANDS, defaultValue = "true")
+	@Parameter(category = CATEGORY_AURORA, property = CONFIG_MULTIPLE_BANDS, defaultValue = "true", lang = "cfg.aurora.MultipleBands")
 	@Comment("Allow Auroras with multiple bands")
 	public static boolean auroraMultipleBands = true;
-	@Parameter(category = CATEGORY_AURORA, property = CONFIG_AURORA_ANIMATE, defaultValue = "true")
+	@Parameter(category = CATEGORY_AURORA, property = CONFIG_AURORA_ANIMATE, defaultValue = "true", lang = "cfg.aurora.Animate")
 	@Comment("Animate Aurora so it waves")
 	public static boolean auroraAnimate = true;
-	@Parameter(category = CATEGORY_AURORA, property = CONFIG_AURORA_SPAWN_OFFSET, defaultValue = "150")
+	@Parameter(category = CATEGORY_AURORA, property = CONFIG_AURORA_SPAWN_OFFSET, defaultValue = "150", lang = "cfg.aurora.SpawnOffset")
 	@MinMaxInt(min = 0, max = 200)
 	@Comment("Number of blocks north of player location to spawn an aurora")
 	public static int auroraSpawnOffset = 150;
@@ -258,7 +258,7 @@ public final class ModOptions {
 	public static final String CONFIG_BIOME_ALIASES = "Biomes Alias";
 	private static final List<String> biomesSort = Arrays.asList(CONFIG_BIOME_ALIASES);
 
-	@Parameter(category = CATEGORY_BIOMES, property = CONFIG_BIOME_ALIASES, defaultValue = "")
+	@Parameter(category = CATEGORY_BIOMES, property = CONFIG_BIOME_ALIASES, defaultValue = "", lang = "cfg.biomes.Aliases")
 	@Comment("Biomes alias list")
 	@RestartRequired
 	public static String[] biomeAliases = {};
@@ -273,31 +273,32 @@ public final class ModOptions {
 	public static final String CONFIG_BLOCK_EFFECT_FOUNTAIN = "Enable FountainJetEffect";
 	public static final String CONFIG_BLOCK_EFFECT_FIREFLY = "Enable Fireflies";
 	public static final String CONFIG_BLOCK_EFFECT_SPLASH = "Enable Water Splash";
-	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_STEAM, defaultValue = "true")
+
+	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_STEAM, defaultValue = "true", lang = "cfg.block.effects.Steam")
 	@Comment("Enable Steam Jets where lava meets water")
 	@RestartRequired
 	public static boolean enableSteamJets = true;
-	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_FIRE, defaultValue = "true")
+	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_FIRE, defaultValue = "true", lang = "cfg.block.effects.Fire")
 	@Comment("Enable FireJetEffect Jets in lava")
 	@RestartRequired
 	public static boolean enableFireJets = true;
-	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_BUBBLE, defaultValue = "true")
+	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_BUBBLE, defaultValue = "true", lang = "cfg.block.effects.Bubble")
 	@Comment("Enable BubbleJetEffect Jets under water")
 	@RestartRequired
 	public static boolean enableBubbleJets = true;
-	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_DUST, defaultValue = "true")
+	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_DUST, defaultValue = "true", lang = "cfg.block.effects.Dust")
 	@Comment("Enable DustJetEffect motes dropping from blocks")
 	@RestartRequired
 	public static boolean enableDustJets = true;
-	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_FOUNTAIN, defaultValue = "true")
+	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_FOUNTAIN, defaultValue = "true", lang = "cfg.block.effects.Fountain")
 	@Comment("Enable FountainJetEffect jets")
 	@RestartRequired
 	public static boolean enableFountainJets = true;
-	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_FIREFLY, defaultValue = "true")
+	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_FIREFLY, defaultValue = "true", lang = "cfg.block.effects.Fireflies")
 	@Comment("Enable Firefly effect around plants")
 	@RestartRequired
 	public static boolean enableFireflies = true;
-	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_SPLASH, defaultValue = "true")
+	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_SPLASH, defaultValue = "true", lang = "cfg.block.effects.Splash")
 	@Comment("Enable Water Splash effects when water spills down")
 	@RestartRequired
 	public static boolean enableWaterSplash = true;
@@ -324,60 +325,60 @@ public final class ModOptions {
 			CONFIG_AUTO_CONFIG_CHANNELS, CONFIG_NORMAL_CHANNEL_COUNT, CONFIG_STREAMING_CHANNEL_COUNT,
 			CONFIG_BLOCKED_SOUNDS, CONFIG_SOUND_CULL_THRESHOLD, CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES);
 
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BIOME_SOUNDS, defaultValue = "true")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BIOME_SOUNDS, defaultValue = "true", lang = "cfg.sound.BiomeSounds")
 	@Comment("Enable biome background and spot sounds")
 	public static boolean enableBiomeSounds = true;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_MASTER_SOUND_FACTOR, defaultValue = "0.5")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_MASTER_SOUND_FACTOR, defaultValue = "0.5", lang = "cfg.sound.MasterScale")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Master volume scale factor for biome and block sounds")
 	public static float masterSoundScaleFactor = 0.5F;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_AUTO_CONFIG_CHANNELS, defaultValue = "true")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_AUTO_CONFIG_CHANNELS, defaultValue = "true", lang = "cfg.sound.AutoConfig")
 	@Comment("Automatically configure sound channels")
 	@RestartRequired(server = true)
 	public static boolean autoConfigureChannels = true;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_NORMAL_CHANNEL_COUNT, defaultValue = "28")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_NORMAL_CHANNEL_COUNT, defaultValue = "28", lang = "cfg.sound.NormalChannels")
 	@MinMaxInt(min = 28)
 	@Comment("Number of normal sound channels to configure in the sound system (manual)")
 	@RestartRequired(server = true)
 	public static int normalSoundChannelCount = 28;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_STREAMING_CHANNEL_COUNT, defaultValue = "4")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_STREAMING_CHANNEL_COUNT, defaultValue = "4", lang = "cfg.sound.StreamingChannels")
 	@MinMaxInt(min = 4)
 	@Comment("Number of streaming sound channels to configure in the sound system (manual)")
 	@RestartRequired(server = true)
 	public static int streamingSoundChannelCount = 4;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_JUMP_SOUND, defaultValue = "true")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_JUMP_SOUND, defaultValue = "true", lang = "cfg.sound.Jump")
 	@Comment("Enable player Jump sound effect")
 	public static boolean enableJumpSound = true;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_SWING_SOUND, defaultValue = "true")
-	@Comment("Enable Weapon Swing sound effect")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_SWING_SOUND, defaultValue = "true", lang = "cfg.sound.Swing")
+	@Comment("Enable Weapon/Tool Swing sound effect")
 	public static boolean enableSwingSound = true;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_CRAFTING_SOUND, defaultValue = "true")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_CRAFTING_SOUND, defaultValue = "true", lang = "cfg.sound.Craft")
 	@Comment("Enable Item Crafted sound effect")
 	public static boolean enableCraftingSound = true;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BOW_PULL_SOUND, defaultValue = "true")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BOW_PULL_SOUND, defaultValue = "true", lang = "cfg.sound.Bow")
 	@Comment("Enable Bow Pull sound effect")
 	public static boolean enableBowPullSound = true;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_FOOTSTEPS_SOUND, defaultValue = "true")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_FOOTSTEPS_SOUND, defaultValue = "true", lang = "cfg.sound.Footsteps")
 	@Comment("Enable Footstep sound effects")
 	public static boolean enableFootstepSounds = true;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_FOOTSTEPS_SOUND_FACTOR, defaultValue = "0.15")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_FOOTSTEPS_SOUND_FACTOR, defaultValue = "0.15", lang = "cfg.sound.FootstepScale")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Volume scale factor for footstep sounds")
 	public static float footstepsSoundFactor = 0.15F;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_SOUND_CULL_THRESHOLD, defaultValue = "20")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_SOUND_CULL_THRESHOLD, defaultValue = "20", lang = "cfg.sound.CullInterval")
 	@MinMaxInt(min = 0)
 	@Comment("Ticks between culled sound events (0 to disable culling)")
 	public static int soundCullingThreshold = 20;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_CULLED_SOUNDS, defaultValue = "minecraft:block.water.ambient,minecraft:block.lava.ambient,minecraft:entity.sheep.ambient,minecraft:entity.chicken.ambient,minecraft:entity.cow.ambient,minecraft:entity.pig.ambient")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_CULLED_SOUNDS, lang = "cfg.sound.CulledSounds", defaultValue = "minecraft:block.water.ambient,minecraft:block.lava.ambient,minecraft:entity.sheep.ambient,minecraft:entity.chicken.ambient,minecraft:entity.cow.ambient,minecraft:entity.pig.ambient")
 	@Comment("Sounds to cull from frequent playing")
 	public static String[] culledSounds = { "minecraft:block.water.ambient", "minecraft:block.lava.ambient",
 			"minecraft:entity.sheep.ambient", "minecraft:entity.chicken.ambient", "minecraft:entity.cow.ambient",
 			"minecraft:entity.pig.ambient" };
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_BLOCKED_SOUNDS, defaultValue = "dsurround:bison")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_BLOCKED_SOUNDS, lang = "cfg.sound.BlockedSounds", defaultValue = "dsurround:bison")
 	@Comment("Sounds to block from playing")
 	@Hidden
 	public static String[] blockedSounds = { "dsurround:bison" };
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_SOUND_VOLUMES, defaultValue = "")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_SOUND_VOLUMES, defaultValue = "", lang = "cfg.sound.SoundVolumes")
 	@Comment("Individual sound volume scaling factors")
 	@Hidden
 	public static String[] soundVolumes = {};
@@ -390,17 +391,17 @@ public final class ModOptions {
 	private static final List<String> playerSort = Arrays.asList(CONFIG_SUPPRESS_POTION_PARTICLES,
 			CONFIG_ENABLE_POPOFFS, CONFIG_HURT_THRESHOLD, CONFIG_HUNGER_THRESHOLD);
 
-	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_SUPPRESS_POTION_PARTICLES, defaultValue = "false")
+	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_SUPPRESS_POTION_PARTICLES, defaultValue = "false", lang = "cfg.player.PotionParticles")
 	@Comment("Suppress player's potion particles from rendering")
 	public static boolean suppressPotionParticles = false;
-	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_ENABLE_POPOFFS, defaultValue = "true")
+	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_ENABLE_POPOFFS, defaultValue = "true", lang = "cfg.player.Popoffs")
 	@Comment("Controls display of damage pop-offs when an entity is damaged")
 	public static boolean enableDamagePopoffs = true;
-	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_HURT_THRESHOLD, defaultValue = "8")
+	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_HURT_THRESHOLD, defaultValue = "8", lang = "cfg.player.HurtThreshold")
 	@Comment("Amount of health bar remaining to trigger player hurt sound (0 disable)")
 	@MinMaxInt(min = 0, max = 10)
 	public static int playerHurtThreshold = 8;
-	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_HUNGER_THRESHOLD, defaultValue = "8")
+	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_HUNGER_THRESHOLD, defaultValue = "8", lang = "cfg.player.HungerThreshold")
 	@Comment("Amount of food bar remaining to trigger player hunger sound (0 disable)")
 	@MinMaxInt(min = 0, max = 10)
 	public static int playerHungerThreshold = 8;
@@ -416,26 +417,26 @@ public final class ModOptions {
 			CONFIG_POTION_HUD_TRANSPARENCY, CONFIG_POTION_HUD_SCALE, CONFIG_POTION_HUD_ANCHOR,
 			CONFIG_POTION_HUD_TOP_OFFSET, CONFIG_POTION_HUD_LEFT_OFFSET);
 
-	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_ENABLE, defaultValue = "true")
+	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_ENABLE, defaultValue = "true", lang="cfg.player.potionHud.Enable")
 	@Comment("Enable display of potion icons in display")
 	public static boolean potionHudEnabled = true;
-	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_TRANSPARENCY, defaultValue = "0.75")
+	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_TRANSPARENCY, defaultValue = "0.75", lang="cfg.player.potionHud.Transparency")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Transparency factor for icons (higher more solid)")
 	public static float potionHudTransparency = 0.75F;
-	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_LEFT_OFFSET, defaultValue = "5")
+	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_LEFT_OFFSET, defaultValue = "5", lang="cfg.player.potionHud.LeftOffset")
 	@MinMaxInt(min = 0)
 	@Comment("Offset from left side of screen")
 	public static int potionHudLeftOffset = 5;
-	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_TOP_OFFSET, defaultValue = "5")
+	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_TOP_OFFSET, defaultValue = "5", lang="cfg.player.potionHud.TopOffset")
 	@MinMaxInt(min = 0)
 	@Comment("Offset from top of screen")
 	public static int potionHudTopOffset = 5;
-	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_SCALE, defaultValue = "0.75")
+	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_SCALE, defaultValue = "0.75", lang="cfg.player.potionHud.Scale")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Size scale of icons (lower is smaller)")
 	public static float potionHudScale = 0.75F;
-	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_ANCHOR, defaultValue = "0")
+	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_ANCHOR, defaultValue = "0", lang="cfg.player.potionHud.Location")
 	@MinMaxInt(min = 0, max = 1)
 	@Comment("Area of the display the Potion HUD is displayed (0 upper left, 1 upper right)")
 	public static int potionHudAnchor = 0;
@@ -446,23 +447,23 @@ public final class ModOptions {
 	public static final String CONFIG_OPTION_ENABLE_EMOJIS = "Enable Entity Emojis";
 	public static final String CONFIG_OPTION_SPEECHBUBBLE_DURATION = "Display Duration";
 	public static final String CONFIG_OPTION_SPEECHBUBBLE_RANGE = "Visibility Range";
-	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_SPEECHBUBBLES, defaultValue = "false")
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_SPEECHBUBBLES, defaultValue = "false", lang="cfg.speech.EnableSpeechBubbles")
 	@Comment("Enables/disables speech bubbles above player heads")
 	public static boolean enableSpeechBubbles = false;
-	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_ENTITY_CHAT, defaultValue = "false")
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_ENTITY_CHAT, defaultValue = "false", lang="cfg.speech.EnableEntityChat")
 	@Comment("Enables/disables entity chat bubbles")
 	public static boolean enableEntityChat = false;
-	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_EMOJIS, defaultValue = "false")
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_EMOJIS, defaultValue = "false", lang="cfg.speech.EnableEntityEmojis")
 	@Comment("Enables/disables entity emojis")
 	@RestartRequired(server = true)
 	public static boolean enableEntityEmojis = false;
-	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_SPEECHBUBBLE_DURATION, defaultValue = "7")
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_SPEECHBUBBLE_DURATION, defaultValue = "7", lang="cfg.speech.Duration")
 	@MinMaxFloat(min = 5.0F, max = 15.0F)
 	@Comment("Number of seconds to display speech before removing")
 	public static float speechBubbleDuration = 7.0F;
-	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_SPEECHBUBBLE_RANGE, defaultValue = "16")
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_SPEECHBUBBLE_RANGE, defaultValue = "16", lang="cfg.speech.Range")
 	@MinMaxInt(min = 16, max = 32)
-	@Comment("Range at which a Speech BubbleJetEffect is visibile.  Filtering occurs server side.")
+	@Comment("Range at which a SpeechBubble is visible.  Filtering occurs server side.")
 	public static float speechBubbleRange = 16;
 
 	private static final List<String> speechBubbleSort = Arrays.asList(CONFIG_OPTION_ENABLE_SPEECHBUBBLES,
@@ -477,80 +478,92 @@ public final class ModOptions {
 		config.setCategoryRequiresMcRestart(CATEGORY_ASM, true);
 		config.setCategoryRequiresWorldRestart(CATEGORY_ASM, true);
 		config.setCategoryComment(CATEGORY_ASM, "Controls ASM transforms Dynamic Surroundings performs at startup");
+		config.setCategoryLanguageKey(CATEGORY_ASM, "cfg.asm.cat.ASM");
 
 		// CATEGORY: Logging
 		config.setCategoryRequiresMcRestart(CATEGORY_LOGGING_CONTROL, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_LOGGING_CONTROL, false);
 		config.setCategoryComment(CATEGORY_LOGGING_CONTROL, "Defines how Dynamic Surroundings logging will behave");
 		config.setCategoryPropertyOrder(CATEGORY_LOGGING_CONTROL, new ArrayList<String>(loggingSort));
+		config.setCategoryLanguageKey(CATEGORY_LOGGING_CONTROL, "cfg.logging.cat.Logging");
 
 		// CATEGORY: Rain
 		config.setCategoryRequiresMcRestart(CATEGORY_RAIN, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_RAIN, false);
 		config.setCategoryComment(CATEGORY_RAIN, "Options that control rain effects in the client");
 		config.setCategoryPropertyOrder(CATEGORY_RAIN, new ArrayList<String>(rainSort));
+		config.setCategoryLanguageKey(CATEGORY_RAIN, "cfg.rain.cat.Rain");
 
 		// CATEGORY: General
 		config.setCategoryRequiresMcRestart(CATEGORY_GENERAL, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_GENERAL, false);
 		config.setCategoryComment(CATEGORY_GENERAL, "Miscellaneous settings");
 		config.setCategoryPropertyOrder(CATEGORY_GENERAL, new ArrayList<String>(generalSort));
+		config.setCategoryLanguageKey(CATEGORY_GENERAL, "cfg.general.cat.General");
 
 		// CATEGORY: Player
 		config.setCategoryRequiresMcRestart(CATEGORY_PLAYER, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_PLAYER, false);
 		config.setCategoryComment(CATEGORY_PLAYER, "General options for defining sound and effects the player entity");
 		config.setCategoryPropertyOrder(CATEGORY_PLAYER, new ArrayList<String>(playerSort));
+		config.setCategoryLanguageKey(CATEGORY_PLAYER, "cfg.player.cat.Player");
 
 		// CATEGORY: Aurora
 		config.setCategoryRequiresMcRestart(CATEGORY_AURORA, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_AURORA, false);
 		config.setCategoryComment(CATEGORY_AURORA, "Options that control Aurora behavior and rendering");
 		config.setCategoryPropertyOrder(CATEGORY_AURORA, new ArrayList<String>(auroraSort));
+		config.setCategoryLanguageKey(CATEGORY_AURORA, "cfg.aurora.cat.Aurora");
 
 		// CATEGORY: Fog
 		config.setCategoryRequiresMcRestart(CATEGORY_FOG, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_FOG, false);
 		config.setCategoryComment(CATEGORY_FOG, "Options that control the various fog effects in the client");
 		config.setCategoryPropertyOrder(CATEGORY_FOG, new ArrayList<String>(fogSort));
+		config.setCategoryLanguageKey(CATEGORY_FOG, "cfg.fog.cat.Fog");
 
 		// CATEGORY: Biomes
 		config.setCategoryRequiresMcRestart(CATEGORY_BIOMES, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_BIOMES, false);
 		config.setCategoryComment(CATEGORY_BIOMES, "Options for controlling biome sound/effects");
 		config.setCategoryPropertyOrder(CATEGORY_BIOMES, new ArrayList<String>(biomesSort));
+		config.setCategoryLanguageKey(CATEGORY_BIOMES, "cfg.biomes.cat.Biomes");
 
 		// CATEGORY: Block
 		config.setCategoryRequiresMcRestart(CATEGORY_BLOCK, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_BLOCK, false);
 		config.setCategoryComment(CATEGORY_BLOCK, "Options for defining block specific sounds/effects");
+		config.setCategoryLanguageKey(CATEGORY_BLOCK, "cfg.block.cat.Blocks");
 
 		// CATEGORY: Block.effects
 		config.setCategoryRequiresMcRestart(CATEGORY_BLOCK_EFFECTS, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_BLOCK_EFFECTS, true);
 		config.setCategoryComment(CATEGORY_BLOCK_EFFECTS, "Options for disabling various block effects");
+		config.setCategoryLanguageKey(CATEGORY_BLOCK_EFFECTS, "cfg.block.effects.cat.BlockEffects");
 
 		// CATEGORY: Sound
 		config.setCategoryRequiresMcRestart(CATEGORY_SOUND, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_SOUND, false);
 		config.setCategoryComment(CATEGORY_SOUND, "General options for defining sound effects");
 		config.setCategoryPropertyOrder(CATEGORY_SOUND, new ArrayList<String>(soundsSort));
+		config.setCategoryLanguageKey(CATEGORY_SOUND, "cfg.sound.cat.Sound");
 
 		// CATEGORY: player.potion hud
 		config.setCategoryRequiresMcRestart(CATEGORY_POTION_HUD, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_POTION_HUD, false);
 		config.setCategoryComment(CATEGORY_POTION_HUD, "Options for the Potion HUD overlay");
 		config.setCategoryPropertyOrder(CATEGORY_POTION_HUD, new ArrayList<String>(potionHudSort));
+		config.setCategoryLanguageKey(CATEGORY_POTION_HUD, "cfg.player.potionHud.cat.PotionHud");
 
 		// CATEGORY: SpeechBubbles
 		config.setCategoryRequiresMcRestart(CATEGORY_SPEECHBUBBLES, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_SPEECHBUBBLES, false);
 		config.setCategoryComment(CATEGORY_SPEECHBUBBLES, "Options configuring SpeechBubbles");
 		config.setCategoryPropertyOrder(CATEGORY_SPEECHBUBBLES, new ArrayList<String>(speechBubbleSort));
+		config.setCategoryLanguageKey(CATEGORY_SPEECHBUBBLES, "cfg.speech.cat.Speech");
 
 		// Iterate through the config list looking for properties without
-		// comments. These will
-		// be scrubbed.
+		// comments. These will be scrubbed.
 		for (final String cat : config.getCategoryNames())
 			scrubCategory(config.getCategory(cat));
 	}

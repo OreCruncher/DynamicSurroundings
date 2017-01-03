@@ -48,6 +48,8 @@ public final class ConfigProcessor {
 		String property();
 
 		String defaultValue();
+		
+		String lang() default "";
 	}
 
 	@Retention(RetentionPolicy.RUNTIME)
@@ -97,6 +99,7 @@ public final class ConfigProcessor {
 			if (annotation != null) {
 				final String category = annotation.category();
 				final String property = annotation.property();
+				final String language = annotation.lang();
 				final String comment = field.getAnnotation(Comment.class) != null
 						? field.getAnnotation(Comment.class).value() : "NEEDS COMMENT";
 
@@ -133,8 +136,10 @@ public final class ConfigProcessor {
 								StringUtils.split(annotation.defaultValue(), ','), comment));
 					}
 
-					// Configure restart settings
+					// Configure other settings
 					final Property prop = config.getCategory(category).get(property);
+					if(!StringUtils.isEmpty(language))
+						prop.setLanguageKey(language);
 					if (field.getAnnotation(RestartRequired.class) != null) {
 						final RestartRequired restart = field.getAnnotation(RestartRequired.class);
 						prop.setRequiresMcRestart(restart.server());

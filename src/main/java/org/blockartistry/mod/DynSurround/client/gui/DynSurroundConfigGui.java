@@ -61,75 +61,74 @@ public class DynSurroundConfigGui extends GuiConfig {
 
 	private final ConfigElement soundVolumeElement;
 	private final ConfigCategory soundVolumeCategory;
-	
+
 	public DynSurroundConfigGui(final GuiScreen parentScreen) {
 		super(parentScreen, new ArrayList<IConfigElement>(), DSurround.MOD_ID, false, false, DSurround.MOD_NAME);
 		this.titleLine2 = this.config.getConfigFile().getAbsolutePath();
 
-		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_AURORA, ModOptions.CONFIG_AURORA_ENABLED,
-				"Aurora Feature"));
-		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_RAIN, ModOptions.CONFIG_ENABLE_BACKGROUND_THUNDER,
-				"Background Thunder Feature"));
-		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_FOG, ModOptions.CONFIG_ALLOW_DESERT_FOG,
-				"Desert Dust Feature"));
-		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_FOG,
-				ModOptions.CONFIG_ENABLE_ELEVATION_HAZE, "Elevation Haze Feature"));
-		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_FOG, ModOptions.CONFIG_ENABLE_BIOME_FOG,
-				"Biomes Fog Feature"));
-		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_SOUND,
-				ModOptions.CONFIG_ENABLE_BIOME_SOUNDS, "Biomes Sound Feature"));
-		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_JUMP_SOUND,
-				"Player Jump Sound Effect"));
-		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_SOUND,
-				ModOptions.CONFIG_ENABLE_SWING_SOUND, "Player Weapon Swing Sound Effect"));
-		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_SOUND,
-				ModOptions.CONFIG_ENABLE_CRAFTING_SOUND, "Player Crafting Sound Effect"));
-		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_SOUND,
-				ModOptions.CONFIG_ENABLE_BOW_PULL_SOUND, "Player Bow Pull Sound Effect"));
-		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_SOUND,
-				ModOptions.CONFIG_ENABLE_FOOTSTEPS_SOUND, "Footstep Sound Effects"));
-		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_POTION_HUD,
-				ModOptions.CONFIG_POTION_HUD_ENABLE, "Potion HUD Overlay"));
+		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_AURORA, ModOptions.CONFIG_AURORA_ENABLED));
+		this.configElements
+				.add(getPropertyConfigElement(ModOptions.CATEGORY_RAIN, ModOptions.CONFIG_ENABLE_BACKGROUND_THUNDER));
+		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_FOG, ModOptions.CONFIG_ALLOW_DESERT_FOG));
+		this.configElements
+				.add(getPropertyConfigElement(ModOptions.CATEGORY_FOG, ModOptions.CONFIG_ENABLE_ELEVATION_HAZE));
+		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_FOG, ModOptions.CONFIG_ENABLE_BIOME_FOG));
+		this.configElements
+				.add(getPropertyConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_BIOME_SOUNDS));
+		this.configElements
+				.add(getPropertyConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_JUMP_SOUND));
+		this.configElements
+				.add(getPropertyConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_SWING_SOUND));
+		this.configElements
+				.add(getPropertyConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_CRAFTING_SOUND));
+		this.configElements
+				.add(getPropertyConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_BOW_PULL_SOUND));
+		this.configElements
+				.add(getPropertyConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_FOOTSTEPS_SOUND));
+		this.configElements
+				.add(getPropertyConfigElement(ModOptions.CATEGORY_POTION_HUD, ModOptions.CONFIG_POTION_HUD_ENABLE));
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES,
-				ModOptions.CONFIG_OPTION_ENABLE_SPEECHBUBBLES, "Speech Bubbles"));
+				ModOptions.CONFIG_OPTION_ENABLE_SPEECHBUBBLES));
+		this.configElements.add(
+				getPropertyConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES, ModOptions.CONFIG_OPTION_ENABLE_EMOJIS));
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES,
-				ModOptions.CONFIG_OPTION_ENABLE_EMOJIS, "Entity Emoji Particles"));
-		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES,
-				ModOptions.CONFIG_OPTION_ENABLE_ENTITY_CHAT, "Entity Chat Bubbles"));
+				ModOptions.CONFIG_OPTION_ENABLE_ENTITY_CHAT));
 
 		this.soundCategory = new ConfigCategory("Blocked Sounds");
 		this.soundCategory.setComment("Sounds that will be blocked from playing");
+		this.soundCategory.setLanguageKey("cfg.sound.BlockedSounds");
 		this.soundElement = new MyConfigElement(this.soundCategory);
 		generateSoundList(this.soundCategory);
 		this.configElements.add(this.soundElement);
 
 		this.soundVolumeCategory = new ConfigCategory("Sound Volumes");
 		this.soundVolumeCategory.setComment("Individual sound volume control");
+		this.soundVolumeCategory.setLanguageKey("cfg.sound.SoundVolumes");
 		this.soundVolumeElement = new MyConfigElement(this.soundVolumeCategory);
 		generateSoundVolumeList(this.soundVolumeCategory);
 		this.configElements.add(this.soundVolumeElement);
 
-		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_ASM, "ASM Transform Settings"));
-		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_GENERAL, "General Settings"));
-		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES, "Speech Bubbles"));
-		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_RAIN, "Rain Settings"));
-		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_FOG, "Fog Settings"));
-		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_AURORA, "Aurora Settings"));
-		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_BLOCK, "Block Settings"));
-		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_BIOMES, "Biomes Behaviors"));
-		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_SOUND, "Sound Effects"));
-		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_PLAYER, "Player Effects"));
-		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_LOGGING_CONTROL, "Logging Options"));
+		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_ASM));
+		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_GENERAL));
+		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES));
+		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_RAIN));
+		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_FOG));
+		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_AURORA));
+		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_BLOCK));
+		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_BIOMES));
+		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_SOUND));
+		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_PLAYER));
+		this.configElements.add(getCategoryConfigElement(ModOptions.CATEGORY_LOGGING_CONTROL));
 	}
 
-	private ConfigElement getCategoryConfigElement(final String category, final String label) {
+	private ConfigElement getCategoryConfigElement(final String category) {
 		final ConfigCategory cat = this.config.getCategory(category);
-		return new MyConfigElement(cat, label);
+		return new ConfigElement(cat);
 	}
 
-	private ConfigElement getPropertyConfigElement(final String category, final String property, final String label) {
+	private ConfigElement getPropertyConfigElement(final String category, final String property) {
 		final Property prop = this.config.getCategory(category).get(property);
-		return new MyConfigElement(prop, label);
+		return new ConfigElement(prop);
 	}
 
 	@Override
@@ -194,7 +193,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 	protected void generateSoundVolumeList(final ConfigCategory cat) {
 		cat.setRequiresMcRestart(false);
 		cat.setRequiresWorldRestart(false);
-		
+
 		final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
 		final List<String> sounds = new ArrayList<String>();
 		for (final Object resource : handler.soundRegistry.getKeys())
