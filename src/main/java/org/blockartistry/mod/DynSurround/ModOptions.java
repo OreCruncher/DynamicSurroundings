@@ -446,16 +446,16 @@ public final class ModOptions {
 	public static final String CONFIG_OPTION_ENABLE_EMOJIS = "Enable Entity Emojis";
 	public static final String CONFIG_OPTION_SPEECHBUBBLE_DURATION = "Display Duration";
 	public static final String CONFIG_OPTION_SPEECHBUBBLE_RANGE = "Visibility Range";
-	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_SPEECHBUBBLES, defaultValue = "true")
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_SPEECHBUBBLES, defaultValue = "false")
 	@Comment("Enables/disables speech bubbles above player heads")
-	public static boolean enableSpeechBubbles = true;
-	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_ENTITY_CHAT, defaultValue = "true")
+	public static boolean enableSpeechBubbles = false;
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_ENTITY_CHAT, defaultValue = "false")
 	@Comment("Enables/disables entity chat bubbles")
-	public static boolean enableEntityChat = true;
-	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_EMOJIS, defaultValue = "true")
+	public static boolean enableEntityChat = false;
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_EMOJIS, defaultValue = "false")
 	@Comment("Enables/disables entity emojis")
 	@RestartRequired(server = true)
-	public static boolean enableEntityEmojis = true;
+	public static boolean enableEntityEmojis = false;
 	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_SPEECHBUBBLE_DURATION, defaultValue = "7")
 	@MinMaxFloat(min = 5.0F, max = 15.0F)
 	@Comment("Number of seconds to display speech before removing")
@@ -466,7 +466,8 @@ public final class ModOptions {
 	public static float speechBubbleRange = 16;
 
 	private static final List<String> speechBubbleSort = Arrays.asList(CONFIG_OPTION_ENABLE_SPEECHBUBBLES,
-			CONFIG_OPTION_ENABLE_ENTITY_CHAT, CONFIG_OPTION_SPEECHBUBBLE_DURATION, CONFIG_OPTION_SPEECHBUBBLE_RANGE);
+			CONFIG_OPTION_ENABLE_ENTITY_CHAT, CONFIG_OPTION_ENABLE_EMOJIS, CONFIG_OPTION_SPEECHBUBBLE_DURATION,
+			CONFIG_OPTION_SPEECHBUBBLE_RANGE);
 
 	public static void load(final Configuration config) {
 
