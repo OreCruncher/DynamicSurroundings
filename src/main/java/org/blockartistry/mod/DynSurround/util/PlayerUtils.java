@@ -23,9 +23,11 @@
 
 package org.blockartistry.mod.DynSurround.util;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
@@ -33,9 +35,12 @@ import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 
+import com.google.common.base.Predicates;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
@@ -56,7 +61,7 @@ public final class PlayerUtils {
 
 		final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
 		final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
-		
+
 		final int theX = MathStuff.floor_double(player.posX);
 		final int theY = MathStuff.floor_double(player.posY);
 		final int theZ = MathStuff.floor_double(player.posZ);
@@ -103,5 +108,16 @@ public final class PlayerUtils {
 	@SideOnly(Side.CLIENT)
 	public static int getClientPlayerDimension() {
 		return getPlayerDimension(FMLClientHandler.instance().getClient().thePlayer);
+	}
+
+	@Nullable
+	public static EntityPlayer getRandomPlayer(@Nonnull final World world) {
+		final List<EntityPlayer> players = world.getPlayers(EntityPlayer.class, Predicates.<EntityPlayer>alwaysTrue());
+		if (players.size() == 1) {
+			return players.get(0);
+		} else if (players.size() > 0) {
+			return players.get(XorShiftRandom.shared.nextInt(players.size()));
+		}
+		return null;
 	}
 }

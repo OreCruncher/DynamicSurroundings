@@ -62,6 +62,7 @@ public final class DimensionEffectData extends WorldSavedData {
 		public final static String MIN_INTENSITY = "min";
 		public final static String MAX_INTENSITY = "max";
 		public final static String AURORA_LIST = "al";
+		public final static String THUNDER_TIMER = "th";
 	};
 
 	private int dimensionId = 0;
@@ -69,6 +70,7 @@ public final class DimensionEffectData extends WorldSavedData {
 	private float currentIntensity = 0.0F;
 	private float minIntensity = ModOptions.defaultMinRainStrength;
 	private float maxIntensity = ModOptions.defaultMaxRainStrength;
+	private int thunderTimer = 0;
 	private final Set<AuroraData> auroras = new HashSet<AuroraData>();
 
 	private DimensionEffectData(final int dimension) {
@@ -117,6 +119,15 @@ public final class DimensionEffectData extends WorldSavedData {
 
 	public void setMaxRainIntensity(final float intensity) {
 		this.maxIntensity = MathHelper.clamp_float(intensity, this.minIntensity, MAX_INTENSITY);
+		this.setDirty(true);
+	}
+
+	public int getThunderTimer() {
+		return this.thunderTimer;
+	}
+
+	public void setThunderTimer(final int time) {
+		this.thunderTimer = MathHelper.clamp_int(time, 0, Integer.MAX_VALUE);
 		this.setDirty(true);
 	}
 
@@ -169,6 +180,9 @@ public final class DimensionEffectData extends WorldSavedData {
 		if (nbt.hasKey(NBT.MAX_INTENSITY))
 			this.maxIntensity = MathHelper.clamp_float(nbt.getFloat(NBT.MAX_INTENSITY), this.minIntensity,
 					MAX_INTENSITY);
+		if (nbt.hasKey(NBT.THUNDER_TIMER))
+			this.thunderTimer = MathHelper.clamp_int(nbt.getInteger(NBT.THUNDER_TIMER), 0, Integer.MAX_VALUE);
+
 		final NBTTagList list = nbt.getTagList(NBT.AURORA_LIST, Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < list.tagCount(); i++) {
 			final NBTTagCompound tag = list.getCompoundTagAt(i);
@@ -186,6 +200,7 @@ public final class DimensionEffectData extends WorldSavedData {
 		nbt.setFloat(NBT.CURRENT_INTENSITY, this.currentIntensity);
 		nbt.setFloat(NBT.MIN_INTENSITY, this.minIntensity);
 		nbt.setFloat(NBT.MAX_INTENSITY, this.maxIntensity);
+		nbt.setInteger(NBT.THUNDER_TIMER, this.thunderTimer);
 		final NBTTagList list = new NBTTagList();
 		for (final AuroraData data : this.auroras) {
 			final NBTTagCompound tag = new NBTTagCompound();

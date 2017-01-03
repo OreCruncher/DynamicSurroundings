@@ -24,6 +24,9 @@
 
 package org.blockartistry.mod.DynSurround.api.events;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
@@ -37,9 +40,9 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 public class AuroraSpawnEvent extends Event {
 	
 	/**
-	 * Dimension for which this event is intended.
+	 * World for which this event is intended.
 	 */
-	public final int dimensionId;
+	public final World world;
 	
 	/**
 	 * Location of the Aurora
@@ -66,8 +69,8 @@ public class AuroraSpawnEvent extends Event {
 	 */
 	public final int preset;
 	
-	public AuroraSpawnEvent(final int dimensionId, final int x, final int z, final long seed, final int colorSet, final int preset) {
-		this.dimensionId = dimensionId;
+	public AuroraSpawnEvent(@Nonnull final World world, final int x, final int z, final long seed, final int colorSet, final int preset) {
+		this.world = world;
 		this.posX = x;
 		this.posZ = z;
 		this.seed = seed;

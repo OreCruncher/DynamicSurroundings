@@ -27,72 +27,59 @@ package org.blockartistry.mod.DynSurround.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.mod.DynSurround.api.events.AuroraSpawnEvent;
-import org.blockartistry.mod.DynSurround.data.AuroraData;
+import org.blockartistry.mod.DynSurround.api.events.ThunderEvent;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public final class PacketAurora implements IMessage {
+public class PacketThunder implements IMessage  {
 	
-	public static class PacketHandler implements IMessageHandler<PacketAurora, IMessage> {
+	public static class PacketHandler implements IMessageHandler<PacketThunder, IMessage> {
 		@Override
 		@Nullable
-		public IMessage onMessage(@Nonnull final PacketAurora message, @Nullable final MessageContext ctx) {
+		public IMessage onMessage(@Nonnull final PacketThunder message, @Nullable final MessageContext ctx) {
 			final World world = WorldUtils.getWorld(message.dimension);
 			if(world != null)
-			Network.postEvent(new AuroraSpawnEvent(world, message.posX, message.posZ, message.seed,
-					message.colorSet, message.preset));
+				Network.postEvent(new ThunderEvent(world, message.doFlash, message.pos));
 			return null;
 		}
 	}
 
 	private int dimension;
-	private long seed;
-	private int posX;
-	private int posZ;
-	private int colorSet;
-	private int preset;
+	private boolean doFlash;
+	private BlockPos pos;
 
-	public PacketAurora() {
+	public PacketThunder() {
 	}
 
-	public PacketAurora(@Nonnull final AuroraData data) {
-		this(data.dimensionId, data.seed, data.posX, data.posZ, data.colorSet, data.preset);
-	}
-
-	public PacketAurora(final int dimensionId, final long seed, final int posX, final int posZ, final int colorSet,
-			final int preset) {
+	public PacketThunder(final int dimensionId, final boolean doFlash, final BlockPos pos) {
 		this.dimension = dimensionId;
-		this.seed = seed;
-		this.posX = posX;
-		this.posZ = posZ;
-		this.colorSet = colorSet;
-		this.preset = preset;
+		this.doFlash = doFlash;
+		this.pos = pos;
 	}
 
 	@Override
 	public void fromBytes(@Nonnull final ByteBuf buf) {
 		this.dimension = buf.readShort();
-		this.seed = buf.readLong();
-		this.posX = buf.readInt();
-		this.posZ = buf.readInt();
-		this.colorSet = buf.readByte();
-		this.preset = buf.readByte();
+		this.doFlash = buf.readBoolean();
+		final int x = buf.readInt();
+		final int y = buf.readInt();
+		final int z = buf.readInt();
+		this.pos = new BlockPos(x, y, z);
 	}
 
 	@Override
 	public void toBytes(@Nonnull final ByteBuf buf) {
 		buf.writeShort(this.dimension);
-		buf.writeLong(this.seed);
-		buf.writeInt(this.posX);
-		buf.writeInt(this.posZ);
-		buf.writeByte(this.colorSet);
-		buf.writeByte(this.preset);
+		buf.writeBoolean(this.doFlash);
+		buf.writeInt(this.pos.getX());
+		buf.writeInt(this.pos.getY());
+		buf.writeInt(this.pos.getZ());
 	}
 
 }

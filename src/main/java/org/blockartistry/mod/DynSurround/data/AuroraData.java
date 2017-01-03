@@ -55,7 +55,7 @@ public final class AuroraData implements INBTSerialization {
 	}
 	
 	public AuroraData(@Nonnull final AuroraSpawnEvent event) {
-		this.dimensionId = event.dimensionId;
+		this.dimensionId = event.world.provider.getDimension();
 		this.posX = event.posX;
 		this.posZ = event.posZ;
 		this.seed = event.seed;

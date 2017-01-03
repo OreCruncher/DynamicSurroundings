@@ -67,6 +67,7 @@ public class EffectManager {
 		this.effectHandlers.add(new EntityEmojiHandler());
 		this.effectHandlers.add(new AuroraEffectHandler());
 		this.effectHandlers.add(new SpeechBubbleHandler());
+		this.effectHandlers.add(new WeatherHandler());
 
 		// Add this one last so it goes last
 		this.effectHandlers.add(new SoundEffectHandler());

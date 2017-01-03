@@ -24,6 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.server.services;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -44,6 +45,7 @@ import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
+import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 public final class AtmosphereService extends Service {
@@ -62,6 +64,16 @@ public final class AtmosphereService extends Service {
 				+ RANDOM.nextInt(isRaining ? ModOptions.rainActiveTimeVariable : ModOptions.rainInactiveTimeVariable);
 	}
 
+	private static int nextThunderEvent(final float rainItensity) {
+		final float scale = 2.0F - rainItensity;
+		return RANDOM.nextInt((int) (600 * scale)) + 300;
+	}
+
+	private static boolean doFlash(final float rainIntensity) {
+		final int randee = (int) ((1.0F - rainIntensity) * 4.0F) + 2;
+		return RANDOM.nextInt(randee) == 0;
+	}
+
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 
 	AtmosphereService() {
@@ -70,8 +82,8 @@ public final class AtmosphereService extends Service {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void tickEvent(@Nonnull final TickEvent.WorldTickEvent event) {
-		
-		if(!ModOptions.enableWeatherASM || ModEnvironment.Weather2.isLoaded())
+
+		if (!ModOptions.enableWeatherASM || ModEnvironment.Weather2.isLoaded())
 			return;
 
 		if (event.side != Side.SERVER || event.phase == Phase.START)
@@ -84,26 +96,26 @@ public final class AtmosphereService extends Service {
 			return;
 
 		// If we get here and the world has no sky we have a dimension
-		// like the Nether.  We need to turn the crank manually to get
+		// like the Nether. We need to turn the crank manually to get
 		// Minecraft to do what we need.
-		if(world.provider.getHasNoSky()) {
+		if (world.provider.getHasNoSky()) {
 			world.provider.hasNoSky = false;
 			try {
 				world.updateWeatherBody();
-			} catch(final Throwable t) {
+			} catch (final Throwable t) {
 				;
 			}
 			world.provider.hasNoSky = true;
 		}
-		
+
 		final WorldInfo info = world.getWorldInfo();
 
-		// Tackle the rain and thunder timers.  We toggle on remaining
-		// time of 2 since updateWeatherBody() triggers on 0.  We
+		// Tackle the rain and thunder timers. We toggle on remaining
+		// time of 2 since updateWeatherBody() triggers on 0. We
 		// want to control the timers.
-		
+
 		final int rain = info.getRainTime();
-		if(rain <= 2) {
+		if (rain <= 2) {
 			info.setRaining(!info.isRaining());
 			info.setRainTime(nextRainInterval(info.isRaining()));
 		}
@@ -142,6 +154,33 @@ public final class AtmosphereService extends Service {
 		// Set the rain rainIntensity for all players in the current
 		// dimension.
 		Network.sendRainIntensity(data.getCurrentRainIntensity(), data.getRainIntensity(), data.getDimensionId());
+
+		if (info.isThundering() && data.getCurrentRainIntensity() >= ModOptions.stormThunderThreshold) {
+
+			int time = data.getThunderTimer() - 1;
+			if (time <= 0) {
+				// If it is 0 we just counted down to this. If it were
+				// the first time through it would be -1.
+				if (time == 0) {
+					// Get a random player in the dimension - they will be the
+					// locus of the event.  Center it at build height above
+					// their head.
+					final EntityPlayer player = PlayerUtils.getRandomPlayer(world);
+					final float theY = this.dimensions.getSkyHeight(world);
+					if (player != null) {
+						Network.sendThunder(data.getDimensionId(), doFlash(data.getCurrentRainIntensity()),
+								(float) player.posX, (float) theY, (float) player.posZ);
+					}
+				}
+				// set new time
+				time = nextThunderEvent(data.getCurrentRainIntensity());
+			}
+			data.setThunderTimer(time);
+
+		} else {
+			// Clear out the timer data for the next storm
+			data.setThunderTimer(0);
+		}
 	}
 
 }

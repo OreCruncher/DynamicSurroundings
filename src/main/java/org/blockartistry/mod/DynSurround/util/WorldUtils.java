@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 
 public final class WorldUtils {
 	
@@ -53,6 +54,11 @@ public final class WorldUtils {
 	
 	public static boolean isSolidBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return world.getBlockState(pos).getMaterial().isSolid();
+	}
+	
+	@Nullable
+	public static World getWorld(final int dimensionId) {
+		return DimensionManager.getWorld(dimensionId);
 	}
 
 }

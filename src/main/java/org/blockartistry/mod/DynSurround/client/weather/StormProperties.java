@@ -174,7 +174,7 @@ public enum StormProperties {
 	@SubscribeEvent
 	public static void onWeatherUpdateEvent(final WeatherUpdateEvent event) {
 		serverSideSupport = true;
-		if(EnvironState.getDimensionId() != event.dimensionId)
+		if(EnvironState.getDimensionId() != event.world.provider.getDimension())
 			return;
 		setMaximumIntensity(event.maxRainIntensity);
 		setCurrentIntensity(event.rainIntensity);

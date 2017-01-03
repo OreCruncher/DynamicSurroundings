@@ -143,7 +143,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		if (!ModOptions.auroraEnable)
 			return;
 
-		if (EnvironState.getDimensionId() == event.dimensionId) {
+		if (EnvironState.getDimensionId() == event.world.provider.getDimension()) {
 			auroras.add(new AuroraData(event));
 		}
 	}

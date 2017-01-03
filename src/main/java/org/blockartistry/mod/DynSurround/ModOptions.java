@@ -48,12 +48,12 @@ public final class ModOptions {
 
 	private ModOptions() {
 	}
-	
+
 	public static final String CATEGORY_ASM = "asm";
 	public static final String CONFIG_ENABLE_WEATHER = "Enable Weather Control";
 	public static final String CONFIG_ENABLE_SOUND_VOLUME_SCALING = "Enable Sound Volume Scaling Control";
 	public static final String CONFIG_ENABLE_RESET_WEATHER_ON_SLEEP = "Enable Weather Reset on Sleep Control";
-	
+
 	@Parameter(category = CATEGORY_ASM, property = CONFIG_ENABLE_WEATHER, defaultValue = "true")
 	@Comment("Enable ASM transformations to permit weather (rain, snow, splash, dust storms, auroras)")
 	@RestartRequired(server = true)
@@ -100,12 +100,13 @@ public final class ModOptions {
 	public static final String CONFIG_STORM_ACTIVE_TIME_VARIABLE = "Active duration of thunder, variable";
 	public static final String CONFIG_STORM_INACTIVE_TIME_CONST = "Inactive duration of thunder, constant";
 	public static final String CONFIG_STORM_INACTIVE_TIME_VARIABLE = "Inactive duration of thunder, variable";
+	public static final String CONFIG_THUNDER_THRESHOLD = "Rain Intensity for Background Thunder";
 
 	private static final List<String> rainSort = Arrays.asList(CONFIG_RAIN_VOLUME, CONFIG_ALLOW_DESERT_DUST,
 			CONFIG_RESET_RAIN_ON_SLEEP, CONFIG_RAIN_PARTICLE_BASE, CONFIG_RAIN_ACTIVE_TIME_CONST,
 			CONFIG_RAIN_ACTIVE_TIME_VARIABLE, CONFIG_RAIN_INACTIVE_TIME_CONST, CONFIG_RAIN_INACTIVE_TIME_VARIABLE,
 			CONFIG_STORM_ACTIVE_TIME_CONST, CONFIG_STORM_ACTIVE_TIME_VARIABLE, CONFIG_STORM_INACTIVE_TIME_CONST,
-			CONFIG_STORM_INACTIVE_TIME_VARIABLE);
+			CONFIG_STORM_INACTIVE_TIME_VARIABLE, CONFIG_THUNDER_THRESHOLD);
 
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_VOLUME, defaultValue = "1.0")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
@@ -118,7 +119,6 @@ public final class ModOptions {
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RESET_RAIN_ON_SLEEP, defaultValue = "true")
 	@Comment("Reset rain/thunder when all players sleep")
 	public static boolean resetRainOnSleep = true;
-
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_ACTIVE_TIME_CONST, defaultValue = "12000")
 	@MinMaxInt(min = 0)
 	@Comment("Base time rain is active, in ticks")
@@ -151,6 +151,10 @@ public final class ModOptions {
 	@MinMaxInt(min = 0)
 	@Comment("Variable amount of ticks storm (thunder) is inactive, added to the base")
 	public static int stormInactiveTimeVariable = 12000;
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_THUNDER_THRESHOLD, defaultValue = "0.75")
+	@MinMaxFloat(min = 0)
+	@Comment("Minimum rain intensity level for background thunder to occur (> 1 to disable)")
+	public static float stormThunderThreshold = 0.75F;
 
 	public static final String CATEGORY_FOG = "fog";
 	public static final String CONFIG_ALLOW_DESERT_FOG = "Desert Fog";
@@ -193,11 +197,9 @@ public final class ModOptions {
 	public static final String CONFIG_EXTERNAL_SCRIPTS = "External Configuration Files";
 	public static final String CONFIG_MIN_RAIN_STRENGTH = "Default Minimum Rain Strength";
 	public static final String CONFIG_MAX_RAIN_STRENGTH = "Default Maximum Rain Strength";
-	public static final String CONFIG_THUNDER_THRESHOLD = "Default Thunder Effect Threshold";
 	public static final String CONFIG_FX_RANGE = "Special Effect Range";
-	private static final List<String> generalSort = ImmutableList.<String>builder().add(CONFIG_FX_RANGE,
-			CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH, CONFIG_THUNDER_THRESHOLD, CONFIG_EXTERNAL_SCRIPTS)
-			.build();
+	private static final List<String> generalSort = ImmutableList.<String>builder()
+			.add(CONFIG_FX_RANGE, CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH, CONFIG_EXTERNAL_SCRIPTS).build();
 
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_MIN_RAIN_STRENGTH, defaultValue = "0.0")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
@@ -207,10 +209,6 @@ public final class ModOptions {
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Default maximum rain strength for a dimension")
 	public static float defaultMaxRainStrength = 1.0F;
-	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_THUNDER_THRESHOLD, defaultValue = "0.5")
-	@MinMaxFloat(min = 0.0F, max = 1.0F)
-	@Comment("Rain strength threshold for when thunder can be triggered")
-	public static float defaultThunderThreshold = 0.5F;
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_FX_RANGE, defaultValue = "16")
 	@MinMaxInt(min = 16, max = 64)
 	@Comment("Block radius/range around player for special effect application")

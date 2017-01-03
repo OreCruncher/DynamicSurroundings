@@ -26,37 +26,39 @@ package org.blockartistry.mod.DynSurround.api.events;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
- * Fires when there is an update to Dynamic Surroundings weather effects. The
- * event will only fire client side.
+ * Event raised when a server requests that thunder and visuals
+ * play.  This event will only fire client side.
+ * 
+ * Can be canceled.
  */
-public class WeatherUpdateEvent extends Event {
-
-	/**
-	 * The world for which this event is intended.
-	 */
-	public final World world;
-
-	/**
-	 * The current rain intensity that is being set.  0 means
-	 * no intensity, and 1.0F means full.
-	 */
-	public final float rainIntensity;
+@Cancelable
+public class ThunderEvent extends Event {
 	
 	/**
-	 * The max possible intensity of the storm.  0 means none,
-	 * and 1.0F means full.
+	 * The world in which the event is occuring.
 	 */
-	public final float maxRainIntensity;
-
-	public WeatherUpdateEvent(@Nonnull final World world, final float rainIntensity, final float maxRainIntensity) {
+	public final World world;
+	
+	/**
+	 * Whether a flash will be played.
+	 */
+	public final boolean doFlash;
+	
+	/**
+	 * Epicenter of the event
+	 */
+	public final BlockPos location;
+	
+	public ThunderEvent(@Nonnull final World world, final boolean doFlash, @Nonnull final BlockPos pos) {
 		this.world = world;
-		this.maxRainIntensity = MathHelper.clamp_float(maxRainIntensity, 0, 1.0F);
-		this.rainIntensity = MathHelper.clamp_float(rainIntensity, 0.0F, this.maxRainIntensity);
+		this.doFlash = doFlash;
+		this.location = pos;
 	}
 
 }
