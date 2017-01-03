@@ -37,9 +37,14 @@ import org.blockartistry.mod.DynSurround.client.weather.StormProperties;
 import org.blockartistry.mod.DynSurround.registry.TemperatureRating;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import org.blockartistry.mod.DynSurround.util.Expression;
+import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.blockartistry.mod.DynSurround.util.Expression.Variant;
 
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -93,31 +98,31 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		register(new DynamicVariable("isDay") {
 			@Override
 			public void update() {
-				this.value = DiurnalUtils.isDaytime(EnvironState.getWorld()) ? Expression.ONE : Expression.ZERO;
+				this.value = DiurnalUtils.isDaytime(EnvironState.getWorld()) ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("isNight") {
 			@Override
 			public void update() {
-				this.value = DiurnalUtils.isNighttime(EnvironState.getWorld()) ? Expression.ONE : Expression.ZERO;
+				this.value = DiurnalUtils.isNighttime(EnvironState.getWorld()) ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("isSunrise") {
 			@Override
 			public void update() {
-				this.value = DiurnalUtils.isSunrise(EnvironState.getWorld()) ? Expression.ONE : Expression.ZERO;
+				this.value = DiurnalUtils.isSunrise(EnvironState.getWorld()) ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("isSunset") {
 			@Override
 			public void update() {
-				this.value = DiurnalUtils.isSunset(EnvironState.getWorld()) ? Expression.ONE : Expression.ZERO;
+				this.value = DiurnalUtils.isSunset(EnvironState.getWorld()) ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("isAuroraVisible") {
 			@Override
 			public void update() {
-				this.value = DiurnalUtils.isAuroraVisible(EnvironState.getWorld()) ? Expression.ONE : Expression.ZERO;
+				this.value = DiurnalUtils.isAuroraVisible(EnvironState.getWorld()) ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("moonPhaseFactor") {
@@ -129,7 +134,7 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		register(new DynamicVariable("hasSky") {
 			@Override
 			public void update() {
-				this.value = !EnvironState.getWorld().provider.getHasNoSky() ? Expression.ONE : Expression.ZERO;
+				this.value = !EnvironState.getWorld().provider.getHasNoSky() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("season") {
@@ -167,19 +172,19 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		register(new DynamicVariable("biome.isFoggy") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isFoggy() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isFoggy() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("biome.isHumid") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isHumid() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isHumid() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("biome.isDry") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isDry() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isDry() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 
@@ -187,103 +192,114 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		register(new DynamicVariable("player.isHurt") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerHurt() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isPlayerHurt() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isHungry") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerHungry() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isPlayerHungry() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isBurning") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerBurning() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isPlayerBurning() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isSuffocating") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerSuffocating() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isPlayerSuffocating() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isFlying") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerFlying() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isPlayerFlying() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isSprinting") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerSprinting() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isPlayerSprinting() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isInLava") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerInLava() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isPlayerInLava() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isInvisible") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerInvisible() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isPlayerInvisible() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isBlind") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerBlind() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isPlayerBlind() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isInWater") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerInWater() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isPlayerInWater() ? Expression.TRUE : Expression.FALSE;
+			}
+		});
+		register(new DynamicVariable("player.isUnderwater") {
+			@Override
+			public void update() {
+				final EntityPlayer player = EnvironState.getPlayer();
+				final int x = MathStuff.floor_double(player.posX);
+				final int y = MathStuff.floor_double(player.posY + player.getEyeHeight());
+				final int z = MathStuff.floor_double(player.posZ);
+				this.value = player.worldObj.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.WATER
+						? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isRiding") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerRiding() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isPlayerRiding() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isOnGround") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerOnGround() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isPlayerOnGround() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isMoving") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerMoving() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isPlayerMoving() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isInside") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerInside() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isPlayerInside() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isUnderground") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerUnderground() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isPlayerUnderground() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isInSpace") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerInSpace() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isPlayerInSpace() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isInClouds") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerInClouds() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.isPlayerInClouds() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.temperature") {
@@ -340,30 +356,62 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 				this.value = new Variant(EnvironState.getPlayer().getFoodStats().getFoodLevel());
 			}
 		});
+		register(new DynamicVariable("player.canRainOn") {
+			@Override
+			public void update() {
+				final World world = EnvironState.getWorld();
+				final BlockPos pos = EnvironState.getPlayerPosition().add(0, 2, 0);
+				this.value = world.canBlockSeeSky(pos) && !(world.getTopSolidOrLiquidBlock(pos).getY() > pos.getY())
+						? Expression.TRUE : Expression.FALSE;
+			}
+		});
+		register(new DynamicVariable("player.canSeeSky") {
+			@Override
+			public void update() {
+				final World world = EnvironState.getWorld();
+				final BlockPos pos = EnvironState.getPlayerPosition().add(0, 2, 0);
+				this.value = world.canBlockSeeSky(pos) ? Expression.TRUE : Expression.FALSE;
+			}
+		});
+		register(new DynamicVariable("player.inBoat") {
+			@Override
+			public void update() {
+				this.value = EnvironState.getPlayer().getRidingEntity() instanceof EntityBoat ? Expression.TRUE
+						: Expression.FALSE;
+			}
+		});
+		register(new DynamicVariable("player.lightLevel") {
+			@Override
+			public void update() {
+				final World world = EnvironState.getWorld();
+				final BlockPos pos = EnvironState.getPlayer().getPosition();
+				this.value = new Variant(world.getLightFor(EnumSkyBlock.BLOCK, pos));
+			}
+		});
 
 		// Weather variables
 		register(new DynamicVariable("weather.isRaining") {
 			@Override
 			public void update() {
-				this.value = StormProperties.getIntensityLevel() > 0.0F ? Expression.ONE : Expression.ZERO;
+				this.value = StormProperties.getIntensityLevel() > 0.0F ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("weather.isThundering") {
 			@Override
 			public void update() {
-				this.value = EnvironState.getWorld().isThundering() ? Expression.ONE : Expression.ZERO;
+				this.value = EnvironState.getWorld().isThundering() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("weather.isNotRaining") {
 			@Override
 			public void update() {
-				this.value = StormProperties.getIntensityLevel() <= 0.0F ? Expression.ONE : Expression.ZERO;
+				this.value = StormProperties.getIntensityLevel() <= 0.0F ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("weather.isNotThundering") {
 			@Override
 			public void update() {
-				this.value = !EnvironState.getWorld().isThundering() ? Expression.ONE : Expression.ZERO;
+				this.value = !EnvironState.getWorld().isThundering() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("weather.rainfall") {
@@ -390,7 +438,7 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 
 		// Sort them for easy display
 		Collections.sort(variables);
-
+		
 	}
 
 	@Override

@@ -379,7 +379,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		"'Biome: ' + biome.name + '; Temp ' + biome.temperature + '/' + biome.temperatureValue + ' rainfall: ' + biome.rainfall",
 		"'Weather: ' + IF(weather.isRaining,'rainfall: ' + weather.rainfall,'not raining') + IF(weather.isThundering,' thundering','') + ' Temp: ' + weather.temperatureValue + '/' + weather.temperature",
 		"'Season: ' + season  + IF(isNight,' night',' day') + IF(player.isInside,' inside',' outside')",
-		"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','') + ' Y: ' + player.Y",
+		"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','') + ' Y: ' + player.Y + ' light: ' + player.lightLevel",
 	};
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)

@@ -50,6 +50,8 @@ public class Expression {
 	public static final Variant e = new Variant(MathStuff.E_F);
 	public static final Variant ZERO = new Variant(0.0F);
 	public static final Variant ONE = new Variant(1.0F);
+	public static final Variant TRUE = ONE;
+	public static final Variant FALSE = ZERO;
 
 	// Built-in operators, functions, and variables. Allows for
 	// the application to predefine items that will be used over and
@@ -232,51 +234,6 @@ public class Expression {
 				return new Variant(d);
 			}
 		});
-		// addBuiltInFunction(new Function("ASIN", 1) { // added by av
-		// @Override
-		// public Float eval(List<Float> parameters) {
-		// double d =
-		// Math.toDegrees(Math.asin(parameters.get(0).doubleValue()));
-		// return new Float(d);
-		// }
-		// });
-		// addBuiltInFunction(new Function("ACOS", 1) { // added by av
-		// @Override
-		// public Float eval(List<Float> parameters) {
-		// double d =
-		// Math.toDegrees(Math.acos(parameters.get(0).doubleValue()));
-		// return new Float(d);
-		// }
-		// });
-		// addBuiltInFunction(new Function("ATAN", 1) { // added by av
-		// @Override
-		// public Float eval(List<Float> parameters) {
-		// double d =
-		// Math.toDegrees(Math.atan(parameters.get(0).doubleValue()));
-		// return new Float(d);
-		// }
-		// });
-		// addBuiltInFunction(new Function("SINH", 1) {
-		// @Override
-		// public Float eval(List<Float> parameters) {
-		// double d = Math.sinh(parameters.get(0).doubleValue());
-		// return new Float(d);
-		// }
-		// });
-		// addBuiltInFunction(new Function("COSH", 1) {
-		// @Override
-		// public Float eval(List<Float> parameters) {
-		// double d = Math.cosh(parameters.get(0).doubleValue());
-		// return new Float(d);
-		// }
-		// });
-		// addBuiltInFunction(new Function("TANH", 1) {
-		// @Override
-		// public Float eval(List<Float> parameters) {
-		// double d = Math.tanh(parameters.get(0).doubleValue());
-		// return new Float(d);
-		// }
-		// });
 		addBuiltInFunction(new Function("RAD", 1) {
 			@Override
 			public Variant eval(final List<Variant> parameters) {
@@ -341,20 +298,6 @@ public class Expression {
 				return new Variant(MathStuff.abs(parameters.get(0).asFloat()));
 			}
 		});
-		// addBuiltInFunction(new Function("LOG", 1) {
-		// @Override
-		// public Float eval(List<Float> parameters) {
-		// double d = Math.log(parameters.get(0).doubleValue());
-		// return new Float(d);
-		// }
-		// });
-		// addBuiltInFunction(new Function("LOG10", 1) {
-		// @Override
-		// public Float eval(List<Float> parameters) {
-		// double d = Math.log10(parameters.get(0).doubleValue());
-		// return new Float(d);
-		// }
-		// });
 		addBuiltInFunction(new Function("ROUND", 1) {
 			@Override
 			public Variant eval(final List<Variant> parameters) {
