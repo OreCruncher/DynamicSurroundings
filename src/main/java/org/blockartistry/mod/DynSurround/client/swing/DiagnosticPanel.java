@@ -25,6 +25,8 @@
 package org.blockartistry.mod.DynSurround.client.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -38,6 +40,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class DiagnosticPanel extends JPanel {
 
+    private static final Font SERVER_GUI_FONT = new Font("Monospaced", 0, 12);
+
 	protected final JFrame frame;
 	protected final JTable table;
 
@@ -48,6 +52,7 @@ public class DiagnosticPanel extends JPanel {
 		this.frame = new JFrame("Script Variable Values");
 		this.frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		this.table = new JTable(new ScriptVariableTable());
+		this.table.setFont(SERVER_GUI_FONT);
 
 		final JScrollPane tableContainer = new JScrollPane(this.table);
 
