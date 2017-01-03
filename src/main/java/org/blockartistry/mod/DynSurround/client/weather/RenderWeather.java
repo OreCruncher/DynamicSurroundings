@@ -28,8 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.blockartistry.mod.DynSurround.ModEnvironment;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
@@ -39,7 +37,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.world.WorldProvider;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -47,27 +44,23 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@SideOnly(Side.CLIENT)
-@Mod.EventBusSubscriber(value = { Side.CLIENT })
+@Mod.EventBusSubscriber(Side.CLIENT)
 public final class RenderWeather extends IRenderHandler {
 
 	private static final List<IAtmosRenderer> renderList = new ArrayList<IAtmosRenderer>();
 
-	private static void register(final IAtmosRenderer renderer) {
+	private static void register(@Nonnull final IAtmosRenderer renderer) {
 		renderList.add(renderer);
 	}
 
-	protected final IRenderHandler previous;
-
-	protected RenderWeather(@Nullable final IRenderHandler former) {
-		this.previous = former;
+	protected RenderWeather() {
 	}
 
 	/**
 	 * Render rain particles. Redirect from EntityRenderer. Why can't there be a
 	 * hook like that for rain/snow rendering?
 	 */
-	public static void addRainParticles(final EntityRenderer theThis) {
+	public static void addRainParticles(@Nonnull final EntityRenderer theThis) {
 		StormSplashRenderer.renderStormSplashes(EnvironState.getDimensionId(), theThis);
 	}
 
@@ -76,7 +69,7 @@ public final class RenderWeather extends IRenderHandler {
 	 * 
 	 * Currently not used. Leaving in place in case there is a revert.
 	 */
-	public static void renderRainSnow(final EntityRenderer theThis, final float partialTicks) {
+	public static void renderRainSnow(@Nonnull final EntityRenderer theThis, final float partialTicks) {
 		for (final IAtmosRenderer renderer : renderList)
 			renderer.render(theThis, partialTicks);
 	}
@@ -91,11 +84,13 @@ public final class RenderWeather extends IRenderHandler {
 	 * Hook the weather renderer for the loading world.
 	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void onWorldLoad(final WorldEvent.Load e) {
+	public static void onWorldLoad(@Nonnull final WorldEvent.Load e) {
 
 		if (!ModOptions.enableWeatherASM || ModEnvironment.Weather2.isLoaded())
 			return;
 
+		// Initialize the render list.  Would do it in static but class
+		// loading would spiderweb and crash Minecraft.
 		if (renderList.size() == 0) {
 			register(new StormRenderer());
 			register(new AuroraRenderer());
@@ -105,7 +100,7 @@ public final class RenderWeather extends IRenderHandler {
 		// weather handling.
 		final WorldProvider provider = e.getWorld().provider;
 		if (provider.getWeatherRenderer() == null) {
-			provider.setWeatherRenderer(new RenderWeather(provider.getWeatherRenderer()));
+			provider.setWeatherRenderer(new RenderWeather());
 		} else {
 			ModLog.info("Not hooking weather renderer for dimension [%s]", provider.getDimensionType().getName());
 		}

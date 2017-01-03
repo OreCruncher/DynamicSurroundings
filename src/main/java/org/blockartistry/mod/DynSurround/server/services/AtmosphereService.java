@@ -70,7 +70,7 @@ public final class AtmosphereService extends Service {
 	}
 
 	private static boolean doFlash(final float rainIntensity) {
-		final int randee = (int)(rainIntensity * 100.0F);
+		final int randee = (int) (rainIntensity * 100.0F);
 		return RANDOM.nextInt(150) <= randee;
 	}
 
@@ -155,7 +155,8 @@ public final class AtmosphereService extends Service {
 		// dimension.
 		Network.sendRainIntensity(data.getCurrentRainIntensity(), data.getRainIntensity(), data.getDimensionId());
 
-		if (info.isThundering() && data.getCurrentRainIntensity() >= ModOptions.stormThunderThreshold) {
+		if (ModOptions.allowBackgroundThunder && info.isThundering()
+				&& data.getCurrentRainIntensity() >= ModOptions.stormThunderThreshold) {
 
 			int time = data.getThunderTimer() - 1;
 			if (time <= 0) {
@@ -163,7 +164,7 @@ public final class AtmosphereService extends Service {
 				// the first time through it would be -1.
 				if (time == 0) {
 					// Get a random player in the dimension - they will be the
-					// locus of the event.  Center it at build height above
+					// locus of the event. Center it at build height above
 					// their head.
 					final EntityPlayer player = PlayerUtils.getRandomPlayer(world);
 					final float theY = this.dimensions.getSkyHeight(world);

@@ -67,7 +67,7 @@ public class WeatherHandler extends EffectHandlerBase {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onThunderEvent(@Nonnull final ThunderEvent event) {
-		if (ModOptions.stormThunderThreshold > 1.0F)
+		if (!ModOptions.allowBackgroundThunder)
 			return;
 
 		final ISound thunder = new PositionedSoundRecord(THUNDER, SoundCategory.WEATHER, 10000.0F, 1.0F,

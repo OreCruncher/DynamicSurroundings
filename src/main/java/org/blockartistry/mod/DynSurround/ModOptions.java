@@ -100,13 +100,14 @@ public final class ModOptions {
 	public static final String CONFIG_STORM_ACTIVE_TIME_VARIABLE = "Active duration of thunder, variable";
 	public static final String CONFIG_STORM_INACTIVE_TIME_CONST = "Inactive duration of thunder, constant";
 	public static final String CONFIG_STORM_INACTIVE_TIME_VARIABLE = "Inactive duration of thunder, variable";
+	public static final String CONFIG_ENABLE_BACKGROUND_THUNDER = "Enable Background Thunder";
 	public static final String CONFIG_THUNDER_THRESHOLD = "Rain Intensity for Background Thunder";
 
 	private static final List<String> rainSort = Arrays.asList(CONFIG_RAIN_VOLUME, CONFIG_ALLOW_DESERT_DUST,
 			CONFIG_RESET_RAIN_ON_SLEEP, CONFIG_RAIN_PARTICLE_BASE, CONFIG_RAIN_ACTIVE_TIME_CONST,
 			CONFIG_RAIN_ACTIVE_TIME_VARIABLE, CONFIG_RAIN_INACTIVE_TIME_CONST, CONFIG_RAIN_INACTIVE_TIME_VARIABLE,
 			CONFIG_STORM_ACTIVE_TIME_CONST, CONFIG_STORM_ACTIVE_TIME_VARIABLE, CONFIG_STORM_INACTIVE_TIME_CONST,
-			CONFIG_STORM_INACTIVE_TIME_VARIABLE, CONFIG_THUNDER_THRESHOLD);
+			CONFIG_STORM_INACTIVE_TIME_VARIABLE, CONFIG_ENABLE_BACKGROUND_THUNDER, CONFIG_THUNDER_THRESHOLD);
 
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_VOLUME, defaultValue = "1.0")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
@@ -151,9 +152,12 @@ public final class ModOptions {
 	@MinMaxInt(min = 0)
 	@Comment("Variable amount of ticks storm (thunder) is inactive, added to the base")
 	public static int stormInactiveTimeVariable = 12000;
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_ENABLE_BACKGROUND_THUNDER, defaultValue = "true")
+	@Comment("Allow background thunder when storming")
+	public static boolean allowBackgroundThunder = true;
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_THUNDER_THRESHOLD, defaultValue = "0.75")
 	@MinMaxFloat(min = 0)
-	@Comment("Minimum rain intensity level for background thunder to occur (> 1 to disable)")
+	@Comment("Minimum rain intensity level for background thunder to occur")
 	public static float stormThunderThreshold = 0.75F;
 
 	public static final String CATEGORY_FOG = "fog";

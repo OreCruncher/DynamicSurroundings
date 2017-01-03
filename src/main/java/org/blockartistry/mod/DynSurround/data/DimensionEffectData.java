@@ -228,9 +228,10 @@ public final class DimensionEffectData extends WorldSavedData {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("dim ").append(this.dimensionId).append(": ");
 		builder.append("rainIntensity: ").append(FORMATTER.format(this.intensity * 100));
+		builder.append('/').append(FORMATTER.format(this.currentIntensity * 100));
 		builder.append(" [").append(FORMATTER.format(this.minIntensity * 100));
 		builder.append(",").append(FORMATTER.format(this.maxIntensity * 100));
-		builder.append("]");
+		builder.append("], thunderTimer: ").append(this.thunderTimer);
 		builder.append(", auroras: ").append(this.auroras.size());
 		return builder.toString();
 	}

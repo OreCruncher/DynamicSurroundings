@@ -26,6 +26,9 @@ package org.blockartistry.mod.DynSurround.client.weather;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.events.WeatherUpdateEvent;
+
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
@@ -39,10 +42,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
-@Mod.EventBusSubscriber(value = { Side.CLIENT })
+@Mod.EventBusSubscriber(Side.CLIENT)
 public enum StormProperties {
 
 	VANILLA, NONE(0.0F, "calm"), CALM(0.1F, "calm"), LIGHT(0.33F, "light"), NORMAL(0.66F, "normal"), HEAVY(1.0F,
@@ -70,7 +71,7 @@ public enum StormProperties {
 		this.dustSound = SoundUtils.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "dust"));
 	}
 
-	private StormProperties(final float level, final String intensity) {
+	private StormProperties(final float level, @Nonnull final String intensity) {
 		this.level = level;
 		this.rainTexture = new ResourceLocation(DSurround.RESOURCE_ID,
 				String.format("textures/environment/rain_%s.png", intensity));
@@ -82,6 +83,7 @@ public enum StormProperties {
 		this.dustSound = SoundUtils.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "dust"));
 	}
 
+	@Nonnull
 	public static StormProperties getIntensity() {
 		return intensity;
 	}
@@ -98,10 +100,12 @@ public enum StormProperties {
 		return fogDensity;
 	}
 
+	@Nonnull
 	public SoundEvent getStormSound() {
 		return this.rainSound;
 	}
 
+	@Nonnull
 	public SoundEvent getDustSound() {
 		return this.dustSound;
 	}
@@ -110,10 +114,12 @@ public enum StormProperties {
 		return (doVanilla() ? 0.66F : intensityLevel) * ModOptions.soundLevel;
 	}
 
+	@Nonnull
 	public static SoundEvent getCurrentStormSound() {
 		return intensity.rainSound;
 	}
 
+	@Nonnull
 	public static SoundEvent getCurrentDustSound() {
 		return intensity.dustSound;
 	}
@@ -125,7 +131,7 @@ public enum StormProperties {
 	/**
 	 * Sets the maximum intensity possible for the current weather phenomenon.
 	 */
-	public static void setMaximumIntensity(float level) {
+	public static void setMaximumIntensity(final float level) {
 		maxIntensityLevel = level;
 	}
 
@@ -171,7 +177,7 @@ public enum StormProperties {
 	}
 
 	@SubscribeEvent
-	public static void onWeatherUpdateEvent(final WeatherUpdateEvent event) {
+	public static void onWeatherUpdateEvent(@Nonnull final WeatherUpdateEvent event) {
 		serverSideSupport = true;
 		if (EnvironState.getDimensionId() != event.world.provider.getDimension())
 			return;
@@ -180,7 +186,7 @@ public enum StormProperties {
 	}
 
 	@SubscribeEvent
-	public static void onClientDisconnect(final ClientDisconnectionFromServerEvent event) {
+	public static void onClientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
 		serverSideSupport = false;
 		setMaximumIntensity(1.0F);
 		setCurrentIntensity(VANILLA.level);
@@ -196,6 +202,7 @@ public enum StormProperties {
 		StormRenderer.locationDustPng = intensity.dustTexture;
 	}
 
+	@Nonnull
 	public static String diagnostic() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("Storm: ").append(intensity.name());

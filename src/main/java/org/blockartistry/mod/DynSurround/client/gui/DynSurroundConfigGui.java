@@ -68,8 +68,10 @@ public class DynSurroundConfigGui extends GuiConfig {
 
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_AURORA, ModOptions.CONFIG_AURORA_ENABLED,
 				"Aurora Feature"));
+		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_RAIN, ModOptions.CONFIG_ENABLE_BACKGROUND_THUNDER,
+				"Background Thunder Feature"));
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_FOG, ModOptions.CONFIG_ALLOW_DESERT_FOG,
-				"Desert DustJetEffect Feature"));
+				"Desert Dust Feature"));
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_FOG,
 				ModOptions.CONFIG_ENABLE_ELEVATION_HAZE, "Elevation Haze Feature"));
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_FOG, ModOptions.CONFIG_ENABLE_BIOME_FOG,
@@ -90,6 +92,10 @@ public class DynSurroundConfigGui extends GuiConfig {
 				ModOptions.CONFIG_POTION_HUD_ENABLE, "Potion HUD Overlay"));
 		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES,
 				ModOptions.CONFIG_OPTION_ENABLE_SPEECHBUBBLES, "Speech Bubbles"));
+		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES,
+				ModOptions.CONFIG_OPTION_ENABLE_EMOJIS, "Entity Emoji Particles"));
+		this.configElements.add(getPropertyConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES,
+				ModOptions.CONFIG_OPTION_ENABLE_ENTITY_CHAT, "Entity Chat Bubbles"));
 
 		this.soundCategory = new ConfigCategory("Blocked Sounds");
 		this.soundCategory.setComment("Sounds that will be blocked from playing");
