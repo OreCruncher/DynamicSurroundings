@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.mod.DynSurround.client.weather.WeatherProperties;
@@ -51,6 +53,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -364,16 +367,29 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		EnvironState.tick(world, player);
 
 		// Gather diagnostics if needed
-		if (ModOptions.enableDebugLogging && Minecraft.getMinecraft().gameSettings.showDebugInfo) {
+		if (Minecraft.getMinecraft().gameSettings.showDebugInfo) {
 			final DiagnosticEvent.Gather gather = new DiagnosticEvent.Gather(world, player);
 			MinecraftForge.EVENT_BUS.post(gather);
 			diagnostics = gather.output;
+		} else {
+			diagnostics = null;
+		}
+	}
+	
+	/**
+	 * Hook the Forge text event to add on our diagnostics
+	 */
+	@SubscribeEvent
+	public void onGatherText(@Nonnull final RenderGameOverlayEvent.Text event) {
+		if(diagnostics != null) {
+			event.getLeft().add("");
+			event.getLeft().addAll(diagnostics);
 		}
 	}
 
 	@Override
 	public void onConnect() {
-		diagnostics = new ArrayList<String>();
+		diagnostics = null;
 	}
 	
 	// Use the new scripting system to pull out data to display

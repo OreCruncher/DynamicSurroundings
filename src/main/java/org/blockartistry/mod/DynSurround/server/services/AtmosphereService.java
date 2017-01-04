@@ -115,13 +115,16 @@ public final class AtmosphereService extends Service {
 		// want to control the timers.
 
 		final int rain = info.getRainTime();
-		if (rain <= 2) {
+		if (rain == 2) {
+			if(data.getDimensionId() == 0 ) {
+				int x = 0;
+			}
 			info.setRaining(!info.isRaining());
 			info.setRainTime(nextRainInterval(info.isRaining()));
 		}
 
 		final int thunder = info.getThunderTime();
-		if (thunder <= 2) {
+		if (thunder == 2) {
 			info.setThundering(!info.isThundering());
 			info.setThunderTime(nextThunderInterval(info.isThundering()));
 		}
@@ -137,18 +140,23 @@ public final class AtmosphereService extends Service {
 						data.getRainIntensity(), info.getRainTime());
 			}
 			data.setCurrentRainIntensity(world.getRainStrength(1.0F));
-		} else if (world.getRainStrength(1.0F) > 0.0F) {
-			// It's not raining and the world has strength. Means that it is on
-			// the way out so reflect the worlds strength.
-			data.setCurrentRainIntensity(world.getRainStrength(1.0F));
-		} else if (data.getCurrentRainIntensity() > 0) {
-			// We get here the world is not raining and there is no strength,
-			// but our record indicates something. Means we stopped.
-			data.setRainIntensity(0);
-			data.setCurrentRainIntensity(0);
-			info.setRainTime(nextRainInterval(false));
-			ModLog.debug("dim %d rain has stopped, next rain %d ticks", data.getDimensionId(),
-					world.getWorldInfo().getRainTime());
+		} else {
+			
+			if (world.getRainStrength(1.0F) > 0.0F) {
+				// It's not raining and the world has strength. Means that it is on
+				// the way out so reflect the worlds strength.
+				data.setCurrentRainIntensity(world.getRainStrength(1.0F));
+			} else if (data.getCurrentRainIntensity() > 0) {
+				// We get here the world is not raining and there is no strength,
+				// but our record indicates something. Means we stopped.
+				data.setRainIntensity(0);
+				data.setCurrentRainIntensity(0);
+				info.setRainTime(nextRainInterval(false));
+				ModLog.debug("dim %d rain has stopped, next rain %d ticks", data.getDimensionId(),
+						world.getWorldInfo().getRainTime());
+			} else if(data.getRainIntensity() > 0) {
+				data.setRainIntensity(0);
+			}
 		}
 
 		// Set the rain rainIntensity for all players in the current

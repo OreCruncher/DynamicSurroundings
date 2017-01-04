@@ -41,8 +41,6 @@ public final class GuiHUDHandler {
 	private static GuiHUDHandler INSTANCE;
 
 	private GuiHUDHandler() {
-		if (ModOptions.enableDebugLogging)
-			register(new DebugHUD());
 		if (ModOptions.potionHudEnabled)
 			register(new PotionHUD());
 	}
