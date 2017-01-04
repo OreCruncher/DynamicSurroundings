@@ -44,7 +44,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnection
 import net.minecraftforge.fml.relauncher.Side;
 
 @Mod.EventBusSubscriber(Side.CLIENT)
-public enum StormProperties {
+public enum WeatherProperties {
 
 	VANILLA, NONE(0.0F, "calm"), CALM(0.1F, "calm"), LIGHT(0.33F, "light"), NORMAL(0.66F, "normal"), HEAVY(1.0F,
 			"heavy");
@@ -52,7 +52,7 @@ public enum StormProperties {
 	private static boolean serverSideSupport = false;
 	private static float intensityLevel = 0.0F;
 	private static float maxIntensityLevel = 0.0F;
-	private static StormProperties intensity = VANILLA;
+	private static WeatherProperties intensity = VANILLA;
 	private static float fogDensity = 0.0F;
 
 	private final float level;
@@ -62,7 +62,7 @@ public enum StormProperties {
 	private final SoundEvent rainSound;
 	private final SoundEvent dustSound;
 
-	private StormProperties() {
+	private WeatherProperties() {
 		this.level = -10.0F;
 		this.rainTexture = EntityRenderer.RAIN_TEXTURES;
 		this.snowTexture = EntityRenderer.SNOW_TEXTURES;
@@ -71,7 +71,7 @@ public enum StormProperties {
 		this.dustSound = SoundUtils.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "dust"));
 	}
 
-	private StormProperties(final float level, @Nonnull final String intensity) {
+	private WeatherProperties(final float level, @Nonnull final String intensity) {
 		this.level = level;
 		this.rainTexture = new ResourceLocation(DSurround.RESOURCE_ID,
 				String.format("textures/environment/rain_%s.png", intensity));
@@ -84,7 +84,7 @@ public enum StormProperties {
 	}
 
 	@Nonnull
-	public static StormProperties getIntensity() {
+	public static WeatherProperties getIntensity() {
 		return intensity;
 	}
 

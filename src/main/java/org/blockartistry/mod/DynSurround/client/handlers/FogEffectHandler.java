@@ -27,7 +27,7 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.client.weather.StormProperties;
+import org.blockartistry.mod.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.lwjgl.opengl.GL11;
@@ -119,7 +119,7 @@ public class FogEffectHandler extends EffectHandlerBase {
 					tint.add(Color.scale(b.getFogColor(), brightnessFactor).scale(scale));
 				} else if (ModOptions.allowDesertFog && b.getHasDust()) {
 					final float strength = EnvironState.getWorld().getRainStrength(1.0F);
-					dustFog += StormProperties.getFogDensity() * scale * strength;
+					dustFog += WeatherProperties.getFogDensity() * scale * strength;
 					tint.add(Color.scale(b.getDustColor(), brightnessFactor).scale(scale));
 				} else {
 					tint.add(Color.scale(currentFogColor, scale));

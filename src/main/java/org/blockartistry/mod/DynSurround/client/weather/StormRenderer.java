@@ -86,17 +86,17 @@ public class StormRenderer implements IAtmosRenderer {
 	 */
 	public void render(final EntityRenderer renderer, final float partialTicks) {
 
-		StormProperties.setTextures();
+		WeatherProperties.setTextures();
 		final World world = renderer.mc.theWorld;
 
 		if (!this.dimensions.hasWeather(world))
 			return;
 
-		final float rainStrength = StormProperties.getIntensityLevel();
+		final float rainStrength = WeatherProperties.getIntensityLevel();
 		if (rainStrength <= 0.0F)
 			return;
 
-		final float alphaRatio = rainStrength / StormProperties.getMaxIntensityLevel();
+		final float alphaRatio = rainStrength / WeatherProperties.getMaxIntensityLevel();
 
 		renderer.enableLightmap();
 

@@ -38,7 +38,7 @@ public class WeatherUtils {
 
 	public static boolean biomeHasDust(final Biome biome) {
 		final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
-		return ModOptions.allowDesertFog && biomes.get(biome).getHasDust() && !StormProperties.doVanilla();
+		return ModOptions.allowDesertFog && biomes.get(biome).getHasDust() && !WeatherProperties.doVanilla();
 	}
 
 }

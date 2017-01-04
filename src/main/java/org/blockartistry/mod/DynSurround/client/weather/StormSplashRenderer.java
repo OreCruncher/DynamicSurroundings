@@ -83,7 +83,7 @@ public class StormSplashRenderer {
 	}
 
 	protected static float calculateRainSoundVolume(final World world) {
-		return StormProperties.getCurrentVolume();
+		return WeatherProperties.getCurrentVolume();
 	}
 
 	protected void spawnBlockParticle(final IBlockState state, final boolean dust, final World world, final double x,
@@ -107,10 +107,10 @@ public class StormSplashRenderer {
 
 	protected SoundEvent getBlockSoundFX(final Block block, final boolean hasDust, final World world) {
 		if (hasDust)
-			return StormProperties.getIntensity().getDustSound();
+			return WeatherProperties.getIntensity().getDustSound();
 		if (block == Blocks.NETHERRACK)
 			return SoundEvents.BLOCK_LAVA_POP;
-		return StormProperties.getIntensity().getStormSound();
+		return WeatherProperties.getIntensity().getStormSound();
 	}
 
 	protected BlockPos getPrecipitationHeight(final World world, final int range, final BlockPos pos) {
@@ -147,7 +147,7 @@ public class StormSplashRenderer {
 		if (!this.dimensions.hasWeather(EnvironState.getWorld()))
 			return;
 
-		float rainStrengthFactor = StormProperties.getIntensityLevel();
+		float rainStrengthFactor = WeatherProperties.getIntensityLevel();
 		if (!theThis.mc.gameSettings.fancyGraphics)
 			rainStrengthFactor /= 2.0F;
 

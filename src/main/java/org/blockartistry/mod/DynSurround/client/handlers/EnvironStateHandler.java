@@ -30,7 +30,7 @@ import java.util.UUID;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
-import org.blockartistry.mod.DynSurround.client.weather.StormProperties;
+import org.blockartistry.mod.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
@@ -164,6 +164,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			return builder.toString();
 		}
 
+		private static BlockPos getPlayerPos() {
+			return new BlockPos(player.posX, player.getEntityBoundingBox().minY, player.posZ);
+		}
+		
 		private static void tick(final World world, final EntityPlayer player) {
 			
 			final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
@@ -175,7 +179,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.season = seasons.getData(world).getSeasonType();
 			EnvironState.dimensionId = world.provider.getDimension();
 			EnvironState.dimensionName = world.provider.getDimensionType().getName();
-			EnvironState.playerPosition = new BlockPos(player.posX, player.posY, player.posZ);
+			EnvironState.playerPosition = getPlayerPos();
 			EnvironState.fog = FogEffectHandler.currentFogLevel() >= 0.01F;
 			EnvironState.inside = AreaSurveyHandler.isReallyInside();
 
@@ -379,7 +383,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		"'Biome: ' + biome.name + '; Temp ' + biome.temperature + '/' + biome.temperatureValue + ' rainfall: ' + biome.rainfall",
 		"'Weather: ' + IF(weather.isRaining,'rainfall: ' + weather.rainfall,'not raining') + IF(weather.isThundering,' thundering','') + ' Temp: ' + weather.temperatureValue + '/' + weather.temperature",
 		"'Season: ' + season  + IF(isNight,' night',' day') + IF(player.isInside,' inside',' outside')",
-		"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','') + ' Y: ' + player.Y + ' light: ' + player.lightLevel",
+		"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','') + ' pos: (' + player.X + ',' + player.Y + ',' + player.Z + ') light: ' + player.lightLevel",
 	};
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -390,7 +394,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			event.output.add(result);
 		}
 		
-		event.output.add(StormProperties.diagnostic());
+		event.output.add(WeatherProperties.diagnostic());
 		event.output.add("Conditions: " + EnvironState.getConditions());
 		
 		

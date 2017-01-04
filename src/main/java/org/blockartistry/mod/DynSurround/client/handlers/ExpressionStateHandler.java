@@ -33,16 +33,16 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.swing.DiagnosticPanel;
-import org.blockartistry.mod.DynSurround.client.weather.StormProperties;
+import org.blockartistry.mod.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.mod.DynSurround.registry.TemperatureRating;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import org.blockartistry.mod.DynSurround.util.Expression;
 import org.blockartistry.mod.DynSurround.util.Expression.Variant;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -279,7 +279,8 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 			@Override
 			public void update() {
 				final EntityPlayer player = EnvironState.getPlayer();
-				this.value = player.distanceWalkedModified != player.prevDistanceWalkedModified ? Expression.TRUE : Expression.FALSE;
+				this.value = player.distanceWalkedModified != player.prevDistanceWalkedModified ? Expression.TRUE
+						: Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isInside") {
@@ -324,10 +325,22 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 				this.value = new Variant(EnvironState.getDimensionName());
 			}
 		});
+		register(new DynamicVariable("player.X") {
+			@Override
+			public void update() {
+				this.value = new Variant(EnvironState.getPlayerPosition().getX());
+			}
+		});
 		register(new DynamicVariable("player.Y") {
 			@Override
 			public void update() {
 				this.value = new Variant(EnvironState.getPlayerPosition().getY());
+			}
+		});
+		register(new DynamicVariable("player.Z") {
+			@Override
+			public void update() {
+				this.value = new Variant(EnvironState.getPlayerPosition().getZ());
 			}
 		});
 		register(new DynamicVariable("player.health") {
@@ -384,21 +397,22 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 						: Expression.FALSE;
 			}
 		});
-//		register(new DynamicVariable("player.lightLevel") {
-//			@Override
-//			public void update() {
-//				final World world = EnvironState.getWorld();
-//				final BlockPos pos = EnvironState.getPlayer().getPosition();
-//				final float light = world.getLightFromNeighbors(pos);
-//				this.value = new Variant(light);
-//			}
-//		});
+		register(new DynamicVariable("player.lightLevel") {
+			@Override
+			public void update() {
+				final World world = EnvironState.getWorld();
+				final BlockPos pos = EnvironState.getPlayerPosition();
+				final int blockLight = world.getLightFor(EnumSkyBlock.BLOCK, pos);
+				final int skyLight = world.getLightFor(EnumSkyBlock.SKY, pos) - world.calculateSkylightSubtracted(1.0F);
+				this.value = new Variant(Math.max(blockLight, skyLight));
+			}
+		});
 
 		// Weather variables
 		register(new DynamicVariable("weather.isRaining") {
 			@Override
 			public void update() {
-				this.value = StormProperties.getIntensityLevel() > 0.0F ? Expression.TRUE : Expression.FALSE;
+				this.value = WeatherProperties.getIntensityLevel() > 0.0F ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("weather.isThundering") {
@@ -410,7 +424,7 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		register(new DynamicVariable("weather.isNotRaining") {
 			@Override
 			public void update() {
-				this.value = StormProperties.getIntensityLevel() <= 0.0F ? Expression.TRUE : Expression.FALSE;
+				this.value = WeatherProperties.getIntensityLevel() <= 0.0F ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("weather.isNotThundering") {
@@ -422,7 +436,7 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		register(new DynamicVariable("weather.rainfall") {
 			@Override
 			public void update() {
-				this.value = new Variant(StormProperties.getIntensityLevel());
+				this.value = new Variant(WeatherProperties.getIntensityLevel());
 			}
 		});
 		register(new DynamicVariable("weather.temperature") {
@@ -443,7 +457,6 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 
 		// Sort them for easy display
 		Collections.sort(variables);
-		
 	}
 
 	@Override
