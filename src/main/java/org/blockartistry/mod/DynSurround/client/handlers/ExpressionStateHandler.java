@@ -37,14 +37,12 @@ import org.blockartistry.mod.DynSurround.client.weather.StormProperties;
 import org.blockartistry.mod.DynSurround.registry.TemperatureRating;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 import org.blockartistry.mod.DynSurround.util.Expression;
-import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.blockartistry.mod.DynSurround.util.Expression.Variant;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -249,33 +247,39 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 				this.value = EnvironState.isPlayerInWater() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
+		register(new DynamicVariable("player.isWet") {
+			@Override
+			public void update() {
+				final EntityPlayer player = EnvironState.getPlayer();
+				this.value = player.isWet() ? Expression.TRUE : Expression.FALSE;
+			}
+		});
 		register(new DynamicVariable("player.isUnderwater") {
 			@Override
 			public void update() {
 				final EntityPlayer player = EnvironState.getPlayer();
-				final int x = MathStuff.floor_double(player.posX);
-				final int y = MathStuff.floor_double(player.posY + player.getEyeHeight());
-				final int z = MathStuff.floor_double(player.posZ);
-				this.value = player.worldObj.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.WATER
-						? Expression.TRUE : Expression.FALSE;
+				this.value = player.isInsideOfMaterial(Material.WATER) ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isRiding") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerRiding() ? Expression.TRUE : Expression.FALSE;
+				final EntityPlayer player = EnvironState.getPlayer();
+				this.value = player.isRiding() ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isOnGround") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerOnGround() ? Expression.TRUE : Expression.FALSE;
+				final EntityPlayer player = EnvironState.getPlayer();
+				this.value = player.onGround ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isMoving") {
 			@Override
 			public void update() {
-				this.value = EnvironState.isPlayerMoving() ? Expression.TRUE : Expression.FALSE;
+				final EntityPlayer player = EnvironState.getPlayer();
+				this.value = player.distanceWalkedModified != player.prevDistanceWalkedModified ? Expression.TRUE : Expression.FALSE;
 			}
 		});
 		register(new DynamicVariable("player.isInside") {
@@ -380,14 +384,15 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 						: Expression.FALSE;
 			}
 		});
-		register(new DynamicVariable("player.lightLevel") {
-			@Override
-			public void update() {
-				final World world = EnvironState.getWorld();
-				final BlockPos pos = EnvironState.getPlayer().getPosition();
-				this.value = new Variant(world.getLightFor(EnumSkyBlock.BLOCK, pos));
-			}
-		});
+//		register(new DynamicVariable("player.lightLevel") {
+//			@Override
+//			public void update() {
+//				final World world = EnvironState.getWorld();
+//				final BlockPos pos = EnvironState.getPlayer().getPosition();
+//				final float light = world.getLightFromNeighbors(pos);
+//				this.value = new Variant(light);
+//			}
+//		});
 
 		// Weather variables
 		register(new DynamicVariable("weather.isRaining") {

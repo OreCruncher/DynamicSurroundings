@@ -328,10 +328,10 @@ public final class ModOptions {
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BIOME_SOUNDS, defaultValue = "true", lang = "cfg.sound.BiomeSounds")
 	@Comment("Enable biome background and spot sounds")
 	public static boolean enableBiomeSounds = true;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_MASTER_SOUND_FACTOR, defaultValue = "0.5", lang = "cfg.sound.MasterScale")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_MASTER_SOUND_FACTOR, defaultValue = "1.0", lang = "cfg.sound.MasterScale")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Master volume scale factor for biome and block sounds")
-	public static float masterSoundScaleFactor = 0.5F;
+	public static float masterSoundScaleFactor = 1.0F;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_AUTO_CONFIG_CHANNELS, defaultValue = "true", lang = "cfg.sound.AutoConfig")
 	@Comment("Automatically configure sound channels")
 	@RestartRequired(server = true)
