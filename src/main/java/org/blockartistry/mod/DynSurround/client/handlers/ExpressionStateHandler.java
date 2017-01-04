@@ -439,14 +439,14 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 				this.value = new Variant(WeatherProperties.getIntensityLevel());
 			}
 		});
-		register(new DynamicVariable("weather.temperature") {
+		register(new DynamicVariable("weather.temperatureValue") {
 			@Override
 			public void update() {
 				this.value = new Variant(
 						EnvironState.getPlayerBiome().getFloatTemperature(EnvironState.getPlayerPosition()));
 			}
 		});
-		register(new DynamicVariable("weather.temperatureValue") {
+		register(new DynamicVariable("weather.temperature") {
 			@Override
 			public void update() {
 				this.value = new Variant(TemperatureRating
