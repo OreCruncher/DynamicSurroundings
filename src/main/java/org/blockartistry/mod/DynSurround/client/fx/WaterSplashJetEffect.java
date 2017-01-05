@@ -44,7 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class WaterSplashJetEffect extends JetEffect {
-	
+
 	public WaterSplashJetEffect(final int chance) {
 		super(chance);
 	}
@@ -54,7 +54,6 @@ public class WaterSplashJetEffect extends JetEffect {
 	public BlockEffectType getEffectType() {
 		return BlockEffectType.SPLASH_JET;
 	}
-
 
 	private static boolean isLiquidBlock(final Block block) {
 		return BlockLiquid.class.isAssignableFrom(block.getClass());
@@ -68,7 +67,8 @@ public class WaterSplashJetEffect extends JetEffect {
 		if (!isLiquidBlock(state.getBlock()))
 			return false;
 
-		// getLiquidHeightPercent() returns the percentage of *air* in the block,
+		// getLiquidHeightPercent() returns the percentage of *air* in the
+		// block,
 		// not how much water is in it.
 		final float height = BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state));
 		return height >= 0.12F;
@@ -103,10 +103,7 @@ public class WaterSplashJetEffect extends JetEffect {
 
 	@Override
 	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		if (!(state.getBlock() instanceof BlockLiquid) || !super.trigger(state, world, pos, random))
-			return false;
-
-		return isValidSpawnBlock(world, pos);
+		return isValidSpawnBlock(world, pos) && super.trigger(state, world, pos, random);
 	}
 
 	@Override
@@ -126,8 +123,7 @@ public class WaterSplashJetEffect extends JetEffect {
 		else
 			y = pos.getY() + 0.1D;
 
-		final ParticleJet effect = new ParticleWaterSplash(strength, world, pos.getX() + 0.5D, y,
-				pos.getZ() + 0.5D);
+		final ParticleJet effect = new ParticleWaterSplash(strength, world, pos.getX() + 0.5D, y, pos.getZ() + 0.5D);
 		addEffect(effect);
 	}
 }

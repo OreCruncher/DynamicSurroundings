@@ -64,17 +64,19 @@ public class RandomBlockEffectScanner extends RandomScanner {
 	@Override
 	public void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
 
-		final World world = EnvironState.getWorld();
 		final List<BlockEffect> chain = this.blocks.findEffectMatches(state);
 
-		if (chain != null) {
+		if (chain != null && !chain.isEmpty()) {
+			final World world = EnvironState.getWorld();
 			for (final BlockEffect effect : chain)
 				effect.process(state, world, pos, this.rand);
 		}
 
 		final SoundEffect sound = this.blocks.getSound(state, this.rand);
-		if (sound != null)
+		if (sound != null) {
+			final World world = EnvironState.getWorld();
 			sound.doEffect(state, world, pos, SoundCategory.BLOCKS, this.rand);
+		}
 
 	}
 

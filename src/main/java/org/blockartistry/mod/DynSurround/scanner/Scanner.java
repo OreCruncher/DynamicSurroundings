@@ -36,6 +36,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public abstract class Scanner implements ITickable {
 
@@ -115,15 +116,14 @@ public abstract class Scanner implements ITickable {
 
 		DSurround.getProfiler().startSection(this.name);
 		
+		final World world = EnvironState.getWorld();
 		for (int count = 0; count < this.blocksPerTick; count++) {
 			final BlockPos pos = nextPos();
 			if(pos == null)
 				break;
-			DSurround.getProfiler().startSection(this.name + "-block process");
-			final IBlockState state = EnvironState.getWorld().getBlockState(pos);
+			final IBlockState state = world.getBlockState(pos);
 			if (interestingBlock(state))
 				blockScan(state, pos);
-			DSurround.getProfiler().endSection();
 		}
 		
 		DSurround.getProfiler().endSection();

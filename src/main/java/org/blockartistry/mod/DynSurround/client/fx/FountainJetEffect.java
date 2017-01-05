@@ -53,7 +53,7 @@ public class FountainJetEffect extends JetEffect {
 
 	@Override
 	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		return super.trigger(state, world, pos, random) && world.isAirBlock(pos.up());
+		return world.isAirBlock(pos.up()) && super.trigger(state, world, pos, random);
 	}
 
 	@Override

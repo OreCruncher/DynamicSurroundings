@@ -65,7 +65,7 @@ public class SteamJetEffect extends JetEffect {
 
 	@Override
 	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		if (!super.trigger(state, world, pos, random) || !world.isAirBlock(pos.up()))
+		if (!world.isAirBlock(pos.up()) || !super.trigger(state, world, pos, random))
 			return false;
 
 		return lavaCount(world, pos) != 0;

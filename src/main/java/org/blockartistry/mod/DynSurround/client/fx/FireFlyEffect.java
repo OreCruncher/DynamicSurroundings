@@ -53,11 +53,6 @@ public class FireFlyEffect extends BlockEffect {
 	}
 
 	@Override
-	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		return super.trigger(state, world, pos, random);
-	}
-
-	@Override
 	public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
 		final AxisAlignedBB box = state.getBoundingBox(world, pos);
 		final Vec3d loc = box.getCenter();
