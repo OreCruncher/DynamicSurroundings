@@ -24,13 +24,12 @@
 package org.blockartistry.mod.DynSurround.client.sound;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
-
 import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.SoundSystemConfig;
 import net.minecraftforge.fml.relauncher.Side;
@@ -44,8 +43,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class Emitter {
 
-	protected static final Random RANDOM = new XorShiftRandom();
-
+	protected final Random RANDOM = ThreadLocalRandom.current();
 	protected final SoundEffect effect;
 	protected TrackingSound activeSound;
 

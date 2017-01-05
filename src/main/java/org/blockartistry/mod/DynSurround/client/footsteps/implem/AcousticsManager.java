@@ -46,10 +46,9 @@ import org.blockartistry.mod.DynSurround.client.footsteps.system.Association;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
-
 import com.google.common.collect.ImmutableList;
 
+import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -67,7 +66,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
-	private static final Random RANDOM = new XorShiftRandom();
+	private final Random RANDOM = ThreadLocalRandom.current();
 
 	private final Map<String, IAcoustic> acoustics = new LinkedHashMap<String, IAcoustic>();
 	private final PriorityQueue<PendingSound> pending = new PriorityQueue<PendingSound>();

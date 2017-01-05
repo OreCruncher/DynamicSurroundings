@@ -24,6 +24,9 @@
 
 package org.blockartistry.mod.DynSurround.client.weather;
 
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
@@ -32,7 +35,6 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SeasonRegistry;
 import org.blockartistry.mod.DynSurround.util.Color;
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.EntityRenderer;
@@ -51,8 +53,6 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class StormRenderer implements IAtmosRenderer {
 
-	private static final XorShiftRandom random = new XorShiftRandom();
-	
 	public static ResourceLocation locationRainPng = new ResourceLocation("textures/environment/rain.png");
 	public static ResourceLocation locationSnowPng = new ResourceLocation("textures/environment/snow.png");
 	public static ResourceLocation locationDustPng = new ResourceLocation(DSurround.RESOURCE_ID,
@@ -73,6 +73,8 @@ public class StormRenderer implements IAtmosRenderer {
 		}
 	}
 
+	private final Random random = ThreadLocalRandom.current();
+	
 	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 	private final SeasonRegistry season = RegistryManager.get(RegistryType.SEASON);

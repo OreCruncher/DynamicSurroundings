@@ -23,8 +23,6 @@
 
 package org.blockartistry.mod.DynSurround.scanner;
 
-import java.util.Random;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -37,8 +35,6 @@ import net.minecraft.util.math.BlockPos;
  */
 public abstract class RandomScanner extends Scanner {
 	
-	protected final Random rand = RANDOM.get();
-
 	public RandomScanner(@Nonnull final String name, final int range) {
 		super(name, range);
 	}

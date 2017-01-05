@@ -23,9 +23,6 @@
 
 package org.blockartistry.mod.DynSurround.scanner;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -37,10 +34,14 @@ import net.minecraft.util.math.BlockPos;
  * space in c1 not in i and at most 3 cuboids describing the space in c2 not in
  * i. This class builds those 3 cuboids as "segments" so that the space in c1 or
  * c2 but not in i can be iterated efficiently.
+ * 
+ * Updated to use "peeking" iterator pattern.
  */
 public class ComplementsPointIterator implements IPointIterator {
 
-	protected List<CuboidPointIterator> segments;
+	protected CuboidPointIterator[] segments = new CuboidPointIterator[3];
+	protected int activeSegment = 0;
+	protected BlockPos peeked = null;
 
 	public ComplementsPointIterator(@Nonnull final Cuboid volume, @Nonnull final Cuboid intersect) {
 		// This function makes some important assumptions about volume and
@@ -61,8 +62,6 @@ public class ComplementsPointIterator implements IPointIterator {
 		// ComplementsPointIterator(newVolume,intersect);
 		//
 
-		this.segments = new ArrayList<CuboidPointIterator>();
-
 		final BlockPos vmax = volume.maximum();
 		final BlockPos imax = intersect.maximum();
 		final BlockPos vmin = volume.minimum();
@@ -70,57 +69,58 @@ public class ComplementsPointIterator implements IPointIterator {
 
 		if (vmax.getX() != imax.getX() || vmin.getX() != imin.getX()) {
 			if (vmax.getX() > imax.getX())
-				this.segments.add(new CuboidPointIterator(new BlockPos(imax.getX(), vmin.getY(), vmin.getZ()),
-						new BlockPos(vmax.getX(), vmax.getY(), vmax.getZ())));
+				this.segments[0] = new CuboidPointIterator(new BlockPos(imax.getX(), vmin.getY(), vmin.getZ()),
+						new BlockPos(vmax.getX(), vmax.getY(), vmax.getZ()));
 			else
-				this.segments.add(new CuboidPointIterator(new BlockPos(vmin.getX(), vmin.getY(), vmin.getZ()),
-						new BlockPos(imin.getX(), vmax.getY(), vmax.getZ())));
+				this.segments[0] = new CuboidPointIterator(new BlockPos(vmin.getX(), vmin.getY(), vmin.getZ()),
+						new BlockPos(imin.getX(), vmax.getY(), vmax.getZ()));
 		}
 
 		if (vmax.getY() != imax.getY() || vmin.getY() != imin.getY()) {
 			if (vmax.getY() > imax.getY())
-				this.segments.add(new CuboidPointIterator(new BlockPos(imin.getX(), imax.getY(), vmin.getZ()),
-						new BlockPos(imax.getX(), vmax.getY(), vmax.getZ())));
+				this.segments[1] = new CuboidPointIterator(new BlockPos(imin.getX(), imax.getY(), vmin.getZ()),
+						new BlockPos(imax.getX(), vmax.getY(), vmax.getZ()));
 			else
-				this.segments.add(new CuboidPointIterator(new BlockPos(imin.getX(), vmin.getY(), vmin.getZ()),
-						new BlockPos(imax.getX(), imin.getY(), vmax.getZ())));
+				this.segments[1] = new CuboidPointIterator(new BlockPos(imin.getX(), vmin.getY(), vmin.getZ()),
+						new BlockPos(imax.getX(), imin.getY(), vmax.getZ()));
 		}
 
 		if (vmax.getZ() != imax.getZ() || vmin.getZ() != imin.getZ()) {
 			if (vmax.getZ() > imax.getZ())
-				this.segments.add(new CuboidPointIterator(new BlockPos(imin.getX(), imin.getY(), imax.getZ()),
-						new BlockPos(imax.getX(), imax.getY(), vmax.getZ())));
+				this.segments[2] = new CuboidPointIterator(new BlockPos(imin.getX(), imin.getY(), imax.getZ()),
+						new BlockPos(imax.getX(), imax.getY(), vmax.getZ()));
 			else
-				this.segments.add(new CuboidPointIterator(new BlockPos(imin.getX(), imin.getY(), vmin.getZ()),
-						new BlockPos(imax.getX(), imax.getY(), imin.getZ())));
+				this.segments[2] = new CuboidPointIterator(new BlockPos(imin.getX(), imin.getY(), vmin.getZ()),
+						new BlockPos(imax.getX(), imax.getY(), imin.getZ()));
 		}
+
+		this.peeked = next0();
+	}
+
+	protected BlockPos next0() {
+		while (this.activeSegment < this.segments.length) {
+			if (this.segments[this.activeSegment] != null) {
+				final BlockPos rv = this.segments[this.activeSegment].next();
+				if (rv != null)
+					return rv;
+			}
+			this.activeSegment++;
+		}
+		return null;
 	}
 
 	@Override
 	@Nullable
 	public BlockPos peek() {
-		for (final CuboidPointIterator i : this.segments) {
-			final BlockPos rv = i.peek();
-			if (rv != null)
-				return rv;
-		}
-		return null;
+		return this.peeked;
 	}
 
 	@Override
 	@Nullable
 	public BlockPos next() {
-		for (final CuboidPointIterator i : this.segments) {
-			final BlockPos rv = i.next();
-			if (rv != null)
-				return rv;
-		}
-		return null;
+		BlockPos result = this.peeked;
+		this.peeked = next0();
+		return result;
 	}
 
-	@Override
-	public void reset() {
-		for (final CuboidPointIterator i : this.segments)
-			i.reset();
-	}
 }

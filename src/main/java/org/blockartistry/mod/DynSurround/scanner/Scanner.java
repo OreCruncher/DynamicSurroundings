@@ -23,15 +23,15 @@
 
 package org.blockartistry.mod.DynSurround.scanner;
 
+import java.util.Random;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
-
+import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.util.ITickable;
@@ -40,14 +40,9 @@ import net.minecraft.world.World;
 
 public abstract class Scanner implements ITickable {
 
-	protected static final ThreadLocal<XorShiftRandom> RANDOM = new ThreadLocal<XorShiftRandom>() {
-		@Override
-		protected XorShiftRandom initialValue() {
-			return new XorShiftRandom();
-		}
-	}; 
-
 	protected final String name;
+	
+	protected final Random rand = ThreadLocalRandom.current();
 	
 	protected final int xRange;
 	protected final int yRange;
@@ -88,7 +83,7 @@ public abstract class Scanner implements ITickable {
 		else
 			this.blocksPerTick = blocksPerTick;
 		
-		this.theProfiler = Minecraft.getMinecraft().mcProfiler;
+		this.theProfiler = DSurround.getProfiler();
 	}
 	
 	/**
@@ -114,7 +109,7 @@ public abstract class Scanner implements ITickable {
 	@Override
 	public void update() {
 
-		DSurround.getProfiler().startSection(this.name);
+		this.theProfiler.startSection(this.name);
 		
 		final World world = EnvironState.getWorld();
 		for (int count = 0; count < this.blocksPerTick; count++) {
@@ -126,7 +121,7 @@ public abstract class Scanner implements ITickable {
 				blockScan(state, pos);
 		}
 		
-		DSurround.getProfiler().endSection();
+		this.theProfiler.endSection();
 
 	}
 

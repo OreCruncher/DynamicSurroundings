@@ -25,8 +25,6 @@
 package org.blockartistry.mod.DynSurround.client.handlers.scanners;
 
 import java.util.List;
-import java.util.Random;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
@@ -35,8 +33,6 @@ import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.scanner.CuboidScanner;
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -44,10 +40,18 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * This guy scans a large area around the player looking for blocks
+ * to spawn "always on" effects.  Currently there is only one, the
+ * water splash for waterfalls.
+ * 
+ * The CuboidScanner tries to only scan new blocks that come into
+ * range as the player moves.  Once all the blocks are scanned in
+ * the region (cuboid) it will stop.  It will start again once the
+ * player moves location.
+ */
 @SideOnly(Side.CLIENT)
 public final class AlwaysOnBlockEffectScanner extends CuboidScanner {
-
-	private static final Random RANDOM = new XorShiftRandom();
 
 	private final BlockRegistry blocks;
 
@@ -58,16 +62,18 @@ public final class AlwaysOnBlockEffectScanner extends CuboidScanner {
 	
 	@Override
 	protected boolean interestingBlock(final IBlockState state) {
+		// Only interested in water blocks.  This will need to
+		// change once more "always on" stuff gets added.
 		return state.getBlock() == Blocks.WATER;
 	}
 
 	@Override
 	public void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
-		final List<BlockEffect> effects = blocks.getAlwaysOnEffects(state);
+		final List<BlockEffect> effects = this.blocks.getAlwaysOnEffects(state);
 		if (effects != null && effects.size() > 0) {
 			final World world = EnvironState.getWorld();
 			for (final BlockEffect be : effects) {
-				be.process(state, world, pos, RANDOM);
+				be.process(state, world, pos, this.rand);
 			}
 		}
 	}

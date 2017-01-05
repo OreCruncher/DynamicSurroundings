@@ -145,10 +145,6 @@ public class MathStuff {
 
 	// Misc functions
 
-	public static final double random() {
-		return XorShiftRandom.shared.nextDouble();
-	}
-
 	public static final float toRadians(final float degrees) {
 		return degrees * DEG_TO_RAD;
 	}

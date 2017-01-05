@@ -26,10 +26,9 @@ package org.blockartistry.mod.DynSurround.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Nonnull;
-
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import net.minecraft.util.math.MathHelper;
 
@@ -80,7 +79,7 @@ public final class AuroraPreset {
 	}
 
 	public static int randomId() {
-		return XorShiftRandom.shared.nextInt(PRESET.size());
+		return ThreadLocalRandom.current().nextInt(PRESET.size());
 	}
 
 	public static int testId() {

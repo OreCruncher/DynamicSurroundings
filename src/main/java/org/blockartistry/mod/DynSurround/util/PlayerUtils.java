@@ -37,6 +37,7 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 
 import com.google.common.base.Predicates;
 
+import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -116,7 +117,7 @@ public final class PlayerUtils {
 		if (players.size() == 1) {
 			return players.get(0);
 		} else if (players.size() > 0) {
-			return players.get(XorShiftRandom.shared.nextInt(players.size()));
+			return players.get(ThreadLocalRandom.current().nextInt(players.size()));
 		}
 		return null;
 	}

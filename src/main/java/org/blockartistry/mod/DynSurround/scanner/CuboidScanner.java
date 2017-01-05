@@ -26,7 +26,6 @@ package org.blockartistry.mod.DynSurround.scanner;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.block.state.IBlockState;
@@ -38,11 +37,9 @@ import net.minecraft.world.World;
  */
 public abstract class CuboidScanner extends Scanner {
 
-	protected boolean yStartsAtPlayer = false;
-
 	// Iteration variables
-	protected transient boolean scanFinished = false;
-	protected transient CuboidPointIterator fullRange;
+	protected boolean scanFinished = false;
+	protected CuboidPointIterator fullRange;
 
 	// State of last tick
 	protected BlockPos lastPos;
@@ -65,40 +62,35 @@ public abstract class CuboidScanner extends Scanner {
 		return this.scanFinished;
 	}
 
-	protected Cuboid getVolumeFor(@Nonnull final BlockPos pos) {
-		return getVolumeFor(pos.getX(), pos.getY(), pos.getZ());
+	protected BlockPos[] getMinMaxPointsForVolume(@Nonnull final BlockPos pos) {
+		BlockPos min = pos.add(-this.xRange, -this.yRange, -this.zRange);
+		BlockPos max = pos.add(this.xRange, this.yRange, this.zRange);
+
+		// TODO: Do we need to do this? Routines can check for Y < 0.
+		if (min.getY() < 0)
+			min = new BlockPos(min.getX(), 0, min.getZ());
+
+		return new BlockPos[] { min, max };
 	}
 
-	protected Cuboid getVolumeFor(final int x, final int y, final int z) {
-		int minX, maxX, minY, maxY, minZ, maxZ;
-		if (this.yStartsAtPlayer) {
-			minY = y;
-			maxY = y + this.ySize;
-		} else {
-			minY = y - this.yRange;
-			maxY = y + this.yRange;
-		}
-		// World bottom truncate
-		if (minY < 0)
-			minY = 0;
-		minX = x - this.xRange;
-		maxX = x + this.xRange;
-		minZ = z - this.zRange;
-		maxZ = z + this.zRange;
-		return new Cuboid(new BlockPos(minX, minY, minZ), new BlockPos(maxX, maxY, maxZ));
+	protected Cuboid getVolumeFor(final BlockPos pos) {
+		final BlockPos[] points = getMinMaxPointsForVolume(pos);
+		return new Cuboid(points);
 	}
 
 	protected void resetFullScan() {
 		this.lastPos = EnvironState.getPlayerPosition();
 		this.lastDimension = EnvironState.getDimensionId();
 		this.scanFinished = false;
-		this.fullRange = new CuboidPointIterator(getVolumeFor(this.lastPos));
+
+		final BlockPos[] points = getMinMaxPointsForVolume(this.lastPos);
+		this.fullRange = new CuboidPointIterator(points);
 	}
 
 	@Override
 	public void update() {
 
-		DSurround.getProfiler().startSection("CuboidScanner");
+		this.theProfiler.startSection("CuboidScanner");
 
 		// If there is no player position or it's bogus just return
 		final BlockPos playerPos = EnvironState.getPlayerPosition();
@@ -130,7 +122,7 @@ public abstract class CuboidScanner extends Scanner {
 					resetFullScan();
 					super.update();
 				} else {
-					
+
 					// Looks to be a small update, like a player walking around.
 					// If the scan has already completed we do an update.
 					if (this.scanFinished) {
@@ -148,7 +140,7 @@ public abstract class CuboidScanner extends Scanner {
 			}
 		}
 
-		DSurround.getProfiler().endSection();
+		this.theProfiler.endSection();
 	}
 
 	/**
@@ -216,15 +208,10 @@ public abstract class CuboidScanner extends Scanner {
 			// Advance our check counter and loop back
 			// to examine the next point.
 			if (++checked >= this.blocksPerTick)
-				break;
+				return null;
 		}
 
-		// If we get here we hit our check or ran out
-		// of points to process.
-		if (point == null)
-			this.scanFinished = true;
-
-		// Nothing else to give
+		this.scanFinished = true;
 		return null;
 	}
 

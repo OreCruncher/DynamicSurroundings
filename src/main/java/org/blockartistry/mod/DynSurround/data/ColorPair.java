@@ -30,8 +30,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.util.Color;
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
+import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.util.math.MathHelper;
 
 /**
@@ -94,7 +94,7 @@ public final class ColorPair {
 	}
 
 	public static int randomId() {
-		return XorShiftRandom.shared.nextInt(PAIRS.size());
+		return ThreadLocalRandom.current().nextInt(PAIRS.size());
 	}
 
 	public static int testId() {

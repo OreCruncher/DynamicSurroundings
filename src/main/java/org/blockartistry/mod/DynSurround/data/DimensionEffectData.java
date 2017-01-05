@@ -26,14 +26,14 @@ package org.blockartistry.mod.DynSurround.data;
 
 import java.text.DecimalFormat;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.DSurround;
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
-
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -49,7 +49,6 @@ import net.minecraftforge.common.util.Constants;
  */
 public final class DimensionEffectData extends WorldSavedData {
 
-	private static final XorShiftRandom RANDOM = new XorShiftRandom();
 	private static final DecimalFormat FORMATTER = new DecimalFormat("0");
 
 	public final static float MIN_INTENSITY = 0.0F;
@@ -65,6 +64,7 @@ public final class DimensionEffectData extends WorldSavedData {
 		public final static String THUNDER_TIMER = "th";
 	};
 
+	private final Random RANDOM = ThreadLocalRandom.current();
 	private int dimensionId = 0;
 	private float intensity = 0.0F;
 	private float currentIntensity = 0.0F;

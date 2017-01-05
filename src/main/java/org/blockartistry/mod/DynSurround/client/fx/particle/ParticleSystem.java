@@ -27,10 +27,9 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Nonnull;
-
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -49,8 +48,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public abstract class ParticleSystem extends Particle {
 
-	protected static final Random RANDOM = new XorShiftRandom();
-
+	protected final Random RANDOM = ThreadLocalRandom.current();
 	protected final int fxLayer;
 	protected final Vec3d location;
 	protected final BlockPos position;

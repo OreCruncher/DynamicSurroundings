@@ -32,8 +32,7 @@ import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
-
+import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -42,9 +41,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public abstract class EffectHandlerBase {
 	
-	// Shared RANDOM with other effect handlers
-	protected static final Random RANDOM = new XorShiftRandom();
-	
+	protected final Random RANDOM = ThreadLocalRandom.current();
 	private BiomeRegistry biomes;
 	private BlockRegistry blocks;
 	private DimensionRegistry dimensions;

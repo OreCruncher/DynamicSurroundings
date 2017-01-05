@@ -25,8 +25,10 @@ package org.blockartistry.mod.DynSurround.scanner;
 
 import net.minecraft.util.math.BlockPos;
 
+/**
+ * Interface for a "peeking" iterator.
+ */
 public interface IPointIterator {
     public BlockPos next();
     public BlockPos peek();
-    public void reset();
 }

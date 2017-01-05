@@ -25,8 +25,6 @@
 package org.blockartistry.mod.DynSurround.client.handlers.scanners;
 
 import java.util.List;
-import java.util.Random;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
@@ -49,7 +47,6 @@ public class RandomBlockEffectScanner extends RandomScanner {
 
 	private static final double RATIO = 0.0335671847202175D;
 
-	protected final Random rand = RANDOM.get();
 	protected final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
 
 	public RandomBlockEffectScanner(final int range) {

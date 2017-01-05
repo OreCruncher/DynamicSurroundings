@@ -31,14 +31,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Random;
+
 import org.blockartistry.mod.DynSurround.util.Color;
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
+import io.netty.util.internal.ThreadLocalRandom;
 
 // Started with ParticleFireWork.Spark as a basis.
 @SideOnly(Side.CLIENT)
 public class ParticleFireFly extends ParticleSimpleAnimated {
 
-	private static final XorShiftRandom RANDOM = new XorShiftRandom();
 	private static final int startColorRGB = Color.YELLOW.rgb();
 	private static final int fadeColorRGB = Color.LGREEN.rgb();
 
@@ -46,6 +47,7 @@ public class ParticleFireFly extends ParticleSimpleAnimated {
 	private static final float Y_MOTION_DELTA = XZ_MOTION_DELTA / 2.0F;
 	private static final float ACCELERATION = 0.004F;
 
+	private final Random RANDOM = ThreadLocalRandom.current();
 	private double xAcceleration;
 	private double yAcceleration;
 	private double zAcceleration;

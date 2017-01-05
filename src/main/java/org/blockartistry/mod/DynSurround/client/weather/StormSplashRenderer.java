@@ -24,6 +24,8 @@
 
 package org.blockartistry.mod.DynSurround.client.weather;
 
+import java.util.Random;
+
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -33,9 +35,8 @@ import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SeasonRegistry;
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
-
 import gnu.trove.map.hash.TIntObjectHashMap;
+import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -59,7 +60,6 @@ public class StormSplashRenderer {
 	private static final TIntObjectHashMap<StormSplashRenderer> splashRenderers = new TIntObjectHashMap<StormSplashRenderer>();
 	private static final StormSplashRenderer DEFAULT = new StormSplashRenderer();
 	protected static final int PARTICLE_SOUND_CHANCE = 20;
-	protected static final XorShiftRandom RANDOM = new XorShiftRandom();
 
 	static {
 		splashRenderers.put(0, DEFAULT);
@@ -74,6 +74,7 @@ public class StormSplashRenderer {
 		splash.addRainParticles(renderer);
 	}
 
+	protected final Random RANDOM = ThreadLocalRandom.current();
 	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 	private final SeasonRegistry season = RegistryManager.get(RegistryType.SEASON);

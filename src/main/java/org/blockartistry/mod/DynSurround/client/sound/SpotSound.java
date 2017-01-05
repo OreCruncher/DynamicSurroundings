@@ -31,8 +31,6 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
-
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
@@ -40,13 +38,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import scala.concurrent.forkjoin.ThreadLocalRandom;
 
 @SideOnly(Side.CLIENT)
 public class SpotSound extends PositionedSound {
 
-	private static final Random RANDOM = new XorShiftRandom();
 	private static final int SPOT_SOUND_RANGE = 8;
 
+	private final Random RANDOM = ThreadLocalRandom.current();
 	private final SoundEffect sound;
 	private final int timeMark;
 
@@ -67,7 +66,7 @@ public class SpotSound extends PositionedSound {
 		this.timeMark = EnvironState.getTickCounter() + delay;
 	}
 
-	private static float randomRange(final int range) {
+	private float randomRange(final int range) {
 		return RANDOM.nextInt(range) - RANDOM.nextInt(range);
 	}
 

@@ -34,7 +34,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class ParticleFountainJet extends ParticleJet {
 
-	protected static final class ParticleFountain extends ParticleBlockDust {
+	protected final class ParticleFountain extends ParticleBlockDust {
 
 		public ParticleFountain(final World world, final double x, final double y, final double z, final double dX,
 				final double dY, final double dZ, final IBlockState block) {

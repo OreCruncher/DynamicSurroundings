@@ -23,9 +23,6 @@
 
 package org.blockartistry.mod.DynSurround.scanner;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -35,7 +32,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class Cuboid {
 
-	protected final List<BlockPos> vertices;
+	protected final BlockPos[] vertices = new BlockPos[8];
 	protected final int volume;
 	protected final BlockPos minPoint;
 	protected final BlockPos maxPoint;
@@ -46,6 +43,10 @@ public class Cuboid {
 				new BlockPos(centerX + width / 2, centerY + height / 2, centerZ + length / 2));
 	}
 
+	public Cuboid(@Nonnull final BlockPos[] points) {
+		this(points[0], points[1]);
+	}
+
 	public Cuboid(@Nonnull final BlockPos vx1, @Nonnull final BlockPos vx2) {
 
 		this.minPoint = BlockPosHelper.createMinPoint(vx1, vx2);
@@ -54,20 +55,17 @@ public class Cuboid {
 		final BlockPos t = this.maxPoint.subtract(this.minPoint);
 		this.volume = t.getX() * t.getY() * t.getZ();
 
-		this.vertices = new ArrayList<BlockPos>();
-		this.vertices.add(new BlockPos(this.minPoint.getX(), this.minPoint.getY(), this.minPoint.getZ()));
-		this.vertices.add(new BlockPos(this.maxPoint.getX(), this.maxPoint.getY(), this.maxPoint.getZ()));
-		this.vertices.add(new BlockPos(this.minPoint.getX(), this.maxPoint.getY(), this.maxPoint.getZ()));
-		this.vertices.add(new BlockPos(this.maxPoint.getX(), this.minPoint.getY(), this.minPoint.getZ()));
-		this.vertices.add(new BlockPos(this.maxPoint.getX(), this.minPoint.getY(), this.maxPoint.getZ()));
-		this.vertices.add(new BlockPos(this.minPoint.getX(), this.minPoint.getY(), this.maxPoint.getZ()));
-		this.vertices.add(new BlockPos(this.minPoint.getX(), this.maxPoint.getY(), this.minPoint.getZ()));
-		this.vertices.add(new BlockPos(this.maxPoint.getX(), this.maxPoint.getY(), this.minPoint.getZ()));
+		this.vertices[0] = this.minPoint;
+		this.vertices[1] = this.maxPoint;
+		this.vertices[2] = new BlockPos(this.minPoint.getX(), this.maxPoint.getY(), this.maxPoint.getZ());
+		this.vertices[3] = new BlockPos(this.maxPoint.getX(), this.minPoint.getY(), this.minPoint.getZ());
+		this.vertices[4] = new BlockPos(this.maxPoint.getX(), this.minPoint.getY(), this.maxPoint.getZ());
+		this.vertices[5] = new BlockPos(this.minPoint.getX(), this.minPoint.getY(), this.maxPoint.getZ());
+		this.vertices[6] = new BlockPos(this.minPoint.getX(), this.maxPoint.getY(), this.minPoint.getZ());
+		this.vertices[7] = new BlockPos(this.maxPoint.getX(), this.maxPoint.getY(), this.minPoint.getZ());
 	}
 
 	public boolean contains(@Nonnull final BlockPos p) {
-		// box.isVecInside() is not inclusive of the boundaries.
-		// So we roll our own.
 		return p.getX() >= this.minPoint.getX() && p.getX() <= this.maxPoint.getX()
 				? (p.getY() >= this.minPoint.getY() && p.getY() <= this.maxPoint.getY()
 						? p.getZ() >= this.minPoint.getZ() && p.getZ() <= this.maxPoint.getZ() : false)
@@ -112,7 +110,4 @@ public class Cuboid {
 		return vx2 == null ? null : new Cuboid(vx1, vx2);
 	}
 
-	public boolean equals(@Nonnull final Cuboid o) {
-		return this.minPoint.equals(o.minPoint) && this.maxPoint.equals(o.maxPoint);
-	}
 }

@@ -26,6 +26,8 @@ package org.blockartistry.mod.DynSurround.client.weather;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Random;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
@@ -34,8 +36,8 @@ import org.blockartistry.mod.DynSurround.data.AuroraPreset;
 import org.blockartistry.mod.DynSurround.data.ColorPair;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
+import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
@@ -203,7 +205,7 @@ public final class Aurora {
 	@Nonnull
 	private Node[] populate() {
 		final Node[] nodeList = new Node[this.length];
-		final XorShiftRandom nodeRand = new XorShiftRandom(this.seed);
+		final Random nodeRand = ThreadLocalRandom.current();
 		final int bound = this.length / 2 - 1;
 
 		float angleTotal = 0.0F;

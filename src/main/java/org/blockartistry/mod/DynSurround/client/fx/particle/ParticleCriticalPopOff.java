@@ -24,9 +24,9 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
-import org.blockartistry.mod.DynSurround.util.Color;
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
+import java.util.concurrent.ThreadLocalRandom;
 
+import org.blockartistry.mod.DynSurround.util.Color;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -50,7 +50,7 @@ public class ParticleCriticalPopOff extends ParticleTextPopOff {
 			"ZZZZWAP", "ZZZZZWAP" };
 
 	private static String getPowerWord() {
-		return POWER_WORDS[XorShiftRandom.shared.nextInt(POWER_WORDS.length)] + "!";
+		return POWER_WORDS[ThreadLocalRandom.current().nextInt(POWER_WORDS.length)] + "!";
 	}
 
 	public ParticleCriticalPopOff(final World world, final double x, final double y, final double z) {

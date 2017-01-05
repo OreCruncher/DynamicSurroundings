@@ -34,7 +34,7 @@ import net.minecraft.world.World;
 @SideOnly(Side.CLIENT)
 public class ParticleDustJet extends ParticleJet {
 
-	protected static final class ParticleDust extends ParticleBlockDust {
+	protected final class ParticleDust extends ParticleBlockDust {
 
 		public ParticleDust(final World world, final double x, final double y, final double z,
 				final IBlockState block) {

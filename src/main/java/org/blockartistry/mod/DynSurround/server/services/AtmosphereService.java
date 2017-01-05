@@ -34,6 +34,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Nonnull;
 
@@ -46,11 +47,10 @@ import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
-import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
 public final class AtmosphereService extends Service {
 
-	private static final Random RANDOM = new XorShiftRandom();
+	private static final Random RANDOM = ThreadLocalRandom.current();
 
 	private static int nextThunderInterval(final boolean isThundering) {
 		final int base = isThundering ? ModOptions.stormActiveTimeConst : ModOptions.stormInactiveTimeConst;

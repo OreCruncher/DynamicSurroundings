@@ -26,19 +26,22 @@ package org.blockartistry.mod.DynSurround.util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import io.netty.util.internal.ThreadLocalRandom;
+
 public class WeightTable<T extends WeightTable.Item> {
 
-	protected final XorShiftRandom random = new XorShiftRandom();
+	protected final Random random = ThreadLocalRandom.current();
 	protected final List<T> items = new ArrayList<T>();
 	protected int totalWeight = 0;
 
 	public abstract static class Item {
 
 		public final int itemWeight;
-		protected XorShiftRandom rnd;
+		protected Random rnd;
 
 		public Item(final int weight) {
 			assert weight > 0;
