@@ -39,10 +39,12 @@ public class Evaluator {
 
 	private static final List<String> naughtyList = new ArrayList<String>();
 
+	@Nonnull
 	public static List<String> getNaughtyList() {
 		return naughtyList;
 	}
 	
+	@Nonnull
 	public static Variant eval(@Nonnull final String script) {
 		return Expression.compile(script).eval();
 	}

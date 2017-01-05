@@ -130,9 +130,11 @@ public abstract class CuboidScanner extends Scanner {
 					resetFullScan();
 					super.update();
 				} else {
+					
 					// Looks to be a small update, like a player walking around.
 					// If the scan has already completed we do an update.
 					if (this.scanFinished) {
+						this.lastPos = playerPos;
 						updateScan(newVolume, oldVolume, intersect);
 					} else {
 						// The existing scan hasn't completed but now we

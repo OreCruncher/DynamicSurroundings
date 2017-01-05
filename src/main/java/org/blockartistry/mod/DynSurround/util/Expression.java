@@ -71,10 +71,6 @@ public class Expression {
 		builtInFunctions.put(func.getName(), func);
 	}
 
-	public static void addBuiltInVariable(final String name, final Variant val) {
-		addBuiltInVariable(name, new Constant(val));
-	}
-
 	public static void addBuiltInVariable(final String name, final LazyVariant number) {
 		builtInVariables.put(name, number);
 	}
@@ -84,7 +80,6 @@ public class Expression {
 			@Override
 			public Variant eval(final Variant v1, final Variant v2) {
 				return v1.add(v2);
-				// return new Variant(v1.asFloat() + v2.asFloat());
 			}
 		});
 		addBuiltInOperator(new Operator("-", 20, true) {
@@ -315,23 +310,23 @@ public class Expression {
 		addBuiltInFunction(new Function("CEILING", 1) {
 			@Override
 			public Variant eval(final List<Variant> parameters) {
-				final Float toRound = parameters.get(0).asFloat();
+				final float toRound = parameters.get(0).asFloat();
 				return new Variant(Math.ceil(toRound));
 			}
 		});
 		addBuiltInFunction(new Function("SQRT", 1) {
 			@Override
 			public Variant eval(final List<Variant> parameters) {
-				final Float x = parameters.get(0).asFloat();
+				final float x = parameters.get(0).asFloat();
 				return new Variant(Math.sqrt(x));
 			}
 		});
 		addBuiltInFunction(new Function("CLAMP", 3) {
 			@Override
 			public Variant eval(final List<Variant> parameters) {
-				final Float val = parameters.get(0).asFloat();
-				final Float low = parameters.get(1).asFloat();
-				final Float high = parameters.get(2).asFloat();
+				final float val = parameters.get(0).asFloat();
+				final float low = parameters.get(1).asFloat();
+				final float high = parameters.get(2).asFloat();
 				return new Variant(MathStuff.clamp_float(val, low, high));
 			}
 		});
@@ -409,37 +404,40 @@ public class Expression {
 		}
 	}
 
-	public final static class Variant {
+	public final static class Variant implements LazyVariant {
 
-		private final Object value;
+		private final float floatVal;
+		private final String value;
 
 		public Variant(final String value) {
 			this.value = value;
+			this.floatVal = 0.0F;
 		}
 
 		public Variant(final float value) {
-			this.value = new Float(value);
+			this.value = null;
+			this.floatVal = value;
 		}
 
 		public Variant(final double value) {
-			this.value = new Float(value);
+			this.value = null;
+			this.floatVal = (float) value;
 		}
 
 		public Variant(final Float value) {
-			this.value = value;
+			this.value = null;
+			this.floatVal = value.floatValue();
 		}
 
-		public Float asFloat() {
-			if (this.value instanceof Float) {
-				return (Float) this.value;
-			}
+		public float asFloat() {
+			if (this.value == null)
+				return this.floatVal;
 			return Float.parseFloat(this.value.toString());
 		}
 
 		public int compareTo(final Variant variant) {
-			if (this.value instanceof Float) {
-				return Float.compare(this.asFloat(), variant.asFloat());
-			}
+			if (this.value == null)
+				return Float.compare(this.floatVal, variant.floatVal);
 			return this.asString().compareTo(variant.asString());
 		}
 
@@ -449,21 +447,27 @@ public class Expression {
 
 		@Override
 		public String toString() {
-			if (this.value instanceof Float) {
-				final Float f = (Float) this.value;
-				final int v = (int) f.floatValue();
-				if (f == v) {
+			if (this.value == null) {
+				final int v = (int) this.floatVal;
+				if (this.floatVal == v) {
 					return String.format("%d", v);
 				}
+				return String.format("%f", this.floatVal);
 			}
-			return this.value.toString();
+			return this.value;
 		}
 
 		// Operator support in case of strings
 		public Variant add(@Nonnull final Variant term) {
-			if (this.value instanceof String || term.value instanceof String)
-				return new Variant(((String) this.value).concat(term.toString()));
-			return new Variant(this.asFloat() + term.asFloat());
+			if (this.value == null)
+				return new Variant(this.floatVal + term.floatVal);
+			return new Variant(this.value.concat(term.toString()));
+		}
+
+		@Override
+		@Nonnull
+		public Variant eval() {
+			return this;
 		}
 	}
 
@@ -472,29 +476,6 @@ public class Expression {
 	 */
 	public static interface LazyVariant {
 		Variant eval();
-	}
-
-	public static class Constant implements LazyVariant {
-
-		private final Variant value;
-
-		public Constant(final Float val) {
-			this.value = new Variant(val);
-		}
-
-		public Constant(final float val) {
-			this.value = new Variant(val);
-		}
-
-		public Constant(final Variant val) {
-			this.value = val;
-		}
-
-		@Override
-		public Variant eval() {
-			return this.value;
-		}
-
 	}
 
 	public static abstract class LazyFunction {
@@ -927,24 +908,19 @@ public class Expression {
 
 		if (this.exp == null) {
 			final Stack<LazyVariant> stack = new Stack<LazyVariant>();
-
 			for (final String token : getRPN()) {
 				if (this.operators.containsKey(token)) {
 					final LazyVariant v1 = stack.pop();
 					final LazyVariant v2 = stack.pop();
 					final Operator op = this.operators.get(token);
-					final LazyVariant number = new LazyVariant() {
+					final LazyVariant result = new LazyVariant() {
 						public Variant eval() {
 							return op.eval(v2.eval(), v1.eval());
 						}
 					};
-					stack.push(number);
+					stack.push(result);
 				} else if (this.variables.containsKey(token)) {
-					stack.push(new LazyVariant() {
-						public Variant eval() {
-							return Expression.this.variables.get(token).eval();
-						}
-					});
+					stack.push(this.variables.get(token));
 				} else if (this.functions.containsKey(token.toUpperCase(Locale.ROOT))) {
 					final LazyFunction f = this.functions.get(token.toUpperCase(Locale.ROOT));
 					final ArrayList<LazyVariant> p = new ArrayList<LazyVariant>(
@@ -967,17 +943,10 @@ public class Expression {
 					stack.push(PARAMS_START);
 				} else if (token.charAt(0) == quote) {
 					final String s = token.substring(1, token.length() - 1);
-					stack.push(new LazyVariant() {
-						public Variant eval() {
-							return new Variant(s);
-						}
-					});
+					stack.push(new Variant(s));
 				} else {
-					stack.push(new LazyVariant() {
-						public Variant eval() {
-							return new Variant(token);
-						}
-					});
+					final float val = Float.parseFloat(token);
+					stack.push(new Variant(val));
 				}
 			}
 			this.exp = stack.pop();
@@ -1031,7 +1000,7 @@ public class Expression {
 	 * @return The expression, allows to chain methods.
 	 */
 	public Expression setVariable(final String variable, final Float value) {
-		this.variables.put(variable, new Constant(value));
+		this.variables.put(variable, new Variant(value));
 		return this;
 	}
 
@@ -1046,7 +1015,7 @@ public class Expression {
 	 */
 	public Expression setVariable(final String variable, final String value) {
 		if (isNumber(value)) {
-			this.variables.put(variable, new Constant(Float.parseFloat(value)));
+			this.variables.put(variable, new Variant(Float.parseFloat(value)));
 		} else {
 			this.expression = expression.replaceAll("(?i)\\b" + variable + "\\b", "(" + value + ")");
 			this.rpn = null;
