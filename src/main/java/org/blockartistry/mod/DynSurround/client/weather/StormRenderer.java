@@ -25,8 +25,6 @@
 package org.blockartistry.mod.DynSurround.client.weather;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
@@ -73,7 +71,7 @@ public class StormRenderer implements IAtmosRenderer {
 		}
 	}
 
-	private final Random random = ThreadLocalRandom.current();
+	private final Random random = new Random();
 	
 	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);

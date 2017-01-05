@@ -36,7 +36,6 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SeasonRegistry;
 import gnu.trove.map.hash.TIntObjectHashMap;
-import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -74,7 +73,7 @@ public class StormSplashRenderer {
 		splash.addRainParticles(renderer);
 	}
 
-	protected final Random RANDOM = ThreadLocalRandom.current();
+	protected final Random RANDOM = new Random();
 	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 	private final SeasonRegistry season = RegistryManager.get(RegistryType.SEASON);
