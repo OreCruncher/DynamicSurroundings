@@ -29,6 +29,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.util.math.BlockPos;
+
 /**
  * For 2 Cuboid objects of equal dimensions displaced in space (c1,c2) that
  * intersect to form the cuboid i there are at most 3 cuboids describing the
@@ -61,44 +63,44 @@ public class ComplementsPointIterator implements IPointIterator {
 
 		this.segments = new ArrayList<CuboidPointIterator>();
 
-		final Point vmax = volume.maximum();
-		final Point imax = intersect.maximum();
-		final Point vmin = volume.minimum();
-		final Point imin = intersect.minimum();
+		final BlockPos vmax = volume.maximum();
+		final BlockPos imax = intersect.maximum();
+		final BlockPos vmin = volume.minimum();
+		final BlockPos imin = intersect.minimum();
 
 		if (vmax.getX() != imax.getX() || vmin.getX() != imin.getX()) {
 			if (vmax.getX() > imax.getX())
-				this.segments.add(new CuboidPointIterator(new Point(imax.getX(), vmin.getY(), vmin.getZ()),
-						new Point(vmax.getX(), vmax.getY(), vmax.getZ())));
+				this.segments.add(new CuboidPointIterator(new BlockPos(imax.getX(), vmin.getY(), vmin.getZ()),
+						new BlockPos(vmax.getX(), vmax.getY(), vmax.getZ())));
 			else
-				this.segments.add(new CuboidPointIterator(new Point(vmin.getX(), vmin.getY(), vmin.getZ()),
-						new Point(imin.getX(), vmax.getY(), vmax.getZ())));
+				this.segments.add(new CuboidPointIterator(new BlockPos(vmin.getX(), vmin.getY(), vmin.getZ()),
+						new BlockPos(imin.getX(), vmax.getY(), vmax.getZ())));
 		}
 
 		if (vmax.getY() != imax.getY() || vmin.getY() != imin.getY()) {
 			if (vmax.getY() > imax.getY())
-				this.segments.add(new CuboidPointIterator(new Point(imin.getX(), imax.getY(), vmin.getZ()),
-						new Point(imax.getX(), vmax.getY(), vmax.getZ())));
+				this.segments.add(new CuboidPointIterator(new BlockPos(imin.getX(), imax.getY(), vmin.getZ()),
+						new BlockPos(imax.getX(), vmax.getY(), vmax.getZ())));
 			else
-				this.segments.add(new CuboidPointIterator(new Point(imin.getX(), vmin.getY(), vmin.getZ()),
-						new Point(imax.getX(), imin.getY(), vmax.getZ())));
+				this.segments.add(new CuboidPointIterator(new BlockPos(imin.getX(), vmin.getY(), vmin.getZ()),
+						new BlockPos(imax.getX(), imin.getY(), vmax.getZ())));
 		}
 
 		if (vmax.getZ() != imax.getZ() || vmin.getZ() != imin.getZ()) {
 			if (vmax.getZ() > imax.getZ())
-				this.segments.add(new CuboidPointIterator(new Point(imin.getX(), imin.getY(), imax.getZ()),
-						new Point(imax.getX(), imax.getY(), vmax.getZ())));
+				this.segments.add(new CuboidPointIterator(new BlockPos(imin.getX(), imin.getY(), imax.getZ()),
+						new BlockPos(imax.getX(), imax.getY(), vmax.getZ())));
 			else
-				this.segments.add(new CuboidPointIterator(new Point(imin.getX(), imin.getY(), vmin.getZ()),
-						new Point(imax.getX(), imax.getY(), imin.getZ())));
+				this.segments.add(new CuboidPointIterator(new BlockPos(imin.getX(), imin.getY(), vmin.getZ()),
+						new BlockPos(imax.getX(), imax.getY(), imin.getZ())));
 		}
 	}
 
 	@Override
 	@Nullable
-	public Point peek() {
+	public BlockPos peek() {
 		for (final CuboidPointIterator i : this.segments) {
-			final Point rv = i.peek();
+			final BlockPos rv = i.peek();
 			if (rv != null)
 				return rv;
 		}
@@ -107,9 +109,9 @@ public class ComplementsPointIterator implements IPointIterator {
 
 	@Override
 	@Nullable
-	public Point next() {
+	public BlockPos next() {
 		for (final CuboidPointIterator i : this.segments) {
-			final Point rv = i.next();
+			final BlockPos rv = i.next();
 			if (rv != null)
 				return rv;
 		}
@@ -118,7 +120,7 @@ public class ComplementsPointIterator implements IPointIterator {
 
 	@Override
 	public void reset() {
-		for (CuboidPointIterator i : segments)
+		for (final CuboidPointIterator i : this.segments)
 			i.reset();
 	}
 }

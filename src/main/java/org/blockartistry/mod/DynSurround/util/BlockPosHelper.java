@@ -1,4 +1,5 @@
-/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/*
+ * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -21,58 +22,29 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.scanner;
+package org.blockartistry.mod.DynSurround.util;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.util.MathStuff;
-
 import net.minecraft.util.math.BlockPos;
 
-public class Point extends BlockPos.MutableBlockPos {
-
-	public Point(@Nonnull final Point p) {
-		super(p);
+public final class BlockPosHelper {
+	
+	private BlockPosHelper() {
+		
 	}
 
-	public Point(final double x, final double y, final double z) {
-		super(MathStuff.floor_double(x), MathStuff.floor_double(y), MathStuff.floor_double(z));
+	public static boolean canFormCuboid(@Nonnull final BlockPos p1, @Nonnull final BlockPos p2) {
+		return !(p1.getX() == p2.getX() || p1.getZ() == p2.getZ() || p1.getY() == p2.getY());
 	}
 
-	public Point(final int x, final int y, final int z) {
-		super(x, y, z);
+	public static BlockPos createMinPoint(@Nonnull final BlockPos p1, @Nonnull final BlockPos p2) {
+		return new BlockPos(Math.min(p1.getX(), p2.getX()), Math.min(p1.getY(), p2.getY()),
+				Math.min(p1.getZ(), p2.getZ()));
 	}
 
-	public Point translate(int dx, int dy, int dz) {
-		this.add(dx, dy, dz);
-		return this;
-	}
-
-	public void addX(int dx) {
-		this.x += dx;
-	}
-
-	public void addY(int dy) {
-		this.y += dy;
-	}
-
-	public void addZ(int dz) {
-		this.z += dz;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public void setZ(int z) {
-		this.z = z;
-	}
-
-	public boolean canFormCuboid(@Nonnull final Point p) {
-		return !(x == p.x || z == p.z || y == p.y);
-	}
-
-	public BlockPos asBlockPos() {
-		return this.toImmutable();
+	public static BlockPos createMaxPoint(@Nonnull final BlockPos p1, @Nonnull final BlockPos p2) {
+		return new BlockPos(Math.max(p1.getX(), p2.getX()), Math.max(p1.getY(), p2.getY()),
+				Math.max(p1.getZ(), p2.getZ()));
 	}
 }

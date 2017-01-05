@@ -29,7 +29,6 @@ import javax.annotation.Nullable;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -75,17 +74,17 @@ public abstract class CuboidScanner extends Scanner {
 			minY = y;
 			maxY = y + this.ySize;
 		} else {
-			minY = y - this.ySize / 2;
-			maxY = y + this.ySize / 2;
+			minY = y - this.yRange;
+			maxY = y + this.yRange;
 		}
 		// World bottom truncate
 		if (minY < 0)
 			minY = 0;
-		minX = x - this.xSize / 2;
-		maxX = x + this.xSize / 2;
-		minZ = z - this.zSize / 2;
-		maxZ = z + this.zSize / 2;
-		return new Cuboid(new Point(minX, minY, minZ), new Point(maxX, maxY, maxZ));
+		minX = x - this.xRange;
+		maxX = x + this.xRange;
+		minZ = z - this.zRange;
+		maxZ = z + this.zRange;
+		return new Cuboid(new BlockPos(minX, minY, minZ), new BlockPos(maxX, maxY, maxZ));
 	}
 
 	protected void resetFullScan() {
@@ -161,19 +160,19 @@ public abstract class CuboidScanner extends Scanner {
 		final ComplementsPointIterator newOutOfRange = new ComplementsPointIterator(oldVolume, intersect);
 
 		// Notify on the blocks going out of range
-		for (Point point = newOutOfRange.next(); point != null; point = newOutOfRange.next()) {
+		for (BlockPos point = newOutOfRange.next(); point != null; point = newOutOfRange.next()) {
 			if (point.getY() > 0) {
 				final IBlockState state = world.getBlockState(point);
-				if (state.getBlock() != Blocks.AIR)
+				if (interestingBlock(state))
 					blockUnscan(state, point);
 			}
 		}
 
 		// Notify on blocks coming into range
-		for (Point point = newInRange.next(); point != null; point = newInRange.next()) {
+		for (BlockPos point = newInRange.next(); point != null; point = newInRange.next()) {
 			if (point.getY() > 0) {
 				final IBlockState state = world.getBlockState(point);
-				if (state.getBlock() != Blocks.AIR)
+				if (interestingBlock(state))
 					blockScan(state, point);
 			}
 		}
@@ -191,7 +190,7 @@ public abstract class CuboidScanner extends Scanner {
 		final World world = EnvironState.getWorld();
 		int checked = 0;
 
-		Point point = null;
+		BlockPos point = null;
 		while ((point = this.fullRange.peek()) != null) {
 
 			// Chunk not loaded we need to skip this tick

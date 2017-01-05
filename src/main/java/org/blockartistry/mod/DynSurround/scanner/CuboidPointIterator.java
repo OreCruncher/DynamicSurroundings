@@ -23,59 +23,73 @@
 
 package org.blockartistry.mod.DynSurround.scanner;
 
+import java.util.Iterator;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class CuboidPointIterator extends Cuboid implements IPointIterator {
-	
-	protected Point current;
+import org.blockartistry.mod.DynSurround.util.BlockPosHelper;
+
+import net.minecraft.util.math.BlockPos;
+
+public class CuboidPointIterator implements IPointIterator {
+
+	protected final BlockPos minPoint;
+	protected final BlockPos maxPoint;
+
+	protected Iterator<BlockPos> itr;
+	protected BlockPos peeked;
 
 	public CuboidPointIterator(@Nonnull final Cuboid other) {
-		super(other.minimum(), other.maximum());
-		reset();
+		this(other.minimum(), other.maximum());
 	}
 
-	public CuboidPointIterator(@Nonnull final Point p1, @Nonnull final Point p2) {
-		super(p1, p2);
-		reset();
-	}
-
-	public CuboidPointIterator(int centerX, int centerY, int centerZ, int sizeX, int sizeY, int sizeZ) {
-		super(centerX, centerY, centerZ, sizeX, sizeY, sizeZ);
+	public CuboidPointIterator(@Nonnull final BlockPos p1, @Nonnull final BlockPos p2) {
+		this.minPoint = BlockPosHelper.createMinPoint(p1, p2);
+		this.maxPoint = BlockPosHelper.createMaxPoint(p1, p2);
 		reset();
 	}
 
 	@Override
 	@Nullable
-	public Point next() {
-		if (this.current.getX() >= this.maxPoint.getX())
+	public BlockPos next() {
+
+		// If there is a peek value the iterator already advanced
+		// so just return the cached result.
+		if (this.peeked != null) {
+			final BlockPos result = this.peeked;
+			this.peeked = null;
+			return result;
+		}
+
+		// Go to the well.  If nothing, return null
+		if (!this.itr.hasNext())
 			return null;
 
-		final Point location = new Point(this.current);
-
-		this.current.addZ(1);
-		if (this.current.getZ() >= this.maxPoint.getZ()) {
-			this.current.setZ(this.minPoint.getZ());
-			this.current.addY(1);
-		}
-		if (this.current.getY() >= this.maxPoint.getY()) {
-			this.current.setY(this.minPoint.getY());
-			this.current.addX(1);
-		}
-		return location;
+		// Peel off the point and return
+		return this.itr.next();
 	}
 
 	@Override
 	@Nullable
-	public Point peek() {
-		if (this.current.getX() >= this.maxPoint.getX())
+	public BlockPos peek() {
+		
+		// If it was peeked already return that
+		if (this.peeked != null)
+			return this.peeked;
+		
+		// If there isn't anything left return null
+		if (!this.itr.hasNext())
 			return null;
-		return new Point(this.current);
+		
+		// Stash the peeked value and return it
+		return this.peeked = this.itr.next();
 	}
 
 	@Override
 	@Nullable
 	public void reset() {
-		this.current = new Point(this.minPoint);
+		this.itr = BlockPos.getAllInBox(this.minPoint, this.maxPoint).iterator();
+		this.peeked = null;
 	}
 }
