@@ -37,6 +37,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 
 /*
@@ -71,6 +72,16 @@ public class BlockEffectHandler extends EffectHandlerBase {
 					sound.doEffect(state, world, pos, SoundCategory.BLOCKS, RANDOM);
 			}
 		}
+	}
+	
+	@Override
+	public void onConnect() {
+		MinecraftForge.EVENT_BUS.register(this.alwaysOn);
+	}
+	
+	@Override
+	public void onDisconnect() {
+		MinecraftForge.EVENT_BUS.unregister(this.alwaysOn);
 	}
 	
 }

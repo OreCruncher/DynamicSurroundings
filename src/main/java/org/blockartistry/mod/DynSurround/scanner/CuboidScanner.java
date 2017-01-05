@@ -26,11 +26,13 @@ package org.blockartistry.mod.DynSurround.scanner;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.mod.DynSurround.client.event.BlockUpdateEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * Scans the area around the player in a continuous pattern.
@@ -39,6 +41,7 @@ public abstract class CuboidScanner extends Scanner {
 
 	// Iteration variables
 	protected boolean scanFinished = false;
+	protected Cuboid activeCuboid;
 	protected CuboidPointIterator fullRange;
 
 	// State of last tick
@@ -84,6 +87,7 @@ public abstract class CuboidScanner extends Scanner {
 		this.scanFinished = false;
 
 		final BlockPos[] points = getMinMaxPointsForVolume(this.lastPos);
+		this.activeCuboid = new Cuboid(points);
 		this.fullRange = new CuboidPointIterator(points);
 	}
 
@@ -110,7 +114,7 @@ public abstract class CuboidScanner extends Scanner {
 					super.update();
 			} else {
 				// The player moved.
-				final Cuboid oldVolume = getVolumeFor(this.lastPos);
+				final Cuboid oldVolume = this.activeCuboid != null ? this.activeCuboid : getVolumeFor(this.lastPos);
 				final Cuboid newVolume = getVolumeFor(playerPos);
 				final Cuboid intersect = oldVolume.intersection(newVolume);
 
@@ -127,6 +131,7 @@ public abstract class CuboidScanner extends Scanner {
 					// If the scan has already completed we do an update.
 					if (this.scanFinished) {
 						this.lastPos = playerPos;
+						this.activeCuboid = newVolume;
 						updateScan(newVolume, oldVolume, intersect);
 					} else {
 						// The existing scan hasn't completed but now we
@@ -213,6 +218,16 @@ public abstract class CuboidScanner extends Scanner {
 
 		this.scanFinished = true;
 		return null;
+	}
+
+	/**
+	 * These events originate from the WorldEventDetector.  The event is
+	 * not a Forge event.
+	 */
+	@SubscribeEvent(receiveCanceled = false)
+	public void onBlockUpdate(@Nonnull final BlockUpdateEvent event) {
+		if (this.activeCuboid != null && this.activeCuboid.contains(event.pos))
+			blockScan(event.newState, event.pos);
 	}
 
 }
