@@ -34,9 +34,27 @@ import net.minecraft.util.math.BlockPos;
  * Implements a "peeking" iterator.
  */
 public class CuboidPointIterator implements IPointIterator {
-
+	
+	static final CuboidPointIterator NULL_ITERATOR = new CuboidPointIterator() {
+		
+		@Override
+		public BlockPos next() {
+			return null;
+		}
+		
+		@Override
+		public BlockPos peek() {
+			return null;
+		}
+		
+	};
+	
 	protected final Iterator<BlockPos> itr;
 	protected BlockPos peeked;
+	
+	private CuboidPointIterator() {
+		this.itr = null;
+	}
 
 	public CuboidPointIterator(@Nonnull final Cuboid other) {
 		this(other.minimum(), other.maximum());

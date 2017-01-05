@@ -74,6 +74,8 @@ public class ComplementsPointIterator implements IPointIterator {
 			else
 				this.segments[0] = new CuboidPointIterator(new BlockPos(vmin.getX(), vmin.getY(), vmin.getZ()),
 						new BlockPos(imin.getX(), vmax.getY(), vmax.getZ()));
+		} else {
+			this.segments[0] = CuboidPointIterator.NULL_ITERATOR;
 		}
 
 		if (vmax.getY() != imax.getY() || vmin.getY() != imin.getY()) {
@@ -83,6 +85,8 @@ public class ComplementsPointIterator implements IPointIterator {
 			else
 				this.segments[1] = new CuboidPointIterator(new BlockPos(imin.getX(), vmin.getY(), vmin.getZ()),
 						new BlockPos(imax.getX(), imin.getY(), vmax.getZ()));
+		} else {
+			this.segments[1] = CuboidPointIterator.NULL_ITERATOR;
 		}
 
 		if (vmax.getZ() != imax.getZ() || vmin.getZ() != imin.getZ()) {
@@ -92,6 +96,8 @@ public class ComplementsPointIterator implements IPointIterator {
 			else
 				this.segments[2] = new CuboidPointIterator(new BlockPos(imin.getX(), imin.getY(), vmin.getZ()),
 						new BlockPos(imax.getX(), imax.getY(), imin.getZ()));
+		} else {
+			this.segments[2] = CuboidPointIterator.NULL_ITERATOR;
 		}
 
 		this.peeked = next0();
@@ -99,11 +105,9 @@ public class ComplementsPointIterator implements IPointIterator {
 
 	protected BlockPos next0() {
 		while (this.activeSegment < this.segments.length) {
-			if (this.segments[this.activeSegment] != null) {
-				final BlockPos rv = this.segments[this.activeSegment].next();
-				if (rv != null)
-					return rv;
-			}
+			final BlockPos rv = this.segments[this.activeSegment].next();
+			if (rv != null)
+				return rv;
 			this.activeSegment++;
 		}
 		return null;
