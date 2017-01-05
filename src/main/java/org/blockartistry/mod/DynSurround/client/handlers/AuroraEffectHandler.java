@@ -30,6 +30,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.events.AuroraSpawnEvent;
@@ -127,6 +128,9 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+		
+		DSurround.getProfiler().startSection(getHandlerName());
+		
 		scrubAuroraList(world);
 		final Aurora aurora = getClosestAurora(world);
 		if (aurora != null) {
@@ -136,6 +140,8 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 				aurora.die();
 			}
 		}
+		
+		DSurround.getProfiler().endSection();
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)

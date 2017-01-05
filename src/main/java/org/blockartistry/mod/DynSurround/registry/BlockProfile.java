@@ -50,6 +50,7 @@ public class BlockProfile {
 	protected final List<SoundEffect> sounds = new ArrayList<SoundEffect>();
 	protected final List<SoundEffect> stepSounds = new ArrayList<SoundEffect>();
 	protected final List<BlockEffect> effects = new ArrayList<BlockEffect>();
+	protected final List<BlockEffect> alwaysOn = new ArrayList<BlockEffect>();
 
 	public BlockProfile(@Nonnull final BlockInfo blockInfo) {
 		this.block = blockInfo.block;
@@ -98,16 +99,25 @@ public class BlockProfile {
 	}
 
 	public void addEffect(@Nonnull final BlockInfo blockInfo, @Nonnull final BlockEffect effect) {
-		this.effects.add(effect);
+		if (effect.getChance() > 0)
+			this.effects.add(effect);
+		else
+			this.alwaysOn.add(effect);
 	}
 
 	public void clearEffects(@Nonnull final BlockInfo blockInfo) {
 		this.effects.clear();
+		this.alwaysOn.clear();
 	}
 
 	@Nonnull
 	public List<BlockEffect> getEffects(@Nonnull final IBlockState state) {
 		return this.effects;
+	}
+
+	@Nonnull
+	List<BlockEffect> getAlwaysOnEffects(@Nonnull final IBlockState state) {
+		return this.alwaysOn;
 	}
 
 	@Override
@@ -148,10 +158,17 @@ public class BlockProfile {
 			builder.append("; NO STEP SOUNDS");
 		}
 
-		if (!this.effects.isEmpty()) {
+		if (!this.effects.isEmpty() || !this.alwaysOn.isEmpty()) {
 			boolean commaFlag = false;
 			builder.append("; effects [");
 			for (final BlockEffect effect : this.effects) {
+				if (commaFlag)
+					builder.append(",");
+				else
+					commaFlag = true;
+				builder.append(effect.toString());
+			}
+			for (final BlockEffect effect : this.alwaysOn) {
 				if (commaFlag)
 					builder.append(",");
 				else

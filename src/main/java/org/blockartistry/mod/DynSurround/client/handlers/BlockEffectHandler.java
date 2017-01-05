@@ -24,10 +24,10 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers;
 
-import java.util.List;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.client.handlers.scanners.AlwaysOnBlockEffectScanner;
+import org.blockartistry.mod.DynSurround.client.handlers.scanners.RandomBlockEffectScanner;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -37,6 +37,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 
 /*
@@ -45,11 +46,8 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class BlockEffectHandler extends EffectHandlerBase {
 
-	private static final double RATIO = 0.0335671847202175D;
-
-	private int randomRange(final int range) {
-		return RANDOM.nextInt(range) - RANDOM.nextInt(range);
-	}
+	protected final RandomBlockEffectScanner effects = new RandomBlockEffectScanner(ModOptions.specialEffectRange);
+	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(ModOptions.specialEffectRange);
 
 	@Override
 	public String getHandlerName() {
@@ -61,31 +59,11 @@ public class BlockEffectHandler extends EffectHandlerBase {
 		if (Minecraft.getMinecraft().isGamePaused())
 			return;
 
-		final BlockPos playerPos = new BlockPos(player);
-		final int RANGE = ModOptions.specialEffectRange;
-		final int CHECK_COUNT = (int) (Math.pow(RANGE * 2 - 1, 3) * RATIO);
-
-		for (int i = 0; i < CHECK_COUNT; i++) {
-			final BlockPos pos = playerPos.add(randomRange(RANGE), randomRange(RANGE), randomRange(RANGE));
-
-			final IBlockState state = world.getBlockState(pos);
-			if (state.getMaterial() == Material.AIR)
-				continue;
-
-			final List<BlockEffect> chain = getBlockRegistry().findEffectMatches(state);
-
-			if (chain != null) {
-				for (final BlockEffect effect : chain)
-					effect.process(state, world, pos, RANDOM);
-			}
-
-			final SoundEffect sound = getBlockRegistry().getSound(state, RANDOM);
-			if (sound != null)
-				sound.doEffect(state, world, pos, SoundCategory.BLOCKS, RANDOM);
-		}
-
+		this.effects.update();
+		this.alwaysOn.update();
+		
 		if (EnvironState.isPlayerOnGround() && EnvironState.isPlayerMoving()) {
-			final BlockPos pos = playerPos.down(1);
+			final BlockPos pos = EnvironState.getPlayerPosition().down(1);
 			final IBlockState state = world.getBlockState(pos);
 			final Material material = state.getMaterial();
 			if (!(material == Material.AIR || material.isLiquid())) {
@@ -94,6 +72,16 @@ public class BlockEffectHandler extends EffectHandlerBase {
 					sound.doEffect(state, world, pos, SoundCategory.BLOCKS, RANDOM);
 			}
 		}
+	}
+	
+	@Override
+	public void onConnect() {
+		MinecraftForge.EVENT_BUS.register(this.effects);
+	}
+	
+	@Override
+	public void onDisconnect() {
+		MinecraftForge.EVENT_BUS.unregister(this.effects);
 	}
 
 }

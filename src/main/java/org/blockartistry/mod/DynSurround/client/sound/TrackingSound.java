@@ -33,6 +33,7 @@ import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
@@ -99,9 +100,10 @@ public class TrackingSound extends PositionedSound implements ITickableSound {
 	}
 
 	public void updateLocation() {
-		final Vec3d point = this.attachedTo.getEntityBoundingBox().getCenter();
+		final AxisAlignedBB box = this.attachedTo.getEntityBoundingBox();
+		final Vec3d point = box.getCenter();
 		this.xPosF = (float) point.xCoord;
-		this.yPosF = (float) point.yCoord;
+		this.yPosF = (float) box.minY;
 		this.zPosF = (float) point.zCoord;
 	}
 

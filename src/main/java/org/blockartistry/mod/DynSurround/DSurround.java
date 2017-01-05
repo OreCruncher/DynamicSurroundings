@@ -30,6 +30,9 @@ import javax.annotation.Nonnull;
 
 import org.apache.logging.log4j.LogManager;
 import org.blockartistry.mod.DynSurround.proxy.Proxy;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.profiler.Profiler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -46,6 +49,8 @@ import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @net.minecraftforge.fml.common.Mod(modid = DSurround.MOD_ID, useMetadata = true, dependencies = DSurround.DEPENDENCIES, version = DSurround.VERSION, guiFactory = DSurround.GUI_FACTORY, updateJSON = DSurround.UPDATE_URL)
 public class DSurround {
@@ -86,6 +91,12 @@ public class DSurround {
 	@Nonnull
 	public static File dataDirectory() {
 		return dataDirectory;
+	}
+	
+	@Nonnull
+	@SideOnly(Side.CLIENT)
+	public static Profiler getProfiler() {
+		return Minecraft.getMinecraft().mcProfiler;
 	}
 
 	public DSurround() {

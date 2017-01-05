@@ -27,6 +27,7 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModLog;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -109,9 +110,11 @@ public class EffectManager {
 			return;
 
 		if (event.phase == Phase.START) {
+			DSurround.getProfiler().startSection("DSurroundEffectManager");
 			final EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
 			for (final EffectHandlerBase handler : effectHandlers)
 				handler.process(world, player);
+			DSurround.getProfiler().endSection();
 		}
 	}
 

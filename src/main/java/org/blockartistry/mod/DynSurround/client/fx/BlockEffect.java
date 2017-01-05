@@ -75,7 +75,10 @@ public abstract class BlockEffect {
 
 	public boolean trigger(@Nonnull final IBlockState state, @Nonnull final World world, @Nonnull final BlockPos pos,
 			@Nonnull final Random random) {
-		if (random.nextInt(getChance()) == 0 && Evaluator.check(getConditions())) {
+		if (getChance() > 0 && random.nextInt(getChance()) != 0)
+			return false;
+
+		if (Evaluator.check(getConditions())) {
 			final BlockEffectEvent event = new BlockEffectEvent(world, getEffectType(), pos);
 			return !MinecraftForge.EVENT_BUS.post(event);
 		}

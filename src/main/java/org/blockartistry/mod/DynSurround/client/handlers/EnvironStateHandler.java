@@ -30,6 +30,7 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.mod.DynSurround.client.weather.WeatherProperties;
@@ -364,6 +365,9 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(final World world, final EntityPlayer player) {
+		
+		DSurround.getProfiler().startSection(getHandlerName());
+		
 		EnvironState.tick(world, player);
 
 		// Gather diagnostics if needed
@@ -374,6 +378,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		} else {
 			diagnostics = null;
 		}
+		
+		DSurround.getProfiler().endSection();
 	}
 	
 	/**
@@ -405,6 +411,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void diagnostics(final DiagnosticEvent.Gather event) {
 		
+		DSurround.getProfiler().startSection("GatherDebug");
 		for(final String s: scripts) {
 			final String result = Evaluator.eval(s).toString();
 			event.output.add(result);
@@ -418,6 +425,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		for(final String s: badScripts) {
 			event.output.add("BAD SCRIPT: " + s);
 		}
+		
+		DSurround.getProfiler().endSection();
 	}
 
 }

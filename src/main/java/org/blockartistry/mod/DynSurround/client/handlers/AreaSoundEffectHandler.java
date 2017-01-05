@@ -27,6 +27,7 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
@@ -84,6 +85,8 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 			return;
 		}
 
+		DSurround.getProfiler().startSection(getHandlerName());
+		
 		final BiomeInfo playerBiome = EnvironState.getPlayerBiome();
 		final List<SoundEffect> sounds = new ArrayList<SoundEffect>();
 
@@ -102,6 +105,8 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		SoundEffect sound = BiomeRegistry.PLAYER.getSpotSound(RANDOM);
 		if (sound != null)
 			SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound, SoundCategory.AMBIENT);
-	}
+
+		DSurround.getProfiler().endSection();
+}
 
 }

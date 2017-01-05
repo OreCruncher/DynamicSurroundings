@@ -22,51 +22,54 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.handlers;
+package org.blockartistry.mod.DynSurround.client.handlers.scanners;
 
-import org.blockartistry.mod.DynSurround.DSurround;
-import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.registry.FootstepsRegistry;
+import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+
+import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
+import org.blockartistry.mod.DynSurround.scanner.CuboidScanner;
+import org.blockartistry.mod.DynSurround.util.XorShiftRandom;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-// Simple shim to forward to the FootstepsRegistry engine.  Needed to seperate
-// because of startup issues.
 @SideOnly(Side.CLIENT)
-public class FootstepsHandler extends EffectHandlerBase {
+public final class AlwaysOnBlockEffectScanner extends CuboidScanner {
 
-	private FootstepsRegistry footsteps;
+	private static final Random RANDOM = new XorShiftRandom();
+
+	private final BlockRegistry blocks;
+
+	public AlwaysOnBlockEffectScanner(final int range) {
+		super("AlwaysOnBlockEffectScanner", range, 0);
+		this.blocks = RegistryManager.get(RegistryType.BLOCK);
+	}
 	
 	@Override
-	public String getHandlerName() {
-		return "FootstepsHandler";
+	protected boolean interestingBlock(final IBlockState state) {
+		return state.getBlock() == Blocks.WATER;
 	}
 
 	@Override
-	public void process(final World world, final EntityPlayer player) {
-		
-		DSurround.getProfiler().startSection(getHandlerName());
-		
-		if(ModOptions.enableFootstepSounds)
-			this.footsteps.process(world, player);
-		else if(player.nextStepDistance == Integer.MAX_VALUE)
-			player.nextStepDistance = 0;
-		
-		DSurround.getProfiler().endSection();
+	public void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
+		final List<BlockEffect> effects = blocks.getAlwaysOnEffects(state);
+		if (effects != null && effects.size() > 0) {
+			final World world = EnvironState.getWorld();
+			for (final BlockEffect be : effects) {
+				be.process(state, world, pos, RANDOM);
+			}
+		}
 	}
-	
-	@Override
-	public void onConnect() {
-		this.footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
-	}
-	
-	@Override
-	public void onDisconnect() {
-		this.footsteps = null;
-	}
+
 }

@@ -30,6 +30,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
@@ -181,10 +182,13 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	// Generally it is called once a tick.
 	@Override
 	public void process(final World world, final EntityPlayer player) {
+		
 		// Only process on the correct interval
 		intervalTicker++;
 		if (intervalTicker < SURVEY_INTERVAL)
 			return;
+		
+		DSurround.getProfiler().startSection(getHandlerName());
 		intervalTicker = 0;
 
 		final BlockPos position = EnvironState.getPlayerPosition();
@@ -198,6 +202,8 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 		}
 
 		doCeilingCoverageRatio();
+		
+		DSurround.getProfiler().endSection();
 	}
 
 	@Override

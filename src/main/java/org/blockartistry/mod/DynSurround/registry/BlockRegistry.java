@@ -100,18 +100,24 @@ public final class BlockRegistry extends Registry {
 		final BlockProfile entry = this.registry.get(state.getBlock());
 		return entry != null ? entry.getEffects(state) : null;
 	}
-	
+
+	@Nullable
+	public List<BlockEffect> getAlwaysOnEffects(@Nonnull final IBlockState state) {
+		final BlockProfile entry = this.registry.get(state.getBlock());
+		return entry != null ? entry.getAlwaysOnEffects(state) : null;
+	}
+
 	@Nullable
 	public List<BlockEffect> findEffectMatches(@Nonnull final IBlockState state) {
 		final List<BlockEffect> effects = getEffects(state);
-		if(effects == null)
+		if (effects == null)
 			return null;
-		
+
 		final List<BlockEffect> results = new ArrayList<BlockEffect>();
-		for(final BlockEffect e: effects)
-			if(Evaluator.check(e.getConditions()))
+		for (final BlockEffect e : effects)
+			if (Evaluator.check(e.getConditions()))
 				results.add(e);
-		
+
 		return results;
 	}
 
@@ -169,6 +175,10 @@ public final class BlockRegistry extends Registry {
 
 		return getRandomSound(sounds, random);
 	}
+	
+	public boolean hasProfile(@Nonnull final IBlockState state) {
+		return this.registry.containsKey(state.getBlock());
+	}
 
 	public void register(@Nonnull final BlockConfig entry) {
 		if (entry.blocks.isEmpty())
@@ -192,7 +202,7 @@ public final class BlockRegistry extends Registry {
 			BlockProfile blockData = this.registry.get(block);
 			if (blockData == null) {
 				blockData = BlockProfile.createProfile(blockInfo);
-				registry.put(block, blockData);
+				this.registry.put(block, blockData);
 			}
 
 			// Reset of a block clears all registry
@@ -248,8 +258,8 @@ public final class BlockRegistry extends Registry {
 					ModLog.warn("Unknown effect type in config: '%s'", e.effect);
 					continue;
 				}
-				
-				if(e.conditions != null)
+
+				if (e.conditions != null)
 					blockEffect.setConditions(e.conditions);
 
 				blockData.addEffect(blockInfo, blockEffect);

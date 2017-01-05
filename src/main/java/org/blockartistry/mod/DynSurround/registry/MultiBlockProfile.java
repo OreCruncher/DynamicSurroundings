@@ -166,6 +166,13 @@ public class MultiBlockProfile extends BlockProfile {
 
 	@Override
 	@Nonnull
+	public List<BlockEffect> getAlwaysOnEffects(@Nonnull final IBlockState state) {
+		final BlockProfile profile = blockData.get(state.getBlock().getMetaFromState(state));
+		return profile != null ? profile.getAlwaysOnEffects(state) : super.getAlwaysOnEffects(state);
+	}
+
+	@Override
+	@Nonnull
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("DEFAULT ").append(super.toString());

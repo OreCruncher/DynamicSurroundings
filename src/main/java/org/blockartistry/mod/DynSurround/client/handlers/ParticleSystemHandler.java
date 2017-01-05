@@ -55,18 +55,19 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 	}
 
 	@Override
+	@Nonnull
 	public String getHandlerName() {
 		return "ParticleSystemHandler";
 	}
 
 	@Override
-	public void process(final World world, final EntityPlayer player) {
+	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 
 		// Process the list looking for systems that can be removed.
 		// They are removed if they are dead, or if they are out of
 		// range of the player.
 		final double range = ModOptions.specialEffectRange;
-		final AxisAlignedBB box = player.getEntityBoundingBox().expand(range, range, range);
+		final AxisAlignedBB box = player.getEntityBoundingBox().expandXyz(range);
 		Iterables.removeIf(this.systems.values(), new Predicate<ParticleSystem>() {
 			@Override
 			public boolean apply(@Nonnull final ParticleSystem input) {
