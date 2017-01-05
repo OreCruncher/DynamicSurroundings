@@ -30,7 +30,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.swing.DiagnosticPanel;
@@ -469,8 +468,6 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 		
-		DSurround.getProfiler().startSection(getHandlerName());
-		
 		// Iterate through the variables and get the data cached for this ticks
 		// expression evaluations.
 		for (final DynamicVariable dv : variables)
@@ -478,8 +475,6 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 
 		if (ModOptions.showDebugDialog)
 			DiagnosticPanel.refresh();
-		
-		DSurround.getProfiler().endSection();
 	}
 
 	@Override

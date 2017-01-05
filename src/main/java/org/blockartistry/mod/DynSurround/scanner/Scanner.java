@@ -119,9 +119,11 @@ public abstract class Scanner implements ITickable {
 			final BlockPos pos = nextPos();
 			if(pos == null)
 				break;
+			DSurround.getProfiler().startSection(this.name + "-block process");
 			final IBlockState state = EnvironState.getWorld().getBlockState(pos);
 			if (interestingBlock(state))
 				blockScan(state, pos);
+			DSurround.getProfiler().endSection();
 		}
 		
 		DSurround.getProfiler().endSection();

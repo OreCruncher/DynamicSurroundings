@@ -36,6 +36,8 @@ import net.minecraft.util.math.BlockPos;
  * selections are closer to the player.
  */
 public abstract class RandomScanner extends Scanner {
+	
+	protected final Random rand = RANDOM.get();
 
 	public RandomScanner(@Nonnull final String name, final int range) {
 		super(name, range);
@@ -46,8 +48,7 @@ public abstract class RandomScanner extends Scanner {
 	}
 
 	private int randomRange(final int range) {
-		final Random rand = RANDOM.get();
-		return rand.nextInt(range) - rand.nextInt(range);
+		return this.rand.nextInt(range) - this.rand.nextInt(range);
 	}
 
 	@Override

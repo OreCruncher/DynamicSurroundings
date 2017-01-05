@@ -172,9 +172,6 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 			this.emitters.put(sound, new Emitter(sound));
 	}
 
-	public void update() {
-	}
-
 	public int currentSoundCount() {
 		return Minecraft.getMinecraft().getSoundHandler().sndManager.playingSounds.size();
 	}
@@ -233,9 +230,9 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	@SubscribeEvent
 	public void soundPlay(@Nonnull final PlaySoundEvent e) {
 		// Don't patch up - Weather2 has it's own sound
-		if(ModEnvironment.Weather2.isLoaded())
+		if (ModEnvironment.Weather2.isLoaded())
 			return;
-		
+
 		if (e.getName().equals("entity.lightning.thunder")) {
 			final ISound sound = e.getSound();
 			final ISound newSound = new PositionedSoundRecord(THUNDER, sound.getCategory(), 10000.0F, 1.0F,
@@ -251,13 +248,12 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		if (player == null)
 			player = EnvironState.getPlayer();
 
-		final SpotSound s = new SpotSound(player, sound, categoryOverride);
 		String soundId = null;
 
-		if (!canFitSound())
-			this.pending.add(s);
-		else
+		if (canFitSound()) {
+			final SpotSound s = new SpotSound(player, sound, categoryOverride);
 			soundId = playSound(s);
+		}
 		return soundId;
 	}
 
@@ -279,19 +275,21 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	@Nullable
 	public String playSoundAt(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int tickDelay,
 			@Nullable final SoundCategory categoryOverride) {
-		if (tickDelay > 0 && !canFitSound())
-			return null;
 
 		if (!canSoundBeHeard(pos, sound.getVolume()))
 			return null;
 
-		final SpotSound s = new SpotSound(pos, sound, tickDelay, categoryOverride);
 		String soundId = null;
 
-		if (tickDelay > 0 || !canFitSound())
-			pending.add(s);
-		else
-			soundId = playSound(s);
+		if(tickDelay > 0 || canFitSound()) {
+			final SpotSound s = new SpotSound(pos, sound, tickDelay, categoryOverride);
+	
+			if (tickDelay > 0)
+				this.pending.add(s);
+			else
+				soundId = playSound(s);
+		}
+		
 		return soundId;
 	}
 

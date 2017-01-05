@@ -116,9 +116,6 @@ public final class AtmosphereService extends Service {
 
 		final int rain = info.getRainTime();
 		if (rain == 2) {
-			if(data.getDimensionId() == 0 ) {
-				int x = 0;
-			}
 			info.setRaining(!info.isRaining());
 			info.setRainTime(nextRainInterval(info.isRaining()));
 		}

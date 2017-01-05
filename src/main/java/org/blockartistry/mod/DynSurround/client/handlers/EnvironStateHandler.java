@@ -90,7 +90,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static TemperatureRating playerTemperature = TemperatureRating.MILD;
 		private static TemperatureRating biomeTemperature = TemperatureRating.MILD;
 		private static boolean inside;
-		
+
 		private static int tickCounter;
 
 		private static final String CONDITION_TOKEN_HURT = "hurt";
@@ -117,9 +117,9 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		private static String getPlayerConditions(final EntityPlayer player) {
 			final StringBuilder builder = new StringBuilder();
-			
+
 			builder.append(CONDITION_SEPARATOR).append(season.getValue());
-			
+
 			if (isPlayerHurt())
 				builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_HURT);
 			if (isPlayerHungry())
@@ -171,12 +171,12 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static BlockPos getPlayerPos() {
 			return new BlockPos(player.posX, player.getEntityBoundingBox().minY, player.posZ);
 		}
-		
+
 		private static void tick(final World world, final EntityPlayer player) {
-			
+
 			final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 			final SeasonRegistry seasons = RegistryManager.get(RegistryType.SEASON);
-			
+
 			EnvironState.player = player;
 			EnvironState.playerBiome = PlayerUtils.getPlayerBiome(player, false);
 			EnvironState.biomeName = EnvironState.playerBiome.getBiomeName();
@@ -215,15 +215,15 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		public static SeasonType getSeason() {
 			return season;
 		}
-		
+
 		public static TemperatureRating getPlayerTemperature() {
 			return playerTemperature;
 		}
-		
+
 		public static TemperatureRating getBiomeTemperature() {
 			return biomeTemperature;
 		}
-		
+
 		public static int getDimensionId() {
 			return dimensionId;
 		}
@@ -237,7 +237,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 				player = Minecraft.getMinecraft().thePlayer;
 			return player;
 		}
-		
+
 		public static BlockPos getPlayerPosition() {
 			return playerPosition;
 		}
@@ -259,11 +259,13 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static boolean isPlayerHurt() {
-			return ModOptions.playerHurtThreshold != 0 && !isCreative() && getPlayer().getHealth() <= ModOptions.playerHurtThreshold;
+			return ModOptions.playerHurtThreshold != 0 && !isCreative()
+					&& getPlayer().getHealth() <= ModOptions.playerHurtThreshold;
 		}
 
 		public static boolean isPlayerHungry() {
-			return ModOptions.playerHungerThreshold != 0 && !isCreative() && getPlayer().getFoodStats().getFoodLevel() <= ModOptions.playerHungerThreshold;
+			return ModOptions.playerHungerThreshold != 0 && !isCreative()
+					&& getPlayer().getFoodStats().getFoodLevel() <= ModOptions.playerHungerThreshold;
 		}
 
 		public static boolean isPlayerBurning() {
@@ -313,7 +315,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		public static boolean isPlayerInside() {
 			return inside;
 		}
-		
+
 		public static boolean isPlayerUnderground() {
 			return playerBiome == BiomeRegistry.UNDERGROUND;
 		}
@@ -365,29 +367,27 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(final World world, final EntityPlayer player) {
-		
-		DSurround.getProfiler().startSection(getHandlerName());
-		
+
 		EnvironState.tick(world, player);
 
 		// Gather diagnostics if needed
-		if (Minecraft.getMinecraft().gameSettings.showDebugInfo) {
+		if (Minecraft.getMinecraft().gameSettings.showDebugInfo && ModOptions.enableDebugLogging) {
+			DSurround.getProfiler().startSection("GatherDebug");
 			final DiagnosticEvent.Gather gather = new DiagnosticEvent.Gather(world, player);
 			MinecraftForge.EVENT_BUS.post(gather);
 			diagnostics = gather.output;
+			DSurround.getProfiler().endSection();
 		} else {
 			diagnostics = null;
 		}
-		
-		DSurround.getProfiler().endSection();
 	}
-	
+
 	/**
 	 * Hook the Forge text event to add on our diagnostics
 	 */
 	@SubscribeEvent
 	public void onGatherText(@Nonnull final RenderGameOverlayEvent.Text event) {
-		if(diagnostics != null) {
+		if (diagnostics != null && !diagnostics.isEmpty()) {
 			event.getLeft().add("");
 			event.getLeft().addAll(diagnostics);
 		}
@@ -397,36 +397,29 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	public void onConnect() {
 		diagnostics = null;
 	}
-	
+
 	// Use the new scripting system to pull out data to display
-	// for debug.  Good for testing.
-	private final static String[] scripts = {
-		"'Dim: ' + player.dimension + '/' + player.dimensionName",
-		"'Biome: ' + biome.name + '; Temp ' + biome.temperature + '/' + biome.temperatureValue + ' rainfall: ' + biome.rainfall",
-		"'Weather: ' + IF(weather.isRaining,'rainfall: ' + weather.rainfall,'not raining') + IF(weather.isThundering,' thundering','') + ' Temp: ' + weather.temperature + '/' + weather.temperatureValue",
-		"'Season: ' + season  + IF(isNight,' night',' day') + IF(player.isInside,' inside',' outside')",
-		"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','') + ' pos: (' + player.X + ',' + player.Y + ',' + player.Z + ') light: ' + player.lightLevel",
-	};
-	
+	// for debug. Good for testing.
+	private final static String[] scripts = { "'Dim: ' + player.dimension + '/' + player.dimensionName",
+			"'Biome: ' + biome.name + '; Temp ' + biome.temperature + '/' + biome.temperatureValue + ' rainfall: ' + biome.rainfall",
+			"'Weather: ' + IF(weather.isRaining,'rainfall: ' + weather.rainfall,'not raining') + IF(weather.isThundering,' thundering','') + ' Temp: ' + weather.temperature + '/' + weather.temperatureValue",
+			"'Season: ' + season  + IF(isNight,' night',' day') + IF(player.isInside,' inside',' outside')",
+			"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','') + ' pos: (' + player.X + ',' + player.Y + ',' + player.Z + ') light: ' + player.lightLevel", };
+
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void diagnostics(final DiagnosticEvent.Gather event) {
-		
-		DSurround.getProfiler().startSection("GatherDebug");
-		for(final String s: scripts) {
+		for (final String s : scripts) {
 			final String result = Evaluator.eval(s).toString();
 			event.output.add(result);
 		}
-		
+
 		event.output.add(WeatherProperties.diagnostic());
 		event.output.add("Conditions: " + EnvironState.getConditions());
-		
-		
+
 		final List<String> badScripts = Evaluator.getNaughtyList();
-		for(final String s: badScripts) {
+		for (final String s : badScripts) {
 			event.output.add("BAD SCRIPT: " + s);
 		}
-		
-		DSurround.getProfiler().endSection();
 	}
 
 }

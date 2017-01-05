@@ -102,5 +102,5 @@ public abstract class EffectHandlerBase {
 		this.dimensions = null;
 		this.sounds = null;
 	}
-
+	
 }

@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.scanner;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.block.state.IBlockState;
@@ -97,51 +98,55 @@ public abstract class CuboidScanner extends Scanner {
 	@Override
 	public void update() {
 
+		DSurround.getProfiler().startSection("CuboidScanner");
+
 		// If there is no player position or it's bogus just return
 		final BlockPos playerPos = EnvironState.getPlayerPosition();
 		if (playerPos == null || playerPos.getY() < 0) {
 			this.fullRange = null;
-			return;
-		}
-
-		// If the full range was reset, or the player dimension changed, dump
-		// everything and restart.
-		if (this.fullRange == null || EnvironState.getDimensionId() != this.lastDimension) {
-			resetFullScan();
-			super.update();
-		} else if (this.lastPos.equals(playerPos)) {
-			// The player didn't move. If a scan is in progress
-			// continue.
-			if (!this.scanFinished)
-				super.update();
 		} else {
-			// The player moved.
-			final Cuboid oldVolume = getVolumeFor(this.lastPos);
-			final Cuboid newVolume = getVolumeFor(playerPos);
-			final Cuboid intersect = oldVolume.intersection(newVolume);
-
-			// If there is no intersect it means the player moved
-			// enough of a distance in the last tick to make it a new
-			// area. Otherwise, if there is a sufficiently large
-			// change to the scan area dump and restart.
-			if (intersect == null || oldVolume.volume() < (oldVolume.volume() - intersect.volume()) * 2) {
+			// If the full range was reset, or the player dimension changed,
+			// dump
+			// everything and restart.
+			if (this.fullRange == null || EnvironState.getDimensionId() != this.lastDimension) {
 				resetFullScan();
 				super.update();
-			} else {
-				// Looks to be a small update, like a player walking around.
-				// If the scan has already completed we do an update.
-				if (this.scanFinished) {
-					updateScan(newVolume, oldVolume, intersect);
-				} else {
-					// The existing scan hasn't completed but now we
-					// have a delta set. Finish out scanning the
-					// old volume and once that is locked then an
-					// subsequent tick will do a delta update to get
-					// the new blocks.
+			} else if (this.lastPos.equals(playerPos)) {
+				// The player didn't move. If a scan is in progress
+				// continue.
+				if (!this.scanFinished)
 					super.update();
+			} else {
+				// The player moved.
+				final Cuboid oldVolume = getVolumeFor(this.lastPos);
+				final Cuboid newVolume = getVolumeFor(playerPos);
+				final Cuboid intersect = oldVolume.intersection(newVolume);
+
+				// If there is no intersect it means the player moved
+				// enough of a distance in the last tick to make it a new
+				// area. Otherwise, if there is a sufficiently large
+				// change to the scan area dump and restart.
+				if (intersect == null || oldVolume.volume() < (oldVolume.volume() - intersect.volume()) * 2) {
+					resetFullScan();
+					super.update();
+				} else {
+					// Looks to be a small update, like a player walking around.
+					// If the scan has already completed we do an update.
+					if (this.scanFinished) {
+						updateScan(newVolume, oldVolume, intersect);
+					} else {
+						// The existing scan hasn't completed but now we
+						// have a delta set. Finish out scanning the
+						// old volume and once that is locked then an
+						// subsequent tick will do a delta update to get
+						// the new blocks.
+						super.update();
+					}
 				}
 			}
 		}
+
+		DSurround.getProfiler().endSection();
 	}
 
 	/**

@@ -74,10 +74,6 @@ public class Cuboid {
 				: false;
 	}
 
-	public Cuboid translate(final int dx, final int dy, final int dz) {
-		return new Cuboid(this.minPoint.add(dx, dy, dz), this.maxPoint.add(dx, dy, dz));
-	}
-
 	@Nonnull
 	public BlockPos maximum() {
 		return this.maxPoint;

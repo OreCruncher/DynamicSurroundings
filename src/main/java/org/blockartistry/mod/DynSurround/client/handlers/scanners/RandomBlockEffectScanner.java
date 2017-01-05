@@ -49,14 +49,15 @@ public class RandomBlockEffectScanner extends RandomScanner {
 
 	private static final double RATIO = 0.0335671847202175D;
 
+	protected final Random rand = RANDOM.get();
 	protected final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
 
-	public RandomBlockEffectScanner(int range) {
+	public RandomBlockEffectScanner(final int range) {
 		super("RandomBlockEffectScanner", range, (int) (Math.pow(range * 2 - 1, 3) * RATIO));
 	}
 	
 	@Override
-	protected boolean interestingBlock(final IBlockState state) {
+	protected boolean interestingBlock(@Nonnull final IBlockState state) {
 		return this.blocks.hasProfile(state);
 	}
 
@@ -65,16 +66,15 @@ public class RandomBlockEffectScanner extends RandomScanner {
 
 		final World world = EnvironState.getWorld();
 		final List<BlockEffect> chain = this.blocks.findEffectMatches(state);
-		final Random rand = RANDOM.get();
 
 		if (chain != null) {
 			for (final BlockEffect effect : chain)
-				effect.process(state, world, pos, rand);
+				effect.process(state, world, pos, this.rand);
 		}
 
-		final SoundEffect sound = this.blocks.getSound(state, rand);
+		final SoundEffect sound = this.blocks.getSound(state, this.rand);
 		if (sound != null)
-			sound.doEffect(state, world, pos, SoundCategory.BLOCKS, rand);
+			sound.doEffect(state, world, pos, SoundCategory.BLOCKS, this.rand);
 
 	}
 
