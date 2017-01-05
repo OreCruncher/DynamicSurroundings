@@ -396,20 +396,13 @@
 			],
 			"effects": [
 				{
-					"effect": "steam",
-					"chance": 10
-				},
-				{
 					"effect": "bubble",
 					"chance": 1800
-				}
-			]
-		},
-		{
-			"blocks": [
-				"minecraft:water"
-			],
-			"effects": [
+				},
+				{
+					"effect": "steam",
+					"chance": 0
+				},
 				{
 					"effect": "splash",
 					"chance": 0

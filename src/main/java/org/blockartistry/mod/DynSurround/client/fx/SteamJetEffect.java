@@ -46,7 +46,7 @@ public class SteamJetEffect extends JetEffect {
 		super(chance);
 	}
 
-	protected int lavaCount(final World world, final BlockPos pos) {
+	protected static int lavaCount(final World world, final BlockPos pos) {
 		int blockCount = 0;
 		for (int i = -1; i <= 1; i++)
 			for (int j = -1; j <= 1; j++)
@@ -62,13 +62,14 @@ public class SteamJetEffect extends JetEffect {
 	public BlockEffectType getEffectType() {
 		return BlockEffectType.STEAM_JET;
 	}
+	
+	public static boolean isValidSpawnBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return world.isAirBlock(pos.up()) && lavaCount(world, pos) > 0;
+	}
 
 	@Override
 	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		if (!world.isAirBlock(pos.up()) || !super.trigger(state, world, pos, random))
-			return false;
-
-		return lavaCount(world, pos) != 0;
+		return isValidSpawnBlock(world, pos) && super.trigger(state, world, pos, random);
 	}
 
 	@Override
