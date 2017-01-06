@@ -32,7 +32,6 @@ package org.blockartistry.mod.DynSurround.util.script;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -442,27 +441,6 @@ public final class Expression {
 		this.variables.putAll(builtInVariables);
 	}
 
-	private static final Map<String, Expression> cache = new HashMap<String, Expression>();
-
-	// This forces a compile and validation of the expression
-	// that is passed in. This will make use of any supplied
-	// builtin references. Custom instance variables, functions,
-	// or operators will cause this to fail since they cannot
-	// be set unless there is an Expression instance. Symbols
-	// in the built-in tables will work, however.
-	//
-	// Expressions are cached. If multiple requests come in for
-	// the same expression an older one is reused.
-	public static Expression compile(final String expression) {
-		Expression exp = cache.get(expression);
-		if (exp == null) {
-			exp = new Expression(expression);
-			exp.getRPN();
-			cache.put(expression, exp);
-		}
-		return exp;
-	}
-
 	/**
 	 * Is the string a number?
 	 * 
@@ -779,7 +757,7 @@ public final class Expression {
 	 * 
 	 * @return The cached RPN instance.
 	 */
-	private List<String> getRPN() {
+	public List<String> getRPN() {
 		if (this.rpn == null) {
 			this.rpn = shuntingYard(this.expression);
 			validate(this.rpn);

@@ -24,7 +24,9 @@
 package org.blockartistry.mod.DynSurround.registry;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
@@ -35,20 +37,50 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.util.script.Expression;
 import org.blockartistry.mod.DynSurround.util.script.Variant;
 
-public class Evaluator {
+public final class Evaluator {
 
+	private static final Map<String, Expression> cache = new HashMap<String, Expression>();
 	private static final List<String> naughtyList = new ArrayList<String>();
 
 	@Nonnull
 	public static List<String> getNaughtyList() {
 		return naughtyList;
 	}
-	
+
+	// This forces a compile and validation of the expression
+	// that is passed in. This will make use of any supplied
+	// built-in references. Custom instance variables, functions,
+	// or operators will cause this to fail since they cannot
+	// be set unless there is an Expression instance. Symbols
+	// in the built-in tables will work, however.
+	//
+	// Expressions are cached. If multiple requests come in for
+	// the same expression an older one is reused.
+	@Nonnull
+	private static Expression compile(final String expression) {
+		Expression exp = null;
+
+		try {
+			exp = cache.get(expression);
+			if (exp == null) {
+				exp = new Expression(expression);
+				exp.getRPN();
+				cache.put(expression, exp);
+			}
+		} catch (final Throwable t) {
+			naughtyList.add(expression);
+			exp = new Expression("'" + t.getMessage() + "'");
+			cache.put(expression, exp);
+			ModLog.warn("Unable to compile [%s]: %s", expression, t.getMessage());
+		}
+		return exp;
+	}
+
 	@Nonnull
 	public static Variant eval(@Nonnull final String script) {
-		return Expression.compile(script).eval();
+		return compile(script).eval();
 	}
-	
+
 	public static boolean check(@Nonnull final String conditions) {
 		// Existing default regex - short circuit to make it faster
 		if (StringUtils.isEmpty(conditions) || conditions.startsWith(".*"))
@@ -61,21 +93,7 @@ public class Evaluator {
 			return Pattern.matches(conditions, ev);
 		}
 
-		// If it was bad the first time around it is doubtful it
-		// changed it's ways.
-		if (naughtyList.contains(conditions))
-			return false;
-
 		// New stuff. Compile the expression and evaluate
-		try {
-			final Variant result = eval(conditions);
-			return result.asNumber() != 0.0F;
-		} catch (final Throwable t) {
-			ModLog.error("Unable to execute check: " + conditions, t);
-			naughtyList.add(conditions);
-		}
-
-		// Something bad happened, so return no match
-		return false;
+		return eval(conditions).asBoolean();
 	}
 }
