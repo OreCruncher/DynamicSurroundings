@@ -32,6 +32,8 @@ import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
@@ -52,7 +54,6 @@ public class ProxyClient extends Proxy {
 		return false;
 	}
 
-
 	@Override
 	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		super.preInit(event);
@@ -68,14 +69,22 @@ public class ProxyClient extends Proxy {
 
 	@Override
 	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
-		EffectManager.register();
-		GuiHUDHandler.register();
+		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+			public void run() {
+				EffectManager.register();
+				GuiHUDHandler.register();
+			}
+		});
 	}
-	
+
 	@Override
 	public void clientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
-		EffectManager.unregister();
-		GuiHUDHandler.unregister();
+		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+			public void run() {
+				EffectManager.unregister();
+				GuiHUDHandler.unregister();
+			}
+		});
 	}
 
 }
