@@ -160,7 +160,9 @@ public final class AtmosphereService extends Service {
 		// dimension.
 		Network.sendRainIntensity(data.getCurrentRainIntensity(), data.getRainIntensity(), data.getDimensionId());
 
-		if (ModOptions.allowBackgroundThunder && info.isThundering()
+		// Do background thunder.  For it to happen the world has to have a real sky, has to be enabled,
+		// has to be in the thunder window, and rain intensity must meet the threshold.
+		if (!world.provider.hasNoSky && ModOptions.allowBackgroundThunder && info.isThundering()
 				&& data.getCurrentRainIntensity() >= ModOptions.stormThunderThreshold) {
 
 			int time = data.getThunderTimer() - 1;
