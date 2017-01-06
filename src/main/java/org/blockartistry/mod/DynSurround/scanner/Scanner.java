@@ -41,13 +41,13 @@ import net.minecraft.world.World;
 public abstract class Scanner implements ITickable {
 
 	protected final String name;
-	
+
 	protected final Random rand = ThreadLocalRandom.current();
-	
+
 	protected final int xRange;
 	protected final int yRange;
 	protected final int zRange;
-	
+
 	protected final int xSize;
 	protected final int ySize;
 	protected final int zSize;
@@ -55,7 +55,7 @@ public abstract class Scanner implements ITickable {
 	protected final int volume;
 
 	protected final Profiler theProfiler;
-	
+
 	public Scanner(@Nonnull final String name, final int range) {
 		this(name, range, 0);
 	}
@@ -68,31 +68,32 @@ public abstract class Scanner implements ITickable {
 		this(name, xRange, yRange, zRange, 0);
 	}
 
-	public Scanner(@Nonnull final String name, final int xRange, final int yRange, final int zRange, final int blocksPerTick) {
+	public Scanner(@Nonnull final String name, final int xRange, final int yRange, final int zRange,
+			final int blocksPerTick) {
 		this.name = name;
 		this.xRange = xRange;
 		this.yRange = yRange;
 		this.zRange = zRange;
-		
+
 		this.xSize = xRange * 2;
 		this.ySize = yRange * 2;
 		this.zSize = zRange * 2;
 		this.volume = this.xSize * this.ySize * this.zSize;
-		if(blocksPerTick == 0)
+		if (blocksPerTick == 0)
 			this.blocksPerTick = this.volume / 20; // 20 ticks in a second
 		else
 			this.blocksPerTick = blocksPerTick;
-		
+
 		this.theProfiler = DSurround.getProfiler();
 	}
-	
+
 	/**
 	 * The volume of the scan area
 	 */
 	public int getVolume() {
 		return this.volume;
 	}
-	
+
 	/**
 	 * Invoked when a block of interest is discovered.
 	 */
@@ -110,17 +111,18 @@ public abstract class Scanner implements ITickable {
 	public void update() {
 
 		this.theProfiler.startSection(this.name);
-		
+
 		final World world = EnvironState.getWorld();
 		for (int count = 0; count < this.blocksPerTick; count++) {
 			final BlockPos pos = nextPos();
-			if(pos == null)
+			if (pos == null)
 				break;
 			final IBlockState state = world.getBlockState(pos);
-			if (interestingBlock(state))
+			if (interestingBlock(state)) {
 				blockScan(state, pos);
+			}
 		}
-		
+
 		this.theProfiler.endSection();
 
 	}

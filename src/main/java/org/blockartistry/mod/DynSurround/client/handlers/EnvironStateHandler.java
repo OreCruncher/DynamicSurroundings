@@ -45,6 +45,7 @@ import org.blockartistry.mod.DynSurround.registry.SeasonType;
 import org.blockartistry.mod.DynSurround.registry.TemperatureRating;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityMinecart;
@@ -56,12 +57,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@SideOnly(Side.CLIENT)
+@Mod.EventBusSubscriber(Side.CLIENT)
 public class EnvironStateHandler extends EffectHandlerBase {
 
 	// Diagnostic strings to display in the debug HUD
@@ -83,6 +85,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static String dimensionName;
 		private static BlockPos playerPosition;
 		private static EntityPlayer player;
+		private static World world;
 		private static boolean freezing;
 		private static boolean fog;
 		private static boolean humid;
@@ -178,6 +181,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			final SeasonRegistry seasons = RegistryManager.get(RegistryType.SEASON);
 
 			EnvironState.player = player;
+			EnvironState.world = player.worldObj;
 			EnvironState.playerBiome = PlayerUtils.getPlayerBiome(player, false);
 			EnvironState.biomeName = EnvironState.playerBiome.getBiomeName();
 			EnvironState.season = seasons.getData(world).getSeasonType();
@@ -233,9 +237,11 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static EntityPlayer getPlayer() {
-			if (player == null)
-				player = Minecraft.getMinecraft().thePlayer;
 			return player;
+		}
+
+		public static World getWorld() {
+			return world;
 		}
 
 		public static BlockPos getPlayerPosition() {
@@ -245,71 +251,71 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		public static boolean isPlayer(final Entity entity) {
 			if (entity instanceof EntityPlayer) {
 				final EntityPlayer ep = (EntityPlayer) entity;
-				return ep.getUniqueID().equals(getPlayer().getUniqueID());
+				return ep.getUniqueID().equals(player.getUniqueID());
 			}
 			return false;
 		}
 
 		public static boolean isPlayer(final UUID id) {
-			return getPlayer().getUniqueID().equals(id);
+			return player.getUniqueID().equals(id);
 		}
 
 		public static boolean isCreative() {
-			return getPlayer().capabilities.isCreativeMode;
+			return player.capabilities.isCreativeMode;
 		}
 
 		public static boolean isPlayerHurt() {
 			return ModOptions.playerHurtThreshold != 0 && !isCreative()
-					&& getPlayer().getHealth() <= ModOptions.playerHurtThreshold;
+					&& player.getHealth() <= ModOptions.playerHurtThreshold;
 		}
 
 		public static boolean isPlayerHungry() {
 			return ModOptions.playerHungerThreshold != 0 && !isCreative()
-					&& getPlayer().getFoodStats().getFoodLevel() <= ModOptions.playerHungerThreshold;
+					&& player.getFoodStats().getFoodLevel() <= ModOptions.playerHungerThreshold;
 		}
 
 		public static boolean isPlayerBurning() {
-			return getPlayer().isBurning();
+			return player.isBurning();
 		}
 
 		public static boolean isPlayerSuffocating() {
-			return getPlayer().getAir() <= 0;
+			return player.getAir() <= 0;
 		}
 
 		public static boolean isPlayerFlying() {
-			return getPlayer().capabilities.isFlying;
+			return player.capabilities.isFlying;
 		}
 
 		public static boolean isPlayerSprinting() {
-			return getPlayer().isSprinting();
+			return player.isSprinting();
 		}
 
 		public static boolean isPlayerInLava() {
-			return getPlayer().isInLava();
+			return player.isInLava();
 		}
 
 		public static boolean isPlayerInvisible() {
-			return getPlayer().isInvisible();
+			return player.isInvisible();
 		}
 
 		public static boolean isPlayerBlind() {
-			return getPlayer().isPotionActive(MobEffects.BLINDNESS);
+			return player.isPotionActive(MobEffects.BLINDNESS);
 		}
 
 		public static boolean isPlayerInWater() {
-			return getPlayer().isInWater();
+			return player.isInWater();
 		}
 
 		public static boolean isPlayerRiding() {
-			return getPlayer().isRiding();
+			return player.isRiding();
 		}
 
 		public static boolean isPlayerOnGround() {
-			return getPlayer().onGround;
+			return player.onGround;
 		}
 
 		public static boolean isPlayerMoving() {
-			return getPlayer().distanceWalkedModified != player.prevDistanceWalkedModified;
+			return player.distanceWalkedModified != player.prevDistanceWalkedModified;
 		}
 
 		public static boolean isPlayerInside() {
@@ -344,22 +350,15 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			return dry;
 		}
 
-		public static World getWorld() {
-			final EntityPlayer player = getPlayer();
-			return player != null ? player.worldObj : null;
-		}
-
 		public static int getTickCounter() {
 			return tickCounter;
 		}
 
 		public static double distanceToPlayer(final double x, final double y, final double z) {
-			if (player == null)
-				return Double.MAX_VALUE;
 			return player.getDistanceSq(x, y, z);
 		}
 	}
-
+	
 	@Override
 	public String getHandlerName() {
 		return "EnvironStateEffectHandler";
@@ -379,6 +378,17 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			DSurround.getProfiler().endSection();
 		} else {
 			diagnostics = null;
+		}
+	}
+	
+	/**
+	 * Hook the entity join world event so we can get the player and world info
+	 * ASAP.
+	 */
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public static void onEntityJoin(@Nonnull final EntityJoinWorldEvent event) {
+		if(event.getWorld().isRemote && event.getEntity() instanceof EntityPlayerSP) {
+			EnvironState.tick(event.getWorld(), (EntityPlayer)event.getEntity());
 		}
 	}
 
