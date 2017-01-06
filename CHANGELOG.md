@@ -1,3 +1,31 @@
+###DynamicSurroundings-3.2.0.0BETA
+**What's New!**
+* [Background thunder during storms!](https://github.com/OreCruncher/DynamicSurroundings/wiki/Let's-Talk-Rain)
+* Refreshed sounds; Minecraft thunder replacement sounds.
+* For those wanting to develop their own sound/block configuration files there is a new configuration option "Enable Debug Dialog".  Setting to "true" will cause a Java dialog window to appear displaying the state of all the script variables and their current values.  Dialog will only be active when a world is loaded.  The dialog will dynamically update as you move through the world.
+* Config options for disabling ASM transformations.  Dynamic Surroundings weather effects can be turned off completely using these options.  Useful if using shader packs and the weather just doesn't work right.
+* Rain/snow/dust will be auto-disabled if Localized Weather and Stormfronts (Weather2) is installed.  Weather2 does a lot with weather and rendering, and Dynamic Surroundings would interfere with all that.
+* Config GUI can now be translated!  Russian translations provided by Xottab-DUTY!  Thanks!
+
+**Fixes**
+* [Updated README with new attributions for sounds.](https://github.com/OreCruncher/DynamicSurroundings/blob/master/README.md)  Depending on the attributions monetizing streaming channels may be a challenge.
+
+**Changes**
+* Speech Bubbles, Entity Chat, and Entity Emojis disabled by default.  These can be turned back on in the configuration.
+* Speech bubble range reduced to 16 as a default range.  Affects player chat as well as entity talk.
+* Speech bubbles will only render if the player can see the entity.  No more "X-ray" of mobs and the like.
+* A ParticleWaterSplash instance can have only one outstanding sound playing.  Reduces pressure on the Minecraft sound engine.  (Each block you see splashes around is an instance.)
+* Adjusted the ParticleWaterSplash creation so that it will not spawn in simple water flows, like dumping a bucket of water on the ground.  Intent is to reduce client and rendering impacts with large falls.
+* Created a new waterfall OGG sound rather than reuse the rain drop.
+* Additional checks for bad sounds when debug logging is enabled.  Minecraft does do checks at startup but I have seen some bad ones during runtime that are currently not explained.
+* Move default location of the Potion HUD to be the upper left.  Main reason is that a lot of mapping mods put their maps in the upper right and the intent is to reduce the amount of configuration the player has to do.
+* Changed how the configuration options are used for feature control.  Most option changes will not require a restart of the client.
+* The sky will darken when it starts raining rather than having some sort of variable gray sky.  This is because I refactored how rain intensity affects Minecraft to eliminate ASM.  Goal was to simplify, work more within the Forge framework, and minimize issues related to mod interactions.
+* Implemented area scanner for "always on" particle effects such as water splashes and steam jets.
+
+**Notes**
+* It's recommended you make a backup copy of your configuration file and let Dynamic Surroundings create a new one.  There were changes made to default settings that would affect things like sound.
+
 ###DynamicSurroundings-3.1.4.1BETA
 **Fixes**
 * Improved error checking around the Forge version check information.
