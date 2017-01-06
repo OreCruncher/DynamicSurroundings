@@ -52,6 +52,10 @@ public enum WeatherProperties {
 	private static boolean serverSideSupport = false;
 	private static float intensityLevel = 0.0F;
 	private static float maxIntensityLevel = 0.0F;
+	private static int nextRainChange = 0;
+	private static float thunderStrength = 0.0F;
+	private static int nextThunderChange = 0;
+	private static int nextThunderEvent = 0;
 	private static WeatherProperties intensity = VANILLA;
 	private static float fogDensity = 0.0F;
 
@@ -94,6 +98,22 @@ public enum WeatherProperties {
 
 	public static float getMaxIntensityLevel() {
 		return serverSideSupport ? maxIntensityLevel : 1.0F;
+	}
+	
+	public static int getNextRainChange() {
+		return serverSideSupport ? nextRainChange : EnvironState.getWorld().getWorldInfo().getRainTime();
+	}
+	
+	public static float getThunderStrength() {
+		return serverSideSupport ? thunderStrength : EnvironState.getWorld().getThunderStrength(1.0F);
+	}
+	
+	public static int getNextThunderChange() {
+		return serverSideSupport ? nextThunderChange : EnvironState.getWorld().getWorldInfo().getThunderTime();
+	}
+	
+	public static int getNextThunderEvent() {
+		return serverSideSupport ? nextThunderEvent : 0;
 	}
 
 	public static float getFogDensity() {
@@ -183,6 +203,10 @@ public enum WeatherProperties {
 			return;
 		setMaximumIntensity(event.maxRainIntensity);
 		setCurrentIntensity(event.rainIntensity);
+		nextRainChange = event.nextRainChange;
+		thunderStrength = event.thunderStrength;
+		nextThunderChange = event.nextThunderChange;
+		nextThunderEvent = event.nextThunderEvent;
 	}
 
 	@SubscribeEvent

@@ -82,8 +82,10 @@ public final class Network {
 		});
 	}
 
-	public static void sendRainIntensity(final float intensity, final float maxIntensity, final int dimension) {
-		NETWORK.sendToDimension(new PacketWeatherUpdate(intensity, maxIntensity, dimension), dimension);
+	public static void sendWeatherUpdate(final int dimension, final float intensity, final float maxIntensity,
+			final int nextRainChange, final float thunderStrength, final int thunderChange, final int thunderEvent) {
+		NETWORK.sendToDimension(new PacketWeatherUpdate(dimension, intensity, maxIntensity, nextRainChange,
+				thunderStrength, thunderChange, thunderEvent), dimension);
 	}
 
 	public static void sendAurora(@Nonnull final AuroraData data, final int dimension) {

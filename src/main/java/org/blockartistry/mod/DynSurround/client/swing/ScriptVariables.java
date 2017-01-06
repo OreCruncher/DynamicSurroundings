@@ -25,71 +25,32 @@
 package org.blockartistry.mod.DynSurround.client.swing;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SuppressWarnings("serial")
 @SideOnly(Side.CLIENT)
-public class DiagnosticPanel extends JPanel {
+public class ScriptVariables extends JPanel {
+	
+	protected final ScriptVariableTable variables;
+	protected final JTable table;
 
-	static final Font SERVER_GUI_FONT = new Font("Monospaced", 0, 12);
-
-	protected final JFrame frame;
-	protected final JTabbedPane tabs;
-
-	protected DiagnosticPanel() {
-
+	public ScriptVariables() {
+		
+		this.setName("Script Variables");
 		this.setLayout(new BorderLayout());
 
-		this.frame = new JFrame("Dynamic Surroundings Diagnostics");
-		this.frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		this.variables = new ScriptVariableTable();
+		this.table = new JTable(this.variables);
+		this.table.setFont(DiagnosticPanel.SERVER_GUI_FONT);
 
-		this.tabs = new JTabbedPane();
-		this.add(this.tabs);
+		final JScrollPane tableContainer = new JScrollPane(this.table);
 
-		this.tabs.add(new ScriptVariables());
-		this.tabs.add(new WeatherStatus());
-		this.tabs.add(new BlockViewer());
-
-		this.frame.getContentPane().add(this);
-		this.frame.pack();
-		this.frame.setAutoRequestFocus(false);
-		this.frame.setVisible(true);
+		this.add(tableContainer, BorderLayout.CENTER);
 	}
 
-	public void close() {
-		this.setVisible(false);
-		this.frame.dispose();
-	}
-
-	private static DiagnosticPanel INSTANCE = null;
-
-	public static void create() {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				INSTANCE = new DiagnosticPanel();
-			}
-		});
-	}
-
-	public static void refresh() {
-		if (INSTANCE != null)
-			DataProxy.update();
-	}
-
-	public static void destroy() {
-		if (INSTANCE != null) {
-			DataProxy.dataPools.clear();
-			INSTANCE.close();
-			INSTANCE = null;
-		}
-	}
 }

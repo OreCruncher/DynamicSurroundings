@@ -43,7 +43,8 @@ public final class PacketWeatherUpdate implements IMessage {
 		public IMessage onMessage(@Nonnull final PacketWeatherUpdate message, @Nullable final MessageContext ctx) {
 			final World world = EnvironState.getWorld();
 			if (world != null && world.provider.getDimension() == message.dimension)
-				Network.postEvent(new WeatherUpdateEvent(world, message.intensity, message.maxIntensity));
+				Network.postEvent(new WeatherUpdateEvent(world, message.intensity, message.maxIntensity,
+						message.nextRainChange, message.thunderStrength, message.thunderChange, message.thunderEvent));
 			return null;
 		}
 	}
@@ -53,6 +54,10 @@ public final class PacketWeatherUpdate implements IMessage {
 	 */
 	private float intensity;
 	private float maxIntensity;
+	private int nextRainChange;
+	private float thunderStrength;
+	private int thunderChange;
+	private int thunderEvent;
 
 	/**
 	 * Dimension where the rainfall is occurring
@@ -62,10 +67,15 @@ public final class PacketWeatherUpdate implements IMessage {
 	public PacketWeatherUpdate() {
 	}
 
-	public PacketWeatherUpdate(final float intensity, final float maxIntensity, final int dimension) {
+	public PacketWeatherUpdate(final int dimension, final float intensity, final float maxIntensity,
+			final int nextRainChange, final float thunderStrength, final int thunderChange, final int thunderEvent) {
+		this.dimension = dimension;
 		this.intensity = intensity;
 		this.maxIntensity = maxIntensity;
-		this.dimension = dimension;
+		this.nextRainChange = nextRainChange;
+		this.thunderStrength = thunderStrength;
+		this.thunderChange = thunderChange;
+		this.thunderEvent = thunderEvent;
 	}
 
 	@Override
@@ -73,6 +83,10 @@ public final class PacketWeatherUpdate implements IMessage {
 		this.dimension = buf.readShort();
 		this.intensity = buf.readFloat();
 		this.maxIntensity = buf.readFloat();
+		this.nextRainChange = buf.readInt();
+		this.thunderStrength = buf.readFloat();
+		this.thunderChange = buf.readInt();
+		this.thunderEvent = buf.readInt();
 	}
 
 	@Override
@@ -80,6 +94,10 @@ public final class PacketWeatherUpdate implements IMessage {
 		buf.writeShort(this.dimension);
 		buf.writeFloat(this.intensity);
 		buf.writeFloat(this.maxIntensity);
+		buf.writeInt(this.nextRainChange);
+		buf.writeFloat(this.thunderStrength);
+		buf.writeInt(this.thunderChange);
+		buf.writeInt(this.thunderEvent);
 	}
 
 }

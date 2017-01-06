@@ -24,30 +24,30 @@
 
 package org.blockartistry.mod.DynSurround.client.swing;
 
-import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
-import javax.swing.event.TableModelListener;
-import javax.swing.table.TableModel;
-
-import org.blockartistry.mod.DynSurround.client.handlers.ExpressionStateHandler;
+import javax.swing.table.AbstractTableModel;
 import org.blockartistry.mod.DynSurround.client.handlers.ExpressionStateHandler.IDynamicVariable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SuppressWarnings("serial")
 @SideOnly(Side.CLIENT)
-public class ScriptVariableTable implements TableModel {
+public class ScriptVariableTable extends AbstractTableModel implements Observer {
 
 	private static final String[] columnNames = { "Variable", "Value" };
 
-	private final List<IDynamicVariable> variables;
+	private final DataProxy.ScriptVariableData data;
 
 	public ScriptVariableTable() {
-		this.variables = ExpressionStateHandler.getVariables();
+		this.data = new DataProxy.ScriptVariableData();
+		this.data.addObserver(this);
 	}
 
 	@Override
 	public int getRowCount() {
-		return this.variables.size();
+		return this.data.getVariables().size();
 	}
 
 	@Override
@@ -66,32 +66,16 @@ public class ScriptVariableTable implements TableModel {
 	}
 
 	@Override
-	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return false;
-	}
-
-	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		final IDynamicVariable v = this.variables.get(rowIndex);
+		final IDynamicVariable v = this.data.getVariables().get(rowIndex);
 		if (v == null)
 			return "";
 		return columnIndex == 0 ? v.getName() : v.asString();
 	}
 
 	@Override
-	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		// Do nothing
-	}
-
-	@Override
-	public void addTableModelListener(TableModelListener l) {
-		// Do nothing?
-
-	}
-
-	@Override
-	public void removeTableModelListener(TableModelListener l) {
-		// Do nothing?
+	public void update(final Observable o, final Object arg) {
+		this.fireTableDataChanged();
 	}
 
 }

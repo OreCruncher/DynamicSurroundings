@@ -143,6 +143,32 @@ public final class BlockRegistry extends Registry {
 
 		return candidates.get(i - 1);
 	}
+	
+	@Nullable
+	public List<SoundEffect> getAllSounds(@Nonnull final IBlockState state) {
+		final BlockProfile entry = this.registry.get(state.getBlock());
+		if (entry == null)
+			return null;
+
+		final List<SoundEffect> sounds = entry.getSounds(state);
+		if (sounds.isEmpty())
+			return null;
+		
+		return sounds;
+	}
+	
+	@Nullable
+	public List<SoundEffect> getAllStepSounds(@Nonnull final IBlockState state) {
+		final BlockProfile entry = this.registry.get(state.getBlock());
+		if (entry == null)
+			return null;
+
+		final List<SoundEffect> sounds = entry.getStepSounds(state);
+		if (sounds.isEmpty())
+			return null;
+		
+		return sounds;
+	}
 
 	@Nullable
 	public SoundEffect getSound(@Nonnull final IBlockState state, @Nonnull final Random random) {

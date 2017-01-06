@@ -42,21 +42,48 @@ public class WeatherUpdateEvent extends Event {
 	public final World world;
 
 	/**
-	 * The current rain intensity that is being set.  0 means
-	 * no intensity, and 1.0F means full.
+	 * The current rain intensity that is being set. 0 means no intensity, and
+	 * 1.0F means full.
 	 */
 	public final float rainIntensity;
-	
+
 	/**
-	 * The max possible intensity of the storm.  0 means none,
-	 * and 1.0F means full.
+	 * The max possible intensity of the storm. 0 means none, and 1.0F means
+	 * full.
 	 */
 	public final float maxRainIntensity;
 
-	public WeatherUpdateEvent(@Nonnull final World world, final float rainIntensity, final float maxRainIntensity) {
+	/**
+	 * Number of ticks until the next rain change, either starting or stopping.
+	 */
+	public final int nextRainChange;
+
+	/**
+	 * Current strength of thunder, 0 means none, 1.0F means full.
+	 */
+	public final float thunderStrength;
+
+	/**
+	 * Number of ticks until the next thunder change, either starting or
+	 * stopping.
+	 */
+	public final int nextThunderChange;
+
+	/**
+	 * Number of ticks until the next background thunder event.
+	 */
+	public final int nextThunderEvent;
+
+	public WeatherUpdateEvent(@Nonnull final World world, final float rainIntensity, final float maxRainIntensity,
+			final int nextRainChange, final float thunderStrength, final int nextThunderChange,
+			final int nextThunderEvent) {
 		this.world = world;
 		this.maxRainIntensity = MathHelper.clamp_float(maxRainIntensity, 0, 1.0F);
 		this.rainIntensity = MathHelper.clamp_float(rainIntensity, 0.0F, this.maxRainIntensity);
+		this.nextRainChange = nextRainChange;
+		this.thunderStrength = thunderStrength;
+		this.nextThunderChange = nextThunderChange;
+		this.nextThunderEvent = nextThunderEvent;
 	}
 
 }

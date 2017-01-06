@@ -138,30 +138,30 @@ public final class AtmosphereService extends Service {
 			}
 			data.setCurrentRainIntensity(world.getRainStrength(1.0F));
 		} else {
-			
+
 			if (world.getRainStrength(1.0F) > 0.0F) {
-				// It's not raining and the world has strength. Means that it is on
+				// It's not raining and the world has strength. Means that it is
+				// on
 				// the way out so reflect the worlds strength.
 				data.setCurrentRainIntensity(world.getRainStrength(1.0F));
 			} else if (data.getCurrentRainIntensity() > 0) {
-				// We get here the world is not raining and there is no strength,
+				// We get here the world is not raining and there is no
+				// strength,
 				// but our record indicates something. Means we stopped.
 				data.setRainIntensity(0);
 				data.setCurrentRainIntensity(0);
 				info.setRainTime(nextRainInterval(false));
 				ModLog.debug("dim %d rain has stopped, next rain %d ticks", data.getDimensionId(),
 						world.getWorldInfo().getRainTime());
-			} else if(data.getRainIntensity() > 0) {
+			} else if (data.getRainIntensity() > 0) {
 				data.setRainIntensity(0);
 			}
 		}
 
-		// Set the rain rainIntensity for all players in the current
-		// dimension.
-		Network.sendRainIntensity(data.getCurrentRainIntensity(), data.getRainIntensity(), data.getDimensionId());
-
-		// Do background thunder.  For it to happen the world has to have a real sky, has to be enabled,
-		// has to be in the thunder window, and rain intensity must meet the threshold.
+		// Do background thunder. For it to happen the world has to have a real
+		// sky, has to be enabled,
+		// has to be in the thunder window, and rain intensity must meet the
+		// threshold.
 		if (!world.provider.hasNoSky && ModOptions.allowBackgroundThunder && info.isThundering()
 				&& data.getCurrentRainIntensity() >= ModOptions.stormThunderThreshold) {
 
@@ -189,6 +189,11 @@ public final class AtmosphereService extends Service {
 			// Clear out the timer data for the next storm
 			data.setThunderTimer(0);
 		}
+
+		// Send the weather update to all players in the dimension.
+		Network.sendWeatherUpdate(data.getDimensionId(), data.getCurrentRainIntensity(), data.getRainIntensity(),
+				info.getRainTime(), world.getThunderStrength(1.0F), info.getThunderTime(), data.getThunderTimer());
+
 	}
 
 }
