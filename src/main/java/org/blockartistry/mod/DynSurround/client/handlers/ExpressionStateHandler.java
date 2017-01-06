@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -59,7 +60,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ExpressionStateHandler extends EffectHandlerBase {
 
-	public interface IDynamicVariable extends Comparable<IDynamicVariable> {
+	public interface IDynamicVariable {
 		String getName();
 
 		void update();
@@ -81,11 +82,6 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 			return this.name;
 		}
 
-		@Override
-		public int compareTo(@Nonnull final IDynamicVariable o) {
-			return this.name.compareTo(o.getName());
-		}
-
 	}
 
 	public abstract static class DynamicString extends StringValue implements IDynamicVariable {
@@ -102,10 +98,6 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 			return this.name;
 		}
 
-		@Override
-		public int compareTo(@Nonnull final IDynamicVariable o) {
-			return this.name.compareTo(o.getName());
-		}
 	}
 
 	public abstract static class DynamicBoolean extends BooleanValue implements IDynamicVariable {
@@ -121,10 +113,6 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 			return this.name;
 		}
 
-		@Override
-		public int compareTo(@Nonnull final IDynamicVariable o) {
-			return this.name.compareTo(o.getName());
-		}
 	}
 
 	private static final List<IDynamicVariable> variables = new ArrayList<IDynamicVariable>();
@@ -321,8 +309,7 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		register(new DynamicBoolean("player.isMoving") {
 			@Override
 			public void update() {
-				final EntityPlayer player = EnvironState.getPlayer();
-				this.value = player.distanceWalkedModified != player.prevDistanceWalkedModified;
+				this.value = EnvironState.isPlayerMoving();
 			}
 		});
 		register(new DynamicBoolean("player.isInside") {
@@ -495,7 +482,12 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		});
 
 		// Sort them for easy display
-		Collections.sort(variables);
+		Collections.sort(variables, new Comparator<IDynamicVariable>() {
+			@Override
+			public int compare(@Nonnull final IDynamicVariable o1, @Nonnull final IDynamicVariable o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
 		
 	}
 

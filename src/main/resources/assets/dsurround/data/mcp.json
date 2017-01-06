@@ -432,7 +432,7 @@
 			"sounds": [
 				{
 					"sound": "dsurround:frog",
-					"conditions": "NOT(player.isInside)",
+					"conditions": "!player.isInside",
 					"volume": 0.4,
 					"pitch": 1.0,
 					"variable": true
@@ -497,7 +497,7 @@
 			"sounds": [
 				{
 					"sound": "dsurround:hiss",
-					"conditions": "weather.isNotRaining && isDay && NOT(ONEOF(biome.temperature, 'icy', 'cold'))",
+					"conditions": "weather.isNotRaining && isDay && !ONEOF(biome.temperature, 'icy', 'cold')",
 					"volume": 1.0,
 					"variable": true
 				}
@@ -567,7 +567,7 @@
 			"effects": [
 				{
 					"effect": "firefly",
-					"conditions": "weather.isNotRaining && isNight && ONEOF(biome.temperature,'mild','warm') && NOT(biome.isDry)",
+					"conditions": "weather.isNotRaining && isNight && ONEOF(biome.temperature,'mild','warm') && !biome.isDry",
 					"chance": 50
 				}
 			]
