@@ -32,8 +32,8 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.Expression;
-import org.blockartistry.mod.DynSurround.util.Expression.Variant;
+import org.blockartistry.mod.DynSurround.util.script.Expression;
+import org.blockartistry.mod.DynSurround.util.script.Variant;
 
 public class Evaluator {
 

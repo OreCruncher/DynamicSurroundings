@@ -30,19 +30,17 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import org.blockartistry.mod.DynSurround.client.handlers.ExpressionStateHandler;
-import org.blockartistry.mod.DynSurround.client.handlers.ExpressionStateHandler.DynamicVariable;
-import org.blockartistry.mod.DynSurround.util.Expression.Variant;
-
+import org.blockartistry.mod.DynSurround.client.handlers.ExpressionStateHandler.IDynamicVariable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ScriptVariableTable implements TableModel  {
-	
+public class ScriptVariableTable implements TableModel {
+
 	private static final String[] columnNames = { "Variable", "Value" };
 
-	private final List<DynamicVariable> variables;
-	
+	private final List<IDynamicVariable> variables;
+
 	public ScriptVariableTable() {
 		this.variables = ExpressionStateHandler.getVariables();
 	}
@@ -74,13 +72,10 @@ public class ScriptVariableTable implements TableModel  {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		final DynamicVariable v = variables.get(rowIndex);
-		if(v == null)
+		final IDynamicVariable v = this.variables.get(rowIndex);
+		if (v == null)
 			return "";
-		if(columnIndex == 0)
-			return v.getName();
-		final Variant result = v.eval();
-		return result == null ? "" : result.toString();
+		return columnIndex == 0 ? v.getName() : v.asString();
 	}
 
 	@Override
@@ -91,7 +86,7 @@ public class ScriptVariableTable implements TableModel  {
 	@Override
 	public void addTableModelListener(TableModelListener l) {
 		// Do nothing?
-		
+
 	}
 
 	@Override
