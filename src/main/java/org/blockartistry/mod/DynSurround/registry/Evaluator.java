@@ -69,7 +69,7 @@ public class Evaluator {
 		// New stuff. Compile the expression and evaluate
 		try {
 			final Variant result = eval(conditions);
-			return result.asFloat() != 0.0F;
+			return result.asNumber() != 0.0F;
 		} catch (final Throwable t) {
 			ModLog.error("Unable to execute check: " + conditions, t);
 			naughtyList.add(conditions);

@@ -99,17 +99,21 @@ public class Solver {
 	 * was found, but has no association in the blockmap.
 	 */
 	@Nonnull
-	public Association findAssociationForPlayer(@Nonnull final EntityPlayer ply, final double verticalOffsetAsMinus,
+	public Association findAssociationForPlayer(@Nonnull final EntityPlayer player, final double verticalOffsetAsMinus,
 			final boolean isRightFoot) {
-		final int yy = MathStuff.floor_double(ply.getEntityBoundingBox().minY - 0.1d - verticalOffsetAsMinus);
-		final double rot = MathStuff.toRadians(MathStuff.wrapDegrees(ply.rotationYaw));
+		// Moved from routine below - why do all this calculation just to toss it away
+		if (MathStuff.abs(player.motionY) < 0.02)
+			return null; // Don't play sounds on every tiny bounce
+		
+		final int yy = MathStuff.floor_double(player.getEntityBoundingBox().minY - 0.1d - verticalOffsetAsMinus);
+		final double rot = MathStuff.toRadians(MathStuff.wrapDegrees(player.rotationYaw));
 		final double xn = MathStuff.cos(rot);
 		final double zn = MathStuff.sin(rot);
 		final float feetDistanceToCenter = 0.2f * (isRightFoot ? -1 : 1);
-		final int xx = MathStuff.floor_double(ply.posX + xn * feetDistanceToCenter);
-		final int zz = MathStuff.floor_double(ply.posZ + zn * feetDistanceToCenter);
+		final int xx = MathStuff.floor_double(player.posX + xn * feetDistanceToCenter);
+		final int zz = MathStuff.floor_double(player.posZ + zn * feetDistanceToCenter);
 
-		return findAssociationForLocation(ply, new BlockPos(xx, yy, zz));
+		return findAssociationForLocation(player, new BlockPos(xx, yy, zz));
 	}
 
 	/**
@@ -123,9 +127,10 @@ public class Solver {
 	 * was found, but has no association in the blockmap.
 	 */
 	@Nonnull
-	public Association findAssociationForLocation(@Nonnull final EntityPlayer player, @Nonnull final BlockPos pos) {
-		if (MathStuff.abs(player.motionY) < 0.02)
-			return null; // Don't play sounds on every tiny bounce
+	protected Association findAssociationForLocation(@Nonnull final EntityPlayer player, @Nonnull final BlockPos pos) {
+//		if (MathStuff.abs(player.motionY) < 0.02)
+//			return null; // Don't play sounds on every tiny bounce
+		
 		if (player.isInWater())
 			ModLog.debug(
 					"WARNING!!! Playing a sound while in the water! This is supposed to be halted by the stopping conditions!!");

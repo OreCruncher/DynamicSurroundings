@@ -88,6 +88,7 @@ public class FootstepsRegistry extends Registry {
 	@Override
 	public void initComplete() {
 		// TODO: Implement dumpstate
+		AcousticsManager.SWIM = this.isolator.getAcoustics().compileAcoustics("_SWIM");
 	}
 	
 	@Override

@@ -192,9 +192,6 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	public void think() {
 
-		if (SWIM == null)
-			SWIM = compileAcoustics("_SWIM");
-
 		final long time = System.currentTimeMillis();
 
 		while (!pending.isEmpty() && pending.peek().getTimeToPlay() <= time) {
