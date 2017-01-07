@@ -26,11 +26,13 @@ package org.blockartistry.mod.DynSurround.client.event;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.client.fx.particle.ExplosionHelper;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -49,6 +51,12 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class WorldEventDetector implements IWorldEventListener {
+	
+	protected final World world;
+	
+	public WorldEventDetector(@Nonnull final World world) {
+		this.world = world;
+	}
 
 	@Override
 	public void notifyBlockUpdate(@Nonnull final World worldIn, @Nonnull final BlockPos pos,
@@ -82,8 +90,12 @@ public class WorldEventDetector implements IWorldEventListener {
 	}
 
 	@Override
-	public void spawnParticle(int particleID, boolean ignoreRange, double xCoord, double yCoord, double zCoord,
+	public void spawnParticle(int particleID, boolean ignoreRange, double x, double y, double z,
 			double xSpeed, double ySpeed, double zSpeed, int... parameters) {
+		
+		if(EnumParticleTypes.EXPLOSION_LARGE.getParticleID() == particleID) {
+			ExplosionHelper.doExplosion(this.world, x, y, z);
+		}
 	}
 
 	@Override
@@ -116,6 +128,6 @@ public class WorldEventDetector implements IWorldEventListener {
 		// Only want client side world things
 		if (!event.getWorld().isRemote)
 			return;
-		event.getWorld().addEventListener(new WorldEventDetector());
+		event.getWorld().addEventListener(new WorldEventDetector(event.getWorld()));
 	}
 }

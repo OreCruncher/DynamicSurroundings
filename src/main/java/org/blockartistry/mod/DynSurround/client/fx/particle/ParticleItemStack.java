@@ -26,43 +26,54 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ParticleBlock extends ParticleAsset {
+public class ParticleItemStack extends ParticleAsset {
 
-	protected final Block prototype;
-	protected final IBlockState state;
-	protected float brightness;
+	protected static RenderItem itemRenderer;
 
-	protected final BlockRendererDispatcher dispatcher;
-	
-	public ParticleBlock(@Nonnull final Block block, @Nonnull final World world, final double x, final double y, final double z) {
-		this(block, world, x, y, z, 0, 0, 0);
+	protected final ItemStack prototype;
+	protected final IBakedModel model;
+
+	public ParticleItemStack(@Nonnull final ItemStack stack, @Nonnull final World world, final double x, final double y,
+			final double z) {
+		this(stack, world, x, y, z, 0, 0, 0);
 	}
 
-	public ParticleBlock(@Nonnull final Block block, @Nonnull final World world, final double x, final double y, final double z, final double dX, final double dY, final double dZ) {
+	public ParticleItemStack(@Nonnull final ItemStack stack, @Nonnull final World world, final double x, final double y,
+			final double z, final double dX, final double dY, final double dZ) {
 		super(world, x, y, z, dX, dY, dZ);
-		
-		this.prototype = block;
-		this.state = block.getDefaultState();
-		this.brightness = 1.0F;
-		this.dispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
+
+		if (itemRenderer == null) {
+			itemRenderer = Minecraft.getMinecraft().getRenderItem();
+		}
+
+		this.prototype = stack.copy();
+		this.model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(this.prototype, null,
+				(EntityLivingBase) null);
+		this.setScale(1.0F);
 	}
-	
-	public void setBrightness(final float bright) {
-		this.brightness = bright;
+
+	@Override
+	protected void doModelTranslate() {
+		GlStateManager.translate(0, -0.16F, 0);
 	}
 
 	@Override
 	protected void handleRender(final float partialTicks) {
-		this.dispatcher.renderBlockBrightness(this.state, this.brightness);
+		IBakedModel baked = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(this.model,
+				ItemCameraTransforms.TransformType.GROUND, false);
+		itemRenderer.renderItem(this.prototype, baked);
 	}
 
 }
