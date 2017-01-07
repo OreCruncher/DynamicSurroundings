@@ -29,82 +29,136 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.lang3.StringUtils;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public final class ExplosionHelper {
 
-	private static final Block[] overWorldTypes = { Blocks.DIRT, Blocks.COBBLESTONE, Blocks.GRAVEL, Blocks.SAND };
-	private static final ItemStack[] overWorldDebris = { new ItemStack(Items.APPLE), new ItemStack(Items.BED),
-			new ItemStack(Items.BONE), new ItemStack(Items.BAKED_POTATO), new ItemStack(Items.COAL) };
+	private static class Assets {
 
-	private static final Block[] netherTypes = { Blocks.NETHERRACK, Blocks.SOUL_SAND, Blocks.GRAVEL, Blocks.MAGMA };
-	private static final ItemStack[] netherDebris = { new ItemStack(Items.NETHER_WART),
-			new ItemStack(Items.GLOWSTONE_DUST), new ItemStack(Items.GOLD_NUGGET) };
+		public Block[] blocks;
+		public ItemStack[] stacks;
+		public String[] mobs;
 
-	private static final Block[] endTypes = { Blocks.END_STONE, Blocks.OBSIDIAN };
-	private static final ItemStack[] endDebris = { new ItemStack(Items.ENDER_PEARL), new ItemStack(Items.ENDER_PEARL) };
+		public Assets setBlocks(final Block... b) {
+			this.blocks = b;
+			return this;
+		}
+
+		public Assets setStacks(final ItemStack... s) {
+			this.stacks = s;
+			return this;
+		}
+
+		public Assets setMobs(final String... m) {
+			this.mobs = m;
+			return this;
+		}
+
+		public Block getBlock(final Random rand) {
+			return blocks != null && blocks.length > 0 ? blocks[rand.nextInt(blocks.length)] : null;
+		}
+
+		public ItemStack getStack(final Random rand) {
+			return stacks != null && stacks.length > 0 ? stacks[rand.nextInt(stacks.length)] : null;
+		}
+
+		public String getMob(final Random rand) {
+			return mobs != null && mobs.length > 0 ? mobs[rand.nextInt(mobs.length)] : null;
+		}
+	}
+
+	private static final Assets OVERWORLD = new Assets()
+			.setBlocks(Blocks.DIRT, Blocks.COBBLESTONE, Blocks.GRAVEL, Blocks.SAND)
+			.setStacks(new ItemStack(Items.FLINT), new ItemStack(Items.BRICK), new ItemStack(Items.BONE),
+					new ItemStack(Items.STICK), new ItemStack(Items.COAL))
+			.setMobs("Pig", "Sheep", "Chicken");
+
+	private static final Assets NETHER = new Assets()
+			.setBlocks(Blocks.NETHERRACK, Blocks.SOUL_SAND, Blocks.GRAVEL, Blocks.MAGMA)
+			.setStacks(new ItemStack(Items.NETHER_WART), new ItemStack(Items.GLOWSTONE_DUST),
+					new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.BLAZE_ROD));
+
+	private static final Assets END = new Assets().setBlocks(Blocks.END_STONE, Blocks.OBSIDIAN)
+			.setStacks(new ItemStack(Items.ENDER_PEARL), new ItemStack(Items.ENDER_PEARL))
+			.setMobs("Enderman", "Endermite");
 
 	private ExplosionHelper() {
 
 	}
 
 	@SuppressWarnings("incomplete-switch")
-	private static Block[] getAppropriateBlocks(@Nonnull final World world) {
+	private static Assets getAssets(@Nonnull final World world) {
 		switch (world.provider.getDimensionType()) {
-		case THE_END:
-			return endTypes;
 		case NETHER:
-			return netherTypes;
+			return ExplosionHelper.NETHER;
+		case THE_END:
+			return ExplosionHelper.END;
 		}
-		return overWorldTypes;
+		return ExplosionHelper.OVERWORLD;
 	}
 
-	@SuppressWarnings("incomplete-switch")
-	private static ItemStack[] getAppropriateItemStacks(@Nonnull final World world) {
-		switch (world.provider.getDimensionType()) {
-		case THE_END:
-			return endDebris;
-		case NETHER:
-			return netherDebris;
+	private static ParticleAsset getParticle(@Nonnull final World world, final double x, final double y,
+			final double z) {
+		final Random rand = ThreadLocalRandom.current();
+		final Assets assets = getAssets(world);
+
+		final float motionX = rand.nextFloat() * 10.0F - 5.0F;
+		final float motionZ = rand.nextFloat() * 10.0F - 5.0F;
+		final float motionY = rand.nextFloat() * 6.0F + 6.0F;
+
+		final int choice = rand.nextInt(20);
+		if (choice < 3) {
+			final String mob = assets.getMob(rand);
+			if (StringUtils.isEmpty(mob))
+				return null;
+			final ParticleEntity pe = new ParticleEntity(mob, world, x, y, z, motionX, motionY, motionZ);
+			pe.setScale(0.5F);
+			pe.setMaxAge(75);
+			pe.setPitchRate(18 + rand.nextFloat() * 18);
+			pe.setYawRate(18 + rand.nextFloat() * 18);
+			pe.setGravity(0.25F);
+			return pe;
+		} else if (choice < 8) {
+			final ItemStack stack = assets.getStack(rand);
+			if (stack == null)
+				return null;
+			final ParticleItemStack s = new ParticleItemStack(stack, world, x, y, z, motionX, motionY, motionZ);
+			s.setScale(0.5F);
+			s.setMaxAge(75);
+			s.setPitchRate(18 + rand.nextFloat() * 18);
+			s.setYawRate(18 + rand.nextFloat() * 18);
+			s.setGravity(0.25F);
+			return s;
+		} else {
+			final Block block = assets.getBlock(rand);
+			if (block == null)
+				return null;
+			final ParticleBlock p = new ParticleBlock(block, world, x, y, z, motionX, motionY, motionZ);
+			p.setScale(0.05F + 0.10F * rand.nextFloat());
+			p.setMaxAge(75);
+			p.setPitchRate(18 + rand.nextFloat() * 18);
+			p.setYawRate(18 + rand.nextFloat() * 18);
+			p.setGravity(0.25F);
+			return p;
 		}
-		return overWorldDebris;
+
 	}
 
 	public static void doExplosion(@Nonnull final World world, final double x, final double y, final double z) {
 
-		final Random rand = ThreadLocalRandom.current();
-		final Block[] candidates = getAppropriateBlocks(world);
-		final ItemStack[] stacks = getAppropriateItemStacks(world);
-
-		for (int i = 0; i < 7; i++) {
-			final float motionX = rand.nextFloat() * 10.0F - 5.0F;
-			final float motionZ = rand.nextFloat() * 10.0F - 5.0F;
-			final float motionY = rand.nextFloat() * 6.0F + 6.0F;
-
-			final Block block = candidates[rand.nextInt(candidates.length)];
-
-			final ParticleBlock p = new ParticleBlock(block, world, x, y, z, motionX, motionY, motionZ);
-			p.setScale(0.05F + 0.10F * rand.nextFloat());
-			p.setMaxAge(100);
-			p.setPitchRate(18 + rand.nextFloat() * 18);
-			p.setYawRate(18 + rand.nextFloat() * 18);
-			p.setGravity(0.25F);
-			ParticleHelper.addParticle(p);
-
-			if (rand.nextInt(5) == 0) {
-				final ItemStack stack = stacks[rand.nextInt(stacks.length)];
-				final ParticleItemStack s = new ParticleItemStack(stack, world, x, y, z, motionX, motionY, motionZ);
-				s.setScale(0.5F);
-				s.setMaxAge(100);
-				s.setPitchRate(18 + rand.nextFloat() * 18);
-				s.setYawRate(18 + rand.nextFloat() * 18);
-				s.setGravity(0.25F);
-				ParticleHelper.addParticle(s);
-			}
+		for (int i = 0; i < 4; i++) {
+			final ParticleAsset particle = getParticle(world, x, y, z);
+			if (particle != null)
+				ParticleHelper.addParticle(particle);
 		}
 	}
 
