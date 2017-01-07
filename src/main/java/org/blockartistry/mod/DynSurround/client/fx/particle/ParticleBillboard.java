@@ -47,9 +47,12 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 // Billboard is a text rendering that hovers and follows an entity as
 // long as there is text to display.
+@SideOnly(Side.CLIENT)
 public class ParticleBillboard extends Particle {
 
 	private static final Color B_COLOR = Color.getColor(TextFormatting.BLACK);

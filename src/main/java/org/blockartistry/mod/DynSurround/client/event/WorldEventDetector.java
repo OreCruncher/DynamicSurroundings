@@ -84,7 +84,6 @@ public class WorldEventDetector implements IWorldEventListener {
 	@Override
 	public void spawnParticle(int particleID, boolean ignoreRange, double xCoord, double yCoord, double zCoord,
 			double xSpeed, double ySpeed, double zSpeed, int... parameters) {
-
 	}
 
 	@Override
