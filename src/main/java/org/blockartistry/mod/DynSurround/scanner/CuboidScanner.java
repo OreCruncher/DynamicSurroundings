@@ -23,6 +23,8 @@
 
 package org.blockartistry.mod.DynSurround.scanner;
 
+import java.util.Random;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -30,6 +32,7 @@ import org.blockartistry.mod.DynSurround.client.event.BlockUpdateEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.MyMutableBlockPos;
 
+import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -153,13 +156,14 @@ public abstract class CuboidScanner extends Scanner {
 	 * This is the hook that gets called when a block goes out of scope because
 	 * the player moved or something.
 	 */
-	public void blockUnscan(final IBlockState state, final BlockPos pos) {
+	public void blockUnscan(final IBlockState state, final BlockPos pos, final Random rand) {
 
 	}
 
 	protected void updateScan(@Nonnull final Cuboid newVolume, @Nonnull final Cuboid oldVolume,
 			@Nonnull final Cuboid intersect) {
 
+		final Random rand = ThreadLocalRandom.current();
 		final World world = EnvironState.getWorld();
 		final ComplementsPointIterator newInRange = new ComplementsPointIterator(newVolume, intersect);
 		final ComplementsPointIterator newOutOfRange = new ComplementsPointIterator(oldVolume, intersect);
@@ -169,7 +173,7 @@ public abstract class CuboidScanner extends Scanner {
 			if (point.getY() > 0) {
 				final IBlockState state = world.getBlockState(point);
 				if (interestingBlock(state))
-					blockUnscan(state, point);
+					blockUnscan(state, point, rand);
 			}
 		}
 
@@ -178,7 +182,7 @@ public abstract class CuboidScanner extends Scanner {
 			if (point.getY() > 0) {
 				final IBlockState state = world.getBlockState(point);
 				if (interestingBlock(state))
-					blockScan(state, point);
+					blockScan(state, point, rand);
 			}
 		}
 
@@ -187,7 +191,7 @@ public abstract class CuboidScanner extends Scanner {
 
 	@Override
 	@Nullable
-	protected BlockPos nextPos(@Nonnull final MyMutableBlockPos workingPos) {
+	protected BlockPos nextPos(@Nonnull final MyMutableBlockPos workingPos, @Nonnull final Random rand) {
 
 		if (this.scanFinished)
 			return null;
@@ -228,7 +232,7 @@ public abstract class CuboidScanner extends Scanner {
 	@SubscribeEvent(receiveCanceled = false)
 	public void onBlockUpdate(@Nonnull final BlockUpdateEvent event) {
 		if (this.activeCuboid != null && this.activeCuboid.contains(event.pos))
-			blockScan(event.newState, event.pos);
+			blockScan(event.newState, event.pos, ThreadLocalRandom.current());
 	}
 
 }

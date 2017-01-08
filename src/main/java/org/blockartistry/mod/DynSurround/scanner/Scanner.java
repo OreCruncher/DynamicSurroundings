@@ -46,8 +46,6 @@ public abstract class Scanner implements ITickable {
 
 	protected final String name;
 
-	protected final Random rand = ThreadLocalRandom.current();
-
 	protected final int xRange;
 	protected final int yRange;
 	protected final int zRange;
@@ -103,7 +101,8 @@ public abstract class Scanner implements ITickable {
 	 * not safe to hold on to beyond the call so if it needs to be kept it needs
 	 * to be copied.
 	 */
-	public abstract void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos);
+	public abstract void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos,
+			@Nonnull final Random rand);
 
 	/**
 	 * Determines if the block is of interest to the effects. Override to
@@ -118,15 +117,16 @@ public abstract class Scanner implements ITickable {
 
 		this.theProfiler.startSection(this.name);
 
+		final Random rand = ThreadLocalRandom.current();
 		final MyMutableBlockPos workingPos = new MyMutableBlockPos();
 		final World world = EnvironState.getWorld();
 		for (int count = 0; count < this.blocksPerTick; count++) {
-			final BlockPos pos = nextPos(workingPos);
+			final BlockPos pos = nextPos(workingPos, rand);
 			if (pos == null)
 				break;
 			final IBlockState state = world.getBlockState(pos);
 			if (interestingBlock(state)) {
-				blockScan(state, pos);
+				blockScan(state, pos, rand);
 			}
 		}
 
@@ -140,6 +140,6 @@ public abstract class Scanner implements ITickable {
 	 * and returned from the function call.
 	 */
 	@Nullable
-	protected abstract BlockPos nextPos(@Nonnull final MyMutableBlockPos pos);
+	protected abstract BlockPos nextPos(@Nonnull final MyMutableBlockPos pos, @Nonnull final Random rand);
 
 }

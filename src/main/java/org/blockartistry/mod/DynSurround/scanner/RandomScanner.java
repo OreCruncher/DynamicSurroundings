@@ -23,6 +23,8 @@
 
 package org.blockartistry.mod.DynSurround.scanner;
 
+import java.util.Random;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -44,14 +46,14 @@ public abstract class RandomScanner extends Scanner {
 		super(name, range, blocksPerTick);
 	}
 
-	protected int randomRange(final int range) {
-		return this.rand.nextInt(range) - this.rand.nextInt(range);
+	protected int randomRange(final int range, final Random rand) {
+		return rand.nextInt(range) - rand.nextInt(range);
 	}
 
 	@Override
-	protected BlockPos nextPos(@Nonnull final MyMutableBlockPos workingPos) {
-		return workingPos.setPos(EnvironState.getPlayerPosition()).add(randomRange(this.xRange),
-				randomRange(this.yRange), randomRange(this.zRange));
+	protected BlockPos nextPos(@Nonnull final MyMutableBlockPos workingPos, @Nonnull final Random rand) {
+		return workingPos.setPos(EnvironState.getPlayerPosition()).add(randomRange(this.xRange, rand),
+				randomRange(this.yRange, rand), randomRange(this.zRange, rand));
 	}
 
 }
