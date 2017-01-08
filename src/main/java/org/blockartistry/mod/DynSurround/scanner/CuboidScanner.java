@@ -98,8 +98,6 @@ public abstract class CuboidScanner extends Scanner {
 	@Override
 	public void update() {
 
-		this.theProfiler.startSection("CuboidScanner");
-
 		// If there is no player position or it's bogus just return
 		final BlockPos playerPos = EnvironState.getPlayerPosition();
 		if (playerPos == null || playerPos.getY() < 0) {
@@ -148,8 +146,6 @@ public abstract class CuboidScanner extends Scanner {
 				}
 			}
 		}
-
-		this.theProfiler.endSection();
 	}
 
 	/**

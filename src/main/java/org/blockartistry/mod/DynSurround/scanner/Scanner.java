@@ -24,23 +24,22 @@
 package org.blockartistry.mod.DynSurround.scanner;
 
 import java.util.Random;
+import java.util.concurrent.Callable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.MyMutableBlockPos;
 
 import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.profiler.Profiler;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public abstract class Scanner implements ITickable {
+public abstract class Scanner implements ITickable, Callable<Void> {
 
 	private final static int MAX_BLOCKS_TICK = 3000;
 
@@ -55,8 +54,6 @@ public abstract class Scanner implements ITickable {
 	protected final int zSize;
 	protected final int blocksPerTick;
 	protected final int volume;
-
-	protected final Profiler theProfiler;
 
 	public Scanner(@Nonnull final String name, final int range) {
 		this(name, range, 0);
@@ -85,8 +82,6 @@ public abstract class Scanner implements ITickable {
 			this.blocksPerTick = Math.min(this.volume / 20, MAX_BLOCKS_TICK);
 		else
 			this.blocksPerTick = Math.min(blocksPerTick, MAX_BLOCKS_TICK);
-
-		this.theProfiler = DSurround.getProfiler();
 	}
 
 	/**
@@ -113,9 +108,13 @@ public abstract class Scanner implements ITickable {
 	}
 
 	@Override
+	public Void call() {
+		update();
+		return null;
+	}
+	
+	@Override
 	public void update() {
-
-		this.theProfiler.startSection(this.name);
 
 		final Random rand = ThreadLocalRandom.current();
 		final MyMutableBlockPos workingPos = new MyMutableBlockPos();
@@ -129,8 +128,6 @@ public abstract class Scanner implements ITickable {
 				blockScan(state, pos, rand);
 			}
 		}
-
-		this.theProfiler.endSection();
 
 	}
 

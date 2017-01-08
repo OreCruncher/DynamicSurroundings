@@ -50,8 +50,22 @@ public abstract class EffectHandlerBase {
 	// Used to obtain the name of the handler for logging purposes
 	public abstract String getHandlerName();
 	
+	/**
+	 * Override to provide pre process logic
+	 */
+	public void pre() {
+		
+	}
+	
 	// The meat of the processing logic.  Invoked every client tick.
 	public abstract void process(final World world, final EntityPlayer player);
+	
+	/**
+	 * Override to provide post process logic
+	 */
+	public void post() {
+		
+	}
 	
 	protected BiomeRegistry getBiomeRegistry() {
 		return this.biomes;

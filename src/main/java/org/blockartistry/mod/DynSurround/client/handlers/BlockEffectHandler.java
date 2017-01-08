@@ -24,10 +24,14 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.handlers.scanners.AlwaysOnBlockEffectScanner;
 import org.blockartistry.mod.DynSurround.client.handlers.scanners.RandomBlockEffectScanner;
+import org.blockartistry.mod.DynSurround.client.handlers.scanners.ScannerThreadPool;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -45,12 +49,43 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class BlockEffectHandler extends EffectHandlerBase {
 
+	//protected final RandomBlockEffectScanner effects = new RandomBlockEffectScannerThreaded(ModOptions.specialEffectRange);
+	//protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScannerThreaded(ModOptions.specialEffectRange);
+
 	protected final RandomBlockEffectScanner effects = new RandomBlockEffectScanner(ModOptions.specialEffectRange);
 	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(ModOptions.specialEffectRange);
+
+	protected Future<?> effectsCall;
+	protected Future<?> alwaysOnCall;
 
 	@Override
 	public String getHandlerName() {
 		return "BlockEffectHandler";
+	}
+
+	@Override
+	public void pre() {
+		if (Minecraft.getMinecraft().isGamePaused())
+			return;
+
+		//this.effectsCall = ScannerThreadPool.submit(this.effects);
+		//this.alwaysOnCall = ScannerThreadPool.submit(this.alwaysOn);
+	}
+
+	@Override
+	public void post() {
+		try {
+			if (this.effectsCall != null)
+				this.effectsCall.get();
+			if (this.alwaysOnCall != null)
+				this.alwaysOnCall.get();
+			ScannerThreadPool.processResults();
+		} catch (final InterruptedException e) {
+		} catch (final ExecutionException e) {
+		}
+		
+		this.effectsCall = null;
+		this.alwaysOnCall = null;
 	}
 
 	@Override

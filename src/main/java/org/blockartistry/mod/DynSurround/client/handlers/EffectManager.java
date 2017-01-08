@@ -109,12 +109,19 @@ public class EffectManager {
 
 		if (event.phase == Phase.START) {
 			DSurround.getProfiler().startSection("DSurroundEffectManager");
+			
+			// Fire pre calls
+			for(final EffectHandlerBase handler: effectHandlers)
+				handler.pre();
+			
 			final EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
-			for (final EffectHandlerBase handler : effectHandlers) {
-				DSurround.getProfiler().startSection(handler.getHandlerName());
+			for (final EffectHandlerBase handler : effectHandlers)
 				handler.process(world, player);
-				DSurround.getProfiler().endSection();
-			}
+			
+			// Fire post calls
+			for(final EffectHandlerBase handler: effectHandlers)
+				handler.post();
+			
 			DSurround.getProfiler().endSection();
 		}
 	}

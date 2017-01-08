@@ -31,51 +31,49 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
-import org.blockartistry.mod.DynSurround.registry.RegistryManager;
-import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.mod.DynSurround.scanner.CuboidScanner;
+import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
+
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * This guy scans a large area around the player looking for blocks to spawn
- * "always on" effects. Currently there is only one, the water splash for
- * waterfalls.
- * 
- * The CuboidScanner tries to only scan new blocks that come into range as the
- * player moves. Once all the blocks are scanned in the region (cuboid) it will
- * stop. It will start again once the player moves location.
- */
 @SideOnly(Side.CLIENT)
-public class AlwaysOnBlockEffectScanner extends CuboidScanner {
+public class RandomBlockEffectScannerThreaded extends RandomBlockEffectScanner {
 
-	protected final BlockRegistry blocks;
-
-	public AlwaysOnBlockEffectScanner(final int range) {
-		super("AlwaysOnBlockEffectScanner", range, 0);
-		this.blocks = RegistryManager.get(RegistryType.BLOCK);
-	}
-
-	@Override
-	protected boolean interestingBlock(final IBlockState state) {
-		// Only interested in water blocks. This will need to
-		// change once more "always on" stuff gets added.
-		return state.getBlock() == Blocks.WATER;
+	public RandomBlockEffectScannerThreaded(int range) {
+		super(range);
 	}
 
 	@Override
 	public void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final Random rand) {
-		final List<BlockEffect> effects = this.blocks.getAlwaysOnEffects(state);
-		if (effects != null && effects.size() > 0) {
+
+		// Incoming pos is actually a mutable. Need to make a real BlockPos
+		// because it is going back to another thread.
+		final BlockPos loc = new BlockPos(pos);
+		final List<BlockEffect> chain = this.blocks.findEffectMatches(state);
+
+		if (chain != null && !chain.isEmpty()) {
 			final World world = EnvironState.getWorld();
-			for (final BlockEffect be : effects) {
-				be.process(state, world, pos, rand);
-			}
+			for (final BlockEffect effect : chain)
+				if (effect.trigger(state, world, pos, rand))
+					ScannerThreadPool.post(new Runnable() {
+						public void run() {
+							effect.doEffect(state, world, loc, rand);
+						}
+					});
+		}
+
+		final SoundEffect sound = this.blocks.getSound(state, rand);
+		if (sound != null) {
+			final World world = EnvironState.getWorld();
+			ScannerThreadPool.post(new Runnable() {
+				public void run() {
+					sound.doEffect(state, world, loc, SoundCategory.BLOCKS, rand);
+				}
+			});
 		}
 	}
 
