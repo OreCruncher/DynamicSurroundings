@@ -45,12 +45,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RandomBlockEffectScanner extends RandomScanner {
 
-	private static final double RATIO = 0.0335671847202175D;
+	// Vanilla had a range of 16 in doVoidParticles() and it iterated 1000 times.
+	// The new doVoidParticles() in 1.10x is different.  Loops less, but has two
+	// ranges it works (near and far). Not going to change it as the data in the
+	// config files it tuned to this existing behavior.
+	private static final float RATIO = 1000.0F / (16.0F * 16.0F * 16.0F);
 
 	protected final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
 
 	public RandomBlockEffectScanner(final int range) {
-		super("RandomBlockEffectScanner", range, (int) (Math.pow(range * 2 - 1, 3) * RATIO));
+		super("RandomBlockEffectScanner", range, (int) (range * range * range * RATIO));
 	}
 	
 	@Override

@@ -42,6 +42,8 @@ import net.minecraft.world.World;
 
 public abstract class Scanner implements ITickable {
 
+	private final static int MAX_BLOCKS_TICK = 3000;
+
 	protected final String name;
 
 	protected final Random rand = ThreadLocalRandom.current();
@@ -82,9 +84,9 @@ public abstract class Scanner implements ITickable {
 		this.zSize = zRange * 2;
 		this.volume = this.xSize * this.ySize * this.zSize;
 		if (blocksPerTick == 0)
-			this.blocksPerTick = this.volume / 20; // 20 ticks in a second
+			this.blocksPerTick = Math.min(this.volume / 20, MAX_BLOCKS_TICK);
 		else
-			this.blocksPerTick = blocksPerTick;
+			this.blocksPerTick = Math.min(blocksPerTick, MAX_BLOCKS_TICK);
 
 		this.theProfiler = DSurround.getProfiler();
 	}
@@ -97,9 +99,9 @@ public abstract class Scanner implements ITickable {
 	}
 
 	/**
-	 * Invoked when a block of interest is discovered.  The BlockPos provided
-	 * is not safe to hold on to beyond the call so if it needs to be kept it
-	 * needs to be copied.
+	 * Invoked when a block of interest is discovered. The BlockPos provided is
+	 * not safe to hold on to beyond the call so if it needs to be kept it needs
+	 * to be copied.
 	 */
 	public abstract void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos);
 
@@ -133,9 +135,9 @@ public abstract class Scanner implements ITickable {
 	}
 
 	/**
-	 * Provide the next block position to be processed.  For memory efficiency
-	 * the provided mutable should be used to store the coordinate information and
-	 * returned from the function call.
+	 * Provide the next block position to be processed. For memory efficiency
+	 * the provided mutable should be used to store the coordinate information
+	 * and returned from the function call.
 	 */
 	@Nullable
 	protected abstract BlockPos nextPos(@Nonnull final MyMutableBlockPos pos);

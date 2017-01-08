@@ -213,10 +213,10 @@ public final class ModOptions {
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Default maximum rain strength for a dimension")
 	public static float defaultMaxRainStrength = 1.0F;
-	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_FX_RANGE, defaultValue = "16", lang = "cfg.general.FXRange")
+	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_FX_RANGE, defaultValue = "24", lang = "cfg.general.FXRange")
 	@MinMaxInt(min = 16, max = 64)
 	@Comment("Block radius/range around player for special effect application")
-	public static int specialEffectRange = 16;
+	public static int specialEffectRange = 24;
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_EXTERNAL_SCRIPTS, defaultValue = "", lang = "cfg.general.ExternalScripts")
 	@Comment("Configuration files for customization")
 	@RestartRequired
