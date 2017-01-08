@@ -54,6 +54,7 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.relauncher.Side;
@@ -159,6 +160,10 @@ public final class BlockRegistry extends Registry {
 	
 	@Nullable
 	public List<SoundEffect> getAllStepSounds(@Nonnull final IBlockState state) {
+		// Air and liquid have no step sounds so optimize that out
+		if(state.getMaterial() == Material.AIR || state.getMaterial().isLiquid())
+			return null;
+
 		final BlockProfile entry = this.registry.get(state.getBlock());
 		if (entry == null)
 			return null;
@@ -188,6 +193,11 @@ public final class BlockRegistry extends Registry {
 
 	@Nullable
 	public SoundEffect getStepSound(@Nonnull final IBlockState state, @Nonnull final Random random) {
+		
+		// Air and liquid have no step sounds so optimize that out
+		if(state.getMaterial() == Material.AIR || state.getMaterial().isLiquid())
+			return null;
+		
 		final BlockProfile entry = this.registry.get(state.getBlock());
 		if (entry == null)
 			return null;

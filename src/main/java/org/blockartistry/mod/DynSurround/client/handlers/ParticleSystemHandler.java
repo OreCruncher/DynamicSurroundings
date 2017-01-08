@@ -33,12 +33,13 @@ import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.mod.DynSurround.api.events.BlockEffectEvent;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleSystem;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.util.BlockPosHelper;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -67,13 +68,15 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 		// They are removed if they are dead, or if they are out of
 		// range of the player.
 		final double range = ModOptions.specialEffectRange;
-		final AxisAlignedBB box = player.getEntityBoundingBox().expandXyz(range);
+		final BlockPos min = EnvironState.getPlayerPosition().add(-range, -range, -range);
+		final BlockPos max = EnvironState.getPlayerPosition().add(range, range, range);
+
 		Iterables.removeIf(this.systems.values(), new Predicate<ParticleSystem>() {
 			@Override
 			public boolean apply(@Nonnull final ParticleSystem input) {
 				if (!input.isAlive())
 					return true;
-				if (!input.inBox(box)) {
+				if (!BlockPosHelper.contains(input.getPos(), min, max)) {
 					input.setExpired();
 					return true;
 				}

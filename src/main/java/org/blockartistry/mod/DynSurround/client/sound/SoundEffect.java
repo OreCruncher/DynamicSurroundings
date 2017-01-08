@@ -33,8 +33,6 @@ import org.blockartistry.mod.DynSurround.data.xface.SoundType;
 import org.blockartistry.mod.DynSurround.registry.Evaluator;
 import org.blockartistry.mod.DynSurround.util.SoundUtils;
 
-import com.google.common.base.Objects;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -76,7 +74,7 @@ public final class SoundEffect {
 		this.sound = SoundUtils.getOrRegisterSound(resource);
 		this.volume = volume;
 		this.pitch = pitch;
-		this.conditions = ".*";
+		this.conditions = StringUtils.EMPTY;
 		this.weight = 1;
 		this.type = SoundType.SPOT;
 		this.variable = variable;
@@ -100,7 +98,7 @@ public final class SoundEffect {
 	public SoundEffect(final SoundConfig record) {
 		this.soundName = StringUtils.isEmpty(record.sound) ? "NO SOUND SPECIFIED" : record.sound;
 		this.sound = StringUtils.isEmpty(record.sound) ? null : SoundUtils.getOrRegisterSound(record.sound);
-		this.conditions = StringUtils.isEmpty(record.conditions) ? ".*" : record.conditions;
+		this.conditions = StringUtils.isEmpty(record.conditions) ? StringUtils.EMPTY : record.conditions;
 		this.volume = record.volume == null ? 1.0F : record.volume.floatValue();
 		this.pitch = record.pitch == null ? 1.0F : record.pitch.floatValue();
 		this.weight = record.weight == null ? 10 : record.weight.intValue();
@@ -157,8 +155,7 @@ public final class SoundEffect {
 			return true;
 		if (!(anObj instanceof SoundEffect))
 			return false;
-		final SoundEffect s = (SoundEffect) anObj;
-		return Objects.equal(this.sound, s.sound);
+		return this.soundName.equals(((SoundEffect) anObj).soundName);
 	}
 
 	@Override
@@ -167,6 +164,10 @@ public final class SoundEffect {
 	}
 
 	public static SoundEffect scaleVolume(final SoundEffect sound, final float scale) {
+		// Easy noop case...
+		if(scale == 1.0F)
+			return sound;
+		
 		final SoundEffect newEffect = new SoundEffect(sound);
 		newEffect.volume *= scale;
 		return newEffect;
@@ -175,8 +176,7 @@ public final class SoundEffect {
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append('[').append(sound == null ? "MISSING_SOUND" : this.soundName);
-		if (!StringUtils.isEmpty(this.conditions))
-			builder.append('(').append(this.conditions).append(')');
+		builder.append('(').append(this.conditions).append(')');
 		builder.append(", v:").append(this.volume);
 		builder.append(", p:").append(this.pitch);
 		builder.append(", t:").append(this.type);

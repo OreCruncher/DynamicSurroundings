@@ -29,7 +29,6 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.client.handlers.scanners.AlwaysOnBlockEffectScanner;
 import org.blockartistry.mod.DynSurround.client.handlers.scanners.RandomBlockEffectScanner;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -61,27 +60,24 @@ public class BlockEffectHandler extends EffectHandlerBase {
 
 		this.effects.update();
 		this.alwaysOn.update();
-		
+
 		if (EnvironState.isPlayerOnGround() && EnvironState.isPlayerMoving()) {
 			final BlockPos pos = EnvironState.getPlayerPosition().down(1);
 			final IBlockState state = world.getBlockState(pos);
-			final Material material = state.getMaterial();
-			if (!(material == Material.AIR || material.isLiquid())) {
-				final SoundEffect sound = getBlockRegistry().getStepSound(state, RANDOM);
-				if (sound != null)
-					sound.doEffect(state, world, pos, SoundCategory.BLOCKS, RANDOM);
-			}
+			final SoundEffect sound = getBlockRegistry().getStepSound(state, RANDOM);
+			if (sound != null)
+				sound.doEffect(state, world, pos, SoundCategory.BLOCKS, RANDOM);
 		}
 	}
-	
+
 	@Override
 	public void onConnect() {
 		MinecraftForge.EVENT_BUS.register(this.alwaysOn);
 	}
-	
+
 	@Override
 	public void onDisconnect() {
 		MinecraftForge.EVENT_BUS.unregister(this.alwaysOn);
 	}
-	
+
 }

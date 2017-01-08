@@ -33,6 +33,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
+import org.blockartistry.mod.DynSurround.util.MyMutableBlockPos;
 
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,14 +52,15 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 
 		private final BlockPos offset;
 		private final float points;
+		private final MyMutableBlockPos working;
 
 		public Cell(@Nonnull final BlockPos offset, final int range) {
 			this.offset = offset;
-
 			final float xV = range - MathStuff.abs(offset.getX()) + 1;
 			final float zV = range - MathStuff.abs(offset.getZ()) + 1;
 			float candidate = Math.min(xV, zV);
 			this.points = candidate * candidate;
+			this.working = new MyMutableBlockPos();
 		}
 
 		public float potentialPoints() {
@@ -66,8 +68,8 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 		}
 
 		public float score(@Nonnull final BlockPos playerPos) {
-			final BlockPos coord = playerPos.add(this.offset);
-			final int y = EnvironState.getWorld().getTopSolidOrLiquidBlock(coord).getY();
+			this.working.setPos(playerPos).add(this.offset);
+			final int y = EnvironState.getWorld().getTopSolidOrLiquidBlock(this.working).getY();
 			return ((y - playerPos.getY()) < 3) ? this.points : 0.0F;
 		}
 
@@ -112,7 +114,7 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 
 	private static int biomeArea;
 	private static final TObjectIntHashMap<BiomeInfo> weights = new TObjectIntHashMap<BiomeInfo>();
-	private static final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+	private static final MyMutableBlockPos mutable = new MyMutableBlockPos();
 
 	// "Finger print" of the last area survey.
 	private static BiomeInfo surveyedBiome = null;
@@ -159,13 +161,10 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 			biomeArea = 1;
 			weights.put(EnvironState.getPlayerBiome(), 1);
 		} else {
-			final int x = surveyedPosition.getX();
-			final int z = surveyedPosition.getZ();
-
 			for (int dX = -BIOME_SURVEY_RANGE; dX <= BIOME_SURVEY_RANGE; dX++)
 				for (int dZ = -BIOME_SURVEY_RANGE; dZ <= BIOME_SURVEY_RANGE; dZ++) {
 					biomeArea++;
-					mutable.setPos(x + dX, 0, z + dZ);
+					mutable.setPos(surveyedPosition).add(dX, 0, dZ);
 					final BiomeInfo biome = getBiomeRegistry().get(EnvironState.getWorld().getBiome(mutable));
 					weights.adjustOrPutValue(biome, 1, 1);
 				}
@@ -180,13 +179,13 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	// Analyzes the area around the player and caches the results.
 	// Generally it is called once a tick.
 	@Override
-	public void process(final World world, final EntityPlayer player) {
-		
+	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+
 		// Only process on the correct interval
 		intervalTicker++;
 		if (intervalTicker < SURVEY_INTERVAL)
 			return;
-		
+
 		intervalTicker = 0;
 
 		final BlockPos position = EnvironState.getPlayerPosition();

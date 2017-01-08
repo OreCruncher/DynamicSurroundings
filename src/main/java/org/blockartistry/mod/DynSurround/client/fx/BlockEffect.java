@@ -28,6 +28,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.mod.DynSurround.api.events.BlockEffectEvent;
 import org.blockartistry.mod.DynSurround.registry.Evaluator;
@@ -43,7 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class BlockEffect {
 
 	private int chance;
-	protected String conditions = ".*";
+	protected String conditions = StringUtils.EMPTY;
 
 	public BlockEffect() {
 		this(100);
@@ -57,7 +58,7 @@ public abstract class BlockEffect {
 	public abstract BlockEffectType getEffectType();
 
 	public void setConditions(@Nullable final String conditions) {
-		this.conditions = conditions == null ? ".*" : conditions;
+		this.conditions = conditions == null ? StringUtils.EMPTY : conditions;
 	}
 
 	@Nonnull

@@ -206,12 +206,10 @@ public class BiomeInfo {
 	}
 
 	@Nonnull
-	public List<SoundEffect> findSoundMatches() {
-		final List<SoundEffect> results = new ArrayList<SoundEffect>();
+	public void findSoundMatches(@Nonnull final List<SoundEffect> results) {
 		for (final SoundEffect sound : this.sounds)
 			if (sound.matches())
 				results.add(sound);
-		return results;
 	}
 
 	@Nullable

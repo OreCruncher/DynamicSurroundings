@@ -31,8 +31,6 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
-import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
-
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
@@ -160,23 +158,4 @@ public final class DimensionRegistry extends Registry {
 		return getData(world).getHasWeather();
 	}
 
-	private static final String CONDITION_TOKEN_RAINING = "raining";
-	private static final String CONDITION_TOKEN_DAY = "day";
-	private static final String CONDITION_TOKEN_NIGHT = "night";
-	private static final char CONDITION_SEPARATOR = '#';
-
-	@Nonnull
-	public String getConditions(@Nonnull final World world) {
-		final StringBuilder builder = new StringBuilder();
-		builder.append(CONDITION_SEPARATOR);
-		if (DiurnalUtils.isDaytime(world))
-			builder.append(CONDITION_TOKEN_DAY);
-		else
-			builder.append(CONDITION_TOKEN_NIGHT);
-		builder.append(CONDITION_SEPARATOR).append(world.provider.getDimensionType());
-		if (world.getRainStrength(1.0F) > 0.0F)
-			builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_RAINING);
-		builder.append(CONDITION_SEPARATOR);
-		return builder.toString();
-	}
 }

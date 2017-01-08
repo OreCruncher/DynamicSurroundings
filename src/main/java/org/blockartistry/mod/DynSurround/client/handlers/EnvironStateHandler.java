@@ -36,7 +36,6 @@ import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.mod.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
-import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.Evaluator;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
@@ -47,10 +46,6 @@ import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityBoat;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.BlockPos;
@@ -77,7 +72,6 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		// State that is gathered from the various sources
 		// to avoid requery. Used during the tick.
-		private static String conditions = "";
 		private static String biomeName = "";
 		private static BiomeInfo playerBiome = null;
 		private static SeasonType season = SeasonType.NONE;
@@ -96,88 +90,12 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		private static int tickCounter;
 
-		private static final String CONDITION_TOKEN_HURT = "hurt";
-		private static final String CONDITION_TOKEN_HUNGRY = "hungry";
-		private static final String CONDITION_TOKEN_BURNING = "burning";
-		private static final String CONDITION_TOKEN_NOAIR = "noair";
-		private static final String CONDITION_TOKEN_FLYING = "flying";
-		private static final String CONDITION_TOKEN_SPRINTING = "sprinting";
-		private static final String CONDITION_TOKEN_INLAVA = "inlava";
-		private static final String CONDITION_TOKEN_INWATER = "inwater";
-		private static final String CONDITION_TOKEN_INVISIBLE = "invisible";
-		private static final String CONDITION_TOKEN_BLIND = "blind";
-		private static final String CONDITION_TOKEN_MINECART = "ridingminecart";
-		private static final String CONDITION_TOKEN_HORSE = "ridinghorse";
-		private static final String CONDITION_TOKEN_BOAT = "ridingboat";
-		private static final String CONDITION_TOKEN_PIG = "ridingpig";
-		private static final String CONDITION_TOKEN_RIDING = "riding";
-		private static final String CONDITION_TOKEN_FREEZING = "freezing";
-		private static final String CONDITION_TOKEN_FOG = "fog";
-		private static final String CONDITION_TOKEN_HUMID = "humid";
-		private static final String CONDITION_TOKEN_DRY = "dry";
-		private static final String CONDITION_TOKEN_INSIDE = "inside";
-		private static final char CONDITION_SEPARATOR = '#';
-
-		private static String getPlayerConditions(final EntityPlayer player) {
-			final StringBuilder builder = new StringBuilder();
-
-			builder.append(CONDITION_SEPARATOR).append(season.getValue());
-
-			if (isPlayerHurt())
-				builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_HURT);
-			if (isPlayerHungry())
-				builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_HUNGRY);
-			if (isPlayerBurning())
-				builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_BURNING);
-			if (isPlayerSuffocating())
-				builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_NOAIR);
-			if (isPlayerFlying())
-				builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_FLYING);
-			if (isPlayerSprinting())
-				builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_SPRINTING);
-			if (isPlayerInLava())
-				builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_INLAVA);
-			if (isPlayerInvisible())
-				builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_INVISIBLE);
-			if (isPlayerBlind())
-				builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_BLIND);
-			if (isPlayerInWater())
-				builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_INWATER);
-			if (isFreezing())
-				builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_FREEZING);
-			if (isFoggy())
-				builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_FOG);
-			if (isHumid())
-				builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_HUMID);
-			if (isDry())
-				builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_DRY);
-			if (isPlayerInside())
-				builder.append(CONDITION_SEPARATOR).append(CONDITION_TOKEN_INSIDE);
-			if (isPlayerRiding()) {
-				builder.append(CONDITION_SEPARATOR);
-				if (player.getRidingEntity() instanceof EntityMinecart)
-					builder.append(CONDITION_TOKEN_MINECART);
-				else if (player.getRidingEntity() instanceof EntityHorse)
-					builder.append(CONDITION_TOKEN_HORSE);
-				else if (player.getRidingEntity() instanceof EntityBoat)
-					builder.append(CONDITION_TOKEN_BOAT);
-				else if (player.getRidingEntity() instanceof EntityPig)
-					builder.append(CONDITION_TOKEN_PIG);
-				else
-					builder.append(CONDITION_TOKEN_RIDING);
-			}
-			builder.append(CONDITION_SEPARATOR).append(playerTemperature.getValue());
-			builder.append(CONDITION_SEPARATOR);
-			return builder.toString();
-		}
-
 		private static BlockPos getPlayerPos() {
 			return new BlockPos(player.posX, player.getEntityBoundingBox().minY, player.posZ);
 		}
 
 		private static void tick(final World world, final EntityPlayer player) {
 
-			final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 			final SeasonRegistry seasons = RegistryManager.get(RegistryType.SEASON);
 
 			EnvironState.player = player;
@@ -198,14 +116,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.humid = trueBiome.isHighHumidity();
 			EnvironState.dry = trueBiome.getRainfall() == 0;
 
-			EnvironState.conditions = dimensions.getConditions(world) + getPlayerConditions(player);
-
 			if (!Minecraft.getMinecraft().isGamePaused())
 				EnvironState.tickCounter++;
-		}
-
-		public static String getConditions() {
-			return conditions;
 		}
 
 		public static BiomeInfo getPlayerBiome() {
@@ -424,7 +336,6 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		event.output.add(WeatherProperties.diagnostic());
-		event.output.add("Conditions: " + EnvironState.getConditions());
 
 		final List<String> badScripts = Evaluator.getNaughtyList();
 		for (final String s : badScripts) {

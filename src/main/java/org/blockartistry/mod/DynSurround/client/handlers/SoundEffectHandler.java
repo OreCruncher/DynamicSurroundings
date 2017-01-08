@@ -29,11 +29,13 @@ import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -57,6 +59,10 @@ import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALC11;
 
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Iterables;
 import com.google.gson.Gson;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
@@ -84,13 +90,16 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	private static final int AGE_THRESHOLD_TICKS = 5;
 	private static final int SOUND_QUEUE_SLACK = 6;
 
+	private static int normalChannelCount = 0;
+	private static int streamChannelCount = 0;
+
 	private static final SoundEvent THUNDER = SoundUtils
 			.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "thunder"));
 
 	public static SoundEffectHandler INSTANCE = null;
 
 	private final Map<SoundEffect, Emitter> emitters = new HashMap<SoundEffect, Emitter>();
-	private final List<SpotSound> pending = new ArrayList<SpotSound>();
+	private final ArrayDeque<SpotSound> pending = new ArrayDeque<SpotSound>();
 
 	public SoundEffectHandler() {
 		INSTANCE = this;
@@ -113,17 +122,18 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		for (final Emitter emitter : this.emitters.values())
 			emitter.update();
 
-		final Iterator<SpotSound> pitr = this.pending.iterator();
-		while (pitr.hasNext()) {
-			final SpotSound sound = pitr.next();
-			if (sound.getTickAge() >= AGE_THRESHOLD_TICKS) {
-				ModLog.debug("AGING: " + sound.toString());
-				pitr.remove();
-			} else if (sound.getTickAge() >= 0 && canFitSound()) {
-				playSound(sound);
-				pitr.remove();
+		Iterables.removeIf(this.pending, new Predicate<SpotSound>() {
+			@Override
+			public boolean apply(SpotSound input) {
+				if (input.getTickAge() >= AGE_THRESHOLD_TICKS)
+					return true;
+				if (input.getTickAge() >= 0 && canFitSound()) {
+					playSound(input);
+					return true;
+				}
+				return false;
 			}
-		}
+		});
 	}
 
 	@Override
@@ -147,27 +157,26 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	}
 
 	public void queueAmbientSounds(@Nonnull final List<SoundEffect> sounds) {
-		// Need to remove sounds that are active but not
-		// in the incoming list
-		final List<SoundEffect> active = new ArrayList<SoundEffect>(this.emitters.keySet());
-		for (final SoundEffect effect : active) {
-			if (!sounds.contains(effect))
-				this.emitters.remove(effect).fade();
-			else {
-				final Emitter emitter = this.emitters.get(effect);
-				SoundEffect incoming = null;
-				for (final SoundEffect sound : sounds)
-					if (sound.equals(effect)) {
-						incoming = sound;
-						break;
-					}
-				emitter.setVolume(incoming.getVolume());
-				sounds.remove(effect);
+
+		// Iterate through the existing emitters:
+		// * If an emitter does not correspond to an incoming sound, remove.
+		// * If an emitter does correspond, update the volume setting.
+		final Iterator<Entry<SoundEffect, Emitter>> itr = this.emitters.entrySet().iterator();
+		while (itr.hasNext()) {
+			final Entry<SoundEffect, Emitter> e = itr.next();
+			final Optional<SoundEffect> effect = Iterables.tryFind(sounds, Predicates.equalTo(e.getKey()));
+			if (effect.isPresent()) {
+				final SoundEffect se = effect.get();
+				e.getValue().setVolume(se.getVolume());
+				sounds.remove(se);
+			} else {
+				e.getValue().fade();
+				itr.remove();
 			}
 		}
 
-		// Add sounds from the incoming list that are not
-		// active.
+		// Any sounds left in the list are new and need
+		// an emitter created.
 		for (final SoundEffect sound : sounds)
 			this.emitters.put(sound, new Emitter(sound));
 	}
@@ -177,11 +186,11 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	}
 
 	public int maxSoundCount() {
-		return SoundSystemConfig.getNumberNormalChannels() + SoundSystemConfig.getNumberStreamingChannels();
+		return normalChannelCount + streamChannelCount;
 	}
 
 	private boolean canFitSound() {
-		return currentSoundCount() < (SoundSystemConfig.getNumberNormalChannels() - SOUND_QUEUE_SLACK);
+		return currentSoundCount() < (normalChannelCount - SOUND_QUEUE_SLACK);
 	}
 
 	public boolean isSoundPlaying(@Nonnull final ISound sound) {
@@ -281,15 +290,15 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 		String soundId = null;
 
-		if(tickDelay > 0 || canFitSound()) {
+		if (tickDelay > 0 || canFitSound()) {
 			final SpotSound s = new SpotSound(pos, sound, tickDelay, categoryOverride);
-	
+
 			if (tickDelay > 0)
 				this.pending.add(s);
 			else
 				soundId = playSound(s);
 		}
-		
+
 		return soundId;
 	}
 
@@ -309,19 +318,19 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 			e.printStackTrace();
 		}
 
-		int normalChannels = ModOptions.normalSoundChannelCount;
-		int streamChannels = ModOptions.streamingSoundChannelCount;
+		normalChannelCount = ModOptions.normalSoundChannelCount;
+		streamChannelCount = ModOptions.streamingSoundChannelCount;
 
 		if (ModOptions.autoConfigureChannels && totalChannels > 64) {
 			final int maxCount = Math.max((totalChannels + 1) / 2, 32);
-			normalChannels = MathHelper.floor_float(maxCount * 0.875F);
-			streamChannels = maxCount - normalChannels;
+			normalChannelCount = MathHelper.floor_float(maxCount * 0.875F);
+			streamChannelCount = maxCount - normalChannelCount;
 		}
 
-		ModLog.info("Sound channels: %d normal, %d streaming (total avail: %s)", normalChannels, streamChannels,
+		ModLog.info("Sound channels: %d normal, %d streaming (total avail: %s)", normalChannelCount, streamChannelCount,
 				totalChannels == -1 ? "UNKNOWN" : Integer.toString(totalChannels));
-		SoundSystemConfig.setNumberNormalChannels(normalChannels);
-		SoundSystemConfig.setNumberStreamingChannels(streamChannels);
+		SoundSystemConfig.setNumberNormalChannels(normalChannelCount);
+		SoundSystemConfig.setNumberStreamingChannels(streamChannelCount);
 	}
 
 	// Not entirely sure why they changed things. This reads the mods

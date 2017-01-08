@@ -27,13 +27,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
-
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.script.Expression;
 import org.blockartistry.mod.DynSurround.util.script.Variant;
 
@@ -83,14 +80,13 @@ public final class Evaluator {
 
 	public static boolean check(@Nonnull final String conditions) {
 		// Existing default regex - short circuit to make it faster
-		if (StringUtils.isEmpty(conditions) || conditions.startsWith(".*"))
+		if (StringUtils.isEmpty(conditions))
 			return true;
 
 		// Older regex supplied so it needs to be processed old school
 		if (conditions.startsWith("(?i)")) {
-			// Old school
-			final String ev = EnvironState.getConditions();
-			return Pattern.matches(conditions, ev);
+			ModLog.warn("Old style condition string detected [%s]", conditions);
+			return false;
 		}
 
 		// New stuff. Compile the expression and evaluate

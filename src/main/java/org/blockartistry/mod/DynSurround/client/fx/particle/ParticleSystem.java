@@ -24,8 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayDeque;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -38,9 +37,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -50,9 +47,8 @@ public abstract class ParticleSystem extends Particle {
 
 	protected final Random RANDOM = ThreadLocalRandom.current();
 	protected final int fxLayer;
-	protected final Vec3d location;
 	protected final BlockPos position;
-	protected final List<Particle> myParticles = new ArrayList<Particle>();
+	protected final ArrayDeque<Particle> myParticles = new ArrayDeque<Particle>();
 	private int particleLimit;
 
 	protected ParticleSystem(final World worldIn, final double posXIn, final double posYIn, final double posZIn) {
@@ -66,7 +62,6 @@ public abstract class ParticleSystem extends Particle {
 		super(worldIn, posXIn, posYIn, posZIn);
 
 		this.fxLayer = renderPass;
-		this.location = new Vec3d(this.posX, this.posY, this.posZ);
 		this.position = new BlockPos(this.posX, this.posY, this.posZ);
 	}
 
@@ -86,10 +81,6 @@ public abstract class ParticleSystem extends Particle {
 		return setting == 0 ? this.particleLimit : this.particleLimit / 2;
 	}
 	
-	public boolean inBox(final AxisAlignedBB box) {
-		return box.isVecInside(this.location);
-	}
-
 	public void addParticle(final Particle particle) {
 		if (particle.getFXLayer() != this.getFXLayer()) {
 			throw new RuntimeException("Invalid particle for fx layer!");

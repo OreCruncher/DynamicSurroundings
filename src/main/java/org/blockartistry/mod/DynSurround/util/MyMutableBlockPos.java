@@ -22,47 +22,44 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.data.xface;
+package org.blockartistry.mod.DynSurround.util;
 
 import javax.annotation.Nonnull;
 
-import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 
-import com.google.gson.annotations.SerializedName;
+public class MyMutableBlockPos extends BlockPos.MutableBlockPos {
 
-public final class EffectConfig {
-	
-	@SerializedName("effect")
-	public String effect = null;
-	@SerializedName("conditions")
-	public String conditions = StringUtils.EMPTY;
-	@SerializedName("chance")
-	public Integer chance = null;
-	
-	public EffectConfig() {
-		
-	}
-	
-	public EffectConfig(@Nonnull final BlockEffectType type) {
-		this.setEffectType(type);
-	}
-	
-	@Nonnull
-	public EffectConfig setEffectType(@Nonnull final BlockEffectType type) {
-		this.effect = type.getName();
+	@Override
+	public MyMutableBlockPos add(final int x, final int y, final int z) {
+		this.x += x;
+		this.y += y;
+		this.z += z;
 		return this;
 	}
 	
-	@Nonnull
-	public EffectConfig setEffectChance(final int chance) {
-		this.chance = chance;
+	@Override
+	public MyMutableBlockPos add(@Nonnull final Vec3i vec) {
+		this.x += vec.getX();
+		this.y += vec.getY();
+		this.z += vec.getZ();
 		return this;
 	}
 	
-	@Nonnull
-	public EffectConfig setCondition(final String condition) {
-		this.conditions = condition;
+	public void setX(final int x) {
+		this.x = x;
+	}
+	
+	public void setZ(final int z) {
+		this.z = z;
+	}
+	
+	public MyMutableBlockPos offset(final int amt) {
+		this.x += amt;
+		this.y += amt;
+		this.z += amt;
 		return this;
 	}
+
 }

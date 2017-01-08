@@ -25,13 +25,15 @@ package org.blockartistry.mod.DynSurround.data.xface;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.gson.annotations.SerializedName;
 
 public class SoundConfig {
 	@SerializedName("sound")
 	public String sound = null;
 	@SerializedName("conditions")
-	public String conditions = ".*";
+	public String conditions = StringUtils.EMPTY;
 	@SerializedName("soundType")
 	public String soundType = null;
 	@SerializedName("volume")
