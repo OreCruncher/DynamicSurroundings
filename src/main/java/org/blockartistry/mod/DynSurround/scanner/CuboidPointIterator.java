@@ -29,9 +29,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 
 /**
- * Implements a "peeking" iterator.
+ * Implements a "peeking" iterator.  The iterator uses
+ * mutables for position so they aren't safe to cache.
  */
 public class CuboidPointIterator implements IPointIterator {
 	
@@ -49,7 +51,7 @@ public class CuboidPointIterator implements IPointIterator {
 		
 	};
 	
-	protected final Iterator<BlockPos> itr;
+	protected final Iterator<MutableBlockPos> itr;
 	protected BlockPos peeked;
 	
 	private CuboidPointIterator() {
@@ -66,7 +68,7 @@ public class CuboidPointIterator implements IPointIterator {
 
 	public CuboidPointIterator(@Nonnull final BlockPos p1, @Nonnull final BlockPos p2) {
 		// The getAllInBox() deals with figuring the min/max points
-		this.itr = BlockPos.getAllInBox(p1, p2).iterator();
+		this.itr = BlockPos.getAllInBoxMutable(p1, p2).iterator();
 		if (this.itr.hasNext())
 			this.peeked = this.itr.next();
 	}

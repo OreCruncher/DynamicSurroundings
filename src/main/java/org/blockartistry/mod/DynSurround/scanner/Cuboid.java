@@ -66,10 +66,7 @@ public class Cuboid {
 	}
 
 	public boolean contains(@Nonnull final BlockPos p) {
-		return p.getX() >= this.minPoint.getX() && p.getX() <= this.maxPoint.getX()
-				? (p.getY() >= this.minPoint.getY() && p.getY() <= this.maxPoint.getY()
-						? p.getZ() >= this.minPoint.getZ() && p.getZ() <= this.maxPoint.getZ() : false)
-				: false;
+		return BlockPosHelper.contains(p, this.minPoint, this.maxPoint);
 	}
 
 	@Nonnull

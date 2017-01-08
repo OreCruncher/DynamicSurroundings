@@ -95,7 +95,9 @@ public abstract class Scanner implements ITickable {
 	}
 
 	/**
-	 * Invoked when a block of interest is discovered.
+	 * Invoked when a block of interest is discovered.  The BlockPos provided
+	 * is not safe to hold on to beyond the call so if it needs to be kept it
+	 * needs to be copied.
 	 */
 	public abstract void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos);
 
@@ -112,9 +114,10 @@ public abstract class Scanner implements ITickable {
 
 		this.theProfiler.startSection(this.name);
 
+		final BlockPos.MutableBlockPos workingPos = new BlockPos.MutableBlockPos();
 		final World world = EnvironState.getWorld();
 		for (int count = 0; count < this.blocksPerTick; count++) {
-			final BlockPos pos = nextPos();
+			final BlockPos pos = nextPos(workingPos);
 			if (pos == null)
 				break;
 			final IBlockState state = world.getBlockState(pos);
@@ -128,9 +131,11 @@ public abstract class Scanner implements ITickable {
 	}
 
 	/**
-	 * Provide the next block position to be processed.
+	 * Provide the next block position to be processed.  For memory efficiency
+	 * the provided mutable should be used to store the coordinate information and
+	 * returned from the function call.
 	 */
 	@Nullable
-	protected abstract BlockPos nextPos();
+	protected abstract BlockPos nextPos(@Nonnull final BlockPos.MutableBlockPos pos);
 
 }

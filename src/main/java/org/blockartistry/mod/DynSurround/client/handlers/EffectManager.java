@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.blockartistry.mod.DynSurround.DSurround;
-import org.blockartistry.mod.DynSurround.ModLog;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -74,7 +73,6 @@ public class EffectManager {
 		this.effectHandlers.add(new SoundEffectHandler());
 
 		for (final EffectHandlerBase h : this.effectHandlers) {
-			ModLog.debug("CLIENT HANDLER [%s]", h.getHandlerName());
 			h.connect0();
 			MinecraftForge.EVENT_BUS.register(h);
 		}

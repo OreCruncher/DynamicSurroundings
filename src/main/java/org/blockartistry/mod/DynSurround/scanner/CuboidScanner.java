@@ -186,7 +186,7 @@ public abstract class CuboidScanner extends Scanner {
 
 	@Override
 	@Nullable
-	protected BlockPos nextPos() {
+	protected BlockPos nextPos(@Nonnull final BlockPos.MutableBlockPos workingPos) {
 
 		if (this.scanFinished)
 			return null;

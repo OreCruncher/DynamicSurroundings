@@ -37,7 +37,6 @@ import org.blockartistry.mod.DynSurround.data.ColorPair;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 
-import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
@@ -205,7 +204,7 @@ public final class Aurora {
 	@Nonnull
 	private Node[] populate() {
 		final Node[] nodeList = new Node[this.length];
-		final Random nodeRand = ThreadLocalRandom.current();
+		final Random nodeRand = new Random(this.seed);
 		final int bound = this.length / 2 - 1;
 
 		float angleTotal = 0.0F;

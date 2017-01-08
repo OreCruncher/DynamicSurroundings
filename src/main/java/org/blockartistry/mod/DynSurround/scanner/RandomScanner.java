@@ -48,9 +48,10 @@ public abstract class RandomScanner extends Scanner {
 	}
 
 	@Override
-	protected BlockPos nextPos() {
-		return EnvironState.getPlayerPosition().add(randomRange(this.xRange), randomRange(this.yRange),
-				randomRange(this.zRange));
+	protected BlockPos nextPos(@Nonnull final BlockPos.MutableBlockPos workingPos) {
+		workingPos.setPos(EnvironState.getPlayerPosition());
+		workingPos.add(randomRange(this.xRange), randomRange(this.yRange), randomRange(this.zRange));
+		return workingPos;
 	}
 
 }
