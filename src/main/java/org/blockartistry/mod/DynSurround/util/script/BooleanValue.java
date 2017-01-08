@@ -39,7 +39,7 @@ public class BooleanValue extends Variant {
 	}
 
 	public BooleanValue(final float f) {
-		this.value = f == 0 ? false : true;
+		this.value = f != 0;
 	}
 
 	@Override

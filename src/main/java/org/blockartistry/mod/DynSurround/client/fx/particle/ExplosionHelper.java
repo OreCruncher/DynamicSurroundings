@@ -78,15 +78,16 @@ public final class ExplosionHelper {
 	}
 
 	private static final Assets OVERWORLD = new Assets()
-			.setBlocks(Blocks.DIRT, Blocks.COBBLESTONE, Blocks.GRAVEL, Blocks.SAND)
+			.setBlocks(Blocks.DIRT, Blocks.COBBLESTONE, Blocks.GRAVEL, Blocks.SAND, Blocks.SAPLING)
 			.setStacks(new ItemStack(Items.FLINT), new ItemStack(Items.BRICK), new ItemStack(Items.BONE),
 					new ItemStack(Items.STICK), new ItemStack(Items.COAL))
-			.setMobs("Pig", "Sheep", "Chicken");
+			.setMobs("Pig", "Sheep", "Chicken", "Cow", "Villager", "Wolf", "Ozelot");
 
 	private static final Assets NETHER = new Assets()
 			.setBlocks(Blocks.NETHERRACK, Blocks.SOUL_SAND, Blocks.GRAVEL, Blocks.MAGMA)
 			.setStacks(new ItemStack(Items.NETHER_WART), new ItemStack(Items.GLOWSTONE_DUST),
-					new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.BLAZE_ROD));
+					new ItemStack(Items.GOLD_NUGGET), new ItemStack(Items.BLAZE_ROD))
+			.setMobs("LavaSlime", "PigZombie", "Blaze");
 
 	private static final Assets END = new Assets().setBlocks(Blocks.END_STONE, Blocks.OBSIDIAN)
 			.setStacks(new ItemStack(Items.ENDER_PEARL), new ItemStack(Items.ENDER_PEARL))
@@ -122,7 +123,7 @@ public final class ExplosionHelper {
 			if (StringUtils.isEmpty(mob))
 				return null;
 			final ParticleEntity pe = new ParticleEntity(mob, world, x, y, z, motionX, motionY, motionZ);
-			pe.setScale(0.5F);
+			pe.setScale(1.0F);
 			pe.setMaxAge(75);
 			pe.setPitchRate(18 + rand.nextFloat() * 18);
 			pe.setYawRate(18 + rand.nextFloat() * 18);
