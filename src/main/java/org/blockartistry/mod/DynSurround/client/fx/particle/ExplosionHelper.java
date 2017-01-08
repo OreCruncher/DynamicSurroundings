@@ -30,6 +30,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.mod.DynSurround.ModOptions;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -116,7 +117,7 @@ public final class ExplosionHelper {
 		final float motionY = rand.nextFloat() * 6.0F + 6.0F;
 
 		final int choice = rand.nextInt(20);
-		if (choice < 3) {
+		if (choice < 3 && ModOptions.addMobParticles) {
 			final String mob = assets.getMob(rand);
 			if (StringUtils.isEmpty(mob))
 				return null;

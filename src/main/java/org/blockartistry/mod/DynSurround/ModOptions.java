@@ -469,6 +469,16 @@ public final class ModOptions {
 	private static final List<String> speechBubbleSort = Arrays.asList(CONFIG_OPTION_ENABLE_SPEECHBUBBLES,
 			CONFIG_OPTION_ENABLE_ENTITY_CHAT, CONFIG_OPTION_ENABLE_EMOJIS, CONFIG_OPTION_SPEECHBUBBLE_DURATION,
 			CONFIG_OPTION_SPEECHBUBBLE_RANGE);
+	
+	public static final String CATEGORY_EXPLOSIONS = "explosions";
+	public static final String CONFIG_ENABLE_EXPLOSIONS = "Enable Explosion Enhancement";
+	public static final String CONFIG_ADD_MOB_PARTICLES = "Add Mob Models";
+	@Parameter(category = CATEGORY_EXPLOSIONS, property = CONFIG_ENABLE_EXPLOSIONS, defaultValue = "true", lang="cfg.explosions.EnableExplosions")
+	@Comment("Enables/disables explosion enhancement")
+	public static boolean enableExplosionEnhancement = false;
+	@Parameter(category = CATEGORY_EXPLOSIONS, property = CONFIG_ADD_MOB_PARTICLES, defaultValue = "false", lang="cfg.explosions.AddMobs")
+	@Comment("Enables/disables addition of mob models in explosion debris")
+	public static boolean addMobParticles = false;
 
 	public static void load(final Configuration config) {
 
@@ -558,9 +568,15 @@ public final class ModOptions {
 		// CATEGORY: SpeechBubbles
 		config.setCategoryRequiresMcRestart(CATEGORY_SPEECHBUBBLES, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_SPEECHBUBBLES, false);
-		config.setCategoryComment(CATEGORY_SPEECHBUBBLES, "Options configuring SpeechBubbles");
+		config.setCategoryComment(CATEGORY_SPEECHBUBBLES, "Options for configuring SpeechBubbles");
 		config.setCategoryPropertyOrder(CATEGORY_SPEECHBUBBLES, new ArrayList<String>(speechBubbleSort));
 		config.setCategoryLanguageKey(CATEGORY_SPEECHBUBBLES, "cfg.speech.cat.Speech");
+		
+		// CATEGORY: Explosions
+		config.setCategoryRequiresMcRestart(CATEGORY_EXPLOSIONS, false);
+		config.setCategoryRequiresWorldRestart(CATEGORY_EXPLOSIONS, false);
+		config.setCategoryComment(CATEGORY_EXPLOSIONS, "Options for configuring Explosion Enhancement");
+		config.setCategoryLanguageKey(CATEGORY_EXPLOSIONS, "cfg.explosions.cat.Explosions");
 
 		// Iterate through the config list looking for properties without
 		// comments. These will be scrubbed.

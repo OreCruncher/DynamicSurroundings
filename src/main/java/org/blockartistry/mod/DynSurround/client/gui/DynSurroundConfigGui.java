@@ -85,6 +85,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 		addConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES, ModOptions.CONFIG_OPTION_ENABLE_SPEECHBUBBLES);
 		addConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES, ModOptions.CONFIG_OPTION_ENABLE_EMOJIS);
 		addConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES, ModOptions.CONFIG_OPTION_ENABLE_ENTITY_CHAT);
+		addConfigElement(ModOptions.CATEGORY_EXPLOSIONS, ModOptions.CONFIG_ENABLE_EXPLOSIONS);
 
 		// Synthetic options for handling sound blocking and volume
 		this.soundCategory = new ConfigCategory("Blocked Sounds").setLanguageKey("cfg.sound.BlockedSounds");
@@ -100,13 +101,14 @@ public class DynSurroundConfigGui extends GuiConfig {
 		// Tack on the rest of the categories for configuration
 		addConfigCategory(ModOptions.CATEGORY_GENERAL);
 		addConfigCategory(ModOptions.CATEGORY_PLAYER);
-		addConfigCategory(ModOptions.CATEGORY_SPEECHBUBBLES);
+		addConfigCategory(ModOptions.CATEGORY_EXPLOSIONS);
 		addConfigCategory(ModOptions.CATEGORY_RAIN);
 		addConfigCategory(ModOptions.CATEGORY_FOG);
 		addConfigCategory(ModOptions.CATEGORY_AURORA);
 		addConfigCategory(ModOptions.CATEGORY_BLOCK);
 		addConfigCategory(ModOptions.CATEGORY_BIOMES);
 		addConfigCategory(ModOptions.CATEGORY_SOUND);
+		addConfigCategory(ModOptions.CATEGORY_SPEECHBUBBLES);
 		addConfigCategory(ModOptions.CATEGORY_ASM);
 		addConfigCategory(ModOptions.CATEGORY_LOGGING_CONTROL);
 	}

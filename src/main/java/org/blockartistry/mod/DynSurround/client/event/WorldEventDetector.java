@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.client.event;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ExplosionHelper;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
@@ -92,6 +93,9 @@ public class WorldEventDetector implements IWorldEventListener {
 	@Override
 	public void spawnParticle(int particleID, boolean ignoreRange, double x, double y, double z,
 			double xSpeed, double ySpeed, double zSpeed, int... parameters) {
+		
+		if(!ModOptions.enableExplosionEnhancement)
+			return;
 		
 		if(EnumParticleTypes.EXPLOSION_LARGE.getParticleID() == particleID) {
 			ExplosionHelper.doExplosion(this.world, x, y, z);
