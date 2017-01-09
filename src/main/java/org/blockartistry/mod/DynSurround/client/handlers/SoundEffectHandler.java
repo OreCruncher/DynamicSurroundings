@@ -44,8 +44,8 @@ import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.mod.DynSurround.client.event.RegistryEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.Emitter;
+import org.blockartistry.mod.DynSurround.client.sound.IMySound;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.mod.DynSurround.client.sound.SpotSound;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModEnvironment;
@@ -87,7 +87,7 @@ import paulscode.sound.SoundSystemConfig;
 @SideOnly(Side.CLIENT)
 public class SoundEffectHandler extends EffectHandlerBase implements ISoundEventListener {
 
-	private static final int AGE_THRESHOLD_TICKS = 5;
+	private static final int AGE_THRESHOLD_TICKS = 10;
 	private static final int SOUND_QUEUE_SLACK = 6;
 
 	private static int normalChannelCount = 0;
@@ -99,7 +99,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	public static SoundEffectHandler INSTANCE = null;
 
 	private final Map<SoundEffect, Emitter> emitters = new HashMap<SoundEffect, Emitter>();
-	private final ArrayDeque<SpotSound> pending = new ArrayDeque<SpotSound>();
+	private final ArrayDeque<IMySound> pending = new ArrayDeque<IMySound>();
 
 	public SoundEffectHandler() {
 		INSTANCE = this;
@@ -118,22 +118,28 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 			clearSounds();
 			return;
 		}
+		
+		// Only execute every 4 ticks.
+		if((EnvironState.getTickCounter() % 4) != 0)
+			return;
 
 		for (final Emitter emitter : this.emitters.values())
 			emitter.update();
 
-		Iterables.removeIf(this.pending, new Predicate<SpotSound>() {
-			@Override
-			public boolean apply(SpotSound input) {
-				if (input.getTickAge() >= AGE_THRESHOLD_TICKS)
-					return true;
-				if (input.getTickAge() >= 0 && canFitSound()) {
-					playSound(input);
-					return true;
+		if (this.pending.size() > 0) {
+			Iterables.removeIf(this.pending, new Predicate<IMySound>() {
+				@Override
+				public boolean apply(final IMySound input) {
+					if (input.getTickAge() >= AGE_THRESHOLD_TICKS)
+						return true;
+					if (input.getTickAge() >= 0 && canFitSound()) {
+						playSound(input);
+						return true;
+					}
+					return false;
 				}
-				return false;
-			}
-		});
+			});
+		}
 	}
 
 	@Override
@@ -158,6 +164,18 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 	public void queueAmbientSounds(@Nonnull final TObjectFloatHashMap<SoundEffect> sounds) {
 
+		// Quick optimization - if there are no sounds coming in we need
+		// to clear out existing emitters and return. No reason to keep
+		// going.
+		if (sounds.size() == 0) {
+			if (this.emitters.size() > 0) {
+				for (final Emitter emit : this.emitters.values())
+					emit.fade();
+				this.emitters.clear();
+			}
+			return;
+		}
+
 		// Iterate through the existing emitters:
 		// * If an emitter does not correspond to an incoming sound, remove.
 		// * If an emitter does correspond, update the volume setting.
@@ -166,7 +184,10 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 			final Entry<SoundEffect, Emitter> e = itr.next();
 			if (sounds.contains(e.getKey())) {
 				e.getValue().setVolume(sounds.get(e.getKey()));
-				sounds.remove(e.getKey());
+				// Set to 0 so that the "new sound" logic below
+				// will ignore.  Cheaper than removing the object
+				// from the collection.
+				sounds.put(e.getKey(), 0F);
 			} else {
 				e.getValue().fade();
 				itr.remove();
@@ -178,7 +199,8 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		final TObjectFloatIterator<SoundEffect> newSounds = sounds.iterator();
 		while (newSounds.hasNext()) {
 			newSounds.advance();
-			this.emitters.put(newSounds.key(), new Emitter(newSounds.key()));
+			if (newSounds.value() > 0)
+				this.emitters.put(newSounds.key(), new Emitter(newSounds.key()));
 		}
 	}
 
@@ -252,8 +274,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	}
 
 	@Nullable
-	public String playSoundAtPlayer(@Nullable EntityPlayer player, @Nonnull final SoundEffect sound,
-			@Nullable final SoundCategory categoryOverride) {
+	public String playSoundAtPlayer(@Nullable EntityPlayer player, @Nonnull final SoundEffect sound) {
 
 		if (player == null)
 			player = EnvironState.getPlayer();
@@ -261,7 +282,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		String soundId = null;
 
 		if (canFitSound()) {
-			final SpotSound s = new SpotSound(player, sound, categoryOverride);
+			final IMySound s = sound.createSound(player);
 			soundId = playSound(s);
 		}
 		return soundId;
@@ -283,8 +304,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	}
 
 	@Nullable
-	public String playSoundAt(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int tickDelay,
-			@Nullable final SoundCategory categoryOverride) {
+	public String playSoundAt(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int tickDelay) {
 
 		if (!canSoundBeHeard(pos, sound.getVolume()))
 			return null;
@@ -292,7 +312,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		String soundId = null;
 
 		if (tickDelay > 0 || canFitSound()) {
-			final SpotSound s = new SpotSound(pos, sound, tickDelay, categoryOverride);
+			final IMySound s = sound.createSound(pos, tickDelay);
 
 			if (tickDelay > 0)
 				this.pending.add(s);
@@ -420,9 +440,8 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 		for (final SoundEffect effect : this.emitters.keySet())
 			event.output.add("EMITTER: " + effect.toString() + "[vol:" + this.emitters.get(effect).getVolume() + "]");
-		for (final SpotSound effect : pending)
-			event.output
-					.add((effect.getTickAge() < 0 ? "DELAYED: " : "PENDING: ") + effect.getSoundEffect().toString());
+		for (final IMySound effect : pending)
+			event.output.add((effect.getTickAge() < 0 ? "DELAYED: " : "PENDING: ") + effect.toString());
 	}
 
 	@Override

@@ -70,8 +70,8 @@ public abstract class JetEffect extends BlockEffect {
 	}
 
 	@Override
-	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		return ParticleSystemHandler.INSTANCE.okToSpawn(pos) && super.trigger(state, world, pos, random);
+	public boolean canTrigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+		return ParticleSystemHandler.INSTANCE.okToSpawn(pos) && super.canTrigger(state, world, pos, random);
 	}
 
 }

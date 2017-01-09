@@ -38,7 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class TrackingSound extends PositionedSound implements ITickableSound {
+public class TrackingSound extends PositionedSound implements ITickableSound, IMySound {
 
 	private static final float DONE_VOLUME_THRESHOLD = 0.001F;
 	private static final float FADE_AMOUNT = 0.015F;
@@ -50,15 +50,15 @@ public class TrackingSound extends PositionedSound implements ITickableSound {
 	private float maxVolume;
 	private boolean isDonePlaying;
 
-	public TrackingSound(final SoundEffect sound) {
+	TrackingSound(final SoundEffect sound) {
 		this(EnvironState.getPlayer(), sound, false);
 	}
 
-	public TrackingSound(final SoundEffect sound, final boolean fadeIn) {
+	TrackingSound(final SoundEffect sound, final boolean fadeIn) {
 		this(EnvironState.getPlayer(), sound, fadeIn);
 	}
 
-	public TrackingSound(final EntityLivingBase attachedTo, final SoundEffect sound, final boolean fadeIn) {
+	TrackingSound(final EntityLivingBase attachedTo, final SoundEffect sound, final boolean fadeIn) {
 		super(sound.sound, SoundCategory.PLAYERS);
 
 		this.attachedTo = attachedTo;
@@ -82,7 +82,7 @@ public class TrackingSound extends PositionedSound implements ITickableSound {
 		return this.sound.getRepeat(RANDOM);
 	}
 
-	public void fadeAway() {
+	public void fade() {
 		this.isFading = true;
 	}
 
@@ -140,9 +140,20 @@ public class TrackingSound extends PositionedSound implements ITickableSound {
 		return this.volume * ModOptions.masterSoundScaleFactor;
 	}
 
+	@Override
 	public void setVolume(final float volume) {
 		if (volume < this.maxVolume || !this.isFading)
 			this.maxVolume = volume;
+	}
+	
+	@Override
+	public void setPitch(final float pitch) {
+		this.pitch = pitch;
+	}
+	
+	@Override
+	public int getTickAge() {
+		return 0;
 	}
 
 	@Override

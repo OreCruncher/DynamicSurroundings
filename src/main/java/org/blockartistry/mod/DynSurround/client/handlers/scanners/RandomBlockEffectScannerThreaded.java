@@ -29,12 +29,9 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
+import org.blockartistry.mod.DynSurround.client.fx.ISpecialEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -53,23 +50,15 @@ public class RandomBlockEffectScannerThreaded extends RandomBlockEffectScanner {
 		// Incoming pos is actually a mutable. Need to make a real BlockPos
 		// because it is going back to another thread.
 		final BlockPos loc = new BlockPos(pos);
+		
 		final World world = EnvironState.getWorld();
-		final List<BlockEffect> effects = getEffectsToImplement(world, state, pos, rand);
-		for (final BlockEffect effect : effects)
+		final List<ISpecialEffect> effects = getEffectsToImplement(world, state, pos, rand);
+		for (final ISpecialEffect effect : effects)
 			ScannerThreadPool.post(new Runnable() {
 				public void run() {
-					effect.doEffect(state, world, pos, rand);
+					effect.doEffect(state, world, loc, rand);
 				}
 			});
-
-		final SoundEffect sound = this.blocks.getSound(state, rand);
-		if (sound != null) {
-			ScannerThreadPool.post(new Runnable() {
-				public void run() {
-					sound.doEffect(state, world, loc, SoundCategory.BLOCKS, rand);
-				}
-			});
-		}
 	}
 
 }

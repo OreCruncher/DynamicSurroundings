@@ -24,19 +24,14 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.handlers.scanners.AlwaysOnBlockEffectScanner;
 import org.blockartistry.mod.DynSurround.client.handlers.scanners.RandomBlockEffectScanner;
-import org.blockartistry.mod.DynSurround.client.handlers.scanners.ScannerThreadPool;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -55,8 +50,8 @@ public class BlockEffectHandler extends EffectHandlerBase {
 	protected final RandomBlockEffectScanner effects = new RandomBlockEffectScanner(ModOptions.specialEffectRange);
 	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(ModOptions.specialEffectRange);
 
-	protected Future<?> effectsCall;
-	protected Future<?> alwaysOnCall;
+//	protected Future<?> effectsCall;
+//	protected Future<?> alwaysOnCall;
 
 	@Override
 	public String getHandlerName() {
@@ -65,27 +60,27 @@ public class BlockEffectHandler extends EffectHandlerBase {
 
 	@Override
 	public void pre() {
-		if (Minecraft.getMinecraft().isGamePaused())
-			return;
-
-		//this.effectsCall = ScannerThreadPool.submit(this.effects);
-		//this.alwaysOnCall = ScannerThreadPool.submit(this.alwaysOn);
+//		if (Minecraft.getMinecraft().isGamePaused())
+//			return;
+//
+//		this.effectsCall = ScannerThreadPool.submit(this.effects);
+//		this.alwaysOnCall = ScannerThreadPool.submit(this.alwaysOn);
 	}
 
 	@Override
 	public void post() {
-		try {
-			if (this.effectsCall != null)
-				this.effectsCall.get();
-			if (this.alwaysOnCall != null)
-				this.alwaysOnCall.get();
-			ScannerThreadPool.processResults();
-		} catch (final InterruptedException e) {
-		} catch (final ExecutionException e) {
-		}
-		
-		this.effectsCall = null;
-		this.alwaysOnCall = null;
+//		try {
+//			if (this.effectsCall != null)
+//				this.effectsCall.get();
+//			if (this.alwaysOnCall != null)
+//				this.alwaysOnCall.get();
+//			ScannerThreadPool.processResults();
+//		} catch (final InterruptedException e) {
+//		} catch (final ExecutionException e) {
+//		}
+//		
+//		this.effectsCall = null;
+//		this.alwaysOnCall = null;
 	}
 
 	@Override
@@ -101,7 +96,7 @@ public class BlockEffectHandler extends EffectHandlerBase {
 			final IBlockState state = world.getBlockState(pos);
 			final SoundEffect sound = getBlockRegistry().getStepSound(state, RANDOM);
 			if (sound != null)
-				sound.doEffect(state, world, pos, SoundCategory.BLOCKS, RANDOM);
+				sound.doEffect(state, world, pos, RANDOM);
 		}
 	}
 

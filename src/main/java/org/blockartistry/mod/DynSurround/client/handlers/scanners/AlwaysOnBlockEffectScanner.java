@@ -73,7 +73,7 @@ public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 		final World world = EnvironState.getWorld();
 		final List<BlockEffect> effects = this.blocks.getAlwaysOnEffects(state);
 		for (final BlockEffect be : effects)
-			if (be.trigger(state, world, pos, rand))
+			if (be.canTrigger(state, world, pos, rand))
 				be.doEffect(state, world, pos, rand);
 	}
 

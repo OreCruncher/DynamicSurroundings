@@ -27,13 +27,10 @@ package org.blockartistry.mod.DynSurround.client.sound;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,7 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import scala.concurrent.forkjoin.ThreadLocalRandom;
 
 @SideOnly(Side.CLIENT)
-public class SpotSound extends PositionedSound {
+public class SpotSound extends PositionedSound implements IMySound {
 
 	private static final int SPOT_SOUND_RANGE = 8;
 
@@ -49,9 +46,8 @@ public class SpotSound extends PositionedSound {
 	private final SoundEffect sound;
 	private final int timeMark;
 
-	public SpotSound(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int delay,
-			@Nullable SoundCategory categoryOverride) {
-		super(sound.sound, categoryOverride != null ? categoryOverride : SoundCategory.BLOCKS);
+	SpotSound(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int delay) {
+		super(sound.sound, sound.category);
 
 		this.sound = sound;
 		this.volume = sound.getVolume();
@@ -70,9 +66,8 @@ public class SpotSound extends PositionedSound {
 		return RANDOM.nextInt(range) - RANDOM.nextInt(range);
 	}
 
-	public SpotSound(@Nonnull final EntityPlayer player, @Nonnull final SoundEffect sound,
-			@Nullable final SoundCategory categoryOverride) {
-		super(sound.sound, categoryOverride != null ? categoryOverride : SoundCategory.PLAYERS);
+	SpotSound(@Nonnull final EntityPlayer player, @Nonnull final SoundEffect sound) {
+		super(sound.sound, sound.category);
 
 		this.sound = sound;
 		this.volume = sound.getVolume();
@@ -93,8 +88,22 @@ public class SpotSound extends PositionedSound {
 		return super.getVolume() * ModOptions.masterSoundScaleFactor;
 	}
 
+	@Override
+	public void setVolume(final float volume) {
+		this.volume = volume;
+	}
+	
+	@Override
+	public void setPitch(final float pitch) {
+		this.pitch = pitch;
+	}
+
 	public int getTickAge() {
 		return EnvironState.getTickCounter() - this.timeMark;
+	}
+	
+	public void fade() {
+		
 	}
 
 	public SoundEffect getSoundEffect() {

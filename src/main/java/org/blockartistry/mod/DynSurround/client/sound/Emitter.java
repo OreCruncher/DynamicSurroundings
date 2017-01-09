@@ -30,6 +30,8 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+
 import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.SoundSystemConfig;
 import net.minecraftforge.fml.relauncher.Side;
@@ -45,7 +47,7 @@ public class Emitter {
 
 	protected final Random RANDOM = ThreadLocalRandom.current();
 	protected final SoundEffect effect;
-	protected TrackingSound activeSound;
+	protected IMySound activeSound;
 
 	protected int repeatDelay = 0;
 
@@ -58,18 +60,19 @@ public class Emitter {
 		// down a sound.
 		if (SoundSystemConfig.getMasterGain() <= 0)
 			return;
-		
-		// Allocate a new sound to send down if needed
-		if(this.activeSound == null)
-			this.activeSound = new TrackingSound(effect, true);
 
-		// If it isn't playing send it to the sound engine
-		if(!SoundEffectHandler.INSTANCE.isSoundPlaying(this.activeSound)) {
-			try {
-				SoundEffectHandler.INSTANCE.playSound(this.activeSound);
-			} catch (final Throwable t) {
-				ModLog.error("Unable to play sound", t);;
-			}
+		// Allocate a new sound to send down if needed
+		if (this.activeSound == null) {
+			this.activeSound = this.effect.createSound(EnvironState.getPlayer(), true, RANDOM);
+		} else if (SoundEffectHandler.INSTANCE.isSoundPlaying(this.activeSound)) {
+			return;
+		}
+
+		try {
+			SoundEffectHandler.INSTANCE.playSound(this.activeSound);
+		} catch (final Throwable t) {
+			ModLog.error("Unable to play sound", t);
+			;
 		}
 	}
 
@@ -85,7 +88,7 @@ public class Emitter {
 	public void fade() {
 		if (this.activeSound != null) {
 			ModLog.debug("FADE: " + this.activeSound.toString());
-			this.activeSound.fadeAway();
+			this.activeSound.fade();
 		}
 	}
 }

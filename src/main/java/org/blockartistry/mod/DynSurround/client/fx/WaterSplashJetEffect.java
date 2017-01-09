@@ -102,8 +102,8 @@ public class WaterSplashJetEffect extends JetEffect {
 	}
 
 	@Override
-	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		return isValidSpawnBlock(world, pos) && super.trigger(state, world, pos, random);
+	public boolean canTrigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+		return isValidSpawnBlock(world, pos) && super.canTrigger(state, world, pos, random);
 	}
 
 	@Override

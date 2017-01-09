@@ -63,7 +63,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 
 public final class BlockRegistry extends Registry {
-	
+
 	protected final static List<BlockEffect> NO_EFFECTS = ImmutableList.of();
 	protected final static List<SoundEffect> NO_SOUNDS = ImmutableList.of();
 
@@ -115,9 +115,9 @@ public final class BlockRegistry extends Registry {
 
 	@Nonnull
 	private SoundEffect getRandomSound(@Nonnull final List<SoundEffect> list, @Nonnull final Random random) {
-		
+
 		// Build a weight table on the fly
-		
+
 		int totalWeight = 0;
 		final List<SoundEffect> candidates = new ArrayList<SoundEffect>();
 		for (final SoundEffect s : list)
@@ -125,9 +125,9 @@ public final class BlockRegistry extends Registry {
 				candidates.add(s);
 				totalWeight += s.weight;
 			}
-		
+
 		// It's possible all the sounds got filtered out
-		if(totalWeight <= 0)
+		if (totalWeight <= 0)
 			return null;
 
 		if (candidates.size() == 1)
@@ -140,7 +140,7 @@ public final class BlockRegistry extends Registry {
 
 		return candidates.get(i - 1);
 	}
-	
+
 	@Nonnull
 	public List<SoundEffect> getAllSounds(@Nonnull final IBlockState state) {
 		final BlockProfile entry = this.registry.get(state.getBlock());
@@ -150,14 +150,14 @@ public final class BlockRegistry extends Registry {
 		final List<SoundEffect> sounds = entry.getSounds(state);
 		if (sounds.isEmpty())
 			return NO_SOUNDS;
-		
+
 		return sounds;
 	}
-	
+
 	@Nonnull
 	public List<SoundEffect> getAllStepSounds(@Nonnull final IBlockState state) {
 		// Air and liquid have no step sounds so optimize that out
-		if(state.getMaterial() == Material.AIR || state.getMaterial().isLiquid())
+		if (state.getMaterial() == Material.AIR || state.getMaterial().isLiquid())
 			return NO_SOUNDS;
 
 		final BlockProfile entry = this.registry.get(state.getBlock());
@@ -167,7 +167,7 @@ public final class BlockRegistry extends Registry {
 		final List<SoundEffect> sounds = entry.getStepSounds(state);
 		if (sounds.isEmpty())
 			return NO_SOUNDS;
-		
+
 		return sounds;
 	}
 
@@ -189,11 +189,11 @@ public final class BlockRegistry extends Registry {
 
 	@Nullable
 	public SoundEffect getStepSound(@Nonnull final IBlockState state, @Nonnull final Random random) {
-		
+
 		// Air and liquid have no step sounds so optimize that out
-		if(state.getMaterial() == Material.AIR || state.getMaterial().isLiquid())
+		if (state.getMaterial() == Material.AIR || state.getMaterial().isLiquid())
 			return null;
-		
+
 		final BlockProfile entry = this.registry.get(state.getBlock());
 		if (entry == null)
 			return null;
@@ -207,9 +207,10 @@ public final class BlockRegistry extends Registry {
 
 		return getRandomSound(sounds, random);
 	}
-	
-	public boolean hasProfile(@Nonnull final IBlockState state) {
-		return this.registry.containsKey(state.getBlock());
+
+	public boolean hasEffectsOrSounds(@Nonnull final IBlockState state) {
+		final BlockProfile entry = this.registry.get(state.getBlock());
+		return entry != null && !(entry.getEffects(state).isEmpty() && entry.getSounds(state).isEmpty());
 	}
 
 	public void register(@Nonnull final BlockConfig entry) {

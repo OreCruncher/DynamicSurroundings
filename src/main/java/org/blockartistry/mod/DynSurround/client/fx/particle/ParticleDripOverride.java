@@ -48,7 +48,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ParticleDripOverride extends ParticleDrip {
 
 	private static final SoundEffect WATER_DRIP = new SoundEffect(
-			new ResourceLocation(DSurround.RESOURCE_ID, "waterdrops"));
+			new ResourceLocation(DSurround.RESOURCE_ID, "waterdrops"), SoundCategory.AMBIENT);
 
 	private boolean firstTime = true;
 
@@ -81,8 +81,7 @@ public class ParticleDripOverride extends ParticleDrip {
 
 					if (soundPos.getY() > 0 && state.getMaterial().isSolid()) {
 						final int distance = y - soundPos.getY();
-						SoundEffectHandler.INSTANCE.playSoundAt(soundPos.up(), WATER_DRIP, 40 + distance * 2,
-								SoundCategory.AMBIENT);
+						SoundEffectHandler.INSTANCE.playSoundAt(soundPos.up(), WATER_DRIP, 40 + distance * 2);
 					}
 				}
 

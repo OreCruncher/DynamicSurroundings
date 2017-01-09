@@ -21,6 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package org.blockartistry.mod.DynSurround.client.fx;
 
 import java.util.Random;
@@ -41,7 +42,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public abstract class BlockEffect {
+public abstract class BlockEffect implements ISpecialEffect {
 
 	private int chance;
 	protected String conditions = StringUtils.EMPTY;
@@ -83,7 +84,8 @@ public abstract class BlockEffect {
 	 * make sure to call the parent last to avoid necessary CPU churn related to
 	 * the script check.
 	 */
-	public boolean trigger(@Nonnull final IBlockState state, @Nonnull final World world, @Nonnull final BlockPos pos,
+	@Override
+	public boolean canTrigger(@Nonnull final IBlockState state, @Nonnull final World world, @Nonnull final BlockPos pos,
 			@Nonnull final Random random) {
 		if (!alwaysExecute() && random.nextInt(getChance()) != 0)
 			return false;
@@ -99,6 +101,7 @@ public abstract class BlockEffect {
 	/**
 	 * Override to provide the body of the effect that is to take place.
 	 */
+	@Override
 	public abstract void doEffect(@Nonnull final IBlockState state, @Nonnull final World world,
 			@Nonnull final BlockPos pos, @Nonnull final Random random);
 

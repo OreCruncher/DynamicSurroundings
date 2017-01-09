@@ -24,9 +24,12 @@
 package org.blockartistry.mod.DynSurround.client.sound;
 
 import java.util.Random;
+
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.mod.DynSurround.client.fx.ISpecialEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundType;
@@ -34,13 +37,14 @@ import org.blockartistry.mod.DynSurround.registry.Evaluator;
 import org.blockartistry.mod.DynSurround.util.SoundUtils;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public final class SoundEffect {
+public final class SoundEffect implements ISpecialEffect {
 
 	private static final float[] pitchDelta = { -0.2F, 0.0F, 0.0F, 0.2F, 0.2F, 0.2F };
 
@@ -49,6 +53,7 @@ public final class SoundEffect {
 	private final String soundName;
 	public final String conditions;
 	public final SoundType type;
+	public final SoundCategory category;
 	public float volume;
 	public final float pitch;
 	public final int weight;
@@ -56,19 +61,19 @@ public final class SoundEffect {
 	public final int repeatDelayRandom;
 	public final int repeatDelay;
 
-	public SoundEffect(final ResourceLocation resource) {
-		this(resource, 1.0F, 1.0F, 0, false);
+	public SoundEffect(final ResourceLocation resource, final SoundCategory category) {
+		this(resource, category, 1.0F, 1.0F, 0, false);
 	}
 
-	public SoundEffect(final ResourceLocation resource, final float volume, final float pitch) {
-		this(resource, volume, pitch, 0, false);
+	public SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume, final float pitch) {
+		this(resource, category, volume, pitch, 0, false);
 	}
 
-	public SoundEffect(final ResourceLocation resource, final float volume, final float pitch, final boolean variable) {
-		this(resource, volume, pitch, 0, variable);
+	public SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume, final float pitch, final boolean variable) {
+		this(resource, category, volume, pitch, 0, variable);
 	}
 
-	public SoundEffect(final ResourceLocation resource, final float volume, final float pitch, final int repeatDelay,
+	public SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume, final float pitch, final int repeatDelay,
 			final boolean variable) {
 		this.soundName = resource.toString();
 		this.sound = SoundUtils.getOrRegisterSound(resource);
@@ -77,22 +82,10 @@ public final class SoundEffect {
 		this.conditions = StringUtils.EMPTY;
 		this.weight = 10;
 		this.type = SoundType.SPOT;
+		this.category = category == null ? SoundCategory.BLOCKS : null;
 		this.variable = variable;
 		this.repeatDelayRandom = 0;
 		this.repeatDelay = repeatDelay;
-	}
-
-	public SoundEffect(final SoundEffect effect) {
-		this.soundName = effect.soundName;
-		this.sound = effect.sound;
-		this.volume = effect.volume;
-		this.pitch = effect.pitch;
-		this.conditions = effect.conditions;
-		this.weight = effect.weight;
-		this.type = effect.type;
-		this.variable = effect.variable;
-		this.repeatDelayRandom = effect.repeatDelayRandom;
-		this.repeatDelay = effect.repeatDelay;
 	}
 
 	public SoundEffect(final SoundConfig record) {
@@ -117,6 +110,19 @@ public final class SoundEffect {
 				this.type = SoundType.SPOT;
 			else
 				this.type = SoundType.BACKGROUND;
+		}
+		
+		switch(this.type) {
+		case BACKGROUND:
+			this.category = SoundCategory.AMBIENT;
+			break;
+		case PERIODIC:
+			this.category = SoundCategory.PLAYERS;
+			break;
+		case STEP:
+		case SPOT:
+		default:
+			this.category = SoundCategory.BLOCKS;
 		}
 	}
 
@@ -143,10 +149,32 @@ public final class SoundEffect {
 	public boolean isRepeatable() {
 		return this.type == SoundType.PERIODIC || this.type == SoundType.BACKGROUND;
 	}
+	
+	public IMySound createSound(@Nonnull final BlockPos pos, final Random rand) {
+		return new SpotSound(pos, this, getRepeat(rand));
+	}
+	
+	public IMySound createSound(@Nonnull final EntityPlayer player) {
+		return new SpotSound(player, this);
+	}
+	
+	public IMySound createSound(@Nonnull final BlockPos pos, final int tickDelay) {
+		return new SpotSound(pos, this, tickDelay);
+	}
+	
+	public IMySound createSound(@Nonnull final EntityPlayer player, final boolean fadeIn, final Random rand) {
+		return new TrackingSound(player, this, fadeIn);
+	}
 
-	public void doEffect(final IBlockState state, final World world, final BlockPos pos,
-			@Nullable final SoundCategory categoryOverride, final Random random) {
-		SoundEffectHandler.INSTANCE.playSoundAt(pos, this, 0, categoryOverride);
+	@Override
+	public boolean canTrigger(@Nonnull final IBlockState state, @Nonnull final World world, @Nonnull final BlockPos pos,
+			@Nonnull final Random random) {
+		return true;
+	}
+
+	@Override
+	public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+		SoundEffectHandler.INSTANCE.playSoundAt(pos, this, 0);
 	}
 
 	@Override

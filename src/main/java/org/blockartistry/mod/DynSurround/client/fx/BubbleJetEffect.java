@@ -52,8 +52,8 @@ public class BubbleJetEffect extends JetEffect {
 	}
 
 	@Override
-	public boolean trigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		return world.getBlockState(pos.down()).getMaterial().isSolid() && super.trigger(state, world, pos, random);
+	public boolean canTrigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+		return world.getBlockState(pos.down()).getMaterial().isSolid() && super.canTrigger(state, world, pos, random);
 	}
 
 	@Override

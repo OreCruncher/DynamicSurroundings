@@ -42,7 +42,8 @@ import net.minecraft.world.World;
 @SideOnly(Side.CLIENT)
 public class ParticleFireJet extends ParticleJet {
 
-	private static final SoundEffect FIRE = new SoundEffect(new ResourceLocation("minecraft:block.fire.ambient"));
+	private static final SoundEffect FIRE = new SoundEffect(new ResourceLocation("minecraft:block.fire.ambient"),
+			SoundCategory.BLOCKS);
 
 	protected final boolean isLava;
 	protected final IParticleFactory factory;
@@ -71,9 +72,9 @@ public class ParticleFireJet extends ParticleJet {
 			flame.flameScale *= this.jetStrength;
 		}
 		addParticle(particle);
-		if(!soundFired) {
+		if (!soundFired) {
 			soundFired = true;
-			SoundEffectHandler.INSTANCE.playSoundAt(this.getPos(), FIRE, 0, SoundCategory.BLOCKS);
+			SoundEffectHandler.INSTANCE.playSoundAt(this.getPos(), FIRE, 0);
 		}
 	}
 }

@@ -31,6 +31,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
+import org.blockartistry.mod.DynSurround.client.fx.ISpecialEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
@@ -39,7 +40,6 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.scanner.RandomScanner;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -63,18 +63,22 @@ public class RandomBlockEffectScanner extends RandomScanner {
 
 	@Override
 	protected boolean interestingBlock(@Nonnull final IBlockState state) {
-		return state.getBlock() != Blocks.AIR && this.blocks.hasProfile(state);
+		return state.getBlock() != Blocks.AIR && this.blocks.hasEffectsOrSounds(state);
 	}
 
-	protected List<BlockEffect> getEffectsToImplement(@Nonnull final World world, @Nonnull final IBlockState state,
+	protected List<ISpecialEffect> getEffectsToImplement(@Nonnull final World world, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random rand) {
 
-		final List<BlockEffect> results = new ArrayList<BlockEffect>();
+		final List<ISpecialEffect> results = new ArrayList<ISpecialEffect>();
 		final List<BlockEffect> chain = this.blocks.getEffects(state);
 
 		for (final BlockEffect effect : chain)
-			if (effect.trigger(state, world, pos, rand))
+			if (effect.canTrigger(state, world, pos, rand))
 				results.add(effect);
+
+		final SoundEffect sound = this.blocks.getSound(state, rand);
+		if (sound != null)
+			sound.doEffect(state, world, pos, rand);
 
 		return results;
 	}
@@ -83,13 +87,9 @@ public class RandomBlockEffectScanner extends RandomScanner {
 	public void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final Random rand) {
 
 		final World world = EnvironState.getWorld();
-		final List<BlockEffect> effects = getEffectsToImplement(world, state, pos, rand);
-		for (final BlockEffect effect : effects)
+		final List<ISpecialEffect> effects = getEffectsToImplement(world, state, pos, rand);
+		for (final ISpecialEffect effect : effects)
 			effect.doEffect(state, world, pos, rand);
-
-		final SoundEffect sound = this.blocks.getSound(state, rand);
-		if (sound != null)
-			sound.doEffect(state, world, pos, SoundCategory.BLOCKS, rand);
 
 	}
 

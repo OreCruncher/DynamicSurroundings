@@ -22,41 +22,22 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.handlers.scanners;
+package org.blockartistry.mod.DynSurround.client.fx;
 
-import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
-
-import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
-import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class AlwaysOnBlockEffectScannerThreaded extends AlwaysOnBlockEffectScanner {
+public interface ISpecialEffect {
 
-	public AlwaysOnBlockEffectScannerThreaded(int range) {
-		super(range);
-	}
+	public boolean canTrigger(@Nonnull final IBlockState state, @Nonnull final World world, @Nonnull final BlockPos pos,
+			@Nonnull final Random random);
 
-	@Override
-	public void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final Random rand) {
-		// Incoming pos is actually a mutable. Need to make a real BlockPos
-		// because it is going back to another thread.
-		final BlockPos loc = new BlockPos(pos);
-		final World world = EnvironState.getWorld();
-		final List<BlockEffect> effects = this.blocks.getAlwaysOnEffects(state);
+	public void doEffect(@Nonnull final IBlockState state, @Nonnull final World world, @Nonnull final BlockPos pos,
+			@Nonnull final Random random);
 
-		for (final BlockEffect be : effects)
-			if (be.canTrigger(state, world, loc, rand)) {
-				ScannerThreadPool.post(new Runnable() {
-					public void run() {
-						be.doEffect(state, world, loc, rand);
-					}
-				});
-			}
-	}
 }

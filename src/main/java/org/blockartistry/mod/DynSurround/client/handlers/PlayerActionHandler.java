@@ -25,16 +25,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class PlayerActionHandler extends EffectHandlerBase {
 
-	private static final SoundEffect JUMP = new SoundEffect(new ResourceLocation(DSurround.RESOURCE_ID, "jump"), 0.4F,
-			1.0F, true);;
-	private static final SoundEffect CRAFTING = new SoundEffect(
-			new ResourceLocation(DSurround.RESOURCE_ID, "crafting"));
+	private static final SoundEffect JUMP = new SoundEffect(new ResourceLocation(DSurround.RESOURCE_ID, "jump"),
+			SoundCategory.PLAYERS, 0.4F, 1.0F, true);
+	private static final SoundEffect CRAFTING = new SoundEffect(new ResourceLocation(DSurround.RESOURCE_ID, "crafting"),
+			SoundCategory.PLAYERS);
 
 	private static final SoundEffect SWORD = new SoundEffect(new ResourceLocation(DSurround.RESOURCE_ID, "swoosh"),
-			1.0F, 1.0F);
-	private static final SoundEffect AXE = new SoundEffect(new ResourceLocation(DSurround.RESOURCE_ID, "swoosh"), 1.0F,
-			0.5F);
-	private static final SoundEffect BOW_PULL = new SoundEffect(new ResourceLocation(DSurround.RESOURCE_ID, "bowpull"));
+			SoundCategory.PLAYERS, 1.0F, 1.0F);
+	private static final SoundEffect AXE = new SoundEffect(new ResourceLocation(DSurround.RESOURCE_ID, "swoosh"),
+			SoundCategory.PLAYERS, 1.0F, 0.5F);
+	private static final SoundEffect BOW_PULL = new SoundEffect(new ResourceLocation(DSurround.RESOURCE_ID, "bowpull"),
+			SoundCategory.PLAYERS);
 
 	private ItemRegistry itemRegistry;
 
@@ -67,7 +68,7 @@ public class PlayerActionHandler extends EffectHandlerBase {
 			return;
 
 		if (event.getEntity().worldObj.isRemote && EnvironState.isPlayer(event.getEntity()))
-			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), JUMP, SoundCategory.PLAYERS);
+			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), JUMP);
 	}
 
 	@SubscribeEvent
@@ -88,8 +89,7 @@ public class PlayerActionHandler extends EffectHandlerBase {
 					sound = AXE;
 
 				if (sound != null)
-					SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), sound,
-							SoundCategory.PLAYERS);
+					SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), sound);
 			}
 		}
 	}
@@ -109,7 +109,7 @@ public class PlayerActionHandler extends EffectHandlerBase {
 
 		if (event.player.worldObj.isRemote && EnvironState.isPlayer(event.player)) {
 			craftSoundThrottle = EnvironState.getTickCounter();
-			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), CRAFTING, SoundCategory.PLAYERS);
+			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), CRAFTING);
 		}
 
 	}
@@ -123,7 +123,7 @@ public class PlayerActionHandler extends EffectHandlerBase {
 			return;
 
 		if (event.getEntityPlayer().worldObj.isRemote && this.itemRegistry.doBowSound(event.getItemStack())) {
-			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), BOW_PULL, SoundCategory.PLAYERS);
+			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), BOW_PULL);
 		}
 	}
 

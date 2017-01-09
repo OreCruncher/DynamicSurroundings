@@ -39,7 +39,6 @@ import gnu.trove.iterator.TObjectFloatIterator;
 import gnu.trove.iterator.TObjectIntIterator;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
@@ -90,6 +89,10 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		if (!player.isEntityAlive()) {
 			return;
 		}
+		
+		// Only execute every 4 ticks.
+		if((EnvironState.getTickCounter() % 4) != 0)
+			return;
 
 		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<SoundEffect>();
 
@@ -107,12 +110,12 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 			final BiomeInfo playerBiome = EnvironState.getPlayerBiome();
 			final SoundEffect sound = playerBiome.getSpotSound(RANDOM);
 			if (sound != null)
-				SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound, SoundCategory.AMBIENT);
+				SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound);
 		}
 
 		final SoundEffect sound = BiomeRegistry.PLAYER.getSpotSound(RANDOM);
 		if (sound != null)
-			SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound, SoundCategory.AMBIENT);
+			SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound);
 	}
 
 }

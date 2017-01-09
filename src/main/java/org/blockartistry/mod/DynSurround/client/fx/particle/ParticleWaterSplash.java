@@ -27,6 +27,7 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.fx.WaterSplashJetEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
+import org.blockartistry.mod.DynSurround.client.sound.IMySound;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
@@ -42,7 +43,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleWaterSplash extends ParticleJet {
 
-	private static final ResourceLocation splashSound = new ResourceLocation(DSurround.RESOURCE_ID, "waterfall");
+	private static final SoundEffect SPLASH = new SoundEffect(
+			new ResourceLocation(DSurround.RESOURCE_ID, "waterfall"), SoundCategory.AMBIENT);
 
 	private static class ParticleWaterSpray extends ParticleRain {
 
@@ -95,11 +97,13 @@ public class ParticleWaterSplash extends ParticleJet {
 			final float volume = this.jetStrength / 10.0F;
 			if (SoundEffectHandler.canSoundBeHeard(this.getPos(), volume)) {
 				final float pitch = 1.0F - 0.7F * (volume / 3.0F) + (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F;
-				final SoundEffect effect = new SoundEffect(splashSound, volume, pitch);
-				this.soundId = SoundEffectHandler.INSTANCE.playSoundAt(this.getPos(), effect, 0, SoundCategory.BLOCKS);
+				final IMySound effect = SPLASH.createSound(this.getPos(), RANDOM);
+				effect.setVolume(volume);
+				effect.setPitch(pitch);
+				this.soundId = SoundEffectHandler.INSTANCE.playSound(effect);
 			}
 		}
-		
+
 		int splashCount = this.getParticleLimit() - this.myParticles.size();
 
 		for (int j = 0; (float) j < splashCount; ++j) {
