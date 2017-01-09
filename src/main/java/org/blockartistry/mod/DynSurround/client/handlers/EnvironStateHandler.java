@@ -277,9 +277,12 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	}
 
 	@Override
-	public void process(final World world, final EntityPlayer player) {
-
+	public void pre(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 		EnvironState.tick(world, player);
+	}
+	
+	@Override
+	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 
 		// Gather diagnostics if needed
 		if (Minecraft.getMinecraft().gameSettings.showDebugInfo && ModOptions.enableDebugLogging) {

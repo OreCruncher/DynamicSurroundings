@@ -229,6 +229,10 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+		
+		if(this.messages.size() == 0)
+			return;
+		
 		// Go through the cached messages and get rid of those
 		// that expire.
 		final ExpireFilter filter = new ExpireFilter(EnvironState.getTickCounter());

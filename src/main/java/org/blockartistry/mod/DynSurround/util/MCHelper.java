@@ -25,8 +25,11 @@
 package org.blockartistry.mod.DynSurround.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -52,7 +55,21 @@ public final class MCHelper {
 	private static final String MATERIAL_NONE = "None";
 	private static final Map<Material, String> materialMap = new TCustomHashMap<Material, String>(
 			IdentityHashingStrategy.INSTANCE);
-	
+	private static final Set<Block> hasVariants = new HashSet<Block>();
+
+	private static boolean variantCheck(@Nonnull final Block block) {
+		final Item item = Item.getItemFromBlock(block);
+		if (item == null)
+			return false;
+
+		if (item.getHasSubtypes())
+			return true;
+
+		final List<ItemStack> stacks = new ArrayList<ItemStack>();
+		block.getSubBlocks(item, null, stacks);
+		return stacks.size() > 1;
+	}
+
 	static {
 		materialMap.put(Material.AIR, "Air");
 		materialMap.put(Material.ANVIL, "Anvil");
@@ -90,18 +107,27 @@ public final class MCHelper {
 		materialMap.put(Material.WATER, "Water");
 		materialMap.put(Material.WEB, "Web");
 		materialMap.put(Material.WOOD, "Wood");
-		
+
+		// Scan the block registry looking for blocks that have subtypes
+		// and add them to the subtype list.
+		final Iterator<Block> itr = Block.REGISTRY.iterator();
+		while (itr.hasNext()) {
+			final Block block = itr.next();
+			if (variantCheck(block))
+				hasVariants.add(block);
+		}
+
 	}
-	
+
 	protected MCHelper() {
-		
+
 	}
-	
+
 	@Nonnull
 	public static String nameOf(@Nonnull final Block block) {
 		return Block.REGISTRY.getNameForObject(block).toString();
 	}
-	
+
 	@Nonnull
 	public static String nameOf(@Nonnull final Item item) {
 		return Item.REGISTRY.getNameForObject(item).toString();
@@ -109,41 +135,33 @@ public final class MCHelper {
 
 	@Nonnull
 	public static Block getBlockByName(@Nonnull final String blockName) {
-		// Yes yes.  I know what I am doing here.  Need to know if the block
+		// Yes yes. I know what I am doing here. Need to know if the block
 		// doesn't exist because of bad data in a config file or some such.
 		return Block.REGISTRY.getObjectBypass(new ResourceLocation(blockName));
 	}
-	
-	public static boolean isAirBlock(@Nonnull final IBlockState state, @Nullable final World world, @Nullable final BlockPos pos) {
+
+	public static boolean isAirBlock(@Nonnull final IBlockState state, @Nullable final World world,
+			@Nullable final BlockPos pos) {
 		return state.getMaterial() == Material.AIR;
 	}
-	
+
 	@Nullable
 	public static SoundType getSoundType(@Nonnull final Block block) {
 		return block.getSoundType();
 	}
-	
+
 	@Nullable
 	public static SoundType getSoundType(@Nonnull final IBlockState state) {
 		return getSoundType(state.getBlock());
 	}
-	
+
 	public static boolean hasVariants(@Nonnull final Block block) {
-		final Item item = Item.getItemFromBlock(block);
-		if(item == null)
-			return false;
-		
-		if(item.getHasSubtypes())
-			return true;
-		
-		final List<ItemStack> stacks = new ArrayList<ItemStack>();
-		block.getSubBlocks(item, null, stacks);
-		return stacks.size() > 1;
+		return hasVariants.contains(block);
 	}
-	
+
 	@Nonnull
 	public static String getMaterialName(@Nullable final Material material) {
-		if(material == null)
+		if (material == null)
 			return MATERIAL_NONE;
 		final String materialName = materialMap.get(material);
 		return materialName == null ? MATERIAL_CUSTOM : materialName;

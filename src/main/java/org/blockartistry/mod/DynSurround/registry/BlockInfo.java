@@ -34,13 +34,14 @@ import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 
-public final class BlockInfo {
+public class BlockInfo {
 
 	private static final Pattern pattern = Pattern.compile("^([^:]+:[^:]+)(?::?)([[\\d]+|[\\*]]*)");
 	
 	public static final int GENERIC = -1;
-	private static final int NO_SUBTYPE = -100;
+	protected static final int NO_SUBTYPE = -100;
 
 	protected Block block;
 	protected int meta;
@@ -67,8 +68,23 @@ public final class BlockInfo {
 		return this.meta == GENERIC;
 	}
 
+	public boolean hasNoSubtypes() {
+		return this.meta == NO_SUBTYPE;
+	}
+
+	private final static int TERM = 3079;
+	
+	@Override
+	public int hashCode() {
+		return this.block.hashCode() ^ (this.meta * TERM);
+	}
+
 	@Override
 	public boolean equals(final Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof BlockInfo))
+			return false;
 		final BlockInfo key = (BlockInfo) obj;
 		return this.block == key.block && this.meta == key.meta;
 	}
@@ -111,10 +127,32 @@ public final class BlockInfo {
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append(MCHelper.nameOf(this.block));
-		if (this.meta == GENERIC)
+		if (isGeneric())
 			builder.append(":*");
-		else if (this.meta != NO_SUBTYPE)
+		else if (!hasNoSubtypes())
 			builder.append(':').append(this.meta);
 		return builder.toString();
+	}
+
+	public static class BlockInfoMutable extends BlockInfo {
+
+		public BlockInfoMutable() {
+			super(null);
+		}
+
+		public void set(@Nonnull final IBlockState state) {
+			this.block = state.getBlock();
+			this.meta = MCHelper.hasVariants(this.block) ? state.getBlock().getMetaFromState(state) : NO_SUBTYPE;
+		}
+		
+		public void set(@Nonnull final BlockInfo info) {
+			this.block = info.block;
+			this.meta = info.meta;
+		}
+
+		public void makeGeneric() {
+			this.meta = GENERIC;
+		}
+
 	}
 }

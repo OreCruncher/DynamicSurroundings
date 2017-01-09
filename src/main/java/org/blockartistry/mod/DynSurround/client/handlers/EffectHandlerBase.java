@@ -26,6 +26,8 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
@@ -53,7 +55,7 @@ public abstract class EffectHandlerBase {
 	/**
 	 * Override to provide pre process logic
 	 */
-	public void pre() {
+	public void pre(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 		
 	}
 	
@@ -63,7 +65,7 @@ public abstract class EffectHandlerBase {
 	/**
 	 * Override to provide post process logic
 	 */
-	public void post() {
+	public void post(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 		
 	}
 	

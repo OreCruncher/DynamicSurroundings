@@ -36,7 +36,6 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.scanner.CuboidScanner;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -63,9 +62,7 @@ public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 
 	@Override
 	protected boolean interestingBlock(final IBlockState state) {
-		// Only interested in water blocks. This will need to
-		// change once more "always on" stuff gets added.
-		return state.getBlock() == Blocks.WATER;
+		return this.blocks.hasAlwaysOnEffects(state);
 	}
 
 	@Override

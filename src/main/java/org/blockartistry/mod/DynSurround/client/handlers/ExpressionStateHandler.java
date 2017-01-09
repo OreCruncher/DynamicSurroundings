@@ -488,7 +488,7 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 				return o1.getName().compareTo(o2.getName());
 			}
 		});
-		
+
 	}
 
 	@Override
@@ -498,13 +498,15 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 	}
 
 	@Override
-	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
-
+	public void pre(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 		// Iterate through the variables and get the data cached for this ticks
 		// expression evaluations.
 		for (final IDynamicVariable dv : variables)
 			dv.update();
+	}
 
+	@Override
+	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 		if (ModOptions.showDebugDialog)
 			DiagnosticPanel.refresh();
 	}

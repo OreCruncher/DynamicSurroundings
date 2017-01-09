@@ -64,6 +64,9 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 
+		if(this.systems.size() == 0)
+			return;
+		
 		// Process the list looking for systems that can be removed.
 		// They are removed if they are dead, or if they are out of
 		// range of the player.

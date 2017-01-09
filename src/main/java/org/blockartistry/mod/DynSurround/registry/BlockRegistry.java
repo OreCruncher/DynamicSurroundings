@@ -25,11 +25,13 @@
 package org.blockartistry.mod.DynSurround.registry;
 
 import java.util.ArrayList;
-import java.util.IdentityHashMap;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,6 +52,7 @@ import org.blockartistry.mod.DynSurround.data.xface.BlockConfig;
 import org.blockartistry.mod.DynSurround.data.xface.EffectConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundType;
+import org.blockartistry.mod.DynSurround.registry.BlockInfo.BlockInfoMutable;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
@@ -73,11 +76,22 @@ public final class BlockRegistry extends Registry {
 
 	@Override
 	public void init() {
-		registry.clear();
+		this.registry.clear();
+		this.alwaysOnEffects.clear();
+		this.hasSoundsAndEffects.clear();
 	}
 
 	@Override
 	public void initComplete() {
+
+		// Scan the registry looking for profiles that match what we want.
+		for (final BlockProfile profile : this.registry.values()) {
+			if (profile.getAlwaysOnEffects(null).size() > 0)
+				this.alwaysOnEffects.add(profile.info);
+			if (profile.getEffects(null).size() > 0 || profile.getSounds(null).size() > 0)
+				this.hasSoundsAndEffects.add(profile.info);
+		}
+
 		if (ModOptions.enableDebugLogging) {
 			ModLog.info("*** BLOCK REGISTRY ***");
 			for (final BlockProfile entry : this.registry.values())
@@ -99,17 +113,31 @@ public final class BlockRegistry extends Registry {
 
 	}
 
-	private final Map<Block, BlockProfile> registry = new IdentityHashMap<Block, BlockProfile>();
+	private final Map<BlockInfo, BlockProfile> registry = new HashMap<BlockInfo, BlockProfile>();
+	private final Set<BlockInfo> alwaysOnEffects = new HashSet<BlockInfo>();
+	private final Set<BlockInfo> hasSoundsAndEffects = new HashSet<BlockInfo>();
+
+	private final BlockInfoMutable key = new BlockInfoMutable();
+
+	private BlockProfile findProfile(@Nonnull final IBlockState state) {
+		this.key.set(state);
+		BlockProfile profile = this.registry.get(this.key);
+		if (profile == null && !this.key.hasNoSubtypes()) {
+			this.key.makeGeneric();
+			profile = this.registry.get(this.key);
+		}
+		return profile;
+	}
 
 	@Nonnull
 	public List<BlockEffect> getEffects(@Nonnull final IBlockState state) {
-		final BlockProfile entry = this.registry.get(state.getBlock());
+		final BlockProfile entry = findProfile(state);
 		return entry != null ? entry.getEffects(state) : NO_EFFECTS;
 	}
 
 	@Nonnull
 	public List<BlockEffect> getAlwaysOnEffects(@Nonnull final IBlockState state) {
-		final BlockProfile entry = this.registry.get(state.getBlock());
+		final BlockProfile entry = findProfile(state);
 		return entry != null ? entry.getAlwaysOnEffects(state) : NO_EFFECTS;
 	}
 
@@ -143,7 +171,7 @@ public final class BlockRegistry extends Registry {
 
 	@Nonnull
 	public List<SoundEffect> getAllSounds(@Nonnull final IBlockState state) {
-		final BlockProfile entry = this.registry.get(state.getBlock());
+		final BlockProfile entry = findProfile(state);
 		if (entry == null)
 			return NO_SOUNDS;
 
@@ -160,7 +188,7 @@ public final class BlockRegistry extends Registry {
 		if (state.getMaterial() == Material.AIR || state.getMaterial().isLiquid())
 			return NO_SOUNDS;
 
-		final BlockProfile entry = this.registry.get(state.getBlock());
+		final BlockProfile entry = findProfile(state);
 		if (entry == null)
 			return NO_SOUNDS;
 
@@ -173,7 +201,7 @@ public final class BlockRegistry extends Registry {
 
 	@Nullable
 	public SoundEffect getSound(@Nonnull final IBlockState state, @Nonnull final Random random) {
-		final BlockProfile entry = this.registry.get(state.getBlock());
+		final BlockProfile entry = findProfile(state);
 		if (entry == null)
 			return null;
 
@@ -194,7 +222,7 @@ public final class BlockRegistry extends Registry {
 		if (state.getMaterial() == Material.AIR || state.getMaterial().isLiquid())
 			return null;
 
-		final BlockProfile entry = this.registry.get(state.getBlock());
+		final BlockProfile entry = findProfile(state);
 		if (entry == null)
 			return null;
 
@@ -208,9 +236,40 @@ public final class BlockRegistry extends Registry {
 		return getRandomSound(sounds, random);
 	}
 
+	private boolean isInteresting(@Nonnull final Set<BlockInfo> data, @Nonnull final IBlockState state) {
+		if(state.getMaterial() == Material.AIR)
+			return false;
+		
+		this.key.set(state);
+		if (data.contains(this.key))
+			return true;
+
+		if (this.key.hasNoSubtypes())
+			return false;
+
+		this.key.makeGeneric();
+		return data.contains(this.key);
+	}
+
+	public boolean hasAlwaysOnEffects(@Nonnull final IBlockState state) {
+		return isInteresting(this.alwaysOnEffects, state);
+	}
+
 	public boolean hasEffectsOrSounds(@Nonnull final IBlockState state) {
-		final BlockProfile entry = this.registry.get(state.getBlock());
-		return entry != null && !(entry.getEffects(state).isEmpty() && entry.getSounds(state).isEmpty());
+		return isInteresting(this.hasSoundsAndEffects, state);
+	}
+
+	@Nullable
+	protected BlockProfile getOrCreateProfile(@Nonnull BlockInfo info) {
+		if (info.getBlock() == Blocks.AIR)
+			return null;
+
+		BlockProfile profile = this.registry.get(info);
+		if (profile == null) {
+			profile = BlockProfile.createProfile(info);
+			this.registry.put(info, profile);
+		}
+		return profile;
 	}
 
 	public void register(@Nonnull final BlockConfig entry) {
@@ -226,16 +285,10 @@ public final class BlockRegistry extends Registry {
 				continue;
 			}
 
-			final Block block = blockInfo.getBlock();
-			if (block == null || block == Blocks.AIR) {
+			final BlockProfile blockData = getOrCreateProfile(blockInfo);
+			if (blockData == null) {
 				ModLog.warn("Unknown block [%s] in block config file", blockName);
 				continue;
-			}
-
-			BlockProfile blockData = this.registry.get(block);
-			if (blockData == null) {
-				blockData = BlockProfile.createProfile(blockInfo);
-				this.registry.put(block, blockData);
 			}
 
 			// Reset of a block clears all registry

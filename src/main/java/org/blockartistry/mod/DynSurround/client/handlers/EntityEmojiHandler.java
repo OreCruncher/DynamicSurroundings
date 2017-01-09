@@ -57,6 +57,10 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+
+		if (this.emojiParticles.size() == 0)
+			return;
+
 		// Get rid of dead particles
 		final TIntObjectIterator<ParticleEmoji> data = this.emojiParticles.iterator();
 		while (data.hasNext()) {
@@ -69,13 +73,12 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void onEntityEmojiEvent(@Nonnull final EntityEmojiEvent event) {
-		if(!ModOptions.enableEntityEmojis)
+		if (!ModOptions.enableEntityEmojis)
 			return;
 
 		final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), event.entityId);
 		if (entity != null) {
-			final IEntityEmojiSettable data = (IEntityEmojiSettable) entity
-					.getCapability(EntityCapability.EMOJI, null);
+			final IEntityEmojiSettable data = (IEntityEmojiSettable) entity.getCapability(EntityCapability.EMOJI, null);
 			data.setActionState(event.actionState);
 			data.setEmotionalState(event.emotionalState);
 			data.setEmojiType(event.emojiType);

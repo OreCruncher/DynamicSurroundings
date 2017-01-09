@@ -39,7 +39,6 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.scanner.RandomScanner;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -63,7 +62,7 @@ public class RandomBlockEffectScanner extends RandomScanner {
 
 	@Override
 	protected boolean interestingBlock(@Nonnull final IBlockState state) {
-		return state.getBlock() != Blocks.AIR && this.blocks.hasEffectsOrSounds(state);
+		return this.blocks.hasEffectsOrSounds(state);
 	}
 
 	protected List<ISpecialEffect> getEffectsToImplement(@Nonnull final World world, @Nonnull final IBlockState state,
@@ -78,7 +77,7 @@ public class RandomBlockEffectScanner extends RandomScanner {
 
 		final SoundEffect sound = this.blocks.getSound(state, rand);
 		if (sound != null)
-			sound.doEffect(state, world, pos, rand);
+			results.add(sound);
 
 		return results;
 	}

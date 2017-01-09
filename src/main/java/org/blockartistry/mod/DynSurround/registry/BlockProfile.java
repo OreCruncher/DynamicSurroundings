@@ -33,18 +33,16 @@ import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 
 public class BlockProfile {
 
 	public static BlockProfile createProfile(@Nonnull final BlockInfo blockInfo) {
-		if (MCHelper.hasVariants(blockInfo.block))
-			return new MultiBlockProfile(blockInfo);
 		return new BlockProfile(blockInfo);
 	}
 
-	protected final Block block;
+	protected final BlockInfo info;
+	protected final boolean hasVariants;
 	protected int chance = 100;
 	protected int stepChance = 100;
 	protected final List<SoundEffect> sounds = new ArrayList<SoundEffect>();
@@ -53,7 +51,8 @@ public class BlockProfile {
 	protected final List<BlockEffect> alwaysOn = new ArrayList<BlockEffect>();
 
 	public BlockProfile(@Nonnull final BlockInfo blockInfo) {
-		this.block = blockInfo.block;
+		this.info = blockInfo;
+		this.hasVariants = MCHelper.hasVariants(this.info.block);
 	}
 
 	public void setChance(@Nonnull final BlockInfo blockInfo, final int chance) {
@@ -124,7 +123,7 @@ public class BlockProfile {
 	@Nonnull
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append("Block [").append(MCHelper.nameOf(this.block)).append("]");
+		builder.append("Block [").append(this.info.toString()).append("]");
 
 		if (!this.sounds.isEmpty()) {
 			boolean commaFlag = false;
