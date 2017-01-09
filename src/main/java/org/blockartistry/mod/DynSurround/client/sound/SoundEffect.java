@@ -163,16 +163,6 @@ public final class SoundEffect {
 		return this.sound.hashCode();
 	}
 
-	public static SoundEffect scaleVolume(final SoundEffect sound, final float scale) {
-		// Easy noop case...
-		if(scale == 1.0F)
-			return sound;
-		
-		final SoundEffect newEffect = new SoundEffect(sound);
-		newEffect.volume *= scale;
-		return newEffect;
-	}
-
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append('[').append(sound == null ? "MISSING_SOUND" : this.soundName);

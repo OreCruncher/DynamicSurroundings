@@ -35,8 +35,9 @@ import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 
+import gnu.trove.iterator.TObjectFloatIterator;
 import gnu.trove.iterator.TObjectIntIterator;
-import gnu.trove.map.hash.TObjectIntHashMap;
+import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
@@ -50,10 +51,9 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		return EnvironState.isPlayerUnderground() || !EnvironState.isPlayerInside();
 	}
 
-	private static void getBiomeSounds(@Nonnull final List<SoundEffect> result) {
+	private static void getBiomeSounds(@Nonnull final TObjectFloatHashMap<SoundEffect> result) {
 		// Need to collect sounds from all the applicable biomes
 		// along with their weights.
-		final TObjectIntHashMap<SoundEffect> sounds = new TObjectIntHashMap<SoundEffect>();
 		final TObjectIntIterator<BiomeInfo> info = AreaSurveyHandler.getBiomes().iterator();
 		while (info.hasNext()) {
 			info.advance();
@@ -61,17 +61,17 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 			info.key().findSoundMatches(bs);
 			for (final SoundEffect sound : bs) {
 				final int w = info.value();
-				sounds.adjustOrPutValue(sound, w, w);
+				result.adjustOrPutValue(sound, w, w);
 			}
 		}
 
 		// Scale the volumes in the resulting list based on the weights
 		final int area = AreaSurveyHandler.getBiomeArea();
-		final TObjectIntIterator<SoundEffect> itr = sounds.iterator();
+		final TObjectFloatIterator<SoundEffect> itr = result.iterator();
 		while (itr.hasNext()) {
 			itr.advance();
-			final float scale = 0.3F + 0.7F * ((float) itr.value() / (float) area);
-			result.add(SoundEffect.scaleVolume(itr.key(), scale));
+			final float scale = 0.1F + 0.9F * ((float) itr.value() / (float) area);
+			itr.setValue(scale);
 		}
 	}
 
@@ -91,12 +91,15 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 			return;
 		}
 
-		final List<SoundEffect> sounds = new ArrayList<SoundEffect>();
+		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<SoundEffect>();
 
 		if (doBiomeSounds())
 			getBiomeSounds(sounds);
 
-		BiomeRegistry.PLAYER.findSoundMatches(sounds);
+		final List<SoundEffect> playerSounds = new ArrayList<SoundEffect>();
+		BiomeRegistry.PLAYER.findSoundMatches(playerSounds);
+		for(final SoundEffect effect: playerSounds)
+			sounds.put(effect, 1.0F);
 
 		SoundEffectHandler.INSTANCE.queueAmbientSounds(sounds);
 

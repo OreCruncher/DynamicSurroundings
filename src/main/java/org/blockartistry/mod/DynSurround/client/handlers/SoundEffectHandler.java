@@ -32,7 +32,6 @@ import java.nio.IntBuffer;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -59,11 +58,12 @@ import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALC11;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.gson.Gson;
+
+import gnu.trove.iterator.TObjectFloatIterator;
+import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ISoundEventListener;
@@ -156,7 +156,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		this.pending.clear();
 	}
 
-	public void queueAmbientSounds(@Nonnull final List<SoundEffect> sounds) {
+	public void queueAmbientSounds(@Nonnull final TObjectFloatHashMap<SoundEffect> sounds) {
 
 		// Iterate through the existing emitters:
 		// * If an emitter does not correspond to an incoming sound, remove.
@@ -164,11 +164,9 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		final Iterator<Entry<SoundEffect, Emitter>> itr = this.emitters.entrySet().iterator();
 		while (itr.hasNext()) {
 			final Entry<SoundEffect, Emitter> e = itr.next();
-			final Optional<SoundEffect> effect = Iterables.tryFind(sounds, Predicates.equalTo(e.getKey()));
-			if (effect.isPresent()) {
-				final SoundEffect se = effect.get();
-				e.getValue().setVolume(se.getVolume());
-				sounds.remove(se);
+			if (sounds.contains(e.getKey())) {
+				e.getValue().setVolume(sounds.get(e.getKey()));
+				sounds.remove(e.getKey());
 			} else {
 				e.getValue().fade();
 				itr.remove();
@@ -177,8 +175,11 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 		// Any sounds left in the list are new and need
 		// an emitter created.
-		for (final SoundEffect sound : sounds)
-			this.emitters.put(sound, new Emitter(sound));
+		final TObjectFloatIterator<SoundEffect> newSounds = sounds.iterator();
+		while (newSounds.hasNext()) {
+			newSounds.advance();
+			this.emitters.put(newSounds.key(), new Emitter(newSounds.key()));
+		}
 	}
 
 	public int currentSoundCount() {
