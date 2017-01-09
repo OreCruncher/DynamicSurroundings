@@ -167,38 +167,33 @@ public abstract class DataProxy extends Observable {
 			if (bm != null) {
 				final List<String> data = new ArrayList<String>();
 				bm.collectData(this.state, data);
-				if (data.size() > 0)
-					result.addAll(data);
+				result.addAll(data);
 			}
 			return result;
 		}
 
 		public List<String> getBlockEffects() {
 			final List<String> result = new ArrayList<String>();
-			List<BlockEffect> effects = blocks.getEffects(state);
-			if (effects != null && effects.size() > 0) {
-				for (final BlockEffect e : effects) {
-					result.add(e.getEffectType().getName());
-				}
+			List<BlockEffect> effects = this.blocks.getEffects(state);
+			for (final BlockEffect e : effects) {
+				result.add(e.getEffectType().getName());
 			}
-			effects = blocks.getAlwaysOnEffects(state);
-			if(effects != null && effects.size() > 0) {
-				for (final BlockEffect e : effects) {
-					result.add(e.getEffectType().getName() + " (Always on)");
-				}
+
+			effects = this.blocks.getAlwaysOnEffects(state);
+			for (final BlockEffect e : effects) {
+				result.add(e.getEffectType().getName() + " (Always on)");
 			}
 			return result;
 		}
 		
 		public List<String> getBlockSounds() {
 			final List<String> result = new ArrayList<String>();
-			List<SoundEffect> sounds = blocks.getAllSounds(this.state);
-			if(sounds != null && sounds.size() > 0)
-				for(final SoundEffect s: sounds)
-					result.add(s.toString());
+			List<SoundEffect> sounds = this.blocks.getAllSounds(this.state);
+			for(final SoundEffect s: sounds)
+				result.add(s.toString());
 			
-			sounds = blocks.getAllStepSounds(this.state);
-			if(sounds != null && sounds.size() > 0)
+			sounds = this.blocks.getAllStepSounds(this.state);
+			if(sounds.size() > 0)
 				for(final SoundEffect s: sounds)
 					result.add(s.toString() + " (Step Sound)");
 			

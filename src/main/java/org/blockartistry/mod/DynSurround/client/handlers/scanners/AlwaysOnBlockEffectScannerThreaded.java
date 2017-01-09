@@ -47,18 +47,16 @@ public class AlwaysOnBlockEffectScannerThreaded extends AlwaysOnBlockEffectScann
 		// Incoming pos is actually a mutable. Need to make a real BlockPos
 		// because it is going back to another thread.
 		final BlockPos loc = new BlockPos(pos);
+		final World world = EnvironState.getWorld();
 		final List<BlockEffect> effects = this.blocks.getAlwaysOnEffects(state);
 
-		if (effects != null && effects.size() > 0) {
-			final World world = EnvironState.getWorld();
-			for (final BlockEffect be : effects)
-				if (be.trigger(state, world, loc, rand)) {
-					ScannerThreadPool.post(new Runnable() {
-						public void run() {
-							be.doEffect(state, world, loc, rand);
-						}
-					});
-				}
-		}
+		for (final BlockEffect be : effects)
+			if (be.trigger(state, world, loc, rand)) {
+				ScannerThreadPool.post(new Runnable() {
+					public void run() {
+						be.doEffect(state, world, loc, rand);
+					}
+				});
+			}
 	}
 }

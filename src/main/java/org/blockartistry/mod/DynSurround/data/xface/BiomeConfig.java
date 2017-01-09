@@ -24,12 +24,9 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
 
 public final class BiomeConfig {
@@ -54,81 +51,6 @@ public final class BiomeConfig {
 	@SerializedName("spotSoundChance")
 	public Integer spotSoundChance = null;
 	@SerializedName("sounds")
-	public List<SoundConfig> sounds = new ArrayList<SoundConfig>();
+	public List<SoundConfig> sounds = ImmutableList.of();
 
-	public BiomeConfig() {
-		
-	}
-	
-	public BiomeConfig(@Nonnull final String nameFilter) {
-		this.biomeName = nameFilter;
-	}
-	
-	@Nonnull
-	public BiomeConfig setBiomeNameFilter(@Nonnull final String name) {
-		this.biomeName = name;
-		return this;
-	}
-
-	@Nonnull
-	public BiomeConfig setHasPrecipitation(final boolean flag) {
-		this.hasPrecipitation = flag;
-		return this;
-	}
-
-	@Nonnull
-	public BiomeConfig setHasDust(final boolean flag) {
-		this.hasDust = flag;
-		return this;
-	}
-
-	@Nonnull
-	public BiomeConfig setDustColor(final int red, final int green, final int blue) {
-		this.dustColor = String.format("%d,%d,%d", red, green, blue);
-		return this;
-	}
-
-	@Nonnull
-	public BiomeConfig setHasAurora(final boolean flag) {
-		this.hasAurora = flag;
-		return this;
-	}
-
-	@Nonnull
-	public BiomeConfig setHasFog(final boolean flag) {
-		this.hasFog = flag;
-		return this;
-	}
-
-	@Nonnull
-	public BiomeConfig setFogColor(final int red, final int green, final int blue) {
-		this.fogColor = String.format("%d,%d,%d", red, green, blue);
-		return this;
-	}
-
-	@Nonnull
-	public BiomeConfig setFogDensity(final float density) {
-		this.fogDensity = density;
-		return this;
-	}
-
-	@Nonnull
-	public BiomeConfig setResetSound(final boolean flag) {
-		this.soundReset = flag;
-		return this;
-	}
-
-	@Nonnull
-	public BiomeConfig setSpotSoundChance(final int chance) {
-		this.spotSoundChance = chance;
-		return this;
-	}
-
-	@Nonnull
-	public BiomeConfig addSound(@Nullable final SoundConfig sound) {
-		if (sounds != null)
-			this.sounds.add(sound);
-		return this;
-	}
-	
 }

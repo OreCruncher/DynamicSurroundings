@@ -24,16 +24,22 @@
 
 package org.blockartistry.mod.DynSurround.registry;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import net.minecraft.block.Block;
 
 public final class BlockInfo {
 
+	private static final Pattern pattern = Pattern.compile("^([^:]+:[^:]+)(?::?)([[\\d]+|[\\*]]*)");
+	
 	public static final int GENERIC = -1;
 	private static final int NO_SUBTYPE = -100;
 
@@ -74,12 +80,12 @@ public final class BlockInfo {
 		int subType = NO_SUBTYPE;
 
 		// Parse out the possible subtype from the end of the string
-		if (StringUtils.countMatches(blockId, ":") == 2) {
-			workingName = StringUtils.substringBeforeLast(blockId, ":");
-			final String num = StringUtils.substringAfterLast(blockId, ":");
+		final Matcher m = pattern.matcher(blockId);
+		if (m.matches()) {
+			workingName = m.group(1);
+			final String num = m.group(2);
 
 			if (num != null && !num.isEmpty()) {
-
 				if ("*".compareTo(num) == 0)
 					subType = GENERIC;
 				else {
@@ -87,17 +93,29 @@ public final class BlockInfo {
 						subType = Integer.parseInt(num);
 					} catch (Exception e) {
 						// It appears malformed - assume the incoming name
-						// is
-						// the real name and continue.
+						// isthe real name and continue.
 						;
 					}
 				}
 			}
+		} else {
+			ModLog.warn("Unkown block id [%s]", blockId);
 		}
 
 		final Block block = MCHelper.getBlockByName(workingName);
 		if (subType == NO_SUBTYPE && MCHelper.hasVariants(block))
 			subType = GENERIC;
 		return block != null ? new BlockInfo(block, subType) : null;
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder builder = new StringBuilder();
+		builder.append(MCHelper.nameOf(this.block));
+		if (this.meta == GENERIC)
+			builder.append(":*");
+		else if (this.meta != NO_SUBTYPE)
+			builder.append(':').append(this.meta);
+		return builder.toString();
 	}
 }

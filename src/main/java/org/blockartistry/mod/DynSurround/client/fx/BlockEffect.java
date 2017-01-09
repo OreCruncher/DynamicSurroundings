@@ -58,7 +58,7 @@ public abstract class BlockEffect {
 	public abstract BlockEffectType getEffectType();
 
 	public void setConditions(@Nullable final String conditions) {
-		this.conditions = conditions == null ? StringUtils.EMPTY : conditions;
+		this.conditions = conditions == null ? StringUtils.EMPTY : conditions.intern();
 	}
 
 	@Nonnull
@@ -73,10 +73,19 @@ public abstract class BlockEffect {
 	public int getChance() {
 		return this.chance;
 	}
+	
+	public boolean alwaysExecute() {
+		return this.chance == 0;
+	}
 
+	/**
+	 * Determines if the effect can trigger.  Classes that override this method should
+	 * make sure to call the parent last to avoid necessary CPU churn related to
+	 * the script check.
+	 */
 	public boolean trigger(@Nonnull final IBlockState state, @Nonnull final World world, @Nonnull final BlockPos pos,
 			@Nonnull final Random random) {
-		if (getChance() > 0 && random.nextInt(getChance()) != 0)
+		if (!alwaysExecute() && random.nextInt(getChance()) != 0)
 			return false;
 
 		if (Evaluator.check(getConditions())) {
@@ -87,14 +96,11 @@ public abstract class BlockEffect {
 		return false;
 	}
 
+	/**
+	 * Override to provide the body of the effect that is to take place.
+	 */
 	public abstract void doEffect(@Nonnull final IBlockState state, @Nonnull final World world,
 			@Nonnull final BlockPos pos, @Nonnull final Random random);
-
-	public void process(@Nonnull final IBlockState state, @Nonnull final World world, @Nonnull final BlockPos pos,
-			@Nonnull final Random random) {
-		if (trigger(state, world, pos, random))
-			doEffect(state, world, pos, random);
-	}
 
 	@Override
 	@Nonnull

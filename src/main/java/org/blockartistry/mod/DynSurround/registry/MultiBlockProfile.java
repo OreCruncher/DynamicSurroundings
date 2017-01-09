@@ -45,10 +45,10 @@ public class MultiBlockProfile extends BlockProfile {
 
 	@Nonnull
 	protected BlockProfile getProfileWithCreate(@Nonnull final BlockInfo blockInfo) {
-		BlockProfile profile = blockData.get(blockInfo.meta);
+		BlockProfile profile = this.blockData.get(blockInfo.meta);
 		if (profile == null) {
 			profile = new BlockProfile(blockInfo);
-			blockData.put(blockInfo.meta, profile);
+			this.blockData.put(blockInfo.meta, profile);
 		}
 		return profile;
 	}
@@ -64,7 +64,7 @@ public class MultiBlockProfile extends BlockProfile {
 
 	@Override
 	public int getChance(@Nonnull final IBlockState state) {
-		final BlockProfile profile = blockData.get(state.getBlock().getMetaFromState(state));
+		final BlockProfile profile = this.blockData.get(state.getBlock().getMetaFromState(state));
 		return profile != null ? profile.getChance(state) : super.getChance(state);
 	}
 
@@ -79,7 +79,7 @@ public class MultiBlockProfile extends BlockProfile {
 
 	@Override
 	public int getStepChance(@Nonnull final IBlockState state) {
-		final BlockProfile profile = blockData.get(state.getBlock().getMetaFromState(state));
+		final BlockProfile profile = this.blockData.get(state.getBlock().getMetaFromState(state));
 		return profile != null ? profile.getStepChance(state) : super.getStepChance(state);
 	}
 
@@ -98,7 +98,7 @@ public class MultiBlockProfile extends BlockProfile {
 			super.clearSounds(blockInfo);
 			return;
 		}
-		final BlockProfile profile = blockData.get(blockInfo.meta);
+		final BlockProfile profile = this.blockData.get(blockInfo.meta);
 		if (profile != null)
 			profile.clearSounds(blockInfo);
 	}
@@ -106,7 +106,7 @@ public class MultiBlockProfile extends BlockProfile {
 	@Override
 	@Nonnull
 	public List<SoundEffect> getSounds(@Nonnull final IBlockState state) {
-		final BlockProfile profile = blockData.get(state.getBlock().getMetaFromState(state));
+		final BlockProfile profile = this.blockData.get(state.getBlock().getMetaFromState(state));
 		return profile != null ? profile.getSounds(state) : super.getSounds(state);
 	}
 
@@ -125,7 +125,7 @@ public class MultiBlockProfile extends BlockProfile {
 			super.clearStepSounds(blockInfo);
 			return;
 		}
-		final BlockProfile profile = blockData.get(blockInfo.meta);
+		final BlockProfile profile = this.blockData.get(blockInfo.meta);
 		if (profile != null)
 			profile.clearStepSounds(blockInfo);
 	}
@@ -133,7 +133,7 @@ public class MultiBlockProfile extends BlockProfile {
 	@Override
 	@Nonnull
 	public List<SoundEffect> getStepSounds(@Nonnull final IBlockState state) {
-		final BlockProfile profile = blockData.get(state.getBlock().getMetaFromState(state));
+		final BlockProfile profile = this.blockData.get(state.getBlock().getMetaFromState(state));
 		return profile != null ? profile.getStepSounds(state) : super.getStepSounds(state);
 	}
 
@@ -152,7 +152,7 @@ public class MultiBlockProfile extends BlockProfile {
 			super.clearEffects(blockInfo);
 			return;
 		}
-		final BlockProfile profile = blockData.get(blockInfo.meta);
+		final BlockProfile profile = this.blockData.get(blockInfo.meta);
 		if (profile != null)
 			profile.clearEffects(blockInfo);
 	}
@@ -160,14 +160,14 @@ public class MultiBlockProfile extends BlockProfile {
 	@Override
 	@Nonnull
 	public List<BlockEffect> getEffects(@Nonnull final IBlockState state) {
-		final BlockProfile profile = blockData.get(state.getBlock().getMetaFromState(state));
+		final BlockProfile profile = this.blockData.get(state.getBlock().getMetaFromState(state));
 		return profile != null ? profile.getEffects(state) : super.getEffects(state);
 	}
 
 	@Override
 	@Nonnull
 	public List<BlockEffect> getAlwaysOnEffects(@Nonnull final IBlockState state) {
-		final BlockProfile profile = blockData.get(state.getBlock().getMetaFromState(state));
+		final BlockProfile profile = this.blockData.get(state.getBlock().getMetaFromState(state));
 		return profile != null ? profile.getAlwaysOnEffects(state) : super.getAlwaysOnEffects(state);
 	}
 
@@ -176,7 +176,7 @@ public class MultiBlockProfile extends BlockProfile {
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("DEFAULT ").append(super.toString());
-		for (final TIntObjectIterator<BlockProfile> itr = blockData.iterator(); itr.hasNext();) {
+		for (final TIntObjectIterator<BlockProfile> itr = this.blockData.iterator(); itr.hasNext();) {
 			itr.advance();
 			builder.append("\nMETA ").append(itr.key()).append(" ").append(itr.value().toString());
 		}

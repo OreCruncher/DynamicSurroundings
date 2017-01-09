@@ -52,7 +52,7 @@ public final class Evaluator {
 	// in the built-in tables will work, however.
 	//
 	// Expressions are cached. If multiple requests come in for
-	// the same expression an older one is reused.
+	// the same expression the cached version is reused.
 	@Nonnull
 	private static Expression compile(final String expression) {
 		Expression exp = null;
@@ -79,17 +79,11 @@ public final class Evaluator {
 	}
 
 	public static boolean check(@Nonnull final String conditions) {
-		// Existing default regex - short circuit to make it faster
+		// If the string is empty return true.  They are always
+		// true.
 		if (StringUtils.isEmpty(conditions))
 			return true;
 
-		// Older regex supplied so it needs to be processed old school
-		if (conditions.startsWith("(?i)")) {
-			ModLog.warn("Old style condition string detected [%s]", conditions);
-			return false;
-		}
-
-		// New stuff. Compile the expression and evaluate
 		return eval(conditions).asBoolean();
 	}
 }

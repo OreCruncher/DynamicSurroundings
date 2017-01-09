@@ -197,14 +197,6 @@ public class BiomeInfo {
 		return this.biome.getRainfall();
 	}
 
-	@Nullable
-	public SoundEffect findSoundMatch() {
-		for (final SoundEffect sound : this.sounds)
-			if (sound.matches())
-				return sound;
-		return null;
-	}
-
 	@Nonnull
 	public void findSoundMatches(@Nonnull final List<SoundEffect> results) {
 		for (final SoundEffect sound : this.sounds)

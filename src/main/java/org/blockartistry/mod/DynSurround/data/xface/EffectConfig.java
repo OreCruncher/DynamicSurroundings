@@ -24,11 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
-import javax.annotation.Nonnull;
-
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
-
 import com.google.gson.annotations.SerializedName;
 
 public final class EffectConfig {
@@ -40,29 +36,4 @@ public final class EffectConfig {
 	@SerializedName("chance")
 	public Integer chance = null;
 	
-	public EffectConfig() {
-		
-	}
-	
-	public EffectConfig(@Nonnull final BlockEffectType type) {
-		this.setEffectType(type);
-	}
-	
-	@Nonnull
-	public EffectConfig setEffectType(@Nonnull final BlockEffectType type) {
-		this.effect = type.getName();
-		return this;
-	}
-	
-	@Nonnull
-	public EffectConfig setEffectChance(final int chance) {
-		this.chance = chance;
-		return this;
-	}
-	
-	@Nonnull
-	public EffectConfig setCondition(final String condition) {
-		this.conditions = condition;
-		return this;
-	}
 }

@@ -113,7 +113,7 @@ public final class WailaHandler implements IWailaDataProvider {
 
 			final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
 			final List<BlockEffect> effects = blocks.getEffects(state);
-			if(effects != null && effects.size() > 0) {
+			if(effects.size() > 0) {
 				text.add(TextFormatting.RED + "Block Effects");
 				for (final BlockEffect e : effects) {
 					text.add(TextFormatting.RED + " " + e.getEffectType().getName());

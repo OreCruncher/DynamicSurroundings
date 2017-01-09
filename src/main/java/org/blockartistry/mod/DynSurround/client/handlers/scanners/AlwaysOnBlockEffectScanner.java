@@ -70,13 +70,11 @@ public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 
 	@Override
 	public void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final Random rand) {
+		final World world = EnvironState.getWorld();
 		final List<BlockEffect> effects = this.blocks.getAlwaysOnEffects(state);
-		if (effects != null && effects.size() > 0) {
-			final World world = EnvironState.getWorld();
-			for (final BlockEffect be : effects) {
-				be.process(state, world, pos, rand);
-			}
-		}
+		for (final BlockEffect be : effects)
+			if (be.trigger(state, world, pos, rand))
+				be.doEffect(state, world, pos, rand);
 	}
 
 }

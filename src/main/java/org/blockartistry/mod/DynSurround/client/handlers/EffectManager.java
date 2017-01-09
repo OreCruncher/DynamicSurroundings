@@ -115,8 +115,11 @@ public class EffectManager {
 				handler.pre();
 			
 			final EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
-			for (final EffectHandlerBase handler : effectHandlers)
+			for (final EffectHandlerBase handler : effectHandlers) {
+				DSurround.getProfiler().startSection(handler.getHandlerName());
 				handler.process(world, player);
+				DSurround.getProfiler().endSection();
+			}
 			
 			// Fire post calls
 			for(final EffectHandlerBase handler: effectHandlers)

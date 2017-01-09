@@ -23,17 +23,14 @@
 
 package org.blockartistry.mod.DynSurround.data.xface;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
 
 public class BlockConfig {
 	@SerializedName("blocks")
-	public List<String> blocks = new ArrayList<String>();
+	public List<String> blocks = ImmutableList.of();
 	@SerializedName("soundReset")
 	public Boolean soundReset = null;
 	@SerializedName("effectReset")
@@ -45,68 +42,8 @@ public class BlockConfig {
 	@SerializedName("stepChance")
 	public Integer stepChance = null;
 	@SerializedName("sounds")
-	public List<SoundConfig> sounds = new ArrayList<SoundConfig>();
+	public List<SoundConfig> sounds = ImmutableList.of();
 	@SerializedName("effects")
-	public List<EffectConfig> effects = new ArrayList<EffectConfig>();
+	public List<EffectConfig> effects = ImmutableList.of();
 
-	public BlockConfig() {
-
-	}
-
-	public BlockConfig(@Nullable final String... blocks) {
-		if (blocks != null)
-			for (final String b : blocks)
-				this.addBlock(b);
-	}
-
-	@Nonnull
-	public BlockConfig addBlock(@Nonnull final String block) {
-		if (blocks != null)
-			this.blocks.add(block);
-		return this;
-	}
-
-	@Nonnull
-	public BlockConfig setResetSounds(final boolean flag) {
-		this.soundReset = flag;
-		return this;
-	}
-
-	@Nonnull
-	public BlockConfig setResetEffects(final boolean flag) {
-		this.effectReset = flag;
-		return this;
-	}
-
-	@Nonnull
-	public BlockConfig setResetStepSounds(final boolean flag) {
-		this.stepSoundReset = flag;
-		return this;
-	}
-
-	@Nonnull
-	public BlockConfig setStepSoundChance(final int chance) {
-		this.stepChance = chance;
-		return this;
-	}
-
-	@Nonnull
-	public BlockConfig setSoundChance(final int chance) {
-		this.chance = chance;
-		return this;
-	}
-
-	@Nonnull
-	public BlockConfig addSound(@Nonnull final SoundConfig sound) {
-		if (sounds != null)
-			this.sounds.add(sound);
-		return this;
-	}
-
-	@Nonnull
-	public BlockConfig addEffect(@Nonnull final EffectConfig effect) {
-		if (effects != null)
-			this.effects.add(effect);
-		return this;
-	}
 }

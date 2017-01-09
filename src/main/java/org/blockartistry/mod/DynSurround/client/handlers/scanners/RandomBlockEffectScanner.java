@@ -24,6 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers.scanners;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -47,8 +48,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RandomBlockEffectScanner extends RandomScanner {
 
-	// Vanilla had a range of 16 in doVoidParticles() and it iterated 1000 times.
-	// The new doVoidParticles() in 1.10x is different.  Loops less, but has two
+	// Vanilla had a range of 16 in doVoidParticles() and it iterated 1000
+	// times.
+	// The new doVoidParticles() in 1.10x is different. Loops less, but has two
 	// ranges it works (near and far). Not going to change it as the data in the
 	// config files it tuned to this existing behavior.
 	private static final float RATIO = 1000.0F / (16.0F * 16.0F * 16.0F);
@@ -58,28 +60,36 @@ public class RandomBlockEffectScanner extends RandomScanner {
 	public RandomBlockEffectScanner(final int range) {
 		super("RandomBlockEffectScanner", range, (int) (range * range * range * RATIO));
 	}
-	
+
 	@Override
 	protected boolean interestingBlock(@Nonnull final IBlockState state) {
 		return state.getBlock() != Blocks.AIR && this.blocks.hasProfile(state);
 	}
 
+	protected List<BlockEffect> getEffectsToImplement(@Nonnull final World world, @Nonnull final IBlockState state,
+			@Nonnull final BlockPos pos, @Nonnull final Random rand) {
+
+		final List<BlockEffect> results = new ArrayList<BlockEffect>();
+		final List<BlockEffect> chain = this.blocks.getEffects(state);
+
+		for (final BlockEffect effect : chain)
+			if (effect.trigger(state, world, pos, rand))
+				results.add(effect);
+
+		return results;
+	}
+
 	@Override
 	public void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final Random rand) {
 
-		final List<BlockEffect> chain = this.blocks.findEffectMatches(state);
-
-		if (chain != null && !chain.isEmpty()) {
-			final World world = EnvironState.getWorld();
-			for (final BlockEffect effect : chain)
-				effect.process(state, world, pos, rand);
-		}
+		final World world = EnvironState.getWorld();
+		final List<BlockEffect> effects = getEffectsToImplement(world, state, pos, rand);
+		for (final BlockEffect effect : effects)
+			effect.doEffect(state, world, pos, rand);
 
 		final SoundEffect sound = this.blocks.getSound(state, rand);
-		if (sound != null) {
-			final World world = EnvironState.getWorld();
+		if (sound != null)
 			sound.doEffect(state, world, pos, SoundCategory.BLOCKS, rand);
-		}
 
 	}
 

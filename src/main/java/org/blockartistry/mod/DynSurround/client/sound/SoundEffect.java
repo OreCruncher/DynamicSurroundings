@@ -75,7 +75,7 @@ public final class SoundEffect {
 		this.volume = volume;
 		this.pitch = pitch;
 		this.conditions = StringUtils.EMPTY;
-		this.weight = 1;
+		this.weight = 10;
 		this.type = SoundType.SPOT;
 		this.variable = variable;
 		this.repeatDelayRandom = 0;
@@ -98,7 +98,7 @@ public final class SoundEffect {
 	public SoundEffect(final SoundConfig record) {
 		this.soundName = StringUtils.isEmpty(record.sound) ? "NO SOUND SPECIFIED" : record.sound;
 		this.sound = StringUtils.isEmpty(record.sound) ? null : SoundUtils.getOrRegisterSound(record.sound);
-		this.conditions = StringUtils.isEmpty(record.conditions) ? StringUtils.EMPTY : record.conditions;
+		this.conditions = StringUtils.isEmpty(record.conditions) ? StringUtils.EMPTY : record.conditions.intern();
 		this.volume = record.volume == null ? 1.0F : record.volume.floatValue();
 		this.pitch = record.pitch == null ? 1.0F : record.pitch.floatValue();
 		this.weight = record.weight == null ? 10 : record.weight.intValue();

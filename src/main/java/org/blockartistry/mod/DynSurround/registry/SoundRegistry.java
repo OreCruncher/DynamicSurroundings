@@ -61,13 +61,13 @@ public final class SoundRegistry extends Registry {
 
 	@Override
 	public void init() {
-		cullSoundNamePatterns.clear();
-		blockSoundNamePatterns.clear();
-		volumeControl.clear();
+		this.cullSoundNamePatterns.clear();
+		this.blockSoundNamePatterns.clear();
+		this.volumeControl.clear();
 
 		for (final String sound : ModOptions.culledSounds) {
 			try {
-				cullSoundNamePatterns.add(Pattern.compile(sound));
+				this.cullSoundNamePatterns.add(Pattern.compile(sound));
 			} catch (final Throwable ex) {
 				ModLog.warn("Unable to compile pattern for culled sound '%s'", sound);
 			}
@@ -75,7 +75,7 @@ public final class SoundRegistry extends Registry {
 
 		for (final String sound : ModOptions.blockedSounds) {
 			try {
-				blockSoundNamePatterns.add(Pattern.compile(sound));
+				this.blockSoundNamePatterns.add(Pattern.compile(sound));
 			} catch (final Throwable ex) {
 				ModLog.warn("Unable to compile pattern for blocked sound '%s'", sound);
 			}
@@ -86,7 +86,7 @@ public final class SoundRegistry extends Registry {
 			if (tokens.length == 2) {
 				try {
 					final float vol = Integer.parseInt(tokens[1]) / 100.0F;
-					volumeControl.put(tokens[0], vol);
+					this.volumeControl.put(tokens[0], vol);
 				} catch (final Throwable t) {
 					ModLog.error("Unable to process sound volume entry: " + volume, t);
 				}
@@ -97,12 +97,13 @@ public final class SoundRegistry extends Registry {
 			final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
 			final List<String> sounds = new ArrayList<String>();
 
-			// Make a map copy.  The sound registry should be baked but don't
-			// trust it.  The map reference will be used in a separate thread to detect
+			// Make a map copy. The sound registry should be baked but don't
+			// trust it. The map reference will be used in a separate thread to
+			// detect
 			// bogus entries.
 			final Map<ResourceLocation, SoundEventAccessor> theClone = ImmutableMap
 					.copyOf(handler.soundRegistry.soundRegistry);
-			
+
 			for (final Entry<ResourceLocation, SoundEventAccessor> e : theClone.entrySet()) {
 				sounds.add(e.getKey().toString());
 			}

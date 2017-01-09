@@ -45,54 +45,6 @@ public class DimensionConfig {
 	@SerializedName("weather")
 	public Boolean hasWeather = null;
 
-	@Nonnull
-	public DimensionConfig setDimensionId(final int id) {
-		this.dimensionId = id;
-		return this;
-	}
-
-	@Nonnull
-	public DimensionConfig setDimensionName(@Nonnull final String name) {
-		this.name = name;
-		return this;
-	}
-
-	@Nonnull
-	public DimensionConfig setSeaLevel(final int level) {
-		this.seaLevel = level;
-		return this;
-	}
-
-	@Nonnull
-	public DimensionConfig setSkyHeight(final int height) {
-		this.skyHeight = height;
-		return this;
-	}
-
-	@Nonnull
-	public DimensionConfig setCloudHeight(final int height) {
-		this.cloudHeight = height;
-		return this;
-	}
-
-	@Nonnull
-	public DimensionConfig setHasCloudHaze(final boolean flag) {
-		this.hasHaze = flag;
-		return this;
-	}
-
-	@Nonnull
-	public DimensionConfig setHasWeather(final boolean flag) {
-		this.hasWeather = flag;
-		return this;
-	}
-
-	@Nonnull
-	public DimensionConfig setHasAuroras(final boolean flag) {
-		this.hasAurora = flag;
-		return this;
-	}
-
 	@Override
 	@Nonnull
 	public String toString() {

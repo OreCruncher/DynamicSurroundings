@@ -53,22 +53,17 @@ public class RandomBlockEffectScannerThreaded extends RandomBlockEffectScanner {
 		// Incoming pos is actually a mutable. Need to make a real BlockPos
 		// because it is going back to another thread.
 		final BlockPos loc = new BlockPos(pos);
-		final List<BlockEffect> chain = this.blocks.findEffectMatches(state);
-
-		if (chain != null && !chain.isEmpty()) {
-			final World world = EnvironState.getWorld();
-			for (final BlockEffect effect : chain)
-				if (effect.trigger(state, world, pos, rand))
-					ScannerThreadPool.post(new Runnable() {
-						public void run() {
-							effect.doEffect(state, world, loc, rand);
-						}
-					});
-		}
+		final World world = EnvironState.getWorld();
+		final List<BlockEffect> effects = getEffectsToImplement(world, state, pos, rand);
+		for (final BlockEffect effect : effects)
+			ScannerThreadPool.post(new Runnable() {
+				public void run() {
+					effect.doEffect(state, world, pos, rand);
+				}
+			});
 
 		final SoundEffect sound = this.blocks.getSound(state, rand);
 		if (sound != null) {
-			final World world = EnvironState.getWorld();
 			ScannerThreadPool.post(new Runnable() {
 				public void run() {
 					sound.doEffect(state, world, loc, SoundCategory.BLOCKS, rand);

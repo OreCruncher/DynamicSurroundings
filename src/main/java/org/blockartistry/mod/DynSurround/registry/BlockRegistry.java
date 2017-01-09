@@ -53,6 +53,8 @@ import org.blockartistry.mod.DynSurround.data.xface.SoundType;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -61,6 +63,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 
 public final class BlockRegistry extends Registry {
+	
+	protected final static List<BlockEffect> NO_EFFECTS = ImmutableList.of();
+	protected final static List<SoundEffect> NO_SOUNDS = ImmutableList.of();
 
 	BlockRegistry(@Nonnull final Side side) {
 		super(side);
@@ -96,42 +101,33 @@ public final class BlockRegistry extends Registry {
 
 	private final Map<Block, BlockProfile> registry = new IdentityHashMap<Block, BlockProfile>();
 
-	@Nullable
+	@Nonnull
 	public List<BlockEffect> getEffects(@Nonnull final IBlockState state) {
 		final BlockProfile entry = this.registry.get(state.getBlock());
-		return entry != null ? entry.getEffects(state) : null;
+		return entry != null ? entry.getEffects(state) : NO_EFFECTS;
 	}
 
-	@Nullable
+	@Nonnull
 	public List<BlockEffect> getAlwaysOnEffects(@Nonnull final IBlockState state) {
 		final BlockProfile entry = this.registry.get(state.getBlock());
-		return entry != null ? entry.getAlwaysOnEffects(state) : null;
-	}
-
-	@Nullable
-	public List<BlockEffect> findEffectMatches(@Nonnull final IBlockState state) {
-		final List<BlockEffect> effects = getEffects(state);
-		if (effects == null)
-			return null;
-
-		final List<BlockEffect> results = new ArrayList<BlockEffect>();
-		for (final BlockEffect e : effects)
-			if (Evaluator.check(e.getConditions()))
-				results.add(e);
-
-		return results;
+		return entry != null ? entry.getAlwaysOnEffects(state) : NO_EFFECTS;
 	}
 
 	@Nonnull
 	private SoundEffect getRandomSound(@Nonnull final List<SoundEffect> list, @Nonnull final Random random) {
+		
+		// Build a weight table on the fly
+		
 		int totalWeight = 0;
 		final List<SoundEffect> candidates = new ArrayList<SoundEffect>();
 		for (final SoundEffect s : list)
-			if (s.matches()) {
+			if (s.weight > 0 && s.matches()) {
 				candidates.add(s);
 				totalWeight += s.weight;
 			}
-		if (totalWeight <= 0)
+		
+		// It's possible all the sounds got filtered out
+		if(totalWeight <= 0)
 			return null;
 
 		if (candidates.size() == 1)
@@ -145,32 +141,32 @@ public final class BlockRegistry extends Registry {
 		return candidates.get(i - 1);
 	}
 	
-	@Nullable
+	@Nonnull
 	public List<SoundEffect> getAllSounds(@Nonnull final IBlockState state) {
 		final BlockProfile entry = this.registry.get(state.getBlock());
 		if (entry == null)
-			return null;
+			return NO_SOUNDS;
 
 		final List<SoundEffect> sounds = entry.getSounds(state);
 		if (sounds.isEmpty())
-			return null;
+			return NO_SOUNDS;
 		
 		return sounds;
 	}
 	
-	@Nullable
+	@Nonnull
 	public List<SoundEffect> getAllStepSounds(@Nonnull final IBlockState state) {
 		// Air and liquid have no step sounds so optimize that out
 		if(state.getMaterial() == Material.AIR || state.getMaterial().isLiquid())
-			return null;
+			return NO_SOUNDS;
 
 		final BlockProfile entry = this.registry.get(state.getBlock());
 		if (entry == null)
-			return null;
+			return NO_SOUNDS;
 
 		final List<SoundEffect> sounds = entry.getStepSounds(state);
 		if (sounds.isEmpty())
-			return null;
+			return NO_SOUNDS;
 		
 		return sounds;
 	}
