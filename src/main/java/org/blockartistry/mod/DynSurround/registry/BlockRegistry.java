@@ -25,11 +25,8 @@
 package org.blockartistry.mod.DynSurround.registry;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -58,6 +55,8 @@ import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import com.google.common.collect.ImmutableList;
 
+import gnu.trove.map.hash.THashMap;
+import gnu.trove.set.hash.THashSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -113,9 +112,9 @@ public final class BlockRegistry extends Registry {
 
 	}
 
-	private final Map<BlockInfo, BlockProfile> registry = new HashMap<BlockInfo, BlockProfile>();
-	private final Set<BlockInfo> alwaysOnEffects = new HashSet<BlockInfo>();
-	private final Set<BlockInfo> hasSoundsAndEffects = new HashSet<BlockInfo>();
+	private final THashMap<BlockInfo, BlockProfile> registry = new THashMap<BlockInfo, BlockProfile>();
+	private final THashSet<BlockInfo> alwaysOnEffects = new THashSet<BlockInfo>();
+	private final THashSet<BlockInfo> hasSoundsAndEffects = new THashSet<BlockInfo>();
 
 	private final BlockInfoMutable key = new BlockInfoMutable();
 
@@ -256,7 +255,7 @@ public final class BlockRegistry extends Registry {
 	}
 
 	@Nullable
-	protected BlockProfile getOrCreateProfile(@Nonnull BlockInfo info) {
+	protected BlockProfile getOrCreateProfile(@Nonnull final BlockInfo info) {
 		if (info.getBlock() == Blocks.AIR)
 			return null;
 

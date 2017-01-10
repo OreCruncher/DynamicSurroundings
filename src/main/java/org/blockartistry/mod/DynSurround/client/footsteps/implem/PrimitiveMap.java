@@ -24,8 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -37,6 +35,7 @@ import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.mod.DynSurround.client.footsteps.util.ConfigProperty;
 
+import gnu.trove.map.hash.THashMap;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -44,19 +43,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class PrimitiveMap {
 
 	private final Isolator isolator;
-	private final Map<String, List<IAcoustic>> primitiveMap = new LinkedHashMap<String, List<IAcoustic>>();
+	private final THashMap<String, IAcoustic[]> primitiveMap = new THashMap<String, IAcoustic[]>();
 
 	public PrimitiveMap(@Nonnull final Isolator isolator) {
 		this.isolator = isolator;
 	}
 
 	@Nullable
-	public List<IAcoustic> getPrimitiveMap(@Nonnull final String primitive) {
+	public IAcoustic[] getPrimitiveMap(@Nonnull final String primitive) {
 		return this.primitiveMap.get(primitive);
 	}
 
 	@Nullable
-	public List<IAcoustic> getPrimitiveMapSubstrate(@Nonnull final String primitive, @Nonnull final String substrate) {
+	public IAcoustic[] getPrimitiveMapSubstrate(@Nonnull final String primitive, @Nonnull final String substrate) {
 		return this.primitiveMap.get(primitive + "@" + substrate);
 	}
 

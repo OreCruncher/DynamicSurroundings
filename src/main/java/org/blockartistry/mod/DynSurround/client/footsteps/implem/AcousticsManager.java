@@ -26,10 +26,8 @@ package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -48,8 +46,7 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.TimeUtils;
 
-import com.google.common.collect.ImmutableList;
-
+import gnu.trove.map.hash.THashMap;
 import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -70,14 +67,15 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	private final Random RANDOM = ThreadLocalRandom.current();
 
-	private final Map<String, IAcoustic> acoustics = new HashMap<String, IAcoustic>();
+	private final THashMap<String, IAcoustic> acoustics = new THashMap<String, IAcoustic>();
 	private final ArrayDeque<PendingSound> pending = new ArrayDeque<PendingSound>();
 	private final Isolator isolator;
 
 	// Special sentinels for equating
-	public static final List<IAcoustic> NOT_EMITTER = ImmutableList.of((IAcoustic) new BasicAcoustic("NOT_EMITTER"));
-	public static final List<IAcoustic> MESSY_GROUND = ImmutableList.of((IAcoustic) new BasicAcoustic("MESSY_GROUND"));
-	public static List<IAcoustic> SWIM;
+	public static final IAcoustic[] EMPTY = {};
+	public static final IAcoustic[] NOT_EMITTER = { new BasicAcoustic("NOT_EMITTER") };
+	public static final IAcoustic[] MESSY_GROUND = { new BasicAcoustic("MESSY_GROUND") };
+	public static IAcoustic[] SWIM;
 
 	public AcousticsManager(@Nonnull final Isolator isolator) {
 		this.isolator = isolator;
@@ -92,9 +90,9 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		playAcoustic(location, acousticName.getData(), event, null);
 	}
 
-	public void playAcoustic(@Nonnull final Object location, @Nonnull final List<IAcoustic> acoustics,
+	public void playAcoustic(@Nonnull final Object location, @Nonnull final IAcoustic[] acoustics,
 			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
-		if (acoustics == null || acoustics.size() == 0) {
+		if (acoustics == null || acoustics.length == 0) {
 			ModLog.debug("Attempt to play acoustic with no name");
 			return;
 		}
@@ -118,7 +116,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	}
 
 	@Nonnull
-	public List<IAcoustic> compileAcoustics(@Nonnull final String acousticName) {
+	public IAcoustic[] compileAcoustics(@Nonnull final String acousticName) {
 		if (acousticName.equals("NOT_EMITTER"))
 			return NOT_EMITTER;
 		else if (acousticName.equals("MESSY_GROUND"))
@@ -136,7 +134,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 			}
 		}
 
-		return ImmutableList.copyOf(acoustics);
+		return acoustics.size() == 0 ? EMPTY : acoustics.toArray(new IAcoustic[acoustics.size()]);
 	}
 
 	@Override

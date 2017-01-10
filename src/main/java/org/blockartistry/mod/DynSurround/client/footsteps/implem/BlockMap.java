@@ -25,8 +25,6 @@
 package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -44,6 +42,7 @@ import org.blockartistry.mod.DynSurround.registry.BlockInfo;
 import org.blockartistry.mod.DynSurround.registry.BlockInfo.BlockInfoMutable;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
+import gnu.trove.map.hash.THashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.fml.relauncher.Side;
@@ -54,8 +53,8 @@ public class BlockMap {
 	private static final Pattern pattern = Pattern.compile("([^:]+:[^^+]+)\\^?(\\d+)?\\+?(\\w+)?");
 
 	private final Isolator isolator;
-	private final Map<BlockInfo, List<IAcoustic>> metaMap = new HashMap<BlockInfo, List<IAcoustic>>();
-	private final Map<BlockInfo, Map<String, List<IAcoustic>>> substrateMap = new HashMap<BlockInfo, Map<String, List<IAcoustic>>>();
+	private final THashMap<BlockInfo, IAcoustic[]> metaMap = new THashMap<BlockInfo, IAcoustic[]>();
+	private final THashMap<BlockInfo, Map<String, IAcoustic[]>> substrateMap = new THashMap<BlockInfo, Map<String, IAcoustic[]>>();
 
 	private final BlockInfoMutable key = new BlockInfoMutable();
 
@@ -75,7 +74,7 @@ public class BlockMap {
 		}
 	}
 
-	private static final Map<String, List<MacroEntry>> macros = new LinkedHashMap<String, List<MacroEntry>>();
+	private static final THashMap<String, List<MacroEntry>> macros = new THashMap<String, List<MacroEntry>>();
 
 	static {
 		List<MacroEntry> entries = new ArrayList<MacroEntry>();
@@ -130,18 +129,18 @@ public class BlockMap {
 	}
 
 	@Nullable
-	public List<IAcoustic> getBlockMap(@Nonnull final IBlockState state) {
+	public IAcoustic[] getBlockMap(@Nonnull final IBlockState state) {
 		this.key.set(state);
-		List<IAcoustic> result = this.metaMap.get(this.key);
+		IAcoustic[] result = this.metaMap.get(this.key);
 		if (result == null && this.key.hasSubTypes()) {
 			result = this.metaMap.get(this.key.asGeneric());
 		}
 		return result;
 	}
 
-	private Map<String, List<IAcoustic>> getBlockSubstrate(@Nonnull final IBlockState state) {
+	private Map<String, IAcoustic[]> getBlockSubstrate(@Nonnull final IBlockState state) {
 		this.key.set(state);
-		Map<String, List<IAcoustic>> sub = this.substrateMap.get(this.key);
+		Map<String, IAcoustic[]> sub = this.substrateMap.get(this.key);
 		if (sub == null) {
 			if (this.key.hasSubTypes())
 				sub = this.substrateMap.get(this.key.asGeneric());
@@ -152,23 +151,23 @@ public class BlockMap {
 	}
 
 	@Nullable
-	public List<IAcoustic> getBlockMapSubstrate(@Nonnull final IBlockState state, @Nonnull final String substrate) {
-		final Map<String, List<IAcoustic>> sub = getBlockSubstrate(state);
+	public IAcoustic[] getBlockMapSubstrate(@Nonnull final IBlockState state, @Nonnull final String substrate) {
+		final Map<String, IAcoustic[]> sub = getBlockSubstrate(state);
 		return sub != null ? sub.get(substrate) : null;
 	}
 
 	private void put(@Nonnull final Block block, final int meta, @Nonnull final String substrate,
 			@Nonnull final String value) {
 
-		final List<IAcoustic> acoustics = this.isolator.getAcoustics().compileAcoustics(value);
+		final IAcoustic[] acoustics = this.isolator.getAcoustics().compileAcoustics(value);
 
 		if (StringUtils.isEmpty(substrate)) {
 			this.metaMap.put(new BlockInfo(block, meta), acoustics);
 		} else {
 			final BlockInfo bi = new BlockInfo(block, meta);
-			Map<String, List<IAcoustic>> sub = this.substrateMap.get(bi);
+			Map<String, IAcoustic[]> sub = this.substrateMap.get(bi);
 			if (sub == null)
-				this.substrateMap.put(bi, sub = new HashMap<String, List<IAcoustic>>());
+				this.substrateMap.put(bi, sub = new THashMap<String, IAcoustic[]>());
 			sub.put(substrate.intern(), acoustics);
 		}
 	}
@@ -207,7 +206,7 @@ public class BlockMap {
 	}
 
 	@Nonnull
-	private static String combine(@Nonnull final List<IAcoustic> acoustics) {
+	private static String combine(@Nonnull final IAcoustic[] acoustics) {
 		final StringBuilder builder = new StringBuilder();
 		boolean addComma = false;
 		for (final IAcoustic a : acoustics) {
@@ -222,13 +221,13 @@ public class BlockMap {
 
 	public void collectData(@Nonnull final IBlockState state, @Nonnull final List<String> data) {
 
-		final List<IAcoustic> temp = getBlockMap(state);
+		final IAcoustic[] temp = getBlockMap(state);
 		if (temp != null)
 			data.add(combine(temp));
 
-		final Map<String, List<IAcoustic>> subs = getBlockSubstrate(state);
+		final Map<String, IAcoustic[]> subs = getBlockSubstrate(state);
 		if (subs != null) {
-			for (final Entry<String, List<IAcoustic>> entry : subs.entrySet())
+			for (final Entry<String, IAcoustic[]> entry : subs.entrySet())
 				data.add(entry.getKey() + ":" + combine(entry.getValue()));
 		}
 	}

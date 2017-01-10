@@ -24,7 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.registry;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -32,14 +31,15 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.data.xface.ItemConfig;
 
+import gnu.trove.set.hash.THashSet;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class ItemRegistry extends Registry {
 	
-	private final List<Class<?>> swordItems = new ArrayList<Class<?>>();
-	private final List<Class<?>> axeItems = new ArrayList<Class<?>>();
-	private final List<Class<?>> bowItems = new ArrayList<Class<?>>();
+	private final THashSet<Class<?>> swordItems = new THashSet<Class<?>>();
+	private final THashSet<Class<?>> axeItems = new THashSet<Class<?>>();
+	private final THashSet<Class<?>> bowItems = new THashSet<Class<?>>();
 	
 	public ItemRegistry(@Nonnull final Side side) {
 		super(side);
@@ -62,7 +62,7 @@ public class ItemRegistry extends Registry {
 
 	}
 	
-	private void process(@Nonnull List<String> classes, final List<Class<?>> theList) {
+	private void process(@Nonnull List<String> classes, final THashSet<Class<?>> theList) {
 		for(final String c: classes) {
 			try {
 				final Class<?> clazz = Class.forName(c, false, ItemRegistry.class.getClassLoader());

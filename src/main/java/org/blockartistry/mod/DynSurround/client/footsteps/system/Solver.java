@@ -24,8 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.client.footsteps.system;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -40,6 +38,7 @@ import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IOptions.Op
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
+import org.blockartistry.mod.DynSurround.util.MyUtils;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -77,7 +76,8 @@ public class Solver {
 	/**
 	 * Play an association.
 	 */
-	public void playAssociation(@Nonnull final EntityPlayer ply, @Nullable final Association assos, @Nonnull final EventType eventType) {
+	public void playAssociation(@Nonnull final EntityPlayer ply, @Nullable final Association assos,
+			@Nonnull final EventType eventType) {
 		if (assos != null && !assos.isNotEmitter()) {
 			if (assos.getNoAssociation()) {
 				this.isolator.getDefaultStepPlayer().playStep(ply, assos);
@@ -101,10 +101,11 @@ public class Solver {
 	@Nonnull
 	public Association findAssociationForPlayer(@Nonnull final EntityPlayer player, final double verticalOffsetAsMinus,
 			final boolean isRightFoot) {
-		// Moved from routine below - why do all this calculation just to toss it away
+		// Moved from routine below - why do all this calculation just to toss
+		// it away
 		if (MathStuff.abs(player.motionY) < 0.02)
 			return null; // Don't play sounds on every tiny bounce
-		
+
 		final int yy = MathStuff.floor_double(player.getEntityBoundingBox().minY - 0.1d - verticalOffsetAsMinus);
 		final double rot = MathStuff.toRadians(MathStuff.wrapDegrees(player.rotationYaw));
 		final double xn = MathStuff.cos(rot);
@@ -128,9 +129,9 @@ public class Solver {
 	 */
 	@Nonnull
 	protected Association findAssociationForLocation(@Nonnull final EntityPlayer player, @Nonnull final BlockPos pos) {
-//		if (MathStuff.abs(player.motionY) < 0.02)
-//			return null; // Don't play sounds on every tiny bounce
-		
+		// if (MathStuff.abs(player.motionY) < 0.02)
+		// return null; // Don't play sounds on every tiny bounce
+
 		if (player.isInWater())
 			ModLog.debug(
 					"WARNING!!! Playing a sound while in the water! This is supposed to be halted by the stopping conditions!!");
@@ -207,14 +208,14 @@ public class Solver {
 	 * valid, but has no association in the blockmap. If the carpet was
 	 * selected, this solves to the carpet.
 	 */
-	@Nonnull 
+	@Nonnull
 	public Association findAssociationForBlock(@Nonnull final BlockPos immutablePos) {
 		final World world = EnvironState.getWorld();
 		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(immutablePos);
 		IBlockState in = world.getBlockState(pos);
 		final IBlockState above = world.getBlockState(pos.up());
 
-		List<IAcoustic> association = isolator.getBlockMap().getBlockMapSubstrate(above, "carpet");
+		IAcoustic[] association = isolator.getBlockMap().getBlockMapSubstrate(above, "carpet");
 
 		// PFLog.debugf("Walking on block: %0 -- Being in block: %1", in,
 		// above);
@@ -247,10 +248,9 @@ public class Solver {
 				// => this block of code is here, not outside this if else
 				// group.
 
-				List<IAcoustic> foliage = this.isolator.getBlockMap().getBlockMapSubstrate(above, "foliage");
+				IAcoustic[] foliage = this.isolator.getBlockMap().getBlockMapSubstrate(above, "foliage");
 				if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
-					association = new ArrayList<IAcoustic>(association);
-					association.addAll(foliage);
+					association = MyUtils.concatenate(association, foliage);
 					ModLog.debug("Foliage detected");
 				}
 			}
@@ -273,7 +273,7 @@ public class Solver {
 				return (new Association(in, pos)).setAssociation(association);
 			}
 		} else {
-			List<IAcoustic> primitive = resolvePrimitive(in);
+			IAcoustic[] primitive = resolvePrimitive(in);
 			if (primitive != null) {
 				if (primitive == AcousticsManager.NOT_EMITTER) {
 					// PFLog.debugf("Primitive for %0 : %1 : %2 is NOT_EMITTER!
@@ -291,8 +291,8 @@ public class Solver {
 		}
 	}
 
-	@Nonnull 
-	private List<IAcoustic> resolvePrimitive(@Nonnull final IBlockState state) {
+	@Nonnull
+	private IAcoustic[] resolvePrimitive(@Nonnull final IBlockState state) {
 
 		if (state.getMaterial() == Material.AIR)
 			return AcousticsManager.NOT_EMITTER;
@@ -314,7 +314,7 @@ public class Solver {
 		final String substrate = String.format(Locale.ENGLISH, "%.2f_%.2f", type.getVolume(), type.getPitch());
 
 		// Check for primitive in register
-		List<IAcoustic> primitive = this.isolator.getPrimitiveMap().getPrimitiveMapSubstrate(soundName, substrate);
+		IAcoustic[] primitive = this.isolator.getPrimitiveMap().getPrimitiveMapSubstrate(soundName, substrate);
 		if (primitive == null) {
 			if (flag) {
 				primitive = this.isolator.getPrimitiveMap().getPrimitiveMapSubstrate(soundName, "break_" + soundName); // Check
@@ -335,7 +335,8 @@ public class Solver {
 	}
 
 	/**
-	 * Play special sounds that must stop the usual footstep figuring things out process.
+	 * Play special sounds that must stop the usual footstep figuring things out
+	 * process.
 	 */
 	public boolean playSpecialStoppingConditions(@Nonnull final EntityPlayer ply) {
 		if (ply.isInWater()) {
@@ -361,16 +362,17 @@ public class Solver {
 	}
 
 	/**
-	 * Find an association for a certain block assuming the player is standing on it,
-	 * using a custom strategy which strategies are defined by the solver.
+	 * Find an association for a certain block assuming the player is standing
+	 * on it, using a custom strategy which strategies are defined by the
+	 * solver.
 	 */
-	@Nonnull 
+	@Nonnull
 	public Association findAssociationMessyFoliage(@Nonnull final BlockPos pos) {
 
 		final World world = EnvironState.getWorld();
 		final IBlockState above = world.getBlockState(pos.up());
 
-		List<IAcoustic> association = null;
+		IAcoustic[] association = null;
 		boolean found = false;
 		// Try to see if the block above is a carpet...
 		/*
@@ -395,13 +397,13 @@ public class Solver {
 		 * => this block of code is here, not outside this if else group.
 		 */
 
-		List<IAcoustic> foliage = this.isolator.getBlockMap().getBlockMapSubstrate(above, "foliage");
+		IAcoustic[] foliage = this.isolator.getBlockMap().getBlockMapSubstrate(above, "foliage");
 		if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 			// we discard the normal block association, and mark the foliage as
 			// detected
 			// association = association + "," + foliage;
 			association = foliage;
-			List<IAcoustic> isMessy = this.isolator.getBlockMap().getBlockMapSubstrate(above, "messy");
+			IAcoustic[] isMessy = this.isolator.getBlockMap().getBlockMapSubstrate(above, "messy");
 
 			if (isMessy != null && isMessy == AcousticsManager.MESSY_GROUND)
 				found = true;

@@ -24,8 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.client.footsteps.system;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.AcousticsManager;
@@ -43,7 +41,7 @@ public class Association {
 	private IBlockState state;
 	private BlockPos pos;
 
-	private List<IAcoustic> data = null;
+	private IAcoustic[] data = null;
 
 	private boolean noAssociation = false;
 	private boolean isPrimative = false;
@@ -57,12 +55,12 @@ public class Association {
 	}
 
 	@Nonnull
-	public List<IAcoustic> getData() {
+	public IAcoustic[] getData() {
 		return this.data;
 	}
 
 	@Nonnull
-	public Association setAssociation(@Nonnull final List<IAcoustic> association) {
+	public Association setAssociation(@Nonnull final IAcoustic[] association) {
 		this.data = association;
 		this.noAssociation = false;
 		return this;
@@ -80,7 +78,7 @@ public class Association {
 	}
 
 	@Nonnull
-	public Association setPrimitive(@Nonnull final List<IAcoustic> primative) {
+	public Association setPrimitive(@Nonnull final IAcoustic[] primative) {
 		this.data = primative;
 		this.isPrimative = true;
 		return this;

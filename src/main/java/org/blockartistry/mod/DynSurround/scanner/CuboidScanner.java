@@ -149,6 +149,13 @@ public abstract class CuboidScanner extends Scanner {
 	}
 
 	/**
+	 * Override to have unscan notifications invoked when processing a block.
+	 */
+	public boolean doBlockUnscan() {
+		return false;
+	}
+
+	/**
 	 * This is the hook that gets called when a block goes out of scope because
 	 * the player moved or something.
 	 */
@@ -161,19 +168,21 @@ public abstract class CuboidScanner extends Scanner {
 
 		final Random rand = ThreadLocalRandom.current();
 		final World world = EnvironState.getWorld();
-		final ComplementsPointIterator newInRange = new ComplementsPointIterator(newVolume, intersect);
-		final ComplementsPointIterator newOutOfRange = new ComplementsPointIterator(oldVolume, intersect);
 
-		// Notify on the blocks going out of range
-		for (BlockPos point = newOutOfRange.next(); point != null; point = newOutOfRange.next()) {
-			if (point.getY() > 0) {
-				final IBlockState state = world.getBlockState(point);
-				if (interestingBlock(state))
-					blockUnscan(state, point, rand);
+		if (doBlockUnscan()) {
+			final ComplementsPointIterator newOutOfRange = new ComplementsPointIterator(oldVolume, intersect);
+			// Notify on the blocks going out of range
+			for (BlockPos point = newOutOfRange.next(); point != null; point = newOutOfRange.next()) {
+				if (point.getY() > 0) {
+					final IBlockState state = world.getBlockState(point);
+					if (interestingBlock(state))
+						blockUnscan(state, point, rand);
+				}
 			}
 		}
 
 		// Notify on blocks coming into range
+		final ComplementsPointIterator newInRange = new ComplementsPointIterator(newVolume, intersect);
 		for (BlockPos point = newInRange.next(); point != null; point = newInRange.next()) {
 			if (point.getY() > 0) {
 				final IBlockState state = world.getBlockState(point);
@@ -222,8 +231,8 @@ public abstract class CuboidScanner extends Scanner {
 	}
 
 	/**
-	 * These events originate from the WorldEventDetector.  The event is
-	 * not a Forge event.
+	 * These events originate from the WorldEventDetector. The event is not a
+	 * Forge event.
 	 */
 	@SubscribeEvent(receiveCanceled = false)
 	public void onBlockUpdate(@Nonnull final BlockUpdateEvent event) {
