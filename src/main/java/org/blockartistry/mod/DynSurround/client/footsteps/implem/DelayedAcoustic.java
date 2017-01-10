@@ -53,6 +53,14 @@ public class DelayedAcoustic extends BasicAcoustic implements IOptions {
 	public Object getOption(@Nonnull final Option option) {
 		return option == Option.DELAY_MIN ? this.delayMin : option == Option.DELAY_MAX ? this.delayMax : null;
 	}
+	
+	public long asLong(@Nonnull final Option option) {
+		return (Long)getOption(option);
+	}
+	
+	public float asFloat(@Nonnull final Option option) {
+		return (Float)getOption(option);
+	}
 
 	public void setDelayMin(final long delay) {
 		this.delayMin = delay;

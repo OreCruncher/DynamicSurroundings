@@ -40,11 +40,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
+import org.blockartistry.mod.DynSurround.registry.BlockInfo;
+import org.blockartistry.mod.DynSurround.registry.BlockInfo.BlockInfoMutable;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
-import gnu.trove.map.hash.TCustomHashMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import gnu.trove.strategy.IdentityHashingStrategy;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.fml.relauncher.Side;
@@ -55,10 +54,10 @@ public class BlockMap {
 	private static final Pattern pattern = Pattern.compile("([^:]+:[^^+]+)\\^?(\\d+)?\\+?(\\w+)?");
 
 	private final Isolator isolator;
-	private final Map<Block, TIntObjectHashMap<List<IAcoustic>>> metaMap = new TCustomHashMap<Block, TIntObjectHashMap<List<IAcoustic>>>(
-			IdentityHashingStrategy.INSTANCE);
-	private final Map<Block, Map<String, List<IAcoustic>>> substrateMap = new TCustomHashMap<Block, Map<String, List<IAcoustic>>>(
-			IdentityHashingStrategy.INSTANCE);
+	private final Map<BlockInfo, List<IAcoustic>> metaMap = new HashMap<BlockInfo, List<IAcoustic>>();
+	private final Map<BlockInfo, Map<String, List<IAcoustic>>> substrateMap = new HashMap<BlockInfo, Map<String, List<IAcoustic>>>();
+
+	private final BlockInfoMutable key = new BlockInfoMutable();
 
 	private static class MacroEntry {
 		public final int meta;
@@ -132,26 +131,30 @@ public class BlockMap {
 
 	@Nullable
 	public List<IAcoustic> getBlockMap(@Nonnull final IBlockState state) {
-		final TIntObjectHashMap<List<IAcoustic>> metas = this.metaMap.get(state.getBlock());
-		if (metas != null) {
-			List<IAcoustic> result = metas.get(state.getBlock().getMetaFromState(state));
-			if (result == null)
-				result = metas.get(-1);
-			return result;
+		this.key.set(state);
+		List<IAcoustic> result = this.metaMap.get(this.key);
+		if (result == null && this.key.hasSubTypes()) {
+			result = this.metaMap.get(this.key.asGeneric());
 		}
-		return null;
+		return result;
+	}
+
+	private Map<String, List<IAcoustic>> getBlockSubstrate(@Nonnull final IBlockState state) {
+		this.key.set(state);
+		Map<String, List<IAcoustic>> sub = this.substrateMap.get(this.key);
+		if (sub == null) {
+			if (this.key.hasSubTypes())
+				sub = this.substrateMap.get(this.key.asGeneric());
+			else if (this.key.hasSpecialMeta())
+				sub = this.substrateMap.get(this.key.asSpecial());
+		}
+		return sub;
 	}
 
 	@Nullable
 	public List<IAcoustic> getBlockMapSubstrate(@Nonnull final IBlockState state, @Nonnull final String substrate) {
-		final Map<String, List<IAcoustic>> sub = this.substrateMap.get(state.getBlock());
-		if (sub != null) {
-			List<IAcoustic> result = sub.get(substrate + "." + state.getBlock().getMetaFromState(state));
-			if (result == null)
-				result = sub.get(substrate + ".-1");
-			return result;
-		}
-		return null;
+		final Map<String, List<IAcoustic>> sub = getBlockSubstrate(state);
+		return sub != null ? sub.get(substrate) : null;
 	}
 
 	private void put(@Nonnull final Block block, final int meta, @Nonnull final String substrate,
@@ -160,15 +163,13 @@ public class BlockMap {
 		final List<IAcoustic> acoustics = this.isolator.getAcoustics().compileAcoustics(value);
 
 		if (StringUtils.isEmpty(substrate)) {
-			TIntObjectHashMap<List<IAcoustic>> metas = this.metaMap.get(block);
-			if (metas == null)
-				this.metaMap.put(block, metas = new TIntObjectHashMap<List<IAcoustic>>());
-			metas.put(meta, acoustics);
+			this.metaMap.put(new BlockInfo(block, meta), acoustics);
 		} else {
-			Map<String, List<IAcoustic>> sub = this.substrateMap.get(block);
+			final BlockInfo bi = new BlockInfo(block, meta);
+			Map<String, List<IAcoustic>> sub = this.substrateMap.get(bi);
 			if (sub == null)
-				this.substrateMap.put(block, sub = new HashMap<String, List<IAcoustic>>());
-			sub.put(substrate + "." + meta, acoustics);
+				this.substrateMap.put(bi, sub = new HashMap<String, List<IAcoustic>>());
+			sub.put(substrate.intern(), acoustics);
 		}
 	}
 
@@ -188,12 +189,15 @@ public class BlockMap {
 			final String blockName = matcher.group(1);
 			final Block block = MCHelper.getBlockByName(blockName);
 			if (block != null) {
-				final int meta = matcher.group(2) == null ? -1 : Integer.parseInt(matcher.group(2));
-				final String substrate = matcher.group(3);
-				if (value.startsWith("#"))
+				if (value.startsWith("#")) {
 					expand(block, value);
-				else
+				} else {
+					final int meta = matcher.group(2) == null
+							? (MCHelper.hasVariants(block) ? BlockInfo.GENERIC : BlockInfo.NO_SUBTYPE)
+							: Integer.parseInt(matcher.group(2));
+					final String substrate = matcher.group(3);
 					put(block, meta, substrate, value);
+				}
 			} else {
 				ModLog.debug("Unable to locate block for blockmap '%s'", blockName);
 			}
@@ -218,26 +222,14 @@ public class BlockMap {
 
 	public void collectData(@Nonnull final IBlockState state, @Nonnull final List<String> data) {
 
-		final Block block = state.getBlock();
-		final int meta = state.getBlock().getMetaFromState(state);
-
-		List<IAcoustic> temp = this.getBlockMap(state);
+		final List<IAcoustic> temp = getBlockMap(state);
 		if (temp != null)
 			data.add(combine(temp));
 
-		final Map<String, List<IAcoustic>> subs = this.substrateMap.get(block);
+		final Map<String, List<IAcoustic>> subs = getBlockSubstrate(state);
 		if (subs != null) {
-			final int len = data.size();
-			String key = "." + meta;
 			for (final Entry<String, List<IAcoustic>> entry : subs.entrySet())
-				if (entry.getKey().endsWith(key))
-					data.add(combine(entry.getValue()));
-			if (data.size() == len) {
-				key = ".-1";
-				for (final Entry<String, List<IAcoustic>> entry : subs.entrySet())
-					if (entry.getKey().endsWith(key))
-						data.add(entry.getKey() + ":" + combine(entry.getValue()));
-			}
+				data.add(entry.getKey() + ":" + combine(entry.getValue()));
 		}
 	}
 

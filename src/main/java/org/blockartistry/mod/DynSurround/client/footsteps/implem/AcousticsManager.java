@@ -24,12 +24,12 @@
 
 package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -46,6 +46,8 @@ import org.blockartistry.mod.DynSurround.client.footsteps.system.Association;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
+import org.blockartistry.mod.DynSurround.util.TimeUtils;
+
 import com.google.common.collect.ImmutableList;
 
 import io.netty.util.internal.ThreadLocalRandom;
@@ -68,8 +70,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	private final Random RANDOM = ThreadLocalRandom.current();
 
-	private final Map<String, IAcoustic> acoustics = new LinkedHashMap<String, IAcoustic>();
-	private final PriorityQueue<PendingSound> pending = new PriorityQueue<PendingSound>();
+	private final Map<String, IAcoustic> acoustics = new HashMap<String, IAcoustic>();
+	private final ArrayDeque<PendingSound> pending = new ArrayDeque<PendingSound>();
 	private final Isolator isolator;
 
 	// Special sentinels for equating
@@ -159,11 +161,10 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 		if (options != null) {
 			if (options.hasOption(Option.DELAY_MIN) && options.hasOption(Option.DELAY_MAX)) {
-				long delay = randAB(RANDOM, (Long) options.getOption(Option.DELAY_MIN),
-						(Long) options.getOption(Option.DELAY_MAX));
-
-				pending.add(new PendingSound(location, sound, volume, pitch, null, System.currentTimeMillis() + delay,
-						options.hasOption(Option.SKIPPABLE) ? -1 : (Long) options.getOption(Option.DELAY_MAX)));
+				final long delay = System.currentTimeMillis()
+						+ randAB(RANDOM, options.asLong(Option.DELAY_MIN), options.asLong(Option.DELAY_MAX));
+				this.pending.add(new PendingSound(location, sound, volume, pitch, null, delay,
+						options.hasOption(Option.SKIPPABLE) ? -1 : options.asLong(Option.DELAY_MAX)));
 			} else {
 				actuallyPlaySound((Entity) location, sound, volume, pitch);
 			}
@@ -181,7 +182,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	}
 
 	private long randAB(@Nonnull final Random rng, final long a, final long b) {
-		return a >= b ? a : a + rng.nextInt((int) b + 1);
+		return a >= b ? a : a + rng.nextInt((int) (b + 1));
 	}
 
 	@Override
@@ -192,10 +193,10 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	public void think() {
 
-		final long time = System.currentTimeMillis();
+		final long time = TimeUtils.currentTimeMillis();
 
-		while (!pending.isEmpty() && pending.peek().getTimeToPlay() <= time) {
-			final PendingSound sound = pending.poll();
+		while (!this.pending.isEmpty() && this.pending.peek().getTimeToPlay() <= time) {
+			final PendingSound sound = this.pending.poll();
 			if (!sound.isLate(time)) {
 				sound.playSound(this);
 			} else if (ModLog.DEBUGGING) {

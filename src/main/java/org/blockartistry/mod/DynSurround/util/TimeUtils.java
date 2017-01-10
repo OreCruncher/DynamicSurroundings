@@ -1,7 +1,7 @@
 /*
  * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
- * Copyright (c) OreCruncher
+ * Copyright (c) Abastro, OreCruncher
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,27 +22,15 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.footsteps.interfaces;
+package org.blockartistry.mod.DynSurround.util;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+public class TimeUtils {
 
-@SideOnly(Side.CLIENT)
-public interface IOptions {
-	
-	public static enum Option {
-		DELAY_MIN,
-		DELAY_MAX,
-		SKIPPABLE,
-		GLIDING_VOLUME,
-		GLIDING_PITCH
+	private TimeUtils(){
 		
-	};
+	}
 	
-	public boolean hasOption(final Option option);
-	
-	public long asLong(final Option option);
-	public float asFloat(final Option option);
-
-	public Object getOption(final Option option);
+	public static long currentTimeMillis() {
+		return System.nanoTime() / 1000000L;
+	}
 }

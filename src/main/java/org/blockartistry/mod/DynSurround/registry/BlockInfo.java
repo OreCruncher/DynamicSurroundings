@@ -39,20 +39,28 @@ import net.minecraft.block.state.IBlockState;
 public class BlockInfo {
 
 	private static final Pattern pattern = Pattern.compile("^([^:]+:[^:]+)(?::?)([[\\d]+|[\\*]]*)");
-	
+
 	public static final int GENERIC = -1;
-	protected static final int NO_SUBTYPE = -100;
+	public static final int NO_SUBTYPE = -100;
 
 	protected Block block;
 	protected int meta;
+	protected int specialMeta;
 
 	public BlockInfo(@Nonnull final Block block, final int meta) {
 		this.block = block;
 		this.meta = meta;
+		this.specialMeta = NO_SUBTYPE;
 	}
 
 	public BlockInfo(@Nonnull final Block block) {
 		this(block, NO_SUBTYPE);
+	}
+
+	public BlockInfo(@Nonnull final IBlockState state) {
+		this.block = state.getBlock();
+		this.meta = MCHelper.hasVariants(this.block) ? state.getBlock().getMetaFromState(state) : NO_SUBTYPE;
+		this.specialMeta = MCHelper.hasSpecialMeta(this.block) ? state.getBlock().getMetaFromState(state) : NO_SUBTYPE;
 	}
 
 	@Nonnull
@@ -64,16 +72,24 @@ public class BlockInfo {
 		return this.meta;
 	}
 
+	public int getSpecialMeta() {
+		return this.specialMeta;
+	}
+
 	public boolean isGeneric() {
 		return this.meta == GENERIC;
 	}
 
-	public boolean hasNoSubtypes() {
-		return this.meta == NO_SUBTYPE;
+	public boolean hasSubTypes() {
+		return this.meta != NO_SUBTYPE;
+	}
+
+	public boolean hasSpecialMeta() {
+		return this.specialMeta != NO_SUBTYPE;
 	}
 
 	private final static int TERM = 3079;
-	
+
 	@Override
 	public int hashCode() {
 		return this.block.hashCode() ^ (this.meta * TERM);
@@ -125,33 +141,41 @@ public class BlockInfo {
 
 	@Override
 	public String toString() {
+		if(this.block == null)
+			return "UNKNOWN";
 		final StringBuilder builder = new StringBuilder();
 		builder.append(MCHelper.nameOf(this.block));
 		if (isGeneric())
 			builder.append(":*");
-		else if (!hasNoSubtypes())
+		else if (hasSubTypes())
 			builder.append(':').append(this.meta);
+		else if (hasSpecialMeta())
+			builder.append('[').append(this.specialMeta).append(']');
 		return builder.toString();
 	}
 
 	public static class BlockInfoMutable extends BlockInfo {
 
 		public BlockInfoMutable() {
-			super(null);
+			super((Block) null);
 		}
 
-		public void set(@Nonnull final IBlockState state) {
+		public BlockInfoMutable set(@Nonnull final IBlockState state) {
 			this.block = state.getBlock();
 			this.meta = MCHelper.hasVariants(this.block) ? state.getBlock().getMetaFromState(state) : NO_SUBTYPE;
-		}
-		
-		public void set(@Nonnull final BlockInfo info) {
-			this.block = info.block;
-			this.meta = info.meta;
+			this.specialMeta = MCHelper.hasSpecialMeta(this.block) ? state.getBlock().getMetaFromState(state)
+					: NO_SUBTYPE;
+			return this;
 		}
 
-		public void makeGeneric() {
+		public BlockInfoMutable asGeneric() {
 			this.meta = GENERIC;
+			return this;
+		}
+
+		public BlockInfoMutable asSpecial() {
+			this.meta = this.specialMeta;
+			return this;
 		}
 
 	}

@@ -33,8 +33,6 @@ import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
-import net.minecraft.block.state.IBlockState;
-
 public class BlockProfile {
 
 	public static BlockProfile createProfile(@Nonnull final BlockInfo blockInfo) {
@@ -55,67 +53,67 @@ public class BlockProfile {
 		this.hasVariants = MCHelper.hasVariants(this.info.block);
 	}
 
-	public void setChance(@Nonnull final BlockInfo blockInfo, final int chance) {
+	public void setChance(final int chance) {
 		this.chance = chance;
 	}
 
-	public int getChance(@Nonnull final IBlockState blockInfo) {
+	public int getChance() {
 		return this.chance;
 	}
 
-	public void setStepChance(@Nonnull final BlockInfo blockInfo, final int chance) {
+	public void setStepChance(final int chance) {
 		this.stepChance = chance;
 	}
 
-	public int getStepChance(@Nonnull final IBlockState blockInfo) {
+	public int getStepChance() {
 		return this.stepChance;
 	}
 
-	public void addSound(@Nonnull final BlockInfo blockInfo, @Nonnull final SoundEffect sound) {
+	public void addSound(@Nonnull final SoundEffect sound) {
 		this.sounds.add(sound);
 	}
 
-	public void clearSounds(@Nonnull final BlockInfo blockInfo) {
+	public void clearSounds() {
 		this.sounds.clear();
 	}
 
 	@Nonnull
-	public List<SoundEffect> getSounds(@Nonnull final IBlockState state) {
+	public List<SoundEffect> getSounds() {
 		return this.sounds;
 	}
 
-	public void addStepSound(@Nonnull final BlockInfo blockInfo, @Nonnull final SoundEffect sound) {
+	public void addStepSound(@Nonnull final SoundEffect sound) {
 		this.stepSounds.add(sound);
 	}
 
-	public void clearStepSounds(@Nonnull final BlockInfo blockInfo) {
+	public void clearStepSounds() {
 		this.stepSounds.clear();
 	}
 
 	@Nonnull
-	public List<SoundEffect> getStepSounds(@Nonnull final IBlockState state) {
+	public List<SoundEffect> getStepSounds() {
 		return this.stepSounds;
 	}
 
-	public void addEffect(@Nonnull final BlockInfo blockInfo, @Nonnull final BlockEffect effect) {
+	public void addEffect(@Nonnull final BlockEffect effect) {
 		if (effect.getChance() > 0)
 			this.effects.add(effect);
 		else
 			this.alwaysOn.add(effect);
 	}
 
-	public void clearEffects(@Nonnull final BlockInfo blockInfo) {
+	public void clearEffects() {
 		this.effects.clear();
 		this.alwaysOn.clear();
 	}
 
 	@Nonnull
-	public List<BlockEffect> getEffects(@Nonnull final IBlockState state) {
+	public List<BlockEffect> getEffects() {
 		return this.effects;
 	}
 
 	@Nonnull
-	List<BlockEffect> getAlwaysOnEffects(@Nonnull final IBlockState state) {
+	List<BlockEffect> getAlwaysOnEffects() {
 		return this.alwaysOn;
 	}
 

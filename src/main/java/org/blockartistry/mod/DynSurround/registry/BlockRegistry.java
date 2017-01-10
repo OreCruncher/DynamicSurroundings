@@ -86,9 +86,9 @@ public final class BlockRegistry extends Registry {
 
 		// Scan the registry looking for profiles that match what we want.
 		for (final BlockProfile profile : this.registry.values()) {
-			if (profile.getAlwaysOnEffects(null).size() > 0)
+			if (profile.getAlwaysOnEffects().size() > 0)
 				this.alwaysOnEffects.add(profile.info);
-			if (profile.getEffects(null).size() > 0 || profile.getSounds(null).size() > 0)
+			if (profile.getEffects().size() > 0 || profile.getSounds().size() > 0)
 				this.hasSoundsAndEffects.add(profile.info);
 		}
 
@@ -120,11 +120,9 @@ public final class BlockRegistry extends Registry {
 	private final BlockInfoMutable key = new BlockInfoMutable();
 
 	private BlockProfile findProfile(@Nonnull final IBlockState state) {
-		this.key.set(state);
-		BlockProfile profile = this.registry.get(this.key);
-		if (profile == null && !this.key.hasNoSubtypes()) {
-			this.key.makeGeneric();
-			profile = this.registry.get(this.key);
+		BlockProfile profile = this.registry.get(this.key.set(state));
+		if (profile == null && this.key.hasSubTypes()) {
+			profile = this.registry.get(this.key.asGeneric());
 		}
 		return profile;
 	}
@@ -132,13 +130,13 @@ public final class BlockRegistry extends Registry {
 	@Nonnull
 	public List<BlockEffect> getEffects(@Nonnull final IBlockState state) {
 		final BlockProfile entry = findProfile(state);
-		return entry != null ? entry.getEffects(state) : NO_EFFECTS;
+		return entry != null ? entry.getEffects() : NO_EFFECTS;
 	}
 
 	@Nonnull
 	public List<BlockEffect> getAlwaysOnEffects(@Nonnull final IBlockState state) {
 		final BlockProfile entry = findProfile(state);
-		return entry != null ? entry.getAlwaysOnEffects(state) : NO_EFFECTS;
+		return entry != null ? entry.getAlwaysOnEffects() : NO_EFFECTS;
 	}
 
 	@Nonnull
@@ -175,7 +173,7 @@ public final class BlockRegistry extends Registry {
 		if (entry == null)
 			return NO_SOUNDS;
 
-		final List<SoundEffect> sounds = entry.getSounds(state);
+		final List<SoundEffect> sounds = entry.getSounds();
 		if (sounds.isEmpty())
 			return NO_SOUNDS;
 
@@ -192,7 +190,7 @@ public final class BlockRegistry extends Registry {
 		if (entry == null)
 			return NO_SOUNDS;
 
-		final List<SoundEffect> sounds = entry.getStepSounds(state);
+		final List<SoundEffect> sounds = entry.getStepSounds();
 		if (sounds.isEmpty())
 			return NO_SOUNDS;
 
@@ -205,11 +203,11 @@ public final class BlockRegistry extends Registry {
 		if (entry == null)
 			return null;
 
-		final List<SoundEffect> sounds = entry.getSounds(state);
+		final List<SoundEffect> sounds = entry.getSounds();
 		if (sounds.isEmpty())
 			return null;
 
-		if (random.nextInt(entry.getChance(state)) != 0)
+		if (random.nextInt(entry.getChance()) != 0)
 			return null;
 
 		return getRandomSound(sounds, random);
@@ -226,29 +224,27 @@ public final class BlockRegistry extends Registry {
 		if (entry == null)
 			return null;
 
-		final List<SoundEffect> sounds = entry.getStepSounds(state);
+		final List<SoundEffect> sounds = entry.getStepSounds();
 		if (sounds.isEmpty())
 			return null;
 
-		if (random.nextInt(entry.getStepChance(state)) != 0)
+		if (random.nextInt(entry.getStepChance()) != 0)
 			return null;
 
 		return getRandomSound(sounds, random);
 	}
 
 	private boolean isInteresting(@Nonnull final Set<BlockInfo> data, @Nonnull final IBlockState state) {
-		if(state.getMaterial() == Material.AIR)
+		if (state.getMaterial() == Material.AIR)
 			return false;
-		
-		this.key.set(state);
-		if (data.contains(this.key))
+
+		if (data.contains(this.key.set(state)))
 			return true;
 
-		if (this.key.hasNoSubtypes())
+		if (!this.key.hasSubTypes())
 			return false;
 
-		this.key.makeGeneric();
-		return data.contains(this.key);
+		return data.contains(this.key.asGeneric());
 	}
 
 	public boolean hasAlwaysOnEffects(@Nonnull final IBlockState state) {
@@ -293,24 +289,24 @@ public final class BlockRegistry extends Registry {
 
 			// Reset of a block clears all registry
 			if (entry.soundReset != null && entry.soundReset.booleanValue())
-				blockData.clearSounds(blockInfo);
+				blockData.clearSounds();
 			if (entry.stepSoundReset != null && entry.stepSoundReset.booleanValue())
-				blockData.clearStepSounds(blockInfo);
+				blockData.clearStepSounds();
 			if (entry.effectReset != null && entry.effectReset.booleanValue())
-				blockData.clearEffects(blockInfo);
+				blockData.clearEffects();
 
 			if (entry.chance != null)
-				blockData.setChance(blockInfo, entry.chance.intValue());
+				blockData.setChance(entry.chance.intValue());
 			if (entry.stepChance != null)
-				blockData.setStepChance(blockInfo, entry.stepChance.intValue());
+				blockData.setStepChance(entry.stepChance.intValue());
 
 			for (final SoundConfig sr : entry.sounds) {
 				if (sr.sound != null && !soundRegistry.isSoundBlocked(sr.sound)) {
 					final SoundEffect eff = new SoundEffect(sr);
 					if (eff.type == SoundType.STEP)
-						blockData.addStepSound(blockInfo, eff);
+						blockData.addStepSound(eff);
 					else
-						blockData.addSound(blockInfo, eff);
+						blockData.addSound(eff);
 				}
 			}
 
@@ -348,7 +344,7 @@ public final class BlockRegistry extends Registry {
 				if (e.conditions != null)
 					blockEffect.setConditions(e.conditions);
 
-				blockData.addEffect(blockInfo, blockEffect);
+				blockData.addEffect(blockEffect);
 			}
 		}
 	}

@@ -41,7 +41,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class BasicAcoustic implements IAcoustic {
-	
+
 	protected String acousticName;
 	protected SoundEvent sound;
 	protected float volMin = 1f;
@@ -50,15 +50,15 @@ public class BasicAcoustic implements IAcoustic {
 	protected float pitchMax = 1f;
 
 	protected IOptions outputOptions;
-	
+
 	public BasicAcoustic() {
 		this("Unnamed");
 	}
-	
+
 	public BasicAcoustic(@Nonnull final String name) {
 		this.acousticName = name;
 	}
-	
+
 	@Override
 	@Nonnull
 	public String getAcousticName() {
@@ -66,8 +66,8 @@ public class BasicAcoustic implements IAcoustic {
 	}
 
 	@Override
-	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Object location, @Nonnull final EventType event,
-			@Nullable final IOptions inputOptions) {
+	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Object location,
+			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
 		// Special case for intentionally empty sounds (as opposed to fall back
 		// sounds)
 		if (this.sound == null)
@@ -77,12 +77,10 @@ public class BasicAcoustic implements IAcoustic {
 		float pitch = generatePitch(player.getRNG());
 		if (inputOptions != null) {
 			if (inputOptions.hasOption(Option.GLIDING_VOLUME)) {
-				volume = this.volMin
-						+ (this.volMax - this.volMin) * (Float) inputOptions.getOption(Option.GLIDING_VOLUME);
+				volume = this.volMin + (this.volMax - this.volMin) * inputOptions.asFloat(Option.GLIDING_VOLUME);
 			}
 			if (inputOptions.hasOption(Option.GLIDING_PITCH)) {
-				pitch = this.pitchMin
-						+ (this.pitchMax - this.pitchMin) * (Float) inputOptions.getOption(Option.GLIDING_PITCH);
+				pitch = this.pitchMin + (this.pitchMax - this.pitchMin) * inputOptions.asFloat(Option.GLIDING_PITCH);
 			}
 		}
 

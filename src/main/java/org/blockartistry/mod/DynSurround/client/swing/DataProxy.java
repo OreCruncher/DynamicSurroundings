@@ -28,8 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
-import javax.annotation.Nullable;
-
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
@@ -37,6 +35,7 @@ import org.blockartistry.mod.DynSurround.client.handlers.ExpressionStateHandler;
 import org.blockartistry.mod.DynSurround.client.handlers.ExpressionStateHandler.IDynamicVariable;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.weather.WeatherProperties;
+import org.blockartistry.mod.DynSurround.registry.BlockInfo.BlockInfoMutable;
 import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.registry.FootstepsRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
@@ -114,6 +113,7 @@ public abstract class DataProxy extends Observable {
 
 		protected final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
 		protected final FootstepsRegistry footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
+		protected final BlockInfoMutable mutable = new BlockInfoMutable();
 
 		protected BlockPos targetBlock = BlockPos.ORIGIN;
 		protected IBlockState state;
@@ -124,37 +124,19 @@ public abstract class DataProxy extends Observable {
 
 		@Override
 		public void notifyObservers() {
-			final BlockPos previous = this.targetBlock;
 			final RayTraceResult current = Minecraft.getMinecraft().objectMouseOver;
 			if (current == null || current.getBlockPos() == null)
 				this.targetBlock = BlockPos.ORIGIN;
 			else
 				this.targetBlock = current.getBlockPos();
 
-			if (previous.equals(this.targetBlock))
-				return;
-
 			this.state = EnvironState.getWorld().getBlockState(this.targetBlock);
+			this.mutable.set(this.state);
 			super.notifyObservers();
 		}
 
-		@Nullable
-		public IBlockState getBlockState() {
-			if (this.state == null)
-				this.state = EnvironState.getWorld().getBlockState(this.targetBlock);
-			return this.state;
-		}
-
 		public String getBlockName() {
-			final String blockName = MCHelper.nameOf(this.state.getBlock());
-			if (blockName != null) {
-				final StringBuilder builder = new StringBuilder();
-				builder.append(blockName);
-				if (MCHelper.hasVariants(this.state.getBlock()))
-					builder.append(':').append(this.state.getBlock().getMetaFromState(this.state));
-				return builder.toString();
-			}
-			return "Unknown";
+			return this.mutable.toString();
 		}
 
 		public String getBlockMaterial() {

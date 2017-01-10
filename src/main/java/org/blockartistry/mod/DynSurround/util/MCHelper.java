@@ -37,6 +37,7 @@ import javax.annotation.Nullable;
 import gnu.trove.map.hash.TCustomHashMap;
 import gnu.trove.strategy.IdentityHashingStrategy;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCrops;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -157,6 +158,10 @@ public final class MCHelper {
 
 	public static boolean hasVariants(@Nonnull final Block block) {
 		return hasVariants.contains(block);
+	}
+	
+	public static boolean hasSpecialMeta(@Nonnull final Block block) {
+		return block instanceof BlockCrops;
 	}
 
 	@Nonnull

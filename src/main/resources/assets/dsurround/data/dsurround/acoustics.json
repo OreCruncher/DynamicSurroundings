@@ -1,1314 +1,1320 @@
 {
-	"type"  : "library",
-	"engineversion" : 0,
-	"defaults" : {
-		"vol_min"   : 90,
-		"vol_max"   : 100,
-		"pitch_min" : 95,
-		"pitch_max" : 105
+	"type": "library",
+	"engineversion": 0,
+	"defaults": {
+		"vol_min": 90,
+		"vol_max": 100,
+		"pitch_min": 95,
+		"pitch_max": 105
 	},
-	"soundroot" : "fs.",
-	"contents" : {
-		"none" : {
+	"soundroot": "fs.",
+	"contents": {
+		"none": {
 		},
-		"_SWIM" : {
-			"swim" : {
-				"name"  : "@entity.player.swim",
-				"vol_min"   : 10,
-				"vol_max"   : 100,
-				"pitch_min" : 90,
-				"pitch_max" : 110
+		"_SWIM": {
+			"swim": {
+				"name": "@entity.player.swim",
+				"vol_min": 10,
+				"vol_max": 100,
+				"pitch_min": 90,
+				"pitch_max": 110
 			},
-			"walk"  : {
-				"name"  : "@entity.player.swim",
-				"vol_min"   : 10,
-				"vol_max"   : 100,
-				"pitch_min" : 90,
-				"pitch_max" : 110
+			"walk": {
+				"name": "@entity.player.swim",
+				"vol_min": 10,
+				"vol_max": 100,
+				"pitch_min": 90,
+				"pitch_max": 110
 			}
 		},
-		"straw" : {
-			"walk"  : "leaves.leaves_through",
-			"jump"  : "leaves.leaves_through",
-			"land"  : "leaves.leaves_through"
+		"straw": {
+			"walk": "leaves.leaves_through",
+			"jump": "leaves.leaves_through",
+			"land": "leaves.leaves_through"
 		},
-		"brush_straw_transition" : {
-			"walk"  : {
-				"type"  : "simultaneous",
-				"array" : [
+		"brush_straw_transition": {
+			"walk": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"  : "leaves.leaves_through",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "leaves.leaves_through",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"name"  : "brush.brush_through",
-						"vol_min"   : 30,
-						"vol_max"   : 30
+						"name": "brush.brush_through",
+						"vol_min": 30,
+						"vol_max": 30
 					}
 				]
 			},
-			"jump"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"jump": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"  : "leaves.leaves_through",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "leaves.leaves_through",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"name"  : "brush.brush_through",
-						"vol_min"   : 30,
-						"vol_max"   : 30
+						"name": "brush.brush_through",
+						"vol_min": 30,
+						"vol_max": 30
 					}
 				]
 			},
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"  : "leaves.leaves_through",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "leaves.leaves_through",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"name"  : "brush.brush_through",
-						"vol_min"   : 30,
-						"vol_max"   : 30
+						"name": "brush.brush_through",
+						"vol_min": 30,
+						"vol_max": 30
 					}
 				]
 			}
 		},
-		"brush" : {
-			"walk"  : {
-				"name"  : "brush.brush_through",
-				"vol_min"   : 65,
-				"vol_max"   : 65
+		"brush": {
+			"walk": {
+				"name": "brush.brush_through",
+				"vol_min": 65,
+				"vol_max": 65
 			},
-			"jump"  : {
-				"name"  : "brush.brush_through",
-				"vol_min"   : 65,
-				"vol_max"   : 65
+			"jump": {
+				"name": "brush.brush_through",
+				"vol_min": 65,
+				"vol_max": 65
 			},
-			"land"  : {
-				"name"  : "brush.brush_through",
-				"vol_min"   : 65,
-				"vol_max"   : 65
+			"land": {
+				"name": "brush.brush_through",
+				"vol_min": 65,
+				"vol_max": 65
 			}
 		},
-		"fire" : {
-			"walk"  : {
-				"name"  : "brush.brush_through",
-				"pitch_min" : 70,
-				"pitch_max" : 80
+		"fire": {
+			"walk": {
+				"name": "brush.brush_through",
+				"pitch_min": 70,
+				"pitch_max": 80
 			},
-			"jump"  : {
-				"name"  : "brush.brush_through",
-				"pitch_min" : 70,
-				"pitch_max" : 80
+			"jump": {
+				"name": "brush.brush_through",
+				"pitch_min": 70,
+				"pitch_max": 80
 			},
-			"land"  : {
-				"name"  : "brush.brush_through",
-				"pitch_min" : 70,
-				"pitch_max" : 80
+			"land": {
+				"name": "brush.brush_through",
+				"pitch_min": 70,
+				"pitch_max": 80
 			}
 		},
-		"rails" : {
-			"walk"  : {
-				"name"  : "metalbar.metalbar_run",
-				"vol_min"   : 20,
-				"vol_max"   : 20
+		"rails": {
+			"walk": {
+				"name": "metalbar.metalbar_run",
+				"vol_min": 20,
+				"vol_max": 20
 			},
-			"jump"  : {
-				"name"  : "metalbar.metalbar_run",
-				"vol_min"   : 20,
-				"vol_max"   : 20
+			"jump": {
+				"name": "metalbar.metalbar_run",
+				"vol_min": 20,
+				"vol_max": 20
 			},
-			"land"  : {
-				"name"  : "metalbar.metalbar_run",
-				"vol_min"   : 20,
-				"vol_max"   : 20
+			"land": {
+				"name": "metalbar.metalbar_run",
+				"vol_min": 20,
+				"vol_max": 20
 			}
 		},
-		"grass" : {
-			"walk"  : {
-				"type"  : "simultaneous",
-				"array" : [
+		"grass": {
+			"walk": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"  : "grass.grass_walk",
-						"vol_min"   : 60,
-						"vol_max"   : 60
+						"name": "grass.grass_walk",
+						"vol_min": 60,
+						"vol_max": 60
 					},
 					{
-						"name"  : "brush.brush_through",
-						"vol_min"   : 20,
-						"vol_max"   : 20
+						"name": "brush.brush_through",
+						"vol_min": 20,
+						"vol_max": 20
 					}
 				]
 			},
-			"run"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"run": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"  : "grass.grass_run",
-						"vol_min"   : 60,
-						"vol_max"   : 60
+						"name": "grass.grass_run",
+						"vol_min": 60,
+						"vol_max": 60
 					},
 					{
-						"name"  : "brush.brush_through",
-						"vol_min"   : 20,
-						"vol_max"   : 20
+						"name": "brush.brush_through",
+						"vol_min": 20,
+						"vol_max": 20
 					}
 				]
 			},
 			"wander": "grass.grass_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"grass.grass_run",
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "grass.grass_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "grass.grass_run"
 					}
 				]
 			}
 		},
-		"organic_solid" : {
-			"walk"  : {
-				"type"  : "simultaneous",
-				"array" : [
+		"organic_solid": {
+			"walk": {
+				"type": "simultaneous",
+				"array": [
 					"grass.grass_run",
 					"mud.mud_walk"
-					]
+				]
 			},
-			"run"   : {
-				"type"  : "simultaneous",
-				"array" : [
+			"run": {
+				"type": "simultaneous",
+				"array": [
 					"grass.grass_run",
 					"mud.mud_walk"
-					]
+				]
 			},
 			"wander": "dirt.dirt_wander",
-			"jump"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"jump": {
+				"type": "simultaneous",
+				"array": [
 					"grass.grass_run",
 					"mud.mud_wander"
-					]
+				]
 			},
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"grass.grass_run",
 					"mud.mud_walk",
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "mud.mud_wander"
+						"type": "delayed",
+						"delay": 50,
+						"name": "mud.mud_wander"
 					}
 				]
 			}
 		},
-		"organic_dry" : {
-			"walk"  : "grass.grass_run",
-			"run"   : "grass.grass_run",
+		"organic_dry": {
+			"walk": "grass.grass_run",
+			"run": "grass.grass_run",
 			"wander": "dirt.dirt_wander",
-			"jump"  : "grass.grass_run",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"jump": "grass.grass_run",
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"grass.grass_run",
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "grass.grass_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "grass.grass_run"
 					}
 				]
 			}
 		},
-		"dirt" : {
-			"walk"  : "dirt.dirt_walk",
-			"run"   : "dirt.dirt_run",
+		"dirt": {
+			"walk": "dirt.dirt_walk",
+			"run": "dirt.dirt_run",
 			"wander": "dirt.dirt_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"dirt.dirt_land",
 					{
-						"name"  : "dirt.dirt_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "dirt.dirt_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "dirt.dirt_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "dirt.dirt_run"
 					}
 				]
 			}
 		},
-		"stone" : {
-			"run"  : {
-				"name"  : "stone.stone_run",
-				"pitch_min" : 65,
-				"pitch_max" : 70
+		"stone": {
+			"run": {
+				"name": "stone.stone_run",
+				"pitch_min": 65,
+				"pitch_max": 70
 			},
-			"walk"  : {
-				"name"  : "stone.stone_walk",
-				"pitch_min" : 65,
-				"pitch_max" : 70
+			"walk": {
+				"name": "stone.stone_walk",
+				"pitch_min": 65,
+				"pitch_max": 70
 			},
 			"wander": "stone.stone_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"concrete.concrete_run",
 					{
-						"name"  : "stone.stone_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "stone.stone_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "stone.stone_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "stone.stone_run"
 					}
 				]
 			}
 		},
-		"wood" : {
-			"walk"  : "wood.wood_walk",
+		"wood": {
+			"walk": "wood.wood_walk",
 			"wander": "dirt.dirt_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"wood.wood_walk",
 					{
-						"type"  : "delayed",
-						"delay" : 30,
-						"name"  : "wood.wood_walk"
+						"type": "delayed",
+						"delay": 30,
+						"name": "wood.wood_walk"
 					}
 				]
 			}
 		},
-		"bedrock" : {
-			"run"  : {
-				"name"  : "stone.stone_run",
-				"pitch_min" : 55,
-				"pitch_max" : 60
+		"bedrock": {
+			"run": {
+				"name": "stone.stone_run",
+				"pitch_min": 55,
+				"pitch_max": 60
 			},
-			"walk"  : {
-				"name"  : "stone.stone_walk",
-				"pitch_min" : 55,
-				"pitch_max" : 60
+			"walk": {
+				"name": "stone.stone_walk",
+				"pitch_min": 55,
+				"pitch_max": 60
 			},
 			"wander": "stone.stone_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"concrete.concrete_run",
 					{
-						"name"  : "stone.stone_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "stone.stone_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "stone.stone_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "stone.stone_run"
 					}
 				]
 			}
 		},
-		"sand" : {
-			"walk"  : {
-				"name"  : "sand.sand_walk",
-				"vol_min"   : 60,
-				"vol_max"   : 60
+		"sand": {
+			"walk": {
+				"name": "sand.sand_walk",
+				"vol_min": 60,
+				"vol_max": 60
 			},
-			"run"   : {
-				"name"  : "sand.sand_run",
-				"vol_min"   : 60,
-				"vol_max"   : 60
+			"run": {
+				"name": "sand.sand_run",
+				"vol_min": 60,
+				"vol_max": 60
 			},
 			"wander": "dirt.dirt_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"  : "sand.sand_run",
-						"vol_min"   : 60,
-						"vol_max"   : 60
+						"name": "sand.sand_run",
+						"vol_min": 60,
+						"vol_max": 60
 					},
 					{
-						"name"  : "sand.sand_walk",
-						"vol_min"   : 60,
-						"vol_max"   : 60
+						"name": "sand.sand_walk",
+						"vol_min": 60,
+						"vol_max": 60
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "sand.sand_run",
-						"vol_min"   : 60,
-						"vol_max"   : 60
+						"type": "delayed",
+						"delay": 50,
+						"name": "sand.sand_run",
+						"vol_min": 60,
+						"vol_max": 60
 					}
 				]
 			}
 		},
-		"gravel" : {
-			"walk"  : "gravel.gravel_walk",
-			"run"   : "gravel.gravel_run",
+		"gravel": {
+			"walk": "gravel.gravel_walk",
+			"run": "gravel.gravel_run",
 			"wander": "gravel.gravel_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"gravel.gravel_run",
 					"gravel.gravel_land",
 					{
-						"name"  : "gravel.gravel_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "gravel.gravel_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "gravel.gravel_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "gravel.gravel_run"
 					}
 				]
 			}
 		},
-		"ore" : {
-			"walk"  : "stone.stone_walk",
-			"run"   : "stone.stone_run",
+		"ore": {
+			"walk": "stone.stone_walk",
+			"run": "stone.stone_run",
 			"wander": "stone.stone_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"stone.stone_run",
 					{
-						"name"  : "stone.stone_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "stone.stone_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "stone.stone_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "stone.stone_run"
 					}
 				]
 			}
 		},
-		"leaves" : {
-			"walk"  : {
-				"type"  : "simultaneous",
-				"array" : [
+		"leaves": {
+			"walk": {
+				"type": "simultaneous",
+				"array": [
 					"dirt.dirt_walk",
 					"leaves.leaves_through"
-					]
+				]
 			},
-			"run"   : {
-				"type"  : "simultaneous",
-				"array" : [
+			"run": {
+				"type": "simultaneous",
+				"array": [
 					"dirt.dirt_run",
 					"leaves.leaves_through"
-					]
+				]
 			},
 			"wander": "dirt.dirt_wander",
-			"jump"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"jump": {
+				"type": "simultaneous",
+				"array": [
 					"dirt.dirt_wander",
 					"leaves.leaves_through"
-					]
+				]
 			},
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"dirt.dirt_land",
 					"leaves.leaves_through",
 					{
-						"name"  : "dirt.dirt_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "dirt.dirt_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "dirt.dirt_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "dirt.dirt_run"
 					}
 				]
 			}
 		},
-		"mud" : {
-			"walk"  : "mud.mud_walk",
+		"mud": {
+			"walk": "mud.mud_walk",
 			"wander": "mud.mud_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"mud.mud_walk",
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "mud.mud_walk"
+						"type": "delayed",
+						"delay": 50,
+						"name": "mud.mud_walk"
 					}
 				]
 			}
 		},
-		"glass" : {
-			"walk"  : {
-				"type"  : "simultaneous",
-				"array" : [
+		"glass": {
+			"walk": {
+				"type": "simultaneous",
+				"array": [
 					"wood.wood_walk",
 					{
-						"name"  : "glass.glass_hit",
-						"pitch_min"   : 95,
-						"pitch_max"   : 105
+						"name": "glass.glass_hit",
+						"pitch_min": 95,
+						"pitch_max": 105
 					}
 				]
 			},
 			"wander": "dirt.dirt_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"wood.wood_walk",
 					{
-						"name"  : "glass.glass_hard",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "glass.glass_hard",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 30,
-						"name"  : "wood.wood_walk"
+						"type": "delayed",
+						"delay": 30,
+						"name": "wood.wood_walk"
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 30,
-						"name"  : "glass.glass_hit"
+						"type": "delayed",
+						"delay": 30,
+						"name": "glass.glass_hit"
 					}
 				]
 			}
 		},
-		"glowstone" : {
-			"walk"  : {
-				"type"  : "simultaneous",
-				"array" : [
+		"glowstone": {
+			"walk": {
+				"type": "simultaneous",
+				"array": [
 					"concrete.concrete_walk",
 					{
-						"name"  : "weakice.weakice_walk",
-						"vol_min"   : 10,
-						"vol_max"   : 20,
-						"pitch_min" : 130,
-						"pitch_max" : 130
+						"name": "weakice.weakice_walk",
+						"vol_min": 10,
+						"vol_max": 20,
+						"pitch_min": 130,
+						"pitch_max": 130
 					}
 				]
 			},
 			"wander": "dirt.dirt_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"concrete.concrete_walk",
 					{
-						"type"  : "delayed",
-						"delay" : 30,
-						"name"  : "concrete.concrete_walk"
+						"type": "delayed",
+						"delay": 30,
+						"name": "concrete.concrete_walk"
 					},
 					{
-						"name"  : "weakice.weakice_walk",
-						"vol_min"   : 40,
-						"vol_max"   : 60,
-						"pitch_min" : 130,
-						"pitch_max" : 130
+						"name": "weakice.weakice_walk",
+						"vol_min": 40,
+						"vol_max": 60,
+						"pitch_min": 130,
+						"pitch_max": 130
 					}
 				]
 			}
 		},
-		"composite" : {
-			"walk"  : "lino.lino_walk",
-			"run"  : "lino.lino_run",
+		"composite": {
+			"walk": "lino.lino_walk",
+			"run": "lino.lino_run",
 			"wander": "marble.marble_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"lino.lino_run",
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "lino.lino_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "lino.lino_run"
 					}
 				]
 			}
 		},
-		"stonemachine" : {
-			"walk"  : {
-						"name"  : "concrete.concrete_walk",
-						"pitch_min"   : 110,
-						"pitch_max"   : 120
-					},
-			"run"   : {
-						"name"  : "concrete.concrete_run",
-						"pitch_min"   : 110,
-						"pitch_max"   : 120
-					},
+		"stonemachine": {
+			"walk": {
+				"name": "concrete.concrete_walk",
+				"pitch_min": 110,
+				"pitch_max": 120
+			},
+			"run": {
+				"name": "concrete.concrete_run",
+				"pitch_min": 110,
+				"pitch_max": 120
+			},
 			"wander": "concrete.concrete_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"concrete.concrete_run",
 					{
-						"name"  : "concrete.concrete_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "concrete.concrete_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "concrete.concrete_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "concrete.concrete_run"
 					}
 				]
 			}
 		},
-		"sandstone" : {
-			"walk"  : {
-				"type"  : "simultaneous",
-				"array" : [
+		"sandstone": {
+			"walk": {
+				"type": "simultaneous",
+				"array": [
 					"concrete.concrete_walk",
 					{
-						"name"  : "sand.sand_walk",
-						"vol_min"   : 10,
-						"vol_max"   : 10
+						"name": "sand.sand_walk",
+						"vol_min": 10,
+						"vol_max": 10
 					}
 				]
 			},
-			"run"   : {
-				"type"  : "simultaneous",
-				"array" : [
+			"run": {
+				"type": "simultaneous",
+				"array": [
 					"concrete.concrete_run",
 					{
-						"name"  : "sand.sand_run",
-						"vol_min"   : 20,
-						"vol_max"   : 20
+						"name": "sand.sand_run",
+						"vol_min": 20,
+						"vol_max": 20
 					}
 				]
 			},
 			"wander": "concrete.concrete_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"concrete.concrete_run",
 					{
-						"name"  : "concrete.concrete_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "concrete.concrete_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "concrete.concrete_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "concrete.concrete_run"
 					}
 				]
 			}
 		},
-		"woodutility" : {
-			"walk"  : {
-				"type"  : "simultaneous",
-				"array" : [
+		"woodutility": {
+			"walk": {
+				"type": "simultaneous",
+				"array": [
 					"bluntwood.bluntwood_walk",
 					{
-						"name"  : "lino.lino_walk",
-						"pitch_min"   : 75,
-						"pitch_max"   : 85
+						"name": "lino.lino_walk",
+						"pitch_min": 75,
+						"pitch_max": 85
 					}
 				]
 			},
-			"run"   : {
-				"type"  : "simultaneous",
-				"array" : [
+			"run": {
+				"type": "simultaneous",
+				"array": [
 					"bluntwood.bluntwood_walk",
 					{
-						"name"  : "lino.lino_run",
-						"pitch_min"   : 75,
-						"pitch_max"   : 85
+						"name": "lino.lino_run",
+						"pitch_min": 75,
+						"pitch_max": 85
 					}
 				]
 			},
 			"wander": {
-				"type"  : "simultaneous",
-				"array" : [
+				"type": "simultaneous",
+				"array": [
 					"bluntwood.bluntwood_wander",
 					"marble.marble_wander"
 				]
 			},
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"bluntwood.bluntwood_walk",
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "bluntwood.bluntwood_walk"
+						"type": "delayed",
+						"delay": 50,
+						"name": "bluntwood.bluntwood_walk"
 					}
 				]
 			}
 		},
-		"rug" : {
-			"walk"  : {
-				"name"  : "rug.rug_walk",
-				"vol_min"   : 70,
-				"vol_max"   : 70
+		"rug": {
+			"walk": {
+				"name": "rug.rug_walk",
+				"vol_min": 70,
+				"vol_max": 70
 			},
 			"wander": "grass.grass_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"rug.rug_walk",
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "rug.rug_walk"
+						"type": "delayed",
+						"delay": 50,
+						"name": "rug.rug_walk"
 					}
 				]
 			}
 		},
-		"wood_sticky" : {
-			"walk"  : {
-				"type"  : "simultaneous",
-				"array" : [
+		"wood_sticky": {
+			"walk": {
+				"type": "simultaneous",
+				"array": [
 					"wood.wood_walk",
 					{
-						"name"  : "mud.mud_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "mud.mud_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					}
 				]
 			},
 			"wander": {
-				"type"  : "simultaneous",
-				"array" : [
+				"type": "simultaneous",
+				"array": [
 					"dirt.dirt_wander",
 					{
-						"name"  : "mud.mud_wander",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "mud.mud_wander",
+						"vol_min": 50,
+						"vol_max": 50
 					}
 				]
 			},
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"type"  : "simultaneous",
-						"array" : [
+						"type": "simultaneous",
+						"array": [
 							"wood.wood_walk",
 							{
-								"name"  : "mud.mud_walk",
-								"vol_min"   : 50,
-								"vol_max"   : 50
+								"name": "mud.mud_walk",
+								"vol_min": 50,
+								"vol_max": 50
 							}
 						]
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 30,
-						"name"  : "wood.wood_walk"
+						"type": "delayed",
+						"delay": 30,
+						"name": "wood.wood_walk"
 					}
 				]
 			}
 		},
-		"hardmetal" : {
-			"walk"  : "metalbox.metalbox_walk",
-			"run"   : "metalbox.metalbox_run",
+		"hardmetal": {
+			"walk": "metalbox.metalbox_walk",
+			"run": "metalbox.metalbox_run",
 			"wander": {
-				"type"  : "simultaneous",
-				"array" : [
+				"type": "simultaneous",
+				"array": [
 					"marble.marble_wander",
 					{
-						"type"  : "probability",
-						"array" : [
-							4, {
-								"name"  : "metalbox.metalbox_wander",
-								"vol_min"  : 10,
-								"vol_max"  : 50
+						"type": "probability",
+						"array": [
+							4,
+							{
+								"name": "metalbox.metalbox_wander",
+								"vol_min": 10,
+								"vol_max": 50
 							},
-							7, "@"
+							7,
+							"@"
 						]
 					}
 				]
 			},
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"metalbox.metalbox_run",
 					{
-						"name"  : "metalbox.metalbox_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "metalbox.metalbox_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "metalbox.metalbox_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "metalbox.metalbox_run"
 					}
 				]
 			}
 		},
-		"brickstone" : {
-			"walk"  : "concrete.concrete_walk",
-			"run"   : "concrete.concrete_run",
+		"brickstone": {
+			"walk": "concrete.concrete_walk",
+			"run": "concrete.concrete_run",
 			"wander": "concrete.concrete_wander",
-			"jump"  : "concrete.concrete_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"jump": "concrete.concrete_wander",
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"concrete.concrete_run",
 					{
-						"name"  : "concrete.concrete_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "concrete.concrete_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "concrete.concrete_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "concrete.concrete_run"
 					}
 				]
 			}
 		},
-		"marble" : {
-			"walk"  : "marble.marble_walk",
-			"run"   : "marble.marble_run",
+		"marble": {
+			"walk": "marble.marble_walk",
+			"run": "marble.marble_run",
 			"wander": "marble.marble_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"marble.marble_run",
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "marble.marble_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "marble.marble_run"
 					}
 				]
 			}
 		},
-		"equipment" : {
-			"walk"  : {
-				"type"  : "simultaneous",
-				"array" : [
+		"equipment": {
+			"walk": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"  : "dirt.dirt_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "dirt.dirt_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"name"  : "lino.lino_walk",
-						"pitch_min"   : 75,
-						"pitch_max"   : 85
+						"name": "lino.lino_walk",
+						"pitch_min": 75,
+						"pitch_max": 85
 					}
 				]
 			},
-			"run"   : {
-				"type"  : "simultaneous",
-				"array" : [
+			"run": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"  : "dirt.dirt_run",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "dirt.dirt_run",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"name"  : "lino.lino_run",
-						"pitch_min"   : 75,
-						"pitch_max"   : 85
+						"name": "lino.lino_run",
+						"pitch_min": 75,
+						"pitch_max": 85
 					}
 				]
 			},
 			"wander": {
-				"type"  : "simultaneous",
-				"array" : [
+				"type": "simultaneous",
+				"array": [
 					"dirt.dirt_wander",
 					"marble.marble_wander"
 				]
 			},
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"dirt.dirt_land",
 					{
-						"name"  : "dirt.dirt_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "dirt.dirt_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "lino.lino_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "lino.lino_run"
 					}
 				]
 			}
 		},
-		"obsidian" : {
-			"walk"  : {
-				"type"  : "simultaneous",
-				"array" : [
+		"obsidian": {
+			"walk": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"  : "stone.stone_walk",
-						"vol_min"   : 80,
-						"vol_max"   : 80,
-						"pitch_min" : 65,
-						"pitch_max" : 70
+						"name": "stone.stone_walk",
+						"vol_min": 80,
+						"vol_max": 80,
+						"pitch_min": 65,
+						"pitch_max": 70
 					},
 					{
-						"name"  : "lino.lino_walk",
-						"pitch_min"   : 75,
-						"pitch_max"   : 85
+						"name": "lino.lino_walk",
+						"pitch_min": 75,
+						"pitch_max": 85
 					}
 				]
 			},
-			"run"   : {
-				"type"  : "simultaneous",
-				"array" : [
+			"run": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"  : "stone.stone_run",
-						"vol_min"   : 80,
-						"vol_max"   : 80,
-						"pitch_min" : 65,
-						"pitch_max" : 70
+						"name": "stone.stone_run",
+						"vol_min": 80,
+						"vol_max": 80,
+						"pitch_min": 65,
+						"pitch_max": 70
 					},
 					{
-						"name"  : "lino.lino_run",
-						"pitch_min"   : 75,
-						"pitch_max"   : 85
+						"name": "lino.lino_run",
+						"pitch_min": 75,
+						"pitch_max": 85
 					}
 				]
 			},
 			"wander": {
-				"type"  : "simultaneous",
-				"array" : [
+				"type": "simultaneous",
+				"array": [
 					"stone.stone_wander",
 					"marble.marble_wander"
 				]
 			},
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"concrete.concrete_run",
 					{
-						"name"  : "stone.stone_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "stone.stone_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "stone.stone_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "stone.stone_run"
 					}
 				]
 			}
 		},
-		"metalbar" : {
-			"walk"  : "metalbar.metalbar_walk",
+		"metalbar": {
+			"walk": "metalbar.metalbar_walk",
 			"wander": {
-				"type"  : "simultaneous",
-				"array" : [
+				"type": "simultaneous",
+				"array": [
 					"marble.marble_wander",
 					{
-						"type"  : "probability",
-						"array" : [
-							4, {
-								"name"  : "metalbar.metalbar_wander",
-								"vol_min"  : 10,
-								"vol_max"  : 50
+						"type": "probability",
+						"array": [
+							4,
+							{
+								"name": "metalbar.metalbar_wander",
+								"vol_min": 10,
+								"vol_max": 50
 							},
-							7, "@"
+							7,
+							"@"
 						]
 					}
 				]
 			},
 			"jump": "metalbar.metalbar_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"metalbar.metalbar_walk",
 					{
-						"type"  : "delayed",
-						"delay" : 30,
-						"name"  : "metalbar.metalbar_walk"
+						"type": "delayed",
+						"delay": 30,
+						"name": "metalbar.metalbar_walk"
 					}
 				]
 			}
 		},
-		"squeakywood" : {
-			"walk"  : "squeakywood.squeakywood_walk",
+		"squeakywood": {
+			"walk": "squeakywood.squeakywood_walk",
 			"wander": "squeakywood.squeakywood_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"squeakywood.squeakywood_walk",
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "wood.wood_walk"
+						"type": "delayed",
+						"delay": 50,
+						"name": "wood.wood_walk"
 					}
 				]
 			}
 		},
-		"bluntwood" : {
-			"walk"  : "bluntwood.bluntwood_walk",
+		"bluntwood": {
+			"walk": "bluntwood.bluntwood_walk",
 			"wander": "bluntwood.bluntwood_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"bluntwood.bluntwood_walk",
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "bluntwood.bluntwood_walk"
+						"type": "delayed",
+						"delay": 50,
+						"name": "bluntwood.bluntwood_walk"
 					}
 				]
 			}
 		},
-		"ladder" : {
-			"walk"  : {
-				"name"  : "bluntwood.bluntwood_walk",
-				"pitch_min" : 130,
-				"pitch_max" : 140,
-				"vol_min"   : 50,
-				"vol_max"   : 50
+		"ladder": {
+			"walk": {
+				"name": "bluntwood.bluntwood_walk",
+				"pitch_min": 130,
+				"pitch_max": 140,
+				"vol_min": 50,
+				"vol_max": 50
 			},
 			"wander": "bluntwood.bluntwood_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"  : "bluntwood.bluntwood_walk",
-						"pitch_min" : 170,
-						"pitch_max" : 180
+						"name": "bluntwood.bluntwood_walk",
+						"pitch_min": 170,
+						"pitch_max": 180
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "bluntwood.bluntwood_walk",
-						"pitch_min" : 170,
-						"pitch_max" : 180
+						"type": "delayed",
+						"delay": 50,
+						"name": "bluntwood.bluntwood_walk",
+						"pitch_min": 170,
+						"pitch_max": 180
 					}
 				]
 			}
 		},
-		"ladder_default" : {
-			"walk"  : {
-				"name"  : "@block.ladder.step",
-				"pitch_min" : 95,
-				"pitch_max" : 105
+		"ladder_default": {
+			"walk": {
+				"name": "@block.ladder.step",
+				"pitch_min": 95,
+				"pitch_max": 105
 			},
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"  : "@block.ladder.step",
-						"pitch_min" : 95,
-						"pitch_max" : 105
+						"name": "@block.ladder.step",
+						"pitch_min": 95,
+						"pitch_max": 105
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "@block.ladder.step",
-						"pitch_min" : 95,
-						"pitch_max" : 105
+						"type": "delayed",
+						"delay": 50,
+						"name": "@block.ladder.step",
+						"pitch_min": 95,
+						"pitch_max": 105
 					}
 				]
 			}
 		},
-		"snow" : {
-			"walk"  : "snow.snow_walk",
-			"run"   : "snow.snow_run",
+		"snow": {
+			"walk": "snow.snow_walk",
+			"run": "snow.snow_run",
 			"wander": "snow.snow_wander",
-			"jump"  : "snow.snow_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"jump": "snow.snow_wander",
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"snow.snow_run",
 					{
-						"name"  : "snow.snow_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "snow.snow_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "snow.snow_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "snow.snow_run"
 					}
 				]
 			}
 		},
-		"ice" : {
-			"walk"  : {
-				"type"  : "simultaneous",
-				"array" : [
+		"ice": {
+			"walk": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"  : "stone.stone_walk",
-						"pitch_min" : 65,
-						"pitch_max" : 70
+						"name": "stone.stone_walk",
+						"pitch_min": 65,
+						"pitch_max": 70
 					},
 					{
-						"name"  : "muffledice.muffledice_walk",
-						"vol_min"   : 40,
-						"vol_max"   : 50
+						"name": "muffledice.muffledice_walk",
+						"vol_min": 40,
+						"vol_max": 50
 					},
 					{
-						"name"  : "weakice.weakice_walk",
-						"vol_min"   : 0,
-						"vol_max"   : 10
+						"name": "weakice.weakice_walk",
+						"vol_min": 0,
+						"vol_max": 10
 					}
 				]
 			},
-			"run"   : {
-				"type"  : "simultaneous",
-				"array" : [
+			"run": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"  : "stone.stone_run",
-						"pitch_min" : 65,
-						"pitch_max" : 70
+						"name": "stone.stone_run",
+						"pitch_min": 65,
+						"pitch_max": 70
 					},
 					{
-						"name"  : "muffledice.muffledice_walk",
-						"vol_min"   : 60,
-						"vol_max"   : 70
+						"name": "muffledice.muffledice_walk",
+						"vol_min": 60,
+						"vol_max": 70
 					},
 					{
-						"name"  : "weakice.weakice_walk",
-						"vol_min"   : 0,
-						"vol_max"   : 20
+						"name": "weakice.weakice_walk",
+						"vol_min": 0,
+						"vol_max": 20
 					}
 				]
 			},
 			"wander": "stone.stone_wander",
-			"jump"  : "stone.stone_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"jump": "stone.stone_wander",
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"concrete.concrete_run",
 					{
-						"name"  : "stone.stone_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "stone.stone_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "stone.stone_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "stone.stone_run"
 					},
 					{
-						"name"  : "muffledice.muffledice_walk",
-						"vol_min"   : 80,
-						"vol_max"   : 100
+						"name": "muffledice.muffledice_walk",
+						"vol_min": 80,
+						"vol_max": 100
 					},
 					{
-						"name"  : "weakice.weakice_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 70
+						"name": "weakice.weakice_walk",
+						"vol_min": 50,
+						"vol_max": 70
 					}
 				]
 			}
 		},
-		"organic" : {
-			"walk"  : {
-				"type"  : "simultaneous",
-				"array" : [
+		"organic": {
+			"walk": {
+				"type": "simultaneous",
+				"array": [
 					"dirt.dirt_walk",
 					"mud.mud_walk"
-					]
+				]
 			},
-			"run"   : {
-				"type"  : "simultaneous",
-				"array" : [
+			"run": {
+				"type": "simultaneous",
+				"array": [
 					"dirt.dirt_run",
 					"mud.mud_walk"
-					]
+				]
 			},
 			"wander": "dirt.dirt_wander",
-			"jump"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"jump": {
+				"type": "simultaneous",
+				"array": [
 					"dirt.dirt_wander",
 					"mud.mud_wander"
-					]
+				]
 			},
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"dirt.dirt_land",
 					"mud.mud_walk",
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "mud.mud_wander"
+						"type": "delayed",
+						"delay": 50,
+						"name": "mud.mud_wander"
 					}
 				]
 			}
 		},
-		"quicksand" : {
-			"walk"  : "quicksand.quicksand_walk",
+		"quicksand": {
+			"walk": "quicksand.quicksand_walk",
 			"wander": "dirt.dirt_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"sand.sand_run",
 					{
-						"name"  : "quicksand.quicksand_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "quicksand.quicksand_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "quicksand.quicksand_walk"
+						"type": "delayed",
+						"delay": 50,
+						"name": "quicksand.quicksand_walk"
 					}
 				]
 			}
 		},
-		"waterfine" : {
-			"walk"  : {
-				"type"  : "probability",
-				"array" : [
-					1, "water.water_through",
-					1, "water_stereofix.water_through"
+		"waterfine": {
+			"walk": {
+				"type": "probability",
+				"array": [
+					1,
+					"water.water_through",
+					1,
+					"water_stereofix.water_through"
 				]
 			},
 			"wander": {
-				"type"  : "probability",
-				"array" : [
-					1, "water.water_wander",
-					1, "water_stereofix.water_wander"
+				"type": "probability",
+				"array": [
+					1,
+					"water.water_wander",
+					1,
+					"water_stereofix.water_wander"
 				]
 			},
-			"land"  : {
-				"type" : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"water.water_through",
 					"water_stereofix.water_through"
 				]
 			}
 		},
-		"stoneutility" : {
-			"walk"  : {
-				"type"  : "simultaneous",
-				"array" : [
+		"stoneutility": {
+			"walk": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"  : "concrete.concrete_walk",
-						"pitch_min"   : 110,
-						"pitch_max"   : 120
+						"name": "concrete.concrete_walk",
+						"pitch_min": 110,
+						"pitch_max": 120
 					},
 					{
-						"name"  : "lino.lino_walk",
-						"pitch_min"   : 75,
-						"pitch_max"   : 85
+						"name": "lino.lino_walk",
+						"pitch_min": 75,
+						"pitch_max": 85
 					}
 				]
 			},
-			"run"   : {
-				"type"  : "simultaneous",
-				"array" : [
+			"run": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"  : "concrete.concrete_run",
-						"pitch_min"   : 110,
-						"pitch_max"   : 120
+						"name": "concrete.concrete_run",
+						"pitch_min": 110,
+						"pitch_max": 120
 					},
 					{
-						"name"  : "lino.lino_run",
-						"pitch_min"   : 75,
-						"pitch_max"   : 85
+						"name": "lino.lino_run",
+						"pitch_min": 75,
+						"pitch_max": 85
 					}
 				]
 			},
 			"wander": {
-				"type"  : "simultaneous",
-				"array" : [
+				"type": "simultaneous",
+				"array": [
 					"concrete.concrete_wander",
 					"marble.marble_wander"
 				]
 			},
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"concrete.concrete_run",
 					{
-						"name"  : "concrete.concrete_walk",
-						"vol_min"   : 50,
-						"vol_max"   : 50
+						"name": "concrete.concrete_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "concrete.concrete_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "concrete.concrete_run"
 					}
 				]
 			}
 		},
-		"metalcompressed" : {
-			"walk"  : {
-				"name"  : "metalbar.metalbar_walk",
-				"pitch_min" : 80,
-				"pitch_min" : 85
+		"metalcompressed": {
+			"walk": {
+				"name": "metalbar.metalbar_walk",
+				"pitch_min": 80,
+				"pitch_max": 85
 			},
 			"wander": {
-				"name"  : "metalbar.metalbar_wander",
-				"pitch_min" : 80,
-				"pitch_min" : 85
+				"name": "metalbar.metalbar_wander",
+				"pitch_min": 80,
+				"pitch_max": 85
 			},
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"  : "metalbar.metalbar_walk",
-						"pitch_min" : 80,
-						"pitch_min" : 85
+						"name": "metalbar.metalbar_walk",
+						"pitch_min": 80,
+						"pitch_max": 85
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 30,
-						"name"  : "metalbar.metalbar_walk",
-						"pitch_min" : 80,
-						"pitch_min" : 85
+						"type": "delayed",
+						"delay": 30,
+						"name": "metalbar.metalbar_walk",
+						"pitch_min": 80,
+						"pitch_max": 85
 					}
 				]
 			}
 		},
-		
-		"metalsubparts" : {
-			"walk"  : {
-				"type" : "simultaneous",
-				"array" : [
+		"metalsubparts": {
+			"walk": {
+				"type": "simultaneous",
+				"array": [
 					{
-						"name"    : "metalbar.metalbar_walk",
-						"vol_min" : 50,
-						"vol_max" : 50
+						"name": "metalbar.metalbar_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"name"    : "metalbox.metalbox_walk",
-						"vol_min" : 50,
-						"vol_max" : 50
+						"name": "metalbox.metalbox_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					}
 				]
 			},
 			"wander": "marble.marble_wander",
-			"land"  : {
-				"type"  : "simultaneous",
-				"array" : [
+			"land": {
+				"type": "simultaneous",
+				"array": [
 					"metalbox.metalbox_run",
 					"metalbar.metalbar_walk",
 					{
-						"type"  : "delayed",
-						"delay" : 30,
-						"name"  : "metalbar.metalbar_walk"
+						"type": "delayed",
+						"delay": 30,
+						"name": "metalbar.metalbar_walk"
 					},
 					{
-						"type"  : "delayed",
-						"delay" : 50,
-						"name"  : "metalbox.metalbox_run"
+						"type": "delayed",
+						"delay": 50,
+						"name": "metalbox.metalbox_run"
 					}
 				]
 			}
 		}
-		
 	}
 }

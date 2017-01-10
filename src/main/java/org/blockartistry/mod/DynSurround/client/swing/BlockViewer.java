@@ -80,7 +80,7 @@ public class BlockViewer extends JPanel implements Observer {
 		lblNewLabel_1.setBounds(10, 61, 100, 14);
 		add(lblNewLabel_1);
 
-		scrollPane.setBounds(120, 61, 231, 95);
+		scrollPane.setBounds(120, 61, 320, 95);
 		add(scrollPane);
 
 		footstepAcoustics.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -89,7 +89,7 @@ public class BlockViewer extends JPanel implements Observer {
 		lblBlockEffects.setBounds(10, 169, 100, 14);
 		add(lblBlockEffects);
 
-		scrollPane_1.setBounds(120, 167, 231, 95);
+		scrollPane_1.setBounds(120, 167, 320, 95);
 		add(scrollPane_1);
 		blockEffects.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -100,7 +100,7 @@ public class BlockViewer extends JPanel implements Observer {
 		lblSounds.setBounds(10, 275, 100, 14);
 
 		add(lblSounds);
-		scrollPane_2.setBounds(120, 276, 231, 105);
+		scrollPane_2.setBounds(120, 276, 320, 105);
 
 		add(scrollPane_2);
 		blockSounds.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

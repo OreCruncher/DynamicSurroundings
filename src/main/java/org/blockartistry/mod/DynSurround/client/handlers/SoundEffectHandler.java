@@ -446,13 +446,13 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 	@Override
 	public void soundPlay(@Nonnull final ISound soundIn, @Nonnull final SoundEventAccessor accessor) {
-		if (!ModOptions.enableDebugLogging)
-			return;
-
-		if (soundIn.getSoundLocation().getResourceDomain().equals(DSurround.RESOURCE_ID))
-			return;
-
-		ModLog.debug("Sound callback: [%s]", soundIn.getSoundLocation().toString());
+//		if (!ModOptions.enableDebugLogging)
+//			return;
+//
+//		if (soundIn.getSoundLocation().getResourceDomain().equals(DSurround.RESOURCE_ID))
+//			return;
+//
+//		ModLog.debug("Sound callback: [%s]", soundIn.getSoundLocation().toString());
 	}
 
 }

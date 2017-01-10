@@ -30,6 +30,7 @@ import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
+import org.blockartistry.mod.DynSurround.registry.BlockInfo;
 import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.registry.FootstepsRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
@@ -88,17 +89,10 @@ public final class WailaHandler implements IWailaDataProvider {
 
 		if (accessor != null) {
 			final IBlockState state = accessor.getBlockState();
-			final String blockName = MCHelper.nameOf(state.getBlock());
-
-			if (blockName != null) {
-				final StringBuilder builder = new StringBuilder();
-				builder.append("BLOCK: ").append(blockName);
-				if (MCHelper.hasVariants(state.getBlock()))
-					builder.append(':').append(state.getBlock().getMetaFromState(state));
-				text.add(builder.toString());
-			}
-
+			final BlockInfo block = new BlockInfo(state);
+			text.add("BLOCK: " + block.toString());
 			text.add("Material: " + MCHelper.getMaterialName(accessor.getBlockState().getMaterial()));
+			
 			final FootstepsRegistry footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
 			final BlockMap bm = footsteps.getBlockMap();
 			if (bm != null) {

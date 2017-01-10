@@ -57,4 +57,12 @@ public class ConfigOptions implements IOptions {
 	public Object getOption(@Nonnull final Option option) {
 		return this.map.get(option);
 	}
+	
+	public long asLong(@Nonnull final Option option) {
+		return (Long)getOption(option);
+	}
+	
+	public float asFloat(@Nonnull final Option option) {
+		return (Float)getOption(option);
+	}
 }

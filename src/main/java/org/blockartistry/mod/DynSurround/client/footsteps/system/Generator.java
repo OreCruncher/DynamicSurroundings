@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.NormalVariator;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
+import org.blockartistry.mod.DynSurround.util.TimeUtils;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -38,7 +39,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class Generator {
-	
+
 	private static final NormalVariator VAR = new NormalVariator();
 
 	// Construct
@@ -78,14 +79,15 @@ public class Generator {
 	}
 
 	protected boolean stoppedImmobile(float reference) {
+		final long current = TimeUtils.currentTimeMillis();
 		final float diff = lastReference - reference;
 		lastReference = reference;
 		if (!isImmobile && diff == 0f) {
-			timeImmobile = System.currentTimeMillis();
+			timeImmobile = current;
 			isImmobile = true;
 		} else if (isImmobile && diff != 0f) {
 			isImmobile = false;
-			return System.currentTimeMillis() - timeImmobile > VAR.IMMOBILE_DURATION;
+			return current - timeImmobile > VAR.IMMOBILE_DURATION;
 		}
 
 		return false;
@@ -132,11 +134,11 @@ public class Generator {
 			if (ply.isOnLadder() && !ply.onGround) {
 				distance = VAR.DISTANCE_LADDER;
 			} else if (!ply.isInWater() && MathStuff.abs(this.yPosition - ply.posY) > 0.4d // &&
-																						// Math.abs(this.yPosition
-																						// -
-																						// ply.posY)
-																						// <
-																						// 0.7d)
+																							// Math.abs(this.yPosition
+																							// -
+																							// ply.posY)
+																							// <
+																							// 0.7d)
 			) {
 				// This ensures this does not get recorded as landing, but as a
 				// step
@@ -178,7 +180,8 @@ public class Generator {
 		produceStep(ply, event, 0d);
 	}
 
-	protected void produceStep(@Nonnull final EntityPlayer ply, @Nullable EventType event, final double verticalOffsetAsMinus) {
+	protected void produceStep(@Nonnull final EntityPlayer ply, @Nullable EventType event,
+			final double verticalOffsetAsMinus) {
 		if (!mod.getSolver().playSpecialStoppingConditions(ply)) {
 			if (event == null)
 				event = speedDisambiguator(ply, EventType.WALK, EventType.RUN);
@@ -245,16 +248,18 @@ public class Generator {
 		}
 	}
 
-	protected EventType speedDisambiguator(@Nonnull final EntityPlayer ply, @Nonnull final EventType walk, @Nonnull final EventType run) {
+	protected EventType speedDisambiguator(@Nonnull final EntityPlayer ply, @Nonnull final EventType walk,
+			@Nonnull final EventType run) {
 		double velocity = ply.motionX * ply.motionX + ply.motionZ * ply.motionZ;
 		return velocity > VAR.SPEED_TO_RUN ? run : walk;
 	}
 
 	private void simulateBrushes(@Nonnull final EntityPlayer ply) {
-		if (brushesTime > System.currentTimeMillis())
+		final long current = TimeUtils.currentTimeMillis();
+		if (brushesTime > current)
 			return;
 
-		brushesTime = System.currentTimeMillis() + 100;
+		brushesTime = current + 100;
 
 		if ((ply.motionX == 0d && ply.motionZ == 0d) || ply.isSneaking())
 			return;
@@ -274,8 +279,8 @@ public class Generator {
 		}
 	}
 
-	protected void playSinglefoot(@Nonnull final EntityPlayer ply, final double verticalOffsetAsMinus, @Nonnull final EventType eventType,
-			final boolean foot) {
+	protected void playSinglefoot(@Nonnull final EntityPlayer ply, final double verticalOffsetAsMinus,
+			@Nonnull final EventType eventType, final boolean foot) {
 		final Association assos = mod.getSolver().findAssociationForPlayer(ply, verticalOffsetAsMinus, isRightFoot);
 		mod.getSolver().playAssociation(ply, assos, eventType);
 	}
