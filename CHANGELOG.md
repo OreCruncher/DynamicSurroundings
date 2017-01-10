@@ -1,3 +1,21 @@
+###DynamicSurroundings-3.2.1.0
+**What's New!**
+* Added a not ! operator to the conditional string grammar.  Does the same thing as the function NOT but without all the extra verbiage.
+* Removed regex support for conditional strings.  Must use the new scripting syntax.
+* Added weapon/tool sound support for TConstruct things.  Now you can swoosh! with style with that cleaver.  (Thanks lukiono!)
+* Added some debris enhancements to explosions.  Just light some TNT and watch.  Or use flint and steel on a creeper.  Let me know what you think.
+* Embellished the Debug Dialog with additional tabs.
+
+**Fixes**
+* Don't initialize state on a Netty thread. :\
+* Fixed a delayed acoustic bug that's been around for a while.  Landing on blocks should sound better.
+* Blending of biome sounds at biome boundaries would sometimes result in lower volumes.  Fixed that.
+
+**Changes**
+* Changes focused on performance and memory utilization.
+* Increased default special effect range from 16 to 24.
+* Improved fade in/out of biome sounds when moving between biomes.  Shouldn't sound as abrupt.
+
 ###DynamicSurroundings-3.2.0.0BETA
 **What's New!**
 * [Background thunder during storms!](https://github.com/OreCruncher/DynamicSurroundings/wiki/Let's-Talk-Rain)
