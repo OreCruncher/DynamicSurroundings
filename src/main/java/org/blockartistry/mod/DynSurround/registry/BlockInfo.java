@@ -99,8 +99,6 @@ public class BlockInfo {
 	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
-		if (!(obj instanceof BlockInfo))
-			return false;
 		final BlockInfo key = (BlockInfo) obj;
 		return this.block == key.block && this.meta == key.meta;
 	}

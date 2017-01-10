@@ -28,8 +28,9 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
+import org.blockartistry.mod.DynSurround.util.MCHelper;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,20 +39,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class Association {
 
-	private IBlockState state;
-	private BlockPos pos;
+	private final IBlockState state;
+	private final BlockPos pos;
+	private final IAcoustic[] data;
 
-	private IAcoustic[] data = null;
-
-	private boolean noAssociation = false;
-	private boolean isPrimative = false;
-
-	public Association() {
+	public Association(@Nonnull final IAcoustic[] association) {
+		this(null, null, association);
+	}
+	
+	public Association(@Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
+		this(state, pos, null);
 	}
 
-	public Association(@Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
+	public Association(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final IAcoustic[] association) {
 		this.state = state;
 		this.pos = pos;
+		this.data = association;
 	}
 
 	@Nonnull
@@ -60,43 +63,18 @@ public class Association {
 	}
 
 	@Nonnull
-	public Association setAssociation(@Nonnull final IAcoustic[] association) {
-		this.data = association;
-		this.noAssociation = false;
-		return this;
-	}
-
-	@Nonnull
-	public Association setNoAssociation() {
-		this.noAssociation = true;
-		return this;
-	}
-
-	@Nonnull
 	public boolean getNoAssociation() {
-		return this.noAssociation;
+		return this.data == null;
 	}
 
-	@Nonnull
-	public Association setPrimitive(@Nonnull final IAcoustic[] primative) {
-		this.data = primative;
-		this.isPrimative = true;
-		return this;
+	public boolean isLiquid() {
+		return this.state != null && this.state.getMaterial().isLiquid();
 	}
-
-	public boolean isPrimative() {
-		return this.isPrimative;
+	
+	public SoundType getSoundType() {
+		return this.state != null ? MCHelper.getSoundType(this.state) : null;
 	}
-
-	public Block getBlock() {
-		return this.state.getBlock();
-	}
-
-	@Nonnull
-	public IBlockState getState() {
-		return this.state;
-	}
-
+	
 	@Nonnull
 	public BlockPos getPos() {
 		return this.pos;

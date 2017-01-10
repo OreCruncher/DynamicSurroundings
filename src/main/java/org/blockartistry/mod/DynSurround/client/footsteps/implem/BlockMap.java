@@ -26,8 +26,6 @@ package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,10 +37,10 @@ import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.mod.DynSurround.registry.BlockInfo;
-import org.blockartistry.mod.DynSurround.registry.BlockInfo.BlockInfoMutable;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import gnu.trove.map.hash.THashMap;
+import gnu.trove.procedure.TObjectObjectProcedure;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.fml.relauncher.Side;
@@ -53,10 +51,8 @@ public class BlockMap {
 	private static final Pattern pattern = Pattern.compile("([^:]+:[^^+]+)\\^?(\\d+)?\\+?(\\w+)?");
 
 	private final Isolator isolator;
-	private final THashMap<BlockInfo, IAcoustic[]> metaMap = new THashMap<BlockInfo, IAcoustic[]>();
-	private final THashMap<BlockInfo, Map<String, IAcoustic[]>> substrateMap = new THashMap<BlockInfo, Map<String, IAcoustic[]>>();
-
-	private final BlockInfoMutable key = new BlockInfoMutable();
+	private final BlockAcousticMap metaMap = new BlockAcousticMap();
+	private final THashMap<String, BlockAcousticMap> substrateMap = new THashMap<String, BlockAcousticMap>();
 
 	private static class MacroEntry {
 		public final int meta;
@@ -130,30 +126,13 @@ public class BlockMap {
 
 	@Nullable
 	public IAcoustic[] getBlockMap(@Nonnull final IBlockState state) {
-		this.key.set(state);
-		IAcoustic[] result = this.metaMap.get(this.key);
-		if (result == null && this.key.hasSubTypes()) {
-			result = this.metaMap.get(this.key.asGeneric());
-		}
-		return result;
-	}
-
-	private Map<String, IAcoustic[]> getBlockSubstrate(@Nonnull final IBlockState state) {
-		this.key.set(state);
-		Map<String, IAcoustic[]> sub = this.substrateMap.get(this.key);
-		if (sub == null) {
-			if (this.key.hasSubTypes())
-				sub = this.substrateMap.get(this.key.asGeneric());
-			else if (this.key.hasSpecialMeta())
-				sub = this.substrateMap.get(this.key.asSpecial());
-		}
-		return sub;
+		return this.metaMap.getBlockMap(state);
 	}
 
 	@Nullable
 	public IAcoustic[] getBlockMapSubstrate(@Nonnull final IBlockState state, @Nonnull final String substrate) {
-		final Map<String, IAcoustic[]> sub = getBlockSubstrate(state);
-		return sub != null ? sub.get(substrate) : null;
+		BlockAcousticMap sub = this.substrateMap.get(substrate);
+		return sub != null ? sub.getBlockMap(state) : null;
 	}
 
 	private void put(@Nonnull final Block block, final int meta, @Nonnull final String substrate,
@@ -164,11 +143,10 @@ public class BlockMap {
 		if (StringUtils.isEmpty(substrate)) {
 			this.metaMap.put(new BlockInfo(block, meta), acoustics);
 		} else {
-			final BlockInfo bi = new BlockInfo(block, meta);
-			Map<String, IAcoustic[]> sub = this.substrateMap.get(bi);
+			BlockAcousticMap sub = this.substrateMap.get(substrate);
 			if (sub == null)
-				this.substrateMap.put(bi, sub = new THashMap<String, IAcoustic[]>());
-			sub.put(substrate.intern(), acoustics);
+				this.substrateMap.put(substrate.intern(), sub = new BlockAcousticMap());
+			sub.put(new BlockInfo(block, meta), acoustics);
 		}
 	}
 
@@ -225,11 +203,15 @@ public class BlockMap {
 		if (temp != null)
 			data.add(combine(temp));
 
-		final Map<String, IAcoustic[]> subs = getBlockSubstrate(state);
-		if (subs != null) {
-			for (final Entry<String, IAcoustic[]> entry : subs.entrySet())
-				data.add(entry.getKey() + ":" + combine(entry.getValue()));
-		}
+		this.substrateMap.forEachEntry(new TObjectObjectProcedure<String, BlockAcousticMap>() {
+			@Override
+			public boolean execute(@Nonnull final String a, @Nonnull final BlockAcousticMap b) {
+				final IAcoustic[] acoustics = b.getBlockMapWithSpecial(state);
+				if (acoustics != null)
+					data.add(a + ":" + combine(acoustics));
+				return true;
+			}
+		});
 	}
 
 	public void clear() {

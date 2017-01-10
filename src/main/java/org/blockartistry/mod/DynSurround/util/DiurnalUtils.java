@@ -45,7 +45,7 @@ public final class DiurnalUtils {
 			return false;
 
 		float brFactor = world.provider.getSunBrightnessFactor(1.0f);
-		return brFactor > 0.1f && brFactor < 0.6f && Math.sin(world.getCelestialAngleRadians(1.0f)) < 0.0;
+		return brFactor > 0.1f && brFactor < 0.6f && MathStuff.sin(world.getCelestialAngleRadians(1.0f)) < 0.0;
 	}
 
 	public static boolean isSunset(@Nonnull final World world) {
@@ -53,7 +53,7 @@ public final class DiurnalUtils {
 			return false;
 
 		float brFactor = world.provider.getSunBrightnessFactor(1.0f);
-		return brFactor > 0.1f && brFactor < 0.6f && Math.sin(world.getCelestialAngleRadians(1.0f)) > 0.0;
+		return brFactor > 0.1f && brFactor < 0.6f && MathStuff.sin(world.getCelestialAngleRadians(1.0f)) > 0.0;
 	}
 
 	public static float getMoonPhaseFactor(@Nonnull final World world) {
@@ -65,6 +65,6 @@ public final class DiurnalUtils {
 	}
 	
 	public static boolean isAuroraInvisible(@Nonnull final World world) {
-		return world.provider.getHasNoSky() || isSunrise(world) || isDaytime(world);
+		return isSunrise(world) || isDaytime(world);
 	}
 }

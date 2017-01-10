@@ -49,7 +49,6 @@ import org.blockartistry.mod.DynSurround.util.TimeUtils;
 import gnu.trove.map.hash.THashMap;
 import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
@@ -139,9 +138,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	@Override
 	public void playStep(@Nonnull final EntityLivingBase entity, @Nonnull final Association assos) {
-		final IBlockState state = assos.getState();
-		SoundType soundType = MCHelper.getSoundType(state);
-		if (!state.getMaterial().isLiquid() && soundType != null) {
+		SoundType soundType = assos.getSoundType();
+		if (!assos.isLiquid() && assos.getSoundType() != null) {
 
 			if (EnvironState.getWorld().getBlockState(assos.getPos().up()).getBlock() == Blocks.SNOW_LAYER) {
 				soundType = MCHelper.getSoundType(Blocks.SNOW_LAYER);

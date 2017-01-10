@@ -270,7 +270,7 @@ public class Solver {
 			} else {
 				// PFLog.debugf("Found association for %0 : %1 : %2", in,
 				// association);
-				return (new Association(in, pos)).setAssociation(association);
+				return new Association(in, pos, association);
 			}
 		} else {
 			IAcoustic[] primitive = resolvePrimitive(in);
@@ -283,10 +283,10 @@ public class Solver {
 
 				// PFLog.debugf("Found primitive for %0 : %1 : %2", in,
 				// primitive);
-				return (new Association(in, pos)).setPrimitive(primitive);
+				return new Association(in, pos, primitive);
 			} else {
 				// PFLog.debugf("No association for %0 : %1", in);
-				return (new Association(in, pos)).setNoAssociation();
+				return new Association(in, pos);
 			}
 		}
 	}
@@ -414,7 +414,7 @@ public class Solver {
 		 */
 
 		if (found && association != null) {
-			return association == AcousticsManager.NOT_EMITTER ? null : (new Association()).setAssociation(association);
+			return association == AcousticsManager.NOT_EMITTER ? null : new Association(association);
 		}
 		return null;
 	}
