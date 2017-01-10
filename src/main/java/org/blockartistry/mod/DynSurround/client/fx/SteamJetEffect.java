@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleSteamJet;
+import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -64,7 +65,7 @@ public class SteamJetEffect extends JetEffect {
 	}
 	
 	public static boolean isValidSpawnBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return world.isAirBlock(pos.up()) && lavaCount(world, pos) > 0;
+		return WorldUtils.isAirBlock(world, pos.up()) && lavaCount(world, pos) > 0;
 	}
 
 	@Override

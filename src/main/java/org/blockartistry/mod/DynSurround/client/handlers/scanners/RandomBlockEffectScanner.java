@@ -34,11 +34,14 @@ import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.fx.ISpecialEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.mod.DynSurround.registry.BlockInfo.BlockInfoMutable;
 import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.scanner.RandomScanner;
+
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -49,12 +52,21 @@ public class RandomBlockEffectScanner extends RandomScanner {
 
 	// Vanilla had a range of 16 in doVoidParticles() and it iterated 1000
 	// times.
+	//
 	// The new doVoidParticles() in 1.10x is different. Loops less, but has two
 	// ranges it works (near and far). Not going to change it as the data in the
 	// config files it tuned to this existing behavior.
 	private static final float RATIO = 1000.0F / (16.0F * 16.0F * 16.0F);
 
 	protected final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
+	
+	// State for remembering the last block state that was looked at.  The idea
+	// is that if there is a concentration of a particular block type in the area
+	// repeated calls back to the BlockRegistry to get effects can be avoided by
+	// using the cached state.
+	protected BlockInfoMutable previousBlock = new BlockInfoMutable();
+	protected BlockInfoMutable scratch = new BlockInfoMutable();
+	protected BlockEffect[] previous = null;
 
 	public RandomBlockEffectScanner(final int range) {
 		super("RandomBlockEffectScanner", range, (int) (range * range * range * RATIO));
@@ -62,16 +74,32 @@ public class RandomBlockEffectScanner extends RandomScanner {
 
 	@Override
 	protected boolean interestingBlock(@Nonnull final IBlockState state) {
-		return this.blocks.hasEffectsOrSounds(state);
+		if(state.getBlock() == Blocks.AIR)
+			return false;
+		
+		this.scratch.set(state);
+		if (this.previousBlock.equals(this.scratch))
+			return true;
+		
+		final boolean interesting = this.blocks.hasEffectsOrSounds(this.scratch);
+		if (interesting) {
+			// Swap previous and scratch
+			final BlockInfoMutable temp = this.previousBlock;
+			this.previousBlock = this.scratch;
+			this.scratch = temp;
+			this.previous = null;
+		}
+		return interesting;
 	}
 
 	protected List<ISpecialEffect> getEffectsToImplement(@Nonnull final World world, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random rand) {
 
 		final List<ISpecialEffect> results = new ArrayList<ISpecialEffect>();
-		final List<BlockEffect> chain = this.blocks.getEffects(state);
+		if (this.previous == null)
+			this.previous = this.blocks.getEffects(state);
 
-		for (final BlockEffect effect : chain)
+		for (final BlockEffect effect : this.previous)
 			if (effect.canTrigger(state, world, pos, rand))
 				results.add(effect);
 

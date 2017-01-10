@@ -156,7 +156,7 @@ public abstract class DataProxy extends Observable {
 
 		public List<String> getBlockEffects() {
 			final List<String> result = new ArrayList<String>();
-			List<BlockEffect> effects = this.blocks.getEffects(state);
+			BlockEffect[] effects = this.blocks.getEffects(state);
 			for (final BlockEffect e : effects) {
 				result.add(e.getEffectType().getName());
 			}
@@ -170,12 +170,12 @@ public abstract class DataProxy extends Observable {
 		
 		public List<String> getBlockSounds() {
 			final List<String> result = new ArrayList<String>();
-			List<SoundEffect> sounds = this.blocks.getAllSounds(this.state);
+			SoundEffect[] sounds = this.blocks.getAllSounds(this.state);
 			for(final SoundEffect s: sounds)
 				result.add(s.toString());
 			
 			sounds = this.blocks.getAllStepSounds(this.state);
-			if(sounds.size() > 0)
+			if(sounds.length > 0)
 				for(final SoundEffect s: sounds)
 					result.add(s.toString() + " (Step Sound)");
 			

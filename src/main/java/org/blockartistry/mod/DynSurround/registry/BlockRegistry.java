@@ -53,12 +53,9 @@ import org.blockartistry.mod.DynSurround.registry.BlockInfo.BlockInfoMutable;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
-import com.google.common.collect.ImmutableList;
-
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.relauncher.Side;
@@ -66,8 +63,8 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public final class BlockRegistry extends Registry {
 
-	protected final static List<BlockEffect> NO_EFFECTS = ImmutableList.of();
-	protected final static List<SoundEffect> NO_SOUNDS = ImmutableList.of();
+	public final static BlockEffect[] NO_EFFECTS = {};
+	public final static SoundEffect[] NO_SOUNDS = {};
 
 	BlockRegistry(@Nonnull final Side side) {
 		super(side);
@@ -85,9 +82,9 @@ public final class BlockRegistry extends Registry {
 
 		// Scan the registry looking for profiles that match what we want.
 		for (final BlockProfile profile : this.registry.values()) {
-			if (profile.getAlwaysOnEffects().size() > 0)
+			if (profile.getAlwaysOnEffects().length > 0)
 				this.alwaysOnEffects.add(profile.info);
-			if (profile.getEffects().size() > 0 || profile.getSounds().size() > 0)
+			if (profile.getEffects().length > 0 || profile.getSounds().length > 0)
 				this.hasSoundsAndEffects.add(profile.info);
 		}
 
@@ -127,22 +124,26 @@ public final class BlockRegistry extends Registry {
 	}
 
 	@Nonnull
-	public List<BlockEffect> getEffects(@Nonnull final IBlockState state) {
+	public BlockEffect[] getEffects(@Nonnull final IBlockState state) {
 		final BlockProfile entry = findProfile(state);
 		return entry != null ? entry.getEffects() : NO_EFFECTS;
 	}
 
 	@Nonnull
-	public List<BlockEffect> getAlwaysOnEffects(@Nonnull final IBlockState state) {
+	public BlockEffect[] getAlwaysOnEffects(@Nonnull final IBlockState state) {
 		final BlockProfile entry = findProfile(state);
 		return entry != null ? entry.getAlwaysOnEffects() : NO_EFFECTS;
 	}
 
 	@Nonnull
-	private SoundEffect getRandomSound(@Nonnull final List<SoundEffect> list, @Nonnull final Random random) {
+	private SoundEffect getRandomSound(@Nonnull final SoundEffect[] list, @Nonnull final Random random) {
+
+		// Degenerative case of a single sound
+		if (list.length == 1) {
+			return list[0].matches() ? list[0] : null;
+		}
 
 		// Build a weight table on the fly
-
 		int totalWeight = 0;
 		final List<SoundEffect> candidates = new ArrayList<SoundEffect>();
 		for (final SoundEffect s : list)
@@ -155,6 +156,7 @@ public final class BlockRegistry extends Registry {
 		if (totalWeight <= 0)
 			return null;
 
+		// Possible that there is a single candidate
 		if (candidates.size() == 1)
 			return candidates.get(0);
 
@@ -167,33 +169,19 @@ public final class BlockRegistry extends Registry {
 	}
 
 	@Nonnull
-	public List<SoundEffect> getAllSounds(@Nonnull final IBlockState state) {
+	public SoundEffect[] getAllSounds(@Nonnull final IBlockState state) {
 		final BlockProfile entry = findProfile(state);
-		if (entry == null)
-			return NO_SOUNDS;
-
-		final List<SoundEffect> sounds = entry.getSounds();
-		if (sounds.isEmpty())
-			return NO_SOUNDS;
-
-		return sounds;
+		return entry != null ? entry.getSounds() : NO_SOUNDS;
 	}
 
 	@Nonnull
-	public List<SoundEffect> getAllStepSounds(@Nonnull final IBlockState state) {
+	public SoundEffect[] getAllStepSounds(@Nonnull final IBlockState state) {
 		// Air and liquid have no step sounds so optimize that out
-		if (state.getMaterial() == Material.AIR || state.getMaterial().isLiquid())
+		if (state.getBlock() == Blocks.AIR || state.getMaterial().isLiquid())
 			return NO_SOUNDS;
 
 		final BlockProfile entry = findProfile(state);
-		if (entry == null)
-			return NO_SOUNDS;
-
-		final List<SoundEffect> sounds = entry.getStepSounds();
-		if (sounds.isEmpty())
-			return NO_SOUNDS;
-
-		return sounds;
+		return entry != null ? entry.getStepSounds() : NO_SOUNDS;
 	}
 
 	@Nullable
@@ -202,8 +190,8 @@ public final class BlockRegistry extends Registry {
 		if (entry == null)
 			return null;
 
-		final List<SoundEffect> sounds = entry.getSounds();
-		if (sounds.isEmpty())
+		final SoundEffect[] sounds = entry.getSounds();
+		if (sounds == NO_SOUNDS)
 			return null;
 
 		if (random.nextInt(entry.getChance()) != 0)
@@ -216,15 +204,15 @@ public final class BlockRegistry extends Registry {
 	public SoundEffect getStepSound(@Nonnull final IBlockState state, @Nonnull final Random random) {
 
 		// Air and liquid have no step sounds so optimize that out
-		if (state.getMaterial() == Material.AIR || state.getMaterial().isLiquid())
+		if (state.getBlock() == Blocks.AIR || state.getMaterial().isLiquid())
 			return null;
 
 		final BlockProfile entry = findProfile(state);
 		if (entry == null)
 			return null;
 
-		final List<SoundEffect> sounds = entry.getStepSounds();
-		if (sounds.isEmpty())
+		final SoundEffect[] sounds = entry.getStepSounds();
+		if (sounds == NO_SOUNDS)
 			return null;
 
 		if (random.nextInt(entry.getStepChance()) != 0)
@@ -233,25 +221,25 @@ public final class BlockRegistry extends Registry {
 		return getRandomSound(sounds, random);
 	}
 
-	private boolean isInteresting(@Nonnull final Set<BlockInfo> data, @Nonnull final IBlockState state) {
-		if (state.getMaterial() == Material.AIR)
+	private boolean isInteresting(@Nonnull final Set<BlockInfo> data, @Nonnull final BlockInfo info) {
+		if (info.getBlock() == Blocks.AIR)
 			return false;
 
-		if (data.contains(this.key.set(state)))
+		if (data.contains(info))
 			return true;
 
-		if (!this.key.hasSubTypes())
+		if (!info.hasSubTypes())
 			return false;
 
-		return data.contains(this.key.asGeneric());
+		return data.contains(this.key.set(info).asGeneric());
 	}
 
-	public boolean hasAlwaysOnEffects(@Nonnull final IBlockState state) {
-		return isInteresting(this.alwaysOnEffects, state);
+	public boolean hasAlwaysOnEffects(@Nonnull final BlockInfo info) {
+		return isInteresting(this.alwaysOnEffects, info);
 	}
 
-	public boolean hasEffectsOrSounds(@Nonnull final IBlockState state) {
-		return isInteresting(this.hasSoundsAndEffects, state);
+	public boolean hasEffectsOrSounds(@Nonnull final BlockInfo info) {
+		return isInteresting(this.hasSoundsAndEffects, info);
 	}
 
 	@Nullable

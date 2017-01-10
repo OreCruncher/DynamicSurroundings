@@ -24,18 +24,19 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers.scanners;
 
-import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.registry.BlockInfo;
 import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.scanner.CuboidScanner;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -53,22 +54,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 
-	protected final BlockRegistry blocks;
+	protected final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
+	protected final BlockInfo.BlockInfoMutable blockInfo = new BlockInfo.BlockInfoMutable();
 
 	public AlwaysOnBlockEffectScanner(final int range) {
 		super("AlwaysOnBlockEffectScanner", range, 0);
-		this.blocks = RegistryManager.get(RegistryType.BLOCK);
 	}
 
 	@Override
 	protected boolean interestingBlock(final IBlockState state) {
-		return this.blocks.hasAlwaysOnEffects(state);
+		return state.getBlock() != Blocks.AIR && this.blocks.hasAlwaysOnEffects(this.blockInfo.set(state));
 	}
 
 	@Override
 	public void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final Random rand) {
 		final World world = EnvironState.getWorld();
-		final List<BlockEffect> effects = this.blocks.getAlwaysOnEffects(state);
+		final BlockEffect[] effects = this.blocks.getAlwaysOnEffects(state);
 		for (final BlockEffect be : effects)
 			if (be.canTrigger(state, world, pos, rand))
 				be.doEffect(state, world, pos, rand);

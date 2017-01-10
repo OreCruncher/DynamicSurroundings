@@ -44,8 +44,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -139,11 +137,6 @@ public final class MCHelper {
 		// Yes yes. I know what I am doing here. Need to know if the block
 		// doesn't exist because of bad data in a config file or some such.
 		return Block.REGISTRY.getObjectBypass(new ResourceLocation(blockName));
-	}
-
-	public static boolean isAirBlock(@Nonnull final IBlockState state, @Nullable final World world,
-			@Nullable final BlockPos pos) {
-		return state.getMaterial() == Material.AIR;
 	}
 
 	@Nullable

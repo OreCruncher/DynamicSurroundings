@@ -35,6 +35,7 @@ import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 
 public class BlockInfo {
 
@@ -58,9 +59,19 @@ public class BlockInfo {
 	}
 
 	public BlockInfo(@Nonnull final IBlockState state) {
+		configure(state);
+	}
+
+	protected void configure(@Nonnull final IBlockState state) {
 		this.block = state.getBlock();
-		this.meta = MCHelper.hasVariants(this.block) ? state.getBlock().getMetaFromState(state) : NO_SUBTYPE;
-		this.specialMeta = MCHelper.hasSpecialMeta(this.block) ? state.getBlock().getMetaFromState(state) : NO_SUBTYPE;
+		if (this.block == Blocks.AIR) {
+			this.meta = NO_SUBTYPE;
+			this.specialMeta = NO_SUBTYPE;
+		} else {
+			this.meta = MCHelper.hasVariants(this.block) ? state.getBlock().getMetaFromState(state) : NO_SUBTYPE;
+			this.specialMeta = MCHelper.hasSpecialMeta(this.block) ? state.getBlock().getMetaFromState(state)
+					: NO_SUBTYPE;
+		}
 	}
 
 	@Nonnull
@@ -122,7 +133,7 @@ public class BlockInfo {
 						subType = Integer.parseInt(num);
 					} catch (Exception e) {
 						// It appears malformed - assume the incoming name
-						// isthe real name and continue.
+						// is the real name and continue.
 						;
 					}
 				}
@@ -139,7 +150,7 @@ public class BlockInfo {
 
 	@Override
 	public String toString() {
-		if(this.block == null)
+		if (this.block == null)
 			return "UNKNOWN";
 		final StringBuilder builder = new StringBuilder();
 		builder.append(MCHelper.nameOf(this.block));
@@ -159,10 +170,14 @@ public class BlockInfo {
 		}
 
 		public BlockInfoMutable set(@Nonnull final IBlockState state) {
-			this.block = state.getBlock();
-			this.meta = MCHelper.hasVariants(this.block) ? state.getBlock().getMetaFromState(state) : NO_SUBTYPE;
-			this.specialMeta = MCHelper.hasSpecialMeta(this.block) ? state.getBlock().getMetaFromState(state)
-					: NO_SUBTYPE;
+			configure(state);
+			return this;
+		}
+
+		public BlockInfoMutable set(@Nonnull final BlockInfo info) {
+			this.block = info.block;
+			this.meta = info.meta;
+			this.specialMeta = info.specialMeta;
 			return this;
 		}
 

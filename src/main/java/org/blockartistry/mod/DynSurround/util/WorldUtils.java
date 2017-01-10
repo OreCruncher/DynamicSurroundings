@@ -28,15 +28,17 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
 public final class WorldUtils {
-	
+
 	private WorldUtils() {
-		
+
 	}
 
 	@Nullable
@@ -46,16 +48,24 @@ public final class WorldUtils {
 				return e;
 		return null;
 	}
-	
+
 	@Nullable
 	public static Entity locateEntity(@Nonnull final World world, final int entityId) {
 		return world.getEntityByID(entityId);
 	}
-	
+
 	public static boolean isSolidBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return world.getBlockState(pos).getMaterial().isSolid();
 	}
-	
+
+	public static boolean isAirBlock(@Nonnull final IBlockState state) {
+		return state.getBlock() == Blocks.AIR;
+	}
+
+	public static boolean isAirBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return isAirBlock(world.getBlockState(pos));
+	}
+
 	@Nullable
 	public static World getWorld(final int dimensionId) {
 		return DimensionManager.getWorld(dimensionId);

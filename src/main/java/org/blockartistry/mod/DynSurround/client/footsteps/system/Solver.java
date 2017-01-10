@@ -44,6 +44,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -294,7 +295,7 @@ public class Solver {
 	@Nonnull
 	private IAcoustic[] resolvePrimitive(@Nonnull final IBlockState state) {
 
-		if (state.getMaterial() == Material.AIR)
+		if (state.getBlock() == Blocks.AIR)
 			return AcousticsManager.NOT_EMITTER;
 
 		final SoundType type = MCHelper.getSoundType(state);

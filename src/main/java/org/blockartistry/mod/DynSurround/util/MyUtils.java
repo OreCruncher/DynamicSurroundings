@@ -30,7 +30,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 
 public final class MyUtils {
-	
+
 	private static final int[] EMPTY = {};
 
 	private MyUtils() {
@@ -50,16 +50,27 @@ public final class MyUtils {
 
 		return result;
 	}
-	
-	public static <T> T[] concatenate (T[] a, T[] b) {
-	    int aLen = a.length;
-	    int bLen = b.length;
 
-	    @SuppressWarnings("unchecked")
-	    T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen+bLen);
-	    System.arraycopy(a, 0, c, 0, aLen);
-	    System.arraycopy(b, 0, c, aLen, bLen);
+	public static <T> T[] concatenate(T[] a, T[] b) {
+		int aLen = a.length;
+		int bLen = b.length;
 
-	    return c;
+		@SuppressWarnings("unchecked")
+		T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen + bLen);
+		System.arraycopy(a, 0, c, 0, aLen);
+		System.arraycopy(b, 0, c, aLen, bLen);
+
+		return c;
+	}
+
+	public static <T> T[] append(T[] a, T b) {
+		final int aLen = a.length;
+
+		@SuppressWarnings("unchecked")
+		T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen + 1);
+		System.arraycopy(a, 0, c, 0, aLen);
+		c[aLen] = b;
+
+		return c;
 	}
 }

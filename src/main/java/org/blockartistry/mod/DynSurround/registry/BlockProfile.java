@@ -24,14 +24,11 @@
 
 package org.blockartistry.mod.DynSurround.registry;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.mod.DynSurround.util.MCHelper;
+import org.blockartistry.mod.DynSurround.util.MyUtils;
 
 public class BlockProfile {
 
@@ -40,17 +37,15 @@ public class BlockProfile {
 	}
 
 	protected final BlockInfo info;
-	protected final boolean hasVariants;
 	protected int chance = 100;
 	protected int stepChance = 100;
-	protected final List<SoundEffect> sounds = new ArrayList<SoundEffect>();
-	protected final List<SoundEffect> stepSounds = new ArrayList<SoundEffect>();
-	protected final List<BlockEffect> effects = new ArrayList<BlockEffect>();
-	protected final List<BlockEffect> alwaysOn = new ArrayList<BlockEffect>();
+	protected SoundEffect[] sounds = BlockRegistry.NO_SOUNDS;
+	protected SoundEffect[] stepSounds = BlockRegistry.NO_SOUNDS;
+	protected BlockEffect[] effects = BlockRegistry.NO_EFFECTS;
+	protected BlockEffect[] alwaysOn = BlockRegistry.NO_EFFECTS;
 
 	public BlockProfile(@Nonnull final BlockInfo blockInfo) {
 		this.info = blockInfo;
-		this.hasVariants = MCHelper.hasVariants(this.info.block);
 	}
 
 	public void setChance(final int chance) {
@@ -70,50 +65,50 @@ public class BlockProfile {
 	}
 
 	public void addSound(@Nonnull final SoundEffect sound) {
-		this.sounds.add(sound);
+		this.sounds = MyUtils.append(this.sounds, sound);
 	}
 
 	public void clearSounds() {
-		this.sounds.clear();
+		this.sounds = BlockRegistry.NO_SOUNDS;
 	}
 
 	@Nonnull
-	public List<SoundEffect> getSounds() {
+	public SoundEffect[] getSounds() {
 		return this.sounds;
 	}
 
 	public void addStepSound(@Nonnull final SoundEffect sound) {
-		this.stepSounds.add(sound);
+		this.stepSounds = MyUtils.append(this.stepSounds, sound);
 	}
 
 	public void clearStepSounds() {
-		this.stepSounds.clear();
+		this.stepSounds = BlockRegistry.NO_SOUNDS;
 	}
 
 	@Nonnull
-	public List<SoundEffect> getStepSounds() {
+	public SoundEffect[] getStepSounds() {
 		return this.stepSounds;
 	}
 
 	public void addEffect(@Nonnull final BlockEffect effect) {
 		if (effect.getChance() > 0)
-			this.effects.add(effect);
+			this.effects = MyUtils.append(this.effects, effect);
 		else
-			this.alwaysOn.add(effect);
+			this.alwaysOn = MyUtils.append(this.alwaysOn, effect);
 	}
 
 	public void clearEffects() {
-		this.effects.clear();
-		this.alwaysOn.clear();
+		this.effects = BlockRegistry.NO_EFFECTS;
+		this.alwaysOn = BlockRegistry.NO_EFFECTS;
 	}
 
 	@Nonnull
-	public List<BlockEffect> getEffects() {
+	public BlockEffect[] getEffects() {
 		return this.effects;
 	}
 
 	@Nonnull
-	List<BlockEffect> getAlwaysOnEffects() {
+	public BlockEffect[] getAlwaysOnEffects() {
 		return this.alwaysOn;
 	}
 
@@ -123,7 +118,7 @@ public class BlockProfile {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("Block [").append(this.info.toString()).append("]");
 
-		if (!this.sounds.isEmpty()) {
+		if (this.sounds != BlockRegistry.NO_SOUNDS) {
 			boolean commaFlag = false;
 			builder.append(" chance:").append(this.chance);
 			builder.append("; sounds [");
@@ -139,7 +134,7 @@ public class BlockProfile {
 			builder.append("NO SOUNDS");
 		}
 
-		if (!this.stepSounds.isEmpty()) {
+		if (this.stepSounds != BlockRegistry.NO_SOUNDS) {
 			boolean commaFlag = false;
 			builder.append(" chance:").append(this.stepChance);
 			builder.append("; step sounds [");
@@ -155,7 +150,7 @@ public class BlockProfile {
 			builder.append("; NO STEP SOUNDS");
 		}
 
-		if (!this.effects.isEmpty() || !this.alwaysOn.isEmpty()) {
+		if (this.effects != this.alwaysOn) {
 			boolean commaFlag = false;
 			builder.append("; effects [");
 			for (final BlockEffect effect : this.effects) {

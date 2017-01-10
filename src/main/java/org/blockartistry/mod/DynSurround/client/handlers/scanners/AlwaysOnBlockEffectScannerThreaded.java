@@ -24,7 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers.scanners;
 
-import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -48,7 +47,7 @@ public class AlwaysOnBlockEffectScannerThreaded extends AlwaysOnBlockEffectScann
 		// because it is going back to another thread.
 		final BlockPos loc = new BlockPos(pos);
 		final World world = EnvironState.getWorld();
-		final List<BlockEffect> effects = this.blocks.getAlwaysOnEffects(state);
+		final BlockEffect[] effects = this.blocks.getAlwaysOnEffects(state);
 
 		for (final BlockEffect be : effects)
 			if (be.canTrigger(state, world, loc, rand)) {

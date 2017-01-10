@@ -37,6 +37,7 @@ import net.minecraft.block.BlockDynamicLiquid;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -61,7 +62,7 @@ public class WaterSplashJetEffect extends JetEffect {
 
 	private static boolean partialLiquidOrAir(final World world, final BlockPos pos) {
 		final IBlockState state = world.getBlockState(pos);
-		if (state.getMaterial() == Material.AIR)
+		if (state.getBlock() == Blocks.AIR)
 			return true;
 
 		if (!isLiquidBlock(state.getBlock()))
