@@ -215,7 +215,7 @@ public class Solver {
 		IBlockState in = world.getBlockState(pos);
 		final IBlockState above = world.getBlockState(pos.up());
 
-		IAcoustic[] association = isolator.getBlockMap().getBlockMapSubstrate(above, "carpet");
+		IAcoustic[] association = isolator.getBlockMap().getBlockSubstrateAcoustics(above, "carpet");
 
 		// PFLog.debugf("Walking on block: %0 -- Being in block: %1", in,
 		// above);
@@ -228,7 +228,7 @@ public class Solver {
 
 			if (world.isAirBlock(pos)) {
 				final IBlockState below = world.getBlockState(pos.down());
-				association = this.isolator.getBlockMap().getBlockMapSubstrate(below, "bigger");
+				association = this.isolator.getBlockMap().getBlockSubstrateAcoustics(below, "bigger");
 				if (association != null) {
 					pos.move(EnumFacing.DOWN);
 					in = below;
@@ -237,7 +237,7 @@ public class Solver {
 			}
 
 			if (association == null) {
-				association = isolator.getBlockMap().getBlockMap(in);
+				association = isolator.getBlockMap().getBlockAcoustics(in);
 			}
 
 			if (association != null && association != AcousticsManager.NOT_EMITTER) {
@@ -248,7 +248,7 @@ public class Solver {
 				// => this block of code is here, not outside this if else
 				// group.
 
-				IAcoustic[] foliage = this.isolator.getBlockMap().getBlockMapSubstrate(above, "foliage");
+				IAcoustic[] foliage = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, "foliage");
 				if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 					association = MyUtils.concatenate(association, foliage);
 					ModLog.debug("Foliage detected");
@@ -397,13 +397,13 @@ public class Solver {
 		 * => this block of code is here, not outside this if else group.
 		 */
 
-		IAcoustic[] foliage = this.isolator.getBlockMap().getBlockMapSubstrate(above, "foliage");
+		IAcoustic[] foliage = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, "foliage");
 		if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 			// we discard the normal block association, and mark the foliage as
 			// detected
 			// association = association + "," + foliage;
 			association = foliage;
-			IAcoustic[] isMessy = this.isolator.getBlockMap().getBlockMapSubstrate(above, "messy");
+			IAcoustic[] isMessy = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, "messy");
 
 			if (isMessy != null && isMessy == AcousticsManager.MESSY_GROUND)
 				found = true;

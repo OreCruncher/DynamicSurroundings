@@ -125,14 +125,14 @@ public class BlockMap {
 	}
 
 	@Nullable
-	public IAcoustic[] getBlockMap(@Nonnull final IBlockState state) {
-		return this.metaMap.getBlockMap(state);
+	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state) {
+		return this.metaMap.getBlockAcoustics(state);
 	}
 
 	@Nullable
-	public IAcoustic[] getBlockMapSubstrate(@Nonnull final IBlockState state, @Nonnull final String substrate) {
+	public IAcoustic[] getBlockSubstrateAcoustics(@Nonnull final IBlockState state, @Nonnull final String substrate) {
 		BlockAcousticMap sub = this.substrateMap.get(substrate);
-		return sub != null ? sub.getBlockMap(state) : null;
+		return sub != null ? sub.getBlockAcousticsWithSpecial(state) : null;
 	}
 
 	private void put(@Nonnull final Block block, final int meta, @Nonnull final String substrate,
@@ -199,14 +199,14 @@ public class BlockMap {
 
 	public void collectData(@Nonnull final IBlockState state, @Nonnull final List<String> data) {
 
-		final IAcoustic[] temp = getBlockMap(state);
+		final IAcoustic[] temp = getBlockAcoustics(state);
 		if (temp != null)
 			data.add(combine(temp));
 
 		this.substrateMap.forEachEntry(new TObjectObjectProcedure<String, BlockAcousticMap>() {
 			@Override
 			public boolean execute(@Nonnull final String a, @Nonnull final BlockAcousticMap b) {
-				final IAcoustic[] acoustics = b.getBlockMapWithSpecial(state);
+				final IAcoustic[] acoustics = b.getBlockAcousticsWithSpecial(state);
 				if (acoustics != null)
 					data.add(a + ":" + combine(acoustics));
 				return true;

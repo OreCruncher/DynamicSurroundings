@@ -38,8 +38,13 @@ public class BlockAcousticMap extends THashMap<BlockInfo, IAcoustic[]> {
 
 	private final BlockInfoMutable key = new BlockInfoMutable();
 
+	/**
+	 * Obtain acoustic information for a block.  If the block has
+	 * variants (subtypes) it will fall back to searching for a
+	 * generic if a specific one is not found.
+	 */
 	@Nullable
-	public IAcoustic[] getBlockMap(@Nonnull final IBlockState state) {
+	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state) {
 		this.key.set(state);
 		IAcoustic[] result = this.get(this.key);
 		if (result == null && this.key.hasSubTypes()) {
@@ -48,8 +53,14 @@ public class BlockAcousticMap extends THashMap<BlockInfo, IAcoustic[]> {
 		return result;
 	}
 
+	/**
+	 * Similar to getBlockMap(), but includes an additional check if
+	 * the block has special metadata.  For example, a BlockCrop may
+	 * not have subtypes, but it would have growth data stored in
+	 * the meta.  An example of this is Wheat.
+	 */
 	@Nullable
-	public IAcoustic[] getBlockMapWithSpecial(@Nonnull final IBlockState state) {
+	public IAcoustic[] getBlockAcousticsWithSpecial(@Nonnull final IBlockState state) {
 		this.key.set(state);
 		IAcoustic[] result = this.get(this.key);
 		if (result == null) {
