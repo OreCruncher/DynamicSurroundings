@@ -43,6 +43,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public final class SoundEffect implements ISpecialEffect {
 
@@ -150,18 +152,22 @@ public final class SoundEffect implements ISpecialEffect {
 		return this.type == SoundType.PERIODIC || this.type == SoundType.BACKGROUND;
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public IMySound createSound(@Nonnull final BlockPos pos, final Random rand) {
 		return new SpotSound(pos, this, getRepeat(rand));
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public IMySound createSound(@Nonnull final EntityPlayer player) {
 		return new SpotSound(player, this);
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public IMySound createSound(@Nonnull final BlockPos pos, final int tickDelay) {
 		return new SpotSound(pos, this, tickDelay);
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public IMySound createSound(@Nonnull final EntityPlayer player, final boolean fadeIn, final Random rand) {
 		return new TrackingSound(player, this, fadeIn);
 	}

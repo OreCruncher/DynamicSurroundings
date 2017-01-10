@@ -24,7 +24,10 @@
 package org.blockartistry.mod.DynSurround.client.sound;
 
 import net.minecraft.client.audio.ISound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public interface IMySound extends ISound {
 	
 	public void setVolume(final float volume);
