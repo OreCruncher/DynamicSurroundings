@@ -1,9 +1,5 @@
-###Status
-Master Branch: Not currently building
-Overall Status: ALPHA
-
 ###Dynamic Surroundings
-Forge 1.10.2 mod that improves the audio and visual experience of Minecraft.
+Forge 1.11.2 mod that improves the audio and visual experience of Minecraft.  Same feature set as the 1.10.x version.
 
 ###License
 The MIT License (MIT)
