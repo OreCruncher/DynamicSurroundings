@@ -84,7 +84,7 @@ public final class VersionCheck {
 			final String updateMessage = getUpdateMessage(DSurround.MOD_ID);
 			if (updateMessage != null) {
 				final ITextComponent component = ITextComponent.Serializer.jsonToComponent(updateMessage);
-				event.player.addChatMessage(component);
+				event.player.sendMessage(component);
 			}
 		}
 	}

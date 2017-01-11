@@ -127,6 +127,13 @@ public class WorldEventDetector implements IWorldEventListener {
 
 	}
 
+	@Override
+	public void spawnParticle(int p_190570_1_, boolean p_190570_2_, boolean p_190570_3_, double p_190570_4_,
+			double p_190570_6_, double p_190570_8_, double p_190570_10_, double p_190570_12_, double p_190570_14_,
+			int... p_190570_16_) {
+		
+	}
+
 	@SubscribeEvent(receiveCanceled = false)
 	public static void onWorldLoad(final WorldEvent.Load event) {
 		// Only want client side world things
@@ -134,4 +141,5 @@ public class WorldEventDetector implements IWorldEventListener {
 			return;
 		event.getWorld().addEventListener(new WorldEventDetector(event.getWorld()));
 	}
+
 }

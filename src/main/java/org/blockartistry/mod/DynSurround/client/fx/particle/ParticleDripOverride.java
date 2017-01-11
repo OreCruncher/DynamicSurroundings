@@ -67,16 +67,16 @@ public class ParticleDripOverride extends ParticleDrip {
 			} else if (firstTime) {
 				firstTime = false;
 
-				final int x = MathHelper.floor_double(this.posX);
-				final int y = MathHelper.floor_double(this.posY + 0.3D);
-				final int z = MathHelper.floor_double(this.posZ);
+				final int x = MathHelper.floor(this.posX);
+				final int y = MathHelper.floor(this.posY + 0.3D);
+				final int z = MathHelper.floor(this.posZ);
 				final BlockPos pos = new BlockPos(x, y, z);
-				final IBlockState state = worldObj.getBlockState(pos);
+				final IBlockState state = this.world.getBlockState(pos);
 				final Block block = state.getBlock();
-				if (!block.isAir(state, this.worldObj, pos) && !block.isLeaves(state, this.worldObj, pos)) {
+				if (!block.isAir(state, this.world, pos) && !block.isLeaves(state, this.world, pos)) {
 					// Find out where it is going to hit
 					BlockPos soundPos = pos.down();
-					while (soundPos.getY() > 0 && worldObj.isAirBlock(soundPos))
+					while (soundPos.getY() > 0 && world.isAirBlock(soundPos))
 						soundPos = soundPos.down();
 
 					if (soundPos.getY() > 0 && state.getMaterial().isSolid()) {

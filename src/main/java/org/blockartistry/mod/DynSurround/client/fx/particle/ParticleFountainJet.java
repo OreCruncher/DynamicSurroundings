@@ -57,7 +57,7 @@ public class ParticleFountainJet extends ParticleJet {
 	protected void spawnJetParticle() {
 		final double motionX = RANDOM.nextGaussian() * 0.03D;
 		final double motionZ = RANDOM.nextGaussian() * 0.03D;
-		final Particle particle = new ParticleFountain(this.worldObj, this.posX, this.posY, this.posZ, motionX, 0.5D,
+		final Particle particle = new ParticleFountain(this.world, this.posX, this.posY, this.posZ, motionX, 0.5D,
 				motionZ, this.block).init();
 		addParticle(particle);
 	}

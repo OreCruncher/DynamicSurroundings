@@ -99,7 +99,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			final SeasonRegistry seasons = RegistryManager.get(RegistryType.SEASON);
 
 			EnvironState.player = player;
-			EnvironState.world = player.worldObj;
+			EnvironState.world = player.world;
 			EnvironState.playerBiome = PlayerUtils.getPlayerBiome(player, false);
 			EnvironState.biomeName = EnvironState.playerBiome.getBiomeName();
 			EnvironState.season = seasons.getData(world).getSeasonType();

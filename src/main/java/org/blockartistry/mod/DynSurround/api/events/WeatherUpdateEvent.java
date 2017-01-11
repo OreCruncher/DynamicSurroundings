@@ -78,8 +78,8 @@ public class WeatherUpdateEvent extends Event {
 			final int nextRainChange, final float thunderStrength, final int nextThunderChange,
 			final int nextThunderEvent) {
 		this.world = world;
-		this.maxRainIntensity = MathHelper.clamp_float(maxRainIntensity, 0, 1.0F);
-		this.rainIntensity = MathHelper.clamp_float(rainIntensity, 0.0F, this.maxRainIntensity);
+		this.maxRainIntensity = MathHelper.clamp(maxRainIntensity, 0, 1.0F);
+		this.rainIntensity = MathHelper.clamp(rainIntensity, 0.0F, this.maxRainIntensity);
 		this.nextRainChange = nextRainChange;
 		this.thunderStrength = thunderStrength;
 		this.nextThunderChange = nextThunderChange;

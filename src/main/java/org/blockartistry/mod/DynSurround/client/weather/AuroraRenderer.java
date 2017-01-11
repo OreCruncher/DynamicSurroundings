@@ -70,15 +70,15 @@ public final class AuroraRenderer implements IAtmosRenderer {
 			tranY = ModOptions.playerFixedHeight;
 		} else {
 			// Adjust to keep aurora at the same altitude
-			tranY = this.dimensions.getCloudHeight(mc.theWorld) + 5 - (float) (mc.thePlayer.lastTickPosY
-					+ (mc.thePlayer.posY - mc.thePlayer.lastTickPosY) * partialTick);
+			tranY = this.dimensions.getCloudHeight(mc.world) + 5 - (float) (mc.player.lastTickPosY
+					+ (mc.player.posY - mc.player.lastTickPosY) * partialTick);
 		}
 
 		final double tranX = aurora.posX
-				- (mc.thePlayer.lastTickPosX + (mc.thePlayer.posX - mc.thePlayer.lastTickPosX) * partialTick);
+				- (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTick);
 
 		final double tranZ = aurora.posZ
-				- (mc.thePlayer.lastTickPosZ + (mc.thePlayer.posZ - mc.thePlayer.lastTickPosZ) * partialTick);
+				- (mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * partialTick);
 
 		if (ModOptions.auroraAnimate)
 			aurora.translate(partialTick);

@@ -33,15 +33,15 @@ public final class DiurnalUtils {
 	}
 
 	public static boolean isDaytime(@Nonnull final World world) {
-		return !world.provider.getHasNoSky() && world.provider.getSunBrightnessFactor(1.0f) > 0.6f;
+		return !world.provider.hasNoSky() && world.provider.getSunBrightnessFactor(1.0f) > 0.6f;
 	}
 
 	public static boolean isNighttime(@Nonnull final World world) {
-		return !world.provider.getHasNoSky() && world.provider.getSunBrightnessFactor(1.0f) < 0.1f;
+		return !world.provider.hasNoSky() && world.provider.getSunBrightnessFactor(1.0f) < 0.1f;
 	}
 
 	public static boolean isSunrise(@Nonnull final World world) {
-		if (world.provider.getHasNoSky())
+		if (world.provider.hasNoSky())
 			return false;
 
 		float brFactor = world.provider.getSunBrightnessFactor(1.0f);
@@ -49,7 +49,7 @@ public final class DiurnalUtils {
 	}
 
 	public static boolean isSunset(@Nonnull final World world) {
-		if (world.provider.getHasNoSky())
+		if (world.provider.hasNoSky())
 			return false;
 
 		float brFactor = world.provider.getSunBrightnessFactor(1.0f);

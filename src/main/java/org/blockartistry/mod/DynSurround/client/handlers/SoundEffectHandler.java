@@ -344,7 +344,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 		if (ModOptions.autoConfigureChannels && totalChannels > 64) {
 			final int maxCount = Math.max((totalChannels + 1) / 2, 32);
-			normalChannelCount = MathHelper.floor_float(maxCount * 0.875F);
+			normalChannelCount = MathHelper.floor(maxCount * 0.875F);
 			streamChannelCount = maxCount - normalChannelCount;
 		}
 
@@ -400,7 +400,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 			try {
 				final SoundRegistry registry = RegistryManager.get(RegistryType.SOUND);
 				final float volumeScale = registry.getVolumeScale(soundName);
-				result = (float) MathHelper.clamp_double(
+				result = (float) MathHelper.clamp(
 						(double) sound.getVolume() * (double) getSoundCategoryVolume(sound.getCategory()) * volumeScale,
 						0.0D, 1.0D);
 			} catch (final Throwable t) {
@@ -428,7 +428,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	 */
 	@SubscribeEvent
 	public void playerJoinWorldEvent(@Nonnull final EntityJoinWorldEvent event) {
-		if (event.getEntity().worldObj.isRemote && EnvironState.isPlayer(event.getEntity()))
+		if (event.getEntity().world.isRemote && EnvironState.isPlayer(event.getEntity()))
 			clearSounds();
 	}
 

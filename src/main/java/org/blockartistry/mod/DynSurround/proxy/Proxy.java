@@ -27,8 +27,6 @@ package org.blockartistry.mod.DynSurround.proxy;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModEnvironment;
-import org.blockartistry.mod.DynSurround.client.waila.WailaEntityHandler;
-import org.blockartistry.mod.DynSurround.client.waila.WailaHandler;
 import org.blockartistry.mod.DynSurround.commands.CommandDS;
 import org.blockartistry.mod.DynSurround.entity.EntityEmojiCapability;
 import org.blockartistry.mod.DynSurround.entity.EntityEventHandler;
@@ -69,8 +67,6 @@ public class Proxy {
 		ModEnvironment.initialize();
 
 		Network.initialize();
-		WailaHandler.register();
-		WailaEntityHandler.register();
 		
 		// General event handlers
 		EntityEventHandler.register();

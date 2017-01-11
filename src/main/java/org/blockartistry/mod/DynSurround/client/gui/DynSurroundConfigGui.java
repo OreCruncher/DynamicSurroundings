@@ -200,7 +200,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 			prop.setDefaultValue(100);
 			prop.setRequiresMcRestart(false);
 			prop.setRequiresWorldRestart(false);
-			prop.set(MathHelper.floor_float(registry.getVolumeScale(sound) * 100));
+			prop.set(MathHelper.floor(registry.getVolumeScale(sound) * 100));
 			prop.setConfigEntryClass(NumberSliderEntry.class);
 			cat.put(sound, prop);
 		}

@@ -47,6 +47,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.passive.EntitySquid;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class EntityAIChat extends EntityAIBase {
@@ -101,9 +102,13 @@ public class EntityAIChat extends EntityAIBase {
 
 	@Nonnull
 	protected static String getEntityClassName(@Nonnull final Class<? extends EntityLiving> entityClass) {
-		final String name = EntityList.getEntityStringFromClass(entityClass);
+		String name = null;
+		final ResourceLocation key = EntityList.getKey(entityClass);
+		if(key != null) {
+			name = EntityList.getTranslationName(key);
+		}
 		if(name == null) {
-			ModLog.debug("getEntityStringFromClass([%s]) returned null", entityClass.getName());
+			ModLog.debug("Can't find entity name for class [%s]", entityClass.getName());
 			return "EntityHasNoClass";
 		}
 		return name.toLowerCase();

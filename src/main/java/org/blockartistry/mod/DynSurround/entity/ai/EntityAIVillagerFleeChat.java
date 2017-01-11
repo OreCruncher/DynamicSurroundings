@@ -56,7 +56,7 @@ public class EntityAIVillagerFleeChat extends EntityAIChat {
 
 	protected boolean villagerThreatened() {
 		final AxisAlignedBB bbox = this.theEntity.getEntityBoundingBox().expand((double) 8.0, 3.0D, (double) 8.0);
-		return !this.theEntity.worldObj
+		return !this.theEntity.world
 				.<EntityZombie> getEntitiesWithinAABB(EntityZombie.class, bbox, Predicates.and(this.preds)).isEmpty();
 	}
 

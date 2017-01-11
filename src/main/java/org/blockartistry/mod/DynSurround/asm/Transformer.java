@@ -47,17 +47,17 @@ public class Transformer implements IClassTransformer {
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] basicClass) {
-		if ("net.minecraft.client.renderer.EntityRenderer".equals(name) || "bnz".equals(name) || "bnd".equals(name)) {
+		if ("net.minecraft.client.renderer.EntityRenderer".equals(name) || "bqc".equals(name)) {
 			if (ModOptions.enableWeatherASM) {
 				logger.debug("Transforming EntityRenderer...");
 				return transformEntityRenderer(basicClass);
 			}
-		} else if ("net.minecraft.world.WorldServer".equals(name) || "ls".equals(name) || "lq".equals(name)) {
+		} else if ("net.minecraft.world.WorldServer".equals(name) || "lw".equals(name)) {
 			if (ModOptions.enableResetOnSleepASM) {
 				logger.debug("Transforming WorldServer...");
 				return transformWorldServer(basicClass);
 			}
-		} else if ("net.minecraft.client.audio.SoundManager".equals(name) || "bzu".equals(name) || "byt".equals(name)) {
+		} else if ("net.minecraft.client.audio.SoundManager".equals(name) || "ccn".equals(name)) {
 			if (ModOptions.enableSoundVolumeASM) {
 				logger.debug("Transforming SoundEffectHandler...");
 				return transformSoundManager(basicClass);

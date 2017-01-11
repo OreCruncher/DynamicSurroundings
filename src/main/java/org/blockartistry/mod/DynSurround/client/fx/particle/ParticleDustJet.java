@@ -55,7 +55,7 @@ public class ParticleDustJet extends ParticleJet {
 
 	@Override
 	protected void spawnJetParticle() {
-		final Particle particle = new ParticleDust(this.worldObj, this.posX, this.posY, this.posZ, this.blockState)
+		final Particle particle = new ParticleDust(this.world, this.posX, this.posY, this.posZ, this.blockState)
 				.init();
 		addParticle(particle);
 	}

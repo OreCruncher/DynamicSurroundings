@@ -71,7 +71,7 @@ public final class PopoffEffectHandler extends EffectHandlerBase {
 			ParticleHelper.addParticle(new ParticleDamagePopOff(world, data.posX, data.posY, data.posZ, data.amount));
 		} else if (data.amount < 0) {
 			ParticleHelper.addParticle(
-					new ParticleHealPopOff(world, data.posX, data.posY, data.posZ, MathHelper.abs_int(data.amount)));
+					new ParticleHealPopOff(world, data.posX, data.posY, data.posZ, MathHelper.abs(data.amount)));
 		}
 	}
 

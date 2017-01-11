@@ -29,7 +29,6 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.ModEnvironment;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo;
-import org.blockartistry.mod.DynSurround.registry.season.SeasonInfoCalendar;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfoNether;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfoToughAsNails;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -56,11 +55,6 @@ public final class SeasonRegistry extends Registry {
 			ModLog.info("Creating Tough as Nails SeasonInfo for dimension %s",
 					world.provider.getDimensionType().getName());
 			return new SeasonInfoToughAsNails(world);
-		}
-
-		if (ModEnvironment.CalendarAPI.isLoaded()) {
-			ModLog.info("Creating Calendar SeasonInfo for dimension %s", world.provider.getDimensionType().getName());
-			return new SeasonInfoCalendar(world);
 		}
 
 		ModLog.info("Creating default SeasonInfo for dimension %s", world.provider.getDimensionType().getName());

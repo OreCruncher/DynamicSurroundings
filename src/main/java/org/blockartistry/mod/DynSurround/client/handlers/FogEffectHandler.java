@@ -86,7 +86,7 @@ public class FogEffectHandler extends EffectHandlerBase {
 		final float factor = 1.0F + world.getRainStrength(1.0F);
 		final float skyHeight = getDimensionRegistry().getSkyHeight(world) / factor;
 		final float groundLevel = getDimensionRegistry().getSeaLevel(world);
-		final float ratio = (MathHelper.floor_double(player.posY + player.getEyeHeight()) - groundLevel)
+		final float ratio = (MathHelper.floor(player.posY + player.getEyeHeight()) - groundLevel)
 				/ (skyHeight - groundLevel);
 		return ratio * ratio * ratio * ratio * ModOptions.elevationHazeFactor;
 	}
@@ -154,7 +154,7 @@ public class FogEffectHandler extends EffectHandlerBase {
 		if (currentFogLevel == 0)
 			return;
 
-		final IBlockState block = ActiveRenderInfo.getBlockStateAtEntityViewpoint(event.getEntity().worldObj, event.getEntity(),
+		final IBlockState block = ActiveRenderInfo.getBlockStateAtEntityViewpoint(event.getEntity().world, event.getEntity(),
 				(float) event.getRenderPartialTicks());
 		if (block.getMaterial() == Material.LAVA || block.getMaterial() == Material.WATER)
 			return;

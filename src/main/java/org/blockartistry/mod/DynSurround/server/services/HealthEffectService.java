@@ -63,8 +63,8 @@ public final class HealthEffectService extends Service {
 		if(!ModOptions.enableDamagePopoffs)
 			return;
 		
-		if (event == null || event.getEntity() == null || event.getEntity().worldObj == null
-				|| event.getEntity().worldObj.isRemote)
+		if (event == null || event.getEntity() == null || event.getEntity().world == null
+				|| event.getEntity().world.isRemote)
 			return;
 
 		// Living heal should handle heals - I think..
@@ -99,8 +99,8 @@ public final class HealthEffectService extends Service {
 		if(!ModOptions.enableDamagePopoffs)
 			return;
 
-		if (event == null || event.getEntity() == null || event.getEntity().worldObj == null
-				|| event.getEntity().worldObj.isRemote)
+		if (event == null || event.getEntity() == null || event.getEntity().world == null
+				|| event.getEntity().world.isRemote)
 			return;
 
 		// Just in case

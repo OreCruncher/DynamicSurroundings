@@ -24,9 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.util;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -43,6 +41,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -64,7 +63,7 @@ public final class MCHelper {
 		if (item.getHasSubtypes())
 			return true;
 
-		final List<ItemStack> stacks = new ArrayList<ItemStack>();
+		final NonNullList<ItemStack> stacks = NonNullList.create();
 		block.getSubBlocks(item, null, stacks);
 		return stacks.size() > 1;
 	}

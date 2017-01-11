@@ -66,7 +66,7 @@ public class PotionHUD extends Gui implements IGuiOverlay {
 
 		event.setCanceled(true);
 
-		final EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		final EntityPlayer player = Minecraft.getMinecraft().player;
 		final Collection<PotionEffect> collection = player.getActivePotionEffects();
 		if (collection.isEmpty())
 			return;

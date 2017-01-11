@@ -40,28 +40,6 @@ public class ParticleSteamJet extends ParticleJet {
 				final double dY, final double dZ) {
 			super(world, x, y, z, dX, dY, dZ);
 		}
-
-		@Override
-		public void onUpdate() {
-			this.prevPosX = this.posX;
-			this.prevPosY = this.posY;
-			this.prevPosZ = this.posZ;
-
-			if (this.particleAge++ >= this.particleMaxAge) {
-				this.setExpired();
-			}
-
-			this.setParticleTextureIndex(7 - this.particleAge * 8 / this.particleMaxAge);
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
-			this.motionX *= 0.9599999785423279D;
-			this.motionY *= 0.9599999785423279D;
-			this.motionZ *= 0.9599999785423279D;
-
-			if (this.isCollided) {
-				this.motionX *= 0.699999988079071D;
-				this.motionZ *= 0.699999988079071D;
-			}
-		}
 	}
 
 	public ParticleSteamJet(final int strength, final World world, final double x, final double y, final double z) {
@@ -70,14 +48,14 @@ public class ParticleSteamJet extends ParticleJet {
 
 	@Override
 	public boolean shouldDie() {
-		return !SteamJetEffect.isValidSpawnBlock(this.worldObj, this.getPos());
+		return !SteamJetEffect.isValidSpawnBlock(this.world, this.getPos());
 	}
 
 	@Override
 	protected void spawnJetParticle() {
 		final double motionX = RANDOM.nextGaussian() * 0.02D;
 		final double motionZ = RANDOM.nextGaussian() * 0.02D;
-		final Particle particle = new ParticleSteamCloud(this.worldObj, this.posX, this.posY, this.posZ, motionX, 0.1F,
+		final Particle particle = new ParticleSteamCloud(this.world, this.posX, this.posY, this.posZ, motionX, 0.1F,
 				motionZ);
 		addParticle(particle);
 	}

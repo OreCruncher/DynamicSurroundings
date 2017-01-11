@@ -103,14 +103,14 @@ public class EffectManager {
 		if (Minecraft.getMinecraft().isGamePaused())
 			return;
 
-		final World world = FMLClientHandler.instance().getClient().theWorld;
+		final World world = FMLClientHandler.instance().getClient().world;
 		if (world == null)
 			return;
 
 		if (event.phase == Phase.START) {
 			DSurround.getProfiler().startSection("DSurroundEffectManager");
 
-			final EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
+			final EntityPlayer player = FMLClientHandler.instance().getClient().player;
 
 			// Fire pre calls
 			for (final EffectHandlerBase handler : effectHandlers) {

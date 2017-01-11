@@ -26,13 +26,19 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModLog;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ParticleEntity extends ParticleAsset {
 
 	protected final Entity prototype;
@@ -46,9 +52,21 @@ public class ParticleEntity extends ParticleAsset {
 
 	public ParticleEntity(@Nonnull String entity, @Nonnull final World world, final double x, final double y,
 			final double z, final double dX, final double dY, final double dZ) {
+		this(new ResourceLocation(entity), world, x, y, z, dX, dY, dZ);
+	}
+
+	public ParticleEntity(@Nonnull ResourceLocation entity, @Nonnull final World world, final double x, final double y,
+			final double z, final double dX, final double dY, final double dZ) {
 		super(world, x, y, z, dX, dY, dZ);
 
-		this.prototype = EntityList.createEntityByName(entity, world);
+		this.prototype = EntityList.createEntityByIDFromName(entity, world);
+		if(this.prototype == null) {
+			this.renderer = null;
+			this.normalScale = 0;
+			ModLog.warn("Entity missing? [%s]", entity.toString());
+			return;
+		}
+		
 		this.renderer = Minecraft.getMinecraft().getRenderManager();
 
 		// From mob spawner block
@@ -62,7 +80,7 @@ public class ParticleEntity extends ParticleAsset {
 		this.normalScale = f;
 		this.setScale(0.1F);
 	}
-	
+
 	@Override
 	public void setScale(final float scale) {
 		super.setScale(scale * this.normalScale);
@@ -70,11 +88,14 @@ public class ParticleEntity extends ParticleAsset {
 
 	@Override
 	protected void doModelTranslate() {
-        GlStateManager.translate(0.0F, -0.2F, 0.0F);
+		GlStateManager.translate(0.0F, -0.2F, 0.0F);
 	}
-	
+
 	@Override
 	protected void handleRender(final float partialTicks) {
+
+		if (this.prototype == null)
+			return;
 
 		// From mob spawner
 		this.prototype.setLocationAndAngles(posX, posY, posZ, 0.0F, 0.0F);

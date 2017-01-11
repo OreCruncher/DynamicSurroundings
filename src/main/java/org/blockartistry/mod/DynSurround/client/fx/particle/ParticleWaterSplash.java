@@ -64,14 +64,14 @@ public class ParticleWaterSplash extends ParticleJet {
 			this.prevPosY = this.posY;
 			this.prevPosZ = this.posZ;
 			this.motionY -= (double) this.particleGravity;
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
+			this.move(this.motionX, this.motionY, this.motionZ);
 			this.motionX *= 0.9800000190734863D;
 			this.motionY *= 0.9800000190734863D;
 			this.motionZ *= 0.9800000190734863D;
 
 			if (this.particleMaxAge-- <= 0) {
 				this.setExpired();
-			} else if (WorldUtils.isSolidBlock(this.worldObj, new BlockPos(this.posX, this.posY, this.posZ))) {
+			} else if (WorldUtils.isSolidBlock(this.world, new BlockPos(this.posX, this.posY, this.posZ))) {
 				this.setExpired();
 			}
 		}
@@ -86,7 +86,7 @@ public class ParticleWaterSplash extends ParticleJet {
 
 	@Override
 	public boolean shouldDie() {
-		return !WaterSplashJetEffect.isValidSpawnBlock(this.worldObj, this.getPos());
+		return !WaterSplashJetEffect.isValidSpawnBlock(this.world, this.getPos());
 	}
 
 	// Entity.resetHeight()
@@ -109,14 +109,14 @@ public class ParticleWaterSplash extends ParticleJet {
 		for (int j = 0; (float) j < splashCount; ++j) {
 			final double xOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
 			final double zOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
-			if (WorldUtils.isSolidBlock(this.worldObj,
+			if (WorldUtils.isSolidBlock(this.world,
 					new BlockPos(this.posX + xOffset, this.posY, this.posZ + zOffset)))
 				continue;
 
 			final double motionX = xOffset * (this.jetStrength / 40.0D);
 			final double motionY = 0.1D + RANDOM.nextFloat() * this.jetStrength / 20.0D;
 			final double motionZ = zOffset * (this.jetStrength / 40.D);
-			final Particle particle = new ParticleWaterSpray(this.worldObj, this.posX + xOffset, (double) (this.posY),
+			final Particle particle = new ParticleWaterSpray(this.world, this.posX + xOffset, (double) (this.posY),
 					this.posZ + zOffset, motionX, motionY, motionZ);
 			addParticle(particle);
 		}

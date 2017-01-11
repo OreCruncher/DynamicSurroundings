@@ -71,11 +71,11 @@ public final class DimensionInfo {
 			if (this.skyHeight == null)
 				this.skyHeight = provider.getHeight();
 			if (this.hasHaze == null)
-				this.hasHaze = !provider.getHasNoSky();
+				this.hasHaze = !provider.hasNoSky();
 			if (this.hasAuroras == null)
-				this.hasAuroras = !provider.getHasNoSky();
+				this.hasAuroras = !provider.hasNoSky();
 			if (this.hasWeather == null)
-				this.hasWeather = !provider.getHasNoSky();
+				this.hasWeather = !provider.hasNoSky();
 			if (this.cloudHeight == null)
 				this.cloudHeight = this.hasHaze ? this.skyHeight / 2 : this.skyHeight;
 			if (this.spaceHeight == null)

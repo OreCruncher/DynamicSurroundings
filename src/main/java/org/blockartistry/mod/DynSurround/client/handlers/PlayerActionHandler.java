@@ -64,10 +64,10 @@ public class PlayerActionHandler extends EffectHandlerBase {
 		if (!ModOptions.enableJumpSound)
 			return;
 
-		if (event.getEntity() == null || event.getEntity().worldObj == null)
+		if (event.getEntity() == null || event.getEntity().world == null)
 			return;
 
-		if (event.getEntity().worldObj.isRemote && EnvironState.isPlayer(event.getEntity()))
+		if (event.getEntity().world.isRemote && EnvironState.isPlayer(event.getEntity()))
 			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), JUMP);
 	}
 
@@ -76,10 +76,10 @@ public class PlayerActionHandler extends EffectHandlerBase {
 		if (!ModOptions.enableSwingSound)
 			return;
 
-		if (event.getEntityPlayer() == null || event.getEntityPlayer().worldObj == null)
+		if (event.getEntityPlayer() == null || event.getEntityPlayer().world == null)
 			return;
 
-		if (event.getEntityPlayer().worldObj.isRemote && EnvironState.isPlayer(event.getEntityPlayer())) {
+		if (event.getEntityPlayer().world.isRemote && EnvironState.isPlayer(event.getEntityPlayer())) {
 			final ItemStack currentItem = event.getEntityPlayer().getHeldItemMainhand();
 			if (currentItem != null) {
 				SoundEffect sound = null;
@@ -104,10 +104,10 @@ public class PlayerActionHandler extends EffectHandlerBase {
 		if (this.craftSoundThrottle >= (EnvironState.getTickCounter() - 30))
 			return;
 
-		if (event.player == null || event.player.worldObj == null)
+		if (event.player == null || event.player.world == null)
 			return;
 
-		if (event.player.worldObj.isRemote && EnvironState.isPlayer(event.player)) {
+		if (event.player.world.isRemote && EnvironState.isPlayer(event.player)) {
 			craftSoundThrottle = EnvironState.getTickCounter();
 			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), CRAFTING);
 		}
@@ -119,10 +119,10 @@ public class PlayerActionHandler extends EffectHandlerBase {
 		if (!ModOptions.enableBowPullSound)
 			return;
 
-		if (event.getEntityPlayer() == null || event.getEntityPlayer().worldObj == null || event.getItemStack() == null)
+		if (event.getEntityPlayer() == null || event.getEntityPlayer().world == null || event.getItemStack() == null)
 			return;
 
-		if (event.getEntityPlayer().worldObj.isRemote && this.itemRegistry.doBowSound(event.getItemStack())) {
+		if (event.getEntityPlayer().world.isRemote && this.itemRegistry.doBowSound(event.getItemStack())) {
 			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), BOW_PULL);
 		}
 	}

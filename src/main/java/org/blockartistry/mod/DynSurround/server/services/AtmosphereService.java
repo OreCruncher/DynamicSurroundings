@@ -98,7 +98,7 @@ public final class AtmosphereService extends Service {
 		// If we get here and the world has no sky we have a dimension
 		// like the Nether. We need to turn the crank manually to get
 		// Minecraft to do what we need.
-		if (world.provider.getHasNoSky()) {
+		if (world.provider.hasNoSky()) {
 			world.provider.hasNoSky = false;
 			try {
 				world.updateWeatherBody();

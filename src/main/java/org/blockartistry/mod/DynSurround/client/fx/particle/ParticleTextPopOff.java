@@ -70,7 +70,7 @@ public class ParticleTextPopOff extends Particle {
 		this.motionY = dY;
 		this.motionZ = dZ;
 		final float dist = MathHelper
-				.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+				.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
 		this.motionX = (this.motionX / dist * 0.12D);
 		this.motionY = (this.motionY / dist * 0.12D);
 		this.motionZ = (this.motionZ / dist * 0.12D);
@@ -81,15 +81,15 @@ public class ParticleTextPopOff extends Particle {
 		this.particleMaxAge = LIFESPAN;
 
 		this.font = Minecraft.getMinecraft().fontRendererObj;
-		this.drawX = -MathHelper.floor_float(this.font.getStringWidth(this.text) / 2.0F) + 1;
-		this.drawY = -MathHelper.floor_float(this.font.FONT_HEIGHT / 2.0F) + 1;
+		this.drawX = -MathHelper.floor(this.font.getStringWidth(this.text) / 2.0F) + 1;
+		this.drawY = -MathHelper.floor(this.font.FONT_HEIGHT / 2.0F) + 1;
 	}
 
 	@Override
 	public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX,
 			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		this.rotationYaw = (-Minecraft.getMinecraft().thePlayer.rotationYaw);
-		this.rotationPitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
+		this.rotationYaw = (-Minecraft.getMinecraft().player.rotationYaw);
+		this.rotationPitch = Minecraft.getMinecraft().player.rotationPitch;
 
 		final float locX = ((float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX));
 		final float locY = ((float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY));

@@ -66,7 +66,7 @@ public final class PlayerUtils {
 		final int theX = MathStuff.floor_double(player.posX);
 		final int theY = MathStuff.floor_double(player.posY);
 		final int theZ = MathStuff.floor_double(player.posZ);
-		BiomeInfo biome = biomes.get(player.worldObj.getBiome(new BlockPos(theX, 0, theZ)));
+		BiomeInfo biome = biomes.get(player.world.getBiome(new BlockPos(theX, 0, theZ)));
 
 		if (!getTrue) {
 			if (isUnderWater(player)) {
@@ -80,35 +80,35 @@ public final class PlayerUtils {
 					biome = BiomeRegistry.UNDERWATER;
 			} else if (isUnderGround(player, INSIDE_Y_ADJUST))
 				biome = BiomeRegistry.UNDERGROUND;
-			else if (theY >= dimensions.getSpaceHeight(player.worldObj))
+			else if (theY >= dimensions.getSpaceHeight(player.world))
 				biome = BiomeRegistry.OUTERSPACE;
-			else if (theY >= dimensions.getCloudHeight(player.worldObj))
+			else if (theY >= dimensions.getCloudHeight(player.world))
 				biome = BiomeRegistry.CLOUDS;
 		}
 		return biome;
 	}
 
 	public static int getPlayerDimension(@Nonnull final EntityPlayer player) {
-		if (player == null || player.worldObj == null)
+		if (player == null || player.world == null)
 			return -256;
-		return player.worldObj.provider.getDimension();
+		return player.world.provider.getDimension();
 	}
 
 	public static boolean isUnderWater(@Nonnull final EntityPlayer player) {
 		final int x = MathStuff.floor_double(player.posX);
 		final int y = MathStuff.floor_double(player.posY + player.getEyeHeight());
 		final int z = MathStuff.floor_double(player.posZ);
-		return player.worldObj.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.WATER;
+		return player.world.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.WATER;
 	}
 
 	public static boolean isUnderGround(@Nonnull final EntityPlayer player, final int offset) {
 		final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
-		return MathStuff.floor_double(player.posY + offset) < dimensions.getSeaLevel(player.worldObj);
+		return MathStuff.floor_double(player.posY + offset) < dimensions.getSeaLevel(player.world);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static int getClientPlayerDimension() {
-		return getPlayerDimension(FMLClientHandler.instance().getClient().thePlayer);
+		return getPlayerDimension(FMLClientHandler.instance().getClient().player);
 	}
 
 	@Nullable

@@ -95,12 +95,12 @@ public final class DimensionEffectData extends WorldSavedData {
 	}
 
 	public void setRainIntensity(final float intensity) {
-		this.intensity = MathHelper.clamp_float(intensity, MIN_INTENSITY, MAX_INTENSITY);
+		this.intensity = MathHelper.clamp(intensity, MIN_INTENSITY, MAX_INTENSITY);
 		this.setDirty(true);
 	}
 
 	public void setCurrentRainIntensity(final float intensity) {
-		this.currentIntensity = MathHelper.clamp_float(intensity, 0, this.intensity);
+		this.currentIntensity = MathHelper.clamp(intensity, 0, this.intensity);
 		this.setDirty(true);
 	}
 
@@ -109,7 +109,7 @@ public final class DimensionEffectData extends WorldSavedData {
 	}
 
 	public void setMinRainIntensity(final float intensity) {
-		this.minIntensity = MathHelper.clamp_float(intensity, MIN_INTENSITY, this.maxIntensity);
+		this.minIntensity = MathHelper.clamp(intensity, MIN_INTENSITY, this.maxIntensity);
 		this.setDirty(true);
 	}
 
@@ -118,7 +118,7 @@ public final class DimensionEffectData extends WorldSavedData {
 	}
 
 	public void setMaxRainIntensity(final float intensity) {
-		this.maxIntensity = MathHelper.clamp_float(intensity, this.minIntensity, MAX_INTENSITY);
+		this.maxIntensity = MathHelper.clamp(intensity, this.minIntensity, MAX_INTENSITY);
 		this.setDirty(true);
 	}
 
@@ -127,7 +127,7 @@ public final class DimensionEffectData extends WorldSavedData {
 	}
 
 	public void setThunderTimer(final int time) {
-		this.thunderTimer = MathHelper.clamp_int(time, 0, Integer.MAX_VALUE);
+		this.thunderTimer = MathHelper.clamp(time, 0, Integer.MAX_VALUE);
 		this.setDirty(true);
 	}
 
@@ -165,23 +165,23 @@ public final class DimensionEffectData extends WorldSavedData {
 			final float mid = delta / 2.0F;
 			result = RANDOM.nextFloat() * mid + RANDOM.nextFloat() * mid;
 		}
-		setRainIntensity(MathHelper.clamp_float(result, 0.01F, MAX_INTENSITY));
+		setRainIntensity(MathHelper.clamp(result, 0.01F, MAX_INTENSITY));
 		setCurrentRainIntensity(0.0F);
 	}
 
 	@Override
 	public void readFromNBT(@Nonnull final NBTTagCompound nbt) {
 		this.dimensionId = nbt.getInteger(NBT.DIMENSION);
-		this.intensity = MathHelper.clamp_float(nbt.getFloat(NBT.INTENSITY), MIN_INTENSITY, MAX_INTENSITY);
+		this.intensity = MathHelper.clamp(nbt.getFloat(NBT.INTENSITY), MIN_INTENSITY, MAX_INTENSITY);
 		if (nbt.hasKey(NBT.CURRENT_INTENSITY))
-			this.currentIntensity = MathHelper.clamp_float(nbt.getFloat(NBT.CURRENT_INTENSITY), 0, this.intensity);
+			this.currentIntensity = MathHelper.clamp(nbt.getFloat(NBT.CURRENT_INTENSITY), 0, this.intensity);
 		if (nbt.hasKey(NBT.MIN_INTENSITY))
-			this.minIntensity = MathHelper.clamp_float(nbt.getFloat(NBT.MIN_INTENSITY), MIN_INTENSITY, MAX_INTENSITY);
+			this.minIntensity = MathHelper.clamp(nbt.getFloat(NBT.MIN_INTENSITY), MIN_INTENSITY, MAX_INTENSITY);
 		if (nbt.hasKey(NBT.MAX_INTENSITY))
-			this.maxIntensity = MathHelper.clamp_float(nbt.getFloat(NBT.MAX_INTENSITY), this.minIntensity,
+			this.maxIntensity = MathHelper.clamp(nbt.getFloat(NBT.MAX_INTENSITY), this.minIntensity,
 					MAX_INTENSITY);
 		if (nbt.hasKey(NBT.THUNDER_TIMER))
-			this.thunderTimer = MathHelper.clamp_int(nbt.getInteger(NBT.THUNDER_TIMER), 0, Integer.MAX_VALUE);
+			this.thunderTimer = MathHelper.clamp(nbt.getInteger(NBT.THUNDER_TIMER), 0, Integer.MAX_VALUE);
 
 		final NBTTagList list = nbt.getTagList(NBT.AURORA_LIST, Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < list.tagCount(); i++) {

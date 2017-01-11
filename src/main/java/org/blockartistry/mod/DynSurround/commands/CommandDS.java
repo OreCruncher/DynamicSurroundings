@@ -101,17 +101,17 @@ public final class CommandDS extends CommandBase {
 	}
 
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return COMMAND;
 	}
 
 	@Override
-	public List<String> getCommandAliases() {
+	public List<String> getAliases() {
 		return ALIAS;
 	}
 
 	@Override
-	public String getCommandUsage(final ICommandSender sender) {
+	public String getUsage(final ICommandSender sender) {
 		return TextFormatting.GOLD + "/ds help" + TextFormatting.BLUE + " -- Help for Dynamic Surroundings";
 	}
 
@@ -120,7 +120,7 @@ public final class CommandDS extends CommandBase {
 
 		try {
 			final EntityPlayerMP player = getCommandSenderAsPlayer(sender);
-			final World world = player.worldObj;
+			final World world = player.world;
 			final DimensionEffectData data = DimensionEffectData.get(world);
 
 			boolean showHelp = false;
@@ -209,9 +209,9 @@ public final class CommandDS extends CommandBase {
 
 			if (showHelp) {
 				for (final String line : HELP)
-					sender.addChatMessage(new TextComponentString(line));
+					sender.sendMessage(new TextComponentString(line));
 			} else if (feedback != null) {
-				player.addChatMessage(feedback);
+				player.sendMessage(feedback);
 			}
 
 		} catch (final Exception ex) {

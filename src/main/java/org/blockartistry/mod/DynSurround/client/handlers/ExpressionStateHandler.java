@@ -167,7 +167,7 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		register(new DynamicBoolean("hasSky") {
 			@Override
 			public void update() {
-				this.value = !EnvironState.getWorld().provider.getHasNoSky();
+				this.value = !EnvironState.getWorld().provider.hasNoSky();
 			}
 		});
 		register(new DynamicString("season") {

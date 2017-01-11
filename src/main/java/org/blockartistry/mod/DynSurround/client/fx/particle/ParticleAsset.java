@@ -115,7 +115,7 @@ public abstract class ParticleAsset extends Particle {
 		if(this.motionX == 0 && this.motionY == 0 && this.motionZ == 0)
 			return true;
 		
-		return this.worldObj.getBlockState(new BlockPos(this.posX, this.posY, this.posZ).down()).getMaterial()
+		return this.world.getBlockState(new BlockPos(this.posX, this.posY, this.posZ).down()).getMaterial()
 				.isSolid();
 	}
 

@@ -65,7 +65,7 @@ public class ParticleFireJet extends ParticleJet {
 	@Override
 	protected void spawnJetParticle() {
 		final double speedY = this.isLava ? 0 : this.jetStrength / 10.0D;
-		final Particle particle = this.factory.createParticle(this.particleId, this.worldObj, this.posX, this.posY,
+		final Particle particle = this.factory.createParticle(this.particleId, this.world, this.posX, this.posY,
 				this.posZ, 0D, speedY, 0D);
 		if (!this.isLava) {
 			final ParticleFlame flame = (ParticleFlame) particle;

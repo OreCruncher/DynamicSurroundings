@@ -56,7 +56,7 @@ public class NetherSplashRenderer extends StormSplashRenderer {
 
 	@Override
 	protected BlockPos getPrecipitationHeight(final World world, final int range, final BlockPos pos) {
-		final int y = MathHelper.floor_double(EnvironState.getPlayer().posY);
+		final int y = MathHelper.floor(EnvironState.getPlayer().posY);
 		boolean airBlockFound = false;
 		for (int i = range; i >= -range; i--) {
 			final BlockPos p = new BlockPos(pos.getX(), y + i, pos.getZ());
