@@ -84,7 +84,7 @@ public final class SoundEffect implements ISpecialEffect {
 		this.conditions = StringUtils.EMPTY;
 		this.weight = 10;
 		this.type = SoundType.SPOT;
-		this.category = category == null ? SoundCategory.BLOCKS : null;
+		this.category = category == null ? SoundCategory.BLOCKS : category;
 		this.variable = variable;
 		this.repeatDelayRandom = 0;
 		this.repeatDelay = repeatDelay;
