@@ -1,3 +1,11 @@
+###DynamicSurroundings-3.2.1.1
+**Fixes**
+* Fix Nullpointer exception when playing sound because of a bonehead mistake on my end.  You may not have seen the problem depending on the mix of mods in your pack.
+
+**Changes**
+* Updated and building against Forge 12.18.3.2202.  Should continue to be compatible with older Forge versions.
+* Updated ru_RU.lang
+
 ###DynamicSurroundings-3.2.1.0
 **What's New!**
 * Added a not ! operator to the conditional string grammar.  Does the same thing as the function NOT but without all the extra verbiage.
