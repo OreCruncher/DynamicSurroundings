@@ -34,7 +34,7 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20161111"
+    mappings = "snapshot_20161220"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
@@ -82,14 +82,15 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-	compile "codechicken:CodeChickenCore:1.10.2-2.4.0.101:deobf"
+	// compile "codechicken:CodeChickenCore:1.10.2-2.4.0.101:deobf"
 
-    compile "foxie:Calendar:1.10.2-1.5-10:deobf"
-    compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
-    compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.10.2-5.0.0.2109:deobf"
+    // compile "foxie:Calendar:1.10.2-1.5-10:deobf"
+    // compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
+    // compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.10.2-5.0.0.2109:deobf"
     
-    deobfCompile "mezz.jei:jei_1.10.2:3.13.6.388:api"
-    runtime "mezz.jei:jei_1.10.2:3.13.6.388"
+	// http://dvs1.progwml6.com/files/maven/mezz/jei/
+    deobfCompile "mezz.jei:jei_1.11.2:4.2.2.221:api"
+    runtime "mezz.jei:jei_1.11.2:4.2.2.221"
 }
 
 processResources
