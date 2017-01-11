@@ -202,3 +202,10 @@ cfg.speech.Duration=Продолжительность отображения
 cfg.speech.Duration.tooltip=Сколько секунд показывать речь, перед тем как скрыть её
 cfg.speech.Range=Дальность видимости
 cfg.speech.Range.tooltip=Расстояние, на котором вы видите пузырики. Фильтрация происходит на сервере.
+
+cfg.explosions.cat.Explosions=Улучшение взрывов
+cfg.explosions.cat.Explosions=Настройки для улучшения взрывов
+cfg.explosions.EnableExplosions=Улучшение взрывов
+cfg.explosions.EnableExplosions.tooltip=Включает/выключает улучшение взрывов
+cfg.explosions.AddMobs=Добавить останки мобов
+cfg.explosions.AddMobs.tooltip=Включает/выключает добавление останков мобов к прочим останкам от взрыва
