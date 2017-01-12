@@ -33,11 +33,10 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
-import org.blockartistry.mod.DynSurround.util.MyMutableBlockPos;
-
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -50,17 +49,17 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 
 	private static final class Cell implements Comparable<Cell> {
 
-		private final BlockPos offset;
+		private final Vec3i offset;
 		private final float points;
-		private final MyMutableBlockPos working;
+		private final BlockPos.MutableBlockPos working;
 
-		public Cell(@Nonnull final BlockPos offset, final int range) {
+		public Cell(@Nonnull final Vec3i offset, final int range) {
 			this.offset = offset;
 			final float xV = range - MathStuff.abs(offset.getX()) + 1;
 			final float zV = range - MathStuff.abs(offset.getZ()) + 1;
-			float candidate = Math.min(xV, zV);
+			final float candidate = Math.min(xV, zV);
 			this.points = candidate * candidate;
-			this.working = new MyMutableBlockPos();
+			this.working = new BlockPos.MutableBlockPos();
 		}
 
 		public float potentialPoints() {
@@ -68,7 +67,8 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 		}
 
 		public float score(@Nonnull final BlockPos playerPos) {
-			this.working.setPos(playerPos).add(this.offset);
+			this.working.setPos(playerPos.getX() + this.offset.getX(), playerPos.getY() + this.offset.getY(),
+					playerPos.getZ() + this.offset.getZ());
 			final int y = EnvironState.getWorld().getTopSolidOrLiquidBlock(this.working).getY();
 			return ((y - playerPos.getY()) < 3) ? this.points : 0.0F;
 		}
@@ -97,7 +97,7 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 		// Build our cell map
 		for (int x = -INSIDE_SURVEY_RANGE; x <= INSIDE_SURVEY_RANGE; x++)
 			for (int z = -INSIDE_SURVEY_RANGE; z <= INSIDE_SURVEY_RANGE; z++)
-				cellList.add(new Cell(new BlockPos(x, 0, z), INSIDE_SURVEY_RANGE));
+				cellList.add(new Cell(new Vec3i(x, 0, z), INSIDE_SURVEY_RANGE));
 
 		// Sort so the highest score cells are first
 		Collections.sort(cellList);
@@ -114,7 +114,7 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 
 	private static int biomeArea;
 	private static final TObjectIntHashMap<BiomeInfo> weights = new TObjectIntHashMap<BiomeInfo>();
-	private static final MyMutableBlockPos mutable = new MyMutableBlockPos();
+	private static final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
 	// "Finger print" of the last area survey.
 	private static BiomeInfo surveyedBiome = null;
@@ -164,7 +164,7 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 			for (int dX = -BIOME_SURVEY_RANGE; dX <= BIOME_SURVEY_RANGE; dX++)
 				for (int dZ = -BIOME_SURVEY_RANGE; dZ <= BIOME_SURVEY_RANGE; dZ++) {
 					biomeArea++;
-					mutable.setPos(surveyedPosition).add(dX, 0, dZ);
+					mutable.setPos(surveyedPosition.getX() + dX, surveyedPosition.getY(), surveyedPosition.getZ() + dZ);
 					final BiomeInfo biome = getBiomeRegistry().get(EnvironState.getWorld().getBiome(mutable));
 					weights.adjustOrPutValue(biome, 1, 1);
 				}
