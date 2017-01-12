@@ -30,8 +30,6 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.client.event.BlockUpdateEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.MyMutableBlockPos;
-
 import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -196,7 +194,7 @@ public abstract class CuboidScanner extends Scanner {
 
 	@Override
 	@Nullable
-	protected BlockPos nextPos(@Nonnull final MyMutableBlockPos workingPos, @Nonnull final Random rand) {
+	protected BlockPos nextPos(@Nonnull final BlockPos.MutableBlockPos workingPos, @Nonnull final Random rand) {
 
 		if (this.scanFinished)
 			return null;

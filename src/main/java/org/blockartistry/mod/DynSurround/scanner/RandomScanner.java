@@ -28,8 +28,6 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.MyMutableBlockPos;
-
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -51,7 +49,7 @@ public abstract class RandomScanner extends Scanner {
 	}
 
 	@Override
-	protected BlockPos nextPos(@Nonnull final MyMutableBlockPos workingPos, @Nonnull final Random rand) {
+	protected BlockPos nextPos(@Nonnull final BlockPos.MutableBlockPos workingPos, @Nonnull final Random rand) {
 		return workingPos.setPos(EnvironState.getPlayerPosition()).add(randomRange(this.xRange, rand),
 				randomRange(this.yRange, rand), randomRange(this.zRange, rand));
 	}

@@ -30,8 +30,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.MyMutableBlockPos;
-
 import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -117,7 +115,7 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 	public void update() {
 
 		final Random rand = ThreadLocalRandom.current();
-		final MyMutableBlockPos workingPos = new MyMutableBlockPos();
+		final BlockPos.MutableBlockPos workingPos = new BlockPos.MutableBlockPos();
 		final World world = EnvironState.getWorld();
 		for (int count = 0; count < this.blocksPerTick; count++) {
 			final BlockPos pos = nextPos(workingPos, rand);
@@ -137,6 +135,6 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 	 * and returned from the function call.
 	 */
 	@Nullable
-	protected abstract BlockPos nextPos(@Nonnull final MyMutableBlockPos pos, @Nonnull final Random rand);
+	protected abstract BlockPos nextPos(@Nonnull final BlockPos.MutableBlockPos pos, @Nonnull final Random rand);
 
 }
