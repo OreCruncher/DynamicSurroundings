@@ -1098,7 +1098,9 @@
 			"acousticProfile": "#sapling",
 			"dictionaryEntries": [
 				"treeSaplings",
-				"saplingTree"
+				"saplingTree",
+				"treeSapling",
+				"sapling"
 			]
 		},
 		{
@@ -1106,7 +1108,8 @@
 			"dictionaryEntries": [
 				"treeLeaves",
 				"leavesTree",
-				"treeBambooLeaves"
+				"treeBambooLeaves",
+				"leaves"
 			]
 		},
 		{
