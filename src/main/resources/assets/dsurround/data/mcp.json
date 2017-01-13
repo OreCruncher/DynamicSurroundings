@@ -611,7 +611,6 @@
 	],
 	"footsteps": {
 		"minecraft:barrier": "NOT_EMITTER",
-		"minecraft:air": "NOT_EMITTER",
 		"minecraft:stone": "stone",
 		"minecraft:grass": "grass",
 		"minecraft:grass_path": "grass",

@@ -43,6 +43,7 @@ import gnu.trove.map.hash.THashMap;
 import gnu.trove.procedure.TObjectObjectProcedure;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -122,6 +123,7 @@ public class BlockMap {
 
 	public BlockMap(@Nonnull final Isolator isolator) {
 		this.isolator = isolator;
+		this.metaMap.put(new BlockInfo(Blocks.AIR), AcousticsManager.NOT_EMITTER);
 	}
 
 	@Nullable
@@ -165,7 +167,7 @@ public class BlockMap {
 		if (matcher.matches()) {
 			final String blockName = matcher.group(1);
 			final Block block = MCHelper.getBlockByName(blockName);
-			if (block != null) {
+			if (block != null && block != Blocks.AIR) {
 				if (value.startsWith("#")) {
 					expand(block, value);
 				} else {
@@ -217,5 +219,6 @@ public class BlockMap {
 	public void clear() {
 		this.metaMap.clear();
 		this.substrateMap.clear();
+		this.metaMap.put(new BlockInfo(Blocks.AIR), AcousticsManager.NOT_EMITTER);
 	}
 }
