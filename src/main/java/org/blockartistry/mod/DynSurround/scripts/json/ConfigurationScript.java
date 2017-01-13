@@ -111,15 +111,15 @@ public final class ConfigurationScript {
 				blocks.register(block);
 
 			final FootstepsRegistry footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
-			for (final Entry<String, String> entry : script.footsteps.entrySet()) {
-				footsteps.registerBlocks(entry.getValue(), entry.getKey());
-			}
-
 			for (final ForgeEntry entry : script.forgeMappings) {
 				for (final String name : entry.dictionaryEntries)
 					footsteps.registerForgeEntries(entry.acousticProfile, name);
 			}
 			
+			for (final Entry<String, String> entry : script.footsteps.entrySet()) {
+				footsteps.registerBlocks(entry.getValue(), entry.getKey());
+			}
+
 			final ItemRegistry itemRegistry = RegistryManager.get(RegistryType.ITEMS);
 			itemRegistry.register(script.itemConfig);
 			
