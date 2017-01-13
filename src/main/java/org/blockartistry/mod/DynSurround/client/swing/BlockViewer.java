@@ -51,12 +51,14 @@ public class BlockViewer extends JPanel implements Observer {
 	private final JScrollPane scrollPane_2 = new JScrollPane();
 	private final JLabel lblBlockEffects = new JLabel("Block Effects:");
 	private final JLabel lblSounds = new JLabel("Sounds:");
+	private final JLabel lblOreDictionary = new JLabel("Ore Dictionary:");
 
 	private final JLabel blockName = new JLabel("block name");
 	private final JLabel blockMaterial = new JLabel("material");
 	private final JList<String> footstepAcoustics = new JList<String>();
 	private final JList<String> blockEffects = new JList<String>();
 	private final JList<String> blockSounds = new JList<String>();
+	private final JList<String> blockOreEntries = new JList<String>();
 
 	protected final DataProxy.ViewedBlockData data;
 
@@ -77,19 +79,19 @@ public class BlockViewer extends JPanel implements Observer {
 		blockMaterial.setBounds(120, 36, 231, 14);
 		add(blockMaterial);
 
-		lblNewLabel_1.setBounds(10, 61, 100, 14);
+		lblNewLabel_1.setBounds(10, 153, 100, 14);
 		add(lblNewLabel_1);
 
-		scrollPane.setBounds(120, 61, 320, 95);
+		scrollPane.setBounds(120, 151, 320, 77);
 		add(scrollPane);
 
 		footstepAcoustics.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(footstepAcoustics);
 
-		lblBlockEffects.setBounds(10, 169, 100, 14);
+		lblBlockEffects.setBounds(10, 245, 100, 14);
 		add(lblBlockEffects);
 
-		scrollPane_1.setBounds(120, 167, 320, 95);
+		scrollPane_1.setBounds(120, 243, 320, 77);
 		add(scrollPane_1);
 		blockEffects.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -97,15 +99,24 @@ public class BlockViewer extends JPanel implements Observer {
 
 		this.data = new DataProxy.ViewedBlockData();
 		this.data.addObserver(this);
-		lblSounds.setBounds(10, 275, 100, 14);
+		lblSounds.setBounds(10, 333, 100, 14);
 
 		add(lblSounds);
-		scrollPane_2.setBounds(120, 276, 320, 105);
+		scrollPane_2.setBounds(120, 331, 320, 77);
 
 		add(scrollPane_2);
 		blockSounds.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		scrollPane_2.setViewportView(blockSounds);
+
+		JScrollPane scrollPane_3 = new JScrollPane();
+		scrollPane_3.setBounds(120, 61, 320, 79);
+		add(scrollPane_3);
+
+		scrollPane_3.setViewportView(blockOreEntries);
+
+		lblOreDictionary.setBounds(10, 63, 100, 14);
+		add(lblOreDictionary);
 	}
 
 	protected String[] asArray(@Nonnull final List<String> list) {
@@ -119,6 +130,7 @@ public class BlockViewer extends JPanel implements Observer {
 		this.blockName.setText(this.data.getBlockName());
 		this.blockMaterial.setText(this.data.getBlockMaterial());
 
+		this.blockOreEntries.setListData(asArray(this.data.getBlockOreDictionary()));
 		this.footstepAcoustics.setListData(asArray(this.data.getFootstepAcoustics()));
 		this.blockEffects.setListData(asArray(this.data.getBlockEffects()));
 		this.blockSounds.setListData(asArray(this.data.getBlockSounds()));
