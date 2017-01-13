@@ -44,8 +44,11 @@ import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * OK - it's a hack. Don't want to mess with the core state too much so these
@@ -167,21 +170,35 @@ public abstract class DataProxy extends Observable {
 			}
 			return result;
 		}
-		
+
 		public List<String> getBlockSounds() {
 			final List<String> result = new ArrayList<String>();
 			SoundEffect[] sounds = this.blocks.getAllSounds(this.state);
-			for(final SoundEffect s: sounds)
+			for (final SoundEffect s : sounds)
 				result.add(s.toString());
-			
+
 			sounds = this.blocks.getAllStepSounds(this.state);
-			if(sounds.length > 0)
-				for(final SoundEffect s: sounds)
+			if (sounds.length > 0)
+				for (final SoundEffect s : sounds)
 					result.add(s.toString() + " (Step Sound)");
-			
+
 			return result;
 		}
-		
+
+		public List<String> getBlockOreDictionary() {
+			final List<String> result = new ArrayList<String>();
+			final Item item = Item.getItemFromBlock(this.state.getBlock());
+			if (item != null) {
+				final ItemStack stack = this.state.getBlock().getPickBlock(this.state,
+						Minecraft.getMinecraft().objectMouseOver, EnvironState.getWorld(), this.targetBlock,
+						EnvironState.getPlayer());
+				if (stack != null)
+					for (int i : OreDictionary.getOreIDs(stack))
+						result.add(OreDictionary.getOreName(i));
+			}
+			return result;
+		}
+
 	}
 
 }
