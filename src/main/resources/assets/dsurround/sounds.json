@@ -815,7 +815,7 @@
 		"category": "ambient",
 		"sounds": [
 			{
-				"name": "dsurround:ambient/outside/taiga",
+				"name": "dsurround:ambient/outside/forest",
 				"stream": true
 			}
 		]
