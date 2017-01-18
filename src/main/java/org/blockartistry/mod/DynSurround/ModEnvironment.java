@@ -41,7 +41,7 @@ public enum ModEnvironment {
 	protected boolean isLoaded;
 	
 	private ModEnvironment(@Nonnull final String modId) {
-		this.modId = modId;
+		this.modId = modId.toLowerCase();
 	}
 	
 	public boolean isLoaded() {

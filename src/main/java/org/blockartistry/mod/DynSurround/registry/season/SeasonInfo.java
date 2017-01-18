@@ -33,56 +33,58 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SeasonType;
 import org.blockartistry.mod.DynSurround.registry.TemperatureRating;
 
+import com.google.common.base.Objects;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class SeasonInfo {
 
 	protected final BiomeRegistry biomes;
-	protected final World world;
+	protected final String dimensionName;
 
 	public SeasonInfo(@Nonnull final World world) {
-		this.world = world;
 		this.biomes = RegistryManager.get(RegistryType.BIOME);
+		this.dimensionName = world.provider.getDimensionType().getName();
 	}
 
 	@Nonnull
-	public SeasonType getSeasonType() {
+	public SeasonType getSeasonType(@Nonnull final World world) {
 		return SeasonType.NONE;
 	}
 
 	@Nonnull
-	public String getSeasonName() {
-		return getSeasonType().getValue();
+	public String getSeasonName(@Nonnull final World world) {
+		return getSeasonType(world).getValue();
 	}
 
 	@Nonnull
-	public TemperatureRating getPlayerTemperature() {
-		return getBiomeTemperature(EnvironState.getPlayerPosition());
+	public TemperatureRating getPlayerTemperature(@Nonnull final World world) {
+		return getBiomeTemperature(world, EnvironState.getPlayerPosition());
 	}
 
 	@Nonnull
-	public TemperatureRating getBiomeTemperature(@Nonnull final BlockPos pos) {
-		return TemperatureRating.fromTemp(getTemperature(pos));
+	public TemperatureRating getBiomeTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return TemperatureRating.fromTemp(getTemperature(world, pos));
 	}
 
 	@Nonnull
-	public BlockPos getPrecipitationHeight(@Nonnull final BlockPos pos) {
-		return this.world.getPrecipitationHeight(pos);
+	public BlockPos getPrecipitationHeight(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return world.getPrecipitationHeight(pos);
 	}
 
-	public float getTemperature(@Nonnull final BlockPos pos) {
-		final float biomeTemp = this.biomes.get(this.world.getBiome(pos)).getFloatTemperature(pos);
-		final float heightTemp = this.world.getBiomeProvider().getTemperatureAtHeight(biomeTemp,
-				getPrecipitationHeight(pos).getY());
+	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		final float biomeTemp = this.biomes.get(world.getBiome(pos)).getFloatTemperature(pos);
+		final float heightTemp = world.getBiomeProvider().getTemperatureAtHeight(biomeTemp,
+				getPrecipitationHeight(world, pos).getY());
 		return heightTemp;
 	}
 
 	/*
 	 * Indicates if rain is striking at the specified position.
 	 */
-	public boolean isRainingAt(@Nonnull final BlockPos pos) {
-		return this.world.isRainingAt(pos);
+	public boolean isRainingAt(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return world.isRainingAt(pos);
 	}
 
 	/*
@@ -91,19 +93,24 @@ public class SeasonInfo {
 	 * factors - just whether its cold enough. If environmental sensitive
 	 * versions are needed look at canBlockFreeze() and canSnowAt().
 	 */
-	public boolean canWaterFreeze(@Nonnull final BlockPos pos) {
-		return getTemperature(pos) < 0.15F;
+	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return getTemperature(world, pos) < 0.15F;
 	}
 
 	/*
 	 * Essentially snow layer stuff.
 	 */
-	public boolean canSnowAt(@Nonnull final BlockPos pos) {
-		return this.world.canSnowAt(pos, false);
+	public boolean canSnowAt(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return world.canSnowAt(pos, false);
 	}
 
-	public boolean canBlockFreeze(@Nonnull final BlockPos pos, final boolean noWaterAdjacent) {
-		return this.world.canBlockFreeze(pos, noWaterAdjacent);
+	public boolean canBlockFreeze(@Nonnull final World world, @Nonnull final BlockPos pos, final boolean noWaterAdjacent) {
+		return world.canBlockFreeze(pos, noWaterAdjacent);
+	}
+	
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this).add("name", this.dimensionName).toString();
 	}
 
 }

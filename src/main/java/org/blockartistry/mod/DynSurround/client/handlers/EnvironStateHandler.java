@@ -102,7 +102,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.world = player.world;
 			EnvironState.playerBiome = PlayerUtils.getPlayerBiome(player, false);
 			EnvironState.biomeName = EnvironState.playerBiome.getBiomeName();
-			EnvironState.season = seasons.getData(world).getSeasonType();
+			EnvironState.season = seasons.getSeasonType(world);
 			EnvironState.dimensionId = world.provider.getDimension();
 			EnvironState.dimensionName = world.provider.getDimensionType().getName();
 			EnvironState.playerPosition = getPlayerPos();
