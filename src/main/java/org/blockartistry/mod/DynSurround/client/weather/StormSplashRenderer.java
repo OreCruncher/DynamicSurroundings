@@ -134,7 +134,7 @@ public class StormSplashRenderer {
 			final int playerY = MathHelper.floor_double(player.posY);
 			final int playerZ = MathHelper.floor_double(player.posZ);
 			if (y > player.posY + 1.0D
-					&& world.getPrecipitationHeight(new BlockPos(playerX, 0, playerZ)).getY() > playerY)
+					&& getPrecipitationHeight(world, 0, new BlockPos(playerX, 0, playerZ)).getY() > playerY)
 				pitch = 0.5F;
 			renderer.mc.theWorld.playSound(x, y, z, sound, SoundCategory.AMBIENT, volume, pitch, false);
 		}
@@ -181,7 +181,7 @@ public class StormSplashRenderer {
 			final BlockPos precipHeight = getPrecipitationHeight(worldclient, RANGE / 2, posXZ);
 			final BiomeInfo biome = this.biomes.get(worldclient.getBiome(posXZ));
 			final boolean hasDust = biome.getHasDust();
-			final boolean canSnow = season.getData(worldclient).canWaterFreeze(precipHeight);
+			final boolean canSnow = this.season.canWaterFreeze(worldclient, precipHeight);
 
 			if (precipHeight.getY() <= playerY + RANGE && precipHeight.getY() >= playerY - RANGE
 					&& (hasDust || (biome.getHasPrecipitation() && !canSnow))) {

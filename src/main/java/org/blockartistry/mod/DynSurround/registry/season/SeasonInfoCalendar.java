@@ -36,20 +36,17 @@ import net.minecraft.world.World;
 
 public class SeasonInfoCalendar extends SeasonInfo {
 
-	private final ICalendarProvider calendarProvider;
-	private final ISeasonProvider seasonProvider;
-
 	public SeasonInfoCalendar(@Nonnull final World world) {
 		super(world);
-
-		this.seasonProvider = CalendarAPI.getSeasonProvider(this.world.provider.getDimension());
-		this.calendarProvider = CalendarAPI.getCalendarInstance(this.world);
 	}
 
 	@Override
 	@Nonnull
-	public SeasonType getSeasonType() {
-		final String name = this.seasonProvider.getSeason(this.calendarProvider).getName();
+	public SeasonType getSeasonType(@Nonnull final World world) {
+		final ICalendarProvider calendarProvider = CalendarAPI.getCalendarInstance(world);
+		final ISeasonProvider seasonProvider = CalendarAPI.getSeasonProvider(world.provider.getDimension());
+
+		final String name = seasonProvider.getSeason(calendarProvider).getName();
 		switch (name) {
 		case "summer":
 			return SeasonType.SUMMER;
@@ -66,8 +63,9 @@ public class SeasonInfoCalendar extends SeasonInfo {
 	}
 
 	@Override
-	public float getTemperature(@Nonnull final BlockPos pos) {
-		return this.seasonProvider.getTemperature(this.world, pos.getX(), pos.getY(), pos.getZ());
+	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		final ISeasonProvider seasonProvider = CalendarAPI.getSeasonProvider(world.provider.getDimension());
+		return seasonProvider.getTemperature(world, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 }

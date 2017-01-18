@@ -82,8 +82,8 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 
 	@Override
 	@Nonnull
-	public SeasonType getSeasonType() {
-		final Season.SubSeason season = SeasonHelper.getSeasonData(this.world).getSubSeason();
+	public SeasonType getSeasonType(@Nonnull final World world) {
+		final Season.SubSeason season = SeasonHelper.getSeasonData(world).getSubSeason();
 		switch (season) {
 		case EARLY_SUMMER:
 		case MID_SUMMER:
@@ -106,15 +106,15 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 		}
 	}
 
-	private Season getSeasonData() {
-		return SeasonHelper.getSeasonData(this.world).getSubSeason().getSeason();
+	private Season getSeasonData(@Nonnull final World world) {
+		return SeasonHelper.getSeasonData(world).getSubSeason().getSeason();
 	}
 
 	@Override
-	public float getTemperature(@Nonnull final BlockPos pos) {
-		final Biome biome = this.world.getBiome(pos);
+	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		final Biome biome = world.getBiome(pos);
 
-		if (biome.getTemperature() <= 0.7F && getSeasonData() == Season.WINTER)
+		if (biome.getTemperature() <= 0.7F && getSeasonData(world) == Season.WINTER)
 			return 0.0F;
 
 		return biome.getFloatTemperature(pos);
@@ -122,10 +122,10 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 
 	@Nonnull
 	@Override
-	public TemperatureRating getPlayerTemperature() {
+	public TemperatureRating getPlayerTemperature(@Nonnull final World world) {
 		final ITemperature data = TemperatureHelper.getTemperatureData(EnvironState.getPlayer());
 		if (data == null)
-			return super.getPlayerTemperature();
+			return super.getPlayerTemperature(world);
 
 		switch (data.getTemperature().getRange()) {
 		case ICY:
@@ -147,8 +147,8 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 	 * Indicates if rain is striking at the specified position.
 	 */
 	@Override
-	public boolean isRainingAt(@Nonnull final BlockPos pos) {
-		return Hooks.isRainingAtInSeason(this.world, pos, getSeasonData());
+	public boolean isRainingAt(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return Hooks.isRainingAtInSeason(world, pos, getSeasonData(world));
 	}
 
 	/*
@@ -158,18 +158,18 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 	 * versions are needed look at canBlockFreeze() and canSnowAt().
 	 */
 	@Override
-	public boolean canWaterFreeze(@Nonnull final BlockPos pos) {
-		return getTemperature(pos) < 0.15F;
+	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return getTemperature(world, pos) < 0.15F;
 	}
 
 	/*
 	 * Essentially snow layer stuff.
 	 */
-	public boolean canSnowAt(@Nonnull final BlockPos pos) {
-		return Hooks.canSnowAtInSeason(this.world, pos, true, getSeasonData());
+	public boolean canSnowAt(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return Hooks.canSnowAtInSeason(world, pos, true, getSeasonData(world));
 	}
 
-	public boolean canBlockFreeze(@Nonnull final BlockPos pos, final boolean noWaterAdjacent) {
-		return Hooks.canBlockFreezeInSeason(this.world, pos, noWaterAdjacent, getSeasonData());
+	public boolean canBlockFreeze(@Nonnull final World world, @Nonnull final BlockPos pos, final boolean noWaterAdjacent) {
+		return Hooks.canBlockFreezeInSeason(world, pos, noWaterAdjacent, getSeasonData(world));
 	}
 }

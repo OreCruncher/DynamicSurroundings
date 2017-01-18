@@ -29,7 +29,6 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.ModEnvironment;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfo;
-import org.blockartistry.mod.DynSurround.registry.season.SeasonInfoCalendar;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfoNether;
 import org.blockartistry.mod.DynSurround.registry.season.SeasonInfoToughAsNails;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -58,17 +57,12 @@ public final class SeasonRegistry extends Registry {
 			return new SeasonInfoToughAsNails(world);
 		}
 
-		if (ModEnvironment.CalendarAPI.isLoaded()) {
-			ModLog.info("Creating Calendar SeasonInfo for dimension %s", world.provider.getDimensionType().getName());
-			return new SeasonInfoCalendar(world);
-		}
-
 		ModLog.info("Creating default SeasonInfo for dimension %s", world.provider.getDimensionType().getName());
 		return new SeasonInfo(world);
 	}
 
 	@Nonnull
-	public SeasonInfo getData(@Nonnull final World world) {
+	protected SeasonInfo getData(@Nonnull final World world) {
 		SeasonInfo result = this.seasonData.get(world.provider.getDimension());
 		if (result == null) {
 			result = factory(world);
@@ -79,26 +73,31 @@ public final class SeasonRegistry extends Registry {
 
 	@Nonnull
 	public TemperatureRating getPlayerTemperature(@Nonnull final World world) {
-		return getData(world).getPlayerTemperature();
+		return getData(world).getPlayerTemperature(world);
 	}
 	
 	@Nonnull
 	public TemperatureRating getBiomeTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getData(world).getBiomeTemperature(pos);
+		return getData(world).getBiomeTemperature(world, pos);
+	}
+	
+	@Nonnull
+	public SeasonType getSeasonType(@Nonnull final World world) {
+		return getData(world).getSeasonType(world);
 	}
 	
 	@Nonnull
 	public String getSeasonName(@Nonnull final World world) {
-		return getData(world).getSeasonName();
+		return getData(world).getSeasonName(world);
 	}
 
 	@Nonnull
 	public BlockPos getPrecipitationHeight(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getData(world).getPrecipitationHeight(pos);
+		return getData(world).getPrecipitationHeight(world, pos);
 	}
 
 	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getData(world).getTemperature(pos);
+		return getData(world).getTemperature(world, pos);
 	}
 
 	/*
@@ -108,18 +107,18 @@ public final class SeasonRegistry extends Registry {
 	 * versions are needed look at canBlockFreeze() and canSnowAt().
 	 */
 	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getData(world).canWaterFreeze(pos);
+		return getData(world).canWaterFreeze(world, pos);
 	}
 
 	/*
 	 * Essentially snow layer stuff.
 	 */
 	public boolean canSnowAt(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getData(world).canSnowAt(pos);
+		return getData(world).canSnowAt(world, pos);
 	}
 
 	public boolean canBlockFreeze(@Nonnull final World world, @Nonnull final BlockPos pos,
 			final boolean noWaterAdjacent) {
-		return getData(world).canBlockFreeze(pos, noWaterAdjacent);
+		return getData(world).canBlockFreeze(world, pos, noWaterAdjacent);
 	}
 }
