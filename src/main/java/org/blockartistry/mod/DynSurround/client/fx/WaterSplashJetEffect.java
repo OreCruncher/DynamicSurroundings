@@ -97,9 +97,13 @@ public class WaterSplashJetEffect extends JetEffect {
 	public static boolean isValidSpawnBlock(final World world, final BlockPos pos) {
 		if (world.getBlockState(pos).getMaterial() != Material.WATER)
 			return false;
-		final boolean unbounded = isUnboundedLiquid(world, pos);
-		return (unbounded && world.getBlockState(pos.down()).getMaterial().isSolid())
-				|| (!unbounded && world.getBlockState(pos.up()).getBlock() instanceof BlockDynamicLiquid);
+		if (isUnboundedLiquid(world, pos)) {
+			final BlockPos down = pos.down();
+			if (world.getBlockState(down).getMaterial().isSolid())
+				return true;
+			return !isUnboundedLiquid(world, down);
+		}
+		return world.getBlockState(pos.up()).getBlock() instanceof BlockDynamicLiquid;
 	}
 
 	@Override
