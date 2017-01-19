@@ -27,8 +27,6 @@
 				{
 					"sound":"dsurround:frog",
 					"conditions":"!player.isInside",
-					"volume":0.4,
-					"pitch":1.0,
 					"variable":true
 				}
 				
@@ -60,7 +58,6 @@
 				{
 					"sound":"dsurround:floorsqueak",
 					"soundType":"step",
-					"volume":0.2,
 					"variable":true
 				}
 				

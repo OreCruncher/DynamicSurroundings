@@ -25,22 +25,18 @@
 			"sounds": [
 				{
 					"sound": "dsurround:jungle",
-					"conditions": "weather.isNotRaining",
-					"volume": 0.3,
-					"pitch": 0.8
+					"conditions": "weather.isNotRaining"
 				},
 				{
 					"sound": "dsurround:insectbuzz",
 					"conditions": "weather.isNotRaining",
 					"soundType": "spot",
-					"volume": 0.2,
 					"variable": true
 				},
 				{
 					"sound": "dsurround:primates",
 					"conditions": "weather.isNotRaining && isDay",
-					"soundType": "spot",
-					"volume": 0.3
+					"soundType": "spot"
 				}
 			]
 		},
@@ -55,7 +51,6 @@
 					"sound": "dsurround:insectbuzz",
 					"conditions": "weather.isNotRaining",
 					"soundType": "spot",
-					"volume": 0.2,
 					"variable": true
 				}
 			]
@@ -66,8 +61,7 @@
 				{
 					"sound": "dsurround:bison",
 					"conditions": "weather.isNotRaining && isDay",
-					"soundType": "spot",
-					"volume": 0.5
+					"soundType": "spot"
 				}
 			]
 		},
@@ -85,8 +79,7 @@
 				{
 					"sound": "dsurround:owl",
 					"conditions": "weather.isNotRaining && isNight",
-					"soundType": "spot",
-					"volume": 0.3
+					"soundType": "spot"
 				}
 			]
 		},
@@ -108,8 +101,7 @@
 			"sounds": [
 				{
 					"sound": "dsurround:taiga",
-					"conditions": "weather.isNotRaining && isDay",
-					"volume": 0.7
+					"conditions": "weather.isNotRaining && isDay"
 				}
 			]
 		},
@@ -119,14 +111,12 @@
 				{
 					"sound": "dsurround:owl",
 					"conditions": "weather.isNotRaining && isNight",
-					"soundType": "spot",
-					"volume": 0.3
+					"soundType": "spot"
 				},
 				{
 					"sound": "dsurround:wolf",
 					"conditions": "weather.isNotRaining && isNight",
-					"soundType": "spot",
-					"volume": 0.3
+					"soundType": "spot"
 				}
 			]
 		},
@@ -139,8 +129,7 @@
 				{
 					"sound": "dsurround:seagulls",
 					"conditions": "isDay",
-					"soundType": "spot",
-					"volume": 0.3
+					"soundType": "spot"
 				}
 			]
 		},
@@ -154,7 +143,6 @@
 					"sound": "dsurround:insectbuzz",
 					"conditions": "weather.isNotRaining",
 					"soundType": "spot",
-					"volume": 0.2,
 					"variable": true
 				}
 			]
@@ -186,7 +174,6 @@
 					"sound": "dsurround:insectbuzz",
 					"conditions": "weather.isNotRaining",
 					"soundType": "spot",
-					"volume": 0.2,
 					"variable": true
 				}
 			]
@@ -203,7 +190,6 @@
 					"sound": "dsurround:insectbuzz",
 					"conditions": "weather.isNotRaining",
 					"soundType": "spot",
-					"volume": 0.2,
 					"variable": true
 				}
 			],
@@ -216,8 +202,7 @@
 			"sounds": [
 				{
 					"sound": "dsurround:crocodile",
-					"soundType": "spot",
-					"volume": 0.7
+					"soundType": "spot"
 				}
 			]
 		},
@@ -232,8 +217,7 @@
 				{
 					"sound": "dsurround:rattlesnake",
 					"conditions": "weather.isNotRaining && isDay",
-					"soundType": "spot",
-					"volume": 1.0
+					"soundType": "spot"
 				}
 			]
 		},
@@ -243,13 +227,11 @@
 				{
 					"sound": "dsurround:elephant",
 					"conditions": "isDay",
-					"soundType": "spot",
-					"volume": 0.7
+					"soundType": "spot"
 				},
 				{
 					"sound": "dsurround:insectbuzz",
 					"soundType": "spot",
-					"volume": 0.2,
 					"weight": 20,
 					"variable": true
 				}
@@ -257,11 +239,10 @@
 		},
 		{
 			"biomeName": "(?i)(the end|sky)",
-			"aurora": true,
+			"aurora": false,
 			"sounds": [
 				{
-					"sound": "dsurround:theend",
-					"volume": 0.2
+					"sound": "dsurround:theend"
 				}
 			]
 		},
@@ -279,8 +260,7 @@
 			"sounds": [
 				{
 					"sound": "dsurround:underground",
-					"conditions": "player.isInside && player.Y < 33",
-					"volume": 0.3
+					"conditions": "player.isInside && player.Y < 33"
 				},
 				{
 					"sound": "dsurround:rockfall",
@@ -290,14 +270,12 @@
 				{
 					"sound": "dsurround:bigrockfall",
 					"soundType": "spot",
-					"volume": 0.4,
 					"weight": 15
 				},
 				{
 					"sound": "dsurround:monstergrowl",
 					"conditions": "isNight",
 					"soundType": "spot",
-					"volume": 0.3,
 					"weight": 10
 				}
 			]
@@ -306,8 +284,7 @@
 			"biomeName": "UnderOCN",
 			"sounds": [
 				{
-					"sound": "dsurround:underocean",
-					"volume": 0.1
+					"sound": "dsurround:underocean"
 				}
 			]
 		},
@@ -315,13 +292,11 @@
 			"biomeName": "UnderDOCN",
 			"sounds": [
 				{
-					"sound": "dsurround:underdeepocean",
-					"volume": 0.1
+					"sound": "dsurround:underdeepocean"
 				},
 				{
 					"sound": "dsurround:whale",
-					"soundType": "spot",
-					"volume": 0.3
+					"soundType": "spot"
 				}
 			]
 		},
@@ -329,9 +304,7 @@
 			"biomeName": "UnderRVR",
 			"sounds": [
 				{
-					"sound": "dsurround:underriver",
-					"volume": 0.1,
-					"pitch": 1.5
+					"sound": "dsurround:underriver"
 				}
 			]
 		},
@@ -418,8 +391,6 @@
 			"sounds": [
 				{
 					"sound": "dsurround:ice",
-					"volume": 0.5,
-					"pitch": 1.0,
 					"variable": false
 				}
 			]
@@ -433,8 +404,6 @@
 				{
 					"sound": "dsurround:frog",
 					"conditions": "!player.isInside",
-					"volume": 0.4,
-					"pitch": 1.0,
 					"variable": true
 				}
 			]
@@ -447,8 +416,6 @@
 			"sounds": [
 				{
 					"sound": "dsurround:soulsand",
-					"volume": 0.2,
-					"pitch": 1.0,
 					"variable": true
 				}
 			]
@@ -468,7 +435,6 @@
 				{
 					"sound": "dsurround:floorsqueak",
 					"soundType": "step",
-					"volume": 0.2,
 					"variable": true
 				}
 			]
@@ -484,7 +450,6 @@
 				{
 					"sound": "dsurround:breathing",
 					"conditions": "player.dimension == -1",
-					"volume": 0.5,
 					"variable": true
 				}
 			]
@@ -498,7 +463,6 @@
 				{
 					"sound": "dsurround:hiss",
 					"conditions": "weather.isNotRaining && isDay && !ONEOF(biome.temperature, 'icy', 'cold')",
-					"volume": 1.0,
 					"variable": true
 				}
 			]
@@ -511,12 +475,10 @@
 			"sounds": [
 				{
 					"sound": "dsurround:hiss",
-					"volume": 1.0,
 					"variable": true
 				},
 				{
 					"sound": "dsurround:insectcrawl",
-					"volume": 1.0,
 					"variable": true
 				}
 			]
@@ -525,11 +487,10 @@
 			"blocks": [
 				"minecraft:bookshelf"
 			],
-			"chance": 500,
+			"chance": 750,
 			"sounds": [
 				{
-					"sound": "dsurround:bookshelf",
-					"volume": 0.7
+					"sound": "dsurround:bookshelf"
 				}
 			]
 		},
@@ -541,19 +502,16 @@
 			"sounds": [
 				{
 					"sound": "dsurround:rattlesnake",
-					"conditions": "weather.isNotRaining && isDay && ONEOF(biome.temperature, 'warm', 'hot')",
-					"volume": 1.0
+					"conditions": "weather.isNotRaining && isDay && ONEOF(biome.temperature, 'warm', 'hot')"
 				},
 				{
 					"sound": "dsurround:hiss",
 					"conditions": "weather.isNotRaining && isDay && ONEOF(biome.temperature, 'warm', 'hot')",
-					"volume": 1.0,
 					"variable": true
 				},
 				{
 					"sound": "dsurround:insectcrawl",
 					"conditions": "weather.isNotRaining && isDay && ONEOF(biome.temperature, 'warm', 'hot')",
-					"volume": 1.0,
 					"variable": true
 				}
 			]

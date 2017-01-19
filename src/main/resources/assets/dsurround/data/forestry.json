@@ -13,7 +13,6 @@
 				{
 					"sound":"dsurround:floorsqueak",
 					"soundType":"step",
-					"volume":0.2,
 					"variable":true
 				}
 				
@@ -29,7 +28,6 @@
 				{
 					"sound":"dsurround:bees",
 					"conditions":"isDay && weather.isNotRaining",
-					"volume":0.2,
 					"variable":true
 				}
 				

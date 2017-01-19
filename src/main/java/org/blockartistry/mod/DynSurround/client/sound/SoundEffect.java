@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.fx.ISpecialEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
@@ -57,25 +58,21 @@ public final class SoundEffect implements ISpecialEffect {
 	public final SoundType type;
 	public final SoundCategory category;
 	public float volume;
-	public final float pitch;
+	public float pitch;
 	public final int weight;
-	public final boolean variable;
+	public boolean variable;
 	public final int repeatDelayRandom;
 	public final int repeatDelay;
+
+	public SoundEffect(@Nonnull final String sound, @Nonnull final SoundCategory category) {
+		this(new ResourceLocation(DSurround.RESOURCE_ID, sound), category);
+	}
 
 	public SoundEffect(final ResourceLocation resource, final SoundCategory category) {
 		this(resource, category, 1.0F, 1.0F, 0, false);
 	}
 
-	public SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume, final float pitch) {
-		this(resource, category, volume, pitch, 0, false);
-	}
-
-	public SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume, final float pitch, final boolean variable) {
-		this(resource, category, volume, pitch, 0, variable);
-	}
-
-	public SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume, final float pitch, final int repeatDelay,
+	protected SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume, final float pitch, final int repeatDelay,
 			final boolean variable) {
 		this.soundName = resource.toString();
 		this.sound = SoundUtils.getOrRegisterSound(resource);
@@ -126,6 +123,21 @@ public final class SoundEffect implements ISpecialEffect {
 		default:
 			this.category = SoundCategory.BLOCKS;
 		}
+	}
+	
+	public SoundEffect setVolume(final float vol) {
+		this.volume = vol;
+		return this;
+	}
+	
+	public SoundEffect setPitch(final float pitch) {
+		this.pitch = pitch;
+		return this;
+	}
+	
+	public SoundEffect setVariable(final boolean flag) {
+		this.variable = flag;
+		return this;
 	}
 
 	public boolean matches() {
