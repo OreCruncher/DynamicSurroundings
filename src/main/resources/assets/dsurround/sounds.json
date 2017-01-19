@@ -753,17 +753,35 @@
 	"ice": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/ice/crack1",
-			"dsurround:ambient/ice/crack2",
-			"dsurround:ambient/ice/crack3"
+			{
+				"name": "dsurround:ambient/ice/crack1",
+				"volume": 0.5
+			},
+			{
+				"name": "dsurround:ambient/ice/crack2",
+				"volume": 0.5
+			},
+			{
+				"name": "dsurround:ambient/ice/crack3",
+				"volume": 0.5
+			}
 		]
 	},
 	"frog": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/frog/croak1",
-			"dsurround:ambient/frog/croak2",
-			"dsurround:ambient/frog/croak3"
+			{
+				"name": "dsurround:ambient/frog/croak1",
+				"volume": 0.4
+			},
+			{
+				"name": "dsurround:ambient/frog/croak2",
+				"volume": 0.4
+			},
+			{
+				"name": "dsurround:ambient/frog/croak3",
+				"volume": 0.4
+			}
 		]
 	},
 	"wind": {
@@ -816,6 +834,7 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/forest",
+				"volume": 0.7,
 				"stream": true
 			}
 		]
@@ -825,6 +844,8 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/jungle",
+				"volume": 0.08,
+				"pitch": 0.8,
 				"stream": true
 			}
 		]
@@ -832,9 +853,18 @@
 	"soulsand": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/soulsand/soulsand1",
-			"dsurround:ambient/soulsand/soulsand2",
-			"dsurround:ambient/soulsand/soulsand3"
+			{
+				"name": "dsurround:ambient/soulsand/soulsand1",
+				"volume": 0.2
+			},
+			{
+				"name": "dsurround:ambient/soulsand/soulsand2",
+				"volume": 0.2
+			},
+			{
+				"name": "dsurround:ambient/soulsand/soulsand3",
+				"volume": 0.2
+			}
 		]
 	},
 	"theend": {
@@ -842,6 +872,7 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/end/end",
+				"volume": 0.2,
 				"stream": true
 			}
 		]
@@ -849,9 +880,18 @@
 	"owl": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/owl/owl1",
-			"dsurround:ambient/owl/owl2",
-			"dsurround:ambient/owl/owl3"
+			{
+				"name": "dsurround:ambient/owl/owl1",
+				"volume": 0.3
+			},
+			{
+				"name": "dsurround:ambient/owl/owl2",
+				"volume": 0.3
+			},
+			{
+				"name": "dsurround:ambient/owl/owl3",
+				"volume": 0.3
+			}
 		]
 	},
 	"underground": {
@@ -859,6 +899,7 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/underground/ambient",
+				"volume": 0.3,
 				"stream": true
 			}
 		]
@@ -874,14 +915,23 @@
 	"bigrockfall": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/underground/bigslide1",
-			"dsurround:ambient/underground/bigslide2"
+			{
+				"name": "dsurround:ambient/underground/bigslide1",
+				"volume": 0.4
+			},
+			{
+				"name": "dsurround:ambient/underground/bigslide2",
+				"volume": 0.4
+			}
 		]
 	},
 	"monstergrowl": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/underground/monster_growl1"
+			{
+				"name": "dsurround:ambient/underground/monster_growl1",
+				"volume": 0.3
+			}
 		]
 	},
 	"waterdrops": {
@@ -895,17 +945,35 @@
 	"seagulls": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/seagulls/seagulls1",
-			"dsurround:ambient/seagulls/seagulls2"
+			{
+				"name": "dsurround:ambient/seagulls/seagulls1",
+				"volume": 0.3
+			},
+			{
+				"name": "dsurround:ambient/seagulls/seagulls2",
+				"volume": 0.3
+			}
 		]
 	},
 	"wolf": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/wolf/wolf1",
-			"dsurround:ambient/wolf/wolf2",
-			"dsurround:ambient/wolf/wolf3",
-			"dsurround:ambient/wolf/wolf4"
+			{
+				"name": "dsurround:ambient/wolf/wolf1",
+				"volume": 0.3
+			},
+			{
+				"name": "dsurround:ambient/wolf/wolf2",
+				"volume": 0.3
+			},
+			{
+				"name": "dsurround:ambient/wolf/wolf3",
+				"volume": 0.3
+			},
+			{
+				"name": "dsurround:ambient/wolf/wolf4",
+				"volume": 0.3
+			}
 		]
 	},
 	"underdeepocean": {
@@ -913,6 +981,7 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/underwater/deepocean",
+				"volume": 0.1,
 				"stream": true
 			}
 		]
@@ -922,6 +991,7 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/underwater/ocean",
+				"volume": 0.1,
 				"stream": true
 			}
 		]
@@ -931,6 +1001,8 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/underwater/river",
+				"volume": 0.1,
+				"pitch": 1.5,
 				"stream": true
 			}
 		]
@@ -938,11 +1010,26 @@
 	"whale": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/whale/whale1",
-			"dsurround:ambient/whale/whale2",
-			"dsurround:ambient/whale/whale3",
-			"dsurround:ambient/whale/whale4",
-			"dsurround:ambient/whale/whale5"
+			{
+				"name": "dsurround:ambient/whale/whale1",
+				"volume": 0.3
+			},
+			{
+				"name": "dsurround:ambient/whale/whale2",
+				"volume": 0.3
+			},
+			{
+				"name": "dsurround:ambient/whale/whale3",
+				"volume": 0.3
+			},
+			{
+				"name": "dsurround:ambient/whale/whale4",
+				"volume": 0.3
+			},
+			{
+				"name": "dsurround:ambient/whale/whale5",
+				"volume": 0.3
+			}
 		]
 	},
 	"heartbeat": {
@@ -962,28 +1049,49 @@
 	"floorsqueak": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/miscblocks/floorsqueak1",
-			"dsurround:ambient/miscblocks/floorsqueak2",
-			"dsurround:ambient/miscblocks/floorsqueak3"
+			{
+				"name": "dsurround:ambient/miscblocks/floorsqueak1",
+				"volume": 0.2
+			},
+			{
+				"name": "dsurround:ambient/miscblocks/floorsqueak2",
+				"volume": 0.2
+			},
+			{
+				"name": "dsurround:ambient/miscblocks/floorsqueak3",
+				"volume": 0.2
+			}
 		]
 	},
 	"breathing": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/miscblocks/breathing1",
-			"dsurround:ambient/miscblocks/breathing2"
+			{
+				"name": "dsurround:ambient/miscblocks/breathing1",
+				"volume": 0.5
+			},
+			{
+				"name": "dsurround:ambient/miscblocks/breathing2",
+				"volume": 0.5
+			}
 		]
 	},
 	"jump": {
 		"category": "player",
 		"sounds": [
-			"dsurround:ambient/steve/jump"
+			{
+				"name": "dsurround:ambient/steve/jump",
+				"volume": 0.4
+			}
 		]
 	},
 	"bees": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/insects/bee1"
+			{
+				"name": "dsurround:ambient/insects/bee1",
+				"volume": 0.05
+			}
 		]
 	},
 	"insectcrawl": {
@@ -1009,8 +1117,14 @@
 	"insectbuzz": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/insects/gnatt1",
-			"dsurround:ambient/insects/grasshopper1"
+			{
+				"name": "dsurround:ambient/insects/gnatt1",
+				"volume": 0.2
+			},
+			{
+				"name": "dsurround:ambient/insects/grasshopper1",
+				"volume": 0.2
+			}
 		]
 	},
 	"gnatt": {
@@ -1028,10 +1142,22 @@
 	"crocodile": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/crock/crocodile1",
-			"dsurround:ambient/crock/crocodile2",
-			"dsurround:ambient/crock/crocodile3",
-			"dsurround:ambient/crock/crocodile4"
+			{
+				"name": "dsurround:ambient/crock/crocodile1",
+				"volume": 0.7
+			},
+			{
+				"name": "dsurround:ambient/crock/crocodile2",
+				"volume": 0.7
+			},
+			{
+				"name": "dsurround:ambient/crock/crocodile3",
+				"volume": 0.7
+			},
+			{
+				"name": "dsurround:ambient/crock/crocodile4",
+				"volume": 0.7
+			}
 		]
 	},
 	"rattlesnake": {
@@ -1045,9 +1171,18 @@
 	"elephant": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/elephant/elephant1",
-			"dsurround:ambient/elephant/elephant2",
-			"dsurround:ambient/elephant/elephant3"
+			{
+				"name": "dsurround:ambient/elephant/elephant1",
+				"volume": 0.7
+			},
+			{
+				"name": "dsurround:ambient/elephant/elephant2",
+				"volume": 0.7
+			},
+			{
+				"name": "dsurround:ambient/elephant/elephant3",
+				"volume": 0.7
+			}
 		]
 	},
 	"hiss": {
@@ -1085,14 +1220,38 @@
 	"bookshelf": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/book/newsprint1",
-			"dsurround:ambient/book/newsprint2",
-			"dsurround:ambient/book/pageflip1",
-			"dsurround:ambient/book/pageflip2",
-			"dsurround:ambient/book/pageflip3",
-			"dsurround:ambient/book/pageflipheavy1",
-			"dsurround:ambient/book/pageflipheavy2",
-			"dsurround:ambient/book/pageflipheavy3"
+			{
+				"name": "dsurround:ambient/book/newsprint1",
+				"volume": 0.175
+			},
+			{
+				"name": "dsurround:ambient/book/newsprint2",
+				"volume": 0.175
+			},
+			{
+				"name": "dsurround:ambient/book/pageflip1",
+				"volume": 0.175
+			},
+			{
+				"name": "dsurround:ambient/book/pageflip2",
+				"volume": 0.175
+			},
+			{
+				"name": "dsurround:ambient/book/pageflip3",
+				"volume": 0.175
+			},
+			{
+				"name": "dsurround:ambient/book/pageflipheavy1",
+				"volume": 0.175
+			},
+			{
+				"name": "dsurround:ambient/book/pageflipheavy2",
+				"volume": 0.175
+			},
+			{
+				"name": "dsurround:ambient/book/pageflipheavy3",
+				"volume": 0.175
+			}
 		]
 	},
 	"crafting": {
@@ -1109,20 +1268,47 @@
 	"bison": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/bison/bison1",
-			"dsurround:ambient/bison/bison2",
-			"dsurround:ambient/bison/bison3",
-			"dsurround:ambient/bison/bison4"
+			{
+				"name": "dsurround:ambient/bison/bison1",
+				"volume": 0.5
+			},
+			{
+				"name": "dsurround:ambient/bison/bison2",
+				"volume": 0.5
+			},
+			{
+				"name": "dsurround:ambient/bison/bison3",
+				"volume": 0.5
+			},
+			{
+				"name": "dsurround:ambient/bison/bison4",
+				"volume": 0.5
+			}
 		]
 	},
 	"primates": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/primate/primate1",
-			"dsurround:ambient/primate/primate2",
-			"dsurround:ambient/primate/primate3",
-			"dsurround:ambient/primate/primate4",
-			"dsurround:ambient/primate/primate5"
+			{
+				"name": "dsurround:ambient/primate/primate1",
+				"volume": 0.3
+			},
+			{
+				"name": "dsurround:ambient/primate/primate2",
+				"volume": 0.3
+			},
+			{
+				"name": "dsurround:ambient/primate/primate3",
+				"volume": 0.3
+			},
+			{
+				"name": "dsurround:ambient/primate/primate4",
+				"volume": 0.3
+			},
+			{
+				"name": "dsurround:ambient/primate/primate5",
+				"volume": 0.3
+			}
 		]
 	},
 	"bowpull": {

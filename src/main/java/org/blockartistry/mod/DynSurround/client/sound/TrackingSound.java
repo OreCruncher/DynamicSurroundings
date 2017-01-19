@@ -137,7 +137,7 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 
 	@Override
 	public float getVolume() {
-		return this.volume * ModOptions.masterSoundScaleFactor;
+		return super.getVolume() * ModOptions.masterSoundScaleFactor;
 	}
 
 	@Override

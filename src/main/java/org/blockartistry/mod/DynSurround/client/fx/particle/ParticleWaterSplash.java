@@ -24,7 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
-import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.fx.WaterSplashJetEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.mod.DynSurround.client.sound.IMySound;
@@ -33,7 +32,6 @@ import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleRain;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -43,8 +41,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleWaterSplash extends ParticleJet {
 
-	private static final SoundEffect SPLASH = new SoundEffect(
-			new ResourceLocation(DSurround.RESOURCE_ID, "waterfall"), SoundCategory.AMBIENT);
+	private static final SoundEffect SPLASH = new SoundEffect("waterfall", SoundCategory.AMBIENT);
 
 	private static class ParticleWaterSpray extends ParticleRain {
 
