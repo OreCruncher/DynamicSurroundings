@@ -30,6 +30,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.ConfigOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.EventType;
@@ -463,6 +464,9 @@ public class Solver {
 	 * sound overlay to add.
 	 */
 	protected ArmorClass effectiveArmorClass(@Nonnull final EntityPlayer player) {
+		if(!ModOptions.enableArmorSounds)
+			return ArmorClass.NONE;
+		
 		final ItemRegistry registry = RegistryManager.get(RegistryType.ITEMS);
 		ArmorClass result = registry.getArmorClass(player.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
 		if (result == ArmorClass.HEAVY)

@@ -315,15 +315,17 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_BOW_PULL_SOUND = "Bow Pull Sound";
 	public static final String CONFIG_ENABLE_FOOTSTEPS_SOUND = "Footsteps";
 	public static final String CONFIG_FOOTSTEPS_SOUND_FACTOR = "Footsteps Sound Factor";
+	public static final String CONFIG_ENABLE_ARMOR_SOUND = "Armor Sound";
 	public static final String CONFIG_SOUND_CULL_THRESHOLD = "Sound Culling Threshold";
 	public static final String CONFIG_CULLED_SOUNDS = "Culled Sounds";
 	public static final String CONFIG_BLOCKED_SOUNDS = "Blocked Sounds";
 	public static final String CONFIG_SOUND_VOLUMES = "Sound Volume";
 	private static final List<String> soundsSort = Arrays.asList(CONFIG_ENABLE_BIOME_SOUNDS, CONFIG_MASTER_SOUND_FACTOR,
-			CONFIG_ENABLE_FOOTSTEPS_SOUND, CONFIG_FOOTSTEPS_SOUND_FACTOR, CONFIG_ENABLE_JUMP_SOUND,
-			CONFIG_ENABLE_SWING_SOUND, CONFIG_ENABLE_CRAFTING_SOUND, CONFIG_ENABLE_BOW_PULL_SOUND,
-			CONFIG_AUTO_CONFIG_CHANNELS, CONFIG_NORMAL_CHANNEL_COUNT, CONFIG_STREAMING_CHANNEL_COUNT,
-			CONFIG_BLOCKED_SOUNDS, CONFIG_SOUND_CULL_THRESHOLD, CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES);
+			CONFIG_ENABLE_FOOTSTEPS_SOUND, CONFIG_FOOTSTEPS_SOUND_FACTOR, CONFIG_ENABLE_ARMOR_SOUND,
+			CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_SWING_SOUND, CONFIG_ENABLE_CRAFTING_SOUND,
+			CONFIG_ENABLE_BOW_PULL_SOUND, CONFIG_AUTO_CONFIG_CHANNELS, CONFIG_NORMAL_CHANNEL_COUNT,
+			CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_BLOCKED_SOUNDS, CONFIG_SOUND_CULL_THRESHOLD, CONFIG_CULLED_SOUNDS,
+			CONFIG_SOUND_VOLUMES);
 
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BIOME_SOUNDS, defaultValue = "true", lang = "cfg.sound.BiomeSounds")
 	@Comment("Enable biome background and spot sounds")
@@ -365,6 +367,9 @@ public final class ModOptions {
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Volume scale factor for footstep sounds")
 	public static float footstepsSoundFactor = 0.15F;
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_ARMOR_SOUND, defaultValue = "true", lang = "cfg.sound.Armor")
+	@Comment("Enable/disable armor sounds when moving")
+	public static boolean enableArmorSounds = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_SOUND_CULL_THRESHOLD, defaultValue = "20", lang = "cfg.sound.CullInterval")
 	@MinMaxInt(min = 0)
 	@Comment("Ticks between culled sound events (0 to disable culling)")
@@ -417,26 +422,26 @@ public final class ModOptions {
 			CONFIG_POTION_HUD_TRANSPARENCY, CONFIG_POTION_HUD_SCALE, CONFIG_POTION_HUD_ANCHOR,
 			CONFIG_POTION_HUD_TOP_OFFSET, CONFIG_POTION_HUD_LEFT_OFFSET);
 
-	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_ENABLE, defaultValue = "true", lang="cfg.player.potionHud.Enable")
+	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_ENABLE, defaultValue = "true", lang = "cfg.player.potionHud.Enable")
 	@Comment("Enable display of potion icons in display")
 	public static boolean potionHudEnabled = true;
-	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_TRANSPARENCY, defaultValue = "0.75", lang="cfg.player.potionHud.Transparency")
+	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_TRANSPARENCY, defaultValue = "0.75", lang = "cfg.player.potionHud.Transparency")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Transparency factor for icons (higher more solid)")
 	public static float potionHudTransparency = 0.75F;
-	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_LEFT_OFFSET, defaultValue = "5", lang="cfg.player.potionHud.LeftOffset")
+	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_LEFT_OFFSET, defaultValue = "5", lang = "cfg.player.potionHud.LeftOffset")
 	@MinMaxInt(min = 0)
 	@Comment("Offset from left side of screen")
 	public static int potionHudLeftOffset = 5;
-	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_TOP_OFFSET, defaultValue = "5", lang="cfg.player.potionHud.TopOffset")
+	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_TOP_OFFSET, defaultValue = "5", lang = "cfg.player.potionHud.TopOffset")
 	@MinMaxInt(min = 0)
 	@Comment("Offset from top of screen")
 	public static int potionHudTopOffset = 5;
-	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_SCALE, defaultValue = "0.75", lang="cfg.player.potionHud.Scale")
+	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_SCALE, defaultValue = "0.75", lang = "cfg.player.potionHud.Scale")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Size scale of icons (lower is smaller)")
 	public static float potionHudScale = 0.75F;
-	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_ANCHOR, defaultValue = "0", lang="cfg.player.potionHud.Location")
+	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_ANCHOR, defaultValue = "0", lang = "cfg.player.potionHud.Location")
 	@MinMaxInt(min = 0, max = 1)
 	@Comment("Area of the display the Potion HUD is displayed (0 upper left, 1 upper right)")
 	public static int potionHudAnchor = 0;
@@ -447,21 +452,21 @@ public final class ModOptions {
 	public static final String CONFIG_OPTION_ENABLE_EMOJIS = "Enable Entity Emojis";
 	public static final String CONFIG_OPTION_SPEECHBUBBLE_DURATION = "Display Duration";
 	public static final String CONFIG_OPTION_SPEECHBUBBLE_RANGE = "Visibility Range";
-	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_SPEECHBUBBLES, defaultValue = "false", lang="cfg.speech.EnableSpeechBubbles")
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_SPEECHBUBBLES, defaultValue = "false", lang = "cfg.speech.EnableSpeechBubbles")
 	@Comment("Enables/disables speech bubbles above player heads")
 	public static boolean enableSpeechBubbles = false;
-	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_ENTITY_CHAT, defaultValue = "false", lang="cfg.speech.EnableEntityChat")
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_ENTITY_CHAT, defaultValue = "false", lang = "cfg.speech.EnableEntityChat")
 	@Comment("Enables/disables entity chat bubbles")
 	public static boolean enableEntityChat = false;
-	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_EMOJIS, defaultValue = "false", lang="cfg.speech.EnableEntityEmojis")
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_EMOJIS, defaultValue = "false", lang = "cfg.speech.EnableEntityEmojis")
 	@Comment("Enables/disables entity emojis")
 	@RestartRequired(server = true)
 	public static boolean enableEntityEmojis = false;
-	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_SPEECHBUBBLE_DURATION, defaultValue = "7", lang="cfg.speech.Duration")
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_SPEECHBUBBLE_DURATION, defaultValue = "7", lang = "cfg.speech.Duration")
 	@MinMaxFloat(min = 5.0F, max = 15.0F)
 	@Comment("Number of seconds to display speech before removing")
 	public static float speechBubbleDuration = 7.0F;
-	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_SPEECHBUBBLE_RANGE, defaultValue = "16", lang="cfg.speech.Range")
+	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_SPEECHBUBBLE_RANGE, defaultValue = "16", lang = "cfg.speech.Range")
 	@MinMaxInt(min = 16, max = 32)
 	@Comment("Range at which a SpeechBubble is visible.  Filtering occurs server side.")
 	public static float speechBubbleRange = 16;
@@ -469,14 +474,14 @@ public final class ModOptions {
 	private static final List<String> speechBubbleSort = Arrays.asList(CONFIG_OPTION_ENABLE_SPEECHBUBBLES,
 			CONFIG_OPTION_ENABLE_ENTITY_CHAT, CONFIG_OPTION_ENABLE_EMOJIS, CONFIG_OPTION_SPEECHBUBBLE_DURATION,
 			CONFIG_OPTION_SPEECHBUBBLE_RANGE);
-	
+
 	public static final String CATEGORY_EXPLOSIONS = "explosions";
 	public static final String CONFIG_ENABLE_EXPLOSIONS = "Enable Explosion Enhancement";
 	public static final String CONFIG_ADD_MOB_PARTICLES = "Add Mob Models";
-	@Parameter(category = CATEGORY_EXPLOSIONS, property = CONFIG_ENABLE_EXPLOSIONS, defaultValue = "true", lang="cfg.explosions.EnableExplosions")
+	@Parameter(category = CATEGORY_EXPLOSIONS, property = CONFIG_ENABLE_EXPLOSIONS, defaultValue = "true", lang = "cfg.explosions.EnableExplosions")
 	@Comment("Enables/disables explosion enhancement")
 	public static boolean enableExplosionEnhancement = false;
-	@Parameter(category = CATEGORY_EXPLOSIONS, property = CONFIG_ADD_MOB_PARTICLES, defaultValue = "false", lang="cfg.explosions.AddMobs")
+	@Parameter(category = CATEGORY_EXPLOSIONS, property = CONFIG_ADD_MOB_PARTICLES, defaultValue = "false", lang = "cfg.explosions.AddMobs")
 	@Comment("Enables/disables addition of mob models in explosion debris")
 	public static boolean addMobParticles = false;
 
@@ -571,7 +576,7 @@ public final class ModOptions {
 		config.setCategoryComment(CATEGORY_SPEECHBUBBLES, "Options for configuring SpeechBubbles");
 		config.setCategoryPropertyOrder(CATEGORY_SPEECHBUBBLES, new ArrayList<String>(speechBubbleSort));
 		config.setCategoryLanguageKey(CATEGORY_SPEECHBUBBLES, "cfg.speech.cat.Speech");
-		
+
 		// CATEGORY: Explosions
 		config.setCategoryRequiresMcRestart(CATEGORY_EXPLOSIONS, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_EXPLOSIONS, false);
