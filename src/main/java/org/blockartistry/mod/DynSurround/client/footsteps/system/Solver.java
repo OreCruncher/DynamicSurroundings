@@ -30,16 +30,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.ConfigOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IOptions.Option;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.registry.ItemRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
-import org.blockartistry.mod.DynSurround.registry.ItemRegistry.ArmorClass;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
+import org.blockartistry.mod.DynSurround.registry.ItemRegistry;
+import org.blockartistry.mod.DynSurround.registry.ItemRegistry.ArmorClass;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.blockartistry.mod.DynSurround.util.MyUtils;
@@ -463,6 +464,9 @@ public class Solver {
 	 * sound overlay to add.
 	 */
 	protected ArmorClass effectiveArmorClass(@Nonnull final EntityPlayer player) {
+		if(!ModOptions.enableArmorSounds)
+			return ArmorClass.NONE;
+		
 		final ItemRegistry registry = RegistryManager.get(RegistryType.ITEMS);
 		ArmorClass result = registry.getArmorClass(player.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
 		if (result == ArmorClass.HEAVY)
