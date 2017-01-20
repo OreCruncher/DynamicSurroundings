@@ -15,6 +15,24 @@
 			"dsurround:footsteps/armor/light_3"
 		]
 	},
+	"fs.armor.crystal_walk": {
+		"category": "player",
+		"sounds": [
+			"dsurround:footsteps/armor/crystal_walk1",
+			"dsurround:footsteps/armor/crystal_walk2",
+			"dsurround:footsteps/armor/crystal_walk3",
+			"dsurround:footsteps/armor/crystal_walk4"
+		]
+	},
+	"fs.armor.crystal_run": {
+		"category": "player",
+		"sounds": [
+			"dsurround:footsteps/armor/crystal_walk1",
+			"dsurround:footsteps/armor/crystal_walk2",
+			"dsurround:footsteps/armor/crystal_walk3",
+			"dsurround:footsteps/armor/crystal_walk4"
+		]
+	},
 	"fs.armor.heavy_walk": {
 		"category": "player",
 		"sounds": [
