@@ -84,6 +84,11 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		this.acoustics.put(acoustic.getAcousticName(), acoustic);
 	}
 
+	@Nullable
+	public IAcoustic getAcoustic(@Nonnull final String name) {
+		return this.acoustics.get(name);
+	}
+
 	public void playAcoustic(@Nonnull final Object location, @Nonnull final Association acousticName,
 			@Nonnull final EventType event) {
 		playAcoustic(location, acousticName.getData(), event, null);

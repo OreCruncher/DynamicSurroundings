@@ -27,6 +27,123 @@
 				"pitch_max": 110
 			}
 		},
+		"armor_light": {
+			"walk": {
+				"name": "armor.light_walk",
+				"pitch_min": 80,
+				"pitch_max": 100
+			},
+			"jump": {
+				"name": "armor.light_walk",
+				"pitch_min": 80,
+				"pitch_max": 100
+			},
+			"run": {
+				"name": "armor.light_run",
+				"pitch_min": 100,
+				"pitch_max": 105
+			},
+			"wander": {
+				"name": "armor.light_walk",
+				"pitch_min": 80,
+				"pitch_max": 100
+			},
+			"land": {
+				"type": "simultaneous",
+				"array": [
+					"armor.light_walk",
+					{
+						"name": "armor.light_walk",
+						"vol_min": 50,
+						"vol_max": 50
+					},
+					{
+						"type": "delayed",
+						"delay": 50,
+						"name": "armor.light_run"
+					}
+				]
+			}
+		},
+		"armor_crystal": {
+			"walk": {
+				"type": "simultaneous",
+				"array": [
+					{
+						"name": "muffledice.muffledice_walk",
+						"vol_min": 40,
+						"vol_max": 50
+					},
+					{
+						"name": "weakice.weakice_walk",
+						"vol_min": 0,
+						"vol_max": 10
+					}
+				]
+			},
+			"run": {
+				"type": "simultaneous",
+				"array": [
+					{
+						"name": "muffledice.muffledice_walk",
+						"vol_min": 60,
+						"vol_max": 70
+					},
+					{
+						"name": "weakice.weakice_walk",
+						"vol_min": 0,
+						"vol_max": 20
+					}
+				]
+			},
+			"wander": "stone.stone_wander",
+			"jump": "stone.stone_wander",
+			"land": {
+				"type": "simultaneous",
+				"array": [
+					{
+						"name": "muffledice.muffledice_walk",
+						"vol_min": 80,
+						"vol_max": 100
+					},
+					{
+						"name": "weakice.weakice_walk",
+						"vol_min": 50,
+						"vol_max": 70
+					}
+				]
+			}
+		},
+		"armor_heavy": {
+			"walk": {
+				"name": "armor.heavy_walk"
+			},
+			"jump": {
+				"name": "armor.heavy_walk"
+			},
+			"run": {
+				"name": "armor.heavy_run"
+			},
+			"wander": {
+				"name": "armor.heavy_walk"
+			},
+			"land": {
+				"type": "simultaneous",
+				"array": [
+					"armor.heavy_walk",
+					{
+						"name": "armor.heavy_walk",
+						"vol_min": 50,
+						"vol_max": 50
+					},
+					{
+						"type": "delayed",
+						"delay": 50,
+						"name": "armor.heavy_run"
+					}
+				]
+			}
+		},
 		"straw": {
 			"walk": "leaves.leaves_through",
 			"jump": "leaves.leaves_through",

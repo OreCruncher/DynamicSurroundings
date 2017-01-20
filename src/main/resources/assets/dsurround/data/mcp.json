@@ -544,6 +544,28 @@
 			"net.minecraft.item.ItemSpade",
 			"net.minecraft.item.ItemHoe",
 			"net.minecraft.item.ItemFishingRod"
+		],
+		"lightArmor": [
+			"minecraft:leather_boots",
+			"minecraft:leather_leggings",
+			"minecraft:leather_chestplate",
+			"minecraft:leather_helmet"
+		],
+		"crystalArmor": [
+			"minecraft:diamond_boots",
+			"minecraft:diamond_leggings",
+			"minecraft:diamond_chestplate",
+			"minecraft:diamond_helmet"
+		],
+		"heavyArmor": [
+			"minecraft:iron_boots",
+			"minecraft:iron_leggings",
+			"minecraft:iron_chestplate",
+			"minecraft:iron_helmet",
+			"minecraft:golden_boots",
+			"minecraft:golden_leggings",
+			"minecraft:golden_chestplate",
+			"minecraft:golden_helmet"
 		]
 	},
 	"dimensions": [
