@@ -96,3 +96,15 @@ whether LPs can be monetized on the various streaming services.
 <ul>
      <li>S: <a href="https://www.freesound.org/people/felix.blume/sounds/156414/">Wind blowing into some cactus spine, on the top of the mountain, in the desert of Atacama (Chile).</a> by <a href="https://www.freesound.org/people/felix.blume/">felix.blume</a> | License: Creative Commons 0</li>
 </ul>
+
+*dsurround:fs.armor.light_walk / dsurround:fs.armor.light_run*
+
+<ul>
+     <li>P: <a href="https://www.freesound.org/people/Samulis/packs/12606/">Foley</a> by <a href="https://www.freesound.org/people/Samulis/">Samulis</a></li>
+</ul>
+
+*dsurround:fs.armor.heavy_walk / dsurround:fs.armor.heavy_run*
+
+<ul>
+<li> <a href="http://www.nexusmods.com/skyrim/mods/24352/?">Clanking Armor</a> by LordSane | See permissions in link</li>
+</ul>

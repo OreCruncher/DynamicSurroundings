@@ -1,3 +1,14 @@
+###DynamicSurroundings-1.10.2-3.2.2.0
+**What's New!**
+* Added armor overlay sounds.  When moving about additional sounds will be mixed in based on armor being worn by the player.
+
+**Changes**
+* Tweaks sound volumes and handling.  Affected sounds:
+    * dsurround:jungle - decreased volume
+    * dsurround:bookshelf - decreased volume
+* Modified block effects.  Affected blocks:
+    * bookshelf - triggers 25% less
+    
 ###DynamicSurroundings-1.11.2-3.2.1.2
 **What's New!**
 * Added keybinding to toggle the block selection box on and off.  The selection box is the black fence you see outlining a block in the world when you have the cursor on it.  By default control is bound to the B key.
