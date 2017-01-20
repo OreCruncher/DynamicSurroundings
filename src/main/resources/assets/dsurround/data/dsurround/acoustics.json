@@ -67,49 +67,30 @@
 		},
 		"armor_crystal": {
 			"walk": {
-				"type": "simultaneous",
-				"array": [
-					{
-						"name": "muffledice.muffledice_walk",
-						"vol_min": 40,
-						"vol_max": 50
-					},
-					{
-						"name": "weakice.weakice_walk",
-						"vol_min": 0,
-						"vol_max": 10
-					}
-				]
+				"name": "armor.crystal_walk"
 			},
 			"run": {
-				"type": "simultaneous",
-				"array": [
-					{
-						"name": "muffledice.muffledice_walk",
-						"vol_min": 60,
-						"vol_max": 70
-					},
-					{
-						"name": "weakice.weakice_walk",
-						"vol_min": 0,
-						"vol_max": 20
-					}
-				]
+				"name": "armor.crystal_run"
 			},
-			"wander": "stone.stone_wander",
-			"jump": "stone.stone_wander",
+			"wander": {
+				"name": "armor.crystal_walk"
+			},
+			"jump": {
+				"name": "armor.crystal_walk"
+			},
 			"land": {
 				"type": "simultaneous",
 				"array": [
+					"armor.crystal_walk",
 					{
-						"name": "muffledice.muffledice_walk",
-						"vol_min": 80,
-						"vol_max": 100
+						"name": "armor.crystal_walk",
+						"vol_min": 50,
+						"vol_max": 50
 					},
 					{
-						"name": "weakice.weakice_walk",
-						"vol_min": 50,
-						"vol_max": 70
+						"type": "delayed",
+						"delay": 50,
+						"name": "armor.crystal_run"
 					}
 				]
 			}
