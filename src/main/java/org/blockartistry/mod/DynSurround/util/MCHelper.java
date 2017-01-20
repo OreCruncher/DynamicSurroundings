@@ -132,6 +132,11 @@ public final class MCHelper {
 		return Item.REGISTRY.getNameForObject(item).toString();
 	}
 
+	@Nullable
+	public static Item getItemByName(@Nonnull final String itemName) {
+		return Item.getByNameOrId(itemName);
+	}
+
 	@Nonnull
 	public static Block getBlockByName(@Nonnull final String blockName) {
 		// Yes yes. I know what I am doing here. Need to know if the block

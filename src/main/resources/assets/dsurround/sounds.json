@@ -1,4 +1,45 @@
 {
+	"fs.armor.light_walk": {
+		"category": "player",
+		"sounds": [
+			"dsurround:footsteps/armor/light_1",
+			"dsurround:footsteps/armor/light_2",
+			"dsurround:footsteps/armor/light_3"
+		]
+	},
+	"fs.armor.light_run": {
+		"category": "player",
+		"sounds": [
+			"dsurround:footsteps/armor/light_1",
+			"dsurround:footsteps/armor/light_2",
+			"dsurround:footsteps/armor/light_3"
+		]
+	},
+	"fs.armor.heavy_walk": {
+		"category": "player",
+		"sounds": [
+			"dsurround:footsteps/armor/heavy_walk1",
+			"dsurround:footsteps/armor/heavy_walk2",
+			"dsurround:footsteps/armor/heavy_walk3",
+			"dsurround:footsteps/armor/heavy_walk4",
+			"dsurround:footsteps/armor/heavy_walk5",
+			"dsurround:footsteps/armor/heavy_walk6"
+		]
+	},
+	"fs.armor.heavy_run": {
+		"category": "player",
+		"sounds": [
+			"dsurround:footsteps/armor/heavy_run1",
+			"dsurround:footsteps/armor/heavy_run2",
+			"dsurround:footsteps/armor/heavy_run3",
+			"dsurround:footsteps/armor/heavy_run4",
+			"dsurround:footsteps/armor/heavy_run5",
+			"dsurround:footsteps/armor/heavy_run6",
+			"dsurround:footsteps/armor/heavy_run7",
+			"dsurround:footsteps/armor/heavy_run8",
+			"dsurround:footsteps/armor/heavy_run9"
+		]
+	},
 	"fs.bluntwood.bluntwood_walk": {
 		"category": "player",
 		"sounds": [

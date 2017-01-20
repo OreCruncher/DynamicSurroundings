@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
+import org.blockartistry.mod.DynSurround.util.MyUtils;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -41,7 +42,7 @@ public class Association {
 
 	private final IBlockState state;
 	private final BlockPos pos;
-	private final IAcoustic[] data;
+	private IAcoustic[] data;
 
 	public Association(@Nonnull final IAcoustic[] association) {
 		this(null, null, association);
@@ -73,6 +74,10 @@ public class Association {
 	
 	public SoundType getSoundType() {
 		return this.state != null ? MCHelper.getSoundType(this.state) : null;
+	}
+	
+	public void add(@Nonnull final IAcoustic acoustics) {
+		this.data = MyUtils.append(this.data, acoustics);
 	}
 	
 	@Nonnull

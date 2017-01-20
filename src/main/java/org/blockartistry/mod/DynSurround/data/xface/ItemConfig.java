@@ -36,5 +36,11 @@ public final class ItemConfig {
 	public List<String> axeSound = ImmutableList.of();
 	@SerializedName("bowSound")
 	public List<String> bowSound = ImmutableList.of();
+	@SerializedName("crystalArmor")
+	public List<String> crystalArmor = ImmutableList.of();
+	@SerializedName("heavyArmor")
+	public List<String> heavyArmor = ImmutableList.of();
+	@SerializedName("lightArmor")
+	public List<String> lightArmor = ImmutableList.of();
 
 }
