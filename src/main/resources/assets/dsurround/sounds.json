@@ -1055,7 +1055,6 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/underwater/deepocean",
-				"volume": 0.1,
 				"stream": true
 			}
 		]
@@ -1065,7 +1064,6 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/underwater/ocean",
-				"volume": 0.1,
 				"stream": true
 			}
 		]
@@ -1075,8 +1073,6 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/underwater/river",
-				"volume": 0.1,
-				"pitch": 1.5,
 				"stream": true
 			}
 		]

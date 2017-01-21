@@ -62,12 +62,6 @@ whether LPs can be monetized on the various streaming services.
      <li>S: <a href="https://www.freesound.org/people/rayjensen/sounds/202749/">Soft, Chilled Crickets Field Recording</a> by <a href="https://www.freesound.org/people/rayjensen/">rayjensen</a> | License: Creative Commons 0</li>
 </ul>
 
-*dsurround:forest / dsurround:taiga*
-
-<ul>
-     <li>S: <a href="https://www.freesound.org/people/thearxx08/sounds/272417/">Forest Ambience.mp3</a> by <a href="https://www.freesound.org/people/thearxx08/">thearxx08</a> | License: Creative Commons 0</li>
-</ul>
-
 *dsurround:swoosh*
 
 <ul>
@@ -107,4 +101,10 @@ whether LPs can be monetized on the various streaming services.
 
 <ul>
 <li> <a href="http://www.nexusmods.com/skyrim/mods/24352/?">Clanking Armor</a> by LordSane | See permissions in link</li>
+</ul>
+
+*dsurround:river / dsurround:ocean / dsurround:deepocean*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/AlienXXX/sounds/218276/">underwater ambience.wav</a> by <a href="https://www.freesound.org/people/AlienXXX/">AlienXXX</a> | License: Attribution</li> 
 </ul>
