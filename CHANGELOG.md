@@ -1,6 +1,6 @@
 ###DynamicSurroundings-1.10.2-3.2.2.0
 **What's New!**
-* Added armor overlay sounds.  When moving about additional sounds will be mixed in based on armor being worn by the player.
+* [Added armor overlay sounds](https://github.com/OreCruncher/DynamicSurroundings/wiki/Sound-Overlay).  When moving about additional sounds will be mixed in based on armor being worn by the player.
 
 **Changes**
 * Tweaks sound volumes and handling.  Affected sounds:
