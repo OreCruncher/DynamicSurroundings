@@ -888,16 +888,6 @@
 			}
 		]
 	},
-	"taiga": {
-		"category": "ambient",
-		"sounds": [
-			{
-				"name": "dsurround:ambient/outside/forest",
-				"volume": 0.7,
-				"stream": true
-			}
-		]
-	},
 	"jungle": {
 		"category": "ambient",
 		"sounds": [
@@ -934,6 +924,31 @@
 				"volume": 0.2,
 				"stream": true
 			}
+		]
+	},
+	"bird": {
+		"category": "ambient",
+		"sounds": [
+			"dsurround:ambient/birds/bird1",
+			"dsurround:ambient/birds/bird2",
+			"dsurround:ambient/birds/bird3",
+			"dsurround:ambient/birds/bird4",
+			"dsurround:ambient/birds/bird5",
+			"dsurround:ambient/birds/bird6",
+			"dsurround:ambient/birds/bird7",
+			"dsurround:ambient/birds/bird8",
+			"dsurround:ambient/birds/bird9",
+			"dsurround:ambient/birds/bird10"
+		]
+	},
+	"woodpecker": {
+		"category": "ambient",
+		"sounds": [
+			"dsurround:ambient/birds/woodpecker1",
+			"dsurround:ambient/birds/woodpecker2",
+			"dsurround:ambient/birds/woodpecker3",
+			"dsurround:ambient/birds/woodpecker4",
+			"dsurround:ambient/birds/woodpecker5"
 		]
 	},
 	"owl": {
