@@ -67,10 +67,21 @@
 		},
 		{
 			"biomeName": "(?i)(?!.*dead.*|.*flower.*|.*fungi.*|.*frost.*|.*snow.*|.*kelp.*)(.*forest.*|.*cherry.*|.*orchard.*|.*wood.*|.*wetland.*|.*grove.*|.*springs.*)",
+			"spotSoundChance": 300,
 			"sounds": [
 				{
 					"sound": "dsurround:forest",
 					"conditions": "weather.isNotRaining && isDay"
+				},
+				{
+					"sound": "dsurround:bird",
+					"conditions": "weather.isNotRaining && isDay",
+					"soundType": "spot"
+				},
+				{
+					"sound": "dsurround:woodpecker",
+					"conditions": "weather.isNotRaining && isDay",
+					"soundType": "spot"
 				},
 				{
 					"sound": "dsurround:crickets",
@@ -85,10 +96,16 @@
 		},
 		{
 			"biomeName": "(?i)(heathland|thicket|land of lakes|mangrove|origin island)",
+			"spotSoundChance": 300,
 			"sounds": [
 				{
 					"sound": "dsurround:forest",
 					"conditions": "weather.isNotRaining && isDay"
+				},
+				{
+					"sound": "dsurround:bird",
+					"conditions": "weather.isNotRaining && isDay",
+					"soundType": "spot"
 				},
 				{
 					"sound": "dsurround:crickets",
@@ -100,7 +117,7 @@
 			"biomeName": "(?i)(?!.*cold.*|.*snow.*)(.*taiga.*)",
 			"sounds": [
 				{
-					"sound": "dsurround:taiga",
+					"sound": "dsurround:forest",
 					"conditions": "weather.isNotRaining && isDay"
 				}
 			]
