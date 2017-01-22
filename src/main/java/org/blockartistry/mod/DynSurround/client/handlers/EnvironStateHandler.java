@@ -34,6 +34,7 @@ import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.mod.DynSurround.client.weather.WeatherProperties;
+import org.blockartistry.mod.DynSurround.registry.ArmorClass;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.Evaluator;
@@ -87,6 +88,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static TemperatureRating playerTemperature = TemperatureRating.MILD;
 		private static TemperatureRating biomeTemperature = TemperatureRating.MILD;
 		private static boolean inside;
+		private static ArmorClass armorClass = ArmorClass.NONE;
 
 		private static int tickCounter;
 
@@ -115,6 +117,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.biomeTemperature = seasons.getBiomeTemperature(world, getPlayerPosition());
 			EnvironState.humid = trueBiome.isHighHumidity();
 			EnvironState.dry = trueBiome.getRainfall() == 0;
+			
+			EnvironState.armorClass = ArmorClass.effectiveArmorClass(player);
 
 			if (!Minecraft.getMinecraft().isGamePaused())
 				EnvironState.tickCounter++;
@@ -260,6 +264,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		public static boolean isDry() {
 			return dry;
+		}
+		
+		public static ArmorClass getPlayerArmorClass() {
+			return armorClass;
 		}
 
 		public static int getTickCounter() {

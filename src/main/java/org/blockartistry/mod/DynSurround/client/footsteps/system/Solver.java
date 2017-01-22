@@ -37,10 +37,6 @@ import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IOptions.Option;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.registry.RegistryManager;
-import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.mod.DynSurround.registry.ItemRegistry;
-import org.blockartistry.mod.DynSurround.registry.ItemRegistry.ArmorClass;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.blockartistry.mod.DynSurround.util.MyUtils;
@@ -50,7 +46,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -434,49 +429,19 @@ public class Solver {
 	@Nonnull
 	public Association addSoundOverlay(@Nullable Association assoc) {
 
-		IAcoustic addons = null;
-		switch (effectiveArmorClass(EnvironState.getPlayer())) {
-		case HEAVY:
-			addons = this.isolator.getAcoustics().getAcoustic("armor_heavy");
-			break;
-		case CRYSTAL:
-			addons = this.isolator.getAcoustics().getAcoustic("armor_crystal");
-			break;
-		case LIGHT:
-			addons = this.isolator.getAcoustics().getAcoustic("armor_light");
-			break;
-		default:
-			break;
-		}
+		if (ModOptions.enableArmorSounds) {
+			final IAcoustic addons = this.isolator.getAcoustics()
+					.getAcoustic(EnvironState.getPlayerArmorClass().getAcoustic());
 
-		if (addons != null) {
-			if (assoc == null)
-				assoc = new Association(new IAcoustic[] { addons });
-			else
-				assoc.add(addons);
+			if (addons != null) {
+				if (assoc == null)
+					assoc = new Association(new IAcoustic[] { addons });
+				else
+					assoc.add(addons);
+			}
 		}
 
 		return assoc;
 	}
 
-	/**
-	 * Determines the effective armor class of the player. Used to determine the
-	 * sound overlay to add.
-	 */
-	protected ArmorClass effectiveArmorClass(@Nonnull final EntityPlayer player) {
-		if(!ModOptions.enableArmorSounds)
-			return ArmorClass.NONE;
-		
-		final ItemRegistry registry = RegistryManager.get(RegistryType.ITEMS);
-		ArmorClass result = registry.getArmorClass(player.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
-		if (result == ArmorClass.HEAVY)
-			return result;
-		ArmorClass temp = registry.getArmorClass(player.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
-		if (temp.compareTo(result) > 0)
-			result = temp;
-		temp = registry.getArmorClass(player.getItemStackFromSlot(EntityEquipmentSlot.FEET));
-		if (temp.compareTo(result) > 0)
-			result = temp;
-		return result;
-	}
 }

@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.util;
 import java.lang.reflect.Array;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -51,23 +52,35 @@ public final class MyUtils {
 		return result;
 	}
 
-	public static <T> T[] concatenate(T[] a, T[] b) {
-		int aLen = a.length;
-		int bLen = b.length;
+	@Nonnull
+	public static <T> T[] concatenate(@Nonnull final T[] a, @Nullable final T[] b) {
+		if(b == null)
+			return a;
+		
+		final int aLen = a.length;
+		final int bLen = b.length;
 
+		if(bLen == 0)
+			return a;
+		
 		@SuppressWarnings("unchecked")
-		T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen + bLen);
+		final T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen + bLen);
 		System.arraycopy(a, 0, c, 0, aLen);
 		System.arraycopy(b, 0, c, aLen, bLen);
 
 		return c;
 	}
 
-	public static <T> T[] append(T[] a, T b) {
+	@Nonnull
+	public static <T> T[] append(@Nonnull final T[] a, @Nullable final T b) {
+		
+		if(b == null)
+			return a;
+		
 		final int aLen = a.length;
 
 		@SuppressWarnings("unchecked")
-		T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen + 1);
+		final T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen + 1);
 		System.arraycopy(a, 0, c, 0, aLen);
 		c[aLen] = b;
 

@@ -434,6 +434,12 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 				this.value = Math.max(blockLight, skyLight);
 			}
 		});
+		register(new DynamicString("player.armor") {
+			@Override
+			public void update() {
+				this.value = EnvironState.getPlayerArmorClass().getClassName();
+			}
+		});
 
 		// Weather variables
 		register(new DynamicBoolean("weather.isRaining") {
