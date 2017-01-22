@@ -30,7 +30,6 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.client.event.BlockUpdateEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -164,7 +163,6 @@ public abstract class CuboidScanner extends Scanner {
 	protected void updateScan(@Nonnull final Cuboid newVolume, @Nonnull final Cuboid oldVolume,
 			@Nonnull final Cuboid intersect) {
 
-		final Random rand = ThreadLocalRandom.current();
 		final World world = EnvironState.getWorld();
 
 		if (doBlockUnscan()) {
@@ -174,7 +172,7 @@ public abstract class CuboidScanner extends Scanner {
 				if (point.getY() > 0) {
 					final IBlockState state = world.getBlockState(point);
 					if (interestingBlock(state))
-						blockUnscan(state, point, rand);
+						blockUnscan(state, point, this.rand);
 				}
 			}
 		}
@@ -185,7 +183,7 @@ public abstract class CuboidScanner extends Scanner {
 			if (point.getY() > 0) {
 				final IBlockState state = world.getBlockState(point);
 				if (interestingBlock(state))
-					blockScan(state, point, rand);
+					blockScan(state, point, this.rand);
 			}
 		}
 
@@ -235,7 +233,7 @@ public abstract class CuboidScanner extends Scanner {
 	@SubscribeEvent(receiveCanceled = false)
 	public void onBlockUpdate(@Nonnull final BlockUpdateEvent event) {
 		if (this.activeCuboid != null && this.activeCuboid.contains(event.pos))
-			blockScan(event.newState, event.pos, ThreadLocalRandom.current());
+			blockScan(event.newState, event.pos, this.rand);
 	}
 
 }

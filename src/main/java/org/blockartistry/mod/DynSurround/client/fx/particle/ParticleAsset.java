@@ -24,13 +24,10 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
-import java.util.Random;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 
-import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
@@ -47,8 +44,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public abstract class ParticleAsset extends Particle {
 
-	protected final Random rand = ThreadLocalRandom.current();
-	
 	protected float pitchRate;
 	protected float yawRate;
 	protected float rollRate;

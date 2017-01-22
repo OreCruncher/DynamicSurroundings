@@ -34,7 +34,6 @@ import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
-import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,7 +42,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public abstract class EffectHandlerBase {
 	
-	protected final Random RANDOM = ThreadLocalRandom.current();
+	protected final Random RANDOM = new Random();
 	private BiomeRegistry biomes;
 	private BlockRegistry blocks;
 	private DimensionRegistry dimensions;

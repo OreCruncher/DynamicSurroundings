@@ -30,7 +30,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ITickable;
@@ -42,6 +41,7 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 	private final static int MAX_BLOCKS_TICK = 3000;
 
 	protected final String name;
+	protected final Random rand = new Random();
 
 	protected final int xRange;
 	protected final int yRange;
@@ -114,16 +114,15 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 	@Override
 	public void update() {
 
-		final Random rand = ThreadLocalRandom.current();
 		final BlockPos.MutableBlockPos workingPos = new BlockPos.MutableBlockPos();
 		final World world = EnvironState.getWorld();
 		for (int count = 0; count < this.blocksPerTick; count++) {
-			final BlockPos pos = nextPos(workingPos, rand);
+			final BlockPos pos = nextPos(workingPos, this.rand);
 			if (pos == null)
 				break;
 			final IBlockState state = world.getBlockState(pos);
 			if (interestingBlock(state)) {
-				blockScan(state, pos, rand);
+				blockScan(state, pos, this.rand);
 			}
 		}
 

@@ -30,11 +30,9 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import io.netty.util.internal.ThreadLocalRandom;
-
 public class WeightTable<T extends WeightTable.Item> {
 
-	protected final Random random = ThreadLocalRandom.current();
+	protected final Random random = new Random();
 	protected final List<T> items = new ArrayList<T>();
 	protected int totalWeight = 0;
 

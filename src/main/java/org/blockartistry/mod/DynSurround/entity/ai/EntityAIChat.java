@@ -42,7 +42,6 @@ import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.util.Translations;
 import com.google.common.base.Predicate;
 
-import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -147,7 +146,7 @@ public class EntityAIChat extends EntityAIBase {
 		return this.data.baseRandom;
 	}
 
-	protected final Random RANDOM = ThreadLocalRandom.current();
+	protected final Random RANDOM = new Random();
 	protected final EntityChatData data;
 	protected final EntityLiving theEntity;
 	protected long nextChat;
