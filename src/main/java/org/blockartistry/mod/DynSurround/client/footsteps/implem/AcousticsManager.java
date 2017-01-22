@@ -47,7 +47,6 @@ import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.TimeUtils;
 
 import gnu.trove.map.hash.THashMap;
-import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.block.SoundType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -64,7 +63,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
-	private final Random RANDOM = ThreadLocalRandom.current();
+	private final Random RANDOM = new Random();
 
 	private final THashMap<String, IAcoustic> acoustics = new THashMap<String, IAcoustic>();
 	private final ArrayDeque<PendingSound> pending = new ArrayDeque<PendingSound>();

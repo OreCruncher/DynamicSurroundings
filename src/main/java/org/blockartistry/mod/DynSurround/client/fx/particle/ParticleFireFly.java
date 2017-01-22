@@ -31,10 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Random;
-
 import org.blockartistry.mod.DynSurround.util.Color;
-import io.netty.util.internal.ThreadLocalRandom;
 
 // Started with ParticleFireWork.Spark as a basis.
 @SideOnly(Side.CLIENT)
@@ -47,7 +44,6 @@ public class ParticleFireFly extends ParticleSimpleAnimated {
 	private static final float Y_MOTION_DELTA = XZ_MOTION_DELTA / 2.0F;
 	private static final float ACCELERATION = 0.004F;
 
-	private final Random RANDOM = ThreadLocalRandom.current();
 	private double xAcceleration;
 	private double yAcceleration;
 	private double zAcceleration;
@@ -55,13 +51,13 @@ public class ParticleFireFly extends ParticleSimpleAnimated {
 	public ParticleFireFly(final World world, double xCoord, double yCoord, double zCoord) {
 		super(world, xCoord, yCoord, zCoord, 160, 8, 0.0F);
 
-		this.motionX = RANDOM.nextGaussian() * XZ_MOTION_DELTA;
-		this.motionZ = RANDOM.nextGaussian() * XZ_MOTION_DELTA;
-		this.motionY = RANDOM.nextGaussian() * Y_MOTION_DELTA;
+		this.motionX = this.rand.nextGaussian() * XZ_MOTION_DELTA;
+		this.motionZ = this.rand.nextGaussian() * XZ_MOTION_DELTA;
+		this.motionY = this.rand.nextGaussian() * Y_MOTION_DELTA;
 
-		this.xAcceleration = RANDOM.nextGaussian() * ACCELERATION;
-		this.yAcceleration = RANDOM.nextGaussian() * ACCELERATION;
-		this.zAcceleration = RANDOM.nextGaussian() * ACCELERATION;
+		this.xAcceleration = this.rand.nextGaussian() * ACCELERATION;
+		this.yAcceleration = this.rand.nextGaussian() * ACCELERATION;
+		this.zAcceleration = this.rand.nextGaussian() * ACCELERATION;
 
 		this.particleScale *= 0.75F * 0.25F;
 		this.particleMaxAge = 48 + this.rand.nextInt(12);

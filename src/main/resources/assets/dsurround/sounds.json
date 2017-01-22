@@ -861,6 +861,15 @@
 			}
 		]
 	},
+	"plains": {
+		"category": "ambient",
+		"sounds": [
+			{
+				"name": "dsurround:ambient/outside/plains",
+				"stream": true
+			}
+		]
+	},
 	"forest": {
 		"category": "ambient",
 		"sounds": [

@@ -142,7 +142,7 @@ public class EntityAIChat extends EntityAIBase {
 		return this.data.baseRandom;
 	}
 
-	protected final Random RANDOM = ThreadLocalRandom.current();
+	protected final Random RANDOM = new Random();
 	protected final EntityChatData data;
 	protected final EntityLiving theEntity;
 	protected long nextChat;
