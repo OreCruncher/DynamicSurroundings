@@ -24,9 +24,9 @@
 
 package org.blockartistry.mod.DynSurround.registry;
 
+import java.util.IdentityHashMap;
 import java.util.List;
-import java.util.Set;
-
+import java.util.Map;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModLog;
@@ -40,17 +40,11 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class ItemRegistry extends Registry {
 
-	public static enum ArmorClass {
-		NONE, LIGHT, CRYSTAL, HEAVY;
-	}
-
 	private final THashSet<Class<?>> swordItems = new THashSet<Class<?>>();
 	private final THashSet<Class<?>> axeItems = new THashSet<Class<?>>();
 	private final THashSet<Class<?>> bowItems = new THashSet<Class<?>>();
 
-	private final THashSet<Item> lightArmor = new THashSet<Item>();
-	private final THashSet<Item> heavyArmor = new THashSet<Item>();
-	private final THashSet<Item> crystalArmor = new THashSet<Item>();
+	private final Map<Item, ArmorClass> armorMap = new IdentityHashMap<Item, ArmorClass>();
 
 	public ItemRegistry(@Nonnull final Side side) {
 		super(side);
@@ -61,9 +55,7 @@ public class ItemRegistry extends Registry {
 		swordItems.clear();
 		axeItems.clear();
 		bowItems.clear();
-		lightArmor.clear();
-		heavyArmor.clear();
-		crystalArmor.clear();
+		armorMap.clear();
 	}
 
 	@Override
@@ -87,11 +79,11 @@ public class ItemRegistry extends Registry {
 		}
 	}
 
-	private void process(@Nonnull final List<String> itemList, @Nonnull final Set<Item> items) {
+	private void process(@Nonnull final List<String> itemList, @Nonnull final ArmorClass ac) {
 		for (final String i : itemList) {
 			final Item item = MCHelper.getItemByName(i);
 			if (item != null)
-				items.add(item);
+				this.armorMap.put(item, ac);
 		}
 	}
 
@@ -99,9 +91,9 @@ public class ItemRegistry extends Registry {
 		process(config.axeSound, this.axeItems);
 		process(config.bowSound, this.bowItems);
 		process(config.swordSound, this.swordItems);
-		process(config.crystalArmor, this.crystalArmor);
-		process(config.heavyArmor, this.heavyArmor);
-		process(config.lightArmor, this.lightArmor);
+		process(config.crystalArmor, ArmorClass.CRYSTAL);
+		process(config.heavyArmor, ArmorClass.HEAVY);
+		process(config.lightArmor, ArmorClass.LIGHT);
 	}
 
 	public boolean doSwordSound(@Nonnull final ItemStack stack) {
@@ -126,12 +118,8 @@ public class ItemRegistry extends Registry {
 		if (stack != null) {
 			final Item item = stack.getItem();
 			if (item != null) {
-				if (this.crystalArmor.contains(item))
-					return ArmorClass.CRYSTAL;
-				else if (this.heavyArmor.contains(item))
-					return ArmorClass.HEAVY;
-				else if (this.lightArmor.contains(item))
-					return ArmorClass.LIGHT;
+				final ArmorClass result = this.armorMap.get(item);
+				return result != null ? result : ArmorClass.NONE;
 			}
 		}
 		return ArmorClass.NONE;
