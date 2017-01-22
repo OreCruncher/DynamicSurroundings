@@ -363,10 +363,10 @@ public final class ModOptions {
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_FOOTSTEPS_SOUND, defaultValue = "true", lang = "cfg.sound.Footsteps")
 	@Comment("Enable Footstep sound effects")
 	public static boolean enableFootstepSounds = true;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_FOOTSTEPS_SOUND_FACTOR, defaultValue = "0.15", lang = "cfg.sound.FootstepScale")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_FOOTSTEPS_SOUND_FACTOR, defaultValue = "0.5", lang = "cfg.sound.FootstepScale")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Volume scale factor for footstep sounds")
-	public static float footstepsSoundFactor = 0.15F;
+	public static float footstepsSoundFactor = 0.5F;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_ARMOR_SOUND, defaultValue = "true", lang = "cfg.sound.Armor")
 	@Comment("Enable/disable armor sounds when moving")
 	public static boolean enableArmorSounds = true;

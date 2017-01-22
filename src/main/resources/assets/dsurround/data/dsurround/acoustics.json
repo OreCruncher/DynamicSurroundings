@@ -49,20 +49,7 @@
 				"pitch_max": 100
 			},
 			"land": {
-				"type": "simultaneous",
-				"array": [
-					"armor.light_walk",
-					{
-						"name": "armor.light_walk",
-						"vol_min": 50,
-						"vol_max": 50
-					},
-					{
-						"type": "delayed",
-						"delay": 50,
-						"name": "armor.light_run"
-					}
-				]
+				"name": "armor.light_walk"
 			}
 		},
 		"armor_crystal": {
