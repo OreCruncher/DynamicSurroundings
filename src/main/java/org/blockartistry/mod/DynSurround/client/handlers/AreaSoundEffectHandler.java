@@ -46,6 +46,8 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class AreaSoundEffectHandler extends EffectHandlerBase {
 
+	public static final int SCAN_INTERVAL = 4;
+
 	private static boolean doBiomeSounds() {
 		return EnvironState.isPlayerUnderground() || !EnvironState.isPlayerInside();
 	}
@@ -91,7 +93,7 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		}
 		
 		// Only execute every 4 ticks.
-		if((EnvironState.getTickCounter() % 4) != 0)
+		if((EnvironState.getTickCounter() % SCAN_INTERVAL) != 0)
 			return;
 
 		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<SoundEffect>();

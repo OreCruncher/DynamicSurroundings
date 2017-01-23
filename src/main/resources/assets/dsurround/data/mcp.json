@@ -20,7 +20,7 @@
 		},
 		{
 			"biomeName": "(?i)(.*jungle.*|.*tropical.*)",
-			"spotSoundChance": 600,
+			"spotSoundChance": 200,
 			"soundReset": true,
 			"sounds": [
 				{
@@ -71,7 +71,7 @@
 		},
 		{
 			"biomeName": "(?i)(?!.*dead.*|.*flower.*|.*fungi.*|.*frost.*|.*snow.*|.*kelp.*)(.*forest.*|.*cherry.*|.*orchard.*|.*wood.*|.*wetland.*|.*grove.*|.*springs.*)",
-			"spotSoundChance": 300,
+			"spotSoundChance": 200,
 			"sounds": [
 				{
 					"sound": "dsurround:forest",
@@ -100,7 +100,7 @@
 		},
 		{
 			"biomeName": "(?i)(heathland|thicket|land of lakes|mangrove|origin island)",
-			"spotSoundChance": 300,
+			"spotSoundChance": 200,
 			"sounds": [
 				{
 					"sound": "dsurround:forest",
@@ -186,7 +186,7 @@
 		},
 		{
 			"biomeName": "(?i)(?!.*dead.*)(.*swamp.*)",
-			"spotSoundChance": 600,
+			"spotSoundChance": 200,
 			"sounds": [
 				{
 					"sound": "dsurround:crickets"
@@ -201,7 +201,7 @@
 		},
 		{
 			"biomeName": "(?i)(.*fen.*|.*bog.*|.*marsh.*|.*moor.*|.*bayou.*|quagmire|silkglades)",
-			"spotSoundChance": 600,
+			"spotSoundChance": 200,
 			"sounds": [
 				{
 					"sound": "dsurround:crickets",
