@@ -112,3 +112,15 @@ whether LPs can be monetized on the various streaming services.
 <ul>
      <li>S: <a href="https://www.freesound.org/people/AlienXXX/sounds/218276/">underwater ambience.wav</a> by <a href="https://www.freesound.org/people/AlienXXX/">AlienXXX</a> | License: Attribution</li> 
 </ul>
+
+*dsurround:plains*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/blouhond/sounds/157947/">Calm Morning Outdoor Ambience</a> by <a href="https://www.freesound.org/people/blouhond/">blouhond</a> | License: Attribution</li> 
+</ul>
+
+*dsurround:forest*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/joepsporck/sounds/262037/">001_forrest.wav</a> by <a href="https://www.freesound.org/people/joepsporck/">joepsporck</a> | License: Creative Commons 0</li> 
+</ul>
