@@ -52,7 +52,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnection
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@net.minecraftforge.fml.common.Mod(modid = DSurround.MOD_ID, useMetadata = true, dependencies = DSurround.DEPENDENCIES, version = DSurround.VERSION, guiFactory = DSurround.GUI_FACTORY, updateJSON = DSurround.UPDATE_URL)
+@net.minecraftforge.fml.common.Mod(modid = DSurround.MOD_ID, useMetadata = true, dependencies = DSurround.DEPENDENCIES, version = DSurround.VERSION, acceptedMinecraftVersions = DSurround.MINECRAFT_VERSIONS, guiFactory = DSurround.GUI_FACTORY, updateJSON = DSurround.UPDATE_URL)
 public class DSurround {
 	public static final String MOD_ID = "dsurround";
 	public static final String API_ID = MOD_ID + "API";
@@ -60,6 +60,7 @@ public class DSurround {
 	public static final String MOD_NAME = "Dynamic Surroundings";
 	public static final String VERSION = "@VERSION@";
 	public static final String DEPENDENCIES = "";
+	public static final String MINECRAFT_VERSIONS = "[1.11,)";
 	public static final String GUI_FACTORY = "org.blockartistry.mod.DynSurround.client.gui.ConfigGuiFactory";
 	public static final String UPDATE_URL = "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json";
 
@@ -92,7 +93,7 @@ public class DSurround {
 	public static File dataDirectory() {
 		return dataDirectory;
 	}
-	
+
 	@Nonnull
 	@SideOnly(Side.CLIENT)
 	public static Profiler getProfiler() {
@@ -137,7 +138,7 @@ public class DSurround {
 	public void loadCompleted(@Nonnull final FMLLoadCompleteEvent event) {
 		proxy.loadCompleted(event);
 	}
-	
+
 	////////////////////////
 	//
 	// Client state events
@@ -147,7 +148,7 @@ public class DSurround {
 	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
 		proxy.clientConnect(event);
 	}
-	
+
 	@SubscribeEvent
 	public void clientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
 		proxy.clientDisconnect(event);
@@ -162,20 +163,20 @@ public class DSurround {
 	public void serverAboutToStart(@Nonnull final FMLServerAboutToStartEvent event) {
 		proxy.serverAboutToStart(event);
 	}
-	
+
 	@EventHandler
 	public void serverStarting(@Nonnull final FMLServerStartingEvent event) {
 		proxy.serverStarting(event);
 	}
-	
+
 	@EventHandler
 	public void serverStopping(@Nonnull final FMLServerStoppingEvent event) {
 		proxy.serverStopping(event);
 	}
-	
+
 	@EventHandler
 	public void serverStopped(@Nonnull final FMLServerStoppedEvent event) {
 		proxy.serverStopped(event);
 	}
-	
+
 }
