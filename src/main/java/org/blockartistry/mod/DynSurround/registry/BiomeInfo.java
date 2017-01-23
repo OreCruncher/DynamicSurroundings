@@ -30,6 +30,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.mod.DynSurround.client.handlers.AreaSoundEffectHandler;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.util.Color;
 
@@ -38,6 +39,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
 
 public class BiomeInfo {
+
+	public static final int DEFAULT_SPOT_CHANCE = 1200 / AreaSoundEffectHandler.SCAN_INTERVAL;
 
 	protected final int biomeId;
 	protected final String biomeName;
@@ -59,7 +62,7 @@ public class BiomeInfo {
 
 		this.sounds = new ArrayList<SoundEffect>();
 		this.spotSounds = new ArrayList<SoundEffect>();
-		this.spotSoundChance = 1200;
+		this.spotSoundChance = DEFAULT_SPOT_CHANCE;
 	}
 
 	public BiomeInfo(@Nonnull final Biome biome) {
@@ -70,8 +73,8 @@ public class BiomeInfo {
 
 		this.sounds = new ArrayList<SoundEffect>();
 		this.spotSounds = new ArrayList<SoundEffect>();
-		this.spotSoundChance = 1200;
-		
+		this.spotSoundChance = DEFAULT_SPOT_CHANCE;
+
 		this.hasPrecipitation = canRain() || getEnableSnow();
 	}
 
@@ -233,7 +236,7 @@ public class BiomeInfo {
 	public void resetSounds() {
 		this.sounds.clear();
 		this.spotSounds.clear();
-		this.spotSoundChance = 1200;
+		this.spotSoundChance = DEFAULT_SPOT_CHANCE;
 	}
 
 	@Override
@@ -241,14 +244,14 @@ public class BiomeInfo {
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append(String.format("Biomes %d [%s]:", this.biomeId, this.biomeName));
-		if(this.isFake()) {
+		if (this.isFake()) {
 			builder.append(" FAKE ");
 		} else {
-			builder.append(" temp: ").append(this.getTemperature()).append(" (").append(getTemperatureRating().getValue())
-					.append(")");
+			builder.append(" temp: ").append(this.getTemperature()).append(" (")
+					.append(getTemperatureRating().getValue()).append(")");
 			builder.append(" rain: ").append(this.getRainfall());
 		}
-		
+
 		if (this.hasPrecipitation)
 			builder.append(" PRECIPITATION");
 		if (this.hasDust)
