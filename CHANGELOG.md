@@ -1,3 +1,17 @@
+###DynamicSurroundings-1.10.2-3.2.3.0
+**What's New!**
+* Relaxed load requirements so that the mod can run on 1.11.
+* Plains biome now has a background sound.  Depending on mods installed prairies, grasslands, shrublands, etc. will also have the same sound.
+
+**Fixes**
+* I introduced an issue when tuning that caused biome spot sounds to be rare.  I renormalized the chance values so things should go back to normal.
+
+**Changes**
+* Redo of the Forest sounds.  New background sound that is more "background", and added several additional spot sounds of birds.  The goal was to minimize the repetitiveness of the prior sound clip.  The bird calls in that sound clip were pretty up-front and contributed to the repetitive impression.
+* Updated underwater background sound for rivers, ocean, and deep ocean.  Sounds better IMO.
+* Changed default footstep sound factor to 0.5 from 0.15.  Should make footstep and armor sounds a bit louder.  Note that this is a default meaning if you have an existing configuration the setting will remain at the currently defined value.
+* Updated ru_RU.lang
+
 ###DynamicSurroundings-1.10.2-3.2.2.0
 **What's New!**
 * [Added armor overlay sounds](https://github.com/OreCruncher/DynamicSurroundings/wiki/Sound-Overlay).  When moving about additional sounds will be mixed in based on armor being worn by the player.
