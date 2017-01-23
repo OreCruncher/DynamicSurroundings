@@ -24,8 +24,6 @@
 package org.blockartistry.mod.DynSurround.client.sound;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import net.minecraft.client.audio.ITickableSound;
@@ -41,9 +39,9 @@ import net.minecraftforge.fml.relauncher.Side;
 public class TrackingSound extends PositionedSound implements ITickableSound, IMySound {
 
 	private static final float DONE_VOLUME_THRESHOLD = 0.001F;
-	private static final float FADE_AMOUNT = 0.015F;
+	private static final float FADE_AMOUNT = 0.025F;
 	
-	private final Random RANDOM = ThreadLocalRandom.current();
+	private final Random RANDOM = new Random();
 	private final EntityLivingBase attachedTo;
 	private final SoundEffect sound;
 	private boolean isFading;
