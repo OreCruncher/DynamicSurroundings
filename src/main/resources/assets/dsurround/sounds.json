@@ -18,34 +18,25 @@
 	"fs.armor.medium_walk": {
 		"category": "player",
 		"sounds": [
-			"dsurround:footsteps/armor/heavy_walk1",
-			"dsurround:footsteps/armor/heavy_walk2",
-			"dsurround:footsteps/armor/heavy_walk3",
-			"dsurround:footsteps/armor/heavy_walk4",
-			"dsurround:footsteps/armor/heavy_walk5",
-			"dsurround:footsteps/armor/heavy_walk6"
+			"dsurround:footsteps/armor/medium_walk1",
+			"dsurround:footsteps/armor/medium_walk2",
+			"dsurround:footsteps/armor/medium_walk3"
 		]
 	},
 	"fs.armor.medium_run": {
 		"category": "player",
 		"sounds": [
-			"dsurround:footsteps/armor/heavy_run1",
-			"dsurround:footsteps/armor/heavy_run2",
-			"dsurround:footsteps/armor/heavy_run3",
-			"dsurround:footsteps/armor/heavy_run4",
-			"dsurround:footsteps/armor/heavy_run5",
-			"dsurround:footsteps/armor/heavy_run6",
-			"dsurround:footsteps/armor/heavy_run7",
-			"dsurround:footsteps/armor/heavy_run8",
-			"dsurround:footsteps/armor/heavy_run9"
+			"dsurround:footsteps/armor/medium_walk1",
+			"dsurround:footsteps/armor/medium_walk2",
+			"dsurround:footsteps/armor/medium_walk3"
 		]
 	},
 	"fs.armor.medium_foot": {
 		"category": "player",
 		"sounds": [
-			"dsurround:footsteps/armor/heavy_foot1",
-			"dsurround:footsteps/armor/heavy_foot2",
-			"dsurround:footsteps/armor/heavy_foot3"
+			"dsurround:footsteps/armor/medium_walk1",
+			"dsurround:footsteps/armor/medium_walk2",
+			"dsurround:footsteps/armor/medium_walk3"
 		]
 	},
 	"fs.armor.crystal_walk": {
@@ -53,8 +44,7 @@
 		"sounds": [
 			"dsurround:footsteps/armor/crystal_walk1",
 			"dsurround:footsteps/armor/crystal_walk2",
-			"dsurround:footsteps/armor/crystal_walk3",
-			"dsurround:footsteps/armor/crystal_walk4"
+			"dsurround:footsteps/armor/crystal_walk3"
 		]
 	},
 	"fs.armor.crystal_run": {
@@ -62,8 +52,13 @@
 		"sounds": [
 			"dsurround:footsteps/armor/crystal_walk1",
 			"dsurround:footsteps/armor/crystal_walk2",
-			"dsurround:footsteps/armor/crystal_walk3",
-			"dsurround:footsteps/armor/crystal_walk4"
+			"dsurround:footsteps/armor/crystal_walk3"
+		]
+	},
+	"fs.armor.crystal_foot": {
+		"category": "player",
+		"sounds": [
+			"dsurround:footsteps/armor/crystal_foot1"
 		]
 	},
 	"fs.armor.heavy_walk": {
