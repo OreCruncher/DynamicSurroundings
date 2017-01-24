@@ -44,15 +44,20 @@ public class Association {
 	private final BlockPos pos;
 	private IAcoustic[] data;
 
+	public Association() {
+		this(AcousticsManager.EMPTY);
+	}
+
 	public Association(@Nonnull final IAcoustic[] association) {
 		this(null, null, association);
 	}
-	
+
 	public Association(@Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
 		this(state, pos, null);
 	}
 
-	public Association(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final IAcoustic[] association) {
+	public Association(@Nonnull final IBlockState state, @Nonnull final BlockPos pos,
+			@Nonnull final IAcoustic[] association) {
 		this.state = state;
 		this.pos = pos;
 		this.data = association;
@@ -71,15 +76,15 @@ public class Association {
 	public boolean isLiquid() {
 		return this.state != null && this.state.getMaterial().isLiquid();
 	}
-	
+
 	public SoundType getSoundType() {
 		return this.state != null ? MCHelper.getSoundType(this.state) : null;
 	}
-	
+
 	public void add(@Nonnull final IAcoustic acoustics) {
 		this.data = MyUtils.append(this.data, acoustics);
 	}
-	
+
 	@Nonnull
 	public BlockPos getPos() {
 		return this.pos;

@@ -58,6 +58,14 @@
 			"dsurround:footsteps/armor/heavy_run9"
 		]
 	},
+	"fs.armor.heavy_foot": {
+		"category": "player",
+		"sounds": [
+			"dsurround:footsteps/armor/heavy_foot1",
+			"dsurround:footsteps/armor/heavy_foot2",
+			"dsurround:footsteps/armor/heavy_foot3"
+		]
+	},
 	"fs.bluntwood.bluntwood_walk": {
 		"category": "player",
 		"sounds": [

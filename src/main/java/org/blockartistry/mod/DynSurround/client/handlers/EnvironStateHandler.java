@@ -89,6 +89,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static TemperatureRating biomeTemperature = TemperatureRating.MILD;
 		private static boolean inside;
 		private static ArmorClass armorClass = ArmorClass.NONE;
+		private static ArmorClass footArmorClass = ArmorClass.NONE;
 
 		private static int tickCounter;
 
@@ -119,6 +120,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.dry = trueBiome.getRainfall() == 0;
 			
 			EnvironState.armorClass = ArmorClass.effectiveArmorClass(player);
+			EnvironState.footArmorClass = ArmorClass.footArmorClass(player);
 
 			if (!Minecraft.getMinecraft().isGamePaused())
 				EnvironState.tickCounter++;
@@ -268,6 +270,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		
 		public static ArmorClass getPlayerArmorClass() {
 			return armorClass;
+		}
+		
+		public static ArmorClass getPlayerFootArmorClass() {
+			return footArmorClass;
 		}
 
 		public static int getTickCounter() {
