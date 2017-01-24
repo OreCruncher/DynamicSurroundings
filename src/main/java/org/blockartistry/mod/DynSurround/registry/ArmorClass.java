@@ -34,7 +34,8 @@ public enum ArmorClass {
 
 	NONE("none", "NOT_EMITTER", "NOT_EMITTER"),
 	LIGHT("light", "armor_light", "NOT_EMITTER"),
-	CRYSTAL("crystal", "armor_crystal", "NOT_EMITTER"),
+	MEDIUM("medium", "armor_medium", "medium_foot"),
+	CRYSTAL("crystal", "armor_crystal", "armor_crystal"),
 	HEAVY("heavy", "armor_heavy", "heavy_foot")
 	;
 

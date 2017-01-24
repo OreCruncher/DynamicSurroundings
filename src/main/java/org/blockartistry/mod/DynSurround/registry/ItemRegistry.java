@@ -93,6 +93,7 @@ public class ItemRegistry extends Registry {
 		process(config.swordSound, this.swordItems);
 		process(config.crystalArmor, ArmorClass.CRYSTAL);
 		process(config.heavyArmor, ArmorClass.HEAVY);
+		process(config.mediumArmor, ArmorClass.MEDIUM);
 		process(config.lightArmor, ArmorClass.LIGHT);
 	}
 

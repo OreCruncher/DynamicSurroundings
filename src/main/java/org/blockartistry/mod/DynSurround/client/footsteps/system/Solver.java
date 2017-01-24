@@ -432,12 +432,16 @@ public class Solver {
 		if (ModOptions.enableArmorSounds) {
 			final IAcoustic armorAddon = this.isolator.getAcoustics()
 					.getAcoustic(EnvironState.getPlayerArmorClass().getAcoustic());
-			final IAcoustic footAddon = this.isolator.getAcoustics()
+			IAcoustic footAddon = this.isolator.getAcoustics()
 					.getAcoustic(EnvironState.getPlayerFootArmorClass().getFootAcoustic());
 
 			if (armorAddon == null && footAddon == null)
 				return assoc;
 
+			// Eliminate duplicates
+			if(armorAddon == footAddon)
+				footAddon = null;
+			
 			if (assoc == null)
 				assoc = new Association();
 			if (armorAddon != null)

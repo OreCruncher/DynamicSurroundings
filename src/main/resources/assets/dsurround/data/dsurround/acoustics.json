@@ -52,6 +52,66 @@
 				"name": "armor.light_walk"
 			}
 		},
+		"armor_medium": {
+			"walk": {
+				"name": "armor.medium_walk"
+			},
+			"jump": {
+				"name": "armor.medium_walk"
+			},
+			"run": {
+				"name": "armor.medium_run"
+			},
+			"wander": {
+				"name": "armor.medium_walk"
+			},
+			"land": {
+				"type": "simultaneous",
+				"array": [
+					"armor.medium_walk",
+					{
+						"name": "armor.medium_walk",
+						"vol_min": 50,
+						"vol_max": 50
+					},
+					{
+						"type": "delayed",
+						"delay": 50,
+						"name": "armor.medium_run"
+					}
+				]
+			}
+		},
+		"medium_foot": {
+			"walk": {
+				"name": "armor.medium_foot"
+			},
+			"jump": {
+				"name": "armor.medium_foot"
+			},
+			"run": {
+				"name": "armor.medium_foot"
+			},
+			"wander": {
+				"name": "armor.medium_foot"
+			},
+			"land": {
+				"type": "simultaneous",
+				"array": [
+					"armor.medium_foot",
+					{
+						"name": "armor.medium_foot",
+						"vol_min": 50,
+						"vol_max": 50
+					},
+					{
+						"type": "delayed",
+						"delay": 50,
+						"name": "armor.medium_foot"
+					}
+				]
+			}
+		},
 		"armor_crystal": {
 			"walk": {
 				"name": "armor.crystal_walk"

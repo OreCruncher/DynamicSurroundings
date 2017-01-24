@@ -572,6 +572,12 @@
 			"minecraft:leather_chestplate",
 			"minecraft:leather_helmet"
 		],
+		"mediumArmor": [
+			"minecraft:chainmail_boots",
+			"minecraft:chainmail_leggings",
+			"minecraft:chainmail_chestplate",
+			"minecraft:chainmail_helmet"
+		],
 		"crystalArmor": [
 			"minecraft:diamond_boots",
 			"minecraft:diamond_leggings",
