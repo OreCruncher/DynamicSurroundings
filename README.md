@@ -120,3 +120,10 @@ whether LPs can be monetized on the various streaming services.
 <ul>
      <li>S: <a href="https://www.freesound.org/people/joepsporck/sounds/262037/">001_forrest.wav</a> by <a href="https://www.freesound.org/people/joepsporck/">joepsporck</a> | License: Creative Commons 0</li> 
 </ul>
+
+*dsurround:fs.armor.medium_walk / dsurround:fs.armor.medium_run / dsurround:fs.armor.medium_foot*
+
+<ul>
+     <li>P: <a href="https://www.freesound.org/people/Samulis/packs/12606/">Foley</a> by <a href="https://www.freesound.org/people/Samulis/">Samulis</a></li>
+     <li>S: <a href="https://www.freesound.org/people/satanicupsman/sounds/147589/">chain drop</a> by <a href="https://www.freesound.org/people/satanicupsman/">satanicupsman</a> | License: Creative Commons 0</li></ul>
+     
