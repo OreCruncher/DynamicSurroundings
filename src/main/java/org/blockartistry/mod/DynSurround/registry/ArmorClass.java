@@ -32,15 +32,20 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 
 public enum ArmorClass {
 
-	NONE("none", "NOT_EMITTER"), LIGHT("light", "armor_light"), CRYSTAL("crystal", "armor_crystal"), HEAVY("heavy",
-			"armor_heavy");
+	NONE("none", "NOT_EMITTER", "NOT_EMITTER"),
+	LIGHT("light", "armor_light", "NOT_EMITTER"),
+	CRYSTAL("crystal", "armor_crystal", "NOT_EMITTER"),
+	HEAVY("heavy", "armor_heavy", "heavy_foot")
+	;
 
 	private final String className;
 	private final String acoustic;
+	private final String footAcoustic;
 
-	private ArmorClass(@Nonnull final String name, @Nonnull final String acoustic) {
+	private ArmorClass(@Nonnull final String name, @Nonnull final String acoustic, @Nonnull final String footAcoustic) {
 		this.className = name;
 		this.acoustic = acoustic;
+		this.footAcoustic = footAcoustic;
 	}
 
 	@Nonnull
@@ -50,25 +55,32 @@ public enum ArmorClass {
 
 	@Nonnull
 	public String getAcoustic() {
-		return acoustic;
+		return this.acoustic;
+	}
+	
+	@Nonnull
+	public String getFootAcoustic() {
+		return this.footAcoustic;
 	}
 
 	/**
 	 * Determines the effective armor class of the player. Used to determine the
-	 * sound overlay to add.
+	 * sound overlay to add. The chest and leg slots are used.
 	 */
 	public static ArmorClass effectiveArmorClass(@Nonnull final EntityPlayer player) {
 		final ItemRegistry registry = RegistryManager.get(RegistryType.ITEMS);
-		ArmorClass result = registry.getArmorClass(player.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
-		if (result == ArmorClass.HEAVY)
-			return result;
-		ArmorClass temp = registry.getArmorClass(player.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
-		if (temp.compareTo(result) > 0)
-			result = temp;
-		temp = registry.getArmorClass(player.getItemStackFromSlot(EntityEquipmentSlot.FEET));
-		if (temp.compareTo(result) > 0)
-			result = temp;
-		return result;
+		final ArmorClass chest = registry.getArmorClass(player.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
+		final ArmorClass legs = registry.getArmorClass(player.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
+		return chest.compareTo(legs) > 0 ? chest : legs;
+	}
+	
+	/**
+	 * Gets the armor class of the player's feet in order to apply additional
+	 * sound accents when moving.
+	 */
+	public static ArmorClass footArmorClass(@Nonnull final EntityPlayer player) {
+		final ItemRegistry registry = RegistryManager.get(RegistryType.ITEMS);
+		return registry.getArmorClass(player.getItemStackFromSlot(EntityEquipmentSlot.FEET));
 	}
 
 }

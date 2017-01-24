@@ -430,15 +430,20 @@ public class Solver {
 	public Association addSoundOverlay(@Nullable Association assoc) {
 
 		if (ModOptions.enableArmorSounds) {
-			final IAcoustic addons = this.isolator.getAcoustics()
+			final IAcoustic armorAddon = this.isolator.getAcoustics()
 					.getAcoustic(EnvironState.getPlayerArmorClass().getAcoustic());
+			final IAcoustic footAddon = this.isolator.getAcoustics()
+					.getAcoustic(EnvironState.getPlayerFootArmorClass().getFootAcoustic());
 
-			if (addons != null) {
-				if (assoc == null)
-					assoc = new Association(new IAcoustic[] { addons });
-				else
-					assoc.add(addons);
-			}
+			if (armorAddon == null && footAddon == null)
+				return assoc;
+
+			if (assoc == null)
+				assoc = new Association();
+			if (armorAddon != null)
+				assoc.add(armorAddon);
+			if (footAddon != null)
+				assoc.add(footAddon);
 		}
 
 		return assoc;

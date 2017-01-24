@@ -112,6 +112,36 @@
 				]
 			}
 		},
+		"heavy_foot": {
+			"walk": {
+				"name": "armor.heavy_foot"
+			},
+			"jump": {
+				"name": "armor.heavy_foot"
+			},
+			"run": {
+				"name": "armor.heavy_foot"
+			},
+			"wander": {
+				"name": "armor.heavy_foot"
+			},
+			"land": {
+				"type": "simultaneous",
+				"array": [
+					"armor.heavy_foot",
+					{
+						"name": "armor.heavy_foot",
+						"vol_min": 50,
+						"vol_max": 50
+					},
+					{
+						"type": "delayed",
+						"delay": 50,
+						"name": "armor.heavy_foot"
+					}
+				]
+			}
+		},
 		"straw": {
 			"walk": "leaves.leaves_through",
 			"jump": "leaves.leaves_through",
