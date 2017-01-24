@@ -54,13 +54,17 @@
 		},
 		"armor_medium": {
 			"walk": {
-				"name": "armor.medium_walk"
+				"name": "armor.medium_walk",
+				"pitch_min": 80,
+				"pitch_max": 100
 			},
 			"jump": {
 				"name": "armor.medium_walk"
 			},
 			"run": {
-				"name": "armor.medium_run"
+				"name": "armor.medium_run",
+				"pitch_min": 90,
+				"pitch_max": 110
 			},
 			"wander": {
 				"name": "armor.medium_walk"
@@ -138,6 +142,38 @@
 						"type": "delayed",
 						"delay": 50,
 						"name": "armor.crystal_run"
+					}
+				]
+			}
+		},
+		"crystal_foot": {
+			"walk": {
+				"name": "armor.crystal_foot",
+				"pitch_min": 80,
+				"pitch_max": 100
+			},
+			"jump": {
+				"name": "armor.crystal_foot"
+			},
+			"run": {
+				"name": "armor.crystal_foot"
+			},
+			"wander": {
+				"name": "armor.crystal_foot"
+			},
+			"land": {
+				"type": "simultaneous",
+				"array": [
+					"armor.crystal_foot",
+					{
+						"name": "armor.crystal_foot",
+						"vol_min": 50,
+						"vol_max": 50
+					},
+					{
+						"type": "delayed",
+						"delay": 50,
+						"name": "armor.crystal_foot"
 					}
 				]
 			}
