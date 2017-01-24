@@ -40,6 +40,8 @@ public final class ItemConfig {
 	public List<String> crystalArmor = ImmutableList.of();
 	@SerializedName("heavyArmor")
 	public List<String> heavyArmor = ImmutableList.of();
+	@SerializedName("mediumArmor")
+	public List<String> mediumArmor = ImmutableList.of();
 	@SerializedName("lightArmor")
 	public List<String> lightArmor = ImmutableList.of();
 
