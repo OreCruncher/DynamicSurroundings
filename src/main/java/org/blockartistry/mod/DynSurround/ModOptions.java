@@ -31,6 +31,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.util.ConfigProcessor;
+import org.blockartistry.mod.DynSurround.util.VersionHelper;
 import org.blockartistry.mod.DynSurround.util.ConfigProcessor.Comment;
 import org.blockartistry.mod.DynSurround.util.ConfigProcessor.Hidden;
 import org.blockartistry.mod.DynSurround.util.ConfigProcessor.MinMaxFloat;
@@ -45,6 +46,9 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
 public final class ModOptions {
+
+	// Various version breaks for upgrading options automatically
+	private static final String VERSION_A = "3.2.4.0";
 
 	private ModOptions() {
 	}
@@ -487,6 +491,12 @@ public final class ModOptions {
 
 	public static void load(final Configuration config) {
 
+		// Patch up values from older config if needed
+		if (VersionHelper.compareVersions(config.getLoadedConfigVersion(), VERSION_A) < 0) {
+			ModLog.info("Upgrade config to baseline version [%s]", VERSION_A);
+			config.getCategory(CATEGORY_SOUND).get(CONFIG_FOOTSTEPS_SOUND_FACTOR).set(0.5F);
+		}
+
 		ConfigProcessor.process(config, ModOptions.class);
 
 		// CATEGORY: asm
@@ -587,6 +597,7 @@ public final class ModOptions {
 		// comments. These will be scrubbed.
 		for (final String cat : config.getCategoryNames())
 			scrubCategory(config.getCategory(cat));
+
 	}
 
 	private static void scrubCategory(final ConfigCategory category) {

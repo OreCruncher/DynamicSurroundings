@@ -111,7 +111,7 @@ public class DSurround {
 		// Load up our configuration
 		dataDirectory = new File(event.getModConfigurationDirectory(), DSurround.MOD_ID);
 		dataDirectory.mkdirs();
-		config = new Configuration(new File(dataDirectory, DSurround.MOD_ID + ".cfg"));
+		config = new Configuration(new File(dataDirectory, DSurround.MOD_ID + ".cfg"), DSurround.VERSION);
 
 		config.load();
 		ModOptions.load(config);
