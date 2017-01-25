@@ -40,6 +40,7 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.blockartistry.mod.DynSurround.util.MyUtils;
+import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -48,6 +49,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -108,16 +110,21 @@ public class Solver {
 		if (MathStuff.abs(player.motionY) < 0.02)
 			return null; // Don't play sounds on every tiny bounce
 
-		final int yy = MathStuff.floor_double(player.getEntityBoundingBox().minY - 0.1d - verticalOffsetAsMinus);
 		final double rot = MathStuff.toRadians(MathStuff.wrapDegrees(player.rotationYaw));
 		final double xn = MathStuff.cos(rot);
 		final double zn = MathStuff.sin(rot);
 		final float feetDistanceToCenter = 0.2f * (isRightFoot ? -1 : 1);
-		final int xx = MathStuff.floor_double(player.posX + xn * feetDistanceToCenter);
-		final int zz = MathStuff.floor_double(player.posZ + zn * feetDistanceToCenter);
 
-		final Association result = findAssociationForLocation(player, new BlockPos(xx, yy, zz));
-		return addSoundOverlay(result);
+		final double xx = player.posX + xn * feetDistanceToCenter;
+		final double minY = player.getEntityBoundingBox().minY;
+		final double zz = player.posZ + zn * feetDistanceToCenter;
+		final BlockPos pos = new BlockPos(xx, minY - 0.1D - verticalOffsetAsMinus, zz);
+
+		final Association result = addSoundOverlay(findAssociationForLocation(player, pos));
+		if (result != null && !player.isJumping && WorldUtils.isSolidBlock(player.worldObj, pos))
+			result.setStepLocation(new Vec3d(xx, minY + 0.015D, zz));
+
+		return result;
 	}
 
 	/**
@@ -439,9 +446,9 @@ public class Solver {
 				return assoc;
 
 			// Eliminate duplicates
-			if(armorAddon == footAddon)
+			if (armorAddon == footAddon)
 				footAddon = null;
-			
+
 			if (assoc == null)
 				assoc = new Association();
 			if (armorAddon != null)
