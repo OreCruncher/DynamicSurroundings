@@ -1,3 +1,16 @@
+###DynamicSurroundings-1.10.2-3.2.4.0
+**What's New!**
+* Use Minecraft's footprint particle to leave a footprint trail as the player walks.  The footprints will fade after a short period of time.  Soft blocks (sand, dirt, grass, etc) will have footprints; hard blocks (stone, sandstone, etc) will not.
+* Started EnderIO block/item support.
+
+**Fixes**
+* Walking on EnderIO conduits should no longer crash the client.  Should fix walking on other blocks that do not use one of the standard Minecraft material types.
+
+**Changes**
+* Separate armor footwear sound overlay from main body.  There will now be two overlays: overlay from the chest/leggings slot, and the foot.  This will provide further variation if a player wears mixed sets of armor and allows for more footfall sound accents due to armor.
+* Added new Medium armor class.  The Minecraft chainmail is in this class.
+* Implemented config file versioning.  This will allow me to reset various options as needed.
+
 ###DynamicSurroundings-1.10.2-3.2.3.0
 **What's New!**
 * Relaxed load requirements so that the mod can run on 1.11.
