@@ -29,6 +29,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
+import javax.annotation.Nonnull;
+
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.util.ConfigProcessor;
 import org.blockartistry.mod.DynSurround.util.VersionHelper;
@@ -489,12 +491,25 @@ public final class ModOptions {
 	@Comment("Enables/disables addition of mob models in explosion debris")
 	public static boolean addMobParticles = false;
 
+	private static void setDefault(@Nonnull final Configuration config, @Nonnull final String cat,
+			@Nonnull final String prop, final float prevDefault, final float newDefault) {
+		final ConfigCategory cc = config.getCategory(cat);
+		if (cc != null) {
+			final Property p = cc.get(prop);
+			if (p != null) {
+				final float cv = (float) p.getDouble();
+				if (cv == prevDefault)
+					p.set(newDefault);
+			}
+		}
+	}
+
 	public static void load(final Configuration config) {
 
 		// Patch up values from older config if needed
 		if (VersionHelper.compareVersions(config.getLoadedConfigVersion(), VERSION_A) < 0) {
 			ModLog.info("Upgrade config to baseline version [%s]", VERSION_A);
-			config.getCategory(CATEGORY_SOUND).get(CONFIG_FOOTSTEPS_SOUND_FACTOR).set(0.5F);
+			setDefault(config, CATEGORY_SOUND, CONFIG_FOOTSTEPS_SOUND_FACTOR, 0.15F, 0.5F);
 		}
 
 		ConfigProcessor.process(config, ModOptions.class);
