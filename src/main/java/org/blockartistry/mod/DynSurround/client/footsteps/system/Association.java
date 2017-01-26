@@ -69,14 +69,14 @@ public class Association {
 	}
 
 	public Association(@Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
-		this(state, pos, null);
+		this(state, pos, AcousticsManager.EMPTY);
 	}
 
 	public Association(@Nonnull final IBlockState state, @Nonnull final BlockPos pos,
 			@Nonnull final IAcoustic[] association) {
 		this.state = state;
 		this.pos = pos;
-		this.data = association;
+		this.data = association == null ? AcousticsManager.EMPTY : association;
 	}
 
 	@Nonnull
@@ -86,7 +86,7 @@ public class Association {
 
 	@Nonnull
 	public boolean getNoAssociation() {
-		return this.data == null;
+		return this.data.length == 0;
 	}
 
 	public boolean isLiquid() {
