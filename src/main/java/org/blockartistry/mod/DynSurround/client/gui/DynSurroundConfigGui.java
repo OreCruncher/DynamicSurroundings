@@ -82,6 +82,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 		addConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_BOW_PULL_SOUND);
 		addConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_FOOTSTEPS_SOUND);
 		addConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_ARMOR_SOUND);
+		addConfigElement(ModOptions.CATEGORY_PLAYER, ModOptions.CONFIG_ENABLE_FOOTPRINTS);
 		addConfigElement(ModOptions.CATEGORY_POTION_HUD, ModOptions.CONFIG_POTION_HUD_ENABLE);
 		addConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES, ModOptions.CONFIG_OPTION_ENABLE_SPEECHBUBBLES);
 		addConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES, ModOptions.CONFIG_OPTION_ENABLE_EMOJIS);

@@ -399,8 +399,9 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_POPOFFS = "Damage Popoffs";
 	public static final String CONFIG_HURT_THRESHOLD = "Hurt Threshold";
 	public static final String CONFIG_HUNGER_THRESHOLD = "Hunger Threshold";
+	public static final String CONFIG_ENABLE_FOOTPRINTS = "Footprints";
 	private static final List<String> playerSort = Arrays.asList(CONFIG_SUPPRESS_POTION_PARTICLES,
-			CONFIG_ENABLE_POPOFFS, CONFIG_HURT_THRESHOLD, CONFIG_HUNGER_THRESHOLD);
+			CONFIG_ENABLE_POPOFFS, CONFIG_ENABLE_FOOTPRINTS, CONFIG_HURT_THRESHOLD, CONFIG_HUNGER_THRESHOLD);
 
 	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_SUPPRESS_POTION_PARTICLES, defaultValue = "false", lang = "cfg.player.PotionParticles")
 	@Comment("Suppress player's potion particles from rendering")
@@ -408,6 +409,9 @@ public final class ModOptions {
 	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_ENABLE_POPOFFS, defaultValue = "true", lang = "cfg.player.Popoffs")
 	@Comment("Controls display of damage pop-offs when an entity is damaged")
 	public static boolean enableDamagePopoffs = true;
+	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_ENABLE_FOOTPRINTS, defaultValue = "true", lang = "cfg.player.Footprints")
+	@Comment("Enable player footprints")
+	public static boolean enableFootprints = true;
 	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_HURT_THRESHOLD, defaultValue = "8", lang = "cfg.player.HurtThreshold")
 	@Comment("Amount of health bar remaining to trigger player hurt sound (0 disable)")
 	@MinMaxInt(min = 0, max = 10)

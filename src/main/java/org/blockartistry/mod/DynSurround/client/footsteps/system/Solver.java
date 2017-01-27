@@ -122,7 +122,8 @@ public class Solver {
 		final BlockPos pos = new BlockPos(xx, minY - 0.1D - verticalOffsetAsMinus, zz);
 
 		final Association result = addSoundOverlay(findAssociationForLocation(player, pos));
-		if (result != null && !player.isJumping && WorldUtils.isSolidBlock(player.world, pos))
+		if (ModOptions.enableFootprints && result != null && !player.isJumping
+				&& WorldUtils.isSolidBlock(player.world, pos))
 			result.setStepLocation(new Vec3d(xx, minY + 0.025D, zz), rotDegrees, isRightFoot);
 
 		return result;
