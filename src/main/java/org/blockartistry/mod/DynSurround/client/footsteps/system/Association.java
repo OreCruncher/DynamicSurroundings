@@ -58,7 +58,10 @@ public class Association {
 	private final IBlockState state;
 	private final BlockPos pos;
 	private IAcoustic[] data;
+	
 	private Vec3d stepLoc;
+	private boolean isRightFoot;
+	private float rotation;
 
 	public Association() {
 		this(AcousticsManager.EMPTY);
@@ -101,6 +104,14 @@ public class Association {
 	public Vec3d getStepLocation() {
 		return this.stepLoc;
 	}
+	
+	public boolean isRightFoot() {
+		return this.isRightFoot;
+	}
+	
+	public float getRotation() {
+		return this.rotation;
+	}
 
 	public SoundType getSoundType() {
 		return this.state != null ? MCHelper.getSoundType(this.state) : null;
@@ -110,8 +121,10 @@ public class Association {
 		this.data = MyUtils.append(this.data, acoustics);
 	}
 	
-	public void setStepLocation(@Nonnull final Vec3d stepLoc) {
+	public void setStepLocation(@Nonnull final Vec3d stepLoc, final float rotation, final boolean rightFoot) {
 		this.stepLoc = stepLoc;
+		this.rotation = rotation;
+		this.isRightFoot = rightFoot;
 	}
 
 	@Nonnull

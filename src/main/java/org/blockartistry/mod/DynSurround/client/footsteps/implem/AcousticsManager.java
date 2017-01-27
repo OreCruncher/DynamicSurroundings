@@ -97,7 +97,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		if (acousticName.hasFootstepImprint()) {
 			final Vec3d stepLoc = acousticName.getStepLocation();
 			if (stepLoc != null) {
-				ParticleHelper.addParticle(new ParticleFootprint(EnvironState.getWorld(), stepLoc.xCoord, stepLoc.yCoord, stepLoc.zCoord));
+				ParticleHelper.addParticle(new ParticleFootprint(EnvironState.getWorld(), stepLoc.xCoord,
+						stepLoc.yCoord, stepLoc.zCoord, acousticName.getRotation(), acousticName.isRightFoot()));
 			}
 		}
 	}
