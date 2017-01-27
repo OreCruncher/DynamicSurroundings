@@ -110,7 +110,8 @@ public class Solver {
 		if (MathStuff.abs(player.motionY) < 0.02)
 			return null; // Don't play sounds on every tiny bounce
 
-		final double rot = MathStuff.toRadians(MathStuff.wrapDegrees(player.rotationYaw));
+		final float rotDegrees = MathStuff.wrapDegrees(player.rotationYaw);
+		final double rot = MathStuff.toRadians(rotDegrees);
 		final double xn = MathStuff.cos(rot);
 		final double zn = MathStuff.sin(rot);
 		final float feetDistanceToCenter = 0.2f * (isRightFoot ? -1 : 1);
@@ -122,7 +123,7 @@ public class Solver {
 
 		final Association result = addSoundOverlay(findAssociationForLocation(player, pos));
 		if (result != null && !player.isJumping && WorldUtils.isSolidBlock(player.world, pos))
-			result.setStepLocation(new Vec3d(xx, minY + 0.001D, zz));
+			result.setStepLocation(new Vec3d(xx, minY + 0.025D, zz), rotDegrees, isRightFoot);
 
 		return result;
 	}

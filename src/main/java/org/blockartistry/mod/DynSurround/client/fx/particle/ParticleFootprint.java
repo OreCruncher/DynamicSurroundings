@@ -52,8 +52,10 @@ public class ParticleFootprint extends Particle {
 	private int footstepAge;
 	private final int footstepMaxAge;
 	private final BlockPos pos;
+	private final float rotation;
+	private final boolean isRightFoot;
 
-	public ParticleFootprint(@Nonnull final World world, final double x, final double y, final double z) {
+	public ParticleFootprint(@Nonnull final World world, final double x, final double y, final double z, final float rotation, final boolean isRightFoot) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
 		this.motionX = 0.0D;
 		this.motionY = 0.0D;
@@ -61,6 +63,8 @@ public class ParticleFootprint extends Particle {
 		this.footstepMaxAge = 200;
 
 		this.pos = new BlockPos(this.posX, this.posY, this.posZ);
+		this.rotation = rotation;
+		this.isRightFoot = isRightFoot;
 	}
 
 	/**
@@ -90,27 +94,36 @@ public class ParticleFootprint extends Particle {
 		GlStateManager.disableLighting();
 
 		final float f2 = 0.125F;
-		final float f3 = (float) (this.posX - interpPosX);
-		final float f4 = (float) (this.posY - interpPosY);
-		final float f5 = (float) (this.posZ - interpPosZ);
+		final float x = ((float) (this.prevPosX - interpPosX));
+		final float y = ((float) (this.prevPosY - interpPosY));
+		final float z = ((float) (this.prevPosZ - interpPosZ));
 		final float f6 = this.world.getLightBrightness(pos);
 		
 		Minecraft.getMinecraft().getTextureManager().bindTexture(FOOTPRINT_TEXTURE);
+		
+		GlStateManager.pushMatrix();
+		GlStateManager.pushAttrib();
+
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
+		GlStateManager.translate(x, y, z);
+		GlStateManager.rotate(-this.rotation, 0F, 1F, 0F);
+		
 		worldRendererIn.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-		worldRendererIn.pos((double) (f3 - f2), (double) f4, (double) (f5 + f2)).tex(0.0D, 1.0D).color(f6, f6, f6, f1)
+		worldRendererIn.pos((double) (- f2), (double) 0, (double) (+ f2)).tex(0.0D, 1.0D).color(f6, f6, f6, f1)
 				.endVertex();
-		worldRendererIn.pos((double) (f3 + f2), (double) f4, (double) (f5 + f2)).tex(1.0D, 1.0D).color(f6, f6, f6, f1)
+		worldRendererIn.pos((double) (f2), (double) 0, (double) (+ f2)).tex(1.0D, 1.0D).color(f6, f6, f6, f1)
 				.endVertex();
-		worldRendererIn.pos((double) (f3 + f2), (double) f4, (double) (f5 - f2)).tex(1.0D, 0.0D).color(f6, f6, f6, f1)
+		worldRendererIn.pos((double) (f2), (double) 0, (double) (- f2)).tex(1.0D, 0.0D).color(f6, f6, f6, f1)
 				.endVertex();
-		worldRendererIn.pos((double) (f3 - f2), (double) f4, (double) (f5 - f2)).tex(0.0D, 0.0D).color(f6, f6, f6, f1)
+		worldRendererIn.pos((double) (-f2), (double) 0, (double) (- f2)).tex(0.0D, 0.0D).color(f6, f6, f6, f1)
 				.endVertex();
 
 		Tessellator.getInstance().draw();
 		GlStateManager.disableBlend();
+		GlStateManager.popAttrib();
+		GlStateManager.popMatrix();
 		GlStateManager.enableLighting();
 	}
 
