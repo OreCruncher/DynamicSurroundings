@@ -42,6 +42,7 @@ import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IStepPlayer
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IOptions.Option;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Association;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFootprint;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
@@ -51,7 +52,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
@@ -97,8 +97,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		if (acousticName.hasFootstepImprint()) {
 			final Vec3d stepLoc = acousticName.getStepLocation();
 			if (stepLoc != null) {
-				ParticleHelper.spawnParticle(EnumParticleTypes.FOOTSTEP, stepLoc.xCoord, stepLoc.yCoord,
-						stepLoc.zCoord);
+				ParticleHelper.addParticle(new ParticleFootprint(EnvironState.getWorld(), stepLoc.xCoord, stepLoc.yCoord, stepLoc.zCoord));
 			}
 		}
 	}

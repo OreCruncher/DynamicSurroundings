@@ -122,7 +122,7 @@ public class Solver {
 
 		final Association result = addSoundOverlay(findAssociationForLocation(player, pos));
 		if (result != null && !player.isJumping && WorldUtils.isSolidBlock(player.worldObj, pos))
-			result.setStepLocation(new Vec3d(xx, minY + 0.015D, zz));
+			result.setStepLocation(new Vec3d(xx, minY + 0.001D, zz));
 
 		return result;
 	}
