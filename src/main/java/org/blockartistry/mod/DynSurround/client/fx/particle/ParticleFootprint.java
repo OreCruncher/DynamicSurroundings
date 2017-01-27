@@ -85,6 +85,11 @@ public class ParticleFootprint extends Particle {
 
 		// Sets the alpha
 		f1 = f1 * 0.4F;
+		
+		final double minU = this.isRightFoot ? 0.5D : 0D;
+		final double maxU = this.isRightFoot ? 1.0D : 0.5D;
+		final double minV = 0D;
+		final double maxV = 1D;
 
 		final int i = this.getBrightnessForRender(partialTicks);
 		final int j = i % 65536;
@@ -93,7 +98,9 @@ public class ParticleFootprint extends Particle {
 
 		GlStateManager.disableLighting();
 
-		final float f2 = 0.125F;
+		//final float f2 = 0.25F;
+		final float width = 0.125F;
+		final float length = width * 2.0F;
 		final float x = ((float) (this.prevPosX - interpPosX));
 		final float y = ((float) (this.prevPosY - interpPosY));
 		final float z = ((float) (this.prevPosZ - interpPosZ));
@@ -108,16 +115,16 @@ public class ParticleFootprint extends Particle {
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
 		GlStateManager.translate(x, y, z);
-		GlStateManager.rotate(-this.rotation, 0F, 1F, 0F);
+		GlStateManager.rotate(-this.rotation + 180, 0F, 1F, 0F);
 		
 		worldRendererIn.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-		worldRendererIn.pos((double) (- f2), (double) 0, (double) (+ f2)).tex(0.0D, 1.0D).color(f6, f6, f6, f1)
+		worldRendererIn.pos((double) (-width), (double) 0, (double) (+length)).tex(minU, maxV).color(f6, f6, f6, f1)
 				.endVertex();
-		worldRendererIn.pos((double) (f2), (double) 0, (double) (+ f2)).tex(1.0D, 1.0D).color(f6, f6, f6, f1)
+		worldRendererIn.pos((double) (width), (double) 0, (double) (+ length)).tex(maxU, maxV).color(f6, f6, f6, f1)
 				.endVertex();
-		worldRendererIn.pos((double) (f2), (double) 0, (double) (- f2)).tex(1.0D, 0.0D).color(f6, f6, f6, f1)
+		worldRendererIn.pos((double) (width), (double) 0, (double) (- length)).tex(maxU, minV).color(f6, f6, f6, f1)
 				.endVertex();
-		worldRendererIn.pos((double) (-f2), (double) 0, (double) (- f2)).tex(0.0D, 0.0D).color(f6, f6, f6, f1)
+		worldRendererIn.pos((double) (-width), (double) 0, (double) (- length)).tex(minU, minV).color(f6, f6, f6, f1)
 				.endVertex();
 
 		Tessellator.getInstance().draw();
