@@ -55,16 +55,29 @@ public class ParticleFootprint extends Particle {
 	private final float rotation;
 	private final boolean isRightFoot;
 
-	public ParticleFootprint(@Nonnull final World world, final double x, final double y, final double z, final float rotation, final boolean isRightFoot) {
-		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
+	private final double minU;
+	private final double maxU;
+	private final double minV = 0D;
+	private final double maxV = 1D;
+	private final float width = 0.125F;
+	private final float length = this.width * 2.0F;
+
+	public ParticleFootprint(@Nonnull final World world, final double x, final double y, final double z,
+			final float rotation, final boolean isRightFoot) {
+		super(world, x, y, z);
 		this.motionX = 0.0D;
 		this.motionY = 0.0D;
 		this.motionZ = 0.0D;
 		this.footstepMaxAge = 200;
 
 		this.pos = new BlockPos(this.posX, this.posY, this.posZ);
-		this.rotation = rotation;
+		this.rotation = -rotation + 180;
 		this.isRightFoot = isRightFoot;
+
+		this.minU = this.isRightFoot ? 0.5D : 0D;
+		this.maxU = this.isRightFoot ? 1.0D : 0.5D;
+		
+		this.canCollide = false;
 	}
 
 	/**
@@ -77,19 +90,14 @@ public class ParticleFootprint extends Particle {
 
 		float f = ((float) this.footstepAge + partialTicks) / (float) this.footstepMaxAge;
 		f = f * f;
-		float f1 = 2.0F - f * 2.0F;
+		float alpha = 2.0F - f * 2.0F;
 
-		if (f1 > 1.0F) {
-			f1 = 1.0F;
+		if (alpha > 1.0F) {
+			alpha = 1.0F;
 		}
 
 		// Sets the alpha
-		f1 = f1 * 0.4F;
-		
-		final double minU = this.isRightFoot ? 0.5D : 0D;
-		final double maxU = this.isRightFoot ? 1.0D : 0.5D;
-		final double minV = 0D;
-		final double maxV = 1D;
+		alpha = alpha * 0.4F;
 
 		final int i = this.getBrightnessForRender(partialTicks);
 		final int j = i % 65536;
@@ -98,16 +106,13 @@ public class ParticleFootprint extends Particle {
 
 		GlStateManager.disableLighting();
 
-		//final float f2 = 0.25F;
-		final float width = 0.125F;
-		final float length = width * 2.0F;
-		final float x = ((float) (this.prevPosX - interpPosX));
-		final float y = ((float) (this.prevPosY - interpPosY));
-		final float z = ((float) (this.prevPosZ - interpPosZ));
-		final float f6 = this.worldObj.getLightBrightness(pos);
-		
+		final double x = this.posX - interpPosX;
+		final double y = this.posY - interpPosY;
+		final double z = this.posZ - interpPosZ;
+		final float bright = this.worldObj.getLightBrightness(this.pos);
+
 		Minecraft.getMinecraft().getTextureManager().bindTexture(FOOTPRINT_TEXTURE);
-		
+
 		GlStateManager.pushMatrix();
 		GlStateManager.pushAttrib();
 
@@ -115,16 +120,16 @@ public class ParticleFootprint extends Particle {
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
 		GlStateManager.translate(x, y, z);
-		GlStateManager.rotate(-this.rotation + 180, 0F, 1F, 0F);
-		
+		GlStateManager.rotate(this.rotation, 0F, 1F, 0F);
+
 		worldRendererIn.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-		worldRendererIn.pos((double) (-width), (double) 0, (double) (+length)).tex(minU, maxV).color(f6, f6, f6, f1)
+		worldRendererIn.pos(-this.width, 0, this.length).tex(this.minU, this.maxV).color(bright, bright, bright, alpha)
 				.endVertex();
-		worldRendererIn.pos((double) (width), (double) 0, (double) (+ length)).tex(maxU, maxV).color(f6, f6, f6, f1)
+		worldRendererIn.pos(this.width, 0, this.length).tex(this.maxU, this.maxV).color(bright, bright, bright, alpha)
 				.endVertex();
-		worldRendererIn.pos((double) (width), (double) 0, (double) (- length)).tex(maxU, minV).color(f6, f6, f6, f1)
+		worldRendererIn.pos(this.width, 0, -this.length).tex(this.maxU, this.minV).color(bright, bright, bright, alpha)
 				.endVertex();
-		worldRendererIn.pos((double) (-width), (double) 0, (double) (- length)).tex(minU, minV).color(f6, f6, f6, f1)
+		worldRendererIn.pos(-this.width, 0, -this.length).tex(this.minU, this.minV).color(bright, bright, bright, alpha)
 				.endVertex();
 
 		Tessellator.getInstance().draw();
