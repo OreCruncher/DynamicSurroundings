@@ -35,6 +35,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -48,6 +49,8 @@ public class ParticleFootprint extends Particle {
 
 	private static final ResourceLocation FOOTPRINT_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
 			"textures/particles/footprint.png");
+
+	private final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
 
 	private int footstepAge;
 	private final int footstepMaxAge;
@@ -76,9 +79,8 @@ public class ParticleFootprint extends Particle {
 
 		this.minU = this.isRightFoot ? 0.5D : 0D;
 		this.maxU = this.isRightFoot ? 1.0D : 0.5D;
-		
-		this.canCollide = false;
 
+		this.canCollide = false;
 	}
 
 	/**
@@ -107,9 +109,9 @@ public class ParticleFootprint extends Particle {
 
 		GlStateManager.disableLighting();
 
-		final double x = this.posX - interpPosX;
-		final double y = this.posY - interpPosY;
-		final double z = this.posZ - interpPosZ;
+		final double x = this.posX - this.manager.viewerPosX;
+		final double y = this.posY - this.manager.viewerPosY;
+		final double z = this.posZ - this.manager.viewerPosZ;
 		final float bright = this.world.getLightBrightness(this.pos);
 
 		Minecraft.getMinecraft().getTextureManager().bindTexture(FOOTPRINT_TEXTURE);
