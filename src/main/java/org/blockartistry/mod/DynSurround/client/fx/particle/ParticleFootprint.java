@@ -27,6 +27,7 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.DSurround;
+import org.blockartistry.mod.DynSurround.util.WorldUtils;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -55,6 +56,7 @@ public class ParticleFootprint extends Particle {
 	private int footstepAge;
 	private final int footstepMaxAge;
 	private final BlockPos pos;
+	private final BlockPos downPos;
 	private final float rotation;
 	private final boolean isRightFoot;
 
@@ -74,6 +76,7 @@ public class ParticleFootprint extends Particle {
 		this.footstepMaxAge = 200;
 
 		this.pos = new BlockPos(this.posX, this.posY, this.posZ);
+		this.downPos = this.pos.down();
 		this.rotation = -rotation + 180;
 		this.isRightFoot = isRightFoot;
 
@@ -87,9 +90,12 @@ public class ParticleFootprint extends Particle {
 	 * Renders the particle
 	 */
 	@Override
-	public void renderParticle(@Nonnull final VertexBuffer worldRendererIn, @Nonnull final Entity entityIn,
+	public void renderParticle(@Nonnull final VertexBuffer buffer, @Nonnull final Entity entity,
 			final float partialTicks, final float rotationX, final float rotationZ, final float rotationYZ,
 			final float rotationXY, final float rotationXZ) {
+
+		GlStateManager.pushMatrix();
+		GlStateManager.pushAttrib();
 
 		float f = ((float) this.footstepAge + partialTicks) / (float) this.footstepMaxAge;
 		f = f * f;
@@ -101,6 +107,8 @@ public class ParticleFootprint extends Particle {
 
 		// Sets the alpha
 		alpha = alpha * 0.4F;
+
+		Minecraft.getMinecraft().getTextureManager().bindTexture(FOOTPRINT_TEXTURE);
 
 		final int i = this.getBrightnessForRender(partialTicks);
 		final int j = i % 65536;
@@ -114,39 +122,34 @@ public class ParticleFootprint extends Particle {
 		final double z = this.posZ - this.manager.viewerPosZ;
 		final float bright = this.world.getLightBrightness(this.pos);
 
-		Minecraft.getMinecraft().getTextureManager().bindTexture(FOOTPRINT_TEXTURE);
-
-		GlStateManager.pushMatrix();
-		GlStateManager.pushAttrib();
-
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-
 		GlStateManager.translate(x, y, z);
 		GlStateManager.rotate(this.rotation, 0F, 1F, 0F);
 
-		worldRendererIn.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-		worldRendererIn.pos(-this.width, 0, this.length).tex(this.minU, this.maxV).color(bright, bright, bright, alpha)
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+		buffer.pos(-this.width, 0, this.length).tex(this.minU, this.maxV).color(bright, bright, bright, alpha)
 				.endVertex();
-		worldRendererIn.pos(this.width, 0, this.length).tex(this.maxU, this.maxV).color(bright, bright, bright, alpha)
+		buffer.pos(this.width, 0, this.length).tex(this.maxU, this.maxV).color(bright, bright, bright, alpha)
 				.endVertex();
-		worldRendererIn.pos(this.width, 0, -this.length).tex(this.maxU, this.minV).color(bright, bright, bright, alpha)
+		buffer.pos(this.width, 0, -this.length).tex(this.maxU, this.minV).color(bright, bright, bright, alpha)
 				.endVertex();
-		worldRendererIn.pos(-this.width, 0, -this.length).tex(this.minU, this.minV).color(bright, bright, bright, alpha)
+		buffer.pos(-this.width, 0, -this.length).tex(this.minU, this.minV).color(bright, bright, bright, alpha)
 				.endVertex();
-
 		Tessellator.getInstance().draw();
+
+		GlStateManager.color(1, 1, 1, 1);
 		GlStateManager.disableBlend();
+		GlStateManager.enableLighting();
 		GlStateManager.popAttrib();
 		GlStateManager.popMatrix();
-		GlStateManager.enableLighting();
 	}
 
 	@Override
 	public void onUpdate() {
 		++this.footstepAge;
 
-		if (this.footstepAge == this.footstepMaxAge) {
+		if (this.footstepAge == this.footstepMaxAge || !WorldUtils.isSolidBlock(this.world, this.downPos)) {
 			this.setExpired();
 		}
 	}
