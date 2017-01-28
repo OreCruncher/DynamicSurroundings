@@ -1,3 +1,10 @@
+###DynamicSurroundings-1.10.2-3.2.4.1
+**Changes**
+* Created my own footstep particle:
+    * Looks like footsteps with facing orientation
+    * Lighting works so they shouldn't "black out" when looking at them at various angles
+* Option to disable footprint feature
+
 ###DynamicSurroundings-1.10.2-3.2.4.0
 **What's New!**
 * Use Minecraft's footprint particle to leave a footprint trail as the player walks.  The footprints will fade after a short period of time.  Soft blocks (sand, dirt, grass, etc) will have footprints; hard blocks (stone, sandstone, etc) will not.
