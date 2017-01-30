@@ -56,6 +56,11 @@
 					"conditions": "weather.isNotRaining",
 					"soundType": "spot",
 					"variable": true
+				},
+				{
+					"sound": "dsurround:coyote",
+					"conditions": "weather.isNotRaining && isNight",
+					"soundType": "spot"
 				}
 			]
 		},
@@ -238,6 +243,11 @@
 				{
 					"sound": "dsurround:rattlesnake",
 					"conditions": "weather.isNotRaining && isDay",
+					"soundType": "spot"
+				},
+				{
+					"sound": "dsurround:coyote",
+					"conditions": "weather.isNotRaining && isNight",
 					"soundType": "spot"
 				}
 			]

@@ -1074,6 +1074,17 @@
 			}
 		]
 	},
+	"coyote":{
+		"category":"ambient",
+		"sounds":[
+			"dsurround:ambient/coyote/coyote1",
+			"dsurround:ambient/coyote/coyote2",
+			"dsurround:ambient/coyote/coyote3",
+			"dsurround:ambient/coyote/coyote4",
+			"dsurround:ambient/coyote/coyote5",
+			"dsurround:ambient/coyote/coyote6"
+		]
+	},
 	"wolf": {
 		"category": "ambient",
 		"sounds": [
