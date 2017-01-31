@@ -47,6 +47,8 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 	private boolean isFading;
 	private float maxVolume;
 	private boolean isDonePlaying;
+	
+	private long lastTick;
 
 	TrackingSound(final SoundEffect sound) {
 		this(EnvironState.getPlayer(), sound, false);
@@ -67,6 +69,8 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 		this.volume = fadeIn ? DONE_VOLUME_THRESHOLD * 2 : this.maxVolume;
 		this.pitch = sound.getPitch(RANDOM);
 
+		this.lastTick = EnvironState.getTickCounter() - 1;
+		
 		updateLocation();
 	}
 
@@ -114,11 +118,19 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 			return;
 		}
 
+		final long tickDelta = EnvironState.getTickCounter() - this.lastTick;
+		if(tickDelta == 0)
+			return;
+		
+		this.lastTick = EnvironState.getTickCounter();
+		
 		if (this.isFading()) {
-			this.volume -= FADE_AMOUNT;
+			this.volume -= FADE_AMOUNT * tickDelta;
 		} else if (this.volume < this.maxVolume) {
-			this.volume += FADE_AMOUNT;
-		} else if (this.volume > this.maxVolume) {
+			this.volume += FADE_AMOUNT * tickDelta;
+		}
+		
+		if (this.volume > this.maxVolume) {
 			this.volume = this.maxVolume;
 		}
 
