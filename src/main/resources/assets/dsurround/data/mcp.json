@@ -361,6 +361,20 @@
 					"conditions": "player.isHungry",
 					"soundType": "periodic",
 					"repeatDelay": 300
+				},
+				{
+					"sound": "dsurround:village.rooster",
+					"conditions": "!player.isInside && player.inVillage && isSunrise && weather.isNotRaining",
+					"soundType": "periodic",
+					"repeatDelay": 100,
+					"repeatDelayRandom": 100
+				},
+				{
+					"sound": "dsurround:village.anvil",
+					"conditions": "!player.isInside && player.inVillage && isDay && weather.isNotRaining",
+					"soundType": "periodic",
+					"repeatDelay": 100,
+					"repeatDelayRandom": 200
 				}
 			]
 		}
