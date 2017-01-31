@@ -87,13 +87,13 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		if (!ModOptions.enableBiomeSounds)
 			return;
 
-		// Dead players hear no sounds
-		if (!player.isEntityAlive()) {
+		// If the chunk isn't loaded or the player is dead, no sounds
+		if (!player.isEntityAlive() || !EnvironState.getWorld().isBlockLoaded(EnvironState.getPlayerPosition())) {
 			return;
 		}
-		
+
 		// Only execute every 4 ticks.
-		if((EnvironState.getTickCounter() % SCAN_INTERVAL) != 0)
+		if ((EnvironState.getTickCounter() % SCAN_INTERVAL) != 0)
 			return;
 
 		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<SoundEffect>();
@@ -103,7 +103,7 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 
 		final List<SoundEffect> playerSounds = new ArrayList<SoundEffect>();
 		BiomeRegistry.PLAYER.findSoundMatches(playerSounds);
-		for(final SoundEffect effect: playerSounds)
+		for (final SoundEffect effect : playerSounds)
 			sounds.put(effect, 1.0F);
 
 		SoundEffectHandler.INSTANCE.queueAmbientSounds(sounds);
