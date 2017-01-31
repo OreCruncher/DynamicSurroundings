@@ -45,6 +45,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public final class Network {
 
@@ -79,6 +80,7 @@ public final class Network {
 	}
 
 	// Package level helper method to fire events based on incoming packets
+	@SideOnly(Side.CLIENT)
 	static void postEvent(@Nonnull final Event event) {
 		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
 			public void run() {
