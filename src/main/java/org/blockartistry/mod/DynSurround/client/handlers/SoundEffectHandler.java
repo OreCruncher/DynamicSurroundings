@@ -96,13 +96,13 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	private static final SoundEvent THUNDER = SoundUtils
 			.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "thunder"));
 
-	public static SoundEffectHandler INSTANCE = null;
+	public static final SoundEffectHandler INSTANCE = new SoundEffectHandler();
 
 	private final Map<SoundEffect, Emitter> emitters = new HashMap<SoundEffect, Emitter>();
 	private final ArrayDeque<IMySound> pending = new ArrayDeque<IMySound>();
 
-	public SoundEffectHandler() {
-		INSTANCE = this;
+	private SoundEffectHandler() {
+
 	}
 
 	@Override
@@ -152,7 +152,6 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	public void onDisconnect() {
 		Minecraft.getMinecraft().getSoundHandler().removeListener(this);
 		clearSounds();
-		INSTANCE = null;
 	}
 
 	public void clearSounds() {

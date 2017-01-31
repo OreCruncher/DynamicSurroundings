@@ -70,7 +70,7 @@ public class EffectManager {
 		this.effectHandlers.add(new WeatherHandler());
 
 		// Add this one last so it goes last
-		this.effectHandlers.add(new SoundEffectHandler());
+		this.effectHandlers.add(SoundEffectHandler.INSTANCE);
 
 		for (final EffectHandlerBase h : this.effectHandlers) {
 			h.connect0();
