@@ -440,6 +440,12 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 				this.value = EnvironState.getPlayerArmorClass().getClassName();
 			}
 		});
+		register(new DynamicBoolean("player.inVillage") {
+			@Override
+			public void update() {
+				this.value = EnvironState.inVillage();
+			}
+		});
 
 		// Weather variables
 		register(new DynamicBoolean("weather.isRaining") {
