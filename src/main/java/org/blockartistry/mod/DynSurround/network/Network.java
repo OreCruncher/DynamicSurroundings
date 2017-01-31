@@ -36,6 +36,8 @@ import org.blockartistry.mod.DynSurround.data.AuroraData;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -65,6 +67,9 @@ public final class Network {
 		NETWORK.registerMessage(PacketEntityEmote.PacketHandler.class, PacketEntityEmote.class, ++discriminator,
 				Side.CLIENT);
 		NETWORK.registerMessage(PacketThunder.PacketHandler.class, PacketThunder.class, ++discriminator, Side.CLIENT);
+		NETWORK.registerMessage(PacketEnvironment.PacketHandler.class, PacketEnvironment.class, ++discriminator,
+				Side.CLIENT);
+
 	}
 
 	@Nonnull
@@ -110,5 +115,9 @@ public final class Network {
 	public static void sendThunder(final int dimensionId, final boolean doFlash, final float x, final float y,
 			final float z) {
 		NETWORK.sendToDimension(new PacketThunder(dimensionId, doFlash, new BlockPos(x, y, z)), dimensionId);
+	}
+	
+	public static void sendEnvironmentUpdate(final EntityPlayer player, final boolean inVillage) {
+		NETWORK.sendTo(new PacketEnvironment(inVillage), (EntityPlayerMP)player);
 	}
 }

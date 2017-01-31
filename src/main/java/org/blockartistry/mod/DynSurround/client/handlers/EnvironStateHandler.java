@@ -32,6 +32,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
+import org.blockartistry.mod.DynSurround.api.events.EnvironmentEvent;
 import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.mod.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.mod.DynSurround.registry.ArmorClass;
@@ -90,6 +91,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static boolean inside;
 		private static ArmorClass armorClass = ArmorClass.NONE;
 		private static ArmorClass footArmorClass = ArmorClass.NONE;
+		private static boolean inVillage;
 
 		private static int tickCounter;
 
@@ -275,6 +277,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		public static ArmorClass getPlayerFootArmorClass() {
 			return footArmorClass;
 		}
+		
+		public static boolean inVillage() {
+			return inVillage;
+		}
 
 		public static int getTickCounter() {
 			return tickCounter;
@@ -320,6 +326,11 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.tick(event.getWorld(), (EntityPlayer)event.getEntity());
 		}
 	}
+	
+	@SubscribeEvent
+	public void onEnvironmentEvent(@Nonnull final EnvironmentEvent event) {
+		EnvironState.inVillage = event.inVillage;
+	}
 
 	/**
 	 * Hook the Forge text event to add on our diagnostics
@@ -343,7 +354,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			"'Biome: ' + biome.name + '; Temp ' + biome.temperature + '/' + biome.temperatureValue + ' rainfall: ' + biome.rainfall",
 			"'Weather: ' + IF(weather.isRaining,'rainfall: ' + weather.rainfall,'not raining') + IF(weather.isThundering,' thundering','') + ' Temp: ' + weather.temperature + '/' + weather.temperatureValue",
 			"'Season: ' + season  + IF(isNight,' night',' day') + IF(player.isInside,' inside',' outside')",
-			"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','') + ' pos: (' + player.X + ',' + player.Y + ',' + player.Z + ') light: ' + player.lightLevel", };
+			"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','') + ' pos: (' + player.X + ',' + player.Y + ',' + player.Z + ') light: ' + player.lightLevel",
+			"'Village: ' + player.inVillage"};
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void diagnostics(final DiagnosticEvent.Gather event) {
