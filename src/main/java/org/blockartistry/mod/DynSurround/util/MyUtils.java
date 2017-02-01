@@ -24,11 +24,14 @@
 package org.blockartistry.mod.DynSurround.util;
 
 import java.lang.reflect.Array;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
+
+import com.google.common.base.Predicate;
 
 public final class MyUtils {
 
@@ -54,15 +57,15 @@ public final class MyUtils {
 
 	@Nonnull
 	public static <T> T[] concatenate(@Nonnull final T[] a, @Nullable final T[] b) {
-		if(b == null)
+		if (b == null)
 			return a;
-		
+
 		final int aLen = a.length;
 		final int bLen = b.length;
 
-		if(bLen == 0)
+		if (bLen == 0)
 			return a;
-		
+
 		@SuppressWarnings("unchecked")
 		final T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen + bLen);
 		System.arraycopy(a, 0, c, 0, aLen);
@@ -73,10 +76,10 @@ public final class MyUtils {
 
 	@Nonnull
 	public static <T> T[] append(@Nonnull final T[] a, @Nullable final T b) {
-		
-		if(b == null)
+
+		if (b == null)
 			return a;
-		
+
 		final int aLen = a.length;
 
 		@SuppressWarnings("unchecked")
@@ -85,5 +88,16 @@ public final class MyUtils {
 		c[aLen] = b;
 
 		return c;
+	}
+
+	@Nullable
+	public static <T> T find(@Nullable final List<T> list, @Nonnull final Predicate<T> pred) {
+		if (list == null || list.size() == 0)
+			return null;
+
+		for (final T e : list)
+			if (pred.apply(e))
+				return e;
+		return null;
 	}
 }

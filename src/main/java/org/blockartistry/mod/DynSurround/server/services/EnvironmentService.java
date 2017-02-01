@@ -29,9 +29,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.network.Network;
+import org.blockartistry.mod.DynSurround.util.MyUtils;
 
-import com.google.common.base.Predicates;
-
+import com.google.common.base.Predicate;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.village.Village;
 import net.minecraft.village.VillageCollection;
@@ -46,31 +46,24 @@ public final class EnvironmentService extends Service {
 		super("EnvironmentService");
 	}
 
-	private boolean isInVillage(final EntityPlayer player) {
-		final VillageCollection villageCollection = player.getEntityWorld().getVillageCollection();
-		if (villageCollection == null)
-			return false;
-
-		final List<Village> villages = villageCollection.getVillageList();
-		if (villages == null || villages.size() == 0)
-			return false;
-
-		for (final Village v : villages) {
-			if (v.isBlockPosWithinSqVillageRadius(player.getPosition()))
-				return true;
-		}
-
-		return false;
-	}
-
 	@SubscribeEvent
 	public void tickEvent(@Nonnull final TickEvent.WorldTickEvent event) {
 		if (event.phase != Phase.END || event.side != Side.SERVER)
 			return;
 
-		for (final EntityPlayer player : event.world.getPlayers(EntityPlayer.class,
-				Predicates.<EntityPlayer>alwaysTrue())) {
-			Network.sendEnvironmentUpdate(player, isInVillage(player));
+		final VillageCollection villageCollection = event.world.getVillageCollection();
+		final List<Village> villages = villageCollection != null ? villageCollection.getVillageList() : null;
+
+		for (final EntityPlayer player : event.world.playerEntities) {
+
+			final boolean inVillage = null != MyUtils.find(villages, new Predicate<Village>() {
+				@Override
+				public boolean apply(@Nonnull final Village input) {
+					return input.isBlockPosWithinSqVillageRadius(player.getPosition());
+				}
+			});
+
+			Network.sendEnvironmentUpdate(player, inVillage);
 		}
 	}
 
