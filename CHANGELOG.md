@@ -1,3 +1,17 @@
+###DynamicSurroundings-1.10.2-3.2.5.0
+**What's New!**
+* Added Coyote spot sound to a bunch of biomes.  Chance of playing at night when it isn't raining.
+* Village sounds.  Sounds that can play when a player is in a village.  Requires server side mod installation for this feature to work.  (Minecraft village information is available server side, not client side.)
+    * Rooster will crow during sunrise when the player is outside and it isn't raining.
+    * Blacksmith hammer/anvil will play periodically during the day when the player is outside and it is not raining.
+    * Sounds play in addition to biome sounds.  Village sounds are attached to the "player biome".
+    * "In a village" defined as within a given village radius.
+
+**Fixes**
+* Destroy footprint particle when block beneath disappears.
+* Tickable repeat sounds now fade in/out in a timely way.
+* Fix intermittent sound handler crash reported via OpenEye (hopefully).
+
 ###DynamicSurroundings-1.10.2-3.2.4.1
 **Changes**
 * Created my own footstep particle:

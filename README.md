@@ -127,3 +127,20 @@ whether LPs can be monetized on the various streaming services.
      <li>P: <a href="https://www.freesound.org/people/Samulis/packs/12606/">Foley</a> by <a href="https://www.freesound.org/people/Samulis/">Samulis</a></li>
      <li>S: <a href="https://www.freesound.org/people/satanicupsman/sounds/147589/">chain drop</a> by <a href="https://www.freesound.org/people/satanicupsman/">satanicupsman</a> | License: Creative Commons 0</li></ul>
      
+*dsurround:coyote*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/dkaufman/sounds/256533/">coyote barks and howls</a> by <a href="https://www.freesound.org/people/dkaufman/">dkaufman</a> | License: Creative Commons 0</li> 
+</ul>
+
+*dsurround:village.rooster*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/Ramston/sounds/331442/">Village ambience rooster and light birds with wind .wav</a> by <a href="https://www.freesound.org/people/Ramston/">Ramston</a> | License: Creative Commons 0</li> 
+</ul>
+
+*dsurround:village.anvil*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/MrAuralization/sounds/274846/">Anvil</a> by <a href="https://www.freesound.org/people/MrAuralization/">MrAuralization</a> | License: Attribution</li> 
+     </ul>
