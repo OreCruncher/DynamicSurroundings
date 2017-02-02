@@ -202,12 +202,6 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 				this.value = EnvironState.getPlayerBiome().getTemperature();
 			}
 		});
-		register(new DynamicBoolean("biome.isFoggy") {
-			@Override
-			public void update() {
-				this.value = EnvironState.isFoggy();
-			}
-		});
 		register(new DynamicBoolean("biome.isHumid") {
 			@Override
 			public void update() {

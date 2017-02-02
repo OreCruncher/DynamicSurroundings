@@ -83,7 +83,6 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static EntityPlayer player;
 		private static World world;
 		private static boolean freezing;
-		private static boolean fog;
 		private static boolean humid;
 		private static boolean dry;
 		private static TemperatureRating playerTemperature = TemperatureRating.MILD;
@@ -111,7 +110,6 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.dimensionId = world.provider.getDimension();
 			EnvironState.dimensionName = world.provider.getDimensionType().getName();
 			EnvironState.playerPosition = getPlayerPos();
-			EnvironState.fog = FogEffectHandler.currentFogLevel() >= 0.01F;
 			EnvironState.inside = AreaSurveyHandler.isReallyInside();
 
 			final BiomeInfo trueBiome = PlayerUtils.getPlayerBiome(player, true);
@@ -256,10 +254,6 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		public static boolean isFreezing() {
 			return freezing;
-		}
-
-		public static boolean isFoggy() {
-			return fog;
 		}
 
 		public static boolean isHumid() {
