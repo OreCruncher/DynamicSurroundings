@@ -30,6 +30,7 @@ import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
@@ -39,6 +40,7 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -59,6 +61,7 @@ public class ParticleFootprint extends Particle {
 	private final BlockPos downPos;
 	private final float rotation;
 	private final boolean isRightFoot;
+	private final boolean isSnowLayer;
 
 	private final double minU;
 	private final double maxU;
@@ -76,6 +79,15 @@ public class ParticleFootprint extends Particle {
 		this.footstepMaxAge = 200;
 
 		this.pos = new BlockPos(this.posX, this.posY, this.posZ);
+
+		// If the block is a snow layer block need to adjust the
+		// y up so the footprint rides on top.
+		final IBlockState state = world.getBlockState(this.pos);
+		this.isSnowLayer = state.getBlock() == Blocks.SNOW_LAYER;
+		if (this.isSnowLayer) {
+			this.posY += 0.125F;
+		}
+
 		this.downPos = this.pos.down();
 		this.rotation = -rotation + 180;
 		this.isRightFoot = isRightFoot;
@@ -150,6 +162,8 @@ public class ParticleFootprint extends Particle {
 		++this.footstepAge;
 
 		if (this.footstepAge == this.footstepMaxAge || !WorldUtils.isSolidBlock(this.worldObj, this.downPos)) {
+			this.setExpired();
+		} else if (this.isSnowLayer && this.worldObj.getBlockState(this.pos).getBlock() != Blocks.SNOW_LAYER) {
 			this.setExpired();
 		}
 	}

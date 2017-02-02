@@ -53,6 +53,8 @@ public class Association {
 		FOOTPRINTABLE.add(Material.GROUND);
 		FOOTPRINTABLE.add(Material.ICE);
 		FOOTPRINTABLE.add(Material.SAND);
+		FOOTPRINTABLE.add(Material.CRAFTED_SNOW);
+		FOOTPRINTABLE.add(Material.SNOW);
 	}
 
 	private final IBlockState state;
