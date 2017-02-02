@@ -40,8 +40,6 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.blockartistry.mod.DynSurround.util.MyUtils;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -122,8 +120,7 @@ public class Solver {
 		final BlockPos pos = new BlockPos(xx, minY - 0.1D - verticalOffsetAsMinus, zz);
 
 		final Association result = addSoundOverlay(findAssociationForLocation(player, pos));
-		if (ModOptions.enableFootprints && result != null && !player.isJumping
-				&& WorldUtils.isSolidBlock(player.world, pos))
+		if (ModOptions.enableFootprints && result != null && !player.isJumping)
 			result.setStepLocation(new Vec3d(xx, minY + 0.025D, zz), rotDegrees, isRightFoot);
 
 		return result;
