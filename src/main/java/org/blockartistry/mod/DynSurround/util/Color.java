@@ -170,9 +170,14 @@ public class Color {
 
 	@Nonnull
 	public Color scale(final float scaleFactor) {
-		this.red *= scaleFactor;
-		this.green *= scaleFactor;
-		this.blue *= scaleFactor;
+		return scale(scaleFactor, scaleFactor, scaleFactor);
+	}
+
+	@Nonnull
+	public Color scale(final float scaleRed, final float scaleGreen, final float scaleBlue) {
+		this.red *= scaleRed;
+		this.green *= scaleGreen;
+		this.blue *= scaleBlue;
 		return this;
 	}
 
