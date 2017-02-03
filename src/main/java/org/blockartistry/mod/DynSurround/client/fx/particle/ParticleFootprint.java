@@ -52,6 +52,8 @@ public class ParticleFootprint extends Particle {
 
 	private static final ResourceLocation FOOTPRINT_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
 			"textures/particles/footprint.png");
+	
+	private static float zFighter = 0;
 
 	private final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
 
@@ -79,6 +81,13 @@ public class ParticleFootprint extends Particle {
 		this.footstepMaxAge = 200;
 
 		this.pos = new BlockPos(this.posX, this.posY, this.posZ);
+		
+		// Micro adjust the Y in an attempt to address z-fighting
+		// of multiple footprints in the area
+		if(++zFighter > 20)
+			zFighter = 1;
+		
+		this.posY += zFighter * 0.001F;
 
 		// If the block is a snow layer block need to adjust the
 		// y up so the footprint rides on top.

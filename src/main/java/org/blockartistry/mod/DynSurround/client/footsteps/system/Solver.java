@@ -121,7 +121,7 @@ public class Solver {
 
 		final Association result = addSoundOverlay(findAssociationForLocation(player, pos));
 		if (ModOptions.enableFootprints && result != null && !player.isJumping)
-			result.setStepLocation(new Vec3d(xx, minY + 0.025D, zz), rotDegrees, isRightFoot);
+			result.setStepLocation(new Vec3d(xx, minY, zz), rotDegrees, isRightFoot);
 
 		return result;
 	}
