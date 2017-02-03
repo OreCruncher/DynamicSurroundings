@@ -36,6 +36,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.facade.FacadeHelper;
 import org.blockartistry.mod.DynSurround.registry.BlockInfo;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
@@ -44,6 +46,8 @@ import gnu.trove.procedure.TObjectObjectProcedure;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -127,14 +131,16 @@ public class BlockMap {
 	}
 
 	@Nullable
-	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state) {
-		return this.metaMap.getBlockAcoustics(state);
+	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
+		final IBlockState trueState = FacadeHelper.resolveState(state, EnvironState.getWorld(), pos, EnumFacing.UP);
+		return this.metaMap.getBlockAcoustics(trueState);
 	}
 
 	@Nullable
-	public IAcoustic[] getBlockSubstrateAcoustics(@Nonnull final IBlockState state, @Nonnull final String substrate) {
-		BlockAcousticMap sub = this.substrateMap.get(substrate);
-		return sub != null ? sub.getBlockAcousticsWithSpecial(state) : null;
+	public IAcoustic[] getBlockSubstrateAcoustics(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final String substrate) {
+		final IBlockState trueState = FacadeHelper.resolveState(state, EnvironState.getWorld(), pos, EnumFacing.UP);
+		final BlockAcousticMap sub = this.substrateMap.get(substrate);
+		return sub != null ? sub.getBlockAcousticsWithSpecial(trueState) : null;
 	}
 
 	private void put(@Nonnull final Block block, final int meta, @Nonnull final String substrate,
@@ -167,7 +173,7 @@ public class BlockMap {
 		if (matcher.matches()) {
 			final String blockName = matcher.group(1);
 			final Block block = MCHelper.getBlockByName(blockName);
-			if (block != null && block != Blocks.AIR) {
+			if (block != null) {
 				if (value.startsWith("#")) {
 					expand(block, value);
 				} else {
@@ -199,9 +205,9 @@ public class BlockMap {
 		return builder.toString();
 	}
 
-	public void collectData(@Nonnull final IBlockState state, @Nonnull final List<String> data) {
+	public void collectData(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final List<String> data) {
 
-		final IAcoustic[] temp = getBlockAcoustics(state);
+		final IAcoustic[] temp = getBlockAcoustics(state, pos);
 		if (temp != null)
 			data.add(combine(temp));
 
