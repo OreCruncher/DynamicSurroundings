@@ -35,7 +35,9 @@ public enum ModEnvironment {
 	
 	ToughAsNails("ToughAsNails"),
 	CalendarAPI("CalendarAPI"),
-	Weather2("weather2");
+	Weather2("weather2"),
+	EnderIO("EnderIO"),
+	Chisel("chisel");
 	
 	protected final String modId;
 	protected boolean isLoaded;

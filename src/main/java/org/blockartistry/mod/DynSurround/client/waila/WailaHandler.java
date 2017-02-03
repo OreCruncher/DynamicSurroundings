@@ -97,7 +97,7 @@ public final class WailaHandler implements IWailaDataProvider {
 			final BlockMap bm = footsteps.getBlockMap();
 			if (bm != null) {
 				final List<String> data = new ArrayList<String>();
-				bm.collectData(accessor.getBlockState(), data);
+				bm.collectData(accessor.getBlockState(), accessor.getPosition(), data);
 				if (data.size() > 0) {
 					text.add(TextFormatting.YELLOW + "Footstep Accoustics");
 					for (final String s : data)
