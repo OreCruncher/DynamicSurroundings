@@ -72,8 +72,13 @@ public final class SoundEffect implements ISpecialEffect {
 		this(resource, category, 1.0F, 1.0F, 0, false);
 	}
 
-	protected SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume, final float pitch, final int repeatDelay,
-			final boolean variable) {
+	public SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume,
+			final float pitch) {
+		this(resource, category, volume, pitch, 0, false);
+	}
+
+	protected SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume,
+			final float pitch, final int repeatDelay, final boolean variable) {
 		this.soundName = resource.toString();
 		this.sound = SoundUtils.getOrRegisterSound(resource);
 		this.volume = volume;
@@ -110,8 +115,8 @@ public final class SoundEffect implements ISpecialEffect {
 			else
 				this.type = SoundType.BACKGROUND;
 		}
-		
-		switch(this.type) {
+
+		switch (this.type) {
 		case BACKGROUND:
 			this.category = SoundCategory.AMBIENT;
 			break;
@@ -124,17 +129,17 @@ public final class SoundEffect implements ISpecialEffect {
 			this.category = SoundCategory.BLOCKS;
 		}
 	}
-	
+
 	public SoundEffect setVolume(final float vol) {
 		this.volume = vol;
 		return this;
 	}
-	
+
 	public SoundEffect setPitch(final float pitch) {
 		this.pitch = pitch;
 		return this;
 	}
-	
+
 	public SoundEffect setVariable(final boolean flag) {
 		this.variable = flag;
 		return this;
@@ -163,22 +168,22 @@ public final class SoundEffect implements ISpecialEffect {
 	public boolean isRepeatable() {
 		return this.type == SoundType.PERIODIC || this.type == SoundType.BACKGROUND;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public IMySound createSound(@Nonnull final BlockPos pos, final Random rand) {
 		return new SpotSound(pos, this, getRepeat(rand));
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public IMySound createSound(@Nonnull final EntityPlayer player) {
 		return new SpotSound(player, this);
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public IMySound createSound(@Nonnull final BlockPos pos, final int tickDelay) {
 		return new SpotSound(pos, this, tickDelay);
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public IMySound createSound(@Nonnull final EntityPlayer player, final boolean fadeIn, final Random rand) {
 		return new TrackingSound(player, this, fadeIn);

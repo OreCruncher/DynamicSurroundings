@@ -24,20 +24,23 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleDrip;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -45,13 +48,26 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleDripOverride extends ParticleDrip {
 
-	private static final SoundEffect WATER_DRIP = new SoundEffect("waterdrops", SoundCategory.AMBIENT);
+	private static final SoundEffect WATER_DROP = new SoundEffect("waterdrops", SoundCategory.AMBIENT);
+	private static final SoundEffect WATER_DRIP = new SoundEffect("waterdrips", SoundCategory.AMBIENT);
+	private static final SoundEffect STEAM_HISS = new SoundEffect(new ResourceLocation("block.fire.extinguish"),
+			SoundCategory.AMBIENT, 0.1F, 1.0F);
 
 	private boolean firstTime = true;
+	private final Material materialType;
 
 	protected ParticleDripOverride(final World worldIn, final double xCoordIn, final double yCoordIn,
 			final double zCoordIn, final Material materialType) {
 		super(worldIn, xCoordIn, yCoordIn, zCoordIn, materialType);
+
+		this.materialType = materialType;
+	}
+
+	private boolean doSteamHiss(@Nonnull final IBlockState state) {
+		final Material blockMaterial = state.getMaterial();
+		if (this.materialType == Material.LAVA && blockMaterial == Material.WATER)
+			return true;
+		return this.materialType == Material.WATER && blockMaterial == Material.LAVA;
 	}
 
 	@Override
@@ -61,25 +77,44 @@ public class ParticleDripOverride extends ParticleDrip {
 		if (isAlive()) {
 			if (this.posY < 1) {
 				setExpired();
-			} else if (firstTime) {
-				firstTime = false;
+			} else if (this.firstTime) {
+				this.firstTime = false;
 
-				final int x = MathHelper.floor(this.posX);
-				final int y = MathHelper.floor(this.posY + 0.3D);
-				final int z = MathHelper.floor(this.posZ);
-				final BlockPos pos = new BlockPos(x, y, z);
-				final IBlockState state = this.world.getBlockState(pos);
-				final Block block = state.getBlock();
-				if (!block.isAir(state, this.world, pos) && !block.isLeaves(state, this.world, pos)) {
+				final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+				pos.setPos(this.posX, this.posY + 0.3D, this.posZ);
+				final int y = pos.getY();
+
+				IBlockState state = this.world.getBlockState(pos);
+				if (!WorldUtils.isAirBlock(state) && !WorldUtils.isLeaves(state)) {
 					// Find out where it is going to hit
-					BlockPos soundPos = pos.down();
-					while (soundPos.getY() > 0 && world.isAirBlock(soundPos))
-						soundPos = soundPos.down();
+					do {
+						pos.move(EnumFacing.DOWN, 1);
+						state = this.world.getBlockState(pos);
+					} while (pos.getY() > 0 && WorldUtils.isAirBlock(state));
 
-					if (soundPos.getY() > 0 && state.getMaterial().isSolid()) {
-						final int distance = y - soundPos.getY();
-						SoundEffectHandler.INSTANCE.playSoundAt(soundPos.up(), WATER_DRIP, 40 + distance * 2);
+					if (pos.getY() < 1)
+						return;
+
+					final int delay = 40 + (y - pos.getY()) * 2;
+					pos.move(EnumFacing.UP, 1);
+
+					final SoundEffect effect;
+
+					// Hitting solid surface
+					if (state.getMaterial().isSolid()) {
+						effect = WATER_DROP;
+					// Lava into water/water into lava
+					} else if (doSteamHiss(state)) {
+						effect = STEAM_HISS;
+					// Water into water
+					} else if (this.materialType == Material.WATER) {
+						effect = WATER_DRIP;
+					// Lava into lava
+					} else {
+						effect = WATER_DROP;
 					}
+
+					SoundEffectHandler.INSTANCE.playSoundAt(pos, effect, delay);
 				}
 
 			}

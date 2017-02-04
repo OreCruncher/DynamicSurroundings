@@ -28,6 +28,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -60,6 +61,10 @@ public final class WorldUtils {
 
 	public static boolean isAirBlock(@Nonnull final IBlockState state) {
 		return state.getBlock() == Blocks.AIR;
+	}
+
+	public static boolean isLeaves(@Nonnull final IBlockState state) {
+		return state.getMaterial() == Material.LEAVES;
 	}
 
 	public static boolean isAirBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
