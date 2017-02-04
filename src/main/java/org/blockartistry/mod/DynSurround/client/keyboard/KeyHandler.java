@@ -27,6 +27,8 @@ package org.blockartistry.mod.DynSurround.client.keyboard;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.DSurround;
+import org.blockartistry.mod.DynSurround.client.hud.LightLevelHUD;
+import org.blockartistry.mod.DynSurround.client.hud.LightLevelHUD.Mode;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
@@ -40,21 +42,29 @@ import net.minecraftforge.fml.relauncher.Side;
 
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class KeyHandler {
-	
-	private static final KeyBinding SELECTIONBOX_KEY = new KeyBinding("Toggle SelectionBox", Keyboard.KEY_B, DSurround.MOD_NAME);
-	
+
+	private static final KeyBinding SELECTIONBOX_KEY = new KeyBinding("Toggle SelectionBox", Keyboard.KEY_B,
+			DSurround.MOD_NAME);
+	private static final KeyBinding LIGHTLEVEL_KEY = new KeyBinding("Toggle Light Level", Keyboard.KEY_L,
+			DSurround.MOD_NAME);
+
 	static {
 		ClientRegistry.registerKeyBinding(SELECTIONBOX_KEY);
+		ClientRegistry.registerKeyBinding(LIGHTLEVEL_KEY);
 	}
-	
+
 	@SubscribeEvent(receiveCanceled = false)
 	public static void onKeyboard(@Nonnull InputEvent.KeyInputEvent event) {
-		
-		if(SELECTIONBOX_KEY.isPressed()) {
+
+		if (SELECTIONBOX_KEY.isPressed()) {
 			final EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
 			renderer.drawBlockOutline = !renderer.drawBlockOutline;
 		}
-		
+
+		if (LIGHTLEVEL_KEY.isPressed()) {
+			LightLevelHUD.displayMode = Mode.cycle(LightLevelHUD.displayMode);
+		}
+
 	}
 
 }
