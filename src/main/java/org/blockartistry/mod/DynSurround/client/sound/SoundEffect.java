@@ -72,6 +72,11 @@ public final class SoundEffect implements ISpecialEffect {
 		this(resource, category, 1.0F, 1.0F, 0, false);
 	}
 
+	public SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume,
+			final float pitch) {
+		this(resource, category, volume, pitch, 0, false);
+	}
+
 	protected SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume,
 			final float pitch, final int repeatDelay, final boolean variable) {
 		this.soundName = resource.toString();

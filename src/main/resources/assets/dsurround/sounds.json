@@ -1061,6 +1061,15 @@
 			"dsurround:ambient/droplets/water3"
 		]
 	},
+	"waterdrips": {
+		"category": "ambient",
+		"sounds": [
+			"dsurround:ambient/droplets/drop1",
+			"dsurround:ambient/droplets/drop2",
+			"dsurround:ambient/droplets/drop3",
+			"dsurround:ambient/droplets/drop3"
+		]
+	},
 	"seagulls": {
 		"category": "ambient",
 		"sounds": [
