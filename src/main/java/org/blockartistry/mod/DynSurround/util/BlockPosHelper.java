@@ -27,11 +27,20 @@ package org.blockartistry.mod.DynSurround.util;
 import javax.annotation.Nonnull;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
 public final class BlockPosHelper {
 
 	private BlockPosHelper() {
 
+	}
+
+	public static BlockPos.MutableBlockPos setPos(@Nonnull final BlockPos.MutableBlockPos pos, @Nonnull final Vec3d vec) {
+		return pos.setPos(vec.xCoord, vec.yCoord, vec.zCoord);
+	}
+	
+	public static BlockPos setPos(@Nonnull final BlockPos pos, @Nonnull final Vec3d vec) {
+		return new BlockPos(vec);
 	}
 
 	public static boolean canFormCuboid(@Nonnull final BlockPos p1, @Nonnull final BlockPos p2) {

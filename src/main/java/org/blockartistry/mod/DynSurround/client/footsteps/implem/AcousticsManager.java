@@ -45,14 +45,19 @@ import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFootprint;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.util.BlockPosHelper;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.TimeUtils;
+import org.blockartistry.mod.DynSurround.util.WorldUtils;
+
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.block.SoundType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -70,6 +75,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	private final THashMap<String, IAcoustic> acoustics = new THashMap<String, IAcoustic>();
 	private final ArrayDeque<PendingSound> pending = new ArrayDeque<PendingSound>();
 	private final Isolator isolator;
+	private BlockPos.MutableBlockPos stepCheck = new BlockPos.MutableBlockPos();
 
 	// Special sentinels for equating
 	public static final IAcoustic[] EMPTY = {};
@@ -96,7 +102,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 		if (acousticName.hasFootstepImprint()) {
 			final Vec3d stepLoc = acousticName.getStepLocation();
-			if (stepLoc != null) {
+			if (stepLoc != null && WorldUtils.isSolidBlock(EnvironState.getWorld(),
+					BlockPosHelper.setPos(this.stepCheck, stepLoc).move(EnumFacing.DOWN, 1))) {
 				ParticleHelper.addParticle(new ParticleFootprint(EnvironState.getWorld(), stepLoc.xCoord,
 						stepLoc.yCoord, stepLoc.zCoord, acousticName.getRotation(), acousticName.isRightFoot()));
 			}
