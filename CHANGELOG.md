@@ -1,3 +1,25 @@
+###DynamicSurroundings-1.10.2-3.2.6.0
+**What's New!**
+* Facade support for EnderIO/Chisel.  Sound and footsteps are based on the facade of conduits.  Will expand to other mods with facade capabilities over time.
+* Light Level HUD.  Bound to the "L" key by default:
+    * First mode shows block light
+    * Second mode shows combined block and sky light
+    * Light level renders as a text number above the block.
+    * Pressing L repeatedly will cycled the modes
+
+**Fixes**
+* Footsteps on snow blocks as well as snow layers.
+* Micro variation of footstep Y to minimize z-fighting.  This reduces the flicker effect greatly for overlapping footsteps.
+
+**Changes**
+* Reworked fog system.  Should be smoother and handle transitions better.
+* Reduced aurora transparency so they are more ephemeral.
+* Water drop TLC:
+    * Water drop into lava produces hiss
+    * Lava drop into water produces hiss
+    * Water drop into water produces drop sound
+    * Drops from leaves are still ignored
+
 ###DynamicSurroundings-1.10.2-3.2.5.0
 **What's New!**
 * Added Coyote spot sound to a bunch of biomes.  Chance of playing at night when it isn't raining.
