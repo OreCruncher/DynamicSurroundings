@@ -36,7 +36,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.chunk.Chunk;
@@ -93,10 +95,19 @@ public final class LightLevelHUD {
 
 	private static List<LightCoord> lightLevels = new ArrayList<LightCoord>();
 
+	private static final Frustum frustum = new Frustum();
+
+	protected static boolean inFrustum(final double x, final double y, final double z) {
+		return frustum.isBoxInFrustum(x, y, z, x, y, z);
+	}
+
 	protected static void updateLightInfo() {
 		final long tick = EnvironState.getTickCounter();
 		if (tick == 0 || tick % 4 != 0)
 			return;
+
+		final EntityPlayer player = EnvironState.getPlayer();
+		frustum.setPosition(player.posX, player.posY, player.posZ);
 
 		final BlockPos origin = EnvironState.getPlayerPosition();
 		lightLevels = new ArrayList<LightCoord>();
@@ -110,25 +121,24 @@ public final class LightLevelHUD {
 		for (int dX = 0; dX < DIM_XZ; dX++)
 			for (int dZ = 0; dZ < DIM_XZ; dZ++) {
 
-				final int trueZ = origin.getZ() + dZ - Z_OFFSET;
-				final int trueX = origin.getX() + dX - X_OFFSET;
-
-				final int chunkX = trueX >> 4;
-				final int chunkZ = trueZ >> 4;
-
-				if (chunk == null || chunk.xPosition != chunkX || chunk.zPosition != chunkZ)
-					chunk = provider.getLoadedChunk(chunkX, chunkZ);
-
-				if (chunk == null)
-					return;
-
 				Material lastMaterial = null;
 
 				for (int dY = 0; dY < DIM_Y; dY++) {
 
+					final int trueX = origin.getX() + dX - X_OFFSET;
 					final int trueY = origin.getY() + dY - Y_OFFSET;
-					if (trueY < 1)
+					final int trueZ = origin.getZ() + dZ - Z_OFFSET;
+
+					if (trueY < 1 || !inFrustum(trueX, trueY, trueZ))
 						continue;
+
+					final int chunkX = trueX >> 4;
+					final int chunkZ = trueZ >> 4;
+					if (chunk == null || chunk.xPosition != chunkX || chunk.zPosition != chunkZ)
+						chunk = provider.getLoadedChunk(chunkX, chunkZ);
+
+					if (chunk == null)
+						return;
 
 					final Material currentMaterial = chunk.getBlockState(trueX, trueY, trueZ).getMaterial();
 					if (!currentMaterial.isSolid() && !currentMaterial.isLiquid()) {
@@ -161,11 +171,15 @@ public final class LightLevelHUD {
 		// Update state if needed
 		updateLightInfo();
 
+		// If no points...
 		if (lightLevels.size() == 0)
 			return;
 
-		// Render the data.
+		// Only render in first person
 		final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
+		if(manager.options.thirdPersonView != 0)
+			return;
+		
 		final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
 
 		GlStateManager.pushMatrix();
