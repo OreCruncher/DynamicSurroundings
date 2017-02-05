@@ -29,6 +29,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.Color;
 
@@ -52,7 +53,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public final class LightLevelHUD {
 
 	public static enum Mode {
-		NONE, BLOCK, BLOCK_SKY;
+		BLOCK, BLOCK_SKY;
 
 		public static Mode cycle(final Mode mode) {
 			int next = mode.ordinal() + 1;
@@ -62,37 +63,77 @@ public final class LightLevelHUD {
 		}
 	}
 
+	public static enum DisplayStyle {
+
+		DEFAULT(0.03F) {
+			@Override
+			public void render(final double x, final double y, final double z, final float yaw, final float pitch,
+					@Nonnull final LightCoord coord) {
+				final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
+				GlStateManager.translate(x + 0.5F, y + 0.3F, z + 0.5F);
+				GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
+				GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);
+				GlStateManager.scale(-this.scale, -this.scale, this.scale);
+				font.drawString(coord.text, -font.getStringWidth(coord.text) / 2, 0, coord.color);
+
+			}
+		},
+		SURFACE(0.08F) {
+			@Override
+			public void render(final double x, final double y, final double z, final float yaw, final float pitch,
+					@Nonnull final LightCoord coord) {
+				final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
+				final int margin = -font.getStringWidth(coord.text) / 2;
+				GlStateManager.translate(x + 0.45D, y + 0.0005D, z + 0.8D);
+				GlStateManager.rotate(90F, 1F, 0F, 0F);
+				GlStateManager.scale(-this.scale, -this.scale, this.scale);
+				font.drawString(coord.text, margin, 0, coord.color);
+			}
+		};
+
+		public abstract void render(final double x, final double y, final double z, final float yaw, final float pitch,
+				@Nonnull final LightCoord coord);
+
+		protected final float scale;
+
+		private DisplayStyle(final float scale) {
+			this.scale = scale;
+		}
+
+		public static DisplayStyle getStyle(final int v) {
+			if (v >= values().length)
+				return DEFAULT;
+			return values()[v];
+		}
+
+	}
+
 	private static class LightCoord {
 		public final int x;
 		public final int y;
 		public final int z;
-		public final int lightLevel;
-		public String text;
+		public final String text;
+		public final int color;
 
-		public LightCoord(final int x, final int y, final int z, final int light) {
+		public LightCoord(final int x, final int y, final int z, final int light, final int color) {
 			this.x = x;
 			this.y = y;
 			this.z = z;
-			this.lightLevel = light;
 			this.text = Integer.toString(light);
+			this.color = color;
 		}
 	}
 
-	public static Mode displayMode = Mode.NONE;
+	public static boolean showHUD = false;
+	public static Mode displayMode = Mode.BLOCK;
 
-	private static final int MOB_SPAWN_LEVEL = 7;
-	private static final float SCALE = 0.035F;
+	private static final int SAFE = Color.MC_GREEN.rgbWithAlpha(0.75F);
+	private static final int CAUTION = Color.MC_YELLOW.rgbWithAlpha(0.75F);
+	private static final int HAZARD = Color.MC_RED.rgbWithAlpha(0.75F);
 
-	private static final int DIM_XZ = 24 * 2 + 1;
-	private static final int DIM_Y = 24 + 1;
-
-	private static final int X_OFFSET = DIM_XZ / 2;
-	private static final int Z_OFFSET = DIM_XZ / 2;
-	private static final int Y_OFFSET = DIM_Y - 3;
-
-	private static final int NO_SPAWN = Color.MC_GREEN.rgbWithAlpha(0.75F);
-	private static final int SPAWN = Color.MC_RED.rgbWithAlpha(0.75F);
-
+	// Allocation size of array. Seems large, until you fly and look
+	// down at a roofed forest.
+	private static int allocationSize = 2176;
 	private static List<LightCoord> lightLevels = new ArrayList<LightCoord>();
 
 	private static final Frustum frustum = new Frustum();
@@ -110,24 +151,29 @@ public final class LightLevelHUD {
 		frustum.setPosition(player.posX, player.posY, player.posZ);
 
 		final BlockPos origin = EnvironState.getPlayerPosition();
-		lightLevels = new ArrayList<LightCoord>();
+		lightLevels = new ArrayList<LightCoord>(allocationSize);
 
 		final int skyLightSub = EnvironState.getWorld().calculateSkylightSubtracted(1.0F);
 		final IChunkProvider provider = EnvironState.getWorld().getChunkProvider();
 		final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+		final int rangeXZ = ModOptions.llBlockRange * 2 + 1;
+		final int rangeY = ModOptions.llBlockRange + 1;
+		final int xOffset = rangeXZ / 2;
+		final int zOffset = rangeXZ / 2;
+		final int yOffset = rangeY - 3;
 
 		Chunk chunk = null;
 
-		for (int dX = 0; dX < DIM_XZ; dX++)
-			for (int dZ = 0; dZ < DIM_XZ; dZ++) {
+		for (int dX = 0; dX < rangeXZ; dX++)
+			for (int dZ = 0; dZ < rangeXZ; dZ++) {
 
 				Material lastMaterial = null;
 
-				for (int dY = 0; dY < DIM_Y; dY++) {
+				for (int dY = 0; dY < rangeY; dY++) {
 
-					final int trueX = origin.getX() + dX - X_OFFSET;
-					final int trueY = origin.getY() + dY - Y_OFFSET;
-					final int trueZ = origin.getZ() + dZ - Z_OFFSET;
+					final int trueX = origin.getX() + dX - xOffset;
+					final int trueY = origin.getY() + dY - yOffset;
+					final int trueZ = origin.getZ() + dZ - zOffset;
 
 					if (trueY < 1 || !inFrustum(trueX, trueY, trueZ))
 						continue;
@@ -150,9 +196,20 @@ public final class LightLevelHUD {
 						if (lastMaterial.isSolid()) {
 							mutable.setPos(trueX, trueY, trueZ);
 							final int blockLight = chunk.getLightFor(EnumSkyBlock.BLOCK, mutable);
-							final int skyLight = displayMode == Mode.BLOCK_SKY
-									? chunk.getLightFor(EnumSkyBlock.SKY, mutable) - skyLightSub : 0;
-							lightLevels.add(new LightCoord(trueX, trueY, trueZ, Math.max(blockLight, skyLight)));
+							final int skyLight = chunk.getLightFor(EnumSkyBlock.SKY, mutable) - skyLightSub;
+							final int effective = Math.max(blockLight, skyLight);
+							final int result = displayMode == Mode.BLOCK_SKY ? effective : blockLight;
+
+							if (!ModOptions.llHideSafe || result <= ModOptions.llSpawnThreshold) {
+								int color = SAFE;
+								if (blockLight <= ModOptions.llSpawnThreshold)
+									if (effective > ModOptions.llSpawnThreshold)
+										color = CAUTION;
+									else
+										color = HAZARD;
+
+								lightLevels.add(new LightCoord(trueX, trueY, trueZ, result, color));
+							}
 						}
 					}
 
@@ -160,12 +217,14 @@ public final class LightLevelHUD {
 				}
 			}
 
+		allocationSize = Math.max(allocationSize, lightLevels.size());
+
 	}
 
 	@SubscribeEvent
 	public static void doRender(@Nonnull final RenderWorldLastEvent event) {
 
-		if (displayMode == Mode.NONE)
+		if (!showHUD)
 			return;
 
 		// Update state if needed
@@ -177,10 +236,10 @@ public final class LightLevelHUD {
 
 		// Only render in first person
 		final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
-		if(manager.options.thirdPersonView != 0)
+		if (manager.options.thirdPersonView != 0)
 			return;
-		
-		final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
+
+		final DisplayStyle displayStyle = DisplayStyle.getStyle(ModOptions.llStyle);
 
 		GlStateManager.pushMatrix();
 		GlStateManager.pushAttrib();
@@ -198,20 +257,15 @@ public final class LightLevelHUD {
 		final float yaw = -manager.playerViewY;
 
 		for (final LightCoord coord : lightLevels) {
-			final double x = coord.x - manager.viewerPosX + 0.5D;
-			final double y = coord.y - manager.viewerPosY + 0.3D;
-			final double z = coord.z - manager.viewerPosZ + 0.5D;
-			final int color = coord.lightLevel <= MOB_SPAWN_LEVEL ? SPAWN : NO_SPAWN;
-			final int margin = -font.getStringWidth(coord.text) / 2;
+
+			final double x = coord.x - manager.viewerPosX;
+			final double y = coord.y - manager.viewerPosY;
+			final double z = coord.z - manager.viewerPosZ;
 
 			GlStateManager.pushMatrix();
 			GlStateManager.pushAttrib();
-			GlStateManager.translate(x, y, z);
-			GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
-			GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);
-			GlStateManager.scale(-SCALE, -SCALE, SCALE);
 
-			font.drawString(coord.text, margin, 0, color);
+			displayStyle.render(x, y, z, yaw, pitch, coord);
 
 			GlStateManager.popAttrib();
 			GlStateManager.popMatrix();

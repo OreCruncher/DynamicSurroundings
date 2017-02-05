@@ -62,7 +62,13 @@ public class KeyHandler {
 		}
 
 		if (LIGHTLEVEL_KEY.isPressed()) {
-			LightLevelHUD.displayMode = Mode.cycle(LightLevelHUD.displayMode);
+			if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
+				// Only change mode when visible
+				if(LightLevelHUD.showHUD)
+					LightLevelHUD.displayMode = Mode.cycle(LightLevelHUD.displayMode);
+			} else {
+				LightLevelHUD.showHUD = !LightLevelHUD.showHUD;
+			}
 		}
 
 	}

@@ -495,6 +495,35 @@ public final class ModOptions {
 	@Comment("Enables/disables addition of mob models in explosion debris")
 	public static boolean addMobParticles = false;
 
+	public static final String CATEGORY_LIGHT_LEVEL = "lightlevel";
+	public static final String CONFIG_LL_RANGE = "Block Range";
+	public static final String CONFIG_LL_MOB_SPAWN_THRESHOLD = "Mob Spawn Threshold";
+	public static final String CONFIG_LL_STYLE = "Style";
+	public static final String CONFIG_LL_HIDE_SAFE = "Hide Safe";
+	public static final String CONFIG_LL_INDICATE_CAUTION = "Indicate Caution";
+
+	private static final List<String> llSort = Arrays.asList(CONFIG_LL_RANGE, CONFIG_LL_MOB_SPAWN_THRESHOLD,
+			CONFIG_LL_STYLE, CONFIG_LL_HIDE_SAFE, CONFIG_LL_INDICATE_CAUTION);
+
+	@Parameter(category = CATEGORY_LIGHT_LEVEL, property = CONFIG_LL_RANGE, defaultValue = "24", lang = "cfg.lightlevel.Range")
+	@Comment("Range from player to analyze light levels")
+	@MinMaxInt(min = 16, max = 32)
+	public static int llBlockRange = 24;
+	@Parameter(category = CATEGORY_LIGHT_LEVEL, property = CONFIG_LL_MOB_SPAWN_THRESHOLD, defaultValue = "7", lang = "cfg.lightlevel.MobSpawnThreshold")
+	@Comment("Light level at which mobs can spawn")
+	@MinMaxInt(min = 0, max = 15)
+	public static int llSpawnThreshold = 7;
+	@Parameter(category = CATEGORY_LIGHT_LEVEL, property = CONFIG_LL_STYLE, defaultValue = "0", lang = "cfg.lightlevel.Style")
+	@Comment("Rendering style: 0 upright facing player, 1 along block surface")
+	@MinMaxInt(min = 0, max = 1)
+	public static int llStyle = 0;
+	@Parameter(category = CATEGORY_LIGHT_LEVEL, property = CONFIG_LL_HIDE_SAFE, defaultValue = "false", lang = "cfg.lightlevel.HideSafe")
+	@Comment("Hide light level information for blocks that are considered safe")
+	public static boolean llHideSafe = false;
+	@Parameter(category = CATEGORY_LIGHT_LEVEL, property = CONFIG_LL_INDICATE_CAUTION, defaultValue = "true", lang = "cfg.lightlevel.IndicateCaution")
+	@Comment("Indicate current light levels that will change at night which could result in mob spawns")
+	public static boolean llIndicateCaution = true;
+
 	private static void setDefault(@Nonnull final Configuration config, @Nonnull final String cat,
 			@Nonnull final String prop, final float prevDefault, final float newDefault) {
 		final ConfigCategory cc = config.getCategory(cat);
@@ -611,6 +640,13 @@ public final class ModOptions {
 		config.setCategoryRequiresWorldRestart(CATEGORY_EXPLOSIONS, false);
 		config.setCategoryComment(CATEGORY_EXPLOSIONS, "Options for configuring Explosion Enhancement");
 		config.setCategoryLanguageKey(CATEGORY_EXPLOSIONS, "cfg.explosions.cat.Explosions");
+
+		// CATEGORY: lightlevel
+		config.setCategoryRequiresMcRestart(CATEGORY_LIGHT_LEVEL, false);
+		config.setCategoryRequiresWorldRestart(CATEGORY_LIGHT_LEVEL, false);
+		config.setCategoryComment(CATEGORY_LIGHT_LEVEL, "Options for configuring Light Level HUD");
+		config.setCategoryPropertyOrder(CATEGORY_LIGHT_LEVEL, new ArrayList<String>(llSort));
+		config.setCategoryLanguageKey(CATEGORY_LIGHT_LEVEL, "cfg.lightlevel.cat.LightLevel");
 
 		// Iterate through the config list looking for properties without
 		// comments. These will be scrubbed.
