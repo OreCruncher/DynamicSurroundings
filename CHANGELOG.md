@@ -1,4 +1,26 @@
-###DynamicSurroundings-1.10.2-3.2.5.0
+###DynamicSurroundings-1.11.2-3.2.6.0
+**What's New!**
+* Facade support for EnderIO/Chisel.  Sound and footsteps are based on the facade of conduits.  Will expand to other mods with facade capabilities over time.  (There isn't a 1.11 version of EnderIO yet, but the capability is in when it arrives.)
+* Light Level HUD.  Bound to the "L" key by default:
+    * First mode shows block light
+    * Second mode shows combined block and sky light
+    * Light level renders as a text number above the block.
+    * Pressing L repeatedly will cycled the modes
+
+**Fixes**
+* Footsteps on snow blocks as well as snow layers.
+* Micro variation of footstep Y to minimize z-fighting.  This reduces the flicker effect greatly for overlapping footsteps.
+
+**Changes**
+* Reworked fog system.  Should be smoother and handle transitions better.
+* Reduced aurora transparency so they are more ephemeral.
+* Water drop TLC:
+    * Water drop into lava produces hiss
+    * Lava drop into water produces hiss
+    * Water drop into water produces drop sound
+    * Drops from leaves are still ignored
+
+###DynamicSurroundings-1.11.2-3.2.5.0
 **What's New!**
 * Added Coyote spot sound to a bunch of biomes.  Chance of playing at night when it isn't raining.
 * Village sounds.  Sounds that can play when a player is in a village.  Requires server side mod installation for this feature to work.  (Minecraft village information is available server side, not client side.)
@@ -12,7 +34,7 @@
 * Tickable repeat sounds now fade in/out in a timely way.
 * Fix intermittent sound handler crash reported via OpenEye (hopefully).
 
-###DynamicSurroundings-1.10.2-3.2.4.1
+###DynamicSurroundings-1.11.2-3.2.4.1
 **Changes**
 * Created my own footstep particle:
     * Looks like footsteps with facing orientation
@@ -20,7 +42,7 @@
     * Shouldn't look like they are floating around when moving
 * Option to disable footprint feature
 
-###DynamicSurroundings-1.10.2-3.2.4.0
+###DynamicSurroundings-1.11.2-3.2.4.0
 **What's New!**
 * Use Minecraft's footprint particle to leave a footprint trail as the player walks.  The footprints will fade after a short period of time.  Soft blocks (sand, dirt, grass, etc) will have footprints; hard blocks (stone, sandstone, etc) will not.
 * Started EnderIO block/item support.
@@ -33,7 +55,7 @@
 * Added new Medium armor class.  The Minecraft chainmail is in this class.
 * Implemented config file versioning.  This will allow me to reset various options as needed.
 
-###DynamicSurroundings-1.10.2-3.2.3.0
+###DynamicSurroundings-1.11.2-3.2.3.0
 **What's New!**
 * Relaxed load requirements so that the mod can run on 1.11.
 * Plains biome now has a background sound.  Depending on mods installed prairies, grasslands, shrublands, etc. will also have the same sound.
@@ -47,7 +69,7 @@
 * Changed default footstep sound factor to 0.5 from 0.15.  Should make footstep and armor sounds a bit louder.  Note that this is a default meaning if you have an existing configuration the setting will remain at the currently defined value.
 * Updated ru_RU.lang
 
-###DynamicSurroundings-1.10.2-3.2.2.0
+###DynamicSurroundings-1.11.2-3.2.2.0
 **What's New!**
 * [Added armor overlay sounds](https://github.com/OreCruncher/DynamicSurroundings/wiki/Sound-Overlay).  When moving about additional sounds will be mixed in based on armor being worn by the player.
 

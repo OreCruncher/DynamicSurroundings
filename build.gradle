@@ -58,6 +58,11 @@ repositories {
         name "Foxiehost"
         url "http://maven.foxiehost.eu"
     }
+	
+    maven {
+    	name "Chisel"
+    	url "http://maven.tterrag.com"
+    }
 }
 
 dependencies {
@@ -91,6 +96,8 @@ dependencies {
 	// http://dvs1.progwml6.com/files/maven/mezz/jei/
     deobfCompile "mezz.jei:jei_1.11.2:4.2.2.221:api"
     runtime "mezz.jei:jei_1.11.2:4.2.2.221"
+	
+	deobfCompile "team.chisel:Chisel:MC1.11-0.0.8.3:api"    
 }
 
 processResources
