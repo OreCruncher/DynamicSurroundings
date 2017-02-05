@@ -208,8 +208,21 @@ cfg.speech.Range=Visibility Range
 cfg.speech.Range.tooltip=Range at which a SpeechBubble is visible.  Filtering occurs server side.
 
 cfg.explosions.cat.Explosions=Explosion Enhancement Options
-cfg.explosions.cat.Explosions=Options for configuring Explosion Enhancement
+cfg.explosions.cat.Explosions.tooltip=Options for configuring Explosion Enhancement
 cfg.explosions.EnableExplosions=Explosion Enhancement
 cfg.explosions.EnableExplosions.tooltip=Enables/disables explosion enhancement
 cfg.explosions.AddMobs=Add Mob Model Debris
 cfg.explosions.AddMobs.tooltip=Enables/disables addition of mob models in explosion debris
+
+cfg.lightlevel.cat.LightLevel=Light Level HUD Options
+cfg.lightlevel.cat.LightLevel.tooltip=Options for configuring the Light Level HUD
+cfg.lightlevel.Range=Block Range
+cfg.lightlevel.Range.tooltip=Block range for light level analysis
+cfg.lightlevel.MobSpawnThreshold=Mob Spawn Light Threshold
+cfg.lightlevel.MobSpawnThreshold.tooltip=Light level at which mobs can spawn
+cfg.lightlevel.Style=Render Style
+cfg.lightlevel.Style.tooltip=0 upright facing player, 1 along block surface
+cfg.lightlevel.HideSafe=Hide Safe Blocks
+cfg.lightlevel.HideSafe.tooltip=Do not show light level for blocks where mobs will not spawn
+cfg.lightlevel.IndicateCaution=Indicate Caution
+cfg.lightlevel.IndicateCaution.tooltip=Indicate current light levels that will change at night which could result in mob spawns
