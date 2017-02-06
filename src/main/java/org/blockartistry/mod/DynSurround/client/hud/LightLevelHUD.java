@@ -165,24 +165,25 @@ public final class LightLevelHUD {
 		for (int dX = 0; dX < rangeXZ; dX++)
 			for (int dZ = 0; dZ < rangeXZ; dZ++) {
 
+				final int trueX = origin.getX() + dX - xOffset;
+				final int trueZ = origin.getZ() + dZ - zOffset;
+
+				final int chunkX = trueX >> 4;
+				final int chunkZ = trueZ >> 4;
+				if (chunk == null || chunk.xPosition != chunkX || chunk.zPosition != chunkZ)
+					chunk = provider.getLoadedChunk(chunkX, chunkZ);
+
+				if (chunk == null)
+					return;
+
 				Material lastMaterial = null;
 
 				for (int dY = 0; dY < rangeY; dY++) {
 
-					final int trueX = origin.getX() + dX - xOffset;
 					final int trueY = origin.getY() + dY - yOffset;
-					final int trueZ = origin.getZ() + dZ - zOffset;
 
 					if (trueY < 1 || !inFrustum(trueX, trueY, trueZ))
 						continue;
-
-					final int chunkX = trueX >> 4;
-					final int chunkZ = trueZ >> 4;
-					if (chunk == null || chunk.xPosition != chunkX || chunk.zPosition != chunkZ)
-						chunk = provider.getLoadedChunk(chunkX, chunkZ);
-
-					if (chunk == null)
-						return;
 
 					final Material currentMaterial = chunk.getBlockState(trueX, trueY, trueZ).getMaterial();
 					if (!currentMaterial.isSolid() && !currentMaterial.isLiquid()) {
@@ -198,16 +199,16 @@ public final class LightLevelHUD {
 							final int effective = Math.max(blockLight, skyLight);
 							final int result = displayMode == Mode.BLOCK_SKY ? effective : blockLight;
 
-							if (!ModOptions.llHideSafe || result <= ModOptions.llSpawnThreshold) {
-								int color = SAFE;
-								if (blockLight <= ModOptions.llSpawnThreshold)
-									if (effective > ModOptions.llSpawnThreshold)
-										color = CAUTION;
-									else
-										color = HAZARD;
-
-								lightLevels.add(new LightCoord(trueX, trueY, trueZ, result, color));
+							int color = SAFE;
+							if (blockLight <= ModOptions.llSpawnThreshold) {
+								if (effective > ModOptions.llSpawnThreshold)
+									color = CAUTION;
+								else
+									color = HAZARD;
 							}
+
+							if (!(color == SAFE && ModOptions.llHideSafe))
+								lightLevels.add(new LightCoord(trueX, trueY, trueZ, result, color));
 						}
 					}
 
@@ -228,10 +229,8 @@ public final class LightLevelHUD {
 		final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
 		final DisplayStyle displayStyle = DisplayStyle.getStyle(ModOptions.llStyle);
 
-		// Update state if needed
 		updateLightInfo(manager.viewerPosX, manager.viewerPosY, manager.viewerPosZ);
 
-		// If no points...
 		if (lightLevels.size() == 0)
 			return;
 
