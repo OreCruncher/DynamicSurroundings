@@ -34,13 +34,17 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.util.Color;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.WorldEntitySpawner;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -62,7 +66,35 @@ public final class LightLevelHUD {
 		}
 	}
 
-	public static enum DisplayStyle {
+	private static enum ColorSet {
+
+		BRIGHT(Color.MC_GREEN, Color.MC_YELLOW, Color.MC_RED, Color.MC_DARKAQUA),
+		DARK(Color.MC_DARKGREEN, Color.MC_GOLD, Color.MC_DARKRED, Color.MC_DARKBLUE);
+
+		private static final float ALPHA = 0.75F;
+
+		public final int safe;
+		public final int caution;
+		public final int hazard;
+		public final int noSpawn;
+
+		private ColorSet(@Nonnull final Color safe, @Nonnull final Color caution, @Nonnull final Color hazard,
+				@Nonnull final Color noSpawn) {
+			this.safe = safe.rgbWithAlpha(ALPHA);
+			this.caution = caution.rgbWithAlpha(ALPHA);
+			this.hazard = hazard.rgbWithAlpha(ALPHA);
+			this.noSpawn = noSpawn.rgbWithAlpha(ALPHA);
+		}
+
+		public static ColorSet getStyle(final int v) {
+			if (v >= values().length)
+				return BRIGHT;
+			return values()[v];
+		}
+
+	}
+
+	private static enum DisplayStyle {
 
 		DEFAULT(0.03F) {
 			@Override
@@ -107,38 +139,56 @@ public final class LightLevelHUD {
 
 	}
 
-	private static class LightCoord {
-		public final int x;
-		public final int y;
-		public final int z;
-		public final String text;
-		public final int color;
-
-		public LightCoord(final int x, final int y, final int z, final int light, final int color) {
-			this.x = x;
-			this.y = y;
-			this.z = z;
-			this.text = Integer.toString(light);
-			this.color = color;
-		}
+	private static final class LightCoord {
+		public int x;
+		public int y;
+		public int z;
+		public String text;
+		public int color;
 	}
 
 	public static boolean showHUD = false;
 	public static Mode displayMode = Mode.BLOCK;
 
-	private static final int SAFE = Color.MC_GREEN.rgbWithAlpha(0.75F);
-	private static final int CAUTION = Color.MC_YELLOW.rgbWithAlpha(0.75F);
-	private static final int HAZARD = Color.MC_RED.rgbWithAlpha(0.75F);
+	private static final String[] VALUES = new String[16];
 
 	// Allocation size of array. Seems large, until you fly and look
 	// down at a roofed forest.
-	private static int allocationSize = 2176;
-	private static List<LightCoord> lightLevels = new ArrayList<LightCoord>();
+	private static final int ALLOCATION_SIZE = 2176;
+	private static final List<LightCoord> lightLevels = new ArrayList<LightCoord>(ALLOCATION_SIZE);
+	private static final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+	private static int nextCoord = 0;
+
+	static {
+		for (int i = 0; i < ALLOCATION_SIZE; i++)
+			lightLevels.add(new LightCoord());
+
+		for (int i = 0; i < VALUES.length; i++) {
+			VALUES[i] = Integer.toString(i);
+		}
+
+	}
+
+	private static LightCoord nextCoord() {
+		if (nextCoord == lightLevels.size())
+			lightLevels.add(new LightCoord());
+		return lightLevels.get(nextCoord++);
+	}
 
 	private static final Frustum frustum = new Frustum();
 
 	protected static boolean inFrustum(final double x, final double y, final double z) {
 		return frustum.isBoxInFrustum(x, y, z, x, y, z);
+	}
+
+	protected static boolean renderLightLevel(@Nonnull final IBlockState state) {
+		final Material mat = state.getMaterial();
+		return !mat.isSolid() && !mat.isLiquid();
+	}
+
+	protected static boolean canMobSpawn(@Nonnull final BlockPos pos) {
+		return WorldEntitySpawner.canCreatureTypeSpawnAtLocation(SpawnPlacementType.ON_GROUND, EnvironState.getWorld(),
+				pos);
 	}
 
 	protected static void updateLightInfo(final double x, final double y, final double z) {
@@ -147,26 +197,24 @@ public final class LightLevelHUD {
 			return;
 
 		frustum.setPosition(x, y, z);
+		nextCoord = 0;
 
-		final BlockPos origin = new BlockPos(x, y, z);
-		lightLevels = new ArrayList<LightCoord>(allocationSize);
-
+		final ColorSet colors = ColorSet.getStyle(ModOptions.llColors);
 		final int skyLightSub = EnvironState.getWorld().calculateSkylightSubtracted(1.0F);
 		final IChunkProvider provider = EnvironState.getWorld().getChunkProvider();
-		final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 		final int rangeXZ = ModOptions.llBlockRange * 2 + 1;
 		final int rangeY = ModOptions.llBlockRange + 1;
-		final int xOffset = rangeXZ / 2;
-		final int zOffset = rangeXZ / 2;
-		final int yOffset = rangeY - 3;
+		final int originX = MathHelper.floor(x) - (rangeXZ / 2);
+		final int originZ = MathHelper.floor(z) - (rangeXZ / 2);
+		final int originY = MathHelper.floor(y) - (rangeY - 3);
 
 		Chunk chunk = null;
 
 		for (int dX = 0; dX < rangeXZ; dX++)
 			for (int dZ = 0; dZ < rangeXZ; dZ++) {
 
-				final int trueX = origin.getX() + dX - xOffset;
-				final int trueZ = origin.getZ() + dZ - zOffset;
+				final int trueX = originX + dX;
+				final int trueZ = originZ + dZ;
 
 				final int chunkX = trueX >> 4;
 				final int chunkZ = trueZ >> 4;
@@ -176,48 +224,56 @@ public final class LightLevelHUD {
 				if (chunk == null)
 					return;
 
+				IBlockState lastState = null;
 				Material lastMaterial = null;
 
 				for (int dY = 0; dY < rangeY; dY++) {
 
-					final int trueY = origin.getY() + dY - yOffset;
+					final int trueY = originY + dY;
 
 					if (trueY < 1 || !inFrustum(trueX, trueY, trueZ))
 						continue;
 
-					final Material currentMaterial = chunk.getBlockState(trueX, trueY, trueZ).getMaterial();
-					if (!currentMaterial.isSolid() && !currentMaterial.isLiquid()) {
+					final IBlockState state = chunk.getBlockState(trueX, trueY, trueZ);
+					final Material currentMaterial = state.getMaterial();
 
-						if (lastMaterial == null) {
-							lastMaterial = chunk.getBlockState(trueX, trueY - 1, trueZ).getMaterial();
+					if (lastMaterial == null) {
+						lastState = chunk.getBlockState(trueX, trueY - 1, trueZ);
+						lastMaterial = lastState.getMaterial();
+					}
+
+					if (lastMaterial.isSolid() && renderLightLevel(state)) {
+						mutable.setPos(trueX, trueY, trueZ);
+						final int blockLight = chunk.getLightFor(EnumSkyBlock.BLOCK, mutable);
+						final int skyLight = chunk.getLightFor(EnumSkyBlock.SKY, mutable) - skyLightSub;
+						final int effective = Math.max(blockLight, skyLight);
+						final int result = displayMode == Mode.BLOCK_SKY ? effective : blockLight;
+						final boolean mobSpawn = canMobSpawn(mutable);
+
+						int color = colors.safe;
+						if (!mobSpawn) {
+							color = colors.noSpawn;
+						} else if (blockLight <= ModOptions.llSpawnThreshold) {
+							if (effective > ModOptions.llSpawnThreshold)
+								color = colors.caution;
+							else
+								color = colors.hazard;
 						}
 
-						if (lastMaterial.isSolid()) {
-							mutable.setPos(trueX, trueY, trueZ);
-							final int blockLight = chunk.getLightFor(EnumSkyBlock.BLOCK, mutable);
-							final int skyLight = chunk.getLightFor(EnumSkyBlock.SKY, mutable) - skyLightSub;
-							final int effective = Math.max(blockLight, skyLight);
-							final int result = displayMode == Mode.BLOCK_SKY ? effective : blockLight;
-
-							int color = SAFE;
-							if (blockLight <= ModOptions.llSpawnThreshold) {
-								if (effective > ModOptions.llSpawnThreshold)
-									color = CAUTION;
-								else
-									color = HAZARD;
-							}
-
-							if (!(color == SAFE && ModOptions.llHideSafe))
-								lightLevels.add(new LightCoord(trueX, trueY, trueZ, result, color));
+						if (!((color == colors.safe || !mobSpawn) && ModOptions.llHideSafe)) {
+							final LightCoord coord = nextCoord();
+							coord.x = trueX;
+							coord.y = trueY;
+							coord.z = trueZ;
+							coord.text = VALUES[result];
+							coord.color = color;
 						}
 					}
 
 					lastMaterial = currentMaterial;
+					lastState = state;
 				}
 			}
-
-		allocationSize = Math.max(allocationSize, lightLevels.size());
-
 	}
 
 	@SubscribeEvent
@@ -231,7 +287,7 @@ public final class LightLevelHUD {
 
 		updateLightInfo(manager.viewerPosX, manager.viewerPosY, manager.viewerPosZ);
 
-		if (lightLevels.size() == 0)
+		if (nextCoord == 0)
 			return;
 
 		GlStateManager.pushMatrix();
@@ -249,18 +305,13 @@ public final class LightLevelHUD {
 		final float pitch = manager.playerViewX * (thirdPerson ? -1 : 1);
 		final float yaw = -manager.playerViewY;
 
-		for (final LightCoord coord : lightLevels) {
-
+		for (int i = 0; i < nextCoord; i++) {
+			final LightCoord coord = lightLevels.get(i);
 			final double x = coord.x - manager.viewerPosX;
 			final double y = coord.y - manager.viewerPosY;
 			final double z = coord.z - manager.viewerPosZ;
-
 			GlStateManager.pushMatrix();
-			GlStateManager.pushAttrib();
-
 			displayStyle.render(x, y, z, yaw, pitch, coord);
-
-			GlStateManager.popAttrib();
 			GlStateManager.popMatrix();
 		}
 

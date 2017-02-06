@@ -178,7 +178,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 		if (options != null) {
 			if (options.hasOption(Option.DELAY_MIN) && options.hasOption(Option.DELAY_MAX)) {
-				final long delay = System.currentTimeMillis()
+				final long delay = TimeUtils.currentTimeMillis()
 						+ randAB(RANDOM, options.asLong(Option.DELAY_MIN), options.asLong(Option.DELAY_MAX));
 				this.pending.add(new PendingSound(location, sound, volume, pitch, null, delay,
 						options.hasOption(Option.SKIPPABLE) ? -1 : options.asLong(Option.DELAY_MAX)));

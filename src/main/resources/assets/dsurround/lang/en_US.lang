@@ -226,3 +226,5 @@ cfg.lightlevel.HideSafe=Hide Safe Blocks
 cfg.lightlevel.HideSafe.tooltip=Do not show light level for blocks where mobs will not spawn
 cfg.lightlevel.IndicateCaution=Indicate Caution
 cfg.lightlevel.IndicateCaution.tooltip=Indicate current light levels that will change at night which could result in mob spawns
+cfg.lightlevel.Colors=Color Set
+cfg.lightlevel.Colors.tooltip=0 bright, 1 dark
