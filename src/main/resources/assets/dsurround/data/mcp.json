@@ -375,6 +375,13 @@
 					"soundType": "periodic",
 					"repeatDelay": 100,
 					"repeatDelayRandom": 200
+				},
+				{
+					"sound": "dsurround:village.dogbark",
+					"conditions": "!player.isInside && player.inVillage && weather.isNotRaining",
+					"soundType": "periodic",
+					"repeatDelay": 200,
+					"repeatDelayRandom": 200
 				}
 			]
 		}

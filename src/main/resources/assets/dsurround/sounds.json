@@ -1500,5 +1500,16 @@
 				"weight": 10
 			}
 		]
+	},
+	"village.dogbark": {
+		"category": "ambient",
+		"sounds": [
+			"dsurround:ambient/village/dogbark1",
+			"dsurround:ambient/village/dogbark2",
+			"dsurround:ambient/village/dogbark3",
+			"dsurround:ambient/village/dogbark4",
+			"dsurround:ambient/village/dogbark5",
+			"dsurround:ambient/village/dogbark6"
+		]
 	}
 }

@@ -154,3 +154,9 @@ whether LPs can be monetized on the various streaming services.
 <ul>
      <li>S: <a href="https://www.freesound.org/people/InspectorJ/sounds/343761/">Dripping, Very Fast, A.wav</a> by <a href="https://www.freesound.org/people/InspectorJ/">InspectorJ</a> | License: Attribution</li> 
 </ul>
+
+*dsurround:village.dogbark*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/darranambler/sounds/344955/">Dogs Barking</a> by <a href="https://www.freesound.org/people/darranambler/">darranambler</a> | License: Creative Commons 0</li> 
+</ul>
