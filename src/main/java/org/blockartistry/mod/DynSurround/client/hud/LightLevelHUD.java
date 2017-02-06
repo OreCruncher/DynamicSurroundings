@@ -39,7 +39,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.chunk.Chunk;
@@ -142,15 +141,14 @@ public final class LightLevelHUD {
 		return frustum.isBoxInFrustum(x, y, z, x, y, z);
 	}
 
-	protected static void updateLightInfo() {
+	protected static void updateLightInfo(final double x, final double y, final double z) {
 		final long tick = EnvironState.getTickCounter();
 		if (tick == 0 || tick % 4 != 0)
 			return;
 
-		final EntityPlayer player = EnvironState.getPlayer();
-		frustum.setPosition(player.posX, player.posY, player.posZ);
+		frustum.setPosition(x, y, z);
 
-		final BlockPos origin = EnvironState.getPlayerPosition();
+		final BlockPos origin = new BlockPos(x, y, z);
 		lightLevels = new ArrayList<LightCoord>(allocationSize);
 
 		final int skyLightSub = EnvironState.getWorld().calculateSkylightSubtracted(1.0F);
@@ -227,19 +225,15 @@ public final class LightLevelHUD {
 		if (!showHUD)
 			return;
 
+		final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
+		final DisplayStyle displayStyle = DisplayStyle.getStyle(ModOptions.llStyle);
+
 		// Update state if needed
-		updateLightInfo();
+		updateLightInfo(manager.viewerPosX, manager.viewerPosY, manager.viewerPosZ);
 
 		// If no points...
 		if (lightLevels.size() == 0)
 			return;
-
-		// Only render in first person
-		final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
-		if (manager.options.thirdPersonView != 0)
-			return;
-
-		final DisplayStyle displayStyle = DisplayStyle.getStyle(ModOptions.llStyle);
 
 		GlStateManager.pushMatrix();
 		GlStateManager.pushAttrib();
@@ -271,6 +265,8 @@ public final class LightLevelHUD {
 			GlStateManager.popMatrix();
 		}
 
+		GlStateManager.disableAlpha();
+		GlStateManager.disableBlend();
 		GlStateManager.popAttrib();
 		GlStateManager.popMatrix();
 	}

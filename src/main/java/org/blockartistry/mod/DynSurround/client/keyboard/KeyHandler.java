@@ -27,6 +27,7 @@ package org.blockartistry.mod.DynSurround.client.keyboard;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.DSurround;
+import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.hud.LightLevelHUD;
 import org.blockartistry.mod.DynSurround.client.hud.LightLevelHUD.Mode;
 import org.lwjgl.input.Keyboard;
@@ -64,10 +65,13 @@ public class KeyHandler {
 		if (LIGHTLEVEL_KEY.isPressed()) {
 			if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
 				// Only change mode when visible
-				if(LightLevelHUD.showHUD)
+				if(LightLevelHUD.showHUD) {
 					LightLevelHUD.displayMode = Mode.cycle(LightLevelHUD.displayMode);
+					ModLog.info("LightLevel HUD mode: %s", LightLevelHUD.displayMode.name());
+				}
 			} else {
 				LightLevelHUD.showHUD = !LightLevelHUD.showHUD;
+				ModLog.info("LighLevel HUD: %s", LightLevelHUD.showHUD ? "ENABLED" : "DISABLED");
 			}
 		}
 
