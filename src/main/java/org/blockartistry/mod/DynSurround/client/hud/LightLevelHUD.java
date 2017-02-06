@@ -41,6 +41,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
@@ -68,8 +70,8 @@ public final class LightLevelHUD {
 
 	private static enum ColorSet {
 
-		BRIGHT(Color.MC_GREEN, Color.MC_YELLOW, Color.MC_RED, Color.MC_DARKAQUA),
-		DARK(Color.MC_DARKGREEN, Color.MC_GOLD, Color.MC_DARKRED, Color.MC_DARKBLUE);
+		BRIGHT(Color.MC_GREEN, Color.MC_YELLOW, Color.MC_RED, Color.MC_DARKAQUA), DARK(Color.MC_DARKGREEN,
+				Color.MC_GOLD, Color.MC_DARKRED, Color.MC_DARKBLUE);
 
 		private static final float ALPHA = 0.75F;
 
@@ -140,9 +142,9 @@ public final class LightLevelHUD {
 	}
 
 	private static final class LightCoord {
-		public int x;
-		public int y;
-		public int z;
+		public double x;
+		public double y;
+		public double z;
 		public String text;
 		public int color;
 	}
@@ -181,14 +183,33 @@ public final class LightLevelHUD {
 		return frustum.isBoxInFrustum(x, y, z, x, y, z);
 	}
 
-	protected static boolean renderLightLevel(@Nonnull final IBlockState state) {
-		final Material mat = state.getMaterial();
-		return !mat.isSolid() && !mat.isLiquid();
+	protected static boolean renderLightLevel(@Nonnull final IBlockState state, @Nonnull final IBlockState below) {
+		final Material stateMaterial = state.getMaterial();
+		final Material belowMaterial = below.getMaterial();
+
+		if (!stateMaterial.isSolid() && !stateMaterial.isLiquid() && belowMaterial.isSolid())
+			return true;
+
+		return false;
 	}
 
 	protected static boolean canMobSpawn(@Nonnull final BlockPos pos) {
 		return WorldEntitySpawner.canCreatureTypeSpawnAtLocation(SpawnPlacementType.ON_GROUND, EnvironState.getWorld(),
 				pos);
+	}
+
+	protected static float heightAdjustment(@Nonnull final IBlockState state, @Nonnull final IBlockState below,
+			@Nonnull final BlockPos pos) {
+		if (state.getBlock() == Blocks.AIR) {
+			final AxisAlignedBB box = below.getCollisionBoundingBox(EnvironState.getWorld(), pos.down());
+			return box == null ? 0 : (float) box.maxY - 1F;
+		}
+
+		final AxisAlignedBB box = state.getCollisionBoundingBox(EnvironState.getWorld(), pos);
+		if (box == null)
+			return 0F;
+		final float adjust = (float) (box.maxY);
+		return state.getBlock() == Blocks.SNOW_LAYER ? adjust + 0.125F : adjust;
 	}
 
 	protected static void updateLightInfo(final double x, final double y, final double z) {
@@ -225,7 +246,6 @@ public final class LightLevelHUD {
 					return;
 
 				IBlockState lastState = null;
-				Material lastMaterial = null;
 
 				for (int dY = 0; dY < rangeY; dY++) {
 
@@ -235,42 +255,41 @@ public final class LightLevelHUD {
 						continue;
 
 					final IBlockState state = chunk.getBlockState(trueX, trueY, trueZ);
-					final Material currentMaterial = state.getMaterial();
 
-					if (lastMaterial == null) {
+					if (lastState == null)
 						lastState = chunk.getBlockState(trueX, trueY - 1, trueZ);
-						lastMaterial = lastState.getMaterial();
-					}
 
-					if (lastMaterial.isSolid() && renderLightLevel(state)) {
+					if (renderLightLevel(state, lastState)) {
 						mutable.setPos(trueX, trueY, trueZ);
-						final int blockLight = chunk.getLightFor(EnumSkyBlock.BLOCK, mutable);
-						final int skyLight = chunk.getLightFor(EnumSkyBlock.SKY, mutable) - skyLightSub;
-						final int effective = Math.max(blockLight, skyLight);
-						final int result = displayMode == Mode.BLOCK_SKY ? effective : blockLight;
+
 						final boolean mobSpawn = canMobSpawn(mutable);
+						if (mobSpawn || !ModOptions.llHideSafe) {
+							final int blockLight = chunk.getLightFor(EnumSkyBlock.BLOCK, mutable);
+							final int skyLight = chunk.getLightFor(EnumSkyBlock.SKY, mutable) - skyLightSub;
+							final int effective = Math.max(blockLight, skyLight);
+							final int result = displayMode == Mode.BLOCK_SKY ? effective : blockLight;
 
-						int color = colors.safe;
-						if (!mobSpawn) {
-							color = colors.noSpawn;
-						} else if (blockLight <= ModOptions.llSpawnThreshold) {
-							if (effective > ModOptions.llSpawnThreshold)
-								color = colors.caution;
-							else
-								color = colors.hazard;
-						}
+							int color = colors.safe;
+							if (!mobSpawn) {
+								color = colors.noSpawn;
+							} else if (blockLight <= ModOptions.llSpawnThreshold) {
+								if (effective > ModOptions.llSpawnThreshold)
+									color = colors.caution;
+								else
+									color = colors.hazard;
+							}
 
-						if (!((color == colors.safe || !mobSpawn) && ModOptions.llHideSafe)) {
-							final LightCoord coord = nextCoord();
-							coord.x = trueX;
-							coord.y = trueY;
-							coord.z = trueZ;
-							coord.text = VALUES[result];
-							coord.color = color;
+							if (!(color == colors.safe && ModOptions.llHideSafe)) {
+								final LightCoord coord = nextCoord();
+								coord.x = trueX;
+								coord.y = trueY + heightAdjustment(state, lastState, mutable);
+								coord.z = trueZ;
+								coord.text = VALUES[result];
+								coord.color = color;
+							}
 						}
 					}
 
-					lastMaterial = currentMaterial;
 					lastState = state;
 				}
 			}
