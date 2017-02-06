@@ -524,7 +524,7 @@ public final class ModOptions {
 	@Parameter(category = CATEGORY_LIGHT_LEVEL, property = CONFIG_LL_INDICATE_CAUTION, defaultValue = "true", lang = "cfg.lightlevel.IndicateCaution")
 	@Comment("Indicate current light levels that will change at night which could result in mob spawns")
 	public static boolean llIndicateCaution = true;
-	@Parameter(category = CATEGORY_LIGHT_LEVEL, property = CONFIG_LL_COLORS, defaultValue = "0", lang = "cfg.lightlevel.Colors")
+	@Parameter(category = CATEGORY_LIGHT_LEVEL, property = CONFIG_LL_COLORS, defaultValue = "1", lang = "cfg.lightlevel.Colors")
 	@Comment("Color set: 0 bright, 1 dark")
 	@MinMaxInt(min = 0, max = 1)
 	public static int llColors = 0;
