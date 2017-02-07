@@ -1,3 +1,24 @@
+###DynamicSurroundings-1.10.2-3.2.7.0
+**What's New**
+* Light Level will be colored YELLOW if the current light level does not permit spawning, but will allow it when dark.
+* Light Level will be colored BLUE for blocks where mobs cannot spawn due to height restrictions, type of blocks (slab, glass, etc.)
+* Configuration option to display light level either vertically or layered on top of a block.
+* Configuration option for lighter or darker color indicator set.
+* Configuration option for hiding "safe" light levels (block light > spawn light level or blocks mob spawn)
+* Barking dog sound in Villages
+* Option to have square footprint rather than the shoe footprint
+
+**Fixes**
+* Screen should no longer black out when pressing F1 with light level active
+* F5 will properly render light level based on perspective
+* Dust particles will not disappear after editing/saving mod configuration.
+
+**Changes**
+* Light Level control changed!
+    * The L key now toggles the light level HUD on/off
+    * CTRL+L will toggle between block and block+skylight
+    * SHIFT+L will toggle display of safe blocks
+
 ###DynamicSurroundings-1.10.2-3.2.6.0
 **What's New!**
 * Facade support for EnderIO/Chisel.  Sound and footsteps are based on the facade of conduits.  Will expand to other mods with facade capabilities over time.
