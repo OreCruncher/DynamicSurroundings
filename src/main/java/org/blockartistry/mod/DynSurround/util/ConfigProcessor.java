@@ -48,7 +48,7 @@ public final class ConfigProcessor {
 		String property();
 
 		String defaultValue();
-		
+
 		String lang() default "";
 	}
 
@@ -138,7 +138,7 @@ public final class ConfigProcessor {
 
 					// Configure other settings
 					final Property prop = config.getCategory(category).get(property);
-					if(!StringUtils.isEmpty(language))
+					if (!StringUtils.isEmpty(language))
 						prop.setLanguageKey(language);
 					if (field.getAnnotation(RestartRequired.class) != null) {
 						final RestartRequired restart = field.getAnnotation(RestartRequired.class);

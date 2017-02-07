@@ -182,14 +182,14 @@ public final class ModOptions {
 	@Comment("Enable/disable desert fog when raining")
 	public static boolean allowDesertFog = true;
 	@Parameter(category = CATEGORY_FOG, property = CONFIG_DESERT_FOG_FACTOR, defaultValue = "1.0", lang = "cfg.fog.DesertFogFactor")
-	@MinMaxFloat(min = 0.0F, max = 5.0F)
+	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Visibility factor to apply to desert fog (higher is thicker)")
 	public static float desertFogFactor = 1.0F;
 	@Parameter(category = CATEGORY_FOG, property = CONFIG_ENABLE_ELEVATION_HAZE, defaultValue = "true", lang = "cfg.fog.ElevationHaze")
 	@Comment("Higher the player elevation the more haze that is experienced")
 	public static boolean enableElevationHaze = true;
 	@Parameter(category = CATEGORY_FOG, property = CONFIG_ELEVATION_HAZE_FACTOR, defaultValue = "1.0", lang = "cfg.fog.ElevationHazFactor")
-	@MinMaxFloat(min = 0.0F, max = 5.0F)
+	@MinMaxFloat(min = 0.0F, max = 1.4F)
 	@Comment("Visibility factor to apply to elevation haze (higher is thicker)")
 	public static float elevationHazeFactor = 1.0F;
 	@Parameter(category = CATEGORY_FOG, property = CONFIG_ELEVATION_HAZE_AS_BAND, defaultValue = "true", lang = "cfg.fog.ElevationHazeBand")
@@ -199,7 +199,7 @@ public final class ModOptions {
 	@Comment("Enable biome specific fog density and color")
 	public static boolean enableBiomeFog = true;
 	@Parameter(category = CATEGORY_FOG, property = CONFIG_BIOME_FOG_FACTOR, defaultValue = "1.0", lang = "cfg.fog.BiomeFogFactor")
-	@MinMaxFloat(min = 0.0F, max = 5.0F)
+	@MinMaxFloat(min = 0.0F, max = 1.9F)
 	@Comment("Visibility factor to apply to biome fog (higher is thicker)")
 	public static float biomeFogFactor = 1.0F;
 
