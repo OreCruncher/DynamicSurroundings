@@ -39,6 +39,7 @@ import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -86,10 +87,11 @@ public final class RenderWeather extends IRenderHandler {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onWorldLoad(@Nonnull final WorldEvent.Load e) {
 
-		if (!ModOptions.enableWeatherASM || ModEnvironment.Weather2.isLoaded())
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER || !ModOptions.enableWeatherASM
+				|| ModEnvironment.Weather2.isLoaded())
 			return;
 
-		// Initialize the render list.  Would do it in static but class
+		// Initialize the render list. Would do it in static but class
 		// loading would spiderweb and crash Minecraft.
 		if (renderList.size() == 0) {
 			register(new StormRenderer());
