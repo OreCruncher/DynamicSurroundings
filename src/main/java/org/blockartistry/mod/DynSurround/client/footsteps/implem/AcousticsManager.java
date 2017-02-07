@@ -34,6 +34,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IOptions;
@@ -44,6 +45,7 @@ import org.blockartistry.mod.DynSurround.client.footsteps.system.Association;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFootprint;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFootprint.Style;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.BlockPosHelper;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
@@ -104,8 +106,9 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 			final Vec3d stepLoc = acousticName.getStepLocation();
 			if (stepLoc != null && WorldUtils.isSolidBlock(EnvironState.getWorld(),
 					BlockPosHelper.setPos(this.stepCheck, stepLoc).move(EnumFacing.DOWN, 1))) {
+				final Style style = Style.getStyle(ModOptions.footprintStyle);
 				ParticleHelper.addParticle(new ParticleFootprint(EnvironState.getWorld(), stepLoc.xCoord,
-						stepLoc.yCoord, stepLoc.zCoord, acousticName.getRotation(), acousticName.isRightFoot()));
+						stepLoc.yCoord, stepLoc.zCoord, acousticName.getRotation(), acousticName.isRightFoot(), style));
 			}
 		}
 	}

@@ -49,9 +49,28 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ParticleFootprint extends Particle {
-
-	private static final ResourceLocation FOOTPRINT_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
-			"textures/particles/footprint.png");
+	
+	public static enum Style {
+		
+		SHOE("textures/particles/footprint.png"),
+		SQUARE("textures/particles/footprint_square.png");
+		
+		private final ResourceLocation resource;
+		
+		private Style(@Nonnull final String texture) {
+			this.resource = new ResourceLocation(DSurround.RESOURCE_ID, texture);
+		}
+		
+		public ResourceLocation getTexture() {
+			return this.resource;
+		}
+		
+		public static Style getStyle(final int v) {
+			if(v >= values().length)
+				return SHOE;
+			return values()[v];
+		}
+	}
 
 	private static float zFighter = 0;
 
@@ -71,22 +90,26 @@ public class ParticleFootprint extends Particle {
 	private final double maxV = 1D;
 	private final float width = 0.125F;
 	private final float length = this.width * 2.0F;
+	
+	private final ResourceLocation print;
 
 	public ParticleFootprint(@Nonnull final World world, final double x, final double y, final double z,
-			final float rotation, final boolean isRightFoot) {
+			final float rotation, final boolean isRightFoot, @Nonnull final Style style) {
 		super(world, x, y, z);
 		this.motionX = 0.0D;
 		this.motionY = 0.0D;
 		this.motionZ = 0.0D;
 		this.footstepMaxAge = 200;
 
+		this.print = style.getTexture();
+		
 		this.pos = new BlockPos(this.posX, this.posY, this.posZ);
-
+		
 		// Micro adjust the Y in an attempt to address z-fighting
 		// of multiple footprints in the area
-		if (++zFighter > 20)
+		if(++zFighter > 20)
 			zFighter = 1;
-
+		
 		this.posY += zFighter * 0.001F;
 
 		// If the block is a snow layer block need to adjust the
@@ -129,7 +152,7 @@ public class ParticleFootprint extends Particle {
 		// Sets the alpha
 		alpha = alpha * 0.4F;
 
-		Minecraft.getMinecraft().getTextureManager().bindTexture(FOOTPRINT_TEXTURE);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(this.print);
 
 		final int i = this.getBrightnessForRender(partialTicks);
 		final int j = i % 65536;
