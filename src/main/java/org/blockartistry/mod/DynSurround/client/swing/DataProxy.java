@@ -192,7 +192,7 @@ public abstract class DataProxy extends Observable {
 				final ItemStack stack = this.state.getBlock().getPickBlock(this.state,
 						Minecraft.getMinecraft().objectMouseOver, EnvironState.getWorld(), this.targetBlock,
 						EnvironState.getPlayer());
-				if (stack != null)
+				if (stack != null && !stack.isEmpty())
 					for (int i : OreDictionary.getOreIDs(stack))
 						result.add(OreDictionary.getOreName(i));
 			}
