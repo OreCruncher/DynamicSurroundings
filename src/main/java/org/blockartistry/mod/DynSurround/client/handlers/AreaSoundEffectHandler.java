@@ -103,6 +103,9 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 
 		final List<SoundEffect> playerSounds = new ArrayList<SoundEffect>();
 		BiomeRegistry.PLAYER.findSoundMatches(playerSounds);
+		if(EnvironState.inVillage())
+			BiomeRegistry.VILLAGE.findSoundMatches(playerSounds);
+		
 		for (final SoundEffect effect : playerSounds)
 			sounds.put(effect, 1.0F);
 
