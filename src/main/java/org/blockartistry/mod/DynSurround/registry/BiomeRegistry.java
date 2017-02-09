@@ -80,6 +80,7 @@ public final class BiomeRegistry extends Registry {
 		registry.put(CLOUDS.getBiomeId(), CLOUDS);
 		registry.put(PLAYER.getBiomeId(), PLAYER);
 		registry.put(WTF.getBiomeId(), WTF);
+		registry.put(VILLAGE.getBiomeId(), VILLAGE);
 		
 		// Make sure they are clean from the previous run
 		UNDERGROUND.resetSounds();
@@ -91,6 +92,7 @@ public final class BiomeRegistry extends Registry {
 		CLOUDS.resetSounds();
 		PLAYER.resetSounds();
 		WTF.resetSounds();
+		VILLAGE.resetSounds();
 	}
 
 	@Override
@@ -121,6 +123,7 @@ public final class BiomeRegistry extends Registry {
 	public static final FakeBiomeInfo UNDERRIVER = new FakeBiomeInfo(-6, "UnderRVR");
 	public static final FakeBiomeInfo OUTERSPACE = new FakeBiomeInfo(-7, "OuterSpace");
 	public static final FakeBiomeInfo CLOUDS = new FakeBiomeInfo(-8, "Clouds");
+	public static final FakeBiomeInfo VILLAGE = new FakeBiomeInfo(-9, "Village");
 
 	// This is for cases when the biome coming in doesn't make sense
 	// and should default to something to avoid crap.

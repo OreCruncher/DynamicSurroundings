@@ -356,6 +356,32 @@
 			]
 		},
 		{
+			"biomeName": "Village",
+			"sounds": [
+				{
+					"sound": "dsurround:village.rooster",
+					"conditions": "!player.isInside && isSunrise && weather.isNotRaining",
+					"soundType": "periodic",
+					"repeatDelay": 100,
+					"repeatDelayRandom": 100
+				},
+				{
+					"sound": "dsurround:village.anvil",
+					"conditions": "!player.isInside && isDay && weather.isNotRaining",
+					"soundType": "periodic",
+					"repeatDelay": 100,
+					"repeatDelayRandom": 200
+				},
+				{
+					"sound": "dsurround:village.dogbark",
+					"conditions": "!player.isInside && weather.isNotRaining",
+					"soundType": "periodic",
+					"repeatDelay": 200,
+					"repeatDelayRandom": 200
+				}
+			]
+		},
+		{
 			"biomeName": "Player",
 			"sounds": [
 				{
@@ -369,27 +395,6 @@
 					"conditions": "player.isHungry",
 					"soundType": "periodic",
 					"repeatDelay": 300
-				},
-				{
-					"sound": "dsurround:village.rooster",
-					"conditions": "!player.isInside && player.inVillage && isSunrise && weather.isNotRaining",
-					"soundType": "periodic",
-					"repeatDelay": 100,
-					"repeatDelayRandom": 100
-				},
-				{
-					"sound": "dsurround:village.anvil",
-					"conditions": "!player.isInside && player.inVillage && isDay && weather.isNotRaining",
-					"soundType": "periodic",
-					"repeatDelay": 100,
-					"repeatDelayRandom": 200
-				},
-				{
-					"sound": "dsurround:village.dogbark",
-					"conditions": "!player.isInside && player.inVillage && weather.isNotRaining",
-					"soundType": "periodic",
-					"repeatDelay": 200,
-					"repeatDelayRandom": 200
 				}
 			]
 		}
