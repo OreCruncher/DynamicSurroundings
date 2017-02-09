@@ -67,6 +67,13 @@ public final class LightLevelHUD {
 				next = 0;
 			return values()[next];
 		}
+		
+		@Nonnull
+		public static Mode getMode(final int v) {
+			if(v >= values().length)
+				return BLOCK;
+			return values()[v];
+		}
 	}
 
 	private static enum ColorSet {
@@ -166,7 +173,6 @@ public final class LightLevelHUD {
 	}
 
 	public static boolean showHUD = false;
-	public static Mode displayMode = Mode.BLOCK;
 
 	private static final String[] VALUES = new String[16];
 	private static final float[] ROTATION = { 180, 0, 270, 90 };
@@ -245,6 +251,7 @@ public final class LightLevelHUD {
 		surfaceRotationAngle = ROTATION[playerFacing.getIndex() - 2];
 
 		final ColorSet colors = ColorSet.getStyle(ModOptions.llColors);
+		final Mode displayMode = Mode.getMode(ModOptions.llDisplayMode);
 		final int skyLightSub = EnvironState.getWorld().calculateSkylightSubtracted(1.0F);
 		final IChunkProvider provider = EnvironState.getWorld().getChunkProvider();
 		final int rangeXZ = ModOptions.llBlockRange * 2 + 1;
