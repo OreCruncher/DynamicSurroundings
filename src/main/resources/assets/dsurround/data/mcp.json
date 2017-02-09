@@ -340,6 +340,14 @@
 			]
 		},
 		{
+			"biomeName": "Underwater",
+			"sounds": [
+				{
+					"sound": "dsurround:underwater"
+				}
+			]
+		},
+		{
 			"biomeName": "Clouds",
 			"sounds": [
 				{

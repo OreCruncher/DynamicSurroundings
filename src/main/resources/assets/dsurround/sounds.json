@@ -1142,6 +1142,15 @@
 			}
 		]
 	},
+	"underwater": {
+		"category": "ambient",
+		"sounds": [
+			{
+				"name": "dsurround:ambient/underwater/water",
+				"stream": true
+			}
+		]
+	},
 	"whale": {
 		"category": "ambient",
 		"sounds": [

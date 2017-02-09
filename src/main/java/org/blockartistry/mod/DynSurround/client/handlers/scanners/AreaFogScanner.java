@@ -195,7 +195,7 @@ public class AreaFogScanner implements ITickable {
 		double scaleGreen = 1.0D;
 		double scaleBlue = 1.0D;
 
-		if (dimId != -1 && dimId != 0) {
+		if (dimId != -1 && dimId != 1) {
 
 			// Overworld and not nether
 
