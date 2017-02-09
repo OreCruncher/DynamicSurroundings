@@ -151,6 +151,10 @@ public class Color {
 		this.blue = blue;
 	}
 
+	public Color(final double red, final double green, final double blue) {
+		this((float) red, (float) green, (float) blue);
+	}
+
 	@Nonnull
 	public Vec3d toVec3d() {
 		return new Vec3d(this.red, this.green, this.blue);
