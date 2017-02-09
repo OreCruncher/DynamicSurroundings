@@ -520,8 +520,8 @@ public final class ModOptions {
 	@MinMaxInt(min = 0, max = 15)
 	public static int llSpawnThreshold = 7;
 	@Parameter(category = CATEGORY_LIGHT_LEVEL, property = CONFIG_LL_STYLE, defaultValue = "0", lang = "cfg.lightlevel.Style")
-	@Comment("Rendering style: 0 upright facing player, 1 along block surface")
-	@MinMaxInt(min = 0, max = 1)
+	@Comment("Rendering style: 0 upright facing player, 1 along block surface, 2 surface with rotation")
+	@MinMaxInt(min = 0, max = 2)
 	public static int llStyle = 0;
 	@Parameter(category = CATEGORY_LIGHT_LEVEL, property = CONFIG_LL_HIDE_SAFE, defaultValue = "false", lang = "cfg.lightlevel.HideSafe")
 	@Comment("Hide light level information for blocks that are considered safe")

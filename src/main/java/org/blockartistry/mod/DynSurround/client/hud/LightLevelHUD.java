@@ -42,6 +42,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -122,6 +123,21 @@ public final class LightLevelHUD {
 				GlStateManager.scale(-this.scale, -this.scale, this.scale);
 				font.drawString(coord.text, margin, 0, coord.color);
 			}
+		},
+		SURFACE_ROTATE(0.08F) {
+
+			@Override
+			public void render(final double x, final double y, final double z, final float yaw, final float pitch,
+					@Nonnull final LightCoord coord) {
+				final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
+				final int margin = -font.getStringWidth(coord.text) / 2;
+				GlStateManager.translate(x + 0.5D, y, z + 0.5D);
+				GlStateManager.rotate(surfaceRotationAngle, 0F, 1F, 0F);
+				GlStateManager.translate(-0.05D, 0.0005D, 0.3D);
+				GlStateManager.rotate(90F, 1F, 0F, 0F);
+				GlStateManager.scale(-this.scale, -this.scale, this.scale);
+				font.drawString(coord.text, margin, 0, coord.color);
+			}
 		};
 
 		public abstract void render(final double x, final double y, final double z, final float yaw, final float pitch,
@@ -153,6 +169,7 @@ public final class LightLevelHUD {
 	public static Mode displayMode = Mode.BLOCK;
 
 	private static final String[] VALUES = new String[16];
+	private static final float[] ROTATION = { 180, 0, 270, 90 };
 
 	// Allocation size of array. Seems large, until you fly and look
 	// down at a roofed forest.
@@ -160,6 +177,8 @@ public final class LightLevelHUD {
 	private static final List<LightCoord> lightLevels = new ArrayList<LightCoord>(ALLOCATION_SIZE);
 	private static final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 	private static int nextCoord = 0;
+
+	private static float surfaceRotationAngle = 0F;
 
 	static {
 		for (int i = 0; i < ALLOCATION_SIZE; i++)
@@ -212,13 +231,18 @@ public final class LightLevelHUD {
 		return state.getBlock() == Blocks.SNOW_LAYER ? adjust + 0.125F : adjust;
 	}
 
-	protected static void updateLightInfo(final double x, final double y, final double z) {
+	protected static void updateLightInfo(@Nonnull final RenderManager manager, final double x, final double y, final double z) {
 		final long tick = EnvironState.getTickCounter();
 		if (tick == 0 || tick % 4 != 0)
 			return;
 
 		frustum.setPosition(x, y, z);
 		nextCoord = 0;
+		
+		EnumFacing playerFacing = EnvironState.getPlayer().getHorizontalFacing();
+		if(manager.options.thirdPersonView == 2)
+			playerFacing = playerFacing.getOpposite();
+		surfaceRotationAngle = ROTATION[playerFacing.getIndex() - 2];
 
 		final ColorSet colors = ColorSet.getStyle(ModOptions.llColors);
 		final int skyLightSub = EnvironState.getWorld().calculateSkylightSubtracted(1.0F);
@@ -304,7 +328,7 @@ public final class LightLevelHUD {
 		final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
 		final DisplayStyle displayStyle = DisplayStyle.getStyle(ModOptions.llStyle);
 
-		updateLightInfo(manager.viewerPosX, manager.viewerPosY, manager.viewerPosZ);
+		updateLightInfo(manager, manager.viewerPosX, manager.viewerPosY, manager.viewerPosZ);
 
 		if (nextCoord == 0)
 			return;
