@@ -67,8 +67,10 @@ public class KeyHandler {
 			if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
 				// Only change mode when visible
 				if (LightLevelHUD.showHUD) {
-					LightLevelHUD.displayMode = Mode.cycle(LightLevelHUD.displayMode);
-					ModLog.info("LightLevel HUD mode: %s", LightLevelHUD.displayMode.name());
+					ModOptions.llDisplayMode++;
+					if (ModOptions.llDisplayMode >= Mode.values().length)
+						ModOptions.llDisplayMode = 0;
+					ModLog.info("LightLevel HUD mode: %s", Mode.getMode(ModOptions.llDisplayMode).name());
 				}
 			} else if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 				if (LightLevelHUD.showHUD) {
