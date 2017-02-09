@@ -53,7 +53,11 @@ public class AreaFogScanner implements ITickable {
 	private static final int HAZE_THRESHOLD = 15;
 	private static final int RANGE = 10;
 	private static final double AREA = (RANGE * 2 + 1) * (RANGE * 2 + 1);
-	private static final Color DEFAULT_FOG_COLOR = new Color(0.7529412F, 0.84705883F, 1.0F);
+
+	private static final Color OVERWORLD_FOG_COLOR = new Color(0.7529412F, 0.84705883F, 1.0F);
+	private static final Color NETHER_FOG_COLOR = new Color(0.20000000298023224D, 0.029999999329447746D,
+			0.029999999329447746D);
+	private static final Color END_FOG_COLOR = new Color(0.627451F * 0.15F, 0.5019608F * 0.15F, 0.627451F * 0.15F);
 
 	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
@@ -69,7 +73,7 @@ public class AreaFogScanner implements ITickable {
 	private float fogDensity;
 
 	private float planeDistanceScale;
-	
+
 	// TODO: Do we need this to clear up fog for buildings?
 	@SuppressWarnings("unused")
 	private float insideFogOffset;
@@ -97,6 +101,17 @@ public class AreaFogScanner implements ITickable {
 		return ratio * ratio * ratio * ratio * ModOptions.elevationHazeFactor;
 	}
 
+	@Nonnull
+	private Color worldFogColor(@Nonnull final World world) {
+		switch (world.provider.getDimension()) {
+		case -1:
+			return NETHER_FOG_COLOR;
+		case 1:
+			return END_FOG_COLOR;
+		}
+		return OVERWORLD_FOG_COLOR;
+	}
+
 	@Override
 	public void update() {
 
@@ -111,7 +126,8 @@ public class AreaFogScanner implements ITickable {
 
 		final World world = EnvironState.getWorld();
 		final float rainStrength = world.getRainStrength(1.0F);
-		final Color scaledDefaultFogColor = Color.scale(DEFAULT_FOG_COLOR, 1 - rainStrength);
+		final Color worldFogColor = worldFogColor(world);
+		final Color scaledDefaultFogColor = Color.scale(worldFogColor, 1F - rainStrength);
 
 		this.blendedColor = new Color(0, 0, 0);
 		this.fogDensity = 0;
@@ -136,7 +152,7 @@ public class AreaFogScanner implements ITickable {
 					theColor = Color.scale(biome.getDustColor(), rainStrength).add(scaledDefaultFogColor);
 					fog = (float) (this.lastIntensity * 0.5F + 0.4F) * ModOptions.desertFogFactor * rainStrength;
 				} else {
-					theColor = DEFAULT_FOG_COLOR;
+					theColor = worldFogColor;
 				}
 
 				this.fogDensity += 1 - Math.max(heightFog, fog);
@@ -150,7 +166,7 @@ public class AreaFogScanner implements ITickable {
 		final float farPlaneDistanceScaleBiome = (0.1f * (1 - fpDistanceBiomeFogAvg) + 0.75f * fpDistanceBiomeFogAvg);
 		this.planeDistanceScale = (float) ((farPlaneDistanceScaleBiome * this.biomeWeight + 0.75f * this.weightDefault)
 				/ AREA);
-		
+
 		this.insideFogOffset = AreaSurveyHandler.getCeilingCoverageRatio() * 15.0F;
 
 	}
@@ -172,31 +188,43 @@ public class AreaFogScanner implements ITickable {
 		if (this.blendedColor == null || this.biomeWeight == 0)
 			return defaultFogColor;
 
-		// WorldProvider.getFogColor() - need to calculate the scale based
-		// on sunlight and stuff.
-		final float angle = world.getCelestialAngle(partialTick);
-		final float base = MathHelper.clamp_float(MathStuff.cos(angle * MathStuff.PI_F * 2.0F) * 2.0F + 0.5F, 0, 1);
+		final int dimId = world.provider.getDimension();
 
-		double scaleRed = base * 0.94F + 0.06F;
-		double scaleGreen = base * 0.94F + 0.06F;
-		double scaleBlue = base * 0.91F + 0.09F;
+		// Default to NETHER/End scale factors
+		double scaleRed = 1.0D;
+		double scaleGreen = 1.0D;
+		double scaleBlue = 1.0D;
 
-		// EntityRenderer.updateFogColor() - adjust the scale further
-		// based on rain and thunder.
-		final float intensity = world.getRainStrength(partialTick);
-		if (intensity > 0) {
-			final float s = 1F - intensity * 0.5F;
-			scaleRed *= s;
-			scaleGreen *= s;
-			scaleBlue *= 1 - intensity * 0.4F;
-		}
+		if (dimId != -1 && dimId != 0) {
 
-		final float strength = world.getThunderStrength(partialTick);
-		if (strength > 0) {
-			final float s = 1 - strength * 0.5F;
-			scaleRed *= s;
-			scaleGreen *= s;
-			scaleBlue *= s;
+			// Overworld and not nether
+
+			// WorldProvider.getFogColor() - need to calculate the scale based
+			// on sunlight and stuff.
+			final float angle = world.getCelestialAngle(partialTick);
+			final float base = MathHelper.clamp_float(MathStuff.cos(angle * MathStuff.PI_F * 2.0F) * 2.0F + 0.5F, 0, 1);
+
+			scaleRed = base * 0.94F + 0.06F;
+			scaleGreen = base * 0.94F + 0.06F;
+			scaleBlue = base * 0.91F + 0.09F;
+
+			// EntityRenderer.updateFogColor() - adjust the scale further
+			// based on rain and thunder.
+			final float intensity = world.getRainStrength(partialTick);
+			if (intensity > 0) {
+				final float s = 1F - intensity * 0.5F;
+				scaleRed *= s;
+				scaleGreen *= s;
+				scaleBlue *= 1 - intensity * 0.4F;
+			}
+
+			final float strength = world.getThunderStrength(partialTick);
+			if (strength > 0) {
+				final float s = 1 - strength * 0.5F;
+				scaleRed *= s;
+				scaleGreen *= s;
+				scaleBlue *= s;
+			}
 		}
 
 		// Normalize the blended color components based on the biome weight.
