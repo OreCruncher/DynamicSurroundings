@@ -99,7 +99,6 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 			return;
 
 		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<SoundEffect>();
-
 		if (doBiomeSounds())
 			getBiomeSounds(sounds);
 

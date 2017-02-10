@@ -418,7 +418,8 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	 */
 	@SubscribeEvent
 	public void registryReloadEvent(@Nonnull final RegistryEvent.Reload event) {
-		clearSounds();
+		if(event.getSide() == Side.CLIENT)
+			clearSounds();
 	}
 
 	/*
