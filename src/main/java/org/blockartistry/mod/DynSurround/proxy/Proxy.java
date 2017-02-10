@@ -58,6 +58,10 @@ public class Proxy {
 	public boolean isRunningAsServer() {
 		return true;
 	}
+	
+	public Side effectiveSide() {
+		return Side.SERVER;
+	}
 
 	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		registerLanguage();

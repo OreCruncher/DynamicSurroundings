@@ -82,18 +82,20 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		return "AreaSoundEffectHandler";
 	}
 
+	private static boolean skipTick(@Nonnull final EntityPlayer player) {
+		// Skip processing this tick IF:
+		// * Option is disabled
+		// * It's not the appropriate tick interval
+		// * Player is dead
+		// * The chunk the player is in is not loaded
+		return !(ModOptions.enableBiomeSounds && (EnvironState.getTickCounter() % SCAN_INTERVAL) == 0
+				&& player.isEntityAlive() && EnvironState.getWorld().isBlockLoaded(EnvironState.getPlayerPosition()));
+	}
+	
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
-		if (!ModOptions.enableBiomeSounds)
-			return;
 
-		// If the chunk isn't loaded or the player is dead, no sounds
-		if (!player.isEntityAlive() || !EnvironState.getWorld().isBlockLoaded(EnvironState.getPlayerPosition())) {
-			return;
-		}
-
-		// Only execute every 4 ticks.
-		if ((EnvironState.getTickCounter() % SCAN_INTERVAL) != 0)
+		if (skipTick(player))
 			return;
 
 		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<SoundEffect>();
