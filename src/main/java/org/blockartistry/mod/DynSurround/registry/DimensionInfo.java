@@ -48,7 +48,7 @@ public final class DimensionInfo {
 
 	public DimensionInfo(@Nonnull final World world) {
 		this.dimensionId = world.provider.getDimension();
-		initialize(world.provider);
+		initialize(world);
 	}
 
 	public DimensionInfo(@Nonnull final World world, @Nonnull final DimensionConfig entry) {
@@ -60,14 +60,15 @@ public final class DimensionInfo {
 		this.hasAuroras = entry.hasAurora;
 		this.hasWeather = entry.hasWeather;
 		this.cloudHeight = entry.cloudHeight;
-		initialize(world.provider);
+		initialize(world);
 	}
 
-	public DimensionInfo initialize(@Nonnull final WorldProvider provider) {
+	public DimensionInfo initialize(@Nonnull final World world) {
 		if (!this.initialized) {
+			final WorldProvider provider = world.provider;
 			this.name = provider.getDimensionType().getName();
 			if (this.seaLevel == null)
-				this.seaLevel = provider.getAverageGroundLevel();
+				this.seaLevel = world.getSeaLevel();
 			if (this.skyHeight == null)
 				this.skyHeight = provider.getHeight();
 			if (this.hasHaze == null)

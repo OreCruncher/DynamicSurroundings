@@ -103,7 +103,7 @@ public final class PlayerUtils {
 
 	public static boolean isUnderGround(@Nonnull final EntityPlayer player, final int offset) {
 		final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
-		return MathStuff.floor_double(player.posY + offset) < dimensions.getSeaLevel(player.worldObj);
+		return MathStuff.floor_double(player.posY + offset) <= dimensions.getSeaLevel(player.worldObj);
 	}
 
 	@SideOnly(Side.CLIENT)
