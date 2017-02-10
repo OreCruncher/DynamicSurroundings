@@ -43,10 +43,6 @@ import net.minecraftforge.fml.relauncher.Side;
 public abstract class EffectHandlerBase {
 	
 	protected final Random RANDOM = new Random();
-	private BiomeRegistry biomes;
-	private BlockRegistry blocks;
-	private DimensionRegistry dimensions;
-	private SoundRegistry sounds;
 	
 	// Used to obtain the name of the handler for logging purposes
 	public abstract String getHandlerName();
@@ -69,19 +65,19 @@ public abstract class EffectHandlerBase {
 	}
 	
 	protected BiomeRegistry getBiomeRegistry() {
-		return this.biomes;
+		return RegistryManager.get(RegistryType.BIOME);
 	}
 	
 	protected BlockRegistry getBlockRegistry() {
-		return this.blocks;
+		return RegistryManager.get(RegistryType.BLOCK);
 	}
 	
 	protected DimensionRegistry getDimensionRegistry() {
-		return this.dimensions;
+		return RegistryManager.get(RegistryType.DIMENSION);
 	}
 	
 	protected SoundRegistry getSoundRegistry() {
-		return this.sounds;
+		return RegistryManager.get(RegistryType.SOUND);
 	}
 	
 	// Called when the client is connecting to a server.  Useful for initializing
@@ -100,19 +96,11 @@ public abstract class EffectHandlerBase {
 	//
 	//////////////////////////////
 	final void connect0() {
-		this.biomes = RegistryManager.get(RegistryType.BIOME);
-		this.blocks = RegistryManager.get(RegistryType.BLOCK);
-		this.dimensions = RegistryManager.get(RegistryType.DIMENSION);
-		this.sounds = RegistryManager.get(RegistryType.SOUND);
 		this.onConnect();
 	}
 	
 	final void disconnect0() {
 		this.onDisconnect();
-		this.biomes = null;
-		this.blocks = null;
-		this.dimensions = null;
-		this.sounds = null;
 	}
 	
 }
