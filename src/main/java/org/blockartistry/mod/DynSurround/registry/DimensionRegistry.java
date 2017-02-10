@@ -67,7 +67,7 @@ public final class DimensionRegistry extends Registry {
 	private boolean isFlatWorld = false;
 
 	public void loading(@Nonnull final World world) {
-		getData(world).initialize(world.provider);
+		getData(world).initialize(world);
 		if (world.provider.getDimension() == 0) {
 			this.isFlatWorld = world.getWorldInfo().getTerrainType() == WorldType.FLAT;
 		}
