@@ -94,11 +94,11 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
-		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<SoundEffect>();
 
 		if (skipTick(player))
 			return;
 
+		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<SoundEffect>();
 		if (doBiomeSounds())
 			getBiomeSounds(sounds);
 
