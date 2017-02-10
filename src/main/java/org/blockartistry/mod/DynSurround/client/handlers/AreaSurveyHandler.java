@@ -110,7 +110,6 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 
 	// Used to throttle processing
 	private static final int SURVEY_INTERVAL = 2;
-	private int intervalTicker = SURVEY_INTERVAL;
 
 	private static int biomeArea;
 	private static final TObjectIntHashMap<BiomeInfo> weights = new TObjectIntHashMap<BiomeInfo>();
@@ -182,12 +181,9 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 
 		// Only process on the correct interval
-		intervalTicker++;
-		if (intervalTicker < SURVEY_INTERVAL)
+		if(EnvironState.getTickCounter() % SURVEY_INTERVAL != 0)
 			return;
-
-		intervalTicker = 0;
-
+		
 		final BlockPos position = EnvironState.getPlayerPosition();
 
 		if (surveyedBiome != EnvironState.getPlayerBiome() || surveyedDimension != EnvironState.getDimensionId()
@@ -203,7 +199,6 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 
 	@Override
 	public void onConnect() {
-		intervalTicker = SURVEY_INTERVAL;
 		weights.clear();
 	}
 }

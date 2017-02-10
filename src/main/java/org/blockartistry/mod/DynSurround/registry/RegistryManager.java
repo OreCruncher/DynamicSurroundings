@@ -29,13 +29,13 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.event.RegistryEvent;
 
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class RegistryManager {
@@ -57,7 +57,7 @@ public class RegistryManager {
 	private static final RegistryManager[] managers = { null, null };
 
 	static RegistryManager getManager() {
-		final Side side = FMLCommonHandler.instance().getEffectiveSide();
+		final Side side = DSurround.proxy().effectiveSide();
 		if(side == Side.CLIENT) {
 			if(managers[1] == null) {
 				managers[1] = new RegistryManagerClient();

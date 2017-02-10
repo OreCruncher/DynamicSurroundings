@@ -33,6 +33,7 @@ import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
@@ -51,6 +52,11 @@ public class ProxyClient extends Proxy {
 	@Override
 	public boolean isRunningAsServer() {
 		return false;
+	}
+
+	@Override
+	public Side effectiveSide() {
+		return FMLCommonHandler.instance().getEffectiveSide();
 	}
 
 	@Override
