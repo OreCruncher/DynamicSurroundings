@@ -48,12 +48,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * OK - it's a hack. Don't want to mess with the core state too much so these
  * proxies server as a way to glue the mod data to the GUI.
  */
+@SideOnly(Side.CLIENT)
 public abstract class DataProxy extends Observable {
 
 	public static final List<Observable> dataPools = new ArrayList<Observable>();
@@ -69,6 +72,7 @@ public abstract class DataProxy extends Observable {
 		super.notifyObservers();
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class ScriptVariableData extends DataProxy {
 
 		public ScriptVariableData() {
@@ -81,6 +85,7 @@ public abstract class DataProxy extends Observable {
 
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class WeatherData extends DataProxy {
 
 		public WeatherData() {
@@ -112,6 +117,7 @@ public abstract class DataProxy extends Observable {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class ViewedBlockData extends DataProxy {
 
 		protected final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
