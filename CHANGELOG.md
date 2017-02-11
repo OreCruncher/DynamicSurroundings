@@ -1,3 +1,15 @@
+###DynamicSurroundings-1.11.2-3.2.8.0
+**What's New!**
+* Added new Light Level HUD style - surface with rotation.  Displays the light level on the block surface and rotated toward the player.  Snaps to the NWSE directions.
+* Light Level HUD display mode is now configurable so you can set your favorite default.
+* Underwater background sound.  This is for when the player's head is in water, but not in a watery biome.
+
+**Fixes**
+* Incorrect default fog colors for the Nether and The End were being used.
+
+**Changes**
+* Increased the default number of sound channels.  Modern sound systems generally have 255 channels, and the update will use 196 of them for sound (38 of which will be streaming channels).  The actual quantity of channels is based upon what the underlying sound system reports about the hardware.
+
 ###DynamicSurroundings-1.11.2-3.2.7.0
 **What's New**
 * Light Level will be colored YELLOW if the current light level does not permit spawning, but will allow it when dark.
