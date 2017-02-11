@@ -341,9 +341,9 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		streamChannelCount = ModOptions.streamingSoundChannelCount;
 
 		if (ModOptions.autoConfigureChannels && totalChannels > 64) {
-			final int maxCount = Math.max((totalChannels + 1) / 2, 32);
-			normalChannelCount = MathHelper.floor(maxCount * 0.875F);
-			streamChannelCount = maxCount - normalChannelCount;
+			totalChannels = ((totalChannels + 1) * 3) / 4;
+			streamChannelCount = totalChannels / 5;
+			normalChannelCount = totalChannels - streamChannelCount;
 		}
 
 		ModLog.info("Sound channels: %d normal, %d streaming (total avail: %s)", normalChannelCount, streamChannelCount,
