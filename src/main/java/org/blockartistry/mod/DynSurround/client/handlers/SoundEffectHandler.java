@@ -102,6 +102,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	private final ArrayDeque<IMySound> pending = new ArrayDeque<IMySound>();
 
 	private SoundEffectHandler() {
+
 	}
 
 	@Override
@@ -117,9 +118,9 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 			clearSounds();
 			return;
 		}
-		
+
 		// Only execute every 4 ticks.
-		if((EnvironState.getTickCounter() % 4) != 0)
+		if ((EnvironState.getTickCounter() % 4) != 0)
 			return;
 
 		for (final Emitter emitter : this.emitters.values())
@@ -183,7 +184,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 			if (sounds.contains(e.getKey())) {
 				e.getValue().setVolume(sounds.get(e.getKey()));
 				// Set to 0 so that the "new sound" logic below
-				// will ignore.  Cheaper than removing the object
+				// will ignore. Cheaper than removing the object
 				// from the collection.
 				sounds.put(e.getKey(), 0F);
 			} else {
@@ -265,7 +266,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 		if (e.getName().equals("entity.lightning.thunder")) {
 			final ISound sound = e.getSound();
-			final ISound newSound = new PositionedSoundRecord(THUNDER, sound.getCategory(), 10000.0F, 1.0F,
+			final ISound newSound = new PositionedSoundRecord(THUNDER, sound.getCategory(), ModOptions.thunderVolume, 1.0F,
 					sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
 			e.setResultSound(newSound);
 		}
@@ -353,9 +354,8 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	}
 
 	// Not entirely sure why they changed things. This reads the mods
-	// sounds.json
-	// and forces registration of all the mod sounds. Code generally comes from
-	// the Minecraft sound processing logic.
+	// sounds.json and forces registration of all the mod sounds.
+	// Code generally comes from the Minecraft sound processing logic.
 	public static void initializeRegistry() {
 		final ParameterizedType TYPE = new ParameterizedType() {
 			public Type[] getActualTypeArguments() {
@@ -418,7 +418,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	 */
 	@SubscribeEvent
 	public void registryReloadEvent(@Nonnull final RegistryEvent.Reload event) {
-		if(event.getSide() == Side.CLIENT)
+		if (event.getSide() == Side.CLIENT)
 			clearSounds();
 	}
 
@@ -445,13 +445,15 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 	@Override
 	public void soundPlay(@Nonnull final ISound soundIn, @Nonnull final SoundEventAccessor accessor) {
-//		if (!ModOptions.enableDebugLogging)
-//			return;
-//
-//		if (soundIn.getSoundLocation().getResourceDomain().equals(DSurround.RESOURCE_ID))
-//			return;
-//
-//		ModLog.debug("Sound callback: [%s]", soundIn.getSoundLocation().toString());
+		// if (!ModOptions.enableDebugLogging)
+		// return;
+		//
+		// if
+		// (soundIn.getSoundLocation().getResourceDomain().equals(DSurround.RESOURCE_ID))
+		// return;
+		//
+		// ModLog.debug("Sound callback: [%s]",
+		// soundIn.getSoundLocation().toString());
 	}
 
 }

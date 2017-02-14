@@ -326,12 +326,13 @@ public final class ModOptions {
 	public static final String CONFIG_CULLED_SOUNDS = "Culled Sounds";
 	public static final String CONFIG_BLOCKED_SOUNDS = "Blocked Sounds";
 	public static final String CONFIG_SOUND_VOLUMES = "Sound Volume";
+	public static final String CONFIG_THUNDER_VOLUME = "Thunder Volume";
 	private static final List<String> soundsSort = Arrays.asList(CONFIG_ENABLE_BIOME_SOUNDS, CONFIG_MASTER_SOUND_FACTOR,
 			CONFIG_ENABLE_FOOTSTEPS_SOUND, CONFIG_FOOTSTEPS_SOUND_FACTOR, CONFIG_ENABLE_ARMOR_SOUND,
 			CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_SWING_SOUND, CONFIG_ENABLE_CRAFTING_SOUND,
 			CONFIG_ENABLE_BOW_PULL_SOUND, CONFIG_AUTO_CONFIG_CHANNELS, CONFIG_NORMAL_CHANNEL_COUNT,
-			CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_BLOCKED_SOUNDS, CONFIG_SOUND_CULL_THRESHOLD, CONFIG_CULLED_SOUNDS,
-			CONFIG_SOUND_VOLUMES);
+			CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS, CONFIG_SOUND_CULL_THRESHOLD,
+			CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES);
 
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BIOME_SOUNDS, defaultValue = "true", lang = "cfg.sound.BiomeSounds")
 	@Comment("Enable biome background and spot sounds")
@@ -354,6 +355,10 @@ public final class ModOptions {
 	@Comment("Number of streaming sound channels to configure in the sound system (manual)")
 	@RestartRequired(server = true)
 	public static int streamingSoundChannelCount = 4;
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_THUNDER_VOLUME, defaultValue = "10000", lang = "cfg.sound.ThunderVolume")
+	@Comment("Sound Volume of Thunder")
+	@MinMaxFloat(min = 15F, max = 10000F)
+	public static float thunderVolume = 10000F;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_JUMP_SOUND, defaultValue = "true", lang = "cfg.sound.Jump")
 	@Comment("Enable player Jump sound effect")
 	public static boolean enableJumpSound = true;
