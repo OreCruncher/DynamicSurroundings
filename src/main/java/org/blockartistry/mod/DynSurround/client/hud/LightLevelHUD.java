@@ -41,11 +41,13 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.WorldEntitySpawner;
 import net.minecraft.world.chunk.Chunk;
@@ -67,10 +69,10 @@ public final class LightLevelHUD {
 				next = 0;
 			return values()[next];
 		}
-		
+
 		@Nonnull
 		public static Mode getMode(final int v) {
-			if(v >= values().length)
+			if (v >= values().length)
 				return BLOCK;
 			return values()[v];
 		}
@@ -237,16 +239,36 @@ public final class LightLevelHUD {
 		return state.getBlock() == Blocks.SNOW_LAYER ? adjust + 0.125F : adjust;
 	}
 
-	protected static void updateLightInfo(@Nonnull final RenderManager manager, final double x, final double y, final double z) {
+	protected static void updateLightInfo(@Nonnull final RenderManager manager, final double x, final double y,
+			final double z) {
 		final long tick = EnvironState.getTickCounter();
 		if (tick == 0 || tick % 4 != 0)
 			return;
 
-		frustum.setPosition(x, y, z);
+		final boolean isThirdPerson = manager.options.thirdPersonView == 2;
+
+		// Position frustum behind the player in order to reduce
+		// clipping of nearby light level textures. Purpose of the
+		// frustum is to reduce processing requirements and does
+		// not have to be perfect.
+		final EntityPlayer player = EnvironState.getPlayer();
+		final Vec3d lookVec = player.getLookVec();
+		final double fX, fY, fZ;
+		if (isThirdPerson) {
+			fX = x + lookVec.xCoord * 2D;
+			fY = y + lookVec.yCoord * 2D;
+			fZ = z + lookVec.zCoord * 2D;
+
+		} else {
+			fX = x - lookVec.xCoord * 2D;
+			fY = y - lookVec.yCoord * 2D;
+			fZ = z - lookVec.zCoord * 2D;
+		}
+		frustum.setPosition(fX, fY, fZ);
 		nextCoord = 0;
-		
-		EnumFacing playerFacing = EnvironState.getPlayer().getHorizontalFacing();
-		if(manager.options.thirdPersonView == 2)
+
+		EnumFacing playerFacing = player.getHorizontalFacing();
+		if (isThirdPerson)
 			playerFacing = playerFacing.getOpposite();
 		surfaceRotationAngle = ROTATION[playerFacing.getIndex() - 2];
 
