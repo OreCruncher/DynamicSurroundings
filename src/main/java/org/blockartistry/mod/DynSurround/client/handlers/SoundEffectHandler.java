@@ -266,7 +266,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 		if (e.getName().equals("entity.lightning.thunder")) {
 			final ISound sound = e.getSound();
-			final ISound newSound = new PositionedSoundRecord(THUNDER, sound.getCategory(), 10000.0F, 1.0F,
+			final ISound newSound = new PositionedSoundRecord(THUNDER, sound.getCategory(), ModOptions.thunderVolume, 1.0F,
 					sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
 			e.setResultSound(newSound);
 		}

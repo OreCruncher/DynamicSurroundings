@@ -46,7 +46,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class WeatherHandler extends EffectHandlerBase {
-
+ 
 	private static final SoundEvent THUNDER = SoundUtils
 			.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "thunder"));
 
@@ -70,7 +70,7 @@ public class WeatherHandler extends EffectHandlerBase {
 		if (!ModOptions.allowBackgroundThunder)
 			return;
 
-		final ISound thunder = new PositionedSoundRecord(THUNDER, SoundCategory.WEATHER, 10000.0F, 1.0F,
+		final ISound thunder = new PositionedSoundRecord(THUNDER, SoundCategory.WEATHER, ModOptions.thunderVolume, 1.0F,
 				event.location.getX(), event.location.getY(), event.location.getZ());
 		SoundEffectHandler.INSTANCE.playSound(thunder);
 
