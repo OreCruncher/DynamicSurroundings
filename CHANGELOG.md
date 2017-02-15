@@ -1,3 +1,10 @@
+###DynamicSurroundings-1.11.2-3.2.8.1
+**What's New**
+* Config option to override default Minecraft thunder volume of 10000.
+
+**Changes**
+* Reduced the amount of "clipping" the light level frustum produced.  Light level textures will show at the boundry of the player field of view.
+
 ###DynamicSurroundings-1.11.2-3.2.8.0
 **What's New!**
 * Added new Light Level HUD style - surface with rotation.  Displays the light level on the block surface and rotated toward the player.  Snaps to the NWSE directions.
