@@ -27,6 +27,7 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.util.MathStuff;
+import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -67,7 +68,7 @@ public abstract class ParticleAsset extends ParticleBase {
 
 		this.particleGravity = 0.12F;
 		this.dieOnGround = true;
-		
+
 		this.currentPitch = 360.0F * this.rand.nextFloat();
 		this.currentYaw = 360.0F * this.rand.nextFloat();
 		this.currentRoll = 360.0F * this.rand.nextFloat();
@@ -105,11 +106,10 @@ public abstract class ParticleAsset extends ParticleBase {
 	}
 
 	protected boolean isOnGround() {
-		if(this.motionX == 0 && this.motionY == 0 && this.motionZ == 0)
+		if (this.motionX == 0 && this.motionY == 0 && this.motionZ == 0)
 			return true;
-		
-		return this.worldObj.getBlockState(new BlockPos(this.posX, this.posY, this.posZ).down()).getMaterial()
-				.isSolid();
+
+		return !WorldUtils.isAirBlock(this.worldObj, new BlockPos(this.posX, this.posY - 1D, this.posZ));
 	}
 
 	@Override
