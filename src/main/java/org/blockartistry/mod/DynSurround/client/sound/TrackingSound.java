@@ -40,8 +40,8 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 
 	private static final float DONE_VOLUME_THRESHOLD = 0.001F;
 	private static final float FADE_AMOUNT = 0.015F;
-	
-	private final Random RANDOM = new Random();
+	private static final Random RANDOM = new Random();
+
 	private final EntityLivingBase attachedTo;
 	private final SoundEffect sound;
 	private boolean isFading;
@@ -49,14 +49,6 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 	private boolean isDonePlaying;
 	
 	private long lastTick;
-
-	TrackingSound(final SoundEffect sound) {
-		this(EnvironState.getPlayer(), sound, false);
-	}
-
-	TrackingSound(final SoundEffect sound, final boolean fadeIn) {
-		this(EnvironState.getPlayer(), sound, fadeIn);
-	}
 
 	TrackingSound(final EntityLivingBase attachedTo, final SoundEffect sound, final boolean fadeIn) {
 		super(sound.sound, SoundCategory.PLAYERS);

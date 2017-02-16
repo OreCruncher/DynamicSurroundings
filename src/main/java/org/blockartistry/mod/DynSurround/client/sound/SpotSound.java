@@ -35,14 +35,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import scala.concurrent.forkjoin.ThreadLocalRandom;
 
 @SideOnly(Side.CLIENT)
 public class SpotSound extends PositionedSound implements IMySound {
 
 	private static final int SPOT_SOUND_RANGE = 8;
+	private static final Random RANDOM = new Random();
 
-	private final Random RANDOM = ThreadLocalRandom.current();
 	private final SoundEffect sound;
 	private final int timeMark;
 
