@@ -42,7 +42,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class EntityEmojiHandler extends EffectHandlerBase {
 
 	private final TIntObjectHashMap<ParticleEmoji> emojiParticles = new TIntObjectHashMap<ParticleEmoji>();
