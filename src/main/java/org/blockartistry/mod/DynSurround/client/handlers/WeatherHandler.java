@@ -26,18 +26,13 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.events.ThunderEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.SoundUtils;
-
+import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -47,8 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class WeatherHandler extends EffectHandlerBase {
  
-	private static final SoundEvent THUNDER = SoundUtils
-			.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "thunder"));
+	private static final SoundEffect THUNDER = new SoundEffect("thunder", SoundCategory.WEATHER).setVolume(10000F);
 
 	private int timer = 0;
 
@@ -70,8 +64,7 @@ public class WeatherHandler extends EffectHandlerBase {
 		if (!ModOptions.allowBackgroundThunder)
 			return;
 
-		final ISound thunder = new PositionedSoundRecord(THUNDER, SoundCategory.WEATHER, ModOptions.thunderVolume, 1.0F,
-				event.location.getX(), event.location.getY(), event.location.getZ());
+		final ISound thunder = THUNDER.setVolume(ModOptions.thunderVolume).createSound(event.location, this.RANDOM);
 		SoundEffectHandler.INSTANCE.playSound(thunder);
 
 		if (event.doFlash)
