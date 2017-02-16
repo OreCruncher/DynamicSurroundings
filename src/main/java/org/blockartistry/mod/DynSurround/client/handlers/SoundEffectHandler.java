@@ -28,7 +28,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.nio.IntBuffer;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -46,18 +45,13 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.client.sound.Emitter;
 import org.blockartistry.mod.DynSurround.client.sound.IMySound;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.mod.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModEnvironment;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
 import org.blockartistry.mod.DynSurround.util.SoundUtils;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.openal.AL;
-import org.lwjgl.openal.ALC10;
-import org.lwjgl.openal.ALC11;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.gson.Gson;
@@ -67,34 +61,24 @@ import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ISoundEventListener;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
-import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import paulscode.sound.SoundSystemConfig;
 
 @SideOnly(Side.CLIENT)
 public class SoundEffectHandler extends EffectHandlerBase implements ISoundEventListener {
 
 	private static final int AGE_THRESHOLD_TICKS = 10;
-	private static final int SOUND_QUEUE_SLACK = 6;
-
-	private static int normalChannelCount = 0;
-	private static int streamChannelCount = 0;
-
-	private static final SoundEvent THUNDER = SoundUtils
-			.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "thunder"));
+	private static final SoundEffect THUNDER = new SoundEffect("thunder", SoundCategory.WEATHER).setVolume(10000F);
 
 	public static final SoundEffectHandler INSTANCE = new SoundEffectHandler();
 
@@ -106,6 +90,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	}
 
 	@Override
+	@Nonnull
 	public String getHandlerName() {
 		return "SoundEffectHandler";
 	}
@@ -132,7 +117,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 				public boolean apply(final IMySound input) {
 					if (input.getTickAge() >= AGE_THRESHOLD_TICKS)
 						return true;
-					if (input.getTickAge() >= 0 && canFitSound()) {
+					if (input.getTickAge() >= 0 && SoundEngine.instance().canFitSound()) {
 						playSound(input);
 						return true;
 					}
@@ -145,12 +130,12 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	@Override
 	public void onConnect() {
 		clearSounds();
-		Minecraft.getMinecraft().getSoundHandler().addListener(this);
+		SoundEngine.instance().addListender(this);
 	}
 
 	@Override
 	public void onDisconnect() {
-		Minecraft.getMinecraft().getSoundHandler().removeListener(this);
+		SoundEngine.instance().removeListener(this);
 		clearSounds();
 	}
 
@@ -203,59 +188,17 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		}
 	}
 
-	public int currentSoundCount() {
-		return Minecraft.getMinecraft().getSoundHandler().sndManager.playingSounds.size();
-	}
-
-	public int maxSoundCount() {
-		return normalChannelCount + streamChannelCount;
-	}
-
-	private boolean canFitSound() {
-		return currentSoundCount() < (normalChannelCount - SOUND_QUEUE_SLACK);
-	}
-
 	public boolean isSoundPlaying(@Nonnull final ISound sound) {
-		// Have to find the hidden sound in the sound engine to see if Minecraft
-		// is still working with it.
-		final net.minecraft.client.audio.SoundManager mgr = Minecraft.getMinecraft().getSoundHandler().sndManager;
-		return mgr.isSoundPlaying(sound) || mgr.playingSounds.containsValue(sound)
-				|| mgr.delayedSounds.containsKey(sound);
+		return SoundEngine.instance().isSoundPlaying(sound);
 	}
 
 	public boolean isSoundPlaying(@Nonnull final String soundId) {
-		if (StringUtils.isEmpty(soundId))
-			return false;
-		final net.minecraft.client.audio.SoundManager mgr = Minecraft.getMinecraft().getSoundHandler().sndManager;
-		return mgr.playingSounds.containsKey(soundId);
+		return SoundEngine.instance().isSoundPlaying(soundId);
 	}
-
-	private ISound currentSound;
-	private String soundId;
 
 	@Nullable
 	public String playSound(@Nonnull final ISound sound) {
-		if (sound != null) {
-			if (ModOptions.enableDebugLogging)
-				ModLog.debug("PLAYING: " + sound.toString());
-			this.currentSound = sound;
-			this.soundId = null;
-			Minecraft.getMinecraft().getSoundHandler().playSound(sound);
-		} else {
-			this.soundId = null;
-		}
-		this.currentSound = null;
-		return this.soundId;
-	}
-
-	/**
-	 * This event hook attempts to associate the internal UUID of the sound play
-	 * event with a sound.
-	 */
-	@SubscribeEvent
-	public void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
-		if (event.getSound() == this.currentSound)
-			this.soundId = event.getUuid();
+		return sound == null ? null : SoundEngine.instance().playSound(sound);
 	}
 
 	@SubscribeEvent
@@ -266,8 +209,8 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 		if (e.getName().equals("entity.lightning.thunder")) {
 			final ISound sound = e.getSound();
-			final ISound newSound = new PositionedSoundRecord(THUNDER, sound.getCategory(), ModOptions.thunderVolume, 1.0F,
-					sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
+			final BlockPos pos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
+			final ISound newSound = THUNDER.setVolume(ModOptions.thunderVolume).createSound(pos, this.RANDOM);
 			e.setResultSound(newSound);
 		}
 	}
@@ -280,7 +223,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 		String soundId = null;
 
-		if (canFitSound()) {
+		if (SoundEngine.instance().canFitSound()) {
 			final IMySound s = sound.createSound(player);
 			soundId = playSound(s);
 		}
@@ -310,7 +253,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 		String soundId = null;
 
-		if (tickDelay > 0 || canFitSound()) {
+		if (tickDelay > 0 || SoundEngine.instance().canFitSound()) {
 			final IMySound s = sound.createSound(pos, tickDelay);
 
 			if (tickDelay > 0)
@@ -320,37 +263,6 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		}
 
 		return soundId;
-	}
-
-	public static void configureSound() {
-		int totalChannels = -1;
-
-		try {
-			final boolean create = !AL.isCreated();
-			if (create)
-				AL.create();
-			final IntBuffer ib = BufferUtils.createIntBuffer(1);
-			ALC10.alcGetInteger(AL.getDevice(), ALC11.ALC_MONO_SOURCES, ib);
-			totalChannels = ib.get(0);
-			if (create)
-				AL.destroy();
-		} catch (final Throwable e) {
-			e.printStackTrace();
-		}
-
-		normalChannelCount = ModOptions.normalSoundChannelCount;
-		streamChannelCount = ModOptions.streamingSoundChannelCount;
-
-		if (ModOptions.autoConfigureChannels && totalChannels > 64) {
-			totalChannels = ((totalChannels + 1) * 3) / 4;
-			streamChannelCount = totalChannels / 5;
-			normalChannelCount = totalChannels - streamChannelCount;
-		}
-
-		ModLog.info("Sound channels: %d normal, %d streaming (total avail: %s)", normalChannelCount, streamChannelCount,
-				totalChannels == -1 ? "UNKNOWN" : Integer.toString(totalChannels));
-		SoundSystemConfig.setNumberNormalChannels(normalChannelCount);
-		SoundSystemConfig.setNumberStreamingChannels(streamChannelCount);
 	}
 
 	// Not entirely sure why they changed things. This reads the mods
@@ -433,8 +345,11 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 	@SubscribeEvent
 	public void diagnostics(@Nonnull final DiagnosticEvent.Gather event) {
+		final int soundCount = SoundEngine.instance().currentSoundCount();
+		final int maxCount = SoundEngine.instance().maxSoundCount();
+
 		final StringBuilder builder = new StringBuilder();
-		builder.append("SoundSystem: ").append(currentSoundCount()).append('/').append(maxSoundCount());
+		builder.append("SoundSystem: ").append(soundCount).append('/').append(maxCount);
 		event.output.add(builder.toString());
 
 		for (final SoundEffect effect : this.emitters.keySet())
