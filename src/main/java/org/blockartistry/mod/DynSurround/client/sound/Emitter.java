@@ -41,7 +41,8 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public abstract class Emitter {
 
-	protected final Random RANDOM = new Random();
+	protected static final Random RANDOM = new Random();
+	
 	protected final SoundEffect effect;
 	protected IMySound activeSound;
 

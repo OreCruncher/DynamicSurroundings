@@ -26,11 +26,10 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.event.PopoffEvent;
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleCriticalPopOff;
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDamagePopOff;
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHealPopOff;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleTextPopOff;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.util.Color;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
@@ -42,7 +41,26 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class PopoffEffectHandler extends EffectHandlerBase {
 
-	public static final double DISTANCE = 32;
+	private static final double DISTANCE = 32;
+	private static final Color CRITICAL_TEXT_COLOR = Color.MC_GOLD;
+	private static final Color HEAL_TEXT_COLOR = Color.MC_GREEN;
+	private static final Color DAMAGE_TEXT_COLOR = Color.MC_RED;
+
+	// In case you want to know....
+	// http://www.66batmania.com/trivia/bat-fight-words/
+	private static final String[] POWER_WORDS = new String[] { "AIEEE", "AIIEEE", "ARRGH", "AWK", "AWKKKKKK", "BAM",
+			"BANG", "BANG-ETH", "BIFF", "BLOOP", "BLURP", "BOFF", "BONK", "CLANK", "CLANK-EST", "CLASH", "CLUNK",
+			"CLUNK-ETH", "CRRAACK", "CRASH", "CRRAACK", "CRUNCH", "CRUNCH-ETH", "EEE-YOW", "FLRBBBBB", "GLIPP",
+			"GLURPP", "KAPOW", "KAYO", "KER-SPLOOSH", "KERPLOP", "KLONK", "KLUNK", "KRUNCH", "OOOFF", "OOOOFF", "OUCH",
+			"OUCH-ETH", "OWWW", "OW-ETH", "PAM", "PLOP", "POW", "POWIE", "QUNCKKK", "RAKKK", "RIP", "SLOSH", "SOCK",
+			"SPLATS", "SPLATT", "SPLOOSH", "SWAAP", "SWISH", "SWOOSH", "THUNK", "THWACK", "THWACKE", "THWAPE", "THWAPP",
+			"UGGH", "URKKK", "VRONK", "WHACK", "WHACK-ETH", "WHAM-ETH", "WHAMM", "WHAMMM", "WHAP", "Z-ZWAP", "ZAM",
+			"ZAMM", "ZAMMM", "ZAP", "ZAP-ETH", "ZGRUPPP", "ZLONK", "ZLOPP", "ZLOTT", "ZOK", "ZOWIE", "ZWAPP", "ZZWAP",
+			"ZZZZWAP", "ZZZZZWAP" };
+
+	private String getPowerWord() {
+		return POWER_WORDS[this.RANDOM.nextInt(POWER_WORDS.length)] + "!";
+	}
 
 	public PopoffEffectHandler() {
 	}
@@ -63,16 +81,17 @@ public final class PopoffEffectHandler extends EffectHandlerBase {
 
 		final World world = EnvironState.getWorld();
 
+		ParticleTextPopOff particle = null;
 		if (data.isCritical) {
-			ParticleHelper.addParticle(new ParticleCriticalPopOff(world, data.posX, data.posY, data.posZ));
+			particle = new ParticleTextPopOff(world, getPowerWord(), CRITICAL_TEXT_COLOR, data.posX, data.posY,
+					data.posZ);
+			ParticleHelper.addParticle(particle);
 		}
 
-		if (data.amount > 0) {
-			ParticleHelper.addParticle(new ParticleDamagePopOff(world, data.posX, data.posY, data.posZ, data.amount));
-		} else if (data.amount < 0) {
-			ParticleHelper.addParticle(
-					new ParticleHealPopOff(world, data.posX, data.posY, data.posZ, MathHelper.abs_int(data.amount)));
-		}
+		final String text = String.valueOf(MathHelper.abs_int(data.amount));
+		final Color color = data.amount < 0 ? HEAL_TEXT_COLOR : DAMAGE_TEXT_COLOR;
+		particle = new ParticleTextPopOff(world, text, color, data.posX, data.posY, data.posZ);
+		ParticleHelper.addParticle(particle);
 	}
 
 	@Override

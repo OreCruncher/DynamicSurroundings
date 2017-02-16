@@ -24,6 +24,8 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.lwjgl.opengl.GL11;
 
@@ -46,7 +48,6 @@ public class ParticleTextPopOff extends ParticleBase {
 	protected static final double BOUNCE_STRENGTH = 1.5F;
 
 	protected Color renderColor = Color.WHITE;
-	protected String text;
 	protected boolean showOnTop = true;
 	protected boolean grow = true;
 	protected float scale = 1.0F;
@@ -54,14 +55,19 @@ public class ParticleTextPopOff extends ParticleBase {
 	protected float rotationYaw = 0.0F;
 	protected float rotationPitch = 0.0F;
 
-	protected final float drawX;
-	protected final float drawY;
+	protected String text;
+	protected float drawX;
+	protected float drawY;
 
-	public ParticleTextPopOff(final World world, final String text, final Color color, final float scale,
+	public ParticleTextPopOff(final World world, final String text, final Color color,
+			final double x, final double y, final double z) {
+		this(world, text, color, x, y, z, 0.001D, 0.05D * BOUNCE_STRENGTH, 0.001D);
+	}
+
+	public ParticleTextPopOff(final World world, final String text, final Color color,
 			final double x, final double y, final double z, final double dX, final double dY, final double dZ) {
 		super(world, x, y, z, dX, dY, dZ);
 
-		this.text = text;
 		this.renderColor = color;
 		this.motionX = dX;
 		this.motionY = dY;
@@ -77,8 +83,19 @@ public class ParticleTextPopOff extends ParticleBase {
 		this.particleScale = SIZE;
 		this.particleMaxAge = LIFESPAN;
 
+		setText(text);
+	}
+
+	public ParticleTextPopOff setText(@Nonnull final String text) {
+		this.text = text;
 		this.drawX = -MathHelper.floor_float(this.font.getStringWidth(this.text) / 2.0F) + 1;
 		this.drawY = -MathHelper.floor_float(this.font.FONT_HEIGHT / 2.0F) + 1;
+		return this;
+	}
+
+	public ParticleTextPopOff setColor(@Nonnull final Color color) {
+		this.renderColor = color;
+		return this;
 	}
 
 	@Override
