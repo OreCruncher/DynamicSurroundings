@@ -50,10 +50,6 @@ public class ParticleTextPopOff extends ParticleBase {
 	protected Color renderColor = Color.WHITE;
 	protected boolean showOnTop = true;
 	protected boolean grow = true;
-	protected float scale = 1.0F;
-
-	protected float rotationYaw = 0.0F;
-	protected float rotationPitch = 0.0F;
 
 	protected String text;
 	protected float drawX;
@@ -101,8 +97,9 @@ public class ParticleTextPopOff extends ParticleBase {
 	@Override
 	public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX,
 			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		this.rotationYaw = (-Minecraft.getMinecraft().player.rotationYaw);
-		this.rotationPitch = Minecraft.getMinecraft().player.rotationPitch;
+		
+		final float yaw = (-Minecraft.getMinecraft().player.rotationYaw);
+		final float pitch = Minecraft.getMinecraft().player.rotationPitch;
 
 		final float locX = ((float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpX()));
 		final float locY = ((float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpY()));
@@ -118,12 +115,11 @@ public class ParticleTextPopOff extends ParticleBase {
 		}
 
 		GlStateManager.translate(locX, locY, locZ);
-		GlStateManager.rotate(this.rotationYaw, 0.0F, 1.0F, 0.0F);
-		GlStateManager.rotate(this.rotationPitch, 1.0F, 0.0F, 0.0F);
+		GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);
 
 		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
 		GlStateManager.scale(this.particleScale * 0.008D, this.particleScale * 0.008D, this.particleScale * 0.008D);
-		GlStateManager.scale(this.scale, this.scale, this.scale);
 
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 0.003662109F);
 
