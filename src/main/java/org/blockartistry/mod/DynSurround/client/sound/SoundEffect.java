@@ -38,6 +38,7 @@ import org.blockartistry.mod.DynSurround.registry.Evaluator;
 import org.blockartistry.mod.DynSurround.util.SoundUtils;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -185,7 +186,7 @@ public final class SoundEffect implements ISpecialEffect {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IMySound createSound(@Nonnull final EntityPlayer player, final boolean fadeIn, final Random rand) {
+	public IMySound createSound(@Nonnull final EntityLivingBase player, final boolean fadeIn, final Random rand) {
 		return new TrackingSound(player, this, fadeIn);
 	}
 

@@ -44,6 +44,7 @@ import org.blockartistry.mod.DynSurround.client.event.RegistryEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.Emitter;
 import org.blockartistry.mod.DynSurround.client.sound.IMySound;
+import org.blockartistry.mod.DynSurround.client.sound.PlayerEmitter;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.mod.DynSurround.DSurround;
@@ -184,7 +185,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		while (newSounds.hasNext()) {
 			newSounds.advance();
 			if (newSounds.value() > 0)
-				this.emitters.put(newSounds.key(), new Emitter(newSounds.key()));
+				this.emitters.put(newSounds.key(), new PlayerEmitter(newSounds.key()));
 		}
 	}
 

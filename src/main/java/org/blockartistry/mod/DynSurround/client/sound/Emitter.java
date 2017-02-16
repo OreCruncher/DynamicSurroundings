@@ -24,14 +24,10 @@
 package org.blockartistry.mod.DynSurround.client.sound;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
-import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-
 import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.SoundSystemConfig;
 import net.minecraftforge.fml.relauncher.Side;
@@ -43,9 +39,9 @@ import net.minecraftforge.fml.relauncher.Side;
  * cancels the sound.
  */
 @SideOnly(Side.CLIENT)
-public class Emitter {
+public abstract class Emitter {
 
-	protected final Random RANDOM = ThreadLocalRandom.current();
+	protected final Random RANDOM = new Random();
 	protected final SoundEffect effect;
 	protected IMySound activeSound;
 
@@ -54,6 +50,8 @@ public class Emitter {
 	public Emitter(@Nonnull final SoundEffect sound) {
 		this.effect = sound;
 	}
+	
+	protected abstract IMySound createSound();
 
 	public void update() {
 		// If the volume is turned off don't send
@@ -63,7 +61,7 @@ public class Emitter {
 
 		// Allocate a new sound to send down if needed
 		if (this.activeSound == null) {
-			this.activeSound = this.effect.createSound(EnvironState.getPlayer(), true, RANDOM);
+			this.activeSound = createSound();
 		} else if (SoundEffectHandler.INSTANCE.isSoundPlaying(this.activeSound)) {
 			return;
 		}
