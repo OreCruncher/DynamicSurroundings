@@ -38,8 +38,8 @@ public class ParticleDustJet extends ParticleJet {
 
 		public ParticleDust(final World world, final double x, final double y, final double z,
 				final IBlockState block) {
-			super(world, x + RANDOM.nextGaussian() * 0.2D, y, z + RANDOM.nextGaussian() * 0.2D, 0, 0, 0, block);
-			this.multipleParticleScaleBy((float) (0.3F + RANDOM.nextGaussian() / 30.0F));
+			super(world, x, y, z, 0, 0, 0, block);
+			this.multipleParticleScaleBy((float) (0.3F + this.rand.nextGaussian() / 30.0F));
 			this.setPosition(this.posX, this.posY, this.posZ);
 		}
 
@@ -55,8 +55,9 @@ public class ParticleDustJet extends ParticleJet {
 
 	@Override
 	protected void spawnJetParticle() {
-		final Particle particle = new ParticleDust(this.world, this.posX, this.posY, this.posZ, this.blockState)
-				.init();
+		final double x = this.posX + this.rand.nextGaussian() * 0.2D;
+		final double z = this.posZ + this.rand.nextGaussian() * 0.2D;
+		final Particle particle = new ParticleDust(this.world, x, this.posY, z, this.blockState).init();
 		addParticle(particle);
 	}
 

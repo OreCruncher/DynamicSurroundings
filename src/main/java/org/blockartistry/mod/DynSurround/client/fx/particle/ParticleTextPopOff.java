@@ -28,8 +28,6 @@ import org.blockartistry.mod.DynSurround.util.Color;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -40,7 +38,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ParticleTextPopOff extends Particle {
+public class ParticleTextPopOff extends ParticleBase {
 
 	protected static final float GRAVITY = 0.8F;
 	protected static final float SIZE = 3.0F;
@@ -56,7 +54,6 @@ public class ParticleTextPopOff extends Particle {
 	protected float rotationYaw = 0.0F;
 	protected float rotationPitch = 0.0F;
 
-	protected final FontRenderer font;
 	protected final float drawX;
 	protected final float drawY;
 
@@ -80,7 +77,6 @@ public class ParticleTextPopOff extends Particle {
 		this.particleScale = SIZE;
 		this.particleMaxAge = LIFESPAN;
 
-		this.font = Minecraft.getMinecraft().fontRendererObj;
 		this.drawX = -MathHelper.floor(this.font.getStringWidth(this.text) / 2.0F) + 1;
 		this.drawY = -MathHelper.floor(this.font.FONT_HEIGHT / 2.0F) + 1;
 	}
@@ -91,9 +87,9 @@ public class ParticleTextPopOff extends Particle {
 		this.rotationYaw = (-Minecraft.getMinecraft().player.rotationYaw);
 		this.rotationPitch = Minecraft.getMinecraft().player.rotationPitch;
 
-		final float locX = ((float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX));
-		final float locY = ((float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY));
-		final float locZ = ((float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpPosZ));
+		final float locX = ((float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpX()));
+		final float locY = ((float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpY()));
+		final float locZ = ((float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpZ()));
 
 		GlStateManager.pushMatrix();
 		GlStateManager.pushAttrib();

@@ -33,8 +33,6 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -44,7 +42,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ParticleEmoji extends Particle {
+public class ParticleEmoji extends ParticleBase {
 
 	// Number of seconds for the particle to complete an
 	// orbit around a mob.
@@ -145,7 +143,7 @@ public class ParticleEmoji extends Particle {
 		if (this.activeTexture == null)
 			return;
 
-		Minecraft.getMinecraft().getTextureManager().bindTexture(this.activeTexture);
+		bindTexture(this.activeTexture);
 
 		final double minU = 0;
 		final double maxU = 1;
@@ -157,9 +155,9 @@ public class ParticleEmoji extends Particle {
 		final double scaleLR = scale;
 		final double scaleUD = scale;
 
-		float x = ((float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX));
-		float y = ((float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY));
-		float z = ((float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpPosZ));
+		float x = ((float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpX()));
+		float y = ((float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpY()));
+		float z = ((float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpZ()));
 
 		// Calculate the location of the drawn particle based
 		// on the current period.

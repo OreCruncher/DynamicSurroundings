@@ -40,6 +40,7 @@ public class ParticleSteamJet extends ParticleJet {
 				final double dY, final double dZ) {
 			super(world, x, y, z, dX, dY, dZ);
 		}
+
 	}
 
 	public ParticleSteamJet(final int strength, final World world, final double x, final double y, final double z) {
@@ -53,8 +54,8 @@ public class ParticleSteamJet extends ParticleJet {
 
 	@Override
 	protected void spawnJetParticle() {
-		final double motionX = RANDOM.nextGaussian() * 0.02D;
-		final double motionZ = RANDOM.nextGaussian() * 0.02D;
+		final double motionX = this.rand.nextGaussian() * 0.02D;
+		final double motionZ = this.rand.nextGaussian() * 0.02D;
 		final Particle particle = new ParticleSteamCloud(this.world, this.posX, this.posY, this.posZ, motionX, 0.1F,
 				motionZ);
 		addParticle(particle);

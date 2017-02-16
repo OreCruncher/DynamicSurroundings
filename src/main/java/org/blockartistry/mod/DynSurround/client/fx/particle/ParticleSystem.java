@@ -25,9 +25,6 @@
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import java.util.ArrayDeque;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
 import javax.annotation.Nonnull;
 
 import com.google.common.base.Predicate;
@@ -43,9 +40,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public abstract class ParticleSystem extends Particle {
+public abstract class ParticleSystem extends ParticleBase {
 
-	protected final Random RANDOM = ThreadLocalRandom.current();
 	protected final int fxLayer;
 	protected final BlockPos position;
 	protected final ArrayDeque<Particle> myParticles = new ArrayDeque<Particle>();

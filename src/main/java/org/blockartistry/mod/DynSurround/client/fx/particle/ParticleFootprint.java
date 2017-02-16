@@ -31,13 +31,10 @@ import org.blockartistry.mod.DynSurround.util.WorldUtils;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -48,7 +45,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ParticleFootprint extends Particle {
+public class ParticleFootprint extends ParticleBase {
 	
 	public static enum Style {
 		
@@ -73,8 +70,6 @@ public class ParticleFootprint extends Particle {
 	}
 
 	private static float zFighter = 0;
-
-	private final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
 
 	private int footstepAge;
 	private final int footstepMaxAge;
@@ -152,7 +147,7 @@ public class ParticleFootprint extends Particle {
 		// Sets the alpha
 		alpha = alpha * 0.4F;
 
-		Minecraft.getMinecraft().getTextureManager().bindTexture(this.print);
+		bindTexture(this.print);
 
 		final int i = this.getBrightnessForRender(partialTicks);
 		final int j = i % 65536;
@@ -161,9 +156,9 @@ public class ParticleFootprint extends Particle {
 
 		GlStateManager.disableLighting();
 
-		final double x = this.posX - this.manager.viewerPosX;
-		final double y = this.posY - this.manager.viewerPosY;
-		final double z = this.posZ - this.manager.viewerPosZ;
+		final double x = this.posX - interpX();
+		final double y = this.posY - interpY();
+		final double z = this.posZ - interpZ();
 		final float bright = this.world.getLightBrightness(this.pos);
 
 		GlStateManager.enableBlend();
