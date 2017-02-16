@@ -93,8 +93,8 @@ public class ParticleWaterSplash extends ParticleJet {
 		if (!SoundEffectHandler.INSTANCE.isSoundPlaying(this.soundId)) {
 			final float volume = this.jetStrength / 10.0F;
 			if (SoundEffectHandler.canSoundBeHeard(this.getPos(), volume)) {
-				final float pitch = 1.0F - 0.7F * (volume / 3.0F) + (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F;
-				final IMySound effect = SPLASH.createSound(this.getPos(), RANDOM);
+				final float pitch = 1.0F - 0.7F * (volume / 3.0F) + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
+				final IMySound effect = SPLASH.createSound(this.getPos(), this.rand);
 				effect.setVolume(volume);
 				effect.setPitch(pitch);
 				this.soundId = SoundEffectHandler.INSTANCE.playSound(effect);
@@ -104,14 +104,14 @@ public class ParticleWaterSplash extends ParticleJet {
 		int splashCount = this.getParticleLimit() - this.myParticles.size();
 
 		for (int j = 0; (float) j < splashCount; ++j) {
-			final double xOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
-			final double zOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
+			final double xOffset = (this.rand.nextFloat() * 2.0F - 1.0F);
+			final double zOffset = (this.rand.nextFloat() * 2.0F - 1.0F);
 			if (WorldUtils.isSolidBlock(this.worldObj,
 					new BlockPos(this.posX + xOffset, this.posY, this.posZ + zOffset)))
 				continue;
 
 			final double motionX = xOffset * (this.jetStrength / 40.0D);
-			final double motionY = 0.1D + RANDOM.nextFloat() * this.jetStrength / 20.0D;
+			final double motionY = 0.1D + this.rand.nextFloat() * this.jetStrength / 20.0D;
 			final double motionZ = zOffset * (this.jetStrength / 40.D);
 			final Particle particle = new ParticleWaterSpray(this.worldObj, this.posX + xOffset, (double) (this.posY),
 					this.posZ + zOffset, motionX, motionY, motionZ);

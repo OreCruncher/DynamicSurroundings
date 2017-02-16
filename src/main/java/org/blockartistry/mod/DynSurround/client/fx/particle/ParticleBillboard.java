@@ -35,14 +35,10 @@ import org.lwjgl.opengl.GL11;
 
 import com.google.common.base.Function;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -53,7 +49,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 // Billboard is a text rendering that hovers and follows an entity as
 // long as there is text to display.
 @SideOnly(Side.CLIENT)
-public class ParticleBillboard extends Particle {
+public class ParticleBillboard extends ParticleBase {
 
 	private static final Color B_COLOR = Color.getColor(TextFormatting.BLACK);
 	private static final float B_COLOR_ALPHA = 0.5F; // 0.25F;
@@ -63,8 +59,6 @@ public class ParticleBillboard extends Particle {
 	private static final int MIN_TEXT_WIDTH = 60;
 	private static final double BUBBLE_MARGIN = 4.0F;
 
-	private final RenderManager renderManager;
-	private final FontRenderer font;
 	private final float scale;
 	private final Entity subject;
 	private final Function<Integer, List<String>> accessor;
@@ -95,8 +89,6 @@ public class ParticleBillboard extends Particle {
 		this.motionY = 0.0D;
 		this.motionZ = 0.0D;
 
-		this.renderManager = Minecraft.getMinecraft().getRenderManager();
-		this.font = Minecraft.getMinecraft().fontRendererObj;
 		this.scale = 1F;
 
 		this.canBeSeen = canBeSeen();
@@ -167,13 +159,12 @@ public class ParticleBillboard extends Particle {
 			return;
 
 		// Calculate scale and position
-		final boolean thirdPerson = this.renderManager.options.thirdPersonView == 2;
-		final float pitch = this.renderManager.playerViewX * (thirdPerson ? -1 : 1);
-		final float yaw = -this.renderManager.playerViewY;
+		final float pitch = this.manager.playerViewX * (isThirdPersonView() ? -1 : 1);
+		final float yaw = -this.manager.playerViewY;
 
-		final float locX = ((float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX));
-		final float locY = ((float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY));
-		final float locZ = ((float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpPosZ));
+		final float locX = ((float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpX()));
+		final float locY = ((float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpY()));
+		final float locZ = ((float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpZ()));
 
 		GlStateManager.pushMatrix();
 		GlStateManager.pushAttrib();

@@ -26,9 +26,7 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.world.World;
@@ -36,7 +34,6 @@ import net.minecraft.world.World;
 public class ParticleEntity extends ParticleAsset {
 
 	protected final Entity prototype;
-	protected final RenderManager renderer;
 	protected final float normalScale;
 
 	public ParticleEntity(@Nonnull String entity, @Nonnull final World world, final double x, final double y,
@@ -49,7 +46,6 @@ public class ParticleEntity extends ParticleAsset {
 		super(world, x, y, z, dX, dY, dZ);
 
 		this.prototype = EntityList.createEntityByName(entity, world);
-		this.renderer = Minecraft.getMinecraft().getRenderManager();
 
 		// From mob spawner block
 		float f = 0.53125F;
@@ -77,8 +73,8 @@ public class ParticleEntity extends ParticleAsset {
 	protected void handleRender(final float partialTicks) {
 
 		// From mob spawner
-		this.prototype.setLocationAndAngles(posX, posY, posZ, 0.0F, 0.0F);
-		this.renderer.doRenderEntity(this.prototype, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, false);
+		this.prototype.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
+		this.manager.doRenderEntity(this.prototype, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, false);
 
 	}
 

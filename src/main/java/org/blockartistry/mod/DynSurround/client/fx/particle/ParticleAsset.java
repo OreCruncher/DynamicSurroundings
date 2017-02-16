@@ -28,8 +28,6 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -42,7 +40,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public abstract class ParticleAsset extends Particle {
+public abstract class ParticleAsset extends ParticleBase {
 
 	protected float pitchRate;
 	protected float yawRate;
@@ -159,15 +157,15 @@ public abstract class ParticleAsset extends Particle {
 	public final void renderParticle(VertexBuffer buffer, Entity entityIn, float partialTicks, float rotationX,
 			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 
-		final float x = ((float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX));
-		final float y = ((float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY));
-		final float z = ((float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpPosZ));
+		final float x = ((float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpX()));
+		final float y = ((float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpY()));
+		final float z = ((float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpZ()));
 
 		final float pitch = MathStuff.wrapDegrees(this.currentPitch + this.pitchRate * partialTicks);
 		final float yaw = MathStuff.wrapDegrees(this.currentYaw + this.yawRate * partialTicks);
 		final float roll = MathStuff.wrapDegrees(this.currentRoll + this.rollRate * partialTicks);
 
-		Minecraft.getMinecraft().renderEngine.bindTexture(getTexture());
+		bindTexture(getTexture());
 
 		GlStateManager.enableRescaleNormal();
 		GlStateManager.pushMatrix();
