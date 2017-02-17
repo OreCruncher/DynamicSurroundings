@@ -80,7 +80,7 @@ public abstract class ParticleSystem extends ParticleBase {
 	public void addParticle(final Particle particle) {
 		if (particle.getFXLayer() != this.getFXLayer()) {
 			throw new RuntimeException("Invalid particle for fx layer!");
-		} else if(this.myParticles.size() < this.particleLimit) {
+		} else if(this.myParticles.size() < getParticleLimit()) {
 			this.myParticles.add(particle);
 		}
 	}
