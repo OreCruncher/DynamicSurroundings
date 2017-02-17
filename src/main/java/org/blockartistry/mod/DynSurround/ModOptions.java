@@ -545,6 +545,26 @@ public final class ModOptions {
 	@MinMaxInt(min = 0, max = 1)
 	public static int llColors = 0;
 
+	public static final String CATEGORY_COMPASS = "compass";
+	public static final String CONFIG_COMPASS_ENABLE = "Enable Compass";
+	public static final String CONFIG_COMPASS_STYLE = "Compass Style";
+	public static final String CONFIG_COMPASS_TRANSPARENCY = "Transparency";
+
+	@Parameter(category = CATEGORY_COMPASS, property = CONFIG_COMPASS_ENABLE, defaultValue = "true", lang = "cfg.compass.Enable")
+	@Comment("Enable/disable compass HUD when compass is held")
+	public static boolean enableCompass = true;
+	@Parameter(category = CATEGORY_COMPASS, property = CONFIG_COMPASS_STYLE, defaultValue = "0", lang = "cfg.compass.Style")
+	@Comment("Style of compass bar")
+	@MinMaxInt(min = 0, max = 3)
+	public static int compassStyle = 0;
+	@Parameter(category = CATEGORY_COMPASS, property = CONFIG_COMPASS_TRANSPARENCY, defaultValue = "0.4", lang = "cfg.compass.Transparency")
+	@Comment("Compass transparency")
+	@MinMaxFloat(min = 0F, max = 1.0F)
+	public static float compassTransparency = 0.4F;
+
+	private static final List<String> compassSort = Arrays.asList(CONFIG_COMPASS_ENABLE, CONFIG_COMPASS_STYLE,
+			CONFIG_COMPASS_TRANSPARENCY);
+
 	private static void setDefault(@Nonnull final Configuration config, @Nonnull final String cat,
 			@Nonnull final String prop, final float prevDefault, final float newDefault) {
 		final ConfigCategory cc = config.getCategory(cat);
@@ -668,6 +688,13 @@ public final class ModOptions {
 		config.setCategoryComment(CATEGORY_LIGHT_LEVEL, "Options for configuring Light Level HUD");
 		config.setCategoryPropertyOrder(CATEGORY_LIGHT_LEVEL, new ArrayList<String>(llSort));
 		config.setCategoryLanguageKey(CATEGORY_LIGHT_LEVEL, "cfg.lightlevel.cat.LightLevel");
+
+		// CATEGORY: compass
+		config.setCategoryRequiresMcRestart(CATEGORY_COMPASS, false);
+		config.setCategoryRequiresWorldRestart(CATEGORY_COMPASS, false);
+		config.setCategoryComment(CATEGORY_COMPASS, "Options for configuring compass HUD");
+		config.setCategoryPropertyOrder(CATEGORY_COMPASS, new ArrayList<String>(compassSort));
+		config.setCategoryLanguageKey(CATEGORY_COMPASS, "cfg.compass.cat.Compass");
 
 		// Iterate through the config list looking for properties without
 		// comments. These will be scrubbed.
