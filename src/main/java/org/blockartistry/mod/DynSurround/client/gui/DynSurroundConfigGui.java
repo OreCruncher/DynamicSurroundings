@@ -88,6 +88,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 		addConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES, ModOptions.CONFIG_OPTION_ENABLE_EMOJIS);
 		addConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES, ModOptions.CONFIG_OPTION_ENABLE_ENTITY_CHAT);
 		addConfigElement(ModOptions.CATEGORY_EXPLOSIONS, ModOptions.CONFIG_ENABLE_EXPLOSIONS);
+		addConfigElement(ModOptions.CATEGORY_COMPASS, ModOptions.CONFIG_COMPASS_ENABLE);
 
 		// Synthetic options for handling sound blocking and volume
 		this.soundCategory = new ConfigCategory("Blocked Sounds").setLanguageKey("cfg.sound.BlockedSounds");
@@ -103,6 +104,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 		// Tack on the rest of the categories for configuration
 		addConfigCategory(ModOptions.CATEGORY_GENERAL);
 		addConfigCategory(ModOptions.CATEGORY_PLAYER);
+		addConfigCategory(ModOptions.CATEGORY_COMPASS);
 		addConfigCategory(ModOptions.CATEGORY_EXPLOSIONS);
 		addConfigCategory(ModOptions.CATEGORY_RAIN);
 		addConfigCategory(ModOptions.CATEGORY_FOG);

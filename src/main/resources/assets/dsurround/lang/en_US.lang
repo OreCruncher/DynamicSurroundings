@@ -234,3 +234,12 @@ cfg.lightlevel.Colors=Color Set
 cfg.lightlevel.Colors.tooltip=0 bright, 1 dark
 cfg.lightlevel.DisplayMode=Display Mode
 cfg.lightlevel.DisplayMode.tooltip=0: block light, 1: block light + skylight
+
+cfg.compass.cat.Compass=Compass Options
+cfg.compass.cat.Compass.tooltip=Options for configuring the Compass HUD
+cfg.compass.Enable=Enable Compass HUD
+cfg.compass.Enable.tooltip=Enable/disable the Compass HUD display
+cfg.compass.Style=Compass Style
+cfg.compass.Style.tooltip=The style of compass rendering
+cfg.compass.Transparency=Compass HUD Transparency
+cfg.compass.Transparency.tooltip=Transparency factor to apply when rendering the Compass HUD

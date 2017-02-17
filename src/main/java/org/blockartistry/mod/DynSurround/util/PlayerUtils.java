@@ -40,6 +40,9 @@ import com.google.common.base.Predicates;
 import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -120,5 +123,19 @@ public final class PlayerUtils {
 			return players.get(ThreadLocalRandom.current().nextInt(players.size()));
 		}
 		return null;
+	}
+
+	public static boolean isHolding(@Nonnull final EntityPlayer player, @Nonnull final Item item,
+			@Nonnull final EnumHand hand) {
+		final ItemStack stack = player.getHeldItem(hand);
+		if (stack != null) {
+			if (stack.getItem() == item)
+				return true;
+		}
+		return false;
+	}
+
+	public static boolean isHolding(@Nonnull final EntityPlayer player, @Nonnull final Item item) {
+		return isHolding(player, item, EnumHand.MAIN_HAND) || isHolding(player, item, EnumHand.OFF_HAND);
 	}
 }

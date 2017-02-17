@@ -43,6 +43,8 @@ public final class GuiHUDHandler {
 	private GuiHUDHandler() {
 		if (ModOptions.potionHudEnabled)
 			register(new PotionHUD());
+		
+		register(new CompassHUD());
 	}
 
 	public static interface IGuiOverlay {
