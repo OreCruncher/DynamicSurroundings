@@ -44,13 +44,14 @@ public abstract class ParticleSystem extends ParticleBase {
 
 	protected final int fxLayer;
 	protected final BlockPos position;
-	protected final ArrayDeque<Particle> myParticles = new ArrayDeque<Particle>();
+	
+	private final ArrayDeque<Particle> myParticles = new ArrayDeque<Particle>();
 	private int particleLimit;
 
 	protected ParticleSystem(final World worldIn, final double posXIn, final double posYIn, final double posZIn) {
 		this(0, worldIn, posXIn, posYIn, posZIn);
 		
-		this.particleLimit = 6;
+		setParticleLimit(6);
 	}
 
 	protected ParticleSystem(final int renderPass, final World worldIn, final double posXIn, final double posYIn,
@@ -68,6 +69,10 @@ public abstract class ParticleSystem extends ParticleBase {
 	
 	public void setParticleLimit(final int limit) {
 		this.particleLimit = limit;
+	}
+	
+	public int getCurrentParticleCount() {
+		return this.myParticles.size();
 	}
 	
 	public int getParticleLimit() {
