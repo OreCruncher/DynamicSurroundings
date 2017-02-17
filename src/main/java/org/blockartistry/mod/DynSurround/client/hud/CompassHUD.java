@@ -95,13 +95,13 @@ public class CompassHUD extends Gui implements IGuiOverlay {
 			drawTexturedModalRect(x, y, direction - 128, (ModOptions.compassStyle * (HEIGHT * 2)) + HEIGHT, WIDTH,
 					HEIGHT);
 
-		String temp = getLocationString();
-		mc.fontRendererObj.drawStringWithShadow(temp, x + (WIDTH - mc.fontRendererObj.getStringWidth(temp)) / 2,
-				y + HEIGHT * 3, COORDINATE_COLOR.rgbWithAlpha(ModOptions.compassTransparency));
+		final int centerX = (resolution.getScaledWidth() + 1) / 2;
+		final int centerY = (resolution.getScaledHeight() + 1) / 2;
 
-		temp = getBiomeName();
-		mc.fontRendererObj.drawStringWithShadow(temp, x + (WIDTH - mc.fontRendererObj.getStringWidth(temp)) / 2,
-				y + HEIGHT * 4, BIOME_NAME_COLOR.rgbWithAlpha(ModOptions.compassTransparency));
+		drawCenteredString(mc.fontRendererObj, getLocationString(), centerX, (int) (centerY + HEIGHT * 1.5F),
+				COORDINATE_COLOR.rgbWithAlpha(ModOptions.compassTransparency));
+		drawCenteredString(mc.fontRendererObj, getBiomeName(), centerX, (int) (centerY + HEIGHT * 2.5F),
+				BIOME_NAME_COLOR.rgbWithAlpha(ModOptions.compassTransparency));
 
 		GlStateManager.color(1F, 1F, 1F, 1F);
 	}
