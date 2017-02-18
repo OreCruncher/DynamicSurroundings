@@ -31,6 +31,7 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler.IGuiOverlay;
 import org.blockartistry.mod.DynSurround.util.Color;
+import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 
 import net.minecraft.client.Minecraft;
@@ -49,13 +50,54 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class CompassHUD extends Gui implements IGuiOverlay {
 
-	private static final int WIDTH = 65;
-	private static final int HEIGHT = 12;
+	private static final int BAND_WIDTH = 65;
+	private static final int BAND_HEIGHT = 12;
+
+	private static enum Style {
+		BAND_0(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT), BAND_1(false,
+				"textures/gui/compass/compass.png", BAND_WIDTH,
+				BAND_HEIGHT), BAND_2(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT), BAND_3(false,
+						"textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT), ROSE_1(true,
+								"textures/gui/compass/compassrose1.png", 256,
+								256), ROSE_2(true, "textures/gui/compass/compassrose2.png", 256, 256);
+
+		private final boolean isRose;
+		private final ResourceLocation texture;
+		private final int width;
+		private final int height;
+
+		private Style(final boolean isRose, @Nonnull final String texture, final int w, final int h) {
+			this.isRose = isRose;
+			this.texture = new ResourceLocation(DSurround.RESOURCE_ID, texture);
+			this.width = w;
+			this.height = h;
+		}
+
+		public boolean isRose() {
+			return this.isRose;
+		}
+
+		public ResourceLocation getTextureResource() {
+			return this.texture;
+		}
+
+		public int getWidth() {
+			return this.width;
+		}
+
+		public int getHeight() {
+			return this.height;
+		}
+
+		public static Style getStyle(final int index) {
+			if (index < 0 || index >= values().length)
+				return BAND_0;
+			return values()[index];
+		}
+	}
 
 	private static final Color COORDINATE_COLOR = Color.MC_AQUA;
 	private static final Color BIOME_NAME_COLOR = Color.MC_GOLD;
-	private static final ResourceLocation TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
-			"textures/gui/compass.png");
 
 	@Nonnull
 	protected String getLocationString() {
@@ -80,28 +122,46 @@ public class CompassHUD extends Gui implements IGuiOverlay {
 			return;
 
 		final Minecraft mc = Minecraft.getMinecraft();
+
 		final ScaledResolution resolution = event.getResolution();
-		final int x = (resolution.getScaledWidth() - WIDTH + 1) / 2;
-		final int y = (resolution.getScaledHeight() - HEIGHT + 1) / 2 - HEIGHT;
-		final int direction = MathHelper.floor(((mc.player.rotationYaw * 256F) / 360F) + 0.5D) & 255;
-
-		mc.getTextureManager().bindTexture(TEXTURE);
-		GlStateManager.color(1F, 1F, 1F, ModOptions.compassTransparency);
-		GlStateManager.enableBlend();
-
-		if (direction < 128)
-			drawTexturedModalRect(x, y, direction, (ModOptions.compassStyle * (HEIGHT * 2)), WIDTH, HEIGHT);
-		else
-			drawTexturedModalRect(x, y, direction - 128, (ModOptions.compassStyle * (HEIGHT * 2)) + HEIGHT, WIDTH,
-					HEIGHT);
-
 		final int centerX = (resolution.getScaledWidth() + 1) / 2;
 		final int centerY = (resolution.getScaledHeight() + 1) / 2;
 
-		drawCenteredString(mc.fontRendererObj, getLocationString(), centerX, (int) (centerY + HEIGHT * 1.5F),
+		GlStateManager.color(1F, 1F, 1F, ModOptions.compassTransparency);
+		GlStateManager.enableBlend();
+
+		drawCenteredString(mc.fontRendererObj, getLocationString(), centerX, (int) (centerY + BAND_HEIGHT * 1.5F),
 				COORDINATE_COLOR.rgbWithAlpha(ModOptions.compassTransparency));
-		drawCenteredString(mc.fontRendererObj, getBiomeName(), centerX, (int) (centerY + HEIGHT * 2.5F),
+		drawCenteredString(mc.fontRendererObj, getBiomeName(), centerX, (int) (centerY + BAND_HEIGHT * 2.5F),
 				BIOME_NAME_COLOR.rgbWithAlpha(ModOptions.compassTransparency));
+
+		final Style style = Style.getStyle(ModOptions.compassStyle);
+		mc.getTextureManager().bindTexture(style.getTextureResource());
+		GlStateManager.color(1F, 1F, 1F, ModOptions.compassTransparency);
+
+		if (!style.isRose()) {
+
+			final int direction = MathHelper.floor(((mc.player.rotationYaw * 256F) / 360F) + 0.5D) & 255;
+			final int x = (resolution.getScaledWidth() - style.getWidth() + 1) / 2;
+			final int y = (resolution.getScaledHeight() - style.getHeight() + 1) / 2 - style.getHeight();
+
+			if (direction < 128)
+				drawTexturedModalRect(x, y, direction, (ModOptions.compassStyle * (style.getHeight() * 2)),
+						style.getWidth(), style.getHeight());
+			else
+				drawTexturedModalRect(x, y, direction - 128,
+						(ModOptions.compassStyle * (style.getHeight() * 2)) + style.getHeight(), style.getWidth(),
+						style.getHeight());
+		} else {
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(centerX, centerY - BAND_HEIGHT * 2.5F, 0);
+			GlStateManager.rotate(70, 1F, 0F, 0F);
+			GlStateManager.rotate(-MathStuff.wrapDegrees(mc.player.rotationYaw + 180F), 0F, 0F, 1F);
+			final int x = -(style.getWidth() + 1) / 2;
+			final int y = -(style.getHeight() + 1) / 2;
+			drawTexturedModalRect(x, y, 0, 0, style.getWidth(), style.getHeight());
+			GlStateManager.popMatrix();
+		}
 
 		GlStateManager.color(1F, 1F, 1F, 1F);
 	}
