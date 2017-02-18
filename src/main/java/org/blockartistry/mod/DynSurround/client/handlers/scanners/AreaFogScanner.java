@@ -39,7 +39,9 @@ import org.blockartistry.mod.DynSurround.util.MathStuff;
 
 import com.google.common.base.Objects;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -233,6 +235,51 @@ public class AreaFogScanner implements ITickable {
 		float r = (float) (this.blendedColor.red * scaleRed / this.biomeWeight);
 		float g = (float) (this.blendedColor.green * scaleGreen / this.biomeWeight);
 		float b = (float) (this.blendedColor.blue * scaleBlue / this.biomeWeight);
+
+		// Darken the fog a bit based on the player's Y
+		final EntityPlayer player = EnvironState.getPlayer();
+		double darken = (player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTick)
+				* world.provider.getVoidFogYFactor();
+
+		// EntityRenderer.updateFogColor() - If the player is blind need to darken it further
+		if (player.isPotionActive(MobEffects.BLINDNESS)) {
+			final int duration = player.getActivePotionEffect(MobEffects.BLINDNESS).getDuration();
+			darken *= (duration < 20) ? (1 - duration / 20f) : 0;
+		}
+
+		// Apply the darken factor to the fog colors
+		if (darken < 1) {
+			darken = (darken < 0) ? 0 : darken * darken;
+			r *= darken;
+			g *= darken;
+			b *= darken;
+		}
+
+		// EntityRenderer.updateFogColor() - If the player has nightvision going need to lighten it a bit
+		if (player.isPotionActive(MobEffects.NIGHT_VISION)) {
+			final int duration = player.getActivePotionEffect(MobEffects.NIGHT_VISION).getDuration();
+			final float brightness = (duration > 200) ? 1
+					: 0.7f + MathHelper.sin((float) ((duration - partialTick) * Math.PI * 0.2f)) * 0.3f;
+
+			double scale = 1 / r;
+			scale = Math.min(scale, 1 / g);
+			scale = Math.min(scale, 1 / b);
+
+			r = (float) (r * (1 - brightness) + r * scale * brightness);
+			g = (float) (g * (1 - brightness) + g * scale * brightness);
+			b = (float) (b * (1 - brightness) + b * scale * brightness);
+		}
+
+		// In case they got some 3D action going on...
+		if (Minecraft.getMinecraft().gameSettings.anaglyph) {
+			float aR = (r * 30 + g * 59 + b * 11) / 100;
+			float aG = (r * 30 + g * 70) / 100;
+			float aB = (r * 30 + b * 70) / 100;
+
+			r = aR;
+			g = aG;
+			b = aB;
+		}
 
 		// Mix the blended color with the existing fog color based on the
 		// areas they occupy.
