@@ -328,10 +328,11 @@ public final class BlockRegistry extends Registry {
 					continue;
 				}
 
-				if (e.conditions != null)
-					blockEffect.setConditions(e.conditions);
-
-				blockData.addEffect(blockEffect);
+				if(blockEffect != null) {
+					if (e.conditions != null)
+						blockEffect.setConditions(e.conditions);
+					blockData.addEffect(blockEffect);
+				}
 			}
 		}
 	}
