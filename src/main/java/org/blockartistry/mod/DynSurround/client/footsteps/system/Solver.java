@@ -40,12 +40,13 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.blockartistry.mod.DynSurround.util.MyUtils;
+import org.blockartistry.mod.DynSurround.util.WorldUtils;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -185,7 +186,7 @@ public class Solver {
 									// else subtract 1
 					worked = findAssociationForBlock(xdang > 0 ? pos.east() : pos.west());
 				} else {
-					worked = findAssociationForBlock(zdang > 0 ? pos.up() : pos.down());
+					worked = findAssociationForBlock(zdang > 0 ? pos.south() : pos.north());
 				}
 
 				// If that didn't work, then maybe the footstep hit in the
@@ -194,7 +195,7 @@ public class Solver {
 				if (worked == null) { // Take the maximum direction and try with
 										// the orthogonal direction of it
 					if (isXdangMax) {
-						worked = findAssociationForBlock(zdang > 0 ? pos.up() : pos.down());
+						worked = findAssociationForBlock(zdang > 0 ? pos.south() : pos.north());
 					} else {
 						worked = findAssociationForBlock(xdang > 0 ? pos.east() : pos.west());
 					}
@@ -218,9 +219,8 @@ public class Solver {
 	 * selected, this solves to the carpet.
 	 */
 	@Nonnull
-	public Association findAssociationForBlock(@Nonnull final BlockPos immutablePos) {
+	public Association findAssociationForBlock(@Nonnull BlockPos pos) {
 		final World world = EnvironState.getWorld();
-		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(immutablePos);
 		IBlockState in = world.getBlockState(pos);
 		BlockPos tPos = pos.up();
 		final IBlockState above = world.getBlockState(tPos);
@@ -236,12 +236,12 @@ public class Solver {
 			// on
 			// > NOT_EMITTER carpets will not cause solving to skip
 
-			if (world.isAirBlock(pos)) {
+			if (WorldUtils.isAirBlock(in)) {
 				tPos = pos.down();
 				final IBlockState below = world.getBlockState(tPos);
 				association = this.isolator.getBlockMap().getBlockSubstrateAcoustics(below, tPos, "bigger");
 				if (association != null) {
-					pos.move(EnumFacing.DOWN);
+					pos = tPos;
 					in = below;
 					ModLog.debug("Fence detected");
 				}
@@ -259,14 +259,14 @@ public class Solver {
 				// => this block of code is here, not outside this if else
 				// group.
 
-				IAcoustic[] foliage = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, immutablePos.up(), "foliage");
+				IAcoustic[] foliage = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, pos.up(), "foliage");
 				if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 					association = MyUtils.concatenate(association, foliage);
 					ModLog.debug("Foliage detected");
 				}
 			}
 		} else {
-			pos.move(EnumFacing.UP);
+			pos = tPos;
 			in = above;
 			ModLog.debug("Carpet detected: " + association);
 		}

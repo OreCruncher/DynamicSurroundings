@@ -137,7 +137,8 @@ public class BlockMap {
 	}
 
 	@Nullable
-	public IAcoustic[] getBlockSubstrateAcoustics(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final String substrate) {
+	public IAcoustic[] getBlockSubstrateAcoustics(@Nonnull final IBlockState state, @Nonnull final BlockPos pos,
+			@Nonnull final String substrate) {
 		final IBlockState trueState = FacadeHelper.resolveState(state, EnvironState.getWorld(), pos, EnumFacing.UP);
 		final BlockAcousticMap sub = this.substrateMap.get(substrate);
 		return sub != null ? sub.getBlockAcousticsWithSpecial(trueState) : null;
@@ -173,21 +174,21 @@ public class BlockMap {
 		if (matcher.matches()) {
 			final String blockName = matcher.group(1);
 			final Block block = MCHelper.getBlockByName(blockName);
-			if (block != null) {
-				if (value.startsWith("#")) {
-					expand(block, value);
-				} else {
-					final int meta = matcher.group(2) == null
-							? (MCHelper.hasVariants(block) ? BlockInfo.GENERIC : BlockInfo.NO_SUBTYPE)
-							: Integer.parseInt(matcher.group(2));
-					final String substrate = matcher.group(3);
-					put(block, meta, substrate, value);
-				}
+			if (block == null) {
+				ModLog.debug("Unable to locate block for blockMap '%s'", blockName);
+			} else if (block == Blocks.AIR) {
+				ModLog.warn("Attempt to insert AIR into blockMap '%s'", blockName);
+			} else if (value.startsWith("#")) {
+				expand(block, value);
 			} else {
-				ModLog.debug("Unable to locate block for blockmap '%s'", blockName);
+				final int meta = matcher.group(2) == null
+						? (MCHelper.hasVariants(block) ? BlockInfo.GENERIC : BlockInfo.NO_SUBTYPE)
+						: Integer.parseInt(matcher.group(2));
+				final String substrate = matcher.group(3);
+				put(block, meta, substrate, value);
 			}
 		} else {
-			ModLog.debug("Malformed key in blockmap '%s'", key);
+			ModLog.warn("Malformed key in blockMap '%s'", key);
 		}
 	}
 
@@ -205,7 +206,8 @@ public class BlockMap {
 		return builder.toString();
 	}
 
-	public void collectData(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final List<String> data) {
+	public void collectData(@Nonnull final IBlockState state, @Nonnull final BlockPos pos,
+			@Nonnull final List<String> data) {
 
 		final IAcoustic[] temp = getBlockAcoustics(state, pos);
 		if (temp != null)
