@@ -45,6 +45,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -104,7 +105,10 @@ public class AreaFogScanner implements ITickable {
 	}
 
 	@Nonnull
-	private Color worldFogColor(@Nonnull final World world) {
+	private Color baseWorldFogColor(@Nonnull final World world) {
+		if (world == null)
+			return OVERWORLD_FOG_COLOR;
+
 		switch (world.provider.getDimension()) {
 		case -1:
 			return NETHER_FOG_COLOR;
@@ -112,6 +116,15 @@ public class AreaFogScanner implements ITickable {
 			return END_FOG_COLOR;
 		}
 		return OVERWORLD_FOG_COLOR;
+	}
+
+	@Nonnull
+	private Color worldFogColor(@Nonnull final World world, final float partialTicks) {
+		if (world == null)
+			return OVERWORLD_FOG_COLOR;
+
+		final Vec3d colors = world.getFogColor(partialTicks);
+		return colors == null ? baseWorldFogColor(world) : new Color(colors);
 	}
 
 	@Override
@@ -128,7 +141,7 @@ public class AreaFogScanner implements ITickable {
 
 		final World world = EnvironState.getWorld();
 		final float rainStrength = world.getRainStrength(1.0F);
-		final Color worldFogColor = worldFogColor(world);
+		final Color worldFogColor = baseWorldFogColor(world);
 		final Color scaledDefaultFogColor = Color.scale(worldFogColor, 1F - rainStrength);
 
 		this.blendedColor = new Color(0, 0, 0);
@@ -185,7 +198,7 @@ public class AreaFogScanner implements ITickable {
 	@Nonnull
 	public Color getFogColor(@Nonnull final World world, final float partialTick) {
 
-		final Color defaultFogColor = new Color(world.getFogColor(partialTick));
+		final Color defaultFogColor = worldFogColor(world, partialTick);
 
 		if (this.blendedColor == null || this.biomeWeight == 0)
 			return defaultFogColor;
@@ -241,7 +254,8 @@ public class AreaFogScanner implements ITickable {
 		double darken = (player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTick)
 				* world.provider.getVoidFogYFactor();
 
-		// EntityRenderer.updateFogColor() - If the player is blind need to darken it further
+		// EntityRenderer.updateFogColor() - If the player is blind need to
+		// darken it further
 		if (player.isPotionActive(MobEffects.BLINDNESS)) {
 			final int duration = player.getActivePotionEffect(MobEffects.BLINDNESS).getDuration();
 			darken *= (duration < 20) ? (1 - duration / 20f) : 0;
@@ -255,7 +269,8 @@ public class AreaFogScanner implements ITickable {
 			b *= darken;
 		}
 
-		// EntityRenderer.updateFogColor() - If the player has nightvision going need to lighten it a bit
+		// EntityRenderer.updateFogColor() - If the player has nightvision going
+		// need to lighten it a bit
 		if (player.isPotionActive(MobEffects.NIGHT_VISION)) {
 			final int duration = player.getActivePotionEffect(MobEffects.NIGHT_VISION).getDuration();
 			final float brightness = (duration > 200) ? 1
