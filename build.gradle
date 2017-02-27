@@ -87,7 +87,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-	compile "codechicken:CodeChickenCore:1.10.2-2.4.0.101:deobf"
+	// compile "codechicken:CodeChickenCore:1.10.2-2.4.0.101:deobf"
 
     compile "foxie:Calendar:1.10.2-1.5-10:deobf"
     compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"

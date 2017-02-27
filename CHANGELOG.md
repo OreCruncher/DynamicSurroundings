@@ -1,3 +1,19 @@
+###DynamicSurroundings-1.10.2-3.3.0.0
+**What's New**
+* Compass HUD!  When holding a compass in either hand location information will be displayed above/below the crosshair.      Trying for a more immersive version of the classic compass HUD.
+    * The HUD cannot be moved, and will be hidden when not holding a compass.
+    * This feature can be disabled.
+    * Choice of 5 different HUD styles: 0-3 classic "bar" style; 4-5 compass rose style
+
+**Fixes**
+* Don't add particle to ParticleSystem past it's limit.
+* Player Blindness and Nightvision effect on fog tinting.
+* NPE loading config when block effect disabled.
+* Fixed block edge walk routine looking up/down rather than south/north.  (The off-foot sound would be the sound below the air block.)
+
+**Changes**
+* Cap the number of outstanding particles for a particle system.  Attempt to address issue with high waterfalls producing large number of splash particles.
+
 ###DynamicSurroundings-1.10.2-3.2.8.1
 **What's New**
 * Config option to override default Minecraft thunder volume of 10000.
