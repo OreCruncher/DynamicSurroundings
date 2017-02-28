@@ -78,45 +78,52 @@ public class ParticleDripOverride extends ParticleDrip {
 			if (this.posY < 1) {
 				setExpired();
 			} else if (this.firstTime) {
+
 				this.firstTime = false;
 
+				// If the particle is not positioned in an air block kill it right
+				// away.  No sense wasting time with it.
 				final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-				pos.setPos(this.posX, this.posY + 0.3D, this.posZ);
-				final int y = pos.getY();
+				pos.setPos(this.posX, this.posY, this.posZ);
+				if (!WorldUtils.isAirBlock(this.world, pos)) {
+					setExpired();
+				} else {
+					pos.setPos(this.posX, this.posY + 0.3D, this.posZ);
+					final int y = pos.getY();
 
-				IBlockState state = this.world.getBlockState(pos);
-				if (!WorldUtils.isAirBlock(state) && !WorldUtils.isLeaves(state)) {
-					// Find out where it is going to hit
-					do {
-						pos.move(EnumFacing.DOWN, 1);
-						state = this.world.getBlockState(pos);
-					} while (pos.getY() > 0 && WorldUtils.isAirBlock(state));
+					IBlockState state = this.world.getBlockState(pos);
+					if (!WorldUtils.isAirBlock(state) && !WorldUtils.isLeaves(state)) {
+						// Find out where it is going to hit
+						do {
+							pos.move(EnumFacing.DOWN, 1);
+							state = this.world.getBlockState(pos);
+						} while (pos.getY() > 0 && WorldUtils.isAirBlock(state));
 
-					if (pos.getY() < 1)
-						return;
+						if (pos.getY() < 1)
+							return;
 
-					final int delay = 40 + (y - pos.getY()) * 2;
-					pos.move(EnumFacing.UP, 1);
+						final int delay = 40 + (y - pos.getY()) * 2;
+						pos.move(EnumFacing.UP, 1);
 
-					final SoundEffect effect;
+						final SoundEffect effect;
 
-					// Hitting solid surface
-					if (state.getMaterial().isSolid()) {
-						effect = WATER_DROP;
-					// Lava into water/water into lava
-					} else if (doSteamHiss(state)) {
-						effect = STEAM_HISS;
-					// Water into water
-					} else if (this.materialType == Material.WATER) {
-						effect = WATER_DRIP;
-					// Lava into lava
-					} else {
-						effect = WATER_DROP;
+						// Hitting solid surface
+						if (state.getMaterial().isSolid()) {
+							effect = WATER_DROP;
+							// Lava into water/water into lava
+						} else if (doSteamHiss(state)) {
+							effect = STEAM_HISS;
+							// Water into water
+						} else if (this.materialType == Material.WATER) {
+							effect = WATER_DRIP;
+							// Lava into lava
+						} else {
+							effect = WATER_DROP;
+						}
+
+						SoundEffectHandler.INSTANCE.playSoundAt(pos, effect, delay);
 					}
-
-					SoundEffectHandler.INSTANCE.playSoundAt(pos, effect, delay);
 				}
-
 			}
 		}
 	}
