@@ -187,7 +187,7 @@ public class AreaFogScanner implements ITickable {
 	}
 
 	public float getPlaneDistance(final float eventDistance) {
-		final float result = (float) ((this.fogDensity * 240 + eventDistance * this.weightDefault) / AREA);
+		final float result = (float) ((this.fogDensity * this.biomeWeight + eventDistance * this.weightDefault) / AREA);
 		return Math.min(result, eventDistance);
 	}
 
