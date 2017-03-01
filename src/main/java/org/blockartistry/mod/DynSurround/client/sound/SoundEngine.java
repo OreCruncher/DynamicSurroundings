@@ -93,7 +93,7 @@ public class SoundEngine {
 	}
 
 	public boolean isSoundPlaying(@Nonnull final ISound sound) {
-		return this.manager.isSoundPlaying(sound) || this.manager.playingSounds.containsValue(sound)
+		return this.manager.isSoundPlaying(sound) || this.manager.invPlayingSounds.containsValue(sound)
 				|| this.manager.delayedSounds.containsKey(sound);
 	}
 
