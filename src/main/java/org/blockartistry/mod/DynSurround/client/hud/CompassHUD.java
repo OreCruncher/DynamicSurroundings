@@ -24,6 +24,8 @@
 
 package org.blockartistry.mod.DynSurround.client.hud;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.DSurround;
@@ -101,9 +103,8 @@ public class CompassHUD extends Gui implements IGuiOverlay {
 
 	@Nonnull
 	protected String getLocationString() {
-		final StringBuilder builder = new StringBuilder();
 		final BlockPos pos = EnvironState.getPlayerPosition();
-		return builder.append("x: ").append(pos.getX()).append(", z: ").append(pos.getZ()).toString();
+		return String.format(Locale.getDefault(), ModOptions.compassCoordFormat, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Nonnull
