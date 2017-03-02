@@ -27,7 +27,6 @@ package org.blockartistry.mod.DynSurround.client.hud;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.blockartistry.mod.DynSurround.ModOptions;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -41,9 +40,7 @@ public final class GuiHUDHandler {
 	private static GuiHUDHandler INSTANCE;
 
 	private GuiHUDHandler() {
-		if (ModOptions.potionHudEnabled)
-			register(new PotionHUD());
-		
+		register(new PotionHUD());
 		register(new CompassHUD());
 	}
 
@@ -51,15 +48,15 @@ public final class GuiHUDHandler {
 		void doRender(final RenderGameOverlayEvent.Pre event);
 	}
 
-	private static final List<IGuiOverlay> overlays = new ArrayList<IGuiOverlay>();
+	private final List<IGuiOverlay> overlays = new ArrayList<IGuiOverlay>();
 
-	public static void register(final IGuiOverlay overlay) {
-		overlays.add(overlay);
+	public void register(final IGuiOverlay overlay) {
+		this.overlays.add(overlay);
 	}
 
 	public static void register() {
 		INSTANCE = new GuiHUDHandler();
-		MinecraftForge.EVENT_BUS.register(new GuiHUDHandler());
+		MinecraftForge.EVENT_BUS.register(INSTANCE);
 	}
 	
 	public static void unregister() {
@@ -69,7 +66,7 @@ public final class GuiHUDHandler {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onRenderGameOverlayEvent(final RenderGameOverlayEvent.Pre event) {
-		for (final IGuiOverlay overlay : overlays)
+		for (final IGuiOverlay overlay : this.overlays)
 			overlay.doRender(event);
 	}
 
