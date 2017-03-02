@@ -549,6 +549,7 @@ public final class ModOptions {
 	public static final String CONFIG_COMPASS_ENABLE = "Enable Compass";
 	public static final String CONFIG_COMPASS_STYLE = "Compass Style";
 	public static final String CONFIG_COMPASS_TRANSPARENCY = "Transparency";
+	public static final String CONFIG_COMPASS_COORD_FORMAT = "Cood Format";
 
 	@Parameter(category = CATEGORY_COMPASS, property = CONFIG_COMPASS_ENABLE, defaultValue = "true", lang = "cfg.compass.Enable")
 	@Comment("Enable/disable compass HUD when compass is held")
@@ -561,6 +562,9 @@ public final class ModOptions {
 	@Comment("Compass transparency")
 	@MinMaxFloat(min = 0F, max = 1.0F)
 	public static float compassTransparency = 0.4F;
+	@Parameter(category = CATEGORY_COMPASS, property = CONFIG_COMPASS_COORD_FORMAT, defaultValue = "x: %1$d, z: %3$d", lang = "cfg.compass.Format")
+	@Comment("Format string for location coordinates")
+	public static String compassCoordFormat = "x: %1$d, z: %3$d";
 
 	private static final List<String> compassSort = Arrays.asList(CONFIG_COMPASS_ENABLE, CONFIG_COMPASS_STYLE,
 			CONFIG_COMPASS_TRANSPARENCY);
