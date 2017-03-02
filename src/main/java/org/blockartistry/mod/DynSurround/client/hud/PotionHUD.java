@@ -60,7 +60,7 @@ public class PotionHUD extends Gui implements IGuiOverlay {
 
 	public void doRender(final RenderGameOverlayEvent.Pre event) {
 
-		if (event.getType() != ElementType.POTION_ICONS) {
+		if (!ModOptions.potionHudEnabled || event.getType() != ElementType.POTION_ICONS) {
 			return;
 		}
 
