@@ -268,7 +268,7 @@ public class Solver {
 		} else {
 			pos = tPos;
 			in = above;
-			ModLog.debug("Carpet detected: " + association);
+			ModLog.debug("Carpet detected");
 		}
 
 		if (association != null) {
