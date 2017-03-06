@@ -55,6 +55,12 @@ public class CompassHUD extends Gui implements IGuiOverlay {
 	private static final int BAND_WIDTH = 65;
 	private static final int BAND_HEIGHT = 12;
 
+	private static final Color COORDINATE_COLOR = Color.MC_AQUA;
+	private static final Color BIOME_NAME_COLOR = Color.MC_GOLD;
+	
+	private static String locationString = "";
+	private static String biomeNameString = "";
+
 	private static enum Style {
 		BAND_0(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT), BAND_1(false,
 				"textures/gui/compass/compass.png", BAND_WIDTH,
@@ -98,9 +104,6 @@ public class CompassHUD extends Gui implements IGuiOverlay {
 		}
 	}
 
-	private static final Color COORDINATE_COLOR = Color.MC_AQUA;
-	private static final Color BIOME_NAME_COLOR = Color.MC_GOLD;
-
 	@Nonnull
 	protected String getLocationString() {
 		final BlockPos pos = EnvironState.getPlayerPosition();
@@ -121,6 +124,11 @@ public class CompassHUD extends Gui implements IGuiOverlay {
 
 		if (event.getType() != ElementType.CROSSHAIRS || !showCompass())
 			return;
+		
+		if(EnvironState.getTickCounter() % 4 == 0) {
+			locationString = getLocationString();
+			biomeNameString = getBiomeName();
+		}
 
 		final Minecraft mc = Minecraft.getMinecraft();
 
@@ -131,9 +139,9 @@ public class CompassHUD extends Gui implements IGuiOverlay {
 		GlStateManager.color(1F, 1F, 1F, ModOptions.compassTransparency);
 		GlStateManager.enableBlend();
 
-		drawCenteredString(mc.fontRendererObj, getLocationString(), centerX, (int) (centerY + BAND_HEIGHT * 1.5F),
+		drawCenteredString(mc.fontRendererObj, locationString, centerX, (int) (centerY + BAND_HEIGHT * 1.5F),
 				COORDINATE_COLOR.rgbWithAlpha(ModOptions.compassTransparency));
-		drawCenteredString(mc.fontRendererObj, getBiomeName(), centerX, (int) (centerY + BAND_HEIGHT * 2.5F),
+		drawCenteredString(mc.fontRendererObj, biomeNameString, centerX, (int) (centerY + BAND_HEIGHT * 2.5F),
 				BIOME_NAME_COLOR.rgbWithAlpha(ModOptions.compassTransparency));
 
 		final Style style = Style.getStyle(ModOptions.compassStyle);
