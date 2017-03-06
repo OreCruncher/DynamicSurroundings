@@ -1018,7 +1018,14 @@
 				"oreAdamantine",
 				"oreMercury",
 				"oreFossil",
-				"oreShadow"
+				"oreShadow",
+				"oreGarnet",
+				"oreJasper",
+				"oreAlexandrite",
+				"oreTourmaline",
+				"oreNuummite",
+				"oreTigersEye",
+				"orePetoskeyStone"
 			]
 		},
 		{
@@ -1179,7 +1186,8 @@
 				"blockDiorite",
 				"blockGranite",
 				"stoneGranite",
-				"blockCharcoal"
+				"blockCharcoal",
+				"blockPetoskeyStone"
 			]
 		},
 		{
@@ -1189,7 +1197,8 @@
 				"blockPrismarine",
 				"limestone",
 				"stoneLimestone",
-				"blockLimestone"
+				"blockLimestone",
+				"coquina"
 			]
 		},
 		{
@@ -1240,7 +1249,9 @@
 				"basalt",
 				"stoneBasalt",
 				"blockBasalt",
-				"blockBloodstone"
+				"blockBloodstone",
+				"blockNuummite",
+				"blockTigersEye"
 			]
 		},
 		{
@@ -1265,7 +1276,11 @@
 				"blockTeslaite",
 				"blockJade",
 				"blockPsiGem",
-				"blockNetherStar"
+				"blockNetherStar",
+				"blockAlexandrite",
+				"blockJasper",
+				"blockGarnet",
+				"blockTourmaline"
 			]
 		},
 		{
