@@ -1,3 +1,18 @@
+###DynamicSurroundings-1.11.2-3.3.1.0
+**What's New**
+* Player definable format string for compass coordinate display
+    * It's a [Java format String](https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html)
+    * x coord "1$", y coord "2$", z coord "3$"
+    * Default string is "x: %1$d, z: %3$d" (without the quotes)
+
+**Fixes**
+* Added defensive code to AreaFogScanner in order to prevent obscure NPE reported on OpenEye.
+
+**Changes**
+* Alter fog calculation routine to handle fog at render distances > 16 chunks.
+* Added code to kill water drip particle effect if it spawns in a non-air block.  Should fix up Minecraft's tendency of spawning water particles under wet sponge blocks even thought the block beneath is water.  Result is that Ocean Monuments with wet sponge blocks will not be as noisy.
+* Cleaned up enable/disable potion HUD so the client does not have to be restarted.
+
 ###DynamicSurroundings-1.11.2-3.3.0.0
 **What's New**
 * Compass HUD!  When holding a compass in either hand location information will be displayed above/below the crosshair.      Trying for a more immersive version of the classic compass HUD.
