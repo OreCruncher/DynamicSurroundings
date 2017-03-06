@@ -68,5 +68,10 @@ public class EventSelectorAcoustics implements IAcoustic {
 	public void setAcousticPair(@Nonnull final EventType type, @Nonnull final IAcoustic acoustic) {
 		this.pairs.put(type, acoustic);
 	}
+	
+	@Override
+	public String toString() {
+		return getAcousticName();
+	}
 
 }
