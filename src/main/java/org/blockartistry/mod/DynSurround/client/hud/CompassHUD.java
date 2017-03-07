@@ -54,6 +54,7 @@ public class CompassHUD extends Gui implements IGuiOverlay {
 
 	private static final int BAND_WIDTH = 65;
 	private static final int BAND_HEIGHT = 12;
+	private static final int ROSE_DIM = 256;
 
 	private static final Color COORDINATE_COLOR = Color.MC_AQUA;
 	private static final Color BIOME_NAME_COLOR = Color.MC_GOLD;
@@ -62,12 +63,14 @@ public class CompassHUD extends Gui implements IGuiOverlay {
 	private static String biomeNameString = "";
 
 	private static enum Style {
-		BAND_0(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT), BAND_1(false,
-				"textures/gui/compass/compass.png", BAND_WIDTH,
-				BAND_HEIGHT), BAND_2(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT), BAND_3(false,
-						"textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT), ROSE_1(true,
-								"textures/gui/compass/compassrose1.png", 256,
-								256), ROSE_2(true, "textures/gui/compass/compassrose2.png", 256, 256);
+		BAND_0(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT),
+		BAND_1(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT),
+		BAND_2(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT),
+		BAND_3(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT),
+		ROSE_1(true, "textures/gui/compass/compassrose1.png", ROSE_DIM, ROSE_DIM),
+		ROSE_2(true, "textures/gui/compass/compassrose2.png", ROSE_DIM, ROSE_DIM),
+		ROSE_3(true, "textures/gui/compass/compassrose3.png", ROSE_DIM, ROSE_DIM)
+		;
 
 		private final boolean isRose;
 		private final ResourceLocation texture;
