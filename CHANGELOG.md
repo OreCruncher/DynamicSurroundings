@@ -1,3 +1,7 @@
+###DynamicSurroundings-1.10.2-3.3.1.1
+**Fixes**
+* Repeated "java.lang.IllegalArgumentException: value already present" when playing sound.
+
 ###DynamicSurroundings-1.10.2-3.3.1.0
 **What's New**
 * Player definable format string for compass coordinate display
