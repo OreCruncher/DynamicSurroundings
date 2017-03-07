@@ -556,7 +556,7 @@ public final class ModOptions {
 	public static boolean enableCompass = true;
 	@Parameter(category = CATEGORY_COMPASS, property = CONFIG_COMPASS_STYLE, defaultValue = "0", lang = "cfg.compass.Style")
 	@Comment("Style of compass bar")
-	@MinMaxInt(min = 0, max = 5)
+	@MinMaxInt(min = 0, max = 6)
 	public static int compassStyle = 0;
 	@Parameter(category = CATEGORY_COMPASS, property = CONFIG_COMPASS_TRANSPARENCY, defaultValue = "0.4", lang = "cfg.compass.Transparency")
 	@Comment("Compass transparency")
