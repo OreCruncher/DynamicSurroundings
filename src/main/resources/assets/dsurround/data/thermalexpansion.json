@@ -1,0 +1,7 @@
+{
+	"footsteps": {
+		"thermalexpansion:tank": "glass",
+		"thermalexpansion:machine": "hardmetal",
+		"thermalexpansion:dynamo": "hardmetal"
+	}
+}
