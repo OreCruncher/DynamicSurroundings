@@ -70,13 +70,13 @@ public class BlockViewer extends JPanel implements Observer {
 		lblNewLabel.setBounds(10, 11, 100, 14);
 		add(lblNewLabel);
 
-		blockName.setBounds(120, 11, 231, 14);
+		blockName.setBounds(120, 11, 320, 14);
 		add(blockName);
 
 		lblBlockMaterial.setBounds(10, 36, 100, 14);
 		add(lblBlockMaterial);
 
-		blockMaterial.setBounds(120, 36, 231, 14);
+		blockMaterial.setBounds(120, 36, 320, 14);
 		add(blockMaterial);
 
 		lblNewLabel_1.setBounds(10, 153, 100, 14);

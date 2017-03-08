@@ -1,0 +1,18 @@
+{
+	"footsteps": {
+		"actuallyadditions:blockCrystal": "composite",
+		"actuallyadditions:blockColoredLamp": "stoneutility",
+		"actuallyadditions:blockTestifiBucksWhiteWall": "marble",
+		"actuallyadditions:blockTestifiBucksWhiteStairs": "marble",
+		"actuallyadditions:blockTestifiBucksGreenWall": "marble",
+		"actuallyadditions:blockTestifiBucksGreenStairs": "marble",
+		"actuallyadditions:blockMisc^0": "marble",
+		"actuallyadditions:blockMisc^1": "marble",
+		"actuallyadditions:blockMisc^2": "marble",
+		"actuallyadditions:blockMisc^4": "wood",
+		"actuallyadditions:blockMisc^6": "composite",
+		"actuallyadditions:blockMisc^7": "hardmetal",
+		"actuallyadditions:blockMisc^8": "marble",
+		"actuallyadditions:blockMisc^9": "hardmetal"
+	}
+}
