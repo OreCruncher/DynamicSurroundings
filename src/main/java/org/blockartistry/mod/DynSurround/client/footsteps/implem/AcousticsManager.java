@@ -162,14 +162,18 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	@Override
 	public void playStep(@Nonnull final EntityLivingBase entity, @Nonnull final Association assos) {
-		SoundType soundType = assos.getSoundType();
-		if (!assos.isLiquid() && assos.getSoundType() != null) {
+		try {
+			SoundType soundType = assos.getSoundType();
+			if (!assos.isLiquid() && assos.getSoundType() != null) {
 
-			if (EnvironState.getWorld().getBlockState(assos.getPos().up()).getBlock() == Blocks.SNOW_LAYER) {
-				soundType = MCHelper.getSoundType(Blocks.SNOW_LAYER);
+				if (EnvironState.getWorld().getBlockState(assos.getPos().up()).getBlock() == Blocks.SNOW_LAYER) {
+					soundType = MCHelper.getSoundType(Blocks.SNOW_LAYER);
+				}
+
+				entity.playSound(soundType.getStepSound(), soundType.getVolume() * 0.15F, soundType.getPitch());
 			}
-
-			entity.playSound(soundType.getStepSound(), soundType.getVolume() * 0.15F, soundType.getPitch());
+		} catch (final Throwable t) {
+			ModLog.error("Unable to play step sound", t);
 		}
 	}
 
@@ -179,17 +183,21 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		if (!(location instanceof Entity))
 			return;
 
-		if (options != null) {
-			if (options.hasOption(Option.DELAY_MIN) && options.hasOption(Option.DELAY_MAX)) {
-				final long delay = TimeUtils.currentTimeMillis()
-						+ randAB(RANDOM, options.asLong(Option.DELAY_MIN), options.asLong(Option.DELAY_MAX));
-				this.pending.add(new PendingSound(location, sound, volume, pitch, null, delay,
-						options.hasOption(Option.SKIPPABLE) ? -1 : options.asLong(Option.DELAY_MAX)));
+		try {
+			if (options != null) {
+				if (options.hasOption(Option.DELAY_MIN) && options.hasOption(Option.DELAY_MAX)) {
+					final long delay = TimeUtils.currentTimeMillis()
+							+ randAB(RANDOM, options.asLong(Option.DELAY_MIN), options.asLong(Option.DELAY_MAX));
+					this.pending.add(new PendingSound(location, sound, volume, pitch, null, delay,
+							options.hasOption(Option.SKIPPABLE) ? -1 : options.asLong(Option.DELAY_MAX)));
+				} else {
+					actuallyPlaySound((Entity) location, sound, volume, pitch);
+				}
 			} else {
 				actuallyPlaySound((Entity) location, sound, volume, pitch);
 			}
-		} else {
-			actuallyPlaySound((Entity) location, sound, volume, pitch);
+		} catch (final Throwable t) {
+			ModLog.error("Unable to play sound", t);
 		}
 	}
 
@@ -198,7 +206,12 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		if (ModLog.DEBUGGING)
 			ModLog.debug("    Playing sound " + sound.getSoundName() + " ("
 					+ String.format(Locale.ENGLISH, "v%.2f, p%.2f", volume, pitch) + ")");
-		location.playSound(sound, volume, pitch);
+
+		try {
+			location.playSound(sound, volume, pitch);
+		} catch (final Throwable t) {
+			ModLog.error("Unable to play sound", t);
+		}
 	}
 
 	private long randAB(@Nonnull final Random rng, final long a, final long b) {
