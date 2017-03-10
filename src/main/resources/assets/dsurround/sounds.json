@@ -1520,5 +1520,14 @@
 			"dsurround:ambient/village/dogbark5",
 			"dsurround:ambient/village/dogbark6"
 		]
+	},
+	"dimension.nether": {
+		"category": "ambient",
+		"sounds": [
+			{
+				"name": "dsurround:ambient/dimension/nether",
+				"stream": true
+			}
+		]
 	}
 }
