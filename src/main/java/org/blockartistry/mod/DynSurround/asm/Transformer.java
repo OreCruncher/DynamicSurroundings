@@ -45,21 +45,28 @@ public class Transformer implements IClassTransformer {
 
 	private static final Logger logger = LogManager.getLogger("dsurround Transform");
 
+	private static boolean isOneOf(final String src, final String[] candidates) {
+		for (final String s : candidates)
+			if (src.equals(s))
+				return true;
+		return false;
+	}
+
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] basicClass) {
-		if ("net.minecraft.client.renderer.EntityRenderer".equals(name) || "bnz".equals(name) || "bnd".equals(name)) {
+		if (isOneOf(transformedName, new String[] { "net.minecraft.client.renderer.EntityRenderer", "bnz", "bnd" })) {
 			if (ModOptions.enableWeatherASM) {
-				logger.debug("Transforming EntityRenderer...");
+				logger.debug("Transforming " + transformedName);
 				return transformEntityRenderer(basicClass);
 			}
-		} else if ("net.minecraft.world.WorldServer".equals(name) || "ls".equals(name) || "lq".equals(name)) {
+		} else if (isOneOf(transformedName, new String[] { "net.minecraft.world.WorldServer", "ls", "lq" })) {
 			if (ModOptions.enableResetOnSleepASM) {
-				logger.debug("Transforming WorldServer...");
+				logger.debug("Transforming " + transformedName);
 				return transformWorldServer(basicClass);
 			}
-		} else if ("net.minecraft.client.audio.SoundManager".equals(name) || "bzu".equals(name) || "byt".equals(name)) {
+		} else if (isOneOf(transformedName, new String[] { "net.minecraft.client.audio.SoundManager", "bzu", "byt" })) {
 			if (ModOptions.enableSoundVolumeASM) {
-				logger.debug("Transforming SoundEffectHandler...");
+				logger.debug("Transforming " + transformedName);
 				return transformSoundManager(basicClass);
 			}
 		}
@@ -68,27 +75,21 @@ public class Transformer implements IClassTransformer {
 	}
 
 	private byte[] transformEntityRenderer(final byte[] classBytes) {
-		final String names[];
-
-		if (TransformLoader.runtimeDeobEnabled)
-			names = new String[] { "func_78484_h" };
-		else
-			names = new String[] { "addRainParticles" };
-
-		final String targetName[] = new String[] { "addRainParticles" };
+		final String names[] = { "func_78484_h", "addRainParticles" };
+		final String targetName = "addRainParticles";
 
 		final ClassReader cr = new ClassReader(classBytes);
 		final ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, 0);
 
 		for (final MethodNode m : cn.methods) {
-			if (m.name.equals(names[0])) {
-				logger.debug("Hooking " + names[0]);
+			if (isOneOf(m.name, names)) {
+				logger.debug("Hooking " + m.name);
 				final InsnList list = new InsnList();
 				list.add(new VarInsnNode(ALOAD, 0));
 				final String sig = "(Lnet/minecraft/client/renderer/EntityRenderer;)V";
-				list.add(new MethodInsnNode(INVOKESTATIC, "org/blockartistry/mod/DynSurround/client/weather/RenderWeather",
-						targetName[0], sig, false));
+				list.add(new MethodInsnNode(INVOKESTATIC,
+						"org/blockartistry/mod/DynSurround/client/weather/RenderWeather", targetName, sig, false));
 				list.add(new InsnNode(RETURN));
 				m.instructions.insertBefore(m.instructions.getFirst(), list);
 			}
@@ -100,27 +101,21 @@ public class Transformer implements IClassTransformer {
 	}
 
 	private byte[] transformWorldServer(final byte[] classBytes) {
-		final String names[];
-
-		if (TransformLoader.runtimeDeobEnabled)
-			names = new String[] { "func_73051_P" };
-		else
-			names = new String[] { "resetRainAndThunder" };
-
-		final String targetName[] = new String[] { "resetRainAndThunder" };
+		final String names[] = { "func_73051_P", "resetRainAndThunder" };
+		final String targetName = "resetRainAndThunder";
 
 		final ClassReader cr = new ClassReader(classBytes);
 		final ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, 0);
 
 		for (final MethodNode m : cn.methods) {
-			if (m.name.equals(names[0])) {
-				logger.debug("Hooking " + names[0]);
+			if (isOneOf(m.name, names)) {
+				logger.debug("Hooking " + m.name);
 				InsnList list = new InsnList();
 				list.add(new VarInsnNode(ALOAD, 0));
 				final String sig = "(Lnet/minecraft/world/WorldServer;)V";
 				list.add(new MethodInsnNode(INVOKESTATIC, "org/blockartistry/mod/DynSurround/server/PlayerSleepHandler",
-						targetName[0], sig, false));
+						targetName, sig, false));
 				list.add(new InsnNode(RETURN));
 				m.instructions.insertBefore(m.instructions.getFirst(), list);
 				break;
@@ -133,27 +128,21 @@ public class Transformer implements IClassTransformer {
 	}
 
 	private byte[] transformSoundManager(final byte[] classBytes) {
-		final String names[];
-
-		if (TransformLoader.runtimeDeobEnabled)
-			names = new String[] { "func_188770_e" };
-		else
-			names = new String[] { "getClampedVolume" };
-
-		final String targetName[] = new String[] { "getClampedVolume" };
+		final String names[] = { "func_188770_e", "getClampedVolume" };
+		final String targetName = "getClampedVolume";
 
 		final ClassReader cr = new ClassReader(classBytes);
 		final ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, 0);
 
 		for (final MethodNode m : cn.methods) {
-			if (m.name.equals(names[0])) {
-				logger.debug("Hooking " + names[0]);
+			if (isOneOf(m.name, names)) {
+				logger.debug("Hooking " + m.name);
 				final InsnList list = new InsnList();
 				list.add(new VarInsnNode(ALOAD, 1));
 				final String sig = "(Lnet/minecraft/client/audio/ISound;)F";
 				list.add(new MethodInsnNode(INVOKESTATIC,
-						"org/blockartistry/mod/DynSurround/client/handlers/SoundEffectHandler", targetName[0], sig,
+						"org/blockartistry/mod/DynSurround/client/handlers/SoundEffectHandler", targetName, sig,
 						false));
 				list.add(new InsnNode(FRETURN));
 				m.instructions.insertBefore(m.instructions.getFirst(), list);
