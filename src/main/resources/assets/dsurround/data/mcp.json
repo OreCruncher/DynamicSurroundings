@@ -395,6 +395,10 @@
 					"conditions": "player.isHungry",
 					"soundType": "periodic",
 					"repeatDelay": 300
+				},
+				{
+					"sound": "dsurround:dimension.nether",
+					"conditions": "player.dimension == -1"
 				}
 			]
 		}
