@@ -43,13 +43,14 @@ import net.minecraft.client.audio.ISoundEventListener;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
+import net.minecraftforge.client.event.sound.SoundSetupEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.SoundSystemConfig;
 
-@SideOnly(Side.CLIENT)
+@Mod.EventBusSubscriber(Side.CLIENT)
 public class SoundEngine {
 
 	private static final int SOUND_QUEUE_SLACK = 6;
@@ -126,8 +127,13 @@ public class SoundEngine {
 		if (event.getSound() == this.currentSound)
 			this.soundId = event.getUuid();
 	}
+	
+	@SubscribeEvent
+	public static void onSoundSetup(@Nonnull final SoundSetupEvent event) {
+		configureSound();
+	}
 
-	public static void configureSound() {
+	private static void configureSound() {
 		int totalChannels = -1;
 
 		try {
