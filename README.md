@@ -1,5 +1,5 @@
 ###Dynamic Surroundings
-Forge 1.11.2 mod that improves the audio and visual experience of Minecraft.  Same feature set as the 1.10.x version.
+Forge 1.11.x mod that improves the audio and visual experience of Minecraft.  Same feature set as the 1.10.x version.
 
 ###License
 The MIT License (MIT)
@@ -172,4 +172,9 @@ whether LPs can be monetized on the various streaming services.
      <li>S: <a href="https://www.freesound.org/people/Abolla/sounds/213914/">UnderwaterDrowning01.wav</a> by <a href="https://www.freesound.org/people/Abolla/">Abolla</a> | License: Creative Commons 0</li> 
 </ul>
 
+*dsurround:dimension.nether*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/DrMinky/sounds/166187/">Creepy Dungeon Ambience</a> by <a href="https://www.freesound.org/people/DrMinky/">DrMinky</a> | License: Attribution</li> 
+</ul>
 

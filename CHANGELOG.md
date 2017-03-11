@@ -1,3 +1,18 @@
+###DynamicSurroundings-1.11.2-3.3.2.0
+**What's New**
+* Nether dimension background sound (may need some tweaking)
+* Added another compass rose texture (style 6).
+* Mod support:
+    * Actually Additions
+    * Thermal Expansion (when available)
+
+**Fixes**
+* MCP mappings for 1.11.2 appear to be lying. Sound scaling feature should work again.
+
+**Changes**
+* Take into account Wasteland Forest ([Wasteland Mod](http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2721105-wasteland-mod-the-lost)) when applying biome rules
+* Initialize sound channels when SoundSetupEvent is raised
+
 ###DynamicSurroundings-1.11.2-3.3.1.1
 **Fixes**
 * Repeated "java.lang.IllegalArgumentException: value already present" when playing sound.
