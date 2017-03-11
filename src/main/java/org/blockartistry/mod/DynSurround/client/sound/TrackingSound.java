@@ -26,6 +26,8 @@ package org.blockartistry.mod.DynSurround.client.sound;
 import java.util.Random;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+
+import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.entity.EntityLivingBase;
@@ -62,6 +64,11 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 		this.pitch = sound.getPitch(RANDOM);
 
 		this.lastTick = EnvironState.getTickCounter() - 1;
+		
+		// No attenuation for sounds attached to the player
+		if(this.attachedTo == EnvironState.getPlayer()) {
+			this.attenuationType = ISound.AttenuationType.NONE;
+		}
 		
 		updateLocation();
 	}
