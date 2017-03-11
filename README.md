@@ -1,7 +1,3 @@
-###Status
-Master Branch: Not currently building
-Overall Status: ALPHA
-
 ###Dynamic Surroundings
 Forge 1.10.2 mod that improves the audio and visual experience of Minecraft.
 
@@ -38,7 +34,7 @@ The following textures were acquired from other sources and require attribution.
 </ul>
 
 ###Sounds
-Note that the sounds provided with Dynamic Surroundings are from the public
+The sounds provided with Dynamic Surroundings are from the public
 domain or have Creative Common restrictions.  These restrictions may impact
 whether LPs can be monetized on the various streaming services.
 
@@ -174,4 +170,10 @@ whether LPs can be monetized on the various streaming services.
 
 <ul>
      <li>S: <a href="https://www.freesound.org/people/Abolla/sounds/213914/">UnderwaterDrowning01.wav</a> by <a href="https://www.freesound.org/people/Abolla/">Abolla</a> | License: Creative Commons 0</li> 
+</ul>
+
+*dsurround:dimension.nether*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/DrMinky/sounds/166187/">Creepy Dungeon Ambience</a> by <a href="https://www.freesound.org/people/DrMinky/">DrMinky</a> | License: Attribution</li> 
 </ul>
