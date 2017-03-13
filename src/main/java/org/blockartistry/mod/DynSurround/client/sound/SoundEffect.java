@@ -187,6 +187,8 @@ public final class SoundEffect implements ISpecialEffect {
 
 	@SideOnly(Side.CLIENT)
 	public IMySound createSound(@Nonnull final EntityLivingBase player, final boolean fadeIn, final Random rand) {
+		if(player instanceof EntityPlayer)
+			return new PlayerTrackingSound(this, fadeIn);
 		return new TrackingSound(player, this, fadeIn);
 	}
 
