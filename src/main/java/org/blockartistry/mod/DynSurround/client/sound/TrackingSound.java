@@ -24,10 +24,13 @@
 package org.blockartistry.mod.DynSurround.client.sound;
 
 import java.util.Random;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
-import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.entity.EntityLivingBase;
@@ -44,6 +47,7 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 	private static final float FADE_AMOUNT = 0.015F;
 	private static final Random RANDOM = new Random();
 
+	@Nullable
 	private final EntityLivingBase attachedTo;
 	private final SoundEffect sound;
 	private boolean isFading;
@@ -52,7 +56,7 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 	
 	private long lastTick;
 
-	TrackingSound(final EntityLivingBase attachedTo, final SoundEffect sound, final boolean fadeIn) {
+	TrackingSound(@Nullable final EntityLivingBase attachedTo, @Nonnull final SoundEffect sound, final boolean fadeIn) {
 		super(sound.sound, SoundCategory.PLAYERS);
 
 		this.attachedTo = attachedTo;
@@ -64,11 +68,6 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 		this.pitch = sound.getPitch(RANDOM);
 
 		this.lastTick = EnvironState.getTickCounter() - 1;
-		
-		// No attenuation for sounds attached to the player
-		if(this.attachedTo == EnvironState.getPlayer()) {
-			this.attenuationType = ISound.AttenuationType.NONE;
-		}
 		
 		updateLocation();
 	}
@@ -106,13 +105,17 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 		this.yPosF = (float) box.minY;
 		this.zPosF = (float) point.zCoord;
 	}
+	
+	public boolean isEntityAlive() {
+		return this.attachedTo.isEntityAlive();
+	}
 
 	@Override
 	public void update() {
 		if (this.isDonePlaying())
 			return;
 
-		if (!this.attachedTo.isEntityAlive()) {
+		if (!isEntityAlive()) {
 			this.isDonePlaying = true;
 			return;
 		}
