@@ -162,8 +162,10 @@ public class BlockMap {
 	private void expand(@Nonnull final Block block, @Nonnull final String value) {
 		final List<MacroEntry> macro = macros.get(value);
 		if (macro != null) {
-			for (final MacroEntry entry : macro)
-				put(block, entry.meta, entry.substrate, entry.value);
+			for (final MacroEntry entry : macro) {
+				final int trueMeta = MCHelper.hasVariants(block) ? entry.meta : BlockInfo.NO_SUBTYPE;
+				put(block, trueMeta, entry.substrate, entry.value);
+			}
 		} else {
 			ModLog.debug("Unknown macro '%s'", value);
 		}

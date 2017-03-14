@@ -75,7 +75,7 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(?!.*dead.*|.*flower.*|.*fungi.*|.*frost.*|.*snow.*|.*kelp.*|.*wasteland.*)(.*forest.*|.*cherry.*|.*orchard.*|.*wood.*|.*wetland.*|.*grove.*|.*springs.*)",
+			"biomeName": "(?i)(?!.*dead.*|.*fungi.*|.*frost.*|.*snow.*|.*kelp.*|.*wasteland.*)(.*forest.*|.*cherry.*|.*orchard.*|.*wood.*|.*wetland.*|.*grove.*|.*springs.*)",
 			"spotSoundChance": 200,
 			"sounds": [
 				{
@@ -1164,6 +1164,12 @@
 				"saplingTree",
 				"treeSapling",
 				"sapling"
+			]
+		},
+		{
+			"acousticProfile": "#reed",
+			"dictionaryEntries": [
+				"sugarcane"
 			]
 		},
 		{
