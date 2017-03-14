@@ -820,6 +820,7 @@
 		"minecraft:spruce_fence": "#fence",
 		"minecraft:pumpkin": "organic_solid",
 		"minecraft:netherrack": "stone",
+		"minecraft:magma": "sandstone",
 		"minecraft:soul_sand": "quicksand",
 		"minecraft:glowstone": "glowstone",
 		"minecraft:nether_wart_block": "organic",
