@@ -42,6 +42,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public abstract class ParticleSystem extends ParticleBase {
 
+	protected static final Predicate<Particle> REMOVE_CRITERIA = new Predicate<Particle>() {
+		@Override
+		public boolean apply(final Particle input) {
+			return !input.isAlive();
+		}
+	};
+
 	protected final int fxLayer;
 	protected final BlockPos position;
 	
@@ -145,12 +152,7 @@ public abstract class ParticleSystem extends ParticleBase {
 			p.onUpdate();
 
 		// Remove the dead ones
-		Iterables.removeIf(this.myParticles, new Predicate<Particle>() {
-			@Override
-			public boolean apply(final Particle input) {
-				return !input.isAlive();
-			}
-		});
+		Iterables.removeIf(this.myParticles, REMOVE_CRITERIA);
 	}
 
 	// Override to provide some sort of intelligence to the system. The
