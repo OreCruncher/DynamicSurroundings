@@ -26,8 +26,6 @@ package org.blockartistry.mod.DynSurround.client.sound;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
@@ -47,7 +45,6 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 	private static final float FADE_AMOUNT = 0.015F;
 	private static final Random RANDOM = new Random();
 
-	@Nullable
 	private final EntityLivingBase attachedTo;
 	private final SoundEffect sound;
 	private boolean isFading;
@@ -56,7 +53,7 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 	
 	private long lastTick;
 
-	TrackingSound(@Nullable final EntityLivingBase attachedTo, @Nonnull final SoundEffect sound, final boolean fadeIn) {
+	TrackingSound(@Nonnull final EntityLivingBase attachedTo, @Nonnull final SoundEffect sound, final boolean fadeIn) {
 		super(sound.sound, SoundCategory.PLAYERS);
 
 		this.attachedTo = attachedTo;
