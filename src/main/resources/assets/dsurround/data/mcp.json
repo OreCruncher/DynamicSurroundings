@@ -187,7 +187,7 @@
 			"biomeName": "(?i)(.*swamp.*)",
 			"fog": true,
 			"fogColor": "64,96,64",
-			"fogDensity": 0.02
+			"fogDensity": 0.6
 		},
 		{
 			"biomeName": "(?i)(?!.*dead.*)(.*swamp.*)",
@@ -221,7 +221,7 @@
 			],
 			"fog": true,
 			"fogColor": "128,128,128",
-			"fogDensity": 0.02
+			"fogDensity": 0.6
 		},
 		{
 			"biomeName": "(?i)(?!.*dead.*)(.*swamp.*|.*marsh.*|.*bayou.*)",

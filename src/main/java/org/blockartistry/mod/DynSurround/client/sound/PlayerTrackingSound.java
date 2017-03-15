@@ -35,18 +35,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class PlayerTrackingSound extends TrackingSound {
 
 	PlayerTrackingSound(@Nonnull final SoundEffect sound, final boolean fadeIn) {
-		super(null, sound, fadeIn);
+		super(EnvironState.getPlayer(), sound, fadeIn);
 		
 		this.attenuationType = ISound.AttenuationType.NONE;
 	}
 	
 	@Override
-	public boolean isEntityAlive() {
-		return EnvironState.getPlayer().isEntityAlive();
-	}
-	
-	@Override
 	public void updateLocation() {
+		super.updateLocation();
+		this.yPosF += 32F;
 	}
 
 }
