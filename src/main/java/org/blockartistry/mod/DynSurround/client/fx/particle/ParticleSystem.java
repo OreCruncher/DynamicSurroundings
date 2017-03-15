@@ -42,15 +42,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public abstract class ParticleSystem extends ParticleBase {
 
+	protected static final Predicate<Particle> REMOVE_CRITERIA = new Predicate<Particle>() {
+		@Override
+		public boolean apply(final Particle input) {
+			return !input.isAlive();
+		}
+	};
+
 	protected final int fxLayer;
 	protected final BlockPos position;
-	
+
 	private final ArrayDeque<Particle> myParticles = new ArrayDeque<Particle>();
 	private int particleLimit;
 
 	protected ParticleSystem(final World worldIn, final double posXIn, final double posYIn, final double posZIn) {
 		this(0, worldIn, posXIn, posYIn, posZIn);
-		
+
 		setParticleLimit(6);
 	}
 
@@ -66,26 +73,26 @@ public abstract class ParticleSystem extends ParticleBase {
 	public BlockPos getPos() {
 		return this.position;
 	}
-	
+
 	public void setParticleLimit(final int limit) {
 		this.particleLimit = limit;
 	}
-	
+
 	public int getCurrentParticleCount() {
 		return this.myParticles.size();
 	}
-	
+
 	public int getParticleLimit() {
 		final int setting = Minecraft.getMinecraft().gameSettings.particleSetting;
-		if(setting == 2)
+		if (setting == 2)
 			return 0;
 		return setting == 0 ? this.particleLimit : this.particleLimit / 2;
 	}
-	
+
 	public void addParticle(final Particle particle) {
 		if (particle.getFXLayer() != this.getFXLayer()) {
 			throw new RuntimeException("Invalid particle for fx layer!");
-		} else if(this.myParticles.size() < getParticleLimit()) {
+		} else if (this.myParticles.size() < getParticleLimit()) {
 			this.myParticles.add(particle);
 		}
 	}
@@ -107,32 +114,31 @@ public abstract class ParticleSystem extends ParticleBase {
 	}
 
 	/**
-	 * Indicates whether to transfer the particle list over to the
-	 * regular minecraft particle manager when the system dies.
-	 * Useful for things like fire jets where the flames need to die
-	 * out naturally.
+	 * Indicates whether to transfer the particle list over to the regular
+	 * minecraft particle manager when the system dies. Useful for things like
+	 * fire jets where the flames need to die out naturally.
 	 */
 	public boolean moveParticlesOnDeath() {
 		return true;
 	}
-	
+
 	protected void moveParticles() {
-		if(!moveParticlesOnDeath())
+		if (!moveParticlesOnDeath())
 			return;
-		
-		for(final Particle p: this.myParticles)
-			if(p.isAlive())
+
+		for (final Particle p : this.myParticles)
+			if (p.isAlive())
 				ParticleHelper.addParticle(p);
-		
+
 		this.myParticles.clear();
 	}
-	
+
 	@Override
 	public final void onUpdate() {
 		// Let the system mull over what it wants to do
 		this.think();
-		
-		if(this.shouldDie()) {
+
+		if (this.shouldDie()) {
 			this.moveParticles();
 			this.setExpired();
 		}
@@ -145,12 +151,7 @@ public abstract class ParticleSystem extends ParticleBase {
 			p.onUpdate();
 
 		// Remove the dead ones
-		Iterables.removeIf(this.myParticles, new Predicate<Particle>() {
-			@Override
-			public boolean apply(final Particle input) {
-				return !input.isAlive();
-			}
-		});
+		Iterables.removeIf(this.myParticles, REMOVE_CRITERIA);
 	}
 
 	// Override to provide some sort of intelligence to the system. The
