@@ -36,7 +36,7 @@ import net.minecraft.world.World;
 @SideOnly(Side.CLIENT)
 public abstract class ParticleJet extends ParticleSystem {
 
-	private static final int MAX_STRENGTH_FOR_COUNT = 5;
+	private static final int MAX_STRENGTH_FOR_COUNT = 7;
 	
 	protected final int jetStrength;
 	protected final int updateFrequency;
