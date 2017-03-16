@@ -25,6 +25,9 @@
 package org.blockartistry.mod.DynSurround.client.weather;
 
 import java.util.Random;
+
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
@@ -35,6 +38,7 @@ import org.blockartistry.mod.DynSurround.registry.SeasonRegistry;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -72,19 +76,24 @@ public class StormRenderer implements IAtmosRenderer {
 	}
 
 	private final Random random = new Random();
-	
+
 	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 	private final SeasonRegistry season = RegistryManager.get(RegistryType.SEASON);
 
-	private BlockPos getPrecipitationHeight(final World world, final BlockPos pos) {
+	@Nonnull
+	private BlockPos getPrecipitationHeight(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return this.season.getPrecipitationHeight(world, pos);
+	}
+
+	private static void bindTexture(@Nonnull final ResourceLocation resource) {
+		Minecraft.getMinecraft().getTextureManager().bindTexture(resource);
 	}
 
 	/**
 	 * Render rain and snow
 	 */
-	public void render(final EntityRenderer renderer, final float partialTicks) {
+	public void render(@Nonnull final EntityRenderer renderer, final float partialTicks) {
 
 		WeatherProperties.setTextures();
 		final World world = renderer.mc.theWorld;
@@ -110,7 +119,9 @@ public class StormRenderer implements IAtmosRenderer {
 		GlStateManager.disableCull();
 		GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
 		GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+				GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+				GlStateManager.DestFactor.ZERO);
 		GlStateManager.alphaFunc(516, 0.1F);
 
 		final double spawnX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) partialTicks;
@@ -120,11 +131,13 @@ public class StormRenderer implements IAtmosRenderer {
 		final int locY = MathHelper.floor_double(spawnY);
 		final int range = renderer.mc.gameSettings.fancyGraphics ? 10 : 5;
 
-		int j1 = -1;
 		float f1 = (float) renderer.rendererUpdateCount + partialTicks;
 		worldrenderer.setTranslation(-spawnX, -spawnY, -spawnZ);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+
+		boolean isDrawing = false;
+		ResourceLocation currentTexture = null;
 
 		for (int gridZ = playerZ - range; gridZ <= playerZ + range; ++gridZ) {
 			for (int gridX = playerX - range; gridX <= playerX + range; ++gridX) {
@@ -154,21 +167,23 @@ public class StormRenderer implements IAtmosRenderer {
 					}
 
 					if (k2 != l2) {
+						
 						random.setSeed((long) (gridX * gridX * 3121 + gridX * 45238971
 								^ gridZ * gridZ * 418711 + gridZ * 13761));
 						mutable.setPos(gridX, k2, gridZ);
 						final boolean canSnow = this.season.canWaterFreeze(world, mutable);
 
 						if (!biome.getHasDust() && !canSnow) {
-							if (j1 != 0) {
-								if (j1 >= 0) {
+
+							if (!isDrawing || currentTexture != locationRainPng) {
+								if (isDrawing) {
 									tess.draw();
 								}
-
-								j1 = 0;
-								renderer.mc.getTextureManager().bindTexture(locationRainPng);
+								currentTexture = locationRainPng;
+								bindTexture(currentTexture);
 								worldrenderer.begin(GL11.GL_QUADS,
 										DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+								isDrawing = true;
 							}
 
 							double d5 = ((double) (renderer.rendererUpdateCount + gridX * gridX * 3121
@@ -195,28 +210,27 @@ public class StormRenderer implements IAtmosRenderer {
 									.tex(0.0D, (double) l2 * 0.25D + d5).color(1.0F, 1.0F, 1.0F, f4).lightmap(k3, l3)
 									.endVertex();
 						} else {
-							if (j1 != 1) {
-								if (j1 >= 0) {
+
+							ResourceLocation texture = locationSnowPng;
+							if (biome.getHasDust() && !canSnow)
+								texture = locationDustPng;
+
+							if (!isDrawing || currentTexture != texture) {
+								if (isDrawing) {
 									tess.draw();
 								}
-
-								// If cold enough the dust texture will be
-								// snow that blows sideways
-								ResourceLocation texture = locationSnowPng;
-								if (biome.getHasDust() && !canSnow)
-									texture = locationDustPng;
-
-								j1 = 1;
-								renderer.mc.getTextureManager().bindTexture(texture);
-								// GL_QUADS == 7
+								currentTexture = texture;
+								bindTexture(currentTexture);
 								worldrenderer.begin(GL11.GL_QUADS,
 										DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+								isDrawing = true;
 							}
 
 							Color color = new Color(1.0F, 1.0F, 1.0F);
-							if (world.provider.getDimension() == -1) {
+							//if (world.provider.getDimension() == -1) {
+							if(biome.getHasDust()) {
 								final Color c = biome.getDustColor();
-								if (color != null)
+								if (c != null)
 									color.mix(c);
 							}
 
@@ -256,7 +270,7 @@ public class StormRenderer implements IAtmosRenderer {
 			}
 		}
 
-		if (j1 >= 0) {
+		if (isDrawing) {
 			tess.draw();
 		}
 
