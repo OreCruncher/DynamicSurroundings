@@ -238,6 +238,11 @@
 			"dustColor": "204,185,102"
 		},
 		{
+			"biomeName": "(?i)(cold desert)",
+			"dust": true,
+			"dustColor": "255,255,255"
+		},
+		{
 			"biomeName": "(?i)(?!.*cold.*|.*frozen.*)(.*desert.*|.*sand.*|.*mesa.*)",
 			"sounds": [
 				{
