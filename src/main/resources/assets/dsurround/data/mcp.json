@@ -41,7 +41,7 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(?!.*ice.*)(.*plains.*|.*meadow.*|grassland|brushland|.*shrubland.*|prairie|.*field.*|.*chaparral.*|overgrown cliffs|steppe)",
+			"biomeName": "(?i)(?!.*ice.*)(.*plains.*|.*meadow.*|.*farmland.*|grassland|brushland|.*shrubland.*|prairie|.*field.*|.*chaparral.*|overgrown cliffs|steppe)",
 			"sounds": [
 				{
 					"sound": "dsurround:plains",
