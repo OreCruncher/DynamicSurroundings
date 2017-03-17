@@ -66,16 +66,6 @@ public final class RenderWeather extends IRenderHandler {
 		StormSplashRenderer.renderStormSplashes(EnvironState.getDimensionId(), theThis);
 	}
 
-	/**
-	 * Render atmospheric effects. Redirect from EntityRenderer.
-	 * 
-	 * Currently not used. Leaving in place in case there is a revert.
-	 */
-	public static void renderRainSnow(@Nonnull final EntityRenderer theThis, final float partialTicks) {
-		for (final IAtmosRenderer renderer : renderList)
-			renderer.render(theThis, partialTicks);
-	}
-
 	@Override
 	public void render(final float partialTicks, @Nonnull final WorldClient world, @Nonnull final Minecraft mc) {
 		for (final IAtmosRenderer r : renderList)
