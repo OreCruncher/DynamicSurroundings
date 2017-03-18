@@ -374,10 +374,10 @@ public final class ModOptions {
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_FOOTSTEPS_SOUND, defaultValue = "true", lang = "cfg.sound.Footsteps")
 	@Comment("Enable Footstep sound effects")
 	public static boolean enableFootstepSounds = true;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_FOOTSTEPS_SOUND_FACTOR, defaultValue = "0.5", lang = "cfg.sound.FootstepScale")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_FOOTSTEPS_SOUND_FACTOR, defaultValue = "0.35", lang = "cfg.sound.FootstepScale")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Volume scale factor for footstep sounds")
-	public static float footstepsSoundFactor = 0.5F;
+	public static float footstepsSoundFactor = 0.35F;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_ARMOR_SOUND, defaultValue = "true", lang = "cfg.sound.Armor")
 	@Comment("Enable/disable armor sounds when moving")
 	public static boolean enableArmorSounds = true;
@@ -530,10 +530,10 @@ public final class ModOptions {
 	@Comment("Light level at which mobs can spawn")
 	@MinMaxInt(min = 0, max = 1)
 	public static int llDisplayMode = 0;
-	@Parameter(category = CATEGORY_LIGHT_LEVEL, property = CONFIG_LL_STYLE, defaultValue = "0", lang = "cfg.lightlevel.Style")
+	@Parameter(category = CATEGORY_LIGHT_LEVEL, property = CONFIG_LL_STYLE, defaultValue = "2", lang = "cfg.lightlevel.Style")
 	@Comment("Rendering style: 0 upright facing player, 1 along block surface, 2 surface with rotation")
 	@MinMaxInt(min = 0, max = 2)
-	public static int llStyle = 0;
+	public static int llStyle = 2;
 	@Parameter(category = CATEGORY_LIGHT_LEVEL, property = CONFIG_LL_HIDE_SAFE, defaultValue = "false", lang = "cfg.lightlevel.HideSafe")
 	@Comment("Hide light level information for blocks that are considered safe")
 	public static boolean llHideSafe = false;
