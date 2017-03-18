@@ -69,6 +69,7 @@ public class AreaFogScanner implements ITickable {
 	private BlockPos lastPos = BlockPos.ORIGIN;
 	private int lastDim = 0;
 	private float lastIntensity = 0;
+	private BiomeInfo lastBiome = null;
 
 	private float biomeWeight;
 	private float weightDefault;
@@ -132,12 +133,14 @@ public class AreaFogScanner implements ITickable {
 
 		final BlockPos playerPos = EnvironState.getPlayerPosition();
 		if (this.lastPos.equals(playerPos) && this.lastDim == EnvironState.getDimensionId()
-				&& this.lastIntensity == WeatherProperties.getIntensityLevel())
+				&& this.lastIntensity == WeatherProperties.getIntensityLevel()
+				&& this.lastBiome == EnvironState.getPlayerBiome())
 			return;
 
 		this.lastPos = playerPos;
 		this.lastDim = EnvironState.getDimensionId();
 		this.lastIntensity = WeatherProperties.getIntensityLevel();
+		this.lastBiome = EnvironState.getPlayerBiome();
 
 		final World world = EnvironState.getWorld();
 		final float rainStrength = world.getRainStrength(1.0F);
