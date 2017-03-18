@@ -1,3 +1,23 @@
+###DynamicSurroundings-1.11.2-3.3.2.1
+**What's New**
+* Mod support for Ars Magica 2, Rockhounding: Surface, Rockhounding: Ore Tiers
+    * These mods currently not available for 1.11.x; will support when they are
+
+**Fixes**
+* No more sound clicking when moving fast; was noticeable when flying over a beach
+* Fixed footstep sounds when walking on fences
+* Forest sounds in Flower Forest
+* Select proper rain/dust/snow precipitation texture; issue was when a dust biome (Cold Desert) was next to a snow biome (Ice Plain) the wrong precipitation texture was selected
+* Sometimes area fog calc would be incorrect when logging in.
+
+**Changes**
+* No sound attenuation for player centered sounds
+* Updated ru_RU.lang
+* Sandstone step sound for minecraft:magma
+* Thicken biome fog a bit to be closer to original thickness
+* Change default footstep volume sound factor to 0.35 to diminish "sharpness" of higher volumes
+* Change default light level render style to be surface with rotation
+
 ###DynamicSurroundings-1.11.2-3.3.2.0
 **What's New**
 * Nether dimension background sound (may need some tweaking)
