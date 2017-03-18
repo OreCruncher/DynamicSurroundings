@@ -1228,6 +1228,22 @@
 			]
 		},
 		{
+			"acousticProfile": "dirt",
+			"dictionaryEntries": [
+				"dirt",
+				"blockDirt",
+				"orePeat",
+				"blockPeat"
+			]
+		},
+		{
+			"acousticProfile": "grass",
+			"dictionaryEntries": [
+				"grass",
+				"blockGrass"
+			]
+		},
+		{
 			"acousticProfile": "squeakywood",
 			"dictionaryEntries": [
 				"chest",

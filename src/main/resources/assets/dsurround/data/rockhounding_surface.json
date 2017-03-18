@@ -1,0 +1,40 @@
+{
+	"biomes" : [
+	],
+	"blocks":[
+	],
+	"itemConfig":{
+		"axeSound":[
+		],
+		"bowSound":[
+		],
+		"swordSound":[
+		],
+		"lightArmor": [
+		],
+		"mediumArmor":[
+		],
+		"crystalArmor":[
+		],
+		"heavyArmor":[
+		]
+	},
+	"dimensions":[
+	],
+	"footsteps": {
+		"rockhounding_surface:whiteSand": "sand",
+		"rockhounding_surface:kauriFences": "#fence",
+		"rockhounding_surface:mophaneFences": "#fence",
+		"rockhounding_surface:gypsumBushLo": "NOT_EMITTER",
+		"rockhounding_surface:gypsumBushLo+messy": "MESSY_GROUND",
+		"rockhounding_surface:gypsumBushLo^0+foliage": "straw",
+		"rockhounding_surface:gypsumBushLo^1+foliage": "straw",
+		"rockhounding_surface:gypsumBushLo^2+foliage": "straw",
+		"rockhounding_surface:gypsumBushLo^3+foliage": "straw",
+		"rockhounding_surface:gypsumBushLo^4+foliage": "straw",
+		"rockhounding_surface:gypsumBushLo^5+foliage": "straw"
+	},
+	"forgeMappings":[
+	]
+	
+}
