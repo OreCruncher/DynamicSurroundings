@@ -30,9 +30,11 @@ import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDripOverride
 import org.blockartistry.mod.DynSurround.client.handlers.EffectManager;
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler;
+import org.blockartistry.mod.DynSurround.commands.CommandCalc;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -69,6 +71,8 @@ public class ProxyClient extends Proxy {
 	public void init(@Nonnull final FMLInitializationEvent event) {
 		super.init(event);
 		ParticleDripOverride.register();
+		
+		ClientCommandHandler.instance.registerCommand(new CommandCalc());
 	}
 
 	@Override
