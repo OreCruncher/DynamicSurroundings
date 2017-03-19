@@ -189,6 +189,8 @@ cfg.player.HungerThreshold.tooltip=Amount of food bar remaining to trigger playe
 
 cfg.player.potionHud.cat.PotionHud=Potion HUD Options
 cfg.player.potionHud.cat.PotionHud.tooltip=Options for the Potion HUD overlay
+cfg.player.potionHud.NoHUD=No Potion HUD
+cfg.player.potionHud.NoHUD.tooltip=Disables Vanilla and Dynamic Surroundings potion HUD
 cfg.player.potionHud.Enable=Potion HUD
 cfg.player.potionHud.tooltip=Enable/disable display of potion icons in display
 cfg.player.potionHud.Transparency=Transparency
