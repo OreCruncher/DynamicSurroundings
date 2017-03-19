@@ -34,7 +34,19 @@
 		"natura:nether_berrybush_skyberry":"leaves",
 		"natura:nether_berrybush_stingberry":"leaves",
 		"natura:nether_glass":"glass",
-		"natura:nether_heat_sand":"sand"
+		"natura:nether_heat_sand":"sand",
+		"natura:cotton_crop": "NOT_EMITTER",
+		"natura:cotton_crop+messy": "MESSY_GROUND",
+		"natura:cotton_crop^0+foliage": "NOT_EMITTER",
+		"natura:cotton_crop^1+foliage": "brush_straw_transition",
+		"natura:cotton_crop^2+foliage": "straw",
+		"natura:cotton_crop^3+foliage": "straw",
+		"natura:barley_crop": "NOT_EMITTER",
+		"natura:barley_crop+messy": "MESSY_GROUND",
+		"natura:barley_crop^0+foliage": "NOT_EMITTER",
+		"natura:barley_crop^1+foliage": "brush",
+		"natura:barley_crop^2+foliage": "brush_straw_transition",
+		"natura:barkey_crop^3+foliage": "straw"
 	},
 	"forgeMappings":[
 		{

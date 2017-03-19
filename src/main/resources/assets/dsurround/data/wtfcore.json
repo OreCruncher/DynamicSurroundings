@@ -1,0 +1,9 @@
+{
+	"footsteps":{
+		"wtfcore:stone0DecoStatic": "stone",
+		"wtfcore:dense_stone0niter_ore0": "ore",
+		"wtfcore:dense_stone0redstone_ore0": "ore",
+		"wtfcore:dense_stone0iron_ore0": "ore",
+		"wtfcore:dense_stone0coal_ore0": "ore"
+	}
+}
