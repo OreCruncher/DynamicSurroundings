@@ -332,8 +332,8 @@ public final class ModOptions {
 			CONFIG_ENABLE_FOOTSTEPS_SOUND, CONFIG_FOOTSTEPS_SOUND_FACTOR, CONFIG_ENABLE_ARMOR_SOUND,
 			CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_SWING_SOUND, CONFIG_ENABLE_CRAFTING_SOUND,
 			CONFIG_ENABLE_BOW_PULL_SOUND, CONFIG_AUTO_CONFIG_CHANNELS, CONFIG_NORMAL_CHANNEL_COUNT,
-			CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS, CONFIG_SOUND_CULL_THRESHOLD,
-			CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES);
+			CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS,
+			CONFIG_SOUND_CULL_THRESHOLD, CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES);
 
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BIOME_SOUNDS, defaultValue = "true", lang = "cfg.sound.BiomeSounds")
 	@Comment("Enable biome background and spot sounds")
@@ -412,8 +412,8 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_FOOTPRINTS = "Footprints";
 	public static final String CONFIG_FOOTPRINT_STYLE = "Footprint Style";
 	private static final List<String> playerSort = Arrays.asList(CONFIG_SUPPRESS_POTION_PARTICLES,
-			CONFIG_ENABLE_POPOFFS, CONFIG_SHOW_CRIT_WORDS, CONFIG_ENABLE_FOOTPRINTS, CONFIG_FOOTPRINT_STYLE, CONFIG_HURT_THRESHOLD,
-			CONFIG_HUNGER_THRESHOLD);
+			CONFIG_ENABLE_POPOFFS, CONFIG_SHOW_CRIT_WORDS, CONFIG_ENABLE_FOOTPRINTS, CONFIG_FOOTPRINT_STYLE,
+			CONFIG_HURT_THRESHOLD, CONFIG_HUNGER_THRESHOLD);
 
 	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_SUPPRESS_POTION_PARTICLES, defaultValue = "false", lang = "cfg.player.PotionParticles")
 	@Comment("Suppress player's potion particles from rendering")
@@ -441,16 +441,20 @@ public final class ModOptions {
 	public static int playerHungerThreshold = 8;
 
 	public static final String CATEGORY_POTION_HUD = "player.potion hud";
+	public static final String CONFIG_POTION_HUD_NONE = "No HUD";
 	public static final String CONFIG_POTION_HUD_ENABLE = "Enable";
 	public static final String CONFIG_POTION_HUD_TRANSPARENCY = "Transparency";
 	public static final String CONFIG_POTION_HUD_LEFT_OFFSET = "Horizontal Offset";
 	public static final String CONFIG_POTION_HUD_TOP_OFFSET = "Vertical Offset";
 	public static final String CONFIG_POTION_HUD_SCALE = "Display Scale";
 	public static final String CONFIG_POTION_HUD_ANCHOR = "HUD Location";
-	private static final List<String> potionHudSort = Arrays.asList(CONFIG_POTION_HUD_ENABLE,
+	private static final List<String> potionHudSort = Arrays.asList(CONFIG_POTION_HUD_NONE, CONFIG_POTION_HUD_ENABLE,
 			CONFIG_POTION_HUD_TRANSPARENCY, CONFIG_POTION_HUD_SCALE, CONFIG_POTION_HUD_ANCHOR,
 			CONFIG_POTION_HUD_TOP_OFFSET, CONFIG_POTION_HUD_LEFT_OFFSET);
 
+	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_NONE, defaultValue = "false", lang = "cfg.player.potionHud.NoHUD")
+	@Comment("Disables Vanilla and Dynamic Surroundings potion HUD")
+	public static boolean potionHudNone = false;
 	@Parameter(category = CATEGORY_POTION_HUD, property = CONFIG_POTION_HUD_ENABLE, defaultValue = "true", lang = "cfg.player.potionHud.Enable")
 	@Comment("Enable display of potion icons in display")
 	public static boolean potionHudEnabled = true;

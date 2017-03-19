@@ -59,6 +59,11 @@ public class PotionHUD extends Gui implements IGuiOverlay {
 	private final Color TEXT_DURATION_LOW = Color.RED;
 
 	public void doRender(final RenderGameOverlayEvent.Pre event) {
+		
+		if(ModOptions.potionHudNone && event.getType() == ElementType.POTION_ICONS) {
+			event.setCanceled(true);
+			return;
+		}
 
 		if (!ModOptions.potionHudEnabled || event.getType() != ElementType.POTION_ICONS) {
 			return;
