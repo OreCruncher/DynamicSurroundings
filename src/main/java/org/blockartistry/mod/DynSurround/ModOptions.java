@@ -315,6 +315,7 @@ public final class ModOptions {
 	public static final String CONFIG_AUTO_CONFIG_CHANNELS = "Autoconfigure Channels";
 	public static final String CONFIG_NORMAL_CHANNEL_COUNT = "Number Normal Channels";
 	public static final String CONFIG_STREAMING_CHANNEL_COUNT = "Number Streaming Channels";
+	public static final String CONFIG_MUTE_WHEN_BACKGROUND = "Mute when Background";
 	public static final String CONFIG_ENABLE_JUMP_SOUND = "Jump Sound";
 	public static final String CONFIG_ENABLE_SWING_SOUND = "Swing Sound";
 	public static final String CONFIG_ENABLE_CRAFTING_SOUND = "Crafting Sound";
@@ -331,7 +332,7 @@ public final class ModOptions {
 			CONFIG_ENABLE_FOOTSTEPS_SOUND, CONFIG_FOOTSTEPS_SOUND_FACTOR, CONFIG_ENABLE_ARMOR_SOUND,
 			CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_SWING_SOUND, CONFIG_ENABLE_CRAFTING_SOUND,
 			CONFIG_ENABLE_BOW_PULL_SOUND, CONFIG_AUTO_CONFIG_CHANNELS, CONFIG_NORMAL_CHANNEL_COUNT,
-			CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS, CONFIG_SOUND_CULL_THRESHOLD,
+			CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS, CONFIG_SOUND_CULL_THRESHOLD,
 			CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES);
 
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BIOME_SOUNDS, defaultValue = "true", lang = "cfg.sound.BiomeSounds")
@@ -355,6 +356,9 @@ public final class ModOptions {
 	@Comment("Number of streaming sound channels to configure in the sound system (manual)")
 	@RestartRequired(server = true)
 	public static int streamingSoundChannelCount = 4;
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_MUTE_WHEN_BACKGROUND, defaultValue = "true", lang = "cfg.sound.Mute")
+	@Comment("Mute sound when Minecraft is in the background")
+	public static boolean muteWhenBackground = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_THUNDER_VOLUME, defaultValue = "10000", lang = "cfg.sound.ThunderVolume")
 	@Comment("Sound Volume of Thunder")
 	@MinMaxFloat(min = 15F, max = 10000F)
