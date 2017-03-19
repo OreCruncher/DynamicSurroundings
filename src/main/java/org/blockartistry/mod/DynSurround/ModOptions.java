@@ -402,12 +402,13 @@ public final class ModOptions {
 	public static final String CATEGORY_PLAYER = "player";
 	public static final String CONFIG_SUPPRESS_POTION_PARTICLES = "Suppress Potion Particles";
 	public static final String CONFIG_ENABLE_POPOFFS = "Damage Popoffs";
+	public static final String CONFIG_SHOW_CRIT_WORDS = "Show Crit Words";
 	public static final String CONFIG_HURT_THRESHOLD = "Hurt Threshold";
 	public static final String CONFIG_HUNGER_THRESHOLD = "Hunger Threshold";
 	public static final String CONFIG_ENABLE_FOOTPRINTS = "Footprints";
 	public static final String CONFIG_FOOTPRINT_STYLE = "Footprint Style";
 	private static final List<String> playerSort = Arrays.asList(CONFIG_SUPPRESS_POTION_PARTICLES,
-			CONFIG_ENABLE_POPOFFS, CONFIG_ENABLE_FOOTPRINTS, CONFIG_FOOTPRINT_STYLE, CONFIG_HURT_THRESHOLD,
+			CONFIG_ENABLE_POPOFFS, CONFIG_SHOW_CRIT_WORDS, CONFIG_ENABLE_FOOTPRINTS, CONFIG_FOOTPRINT_STYLE, CONFIG_HURT_THRESHOLD,
 			CONFIG_HUNGER_THRESHOLD);
 
 	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_SUPPRESS_POTION_PARTICLES, defaultValue = "false", lang = "cfg.player.PotionParticles")
@@ -416,6 +417,9 @@ public final class ModOptions {
 	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_ENABLE_POPOFFS, defaultValue = "true", lang = "cfg.player.Popoffs")
 	@Comment("Controls display of damage pop-offs when an entity is damaged")
 	public static boolean enableDamagePopoffs = true;
+	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_SHOW_CRIT_WORDS, defaultValue = "true", lang = "cfg.player.CritWords")
+	@Comment("Display random power word on critical hit")
+	public static boolean showCritWords = true;
 	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_ENABLE_FOOTPRINTS, defaultValue = "true", lang = "cfg.player.Footprints")
 	@Comment("Enable player footprints")
 	public static boolean enableFootprints = true;

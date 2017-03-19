@@ -82,7 +82,7 @@ public final class PopoffEffectHandler extends EffectHandlerBase {
 		final World world = EnvironState.getWorld();
 
 		ParticleTextPopOff particle = null;
-		if (data.isCritical) {
+		if (data.isCritical && ModOptions.showCritWords) {
 			particle = new ParticleTextPopOff(world, getPowerWord(), CRITICAL_TEXT_COLOR, data.posX, data.posY,
 					data.posZ);
 			ParticleHelper.addParticle(particle);
