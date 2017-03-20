@@ -46,7 +46,7 @@
 		"natura:barley_crop^0+foliage": "NOT_EMITTER",
 		"natura:barley_crop^1+foliage": "brush",
 		"natura:barley_crop^2+foliage": "brush_straw_transition",
-		"natura:barkey_crop^3+foliage": "straw"
+		"natura:barley_crop^3+foliage": "straw"
 	},
 	"forgeMappings":[
 		{

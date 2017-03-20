@@ -32,7 +32,6 @@ import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleWaterSplash;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockDynamicLiquid;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -56,8 +55,8 @@ public class WaterSplashJetEffect extends JetEffect {
 		return BlockEffectType.SPLASH_JET;
 	}
 
-	private static boolean isLiquidBlock(final Block block) {
-		return BlockLiquid.class.isAssignableFrom(block.getClass());
+	private static boolean isLiquidBlock(final IBlockState state) {
+		return state.getMaterial().isLiquid() || BlockLiquid.class.isAssignableFrom(state.getBlock().getClass());
 	}
 
 	private static boolean partialLiquidOrAir(final World world, final BlockPos pos) {
@@ -65,7 +64,7 @@ public class WaterSplashJetEffect extends JetEffect {
 		if (state.getBlock() == Blocks.AIR)
 			return true;
 
-		if (!isLiquidBlock(state.getBlock()))
+		if (!isLiquidBlock(state))
 			return false;
 
 		// getLiquidHeightPercent() returns the percentage of *air* in the
@@ -86,7 +85,7 @@ public class WaterSplashJetEffect extends JetEffect {
 		int count;
 		for (count = 0; count < MAX_STRENGTH; count++) {
 			final IBlockState state = world.getBlockState(workBlock);
-			if (!isLiquidBlock(state.getBlock()) || !isUnboundedLiquid(world, workBlock))
+			if (!isLiquidBlock(state) || !isUnboundedLiquid(world, workBlock))
 				break;
 			workBlock = workBlock.up();
 		}

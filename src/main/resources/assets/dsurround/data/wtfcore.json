@@ -1,5 +1,15 @@
 {
 	"footsteps":{
+		"wtfcore:patchWater": "waterfine",
+		"wtfcore:patchWater+carpet": "waterfine",
+		"wtfcore:slabDirt": "dirt",
+		"wtfcore:slabDirt+carpet": "dirt",
+		"wtfcore:slabSand": "sand",
+		"wtfcore:slabSand+carpet": "sand",
+		"wtfcore:slabRedsand": "sand",
+		"wtfcore:slabRedsand+carpet": "sand",
+		"wtfcore:slabClay": "dirt",
+		"wtfcore:slabClay+carpet": "dirt",
 		"wtfcore:stone0DecoStatic": "stone",
 		"wtfcore:dense_stone0niter_ore0": "ore",
 		"wtfcore:dense_stone0redstone_ore0": "ore",

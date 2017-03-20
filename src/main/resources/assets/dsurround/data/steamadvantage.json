@@ -1,0 +1,20 @@
+{
+	"footsteps":{
+		"steamadvantage:pump_pipe_steam": "metalbar",
+		"steamadvantage:drillbit": "hardmetal",
+		"steamadvantage:steam_boiler_coal": "hardmetal",
+		"steamadvantage:steam_boiler_electric": "hardmetal",
+		"steamadvantage:steam_boiler_geothermal": "hardmetal",
+		"steamadvantage:steam_boiler_oil": "hardmetal",
+		"steamadvantage:steam_crusher": "hardmetal",
+		"steamadvantage:steam_drill": "hardmetal",
+		"steamadvantage:steam_elevator": "hardmetal",
+		"steamadvantage:steam_furnace": "hardmetal",
+		"steamadvantage:steam_pump": "hardmetal",
+		"steamadvantage:steam_still": "hardmetal",
+		"steamadvantage:steam_tank": "hardmetal",
+		"steamadvantage:platform": "hardmetal",
+		"steamadvantage:steam_pipe": "metalbar",
+		"steamadvantage:steam_track": "metalbar"
+	}
+}
