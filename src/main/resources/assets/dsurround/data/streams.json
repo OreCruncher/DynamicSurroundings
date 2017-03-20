@@ -1,0 +1,39 @@
+{
+	"blocks":[
+		{
+			"blocks": [
+				"streams:river/tile.water/-2/-2",
+				"streams:river/tile.water/-2/-1",
+				"streams:river/tile.water/-2/0",
+				"streams:river/tile.water/-2/1",
+				"streams:river/tile.water/-2/2",
+				"streams:river/tile.water/-1/-2",
+				"streams:river/tile.water/-1/2",
+				"streams:river/tile.water/0/-2",
+				"streams:river/tile.water/0/0",
+				"streams:river/tile.water/0/2",
+				"streams:river/tile.water/1/-2",
+				"streams:river/tile.water/1/2",
+				"streams:river/tile.water/2/-2",
+				"streams:river/tile.water/2/-1",
+				"streams:river/tile.water/2/0",
+				"streams:river/tile.water/2/1",
+				"streams:river/tile.water/2/2"
+			],
+			"effects": [
+				{
+					"effect": "bubble",
+					"chance": 1800
+				},
+				{
+					"effect": "steam",
+					"chance": 0
+				},
+				{
+					"effect": "splash",
+					"chance": 0
+				}
+			]
+		}
+	]
+}

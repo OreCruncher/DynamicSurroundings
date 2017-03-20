@@ -2,6 +2,17 @@
 	"biomes" : [
 	],
 	"blocks":[
+		{
+			"blocks": [
+				"rockhounding_surface:whiteSand"
+			],
+			"effects": [
+				{
+					"effect": "dust",
+					"chance": 500
+				}
+			]
+		}
 	],
 	"itemConfig":{
 		"axeSound":[
@@ -22,6 +33,7 @@
 	"dimensions":[
 	],
 	"footsteps": {
+		"rockhounding_surface:gypsumCrops": "leaves",
 		"rockhounding_surface:whiteSand": "sand",
 		"rockhounding_surface:kauriFences": "#fence",
 		"rockhounding_surface:mophaneFences": "#fence",
