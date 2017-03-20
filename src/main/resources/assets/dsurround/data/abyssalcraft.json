@@ -1,0 +1,117 @@
+{
+	"biomes": [
+		{
+			"biomeName": "(?i)(darklands.*|.*dreadlands.*|.*coralium.*)",
+			"soundReset": true,
+			"dust": false,
+			"fog": false
+		},
+		{
+			"biomeName": "Darklands",
+			"fog": true,
+			"fogColor": "75,0,130",
+			"fogDensity": 0.6
+		},
+		{
+			"biomeName": "Darklands Forest",
+			"fog": true,
+			"fogColor": "75,0,130",
+			"fogDensity": 0.6,
+			"sounds": [
+				{
+					"sound": "dsurround:forest",
+					"conditions": "weather.isNotRaining && isDay"
+				},
+				{
+					"sound": "dsurround:crickets",
+					"conditions": "weather.isNotRaining && isNight"
+				}
+			]
+		},
+		{
+			"biomeName": "Darklands Plains",
+			"fog": true,
+			"fogColor": "75,0,130",
+			"fogDensity": 0.6,
+			"sounds": [
+				{
+					"sound": "dsurround:wind",
+					"volume": 0.3,
+					"pitch": 1.5
+				}
+			]
+		},
+		{
+			"biomeName": "Darklands Highland",
+			"sounds": [
+				{
+					"sound": "dsurround:wind",
+					"volume": 0.3,
+					"pitch": 1.5
+				}
+			]
+		},
+		{
+			"biomeName": "Darklands Mountains",
+			"sounds": [
+				{
+					"sound": "dsurround:wind"
+				}
+			]
+		},
+		{
+			"biomeName": "Coralium Infested Swamp",
+			"fog": true,
+			"fogColor": "34,228,144",
+			"fogDensity": 0.6,
+			"sounds": [
+				{
+					"sound": "dsurround:crickets"
+				},
+				{
+					"sound": "dsurround:insectbuzz",
+					"conditions": "weather.isNotRaining",
+					"soundType": "spot",
+					"variable": true
+				}
+			]
+		},
+		{
+			"biomeName": "Coralium Infested Ocean",
+			"fog": true,
+			"fogColor": "28,107,160",
+			"fogDensity": 0.6,
+			"sounds": [
+				{
+					"sound": "dsurround:beach"
+				}
+			]
+		},
+		{
+			"biomeName": "Abyssal Wasteland",
+			"soundReset": true,
+			"dust": true,
+			"dustColor": "204,185,102",
+			"sounds": [
+				{
+					"sound": "dsurround:wind",
+					"volume": 0.3,
+					"pitch": 1.5
+				}
+			]
+		},
+		{
+			"biomeName": ".*Dreadlands.*",
+			"soundReset": true,
+			"sounds": [
+				{
+					"sound": "dsurround:wind"
+				}
+			]
+		}
+	],
+	"blocks": [
+	],
+	"footsteps": {
+	}
+}
