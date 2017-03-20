@@ -24,6 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.client.sound;
 
+import java.lang.reflect.Field;
 import java.nio.IntBuffer;
 
 import javax.annotation.Nonnull;
@@ -42,12 +43,15 @@ import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ISoundEventListener;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
-import net.minecraftforge.client.event.sound.SoundSetupEvent;
 import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
+import net.minecraftforge.client.event.sound.SoundSetupEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
+import paulscode.sound.CommandThread;
+import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 
 @Mod.EventBusSubscriber(Side.CLIENT)
@@ -58,6 +62,22 @@ public class SoundEngine {
 	private static int normalChannelCount = 0;
 	private static int streamChannelCount = 0;
 	private static SoundEngine instance = null;
+	
+	private static Field sndSystem = null;
+	private static Field commandThread = null;
+	
+	static {
+		
+		try {
+			sndSystem = ReflectionHelper.findField(SoundManager.class, "field_148620_e", "sndSystem");
+			commandThread = ReflectionHelper.findField(SoundSystem.class, "commandThread");
+		} catch(final Throwable t) {
+			ModLog.warn("Cannot find sound manager fields; auto restart not enabled");
+			sndSystem = null;
+			commandThread = null;
+		}
+		
+	}
 
 	public static SoundEngine instance() {
 		if (instance == null)
@@ -127,7 +147,7 @@ public class SoundEngine {
 		if (event.getSound() == this.currentSound)
 			this.soundId = event.getUuid();
 	}
-
+	
 	@SubscribeEvent
 	public static void onSoundSetup(@Nonnull final SoundSetupEvent event) {
 		configureSound();
@@ -162,6 +182,24 @@ public class SoundEngine {
 				totalChannels == -1 ? "UNKNOWN" : Integer.toString(totalChannels));
 		SoundSystemConfig.setNumberNormalChannels(normalChannelCount);
 		SoundSystemConfig.setNumberStreamingChannels(streamChannelCount);
+	}
+	
+	public void keepAlive() {
+		if(sndSystem == null)
+			return;
+		
+		try {
+			final SoundSystem sys = (SoundSystem)sndSystem.get(this.manager);
+			if(sys != null) {
+				final CommandThread t = (CommandThread)commandThread.get(sys);
+				if(t != null && !t.isAlive()) {
+					ModLog.warn("Autoresart of sound system!");
+					this.manager.reloadSoundSystem();
+				}
+			}
+		} catch(final Throwable t) {
+			
+		}
 	}
 
 }

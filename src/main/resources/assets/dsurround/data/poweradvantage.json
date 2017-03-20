@@ -1,0 +1,27 @@
+{
+	"footsteps": {
+		"poweradvantage:item_filter_block": "hardmetal",
+		"poweradvantage:item_filter_food": "hardmetal",
+		"poweradvantage:item_filter_fuel": "hardmetal",
+		"poweradvantage:item_filter_inventory": "hardmetal",
+		"poweradvantage:item_filter_ore": "hardmetal",
+		"poweradvantage:item_filter_overflow": "hardmetal",
+		"poweradvantage:item_filter_plant": "hardmetal",
+		"poweradvantage:item_filter_smelt": "hardmetal",
+		"poweradvantage:still": "metalbar",
+		"poweradvantage:fluid_pipe": "metalbar",
+		"poweradvantage:fluid_switch": "metalbar",
+		"poweradvantage:steel_frame": "metalbar",
+		"poweradvantage:item_conveyor": "hardmetal",
+		"poweradvantage:infinite_electricity": "hardmetal",
+		"poweradvantage:infinite_quantum": "hardmetal",
+		"poweradvantage:infinite_steam": "hardmetal",
+		"poweradvantage:fluid_storage_tank": "woodutility",
+		"poweradvantage:fluid_metal_tank": "hardmetal",
+		"poweradvantage:fluid_drain": "metalbar",
+		"poweradvantage:fluid_discharge": "hardmetal",
+		"poweradvantage:converter_rf_electricity": "hardmetal",
+		"poweradvantage:converter_rf_quantum": "hardmetal",
+		"poweradvantage:converter_rf_steam": "hardmetal"
+	}
+}
