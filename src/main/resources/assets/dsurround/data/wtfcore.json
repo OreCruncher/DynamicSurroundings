@@ -4,6 +4,8 @@
 		"wtfcore:patchWater+carpet": "waterfine",
 		"wtfcore:slabDirt": "dirt",
 		"wtfcore:slabDirt+carpet": "dirt",
+		"wtfcore:slabPodzol": "dirt",
+		"wtfcore:slabPodzol+carpet": "dirt",
 		"wtfcore:slabSand": "sand",
 		"wtfcore:slabSand+carpet": "sand",
 		"wtfcore:slabRedsand": "sand",
