@@ -1,6 +1,15 @@
 {
 	"biomes": [
 		{
+			"biomeName": "Player",
+			"sounds": [
+				{
+					"sound": "dsurround:dimension.nether",
+					"conditions": "player.dimensionName == 'Omothol'"
+				}
+			]
+		},
+		{
 			"biomeName": "(?i)(darklands.*|.*dreadlands.*|.*coralium.*)",
 			"soundReset": true,
 			"dust": false,
@@ -9,13 +18,13 @@
 		{
 			"biomeName": "Darklands",
 			"fog": true,
-			"fogColor": "75,0,130",
+			"fogColor": "128,0,128",
 			"fogDensity": 0.6
 		},
 		{
 			"biomeName": "Darklands Forest",
 			"fog": true,
-			"fogColor": "75,0,130",
+			"fogColor": "128,0,128",
 			"fogDensity": 0.6,
 			"sounds": [
 				{
@@ -31,7 +40,7 @@
 		{
 			"biomeName": "Darklands Plains",
 			"fog": true,
-			"fogColor": "75,0,130",
+			"fogColor": "128,0,128",
 			"fogDensity": 0.6,
 			"sounds": [
 				{
@@ -43,6 +52,9 @@
 		},
 		{
 			"biomeName": "Darklands Highland",
+			"fog": true,
+			"fogColor": "128,0,128",
+			"fogDensity": 0.6,
 			"sounds": [
 				{
 					"sound": "dsurround:wind",
@@ -112,6 +124,80 @@
 	],
 	"blocks": [
 	],
+	"itemConfig": {
+		"axeSound": [
+			"com.shinoow.abyssalcraft.common.items.ItemACAxe",
+			"com.shinoow.abyssalcraft.common.items.ItemACPickaxe",
+			"com.shinoow.abyssalcraft.common.items.ItemCudgel"
+		],
+		"bowSound": [
+			"com.shinoow.abyssalcraft.common.items.ItemCoraliumBow"
+		],
+		"swordSound": [
+			"com.shinoow.abyssalcraft.common.items.ItemStaff",
+			"com.shinoow.abyssalcraft.common.items.ItemDrainStaff",
+			"com.shinoow.abyssalcraft.common.items.ItemACShovel",
+			"com.shinoow.abyssalcraft.common.items.ItemACHoe",
+			"com.shinoow.abyssalcraft.common.items.ItemACSword",
+			"com.shinoow.abyssalcraft.common.items.ItemDreadiumKatana",
+			"com.shinoow.abyssalcraft.common.items.ItemSoulReaper"
+		],
+		"lightArmor": [
+		],
+		"mediumArmor": [
+			"abyssalcraft:dreadiumsamuraihelmet",
+			"abyssalcraft:dreadiumsamuraiplate",
+			"abyssalcraft:dreadiumsamurailegs",
+			"abyssalcraft:dreadiumsamuraiboots"
+		],
+		"crystalArmor": [
+		],
+		"heavyArmor": [
+			"abyssalcraft:ahelmet",
+			"abyssalcraft:aplate",
+			"abyssalcraft:alegs",
+			"abyssalcraft:aboots",
+			"abyssalcraft:dhelmet",
+			"abyssalcraft:dplate",
+			"abyssalcraft:dlegs",
+			"abyssalcraft:dboots",
+			"abyssalcraft:corhelmet",
+			"abyssalcraft:corplate",
+			"abyssalcraft:corlegs",
+			"abyssalcraft:corboots",
+			"abyssalcraft:corhelmetp",
+			"abyssalcraft:corplatep",
+			"abyssalcraft:corlegsp",
+			"abyssalcraft:corbootsp",
+			"abyssalcraft:depthshelmet",
+			"abyssalcraft:depthsplate",
+			"abyssalcraft:depthslegs",
+			"abyssalcraft:depthsboots",
+			"abyssalcraft:dreadiumhelmet",
+			"abyssalcraft:dreadiumplate",
+			"abyssalcraft:dreadiumlegs",
+			"abyssalcraft:dreadiumboots",
+			"abyssalcraft:ethaxiumhelmet",
+			"abyssalcraft:ethaxiumplate",
+			"abyssalcraft:ethaxiumlegs",
+			"abyssalcraft:ethaxiumboots"
+		]
+	},
+	"dimensions": [
+		{
+			"name": "Omothol",
+			"seaLevel": 0
+		}
+	],
 	"footsteps": {
+		"abyssalcraft:abyfence+bigger": "brickstone",
+		"abyssalcraft:dsbfence+bigger": "brickstone",
+		"abyssalcraft:dreadbrickfence+bigger": "brickstone",
+		"abyssalcraft:abydreadbrickfence+bigger": "brickstone",
+		"abyssalcraft:cstonebrickfence+bigger": "brickstone",
+		"abyssalcraft:ethaxiumfence+bigger": "brickstone",
+		"abyssalcraft:darkethaxiumfence+bigger": "brickstone",
+		"abyssalcraft:dltfence": "#fence",
+		"abyssalcraft:drtfence": "#fence"
 	}
 }

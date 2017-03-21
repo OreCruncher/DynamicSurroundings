@@ -84,6 +84,7 @@ public final class WailaHandler implements IWailaDataProvider {
 				if (stack.getHasSubtypes())
 					builder.append(':').append(stack.getItemDamage());
 				text.add(builder.toString());
+				text.add("> " + item.getClass().getName());
 			}
 		}
 
@@ -91,6 +92,7 @@ public final class WailaHandler implements IWailaDataProvider {
 			final IBlockState state = accessor.getBlockState();
 			final BlockInfo block = new BlockInfo(state);
 			text.add("BLOCK: " + block.toString());
+			text.add("> " + block.getBlock().getClass().getName());
 			text.add("Material: " + MCHelper.getMaterialName(accessor.getBlockState().getMaterial()));
 			
 			final FootstepsRegistry footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);

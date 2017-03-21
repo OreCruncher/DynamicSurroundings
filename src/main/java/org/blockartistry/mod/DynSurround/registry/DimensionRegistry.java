@@ -52,7 +52,7 @@ public final class DimensionRegistry extends Registry {
 	public void initComplete() {
 		if (ModOptions.enableDebugLogging) {
 			ModLog.info("*** DIMENSION REGISTRY (cache) ***");
-			for (final DimensionConfig reg : cache)
+			for (final DimensionConfig reg : this.cache)
 				ModLog.info(reg.toString());
 		}
 	}
@@ -76,8 +76,7 @@ public final class DimensionRegistry extends Registry {
 	@Nonnull
 	private DimensionConfig getData(@Nonnull final DimensionConfig entry) {
 		for (final DimensionConfig e : this.cache)
-			if ((e.dimensionId != null && e.dimensionId.equals(entry.dimensionId))
-					|| (e.name != null && e.name.equals(entry.name)))
+			if(e.equals(entry))
 				return e;
 		this.cache.add(entry);
 		return entry;
@@ -114,7 +113,7 @@ public final class DimensionRegistry extends Registry {
 			DimensionConfig entry = null;
 			for (final DimensionConfig e : this.cache)
 				if ((e.dimensionId != null && e.dimensionId == world.provider.getDimension())
-						|| (e.name != null && e.name.equals(world.provider.getDimensionType()))) {
+						|| (e.name != null && e.name.equals(world.provider.getDimensionType().getName()))) {
 					entry = e;
 					break;
 				}
