@@ -13,7 +13,8 @@
 		"wtfcore:slabClay": "dirt",
 		"wtfcore:slabClay+carpet": "dirt",
 		"wtfcore:stone0DecoStatic": "stone",
-		"wtfcore:dense_stone0niter_ore0": "ore",
+		"wtfcore:nitre_ore": "ore",
+		"wtfcore:dense_stone0nitre_ore0": "ore",
 		"wtfcore:dense_stone0redstone_ore0": "ore",
 		"wtfcore:dense_stone0iron_ore0": "ore",
 		"wtfcore:dense_stone0coal_ore0": "ore"
