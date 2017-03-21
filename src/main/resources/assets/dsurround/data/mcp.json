@@ -663,10 +663,6 @@
 			"aurora": false,
 			"seaLevel": 0,
 			"cloudHeight": 128
-		},
-		{
-			"name": "Erebus",
-			"seaLevel": 24
 		}
 	],
 	"footsteps": {

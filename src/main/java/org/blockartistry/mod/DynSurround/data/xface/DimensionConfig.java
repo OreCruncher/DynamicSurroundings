@@ -67,4 +67,14 @@ public class DimensionConfig {
 			builder.append("hasWeather: ").append(Boolean.toString(this.hasWeather.booleanValue())).append(" ");
 		return builder.toString();
 	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj)
+			return true;
+
+		final DimensionConfig dc = (DimensionConfig)obj;
+		return (this.dimensionId != null && this.dimensionId.equals(dc.dimensionId))
+				|| (this.name != null && this.name.equals(dc.name));
+	}
 }
