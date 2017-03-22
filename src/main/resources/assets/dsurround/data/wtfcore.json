@@ -2,8 +2,12 @@
 	"footsteps":{
 		"wtfcore:patchWater": "waterfine",
 		"wtfcore:patchWater+carpet": "waterfine",
+		"wtfcore:slabGravel": "gravel",
+		"wtfcore:slabGravel+carpet": "gravel",
 		"wtfcore:slabDirt": "dirt",
 		"wtfcore:slabDirt+carpet": "dirt",
+		"wtfcore:slabMossyDirt": "dirt",
+		"wtfcore:slabMossyDirt+carpet": "dirt",
 		"wtfcore:slabPodzol": "dirt",
 		"wtfcore:slabPodzol+carpet": "dirt",
 		"wtfcore:slabSand": "sand",
