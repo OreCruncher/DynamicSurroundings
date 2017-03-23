@@ -58,6 +58,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -392,15 +393,16 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		final int diff = event.total - event.free;
 
 		data.add(TextFormatting.GOLD + "Server Information");
-		data.add(String.format("Mem: % 2d%% %03d/%03dMB", diff * 100 / event.max, diff, event.max));
-		data.add(String.format("Allocated: % 2d%% %03dMB", event.total * 100 / event.max, event.total));
+		data.add(String.format("Mem: %d%% %03d/%3dMB", diff * 100 / event.max, diff, event.max));
+		data.add(String.format("Allocated: %d%% %3dMB", event.total * 100 / event.max, event.total));
 		final int tps = (int) Math.min(1000.0D / event.meanTickTime, 20.0D);
-		data.add(String.format("Ticktime Overall:%s %1.3fms (%d TPS)", getTpsFormatPrefix(tps), event.meanTickTime, tps));
+		data.add(String.format("Ticktime Overall:%s %5.3fms (%d TPS)", getTpsFormatPrefix(tps), event.meanTickTime, tps));
 		event.dimTps.forEachEntry(new TIntDoubleProcedure() {
 			@Override
 			public boolean execute(int a, double b) {
+				final String dimName = DimensionManager.getProviderType(a).getName();
 				final int tps = (int) Math.min(1000.0D / b, 20.0D);
-				data.add(String.format("Dim % 3d:%s %3.3fms (%d TPS)", a, getTpsFormatPrefix(tps), b, tps));
+				data.add(String.format("%s (%d):%s %7.3fms (%d TPS)", dimName, a, getTpsFormatPrefix(tps), b, tps));
 				return true;
 			}
 
