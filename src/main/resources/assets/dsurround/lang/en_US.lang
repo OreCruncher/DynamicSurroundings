@@ -33,6 +33,8 @@ cfg.logging.VersionCheck=Online Version Check Result
 cfg.logging.VersionCheck.tooltip=Enables/disables display of version check information
 cfg.logging.DebugDialog=Debug Dialog
 cfg.logging.DebugDialog.tooltip=Enables/disables display of debug dialog
+cfg.logging.ServerStats=Report Server Stats
+cfg.logging.ServerStats.tooltip=Enables/disables reporting of server stats
 
 cfg.rain.cat.Rain=Rain Options
 cfg.rain.cat.Rain.tooltip=Options that control rain effects in the client

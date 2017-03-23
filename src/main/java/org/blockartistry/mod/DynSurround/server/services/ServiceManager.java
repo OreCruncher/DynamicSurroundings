@@ -27,48 +27,58 @@ package org.blockartistry.mod.DynSurround.server.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
+import org.blockartistry.mod.DynSurround.ModOptions;
+import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 
+import gnu.trove.map.hash.TIntDoubleHashMap;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 public final class ServiceManager extends Service {
-	
+
 	private static final ServiceManager INSTANCE = new ServiceManager();
-	
+
 	private final List<Service> services = new ArrayList<Service>();
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
-	
+
 	private ServiceManager() {
 		super("ServiceManager");
 	}
-	
+
 	private void addService(final Service service) {
 		this.services.add(service);
 	}
-	
+
 	private void clearServices() {
 		this.services.clear();
 	}
-	
+
 	private void init0() {
-		for(final Service s: this.services) {
+		for (final Service s : this.services) {
 			s.init();
 			MinecraftForge.EVENT_BUS.register(s);
 		}
 	}
-	
+
 	private void fini0() {
-		for(final Service s: this.services) {
+		for (final Service s : this.services) {
 			s.fini();
 			MinecraftForge.EVENT_BUS.unregister(s);
 		}
 	}
-	
+
 	public static void initialize() {
 		INSTANCE.addService(INSTANCE);
 		INSTANCE.addService(new AtmosphereService());
@@ -79,7 +89,7 @@ public final class ServiceManager extends Service {
 		INSTANCE.addService(new EnvironmentService());
 		INSTANCE.init0();
 	}
-	
+
 	public static void deinitialize() {
 		INSTANCE.fini0();
 		INSTANCE.clearServices();
@@ -92,4 +102,42 @@ public final class ServiceManager extends Service {
 		this.dimensions.loading(e.getWorld());
 	}
 
+	private static long tpsCount = 0;
+
+	private static long mean(@Nonnull final long[] values) {
+		long sum = 0L;
+		for (long v : values)
+			sum += v;
+		return sum / values.length;
+	}
+
+	/**
+	 * Collect tick performance data for the loaded dimensions and broadcast to
+	 * attached players.
+	 * 
+	 * @param event
+	 */
+	@SubscribeEvent
+	public void tickEvent(@Nonnull final TickEvent.ServerTickEvent event) {
+		if (!ModOptions.reportServerStats || event.phase != Phase.END)
+			return;
+
+		// Spam once a second
+		if ((++tpsCount % 20) != 0)
+			return;
+
+		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+
+		final TIntDoubleHashMap map = new TIntDoubleHashMap();
+		for (Integer dim : DimensionManager.getIDs()) {
+			map.put(dim.intValue(), mean((long[]) server.worldTickTimes.get(dim)) / 1000000D);
+		}
+
+		final double meanTickTime = mean(server.tickTimeArray) / 1000000D;
+		final int total = (int) (Runtime.getRuntime().totalMemory() / 1024L / 1024L);
+		final int max = (int) (Runtime.getRuntime().maxMemory() / 1024L / 1024L);
+		final int free = (int) (Runtime.getRuntime().freeMemory() / 1024L / 1024L);
+
+		Network.sendServerDataUpdate(map, meanTickTime, free, total, max);
+	}
 }
