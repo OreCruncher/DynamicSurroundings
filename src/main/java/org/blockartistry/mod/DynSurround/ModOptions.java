@@ -77,8 +77,9 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_DEBUG_LOGGING = "Enable Debug Logging";
 	public static final String CONFIG_ENABLE_ONLINE_VERSION_CHECK = "Enable Online Version Check";
 	public static final String CONFIG_ENABLE_DEBUG_DIALOG = "Enable Debug Dialog";
+	public static final String CONFIG_REPORT_SERVER_STATS = "Report Server Stats";
 	private static final List<String> loggingSort = Arrays.asList(CONFIG_ENABLE_ONLINE_VERSION_CHECK,
-			CONFIG_ENABLE_DEBUG_LOGGING);
+			CONFIG_ENABLE_DEBUG_LOGGING, CONFIG_REPORT_SERVER_STATS);
 
 	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_ENABLE_DEBUG_LOGGING, defaultValue = "false", lang = "cfg.logging.EnableDebug")
 	@Comment("Enables/disables debug logging of the mod")
@@ -92,6 +93,9 @@ public final class ModOptions {
 	@Comment("Enables/disables display of debug dialog")
 	@RestartRequired
 	public static boolean showDebugDialog = false;
+	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_REPORT_SERVER_STATS, defaultValue = "false", lang = "cfg.logging.ServerStats")
+	@Comment("Enables/disables reporting of server stats")
+	public static boolean reportServerStats = false;
 
 	public static final String CATEGORY_RAIN = "rain";
 	public static final String CONFIG_RAIN_VOLUME = "Sound Level";
@@ -441,7 +445,7 @@ public final class ModOptions {
 	public static int playerHungerThreshold = 8;
 
 	public static final String CATEGORY_POTION_HUD = "player.potion hud";
-	public static final String CONFIG_POTION_HUD_NONE = "No HUD";
+	public static final String CONFIG_POTION_HUD_NONE = "No Potion HUD";
 	public static final String CONFIG_POTION_HUD_ENABLE = "Enable";
 	public static final String CONFIG_POTION_HUD_TRANSPARENCY = "Transparency";
 	public static final String CONFIG_POTION_HUD_LEFT_OFFSET = "Horizontal Offset";

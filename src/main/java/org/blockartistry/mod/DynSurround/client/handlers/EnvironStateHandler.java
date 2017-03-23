@@ -25,6 +25,7 @@
 package org.blockartistry.mod.DynSurround.client.handlers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +35,7 @@ import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.events.EnvironmentEvent;
 import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
+import org.blockartistry.mod.DynSurround.client.event.ServerDataEvent;
 import org.blockartistry.mod.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.mod.DynSurround.registry.ArmorClass;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
@@ -45,12 +47,15 @@ import org.blockartistry.mod.DynSurround.registry.SeasonRegistry;
 import org.blockartistry.mod.DynSurround.registry.SeasonType;
 import org.blockartistry.mod.DynSurround.registry.TemperatureRating;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
+
+import gnu.trove.procedure.TIntDoubleProcedure;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -64,11 +69,10 @@ import net.minecraftforge.fml.relauncher.Side;
 public class EnvironStateHandler extends EffectHandlerBase {
 
 	// Diagnostic strings to display in the debug HUD
-	private static List<String> diagnostics = new ArrayList<String>();
+	private List<String> diagnostics = new ArrayList<String>();
 
-	public static List<String> getDiagnostics() {
-		return diagnostics;
-	}
+	// TPS status strings to display
+	private List<String> serverDataReport = new ArrayList<String>();
 
 	public static class EnvironState {
 
@@ -103,7 +107,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			final SeasonRegistry seasons = RegistryManager.get(RegistryType.SEASON);
 
 			EnvironState.player = player;
-			EnvironState.world = player.getEntityWorld();
+			EnvironState.world = player.world;
 			EnvironState.playerBiome = PlayerUtils.getPlayerBiome(player, false);
 			EnvironState.biomeName = EnvironState.playerBiome.getBiomeName();
 			EnvironState.season = seasons.getSeasonType(world);
@@ -118,7 +122,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.biomeTemperature = seasons.getBiomeTemperature(world, getPlayerPosition());
 			EnvironState.humid = trueBiome.isHighHumidity();
 			EnvironState.dry = trueBiome.getRainfall() == 0;
-			
+
 			EnvironState.armorClass = ArmorClass.effectiveArmorClass(player);
 			EnvironState.footArmorClass = ArmorClass.footArmorClass(player);
 
@@ -263,15 +267,15 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		public static boolean isDry() {
 			return dry;
 		}
-		
+
 		public static ArmorClass getPlayerArmorClass() {
 			return armorClass;
 		}
-		
+
 		public static ArmorClass getPlayerFootArmorClass() {
 			return footArmorClass;
 		}
-		
+
 		public static boolean inVillage() {
 			return inVillage;
 		}
@@ -284,7 +288,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			return player.getDistanceSq(x, y, z);
 		}
 	}
-	
+
 	@Override
 	public String getHandlerName() {
 		return "EnvironStateEffectHandler";
@@ -294,7 +298,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	public void pre(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 		EnvironState.tick(world, player);
 	}
-	
+
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 
@@ -303,24 +307,24 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			DSurround.getProfiler().startSection("GatherDebug");
 			final DiagnosticEvent.Gather gather = new DiagnosticEvent.Gather(world, player);
 			MinecraftForge.EVENT_BUS.post(gather);
-			diagnostics = gather.output;
+			this.diagnostics = gather.output;
 			DSurround.getProfiler().endSection();
 		} else {
-			diagnostics = null;
+			this.diagnostics = null;
 		}
 	}
-	
+
 	/**
 	 * Hook the entity join world event so we can get the player and world info
 	 * ASAP.
 	 */
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onEntityJoin(@Nonnull final EntityJoinWorldEvent event) {
-		if(event.getWorld().isRemote && event.getEntity() instanceof EntityPlayerSP) {
-			EnvironState.tick(event.getWorld(), (EntityPlayer)event.getEntity());
+		if (event.getWorld().isRemote && event.getEntity() instanceof EntityPlayerSP) {
+			EnvironState.tick(event.getWorld(), (EntityPlayer) event.getEntity());
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onEnvironmentEvent(@Nonnull final EnvironmentEvent event) {
 		EnvironState.inVillage = event.inVillage;
@@ -331,15 +335,21 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	 */
 	@SubscribeEvent
 	public void onGatherText(@Nonnull final RenderGameOverlayEvent.Text event) {
-		if (diagnostics != null && !diagnostics.isEmpty()) {
+		if (this.diagnostics != null && !this.diagnostics.isEmpty()) {
 			event.getLeft().add("");
-			event.getLeft().addAll(diagnostics);
+			event.getLeft().addAll(this.diagnostics);
+		}
+
+		if (Minecraft.getMinecraft().gameSettings.showDebugInfo && this.serverDataReport != null) {
+			event.getRight().add(" ");
+			event.getRight().addAll(this.serverDataReport);
 		}
 	}
 
 	@Override
 	public void onConnect() {
-		diagnostics = null;
+		this.diagnostics = null;
+		this.serverDataReport = null;
 	}
 
 	// Use the new scripting system to pull out data to display
@@ -349,7 +359,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			"'Weather: ' + IF(weather.isRaining,'rainfall: ' + weather.rainfall,'not raining') + IF(weather.isThundering,' thundering','') + ' Temp: ' + weather.temperature + '/' + weather.temperatureValue",
 			"'Season: ' + season  + IF(isNight,' night',' day') + IF(player.isInside,' inside',' outside')",
 			"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','') + ' pos: (' + player.X + ',' + player.Y + ',' + player.Z + ') light: ' + player.lightLevel",
-			"'Village: ' + player.inVillage"};
+			"'Village: ' + player.inVillage" };
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void diagnostics(final DiagnosticEvent.Gather event) {
@@ -364,6 +374,40 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		for (final String s : badScripts) {
 			event.output.add("BAD SCRIPT: " + s);
 		}
+	}
+
+	@Nonnull
+	private static TextFormatting getTpsFormatPrefix(final int tps) {
+		if (tps <= 10)
+			return TextFormatting.RED;
+		if (tps <= 15)
+			return TextFormatting.YELLOW;
+		return TextFormatting.GREEN;
+	}
+
+	@SubscribeEvent
+	public void serverDataEvent(final ServerDataEvent event) {
+		final ArrayList<String> data = new ArrayList<String>();
+
+		final int diff = event.total - event.free;
+
+		data.add(TextFormatting.GOLD + "Server Information");
+		data.add(String.format("Mem: % 2d%% %03d/%03dMB", diff * 100 / event.max, diff, event.max));
+		data.add(String.format("Allocated: % 2d%% %03dMB", event.total * 100 / event.max, event.total));
+		final int tps = (int) Math.min(1000.0D / event.meanTickTime, 20.0D);
+		data.add(String.format("Ticktime Overall:%s %1.3fms (%d TPS)", getTpsFormatPrefix(tps), event.meanTickTime, tps));
+		event.dimTps.forEachEntry(new TIntDoubleProcedure() {
+			@Override
+			public boolean execute(int a, double b) {
+				final int tps = (int) Math.min(1000.0D / b, 20.0D);
+				data.add(String.format("Dim % 3d:%s %3.3fms (%d TPS)", a, getTpsFormatPrefix(tps), b, tps));
+				return true;
+			}
+
+		});
+
+		Collections.sort(data.subList(4, data.size()));
+		this.serverDataReport = data;
 	}
 
 }

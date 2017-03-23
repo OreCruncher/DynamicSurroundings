@@ -34,6 +34,7 @@ import org.blockartistry.mod.DynSurround.api.entity.EmojiType;
 import org.blockartistry.mod.DynSurround.api.entity.EmotionalState;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
 
+import gnu.trove.map.hash.TIntDoubleHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -69,6 +70,8 @@ public final class Network {
 				Side.CLIENT);
 		NETWORK.registerMessage(PacketThunder.PacketHandler.class, PacketThunder.class, ++discriminator, Side.CLIENT);
 		NETWORK.registerMessage(PacketEnvironment.PacketHandler.class, PacketEnvironment.class, ++discriminator,
+				Side.CLIENT);
+		NETWORK.registerMessage(PacketServerData.PacketHandler.class, PacketServerData.class, ++discriminator,
 				Side.CLIENT);
 
 	}
@@ -118,8 +121,13 @@ public final class Network {
 			final float z) {
 		NETWORK.sendToDimension(new PacketThunder(dimensionId, doFlash, new BlockPos(x, y, z)), dimensionId);
 	}
-	
+
 	public static void sendEnvironmentUpdate(final EntityPlayer player, final boolean inVillage) {
-		NETWORK.sendTo(new PacketEnvironment(inVillage), (EntityPlayerMP)player);
+		NETWORK.sendTo(new PacketEnvironment(inVillage), (EntityPlayerMP) player);
+	}
+
+	public static void sendServerDataUpdate(@Nonnull final TIntDoubleHashMap dimTps, final double meanTps,
+			final int freeMemory, final int totalMemory, final int maxMemory) {
+		NETWORK.sendToAll(new PacketServerData(dimTps, meanTps, freeMemory, totalMemory, maxMemory));
 	}
 }
