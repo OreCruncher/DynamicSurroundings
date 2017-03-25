@@ -1,3 +1,22 @@
+###DynamicSurroundings-1.11.2-3.3.3.0
+**What's New**
+* Option to disable display of critical hit pop-off text
+* Option to mute sounds when Minecraft is in the desktop background; defaults to ON
+* Option to disable both Vanilla and Dynamic Surroundings potion HUD
+* [WIP] Added **client side** command /calc for doing math homework while playing Minecraft
+    * Not immersion related, but the logic was already there in support of configuration logical expressions
+    * Command: /calc *expression* (ex. **/calc (2+2)/3**).
+* Server side TPS/memory reporting to client
+    * Added because I use it for putting together private packs
+    * Turned off by default; controls server side behavior
+    * Mod needs to be on the server to report
+    * Reports per dimension TPS and server memory
+    * Updates once a second server side if enabled
+    * Information displayed in debug screen (F3)
+* Attempt automatic restart of crashed sound system
+* Mod support: AbyssalCraft, Rustic, Power Advantage, Steam Advantage, Streams, WTF's Expedition
+    * Waterfall splash effect + Streams gives the impression of rapids
+
 ###DynamicSurroundings-1.11.2-3.3.2.1
 **What's New**
 * Mod support for Ars Magica 2, Rockhounding: Surface, Rockhounding: Ore Tiers
