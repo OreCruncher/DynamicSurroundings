@@ -1,0 +1,40 @@
+{
+	"itemConfig": {
+		"axeSound": [
+			"mods.railcraft.common.items.ItemSteelAxe",
+			"mods.railcraft.common.items.ItemSteelPickaxe",
+			"mods.railcraft.common.items.ItemCrowbarIron",
+			"mods.railcraft.common.items.ItemCrowbarSteel"
+		],
+		"swordSound": [
+			"mods.railcraft.common.items.ItemSteelHoe",
+			"mods.railcraft.common.items.ItemSteelShovel",
+			"mods.railcraft.common.items.ItemSteelSword"
+		],
+		"heavyArmor": [
+			"railcraft:armor_helmet_steel",
+			"railcraft:armor_chestplate_steel",
+			"railcraft:armor_leggings_steel",
+			"railcraft:armor_boots_steel"
+		]
+	},
+	"footsteps":{
+		"railcraft:track_flex_abandoned": "NOT_EMITTER",
+		"railcraft:track_flex_abandoned+foliage": "rails",
+		"railcraft:track_flex_electric": "NOT_EMITTER",
+		"railcraft:track_flex_electric+foliage": "rails",
+		"railcraft:track_flex_high_speed": "NOT_EMITTER",
+		"railcraft:track_flex_high_speed+foliage": "rails",
+		"railcraft:track_flex_hs_electric": "NOT_EMITTER",
+		"railcraft:track_flex_hs_electric+foliage": "rails",
+		"railcraft:track_flex_reinforced": "NOT_EMITTER",
+		"railcraft:track_flex_reinforced+foliage": "rails",
+		"railcraft:track_flex_strap_iron": "NOT_EMITTER",
+		"railcraft:track_flex_strap_iron+foliage": "rails",
+		"railcraft:track_outfitted": "NOT_EMITTER",
+		"railcraft:track_outfitted+foliage": "rails",
+		"railcraft:generic^7": "gravel",
+		"railcraft:anvil": "metalcompressed,hardmetal"
+
+	}
+}

@@ -948,11 +948,17 @@
 			"acousticProfile": "ore",
 			"dictionaryEntries": [
 				"oreIron",
+				"orePoorIron",
 				"oreGold",
+				"orePoorGold",
 				"oreCopper",
+				"orePoorCopper",
 				"oreTin",
+				"orePoorTin",
 				"oreSilver",
+				"orePoorSilver",
 				"oreLead",
+				"orePoorLead",
 				"oreNickle",
 				"orePlatinum",
 				"oreManaInfused",
@@ -1043,7 +1049,9 @@
 				"oreHematite",
 				"oreGoethite",
 				"oreLimonite",
-				"oreBogIron"
+				"oreBogIron",
+				"oreSulfur",
+				"oreFirestone"
 			]
 		},
 		{
