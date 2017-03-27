@@ -87,6 +87,14 @@ public enum WeatherProperties {
 		this.dustSound = SoundUtils.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "dust"));
 	}
 
+	public static boolean isRaining() {
+		return getIntensityLevel() > 0F;
+	}
+	
+	public static boolean isThundering() {
+		return EnvironState.getWorld().isThundering();
+	}
+	
 	@Nonnull
 	public static WeatherProperties getIntensity() {
 		return intensity;
