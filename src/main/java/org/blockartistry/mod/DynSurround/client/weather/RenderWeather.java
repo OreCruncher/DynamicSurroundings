@@ -30,7 +30,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.DSurround;
-import org.blockartistry.mod.DynSurround.ModEnvironment;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -49,13 +48,15 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod.EventBusSubscriber(Side.CLIENT)
 public final class RenderWeather extends IRenderHandler {
 
-	private static final List<IAtmosRenderer> renderList = new ArrayList<IAtmosRenderer>();
+	private final List<IAtmosRenderer> renderList = new ArrayList<IAtmosRenderer>();
 
-	private static void register(@Nonnull final IAtmosRenderer renderer) {
-		renderList.add(renderer);
+	private void register(@Nonnull final IAtmosRenderer renderer) {
+		this.renderList.add(renderer);
 	}
 
 	protected RenderWeather() {
+		register(new StormRenderer());
+		register(new AuroraRenderer());
 	}
 
 	/**
@@ -68,7 +69,7 @@ public final class RenderWeather extends IRenderHandler {
 
 	@Override
 	public void render(final float partialTicks, @Nonnull final WorldClient world, @Nonnull final Minecraft mc) {
-		for (final IAtmosRenderer r : renderList)
+		for (final IAtmosRenderer r : this.renderList)
 			r.render(mc.entityRenderer, partialTicks);
 	}
 
@@ -78,24 +79,18 @@ public final class RenderWeather extends IRenderHandler {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onWorldLoad(@Nonnull final WorldEvent.Load e) {
 
-		if (DSurround.proxy().effectiveSide() == Side.SERVER || !ModOptions.enableWeatherASM
-				|| ModEnvironment.Weather2.isLoaded())
+		if (DSurround.proxy().effectiveSide() == Side.SERVER || !ModOptions.enableWeatherASM)
 			return;
-
-		// Initialize the render list. Would do it in static but class
-		// loading would spiderweb and crash Minecraft.
-		if (renderList.size() == 0) {
-			register(new StormRenderer());
-			register(new AuroraRenderer());
-		}
 
 		// Only want to hook if the provider doesn't have special
 		// weather handling.
 		final WorldProvider provider = e.getWorld().provider;
+		final String dimName = provider.getDimensionType().getName();
 		if (provider.getWeatherRenderer() == null) {
+			ModLog.info("Setting weather renderer for dimension [%s]", dimName);
 			provider.setWeatherRenderer(new RenderWeather());
 		} else {
-			ModLog.info("Not hooking weather renderer for dimension [%s]", provider.getDimensionType().getName());
+			ModLog.info("Not hooking weather renderer for dimension [%s]", dimName);
 		}
 	}
 

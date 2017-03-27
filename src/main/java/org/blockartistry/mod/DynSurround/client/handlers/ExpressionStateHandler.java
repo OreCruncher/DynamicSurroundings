@@ -445,25 +445,25 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		register(new DynamicBoolean("weather.isRaining") {
 			@Override
 			public void update() {
-				this.value = WeatherProperties.getIntensityLevel() > 0.0F;
+				this.value = WeatherProperties.isRaining();
 			}
 		});
 		register(new DynamicBoolean("weather.isThundering") {
 			@Override
 			public void update() {
-				this.value = EnvironState.getWorld().isThundering();
+				this.value = WeatherProperties.isThundering();
 			}
 		});
 		register(new DynamicBoolean("weather.isNotRaining") {
 			@Override
 			public void update() {
-				this.value = WeatherProperties.getIntensityLevel() <= 0.0F;
+				this.value = !WeatherProperties.isRaining();
 			}
 		});
 		register(new DynamicBoolean("weather.isNotThundering") {
 			@Override
 			public void update() {
-				this.value = !EnvironState.getWorld().isThundering();
+				this.value = !WeatherProperties.isThundering();
 			}
 		});
 		register(new DynamicNumber("weather.rainfall") {
