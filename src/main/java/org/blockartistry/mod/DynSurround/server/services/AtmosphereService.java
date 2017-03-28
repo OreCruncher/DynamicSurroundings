@@ -83,10 +83,8 @@ public final class AtmosphereService extends Service {
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void tickEvent(@Nonnull final TickEvent.WorldTickEvent event) {
 
-		if (!ModOptions.enableWeatherASM || ModEnvironment.Weather2.isLoaded())
-			return;
-
-		if (event.side != Side.SERVER || event.phase == Phase.START)
+		if (event.side != Side.SERVER || event.phase == Phase.START || !ModOptions.enableWeatherASM
+				|| ModEnvironment.Weather2.isLoaded())
 			return;
 
 		final World world = event.world;

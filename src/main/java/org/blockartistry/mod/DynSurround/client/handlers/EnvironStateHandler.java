@@ -370,6 +370,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		event.output.add(WeatherProperties.diagnostic());
+		event.output.add("Aurora: " + (AuroraEffectHandler.getCurrentAurora() == null ? "NONE"
+				: AuroraEffectHandler.getCurrentAurora().toString()));
 
 		final List<String> badScripts = Evaluator.getNaughtyList();
 		for (final String s : badScripts) {
@@ -396,7 +398,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		data.add(String.format("Mem: %d%% %03d/%3dMB", diff * 100 / event.max, diff, event.max));
 		data.add(String.format("Allocated: %d%% %3dMB", event.total * 100 / event.max, event.total));
 		final int tps = (int) Math.min(1000.0D / event.meanTickTime, 20.0D);
-		data.add(String.format("Ticktime Overall:%s %5.3fms (%d TPS)", getTpsFormatPrefix(tps), event.meanTickTime, tps));
+		data.add(String.format("Ticktime Overall:%s %5.3fms (%d TPS)", getTpsFormatPrefix(tps), event.meanTickTime,
+				tps));
 		event.dimTps.forEachEntry(new TIntDoubleProcedure() {
 			@Override
 			public boolean execute(int a, double b) {
