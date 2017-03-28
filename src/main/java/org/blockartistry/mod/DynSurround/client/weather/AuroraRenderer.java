@@ -149,9 +149,13 @@ public final class AuroraRenderer {
 			}
 		}
 
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+				GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+				GlStateManager.DestFactor.ZERO);
+		GlStateManager.shadeModel(GL11.GL_FLAT);
 		GlStateManager.depthMask(true);
 		GlStateManager.enableCull();
-		GlStateManager.disableAlpha();
+		//GlStateManager.disableAlpha();
 		GlStateManager.enableTexture2D();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
