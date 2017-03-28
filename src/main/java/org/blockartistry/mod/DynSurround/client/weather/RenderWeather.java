@@ -24,9 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.client.weather;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.DSurround;
@@ -48,14 +45,10 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod.EventBusSubscriber(Side.CLIENT)
 public final class RenderWeather extends IRenderHandler {
 
-	private final List<IAtmosRenderer> renderList = new ArrayList<IAtmosRenderer>();
-
-	private void register(@Nonnull final IAtmosRenderer renderer) {
-		this.renderList.add(renderer);
-	}
+	private final StormRenderer renderer;
 
 	protected RenderWeather() {
-		register(new StormRenderer());
+		this.renderer = new StormRenderer();
 	}
 
 	/**
@@ -68,8 +61,7 @@ public final class RenderWeather extends IRenderHandler {
 
 	@Override
 	public void render(final float partialTicks, @Nonnull final WorldClient world, @Nonnull final Minecraft mc) {
-		for (final IAtmosRenderer r : this.renderList)
-			r.render(mc.entityRenderer, partialTicks);
+		this.renderer.render(mc.entityRenderer,  partialTicks);
 	}
 
 	/**
