@@ -67,7 +67,7 @@ public final class DimensionRegistry extends Registry {
 	private boolean isFlatWorld = false;
 
 	public void loading(@Nonnull final World world) {
-		getData(world).initialize(world);
+		getData(world);
 		if (world.provider.getDimension() == 0) {
 			this.isFlatWorld = world.getWorldInfo().getTerrainType() == WorldType.FLAT;
 		}
@@ -123,6 +123,7 @@ public final class DimensionRegistry extends Registry {
 				data = new DimensionInfo(world, entry);
 			}
 			dimensionData.put(world.provider.getDimension(), data);
+			ModLog.info(data.toString());
 		}
 		return data;
 	}

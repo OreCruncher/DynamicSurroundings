@@ -26,65 +26,52 @@ package org.blockartistry.mod.DynSurround.registry;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
 
 public final class DimensionInfo {
 
 	private static final int SPACE_HEIGHT_OFFSET = 32;
 
 	protected final int dimensionId;
-	protected boolean initialized;
 	protected String name = "<NOT SET>";
-	protected Integer seaLevel;
-	protected Integer skyHeight;
-	protected Integer cloudHeight;
-	protected Integer spaceHeight;
-	protected Boolean hasHaze;
-	protected Boolean hasAuroras;
-	protected Boolean hasWeather;
+	protected int seaLevel;
+	protected int skyHeight;
+	protected int cloudHeight;
+	protected int spaceHeight;
+	protected boolean hasHaze;
+	protected boolean hasAuroras;
+	protected boolean hasWeather;
 
 	public DimensionInfo(@Nonnull final World world) {
 		this.dimensionId = world.provider.getDimension();
-		initialize(world);
+		this.name = world.provider.getDimensionType().getName();
+		this.seaLevel = world.getSeaLevel();
+		this.skyHeight = world.getHeight();
+		this.hasHaze = !world.provider.hasNoSky();
+		this.hasAuroras = !world.provider.hasNoSky();
+		this.hasWeather = !world.provider.hasNoSky();
+		this.cloudHeight = this.hasHaze ? this.skyHeight / 2 : this.skyHeight;
+		this.spaceHeight = this.skyHeight + SPACE_HEIGHT_OFFSET;
 	}
 
 	public DimensionInfo(@Nonnull final World world, @Nonnull final DimensionConfig entry) {
-		this.dimensionId = world.provider.getDimension();
-		this.name = world.provider.getDimensionType().getName();
-		this.seaLevel = entry.seaLevel;
-		this.skyHeight = entry.skyHeight;
-		this.hasHaze = entry.hasHaze;
-		this.hasAuroras = entry.hasAurora;
-		this.hasWeather = entry.hasWeather;
-		this.cloudHeight = entry.cloudHeight;
-		initialize(world);
-	}
-
-	public DimensionInfo initialize(@Nonnull final World world) {
-		if (!this.initialized) {
-			final WorldProvider provider = world.provider;
-			this.name = provider.getDimensionType().getName();
-			if (this.seaLevel == null)
-				this.seaLevel = world.getSeaLevel();
-			if (this.skyHeight == null)
-				this.skyHeight = provider.getHeight();
-			if (this.hasHaze == null)
-				this.hasHaze = !provider.hasNoSky();
-			if (this.hasAuroras == null)
-				this.hasAuroras = !provider.hasNoSky();
-			if (this.hasWeather == null)
-				this.hasWeather = !provider.hasNoSky();
-			if (this.cloudHeight == null)
-				this.cloudHeight = this.hasHaze ? this.skyHeight / 2 : this.skyHeight;
-			if (this.spaceHeight == null)
-				this.spaceHeight = this.skyHeight + SPACE_HEIGHT_OFFSET;
-			this.initialized = true;
-			ModLog.info("Dimension initialized " + this.toString());
-		}
-		return this;
+		this(world);
+		
+		if(entry.seaLevel != null)
+			this.seaLevel = entry.seaLevel;
+		if(entry.skyHeight != null)
+			this.skyHeight = entry.skyHeight;
+		if(entry.hasHaze != null)
+			this.hasHaze = entry.hasHaze;
+		if(entry.hasAurora != null)
+			this.hasAuroras = entry.hasAurora;
+		if(entry.hasWeather != null)
+			this.hasWeather = entry.hasWeather;
+		if(entry.cloudHeight != null)
+			this.cloudHeight = entry.cloudHeight;
+		
+		this.spaceHeight = this.skyHeight + SPACE_HEIGHT_OFFSET;
 	}
 
 	public int getDimensionId() {
@@ -96,31 +83,31 @@ public final class DimensionInfo {
 	}
 
 	public int getSeaLevel() {
-		return this.seaLevel.intValue();
+		return this.seaLevel;
 	}
 
 	public int getSkyHeight() {
-		return this.skyHeight.intValue();
+		return this.skyHeight;
 	}
 
 	public int getCloudHeight() {
-		return this.cloudHeight.intValue();
+		return this.cloudHeight;
 	}
 
 	public int getSpaceHeight() {
-		return this.spaceHeight.intValue();
+		return this.spaceHeight;
 	}
 
 	public boolean getHasHaze() {
-		return this.hasHaze.booleanValue();
+		return this.hasHaze;
 	}
 
 	public boolean getHasAuroras() {
-		return this.hasAuroras.booleanValue();
+		return this.hasAuroras;
 	}
 
 	public boolean getHasWeather() {
-		return this.hasWeather.booleanValue();
+		return this.hasWeather;
 	}
 
 	@Override

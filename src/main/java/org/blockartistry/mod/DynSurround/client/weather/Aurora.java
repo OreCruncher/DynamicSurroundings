@@ -143,10 +143,10 @@ public final class Aurora {
 
 	public void update() {
 		if (this.fadeTimer < this.fadeLimit) {
-			
+
 			if ((this.fadeTimer % ALPHA_INCREMENT_MOD) == 0 && this.alpha >= 0)
 				this.alpha += this.isAlive ? 1 : -1;
-			
+
 			if (this.alpha <= 0)
 				this.fadeTimer = this.fadeLimit;
 			else
@@ -309,6 +309,18 @@ public final class Aurora {
 		for (int i = 1; i < nodeList.length - 1; i++)
 			nodeList[i].findAngles(nodeList[i + 1]);
 		nodeList[nodeList.length - 1].findAngles(null);
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder builder = new StringBuilder();
+		builder.append("X:").append(this.posX).append(", Z:").append(this.posZ);
+		builder.append(", base").append(this.baseColor.toString());
+		builder.append(", fade").append(this.fadeColor.toString());
+		builder.append(", alpha:").append(this.alpha);
+		if (!this.isAlive)
+			builder.append(", FADING");
+		return builder.toString();
 	}
 
 }

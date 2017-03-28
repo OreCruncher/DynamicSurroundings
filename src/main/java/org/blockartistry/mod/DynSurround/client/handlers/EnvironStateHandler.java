@@ -370,6 +370,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		event.output.add(WeatherProperties.diagnostic());
+		event.output.add("Aurora: " + (AuroraEffectHandler.getCurrentAurora() == null ? "NONE"
+				: AuroraEffectHandler.getCurrentAurora().toString()));
 
 		final List<String> badScripts = Evaluator.getNaughtyList();
 		for (final String s : badScripts) {
