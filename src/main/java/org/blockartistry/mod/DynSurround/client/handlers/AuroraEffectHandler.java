@@ -35,12 +35,14 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.events.AuroraSpawnEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.weather.Aurora;
+import org.blockartistry.mod.DynSurround.client.weather.AuroraRenderer;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -52,6 +54,12 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	private static int auroraDimension = 0;
 	private static final Set<AuroraData> auroras = new HashSet<AuroraData>();
 	private static Aurora current;
+
+	private AuroraRenderer auroraRenderer;
+
+	public AuroraEffectHandler() {
+		this.auroraRenderer = new AuroraRenderer();
+	}
 
 	@Nullable
 	public static Aurora getCurrentAurora() {
@@ -127,7 +135,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
-		
+
 		scrubAuroraList(world);
 		final Aurora aurora = getClosestAurora(world);
 		if (aurora != null) {
@@ -147,5 +155,11 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		if (EnvironState.getDimensionId() == event.world.provider.getDimension()) {
 			auroras.add(new AuroraData(event));
 		}
+	}
+
+	@SubscribeEvent
+	public void doRender(@Nonnull final RenderWorldLastEvent event) {
+		if (ModOptions.auroraEnable && current != null)
+			this.auroraRenderer.renderAurora(event.getPartialTicks(), current);
 	}
 }
