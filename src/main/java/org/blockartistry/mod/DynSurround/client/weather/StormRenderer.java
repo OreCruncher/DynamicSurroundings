@@ -53,7 +53,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class StormRenderer implements IAtmosRenderer {
+public class StormRenderer {
 
 	public static ResourceLocation locationRainPng = new ResourceLocation("textures/environment/rain.png");
 	public static ResourceLocation locationSnowPng = new ResourceLocation("textures/environment/snow.png");
