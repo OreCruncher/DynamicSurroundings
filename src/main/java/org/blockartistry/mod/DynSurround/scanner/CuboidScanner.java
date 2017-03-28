@@ -24,6 +24,7 @@
 package org.blockartistry.mod.DynSurround.scanner;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -70,7 +71,6 @@ public abstract class CuboidScanner extends Scanner {
 		BlockPos min = pos.add(-this.xRange, -this.yRange, -this.zRange);
 		BlockPos max = pos.add(this.xRange, this.yRange, this.zRange);
 
-		// TODO: Do we need to do this? Routines can check for Y < 0.
 		if (min.getY() < 0)
 			min = new BlockPos(min.getX(), 0, min.getZ());
 
@@ -163,8 +163,9 @@ public abstract class CuboidScanner extends Scanner {
 	protected void updateScan(@Nonnull final Cuboid newVolume, @Nonnull final Cuboid oldVolume,
 			@Nonnull final Cuboid intersect) {
 
+		final Random random = ThreadLocalRandom.current();
 		final World world = EnvironState.getWorld();
-
+		
 		if (doBlockUnscan()) {
 			final ComplementsPointIterator newOutOfRange = new ComplementsPointIterator(oldVolume, intersect);
 			// Notify on the blocks going out of range
@@ -172,7 +173,7 @@ public abstract class CuboidScanner extends Scanner {
 				if (point.getY() > 0) {
 					final IBlockState state = world.getBlockState(point);
 					if (interestingBlock(state))
-						blockUnscan(state, point, this.rand);
+						blockUnscan(state, point, random);
 				}
 			}
 		}
@@ -183,7 +184,7 @@ public abstract class CuboidScanner extends Scanner {
 			if (point.getY() > 0) {
 				final IBlockState state = world.getBlockState(point);
 				if (interestingBlock(state))
-					blockScan(state, point, this.rand);
+					blockScan(state, point, random);
 			}
 		}
 
@@ -233,7 +234,7 @@ public abstract class CuboidScanner extends Scanner {
 	@SubscribeEvent(receiveCanceled = false)
 	public void onBlockUpdate(@Nonnull final BlockUpdateEvent event) {
 		if (this.activeCuboid != null && this.activeCuboid.contains(event.pos))
-			blockScan(event.newState, event.pos, this.rand);
+			blockScan(event.newState, event.pos, ThreadLocalRandom.current());
 	}
 
 }
