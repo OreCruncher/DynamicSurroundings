@@ -56,7 +56,6 @@ public final class RenderWeather extends IRenderHandler {
 
 	protected RenderWeather() {
 		register(new StormRenderer());
-		register(new AuroraRenderer());
 	}
 
 	/**

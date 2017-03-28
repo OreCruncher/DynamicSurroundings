@@ -25,7 +25,6 @@
 package org.blockartistry.mod.DynSurround.client.weather;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -36,7 +35,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.handlers.AuroraEffectHandler;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
@@ -44,18 +42,11 @@ import org.blockartistry.mod.DynSurround.util.Color;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public final class AuroraRenderer implements IAtmosRenderer {
-	
+public final class AuroraRenderer {
+
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 
-	@Override
-	public void render(@Nonnull final EntityRenderer renderer, final float partialTick) {
-		if (AuroraEffectHandler.getCurrentAurora() != null) {
-			renderAurora(partialTick, AuroraEffectHandler.getCurrentAurora());
-		}
-	}
-
-	protected void renderAurora(final float partialTick, @Nonnull final Aurora aurora) {
+	public void renderAurora(final float partialTick, @Nonnull final Aurora aurora) {
 
 		final float alpha = aurora.getAlphaf();
 		if (alpha <= 0.0F)
@@ -88,17 +79,19 @@ public final class AuroraRenderer implements IAtmosRenderer {
 		final double zero = 0.0D;
 
 		GlStateManager.pushMatrix();
+		GlStateManager.pushAttrib();
+
 		GlStateManager.translate((float) tranX, tranY, (float) tranZ);
 		GlStateManager.scale(0.5D, 8.0D, 0.5D);
 		GlStateManager.disableTexture2D();
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
+		GlStateManager.disableLighting();
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
 				GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.disableAlpha();
 		GlStateManager.disableCull();
 		GlStateManager.depthMask(false);
-		GlStateManager.disableFog();
 
 		for (final Node[] array : aurora.getNodeList()) {
 			for (int i = 0; i < array.length - 1; i++) {
@@ -156,15 +149,13 @@ public final class AuroraRenderer implements IAtmosRenderer {
 			}
 		}
 
-		GlStateManager.enableFog();
-		GlStateManager.scale(3.5D, 25.0D, 3.5D);
 		GlStateManager.depthMask(true);
 		GlStateManager.enableCull();
-		GlStateManager.disableBlend();
-		GlStateManager.shadeModel(GL11.GL_FLAT);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.disableAlpha();
 		GlStateManager.enableTexture2D();
-		GlStateManager.enableAlpha();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
+		GlStateManager.popAttrib();
 		GlStateManager.popMatrix();
 	}
 }
