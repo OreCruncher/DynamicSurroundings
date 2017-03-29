@@ -74,6 +74,8 @@ public class StormSplashRenderer {
 	}
 
 	protected final Random RANDOM = new Random();
+	protected final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+
 	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 	private final SeasonRegistry season = RegistryManager.get(RegistryType.SEASON);
@@ -119,22 +121,19 @@ public class StormSplashRenderer {
 
 	protected void playSplashSound(final EntityRenderer renderer, final WorldClient world, final Entity player,
 			double x, double y, double z) {
-		final int theX = MathHelper.floor(x);
-		final int theY = MathHelper.floor(y);
-		final int theZ = MathHelper.floor(z);
 
-		final BlockPos coord = new BlockPos(theX, theY, theZ);
-		final boolean hasDust = WeatherUtils.biomeHasDust(world.getBiome(coord));
-		final Block block = world.getBlockState(coord.down()).getBlock();
+		this.pos.setPos(x, y, z);
+		final boolean hasDust = WeatherUtils.biomeHasDust(world.getBiome(this.pos));
+		this.pos.setY(this.pos.getY() - 1);
+		final Block block = world.getBlockState(this.pos).getBlock();
 		final SoundEvent sound = getBlockSoundFX(block, hasDust, world);
 		if (sound != null) {
 			final float volume = calculateRainSoundVolume(world);
 			float pitch = 1.0F;
-			final int playerX = MathHelper.floor(player.posX);
 			final int playerY = MathHelper.floor(player.posY);
-			final int playerZ = MathHelper.floor(player.posZ);
+			this.pos.setPos(player.posX, 0, player.posZ);
 			if (y > player.posY + 1.0D
-					&& getPrecipitationHeight(world, 0, new BlockPos(playerX, 0, playerZ)).getY() > playerY)
+					&& getPrecipitationHeight(world, 0, this.pos).getY() > playerY)
 				pitch = 0.5F;
 			renderer.mc.world.playSound(x, y, z, sound, SoundCategory.AMBIENT, volume, pitch, false);
 		}
@@ -173,13 +172,12 @@ public class StormSplashRenderer {
 		if (theThis.mc.gameSettings.particleSetting == 1)
 			particleCount >>= 1;
 
-		BlockPos.MutableBlockPos posXZ = new BlockPos.MutableBlockPos();
 		for (int j1 = 0; j1 < particleCount; ++j1) {
 			final int locX = playerX + RANDOM.nextInt(RANGE) - RANDOM.nextInt(RANGE);
 			final int locZ = playerZ + RANDOM.nextInt(RANGE) - RANDOM.nextInt(RANGE);
-			posXZ.setPos(locX, 0, locZ);
-			final BlockPos precipHeight = getPrecipitationHeight(worldclient, RANGE / 2, posXZ);
-			final BiomeInfo biome = this.biomes.get(worldclient.getBiome(posXZ));
+			this.pos.setPos(locX, 0, locZ);
+			final BlockPos precipHeight = getPrecipitationHeight(worldclient, RANGE / 2, this.pos);
+			final BiomeInfo biome = this.biomes.get(worldclient.getBiome(this.pos));
 			final boolean hasDust = biome.getHasDust();
 			final boolean canSnow = this.season.canWaterFreeze(worldclient, precipHeight);
 
