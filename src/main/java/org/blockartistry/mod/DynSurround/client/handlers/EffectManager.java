@@ -114,9 +114,7 @@ public class EffectManager {
 
 			// Fire pre calls
 			for (final EffectHandlerBase handler : effectHandlers) {
-				DSurround.getProfiler().startSection("PRE: " + handler.getHandlerName());
 				handler.pre(world, player);
-				DSurround.getProfiler().endSection();
 			}
 
 			for (final EffectHandlerBase handler : effectHandlers) {
@@ -127,9 +125,7 @@ public class EffectManager {
 
 			// Fire post calls
 			for (final EffectHandlerBase handler : effectHandlers) {
-				DSurround.getProfiler().startSection("POST: " + handler.getHandlerName());
 				handler.post(world, player);
-				DSurround.getProfiler().endSection();
 			}
 
 			DSurround.getProfiler().endSection();

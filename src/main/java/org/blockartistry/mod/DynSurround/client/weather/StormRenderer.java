@@ -35,6 +35,7 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SeasonRegistry;
 import org.blockartistry.mod.DynSurround.util.Color;
+import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -70,7 +71,7 @@ public class StormRenderer {
 		}
 	}
 
-	private final Random random = new Random();
+	private final Random random = new XorShiftRandom();
 	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 	private final SeasonRegistry season = RegistryManager.get(RegistryType.SEASON);

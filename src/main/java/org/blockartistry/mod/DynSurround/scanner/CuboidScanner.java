@@ -163,7 +163,6 @@ public abstract class CuboidScanner extends Scanner {
 	protected void updateScan(@Nonnull final Cuboid newVolume, @Nonnull final Cuboid oldVolume,
 			@Nonnull final Cuboid intersect) {
 
-		final Random random = ThreadLocalRandom.current();
 		final World world = EnvironState.getWorld();
 		
 		if (doBlockUnscan()) {
@@ -173,7 +172,7 @@ public abstract class CuboidScanner extends Scanner {
 				if (point.getY() > 0) {
 					final IBlockState state = world.getBlockState(point);
 					if (interestingBlock(state))
-						blockUnscan(state, point, random);
+						blockUnscan(state, point, this.random);
 				}
 			}
 		}
@@ -184,7 +183,7 @@ public abstract class CuboidScanner extends Scanner {
 			if (point.getY() > 0) {
 				final IBlockState state = world.getBlockState(point);
 				if (interestingBlock(state))
-					blockScan(state, point, random);
+					blockScan(state, point, this.random);
 			}
 		}
 
