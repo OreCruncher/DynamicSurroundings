@@ -90,11 +90,11 @@ public enum WeatherProperties {
 	public static boolean isRaining() {
 		return getIntensityLevel() > 0F;
 	}
-	
+
 	public static boolean isThundering() {
 		return EnvironState.getWorld().isThundering();
 	}
-	
+
 	@Nonnull
 	public static WeatherProperties getIntensity() {
 		return intensity;
@@ -107,19 +107,19 @@ public enum WeatherProperties {
 	public static float getMaxIntensityLevel() {
 		return serverSideSupport ? maxIntensityLevel : 1.0F;
 	}
-	
+
 	public static int getNextRainChange() {
 		return serverSideSupport ? nextRainChange : EnvironState.getWorld().getWorldInfo().getRainTime();
 	}
-	
+
 	public static float getThunderStrength() {
 		return serverSideSupport ? thunderStrength : EnvironState.getWorld().getThunderStrength(1.0F);
 	}
-	
+
 	public static int getNextThunderChange() {
 		return serverSideSupport ? nextThunderChange : EnvironState.getWorld().getWorldInfo().getThunderTime();
 	}
-	
+
 	public static int getNextThunderEvent() {
 		return serverSideSupport ? nextThunderEvent : 0;
 	}
@@ -136,6 +136,21 @@ public enum WeatherProperties {
 	@Nonnull
 	public SoundEvent getDustSound() {
 		return this.dustSound;
+	}
+	
+	@Nonnull
+	public ResourceLocation getRainTexture() {
+		return this.rainTexture;
+	}
+	
+	@Nonnull
+	public ResourceLocation getDustTexture() {
+		return this.dustTexture;
+	}
+	
+	@Nonnull
+	public ResourceLocation getSnowTexture() {
+		return this.snowTexture;
 	}
 
 	public static float getCurrentVolume() {
@@ -177,30 +192,29 @@ public enum WeatherProperties {
 			intensity = VANILLA;
 			intensityLevel = 0.0F;
 			fogDensity = 0.0F;
-			setTextures();
-			return;
-		}
+		} else {
 
-		level = MathHelper.clamp_float(level, DimensionEffectData.MIN_INTENSITY, DimensionEffectData.MAX_INTENSITY);
+			level = MathHelper.clamp_float(level, DimensionEffectData.MIN_INTENSITY, DimensionEffectData.MAX_INTENSITY);
 
-		if (intensityLevel != level) {
-			intensityLevel = level;
-			if (level > 0) {
-				level += 0.01;
-				fogDensity = level * level * 0.13F;
-			} else {
-				fogDensity = 0.0F;
+			if (intensityLevel != level) {
+				intensityLevel = level;
+				if (level > 0) {
+					level += 0.01;
+					fogDensity = level * level * 0.13F;
+				} else {
+					fogDensity = 0.0F;
+				}
+				if (intensityLevel <= NONE.level)
+					intensity = NONE;
+				else if (intensityLevel < CALM.level)
+					intensity = CALM;
+				else if (intensityLevel < LIGHT.level)
+					intensity = LIGHT;
+				else if (intensityLevel < NORMAL.level)
+					intensity = NORMAL;
+				else
+					intensity = HEAVY;
 			}
-			if (intensityLevel <= NONE.level)
-				intensity = NONE;
-			else if (intensityLevel < CALM.level)
-				intensity = CALM;
-			else if (intensityLevel < LIGHT.level)
-				intensity = LIGHT;
-			else if (intensityLevel < NORMAL.level)
-				intensity = NORMAL;
-			else
-				intensity = HEAVY;
 		}
 	}
 
@@ -222,16 +236,6 @@ public enum WeatherProperties {
 		serverSideSupport = false;
 		setMaximumIntensity(1.0F);
 		setCurrentIntensity(VANILLA.level);
-	}
-
-	/**
-	 * Set precipitation textures based on the current rainIntensity. This is
-	 * invoked before rendering takes place.
-	 */
-	public static void setTextures() {
-		StormRenderer.locationRainPng = intensity.rainTexture;
-		StormRenderer.locationSnowPng = intensity.snowTexture;
-		StormRenderer.locationDustPng = intensity.dustTexture;
 	}
 
 	@Nonnull
