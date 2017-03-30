@@ -44,7 +44,7 @@ public abstract class RandomScanner extends Scanner {
 		super(name, range, blocksPerTick);
 	}
 
-	protected int randomRange(final int range, final Random rand) {
+	private static int randomRange(final int range, final Random rand) {
 		return rand.nextInt(range) - rand.nextInt(range);
 	}
 

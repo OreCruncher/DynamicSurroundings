@@ -44,10 +44,7 @@ public final class XorShiftRandom extends Random {
 	}
 
 	public XorShiftRandom(final long seed) {
-		// Must be here, the only Random constructor. Has side-effects on
-		// setSeed, see below.
 		super(0);
-
 		setSeed0(seed);
 	}
 
@@ -101,26 +98,19 @@ public final class XorShiftRandom extends Random {
 		return (int) nextLong();
 	}
 
-	@Override
-	public int nextInt(final int n) {
-		return super.nextInt(n);
-	}
+	// @Override
+	// public int nextInt(final int n) {
+	// return super.nextInt(n);
+	// }
 
-	@Override
-	public double nextGaussian() {
-		// See Knuth, ACP, Section 3.4.1 Algorithm C.
-		if (this.hasGaussian) {
-			this.hasGaussian = false;
-			return nextGaussian;
-		}
-
+	protected double genGaussian() {
 		double v1, v2, s;
 		do {
 			v1 = 2 * nextDouble() - 1; // between -1 and 1
 			v2 = 2 * nextDouble() - 1; // between -1 and 1
 			s = v1 * v1 + v2 * v2;
 		} while (s >= 1 || s == 0);
-		
+
 		final double multiplier = StrictMath.sqrt(-2 * StrictMath.log(s) / s);
 		this.nextGaussian = v2 * multiplier;
 		this.hasGaussian = true;
@@ -128,12 +118,19 @@ public final class XorShiftRandom extends Random {
 	}
 
 	@Override
+	public double nextGaussian() {
+		// See Knuth, ACP, Section 3.4.1 Algorithm C.
+		if (!this.hasGaussian)
+			return genGaussian();
+		this.hasGaussian = false;
+		return this.nextGaussian;
+	}
+
+	@Override
 	public long nextLong() {
-		final long s0 = this.s0;
-		long s1 = this.s1;
-		final long result = s0 + s1;
-		s1 ^= s0;
-		this.s0 = Long.rotateLeft(s0, 55) ^ s1 ^ s1 << 14;
+		final long result = this.s0 + this.s1;
+		final long s1 = this.s1 ^ this.s0;
+		this.s0 = Long.rotateLeft(this.s0, 55) ^ s1 ^ s1 << 14;
 		this.s1 = Long.rotateLeft(s1, 36);
 		return result;
 	}
