@@ -26,13 +26,17 @@ package org.blockartistry.mod.DynSurround.asm;
 
 import static org.objectweb.asm.Opcodes.*;
 
+import java.util.ListIterator;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
 import net.minecraft.launchwrapper.IClassTransformer;
@@ -57,18 +61,22 @@ public class Transformer implements IClassTransformer {
 		if (isOneOf(transformedName, new String[] { "net.minecraft.client.renderer.EntityRenderer", "bqc" })) {
 			if (ModOptions.enableWeatherASM) {
 				logger.debug("Transforming " + transformedName);
-				return transformEntityRenderer(basicClass);
+				basicClass = transformEntityRenderer(basicClass);
 			}
 		} else if (isOneOf(transformedName, new String[] { "net.minecraft.world.WorldServer", "lw" })) {
 			if (ModOptions.enableResetOnSleepASM) {
 				logger.debug("Transforming " + transformedName);
-				return transformWorldServer(basicClass);
+				basicClass = transformWorldServer(basicClass);
 			}
 		} else if (isOneOf(transformedName, new String[] { "net.minecraft.client.audio.SoundManager", "ccn" })) {
 			if (ModOptions.enableSoundVolumeASM) {
 				logger.debug("Transforming " + transformedName);
-				return transformSoundManager(basicClass);
+				basicClass = transformSoundManager(basicClass);
 			}
+		}
+		
+		if(ModOptions.enableRandomReplace) {
+			basicClass = replaceRandom(transformedName, basicClass);
 		}
 
 		return basicClass;
@@ -153,5 +161,50 @@ public class Transformer implements IClassTransformer {
 		final ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		cn.accept(cw);
 		return cw.toByteArray();
+	}
+	
+	private byte[] replaceRandom(final String name, final byte[] classBytes) {
+
+		final String randomToReplace = "java/util/Random";
+		final String newRandom = "org/blockartistry/mod/DynSurround/util/random/XorShiftRandom";
+
+		boolean madeUpdate = false;
+
+		final ClassReader cr = new ClassReader(classBytes);
+		final ClassNode cn = new ClassNode(ASM5);
+		cr.accept(cn, 0);
+
+		for (final MethodNode m : cn.methods) {
+			final ListIterator<AbstractInsnNode> itr = m.instructions.iterator();
+			boolean foundNew = false;
+			while (itr.hasNext()) {
+				final AbstractInsnNode node = itr.next();
+				if (node.getOpcode() == NEW) {
+					final TypeInsnNode theNew = (TypeInsnNode) node;
+					if (randomToReplace.equals(theNew.desc)) {
+						m.instructions.set(node, new TypeInsnNode(NEW, newRandom));
+						madeUpdate = true;
+						foundNew = true;
+					}
+				} else if (node.getOpcode() == INVOKESPECIAL) {
+					final MethodInsnNode theInvoke = (MethodInsnNode) node;
+					if (randomToReplace.equals(theInvoke.owner)) {
+						if (foundNew) {
+							m.instructions.set(node, new MethodInsnNode(INVOKESPECIAL, newRandom, theInvoke.name,
+									theInvoke.desc, false));
+							foundNew = false;
+						}
+					}
+				}
+			}
+		}
+
+		if (madeUpdate) {
+			logger.debug("Replaced Random in " + name);
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			cn.accept(cw);
+			return cw.toByteArray();
+		}
+		return classBytes;
 	}
 }
