@@ -33,6 +33,7 @@ import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
+import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -42,7 +43,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public abstract class EffectHandlerBase {
 	
-	protected final Random RANDOM = new Random();
+	protected final Random RANDOM = XorShiftRandom.current();
 	
 	// Used to obtain the name of the handler for logging purposes
 	public abstract String getHandlerName();

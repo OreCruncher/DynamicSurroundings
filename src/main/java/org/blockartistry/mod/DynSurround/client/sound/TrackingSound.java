@@ -28,6 +28,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.PositionedSound;
@@ -43,8 +44,8 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 
 	private static final float DONE_VOLUME_THRESHOLD = 0.001F;
 	private static final float FADE_AMOUNT = 0.015F;
-	private static final Random RANDOM = new Random();
-
+	
+	private final Random RANDOM = XorShiftRandom.current();
 	private final EntityLivingBase attachedTo;
 	private final SoundEffect sound;
 	private boolean isFading;
