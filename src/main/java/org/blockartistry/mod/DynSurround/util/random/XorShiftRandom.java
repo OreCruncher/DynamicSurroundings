@@ -1,4 +1,4 @@
-/* This file is part of ThermalRecycling, licensed under the MIT License (MIT).
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -22,246 +22,135 @@
  */
 package org.blockartistry.mod.DynSurround.util.random;
 
-import java.lang.reflect.Field;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Essentially swipe the ThreadLocalRandom code, but not make it thread
- * specific.  ThreadLocalRandom is fast, and this version avoids
- * synchronization and permits the use of seed values to achieve
- * deterministic behavior.
- * 
- * (By fast I mean like 4x faster using nextInt())
+ * @see "http://xoroshiro.di.unimi.it/xoroshiro128plus.c"
  */
-public class XorShiftRandom extends Random {
+@SuppressWarnings("serial")
+public final class XorShiftRandom extends Random {
 
-	/**
-	 * Shared random.  Not thread safe.
-	 */
-	public static final XorShiftRandom shared = new XorShiftRandom();
+	private static final double DOUBLE_UNIT = 0x1.0p-53; // 1.0 / (1L << 53);
+	private static final float FLOAT_UNIT = 0x1.0p-24f; // 1.0 / (1L << 24);
 
-	private static final long serialVersionUID = 1422228009367463911L;
-	private static Field getSeed = null;
-	
-	// Used to get hold of the seed value of a Random
-	static {
-		
-		try {
-			getSeed = Random.class.getDeclaredField("seed");
-			getSeed.setAccessible(true);
-		} catch(Throwable t) {
-			;
-		}
-	}
-	
-	private static final long GAMMA = 0x9e3779b97f4a7c15L;
-	private static final double DOUBLE_UNIT = 0x1.0p-53; // 1.0 / (1L << 53)
-	private static final float FLOAT_UNIT = 0x1.0p-24f; // 1.0f / (1 << 24)
+	private long s0;
+	private long s1;
 
-	private Double nextLocalGaussian = null;
-	private long seed;
-
-	private static long mix64(long z) {
-		z = (z ^ (z >>> 33)) * 0xff51afd7ed558ccdL;
-		z = (z ^ (z >>> 33)) * 0xc4ceb9fe1a85ec53L;
-		return z ^ (z >>> 33);
-	}
-
-	private static int mix32(long z) {
-		z = (z ^ (z >>> 33)) * 0xff51afd7ed558ccdL;
-		return (int) (((z ^ (z >>> 33)) * 0xc4ceb9fe1a85ec53L) >>> 32);
-	}
-	
-	private static long initialSeed() {
-		return mix64(System.currentTimeMillis()) ^ mix64(System.nanoTime());
-	}
+	private boolean hasGaussian = false;
+	private double nextGaussian = 0D;
 
 	public XorShiftRandom() {
-		this(initialSeed());
+		this(System.currentTimeMillis() ^ System.nanoTime());
 	}
 
-	public XorShiftRandom(final XorShiftRandom random) {
-		this.seed = random.seed;
-	}
-	
-	public XorShiftRandom(final Random random) {
-		if(random instanceof XorShiftRandom) {
-			this.seed = ((XorShiftRandom)random).seed;
-		} else {
-			try {
-				if(getSeed != null)
-					this.seed = ((AtomicLong)XorShiftRandom.getSeed.get(random)).get();
-			} catch(Throwable t) {
-				;
-			} finally {
-				if(seed == 0)
-					this.seed = initialSeed();
-			}
-		}
-	}
-	
 	public XorShiftRandom(final long seed) {
-		this.seed = seed;
-	}
-	
-	public XorShiftRandom(final long seed1, final long seed2) {
-		this(mix64(seed1) ^ mix64(seed2));
+		// Must be here, the only Random constructor. Has side-effects on
+		// setSeed, see below.
+		super(0);
+
+		setSeed0(seed);
 	}
 
-	public void setSeed(long seed) {
-		this.seed = seed;
-	}
+	private void setSeed0(final long seed) {
+		this.s0 = MurmurHash3.hash(seed);
+		this.s1 = MurmurHash3.hash(this.s0);
 
-	private final long nextSeed() {
-		return this.seed += GAMMA;
-	}
-
-	protected int next(int bits) {
-		return (int) (mix64(nextSeed()) >>> (64 - bits));
-	}
-
-	private static final String BadBound = "bound must be positive";
-	private static final String BadRange = "bound must be greater than origin";
-	
-	private long internalNextLong0(long origin, long bound) {
-		long r = mix64(nextSeed());
-		if (origin < bound) {
-			long n = bound - origin, m = n - 1;
-			if ((n & m) == 0L) // power of two
-				r = (r & m) + origin;
-			else if (n > 0L) { // reject over-represented candidates
-				for (long u = r >>> 1; // ensure nonnegative
-				u + m - (r = u % n) < 0L; // rejection check
-				u = mix64(nextSeed()) >>> 1) // retry
-					;
-				r += origin;
-			} else { // range not representable as long
-				while (r < origin || r >= bound)
-					r = mix64(nextSeed());
-			}
+		if (this.s0 == 0 && this.s1 == 0) {
+			this.s0 = MurmurHash3.hash(0xdeadbeefL);
+			this.s1 = MurmurHash3.hash(this.s0);
 		}
-		return r;
 	}
 
-	private int internalNextInt0(int origin, int bound) {
-		int r = mix32(nextSeed());
-		if (origin < bound) {
-			int n = bound - origin, m = n - 1;
-			if ((n & m) == 0)
-				r = (r & m) + origin;
-			else if (n > 0) {
-				for (int u = r >>> 1; u + m - (r = u % n) < 0; u = mix32(nextSeed()) >>> 1)
-					;
-				r += origin;
-			} else {
-				while (r < origin || r >= bound)
-					r = mix32(nextSeed());
-			}
-		}
-		return r;
+	@Override
+	public void setSeed(final long seed) {
+
+		if (this.s0 == 0 && this.s1 == 0)
+			return;
+
+		setSeed0(seed);
+		this.hasGaussian = false;
 	}
 
-	private double internalNextDouble0(double origin, double bound) {
-		double r = (nextLong() >>> 11) * DOUBLE_UNIT;
-		if (origin < bound) {
-			r = r * (bound - origin) + origin;
-			if (r >= bound) // correct for rounding
-				r = Double.longBitsToDouble(Double.doubleToLongBits(bound) - 1);
-		}
-		return r;
-	}
-
-	public int nextInt() {
-		return mix32(nextSeed());
-	}
-
-	public int nextInt(int bound) {
-		if (bound <= 0)
-			throw new IllegalArgumentException(BadBound);
-		int r = mix32(nextSeed());
-		int m = bound - 1;
-		if ((bound & m) == 0) // power of two
-			r &= m;
-		else { // reject over-represented candidates
-			for (int u = r >>> 1; u + m - (r = u % bound) < 0; u = mix32(nextSeed()) >>> 1)
-				;
-		}
-		return r;
-	}
-
-	public int nextInt(int origin, int bound) {
-		if (origin >= bound)
-			throw new IllegalArgumentException(BadRange);
-		return internalNextInt0(origin, bound);
-	}
-
-	public long nextLong() {
-		return mix64(nextSeed());
-	}
-
-	public long nextLong(long bound) {
-		if (bound <= 0)
-			throw new IllegalArgumentException(BadBound);
-		long r = mix64(nextSeed());
-		long m = bound - 1;
-		if ((bound & m) == 0L) // power of two
-			r &= m;
-		else { // reject over-represented candidates
-			for (long u = r >>> 1; u + m - (r = u % bound) < 0L; u = mix64(nextSeed()) >>> 1)
-				;
-		}
-		return r;
-	}
-
-	public long nextLong(long origin, long bound) {
-		if (origin >= bound)
-			throw new IllegalArgumentException(BadRange);
-		return internalNextLong0(origin, bound);
-	}
-
-	public double nextDouble() {
-		return (mix64(nextSeed()) >>> 11) * DOUBLE_UNIT;
-	}
-
-	public double nextDouble(double bound) {
-		if (!(bound > 0.0))
-			throw new IllegalArgumentException(BadBound);
-		double result = (mix64(nextSeed()) >>> 11) * DOUBLE_UNIT * bound;
-		return (result < bound) ? result
-				: // correct for rounding
-				Double.longBitsToDouble(Double.doubleToLongBits(bound) - 1);
-	}
-
-	public double nextDouble(double origin, double bound) {
-		if (!(origin < bound))
-			throw new IllegalArgumentException(BadRange);
-		return internalNextDouble0(origin, bound);
-	}
-
+	@Override
 	public boolean nextBoolean() {
-		return mix32(nextSeed()) < 0;
+		return nextLong() >= 0;
 	}
 
-	public float nextFloat() {
-		return (mix32(nextSeed()) >>> 8) * FLOAT_UNIT;
-	}
-
-	public double nextGaussian() {
-		// Use nextLocalGaussian instead of nextGaussian field
-		Double d = nextLocalGaussian;
-		if (d != null) {
-			nextLocalGaussian = null;
-			return d.doubleValue();
+	@Override
+	public void nextBytes(final byte[] bytes) {
+		for (int i = 0, len = bytes.length; i < len;) {
+			long rnd = nextInt();
+			for (int n = Math.min(len - i, 8); n-- > 0; rnd >>>= 8) {
+				bytes[i++] = (byte) rnd;
+			}
 		}
+	}
+
+	@Override
+	public double nextDouble() {
+		return (nextLong() >>> 11) * DOUBLE_UNIT;
+	}
+
+	@Override
+	public float nextFloat() {
+		return (nextInt() >>> 8) * FLOAT_UNIT;
+	}
+
+	@Override
+	public int nextInt() {
+		return (int) nextLong();
+	}
+
+	@Override
+	public int nextInt(final int n) {
+		return super.nextInt(n);
+	}
+
+	@Override
+	public double nextGaussian() {
+		// See Knuth, ACP, Section 3.4.1 Algorithm C.
+		if (this.hasGaussian) {
+			this.hasGaussian = false;
+			return nextGaussian;
+		}
+
 		double v1, v2, s;
 		do {
 			v1 = 2 * nextDouble() - 1; // between -1 and 1
 			v2 = 2 * nextDouble() - 1; // between -1 and 1
 			s = v1 * v1 + v2 * v2;
 		} while (s >= 1 || s == 0);
-		double multiplier = StrictMath.sqrt(-2 * StrictMath.log(s) / s);
-		nextLocalGaussian = new Double(v2 * multiplier);
+		
+		final double multiplier = StrictMath.sqrt(-2 * StrictMath.log(s) / s);
+		this.nextGaussian = v2 * multiplier;
+		this.hasGaussian = true;
 		return v1 * multiplier;
+	}
+
+	@Override
+	public long nextLong() {
+		final long s0 = this.s0;
+		long s1 = this.s1;
+		final long result = s0 + s1;
+		s1 ^= s0;
+		this.s0 = Long.rotateLeft(s0, 55) ^ s1 ^ s1 << 14;
+		this.s1 = Long.rotateLeft(s1, 36);
+		return result;
+	}
+
+	@Override
+	protected int next(final int bits) {
+		return ((int) nextLong()) >>> (32 - bits);
+	}
+
+	private static final ThreadLocal<XorShiftRandom> localRandom = new ThreadLocal<XorShiftRandom>() {
+		@Override
+		public XorShiftRandom initialValue() {
+			return new XorShiftRandom();
+		}
+	};
+
+	public static Random current() {
+		return localRandom.get();
 	}
 }
