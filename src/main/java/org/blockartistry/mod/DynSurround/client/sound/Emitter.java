@@ -28,6 +28,8 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
+import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
+
 import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.SoundSystemConfig;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,7 +43,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public abstract class Emitter {
 
-	protected static final Random RANDOM = new Random();
+	protected final Random RANDOM = XorShiftRandom.current();
 	
 	protected final SoundEffect effect;
 	protected IMySound activeSound;
