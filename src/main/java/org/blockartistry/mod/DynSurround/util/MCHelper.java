@@ -32,7 +32,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import gnu.trove.map.hash.TCustomHashMap;
-import gnu.trove.set.hash.THashSet;
+import gnu.trove.set.hash.TCustomHashSet;
 import gnu.trove.strategy.IdentityHashingStrategy;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
@@ -53,7 +53,7 @@ public final class MCHelper {
 	private static final String MATERIAL_NONE = "None";
 	private static final Map<Material, String> materialMap = new TCustomHashMap<Material, String>(
 			IdentityHashingStrategy.INSTANCE);
-	private static final Set<Block> hasVariants = new THashSet<Block>();
+	private static final Set<Block> hasVariants = new TCustomHashSet<Block>(IdentityHashingStrategy.INSTANCE);
 
 	private static boolean variantCheck(@Nonnull final Block block) {
 		final Item item = Item.getItemFromBlock(block);
@@ -156,7 +156,7 @@ public final class MCHelper {
 	public static boolean hasVariants(@Nonnull final Block block) {
 		return hasVariants.contains(block);
 	}
-	
+
 	public static boolean hasSpecialMeta(@Nonnull final Block block) {
 		return block instanceof BlockCrops;
 	}

@@ -30,9 +30,11 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
+
 public class WeightTable<T extends WeightTable.Item> {
 
-	protected final Random random = new Random();
+	protected final Random random = new XorShiftRandom();
 	protected final List<T> items = new ArrayList<T>();
 	protected int totalWeight = 0;
 
