@@ -1,3 +1,11 @@
+###DynamicSurroundings-1.11.2-3.3.3.1
+**What's New**
+* Mod Support: Railcraft
+
+**Changes**
+* Aurora rendering was moved to a different rendering phase so that it can render properly even when rain/snow rendering is replaced by other mods (Weather2).  (Weather 2 is currently not available for 1.11.x, but will be supported when a version exists.)
+* Use different RNG; improves area scanning performance a bit
+
 ###DynamicSurroundings-1.11.2-3.3.3.0
 **What's New**
 * Option to disable display of critical hit pop-off text
