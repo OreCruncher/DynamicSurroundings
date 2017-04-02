@@ -24,7 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.client.sound;
 
-import java.lang.reflect.Field;
 import java.nio.IntBuffer;
 
 import javax.annotation.Nonnull;
@@ -33,7 +32,6 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC10;
@@ -44,18 +42,13 @@ import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ISoundEventListener;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
 import net.minecraftforge.client.event.sound.SoundSetupEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
-import paulscode.sound.Library;
-import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
-import paulscode.sound.StreamThread;
 
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class SoundEngine {
@@ -65,25 +58,6 @@ public class SoundEngine {
 	private static int normalChannelCount = 0;
 	private static int streamChannelCount = 0;
 	private static SoundEngine instance = null;
-
-	private static Field sndSystem = null;
-	private static Field soundLibrary = null;
-	private static Field streamThread = null;
-
-	static {
-
-		try {
-			sndSystem = ReflectionHelper.findField(SoundManager.class, "field_148620_e", "sndSystem");
-			soundLibrary = ReflectionHelper.findField(SoundSystem.class, "soundLibrary");
-			streamThread = ReflectionHelper.findField(Library.class, "streamThread");
-		} catch (final Throwable t) {
-			ModLog.warn("Cannot find sound manager fields; auto restart not enabled");
-			sndSystem = null;
-			soundLibrary = null;
-			streamThread = null;
-		}
-
-	}
 
 	public static SoundEngine instance() {
 		if (instance == null)
@@ -188,31 +162,6 @@ public class SoundEngine {
 				totalChannels == -1 ? "UNKNOWN" : Integer.toString(totalChannels));
 		SoundSystemConfig.setNumberNormalChannels(normalChannelCount);
 		SoundSystemConfig.setNumberStreamingChannels(streamChannelCount);
-	}
-
-	public void keepAlive() {
-		if (streamThread == null)
-			return;
-
-		try {
-			final SoundSystem sys = (SoundSystem) sndSystem.get(this.manager);
-			if (sys != null) {
-				final Library l = (Library) soundLibrary.get(sys);
-				if (l != null) {
-					final StreamThread t = (StreamThread) streamThread.get(l);
-					if (t != null && !t.isAlive()) {
-						if (ModLog.DEBUGGING) {
-							EnvironState.getPlayer()
-									.sendMessage(new TextComponentString("Autorestart of sound system!"));
-						}
-						ModLog.warn("Autorestart of sound system!");
-						this.manager.reloadSoundSystem();
-					}
-				}
-			}
-		} catch (final Throwable t) {
-
-		}
 	}
 
 }
