@@ -107,6 +107,11 @@
 		}
 		
 	],
+	"itemConfig": {
+		"swordSound": [
+			"biomesoplenty.common.item.ItemBOPScythe"
+		]
+	},
 	"footsteps":{
 		"biomesoplenty:ash_block":"sand",
 		"biomesoplenty:bamboo":"wood",
