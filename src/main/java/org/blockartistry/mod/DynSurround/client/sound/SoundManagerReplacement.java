@@ -34,14 +34,11 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -49,6 +46,8 @@ import paulscode.sound.SoundSystem;
 
 @SideOnly(Side.CLIENT)
 public class SoundManagerReplacement extends SoundManager {
+
+	private SoundRegistry registry = null;
 
 	public SoundManagerReplacement(final SoundHandler handler, final GameSettings settings) {
 		super(handler, settings);
@@ -136,23 +135,12 @@ public class SoundManagerReplacement extends SoundManager {
 
 	@Override
 	public float getClampedVolume(@Nonnull final ISound sound) {
-		float result = 0.0F;
-		if (sound != null) {
-			final ResourceLocation location = sound.getSoundLocation();
-			if (location != null) {
-				final SoundRegistry registry = RegistryManager.get(RegistryType.SOUND);
-				final float volumeScale = registry.getVolumeScale(location.toString());
-				result = (float) MathHelper.clamp_double(
-						(double) sound.getVolume() * (double) getSoundCategoryVolume(sound.getCategory()) * volumeScale,
-						0.0D, 1.0D);
-			}
-		}
-		return result;
-	}
+		if (this.registry == null)
+			this.registry = RegistryManager.get(RegistryType.SOUND);
 
-	private static float getSoundCategoryVolume(@Nullable final SoundCategory category) {
-		return category != null && category != SoundCategory.MASTER
-				? Minecraft.getMinecraft().gameSettings.getSoundLevel(category) : 1.0F;
+		final float volumeScale = this.registry.getVolumeScale(sound);
+		final float volume = sound.getVolume() * getVolume(sound.getCategory()) * volumeScale;
+		return MathHelper.clamp_float(volume, 0.0F, 1.0F);
 	}
 
 }

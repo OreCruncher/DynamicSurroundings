@@ -41,6 +41,7 @@ import com.google.common.collect.ImmutableMap;
 import gnu.trove.impl.Constants;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ISoundEventAccessor;
 import net.minecraft.client.audio.Sound;
 import net.minecraft.client.audio.SoundEventAccessor;
@@ -180,6 +181,10 @@ public final class SoundRegistry extends Registry {
 
 	public float getVolumeScale(@Nonnull final String soundName) {
 		return this.volumeControl.get(soundName);
+	}
+
+	public float getVolumeScale(@Nonnull final ISound sound) {
+		return sound.getSoundLocation() == null ? 1F : this.volumeControl.get(sound.getSoundLocation().toString());
 	}
 
 }
