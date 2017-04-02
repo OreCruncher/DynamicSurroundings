@@ -1,0 +1,9 @@
+{
+	"itemConfig": {
+		"swordSound": [
+			"com.teammetallurgy.aquaculture.items.ItemAquacultureAdminFishingRod",
+			"com.teammetallurgy.aquaculture.items.ItemAquacultureWoodenFishingRod",
+			"com.teammetallurgy.aquaculture.items.ItemAquacultureFishingRod"
+		]
+	}
+}
