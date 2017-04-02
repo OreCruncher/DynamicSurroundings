@@ -162,7 +162,7 @@ public final class SoundEffect implements ISpecialEffect {
 
 	public int getRepeat(final Random rand) {
 		if (this.repeatDelayRandom <= 0)
-			return Math.max(this.repeatDelay, 1);
+			return Math.max(this.repeatDelay, 0);
 		return this.repeatDelay + rand.nextInt(this.repeatDelayRandom);
 	}
 
