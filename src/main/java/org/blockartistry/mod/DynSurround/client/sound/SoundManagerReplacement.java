@@ -24,12 +24,14 @@
 
 package org.blockartistry.mod.DynSurround.client.sound;
 
+import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
+import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
@@ -40,12 +42,32 @@ import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import paulscode.sound.Library;
 import paulscode.sound.SoundSystem;
+import paulscode.sound.StreamThread;
 
 @SideOnly(Side.CLIENT)
 public class SoundManagerReplacement extends SoundManager {
+
+	private static Field soundLibrary = null;
+	private static Field streamThread = null;
+
+	static {
+
+		try {
+			soundLibrary = ReflectionHelper.findField(SoundSystem.class, "soundLibrary");
+			streamThread = ReflectionHelper.findField(Library.class, "streamThread");
+		} catch (final Throwable t) {
+			ModLog.warn("Cannot find sound manager fields; auto-restart not enabled");
+			soundLibrary = null;
+			streamThread = null;
+		}
+
+	}
 
 	private SoundRegistry registry = null;
 
@@ -53,14 +75,30 @@ public class SoundManagerReplacement extends SoundManager {
 		super(handler, settings);
 	}
 
-	@Nullable
-	private static SoundSystem getSoundSystem(final SoundManager mgr) {
-		return (SoundSystem) mgr.sndSystem;
+	private void keepAlive() {
+		if (streamThread == null)
+			return;
+
+		try {
+			final Library l = (Library) soundLibrary.get(this.sndSystem);
+			final StreamThread t = (StreamThread) streamThread.get(l);
+			if (t != null && !t.isAlive()) {
+				if (EnvironState.getPlayer() != null)
+					EnvironState.getPlayer().addChatMessage(new TextComponentString("Auto-restart of sound system!"));
+				ModLog.warn("Auto-restart of sound system!");
+				this.reloadSoundSystem();
+			}
+		} catch (final Throwable t) {
+			;
+		}
 	}
 
 	@Override
 	public void updateAllSounds() {
-		final SoundSystem sndSystem = getSoundSystem(this);
+
+		keepAlive();
+
+		final SoundSystem sndSystem = this.sndSystem;
 
 		++this.playTime;
 

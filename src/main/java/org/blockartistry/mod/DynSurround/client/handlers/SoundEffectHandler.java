@@ -93,9 +93,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
-		
-		SoundEngine.instance().keepAlive();
-		
+
 		// Dead players hear no sounds...
 		if (!player.isEntityAlive()) {
 			clearSounds();
