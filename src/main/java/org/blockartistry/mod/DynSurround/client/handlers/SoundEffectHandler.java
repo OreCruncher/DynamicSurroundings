@@ -49,9 +49,6 @@ import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModEnvironment;
-import org.blockartistry.mod.DynSurround.registry.RegistryManager;
-import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
 import org.blockartistry.mod.DynSurround.util.SoundUtils;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -59,7 +56,6 @@ import com.google.gson.Gson;
 
 import gnu.trove.iterator.TObjectFloatIterator;
 import gnu.trove.map.hash.TObjectFloatHashMap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ISoundEventListener;
 import net.minecraft.client.audio.SoundEventAccessor;
@@ -67,7 +63,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -299,33 +294,6 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 			ModLog.error("Unable to read the mod sound file!", t);
 		}
 
-	}
-
-	// Redirect hook from Minecraft's SoundEffectHandler so we can scale the
-	// volume
-	// for each individual sound.
-	public static float getClampedVolume(@Nonnull final ISound sound) {
-		float result = 0.0F;
-		if (sound == null) {
-			ModLog.warn("getNormalizedVolume(): Null sound parameter");
-		} else {
-			final String soundName = sound.getSoundLocation().toString();
-			try {
-				final SoundRegistry registry = RegistryManager.get(RegistryType.SOUND);
-				final float volumeScale = registry.getVolumeScale(soundName);
-				result = (float) MathHelper.clamp(
-						(double) sound.getVolume() * (double) getSoundCategoryVolume(sound.getCategory()) * volumeScale,
-						0.0D, 1.0D);
-			} catch (final Throwable t) {
-				ModLog.error("getNormalizedVolume(): Unable to calculate " + soundName, t);
-			}
-		}
-		return result;
-	}
-
-	private static float getSoundCategoryVolume(@Nullable final SoundCategory category) {
-		return category != null && category != SoundCategory.MASTER
-				? Minecraft.getMinecraft().gameSettings.getSoundLevel(category) : 1.0F;
 	}
 
 	/*
