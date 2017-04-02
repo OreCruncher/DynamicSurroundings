@@ -1,7 +1,7 @@
-###Dynamic Surroundings
+### Dynamic Surroundings
 Forge 1.10.2 mod that improves the audio and visual experience of Minecraft.
 
-###License
+### License
 The MIT License (MIT)
 
 Copyright (c) 2017 OreCruncher, Abastro
@@ -24,7 +24,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-###Textures
+### Textures
 The following textures were acquired from other sources and require attribution.  Additionally, the use of these textures may further restrict what you can do with the mod:
 
 *dsurround:textures.gui.compass*
@@ -33,7 +33,7 @@ The following textures were acquired from other sources and require attribution.
      <li>S: <a href="https://github.com/bspkrs/DirectionHUD/tree/master/src/main/resources/assets/directionhud/textures/gui/">compass.png</a> by bspkrs | License: Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0)</li> 
 </ul>
 
-###Sounds
+### Sounds
 The sounds provided with Dynamic Surroundings are from the public
 domain or have Creative Common restrictions.  These restrictions may impact
 whether LPs can be monetized on the various streaming services.
