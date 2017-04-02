@@ -37,6 +37,8 @@ import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 
 import com.google.common.collect.ImmutableMap;
+
+import gnu.trove.impl.Constants;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISoundEventAccessor;
@@ -52,7 +54,8 @@ public final class SoundRegistry extends Registry {
 
 	private final List<Pattern> cullSoundNamePatterns = new ArrayList<Pattern>();
 	private final List<Pattern> blockSoundNamePatterns = new ArrayList<Pattern>();
-	private final TObjectFloatHashMap<String> volumeControl = new TObjectFloatHashMap<String>();
+	private final TObjectFloatHashMap<String> volumeControl = new TObjectFloatHashMap<String>(
+			Constants.DEFAULT_CAPACITY, Constants.DEFAULT_LOAD_FACTOR, 1.0F);
 
 	public SoundRegistry(@Nonnull final Side side) {
 		super(side);
@@ -176,7 +179,7 @@ public final class SoundRegistry extends Registry {
 	}
 
 	public float getVolumeScale(@Nonnull final String soundName) {
-		return this.volumeControl.contains(soundName) ? this.volumeControl.get(soundName) : 1.0F;
+		return this.volumeControl.get(soundName);
 	}
 
 }

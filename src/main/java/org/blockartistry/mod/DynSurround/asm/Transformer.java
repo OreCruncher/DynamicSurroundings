@@ -68,14 +68,14 @@ public class Transformer implements IClassTransformer {
 				logger.debug("Transforming " + transformedName);
 				basicClass = transformWorldServer(basicClass);
 			}
-		} else if (isOneOf(transformedName, new String[] { "net.minecraft.client.audio.SoundManager", "bzu", "byt" })) {
+		} else if (isOneOf(transformedName, new String[] { "net.minecraft.client.audio.SoundHandler", "bzw" })) {
 			if (ModOptions.enableSoundVolumeASM) {
 				logger.debug("Transforming " + transformedName);
 				basicClass = transformSoundManager(basicClass);
 			}
 		}
 
-		if(ModOptions.enableRandomReplace) {
+		if (ModOptions.enableRandomReplace) {
 			basicClass = replaceRandom(transformedName, basicClass);
 		}
 
@@ -136,25 +136,34 @@ public class Transformer implements IClassTransformer {
 	}
 
 	private byte[] transformSoundManager(final byte[] classBytes) {
-		final String names[] = { "func_188770_e", "getClampedVolume" };
-		final String targetName = "getClampedVolume";
+		final String managerToReplace = "net/minecraft/client/audio/SoundManager";
+		final String newManager = "org/blockartistry/mod/DynSurround/client/sound/SoundManagerReplacement";
 
 		final ClassReader cr = new ClassReader(classBytes);
 		final ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, 0);
 
 		for (final MethodNode m : cn.methods) {
-			if (isOneOf(m.name, names)) {
-				logger.debug("Hooking " + m.name);
-				final InsnList list = new InsnList();
-				list.add(new VarInsnNode(ALOAD, 1));
-				final String sig = "(Lnet/minecraft/client/audio/ISound;)F";
-				list.add(new MethodInsnNode(INVOKESTATIC,
-						"org/blockartistry/mod/DynSurround/client/handlers/SoundEffectHandler", targetName, sig,
-						false));
-				list.add(new InsnNode(FRETURN));
-				m.instructions.insertBefore(m.instructions.getFirst(), list);
-				break;
+			final ListIterator<AbstractInsnNode> itr = m.instructions.iterator();
+			boolean foundNew = false;
+			while (itr.hasNext()) {
+				final AbstractInsnNode node = itr.next();
+				if (node.getOpcode() == NEW) {
+					final TypeInsnNode theNew = (TypeInsnNode) node;
+					if (managerToReplace.equals(theNew.desc)) {
+						m.instructions.set(node, new TypeInsnNode(NEW, newManager));
+						foundNew = true;
+					}
+				} else if (node.getOpcode() == INVOKESPECIAL) {
+					final MethodInsnNode theInvoke = (MethodInsnNode) node;
+					if (managerToReplace.equals(theInvoke.owner)) {
+						if (foundNew) {
+							m.instructions.set(node, new MethodInsnNode(INVOKESPECIAL, newManager, theInvoke.name,
+									theInvoke.desc, false));
+							foundNew = false;
+						}
+					}
+				}
 			}
 		}
 
