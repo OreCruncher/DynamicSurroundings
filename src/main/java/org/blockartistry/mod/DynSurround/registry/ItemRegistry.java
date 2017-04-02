@@ -25,6 +25,7 @@
 package org.blockartistry.mod.DynSurround.registry;
 
 import java.util.IdentityHashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -58,9 +59,38 @@ public class ItemRegistry extends Registry {
 		armorMap.clear();
 	}
 
+	private boolean postProcess(THashSet<Class<?>> itemSet, final Item item) {
+		final Class<?> itemClass = item.getClass();
+		
+		// If the item is in the collection already, return
+		if(itemSet.contains(itemClass))
+			return true;
+		
+		// Need to iterate to see if an item is a sub-class of an existing
+		// item in the list.
+		for(final Class<?> clazz : itemSet) {
+			if(clazz.isAssignableFrom(itemClass)) {
+				itemSet.add(itemClass);
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	@Override
 	public void initComplete() {
-
+		
+		// Post process item list looking for similar items
+		final Iterator<Item> iterator = Item.REGISTRY.iterator();
+		while(iterator.hasNext()) {
+			final Item item = iterator.next();
+			if(postProcess(this.swordItems, item))
+				continue;
+			if(postProcess(this.axeItems, item))
+				continue;
+			postProcess(this.bowItems, item);
+		}
 	}
 
 	@Override
