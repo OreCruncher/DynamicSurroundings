@@ -27,7 +27,6 @@ package org.blockartistry.mod.DynSurround.entity.ai;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,6 +39,8 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.entity.MessageTable;
 import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.util.Translations;
+import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
+
 import com.google.common.base.Predicate;
 
 import net.minecraft.entity.EntityList;
@@ -146,7 +147,6 @@ public class EntityAIChat extends EntityAIBase {
 		return this.data.baseRandom;
 	}
 
-	protected final Random RANDOM = new Random();
 	protected final EntityChatData data;
 	protected final EntityLiving theEntity;
 	protected long nextChat;
@@ -172,7 +172,7 @@ public class EntityAIChat extends EntityAIBase {
 	}
 
 	protected int getNextChatTime() {
-		return getBase() + RANDOM.nextInt(getRandom());
+		return getBase() + XorShiftRandom.current().nextInt(getRandom());
 	}
 
 	@Override
