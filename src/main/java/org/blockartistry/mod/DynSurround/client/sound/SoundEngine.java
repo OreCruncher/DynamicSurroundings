@@ -53,6 +53,7 @@ import paulscode.sound.SoundSystemConfig;
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class SoundEngine {
 
+	private static final int MAX_STREAM_CHANNELS = 16;
 	private static final int SOUND_QUEUE_SLACK = 6;
 
 	private static int normalChannelCount = 0;
@@ -82,14 +83,14 @@ public class SoundEngine {
 	}
 
 	public int currentSoundCount() {
-		return this.manager.playingSounds.size();
+		return this.manager.playingSoundsStopTime.size();
 	}
 
 	public int maxSoundCount() {
 		return normalChannelCount + streamChannelCount;
 	}
 
-	public boolean canFitSound() {
+	private boolean canFitSound() {
 		return currentSoundCount() < (normalChannelCount - SOUND_QUEUE_SLACK);
 	}
 
@@ -109,6 +110,10 @@ public class SoundEngine {
 
 	@Nullable
 	public String playSound(@Nonnull final ISound sound) {
+		
+		if(!canFitSound())
+			return null;
+		
 		if (ModOptions.enableDebugLogging)
 			ModLog.debug("PLAYING: " + sound.toString());
 
@@ -154,7 +159,7 @@ public class SoundEngine {
 
 		if (ModOptions.autoConfigureChannels && totalChannels > 64) {
 			totalChannels = ((totalChannels + 1) * 3) / 4;
-			streamChannelCount = totalChannels / 5;
+			streamChannelCount = Math.min(totalChannels / 5, MAX_STREAM_CHANNELS);
 			normalChannelCount = totalChannels - streamChannelCount;
 		}
 
