@@ -113,9 +113,8 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 				public boolean apply(final IMySound input) {
 					if (input.getTickAge() >= AGE_THRESHOLD_TICKS)
 						return true;
-					if (input.getTickAge() >= 0 && SoundEngine.instance().canFitSound()) {
-						playSound(input);
-						return true;
+					if (input.getTickAge() >= 0) {
+						return playSound(input) != null;
 					}
 					return false;
 				}
@@ -217,13 +216,8 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		if (player == null)
 			player = EnvironState.getPlayer();
 
-		String soundId = null;
-
-		if (SoundEngine.instance().canFitSound()) {
-			final IMySound s = sound.createSound(player);
-			soundId = playSound(s);
-		}
-		return soundId;
+		final IMySound s = sound.createSound(player);
+		return playSound(s);
 	}
 
 	/**
@@ -247,18 +241,12 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		if (!canSoundBeHeard(pos, sound.getVolume()))
 			return null;
 
-		String soundId = null;
+		final IMySound s = sound.createSound(pos, tickDelay);
+		if(tickDelay == 0)
+			return playSound(s);
 
-		if (tickDelay > 0 || SoundEngine.instance().canFitSound()) {
-			final IMySound s = sound.createSound(pos, tickDelay);
-
-			if (tickDelay > 0)
-				this.pending.add(s);
-			else
-				soundId = playSound(s);
-		}
-
-		return soundId;
+		this.pending.add(s);
+		return null;
 	}
 
 	// Not entirely sure why they changed things. This reads the mods

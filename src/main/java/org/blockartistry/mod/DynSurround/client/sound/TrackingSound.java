@@ -32,6 +32,7 @@ import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.PositionedSound;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -44,7 +45,7 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 
 	private static final float DONE_VOLUME_THRESHOLD = 0.001F;
 	private static final float FADE_AMOUNT = 0.015F;
-
+	
 	private final Random RANDOM = XorShiftRandom.current();
 	private final EntityLivingBase attachedTo;
 	private final SoundEffect sound;
@@ -66,6 +67,8 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 		this.pitch = sound.getPitch(RANDOM);
 
 		this.lastTick = EnvironState.getTickCounter() - 1;
+		
+		super.sound = SoundHandler.MISSING_SOUND;
 		
 		updateLocation();
 	}
