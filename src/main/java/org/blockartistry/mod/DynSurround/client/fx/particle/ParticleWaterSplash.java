@@ -31,7 +31,6 @@ import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleRain;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -42,38 +41,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ParticleWaterSplash extends ParticleJet {
 
 	private static final SoundEffect SPLASH = new SoundEffect("waterfall", SoundCategory.AMBIENT);
-
-	private static class ParticleWaterSpray extends ParticleRain {
-
-		protected ParticleWaterSpray(final World world, final double x, final double y, final double z, double speedX,
-				final double speedY, final double speedZ) {
-			super(world, x, y, z);
-
-			this.motionX = speedX;
-			this.motionY = speedY;
-			this.motionZ = speedZ;
-
-			this.canCollide = false;
-		}
-
-		public void onUpdate() {
-			this.prevPosX = this.posX;
-			this.prevPosY = this.posY;
-			this.prevPosZ = this.posZ;
-			this.motionY -= (double) this.particleGravity;
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
-			this.motionX *= 0.9800000190734863D;
-			this.motionY *= 0.9800000190734863D;
-			this.motionZ *= 0.9800000190734863D;
-
-			if (this.particleMaxAge-- <= 0) {
-				this.setExpired();
-			} else if (WorldUtils.isSolidBlock(this.worldObj, new BlockPos(this.posX, this.posY, this.posZ))) {
-				this.setExpired();
-			}
-		}
-
-	}
 
 	private String soundId = null;
 
@@ -93,7 +60,8 @@ public class ParticleWaterSplash extends ParticleJet {
 		if (!SoundEffectHandler.INSTANCE.isSoundPlaying(this.soundId)) {
 			final float volume = this.jetStrength / 10.0F;
 			if (SoundEffectHandler.canSoundBeHeard(this.getPos(), volume)) {
-				final float pitch = 1.0F - 0.7F * (volume / 3.0F) + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
+				final float pitch = 1.0F - 0.7F * (volume / 3.0F)
+						+ (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
 				final IMySound effect = SPLASH.createSound(this.getPos(), this.rand);
 				effect.setVolume(volume);
 				effect.setPitch(pitch);
@@ -104,14 +72,14 @@ public class ParticleWaterSplash extends ParticleJet {
 		final int splashCount = this.getParticleLimit() - getCurrentParticleCount();
 
 		for (int j = 0; (float) j < splashCount; ++j) {
-			final double xOffset = (this.rand.nextFloat() * 2.0F - 1.0F);
-			final double zOffset = (this.rand.nextFloat() * 2.0F - 1.0F);
+			final double xOffset = (this.rand.nextDouble() * 2.0F - 1.0F);
+			final double zOffset = (this.rand.nextDouble() * 2.0F - 1.0F);
 			if (WorldUtils.isSolidBlock(this.worldObj,
 					new BlockPos(this.posX + xOffset, this.posY, this.posZ + zOffset)))
 				continue;
 
 			final double motionX = xOffset * (this.jetStrength / 40.0D);
-			final double motionY = 0.1D + this.rand.nextFloat() * this.jetStrength / 20.0D;
+			final double motionY = 0.1D + this.rand.nextDouble() * this.jetStrength / 20.0D;
 			final double motionZ = zOffset * (this.jetStrength / 40.D);
 			final Particle particle = new ParticleWaterSpray(this.worldObj, this.posX + xOffset, (double) (this.posY),
 					this.posZ + zOffset, motionX, motionY, motionZ);
