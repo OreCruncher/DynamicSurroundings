@@ -26,6 +26,8 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.particle.Particle;
@@ -44,11 +46,15 @@ public abstract class ParticleBase extends Particle {
 	protected ParticleBase(@Nonnull final World worldIn, final double posXIn, final double posYIn,
 			final double posZIn) {
 		super(worldIn, posXIn, posYIn, posZIn);
+		
+		this.rand = XorShiftRandom.current();
 	}
 
 	public ParticleBase(@Nonnull final World worldIn, final double xCoordIn, final double yCoordIn,
 			final double zCoordIn, final double xSpeedIn, final double ySpeedIn, final double zSpeedIn) {
 		super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
+
+		this.rand = XorShiftRandom.current();
 	}
 	
 	protected double interpX() {

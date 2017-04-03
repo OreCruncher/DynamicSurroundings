@@ -28,22 +28,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleBlockDust;
 import net.minecraft.world.World;
 
 @SideOnly(Side.CLIENT)
 public class ParticleDustJet extends ParticleJet {
-
-	protected final class ParticleDust extends ParticleBlockDust {
-
-		public ParticleDust(final World world, final double x, final double y, final double z,
-				final IBlockState block) {
-			super(world, x, y, z, 0, 0, 0, block);
-			this.multipleParticleScaleBy((float) (0.3F + this.rand.nextGaussian() / 30.0F));
-			this.setPosition(this.posX, this.posY, this.posZ);
-		}
-
-	}
 
 	protected final IBlockState blockState;
 

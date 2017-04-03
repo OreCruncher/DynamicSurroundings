@@ -25,7 +25,10 @@
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
-import net.minecraft.client.particle.ParticleRain;
+import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.ParticleBlockDust;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
@@ -34,29 +37,27 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ParticleWaterSpray extends ParticleRain {
+public class ParticleDust extends ParticleBlockDust {
 
 	private final float f, f1, f2, f3, f4;
 	private final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 	private int slX16, blX16;
 
-	protected ParticleWaterSpray(final World world, final double x, final double y, final double z, double speedX,
-			final double speedY, final double speedZ) {
-		super(world, x, y, z);
-
-		this.motionX = speedX;
-		this.motionY = speedY;
-		this.motionZ = speedZ;
+	public ParticleDust(final World world, final double x, final double y, final double z, final IBlockState block) {
+		super(world, x, y, z, 0, 0, 0, block);
 
 		this.canCollide = false;
-
-		f = (float) this.particleTextureIndexX / 16.0F;
-		f1 = f + 0.0624375F;
-		f2 = (float) this.particleTextureIndexY / 16.0F;
-		f3 = f2 + 0.0624375F;
-		f4 = 0.1F * this.particleScale;
 		
-		this.rand = null;
+		this.rand = XorShiftRandom.current();
+
+		this.multipleParticleScaleBy((float) (0.3F + this.rand.nextGaussian() / 30.0F));
+		this.setPosition(this.posX, this.posY, this.posZ);
+
+		f = this.particleTexture.getInterpolatedU((double) (this.particleTextureJitterX / 4.0F * 16.0F));
+		f1 = this.particleTexture.getInterpolatedU((double) ((this.particleTextureJitterX + 1.0F) / 4.0F * 16.0F));
+		f2 = this.particleTexture.getInterpolatedV((double) (this.particleTextureJitterY / 4.0F * 16.0F));
+		f3 = this.particleTexture.getInterpolatedV((double) ((this.particleTextureJitterY + 1.0F) / 4.0F * 16.0F));
+		f4 = 0.1F * this.particleScale;
 	}
 
 	@Override
@@ -71,7 +72,7 @@ public class ParticleWaterSpray extends ParticleRain {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		this.motionY -= (double) this.particleGravity;
+		this.motionY -= 0.04D * (double) this.particleGravity;
 		this.move(this.motionX, this.motionY, this.motionZ);
 		this.motionX *= 0.9800000190734863D;
 		this.motionY *= 0.9800000190734863D;
@@ -88,45 +89,34 @@ public class ParticleWaterSpray extends ParticleRain {
 		final int combinedLight = this.getBrightnessForRender(0);
 		this.slX16 = combinedLight >> 16 & 65535;
 		this.blX16 = combinedLight & 65535;
-
 	}
 
 	@Override
-	public void renderParticle(VertexBuffer buffer, Entity player, float partialTicks, float rotationX,
+	public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX,
 			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		
-		final float x = (float) (this.prevPosX + (this.posX - this.prevPosX) * (double) partialTicks - interpPosX);
-		final float y = (float) (this.prevPosY + (this.posY - this.prevPosY) * (double) partialTicks - interpPosY);
-		final float z = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * (double) partialTicks - interpPosZ);
-
-		buffer
-				.pos((double) x + (double) (-rotationX * f4 - rotationXY * f4),
-						(double) y + (double) (-rotationZ * f4),
-						(double) z + (double) (-rotationYZ * f4 - rotationXZ * f4))
-				.tex((double) f1, (double) f3)
-				.color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(slX16, blX16)
-				.endVertex();
-		buffer
-				.pos((double) x + (double) (-rotationX * f4 + rotationXY * f4),
-						(double) y + (double) (rotationZ * f4),
-						(double) z + (double) (-rotationYZ * f4 + rotationXZ * f4))
-				.tex((double) f1, (double) f2)
-				.color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(slX16, blX16)
-				.endVertex();
-		buffer
-				.pos((double) x + (double) (rotationX * f4 + rotationXY * f4),
-						(double) y + (double) (rotationZ * f4),
-						(double) z + (double) (rotationYZ * f4 + rotationXZ * f4))
-				.tex((double) f, (double) f2)
-				.color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(slX16, blX16)
-				.endVertex();
-		buffer
-				.pos((double) x + (double) (rotationX * f4 - rotationXY * f4),
-						(double) y + (double) (-rotationZ * f4),
-						(double) z + (double) (rotationYZ * f4 - rotationXZ * f4))
-				.tex((double) f, (double) f3)
-				.color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(slX16, blX16)
-				.endVertex();
+		float f5 = (float) (this.prevPosX + (this.posX - this.prevPosX) * (double) partialTicks - interpPosX);
+		float f6 = (float) (this.prevPosY + (this.posY - this.prevPosY) * (double) partialTicks - interpPosY);
+		float f7 = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * (double) partialTicks - interpPosZ);
+		worldRendererIn
+				.pos((double) (f5 - rotationX * f4 - rotationXY * f4), (double) (f6 - rotationZ * f4),
+						(double) (f7 - rotationYZ * f4 - rotationXZ * f4))
+				.tex((double) f, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, 1.0F)
+				.lightmap(slX16, blX16).endVertex();
+		worldRendererIn
+				.pos((double) (f5 - rotationX * f4 + rotationXY * f4), (double) (f6 + rotationZ * f4),
+						(double) (f7 - rotationYZ * f4 + rotationXZ * f4))
+				.tex((double) f, (double) f2).color(this.particleRed, this.particleGreen, this.particleBlue, 1.0F)
+				.lightmap(slX16, blX16).endVertex();
+		worldRendererIn
+				.pos((double) (f5 + rotationX * f4 + rotationXY * f4), (double) (f6 + rotationZ * f4),
+						(double) (f7 + rotationYZ * f4 + rotationXZ * f4))
+				.tex((double) f1, (double) f2).color(this.particleRed, this.particleGreen, this.particleBlue, 1.0F)
+				.lightmap(slX16, blX16).endVertex();
+		worldRendererIn
+				.pos((double) (f5 + rotationX * f4 - rotationXY * f4), (double) (f6 - rotationZ * f4),
+						(double) (f7 + rotationYZ * f4 - rotationXZ * f4))
+				.tex((double) f1, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, 1.0F)
+				.lightmap(slX16, blX16).endVertex();
 	}
 
 	@Override
