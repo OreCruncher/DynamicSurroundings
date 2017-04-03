@@ -41,6 +41,7 @@ import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 import org.blockartistry.mod.DynSurround.util.MathStuff;
+import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 public final class Expression {
 
@@ -203,8 +204,7 @@ public final class Expression {
 		addBuiltInFunction(new Function("RANDOM", 0) {
 			@Override
 			public Variant eval(final Variant... parameters) {
-				final float d = (float) Math.random();
-				return new NumberValue(d);
+				return new NumberValue(XorShiftRandom.current().nextFloat());
 			}
 		});
 		addBuiltInFunction(new Function("SIN", 1) {
