@@ -29,8 +29,8 @@ import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.mod.DynSurround.client.sound.IMySound;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
-
-import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -51,6 +51,19 @@ public class ParticleWaterSplash extends ParticleJet {
 	@Override
 	public boolean shouldDie() {
 		return !WaterSplashJetEffect.isValidSpawnBlock(this.world, this.getPos());
+	}
+
+	@Override
+	public void renderParticle(VertexBuffer buffer, Entity entityIn, float partialTicks, float rotationX,
+			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+
+		super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
+
+	}
+
+	@Override
+	public int getFXLayer() {
+		return 0;
 	}
 
 	// Entity.resetHeight()
@@ -81,7 +94,7 @@ public class ParticleWaterSplash extends ParticleJet {
 			final double motionX = xOffset * (this.jetStrength / 40.0D);
 			final double motionY = 0.1D + this.rand.nextDouble() * this.jetStrength / 20.0D;
 			final double motionZ = zOffset * (this.jetStrength / 40.D);
-			final Particle particle = new ParticleWaterSpray(this.world, this.posX + xOffset, (double) (this.posY),
+			final IParticleMote particle = new MoteWaterSpray(this.world, this.posX + xOffset, (double) (this.posY),
 					this.posZ + zOffset, motionX, motionY, motionZ);
 			addParticle(particle);
 		}
