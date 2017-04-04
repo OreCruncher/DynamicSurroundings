@@ -105,7 +105,8 @@ public abstract class ParticleSystem extends ParticleBase {
 	public void renderParticle(final VertexBuffer buffer, final Entity entityIn, final float partialTicks,
 			final float rotX, final float rotZ, final float rotYZ, final float rotXY, final float rotXZ) {
 		for (final IParticleMote p : this.myParticles)
-			p.renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
+			if(p.isAlive())
+				p.renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
 	}
 
 	/**
