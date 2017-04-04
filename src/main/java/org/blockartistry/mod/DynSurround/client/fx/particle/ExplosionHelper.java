@@ -25,12 +25,11 @@
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModOptions;
+import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -110,7 +109,7 @@ public final class ExplosionHelper {
 
 	private static ParticleAsset getParticle(@Nonnull final World world, final double x, final double y,
 			final double z) {
-		final Random rand = ThreadLocalRandom.current();
+		final Random rand = XorShiftRandom.current();
 		final Assets assets = getAssets(world);
 
 		final float motionX = rand.nextFloat() * 10.0F - 5.0F;
