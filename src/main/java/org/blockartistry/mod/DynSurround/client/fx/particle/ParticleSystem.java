@@ -42,9 +42,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public abstract class ParticleSystem extends ParticleBase {
 
-	protected static final Predicate<Particle> REMOVE_CRITERIA = new Predicate<Particle>() {
+	protected static final Predicate<IParticleMote> REMOVE_CRITERIA = new Predicate<IParticleMote>() {
 		@Override
-		public boolean apply(final Particle input) {
+		public boolean apply(final IParticleMote input) {
 			return !input.isAlive();
 		}
 	};
@@ -52,7 +52,7 @@ public abstract class ParticleSystem extends ParticleBase {
 	protected final int fxLayer;
 	protected final BlockPos position;
 
-	private final ArrayDeque<Particle> myParticles = new ArrayDeque<Particle>();
+	private final ArrayDeque<IParticleMote> myParticles = new ArrayDeque<IParticleMote>();
 	private int particleLimit;
 
 	protected ParticleSystem(final World worldIn, final double posXIn, final double posYIn, final double posZIn) {
@@ -90,6 +90,10 @@ public abstract class ParticleSystem extends ParticleBase {
 	}
 
 	public void addParticle(final Particle particle) {
+		this.addParticle(new ParticleMoteAdapter(particle));
+	}
+	
+	public void addParticle(final IParticleMote particle) {
 		if (particle.getFXLayer() != this.getFXLayer()) {
 			throw new RuntimeException("Invalid particle for fx layer!");
 		} else if (this.myParticles.size() < getParticleLimit()) {
@@ -100,7 +104,7 @@ public abstract class ParticleSystem extends ParticleBase {
 	@Override
 	public void renderParticle(final VertexBuffer buffer, final Entity entityIn, final float partialTicks,
 			final float rotX, final float rotZ, final float rotYZ, final float rotXY, final float rotXZ) {
-		for (final Particle p : this.myParticles)
+		for (final IParticleMote p : this.myParticles)
 			p.renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
 	}
 
@@ -126,9 +130,9 @@ public abstract class ParticleSystem extends ParticleBase {
 		if (!moveParticlesOnDeath())
 			return;
 
-		for (final Particle p : this.myParticles)
-			if (p.isAlive())
-				ParticleHelper.addParticle(p);
+		for (final IParticleMote p : this.myParticles)
+			if (p.isAlive() && p.moveParticleOnExpire())
+				ParticleHelper.addParticle(p.getParticle());
 
 		this.myParticles.clear();
 	}
@@ -147,7 +151,7 @@ public abstract class ParticleSystem extends ParticleBase {
 			return;
 
 		// Iterate through the list doing updates
-		for (final Particle p : this.myParticles)
+		for (final IParticleMote p : this.myParticles)
 			p.onUpdate();
 
 		// Remove the dead ones
