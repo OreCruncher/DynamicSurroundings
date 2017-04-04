@@ -599,8 +599,8 @@
 			"effects": [
 				{
 					"effect": "firefly",
-					"conditions": "weather.isNotRaining && isNight && ONEOF(biome.temperature,'mild','warm') && !biome.isDry",
-					"chance": 50
+					"conditions": "weather.isNotRaining && isNight && !biome.isDry && ONEOF(biome.temperature,'mild','warm')",
+					"chance": 30
 				}
 			]
 		}
