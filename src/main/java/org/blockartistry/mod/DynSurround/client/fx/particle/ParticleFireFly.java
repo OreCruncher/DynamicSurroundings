@@ -32,6 +32,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.blockartistry.mod.DynSurround.util.Color;
+import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 // Started with ParticleFireWork.Spark as a basis.
 @SideOnly(Side.CLIENT)
@@ -51,12 +52,14 @@ public class ParticleFireFly extends ParticleSimpleAnimated {
 	public ParticleFireFly(final World world, double xCoord, double yCoord, double zCoord) {
 		super(world, xCoord, yCoord, zCoord, 160, 8, 0.0F);
 
+		this.rand = XorShiftRandom.current();
+		
 		this.motionX = this.rand.nextGaussian() * XZ_MOTION_DELTA;
 		this.motionZ = this.rand.nextGaussian() * XZ_MOTION_DELTA;
 		this.motionY = this.rand.nextGaussian() * Y_MOTION_DELTA;
 
 		this.xAcceleration = this.rand.nextGaussian() * ACCELERATION;
-		this.yAcceleration = this.rand.nextGaussian() * ACCELERATION;
+		this.yAcceleration = this.rand.nextGaussian() / 2.0D * ACCELERATION;
 		this.zAcceleration = this.rand.nextGaussian() * ACCELERATION;
 
 		this.particleScale *= 0.75F * 0.25F;
