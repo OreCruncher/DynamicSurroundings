@@ -75,7 +75,7 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 
 	@Override
 	public boolean canRepeat() {
-		return this.sound.isRepeatable();
+		return !this.isDonePlaying() && this.sound.isRepeatable();
 	}
 
 	@Override
