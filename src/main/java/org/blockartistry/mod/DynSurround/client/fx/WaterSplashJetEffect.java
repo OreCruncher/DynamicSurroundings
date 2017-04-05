@@ -68,8 +68,7 @@ public class WaterSplashJetEffect extends JetEffect {
 			return false;
 
 		// getLiquidHeightPercent() returns the percentage of *air* in the
-		// block,
-		// not how much water is in it.
+		// block, not how much water is in it.
 		final float height = BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state));
 		return height >= 0.12F;
 	}
@@ -80,14 +79,14 @@ public class WaterSplashJetEffect extends JetEffect {
 	}
 
 	private int liquidBlockCount(final World world, final BlockPos pos) {
-		BlockPos workBlock = pos;
+		final BlockPos.MutableBlockPos workBlock = new BlockPos.MutableBlockPos(pos);
 
 		int count;
 		for (count = 0; count < MAX_STRENGTH; count++) {
 			final IBlockState state = world.getBlockState(workBlock);
 			if (!isLiquidBlock(state) || !isUnboundedLiquid(world, workBlock))
 				break;
-			workBlock = workBlock.up();
+			workBlock.setY(pos.getY() + count);
 		}
 
 		return count;

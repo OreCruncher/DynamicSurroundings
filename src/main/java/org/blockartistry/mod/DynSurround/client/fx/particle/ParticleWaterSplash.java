@@ -83,12 +83,12 @@ public class ParticleWaterSplash extends ParticleJet {
 		}
 
 		final int splashCount = this.getParticleLimit() - getCurrentParticleCount();
+		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
 		for (int j = 0; (float) j < splashCount; ++j) {
 			final double xOffset = (this.rand.nextDouble() * 2.0F - 1.0F);
 			final double zOffset = (this.rand.nextDouble() * 2.0F - 1.0F);
-			if (WorldUtils.isSolidBlock(this.worldObj,
-					new BlockPos(this.posX + xOffset, this.posY, this.posZ + zOffset)))
+			if (WorldUtils.isSolidBlock(this.worldObj, pos.setPos(this.posX + xOffset, this.posY, this.posZ + zOffset)))
 				continue;
 
 			final double motionX = xOffset * (this.jetStrength / 40.0D);

@@ -28,6 +28,7 @@ import java.util.Random;
 
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
 import org.blockartistry.mod.DynSurround.client.handlers.ParticleSystemHandler;
+import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -41,13 +42,11 @@ public abstract class JetEffect extends BlockEffect {
 
 	protected static final int MAX_STRENGTH = 10;
 
-	protected static final BlockPos.MutableBlockPos pos1 = new BlockPos.MutableBlockPos();
-
 	protected static int countBlocks(final World world, final BlockPos pos, final IBlockState state, final int dir) {
 		int count = 0;
 		int idx = pos.getY();
 		while (count < MAX_STRENGTH) {
-			if (world.getBlockState(pos1.setPos(pos.getX(), idx, pos.getZ())).getBlock() != state.getBlock())
+			if (WorldUtils.getBlockState(world, pos.getX(), idx, pos.getZ()).getBlock() != state.getBlock())
 				return count;
 			count++;
 			idx += dir;

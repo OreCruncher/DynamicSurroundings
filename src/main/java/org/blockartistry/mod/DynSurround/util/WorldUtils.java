@@ -34,7 +34,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 
 public final class WorldUtils {
 
@@ -56,24 +55,33 @@ public final class WorldUtils {
 	}
 
 	public static boolean isSolidBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return world.getBlockState(pos).getMaterial().isSolid();
+		return isSolidBlock(world, pos.getX(), pos.getY(), pos.getZ());
+	}
+
+	public static boolean isSolidBlock(@Nonnull final World world, final int x, final int y, final int z) {
+		return getBlockState(world, x, y, z).getMaterial().isSolid();
 	}
 
 	public static boolean isAirBlock(@Nonnull final IBlockState state) {
 		return state.getBlock() == Blocks.AIR;
 	}
-	
+
 	public static boolean isLeaves(@Nonnull final IBlockState state) {
 		return state.getMaterial() == Material.LEAVES;
 	}
 
 	public static boolean isAirBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return isAirBlock(world.getBlockState(pos));
+		return isAirBlock(getBlockState(world, pos.getX(), pos.getY(), pos.getZ()));
 	}
 
-	@Nullable
-	public static World getWorld(final int dimensionId) {
-		return DimensionManager.getWorld(dimensionId);
+	public static boolean isAirBlock(@Nonnull final World world, final int x, final int y, final int z) {
+		return isAirBlock(getBlockState(world, x, y, z));
+	}
+
+	@Nonnull
+	public static IBlockState getBlockState(@Nonnull final World world, final int x, final int y, final int z) {
+		return (y < 0 || y >= 256) ? Blocks.AIR.getDefaultState()
+				: world.getChunkFromChunkCoords(x >> 4, z >> 4).getBlockState(x, y, z);
 	}
 
 }
