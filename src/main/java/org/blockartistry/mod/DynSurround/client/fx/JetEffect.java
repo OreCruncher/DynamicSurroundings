@@ -24,8 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.client.fx;
 
-import java.util.Random;
-
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
 import org.blockartistry.mod.DynSurround.client.handlers.ParticleSystemHandler;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
@@ -66,11 +64,6 @@ public abstract class JetEffect extends BlockEffect {
 
 	protected void addEffect(final ParticleJet fx) {
 		ParticleSystemHandler.INSTANCE.addSystem(fx);
-	}
-
-	@Override
-	public boolean canTrigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		return ParticleSystemHandler.INSTANCE.okToSpawn(pos) && super.canTrigger(state, world, pos, random);
 	}
 
 }

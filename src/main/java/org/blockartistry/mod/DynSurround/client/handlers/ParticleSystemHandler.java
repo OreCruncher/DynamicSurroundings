@@ -101,24 +101,24 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 		this.systems.clear();
 	}
 
+	private static boolean interestingEvent(final BlockEffectEvent event) {
+		return event.effect != BlockEffectType.FIREFLY;
+	}
+	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onBlockEffectEvent(@Nonnull final BlockEffectEvent event) {
-		if (event.effect == BlockEffectType.SPLASH_JET && !okToSpawn(event.location))
+		if (interestingEvent(event) && !okToSpawn(event.location))
 			event.setCanceled(true);
 	}
 
 	// Determines if it is OK to spawn a particle system at the specified
 	// location. Generally only a single system can occupy a block.
-	public boolean okToSpawn(@Nonnull final BlockPos pos) {
-		return !(this.systems.containsKey(pos) || this.systems.containsKey(pos.up()));
+	private boolean okToSpawn(@Nonnull final BlockPos pos) {
+		return !this.systems.containsKey(pos);
 	}
 
 	public void addSystem(@Nonnull final ParticleSystem system) {
-		final BlockPos pos = system.getPos();
-		if (!okToSpawn(pos)) {
-			return;
-		}
-		this.systems.put(pos, system);
+		this.systems.put(system.getPos(), system);
 		ParticleHelper.addParticle(system);
 	}
 
