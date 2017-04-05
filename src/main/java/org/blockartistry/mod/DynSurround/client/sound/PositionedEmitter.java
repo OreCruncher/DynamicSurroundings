@@ -26,7 +26,10 @@ package org.blockartistry.mod.DynSurround.client.sound;
 import javax.annotation.Nonnull;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class PositionedEmitter extends Emitter {
 
 	private final BlockPos position;
