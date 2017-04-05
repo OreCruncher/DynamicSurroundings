@@ -31,13 +31,12 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler.IGuiOverlay;
+import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler.GuiOverlay;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.Items;
@@ -50,7 +49,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class CompassHUD extends Gui implements IGuiOverlay {
+public class CompassHUD extends GuiOverlay {
 
 	private static final int BAND_WIDTH = 65;
 	private static final int BAND_HEIGHT = 12;
