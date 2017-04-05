@@ -27,7 +27,7 @@ package org.blockartistry.mod.DynSurround.client.hud;
 import java.util.Collection;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler.IGuiOverlay;
+import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler.GuiOverlay;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
@@ -35,7 +35,6 @@ import com.google.common.collect.Ordering;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -50,7 +49,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 //net.minecraft.client.renderer.InventoryEffectRenderer
 
 @SideOnly(Side.CLIENT)
-public class PotionHUD extends Gui implements IGuiOverlay {
+public class PotionHUD extends GuiOverlay {
 
 	private final Color TEXT_POTION_NAME = Color.WHITE;
 	private final Color TEXT_POTION_NAME_BAD = Color.RED;
