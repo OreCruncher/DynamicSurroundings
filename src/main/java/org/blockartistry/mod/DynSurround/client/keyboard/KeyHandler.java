@@ -49,10 +49,13 @@ public class KeyHandler {
 			DSurround.MOD_NAME);
 	private static final KeyBinding LIGHTLEVEL_KEY = new KeyBinding("Toggle Light Level", Keyboard.KEY_L,
 			DSurround.MOD_NAME);
+	private static final KeyBinding CHUNKBORDER_KEY = new KeyBinding("Toggle Chunk Borders", Keyboard.KEY_F9,
+			DSurround.MOD_NAME);
 
 	static {
 		ClientRegistry.registerKeyBinding(SELECTIONBOX_KEY);
 		ClientRegistry.registerKeyBinding(LIGHTLEVEL_KEY);
+		ClientRegistry.registerKeyBinding(CHUNKBORDER_KEY);
 	}
 
 	@SubscribeEvent(receiveCanceled = false)
@@ -61,6 +64,10 @@ public class KeyHandler {
 		if (SELECTIONBOX_KEY.isPressed()) {
 			final EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
 			renderer.drawBlockOutline = !renderer.drawBlockOutline;
+		}
+		
+		if(CHUNKBORDER_KEY.isPressed()) {
+			Minecraft.getMinecraft().debugRenderer.toggleDebugScreen();
 		}
 
 		if (LIGHTLEVEL_KEY.isPressed()) {
