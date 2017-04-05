@@ -2,11 +2,17 @@
 # US English Translations
 msg.dsurround=Dynamic Surroundings
 
-
 # Keybindings
 cfg.keybind.SelectionBox=Toggle SelectionBox
 cfg.keybind.LightLevel=Toggle Light Level
 cfg.keybind.ChunkBorders=Toggle Chunk Borders
+cfg.keybind.msg.ON=§aON
+cfg.keybind.msg.OFF=§cOFF
+cfg.keybind.msg.Fencing=Block fencing %s
+cfg.keybind.msg.ChunkBorder=Chunk border display %s
+cfg.keybind.msg.LLDisplayMode=Light Level display mode %s
+cfg.keybind.msg.LLSafeBlocks=Light Level hide safe blocks %s
+cfg.keybind.msg.LLDisplay=Light Level display %s
 
 msg.RainIntensitySet=§9Rain intensity set to %1$s
 msg.MinRainIntensitySet=§9Minimum rain intensity set to %1$s

@@ -27,15 +27,18 @@ package org.blockartistry.mod.DynSurround.client.keyboard;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.DSurround;
-import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.hud.LightLevelHUD;
 import org.blockartistry.mod.DynSurround.client.hud.LightLevelHUD.Mode;
+import org.blockartistry.mod.DynSurround.util.Localization;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -58,16 +61,33 @@ public class KeyHandler {
 		ClientRegistry.registerKeyBinding(CHUNKBORDER_KEY);
 	}
 
+	private static String getOnOff(final boolean flag) {
+		return Localization.format(flag ? "cfg.keybind.msg.ON" : "cfg.keybind.msg.OFF");
+	}
+
+	private static final String chatPrefix = TextFormatting.BLUE + "[" + TextFormatting.GREEN + DSurround.MOD_NAME
+			+ TextFormatting.BLUE + "] " + TextFormatting.RESET;
+
+	private static void sendPlayerMessage(final String fmt, final Object... parms) {
+		final EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+		if (player != null) {
+			final String txt = chatPrefix + Localization.format(fmt, parms);
+			player.addChatMessage(new TextComponentString(txt));
+		}
+	}
+
 	@SubscribeEvent(receiveCanceled = false)
 	public static void onKeyboard(@Nonnull InputEvent.KeyInputEvent event) {
 
 		if (SELECTIONBOX_KEY.isPressed()) {
 			final EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
 			renderer.drawBlockOutline = !renderer.drawBlockOutline;
+			sendPlayerMessage("cfg.keybind.msg.Fencing", getOnOff(renderer.drawBlockOutline));
 		}
-		
-		if(CHUNKBORDER_KEY.isPressed()) {
-			Minecraft.getMinecraft().debugRenderer.toggleDebugScreen();
+
+		if (CHUNKBORDER_KEY.isPressed()) {
+			final boolean result = Minecraft.getMinecraft().debugRenderer.toggleDebugScreen();
+			sendPlayerMessage("cfg.keybind.msg.ChunkBorder", getOnOff(result));
 		}
 
 		if (LIGHTLEVEL_KEY.isPressed()) {
@@ -77,16 +97,16 @@ public class KeyHandler {
 					ModOptions.llDisplayMode++;
 					if (ModOptions.llDisplayMode >= Mode.values().length)
 						ModOptions.llDisplayMode = 0;
-					ModLog.info("LightLevel HUD mode: %s", Mode.getMode(ModOptions.llDisplayMode).name());
+					sendPlayerMessage("cfg.keybind.msg.LLDisplayMode", Mode.getMode(ModOptions.llDisplayMode).name());
 				}
 			} else if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 				if (LightLevelHUD.showHUD) {
 					ModOptions.llHideSafe = !ModOptions.llHideSafe;
-					ModLog.info("LightLevel HUD hidesafe: %s", ModOptions.llHideSafe ? "ENABLED" : "DISABLED");
+					sendPlayerMessage("cfg.keybind.msg.LLSafeBlocks", getOnOff(ModOptions.llHideSafe));
 				}
 			} else {
 				LightLevelHUD.showHUD = !LightLevelHUD.showHUD;
-				ModLog.info("LighLevel HUD: %s", LightLevelHUD.showHUD ? "ENABLED" : "DISABLED");
+				sendPlayerMessage("cfg.keybind.msg.LLDisplay", getOnOff(LightLevelHUD.showHUD));
 			}
 		}
 
