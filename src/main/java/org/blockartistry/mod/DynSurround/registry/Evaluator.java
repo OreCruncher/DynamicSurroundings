@@ -24,6 +24,7 @@
 package org.blockartistry.mod.DynSurround.registry;
 
 import java.util.ArrayList;
+import java.util.IdentityHashMap;
 import java.util.List;
 import javax.annotation.Nonnull;
 
@@ -32,11 +33,9 @@ import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.util.script.Expression;
 import org.blockartistry.mod.DynSurround.util.script.Variant;
 
-import gnu.trove.map.hash.THashMap;
-
 public final class Evaluator {
 
-	private static final THashMap<String, Expression> cache = new THashMap<String, Expression>();
+	private static final IdentityHashMap<String, Expression> cache = new IdentityHashMap<String, Expression>();
 	private static final List<String> naughtyList = new ArrayList<String>();
 
 	@Nonnull
@@ -75,7 +74,7 @@ public final class Evaluator {
 
 	@Nonnull
 	public static Variant eval(@Nonnull final String script) {
-		return compile(script).eval();
+		return compile(script.intern()).eval();
 	}
 
 	public static boolean check(@Nonnull final String conditions) {

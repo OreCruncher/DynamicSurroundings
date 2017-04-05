@@ -911,7 +911,7 @@ public final class Expression {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return this.expression;
+		return toRPN();
 	}
 
 }
