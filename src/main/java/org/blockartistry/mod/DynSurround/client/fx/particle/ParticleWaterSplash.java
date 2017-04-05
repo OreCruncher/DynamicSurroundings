@@ -41,6 +41,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ParticleWaterSplash extends ParticleJet {
 
 	private static final SoundEffect SPLASH = new SoundEffect("waterfall", SoundCategory.AMBIENT);
+	private static final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
 	private String soundId = null;
 	private boolean firstSound = true;
@@ -90,7 +91,6 @@ public class ParticleWaterSplash extends ParticleJet {
 		}
 
 		final int splashCount = this.getParticleLimit() - getCurrentParticleCount();
-		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
 		for (int j = 0; (float) j < splashCount; ++j) {
 			final double xOffset = (this.rand.nextDouble() * 2.0F - 1.0F);
