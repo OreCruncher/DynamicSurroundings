@@ -2,6 +2,12 @@
 # US English Translations
 msg.dsurround=Dynamic Surroundings
 
+
+# Keybindings
+cfg.keybind.SelectionBox=Toggle SelectionBox
+cfg.keybind.LightLevel=Toggle Light Level
+cfg.keybind.ChunkBorders=Toggle Chunk Borders
+
 msg.RainIntensitySet=§9Rain intensity set to %1$s
 msg.MinRainIntensitySet=§9Minimum rain intensity set to %1$s
 msg.MaxRainIntensitySet=§9Maximum rain intensity set to %1$s
@@ -33,6 +39,8 @@ cfg.logging.VersionCheck=Online Version Check Result
 cfg.logging.VersionCheck.tooltip=Enables/disables display of version check information
 cfg.logging.DebugDialog=Debug Dialog
 cfg.logging.DebugDialog.tooltip=Enables/disables display of debug dialog
+cfg.logging.ServerStats=Report Server Stats
+cfg.logging.ServerStats.tooltip=Enables/disables reporting of server stats
 
 cfg.rain.cat.Rain=Rain Options
 cfg.rain.cat.Rain.tooltip=Options that control rain effects in the client

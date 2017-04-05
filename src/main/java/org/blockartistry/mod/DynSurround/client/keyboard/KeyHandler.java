@@ -45,11 +45,11 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class KeyHandler {
 
-	private static final KeyBinding SELECTIONBOX_KEY = new KeyBinding("Toggle SelectionBox", Keyboard.KEY_B,
+	private static final KeyBinding SELECTIONBOX_KEY = new KeyBinding("cfg.keybind.SelectionBox", Keyboard.KEY_B,
 			DSurround.MOD_NAME);
-	private static final KeyBinding LIGHTLEVEL_KEY = new KeyBinding("Toggle Light Level", Keyboard.KEY_L,
+	private static final KeyBinding LIGHTLEVEL_KEY = new KeyBinding("cfg.keybind.LightLevel", Keyboard.KEY_L,
 			DSurround.MOD_NAME);
-	private static final KeyBinding CHUNKBORDER_KEY = new KeyBinding("Toggle Chunk Borders", Keyboard.KEY_F9,
+	private static final KeyBinding CHUNKBORDER_KEY = new KeyBinding("cfg.keybind.ChunkBorders", Keyboard.KEY_F9,
 			DSurround.MOD_NAME);
 
 	static {
