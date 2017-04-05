@@ -216,6 +216,12 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		});
 
 		// Player variables
+		register(new DynamicBoolean("player.isDead") {
+			@Override
+			public void update() {
+				this.value = EnvironState.getPlayer().isDead;
+			}
+		});
 		register(new DynamicBoolean("player.isHurt") {
 			@Override
 			public void update() {

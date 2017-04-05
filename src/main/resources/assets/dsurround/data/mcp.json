@@ -391,13 +391,13 @@
 			"sounds": [
 				{
 					"sound": "dsurround:heartbeat",
-					"conditions": "player.isHurt",
+					"conditions": "player.isHurt && !player.isDead",
 					"soundType": "periodic",
 					"repeatDelay": 0
 				},
 				{
 					"sound": "dsurround:tummy",
-					"conditions": "player.isHungry",
+					"conditions": "player.isHungry && !player.isDead",
 					"soundType": "periodic",
 					"repeatDelay": 300
 				},
