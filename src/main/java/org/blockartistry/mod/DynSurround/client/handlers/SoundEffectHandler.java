@@ -94,12 +94,6 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 
-		// Dead players hear no sounds...
-		if (!player.isEntityAlive()) {
-			clearSounds();
-			return;
-		}
-
 		// Only execute every 4 ticks.
 		if ((EnvironState.getTickCounter() % 4) != 0)
 			return;
@@ -135,10 +129,9 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	}
 
 	public void clearSounds() {
-		for (final Emitter emit : this.emitters.values())
-			emit.fade();
 		this.emitters.clear();
 		this.pending.clear();
+		SoundEngine.instance().stopAllSounds();
 	}
 
 	public void queueAmbientSounds(@Nonnull final TObjectFloatHashMap<SoundEffect> sounds) {
@@ -296,7 +289,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	 */
 	@SubscribeEvent
 	public void playerJoinWorldEvent(@Nonnull final EntityJoinWorldEvent event) {
-		if (event.getEntity().world.isRemote && EnvironState.isPlayer(event.getEntity()))
+		if (event.getEntity().world.isRemote && EnvironState.isPlayer(event.getEntity()) && !event.getEntity().isDead)
 			clearSounds();
 	}
 

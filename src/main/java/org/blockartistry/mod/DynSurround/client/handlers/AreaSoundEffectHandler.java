@@ -86,10 +86,9 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		// Skip processing this tick IF:
 		// * Option is disabled
 		// * It's not the appropriate tick interval
-		// * Player is dead
 		// * The chunk the player is in is not loaded
 		return !(ModOptions.enableBiomeSounds && (EnvironState.getTickCounter() % SCAN_INTERVAL) == 0
-				&& player.isEntityAlive() && EnvironState.getWorld().isBlockLoaded(EnvironState.getPlayerPosition()));
+				&& EnvironState.getWorld().isBlockLoaded(EnvironState.getPlayerPosition()));
 	}
 	
 	@Override

@@ -104,6 +104,10 @@ public class SoundEngine {
 			return false;
 		return this.manager.playingSounds.containsKey(soundId);
 	}
+	
+	public void stopAllSounds() {
+		this.manager.stopAllSounds();
+	}
 
 	private ISound currentSound;
 	private String soundId;
