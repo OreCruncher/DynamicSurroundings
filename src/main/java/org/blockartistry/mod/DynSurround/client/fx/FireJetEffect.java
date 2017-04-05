@@ -54,7 +54,11 @@ public class FireJetEffect extends JetEffect {
 
 	@Override
 	public boolean canTrigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		return WorldUtils.isAirBlock(world, pos.up()) && super.canTrigger(state, world, pos, random);
+		return WorldUtils.isAirBlock(world, pos.getX(), pos.getY() + 1, pos.getZ())
+				&& super.canTrigger(state, world, pos, random);
+		// return super.canTrigger(state, world, pos, random)
+		// && WorldUtils.isAirBlock(world, pos.getX(), pos.getY() + 1,
+		// pos.getZ());
 	}
 
 	@Override

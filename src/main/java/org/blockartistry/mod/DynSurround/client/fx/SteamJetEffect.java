@@ -52,7 +52,8 @@ public class SteamJetEffect extends JetEffect {
 		for (int i = -1; i <= 1; i++)
 			for (int j = -1; j <= 1; j++)
 				for (int k = -1; k <= 1; k++) {
-					if (world.getBlockState(pos.add(i, j, k)).getBlock() == Blocks.LAVA)
+					if (WorldUtils.getBlockState(world, pos.getX() + i, pos.getY() + j, pos.getZ() + k)
+							.getBlock() == Blocks.LAVA)
 						blockCount++;
 				}
 		return blockCount;
@@ -63,9 +64,9 @@ public class SteamJetEffect extends JetEffect {
 	public BlockEffectType getEffectType() {
 		return BlockEffectType.STEAM_JET;
 	}
-	
+
 	public static boolean isValidSpawnBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return WorldUtils.isAirBlock(world, pos.up()) && lavaCount(world, pos) > 0;
+		return WorldUtils.isAirBlock(world, pos.getX(), pos.getY() + 1, pos.getZ()) && lavaCount(world, pos) > 0;
 	}
 
 	@Override
