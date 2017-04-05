@@ -25,8 +25,7 @@
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import org.blockartistry.mod.DynSurround.client.fx.WaterSplashJetEffect;
-import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
-import org.blockartistry.mod.DynSurround.client.sound.IMySound;
+import org.blockartistry.mod.DynSurround.client.sound.PositionedEmitter;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -43,8 +42,7 @@ public class ParticleWaterSplash extends ParticleJet {
 	private static final SoundEffect SPLASH = new SoundEffect("waterfall", SoundCategory.AMBIENT);
 	private static final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
-	private String soundId = null;
-	private boolean firstSound = true;
+	private PositionedEmitter emitter;
 
 	public ParticleWaterSplash(final int strength, final World world, final double x, final double y, final double z) {
 		super(strength, world, x, y, z);
@@ -68,27 +66,26 @@ public class ParticleWaterSplash extends ParticleJet {
 		return 0;
 	}
 
-	private boolean doSound() {
-		return (this.firstSound && this.rand.nextInt(3) == 0)
-				|| !SoundEffectHandler.INSTANCE.isSoundPlaying(this.soundId);
+	private boolean setupSound() {
+		return this.emitter == null && this.rand.nextInt(3) == 0;
 	}
 
 	// Entity.resetHeight()
 	@Override
 	protected void spawnJetParticle() {
 
-		if (doSound()) {
-			this.firstSound = false;
+		if (setupSound()) {
+			pos.setPos(this.posX, this.posY, this.posZ);
+			this.emitter = new PositionedEmitter(SPLASH, pos);
 			final float volume = this.jetStrength / 10.0F;
-			if (SoundEffectHandler.canSoundBeHeard(this.getPos(), volume)) {
-				final float pitch = 1.0F - 0.7F * (volume / 3.0F)
-						+ (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
-				final IMySound effect = SPLASH.createSound(this.getPos(), this.rand);
-				effect.setVolume(volume);
-				effect.setPitch(pitch);
-				this.soundId = SoundEffectHandler.INSTANCE.playSound(effect);
-			}
+			final float pitch = 1.0F - 0.7F * (volume / 3.0F)
+					+ (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
+			this.emitter.setVolume(volume);
+			this.emitter.setPitch(pitch);
 		}
+		
+		if(this.emitter != null)
+			this.emitter.update();
 
 		final int splashCount = this.getParticleLimit() - getCurrentParticleCount();
 

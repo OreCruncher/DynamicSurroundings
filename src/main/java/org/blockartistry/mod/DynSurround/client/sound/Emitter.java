@@ -48,8 +48,6 @@ public abstract class Emitter {
 	protected final SoundEffect effect;
 	protected IMySound activeSound;
 
-	protected int repeatDelay = 0;
-
 	public Emitter(@Nonnull final SoundEffect sound) {
 		this.effect = sound;
 	}
@@ -86,6 +84,15 @@ public abstract class Emitter {
 		return this.activeSound != null ? this.activeSound.getVolume() : 0.0F;
 	}
 
+	public void setPitch(final float pitch) {
+		if(this.activeSound != null)
+			this.activeSound.setPitch(pitch);
+	}
+
+	public float getPitch() {
+		return this.activeSound != null ? this.activeSound.getPitch() : 0.0F;
+	}
+	
 	public void fade() {
 		if (this.activeSound != null) {
 			ModLog.debug("FADE: " + this.activeSound.toString());
