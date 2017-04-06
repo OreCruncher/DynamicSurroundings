@@ -37,7 +37,10 @@ import org.blockartistry.mod.DynSurround.registry.BlockInfo.BlockInfoMutable;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class BlockAcousticMap {
 
 	private final BlockInfoMutable key = new BlockInfoMutable();
