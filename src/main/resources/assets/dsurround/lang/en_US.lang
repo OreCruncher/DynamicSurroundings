@@ -2,6 +2,12 @@
 # US English Translations
 msg.dsurround=Dynamic Surroundings
 
+# Metadata Updates
+metadata.Name=§3Dynamic Surroundings
+metadata.Credits=\n\n§6Wirsbo§r for §2BetterRain§r\n§6MrRube§r for §2Aurora Rubealis§r\n§6Hurricaaane§r for §2Presence Footsteps§r\n§eSound and Texture Attributions§r at https://tinyurl.com/mggnl76\n\n
+metadata.Authors=§6OreCruncher§r,§6Abastro§r
+metadata.Description=Adds a variety of §6sound§r and §6particle§r effects to improve your Minecraft experience
+
 # Keybindings
 cfg.keybind.SelectionBox=Toggle SelectionBox
 cfg.keybind.LightLevel=Toggle Light Level

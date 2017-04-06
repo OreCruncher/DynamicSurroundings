@@ -27,6 +27,7 @@ package org.blockartistry.mod.DynSurround;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.mod.DynSurround.util.ForgeUtils;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,7 +35,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.ForgeVersion.CheckResult;
 import net.minecraftforge.common.ForgeVersion.Status;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -47,15 +47,6 @@ public final class VersionCheck {
 
 	}
 
-	@Nullable
-	private static ModContainer findModContainer(@Nonnull final String modId) {
-		for (final ModContainer mod : Loader.instance().getActiveModList()) {
-			if (mod.getModId().equals(modId))
-				return mod;
-		}
-		return null;
-	}
-
 	private static boolean dontPrintMessage(@Nonnull final CheckResult result) {
 		return result == null || result.status == null || result.target == null || result.url == null
 				|| result.status == Status.UP_TO_DATE || result.status == Status.AHEAD
@@ -64,7 +55,7 @@ public final class VersionCheck {
 
 	@Nullable
 	private static String getUpdateMessage(@Nonnull final String modId) {
-		final ModContainer mod = findModContainer(modId);
+		final ModContainer mod = ForgeUtils.findModContainer(modId);
 		if (mod == null)
 			return null;
 		final CheckResult result = ForgeVersion.getResult(mod);

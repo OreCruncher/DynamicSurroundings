@@ -25,11 +25,13 @@
 package org.blockartistry.mod.DynSurround;
 
 import java.io.File;
-
 import javax.annotation.Nonnull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.blockartistry.mod.DynSurround.proxy.Proxy;
+import org.blockartistry.mod.DynSurround.util.ForgeUtils;
+import org.blockartistry.mod.DynSurround.util.Localization;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.profiler.Profiler;
@@ -37,6 +39,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
@@ -51,6 +54,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToSe
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import scala.actors.threadpool.Arrays;
 
 @net.minecraftforge.fml.common.Mod(modid = DSurround.MOD_ID, useMetadata = true, dependencies = DSurround.DEPENDENCIES, version = DSurround.VERSION, guiFactory = DSurround.GUI_FACTORY, updateJSON = DSurround.UPDATE_URL)
 public class DSurround {
@@ -92,7 +96,7 @@ public class DSurround {
 	public static File dataDirectory() {
 		return dataDirectory;
 	}
-	
+
 	@Nonnull
 	@SideOnly(Side.CLIENT)
 	public static Profiler getProfiler() {
@@ -127,17 +131,29 @@ public class DSurround {
 		proxy.init(event);
 	}
 
+	@SuppressWarnings("unchecked")
 	@EventHandler
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
 		proxy.postInit(event);
 		config.save();
+
+		// Patch up metadata
+		if (!proxy.isRunningAsServer()) {
+			final ModMetadata data = ForgeUtils.getModMetadata(DSurround.MOD_ID);
+			if (data != null) {
+				data.name = Localization.format("metadata.Name");
+				data.credits = Localization.format("metadata.Credits");
+				data.description = Localization.format("metadata.Description");
+				data.authorList = Arrays.asList(StringUtils.split(Localization.format("metadata.Authors"), ','));
+			}
+		}
 	}
 
 	@EventHandler
 	public void loadCompleted(@Nonnull final FMLLoadCompleteEvent event) {
 		proxy.loadCompleted(event);
 	}
-	
+
 	////////////////////////
 	//
 	// Client state events
@@ -147,7 +163,7 @@ public class DSurround {
 	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
 		proxy.clientConnect(event);
 	}
-	
+
 	@SubscribeEvent
 	public void clientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
 		proxy.clientDisconnect(event);
@@ -162,20 +178,20 @@ public class DSurround {
 	public void serverAboutToStart(@Nonnull final FMLServerAboutToStartEvent event) {
 		proxy.serverAboutToStart(event);
 	}
-	
+
 	@EventHandler
 	public void serverStarting(@Nonnull final FMLServerStartingEvent event) {
 		proxy.serverStarting(event);
 	}
-	
+
 	@EventHandler
 	public void serverStopping(@Nonnull final FMLServerStoppingEvent event) {
 		proxy.serverStopping(event);
 	}
-	
+
 	@EventHandler
 	public void serverStopped(@Nonnull final FMLServerStoppedEvent event) {
 		proxy.serverStopped(event);
 	}
-	
+
 }
