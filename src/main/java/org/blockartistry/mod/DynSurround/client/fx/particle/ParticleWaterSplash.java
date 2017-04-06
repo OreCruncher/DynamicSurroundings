@@ -26,11 +26,10 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import org.blockartistry.mod.DynSurround.client.fx.WaterSplashJetEffect;
 import org.blockartistry.mod.DynSurround.client.sound.PositionedEmitter;
-import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.mod.DynSurround.client.sound.Sounds;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,7 +38,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleWaterSplash extends ParticleJet {
 
-	private static final SoundEffect SPLASH = new SoundEffect("waterfall", SoundCategory.AMBIENT);
 	private static final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
 	private PositionedEmitter emitter;
@@ -76,7 +74,7 @@ public class ParticleWaterSplash extends ParticleJet {
 
 		if (setupSound()) {
 			pos.setPos(this.posX, this.posY, this.posZ);
-			this.emitter = new PositionedEmitter(SPLASH, pos);
+			this.emitter = new PositionedEmitter(Sounds.SPLASH, pos);
 			final float volume = this.jetStrength / 10.0F;
 			final float pitch = 1.0F - 0.7F * (volume / 3.0F)
 					+ (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;

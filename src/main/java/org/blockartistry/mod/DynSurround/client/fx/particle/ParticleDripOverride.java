@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.mod.DynSurround.client.sound.Sounds;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.block.material.Material;
@@ -38,8 +39,6 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleDrip;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -47,11 +46,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ParticleDripOverride extends ParticleDrip {
-
-	private static final SoundEffect WATER_DROP = new SoundEffect("waterdrops", SoundCategory.AMBIENT);
-	private static final SoundEffect WATER_DRIP = new SoundEffect("waterdrips", SoundCategory.AMBIENT);
-	private static final SoundEffect STEAM_HISS = new SoundEffect(new ResourceLocation("block.fire.extinguish"),
-			SoundCategory.AMBIENT, 0.1F, 1.0F);
 
 	private boolean firstTime = true;
 	private final Material materialType;
@@ -109,16 +103,16 @@ public class ParticleDripOverride extends ParticleDrip {
 
 						// Hitting solid surface
 						if (state.getMaterial().isSolid()) {
-							effect = WATER_DROP;
+							effect = Sounds.WATER_DROP;
 							// Lava into water/water into lava
 						} else if (doSteamHiss(state)) {
-							effect = STEAM_HISS;
+							effect = Sounds.STEAM_HISS;
 							// Water into water
 						} else if (this.materialType == Material.WATER) {
-							effect = WATER_DRIP;
+							effect = Sounds.WATER_DRIP;
 							// Lava into lava
 						} else {
-							effect = WATER_DROP;
+							effect = Sounds.WATER_DROP;
 						}
 
 						SoundEffectHandler.INSTANCE.playSoundAt(pos, effect, delay);

@@ -47,6 +47,7 @@ import org.blockartistry.mod.DynSurround.client.sound.IMySound;
 import org.blockartistry.mod.DynSurround.client.sound.PlayerEmitter;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEngine;
+import org.blockartistry.mod.DynSurround.client.sound.Sounds;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModEnvironment;
 import org.blockartistry.mod.DynSurround.util.SoundUtils;
@@ -61,7 +62,6 @@ import net.minecraft.client.audio.ISoundEventListener;
 import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
@@ -74,7 +74,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class SoundEffectHandler extends EffectHandlerBase implements ISoundEventListener {
 
 	private static final int AGE_THRESHOLD_TICKS = 10;
-	private static final SoundEffect THUNDER = new SoundEffect("thunder", SoundCategory.WEATHER).setVolume(10000F);
 
 	public static final SoundEffectHandler INSTANCE = new SoundEffectHandler();
 
@@ -198,7 +197,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		if (e.getName().equals("entity.lightning.thunder")) {
 			final ISound sound = e.getSound();
 			final BlockPos pos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
-			final ISound newSound = THUNDER.setVolume(ModOptions.thunderVolume).createSound(pos, this.RANDOM);
+			final ISound newSound = Sounds.THUNDER.setVolume(ModOptions.thunderVolume).createSound(pos, this.RANDOM);
 			e.setResultSound(newSound);
 		}
 	}
