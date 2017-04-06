@@ -96,6 +96,8 @@ cfg.fog.BiomeFogFactor.tooltip=Visibility factor to apply to biome fog (higher i
 
 cfg.general.cat.General=General Options
 cfg.general.cat.General.tooltip=Miscellaneous settings
+cfg.general.Suspend=Disable Water Suspend Particles
+cfg.general.Suspend.tooltip=Enable/disable water depth particle effect
 cfg.general.MinRainStrength=Default Minimum Rain Strength
 cfg.general.MinRainStrength.tooltip=Default minimum rain strength for a dimension
 cfg.general.MaxRainStrength=Default Maximum Rain Strength

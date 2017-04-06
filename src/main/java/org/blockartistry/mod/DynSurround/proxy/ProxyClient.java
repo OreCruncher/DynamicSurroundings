@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.proxy;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.mod.DynSurround.client.handlers.EffectManager;
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
@@ -34,6 +35,7 @@ import org.blockartistry.mod.DynSurround.commands.CommandCalc;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -73,6 +75,9 @@ public class ProxyClient extends Proxy {
 		ParticleDripOverride.register();
 		
 		ClientCommandHandler.instance.registerCommand(new CommandCalc());
+		
+		if(ModOptions.disableWaterSuspendParticle)
+			Minecraft.getMinecraft().effectRenderer.registerParticle(EnumParticleTypes.SUSPENDED.getParticleID(), null);
 	}
 
 	@Override

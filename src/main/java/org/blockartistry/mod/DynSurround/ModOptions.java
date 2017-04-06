@@ -217,9 +217,14 @@ public final class ModOptions {
 	public static final String CONFIG_MIN_RAIN_STRENGTH = "Default Minimum Rain Strength";
 	public static final String CONFIG_MAX_RAIN_STRENGTH = "Default Maximum Rain Strength";
 	public static final String CONFIG_FX_RANGE = "Special Effect Range";
-	private static final List<String> generalSort = ImmutableList.<String>builder()
-			.add(CONFIG_FX_RANGE, CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH, CONFIG_EXTERNAL_SCRIPTS).build();
+	public static final String CONFIG_DISABLE_SUSPEND = "Disable Water Suspend Particles";
+	private static final List<String> generalSort = ImmutableList.<String>builder().add(CONFIG_DISABLE_SUSPEND,
+			CONFIG_FX_RANGE, CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH, CONFIG_EXTERNAL_SCRIPTS).build();
 
+	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_DISABLE_SUSPEND, defaultValue = "false", lang = "cfg.general.Suspend")
+	@Comment("Enable/disable water depth particle effect")
+	@RestartRequired(server = true)
+	public static boolean disableWaterSuspendParticle = false;
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_MIN_RAIN_STRENGTH, defaultValue = "0.0", lang = "cfg.general.MinRainStrength")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Default minimum rain strength for a dimension")
