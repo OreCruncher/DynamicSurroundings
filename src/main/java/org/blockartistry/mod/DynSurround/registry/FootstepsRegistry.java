@@ -41,7 +41,6 @@ import org.blockartistry.mod.DynSurround.client.footsteps.system.Generator;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.ResourcePacks;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Solver;
-import org.blockartistry.mod.DynSurround.client.footsteps.system.UserConfigSoundPlayerWrapper;
 import org.blockartistry.mod.DynSurround.client.footsteps.util.ConfigProperty;
 import org.blockartistry.mod.DynSurround.util.JsonUtils;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
@@ -174,7 +173,7 @@ public class FootstepsRegistry extends Registry {
 		}
 
 		this.isolator.setAcoustics(acoustics);
-		this.isolator.setSoundPlayer(new UserConfigSoundPlayerWrapper(acoustics));
+		this.isolator.setSoundPlayer(acoustics);
 		this.isolator.setDefaultStepPlayer(acoustics);
 	}
 
