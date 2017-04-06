@@ -29,6 +29,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -56,11 +57,13 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-@SideOnly(Side.CLIENT)
+@Mod.EventBusSubscriber(Side.CLIENT)
 public class BlockInfoHelperHUD extends GuiOverlay {
 
 	private static final int TEXT_COLOR = Color.MC_WHITE.rgbWithAlpha(1.0F);
@@ -73,22 +76,31 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 		return result;
 	}
 
+	private static String getItemName(final ItemStack stack) {
+		final Item item = stack.getItem();
+		final String itemName = MCHelper.nameOf(item);
+
+		if (itemName != null) {
+			final StringBuilder builder = new StringBuilder();
+			builder.append(itemName);
+			if (stack.getHasSubtypes())
+				builder.append(':').append(stack.getItemDamage());
+			return builder.toString();
+		}
+		
+		return null;
+	}
+	
 	private static List<String> gatherText(final ItemStack stack, final List<String> text, final IBlockState state,
 			final BlockPos pos) {
 
 		text.add(TextFormatting.GOLD + "--------------------");
 
 		if (stack != null) {
-			final Item item = stack.getItem();
-			final String itemName = MCHelper.nameOf(item);
-
+			final String itemName = getItemName(stack);
 			if (itemName != null) {
-				final StringBuilder builder = new StringBuilder();
-				builder.append("ITEM: ").append(itemName);
-				if (stack.getHasSubtypes())
-					builder.append(':').append(stack.getItemDamage());
-				text.add(builder.toString());
-				text.add(TextFormatting.DARK_AQUA + "> " + item.getClass().getName());
+				text.add("ITEM: " + itemName);
+				text.add(TextFormatting.DARK_AQUA + "> " + stack.getItem().getClass().getName());
 			}
 		}
 
@@ -167,6 +179,8 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 
 				final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
 
+				final float height = event.getResolution().getScaledHeight() / 2 - 100;
+				
 				// Render the text
 				GlStateManager.pushMatrix();
 				GlStateManager.pushAttrib();
@@ -178,7 +192,7 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 				GlStateManager.enableDepth();
 				GlStateManager.depthMask(true);
-				GlStateManager.translate(10, 200, 0);
+				GlStateManager.translate(10, height, 0);
 
 				int y = 0;
 				for (int i = 0; i < this.data.size(); i++) {
@@ -191,6 +205,18 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 				GlStateManager.disableBlend();
 				GlStateManager.popAttrib();
 				GlStateManager.popMatrix();
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static void tooltipEvent(@Nonnull final ItemTooltipEvent event) {
+		if(ModOptions.enableDebugLogging) {
+			final ItemStack stack = event.getItemStack();
+			if(stack != null) {
+				final String itemName = getItemName(stack);
+				event.getToolTip().add(TextFormatting.GOLD + itemName);
+				event.getToolTip().add(TextFormatting.GOLD + stack.getItem().getClass().getName());
 			}
 		}
 	}
