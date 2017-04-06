@@ -28,22 +28,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
-import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.mod.DynSurround.client.sound.Sounds;
 
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.client.particle.ParticleLava;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 @SideOnly(Side.CLIENT)
 public class ParticleFireJet extends ParticleJet {
-
-	private static final SoundEffect FIRE = new SoundEffect(new ResourceLocation("minecraft:block.fire.ambient"),
-			SoundCategory.BLOCKS);
 
 	protected final boolean isLava;
 	protected final IParticleFactory factory;
@@ -74,7 +69,7 @@ public class ParticleFireJet extends ParticleJet {
 		addParticle(particle);
 		if (!soundFired) {
 			soundFired = true;
-			SoundEffectHandler.INSTANCE.playSoundAt(this.getPos(), FIRE, 0);
+			SoundEffectHandler.INSTANCE.playSoundAt(this.getPos(), Sounds.FIRE, 0);
 		}
 	}
 }

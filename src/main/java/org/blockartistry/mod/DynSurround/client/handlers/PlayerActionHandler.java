@@ -5,13 +5,13 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.mod.DynSurround.client.sound.Sounds;
 import org.blockartistry.mod.DynSurround.registry.ItemRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -22,12 +22,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class PlayerActionHandler extends EffectHandlerBase {
-
-	private static final SoundEffect JUMP = new SoundEffect("jump", SoundCategory.PLAYERS).setVariable(true);
-	private static final SoundEffect CRAFTING = new SoundEffect("crafting", SoundCategory.PLAYERS);
-	private static final SoundEffect SWORD = new SoundEffect("swoosh", SoundCategory.PLAYERS);
-	private static final SoundEffect AXE = new SoundEffect("swoosh", SoundCategory.PLAYERS).setPitch(0.5F);
-	private static final SoundEffect BOW_PULL = new SoundEffect("bowpull", SoundCategory.PLAYERS);
 
 	private ItemRegistry itemRegistry;
 
@@ -60,7 +54,7 @@ public class PlayerActionHandler extends EffectHandlerBase {
 			return;
 
 		if (event.getEntity().worldObj.isRemote && EnvironState.isPlayer(event.getEntity()))
-			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), JUMP);
+			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), Sounds.JUMP);
 	}
 
 	@SubscribeEvent
@@ -76,9 +70,9 @@ public class PlayerActionHandler extends EffectHandlerBase {
 			if (currentItem != null) {
 				SoundEffect sound = null;
 				if (this.itemRegistry.doSwordSound(currentItem))
-					sound = SWORD;
+					sound = Sounds.SWORD_SWING;
 				else if (this.itemRegistry.doAxeSound(currentItem))
-					sound = AXE;
+					sound = Sounds.AXE_SWING;
 
 				if (sound != null)
 					SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), sound);
@@ -101,7 +95,7 @@ public class PlayerActionHandler extends EffectHandlerBase {
 
 		if (event.player.worldObj.isRemote && EnvironState.isPlayer(event.player)) {
 			craftSoundThrottle = EnvironState.getTickCounter();
-			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), CRAFTING);
+			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), Sounds.CRAFTING);
 		}
 
 	}
@@ -115,7 +109,7 @@ public class PlayerActionHandler extends EffectHandlerBase {
 			return;
 
 		if (event.getEntityPlayer().worldObj.isRemote && this.itemRegistry.doBowSound(event.getItemStack())) {
-			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), BOW_PULL);
+			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), Sounds.BOW_PULL);
 		}
 	}
 
