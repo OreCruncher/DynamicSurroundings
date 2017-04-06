@@ -91,11 +91,11 @@ dependencies {
 
     // compile "foxie:Calendar:1.10.2-1.5-10:deobf"
     // compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
-    compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.11.2-6.0.2.2157:deobf"
+    compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.11.2-6.0.2.2168:deobf"
     
 	// http://dvs1.progwml6.com/files/maven/mezz/jei/
-    deobfCompile "mezz.jei:jei_1.11.2:4.2.4.226:api"
-    runtime "mezz.jei:jei_1.11.2:4.2.4.226"
+    deobfCompile "mezz.jei:jei_1.11.2:4.2.10.248:api"
+    runtime "mezz.jei:jei_1.11.2:4.2.10.248"
 	
 	deobfCompile "team.chisel:Chisel:MC1.11-0.0.8.3:api"    
 }

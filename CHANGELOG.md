@@ -1,3 +1,25 @@
+###DynamicSurroundings-1.11.2-3.3.4.0
+**What's New**
+* F9 to show Minecraft's chunk border fencing.  Basically it is a simplified shortcut for F3+G.
+* Chat feedback when player toggles display modes, like chunk border fencing and light level
+* Option to disable the water suspend particle effect.  Can reduce particle load if you spend a lot of time around water, or if you want clean water.
+
+**Fixes**
+* Overload of sound engine with sounds; noticeable around large water falls where it would sound like it was clicking.
+* Sporadic crash when Dynamic Surroundings debug logging was enabled and F3 debug screen was up.
+* No more repeating/clicking sounds when you die.  Something is attempting to join a dead player to the world every 1-2 seconds.  Dynamic Surroundings no longer clears out the currently playing sounds when a dead player attempts to join a world.
+* Sometimes a repeating sound would not go away when it has completed fade.
+
+**Changes**
+* Built against Forge 13.20.0.2262.  The config option GUI system changed slightly to accommodate so please report any strangeness you may encounter.
+* Replace Minecraft SoundManager with slightly modified one to improve playing of looping sound clips and simplify volume scale hook
+* Use Item Java class hierarchy to identify sound to play when player swings an item.  This allows for a modded item to be "detected" and handled appropriately if derived from an existing known class (i.e. a modded hoe that derives from ItemHoe will get the swing sound of a hoe.)
+* Reworked waterfall splash and dust mote particle rendering to squeeze more performance.
+* Capped number of streaming sound channels at 16.
+* Increased firefly spawn rate quite a bit, and smoothed out the Y trajectory.  Fireflies spawn around `red_flower`, `yellow_flower`, and `double_plant`.  It does NOT include `tallgrass`.  (The two block tall grass is actually a `double_plant`.)
+* Randomize the initial sound play for waterfall splash.  This should even out the sound effect of large falls a bit.
+* General performance tweaks related to internal data tables.
+
 ###DynamicSurroundings-1.11.2-3.3.3.1
 **What's New**
 * Mod Support: Railcraft
