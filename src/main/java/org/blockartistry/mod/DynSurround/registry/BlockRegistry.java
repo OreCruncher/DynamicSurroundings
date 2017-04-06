@@ -25,8 +25,10 @@
 package org.blockartistry.mod.DynSurround.registry;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -53,7 +55,6 @@ import org.blockartistry.mod.DynSurround.registry.BlockInfo.BlockInfoMutable;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
-import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -109,7 +110,7 @@ public final class BlockRegistry extends Registry {
 
 	}
 
-	private final THashMap<BlockInfo, BlockProfile> registry = new THashMap<BlockInfo, BlockProfile>();
+	private final Map<BlockInfo, BlockProfile> registry = new HashMap<BlockInfo, BlockProfile>();
 	private final THashSet<BlockInfo> alwaysOnEffects = new THashSet<BlockInfo>();
 	private final THashSet<BlockInfo> hasSoundsAndEffects = new THashSet<BlockInfo>();
 
