@@ -25,7 +25,10 @@
 package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,8 +44,9 @@ import org.blockartistry.mod.DynSurround.facade.FacadeHelper;
 import org.blockartistry.mod.DynSurround.registry.BlockInfo;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
+import com.google.common.collect.ImmutableMap;
+
 import gnu.trove.map.hash.THashMap;
-import gnu.trove.procedure.TObjectObjectProcedure;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -57,7 +61,7 @@ public class BlockMap {
 
 	private final Isolator isolator;
 	private final BlockAcousticMap metaMap = new BlockAcousticMap();
-	private final THashMap<String, BlockAcousticMap> substrateMap = new THashMap<String, BlockAcousticMap>();
+	private Map<String, BlockAcousticMap> substrateMap = new HashMap<String, BlockAcousticMap>();
 
 	private static class MacroEntry {
 		public final int meta;
@@ -215,20 +219,21 @@ public class BlockMap {
 		if (temp != null)
 			data.add(combine(temp));
 
-		this.substrateMap.forEachEntry(new TObjectObjectProcedure<String, BlockAcousticMap>() {
-			@Override
-			public boolean execute(@Nonnull final String a, @Nonnull final BlockAcousticMap b) {
-				final IAcoustic[] acoustics = b.getBlockAcousticsWithSpecial(state);
-				if (acoustics != null)
-					data.add(a + ":" + combine(acoustics));
-				return true;
-			}
-		});
+		for(final Entry<String, BlockAcousticMap> e: this.substrateMap.entrySet()) {
+			final IAcoustic[] acoustics = e.getValue().getBlockAcousticsWithSpecial(state);
+			if (acoustics != null)
+				data.add(e.getKey() + ":" + combine(acoustics));
+		}
 	}
 
 	public void clear() {
 		this.metaMap.clear();
 		this.substrateMap.clear();
 		this.metaMap.put(new BlockInfo(Blocks.AIR), AcousticsManager.NOT_EMITTER);
+	}
+	
+	public void freeze() {
+		this.metaMap.freeze();
+		this.substrateMap = new ImmutableMap.Builder<String, BlockAcousticMap>().putAll(this.substrateMap).build();
 	}
 }

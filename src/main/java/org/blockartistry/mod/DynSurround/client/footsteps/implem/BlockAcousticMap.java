@@ -24,6 +24,9 @@
 
 package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -31,12 +34,14 @@ import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.registry.BlockInfo;
 import org.blockartistry.mod.DynSurround.registry.BlockInfo.BlockInfoMutable;
 
-import gnu.trove.map.hash.THashMap;
+import com.google.common.collect.ImmutableMap;
+
 import net.minecraft.block.state.IBlockState;
 
-public class BlockAcousticMap extends THashMap<BlockInfo, IAcoustic[]> {
+public class BlockAcousticMap {
 
 	private final BlockInfoMutable key = new BlockInfoMutable();
+	private Map<BlockInfo, IAcoustic[]> data = new HashMap<BlockInfo, IAcoustic[]>();
 
 	/**
 	 * Obtain acoustic information for a block.  If the block has
@@ -46,9 +51,9 @@ public class BlockAcousticMap extends THashMap<BlockInfo, IAcoustic[]> {
 	@Nullable
 	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state) {
 		this.key.set(state);
-		IAcoustic[] result = this.get(this.key);
+		IAcoustic[] result = this.data.get(this.key);
 		if (result == null && this.key.hasSubTypes()) {
-			result = this.get(this.key.asGeneric());
+			result = this.data.get(this.key.asGeneric());
 		}
 		return result;
 	}
@@ -62,14 +67,26 @@ public class BlockAcousticMap extends THashMap<BlockInfo, IAcoustic[]> {
 	@Nullable
 	public IAcoustic[] getBlockAcousticsWithSpecial(@Nonnull final IBlockState state) {
 		this.key.set(state);
-		IAcoustic[] result = this.get(this.key);
+		IAcoustic[] result = this.data.get(this.key);
 		if (result == null) {
 			if (this.key.hasSubTypes()) {
-				result = this.get(this.key.asGeneric());
+				result = this.data.get(this.key.asGeneric());
 			} else if (this.key.hasSpecialMeta()) {
-				result = this.get(this.key.asSpecial());
+				result = this.data.get(this.key.asSpecial());
 			}
 		}
 		return result;
+	}
+	
+	public void put(@Nonnull final BlockInfo info, final IAcoustic[] acoustics) {
+		this.data.put(info, acoustics);
+	}
+	
+	public void clear() {
+		this.data = new HashMap<BlockInfo, IAcoustic[]>(); 
+	}
+	
+	public void freeze() {
+		this.data = new ImmutableMap.Builder<BlockInfo, IAcoustic[]>().putAll(this.data).build();
 	}
 }

@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -53,7 +54,6 @@ import org.blockartistry.mod.DynSurround.util.TimeUtils;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
 import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
-import gnu.trove.map.hash.THashMap;
 import net.minecraft.block.SoundType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -67,18 +67,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * A ILibrary that can also play sounds and default footsteps.
- * 
- * @author Hurry
  */
 @SideOnly(Side.CLIENT)
 public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	private final Random RANDOM = XorShiftRandom.current();
 
-	private final THashMap<String, IAcoustic> acoustics = new THashMap<String, IAcoustic>();
+	private final HashMap<String, IAcoustic> acoustics = new HashMap<String, IAcoustic>();
 	private final ArrayDeque<PendingSound> pending = new ArrayDeque<PendingSound>();
 	private final Isolator isolator;
-	private BlockPos.MutableBlockPos stepCheck = new BlockPos.MutableBlockPos();
+	private final BlockPos.MutableBlockPos stepCheck = new BlockPos.MutableBlockPos();
 
 	// Special sentinels for equating
 	public static final IAcoustic[] EMPTY = {};
