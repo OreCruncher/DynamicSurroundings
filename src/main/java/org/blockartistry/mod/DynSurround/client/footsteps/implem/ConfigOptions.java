@@ -24,7 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
-import java.util.IdentityHashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -37,7 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ConfigOptions implements IOptions {
-	private final Map<Option, Object> map = new IdentityHashMap<Option, Object>();
+	private final Map<Option, Object> map = new EnumMap<Option, Object>(Option.class);
 
 	public ConfigOptions() {
 	}
