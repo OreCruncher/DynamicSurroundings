@@ -24,6 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -31,14 +32,12 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IOptions;
 
-import gnu.trove.map.hash.TCustomHashMap;
-import gnu.trove.strategy.IdentityHashingStrategy;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ConfigOptions implements IOptions {
-	private final Map<Option, Object> map = new TCustomHashMap<Option, Object>(IdentityHashingStrategy.INSTANCE);
+	private final Map<Option, Object> map = new IdentityHashMap<Option, Object>();
 
 	public ConfigOptions() {
 	}

@@ -24,6 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -34,8 +35,6 @@ import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 
-import gnu.trove.map.hash.TCustomHashMap;
-import gnu.trove.strategy.IdentityHashingStrategy;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -43,8 +42,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class EventSelectorAcoustics implements IAcoustic {
 	private final String name;
 
-	private final Map<EventType, IAcoustic> pairs = new TCustomHashMap<EventType, IAcoustic>(
-			IdentityHashingStrategy.INSTANCE);
+	private final Map<EventType, IAcoustic> pairs = new IdentityHashMap<EventType, IAcoustic>();
 
 	public EventSelectorAcoustics(@Nonnull final String acousticName) {
 		this.name = acousticName;
