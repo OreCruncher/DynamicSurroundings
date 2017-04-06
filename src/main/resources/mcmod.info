@@ -2,7 +2,7 @@
 	{
 		"modid": "dsurround",
 		"name": "Dynamic Surroundings",
-		"description": "Adds a variety of sound and particle effects to improve your Minecraft experience",
+		"description": "Adds a variety of sound and visual effects to improve your Minecraft experience",
 		"version": "$version",
 		"mcversion": "$mcversion",
 		"url": "https://github.com/OreCruncher/DynamicSurroundings/wiki",
