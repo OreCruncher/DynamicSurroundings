@@ -36,7 +36,8 @@ import org.blockartistry.mod.DynSurround.facade.FacadeHelper;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.MyUtils;
 
-import gnu.trove.set.hash.THashSet;
+import com.google.common.collect.Sets;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -49,7 +50,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class Association {
 
-	private static final Set<Material> FOOTPRINTABLE = new THashSet<Material>();
+	private static final Set<Material> FOOTPRINTABLE = Sets.newIdentityHashSet();
 	static {
 		FOOTPRINTABLE.add(Material.CLAY);
 		FOOTPRINTABLE.add(Material.GRASS);

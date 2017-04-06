@@ -24,6 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.util;
 
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -31,9 +32,8 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import gnu.trove.map.hash.TCustomHashMap;
-import gnu.trove.set.hash.TCustomHashSet;
-import gnu.trove.strategy.IdentityHashingStrategy;
+import com.google.common.collect.Sets;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.SoundType;
@@ -51,9 +51,8 @@ public final class MCHelper {
 
 	private static final String MATERIAL_CUSTOM = "Custom";
 	private static final String MATERIAL_NONE = "None";
-	private static final Map<Material, String> materialMap = new TCustomHashMap<Material, String>(
-			IdentityHashingStrategy.INSTANCE);
-	private static final Set<Block> hasVariants = new TCustomHashSet<Block>(IdentityHashingStrategy.INSTANCE);
+	private static final Map<Material, String> materialMap = new IdentityHashMap<Material, String>();
+	private static final Set<Block> hasVariants = Sets.newIdentityHashSet();
 
 	private static boolean variantCheck(@Nonnull final Block block) {
 		final Item item = Item.getItemFromBlock(block);
