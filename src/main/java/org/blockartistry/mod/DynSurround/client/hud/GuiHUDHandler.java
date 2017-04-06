@@ -43,6 +43,7 @@ public final class GuiHUDHandler {
 	private GuiHUDHandler() {
 		register(new PotionHUD());
 		register(new CompassHUD());
+		register(new BlockInfoHelperHUD());
 	}
 
 	@SideOnly(Side.CLIENT)
