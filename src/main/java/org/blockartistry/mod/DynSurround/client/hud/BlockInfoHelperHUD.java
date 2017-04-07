@@ -179,6 +179,8 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 
 				final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
 
+				final float height = event.getResolution().getScaledHeight() / 2 - 100;
+				
 				// Render the text
 				GlStateManager.pushMatrix();
 				GlStateManager.pushAttrib();
@@ -190,7 +192,7 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 				GlStateManager.enableDepth();
 				GlStateManager.depthMask(true);
-				GlStateManager.translate(10, 200, 0);
+				GlStateManager.translate(10, height, 0);
 
 				int y = 0;
 				for (int i = 0; i < this.data.size(); i++) {
