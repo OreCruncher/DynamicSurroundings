@@ -26,7 +26,10 @@ package org.blockartistry.mod.DynSurround.util;
 import net.minecraft.world.World;
 
 public class MinecraftClock {
-
+	
+	private static final String AM = Localization.format("format.AM");
+	private static final String PM = Localization.format("format.PM");
+	
 	protected int day;
 	protected int hour;
 	protected int minute;
@@ -80,6 +83,6 @@ public class MinecraftClock {
 	
 	@Override
 	public String toString() {
-		return String.format("Day %d, %d:%02d %s", this.day, this.hour, this.minute, this.isAM ? "AM" : "PM");
+		return Localization.format("format.TimeOfDay", this.day, this.hour, this.minute, this.isAM ? AM : PM);
 	}
 }

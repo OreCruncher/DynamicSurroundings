@@ -8,6 +8,12 @@ metadata.Credits=\n\n§6Wirsbo§r for §2BetterRain§r\n§6MrRube§r for §2Auro
 metadata.Authors=§6OreCruncher§r,§6Abastro§r
 metadata.Description=Adds a variety of §6sound§r and §6visual§r effects to improve your Minecraft experience
 
+# String formatting
+format.TimeOfDay=Day %1$d, %2$d:%3$02d %4$s
+format.AM=AM
+format.PM=PM
+format.SessionTime=Session Time %1$d:%2$02d:%3$02d
+
 # Keybindings
 cfg.keybind.SelectionBox=Toggle SelectionBox
 cfg.keybind.LightLevel=Toggle Light Level

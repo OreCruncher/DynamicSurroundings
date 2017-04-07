@@ -31,6 +31,7 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler.GuiOverlay;
 import org.blockartistry.mod.DynSurround.util.Color;
+import org.blockartistry.mod.DynSurround.util.Localization;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 
 import net.minecraft.client.Minecraft;
@@ -72,7 +73,7 @@ public class ClockHUD extends GuiOverlay {
 		this.elapsedSeconds = (int) (time / 1000);
 
 		this.time = EnvironState.getClock().toString();
-		this.elapsed = String.format("Session Time %d:%02d:%02d", this.elapsedHours, this.elapsedMinutes,
+		this.elapsed = Localization.format("format.SessionTime", this.elapsedHours, this.elapsedMinutes,
 				this.elapsedSeconds);
 
 	}
