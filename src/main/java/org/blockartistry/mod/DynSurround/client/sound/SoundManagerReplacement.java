@@ -129,10 +129,11 @@ public class SoundManagerReplacement extends SoundManager {
 				if (i <= this.playTime) {
 					final ISound isound = entry.getValue();
 					final int j = isound.getRepeatDelay();
+					final int minThresholdDelay = isound instanceof IMySound ? 0 : 1;
 
 					// Repeatable sound could have a delay of 0, meaning
 					// don't delay a requeue.
-					if (isound.canRepeat() && j >= 0) {
+					if (isound.canRepeat() && j >= minThresholdDelay) {
 						this.playDelayedSound(isound, j);
 					}
 
