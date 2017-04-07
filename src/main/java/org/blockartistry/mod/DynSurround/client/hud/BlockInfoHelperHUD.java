@@ -41,11 +41,13 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
+import org.blockartistry.mod.DynSurround.util.gui.TextPanel;
+import org.blockartistry.mod.DynSurround.util.gui.TextPanel.Reference;
+
+import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -65,7 +67,9 @@ import net.minecraftforge.oredict.OreDictionary;
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class BlockInfoHelperHUD extends GuiOverlay {
 
-	private static final int TEXT_COLOR = Color.MC_WHITE.rgbWithAlpha(1.0F);
+	private static final Color BACKGROUND_COLOR = Color.DARKSLATEGRAY;
+	private static final Color FRAME_COLOR = Color.MC_WHITE;
+	private static final Color TEXT_COLOR = Color.GOLD;
 
 	private static List<String> gatherOreNames(final ItemStack stack) {
 		final List<String> result = new ArrayList<String>();
@@ -86,27 +90,25 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 				builder.append(':').append(stack.getItemDamage());
 			return builder.toString();
 		}
-		
+
 		return null;
 	}
-	
+
 	private static List<String> gatherText(final ItemStack stack, final List<String> text, final IBlockState state,
 			final BlockPos pos) {
-
-		text.add(TextFormatting.GOLD + "--------------------");
 
 		if (stack != null) {
 			final String itemName = getItemName(stack);
 			if (itemName != null) {
 				text.add("ITEM: " + itemName);
-				text.add(TextFormatting.DARK_AQUA + "> " + stack.getItem().getClass().getName());
+				text.add(TextFormatting.DARK_AQUA + stack.getItem().getClass().getName());
 			}
 		}
 
 		if (state != null) {
 			final BlockInfo block = new BlockInfo(state);
 			text.add("BLOCK: " + block.toString());
-			text.add(TextFormatting.DARK_AQUA + "> " + block.getBlock().getClass().getName());
+			text.add(TextFormatting.DARK_AQUA + block.getBlock().getClass().getName());
 			text.add("Material: " + MCHelper.getMaterialName(state.getMaterial()));
 
 			final FootstepsRegistry footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
@@ -117,7 +119,7 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 				if (data.size() > 0) {
 					text.add(TextFormatting.DARK_PURPLE + "Footstep Accoustics");
 					for (final String s : data)
-						text.add(TextFormatting.DARK_PURPLE + " " + s);
+						text.add(TextFormatting.DARK_PURPLE + s);
 				}
 			}
 
@@ -126,7 +128,7 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 			if (effects.length > 0) {
 				text.add(TextFormatting.DARK_RED + "Block Effects");
 				for (final BlockEffect e : effects) {
-					text.add(TextFormatting.DARK_RED + " " + e.getEffectType().getName());
+					text.add(TextFormatting.DARK_RED + e.getEffectType().getName());
 				}
 			}
 		}
@@ -135,10 +137,8 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 		if (oreNames.size() > 0) {
 			text.add(TextFormatting.DARK_GREEN + "Dictionary Names");
 			for (final String ore : oreNames)
-				text.add(TextFormatting.DARK_GREEN + " " + ore);
+				text.add(TextFormatting.DARK_GREEN + ore);
 		}
-
-		text.add(TextFormatting.GOLD + "--------------------");
 
 		return text;
 	}
@@ -150,69 +150,48 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 		return ItemStack.areItemStacksEqual(tool, player.getHeldItem(EnumHand.MAIN_HAND));
 	}
 
-	private ArrayList<String> data = new ArrayList<String>();
-	
+	private final TextPanel textPanel;
+
+	public BlockInfoHelperHUD() {
+		this.textPanel = new TextPanel(TEXT_COLOR, BACKGROUND_COLOR, FRAME_COLOR);
+	}
+
 	@Override
 	public void doRender(@Nonnull final RenderGameOverlayEvent.Pre event) {
 		// Only trigger if the player is in creative and is holding a stack of
 		// nether stars
 		if (event.getType() == ElementType.TEXT && EnvironState.getPlayer().isCreative() && isHolding()) {
-			
+
 			final long tick = EnvironState.getTickCounter();
 			if (tick != 0 && tick % 5 == 0) {
 				final RayTraceResult current = Minecraft.getMinecraft().objectMouseOver;
 				final BlockPos targetBlock = (current == null || current.getBlockPos() == null) ? BlockPos.ORIGIN
 						: current.getBlockPos();
 				final IBlockState state = EnvironState.getWorld().getBlockState(targetBlock);
-	
-				this.data = new ArrayList<String>();
+
+				final List<String> data = new ArrayList<String>();
 				if (!WorldUtils.isAirBlock(state)) {
 					final ItemStack stack = state != null ? state.getBlock().getPickBlock(state, current,
 							EnvironState.getWorld(), targetBlock, EnvironState.getPlayer()) : null;
-		
-					gatherText(stack, this.data, state, targetBlock);
+
+					gatherText(stack, data, state, targetBlock);
+					this.textPanel.setText(data);
+				} else {
+					final List<String> t = ImmutableList.of();
+					this.textPanel.setText(t);
 				}
 			}
-			
-			if (this.data.size() > 0) {
 
-				final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
-
-				final float height = event.getResolution().getScaledHeight() / 2 - 100;
-				
-				// Render the text
-				GlStateManager.pushMatrix();
-				GlStateManager.pushAttrib();
-
-				GlStateManager.disableLighting();
-				GlStateManager.enableBlend();
-				GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-				GlStateManager.enableAlpha();
-				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-				GlStateManager.enableDepth();
-				GlStateManager.depthMask(true);
-				GlStateManager.translate(10, height, 0);
-
-				int y = 0;
-				for (int i = 0; i < this.data.size(); i++) {
-					final String txt = this.data.get(i);
-					font.drawString(txt, 0, y, TEXT_COLOR);
-					y += 12;
-				}
-
-				GlStateManager.disableAlpha();
-				GlStateManager.disableBlend();
-				GlStateManager.popAttrib();
-				GlStateManager.popMatrix();
-			}
+			final int height = event.getResolution().getScaledHeight() / 2 - 100;
+			this.textPanel.render(10, height, Reference.UPPER_LEFT);
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void tooltipEvent(@Nonnull final ItemTooltipEvent event) {
-		if(ModOptions.enableDebugLogging) {
+		if (ModOptions.enableDebugLogging) {
 			final ItemStack stack = event.getItemStack();
-			if(stack != null) {
+			if (stack != null) {
 				final String itemName = getItemName(stack);
 				event.getToolTip().add(TextFormatting.GOLD + itemName);
 				event.getToolTip().add(TextFormatting.GOLD + stack.getItem().getClass().getName());
