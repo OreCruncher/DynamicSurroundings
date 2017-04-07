@@ -27,7 +27,6 @@ package org.blockartistry.mod.DynSurround.client.hud;
 import java.util.Collection;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler.GuiOverlay;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.Localization;
 

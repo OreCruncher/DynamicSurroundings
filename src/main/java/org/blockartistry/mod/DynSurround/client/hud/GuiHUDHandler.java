@@ -27,7 +27,6 @@ package org.blockartistry.mod.DynSurround.client.hud;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.gui.Gui;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -45,12 +44,6 @@ public final class GuiHUDHandler {
 		register(new CompassHUD());
 		register(new ClockHUD());
 		register(new BlockInfoHelperHUD());
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static class GuiOverlay extends Gui {
-		public void doRender(final RenderGameOverlayEvent.Pre event) { }
-		public void doRender(final RenderGameOverlayEvent.Post event) { }
 	}
 
 	private final List<GuiOverlay> overlays = new ArrayList<GuiOverlay>();
