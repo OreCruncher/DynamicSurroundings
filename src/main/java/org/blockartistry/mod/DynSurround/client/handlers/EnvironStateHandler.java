@@ -46,6 +46,7 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SeasonRegistry;
 import org.blockartistry.mod.DynSurround.registry.SeasonType;
 import org.blockartistry.mod.DynSurround.registry.TemperatureRating;
+import org.blockartistry.mod.DynSurround.util.MinecraftClock;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 
 import gnu.trove.procedure.TIntDoubleProcedure;
@@ -98,6 +99,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static boolean inVillage;
 
 		private static int tickCounter;
+		
+		private static MinecraftClock clock = new MinecraftClock();
 
 		private static BlockPos getPlayerPos() {
 			return new BlockPos(player.posX, player.getEntityBoundingBox().minY, player.posZ);
@@ -109,6 +112,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 			EnvironState.player = player;
 			EnvironState.world = player.worldObj;
+			EnvironState.clock = new MinecraftClock(player.worldObj);
 			EnvironState.playerBiome = PlayerUtils.getPlayerBiome(player, false);
 			EnvironState.biomeName = EnvironState.playerBiome.getBiomeName();
 			EnvironState.season = seasons.getSeasonType(world);
@@ -131,6 +135,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 				EnvironState.tickCounter++;
 		}
 
+		public static MinecraftClock getClock() {
+			return clock;
+		}
+		
 		public static BiomeInfo getPlayerBiome() {
 			return playerBiome;
 		}
