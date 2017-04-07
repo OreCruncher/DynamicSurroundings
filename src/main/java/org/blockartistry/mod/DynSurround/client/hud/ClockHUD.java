@@ -54,7 +54,7 @@ public class ClockHUD extends GuiOverlay {
 	private static final Color FRAME_COLOR = Color.MC_WHITE;
 	private static final Color TIME_COLOR = Color.MC_YELLOW;
 
-	private static final int TEXT_LINE_START = 6;
+	private static final float TEXT_LINE_START = 7.0F;
 
 	private int elapsedMinutes;
 	private int elapsedHours;
@@ -103,7 +103,7 @@ public class ClockHUD extends GuiOverlay {
 
 		final ScaledResolution resolution = event.getResolution();
 		final int centerX = (resolution.getScaledWidth() + 1) / 2;
-		final int centerY = (resolution.getScaledHeight() + 1) / 2 + font.FONT_HEIGHT * TEXT_LINE_START;
+		final int centerY = (resolution.getScaledHeight() + 1) / 2 + (int)(font.FONT_HEIGHT * TEXT_LINE_START);
 
 		this.textPanel.render(centerX, centerY, Reference.CENTERED);
 	}
