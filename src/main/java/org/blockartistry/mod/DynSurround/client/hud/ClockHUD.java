@@ -50,6 +50,8 @@ public class ClockHUD extends GuiOverlay {
 	private static final Color FRAME_COLOR = Color.MC_WHITE;
 	private static final Color TIME_COLOR = Color.MC_YELLOW;
 
+	private static final int TEXT_LINE_START = 6;
+
 	private int elapsedMinutes;
 	private int elapsedHours;
 	private int elapsedSeconds;
@@ -91,10 +93,7 @@ public class ClockHUD extends GuiOverlay {
 
 		final ScaledResolution resolution = event.getResolution();
 		final int centerX = (resolution.getScaledWidth() + 1) / 2;
-		final int centerY = (resolution.getScaledHeight() + 1) / 2 + 50;
-
-		GlStateManager.color(1F, 1F, 1F, ModOptions.compassTransparency);
-		GlStateManager.enableBlend();
+		final int centerY = (resolution.getScaledHeight() + 1) / 2 + font.FONT_HEIGHT * TEXT_LINE_START;
 
 		final int width = Math.max(font.getStringWidth(this.time), font.getStringWidth(this.elapsed)) + 10;
 		final int height = 2 * font.FONT_HEIGHT + 10;
@@ -108,6 +107,9 @@ public class ClockHUD extends GuiOverlay {
 
 		drawRect(x1 + 2, y1 + 2, x1 + width - 1, y1 + height - 1, backgroundRGB);
 		drawTooltipBox(x1, y1, width, height, frameRGB, frameRGB, frameRGB);
+
+		GlStateManager.color(1F, 1F, 1F, ModOptions.compassTransparency);
+		GlStateManager.enableBlend();
 
 		drawCenteredString(font, time, centerX, (int) (centerY) - font.FONT_HEIGHT, textRGB);
 		drawCenteredString(font, elapsed, centerX, (int) (centerY), textRGB);

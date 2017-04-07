@@ -36,6 +36,7 @@ import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.Items;
@@ -53,6 +54,8 @@ public class CompassHUD extends GuiOverlay {
 	private static final int BAND_WIDTH = 65;
 	private static final int BAND_HEIGHT = 12;
 	private static final int ROSE_DIM = 256;
+	
+	private static final int TEXT_LINE_START = 2;
 
 	private static final Color COORDINATE_COLOR = Color.MC_AQUA;
 	private static final Color BIOME_NAME_COLOR = Color.MC_GOLD;
@@ -132,6 +135,7 @@ public class CompassHUD extends GuiOverlay {
 		}
 
 		final Minecraft mc = Minecraft.getMinecraft();
+		final FontRenderer font = mc.fontRendererObj;
 
 		final ScaledResolution resolution = event.getResolution();
 		final int centerX = (resolution.getScaledWidth() + 1) / 2;
@@ -140,9 +144,9 @@ public class CompassHUD extends GuiOverlay {
 		GlStateManager.color(1F, 1F, 1F, ModOptions.compassTransparency);
 		GlStateManager.enableBlend();
 
-		drawCenteredString(mc.fontRendererObj, locationString, centerX, (int) (centerY + BAND_HEIGHT * 1.5F),
+		drawCenteredString(font, locationString, centerX, (int) (centerY + TEXT_LINE_START * font.FONT_HEIGHT),
 				COORDINATE_COLOR.rgbWithAlpha(ModOptions.compassTransparency));
-		drawCenteredString(mc.fontRendererObj, biomeNameString, centerX, (int) (centerY + BAND_HEIGHT * 2.5F),
+		drawCenteredString(font, biomeNameString, centerX, (int) (centerY + (TEXT_LINE_START + 1) * font.FONT_HEIGHT),
 				BIOME_NAME_COLOR.rgbWithAlpha(ModOptions.compassTransparency));
 
 		final Style style = Style.getStyle(ModOptions.compassStyle);
