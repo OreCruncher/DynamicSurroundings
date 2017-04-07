@@ -31,9 +31,12 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
+import org.blockartistry.mod.DynSurround.util.gui.TextPanel;
+import org.blockartistry.mod.DynSurround.util.gui.TextPanel.Reference;
+
+import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -43,6 +46,7 @@ import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.relauncher.Side;
@@ -54,24 +58,17 @@ public class CompassHUD extends GuiOverlay {
 	private static final int BAND_WIDTH = 65;
 	private static final int BAND_HEIGHT = 12;
 	private static final int ROSE_DIM = 256;
-	
-	private static final int TEXT_LINE_START = 2;
 
-	private static final Color COORDINATE_COLOR = Color.MC_AQUA;
-	private static final Color BIOME_NAME_COLOR = Color.MC_GOLD;
-	
-	private static String locationString = "";
-	private static String biomeNameString = "";
+	private static final float TEXT_LINE_START = 3.5F;
 
 	private static enum Style {
-		BAND_0(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT),
-		BAND_1(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT),
-		BAND_2(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT),
-		BAND_3(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT),
-		ROSE_1(true, "textures/gui/compass/compassrose1.png", ROSE_DIM, ROSE_DIM),
-		ROSE_2(true, "textures/gui/compass/compassrose2.png", ROSE_DIM, ROSE_DIM),
-		ROSE_3(true, "textures/gui/compass/compassrose3.png", ROSE_DIM, ROSE_DIM)
-		;
+		BAND_0(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT), BAND_1(false,
+				"textures/gui/compass/compass.png", BAND_WIDTH,
+				BAND_HEIGHT), BAND_2(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT), BAND_3(false,
+						"textures/gui/compass/compass.png", BAND_WIDTH,
+						BAND_HEIGHT), ROSE_1(true, "textures/gui/compass/compassrose1.png", ROSE_DIM, ROSE_DIM), ROSE_2(
+								true, "textures/gui/compass/compassrose2.png", ROSE_DIM,
+								ROSE_DIM), ROSE_3(true, "textures/gui/compass/compassrose3.png", ROSE_DIM, ROSE_DIM);
 
 		private final boolean isRose;
 		private final ResourceLocation texture;
@@ -108,15 +105,18 @@ public class CompassHUD extends GuiOverlay {
 		}
 	}
 
+	private final TextPanel textPanel = new TextPanel().setMinimumWidth(100);
+
 	@Nonnull
 	protected String getLocationString() {
 		final BlockPos pos = EnvironState.getPlayerPosition();
-		return String.format(Locale.getDefault(), ModOptions.compassCoordFormat, pos.getX(), pos.getY(), pos.getZ());
+		return TextFormatting.AQUA
+				+ String.format(Locale.getDefault(), ModOptions.compassCoordFormat, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Nonnull
 	protected String getBiomeName() {
-		return EnvironState.getBiomeName();
+		return TextFormatting.GOLD + EnvironState.getBiomeName();
 	}
 
 	protected boolean showCompass() {
@@ -128,10 +128,11 @@ public class CompassHUD extends GuiOverlay {
 
 		if (event.getType() != ElementType.CROSSHAIRS || !showCompass())
 			return;
-		
-		if(EnvironState.getTickCounter() % 4 == 0) {
-			locationString = getLocationString();
-			biomeNameString = getBiomeName();
+
+		if (EnvironState.getTickCounter() % 4 == 0) {
+			final String locationString = getLocationString();
+			final String biomeNameString = getBiomeName();
+			this.textPanel.setText(ImmutableList.of(locationString, biomeNameString));
 		}
 
 		final Minecraft mc = Minecraft.getMinecraft();
@@ -141,16 +142,12 @@ public class CompassHUD extends GuiOverlay {
 		final int centerX = (resolution.getScaledWidth() + 1) / 2;
 		final int centerY = (resolution.getScaledHeight() + 1) / 2;
 
-		GlStateManager.color(1F, 1F, 1F, ModOptions.compassTransparency);
-		GlStateManager.enableBlend();
-
-		drawCenteredString(font, locationString, centerX, (int) (centerY + TEXT_LINE_START * font.FONT_HEIGHT),
-				COORDINATE_COLOR.rgbWithAlpha(ModOptions.compassTransparency));
-		drawCenteredString(font, biomeNameString, centerX, (int) (centerY + (TEXT_LINE_START + 1) * font.FONT_HEIGHT),
-				BIOME_NAME_COLOR.rgbWithAlpha(ModOptions.compassTransparency));
+		this.textPanel.setAlpha(ModOptions.compassTransparency);
+		this.textPanel.render(centerX, centerY + (int) (font.FONT_HEIGHT * TEXT_LINE_START), Reference.CENTERED);
 
 		final Style style = Style.getStyle(ModOptions.compassStyle);
 		mc.getTextureManager().bindTexture(style.getTextureResource());
+
 		GlStateManager.color(1F, 1F, 1F, ModOptions.compassTransparency);
 
 		if (!style.isRose()) {

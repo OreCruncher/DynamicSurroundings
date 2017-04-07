@@ -34,9 +34,16 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class TextPanel {
 	
+	public static final Color BACKGROUND_COLOR = Color.DARKSLATEGRAY;
+	public static final Color FRAME_COLOR = Color.MC_WHITE;
+	public static final Color TEXT_COLOR = Color.MC_YELLOW;
+
 	public static enum Reference {
 		CENTERED,
 		UPPER_LEFT
@@ -53,9 +60,15 @@ public class TextPanel {
 	private List<String> text = ImmutableList.of();
 	private int width;
 	private int height;
+	
+	private int minWidth;
 
 	private int centerX = 0;
 	private int centerY = 0;
+	
+	public TextPanel() {
+		this(TEXT_COLOR, BACKGROUND_COLOR, FRAME_COLOR);
+	}
 	
 	public TextPanel(final Color fore, final Color back, final Color border) {
 		this.foreground = fore;
@@ -69,11 +82,17 @@ public class TextPanel {
 	}
 
 	@Nonnull
+	public TextPanel setMinimumWidth(final int w) {
+		this.minWidth = w;
+		return this;
+	}
+	
+	@Nonnull
 	public TextPanel setText(@Nonnull final List<String> text) {
 		this.text = text;
 		this.height = (text.size() + 1) * font.FONT_HEIGHT;
 
-		this.width = 0;
+		this.width = this.minWidth;
 		for (final String s : text)
 			this.width = Math.max(font.getStringWidth(s), this.width);
 		this.width += font.FONT_HEIGHT;
