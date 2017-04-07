@@ -59,6 +59,10 @@ public class ClockHUD extends GuiOverlay {
 	private String time;
 	private String elapsed;
 
+	// Cached rendering data
+	private int width;
+	private int height;
+
 	protected boolean showClock() {
 		return ModOptions.enableCompass && PlayerUtils.isHolding(EnvironState.getPlayer(), Items.CLOCK);
 	}
@@ -79,6 +83,9 @@ public class ClockHUD extends GuiOverlay {
 		this.elapsed = Localization.format("format.SessionTime", this.elapsedHours, this.elapsedMinutes,
 				this.elapsedSeconds);
 
+		final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
+		this.width = Math.max(font.getStringWidth(this.time), font.getStringWidth(this.elapsed)) + 10;
+		this.height = 2 * font.FONT_HEIGHT + 10;
 	}
 
 	@Override
@@ -95,24 +102,21 @@ public class ClockHUD extends GuiOverlay {
 		final int centerX = (resolution.getScaledWidth() + 1) / 2;
 		final int centerY = (resolution.getScaledHeight() + 1) / 2 + font.FONT_HEIGHT * TEXT_LINE_START;
 
-		final int width = Math.max(font.getStringWidth(this.time), font.getStringWidth(this.elapsed)) + 10;
-		final int height = 2 * font.FONT_HEIGHT + 10;
-
-		final int x1 = centerX - (width+1) / 2;
-		final int y1 = centerY - (height+1) / 2;
+		final int x1 = centerX - (this.width + 1) / 2;
+		final int y1 = centerY - (this.height + 1) / 2;
 
 		final int backgroundRGB = BACKGROUND_COLOR.rgbWithAlpha(ModOptions.compassTransparency);
 		final int textRGB = TIME_COLOR.rgbWithAlpha(ModOptions.compassTransparency);
 		final int frameRGB = FRAME_COLOR.rgbWithAlpha(ModOptions.compassTransparency);
 
-		drawRect(x1 + 2, y1 + 2, x1 + width - 1, y1 + height - 1, backgroundRGB);
-		drawTooltipBox(x1, y1, width, height, frameRGB, frameRGB, frameRGB);
+		drawRect(x1 + 2, y1 + 2, x1 + this.width - 1, y1 + this.height - 1, backgroundRGB);
+		drawTooltipBox(x1, y1, this.width, this.height, frameRGB, frameRGB, frameRGB);
 
 		GlStateManager.color(1F, 1F, 1F, ModOptions.compassTransparency);
 		GlStateManager.enableBlend();
-		
-		drawCenteredString(font, time, centerX, (int) (centerY) - font.FONT_HEIGHT, textRGB);
-		drawCenteredString(font, elapsed, centerX, (int) (centerY), textRGB);
+
+		drawCenteredString(font, this.time, centerX, (int) (centerY) - font.FONT_HEIGHT, textRGB);
+		drawCenteredString(font, this.elapsed, centerX, (int) (centerY), textRGB);
 
 		GlStateManager.color(1F, 1F, 1F, 1F);
 
