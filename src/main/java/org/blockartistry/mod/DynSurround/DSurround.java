@@ -25,6 +25,8 @@
 package org.blockartistry.mod.DynSurround;
 
 import java.io.File;
+import java.util.Arrays;
+
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
@@ -54,7 +56,6 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToSe
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import scala.actors.threadpool.Arrays;
 
 @net.minecraftforge.fml.common.Mod(modid = DSurround.MOD_ID, useMetadata = true, dependencies = DSurround.DEPENDENCIES, version = DSurround.VERSION, guiFactory = DSurround.GUI_FACTORY, updateJSON = DSurround.UPDATE_URL)
 public class DSurround {
@@ -131,7 +132,6 @@ public class DSurround {
 		proxy.init(event);
 	}
 
-	@SuppressWarnings("unchecked")
 	@EventHandler
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
 		proxy.postInit(event);
