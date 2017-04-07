@@ -46,6 +46,7 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SeasonRegistry;
 import org.blockartistry.mod.DynSurround.registry.SeasonType;
 import org.blockartistry.mod.DynSurround.registry.TemperatureRating;
+import org.blockartistry.mod.DynSurround.util.MinecraftClock;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 
 import gnu.trove.procedure.TIntDoubleProcedure;
@@ -98,6 +99,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static boolean inVillage;
 
 		private static int tickCounter;
+		
+		private static MinecraftClock clock = new MinecraftClock();
 
 		private static BlockPos getPlayerPos() {
 			return new BlockPos(player.posX, player.getEntityBoundingBox().minY, player.posZ);
@@ -109,6 +112,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 			EnvironState.player = player;
 			EnvironState.world = player.world;
+			EnvironState.clock = new MinecraftClock(player.world);
 			EnvironState.playerBiome = PlayerUtils.getPlayerBiome(player, false);
 			EnvironState.biomeName = EnvironState.playerBiome.getBiomeName();
 			EnvironState.season = seasons.getSeasonType(world);
@@ -131,6 +135,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 				EnvironState.tickCounter++;
 		}
 
+		public static MinecraftClock getClock() {
+			return clock;
+		}
+		
 		public static BiomeInfo getPlayerBiome() {
 			return playerBiome;
 		}
@@ -398,7 +406,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		data.add(String.format("Mem: %d%% %03d/%3dMB", diff * 100 / event.max, diff, event.max));
 		data.add(String.format("Allocated: %d%% %3dMB", event.total * 100 / event.max, event.total));
 		final int tps = (int) Math.min(1000.0D / event.meanTickTime, 20.0D);
-		data.add(String.format("Ticktime Overall:%s %5.3fms (%d TPS)", getTpsFormatPrefix(tps), event.meanTickTime, tps));
+		data.add(String.format("Ticktime Overall:%s %5.3fms (%d TPS)", getTpsFormatPrefix(tps), event.meanTickTime,
+				tps));
 		event.dimTps.forEachEntry(new TIntDoubleProcedure() {
 			@Override
 			public boolean execute(int a, double b) {

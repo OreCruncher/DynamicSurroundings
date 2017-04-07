@@ -47,7 +47,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ProxyClient extends Proxy {
-
+	
 	@Override
 	protected void registerLanguage() {
 		Localization.initialize(Side.CLIENT);
@@ -86,6 +86,7 @@ public class ProxyClient extends Proxy {
 			public void run() {
 				EffectManager.register();
 				GuiHUDHandler.register();
+				ProxyClient.this.connectionTime = System.currentTimeMillis();
 			}
 		});
 	}
@@ -96,6 +97,7 @@ public class ProxyClient extends Proxy {
 			public void run() {
 				EffectManager.unregister();
 				GuiHUDHandler.unregister();
+				ProxyClient.this.connectionTime = 0;
 			}
 		});
 	}
