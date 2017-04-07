@@ -24,6 +24,9 @@
 
 package org.blockartistry.mod.DynSurround.client.hud;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.DSurround;
@@ -32,11 +35,12 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.Localization;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
+import org.blockartistry.mod.DynSurround.util.gui.TextPanel;
+import org.blockartistry.mod.DynSurround.util.gui.TextPanel.Reference;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.Items;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -56,12 +60,11 @@ public class ClockHUD extends GuiOverlay {
 	private int elapsedHours;
 	private int elapsedSeconds;
 
-	private String time;
-	private String elapsed;
-
-	// Cached rendering data
-	private int width;
-	private int height;
+	private final TextPanel textPanel;
+	
+	public ClockHUD() {
+		this.textPanel = new TextPanel(TIME_COLOR, BACKGROUND_COLOR, FRAME_COLOR);
+	}
 
 	protected boolean showClock() {
 		return ModOptions.enableCompass && PlayerUtils.isHolding(EnvironState.getPlayer(), Items.CLOCK);
@@ -69,7 +72,7 @@ public class ClockHUD extends GuiOverlay {
 
 	private void updateTime() {
 
-		if (this.time != null && EnvironState.getTickCounter() % 4 != 0)
+		if (EnvironState.getTickCounter() % 4 != 0)
 			return;
 
 		long time = DSurround.proxy().currentSessionDuration();
@@ -79,13 +82,13 @@ public class ClockHUD extends GuiOverlay {
 		time -= this.elapsedMinutes * 60000;
 		this.elapsedSeconds = (int) (time / 1000);
 
-		this.time = EnvironState.getClock().toString();
-		this.elapsed = Localization.format("format.SessionTime", this.elapsedHours, this.elapsedMinutes,
-				this.elapsedSeconds);
-
-		final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
-		this.width = Math.max(font.getStringWidth(this.time), font.getStringWidth(this.elapsed)) + 10;
-		this.height = 2 * font.FONT_HEIGHT + 10;
+		final List<String> text = new ArrayList<String>();
+		text.add(EnvironState.getClock().toString());
+		text.add(Localization.format("format.SessionTime", this.elapsedHours, this.elapsedMinutes,
+				this.elapsedSeconds));
+		
+		this.textPanel.setText(text);
+		this.textPanel.setAlpha(ModOptions.compassTransparency);
 	}
 
 	@Override
@@ -102,23 +105,6 @@ public class ClockHUD extends GuiOverlay {
 		final int centerX = (resolution.getScaledWidth() + 1) / 2;
 		final int centerY = (resolution.getScaledHeight() + 1) / 2 + font.FONT_HEIGHT * TEXT_LINE_START;
 
-		final int x1 = centerX - (this.width + 1) / 2;
-		final int y1 = centerY - (this.height + 1) / 2;
-
-		final int backgroundRGB = BACKGROUND_COLOR.rgbWithAlpha(ModOptions.compassTransparency);
-		final int textRGB = TIME_COLOR.rgbWithAlpha(ModOptions.compassTransparency);
-		final int frameRGB = FRAME_COLOR.rgbWithAlpha(ModOptions.compassTransparency);
-
-		drawRect(x1 + 2, y1 + 2, x1 + this.width - 1, y1 + this.height - 1, backgroundRGB);
-		drawTooltipBox(x1, y1, this.width, this.height, frameRGB, frameRGB, frameRGB);
-
-		GlStateManager.color(1F, 1F, 1F, ModOptions.compassTransparency);
-		GlStateManager.enableBlend();
-
-		drawCenteredString(font, this.time, centerX, (int) (centerY) - font.FONT_HEIGHT, textRGB);
-		drawCenteredString(font, this.elapsed, centerX, (int) (centerY), textRGB);
-
-		GlStateManager.color(1F, 1F, 1F, 1F);
-
+		this.textPanel.render(centerX, centerY, Reference.CENTERED);
 	}
 }
