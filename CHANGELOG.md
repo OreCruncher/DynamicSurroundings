@@ -1,3 +1,13 @@
+###DynamicSurroundings-1.11.2-3.3.4.1
+**Fixes**
+* Exception modifying immutable collection when config reloads after editing
+* Simply Jetpacks sound would not stop when it should
+
+**Changes**
+* Updated/Improved/Fancified the Dynamic Surroundings mod information screen
+* Debug HUD that describes blocks in the world when in creative mode and holding a stack of nether stars.  Helps a modpack/resource pack developers in modifying Dynamic Surroundings configuration files.
+* Show debug information in an item's tooltip if Dynamic Surroundings debugging is enabled.
+
 ###DynamicSurroundings-1.11.2-3.3.4.0
 **What's New**
 * F9 to show Minecraft's chunk border fencing.  Basically it is a simplified shortcut for F3+G.
