@@ -228,7 +228,7 @@ public class BlockMap {
 
 	public void clear() {
 		this.metaMap.clear();
-		this.substrateMap.clear();
+		this.substrateMap = new HashMap<String, BlockAcousticMap>();
 		this.metaMap.put(new BlockInfo(Blocks.AIR), AcousticsManager.NOT_EMITTER);
 	}
 	
