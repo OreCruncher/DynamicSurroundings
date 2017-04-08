@@ -29,42 +29,53 @@ import net.minecraft.world.World;
 
 public final class DiurnalUtils {
 
+	public static enum DayCycle {
+		NO_SKY, SUNRISE, SUNSET, DAYTIME, NIGHTTIME
+	}
+
 	private DiurnalUtils() {
 	}
 
 	public static boolean isDaytime(@Nonnull final World world) {
-		return !world.provider.hasNoSky() && world.provider.getSunBrightnessFactor(1.0f) > 0.6f;
+		return getCycle(world) == DayCycle.DAYTIME;
 	}
 
 	public static boolean isNighttime(@Nonnull final World world) {
-		return !world.provider.hasNoSky() && world.provider.getSunBrightnessFactor(1.0f) < 0.1f;
+		return getCycle(world) == DayCycle.NIGHTTIME;
 	}
 
 	public static boolean isSunrise(@Nonnull final World world) {
-		if (world.provider.hasNoSky())
-			return false;
-
-		float brFactor = world.provider.getSunBrightnessFactor(1.0f);
-		return brFactor > 0.1f && brFactor < 0.6f && MathStuff.sin(world.getCelestialAngleRadians(1.0f)) < 0.0;
+		return getCycle(world) == DayCycle.SUNRISE;
 	}
 
 	public static boolean isSunset(@Nonnull final World world) {
-		if (world.provider.hasNoSky())
-			return false;
+		return getCycle(world) == DayCycle.SUNSET;
+	}
 
-		float brFactor = world.provider.getSunBrightnessFactor(1.0f);
-		return brFactor > 0.1f && brFactor < 0.6f && MathStuff.sin(world.getCelestialAngleRadians(1.0f)) > 0.0;
+	public static DayCycle getCycle(@Nonnull final World world) {
+		if (world.provider.hasNoSky())
+			return DayCycle.NO_SKY;
+
+		final float brFactor = world.provider.getSunBrightnessFactor(1.0f);
+		if (brFactor > 0.6f)
+			return DayCycle.DAYTIME;
+		if (brFactor < 0.1f)
+			return DayCycle.NIGHTTIME;
+		if (brFactor > 0.1f && brFactor < 0.6f && MathStuff.sin(world.getCelestialAngleRadians(1.0f)) > 0.0)
+			return DayCycle.SUNSET;
+		return DayCycle.SUNRISE;
 	}
 
 	public static float getMoonPhaseFactor(@Nonnull final World world) {
 		return world.getCurrentMoonPhaseFactor();
 	}
-	
+
 	public static boolean isAuroraVisible(@Nonnull final World world) {
 		return !isAuroraInvisible(world);
 	}
-	
+
 	public static boolean isAuroraInvisible(@Nonnull final World world) {
-		return isSunrise(world) || isDaytime(world);
+		final DayCycle cycle = getCycle(world);
+		return cycle == DayCycle.SUNRISE || cycle == DayCycle.DAYTIME;
 	}
 }

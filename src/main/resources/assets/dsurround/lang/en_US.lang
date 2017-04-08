@@ -13,6 +13,11 @@ format.TimeOfDay=Day %1$d, %2$d:%3$02d %4$s
 format.AM=AM
 format.PM=PM
 format.SessionTime=Session Time %1$d:%2$02d:%3$02d
+format.NoSky=No Sky
+format.Sunrise=Sunrise
+format.Sunset=Sunset
+format.Daytime=Daytime
+format.Nighttime=Nighttime
 
 # Volume Quickset Dialog
 dlg.format.Display=%s %d%%
