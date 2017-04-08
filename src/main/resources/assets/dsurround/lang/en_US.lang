@@ -14,10 +14,18 @@ format.AM=AM
 format.PM=PM
 format.SessionTime=Session Time %1$d:%2$02d:%3$02d
 
+# Volume Quickset Dialog
+dlg.format.Display=%s %d%%
+dlg.name.MasterSound=Master Sound Volume
+dlg.name.BiomeSound=Biome Sound Scale
+dlg.name.FootstepSound=Footstep Sound Scale
+dlg.name.Close=ESC to Save and Close
+
 # Keybindings
 cfg.keybind.SelectionBox=Toggle SelectionBox
 cfg.keybind.LightLevel=Toggle Light Level
 cfg.keybind.ChunkBorders=Toggle Chunk Borders
+cfg.keybind.Volume=Volume Quick Set
 cfg.keybind.msg.ON=§aON
 cfg.keybind.msg.OFF=§cOFF
 cfg.keybind.msg.Fencing=Block fencing %s
