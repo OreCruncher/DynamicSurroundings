@@ -16,7 +16,7 @@ format.SessionTime=Session Time %1$d:%2$02d:%3$02d
 
 # Volume Quickset Dialog
 dlg.format.Display=%s %d%%
-dlg.name.MasterSound=Master Sound Volume
+dlg.name.MasterSound=Master Volume
 dlg.name.BiomeSound=Biome Sound Scale
 dlg.name.FootstepSound=Footstep Sound Scale
 dlg.name.Close=ESC to Save and Close

@@ -47,6 +47,8 @@ public class VolumeControlGui extends GuiScreen implements GuiResponder {
 		}
 	};
 	
+	public static final int SLIDER_WIDTH = 200;
+	
 	private static final int ID_MASTER_SOUND = 1;
 	private static final int ID_BIOME_SOUND = 2;
 	private static final int ID_FOOTSTEP_SOUND = 3;
@@ -59,15 +61,22 @@ public class VolumeControlGui extends GuiScreen implements GuiResponder {
 	protected float sound = ModOptions.soundLevel;
 	protected float footstep = ModOptions.footstepsSoundFactor;
 
+	
+	private void addSlider(final GuiSlider slider) {
+		slider.setWidth(SLIDER_WIDTH);
+		addButton(slider);
+	}
+	
 	@Override
 	public void initGui() {
-		final int drawX = (this.width + 1) / 2 - 75;
+		final int drawX = (this.width + 1) / 2 - SLIDER_WIDTH / 2;
 		final int drawY = 40;
-		addButton(new GuiSlider(this, ID_MASTER_SOUND, drawX, drawY, "dlg.name.MasterSound", 0F, 1F, this.master, FORMAT));
-		addButton(new GuiSlider(this, ID_BIOME_SOUND, drawX, drawY + 25, "dlg.name.BiomeSound", 0F, 1F, this.sound, FORMAT));
-		addButton(new GuiSlider(this, ID_FOOTSTEP_SOUND, drawX, drawY + 50, "dlg.name.FootstepSound", 0F, 1F, this.footstep, FORMAT));
+		
+		addSlider(new GuiSlider(this, ID_MASTER_SOUND, drawX, drawY, "dlg.name.MasterSound", 0F, 1F, this.master, FORMAT));
+		addSlider(new GuiSlider(this, ID_BIOME_SOUND, drawX, drawY + 25, "dlg.name.BiomeSound", 0F, 1F, this.sound, FORMAT));
+		addSlider(new GuiSlider(this, ID_FOOTSTEP_SOUND, drawX, drawY + 50, "dlg.name.FootstepSound", 0F, 1F, this.footstep, FORMAT));
 
-		final GuiLabel label = new GuiLabel(mc.fontRendererObj, ID_LABEL, drawX, drawY + 75, 150, 10, Color.MC_WHITE.rgb());
+		final GuiLabel label = new GuiLabel(mc.fontRendererObj, ID_LABEL, drawX, drawY + 75, SLIDER_WIDTH, 10, Color.MC_WHITE.rgb());
 		label.setCentered().addLine(Localization.format("dlg.name.Close"));
 		this.labelList.add(label);
 	}
