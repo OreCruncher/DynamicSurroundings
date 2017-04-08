@@ -28,11 +28,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.Color;
+import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
+import org.blockartistry.mod.DynSurround.util.DiurnalUtils.DayCycle;
 import org.blockartistry.mod.DynSurround.util.Localization;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 import org.blockartistry.mod.DynSurround.util.gui.TextPanel;
@@ -50,24 +52,43 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ClockHUD extends GuiOverlay {
 
-	private static final Color BACKGROUND_COLOR = Color.DARKSLATEGRAY;
-	private static final Color FRAME_COLOR = Color.MC_WHITE;
-	private static final Color TIME_COLOR = Color.MC_YELLOW;
-
-	private static final float TEXT_LINE_START = 7.0F;
+	private static final float TEXT_LINE_START = 7.5F;
 
 	private int elapsedMinutes;
 	private int elapsedHours;
 	private int elapsedSeconds;
 
 	private final TextPanel textPanel;
-	
+
 	public ClockHUD() {
-		this.textPanel = new TextPanel(TIME_COLOR, BACKGROUND_COLOR, FRAME_COLOR);
+		this.textPanel = new TextPanel();
 	}
 
 	protected boolean showClock() {
 		return ModOptions.enableCompass && PlayerUtils.isHolding(EnvironState.getPlayer(), Items.CLOCK);
+	}
+
+	private static final String NO_SKY = Localization.format("format.NoSky");
+	private static final String SUNRISE = Localization.format("format.Sunrise");
+	private static final String SUNSET = Localization.format("format.Sunset");
+	private static final String DAYTIME = Localization.format("format.Daytime");
+	private static final String NIGHTTIME = Localization.format("format.Nighttime");
+
+	@Nullable
+	private static String diurnalName() {
+		final DayCycle cycle = DiurnalUtils.getCycle(EnvironState.getWorld());
+		switch (cycle) {
+		case NO_SKY:
+			return ClockHUD.NO_SKY;
+		case SUNRISE:
+			return ClockHUD.SUNRISE;
+		case SUNSET:
+			return ClockHUD.SUNSET;
+		case DAYTIME:
+			return ClockHUD.DAYTIME;
+		default:
+			return ClockHUD.NIGHTTIME;
+		}
 	}
 
 	private void updateTime() {
@@ -84,9 +105,10 @@ public class ClockHUD extends GuiOverlay {
 
 		final List<String> text = new ArrayList<String>();
 		text.add(EnvironState.getClock().toString());
-		text.add(Localization.format("format.SessionTime", this.elapsedHours, this.elapsedMinutes,
-				this.elapsedSeconds));
-		
+		text.add(diurnalName());
+		text.add(
+				Localization.format("format.SessionTime", this.elapsedHours, this.elapsedMinutes, this.elapsedSeconds));
+
 		this.textPanel.setText(text);
 		this.textPanel.setAlpha(ModOptions.compassTransparency);
 	}
@@ -103,7 +125,7 @@ public class ClockHUD extends GuiOverlay {
 
 		final ScaledResolution resolution = event.getResolution();
 		final int centerX = (resolution.getScaledWidth() + 1) / 2;
-		final int centerY = (resolution.getScaledHeight() + 1) / 2 + (int)(font.FONT_HEIGHT * TEXT_LINE_START);
+		final int centerY = (resolution.getScaledHeight() + 1) / 2 + (int) (font.FONT_HEIGHT * TEXT_LINE_START);
 
 		this.textPanel.render(centerX, centerY, Reference.CENTERED);
 	}
