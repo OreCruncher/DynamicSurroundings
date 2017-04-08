@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
+import org.blockartistry.mod.DynSurround.client.gui.VolumeControlGui;
 import org.blockartistry.mod.DynSurround.client.hud.LightLevelHUD;
 import org.blockartistry.mod.DynSurround.client.hud.LightLevelHUD.Mode;
 import org.blockartistry.mod.DynSurround.util.Localization;
@@ -48,17 +49,21 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class KeyHandler {
 
+	private static final String SECTION_NAME = DSurround.MOD_NAME;
+
 	private static final KeyBinding SELECTIONBOX_KEY = new KeyBinding("cfg.keybind.SelectionBox", Keyboard.KEY_B,
-			DSurround.MOD_NAME);
+			SECTION_NAME);
 	private static final KeyBinding LIGHTLEVEL_KEY = new KeyBinding("cfg.keybind.LightLevel", Keyboard.KEY_L,
-			DSurround.MOD_NAME);
+			SECTION_NAME);
 	private static final KeyBinding CHUNKBORDER_KEY = new KeyBinding("cfg.keybind.ChunkBorders", Keyboard.KEY_F9,
-			DSurround.MOD_NAME);
+			SECTION_NAME);
+	private static final KeyBinding VOLUME_KEY = new KeyBinding("cfg.keybind.Volume", Keyboard.KEY_V, SECTION_NAME);
 
 	static {
 		ClientRegistry.registerKeyBinding(SELECTIONBOX_KEY);
 		ClientRegistry.registerKeyBinding(LIGHTLEVEL_KEY);
 		ClientRegistry.registerKeyBinding(CHUNKBORDER_KEY);
+		ClientRegistry.registerKeyBinding(VOLUME_KEY);
 	}
 
 	private static String getOnOff(final boolean flag) {
@@ -108,6 +113,11 @@ public class KeyHandler {
 				LightLevelHUD.showHUD = !LightLevelHUD.showHUD;
 				sendPlayerMessage("cfg.keybind.msg.LLDisplay", getOnOff(LightLevelHUD.showHUD));
 			}
+		}
+
+		if (VOLUME_KEY.isPressed() && Minecraft.getMinecraft().currentScreen == null) {
+			final VolumeControlGui gui = new VolumeControlGui();
+			Minecraft.getMinecraft().displayGuiScreen(gui);
 		}
 
 	}
