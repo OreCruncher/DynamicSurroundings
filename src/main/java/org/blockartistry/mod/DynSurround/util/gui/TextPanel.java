@@ -102,6 +102,12 @@ public class TextPanel {
 
 		return this;
 	}
+	
+	@Nonnull
+	public TextPanel resetText() {
+		this.text = ImmutableList.of();
+		return this;
+	}
 
 	public void render(final int locX, final int locY, @Nonnull final Reference ref) {
 		

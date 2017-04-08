@@ -200,6 +200,16 @@ public final class BlockRegistry extends Registry {
 
 		return getRandomSound(sounds, random);
 	}
+	
+	public int getStepSoundChance(@Nonnull final IBlockState state) {
+		final BlockProfile entry = findProfile(state);
+		return entry != null ? entry.getStepChance() : 0;
+	}
+	
+	public int getSoundChance(@Nonnull final IBlockState state) {
+		final BlockProfile entry = findProfile(state);
+		return entry != null ? entry.getChance() : 0;
+	}
 
 	@Nullable
 	public SoundEffect getStepSound(@Nonnull final IBlockState state, @Nonnull final Random random) {
