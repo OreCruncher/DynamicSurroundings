@@ -24,6 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.handlers.scanners.AreaFogScanner;
@@ -53,10 +54,15 @@ public class FogEffectHandler extends EffectHandlerBase {
 	public String getHandlerName() {
 		return "FogEffectHandler";
 	}
+	
+	private static boolean ignoreFog() {
+		return !(ModOptions.enableBiomeFog || ModOptions.allowDesertFog);
+	}
 
 	@Override
 	public void process(final World world, final EntityPlayer player) {
-		this.scanner.update();
+		if(!ignoreFog())
+			this.scanner.update();
 	}
 
 	/*
@@ -66,6 +72,9 @@ public class FogEffectHandler extends EffectHandlerBase {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void fogColorEvent(final EntityViewRenderEvent.FogColors event) {
 
+		if(ignoreFog())
+			return;
+		
 		final IBlockState block = ActiveRenderInfo.getBlockStateAtEntityViewpoint(event.getEntity().worldObj,
 				event.getEntity(), (float) event.getRenderPartialTicks());
 		if (block.getMaterial() == Material.LAVA || block.getMaterial() == Material.WATER)
@@ -86,7 +95,7 @@ public class FogEffectHandler extends EffectHandlerBase {
 	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void fogRenderEvent(final EntityViewRenderEvent.RenderFogEvent event) {
-		if (event.getResult() != Result.DEFAULT)
+		if (ignoreFog() || event.getResult() != Result.DEFAULT)
 			return;
 
 		final float planeDistance = this.scanner.getPlaneDistance(event.getFarPlaneDistance());
@@ -103,7 +112,10 @@ public class FogEffectHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void diagnostics(final DiagnosticEvent.Gather event) {
-		event.output.add(this.scanner.toString());
+		if(ignoreFog())
+			event.output.add("FOG: IGNORED");
+		else
+			event.output.add(this.scanner.toString());
 	}
 
 }
