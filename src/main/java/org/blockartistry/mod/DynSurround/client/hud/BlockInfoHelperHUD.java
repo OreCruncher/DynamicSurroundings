@@ -33,18 +33,16 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.registry.BlockInfo;
 import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.registry.FootstepsRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
 import org.blockartistry.mod.DynSurround.util.gui.TextPanel;
 import org.blockartistry.mod.DynSurround.util.gui.TextPanel.Reference;
-
-import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -67,9 +65,16 @@ import net.minecraftforge.oredict.OreDictionary;
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class BlockInfoHelperHUD extends GuiOverlay {
 
-	private static final Color BACKGROUND_COLOR = Color.DARKSLATEGRAY;
-	private static final Color FRAME_COLOR = Color.MC_WHITE;
-	private static final Color TEXT_COLOR = Color.GOLD;
+	private static final String TEXT_FOOTSTEP_ACOUSTICS = TextFormatting.DARK_PURPLE + "<Footstep Accoustics>";
+	private static final String TEXT_BLOCK_EFFECTS = TextFormatting.DARK_PURPLE + "<Block Effects>";
+	private static final String TEXT_ALWAYS_ON_EFFECTS = TextFormatting.DARK_PURPLE + "<Always On Effects>";
+	private static final String TEXT_STEP_SOUNDS = TextFormatting.DARK_PURPLE + "<Step Sounds>";
+	private static final String TEXT_BLOCK_SOUNDS = TextFormatting.DARK_PURPLE + "<Block Sounds>";
+	private static final String TEXT_DICTIONARY_NAMES = TextFormatting.DARK_PURPLE + "<Dictionary Names>";
+
+	private final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
+	private final FootstepsRegistry footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
+	private final BlockInfo.BlockInfoMutable block = new BlockInfo.BlockInfoMutable();
 
 	private static List<String> gatherOreNames(final ItemStack stack) {
 		final List<String> result = new ArrayList<String>();
@@ -94,10 +99,11 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 		return null;
 	}
 
-	private static List<String> gatherText(final ItemStack stack, final List<String> text, final IBlockState state,
+	private List<String> gatherText(final ItemStack stack, final List<String> text, final IBlockState state,
 			final BlockPos pos) {
 
-		if (stack != null) {
+		if (stack != null && !stack.isEmpty()) {
+			text.add(TextFormatting.RED + stack.getDisplayName());
 			final String itemName = getItemName(stack);
 			if (itemName != null) {
 				text.add("ITEM: " + itemName);
@@ -106,38 +112,60 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 		}
 
 		if (state != null) {
-			final BlockInfo block = new BlockInfo(state);
-			text.add("BLOCK: " + block.toString());
-			text.add(TextFormatting.DARK_AQUA + block.getBlock().getClass().getName());
+			this.block.set(state);
+			text.add("BLOCK: " + this.block.toString());
+			text.add(TextFormatting.DARK_AQUA + this.block.getBlock().getClass().getName());
 			text.add("Material: " + MCHelper.getMaterialName(state.getMaterial()));
 
-			final FootstepsRegistry footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
-			final BlockMap bm = footsteps.getBlockMap();
+			final BlockMap bm = this.footsteps.getBlockMap();
 			if (bm != null) {
 				final List<String> data = new ArrayList<String>();
 				bm.collectData(state, pos, data);
 				if (data.size() > 0) {
-					text.add(TextFormatting.DARK_PURPLE + "Footstep Accoustics");
+					text.add(TEXT_FOOTSTEP_ACOUSTICS);
 					for (final String s : data)
-						text.add(TextFormatting.DARK_PURPLE + s);
+						text.add(TextFormatting.GOLD + s);
 				}
 			}
 
-			final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
-			final BlockEffect[] effects = blocks.getEffects(state);
+			BlockEffect[] effects = this.blocks.getEffects(state);
 			if (effects.length > 0) {
-				text.add(TextFormatting.DARK_RED + "Block Effects");
+				text.add(TEXT_BLOCK_EFFECTS);
 				for (final BlockEffect e : effects) {
-					text.add(TextFormatting.DARK_RED + e.getEffectType().getName());
+					text.add(TextFormatting.GOLD + e.getEffectType().getName());
 				}
+			}
+
+			effects = this.blocks.getAlwaysOnEffects(state);
+			if (effects.length > 0) {
+				text.add(TEXT_ALWAYS_ON_EFFECTS);
+				for (final BlockEffect e : effects) {
+					text.add(TextFormatting.GOLD + e.getEffectType().getName());
+				}
+			}
+
+			SoundEffect[] sounds = this.blocks.getAllStepSounds(state);
+			if(sounds.length > 0) {
+				text.add(TEXT_STEP_SOUNDS);
+				text.add(TextFormatting.DARK_GREEN + "Chance: 1 in " + this.blocks.getStepSoundChance(state));
+				for(final SoundEffect s: sounds)
+					text.add(TextFormatting.GOLD + s.toString());
+			}
+			
+			sounds = this.blocks.getAllSounds(state);
+			if(sounds.length > 0) {
+				text.add(TEXT_BLOCK_SOUNDS);
+				text.add(TextFormatting.DARK_GREEN + "Chance: 1 in " + this.blocks.getSoundChance(state));
+				for(final SoundEffect s: sounds)
+					text.add(TextFormatting.GOLD + s.toString());
 			}
 		}
 
 		final List<String> oreNames = gatherOreNames(stack);
 		if (oreNames.size() > 0) {
-			text.add(TextFormatting.DARK_GREEN + "Dictionary Names");
+			text.add(TEXT_DICTIONARY_NAMES);
 			for (final String ore : oreNames)
-				text.add(TextFormatting.DARK_GREEN + ore);
+				text.add(TextFormatting.GOLD + ore);
 		}
 
 		return text;
@@ -153,14 +181,19 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 	private final TextPanel textPanel;
 
 	public BlockInfoHelperHUD() {
-		this.textPanel = new TextPanel(TEXT_COLOR, BACKGROUND_COLOR, FRAME_COLOR);
+		this.textPanel = new TextPanel();
 	}
 
 	@Override
 	public void doRender(@Nonnull final RenderGameOverlayEvent.Pre event) {
 		// Only trigger if the player is in creative and is holding a stack of
 		// nether stars
-		if (event.getType() == ElementType.TEXT && EnvironState.getPlayer().isCreative() && isHolding()) {
+		if (event.getType() == ElementType.TEXT && EnvironState.getPlayer().isCreative()) {
+			
+			if(!isHolding()) {
+				this.textPanel.resetText();
+				return;
+			}
 
 			final long tick = EnvironState.getTickCounter();
 			if (tick != 0 && tick % 5 == 0) {
@@ -177,13 +210,13 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 					gatherText(stack, data, state, targetBlock);
 					this.textPanel.setText(data);
 				} else {
-					final List<String> t = ImmutableList.of();
-					this.textPanel.setText(t);
+					this.textPanel.resetText();
 				}
 			}
 
-			final int height = event.getResolution().getScaledHeight() / 2 - 100;
-			this.textPanel.render(10, height, Reference.UPPER_LEFT);
+			final int centerX = event.getResolution().getScaledWidth() / 2;
+			final int centerY = event.getResolution().getScaledHeight() / 2 - 100;
+			this.textPanel.render(centerX, centerY, Reference.CENTERED);
 		}
 	}
 
