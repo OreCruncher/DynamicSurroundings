@@ -24,8 +24,10 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleSimpleAnimated;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -45,11 +47,20 @@ public class ParticleFireFly extends ParticleSimpleAnimated {
 	private static final float Y_MOTION_DELTA = XZ_MOTION_DELTA / 2.0F;
 	private static final float ACCELERATION = 0.004F;
 
+	protected final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
+
 	private double xAcceleration;
 	private double yAcceleration;
 	private double zAcceleration;
 
 	private boolean doRender;
+
+	protected int slX16;
+	protected int blX16;
+
+	protected float texU1, texU2;
+	protected float texV1, texV2;
+	protected float f4;
 
 	public ParticleFireFly(final World world, double xCoord, double yCoord, double zCoord) {
 		super(world, xCoord, yCoord, zCoord, 160, 8, 0.0F);
@@ -69,16 +80,46 @@ public class ParticleFireFly extends ParticleSimpleAnimated {
 
 		this.setColor(startColorRGB);
 		this.setColorFade(fadeColorRGB);
+		
+		this.f4 = 0.1F * this.particleScale;
+	}
+
+	protected double interpX() {
+		return this.manager.viewerPosX;
+	}
+
+	protected double interpY() {
+		return this.manager.viewerPosY;
+	}
+
+	protected double interpZ() {
+		return this.manager.viewerPosZ;
+	}
+
+	protected void drawVertex(final VertexBuffer buffer, final double x, final double y, final double z, final double u,
+			final double v) {
+		buffer.pos(x, y, z).tex(u, v).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
+				.lightmap(this.slX16, this.blX16).endVertex();
 	}
 
 	/**
 	 * Renders the particle
 	 */
-	public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX,
+	public void renderParticle(VertexBuffer buffer, Entity entityIn, float partialTicks, float rotationX,
 			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		if (this.doRender) {
-			super.renderParticle(worldRendererIn, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY,
-					rotationXZ);
+			final double x = (this.prevPosX + (this.posX - this.prevPosX) * (double) partialTicks - interpX());
+			final double y = (this.prevPosY + (this.posY - this.prevPosY) * (double) partialTicks - interpY());
+			final double z = (this.prevPosZ + (this.posZ - this.prevPosZ) * (double) partialTicks - interpZ());
+
+			drawVertex(buffer, x + (-rotationX * f4 - rotationXY * f4), y + (-rotationZ * f4),
+					z + (-rotationYZ * f4 - rotationXZ * f4), this.texU2, this.texV2);
+			drawVertex(buffer, x + (-rotationX * f4 + rotationXY * f4), y + (rotationZ * f4),
+					z + (-rotationYZ * f4 + rotationXZ * f4), this.texU2, this.texV1);
+			drawVertex(buffer, x + (rotationX * f4 + rotationXY * f4), y + (rotationZ * f4),
+					z + (rotationYZ * f4 + rotationXZ * f4), this.texU1, this.texV1);
+			drawVertex(buffer, x + (rotationX * f4 - rotationXY * f4), y + (-rotationZ * f4),
+					z + (rotationYZ * f4 - rotationXZ * f4), this.texU1, this.texV2);
 		}
 	}
 
@@ -92,11 +133,22 @@ public class ParticleFireFly extends ParticleSimpleAnimated {
 
 		this.doRender = this.particleAge < this.particleMaxAge / 3
 				|| (this.particleAge + this.particleMaxAge) / 3 % 2 == 0;
+
+		if (this.doRender) {
+			final int combinedLight = this.getBrightnessForRender(0);
+			this.slX16 = combinedLight >> 16 & 65535;
+			this.blX16 = combinedLight & 65535;
+		}
 	}
 
 	@Override
 	public void setParticleTextureIndex(final int particleTextureIndex) {
 		this.particleTextureIndexX = particleTextureIndex % 16;
 		this.particleTextureIndexY = particleTextureIndex / 16;
+
+		this.texU1 = this.particleTextureIndexX / 16F;
+		this.texU2 = this.texU1 + 0.0624375F;
+		this.texV1 = this.particleTextureIndexY / 16F;
+		this.texV2 = this.texV1 + 0.0624375F;
 	}
 }
