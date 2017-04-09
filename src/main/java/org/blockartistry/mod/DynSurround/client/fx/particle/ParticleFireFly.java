@@ -49,11 +49,13 @@ public class ParticleFireFly extends ParticleSimpleAnimated {
 	private double yAcceleration;
 	private double zAcceleration;
 
+	private boolean doRender;
+
 	public ParticleFireFly(final World world, double xCoord, double yCoord, double zCoord) {
 		super(world, xCoord, yCoord, zCoord, 160, 8, 0.0F);
 
 		this.rand = XorShiftRandom.current();
-		
+
 		this.motionX = this.rand.nextGaussian() * XZ_MOTION_DELTA;
 		this.motionZ = this.rand.nextGaussian() * XZ_MOTION_DELTA;
 		this.motionY = this.rand.nextGaussian() * Y_MOTION_DELTA;
@@ -69,17 +71,12 @@ public class ParticleFireFly extends ParticleSimpleAnimated {
 		this.setColorFade(fadeColorRGB);
 	}
 
-	public boolean isTransparent() {
-		return true;
-	}
-
 	/**
 	 * Renders the particle
 	 */
 	public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX,
 			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		if (this.particleAge < this.particleMaxAge / 3
-				|| (this.particleAge + this.particleMaxAge) / 3 % 2 == 0) {
+		if (this.doRender) {
 			super.renderParticle(worldRendererIn, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY,
 					rotationXZ);
 		}
@@ -92,5 +89,14 @@ public class ParticleFireFly extends ParticleSimpleAnimated {
 		this.motionZ += this.zAcceleration;
 
 		super.onUpdate();
+
+		this.doRender = this.particleAge < this.particleMaxAge / 3
+				|| (this.particleAge + this.particleMaxAge) / 3 % 2 == 0;
+	}
+
+	@Override
+	public void setParticleTextureIndex(final int particleTextureIndex) {
+		this.particleTextureIndexX = particleTextureIndex % 16;
+		this.particleTextureIndexY = particleTextureIndex / 16;
 	}
 }
