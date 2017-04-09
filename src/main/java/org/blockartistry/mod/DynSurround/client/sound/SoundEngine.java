@@ -34,6 +34,7 @@ import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;
+import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALC11;
 
@@ -56,8 +57,6 @@ public class SoundEngine {
 	private static final int MAX_STREAM_CHANNELS = 16;
 	private static final int SOUND_QUEUE_SLACK = 6;
 
-	private static int normalChannelCount = 0;
-	private static int streamChannelCount = 0;
 	private static SoundEngine instance = null;
 
 	public static SoundEngine instance() {
@@ -87,11 +86,11 @@ public class SoundEngine {
 	}
 
 	public int maxSoundCount() {
-		return normalChannelCount + streamChannelCount;
+		return SoundSystemConfig.getNumberNormalChannels() + SoundSystemConfig.getNumberStreamingChannels();
 	}
 
 	private boolean canFitSound() {
-		return currentSoundCount() < (normalChannelCount - SOUND_QUEUE_SLACK);
+		return currentSoundCount() < (SoundSystemConfig.getNumberNormalChannels() - SOUND_QUEUE_SLACK);
 	}
 
 	public boolean isSoundPlaying(@Nonnull final ISound sound) {
@@ -104,7 +103,7 @@ public class SoundEngine {
 			return false;
 		return this.manager.playingSounds.containsKey(soundId);
 	}
-	
+
 	public void stopAllSounds() {
 		this.manager.stopAllSounds();
 	}
@@ -114,10 +113,10 @@ public class SoundEngine {
 
 	@Nullable
 	public String playSound(@Nonnull final ISound sound) {
-		
-		if(!canFitSound())
+
+		if (!canFitSound())
 			return null;
-		
+
 		if (ModOptions.enableDebugLogging)
 			ModLog.debug("PLAYING: " + sound.toString());
 
@@ -142,24 +141,40 @@ public class SoundEngine {
 		configureSound();
 	}
 
+	private static void alErrorCheck() {
+		final int error = AL10.alGetError();
+		if (error != AL10.AL_NO_ERROR)
+			ModLog.warn("OpenAL error: %d", error);
+	}
+
 	private static void configureSound() {
 		int totalChannels = -1;
 
 		try {
+
 			final boolean create = !AL.isCreated();
-			if (create)
+			if (create) {
 				AL.create();
+				alErrorCheck();
+			}
+
+			final String defaultDevice = ALC10.alcGetString(null, ALC11.ALC_DEFAULT_ALL_DEVICES_SPECIFIER);
+			ModLog.info("Default sound device: [%s]", defaultDevice == null ? "UNKNOWN" : defaultDevice);
+
 			final IntBuffer ib = BufferUtils.createIntBuffer(1);
 			ALC10.alcGetInteger(AL.getDevice(), ALC11.ALC_MONO_SOURCES, ib);
+			alErrorCheck();
 			totalChannels = ib.get(0);
+
 			if (create)
 				AL.destroy();
+
 		} catch (final Throwable e) {
 			e.printStackTrace();
 		}
 
-		normalChannelCount = ModOptions.normalSoundChannelCount;
-		streamChannelCount = ModOptions.streamingSoundChannelCount;
+		int normalChannelCount = ModOptions.normalSoundChannelCount;
+		int streamChannelCount = ModOptions.streamingSoundChannelCount;
 
 		if (ModOptions.autoConfigureChannels && totalChannels > 64) {
 			totalChannels = ((totalChannels + 1) * 3) / 4;
