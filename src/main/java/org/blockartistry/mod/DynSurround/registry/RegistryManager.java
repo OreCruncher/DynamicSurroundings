@@ -29,13 +29,13 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.event.RegistryEvent;
 
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class RegistryManager {
@@ -57,15 +57,15 @@ public class RegistryManager {
 	private static final RegistryManager[] managers = { null, null };
 
 	static RegistryManager getManager() {
-		final Side side = DSurround.proxy().effectiveSide();
-		if(side == Side.CLIENT) {
-			if(managers[1] == null) {
+		final Side side = FMLCommonHandler.instance().getEffectiveSide();
+		if (side == Side.CLIENT) {
+			if (managers[1] == null) {
 				managers[1] = new RegistryManagerClient();
 				managers[1].reload();
 			}
 			return managers[1];
 		} else {
-			if(managers[0] == null) {
+			if (managers[0] == null) {
 				managers[0] = new RegistryManager();
 				managers[0].reload();
 			}
@@ -79,16 +79,16 @@ public class RegistryManager {
 	}
 
 	public static void reloadResources() {
-		// Reload the server side.  This should be called
-		// by the server thread and not the client because
-		// the /ds command runs server side.
+		// Reload can be called on either side so make sure we queue
+		// up a scheduled task appropriately.
 		if (managers[0] != null) {
-			managers[0].reload();
+			FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(new Runnable() {
+				public void run() {
+					managers[0].reload();
+				}
+			});
 		}
-		
-		// Schedule reload on the client thread.  If this is a
-		// dedicated server there won't be a ResourceManager for
-		// this array slot thus it won't pass the test.
+
 		if (managers[1] != null) {
 			Minecraft.getMinecraft().addScheduledTask(new Runnable() {
 				public void run() {
@@ -100,7 +100,7 @@ public class RegistryManager {
 
 	protected final Side side;
 	protected final Registry[] registries = new Registry[RegistryType.values().length];
-	
+
 	RegistryManager() {
 		this(Side.SERVER);
 	}
@@ -115,13 +115,13 @@ public class RegistryManager {
 
 	void reload() {
 		for (final Registry r : this.registries)
-			if(r != null)
+			if (r != null)
 				r.init();
 
 		new DataScripts(this.side).execute(getAdditionalScripts());
 
 		for (final Registry r : this.registries)
-			if(r != null)
+			if (r != null)
 				r.initComplete();
 
 		MinecraftForge.EVENT_BUS.post(new RegistryEvent.Reload(this.side));
