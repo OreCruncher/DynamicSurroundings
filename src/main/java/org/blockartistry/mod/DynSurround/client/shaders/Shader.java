@@ -27,46 +27,40 @@ package org.blockartistry.mod.DynSurround.client.shaders;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.util.gui.ShaderUtils;
+import org.blockartistry.mod.DynSurround.util.gui.ShaderUtils.ParameterBindings;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public enum Shader {
-	
-	FIREFLY(null, "halo");
-	
+
+	LIGHT_SOURCE(null, "halo.frag");
+
 	private int id = 0;
 	private final String fragment;
 	private final String vertex;
-	
+
 	private Shader(@Nullable final String vert, @Nullable final String frag) {
-		this.vertex = vert == null ? null : "/assets/dsurround/shader/" + vert + ".vert";
-		this.fragment = frag == null ? null : "/assets/dsurround/shader/" + frag + ".frag";
-	}
-	
-	public void use() {
-		if(this.id > 0)
-			ShaderUtils.useShader(this.id);
+		this.vertex = vert == null ? null : "/assets/dsurround/shader/" + vert;
+		this.fragment = frag == null ? null : "/assets/dsurround/shader/" + frag;
 	}
 
-	public void releaseShader() {
-		if(this.id > 0)
-			ShaderUtils.useShader(0);
+	public ParameterBindings aquire() {
+		return ShaderUtils.useShader(this.id);
 	}
 
-	public static boolean useShaders() {
-		// TODO: Option to turn off shaders
-		return false; //OpenGlHelper.shadersSupported;
+	public void release() {
+		ShaderUtils.closeShader();
 	}
 
 	private void load() {
 		this.id = ShaderUtils.createProgram(this.vertex, this.fragment);
 	}
-	
+
 	public static void init() {
-		if(useShaders())
-			for(final Shader s: Shader.values())
+		if (ShaderUtils.useShaders())
+			for (final Shader s : Shader.values())
 				s.load();
 	}
 

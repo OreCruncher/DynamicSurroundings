@@ -26,11 +26,13 @@ package org.blockartistry.mod.DynSurround.util.gui;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.lwjgl.opengl.ARBFragmentShader;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ARBVertexShader;
@@ -41,19 +43,130 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public final class ShaderUtils {
-	
-	private ShaderUtils() {
-		
+
+	@SideOnly(Side.CLIENT)
+	public static class ParameterBindings {
+
+		private final int shaderId;
+
+		ParameterBindings(final int shader) {
+			this.shaderId = shader;
+		}
+
+		private static int getIdx(final int shaderId, @Nonnull final String name) {
+			return ARBShaderObjects.glGetUniformLocationARB(shaderId, name);
+		}
+
+		@Nonnull
+		public ParameterBindings bind(@Nonnull final String name, @Nonnull final int... v) {
+			assert v.length != 0;
+
+			final int idx = getIdx(this.shaderId, name);
+			switch (v.length) {
+			case 1:
+				ARBShaderObjects.glUniform1iARB(idx, v[0]);
+				break;
+			case 2:
+				ARBShaderObjects.glUniform2iARB(idx, v[0], v[1]);
+				break;
+			case 3:
+				ARBShaderObjects.glUniform3iARB(idx, v[0], v[1], v[2]);
+				break;
+			case 4:
+				ARBShaderObjects.glUniform4iARB(idx, v[0], v[1], v[2], v[3]);
+				break;
+			}
+
+			return this;
+		}
+
+		@Nonnull
+		public ParameterBindings bind(@Nonnull final String name, @Nonnull final IntBuffer buf) {
+			final int idx = getIdx(this.shaderId, name);
+			ARBShaderObjects.glUniform1ARB(idx, buf);
+			return this;
+		}
+
+		@Nonnull
+		public ParameterBindings bind(@Nonnull final String name, @Nonnull final float... v) {
+			assert v.length != 0;
+
+			final int idx = getIdx(this.shaderId, name);
+			switch (v.length) {
+			case 1:
+				ARBShaderObjects.glUniform1fARB(idx, v[0]);
+				break;
+			case 2:
+				ARBShaderObjects.glUniform2fARB(idx, v[0], v[1]);
+				break;
+			case 3:
+				ARBShaderObjects.glUniform3fARB(idx, v[0], v[1], v[2]);
+				break;
+			case 4:
+				ARBShaderObjects.glUniform4fARB(idx, v[0], v[1], v[2], v[3]);
+				break;
+			}
+
+			return this;
+		}
+
+		@Nonnull
+		public ParameterBindings bind(@Nonnull final String name, @Nonnull final FloatBuffer buf) {
+			final int idx = getIdx(this.shaderId, name);
+			ARBShaderObjects.glUniform1ARB(idx, buf);
+			return this;
+		}
 	}
 
-	public static void useShader(int shader) {
-
-		ARBShaderObjects.glUseProgramObjectARB(shader);
-
-		if (shader != 0) {
-			final int time = ARBShaderObjects.glGetUniformLocationARB(shader, "time");
-			ARBShaderObjects.glUniform1iARB(time, EnvironState.getTickCounter());
+	private static final ParameterBindings NULL_BINDINGS = new ParameterBindings(0) {
+		@Override
+		@Nonnull
+		public ParameterBindings bind(@Nonnull final String name, @Nonnull final int... v) {
+			return this;
 		}
+
+		@Override
+		@Nonnull
+		public ParameterBindings bind(@Nonnull final String name, @Nonnull final IntBuffer buf) {
+			return this;
+		}
+
+		@Override
+		@Nonnull
+		public ParameterBindings bind(@Nonnull final String name, @Nonnull final float... v) {
+			return this;
+		}
+
+		@Override
+		@Nonnull
+		public ParameterBindings bind(@Nonnull final String name, @Nonnull final FloatBuffer buf) {
+			return this;
+		}
+	};
+
+	private ShaderUtils() {
+
+	}
+
+	public static boolean useShaders() {
+		// TODO: Option to turn off shaders
+		return false; // OpenGlHelper.shadersSupported;
+	}
+
+	@Nonnull
+	public static ParameterBindings useShader(final int shader) {
+
+		if (useShaders() && shader != 0) {
+			ARBShaderObjects.glUseProgramObjectARB(shader);
+			return new ParameterBindings(shader);
+		}
+
+		return NULL_BINDINGS;
+	}
+
+	public static void closeShader() {
+		if (useShaders())
+			ARBShaderObjects.glUseProgramObjectARB(0);
 	}
 
 	// Most of the code taken from the LWJGL wiki
@@ -129,7 +242,7 @@ public final class ShaderUtils {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"))) {
 			final StringBuilder builder = new StringBuilder();
 			String s = null;
-			while((s = reader.readLine()) != null)
+			while ((s = reader.readLine()) != null)
 				builder.append(s).append('\n');
 			return builder.toString();
 		}
