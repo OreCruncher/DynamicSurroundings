@@ -37,12 +37,6 @@ public class Cuboid {
 	protected final BlockPos minPoint;
 	protected final BlockPos maxPoint;
 
-	public Cuboid(final int centerX, final int centerY, final int centerZ, final int width, final int height,
-			final int length) {
-		this(new BlockPos(centerX - width / 2, centerY - height / 2, centerZ - length / 2),
-				new BlockPos(centerX + width / 2, centerY + height / 2, centerZ + length / 2));
-	}
-
 	public Cuboid(@Nonnull final BlockPos[] points) {
 		this(points[0], points[1]);
 	}
