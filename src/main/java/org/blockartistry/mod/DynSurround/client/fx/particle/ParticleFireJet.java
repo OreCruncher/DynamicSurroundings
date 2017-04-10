@@ -58,6 +58,14 @@ public class ParticleFireJet extends ParticleJet {
 	}
 
 	@Override
+	protected void soundUpdate() {
+		if (!this.soundFired) {
+			this.soundFired = true;
+			SoundEffectHandler.INSTANCE.playSoundAt(this.getPos(), Sounds.FIRE, 0);
+		}
+	}
+
+	@Override
 	protected void spawnJetParticle() {
 		final double speedY = this.isLava ? 0 : this.jetStrength / 10.0D;
 		final Particle particle = this.factory.createParticle(this.particleId, this.worldObj, this.posX, this.posY,
@@ -67,9 +75,5 @@ public class ParticleFireJet extends ParticleJet {
 			flame.flameScale *= this.jetStrength;
 		}
 		addParticle(particle);
-		if (!soundFired) {
-			soundFired = true;
-			SoundEffectHandler.INSTANCE.playSoundAt(this.getPos(), Sounds.FIRE, 0);
-		}
 	}
 }

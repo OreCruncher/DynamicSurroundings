@@ -65,13 +65,11 @@ public class ParticleWaterSplash extends ParticleJet {
 	}
 
 	private boolean setupSound() {
-		return this.emitter == null && this.rand.nextInt(3) == 0;
+		return this.emitter == null && this.rand.nextInt(4) == 0;
 	}
-
-	// Entity.resetHeight()
+	
 	@Override
-	protected void spawnJetParticle() {
-
+	protected void soundUpdate() {
 		if (setupSound()) {
 			pos.setPos(this.posX, this.posY, this.posZ);
 			this.emitter = new PositionedEmitter(Sounds.SPLASH, pos);
@@ -84,6 +82,11 @@ public class ParticleWaterSplash extends ParticleJet {
 		
 		if(this.emitter != null)
 			this.emitter.update();
+	}
+
+	// Entity.resetHeight()
+	@Override
+	protected void spawnJetParticle() {
 
 		final int splashCount = this.getParticleLimit() - getCurrentParticleCount();
 
