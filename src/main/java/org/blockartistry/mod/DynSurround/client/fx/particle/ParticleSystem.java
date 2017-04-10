@@ -157,6 +157,14 @@ public abstract class ParticleSystem extends ParticleBase {
 
 		// Remove the dead ones
 		Iterables.removeIf(this.myParticles, REMOVE_CRITERIA);
+		
+		this.soundUpdate();
+	}
+	
+	// Override to provide sound for the particle effect.  Will be invoked
+	// whenever the particle system is updated by the particle manager.
+	protected void soundUpdate() {
+		
 	}
 
 	// Override to provide some sort of intelligence to the system. The

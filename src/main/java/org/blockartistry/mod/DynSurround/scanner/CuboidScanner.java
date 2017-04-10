@@ -24,8 +24,6 @@
 package org.blockartistry.mod.DynSurround.scanner;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -233,7 +231,7 @@ public abstract class CuboidScanner extends Scanner {
 	@SubscribeEvent(receiveCanceled = false)
 	public void onBlockUpdate(@Nonnull final BlockUpdateEvent event) {
 		if (this.activeCuboid != null && this.activeCuboid.contains(event.pos))
-			blockScan(event.newState, event.pos, ThreadLocalRandom.current());
+			blockScan(event.newState, event.pos, this.random);
 	}
 
 }
