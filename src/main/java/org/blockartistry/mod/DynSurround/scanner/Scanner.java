@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.util.WorldUtils;
 import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import net.minecraft.block.state.IBlockState;
@@ -122,7 +123,7 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 			final BlockPos pos = nextPos(this.workingPos, this.random);
 			if (pos == null)
 				break;
-			final IBlockState state = world.getBlockState(pos);
+			final IBlockState state = WorldUtils.getBlockState(world, pos);
 			if (interestingBlock(state)) {
 				blockScan(state, pos, this.random);
 			}

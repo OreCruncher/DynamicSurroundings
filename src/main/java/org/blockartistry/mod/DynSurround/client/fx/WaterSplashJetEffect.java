@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleWaterSplash;
+import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.block.BlockDynamicLiquid;
 import net.minecraft.block.BlockLiquid;
@@ -60,7 +61,7 @@ public class WaterSplashJetEffect extends JetEffect {
 	}
 
 	private static boolean partialLiquidOrAir(final World world, final BlockPos pos) {
-		final IBlockState state = world.getBlockState(pos);
+		final IBlockState state = WorldUtils.getBlockState(world, pos);
 		if (state.getBlock() == Blocks.AIR)
 			return true;
 
@@ -83,7 +84,7 @@ public class WaterSplashJetEffect extends JetEffect {
 
 		int count;
 		for (count = 0; count < MAX_STRENGTH; count++) {
-			final IBlockState state = world.getBlockState(workBlock);
+			final IBlockState state = WorldUtils.getBlockState(world, workBlock);
 			if (!isLiquidBlock(state) || !isUnboundedLiquid(world, workBlock))
 				break;
 			workBlock.setY(pos.getY() + count);
@@ -93,15 +94,15 @@ public class WaterSplashJetEffect extends JetEffect {
 	}
 
 	public static boolean isValidSpawnBlock(final World world, final BlockPos pos) {
-		if (world.getBlockState(pos).getMaterial() != Material.WATER)
+		if (WorldUtils.getBlockState(world, pos).getMaterial() != Material.WATER)
 			return false;
 		if (isUnboundedLiquid(world, pos)) {
 			final BlockPos down = pos.down();
-			if (world.getBlockState(down).getMaterial().isSolid())
+			if (WorldUtils.isSolidBlock(world, down))
 				return true;
 			return !isUnboundedLiquid(world, down);
 		}
-		return world.getBlockState(pos.up()).getBlock() instanceof BlockDynamicLiquid;
+		return WorldUtils.getBlockState(world, pos.up()).getBlock() instanceof BlockDynamicLiquid;
 	}
 
 	@Override

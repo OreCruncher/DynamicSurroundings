@@ -28,6 +28,8 @@ import java.util.Iterator;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.mod.DynSurround.util.BlockPosHelper;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 
@@ -68,7 +70,7 @@ public class CuboidPointIterator implements IPointIterator {
 
 	public CuboidPointIterator(@Nonnull final BlockPos p1, @Nonnull final BlockPos p2) {
 		// The getAllInBox() deals with figuring the min/max points
-		this.itr = BlockPos.getAllInBoxMutable(p1, p2).iterator();
+		this.itr = BlockPosHelper.getAllInBoxMutable(p1, p2).iterator();
 		if (this.itr.hasNext())
 			this.peeked = this.itr.next();
 	}
