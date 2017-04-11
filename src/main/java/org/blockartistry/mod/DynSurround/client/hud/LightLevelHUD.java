@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.util.BlockStateProvider;
 import org.blockartistry.mod.DynSurround.util.Color;
 
 import net.minecraft.block.material.Material;
@@ -50,8 +51,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.WorldEntitySpawner;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -179,14 +178,14 @@ public final class LightLevelHUD {
 	private static final String[] VALUES = new String[16];
 	private static final float[] ROTATION = { 180, 0, 270, 90 };
 
-	// Allocation size of array. Seems large, until you fly and look
-	// down at a roofed forest.
+	private static final BlockStateProvider blocks = new BlockStateProvider();
 	private static final int ALLOCATION_SIZE = 2176;
 	private static final List<LightCoord> lightLevels = new ArrayList<LightCoord>(ALLOCATION_SIZE);
 	private static final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 	private static int nextCoord = 0;
 
 	private static float surfaceRotationAngle = 0F;
+	
 
 	static {
 		for (int i = 0; i < ALLOCATION_SIZE; i++)
@@ -275,29 +274,23 @@ public final class LightLevelHUD {
 		final ColorSet colors = ColorSet.getStyle(ModOptions.llColors);
 		final Mode displayMode = Mode.getMode(ModOptions.llDisplayMode);
 		final int skyLightSub = EnvironState.getWorld().calculateSkylightSubtracted(1.0F);
-		final IChunkProvider provider = EnvironState.getWorld().getChunkProvider();
 		final int rangeXZ = ModOptions.llBlockRange * 2 + 1;
 		final int rangeY = ModOptions.llBlockRange + 1;
 		final int originX = MathHelper.floor_double(x) - (rangeXZ / 2);
 		final int originZ = MathHelper.floor_double(z) - (rangeXZ / 2);
 		final int originY = MathHelper.floor_double(y) - (rangeY - 3);
 
-		Chunk chunk = null;
-
+		blocks.setWorld(EnvironState.getWorld());
+		
 		for (int dX = 0; dX < rangeXZ; dX++)
 			for (int dZ = 0; dZ < rangeXZ; dZ++) {
 
 				final int trueX = originX + dX;
 				final int trueZ = originZ + dZ;
-
-				final int chunkX = trueX >> 4;
-				final int chunkZ = trueZ >> 4;
-				if (chunk == null || chunk.xPosition != chunkX || chunk.zPosition != chunkZ)
-					chunk = provider.getLoadedChunk(chunkX, chunkZ);
-
-				if (chunk == null)
+				
+				if(!blocks.isAvailable(trueX, trueZ))
 					return;
-
+				
 				IBlockState lastState = null;
 
 				for (int dY = 0; dY < rangeY; dY++) {
@@ -307,18 +300,18 @@ public final class LightLevelHUD {
 					if (trueY < 1 || !inFrustum(trueX, trueY, trueZ))
 						continue;
 
-					final IBlockState state = chunk.getBlockState(trueX, trueY, trueZ);
+					final IBlockState state = blocks.getBlockState(trueX, trueY, trueZ);
 
 					if (lastState == null)
-						lastState = chunk.getBlockState(trueX, trueY - 1, trueZ);
+						lastState = blocks.getBlockState(trueX, trueY - 1, trueZ);
 
 					if (renderLightLevel(state, lastState)) {
 						mutable.setPos(trueX, trueY, trueZ);
 
 						final boolean mobSpawn = canMobSpawn(mutable);
 						if (mobSpawn || !ModOptions.llHideSafe) {
-							final int blockLight = chunk.getLightFor(EnumSkyBlock.BLOCK, mutable);
-							final int skyLight = chunk.getLightFor(EnumSkyBlock.SKY, mutable) - skyLightSub;
+							final int blockLight = blocks.getLightFor(EnumSkyBlock.BLOCK, mutable);
+							final int skyLight = blocks.getLightFor(EnumSkyBlock.SKY, mutable) - skyLightSub;
 							final int effective = Math.max(blockLight, skyLight);
 							final int result = displayMode == Mode.BLOCK_SKY ? effective : blockLight;
 
