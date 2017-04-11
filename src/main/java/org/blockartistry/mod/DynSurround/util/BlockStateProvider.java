@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -39,9 +40,11 @@ import net.minecraft.world.chunk.Chunk;
 public class BlockStateProvider {
 
 	protected World world;
-	protected int chunkX = -1;;
-	protected int chunkZ = -1;
 	protected Chunk chunk;
+
+	public BlockStateProvider() {
+		this(null);
+	}
 
 	public BlockStateProvider(final World world) {
 		this.world = world;
@@ -52,10 +55,8 @@ public class BlockStateProvider {
 		final int cX = x >> 4;
 		final int cZ = z >> 4;
 
-		if (this.chunkX != cX || this.chunkZ != cZ) {
-			this.chunkX = cX;
-			this.chunkZ = cZ;
-			this.chunk = this.world.getChunkFromChunkCoords(this.chunkX, this.chunkZ);
+		if (this.chunk == null || !this.chunk.isAtLocation(cX, cZ)) {
+			this.chunk = this.world.getChunkFromChunkCoords(cX, cZ);
 		}
 
 		return this.chunk;
@@ -66,7 +67,6 @@ public class BlockStateProvider {
 		if (this.world != world) {
 			this.world = world;
 			this.chunk = null;
-			this.chunkX = this.chunkZ = -1;
 		}
 		return this;
 	}
@@ -81,4 +81,22 @@ public class BlockStateProvider {
 		return resolveChunk(x, z).getBlockState(x, y, z);
 	}
 
+	public boolean isAvailable(final int x, final int z) {
+		final int cX = x >> 4;
+		final int cZ = z >> 4;
+
+		if (this.chunk == null || !this.chunk.isAtLocation(cX, cZ)) {
+			this.chunk = this.world.getChunkProvider().getLoadedChunk(cX, cZ);
+		}
+
+		return this.chunk != null;
+	}
+
+	public boolean isAvailable(@Nonnull final BlockPos pos) {
+		return isAvailable(pos.getX(), pos.getZ());
+	}
+
+	public int getLightFor(@Nonnull final EnumSkyBlock type, @Nonnull final BlockPos pos) {
+		return resolveChunk(pos.getX(), pos.getZ()).getLightFor(type, pos);
+	}
 }

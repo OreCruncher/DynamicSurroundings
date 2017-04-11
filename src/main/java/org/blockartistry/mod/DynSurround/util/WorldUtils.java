@@ -40,7 +40,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class WorldUtils {
 
-	private static final BlockStateProvider blockProvider = new BlockStateProvider(null);
+	private static final BlockStateProvider blockProvider = new BlockStateProvider();
 	
 	private WorldUtils() {
 
