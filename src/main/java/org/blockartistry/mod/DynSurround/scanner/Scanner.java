@@ -29,14 +29,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
+import org.blockartistry.mod.DynSurround.util.BlockStateProvider;
 import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public abstract class Scanner implements ITickable, Callable<Void> {
 
@@ -56,6 +55,8 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 
 	protected final Random random = new XorShiftRandom();
 	protected final BlockPos.MutableBlockPos workingPos = new BlockPos.MutableBlockPos();
+	
+	protected final BlockStateProvider blockProvider = new BlockStateProvider();
 
 	public Scanner(@Nonnull final String name, final int range) {
 		this(name, range, 0);
@@ -118,12 +119,13 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 	@Override
 	public void update() {
 
-		final World world = EnvironState.getWorld();
+		this.blockProvider.setWorld(EnvironState.getWorld());
+		
 		for (int count = 0; count < this.blocksPerTick; count++) {
 			final BlockPos pos = nextPos(this.workingPos, this.random);
 			if (pos == null)
 				break;
-			final IBlockState state = WorldUtils.getBlockState(world, pos);
+			final IBlockState state = this.blockProvider.getBlockState(pos);
 			if (interestingBlock(state)) {
 				blockScan(state, pos, this.random);
 			}
