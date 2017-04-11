@@ -221,9 +221,9 @@ public class Solver {
 	@Nonnull
 	public Association findAssociationForBlock(@Nonnull BlockPos pos) {
 		final World world = EnvironState.getWorld();
-		IBlockState in = world.getBlockState(pos);
+		IBlockState in = WorldUtils.getBlockState(world, pos);
 		BlockPos tPos = pos.up();
-		final IBlockState above = world.getBlockState(tPos);
+		final IBlockState above = WorldUtils.getBlockState(world, tPos);
 
 		IAcoustic[] association = isolator.getBlockMap().getBlockSubstrateAcoustics(above, tPos, "carpet");
 
@@ -238,7 +238,7 @@ public class Solver {
 
 			if (WorldUtils.isAirBlock(in)) {
 				tPos = pos.down();
-				final IBlockState below = world.getBlockState(tPos);
+				final IBlockState below = WorldUtils.getBlockState(world, tPos);
 				association = this.isolator.getBlockMap().getBlockSubstrateAcoustics(below, tPos, "bigger");
 				if (association != null) {
 					pos = tPos;
@@ -382,7 +382,7 @@ public class Solver {
 
 		final World world = EnvironState.getWorld();
 		final BlockPos up = pos.up();
-		final IBlockState above = world.getBlockState(up);
+		final IBlockState above = WorldUtils.getBlockState(world, up);
 
 		IAcoustic[] association = null;
 		boolean found = false;

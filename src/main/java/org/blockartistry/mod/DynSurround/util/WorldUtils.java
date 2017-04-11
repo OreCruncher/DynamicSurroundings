@@ -34,9 +34,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public final class WorldUtils {
 
+	private static final BlockStateProvider blockProvider = new BlockStateProvider(null);
+	
 	private WorldUtils() {
 
 	}
@@ -49,13 +54,8 @@ public final class WorldUtils {
 		return null;
 	}
 
-	@Nullable
-	public static Entity locateEntity(@Nonnull final World world, final int entityId) {
-		return world.getEntityByID(entityId);
-	}
-
 	public static boolean isSolidBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return isSolidBlock(world, pos.getX(), pos.getY(), pos.getZ());
+		return getBlockState(world, pos).getMaterial().isSolid();
 	}
 
 	public static boolean isSolidBlock(@Nonnull final World world, final int x, final int y, final int z) {
@@ -71,7 +71,7 @@ public final class WorldUtils {
 	}
 
 	public static boolean isAirBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return isAirBlock(getBlockState(world, pos.getX(), pos.getY(), pos.getZ()));
+		return isAirBlock(getBlockState(world, pos));
 	}
 
 	public static boolean isAirBlock(@Nonnull final World world, final int x, final int y, final int z) {
@@ -79,9 +79,13 @@ public final class WorldUtils {
 	}
 
 	@Nonnull
+	public static IBlockState getBlockState(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return blockProvider.setWorld(world).getBlockState(pos);
+	}
+	
+	@Nonnull
 	public static IBlockState getBlockState(@Nonnull final World world, final int x, final int y, final int z) {
-		return (y < 0 || y >= 256) ? Blocks.AIR.getDefaultState()
-				: world.getChunkFromChunkCoords(x >> 4, z >> 4).getBlockState(x, y, z);
+		return blockProvider.setWorld(world).getBlockState(x, y, z);
 	}
 
 }

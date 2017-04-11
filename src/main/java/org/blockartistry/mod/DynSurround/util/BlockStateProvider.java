@@ -22,47 +22,63 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.fx;
-
-import java.util.Random;
+package org.blockartistry.mod.DynSurround.util;
 
 import javax.annotation.Nonnull;
-
-import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleBubbleJet;
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.chunk.Chunk;
 
-@SideOnly(Side.CLIENT)
-public class BubbleJetEffect extends JetEffect {
+/**
+ * Simple provider that caches the last chunk referenced in hopes of getting a
+ * hit on the next call. Goal is to speed up area scanning by assuming traversal
+ * is on the Y axis first.
+ */
+public class BlockStateProvider {
 
-	public BubbleJetEffect(final int chance) {
-		super(chance);
+	protected World world;
+	protected int chunkX = -1;;
+	protected int chunkZ = -1;
+	protected Chunk chunk;
+
+	public BlockStateProvider(final World world) {
+		this.world = world;
 	}
 
-	@Override
 	@Nonnull
-	public BlockEffectType getEffectType() {
-		return BlockEffectType.BUBBLE_JET;
+	protected Chunk resolveChunk(final int x, final int z) {
+		final int cX = x >> 4;
+		final int cZ = z >> 4;
+
+		if (this.chunkX != cX || this.chunkZ != cZ) {
+			this.chunkX = cX;
+			this.chunkZ = cZ;
+			this.chunk = this.world.getChunkFromChunkCoords(this.chunkX, this.chunkZ);
+		}
+
+		return this.chunk;
 	}
 
-	@Override
-	public boolean canTrigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		return WorldUtils.isSolidBlock(world, pos.down()) && super.canTrigger(state, world, pos, random);
+	@Nonnull
+	public BlockStateProvider setWorld(@Nonnull final World world) {
+		if (this.world != world) {
+			this.world = world;
+			this.chunk = null;
+			this.chunkX = this.chunkZ = -1;
+		}
+		return this;
 	}
 
-	@Override
-	public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		final int waterBlocks = countBlocks(world, pos, state, 1);
-		final ParticleJet effect = new ParticleBubbleJet(waterBlocks, world, pos.getX() + 0.5D, pos.getY() + 0.1D,
-				pos.getZ() + 0.5D);
-		addEffect(effect);
+	@Nonnull
+	public IBlockState getBlockState(@Nonnull final BlockPos pos) {
+		return getBlockState(pos.getX(), pos.getY(), pos.getZ());
+	}
+
+	@Nonnull
+	public IBlockState getBlockState(final int x, final int y, final int z) {
+		return resolveChunk(x, z).getBlockState(x, y, z);
 	}
 
 }
