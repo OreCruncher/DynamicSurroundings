@@ -31,7 +31,6 @@ import org.blockartistry.mod.DynSurround.client.event.BlockUpdateEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -161,14 +160,14 @@ public abstract class CuboidScanner extends Scanner {
 	protected void updateScan(@Nonnull final Cuboid newVolume, @Nonnull final Cuboid oldVolume,
 			@Nonnull final Cuboid intersect) {
 
-		final World world = EnvironState.getWorld();
+		this.blockProvider.setWorld(EnvironState.getWorld());
 		
 		if (doBlockUnscan()) {
 			final ComplementsPointIterator newOutOfRange = new ComplementsPointIterator(oldVolume, intersect);
 			// Notify on the blocks going out of range
 			for (BlockPos point = newOutOfRange.next(); point != null; point = newOutOfRange.next()) {
 				if (point.getY() > 0) {
-					final IBlockState state = world.getBlockState(point);
+					final IBlockState state = this.blockProvider.getBlockState(point);
 					if (interestingBlock(state))
 						blockUnscan(state, point, this.random);
 				}
@@ -179,7 +178,7 @@ public abstract class CuboidScanner extends Scanner {
 		final ComplementsPointIterator newInRange = new ComplementsPointIterator(newVolume, intersect);
 		for (BlockPos point = newInRange.next(); point != null; point = newInRange.next()) {
 			if (point.getY() > 0) {
-				final IBlockState state = world.getBlockState(point);
+				final IBlockState state = this.blockProvider.getBlockState(point);
 				if (interestingBlock(state))
 					blockScan(state, point, this.random);
 			}
@@ -195,14 +194,13 @@ public abstract class CuboidScanner extends Scanner {
 		if (this.scanFinished)
 			return null;
 
-		final World world = EnvironState.getWorld();
 		int checked = 0;
 
 		BlockPos point = null;
 		while ((point = this.fullRange.peek()) != null) {
 
 			// Chunk not loaded we need to skip this tick
-			if (!world.isBlockLoaded(point))
+			if (!this.blockProvider.isAvailable(point))
 				return null;
 
 			// Consume the point
