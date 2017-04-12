@@ -49,10 +49,34 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public final class BiomeRegistry extends Registry {
 
+	public static final FakeBiome UNDERGROUND = new FakeBiome("Underground");
+	public static final FakeBiome PLAYER = new FakeBiome("Player");
+	public static final FakeBiome UNDERWATER = new FakeBiome("Underwater");
+	public static final FakeBiome UNDEROCEAN = new FakeBiome("UnderOCN");
+	public static final FakeBiome UNDERDEEPOCEAN = new FakeBiome("UnderDOCN");
+	public static final FakeBiome UNDERRIVER = new FakeBiome("UnderRVR");
+	public static final FakeBiome OUTERSPACE = new FakeBiome("OuterSpace");
+	public static final FakeBiome CLOUDS = new FakeBiome("Clouds");
+	public static final FakeBiome VILLAGE = new FakeBiome("Village");
+
+	public static BiomeInfo VILLAGE_INFO;
+	public static BiomeInfo PLAYER_INFO;
+	public static BiomeInfo UNDERGROUND_INFO;
+	public static BiomeInfo CLOUDS_INFO;
+	public static BiomeInfo OUTERSPACE_INFO;
+	public static BiomeInfo WTF_INFO;
+
+	// This is for cases when the biome coming in doesn't make sense
+	// and should default to something to avoid crap.
+	private static final FakeBiome WTF = new FakeBiome("(FooBar)");
+
+	private final Map<Biome, BiomeInfo> registry = new IdentityHashMap<Biome, BiomeInfo>();
+	private final Map<String, String> biomeAliases = new HashMap<String, String>();
+
 	BiomeRegistry(@Nonnull final Side side) {
 		super(side);
 	}
-	
+
 	@Override
 	public void init() {
 		biomeAliases.clear();
@@ -75,8 +99,8 @@ public final class BiomeRegistry extends Registry {
 		registry.put(UNDEROCEAN, new BiomeInfo(UNDEROCEAN));
 		registry.put(UNDERDEEPOCEAN, new BiomeInfo(UNDERDEEPOCEAN));
 		registry.put(UNDERRIVER, new BiomeInfo(UNDERRIVER));
-		registry.put(WTF, new BiomeInfo(WTF));
 
+		registry.put(WTF, WTF_INFO = new BiomeInfo(WTF));
 		registry.put(PLAYER, PLAYER_INFO = new BiomeInfo(PLAYER));
 		registry.put(VILLAGE, VILLAGE_INFO = new BiomeInfo(VILLAGE));
 		registry.put(UNDERGROUND, UNDERGROUND_INFO = new BiomeInfo(UNDERGROUND));
@@ -98,48 +122,12 @@ public final class BiomeRegistry extends Registry {
 
 	@Override
 	public void fini() {
-		
-	}
 
-	private final Map<Biome, BiomeInfo> registry = new IdentityHashMap<Biome, BiomeInfo>();
-	private final Map<String, String> biomeAliases = new HashMap<String, String>();
-
-	public static final FakeBiome UNDERGROUND = new FakeBiome("Underground");
-	public static final FakeBiome PLAYER = new FakeBiome("Player");
-	public static final FakeBiome UNDERWATER = new FakeBiome("Underwater");
-	public static final FakeBiome UNDEROCEAN = new FakeBiome("UnderOCN");
-	public static final FakeBiome UNDERDEEPOCEAN = new FakeBiome("UnderDOCN");
-	public static final FakeBiome UNDERRIVER = new FakeBiome("UnderRVR");
-	public static final FakeBiome OUTERSPACE = new FakeBiome("OuterSpace");
-	public static final FakeBiome CLOUDS = new FakeBiome("Clouds");
-	public static final FakeBiome VILLAGE = new FakeBiome("Village");
-	
-	public static BiomeInfo VILLAGE_INFO;
-	public static BiomeInfo PLAYER_INFO;
-	public static BiomeInfo UNDERGROUND_INFO;
-	public static BiomeInfo CLOUDS_INFO;
-	public static BiomeInfo OUTERSPACE_INFO;
-	
-	// This is for cases when the biome coming in doesn't make sense
-	// and should default to something to avoid crap.
-	private static final FakeBiome WTF = new FakeBiome("(FooBar)");
-
-	@Nonnull
-	public static String resolveName(@Nullable final Biome biome) {
-		if (biome == null)
-			return "(Bad Biomes)";
-		return biome.getBiomeName();
 	}
 
 	@Nullable
 	public BiomeInfo get(@Nonnull final Biome biome) {
-		BiomeInfo entry = registry.get(biome == null ? WTF : biome);
-		if (entry == null) {
-			ModLog.warn("Biome [%s] was not detected during scan! Explicitly adding at defaults", resolveName(biome));
-			entry = new BiomeInfo(biome);
-			this.registry.put(entry.biome, entry);
-		}
-		return entry;
+		return biome == null ? WTF_INFO : this.registry.get(biome);
 	}
 
 	final boolean isBiomeMatch(@Nonnull final BiomeConfig entry, @Nonnull final String biomeName) {
@@ -148,14 +136,14 @@ public final class BiomeRegistry extends Registry {
 		final String alias = this.biomeAliases.get(biomeName);
 		return alias == null ? false : Pattern.matches(entry.biomeName, alias);
 	}
-	
+
 	public void registerBiomeAlias(@Nonnull final String alias, @Nonnull final String biome) {
 		this.biomeAliases.put(alias, biome);
 	}
 
 	public void register(@Nonnull final BiomeConfig entry) {
 		final SoundRegistry soundRegistry = RegistryManager.getManager().getRegistry(RegistryType.SOUND);
-		
+
 		for (final BiomeInfo biomeEntry : this.registry.values()) {
 			if (isBiomeMatch(entry, biomeEntry.getBiomeName())) {
 				if (entry.hasPrecipitation != null)
