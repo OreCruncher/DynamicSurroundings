@@ -124,16 +124,24 @@ public class CompassHUD extends GuiOverlay {
 	}
 
 	@Override
+	public void doTick(final int tickRef) {
+		if (tickRef != 0 && tickRef % 4 == 0) {
+
+			this.textPanel.resetText();
+
+			if (showCompass()) {
+				final String locationString = getLocationString();
+				final String biomeNameString = getBiomeName();
+				this.textPanel.setText(ImmutableList.of(locationString, biomeNameString));
+			}
+		}
+	}
+
+	@Override
 	public void doRender(@Nonnull final RenderGameOverlayEvent.Pre event) {
 
-		if (event.getType() != ElementType.CROSSHAIRS || !showCompass())
+		if (event.getType() != ElementType.CROSSHAIRS || !this.textPanel.hasText())
 			return;
-
-		if (EnvironState.getTickCounter() % 4 == 0) {
-			final String locationString = getLocationString();
-			final String biomeNameString = getBiomeName();
-			this.textPanel.setText(ImmutableList.of(locationString, biomeNameString));
-		}
 
 		final Minecraft mc = Minecraft.getMinecraft();
 		final FontRenderer font = mc.fontRendererObj;
