@@ -102,9 +102,9 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 			getBiomeSounds(sounds);
 
 		final List<SoundEffect> playerSounds = new ArrayList<SoundEffect>();
-		BiomeRegistry.PLAYER.findSoundMatches(playerSounds);
+		BiomeRegistry.PLAYER_INFO.findSoundMatches(playerSounds);
 		if(EnvironState.inVillage())
-			BiomeRegistry.VILLAGE.findSoundMatches(playerSounds);
+			BiomeRegistry.VILLAGE_INFO.findSoundMatches(playerSounds);
 
 		for (final SoundEffect effect : playerSounds)
 			sounds.put(effect, 1.0F);
@@ -118,7 +118,7 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 				SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound);
 		}
 
-		final SoundEffect sound = BiomeRegistry.PLAYER.getSpotSound(RANDOM);
+		final SoundEffect sound = BiomeRegistry.PLAYER_INFO.getSpotSound(RANDOM);
 		if (sound != null)
 			SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound);
 	}

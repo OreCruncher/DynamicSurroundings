@@ -42,8 +42,6 @@ public class BiomeInfo {
 
 	public static final int DEFAULT_SPOT_CHANCE = 1200 / AreaSoundEffectHandler.SCAN_INTERVAL;
 
-	protected final int biomeId;
-	protected final String biomeName;
 	protected final Biome biome;
 
 	protected boolean hasPrecipitation;
@@ -55,35 +53,18 @@ public class BiomeInfo {
 	protected int spotSoundChance;
 	protected List<SoundEffect> spotSounds;
 
-	protected BiomeInfo(final int biomeId, @Nonnull final String biomeName) {
-		this.biome = null;
-		this.biomeId = biomeId;
-		this.biomeName = biomeName;
-
-		this.sounds = new ArrayList<SoundEffect>();
-		this.spotSounds = new ArrayList<SoundEffect>();
-		this.spotSoundChance = DEFAULT_SPOT_CHANCE;
-	}
-
 	public BiomeInfo(@Nonnull final Biome biome) {
-
 		this.biome = biome;
-		this.biomeId = Biome.getIdForBiome(biome);
-		this.biomeName = biome.getBiomeName();
-
 		this.sounds = new ArrayList<SoundEffect>();
 		this.spotSounds = new ArrayList<SoundEffect>();
 		this.spotSoundChance = DEFAULT_SPOT_CHANCE;
-
-		this.hasPrecipitation = canRain() || getEnableSnow();
-	}
-
-	public int getBiomeId() {
-		return this.biomeId;
+		
+		if(!this.isFake())
+			this.hasPrecipitation = canRain() || getEnableSnow();
 	}
 
 	public String getBiomeName() {
-		return this.biomeName;
+		return this.biome.getBiomeName();
 	}
 
 	public boolean getHasPrecipitation() {
@@ -173,7 +154,7 @@ public class BiomeInfo {
 	}
 
 	public boolean isFake() {
-		return false;
+		return this.biome instanceof FakeBiome;
 	}
 
 	public float getFloatTemperature(@Nonnull final BlockPos pos) {
@@ -243,7 +224,7 @@ public class BiomeInfo {
 	@Nonnull
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append(String.format("Biomes %d [%s]:", this.biomeId, this.biomeName));
+		builder.append(String.format("Biomes [%s]:", this.getBiomeName()));
 		if (this.isFake()) {
 			builder.append(" FAKE ");
 		} else {

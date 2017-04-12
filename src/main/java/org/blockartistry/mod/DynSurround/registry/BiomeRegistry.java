@@ -25,6 +25,7 @@
 package org.blockartistry.mod.DynSurround.registry;
 
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -43,7 +44,6 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.MyUtils;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -67,39 +67,28 @@ public final class BiomeRegistry extends Registry {
 
 		for (Iterator<Biome> itr = Biome.REGISTRY.iterator(); itr.hasNext();) {
 			final BiomeInfo e = new BiomeInfo(itr.next());
-			registry.put(e.getBiomeId(), e);
+			registry.put(e.biome, e);
 		}
 
 		// Add our fake biomes
-		registry.put(UNDERGROUND.getBiomeId(), UNDERGROUND);
-		registry.put(UNDERWATER.getBiomeId(), UNDERWATER);
-		registry.put(UNDEROCEAN.getBiomeId(), UNDEROCEAN);
-		registry.put(UNDERDEEPOCEAN.getBiomeId(), UNDERDEEPOCEAN);
-		registry.put(UNDERRIVER.getBiomeId(), UNDERRIVER);
-		registry.put(OUTERSPACE.getBiomeId(), OUTERSPACE);
-		registry.put(CLOUDS.getBiomeId(), CLOUDS);
-		registry.put(PLAYER.getBiomeId(), PLAYER);
-		registry.put(WTF.getBiomeId(), WTF);
-		registry.put(VILLAGE.getBiomeId(), VILLAGE);
-		
-		// Make sure they are clean from the previous run
-		UNDERGROUND.resetSounds();
-		UNDERWATER.resetSounds();
-		UNDEROCEAN.resetSounds();
-		UNDERDEEPOCEAN.resetSounds();
-		UNDERRIVER.resetSounds();
-		OUTERSPACE.resetSounds();
-		CLOUDS.resetSounds();
-		PLAYER.resetSounds();
-		WTF.resetSounds();
-		VILLAGE.resetSounds();
+		registry.put(UNDERWATER, new BiomeInfo(UNDERWATER));
+		registry.put(UNDEROCEAN, new BiomeInfo(UNDEROCEAN));
+		registry.put(UNDERDEEPOCEAN, new BiomeInfo(UNDERDEEPOCEAN));
+		registry.put(UNDERRIVER, new BiomeInfo(UNDERRIVER));
+		registry.put(WTF, new BiomeInfo(WTF));
+
+		registry.put(PLAYER, PLAYER_INFO = new BiomeInfo(PLAYER));
+		registry.put(VILLAGE, VILLAGE_INFO = new BiomeInfo(VILLAGE));
+		registry.put(UNDERGROUND, UNDERGROUND_INFO = new BiomeInfo(UNDERGROUND));
+		registry.put(CLOUDS, CLOUDS_INFO = new BiomeInfo(CLOUDS));
+		registry.put(OUTERSPACE, OUTERSPACE_INFO = new BiomeInfo(OUTERSPACE));
 	}
 
 	@Override
 	public void initComplete() {
 		if (ModOptions.enableDebugLogging) {
 			ModLog.info("*** BIOME REGISTRY ***");
-			for (final BiomeInfo entry : registry.valueCollection())
+			for (final BiomeInfo entry : registry.values())
 				ModLog.info(entry.toString());
 		}
 
@@ -112,22 +101,28 @@ public final class BiomeRegistry extends Registry {
 		
 	}
 
-	private final TIntObjectHashMap<BiomeInfo> registry = new TIntObjectHashMap<BiomeInfo>();
+	private final Map<Biome, BiomeInfo> registry = new IdentityHashMap<Biome, BiomeInfo>();
 	private final Map<String, String> biomeAliases = new HashMap<String, String>();
 
-	public static final FakeBiomeInfo UNDERGROUND = new FakeBiomeInfo(-1, "Underground");
-	public static final FakeBiomeInfo PLAYER = new FakeBiomeInfo(-2, "Player");
-	public static final FakeBiomeInfo UNDERWATER = new FakeBiomeInfo(-3, "Underwater");
-	public static final FakeBiomeInfo UNDEROCEAN = new FakeBiomeInfo(-4, "UnderOCN");
-	public static final FakeBiomeInfo UNDERDEEPOCEAN = new FakeBiomeInfo(-5, "UnderDOCN");
-	public static final FakeBiomeInfo UNDERRIVER = new FakeBiomeInfo(-6, "UnderRVR");
-	public static final FakeBiomeInfo OUTERSPACE = new FakeBiomeInfo(-7, "OuterSpace");
-	public static final FakeBiomeInfo CLOUDS = new FakeBiomeInfo(-8, "Clouds");
-	public static final FakeBiomeInfo VILLAGE = new FakeBiomeInfo(-9, "Village");
-
+	public static final FakeBiome UNDERGROUND = new FakeBiome("Underground");
+	public static final FakeBiome PLAYER = new FakeBiome("Player");
+	public static final FakeBiome UNDERWATER = new FakeBiome("Underwater");
+	public static final FakeBiome UNDEROCEAN = new FakeBiome("UnderOCN");
+	public static final FakeBiome UNDERDEEPOCEAN = new FakeBiome("UnderDOCN");
+	public static final FakeBiome UNDERRIVER = new FakeBiome("UnderRVR");
+	public static final FakeBiome OUTERSPACE = new FakeBiome("OuterSpace");
+	public static final FakeBiome CLOUDS = new FakeBiome("Clouds");
+	public static final FakeBiome VILLAGE = new FakeBiome("Village");
+	
+	public static BiomeInfo VILLAGE_INFO;
+	public static BiomeInfo PLAYER_INFO;
+	public static BiomeInfo UNDERGROUND_INFO;
+	public static BiomeInfo CLOUDS_INFO;
+	public static BiomeInfo OUTERSPACE_INFO;
+	
 	// This is for cases when the biome coming in doesn't make sense
 	// and should default to something to avoid crap.
-	private static final FakeBiomeInfo WTF = new FakeBiomeInfo(-256, "(FooBar)");
+	private static final FakeBiome WTF = new FakeBiome("(FooBar)");
 
 	@Nonnull
 	public static String resolveName(@Nullable final Biome biome) {
@@ -138,11 +133,11 @@ public final class BiomeRegistry extends Registry {
 
 	@Nullable
 	public BiomeInfo get(@Nonnull final Biome biome) {
-		BiomeInfo entry = registry.get(biome == null ? WTF.getBiomeId() : Biome.REGISTRY.getIDForObject(biome));
+		BiomeInfo entry = registry.get(biome == null ? WTF : biome);
 		if (entry == null) {
 			ModLog.warn("Biome [%s] was not detected during scan! Explicitly adding at defaults", resolveName(biome));
 			entry = new BiomeInfo(biome);
-			this.registry.put(entry.getBiomeId(), entry);
+			this.registry.put(entry.biome, entry);
 		}
 		return entry;
 	}
@@ -161,7 +156,7 @@ public final class BiomeRegistry extends Registry {
 	public void register(@Nonnull final BiomeConfig entry) {
 		final SoundRegistry soundRegistry = RegistryManager.getManager().getRegistry(RegistryType.SOUND);
 		
-		for (final BiomeInfo biomeEntry : this.registry.valueCollection()) {
+		for (final BiomeInfo biomeEntry : this.registry.values()) {
 			if (isBiomeMatch(entry, biomeEntry.getBiomeName())) {
 				if (entry.hasPrecipitation != null)
 					biomeEntry.setHasPrecipitation(entry.hasPrecipitation.booleanValue());

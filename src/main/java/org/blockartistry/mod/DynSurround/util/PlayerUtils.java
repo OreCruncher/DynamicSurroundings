@@ -34,10 +34,10 @@ import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
+import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import com.google.common.base.Predicates;
 
-import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -45,6 +45,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
@@ -62,16 +63,11 @@ public final class PlayerUtils {
 
 	@Nonnull
 	public static BiomeInfo getPlayerBiome(@Nonnull final EntityPlayer player, final boolean getTrue) {
-
-		final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
-		final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
-
-		final int theX = MathStuff.floor_double(player.posX);
-		final int theY = MathStuff.floor_double(player.posY);
-		final int theZ = MathStuff.floor_double(player.posZ);
-		BiomeInfo biome = biomes.get(player.world.getBiome(new BlockPos(theX, 0, theZ)));
+		Biome biome = player.world.getBiome(new BlockPos(player.posX, 0, player.posZ));
 
 		if (!getTrue) {
+			final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
+			final int theY = MathStuff.floor_double(player.posY);
 			if (isUnderWater(player)) {
 				if (REGEX_DEEP_OCEAN.matcher(biome.getBiomeName()).matches())
 					biome = BiomeRegistry.UNDERDEEPOCEAN;
@@ -88,7 +84,8 @@ public final class PlayerUtils {
 			else if (theY >= dimensions.getCloudHeight(player.world))
 				biome = BiomeRegistry.CLOUDS;
 		}
-		return biome;
+
+		return ((BiomeRegistry) RegistryManager.get(RegistryType.BIOME)).get(biome);
 	}
 
 	public static int getPlayerDimension(@Nonnull final EntityPlayer player) {
@@ -98,10 +95,10 @@ public final class PlayerUtils {
 	}
 
 	public static boolean isUnderWater(@Nonnull final EntityPlayer player) {
-		final int x = MathStuff.floor_double(player.posX);
-		final int y = MathStuff.floor_double(player.posY + player.getEyeHeight());
-		final int z = MathStuff.floor_double(player.posZ);
-		return player.world.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.WATER;
+		return WorldUtils
+				.getBlockState(player.world,
+						new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ))
+				.getMaterial() == Material.WATER;
 	}
 
 	public static boolean isUnderGround(@Nonnull final EntityPlayer player, final int offset) {
@@ -120,11 +117,11 @@ public final class PlayerUtils {
 		if (players.size() == 1) {
 			return players.get(0);
 		} else if (players.size() > 0) {
-			return players.get(ThreadLocalRandom.current().nextInt(players.size()));
+			return players.get(XorShiftRandom.current().nextInt(players.size()));
 		}
 		return null;
 	}
-	
+
 	public static boolean isHolding(@Nonnull final EntityPlayer player, @Nonnull final Item item,
 			@Nonnull final EnumHand hand) {
 		final ItemStack stack = player.getHeldItem(hand);
