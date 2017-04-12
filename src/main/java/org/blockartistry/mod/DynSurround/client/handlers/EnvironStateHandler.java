@@ -82,6 +82,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		// to avoid requery. Used during the tick.
 		private static String biomeName = "";
 		private static BiomeInfo playerBiome = null;
+		private static BiomeInfo truePlayerBiome = null;
 		private static SeasonType season = SeasonType.NONE;
 		private static int dimensionId;
 		private static String dimensionName;
@@ -121,12 +122,12 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.playerPosition = getPlayerPos();
 			EnvironState.inside = AreaSurveyHandler.isReallyInside();
 
-			final BiomeInfo trueBiome = PlayerUtils.getPlayerBiome(player, true);
-			EnvironState.freezing = trueBiome.getFloatTemperature(EnvironState.playerPosition) < 0.15F;
+			EnvironState.truePlayerBiome = PlayerUtils.getPlayerBiome(player, true);
+			EnvironState.freezing = EnvironState.truePlayerBiome.getFloatTemperature(EnvironState.playerPosition) < 0.15F;
 			EnvironState.playerTemperature = seasons.getPlayerTemperature(world);
 			EnvironState.biomeTemperature = seasons.getBiomeTemperature(world, getPlayerPosition());
-			EnvironState.humid = trueBiome.isHighHumidity();
-			EnvironState.dry = trueBiome.getRainfall() == 0;
+			EnvironState.humid = EnvironState.truePlayerBiome.isHighHumidity();
+			EnvironState.dry = EnvironState.truePlayerBiome.getRainfall() == 0;
 
 			EnvironState.armorClass = ArmorClass.effectiveArmorClass(player);
 			EnvironState.footArmorClass = ArmorClass.footArmorClass(player);
@@ -141,6 +142,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		
 		public static BiomeInfo getPlayerBiome() {
 			return playerBiome;
+		}
+		
+		public static BiomeInfo getTruePlayerBiome() {
+			return truePlayerBiome;
 		}
 
 		public static String getBiomeName() {
@@ -254,15 +259,15 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static boolean isPlayerUnderground() {
-			return playerBiome == BiomeRegistry.UNDERGROUND;
+			return playerBiome == BiomeRegistry.UNDERGROUND_INFO;
 		}
 
 		public static boolean isPlayerInSpace() {
-			return playerBiome == BiomeRegistry.OUTERSPACE;
+			return playerBiome == BiomeRegistry.OUTERSPACE_INFO;
 		}
 
 		public static boolean isPlayerInClouds() {
-			return playerBiome == BiomeRegistry.CLOUDS;
+			return playerBiome == BiomeRegistry.CLOUDS_INFO;
 		}
 
 		public static boolean isFreezing() {

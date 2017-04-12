@@ -26,26 +26,26 @@ package org.blockartistry.mod.DynSurround.registry;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.PlayerUtils;
-
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.Biome.TempCategory;
+import net.minecraft.world.biome.Biome;
 
-public class FakeBiomeInfo extends BiomeInfo {
+public class FakeBiome extends Biome {
 
-	public FakeBiomeInfo(int biomeId, String biomeName) {
-		super(biomeId, biomeName);
+	public FakeBiome(@Nonnull final String name) {
+		super(new BiomeProperties(name));
+		
+		this.flowers = null;
+		this.spawnableCaveCreatureList = null;
+		this.spawnableCreatureList = null;
+		this.spawnableMonsterList = null;
+		this.spawnableWaterCreatureList = null;
+		this.theBiomeDecorator = null;
 	}
 
-	private BiomeInfo getTrueBiome() {
-		return PlayerUtils.getPlayerBiome(EnvironState.getPlayer(), true);
+	private static BiomeInfo getTrueBiome() {
+		return EnvironState.getTruePlayerBiome();
 	}
-	
-	@Override
-	public boolean isFake() {
-		return true;
-	}
-	
+
 	@Override
 	public boolean canRain() {
 		return getTrueBiome().canRain();
@@ -80,5 +80,4 @@ public class FakeBiomeInfo extends BiomeInfo {
 	public float getRainfall() {
 		return getTrueBiome().getRainfall();
 	}
-
 }
