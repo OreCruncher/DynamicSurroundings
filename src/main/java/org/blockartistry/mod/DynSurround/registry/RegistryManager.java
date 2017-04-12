@@ -34,6 +34,7 @@ import org.blockartistry.mod.DynSurround.client.event.RegistryEvent;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -82,19 +83,29 @@ public class RegistryManager {
 		// Reload can be called on either side so make sure we queue
 		// up a scheduled task appropriately.
 		if (managers[0] != null) {
-			FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(new Runnable() {
-				public void run() {
-					managers[0].reload();
-				}
-			});
+			final MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+			if (server == null) {
+				managers[0] = null;
+			} else {
+				server.addScheduledTask(new Runnable() {
+					public void run() {
+						managers[0].reload();
+					}
+				});
+			}
 		}
 
 		if (managers[1] != null) {
-			Minecraft.getMinecraft().addScheduledTask(new Runnable() {
-				public void run() {
-					managers[1].reload();
-				}
-			});
+			final Minecraft mc = Minecraft.getMinecraft();
+			if (mc == null) {
+				managers[1] = null;
+			} else {
+				mc.addScheduledTask(new Runnable() {
+					public void run() {
+						managers[1].reload();
+					}
+				});
+			}
 		}
 	}
 
