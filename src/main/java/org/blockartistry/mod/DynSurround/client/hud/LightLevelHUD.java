@@ -57,7 +57,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @Mod.EventBusSubscriber(Side.CLIENT)
-public final class LightLevelHUD {
+public final class LightLevelHUD extends GuiOverlay {
+
+	protected static FontRenderer font;
 
 	public static enum Mode {
 		BLOCK, BLOCK_SKY;
@@ -111,12 +113,11 @@ public final class LightLevelHUD {
 			@Override
 			public void render(final double x, final double y, final double z, final float yaw, final float pitch,
 					@Nonnull final LightCoord coord) {
-				final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
 				GlStateManager.translate(x + 0.5F, y + 0.3F, z + 0.5F);
 				GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
 				GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);
 				GlStateManager.scale(-this.scale, -this.scale, this.scale);
-				font.drawString(coord.text, -font.getStringWidth(coord.text) / 2, 0, coord.color);
+				font.drawString(coord.text, coord.margin, 0, coord.color);
 
 			}
 		},
@@ -124,12 +125,10 @@ public final class LightLevelHUD {
 			@Override
 			public void render(final double x, final double y, final double z, final float yaw, final float pitch,
 					@Nonnull final LightCoord coord) {
-				final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
-				final int margin = -font.getStringWidth(coord.text) / 2;
 				GlStateManager.translate(x + 0.45D, y + 0.0005D, z + 0.8D);
 				GlStateManager.rotate(90F, 1F, 0F, 0F);
 				GlStateManager.scale(-this.scale, -this.scale, this.scale);
-				font.drawString(coord.text, margin, 0, coord.color);
+				font.drawString(coord.text, coord.margin, 0, coord.color);
 			}
 		},
 		SURFACE_ROTATE(0.08F) {
@@ -137,14 +136,12 @@ public final class LightLevelHUD {
 			@Override
 			public void render(final double x, final double y, final double z, final float yaw, final float pitch,
 					@Nonnull final LightCoord coord) {
-				final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
-				final int margin = -font.getStringWidth(coord.text) / 2;
 				GlStateManager.translate(x + 0.5D, y, z + 0.5D);
 				GlStateManager.rotate(surfaceRotationAngle, 0F, 1F, 0F);
 				GlStateManager.translate(-0.05D, 0.0005D, 0.3D);
 				GlStateManager.rotate(90F, 1F, 0F, 0F);
 				GlStateManager.scale(-this.scale, -this.scale, this.scale);
-				font.drawString(coord.text, margin, 0, coord.color);
+				font.drawString(coord.text, coord.margin, 0, coord.color);
 			}
 		};
 
@@ -166,11 +163,12 @@ public final class LightLevelHUD {
 	}
 
 	private static final class LightCoord {
-		public double x;
+		public int x;
 		public double y;
-		public double z;
+		public int z;
 		public String text;
 		public int color;
+		public int margin;
 	}
 
 	public static boolean showHUD = false;
@@ -178,8 +176,9 @@ public final class LightLevelHUD {
 	private static final String[] VALUES = new String[16];
 	private static final float[] ROTATION = { 180, 0, 270, 90 };
 
+	private static DisplayStyle displayStyle = DisplayStyle.SURFACE_ROTATE;
 	private static final BlockStateProvider blocks = new BlockStateProvider();
-	private static final int ALLOCATION_SIZE = 2176;
+	private static final int ALLOCATION_SIZE = 2048;
 	private static final List<LightCoord> lightLevels = new ArrayList<LightCoord>(ALLOCATION_SIZE);
 	private static final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 	private static int nextCoord = 0;
@@ -240,10 +239,8 @@ public final class LightLevelHUD {
 
 	protected static void updateLightInfo(@Nonnull final RenderManager manager, final double x, final double y,
 			final double z) {
-		final long tick = EnvironState.getTickCounter();
-		if (tick == 0 || tick % 4 != 0)
-			return;
-
+		
+		font = Minecraft.getMinecraft().fontRendererObj;
 		final boolean isThirdPerson = manager.options.thirdPersonView == 2;
 
 		// Position frustum behind the player in order to reduce
@@ -332,6 +329,7 @@ public final class LightLevelHUD {
 								coord.z = trueZ;
 								coord.text = VALUES[result];
 								coord.color = color;
+								coord.margin = -(font.getStringWidth(coord.text) + 1) / 2;
 							}
 						}
 					}
@@ -340,19 +338,21 @@ public final class LightLevelHUD {
 				}
 			}
 	}
+	
+	@Override
+	public void doTick(final int tickRef) {
+		if (!showHUD || tickRef == 0 || tickRef % 4 != 0)
+			return;
+
+		displayStyle = DisplayStyle.getStyle(ModOptions.llStyle);
+		final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
+		updateLightInfo(manager, manager.viewerPosX, manager.viewerPosY, manager.viewerPosZ);
+	}
 
 	@SubscribeEvent
 	public static void doRender(@Nonnull final RenderWorldLastEvent event) {
 
-		if (!showHUD)
-			return;
-
-		final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
-		final DisplayStyle displayStyle = DisplayStyle.getStyle(ModOptions.llStyle);
-
-		updateLightInfo(manager, manager.viewerPosX, manager.viewerPosY, manager.viewerPosZ);
-
-		if (nextCoord == 0)
+		if (!showHUD || nextCoord == 0)
 			return;
 
 		GlStateManager.pushMatrix();
@@ -365,6 +365,8 @@ public final class LightLevelHUD {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.enableDepth();
 		GlStateManager.depthMask(true);
+
+		final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
 
 		final boolean thirdPerson = manager.options.thirdPersonView == 2;
 		final float pitch = manager.playerViewX * (thirdPerson ? -1 : 1);

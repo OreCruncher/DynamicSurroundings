@@ -78,7 +78,7 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 
 	private static List<String> gatherOreNames(final ItemStack stack) {
 		final List<String> result = new ArrayList<String>();
-		if (stack != null && !stack.isEmpty())
+		if (stack != null)
 			for (int i : OreDictionary.getOreIDs(stack))
 				result.add(OreDictionary.getOreName(i));
 		return result;
@@ -99,10 +99,10 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 		return null;
 	}
 
-	private List<String> gatherText(final ItemStack stack, final List<String> text, final IBlockState state,
+	private List<String> gatherBlockText(final ItemStack stack, final List<String> text, final IBlockState state,
 			final BlockPos pos) {
 
-		if (stack != null && !stack.isEmpty()) {
+		if (stack != null) {
 			text.add(TextFormatting.RED + stack.getDisplayName());
 			final String itemName = getItemName(stack);
 			if (itemName != null) {
@@ -145,18 +145,18 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 			}
 
 			SoundEffect[] sounds = this.blocks.getAllStepSounds(state);
-			if(sounds.length > 0) {
+			if (sounds.length > 0) {
 				text.add(TEXT_STEP_SOUNDS);
 				text.add(TextFormatting.DARK_GREEN + "Chance: 1 in " + this.blocks.getStepSoundChance(state));
-				for(final SoundEffect s: sounds)
+				for (final SoundEffect s : sounds)
 					text.add(TextFormatting.GOLD + s.toString());
 			}
-			
+
 			sounds = this.blocks.getAllSounds(state);
-			if(sounds.length > 0) {
+			if (sounds.length > 0) {
 				text.add(TEXT_BLOCK_SOUNDS);
 				text.add(TextFormatting.DARK_GREEN + "Chance: 1 in " + this.blocks.getSoundChance(state));
-				for(final SoundEffect s: sounds)
+				for (final SoundEffect s : sounds)
 					text.add(TextFormatting.GOLD + s.toString());
 			}
 		}
@@ -185,35 +185,35 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 	}
 
 	@Override
-	public void doRender(@Nonnull final RenderGameOverlayEvent.Pre event) {
-		// Only trigger if the player is in creative and is holding a stack of
-		// nether stars
-		if (event.getType() == ElementType.TEXT && EnvironState.getPlayer().isCreative()) {
-			
-			if(!isHolding()) {
-				this.textPanel.resetText();
-				return;
-			}
+	public void doTick(final int tickRef) {
 
-			final long tick = EnvironState.getTickCounter();
-			if (tick != 0 && tick % 5 == 0) {
+		if (tickRef != 0 && tickRef % 5 == 0) {
+
+			this.textPanel.resetText();
+
+			// Only trigger if the player is in creative and is holding a stack
+			// of nether stars
+			if (EnvironState.getPlayer().isCreative() && isHolding()) {
 				final RayTraceResult current = Minecraft.getMinecraft().objectMouseOver;
 				final BlockPos targetBlock = (current == null || current.getBlockPos() == null) ? BlockPos.ORIGIN
 						: current.getBlockPos();
-				final IBlockState state = EnvironState.getWorld().getBlockState(targetBlock);
+				final IBlockState state = WorldUtils.getBlockState(EnvironState.getWorld(), targetBlock);
 
 				final List<String> data = new ArrayList<String>();
 				if (!WorldUtils.isAirBlock(state)) {
 					final ItemStack stack = state != null ? state.getBlock().getPickBlock(state, current,
 							EnvironState.getWorld(), targetBlock, EnvironState.getPlayer()) : null;
 
-					gatherText(stack, data, state, targetBlock);
+					gatherBlockText(stack, data, state, targetBlock);
 					this.textPanel.setText(data);
-				} else {
-					this.textPanel.resetText();
 				}
 			}
+		}
+	}
 
+	@Override
+	public void doRender(@Nonnull final RenderGameOverlayEvent.Pre event) {
+		if (event.getType() == ElementType.TEXT && this.textPanel.hasText()) {
 			final int centerX = event.getResolution().getScaledWidth() / 2;
 			final int centerY = event.getResolution().getScaledHeight() / 2 - 100;
 			this.textPanel.render(centerX, centerY, Reference.CENTERED);

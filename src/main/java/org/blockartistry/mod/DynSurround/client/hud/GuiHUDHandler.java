@@ -27,16 +27,24 @@ package org.blockartistry.mod.DynSurround.client.hud;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.blockartistry.mod.DynSurround.DSurround;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public final class GuiHUDHandler {
-	
+
 	private static GuiHUDHandler INSTANCE;
 
 	private GuiHUDHandler() {
@@ -44,6 +52,7 @@ public final class GuiHUDHandler {
 		register(new CompassHUD());
 		register(new ClockHUD());
 		register(new BlockInfoHelperHUD());
+		register(new LightLevelHUD());
 	}
 
 	private final List<GuiOverlay> overlays = new ArrayList<GuiOverlay>();
@@ -56,7 +65,7 @@ public final class GuiHUDHandler {
 		INSTANCE = new GuiHUDHandler();
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
 	}
-	
+
 	public static void unregister() {
 		MinecraftForge.EVENT_BUS.unregister(INSTANCE);
 		INSTANCE = null;
@@ -64,14 +73,31 @@ public final class GuiHUDHandler {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onRenderGameOverlayEvent(final RenderGameOverlayEvent.Pre event) {
-		for (final GuiOverlay overlay : this.overlays)
-			overlay.doRender(event);
+		for (int i = 0; i < this.overlays.size(); i++)
+			this.overlays.get(i).doRender(event);
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onRenderGameOverlayEvent(final RenderGameOverlayEvent.Post event) {
-		for (final GuiOverlay overlay : this.overlays)
-			overlay.doRender(event);
+		for (int i = 0; i < this.overlays.size(); i++)
+			this.overlays.get(i).doRender(event);
 	}
 
+	@SubscribeEvent
+	public void clientTick(final TickEvent.ClientTickEvent event) {
+		if (Minecraft.getMinecraft().isGamePaused())
+			return;
+
+		final World world = FMLClientHandler.instance().getClient().world;
+		if (world == null)
+			return;
+
+		if (event.phase == Phase.START) {
+			DSurround.getProfiler().startSection("DSurroundGuiHUDHandler");
+			final int tickRef = EnvironState.getTickCounter();
+			for (int i = 0; i < this.overlays.size(); i++)
+				this.overlays.get(i).doTick(tickRef);
+			DSurround.getProfiler().endSection();
+		}
+	}
 }

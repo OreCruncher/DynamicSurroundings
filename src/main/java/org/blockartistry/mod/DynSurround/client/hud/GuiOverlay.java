@@ -34,15 +34,29 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiOverlay extends Gui {
-
+public abstract class GuiOverlay extends Gui {
+	
+	/*
+	 * Override to provide pre render logic.
+	 */
 	public void doRender(final RenderGameOverlayEvent.Pre event) {
 	}
 
+	/*
+	 * Override to provide post render logic
+	 */
 	public void doRender(final RenderGameOverlayEvent.Post event) {
 	}
+	
+	/*
+	 * Override if the overlay needs to be ticked during the client
+	 * tick phase.
+	 */
+	public void doTick(final int tickRef) {
+		
+	}
 
-	public void drawGradientRect(int left, int top, int right, int bottom, int startColor, int endColor) {
+	protected void drawGradientRect(int left, int top, int right, int bottom, int startColor, int endColor) {
 		float zLevel = 0.0F;
 
 		float f = (float) (startColor >> 24 & 255) / 255.0F;

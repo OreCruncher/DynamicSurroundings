@@ -108,6 +108,10 @@ public class TextPanel {
 		this.text = ImmutableList.of();
 		return this;
 	}
+	
+	public boolean hasText() {
+		return !this.text.isEmpty();
+	}
 
 	public void render(final int locX, final int locY, @Nonnull final Reference ref) {
 		

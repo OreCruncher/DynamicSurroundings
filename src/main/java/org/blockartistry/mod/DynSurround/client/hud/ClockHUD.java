@@ -91,35 +91,37 @@ public class ClockHUD extends GuiOverlay {
 		}
 	}
 
-	private void updateTime() {
+	@Override
+	public void doTick(final int tickRef) {
 
-		if (EnvironState.getTickCounter() % 4 != 0)
-			return;
+		if (tickRef != 0 && tickRef % 4 == 0) {
+			this.textPanel.resetText();
 
-		long time = DSurround.proxy().currentSessionDuration();
-		this.elapsedHours = (int) (time / 3600000);
-		time -= this.elapsedHours * 3600000;
-		this.elapsedMinutes = (int) (time / 60000);
-		time -= this.elapsedMinutes * 60000;
-		this.elapsedSeconds = (int) (time / 1000);
+			if (showClock()) {
+				long time = DSurround.proxy().currentSessionDuration();
+				this.elapsedHours = (int) (time / 3600000);
+				time -= this.elapsedHours * 3600000;
+				this.elapsedMinutes = (int) (time / 60000);
+				time -= this.elapsedMinutes * 60000;
+				this.elapsedSeconds = (int) (time / 1000);
 
-		final List<String> text = new ArrayList<String>();
-		text.add(EnvironState.getClock().toString());
-		text.add(diurnalName());
-		text.add(
-				Localization.format("format.SessionTime", this.elapsedHours, this.elapsedMinutes, this.elapsedSeconds));
+				final List<String> text = new ArrayList<String>();
+				text.add(EnvironState.getClock().toString());
+				text.add(diurnalName());
+				text.add(Localization.format("format.SessionTime", this.elapsedHours, this.elapsedMinutes,
+						this.elapsedSeconds));
 
-		this.textPanel.setText(text);
-		this.textPanel.setAlpha(ModOptions.compassTransparency);
+				this.textPanel.setText(text);
+				this.textPanel.setAlpha(ModOptions.compassTransparency);
+			}
+		}
 	}
 
 	@Override
 	public void doRender(@Nonnull final RenderGameOverlayEvent.Pre event) {
 
-		if (event.getType() != ElementType.CROSSHAIRS || !showClock())
+		if (event.getType() != ElementType.CROSSHAIRS || !this.textPanel.hasText())
 			return;
-
-		updateTime();
 
 		final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
 
