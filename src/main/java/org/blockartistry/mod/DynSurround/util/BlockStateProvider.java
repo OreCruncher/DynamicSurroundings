@@ -27,10 +27,12 @@ package org.blockartistry.mod.DynSurround.util;
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 /**
  * Simple provider that caches the last chunk referenced in hopes of getting a
@@ -41,7 +43,7 @@ public class BlockStateProvider {
 
 	protected World world;
 	protected Chunk chunk;
-
+	
 	public BlockStateProvider() {
 		this(null);
 	}
@@ -78,7 +80,22 @@ public class BlockStateProvider {
 
 	@Nonnull
 	public IBlockState getBlockState(final int x, final int y, final int z) {
-		return resolveChunk(x, z).getBlockState(x, y, z);
+
+		if (y >= 0 && y < 256) {
+
+			final ExtendedBlockStorage[] storageArrays = resolveChunk(x, z).getBlockStorageArray();
+
+			if (y >> 4 < storageArrays.length) {
+
+				final ExtendedBlockStorage extendedblockstorage = storageArrays[y >> 4];
+
+				if (extendedblockstorage != Chunk.NULL_BLOCK_STORAGE) {
+					return extendedblockstorage.get(x & 15, y & 15, z & 15);
+				}
+			}
+		}
+
+		return Blocks.AIR.getDefaultState();
 	}
 
 	public boolean isAvailable(final int x, final int z) {
@@ -99,4 +116,5 @@ public class BlockStateProvider {
 	public int getLightFor(@Nonnull final EnumSkyBlock type, @Nonnull final BlockPos pos) {
 		return resolveChunk(pos.getX(), pos.getZ()).getLightFor(type, pos);
 	}
+
 }
