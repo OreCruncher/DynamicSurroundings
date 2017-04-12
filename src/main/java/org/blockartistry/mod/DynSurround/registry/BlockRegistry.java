@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.registry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +56,9 @@ import org.blockartistry.mod.DynSurround.registry.BlockInfo.BlockInfoMutable;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
-import gnu.trove.set.hash.THashSet;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -73,9 +76,9 @@ public final class BlockRegistry extends Registry {
 
 	@Override
 	public void init() {
-		this.registry.clear();
-		this.alwaysOnEffects.clear();
-		this.hasSoundsAndEffects.clear();
+		this.registry = new HashMap<BlockInfo, BlockProfile>();
+		this.alwaysOnEffects = new HashSet<BlockInfo>();
+		this.hasSoundsAndEffects = new HashSet<BlockInfo>();
 	}
 
 	@Override
@@ -103,6 +106,11 @@ public final class BlockRegistry extends Registry {
 			while (itr.hasNext())
 				ModLog.info(MCHelper.nameOf(itr.next()));
 		}
+		
+		this.registry = ImmutableMap.copyOf(this.registry);
+		this.alwaysOnEffects = ImmutableSet.copyOf(this.alwaysOnEffects);
+		this.hasSoundsAndEffects = ImmutableSet.copyOf(this.hasSoundsAndEffects);
+		
 	}
 
 	@Override
@@ -110,9 +118,9 @@ public final class BlockRegistry extends Registry {
 
 	}
 
-	private final Map<BlockInfo, BlockProfile> registry = new HashMap<BlockInfo, BlockProfile>();
-	private final THashSet<BlockInfo> alwaysOnEffects = new THashSet<BlockInfo>();
-	private final THashSet<BlockInfo> hasSoundsAndEffects = new THashSet<BlockInfo>();
+	private Map<BlockInfo, BlockProfile> registry = new HashMap<BlockInfo, BlockProfile>();
+	private Set<BlockInfo> alwaysOnEffects = new HashSet<BlockInfo>();
+	private Set<BlockInfo> hasSoundsAndEffects = new HashSet<BlockInfo>();
 
 	private final BlockInfoMutable key = new BlockInfoMutable();
 
@@ -177,10 +185,6 @@ public final class BlockRegistry extends Registry {
 
 	@Nonnull
 	public SoundEffect[] getAllStepSounds(@Nonnull final IBlockState state) {
-		// Air and liquid have no step sounds so optimize that out
-		if (state.getBlock() == Blocks.AIR || state.getMaterial().isLiquid())
-			return NO_SOUNDS;
-
 		final BlockProfile entry = findProfile(state);
 		return entry != null ? entry.getStepSounds() : NO_SOUNDS;
 	}
@@ -188,24 +192,18 @@ public final class BlockRegistry extends Registry {
 	@Nullable
 	public SoundEffect getSound(@Nonnull final IBlockState state, @Nonnull final Random random) {
 		final BlockProfile entry = findProfile(state);
-		if (entry == null)
-			return null;
-
-		final SoundEffect[] sounds = entry.getSounds();
-		if (sounds == NO_SOUNDS)
-			return null;
-
-		if (random.nextInt(entry.getChance()) != 0)
+		final SoundEffect[] sounds;
+		if (entry == null || (sounds = entry.getSounds()) == NO_SOUNDS || random.nextInt(entry.getChance()) != 0)
 			return null;
 
 		return getRandomSound(sounds, random);
 	}
-	
+
 	public int getStepSoundChance(@Nonnull final IBlockState state) {
 		final BlockProfile entry = findProfile(state);
 		return entry != null ? entry.getStepChance() : 0;
 	}
-	
+
 	public int getSoundChance(@Nonnull final IBlockState state) {
 		final BlockProfile entry = findProfile(state);
 		return entry != null ? entry.getChance() : 0;
@@ -213,20 +211,9 @@ public final class BlockRegistry extends Registry {
 
 	@Nullable
 	public SoundEffect getStepSound(@Nonnull final IBlockState state, @Nonnull final Random random) {
-
-		// Air and liquid have no step sounds so optimize that out
-		if (state.getBlock() == Blocks.AIR || state.getMaterial().isLiquid())
-			return null;
-
 		final BlockProfile entry = findProfile(state);
-		if (entry == null)
-			return null;
-
-		final SoundEffect[] sounds = entry.getStepSounds();
-		if (sounds == NO_SOUNDS)
-			return null;
-
-		if (random.nextInt(entry.getStepChance()) != 0)
+		final SoundEffect[] sounds;
+		if (entry == null || (sounds = entry.getSounds()) == NO_SOUNDS || random.nextInt(entry.getStepChance()) != 0)
 			return null;
 
 		return getRandomSound(sounds, random);
@@ -339,7 +326,7 @@ public final class BlockRegistry extends Registry {
 					continue;
 				}
 
-				if(blockEffect != null) {
+				if (blockEffect != null) {
 					if (e.conditions != null)
 						blockEffect.setConditions(e.conditions);
 					blockData.addEffect(blockEffect);
