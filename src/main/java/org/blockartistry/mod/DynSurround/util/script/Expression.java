@@ -436,9 +436,9 @@ public final class Expression {
 		this.expression = expression;
 		this.originalExpression = expression;
 
-		this.operators.putAll(builtInOperators);
-		this.functions.putAll(builtInFunctions);
-		this.variables.putAll(builtInVariables);
+		this.operators = builtInOperators;
+		this.functions = builtInFunctions;
+		this.variables = builtInVariables;
 	}
 
 	/**
@@ -627,127 +627,6 @@ public final class Expression {
 			this.exp = stack.pop();
 		}
 		return this.exp.eval();
-	}
-
-	/**
-	 * Adds an operator to the list of supported operators.
-	 * 
-	 * @param operator
-	 *            The operator to add.
-	 * @return The previous operator with that name, or <code>null</code> if
-	 *         there was none.
-	 */
-	public Operator addOperator(final Operator operator) {
-		return this.operators.put(operator.getOper(), operator);
-	}
-
-	/**
-	 * Adds a function to the list of supported functions
-	 * 
-	 * @param function
-	 *            The function to add.
-	 * @return The previous operator with that name, or <code>null</code> if
-	 *         there was none.
-	 */
-	public Function addFunction(final Function function) {
-		return (Function) this.functions.put(function.getName(), function);
-	}
-
-	/**
-	 * Adds a lazy function function to the list of supported functions
-	 *
-	 * @param function
-	 *            The function to add.
-	 * @return The previous operator with that name, or <code>null</code> if
-	 *         there was none.
-	 */
-	public LazyFunction addLazyFunction(final LazyFunction function) {
-		return this.functions.put(function.getName(), function);
-	}
-
-	/**
-	 * Sets a variable value.
-	 * 
-	 * @param variable
-	 *            The variable name.
-	 * @param value
-	 *            The variable value.
-	 * @return The expression, allows to chain methods.
-	 */
-	public Expression setVariable(final String variable, final Float value) {
-		this.variables.put(variable, new NumberValue(value));
-		return this;
-	}
-
-	/**
-	 * Sets a variable value.
-	 * 
-	 * @param variable
-	 *            The variable to set.
-	 * @param value
-	 *            The variable value.
-	 * @return The expression, allows to chain methods.
-	 */
-	public Expression setVariable(final String variable, final String value) {
-		if (isNumber(value)) {
-			this.variables.put(variable, new NumberValue(Float.parseFloat(value)));
-		} else {
-			this.expression = expression.replaceAll("(?i)\\b" + variable + "\\b", "(" + value + ")");
-			this.rpn = null;
-		}
-		return this;
-	}
-
-	/**
-	 * Sets a variable value.
-	 * 
-	 * @param variable
-	 *            The variable to set.
-	 * @param value
-	 *            The variable value.
-	 * @return The expression, allows to chain methods.
-	 */
-	public Expression with(final String variable, final Float value) {
-		return setVariable(variable, value);
-	}
-
-	/**
-	 * Sets a variable value.
-	 * 
-	 * @param variable
-	 *            The variable to set.
-	 * @param value
-	 *            The variable value.
-	 * @return The expression, allows to chain methods.
-	 */
-	public Expression and(final String variable, final String value) {
-		return setVariable(variable, value);
-	}
-
-	/**
-	 * Sets a variable value.
-	 * 
-	 * @param variable
-	 *            The variable to set.
-	 * @param value
-	 *            The variable value.
-	 * @return The expression, allows to chain methods.
-	 */
-	public Expression and(final String variable, final Float value) {
-		return setVariable(variable, value);
-	}
-
-	/**
-	 * Sets a variable value.
-	 * 
-	 * @param variable
-	 *            The variable to set.
-	 * @param value
-	 *            The variable value.
-	 * @return The expression, allows to chain methods.
-	 */
-	public Expression with(final String variable, final String value) {
-		return setVariable(variable, value);
 	}
 
 	/**
