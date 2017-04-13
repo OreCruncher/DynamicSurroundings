@@ -127,7 +127,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.playerTemperature = seasons.getPlayerTemperature(world);
 			EnvironState.biomeTemperature = seasons.getBiomeTemperature(world, getPlayerPosition());
 			EnvironState.humid = EnvironState.truePlayerBiome.isHighHumidity();
-			EnvironState.dry = EnvironState.truePlayerBiome.getRainfall() == 0;
+			EnvironState.dry = EnvironState.truePlayerBiome.getRainfall() < 0.2F;
 
 			EnvironState.armorClass = ArmorClass.effectiveArmorClass(player);
 			EnvironState.footArmorClass = ArmorClass.footArmorClass(player);
