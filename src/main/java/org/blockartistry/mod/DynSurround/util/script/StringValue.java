@@ -51,7 +51,7 @@ public class StringValue extends Variant {
 	
 	@Override
 	public boolean asBoolean() {
-		return "FALSE".compareToIgnoreCase(this.value) != 0;
+		return !("FALSE".equalsIgnoreCase(this.value));
 	}
 
 	@Override

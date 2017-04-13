@@ -60,13 +60,13 @@ public class BooleanValue extends Variant {
 
 	@Override
 	public int compareTo(@Nonnull final Variant variant) {
-		return Boolean.compare(this.value, variant.asNumber() != 0);
+		return Boolean.compare(this.value, variant.asBoolean());
 	}
 
 	@Override
 	@Nonnull
 	public Variant add(@Nonnull final Variant term) {
-		return new BooleanValue(this.value || (term.asNumber() != 0));
+		return new BooleanValue(this.value || term.asBoolean());
 	}
 
 }

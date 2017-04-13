@@ -56,8 +56,8 @@ public class NumberValue extends Variant {
 	public String asString() {
 		final int i = (int) this.value;
 		if (i == this.value)
-			return String.format("%d", i);
-		return String.format("%f", this.value);
+			return Integer.toString(i);
+		return Float.toString(this.value);
 	}
 	
 	@Override
