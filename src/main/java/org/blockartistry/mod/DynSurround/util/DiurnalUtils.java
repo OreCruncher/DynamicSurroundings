@@ -61,7 +61,7 @@ public final class DiurnalUtils {
 			return DayCycle.DAYTIME;
 		if (brFactor < 0.1f)
 			return DayCycle.NIGHTTIME;
-		if (brFactor > 0.1f && brFactor < 0.6f && MathStuff.sin(world.getCelestialAngleRadians(1.0f)) > 0.0)
+		if (MathStuff.sin(world.getCelestialAngleRadians(1.0f)) > 0.0)
 			return DayCycle.SUNSET;
 		return DayCycle.SUNRISE;
 	}
