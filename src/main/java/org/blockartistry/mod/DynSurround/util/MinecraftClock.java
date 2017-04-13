@@ -23,23 +23,30 @@
 
 package org.blockartistry.mod.DynSurround.util;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.world.World;
 
 public class MinecraftClock {
-	
+
 	private static final String AM = Localization.format("format.AM");
 	private static final String PM = Localization.format("format.PM");
-	
+
 	protected int day;
 	protected int hour;
 	protected int minute;
 	protected boolean isAM;
 
 	public MinecraftClock() {
-		
+
 	}
 	
-	public MinecraftClock(final World world) {
+	public MinecraftClock(@Nonnull final World world) {
+		update(world);
+	}
+
+	public void update(@Nonnull final World world) {
+
 		long time = world.getWorldTime();
 		this.day = (int) (time / 24000);
 		time -= this.day * 24000;
@@ -53,36 +60,29 @@ public class MinecraftClock {
 			this.hour -= 24;
 			this.day++;
 		}
-		
-		if(this.hour >= 12) {
-			this.isAM = false;
-			if(this.hour > 12)
-				this.hour -= 12;
-		} else {
-			this.isAM = true;
-			if(this.hour == 0)
-				this.hour = 12;
-		}
+
+		this.isAM = this.hour < 12;
 	}
-	
+
 	public int getDay() {
 		return this.day;
 	}
-	
+
 	public int getHour() {
 		return this.hour;
 	}
-	
+
 	public int getMinute() {
 		return this.minute;
 	}
-	
+
 	public boolean isAM() {
 		return this.isAM;
 	}
-	
+
 	@Override
 	public String toString() {
-		return Localization.format("format.TimeOfDay", this.day, this.hour, this.minute, this.isAM ? AM : PM);
+		return Localization.format("format.TimeOfDay", this.day, this.hour > 12 ? this.hour - 12 : this.hour,
+				this.minute, this.isAM ? AM : PM);
 	}
 }

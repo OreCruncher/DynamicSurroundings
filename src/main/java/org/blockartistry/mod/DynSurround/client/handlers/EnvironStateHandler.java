@@ -101,7 +101,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		private static int tickCounter;
 		
-		private static MinecraftClock clock = new MinecraftClock();
+		private static final MinecraftClock clock = new MinecraftClock();
 
 		private static BlockPos getPlayerPos() {
 			return new BlockPos(player.posX, player.getEntityBoundingBox().minY, player.posZ);
@@ -113,7 +113,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 			EnvironState.player = player;
 			EnvironState.world = player.worldObj;
-			EnvironState.clock = new MinecraftClock(player.worldObj);
+			EnvironState.clock.update(EnvironState.world);
 			EnvironState.playerBiome = PlayerUtils.getPlayerBiome(player, false);
 			EnvironState.biomeName = EnvironState.playerBiome.getBiomeName();
 			EnvironState.season = seasons.getSeasonType(world);
