@@ -53,9 +53,6 @@ public class WeightTable<T extends WeightTable.Item> {
 	}
 
 	public void add(@Nonnull final T entry) {
-		assert entry != null;
-		assert entry.itemWeight > 0;
-		
 		this.totalWeight += entry.itemWeight;
 		entry.rnd = this.random;
 		this.items.add(entry);
@@ -68,11 +65,7 @@ public class WeightTable<T extends WeightTable.Item> {
 
 	@Nonnull
 	public T next() {
-
-		assert this.totalWeight > 0;
-		assert this.items != null && !this.items.isEmpty();
-		
-		if(this.totalWeight < 1 || this.items == null || this.items.isEmpty())
+		if(this.totalWeight < 1 || this.items.isEmpty())
 			return null;
 		
 		int targetWeight = this.random.nextInt(this.totalWeight);

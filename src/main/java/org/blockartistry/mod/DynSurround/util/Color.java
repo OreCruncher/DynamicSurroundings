@@ -24,7 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.util;
 
-import java.util.IdentityHashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -105,7 +105,7 @@ public class Color {
 	public static final Color MC_YELLOW = new ImmutableColor(255, 255, 85);
 	public static final Color MC_WHITE = new ImmutableColor(255, 255, 255);
 
-	private static final Map<TextFormatting, Color> colorLookup = new IdentityHashMap<TextFormatting, Color>();
+	private static final Map<TextFormatting, Color> colorLookup = new EnumMap<TextFormatting, Color>(TextFormatting.class);
 	static {
 		colorLookup.put(TextFormatting.BLACK, MC_BLACK);
 		colorLookup.put(TextFormatting.DARK_BLUE, MC_DARKBLUE);
