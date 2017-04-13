@@ -99,7 +99,7 @@ public class BlockInfo {
 		return this.specialMeta != NO_SUBTYPE;
 	}
 
-	private final static int TERM = 3079;
+	private final static int TERM = 769;
 
 	@Override
 	public int hashCode() {
@@ -108,10 +108,7 @@ public class BlockInfo {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
-			return true;
-		final BlockInfo key = (BlockInfo) obj;
-		return this.block == key.block && this.meta == key.meta;
+		return this.block == ((BlockInfo)obj).block && this.meta == ((BlockInfo)obj).meta;
 	}
 
 	@Nullable
