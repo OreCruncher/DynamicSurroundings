@@ -117,10 +117,20 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 		return null;
 	}
 	
+	public void preScan() {
+		
+	}
+	
+	public void postScan() {
+		
+	}
+	
 	@Override
 	public void update() {
 
 		this.blockProvider.setWorld(EnvironState.getWorld());
+		
+		preScan();
 		
 		for (int count = 0; count < this.blocksPerTick; count++) {
 			final BlockPos pos = nextPos(this.workingPos, this.random);
@@ -131,6 +141,8 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 				blockScan(state, pos, this.random);
 			}
 		}
+		
+		postScan();
 
 	}
 
