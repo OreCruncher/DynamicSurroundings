@@ -167,8 +167,7 @@ public final class BiomeRegistry extends Registry {
 						biomeEntry.setDustColor(new Color(rgb[0], rgb[1], rgb[2]));
 				}
 				if (entry.soundReset != null && entry.soundReset.booleanValue()) {
-					biomeEntry.getSounds().clear();
-					biomeEntry.getSpotSounds().clear();
+					biomeEntry.resetSounds();
 				}
 
 				if (entry.spotSoundChance != null)
@@ -179,9 +178,9 @@ public final class BiomeRegistry extends Registry {
 						continue;
 					final SoundEffect s = new SoundEffect(sr);
 					if (s.type == SoundType.SPOT)
-						biomeEntry.getSpotSounds().add(s);
+						biomeEntry.addSpotSound(s);
 					else
-						biomeEntry.getSounds().add(s);
+						biomeEntry.addSound(s);
 				}
 			}
 		}

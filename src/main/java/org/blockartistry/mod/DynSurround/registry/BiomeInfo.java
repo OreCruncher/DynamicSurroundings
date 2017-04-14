@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
 import org.blockartistry.mod.DynSurround.client.handlers.AreaSoundEffectHandler;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.util.Color;
+import org.blockartistry.mod.DynSurround.util.MyUtils;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
@@ -41,6 +42,7 @@ import net.minecraft.world.biome.Biome.TempCategory;
 public class BiomeInfo {
 
 	public static final int DEFAULT_SPOT_CHANCE = 1200 / AreaSoundEffectHandler.SCAN_INTERVAL;
+	public final static SoundEffect[] NO_SOUNDS = {};
 
 	protected final Biome biome;
 
@@ -49,15 +51,16 @@ public class BiomeInfo {
 	protected boolean hasAurora;
 	protected boolean hasFog;
 
-	protected List<SoundEffect> sounds;
-	protected int spotSoundChance;
-	protected List<SoundEffect> spotSounds;
+	private Color dustColor;
+	private Color fogColor;
+	private float fogDensity;
+
+	protected SoundEffect[] sounds = NO_SOUNDS;
+	protected SoundEffect[] spotSounds = NO_SOUNDS;
+	protected int spotSoundChance = DEFAULT_SPOT_CHANCE;
 
 	public BiomeInfo(@Nonnull final Biome biome) {
 		this.biome = biome;
-		this.sounds = new ArrayList<SoundEffect>();
-		this.spotSounds = new ArrayList<SoundEffect>();
-		this.spotSoundChance = DEFAULT_SPOT_CHANCE;
 		
 		if(!this.isFake())
 			this.hasPrecipitation = canRain() || getEnableSnow();
@@ -107,10 +110,6 @@ public class BiomeInfo {
 		this.hasFog = flag;
 	}
 
-	private Color dustColor;
-	private Color fogColor;
-	private float fogDensity;
-
 	public Color getDustColor() {
 		return this.dustColor;
 	}
@@ -135,22 +134,16 @@ public class BiomeInfo {
 		this.fogDensity = density;
 	}
 
-	@Nonnull
-	public List<SoundEffect> getSounds() {
-		return this.sounds;
-	}
-
-	public int getSpotSoundChance() {
-		return this.spotSoundChance;
-	}
-
 	public void setSpotSoundChance(final int chance) {
 		this.spotSoundChance = chance;
 	}
-
-	@Nonnull
-	public List<SoundEffect> getSpotSounds() {
-		return this.spotSounds;
+	
+	public void addSound(final SoundEffect sound) {
+		this.sounds = MyUtils.append(this.sounds, sound);
+	}
+	
+	public void addSpotSound(final SoundEffect sound) {
+		this.spotSounds = MyUtils.append(this.spotSounds, sound);
 	}
 
 	public boolean isFake() {
@@ -183,23 +176,28 @@ public class BiomeInfo {
 
 	@Nonnull
 	public void findSoundMatches(@Nonnull final List<SoundEffect> results) {
-		for (final SoundEffect sound : this.sounds)
+		for(int i = 0; i < this.sounds.length; i++) {
+			final SoundEffect sound = this.sounds[i];
 			if (sound.matches())
 				results.add(sound);
+		}
 	}
 
 	@Nullable
 	public SoundEffect getSpotSound(@Nonnull final Random random) {
-		if (this.getSpotSounds().isEmpty() || random.nextInt(this.getSpotSoundChance()) != 0)
+		if (this.spotSounds == NO_SOUNDS || random.nextInt(this.spotSoundChance) != 0)
 			return null;
 
 		int totalWeight = 0;
-		final List<SoundEffect> candidates = new ArrayList<SoundEffect>();
-		for (final SoundEffect s : getSpotSounds())
+		final List<SoundEffect> candidates = new ArrayList<SoundEffect>(this.spotSounds.length);
+		for(int i = 0; i < this.spotSounds.length; i++) {
+			final SoundEffect s = this.spotSounds[i];
 			if (s.matches()) {
 				candidates.add(s);
 				totalWeight += s.weight;
 			}
+		}
+		
 		if (totalWeight <= 0)
 			return null;
 
@@ -215,8 +213,8 @@ public class BiomeInfo {
 	}
 
 	public void resetSounds() {
-		this.sounds.clear();
-		this.spotSounds.clear();
+		this.sounds = NO_SOUNDS;
+		this.spotSounds = NO_SOUNDS;
 		this.spotSoundChance = DEFAULT_SPOT_CHANCE;
 	}
 
@@ -250,14 +248,14 @@ public class BiomeInfo {
 			builder.append(" fogDensity:").append(this.fogDensity);
 		}
 
-		if (!this.sounds.isEmpty()) {
+		if (this.sounds.length > 0) {
 			builder.append("; sounds [");
 			for (final SoundEffect sound : this.sounds)
 				builder.append(sound.toString()).append(',');
 			builder.append(']');
 		}
 
-		if (!this.spotSounds.isEmpty()) {
+		if (this.spotSounds.length > 0) {
 			builder.append("; spot sound chance:").append(this.spotSoundChance);
 			builder.append(" spot sounds [");
 			for (final SoundEffect sound : this.spotSounds)
