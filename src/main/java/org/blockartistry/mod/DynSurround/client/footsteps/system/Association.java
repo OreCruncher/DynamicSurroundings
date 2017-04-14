@@ -107,7 +107,7 @@ public class Association {
 			return false;
 		final IBlockState footstepState = FacadeHelper.resolveState(this.state, EnvironState.getWorld(), this.pos,
 				EnumFacing.UP);
-		return footstepState != null && FOOTPRINTABLE.contains(footstepState.getMaterial());
+		return FOOTPRINTABLE.contains(footstepState.getMaterial());
 	}
 
 	@Nullable

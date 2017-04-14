@@ -31,7 +31,7 @@ import org.blockartistry.mod.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.PrimitiveMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IStepPlayer;
-import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -51,11 +51,11 @@ public class Isolator {
 		this.blockMap = new BlockMap(this);
 	}
 
-	public void onFrame() {
+	public void onFrame(@Nonnull final EntityPlayer player) {
 		if (this.generator == null)
 			return;
 
-		this.generator.generateFootsteps(EnvironState.getPlayer());
+		this.generator.generateFootsteps(player);
 		this.acoustics.think();
 	}
 
