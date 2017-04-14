@@ -41,7 +41,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public final class WorldUtils {
 
 	private static final BlockStateProvider blockProvider = new BlockStateProvider();
-	
+
 	private WorldUtils() {
 
 	}
@@ -82,7 +82,7 @@ public final class WorldUtils {
 	public static IBlockState getBlockState(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return blockProvider.setWorld(world).getBlockState(pos);
 	}
-	
+
 	@Nonnull
 	public static IBlockState getBlockState(@Nonnull final World world, final int x, final int y, final int z) {
 		return blockProvider.setWorld(world).getBlockState(x, y, z);

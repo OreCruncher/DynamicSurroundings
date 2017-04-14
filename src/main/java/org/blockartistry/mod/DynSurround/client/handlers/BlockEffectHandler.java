@@ -61,7 +61,7 @@ public class BlockEffectHandler extends EffectHandlerBase {
 		if (EnvironState.isPlayerOnGround() && EnvironState.isPlayerMoving()) {
 			final BlockPos pos = EnvironState.getPlayerPosition().down(1);
 			final IBlockState state = WorldUtils.getBlockState(world, pos);
-			final SoundEffect sound = getBlockRegistry().getStepSound(state, RANDOM);
+			final SoundEffect sound = getBlockRegistry().getStepSoundToPlay(state, RANDOM);
 			if (sound != null)
 				sound.doEffect(state, world, pos, RANDOM);
 		}

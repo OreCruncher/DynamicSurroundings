@@ -24,24 +24,19 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers.scanners;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
-import org.blockartistry.mod.DynSurround.client.fx.ISpecialEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.mod.DynSurround.registry.BlockInfo.BlockInfoMutable;
+import org.blockartistry.mod.DynSurround.registry.BlockProfile;
 import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.scanner.RandomScanner;
-
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -59,14 +54,8 @@ public class RandomBlockEffectScanner extends RandomScanner {
 	private static final float RATIO = 1000.0F / (16.0F * 16.0F * 16.0F);
 
 	protected final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
-	
-	// State for remembering the last block state that was looked at.  The idea
-	// is that if there is a concentration of a particular block type in the area
-	// repeated calls back to the BlockRegistry to get effects can be avoided by
-	// using the cached state.
-	protected BlockInfoMutable previousBlock = new BlockInfoMutable();
-	protected BlockInfoMutable scratch = new BlockInfoMutable();
-	protected BlockEffect[] previous = null;
+	protected BlockProfile profile = null;
+	protected IBlockState lastState = null;
 
 	public RandomBlockEffectScanner(final int range) {
 		super("RandomBlockEffectScanner", range, (int) (range * range * range * RATIO));
@@ -74,50 +63,30 @@ public class RandomBlockEffectScanner extends RandomScanner {
 
 	@Override
 	protected boolean interestingBlock(@Nonnull final IBlockState state) {
-		if(state.getBlock() == Blocks.AIR)
+		if (state == AIR_BLOCK)
 			return false;
-		
-		this.scratch.set(state);
-		if (this.previousBlock.equals(this.scratch))
-			return true;
-		
-		final boolean interesting = this.blocks.hasEffectsOrSounds(this.scratch);
-		if (interesting) {
-			// Swap previous and scratch
-			final BlockInfoMutable temp = this.previousBlock;
-			this.previousBlock = this.scratch;
-			this.scratch = temp;
-			this.previous = null;
+		if (this.lastState != state) {
+			this.lastState = state;
+			this.profile = this.blocks.findProfile(state);
 		}
-		return interesting;
-	}
-
-	protected List<ISpecialEffect> getEffectsToImplement(@Nonnull final World world, @Nonnull final IBlockState state,
-			@Nonnull final BlockPos pos, @Nonnull final Random rand) {
-
-		final List<ISpecialEffect> results = new ArrayList<ISpecialEffect>();
-		if (this.previous == null)
-			this.previous = this.blocks.getEffects(state);
-
-		for (final BlockEffect effect : this.previous)
-			if (effect.canTrigger(state, world, pos, rand))
-				results.add(effect);
-
-		final SoundEffect sound = this.blocks.getSound(state, rand);
-		if (sound != null)
-			results.add(sound);
-
-		return results;
+		return this.profile.hasSoundsOrEffects();
 	}
 
 	@Override
 	public void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final Random rand) {
 
 		final World world = EnvironState.getWorld();
-		final List<ISpecialEffect> effects = getEffectsToImplement(world, state, pos, rand);
-		for (final ISpecialEffect effect : effects)
-			effect.doEffect(state, world, pos, rand);
 
+		final BlockEffect[] effects = this.profile.getEffects();
+		for (int i = 0; i < effects.length; i++) {
+			final BlockEffect be = effects[i];
+			if (be.canTrigger(state, world, pos, rand))
+				be.doEffect(state, world, pos, rand);
+		}
+
+		final SoundEffect sound = this.profile.getSoundToPlay(rand);
+		if (sound != null)
+			sound.doEffect(state, world, pos, rand);
 	}
 
 }
