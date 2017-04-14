@@ -162,12 +162,22 @@ public class BlockInfo {
 
 	public static class BlockInfoMutable extends BlockInfo {
 
+		protected IBlockState lastState;
+		protected int originalMeta;
+
 		public BlockInfoMutable() {
 			super((Block) null);
+			
+			this.originalMeta = this.meta;
 		}
 
 		public BlockInfoMutable set(@Nonnull final IBlockState state) {
-			configure(state);
+			if(this.lastState == state) {
+				this.meta = this.originalMeta;
+			} else {
+				configure(state);
+				this.originalMeta = this.meta;
+			}
 			return this;
 		}
 
@@ -175,6 +185,7 @@ public class BlockInfo {
 			this.block = info.block;
 			this.meta = info.meta;
 			this.specialMeta = info.specialMeta;
+			this.originalMeta = this.meta;
 			return this;
 		}
 

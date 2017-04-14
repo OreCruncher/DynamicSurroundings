@@ -30,13 +30,12 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.registry.BlockInfo;
+import org.blockartistry.mod.DynSurround.registry.BlockProfile;
 import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.scanner.CuboidScanner;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -54,7 +53,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 
 	protected final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
-	protected final BlockInfo.BlockInfoMutable blockInfo = new BlockInfo.BlockInfoMutable();
+	protected BlockProfile profile = null;
+	protected IBlockState lastState = null;
 
 	public AlwaysOnBlockEffectScanner(final int range) {
 		super("AlwaysOnBlockEffectScanner", range, 0);
@@ -62,16 +62,24 @@ public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 
 	@Override
 	protected boolean interestingBlock(final IBlockState state) {
-		return state.getBlock() != Blocks.AIR && this.blocks.hasAlwaysOnEffects(this.blockInfo.set(state));
+		if (state == AIR_BLOCK)
+			return false;
+		if (this.lastState != state) {
+			this.lastState = state;
+			this.profile = this.blocks.findProfile(state);
+		}
+		return this.profile.hasAlwaysOnEffects();
 	}
 
 	@Override
 	public void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final Random rand) {
 		final World world = EnvironState.getWorld();
-		final BlockEffect[] effects = this.blocks.getAlwaysOnEffects(state);
-		for (final BlockEffect be : effects)
+		final BlockEffect[] effects = this.profile.getAlwaysOnEffects();
+		for (int i = 0; i < effects.length; i++) {
+			final BlockEffect be = effects[i];
 			if (be.canTrigger(state, world, pos, rand))
 				be.doEffect(state, world, pos, rand);
+		}
 	}
 
 }

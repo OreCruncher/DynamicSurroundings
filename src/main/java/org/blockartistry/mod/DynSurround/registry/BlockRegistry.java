@@ -24,15 +24,11 @@
 
 package org.blockartistry.mod.DynSurround.registry;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -57,8 +53,6 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -66,9 +60,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 
 public final class BlockRegistry extends Registry {
-
-	public final static BlockEffect[] NO_EFFECTS = {};
-	public final static SoundEffect[] NO_SOUNDS = {};
 
 	private static final BlockProfile NO_PROFILE = BlockProfile
 			.createProfile(new BlockInfo(Blocks.AIR.getDefaultState())).setChance(0).setStepChance(0);
@@ -80,20 +71,11 @@ public final class BlockRegistry extends Registry {
 	@Override
 	public void init() {
 		this.registry = new HashMap<BlockInfo, BlockProfile>();
-		this.alwaysOnEffects = new HashSet<BlockInfo>();
-		this.hasSoundsAndEffects = new HashSet<BlockInfo>();
+		this.cache = new IdentityHashMap<IBlockState, BlockProfile>();
 	}
 
 	@Override
 	public void initComplete() {
-
-		// Scan the registry looking for profiles that match what we want.
-		for (final BlockProfile profile : this.registry.values()) {
-			if (profile.getAlwaysOnEffects().length > 0)
-				this.alwaysOnEffects.add(profile.info);
-			if (profile.getEffects().length > 0 || profile.getSounds().length > 0)
-				this.hasSoundsAndEffects.add(profile.info);
-		}
 
 		if (ModOptions.enableDebugLogging) {
 			ModLog.info("*** BLOCK REGISTRY ***");
@@ -111,9 +93,6 @@ public final class BlockRegistry extends Registry {
 		}
 
 		this.registry = ImmutableMap.copyOf(this.registry);
-		this.alwaysOnEffects = ImmutableSet.copyOf(this.alwaysOnEffects);
-		this.hasSoundsAndEffects = ImmutableSet.copyOf(this.hasSoundsAndEffects);
-
 	}
 
 	@Override
@@ -122,17 +101,23 @@ public final class BlockRegistry extends Registry {
 	}
 
 	private Map<BlockInfo, BlockProfile> registry = new HashMap<BlockInfo, BlockProfile>();
-	private Set<BlockInfo> alwaysOnEffects = new HashSet<BlockInfo>();
-	private Set<BlockInfo> hasSoundsAndEffects = new HashSet<BlockInfo>();
+	private Map<IBlockState, BlockProfile> cache = new IdentityHashMap<IBlockState, BlockProfile>();
 
 	private final BlockInfoMutable key = new BlockInfoMutable();
 
-	private BlockProfile findProfile(@Nonnull final IBlockState state) {
-		BlockProfile profile = this.registry.get(this.key.set(state));
-		if (profile == null && this.key.hasSubTypes()) {
-			profile = this.registry.get(this.key.asGeneric());
+	@Nonnull
+	public BlockProfile findProfile(@Nonnull final IBlockState state) {
+		BlockProfile profile = this.cache.get(state);
+		if (profile == null) {
+			profile = this.registry.get(this.key.set(state));
+			if (profile == null && this.key.hasSubTypes()) {
+				profile = this.registry.get(this.key.asGeneric());
+			}
+			if (profile == null)
+				profile = NO_PROFILE;
+			this.cache.put(state, profile);
 		}
-		return profile == null ? NO_PROFILE : profile;
+		return profile;
 	}
 
 	@Nonnull
@@ -146,35 +131,6 @@ public final class BlockRegistry extends Registry {
 	}
 
 	@Nonnull
-	private SoundEffect getRandomSound(@Nonnull final SoundEffect[] list, @Nonnull final Random random) {
-		// Build a weight table on the fly
-		int totalWeight = 0;
-		final List<SoundEffect> candidates = new ArrayList<SoundEffect>(list.length);
-		for (int i = 0; i < list.length; i++) {
-			final SoundEffect s = list[i];
-			if (s.matches()) {
-				candidates.add(s);
-				totalWeight += s.weight;
-			}
-		}
-
-		// It's possible all the sounds got filtered out
-		if (totalWeight <= 0)
-			return null;
-
-		// Possible that there is a single candidate
-		if (candidates.size() == 1)
-			return candidates.get(0);
-
-		int targetWeight = random.nextInt(totalWeight);
-		int i = 0;
-		for (i = candidates.size(); (targetWeight -= candidates.get(i - 1).weight) >= 0; i--)
-			;
-
-		return candidates.get(i - 1);
-	}
-
-	@Nonnull
 	public SoundEffect[] getAllSounds(@Nonnull final IBlockState state) {
 		return findProfile(state).getSounds();
 	}
@@ -182,16 +138,6 @@ public final class BlockRegistry extends Registry {
 	@Nonnull
 	public SoundEffect[] getAllStepSounds(@Nonnull final IBlockState state) {
 		return findProfile(state).getStepSounds();
-	}
-
-	@Nullable
-	public SoundEffect getSound(@Nonnull final IBlockState state, @Nonnull final Random random) {
-		final BlockProfile profile = findProfile(state);
-		final SoundEffect[] sounds = profile.getSounds();
-		if (sounds == NO_SOUNDS || random.nextInt(profile.getChance()) != 0)
-			return null;
-
-		return getRandomSound(sounds, random);
 	}
 
 	public int getStepSoundChance(@Nonnull final IBlockState state) {
@@ -203,34 +149,13 @@ public final class BlockRegistry extends Registry {
 	}
 
 	@Nullable
-	public SoundEffect getStepSound(@Nonnull final IBlockState state, @Nonnull final Random random) {
-		final BlockProfile profile = findProfile(state);
-		final SoundEffect[] sounds = profile.getStepSounds();
-		if (sounds == NO_SOUNDS || random.nextInt(profile.getStepChance()) != 0)
-			return null;
-
-		return getRandomSound(sounds, random);
+	public SoundEffect getStepSoundToPlay(@Nonnull final IBlockState state, @Nonnull final Random rand) {
+		return findProfile(state).getStepSoundToPlay(rand);
 	}
 
-	private boolean isInteresting(@Nonnull final Set<BlockInfo> data, @Nonnull final BlockInfo info) {
-		if (info.getBlock() == Blocks.AIR)
-			return false;
-
-		if (data.contains(info))
-			return true;
-
-		if (!info.hasSubTypes())
-			return false;
-
-		return data.contains(this.key.set(info).asGeneric());
-	}
-
-	public boolean hasAlwaysOnEffects(@Nonnull final BlockInfo info) {
-		return isInteresting(this.alwaysOnEffects, info);
-	}
-
-	public boolean hasEffectsOrSounds(@Nonnull final BlockInfo info) {
-		return isInteresting(this.hasSoundsAndEffects, info);
+	@Nullable
+	public SoundEffect getSoundToPlay(@Nonnull final IBlockState state, @Nonnull final Random rand) {
+		return findProfile(state).getSoundToPlay(rand);
 	}
 
 	@Nullable
