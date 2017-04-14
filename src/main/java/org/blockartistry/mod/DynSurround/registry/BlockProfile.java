@@ -48,28 +48,32 @@ public class BlockProfile {
 		this.info = blockInfo;
 	}
 
-	public void setChance(final int chance) {
+	public BlockProfile setChance(final int chance) {
 		this.chance = chance;
+		return this;
 	}
 
 	public int getChance() {
 		return this.chance;
 	}
 
-	public void setStepChance(final int chance) {
+	public BlockProfile setStepChance(final int chance) {
 		this.stepChance = chance;
+		return this;
 	}
 
 	public int getStepChance() {
 		return this.stepChance;
 	}
 
-	public void addSound(@Nonnull final SoundEffect sound) {
+	public BlockProfile addSound(@Nonnull final SoundEffect sound) {
 		this.sounds = MyUtils.append(this.sounds, sound);
+		return this;
 	}
 
-	public void clearSounds() {
+	public BlockProfile clearSounds() {
 		this.sounds = BlockRegistry.NO_SOUNDS;
+		return this;
 	}
 
 	@Nonnull
@@ -77,12 +81,14 @@ public class BlockProfile {
 		return this.sounds;
 	}
 
-	public void addStepSound(@Nonnull final SoundEffect sound) {
+	public BlockProfile addStepSound(@Nonnull final SoundEffect sound) {
 		this.stepSounds = MyUtils.append(this.stepSounds, sound);
+		return this;
 	}
 
-	public void clearStepSounds() {
+	public BlockProfile clearStepSounds() {
 		this.stepSounds = BlockRegistry.NO_SOUNDS;
+		return this;
 	}
 
 	@Nonnull
@@ -90,16 +96,18 @@ public class BlockProfile {
 		return this.stepSounds;
 	}
 
-	public void addEffect(@Nonnull final BlockEffect effect) {
+	public BlockProfile addEffect(@Nonnull final BlockEffect effect) {
 		if (effect.getChance() > 0)
 			this.effects = MyUtils.append(this.effects, effect);
 		else
 			this.alwaysOn = MyUtils.append(this.alwaysOn, effect);
+		return this;
 	}
 
-	public void clearEffects() {
+	public BlockProfile clearEffects() {
 		this.effects = BlockRegistry.NO_EFFECTS;
 		this.alwaysOn = BlockRegistry.NO_EFFECTS;
+		return this;
 	}
 
 	@Nonnull
