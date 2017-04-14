@@ -59,12 +59,12 @@ public final class BiomeRegistry extends Registry {
 	public static final FakeBiome CLOUDS = new FakeBiome("Clouds");
 	public static final FakeBiome VILLAGE = new FakeBiome("Village");
 
-	public static BiomeInfo VILLAGE_INFO;
-	public static BiomeInfo PLAYER_INFO;
-	public static BiomeInfo UNDERGROUND_INFO;
-	public static BiomeInfo CLOUDS_INFO;
-	public static BiomeInfo OUTERSPACE_INFO;
-	public static BiomeInfo WTF_INFO;
+	public BiomeInfo VILLAGE_INFO;
+	public BiomeInfo PLAYER_INFO;
+	public BiomeInfo UNDERGROUND_INFO;
+	public BiomeInfo CLOUDS_INFO;
+	public BiomeInfo OUTERSPACE_INFO;
+	public BiomeInfo WTF_INFO;
 
 	// This is for cases when the biome coming in doesn't make sense
 	// and should default to something to avoid crap.

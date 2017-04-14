@@ -90,7 +90,7 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		return !(ModOptions.enableBiomeSounds && (EnvironState.getTickCounter() % SCAN_INTERVAL) == 0
 				&& EnvironState.getWorld().isBlockLoaded(EnvironState.getPlayerPosition()));
 	}
-
+	
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 
@@ -100,11 +100,13 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<SoundEffect>();
 		if (doBiomeSounds())
 			getBiomeSounds(sounds);
+		
+		final BiomeRegistry registry = this.getBiomeRegistry();
 
 		final List<SoundEffect> playerSounds = new ArrayList<SoundEffect>();
-		BiomeRegistry.PLAYER_INFO.findSoundMatches(playerSounds);
-		if (EnvironState.inVillage())
-			BiomeRegistry.VILLAGE_INFO.findSoundMatches(playerSounds);
+		registry.PLAYER_INFO.findSoundMatches(playerSounds);
+		if(EnvironState.inVillage())
+			registry.VILLAGE_INFO.findSoundMatches(playerSounds);
 
 		for (final SoundEffect effect : playerSounds)
 			sounds.put(effect, 1.0F);
@@ -118,7 +120,7 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 				SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound);
 		}
 
-		final SoundEffect sound = BiomeRegistry.PLAYER_INFO.getSpotSound(RANDOM);
+		final SoundEffect sound = registry.PLAYER_INFO.getSpotSound(RANDOM);
 		if (sound != null)
 			SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound);
 	}
