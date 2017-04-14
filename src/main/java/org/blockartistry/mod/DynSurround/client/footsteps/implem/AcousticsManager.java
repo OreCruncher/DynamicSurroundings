@@ -112,28 +112,29 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		}
 	}
 
+	private static void logAcousticPlay(@Nonnull final IAcoustic[] acoustics, @Nonnull final EventType event) {
+		final StringBuilder builder = new StringBuilder();
+		boolean doComma = false;
+		for (int i = 0; i < acoustics.length; i++) {
+			if (doComma)
+				builder.append(",");
+			else
+				doComma = true;
+			builder.append(acoustics[i].getAcousticName());
+		}
+		ModLog.debug("  Playing acoustic " + builder.toString() + " for event " + event.toString().toUpperCase());
+	}
+
 	public void playAcoustic(@Nonnull final Object location, @Nonnull final IAcoustic[] acoustics,
 			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
-		if (acoustics == null || acoustics.length == 0) {
-			ModLog.debug("Attempt to play acoustic with no name");
-			return;
-		}
 
-		if (ModLog.DEBUGGING) {
-			final StringBuilder builder = new StringBuilder();
-			boolean doComma = false;
-			for (final IAcoustic acoustic : acoustics) {
-				if (doComma)
-					builder.append(",");
-				else
-					doComma = true;
-				builder.append(acoustic.getAcousticName());
+		if (acoustics != null) {
+			if (ModLog.DEBUGGING)
+				logAcousticPlay(acoustics, event);
+
+			for (int i = 0; i < acoustics.length; i++) {
+				acoustics[i].playSound(mySoundPlayer(), location, event, inputOptions);
 			}
-			ModLog.debug("  Playing acoustic " + builder.toString() + " for event " + event.toString().toUpperCase());
-		}
-
-		for (final IAcoustic acoustic : acoustics) {
-			acoustic.playSound(mySoundPlayer(), location, event, inputOptions);
 		}
 	}
 
@@ -165,7 +166,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 			SoundType soundType = assos.getSoundType();
 			if (!assos.isLiquid() && assos.getSoundType() != null) {
 
-				if (EnvironState.getWorld().getBlockState(assos.getPos().up()).getBlock() == Blocks.SNOW_LAYER) {
+				if (WorldUtils.getBlockState(EnvironState.getWorld(), assos.getPos().up())
+						.getBlock() == Blocks.SNOW_LAYER) {
 					soundType = MCHelper.getSoundType(Blocks.SNOW_LAYER);
 				}
 
@@ -188,7 +190,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 					final long delay = TimeUtils.currentTimeMillis()
 							+ randAB(RANDOM, options.asLong(Option.DELAY_MIN), options.asLong(Option.DELAY_MAX));
 					this.pending.add(new PendingSound(location, sound, volume, pitch, null, delay,
-							options.hasOption(Option.SKIPPABLE) ? -1 : options.asLong(Option.DELAY_MAX)));
+							options.asLong(Option.DELAY_MAX)));
 				} else {
 					actuallyPlaySound((Entity) location, sound, volume, pitch);
 				}
@@ -225,9 +227,12 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	public void think() {
 
+		if (this.pending.isEmpty())
+			return;
+
 		final long time = TimeUtils.currentTimeMillis();
 
-		while (!this.pending.isEmpty() && this.pending.peek().getTimeToPlay() <= time) {
+		while (this.pending.peek().getTimeToPlay() <= time) {
 			final PendingSound sound = this.pending.poll();
 			if (!sound.isLate(time)) {
 				sound.playSound(this);
@@ -235,6 +240,9 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 				ModLog.debug("    Skipped late sound (late by " + sound.howLate(time) + "ms, tolerence is "
 						+ sound.getLateTolerance() + "ms)");
 			}
+
+			if (this.pending.isEmpty())
+				break;
 		}
 	}
 

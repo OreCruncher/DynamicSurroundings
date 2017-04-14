@@ -33,7 +33,6 @@ public interface IOptions {
 	public static enum Option {
 		DELAY_MIN,
 		DELAY_MAX,
-		SKIPPABLE,
 		GLIDING_VOLUME,
 		GLIDING_PITCH
 		
