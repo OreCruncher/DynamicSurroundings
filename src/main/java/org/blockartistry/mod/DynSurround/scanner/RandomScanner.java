@@ -36,6 +36,10 @@ import net.minecraft.util.math.BlockPos;
  */
 public abstract class RandomScanner extends Scanner {
 
+	private int playerX;
+	private int playerY;
+	private int playerZ;
+
 	public RandomScanner(@Nonnull final String name, final int range) {
 		super(name, range);
 	}
@@ -44,16 +48,23 @@ public abstract class RandomScanner extends Scanner {
 		super(name, range, blocksPerTick);
 	}
 
-	protected static int randomRange(final int range, final Random rand) {
+	private static int randomRange(final int range, final Random rand) {
 		return rand.nextInt(range) - rand.nextInt(range);
+	}
+
+	@Override
+	public void preScan() {
+		final BlockPos pos = EnvironState.getPlayerPosition();
+		this.playerX = pos.getX();
+		this.playerY = pos.getY();
+		this.playerZ = pos.getZ();
 	}
 
 	@Override
 	@Nonnull
 	protected BlockPos nextPos(@Nonnull final BlockPos.MutableBlockPos workingPos, @Nonnull final Random rand) {
-		final BlockPos pos = EnvironState.getPlayerPosition();
-		return workingPos.setPos(pos.getX() + randomRange(this.xRange, rand),
-				pos.getY() + randomRange(this.yRange, rand), pos.getZ() + randomRange(this.zRange, rand));
+		return workingPos.setPos(this.playerX + randomRange(this.xRange, rand),
+				this.playerY + randomRange(this.yRange, rand), this.playerZ + randomRange(this.zRange, rand));
 	}
 
 }
