@@ -178,7 +178,7 @@ public class FootstepsRegistry extends Registry {
 	}
 
 	public void process(@Nonnull World world, @Nonnull EntityPlayer player) {
-		this.isolator.onFrame();
+		this.isolator.onFrame(player);
 		player.nextStepDistance = Integer.MAX_VALUE;
 	}
 

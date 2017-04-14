@@ -111,8 +111,7 @@ public class Generator {
 			scalStat = !scalStat;
 
 			if (scalStat && VAR.PLAY_WANDER && !mod.getSolver().hasSpecialStoppingConditions(ply)) {
-				mod.getSolver().playAssociation(ply, mod.getSolver().findAssociationForPlayer(ply, 0d, isRightFoot),
-						EventType.WANDER);
+				playSinglefoot(ply, 0d, EventType.WANDER, isRightFoot);
 			}
 		}
 		xMovec = movX;
@@ -133,13 +132,7 @@ public class Generator {
 
 			if (ply.isOnLadder() && !ply.onGround) {
 				distance = VAR.DISTANCE_LADDER;
-			} else if (!ply.isInWater() && MathStuff.abs(this.yPosition - ply.posY) > 0.4d // &&
-																							// Math.abs(this.yPosition
-																							// -
-																							// ply.posY)
-																							// <
-																							// 0.7d)
-			) {
+			} else if (!ply.isInWater() && MathStuff.abs(this.yPosition - ply.posY) > 0.4d) {
 				// This ensures this does not get recorded as landing, but as a
 				// step
 				if (yPosition < ply.posY) { // Going upstairs
@@ -160,11 +153,9 @@ public class Generator {
 			if (event == null) {
 				event = speedDisambiguator(ply, EventType.WALK, EventType.RUN);
 			}
-			distance = reevaluateDistance(event, distance);
 
 			if (dwm > distance) {
 				produceStep(ply, event, verticalOffsetAsMinus);
-				stepped(ply, event);
 				dmwBase = distanceReference;
 			}
 		}
@@ -185,19 +176,11 @@ public class Generator {
 		if (!mod.getSolver().playSpecialStoppingConditions(ply)) {
 			if (event == null)
 				event = speedDisambiguator(ply, EventType.WALK, EventType.RUN);
-			mod.getSolver().playAssociation(ply,
-					mod.getSolver().findAssociationForPlayer(ply, verticalOffsetAsMinus, isRightFoot), event);
+			playSinglefoot(ply, verticalOffsetAsMinus, event, isRightFoot);
 			isRightFoot = !isRightFoot;
 		}
 
 		stepThisFrame = true;
-	}
-
-	protected void stepped(@Nonnull final EntityPlayer ply, @Nonnull final EventType event) {
-	}
-
-	protected float reevaluateDistance(@Nonnull final EventType event, final float distance) {
-		return distance;
 	}
 
 	protected void simulateAirborne(@Nonnull final EntityPlayer ply) {
@@ -265,23 +248,20 @@ public class Generator {
 			return;
 
 		final int yy = MathStuff.floor_double(ply.posY - 0.1d - ply.getYOffset() - (ply.onGround ? 0d : 0.25d));
-		final Association assos = mod.getSolver().findAssociationMessyFoliage(
-				new BlockPos(MathStuff.floor_double(ply.posX), yy, MathStuff.floor_double(ply.posZ)));
+		final Association assos = mod.getSolver().findAssociationMessyFoliage(new BlockPos(ply.posX, yy, ply.posZ));
 		if (assos != null) {
 			if (!this.isMessyFoliage) {
 				this.isMessyFoliage = true;
 				this.mod.getSolver().playAssociation(ply, assos, EventType.WALK);
 			}
 		} else {
-			if (this.isMessyFoliage) {
-				this.isMessyFoliage = false;
-			}
+			this.isMessyFoliage = false;
 		}
 	}
 
 	protected void playSinglefoot(@Nonnull final EntityPlayer ply, final double verticalOffsetAsMinus,
 			@Nonnull final EventType eventType, final boolean foot) {
-		final Association assos = mod.getSolver().findAssociationForPlayer(ply, verticalOffsetAsMinus, isRightFoot);
+		final Association assos = mod.getSolver().findAssociationForPlayer(ply, verticalOffsetAsMinus, foot);
 		mod.getSolver().playAssociation(ply, assos, eventType);
 	}
 
