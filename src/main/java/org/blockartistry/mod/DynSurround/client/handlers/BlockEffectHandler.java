@@ -29,8 +29,9 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.client.handlers.scanners.AlwaysOnBlockEffectScanner;
 import org.blockartistry.mod.DynSurround.client.handlers.scanners.RandomBlockEffectScanner;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.mod.DynSurround.util.WorldUtils;
+
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -54,15 +55,12 @@ public class BlockEffectHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(final World world, final EntityPlayer player) {
-		if (Minecraft.getMinecraft().isGamePaused())
-			return;
-
 		this.effects.update();
 		this.alwaysOn.update();
 
 		if (EnvironState.isPlayerOnGround() && EnvironState.isPlayerMoving()) {
 			final BlockPos pos = EnvironState.getPlayerPosition().down(1);
-			final IBlockState state = world.getBlockState(pos);
+			final IBlockState state = WorldUtils.getBlockState(world, pos);
 			final SoundEffect sound = getBlockRegistry().getStepSound(state, RANDOM);
 			if (sound != null)
 				sound.doEffect(state, world, pos, RANDOM);

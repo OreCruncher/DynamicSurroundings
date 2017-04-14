@@ -70,6 +70,9 @@ public final class BlockRegistry extends Registry {
 	public final static BlockEffect[] NO_EFFECTS = {};
 	public final static SoundEffect[] NO_SOUNDS = {};
 
+	private static final BlockProfile NO_PROFILE = BlockProfile
+			.createProfile(new BlockInfo(Blocks.AIR.getDefaultState())).setChance(0).setStepChance(0);
+
 	BlockRegistry(@Nonnull final Side side) {
 		super(side);
 	}
@@ -106,11 +109,11 @@ public final class BlockRegistry extends Registry {
 			while (itr.hasNext())
 				ModLog.info(MCHelper.nameOf(itr.next()));
 		}
-		
+
 		this.registry = ImmutableMap.copyOf(this.registry);
 		this.alwaysOnEffects = ImmutableSet.copyOf(this.alwaysOnEffects);
 		this.hasSoundsAndEffects = ImmutableSet.copyOf(this.hasSoundsAndEffects);
-		
+
 	}
 
 	@Override
@@ -129,37 +132,31 @@ public final class BlockRegistry extends Registry {
 		if (profile == null && this.key.hasSubTypes()) {
 			profile = this.registry.get(this.key.asGeneric());
 		}
-		return profile;
+		return profile == null ? NO_PROFILE : profile;
 	}
 
 	@Nonnull
 	public BlockEffect[] getEffects(@Nonnull final IBlockState state) {
-		final BlockProfile entry = findProfile(state);
-		return entry != null ? entry.getEffects() : NO_EFFECTS;
+		return findProfile(state).getEffects();
 	}
 
 	@Nonnull
 	public BlockEffect[] getAlwaysOnEffects(@Nonnull final IBlockState state) {
-		final BlockProfile entry = findProfile(state);
-		return entry != null ? entry.getAlwaysOnEffects() : NO_EFFECTS;
+		return findProfile(state).getAlwaysOnEffects();
 	}
 
 	@Nonnull
 	private SoundEffect getRandomSound(@Nonnull final SoundEffect[] list, @Nonnull final Random random) {
-
-		// Degenerative case of a single sound
-		if (list.length == 1) {
-			return list[0].matches() ? list[0] : null;
-		}
-
 		// Build a weight table on the fly
 		int totalWeight = 0;
-		final List<SoundEffect> candidates = new ArrayList<SoundEffect>();
-		for (final SoundEffect s : list)
-			if (s.weight > 0 && s.matches()) {
+		final List<SoundEffect> candidates = new ArrayList<SoundEffect>(list.length);
+		for (int i = 0; i < list.length; i++) {
+			final SoundEffect s = list[i];
+			if (s.matches()) {
 				candidates.add(s);
 				totalWeight += s.weight;
 			}
+		}
 
 		// It's possible all the sounds got filtered out
 		if (totalWeight <= 0)
@@ -179,41 +176,37 @@ public final class BlockRegistry extends Registry {
 
 	@Nonnull
 	public SoundEffect[] getAllSounds(@Nonnull final IBlockState state) {
-		final BlockProfile entry = findProfile(state);
-		return entry != null ? entry.getSounds() : NO_SOUNDS;
+		return findProfile(state).getSounds();
 	}
 
 	@Nonnull
 	public SoundEffect[] getAllStepSounds(@Nonnull final IBlockState state) {
-		final BlockProfile entry = findProfile(state);
-		return entry != null ? entry.getStepSounds() : NO_SOUNDS;
+		return findProfile(state).getStepSounds();
 	}
 
 	@Nullable
 	public SoundEffect getSound(@Nonnull final IBlockState state, @Nonnull final Random random) {
-		final BlockProfile entry = findProfile(state);
-		final SoundEffect[] sounds;
-		if (entry == null || (sounds = entry.getSounds()) == NO_SOUNDS || random.nextInt(entry.getChance()) != 0)
+		final BlockProfile profile = findProfile(state);
+		final SoundEffect[] sounds = profile.getSounds();
+		if (sounds == NO_SOUNDS || random.nextInt(profile.getChance()) != 0)
 			return null;
 
 		return getRandomSound(sounds, random);
 	}
 
 	public int getStepSoundChance(@Nonnull final IBlockState state) {
-		final BlockProfile entry = findProfile(state);
-		return entry != null ? entry.getStepChance() : 0;
+		return findProfile(state).getStepChance();
 	}
 
 	public int getSoundChance(@Nonnull final IBlockState state) {
-		final BlockProfile entry = findProfile(state);
-		return entry != null ? entry.getChance() : 0;
+		return findProfile(state).getChance();
 	}
 
 	@Nullable
 	public SoundEffect getStepSound(@Nonnull final IBlockState state, @Nonnull final Random random) {
-		final BlockProfile entry = findProfile(state);
-		final SoundEffect[] sounds;
-		if (entry == null || (sounds = entry.getSounds()) == NO_SOUNDS || random.nextInt(entry.getStepChance()) != 0)
+		final BlockProfile profile = findProfile(state);
+		final SoundEffect[] sounds = profile.getStepSounds();
+		if (sounds == NO_SOUNDS || random.nextInt(profile.getStepChance()) != 0)
 			return null;
 
 		return getRandomSound(sounds, random);
