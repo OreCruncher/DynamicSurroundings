@@ -98,6 +98,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static ArmorClass armorClass = ArmorClass.NONE;
 		private static ArmorClass footArmorClass = ArmorClass.NONE;
 		private static boolean inVillage;
+		
+		private static boolean isUnderground;
+		private static boolean isInSpace;
+		private static boolean isInClouds;
 
 		private static int tickCounter;
 		
@@ -109,6 +113,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		private static void tick(final World world, final EntityPlayer player) {
 
+			final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
 			final SeasonRegistry seasons = RegistryManager.get(RegistryType.SEASON);
 
 			EnvironState.player = player;
@@ -131,6 +136,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 			EnvironState.armorClass = ArmorClass.effectiveArmorClass(player);
 			EnvironState.footArmorClass = ArmorClass.footArmorClass(player);
+			
+			EnvironState.isUnderground = EnvironState.playerBiome == biomes.UNDERGROUND_INFO;
+			EnvironState.isInSpace = EnvironState.playerBiome == biomes.OUTERSPACE_INFO;
+			EnvironState.isInClouds = EnvironState.playerBiome == biomes.CLOUDS_INFO;
 
 			if (!Minecraft.getMinecraft().isGamePaused())
 				EnvironState.tickCounter++;
@@ -259,15 +268,15 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static boolean isPlayerUnderground() {
-			return playerBiome == BiomeRegistry.UNDERGROUND_INFO;
+			return isUnderground;
 		}
 
 		public static boolean isPlayerInSpace() {
-			return playerBiome == BiomeRegistry.OUTERSPACE_INFO;
+			return isInSpace;
 		}
 
 		public static boolean isPlayerInClouds() {
-			return playerBiome == BiomeRegistry.CLOUDS_INFO;
+			return isInClouds;
 		}
 
 		public static boolean isFreezing() {

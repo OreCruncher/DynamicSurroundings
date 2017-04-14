@@ -25,6 +25,7 @@
 package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -43,52 +44,68 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class BlockAcousticMap {
 
+	private static final IAcoustic[] NO_ACOUSTICS = {};
+
 	private final BlockInfoMutable key = new BlockInfoMutable();
 	private Map<BlockInfo, IAcoustic[]> data = new HashMap<BlockInfo, IAcoustic[]>();
+	private Map<IBlockState, IAcoustic[]> cache = new IdentityHashMap<IBlockState, IAcoustic[]>();
+	private Map<IBlockState, IAcoustic[]> specialCache = new IdentityHashMap<IBlockState, IAcoustic[]>();
 
 	/**
-	 * Obtain acoustic information for a block.  If the block has
-	 * variants (subtypes) it will fall back to searching for a
-	 * generic if a specific one is not found.
+	 * Obtain acoustic information for a block. If the block has variants
+	 * (subtypes) it will fall back to searching for a generic if a specific one
+	 * is not found.
 	 */
 	@Nullable
 	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state) {
-		this.key.set(state);
-		IAcoustic[] result = this.data.get(this.key);
-		if (result == null && this.key.hasSubTypes()) {
-			result = this.data.get(this.key.asGeneric());
+		IAcoustic[] result = this.cache.get(state);
+		if (result == null) {
+			result = this.data.get(this.key.set(state));
+			if (result == null && this.key.hasSubTypes()) {
+				result = this.data.get(this.key.asGeneric());
+			}
+			if (result == null)
+				result = NO_ACOUSTICS;
+			this.cache.put(state, result);
 		}
-		return result;
+		return result == NO_ACOUSTICS ? null : result;
 	}
 
 	/**
-	 * Similar to getBlockMap(), but includes an additional check if
-	 * the block has special metadata.  For example, a BlockCrop may
-	 * not have subtypes, but it would have growth data stored in
-	 * the meta.  An example of this is Wheat.
+	 * Similar to getBlockMap(), but includes an additional check if the block
+	 * has special metadata. For example, a BlockCrop may not have subtypes, but
+	 * it would have growth data stored in the meta. An example of this is
+	 * Wheat.
 	 */
 	@Nullable
 	public IAcoustic[] getBlockAcousticsWithSpecial(@Nonnull final IBlockState state) {
-		this.key.set(state);
-		IAcoustic[] result = this.data.get(this.key);
+		IAcoustic[] result = this.specialCache.get(state);
 		if (result == null) {
-			if (this.key.hasSubTypes()) {
-				result = this.data.get(this.key.asGeneric());
-			} else if (this.key.hasSpecialMeta()) {
-				result = this.data.get(this.key.asSpecial());
+			result = this.data.get(this.key.set(state));
+			if (result == null) {
+				if (this.key.hasSubTypes()) {
+					result = this.data.get(this.key.asGeneric());
+				} else if (this.key.hasSpecialMeta()) {
+					result = this.data.get(this.key.asSpecial());
+				}
 			}
+			if (result == null)
+				result = NO_ACOUSTICS;
+			this.specialCache.put(state, result);
 		}
-		return result;
+		return result == NO_ACOUSTICS ? null : result;
 	}
-	
+
 	public void put(@Nonnull final BlockInfo info, final IAcoustic[] acoustics) {
 		this.data.put(info, acoustics);
 	}
-	
+
 	public void clear() {
-		this.data = new HashMap<BlockInfo, IAcoustic[]>(); 
+		this.data = new HashMap<BlockInfo, IAcoustic[]>(this.data.size());
+		this.cache = new IdentityHashMap<IBlockState, IAcoustic[]>(this.cache.size());
+		this.specialCache = new IdentityHashMap<IBlockState, IAcoustic[]>(this.specialCache.size());
 	}
-	
+
 	public void freeze() {
 		this.data = new ImmutableMap.Builder<BlockInfo, IAcoustic[]>().putAll(this.data).build();
 	}
