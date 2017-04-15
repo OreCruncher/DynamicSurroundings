@@ -1,3 +1,10 @@
+###DynamicSurroundings-1.10.2-3.3.5.1
+**Fixes**
+* LWJGL having difficulties digesting default sound device name
+
+**Changes**
+* Updated Tough as Nails support (v1.9.4-1.1.1)
+
 ###DynamicSurroundings-1.10.2-3.3.5.0
 **What's New**
 * Clock HUD when holding a Minecraft clock
