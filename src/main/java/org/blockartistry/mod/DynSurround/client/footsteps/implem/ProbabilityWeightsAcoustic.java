@@ -24,7 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -41,12 +40,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ProbabilityWeightsAcoustic implements IAcoustic {
 	
-	protected final List<IAcoustic> acoustics;
+	protected final IAcoustic[] acoustics;
 	protected final int[] weights;
 	protected final int totalWeight;
 
 	public ProbabilityWeightsAcoustic(@Nonnull final List<IAcoustic> acoustics, @Nonnull final List<Integer> weights) {
-		this.acoustics = new ArrayList<IAcoustic>(acoustics);
+		this.acoustics = acoustics.toArray(new IAcoustic[acoustics.size()]);
 		this.weights = new int[weights.size()];
 
 		int tWeight = 0;
@@ -76,6 +75,6 @@ public class ProbabilityWeightsAcoustic implements IAcoustic {
 		for (i = this.weights.length; (targetWeight -= this.weights[i - 1]) >= 0; i--)
 			;
 
-		this.acoustics.get(i - 1).playSound(player, location, event, inputOptions);
+		this.acoustics[i - 1].playSound(player, location, event, inputOptions);
 	}
 }

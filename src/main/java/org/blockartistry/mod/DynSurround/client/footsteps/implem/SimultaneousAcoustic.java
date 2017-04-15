@@ -24,10 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -41,10 +38,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class SimultaneousAcoustic implements IAcoustic {
-	protected final List<IAcoustic> acoustics;
+	protected final IAcoustic[] acoustics;
 
 	public SimultaneousAcoustic(@Nonnull final Collection<IAcoustic> acoustics) {
-		this.acoustics = new ArrayList<IAcoustic>(acoustics);
+		this.acoustics = acoustics.toArray(new IAcoustic[acoustics.size()]);
 	}
 
 	@Override
@@ -56,10 +53,8 @@ public class SimultaneousAcoustic implements IAcoustic {
 	@Override
 	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Object location,
 			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
-		for (final IAcoustic acoustic : this.acoustics) {
-			acoustic.playSound(player, location, event, inputOptions);
-		}
-
+		for (int i = 0; i < this.acoustics.length; i++)
+			this.acoustics[i].playSound(player, location, event, inputOptions);
 	}
 
 }
