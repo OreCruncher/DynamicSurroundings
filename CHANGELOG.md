@@ -1,3 +1,24 @@
+###DynamicSurroundings-1.10.2-3.3.5.0
+**What's New**
+* Clock HUD when holding a Minecraft clock
+    * Similar in concept to the Compass
+    * Displays Minecraft day information
+    * Displays elapsed time of the current Minecraft session
+    * Tied to the enable/disable and transparency of the Compass HUD
+* Volume Quickset Dialog that allows for configuring the Master Sound Volume as well as the volume scale for Biome Sounds and Footsteps.  Activate by pressing V.
+
+**Fixes**
+* NPE initializing the sound manager before mod proxy is created
+
+**Changes**
+* Built against Forge 12.18.3.2281
+* Fancified compass and debug hud with text panels
+* Disabling desert and biome fog effects will turn off fog processing within Dynamic Surroundings.  Intended to address compatibility with certain mod configurations (DS + BOP + OptFine).
+* Default footprint style is now square
+* Fireflies will be out at sunset as well as night
+* Changed a dry biome definition from being no rainfall to having a rainfall of < 0.2F
+* Code cleanup and performance tweaks
+
 ###DynamicSurroundings-1.10.2-3.3.4.1
 **Fixes**
 * Exception modifying immutable collection when config reloads after editing
