@@ -122,4 +122,11 @@ public class BasicAcoustic implements IAcoustic {
 		this.pitchMax = pitchMax;
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder builder = new StringBuilder();
+		builder.append(this.getAcousticName()).append('[').append(this.sound.getSoundName()).append(']');
+		return builder.toString();
+	}
+
 }

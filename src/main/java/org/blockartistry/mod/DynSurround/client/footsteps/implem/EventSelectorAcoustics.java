@@ -24,7 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.client.footsteps.implem;
 
-import java.util.IdentityHashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -42,7 +42,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class EventSelectorAcoustics implements IAcoustic {
 	private final String name;
 
-	private final Map<EventType, IAcoustic> pairs = new IdentityHashMap<EventType, IAcoustic>();
+	private final Map<EventType, IAcoustic> pairs = new EnumMap<EventType, IAcoustic>(EventType.class);
 
 	public EventSelectorAcoustics(@Nonnull final String acousticName) {
 		this.name = acousticName;
