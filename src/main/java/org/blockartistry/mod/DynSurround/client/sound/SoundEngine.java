@@ -158,9 +158,6 @@ public class SoundEngine {
 				alErrorCheck();
 			}
 
-			final String defaultDevice = ALC10.alcGetString(null, ALC11.ALC_DEFAULT_ALL_DEVICES_SPECIFIER);
-			ModLog.info("Default sound device: [%s]", defaultDevice == null ? "UNKNOWN" : defaultDevice);
-
 			final IntBuffer ib = BufferUtils.createIntBuffer(1);
 			ALC10.alcGetInteger(AL.getDevice(), ALC11.ALC_MONO_SOURCES, ib);
 			alErrorCheck();
