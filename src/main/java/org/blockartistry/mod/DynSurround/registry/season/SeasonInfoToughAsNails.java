@@ -35,46 +35,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import toughasnails.api.season.Season;
 import toughasnails.api.season.SeasonHelper;
+import toughasnails.api.season.WorldHooks;
 import toughasnails.api.stat.capability.ITemperature;
 import toughasnails.api.temperature.TemperatureHelper;
 
 public class SeasonInfoToughAsNails extends SeasonInfo {
-
-	// Lifted from the 1.11.x branch of TaN. Will be removed when Dynamic
-	// Surroundings gets to 1.11.x
-	// TODO: Cleanup for 1.11.x version of Dynamic Surroundings
-	private static class Hooks {
-
-		public static boolean canSnowAtInSeason(World world, BlockPos pos, boolean checkLight, Season season) {
-			try {
-				return (Boolean) Class.forName("toughasnails.season.SeasonASMHelper")
-						.getMethod("canSnowAtInSeason", World.class, BlockPos.class, Boolean.class, Season.class)
-						.invoke(null, world, pos, checkLight, season);
-			} catch (Exception e) {
-				throw new RuntimeException("An error occurred calling canSnowAtInSeason", e);
-			}
-		}
-
-		public static boolean canBlockFreezeInSeason(World world, BlockPos pos, boolean noWaterAdj, Season season) {
-			try {
-				return (Boolean) Class.forName("toughasnails.season.SeasonASMHelper")
-						.getMethod("canBlockFreezeInSeason", World.class, BlockPos.class, Boolean.class, Season.class)
-						.invoke(null, world, pos, noWaterAdj, season);
-			} catch (Exception e) {
-				throw new RuntimeException("An error occurred calling canBlockFreezeInSeason", e);
-			}
-		}
-
-		public static boolean isRainingAtInSeason(World world, BlockPos pos, Season season) {
-			try {
-				return (Boolean) Class.forName("toughasnails.season.SeasonASMHelper")
-						.getMethod("isRainingAtInSeason", World.class, BlockPos.class, Season.class)
-						.invoke(null, world, pos, season);
-			} catch (Exception e) {
-				throw new RuntimeException("An error occurred calling isRainingAtInSeason", e);
-			}
-		}
-	}
 
 	public SeasonInfoToughAsNails(@Nonnull final World world) {
 		super(world);
@@ -148,7 +113,7 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 	 */
 	@Override
 	public boolean isRainingAt(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return Hooks.isRainingAtInSeason(world, pos, getSeasonData(world));
+		return WorldHooks.isRainingAtInSeason(world, pos, getSeasonData(world));
 	}
 
 	/*
@@ -166,10 +131,11 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 	 * Essentially snow layer stuff.
 	 */
 	public boolean canSnowAt(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return Hooks.canSnowAtInSeason(world, pos, true, getSeasonData(world));
+		return WorldHooks.canSnowAtInSeason(world, pos, true, getSeasonData(world));
 	}
 
-	public boolean canBlockFreeze(@Nonnull final World world, @Nonnull final BlockPos pos, final boolean noWaterAdjacent) {
-		return Hooks.canBlockFreezeInSeason(world, pos, noWaterAdjacent, getSeasonData(world));
+	public boolean canBlockFreeze(@Nonnull final World world, @Nonnull final BlockPos pos,
+			final boolean noWaterAdjacent) {
+		return WorldHooks.canBlockFreezeInSeason(world, pos, noWaterAdjacent, getSeasonData(world));
 	}
 }
