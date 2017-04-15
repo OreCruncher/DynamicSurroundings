@@ -27,6 +27,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.event.BlockUpdateEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import net.minecraft.block.state.IBlockState;
@@ -161,7 +162,7 @@ public abstract class CuboidScanner extends Scanner {
 			@Nonnull final Cuboid intersect) {
 
 		this.blockProvider.setWorld(EnvironState.getWorld());
-		
+
 		if (doBlockUnscan()) {
 			final ComplementsPointIterator newOutOfRange = new ComplementsPointIterator(oldVolume, intersect);
 			// Notify on the blocks going out of range
@@ -228,8 +229,13 @@ public abstract class CuboidScanner extends Scanner {
 	 */
 	@SubscribeEvent(receiveCanceled = false)
 	public void onBlockUpdate(@Nonnull final BlockUpdateEvent event) {
-		if (this.activeCuboid != null && this.activeCuboid.contains(event.pos))
-			blockScan(event.newState, event.pos, this.random);
+		try {
+			if (this.activeCuboid != null && this.activeCuboid.contains(event.pos)
+					&& this.interestingBlock(event.newState))
+				blockScan(event.newState, event.pos, this.random);
+		} catch (final Throwable t) {
+			ModLog.error("onBlockUpdate() error", t);
+		}
 	}
 
 }
