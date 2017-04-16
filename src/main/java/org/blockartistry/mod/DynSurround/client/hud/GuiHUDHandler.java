@@ -50,7 +50,6 @@ public final class GuiHUDHandler {
 	private GuiHUDHandler() {
 		register(new PotionHUD());
 		register(new CompassHUD());
-		register(new ClockHUD());
 		register(new BlockInfoHelperHUD());
 		register(new LightLevelHUD());
 	}

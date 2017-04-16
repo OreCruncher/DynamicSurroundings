@@ -45,7 +45,8 @@ public class TextPanel {
 	public static final Color TEXT_COLOR = Color.MC_YELLOW;
 
 	public static enum Reference {
-		CENTERED,
+		CENTER,
+		TOP_CENTER,
 		UPPER_LEFT
 	};
 
@@ -121,10 +122,16 @@ public class TextPanel {
 		final int posX;
 		final int posY;
 		
-		if(ref == Reference.CENTERED) {
+		switch(ref) {
+		case CENTER:
 			posX = locX - this.centerX;
 			posY = locY - this.centerY;
-		} else {
+			break;
+		case TOP_CENTER:
+			posX = locX - this.centerX;
+			posY = locY;
+			break;
+		default:
 			posX = locX;
 			posY = locY;
 		}
@@ -141,7 +148,7 @@ public class TextPanel {
 		
 		final int drawX;
 		
-		if(ref == Reference.CENTERED)
+		if(ref == Reference.CENTER || ref == Reference.TOP_CENTER)
 			drawX = locX;
 		else
 			drawX = locX + this.centerX;

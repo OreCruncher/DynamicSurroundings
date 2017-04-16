@@ -215,8 +215,8 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 	public void doRender(@Nonnull final RenderGameOverlayEvent.Pre event) {
 		if (event.getType() == ElementType.TEXT && this.textPanel.hasText()) {
 			final int centerX = event.getResolution().getScaledWidth() / 2;
-			final int centerY = event.getResolution().getScaledHeight() / 2 - 100;
-			this.textPanel.render(centerX, centerY, Reference.CENTERED);
+			final int centerY = 80;
+			this.textPanel.render(centerX, centerY, Reference.TOP_CENTER);
 		}
 	}
 

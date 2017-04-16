@@ -24,19 +24,21 @@
 
 package org.blockartistry.mod.DynSurround.client.hud;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
-
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
+import org.blockartistry.mod.DynSurround.util.Localization;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
+import org.blockartistry.mod.DynSurround.util.DiurnalUtils.DayCycle;
 import org.blockartistry.mod.DynSurround.util.gui.TextPanel;
 import org.blockartistry.mod.DynSurround.util.gui.TextPanel.Reference;
-
-import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -59,7 +61,13 @@ public class CompassHUD extends GuiOverlay {
 	private static final int BAND_HEIGHT = 12;
 	private static final int ROSE_DIM = 256;
 
-	private static final float TEXT_LINE_START = 3.5F;
+	private static final float TEXT_LINE_START = 1.5F;
+
+	private static final String NO_SKY = Localization.format("format.NoSky");
+	private static final String SUNRISE = Localization.format("format.Sunrise");
+	private static final String SUNSET = Localization.format("format.Sunset");
+	private static final String DAYTIME = Localization.format("format.Daytime");
+	private static final String NIGHTTIME = Localization.format("format.Nighttime");
 
 	private static enum Style {
 		BAND_0(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT), BAND_1(false,
@@ -105,7 +113,8 @@ public class CompassHUD extends GuiOverlay {
 		}
 	}
 
-	private final TextPanel textPanel = new TextPanel().setMinimumWidth(100);
+	private final TextPanel textPanel = new TextPanel();
+	private boolean showCompass = false;
 
 	@Nonnull
 	protected String getLocationString() {
@@ -123,17 +132,58 @@ public class CompassHUD extends GuiOverlay {
 		return ModOptions.enableCompass && PlayerUtils.isHolding(EnvironState.getPlayer(), Items.COMPASS);
 	}
 
+	protected boolean showClock() {
+		return ModOptions.enableCompass && PlayerUtils.isHolding(EnvironState.getPlayer(), Items.CLOCK);
+	}
+
+	@Nonnull
+	private static String diurnalName() {
+		final DayCycle cycle = DiurnalUtils.getCycle(EnvironState.getWorld());
+		switch (cycle) {
+		case NO_SKY:
+			return CompassHUD.NO_SKY;
+		case SUNRISE:
+			return CompassHUD.SUNRISE;
+		case SUNSET:
+			return CompassHUD.SUNSET;
+		case DAYTIME:
+			return CompassHUD.DAYTIME;
+		default:
+			return CompassHUD.NIGHTTIME;
+		}
+	}
+
 	@Override
 	public void doTick(final int tickRef) {
 		if (tickRef != 0 && tickRef % 4 == 0) {
 
 			this.textPanel.resetText();
 
-			if (showCompass()) {
-				final String locationString = getLocationString();
-				final String biomeNameString = getBiomeName();
-				this.textPanel.setText(ImmutableList.of(locationString, biomeNameString));
+			final List<String> text = new ArrayList<String>();
+
+			if (this.showCompass = showCompass()) {
+				text.add(getLocationString());
+				text.add(getBiomeName());
 			}
+
+			if (showClock()) {
+				if (text.size() > 0)
+					text.add("");
+
+				long time = DSurround.proxy().currentSessionDuration();
+				final int elapsedHours = (int) (time / 3600000);
+				time -= elapsedHours * 3600000;
+				final int elapsedMinutes = (int) (time / 60000);
+				time -= elapsedMinutes * 60000;
+				final int elapsedSeconds = (int) (time / 1000);
+
+				text.add(EnvironState.getClock().toString());
+				text.add(diurnalName());
+				text.add(Localization.format("format.SessionTime", elapsedHours, elapsedMinutes, elapsedSeconds));
+			}
+
+			if (text.size() > 0)
+				this.textPanel.setText(text);
 		}
 	}
 
@@ -151,7 +201,7 @@ public class CompassHUD extends GuiOverlay {
 		final int centerY = (resolution.getScaledHeight() + 1) / 2;
 
 		this.textPanel.setAlpha(ModOptions.compassTransparency);
-		this.textPanel.render(centerX, centerY + (int) (font.FONT_HEIGHT * TEXT_LINE_START), Reference.CENTERED);
+		this.textPanel.render(centerX, centerY + (int) (font.FONT_HEIGHT * TEXT_LINE_START), Reference.TOP_CENTER);
 
 		final Style style = Style.getStyle(ModOptions.compassStyle);
 		mc.getTextureManager().bindTexture(style.getTextureResource());
@@ -171,7 +221,7 @@ public class CompassHUD extends GuiOverlay {
 				drawTexturedModalRect(x, y, direction - 128,
 						(ModOptions.compassStyle * (style.getHeight() * 2)) + style.getHeight(), style.getWidth(),
 						style.getHeight());
-		} else {
+		} else if (this.showCompass) {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(centerX, centerY - BAND_HEIGHT * 2.5F, 0);
 			GlStateManager.rotate(70, 1F, 0F, 0F);
