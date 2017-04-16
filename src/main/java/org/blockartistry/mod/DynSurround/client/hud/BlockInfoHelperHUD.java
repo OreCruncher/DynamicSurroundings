@@ -78,7 +78,7 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 
 	private static List<String> gatherOreNames(final ItemStack stack) {
 		final List<String> result = new ArrayList<String>();
-		if (stack != null && !stack.isEmpty())
+		if (stack != null)
 			for (int i : OreDictionary.getOreIDs(stack))
 				result.add(OreDictionary.getOreName(i));
 		return result;
@@ -102,7 +102,7 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 	private List<String> gatherBlockText(final ItemStack stack, final List<String> text, final IBlockState state,
 			final BlockPos pos) {
 
-		if (stack != null && !stack.isEmpty()) {
+		if (stack != null) {
 			text.add(TextFormatting.RED + stack.getDisplayName());
 			final String itemName = getItemName(stack);
 			if (itemName != null) {
@@ -215,8 +215,8 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 	public void doRender(@Nonnull final RenderGameOverlayEvent.Pre event) {
 		if (event.getType() == ElementType.TEXT && this.textPanel.hasText()) {
 			final int centerX = event.getResolution().getScaledWidth() / 2;
-			final int centerY = event.getResolution().getScaledHeight() / 2 - 100;
-			this.textPanel.render(centerX, centerY, Reference.CENTERED);
+			final int centerY = 80;
+			this.textPanel.render(centerX, centerY, Reference.TOP_CENTER);
 		}
 	}
 
