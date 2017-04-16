@@ -28,6 +28,8 @@ import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.Localization;
+import org.blockartistry.mod.DynSurround.util.gui.Panel;
+import org.blockartistry.mod.DynSurround.util.gui.Panel.Reference;
 
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiPageButtonList.GuiResponder;
@@ -61,6 +63,7 @@ public class VolumeControlGui extends GuiScreen implements GuiResponder {
 	protected float sound = ModOptions.soundLevel;
 	protected float footstep = ModOptions.footstepsSoundFactor;
 
+	protected Panel panel = new Panel();
 	
 	private void addSlider(final GuiSlider slider) {
 		slider.setWidth(SLIDER_WIDTH);
@@ -79,6 +82,17 @@ public class VolumeControlGui extends GuiScreen implements GuiResponder {
 		final GuiLabel label = new GuiLabel(mc.fontRendererObj, ID_LABEL, drawX, drawY + 75, SLIDER_WIDTH, 10, Color.MC_WHITE.rgb());
 		label.setCentered().addLine(Localization.format("dlg.name.Close"));
 		this.labelList.add(label);
+		
+		this.panel.setMinimumWidth(SLIDER_WIDTH + mc.fontRendererObj.FONT_HEIGHT * 2);
+		this.panel.setMinimumHeight(4 * 25);
+	}
+	
+	@Override
+    public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
+		final int drawX = (this.width + 1) / 2;
+		final int drawY = 30;
+		this.panel.render(drawX, drawY, Reference.TOP_CENTER);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 
 	@Override

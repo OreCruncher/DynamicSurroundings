@@ -37,9 +37,8 @@ import org.blockartistry.mod.DynSurround.util.Localization;
 import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 import org.blockartistry.mod.DynSurround.util.DiurnalUtils.DayCycle;
+import org.blockartistry.mod.DynSurround.util.gui.Panel.Reference;
 import org.blockartistry.mod.DynSurround.util.gui.TextPanel;
-import org.blockartistry.mod.DynSurround.util.gui.TextPanel.Reference;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;

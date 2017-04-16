@@ -27,8 +27,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.util.Color;
-
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;
@@ -38,124 +36,74 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class TextPanel {
-	
-	public static final Color BACKGROUND_COLOR = Color.DARKSLATEGRAY;
-	public static final Color FRAME_COLOR = Color.MC_WHITE;
-	public static final Color TEXT_COLOR = Color.MC_YELLOW;
-
-	public static enum Reference {
-		CENTER,
-		TOP_CENTER,
-		UPPER_LEFT
-	};
+public class TextPanel extends Panel {
 
 	private final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
 
-	private final Color foreground;
-	private final Color background;
-	private final Color border;
-
-	private float alpha = 1.0F;
-
 	private List<String> text = ImmutableList.of();
-	private int width;
-	private int height;
-	
-	private int minWidth;
 
-	private int centerX = 0;
-	private int centerY = 0;
-	
 	public TextPanel() {
-		this(TEXT_COLOR, BACKGROUND_COLOR, FRAME_COLOR);
-	}
-	
-	public TextPanel(final Color fore, final Color back, final Color border) {
-		this.foreground = fore;
-		this.background = back;
-		this.border = border;
+		super();
 	}
 
-	public TextPanel setAlpha(final float a) {
-		this.alpha = a;
-		return this;
-	}
-
-	@Nonnull
-	public TextPanel setMinimumWidth(final int w) {
-		this.minWidth = w;
-		return this;
-	}
-	
 	@Nonnull
 	public TextPanel setText(@Nonnull final List<String> text) {
 		this.text = text;
-		this.height = (text.size() + 1) * font.FONT_HEIGHT;
+		this.setHeight((text.size() + 1) * font.FONT_HEIGHT);
 
-		this.width = this.minWidth;
+		int w = 0;
 		for (final String s : text)
-			this.width = Math.max(font.getStringWidth(s), this.width);
-		this.width += font.FONT_HEIGHT;
-
-		this.centerX = (this.width + 1) / 2;
-		this.centerY = (this.height + 1) / 2;
-
+			w = Math.max(font.getStringWidth(s), w);
+		w += font.FONT_HEIGHT;
+		this.setWidth(w);
 		return this;
 	}
-	
+
 	@Nonnull
 	public TextPanel resetText() {
 		this.text = ImmutableList.of();
 		return this;
 	}
-	
+
 	public boolean hasText() {
 		return !this.text.isEmpty();
 	}
 
 	public void render(final int locX, final int locY, @Nonnull final Reference ref) {
-		
-		if(this.text.isEmpty())
+
+		if (this.text.isEmpty())
 			return;
 
-		final int posX;
 		final int posY;
-		
-		switch(ref) {
+
+		switch (ref) {
 		case CENTER:
-			posX = locX - this.centerX;
-			posY = locY - this.centerY;
+			posY = locY - getCenterY();
 			break;
 		case TOP_CENTER:
-			posX = locX - this.centerX;
 			posY = locY;
 			break;
 		default:
-			posX = locX;
 			posY = locY;
 		}
 
-		final int backgroundRGB = background.rgbWithAlpha(this.alpha);
-		final int textRGB = foreground.rgbWithAlpha(this.alpha);
-		final int frameRGB = border.rgbWithAlpha(this.alpha);
+		super.render(locX, locY, ref);
 
-		GuiUtils.drawRect(posX + 2, posY + 2, posX + this.width - 1, posY + this.height - 1, backgroundRGB);
-		GuiUtils.drawTooltipBox(posX, posY, this.width, this.height, frameRGB, frameRGB, frameRGB);
+		final int textRGB = foreground.rgbWithAlpha(this.alpha);
 
 		GlStateManager.color(1F, 1F, 1F, this.alpha);
 		GlStateManager.enableBlend();
-		
+
 		final int drawX;
-		
-		if(ref == Reference.CENTER || ref == Reference.TOP_CENTER)
+
+		if (ref == Reference.CENTER || ref == Reference.TOP_CENTER)
 			drawX = locX;
 		else
-			drawX = locX + this.centerX;
-		
+			drawX = locX + getCenterX();
+
 		int drawY = posY + (this.font.FONT_HEIGHT + 1) / 2;
-		
-		for(final String s: this.text) {
+
+		for (final String s : this.text) {
 			GuiUtils.drawCenteredString(this.font, s, drawX, drawY, textRGB);
 			drawY += font.FONT_HEIGHT;
 		}

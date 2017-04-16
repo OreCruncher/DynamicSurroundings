@@ -41,9 +41,8 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
+import org.blockartistry.mod.DynSurround.util.gui.Panel.Reference;
 import org.blockartistry.mod.DynSurround.util.gui.TextPanel;
-import org.blockartistry.mod.DynSurround.util.gui.TextPanel.Reference;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
