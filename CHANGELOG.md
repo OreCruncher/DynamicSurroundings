@@ -1,3 +1,7 @@
+###DynamicSurroundings-1.10.2-3.3.5.2
+**Fixes**
+* Strange rendering caused by client side block event handler throwing an NPE due to race condition
+
 ###DynamicSurroundings-1.10.2-3.3.5.1
 **Fixes**
 * LWJGL having difficulties digesting default sound device name
