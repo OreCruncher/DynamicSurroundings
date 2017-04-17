@@ -23,11 +23,17 @@
 
 package org.blockartistry.mod.DynSurround.util.gui;
 
+import javax.annotation.Nonnull;
+
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -124,4 +130,18 @@ public final class GuiUtils {
 		drawGradientRect(x + 1, y + h - 1, w - 1, 1, grad2, grad2);
 	}
 
+	public static void drawTexturedModalRect(@Nonnull final ResourceLocation texture, final int x, final int y,
+			final int width, final int height) {
+		final float zLevel = 0F;
+		
+		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+		Tessellator tessellator = Tessellator.getInstance();
+		VertexBuffer vertexbuffer = tessellator.getBuffer();
+		vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		vertexbuffer.pos((double) (x + 0), (double) (y + height), (double) zLevel).endVertex();
+		vertexbuffer.pos((double) (x + width), (double) (y + height), (double) zLevel).endVertex();
+		vertexbuffer.pos((double) (x + width), (double) (y + 0), (double) zLevel).endVertex();
+		vertexbuffer.pos((double) (x + 0), (double) (y + 0), (double) zLevel).endVertex();
+		tessellator.draw();
+	}
 }
