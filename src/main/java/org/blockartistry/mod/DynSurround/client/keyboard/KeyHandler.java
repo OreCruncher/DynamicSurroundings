@@ -36,6 +36,7 @@ import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.text.TextComponentString;
@@ -96,7 +97,7 @@ public class KeyHandler {
 		}
 
 		if (LIGHTLEVEL_KEY.isPressed()) {
-			if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
+			if (GuiScreen.isCtrlKeyDown()) {
 				// Only change mode when visible
 				if (LightLevelHUD.showHUD) {
 					ModOptions.llDisplayMode++;
@@ -104,7 +105,7 @@ public class KeyHandler {
 						ModOptions.llDisplayMode = 0;
 					sendPlayerMessage("cfg.keybind.msg.LLDisplayMode", Mode.getMode(ModOptions.llDisplayMode).name());
 				}
-			} else if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
+			} else if (GuiScreen.isShiftKeyDown()) {
 				if (LightLevelHUD.showHUD) {
 					ModOptions.llHideSafe = !ModOptions.llHideSafe;
 					sendPlayerMessage("cfg.keybind.msg.LLSafeBlocks", getOnOff(ModOptions.llHideSafe));
