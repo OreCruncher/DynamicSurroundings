@@ -89,7 +89,7 @@ public class TextPanel extends Panel {
 
 		super.render(locX, locY, ref);
 
-		final int textRGB = foreground.rgbWithAlpha(this.alpha);
+		final int textRGB = this.getForegroundColor().rgbWithAlpha(this.alpha);
 
 		GlStateManager.color(1F, 1F, 1F, this.alpha);
 		GlStateManager.enableBlend();
@@ -103,9 +103,9 @@ public class TextPanel extends Panel {
 
 		int drawY = posY + (this.font.FONT_HEIGHT + 1) / 2;
 
-		for (final String s : this.text) {
-			GuiUtils.drawCenteredString(this.font, s, drawX, drawY, textRGB);
-			drawY += font.FONT_HEIGHT;
+		for (int i = 0; i < this.text.size(); i++) {
+			GuiUtils.drawCenteredString(this.font, this.text.get(i), drawX, drawY, textRGB);
+			drawY += this.font.FONT_HEIGHT;
 		}
 
 		GlStateManager.color(1F, 1F, 1F, 1F);

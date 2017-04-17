@@ -35,7 +35,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class Panel {
 
 	public static final Color BACKGROUND_COLOR = Color.DARKSLATEGRAY;
-	public static final Color FRAME_COLOR = Color.MC_WHITE;
+	public static final Color BORDER_COLOR = Color.MC_WHITE;
 	public static final Color TEXT_COLOR = Color.MC_YELLOW;
 
 	private static final int DEFAULT_WIDTH = 10;
@@ -76,16 +76,30 @@ public class Panel {
 	}
 
 	public Panel(final int width, final int height) {
-		this(width, height, TEXT_COLOR, BACKGROUND_COLOR, FRAME_COLOR);
+		this(width, height, TEXT_COLOR, BACKGROUND_COLOR, BORDER_COLOR);
 	}
 
 	public Panel(final int width, final int height, final Color fore, final Color back, final Color border) {
-		this.foreground = fore;
-		this.background = back;
-		this.border = border;
+		this.foreground = fore != null ? fore : TEXT_COLOR;
+		this.background = back != null ? back : BACKGROUND_COLOR;
+		this.border = border != null ? border : BORDER_COLOR;
 
 		this.minWidth = this.width = width;
 		this.minHeight = this.height = height;
+	}
+	
+	@Nonnull
+	public Color getForegroundColor() {
+		return this.foreground;
+	}
+	
+	@Nonnull
+	public Color getBackgroundColor() {
+		return this.background;
+	}
+	
+	@Nonnull Color getFrameColor() {
+		return this.border;
 	}
 
 	public Panel setAlpha(final float a) {
