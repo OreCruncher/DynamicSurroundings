@@ -39,7 +39,10 @@ import net.minecraft.client.gui.GuiSlider;
 import net.minecraft.client.gui.GuiSlider.FormatHelper;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class VolumeControlGui extends GuiScreen implements GuiResponder {
 
 	private static final FormatHelper FORMAT = new FormatHelper() {
@@ -89,6 +92,7 @@ public class VolumeControlGui extends GuiScreen implements GuiResponder {
 	
 	@Override
     public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
+        this.drawDefaultBackground();
 		final int drawX = (this.width + 1) / 2;
 		final int drawY = 30;
 		this.panel.render(drawX, drawY, Reference.TOP_CENTER);
