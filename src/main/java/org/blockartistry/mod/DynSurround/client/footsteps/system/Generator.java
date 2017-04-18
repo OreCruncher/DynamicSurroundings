@@ -154,8 +154,11 @@ public class Generator {
 				event = speedDisambiguator(ply, EventType.WALK, EventType.RUN);
 			}
 
+			distance = reevaluateDistance(event, distance);
+			
 			if (dwm > distance) {
 				produceStep(ply, event, verticalOffsetAsMinus);
+				stepped(ply, event);
 				dmwBase = distanceReference;
 			}
 		}
@@ -165,6 +168,13 @@ public class Generator {
 							// while descending stairs
 			yPosition = ply.posY;
 		}
+	}
+
+	protected void stepped(@Nonnull final EntityPlayer ply, @Nonnull final EventType event) {
+	}
+
+	protected float reevaluateDistance(@Nonnull final EventType event, final float distance) {
+		return distance;
 	}
 
 	protected void produceStep(@Nonnull final EntityPlayer ply, @Nonnull final EventType event) {
