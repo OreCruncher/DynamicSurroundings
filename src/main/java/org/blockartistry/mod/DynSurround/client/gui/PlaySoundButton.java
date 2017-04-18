@@ -74,7 +74,6 @@ public class PlaySoundButton extends GuiButtonExt {
 			this.displayString = PLAY;
 		} else {
 			mc.getSoundHandler().stopSounds();
-			//mc.getSoundHandler().resumeSounds();
 			this.playingSound = new ConfigSound(this.soundResource, volume);
 			mc.getSoundHandler().playSound(this.playingSound);
 			this.displayString = STOP;
