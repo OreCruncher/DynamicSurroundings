@@ -50,7 +50,8 @@ public class ParticleFootprint extends ParticleBase {
 	public static enum Style {
 		
 		SHOE("textures/particles/footprint.png"),
-		SQUARE("textures/particles/footprint_square.png");
+		SQUARE("textures/particles/footprint_square.png"),
+		HORSESHOE("textures/particles/footprint_horseshoe.png");
 		
 		private final ResourceLocation resource;
 		
