@@ -26,6 +26,8 @@ package org.blockartistry.mod.DynSurround.client.footsteps.system;
 
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
@@ -36,17 +38,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GeneratorQP extends Generator {
 	
-	private int hoof = 0;
-	private int USE_FUNCTION = 2;
-	private float nextWalkDistanceMultiplier = 0.05f;
 	private final Random rand = XorShiftRandom.current();
+	private final int USE_FUNCTION = 2;
 
-	public GeneratorQP(Isolator isolator) {
+	private int hoof = 0;
+	private float nextWalkDistanceMultiplier = 0.05f;
+
+	public GeneratorQP(@Nonnull final Isolator isolator) {
 		super(isolator);
 	}
 
 	@Override
-	protected void stepped(final EntityPlayer ply, final EventType event) {
+	protected void stepped(@Nonnull final EntityPlayer ply, @Nonnull final EventType event) {
 		if (this.hoof == 0 || this.hoof == 2) {
 			this.nextWalkDistanceMultiplier = this.rand.nextFloat();
 		}
@@ -68,18 +71,12 @@ public class GeneratorQP extends Generator {
 	}
 
 	@Override
-	protected float reevaluateDistance(final EventType event, final float distance) {
+	protected float reevaluateDistance(@Nonnull final EventType event, @Nonnull final float distance) {
 		float ret = distance;
 		if (event == EventType.WALK) {
 			if (this.USE_FUNCTION == 2) {
 				final float overallMultiplier = 1.85f / 2;
 				final float ndm = 0.2f;
-
-				/*
-				 * if (this.hoof == 1 || this.hoof == 3) return
-				 * this.nextWalkDistanceMultiplier * 0.5f; else return ret * (1
-				 * - ndm) * overallMultiplier;
-				 */
 				float pond = this.nextWalkDistanceMultiplier;
 				pond *= pond;
 				pond *= ndm;
