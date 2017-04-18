@@ -336,6 +336,7 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_BOW_PULL_SOUND = "Bow Pull Sound";
 	public static final String CONFIG_ENABLE_FOOTSTEPS_SOUND = "Footsteps";
 	public static final String CONFIG_FOOTSTEPS_SOUND_FACTOR = "Footsteps Sound Factor";
+	public static final String CONFIG_FOOTSTEPS_QUAD = "Footsteps as Quadruped";
 	public static final String CONFIG_ENABLE_ARMOR_SOUND = "Armor Sound";
 	public static final String CONFIG_SOUND_CULL_THRESHOLD = "Sound Culling Threshold";
 	public static final String CONFIG_CULLED_SOUNDS = "Culled Sounds";
@@ -343,7 +344,7 @@ public final class ModOptions {
 	public static final String CONFIG_SOUND_VOLUMES = "Sound Volume";
 	public static final String CONFIG_THUNDER_VOLUME = "Thunder Volume";
 	private static final List<String> soundsSort = Arrays.asList(CONFIG_ENABLE_BIOME_SOUNDS, CONFIG_MASTER_SOUND_FACTOR,
-			CONFIG_ENABLE_FOOTSTEPS_SOUND, CONFIG_FOOTSTEPS_SOUND_FACTOR, CONFIG_ENABLE_ARMOR_SOUND,
+			CONFIG_ENABLE_FOOTSTEPS_SOUND, CONFIG_FOOTSTEPS_SOUND_FACTOR, CONFIG_FOOTSTEPS_QUAD, CONFIG_ENABLE_ARMOR_SOUND,
 			CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_SWING_SOUND, CONFIG_ENABLE_CRAFTING_SOUND,
 			CONFIG_ENABLE_BOW_PULL_SOUND, CONFIG_AUTO_CONFIG_CHANNELS, CONFIG_NORMAL_CHANNEL_COUNT,
 			CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS,
@@ -396,6 +397,9 @@ public final class ModOptions {
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Volume scale factor for footstep sounds")
 	public static float footstepsSoundFactor = 0.35F;
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_FOOTSTEPS_QUAD, defaultValue = "false", lang = "cfg.sound.FootstepQuad")
+	@Comment("Simulate quadruped with Footstep effects (horse)")
+	public static boolean foostepsQuadruped = false;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_ARMOR_SOUND, defaultValue = "true", lang = "cfg.sound.Armor")
 	@Comment("Enable/disable armor sounds when moving")
 	public static boolean enableArmorSounds = true;

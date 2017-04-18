@@ -32,12 +32,14 @@ import java.util.Scanner;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.Manifest;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.PrimitiveMap;
 import org.blockartistry.mod.DynSurround.client.footsteps.parsers.AcousticsJsonReader;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Generator;
+import org.blockartistry.mod.DynSurround.client.footsteps.system.GeneratorQP;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.ResourcePacks;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Solver;
@@ -77,11 +79,8 @@ public class FootstepsRegistry extends Registry {
 		reloadPrimitiveMap(repo);
 
 		this.isolator.setSolver(new Solver(this.isolator));
-		this.isolator.setGenerator(new Generator(this.isolator));
-		/*
-		 * this.isolator.setGenerator(getConfig().getInteger("custom.stance") ==
-		 * 0 ? new Generator(this.isolator) : new GeneratorQP(this.isolator));
-		 */
+		this.isolator.setGenerator(
+				ModOptions.foostepsQuadruped ? new GeneratorQP(this.isolator) : new Generator(this.isolator));
 	}
 	
 	@Override
