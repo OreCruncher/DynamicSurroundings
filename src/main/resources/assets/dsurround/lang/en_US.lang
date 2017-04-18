@@ -20,6 +20,8 @@ format.Daytime=Daytime
 format.Nighttime=Nighttime
 format.Play=Play
 format.Stop=STOP
+format.Block=Block
+format.Cull=Cull
 
 # Volume Quickset Dialog
 dlg.format.Display=%s %d%%
@@ -208,12 +210,8 @@ cfg.sound.Armor=Armor Sounds
 cfg.sound.Armor.tooltip=Enable/disable armor sounds when moving
 cfg.sound.CullInterval=Sound Culling Interval
 cfg.sound.CullInterval.tooltip=Ticks between culled sound events (0 to disable culling)
-cfg.sound.CulledSounds=Culled Sounds
-cfg.sound.CulledSounds.tooltip=Sounds to cull from frequent playing
-cfg.sound.BlockedSounds=Blocked Sounds
-cfg.sound.BlockedSounds.tooltip=Sounds to block from playing
-cfg.sound.SoundVolumes=Individual Sound Volume Scale Factors
-cfg.sound.SoundVolumes.tooltip=Individual sound volume scaling factors
+cfg.sound.SoundConfig=Individual Sound Configuration
+cfg.sound.SoundConfig.tooltip=Configure sound block, cull, and individual volumes
 
 cfg.player.cat.Player=Player Options
 cfg.player.cat.Player.tooltip=General options for defining sound and effects the player entity

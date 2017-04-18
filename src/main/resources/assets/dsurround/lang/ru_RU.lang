@@ -161,12 +161,6 @@ cfg.sound.Armor=Звуки брони
 cfg.sound.Armor.tooltip=Включить/выключить звуки брони при движении
 cfg.sound.CullInterval=Интервал отбракованных звуков
 cfg.sound.CullInterval.tooltip=Не менее скольки тиков нужно, чтобы был проигран отбракованный звук (0, чтобы выключить)
-cfg.sound.CulledSounds=Отбракованные звуки
-cfg.sound.CulledSounds.tooltip=Не проигрывать выбранные звуки слишком часто
-cfg.sound.BlockedSounds=Блокированные звуки
-cfg.sound.BlockedSounds.tooltip=Какие звуки не нужно проигрывать
-cfg.sound.SoundVolumes=Отдельные настройки звуков
-cfg.sound.SoundVolumes.tooltip=Отдельные настройки громкости для каждого звука
 
 cfg.player.cat.Player=Эффекты игрока
 cfg.player.cat.Player.tooltip=Основные настройки для определения звуков и эффектов для сущности игрока
