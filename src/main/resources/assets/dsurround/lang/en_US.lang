@@ -18,6 +18,8 @@ format.Sunrise=Sunrise
 format.Sunset=Sunset
 format.Daytime=Daytime
 format.Nighttime=Nighttime
+format.Play=Play
+format.Stop=STOP
 
 # Volume Quickset Dialog
 dlg.format.Display=%s %d%%

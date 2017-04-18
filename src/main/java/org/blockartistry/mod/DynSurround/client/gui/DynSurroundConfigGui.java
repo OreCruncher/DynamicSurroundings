@@ -49,7 +49,6 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.client.config.GuiConfig;
-import net.minecraftforge.fml.client.config.GuiConfigEntries.NumberSliderEntry;
 import net.minecraftforge.fml.client.config.IConfigElement;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -206,7 +205,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 			prop.setRequiresMcRestart(false);
 			prop.setRequiresWorldRestart(false);
 			prop.set(MathHelper.floor_float(registry.getVolumeScale(sound) * 100));
-			prop.setConfigEntryClass(NumberSliderEntry.class);
+			prop.setConfigEntryClass(SoundVolumeEntry.class);
 			cat.put(sound, prop);
 		}
 	}

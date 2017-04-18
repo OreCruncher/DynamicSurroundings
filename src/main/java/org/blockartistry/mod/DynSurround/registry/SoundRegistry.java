@@ -35,6 +35,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
+import org.blockartistry.mod.DynSurround.client.gui.ConfigSound;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -184,7 +185,7 @@ public final class SoundRegistry extends Registry {
 	}
 
 	public float getVolumeScale(@Nonnull final ISound sound) {
-		return sound.getSoundLocation() == null ? 1F : this.volumeControl.get(sound.getSoundLocation().toString());
+		return (sound.getSoundLocation() == null || sound instanceof ConfigSound) ? 1F : this.volumeControl.get(sound.getSoundLocation().toString());
 	}
 
 }
