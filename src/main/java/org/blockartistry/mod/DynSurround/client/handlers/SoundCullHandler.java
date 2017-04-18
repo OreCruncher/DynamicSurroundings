@@ -30,6 +30,7 @@ import java.util.List;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.event.RegistryEvent;
+import org.blockartistry.mod.DynSurround.client.gui.ConfigSound;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.client.Minecraft;
@@ -86,7 +87,7 @@ public class SoundCullHandler extends EffectHandlerBase {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void soundEvent(final PlaySoundEvent event) {
-		if (event.getSound() == null)
+		if (event.getSound() == null || event.getSound() instanceof ConfigSound)
 			return;
 		
 		final String resource = event.getSound().getSoundLocation().toString();
