@@ -32,10 +32,14 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.util.Localization;
 
+import com.google.common.collect.ImmutableList;
+
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.ConfigGuiType;
 import net.minecraftforge.fml.client.config.GuiConfig;
 import net.minecraftforge.fml.client.config.GuiConfigEntries;
 import net.minecraftforge.fml.client.config.GuiSlider;
+import net.minecraftforge.fml.client.config.HoverChecker;
 import net.minecraftforge.fml.client.config.GuiConfigEntries.IConfigEntry;
 import net.minecraftforge.fml.client.config.GuiConfigEntries.NumberSliderEntry;
 import net.minecraftforge.fml.client.config.GuiEditArrayEntries.IArrayEntry;
@@ -49,14 +53,24 @@ public class SoundConfigEntry extends NumberSliderEntry {
 	private static final int ID_CULLED = 10000;
 	private static final int ID_BLOCKED = 10001;
 	private static final int ID_PLAY = 10002;
-	
+
 	private static final String CULL = Localization.format("format.Cull");
 	private static final String BLOCK = Localization.format("format.Block");
+	private static final String PLAY = Localization.format("format.Play");
 
+	private static final String TOOLTIP_FORMAT = TextFormatting.GREEN + "%s " + TextFormatting.GOLD + "%s";
 	private final CheckBoxButton cull;
 	private final CheckBoxButton block;
 	private final PlaySoundButton play;
-	
+
+	private final HoverChecker cullHover;
+	private final HoverChecker blockHover;
+	private final HoverChecker playHover;
+
+	private final List<String> cullHoverText;
+	private final List<String> blockHoverText;
+	private final List<String> playHoverText;
+
 	private final IConfigElement realConfig;
 
 	public SoundConfigEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement configElement) {
@@ -70,8 +84,33 @@ public class SoundConfigEntry extends NumberSliderEntry {
 		this.cull = new CheckBoxButton(ID_CULLED, CULL, culled, false);
 		this.block = new CheckBoxButton(ID_BLOCKED, BLOCK, blocked, false);
 		this.play = new PlaySoundButton(ID_PLAY, configElement.getName());
-		
+
+		this.cullHover = new HoverChecker(this.cull, 800);
+		this.blockHover = new HoverChecker(this.block, 800);
+		this.playHover = new HoverChecker(this.play, 800);
+
+		this.cullHoverText = ImmutableList.of(String.format(TOOLTIP_FORMAT, CULL, configElement.getName()));
+		this.blockHoverText = ImmutableList.of(String.format(TOOLTIP_FORMAT, BLOCK, configElement.getName()));
+		this.playHoverText = ImmutableList.of(String.format(TOOLTIP_FORMAT, PLAY, configElement.getName()));
+
 		this.realConfig = configElement;
+	}
+
+	@Override
+	public void drawToolTip(int mouseX, int mouseY) {
+		super.drawToolTip(mouseX, mouseY);
+
+		final boolean canHover = mouseY < this.owningScreen.entryList.bottom
+				&& mouseY > this.owningScreen.entryList.top;
+
+		if (this.cullHover.checkHover(mouseX, mouseY, canHover))
+			this.owningScreen.drawToolTip(this.cullHoverText, mouseX, mouseY);
+
+		if (this.blockHover.checkHover(mouseX, mouseY, canHover))
+			this.owningScreen.drawToolTip(this.blockHoverText, mouseX, mouseY);
+
+		if (this.playHover.checkHover(mouseX, mouseY, canHover))
+			this.owningScreen.drawToolTip(this.playHoverText, mouseX, mouseY);
 	}
 
 	@Override
@@ -277,7 +316,7 @@ public class SoundConfigEntry extends NumberSliderEntry {
 
 		@Override
 		public void set(Object value) {
-			this.initialValue = Integer.parseInt((String)value);
+			this.initialValue = Integer.parseInt((String) value);
 		}
 
 		@Override
