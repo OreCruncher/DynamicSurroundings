@@ -30,8 +30,6 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.mod.DynSurround.util.Localization;
-
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.util.text.TextFormatting;
@@ -54,11 +52,8 @@ public class SoundConfigEntry extends NumberSliderEntry {
 	private static final int ID_BLOCKED = 10001;
 	private static final int ID_PLAY = 10002;
 
-	private static final String CULL = Localization.format("format.Cull");
-	private static final String BLOCK = Localization.format("format.Block");
-	private static final String PLAY = Localization.format("format.Play");
-
 	private static final String TOOLTIP_FORMAT = TextFormatting.GREEN + "%s " + TextFormatting.GOLD + "%s";
+
 	private final CheckBoxButton cull;
 	private final CheckBoxButton block;
 	private final PlaySoundButton play;
@@ -73,31 +68,34 @@ public class SoundConfigEntry extends NumberSliderEntry {
 
 	private final IConfigElement realConfig;
 
-	public SoundConfigEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement configElement) {
+	public SoundConfigEntry(@Nonnull final GuiConfig owningScreen, @Nonnull final GuiConfigEntries owningEntryList,
+			@Nonnull final IConfigElement configElement) {
 		super(owningScreen, owningEntryList, new ConfigElementSliderAdapter(configElement));
+
+		final String soundName = configElement.getName();
 
 		// Parse out our parameter string
 		String parms = (String) configElement.get();
-		final boolean culled = parms.contains("cull");
-		final boolean blocked = parms.contains("block");
+		final boolean culled = parms.contains(GuiConstants.TOKEN_CULL);
+		final boolean blocked = parms.contains(GuiConstants.TOKEN_BLOCK);
 
-		this.cull = new CheckBoxButton(ID_CULLED, CULL, culled, false);
-		this.block = new CheckBoxButton(ID_BLOCKED, BLOCK, blocked, false);
-		this.play = new PlaySoundButton(ID_PLAY, configElement.getName());
+		this.cull = new CheckBoxButton(ID_CULLED, GuiConstants.TEXT_CULL, culled, false);
+		this.block = new CheckBoxButton(ID_BLOCKED, GuiConstants.TEXT_BLOCK, blocked, false);
+		this.play = new PlaySoundButton(ID_PLAY, soundName);
 
 		this.cullHover = new HoverChecker(this.cull, 800);
 		this.blockHover = new HoverChecker(this.block, 800);
 		this.playHover = new HoverChecker(this.play, 800);
 
-		this.cullHoverText = ImmutableList.of(String.format(TOOLTIP_FORMAT, CULL, configElement.getName()));
-		this.blockHoverText = ImmutableList.of(String.format(TOOLTIP_FORMAT, BLOCK, configElement.getName()));
-		this.playHoverText = ImmutableList.of(String.format(TOOLTIP_FORMAT, PLAY, configElement.getName()));
+		this.cullHoverText = ImmutableList.of(String.format(TOOLTIP_FORMAT, GuiConstants.TEXT_CULL, soundName));
+		this.blockHoverText = ImmutableList.of(String.format(TOOLTIP_FORMAT, GuiConstants.TEXT_BLOCK, soundName));
+		this.playHoverText = ImmutableList.of(String.format(TOOLTIP_FORMAT, GuiConstants.TEXT_PLAY, soundName));
 
 		this.realConfig = configElement;
 	}
 
 	@Override
-	public void drawToolTip(int mouseX, int mouseY) {
+	public void drawToolTip(final int mouseX, final int mouseY) {
 		super.drawToolTip(mouseX, mouseY);
 
 		final boolean canHover = mouseY < this.owningScreen.entryList.bottom
@@ -114,8 +112,8 @@ public class SoundConfigEntry extends NumberSliderEntry {
 	}
 
 	@Override
-	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY,
-			boolean isSelected) {
+	public void drawEntry(final int slotIndex, final int x, final int y, final int listWidth, final int slotHeight,
+			final int mouseX, final int mouseY, final boolean isSelected) {
 
 		this.owningEntryList.controlWidth -= 148;
 		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, mouseX, mouseY, isSelected);
@@ -163,7 +161,8 @@ public class SoundConfigEntry extends NumberSliderEntry {
 	}
 
 	@Override
-	public boolean mousePressed(int index, int x, int y, int mouseEvent, int relativeX, int relativeY) {
+	public boolean mousePressed(final int index, final int x, final int y, final int mouseEvent, final int relativeX,
+			final int relativeY) {
 		if (this.cull.mousePressed(this.mc, x, y)) {
 			this.cull.toggleState();
 		} else if (this.block.mousePressed(this.mc, x, y)) {
@@ -182,9 +181,9 @@ public class SoundConfigEntry extends NumberSliderEntry {
 		if (this.enabled() && this.isChanged()) {
 			final StringBuilder builder = new StringBuilder();
 			if (this.cull.getValue())
-				builder.append("cull ");
+				builder.append(GuiConstants.TOKEN_CULL).append(' ');
 			if (this.block.getValue())
-				builder.append("block ");
+				builder.append(GuiConstants.TOKEN_BLOCK).append(' ');
 			final int volume = ((GuiSlider) this.btnValue).getValueInt();
 			if (volume != 100)
 				builder.append(volume);
@@ -194,6 +193,14 @@ public class SoundConfigEntry extends NumberSliderEntry {
 		return false;
 	}
 
+	/**
+	 * The NumberSliderEntry super class assumes a single source value as a
+	 * value to manipulate. Since the SoundConfigEntry is a composite of 3
+	 * different config values, we need to process the parameter string to
+	 * extract out the volume scale information. This adapter is used because
+	 * the NumberSliderEntry CTOR is invoked before any other data processing
+	 * can take place.
+	 */
 	private static class ConfigElementSliderAdapter implements IConfigElement {
 
 		private final IConfigElement element;
@@ -202,7 +209,8 @@ public class SoundConfigEntry extends NumberSliderEntry {
 		public ConfigElementSliderAdapter(@Nonnull final IConfigElement element) {
 			this.element = element;
 
-			final String n = ((String) element.get()).replace("cull", "").replaceAll("block", "").trim();
+			final String n = ((String) element.get()).replace(GuiConstants.TOKEN_CULL, "")
+					.replace(GuiConstants.TOKEN_BLOCK, "").trim();
 			if (StringUtils.isEmpty(n))
 				this.initialValue = 100;
 			else
