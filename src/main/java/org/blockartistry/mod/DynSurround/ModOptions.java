@@ -577,6 +577,7 @@ public final class ModOptions {
 
 	public static final String CATEGORY_COMPASS = "compass";
 	public static final String CONFIG_COMPASS_ENABLE = "Enable Compass";
+	public static final String CONFIG_CLOCK_ENABLE = "Enable Clock";
 	public static final String CONFIG_COMPASS_STYLE = "Compass Style";
 	public static final String CONFIG_COMPASS_TRANSPARENCY = "Transparency";
 	public static final String CONFIG_COMPASS_COORD_FORMAT = "Cood Format";
@@ -584,6 +585,9 @@ public final class ModOptions {
 	@Parameter(category = CATEGORY_COMPASS, property = CONFIG_COMPASS_ENABLE, defaultValue = "true", lang = "cfg.compass.Enable")
 	@Comment("Enable/disable compass HUD when compass is held")
 	public static boolean enableCompass = true;
+	@Parameter(category = CATEGORY_COMPASS, property = CONFIG_CLOCK_ENABLE, defaultValue = "true", lang = "cfg.compass.ClockEnable")
+	@Comment("Enable/disable clock HUD when clock is held")
+	public static boolean enableClock = true;
 	@Parameter(category = CATEGORY_COMPASS, property = CONFIG_COMPASS_STYLE, defaultValue = "0", lang = "cfg.compass.Style")
 	@Comment("Style of compass bar")
 	@MinMaxInt(min = 0, max = 6)
