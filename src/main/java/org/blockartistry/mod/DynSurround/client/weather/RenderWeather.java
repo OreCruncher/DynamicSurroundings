@@ -56,7 +56,8 @@ public final class RenderWeather extends IRenderHandler {
 	 * hook like that for rain/snow rendering?
 	 */
 	public static void addRainParticles(@Nonnull final EntityRenderer theThis) {
-		StormSplashRenderer.renderStormSplashes(EnvironState.getDimensionId(), theThis);
+		if(EnvironState.getWorld() != null)
+			StormSplashRenderer.renderStormSplashes(EnvironState.getDimensionId(), theThis);
 	}
 
 	@Override
