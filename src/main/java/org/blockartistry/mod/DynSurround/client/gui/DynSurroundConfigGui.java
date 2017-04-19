@@ -87,7 +87,8 @@ public class DynSurroundConfigGui extends GuiConfig {
 		addConfigElement(ModOptions.CATEGORY_COMPASS, ModOptions.CONFIG_COMPASS_ENABLE);
 
 		// Synthetic options for handling sound blocking and volume
-		this.soundCategory = new ConfigCategory("Sounds Configuration").setLanguageKey("cfg.sound.SoundConfig");
+		this.soundCategory = new ConfigCategory("Individual Sound Configuration")
+				.setLanguageKey("cfg.sound.SoundConfig");
 		this.soundElement = new ConfigElement(this.soundCategory);
 		generateSoundList(this.soundCategory);
 		this.configElements.add(this.soundElement);
@@ -137,39 +138,39 @@ public class DynSurroundConfigGui extends GuiConfig {
 		final List<String> culledSounds = new ArrayList<String>();
 		final List<String> blockedSounds = new ArrayList<String>();
 		final List<String> soundVolumes = new ArrayList<String>();
-		
+
 		for (final Entry<String, Property> entry : this.soundCategory.entrySet()) {
 			final String sound = entry.getKey();
 			String parms = entry.getValue().getString();
-			if(StringUtils.isEmpty(parms))
+			if (StringUtils.isEmpty(parms))
 				continue;
-			
-			if(parms.contains("cull")) {
-				parms = parms.replace("cull", "");
+
+			if (parms.contains(GuiConstants.TOKEN_CULL)) {
+				parms = parms.replace(GuiConstants.TOKEN_CULL, "");
 				culledSounds.add(sound);
 			}
-			
-			if(parms.contains("block")) {
-				parms = parms.replace("block", "");
+
+			if (parms.contains(GuiConstants.TOKEN_BLOCK)) {
+				parms = parms.replace(GuiConstants.TOKEN_BLOCK, "");
 				blockedSounds.add(sound);
 			}
-			
+
 			parms = parms.trim();
-			if(StringUtils.isEmpty(parms))
+			if (StringUtils.isEmpty(parms))
 				continue;
-			
+
 			final int volume = Integer.parseInt(parms);
-			if(volume != 100) {
+			if (volume != 100) {
 				soundVolumes.add(sound + "=" + volume);
 			}
 		}
-		
+
 		String[] results = culledSounds.toArray(new String[culledSounds.size()]);
 		this.config.getCategory(ModOptions.CATEGORY_SOUND).get(ModOptions.CONFIG_CULLED_SOUNDS).set(results);
-		
+
 		results = blockedSounds.toArray(new String[blockedSounds.size()]);
 		this.config.getCategory(ModOptions.CATEGORY_SOUND).get(ModOptions.CONFIG_BLOCKED_SOUNDS).set(results);
-		
+
 		results = soundVolumes.toArray(new String[soundVolumes.size()]);
 		this.config.getCategory(ModOptions.CATEGORY_SOUND).get(ModOptions.CONFIG_SOUND_VOLUMES).set(results);
 	}
@@ -192,13 +193,13 @@ public class DynSurroundConfigGui extends GuiConfig {
 			prop.setRequiresWorldRestart(false);
 			prop.setConfigEntryClass(SoundConfigEntry.class);
 			final StringBuilder builder = new StringBuilder();
-			if(registry.isSoundBlocked(sound))
-				builder.append("block ");
-			if(registry.isSoundCulled(sound))
-				builder.append("cull ");
+			if (registry.isSoundBlocked(sound))
+				builder.append(GuiConstants.TOKEN_BLOCK).append(' ');
+			if (registry.isSoundCulled(sound))
+				builder.append(GuiConstants.TOKEN_CULL).append(' ');
 			final float v = registry.getVolumeScale(sound);
-			if(v != 1.0F)
-				builder.append((int)(v * 100F));
+			if (v != 1.0F)
+				builder.append((int) (v * 100F));
 			prop.setValue(builder.toString());
 			cat.put(sound, prop);
 		}

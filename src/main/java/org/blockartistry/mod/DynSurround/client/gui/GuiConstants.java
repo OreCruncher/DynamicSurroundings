@@ -24,58 +24,25 @@
 
 package org.blockartistry.mod.DynSurround.client.gui;
 
-import javax.annotation.Nonnull;
+import org.blockartistry.mod.DynSurround.util.Localization;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class PlaySoundButton extends GuiButtonExt {
+public final class GuiConstants {
 	
-	private final String soundResource;
-	private ISound playingSound;
+	private GuiConstants() {
+		
+	}
+	
+	public static final String TOKEN_CULL = "cull";
+	public static final String TOKEN_BLOCK  = "block";
 
-	public PlaySoundButton(final int id, @Nonnull final String sound) {
-		super(id, 0, 0, 34, 18, GuiConstants.TEXT_PLAY);
-		
-		this.soundResource = sound;
-	}
-	
-	public String getSoundResource() {
-		return this.soundResource;
-	}
-	
-	protected void updateDisplayText() {
-		this.displayString = this.playingSound != null ? GuiConstants.TEXT_STOP : GuiConstants.TEXT_PLAY;
-	}
-	
-	@Override
-	public void drawButton(@Nonnull final Minecraft mc, final int x, final int y) {
-		super.drawButton(mc, x, y);
-		
-		if (this.playingSound != null) {
-			if (!mc.getSoundHandler().isSoundPlaying(this.playingSound)) {
-				this.playingSound = null;
-				updateDisplayText();
-			}
-		}
-
-	}
-	
-	public void playSound(@Nonnull final Minecraft mc, final float volume) {
-		if (this.playingSound != null) {
-			mc.getSoundHandler().stopSound(this.playingSound);
-			this.playingSound = null;
-		} else {
-			mc.getSoundHandler().stopSounds();
-			this.playingSound = new ConfigSound(this.soundResource, volume);
-			mc.getSoundHandler().playSound(this.playingSound);
-		}
-		
-		updateDisplayText();
-	}
+	public static final String TEXT_CULL = Localization.format("format.Cull");
+	public static final String TEXT_BLOCK = Localization.format("format.Block");
+	public static final String TEXT_PLAY = Localization.format("format.Play");
+	public static final String TEXT_STOP = TextFormatting.RED + Localization.format("format.Stop");
 
 }
