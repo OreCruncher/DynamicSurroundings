@@ -132,7 +132,7 @@ public class CompassHUD extends GuiOverlay {
 	}
 
 	protected boolean showClock() {
-		return ModOptions.enableCompass && PlayerUtils.isHolding(EnvironState.getPlayer(), Items.CLOCK);
+		return ModOptions.enableClock && PlayerUtils.isHolding(EnvironState.getPlayer(), Items.CLOCK);
 	}
 
 	@Nonnull
@@ -207,29 +207,30 @@ public class CompassHUD extends GuiOverlay {
 
 		GlStateManager.color(1F, 1F, 1F, ModOptions.compassTransparency);
 
-		if (!style.isRose()) {
+		if (this.showCompass)
+			if (!style.isRose()) {
 
-			final int direction = MathHelper.floor(((mc.player.rotationYaw * 256F) / 360F) + 0.5D) & 255;
-			final int x = (resolution.getScaledWidth() - style.getWidth() + 1) / 2;
-			final int y = (resolution.getScaledHeight() - style.getHeight() + 1) / 2 - style.getHeight();
+				final int direction = MathHelper.floor(((mc.player.rotationYaw * 256F) / 360F) + 0.5D) & 255;
+				final int x = (resolution.getScaledWidth() - style.getWidth() + 1) / 2;
+				final int y = (resolution.getScaledHeight() - style.getHeight() + 1) / 2 - style.getHeight();
 
-			if (direction < 128)
-				drawTexturedModalRect(x, y, direction, (ModOptions.compassStyle * (style.getHeight() * 2)),
-						style.getWidth(), style.getHeight());
-			else
-				drawTexturedModalRect(x, y, direction - 128,
-						(ModOptions.compassStyle * (style.getHeight() * 2)) + style.getHeight(), style.getWidth(),
-						style.getHeight());
-		} else if (this.showCompass) {
-			GlStateManager.pushMatrix();
-			GlStateManager.translate(centerX, centerY - BAND_HEIGHT * 2.5F, 0);
-			GlStateManager.rotate(70, 1F, 0F, 0F);
-			GlStateManager.rotate(-MathStuff.wrapDegrees(mc.player.rotationYaw + 180F), 0F, 0F, 1F);
-			final int x = -(style.getWidth() + 1) / 2;
-			final int y = -(style.getHeight() + 1) / 2;
-			drawTexturedModalRect(x, y, 0, 0, style.getWidth(), style.getHeight());
-			GlStateManager.popMatrix();
-		}
+				if (direction < 128)
+					drawTexturedModalRect(x, y, direction, (ModOptions.compassStyle * (style.getHeight() * 2)),
+							style.getWidth(), style.getHeight());
+				else
+					drawTexturedModalRect(x, y, direction - 128,
+							(ModOptions.compassStyle * (style.getHeight() * 2)) + style.getHeight(), style.getWidth(),
+							style.getHeight());
+			} else {
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(centerX, centerY - BAND_HEIGHT * 2.5F, 0);
+				GlStateManager.rotate(70, 1F, 0F, 0F);
+				GlStateManager.rotate(-MathStuff.wrapDegrees(mc.player.rotationYaw + 180F), 0F, 0F, 1F);
+				final int x = -(style.getWidth() + 1) / 2;
+				final int y = -(style.getHeight() + 1) / 2;
+				drawTexturedModalRect(x, y, 0, 0, style.getWidth(), style.getHeight());
+				GlStateManager.popMatrix();
+			}
 
 		GlStateManager.color(1F, 1F, 1F, 1F);
 	}

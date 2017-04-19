@@ -85,6 +85,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 		addConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES, ModOptions.CONFIG_OPTION_ENABLE_ENTITY_CHAT);
 		addConfigElement(ModOptions.CATEGORY_EXPLOSIONS, ModOptions.CONFIG_ENABLE_EXPLOSIONS);
 		addConfigElement(ModOptions.CATEGORY_COMPASS, ModOptions.CONFIG_COMPASS_ENABLE);
+		addConfigElement(ModOptions.CATEGORY_COMPASS, ModOptions.CONFIG_CLOCK_ENABLE);
 
 		// Synthetic options for handling sound blocking and volume
 		this.soundCategory = new ConfigCategory("Individual Sound Configuration")
