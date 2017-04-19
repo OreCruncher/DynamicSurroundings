@@ -1,3 +1,24 @@
+###DynamicSurroundings-1.10.2-3.3.6.0
+**What's New**
+* Added new horseshoe footprint style.
+* Quadruped support.  Enable option under Sound Options.  Turn on to have footstep sounds like a quadruped (horse).  Useful with [Mine Little Pony](http://minelittlepony-mod.com/).  Try with the new horseshoe footprint!  Note that MLP is not required for the quadruped sounds and horseshoe prints to work.
+* Consolidated the various sound configuration dialogs into one
+    * New dialog can be found under "Individual Sound Configuration"
+    * Can toggle sound blocking, culling, and set individual sound scale factors
+    * dsurround.cfg schema is not altered
+* Sound Play button in the "Individual Sound Configuration" dialog
+    * Playing the sound will play at the current slide volume
+    * Pressing button again when labeled stop will stop the sound
+    * Sounds play on MASTER category so MASTER slider will influence volume
+    * The actual volume in game may vary because mods may use different volume settings
+
+**Fixes**
+* OpenEye report related to rain splash particle rendering.
+
+**Changes**
+* Merged clock and compass HUD so they share the same text panel
+* Color panel behind volume control dialog
+
 ###DynamicSurroundings-1.10.2-3.3.5.2
 **Fixes**
 * Strange rendering caused by client side block event handler throwing an NPE due to race condition
