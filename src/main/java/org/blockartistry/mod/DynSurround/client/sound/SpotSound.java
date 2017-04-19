@@ -29,6 +29,8 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
+
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -40,8 +42,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class SpotSound extends PositionedSound implements IMySound {
 
 	private static final int SPOT_SOUND_RANGE = 8;
-	private static final Random RANDOM = new Random();
 
+	private final Random RANDOM = XorShiftRandom.current();
 	private final SoundEffect sound;
 	private final int timeMark;
 
