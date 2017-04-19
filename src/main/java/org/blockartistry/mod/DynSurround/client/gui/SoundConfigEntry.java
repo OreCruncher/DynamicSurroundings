@@ -30,8 +30,11 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.mod.DynSurround.util.ForgeUtils;
+
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.ConfigGuiType;
 import net.minecraftforge.fml.client.config.GuiConfig;
@@ -51,8 +54,6 @@ public class SoundConfigEntry extends NumberSliderEntry {
 	private static final int ID_CULLED = 10000;
 	private static final int ID_BLOCKED = 10001;
 	private static final int ID_PLAY = 10002;
-
-	private static final String TOOLTIP_FORMAT = TextFormatting.GREEN + "%s " + TextFormatting.GOLD + "%s";
 
 	private final CheckBoxButton cull;
 	private final CheckBoxButton block;
@@ -87,11 +88,15 @@ public class SoundConfigEntry extends NumberSliderEntry {
 		this.blockHover = new HoverChecker(this.block, 800);
 		this.playHover = new HoverChecker(this.play, 800);
 
-		this.cullHoverText = ImmutableList.of(String.format(TOOLTIP_FORMAT, GuiConstants.TEXT_CULL, soundName));
-		this.blockHoverText = ImmutableList.of(String.format(TOOLTIP_FORMAT, GuiConstants.TEXT_BLOCK, soundName));
-		this.playHoverText = ImmutableList.of(String.format(TOOLTIP_FORMAT, GuiConstants.TEXT_PLAY, soundName));
+		// Replace the slider tooltip with our own version
+		final String modName = TextFormatting.GREEN + ForgeUtils.getModName(new ResourceLocation(soundName));
+		this.toolTip = ImmutableList.of(modName, TextFormatting.GOLD + soundName);
+		this.cullHoverText = this.toolTip;
+		this.blockHoverText = this.toolTip;
+		this.playHoverText = this.toolTip;
 
 		this.realConfig = configElement;
+		
 	}
 
 	@Override

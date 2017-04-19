@@ -26,6 +26,9 @@ package org.blockartistry.mod.DynSurround.util;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
+
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.ModMetadata;
@@ -33,22 +36,35 @@ import net.minecraftforge.fml.common.ModMetadata;
 public final class ForgeUtils {
 
 	private ForgeUtils() {
-		
+
 	}
-	
+
 	@Nullable
 	public static ModContainer findModContainer(@Nonnull final String modId) {
-		for (final ModContainer mod : Loader.instance().getActiveModList()) {
-			if (mod.getModId().equals(modId))
-				return mod;
-		}
+		if (!StringUtils.isEmpty(modId))
+			for (final ModContainer mod : Loader.instance().getActiveModList()) {
+				if (mod.getModId().equalsIgnoreCase(modId))
+					return mod;
+			}
 		return null;
 	}
 
+	@Nullable
 	public static ModMetadata getModMetadata(@Nonnull final String modId) {
 		final ModContainer container = findModContainer(modId);
 		return container != null ? container.getMetadata() : null;
 	}
 
+	@Nonnull
+	public static String getModName(@Nonnull final String modId) {
+		if ("minecraft".equalsIgnoreCase(modId))
+			return "Minecraft";
+		final ModContainer cont = findModContainer(modId);
+		return cont != null ? cont.getName() : "UNKNOWN";
+	}
 	
+	@Nonnull
+	public static String getModName(@Nonnull final ResourceLocation resource) {
+		return getModName(resource.getResourceDomain());
+	}
 }
