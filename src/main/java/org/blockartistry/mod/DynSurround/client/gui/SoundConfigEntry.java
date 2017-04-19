@@ -62,10 +62,7 @@ public class SoundConfigEntry extends NumberSliderEntry {
 	private final HoverChecker cullHover;
 	private final HoverChecker blockHover;
 	private final HoverChecker playHover;
-
-	private final List<String> cullHoverText;
-	private final List<String> blockHoverText;
-	private final List<String> playHoverText;
+	private final HoverChecker sliderHover;
 
 	private final IConfigElement realConfig;
 
@@ -87,16 +84,14 @@ public class SoundConfigEntry extends NumberSliderEntry {
 		this.cullHover = new HoverChecker(this.cull, 800);
 		this.blockHover = new HoverChecker(this.block, 800);
 		this.playHover = new HoverChecker(this.play, 800);
+		this.sliderHover = new HoverChecker(null, 800);
 
 		// Replace the slider tooltip with our own version
 		final String modName = TextFormatting.GREEN + ForgeUtils.getModName(new ResourceLocation(soundName));
 		this.toolTip = ImmutableList.of(modName, TextFormatting.GOLD + soundName);
-		this.cullHoverText = this.toolTip;
-		this.blockHoverText = this.toolTip;
-		this.playHoverText = this.toolTip;
 
 		this.realConfig = configElement;
-		
+
 	}
 
 	@Override
@@ -106,14 +101,17 @@ public class SoundConfigEntry extends NumberSliderEntry {
 		final boolean canHover = mouseY < this.owningScreen.entryList.bottom
 				&& mouseY > this.owningScreen.entryList.top;
 
+		if (this.sliderHover.checkHover(mouseX, mouseY))
+			this.owningScreen.drawToolTip(this.toolTip, mouseX, mouseY);
+
 		if (this.cullHover.checkHover(mouseX, mouseY, canHover))
-			this.owningScreen.drawToolTip(this.cullHoverText, mouseX, mouseY);
+			this.owningScreen.drawToolTip(this.toolTip, mouseX, mouseY);
 
 		if (this.blockHover.checkHover(mouseX, mouseY, canHover))
-			this.owningScreen.drawToolTip(this.blockHoverText, mouseX, mouseY);
+			this.owningScreen.drawToolTip(this.toolTip, mouseX, mouseY);
 
 		if (this.playHover.checkHover(mouseX, mouseY, canHover))
-			this.owningScreen.drawToolTip(this.playHoverText, mouseX, mouseY);
+			this.owningScreen.drawToolTip(this.toolTip, mouseX, mouseY);
 	}
 
 	@Override
@@ -123,6 +121,8 @@ public class SoundConfigEntry extends NumberSliderEntry {
 		this.owningEntryList.controlWidth -= 148;
 		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, mouseX, mouseY, isSelected);
 		this.owningEntryList.controlWidth += 148;
+
+		this.sliderHover.updateBounds(y, y + slotHeight, x, this.owningEntryList.scrollBarX - 196);
 
 		this.play.xPosition = this.owningEntryList.scrollBarX - 82;
 		this.play.yPosition = y;
