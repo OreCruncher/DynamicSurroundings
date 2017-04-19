@@ -204,12 +204,15 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	protected void actuallyPlaySound(@Nonnull final Entity location, @Nonnull final SoundEvent sound,
 			final float volume, final float pitch) {
+
+		final float trueVolume = volume * ModOptions.footstepsSoundFactor;
+
 		if (ModLog.DEBUGGING)
 			ModLog.debug("    Playing sound " + sound.getSoundName() + " ("
-					+ String.format(Locale.ENGLISH, "v%.2f, p%.2f", volume, pitch) + ")");
+					+ String.format(Locale.ENGLISH, "v%.2f, p%.2f", trueVolume, pitch) + ")");
 
 		try {
-			location.playSound(sound, volume * ModOptions.footstepsSoundFactor, pitch);
+			location.playSound(sound, trueVolume, pitch);
 		} catch (final Throwable t) {
 			ModLog.error("Unable to play sound", t);
 		}
