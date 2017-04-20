@@ -47,6 +47,7 @@ import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
 import net.minecraftforge.client.event.sound.SoundSetupEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import paulscode.sound.SoundSystemConfig;
@@ -136,7 +137,7 @@ public class SoundEngine {
 			this.soundId = event.getUuid();
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onSoundSetup(@Nonnull final SoundSetupEvent event) {
 		configureSound();
 	}
