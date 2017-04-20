@@ -101,4 +101,12 @@ public final class MyUtils {
 		return null;
 	}
 
+	@SafeVarargs
+	public static <T> List<T> addAll(@Nonnull final List<T> list, final T... objs) {
+		if (objs != null)
+			for (int i = 0; i < objs.length; i++)
+				if (objs[i] != null)
+					list.add(objs[i]);
+		return list;
+	}
 }
