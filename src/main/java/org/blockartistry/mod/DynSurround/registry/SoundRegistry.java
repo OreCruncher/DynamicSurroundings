@@ -23,21 +23,27 @@
 
 package org.blockartistry.mod.DynSurround.registry;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Pattern;
-
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.gui.ConfigSound;
+import org.blockartistry.mod.DynSurround.util.MyUtils;
+import org.blockartistry.mod.DynSurround.util.SoundUtils;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
 
 import gnu.trove.impl.Constants;
 import gnu.trove.map.hash.TObjectFloatHashMap;
@@ -50,12 +56,13 @@ import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 //@SideOnly(Side.CLIENT)
 public final class SoundRegistry extends Registry {
 
-	private final List<Pattern> cullSoundNamePatterns = new ArrayList<Pattern>();
-	private final List<Pattern> blockSoundNamePatterns = new ArrayList<Pattern>();
+	private final List<String> cullSoundNames = new ArrayList<String>();
+	private final List<String> blockSoundNames = new ArrayList<String>();
 	private final TObjectFloatHashMap<String> volumeControl = new TObjectFloatHashMap<String>(
 			Constants.DEFAULT_CAPACITY, Constants.DEFAULT_LOAD_FACTOR, 1.0F);
 
@@ -66,25 +73,12 @@ public final class SoundRegistry extends Registry {
 
 	@Override
 	public void init() {
-		this.cullSoundNamePatterns.clear();
-		this.blockSoundNamePatterns.clear();
+		this.cullSoundNames.clear();
+		this.blockSoundNames.clear();
 		this.volumeControl.clear();
 
-		for (final String sound : ModOptions.culledSounds) {
-			try {
-				this.cullSoundNamePatterns.add(Pattern.compile(sound));
-			} catch (final Throwable ex) {
-				ModLog.warn("Unable to compile pattern for culled sound '%s'", sound);
-			}
-		}
-
-		for (final String sound : ModOptions.blockedSounds) {
-			try {
-				this.blockSoundNamePatterns.add(Pattern.compile(sound));
-			} catch (final Throwable ex) {
-				ModLog.warn("Unable to compile pattern for blocked sound '%s'", sound);
-			}
-		}
+		MyUtils.addAll(this.cullSoundNames, ModOptions.culledSounds);
+		MyUtils.addAll(this.blockSoundNames, ModOptions.blockedSounds);
 
 		for (final String volume : ModOptions.soundVolumes) {
 			final String[] tokens = StringUtils.split(volume, "=");
@@ -167,17 +161,11 @@ public final class SoundRegistry extends Registry {
 	}
 
 	public boolean isSoundCulled(@Nonnull final String sound) {
-		for (final Pattern pattern : this.cullSoundNamePatterns)
-			if (pattern.matcher(sound).matches())
-				return true;
-		return false;
+		return this.cullSoundNames.contains(sound);
 	}
 
 	public boolean isSoundBlocked(@Nonnull final String sound) {
-		for (final Pattern pattern : this.blockSoundNamePatterns)
-			if (pattern.matcher(sound).matches())
-				return true;
-		return false;
+		return this.blockSoundNames.contains(sound);
 	}
 
 	public float getVolumeScale(@Nonnull final String soundName) {
@@ -186,6 +174,40 @@ public final class SoundRegistry extends Registry {
 
 	public float getVolumeScale(@Nonnull final ISound sound) {
 		return (sound.getSoundLocation() == null || sound instanceof ConfigSound) ? 1F : this.volumeControl.get(sound.getSoundLocation().toString());
+	}
+
+	// Not entirely sure why they changed things. This reads the mods
+	// sounds.json and forces registration of all the mod sounds.
+	// Code generally comes from the Minecraft sound processing logic.
+	@SideOnly(Side.CLIENT)
+	public static void initializeRegistry() {
+		final ParameterizedType TYPE = new ParameterizedType() {
+			public Type[] getActualTypeArguments() {
+				return new Type[] { String.class, Object.class };
+			}
+
+			public Type getRawType() {
+				return Map.class;
+			}
+
+			public Type getOwnerType() {
+				return null;
+			}
+		};
+
+		try (final InputStream stream = SoundRegistry.class.getResourceAsStream("/assets/dsurround/sounds.json")) {
+			if (stream != null) {
+				@SuppressWarnings("unchecked")
+				final Map<String, Object> sounds = (Map<String, Object>) new Gson()
+						.fromJson(new InputStreamReader(stream), TYPE);
+				for (final String s : sounds.keySet())
+					SoundUtils.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, s));
+
+			}
+		} catch (final Throwable t) {
+			ModLog.error("Unable to read the mod sound file!", t);
+		}
+
 	}
 
 }

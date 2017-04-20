@@ -24,10 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,7 +33,6 @@ import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.mod.DynSurround.client.event.RegistryEvent;
@@ -48,20 +43,15 @@ import org.blockartistry.mod.DynSurround.client.sound.PlayerEmitter;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.mod.DynSurround.client.sound.Sounds;
-import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModEnvironment;
-import org.blockartistry.mod.DynSurround.util.SoundUtils;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.google.gson.Gson;
-
 import gnu.trove.iterator.TObjectFloatIterator;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ISoundEventListener;
 import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
@@ -239,39 +229,6 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 		this.pending.add(s);
 		return null;
-	}
-
-	// Not entirely sure why they changed things. This reads the mods
-	// sounds.json and forces registration of all the mod sounds.
-	// Code generally comes from the Minecraft sound processing logic.
-	public static void initializeRegistry() {
-		final ParameterizedType TYPE = new ParameterizedType() {
-			public Type[] getActualTypeArguments() {
-				return new Type[] { String.class, Object.class };
-			}
-
-			public Type getRawType() {
-				return Map.class;
-			}
-
-			public Type getOwnerType() {
-				return null;
-			}
-		};
-
-		try (final InputStream stream = SoundEffectHandler.class.getResourceAsStream("/assets/dsurround/sounds.json")) {
-			if (stream != null) {
-				@SuppressWarnings("unchecked")
-				final Map<String, Object> sounds = (Map<String, Object>) new Gson()
-						.fromJson(new InputStreamReader(stream), TYPE);
-				for (final String s : sounds.keySet())
-					SoundUtils.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, s));
-
-			}
-		} catch (final Throwable t) {
-			ModLog.error("Unable to read the mod sound file!", t);
-		}
-
 	}
 
 	/*

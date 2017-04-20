@@ -37,15 +37,15 @@ public final class MyUtils {
 
 	private static final int[] EMPTY = {};
 
-	public static double JAVA_VERSION = getVersion ();
+	public static double JAVA_VERSION = getVersion();
 
-	static double getVersion () {
-	    String version = System.getProperty("java.version");
-	    int pos = version.indexOf('.');
-	    pos = version.indexOf('.', pos+1);
-	    return Double.parseDouble (version.substring (0, pos));
+	static double getVersion() {
+		String version = System.getProperty("java.version");
+		int pos = version.indexOf('.');
+		pos = version.indexOf('.', pos + 1);
+		return Double.parseDouble(version.substring(0, pos));
 	}
-	
+
 	private MyUtils() {
 	}
 
@@ -108,5 +108,14 @@ public final class MyUtils {
 			if (pred.apply(e))
 				return e;
 		return null;
+	}
+
+	@SafeVarargs
+	public static <T> List<T> addAll(@Nonnull final List<T> list, final T... objs) {
+		if (objs != null)
+			for (int i = 0; i < objs.length; i++)
+				if (objs[i] != null)
+					list.add(objs[i]);
+		return list;
 	}
 }
