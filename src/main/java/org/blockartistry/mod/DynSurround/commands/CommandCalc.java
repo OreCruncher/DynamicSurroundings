@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.commands;
 
 import java.util.List;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.util.script.Expression;
 import org.blockartistry.mod.DynSurround.util.script.ExpressionException;
 import org.blockartistry.mod.DynSurround.util.script.Variant;
@@ -38,24 +39,26 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class CommandCalc extends CommandBase {
-	
-	private final static String COMMAND = "calc";
+
+	private final static String COMMAND = ModOptions.commandNameCalc;
 	private final static String COMMAND_OPTION_HELP = "help";
 	private final static String COMMAND_OPTION_FUNCS = "funcs";
 	private final static String COMMAND_OPTION_VARS = "vars";
 	private final static String COMMAND_OPTION_OPS = "ops";
 
-	private static final List<String> ALIAS = ImmutableList.<String> builder().add("c", "math").build();
+	private static final List<String> ALIAS = ImmutableList.<String>builder()
+			.add(ModOptions.commandAliasCalc.split(" ")).build();
 
-	private static final List<String> HELP = ImmutableList.<String> builder()
+	private static final List<String> HELP = ImmutableList.<String>builder()
 			.add(TextFormatting.GOLD + "Calculator command help:")
-			.add(TextFormatting.YELLOW + "/calc <expression>")
-			.add(TextFormatting.YELLOW + "/calc funcs")
-			.add(TextFormatting.YELLOW + "/calc vars")
-			.add(TextFormatting.YELLOW + "/calc ops")
-			.build();
+			.add(TextFormatting.YELLOW + "/" + COMMAND + " <expression>")
+			.add(TextFormatting.YELLOW + "/" + COMMAND + " funcs").add(TextFormatting.YELLOW + "/" + COMMAND + " vars")
+			.add(TextFormatting.YELLOW + "/" + COMMAND + " ops").build();
 
 	@Override
 	public String getCommandName() {
@@ -69,11 +72,12 @@ public class CommandCalc extends CommandBase {
 
 	@Override
 	public String getCommandUsage(final ICommandSender sender) {
-		return TextFormatting.GOLD + "/calc help" + TextFormatting.BLUE + " -- Help for Calculator";
+		return TextFormatting.GOLD + "/" + COMMAND + " help" + TextFormatting.BLUE + " -- Help for Calculator";
 	}
 
 	@Override
-	public void execute(final MinecraftServer server, final ICommandSender sender, final String[] parms) throws CommandException {
+	public void execute(final MinecraftServer server, final ICommandSender sender, final String[] parms)
+			throws CommandException {
 		try {
 			boolean showHelp = false;
 
@@ -83,24 +87,24 @@ public class CommandCalc extends CommandBase {
 				showHelp = true;
 			} else if (COMMAND_OPTION_FUNCS.compareToIgnoreCase(parms[0]) == 0) {
 				final Expression exp = new Expression("0");
-				for(final String line: exp.getDeclaredFunctions())
+				for (final String line : exp.getDeclaredFunctions())
 					sender.addChatMessage(new TextComponentString(line));
 			} else if (COMMAND_OPTION_VARS.compareToIgnoreCase(parms[0]) == 0) {
 				final Expression exp = new Expression("0");
-				for(final String line: exp.getDeclaredVariables())
+				for (final String line : exp.getDeclaredVariables())
 					sender.addChatMessage(new TextComponentString(line));
 			} else if (COMMAND_OPTION_OPS.compareToIgnoreCase(parms[0]) == 0) {
 				final Expression exp = new Expression("0");
-				for(final String line: exp.getDeclaredOperators())
+				for (final String line : exp.getDeclaredOperators())
 					sender.addChatMessage(new TextComponentString(line));
 			} else {
 				try {
 					final Expression exp = new Expression(buildString(parms, 0));
 					final Variant result = exp.eval();
 					sender.addChatMessage(new TextComponentString(TextFormatting.GREEN + "-> " + result.asString()));
-				} catch(final ExpressionException t) {
+				} catch (final ExpressionException t) {
 					sender.addChatMessage(new TextComponentString(TextFormatting.RED + t.getMessage()));
-				} catch(final Throwable t) {
+				} catch (final Throwable t) {
 					sender.addChatMessage(new TextComponentString(TextFormatting.RED + "Internal error"));
 					showHelp = true;
 				}

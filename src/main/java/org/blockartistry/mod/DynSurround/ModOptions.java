@@ -602,6 +602,25 @@ public final class ModOptions {
 
 	private static final List<String> compassSort = Arrays.asList(CONFIG_COMPASS_ENABLE, CONFIG_COMPASS_STYLE,
 			CONFIG_COMPASS_TRANSPARENCY);
+	
+	public static final String CATEGORY_COMMANDS = "commands";
+	public static final String CONFIG_COMMANDS_DS = "commands./ds";
+	public static final String CONFIG_COMMANDS_CALC = "commands./calc";
+	public static final String CONFIG_COMMAND_NAME = "name";
+	public static final String CONFIG_COMMAND_ALIAS = "alias";
+
+	@Parameter(category = CONFIG_COMMANDS_DS, property = CONFIG_COMMAND_NAME, defaultValue = "ds", lang = "cfg.commands.DS.Name")
+	@Comment("Name of the command")
+	public static String commandNameDS = "ds";
+	@Parameter(category = CONFIG_COMMANDS_DS, property = CONFIG_COMMAND_ALIAS, defaultValue = "dsurround rain", lang = "cfg.commands.DS.Alias")
+	@Comment("Alias for the command")
+	public static String commandAliasDS = "dsurround rain";
+	@Parameter(category = CONFIG_COMMANDS_CALC, property = CONFIG_COMMAND_NAME, defaultValue = "calc", lang = "cfg.commands.Calc.Name")
+	@Comment("Name of the command")
+	public static String commandNameCalc = "calc";
+	@Parameter(category = CONFIG_COMMANDS_CALC, property = CONFIG_COMMAND_ALIAS, defaultValue = "c math", lang = "cfg.commands.Calc.Alias")
+	@Comment("Alias for the command")
+	public static String commandAliasCalc = "c math";
 
 	private static void setDefault(@Nonnull final Configuration config, @Nonnull final String cat,
 			@Nonnull final String prop, final float prevDefault, final float newDefault) {
@@ -733,6 +752,12 @@ public final class ModOptions {
 		config.setCategoryComment(CATEGORY_COMPASS, "Options for configuring compass HUD");
 		config.setCategoryPropertyOrder(CATEGORY_COMPASS, new ArrayList<String>(compassSort));
 		config.setCategoryLanguageKey(CATEGORY_COMPASS, "cfg.compass.cat.Compass");
+		
+		// CATEGORY: commands
+		config.setCategoryRequiresMcRestart(CATEGORY_COMMANDS, true);
+		config.setCategoryRequiresWorldRestart(CATEGORY_COMMANDS, true);
+		config.setCategoryComment(CATEGORY_COMMANDS, "Options for configuring commands");
+		config.setCategoryLanguageKey(CATEGORY_COMMANDS, "cfg.commands.cat.Commands");
 
 		// Iterate through the config list looking for properties without
 		// comments. These will be scrubbed.

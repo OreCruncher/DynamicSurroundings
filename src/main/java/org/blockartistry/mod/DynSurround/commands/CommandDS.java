@@ -27,6 +27,7 @@ package org.blockartistry.mod.DynSurround.commands;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.server.services.AuroraService;
@@ -45,7 +46,7 @@ import net.minecraft.world.World;
 
 public final class CommandDS extends CommandBase {
 
-	private static final String COMMAND = "ds";
+	private static final String COMMAND = ModOptions.commandNameDS;
 	private static final String COMMAND_OPTION_RAIN = "rain";
 	private static final String COMMAND_OPTION_THUNDER = "thunder";
 	private static final String COMMAND_OPTION_AURORA = "aurora";
@@ -58,16 +59,20 @@ public final class CommandDS extends CommandBase {
 	private static final String COMMAND_OPTION_SETTIME = "settime";
 	private static final String COMMAND_OPTION_CONFIG = "config";
 
-	private static final List<String> ALIAS = ImmutableList.<String> builder().add("dsurround", "rain").build();
+	private static final List<String> ALIAS = ImmutableList.<String>builder().add(ModOptions.commandAliasDS.split(" "))
+			.build();
 	private static final DecimalFormat FORMATTER = new DecimalFormat("0.0");
 
-	private static final List<String> HELP = ImmutableList.<String> builder()
-			.add(TextFormatting.GOLD + "Dynamic Surroundings command help:").add(TextFormatting.YELLOW + "/ds reset")
-			.add(TextFormatting.YELLOW + "/ds reload").add(TextFormatting.YELLOW + "/ds config")
-			.add(TextFormatting.YELLOW + "/ds status <rain|thunder|aurora>")
-			.add(TextFormatting.YELLOW + "/ds settime <rain|thunder> 0-1000")
-			.add(TextFormatting.YELLOW + "/ds setstr rain 0-100").add(TextFormatting.YELLOW + "/ds setmin rain 0-100")
-			.add(TextFormatting.YELLOW + "/ds setmax rain 0-100").build();
+	private static final List<String> HELP = ImmutableList.<String>builder()
+			.add(TextFormatting.GOLD + "Dynamic Surroundings command help:")
+			.add(TextFormatting.YELLOW + "/" + COMMAND + " reset")
+			.add(TextFormatting.YELLOW + "/" + COMMAND + " reload")
+			.add(TextFormatting.YELLOW + "/" + COMMAND + " config")
+			.add(TextFormatting.YELLOW + "/" + COMMAND + " status <rain|thunder|aurora>")
+			.add(TextFormatting.YELLOW + "/" + COMMAND + " settime <rain|thunder> 0-1000")
+			.add(TextFormatting.YELLOW + "/" + COMMAND + " setstr rain 0-100")
+			.add(TextFormatting.YELLOW + "/" + COMMAND + " setmin rain 0-100")
+			.add(TextFormatting.YELLOW + "/" + COMMAND + " setmax rain 0-100").build();
 
 	public static String rainStatusOutput(final World world, final DimensionEffectData data) {
 		final StringBuilder builder = new StringBuilder();
@@ -112,7 +117,8 @@ public final class CommandDS extends CommandBase {
 
 	@Override
 	public String getCommandUsage(final ICommandSender sender) {
-		return TextFormatting.GOLD + "/ds help" + TextFormatting.BLUE + " -- Help for Dynamic Surroundings";
+		return TextFormatting.GOLD + "/" + COMMAND + " help" + TextFormatting.BLUE
+				+ " -- Help for Dynamic Surroundings";
 	}
 
 	@Override

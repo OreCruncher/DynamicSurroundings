@@ -296,3 +296,14 @@ cfg.compass.Transparency=Compass HUD Transparency
 cfg.compass.Transparency.tooltip=Transparency factor to apply when rendering the Compass HUD
 cfg.compass.Format=Coord Format
 cfg.compass.Format.tooltip=Format string for location coordinates
+
+cfg.commands.cat.Commands=Command Options
+cfg.commands.cat.Commands.tooltip=Options for configuring Commands
+cfg.commands.DS.Name=/ds Command Name
+cfg.commands.DS.Name.tooltip=Name to give the /ds command
+cfg.commands.DS.Alias=Alias to give the /ds command
+cfg.commands.DS.Alias.tooltip=One or more alias names to give the /ds command (space separated)
+cfg.commands.Calc.Name=/calc Command Name
+cfg.commands.Calc.Name.tooltip=Name to give the /calc command
+cfg.commands.Calc.Alias=Alias to give the /calc command
+cfg.commands.Calc.Alias.tooltip=One or more alias names to give the /calc command (space separated)
