@@ -107,6 +107,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 		addConfigCategory(ModOptions.CATEGORY_SOUND);
 		addConfigCategory(ModOptions.CATEGORY_LIGHT_LEVEL);
 		addConfigCategory(ModOptions.CATEGORY_SPEECHBUBBLES);
+		addConfigCategory(ModOptions.CATEGORY_COMMANDS);
 		addConfigCategory(ModOptions.CATEGORY_ASM);
 		addConfigCategory(ModOptions.CATEGORY_LOGGING_CONTROL);
 	}
