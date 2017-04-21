@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.client.weather;
 
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -33,7 +34,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -56,14 +56,13 @@ public class NetherSplashRenderer extends StormSplashRenderer {
 
 	@Override
 	protected BlockPos getPrecipitationHeight(final World world, final int range, final BlockPos pos) {
-		final int y = MathHelper.floor_double(EnvironState.getPlayer().posY);
+		final int y = EnvironState.getPlayerPosition().getY();
 		boolean airBlockFound = false;
 		for (int i = range; i >= -range; i--) {
-			final BlockPos p = new BlockPos(pos.getX(), y + i, pos.getZ());
-			final IBlockState state = world.getBlockState(p);
+			final IBlockState state = WorldUtils.getBlockState(world, pos.getX(), y + i, pos.getZ());
 			final Material material = state.getMaterial();
 			if (airBlockFound && material != Material.AIR && material.isSolid())
-				return p.up();
+				return new BlockPos(pos.getX(), y + i + 1, pos.getZ());
 			if (material == Material.AIR)
 				airBlockFound = true;
 		}
