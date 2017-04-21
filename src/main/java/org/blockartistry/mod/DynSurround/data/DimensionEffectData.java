@@ -28,11 +28,10 @@ import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
+import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 import org.blockartistry.mod.DynSurround.DSurround;
 import com.google.common.collect.ImmutableSet;
 
@@ -64,7 +63,7 @@ public final class DimensionEffectData extends WorldSavedData {
 		public final static String THUNDER_TIMER = "th";
 	};
 
-	private final Random RANDOM = ThreadLocalRandom.current();
+	private final Random RANDOM = XorShiftRandom.current();
 	private int dimensionId = 0;
 	private float intensity = 0.0F;
 	private float currentIntensity = 0.0F;
