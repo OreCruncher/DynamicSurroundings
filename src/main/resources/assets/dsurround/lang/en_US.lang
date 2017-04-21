@@ -28,6 +28,7 @@ dlg.format.Display=%s %d%%
 dlg.name.MasterSound=Master Volume
 dlg.name.BiomeSound=Biome Sound Scale
 dlg.name.FootstepSound=Footstep Sound Scale
+dlg.name.RainSound=Rain Sound Scale
 dlg.name.Close=ESC to Save and Close
 
 # Keybindings
