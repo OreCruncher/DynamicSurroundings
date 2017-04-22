@@ -7,9 +7,11 @@
 			"mods.railcraft.common.items.ItemCrowbarSteel"
 		],
 		"swordSound": [
-			"mods.railcraft.common.items.ItemSteelHoe",
-			"mods.railcraft.common.items.ItemSteelShovel",
 			"mods.railcraft.common.items.ItemSteelSword"
+		],
+		"toolSound": [
+			"mods.railcraft.common.items.ItemSteelHoe",
+			"mods.railcraft.common.items.ItemSteelShovel"
 		],
 		"heavyArmor": [
 			"railcraft:armor_helmet_steel",

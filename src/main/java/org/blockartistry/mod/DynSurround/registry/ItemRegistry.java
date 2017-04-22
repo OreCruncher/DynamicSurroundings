@@ -44,6 +44,7 @@ public class ItemRegistry extends Registry {
 	private final THashSet<Class<?>> swordItems = new THashSet<Class<?>>();
 	private final THashSet<Class<?>> axeItems = new THashSet<Class<?>>();
 	private final THashSet<Class<?>> bowItems = new THashSet<Class<?>>();
+	private final THashSet<Class<?>> toolItems = new THashSet<Class<?>>();
 
 	private final Map<Item, ArmorClass> armorMap = new IdentityHashMap<Item, ArmorClass>();
 
@@ -53,10 +54,11 @@ public class ItemRegistry extends Registry {
 
 	@Override
 	public void init() {
-		swordItems.clear();
-		axeItems.clear();
-		bowItems.clear();
-		armorMap.clear();
+		this.swordItems.clear();
+		this.axeItems.clear();
+		this.bowItems.clear();
+		this.toolItems.clear();
+		this.armorMap.clear();
 	}
 
 	private boolean postProcess(THashSet<Class<?>> itemSet, final Item item) {
@@ -88,6 +90,8 @@ public class ItemRegistry extends Registry {
 			if(postProcess(this.swordItems, item))
 				continue;
 			if(postProcess(this.axeItems, item))
+				continue;
+			if(postProcess(this.toolItems, item))
 				continue;
 			postProcess(this.bowItems, item);
 		}
@@ -121,6 +125,7 @@ public class ItemRegistry extends Registry {
 		process(config.axeSound, this.axeItems);
 		process(config.bowSound, this.bowItems);
 		process(config.swordSound, this.swordItems);
+		process(config.toolSound, this.toolItems);
 		process(config.crystalArmor, ArmorClass.CRYSTAL);
 		process(config.heavyArmor, ArmorClass.HEAVY);
 		process(config.mediumArmor, ArmorClass.MEDIUM);
@@ -143,6 +148,12 @@ public class ItemRegistry extends Registry {
 		if (stack == null || stack.getItem() == null)
 			return false;
 		return this.bowItems.contains(stack.getItem().getClass());
+	}
+	
+	public boolean doToolSound(@Nonnull final ItemStack stack) {
+		if (stack == null || stack.getItem() == null)
+			return false;
+		return this.toolItems.contains(stack.getItem().getClass());
 	}
 
 	public ArmorClass getArmorClass(@Nonnull final ItemStack stack) {

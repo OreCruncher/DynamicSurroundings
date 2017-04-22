@@ -5,13 +5,13 @@
 	],
 	"itemConfig":{
 		"axeSound":[
-			"crazypants.enderio.item.darksteel.ItemDarkSteelAxe"
+			"crazypants.enderio.item.darksteel.ItemDarkSteelAxe",
+			"crazypants.enderio.item.darksteel.ItemDarkSteelPickaxe"
 		],
 		"bowSound":[
 			"crazypants.enderio.item.darksteel.ItemDarkSteelBow"
 		],
 		"swordSound":[
-			"crazypants.enderio.item.darksteel.ItemDarkSteelPickaxe",
 			"crazypants.enderio.item.darksteel.ItemDarkSteelSword"
 		],
 		"lightArmor": [

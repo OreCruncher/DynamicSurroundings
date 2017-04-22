@@ -43,7 +43,7 @@ public final class Sounds {
 	public static final SoundEffect BOW_EQUIP = new SoundEffect("bow.equip", SoundCategory.PLAYERS);
 	public static final SoundEffect BOW_PULL = new SoundEffect("bow.pull", SoundCategory.PLAYERS);
 	public static final SoundEffect TOOL_EQUIP = new SoundEffect("tool.equip", SoundCategory.PLAYERS);
-	public static final SoundEffect TOOL_SWING = new SoundEffect("tool.pull", SoundCategory.PLAYERS);
+	public static final SoundEffect TOOL_SWING = new SoundEffect("tool.swing", SoundCategory.PLAYERS);
 	public static final SoundEffect UTILITY_EQUIP = new SoundEffect("utility.equip", SoundCategory.PLAYERS);
 
 	public static final SoundEffect THUNDER = new SoundEffect("thunder", SoundCategory.WEATHER).setVolume(10000F);
