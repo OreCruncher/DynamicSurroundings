@@ -5,13 +5,16 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.mod.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.mod.DynSurround.client.sound.Sounds;
+import org.blockartistry.mod.DynSurround.registry.ArmorClass;
 import org.blockartistry.mod.DynSurround.registry.ItemRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -30,9 +33,65 @@ public class PlayerActionHandler extends EffectHandlerBase {
 		return "PlayerActionHandler";
 	}
 
+	private boolean lastHeld = false;
+	private int lastSlot = -1;
+	private String soundId = null;
+
+	protected boolean triggerNewEquipSound(@Nonnull final EntityPlayer player) {
+		if (this.lastSlot != player.inventory.currentItem)
+			return true;
+
+		return this.lastHeld != (player.getHeldItemMainhand() != null);
+	}
+
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 
+		// Handle item equip sounds
+		if (!ModOptions.enableEquipSound || !triggerNewEquipSound(player))
+			return;
+
+		final ItemStack currentStack = player.getHeldItemMainhand();
+
+		SoundEngine.instance().stopSound(this.soundId, SoundCategory.PLAYERS);
+
+		if (currentStack != null) {
+			final SoundEffect sound;
+			if (this.itemRegistry.doSwordSound(currentStack))
+				sound = Sounds.SWORD_EQUIP;
+			else if (this.itemRegistry.doAxeSound(currentStack))
+				sound = Sounds.AXE_EQUIP;
+			else if (this.itemRegistry.doToolSound(currentStack))
+				sound = Sounds.TOOL_EQUIP;
+			else if (this.itemRegistry.doBowSound(currentStack))
+				sound = Sounds.BOW_EQUIP;
+			else {
+				final ArmorClass armor = this.itemRegistry.getArmorClass(currentStack);
+				switch (armor) {
+				case LIGHT:
+					sound = Sounds.LIGHT_ARMOR_EQUIP;
+					break;
+				case MEDIUM:
+					sound = Sounds.MEDIUM_ARMOR_EQUIP;
+					break;
+				case HEAVY:
+					sound = Sounds.HEAVY_ARMOR_EQUIP;
+					break;
+				case CRYSTAL:
+					sound = Sounds.CRYSTAL_ARMOR_EQUIP;
+					break;
+				default:
+					sound = Sounds.UTILITY_EQUIP;
+				}
+			}
+
+			this.soundId = SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound);
+		} else {
+			this.soundId = null;
+		}
+		
+		this.lastHeld = player.getHeldItemMainhand() != null;
+		this.lastSlot = player.inventory.currentItem;
 	}
 
 	@Override
@@ -73,9 +132,9 @@ public class PlayerActionHandler extends EffectHandlerBase {
 					sound = Sounds.SWORD_SWING;
 				else if (this.itemRegistry.doAxeSound(currentItem))
 					sound = Sounds.AXE_SWING;
-				else if(this.itemRegistry.doToolSound(currentItem))
+				else if (this.itemRegistry.doToolSound(currentItem))
 					sound = Sounds.TOOL_SWING;
-				
+
 				if (sound != null)
 					SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), sound);
 			}
