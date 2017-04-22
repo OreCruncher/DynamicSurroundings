@@ -134,13 +134,15 @@
 			"com.shinoow.abyssalcraft.common.items.ItemCoraliumBow"
 		],
 		"swordSound": [
-			"com.shinoow.abyssalcraft.common.items.ItemStaff",
-			"com.shinoow.abyssalcraft.common.items.ItemDrainStaff",
-			"com.shinoow.abyssalcraft.common.items.ItemACShovel",
-			"com.shinoow.abyssalcraft.common.items.ItemACHoe",
 			"com.shinoow.abyssalcraft.common.items.ItemACSword",
 			"com.shinoow.abyssalcraft.common.items.ItemDreadiumKatana",
 			"com.shinoow.abyssalcraft.common.items.ItemSoulReaper"
+		],
+		"toolSound": [
+			"com.shinoow.abyssalcraft.common.items.ItemStaff",
+			"com.shinoow.abyssalcraft.common.items.ItemDrainStaff",
+			"com.shinoow.abyssalcraft.common.items.ItemACShovel",
+			"com.shinoow.abyssalcraft.common.items.ItemACHoe"
 		],
 		"lightArmor": [
 		],

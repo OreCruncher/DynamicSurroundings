@@ -73,7 +73,9 @@ public class PlayerActionHandler extends EffectHandlerBase {
 					sound = Sounds.SWORD_SWING;
 				else if (this.itemRegistry.doAxeSound(currentItem))
 					sound = Sounds.AXE_SWING;
-
+				else if(this.itemRegistry.doToolSound(currentItem))
+					sound = Sounds.TOOL_SWING;
+				
 				if (sound != null)
 					SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), sound);
 			}

@@ -39,7 +39,9 @@
 			"am2.items.ItemBoundBow"
 		],
 		"swordSound":[
-			"am2.items.ItemBoundSword",
+			"am2.items.ItemBoundSword"
+		],
+		"toolSound": [
 			"am2.items.ItemBoundHoe",
 			"am2.items.ItemBoundShovel",
 			"am2.items.ItemMagicBroom",

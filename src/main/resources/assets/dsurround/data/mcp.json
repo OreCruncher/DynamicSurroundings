@@ -614,7 +614,9 @@
 			"net.minecraft.item.ItemBow"
 		],
 		"swordSound": [
-			"net.minecraft.item.ItemSword",
+			"net.minecraft.item.ItemSword"
+		],
+		"toolSound": [
 			"net.minecraft.item.ItemSpade",
 			"net.minecraft.item.ItemHoe",
 			"net.minecraft.item.ItemFishingRod"

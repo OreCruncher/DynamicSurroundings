@@ -108,7 +108,7 @@
 		
 	],
 	"itemConfig": {
-		"swordSound": [
+		"toolSound": [
 			"biomesoplenty.common.item.ItemBOPScythe"
 		]
 	},
