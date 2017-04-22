@@ -332,6 +332,7 @@ public final class ModOptions {
 	public static final String CONFIG_MUTE_WHEN_BACKGROUND = "Mute when Background";
 	public static final String CONFIG_ENABLE_JUMP_SOUND = "Jump Sound";
 	public static final String CONFIG_ENABLE_SWING_SOUND = "Swing Sound";
+	public static final String CONFIG_ENABLE_EQUIP_SOUND = "Equip Sound";
 	public static final String CONFIG_ENABLE_CRAFTING_SOUND = "Crafting Sound";
 	public static final String CONFIG_ENABLE_BOW_PULL_SOUND = "Bow Pull Sound";
 	public static final String CONFIG_ENABLE_FOOTSTEPS_SOUND = "Footsteps";
@@ -344,11 +345,12 @@ public final class ModOptions {
 	public static final String CONFIG_SOUND_VOLUMES = "Sound Volume";
 	public static final String CONFIG_THUNDER_VOLUME = "Thunder Volume";
 	private static final List<String> soundsSort = Arrays.asList(CONFIG_ENABLE_BIOME_SOUNDS, CONFIG_MASTER_SOUND_FACTOR,
-			CONFIG_ENABLE_FOOTSTEPS_SOUND, CONFIG_FOOTSTEPS_SOUND_FACTOR, CONFIG_FOOTSTEPS_QUAD, CONFIG_ENABLE_ARMOR_SOUND,
-			CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_SWING_SOUND, CONFIG_ENABLE_CRAFTING_SOUND,
-			CONFIG_ENABLE_BOW_PULL_SOUND, CONFIG_AUTO_CONFIG_CHANNELS, CONFIG_NORMAL_CHANNEL_COUNT,
-			CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS,
-			CONFIG_SOUND_CULL_THRESHOLD, CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES);
+			CONFIG_ENABLE_FOOTSTEPS_SOUND, CONFIG_FOOTSTEPS_SOUND_FACTOR, CONFIG_FOOTSTEPS_QUAD,
+			CONFIG_ENABLE_ARMOR_SOUND, CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_SWING_SOUND, CONFIG_ENABLE_EQUIP_SOUND,
+			CONFIG_ENABLE_CRAFTING_SOUND, CONFIG_ENABLE_BOW_PULL_SOUND, CONFIG_AUTO_CONFIG_CHANNELS,
+			CONFIG_NORMAL_CHANNEL_COUNT, CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_MUTE_WHEN_BACKGROUND,
+			CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS, CONFIG_SOUND_CULL_THRESHOLD, CONFIG_CULLED_SOUNDS,
+			CONFIG_SOUND_VOLUMES);
 
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BIOME_SOUNDS, defaultValue = "true", lang = "cfg.sound.BiomeSounds")
 	@Comment("Enable biome background and spot sounds")
@@ -384,6 +386,9 @@ public final class ModOptions {
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_SWING_SOUND, defaultValue = "true", lang = "cfg.sound.Swing")
 	@Comment("Enable Weapon/Tool Swing sound effect")
 	public static boolean enableSwingSound = true;
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_EQUIP_SOUND, defaultValue = "true", lang = "cfg.sound.Equip")
+	@Comment("Enable Weapon/Tool Equip sound effect")
+	public static boolean enableEquipSound = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_CRAFTING_SOUND, defaultValue = "true", lang = "cfg.sound.Craft")
 	@Comment("Enable Item Crafted sound effect")
 	public static boolean enableCraftingSound = true;
@@ -602,7 +607,7 @@ public final class ModOptions {
 
 	private static final List<String> compassSort = Arrays.asList(CONFIG_COMPASS_ENABLE, CONFIG_COMPASS_STYLE,
 			CONFIG_COMPASS_TRANSPARENCY);
-	
+
 	public static final String CATEGORY_COMMANDS = "commands";
 	public static final String CONFIG_COMMANDS_DS = "commands./ds";
 	public static final String CONFIG_COMMANDS_CALC = "commands./calc";
@@ -752,7 +757,7 @@ public final class ModOptions {
 		config.setCategoryComment(CATEGORY_COMPASS, "Options for configuring compass HUD");
 		config.setCategoryPropertyOrder(CATEGORY_COMPASS, new ArrayList<String>(compassSort));
 		config.setCategoryLanguageKey(CATEGORY_COMPASS, "cfg.compass.cat.Compass");
-		
+
 		// CATEGORY: commands
 		config.setCategoryRequiresMcRestart(CATEGORY_COMMANDS, true);
 		config.setCategoryRequiresWorldRestart(CATEGORY_COMMANDS, true);

@@ -36,6 +36,7 @@ import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import gnu.trove.set.hash.THashSet;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -154,6 +155,12 @@ public class ItemRegistry extends Registry {
 		if (stack == null || stack.getItem() == null)
 			return false;
 		return this.toolItems.contains(stack.getItem().getClass());
+	}
+	
+	public boolean doFoodSound(@Nonnull final ItemStack stack) {
+		if(stack == null || stack.getItem() == null)
+			return false;
+		return stack.getItem() instanceof ItemFood;
 	}
 
 	public ArmorClass getArmorClass(@Nonnull final ItemStack stack) {

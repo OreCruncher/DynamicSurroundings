@@ -43,6 +43,7 @@ import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ISoundEventListener;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
 import net.minecraftforge.client.event.sound.SoundSetupEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -103,6 +104,16 @@ public class SoundEngine {
 		if (StringUtils.isEmpty(soundId))
 			return false;
 		return this.manager.playingSounds.containsKey(soundId);
+	}
+	
+	public void stopSound(@Nonnull final String sound, @Nonnull final SoundCategory cat) {
+		if(sound != null)
+			this.manager.stop(sound, cat);
+	}
+	
+	public void stopSound(@Nonnull final ISound sound) {
+		if(sound != null)
+			this.manager.stopSound(sound);
 	}
 
 	public void stopAllSounds() {
