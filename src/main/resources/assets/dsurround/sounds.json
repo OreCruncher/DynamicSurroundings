@@ -1246,18 +1246,6 @@
 			"dsurround:ambient/insects/crawl3"
 		]
 	},
-	"swoosh": {
-		"category": "player",
-		"sounds": [
-			"dsurround:ambient/steve/swoosh1",
-			"dsurround:ambient/steve/swoosh2",
-			"dsurround:ambient/steve/swoosh3",
-			"dsurround:ambient/steve/swoosh4",
-			"dsurround:ambient/steve/swoosh5",
-			"dsurround:ambient/steve/swoosh6",
-			"dsurround:ambient/steve/swoosh7"
-		]
-	},
 	"insectbuzz": {
 		"category": "ambient",
 		"sounds": [
@@ -1455,26 +1443,6 @@
 			}
 		]
 	},
-	"bowpull": {
-		"category": "player",
-		"sounds": [
-			{
-				"name": "dsurround:ambient/steve/bowpull1"
-			},
-			{
-				"name": "dsurround:ambient/steve/bowpull1",
-				"pitch": 1.25
-			},
-			{
-				"name": "dsurround:ambient/steve/bowpull1",
-				"pitch": 1.5
-			},
-			{
-				"name": "dsurround:ambient/steve/bowpull1",
-				"pitch": 1.75
-			}
-		]
-	},
 	"waterfall": {
 		"category": "ambient",
 		"sounds": [
@@ -1530,5 +1498,81 @@
 				"stream": true
 			}
 		]
-	}
+	},
+	"blunt.equip": {
+		"category": "player",
+		"sounds": [
+			"dsurround:ambient/items/blunt_draw"
+		]
+	},
+	"blunt.swing": {
+		"category": "player",
+		"sounds": [
+			"dsurround:ambient/items/blunt_swing1",
+			"dsurround:ambient/items/blunt_swing2",
+			"dsurround:ambient/items/blunt_swing3",
+			"dsurround:ambient/items/blunt_swing4",
+			"dsurround:ambient/items/blunt_swing5"
+		]
+	},
+	"bow.equip": {
+		"category": "player",
+		"sounds": [
+			"dsurround:ambient/items/bow_draw"
+		]
+	},
+	"bow.pull": {
+		"category": "player",
+		"sounds": [
+			"dsurround:ambient/items/bow_pull1",
+			"dsurround:ambient/items/bow_pull2",
+			"dsurround:ambient/items/bow_pull3",
+			"dsurround:ambient/items/bow_pull4",
+			"dsurround:ambient/items/bow_pull5"
+		]
+	},
+	"sword.equip": {
+		"category": "player",
+		"sounds": [
+			"dsurround:ambient/items/sword_draw"
+		]
+	},
+	"sword.swing": {
+		"category": "player",
+		"sounds": [
+			"dsurround:ambient/items/sword_swing1",
+			"dsurround:ambient/items/sword_swing2",
+			"dsurround:ambient/items/sword_swing3",
+			"dsurround:ambient/items/sword_swing4",
+			"dsurround:ambient/items/sword_swing5",
+			"dsurround:ambient/items/sword_swing6",
+			"dsurround:ambient/items/sword_swing7",
+			"dsurround:ambient/items/sword_swing8",
+			"dsurround:ambient/items/sword_swing9"
+		]
+	},
+	"tool.equip": {
+		"category": "player",
+		"sounds": [
+			"dsurround:ambient/items/tool_draw"
+		]
+	},
+	"tool.swing": {
+		"category": "player",
+		"sounds": [
+			"dsurround:ambient/items/swoosh1",
+			"dsurround:ambient/items/swoosh2",
+			"dsurround:ambient/items/swoosh3",
+			"dsurround:ambient/items/swoosh4",
+			"dsurround:ambient/items/swoosh5",
+			"dsurround:ambient/items/swoosh6",
+			"dsurround:ambient/items/swoosh7"
+		]
+	},
+	"utility.equip": {
+		"category": "player",
+		"sounds": [
+			"dsurround:ambient/items/utility_draw"
+		]
+	}	
 }
