@@ -35,9 +35,16 @@ public final class Sounds {
 
 	public static final SoundEffect JUMP = new SoundEffect("jump", SoundCategory.PLAYERS).setVariable(true);
 	public static final SoundEffect CRAFTING = new SoundEffect("crafting", SoundCategory.PLAYERS);
-	public static final SoundEffect SWORD_SWING = new SoundEffect("swoosh", SoundCategory.PLAYERS);
-	public static final SoundEffect AXE_SWING = new SoundEffect("swoosh", SoundCategory.PLAYERS).setPitch(0.5F);
-	public static final SoundEffect BOW_PULL = new SoundEffect("bowpull", SoundCategory.PLAYERS);
+
+	public static final SoundEffect SWORD_EQUIP = new SoundEffect("sword.equip", SoundCategory.PLAYERS);
+	public static final SoundEffect SWORD_SWING = new SoundEffect("sword.swing", SoundCategory.PLAYERS);
+	public static final SoundEffect AXE_EQUIP = new SoundEffect("blunt.equip", SoundCategory.PLAYERS);
+	public static final SoundEffect AXE_SWING = new SoundEffect("blunt.swing", SoundCategory.PLAYERS);
+	public static final SoundEffect BOW_EQUIP = new SoundEffect("bow.equip", SoundCategory.PLAYERS);
+	public static final SoundEffect BOW_PULL = new SoundEffect("bow.pull", SoundCategory.PLAYERS);
+	public static final SoundEffect TOOL_EQUIP = new SoundEffect("tool.equip", SoundCategory.PLAYERS);
+	public static final SoundEffect TOOL_SWING = new SoundEffect("tool.pull", SoundCategory.PLAYERS);
+	public static final SoundEffect UTILITY_EQUIP = new SoundEffect("utility.equip", SoundCategory.PLAYERS);
 
 	public static final SoundEffect THUNDER = new SoundEffect("thunder", SoundCategory.WEATHER).setVolume(10000F);
 
