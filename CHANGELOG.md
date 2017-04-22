@@ -1,3 +1,16 @@
+###DynamicSurroundings-1.10.2-3.3.6.1
+**What's New**
+* Option to enable/disable clock HUD independent of compass HUD.  This will let the player use a compass HUD from another mod but keep Dynamic Surroundings clock HUD.
+* Options to change command names and aliases so that command conflicts can be easily mitigated.  Found in the configuration menu under "Command Options".
+    * The /calc command is a client side command and changes will only affect the client
+    * The /ds command is server side so for a dedicated server changes must be made on the server.  (For single player/LAN the client is also the server so it uses the same config.)
+
+**Fixes**
+* Compass bar will no longer render inappropriately when holding a clock.
+* Biome sound slider in volume dialog incorrectly bound to rain sound scale
+* Added missing rain sound volume scale to volume dialog
+* Critical popoff text will render half block above the damage amount instead of on top of it
+
 ###DynamicSurroundings-1.10.2-3.3.6.0
 **What's New**
 * Added new horseshoe footprint style.
