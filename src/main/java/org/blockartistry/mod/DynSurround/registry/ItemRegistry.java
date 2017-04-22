@@ -31,6 +31,8 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.mod.DynSurround.client.sound.Sounds;
 import org.blockartistry.mod.DynSurround.data.xface.ItemConfig;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 
@@ -39,6 +41,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemRegistry extends Registry {
 
@@ -172,6 +175,45 @@ public class ItemRegistry extends Registry {
 			}
 		}
 		return ArmorClass.NONE;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public SoundEffect getEquipSound(@Nonnull final ItemStack stack) {
+		if(stack != null && stack.getItem() != null) {
+			final Class<?> itemClass = stack.getItem().getClass();
+			final SoundEffect sound;
+			if (this.swordItems.contains(itemClass))
+				sound = Sounds.SWORD_EQUIP;
+			else if (this.axeItems.contains(itemClass))
+				sound = Sounds.AXE_EQUIP;
+			else if (this.toolItems.contains(itemClass))
+				sound = Sounds.TOOL_EQUIP;
+			else if (this.bowItems.contains(itemClass))
+				sound = Sounds.BOW_EQUIP;
+			else {
+				final ArmorClass armor = this.getArmorClass(stack);
+				switch (armor) {
+				case LIGHT:
+					sound = Sounds.LIGHT_ARMOR_EQUIP;
+					break;
+				case MEDIUM:
+					sound = Sounds.MEDIUM_ARMOR_EQUIP;
+					break;
+				case HEAVY:
+					sound = Sounds.HEAVY_ARMOR_EQUIP;
+					break;
+				case CRYSTAL:
+					sound = Sounds.CRYSTAL_ARMOR_EQUIP;
+					break;
+				default:
+					sound = Sounds.UTILITY_EQUIP;
+				}
+			}
+			
+			return sound;
+		}
+		
+		return null;
 	}
 
 }

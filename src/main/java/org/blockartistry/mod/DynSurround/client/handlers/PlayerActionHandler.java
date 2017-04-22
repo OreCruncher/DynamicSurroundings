@@ -7,7 +7,6 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.mod.DynSurround.client.sound.Sounds;
-import org.blockartistry.mod.DynSurround.registry.ArmorClass;
 import org.blockartistry.mod.DynSurround.registry.ItemRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
@@ -51,46 +50,13 @@ public class PlayerActionHandler extends EffectHandlerBase {
 		if (!ModOptions.enableEquipSound || !triggerNewEquipSound(player))
 			return;
 
-		final ItemStack currentStack = player.getHeldItemMainhand();
-
 		SoundEngine.instance().stopSound(this.soundId, SoundCategory.PLAYERS);
 
-		if (currentStack != null) {
-			final SoundEffect sound;
-			if (this.itemRegistry.doSwordSound(currentStack))
-				sound = Sounds.SWORD_EQUIP;
-			else if (this.itemRegistry.doAxeSound(currentStack))
-				sound = Sounds.AXE_EQUIP;
-			else if (this.itemRegistry.doToolSound(currentStack))
-				sound = Sounds.TOOL_EQUIP;
-			else if (this.itemRegistry.doBowSound(currentStack))
-				sound = Sounds.BOW_EQUIP;
-			else {
-				final ArmorClass armor = this.itemRegistry.getArmorClass(currentStack);
-				switch (armor) {
-				case LIGHT:
-					sound = Sounds.LIGHT_ARMOR_EQUIP;
-					break;
-				case MEDIUM:
-					sound = Sounds.MEDIUM_ARMOR_EQUIP;
-					break;
-				case HEAVY:
-					sound = Sounds.HEAVY_ARMOR_EQUIP;
-					break;
-				case CRYSTAL:
-					sound = Sounds.CRYSTAL_ARMOR_EQUIP;
-					break;
-				default:
-					sound = Sounds.UTILITY_EQUIP;
-				}
-			}
+		final ItemStack currentStack = player.getHeldItemMainhand();
+		final SoundEffect sound = this.itemRegistry.getEquipSound(currentStack);
 
-			this.soundId = SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound);
-		} else {
-			this.soundId = null;
-		}
-		
-		this.lastHeld = player.getHeldItemMainhand() != null;
+		this.soundId = sound == null ? null : SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound);
+		this.lastHeld = currentStack != null;
 		this.lastSlot = player.inventory.currentItem;
 	}
 
