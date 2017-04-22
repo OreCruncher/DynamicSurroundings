@@ -287,8 +287,8 @@ cfg.lightlevel.Colors.tooltip=0 bright, 1 dark
 cfg.lightlevel.DisplayMode=Display Mode
 cfg.lightlevel.DisplayMode.tooltip=0: block light, 1: block light + skylight
 
-cfg.compass.cat.Compass=Compass Options
-cfg.compass.cat.Compass.tooltip=Options for configuring the Compass HUD
+cfg.compass.cat.Compass=Compass/Clock Options
+cfg.compass.cat.Compass.tooltip=Options for configuring the Compass/Clock HUD
 cfg.compass.Enable=Enable Compass HUD
 cfg.compass.Enable.tooltip=Enable/disable the Compass HUD display
 cfg.compass.ClockEnable=Enable Clock HUD
