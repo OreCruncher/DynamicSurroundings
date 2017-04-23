@@ -28,6 +28,7 @@ import java.util.Random;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleRipple;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
@@ -41,6 +42,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -107,6 +109,10 @@ public class StormSplashRenderer {
 			particleType = EnumParticleTypes.LAVA;
 		} else if (state.getMaterial() == Material.LAVA) {
 			particleType = EnumParticleTypes.SMOKE_NORMAL;
+		} else if( state.getMaterial() == Material.WATER) {
+			final Particle ripple = new ParticleRipple(world, x, y, z);
+			ParticleHelper.addParticle(ripple);
+			return;
 		} else if (state.getMaterial() != Material.AIR) {
 			particleType = EnumParticleTypes.WATER_SPLASH;
 		}
