@@ -145,6 +145,7 @@ public class StormSplashRenderer {
 			this.pos.setPos(player.posX, 0, player.posZ);
 			if (y > player.posY + 1.0D && getPrecipitationHeight(world, 0, this.pos).getY() > playerY)
 				pitch = 0.5F;
+			pitch -= (this.RANDOM.nextFloat() - this.RANDOM.nextFloat()) * 0.1F;
 			renderer.mc.world.playSound(x, y, z, sound, SoundCategory.WEATHER, volume, pitch, false);
 		}
 	}
