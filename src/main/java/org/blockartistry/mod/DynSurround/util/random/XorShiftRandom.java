@@ -69,11 +69,6 @@ public final class XorShiftRandom extends Random {
 	}
 
 	@Override
-	public boolean nextBoolean() {
-		return nextLong() >= 0;
-	}
-
-	@Override
 	public void nextBytes(final byte[] bytes) {
 		for (int i = 0, len = bytes.length; i < len;) {
 			long rnd = nextInt();
@@ -97,11 +92,6 @@ public final class XorShiftRandom extends Random {
 	public int nextInt() {
 		return (int) nextLong();
 	}
-
-	// @Override
-	// public int nextInt(final int n) {
-	// return super.nextInt(n);
-	// }
 
 	protected double genGaussian() {
 		double v1, v2, s;
