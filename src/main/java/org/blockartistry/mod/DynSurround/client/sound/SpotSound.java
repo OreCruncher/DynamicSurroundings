@@ -33,6 +33,7 @@ import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
@@ -77,9 +78,16 @@ public class SpotSound extends PositionedSound implements IMySound {
 		this.repeatDelay = 0;
 
 		final Vec3d point = player.getEntityBoundingBox().getCenter();
-		this.xPosF = (float) point.xCoord + randomRange(SPOT_SOUND_RANGE);
-		this.yPosF = (float) point.yCoord + randomRange(SPOT_SOUND_RANGE);
-		this.zPosF = (float) point.zCoord + randomRange(SPOT_SOUND_RANGE);
+		this.xPosF = (float) point.xCoord;
+		this.yPosF = (float) point.yCoord;
+		this.zPosF = (float) point.zCoord;
+		
+		// If it is not a player sound randomize the location around the player
+		if(sound.category != SoundCategory.PLAYERS) {
+			this.xPosF += randomRange(SPOT_SOUND_RANGE);
+			this.yPosF += randomRange(SPOT_SOUND_RANGE);
+			this.zPosF += randomRange(SPOT_SOUND_RANGE);
+		}
 
 		this.timeMark = EnvironState.getTickCounter();
 	}
