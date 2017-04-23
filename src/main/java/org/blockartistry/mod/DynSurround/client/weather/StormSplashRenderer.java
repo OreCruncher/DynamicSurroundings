@@ -52,15 +52,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.NoiseGeneratorSimplex;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
 public class StormSplashRenderer {
 
+	protected static final int PARTICLE_SOUND_CHANCE = 3;
 	private static final TIntObjectHashMap<StormSplashRenderer> splashRenderers = new TIntObjectHashMap<StormSplashRenderer>();
 	private static final StormSplashRenderer DEFAULT = new StormSplashRenderer();
-	protected static final int PARTICLE_SOUND_CHANCE = 20;
 
 	static {
 		splashRenderers.put(0, DEFAULT);
@@ -76,6 +77,7 @@ public class StormSplashRenderer {
 	}
 
 	protected final Random RANDOM = new XorShiftRandom();
+	protected final NoiseGeneratorSimplex GENERATOR = new NoiseGeneratorSimplex(RANDOM);
 	protected final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
 	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
@@ -86,8 +88,12 @@ public class StormSplashRenderer {
 
 	}
 
-	protected static float calculateRainSoundVolume(final World world) {
-		return WeatherProperties.getCurrentVolume();
+	protected float calculateRainSoundVolume(final World world) {
+		final float currentVolume = WeatherProperties.getCurrentVolume();
+		final float bounds = currentVolume * 0.25F;
+		final float adjust = MathHelper.clamp_float(
+				(float) (this.GENERATOR.getValue((world.getWorldTime() % 24000L) / 100, 1) / 5.0F), -bounds, bounds);
+		return MathHelper.clamp_float(currentVolume + adjust, 0, 1F);
 	}
 
 	protected void spawnBlockParticle(final IBlockState state, final boolean dust, final World world, final double x,
@@ -125,8 +131,8 @@ public class StormSplashRenderer {
 		return ModOptions.allowDesertFog && !WeatherProperties.doVanilla() && this.biomes.get(biome).getHasDust();
 	}
 
-	protected void playSplashSound(final EntityRenderer renderer, final World world, final Entity player,
-			double x, double y, double z) {
+	protected void playSplashSound(final EntityRenderer renderer, final World world, final Entity player, double x,
+			double y, double z) {
 
 		this.pos.setPos(x, y - 1, z);
 		final boolean hasDust = biomeHasDust(world.getBiome(this.pos));
@@ -139,7 +145,7 @@ public class StormSplashRenderer {
 			this.pos.setPos(player.posX, 0, player.posZ);
 			if (y > player.posY + 1.0D && getPrecipitationHeight(world, 0, this.pos).getY() > playerY)
 				pitch = 0.5F;
-			renderer.mc.theWorld.playSound(x, y, z, sound, SoundCategory.AMBIENT, volume, pitch, false);
+			renderer.mc.theWorld.playSound(x, y, z, sound, SoundCategory.WEATHER, volume, pitch, false);
 		}
 	}
 
@@ -168,8 +174,8 @@ public class StormSplashRenderer {
 		double spawnZ = 0.0D;
 		int particlesSpawned = 0;
 
-		final int RANGE = ModOptions.specialEffectRange / 2;
-		final float rangeFactor = (RANGE * RANGE) / 100.0F;
+		final int RANGE = Math.max((ModOptions.specialEffectRange + 1) / 2, 10);
+		final float rangeFactor = RANGE / 10.0F;
 		int particleCount = (int) (ModOptions.particleCountBase * rainStrengthFactor * rainStrengthFactor
 				* rangeFactor);
 
@@ -191,7 +197,7 @@ public class StormSplashRenderer {
 				final BlockPos blockPos = precipHeight.down();
 				final IBlockState state = WorldUtils.getBlockState(world, blockPos);
 				final double posX = locX + RANDOM.nextFloat();
-				final double posY = precipHeight.getY() + 0.1F - state.getBoundingBox(world, blockPos).minY; // block.getBlockBoundsMinY();
+				final double posY = precipHeight.getY() + 0.1F - state.getBoundingBox(world, blockPos).minY;
 				final double posZ = locZ + RANDOM.nextFloat();
 
 				spawnBlockParticle(state, hasDust, world, posX, posY, posZ);
