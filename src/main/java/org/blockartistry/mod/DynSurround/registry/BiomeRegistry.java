@@ -127,7 +127,10 @@ public final class BiomeRegistry extends Registry {
 
 	@Nullable
 	public BiomeInfo get(@Nonnull final Biome biome) {
-		return biome == null ? WTF_INFO : this.registry.get(biome);
+		if (biome == null)
+			return WTF_INFO;
+		final BiomeInfo result = this.registry.get(biome);
+		return result == null ? WTF_INFO : result;
 	}
 
 	final boolean isBiomeMatch(@Nonnull final BiomeConfig entry, @Nonnull final String biomeName) {
