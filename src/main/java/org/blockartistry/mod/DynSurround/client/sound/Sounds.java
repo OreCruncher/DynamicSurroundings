@@ -46,6 +46,8 @@ public final class Sounds {
 	public static final SoundEffect TOOL_SWING = new SoundEffect("tool.swing", SoundCategory.PLAYERS);
 	public static final SoundEffect UTILITY_EQUIP = new SoundEffect("utility.equip", SoundCategory.PLAYERS);
 
+	public static final SoundEffect SHIELD_EQUIP = TOOL_EQUIP;
+	
 	public static final SoundEffect LIGHT_ARMOR_EQUIP = new SoundEffect("fs.armor.light_walk", SoundCategory.PLAYERS);
 	public static final SoundEffect MEDIUM_ARMOR_EQUIP = new SoundEffect("fs.armor.medium_walk", SoundCategory.PLAYERS);
 	public static final SoundEffect HEAVY_ARMOR_EQUIP = new SoundEffect("fs.armor.heavy_walk", SoundCategory.PLAYERS);

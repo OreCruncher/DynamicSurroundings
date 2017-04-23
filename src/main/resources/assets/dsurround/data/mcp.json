@@ -621,6 +621,9 @@
 			"net.minecraft.item.ItemHoe",
 			"net.minecraft.item.ItemFishingRod"
 		],
+		"shieldSound": [
+			"net.minecraft.item.ItemShield"
+		],
 		"lightArmor": [
 			"minecraft:leather_boots",
 			"minecraft:leather_leggings",

@@ -49,6 +49,7 @@ public class ItemRegistry extends Registry {
 	private final THashSet<Class<?>> axeItems = new THashSet<Class<?>>();
 	private final THashSet<Class<?>> bowItems = new THashSet<Class<?>>();
 	private final THashSet<Class<?>> toolItems = new THashSet<Class<?>>();
+	private final THashSet<Class<?>> shieldItems = new THashSet<Class<?>>();
 
 	private final Map<Item, ArmorClass> armorMap = new IdentityHashMap<Item, ArmorClass>();
 
@@ -62,41 +63,45 @@ public class ItemRegistry extends Registry {
 		this.axeItems.clear();
 		this.bowItems.clear();
 		this.toolItems.clear();
+		this.shieldItems.clear();
 		this.armorMap.clear();
 	}
 
 	private boolean postProcess(THashSet<Class<?>> itemSet, final Item item) {
 		final Class<?> itemClass = item.getClass();
-		
+
 		// If the item is in the collection already, return
-		if(itemSet.contains(itemClass))
+		if (itemSet.contains(itemClass))
 			return true;
-		
+
 		// Need to iterate to see if an item is a sub-class of an existing
 		// item in the list.
-		for(final Class<?> clazz : itemSet) {
-			if(clazz.isAssignableFrom(itemClass)) {
+		for (final Class<?> clazz : itemSet) {
+			if (clazz.isAssignableFrom(itemClass)) {
 				itemSet.add(itemClass);
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
 	public void initComplete() {
-		
+
 		// Post process item list looking for similar items
 		final Iterator<Item> iterator = Item.REGISTRY.iterator();
-		while(iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			final Item item = iterator.next();
-			if(postProcess(this.swordItems, item))
+			if (postProcess(this.swordItems, item))
 				continue;
-			if(postProcess(this.axeItems, item))
+			if (postProcess(this.axeItems, item))
 				continue;
-			if(postProcess(this.toolItems, item))
+			if (postProcess(this.toolItems, item))
 				continue;
+			if (postProcess(this.shieldItems, item))
+				continue;
+
 			postProcess(this.bowItems, item);
 		}
 	}
@@ -130,6 +135,7 @@ public class ItemRegistry extends Registry {
 		process(config.bowSound, this.bowItems);
 		process(config.swordSound, this.swordItems);
 		process(config.toolSound, this.toolItems);
+		process(config.shieldSound, this.shieldItems);
 		process(config.crystalArmor, ArmorClass.CRYSTAL);
 		process(config.heavyArmor, ArmorClass.HEAVY);
 		process(config.mediumArmor, ArmorClass.MEDIUM);
@@ -153,15 +159,21 @@ public class ItemRegistry extends Registry {
 			return false;
 		return this.bowItems.contains(stack.getItem().getClass());
 	}
-	
+
 	public boolean doToolSound(@Nonnull final ItemStack stack) {
 		if (stack == null || stack.getItem() == null)
 			return false;
 		return this.toolItems.contains(stack.getItem().getClass());
 	}
-	
+
+	public boolean doShieldSound(@Nonnull final ItemStack stack) {
+		if (stack == null || stack.getItem() == null)
+			return false;
+		return this.shieldItems.contains(stack.getItem().getClass());
+	}
+
 	public boolean doFoodSound(@Nonnull final ItemStack stack) {
-		if(stack == null || stack.getItem() == null)
+		if (stack == null || stack.getItem() == null)
 			return false;
 		return stack.getItem() instanceof ItemFood;
 	}
@@ -178,8 +190,85 @@ public class ItemRegistry extends Registry {
 	}
 	
 	@SideOnly(Side.CLIENT)
+	public SoundEffect getSwingSound(@Nonnull final ItemStack stack) {
+		if (stack != null && stack.getItem() != null) {
+			final Class<?> itemClass = stack.getItem().getClass();
+			final SoundEffect sound;
+			if (this.swordItems.contains(itemClass))
+				sound = Sounds.SWORD_SWING;
+			else if (this.axeItems.contains(itemClass))
+				sound = Sounds.AXE_SWING;
+			else if (this.toolItems.contains(itemClass))
+				sound = Sounds.TOOL_SWING;
+			else if (this.bowItems.contains(itemClass))
+				sound = Sounds.TOOL_SWING;
+			else if (this.shieldItems.contains(itemClass))
+				sound = Sounds.TOOL_SWING;
+			else {
+				final ArmorClass armor = this.getArmorClass(stack);
+				switch (armor) {
+				case LIGHT:
+					sound = Sounds.LIGHT_ARMOR_EQUIP;
+					break;
+				case MEDIUM:
+					sound = Sounds.MEDIUM_ARMOR_EQUIP;
+					break;
+				case HEAVY:
+					sound = Sounds.HEAVY_ARMOR_EQUIP;
+					break;
+				case CRYSTAL:
+					sound = Sounds.CRYSTAL_ARMOR_EQUIP;
+					break;
+				default:
+					sound = null;
+				}
+			}
+
+			return sound;
+		}
+
+		return null;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public SoundEffect getUseSound(@Nonnull final ItemStack stack) {
+		if (stack != null && stack.getItem() != null) {
+			final Class<?> itemClass = stack.getItem().getClass();
+			final SoundEffect sound;
+			
+			if (this.bowItems.contains(itemClass))
+				sound = Sounds.BOW_PULL;
+			else if (this.shieldItems.contains(itemClass))
+				sound = Sounds.TOOL_EQUIP;
+			else {
+				final ArmorClass armor = this.getArmorClass(stack);
+				switch (armor) {
+				case LIGHT:
+					sound = Sounds.LIGHT_ARMOR_EQUIP;
+					break;
+				case MEDIUM:
+					sound = Sounds.MEDIUM_ARMOR_EQUIP;
+					break;
+				case HEAVY:
+					sound = Sounds.HEAVY_ARMOR_EQUIP;
+					break;
+				case CRYSTAL:
+					sound = Sounds.CRYSTAL_ARMOR_EQUIP;
+					break;
+				default:
+					sound = null;
+				}
+			}
+
+			return sound;
+		}
+
+		return null;
+	}
+
+	@SideOnly(Side.CLIENT)
 	public SoundEffect getEquipSound(@Nonnull final ItemStack stack) {
-		if(stack != null && stack.getItem() != null) {
+		if (stack != null && stack.getItem() != null) {
 			final Class<?> itemClass = stack.getItem().getClass();
 			final SoundEffect sound;
 			if (this.swordItems.contains(itemClass))
@@ -190,6 +279,8 @@ public class ItemRegistry extends Registry {
 				sound = Sounds.TOOL_EQUIP;
 			else if (this.bowItems.contains(itemClass))
 				sound = Sounds.BOW_EQUIP;
+			else if (this.shieldItems.contains(itemClass))
+				sound = Sounds.SHIELD_EQUIP;
 			else {
 				final ArmorClass armor = this.getArmorClass(stack);
 				switch (armor) {
@@ -209,10 +300,10 @@ public class ItemRegistry extends Registry {
 					sound = Sounds.UTILITY_EQUIP;
 				}
 			}
-			
+
 			return sound;
 		}
-		
+
 		return null;
 	}
 
