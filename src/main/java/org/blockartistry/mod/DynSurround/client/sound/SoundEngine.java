@@ -53,6 +53,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 
 @Mod.EventBusSubscriber(Side.CLIENT)
@@ -127,20 +128,30 @@ public class SoundEngine {
 
 	@Nullable
 	public String playSound(@Nonnull final ISound sound) {
-
-		if (!canFitSound())
+		if (!canFitSound()) {
+			if(ModOptions.enableDebugLogging)
+				ModLog.debug("> NO ROOM: [%s]", sound.toString());
 			return null;
-
-		if (ModOptions.enableDebugLogging)
-			ModLog.debug("PLAYING: " + sound.toString());
+		}
 
 		this.soundId = null;
 		this.currentSound = sound;
 		this.manager.playSound(sound);
 		this.currentSound = null;
-		
-		if (ModOptions.enableDebugLogging && this.soundId == null) {
-			ModLog.debug("Sound did not queue: [%s]", sound.toString());
+
+		if (ModOptions.enableDebugLogging) {
+			if (this.soundId == null) {
+				ModLog.debug("> NOT QUEUED: [%s]", sound.toString());
+			} else {
+				final SoundSystem ss = this.manager.sndSystem;
+				// Force a flush of all commands so we can get
+				// the actual volume and pitch used within the
+				// sound library.
+				ss.CommandQueue(null);
+				final float v = ss.getVolume(this.soundId);
+				final float p = ss.getPitch(this.soundId);
+				ModLog.debug("> QUEUED: [%s]; v: %f, p: %f", sound.toString(), v, p);
+			}
 		}
 
 		return this.soundId;
