@@ -44,6 +44,7 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.MyUtils;
 
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -179,8 +180,11 @@ public final class BiomeRegistry extends Registry {
 				for (final SoundConfig sr : entry.sounds) {
 					if (soundRegistry.isSoundBlocked(sr.sound))
 						continue;
-					final SoundEffect s = new SoundEffect(sr);
-					if (s.type == SoundType.SPOT)
+					final SoundEffect.Builder b = new SoundEffect.Builder(sr);
+					if (sr.soundCategory == null)
+						b.setSoundCategory(SoundCategory.AMBIENT);
+					final SoundEffect s = b.build();
+					if (s.getSoundType() == SoundType.SPOT)
 						biomeEntry.addSpotSound(s);
 					else
 						biomeEntry.addSound(s);
