@@ -40,7 +40,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class TrackingSound extends BasicSound<TrackingSound> implements ITickableSound, IMySound<TrackingSound> {
+public class TrackingSound extends BasicSound<TrackingSound> implements ITickableSound {
 
 	private static final float DONE_VOLUME_THRESHOLD = 0.001F;
 	private static final float FADE_AMOUNT = 0.015F;
@@ -155,11 +155,6 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 		if (volume < this.maxVolume || !this.isFading)
 			this.maxVolume = volume;
 		return this;
-	}
-
-	@Override
-	public int getTickAge() {
-		return 0;
 	}
 
 	@Override

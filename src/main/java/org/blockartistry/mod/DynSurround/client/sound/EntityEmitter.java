@@ -41,7 +41,7 @@ public class EntityEmitter extends Emitter {
 	}
 
 	@Override
-	protected IMySound<?> createSound() {
+	protected BasicSound<?> createSound() {
 		return this.effect.createSound(this.entity, true, RANDOM);
 	}
 

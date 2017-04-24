@@ -37,8 +37,8 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.mod.DynSurround.client.event.RegistryEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.client.sound.BasicSound;
 import org.blockartistry.mod.DynSurround.client.sound.Emitter;
-import org.blockartistry.mod.DynSurround.client.sound.IMySound;
 import org.blockartistry.mod.DynSurround.client.sound.PlayerEmitter;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEngine;
@@ -66,7 +66,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	public static final SoundEffectHandler INSTANCE = new SoundEffectHandler();
 
 	private final Map<SoundEffect, Emitter> emitters = new HashMap<SoundEffect, Emitter>();
-	private final ArrayDeque<IMySound<?>> pending = new ArrayDeque<IMySound<?>>();
+	private final ArrayDeque<BasicSound<?>> pending = new ArrayDeque<BasicSound<?>>();
 
 	private SoundEffectHandler() {
 
@@ -89,9 +89,9 @@ public class SoundEffectHandler extends EffectHandlerBase {
 			emitter.update();
 
 		if (this.pending.size() > 0) {
-			Iterables.removeIf(this.pending, new Predicate<IMySound<?>>() {
+			Iterables.removeIf(this.pending, new Predicate<BasicSound<?>>() {
 				@Override
-				public boolean apply(final IMySound<?> input) {
+				public boolean apply(final BasicSound<?> input) {
 					if (input.getTickAge() >= AGE_THRESHOLD_TICKS)
 						return true;
 					if (input.getTickAge() >= 0) {
@@ -194,7 +194,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		if (player == null)
 			player = EnvironState.getPlayer();
 
-		final IMySound<?> s = sound.createSound(player);
+		final BasicSound<?> s = sound.createSound(player);
 		return playSound(s);
 	}
 
@@ -219,7 +219,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		if (!canSoundBeHeard(pos, sound.getVolume()))
 			return null;
 
-		final IMySound<?> s = sound.createSound(pos, tickDelay);
+		final BasicSound<?> s = sound.createSound(pos, tickDelay);
 		if(tickDelay == 0)
 			return playSound(s);
 
@@ -256,7 +256,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 		for (final SoundEffect effect : this.emitters.keySet())
 			event.output.add("EMITTER: " + effect.toString() + "[vol:" + this.emitters.get(effect).getVolume() + "]");
-		for (final IMySound<?> effect : pending)
+		for (final BasicSound<?> effect : this.pending)
 			event.output.add((effect.getTickAge() < 0 ? "DELAYED: " : "PENDING: ") + effect.toString());
 	}
 
