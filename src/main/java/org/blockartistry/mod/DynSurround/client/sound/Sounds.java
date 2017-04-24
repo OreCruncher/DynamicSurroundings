@@ -54,6 +54,7 @@ public final class Sounds {
 	public static final SoundEffect CRYSTAL_ARMOR_EQUIP = new SoundEffect("fs.armor.crystal_walk", SoundCategory.PLAYERS);
 	
 	public static final SoundEffect THUNDER = new SoundEffect("thunder", SoundCategory.WEATHER).setVolume(10000F);
+	public static final SoundEffect RAINFALL = new SoundEffect("rain", SoundCategory.WEATHER);
 
 	public static final SoundEffect WATER_DROP = new SoundEffect("waterdrops", SoundCategory.AMBIENT);
 	public static final SoundEffect WATER_DRIP = new SoundEffect("waterdrips", SoundCategory.AMBIENT);
@@ -63,6 +64,6 @@ public final class Sounds {
 	public static final SoundEffect FIRE = new SoundEffect(new ResourceLocation("minecraft:block.fire.ambient"),
 			SoundCategory.BLOCKS);
 
-	public static final SoundEffect SPLASH = new SoundEffect("waterfall", SoundCategory.AMBIENT);
+	public static final SoundEffect WATERFALL = new SoundEffect("waterfall", SoundCategory.AMBIENT);
 
 }

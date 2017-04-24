@@ -29,6 +29,8 @@ import java.util.Random;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleRipple;
+import org.blockartistry.mod.DynSurround.client.sound.SoundEngine;
+import org.blockartistry.mod.DynSurround.client.sound.Sounds;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
@@ -48,7 +50,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -109,7 +110,7 @@ public class StormSplashRenderer {
 			particleType = EnumParticleTypes.LAVA;
 		} else if (state.getMaterial() == Material.LAVA) {
 			particleType = EnumParticleTypes.SMOKE_NORMAL;
-		} else if( state.getMaterial() == Material.WATER) {
+		} else if (state.getMaterial() == Material.WATER) {
 			final Particle ripple = new ParticleRipple(world, x, y, z);
 			ParticleHelper.addParticle(ripple);
 			return;
@@ -152,7 +153,9 @@ public class StormSplashRenderer {
 			if (y > player.posY + 1.0D && getPrecipitationHeight(world, 0, this.pos).getY() > playerY)
 				pitch = 0.5F;
 			pitch -= (this.RANDOM.nextFloat() - this.RANDOM.nextFloat()) * 0.1F;
-			renderer.mc.world.playSound(x, y, z, sound, SoundCategory.WEATHER, volume, pitch, false);
+			this.pos.setPos(x, y, z);
+			SoundEngine.instance()
+					.playSound(Sounds.RAINFALL.setVolume(volume).setPitch(pitch).createSound(this.pos, 0));
 		}
 	}
 
