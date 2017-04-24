@@ -44,14 +44,14 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 
 	private static final float DONE_VOLUME_THRESHOLD = 0.001F;
 	private static final float FADE_AMOUNT = 0.015F;
-	
+
 	private final Random RANDOM = XorShiftRandom.current();
 	private final EntityLivingBase attachedTo;
 	private final SoundEffect sound;
 	private boolean isFading;
 	private float maxVolume;
 	private boolean isDonePlaying;
-	
+
 	private long lastTick;
 
 	TrackingSound(@Nonnull final EntityLivingBase attachedTo, @Nonnull final SoundEffect sound, final boolean fadeIn) {
@@ -66,9 +66,9 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 		this.pitch = sound.getPitch(RANDOM);
 
 		this.lastTick = EnvironState.getTickCounter() - 1;
-		
+
 		super.sound = SoundHandler.MISSING_SOUND;
-		
+
 		updateLocation();
 	}
 
@@ -101,11 +101,9 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 	public void updateLocation() {
 		final AxisAlignedBB box = this.attachedTo.getEntityBoundingBox();
 		final Vec3d point = box.getCenter();
-		this.xPosF = (float) point.xCoord;
-		this.yPosF = (float) box.minY;
-		this.zPosF = (float) point.zCoord;
+		this.setPosition((float) point.xCoord, (float) box.minY, (float) point.zCoord);
 	}
-	
+
 	public boolean isEntityAlive() {
 		return this.attachedTo.isEntityAlive();
 	}
@@ -121,17 +119,17 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 		}
 
 		final long tickDelta = EnvironState.getTickCounter() - this.lastTick;
-		if(tickDelta == 0)
+		if (tickDelta == 0)
 			return;
-		
+
 		this.lastTick = EnvironState.getTickCounter();
-		
+
 		if (this.isFading()) {
 			this.volume -= FADE_AMOUNT * tickDelta;
 		} else if (this.volume < this.maxVolume) {
 			this.volume += FADE_AMOUNT * tickDelta;
 		}
-		
+
 		if (this.volume > this.maxVolume) {
 			this.volume = this.maxVolume;
 		}
@@ -158,7 +156,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 			this.maxVolume = volume;
 		return this;
 	}
-	
+
 	@Override
 	public int getTickAge() {
 		return 0;

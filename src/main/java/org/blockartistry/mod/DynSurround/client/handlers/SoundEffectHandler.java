@@ -49,8 +49,6 @@ import com.google.common.collect.Iterables;
 import gnu.trove.iterator.TObjectFloatIterator;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.ISoundEventListener;
-import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -61,7 +59,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class SoundEffectHandler extends EffectHandlerBase implements ISoundEventListener {
+public class SoundEffectHandler extends EffectHandlerBase {
 
 	private static final int AGE_THRESHOLD_TICKS = 10;
 
@@ -108,12 +106,10 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	@Override
 	public void onConnect() {
 		clearSounds();
-		SoundEngine.instance().addListender(this);
 	}
 
 	@Override
 	public void onDisconnect() {
-		SoundEngine.instance().removeListener(this);
 		clearSounds();
 	}
 
@@ -262,19 +258,6 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 			event.output.add("EMITTER: " + effect.toString() + "[vol:" + this.emitters.get(effect).getVolume() + "]");
 		for (final IMySound<?> effect : pending)
 			event.output.add((effect.getTickAge() < 0 ? "DELAYED: " : "PENDING: ") + effect.toString());
-	}
-
-	@Override
-	public void soundPlay(@Nonnull final ISound soundIn, @Nonnull final SoundEventAccessor accessor) {
-		// if (!ModOptions.enableDebugLogging)
-		// return;
-		//
-		// if
-		// (soundIn.getSoundLocation().getResourceDomain().equals(DSurround.RESOURCE_ID))
-		// return;
-		//
-		// ModLog.debug("Sound callback: [%s]",
-		// soundIn.getSoundLocation().toString());
 	}
 
 }
