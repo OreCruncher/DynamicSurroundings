@@ -25,6 +25,7 @@
 package org.blockartistry.mod.DynSurround.client.fx;
 
 import java.util.Random;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 
@@ -33,6 +34,9 @@ import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleSteamJet;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
+import com.google.common.collect.Sets;
+
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -43,6 +47,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SteamJetEffect extends JetEffect {
 
+	private static final Set<Block> hotBlocks = Sets.newIdentityHashSet();
+
+	static {
+		hotBlocks.add(Blocks.LAVA);
+		hotBlocks.add(Blocks.MAGMA);
+	}
+
 	public SteamJetEffect(final int chance) {
 		super(chance);
 	}
@@ -52,8 +63,9 @@ public class SteamJetEffect extends JetEffect {
 		for (int i = -1; i <= 1; i++)
 			for (int j = -1; j <= 1; j++)
 				for (int k = -1; k <= 1; k++) {
-					if (WorldUtils.getBlockState(world, pos.getX() + i, pos.getY() + j, pos.getZ() + k)
-							.getBlock() == Blocks.LAVA)
+					final Block theBlock = WorldUtils
+							.getBlockState(world, pos.getX() + i, pos.getY() + j, pos.getZ() + k).getBlock();
+					if (hotBlocks.contains(theBlock))
 						blockCount++;
 				}
 		return blockCount;
