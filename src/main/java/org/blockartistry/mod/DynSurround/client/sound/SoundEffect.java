@@ -171,22 +171,22 @@ public final class SoundEffect implements ISpecialEffect {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IMySound createSound(@Nonnull final BlockPos pos, final Random rand) {
+	public IMySound<?> createSound(@Nonnull final BlockPos pos, final Random rand) {
 		return new SpotSound(pos, this, getRepeat(rand));
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IMySound createSound(@Nonnull final EntityPlayer player) {
+	public IMySound<?> createSound(@Nonnull final EntityPlayer player) {
 		return new SpotSound(player, this);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IMySound createSound(@Nonnull final BlockPos pos, final int tickDelay) {
+	public IMySound<?> createSound(@Nonnull final BlockPos pos, final int tickDelay) {
 		return new SpotSound(pos, this, tickDelay);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IMySound createSound(@Nonnull final EntityLivingBase player, final boolean fadeIn, final Random rand) {
+	public IMySound<?> createSound(@Nonnull final EntityLivingBase player, final boolean fadeIn, final Random rand) {
 		if(player instanceof EntityPlayer)
 			return new PlayerTrackingSound(this, fadeIn);
 		return new TrackingSound(player, this, fadeIn);

@@ -46,13 +46,13 @@ public abstract class Emitter {
 	protected final Random RANDOM = XorShiftRandom.current();
 	
 	protected final SoundEffect effect;
-	protected IMySound activeSound;
+	protected IMySound<?> activeSound;
 
 	public Emitter(@Nonnull final SoundEffect sound) {
 		this.effect = sound;
 	}
 	
-	protected abstract IMySound createSound();
+	protected abstract IMySound<?> createSound();
 
 	public void update() {
 		// If the volume is turned off don't send

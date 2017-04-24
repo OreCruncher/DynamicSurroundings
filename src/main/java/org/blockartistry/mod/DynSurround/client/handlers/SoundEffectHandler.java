@@ -68,7 +68,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 	public static final SoundEffectHandler INSTANCE = new SoundEffectHandler();
 
 	private final Map<SoundEffect, Emitter> emitters = new HashMap<SoundEffect, Emitter>();
-	private final ArrayDeque<IMySound> pending = new ArrayDeque<IMySound>();
+	private final ArrayDeque<IMySound<?>> pending = new ArrayDeque<IMySound<?>>();
 
 	private SoundEffectHandler() {
 
@@ -91,9 +91,9 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 			emitter.update();
 
 		if (this.pending.size() > 0) {
-			Iterables.removeIf(this.pending, new Predicate<IMySound>() {
+			Iterables.removeIf(this.pending, new Predicate<IMySound<?>>() {
 				@Override
-				public boolean apply(final IMySound input) {
+				public boolean apply(final IMySound<?> input) {
 					if (input.getTickAge() >= AGE_THRESHOLD_TICKS)
 						return true;
 					if (input.getTickAge() >= 0) {
@@ -198,7 +198,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		if (player == null)
 			player = EnvironState.getPlayer();
 
-		final IMySound s = sound.createSound(player);
+		final IMySound<?> s = sound.createSound(player);
 		return playSound(s);
 	}
 
@@ -223,7 +223,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 		if (!canSoundBeHeard(pos, sound.getVolume()))
 			return null;
 
-		final IMySound s = sound.createSound(pos, tickDelay);
+		final IMySound<?> s = sound.createSound(pos, tickDelay);
 		if(tickDelay == 0)
 			return playSound(s);
 
@@ -260,7 +260,7 @@ public class SoundEffectHandler extends EffectHandlerBase implements ISoundEvent
 
 		for (final SoundEffect effect : this.emitters.keySet())
 			event.output.add("EMITTER: " + effect.toString() + "[vol:" + this.emitters.get(effect).getVolume() + "]");
-		for (final IMySound effect : pending)
+		for (final IMySound<?> effect : pending)
 			event.output.add((effect.getTickAge() < 0 ? "DELAYED: " : "PENDING: ") + effect.toString());
 	}
 

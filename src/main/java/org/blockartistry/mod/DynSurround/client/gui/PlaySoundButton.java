@@ -26,6 +26,8 @@ package org.blockartistry.mod.DynSurround.client.gui;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.client.sound.SoundEngine;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
@@ -35,12 +37,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class PlaySoundButton extends GuiButtonExt {
 	
+	private final SoundEngine soundEngine;
 	private final String soundResource;
 	private ISound playingSound;
 
 	public PlaySoundButton(final int id, @Nonnull final String sound) {
 		super(id, 0, 0, 34, 18, GuiConstants.TEXT_PLAY);
 		
+		this.soundEngine = SoundEngine.instance();
 		this.soundResource = sound;
 	}
 	
@@ -57,7 +61,7 @@ public class PlaySoundButton extends GuiButtonExt {
 		super.drawButton(mc, x, y);
 		
 		if (this.playingSound != null) {
-			if (!mc.getSoundHandler().isSoundPlaying(this.playingSound)) {
+			if (!this.soundEngine.isSoundPlaying(this.playingSound)) {
 				this.playingSound = null;
 				updateDisplayText();
 			}
@@ -67,12 +71,12 @@ public class PlaySoundButton extends GuiButtonExt {
 	
 	public void playSound(@Nonnull final Minecraft mc, final float volume) {
 		if (this.playingSound != null) {
-			mc.getSoundHandler().stopSound(this.playingSound);
+			this.soundEngine.stopSound(this.playingSound);
 			this.playingSound = null;
 		} else {
-			mc.getSoundHandler().stopSounds();
+			this.soundEngine.stopAllSounds();
 			this.playingSound = new ConfigSound(this.soundResource, volume);
-			mc.getSoundHandler().playSound(this.playingSound);
+			this.soundEngine.playSound(this.playingSound);
 		}
 		
 		updateDisplayText();

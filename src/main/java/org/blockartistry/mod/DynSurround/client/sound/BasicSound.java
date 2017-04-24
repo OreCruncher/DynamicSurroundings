@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.gui;
+package org.blockartistry.mod.DynSurround.client.sound;
 
 import javax.annotation.Nonnull;
 
@@ -32,31 +32,59 @@ import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Special sound class for playing sounds during configuration. The sound engine
- * will not block or scale volumes so that the player can hear the sound
- * regardless of how the config is set up.
- */
 @SideOnly(Side.CLIENT)
-public class ConfigSound extends PositionedSound {
+public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 
-	public ConfigSound(@Nonnull final String soundResource, final float volume) {
-		super(new ResourceLocation(soundResource), SoundCategory.MASTER);
+	public BasicSound(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
+		this(event.getSoundName(), cat);
+	}
 
-		this.volume = volume;
+	public BasicSound(@Nonnull final ResourceLocation soundResource, @Nonnull final SoundCategory cat) {
+		super(soundResource, cat);
+
+		this.volume = 1F;
 		this.pitch = 1F;
 		this.xPosF = this.yPosF = this.zPosF = 0F;
 		this.repeat = false;
 		this.repeatDelay = 0;
-		this.attenuationType = ISound.AttenuationType.NONE;
+		this.attenuationType = ISound.AttenuationType.LINEAR;
+	}
+
+	@SuppressWarnings("unchecked")
+	public T setVolume(final float v) {
+		this.volume = v;
+		return (T) this;
+	}
+
+	@SuppressWarnings("unchecked")
+	public T setPitch(final float p) {
+		this.pitch = p;
+		return (T) this;
+	}
+
+	@SuppressWarnings("unchecked")
+	public T setPosition(final float x, final float y, final float z) {
+		this.xPosF = x;
+		this.yPosF = y;
+		this.zPosF = z;
+		return (T) this;
+	}
+
+	@SuppressWarnings("unchecked")
+	public T setAttenuationType(@Nonnull final ISound.AttenuationType type) {
+		this.attenuationType = type;
+		return (T) this;
 	}
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).addValue(this.positionedSoundLocation.toString()).add("volume", this.volume)
-				.add("pitch", this.pitch).add("attenuation", this.attenuationType).toString();
+		return Objects.toStringHelper(this).addValue(this.positionedSoundLocation.toString())
+				.addValue(this.category.toString()).add("volume", this.volume).add("pitch", this.pitch)
+				.add("attenuation", this.attenuationType).add("x", this.xPosF).add("y", this.yPosF).add("z", this.zPosF)
+				.toString();
 	}
 }

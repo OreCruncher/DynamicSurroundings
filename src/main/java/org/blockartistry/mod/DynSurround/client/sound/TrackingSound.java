@@ -31,7 +31,6 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import net.minecraft.client.audio.ITickableSound;
-import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.SoundCategory;
@@ -41,7 +40,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class TrackingSound extends PositionedSound implements ITickableSound, IMySound {
+public class TrackingSound extends BasicSound<TrackingSound> implements ITickableSound, IMySound<TrackingSound> {
 
 	private static final float DONE_VOLUME_THRESHOLD = 0.001F;
 	private static final float FADE_AMOUNT = 0.015F;
@@ -154,24 +153,15 @@ public class TrackingSound extends PositionedSound implements ITickableSound, IM
 	}
 
 	@Override
-	public void setVolume(final float volume) {
+	public TrackingSound setVolume(final float volume) {
 		if (volume < this.maxVolume || !this.isFading)
 			this.maxVolume = volume;
-	}
-	
-	@Override
-	public void setPitch(final float pitch) {
-		this.pitch = pitch;
+		return this;
 	}
 	
 	@Override
 	public int getTickAge() {
 		return 0;
-	}
-
-	@Override
-	public String toString() {
-		return this.sound.toString();
 	}
 
 	@Override
