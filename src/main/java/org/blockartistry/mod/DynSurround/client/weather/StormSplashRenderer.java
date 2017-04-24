@@ -106,7 +106,7 @@ public class StormSplashRenderer {
 
 		if (dust || block == Blocks.SOUL_SAND) {
 			particleType = null;
-		} else if (block == Blocks.NETHERRACK && RANDOM.nextInt(20) == 0) {
+		} else if ((block == Blocks.NETHERRACK  || block == Blocks.MAGMA) && RANDOM.nextInt(20) == 0) {
 			particleType = EnumParticleTypes.LAVA;
 		} else if (state.getMaterial() == Material.LAVA) {
 			particleType = EnumParticleTypes.SMOKE_NORMAL;
