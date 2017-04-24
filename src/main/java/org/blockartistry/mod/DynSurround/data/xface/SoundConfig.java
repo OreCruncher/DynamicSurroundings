@@ -34,6 +34,8 @@ public class SoundConfig {
 	public String conditions = StringUtils.EMPTY;
 	@SerializedName("soundType")
 	public String soundType = null;
+	@SerializedName("category")
+	public String soundCategory = null;
 	@SerializedName("volume")
 	public Float volume = null;
 	@SerializedName("pitch")

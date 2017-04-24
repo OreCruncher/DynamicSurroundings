@@ -138,7 +138,7 @@ public class BlockProfile {
 			final SoundEffect s = list[i];
 			if (s.matches()) {
 				candidates.add(s);
-				totalWeight += s.weight;
+				totalWeight += s.getWeight();
 			}
 		}
 
@@ -152,7 +152,7 @@ public class BlockProfile {
 
 		int targetWeight = random.nextInt(totalWeight);
 		int i = 0;
-		for (i = candidates.size(); (targetWeight -= candidates.get(i - 1).weight) >= 0; i--)
+		for (i = candidates.size(); (targetWeight -= candidates.get(i - 1).getWeight()) >= 0; i--)
 			;
 
 		return candidates.get(i - 1);

@@ -183,7 +183,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		if (e.getName().equals("entity.lightning.thunder")) {
 			final ISound sound = e.getSound();
 			final BlockPos pos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
-			final ISound newSound = Sounds.THUNDER.setVolume(ModOptions.thunderVolume).createSound(pos, this.RANDOM);
+			final ISound newSound = Sounds.THUNDER.createSound(pos, this.RANDOM).setVolume(ModOptions.thunderVolume);
 			e.setResultSound(newSound);
 		}
 	}
@@ -198,25 +198,10 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		return playSound(s);
 	}
 
-	/**
-	 * Estimate whether a sound can be heard based on it's volume and distance.
-	 */
-	public static boolean canSoundBeHeard(@Nonnull final BlockPos soundPos, final float volume) {
-		if (volume == 0.0F)
-			return false;
-		final BlockPos playerPos = EnvironState.getPlayerPosition();
-		final double distanceSq = playerPos.distanceSq(soundPos);
-		final double DROPOFF = 16 * 16;
-		if (distanceSq <= DROPOFF)
-			return true;
-		final double power = volume * DROPOFF;
-		return distanceSq <= power;
-	}
-
 	@Nullable
 	public String playSoundAt(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int tickDelay) {
 
-		if (!canSoundBeHeard(pos, sound.getVolume()))
+		if (!sound.canSoundBeHeard(pos))
 			return null;
 
 		final BasicSound<?> s = sound.createSound(pos, tickDelay);

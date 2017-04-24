@@ -33,7 +33,6 @@ import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -48,6 +47,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 	private final Random RANDOM = XorShiftRandom.current();
 	private final EntityLivingBase attachedTo;
 	private final SoundEffect sound;
+	
 	private boolean isFading;
 	private float maxVolume;
 	private boolean isDonePlaying;
@@ -55,10 +55,13 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 	private long lastTick;
 
 	TrackingSound(@Nonnull final EntityLivingBase attachedTo, @Nonnull final SoundEffect sound, final boolean fadeIn) {
-		super(sound.sound, SoundCategory.PLAYERS);
+		// TODO: Was SoundCategory.PLAYERS
+		super(sound.getSound(), sound.getCategory());
 
 		this.attachedTo = attachedTo;
 
+		this.repeat = sound.isRepeatable();
+		
 		// Don't set volume to 0; MC will optimize out
 		this.sound = sound;
 		this.maxVolume = sound.getVolume();
@@ -74,7 +77,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 
 	@Override
 	public boolean canRepeat() {
-		return !this.isDonePlaying() && this.sound.isRepeatable();
+		return !this.isDonePlaying() && super.canRepeat();
 	}
 
 	@Override

@@ -33,37 +33,44 @@ public final class Sounds {
 
 	}
 
-	public static final SoundEffect JUMP = new SoundEffect("jump", SoundCategory.PLAYERS).setVariable(true);
-	public static final SoundEffect CRAFTING = new SoundEffect("crafting", SoundCategory.PLAYERS);
+	public static final SoundEffect JUMP = new SoundEffect.Builder("jump", SoundCategory.PLAYERS).setVariablePitch(true)
+			.build();
+	public static final SoundEffect CRAFTING = new SoundEffect.Builder("crafting", SoundCategory.PLAYERS).build();
 
-	public static final SoundEffect SWORD_EQUIP = new SoundEffect("sword.equip", SoundCategory.PLAYERS);
-	public static final SoundEffect SWORD_SWING = new SoundEffect("sword.swing", SoundCategory.PLAYERS);
-	public static final SoundEffect AXE_EQUIP = new SoundEffect("blunt.equip", SoundCategory.PLAYERS);
-	public static final SoundEffect AXE_SWING = new SoundEffect("blunt.swing", SoundCategory.PLAYERS);
-	public static final SoundEffect BOW_EQUIP = new SoundEffect("bow.equip", SoundCategory.PLAYERS);
-	public static final SoundEffect BOW_PULL = new SoundEffect("bow.pull", SoundCategory.PLAYERS);
-	public static final SoundEffect TOOL_EQUIP = new SoundEffect("tool.equip", SoundCategory.PLAYERS);
-	public static final SoundEffect TOOL_SWING = new SoundEffect("tool.swing", SoundCategory.PLAYERS);
-	public static final SoundEffect UTILITY_EQUIP = new SoundEffect("utility.equip", SoundCategory.PLAYERS);
+	public static final SoundEffect SWORD_EQUIP = new SoundEffect.Builder("sword.equip", SoundCategory.PLAYERS).build();
+	public static final SoundEffect SWORD_SWING = new SoundEffect.Builder("sword.swing", SoundCategory.PLAYERS).build();
+	public static final SoundEffect AXE_EQUIP = new SoundEffect.Builder("blunt.equip", SoundCategory.PLAYERS).build();
+	public static final SoundEffect AXE_SWING = new SoundEffect.Builder("blunt.swing", SoundCategory.PLAYERS).build();
+	public static final SoundEffect BOW_EQUIP = new SoundEffect.Builder("bow.equip", SoundCategory.PLAYERS).build();
+	public static final SoundEffect BOW_PULL = new SoundEffect.Builder("bow.pull", SoundCategory.PLAYERS).build();
+	public static final SoundEffect TOOL_EQUIP = new SoundEffect.Builder("tool.equip", SoundCategory.PLAYERS).build();
+	public static final SoundEffect TOOL_SWING = new SoundEffect.Builder("tool.swing", SoundCategory.PLAYERS).build();
+	public static final SoundEffect UTILITY_EQUIP = new SoundEffect.Builder("utility.equip", SoundCategory.PLAYERS)
+			.build();
 
 	public static final SoundEffect SHIELD_EQUIP = TOOL_EQUIP;
-	
-	public static final SoundEffect LIGHT_ARMOR_EQUIP = new SoundEffect("fs.armor.light_walk", SoundCategory.PLAYERS);
-	public static final SoundEffect MEDIUM_ARMOR_EQUIP = new SoundEffect("fs.armor.medium_walk", SoundCategory.PLAYERS);
-	public static final SoundEffect HEAVY_ARMOR_EQUIP = new SoundEffect("fs.armor.heavy_walk", SoundCategory.PLAYERS);
-	public static final SoundEffect CRYSTAL_ARMOR_EQUIP = new SoundEffect("fs.armor.crystal_walk", SoundCategory.PLAYERS);
-	
-	public static final SoundEffect THUNDER = new SoundEffect("thunder", SoundCategory.WEATHER).setVolume(10000F);
-	public static final SoundEffect RAINFALL = new SoundEffect("rain", SoundCategory.WEATHER);
 
-	public static final SoundEffect WATER_DROP = new SoundEffect("waterdrops", SoundCategory.AMBIENT);
-	public static final SoundEffect WATER_DRIP = new SoundEffect("waterdrips", SoundCategory.AMBIENT);
-	public static final SoundEffect STEAM_HISS = new SoundEffect(new ResourceLocation("block.fire.extinguish"),
-			SoundCategory.AMBIENT, 0.1F, 1.0F);
+	public static final SoundEffect LIGHT_ARMOR_EQUIP = new SoundEffect.Builder("fs.armor.light_walk",
+			SoundCategory.PLAYERS).build();
+	public static final SoundEffect MEDIUM_ARMOR_EQUIP = new SoundEffect.Builder("fs.armor.medium_walk",
+			SoundCategory.PLAYERS).build();
+	public static final SoundEffect HEAVY_ARMOR_EQUIP = new SoundEffect.Builder("fs.armor.heavy_walk",
+			SoundCategory.PLAYERS).build();
+	public static final SoundEffect CRYSTAL_ARMOR_EQUIP = new SoundEffect.Builder("fs.armor.crystal_walk",
+			SoundCategory.PLAYERS).build();
 
-	public static final SoundEffect FIRE = new SoundEffect(new ResourceLocation("minecraft:block.fire.ambient"),
-			SoundCategory.BLOCKS);
+	public static final SoundEffect THUNDER = new SoundEffect.Builder("thunder", SoundCategory.WEATHER)
+			.setVolume(10000F).build();
+	public static final SoundEffect RAINFALL = new SoundEffect.Builder("rain", SoundCategory.WEATHER).build();
 
-	public static final SoundEffect WATERFALL = new SoundEffect("waterfall", SoundCategory.AMBIENT);
+	public static final SoundEffect WATER_DROP = new SoundEffect.Builder("waterdrops", SoundCategory.AMBIENT).build();
+	public static final SoundEffect WATER_DRIP = new SoundEffect.Builder("waterdrips", SoundCategory.AMBIENT).build();
+	public static final SoundEffect STEAM_HISS = new SoundEffect.Builder(new ResourceLocation("block.fire.extinguish"),
+			SoundCategory.AMBIENT).setVolume(0.1F).setPitch(1.0F).build();
+
+	public static final SoundEffect FIRE = new SoundEffect.Builder(new ResourceLocation("minecraft:block.fire.ambient"),
+			SoundCategory.BLOCKS).build();
+
+	public static final SoundEffect WATERFALL = new SoundEffect.Builder("waterfall", SoundCategory.AMBIENT).build();
 
 }

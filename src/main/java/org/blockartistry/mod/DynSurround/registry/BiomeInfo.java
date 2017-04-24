@@ -194,7 +194,7 @@ public class BiomeInfo {
 			final SoundEffect s = this.spotSounds[i];
 			if (s.matches()) {
 				candidates.add(s);
-				totalWeight += s.weight;
+				totalWeight += s.getWeight();
 			}
 		}
 		
@@ -206,7 +206,7 @@ public class BiomeInfo {
 
 		int targetWeight = random.nextInt(totalWeight);
 		int i = 0;
-		for (i = candidates.size(); (targetWeight -= candidates.get(i - 1).weight) >= 0; i--)
+		for (i = candidates.size(); (targetWeight -= candidates.get(i - 1).getWeight()) >= 0; i--)
 			;
 
 		return candidates.get(i - 1);

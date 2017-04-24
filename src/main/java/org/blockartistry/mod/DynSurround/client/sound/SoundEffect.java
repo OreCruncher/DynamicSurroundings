@@ -32,6 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.fx.ISpecialEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
+import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundType;
 import org.blockartistry.mod.DynSurround.registry.Evaluator;
@@ -52,30 +53,21 @@ public final class SoundEffect implements ISpecialEffect {
 
 	private static final float[] pitchDelta = { -0.2F, 0.0F, 0.0F, 0.2F, 0.2F, 0.2F };
 
-	public final @Nullable SoundEvent sound;
+	private final @Nullable SoundEvent sound;
 	// Hack around SoundEvent.getName() being client sided
 	private final String soundName;
-	public final String conditions;
-	public final SoundType type;
-	public final SoundCategory category;
-	public float volume;
-	public float pitch;
-	public final int weight;
-	public boolean variable;
-	public final int repeatDelayRandom;
-	public final int repeatDelay;
+	private SoundType type;
+	private String conditions;
+	private SoundCategory category;
+	private float volume;
+	private float pitch;
+	private int weight;
+	private boolean variable;
+	private int repeatDelayRandom;
+	private int repeatDelay;
 
-	public SoundEffect(@Nonnull final String sound, @Nonnull final SoundCategory category) {
-		this(new ResourceLocation(DSurround.RESOURCE_ID, sound), category);
-	}
-
-	public SoundEffect(final ResourceLocation resource, final SoundCategory category) {
+	protected SoundEffect(final ResourceLocation resource, final SoundCategory category) {
 		this(resource, category, 1.0F, 1.0F, 0, false);
-	}
-
-	public SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume,
-			final float pitch) {
-		this(resource, category, volume, pitch, 0, false);
 	}
 
 	protected SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume,
@@ -93,56 +85,48 @@ public final class SoundEffect implements ISpecialEffect {
 		this.repeatDelay = repeatDelay;
 	}
 
-	public SoundEffect(final SoundConfig record) {
-		this.soundName = StringUtils.isEmpty(record.sound) ? "NO SOUND SPECIFIED" : record.sound;
-		this.sound = StringUtils.isEmpty(record.sound) ? null : SoundUtils.getOrRegisterSound(record.sound);
-		this.conditions = StringUtils.isEmpty(record.conditions) ? StringUtils.EMPTY : record.conditions.intern();
-		this.volume = record.volume == null ? 1.0F : record.volume.floatValue();
-		this.pitch = record.pitch == null ? 1.0F : record.pitch.floatValue();
-		this.weight = record.weight == null ? 10 : record.weight.intValue();
-		this.variable = record.variable != null && record.variable.booleanValue();
-		this.repeatDelayRandom = record.repeatDelayRandom == null ? 0 : record.repeatDelayRandom.intValue();
-		this.repeatDelay = record.repeatDelay == null ? 0 : record.repeatDelay.intValue();
-
-		if (record.soundType != null) {
-			this.type = SoundType.getType(record.soundType);
-		} else {
-			if (record.repeatDelay != null && record.repeatDelay.intValue() > 0)
-				this.type = SoundType.PERIODIC;
-			else if (record.step != null && record.step.booleanValue())
-				this.type = SoundType.STEP;
-			else if (record.spotSound != null && record.spotSound.booleanValue())
-				this.type = SoundType.SPOT;
-			else
-				this.type = SoundType.BACKGROUND;
-		}
-
-		switch (this.type) {
-		case BACKGROUND:
-			this.category = SoundCategory.AMBIENT;
-			break;
-		case PERIODIC:
-			this.category = SoundCategory.PLAYERS;
-			break;
-		case STEP:
-		case SPOT:
-		default:
-			this.category = SoundCategory.BLOCKS;
-		}
-	}
-
-	public SoundEffect setVolume(final float vol) {
+	protected SoundEffect setVolume(final float vol) {
 		this.volume = vol;
 		return this;
 	}
 
-	public SoundEffect setPitch(final float pitch) {
+	protected SoundEffect setPitch(final float pitch) {
 		this.pitch = pitch;
 		return this;
 	}
 
-	public SoundEffect setVariable(final boolean flag) {
+	protected SoundEffect setVariable(final boolean flag) {
 		this.variable = flag;
+		return this;
+	}
+
+	protected SoundEffect setSoundCategory(@Nonnull final SoundCategory cat) {
+		this.category = cat;
+		return this;
+	}
+
+	protected SoundEffect setConditions(@Nonnull final String cond) {
+		this.conditions = cond;
+		return this;
+	}
+
+	protected SoundEffect setWeight(final int w) {
+		this.weight = w;
+		return this;
+	}
+
+	protected SoundEffect setSoundType(@Nonnull final SoundType type) {
+		this.type = type;
+		return this;
+	}
+
+	protected SoundEffect setRepeatDelay(final int d) {
+		this.repeatDelay = d;
+		return this;
+	}
+
+	protected SoundEffect setRepeatDelayRandom(final int r) {
+		this.repeatDelayRandom = r;
 		return this;
 	}
 
@@ -150,23 +134,39 @@ public final class SoundEffect implements ISpecialEffect {
 		return Evaluator.check(this.conditions);
 	}
 
-	public float getVolume() {
+	public SoundEvent getSound() {
+		return this.sound;
+	}
+
+	public SoundCategory getCategory() {
+		return this.category;
+	}
+
+	public int getWeight() {
+		return this.weight;
+	}
+
+	public SoundType getSoundType() {
+		return this.type;
+	}
+
+	protected float getVolume() {
 		return this.volume;
 	}
 
-	public float getPitch(final Random rand) {
+	protected float getPitch(final Random rand) {
 		if (rand != null && this.variable)
 			return this.pitch + pitchDelta[rand.nextInt(pitchDelta.length)];
 		return this.pitch;
 	}
 
-	public int getRepeat(final Random rand) {
+	protected int getRepeat(final Random rand) {
 		if (this.repeatDelayRandom <= 0)
 			return Math.max(this.repeatDelay, 0);
 		return this.repeatDelay + rand.nextInt(this.repeatDelayRandom);
 	}
 
-	public boolean isRepeatable() {
+	protected boolean isRepeatable() {
 		return this.type == SoundType.PERIODIC || this.type == SoundType.BACKGROUND;
 	}
 
@@ -187,9 +187,20 @@ public final class SoundEffect implements ISpecialEffect {
 
 	@SideOnly(Side.CLIENT)
 	public BasicSound<?> createSound(@Nonnull final EntityLivingBase player, final boolean fadeIn, final Random rand) {
-		if(player instanceof EntityPlayer)
+		if (player instanceof EntityPlayer)
 			return new PlayerTrackingSound(this, fadeIn);
 		return new TrackingSound(player, this, fadeIn);
+	}
+
+	public boolean canSoundBeHeard(@Nonnull final BlockPos soundPos) {
+		if (this.getVolume() == 0.0F)
+			return false;
+		final double distanceSq = EnvironState.getPlayerPosition().distanceSq(soundPos);
+		final double DROPOFF = 16 * 16;
+		if (distanceSq <= DROPOFF)
+			return true;
+		final double power = this.getVolume() * DROPOFF;
+		return distanceSq <= power;
 	}
 
 	@Override
@@ -231,5 +242,117 @@ public final class SoundEffect implements ISpecialEffect {
 		builder.append(']');
 		return builder.toString();
 	}
-	
+
+	public static class Builder {
+
+		private final SoundEffect effect;
+
+		public Builder(@Nonnull final String sound, @Nonnull final SoundCategory cat) {
+			this(new ResourceLocation(DSurround.RESOURCE_ID, sound), cat);
+		}
+
+		public Builder(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
+			this(event.getSoundName(), cat);
+		}
+
+		public Builder(@Nonnull final ResourceLocation resource, @Nonnull final SoundCategory cat) {
+			this.effect = new SoundEffect(resource, cat);
+		}
+
+		public Builder(@Nonnull final SoundConfig record) {
+			this.effect = new SoundEffect(new ResourceLocation(record.sound), null);
+
+			this.setConditions(StringUtils.isEmpty(record.conditions) ? StringUtils.EMPTY : record.conditions.intern());
+			this.setVolume(record.volume == null ? 1.0F : record.volume.floatValue());
+			this.setPitch(record.pitch == null ? 1.0F : record.pitch.floatValue());
+			this.setWeight(record.weight == null ? 10 : record.weight.intValue());
+			this.setVariablePitch(record.variable != null && record.variable.booleanValue());
+			this.setRepeatDelay(record.repeatDelay == null ? 0 : record.repeatDelay.intValue());
+			this.setRepeatDelayRandom(record.repeatDelayRandom == null ? 0 : record.repeatDelayRandom.intValue());
+
+			final SoundType t;
+			if (record.soundType != null) {
+				t = SoundType.getType(record.soundType);
+			} else {
+				if (record.repeatDelay != null && record.repeatDelay.intValue() > 0)
+					t = SoundType.PERIODIC;
+				else if (record.step != null && record.step.booleanValue())
+					t = SoundType.STEP;
+				else if (record.spotSound != null && record.spotSound.booleanValue())
+					t = SoundType.SPOT;
+				else
+					t = SoundType.BACKGROUND;
+			}
+
+			this.setSoundType(t != null ? t : SoundType.BACKGROUND);
+
+			final SoundCategory sc;
+			if (record.soundCategory != null) {
+				sc = SoundCategory.getByName(record.soundCategory);
+			} else {
+				switch (t) {
+				case BACKGROUND:
+				case PERIODIC:
+				case SPOT:
+					sc = SoundCategory.AMBIENT;
+					break;
+				case STEP:
+				default:
+					sc = SoundCategory.BLOCKS;
+				}
+			}
+
+			this.setSoundCategory(sc != null ? sc : SoundCategory.AMBIENT);
+		}
+
+		public Builder setVolume(final float v) {
+			this.effect.setVolume(v);
+			return this;
+		}
+
+		public Builder setPitch(final float p) {
+			this.effect.setPitch(p);
+			return this;
+		}
+
+		public Builder setVariablePitch(final boolean flag) {
+			this.effect.setVariable(flag);
+			return this;
+		}
+
+		public Builder setSoundCategory(@Nonnull final SoundCategory cat) {
+			this.effect.setSoundCategory(cat);
+			return this;
+		}
+
+		public Builder setConditions(@Nonnull final String cond) {
+			this.effect.setConditions(cond == null ? "" : cond);
+			return this;
+		}
+
+		public Builder setWeight(final int w) {
+			this.effect.setWeight(w);
+			return this;
+		}
+
+		public Builder setRepeatDelay(final int d) {
+			this.effect.setRepeatDelay(d);
+			return this;
+		}
+
+		public Builder setRepeatDelayRandom(final int r) {
+			this.effect.setRepeatDelayRandom(r);
+			return this;
+		}
+
+		public Builder setSoundType(final SoundType type) {
+			this.effect.setSoundType(type);
+			return this;
+		}
+
+		public SoundEffect build() {
+			return effect;
+		}
+	}
+
 }

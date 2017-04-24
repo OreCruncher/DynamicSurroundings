@@ -47,7 +47,7 @@ public class SpotSound extends BasicSound<SpotSound> {
 	private final int timeMark;
 
 	SpotSound(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int delay) {
-		super(sound.sound, sound.category);
+		super(sound.getSound(), sound.getCategory());
 
 		this.volume = sound.getVolume();
 		this.pitch = sound.getPitch(RANDOM);
@@ -66,7 +66,7 @@ public class SpotSound extends BasicSound<SpotSound> {
 	}
 
 	SpotSound(@Nonnull final EntityPlayer player, @Nonnull final SoundEffect sound) {
-		super(sound.sound, sound.category);
+		super(sound.getSound(), sound.getCategory());
 
 		this.volume = sound.getVolume();
 		this.pitch = sound.getPitch(RANDOM);
@@ -79,7 +79,7 @@ public class SpotSound extends BasicSound<SpotSound> {
 		this.zPosF = (float) point.zCoord;
 		
 		// If it is not a player sound randomize the location around the player
-		if(sound.category != SoundCategory.PLAYERS) {
+		if(sound.getCategory() != SoundCategory.PLAYERS) {
 			this.xPosF += randomRange(SPOT_SOUND_RANGE);
 			this.yPosF += randomRange(SPOT_SOUND_RANGE);
 			this.zPosF += randomRange(SPOT_SOUND_RANGE);

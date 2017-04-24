@@ -56,6 +56,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -205,8 +206,11 @@ public final class BlockRegistry extends Registry {
 
 			for (final SoundConfig sr : entry.sounds) {
 				if (sr.sound != null && !soundRegistry.isSoundBlocked(sr.sound)) {
-					final SoundEffect eff = new SoundEffect(sr);
-					if (eff.type == SoundType.STEP)
+					final SoundEffect.Builder b = new SoundEffect.Builder(sr);
+					if (sr.soundCategory == null)
+						b.setSoundCategory(SoundCategory.BLOCKS);
+					final SoundEffect eff = b.build();
+					if (eff.getSoundType() == SoundType.STEP)
 						blockData.addStepSound(eff);
 					else
 						blockData.addSound(eff);
