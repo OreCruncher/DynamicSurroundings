@@ -142,8 +142,7 @@ public class SoundEngine {
 	
 	@Nullable
     public String playSound(@Nonnull final BlockPos pos, @Nonnull final SoundEvent soundIn, @Nonnull final SoundCategory category, final float volume, final float pitch) {
-		@SuppressWarnings("rawtypes")
-		final BasicSound<BasicSound> sound = new BasicSound<BasicSound>(soundIn, category);
+		final BasicSound<?> sound = new AdhocSound(soundIn, category);
 		sound.setVolume(volume).setPitch(pitch).setPosition(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
 		return this.playSound(sound);
 	}
@@ -205,6 +204,14 @@ public class SoundEngine {
 				totalChannels == -1 ? "UNKNOWN" : Integer.toString(totalChannels));
 		SoundSystemConfig.setNumberNormalChannels(normalChannelCount);
 		SoundSystemConfig.setNumberStreamingChannels(streamChannelCount);
+	}
+	
+	private static class AdhocSound extends BasicSound<AdhocSound> {
+
+		public AdhocSound(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
+			super(event, cat);
+		}
+		
 	}
 
 }

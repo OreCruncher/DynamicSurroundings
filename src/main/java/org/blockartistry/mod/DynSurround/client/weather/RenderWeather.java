@@ -78,11 +78,12 @@ public final class RenderWeather extends IRenderHandler {
 		// weather handling.
 		final WorldProvider provider = e.getWorld().provider;
 		final String dimName = provider.getDimensionType().getName();
-		if (provider.getWeatherRenderer() == null) {
+		final IRenderHandler renderer = provider.getWeatherRenderer();
+		if (renderer == null) {
 			ModLog.info("Setting weather renderer for dimension [%s]", dimName);
 			provider.setWeatherRenderer(new RenderWeather());
 		} else {
-			ModLog.info("Not hooking weather renderer for dimension [%s]", dimName);
+			ModLog.info("Not hooking weather renderer for dimension [%s] (%s)", dimName, renderer.getClass());
 		}
 	}
 
