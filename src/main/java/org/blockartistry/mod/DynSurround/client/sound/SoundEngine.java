@@ -107,14 +107,14 @@ public class SoundEngine {
 			return false;
 		return this.manager.playingSounds.containsKey(soundId);
 	}
-	
+
 	public void stopSound(@Nonnull final String sound, @Nonnull final SoundCategory cat) {
-		if(sound != null)
+		if (sound != null)
 			this.manager.stop(sound, cat);
 	}
-	
+
 	public void stopSound(@Nonnull final ISound sound) {
-		if(sound != null)
+		if (sound != null)
 			this.manager.stopSound(sound);
 	}
 
@@ -137,11 +137,18 @@ public class SoundEngine {
 		this.soundId = null;
 		this.currentSound = sound;
 		this.manager.playSound(sound);
+		this.currentSound = null;
+
+		if (ModOptions.enableDebugLogging && this.soundId == null) {
+			ModLog.debug("Sound did not queue: [%s]", sound.toString());
+		}
+
 		return this.soundId;
 	}
-	
+
 	@Nullable
-    public String playSound(@Nonnull final BlockPos pos, @Nonnull final SoundEvent soundIn, @Nonnull final SoundCategory category, final float volume, final float pitch) {
+	public String playSound(@Nonnull final BlockPos pos, @Nonnull final SoundEvent soundIn,
+			@Nonnull final SoundCategory category, final float volume, final float pitch) {
 		final BasicSound<?> sound = new AdhocSound(soundIn, category);
 		sound.setVolume(volume).setPitch(pitch).setPosition(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
 		return this.playSound(sound);
@@ -205,13 +212,13 @@ public class SoundEngine {
 		SoundSystemConfig.setNumberNormalChannels(normalChannelCount);
 		SoundSystemConfig.setNumberStreamingChannels(streamChannelCount);
 	}
-	
+
 	private static class AdhocSound extends BasicSound<AdhocSound> {
 
 		public AdhocSound(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
 			super(event, cat);
 		}
-		
+
 	}
 
 }
