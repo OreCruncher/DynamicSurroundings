@@ -137,6 +137,12 @@ public class SoundEngine {
 		this.soundId = null;
 		this.currentSound = sound;
 		this.manager.playSound(sound);
+		this.currentSound = null;
+		
+		if (ModOptions.enableDebugLogging && this.soundId == null) {
+			ModLog.debug("Sound did not queue: [%s]", sound.toString());
+		}
+
 		return this.soundId;
 	}
 	
