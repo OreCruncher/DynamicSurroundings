@@ -101,9 +101,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 	public void updateLocation() {
 		final AxisAlignedBB box = this.attachedTo.getEntityBoundingBox();
 		final Vec3d point = box.getCenter();
-		this.xPosF = (float) point.xCoord;
-		this.yPosF = (float) box.minY;
-		this.zPosF = (float) point.zCoord;
+		this.setPosition((float) point.xCoord, (float) box.minY, (float) point.zCoord);
 	}
 	
 	public boolean isEntityAlive() {
