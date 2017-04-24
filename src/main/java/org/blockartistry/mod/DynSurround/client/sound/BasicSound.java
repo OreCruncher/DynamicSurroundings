@@ -79,6 +79,14 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 		this.attenuationType = type;
 		return (T) this;
 	}
+	
+	public int getTickAge() {
+		return 0;
+	}
+	
+	public void fade() {
+		
+	}
 
 	@Override
 	public String toString() {

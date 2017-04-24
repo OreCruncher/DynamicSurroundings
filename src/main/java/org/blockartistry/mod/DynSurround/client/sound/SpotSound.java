@@ -39,7 +39,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class SpotSound extends BasicSound<SpotSound> implements IMySound<SpotSound> {
+public class SpotSound extends BasicSound<SpotSound> {
 
 	private static final int SPOT_SOUND_RANGE = 8;
 
@@ -95,10 +95,6 @@ public class SpotSound extends BasicSound<SpotSound> implements IMySound<SpotSou
 
 	public int getTickAge() {
 		return EnvironState.getTickCounter() - this.timeMark;
-	}
-	
-	public void fade() {
-		
 	}
 
 }
