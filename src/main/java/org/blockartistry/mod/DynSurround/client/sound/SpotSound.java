@@ -31,7 +31,6 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
-import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -40,18 +39,16 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class SpotSound extends PositionedSound implements IMySound {
+public class SpotSound extends BasicSound<SpotSound> implements IMySound<SpotSound> {
 
 	private static final int SPOT_SOUND_RANGE = 8;
 
 	private final Random RANDOM = XorShiftRandom.current();
-	private final SoundEffect sound;
 	private final int timeMark;
 
 	SpotSound(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int delay) {
 		super(sound.sound, sound.category);
 
-		this.sound = sound;
 		this.volume = sound.getVolume();
 		this.pitch = sound.getPitch(RANDOM);
 		this.repeat = false;
@@ -71,7 +68,6 @@ public class SpotSound extends PositionedSound implements IMySound {
 	SpotSound(@Nonnull final EntityPlayer player, @Nonnull final SoundEffect sound) {
 		super(sound.sound, sound.category);
 
-		this.sound = sound;
 		this.volume = sound.getVolume();
 		this.pitch = sound.getPitch(RANDOM);
 		this.repeat = false;
@@ -97,31 +93,12 @@ public class SpotSound extends PositionedSound implements IMySound {
 		return super.getVolume() * ModOptions.masterSoundScaleFactor;
 	}
 
-	@Override
-	public void setVolume(final float volume) {
-		this.volume = volume;
-	}
-	
-	@Override
-	public void setPitch(final float pitch) {
-		this.pitch = pitch;
-	}
-
 	public int getTickAge() {
 		return EnvironState.getTickCounter() - this.timeMark;
 	}
 	
 	public void fade() {
 		
-	}
-
-	public SoundEffect getSoundEffect() {
-		return this.sound;
-	}
-
-	@Override
-	public String toString() {
-		return this.sound.toString();
 	}
 
 }

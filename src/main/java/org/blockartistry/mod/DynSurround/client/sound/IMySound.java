@@ -28,11 +28,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public interface IMySound extends ISound {
+public interface IMySound<T> extends ISound {
 	
-	public void setVolume(final float volume);
+	public T setVolume(final float volume);
 	
-	public void setPitch(final float pitch);
+	public T setPitch(final float pitch);
 	
 	public int getTickAge();
 	

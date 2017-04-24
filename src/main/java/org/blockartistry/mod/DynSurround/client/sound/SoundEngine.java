@@ -44,6 +44,8 @@ import net.minecraft.client.audio.ISoundEventListener;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
 import net.minecraftforge.client.event.sound.SoundSetupEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -136,6 +138,14 @@ public class SoundEngine {
 		this.currentSound = sound;
 		this.manager.playSound(sound);
 		return this.soundId;
+	}
+	
+	@Nullable
+    public String playSound(@Nonnull final BlockPos pos, @Nonnull final SoundEvent soundIn, @Nonnull final SoundCategory category, final float volume, final float pitch) {
+		@SuppressWarnings("rawtypes")
+		final BasicSound<BasicSound> sound = new BasicSound<BasicSound>(soundIn, category);
+		sound.setVolume(volume).setPitch(pitch).setPosition(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
+		return this.playSound(sound);
 	}
 
 	/**

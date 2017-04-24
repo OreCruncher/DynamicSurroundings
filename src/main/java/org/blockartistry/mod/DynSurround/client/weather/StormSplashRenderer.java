@@ -50,6 +50,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -154,8 +155,7 @@ public class StormSplashRenderer {
 				pitch = 0.5F;
 			pitch -= (this.RANDOM.nextFloat() - this.RANDOM.nextFloat()) * 0.1F;
 			this.pos.setPos(x, y, z);
-			SoundEngine.instance()
-					.playSound(Sounds.RAINFALL.setVolume(volume).setPitch(pitch).createSound(this.pos, 0));
+			SoundEngine.instance().playSound(this.pos, sound, SoundCategory.WEATHER, volume, pitch);
 		}
 	}
 
