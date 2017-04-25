@@ -75,8 +75,9 @@ public class ParticleDripOverride extends ParticleDrip {
 
 				this.firstTime = false;
 
-				// If the particle is not positioned in an air block kill it right
-				// away.  No sense wasting time with it.
+				// If the particle is not positioned in an air block kill it
+				// right
+				// away. No sense wasting time with it.
 				final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 				pos.setPos(this.posX, this.posY, this.posZ);
 				if (!WorldUtils.isAirBlock(this.world, pos)) {
@@ -120,6 +121,13 @@ public class ParticleDripOverride extends ParticleDrip {
 				}
 			}
 		}
+
+		final BlockPos pos = new BlockPos(this.posX, this.posY, this.posZ);
+		if (WorldUtils.isFullWaterBlock(this.world, pos)) {
+			final Particle ripple = new ParticleRipple(this.world, this.posX, pos.getY() + 1, this.posZ);
+			ParticleHelper.addParticle(ripple);
+		}
+
 	}
 
 	public static class LavaFactory implements IParticleFactory {

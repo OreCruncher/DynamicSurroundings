@@ -110,7 +110,7 @@ public class StormSplashRenderer {
 			particleType = EnumParticleTypes.LAVA;
 		} else if (state.getMaterial() == Material.LAVA) {
 			particleType = EnumParticleTypes.SMOKE_NORMAL;
-		} else if (state.getMaterial() == Material.WATER) {
+		} else if (WorldUtils.isFullWaterBlock(state)) {
 			final Particle ripple = new ParticleRipple(world, x, y, z);
 			ParticleHelper.addParticle(ripple);
 			return;
