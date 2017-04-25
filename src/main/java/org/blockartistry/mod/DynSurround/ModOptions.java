@@ -409,6 +409,7 @@ public final class ModOptions {
 	public static int soundCullingThreshold = 20;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_CULLED_SOUNDS, lang = "cfg.sound.CulledSounds", defaultValue = "minecraft:block.water.ambient,minecraft:block.lava.ambient,minecraft:entity.sheep.ambient,minecraft:entity.chicken.ambient,minecraft:entity.cow.ambient,minecraft:entity.pig.ambient")
 	@Comment("Sounds to cull from frequent playing")
+	@Hidden
 	public static String[] culledSounds = { "minecraft:block.water.ambient", "minecraft:block.lava.ambient",
 			"minecraft:entity.sheep.ambient", "minecraft:entity.chicken.ambient", "minecraft:entity.cow.ambient",
 			"minecraft:entity.pig.ambient" };
