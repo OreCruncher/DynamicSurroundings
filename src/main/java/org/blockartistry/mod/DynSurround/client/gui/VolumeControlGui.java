@@ -57,7 +57,6 @@ public class VolumeControlGui extends GuiScreen implements GuiResponder {
 	private static final int ID_MASTER_SOUND = 1;
 	private static final int ID_BIOME_SOUND = 2;
 	private static final int ID_FOOTSTEP_SOUND = 3;
-	private static final int ID_RAIN_SOUND = 4;
 	private static final int ID_LABEL = 10;
 
 	protected final Configuration config = DSurround.config();
@@ -66,7 +65,6 @@ public class VolumeControlGui extends GuiScreen implements GuiResponder {
 	protected float master = mc.gameSettings.getSoundLevel(SoundCategory.MASTER);
 	protected float biome = ModOptions.masterSoundScaleFactor;
 	protected float footstep = ModOptions.footstepsSoundFactor;
-	protected float rain = ModOptions.soundLevel;
 
 	protected Panel panel = new Panel();
 	
@@ -81,16 +79,15 @@ public class VolumeControlGui extends GuiScreen implements GuiResponder {
 		final int drawY = 40;
 		
 		addSlider(new GuiSlider(this, ID_MASTER_SOUND, drawX, drawY, "dlg.name.MasterSound", 0F, 1F, this.master, FORMAT));
-		addSlider(new GuiSlider(this, ID_RAIN_SOUND, drawX, drawY + 25, "dlg.name.RainSound", 0F, 1F, this.rain, FORMAT));
-		addSlider(new GuiSlider(this, ID_BIOME_SOUND, drawX, drawY + 50, "dlg.name.BiomeSound", 0F, 1F, this.biome, FORMAT));
-		addSlider(new GuiSlider(this, ID_FOOTSTEP_SOUND, drawX, drawY + 75, "dlg.name.FootstepSound", 0F, 1F, this.footstep, FORMAT));
+		addSlider(new GuiSlider(this, ID_BIOME_SOUND, drawX, drawY + 25, "dlg.name.BiomeSound", 0F, 1F, this.biome, FORMAT));
+		addSlider(new GuiSlider(this, ID_FOOTSTEP_SOUND, drawX, drawY + 50, "dlg.name.FootstepSound", 0F, 1F, this.footstep, FORMAT));
 
-		final GuiLabel label = new GuiLabel(mc.fontRendererObj, ID_LABEL, drawX, drawY + 100, SLIDER_WIDTH, 10, Color.MC_WHITE.rgb());
+		final GuiLabel label = new GuiLabel(mc.fontRendererObj, ID_LABEL, drawX, drawY + 75, SLIDER_WIDTH, 10, Color.MC_WHITE.rgb());
 		label.setCentered().addLine(Localization.format("dlg.name.Close"));
 		this.labelList.add(label);
 		
 		this.panel.setMinimumWidth(SLIDER_WIDTH + mc.fontRendererObj.FONT_HEIGHT * 2);
-		this.panel.setMinimumHeight(5 * 25);
+		this.panel.setMinimumHeight(4 * 25);
 	}
 	
 	@Override
@@ -118,9 +115,6 @@ public class VolumeControlGui extends GuiScreen implements GuiResponder {
 		case ID_FOOTSTEP_SOUND:
 			this.footstep = value;
 			break;
-		case ID_RAIN_SOUND:
-			this.rain = value;
-			break;
 		}
 	}
 
@@ -136,7 +130,6 @@ public class VolumeControlGui extends GuiScreen implements GuiResponder {
 
 		ModOptions.masterSoundScaleFactor = this.biome;
 		ModOptions.footstepsSoundFactor = this.footstep;
-		ModOptions.soundLevel = this.rain;
 		this.config.save();
 	}
 

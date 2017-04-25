@@ -62,11 +62,33 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class SoundEffectHandler extends EffectHandlerBase {
 
 	private static final int AGE_THRESHOLD_TICKS = 10;
-
 	public static final SoundEffectHandler INSTANCE = new SoundEffectHandler();
 
+	/*
+	 * Used to track sound in the PENDING list.
+	 */
+	private final static class PendingSound {
+		
+		private final int timeMark;
+		private final BasicSound<?> sound;
+		
+		public PendingSound(@Nonnull final BasicSound<?> sound, final int delay) {
+			this.timeMark = EnvironState.getTickCounter() + delay;
+			this.sound = sound;
+		}
+		
+		public int getTickAge() {
+			return EnvironState.getTickCounter() - this.timeMark;
+		}
+
+		public BasicSound<?> getSound() {
+			return this.sound;
+		}
+	}
+	
+	
 	private final Map<SoundEffect, Emitter> emitters = new HashMap<SoundEffect, Emitter>();
-	private final ArrayDeque<BasicSound<?>> pending = new ArrayDeque<BasicSound<?>>();
+	private final ArrayDeque<PendingSound> pending = new ArrayDeque<PendingSound>();
 
 	private SoundEffectHandler() {
 
@@ -89,13 +111,13 @@ public class SoundEffectHandler extends EffectHandlerBase {
 			emitter.update();
 
 		if (this.pending.size() > 0) {
-			Iterables.removeIf(this.pending, new Predicate<BasicSound<?>>() {
+			Iterables.removeIf(this.pending, new Predicate<PendingSound>() {
 				@Override
-				public boolean apply(final BasicSound<?> input) {
+				public boolean apply(final PendingSound input) {
 					if (input.getTickAge() >= AGE_THRESHOLD_TICKS)
 						return true;
 					if (input.getTickAge() >= 0) {
-						return playSound(input) != null;
+						return playSound(input.getSound()) != null;
 					}
 					return false;
 				}
@@ -183,7 +205,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		if (e.getName().equals("entity.lightning.thunder")) {
 			final ISound sound = e.getSound();
 			final BlockPos pos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
-			final ISound newSound = Sounds.THUNDER.createSound(pos, this.RANDOM).setVolume(ModOptions.thunderVolume);
+			final ISound newSound = Sounds.THUNDER.createSound(pos).setVolume(ModOptions.thunderVolume);
 			e.setResultSound(newSound);
 		}
 	}
@@ -204,11 +226,11 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		if (!sound.canSoundBeHeard(pos))
 			return null;
 
-		final BasicSound<?> s = sound.createSound(pos, tickDelay);
+		final BasicSound<?> s = sound.createSound(pos);
 		if(tickDelay == 0)
 			return playSound(s);
 
-		this.pending.add(s);
+		this.pending.add(new PendingSound(s, tickDelay));
 		return null;
 	}
 
@@ -241,8 +263,8 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 		for (final SoundEffect effect : this.emitters.keySet())
 			event.output.add("EMITTER: " + effect.toString() + "[vol:" + this.emitters.get(effect).getVolume() + "]");
-		for (final BasicSound<?> effect : this.pending)
-			event.output.add((effect.getTickAge() < 0 ? "DELAYED: " : "PENDING: ") + effect.toString());
+		for (final PendingSound effect : this.pending)
+			event.output.add((effect.getTickAge() < 0 ? "DELAYED: " : "PENDING: ") + effect.getSound().toString());
 	}
 
 }

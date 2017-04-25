@@ -103,7 +103,6 @@ public final class ModOptions {
 	public static boolean reportServerStats = false;
 
 	public static final String CATEGORY_RAIN = "rain";
-	public static final String CONFIG_RAIN_VOLUME = "Sound Level";
 	public static final String CONFIG_RAIN_PARTICLE_BASE = "Particle Count Base";
 	public static final String CONFIG_ALLOW_DESERT_DUST = "Desert DustJetEffect";
 	public static final String CONFIG_RESET_RAIN_ON_SLEEP = "Reset Rain on Sleep";
@@ -118,16 +117,12 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_BACKGROUND_THUNDER = "Enable Background Thunder";
 	public static final String CONFIG_THUNDER_THRESHOLD = "Rain Intensity for Background Thunder";
 
-	private static final List<String> rainSort = Arrays.asList(CONFIG_RAIN_VOLUME, CONFIG_ALLOW_DESERT_DUST,
+	private static final List<String> rainSort = Arrays.asList(CONFIG_ALLOW_DESERT_DUST,
 			CONFIG_RESET_RAIN_ON_SLEEP, CONFIG_RAIN_PARTICLE_BASE, CONFIG_RAIN_ACTIVE_TIME_CONST,
 			CONFIG_RAIN_ACTIVE_TIME_VARIABLE, CONFIG_RAIN_INACTIVE_TIME_CONST, CONFIG_RAIN_INACTIVE_TIME_VARIABLE,
 			CONFIG_STORM_ACTIVE_TIME_CONST, CONFIG_STORM_ACTIVE_TIME_VARIABLE, CONFIG_STORM_INACTIVE_TIME_CONST,
 			CONFIG_STORM_INACTIVE_TIME_VARIABLE, CONFIG_ENABLE_BACKGROUND_THUNDER, CONFIG_THUNDER_THRESHOLD);
 
-	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_VOLUME, defaultValue = "1.0", lang = "cfg.rain.RainVolume")
-	@MinMaxFloat(min = 0.0F, max = 1.0F)
-	@Comment("Volume scale factor to apply to rain sound level to adjust")
-	public static float soundLevel = 1.0F;
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_PARTICLE_BASE, defaultValue = "100", lang = "cfg.rain.ParticleCount")
 	@MinMaxInt(min = 0, max = 500)
 	@Comment("Base count of rain splash particles to generate per tick")

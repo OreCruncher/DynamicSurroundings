@@ -23,13 +23,8 @@
 
 package org.blockartistry.mod.DynSurround.client.sound;
 
-import java.util.Random;
-
 import javax.annotation.Nonnull;
-import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
-
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.EntityLivingBase;
@@ -44,7 +39,6 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 	private static final float DONE_VOLUME_THRESHOLD = 0.001F;
 	private static final float FADE_AMOUNT = 0.015F;
 
-	private final Random RANDOM = XorShiftRandom.current();
 	private final EntityLivingBase attachedTo;
 	private final SoundEffect sound;
 	
@@ -55,7 +49,6 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 	private long lastTick;
 
 	TrackingSound(@Nonnull final EntityLivingBase attachedTo, @Nonnull final SoundEffect sound, final boolean fadeIn) {
-		// TODO: Was SoundCategory.PLAYERS
 		super(sound.getSound(), sound.getCategory());
 
 		this.attachedTo = attachedTo;
@@ -66,7 +59,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 		this.sound = sound;
 		this.maxVolume = sound.getVolume();
 		this.volume = fadeIn ? DONE_VOLUME_THRESHOLD * 2 : this.maxVolume;
-		this.pitch = sound.getPitch(RANDOM);
+		this.pitch = sound.getPitch(this.RANDOM);
 
 		this.lastTick = EnvironState.getTickCounter() - 1;
 
@@ -82,7 +75,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 
 	@Override
 	public int getRepeatDelay() {
-		return this.sound.getRepeat(RANDOM);
+		return this.sound.getRepeat(this.RANDOM);
 	}
 
 	public void fade() {
@@ -146,11 +139,6 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 		} else {
 			updateLocation();
 		}
-	}
-
-	@Override
-	public float getVolume() {
-		return super.getVolume() * ModOptions.masterSoundScaleFactor;
 	}
 
 	@Override
