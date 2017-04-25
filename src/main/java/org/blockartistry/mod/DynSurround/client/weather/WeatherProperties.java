@@ -24,7 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.client.weather;
 
-import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.events.WeatherUpdateEvent;
 
 import javax.annotation.Nonnull;
@@ -154,7 +153,7 @@ public enum WeatherProperties {
 	}
 
 	public static float getCurrentVolume() {
-		return (doVanilla() ? 0.66F : (0.05F + 0.95F * intensityLevel)) * ModOptions.soundLevel;
+		return (doVanilla() ? 0.66F : (0.05F + 0.95F * intensityLevel));
 	}
 
 	@Nonnull

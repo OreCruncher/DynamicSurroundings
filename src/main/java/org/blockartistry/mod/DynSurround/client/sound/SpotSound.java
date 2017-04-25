@@ -24,13 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.client.sound;
 
-import java.util.Random;
-
 import javax.annotation.Nonnull;
-import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -43,40 +37,31 @@ public class SpotSound extends BasicSound<SpotSound> {
 
 	private static final int SPOT_SOUND_RANGE = 8;
 
-	private final Random RANDOM = XorShiftRandom.current();
-	private final int timeMark;
-
-	SpotSound(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int delay) {
+	SpotSound(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound) {
 		super(sound.getSound(), sound.getCategory());
 
 		this.volume = sound.getVolume();
-		this.pitch = sound.getPitch(RANDOM);
+		this.pitch = sound.getPitch(this.RANDOM);
 		this.repeat = false;
 		this.repeatDelay = 0;
 
-		this.xPosF = (float) pos.getX() + 0.5F;
-		this.yPosF = (float) pos.getY() + 0.5F;
-		this.zPosF = (float) pos.getZ() + 0.5F;
-
-		this.timeMark = EnvironState.getTickCounter() + delay;
+		this.setPosition(pos);
 	}
 
 	private float randomRange(final int range) {
-		return RANDOM.nextInt(range) - RANDOM.nextInt(range);
+		return this.RANDOM.nextInt(range) - this.RANDOM.nextInt(range);
 	}
 
 	SpotSound(@Nonnull final EntityPlayer player, @Nonnull final SoundEffect sound) {
 		super(sound.getSound(), sound.getCategory());
 
 		this.volume = sound.getVolume();
-		this.pitch = sound.getPitch(RANDOM);
+		this.pitch = sound.getPitch(this.RANDOM);
 		this.repeat = false;
 		this.repeatDelay = 0;
 
 		final Vec3d point = player.getEntityBoundingBox().getCenter();
-		this.xPosF = (float) point.xCoord;
-		this.yPosF = (float) point.yCoord;
-		this.zPosF = (float) point.zCoord;
+		this.setPosition(point);
 		
 		// If it is not a player sound randomize the location around the player
 		if(sound.getCategory() != SoundCategory.PLAYERS) {
@@ -85,16 +70,6 @@ public class SpotSound extends BasicSound<SpotSound> {
 			this.zPosF += randomRange(SPOT_SOUND_RANGE);
 		}
 
-		this.timeMark = EnvironState.getTickCounter();
-	}
-
-	@Override
-	public float getVolume() {
-		return super.getVolume() * ModOptions.masterSoundScaleFactor;
-	}
-
-	public int getTickAge() {
-		return EnvironState.getTickCounter() - this.timeMark;
 	}
 
 }

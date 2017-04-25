@@ -24,7 +24,12 @@
 
 package org.blockartistry.mod.DynSurround.client.sound;
 
+import java.util.Random;
+
 import javax.annotation.Nonnull;
+
+import org.blockartistry.mod.DynSurround.ModOptions;
+import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import com.google.common.base.Objects;
 
@@ -33,11 +38,15 @@ import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
+
+	protected final Random RANDOM = XorShiftRandom.current();
 
 	public BasicSound(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
 		this(event.getSoundName(), cat);
@@ -74,18 +83,39 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 		return (T) this;
 	}
 
+	public T setPosition(@Nonnull final Vec3i pos) {
+		return this.setPosition(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
+	}
+
+	public T setPosition(@Nonnull final Vec3d pos) {
+		return this.setPosition((float) pos.xCoord, (float) pos.yCoord, (float) pos.zCoord);
+	}
+
 	@SuppressWarnings("unchecked")
 	public T setAttenuationType(@Nonnull final ISound.AttenuationType type) {
 		this.attenuationType = type;
 		return (T) this;
 	}
-	
-	public int getTickAge() {
-		return 0;
+
+	@SuppressWarnings("unchecked")
+	public T setRepeat(final boolean flag) {
+		this.repeat = flag;
+		return (T) this;
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	public T setRepeatDelay(final int delay) {
+		this.repeatDelay = delay;
+		return (T) this;
+	}
+
+	@Override
+	public float getVolume() {
+		return super.getVolume() * ModOptions.masterSoundScaleFactor;
+	}
+
 	public void fade() {
-		
+
 	}
 
 	@Override

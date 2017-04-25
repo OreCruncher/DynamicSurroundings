@@ -43,7 +43,7 @@ public class PositionedEmitter extends Emitter {
 
 	@Override
 	protected BasicSound<?> createSound() {
-		return this.effect.createSound(this.position, 0);
+		return this.effect.createSound(this.position);
 	}
 	
 }
