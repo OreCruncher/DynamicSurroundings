@@ -53,7 +53,7 @@ public class ParticleRipple extends ParticleBase {
 	public ParticleRipple(World worldIn, double posXIn, double posYIn, double posZIn) {
 		super(worldIn, posXIn, posYIn, posZIn);
 
-		this.particleMaxAge = 8 + this.rand.nextInt(8);
+		this.particleMaxAge = 12 + this.rand.nextInt(8);
 		this.growthRate = this.particleMaxAge / 500F;
 		this.particleScale = this.growthRate;
 		this.pos = new BlockPos(this.posX, this.posY, this.posZ);
@@ -98,7 +98,6 @@ public class ParticleRipple extends ParticleBase {
 		GlStateManager.enableAlpha();
 		GlStateManager.translate(x, y, z);
 		GlStateManager.scale(this.particleScale, this.particleScale, this.particleScale);
-		GlStateManager.disableDepth();
 		GlStateManager.depthMask(false);
 
 		final float width = 0.5F;
