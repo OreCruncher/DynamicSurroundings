@@ -31,8 +31,6 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
@@ -126,12 +124,16 @@ public final class BiomeRegistry extends Registry {
 
 	}
 
-	@Nullable
+	@Nonnull
 	public BiomeInfo get(@Nonnull final Biome biome) {
 		if (biome == null)
 			return WTF_INFO;
-		final BiomeInfo result = this.registry.get(biome);
-		return result == null ? WTF_INFO : result;
+		BiomeInfo result = this.registry.get(biome);
+		if (result == null) {
+			ModLog.warn("Biome [%s] not detected during initialization - dynamically adding", biome.getBiomeName());
+			this.registry.put(biome, result = new BiomeInfo(biome));
+		}
+		return result;
 	}
 
 	final boolean isBiomeMatch(@Nonnull final BiomeConfig entry, @Nonnull final String biomeName) {
