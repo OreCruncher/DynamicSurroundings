@@ -41,18 +41,16 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class RegistryManager {
 
-	public static enum RegistryType {
-		SOUND(0), BIOME(1), BLOCK(2), DIMENSION(3), FOOTSTEPS(4), SEASON(5), ITEMS(6);
-
-		private final int id;
-
-		RegistryType(final int id) {
-			this.id = id;
-		}
-
-		public int getId() {
-			return this.id;
-		}
+	public static class RegistryType {
+		public final static int SOUND = 0;
+		public final static int BIOME = 1;
+		public final static int BLOCK = 2;
+		public final static int DIMENSION = 3;
+		public final static int FOOTSTEPS = 4;
+		public final static int SEASON = 5;
+		public final static int ITEMS = 6;
+		
+		public final static int LENGTH = 7;
 	}
 
 	private static final RegistryManager[] managers = { null, null };
@@ -75,7 +73,7 @@ public class RegistryManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends Registry> T get(@Nonnull RegistryType type) {
+	public static <T extends Registry> T get(@Nonnull int type) {
 		return (T) getManager().getRegistry(type);
 	}
 
@@ -110,7 +108,7 @@ public class RegistryManager {
 	}
 
 	protected final Side side;
-	protected final Registry[] registries = new Registry[RegistryType.values().length];
+	protected final Registry[] registries = new Registry[RegistryType.LENGTH];
 
 	RegistryManager() {
 		this(Side.SERVER);
@@ -118,10 +116,10 @@ public class RegistryManager {
 
 	RegistryManager(final Side side) {
 		this.side = side;
-		this.registries[RegistryType.DIMENSION.getId()] = new DimensionRegistry(side);
-		this.registries[RegistryType.BIOME.getId()] = new BiomeRegistry(side);
-		this.registries[RegistryType.SOUND.getId()] = new SoundRegistry(side);
-		this.registries[RegistryType.SEASON.getId()] = new SeasonRegistry(side);
+		this.registries[RegistryType.DIMENSION] = new DimensionRegistry(side);
+		this.registries[RegistryType.BIOME] = new BiomeRegistry(side);
+		this.registries[RegistryType.SOUND] = new SoundRegistry(side);
+		this.registries[RegistryType.SEASON] = new SeasonRegistry(side);
 	}
 
 	void reload() {
@@ -139,8 +137,8 @@ public class RegistryManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T getRegistry(final RegistryType type) {
-		return (T) this.registries[type.getId()];
+	public <T> T getRegistry(final int type) {
+		return (T) this.registries[type];
 	}
 
 	public List<InputStream> getAdditionalScripts() {
