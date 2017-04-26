@@ -259,7 +259,8 @@ public class Solver {
 				// => this block of code is here, not outside this if else
 				// group.
 
-				IAcoustic[] foliage = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, pos.up(), "foliage");
+				IAcoustic[] foliage = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, pos.up(),
+						"foliage");
 				if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 					association = MyUtils.concatenate(association, foliage);
 					ModLog.debug("Foliage detected");
@@ -352,8 +353,7 @@ public class Solver {
 	public boolean playSpecialStoppingConditions(@Nonnull final EntityPlayer ply) {
 		if (ply.isInWater()) {
 			final float volume = MathStuff.sqrt_double(
-					ply.motionX * ply.motionX * 0.2d + ply.motionY * ply.motionY + ply.motionZ * ply.motionZ * 0.2d)
-					* 0.35f;
+					ply.motionX * ply.motionX + ply.motionY * ply.motionY + ply.motionZ * ply.motionZ);
 			final ConfigOptions options = new ConfigOptions();
 			options.getMap().put(Option.GLIDING_VOLUME, volume > 1 ? 1 : volume);
 			// material water, see EntityLivingBase line 286
