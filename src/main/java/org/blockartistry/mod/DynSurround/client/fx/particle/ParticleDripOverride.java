@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.Sounds;
@@ -124,8 +125,7 @@ public class ParticleDripOverride extends ParticleDrip {
 
 		final BlockPos pos = new BlockPos(this.posX, this.posY, this.posZ);
 		if (WorldUtils.isFullWaterBlock(this.worldObj, pos)) {
-			final Particle ripple = new ParticleRipple(this.worldObj, this.posX, pos.getY() + 1, this.posZ);
-			ParticleHelper.addParticle(ripple);
+			ParticleCollections.addWaterRipple(this.worldObj, this.posX, pos.getY() + 1, this.posZ);
 		}
 
 	}

@@ -27,8 +27,8 @@ package org.blockartistry.mod.DynSurround.client.weather;
 import java.util.Random;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
+import org.blockartistry.mod.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleRipple;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
@@ -43,7 +43,6 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -86,7 +85,7 @@ public class StormSplashRenderer {
 	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 	private final SeasonRegistry season = RegistryManager.get(RegistryType.SEASON);
-
+	
 	protected StormSplashRenderer() {
 
 	}
@@ -98,7 +97,7 @@ public class StormSplashRenderer {
 				(float) (this.GENERATOR.getValue((world.getWorldTime() % 24000L) / 100, 1) / 5.0F), -bounds, bounds);
 		return MathHelper.clamp_float(currentVolume + adjust, 0, 1F);
 	}
-
+	
 	protected void spawnBlockParticle(final IBlockState state, final boolean dust, final World world, final double x,
 			final double y, final double z) {
 		final Block block = state.getBlock();
@@ -111,8 +110,7 @@ public class StormSplashRenderer {
 		} else if (state.getMaterial() == Material.LAVA) {
 			particleType = EnumParticleTypes.SMOKE_NORMAL;
 		} else if (WorldUtils.isFullWaterBlock(state)) {
-			final Particle ripple = new ParticleRipple(world, x, y, z);
-			ParticleHelper.addParticle(ripple);
+			ParticleCollections.addWaterRipple(world, x, y, z);
 			return;
 		} else if (state.getMaterial() != Material.AIR) {
 			particleType = EnumParticleTypes.WATER_SPLASH;
