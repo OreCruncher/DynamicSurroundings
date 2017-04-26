@@ -25,10 +25,12 @@
 package org.blockartistry.mod.DynSurround.client.sound;
 
 import javax.annotation.Nonnull;
+
+import org.blockartistry.mod.DynSurround.ModOptions;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -36,6 +38,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class SpotSound extends BasicSound<SpotSound> {
 
 	private static final int SPOT_SOUND_RANGE = 8;
+	public static final ISoundScale BIOME_EFFECT = new ISoundScale() {
+		@Override
+		public float getScale() {
+			return ModOptions.masterSoundScaleFactor;
+		}
+	};
 
 	SpotSound(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound) {
 		super(sound.getSound(), sound.getCategory());
@@ -46,6 +54,7 @@ public class SpotSound extends BasicSound<SpotSound> {
 		this.repeatDelay = 0;
 
 		this.setPosition(pos);
+		this.setVolumeScale(BIOME_EFFECT);
 	}
 
 	private float randomRange(final int range) {
@@ -60,8 +69,7 @@ public class SpotSound extends BasicSound<SpotSound> {
 		this.repeat = false;
 		this.repeatDelay = 0;
 
-		final Vec3d point = player.getEntityBoundingBox().getCenter();
-		this.setPosition(point);
+		this.setPosition(player);
 		
 		// If it is not a player sound randomize the location around the player
 		if(sound.getCategory() != SoundCategory.PLAYERS) {
@@ -70,6 +78,7 @@ public class SpotSound extends BasicSound<SpotSound> {
 			this.zPosF += randomRange(SPOT_SOUND_RANGE);
 		}
 
+		this.setVolumeScale(BIOME_EFFECT);
 	}
 
 }

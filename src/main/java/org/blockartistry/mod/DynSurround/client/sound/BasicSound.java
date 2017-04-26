@@ -28,13 +28,13 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import com.google.common.base.Objects;
 
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSound;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -46,7 +46,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 
+	public static interface ISoundScale {
+		float getScale();
+	}
+
+	public static final ISoundScale DEFAULT_SCALE = new ISoundScale() {
+		@Override
+		public float getScale() {
+			return 1.0F;
+		}
+	};
+
 	protected final Random RANDOM = XorShiftRandom.current();
+	protected ISoundScale volumeScale;
 
 	public BasicSound(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
 		this(event.getSoundName(), cat);
@@ -54,6 +66,8 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 
 	public BasicSound(@Nonnull final ResourceLocation soundResource, @Nonnull final SoundCategory cat) {
 		super(soundResource, cat);
+
+		this.volumeScale = DEFAULT_SCALE;
 
 		this.volume = 1F;
 		this.pitch = 1F;
@@ -82,6 +96,11 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 		this.zPosF = z;
 		return (T) this;
 	}
+	
+	public T setPosition(@Nonnull final Entity entity) {
+		final Vec3d point = entity.getEntityBoundingBox().getCenter();
+		return this.setPosition(point);
+	}
 
 	public T setPosition(@Nonnull final Vec3i pos) {
 		return this.setPosition(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
@@ -109,9 +128,15 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 		return (T) this;
 	}
 
+	@SuppressWarnings("unchecked")
+	public T setVolumeScale(@Nonnull final ISoundScale scale) {
+		this.volumeScale = scale;
+		return (T) this;
+	}
+
 	@Override
 	public float getVolume() {
-		return super.getVolume() * ModOptions.masterSoundScaleFactor;
+		return super.getVolume() * this.volumeScale.getScale();
 	}
 
 	public void fade() {
@@ -121,8 +146,8 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this).addValue(this.positionedSoundLocation.toString())
-				.addValue(this.category.toString()).add("volume", this.volume).add("pitch", this.pitch)
-				.add("attenuation", this.attenuationType).add("x", this.xPosF).add("y", this.yPosF).add("z", this.zPosF)
-				.toString();
+				.addValue(this.category.toString()).add("volume", this.getVolume()).add("pitch", this.getPitch())
+				.add("attenuation", this.getAttenuationType()).add("x", this.getXPosF()).add("y", this.getYPosF())
+				.add("z", this.getZPosF()).toString();
 	}
 }

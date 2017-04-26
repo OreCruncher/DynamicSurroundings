@@ -38,7 +38,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 
 	private static final float DONE_VOLUME_THRESHOLD = 0.001F;
 	private static final float FADE_AMOUNT = 0.015F;
-
+	
 	private final EntityLivingBase attachedTo;
 	private final SoundEffect sound;
 	
@@ -65,7 +65,8 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 
 		super.sound = SoundHandler.MISSING_SOUND;
 
-		updateLocation();
+		this.updateLocation();
+		this.setVolumeScale(SpotSound.BIOME_EFFECT);
 	}
 
 	@Override

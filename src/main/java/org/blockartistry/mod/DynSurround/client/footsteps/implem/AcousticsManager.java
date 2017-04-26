@@ -28,7 +28,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -48,6 +47,8 @@ import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFootprint;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFootprint.Style;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.mod.DynSurround.client.sound.FootstepSound;
+import org.blockartistry.mod.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.mod.DynSurround.util.BlockPosHelper;
 import org.blockartistry.mod.DynSurround.util.MCHelper;
 import org.blockartistry.mod.DynSurround.util.TimeUtils;
@@ -122,7 +123,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 				doComma = true;
 			builder.append(acoustics[i].getAcousticName());
 		}
-		ModLog.debug("  Playing acoustic " + builder.toString() + " for event " + event.toString().toUpperCase());
+		ModLog.debug("Playing acoustic " + builder.toString() + " for event " + event.toString().toUpperCase());
 	}
 
 	public void playAcoustic(@Nonnull final Object location, @Nonnull final IAcoustic[] acoustics,
@@ -171,7 +172,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 					soundType = MCHelper.getSoundType(Blocks.SNOW_LAYER);
 				}
 
-				entity.playSound(soundType.getStepSound(), soundType.getVolume() * 0.15F, soundType.getPitch());
+				actuallyPlaySound(entity, soundType.getStepSound(), soundType.getVolume() * 0.15F,
+						soundType.getPitch());
 			}
 		} catch (final Throwable t) {
 			ModLog.error("Unable to play step sound", t);
@@ -205,14 +207,9 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	protected void actuallyPlaySound(@Nonnull final Entity location, @Nonnull final SoundEvent sound,
 			final float volume, final float pitch) {
 
-		final float trueVolume = volume * ModOptions.footstepsSoundFactor;
-
-		if (ModLog.DEBUGGING)
-			ModLog.debug("    Playing sound " + sound.getSoundName() + " ("
-					+ String.format(Locale.ENGLISH, "v%.2f, p%.2f", trueVolume, pitch) + ")");
-
 		try {
-			location.playSound(sound, trueVolume, pitch);
+			final FootstepSound s = new FootstepSound(location, sound).setVolume(volume).setPitch(pitch);
+			SoundEngine.instance().playSound(s);
 		} catch (final Throwable t) {
 			ModLog.error("Unable to play sound", t);
 		}
