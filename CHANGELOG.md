@@ -1,3 +1,26 @@
+###DynamicSurroundings-1.11.2-3.3.7.0
+**What's New**
+* Item equip sounds ala MAtmos.  Swapping items in the hot bar will trigger sounds based on item type.  Can be turned off in config. Works main hand as well as off hand.
+* Added new sound type for tools for swinging/use.
+* Rain on water blocks produce water ripple particle effect rather than splash effect.
+* Water/lava drops falling into water produce water ripple particle effect.
+
+**Fixes**
+* Defensive code for NPE reported via OpenEye (EnvironState.tick)
+* Removed culled sound list from config GUI because of new "Individual Sound Configuration" dialog
+
+**Changes**
+* Updated the various item use/swing sounds.
+* Pumpkins and melons no longer sound squishy when walked on (acoustic profile organic_dry).
+* Player centered sounds (item swing, jump, etc.) will play at the player location rather than some random location around the player.
+* Magma block fixups - can spark when rained on like netherrack, and counts as a lava block for steam jet spawn.
+* Removed rain sound scale factor; control using the individual sound scale controls (dsurround:rain, minecraft:weather.rain, and minecraft:weather.rain.above)
+* Tweaked rain sound volume processing:
+    * Splash sound moved to WEATHER sound category (was AMBIENT for some reason)
+    * Ensure minimum sound volume for low intensity rain
+    * Volume variation to give some texture
+    * Vary pitch to reduce dust storm drone harmonic
+
 ###DynamicSurroundings-1.11.2-3.3.6.1
 **What's New**
 * Option to enable/disable clock HUD independent of compass HUD.  This will let the player use a compass HUD from another mod but keep Dynamic Surroundings clock HUD.
