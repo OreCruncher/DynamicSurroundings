@@ -52,8 +52,8 @@ public abstract class ParticleSystem extends ParticleBase {
 	protected final int fxLayer;
 	protected final BlockPos position;
 
-	private final ArrayDeque<IParticleMote> myParticles = new ArrayDeque<IParticleMote>();
-	private int particleLimit;
+	protected final ArrayDeque<IParticleMote> myParticles = new ArrayDeque<IParticleMote>();
+	protected int particleLimit;
 
 	protected ParticleSystem(final World worldIn, final double posXIn, final double posYIn, final double posZIn) {
 		this(0, worldIn, posXIn, posYIn, posZIn);
