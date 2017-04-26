@@ -126,6 +126,8 @@ public class ParticleDripOverride extends ParticleDrip {
 		final BlockPos pos = new BlockPos(this.posX, this.posY, this.posZ);
 		if (WorldUtils.isFullWaterBlock(this.worldObj, pos)) {
 			ParticleCollections.addWaterRipple(this.worldObj, this.posX, pos.getY() + 1, this.posZ);
+			if (this.materialType == Material.LAVA)
+				ParticleHelper.addParticle(new ParticleSteamCloud(this.worldObj, this.posX, pos.getY() + 1, this.posZ, 0.01D));
 		}
 
 	}

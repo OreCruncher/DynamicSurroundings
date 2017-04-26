@@ -24,29 +24,39 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
-import org.blockartistry.mod.DynSurround.client.fx.SteamJetEffect;
+import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
-import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleCloud;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ParticleSteamJet extends ParticleJet {
-
-	public ParticleSteamJet(final int strength, final World world, final double x, final double y, final double z) {
-		super(strength, world, x, y, z);
+public class ParticleSteamCloud extends ParticleCloud {
+	
+	public ParticleSteamCloud(final World world, final double x, final double y, final double z, final double dY) {
+		super(world, x, y, z, XorShiftRandom.current().nextGaussian() * 0.02D, dY, XorShiftRandom.current().nextGaussian() * 0.02D);
 	}
 
 	@Override
-	public boolean shouldDie() {
-		return !SteamJetEffect.isValidSpawnBlock(this.worldObj, this.getPos());
-	}
+	public void onUpdate() {
+		this.prevPosX = this.posX;
+		this.prevPosY = this.posY;
+		this.prevPosZ = this.posZ;
 
-	@Override
-	protected void spawnJetParticle() {
-		final Particle particle = new ParticleSteamCloud(this.worldObj, this.posX, this.posY, this.posZ, 0.1D);
-		addParticle(particle);
-	}
+		if (this.particleAge++ >= this.particleMaxAge) {
+			this.setExpired();
+		}
 
+		this.setParticleTextureIndex(7 - this.particleAge * 8 / this.particleMaxAge);
+		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.motionX *= 0.9599999785423279D;
+		this.motionY *= 0.9599999785423279D;
+		this.motionZ *= 0.9599999785423279D;
+
+		if (this.isCollided) {
+			this.motionX *= 0.699999988079071D;
+			this.motionZ *= 0.699999988079071D;
+		}
+	}
 }
