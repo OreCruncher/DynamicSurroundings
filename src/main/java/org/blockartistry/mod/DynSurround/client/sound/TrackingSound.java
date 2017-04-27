@@ -26,7 +26,6 @@ package org.blockartistry.mod.DynSurround.client.sound;
 import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import net.minecraft.client.audio.ITickableSound;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
@@ -62,8 +61,6 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 		this.pitch = sound.getPitch(this.RANDOM);
 
 		this.lastTick = EnvironState.getTickCounter() - 1;
-
-		super.sound = SoundHandler.MISSING_SOUND;
 
 		this.updateLocation();
 		this.setVolumeScale(SpotSound.BIOME_EFFECT);
