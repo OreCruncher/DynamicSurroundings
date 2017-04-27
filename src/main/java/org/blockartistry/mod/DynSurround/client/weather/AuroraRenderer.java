@@ -155,10 +155,10 @@ public final class AuroraRenderer {
 		GlStateManager.shadeModel(GL11.GL_FLAT);
 		GlStateManager.depthMask(true);
 		GlStateManager.enableCull();
-		//GlStateManager.disableAlpha();
 		GlStateManager.enableTexture2D();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
+		GlStateManager.disableBlend();
 		GlStateManager.popAttrib();
 		GlStateManager.popMatrix();
 	}
