@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
+import org.blockartistry.mod.DynSurround.registry.DimensionInfo;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
@@ -46,9 +47,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
 
 public final class PlayerUtils {
 
@@ -66,49 +64,29 @@ public final class PlayerUtils {
 		Biome biome = player.worldObj.getBiome(new BlockPos(player.posX, 0, player.posZ));
 
 		if (!getTrue) {
-			final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
-			final int theY = MathStuff.floor_double(player.posY);
-			if (isUnderWater(player)) {
-				if (REGEX_DEEP_OCEAN.matcher(biome.getBiomeName()).matches())
-					biome = BiomeRegistry.UNDERDEEPOCEAN;
+			if (player.isInsideOfMaterial(Material.WATER)) {
+				if (REGEX_RIVER.matcher(biome.getBiomeName()).matches())
+					biome = BiomeRegistry.UNDERRIVER;
 				else if (REGEX_OCEAN.matcher(biome.getBiomeName()).matches())
 					biome = BiomeRegistry.UNDEROCEAN;
-				else if (REGEX_RIVER.matcher(biome.getBiomeName()).matches())
-					biome = BiomeRegistry.UNDERRIVER;
+				else if (REGEX_DEEP_OCEAN.matcher(biome.getBiomeName()).matches())
+					biome = BiomeRegistry.UNDERDEEPOCEAN;
 				else
 					biome = BiomeRegistry.UNDERWATER;
-			} else if (isUnderGround(player, INSIDE_Y_ADJUST))
-				biome = BiomeRegistry.UNDERGROUND;
-			else if (theY >= dimensions.getSpaceHeight(player.worldObj))
-				biome = BiomeRegistry.OUTERSPACE;
-			else if (theY >= dimensions.getCloudHeight(player.worldObj))
-				biome = BiomeRegistry.CLOUDS;
+			} else {
+				final DimensionInfo dimInfo = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION)
+						.getData(player.worldObj);
+				final int theY = MathStuff.floor_double(player.posY);
+				if ((theY + INSIDE_Y_ADJUST) <= dimInfo.getSeaLevel())
+					biome = BiomeRegistry.UNDERGROUND;
+				else if (theY >= dimInfo.getSpaceHeight())
+					biome = BiomeRegistry.OUTERSPACE;
+				else if (theY >= dimInfo.getCloudHeight())
+					biome = BiomeRegistry.CLOUDS;
+			}
 		}
 
-		return ((BiomeRegistry) RegistryManager.get(RegistryType.BIOME)).get(biome);
-	}
-
-	public static int getPlayerDimension(@Nonnull final EntityPlayer player) {
-		if (player == null || player.worldObj == null)
-			return -256;
-		return player.worldObj.provider.getDimension();
-	}
-
-	public static boolean isUnderWater(@Nonnull final EntityPlayer player) {
-		return WorldUtils
-				.getBlockState(player.worldObj,
-						new BlockPos(player.posX, player.posY + player.getEyeHeight(), player.posZ))
-				.getMaterial() == Material.WATER;
-	}
-
-	public static boolean isUnderGround(@Nonnull final EntityPlayer player, final int offset) {
-		final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
-		return MathStuff.floor_double(player.posY + offset) <= dimensions.getSeaLevel(player.worldObj);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static int getClientPlayerDimension() {
-		return getPlayerDimension(FMLClientHandler.instance().getClient().thePlayer);
+		return RegistryManager.<BiomeRegistry>get(RegistryType.BIOME).get(biome);
 	}
 
 	@Nullable
