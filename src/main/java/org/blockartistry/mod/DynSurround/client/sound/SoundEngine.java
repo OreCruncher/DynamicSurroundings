@@ -161,7 +161,7 @@ public class SoundEngine {
 	public String playSound(@Nonnull final BlockPos pos, @Nonnull final SoundEvent soundIn,
 			@Nonnull final SoundCategory category, final float volume, final float pitch) {
 		final BasicSound<?> sound = new AdhocSound(soundIn, category);
-		sound.setVolume(volume).setPitch(pitch).setPosition(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
+		sound.setVolume(volume).setPitch(pitch).setPosition(pos);
 		return this.playSound(sound);
 	}
 

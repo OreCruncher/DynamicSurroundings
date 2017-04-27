@@ -76,7 +76,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 		this.repeat = false;
 		this.repeatDelay = 0;
 		this.attenuationType = ISound.AttenuationType.LINEAR;
-		
+
 		super.sound = SoundHandler.MISSING_SOUND;
 	}
 
@@ -99,7 +99,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 		this.zPosF = z;
 		return (T) this;
 	}
-	
+
 	public T setPosition(@Nonnull final Entity entity) {
 		final Vec3d point = entity.getEntityBoundingBox().getCenter();
 		return this.setPosition(point);
@@ -149,8 +149,8 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this).addValue(this.positionedSoundLocation.toString())
-				.addValue(this.category.toString()).add("volume", this.getVolume()).add("pitch", this.getPitch())
-				.add("attenuation", this.getAttenuationType()).add("x", this.getXPosF()).add("y", this.getYPosF())
-				.add("z", this.getZPosF()).toString();
+				.addValue(this.category.toString()).add("v", this.getVolume()).add("p", this.getPitch())
+				.add("s", this.volumeScale.getScale()).addValue(this.getAttenuationType()).add("x", this.getXPosF())
+				.add("y", this.getYPosF()).add("z", this.getZPosF()).toString();
 	}
 }
