@@ -28,7 +28,6 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -94,8 +93,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 
 	public void updateLocation() {
 		final AxisAlignedBB box = this.attachedTo.getEntityBoundingBox();
-		final Vec3d point = box.getCenter();
-		this.setPosition((float) point.xCoord, (float) box.minY, (float) point.zCoord);
+		this.setPosition(box.getCenter());
 	}
 
 	public boolean isEntityAlive() {
