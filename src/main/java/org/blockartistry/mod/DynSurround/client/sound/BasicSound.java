@@ -34,6 +34,7 @@ import com.google.common.base.Objects;
 
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSound;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -75,6 +76,8 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 		this.repeat = false;
 		this.repeatDelay = 0;
 		this.attenuationType = ISound.AttenuationType.LINEAR;
+		
+		super.sound = SoundHandler.MISSING_SOUND;
 	}
 
 	@SuppressWarnings("unchecked")

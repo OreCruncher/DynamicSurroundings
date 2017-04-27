@@ -36,11 +36,13 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -69,6 +71,8 @@ public class SoundManagerReplacement extends SoundManager {
 
 	}
 
+	private final static float MUTE_VOLUME = 0.00001F;
+	
 	private SoundRegistry registry = null;
 
 	public SoundManagerReplacement(final SoundHandler handler, final GameSettings settings) {
@@ -169,6 +173,21 @@ public class SoundManagerReplacement extends SoundManager {
 				this.playSound(isound1);
 				iterator1.remove();
 			}
+		}
+	}
+	
+	public boolean isMuted() {
+		return ((SoundSystem)this.sndSystem).getMasterVolume() == MUTE_VOLUME;
+	}
+	
+	public void setMuted(final boolean flag) {
+		final SoundSystem ss = (SoundSystem)this.sndSystem;
+		
+		if(flag) {
+			ss.setMasterVolume(MUTE_VOLUME);
+		} else {
+			final GameSettings options = Minecraft.getMinecraft().gameSettings;
+            ss.setMasterVolume(options.getSoundLevel(SoundCategory.MASTER));
 		}
 	}
 

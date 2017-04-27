@@ -28,8 +28,7 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.lwjgl.opengl.Display;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.GameSettings;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.client.audio.SoundManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -38,22 +37,23 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class BackgroundMute {
 
-	private static boolean isMuted = false;
-	private static float savedVolume = 1.0F;
-
 	@SubscribeEvent
 	public static void clientTick(final TickEvent.ClientTickEvent event) {
 		if (ModOptions.muteWhenBackground) {
-			final GameSettings settings = Minecraft.getMinecraft().gameSettings;
-			if (isMuted && Display.isActive()) {
-				isMuted = false;
-				settings.setSoundLevel(SoundCategory.MASTER, savedVolume);
-				ModLog.info("Sound unmuted; volume %f", savedVolume);
-			} else if (!isMuted && !Display.isActive()) {
-				isMuted = true;
-				savedVolume = settings.getSoundLevel(SoundCategory.MASTER);
-				settings.setSoundLevel(SoundCategory.MASTER, 0.0001F);
-				ModLog.info("Muting sounds");
+			final SoundManager mgr = Minecraft.getMinecraft().getSoundHandler().sndManager;
+			if (mgr instanceof SoundManagerReplacement) {
+				final SoundManagerReplacement sm = (SoundManagerReplacement) mgr;
+
+				final boolean active = Display.isActive();
+				final boolean muted = sm.isMuted();
+
+				if (active && muted) {
+					sm.setMuted(false);
+					ModLog.info("Unmuting sounds");
+				} else if (!active && !muted) {
+					sm.setMuted(true);
+					ModLog.info("Muting sounds");
+				}
 			}
 		}
 	}
