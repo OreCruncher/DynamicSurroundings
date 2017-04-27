@@ -133,7 +133,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 			saveSoundList();
 			this.config.save();
 			ConfigProcessor.process(this.config, ModOptions.class);
-			RegistryManager.reloadResources();
+			RegistryManager.reloadResources(null);
 		}
 	}
 

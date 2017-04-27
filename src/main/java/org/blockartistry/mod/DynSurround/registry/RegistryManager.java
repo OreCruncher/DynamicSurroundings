@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.mod.DynSurround.client.event.RegistryEvent;
 
@@ -77,10 +78,10 @@ public class RegistryManager {
 		return (T) getManager().getRegistry(type);
 	}
 
-	public static void reloadResources() {
+	public static void reloadResources(@Nullable Side side) {
 		// Reload can be called on either side so make sure we queue
 		// up a scheduled task appropriately.
-		if (managers[0] != null) {
+		if (managers[0] != null && (side == null || side == Side.SERVER)) {
 			final MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 			if (server == null) {
 				managers[0] = null;
@@ -93,7 +94,7 @@ public class RegistryManager {
 			}
 		}
 
-		if (managers[1] != null) {
+		if (managers[1] != null && (side == null || side == Side.CLIENT)) {
 			final Minecraft mc = Minecraft.getMinecraft();
 			if (mc == null) {
 				managers[1] = null;

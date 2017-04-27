@@ -67,7 +67,7 @@ public final class BiomeRegistry extends Registry {
 
 	// This is for cases when the biome coming in doesn't make sense
 	// and should default to something to avoid crap.
-	private static final FakeBiome WTF = new FakeBiome("(FooBar)");
+	private static final FakeBiome WTF = new WTFFakeBiome();
 
 	private final Map<Biome, BiomeInfo> registry = new IdentityHashMap<Biome, BiomeInfo>();
 	private final Map<String, String> biomeAliases = new HashMap<String, String>();
@@ -78,33 +78,33 @@ public final class BiomeRegistry extends Registry {
 
 	@Override
 	public void init() {
-		biomeAliases.clear();
-		registry.clear();
+		this.biomeAliases.clear();
+		this.registry.clear();
 
 		for (final String entry : ModOptions.biomeAliases) {
 			final String[] parts = StringUtils.split(entry, "=");
 			if (parts.length == 2) {
-				biomeAliases.put(parts[0], parts[1]);
+				this.biomeAliases.put(parts[0], parts[1]);
 			}
 		}
 
 		for (Iterator<Biome> itr = Biome.REGISTRY.iterator(); itr.hasNext();) {
 			final BiomeInfo e = new BiomeInfo(itr.next());
-			registry.put(e.biome, e);
+			this.registry.put(e.biome, e);
 		}
 
 		// Add our fake biomes
-		registry.put(UNDERWATER, new BiomeInfo(UNDERWATER));
-		registry.put(UNDEROCEAN, new BiomeInfo(UNDEROCEAN));
-		registry.put(UNDERDEEPOCEAN, new BiomeInfo(UNDERDEEPOCEAN));
-		registry.put(UNDERRIVER, new BiomeInfo(UNDERRIVER));
+		this.registry.put(UNDERWATER, new BiomeInfo(UNDERWATER));
+		this.registry.put(UNDEROCEAN, new BiomeInfo(UNDEROCEAN));
+		this.registry.put(UNDERDEEPOCEAN, new BiomeInfo(UNDERDEEPOCEAN));
+		this.registry.put(UNDERRIVER, new BiomeInfo(UNDERRIVER));
 
-		registry.put(WTF, WTF_INFO = new BiomeInfo(WTF));
-		registry.put(PLAYER, PLAYER_INFO = new BiomeInfo(PLAYER));
-		registry.put(VILLAGE, VILLAGE_INFO = new BiomeInfo(VILLAGE));
-		registry.put(UNDERGROUND, UNDERGROUND_INFO = new BiomeInfo(UNDERGROUND));
-		registry.put(CLOUDS, CLOUDS_INFO = new BiomeInfo(CLOUDS));
-		registry.put(OUTERSPACE, OUTERSPACE_INFO = new BiomeInfo(OUTERSPACE));
+		this.registry.put(WTF, WTF_INFO = new BiomeInfo(WTF));
+		this.registry.put(PLAYER, PLAYER_INFO = new BiomeInfo(PLAYER));
+		this.registry.put(VILLAGE, VILLAGE_INFO = new BiomeInfo(VILLAGE));
+		this.registry.put(UNDERGROUND, UNDERGROUND_INFO = new BiomeInfo(UNDERGROUND));
+		this.registry.put(CLOUDS, CLOUDS_INFO = new BiomeInfo(CLOUDS));
+		this.registry.put(OUTERSPACE, OUTERSPACE_INFO = new BiomeInfo(OUTERSPACE));
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public final class BiomeRegistry extends Registry {
 		}
 
 		// Free memory because we no longer need
-		biomeAliases.clear();
+		this.biomeAliases.clear();
 	}
 
 	@Override
@@ -126,12 +126,19 @@ public final class BiomeRegistry extends Registry {
 
 	@Nonnull
 	public BiomeInfo get(@Nonnull final Biome biome) {
+		// This shouldn't happen, but...
 		if (biome == null)
 			return WTF_INFO;
+		
 		BiomeInfo result = this.registry.get(biome);
 		if (result == null) {
-			ModLog.warn("Biome [%s] not detected during initialization - dynamically adding", biome.getBiomeName());
-			this.registry.put(biome, result = new BiomeInfo(biome));
+			// Open Terrain Generation can trigger this...
+			ModLog.warn("Biome [%s] not detected during initialization - forcing reload", biome.getBiomeName());
+			RegistryManager.reloadResources(this.side);
+			result = this.registry.get(biome);
+			if(result == null) {
+				throw new RuntimeException("What's going on with biomes?");
+			}
 		}
 		return result;
 	}
