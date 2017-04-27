@@ -156,13 +156,13 @@ public final class DimensionEffectData extends WorldSavedData {
 	}
 
 	public void randomizeRain() {
-		float result = 0.0F;
+		final float result;
 		final float delta = this.maxIntensity - this.minIntensity;
 		if (delta <= 0.0F) {
 			result = (float) this.minIntensity;
 		} else {
 			final float mid = delta / 2.0F;
-			result = RANDOM.nextFloat() * mid + RANDOM.nextFloat() * mid;
+			result = this.minIntensity + RANDOM.nextFloat() * mid + RANDOM.nextFloat() * mid;
 		}
 		setRainIntensity(MathHelper.clamp_float(result, 0.01F, MAX_INTENSITY));
 		setCurrentRainIntensity(0.0F);
