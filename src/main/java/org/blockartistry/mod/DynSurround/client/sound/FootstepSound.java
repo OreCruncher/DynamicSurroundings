@@ -31,7 +31,10 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class FootstepSound extends BasicSound<FootstepSound> {
 
 	public static final ISoundScale FOOTSTEP = new ISoundScale() {
