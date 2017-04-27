@@ -40,16 +40,20 @@ public final class Sounds {
 			.build();
 	public static final SoundEffect CRAFTING = new SoundEffect.Builder("crafting", SoundCategory.PLAYERS).build();
 
-	public static final SoundEffect SWORD_EQUIP = new SoundEffect.Builder("sword.equip", SoundCategory.PLAYERS).build();
+	public static final SoundEffect SWORD_EQUIP = new SoundEffect.Builder("sword.equip", SoundCategory.PLAYERS)
+			.setVolume(0.5F).build();
 	public static final SoundEffect SWORD_SWING = new SoundEffect.Builder("sword.swing", SoundCategory.PLAYERS).build();
-	public static final SoundEffect AXE_EQUIP = new SoundEffect.Builder("blunt.equip", SoundCategory.PLAYERS).build();
+	public static final SoundEffect AXE_EQUIP = new SoundEffect.Builder("blunt.equip", SoundCategory.PLAYERS)
+			.setVolume(0.35F).build();
 	public static final SoundEffect AXE_SWING = new SoundEffect.Builder("blunt.swing", SoundCategory.PLAYERS).build();
-	public static final SoundEffect BOW_EQUIP = new SoundEffect.Builder("bow.equip", SoundCategory.PLAYERS).build();
+	public static final SoundEffect BOW_EQUIP = new SoundEffect.Builder("bow.equip", SoundCategory.PLAYERS)
+			.setVolume(0.30F).build();
 	public static final SoundEffect BOW_PULL = new SoundEffect.Builder("bow.pull", SoundCategory.PLAYERS).build();
-	public static final SoundEffect TOOL_EQUIP = new SoundEffect.Builder("tool.equip", SoundCategory.PLAYERS).build();
+	public static final SoundEffect TOOL_EQUIP = new SoundEffect.Builder("tool.equip", SoundCategory.PLAYERS)
+			.setVolume(0.30F).build();
 	public static final SoundEffect TOOL_SWING = new SoundEffect.Builder("tool.swing", SoundCategory.PLAYERS).build();
 	public static final SoundEffect UTILITY_EQUIP = new SoundEffect.Builder("utility.equip", SoundCategory.PLAYERS)
-			.build();
+			.setVolume(0.35F).build();
 
 	public static final SoundEffect SHIELD_EQUIP = TOOL_EQUIP;
 
