@@ -26,7 +26,10 @@ package org.blockartistry.mod.DynSurround.client.sound;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public final class Sounds {
 
 	private Sounds() {
