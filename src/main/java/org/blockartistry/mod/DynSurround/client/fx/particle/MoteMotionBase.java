@@ -24,50 +24,59 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.entity.Entity;
+import javax.annotation.Nonnull;
+
+import org.blockartistry.mod.DynSurround.util.WorldUtils;
+
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class MoteWaterRipple extends MoteBase {
+public abstract class MoteMotionBase extends MoteBase {
 
-	private static final float TEX_SIZE_HALF = 0.5F;
+	protected double motionX;
+	protected double motionY;
+	protected double motionZ;
+	protected double gravity;
 
-	protected final float growthRate;
-	protected float scale;
-	protected float scaledWidth;
+	protected double prevX;
+	protected double prevY;
+	protected double prevZ;
 
-	public MoteWaterRipple(final World world, final double x, final double y, final double z) {
+	protected MoteMotionBase(@Nonnull final World world, final double x, final double y, final double z,
+			final double dX, final double dY, final double dZ) {
 		super(world, x, y, z);
-
-		this.maxAge = 12 + this.rand.nextInt(8);
-		this.growthRate = this.maxAge / 500F;
-		this.scale = this.growthRate;
-		this.scaledWidth = this.scale * TEX_SIZE_HALF;
-		this.posY -= 0.2D;
+		this.prevX = this.posX;
+		this.prevY = this.posY;
+		this.prevZ = this.posZ;
+		this.motionX = dX;
+		this.motionY = dY;
+		this.motionZ = dZ;
+		this.gravity = 0.06D;
 	}
 
 	@Override
-	public void update() {
-		this.scale += this.growthRate;
-		this.scaledWidth = this.scale * TEX_SIZE_HALF;
-		this.alpha = (float) (this.maxAge - this.age) / (float) (this.maxAge + 3);
-	}
+	protected void update() {
 
-	@Override
-	public void renderParticle(VertexBuffer buffer, Entity entityIn, float partialTicks, float rotationX,
-			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+		this.prevX = this.posX;
+		this.prevY = this.posY;
+		this.prevZ = this.posZ;
+		this.motionY -= this.gravity;
 
-		final float x = (float) (this.posX - interpX());
-		final float y = (float) (this.posY - interpY());
-		final float z = (float) (this.posZ - interpZ());
+		this.posX += this.motionX;
+		this.posY += this.motionY;
+		this.posZ += this.motionZ;
 
-		drawVertex(buffer, -this.scaledWidth + x, y, this.scaledWidth + z, 0, 1);
-		drawVertex(buffer, this.scaledWidth + x, y, this.scaledWidth + z, 1, 1);
-		drawVertex(buffer, this.scaledWidth + x, y, -this.scaledWidth + z, 1, 0);
-		drawVertex(buffer, -this.scaledWidth + x, y, -this.scaledWidth + z, 0, 0);
+		this.position.setPos(this.posX, this.posY, this.posZ);
+
+		if (WorldUtils.isSolidBlock(this.world, this.position)) {
+			this.isAlive = false;
+		} else {
+			this.motionX *= 0.9800000190734863D;
+			this.motionY *= 0.9800000190734863D;
+			this.motionZ *= 0.9800000190734863D;
+		}
 	}
 
 }
