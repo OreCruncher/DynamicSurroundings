@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.registry;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
@@ -60,6 +61,8 @@ public final class DimensionInfo {
 
 		if (wt == WorldType.FLAT)
 			this.seaLevel = 0;
+		else if (this.dimensionId == 0 && ModOptions.worldSealevelOverride > 0)
+			this.seaLevel = ModOptions.worldSealevelOverride;
 	}
 
 	public DimensionInfo(@Nonnull final World world, @Nonnull final DimensionConfig entry) {

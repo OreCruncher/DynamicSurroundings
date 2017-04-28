@@ -154,6 +154,8 @@ cfg.aurora.SpawnOffset.tooltip=Number of blocks north of player location to spaw
 
 cfg.biomes.cat.Biomes=Biome Options
 cfg.biomes.cat.Biomes.tooltip=Options for controlling biome sound/effects
+cfg.biomes.Sealevel=Overworld Sealevel Override
+cfg.biomes.Sealevel.tooltip=Sealevel to set for Overworld (0 use default for World)
 cfg.biomes.Aliases=Biomes Alias
 cfg.biomes.Aliases.tooltip=Biomes alias list
 
