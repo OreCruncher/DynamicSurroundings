@@ -37,6 +37,7 @@ import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundType;
 import org.blockartistry.mod.DynSurround.registry.Evaluator;
 import org.blockartistry.mod.DynSurround.util.SoundUtils;
+import org.blockartistry.mod.DynSurround.util.WeightTable.IEntrySource;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -49,7 +50,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public final class SoundEffect implements ISpecialEffect {
+public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffect> {
 
 	private static final float[] pitchDelta = { -0.2F, 0.0F, 0.0F, 0.2F, 0.2F, 0.2F };
 
@@ -130,10 +131,6 @@ public final class SoundEffect implements ISpecialEffect {
 		return this;
 	}
 
-	public boolean matches() {
-		return Evaluator.check(this.conditions);
-	}
-
 	public SoundEvent getSound() {
 		return this.sound;
 	}
@@ -142,8 +139,19 @@ public final class SoundEffect implements ISpecialEffect {
 		return this.category;
 	}
 
+	// IEntrySource
 	public int getWeight() {
 		return this.weight;
+	}
+
+	// IEntrySource
+	public SoundEffect getItem() {
+		return this;
+	}
+	
+	// IEntrySource
+	public boolean matches() {
+		return Evaluator.check(this.conditions);
 	}
 
 	public SoundType getSoundType() {

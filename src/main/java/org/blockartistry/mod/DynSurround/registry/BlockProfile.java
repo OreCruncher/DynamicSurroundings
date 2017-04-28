@@ -24,8 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.registry;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -34,6 +32,7 @@ import javax.annotation.Nullable;
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.util.MyUtils;
+import org.blockartistry.mod.DynSurround.util.WeightTable;
 
 public class BlockProfile {
 
@@ -128,60 +127,26 @@ public class BlockProfile {
 		return this.alwaysOn;
 	}
 
-	
-	@Nonnull
-	private SoundEffect getRandomSound(@Nonnull final SoundEffect[] list, @Nonnull final Random random) {
-		// Build a weight table on the fly
-		int totalWeight = 0;
-		final List<SoundEffect> candidates = new ArrayList<SoundEffect>(list.length);
-		for (int i = 0; i < list.length; i++) {
-			final SoundEffect s = list[i];
-			if (s.matches()) {
-				candidates.add(s);
-				totalWeight += s.getWeight();
-			}
-		}
-
-		// It's possible all the sounds got filtered out
-		if (totalWeight <= 0)
-			return null;
-
-		// Possible that there is a single candidate
-		if (candidates.size() == 1)
-			return candidates.get(0);
-
-		int targetWeight = random.nextInt(totalWeight);
-		int i = 0;
-		for (i = candidates.size(); (targetWeight -= candidates.get(i - 1).getWeight()) >= 0; i--)
-			;
-
-		return candidates.get(i - 1);
-	}
-
 	@Nullable
 	public SoundEffect getSoundToPlay(@Nonnull final Random random) {
-		if (this.sounds == NO_SOUNDS || random.nextInt(getChance()) != 0)
-			return null;
-
-		return getRandomSound(this.sounds, random);
+		return this.sounds != NO_SOUNDS && random.nextInt(getChance()) == 0
+				? new WeightTable<SoundEffect>(this.sounds).next() : null;
 	}
 
 	@Nullable
 	public SoundEffect getStepSoundToPlay(@Nonnull final Random random) {
-		if (this.stepSounds == NO_SOUNDS || random.nextInt(getStepChance()) != 0)
-			return null;
-
-		return getRandomSound(this.stepSounds, random);
+		return this.stepSounds != NO_SOUNDS && random.nextInt(getStepChance()) == 0
+				? new WeightTable<SoundEffect>(this.stepSounds).next() : null;
 	}
 
 	public boolean hasSoundsOrEffects() {
 		return this.sounds.length > 0 || this.effects.length > 0;
 	}
-	
+
 	public boolean hasAlwaysOnEffects() {
 		return this.alwaysOn.length > 0;
 	}
-	
+
 	@Override
 	@Nonnull
 	public String toString() {

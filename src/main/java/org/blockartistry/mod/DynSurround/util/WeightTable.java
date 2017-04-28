@@ -25,16 +25,13 @@ package org.blockartistry.mod.DynSurround.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 public class WeightTable<T> {
 
-	protected final Random random = new XorShiftRandom();
-	protected final List<Item<T>> items = new ArrayList<Item<T>>();
+	protected final List<Item<T>> items = new ArrayList<Item<T>>(16);
 	protected int totalWeight = 0;
 
 	public static class Item<T> {
@@ -50,21 +47,28 @@ public class WeightTable<T> {
 
 	public WeightTable() {
 	}
+	
+	@SafeVarargs
+	public WeightTable(@Nonnull final IEntrySource<T>... src) {
+		for (int i = 0; i < src.length; i++)
+			if (src[i].matches())
+				this.add(src[i].getItem(), src[i].getWeight());
+	}
 
 	public WeightTable<T> add(@Nonnull final T entry, final int itemWeight) {
 		assert itemWeight > 0;
 		assert entry != null;
-		
+
 		this.totalWeight += itemWeight;
 		this.items.add(new Item<T>(entry, itemWeight));
 		return this;
 	}
-	
+
 	public WeightTable<T> add(@Nonnull final Item<T> entry) {
 		assert entry != null;
 		assert entry.itemWeight > 0;
 		assert entry.item != null;
-		
+
 		this.totalWeight += entry.itemWeight;
 		this.items.add(entry);
 		return this;
@@ -72,14 +76,24 @@ public class WeightTable<T> {
 
 	@Nonnull
 	public T next() {
-		int targetWeight = this.random.nextInt(this.totalWeight);
+		if(this.totalWeight <= 0)
+			return null;
+		
+		int targetWeight = XorShiftRandom.current().nextInt(this.totalWeight);
 
 		int i = -1;
 		do {
 			targetWeight -= this.items.get(++i).itemWeight;
-		} while(targetWeight >= 0);
-		
+		} while (targetWeight >= 0);
+
 		return this.items.get(i).item;
 	}
 
+	public static interface IEntrySource<T> {
+		int getWeight();
+
+		T getItem();
+
+		boolean matches();
+	}
 }
