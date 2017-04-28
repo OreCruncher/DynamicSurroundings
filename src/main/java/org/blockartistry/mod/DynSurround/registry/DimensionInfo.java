@@ -26,7 +26,6 @@ package org.blockartistry.mod.DynSurround.registry;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.ModEnvironment;
 import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
@@ -58,10 +57,9 @@ public final class DimensionInfo {
 
 		// Force sea level based on known world types that give heartburn
 		final WorldType wt = world.getWorldType();
+
 		if (wt == WorldType.FLAT)
 			this.seaLevel = 0;
-		else if (ModEnvironment.OpenTerrainGenerator.isLoaded() && "OTG".equals(wt.getWorldTypeName()))
-			this.seaLevel = 51;
 	}
 
 	public DimensionInfo(@Nonnull final World world, @Nonnull final DimensionConfig entry) {
