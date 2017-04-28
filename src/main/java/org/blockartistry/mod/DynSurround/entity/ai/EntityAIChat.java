@@ -36,9 +36,9 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.entity.MessageTable;
 import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.util.Translations;
+import org.blockartistry.mod.DynSurround.util.WeightTable;
 import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import com.google.common.base.Predicate;
@@ -62,7 +62,7 @@ public class EntityAIChat extends EntityAIBase {
 		public int baseInterval = DEFAULT_INTERVAL;
 		public int baseRandom = DEFAULT_RANDOM;
 
-		public final MessageTable table = new MessageTable();
+		public final WeightTable<String> table = new WeightTable<String>();
 	}
 
 	private static final Map<String, EntityChatData> messages = new HashMap<String, EntityChatData>();
@@ -86,7 +86,7 @@ public class EntityAIChat extends EntityAIBase {
 					if (data == null)
 						messages.put(key, data = new EntityChatData());
 					final String weight = matcher2.group(1);
-					data.table.add(Integer.parseInt(weight), input.getKey());
+					data.table.add(input.getKey(), Integer.parseInt(weight));
 				} else {
 					ModLog.warn("Invalid value in language file: %s", input.getValue());
 				}
@@ -163,7 +163,7 @@ public class EntityAIChat extends EntityAIBase {
 	}
 
 	protected String getChatMessage() {
-		return this.data.table.getMessage();
+		return this.data.table.next();
 	}
 
 	protected int getNextChatTime() {

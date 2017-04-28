@@ -24,7 +24,6 @@
 package org.blockartistry.mod.DynSurround.util;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -32,35 +31,33 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
-public class WeightTable<T extends WeightTable.Item> {
+public class WeightTable<T> {
 
 	protected final Random random = new XorShiftRandom();
-	protected final List<T> items = new ArrayList<T>();
+	protected final List<Item<T>> items = new ArrayList<Item<T>>();
 	protected int totalWeight = 0;
 
-	public abstract static class Item {
+	private static class Item<T> {
 
 		public final int itemWeight;
-		protected Random rnd;
+		public final T item;
 
-		public Item(final int weight) {
-			assert weight > 0;
+		public Item(@Nonnull final T item, final int weight) {
 			this.itemWeight = weight;
+			this.item = item;
 		}
 	}
 
 	public WeightTable() {
 	}
 
-	public void add(@Nonnull final T entry) {
-		this.totalWeight += entry.itemWeight;
-		entry.rnd = this.random;
-		this.items.add(entry);
-	}
-
-	public void remove(@Nonnull final T entry) {
-		if(this.items.remove(entry))
-			this.totalWeight -= entry.itemWeight;
+	public WeightTable<T> add(@Nonnull final T entry, final int itemWeight) {
+		assert itemWeight > 0;
+		assert entry != null;
+		
+		this.totalWeight += itemWeight;
+		this.items.add(new Item<T>(entry, itemWeight));
+		return this;
 	}
 
 	@Nonnull
@@ -74,15 +71,7 @@ public class WeightTable<T extends WeightTable.Item> {
 		for (i = this.items.size(); (targetWeight -= this.items.get(i - 1).itemWeight) >= 0; i--)
 			;
 
-		return this.items.get(i - 1);
+		return this.items.get(i - 1).item;
 	}
 
-	@Nonnull
-	public List<T> getEntries() {
-		return Collections.unmodifiableList(items);
-	}
-
-	public int getTotalWeight() {
-		return totalWeight;
-	}
 }
