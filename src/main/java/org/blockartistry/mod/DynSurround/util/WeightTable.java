@@ -37,7 +37,7 @@ public class WeightTable<T> {
 	protected final List<Item<T>> items = new ArrayList<Item<T>>();
 	protected int totalWeight = 0;
 
-	private static class Item<T> {
+	public static class Item<T> {
 
 		public final int itemWeight;
 		public final T item;
@@ -59,19 +59,27 @@ public class WeightTable<T> {
 		this.items.add(new Item<T>(entry, itemWeight));
 		return this;
 	}
+	
+	public WeightTable<T> add(@Nonnull final Item<T> entry) {
+		assert entry != null;
+		assert entry.itemWeight > 0;
+		assert entry.item != null;
+		
+		this.totalWeight += entry.itemWeight;
+		this.items.add(entry);
+		return this;
+	}
 
 	@Nonnull
 	public T next() {
-		if(this.totalWeight < 1 || this.items.isEmpty())
-			return null;
-		
 		int targetWeight = this.random.nextInt(this.totalWeight);
 
-		int i = 0;
-		for (i = this.items.size(); (targetWeight -= this.items.get(i - 1).itemWeight) >= 0; i--)
-			;
-
-		return this.items.get(i - 1).item;
+		int i = -1;
+		do {
+			targetWeight -= this.items.get(++i).itemWeight;
+		} while(targetWeight >= 0);
+		
+		return this.items.get(i).item;
 	}
 
 }
