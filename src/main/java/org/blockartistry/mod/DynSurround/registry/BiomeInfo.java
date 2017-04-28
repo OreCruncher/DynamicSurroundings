@@ -23,7 +23,6 @@
 
 package org.blockartistry.mod.DynSurround.registry;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -34,6 +33,7 @@ import org.blockartistry.mod.DynSurround.client.handlers.AreaSoundEffectHandler;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.util.Color;
 import org.blockartistry.mod.DynSurround.util.MyUtils;
+import org.blockartistry.mod.DynSurround.util.WeightTable;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
@@ -61,8 +61,8 @@ public class BiomeInfo {
 
 	public BiomeInfo(@Nonnull final Biome biome) {
 		this.biome = biome;
-		
-		if(!this.isFake())
+
+		if (!this.isFake())
 			this.hasPrecipitation = canRain() || getEnableSnow();
 	}
 
@@ -137,11 +137,11 @@ public class BiomeInfo {
 	public void setSpotSoundChance(final int chance) {
 		this.spotSoundChance = chance;
 	}
-	
+
 	public void addSound(final SoundEffect sound) {
 		this.sounds = MyUtils.append(this.sounds, sound);
 	}
-	
+
 	public void addSpotSound(final SoundEffect sound) {
 		this.spotSounds = MyUtils.append(this.spotSounds, sound);
 	}
@@ -176,7 +176,7 @@ public class BiomeInfo {
 
 	@Nonnull
 	public void findSoundMatches(@Nonnull final List<SoundEffect> results) {
-		for(int i = 0; i < this.sounds.length; i++) {
+		for (int i = 0; i < this.sounds.length; i++) {
 			final SoundEffect sound = this.sounds[i];
 			if (sound.matches())
 				results.add(sound);
@@ -185,31 +185,8 @@ public class BiomeInfo {
 
 	@Nullable
 	public SoundEffect getSpotSound(@Nonnull final Random random) {
-		if (this.spotSounds == NO_SOUNDS || random.nextInt(this.spotSoundChance) != 0)
-			return null;
-
-		int totalWeight = 0;
-		final List<SoundEffect> candidates = new ArrayList<SoundEffect>(this.spotSounds.length);
-		for(int i = 0; i < this.spotSounds.length; i++) {
-			final SoundEffect s = this.spotSounds[i];
-			if (s.matches()) {
-				candidates.add(s);
-				totalWeight += s.getWeight();
-			}
-		}
-		
-		if (totalWeight <= 0)
-			return null;
-
-		if (candidates.size() == 1)
-			return candidates.get(0);
-
-		int targetWeight = random.nextInt(totalWeight);
-		int i = 0;
-		for (i = candidates.size(); (targetWeight -= candidates.get(i - 1).getWeight()) >= 0; i--)
-			;
-
-		return candidates.get(i - 1);
+		return this.spotSounds != NO_SOUNDS && random.nextInt(this.spotSoundChance) == 0
+				? new WeightTable<SoundEffect>(this.spotSounds).next() : null;
 	}
 
 	public void resetSounds() {
