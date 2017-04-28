@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
 
 public final class DimensionInfo {
 
@@ -53,6 +54,10 @@ public final class DimensionInfo {
 		this.hasWeather = !world.provider.hasNoSky();
 		this.cloudHeight = this.hasHaze ? this.skyHeight / 2 : this.skyHeight;
 		this.spaceHeight = this.skyHeight + SPACE_HEIGHT_OFFSET;
+		
+		// Force sea level on superflat worlds
+		if(this.dimensionId == 0 && world.getWorldInfo().getTerrainType() == WorldType.FLAT)
+			this.seaLevel = 0;
 	}
 
 	public DimensionInfo(@Nonnull final World world, @Nonnull final DimensionConfig entry) {
@@ -70,7 +75,7 @@ public final class DimensionInfo {
 			this.hasWeather = entry.hasWeather;
 		if(entry.cloudHeight != null)
 			this.cloudHeight = entry.cloudHeight;
-		
+
 		this.spaceHeight = this.skyHeight + SPACE_HEIGHT_OFFSET;
 	}
 

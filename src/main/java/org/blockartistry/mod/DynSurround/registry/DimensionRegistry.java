@@ -33,7 +33,6 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldType;
 import net.minecraftforge.fml.relauncher.Side;
 
 public final class DimensionRegistry extends Registry {
@@ -64,13 +63,9 @@ public final class DimensionRegistry extends Registry {
 	
 	private final List<DimensionConfig> cache = new ArrayList<DimensionConfig>();
 	private final TIntObjectHashMap<DimensionInfo> dimensionData = new TIntObjectHashMap<DimensionInfo>();
-	private boolean isFlatWorld = false;
 
 	public void loading(@Nonnull final World world) {
 		getData(world);
-		if (world.provider.getDimension() == 0) {
-			this.isFlatWorld = world.getWorldInfo().getTerrainType() == WorldType.FLAT;
-		}
 	}
 
 	@Nonnull
@@ -122,6 +117,7 @@ public final class DimensionRegistry extends Registry {
 			} else {
 				data = new DimensionInfo(world, entry);
 			}
+			
 			dimensionData.put(world.provider.getDimension(), data);
 			ModLog.info(data.toString());
 		}
@@ -133,8 +129,6 @@ public final class DimensionRegistry extends Registry {
 	}
 
 	public int getSeaLevel(@Nonnull final World world) {
-		if (world.provider.getDimension() == 0 && this.isFlatWorld)
-			return 0;
 		return getData(world).getSeaLevel();
 	}
 
