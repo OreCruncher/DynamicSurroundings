@@ -129,14 +129,15 @@ public final class BiomeRegistry extends Registry {
 		// This shouldn't happen, but...
 		if (biome == null)
 			return WTF_INFO;
-		
+
 		BiomeInfo result = this.registry.get(biome);
 		if (result == null) {
 			// Open Terrain Generation can trigger this...
-			ModLog.warn("Biome [%s] not detected during initialization - forcing reload", biome.getBiomeName());
+			ModLog.warn("Biome [%s] not detected during initialization - forcing reload (%s)", biome.getBiomeName(),
+					biome.getClass());
 			RegistryManager.reloadResources(this.side);
 			result = this.registry.get(biome);
-			if(result == null) {
+			if (result == null) {
 				throw new RuntimeException("What's going on with biomes?");
 			}
 		}
