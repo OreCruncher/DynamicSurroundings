@@ -43,8 +43,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public abstract class MoteBase implements IParticleMote {
 
-	protected final Random rand = XorShiftRandom.current();
-	protected final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
+	protected static final Random RANDOM = XorShiftRandom.current();
+	protected static final RenderManager RENDERER = Minecraft.getMinecraft().getRenderManager();
+
 	protected final World world;
 
 	protected boolean isAlive = true;
@@ -122,15 +123,27 @@ public abstract class MoteBase implements IParticleMote {
 	}
 
 	protected final double interpX() {
-		return this.manager.viewerPosX;
+		return RENDERER.viewerPosX;
 	}
 
 	protected final double interpY() {
-		return this.manager.viewerPosY;
+		return RENDERER.viewerPosY;
 	}
 
 	protected final double interpZ() {
-		return this.manager.viewerPosZ;
+		return RENDERER.viewerPosZ;
+	}
+
+	protected float renderX(final float partialTicks) {
+		return (float) (this.posX - interpX());
+	}
+
+	protected float renderY(final float partialTicks) {
+		return (float) (this.posY - interpY());
+	}
+
+	protected float renderZ(final float partialTicks) {
+		return (float) (this.posZ - interpZ());
 	}
 
 	protected void drawVertex(final VertexBuffer buffer, final double x, final double y, final double z, final double u,
