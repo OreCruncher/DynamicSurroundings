@@ -100,7 +100,7 @@ public final class WorldUtils {
 	}
 
 	public static boolean isFullWaterBlock(@Nonnull final IBlockState state) {
-		return state.getBlock() == Blocks.WATER && ((Integer) (state.getValue(BlockLiquid.LEVEL))).intValue() == 0;
+		return state.getMaterial() == Material.WATER && state.getBlock().getDefaultState() == state;
 	}
 
 }
