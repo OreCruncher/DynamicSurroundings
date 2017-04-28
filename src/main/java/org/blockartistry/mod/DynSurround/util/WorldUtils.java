@@ -28,7 +28,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -89,10 +88,6 @@ public final class WorldUtils {
 	@Nonnull
 	public static IBlockState getBlockState(@Nonnull final World world, final int x, final int y, final int z) {
 		return blockProvider.get().setWorld(world).getBlockState(x, y, z);
-	}
-
-	public static float getLiquidHeightPercent(@Nonnull final IBlockState state) {
-		return BlockLiquid.getLiquidHeightPercent(((Integer) (state.getValue(BlockLiquid.LEVEL))).intValue());
 	}
 
 	public static boolean isFullWaterBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
