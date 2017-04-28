@@ -933,6 +933,15 @@
 			}
 		]
 	},
+	"bog": {
+		"category": "ambient",
+		"sounds": [
+			{
+				"name": "dsurround:ambient/outside/bog",
+				"stream": true
+			}
+		]
+	},
 	"jungle": {
 		"category": "ambient",
 		"sounds": [
