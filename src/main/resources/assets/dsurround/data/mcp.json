@@ -93,6 +93,11 @@
 					"soundType": "spot"
 				},
 				{
+					"sound": "dsurround:crow",
+					"conditions": "weather.isNotRaining && isDay",
+					"soundType": "spot"
+				},
+				{
 					"sound": "dsurround:crickets",
 					"conditions": "weather.isNotRaining && isNight"
 				},
@@ -209,8 +214,17 @@
 			"spotSoundChance": 200,
 			"sounds": [
 				{
+					"sound": "dsurround:bog",
+					"conditions": "weather.isNotRaining && isDay"
+				},
+				{
 					"sound": "dsurround:crickets",
 					"conditions": "isNight"
+				},
+				{
+					"sound": "dsurround:crow",
+					"conditions": "weather.isNotRaining && isDay",
+					"soundType": "spot"
 				},
 				{
 					"sound": "dsurround:insectbuzz",
@@ -233,7 +247,7 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(.*dead.*|.*bog.*)",
+			"biomeName": "(?i)(?!.*cold.*)(.*dead.*)",
 			"sounds": [
 				{
 					"sound": "dsurround:crow",
