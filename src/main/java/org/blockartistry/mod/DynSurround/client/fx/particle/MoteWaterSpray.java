@@ -43,11 +43,11 @@ public class MoteWaterSpray extends MoteMotionBase {
 			final double dY, final double dZ) {
 
 		super(world, x, y, z, dX, dY, dZ);
-		
-		this.maxAge = (int) (8.0D / (this.rand.nextDouble() * 0.8D + 0.2D));
-		this.scale = (this.rand.nextFloat() * 0.5F + 0.5F) * 2.0F;
 
-		final int textureIdx = 19 + this.rand.nextInt(4);
+		this.maxAge = (int) (8.0D / (RANDOM.nextDouble() * 0.8D + 0.2D));
+		this.scale = (RANDOM.nextFloat() * 0.5F + 0.5F) * 2.0F;
+
+		final int textureIdx = 19 + RANDOM.nextInt(4);
 		final int texX = textureIdx % 16;
 		final int texY = textureIdx / 16;
 		this.texU1 = texX / 16F;
@@ -68,9 +68,9 @@ public class MoteWaterSpray extends MoteMotionBase {
 	public void renderParticle(VertexBuffer buffer, Entity entityIn, float partialTicks, float rotationX,
 			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 
-		final double x = (this.prevX + (this.posX - this.prevX) * (double) partialTicks - interpX());
-		final double y = (this.prevY + (this.posY - this.prevY) * (double) partialTicks - interpY());
-		final double z = (this.prevZ + (this.posZ - this.prevZ) * (double) partialTicks - interpZ());
+		final float x = renderX(partialTicks);
+		final float y = renderY(partialTicks);
+		final float z = renderZ(partialTicks);
 
 		drawVertex(buffer, x + (-rotationX * f4 - rotationXY * f4), y + (-rotationZ * f4),
 				z + (-rotationYZ * f4 - rotationXZ * f4), this.texU2, this.texV2);

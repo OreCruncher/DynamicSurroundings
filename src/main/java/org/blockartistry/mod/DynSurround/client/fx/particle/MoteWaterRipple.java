@@ -42,7 +42,7 @@ public class MoteWaterRipple extends MoteBase {
 	public MoteWaterRipple(final World world, final double x, final double y, final double z) {
 		super(world, x, y, z);
 
-		this.maxAge = 12 + this.rand.nextInt(8);
+		this.maxAge = 12 + RANDOM.nextInt(8);
 		this.growthRate = this.maxAge / 500F;
 		this.scale = this.growthRate;
 		this.scaledWidth = this.scale * TEX_SIZE_HALF;
@@ -60,9 +60,9 @@ public class MoteWaterRipple extends MoteBase {
 	public void renderParticle(VertexBuffer buffer, Entity entityIn, float partialTicks, float rotationX,
 			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 
-		final float x = (float) (this.posX - interpX());
-		final float y = (float) (this.posY - interpY());
-		final float z = (float) (this.posZ - interpZ());
+		final float x = renderX(partialTicks);
+		final float y = renderY(partialTicks);
+		final float z = renderZ(partialTicks);
 
 		drawVertex(buffer, -this.scaledWidth + x, y, this.scaledWidth + z, 0, 1);
 		drawVertex(buffer, this.scaledWidth + x, y, this.scaledWidth + z, 1, 1);

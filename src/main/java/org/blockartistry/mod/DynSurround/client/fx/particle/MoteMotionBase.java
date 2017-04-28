@@ -57,6 +57,21 @@ public abstract class MoteMotionBase extends MoteBase {
 	}
 
 	@Override
+	protected float renderX(final float partialTicks) {
+		return (float) (this.prevX + (this.posX - this.prevX) * (double) partialTicks - interpX());
+	}
+
+	@Override
+	protected float renderY(final float partialTicks) {
+		return (float) (this.prevY + (this.posY - this.prevY) * (double) partialTicks - interpY());
+	}
+
+	@Override
+	protected float renderZ(final float partialTicks) {
+		return (float) (this.prevZ + (this.posZ - this.prevZ) * (double) partialTicks - interpZ());
+	}
+
+	@Override
 	protected void update() {
 
 		this.prevX = this.posX;
