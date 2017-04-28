@@ -270,9 +270,14 @@ public final class ModOptions {
 	public static int auroraSpawnOffset = 150;
 
 	public static final String CATEGORY_BIOMES = "biomes";
+	public static final String CONFIG_BIOME_SEALEVEL = "Overworld Sealevel Override";
 	public static final String CONFIG_BIOME_ALIASES = "Biomes Alias";
-	private static final List<String> biomesSort = Arrays.asList(CONFIG_BIOME_ALIASES);
+	private static final List<String> biomesSort = Arrays.asList(CONFIG_BIOME_SEALEVEL, CONFIG_BIOME_ALIASES);
 
+	@Parameter(category = CATEGORY_BIOMES, property = CONFIG_BIOME_SEALEVEL, defaultValue = "0", lang = "cfg.biomes.Sealevel")
+	@MinMaxInt(min = 0, max = 255)
+	@Comment("Sealevel to set for Overworld (0 use default for World)")
+	public static int worldSealevelOverride = 0;
 	@Parameter(category = CATEGORY_BIOMES, property = CONFIG_BIOME_ALIASES, defaultValue = "", lang = "cfg.biomes.Aliases")
 	@Comment("Biomes alias list")
 	@RestartRequired
