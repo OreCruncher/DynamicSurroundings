@@ -37,7 +37,8 @@ public enum ModEnvironment {
 	CalendarAPI("CalendarAPI"),
 	Weather2("weather2"),
 	EnderIO("EnderIO"),
-	Chisel("chisel");
+	Chisel("chisel"),
+	OpenTerrainGenerator("openterraingenerator");
 	
 	protected final String modId;
 	protected boolean isLoaded;

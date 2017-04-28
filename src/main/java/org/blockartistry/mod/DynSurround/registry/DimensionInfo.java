@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.registry;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.ModEnvironment;
 import org.blockartistry.mod.DynSurround.data.xface.DimensionConfig;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
@@ -54,26 +55,29 @@ public final class DimensionInfo {
 		this.hasWeather = !world.provider.getHasNoSky();
 		this.cloudHeight = this.hasHaze ? this.skyHeight / 2 : this.skyHeight;
 		this.spaceHeight = this.skyHeight + SPACE_HEIGHT_OFFSET;
-		
-		// Force sea level on superflat worlds
-		if(this.dimensionId == 0 && world.getWorldInfo().getTerrainType() == WorldType.FLAT)
+
+		// Force sea level based on known world types that give heartburn
+		final WorldType wt = world.getWorldType();
+		if (wt == WorldType.FLAT)
 			this.seaLevel = 0;
+		else if (ModEnvironment.OpenTerrainGenerator.isLoaded() && "OTG".equals(wt.getWorldTypeName()))
+			this.seaLevel = 51;
 	}
 
 	public DimensionInfo(@Nonnull final World world, @Nonnull final DimensionConfig entry) {
 		this(world);
-		
-		if(entry.seaLevel != null)
+
+		if (entry.seaLevel != null)
 			this.seaLevel = entry.seaLevel;
-		if(entry.skyHeight != null)
+		if (entry.skyHeight != null)
 			this.skyHeight = entry.skyHeight;
-		if(entry.hasHaze != null)
+		if (entry.hasHaze != null)
 			this.hasHaze = entry.hasHaze;
-		if(entry.hasAurora != null)
+		if (entry.hasAurora != null)
 			this.hasAuroras = entry.hasAurora;
-		if(entry.hasWeather != null)
+		if (entry.hasWeather != null)
 			this.hasWeather = entry.hasWeather;
-		if(entry.cloudHeight != null)
+		if (entry.cloudHeight != null)
 			this.cloudHeight = entry.cloudHeight;
 
 		this.spaceHeight = this.skyHeight + SPACE_HEIGHT_OFFSET;
