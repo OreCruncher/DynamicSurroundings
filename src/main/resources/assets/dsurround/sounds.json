@@ -996,6 +996,21 @@
 			"dsurround:ambient/birds/woodpecker5"
 		]
 	},
+	"crow": {
+		"category": "ambient",
+		"sounds": [
+			"dsurround:ambient/birds/crow1",
+			"dsurround:ambient/birds/crow2",
+			"dsurround:ambient/birds/crow3",
+			"dsurround:ambient/birds/crow4",
+			"dsurround:ambient/birds/crow5",
+			"dsurround:ambient/birds/crow6",
+			"dsurround:ambient/birds/crow7",
+			"dsurround:ambient/birds/crow8",
+			"dsurround:ambient/birds/crow9",
+			"dsurround:ambient/birds/crow10"
+		]
+	},
 	"owl": {
 		"category": "ambient",
 		"sounds": [
@@ -1574,5 +1589,5 @@
 		"sounds": [
 			"dsurround:ambient/items/utility_draw"
 		]
-	}	
+	}
 }

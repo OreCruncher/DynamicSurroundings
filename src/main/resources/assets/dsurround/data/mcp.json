@@ -233,6 +233,16 @@
 			]
 		},
 		{
+			"biomeName": "(?i)(.*dead.*|.*bog.*)",
+			"sounds": [
+				{
+					"sound": "dsurround:crow",
+					"conditions": "weather.isNotRaining && isDay",
+					"soundType": "spot"
+				}
+			]
+		},
+		{
 			"biomeName": "(?i)(.*desert.*|.*sand.*|.*mesa.*|.*wasteland.*|.*sahara.*|outback)",
 			"dust": true,
 			"dustColor": "204,185,102"
