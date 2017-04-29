@@ -32,7 +32,7 @@ import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.mod.DynSurround.api.events.BlockEffectEvent;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleSystem;
+import org.blockartistry.mod.DynSurround.client.fx.particle.system.ParticleSystem;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.BlockPosHelper;
 

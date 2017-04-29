@@ -22,58 +22,31 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.fx.particle;
+package org.blockartistry.mod.DynSurround.client.fx.particle.system;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
-
-import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
-import org.blockartistry.mod.DynSurround.client.sound.Sounds;
-
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleFlame;
-import net.minecraft.client.particle.ParticleLava;
+import net.minecraft.client.particle.ParticleBubble;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
 @SideOnly(Side.CLIENT)
-public class ParticleFireJet extends ParticleJet {
+public class ParticleBubbleJet extends ParticleJet {
 
-	protected final boolean isLava;
 	protected final IParticleFactory factory;
-	protected final int particleId;
-	protected boolean soundFired;
-
-	public ParticleFireJet(final int strength, final World world, final double x, final double y, final double z) {
+	
+	public ParticleBubbleJet(final int strength, final World world, final double x, final double y, final double z) {
 		super(strength, world, x, y, z);
-		this.isLava = this.rand.nextInt(3) == 0;
-
-		this.particleId = this.isLava ? EnumParticleTypes.LAVA.getParticleID()
-				: EnumParticleTypes.FLAME.getParticleID();
-		if (this.isLava)
-			this.factory = new ParticleLava.Factory();
-		else
-			this.factory = new ParticleFlame.Factory();
-	}
-
-	@Override
-	protected void soundUpdate() {
-		if (!this.soundFired) {
-			this.soundFired = true;
-			SoundEffectHandler.INSTANCE.playSoundAt(this.getPos(), Sounds.FIRE, 0);
-		}
+		
+		this.factory = new ParticleBubble.Factory();
 	}
 
 	@Override
 	protected void spawnJetParticle() {
-		final double speedY = this.isLava ? 0 : this.jetStrength / 10.0D;
-		final Particle particle = this.factory.createParticle(this.particleId, this.world, this.posX, this.posY,
-				this.posZ, 0D, speedY, 0D);
-		if (!this.isLava) {
-			final ParticleFlame flame = (ParticleFlame) particle;
-			flame.flameScale *= this.jetStrength;
-		}
+		final Particle particle = this.factory.createParticle(EnumParticleTypes.WATER_BUBBLE.getParticleID(), this.world, this.posX, this.posY, this.posZ, 0D, 0.5D + this.jetStrength / 10.0D, 0D);
 		addParticle(particle);
 	}
+
 }

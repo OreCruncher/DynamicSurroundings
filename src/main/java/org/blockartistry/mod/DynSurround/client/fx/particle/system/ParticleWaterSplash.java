@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.fx.particle;
+package org.blockartistry.mod.DynSurround.client.fx.particle.system;
 
 import org.blockartistry.mod.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.mod.DynSurround.client.fx.WaterSplashJetEffect;

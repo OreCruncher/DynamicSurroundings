@@ -22,30 +22,31 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.fx.particle;
+package org.blockartistry.mod.DynSurround.client.fx.particle.system;
 
+import org.blockartistry.mod.DynSurround.client.fx.SteamJetEffect;
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleSteamCloud;
+
+import net.minecraft.client.particle.Particle;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraft.client.particle.IParticleFactory;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleBubble;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.world.World;
 
 @SideOnly(Side.CLIENT)
-public class ParticleBubbleJet extends ParticleJet {
+public class ParticleSteamJet extends ParticleJet {
 
-	protected final IParticleFactory factory;
-	
-	public ParticleBubbleJet(final int strength, final World world, final double x, final double y, final double z) {
+	public ParticleSteamJet(final int strength, final World world, final double x, final double y, final double z) {
 		super(strength, world, x, y, z);
-		
-		this.factory = new ParticleBubble.Factory();
+	}
+
+	@Override
+	public boolean shouldDie() {
+		return !SteamJetEffect.isValidSpawnBlock(this.world, this.getPos());
 	}
 
 	@Override
 	protected void spawnJetParticle() {
-		final Particle particle = this.factory.createParticle(EnumParticleTypes.WATER_BUBBLE.getParticleID(), this.world, this.posX, this.posY, this.posZ, 0D, 0.5D + this.jetStrength / 10.0D, 0D);
+		final Particle particle = new ParticleSteamCloud(this.world, this.posX, this.posY, this.posZ, 0.1D);
 		addParticle(particle);
 	}
 
