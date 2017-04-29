@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.fx.particle;
+package org.blockartistry.mod.DynSurround.client.fx.particle.mote;
 
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
@@ -31,29 +31,37 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class MoteWaterRipple extends MoteBase {
+public class MoteWaterSpray extends MoteMotionBase {
 
-	private static final float TEX_SIZE_HALF = 0.5F;
-
-	protected final float growthRate;
 	protected float scale;
-	protected float scaledWidth;
 
-	public MoteWaterRipple(final World world, final double x, final double y, final double z) {
-		super(world, x, y, z);
+	protected final float texU1, texU2;
+	protected final float texV1, texV2;
+	protected final float f4;
 
-		this.maxAge = 12 + RANDOM.nextInt(8);
-		this.growthRate = this.maxAge / 500F;
-		this.scale = this.growthRate;
-		this.scaledWidth = this.scale * TEX_SIZE_HALF;
-		this.posY -= 0.2D;
+	public MoteWaterSpray(final World world, final double x, final double y, final double z, final double dX,
+			final double dY, final double dZ) {
+
+		super(world, x, y, z, dX, dY, dZ);
+
+		this.maxAge = (int) (8.0D / (RANDOM.nextDouble() * 0.8D + 0.2D));
+		this.scale = (RANDOM.nextFloat() * 0.5F + 0.5F) * 2.0F;
+
+		final int textureIdx = RANDOM.nextInt(4);
+		final int texX = textureIdx % 2;
+		final int texY = textureIdx / 2;
+		this.texU1 = texX * 0.5F;
+		this.texU2 = this.texU1 + 0.5F;
+		this.texV1 = texY * 0.5F;
+		this.texV2 = this.texV1 + 0.5F;
+
+		this.f4 = 0.1F * this.scale;
+
 	}
 
 	@Override
-	public void update() {
-		this.scale += this.growthRate;
-		this.scaledWidth = this.scale * TEX_SIZE_HALF;
-		this.alpha = (float) (this.maxAge - this.age) / (float) (this.maxAge + 3);
+	public int getFXLayer() {
+		return 3;
 	}
 
 	@Override
@@ -64,10 +72,14 @@ public class MoteWaterRipple extends MoteBase {
 		final float y = renderY(partialTicks);
 		final float z = renderZ(partialTicks);
 
-		drawVertex(buffer, -this.scaledWidth + x, y, this.scaledWidth + z, 0, 1);
-		drawVertex(buffer, this.scaledWidth + x, y, this.scaledWidth + z, 1, 1);
-		drawVertex(buffer, this.scaledWidth + x, y, -this.scaledWidth + z, 1, 0);
-		drawVertex(buffer, -this.scaledWidth + x, y, -this.scaledWidth + z, 0, 0);
+		drawVertex(buffer, x + (-rotationX * f4 - rotationXY * f4), y + (-rotationZ * f4),
+				z + (-rotationYZ * f4 - rotationXZ * f4), this.texU2, this.texV2);
+		drawVertex(buffer, x + (-rotationX * f4 + rotationXY * f4), y + (rotationZ * f4),
+				z + (-rotationYZ * f4 + rotationXZ * f4), this.texU2, this.texV1);
+		drawVertex(buffer, x + (rotationX * f4 + rotationXY * f4), y + (rotationZ * f4),
+				z + (rotationYZ * f4 + rotationXZ * f4), this.texU1, this.texV1);
+		drawVertex(buffer, x + (rotationX * f4 - rotationXY * f4), y + (-rotationZ * f4),
+				z + (rotationYZ * f4 - rotationXZ * f4), this.texU1, this.texV2);
 	}
 
 }

@@ -27,12 +27,12 @@ package org.blockartistry.mod.DynSurround.client.fx;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.DSurround;
-import org.blockartistry.mod.DynSurround.client.fx.particle.IParticleMote;
-import org.blockartistry.mod.DynSurround.client.fx.particle.MoteRainSplash;
-import org.blockartistry.mod.DynSurround.client.fx.particle.MoteWaterRipple;
-import org.blockartistry.mod.DynSurround.client.fx.particle.MoteWaterSpray;
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleCollection;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
+import org.blockartistry.mod.DynSurround.client.fx.particle.mote.IParticleMote;
+import org.blockartistry.mod.DynSurround.client.fx.particle.mote.MoteRainSplash;
+import org.blockartistry.mod.DynSurround.client.fx.particle.mote.MoteWaterRipple;
+import org.blockartistry.mod.DynSurround.client.fx.particle.mote.MoteWaterSpray;
+import org.blockartistry.mod.DynSurround.client.fx.particle.mote.ParticleCollection;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.util.ResourceLocation;
