@@ -22,36 +22,22 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.fx.particle.system;
-
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFountain;
+package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleBlockDust;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ParticleFountainJet extends ParticleJet {
+public class ParticleFountain extends ParticleBlockDust {
 
-	protected final IBlockState block;
-
-	public ParticleFountainJet(final int strength, final World world, final double x, final double y, final double z,
-			final IBlockState block) {
-		super(1, strength, world, x, y, z, 1);
-		this.block = block;
-	}
-
-	@Override
-	protected void spawnJetParticle() {
-		final double motionX = this.rand.nextGaussian() * 0.03D;
-		final double motionZ = this.rand.nextGaussian() * 0.03D;
-		final double x = this.posX + this.rand.nextGaussian() * 0.2D;
-		final double z = this.posZ + this.rand.nextGaussian() * 0.2D;
-		final Particle particle = new ParticleFountain(this.world, x, this.posY, z, motionX, 0.5D, motionZ,
-				this.block).init();
-		addParticle(particle);
+	public ParticleFountain(final World world, final double x, final double y, final double z, final double dX,
+			final double dY, final double dZ, final IBlockState block) {
+		super(world, x, y, z, dX, dY, dZ, block);
+		this.multipleParticleScaleBy((float) (0.3F + this.rand.nextGaussian() / 10.0F));
+		this.setPosition(this.posX, this.posY, this.posZ);
 	}
 
 }
