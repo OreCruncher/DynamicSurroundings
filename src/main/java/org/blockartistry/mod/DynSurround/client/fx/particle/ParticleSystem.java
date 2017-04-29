@@ -24,7 +24,8 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
-import java.util.ArrayDeque;
+import java.util.LinkedHashSet;
+
 import javax.annotation.Nonnull;
 
 import com.google.common.base.Predicate;
@@ -52,7 +53,7 @@ public abstract class ParticleSystem extends ParticleBase {
 	protected final int fxLayer;
 	protected final BlockPos position;
 
-	protected final ArrayDeque<IParticleMote> myParticles = new ArrayDeque<IParticleMote>();
+	protected final LinkedHashSet<IParticleMote> myParticles = new LinkedHashSet<IParticleMote>();
 	protected int particleLimit;
 
 	protected ParticleSystem(final World worldIn, final double posXIn, final double posYIn, final double posZIn) {
@@ -139,7 +140,7 @@ public abstract class ParticleSystem extends ParticleBase {
 	}
 
 	@Override
-	public final void onUpdate() {
+	public void onUpdate() {
 		// Let the system mull over what it wants to do
 		this.think();
 

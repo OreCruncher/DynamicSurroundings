@@ -40,12 +40,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class WaterRippleCollection extends ParticleCollection {
+public class WaterSprayCollection extends ParticleCollection {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
-			"textures/particles/ripple.png");
+			"textures/particles/rainsplash.png");
 
-	public WaterRippleCollection(@Nonnull World world) {
+	public WaterSprayCollection(@Nonnull World world) {
 		super(3, world);
 		this.setParticleLimit(Integer.MAX_VALUE);
 	}
