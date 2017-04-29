@@ -99,4 +99,11 @@ public abstract class Emitter {
 			this.activeSound.fade();
 		}
 	}
+	
+	public void stop() {
+		if(this.activeSound != null) {
+			SoundEngine.instance().stopSound(this.activeSound);
+		}
+	}
+
 }

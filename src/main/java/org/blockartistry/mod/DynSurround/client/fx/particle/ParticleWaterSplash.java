@@ -84,6 +84,14 @@ public class ParticleWaterSplash extends ParticleJet {
 		if (this.emitter != null)
 			this.emitter.update();
 	}
+	
+	@Override
+	protected void cleanUp() {
+		if(this.emitter != null)
+			this.emitter.stop();
+		this.emitter = null;
+		super.cleanUp();
+	}
 
 	@Override
 	public void onUpdate() {
@@ -92,6 +100,7 @@ public class ParticleWaterSplash extends ParticleJet {
 
 		if (this.shouldDie()) {
 			this.setExpired();
+			this.cleanUp();
 		}
 
 		if (!this.isAlive())
@@ -107,7 +116,7 @@ public class ParticleWaterSplash extends ParticleJet {
 	@Override
 	protected void spawnJetParticle() {
 
-		final int splashCount = this.getParticleLimit() - getCurrentParticleCount();
+		final int splashCount = Math.min(this.getParticleLimit() - getCurrentParticleCount(), 30);
 
 		for (int j = 0; (float) j < splashCount; ++j) {
 			final double xOffset = (this.rand.nextDouble() * 2.0F - 1.0F);

@@ -26,15 +26,15 @@ package org.blockartistry.mod.DynSurround.client.fx;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.fx.particle.IParticleMote;
 import org.blockartistry.mod.DynSurround.client.fx.particle.MoteWaterRipple;
 import org.blockartistry.mod.DynSurround.client.fx.particle.MoteWaterSpray;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleCollection;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
-import org.blockartistry.mod.DynSurround.client.fx.particle.WaterRippleCollection;
-import org.blockartistry.mod.DynSurround.client.fx.particle.WaterSprayCollection;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -42,37 +42,31 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class ParticleCollections {
 
-	private abstract static class CollectionHelper<T extends ParticleCollection> {
-		private T collection;
+	private static class CollectionHelper {
 		
-		public CollectionHelper() {
-			
+		private final ResourceLocation texture;
+		private ParticleCollection collection;
+		
+		public CollectionHelper(@Nonnull final ResourceLocation texture) {
+			this.texture = texture;
 		}
 		
-		protected abstract T create(@Nonnull final World world);
-		
-		public T get() {
+		public ParticleCollection get() {
 			if(this.collection == null || this.collection.shouldDie()) {
-				this.collection = create(EnvironState.getWorld());
+				this.collection = new ParticleCollection(EnvironState.getWorld(), this.texture);
 				ParticleHelper.addParticle(this.collection);
 			}
 			return this.collection;
 		}
 	}
 	
-	private final static CollectionHelper<WaterRippleCollection> theRipples = new CollectionHelper<WaterRippleCollection>() {
-		@Override
-		protected WaterRippleCollection create(@Nonnull final World world) {
-			return new WaterRippleCollection(world);
-		}
-	};
-	
-	private final static CollectionHelper<WaterSprayCollection> theSprays = new CollectionHelper<WaterSprayCollection>() {
-		@Override
-		protected WaterSprayCollection create(@Nonnull final World world) {
-			return new WaterSprayCollection(world);
-		}
-	};
+	private static final ResourceLocation RIPPLE_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
+			"textures/particles/ripple.png");
+	private static final ResourceLocation SPRAY_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
+			"textures/particles/rainsplash.png");
+
+	private final static CollectionHelper theRipples = new CollectionHelper(RIPPLE_TEXTURE);
+	private final static CollectionHelper theSprays = new CollectionHelper(SPRAY_TEXTURE);
 	
 	public static IParticleMote addWaterRipple(@Nonnull final World world, final double x, final double y, final double z) {
 		final IParticleMote mote = new MoteWaterRipple(world, x, y, z);
