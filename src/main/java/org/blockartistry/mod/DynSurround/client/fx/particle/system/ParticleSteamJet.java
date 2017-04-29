@@ -41,12 +41,12 @@ public class ParticleSteamJet extends ParticleJet {
 
 	@Override
 	public boolean shouldDie() {
-		return !SteamJetEffect.isValidSpawnBlock(this.worldObj, this.getPos());
+		return !SteamJetEffect.isValidSpawnBlock(this.world, this.getPos());
 	}
 
 	@Override
 	protected void spawnJetParticle() {
-		final Particle particle = new ParticleSteamCloud(this.worldObj, this.posX, this.posY, this.posZ, 0.1D);
+		final Particle particle = new ParticleSteamCloud(this.world, this.posX, this.posY, this.posZ, 0.1D);
 		addParticle(particle);
 	}
 

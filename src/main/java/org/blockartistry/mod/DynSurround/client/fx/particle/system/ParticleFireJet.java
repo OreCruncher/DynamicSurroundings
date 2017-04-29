@@ -47,7 +47,7 @@ public class ParticleFireJet extends ParticleJet {
 
 	public ParticleFireJet(final int strength, final World world, final double x, final double y, final double z) {
 		super(strength, world, x, y, z);
-		this.isLava = this.rand.nextInt(3) == 0;
+		this.isLava = RANDOM.nextInt(3) == 0;
 
 		this.particleId = this.isLava ? EnumParticleTypes.LAVA.getParticleID()
 				: EnumParticleTypes.FLAME.getParticleID();
@@ -68,7 +68,7 @@ public class ParticleFireJet extends ParticleJet {
 	@Override
 	protected void spawnJetParticle() {
 		final double speedY = this.isLava ? 0 : this.jetStrength / 10.0D;
-		final Particle particle = this.factory.createParticle(this.particleId, this.worldObj, this.posX, this.posY,
+		final Particle particle = this.factory.createParticle(this.particleId, this.world, this.posX, this.posY,
 				this.posZ, 0D, speedY, 0D);
 		if (!this.isLava) {
 			final ParticleFlame flame = (ParticleFlame) particle;

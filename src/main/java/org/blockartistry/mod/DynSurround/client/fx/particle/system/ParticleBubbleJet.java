@@ -36,16 +36,17 @@ import net.minecraft.world.World;
 public class ParticleBubbleJet extends ParticleJet {
 
 	protected final IParticleFactory factory;
-	
+
 	public ParticleBubbleJet(final int strength, final World world, final double x, final double y, final double z) {
 		super(strength, world, x, y, z);
-		
+
 		this.factory = new ParticleBubble.Factory();
 	}
 
 	@Override
 	protected void spawnJetParticle() {
-		final Particle particle = this.factory.createParticle(EnumParticleTypes.WATER_BUBBLE.getParticleID(), this.worldObj, this.posX, this.posY, this.posZ, 0D, 0.5D + this.jetStrength / 10.0D, 0D);
+		final Particle particle = this.factory.createParticle(EnumParticleTypes.WATER_BUBBLE.getParticleID(),
+				this.world, this.posX, this.posY, this.posZ, 0D, 0.5D + this.jetStrength / 10.0D, 0D);
 		addParticle(particle);
 	}
 
