@@ -55,13 +55,9 @@ public class MoteWaterSpray extends MoteMotionBase {
 		this.texV1 = texY * 0.5F;
 		this.texV2 = this.texV1 + 0.5F;
 
-		this.f4 = 0.1F * this.scale;
+		// Tweak the constant to change the size of the raindrop
+		this.f4 = 0.07F * this.scale;
 
-	}
-
-	@Override
-	public int getFXLayer() {
-		return 3;
 	}
 
 	@Override

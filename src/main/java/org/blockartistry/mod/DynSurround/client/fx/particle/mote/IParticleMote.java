@@ -24,7 +24,6 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle.mote;
 
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,12 +36,6 @@ public interface IParticleMote {
 
 	void onUpdate();
 	
-	boolean moveParticleOnExpire();
-	
-	Particle getParticle();
-
-	int getFXLayer();
-
 	void renderParticle(final VertexBuffer buffer, final Entity entityIn, final float partialTicks, final float rotX,
 			final float rotZ, final float rotYZ, final float rotXY, final float rotXZ);
 
