@@ -47,13 +47,13 @@ public class MoteWaterSpray extends MoteMotionBase {
 		this.maxAge = (int) (8.0D / (RANDOM.nextDouble() * 0.8D + 0.2D));
 		this.scale = (RANDOM.nextFloat() * 0.5F + 0.5F) * 2.0F;
 
-		final int textureIdx = 19 + RANDOM.nextInt(4);
-		final int texX = textureIdx % 16;
-		final int texY = textureIdx / 16;
+		final int textureIdx = RANDOM.nextInt(4);
+		final int texX = textureIdx % 2;
+		final int texY = textureIdx / 2;
 		this.texU1 = texX / 16F;
-		this.texU2 = this.texU1 + 0.0624375F;
+		this.texU2 = this.texU1 + 0.5F;
 		this.texV1 = texY / 16F;
-		this.texV2 = this.texV1 + 0.0624375F;
+		this.texV2 = this.texV1 + 0.5F;
 
 		this.f4 = 0.1F * this.scale;
 
@@ -61,7 +61,7 @@ public class MoteWaterSpray extends MoteMotionBase {
 
 	@Override
 	public int getFXLayer() {
-		return 0;
+		return 3;
 	}
 
 	@Override

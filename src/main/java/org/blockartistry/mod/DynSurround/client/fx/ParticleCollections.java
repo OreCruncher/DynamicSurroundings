@@ -26,9 +26,13 @@ package org.blockartistry.mod.DynSurround.client.fx;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.client.fx.particle.IParticleMote;
 import org.blockartistry.mod.DynSurround.client.fx.particle.MoteWaterRipple;
+import org.blockartistry.mod.DynSurround.client.fx.particle.MoteWaterSpray;
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleCollection;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.fx.particle.WaterRippleCollection;
+import org.blockartistry.mod.DynSurround.client.fx.particle.WaterSprayCollection;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.world.World;
@@ -38,17 +42,48 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class ParticleCollections {
 
-	private static WaterRippleCollection theRipples;
-	
-	private static WaterRippleCollection ripples() {
-		if(theRipples == null || theRipples.shouldDie()) {
-			theRipples = new WaterRippleCollection(EnvironState.getWorld());
-			ParticleHelper.addParticle(theRipples);
+	private abstract static class CollectionHelper<T extends ParticleCollection> {
+		private T collection;
+		
+		public CollectionHelper() {
+			
 		}
-		return theRipples;
+		
+		protected abstract T create(@Nonnull final World world);
+		
+		public T get() {
+			if(this.collection == null || this.collection.shouldDie()) {
+				this.collection = create(EnvironState.getWorld());
+				ParticleHelper.addParticle(this.collection);
+			}
+			return this.collection;
+		}
 	}
 	
-	public static void addWaterRipple(@Nonnull final World world, final double x, final double y, final double z) {
-		ripples().addParticle(new MoteWaterRipple(world, x, y, z));
+	private final static CollectionHelper<WaterRippleCollection> theRipples = new CollectionHelper<WaterRippleCollection>() {
+		@Override
+		protected WaterRippleCollection create(@Nonnull final World world) {
+			return new WaterRippleCollection(world);
+		}
+	};
+	
+	private final static CollectionHelper<WaterSprayCollection> theSprays = new CollectionHelper<WaterSprayCollection>() {
+		@Override
+		protected WaterSprayCollection create(@Nonnull final World world) {
+			return new WaterSprayCollection(world);
+		}
+	};
+	
+	public static IParticleMote addWaterRipple(@Nonnull final World world, final double x, final double y, final double z) {
+		final IParticleMote mote = new MoteWaterRipple(world, x, y, z);
+		theRipples.get().addParticle(mote);
+		return mote;
 	}
+
+	public static IParticleMote addWaterSpray(@Nonnull final World world, final double x, final double y, final double z, final double dX, final double dY, final double dZ) {
+		final IParticleMote mote = new MoteWaterSpray(world, x, y, z, dX, dY, dZ);
+		theSprays.get().addParticle(mote);
+		return mote;
+	}
+
 }
