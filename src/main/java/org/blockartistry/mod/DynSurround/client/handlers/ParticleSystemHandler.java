@@ -31,7 +31,6 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.mod.DynSurround.api.events.BlockEffectEvent;
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.fx.particle.system.ParticleSystem;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.util.BlockPosHelper;
@@ -69,10 +68,11 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 
 		if(this.systems.size() == 0)
 			return;
-		
-		// Process the list looking for systems that can be removed.
-		// They are removed if they are dead, or if they are out of
-		// range of the player.
+
+		// Process the system list.  Remove entries that have expired
+		// or gone out of range; trigger and update() on remaining ones.
+		// Note that particles will be updated via the Minecraft
+		// particle manager or a ParticleCollection.
 		final double range = ModOptions.specialEffectRange;
 		final BlockPos min = EnvironState.getPlayerPosition().add(-range, -range, -range);
 		final BlockPos max = EnvironState.getPlayerPosition().add(range, range, range);
@@ -86,7 +86,8 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 					input.setExpired();
 					return true;
 				}
-				return false;
+				input.onUpdate();
+				return !input.isAlive();
 			}
 		});
 	}
@@ -119,7 +120,6 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 
 	public void addSystem(@Nonnull final ParticleSystem system) {
 		this.systems.put(system.getPos(), system);
-		ParticleHelper.addParticle(system);
 	}
 
 }

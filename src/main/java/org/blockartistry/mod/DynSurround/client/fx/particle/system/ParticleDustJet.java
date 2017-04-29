@@ -46,8 +46,8 @@ public class ParticleDustJet extends ParticleJet {
 
 	@Override
 	protected void spawnJetParticle() {
-		final double x = this.posX + this.rand.nextGaussian() * 0.2D;
-		final double z = this.posZ + this.rand.nextGaussian() * 0.2D;
+		final double x = this.posX + RANDOM.nextGaussian() * 0.2D;
+		final double z = this.posZ + RANDOM.nextGaussian() * 0.2D;
 		final Particle particle = new ParticleDust(this.world, x, this.posY, z, this.blockState).init();
 		addParticle(particle);
 	}

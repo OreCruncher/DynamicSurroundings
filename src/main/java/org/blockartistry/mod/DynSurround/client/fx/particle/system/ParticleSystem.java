@@ -25,28 +25,27 @@
 package org.blockartistry.mod.DynSurround.client.fx.particle.system;
 
 import java.util.LinkedHashSet;
+import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleBase;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleMoteAdapter;
 import org.blockartistry.mod.DynSurround.client.fx.particle.mote.IParticleMote;
+import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public abstract class ParticleSystem extends ParticleBase {
+public abstract class ParticleSystem {
 
 	protected static final Predicate<IParticleMote> REMOVE_CRITERIA = new Predicate<IParticleMote>() {
 		@Override
@@ -55,24 +54,24 @@ public abstract class ParticleSystem extends ParticleBase {
 		}
 	};
 
-	protected final int fxLayer;
-	protected final BlockPos position;
+	protected static final Random RANDOM = XorShiftRandom.current();
 
+	protected final World world;
+	protected final double posX;
+	protected final double posY;
+	protected final double posZ;
+	protected final BlockPos position;
 	protected final LinkedHashSet<IParticleMote> myParticles = new LinkedHashSet<IParticleMote>();
 	protected int particleLimit;
+	protected boolean isAlive = true;
 
 	protected ParticleSystem(final World worldIn, final double posXIn, final double posYIn, final double posZIn) {
-		this(0, worldIn, posXIn, posYIn, posZIn);
-
-		setParticleLimit(6);
-	}
-
-	protected ParticleSystem(final int renderPass, final World worldIn, final double posXIn, final double posYIn,
-			final double posZIn) {
-		super(worldIn, posXIn, posYIn, posZIn);
-
-		this.fxLayer = renderPass;
-		this.position = new BlockPos(this.posX, this.posY, this.posZ);
+		this.world = worldIn;
+		this.posX = posXIn;
+		this.posY = posYIn;
+		this.posZ = posZIn;
+		this.position = new BlockPos(posXIn, posYIn, posZIn);
+		this.setParticleLimit(6);
 	}
 
 	@Nonnull
@@ -95,24 +94,29 @@ public abstract class ParticleSystem extends ParticleBase {
 		return setting == 0 ? this.particleLimit : this.particleLimit / 2;
 	}
 
+	// Adds a particle to the internal tracking list as well as
+	// adds it to the Minecraft particle manager.
 	public void addParticle(final Particle particle) {
-		this.addParticle(new ParticleMoteAdapter(particle));
-	}
-	
-	public void addParticle(final IParticleMote particle) {
-		if (particle.getFXLayer() != this.getFXLayer()) {
-			throw new RuntimeException("Invalid particle for fx layer!");
-		} else if (this.myParticles.size() < getParticleLimit()) {
-			this.myParticles.add(particle);
+		if (this.myParticles.size() < getParticleLimit()) {
+			ParticleHelper.addParticle(particle);
+			this.addParticle(new ParticleMoteAdapter(particle));
 		}
 	}
 
-	@Override
-	public void renderParticle(final VertexBuffer buffer, final Entity entityIn, final float partialTicks,
-			final float rotX, final float rotZ, final float rotYZ, final float rotXY, final float rotXZ) {
-		for (final IParticleMote p : this.myParticles)
-			if(p.isAlive())
-				p.renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
+	// This assumes that the caller has queued the mote to the
+	// appropriate collection.
+	public void addParticle(final IParticleMote particle) {
+		if (this.myParticles.size() < getParticleLimit())
+			this.myParticles.add(particle);
+	}
+
+	public boolean isAlive() {
+		return this.isAlive;
+	}
+	
+	public void setExpired() {
+		this.isAlive = false;
+		this.cleanUp();
 	}
 
 	/**
@@ -124,59 +128,41 @@ public abstract class ParticleSystem extends ParticleBase {
 		return false;
 	}
 
-	/**
-	 * Indicates whether to transfer the particle list over to the regular
-	 * minecraft particle manager when the system dies. Useful for things like
-	 * fire jets where the flames need to die out naturally.
-	 */
-	public boolean moveParticlesOnDeath() {
-		return true;
-	}
-
-	protected void moveParticles() {
-		if (!moveParticlesOnDeath())
-			return;
-
-		for (final IParticleMote p : this.myParticles)
-			if (p.isAlive() && p.moveParticleOnExpire())
-				ParticleHelper.addParticle(p.getParticle());
-	}
-
 	/*
 	 * Perform any cleanup activities prior to dying.
 	 */
 	protected void cleanUp() {
 		this.myParticles.clear();
 	}
-	
-	@Override
+
+	/*
+	 * Update the state of the particle system. Any particles are queued into
+	 * the Minecraft particle system or to a ParticleCollection so they do not
+	 * have to be ticked.
+	 */
 	public void onUpdate() {
 		// Let the system mull over what it wants to do
 		this.think();
 
 		if (this.shouldDie()) {
-			this.moveParticles();
-			this.setExpired();
+			this.isAlive = false;
 			this.cleanUp();
 		}
 
 		if (!this.isAlive())
 			return;
 
-		// Iterate through the list doing updates
-		for (final IParticleMote p : this.myParticles)
-			p.onUpdate();
-
 		// Remove the dead ones
 		Iterables.removeIf(this.myParticles, REMOVE_CRITERIA);
-		
+
+		// Update any sounds
 		this.soundUpdate();
 	}
-	
-	// Override to provide sound for the particle effect.  Will be invoked
+
+	// Override to provide sound for the particle effect. Will be invoked
 	// whenever the particle system is updated by the particle manager.
 	protected void soundUpdate() {
-		
+
 	}
 
 	// Override to provide some sort of intelligence to the system. The
@@ -184,10 +170,5 @@ public abstract class ParticleSystem extends ParticleBase {
 	// positions, etc. Will be invoked during the systems onUpdate()
 	// call.
 	public abstract void think();
-
-	@Override
-	public int getFXLayer() {
-		return this.fxLayer;
-	}
 
 }

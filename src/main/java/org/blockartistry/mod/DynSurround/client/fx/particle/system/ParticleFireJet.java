@@ -47,7 +47,7 @@ public class ParticleFireJet extends ParticleJet {
 
 	public ParticleFireJet(final int strength, final World world, final double x, final double y, final double z) {
 		super(strength, world, x, y, z);
-		this.isLava = this.rand.nextInt(3) == 0;
+		this.isLava = RANDOM.nextInt(3) == 0;
 
 		this.particleId = this.isLava ? EnumParticleTypes.LAVA.getParticleID()
 				: EnumParticleTypes.FLAME.getParticleID();

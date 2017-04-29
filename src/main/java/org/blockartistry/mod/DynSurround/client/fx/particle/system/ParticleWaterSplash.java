@@ -31,10 +31,6 @@ import org.blockartistry.mod.DynSurround.client.sound.PositionedEmitter;
 import org.blockartistry.mod.DynSurround.client.sound.Sounds;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
-import com.google.common.collect.Iterables;
-
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -56,19 +52,8 @@ public class ParticleWaterSplash extends ParticleJet {
 		return !WaterSplashJetEffect.isValidSpawnBlock(this.world, this.getPos());
 	}
 
-	@Override
-	public void renderParticle(VertexBuffer buffer, Entity entityIn, float partialTicks, float rotationX,
-			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		// It's all being delegated to the WaterSprayCollection
-	}
-
-	@Override
-	public int getFXLayer() {
-		return 3;
-	}
-
 	private boolean setupSound() {
-		return this.emitter == null && this.rand.nextInt(4) == 0;
+		return this.emitter == null && RANDOM.nextInt(4) == 0;
 	}
 
 	@Override
@@ -77,7 +62,7 @@ public class ParticleWaterSplash extends ParticleJet {
 			pos.setPos(this.posX, this.posY, this.posZ);
 			this.emitter = new PositionedEmitter(Sounds.WATERFALL, pos);
 			final float volume = this.jetStrength / 10.0F;
-			final float pitch = 1.0F - 0.7F * (volume / 3.0F) + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
+			final float pitch = 1.0F - 0.7F * (volume / 3.0F) + (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F;
 			this.emitter.setVolume(volume);
 			this.emitter.setPitch(pitch);
 		}
@@ -85,32 +70,13 @@ public class ParticleWaterSplash extends ParticleJet {
 		if (this.emitter != null)
 			this.emitter.update();
 	}
-	
+
 	@Override
 	protected void cleanUp() {
-		if(this.emitter != null)
+		if (this.emitter != null)
 			this.emitter.stop();
 		this.emitter = null;
 		super.cleanUp();
-	}
-
-	@Override
-	public void onUpdate() {
-		// Let the system mull over what it wants to do
-		this.think();
-
-		if (this.shouldDie()) {
-			this.setExpired();
-			this.cleanUp();
-		}
-
-		if (!this.isAlive())
-			return;
-
-		// Remove the dead ones
-		Iterables.removeIf(this.myParticles, REMOVE_CRITERIA);
-		
-		this.soundUpdate();
 	}
 
 	// Entity.resetHeight()
@@ -120,13 +86,13 @@ public class ParticleWaterSplash extends ParticleJet {
 		final int splashCount = Math.min(this.getParticleLimit() - getCurrentParticleCount(), 30);
 
 		for (int j = 0; (float) j < splashCount; ++j) {
-			final double xOffset = (this.rand.nextDouble() * 2.0F - 1.0F);
-			final double zOffset = (this.rand.nextDouble() * 2.0F - 1.0F);
+			final double xOffset = (RANDOM.nextDouble() * 2.0F - 1.0F);
+			final double zOffset = (RANDOM.nextDouble() * 2.0F - 1.0F);
 			if (WorldUtils.isSolidBlock(this.world, pos.setPos(this.posX + xOffset, this.posY, this.posZ + zOffset)))
 				continue;
 
 			final double motionX = xOffset * (this.jetStrength / 40.0D);
-			final double motionY = 0.1D + this.rand.nextDouble() * this.jetStrength / 20.0D;
+			final double motionY = 0.1D + RANDOM.nextDouble() * this.jetStrength / 20.0D;
 			final double motionZ = zOffset * (this.jetStrength / 40.D);
 			final IParticleMote particle = ParticleCollections.addWaterSpray(this.world, this.posX + xOffset,
 					(double) (this.posY), this.posZ + zOffset, motionX, motionY, motionZ);
