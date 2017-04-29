@@ -31,7 +31,6 @@ import javax.annotation.Nonnull;
 import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -105,21 +104,6 @@ public abstract class MoteBase implements IParticleMote {
 		final int combinedLight = this.getBrightnessForRender(0);
 		this.slX16 = combinedLight >> 16 & 65535;
 		this.blX16 = combinedLight & 65535;
-	}
-
-	@Override
-	public boolean moveParticleOnExpire() {
-		return false;
-	}
-
-	@Override
-	public Particle getParticle() {
-		throw new RuntimeException("Cannot move a mote!");
-	}
-
-	@Override
-	public int getFXLayer() {
-		return 3;
 	}
 
 	protected final double interpX() {

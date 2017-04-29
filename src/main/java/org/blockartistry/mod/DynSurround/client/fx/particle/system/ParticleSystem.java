@@ -24,7 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle.system;
 
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -36,9 +36,11 @@ import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -49,19 +51,20 @@ public abstract class ParticleSystem {
 
 	protected static final Predicate<IParticleMote> REMOVE_CRITERIA = new Predicate<IParticleMote>() {
 		@Override
-		public boolean apply(final IParticleMote input) {
+		public boolean apply(@Nonnull final IParticleMote input) {
 			return !input.isAlive();
 		}
 	};
 
 	protected static final Random RANDOM = XorShiftRandom.current();
+	protected static final GameSettings SETTINGS = Minecraft.getMinecraft().gameSettings;
 
 	protected final World world;
 	protected final double posX;
 	protected final double posY;
 	protected final double posZ;
 	protected final BlockPos position;
-	protected final LinkedHashSet<IParticleMote> myParticles = new LinkedHashSet<IParticleMote>();
+	protected final LinkedList<IParticleMote> myParticles = Lists.newLinkedList();
 	protected int particleLimit;
 	protected boolean isAlive = true;
 
@@ -88,38 +91,50 @@ public abstract class ParticleSystem {
 	}
 
 	public int getParticleLimit() {
-		final int setting = Minecraft.getMinecraft().gameSettings.particleSetting;
-		if (setting == 2)
+		switch (SETTINGS.particleSetting) {
+		case 2:
 			return 0;
-		return setting == 0 ? this.particleLimit : this.particleLimit / 2;
-	}
-
-	// Adds a particle to the internal tracking list as well as
-	// adds it to the Minecraft particle manager.
-	public void addParticle(final Particle particle) {
-		if (this.myParticles.size() < getParticleLimit()) {
-			ParticleHelper.addParticle(particle);
-			this.addParticle(new ParticleMoteAdapter(particle));
+		case 0:
+			return this.particleLimit;
+		default:
+			return this.particleLimit / 2;
 		}
 	}
 
-	// This assumes that the caller has queued the mote to the
-	// appropriate collection.
-	public void addParticle(final IParticleMote particle) {
-		if (this.myParticles.size() < getParticleLimit())
+	public boolean hasSpace() {
+		return getCurrentParticleCount() < getParticleLimit();
+	}
+
+	/*
+	 * Adds a particle to the internal tracking list as well as adds it to the
+	 * Minecraft particle manager.
+	 */
+	public void addParticle(@Nonnull final Particle particle) {
+		if (hasSpace()) {
+			this.myParticles.add(new ParticleMoteAdapter(particle));
+			ParticleHelper.addParticle(particle);
+		}
+	}
+
+	/*
+	 * This assumes that the caller has queued the mote to the appropriate
+	 * collection.
+	 */
+	public void addParticle(@Nonnull final IParticleMote particle) {
+		if (hasSpace())
 			this.myParticles.add(particle);
 	}
 
 	public boolean isAlive() {
 		return this.isAlive;
 	}
-	
+
 	public void setExpired() {
 		this.isAlive = false;
 		this.cleanUp();
 	}
 
-	/**
+	/*
 	 * By default a system will stay alive indefinitely until the
 	 * ParticleSystemManager kills it. Override to provide termination
 	 * capability.
@@ -149,26 +164,28 @@ public abstract class ParticleSystem {
 			this.cleanUp();
 		}
 
-		if (!this.isAlive())
-			return;
+		if (this.isAlive()) {
+			// Remove the dead ones
+			Iterables.removeIf(this.myParticles, REMOVE_CRITERIA);
 
-		// Remove the dead ones
-		Iterables.removeIf(this.myParticles, REMOVE_CRITERIA);
-
-		// Update any sounds
-		this.soundUpdate();
+			// Update any sounds
+			this.soundUpdate();
+		}
 	}
 
-	// Override to provide sound for the particle effect. Will be invoked
-	// whenever the particle system is updated by the particle manager.
+	/*
+	 * Override to provide sound for the particle effect. Will be invoked
+	 * whenever the particle system is updated by the particle manager.
+	 */
 	protected void soundUpdate() {
 
 	}
 
-	// Override to provide some sort of intelligence to the system. The
-	// logic can do things like add new particles, remove old ones, update
-	// positions, etc. Will be invoked during the systems onUpdate()
-	// call.
+	/*
+	 * Override to provide some sort of intelligence to the system. The logic
+	 * can do things like add new particles, remove old ones, update positions,
+	 * etc. Will be invoked during the systems onUpdate() call.
+	 */
 	public abstract void think();
 
 }

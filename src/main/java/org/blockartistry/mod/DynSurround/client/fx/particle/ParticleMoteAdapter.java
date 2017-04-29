@@ -58,21 +58,6 @@ public final class ParticleMoteAdapter implements IParticleMote {
 	}
 
 	@Override
-	public boolean moveParticleOnExpire() {
-		return true;
-	}
-	
-	@Override
-	public Particle getParticle() {
-		return this.particle;
-	}
-
-	@Override
-	public int getFXLayer() {
-		return this.particle.getFXLayer();
-	}
-
-	@Override
 	public void renderParticle(VertexBuffer buffer, Entity entityIn, float partialTicks, float rotX, float rotZ,
 			float rotYZ, float rotXY, float rotXZ) {
 		this.particle.renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
