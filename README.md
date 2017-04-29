@@ -178,3 +178,14 @@ whether LPs can be monetized on the various streaming services.
      <li>S: <a href="https://www.freesound.org/people/DrMinky/sounds/166187/">Creepy Dungeon Ambience</a> by <a href="https://www.freesound.org/people/DrMinky/">DrMinky</a> | License: Attribution</li> 
 </ul>
 
+*dsurround:crow*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/conleec/sounds/173866/">ANML_M_Ext_Crow_Calls_Single1.wav</a> by <a href="https://www.freesound.org/people/conleec/">conleec</a> | License: Creative Commons 0</li> 
+</ul>
+
+*dsurround:bog*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/RHumphries/sounds/1050/">rbh Mpls Bog birds.wav</a> by <a href="https://www.freesound.org/people/RHumphries/">RHumphries</a> | License: Attribution</li> 
+</ul>
