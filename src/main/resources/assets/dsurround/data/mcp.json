@@ -96,7 +96,8 @@
 					"sound": "dsurround:crow",
 					"conditions": "weather.isNotRaining && isDay",
 					"soundType": "spot"
-				},				{
+				},
+				{
 					"sound": "dsurround:crickets",
 					"conditions": "weather.isNotRaining && isNight"
 				},
@@ -127,7 +128,7 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(?!.*cold.*|.*snow.*)(.*taiga.*)",
+			"biomeName": "(?i)(?!.*cold.*|.*snow.*)(.*taiga.*|.*meneglin.*)",
 			"sounds": [
 				{
 					"sound": "dsurround:forest",
@@ -136,7 +137,7 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(.*taiga.*|.*snow.*forest.*)",
+			"biomeName": "(?i)(.*taiga.*|.*meneglin.*|.*snow.*forest.*)",
 			"sounds": [
 				{
 					"sound": "dsurround:owl",
@@ -306,7 +307,7 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(.*taiga.*|.*frozen.*|.*ice.*|.*tundra.*|.*polar.*|.*snow.*|.*glacier.*|.*arctic.*)",
+			"biomeName": "(?i)(.*taiga.*|.*meneglin.*|.*frozen.*|.*ice.*|.*tundra.*|.*polar.*|.*snow.*|.*glacier.*|.*arctic.*)",
 			"aurora": true
 		},
 		{
