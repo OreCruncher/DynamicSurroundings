@@ -32,6 +32,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.JsonUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.mod.DynSurround.data.xface.BlockConfig;
@@ -44,7 +45,6 @@ import org.blockartistry.mod.DynSurround.registry.FootstepsRegistry;
 import org.blockartistry.mod.DynSurround.registry.ItemRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.mod.DynSurround.util.JsonUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;

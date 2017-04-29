@@ -33,6 +33,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.lib.MCHelper;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
@@ -50,7 +51,6 @@ import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundType;
 import org.blockartistry.mod.DynSurround.registry.BlockInfo.BlockInfoMutable;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;

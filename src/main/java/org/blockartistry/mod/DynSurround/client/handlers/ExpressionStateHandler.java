@@ -31,17 +31,17 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.DiurnalUtils;
+import org.blockartistry.lib.script.BooleanValue;
+import org.blockartistry.lib.script.Expression;
+import org.blockartistry.lib.script.NumberValue;
+import org.blockartistry.lib.script.StringValue;
+import org.blockartistry.lib.script.Variant;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.swing.DiagnosticPanel;
 import org.blockartistry.mod.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.mod.DynSurround.registry.TemperatureRating;
-import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
-import org.blockartistry.mod.DynSurround.util.script.BooleanValue;
-import org.blockartistry.mod.DynSurround.util.script.Expression;
-import org.blockartistry.mod.DynSurround.util.script.NumberValue;
-import org.blockartistry.mod.DynSurround.util.script.StringValue;
-import org.blockartistry.mod.DynSurround.util.script.Variant;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityBoat;

@@ -27,6 +27,8 @@ package org.blockartistry.mod.DynSurround.client.weather;
 import java.util.Random;
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.Color;
+import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
@@ -34,8 +36,6 @@ import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SeasonRegistry;
-import org.blockartistry.mod.DynSurround.util.Color;
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;

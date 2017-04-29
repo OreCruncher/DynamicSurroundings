@@ -28,9 +28,9 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.Color;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.Color;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.base.Function;

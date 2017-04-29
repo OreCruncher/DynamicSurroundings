@@ -29,9 +29,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.lib.script.Expression;
+import org.blockartistry.lib.script.Variant;
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.util.script.Expression;
-import org.blockartistry.mod.DynSurround.util.script.Variant;
 
 public final class Evaluator {
 

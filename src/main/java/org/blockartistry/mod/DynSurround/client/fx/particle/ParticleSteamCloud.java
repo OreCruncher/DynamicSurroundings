@@ -24,7 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
+import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraft.client.particle.ParticleCloud;
 import net.minecraft.world.World;

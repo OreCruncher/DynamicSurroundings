@@ -28,9 +28,9 @@ import java.util.concurrent.Callable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.lib.BlockStateProvider;
+import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.BlockStateProvider;
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;

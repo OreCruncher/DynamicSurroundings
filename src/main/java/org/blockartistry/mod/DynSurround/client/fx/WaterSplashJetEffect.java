@@ -28,10 +28,10 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.mod.DynSurround.client.fx.particle.system.ParticleJet;
 import org.blockartistry.mod.DynSurround.client.fx.particle.system.ParticleWaterSplash;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.block.BlockDynamicLiquid;
 import net.minecraft.block.BlockLiquid;

@@ -26,7 +26,7 @@ package org.blockartistry.mod.DynSurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
+import org.blockartistry.lib.WorldUtils;
 
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;

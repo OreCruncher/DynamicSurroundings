@@ -34,12 +34,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.lib.Translations;
+import org.blockartistry.lib.WeightTable;
+import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.network.Network;
-import org.blockartistry.mod.DynSurround.util.Translations;
-import org.blockartistry.mod.DynSurround.util.WeightTable;
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import com.google.common.base.Predicate;
 

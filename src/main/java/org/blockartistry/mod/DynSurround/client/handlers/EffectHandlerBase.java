@@ -28,12 +28,12 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;

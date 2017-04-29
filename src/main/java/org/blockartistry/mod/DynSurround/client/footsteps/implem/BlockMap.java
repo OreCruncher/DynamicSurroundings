@@ -36,13 +36,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.lib.MCHelper;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.facade.FacadeHelper;
 import org.blockartistry.mod.DynSurround.registry.BlockInfo;
-import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import com.google.common.collect.ImmutableMap;
 

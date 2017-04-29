@@ -27,8 +27,8 @@ package org.blockartistry.mod.DynSurround;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.mod.DynSurround.util.ForgeUtils;
-import org.blockartistry.mod.DynSurround.util.Localization;
+import org.blockartistry.lib.ForgeUtils;
+import org.blockartistry.lib.Localization;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.ITextComponent;

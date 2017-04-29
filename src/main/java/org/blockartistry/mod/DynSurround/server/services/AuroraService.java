@@ -29,6 +29,8 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.DiurnalUtils;
+import org.blockartistry.lib.PlayerUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
@@ -39,8 +41,6 @@ import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
-import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 
 import com.google.common.base.Predicates;
 

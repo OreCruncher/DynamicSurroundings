@@ -25,6 +25,9 @@
 package org.blockartistry.mod.DynSurround.client.handlers.scanners;
 
 import javax.annotation.Nonnull;
+
+import org.blockartistry.lib.Color;
+import org.blockartistry.lib.MathStuff;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.AreaSurveyHandler;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -34,8 +37,6 @@ import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.mod.DynSurround.util.Color;
-import org.blockartistry.mod.DynSurround.util.MathStuff;
 
 import com.google.common.base.Objects;
 

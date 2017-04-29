@@ -28,8 +28,8 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.EventType;
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;

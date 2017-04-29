@@ -26,12 +26,12 @@ package org.blockartistry.mod.DynSurround.client.keyboard;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.Localization;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.gui.VolumeControlGui;
 import org.blockartistry.mod.DynSurround.client.hud.LightLevelHUD;
 import org.blockartistry.mod.DynSurround.client.hud.LightLevelHUD.Mode;
-import org.blockartistry.mod.DynSurround.util.Localization;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;

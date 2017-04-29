@@ -34,11 +34,11 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.Color;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.mod.DynSurround.util.Color;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)

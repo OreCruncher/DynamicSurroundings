@@ -28,12 +28,12 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.BlockPosHelper;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.mod.DynSurround.api.events.BlockEffectEvent;
 import org.blockartistry.mod.DynSurround.client.fx.particle.system.ParticleSystem;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.BlockPosHelper;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;

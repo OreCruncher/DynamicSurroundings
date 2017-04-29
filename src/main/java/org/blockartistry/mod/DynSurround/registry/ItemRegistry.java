@@ -30,11 +30,11 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.MCHelper;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.Sounds;
 import org.blockartistry.mod.DynSurround.data.xface.ItemConfig;
-import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import gnu.trove.set.hash.THashSet;
 import net.minecraft.item.Item;
