@@ -1,6 +1,10 @@
 ### Dynamic Surroundings
 Forge 1.11.x mod that improves the audio and visual experience of Minecraft.  Same feature set as the 1.10.x version.
 
+<a href="https://minecraft.curseforge.com/projects/dynamic-surroundings"><img src="http://cf.way2muchnoise.eu/versions/dynamic-surroundings.svg" alt="CurseForge Project"/></a>
+</br></br>
+<a href="https://minecraft.curseforge.com/projects/dynamic-surroundings"><img src="http://cf.way2muchnoise.eu/full_dynamic-surroundings_downloads.svg" alt="CurseForge Project"/></a>
+
 ### License
 The MIT License (MIT)
 
