@@ -26,8 +26,7 @@ package org.blockartistry.DynSurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModLog;
-
+import org.blockartistry.DynSurround.DSurround;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -56,7 +55,7 @@ public class ParticleEntity extends ParticleAsset {
 		this.prototype = EntityList.createEntityByIDFromName(entity, world);
 		if(this.prototype == null) {
 			this.normalScale = 0;
-			ModLog.warn("Entity missing? [%s]", entity.toString());
+			DSurround.log().warn("Entity missing? [%s]", entity.toString());
 			return;
 		}
 		

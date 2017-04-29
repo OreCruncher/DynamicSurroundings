@@ -27,12 +27,11 @@ package org.blockartistry.DynSurround.client.handlers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.event.RegistryEvent;
 import org.blockartistry.DynSurround.client.gui.ConfigSound;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
@@ -71,10 +70,10 @@ public class SoundCullHandler extends EffectHandlerBase {
 		for (final Object resource : handler.soundRegistry.getKeys()) {
 			final String rs = resource.toString();
 			if (getSoundRegistry().isSoundBlocked(rs)) {
-				ModLog.debug("Blocking sound '%s'", rs);
+				DSurround.log().debug("Blocking sound '%s'", rs);
 				this.soundsToBlock.add(rs);
 			} else if (getSoundRegistry().isSoundCulled(rs)) {
-				ModLog.debug("Culling sound '%s'", rs);
+				DSurround.log().debug("Culling sound '%s'", rs);
 				this.soundCull.put(rs, -ModOptions.soundCullingThreshold);
 			}
 		}

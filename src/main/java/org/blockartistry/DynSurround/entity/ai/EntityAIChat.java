@@ -34,7 +34,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.lib.Translations;
@@ -89,10 +89,10 @@ public class EntityAIChat extends EntityAIBase {
 					final String weight = matcher2.group(1);
 					data.table.add(input.getKey(), Integer.parseInt(weight));
 				} else {
-					ModLog.warn("Invalid value in language file: %s", input.getValue());
+					DSurround.log().warn("Invalid value in language file: %s", input.getValue());
 				}
 			} else {
-				ModLog.warn("Invalid key in language file: %s", input.getKey());
+				DSurround.log().warn("Invalid key in language file: %s", input.getKey());
 			}
 
 			return true;
@@ -108,7 +108,7 @@ public class EntityAIChat extends EntityAIBase {
 			name = EntityList.getTranslationName(key);
 		}
 		if(name == null) {
-			ModLog.debug("Can't find entity name for class [%s]", entityClass.getName());
+			DSurround.log().debug("Can't find entity name for class [%s]", entityClass.getName());
 			return "EntityHasNoClass";
 		}
 		return name.toLowerCase();

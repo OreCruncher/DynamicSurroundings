@@ -36,8 +36,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.util.Random;
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModEnvironment;
-import org.blockartistry.DynSurround.ModLog;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.data.DimensionEffectData;
 import org.blockartistry.DynSurround.network.Network;
@@ -132,7 +132,7 @@ public final class AtmosphereService extends Service {
 			if (data.getRainIntensity() == 0.0F) {
 				data.randomizeRain();
 				info.setRainTime(nextRainInterval(true));
-				ModLog.debug("dim %d rain intensity set to %f, duration %d ticks", data.getDimensionId(),
+				DSurround.log().debug("dim %d rain intensity set to %f, duration %d ticks", data.getDimensionId(),
 						data.getRainIntensity(), info.getRainTime());
 			}
 			data.setCurrentRainIntensity(world.getRainStrength(1.0F));
@@ -150,7 +150,7 @@ public final class AtmosphereService extends Service {
 				data.setRainIntensity(0);
 				data.setCurrentRainIntensity(0);
 				info.setRainTime(nextRainInterval(false));
-				ModLog.debug("dim %d rain has stopped, next rain %d ticks", data.getDimensionId(),
+				DSurround.log().debug("dim %d rain has stopped, next rain %d ticks", data.getDimensionId(),
 						world.getWorldInfo().getRainTime());
 			} else if (data.getRainIntensity() > 0) {
 				data.setRainIntensity(0);

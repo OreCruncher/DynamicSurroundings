@@ -32,11 +32,10 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.api.entity.ActionState;
 import org.blockartistry.DynSurround.api.entity.EmojiType;
 import org.blockartistry.DynSurround.api.entity.EmotionalState;
-
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
@@ -186,7 +185,7 @@ public final class EmojiDataTables {
 		if (ai != null)
 			actions.put(ai, state);
 		else
-			ModLog.warn("Unable to locate class '%s' inside [%s]", className, clazz.toGenericString());
+			DSurround.log().warn("Unable to locate class '%s' inside [%s]", className, clazz.toGenericString());
 	}
 
 	@SuppressWarnings({ "unchecked" })

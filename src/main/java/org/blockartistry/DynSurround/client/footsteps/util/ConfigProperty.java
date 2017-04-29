@@ -28,9 +28,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.lib.JsonUtils;
-
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -125,7 +124,7 @@ public class ConfigProperty {
 		try {
 			properties.properties = JsonUtils.load(stream, properties.properties.getClass());
 		} catch(final Throwable t) {
-			ModLog.error("Unable to load properties", t);
+			DSurround.log().error("Unable to load properties", t);
 		}
 		return true;
 	}

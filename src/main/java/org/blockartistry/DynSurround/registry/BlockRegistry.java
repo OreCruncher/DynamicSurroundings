@@ -33,7 +33,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.DynSurround.client.fx.BubbleJetEffect;
@@ -51,7 +51,6 @@ import org.blockartistry.DynSurround.data.xface.SoundType;
 import org.blockartistry.DynSurround.registry.BlockInfo.BlockInfoMutable;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.MCHelper;
-
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -79,18 +78,18 @@ public final class BlockRegistry extends Registry {
 	public void initComplete() {
 
 		if (ModOptions.enableDebugLogging) {
-			ModLog.info("*** BLOCK REGISTRY ***");
+			DSurround.log().info("*** BLOCK REGISTRY ***");
 			for (final BlockProfile entry : this.registry.values())
-				ModLog.info(entry.toString());
+				DSurround.log().info(entry.toString());
 
-			ModLog.info("**** FORGE ORE DICTIONARY NAMES ****");
+			DSurround.log().info("**** FORGE ORE DICTIONARY NAMES ****");
 			for (final String oreName : OreDictionary.getOreNames())
-				ModLog.info(oreName);
+				DSurround.log().info(oreName);
 
-			ModLog.info("**** BLOCKS REGISTERED WITH FORGE ****");
+			DSurround.log().info("**** BLOCKS REGISTERED WITH FORGE ****");
 			final Iterator<Block> itr = Block.REGISTRY.iterator();
 			while (itr.hasNext())
-				ModLog.info(MCHelper.nameOf(itr.next()));
+				DSurround.log().info(MCHelper.nameOf(itr.next()));
 		}
 
 		this.registry = ImmutableMap.copyOf(this.registry);
@@ -181,13 +180,13 @@ public final class BlockRegistry extends Registry {
 		for (final String blockName : entry.blocks) {
 			final BlockInfo blockInfo = BlockInfo.create(blockName);
 			if (blockInfo == null) {
-				ModLog.warn("Unknown block [%s] in block config file", blockName);
+				DSurround.log().warn("Unknown block [%s] in block config file", blockName);
 				continue;
 			}
 
 			final BlockProfile blockData = getOrCreateProfile(blockInfo);
 			if (blockData == null) {
-				ModLog.warn("Unknown block [%s] in block config file", blockName);
+				DSurround.log().warn("Unknown block [%s] in block config file", blockName);
 				continue;
 			}
 
@@ -244,7 +243,7 @@ public final class BlockRegistry extends Registry {
 					if (ModOptions.enableWaterSplash)
 						blockEffect = new WaterSplashJetEffect(chance);
 				} else {
-					ModLog.warn("Unknown effect type in config: '%s'", e.effect);
+					DSurround.log().warn("Unknown effect type in config: '%s'", e.effect);
 					continue;
 				}
 

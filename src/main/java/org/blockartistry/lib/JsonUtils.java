@@ -33,8 +33,7 @@ import java.io.Reader;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.ModLog;
-
+import org.blockartistry.DynSurround.DSurround;
 import com.google.gson.Gson;
 
 public final class JsonUtils {
@@ -68,7 +67,7 @@ public final class JsonUtils {
 		try {
 			return new Gson().fromJson(stream, clazz);
 		} catch (final Throwable t) {
-			ModLog.error("Unable to process Json from stream", t);;
+			DSurround.log().error("Unable to process Json from stream", t);;
 		}
 		return (T) clazz.newInstance();
 	}
@@ -78,7 +77,7 @@ public final class JsonUtils {
 		try (final InputStreamReader reader = new InputStreamReader(stream)) {
 			return new Gson().fromJson(reader, clazz);
 		} catch (final Throwable t) {
-			ModLog.error("Unable to process Json from stream", t);;
+			DSurround.log().error("Unable to process Json from stream", t);;
 		}
 		return (T) clazz.newInstance();
 	}

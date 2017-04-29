@@ -29,7 +29,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.lib.script.Expression;
 import org.blockartistry.lib.script.Variant;
 
@@ -67,7 +67,7 @@ public final class Evaluator {
 			naughtyList.add(expression);
 			exp = new Expression("'" + t.getMessage() + "'");
 			cache.put(expression, exp);
-			ModLog.warn("Unable to compile [%s]: %s", expression, t.getMessage());
+			DSurround.log().warn("Unable to compile [%s]: %s", expression, t.getMessage());
 		}
 		return exp;
 	}

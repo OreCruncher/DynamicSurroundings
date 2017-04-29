@@ -29,7 +29,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.implem.ConfigOptions;
@@ -41,7 +41,6 @@ import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.WorldUtils;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -143,7 +142,7 @@ public class Solver {
 		// return null; // Don't play sounds on every tiny bounce
 
 		if (player.isInWater())
-			ModLog.debug(
+			DSurround.log().debug(
 					"WARNING!!! Playing a sound while in the water! This is supposed to be halted by the stopping conditions!!");
 
 		Association worked = findAssociationForBlock(pos);
@@ -243,7 +242,7 @@ public class Solver {
 				if (association != null) {
 					pos = tPos;
 					in = below;
-					ModLog.debug("Fence detected");
+					DSurround.log().debug("Fence detected");
 				}
 			}
 
@@ -263,13 +262,13 @@ public class Solver {
 						"foliage");
 				if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 					association = MyUtils.concatenate(association, foliage);
-					ModLog.debug("Foliage detected");
+					DSurround.log().debug("Foliage detected");
 				}
 			}
 		} else {
 			pos = tPos;
 			in = above;
-			ModLog.debug("Carpet detected");
+			DSurround.log().debug("Carpet detected");
 		}
 
 		if (association != null) {
@@ -338,11 +337,11 @@ public class Solver {
 		}
 
 		if (primitive != null) {
-			ModLog.debug("Primitive found for " + soundName + ":" + substrate);
+			DSurround.log().debug("Primitive found for %s: %s", soundName, substrate);
 			return primitive;
 		}
 
-		ModLog.debug("No primitive for " + soundName + ":" + substrate);
+		DSurround.log().debug("No primitive for %s: %s", soundName, substrate);
 		return null;
 	}
 

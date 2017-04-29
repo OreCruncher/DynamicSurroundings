@@ -30,9 +30,8 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.lib.MCHelper;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -136,7 +135,7 @@ public class BlockInfo {
 				}
 			}
 		} else {
-			ModLog.warn("Unkown block id [%s]", blockId);
+			DSurround.log().warn("Unkown block id [%s]", blockId);
 		}
 
 		final Block block = MCHelper.getBlockByName(workingName);

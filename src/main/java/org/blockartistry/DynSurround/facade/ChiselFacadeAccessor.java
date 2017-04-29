@@ -28,9 +28,8 @@ import java.lang.reflect.Method;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.facade.FacadeHelper.IFacadeAccessor;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -53,8 +52,8 @@ final class ChiselFacadeAccessor implements IFacadeAccessor {
 				method = IFacadeClass.getMethod(METHOD, IBlockAccess.class, BlockPos.class, EnumFacing.class);
 			}
 		} catch (@Nonnull final Throwable t) {
-			ModLog.warn("Unable to locate %s.%s()", CLASS, METHOD);
-			ModLog.catching(t);
+			DSurround.log().warn("Unable to locate %s.%s()", CLASS, METHOD);
+			DSurround.log().catching(t);
 		}
 	}
 
@@ -72,8 +71,8 @@ final class ChiselFacadeAccessor implements IFacadeAccessor {
 			if (IFacadeClass.isInstance(block))
 				return (IBlockState) method.invoke(block, world, pos, side);
 		} catch (@Nonnull final Exception ex) {
-			ModLog.warn("Unable to invoke %s.%s()", CLASS, METHOD);
-			ModLog.catching(ex);
+			DSurround.log().warn("Unable to invoke %s.%s()", CLASS, METHOD);
+			DSurround.log().catching(ex);
 			method = null;
 		}
 		return null;

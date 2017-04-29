@@ -34,8 +34,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.DynSurround.ModLog;
-
+import org.blockartistry.DynSurround.DSurround;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 
@@ -60,7 +59,7 @@ public class Translations {
 				if (stream != null)
 					merge(stream);
 			} catch (final Throwable t) {
-				ModLog.error("Error merging language " + assetName, t);
+				DSurround.log().error("Error merging language " + assetName, t);
 			}
 		}
 	}

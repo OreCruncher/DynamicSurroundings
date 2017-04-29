@@ -32,7 +32,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.DynSurround.data.xface.BlockConfig;
 import org.blockartistry.DynSurround.data.xface.DimensionConfig;
@@ -45,7 +45,6 @@ import org.blockartistry.DynSurround.registry.ItemRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.JsonUtils;
-
 import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
 
@@ -124,7 +123,7 @@ public final class ConfigurationScript {
 			itemRegistry.register(script.itemConfig);
 			
 		} catch (final Throwable t) {
-			ModLog.error("Unable to process configuration script", t);
+			DSurround.log().error("Unable to process configuration script", t);
 		}
 	}
 }

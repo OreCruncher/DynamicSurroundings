@@ -26,7 +26,7 @@ package org.blockartistry.DynSurround.client.sound;
 import java.util.Random;
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.lib.random.XorShiftRandom;
 
@@ -70,8 +70,7 @@ public abstract class Emitter {
 		try {
 			SoundEffectHandler.INSTANCE.playSound(this.activeSound);
 		} catch (final Throwable t) {
-			ModLog.error("Unable to play sound", t);
-			;
+			DSurround.log().error("Unable to play sound", t);
 		}
 	}
 
@@ -95,7 +94,7 @@ public abstract class Emitter {
 	
 	public void fade() {
 		if (this.activeSound != null) {
-			ModLog.debug("FADE: " + this.activeSound.toString());
+			DSurround.log().debug("FADE: " + this.activeSound.toString());
 			this.activeSound.fade();
 		}
 	}

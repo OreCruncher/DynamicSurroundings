@@ -30,7 +30,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;
@@ -108,14 +108,14 @@ public class SoundEngine {
 			return false;
 		return this.manager.playingSounds.containsKey(soundId);
 	}
-	
+
 	public void stopSound(@Nonnull final String sound, @Nonnull final SoundCategory cat) {
-		if(sound != null)
+		if (sound != null)
 			this.manager.stop(sound, cat);
 	}
-	
+
 	public void stopSound(@Nonnull final ISound sound) {
-		if(sound != null)
+		if (sound != null)
 			this.manager.stopSound(sound);
 	}
 
@@ -129,8 +129,8 @@ public class SoundEngine {
 	@Nullable
 	public String playSound(@Nonnull final ISound sound) {
 		if (!canFitSound()) {
-			if(ModOptions.enableDebugLogging)
-				ModLog.debug("> NO ROOM: [%s]", sound.toString());
+			if (ModOptions.enableDebugLogging)
+				DSurround.log().debug("> NO ROOM: [%s]", sound.toString());
 			return null;
 		}
 
@@ -141,7 +141,7 @@ public class SoundEngine {
 
 		if (ModOptions.enableDebugLogging) {
 			if (this.soundId == null) {
-				ModLog.debug("> NOT QUEUED: [%s]", sound.toString());
+				DSurround.log().debug("> NOT QUEUED: [%s]", sound.toString());
 			} else {
 				final SoundSystem ss = this.manager.sndSystem;
 				// Force a flush of all commands so we can get
@@ -150,15 +150,16 @@ public class SoundEngine {
 				ss.CommandQueue(null);
 				final float v = ss.getVolume(this.soundId);
 				final float p = ss.getPitch(this.soundId);
-				ModLog.debug("> QUEUED: [%s]; v: %f, p: %f", sound.toString(), v, p);
+				DSurround.log().debug("> QUEUED: [%s]; v: %f, p: %f", sound.toString(), v, p);
 			}
 		}
 
 		return this.soundId;
 	}
-	
+
 	@Nullable
-    public String playSound(@Nonnull final BlockPos pos, @Nonnull final SoundEvent soundIn, @Nonnull final SoundCategory category, final float volume, final float pitch) {
+	public String playSound(@Nonnull final BlockPos pos, @Nonnull final SoundEvent soundIn,
+			@Nonnull final SoundCategory category, final float volume, final float pitch) {
 		final BasicSound<?> sound = new AdhocSound(soundIn, category);
 		sound.setVolume(volume).setPitch(pitch).setPosition(pos);
 		return this.playSound(sound);
@@ -182,7 +183,7 @@ public class SoundEngine {
 	private static void alErrorCheck() {
 		final int error = AL10.alGetError();
 		if (error != AL10.AL_NO_ERROR)
-			ModLog.warn("OpenAL error: %d", error);
+			DSurround.log().warn("OpenAL error: %d", error);
 	}
 
 	private static void configureSound() {
@@ -217,18 +218,18 @@ public class SoundEngine {
 			normalChannelCount = totalChannels - streamChannelCount;
 		}
 
-		ModLog.info("Sound channels: %d normal, %d streaming (total avail: %s)", normalChannelCount, streamChannelCount,
-				totalChannels == -1 ? "UNKNOWN" : Integer.toString(totalChannels));
+		DSurround.log().info("Sound channels: %d normal, %d streaming (total avail: %s)", normalChannelCount,
+				streamChannelCount, totalChannels == -1 ? "UNKNOWN" : Integer.toString(totalChannels));
 		SoundSystemConfig.setNumberNormalChannels(normalChannelCount);
 		SoundSystemConfig.setNumberStreamingChannels(streamChannelCount);
 	}
-	
+
 	private static class AdhocSound extends BasicSound<AdhocSound> {
 
 		public AdhocSound(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
 			super(event, cat);
 		}
-		
+
 	}
 
 }

@@ -31,11 +31,10 @@ import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.DynSurround.client.footsteps.util.ConfigProperty;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -69,7 +68,7 @@ public class PrimitiveMap {
 			try {
 				register(entry.getKey(), entry.getValue());
 			} catch (final Exception e) {
-				ModLog.info("Error making registration " + entry.getKey() + ": " + e.getMessage());
+				DSurround.log().info("Error making registration %s: %s", entry.getKey(), e.getMessage());
 			}
 		}
 	}

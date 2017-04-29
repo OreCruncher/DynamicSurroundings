@@ -23,7 +23,7 @@
 
 package org.blockartistry.DynSurround.client.sound;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.lwjgl.opengl.Display;
 
@@ -49,10 +49,10 @@ public class BackgroundMute {
 
 				if (active && muted) {
 					sm.setMuted(false);
-					ModLog.info("Unmuting sounds");
+					DSurround.log().info("Unmuting sounds");
 				} else if (!active && !muted) {
 					sm.setMuted(true);
-					ModLog.info("Muting sounds");
+					DSurround.log().info("Muting sounds");
 				}
 			}
 		}

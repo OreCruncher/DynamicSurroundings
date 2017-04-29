@@ -28,10 +28,9 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.data.xface.DimensionConfig;
-
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -51,9 +50,9 @@ public final class DimensionRegistry extends Registry {
 	@Override
 	public void initComplete() {
 		if (ModOptions.enableDebugLogging) {
-			ModLog.info("*** DIMENSION REGISTRY (cache) ***");
+			DSurround.log().info("*** DIMENSION REGISTRY (cache) ***");
 			for (final DimensionConfig reg : this.cache)
-				ModLog.info(reg.toString());
+				DSurround.log().info(reg.toString());
 		}
 	}
 
@@ -120,7 +119,7 @@ public final class DimensionRegistry extends Registry {
 			}
 			
 			dimensionData.put(world.provider.getDimension(), data);
-			ModLog.info(data.toString());
+			DSurround.log().info(data.toString());
 		}
 		return data;
 	}

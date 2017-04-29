@@ -26,12 +26,11 @@ package org.blockartistry.DynSurround.registry;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModEnvironment;
-import org.blockartistry.DynSurround.ModLog;
 import org.blockartistry.DynSurround.registry.season.SeasonInfo;
 import org.blockartistry.DynSurround.registry.season.SeasonInfoNether;
 import org.blockartistry.DynSurround.registry.season.SeasonInfoToughAsNails;
-
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -40,7 +39,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public final class SeasonRegistry extends Registry {
 
 	private final TIntObjectHashMap<SeasonInfo> seasonData = new TIntObjectHashMap<SeasonInfo>();
-	
+
 	public SeasonRegistry(@Nonnull final Side side) {
 		super(side);
 	}
@@ -48,17 +47,18 @@ public final class SeasonRegistry extends Registry {
 	protected SeasonInfo factory(@Nonnull final World world) {
 
 		if (world.provider.getDimension() == -1) {
-			ModLog.info("Creating Nether SeasonInfo");
+			DSurround.log().info("Creating Nether SeasonInfo");
 			return new SeasonInfoNether(world);
 		}
 
 		if (ModEnvironment.ToughAsNails.isLoaded()) {
-			ModLog.info("Creating Tough as Nails SeasonInfo for dimension %s",
+			DSurround.log().info("Creating Tough as Nails SeasonInfo for dimension %s",
 					world.provider.getDimensionType().getName());
 			return new SeasonInfoToughAsNails(world);
 		}
 
-		ModLog.info("Creating default SeasonInfo for dimension %s", world.provider.getDimensionType().getName());
+		DSurround.log().info("Creating default SeasonInfo for dimension %s",
+				world.provider.getDimensionType().getName());
 		return new SeasonInfo(world);
 	}
 
@@ -76,17 +76,17 @@ public final class SeasonRegistry extends Registry {
 	public TemperatureRating getPlayerTemperature(@Nonnull final World world) {
 		return getData(world).getPlayerTemperature(world);
 	}
-	
+
 	@Nonnull
 	public TemperatureRating getBiomeTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getData(world).getBiomeTemperature(world, pos);
 	}
-	
+
 	@Nonnull
 	public SeasonType getSeasonType(@Nonnull final World world) {
 		return getData(world).getSeasonType(world);
 	}
-	
+
 	@Nonnull
 	public String getSeasonName(@Nonnull final World world) {
 		return getData(world).getSeasonName(world);

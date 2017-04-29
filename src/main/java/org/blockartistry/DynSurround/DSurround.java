@@ -34,6 +34,7 @@ import org.apache.logging.log4j.LogManager;
 import org.blockartistry.DynSurround.proxy.Proxy;
 import org.blockartistry.lib.ForgeUtils;
 import org.blockartistry.lib.Localization;
+import org.blockartistry.lib.logging.ModLog;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.profiler.Profiler;
@@ -85,11 +86,17 @@ public class DSurround {
 		return proxy;
 	}
 
+	protected static ModLog logger = ModLog.NULL_LOGGER;
 	protected static Configuration config;
 
 	@Nonnull
 	public static Configuration config() {
 		return config;
+	}
+	
+	@Nonnull
+	public static ModLog log() {
+		return logger;
 	}
 
 	protected static File dataDirectory;
@@ -106,7 +113,7 @@ public class DSurround {
 	}
 
 	public DSurround() {
-		ModLog.setLogger(LogManager.getLogger(MOD_ID));
+		logger = ModLog.setLogger(MOD_ID, LogManager.getLogger(MOD_ID));
 	}
 
 	@EventHandler
@@ -123,7 +130,7 @@ public class DSurround {
 		ModOptions.load(config);
 		config.save();
 
-		ModLog.DEBUGGING = ModOptions.enableDebugLogging;
+		logger.setDebug(ModOptions.enableDebugLogging);
 
 		proxy.preInit(event);
 	}
