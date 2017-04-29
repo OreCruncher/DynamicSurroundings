@@ -22,30 +22,45 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.fx.particle;
+package org.blockartistry.mod.DynSurround.client.fx.particle.system;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleBlockDust;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class ParticleDustJet extends ParticleJet {
+public class ParticleFountainJet extends ParticleJet {
 
-	protected final IBlockState blockState;
+	protected final class ParticleFountain extends ParticleBlockDust {
 
-	public ParticleDustJet(final int strength, final World world, final double x, final double y, final double z,
-			final IBlockState state) {
-		super(1, strength, world, x, y, z, 2);
-		this.blockState = state;
+		public ParticleFountain(final World world, final double x, final double y, final double z, final double dX,
+				final double dY, final double dZ, final IBlockState block) {
+			super(world, x, y, z, dX, dY, dZ, block);
+			this.multipleParticleScaleBy((float) (0.3F + this.rand.nextGaussian() / 10.0F));
+			this.setPosition(this.posX, this.posY, this.posZ);
+		}
+
+	}
+
+	protected final IBlockState block;
+
+	public ParticleFountainJet(final int strength, final World world, final double x, final double y, final double z,
+			final IBlockState block) {
+		super(1, strength, world, x, y, z, 1);
+		this.block = block;
 	}
 
 	@Override
 	protected void spawnJetParticle() {
+		final double motionX = this.rand.nextGaussian() * 0.03D;
+		final double motionZ = this.rand.nextGaussian() * 0.03D;
 		final double x = this.posX + this.rand.nextGaussian() * 0.2D;
 		final double z = this.posZ + this.rand.nextGaussian() * 0.2D;
-		final Particle particle = new ParticleDust(this.worldObj, x, this.posY, z, this.blockState).init();
+		final Particle particle = new ParticleFountain(this.worldObj, x, this.posY, z, motionX, 0.5D, motionZ,
+				this.block).init();
 		addParticle(particle);
 	}
 

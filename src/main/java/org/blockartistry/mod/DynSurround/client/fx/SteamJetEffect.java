@@ -30,8 +30,8 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleSteamJet;
+import org.blockartistry.mod.DynSurround.client.fx.particle.system.ParticleJet;
+import org.blockartistry.mod.DynSurround.client.fx.particle.system.ParticleSteamJet;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import com.google.common.collect.Sets;

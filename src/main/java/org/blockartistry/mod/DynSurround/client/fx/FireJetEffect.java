@@ -29,8 +29,8 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.api.effects.BlockEffectType;
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFireJet;
-import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleJet;
+import org.blockartistry.mod.DynSurround.client.fx.particle.system.ParticleFireJet;
+import org.blockartistry.mod.DynSurround.client.fx.particle.system.ParticleJet;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.block.state.IBlockState;

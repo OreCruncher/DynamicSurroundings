@@ -22,30 +22,33 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.fx.particle;
+package org.blockartistry.mod.DynSurround.client.fx.particle.system;
 
-import org.blockartistry.mod.DynSurround.client.fx.SteamJetEffect;
-
-import net.minecraft.client.particle.Particle;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDust;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.world.World;
+
 @SideOnly(Side.CLIENT)
-public class ParticleSteamJet extends ParticleJet {
+public class ParticleDustJet extends ParticleJet {
 
-	public ParticleSteamJet(final int strength, final World world, final double x, final double y, final double z) {
-		super(strength, world, x, y, z);
-	}
+	protected final IBlockState blockState;
 
-	@Override
-	public boolean shouldDie() {
-		return !SteamJetEffect.isValidSpawnBlock(this.worldObj, this.getPos());
+	public ParticleDustJet(final int strength, final World world, final double x, final double y, final double z,
+			final IBlockState state) {
+		super(1, strength, world, x, y, z, 2);
+		this.blockState = state;
 	}
 
 	@Override
 	protected void spawnJetParticle() {
-		final Particle particle = new ParticleSteamCloud(this.worldObj, this.posX, this.posY, this.posZ, 0.1D);
+		final double x = this.posX + this.rand.nextGaussian() * 0.2D;
+		final double z = this.posZ + this.rand.nextGaussian() * 0.2D;
+		final Particle particle = new ParticleDust(this.worldObj, x, this.posY, z, this.blockState).init();
 		addParticle(particle);
 	}
 

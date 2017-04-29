@@ -22,12 +22,15 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.fx.particle;
+package org.blockartistry.mod.DynSurround.client.fx.particle.system;
 
 import java.util.LinkedHashSet;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleBase;
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
+import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleMoteAdapter;
 import org.blockartistry.mod.DynSurround.client.fx.particle.mote.IParticleMote;
 
 import com.google.common.base.Predicate;
