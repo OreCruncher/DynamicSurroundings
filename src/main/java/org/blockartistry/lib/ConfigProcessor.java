@@ -34,7 +34,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -153,7 +153,7 @@ public final class ConfigProcessor {
 					prop.setShowInGui(field.getAnnotation(Hidden.class) == null);
 
 				} catch (final Throwable t) {
-					ModLog.error("Unable to parse configuration", t);
+					DSurround.log().error("Unable to parse configuration", t);
 				}
 			}
 		}

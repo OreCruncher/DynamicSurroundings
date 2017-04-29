@@ -29,7 +29,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.data.AuroraData;
 import org.blockartistry.DynSurround.data.AuroraPreset;
@@ -41,7 +41,6 @@ import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.DiurnalUtils;
 import org.blockartistry.lib.PlayerUtils;
-
 import com.google.common.base.Predicates;
 
 import gnu.trove.map.hash.TIntIntHashMap;
@@ -114,7 +113,7 @@ public final class AuroraService extends Service {
 							final AuroraData aurora = new AuroraData(player, -ModOptions.auroraSpawnOffset, colorSet,
 									preset);
 							if (data.addAuroraData(aurora)) {
-								ModLog.debug("Spawned new aurora: " + aurora.toString());
+								DSurround.log().debug("Spawned new aurora: %s", aurora.toString());
 							}
 						}
 					}

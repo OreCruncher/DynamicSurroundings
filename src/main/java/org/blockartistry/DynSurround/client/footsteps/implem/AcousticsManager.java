@@ -33,7 +33,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
@@ -113,7 +113,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		}
 	}
 
-	private static void logAcousticPlay(@Nonnull final IAcoustic[] acoustics, @Nonnull final EventType event) {
+	private void logAcousticPlay(@Nonnull final IAcoustic[] acoustics, @Nonnull final EventType event) {
 		final StringBuilder builder = new StringBuilder();
 		boolean doComma = false;
 		for (int i = 0; i < acoustics.length; i++) {
@@ -123,14 +123,14 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 				doComma = true;
 			builder.append(acoustics[i].getAcousticName());
 		}
-		ModLog.debug("Playing acoustic " + builder.toString() + " for event " + event.toString().toUpperCase());
+		DSurround.log().debug("Playing acoustic %s for event %s", builder.toString(), event.toString().toUpperCase());
 	}
 
 	public void playAcoustic(@Nonnull final Object location, @Nonnull final IAcoustic[] acoustics,
 			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
 
 		if (acoustics != null) {
-			if (ModLog.DEBUGGING)
+			if (DSurround.log().isDebugging())
 				logAcousticPlay(acoustics, event);
 
 			for (int i = 0; i < acoustics.length; i++) {
@@ -152,7 +152,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		for (final String fragment : fragments) {
 			final IAcoustic acoustic = this.acoustics.get(fragment);
 			if (acoustic == null) {
-				ModLog.warn("Acoustic '%s' not found!", fragment);
+				DSurround.log().warn("Acoustic '%s' not found!", fragment);
 			} else {
 				acoustics.add(acoustic);
 			}
@@ -176,7 +176,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 						soundType.getPitch());
 			}
 		} catch (final Throwable t) {
-			ModLog.error("Unable to play step sound", t);
+			DSurround.log().error("Unable to play step sound", t);
 		}
 	}
 
@@ -200,7 +200,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 				actuallyPlaySound((Entity) location, sound, volume, pitch);
 			}
 		} catch (final Throwable t) {
-			ModLog.error("Unable to play sound", t);
+			DSurround.log().error("Unable to play sound", t);
 		}
 	}
 
@@ -211,7 +211,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 			final FootstepSound s = new FootstepSound(location, sound).setVolume(volume).setPitch(pitch);
 			SoundEngine.instance().playSound(s);
 		} catch (final Throwable t) {
-			ModLog.error("Unable to play sound", t);
+			DSurround.log().error("Unable to play sound", t);
 		}
 	}
 
@@ -236,8 +236,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 			final PendingSound sound = this.pending.poll();
 			if (!sound.isLate(time)) {
 				sound.playSound(this);
-			} else if (ModLog.DEBUGGING) {
-				ModLog.debug("    Skipped late sound (late by " + sound.howLate(time) + "ms, tolerence is "
+			} else if (DSurround.log().isDebugging()) {
+				DSurround.log().debug("    Skipped late sound (late by " + sound.howLate(time) + "ms, tolerence is "
 						+ sound.getLateTolerance() + "ms)");
 			}
 

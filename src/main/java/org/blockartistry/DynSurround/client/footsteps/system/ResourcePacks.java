@@ -35,8 +35,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModLog;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.ResourcePackRepository;
@@ -54,7 +52,7 @@ public class ResourcePacks {
 	private final ResourceLocation manifest = new ResourceLocation(DSurround.RESOURCE_ID, "manifest.json");
 	private final ResourceLocation acoustics = new ResourceLocation(DSurround.RESOURCE_ID, "acoustics.json");
 	private final ResourceLocation primitivemap = new ResourceLocation(DSurround.RESOURCE_ID, "primitivemap.json");
-
+	
 	// Resource pack reference for the built in pack.
 	private static class DefaultPack implements IResourcePack {
 
@@ -130,9 +128,9 @@ public class ResourcePacks {
 
 		// Look in other resource packs for more configuration data
 		for (final ResourcePackRepository.Entry pack : repo) {
-			ModLog.debug("Resource Pack: %s", pack.getResourcePackName());
+			DSurround.log().debug("Resource Pack: %s", pack.getResourcePackName());
 			if (checkCompatible(pack)) {
-				ModLog.debug("Found FootstepsRegistry resource pack: %s", pack.getResourcePackName());
+				DSurround.log().debug("Found FootstepsRegistry resource pack: %s", pack.getResourcePackName());
 				foundEntries.add(pack.getResourcePack());
 			}
 		}

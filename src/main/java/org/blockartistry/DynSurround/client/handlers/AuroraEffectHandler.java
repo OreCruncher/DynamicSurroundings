@@ -30,7 +30,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.AuroraSpawnEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -38,7 +38,6 @@ import org.blockartistry.DynSurround.client.weather.Aurora;
 import org.blockartistry.DynSurround.client.weather.AuroraRenderer;
 import org.blockartistry.DynSurround.data.AuroraData;
 import org.blockartistry.lib.DiurnalUtils;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -92,7 +91,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		if (ad == null) {
 			current = null;
 		} else if (current == null || (current.posX != ad.posX && current.posZ != ad.posZ)) {
-			ModLog.debug("New aurora: " + ad.toString());
+			DSurround.log().debug("New aurora: %s", ad.toString());
 			current = new Aurora(ad);
 		}
 
@@ -141,7 +140,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		if (aurora != null) {
 			aurora.update();
 			if (aurora.isAlive() && DiurnalUtils.isAuroraInvisible(world)) {
-				ModLog.debug("Aurora fade...");
+				DSurround.log().debug("Aurora fade...");
 				aurora.die();
 			}
 		}

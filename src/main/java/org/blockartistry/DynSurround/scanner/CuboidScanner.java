@@ -27,7 +27,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.event.BlockUpdateEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
@@ -235,7 +235,7 @@ public abstract class CuboidScanner extends Scanner {
 					&& this.interestingBlock(event.newState))
 				blockScan(event.newState, event.pos, this.random);
 		} catch (final Throwable t) {
-			ModLog.error("onBlockUpdate() error", t);
+			DSurround.log().error("onBlockUpdate() error", t);
 		}
 	}
 

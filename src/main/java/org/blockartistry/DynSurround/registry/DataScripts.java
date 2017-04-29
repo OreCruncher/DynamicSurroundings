@@ -34,11 +34,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModLog;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.scripts.IScriptingEngine;
 import org.blockartistry.DynSurround.scripts.JsonScriptingEngine;
-
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -52,7 +50,7 @@ public final class DataScripts {
 	private String assetDirectory;
 	private IScriptingEngine exe;
 	private Side side;
-
+	
 	public DataScripts(final Side side) {
 		this(side, DSurround.dataDirectory(), "/assets/dsurround/data/");
 	}
@@ -76,7 +74,7 @@ public final class DataScripts {
 			try(final InputStreamReader reader = new InputStreamReader(stream)) {
 				runFromStream(reader);
 			} catch (final Throwable t) {
-				ModLog.error("Unable to read script from resource pack!", t);
+				DSurround.log().error("Unable to read script from resource pack!", t);
 			}
 		}
 		
@@ -106,11 +104,11 @@ public final class DataScripts {
 
 		try (final InputStream stream = DataScripts.class.getResourceAsStream(fileName)) {
 			if (stream != null) {
-				ModLog.info("%s: Executing script for mod [%s]", this.side.toString(), dataFile);
+				DSurround.log().info("%s: Executing script for mod [%s]", this.side.toString(), dataFile);
 				this.exe.eval(new InputStreamReader(stream));
 			}
 		} catch (final Throwable t) {
-			ModLog.error("Unable to run script!", t);
+			DSurround.log().error("Unable to run script!", t);
 		}
 	}
 
@@ -119,20 +117,20 @@ public final class DataScripts {
 				this.exe.preferredExtension());
 		final File file = new File(dataDirectory, workingFile);
 		if (!file.exists()) {
-			ModLog.warn("Could not locate script file [%s]", file.toString());
+			DSurround.log().warn("Could not locate script file [%s]", file.toString());
 			return;
 		}
 
 		if (!file.isFile()) {
-			ModLog.warn("Script file [%s] is not a file", file.toString());
+			DSurround.log().warn("Script file [%s] is not a file", file.toString());
 			return;
 		}
 
 		try (final InputStream stream = new FileInputStream(file)) {
-			ModLog.info("%s: Executing script [%s]", this.side.toString(), file.toString());
+			DSurround.log().info("%s: Executing script [%s]", this.side.toString(), file.toString());
 			this.exe.eval(new InputStreamReader(stream));
 		} catch (final Throwable t) {
-			ModLog.error("Unable to run script!", t);
+			DSurround.log().error("Unable to run script!", t);
 		}
 	}
 }

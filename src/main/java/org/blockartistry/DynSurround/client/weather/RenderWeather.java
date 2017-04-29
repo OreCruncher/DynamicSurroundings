@@ -27,7 +27,6 @@ package org.blockartistry.DynSurround.client.weather;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModLog;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
@@ -80,10 +79,10 @@ public final class RenderWeather extends IRenderHandler {
 		final String dimName = provider.getDimensionType().getName();
 		final IRenderHandler renderer = provider.getWeatherRenderer();
 		if (renderer == null) {
-			ModLog.info("Setting weather renderer for dimension [%s]", dimName);
+			DSurround.log().info("Setting weather renderer for dimension [%s]", dimName);
 			provider.setWeatherRenderer(new RenderWeather());
 		} else {
-			ModLog.info("Not hooking weather renderer for dimension [%s] (%s)", dimName, renderer.getClass());
+			DSurround.log().info("Not hooking weather renderer for dimension [%s] (%s)", dimName, renderer.getClass());
 		}
 	}
 

@@ -31,7 +31,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.client.event.RegistryEvent;
-
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;

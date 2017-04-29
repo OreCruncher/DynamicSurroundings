@@ -30,12 +30,11 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.data.xface.ItemConfig;
 import org.blockartistry.lib.MCHelper;
-
 import gnu.trove.set.hash.THashSet;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
@@ -117,7 +116,7 @@ public class ItemRegistry extends Registry {
 				final Class<?> clazz = Class.forName(c, false, ItemRegistry.class.getClassLoader());
 				theList.add(clazz);
 			} catch (final ClassNotFoundException e) {
-				ModLog.warn("Cannot locate class '%s' for ItemRegistry", c);
+				DSurround.log().warn("Cannot locate class '%s' for ItemRegistry", c);
 			}
 		}
 	}

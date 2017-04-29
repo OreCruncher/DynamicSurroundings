@@ -32,7 +32,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.DynSurround.data.xface.BlockConfig;
 import org.blockartistry.DynSurround.data.xface.DimensionConfig;
@@ -124,7 +124,7 @@ public final class ConfigurationScript {
 			itemRegistry.register(script.itemConfig);
 			
 		} catch (final Throwable t) {
-			ModLog.error("Unable to process configuration script", t);
+			DSurround.log().error("Unable to process configuration script", t);
 		}
 	}
 }

@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
@@ -41,7 +41,6 @@ import org.blockartistry.DynSurround.data.xface.SoundType;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.MyUtils;
-
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
@@ -110,9 +109,9 @@ public final class BiomeRegistry extends Registry {
 	@Override
 	public void initComplete() {
 		if (ModOptions.enableDebugLogging) {
-			ModLog.info("*** BIOME REGISTRY ***");
+			DSurround.log().info("*** BIOME REGISTRY ***");
 			for (final BiomeInfo entry : registry.values())
-				ModLog.info(entry.toString());
+				DSurround.log().info(entry.toString());
 		}
 
 		// Free memory because we no longer need
@@ -133,7 +132,7 @@ public final class BiomeRegistry extends Registry {
 		BiomeInfo result = this.registry.get(biome);
 		if (result == null) {
 			// Open Terrain Generation can trigger this...
-			ModLog.warn("Biome [%s] not detected during initialization - forcing reload (%s)", biome.getBiomeName(),
+			DSurround.log().warn("Biome [%s] not detected during initialization - forcing reload (%s)", biome.getBiomeName(),
 					biome.getClass());
 			RegistryManager.reloadResources(this.side);
 			result = this.registry.get(biome);

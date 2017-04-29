@@ -30,7 +30,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
@@ -64,7 +64,7 @@ public class SoundManagerReplacement extends SoundManager {
 			soundLibrary = ReflectionHelper.findField(SoundSystem.class, "soundLibrary");
 			streamThread = ReflectionHelper.findField(Library.class, "streamThread");
 		} catch (final Throwable t) {
-			ModLog.warn("Cannot find sound manager fields; auto-restart not enabled");
+			DSurround.log().warn("Cannot find sound manager fields; auto-restart not enabled");
 			soundLibrary = null;
 			streamThread = null;
 		}
@@ -89,7 +89,7 @@ public class SoundManagerReplacement extends SoundManager {
 			if (t != null && !t.isAlive()) {
 				if (EnvironState.getPlayer() != null)
 					EnvironState.getPlayer().addChatMessage(new TextComponentString("Auto-restart of sound system!"));
-				ModLog.warn("Auto-restart of sound system!");
+				DSurround.log().warn("Auto-restart of sound system!");
 				this.reloadSoundSystem();
 			}
 		} catch (final Throwable t) {

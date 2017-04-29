@@ -40,7 +40,6 @@ import org.blockartistry.lib.ConfigProcessor.MinMaxFloat;
 import org.blockartistry.lib.ConfigProcessor.MinMaxInt;
 import org.blockartistry.lib.ConfigProcessor.Parameter;
 import org.blockartistry.lib.ConfigProcessor.RestartRequired;
-
 import com.google.common.collect.ImmutableList;
 
 import net.minecraftforge.common.config.ConfigCategory;
@@ -645,7 +644,7 @@ public final class ModOptions {
 
 		// Patch up values from older config if needed
 		if (VersionHelper.compareVersions(config.getLoadedConfigVersion(), VERSION_A) < 0) {
-			ModLog.info("Upgrade config to baseline version [%s]", VERSION_A);
+			DSurround.log().info("Upgrade config to baseline version [%s]", VERSION_A);
 			setDefault(config, CATEGORY_SOUND, CONFIG_FOOTSTEPS_SOUND_FACTOR, 0.15F, 0.5F);
 		}
 

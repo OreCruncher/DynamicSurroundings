@@ -33,8 +33,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModLog;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.ResourcePackRepository;
@@ -71,13 +69,13 @@ class RegistryManagerClient extends RegistryManager {
 		// Look in other resource packs for more configuration data
 		for (final ResourcePackRepository.Entry pack : repo) {
 			if (checkCompatible(pack)) {
-				ModLog.debug("Found script in resource pack: %s", pack.getResourcePackName());
+				DSurround.log().debug("Found script in resource pack: %s", pack.getResourcePackName());
 				try {
 					final InputStream stream = openScript(pack.getResourcePack());
 					if (stream != null)
 						streams.add(stream);
 				} catch (final Throwable t) {
-					ModLog.error("Unable to open script in resource pack", t);
+					DSurround.log().error("Unable to open script in resource pack", t);
 				}
 			}
 		}

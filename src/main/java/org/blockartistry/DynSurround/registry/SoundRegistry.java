@@ -36,11 +36,11 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModLog;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.gui.ConfigSound;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.SoundUtils;
+import org.blockartistry.lib.logging.ModLog;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
@@ -87,7 +87,7 @@ public final class SoundRegistry extends Registry {
 					final float vol = Integer.parseInt(tokens[1]) / 100.0F;
 					this.volumeControl.put(tokens[0], vol);
 				} catch (final Throwable t) {
-					ModLog.error("Unable to process sound volume entry: " + volume, t);
+					DSurround.log().error("Unable to process sound volume entry: " + volume, t);
 				}
 			}
 		}
@@ -108,9 +108,9 @@ public final class SoundRegistry extends Registry {
 			}
 			Collections.sort(sounds);
 
-			ModLog.info("*** SOUND REGISTRY ***");
+			DSurround.log().info("*** SOUND REGISTRY ***");
 			for (final String sound : sounds)
-				ModLog.info(sound);
+				DSurround.log().info(sound);
 
 			new Thread(new Runnable() {
 
@@ -141,9 +141,9 @@ public final class SoundRegistry extends Registry {
 							@Override
 							public void run() {
 								Collections.sort(smells);
-								ModLog.info("*** SOUND SMELLS ***");
+								DSurround.log().info("*** SOUND SMELLS ***");
 								for (final String smell : smells)
-									ModLog.info(smell);
+									DSurround.log().info(smell);
 							}
 						});
 					}
@@ -205,7 +205,7 @@ public final class SoundRegistry extends Registry {
 
 			}
 		} catch (final Throwable t) {
-			ModLog.error("Unable to read the mod sound file!", t);
+			ModLog.getLogger(DSurround.MOD_ID).error("Unable to read the mod sound file!", t);
 		}
 
 	}

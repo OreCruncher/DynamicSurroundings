@@ -31,7 +31,7 @@ import java.util.Scanner;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
@@ -46,7 +46,6 @@ import org.blockartistry.DynSurround.client.footsteps.system.Solver;
 import org.blockartistry.DynSurround.client.footsteps.util.ConfigProperty;
 import org.blockartistry.lib.JsonUtils;
 import org.blockartistry.lib.MCHelper;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.entity.player.EntityPlayer;
@@ -102,12 +101,12 @@ public class FootstepsRegistry extends Registry {
 				if (stream != null) {
 					final Manifest manifest = JsonUtils.load(stream, Manifest.class);
 					if (manifest != null) {
-						ModLog.info("Resource pack %s: %s by %s (%s)", pack.getPackName(), manifest.getName(),
+						DSurround.log().info("Resource pack %s: %s by %s (%s)", pack.getPackName(), manifest.getName(),
 								manifest.getAuthor(), manifest.getWebsite());
 					}
 				}
 			} catch (final Exception e) {
-				ModLog.debug("Unable to load variator data from pack %s", pack.getPackName());
+				DSurround.log().debug("Unable to load variator data from pack %s", pack.getPackName());
 			} finally {
 				if (stream != null)
 					try {
@@ -129,7 +128,7 @@ public class FootstepsRegistry extends Registry {
 				if (stream != null)
 					primitiveMap.setup(ConfigProperty.fromStream(stream));
 			} catch (final IOException e) {
-				ModLog.debug("Unable to load primitive map data from pack %s", pack.getPackName());
+				DSurround.log().debug("Unable to load primitive map data from pack %s", pack.getPackName());
 			} finally {
 				if (stream != null)
 					try {
@@ -158,7 +157,7 @@ public class FootstepsRegistry extends Registry {
 					new AcousticsJsonReader("").parseJSON(jasonString, acoustics);
 				}
 			} catch (final IOException e) {
-				ModLog.debug("Unable to load acoustic data from pack %s", pack.getPackName());
+				DSurround.log().debug("Unable to load acoustic data from pack %s", pack.getPackName());
 			} finally {
 				try {
 					if (scanner != null)

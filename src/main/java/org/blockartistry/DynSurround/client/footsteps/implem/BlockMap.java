@@ -36,14 +36,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.DynSurround.ModLog;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.DynSurround.registry.BlockInfo;
 import org.blockartistry.lib.MCHelper;
-
 import com.google.common.collect.ImmutableMap;
 
 import gnu.trove.map.hash.THashMap;
@@ -62,7 +61,7 @@ public class BlockMap {
 	private final Isolator isolator;
 	private final BlockAcousticMap metaMap = new BlockAcousticMap();
 	private Map<String, BlockAcousticMap> substrateMap = new HashMap<String, BlockAcousticMap>();
-
+	
 	private static class MacroEntry {
 		public final int meta;
 		public final String substrate;
@@ -171,7 +170,7 @@ public class BlockMap {
 				put(block, trueMeta, entry.substrate, entry.value);
 			}
 		} else {
-			ModLog.debug("Unknown macro '%s'", value);
+			DSurround.log().debug("Unknown macro '%s'", value);
 		}
 	}
 
@@ -181,9 +180,9 @@ public class BlockMap {
 			final String blockName = matcher.group(1);
 			final Block block = MCHelper.getBlockByName(blockName);
 			if (block == null) {
-				ModLog.debug("Unable to locate block for blockMap '%s'", blockName);
+				DSurround.log().debug("Unable to locate block for blockMap '%s'", blockName);
 			} else if (block == Blocks.AIR) {
-				ModLog.warn("Attempt to insert AIR into blockMap '%s'", blockName);
+				DSurround.log().warn("Attempt to insert AIR into blockMap '%s'", blockName);
 			} else if (value.startsWith("#")) {
 				expand(block, value);
 			} else {
@@ -194,7 +193,7 @@ public class BlockMap {
 				put(block, meta, substrate, value);
 			}
 		} else {
-			ModLog.warn("Malformed key in blockMap '%s'", key);
+			DSurround.log().warn("Malformed key in blockMap '%s'", key);
 		}
 	}
 
