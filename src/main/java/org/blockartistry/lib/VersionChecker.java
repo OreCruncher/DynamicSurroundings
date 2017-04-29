@@ -22,29 +22,27 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround;
+package org.blockartistry.lib;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import org.blockartistry.lib.ForgeUtils;
-import org.blockartistry.lib.Localization;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.ForgeVersion.CheckResult;
 import net.minecraftforge.common.ForgeVersion.Status;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModContainer;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
-@Mod.EventBusSubscriber
-public final class VersionCheck {
+public final class VersionChecker {
 
-	private VersionCheck() {
-
+	private final String modId;
+	private final String messageId;
+	
+	public VersionChecker(@Nonnull final String id, @Nonnull final String messageId) {
+		this.modId = id;
+		this.messageId = messageId;
 	}
 
 	private static boolean dontPrintMessage(@Nonnull final CheckResult result) {
@@ -54,7 +52,7 @@ public final class VersionCheck {
 	}
 
 	@Nullable
-	private static String getUpdateMessage(@Nonnull final String modId) {
+	private String getUpdateMessage(@Nonnull final String modId) {
 		final ModContainer mod = ForgeUtils.findModContainer(modId);
 		if (mod == null)
 			return null;
@@ -63,16 +61,12 @@ public final class VersionCheck {
 			return null;
 		final String t = result.target.toString();
 		final String u = result.url.toString();
-		return Localization.format("msg.NewVersion.dsurround", DSurround.MOD_NAME, t, u);
+		return Localization.format(this.messageId, mod.getName(), t, u);
 	}
 
-	@SubscribeEvent
-	public static void playerLogin(final PlayerLoggedInEvent event) {
-		if (!ModOptions.enableVersionChecking)
-			return;
-
+	public void playerLogin(@Nonnull final PlayerLoggedInEvent event) {
 		if (event.player instanceof EntityPlayer) {
-			final String updateMessage = getUpdateMessage(DSurround.MOD_ID);
+			final String updateMessage = getUpdateMessage(this.modId);
 			if (updateMessage != null) {
 				final ITextComponent component = ITextComponent.Serializer.jsonToComponent(updateMessage);
 				event.player.addChatMessage(component);

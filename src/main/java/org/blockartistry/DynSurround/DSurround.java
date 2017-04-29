@@ -34,6 +34,7 @@ import org.apache.logging.log4j.LogManager;
 import org.blockartistry.DynSurround.proxy.Proxy;
 import org.blockartistry.lib.ForgeUtils;
 import org.blockartistry.lib.Localization;
+import org.blockartistry.lib.VersionChecker;
 import org.blockartistry.lib.logging.ModLog;
 
 import net.minecraft.client.Minecraft;
@@ -54,6 +55,7 @@ import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -93,7 +95,7 @@ public class DSurround {
 	public static Configuration config() {
 		return config;
 	}
-	
+
 	@Nonnull
 	public static ModLog log() {
 		return logger;
@@ -175,6 +177,12 @@ public class DSurround {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void clientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
 		proxy.clientDisconnect(event);
+	}
+
+	@SubscribeEvent
+	public void playerLogin(final PlayerLoggedInEvent event) {
+		if (ModOptions.enableVersionChecking)
+			new VersionChecker(DSurround.MOD_ID, "msg.NewVersion.dsurround").playerLogin(event);
 	}
 
 	////////////////////////
