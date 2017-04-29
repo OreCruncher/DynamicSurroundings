@@ -644,7 +644,6 @@ public final class ModOptions {
 
 		// Patch up values from older config if needed
 		if (VersionHelper.compareVersions(config.getLoadedConfigVersion(), VERSION_A) < 0) {
-			DSurround.log().info("Upgrade config to baseline version [%s]", VERSION_A);
 			setDefault(config, CATEGORY_SOUND, CONFIG_FOOTSTEPS_SOUND_FACTOR, 0.15F, 0.5F);
 		}
 
