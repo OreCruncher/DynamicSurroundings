@@ -24,34 +24,109 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
+import java.util.LinkedHashSet;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.lwjgl.opengl.GL11;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ParticleCollection extends ParticleSystem {
-	
-	public ParticleCollection(final int pass, @Nonnull final World world) {
-		super(pass, world, 0, 0, 0);
+public class ParticleCollection extends Particle {
+
+	protected static final Predicate<IParticleMote> REMOVE_CRITERIA = new Predicate<IParticleMote>() {
+		@Override
+		public boolean apply(final IParticleMote input) {
+			return !input.isAlive();
+		}
+	};
+
+	protected final ResourceLocation texture;
+	protected final LinkedHashSet<IParticleMote> myParticles = new LinkedHashSet<IParticleMote>();
+
+	public ParticleCollection(@Nonnull final World world, @Nonnull final ResourceLocation tex) {
+		super(world, 0, 0, 0);
+
+		this.canCollide = false;
+		this.texture = tex;
+	}
+
+	protected void bindTexture(@Nonnull final ResourceLocation resource) {
+		Minecraft.getMinecraft().getTextureManager().bindTexture(resource);
+	}
+
+	public void addParticle(@Nonnull final IParticleMote mote) {
+		this.myParticles.add(mote);
+	}
+
+	public boolean shouldDie() {
+		return this.myParticles.size() == 0 || this.world != EnvironState.getWorld();
 	}
 
 	@Override
-	public void think() {
-		
+	public void onUpdate() {
+		if (!this.isAlive())
+			return;
+
+		// Update mote state
+		for (final IParticleMote mote : this.myParticles)
+			mote.onUpdate();
+
+		// Remove the dead ones
+		Iterables.removeIf(this.myParticles, REMOVE_CRITERIA);
+
+		if (this.shouldDie()) {
+			this.setExpired();
+		}
 	}
-	
+
 	@Override
-	public boolean shouldDie() {
-		return this.getCurrentParticleCount() == 0 || this.world != EnvironState.getWorld();
+	public void renderParticle(final VertexBuffer buffer, final Entity entityIn, final float partialTicks,
+			final float rotX, final float rotZ, final float rotYZ, final float rotXY, final float rotXZ) {
+
+		this.bindTexture(this.texture);
+
+		GlStateManager.disableLighting();
+		GlStateManager.pushMatrix();
+		GlStateManager.pushAttrib();
+
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.enableAlpha();
+		GlStateManager.depthMask(false);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+		for (final IParticleMote mote : this.myParticles)
+			mote.renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
+		Tessellator.getInstance().draw();
+
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.disableBlend();
+		GlStateManager.enableLighting();
+		GlStateManager.popAttrib();
+		GlStateManager.popMatrix();
+
 	}
-	
+
 	@Override
-	public boolean moveParticlesOnDeath() {
-		return false;
+	public int getFXLayer() {
+		return 3;
 	}
 
 }

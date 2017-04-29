@@ -135,10 +135,15 @@ public abstract class ParticleSystem extends ParticleBase {
 		for (final IParticleMote p : this.myParticles)
 			if (p.isAlive() && p.moveParticleOnExpire())
 				ParticleHelper.addParticle(p.getParticle());
-
-		this.myParticles.clear();
 	}
 
+	/*
+	 * Perform any cleanup activities prior to dying.
+	 */
+	protected void cleanUp() {
+		this.myParticles.clear();
+	}
+	
 	@Override
 	public void onUpdate() {
 		// Let the system mull over what it wants to do
@@ -147,6 +152,7 @@ public abstract class ParticleSystem extends ParticleBase {
 		if (this.shouldDie()) {
 			this.moveParticles();
 			this.setExpired();
+			this.cleanUp();
 		}
 
 		if (!this.isAlive())
