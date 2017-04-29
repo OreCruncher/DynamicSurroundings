@@ -24,7 +24,7 @@
 
 package org.blockartistry.mod.DynSurround.client.gui;
 
-import org.blockartistry.mod.DynSurround.util.Localization;
+import org.blockartistry.lib.Localization;
 
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;

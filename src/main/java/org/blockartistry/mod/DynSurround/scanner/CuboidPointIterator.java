@@ -28,7 +28,7 @@ import java.util.Iterator;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.mod.DynSurround.util.BlockPosHelper;
+import org.blockartistry.lib.BlockPosHelper;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;

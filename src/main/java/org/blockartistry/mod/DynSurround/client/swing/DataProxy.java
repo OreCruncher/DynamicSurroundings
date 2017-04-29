@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Observable;
 
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.lib.MCHelper;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.ExpressionStateHandler;
@@ -40,7 +41,6 @@ import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.registry.FootstepsRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;

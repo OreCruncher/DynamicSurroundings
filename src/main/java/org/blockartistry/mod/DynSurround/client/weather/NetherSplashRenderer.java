@@ -24,9 +24,9 @@
 
 package org.blockartistry.mod.DynSurround.client.weather;
 
+import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

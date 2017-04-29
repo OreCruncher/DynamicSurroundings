@@ -26,11 +26,11 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.mod.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.mod.DynSurround.client.sound.Sounds;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

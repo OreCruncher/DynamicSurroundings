@@ -28,8 +28,8 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;

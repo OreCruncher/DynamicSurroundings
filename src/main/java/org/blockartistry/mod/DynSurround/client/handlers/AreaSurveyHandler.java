@@ -30,10 +30,10 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.MathStuff;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
 import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
-import org.blockartistry.mod.DynSurround.util.MathStuff;
 
 import gnu.trove.map.custom_hash.TObjectIntCustomHashMap;
 import gnu.trove.strategy.IdentityHashingStrategy;

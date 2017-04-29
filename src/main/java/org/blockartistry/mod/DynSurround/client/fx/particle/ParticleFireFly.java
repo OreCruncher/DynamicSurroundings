@@ -24,6 +24,9 @@
 
 package org.blockartistry.mod.DynSurround.client.fx.particle;
 
+import org.blockartistry.lib.Color;
+import org.blockartistry.lib.random.XorShiftRandom;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleSimpleAnimated;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -32,9 +35,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import org.blockartistry.mod.DynSurround.util.Color;
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 // Started with ParticleFireWork.Spark as a basis.
 @SideOnly(Side.CLIENT)

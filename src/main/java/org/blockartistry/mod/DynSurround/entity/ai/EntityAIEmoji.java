@@ -24,13 +24,13 @@
 
 package org.blockartistry.mod.DynSurround.entity.ai;
 
+import org.blockartistry.lib.EntityUtils;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.entity.EmotionalState;
 import org.blockartistry.mod.DynSurround.api.entity.EntityCapability;
 import org.blockartistry.mod.DynSurround.entity.EmojiDataTables;
 import org.blockartistry.mod.DynSurround.entity.IEntityEmojiSettable;
 import org.blockartistry.mod.DynSurround.network.Network;
-import org.blockartistry.mod.DynSurround.util.EntityUtils;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;

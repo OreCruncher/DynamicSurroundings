@@ -32,6 +32,8 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.lib.Color;
+import org.blockartistry.lib.MyUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
@@ -39,8 +41,6 @@ import org.blockartistry.mod.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundType;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.mod.DynSurround.util.Color;
-import org.blockartistry.mod.DynSurround.util.MyUtils;
 
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.biome.Biome;

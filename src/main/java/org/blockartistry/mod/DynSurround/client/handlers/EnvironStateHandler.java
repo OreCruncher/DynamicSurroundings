@@ -31,6 +31,8 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.MinecraftClock;
+import org.blockartistry.lib.PlayerUtils;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.events.EnvironmentEvent;
@@ -46,8 +48,6 @@ import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SeasonRegistry;
 import org.blockartistry.mod.DynSurround.registry.SeasonType;
 import org.blockartistry.mod.DynSurround.registry.TemperatureRating;
-import org.blockartistry.mod.DynSurround.util.MinecraftClock;
-import org.blockartistry.mod.DynSurround.util.PlayerUtils;
 
 import gnu.trove.procedure.TIntDoubleProcedure;
 import net.minecraft.client.Minecraft;

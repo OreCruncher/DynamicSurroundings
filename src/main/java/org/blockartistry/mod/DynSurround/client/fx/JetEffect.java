@@ -24,9 +24,9 @@
 
 package org.blockartistry.mod.DynSurround.client.fx;
 
+import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.mod.DynSurround.client.fx.particle.system.ParticleJet;
 import org.blockartistry.mod.DynSurround.client.handlers.ParticleSystemHandler;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;

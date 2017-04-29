@@ -30,13 +30,13 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.Color;
+import org.blockartistry.lib.MathStuff;
+import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
 import org.blockartistry.mod.DynSurround.data.AuroraPreset;
 import org.blockartistry.mod.DynSurround.data.ColorPair;
-import org.blockartistry.mod.DynSurround.util.Color;
-import org.blockartistry.mod.DynSurround.util.MathStuff;
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import net.minecraftforge.fml.relauncher.Side;
 

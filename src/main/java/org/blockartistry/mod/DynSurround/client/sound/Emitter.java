@@ -26,9 +26,9 @@ package org.blockartistry.mod.DynSurround.client.sound;
 import java.util.Random;
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.SoundSystemConfig;

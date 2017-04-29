@@ -33,11 +33,11 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.lib.ConfigProcessor;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.mod.DynSurround.util.ConfigProcessor;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;

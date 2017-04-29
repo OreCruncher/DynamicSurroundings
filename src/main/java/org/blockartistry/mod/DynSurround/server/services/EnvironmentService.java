@@ -28,8 +28,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.MyUtils;
 import org.blockartistry.mod.DynSurround.network.Network;
-import org.blockartistry.mod.DynSurround.util.MyUtils;
 
 import com.google.common.base.Predicate;
 import net.minecraft.entity.player.EntityPlayer;

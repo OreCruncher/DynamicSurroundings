@@ -31,9 +31,9 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
+import org.blockartistry.lib.ForgeUtils;
+import org.blockartistry.lib.Localization;
 import org.blockartistry.mod.DynSurround.proxy.Proxy;
-import org.blockartistry.mod.DynSurround.util.ForgeUtils;
-import org.blockartistry.mod.DynSurround.util.Localization;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.profiler.Profiler;

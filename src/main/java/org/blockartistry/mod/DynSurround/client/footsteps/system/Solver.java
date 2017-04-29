@@ -29,6 +29,10 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.lib.MCHelper;
+import org.blockartistry.lib.MathStuff;
+import org.blockartistry.lib.MyUtils;
+import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.AcousticsManager;
@@ -37,10 +41,6 @@ import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IOptions.Option;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.MCHelper;
-import org.blockartistry.mod.DynSurround.util.MathStuff;
-import org.blockartistry.mod.DynSurround.util.MyUtils;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

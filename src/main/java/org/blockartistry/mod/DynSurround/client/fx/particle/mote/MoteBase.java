@@ -28,7 +28,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
+import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.VertexBuffer;

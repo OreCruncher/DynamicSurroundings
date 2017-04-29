@@ -29,6 +29,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.lib.SoundUtils;
+import org.blockartistry.lib.WeightTable.IEntrySource;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.fx.ISpecialEffect;
 import org.blockartistry.mod.DynSurround.client.handlers.SoundEffectHandler;
@@ -36,8 +38,6 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.mod.DynSurround.data.xface.SoundType;
 import org.blockartistry.mod.DynSurround.registry.Evaluator;
-import org.blockartistry.mod.DynSurround.util.SoundUtils;
-import org.blockartistry.mod.DynSurround.util.WeightTable.IEntrySource;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;

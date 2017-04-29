@@ -26,8 +26,8 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.util.MathStuff;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
+import org.blockartistry.lib.MathStuff;
+import org.blockartistry.lib.WorldUtils;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;

@@ -24,12 +24,12 @@
 
 package org.blockartistry.mod.DynSurround.client.gui;
 
+import org.blockartistry.lib.Color;
+import org.blockartistry.lib.Localization;
+import org.blockartistry.lib.gui.Panel;
+import org.blockartistry.lib.gui.Panel.Reference;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.util.Color;
-import org.blockartistry.mod.DynSurround.util.Localization;
-import org.blockartistry.mod.DynSurround.util.gui.Panel;
-import org.blockartistry.mod.DynSurround.util.gui.Panel.Reference;
 
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiPageButtonList.GuiResponder;

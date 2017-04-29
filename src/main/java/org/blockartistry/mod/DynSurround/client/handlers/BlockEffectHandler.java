@@ -24,12 +24,12 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers;
 
+import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.handlers.scanners.AlwaysOnBlockEffectScanner;
 import org.blockartistry.mod.DynSurround.client.handlers.scanners.RandomBlockEffectScanner;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;

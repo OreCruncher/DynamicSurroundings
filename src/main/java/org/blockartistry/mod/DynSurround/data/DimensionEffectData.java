@@ -31,7 +31,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
+import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.mod.DynSurround.DSurround;
 import com.google.common.collect.ImmutableSet;
 

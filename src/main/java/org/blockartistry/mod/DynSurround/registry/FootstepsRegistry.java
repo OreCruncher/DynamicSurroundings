@@ -31,6 +31,8 @@ import java.util.Scanner;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.JsonUtils;
+import org.blockartistry.lib.MCHelper;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.AcousticsManager;
@@ -44,8 +46,6 @@ import org.blockartistry.mod.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.ResourcePacks;
 import org.blockartistry.mod.DynSurround.client.footsteps.system.Solver;
 import org.blockartistry.mod.DynSurround.client.footsteps.util.ConfigProperty;
-import org.blockartistry.mod.DynSurround.util.JsonUtils;
-import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.IResourcePack;

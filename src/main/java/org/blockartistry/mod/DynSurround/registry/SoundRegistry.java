@@ -35,12 +35,12 @@ import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.lib.MyUtils;
+import org.blockartistry.lib.SoundUtils;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.gui.ConfigSound;
-import org.blockartistry.mod.DynSurround.util.MyUtils;
-import org.blockartistry.mod.DynSurround.util.SoundUtils;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;

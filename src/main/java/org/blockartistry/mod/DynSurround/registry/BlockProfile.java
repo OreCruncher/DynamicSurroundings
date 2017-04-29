@@ -29,10 +29,10 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.lib.MyUtils;
+import org.blockartistry.lib.WeightTable;
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.mod.DynSurround.util.MyUtils;
-import org.blockartistry.mod.DynSurround.util.WeightTable;
 
 public class BlockProfile {
 

@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.mod.DynSurround.util.ForgeUtils;
+import org.blockartistry.lib.ForgeUtils;
 
 import com.google.common.collect.ImmutableList;
 

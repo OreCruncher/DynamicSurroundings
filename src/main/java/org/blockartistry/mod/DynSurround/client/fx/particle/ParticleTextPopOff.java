@@ -26,7 +26,7 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.util.Color;
+import org.blockartistry.lib.Color;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;

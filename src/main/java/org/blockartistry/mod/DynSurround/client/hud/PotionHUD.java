@@ -30,9 +30,9 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.Color;
+import org.blockartistry.lib.Localization;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.util.Color;
-import org.blockartistry.mod.DynSurround.util.Localization;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;

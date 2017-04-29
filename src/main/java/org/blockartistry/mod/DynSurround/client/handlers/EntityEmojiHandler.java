@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.client.handlers;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.entity.EmojiType;
 import org.blockartistry.mod.DynSurround.api.entity.EntityCapability;
@@ -34,7 +35,6 @@ import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleEmoji;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.entity.IEntityEmojiSettable;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;

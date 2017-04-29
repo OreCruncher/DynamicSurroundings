@@ -36,6 +36,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.util.Random;
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.PlayerUtils;
+import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.mod.DynSurround.ModEnvironment;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
@@ -44,8 +46,6 @@ import org.blockartistry.mod.DynSurround.network.Network;
 import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.mod.DynSurround.util.PlayerUtils;
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 public final class AtmosphereService extends Service {
 

@@ -29,10 +29,10 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleMoteAdapter;
 import org.blockartistry.mod.DynSurround.client.fx.particle.mote.IParticleMote;
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;

@@ -29,12 +29,12 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.lib.MCHelper;
+import org.blockartistry.lib.MyUtils;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.facade.FacadeHelper;
-import org.blockartistry.mod.DynSurround.util.MCHelper;
-import org.blockartistry.mod.DynSurround.util.MyUtils;
 
 import com.google.common.collect.Sets;
 

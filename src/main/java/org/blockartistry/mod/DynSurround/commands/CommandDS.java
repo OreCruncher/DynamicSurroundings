@@ -27,11 +27,11 @@ package org.blockartistry.mod.DynSurround.commands;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import org.blockartistry.lib.Localization;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.server.services.AuroraService;
-import org.blockartistry.mod.DynSurround.util.Localization;
 
 import com.google.common.collect.ImmutableList;
 

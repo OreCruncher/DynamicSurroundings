@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.blockartistry.lib.SoundUtils;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.BasicAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.DelayedAcoustic;
@@ -37,7 +38,6 @@ import org.blockartistry.mod.DynSurround.client.footsteps.implem.ProbabilityWeig
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.SimultaneousAcoustic;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.IAcoustic;
-import org.blockartistry.mod.DynSurround.util.SoundUtils;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

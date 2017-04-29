@@ -29,16 +29,18 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
+
+import org.blockartistry.lib.DiurnalUtils;
+import org.blockartistry.lib.Localization;
+import org.blockartistry.lib.MathStuff;
+import org.blockartistry.lib.PlayerUtils;
+import org.blockartistry.lib.DiurnalUtils.DayCycle;
+import org.blockartistry.lib.gui.TextPanel;
+import org.blockartistry.lib.gui.Panel.Reference;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
-import org.blockartistry.mod.DynSurround.util.Localization;
-import org.blockartistry.mod.DynSurround.util.MathStuff;
-import org.blockartistry.mod.DynSurround.util.PlayerUtils;
-import org.blockartistry.mod.DynSurround.util.DiurnalUtils.DayCycle;
-import org.blockartistry.mod.DynSurround.util.gui.Panel.Reference;
-import org.blockartistry.mod.DynSurround.util.gui.TextPanel;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;

@@ -33,6 +33,11 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.lib.BlockPosHelper;
+import org.blockartistry.lib.MCHelper;
+import org.blockartistry.lib.TimeUtils;
+import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.interfaces.EventType;
@@ -49,11 +54,6 @@ import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleFootprint.St
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.sound.FootstepSound;
 import org.blockartistry.mod.DynSurround.client.sound.SoundEngine;
-import org.blockartistry.mod.DynSurround.util.BlockPosHelper;
-import org.blockartistry.mod.DynSurround.util.MCHelper;
-import org.blockartistry.mod.DynSurround.util.TimeUtils;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.entity.Entity;

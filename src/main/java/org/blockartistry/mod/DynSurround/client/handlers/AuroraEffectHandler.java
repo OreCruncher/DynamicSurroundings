@@ -30,6 +30,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.lib.DiurnalUtils;
 import org.blockartistry.mod.DynSurround.ModLog;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.events.AuroraSpawnEvent;
@@ -37,7 +38,6 @@ import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.Env
 import org.blockartistry.mod.DynSurround.client.weather.Aurora;
 import org.blockartistry.mod.DynSurround.client.weather.AuroraRenderer;
 import org.blockartistry.mod.DynSurround.data.AuroraData;
-import org.blockartistry.mod.DynSurround.util.DiurnalUtils;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;

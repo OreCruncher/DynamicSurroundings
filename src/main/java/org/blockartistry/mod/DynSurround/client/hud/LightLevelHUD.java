@@ -29,10 +29,10 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.BlockStateProvider;
+import org.blockartistry.lib.Color;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.BlockStateProvider;
-import org.blockartistry.mod.DynSurround.util.Color;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

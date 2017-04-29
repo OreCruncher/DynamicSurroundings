@@ -30,8 +30,8 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.lib.MCHelper;
 import org.blockartistry.mod.DynSurround.ModLog;
-import org.blockartistry.mod.DynSurround.util.MCHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

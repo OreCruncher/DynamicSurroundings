@@ -26,10 +26,10 @@ package org.blockartistry.mod.DynSurround.commands;
 
 import java.util.List;
 
+import org.blockartistry.lib.script.Expression;
+import org.blockartistry.lib.script.ExpressionException;
+import org.blockartistry.lib.script.Variant;
 import org.blockartistry.mod.DynSurround.ModOptions;
-import org.blockartistry.mod.DynSurround.util.script.Expression;
-import org.blockartistry.mod.DynSurround.util.script.ExpressionException;
-import org.blockartistry.mod.DynSurround.util.script.Variant;
 
 import com.google.common.collect.ImmutableList;
 

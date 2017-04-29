@@ -29,6 +29,10 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.MCHelper;
+import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.lib.gui.TextPanel;
+import org.blockartistry.lib.gui.Panel.Reference;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.mod.DynSurround.client.fx.BlockEffect;
@@ -39,10 +43,7 @@ import org.blockartistry.mod.DynSurround.registry.BlockRegistry;
 import org.blockartistry.mod.DynSurround.registry.FootstepsRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.mod.DynSurround.util.MCHelper;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
-import org.blockartistry.mod.DynSurround.util.gui.Panel.Reference;
-import org.blockartistry.mod.DynSurround.util.gui.TextPanel;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;

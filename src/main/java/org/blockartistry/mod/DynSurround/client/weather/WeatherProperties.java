@@ -28,10 +28,10 @@ import org.blockartistry.mod.DynSurround.api.events.WeatherUpdateEvent;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.SoundUtils;
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.data.DimensionEffectData;
-import org.blockartistry.mod.DynSurround.util.SoundUtils;
 
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.util.ResourceLocation;

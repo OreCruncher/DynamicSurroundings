@@ -26,13 +26,13 @@ package org.blockartistry.mod.DynSurround.proxy;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.Localization;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.mod.DynSurround.client.handlers.EffectManager;
 import org.blockartistry.mod.DynSurround.client.hud.GuiHUDHandler;
 import org.blockartistry.mod.DynSurround.commands.CommandCalc;
 import org.blockartistry.mod.DynSurround.registry.SoundRegistry;
-import org.blockartistry.mod.DynSurround.util.Localization;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumParticleTypes;

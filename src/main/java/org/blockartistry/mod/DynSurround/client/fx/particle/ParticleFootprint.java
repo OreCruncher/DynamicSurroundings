@@ -26,8 +26,8 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.mod.DynSurround.DSurround;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.state.IBlockState;

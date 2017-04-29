@@ -24,11 +24,12 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers;
 
+import org.blockartistry.lib.Color;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.mod.DynSurround.client.handlers.scanners.AreaFogScanner;
-import org.blockartistry.mod.DynSurround.util.Color;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ActiveRenderInfo;

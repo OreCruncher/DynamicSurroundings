@@ -175,7 +175,7 @@ public class Transformer implements IClassTransformer {
 	private byte[] replaceRandom(final String name, final byte[] classBytes) {
 
 		final String randomToReplace = "java/util/Random";
-		final String newRandom = "org/blockartistry/mod/DynSurround/util/random/XorShiftRandom";
+		final String newRandom = "org/blockartistry/lib/random/XorShiftRandom";
 
 		boolean madeUpdate = false;
 

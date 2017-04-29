@@ -32,14 +32,14 @@ import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.mod.DynSurround.util.ConfigProcessor;
-import org.blockartistry.mod.DynSurround.util.VersionHelper;
-import org.blockartistry.mod.DynSurround.util.ConfigProcessor.Comment;
-import org.blockartistry.mod.DynSurround.util.ConfigProcessor.Hidden;
-import org.blockartistry.mod.DynSurround.util.ConfigProcessor.MinMaxFloat;
-import org.blockartistry.mod.DynSurround.util.ConfigProcessor.MinMaxInt;
-import org.blockartistry.mod.DynSurround.util.ConfigProcessor.Parameter;
-import org.blockartistry.mod.DynSurround.util.ConfigProcessor.RestartRequired;
+import org.blockartistry.lib.ConfigProcessor;
+import org.blockartistry.lib.VersionHelper;
+import org.blockartistry.lib.ConfigProcessor.Comment;
+import org.blockartistry.lib.ConfigProcessor.Hidden;
+import org.blockartistry.lib.ConfigProcessor.MinMaxFloat;
+import org.blockartistry.lib.ConfigProcessor.MinMaxInt;
+import org.blockartistry.lib.ConfigProcessor.Parameter;
+import org.blockartistry.lib.ConfigProcessor.RestartRequired;
 
 import com.google.common.collect.ImmutableList;
 

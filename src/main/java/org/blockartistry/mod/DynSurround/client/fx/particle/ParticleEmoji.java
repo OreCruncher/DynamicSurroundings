@@ -26,11 +26,11 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.MathStuff;
 import org.blockartistry.mod.DynSurround.api.entity.EmojiType;
 import org.blockartistry.mod.DynSurround.api.entity.EntityCapability;
 import org.blockartistry.mod.DynSurround.api.entity.IEntityEmoji;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.MathStuff;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.Tessellator;

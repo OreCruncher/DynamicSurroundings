@@ -26,6 +26,8 @@ package org.blockartistry.mod.DynSurround.client.weather;
 
 import java.util.Random;
 
+import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
@@ -36,8 +38,6 @@ import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager;
 import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.mod.DynSurround.registry.SeasonRegistry;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
-import org.blockartistry.mod.DynSurround.util.random.XorShiftRandom;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.block.Block;

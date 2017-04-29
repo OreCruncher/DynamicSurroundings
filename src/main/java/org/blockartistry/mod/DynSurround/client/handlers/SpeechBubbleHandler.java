@@ -38,13 +38,13 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.lib.Translations;
+import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.api.events.SpeechTextEvent;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleBillboard;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.Translations;
-import org.blockartistry.mod.DynSurround.util.WorldUtils;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;

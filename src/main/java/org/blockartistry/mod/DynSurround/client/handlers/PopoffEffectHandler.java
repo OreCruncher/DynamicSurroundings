@@ -24,12 +24,12 @@
 
 package org.blockartistry.mod.DynSurround.client.handlers;
 
+import org.blockartistry.lib.Color;
 import org.blockartistry.mod.DynSurround.ModOptions;
 import org.blockartistry.mod.DynSurround.client.event.PopoffEvent;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleTextPopOff;
 import org.blockartistry.mod.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.mod.DynSurround.util.Color;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
