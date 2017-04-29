@@ -83,7 +83,7 @@ public class ParticleWaterSplash extends ParticleJet {
 	@Override
 	protected void spawnJetParticle() {
 
-		final int splashCount = Math.min(this.getParticleLimit() - getCurrentParticleCount(), 30);
+		final int splashCount = Math.min(this.getParticleLimit() - getCurrentParticleCount(), 100);
 
 		for (int j = 0; (float) j < splashCount; ++j) {
 			final double xOffset = (RANDOM.nextDouble() * 2.0F - 1.0F);
