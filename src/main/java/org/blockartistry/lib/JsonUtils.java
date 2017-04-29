@@ -33,7 +33,7 @@ import java.io.Reader;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.DynSurround.ModLog;
 
 import com.google.gson.Gson;
 
