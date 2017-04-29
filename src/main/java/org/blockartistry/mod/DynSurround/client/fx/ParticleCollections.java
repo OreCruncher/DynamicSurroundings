@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.mod.DynSurround.DSurround;
 import org.blockartistry.mod.DynSurround.client.fx.particle.IParticleMote;
+import org.blockartistry.mod.DynSurround.client.fx.particle.MoteRainSplash;
 import org.blockartistry.mod.DynSurround.client.fx.particle.MoteWaterRipple;
 import org.blockartistry.mod.DynSurround.client.fx.particle.MoteWaterSpray;
 import org.blockartistry.mod.DynSurround.client.fx.particle.ParticleCollection;
@@ -76,6 +77,12 @@ public final class ParticleCollections {
 
 	public static IParticleMote addWaterSpray(@Nonnull final World world, final double x, final double y, final double z, final double dX, final double dY, final double dZ) {
 		final IParticleMote mote = new MoteWaterSpray(world, x, y, z, dX, dY, dZ);
+		theSprays.get().addParticle(mote);
+		return mote;
+	}
+	
+	public static IParticleMote addRainSplash(@Nonnull final World world, final double x, final double y, final double z) {
+		final IParticleMote mote = new MoteRainSplash(world, x, y, z);
 		theSprays.get().addParticle(mote);
 		return mote;
 	}

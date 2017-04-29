@@ -50,9 +50,9 @@ public class MoteWaterSpray extends MoteMotionBase {
 		final int textureIdx = RANDOM.nextInt(4);
 		final int texX = textureIdx % 2;
 		final int texY = textureIdx / 2;
-		this.texU1 = texX / 16F;
+		this.texU1 = texX * 0.5F;
 		this.texU2 = this.texU1 + 0.5F;
-		this.texV1 = texY / 16F;
+		this.texV1 = texY * 0.5F;
 		this.texV2 = this.texV1 + 0.5F;
 
 		this.f4 = 0.1F * this.scale;
