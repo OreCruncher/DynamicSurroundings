@@ -189,25 +189,25 @@ public class MathStuff {
 		return val < 0.0F ? -val : val;
 	}
 
-	public static float sqrt_float(final float value) {
+	public static float sqrt(final float value) {
 		return (float) Math.sqrt((double) value);
 	}
 
-	public static float sqrt_double(final double value) {
+	public static double sqrt(final double value) {
 		return (float) Math.sqrt(value);
 	}
 
-	public static int floor_double(final double value) {
+	public static int floor(final double value) {
 		final int i = (int) value;
 		return value < (double) i ? i - 1 : i;
 	}
 	
-	public static int floor_float(final float value) {
+	public static int floor(final float value) {
 		final int i = (int)value;
 		return value < (float) i ? i - 1 : i;
 	}
 
-	public static float clamp_float(final float num, final float min, final float max) {
+	public static float clamp(final float num, final float min, final float max) {
 		return num < min ? min : (num > max ? max : num);
 	}
 

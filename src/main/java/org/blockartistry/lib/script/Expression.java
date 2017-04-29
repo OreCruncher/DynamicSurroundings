@@ -326,7 +326,7 @@ public final class Expression {
 				final float val = parameters[0].asNumber();
 				final float low = parameters[1].asNumber();
 				final float high = parameters[2].asNumber();
-				return new NumberValue(MathStuff.clamp_float(val, low, high));
+				return new NumberValue(MathStuff.clamp(val, low, high));
 			}
 		});
 

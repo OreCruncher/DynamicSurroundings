@@ -257,7 +257,7 @@ public class Generator {
 		if ((ply.motionX == 0d && ply.motionZ == 0d) || ply.isSneaking())
 			return;
 
-		final int yy = MathStuff.floor_double(ply.posY - 0.1d - ply.getYOffset() - (ply.onGround ? 0d : 0.25d));
+		final int yy = MathStuff.floor(ply.posY - 0.1d - ply.getYOffset() - (ply.onGround ? 0d : 0.25d));
 		final Association assos = mod.getSolver().findAssociationMessyFoliage(new BlockPos(ply.posX, yy, ply.posZ));
 		if (assos != null) {
 			if (!this.isMessyFoliage) {
@@ -291,6 +291,6 @@ public class Generator {
 	}
 
 	protected float scalex(final float number, final float min, final float max) {
-		return MathStuff.clamp_float((number - min) / (max - min), 0.0F, 1.0F);
+		return MathStuff.clamp((number - min) / (max - min), 0.0F, 1.0F);
 	}
 }

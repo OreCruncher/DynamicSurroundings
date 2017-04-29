@@ -351,7 +351,7 @@ public class Solver {
 	 */
 	public boolean playSpecialStoppingConditions(@Nonnull final EntityPlayer ply) {
 		if (ply.isInWater()) {
-			final float volume = MathStuff.sqrt_double(
+			final float volume = (float) MathStuff.sqrt(
 					ply.motionX * ply.motionX + ply.motionY * ply.motionY + ply.motionZ * ply.motionZ) * 1.25F;
 			final ConfigOptions options = new ConfigOptions();
 			options.getMap().put(Option.GLIDING_VOLUME, volume > 1 ? 1 : volume);

@@ -76,7 +76,7 @@ public final class PlayerUtils {
 			} else {
 				final DimensionInfo dimInfo = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION)
 						.getData(player.world);
-				final int theY = MathStuff.floor_double(player.posY);
+				final int theY = MathStuff.floor(player.posY);
 				if ((theY + INSIDE_Y_ADJUST) <= dimInfo.getSeaLevel())
 					biome = BiomeRegistry.UNDERGROUND;
 				else if (theY >= dimInfo.getSpaceHeight())
