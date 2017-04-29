@@ -21,14 +21,13 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.scanner;
+package org.blockartistry.lib.scanner;
 
 import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -55,7 +54,7 @@ public abstract class RandomScanner extends Scanner {
 
 	@Override
 	public void preScan() {
-		final BlockPos pos = EnvironState.getPlayerPosition();
+		final BlockPos pos = Minecraft.getMinecraft().player.getPosition();
 		this.playerX = pos.getX();
 		this.playerY = pos.getY();
 		this.playerZ = pos.getZ();

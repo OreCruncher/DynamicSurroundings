@@ -21,15 +21,15 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.scanner;
+package org.blockartistry.lib.scanner;
 
 import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.event.BlockUpdateEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -234,7 +234,7 @@ public abstract class CuboidScanner extends Scanner {
 					&& this.interestingBlock(event.newState))
 				blockScan(event.newState, event.pos, this.random);
 		} catch (final Throwable t) {
-			DSurround.log().error("onBlockUpdate() error", t);
+			this.log.error("onBlockUpdate() error", t);
 		}
 	}
 

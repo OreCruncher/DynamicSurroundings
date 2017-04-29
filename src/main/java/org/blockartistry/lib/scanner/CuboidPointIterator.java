@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.scanner;
+package org.blockartistry.lib.scanner;
 
 import java.util.Iterator;
 
