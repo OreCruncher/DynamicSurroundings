@@ -29,13 +29,13 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.DynSurround.registry.BiomeInfo;
+import org.blockartistry.DynSurround.registry.BiomeRegistry;
+import org.blockartistry.DynSurround.registry.DimensionInfo;
+import org.blockartistry.DynSurround.registry.DimensionRegistry;
+import org.blockartistry.DynSurround.registry.RegistryManager;
+import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.random.XorShiftRandom;
-import org.blockartistry.mod.DynSurround.registry.BiomeInfo;
-import org.blockartistry.mod.DynSurround.registry.BiomeRegistry;
-import org.blockartistry.mod.DynSurround.registry.DimensionInfo;
-import org.blockartistry.mod.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.mod.DynSurround.registry.RegistryManager;
-import org.blockartistry.mod.DynSurround.registry.RegistryManager.RegistryType;
 
 import com.google.common.base.Predicates;
 

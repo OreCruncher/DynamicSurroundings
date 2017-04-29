@@ -2,7 +2,7 @@ package org.blockartistry.lib;
 
 import java.nio.ByteBuffer;
 
-import org.blockartistry.mod.DynSurround.ModLog;
+import org.blockartistry.DynSurround.ModLog;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 

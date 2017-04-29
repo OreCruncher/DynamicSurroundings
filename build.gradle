@@ -123,7 +123,7 @@ processResources
 jar {
     
     manifest {
-        	attributes('FMLCorePlugin': 'org.blockartistry.mod.DynSurround.asm.TransformLoader', 'FMLCorePluginContainsFMLMod': 'true', 'FMLAT': 'dsurround_at.cfg')
+        	attributes('FMLCorePlugin': 'org.blockartistry.DynSurround.asm.TransformLoader', 'FMLCorePluginContainsFMLMod': 'true', 'FMLAT': 'dsurround_at.cfg')
     }
 }
 
@@ -140,7 +140,7 @@ task deobfJar(type: Jar) {
     classifier = 'dev'
     
     manifest {
-        	attributes('FMLCorePlugin': 'org.blockartistry.mod.DynSurround.asm.TransformLoader', 'FMLCorePluginContainsFMLMod': 'true', 'FMLAT': 'dsurround_at.cfg')
+        	attributes('FMLCorePlugin': 'org.blockartistry.DynSurround.asm.TransformLoader', 'FMLCorePluginContainsFMLMod': 'true', 'FMLAT': 'dsurround_at.cfg')
     }
 }
 

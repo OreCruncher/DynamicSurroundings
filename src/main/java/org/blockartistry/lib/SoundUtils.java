@@ -26,7 +26,7 @@ package org.blockartistry.lib;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.mod.DynSurround.DSurround;
+import org.blockartistry.DynSurround.DSurround;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
