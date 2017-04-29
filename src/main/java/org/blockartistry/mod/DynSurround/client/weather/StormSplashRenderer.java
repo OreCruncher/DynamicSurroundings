@@ -111,9 +111,8 @@ public class StormSplashRenderer {
 			particleType = EnumParticleTypes.SMOKE_NORMAL;
 		} else if (WorldUtils.isFullWaterBlock(state)) {
 			ParticleCollections.addWaterRipple(world, x, y, z);
-			return;
 		} else if (state.getMaterial() != Material.AIR) {
-			particleType = EnumParticleTypes.WATER_SPLASH;
+			ParticleCollections.addRainSplash(world, x, y, z);
 		}
 
 		if (particleType != null)
