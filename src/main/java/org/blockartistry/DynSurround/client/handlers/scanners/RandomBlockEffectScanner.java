@@ -28,6 +28,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
@@ -35,7 +36,7 @@ import org.blockartistry.DynSurround.registry.BlockProfile;
 import org.blockartistry.DynSurround.registry.BlockRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.DynSurround.scanner.RandomScanner;
+import org.blockartistry.lib.scanner.RandomScanner;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -60,6 +61,7 @@ public class RandomBlockEffectScanner extends RandomScanner {
 
 	public RandomBlockEffectScanner(final int range) {
 		super("RandomBlockEffectScanner", range, (int) (range * range * range * RATIO));
+		this.setLogger(DSurround.log());
 	}
 
 	@Override

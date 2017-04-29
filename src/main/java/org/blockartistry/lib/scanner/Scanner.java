@@ -21,21 +21,23 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.scanner;
+package org.blockartistry.lib.scanner;
 
 import java.util.Random;
 import java.util.concurrent.Callable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.BlockStateProvider;
+import org.blockartistry.lib.logging.ModLog;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public abstract class Scanner implements ITickable, Callable<Void> {
 
@@ -56,9 +58,10 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 
 	protected final Random random = new XorShiftRandom();
 	protected final BlockPos.MutableBlockPos workingPos = new BlockPos.MutableBlockPos();
-	
 	protected final BlockStateProvider blockProvider = new BlockStateProvider();
-
+	
+	protected ModLog log;
+	
 	public Scanner(@Nonnull final String name, final int range) {
 		this(name, range, 0);
 	}
@@ -73,6 +76,7 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 
 	public Scanner(@Nonnull final String name, final int xRange, final int yRange, final int zRange,
 			final int blocksPerTick) {
+		this.log = ModLog.NULL_LOGGER;
 		this.name = name;
 		this.xRange = xRange;
 		this.yRange = yRange;
@@ -86,6 +90,10 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 			this.blocksPerTick = Math.min(this.volume / 20, MAX_BLOCKS_TICK);
 		else
 			this.blocksPerTick = Math.min(blocksPerTick, MAX_BLOCKS_TICK);
+	}
+	
+	public void setLogger(@Nonnull final ModLog log) {
+		this.log = log;
 	}
 
 	/**
@@ -110,6 +118,10 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 	protected boolean interestingBlock(final IBlockState state) {
 		return state != AIR_BLOCK;
 	}
+	
+	protected World getWorld() {
+		return Minecraft.getMinecraft().thePlayer.worldObj;
+	}
 
 	@Override
 	public Void call() {
@@ -128,7 +140,7 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 	@Override
 	public void update() {
 
-		this.blockProvider.setWorld(EnvironState.getWorld());
+		this.blockProvider.setWorld(getWorld());
 		
 		preScan();
 		
