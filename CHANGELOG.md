@@ -1,3 +1,25 @@
+###DynamicSurroundings-1.10.2-3.3.8.0
+**What's New**
+* Crow (dsurround:crow) spot sound; occurs in forests, bogs, fens, etc. (American Crow)
+    * Also occurs in "dead" biomes (Dead Forest, Dead Swamp, etc.)
+* New biome background sound for bogs, fens, marshes, bayou, etc.
+* Option to override sea level definition for Overworld; useful when terrain generators have sea levels other than 63, for example OTG and Biome Bundle.  Can be found in the config GUI: Biome Options -> Overworld Sealevel Override
+* Integrated Dynamics Meneglin biome similar to Taiga
+
+**Fixes**
+* Rain intensity generation with custom min/max boundaries
+* Screen blackout when hitting F1 with aurora present
+* Stack overflow in biome registry when OTG is installed
+* Superflat worlds are no longer Underground
+
+**Changes**
+* Tweaked swim sound volume equation so its a bit louder
+* Lava drop falling into water produces steam cloud
+* Manipulate master sound gain (PaulsCode) to mute rather than MASTER sound category
+* Adjusted toolbar sounds to be lower in volume
+* Water ripples on any Material.WATER blocks that are at default state (i.e. full); will occur on BoP liquid blocks such as poison, honey, and blood
+* Water splash particle effect is slightly smaller.
+
 ###DynamicSurroundings-1.10.2-3.3.7.0
 **What's New**
 * Item equip sounds ala MAtmos.  Swapping items in the hot bar will trigger sounds based on item type.  Can be turned off in config. Works main hand as well as off hand.
