@@ -26,6 +26,7 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import org.blockartistry.mod.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.mod.DynSurround.client.fx.WaterSplashJetEffect;
+import org.blockartistry.mod.DynSurround.client.fx.particle.mote.IParticleMote;
 import org.blockartistry.mod.DynSurround.client.sound.PositionedEmitter;
 import org.blockartistry.mod.DynSurround.client.sound.Sounds;
 import org.blockartistry.mod.DynSurround.util.WorldUtils;

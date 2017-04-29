@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.DynSurround.client.fx.particle;
+package org.blockartistry.mod.DynSurround.client.fx.particle.mote;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;

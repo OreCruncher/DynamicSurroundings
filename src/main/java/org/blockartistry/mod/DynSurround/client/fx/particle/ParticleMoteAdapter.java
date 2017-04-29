@@ -26,6 +26,8 @@ package org.blockartistry.mod.DynSurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.mod.DynSurround.client.fx.particle.mote.IParticleMote;
+
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
