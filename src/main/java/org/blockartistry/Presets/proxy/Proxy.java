@@ -22,9 +22,43 @@
  * THE SOFTWARE.
  */
 
-@API(owner = DSurround.MOD_ID, provides = DSurround.API_ID, apiVersion = "1.0")
-package org.blockartistry.DynSurround.api;
+package org.blockartistry.Presets.proxy;
 
-import org.blockartistry.DynSurround.DSurround;
+import javax.annotation.Nonnull;
 
-import net.minecraftforge.fml.common.API;
+import org.blockartistry.lib.Localization;
+
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+
+public class Proxy {
+	
+	protected void registerLanguage() {
+		Localization.initialize(Side.SERVER);
+	}
+	
+	public boolean isRunningAsServer() {
+		return true;
+	}
+	
+	public Side effectiveSide() {
+		return Side.SERVER;
+	}
+
+	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
+		registerLanguage();
+	}
+
+	public void init(@Nonnull final FMLInitializationEvent event) {
+	}
+
+	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
+	}
+	
+	public void loadCompleted(@Nonnull final FMLLoadCompleteEvent event) {
+	}
+
+}
