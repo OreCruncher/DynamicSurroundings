@@ -18,5 +18,24 @@
 		],
 		"dependencies": [
 		]
+	},
+	{
+		"modid": "presets",
+		"name": "Presets!",
+		"description": "Save/Restore configuration data using presets for ease of use",
+		"version": "$version",
+		"mcversion": "$mcversion",
+		"url": "https://github.com/OreCruncher/DynamicSurroundings/wiki",
+		"updateUrl": "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json",
+		"updateJSON": "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json",
+		"authorList": [
+			"OreCruncher"
+		],
+		"credits": "Tsoccerguy3 for The Idea",
+		"logoFile": "",
+		"screenshots": [
+		],
+		"dependencies": [
+		]
 	}
 ]

@@ -68,7 +68,7 @@ public class DSurround {
 	public static final String RESOURCE_ID = "dsurround";
 	public static final String MOD_NAME = "Dynamic Surroundings";
 	public static final String VERSION = "@VERSION@";
-	public static final String DEPENDENCIES = "";
+	public static final String DEPENDENCIES = "before:presets";
 	public static final String GUI_FACTORY = "org.blockartistry.DynSurround.client.gui.ConfigGuiFactory";
 	public static final String UPDATE_URL = "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json";
 
@@ -151,10 +151,10 @@ public class DSurround {
 		if (!proxy.isRunningAsServer()) {
 			final ModMetadata data = ForgeUtils.getModMetadata(DSurround.MOD_ID);
 			if (data != null) {
-				data.name = Localization.format("metadata.Name");
-				data.credits = Localization.format("metadata.Credits");
-				data.description = Localization.format("metadata.Description");
-				data.authorList = Arrays.asList(StringUtils.split(Localization.format("metadata.Authors"), ','));
+				data.name = Localization.format("dsurround.metadata.Name");
+				data.credits = Localization.format("dsurround.metadata.Credits");
+				data.description = Localization.format("dsurround.metadata.Description");
+				data.authorList = Arrays.asList(StringUtils.split(Localization.format("dsurround.metadata.Authors"), ','));
 			}
 		}
 	}

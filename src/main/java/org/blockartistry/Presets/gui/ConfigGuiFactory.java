@@ -22,9 +22,47 @@
  * THE SOFTWARE.
  */
 
-@API(owner = DSurround.MOD_ID, provides = DSurround.API_ID, apiVersion = "1.0")
-package org.blockartistry.DynSurround.api;
+package org.blockartistry.Presets.gui;
 
-import org.blockartistry.DynSurround.DSurround;
+import java.util.Set;
 
-import net.minecraftforge.fml.common.API;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.fml.client.IModGuiFactory;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
+public class ConfigGuiFactory implements IModGuiFactory{
+
+	@Override
+	public void initialize(final Minecraft minecraftInstance) {
+	}
+
+	@Override
+	public Class<? extends GuiScreen> mainConfigGuiClass() {
+		return PresetsConfigGui.class;
+	}
+
+	@Override
+	public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
+		return null;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
+		return null;
+	}
+
+	@Override
+	public boolean hasConfigGui() {
+		return true;
+	}
+
+	@Override
+	public GuiScreen createConfigGui(GuiScreen parentScreen) {
+		return new PresetsConfigGui(parentScreen);
+	}
+
+}
