@@ -48,7 +48,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod.EventBusSubscriber(Side.CLIENT)
+@Mod.EventBusSubscriber(value = Side.CLIENT)
 public class MinecraftConfigHandler {
 
 	private final static String MINECRAFT = "minecraft";
@@ -204,9 +204,18 @@ public class MinecraftConfigHandler {
 		final PresetData data = event.getModData(MINECRAFT);
 		if (data != null) {
 			final GameSettings settings = Minecraft.getMinecraft().gameSettings;
+
+			boolean refreshChat = false;
+			boolean refreshMipmaps = false;
+			boolean refreshRenderDistance = false;
+			boolean refreshRenderers = false;
+			boolean refreshUnicodeFlag = false;
+			boolean refreshResources = false;
+			boolean refreshVsync = false;
+
 			for (final Entry<String, String> e : data.getEntries()) {
 				if (e.getKey().startsWith(SOUND_PREFIX)) {
-					
+
 					final String catName = e.getKey().replace(SOUND_PREFIX, "");
 					final SoundCategory sc = SoundCategory.getByName(catName);
 					if (sc != null) {
@@ -214,7 +223,7 @@ public class MinecraftConfigHandler {
 					} else {
 						Presets.log().warn("Unknown sound category: %s", catName);
 					}
-					
+
 				} else if (e.getKey().startsWith(KEYBIND_PREFIX)) {
 
 					boolean found = false;
@@ -230,8 +239,8 @@ public class MinecraftConfigHandler {
 							break;
 						}
 					}
-					
-					if(!found)
+
+					if (!found)
 						Presets.log().warn("Unknown keybinding found: %s", keyName);
 
 				} else {
@@ -255,13 +264,21 @@ public class MinecraftConfigHandler {
 							settings.saturation = (float) data.getDouble(theName, settings.saturation);
 							break;
 						case RENDER_DISTANCE:
-							settings.renderDistanceChunks = data.getInt(theName, settings.renderDistanceChunks);
+							final int rd = data.getInt(theName, settings.renderDistanceChunks);
+							if (settings.renderDistanceChunks != rd) {
+								settings.renderDistanceChunks = rd;
+								refreshRenderDistance = true;
+							}
 							break;
 						case VIEW_BOBBING:
 							settings.viewBobbing = data.getBoolean(theName, settings.viewBobbing);
 							break;
 						case ANAGLYPH:
-							settings.anaglyph = data.getBoolean(theName, settings.anaglyph);
+							final boolean anal = data.getBoolean(theName, settings.anaglyph);
+							if (settings.anaglyph != anal) {
+								settings.anaglyph = anal;
+								refreshResources = true;
+							}
 							break;
 						case FRAMERATE_LIMIT:
 							settings.limitFramerate = data.getInt(theName, settings.limitFramerate);
@@ -271,15 +288,19 @@ public class MinecraftConfigHandler {
 							break;
 						case CHAT_COLOR:
 							settings.chatColours = data.getBoolean(theName, settings.chatColours);
+							refreshChat = true;
 							break;
 						case CHAT_LINKS:
 							settings.chatLinks = data.getBoolean(theName, settings.chatLinks);
+							refreshChat = true;
 							break;
 						case CHAT_OPACITY:
 							settings.chatOpacity = (float) data.getDouble(theName, settings.chatOpacity);
+							refreshChat = true;
 							break;
 						case CHAT_LINKS_PROMPT:
 							settings.chatLinksPrompt = data.getBoolean(theName, settings.chatLinksPrompt);
+							refreshChat = true;
 							break;
 						case SNOOPER_ENABLED:
 							settings.snooperEnabled = data.getBoolean(theName, settings.snooperEnabled);
@@ -288,32 +309,52 @@ public class MinecraftConfigHandler {
 							settings.fullScreen = data.getBoolean(theName, settings.fullScreen);
 							break;
 						case ENABLE_VSYNC:
-							settings.enableVsync = data.getBoolean(theName, settings.enableVsync);
+							final boolean vsync = data.getBoolean(theName, settings.enableVsync);
+							if (settings.enableVsync != vsync) {
+								settings.enableVsync = vsync;
+								refreshVsync = true;
+							}
 							break;
 						case USE_VBO:
-							settings.useVbo = data.getBoolean(theName, settings.useVbo);
+							final boolean vbo = data.getBoolean(theName, settings.useVbo);
+							if (settings.useVbo != vbo) {
+								settings.useVbo = vbo;
+								refreshRenderers = true;
+							}
 							break;
 						case TOUCHSCREEN:
 							settings.touchscreen = data.getBoolean(theName, settings.touchscreen);
 							break;
 						case CHAT_SCALE:
 							settings.chatScale = (float) data.getDouble(theName, settings.chatScale);
+							refreshChat = true;
 							break;
 						case CHAT_WIDTH:
 							settings.chatWidth = (float) data.getDouble(theName, settings.chatWidth);
+							refreshChat = true;
 							break;
 						case CHAT_HEIGHT_FOCUSED:
 							settings.chatHeightFocused = (float) data.getDouble(theName, settings.chatHeightFocused);
+							refreshChat = true;
 							break;
 						case CHAT_HEIGHT_UNFOCUSED:
 							settings.chatHeightUnfocused = (float) data.getDouble(theName,
 									settings.chatHeightUnfocused);
+							refreshChat = true;
 							break;
 						case MIPMAP_LEVELS:
-							settings.mipmapLevels = data.getInt(theName, settings.mipmapLevels);
+							final int mips = data.getInt(theName, settings.mipmapLevels);
+							if (settings.mipmapLevels != mips) {
+								settings.mipmapLevels = mips;
+								refreshMipmaps = true;
+							}
 							break;
 						case FORCE_UNICODE_FONT:
-							settings.forceUnicodeFont = data.getBoolean(theName, settings.forceUnicodeFont);
+							final boolean force = data.getBoolean(theName, settings.forceUnicodeFont);
+							if (settings.forceUnicodeFont != force) {
+								settings.forceUnicodeFont = force;
+								refreshUnicodeFlag = true;
+							}
 							break;
 						case REDUCED_DEBUG_INFO:
 							settings.reducedDebugInfo = data.getBoolean(theName, settings.reducedDebugInfo);
@@ -337,10 +378,18 @@ public class MinecraftConfigHandler {
 							settings.clouds = data.getInt(theName, settings.clouds);
 							break;
 						case GRAPHICS:
-							settings.fancyGraphics = data.getBoolean(theName, settings.fancyGraphics);
+							final boolean fancy = data.getBoolean(theName, settings.fancyGraphics);
+							if (settings.fancyGraphics != fancy) {
+								settings.fancyGraphics = fancy;
+								refreshRenderers = true;
+							}
 							break;
 						case AMBIENT_OCCLUSION:
-							settings.ambientOcclusion = data.getInt(theName, settings.ambientOcclusion);
+							final int occlusion = data.getInt(theName, settings.ambientOcclusion);
+							if (settings.ambientOcclusion != occlusion) {
+								settings.ambientOcclusion = occlusion;
+								refreshRenderers = true;
+							}
 							break;
 						case GUI_SCALE:
 							settings.guiScale = data.getInt(theName, settings.guiScale);
@@ -367,21 +416,38 @@ public class MinecraftConfigHandler {
 				}
 			}
 			settings.saveOptions();
-			
-			// Tickle the various modules of Minecraft to get the update settings
-			// since we bypassed the get/set of GameSettings.
+
+			// Tickle the various modules of Minecraft to get the update
+			// settings since we bypassed the get/set of GameSettings.
 			final Minecraft mc = Minecraft.getMinecraft();
-            mc.ingameGUI.getChatGUI().refreshChat();
-            mc.getTextureMapBlocks().setMipmapLevels(settings.mipmapLevels);
-            mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-            mc.getTextureMapBlocks().setBlurMipmapDirect(false, settings.mipmapLevels > 0);
-            mc.renderGlobal.setDisplayListEntitiesDirty();
-            mc.fontRendererObj.setUnicodeFlag(mc.getLanguageManager().isCurrentLocaleUnicode() || settings.forceUnicodeFont);
-            mc.refreshResources();
-            Display.setVSyncEnabled(settings.enableVsync);
-            
-            if(settings.fullScreen != mc.isFullScreen())
-            	mc.toggleFullscreen();
+			if (refreshChat)
+				mc.ingameGUI.getChatGUI().refreshChat();
+
+			if (refreshMipmaps) {
+				mc.getTextureMapBlocks().setMipmapLevels(settings.mipmapLevels);
+				mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+				mc.getTextureMapBlocks().setBlurMipmapDirect(false, settings.mipmapLevels > 0);
+				refreshResources = true;
+			}
+
+			if (refreshRenderDistance)
+				mc.renderGlobal.setDisplayListEntitiesDirty();
+
+			if (refreshRenderers)
+				mc.renderGlobal.loadRenderers();
+
+			if (refreshUnicodeFlag)
+				mc.fontRendererObj
+						.setUnicodeFlag(mc.getLanguageManager().isCurrentLocaleUnicode() || settings.forceUnicodeFont);
+
+			if (refreshResources)
+				mc.refreshResources();
+
+			if (refreshVsync)
+				Display.setVSyncEnabled(settings.enableVsync);
+
+			if (settings.fullScreen != mc.isFullScreen())
+				mc.toggleFullscreen();
 
 		}
 
