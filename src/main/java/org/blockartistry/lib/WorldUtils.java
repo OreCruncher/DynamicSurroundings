@@ -50,6 +50,9 @@ public final class WorldUtils {
 
 	@Nullable
 	public static Entity locateEntity(@Nonnull final World world, @Nonnull final UUID entityId) {
+		if(world == null)
+			return null;
+		
 		for (final Entity e : world.getLoadedEntityList())
 			if (e.getUniqueID().equals(entityId))
 				return e;
