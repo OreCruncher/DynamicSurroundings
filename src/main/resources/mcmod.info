@@ -32,7 +32,7 @@
 			"OreCruncher"
 		],
 		"credits": "Tsoccerguy3 for The Idea",
-		"logoFile": "",
+		"logoFile": "assets/presets/textures/logo.png",
 		"screenshots": [
 		],
 		"dependencies": [
