@@ -41,6 +41,8 @@ public class PresetDataFile {
 	public String title = StringUtils.EMPTY;
 	@SerializedName("description")
 	public String description = StringUtils.EMPTY;
+	@SerializedName("restartRequired")
+	public boolean restartRequired = false;
 	@SerializedName("data")
 	public Map<String, Map<String, String>> data = Maps.newHashMap();
 
@@ -51,6 +53,7 @@ public class PresetDataFile {
 	public PresetDataFile(@Nonnull final PresetInfo info) {
 		this.title = info.getTitle();
 		this.description = info.getDescription();
+		this.restartRequired = info.isRestartRequired();
 		this.data = Maps.newHashMap();
 		for (final Entry<String, PresetData> d : info.getData().entrySet()) {
 			final Map<String, String> data = Maps.newHashMap();

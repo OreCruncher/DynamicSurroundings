@@ -12,7 +12,7 @@ presets.metadata.Authors=§6OreCruncher§r
 presets.metadata.Description=Save/Restore §6configuration data§r using §6presets§r for ease of use
 
 # Keybindings
-presets.cfg.keybind.Presets=Toggle SelectionBox
+presets.cfg.keybind.Presets=Preset Selection
 
 # Config options
 presets.cfg.logging.cat.Logging=Logging Options
@@ -44,4 +44,5 @@ presets.dlg.Required=REQUIRED
 presets.dlg.ApplyWarning=Applying this preset will overwrite existing settings.  Continue?
 presets.dlg.SaveWarning=Are you sure you want to SAVE over this preset?
 presets.dlg.DeleteWarning=Are you sure you want to delete this preset?
-
+presets.dlg.RestartRequired=NOTE: A restart of your Minecraft client will be required for some of the configuration changes to take effect.
+presets.dlg.RestartRequired.tooltip=Restart may be required

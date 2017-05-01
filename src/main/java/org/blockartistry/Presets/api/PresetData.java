@@ -42,6 +42,7 @@ public final class PresetData {
 	public static final char SPLIT_SPACE_CHAR = ' ';
 
 	private final Map<String, String> data;
+	private boolean restartRequired = false;
 
 	public PresetData() {
 		this.data = Maps.newHashMap();
@@ -49,6 +50,15 @@ public final class PresetData {
 
 	public PresetData(@Nonnull final Map<String, String> data) {
 		this.data = data;
+	}
+	
+	public PresetData restartRequired() {
+		this.restartRequired = true;
+		return this;
+	}
+	
+	public boolean isRestartRequired() {
+		return this.restartRequired;
 	}
 
 	public PresetData setInt(@Nonnull final String id, final int value) {

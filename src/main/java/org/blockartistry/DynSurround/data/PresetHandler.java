@@ -46,6 +46,7 @@ public class PresetHandler {
 		final PresetData data = event.getModData(DSurround.MOD_ID);
 		final ConfigurationHelper helper = new ConfigurationHelper(data);
 		helper.save(DSurround.config());
+		data.restartRequired();
 	}
 
 	@Optional.Method(modid = "presets")

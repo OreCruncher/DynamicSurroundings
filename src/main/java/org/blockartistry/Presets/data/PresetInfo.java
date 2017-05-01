@@ -37,12 +37,13 @@ public class PresetInfo implements Comparable<PresetInfo> {
 	protected String fileName = StringUtils.EMPTY;
 	protected String title = StringUtils.EMPTY;
 	protected String description = StringUtils.EMPTY;
+	protected boolean restartRequired = false;
 	protected Map<String, PresetData> data = Maps.newHashMap();
 
 	public PresetInfo() {
 
 	}
-	
+
 	public PresetInfo(@Nonnull final PresetInfo src) {
 		this.title = src.title;
 		this.description = src.description;
@@ -66,6 +67,10 @@ public class PresetInfo implements Comparable<PresetInfo> {
 		return this.fileName;
 	}
 
+	public boolean isRestartRequired() {
+		return this.restartRequired;
+	}
+
 	public PresetInfo setTitle(@Nonnull final String title) {
 		this.title = title;
 		return this;
@@ -81,6 +86,11 @@ public class PresetInfo implements Comparable<PresetInfo> {
 		return this;
 	}
 
+	public PresetInfo setRestartRequired(final boolean flag) {
+		this.restartRequired = flag;
+		return this;
+	}
+
 	PresetInfo set0(@Nonnull final Map<String, Map<String, String>> data) {
 		this.data = Maps.newHashMap();
 		for (final Entry<String, Map<String, String>> d : data.entrySet()) {
@@ -88,9 +98,15 @@ public class PresetInfo implements Comparable<PresetInfo> {
 		}
 		return this;
 	}
-	
+
 	PresetInfo set1(@Nonnull final Map<String, PresetData> data) {
 		this.data = data;
+		this.restartRequired = false;
+		for (final PresetData d : this.data.values())
+			if (d.isRestartRequired()) {
+				this.restartRequired = true;
+				break;
+			}
 		return this;
 	}
 
@@ -98,6 +114,7 @@ public class PresetInfo implements Comparable<PresetInfo> {
 		this.setTitle(data.title);
 		this.setDescription(data.description);
 		this.set0(data.data);
+		this.setRestartRequired(data.restartRequired);
 		return this;
 	}
 
