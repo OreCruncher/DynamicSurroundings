@@ -46,11 +46,11 @@ public final class ModOptions {
 	private static final List<String> loggingSort = Arrays.asList(CONFIG_ENABLE_ONLINE_VERSION_CHECK,
 			CONFIG_ENABLE_DEBUG_LOGGING);
 
-	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_ENABLE_DEBUG_LOGGING, defaultValue = "false", lang = "cfg.logging.EnableDebug")
+	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_ENABLE_DEBUG_LOGGING, defaultValue = "false", lang = "presets.cfg.logging.EnableDebug")
 	@Comment("Enables/disables debug logging of the mod")
 	@RestartRequired
 	public static boolean enableDebugLogging = false;
-	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_ENABLE_ONLINE_VERSION_CHECK, defaultValue = "true", lang = "cfg.logging.VersionCheck")
+	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_ENABLE_ONLINE_VERSION_CHECK, defaultValue = "true", lang = "presets.cfg.logging.VersionCheck")
 	@Comment("Enables/disables display of version check information")
 	@RestartRequired
 	public static boolean enableVersionChecking = true;
@@ -65,7 +65,7 @@ public final class ModOptions {
 		config.setCategoryRequiresWorldRestart(CATEGORY_LOGGING_CONTROL, false);
 		config.setCategoryComment(CATEGORY_LOGGING_CONTROL, "Defines how Presets! logging will behave");
 		config.setCategoryPropertyOrder(CATEGORY_LOGGING_CONTROL, new ArrayList<String>(loggingSort));
-		config.setCategoryLanguageKey(CATEGORY_LOGGING_CONTROL, "cfg.logging.cat.Logging");
+		config.setCategoryLanguageKey(CATEGORY_LOGGING_CONTROL, "presets.cfg.logging.cat.Logging");
 
 		// Iterate through the config list looking for properties without
 		// comments. These will be scrubbed.

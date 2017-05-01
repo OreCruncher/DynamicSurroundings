@@ -142,7 +142,7 @@ public class Presets {
 	@SubscribeEvent
 	public void playerLogin(final PlayerLoggedInEvent event) {
 		if (ModOptions.enableVersionChecking)
-			new VersionChecker(Presets.MOD_ID, "msg.NewVersion.dsurround").playerLogin(event);
+			new VersionChecker(Presets.MOD_ID, "msg.NewVersion.presets").playerLogin(event);
 	}
 
 }
