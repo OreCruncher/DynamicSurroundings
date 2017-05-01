@@ -1,3 +1,19 @@
+###DynamicSurroundings-1.11.2-3.4.0.0
+**What's New**
+* Presets!
+    * Saves Minecraft and Dynamic Surroundings settings to an external configuration file.  Useful to use after getting your client and modpack tuned the way you want.
+    * Apply saved settings anytime you want
+    * Can have multiple preset files depending on your needs.  (Like tweaking Minecraft settings trying to get the right setup and saving in between attempts.)
+    * Access the Presets! dialog by using the mod configuration system or pressing P while in game.
+    * Saved presets are in Json format so you can use your favorite Json editor to hand modify.
+    * You can edit out settings from the file if you do not want to overwrite when applying.
+    * Json files can be shared - just copy from/to the ./minecraft/config/presets directory.
+* Presets! is currently embedded within Dynamic Surroundings.  (If you didn't know a single JAR can host multiple mods.)  Depending on success I may split into a standalone mod and provide an API so that other mods can tap into the feature.
+* Presets! is a work in progress.  This means it may be tweaked/changed based on feedback.
+
+**Changes**
+* Internal reorganization and refactor.  Shouldn't see any differences outside of what is listed here.
+
 ###DynamicSurroundings-1.11.2-3.3.8.0
 **What's New**
 * Crow (dsurround:crow) spot sound; occurs in forests, bogs, fens, etc. (American Crow)
