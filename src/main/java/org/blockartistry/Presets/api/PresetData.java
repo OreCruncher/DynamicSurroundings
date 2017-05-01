@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
 public final class PresetData {
@@ -146,9 +147,13 @@ public final class PresetData {
 		return def;
 	}
 
+	public boolean contains(@Nonnull final String id) {
+		return this.data.containsKey(id);
+	}
+	
 	@Nonnull
 	public Set<Entry<String, String>> getEntries() {
-		return this.data.entrySet();
+		return ImmutableSet.copyOf(this.data.entrySet());
 	}
 
 }

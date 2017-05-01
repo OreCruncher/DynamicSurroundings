@@ -22,49 +22,41 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.Presets.gui;
-
-import java.util.Set;
+package org.blockartistry.Presets.keyboard;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.Presets.Presets;
+import org.blockartistry.Presets.gui.PresetsConfigGui;
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.fml.client.IModGuiFactory;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
-public class ConfigGuiFactory implements IModGuiFactory{
+@Mod.EventBusSubscriber(Side.CLIENT)
+public class KeyHandler {
 
-	@Override
-	public void initialize(@Nonnull final Minecraft minecraftInstance) {
+	private static final String SECTION_NAME = Presets.MOD_NAME;
+
+	private static final KeyBinding PRESET_KEY = new KeyBinding("presets.cfg.keybind.Presets", Keyboard.KEY_P, SECTION_NAME);
+
+	static {
+		ClientRegistry.registerKeyBinding(PRESET_KEY);
 	}
 
-	@Override
-	public Class<? extends GuiScreen> mainConfigGuiClass() {
-		return PresetsConfigGui.class;
-	}
+	@SubscribeEvent(receiveCanceled = false)
+	public static void onKeyboard(@Nonnull InputEvent.KeyInputEvent event) {
 
-	@Override
-	public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
-		return null;
-	}
+		if (PRESET_KEY.isPressed()&& Minecraft.getMinecraft().currentScreen == null) {
+			final PresetsConfigGui gui = new PresetsConfigGui(null);
+			Minecraft.getMinecraft().displayGuiScreen(gui);
+		}
 
-	@SuppressWarnings("deprecation")
-	@Override
-	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
-		return null;
-	}
-
-	@Override
-	public boolean hasConfigGui() {
-		return true;
-	}
-
-	@Override
-	public GuiScreen createConfigGui(@Nonnull final GuiScreen parentScreen) {
-		return new PresetsConfigGui(parentScreen);
 	}
 
 }

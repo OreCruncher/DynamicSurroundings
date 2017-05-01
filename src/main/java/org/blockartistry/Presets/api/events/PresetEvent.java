@@ -31,6 +31,8 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.Presets.api.PresetData;
 
+import com.google.common.collect.ImmutableMap;
+
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /*
@@ -43,6 +45,14 @@ public class PresetEvent extends Event {
 
 	protected PresetEvent(@Nonnull final Map<String, PresetData> data) {
 		this.data = data;
+	}
+	
+	/*
+	 * Get a read only copy of the underlying data.
+	 */
+	@Nonnull
+	public Map<String, PresetData> getData() {
+		return ImmutableMap.copyOf(this.data);
 	}
 
 	/*

@@ -22,49 +22,42 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.Presets.gui;
+package org.blockartistry.Presets.data;
 
-import java.util.Set;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.fml.client.IModGuiFactory;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.Presets.api.PresetData;
 
-@SideOnly(Side.CLIENT)
-public class ConfigGuiFactory implements IModGuiFactory{
+import com.google.common.collect.Maps;
+import com.google.gson.annotations.SerializedName;
 
-	@Override
-	public void initialize(@Nonnull final Minecraft minecraftInstance) {
+public class PresetDataFile {
+
+	@SerializedName("title")
+	public String title = StringUtils.EMPTY;
+	@SerializedName("description")
+	public String description = StringUtils.EMPTY;
+	@SerializedName("data")
+	public Map<String, Map<String, String>> data = Maps.newHashMap();
+
+	public PresetDataFile() {
+
 	}
 
-	@Override
-	public Class<? extends GuiScreen> mainConfigGuiClass() {
-		return PresetsConfigGui.class;
-	}
-
-	@Override
-	public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
-		return null;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
-		return null;
-	}
-
-	@Override
-	public boolean hasConfigGui() {
-		return true;
-	}
-
-	@Override
-	public GuiScreen createConfigGui(@Nonnull final GuiScreen parentScreen) {
-		return new PresetsConfigGui(parentScreen);
+	public PresetDataFile(@Nonnull final PresetInfo info) {
+		this.title = info.getTitle();
+		this.description = info.getDescription();
+		this.data = Maps.newHashMap();
+		for (final Entry<String, PresetData> d : info.getData().entrySet()) {
+			final Map<String, String> data = Maps.newHashMap();
+			for (final Entry<String, String> e : d.getValue().getEntries())
+				data.put(e.getKey(), e.getValue());
+			this.data.put(d.getKey(), data);
+		}
 	}
 
 }
