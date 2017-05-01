@@ -47,7 +47,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod.EventBusSubscriber(Side.CLIENT)
+@Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
 public class KeyHandler {
 
 	private static final String SECTION_NAME = DSurround.MOD_NAME;

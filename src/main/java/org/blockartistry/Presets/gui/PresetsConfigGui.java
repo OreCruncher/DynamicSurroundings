@@ -69,6 +69,11 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback {
 	protected static final String APPLY_WARNING_TEXT = Localization.format("presets.dlg.ApplyWarning");
 	protected static final String SAVE_WARNING_TEXT = Localization.format("presets.dlg.SaveWarning");
 	protected static final String DELETE_WARNING_TEXT = Localization.format("presets.dlg.DeleteWarning");
+	protected static final String RESTART_REQUIRED_TEXT = TextFormatting.RED
+			+ Localization.format("presets.dlg.RestartRequired");
+
+	protected static final String TOOLTIP_RESTART_REQUIRED = TextFormatting.RED
+			+ Localization.format("presets.dlg.RestartRequired.tooltip");
 
 	protected static final int ID_TITLE = 500;
 
@@ -259,8 +264,14 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback {
 
 				final List<String> tipText = Lists.newArrayList();
 				tipText.add(TextFormatting.GOLD + info.getFilename());
-				tipText.add("");
-				tipText.addAll(this.fontRendererObj.listFormattedStringToWidth(info.getDescription(), 200));
+				if (info.isRestartRequired())
+					tipText.add(TOOLTIP_RESTART_REQUIRED);
+				final List<String> moreText = this.fontRendererObj.listFormattedStringToWidth(info.getDescription(),
+						200);
+				if (moreText.size() > 0) {
+					tipText.add("");
+					tipText.addAll(moreText);
+				}
 				this.tooltips.set(i, tipText);
 			}
 		}
@@ -301,7 +312,11 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback {
 			break;
 		case ID_APPLY: {
 			final PresetInfo pi = this.presets.get(this.selectedPreset);
-			final GuiYesNo yn = new GuiYesNo(this, APPLY_WARNING_TEXT, pi.getTitle(), ID_APPLY);
+			final StringBuilder builder = new StringBuilder();
+			builder.append(pi.getTitle());
+			if (pi.isRestartRequired())
+				builder.append("\n\n").append(RESTART_REQUIRED_TEXT);
+			final GuiYesNo yn = new GuiYesNo(this, APPLY_WARNING_TEXT, builder.toString(), ID_APPLY);
 			this.mc.displayGuiScreen(yn);
 		}
 			break;

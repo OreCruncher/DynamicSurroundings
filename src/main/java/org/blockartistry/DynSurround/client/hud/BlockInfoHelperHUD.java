@@ -29,6 +29,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
@@ -62,7 +63,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 
-@Mod.EventBusSubscriber(Side.CLIENT)
+@Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
 public class BlockInfoHelperHUD extends GuiOverlay {
 
 	private static final String TEXT_FOOTSTEP_ACOUSTICS = TextFormatting.DARK_PURPLE + "<Footstep Accoustics>";

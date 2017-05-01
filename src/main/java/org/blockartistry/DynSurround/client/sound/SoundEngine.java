@@ -56,7 +56,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 
-@Mod.EventBusSubscriber(Side.CLIENT)
+@Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
 public class SoundEngine {
 
 	private static final int MAX_STREAM_CHANNELS = 16;

@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.event;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.fx.particle.ExplosionHelper;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -50,7 +51,7 @@ import net.minecraftforge.fml.relauncher.Side;
  * client events.  This is the way it can pick up on things like waterflow changes
  * and liquid being picked up/placed.
  */
-@Mod.EventBusSubscriber(Side.CLIENT)
+@Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
 public class WorldEventDetector implements IWorldEventListener {
 	
 	protected final World world;
