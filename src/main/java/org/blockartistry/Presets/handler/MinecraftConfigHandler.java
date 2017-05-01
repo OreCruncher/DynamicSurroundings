@@ -33,8 +33,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.Presets.Presets;
 import org.blockartistry.Presets.api.PresetData;
 import org.blockartistry.Presets.api.events.PresetEvent;
+import org.lwjgl.opengl.Display;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.settings.GameSettings.Options;
@@ -365,6 +367,22 @@ public class MinecraftConfigHandler {
 				}
 			}
 			settings.saveOptions();
+			
+			// Tickle the various modules of Minecraft to get the update settings
+			// since we bypassed the get/set of GameSettings.
+			final Minecraft mc = Minecraft.getMinecraft();
+            mc.ingameGUI.getChatGUI().refreshChat();
+            mc.getTextureMapBlocks().setMipmapLevels(settings.mipmapLevels);
+            mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+            mc.getTextureMapBlocks().setBlurMipmapDirect(false, settings.mipmapLevels > 0);
+            mc.renderGlobal.setDisplayListEntitiesDirty();
+            mc.fontRendererObj.setUnicodeFlag(mc.getLanguageManager().isCurrentLocaleUnicode() || settings.forceUnicodeFont);
+            mc.refreshResources();
+            Display.setVSyncEnabled(settings.enableVsync);
+            
+            if(settings.fullScreen != mc.isFullScreen())
+            	mc.toggleFullscreen();
+
 		}
 
 	}
