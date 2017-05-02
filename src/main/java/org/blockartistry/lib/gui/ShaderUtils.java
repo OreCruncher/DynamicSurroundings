@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.io.IOUtils;
-import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.lib.LibLog;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBFragmentShader;
 import org.lwjgl.opengl.ARBShaderObjects;
@@ -76,13 +76,13 @@ public final class ShaderUtils {
 
 		OpenGlHelper.glLinkProgram(program);
 		if (OpenGlHelper.glGetProgrami(program, ARBShaderObjects.GL_OBJECT_LINK_STATUS_ARB) == GL11.GL_FALSE) {
-			DSurround.log().error(getLogInfoProgram(program), null);
+			LibLog.log().error(getLogInfoProgram(program), null);
 			return 0;
 		}
 
 		GL20.glValidateProgram(program);
 		if (OpenGlHelper.glGetProgrami(program, ARBShaderObjects.GL_OBJECT_VALIDATE_STATUS_ARB) == GL11.GL_FALSE) {
-			DSurround.log().error(getLogInfoProgram(program), null);
+			LibLog.log().error(getLogInfoProgram(program), null);
 			return 0;
 		}
 

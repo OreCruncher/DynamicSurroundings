@@ -90,6 +90,13 @@ public class PresetInfo implements Comparable<PresetInfo> {
 		this.restartRequired = flag;
 		return this;
 	}
+	
+	@Override
+	public int compareTo(@Nonnull final PresetInfo o) {
+		return this.title.compareTo(o.title);
+	}
+
+	// THESE METHODS ARE INTERNAL TO PRESETS
 
 	PresetInfo set0(@Nonnull final Map<String, Map<String, String>> data) {
 		this.data = Maps.newHashMap();
@@ -122,8 +129,4 @@ public class PresetInfo implements Comparable<PresetInfo> {
 		return this.data;
 	}
 
-	@Override
-	public int compareTo(@Nonnull final PresetInfo o) {
-		return this.title.compareTo(o.title);
-	}
 }

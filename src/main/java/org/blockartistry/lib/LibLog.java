@@ -22,45 +22,20 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.Presets.data;
+package org.blockartistry.lib;
 
-import java.util.Map;
-import java.util.Map.Entry;
+import org.blockartistry.lib.logging.ModLog;
 
-import javax.annotation.Nonnull;
-
-import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.Presets.api.PresetData;
-
-import com.google.common.collect.Maps;
-import com.google.gson.annotations.SerializedName;
-
-class PresetDataFile {
-
-	@SerializedName("title")
-	public String title = StringUtils.EMPTY;
-	@SerializedName("description")
-	public String description = StringUtils.EMPTY;
-	@SerializedName("restartRequired")
-	public boolean restartRequired = false;
-	@SerializedName("data")
-	public Map<String, Map<String, String>> data = Maps.newHashMap();
-
-	public PresetDataFile() {
-
+public final class LibLog {
+	
+	private LibLog() {
+		
 	}
-
-	public PresetDataFile(@Nonnull final PresetInfo info) {
-		this.title = info.getTitle();
-		this.description = info.getDescription();
-		this.restartRequired = info.isRestartRequired();
-		this.data = Maps.newHashMap();
-		for (final Entry<String, PresetData> d : info.getData().entrySet()) {
-			final Map<String, String> data = Maps.newHashMap();
-			for (final Entry<String, String> e : d.getValue().getEntries())
-				data.put(e.getKey(), e.getValue());
-			this.data.put(d.getKey(), data);
-		}
+	
+	private static final ModLog logger = ModLog.getLogger("blockartistry.lib");
+	
+	public static ModLog log() {
+		return logger;
 	}
 
 }

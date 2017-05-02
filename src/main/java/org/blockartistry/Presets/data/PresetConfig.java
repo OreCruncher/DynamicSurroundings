@@ -66,6 +66,10 @@ public class PresetConfig {
 		this.dir = directory;
 	}
 
+	/*
+	 * Retrieves an immutable list of presets that are present
+	 * within the Presets! config directory.
+	 */
 	@Nonnull
 	public List<PresetInfo> getPresets() {
 		if (!this.hasScanned)
@@ -73,6 +77,11 @@ public class PresetConfig {
 		return ImmutableList.copyOf(this.presets);
 	}
 
+	/*
+	 * Forces a scan of the Presets! directory to find presets.
+	 * The internal list of presets will be updated with the
+	 * changes.
+	 */
 	public void scan() {
 		this.presets.clear();
 		for (final File f : this.dir.listFiles(FILTER)) {
