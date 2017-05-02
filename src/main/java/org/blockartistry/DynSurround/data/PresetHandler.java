@@ -29,11 +29,13 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.Presets.api.ConfigurationHelper;
 import org.blockartistry.Presets.api.ConfigurationHelper.IConfigFilter;
 import org.blockartistry.Presets.api.PresetData;
 import org.blockartistry.Presets.api.events.PresetEvent;
+import org.blockartistry.lib.ConfigProcessor;
 
 import com.google.common.collect.Sets;
 
@@ -72,7 +74,6 @@ public class PresetHandler {
 		final PresetData data = event.getModData(DSurround.MOD_ID);
 		final ConfigurationHelper helper = new ConfigurationHelper(data);
 		helper.save(DSurround.config(), FILTER);
-		data.restartRequired();
 	}
 
 	@Optional.Method(modid = "presets")
@@ -83,6 +84,7 @@ public class PresetHandler {
 			final ConfigurationHelper helper = new ConfigurationHelper(data);
 			helper.load(DSurround.config(), FILTER);
 			DSurround.config().save();
+			ConfigProcessor.process(DSurround.config(), ModOptions.class);
 			RegistryManager.reloadResources(null);
 		}
 	}

@@ -61,11 +61,15 @@ public class ConfigurationHelper {
 
 	@Nonnull
 	public ConfigurationHelper save(@Nonnull final ConfigCategory category, @Nonnull final Property prop) {
+		if (category.requiresMcRestart() || category.requiresWorldRestart())
+			this.data.restartRequired();
 		return save(category.getQualifiedName(), prop);
 	}
 
 	@Nonnull
 	public ConfigurationHelper save(@Nonnull final String category, @Nonnull final Property prop) {
+		if (prop.requiresMcRestart() || prop.requiresWorldRestart())
+			this.data.restartRequired();
 		final String id = category + "." + prop.getName();
 		switch (prop.getType()) {
 		case STRING:
@@ -164,6 +168,8 @@ public class ConfigurationHelper {
 	@Nonnull
 	public ConfigurationHelper save(@Nonnull final ConfigCategory category, @Nonnull final IConfigFilter filter) {
 		if (!filter.skipCategory(category)) {
+			if (category.requiresMcRestart() || category.requiresWorldRestart())
+				this.data.restartRequired();
 			for (final Entry<String, Property> e : category.getValues().entrySet())
 				if (!filter.skipProperty(category, e.getValue()))
 					this.save(category, e.getValue());
