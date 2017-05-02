@@ -233,7 +233,6 @@ public final class ModOptions {
 	public static int specialEffectRange = 24;
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_EXTERNAL_SCRIPTS, defaultValue = "", lang = "cfg.general.ExternalScripts")
 	@Comment("Configuration files for customization")
-	@RestartRequired
 	public static String[] externalScriptFiles = {};
 
 	public static final String CATEGORY_AURORA = "aurora";
@@ -248,7 +247,6 @@ public final class ModOptions {
 
 	@Parameter(category = CATEGORY_AURORA, property = CONFIG_AURORA_ENABLED, defaultValue = "true", lang = "cfg.aurora.EnableAurora")
 	@Comment("Enable/disable Aurora processing on server/client")
-	@RestartRequired(server = true)
 	public static boolean auroraEnable = true;
 	@Parameter(category = CATEGORY_AURORA, property = CONFIG_Y_PLAYER_RELATIVE, defaultValue = "true", lang = "cfg.aurora.HeightRelative")
 	@Comment("true to keep the aurora at a height above player; false to fix it to an altitude")
@@ -279,7 +277,6 @@ public final class ModOptions {
 	public static int worldSealevelOverride = 0;
 	@Parameter(category = CATEGORY_BIOMES, property = CONFIG_BIOME_ALIASES, defaultValue = "", lang = "cfg.biomes.Aliases")
 	@Comment("Biomes alias list")
-	@RestartRequired
 	public static String[] biomeAliases = {};
 
 	public static final String CATEGORY_BLOCK = "block";
@@ -295,31 +292,24 @@ public final class ModOptions {
 
 	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_STEAM, defaultValue = "true", lang = "cfg.block.effects.Steam")
 	@Comment("Enable Steam Jets where lava meets water")
-	@RestartRequired
 	public static boolean enableSteamJets = true;
 	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_FIRE, defaultValue = "true", lang = "cfg.block.effects.Fire")
 	@Comment("Enable FireJetEffect Jets in lava")
-	@RestartRequired
 	public static boolean enableFireJets = true;
 	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_BUBBLE, defaultValue = "true", lang = "cfg.block.effects.Bubble")
 	@Comment("Enable BubbleJetEffect Jets under water")
-	@RestartRequired
 	public static boolean enableBubbleJets = true;
 	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_DUST, defaultValue = "true", lang = "cfg.block.effects.Dust")
 	@Comment("Enable DustJetEffect motes dropping from blocks")
-	@RestartRequired
 	public static boolean enableDustJets = true;
 	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_FOUNTAIN, defaultValue = "true", lang = "cfg.block.effects.Fountain")
 	@Comment("Enable FountainJetEffect jets")
-	@RestartRequired
 	public static boolean enableFountainJets = true;
 	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_FIREFLY, defaultValue = "true", lang = "cfg.block.effects.Fireflies")
 	@Comment("Enable Firefly effect around plants")
-	@RestartRequired
 	public static boolean enableFireflies = true;
 	@Parameter(category = CATEGORY_BLOCK_EFFECTS, property = CONFIG_BLOCK_EFFECT_SPLASH, defaultValue = "true", lang = "cfg.block.effects.Splash")
 	@Comment("Enable Water Splash effects when water spills down")
-	@RestartRequired
 	public static boolean enableWaterSplash = true;
 
 	public static final String CATEGORY_SOUND = "sound";
@@ -712,7 +702,7 @@ public final class ModOptions {
 
 		// CATEGORY: Block.effects
 		config.setCategoryRequiresMcRestart(CATEGORY_BLOCK_EFFECTS, false);
-		config.setCategoryRequiresWorldRestart(CATEGORY_BLOCK_EFFECTS, true);
+		config.setCategoryRequiresWorldRestart(CATEGORY_BLOCK_EFFECTS, false);
 		config.setCategoryComment(CATEGORY_BLOCK_EFFECTS, "Options for disabling various block effects");
 		config.setCategoryLanguageKey(CATEGORY_BLOCK_EFFECTS, "cfg.block.effects.cat.BlockEffects");
 
