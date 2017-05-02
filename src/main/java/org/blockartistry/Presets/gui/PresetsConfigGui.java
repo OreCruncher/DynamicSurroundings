@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+
+import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.Presets.Presets;
 import org.blockartistry.Presets.data.PresetConfig;
 import org.blockartistry.Presets.data.PresetInfo;
@@ -263,14 +265,17 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback {
 				button.visible = true;
 
 				final List<String> tipText = Lists.newArrayList();
-				tipText.add(TextFormatting.GOLD + info.getFilename());
+				tipText.add(TextFormatting.GOLD + info.getTitle());
+				tipText.add(TextFormatting.AQUA + info.getFilename());
 				if (info.isRestartRequired())
 					tipText.add(TOOLTIP_RESTART_REQUIRED);
-				final List<String> moreText = this.fontRendererObj.listFormattedStringToWidth(info.getDescription(),
-						200);
-				if (moreText.size() > 0) {
-					tipText.add("");
-					tipText.addAll(moreText);
+				if (!StringUtils.isEmpty(info.getDescription().trim())) {
+					final List<String> moreText = this.fontRendererObj.listFormattedStringToWidth(info.getDescription(),
+							200);
+					if (moreText.size() > 0) {
+						tipText.add("");
+						tipText.addAll(moreText);
+					}
 				}
 				this.tooltips.set(i, tipText);
 			}
