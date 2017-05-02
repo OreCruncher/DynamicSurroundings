@@ -24,14 +24,21 @@
 
 package org.blockartistry.DynSurround.data;
 
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.Presets.api.ConfigurationHelper;
+import org.blockartistry.Presets.api.ConfigurationHelper.IConfigFilter;
 import org.blockartistry.Presets.api.PresetData;
 import org.blockartistry.Presets.api.events.PresetEvent;
 
+import com.google.common.collect.Sets;
+
+import net.minecraftforge.common.config.ConfigCategory;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -40,12 +47,31 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class PresetHandler {
 
+	private static final Set<String> categoriesToIgnore = Sets.newHashSet();
+
+	static {
+		categoriesToIgnore.add("asm");
+		categoriesToIgnore.add("logging");
+	}
+
+	private static final IConfigFilter FILTER = new IConfigFilter() {
+		@Override
+		public boolean skipCategory(@Nonnull final ConfigCategory category) {
+			return categoriesToIgnore.contains(category.getQualifiedName());
+		}
+
+		@Override
+		public boolean skipProperty(@Nonnull final ConfigCategory category, @Nonnull final Property property) {
+			return false;
+		}
+	};
+
 	@Optional.Method(modid = "presets")
 	@SubscribeEvent
 	public static void presetSave(@Nonnull final PresetEvent.Save event) {
 		final PresetData data = event.getModData(DSurround.MOD_ID);
 		final ConfigurationHelper helper = new ConfigurationHelper(data);
-		helper.save(DSurround.config());
+		helper.save(DSurround.config(), FILTER);
 		data.restartRequired();
 	}
 
@@ -55,7 +81,7 @@ public class PresetHandler {
 		final PresetData data = event.getModData(DSurround.MOD_ID);
 		if (data != null) {
 			final ConfigurationHelper helper = new ConfigurationHelper(data);
-			helper.load(DSurround.config());
+			helper.load(DSurround.config(), FILTER);
 			DSurround.config().save();
 			RegistryManager.reloadResources(null);
 		}
