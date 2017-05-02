@@ -30,7 +30,6 @@ import java.util.List;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.data.DimensionEffectData;
 import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.server.services.AuroraService;
 import org.blockartistry.lib.Localization;
 
 import com.google.common.collect.ImmutableList;
@@ -49,7 +48,6 @@ public final class CommandDS extends CommandBase {
 	private static final String COMMAND = ModOptions.commandNameDS;
 	private static final String COMMAND_OPTION_RAIN = "rain";
 	private static final String COMMAND_OPTION_THUNDER = "thunder";
-	private static final String COMMAND_OPTION_AURORA = "aurora";
 	private static final String COMMAND_OPTION_STATUS = "status";
 	private static final String COMMAND_OPTION_RESET = "reset";
 	private static final String COMMAND_OPTION_RELOAD = "reload";
@@ -149,8 +147,6 @@ public final class CommandDS extends CommandBase {
 					feedback = new TextComponentString(rainStatusOutput(world, data));
 				} else if (COMMAND_OPTION_THUNDER.compareToIgnoreCase(parms[1]) == 0) {
 					feedback = new TextComponentString(thunderStatusOutput(world, data));
-				} else if (COMMAND_OPTION_AURORA.compareToIgnoreCase(parms[1]) == 0) {
-					feedback = new TextComponentString(AuroraService.getAuroraData(player));
 				}
 			} else if (COMMAND_OPTION_SETTIME.compareToIgnoreCase(parms[0]) == 0) {
 				if (parms.length < 3) {

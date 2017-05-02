@@ -26,13 +26,11 @@ package org.blockartistry.DynSurround.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nonnull;
 
 import org.blockartistry.lib.Color;
-import org.blockartistry.lib.random.XorShiftRandom;
-
-import net.minecraft.util.math.MathHelper;
 
 /**
  * Preset color pairs for generating aurora colors.
@@ -89,12 +87,9 @@ public final class ColorPair {
 	}
 
 	@Nonnull
-	public static ColorPair get(final int id) {
-		return PAIRS.get(MathHelper.clamp(id, 0, PAIRS.size() - 1));
-	}
-
-	public static int randomId() {
-		return XorShiftRandom.current().nextInt(PAIRS.size());
+	public static ColorPair get(@Nonnull final Random random) {
+		final int idx = random.nextInt(PAIRS.size());
+		return PAIRS.get(idx);
 	}
 
 	public static int testId() {

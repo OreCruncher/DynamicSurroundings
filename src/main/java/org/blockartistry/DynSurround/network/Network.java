@@ -32,8 +32,6 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.api.entity.ActionState;
 import org.blockartistry.DynSurround.api.entity.EmojiType;
 import org.blockartistry.DynSurround.api.entity.EmotionalState;
-import org.blockartistry.DynSurround.data.AuroraData;
-
 import gnu.trove.map.hash.TIntDoubleHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -61,7 +59,6 @@ public final class Network {
 
 		NETWORK.registerMessage(PacketWeatherUpdate.PacketHandler.class, PacketWeatherUpdate.class, ++discriminator,
 				Side.CLIENT);
-		NETWORK.registerMessage(PacketAurora.PacketHandler.class, PacketAurora.class, ++discriminator, Side.CLIENT);
 		NETWORK.registerMessage(PacketHealthChange.PacketHandler.class, PacketHealthChange.class, ++discriminator,
 				Side.CLIENT);
 		NETWORK.registerMessage(PacketSpeechBubble.PacketHandler.class, PacketSpeechBubble.class, ++discriminator,
@@ -96,10 +93,6 @@ public final class Network {
 			final int nextRainChange, final float thunderStrength, final int thunderChange, final int thunderEvent) {
 		NETWORK.sendToDimension(new PacketWeatherUpdate(dimension, intensity, maxIntensity, nextRainChange,
 				thunderStrength, thunderChange, thunderEvent), dimension);
-	}
-
-	public static void sendAurora(@Nonnull final AuroraData data, final int dimension) {
-		NETWORK.sendToDimension(new PacketAurora(data), dimension);
 	}
 
 	public static void sendHealthUpdate(@Nonnull final UUID id, final float x, final float y, final float z,
