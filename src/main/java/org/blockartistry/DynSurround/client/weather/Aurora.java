@@ -31,7 +31,6 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.data.AuroraData;
 import org.blockartistry.DynSurround.data.AuroraPreset;
 import org.blockartistry.DynSurround.data.ColorPair;
 import org.blockartistry.lib.Color;
@@ -52,9 +51,8 @@ public final class Aurora {
 	private static final float AURORA_WAVELENGTH = 8.0F;
 	private static final int ALPHA_INCREMENT_MOD = 8;
 
-	public float posX;
-	public float posZ;
-
+	private final Random random;
+	
 	private Node[][] bands;
 	private long seed;
 	private float cycle = 0.0F;
@@ -74,24 +72,22 @@ public final class Aurora {
 	// Alpha setting of the aurora for fade
 	private int alpha = 1;
 
-	public Aurora(@Nonnull final AuroraData data) {
-		this(data.posX, data.posZ, data.seed, data.colorSet, data.preset);
-	}
-
-	public Aurora(final float x, final float z, final long seed, final int colorConfig, final int presetConfig) {
+	public Aurora(final long seed) {
 		this.seed = seed;
-		this.posX = x;
-		this.posZ = z;
-
-		final ColorPair pair = ColorPair.get(colorConfig);
+		this.random = new XorShiftRandom(seed);
+		final ColorPair pair = ColorPair.get(this.random);
 		this.baseColor = pair.baseColor;
 		this.fadeColor = pair.fadeColor;
 
-		preset(presetConfig);
+		preset();
 		generateBands();
 
 		// Initialize at least once for a non-animated aurora
 		translate(0);
+	}
+	
+	public long getSeed() {
+		return this.seed;
 	}
 
 	@Nonnull
@@ -99,8 +95,8 @@ public final class Aurora {
 		return this.bands;
 	}
 
-	private void preset(final int preset) {
-		final AuroraPreset p = AuroraPreset.get(preset);
+	private void preset() {
+		final AuroraPreset p = AuroraPreset.get(this.random);
 		this.length = p.length;
 		this.nodeLength = p.nodeLength;
 		this.nodeWidth = p.nodeWidth;
@@ -205,7 +201,7 @@ public final class Aurora {
 	@Nonnull
 	private Node[] populate() {
 		final Node[] nodeList = new Node[this.length];
-		final Random nodeRand = new XorShiftRandom(this.seed);
+		final Random nodeRand = this.random;
 		final int bound = this.length / 2 - 1;
 
 		float angleTotal = 0.0F;
@@ -315,8 +311,7 @@ public final class Aurora {
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append("X:").append(this.posX).append(", Z:").append(this.posZ);
-		builder.append(", base").append(this.baseColor.toString());
+		builder.append("base").append(this.baseColor.toString());
 		builder.append(", fade").append(this.fadeColor.toString());
 		builder.append(", alpha:").append(this.alpha);
 		if (!this.isAlive)

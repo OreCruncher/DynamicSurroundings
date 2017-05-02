@@ -55,6 +55,7 @@ public final class AuroraRenderer {
 		final Minecraft mc = Minecraft.getMinecraft();
 		final Tessellator tess = Tessellator.getInstance();
 		final VertexBuffer renderer = tess.getBuffer();
+
 		final float tranY;
 		if (ModOptions.auroraHeightPlayerRelative) {
 			// Fix height above player
@@ -65,10 +66,10 @@ public final class AuroraRenderer {
 					+ (mc.thePlayer.posY - mc.thePlayer.lastTickPosY) * partialTick);
 		}
 
-		final double tranX = aurora.posX
+		final double tranX = mc.thePlayer.posX
 				- (mc.thePlayer.lastTickPosX + (mc.thePlayer.posX - mc.thePlayer.lastTickPosX) * partialTick);
 
-		final double tranZ = aurora.posZ
+		final double tranZ = (mc.thePlayer.posZ - ModOptions.auroraSpawnOffset)
 				- (mc.thePlayer.lastTickPosZ + (mc.thePlayer.posZ - mc.thePlayer.lastTickPosZ) * partialTick);
 
 		if (ModOptions.auroraAnimate)

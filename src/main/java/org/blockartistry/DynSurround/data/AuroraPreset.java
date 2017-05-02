@@ -26,11 +26,9 @@ package org.blockartistry.DynSurround.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 import javax.annotation.Nonnull;
-
-import org.blockartistry.lib.random.XorShiftRandom;
-
-import net.minecraft.util.math.MathHelper;
 
 /**
  * Preset geometry of an Aurora. A preset is selected by the server when an
@@ -74,16 +72,9 @@ public final class AuroraPreset {
 	}
 
 	@Nonnull
-	public static AuroraPreset get(final int id) {
-		return PRESET.get(MathHelper.clamp_int(id, 0, PRESET.size() - 1));
-	}
-
-	public static int randomId() {
-		return XorShiftRandom.current().nextInt(PRESET.size());
-	}
-
-	public static int testId() {
-		return PRESET.size() - 1;
+	public static AuroraPreset get(@Nonnull final Random random) {
+		final int idx = random.nextInt(PRESET.size());
+		return PRESET.get(idx);
 	}
 
 	@Override

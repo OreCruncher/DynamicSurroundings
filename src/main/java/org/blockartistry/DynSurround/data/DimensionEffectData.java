@@ -25,24 +25,18 @@
 package org.blockartistry.DynSurround.data;
 
 import java.text.DecimalFormat;
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.lib.random.XorShiftRandom;
 
-import com.google.common.collect.ImmutableSet;
-
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
-import net.minecraftforge.common.util.Constants;
 
 /**
  * Per world effect data for effects
@@ -60,7 +54,6 @@ public final class DimensionEffectData extends WorldSavedData {
 		public final static String CURRENT_INTENSITY = "ci";
 		public final static String MIN_INTENSITY = "min";
 		public final static String MAX_INTENSITY = "max";
-		public final static String AURORA_LIST = "al";
 		public final static String THUNDER_TIMER = "th";
 	};
 
@@ -71,7 +64,6 @@ public final class DimensionEffectData extends WorldSavedData {
 	private float minIntensity = ModOptions.defaultMinRainStrength;
 	private float maxIntensity = ModOptions.defaultMaxRainStrength;
 	private int thunderTimer = 0;
-	private final Set<AuroraData> auroras = new HashSet<AuroraData>();
 
 	private DimensionEffectData(final int dimension) {
 		this(DSurround.MOD_ID);
@@ -131,31 +123,6 @@ public final class DimensionEffectData extends WorldSavedData {
 		this.setDirty(true);
 	}
 
-	@Nonnull
-	public Set<AuroraData> getAuroraList() {
-		return ImmutableSet.copyOf(this.auroras);
-	}
-
-	public void clearAuroraList() {
-		if (this.auroras.size() > 0) {
-			this.auroras.clear();
-			this.setDirty(true);
-		}
-	}
-
-	public boolean addAuroraData(@Nonnull final AuroraData aurora) {
-		if (this.auroras.add(aurora)) {
-			this.setDirty(true);
-			return true;
-		}
-		return false;
-	}
-
-	public void removeAuroraData(@Nonnull final AuroraData aurora) {
-		if (this.auroras.remove(aurora))
-			this.setDirty(true);
-	}
-
 	public void randomizeRain() {
 		final float result;
 		final float delta = this.maxIntensity - this.minIntensity;
@@ -182,14 +149,6 @@ public final class DimensionEffectData extends WorldSavedData {
 					MAX_INTENSITY);
 		if (nbt.hasKey(NBT.THUNDER_TIMER))
 			this.thunderTimer = MathHelper.clamp_int(nbt.getInteger(NBT.THUNDER_TIMER), 0, Integer.MAX_VALUE);
-
-		final NBTTagList list = nbt.getTagList(NBT.AURORA_LIST, Constants.NBT.TAG_COMPOUND);
-		for (int i = 0; i < list.tagCount(); i++) {
-			final NBTTagCompound tag = list.getCompoundTagAt(i);
-			final AuroraData data = new AuroraData();
-			data.readFromNBT(tag);
-			this.auroras.add(data);
-		}
 	}
 
 	@Override
@@ -201,13 +160,6 @@ public final class DimensionEffectData extends WorldSavedData {
 		nbt.setFloat(NBT.MIN_INTENSITY, this.minIntensity);
 		nbt.setFloat(NBT.MAX_INTENSITY, this.maxIntensity);
 		nbt.setInteger(NBT.THUNDER_TIMER, this.thunderTimer);
-		final NBTTagList list = new NBTTagList();
-		for (final AuroraData data : this.auroras) {
-			final NBTTagCompound tag = new NBTTagCompound();
-			data.writeToNBT(tag);
-			list.appendTag(tag);
-		}
-		nbt.setTag(NBT.AURORA_LIST, list);
 		return nbt;
 	}
 
@@ -232,7 +184,6 @@ public final class DimensionEffectData extends WorldSavedData {
 		builder.append(" [").append(FORMATTER.format(this.minIntensity * 100));
 		builder.append(",").append(FORMATTER.format(this.maxIntensity * 100));
 		builder.append("], thunderTimer: ").append(this.thunderTimer);
-		builder.append(", auroras: ").append(this.auroras.size());
 		return builder.toString();
 	}
 

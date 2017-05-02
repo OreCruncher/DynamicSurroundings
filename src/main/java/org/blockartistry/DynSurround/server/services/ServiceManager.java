@@ -82,7 +82,6 @@ public final class ServiceManager extends Service {
 	public static void initialize() {
 		INSTANCE.addService(INSTANCE);
 		INSTANCE.addService(new AtmosphereService());
-		INSTANCE.addService(new AuroraService());
 		INSTANCE.addService(new EntityEmojiService());
 		INSTANCE.addService(new HealthEffectService());
 		INSTANCE.addService(new SpeechBubbleService());
