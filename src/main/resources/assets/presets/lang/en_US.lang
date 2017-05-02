@@ -26,11 +26,17 @@ presets.cfg.logging.VersionCheck.tooltip=Enables/disables display of version che
 presets.button.Done=Done
 presets.button.Cancel=Cancel
 presets.button.Refresh=Refresh
+presets.button.Refresh.tooltip=Scans the configuration directory looking for new preset configuration files.
 presets.button.Create=Create
+presets.button.Create.tooltip=Create a new preset configuration file based on current Minecraft configuration settings.
 presets.button.Apply=Apply
+presets.button.Apply.tooltip=Apply the settings from the selected preset configuration file to the Minecraft configuration.
 presets.button.Save=Save
+presets.button.Save.tooltip=Save the current Minecraft configuration OVER the selected preset configuration file.
 presets.button.Delete=Delete
+presets.button.Delete.tooltip=Delete the selected preset configuration file.
 presets.button.Edit=Edit
+presets.button.Edit.tooltip=Edit the selected preset configuration metadata.  This will not change any settings in the preset configuration file!
 
 # PresetInfoModifyGui
 presets.dlg.CreateTitle=Create Preset
