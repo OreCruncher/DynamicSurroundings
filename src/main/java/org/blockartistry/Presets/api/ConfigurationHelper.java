@@ -34,12 +34,37 @@ import net.minecraftforge.common.config.Property;
 
 public class ConfigurationHelper {
 
+	public static interface IConfigFilter {
+
+		boolean skipCategory(@Nonnull final ConfigCategory category);
+
+		boolean skipProperty(@Nonnull final ConfigCategory category, @Nonnull final Property property);
+	}
+
+	protected static final IConfigFilter DEFAULT_FILTER = new IConfigFilter() {
+		@Override
+		public boolean skipCategory(@Nonnull final ConfigCategory category) {
+			return false;
+		}
+
+		@Override
+		public boolean skipProperty(@Nonnull final ConfigCategory category, @Nonnull final Property property) {
+			return false;
+		}
+	};
+
 	protected final PresetData data;
 
 	public ConfigurationHelper(@Nonnull final PresetData data) {
 		this.data = data;
 	}
 
+	@Nonnull
+	public ConfigurationHelper save(@Nonnull final ConfigCategory category, @Nonnull final Property prop) {
+		return save(category.getQualifiedName(), prop);
+	}
+
+	@Nonnull
 	public ConfigurationHelper save(@Nonnull final String category, @Nonnull final Property prop) {
 		final String id = category + "." + prop.getName();
 		switch (prop.getType()) {
@@ -74,6 +99,12 @@ public class ConfigurationHelper {
 		return this;
 	}
 
+	@Nonnull
+	public ConfigurationHelper load(@Nonnull final ConfigCategory category, @Nonnull final Property prop) {
+		return load(category.getQualifiedName(), prop);
+	}
+
+	@Nonnull
 	public ConfigurationHelper load(@Nonnull final String category, @Nonnull final Property prop) {
 		final String id = category + "." + prop.getName();
 		switch (prop.getType()) {
@@ -108,33 +139,61 @@ public class ConfigurationHelper {
 		return this;
 	}
 
+	@Nonnull
 	public ConfigurationHelper load(@Nonnull final ConfigCategory category) {
-		final String id = category.getQualifiedName();
-		for (final Entry<String, Property> e : category.getValues().entrySet())
-			this.load(id, e.getValue());
-		for (final ConfigCategory c : category.getChildren())
-			this.load(c);
+		return load(category, DEFAULT_FILTER);
+	}
+
+	@Nonnull
+	public ConfigurationHelper load(@Nonnull final ConfigCategory category, @Nonnull final IConfigFilter filter) {
+		if (!filter.skipCategory(category)) {
+			for (final Entry<String, Property> e : category.getValues().entrySet())
+				if (!filter.skipProperty(category, e.getValue()))
+					this.load(category, e.getValue());
+			for (final ConfigCategory c : category.getChildren())
+				this.load(c, filter);
+		}
 		return this;
 	}
 
+	@Nonnull
 	public ConfigurationHelper save(@Nonnull final ConfigCategory category) {
-		final String id = category.getQualifiedName();
-		for (final Entry<String, Property> e : category.getValues().entrySet())
-			this.save(id, e.getValue());
-		for (final ConfigCategory c : category.getChildren())
-			this.save(c);
+		return save(category, DEFAULT_FILTER);
+	}
+
+	@Nonnull
+	public ConfigurationHelper save(@Nonnull final ConfigCategory category, @Nonnull final IConfigFilter filter) {
+		if (!filter.skipCategory(category)) {
+			for (final Entry<String, Property> e : category.getValues().entrySet())
+				if (!filter.skipProperty(category, e.getValue()))
+					this.save(category, e.getValue());
+			for (final ConfigCategory c : category.getChildren())
+				this.save(c, filter);
+		}
 		return this;
 	}
 
+	@Nonnull
 	public ConfigurationHelper load(@Nonnull final Configuration config) {
+		return load(config, DEFAULT_FILTER);
+	}
+
+	@Nonnull
+	public ConfigurationHelper load(@Nonnull final Configuration config, @Nonnull final IConfigFilter filter) {
 		for (final String cat : config.getCategoryNames())
-			this.load(config.getCategory(cat));
+			this.load(config.getCategory(cat), filter);
 		return this;
 	}
 
+	@Nonnull
 	public ConfigurationHelper save(@Nonnull final Configuration config) {
+		return save(config, DEFAULT_FILTER);
+	}
+
+	@Nonnull
+	public ConfigurationHelper save(@Nonnull final Configuration config, @Nonnull final IConfigFilter filter) {
 		for (final String cat : config.getCategoryNames())
-			this.save(config.getCategory(cat));
+			this.save(config.getCategory(cat), filter);
 		return this;
 	}
 }
