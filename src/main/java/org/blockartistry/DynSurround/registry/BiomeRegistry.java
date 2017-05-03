@@ -155,7 +155,7 @@ public final class BiomeRegistry extends Registry {
 	}
 
 	public void register(@Nonnull final BiomeConfig entry) {
-		final SoundRegistry soundRegistry = RegistryManager.getManager().getRegistry(RegistryType.SOUND);
+		final SoundRegistry soundRegistry = RegistryManager.get(RegistryType.SOUND);
 
 		for (final BiomeInfo biomeEntry : this.registry.values()) {
 			if (isBiomeMatch(entry, biomeEntry.getBiomeName())) {

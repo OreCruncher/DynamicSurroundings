@@ -24,23 +24,27 @@
 
 package org.blockartistry.DynSurround.registry;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.event.RegistryEvent;
-
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.client.resources.IResourcePack;
+import net.minecraft.client.resources.ResourcePackRepository;
+import net.minecraft.util.IThreadListener;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class RegistryManager {
+public final class RegistryManager {
 
 	public static class RegistryType {
 		public final static int SOUND = 0;
@@ -50,70 +54,54 @@ public class RegistryManager {
 		public final static int FOOTSTEPS = 4;
 		public final static int SEASON = 5;
 		public final static int ITEMS = 6;
-		
+
 		public final static int LENGTH = 7;
 	}
 
 	private static final RegistryManager[] managers = { null, null };
 
-	static RegistryManager getManager() {
+	@Nonnull
+	private static RegistryManager getManager() {
 		final Side side = FMLCommonHandler.instance().getEffectiveSide();
-		if (side == Side.CLIENT) {
-			if (managers[1] == null) {
-				managers[1] = new RegistryManagerClient();
-				managers[1].reload();
-			}
-			return managers[1];
-		} else {
-			if (managers[0] == null) {
-				managers[0] = new RegistryManager();
-				managers[0].reload();
-			}
-			return managers[0];
+		final int idx = side.ordinal();
+		if (managers[idx] == null) {
+			managers[idx] = new RegistryManager(side);
+			managers[idx].reload();
 		}
+		return managers[idx];
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T extends Registry> T get(@Nonnull int type) {
-		return (T) getManager().getRegistry(type);
+	@Nonnull
+	public static <T extends Registry> T get(@Nonnull final int type) {
+		return (T) getManager().<T>getRegistry(type);
 	}
 
-	public static void reloadResources(@Nullable Side side) {
+	public static void reloadResources() {
+		reloadResources(Side.CLIENT);
+		reloadResources(Side.SERVER);
+	}
+
+	public static void reloadResources(@Nonnull final Side side) {
 		// Reload can be called on either side so make sure we queue
 		// up a scheduled task appropriately.
-		if (managers[0] != null && (side == null || side == Side.SERVER)) {
-			final MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-			if (server == null) {
-				managers[0] = null;
-			} else {
-				server.addScheduledTask(new Runnable() {
+		final int idx = side.ordinal();
+		if (managers[idx] != null) {
+			final IThreadListener tl = side == Side.SERVER ? FMLCommonHandler.instance().getMinecraftServerInstance()
+					: Minecraft.getMinecraft();
+			if (tl == null)
+				managers[idx] = null;
+			else
+				tl.addScheduledTask(new Runnable() {
 					public void run() {
-						managers[0].reload();
+						managers[idx].reload();
 					}
 				});
-			}
-		}
-
-		if (managers[1] != null && (side == null || side == Side.CLIENT)) {
-			final Minecraft mc = Minecraft.getMinecraft();
-			if (mc == null) {
-				managers[1] = null;
-			} else {
-				mc.addScheduledTask(new Runnable() {
-					public void run() {
-						managers[1].reload();
-					}
-				});
-			}
 		}
 	}
 
 	protected final Side side;
+	protected final ResourceLocation SCRIPT;
 	protected final Registry[] registries = new Registry[RegistryType.LENGTH];
-
-	RegistryManager() {
-		this(Side.SERVER);
-	}
 
 	RegistryManager(final Side side) {
 		this.side = side;
@@ -121,6 +109,25 @@ public class RegistryManager {
 		this.registries[RegistryType.BIOME] = new BiomeRegistry(side);
 		this.registries[RegistryType.SOUND] = new SoundRegistry(side);
 		this.registries[RegistryType.SEASON] = new SeasonRegistry(side);
+
+		if (side == Side.CLIENT) {
+			this.registries[RegistryType.BLOCK] = new BlockRegistry(side);
+			this.registries[RegistryType.FOOTSTEPS] = new FootstepsRegistry(side);
+			this.registries[RegistryType.ITEMS] = new ItemRegistry(side);
+			this.SCRIPT = new ResourceLocation(DSurround.RESOURCE_ID, "configure.json");
+		} else {
+			this.SCRIPT = null;
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private boolean checkCompatible(@Nonnull final ResourcePackRepository.Entry pack) {
+		return pack.getResourcePack().resourceExists(SCRIPT);
+	}
+
+	@SideOnly(Side.CLIENT)
+	private InputStream openScript(@Nonnull final IResourcePack pack) throws IOException {
+		return pack.getInputStream(SCRIPT);
 	}
 
 	void reload() {
@@ -138,12 +145,35 @@ public class RegistryManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T getRegistry(final int type) {
+	protected <T> T getRegistry(final int type) {
 		return (T) this.registries[type];
 	}
 
+	// NOTE: Server side has no resource packs so the client specific
+	// code is not executed when initializing a server side registry.
 	public List<InputStream> getAdditionalScripts() {
-		return ImmutableList.of();
+		if (this.side == Side.SERVER)
+			return ImmutableList.of();
+
+		final List<ResourcePackRepository.Entry> repo = Minecraft.getMinecraft().getResourcePackRepository()
+				.getRepositoryEntries();
+
+		final List<InputStream> streams = new ArrayList<InputStream>();
+
+		// Look in other resource packs for more configuration data
+		for (final ResourcePackRepository.Entry pack : repo) {
+			if (checkCompatible(pack)) {
+				DSurround.log().debug("Found script in resource pack: %s", pack.getResourcePackName());
+				try {
+					final InputStream stream = openScript(pack.getResourcePack());
+					if (stream != null)
+						streams.add(stream);
+				} catch (final Throwable t) {
+					DSurround.log().error("Unable to open script in resource pack", t);
+				}
+			}
+		}
+		return streams;
 	}
 
 }
