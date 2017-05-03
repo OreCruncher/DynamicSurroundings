@@ -61,20 +61,12 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 	protected static final String NEXT_BUTTON_TEXT = ">>>";
 
 	protected final String TITLE = Localization.format("msg.presets");
-	protected final String DONE_BUTTON_LABEL = Localization.format("presets.button.Done");
-	protected final String REFRESH_BUTTON_LABEL = Localization.format("presets.button.Refresh");
-	protected final String CREATE_BUTTON_LABEL = Localization.format("presets.button.Create");
-	protected final String APPLY_BUTTON_LABEL = Localization.format("presets.button.Apply");
-	protected final String SAVE_BUTTON_LABEL = Localization.format("presets.button.Save");
-	protected final String DELETE_BUTTON_LABEL = Localization.format("presets.button.Delete");
-	protected final String EDIT_BUTTON_LABEL = Localization.format("presets.button.Edit");
-
 	protected final String APPLY_WARNING_TEXT = Localization.format("presets.dlg.ApplyWarning");
 	protected final String SAVE_WARNING_TEXT = Localization.format("presets.dlg.SaveWarning");
 	protected final String DELETE_WARNING_TEXT = Localization.format("presets.dlg.DeleteWarning");
+
 	protected final String RESTART_REQUIRED_TEXT = TextFormatting.RED
 			+ Localization.format("presets.dlg.RestartRequired");
-
 	protected final String TOOLTIP_RESTART_REQUIRED = TextFormatting.RED
 			+ Localization.format("presets.dlg.RestartRequired.tooltip") + TextFormatting.RESET;
 
@@ -109,6 +101,9 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 	protected final GuiScreen parentScreen;
 	protected final PresetConfig config;
 
+	protected final Panel backgroundPanel = new Panel();
+	protected final Panel presetPanel = new Panel(0, 0, Color.GOLD, Color.BLACK, Color.GRAY);
+
 	protected int anchorX;
 	protected int anchorY;
 	protected int regionWidth;
@@ -121,25 +116,17 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 
 	protected final List<GuiButtonExt> presetButtons = Lists.newArrayList();
 	protected final List<GuiTooltip> tooltips = Lists.newArrayList();
+	protected final List<GuiTooltip> buttonTips = Lists.newArrayList();
 
 	protected GuiButtonExt previousButton;
 	protected GuiButtonExt nextButton;
 
 	protected GuiButtonExt refreshButton;
-	protected GuiTooltip tooltipRefreshButton;
 	protected GuiButtonExt applyButton;
-	protected GuiTooltip tooltipApplyButton;
 	protected GuiButtonExt createButton;
-	protected GuiTooltip tooltipCreateButton;
 	protected GuiButtonExt editButton;
-	protected GuiTooltip tooltipEditButton;
 	protected GuiButtonExt saveButton;
-	protected GuiTooltip tooltipSaveButton;
 	protected GuiButtonExt deleteButton;
-	protected GuiTooltip tooltipDeleteButton;
-
-	protected final Panel backgroundPanel = new Panel();
-	protected final Panel presetPanel = new Panel(0, 0, Color.GOLD, Color.BLACK, Color.GRAY);
 
 	public PresetsConfigGui(@Nonnull final GuiScreen parent) {
 		this.mc = Minecraft.getMinecraft();
@@ -147,11 +134,22 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 		this.config = new PresetConfig(Presets.dataDirectory());
 	}
 
+	protected GuiButtonExt setupButton(final int id, final int x, final int y, @Nonnull final String buttonLabel) {
+		final String label = Localization.format(buttonLabel);
+		final String tip = Localization.format(buttonLabel + ".tooltip");
+		final GuiButtonExt button = new GuiButtonExt(id, x, y, BUTTON_WIDTH, BUTTON_HEIGHT, label);
+		this.buttonList.add(button);
+		if (!tip.endsWith(".tooltip"))
+			this.buttonTips.add(new GuiTooltip(this, button, tip));
+		return button;
+	}
+
 	@Override
 	public void initGui() {
 
 		this.presetButtons.clear();
 		this.tooltips.clear();
+		this.buttonTips.clear();
 		this.labelList.clear();
 		this.buttonList.clear();
 
@@ -199,45 +197,30 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 				NEXT_BUTTON_TEXT);
 		this.buttonList.add(this.nextButton);
 
-		// Buttons to the side
+		// Buttons to the side. Offset is the spacing between the buttons based
+		// on the preset region size and the number of buttons to render.
 		final int offset = (presetHeight - 6 * BUTTON_HEIGHT) / 7;
 		final int buttonsX = this.anchorX + MARGIN + presetWidth + INSET;
 
 		int buttonsY = this.anchorY + MARGIN * 2 + INSET + offset;
-		this.refreshButton = new GuiButtonExt(ID_REFRESH, buttonsX, buttonsY, BUTTON_WIDTH, BUTTON_HEIGHT,
-				REFRESH_BUTTON_LABEL);
-		this.buttonList.add(this.refreshButton);
-		this.tooltipRefreshButton = new GuiTooltip(this, this.refreshButton, "presets.button.Refresh.tooltip");
+		this.refreshButton = setupButton(ID_REFRESH, buttonsX, buttonsY, "presets.button.Refresh");
 
 		buttonsY += BUTTON_HEIGHT + offset;
-		this.createButton = new GuiButtonExt(ID_CREATE, buttonsX, buttonsY, BUTTON_WIDTH, BUTTON_HEIGHT,
-				CREATE_BUTTON_LABEL);
-		this.buttonList.add(this.createButton);
-		this.tooltipCreateButton = new GuiTooltip(this, this.createButton, "presets.button.Create.tooltip");
+		this.createButton = setupButton(ID_CREATE, buttonsX, buttonsY, "presets.button.Create");
 
 		buttonsY += BUTTON_HEIGHT + offset;
-		this.editButton = new GuiButtonExt(ID_EDIT, buttonsX, buttonsY, BUTTON_WIDTH, BUTTON_HEIGHT, EDIT_BUTTON_LABEL);
-		this.buttonList.add(this.editButton);
-		this.tooltipEditButton = new GuiTooltip(this, this.editButton, "presets.button.Edit.tooltip");
+		this.editButton = setupButton(ID_EDIT, buttonsX, buttonsY, "presets.button.Edit");
 
 		buttonsY += BUTTON_HEIGHT + offset;
-		this.applyButton = new GuiButtonExt(ID_APPLY, buttonsX, buttonsY, BUTTON_WIDTH, BUTTON_HEIGHT,
-				APPLY_BUTTON_LABEL);
-		this.buttonList.add(this.applyButton);
-		this.tooltipApplyButton = new GuiTooltip(this, this.applyButton, "presets.button.Apply.tooltip");
+		this.applyButton = setupButton(ID_APPLY, buttonsX, buttonsY, "presets.button.Apply");
 
 		buttonsY += BUTTON_HEIGHT + offset;
-		this.saveButton = new GuiButtonExt(ID_SAVE, buttonsX, buttonsY, BUTTON_WIDTH, BUTTON_HEIGHT, SAVE_BUTTON_LABEL);
-		this.buttonList.add(this.saveButton);
-		this.tooltipSaveButton = new GuiTooltip(this, this.saveButton, "presets.button.Save.tooltip");
+		this.saveButton = setupButton(ID_SAVE, buttonsX, buttonsY, "presets.button.Save");
 
 		buttonsY += BUTTON_HEIGHT + offset;
-		this.deleteButton = new GuiButtonExt(ID_DELETE, buttonsX, buttonsY, BUTTON_WIDTH, BUTTON_HEIGHT,
-				DELETE_BUTTON_LABEL);
-		this.buttonList.add(this.deleteButton);
-		this.tooltipDeleteButton = new GuiTooltip(this, this.deleteButton, "presets.button.Delete.tooltip");
+		this.deleteButton = setupButton(ID_DELETE, buttonsX, buttonsY, "presets.button.Delete");
 
-		// Set the final size of the background panel;
+		// Set the final size of the background panel
 		this.regionWidth = MARGIN * 2 + presetWidth + INSET + BUTTON_WIDTH;
 		this.regionHeight = MARGIN * 2 + presetHeight + BUTTON_HEIGHT * 2;
 		this.backgroundPanel.setWidth(this.regionWidth);
@@ -246,8 +229,7 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 		// Done button
 		final int doneX = (this.regionWidth - BUTTON_WIDTH) / 2 + this.anchorX;
 		final int doneY = this.anchorY + this.regionHeight - (int) (BUTTON_HEIGHT * 1.5F);
-		GuiButtonExt button = new GuiButtonExt(ID_DONE, doneX, doneY, BUTTON_WIDTH, BUTTON_HEIGHT, DONE_BUTTON_LABEL);
-		this.buttonList.add(button);
+		setupButton(ID_DONE, doneX, doneY, "presets.button.Done");
 
 		this.reload();
 	}
@@ -285,6 +267,10 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 			}
 		}
 
+		this.updateButtonState();
+	}
+
+	protected void updateButtonState() {
 		this.previousButton.enabled = this.currentPage > 0;
 		this.nextButton.enabled = this.currentPage < this.maxPage;
 		this.applyButton.enabled = this.selectedPreset != -1;
@@ -300,31 +286,27 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 		this.presetPanel.render(this.anchorX + MARGIN, this.anchorY + MARGIN + INSET * 3, Reference.UPPER_LEFT);
 		super.drawScreen(mouseX, mouseY, partialTicks);
 
-		boolean found = false;
-		for (int i = 0; i < MAX_PRESETS_PAGE && !found; i++) {
+		for (int i = 0; i < MAX_PRESETS_PAGE; i++) {
 			final GuiButtonExt button = this.presetButtons.get(i);
-			if (button.visible && this.tooltips.get(i).handle(mouseX, mouseY)) {
-				found = true;
-				break;
-			}
+			if (button.visible && this.tooltips.get(i).handle(mouseX, mouseY))
+				return;
 		}
 
-		@SuppressWarnings("unused")
-		final boolean t = found || this.tooltipApplyButton.handle(mouseX, mouseY)
-				|| this.tooltipCreateButton.handle(mouseX, mouseY) || this.tooltipDeleteButton.handle(mouseX, mouseY)
-				|| this.tooltipEditButton.handle(mouseX, mouseY) || this.tooltipRefreshButton.handle(mouseX, mouseY)
-				|| this.tooltipSaveButton.handle(mouseX, mouseY);
+		for (final GuiTooltip tip : this.buttonTips)
+			if (tip.handle(mouseX, mouseY))
+				return;
 	}
 
 	@Override
 	protected void actionPerformed(@Nonnull final GuiButton button) throws IOException {
+
+		PresetInfo pi = this.selectedPreset != -1 ? this.presets.get(this.selectedPreset) : null;
 
 		switch (button.id) {
 		case ID_DONE:
 			this.mc.displayGuiScreen(this.parentScreen);
 			break;
 		case ID_APPLY: {
-			final PresetInfo pi = this.presets.get(this.selectedPreset);
 			final StringBuilder builder = new StringBuilder();
 			builder.append(pi.getTitle());
 			if (pi.isRestartRequired())
@@ -334,25 +316,22 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 		}
 			break;
 		case ID_CREATE: {
-			final PresetInfo pi = new PresetInfo();
+			pi = new PresetInfo();
 			final PresetInfoModifyGui gui = new PresetInfoModifyGui(this, pi, false, ID_CREATE);
 			this.mc.displayGuiScreen(gui);
 		}
 			break;
 		case ID_EDIT: {
-			final PresetInfo pi = this.presets.get(this.selectedPreset);
 			final PresetInfoModifyGui gui = new PresetInfoModifyGui(this, pi, true, ID_EDIT);
 			this.mc.displayGuiScreen(gui);
 		}
 			break;
 		case ID_SAVE: {
-			final PresetInfo pi = this.presets.get(this.selectedPreset);
 			final GuiYesNo yn = new GuiYesNo(this, SAVE_WARNING_TEXT, pi.getTitle(), ID_SAVE);
 			this.mc.displayGuiScreen(yn);
 		}
 			break;
 		case ID_DELETE: {
-			final PresetInfo pi = this.presets.get(this.selectedPreset);
 			final GuiYesNo yn = new GuiYesNo(this, DELETE_WARNING_TEXT, pi.getTitle(), ID_DELETE);
 			this.mc.displayGuiScreen(yn);
 		}
@@ -392,10 +371,7 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 				}
 				this.selectedPreset = this.currentPage * MAX_PRESETS_PAGE + buttonMashed;
 				this.presetButtons.get(buttonMashed).enabled = false;
-				this.applyButton.enabled = true;
-				this.saveButton.enabled = true;
-				this.deleteButton.enabled = true;
-				this.editButton.enabled = true;
+				this.updateButtonState();
 			}
 		}
 	}
