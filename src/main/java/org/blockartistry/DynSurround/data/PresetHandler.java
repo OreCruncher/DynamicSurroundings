@@ -85,7 +85,7 @@ public class PresetHandler {
 			helper.load(DSurround.config(), FILTER);
 			DSurround.config().save();
 			ConfigProcessor.process(DSurround.config(), ModOptions.class);
-			RegistryManager.reloadResources(null);
+			RegistryManager.reloadResources();
 		}
 	}
 }

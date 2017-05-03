@@ -136,7 +136,7 @@ public final class CommandDS extends CommandBase {
 				world.provider.resetRainAndThunder();
 				feedback = new TextComponentString(Localization.format("msg.RainReset"));
 			} else if (COMMAND_OPTION_RELOAD.compareToIgnoreCase(parms[0]) == 0) {
-				RegistryManager.reloadResources(null);
+				RegistryManager.reloadResources();
 				feedback = new TextComponentString(Localization.format("msg.BiomeReload"));
 			} else if (COMMAND_OPTION_CONFIG.compareToIgnoreCase(parms[0]) == 0) {
 				feedback = new TextComponentString(config(world, data));

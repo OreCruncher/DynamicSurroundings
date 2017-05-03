@@ -175,7 +175,7 @@ public final class BlockRegistry extends Registry {
 		if (entry.blocks.isEmpty())
 			return;
 
-		final SoundRegistry soundRegistry = RegistryManager.getManager().getRegistry(RegistryType.SOUND);
+		final SoundRegistry soundRegistry = RegistryManager.get(RegistryType.SOUND);
 
 		for (final String blockName : entry.blocks) {
 			final BlockInfo blockInfo = BlockInfo.create(blockName);
