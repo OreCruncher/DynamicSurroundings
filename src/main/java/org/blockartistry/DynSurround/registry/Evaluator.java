@@ -30,8 +30,11 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.client.event.ExpressionEvent;
 import org.blockartistry.lib.script.Expression;
 import org.blockartistry.lib.script.Variant;
+
+import net.minecraftforge.common.MinecraftForge;
 
 public final class Evaluator {
 
@@ -60,6 +63,8 @@ public final class Evaluator {
 			exp = cache.get(expression);
 			if (exp == null) {
 				exp = new Expression(expression);
+				final ExpressionEvent.Create event = new ExpressionEvent.Create(exp);
+				MinecraftForge.EVENT_BUS.post(event);
 				exp.getRPN();
 				cache.put(expression, exp);
 			}

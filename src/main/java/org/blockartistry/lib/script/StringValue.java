@@ -26,16 +26,23 @@ package org.blockartistry.lib.script;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class StringValue extends Variant {
 
 	protected String value;
 
 	public StringValue() {
-		this.value = "";
+		this.value = StringUtils.EMPTY;
 	}
 
 	public StringValue(@Nonnull final String v) {
 		this.value = v;
+	}
+
+	public StringValue(@Nonnull final String name, @Nonnull final String value) {
+		super(name);
+		this.value = value;
 	}
 
 	@Override

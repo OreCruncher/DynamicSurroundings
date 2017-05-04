@@ -46,6 +46,26 @@ public class NumberValue extends Variant {
 		this.value = (float) d;
 	}
 
+	public NumberValue(@Nonnull final String name) {
+		super(name);
+		this.value = 0.0F;
+	}
+
+	public NumberValue(@Nonnull final String name, final float v) {
+		super(name);
+		this.value = v;
+	}
+
+	public NumberValue(@Nonnull final String name, @Nonnull final Float v) {
+		super(name);
+		this.value = v.floatValue();
+	}
+
+	public NumberValue(@Nonnull final String name, final double d) {
+		super(name);
+		this.value = (float) d;
+	}
+
 	@Override
 	public float asNumber() {
 		return this.value;

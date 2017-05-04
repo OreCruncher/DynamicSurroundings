@@ -32,7 +32,6 @@ import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.DynSurround.client.handlers.ExpressionStateHandler;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.client.handlers.ExpressionStateHandler.IDynamicVariable;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.DynSurround.registry.BlockRegistry;
@@ -41,6 +40,7 @@ import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.BlockInfo.BlockInfoMutable;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.MCHelper;
+import org.blockartistry.lib.script.IDynamicValue;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -79,7 +79,7 @@ public abstract class DataProxy extends Observable {
 			dataPools.add(this);
 		}
 
-		public List<IDynamicVariable> getVariables() {
+		public List<IDynamicValue> getVariables() {
 			return ExpressionStateHandler.getVariables();
 		}
 
