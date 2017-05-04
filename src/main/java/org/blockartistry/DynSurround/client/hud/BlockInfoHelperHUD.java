@@ -79,7 +79,7 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 
 	private static List<String> gatherOreNames(final ItemStack stack) {
 		final List<String> result = new ArrayList<String>();
-		if (stack != null)
+		if (stack != null && !stack.isEmpty())
 			for (int i : OreDictionary.getOreIDs(stack))
 				result.add(OreDictionary.getOreName(i));
 		return result;
@@ -103,7 +103,7 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 	private List<String> gatherBlockText(final ItemStack stack, final List<String> text, final IBlockState state,
 			final BlockPos pos) {
 
-		if (stack != null) {
+		if (stack != null && !stack.isEmpty()) {
 			text.add(TextFormatting.RED + stack.getDisplayName());
 			final String itemName = getItemName(stack);
 			if (itemName != null) {
