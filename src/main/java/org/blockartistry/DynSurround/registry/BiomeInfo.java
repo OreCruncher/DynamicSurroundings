@@ -25,6 +25,7 @@ package org.blockartistry.DynSurround.registry;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,9 +36,14 @@ import org.blockartistry.lib.Color;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.WeightTable;
 
+import com.google.common.collect.ImmutableSet;
+
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 
 public class BiomeInfo {
 
@@ -55,6 +61,7 @@ public class BiomeInfo {
 	private Color fogColor;
 	private float fogDensity;
 
+	protected final Set<Type> biomeTypes;
 	protected SoundEffect[] sounds = NO_SOUNDS;
 	protected SoundEffect[] spotSounds = NO_SOUNDS;
 	protected int spotSoundChance = DEFAULT_SPOT_CHANCE;
@@ -62,8 +69,12 @@ public class BiomeInfo {
 	public BiomeInfo(@Nonnull final Biome biome) {
 		this.biome = biome;
 
-		if (!this.isFake())
+		if (!this.isFake()) {
 			this.hasPrecipitation = canRain() || getEnableSnow();
+			this.biomeTypes = BiomeDictionary.getTypes(this.biome);
+		} else {
+			this.biomeTypes = ImmutableSet.of();
+		}
 	}
 
 	public String getBiomeName() {
@@ -198,11 +209,24 @@ public class BiomeInfo {
 	@Override
 	@Nonnull
 	public String toString() {
+		final ResourceLocation rl = this.biome.getRegistryName();
+		final String registryName = rl == null ? "UNKNOWN" : rl.toString();
+
 		final StringBuilder builder = new StringBuilder();
-		builder.append(String.format("Biomes [%s]:", this.getBiomeName()));
+		builder.append("Biome [").append(this.getBiomeName()).append('/').append(registryName).append("]:");
 		if (this.isFake()) {
 			builder.append(" FAKE ");
 		} else {
+			builder.append('<');
+			boolean comma = false;
+			for (final BiomeDictionary.Type t : this.biomeTypes) {
+				if (comma)
+					builder.append(',');
+				else
+					comma = true;
+				builder.append(t.getName());
+			}
+			builder.append('>');
 			builder.append(" temp: ").append(this.getTemperature()).append(" (")
 					.append(getTemperatureRating().getValue()).append(")");
 			builder.append(" rain: ").append(this.getRainfall());
