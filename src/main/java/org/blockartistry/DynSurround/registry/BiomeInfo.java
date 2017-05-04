@@ -35,9 +35,11 @@ import org.blockartistry.lib.Color;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.WeightTable;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
+import net.minecraftforge.common.BiomeDictionary;
 
 public class BiomeInfo {
 
@@ -55,6 +57,7 @@ public class BiomeInfo {
 	private Color fogColor;
 	private float fogDensity;
 
+	protected final BiomeDictionary.Type[] biomeTypes;
 	protected SoundEffect[] sounds = NO_SOUNDS;
 	protected SoundEffect[] spotSounds = NO_SOUNDS;
 	protected int spotSoundChance = DEFAULT_SPOT_CHANCE;
@@ -62,8 +65,12 @@ public class BiomeInfo {
 	public BiomeInfo(@Nonnull final Biome biome) {
 		this.biome = biome;
 
-		if (!this.isFake())
+		if (!this.isFake()) {
 			this.hasPrecipitation = canRain() || getEnableSnow();
+			this.biomeTypes = BiomeDictionary.getTypesForBiome(this.biome);
+		} else {
+			this.biomeTypes = new BiomeDictionary.Type[0];
+		}
 	}
 
 	public String getBiomeName() {
@@ -198,11 +205,24 @@ public class BiomeInfo {
 	@Override
 	@Nonnull
 	public String toString() {
+		final ResourceLocation rl = this.biome.getRegistryName();
+		final String registryName = rl == null ? "UNKNOWN" : rl.toString();
+
 		final StringBuilder builder = new StringBuilder();
-		builder.append(String.format("Biomes [%s]:", this.getBiomeName()));
+		builder.append("Biome [").append(this.getBiomeName()).append('/').append(registryName).append("]:");
 		if (this.isFake()) {
 			builder.append(" FAKE ");
 		} else {
+			builder.append('<');
+			boolean comma = false;
+			for (final BiomeDictionary.Type t : this.biomeTypes) {
+				if (comma)
+					builder.append(',');
+				else
+					comma = true;
+				builder.append(t.name());
+			}
+			builder.append('>');
 			builder.append(" temp: ").append(this.getTemperature()).append(" (")
 					.append(getTemperatureRating().getValue()).append(")");
 			builder.append(" rain: ").append(this.getRainfall());
