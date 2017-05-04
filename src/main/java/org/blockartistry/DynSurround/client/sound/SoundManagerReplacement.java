@@ -180,13 +180,24 @@ public class SoundManagerReplacement extends SoundManager {
 	}
 	
 	public void setMuted(final boolean flag) {
-		final SoundSystem ss = (SoundSystem)this.sndSystem;
+		// If not loaded return
+		if(!this.loaded)
+			return;
 		
-		if(flag) {
-			ss.setMasterVolume(MUTE_VOLUME);
-		} else {
-			final GameSettings options = Minecraft.getMinecraft().gameSettings;
-            ss.setMasterVolume(options.getSoundLevel(SoundCategory.MASTER));
+		final SoundSystem ss = (SoundSystem) this.sndSystem;
+
+		// OpenEye: Looks like the command thread is dead or not initialized.
+		try {
+			if (flag) {
+				ss.setMasterVolume(MUTE_VOLUME);
+			} else {
+				final GameSettings options = Minecraft.getMinecraft().gameSettings;
+				ss.setMasterVolume(options.getSoundLevel(SoundCategory.MASTER));
+			}
+		} catch (final Throwable t) {
+			// Silent - at some point the thread will come back and can be
+			// issued a mute.
+			;
 		}
 	}
 
