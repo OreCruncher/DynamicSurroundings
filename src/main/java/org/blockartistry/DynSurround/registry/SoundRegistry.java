@@ -28,10 +28,8 @@ import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
@@ -40,18 +38,11 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.gui.ConfigSound;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.SoundUtils;
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
 import gnu.trove.impl.Constants;
 import gnu.trove.map.hash.TObjectFloatHashMap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.ISoundEventAccessor;
-import net.minecraft.client.audio.Sound;
-import net.minecraft.client.audio.SoundEventAccessor;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -75,7 +66,7 @@ public final class SoundRegistry extends Registry {
 		this.blockSoundNames.clear();
 		this.volumeControl.clear();
 
-		MyUtils.addAll(this.cullSoundNames, ModOptions.culledSounds);
+   		MyUtils.addAll(this.cullSoundNames, ModOptions.culledSounds);
 		MyUtils.addAll(this.blockSoundNames, ModOptions.blockedSounds);
 
 		for (final String volume : ModOptions.soundVolumes) {
@@ -89,68 +80,6 @@ public final class SoundRegistry extends Registry {
 				}
 			}
 		}
-
-		if (ModOptions.enableDebugLogging && this.side == Side.CLIENT) {
-			final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
-			final List<String> sounds = new ArrayList<String>();
-
-			// Make a map copy. The sound registry should be baked but don't
-			// trust it. The map reference will be used in a separate thread to
-			// detect
-			// bogus entries.
-			final Map<ResourceLocation, SoundEventAccessor> theClone = ImmutableMap
-					.copyOf(handler.soundRegistry.soundRegistry);
-
-			for (final Entry<ResourceLocation, SoundEventAccessor> e : theClone.entrySet()) {
-				sounds.add(e.getKey().toString());
-			}
-			Collections.sort(sounds);
-
-			DSurround.log().info("*** SOUND REGISTRY ***");
-			for (final String sound : sounds)
-				DSurround.log().info(sound);
-
-			new Thread(new Runnable() {
-
-				@Override
-				public void run() {
-
-					final List<String> smells = new ArrayList<String>();
-					try {
-						for (final Entry<ResourceLocation, SoundEventAccessor> e : theClone.entrySet()) {
-							for (final ISoundEventAccessor<Sound> x : e.getValue().accessorList) {
-								final ResourceLocation ogg = x.cloneEntry().getSoundAsOggLocation();
-								try (final IResource resource = Minecraft.getMinecraft().getResourceManager()
-										.getResource(ogg)) {
-									resource.getInputStream();
-								} catch (final Throwable t) {
-									smells.add(String.format("INACCESSABLE [%s] [%s]", e.getKey().toString(),
-											ogg.toString()));
-								}
-							}
-						}
-
-					} catch (final Throwable t) {
-
-					}
-
-					if (smells.size() > 0) {
-						Minecraft.getMinecraft().addScheduledTask(new Runnable() {
-							@Override
-							public void run() {
-								Collections.sort(smells);
-								DSurround.log().info("*** SOUND SMELLS ***");
-								for (final String smell : smells)
-									DSurround.log().info(smell);
-							}
-						});
-					}
-				}
-
-			}).start();
-
-		}
-
 	}
 
 	@Override

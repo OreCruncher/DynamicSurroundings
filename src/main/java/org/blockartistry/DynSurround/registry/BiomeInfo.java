@@ -43,11 +43,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeDictionary.Type;
 
-public class BiomeInfo {
+public final class BiomeInfo {
 
-	public static final int DEFAULT_SPOT_CHANCE = 1200 / AreaSoundEffectHandler.SCAN_INTERVAL;
+	public final static int DEFAULT_SPOT_CHANCE = 1200 / AreaSoundEffectHandler.SCAN_INTERVAL;
 	public final static SoundEffect[] NO_SOUNDS = {};
 
 	protected final Biome biome;
@@ -61,10 +60,11 @@ public class BiomeInfo {
 	private Color fogColor;
 	private float fogDensity;
 
-	protected final Set<Type> biomeTypes;
 	protected SoundEffect[] sounds = NO_SOUNDS;
 	protected SoundEffect[] spotSounds = NO_SOUNDS;
 	protected int spotSoundChance = DEFAULT_SPOT_CHANCE;
+
+	protected final Set<BiomeDictionary.Type> biomeTypes;
 
 	public BiomeInfo(@Nonnull final Biome biome) {
 		this.biome = biome;
@@ -206,6 +206,10 @@ public class BiomeInfo {
 		this.spotSoundChance = DEFAULT_SPOT_CHANCE;
 	}
 
+	public boolean isBiomeType(@Nonnull final BiomeDictionary.Type type) {
+		return this.biomeTypes.contains(type);
+	}
+	
 	@Override
 	@Nonnull
 	public String toString() {

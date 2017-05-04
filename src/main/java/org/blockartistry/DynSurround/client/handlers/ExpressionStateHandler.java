@@ -24,10 +24,13 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 
@@ -48,7 +51,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -146,18 +152,26 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 				this.value = EnvironState.getPlayerBiome().getTemperature();
 			}
 		});
-		register(new Dynamic.DynamicBoolean("biome.isHumid") {
-			@Override
-			public void update() {
-				this.value = EnvironState.isHumid();
+
+		// Scan the BiomeDictionary adding the the types
+		try {
+			final Field accessor = ReflectionHelper.findField(BiomeDictionary.Type.class, "byName");
+			if (accessor != null) {
+				@SuppressWarnings("unchecked")
+				final Map<String, BiomeDictionary.Type> stuff = (Map<String, BiomeDictionary.Type>) accessor.get(null);
+				for (final Entry<String, Type> e : stuff.entrySet()) {
+					register(new Dynamic.DynamicBoolean("biome.is" + e.getKey()) {
+						@Override
+						public void update() {
+							this.value = EnvironState.getTruePlayerBiome().isBiomeType(e.getValue());
+						}
+					});
+				}
 			}
-		});
-		register(new Dynamic.DynamicBoolean("biome.isDry") {
-			@Override
-			public void update() {
-				this.value = EnvironState.isDry();
-			}
-		});
+
+		} catch (final Throwable t) {
+			throw new RuntimeException("Cannot locate BiomeDictionary.Type table!");
+		}
 
 		// Player variables
 		register(new Dynamic.DynamicBoolean("player.isDead") {

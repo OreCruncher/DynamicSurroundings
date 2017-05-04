@@ -26,7 +26,6 @@ package org.blockartistry.DynSurround.registry;
 
 import java.util.HashMap;
 import java.util.IdentityHashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import javax.annotation.Nonnull;
@@ -50,14 +49,11 @@ import org.blockartistry.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.DynSurround.data.xface.SoundType;
 import org.blockartistry.DynSurround.registry.BlockInfo.BlockInfoMutable;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.lib.MCHelper;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.oredict.OreDictionary;
 
 public final class BlockRegistry extends Registry {
 
@@ -76,22 +72,6 @@ public final class BlockRegistry extends Registry {
 
 	@Override
 	public void initComplete() {
-
-		if (ModOptions.enableDebugLogging) {
-			DSurround.log().info("*** BLOCK REGISTRY ***");
-			for (final BlockProfile entry : this.registry.values())
-				DSurround.log().info(entry.toString());
-
-			DSurround.log().info("**** FORGE ORE DICTIONARY NAMES ****");
-			for (final String oreName : OreDictionary.getOreNames())
-				DSurround.log().info(oreName);
-
-			DSurround.log().info("**** BLOCKS REGISTERED WITH FORGE ****");
-			final Iterator<Block> itr = Block.REGISTRY.iterator();
-			while (itr.hasNext())
-				DSurround.log().info(MCHelper.nameOf(itr.next()));
-		}
-
 		this.registry = ImmutableMap.copyOf(this.registry);
 	}
 

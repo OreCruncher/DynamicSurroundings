@@ -562,7 +562,7 @@
 			"sounds": [
 				{
 					"sound": "dsurround:hiss",
-					"conditions": "weather.isNotRaining && isDay && !ONEOF(biome.temperature, 'icy', 'cold')",
+					"conditions": "weather.isNotRaining && isDay && !biome.isCold",
 					"variable": true
 				}
 			]
@@ -625,7 +625,7 @@
 			"effects": [
 				{
 					"effect": "firefly",
-					"conditions": "weather.isNotRaining && (isNight || isSunset) && !biome.isDry && ONEOF(biome.temperature,'mild','warm')",
+					"conditions": "weather.isNotRaining && (isNight || isSunset) && !(biome.isDry || biome.isHot || biome.isCold)",
 					"chance": 30
 				}
 			]
