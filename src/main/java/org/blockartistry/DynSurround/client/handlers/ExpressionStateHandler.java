@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
@@ -48,6 +47,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -146,18 +146,16 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 				this.value = EnvironState.getPlayerBiome().getTemperature();
 			}
 		});
-		register(new Dynamic.DynamicBoolean("biome.isHumid") {
-			@Override
-			public void update() {
-				this.value = EnvironState.isHumid();
-			}
-		});
-		register(new Dynamic.DynamicBoolean("biome.isDry") {
-			@Override
-			public void update() {
-				this.value = EnvironState.isDry();
-			}
-		});
+
+		// Scan the BiomeDictionary adding the the types
+		for (final BiomeDictionary.Type t : BiomeDictionary.Type.values()) {
+			register(new Dynamic.DynamicBoolean("biome.is" + t.name()) {
+				@Override
+				public void update() {
+					this.value = EnvironState.getTruePlayerBiome().isBiomeType(t);
+				}
+			});
+		}
 
 		// Player variables
 		register(new Dynamic.DynamicBoolean("player.isDead") {

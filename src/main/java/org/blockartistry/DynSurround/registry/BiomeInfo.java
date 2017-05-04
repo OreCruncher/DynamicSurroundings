@@ -25,6 +25,7 @@ package org.blockartistry.DynSurround.registry;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,15 +36,18 @@ import org.blockartistry.lib.Color;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.WeightTable;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.BiomeDictionary;
 
-public class BiomeInfo {
+public final class BiomeInfo {
 
-	public static final int DEFAULT_SPOT_CHANCE = 1200 / AreaSoundEffectHandler.SCAN_INTERVAL;
+	public final static int DEFAULT_SPOT_CHANCE = 1200 / AreaSoundEffectHandler.SCAN_INTERVAL;
 	public final static SoundEffect[] NO_SOUNDS = {};
 
 	protected final Biome biome;
@@ -57,19 +61,22 @@ public class BiomeInfo {
 	private Color fogColor;
 	private float fogDensity;
 
-	protected final BiomeDictionary.Type[] biomeTypes;
 	protected SoundEffect[] sounds = NO_SOUNDS;
 	protected SoundEffect[] spotSounds = NO_SOUNDS;
 	protected int spotSoundChance = DEFAULT_SPOT_CHANCE;
+
+	protected final Set<BiomeDictionary.Type> biomeTypes;
 
 	public BiomeInfo(@Nonnull final Biome biome) {
 		this.biome = biome;
 
 		if (!this.isFake()) {
 			this.hasPrecipitation = canRain() || getEnableSnow();
-			this.biomeTypes = BiomeDictionary.getTypesForBiome(this.biome);
+			this.biomeTypes = Sets.newIdentityHashSet();
+			for(final BiomeDictionary.Type t: BiomeDictionary.getTypesForBiome(this.biome))
+				this.biomeTypes.add(t);
 		} else {
-			this.biomeTypes = new BiomeDictionary.Type[0];
+			this.biomeTypes = ImmutableSet.of();
 		}
 	}
 
@@ -202,6 +209,10 @@ public class BiomeInfo {
 		this.spotSoundChance = DEFAULT_SPOT_CHANCE;
 	}
 
+	public boolean isBiomeType(@Nonnull final BiomeDictionary.Type type) {
+		return this.biomeTypes.contains(type);
+	}
+	
 	@Override
 	@Nonnull
 	public String toString() {
