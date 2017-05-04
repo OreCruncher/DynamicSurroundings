@@ -22,47 +22,27 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.lib.script;
+package org.blockartistry.DynSurround.client.event;
 
 import javax.annotation.Nonnull;
 
-public abstract class Variant implements Comparable<Variant>, Expression.LazyVariant {
+import org.blockartistry.lib.script.Expression;
 
-	protected final String name;
+import net.minecraftforge.fml.common.eventhandler.Event;
+
+public class ExpressionEvent extends Event {
 	
-	public Variant() {
-		this("<ANON>");
+	public final Expression expression;
+	
+	protected ExpressionEvent(@Nonnull final Expression exp) {
+		this.expression = exp;
 	}
 	
-	public Variant(@Nonnull final String name) {
-		this.name = name;
-	}
-	
-	@Nonnull
-	public String getName() {
-		return this.name;
-	}
-	
-	public abstract float asNumber();
-
-	@Nonnull
-	public abstract String asString();
-	
-	public abstract boolean asBoolean();
-
-	// Operator support in case of strings
-	@Nonnull
-	public abstract Variant add(@Nonnull final Variant term);
-	
-	@Override
-	@Nonnull
-	public final String toString() {
-		return asString();
+	public static class Create extends ExpressionEvent {
+		
+		public Create(@Nonnull final Expression exp) {
+			super(exp);
+		}
 	}
 
-	@Override
-	@Nonnull
-	public final Variant eval() {
-		return this;
-	}
 }

@@ -40,15 +40,17 @@ import java.util.Stack;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 public final class Expression {
 
-	public static final Variant PI = new NumberValue(MathStuff.PI_F);
-	public static final Variant e = new NumberValue(MathStuff.E_F);
-	public static final Variant TRUE = new BooleanValue(true);
-	public static final Variant FALSE = new BooleanValue(false);
+	public static final Variant PI = new NumberValue("PI", MathStuff.PI_F);
+	public static final Variant e = new NumberValue("e", MathStuff.E_F);
+	public static final Variant TRUE = new BooleanValue("TRUE", true);
+	public static final Variant FALSE = new BooleanValue("FALSE", false);
 
 	// Built-in operators, functions, and variables. Allows for
 	// the application to predefine items that will be used over and
@@ -70,6 +72,10 @@ public final class Expression {
 
 	public static void addBuiltInVariable(final String name, final LazyVariant number) {
 		builtInVariables.put(name, number);
+	}
+	
+	public static void addBuiltInVariable(@Nonnull final Variant v) {
+		builtInVariables.put(v.getName(), v);
 	}
 
 	static {
@@ -330,10 +336,10 @@ public final class Expression {
 			}
 		});
 
-		addBuiltInVariable("e", e);
-		addBuiltInVariable("PI", PI);
-		addBuiltInVariable("TRUE", TRUE);
-		addBuiltInVariable("FALSE", FALSE);
+		addBuiltInVariable(e.getName(), e);
+		addBuiltInVariable(PI.getName(), PI);
+		addBuiltInVariable(TRUE.getName(), TRUE);
+		addBuiltInVariable(FALSE.getName(), FALSE);
 
 	}
 
@@ -355,17 +361,18 @@ public final class Expression {
 	/**
 	 * All defined operators with name and implementation.
 	 */
-	private Map<String, Operator> operators = new TreeMap<String, Operator>(String.CASE_INSENSITIVE_ORDER);
+	private final Map<String, Operator> operators = new TreeMap<String, Operator>(String.CASE_INSENSITIVE_ORDER);
 
 	/**
 	 * All defined functions with name and implementation.
 	 */
-	private Map<String, LazyFunction> functions = new TreeMap<String, LazyFunction>(String.CASE_INSENSITIVE_ORDER);
+	private final Map<String, LazyFunction> functions = new TreeMap<String, LazyFunction>(
+			String.CASE_INSENSITIVE_ORDER);
 
 	/**
 	 * All defined variables with name and value.
 	 */
-	private Map<String, LazyVariant> variables = new TreeMap<String, LazyVariant>(String.CASE_INSENSITIVE_ORDER);
+	private final Map<String, LazyVariant> variables = new TreeMap<String, LazyVariant>(String.CASE_INSENSITIVE_ORDER);
 
 	/**
 	 * The Float representation of the left parenthesis, used for parsing
@@ -436,9 +443,9 @@ public final class Expression {
 		this.expression = expression;
 		this.originalExpression = expression;
 
-		this.operators = builtInOperators;
-		this.functions = builtInFunctions;
-		this.variables = builtInVariables;
+		this.operators.putAll(builtInOperators);
+		this.functions.putAll(builtInFunctions);
+		this.variables.putAll(builtInVariables);
 	}
 
 	/**
@@ -665,7 +672,7 @@ public final class Expression {
 
 		for (final String token : rpn) {
 			if (this.operators.containsKey(token)) {
-				if(this.operators.get(token).isUnary()) {
+				if (this.operators.get(token).isUnary()) {
 					if (stack.peek() < 1) {
 						throw new ExpressionException("Missing parameter(s) for operator " + token);
 					}
@@ -722,6 +729,22 @@ public final class Expression {
 			result.append(st);
 		}
 		return result.toString();
+	}
+
+	public Expression addVariable(@Nonnull final Variant v) {
+		this.variables.put(v.getName(), v);
+		return this;
+	}
+
+	public Expression addVariables(@Nonnull final List<Variant> list) {
+		for (final Variant v : list)
+			this.addVariable(v);
+		return this;
+	}
+
+	public Expression addVariables(@Nonnull final Map<String, Variant> map) {
+		this.variables.putAll(map);
+		return this;
 	}
 
 	/**

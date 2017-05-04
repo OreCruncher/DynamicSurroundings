@@ -26,43 +26,30 @@ package org.blockartistry.lib.script;
 
 import javax.annotation.Nonnull;
 
-public abstract class Variant implements Comparable<Variant>, Expression.LazyVariant {
+import org.apache.commons.lang3.StringUtils;
 
-	protected final String name;
+public final class Dynamic {
 	
-	public Variant() {
-		this("<ANON>");
-	}
-	
-	public Variant(@Nonnull final String name) {
-		this.name = name;
-	}
-	
-	@Nonnull
-	public String getName() {
-		return this.name;
-	}
-	
-	public abstract float asNumber();
-
-	@Nonnull
-	public abstract String asString();
-	
-	public abstract boolean asBoolean();
-
-	// Operator support in case of strings
-	@Nonnull
-	public abstract Variant add(@Nonnull final Variant term);
-	
-	@Override
-	@Nonnull
-	public final String toString() {
-		return asString();
+	private Dynamic() {
+		
 	}
 
-	@Override
-	@Nonnull
-	public final Variant eval() {
-		return this;
+	public abstract static class DynamicNumber extends NumberValue implements IDynamicValue {
+		public DynamicNumber(@Nonnull final String name) {
+			super(name);
+		}
 	}
+
+	public abstract static class DynamicString extends StringValue implements IDynamicValue {
+		public DynamicString(@Nonnull final String name) {
+			super(name, StringUtils.EMPTY);
+		}
+	}
+
+	public abstract static class DynamicBoolean extends BooleanValue implements IDynamicValue {
+		public DynamicBoolean(@Nonnull final String name) {
+			super(name);
+		}
+	}
+
 }
