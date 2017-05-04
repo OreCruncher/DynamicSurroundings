@@ -32,6 +32,8 @@ import com.google.gson.annotations.SerializedName;
 public final class BiomeConfig {
 	@SerializedName("biomeName")
 	public String biomeName = null;
+	@SerializedName("conditions")
+	public String conditions = null;
 	@SerializedName("precipitation")
 	public Boolean hasPrecipitation = null;
 	@SerializedName("dust")
