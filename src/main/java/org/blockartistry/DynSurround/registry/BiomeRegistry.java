@@ -143,22 +143,23 @@ public final class BiomeRegistry extends Registry {
 		return result;
 	}
 
-	final boolean isBiomeMatch(@Nonnull final BiomeConfig entry, @Nonnull final String biomeName) {
-		if (Pattern.matches(entry.biomeName, biomeName))
+	final boolean isBiomeMatch(@Nonnull final BiomeConfig entry, @Nonnull final BiomeInfo info) {
+		if (Pattern.matches(entry.biomeName, info.getBiomeName()))
 			return true;
-		final String alias = this.biomeAliases.get(biomeName);
+		final String alias = this.biomeAliases.get(info.getBiomeName());
 		return alias == null ? false : Pattern.matches(entry.biomeName, alias);
 	}
 
 	public void registerBiomeAlias(@Nonnull final String alias, @Nonnull final String biome) {
 		this.biomeAliases.put(alias, biome);
 	}
-
+	
 	public void register(@Nonnull final BiomeConfig entry) {
 		final SoundRegistry soundRegistry = RegistryManager.get(RegistryType.SOUND);
 
+		final BiomeMatcher matcher = BiomeMatcher.getMatcher(entry);
 		for (final BiomeInfo biomeEntry : this.registry.values()) {
-			if (isBiomeMatch(entry, biomeEntry.getBiomeName())) {
+			if (matcher.match(biomeEntry)) {
 				if (entry.hasPrecipitation != null)
 					biomeEntry.setHasPrecipitation(entry.hasPrecipitation.booleanValue());
 				if (entry.hasAurora != null)
