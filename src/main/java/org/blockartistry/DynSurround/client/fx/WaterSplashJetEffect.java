@@ -57,7 +57,7 @@ public class WaterSplashJetEffect extends JetEffect {
 	}
 
 	private static boolean isLiquidBlock(final IBlockState state) {
-		return state.getMaterial() == Material.WATER;
+		return state.getBlock() instanceof BlockLiquid;
 	}
 
 	private static boolean partialLiquidOrAir(final World world, final BlockPos pos) {
