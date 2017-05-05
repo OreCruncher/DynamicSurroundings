@@ -1,3 +1,27 @@
+###DynamicSurroundings-1.11.2-3.4.1.0
+**What's New**
+* Aurora spawn is now 100% client side!  This means auroras will display in polar biomes even though a server may not have Dynamic Surroundings installed.
+    * The "seed" for the aurora is based on the current Minecraft day of the dimension in question
+    * Auroras will be a fixed X,Z distance from the player regardless of the direction of movement (i.e. you can no longer fly up into them)
+    * Aurora Y will obey the settings in the configuration file
+    * They will fade once you move out of a polar biome
+    * Because aurora processing is 100% client side there is no server side code
+
+**Fixes**
+* NPE when holding a stack of nether stars in order to inspect a block that has no corresponding Item.
+* OpenEye: SoundManager NPE when muting sound
+* BoP Algae no longer cause underwater waterfalls
+
+**Changes**
+* Minecraft preset application is smarter about making setting changes that can trigger some lag.  For example, it will no longer cause a resource refresh if the current mipmap level is the same as the one in the preset.
+* Filter Dynamic Surroundings "asm" and "logging" categories from preset configuration.
+* Biome matching rules for sounds now use traits rather than regex name matching.
+    * Each biome has traits via the BiomeDictionary.  For example a Desert biome has the traits of HOT, DRY, and SANDY.
+    * Possible to have multiple background sounds streaming for a biome (ie. Birch Forest Hills will have the regular Forest sounds as well as the Hills wind sound)
+    * Should provide better "out of the box" support for modded biomes Dynamic Surroundings is not directly aware of
+    * It's not 100% perfect, so if you come across a biome that has non-sensical sounds let me know.  The configs can be tweaked.
+    * Configuration files created by other authors can still use regex name matching since backward compatibility is maintained.
+
 ###DynamicSurroundings-1.11.2-3.4.0.0
 **What's New**
 * Presets!
