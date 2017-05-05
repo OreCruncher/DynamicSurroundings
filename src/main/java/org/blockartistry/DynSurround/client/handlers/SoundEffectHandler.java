@@ -163,7 +163,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		while (itr.hasNext()) {
 			final Entry<SoundEffect, Emitter> e = itr.next();
 			if (sounds.contains(e.getKey())) {
-				e.getValue().setVolume(sounds.get(e.getKey()));
+				e.getValue().setVolumeThrottle(sounds.get(e.getKey()));
 				// Set to 0 so that the "new sound" logic below
 				// will ignore. Cheaper than removing the object
 				// from the collection.

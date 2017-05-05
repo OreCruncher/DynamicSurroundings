@@ -29,6 +29,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.Maps;
@@ -43,6 +44,11 @@ public class ModLog {
 	private ModLog(@Nonnull final Logger logger) {
 		this.logger = logger;
 		this.DEBUGGING = false;
+	}
+
+	@Nonnull
+	private String[] formatLines(@Nonnull final String format, @Nullable final Object... parms) {
+		return StringUtils.split(String.format(format, parms), '\n');
 	}
 
 	public static ModLog getLogger(@Nonnull final String id) {
@@ -65,20 +71,24 @@ public class ModLog {
 	}
 
 	public void info(@Nonnull final String msg, @Nullable final Object... parms) {
-		this.logger.info(String.format(msg, parms));
+		for (final String s : formatLines(msg, parms))
+			this.logger.info(s);
 	}
 
 	public void warn(@Nonnull final String msg, @Nullable final Object... parms) {
-		this.logger.warn(String.format(msg, parms));
+		for (final String s : formatLines(msg, parms))
+			this.logger.warn(s);
 	}
 
 	public void debug(@Nonnull final String msg, @Nullable final Object... parms) {
 		if (this.DEBUGGING)
-			this.logger.info(String.format(msg, parms));
+			for (final String s : formatLines(msg, parms))
+				this.logger.info(s);
 	}
 
 	public void error(@Nonnull final String msg, @Nonnull final Throwable e) {
-		this.logger.error(msg);
+		for (final String s : formatLines(msg))
+			this.logger.error(s);
 		e.printStackTrace();
 	}
 

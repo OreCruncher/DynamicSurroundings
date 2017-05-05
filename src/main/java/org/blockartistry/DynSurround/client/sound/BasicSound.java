@@ -59,6 +59,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 	};
 
 	protected final Random RANDOM = XorShiftRandom.current();
+	protected float volumeThrottle = 1.0F;
 	protected ISoundScale volumeScale;
 
 	public BasicSound(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
@@ -136,10 +137,16 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 		this.volumeScale = scale;
 		return (T) this;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public T setVolumeThrottle(final float throttle) {
+		this.volumeThrottle = throttle;
+		return (T) this;
+	}
 
 	@Override
 	public float getVolume() {
-		return super.getVolume() * this.volumeScale.getScale();
+		return super.getVolume() * this.volumeScale.getScale() * this.volumeThrottle;
 	}
 
 	public void fade() {

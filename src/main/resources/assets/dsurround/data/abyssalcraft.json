@@ -1,7 +1,8 @@
 {
 	"biomes": [
 		{
-			"biomeName": "Player",
+			"conditions": "biome.name == 'Player'",
+			"_comment": "Add sound to Omothol",
 			"sounds": [
 				{
 					"sound": "dsurround:dimension.nether",
@@ -10,116 +11,60 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(darklands.*|.*dreadlands.*|.*coralium.*)",
-			"soundReset": true,
-			"dust": false,
-			"fog": false
-		},
-		{
-			"biomeName": "Darklands",
+			"conditions": "biome.name == 'Darklands'",
+			"_comment": "Darklands fog override",
 			"fog": true,
 			"fogColor": "128,0,128",
 			"fogDensity": 0.6
 		},
 		{
-			"biomeName": "Darklands Forest",
+			"conditions": "biome.name == 'Darklands Forest'",
+			"_comment": "Darklands Forest fog override",
 			"fog": true,
 			"fogColor": "128,0,128",
-			"fogDensity": 0.6,
-			"sounds": [
-				{
-					"sound": "dsurround:forest",
-					"conditions": "weather.isNotRaining && isDay"
-				},
-				{
-					"sound": "dsurround:crickets",
-					"conditions": "weather.isNotRaining && isNight"
-				}
-			]
+			"fogDensity": 0.6
 		},
 		{
-			"biomeName": "Darklands Plains",
+			"conditions": "biome.name == 'Darklands Forest'",
+			"_comment": "Darklands Forest fog override",
 			"fog": true,
 			"fogColor": "128,0,128",
-			"fogDensity": 0.6,
-			"sounds": [
-				{
-					"sound": "dsurround:wind",
-					"volume": 0.3,
-					"pitch": 1.5
-				}
-			]
+			"fogDensity": 0.6
 		},
 		{
-			"biomeName": "Darklands Highland",
+			"conditions": "biome.name == 'Darklands Highland'",
+			"_comment": "Darklands Highland fog override",
 			"fog": true,
 			"fogColor": "128,0,128",
-			"fogDensity": 0.6,
-			"sounds": [
-				{
-					"sound": "dsurround:wind",
-					"volume": 0.3,
-					"pitch": 1.5
-				}
-			]
+			"fogDensity": 0.6
 		},
 		{
-			"biomeName": "Darklands Mountains",
-			"sounds": [
-				{
-					"sound": "dsurround:wind"
-				}
-			]
+			"conditions": "biome.name == 'Darklands Mountains'",
+			"_comment": "Darklands Mountains no additional overrides"
 		},
 		{
-			"biomeName": "Coralium Infested Swamp",
+			"conditions": "biome.name == 'Coralium Infested Swamp'",
+			"_comment": "Coralium Infested Swamp fog override",
 			"fog": true,
 			"fogColor": "34,228,144",
-			"fogDensity": 0.6,
-			"sounds": [
-				{
-					"sound": "dsurround:crickets"
-				},
-				{
-					"sound": "dsurround:insectbuzz",
-					"conditions": "weather.isNotRaining",
-					"soundType": "spot",
-					"variable": true
-				}
-			]
+			"fogDensity": 0.6
 		},
 		{
-			"biomeName": "Coralium Infested Ocean",
+			"conditions": "biome.name == 'Coralium Infested Ocean'",
+			"_comment": "Coralium Infested Ocean fog override",
 			"fog": true,
 			"fogColor": "28,107,160",
-			"fogDensity": 0.6,
-			"sounds": [
-				{
-					"sound": "dsurround:beach"
-				}
-			]
+			"fogDensity": 0.6
 		},
 		{
-			"biomeName": "Abyssal Wasteland",
-			"soundReset": true,
+			"conditions": "biome.name == 'Abyssal Wasteland'",
+			"_comment": "Abyssal Wasteland dust override",
 			"dust": true,
-			"dustColor": "204,185,102",
-			"sounds": [
-				{
-					"sound": "dsurround:wind",
-					"volume": 0.3,
-					"pitch": 1.5
-				}
-			]
+			"dustColor": "204,185,102"
 		},
 		{
-			"biomeName": ".*Dreadlands.*",
-			"soundReset": true,
-			"sounds": [
-				{
-					"sound": "dsurround:wind"
-				}
-			]
+			"conditions": "match('.*Dreadlands.*', biome.name)",
+			"_comment": "Dreadlands no additional overrides"
 		}
 	],
 	"blocks": [

@@ -82,6 +82,11 @@ public abstract class Emitter {
 	public float getVolume() {
 		return this.activeSound != null ? this.activeSound.getVolume() : 0.0F;
 	}
+	
+	public void setVolumeThrottle(final float throttle) {
+		if(this.activeSound != null)
+			this.activeSound.setVolumeThrottle(throttle);
+	}
 
 	public void setPitch(final float pitch) {
 		if(this.activeSound != null)
@@ -94,7 +99,7 @@ public abstract class Emitter {
 	
 	public void fade() {
 		if (this.activeSound != null) {
-			DSurround.log().debug("FADE: " + this.activeSound.toString());
+			DSurround.log().debug("FADE: %s", this.activeSound.toString());
 			this.activeSound.fade();
 		}
 	}
@@ -104,4 +109,5 @@ public abstract class Emitter {
 			SoundEngine.instance().stopSound(this.activeSound);
 		}
 	}
+
 }
