@@ -30,6 +30,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.client.handlers.AreaSoundEffectHandler;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.lib.Color;
@@ -37,6 +38,7 @@ import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.WeightTable;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import net.minecraft.util.ResourceLocation;
@@ -45,7 +47,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.BiomeDictionary;
 
-public final class BiomeInfo {
+public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 	public final static int DEFAULT_SPOT_CHANCE = 1200 / AreaSoundEffectHandler.SCAN_INTERVAL;
 	public final static SoundEffect[] NO_SOUNDS = {};
@@ -67,17 +69,28 @@ public final class BiomeInfo {
 
 	protected final Set<BiomeDictionary.Type> biomeTypes;
 
+	protected final List<String> comments = Lists.newArrayList();
+
 	public BiomeInfo(@Nonnull final Biome biome) {
 		this.biome = biome;
 
 		if (!this.isFake()) {
 			this.hasPrecipitation = canRain() || getEnableSnow();
 			this.biomeTypes = Sets.newIdentityHashSet();
-			for(final BiomeDictionary.Type t: BiomeDictionary.getTypesForBiome(this.biome))
+			for (final BiomeDictionary.Type t : BiomeDictionary.getTypesForBiome(this.biome))
 				this.biomeTypes.add(t);
 		} else {
 			this.biomeTypes = ImmutableSet.of();
 		}
+	}
+
+	public void addComment(@Nonnull final String comment) {
+		if (!StringUtils.isEmpty(comment))
+			this.comments.add(comment);
+	}
+
+	public List<String> getComments() {
+		return this.comments;
 	}
 
 	public String getBiomeName() {
@@ -212,7 +225,11 @@ public final class BiomeInfo {
 	public boolean isBiomeType(@Nonnull final BiomeDictionary.Type type) {
 		return this.biomeTypes.contains(type);
 	}
-	
+
+	public boolean areBiomesSameClass(@Nonnull final Biome biome) {
+		return BiomeDictionary.areBiomesEquivalent(this.biome, biome);
+	}
+
 	@Override
 	@Nonnull
 	public String toString() {
@@ -224,7 +241,7 @@ public final class BiomeInfo {
 		if (this.isFake()) {
 			builder.append(" FAKE ");
 		} else {
-			builder.append('<');
+			builder.append("\n+ ").append('<');
 			boolean comma = false;
 			for (final BiomeDictionary.Type t : this.biomeTypes) {
 				if (comma)
@@ -233,8 +250,8 @@ public final class BiomeInfo {
 					comma = true;
 				builder.append(t.name());
 			}
-			builder.append('>');
-			builder.append(" temp: ").append(this.getTemperature()).append(" (")
+			builder.append('>').append('\n');
+			builder.append("+ temp: ").append(this.getTemperature()).append(" (")
 					.append(getTemperatureRating().getValue()).append(")");
 			builder.append(" rain: ").append(this.getRainfall());
 		}
@@ -257,19 +274,31 @@ public final class BiomeInfo {
 		}
 
 		if (this.sounds.length > 0) {
-			builder.append("; sounds [");
+			builder.append("\n+ sounds [\n");
 			for (final SoundEffect sound : this.sounds)
-				builder.append(sound.toString()).append(',');
-			builder.append(']');
+				builder.append("+   ").append(sound.toString()).append('\n');
+			builder.append("+ ]");
 		}
 
 		if (this.spotSounds.length > 0) {
-			builder.append("; spot sound chance:").append(this.spotSoundChance);
-			builder.append(" spot sounds [");
+			builder.append("\n+ spot sound chance:").append(this.spotSoundChance);
+			builder.append("\n+ spot sounds [\n");
 			for (final SoundEffect sound : this.spotSounds)
-				builder.append(sound.toString()).append(',');
-			builder.append(']');
+				builder.append("+   ").append(sound.toString()).append('\n');
+			builder.append("+ ]");
 		}
+
+		if (this.comments.size() > 0) {
+			builder.append("\n+ comments:\n");
+			for (final String c : this.comments)
+				builder.append("+   ").append(c).append('\n');
+		}
+
 		return builder.toString();
+	}
+
+	@Override
+	public int compareTo(@Nonnull final BiomeInfo o) {
+		return this.getBiomeName().compareTo(o.getBiomeName());
 	}
 }

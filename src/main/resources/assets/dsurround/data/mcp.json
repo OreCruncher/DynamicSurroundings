@@ -1,17 +1,19 @@
 {
 	"biomes": [
 		{
-			"biomeName": "(?i)(?!.*forest.*|.*taiga.*|.*jungle.*|.*\\+.*|.*savanna.*)(.*hills.*|.*plateau.*|.*wasteland.*|.*canyon.*|tundra|.*highland.*|.*volcanic.*)",
+			"conditions": "!biome.isMountain && ((biome.isWasteland && !biome.isSwamp) || biome.isHills)",
+			"_comment": "Wind for Hills/Wasteland",
 			"sounds": [
 				{
 					"sound": "dsurround:wind",
-					"volume": 0.3,
+					"volume": 0.2,
 					"pitch": 1.5
 				}
 			]
 		},
 		{
-			"biomeName": "(?i)(.*mountain.*|.*hills\\+.*|crag|alps)",
+			"conditions": "biome.isMountain",
+			"_comment": "Wind for Mountain",
 			"sounds": [
 				{
 					"sound": "dsurround:wind"
@@ -19,7 +21,8 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(.*jungle.*|.*tropical.*)",
+			"conditions": "biome.isJungle && biome.isWet",
+			"_comment": "Regular Jungle and Tropical",
 			"spotSoundChance": 200,
 			"soundReset": true,
 			"sounds": [
@@ -32,7 +35,13 @@
 					"conditions": "weather.isNotRaining",
 					"soundType": "spot",
 					"variable": true
-				},
+				}
+			]
+		},
+		{
+			"conditions": "biome.isJungle && biome.isWet && !biome.isForest",
+			"_comment": "Primates for Jungle",
+			"sounds": [
 				{
 					"sound": "dsurround:primates",
 					"conditions": "weather.isNotRaining && isDay",
@@ -41,7 +50,8 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(?!.*ice.*)(.*plains.*|.*meadow.*|.*farmland.*|grassland|brushland|.*shrubland.*|prairie|.*field.*|.*chaparral.*|overgrown cliffs|steppe)",
+			"conditions": "biome.isPlains && !(biome.isSnowy || biome.isHot || biome.isForest)",
+			"_comment": "Regular Plains",
 			"sounds": [
 				{
 					"sound": "dsurround:plains",
@@ -65,7 +75,8 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(?!.*ice.*)(.*plains.*|grassland|prairie)",
+			"conditions":"biome.isPlains && !biome.isSnowy",
+			"_comment": "Bison!",
 			"sounds": [
 				{
 					"sound": "dsurround:bison",
@@ -75,7 +86,8 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(?!.*dead.*|.*fungi.*|.*frost.*|.*snow.*|.*kelp.*|.*wasteland.*)(.*forest.*|.*cherry.*|.*orchard.*|.*wood.*|.*wetland.*|.*grove.*|.*springs.*)",
+			"conditions":"biome.isForest && !(biome.isHot || biome.isSwamp || biome.isDead || biome.isSnowy || biome.isCold || biome.isOcean || biome.isWasteland || biome.isJungle)",
+			"_comment": "Regular Forest",
 			"spotSoundChance": 200,
 			"sounds": [
 				{
@@ -86,6 +98,10 @@
 					"sound": "dsurround:bird",
 					"conditions": "weather.isNotRaining && isDay",
 					"soundType": "spot"
+				},
+				{
+					"sound": "dsurround:crickets",
+					"conditions": "weather.isNotRaining && isNight"
 				},
 				{
 					"sound": "dsurround:woodpecker",
@@ -98,10 +114,6 @@
 					"soundType": "spot"
 				},
 				{
-					"sound": "dsurround:crickets",
-					"conditions": "weather.isNotRaining && isNight"
-				},
-				{
 					"sound": "dsurround:owl",
 					"conditions": "weather.isNotRaining && isNight",
 					"soundType": "spot"
@@ -109,7 +121,8 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(heathland|thicket|land of lakes|mangrove|origin island)",
+			"conditions": "false",
+			"_comment": "Heathland, Thicket, etc. - Forest sounds without spots",
 			"spotSoundChance": 200,
 			"sounds": [
 				{
@@ -128,7 +141,8 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(?!.*cold.*|.*snow.*)(.*taiga.*|.*meneglin.*)",
+			"conditions": "biome.isForest && biome.isCold && !(biome.isSwamp || biome.isSnowy || biome.isDead)",
+			"_comment": "Basic Forest background sound",
 			"sounds": [
 				{
 					"sound": "dsurround:forest",
@@ -137,7 +151,8 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(.*taiga.*|.*meneglin.*|.*snow.*forest.*)",
+			"conditions": "biome.isForest && !biome.isSwamp && (biome.isCold || biome.isSnowy || biome.isDead)",
+			"_comment": "Add in Owl and Wolf for cold forest like biomes",
 			"sounds": [
 				{
 					"sound": "dsurround:owl",
@@ -152,7 +167,8 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(?!.*frozen.*|.*cold.*)(.*beach.*|.*ocean.*|.*kelp.*|.*reef.*)",
+			"conditions": "(biome.isOcean || biome.isBeach) && !(biome.isCold || biome.isSnowy)",
+			"_comment": "Regular Beach",
 			"sounds": [
 				{
 					"sound": "dsurround:beach"
@@ -165,7 +181,8 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(?!.*frozen.*|.*dry.*)(.*river.*)",
+			"conditions": "biome.isRiver && !(biome.isSnowy || biome.isDry || biome.isOcean)",
+			"_comment": "Regular River",
 			"sounds": [
 				{
 					"sound": "dsurround:river"
@@ -179,7 +196,8 @@
 			]
 		},
 		{
-			"biomeName": "Deep Ocean",
+			"conditions": "biome.name == 'Deep Ocean'",
+			"_comment": "Deep Ocean explicit set",
 			"soundReset": true,
 			"sounds": [
 				{
@@ -189,12 +207,15 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(.*swamp.*)",
+			"conditions": "biome.isSwamp && !biome.isForest",
+			"_comment": "Regular Swamp fog",
 			"fog": true,
 			"fogColor": "64,96,64",
 			"fogDensity": 0.6
 		},
 		{
+			"conditions":"biome.isSwamp && !(biome.isForest || biome.isDead || biome.isCold)",
+			"_comment": "Regular Swamp Sounds",
 			"biomeName": "(?i)(?!.*dead.*)(.*swamp.*)",
 			"spotSoundChance": 200,
 			"sounds": [
@@ -210,7 +231,8 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(.*fen.*|.*bog.*|.*marsh.*|.*moor.*|.*bayou.*|quagmire|silkglades)",
+			"conditions": "biome.isSwamp && biome.isCold",
+			"_comment": "Special Swamps such as Fen, Bog, Marsh, etc.",
 			"spotSoundChance": 200,
 			"sounds": [
 				{
@@ -238,7 +260,8 @@
 			"fogDensity": 0.6
 		},
 		{
-			"biomeName": "(?i)(?!.*dead.*)(.*swamp.*|.*marsh.*|.*bayou.*)",
+			"conditions":"biome.isSwamp && !(biome.isDead || biome.isHills || biome.isMountain || biome.isCold || biome.isSnowy || biome.isForest)",
+			"_comment": "Crocodiles for Swamp biomes",
 			"sounds": [
 				{
 					"sound": "dsurround:crocodile",
@@ -247,7 +270,8 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(?!.*cold.*)(.*dead.*)",
+			"conditions": "biome.isDead && !(biome.isSnowy)",
+			"_comment": "Crows for Dead biomes",
 			"sounds": [
 				{
 					"sound": "dsurround:crow",
@@ -257,17 +281,20 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(.*desert.*|.*sand.*|.*mesa.*|.*wasteland.*|.*sahara.*|outback)",
+			"conditions": "biome.isSandy || biome.isMesa || biome.isWasteland",
+			"_comment": "Dust for desert like biomes",
 			"dust": true,
 			"dustColor": "204,185,102"
 		},
 		{
-			"biomeName": "(?i)(cold desert)",
+			"conditions": "biome.name == 'Cold Desert'",
+			"_comment": "Cold Desert dust explicit set",
 			"dust": true,
 			"dustColor": "255,255,255"
 		},
 		{
-			"biomeName": "(?i)(?!.*cold.*|.*frozen.*)(.*desert.*|.*sand.*|.*mesa.*)",
+			"conditions": "(biome.isSandy || biome.isMesa) && !(biome.isCold || biome.isSnowy)",
+			"_comment": "Regular Desert for snakes and coyote",
 			"sounds": [
 				{
 					"sound": "dsurround:rattlesnake",
@@ -282,7 +309,8 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(.*savanna.*)",
+			"conditions": "biome.isSavanna && !biome.isDry",
+			"_comment": "Regular Savanna (Elephants and insects)",
 			"sounds": [
 				{
 					"sound": "dsurround:elephant",
@@ -298,7 +326,9 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(the end|sky)",
+			"conditions": "biome.isEnd || biome.name == 'The Void'",
+			"_comment": "It's The End!",
+			"soundReset": true,
 			"aurora": false,
 			"sounds": [
 				{
@@ -307,16 +337,19 @@
 			]
 		},
 		{
-			"biomeName": "(?i)(.*taiga.*|.*meneglin.*|.*frozen.*|.*ice.*|.*tundra.*|.*polar.*|.*snow.*|.*glacier.*|.*arctic.*)",
+			"conditions": "(biome.isCold || biome.isSnowy) && !(biome.isDead || biome.isSwamp || biome.isEnd)",
+			"_comment": "Aurora Set for cold/snowy biomes that aren't dead",
 			"aurora": true
 		},
 		{
-			"biomeName": "(?i)(hell|.*visceral.*|.*inferno.*|undergarden|boneyard)",
+			"conditions": "biome.isNether",
+			"_comment": "Regular Nether",
 			"dust": true,
 			"dustColor": "255,0,0"
 		},
 		{
-			"biomeName": "Underground",
+			"conditions": "biome.name == 'Underground'",
+			"_comment": "Underground explicit set",
 			"sounds": [
 				{
 					"sound": "dsurround:underground",
@@ -341,7 +374,8 @@
 			]
 		},
 		{
-			"biomeName": "UnderOCN",
+			"conditions": "biome.name == 'UnderOCN'",
+			"_comment": "Under Ocean explicit set",
 			"sounds": [
 				{
 					"sound": "dsurround:underocean"
@@ -349,7 +383,8 @@
 			]
 		},
 		{
-			"biomeName": "UnderDOCN",
+			"conditions": "biome.name == 'UnderDOCN'",
+			"_comment": "Under Deep Ocean explicit set",
 			"sounds": [
 				{
 					"sound": "dsurround:underdeepocean"
@@ -361,7 +396,8 @@
 			]
 		},
 		{
-			"biomeName": "UnderRVR",
+			"conditions": "biome.name == 'UnderRVR'",
+			"_comment": "Under River explicit set",
 			"sounds": [
 				{
 					"sound": "dsurround:underriver"
@@ -369,7 +405,8 @@
 			]
 		},
 		{
-			"biomeName": "Underwater",
+			"conditions": "biome.name == 'Underwater'",
+			"_comment": "Underwater explicit set",
 			"sounds": [
 				{
 					"sound": "dsurround:underwater"
@@ -377,7 +414,8 @@
 			]
 		},
 		{
-			"biomeName": "Clouds",
+			"conditions": "biome.name == 'Clouds'",
+			"_comment": "Clouds explicit set",
 			"sounds": [
 				{
 					"sound": "dsurround:wind"
@@ -385,7 +423,8 @@
 			]
 		},
 		{
-			"biomeName": "Village",
+			"conditions": "biome.name == 'Village'",
+			"_comment": "Village explicit set",
 			"sounds": [
 				{
 					"sound": "dsurround:village.rooster",
@@ -411,7 +450,8 @@
 			]
 		},
 		{
-			"biomeName": "Player",
+			"conditions": "biome.name == 'Player'",
+			"_comment": "Player explicit set",
 			"sounds": [
 				{
 					"sound": "dsurround:heartbeat",
@@ -602,16 +642,16 @@
 			"sounds": [
 				{
 					"sound": "dsurround:rattlesnake",
-					"conditions": "weather.isNotRaining && isDay && ONEOF(biome.temperature, 'warm', 'hot')"
+					"conditions": "weather.isNotRaining && isDay && !(biome.isCold || biome.isSnowy)"
 				},
 				{
 					"sound": "dsurround:hiss",
-					"conditions": "weather.isNotRaining && isDay && ONEOF(biome.temperature, 'warm', 'hot')",
+					"conditions": "weather.isNotRaining && isDay && !(biome.isCold || biome.isSnowy)",
 					"variable": true
 				},
 				{
 					"sound": "dsurround:insectcrawl",
-					"conditions": "weather.isNotRaining && isDay && ONEOF(biome.temperature, 'warm', 'hot')",
+					"conditions": "weather.isNotRaining && isDay && !(biome.isCold || biome.isSnowy)",
 					"variable": true
 				}
 			]
@@ -625,7 +665,7 @@
 			"effects": [
 				{
 					"effect": "firefly",
-					"conditions": "weather.isNotRaining && (isNight || isSunset) && !(biome.isDry || biome.isHot || biome.isCold)",
+					"conditions": "weather.isNotRaining && (isNight || isSunset) && !(biome.isHot || biome.isCold || biome.isSnowy)",
 					"chance": 30
 				}
 			]

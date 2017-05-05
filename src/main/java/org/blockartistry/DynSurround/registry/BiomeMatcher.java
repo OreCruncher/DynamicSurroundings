@@ -29,6 +29,7 @@ import org.blockartistry.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.script.BooleanValue;
 import org.blockartistry.lib.script.Expression;
+import org.blockartistry.lib.script.StringValue;
 import org.blockartistry.lib.script.Variant;
 
 import com.google.common.primitives.Booleans;
@@ -64,43 +65,81 @@ public abstract class BiomeMatcher {
 
 	private static class ConditionsImpl extends BiomeMatcher {
 
+		private class BiomeTypeVariable extends Variant {
+
+			private final BiomeDictionary.Type type;
+
+			public BiomeTypeVariable(@Nonnull final BiomeDictionary.Type t) {
+				super("biome.is" + t.name());
+				this.type = t;
+			}
+
+			@Override
+			public int compareTo(Variant o) {
+				return Booleans.compare(this.asBoolean(), o.asBoolean());
+			}
+
+			@Override
+			public float asNumber() {
+				return this.asBoolean() ? 1 : 0;
+			}
+
+			@Override
+			public String asString() {
+				return Boolean.toString(this.asBoolean());
+			}
+
+			@Override
+			public boolean asBoolean() {
+				return ConditionsImpl.this.current.isBiomeType(this.type);
+			}
+
+			@Override
+			public Variant add(Variant term) {
+				return new BooleanValue(this.asBoolean() || term.asBoolean());
+			}
+		}
+		
 		protected BiomeInfo current;
 		protected final Expression exp;
 
 		public ConditionsImpl(@Nonnull final BiomeConfig config) {
 			this.exp = new Expression(config.conditions);
 
+			// Biome name!
+			this.exp.addVariable(new Variant("biome.name") {
+
+				@Override
+				public int compareTo(Variant o) {
+					return this.asString().compareTo(o.asString());
+				}
+
+				@Override
+				public float asNumber() {
+					return 0;
+				}
+
+				@Override
+				public String asString() {
+					return ConditionsImpl.this.current.getBiomeName();
+				}
+
+				@Override
+				public boolean asBoolean() {
+					return false;
+				}
+
+				@Override
+				public Variant add(Variant term) {
+					return new StringValue(this.asString().concat(term.asString()));
+				}
+
+			});
+
 			// Scan the BiomeDictionary adding the the types
-			for (final BiomeDictionary.Type t : BiomeDictionary.Type.values()) {
-				this.exp.addVariable(new Variant("biome.is" + t.name()) {
+			for (final BiomeDictionary.Type t : BiomeDictionary.Type.values())
+				this.exp.addVariable(new BiomeTypeVariable(t));
 
-					@Override
-					public int compareTo(Variant o) {
-						return Booleans.compare(this.asBoolean(), o.asBoolean());
-					}
-
-					@Override
-					public float asNumber() {
-						return this.asBoolean() ? 1 : 0;
-					}
-
-					@Override
-					public String asString() {
-						return Boolean.toString(this.asBoolean());
-					}
-
-					@Override
-					public boolean asBoolean() {
-						return ConditionsImpl.this.current.isBiomeType(t);
-					}
-
-					@Override
-					public Variant add(Variant term) {
-						return new BooleanValue(this.asBoolean() || term.asBoolean());
-					}
-				});
-			}
-			
 			// Compile it
 			this.exp.getRPN();
 

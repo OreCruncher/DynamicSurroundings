@@ -24,9 +24,12 @@
 
 package org.blockartistry.DynSurround.registry;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -110,7 +113,9 @@ public final class BiomeRegistry extends Registry {
 	public void initComplete() {
 		if (ModOptions.enableDebugLogging) {
 			DSurround.log().info("*** BIOME REGISTRY ***");
-			for (final BiomeInfo entry : registry.values())
+			final List<BiomeInfo> info = new ArrayList<BiomeInfo>(this.registry.values());
+			Collections.sort(info);
+			for (final BiomeInfo entry : info)
 				DSurround.log().info(entry.toString());
 		}
 
@@ -132,8 +137,8 @@ public final class BiomeRegistry extends Registry {
 		BiomeInfo result = this.registry.get(biome);
 		if (result == null) {
 			// Open Terrain Generation can trigger this...
-			DSurround.log().warn("Biome [%s] not detected during initialization - forcing reload (%s)", biome.getBiomeName(),
-					biome.getClass());
+			DSurround.log().warn("Biome [%s] not detected during initialization - forcing reload (%s)",
+					biome.getBiomeName(), biome.getClass());
 			RegistryManager.reloadResources(this.side);
 			result = this.registry.get(biome);
 			if (result == null) {
@@ -153,13 +158,14 @@ public final class BiomeRegistry extends Registry {
 	public void registerBiomeAlias(@Nonnull final String alias, @Nonnull final String biome) {
 		this.biomeAliases.put(alias, biome);
 	}
-	
+
 	public void register(@Nonnull final BiomeConfig entry) {
 		final SoundRegistry soundRegistry = RegistryManager.get(RegistryType.SOUND);
 
 		final BiomeMatcher matcher = BiomeMatcher.getMatcher(entry);
 		for (final BiomeInfo biomeEntry : this.registry.values()) {
 			if (matcher.match(biomeEntry)) {
+				biomeEntry.addComment(entry.comment);
 				if (entry.hasPrecipitation != null)
 					biomeEntry.setHasPrecipitation(entry.hasPrecipitation.booleanValue());
 				if (entry.hasAurora != null)

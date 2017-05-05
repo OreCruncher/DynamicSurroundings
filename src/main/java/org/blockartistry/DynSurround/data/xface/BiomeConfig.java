@@ -34,6 +34,8 @@ public final class BiomeConfig {
 	public String biomeName = null;
 	@SerializedName("conditions")
 	public String conditions = null;
+	@SerializedName("_comment")
+	public String comment = null;
 	@SerializedName("precipitation")
 	public Boolean hasPrecipitation = null;
 	@SerializedName("dust")

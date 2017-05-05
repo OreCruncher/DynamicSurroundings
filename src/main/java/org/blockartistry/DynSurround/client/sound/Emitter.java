@@ -82,6 +82,11 @@ public abstract class Emitter {
 	public float getVolume() {
 		return this.activeSound != null ? this.activeSound.getVolume() : 0.0F;
 	}
+	
+	public void setVolumeThrottle(final float throttle) {
+		if(this.activeSound != null)
+			this.activeSound.setVolumeThrottle(throttle);
+	}
 
 	public void setPitch(final float pitch) {
 		if(this.activeSound != null)
