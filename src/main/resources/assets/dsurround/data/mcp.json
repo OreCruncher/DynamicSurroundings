@@ -231,7 +231,7 @@
 			]
 		},
 		{
-			"conditions": "biome.isSwamp && biome.isCold",
+			"conditions": "biome.isSwamp && (biome.isCold || biome.isForest)",
 			"_comment": "Special Swamps such as Fen, Bog, Marsh, etc.",
 			"spotSoundChance": 200,
 			"sounds": [
@@ -310,13 +310,19 @@
 		},
 		{
 			"conditions": "biome.isSavanna && !biome.isDry",
-			"_comment": "Regular Savanna (Elephants and insects)",
+			"_comment": "Savanna - Elephants",
 			"sounds": [
 				{
 					"sound": "dsurround:elephant",
 					"conditions": "isDay",
 					"soundType": "spot"
-				},
+				}
+			]
+		},
+		{
+			"conditions": "biome.isSavanna",
+			"_comment": "Savanna - Insects",
+			"sounds": [
 				{
 					"sound": "dsurround:insectbuzz",
 					"soundType": "spot",
