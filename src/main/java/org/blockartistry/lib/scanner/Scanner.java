@@ -33,11 +33,9 @@ import org.blockartistry.lib.logging.ModLog;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public abstract class Scanner implements ITickable, Callable<Void> {
 
@@ -45,7 +43,7 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 	protected static final IBlockState AIR_BLOCK = Blocks.AIR.getDefaultState();
 
 	protected final String name;
-	
+
 	protected final int xRange;
 	protected final int yRange;
 	protected final int zRange;
@@ -55,27 +53,31 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 	protected final int zSize;
 	protected final int blocksPerTick;
 	protected final int volume;
+	
+	protected final ScanLocus locus;
 
 	protected final Random random = new XorShiftRandom();
 	protected final BlockPos.MutableBlockPos workingPos = new BlockPos.MutableBlockPos();
 	protected final BlockStateProvider blockProvider = new BlockStateProvider();
-	
+
 	protected ModLog log;
-	
-	public Scanner(@Nonnull final String name, final int range) {
-		this(name, range, 0);
+
+	public Scanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int range) {
+		this(locus, name, range, 0);
 	}
 
-	public Scanner(@Nonnull final String name, final int range, final int blocksPerTick) {
-		this(name, range, range, range, blocksPerTick);
-	}
-
-	public Scanner(@Nonnull final String name, final int xRange, final int yRange, final int zRange) {
-		this(name, xRange, yRange, zRange, 0);
-	}
-
-	public Scanner(@Nonnull final String name, final int xRange, final int yRange, final int zRange,
+	public Scanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int range,
 			final int blocksPerTick) {
+		this(locus, name, range, range, range, blocksPerTick);
+	}
+
+	public Scanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int xRange, final int yRange,
+			final int zRange) {
+		this(locus, name, xRange, yRange, zRange, 0);
+	}
+
+	public Scanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int xRange, final int yRange,
+			final int zRange, final int blocksPerTick) {
 		this.log = ModLog.NULL_LOGGER;
 		this.name = name;
 		this.xRange = xRange;
@@ -90,8 +92,10 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 			this.blocksPerTick = Math.min(this.volume / 20, MAX_BLOCKS_TICK);
 		else
 			this.blocksPerTick = Math.min(blocksPerTick, MAX_BLOCKS_TICK);
+		
+		this.locus = locus;
 	}
-	
+
 	public void setLogger(@Nonnull final ModLog log) {
 		this.log = log;
 	}
@@ -118,32 +122,28 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 	protected boolean interestingBlock(final IBlockState state) {
 		return state != AIR_BLOCK;
 	}
-	
-	protected World getWorld() {
-		return Minecraft.getMinecraft().player.world;
-	}
 
 	@Override
 	public Void call() {
 		update();
 		return null;
 	}
-	
+
 	public void preScan() {
-		
+
 	}
-	
+
 	public void postScan() {
-		
+
 	}
-	
+
 	@Override
 	public void update() {
 
-		this.blockProvider.setWorld(getWorld());
-		
+		this.blockProvider.setWorld(this.locus.getWorld());
+
 		preScan();
-		
+
 		for (int count = 0; count < this.blocksPerTick; count++) {
 			final BlockPos pos = nextPos(this.workingPos, this.random);
 			if (pos == null)
@@ -153,7 +153,7 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 				blockScan(state, pos, this.random);
 			}
 		}
-		
+
 		postScan();
 
 	}

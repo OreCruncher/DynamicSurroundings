@@ -60,7 +60,7 @@ public class RandomBlockEffectScanner extends RandomScanner {
 	protected IBlockState lastState = null;
 
 	public RandomBlockEffectScanner(final int range) {
-		super("RandomBlockEffectScanner", range, (int) (range * range * range * RATIO));
+		super(ClientPlayerLocus.INSTANCE, "RandomBlockEffectScanner", range, (int) (range * range * range * RATIO));
 		this.setLogger(DSurround.log());
 	}
 
