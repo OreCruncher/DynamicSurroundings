@@ -747,6 +747,12 @@ public final class Expression {
 		return this;
 	}
 
+	@Nonnull
+	public Expression addFunction(@Nonnull final Function func) {
+		this.functions.put(func.getName(), func);
+		return this;
+	}
+
 	/**
 	 * Exposing declared variables in the expression.
 	 * 

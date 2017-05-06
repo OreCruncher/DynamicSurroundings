@@ -227,6 +227,10 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		return this.biomeTypes.contains(type);
 	}
 
+	public boolean areBiomesSameClass(@Nonnull final Biome biome) {
+		return BiomeDictionary.areSimilar(this.biome, biome);
+	}
+
 	// Internal to the package
 	void update(@Nonnull final BiomeConfig entry) {
 		this.addComment(entry.comment);
