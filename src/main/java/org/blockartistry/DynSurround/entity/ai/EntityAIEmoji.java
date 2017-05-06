@@ -40,12 +40,8 @@ public class EntityAIEmoji extends EntityAIBase {
 
 	public static final int PRIORITY = 400;
 
-	private static final int INTERVAL = 20;
-
 	protected final EntityLiving subject;
 	protected IEntityEmojiSettable data;
-	private long nextChat;
-
 	public EntityAIEmoji(final EntityLiving subject) {
 		this.subject = subject;
 		this.data = (IEntityEmojiSettable) subject.getCapability(EntityCapability.EMOJI, null);
@@ -66,12 +62,11 @@ public class EntityAIEmoji extends EntityAIBase {
 		updateEmotionalState();
 		updateEmoji();
 
-		if (this.data.isDirty() || this.subject.getEntityWorld().getWorldTime() > this.nextChat) {
+		if (this.data.isDirty()) {
 			final TargetPoint point = Network.getTargetPoint(this.subject, ModOptions.speechBubbleRange);
 			Network.sendEntityEmoteUpdate(this.subject.getPersistentID(), this.data.getActionState(),
 					this.data.getEmotionalState(), this.data.getEmojiType(), point);
 			this.data.clearDirty();
-			this.nextChat = this.subject.getEntityWorld().getTotalWorldTime() + INTERVAL;
 		}
 	}
 
