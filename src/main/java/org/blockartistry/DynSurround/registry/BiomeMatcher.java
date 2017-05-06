@@ -23,17 +23,22 @@
 
 package org.blockartistry.DynSurround.registry;
 
+import java.util.Iterator;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.script.BooleanValue;
 import org.blockartistry.lib.script.Expression;
+import org.blockartistry.lib.script.Function;
 import org.blockartistry.lib.script.StringValue;
 import org.blockartistry.lib.script.Variant;
 
 import com.google.common.primitives.Booleans;
 
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 
 public abstract class BiomeMatcher {
@@ -99,7 +104,7 @@ public abstract class BiomeMatcher {
 				return new BooleanValue(this.asBoolean() || term.asBoolean());
 			}
 		}
-		
+
 		protected BiomeInfo current;
 		protected final Expression exp;
 
@@ -169,6 +174,26 @@ public abstract class BiomeMatcher {
 			// Scan the BiomeDictionary adding the the types
 			for (final BiomeDictionary.Type t : BiomeDictionary.Type.values())
 				this.exp.addVariable(new BiomeTypeVariable(t));
+
+			// Add the biomes in the biome list
+			for (Iterator<Biome> itr = Biome.REGISTRY.iterator(); itr.hasNext();) {
+				final Biome b = itr.next();
+				final ResourceLocation resource = b.getRegistryName();
+				if ("minecraft".equals(resource.getResourceDomain()))
+					this.exp.addVariable(
+							new StringValue("biomeType." + resource.getResourcePath(), resource.toString()));
+			}
+
+			// Add a function to do some biome comparisons
+			this.exp.addFunction(new Function("biome.isLike", 1) {
+				@Override
+				public Variant eval(final Variant... params) {
+					final String biomeName = params[0].asString();
+					final Biome biome = Biome.REGISTRY.getObject(new ResourceLocation(biomeName));
+					return biome != null && ConditionsImpl.this.current.areBiomesSameClass(biome) ? Expression.TRUE
+							: Expression.FALSE;
+				}
+			});
 
 			// Compile it
 			this.exp.getRPN();

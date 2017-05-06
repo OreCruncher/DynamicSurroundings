@@ -731,19 +731,28 @@ public final class Expression {
 		return result.toString();
 	}
 
+	@Nonnull
 	public Expression addVariable(@Nonnull final Variant v) {
 		this.variables.put(v.getName(), v);
 		return this;
 	}
 
+	@Nonnull
 	public Expression addVariables(@Nonnull final List<Variant> list) {
 		for (final Variant v : list)
 			this.addVariable(v);
 		return this;
 	}
 
+	@Nonnull
 	public Expression addVariables(@Nonnull final Map<String, Variant> map) {
 		this.variables.putAll(map);
+		return this;
+	}
+	
+	@Nonnull
+	public Expression addFunction(@Nonnull final Function func) {
+		this.functions.put(func.getName(), func);
 		return this;
 	}
 
