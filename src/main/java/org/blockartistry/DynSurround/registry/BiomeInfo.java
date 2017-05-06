@@ -251,6 +251,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 				this.setDustColor(new Color(rgb[0], rgb[1], rgb[2]));
 		}
 		if (entry.soundReset != null && entry.soundReset.booleanValue()) {
+			this.addComment("> Sound Reset");
 			this.resetSounds();
 		}
 
