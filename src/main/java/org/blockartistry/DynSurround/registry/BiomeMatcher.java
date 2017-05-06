@@ -106,7 +106,7 @@ public abstract class BiomeMatcher {
 		public ConditionsImpl(@Nonnull final BiomeConfig config) {
 			this.exp = new Expression(config.conditions);
 
-			// Biome name!
+			// Biome name
 			this.exp.addVariable(new Variant("biome.name") {
 
 				@Override
@@ -132,6 +132,36 @@ public abstract class BiomeMatcher {
 				@Override
 				public Variant add(Variant term) {
 					return new StringValue(this.asString().concat(term.asString()));
+				}
+
+			});
+
+			// Fake biome
+			this.exp.addVariable(new Variant("biome.isFake") {
+
+				@Override
+				public int compareTo(Variant o) {
+					return this.asString().compareTo(o.asString());
+				}
+
+				@Override
+				public float asNumber() {
+					return this.asBoolean() ? 1 : 0;
+				}
+
+				@Override
+				public String asString() {
+					return Boolean.toString(this.asBoolean());
+				}
+
+				@Override
+				public boolean asBoolean() {
+					return ConditionsImpl.this.current.isFake();
+				}
+
+				@Override
+				public Variant add(Variant term) {
+					return new BooleanValue(this.asBoolean() || term.asBoolean());
 				}
 
 			});
