@@ -29,12 +29,6 @@
 				{
 					"sound": "dsurround:jungle",
 					"conditions": "weather.isNotRaining"
-				},
-				{
-					"sound": "dsurround:insectbuzz",
-					"conditions": "weather.isNotRaining",
-					"soundType": "spot",
-					"variable": true
 				}
 			]
 		},
@@ -60,17 +54,6 @@
 				{
 					"sound": "dsurround:crickets",
 					"conditions": "weather.isNotRaining && isNight"
-				},
-				{
-					"sound": "dsurround:insectbuzz",
-					"conditions": "weather.isNotRaining",
-					"soundType": "spot",
-					"variable": true
-				},
-				{
-					"sound": "dsurround:coyote",
-					"conditions": "weather.isNotRaining && isNight",
-					"soundType": "spot"
 				}
 			]
 		},
@@ -107,16 +90,6 @@
 					"sound": "dsurround:woodpecker",
 					"conditions": "weather.isNotRaining && isDay",
 					"soundType": "spot"
-				},
-				{
-					"sound": "dsurround:crow",
-					"conditions": "weather.isNotRaining && isDay",
-					"soundType": "spot"
-				},
-				{
-					"sound": "dsurround:owl",
-					"conditions": "weather.isNotRaining && isNight",
-					"soundType": "spot"
 				}
 			]
 		},
@@ -152,13 +125,8 @@
 		},
 		{
 			"conditions": "biome.isForest && !biome.isSwamp && (biome.isCold || biome.isSnowy || biome.isDead)",
-			"_comment": "Add in Owl and Wolf for cold forest like biomes",
+			"_comment": "Wolf",
 			"sounds": [
-				{
-					"sound": "dsurround:owl",
-					"conditions": "weather.isNotRaining && isNight",
-					"soundType": "spot"
-				},
 				{
 					"sound": "dsurround:wolf",
 					"conditions": "weather.isNotRaining && isNight",
@@ -168,7 +136,7 @@
 		},
 		{
 			"conditions": "(biome.isOcean || biome.isBeach) && !(biome.isCold || biome.isSnowy)",
-			"_comment": "Regular Beach",
+			"_comment": "Beach",
 			"sounds": [
 				{
 					"sound": "dsurround:beach"
@@ -182,16 +150,10 @@
 		},
 		{
 			"conditions": "biome.isRiver && !(biome.isSnowy || biome.isDry || biome.isOcean)",
-			"_comment": "Regular River",
+			"_comment": "River",
 			"sounds": [
 				{
 					"sound": "dsurround:river"
-				},
-				{
-					"sound": "dsurround:insectbuzz",
-					"conditions": "weather.isNotRaining",
-					"soundType": "spot",
-					"variable": true
 				}
 			]
 		},
@@ -221,12 +183,6 @@
 			"sounds": [
 				{
 					"sound": "dsurround:crickets"
-				},
-				{
-					"sound": "dsurround:insectbuzz",
-					"conditions": "weather.isNotRaining",
-					"soundType": "spot",
-					"variable": true
 				}
 			]
 		},
@@ -242,17 +198,6 @@
 				{
 					"sound": "dsurround:crickets",
 					"conditions": "isNight"
-				},
-				{
-					"sound": "dsurround:crow",
-					"conditions": "weather.isNotRaining && isDay",
-					"soundType": "spot"
-				},
-				{
-					"sound": "dsurround:insectbuzz",
-					"conditions": "weather.isNotRaining",
-					"soundType": "spot",
-					"variable": true
 				}
 			],
 			"fog": true,
@@ -261,21 +206,10 @@
 		},
 		{
 			"conditions":"biome.isSwamp && !(biome.isDead || biome.isHills || biome.isMountain || biome.isCold || biome.isSnowy || biome.isForest)",
-			"_comment": "Crocodiles for Swamp biomes",
+			"_comment": "Crocodiles",
 			"sounds": [
 				{
 					"sound": "dsurround:crocodile",
-					"soundType": "spot"
-				}
-			]
-		},
-		{
-			"conditions": "biome.isDead && !(biome.isSnowy)",
-			"_comment": "Crows for Dead biomes",
-			"sounds": [
-				{
-					"sound": "dsurround:crow",
-					"conditions": "weather.isNotRaining && isDay",
 					"soundType": "spot"
 				}
 			]
@@ -294,23 +228,18 @@
 		},
 		{
 			"conditions": "(biome.isSandy || biome.isMesa) && !(biome.isCold || biome.isSnowy)",
-			"_comment": "Regular Desert for snakes and coyote",
+			"_comment": "Desert",
 			"sounds": [
 				{
 					"sound": "dsurround:rattlesnake",
 					"conditions": "weather.isNotRaining && isDay",
-					"soundType": "spot"
-				},
-				{
-					"sound": "dsurround:coyote",
-					"conditions": "weather.isNotRaining && isNight",
 					"soundType": "spot"
 				}
 			]
 		},
 		{
 			"conditions": "biome.isSavanna && !biome.isDry",
-			"_comment": "Savanna - Elephants",
+			"_comment": "Elephants",
 			"sounds": [
 				{
 					"sound": "dsurround:elephant",
@@ -320,16 +249,59 @@
 			]
 		},
 		{
-			"conditions": "biome.isSavanna",
-			"_comment": "Savanna - Insects",
+			"conditions": "!(biome.isOcean || biome.isRiver || biome.isNether || biome.isEnd || biome.isMushroom) && !(biome.isFake || biome.isSnowy || biome.isSandy || biome.isBeach || biome.isMountain)",
+			"_comment": "Insect buzz",
 			"sounds": [
 				{
 					"sound": "dsurround:insectbuzz",
 					"soundType": "spot",
-					"weight": 20,
 					"variable": true
 				}
 			]
+		},
+		{
+			"conditions": "!(biome.isOcean || biome.isRiver || biome.isNether || biome.isEnd || biome.isMushroom) && !(biome.isFake || biome.isSnowy || biome.isSwamp || biome.isJungle || biome.isBeach || biome.isWasteland || biome.isWet)",
+			"_comment": "Coyote",
+			"sounds": [
+				{
+					"sound": "dsurround:coyote",
+					"conditions": "weather.isNotRaining && isNight",
+					"soundType": "spot"
+				}
+			]
+		},
+		{
+			"conditions": "!(biome.isOcean || biome.isRiver || biome.isNether || biome.isEnd) && !(biome.isFake || biome.isSnowy || biome.isJungle || biome.isHot || biome.isBeach)",
+			"_comment": "Crow",
+			"sounds": [
+				{
+					"sound": "dsurround:crow",
+					"conditions": "weather.isNotRaining && isDay",
+					"soundType": "spot"
+				}
+			]
+		},
+		{
+			"conditions": "!(biome.isOcean || biome.isRiver || biome.isNether || biome.isEnd) && !(biome.isFake || biome.isDry || biome.isJungle || biome.isHot || biome.isBeach || biome.isSwamp || biome.isWasteland)",
+			"_comment": "Owl",
+			"sounds": [
+				{
+					"sound": "dsurround:owl",
+					"conditions": "weather.isNotRaining && isNight",
+					"soundType": "spot"
+				}
+			]
+		},
+		{
+			"conditions": "(biome.isCold || biome.isSnowy) && !(biome.isDead || biome.isSwamp || biome.isEnd)",
+			"_comment": "Display aurora",
+			"aurora": true
+		},
+		{
+			"conditions": "biome.isNether",
+			"_comment": "Regular Nether",
+			"dust": true,
+			"dustColor": "255,0,0"
 		},
 		{
 			"conditions": "biome.isEnd || biome.name == 'The Void'",
@@ -341,17 +313,6 @@
 					"sound": "dsurround:theend"
 				}
 			]
-		},
-		{
-			"conditions": "(biome.isCold || biome.isSnowy) && !(biome.isDead || biome.isSwamp || biome.isEnd)",
-			"_comment": "Aurora Set for cold/snowy biomes that aren't dead",
-			"aurora": true
-		},
-		{
-			"conditions": "biome.isNether",
-			"_comment": "Regular Nether",
-			"dust": true,
-			"dustColor": "255,0,0"
 		},
 		{
 			"conditions": "biome.name == 'Underground'",

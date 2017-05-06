@@ -142,6 +142,36 @@ public abstract class BiomeMatcher {
 
 			});
 
+			// Fake biome
+			this.exp.addVariable(new Variant("biome.isFake") {
+
+				@Override
+				public int compareTo(Variant o) {
+					return this.asString().compareTo(o.asString());
+				}
+
+				@Override
+				public float asNumber() {
+					return this.asBoolean() ? 1 : 0;
+				}
+
+				@Override
+				public String asString() {
+					return Boolean.toString(this.asBoolean());
+				}
+
+				@Override
+				public boolean asBoolean() {
+					return ConditionsImpl.this.current.isFake();
+				}
+
+				@Override
+				public Variant add(Variant term) {
+					return new BooleanValue(this.asBoolean() || term.asBoolean());
+				}
+
+			});
+
 			// Scan the BiomeDictionary adding the the types
 			try {
 				final Field accessor = ReflectionHelper.findField(BiomeDictionary.Type.class, "byName");
