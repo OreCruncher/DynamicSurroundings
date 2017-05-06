@@ -22,8 +22,7 @@
 		},
 		{
 			"conditions": "biome.isJungle && biome.isWet",
-			"_comment": "Regular Jungle and Tropical",
-			"spotSoundChance": 200,
+			"_comment": "Basic Jungle and Tropical",
 			"soundReset": true,
 			"sounds": [
 				{
@@ -34,7 +33,7 @@
 		},
 		{
 			"conditions": "biome.isJungle && biome.isWet && !biome.isForest",
-			"_comment": "Primates for Jungle",
+			"_comment": "Primates",
 			"sounds": [
 				{
 					"sound": "dsurround:primates",
@@ -45,7 +44,7 @@
 		},
 		{
 			"conditions": "biome.isPlains && !(biome.isSnowy || biome.isHot || biome.isForest)",
-			"_comment": "Regular Plains",
+			"_comment": "Basic Plains",
 			"sounds": [
 				{
 					"sound": "dsurround:plains",
@@ -70,42 +69,11 @@
 		},
 		{
 			"conditions":"biome.isForest && !(biome.isHot || biome.isSwamp || biome.isDead || biome.isSnowy || biome.isCold || biome.isOcean || biome.isWasteland || biome.isJungle)",
-			"_comment": "Regular Forest",
-			"spotSoundChance": 200,
+			"_comment": "Basic Forest w/Crickets",
 			"sounds": [
 				{
 					"sound": "dsurround:forest",
 					"conditions": "weather.isNotRaining && isDay"
-				},
-				{
-					"sound": "dsurround:bird",
-					"conditions": "weather.isNotRaining && isDay",
-					"soundType": "spot"
-				},
-				{
-					"sound": "dsurround:crickets",
-					"conditions": "weather.isNotRaining && isNight"
-				},
-				{
-					"sound": "dsurround:woodpecker",
-					"conditions": "weather.isNotRaining && isDay",
-					"soundType": "spot"
-				}
-			]
-		},
-		{
-			"conditions": "false",
-			"_comment": "Heathland, Thicket, etc. - Forest sounds without spots",
-			"spotSoundChance": 200,
-			"sounds": [
-				{
-					"sound": "dsurround:forest",
-					"conditions": "weather.isNotRaining && isDay"
-				},
-				{
-					"sound": "dsurround:bird",
-					"conditions": "weather.isNotRaining && isDay",
-					"soundType": "spot"
 				},
 				{
 					"sound": "dsurround:crickets",
@@ -115,7 +83,7 @@
 		},
 		{
 			"conditions": "biome.isForest && biome.isCold && !(biome.isSwamp || biome.isSnowy || biome.isDead)",
-			"_comment": "Basic Forest background sound",
+			"_comment": "Simple Forest",
 			"sounds": [
 				{
 					"sound": "dsurround:forest",
@@ -170,16 +138,15 @@
 		},
 		{
 			"conditions": "biome.isSwamp && !biome.isForest",
-			"_comment": "Regular Swamp fog",
+			"_comment": "Basic Swamp Fog",
 			"fog": true,
 			"fogColor": "64,96,64",
 			"fogDensity": 0.6
 		},
 		{
 			"conditions":"biome.isSwamp && !(biome.isForest || biome.isDead || biome.isCold)",
-			"_comment": "Regular Swamp Sounds",
+			"_comment": "Basic Swamp Sounds",
 			"biomeName": "(?i)(?!.*dead.*)(.*swamp.*)",
-			"spotSoundChance": 200,
 			"sounds": [
 				{
 					"sound": "dsurround:crickets"
@@ -189,7 +156,6 @@
 		{
 			"conditions": "biome.isSwamp && (biome.isCold || biome.isForest)",
 			"_comment": "Special Swamps such as Fen, Bog, Marsh, etc.",
-			"spotSoundChance": 200,
 			"sounds": [
 				{
 					"sound": "dsurround:bog",
@@ -288,6 +254,22 @@
 				{
 					"sound": "dsurround:owl",
 					"conditions": "weather.isNotRaining && isNight",
+					"soundType": "spot"
+				}
+			]
+		},
+		{
+			"conditions":"biome.isForest && !(biome.isHot || biome.isSwamp || biome.isDead || biome.isCold || biome.isOcean || biome.isWasteland || biome.isJungle)",
+			"_comment": "Birds and Woodpecker",
+			"sounds": [
+				{
+					"sound": "dsurround:bird",
+					"conditions": "weather.isNotRaining && isDay",
+					"soundType": "spot"
+				},
+				{
+					"sound": "dsurround:woodpecker",
+					"conditions": "weather.isNotRaining && isDay",
 					"soundType": "spot"
 				}
 			]
