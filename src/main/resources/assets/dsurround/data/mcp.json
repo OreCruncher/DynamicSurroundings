@@ -23,7 +23,6 @@
 		{
 			"conditions": "biome.isJungle && biome.isWet",
 			"_comment": "Regular Jungle and Tropical",
-			"spotSoundChance": 200,
 			"soundReset": true,
 			"sounds": [
 				{
@@ -71,7 +70,6 @@
 		{
 			"conditions":"biome.isForest && !(biome.isHot || biome.isSwamp || biome.isDead || biome.isSnowy || biome.isCold || biome.isOcean || biome.isWasteland || biome.isJungle)",
 			"_comment": "Regular Forest",
-			"spotSoundChance": 200,
 			"sounds": [
 				{
 					"sound": "dsurround:forest",
@@ -96,7 +94,6 @@
 		{
 			"conditions": "false",
 			"_comment": "Heathland, Thicket, etc. - Forest sounds without spots",
-			"spotSoundChance": 200,
 			"sounds": [
 				{
 					"sound": "dsurround:forest",
@@ -179,7 +176,6 @@
 			"conditions":"biome.isSwamp && !(biome.isForest || biome.isDead || biome.isCold)",
 			"_comment": "Regular Swamp Sounds",
 			"biomeName": "(?i)(?!.*dead.*)(.*swamp.*)",
-			"spotSoundChance": 200,
 			"sounds": [
 				{
 					"sound": "dsurround:crickets"
@@ -189,7 +185,6 @@
 		{
 			"conditions": "biome.isSwamp && (biome.isCold || biome.isForest)",
 			"_comment": "Special Swamps such as Fen, Bog, Marsh, etc.",
-			"spotSoundChance": 200,
 			"sounds": [
 				{
 					"sound": "dsurround:bog",
