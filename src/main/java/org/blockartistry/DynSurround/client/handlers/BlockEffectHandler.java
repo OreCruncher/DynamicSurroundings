@@ -24,7 +24,10 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.event.BlockUpdateEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.handlers.scanners.AlwaysOnBlockEffectScanner;
 import org.blockartistry.DynSurround.client.handlers.scanners.RandomBlockEffectScanner;
@@ -37,6 +40,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 /*
@@ -65,6 +69,12 @@ public class BlockEffectHandler extends EffectHandlerBase {
 			if (sound != null)
 				sound.doEffect(state, world, pos, RANDOM);
 		}
+	}
+
+	@SubscribeEvent(receiveCanceled = false)
+	public void onBlockUpdate(@Nonnull final BlockUpdateEvent event) {
+		// Notify the always on cuboid scanner that a block has changed
+		this.alwaysOn.onBlockUpdate(event.oldState, event.newState, event.pos, event.flags);
 	}
 
 	@Override

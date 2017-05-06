@@ -27,12 +27,8 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.event.BlockUpdateEvent;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * Scans the area around the player in a continuous pattern.
@@ -48,17 +44,17 @@ public abstract class CuboidScanner extends Scanner {
 	protected BlockPos lastPos;
 	protected int lastDimension = 0;
 
-	protected CuboidScanner(@Nonnull final String name, final int range, final int blocksPerTick) {
-		super(name, range, blocksPerTick);
+	protected CuboidScanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int range, final int blocksPerTick) {
+		super(locus, name, range, blocksPerTick);
 	}
 
-	protected CuboidScanner(@Nonnull final String name, final int xRange, final int yRange, final int zRange) {
-		super(name, xRange, yRange, zRange);
+	protected CuboidScanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int xRange, final int yRange, final int zRange) {
+		super(locus, name, xRange, yRange, zRange);
 	}
 
-	protected CuboidScanner(@Nonnull final String name, final int xSize, final int ySize, final int zSize,
+	protected CuboidScanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int xSize, final int ySize, final int zSize,
 			final int blocksPerTick) {
-		super(name, xSize, ySize, zSize, blocksPerTick);
+		super(locus, name, xSize, ySize, zSize, blocksPerTick);
 	}
 
 	public boolean isScanFinished() {
@@ -81,8 +77,8 @@ public abstract class CuboidScanner extends Scanner {
 	}
 
 	protected void resetFullScan() {
-		this.lastPos = EnvironState.getPlayerPosition();
-		this.lastDimension = EnvironState.getDimensionId();
+		this.lastPos = this.locus.getCenter();
+		this.lastDimension = this.locus.getDimension();
 		this.scanFinished = false;
 
 		final BlockPos[] points = getMinMaxPointsForVolume(this.lastPos);
@@ -94,14 +90,14 @@ public abstract class CuboidScanner extends Scanner {
 	public void update() {
 
 		// If there is no player position or it's bogus just return
-		final BlockPos playerPos = EnvironState.getPlayerPosition();
+		final BlockPos playerPos = this.locus.getCenter();
 		if (playerPos == null || playerPos.getY() < 0) {
 			this.fullRange = null;
 		} else {
 			// If the full range was reset, or the player dimension changed,
 			// dump
 			// everything and restart.
-			if (this.fullRange == null || EnvironState.getDimensionId() != this.lastDimension) {
+			if (this.fullRange == null || this.locus.getDimension() != this.lastDimension) {
 				resetFullScan();
 				super.update();
 			} else if (this.lastPos.equals(playerPos)) {
@@ -161,7 +157,7 @@ public abstract class CuboidScanner extends Scanner {
 	protected void updateScan(@Nonnull final Cuboid newVolume, @Nonnull final Cuboid oldVolume,
 			@Nonnull final Cuboid intersect) {
 
-		this.blockProvider.setWorld(EnvironState.getWorld());
+		this.blockProvider.setWorld(this.locus.getWorld());
 
 		if (doBlockUnscan()) {
 			final ComplementsPointIterator newOutOfRange = new ComplementsPointIterator(oldVolume, intersect);
@@ -223,16 +219,11 @@ public abstract class CuboidScanner extends Scanner {
 		return null;
 	}
 
-	/**
-	 * These events originate from the WorldEventDetector. The event is not a
-	 * Forge event.
-	 */
-	@SubscribeEvent(receiveCanceled = false)
-	public void onBlockUpdate(@Nonnull final BlockUpdateEvent event) {
+	public void onBlockUpdate(@Nonnull final IBlockState oldState, @Nonnull final IBlockState newState,
+			@Nonnull final BlockPos pos, final int flags) {
 		try {
-			if (this.activeCuboid != null && this.activeCuboid.contains(event.pos)
-					&& this.interestingBlock(event.newState))
-				blockScan(event.newState, event.pos, this.random);
+			if (this.activeCuboid != null && this.activeCuboid.contains(pos) && this.interestingBlock(newState))
+				blockScan(newState, pos, this.random);
 		} catch (final Throwable t) {
 			this.log.error("onBlockUpdate() error", t);
 		}

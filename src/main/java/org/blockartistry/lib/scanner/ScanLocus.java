@@ -23,47 +23,32 @@
 
 package org.blockartistry.lib.scanner;
 
-import java.util.Random;
-
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
-/**
- * Serves up random blocks in an area around the player. Concentration of block
- * selections are closer to the player.
- */
-public abstract class RandomScanner extends Scanner {
+public abstract class ScanLocus {
 
-	private int playerX;
-	private int playerY;
-	private int playerZ;
+	public ScanLocus() {
 
-	public RandomScanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int range) {
-		super(locus, name, range);
 	}
 
-	public RandomScanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int range, final int blocksPerTick) {
-		super(locus, name, range, blocksPerTick);
-	}
+	public abstract World getWorld();
 
-	private static int randomRange(final int range, final Random rand) {
-		return rand.nextInt(range) - rand.nextInt(range);
+	public abstract BlockPos getCenter();
+
+	public int getDimension() {
+		return this.getWorld().provider.getDimension();
 	}
 
 	@Override
-	public void preScan() {
-		final BlockPos pos = this.locus.getCenter();
-		this.playerX = pos.getX();
-		this.playerY = pos.getY();
-		this.playerZ = pos.getZ();
-	}
-
-	@Override
-	@Nonnull
-	protected BlockPos nextPos(@Nonnull final BlockPos.MutableBlockPos workingPos, @Nonnull final Random rand) {
-		return workingPos.setPos(this.playerX + randomRange(this.xRange, rand),
-				this.playerY + randomRange(this.yRange, rand), this.playerZ + randomRange(this.zRange, rand));
+	public boolean equals(@Nullable final Object o) {
+		if (this == o)
+			return true;
+		;
+		final ScanLocus sl = (ScanLocus) o;
+		return this.getWorld() == sl.getWorld() && this.getCenter().equals(sl.getCenter());
 	}
 
 }

@@ -59,7 +59,7 @@ public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 	protected IBlockState lastState = null;
 
 	public AlwaysOnBlockEffectScanner(final int range) {
-		super("AlwaysOnBlockEffectScanner", range, 0);
+		super(ClientPlayerLocus.INSTANCE, "AlwaysOnBlockEffectScanner", range, 0);
 		this.setLogger(DSurround.log());
 	}
 
