@@ -260,13 +260,19 @@
 		},
 		{
 			"conditions":"biome.isForest && !(biome.isHot || biome.isSwamp || biome.isDead || biome.isCold || biome.isOcean || biome.isWasteland || biome.isJungle)",
-			"_comment": "Birds and Woodpecker",
+			"_comment": "Birds",
 			"sounds": [
 				{
 					"sound": "dsurround:bird",
 					"conditions": "weather.isNotRaining && isDay",
 					"soundType": "spot"
-				},
+				}
+			]
+		},
+		{
+			"conditions":"biome.isForest && !(biome.isEnd || biome.isNether || biome.isOcean || biome.isRiver)",
+			"_comment": "Woodpecker",
+			"sounds": [
 				{
 					"sound": "dsurround:woodpecker",
 					"conditions": "weather.isNotRaining && isDay",
