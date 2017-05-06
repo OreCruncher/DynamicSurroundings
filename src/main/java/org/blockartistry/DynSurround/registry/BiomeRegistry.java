@@ -37,14 +37,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
-import org.blockartistry.DynSurround.data.xface.SoundConfig;
-import org.blockartistry.DynSurround.data.xface.SoundType;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.lib.Color;
-import org.blockartistry.lib.MyUtils;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -160,52 +153,10 @@ public final class BiomeRegistry extends Registry {
 	}
 
 	public void register(@Nonnull final BiomeConfig entry) {
-		final SoundRegistry soundRegistry = RegistryManager.get(RegistryType.SOUND);
-
 		final BiomeMatcher matcher = BiomeMatcher.getMatcher(entry);
 		for (final BiomeInfo biomeEntry : this.registry.values()) {
-			if (matcher.match(biomeEntry)) {
-				biomeEntry.addComment(entry.comment);
-				if (entry.hasPrecipitation != null)
-					biomeEntry.setHasPrecipitation(entry.hasPrecipitation.booleanValue());
-				if (entry.hasAurora != null)
-					biomeEntry.setHasAurora(entry.hasAurora.booleanValue());
-				if (entry.hasDust != null)
-					biomeEntry.setHasDust(entry.hasDust.booleanValue());
-				if (entry.hasFog != null)
-					biomeEntry.setHasFog(entry.hasFog.booleanValue());
-				if (entry.fogDensity != null)
-					biomeEntry.setFogDensity(entry.fogDensity.floatValue());
-				if (entry.fogColor != null) {
-					final int[] rgb = MyUtils.splitToInts(entry.fogColor, ',');
-					if (rgb.length == 3)
-						biomeEntry.setFogColor(new Color(rgb[0], rgb[1], rgb[2]));
-				}
-				if (entry.dustColor != null) {
-					final int[] rgb = MyUtils.splitToInts(entry.dustColor, ',');
-					if (rgb.length == 3)
-						biomeEntry.setDustColor(new Color(rgb[0], rgb[1], rgb[2]));
-				}
-				if (entry.soundReset != null && entry.soundReset.booleanValue()) {
-					biomeEntry.resetSounds();
-				}
-
-				if (entry.spotSoundChance != null)
-					biomeEntry.setSpotSoundChance(entry.spotSoundChance.intValue());
-
-				for (final SoundConfig sr : entry.sounds) {
-					if (soundRegistry.isSoundBlocked(sr.sound))
-						continue;
-					final SoundEffect.Builder b = new SoundEffect.Builder(sr);
-					if (sr.soundCategory == null)
-						b.setSoundCategory(SoundCategory.AMBIENT);
-					final SoundEffect s = b.build();
-					if (s.getSoundType() == SoundType.SPOT)
-						biomeEntry.addSpotSound(s);
-					else
-						biomeEntry.addSound(s);
-				}
-			}
+			if (matcher.match(biomeEntry))
+				biomeEntry.update(entry);
 		}
 	}
 }

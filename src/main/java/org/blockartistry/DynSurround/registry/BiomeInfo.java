@@ -33,14 +33,18 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.client.handlers.AreaSoundEffectHandler;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.DynSurround.data.xface.BiomeConfig;
+import org.blockartistry.DynSurround.data.xface.SoundConfig;
+import org.blockartistry.DynSurround.data.xface.SoundType;
+import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.WeightTable;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
@@ -48,7 +52,7 @@ import net.minecraftforge.common.BiomeDictionary;
 
 public final class BiomeInfo implements Comparable<BiomeInfo> {
 
-	public final static int DEFAULT_SPOT_CHANCE = 1200 / AreaSoundEffectHandler.SCAN_INTERVAL;
+	public final static int DEFAULT_SPOT_CHANCE = 1000 / AreaSoundEffectHandler.SCAN_INTERVAL;
 	public final static SoundEffect[] NO_SOUNDS = {};
 
 	protected final Biome biome;
@@ -81,7 +85,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		}
 	}
 
-	public void addComment(@Nonnull final String comment) {
+	void addComment(@Nonnull final String comment) {
 		if (!StringUtils.isEmpty(comment))
 			this.comments.add(comment);
 	}
@@ -106,7 +110,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		return this.biome.getEnableSnow();
 	}
 
-	public void setHasPrecipitation(final boolean flag) {
+	void setHasPrecipitation(final boolean flag) {
 		this.hasPrecipitation = flag;
 	}
 
@@ -114,7 +118,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		return this.hasDust;
 	}
 
-	public void setHasDust(final boolean flag) {
+	void setHasDust(final boolean flag) {
 		this.hasDust = flag;
 	}
 
@@ -122,7 +126,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		return this.hasAurora;
 	}
 
-	public void setHasAurora(final boolean flag) {
+	void setHasAurora(final boolean flag) {
 		this.hasAurora = flag;
 	}
 
@@ -130,7 +134,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		return this.hasFog;
 	}
 
-	public void setHasFog(final boolean flag) {
+	void setHasFog(final boolean flag) {
 		this.hasFog = flag;
 	}
 
@@ -138,7 +142,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		return this.dustColor;
 	}
 
-	public void setDustColor(final Color color) {
+	void setDustColor(final Color color) {
 		this.dustColor = color;
 	}
 
@@ -146,7 +150,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		return this.fogColor;
 	}
 
-	public void setFogColor(@Nonnull final Color color) {
+	void setFogColor(@Nonnull final Color color) {
 		this.fogColor = color;
 	}
 
@@ -154,19 +158,19 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		return this.fogDensity;
 	}
 
-	public void setFogDensity(final float density) {
+	void setFogDensity(final float density) {
 		this.fogDensity = density;
 	}
 
-	public void setSpotSoundChance(final int chance) {
+	void setSpotSoundChance(final int chance) {
 		this.spotSoundChance = chance;
 	}
 
-	public void addSound(final SoundEffect sound) {
+	void addSound(final SoundEffect sound) {
 		this.sounds = MyUtils.append(this.sounds, sound);
 	}
 
-	public void addSpotSound(final SoundEffect sound) {
+	void addSpotSound(final SoundEffect sound) {
 		this.spotSounds = MyUtils.append(this.spotSounds, sound);
 	}
 
@@ -213,7 +217,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 				? new WeightTable<SoundEffect>(this.spotSounds).next() : null;
 	}
 
-	public void resetSounds() {
+	void resetSounds() {
 		this.sounds = NO_SOUNDS;
 		this.spotSounds = NO_SOUNDS;
 		this.spotSoundChance = DEFAULT_SPOT_CHANCE;
@@ -221,6 +225,51 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 	public boolean isBiomeType(@Nonnull final BiomeDictionary.Type type) {
 		return this.biomeTypes.contains(type);
+	}
+
+	// Internal to the package
+	void update(@Nonnull final BiomeConfig entry) {
+		this.addComment(entry.comment);
+		if (entry.hasPrecipitation != null)
+			this.setHasPrecipitation(entry.hasPrecipitation.booleanValue());
+		if (entry.hasAurora != null)
+			this.setHasAurora(entry.hasAurora.booleanValue());
+		if (entry.hasDust != null)
+			this.setHasDust(entry.hasDust.booleanValue());
+		if (entry.hasFog != null)
+			this.setHasFog(entry.hasFog.booleanValue());
+		if (entry.fogDensity != null)
+			this.setFogDensity(entry.fogDensity.floatValue());
+		if (entry.fogColor != null) {
+			final int[] rgb = MyUtils.splitToInts(entry.fogColor, ',');
+			if (rgb.length == 3)
+				this.setFogColor(new Color(rgb[0], rgb[1], rgb[2]));
+		}
+		if (entry.dustColor != null) {
+			final int[] rgb = MyUtils.splitToInts(entry.dustColor, ',');
+			if (rgb.length == 3)
+				this.setDustColor(new Color(rgb[0], rgb[1], rgb[2]));
+		}
+		if (entry.soundReset != null && entry.soundReset.booleanValue()) {
+			this.resetSounds();
+		}
+
+		if (entry.spotSoundChance != null)
+			this.setSpotSoundChance(entry.spotSoundChance.intValue());
+
+		for (final SoundConfig sr : entry.sounds) {
+			if (RegistryManager.<SoundRegistry>get(RegistryType.SOUND).isSoundBlocked(sr.sound))
+				continue;
+			final SoundEffect.Builder b = new SoundEffect.Builder(sr);
+			if (sr.soundCategory == null)
+				b.setSoundCategory(SoundCategory.AMBIENT);
+			final SoundEffect s = b.build();
+			if (s.getSoundType() == SoundType.SPOT)
+				this.addSpotSound(s);
+			else
+				this.addSound(s);
+		}
+
 	}
 
 	@Override
@@ -294,5 +343,4 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	public int compareTo(@Nonnull final BiomeInfo o) {
 		return this.getBiomeName().compareTo(o.getBiomeName());
 	}
-
 }
