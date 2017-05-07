@@ -34,16 +34,21 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.registry.DimensionRegistry;
+import org.blockartistry.DynSurround.registry.RegistryManager;
+import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Color;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public final class AuroraRenderer {
 
+	protected final DimensionRegistry dimensions = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION);
+
 	private int getZOffset() {
 		return (Minecraft.getMinecraft().gameSettings.renderDistanceChunks + 1) * 16;
 	}
-	
+
 	private double getScaledHeight() {
 		return 4D + 16D * ((Minecraft.getMinecraft().gameSettings.renderDistanceChunks - 6D) / 24D);
 	}
@@ -58,7 +63,8 @@ public final class AuroraRenderer {
 		final Tessellator tess = Tessellator.getInstance();
 		final VertexBuffer renderer = tess.getBuffer();
 
-		final double tranY = 64 - ((mc.thePlayer.lastTickPosY + (mc.thePlayer.posY - mc.thePlayer.lastTickPosY) * partialTick));
+		final double tranY = this.dimensions.getSeaLevel(mc.theWorld)
+				- ((mc.thePlayer.lastTickPosY + (mc.thePlayer.posY - mc.thePlayer.lastTickPosY) * partialTick));
 
 		final double tranX = mc.thePlayer.posX
 				- (mc.thePlayer.lastTickPosX + (mc.thePlayer.posX - mc.thePlayer.lastTickPosX) * partialTick);
