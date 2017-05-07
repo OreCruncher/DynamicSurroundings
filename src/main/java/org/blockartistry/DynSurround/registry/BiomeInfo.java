@@ -56,6 +56,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	public final static SoundEffect[] NO_SOUNDS = {};
 
 	protected final Biome biome;
+	protected final int biomeId;
 
 	protected boolean hasPrecipitation;
 	protected boolean hasDust;
@@ -80,9 +81,15 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		if (!this.isFake()) {
 			this.hasPrecipitation = canRain() || getEnableSnow();
 			this.biomeTypes = BiomeDictionary.getTypes(this.biome);
+			this.biomeId = Biome.getIdForBiome(this.biome);
 		} else {
 			this.biomeTypes = ImmutableSet.of();
+			this.biomeId = ((FakeBiome) this.biome).getBiomeId();
 		}
+	}
+
+	public int getBiomeId() {
+		return this.biomeId;
 	}
 
 	void addComment(@Nonnull final String comment) {
@@ -281,13 +288,12 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	@Nonnull
 	public String toString() {
 		final ResourceLocation rl = this.biome.getRegistryName();
-		final String registryName = rl == null ? "UNKNOWN" : rl.toString();
+		final String registryName = rl == null ? (this.isFake() ? "FAKE" : "UNKNOWN") : rl.toString();
 
 		final StringBuilder builder = new StringBuilder();
-		builder.append("Biome [").append(this.getBiomeName()).append('/').append(registryName).append("]:");
-		if (this.isFake()) {
-			builder.append(" FAKE ");
-		} else {
+		builder.append("Biome [").append(this.getBiomeName()).append('/').append(registryName).append("] (")
+				.append(this.getBiomeId()).append("):");
+		if (!this.isFake()) {
 			builder.append("\n+ ").append('<');
 			boolean comma = false;
 			for (final BiomeDictionary.Type t : this.biomeTypes) {
@@ -311,8 +317,6 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 			builder.append(" AURORA");
 		if (this.hasFog)
 			builder.append(" FOG");
-		if (!this.hasPrecipitation && !this.hasDust && !this.hasAurora && !this.hasFog)
-			builder.append(" NONE");
 		if (this.dustColor != null)
 			builder.append(" dustColor:").append(this.dustColor.toString());
 		if (this.fogColor != null) {
