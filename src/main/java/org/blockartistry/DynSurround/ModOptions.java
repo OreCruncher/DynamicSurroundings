@@ -237,34 +237,11 @@ public final class ModOptions {
 
 	public static final String CATEGORY_AURORA = "aurora";
 	public static final String CONFIG_AURORA_ENABLED = "Enabled";
-	public static final String CONFIG_Y_PLAYER_RELATIVE = "Height Player Relative";
-	public static final String CONFIG_PLAYER_FIXED_HEIGHT = "Player Fixed Height";
-	public static final String CONFIG_MULTIPLE_BANDS = "Multiple Bands";
-	public static final String CONFIG_AURORA_ANIMATE = "Animate";
-	public static final String CONFIG_AURORA_SPAWN_OFFSET = "Spawn Offset";
-	private static final List<String> auroraSort = Arrays.asList(CONFIG_AURORA_ENABLED, CONFIG_AURORA_ANIMATE,
-			CONFIG_MULTIPLE_BANDS, CONFIG_Y_PLAYER_RELATIVE, CONFIG_PLAYER_FIXED_HEIGHT, CONFIG_AURORA_SPAWN_OFFSET);
+	private static final List<String> auroraSort = Arrays.asList(CONFIG_AURORA_ENABLED);
 
 	@Parameter(category = CATEGORY_AURORA, property = CONFIG_AURORA_ENABLED, defaultValue = "true", lang = "cfg.aurora.EnableAurora")
 	@Comment("Enable/disable Aurora processing on server/client")
 	public static boolean auroraEnable = true;
-	@Parameter(category = CATEGORY_AURORA, property = CONFIG_Y_PLAYER_RELATIVE, defaultValue = "true", lang = "cfg.aurora.HeightRelative")
-	@Comment("true to keep the aurora at a height above player; false to fix it to an altitude")
-	public static boolean auroraHeightPlayerRelative = true;
-	@Parameter(category = CATEGORY_AURORA, property = CONFIG_PLAYER_FIXED_HEIGHT, defaultValue = "64.0", lang = "cfg.aurora.FixedHeight")
-	@MinMaxFloat(min = 16.0F, max = 2048.0F)
-	@Comment("Number of blocks to say fixed above player if Aurora is player relative")
-	public static float playerFixedHeight = 64.0F;
-	@Parameter(category = CATEGORY_AURORA, property = CONFIG_MULTIPLE_BANDS, defaultValue = "true", lang = "cfg.aurora.MultipleBands")
-	@Comment("Allow Auroras with multiple bands")
-	public static boolean auroraMultipleBands = true;
-	@Parameter(category = CATEGORY_AURORA, property = CONFIG_AURORA_ANIMATE, defaultValue = "true", lang = "cfg.aurora.Animate")
-	@Comment("Animate Aurora so it waves")
-	public static boolean auroraAnimate = true;
-	@Parameter(category = CATEGORY_AURORA, property = CONFIG_AURORA_SPAWN_OFFSET, defaultValue = "150", lang = "cfg.aurora.SpawnOffset")
-	@MinMaxInt(min = 0, max = 200)
-	@Comment("Number of blocks north of player location to spawn an aurora")
-	public static int auroraSpawnOffset = 150;
 
 	public static final String CATEGORY_BIOMES = "biomes";
 	public static final String CONFIG_BIOME_SEALEVEL = "Overworld Sealevel Override";
