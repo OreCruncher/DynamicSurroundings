@@ -31,6 +31,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 
 public class FakeBiome extends Biome {
+	
+	private static int biomeIdCounter = -200;
+	
+	protected final int biomeId = --biomeIdCounter;
 
 	public FakeBiome(@Nonnull final String name) {
 		super(new BiomeProperties(name));
@@ -41,6 +45,10 @@ public class FakeBiome extends Biome {
 		this.spawnableMonsterList = null;
 		this.spawnableWaterCreatureList = null;
 		this.theBiomeDecorator = null;
+	}
+	
+	public int getBiomeId() {
+		return this.biomeId;
 	}
 
 	private static BiomeInfo getTrueBiome() {
