@@ -38,6 +38,7 @@ import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.DiurnalUtils;
 import org.blockartistry.lib.random.MurmurHash3;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -81,13 +82,16 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	}
 
 	private boolean spawnAurora(@Nonnull final World world) {
-		if (!ModOptions.auroraEnable || current != null || DiurnalUtils.isAuroraInvisible(world))
+		if (!ModOptions.auroraEnable || current != null
+				|| Minecraft.getMinecraft().gameSettings.renderDistanceChunks < 6
+				|| DiurnalUtils.isAuroraInvisible(world))
 			return false;
 		return this.registry.hasAuroras(world) && EnvironState.getPlayerBiome().getHasAurora();
 	}
 
 	private boolean canAuroraStay(@Nonnull final World world) {
-		return DiurnalUtils.isAuroraVisible(world) && EnvironState.getPlayerBiome().getHasAurora();
+		return Minecraft.getMinecraft().gameSettings.renderDistanceChunks < 6
+				|| DiurnalUtils.isAuroraVisible(world) && EnvironState.getPlayerBiome().getHasAurora();
 	}
 
 	private long getAuroraSeed(@Nonnull final World world) {

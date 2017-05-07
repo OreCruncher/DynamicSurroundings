@@ -30,8 +30,6 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.data.AuroraPreset;
 import org.blockartistry.DynSurround.data.ColorPair;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.MathStuff;
@@ -42,8 +40,6 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public final class Aurora {
 
-	private static final boolean MULTIPLES = ModOptions.auroraMultipleBands;
-
 	private static final float ANGLE1 = MathStuff.PI_F / 16.0F;
 	private static final float ANGLE2 = MathStuff.toRadians(90.0F / 7.0F);
 	private static final float AURORA_SPEED = 0.75F;
@@ -52,8 +48,8 @@ public final class Aurora {
 	private static final int ALPHA_INCREMENT_MOD = 8;
 
 	private final Random random;
-	
-	private Node[][] bands;
+
+	private Node[] nodes;
 	private long seed;
 	private float cycle = 0.0F;
 	private int fadeTimer = 0;
@@ -63,7 +59,6 @@ public final class Aurora {
 	private int length;
 	private float nodeLength;
 	private float nodeWidth;
-	private int bandOffset;
 
 	// Base color of the aurora
 	private final Color baseColor;
@@ -85,23 +80,21 @@ public final class Aurora {
 		// Initialize at least once for a non-animated aurora
 		translate(0);
 	}
-	
+
 	public long getSeed() {
 		return this.seed;
 	}
 
 	@Nonnull
-	public Node[][] getNodeList() {
-		return this.bands;
+	public Node[] getNodeList() {
+		return this.nodes;
 	}
 
 	private void preset() {
-		final AuroraPreset p = AuroraPreset.get(this.random);
-		this.length = p.length;
-		this.nodeLength = p.nodeLength;
-		this.nodeWidth = p.nodeWidth;
-		this.bandOffset = p.bandOffset;
-		this.alphaLimit = p.alphaLimit;
+		this.length = 128;
+		this.nodeLength = this.random.nextBoolean() ? 30 : 15;
+		this.nodeWidth = 2;
+		this.alphaLimit = this.random.nextInt(64) + 64;
 		this.fadeLimit = this.alphaLimit * ALPHA_INCREMENT_MOD;
 	}
 
@@ -155,16 +148,7 @@ public final class Aurora {
 	}
 
 	private void generateBands() {
-		this.bands = new Node[MULTIPLES ? 3 : 1][];
-		final Node[] band0 = this.bands[0] = populate();
-		final Node[] band1, band2;
-		if (this.bands.length > 1) {
-			band1 = this.bands[1] = populateFromTemplate(this.bands[0], this.bandOffset);
-			band2 = this.bands[2] = populateFromTemplate(this.bands[0], -this.bandOffset);
-		} else {
-			band1 = band2 = null;
-		}
-
+		this.nodes = populate();
 		final float factor = MathStuff.PI_F / (this.length / 4);
 		final int lowerBound = this.length / 8 + 1;
 		final int upperBound = this.length * 7 / 8 - 1;
@@ -182,20 +166,8 @@ public final class Aurora {
 				width = this.nodeWidth;
 			}
 
-			band0[i].setWidth(width);
-			if (band1 != null) {
-				band1[i].setWidth(width);
-				band2[i].setWidth(width);
-			}
+			this.nodes[i].setWidth(width);
 		}
-	}
-
-	@Nonnull
-	private static Node[] populateFromTemplate(@Nonnull final Node[] template, final int offset) {
-		final Node[] tet = new Node[template.length];
-		for (int i = 0; i < template.length; i++)
-			tet[i] = new Node(template[i], offset);
-		return tet;
 	}
 
 	@Nonnull
@@ -267,38 +239,17 @@ public final class Aurora {
 	 * Calculates the next "frame" of the aurora if it is being animated.
 	 */
 	public void translate(final float partialTick) {
-		final Node[] nodeList = this.bands[0];
-		Node[] second = null;
-		Node[] third = null;
-		if (this.bands.length > 1) {
-			second = this.bands[1];
-			third = this.bands[2];
-		}
-
 		final float c = this.cycle + AURORA_SPEED * partialTick;
-		for (int i = 0; i < nodeList.length; i++) {
+		for (int i = 0; i < this.nodes.length; i++) {
 			// Travelling sine wave: https://en.wikipedia.org/wiki/Wavelength
 			final float f = MathStuff.cos(MathStuff.toRadians(AURORA_WAVELENGTH * i + c));
 			final float dZ = f * AURORA_AMPLITUDE;
 			final float dY = f * 3.0F;
-			Node node = nodeList[i];
+			Node node = this.nodes[i];
 			node.setDeltaZ(dZ);
 			node.setDeltaY(dY);
-			if (second != null) {
-				node = second[i];
-				node.setDeltaZ(dZ);
-				node.setDeltaY(dY);
-
-				node = third[i];
-				node.setDeltaZ(dZ);
-				node.setDeltaY(dY);
-			}
 		}
-		findAngles(nodeList);
-		if (second != null) {
-			findAngles(second);
-			findAngles(third);
-		}
+		findAngles(this.nodes);
 	}
 
 	private static void findAngles(@Nonnull final Node[] nodeList) {
