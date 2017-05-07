@@ -129,11 +129,44 @@ public final class BiomeRegistry extends Registry {
 
 		BiomeInfo result = this.registry.get(biome);
 		if (result == null) {
-			// Open Terrain Generation can trigger this...
-			DSurround.log().warn("Biome [%s] not detected during initialization - forcing reload (%s)",
-					biome.getBiomeName(), biome.getClass());
-			RegistryManager.reloadResources(this.side);
-			result = this.registry.get(biome);
+			// Two possibilities:
+			// - A biome could have been dynamically added after the mod's init
+			// phase.  Open Terrain Generation can do this.
+			//
+			// - A mod replaced a vanilla biome in the biome registry but did
+			// not update the identity instance in Biome.  An example of this
+			// is Biome.PLAINS.  It is the default biome returned and a
+			// chunk isn't fully loaded.  If a mod updates the PLAINS entry
+			// in the REGISTRY and did NOT update Biome.PLAINS with the new
+			// object reference things have become inconsistent.
+			final int id = Biome.getIdForBiome(biome);
+			if (id == -1) {
+				final Biome tryBiome;
+				// Check for the second case
+				if ("Ocean".equals(biome.getBiomeName()))
+					tryBiome = Biome.getBiomeForId(0);
+				else if ("Plains".equals(biome.getBiomeName()))
+					tryBiome = Biome.getBiomeForId(1);
+				else
+					tryBiome = null;
+
+				if (tryBiome == null) {
+					final String err = String.format("Unknown biome [%s] (%s)", biome.getBiomeName(),
+							biome.getClass().getName());
+					throw new RuntimeException(err);
+				} else {
+					result = this.registry.get(tryBiome);
+				}
+			}
+
+			// Handle the first case
+			if (result == null) {
+				DSurround.log().warn("Biome [%s] not detected during initialization - forcing reload (%s)",
+						biome.getBiomeName(), biome.getClass());
+				RegistryManager.reloadResources(this.side);
+				result = this.registry.get(biome);
+			}
+
 			if (result == null) {
 				throw new RuntimeException("What's going on with biomes?");
 			}
