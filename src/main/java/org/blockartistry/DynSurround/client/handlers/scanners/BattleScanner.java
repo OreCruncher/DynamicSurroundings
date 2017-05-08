@@ -50,7 +50,9 @@ public class BattleScanner implements ITickable {
 	private static final int BOSS_RANGE = 65536; // 256 block range
 	private static final int MINI_BOSS_RANGE = 16384; // 128 block range
 	private static final int MOB_RANGE = 256; // 16 block range
+	private static final int BATTLE_TIMER_EXPIRY = 60;
 
+	protected int battleTimer;
 	protected boolean inBattle;
 	protected boolean isWither;
 	protected boolean isDragon;
@@ -82,8 +84,7 @@ public class BattleScanner implements ITickable {
 	@Override
 	public void update() {
 
-		this.reset();
-
+		final int tickCounter = EnvironState.getTickCounter();
 		final BlockPos playerPos = EnvironState.getPlayerPosition();
 		final World world = EnvironState.getWorld();
 
@@ -110,11 +111,17 @@ public class BattleScanner implements ITickable {
 
 		// If nothing matches return
 		final List<Entity> candidates = world.getEntities(Entity.class, hostileFilter);
-		if (candidates.isEmpty())
+		if (candidates.isEmpty()) {
+			if (tickCounter > this.battleTimer)
+				this.reset();
 			return;
+		}
+
+		this.reset();
 
 		// Battle flag is set regardless of hostile discovered
 		this.inBattle = true;
+		this.battleTimer = tickCounter + BATTLE_TIMER_EXPIRY;
 
 		// Rip through looking for withers, dragons, and mini bosses
 		for (final Entity e : candidates)
