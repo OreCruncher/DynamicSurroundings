@@ -36,6 +36,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.EnvironmentEvent;
 import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.client.event.ServerDataEvent;
+import org.blockartistry.DynSurround.client.handlers.scanners.BattleScanner;
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.DynSurround.registry.ArmorClass;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
@@ -106,6 +107,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static int tickCounter;
 		
 		private static final MinecraftClock clock = new MinecraftClock();
+		private static final BattleScanner battle = new BattleScanner();
 
 		private static BlockPos getPlayerPos() {
 			return new BlockPos(player.posX, player.getEntityBoundingBox().minY, player.posZ);
@@ -141,12 +143,19 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.isInSpace = EnvironState.playerBiome == biomes.OUTERSPACE_INFO;
 			EnvironState.isInClouds = EnvironState.playerBiome == biomes.CLOUDS_INFO;
 
+			// Trigger the battle scanner
+			EnvironState.battle.update();
+			
 			if (!Minecraft.getMinecraft().isGamePaused())
 				EnvironState.tickCounter++;
 		}
 
 		public static MinecraftClock getClock() {
 			return clock;
+		}
+		
+		public static BattleScanner getBattleScanner() {
+			return battle;
 		}
 		
 		public static BiomeInfo getPlayerBiome() {
