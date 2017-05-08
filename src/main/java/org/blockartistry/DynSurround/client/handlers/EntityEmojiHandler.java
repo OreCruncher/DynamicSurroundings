@@ -24,11 +24,14 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.entity.EmojiType;
 import org.blockartistry.DynSurround.api.entity.EntityCapability;
+import org.blockartistry.DynSurround.api.entity.IEntityEmoji;
 import org.blockartistry.DynSurround.api.events.EntityEmojiEvent;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleEmoji;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
@@ -36,10 +39,13 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.entity.IEntityEmojiSettable;
 import org.blockartistry.lib.WorldUtils;
 
+import com.google.common.base.Predicate;
+
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -61,40 +67,50 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 
-		if (this.emojiParticles.size() == 0)
+		if (this.emojiParticles.size() > 0) {
+			// Get rid of dead particles
+			final TIntObjectIterator<ParticleEmoji> data = this.emojiParticles.iterator();
+			while (data.hasNext()) {
+				data.advance();
+				if (data.value().shouldExpire())
+					data.remove();
+			}
+		}
+		
+		if(!ModOptions.enableEntityEmojis)
 			return;
-
-		// Get rid of dead particles
-		final TIntObjectIterator<ParticleEmoji> data = this.emojiParticles.iterator();
-		while (data.hasNext()) {
-			data.advance();
-			if (data.value().shouldExpire())
-				data.remove();
+		
+		// Spawn any new ones
+		final BlockPos pos = EnvironState.getPlayerPosition();
+		final double rangeSq = ModOptions.speechBubbleRange * ModOptions.speechBubbleRange;
+		final Predicate<Entity> needFilter = new Predicate<Entity>() {
+			@Override
+			public boolean apply(@Nonnull final Entity input) {
+				return input.isEntityAlive() && input.getDistanceSq(pos) <= rangeSq && !EntityEmojiHandler.this.emojiParticles.contains(input.getEntityId());
+			}
+		};
+		
+		final List<Entity> newOnes = world.getEntities(Entity.class, needFilter);
+		for(final Entity e: newOnes) {
+			final IEntityEmoji emoji = e.getCapability(EntityCapability.EMOJI, null);
+			if(emoji != null && emoji.getEmojiType() != EmojiType.NONE) {
+				final ParticleEmoji p = new ParticleEmoji(e);
+				this.emojiParticles.put(e.getEntityId(), p);
+				ParticleHelper.addParticle(p);
+			}
 		}
 
 	}
 
 	@SubscribeEvent
 	public void onEntityEmojiEvent(@Nonnull final EntityEmojiEvent event) {
-		if (!ModOptions.enableEntityEmojis)
-			return;
-
 		final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), event.entityId);
 		if (entity != null) {
 			final IEntityEmojiSettable data = (IEntityEmojiSettable) entity.getCapability(EntityCapability.EMOJI, null);
 			data.setActionState(event.actionState);
 			data.setEmotionalState(event.emotionalState);
 			data.setEmojiType(event.emojiType);
-
-			final ParticleEmoji particle = this.emojiParticles.get(entity.getEntityId());
-
-			if (particle == null && data.getEmojiType() != EmojiType.NONE) {
-				final ParticleEmoji p = new ParticleEmoji(entity);
-				this.emojiParticles.put(entity.getEntityId(), p);
-				ParticleHelper.addParticle(p);
-			}
 		}
-
 	}
 
 	@Override

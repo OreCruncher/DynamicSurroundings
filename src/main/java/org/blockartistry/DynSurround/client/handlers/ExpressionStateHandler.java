@@ -45,7 +45,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -369,11 +368,7 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		register(new Dynamic.DynamicNumber("player.lightLevel") {
 			@Override
 			public void update() {
-				final World world = EnvironState.getWorld();
-				final BlockPos pos = EnvironState.getPlayerPosition();
-				final int blockLight = world.getLightFor(EnumSkyBlock.BLOCK, pos);
-				final int skyLight = world.getLightFor(EnumSkyBlock.SKY, pos) - world.calculateSkylightSubtracted(1.0F);
-				this.value = Math.max(blockLight, skyLight);
+				this.value = EnvironState.getLightLevel();
 			}
 		});
 		register(new Dynamic.DynamicString("player.armor") {
@@ -434,6 +429,7 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 						.getValue();
 			}
 		});
+
 
 		// Battle state
 		register(new Dynamic.DynamicBoolean("battle.inBattle") {

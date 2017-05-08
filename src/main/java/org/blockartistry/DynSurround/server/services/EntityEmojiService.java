@@ -45,14 +45,14 @@ public final class EntityEmojiService extends Service {
 	}
 
 	protected void addChatAI(@Nonnull final EntityLiving entity) {
-		if(EntityAIChat.hasMessages(entity))
+		if (EntityAIChat.hasMessages(entity))
 			entity.tasks.addTask(EntityAIChat.PRIORITY, new EntityAIChat(entity));
 		if (entity instanceof EntityVillager)
 			entity.tasks.addTask(EntityAIVillagerFleeChat.PRIORITY, new EntityAIVillagerFleeChat(entity));
 	}
-	
+
 	protected void addEmojiAI(@Nonnull final EntityLiving entity) {
-		if(entity instanceof EntityVillager)
+		if (entity instanceof EntityVillager)
 			entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIVillagerEmoji(entity));
 		else
 			entity.tasks.addTask(EntityAIEmoji.PRIORITY, new EntityAIEmoji(entity));
@@ -62,10 +62,9 @@ public final class EntityEmojiService extends Service {
 	public void onJoinWorld(@Nonnull final EntityJoinWorldEvent event) {
 		if (event.getEntity() instanceof EntityLiving) {
 			final EntityLiving entity = (EntityLiving) event.getEntity();
-			if(ModOptions.enableEntityChat)
+			if (ModOptions.enableEntityChat)
 				addChatAI(entity);
-			if(ModOptions.enableEntityEmojis)
-				addEmojiAI(entity);
+			addEmojiAI(entity);
 		}
 	}
 

@@ -58,6 +58,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.DimensionManager;
@@ -104,6 +105,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static boolean isInSpace;
 		private static boolean isInClouds;
 
+		private static int lightLevel;
+
 		private static int tickCounter;
 		
 		private static final MinecraftClock clock = new MinecraftClock();
@@ -142,6 +145,11 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.isUnderground = EnvironState.playerBiome == biomes.UNDERGROUND_INFO;
 			EnvironState.isInSpace = EnvironState.playerBiome == biomes.OUTERSPACE_INFO;
 			EnvironState.isInClouds = EnvironState.playerBiome == biomes.CLOUDS_INFO;
+
+			final BlockPos pos = EnvironState.getPlayerPosition();
+			final int blockLight = world.getLightFor(EnumSkyBlock.BLOCK, pos);
+			final int skyLight = world.getLightFor(EnumSkyBlock.SKY, pos) - world.calculateSkylightSubtracted(1.0F);
+			EnvironState.lightLevel = Math.max(blockLight, skyLight);
 
 			// Trigger the battle scanner
 			EnvironState.battle.update();
@@ -310,6 +318,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		public static boolean inVillage() {
 			return inVillage;
+		}
+
+		public static int getLightLevel() {
+			return lightLevel;
 		}
 
 		public static int getTickCounter() {

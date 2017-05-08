@@ -487,7 +487,6 @@ public final class ModOptions {
 	public static boolean enableEntityChat = false;
 	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_ENABLE_EMOJIS, defaultValue = "false", lang = "cfg.speech.EnableEntityEmojis")
 	@Comment("Enables/disables entity emojis")
-	@RestartRequired(server = true)
 	public static boolean enableEntityEmojis = false;
 	@Parameter(category = CATEGORY_SPEECHBUBBLES, property = CONFIG_OPTION_SPEECHBUBBLE_DURATION, defaultValue = "7", lang = "cfg.speech.Duration")
 	@MinMaxFloat(min = 5.0F, max = 15.0F)
