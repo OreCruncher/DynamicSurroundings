@@ -33,7 +33,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
-public class EntityEmojiCapability {
+public class CapabilityEmojiData {
 	
 	public static final class Storage implements Capability.IStorage<IEmojiData> {
 
