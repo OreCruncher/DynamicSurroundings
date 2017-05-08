@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.commands.CommandDS;
-import org.blockartistry.DynSurround.entity.EntityEmojiCapability;
+import org.blockartistry.DynSurround.entity.CapabilityEmojiData;
 import org.blockartistry.DynSurround.entity.EntityEventHandler;
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.server.services.ServiceManager;
@@ -82,7 +82,7 @@ public class Proxy {
 		EntityEventHandler.register();
 		
 		// Capabilities
-		EntityEmojiCapability.register();
+		CapabilityEmojiData.register();
 	}
 
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
