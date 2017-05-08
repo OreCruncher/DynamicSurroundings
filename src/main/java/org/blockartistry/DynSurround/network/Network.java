@@ -106,8 +106,8 @@ public final class Network {
 	}
 
 	public static void sendEntityEmoteUpdate(@Nonnull final UUID id, @Nonnull final ActionState action,
-			@Nonnull final EmotionalState emotion, @Nonnull final EmojiType type, @Nonnull final TargetPoint point) {
-		NETWORK.sendToAllAround(new PacketEntityEmote(id, action, emotion, type), point);
+			@Nonnull final EmotionalState emotion, @Nonnull final EmojiType type, final int dimensionId) {
+		NETWORK.sendToDimension(new PacketEntityEmote(id, action, emotion, type), dimensionId);
 	}
 
 	public static void sendThunder(final int dimensionId, final boolean doFlash, final float x, final float y,

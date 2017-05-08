@@ -24,7 +24,6 @@
 
 package org.blockartistry.DynSurround.entity.ai;
 
-import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.entity.EmotionalState;
 import org.blockartistry.DynSurround.api.entity.EntityCapability;
 import org.blockartistry.DynSurround.entity.EmojiDataTables;
@@ -34,7 +33,6 @@ import org.blockartistry.lib.EntityUtils;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class EntityAIEmoji extends EntityAIBase {
 
@@ -63,9 +61,8 @@ public class EntityAIEmoji extends EntityAIBase {
 		updateEmoji();
 
 		if (this.data.isDirty()) {
-			final TargetPoint point = Network.getTargetPoint(this.subject, ModOptions.speechBubbleRange);
 			Network.sendEntityEmoteUpdate(this.subject.getPersistentID(), this.data.getActionState(),
-					this.data.getEmotionalState(), this.data.getEmojiType(), point);
+					this.data.getEmotionalState(), this.data.getEmojiType(), this.subject.world.provider.getDimension());
 			this.data.clearDirty();
 		}
 	}

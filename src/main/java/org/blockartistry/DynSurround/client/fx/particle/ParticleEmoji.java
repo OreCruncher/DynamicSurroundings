@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.entity.EmojiType;
 import org.blockartistry.DynSurround.api.entity.EntityCapability;
 import org.blockartistry.DynSurround.api.entity.IEntityEmoji;
@@ -51,7 +52,7 @@ public class ParticleEmoji extends ParticleBase {
 	// Number of degrees the particle will move in a
 	// single tick.
 	private static final float ORBITAL_TICK = 360.0F / (ORBITAL_PERIOD * 20.0F);
-	
+
 	// Number of ticks to keep the icon around until
 	// the particle is dismissed.
 	private static final int HOLD_TICK_COUNT = 40;
@@ -82,7 +83,7 @@ public class ParticleEmoji extends ParticleBase {
 		this.particleAlpha = 0.99F;
 		this.radius = (entity.width / 2.0F) + 0.25F;
 		this.period = this.rand.nextFloat() * 360.0F;
-		
+
 		this.emoji = entity.getCapability(EntityCapability.EMOJI, null);
 		this.activeTexture = this.emoji.getEmojiType().getResource();
 	}
@@ -90,11 +91,15 @@ public class ParticleEmoji extends ParticleBase {
 	public boolean shouldExpire() {
 		if (!this.isAlive())
 			return true;
-		
-		if(this.subject == null || !this.subject.isEntityAlive())
+
+		if (this.subject == null || !this.subject.isEntityAlive())
 			return true;
 
 		if (this.subject.isInvisibleToPlayer(EnvironState.getPlayer()))
+			return true;
+
+		final double rangeSq = ModOptions.speechBubbleRange * ModOptions.speechBubbleRange;
+		if (this.subject.getDistanceSqToCenter(EnvironState.getPlayerPosition()) > rangeSq)
 			return true;
 
 		return this.emoji == null;
@@ -105,7 +110,7 @@ public class ParticleEmoji extends ParticleBase {
 		if (shouldExpire()) {
 			this.setExpired();
 		} else {
-			
+
 			this.prevPosX = this.posX;
 			this.prevPosY = this.posY;
 			this.prevPosZ = this.posZ;
@@ -118,14 +123,14 @@ public class ParticleEmoji extends ParticleBase {
 
 			// If there is no emoji we want to keep the current one
 			// around for a period of time to give a better feel.
-			if(this.emoji.getEmojiType() == EmojiType.NONE) {
+			if (this.emoji.getEmojiType() == EmojiType.NONE) {
 				this.holdTicks++;
-				if(this.holdTicks >= HOLD_TICK_COUNT) {
+				if (this.holdTicks >= HOLD_TICK_COUNT) {
 					this.setExpired();
 				}
 				return;
 			}
-			
+
 			// Reset the hold counter and set the texture
 			this.holdTicks = 0;
 			this.activeTexture = this.emoji.getEmojiType().getResource();
@@ -171,7 +176,7 @@ public class ParticleEmoji extends ParticleBase {
 		final int combinedBrightness = this.getBrightnessForRender(partialTicks);
 		final int slX16 = combinedBrightness >> 16 & 65535;
 		final int blX16 = combinedBrightness & 65535;
-		
+
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		buffer.pos(x - edgeLRdirectionX * scaleLR - edgeUDdirectionX * scaleUD, y - edgeUDdirectionY * scaleUD,
 				z - edgeLRdirectionZ * scaleLR - edgeUDdirectionZ * scaleUD).tex(maxU, maxV)
@@ -194,11 +199,11 @@ public class ParticleEmoji extends ParticleBase {
 
 	@Override
 	public int getBrightnessForRender(float partialTick) {
-		//final int FULL_BRIGHTNESS_VALUE = 0xf000f0;
-		//return FULL_BRIGHTNESS_VALUE;
+		// final int FULL_BRIGHTNESS_VALUE = 0xf000f0;
+		// return FULL_BRIGHTNESS_VALUE;
 
 		return this.subject.getBrightnessForRender(partialTick);
-		
+
 		// if you want the brightness to be the local illumination (from block
 		// light and sky light) you can just use
 		// Entity.getBrightnessForRender() base method, which contains:
