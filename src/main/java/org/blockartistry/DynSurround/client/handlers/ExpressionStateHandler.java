@@ -435,6 +435,32 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 			}
 		});
 
+		// Battle state
+		register(new Dynamic.DynamicBoolean("battle.inBattle") {
+			@Override
+			public void update() {
+				this.value = EnvironState.getBattleScanner().inBattle();
+			}
+		});
+		register(new Dynamic.DynamicBoolean("battle.isBoss") {
+			@Override
+			public void update() {
+				this.value = EnvironState.getBattleScanner().isBoss();
+			}
+		});
+		register(new Dynamic.DynamicBoolean("battle.isWither") {
+			@Override
+			public void update() {
+				this.value = EnvironState.getBattleScanner().isWither();
+			}
+		});
+		register(new Dynamic.DynamicBoolean("battle.isDragon") {
+			@Override
+			public void update() {
+				this.value = EnvironState.getBattleScanner().isDragon();
+			}
+		});
+
 		// Sort them for easy display
 		Collections.sort(variables, new Comparator<IDynamicValue>() {
 			@Override
