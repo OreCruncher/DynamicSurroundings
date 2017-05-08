@@ -52,7 +52,7 @@ public class EntityEmojiCapability {
 
 		@Override
 		public IEmojiData call() throws Exception {
-			return new EntityEmojiData();
+			return new EmojiData();
 		}
 		
 	}

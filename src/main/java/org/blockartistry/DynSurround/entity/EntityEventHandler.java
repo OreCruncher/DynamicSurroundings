@@ -45,7 +45,7 @@ public final class EntityEventHandler {
 	@SubscribeEvent
 	public void onAttachCapabilities(@Nonnull final AttachCapabilitiesEvent.Entity event) {
 		if(event.getObject() instanceof EntityLiving)
-			event.addCapability(EntityEmojiData.CAPABILITY_ID, new EntityEmojiData());
+			event.addCapability(EmojiData.CAPABILITY_ID, new EmojiData());
 	}
 	
 }
