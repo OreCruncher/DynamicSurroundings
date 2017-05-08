@@ -38,7 +38,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
-public final class EntityEmojiData implements ICapabilityProvider, IEmojiDataSettable {
+public final class EmojiData implements ICapabilityProvider, IEmojiDataSettable {
 
 	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(DSurround.MOD_ID, "entityEmojiData");
 
