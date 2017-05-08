@@ -1598,5 +1598,15 @@
 		"sounds": [
 			"dsurround:ambient/items/utility_draw"
 		]
+	},
+	"battle.normal": {
+		"category": "ambient",
+		"sounds": [
+			{
+				"name": "dsurround:ambient/battle/normal_battle",
+				"volume": 0.25,
+				"stream": true
+			}
+		]
 	}
 }

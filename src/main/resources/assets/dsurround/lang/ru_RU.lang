@@ -95,16 +95,6 @@ cfg.aurora.cat.Aurora=Северное сияние
 cfg.aurora.cat.Aurora.tooltip=Настройки для управления поведением и отрисовкой северного сияния
 cfg.aurora.EnableAurora=Северное сияние
 cfg.aurora.EnableAurora.tooltip=Включить/выключить обработку северного сияния на клиенте и сервере
-cfg.aurora.HeightRelative=Относительно высоты игрока
-cfg.aurora.HeightRelative.tooltip=true для того, чтобы северное сияние всегда было на высоте выше игрока; false, чтобы закрепить на определённой высоте
-cfg.aurora.FixedHeight=Определённая высота над игроком
-cfg.aurora.FixedHeight.tooltip=Насколько блоков выше игрока должно быть северное сияние, если оно относительно игрока, а не закреплено на определённой высоте
-cfg.aurora.MultipleBands=Множество полос
-cfg.aurora.MultipleBands.tooltip=Разрешить северное сияние с множеством полос
-cfg.aurora.Animate=Оживить
-cfg.aurora.Animate.tooltip=Включить колебание северного сияния
-cfg.aurora.SpawnOffset=Смещение появления
-cfg.aurora.SpawnOffset.tooltip=Количество блоков на север от игрока для появления северного сияния
 
 cfg.biomes.cat.Biomes=Настройки биомов
 cfg.biomes.cat.Biomes.tooltip=Настройки звуков и эффектов биомов

@@ -52,6 +52,7 @@ public final class BiomeRegistry extends Registry {
 	public static final FakeBiome OUTERSPACE = new FakeBiome("OuterSpace");
 	public static final FakeBiome CLOUDS = new FakeBiome("Clouds");
 	public static final FakeBiome VILLAGE = new FakeBiome("Village");
+	public static final FakeBiome BATTLE_MUSIC = new FakeBiome("BattleMusic");
 
 	public BiomeInfo VILLAGE_INFO;
 	public BiomeInfo PLAYER_INFO;
@@ -59,6 +60,7 @@ public final class BiomeRegistry extends Registry {
 	public BiomeInfo CLOUDS_INFO;
 	public BiomeInfo OUTERSPACE_INFO;
 	public BiomeInfo WTF_INFO;
+	public BiomeInfo BATTLE_MUSIC_INFO;
 
 	// This is for cases when the biome coming in doesn't make sense
 	// and should default to something to avoid crap.
@@ -100,6 +102,8 @@ public final class BiomeRegistry extends Registry {
 		this.registry.put(UNDERGROUND, UNDERGROUND_INFO = new BiomeInfo(UNDERGROUND));
 		this.registry.put(CLOUDS, CLOUDS_INFO = new BiomeInfo(CLOUDS));
 		this.registry.put(OUTERSPACE, OUTERSPACE_INFO = new BiomeInfo(OUTERSPACE));
+
+		this.registry.put(BATTLE_MUSIC, BATTLE_MUSIC_INFO = new BiomeInfo(BATTLE_MUSIC));
 	}
 
 	@Override
