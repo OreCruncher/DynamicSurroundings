@@ -164,7 +164,7 @@ public class PresetConfig {
 
 			final File dataFile = new File(this.dir, info.getFilename());
 			try (final Writer out = new FileWriter(dataFile)) {
-				final Gson gson = new GsonBuilder().create();
+				final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 				gson.toJson(new PresetDataFile(info), out);
 			}
 
