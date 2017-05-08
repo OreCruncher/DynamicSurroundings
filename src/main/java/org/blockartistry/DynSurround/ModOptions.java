@@ -116,11 +116,11 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_BACKGROUND_THUNDER = "Enable Background Thunder";
 	public static final String CONFIG_THUNDER_THRESHOLD = "Rain Intensity for Background Thunder";
 
-	private static final List<String> rainSort = Arrays.asList(CONFIG_ALLOW_DESERT_DUST,
-			CONFIG_RESET_RAIN_ON_SLEEP, CONFIG_RAIN_PARTICLE_BASE, CONFIG_RAIN_ACTIVE_TIME_CONST,
-			CONFIG_RAIN_ACTIVE_TIME_VARIABLE, CONFIG_RAIN_INACTIVE_TIME_CONST, CONFIG_RAIN_INACTIVE_TIME_VARIABLE,
-			CONFIG_STORM_ACTIVE_TIME_CONST, CONFIG_STORM_ACTIVE_TIME_VARIABLE, CONFIG_STORM_INACTIVE_TIME_CONST,
-			CONFIG_STORM_INACTIVE_TIME_VARIABLE, CONFIG_ENABLE_BACKGROUND_THUNDER, CONFIG_THUNDER_THRESHOLD);
+	private static final List<String> rainSort = Arrays.asList(CONFIG_ALLOW_DESERT_DUST, CONFIG_RESET_RAIN_ON_SLEEP,
+			CONFIG_RAIN_PARTICLE_BASE, CONFIG_RAIN_ACTIVE_TIME_CONST, CONFIG_RAIN_ACTIVE_TIME_VARIABLE,
+			CONFIG_RAIN_INACTIVE_TIME_CONST, CONFIG_RAIN_INACTIVE_TIME_VARIABLE, CONFIG_STORM_ACTIVE_TIME_CONST,
+			CONFIG_STORM_ACTIVE_TIME_VARIABLE, CONFIG_STORM_INACTIVE_TIME_CONST, CONFIG_STORM_INACTIVE_TIME_VARIABLE,
+			CONFIG_ENABLE_BACKGROUND_THUNDER, CONFIG_THUNDER_THRESHOLD);
 
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_PARTICLE_BASE, defaultValue = "100", lang = "cfg.rain.ParticleCount")
 	@MinMaxInt(min = 0, max = 500)
@@ -310,13 +310,14 @@ public final class ModOptions {
 	public static final String CONFIG_BLOCKED_SOUNDS = "Blocked Sounds";
 	public static final String CONFIG_SOUND_VOLUMES = "Sound Volume";
 	public static final String CONFIG_THUNDER_VOLUME = "Thunder Volume";
+	public static final String CONFIG_ENABLE_BATTLEMUSIC = "Battle Music";
 	private static final List<String> soundsSort = Arrays.asList(CONFIG_ENABLE_BIOME_SOUNDS, CONFIG_MASTER_SOUND_FACTOR,
 			CONFIG_ENABLE_FOOTSTEPS_SOUND, CONFIG_FOOTSTEPS_SOUND_FACTOR, CONFIG_FOOTSTEPS_QUAD,
 			CONFIG_ENABLE_ARMOR_SOUND, CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_SWING_SOUND, CONFIG_ENABLE_EQUIP_SOUND,
 			CONFIG_ENABLE_CRAFTING_SOUND, CONFIG_ENABLE_BOW_PULL_SOUND, CONFIG_AUTO_CONFIG_CHANNELS,
 			CONFIG_NORMAL_CHANNEL_COUNT, CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_MUTE_WHEN_BACKGROUND,
 			CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS, CONFIG_SOUND_CULL_THRESHOLD, CONFIG_CULLED_SOUNDS,
-			CONFIG_SOUND_VOLUMES);
+			CONFIG_SOUND_VOLUMES, CONFIG_ENABLE_BATTLEMUSIC);
 
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BIOME_SOUNDS, defaultValue = "true", lang = "cfg.sound.BiomeSounds")
 	@Comment("Enable biome background and spot sounds")
@@ -378,6 +379,9 @@ public final class ModOptions {
 	@MinMaxInt(min = 0)
 	@Comment("Ticks between culled sound events (0 to disable culling)")
 	public static int soundCullingThreshold = 20;
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BATTLEMUSIC, defaultValue = "false", lang = "cfg.sound.BattleMusic")
+	@Comment("Enable/disable Battle Music")
+	public static boolean enableBattleMusic = false;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_CULLED_SOUNDS, lang = "cfg.sound.CulledSounds", defaultValue = "minecraft:block.water.ambient,minecraft:block.lava.ambient,minecraft:entity.sheep.ambient,minecraft:entity.chicken.ambient,minecraft:entity.cow.ambient,minecraft:entity.pig.ambient")
 	@Comment("Sounds to cull from frequent playing")
 	@Hidden

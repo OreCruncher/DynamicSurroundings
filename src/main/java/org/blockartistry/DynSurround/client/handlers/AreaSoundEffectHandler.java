@@ -90,7 +90,7 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		return !(ModOptions.enableBiomeSounds && (EnvironState.getTickCounter() % SCAN_INTERVAL) == 0
 				&& EnvironState.getWorld().isBlockLoaded(EnvironState.getPlayerPosition()));
 	}
-	
+
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 
@@ -100,12 +100,14 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<SoundEffect>();
 		if (doBiomeSounds())
 			getBiomeSounds(sounds);
-		
+
 		final BiomeRegistry registry = this.getBiomeRegistry();
 
 		final List<SoundEffect> playerSounds = new ArrayList<SoundEffect>();
 		registry.PLAYER_INFO.findSoundMatches(playerSounds);
-		if(EnvironState.inVillage())
+		if (ModOptions.enableBattleMusic)
+			registry.BATTLE_MUSIC_INFO.findSoundMatches(playerSounds);
+		if (EnvironState.inVillage())
 			registry.VILLAGE_INFO.findSoundMatches(playerSounds);
 
 		for (final SoundEffect effect : playerSounds)

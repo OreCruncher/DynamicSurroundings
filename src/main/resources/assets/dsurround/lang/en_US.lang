@@ -141,16 +141,6 @@ cfg.aurora.cat.Aurora=Aurora Options
 cfg.aurora.cat.Aurora.tooltip=Options that control Aurora behavior and rendering
 cfg.aurora.EnableAurora=Auroras
 cfg.aurora.EnableAurora.tooltip=Enable/disable Aurora processing on server/client
-cfg.aurora.HeightRelative=Height Player Relative
-cfg.aurora.HeightRelative.tooltip=true to keep the aurora at a height above player; false to fix it to an altitude
-cfg.aurora.FixedHeight=Player Fixed Height
-cfg.aurora.FixedHeight.tooltip=Number of blocks to say fixed above player if Aurora is player relative
-cfg.aurora.MultipleBands=Multiple Bands
-cfg.aurora.MultipleBands.tooltip=Allow Auroras with multiple bands
-cfg.aurora.Animate=Animate
-cfg.aurora.Animate.tooltip=Animate Aurora so it waves
-cfg.aurora.SpawnOffset=Spawn Offset
-cfg.aurora.SpawnOffset.tooltip=Number of blocks north of player location to spawn an aurora
 
 cfg.biomes.cat.Biomes=Biome Options
 cfg.biomes.cat.Biomes.tooltip=Options for controlling biome sound/effects
@@ -217,6 +207,8 @@ cfg.sound.CullInterval=Sound Culling Interval
 cfg.sound.CullInterval.tooltip=Ticks between culled sound events (0 to disable culling)
 cfg.sound.SoundConfig=Individual Sound Configuration
 cfg.sound.SoundConfig.tooltip=Configure sound block, cull, and individual volumes
+cfg.sound.BattleMusic=Battle Music
+cfg.sound.BattleMusic.tooltip=Enable/disable playing of Battle Music when in combat
 
 cfg.player.cat.Player=Player Options
 cfg.player.cat.Player.tooltip=General options for defining sound and effects the player entity
