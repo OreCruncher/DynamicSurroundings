@@ -26,7 +26,7 @@ package org.blockartistry.DynSurround.api.entity;
 
 import javax.annotation.Nonnull;
 
-public interface IEntityEmoji {
+public interface IEmojiData {
 	
 	/**
 	 * The current ActionState of the entity

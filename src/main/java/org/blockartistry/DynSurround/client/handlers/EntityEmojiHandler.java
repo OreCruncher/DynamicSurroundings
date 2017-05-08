@@ -31,12 +31,12 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.entity.EmojiType;
 import org.blockartistry.DynSurround.api.entity.EntityCapability;
-import org.blockartistry.DynSurround.api.entity.IEntityEmoji;
+import org.blockartistry.DynSurround.api.entity.IEmojiData;
 import org.blockartistry.DynSurround.api.events.EntityEmojiEvent;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleEmoji;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.entity.IEntityEmojiSettable;
+import org.blockartistry.DynSurround.entity.IEmojiDataSettable;
 import org.blockartistry.lib.WorldUtils;
 
 import com.google.common.base.Predicate;
@@ -92,7 +92,7 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 		
 		final List<Entity> newOnes = world.getEntities(Entity.class, needFilter);
 		for(final Entity e: newOnes) {
-			final IEntityEmoji emoji = e.getCapability(EntityCapability.EMOJI, null);
+			final IEmojiData emoji = e.getCapability(EntityCapability.EMOJI, null);
 			if(emoji != null && emoji.getEmojiType() != EmojiType.NONE) {
 				final ParticleEmoji p = new ParticleEmoji(e);
 				this.emojiParticles.put(e.getEntityId(), p);
@@ -106,7 +106,7 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 	public void onEntityEmojiEvent(@Nonnull final EntityEmojiEvent event) {
 		final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), event.entityId);
 		if (entity != null) {
-			final IEntityEmojiSettable data = (IEntityEmojiSettable) entity.getCapability(EntityCapability.EMOJI, null);
+			final IEmojiDataSettable data = (IEmojiDataSettable) entity.getCapability(EntityCapability.EMOJI, null);
 			data.setActionState(event.actionState);
 			data.setEmotionalState(event.emotionalState);
 			data.setEmojiType(event.emojiType);

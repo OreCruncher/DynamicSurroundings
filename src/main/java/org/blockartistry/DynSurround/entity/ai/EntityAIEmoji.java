@@ -27,7 +27,7 @@ package org.blockartistry.DynSurround.entity.ai;
 import org.blockartistry.DynSurround.api.entity.EmotionalState;
 import org.blockartistry.DynSurround.api.entity.EntityCapability;
 import org.blockartistry.DynSurround.entity.EmojiDataTables;
-import org.blockartistry.DynSurround.entity.IEntityEmojiSettable;
+import org.blockartistry.DynSurround.entity.IEmojiDataSettable;
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.lib.EntityUtils;
 
@@ -39,10 +39,10 @@ public class EntityAIEmoji extends EntityAIBase {
 	public static final int PRIORITY = 400;
 
 	protected final EntityLiving subject;
-	protected IEntityEmojiSettable data;
+	protected IEmojiDataSettable data;
 	public EntityAIEmoji(final EntityLiving subject) {
 		this.subject = subject;
-		this.data = (IEntityEmojiSettable) subject.getCapability(EntityCapability.EMOJI, null);
+		this.data = (IEmojiDataSettable) subject.getCapability(EntityCapability.EMOJI, null);
 	}
 
 	@Override

@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.api.entity.EmojiType;
 import org.blockartistry.DynSurround.api.entity.EntityCapability;
-import org.blockartistry.DynSurround.api.entity.IEntityEmoji;
+import org.blockartistry.DynSurround.api.entity.IEmojiData;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.MathStuff;
 import org.lwjgl.opengl.GL11;
@@ -57,7 +57,7 @@ public class ParticleEmoji extends ParticleBase {
 	private static final int HOLD_TICK_COUNT = 40;
 
 	private final Entity subject;
-	private final IEntityEmoji emoji;
+	private final IEmojiData emoji;
 	private ResourceLocation activeTexture;
 
 	private int holdTicks;
