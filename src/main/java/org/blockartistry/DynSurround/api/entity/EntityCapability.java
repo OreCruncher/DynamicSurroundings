@@ -29,8 +29,8 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 
 public class EntityCapability {
 	
-	@CapabilityInject(IEntityEmoji.class)
-	public static final Capability<IEntityEmoji> EMOJI = null;
+	@CapabilityInject(IEmojiData.class)
+	public static final Capability<IEmojiData> EMOJI = null;
 	
 
 }

@@ -26,7 +26,7 @@ package org.blockartistry.DynSurround.entity;
 
 import java.util.concurrent.Callable;
 
-import org.blockartistry.DynSurround.api.entity.IEntityEmoji;
+import org.blockartistry.DynSurround.api.entity.IEmojiData;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
@@ -35,30 +35,30 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 
 public class EntityEmojiCapability {
 	
-	public static final class Storage implements Capability.IStorage<IEntityEmoji> {
+	public static final class Storage implements Capability.IStorage<IEmojiData> {
 
 		@Override
-		public NBTBase writeNBT(Capability<IEntityEmoji> capability, IEntityEmoji instance, EnumFacing side) {
+		public NBTBase writeNBT(Capability<IEmojiData> capability, IEmojiData instance, EnumFacing side) {
 			return null;
 		}
 
 		@Override
-		public void readNBT(Capability<IEntityEmoji> capability, IEntityEmoji instance, EnumFacing side, NBTBase nbt) {
+		public void readNBT(Capability<IEmojiData> capability, IEmojiData instance, EnumFacing side, NBTBase nbt) {
 		}
 		
 	}
 	
-	public static final class Factory implements Callable<IEntityEmoji> {
+	public static final class Factory implements Callable<IEmojiData> {
 
 		@Override
-		public IEntityEmoji call() throws Exception {
+		public IEmojiData call() throws Exception {
 			return new EntityEmojiData();
 		}
 		
 	}
 	
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IEntityEmoji.class, new Storage(), new Factory());
+		CapabilityManager.INSTANCE.register(IEmojiData.class, new Storage(), new Factory());
 	}
 
 }

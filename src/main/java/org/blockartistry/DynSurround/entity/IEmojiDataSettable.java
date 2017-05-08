@@ -29,9 +29,9 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.api.entity.ActionState;
 import org.blockartistry.DynSurround.api.entity.EmojiType;
 import org.blockartistry.DynSurround.api.entity.EmotionalState;
-import org.blockartistry.DynSurround.api.entity.IEntityEmoji;
+import org.blockartistry.DynSurround.api.entity.IEmojiData;
 
-public interface IEntityEmojiSettable extends IEntityEmoji {
+public interface IEmojiDataSettable extends IEmojiData {
 	void setActionState(@Nonnull final ActionState state);
 	void setEmotionalState(@Nonnull final EmotionalState state);
 	void setEmojiType(@Nonnull final EmojiType type);
