@@ -110,6 +110,12 @@ public final class Network {
 		NETWORK.sendToDimension(new PacketEntityEmote(id, action, emotion, type), dimensionId);
 	}
 
+	public static void sendEntityEmoteUpdateToPlayer(@Nonnull final UUID id, @Nonnull final ActionState action,
+			@Nonnull final EmotionalState emotion, @Nonnull final EmojiType type,
+			@Nonnull final EntityPlayerMP player) {
+		NETWORK.sendTo(new PacketEntityEmote(id, action, emotion, type), player);
+	}
+
 	public static void sendThunder(final int dimensionId, final boolean doFlash, final float x, final float y,
 			final float z) {
 		NETWORK.sendToDimension(new PacketThunder(dimensionId, doFlash, new BlockPos(x, y, z)), dimensionId);

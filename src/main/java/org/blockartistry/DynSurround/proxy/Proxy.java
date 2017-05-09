@@ -29,7 +29,6 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.commands.CommandDS;
 import org.blockartistry.DynSurround.entity.CapabilityEmojiData;
-import org.blockartistry.DynSurround.entity.EntityEventHandler;
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.server.services.ServiceManager;
 import org.blockartistry.lib.Localization;
@@ -77,9 +76,6 @@ public class Proxy {
 		ModEnvironment.initialize();
 
 		Network.initialize();
-		
-		// General event handlers
-		EntityEventHandler.register();
 		
 		// Capabilities
 		CapabilityEmojiData.register();

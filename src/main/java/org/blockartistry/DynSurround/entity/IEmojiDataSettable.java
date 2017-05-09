@@ -31,10 +31,14 @@ import org.blockartistry.DynSurround.api.entity.EmojiType;
 import org.blockartistry.DynSurround.api.entity.EmotionalState;
 import org.blockartistry.DynSurround.api.entity.IEmojiData;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+
 public interface IEmojiDataSettable extends IEmojiData {
 	void setActionState(@Nonnull final ActionState state);
 	void setEmotionalState(@Nonnull final EmotionalState state);
 	void setEmojiType(@Nonnull final EmojiType type);
 	boolean isDirty();
 	void clearDirty();
+	void sync();
+	void syncPlayer(@Nonnull final EntityPlayerMP player);
 }
