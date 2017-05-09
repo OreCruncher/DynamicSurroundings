@@ -152,7 +152,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.lightLevel = Math.max(blockLight, skyLight);
 
 			// Trigger the battle scanner
-			EnvironState.battle.update();
+			if(ModOptions.enableBattleMusic)
+				EnvironState.battle.update();
+			else
+				EnvironState.battle.reset();
 			
 			if (!Minecraft.getMinecraft().isGamePaused())
 				EnvironState.tickCounter++;

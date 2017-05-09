@@ -24,16 +24,10 @@
 
 package org.blockartistry.DynSurround.client.handlers.scanners;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import org.blockartistry.DynSurround.api.entity.ActionState;
 import org.blockartistry.DynSurround.api.entity.EntityCapability;
 import org.blockartistry.DynSurround.api.entity.IEmojiData;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-
-import com.google.common.base.Predicate;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
@@ -65,7 +59,7 @@ public class BattleScanner implements ITickable {
 	protected boolean isDragon;
 	protected boolean isBoss;
 
-	protected void reset() {
+	public void reset() {
 		this.inBattle = false;
 		this.isWither = false;
 		this.isDragon = false;
@@ -91,83 +85,66 @@ public class BattleScanner implements ITickable {
 	@Override
 	public void update() {
 
-		final int tickCounter = EnvironState.getTickCounter();
 		final EntityPlayer player = EnvironState.getPlayer();
 		final BlockPos playerPos = EnvironState.getPlayerPosition();
 		final World world = EnvironState.getWorld();
 
-		// Find all the possible candidates that influence battle flags
-		final Predicate<Entity> hostileFilter = new Predicate<Entity>() {
-			@Override
-			public boolean apply(@Nonnull final Entity e) {
+		boolean inBattle = false;
+		boolean isBoss = false;
+		boolean isDragon = false;
+		boolean isWither = false;
 
-				// Invisible things do not trigger as well as the current
-				// player and team members.
-				if (e.isInvisible() || e == player || e.isOnSameTeam(player))
-					return false;
+		for (final Entity e : world.getLoadedEntityList()) {
+			// Invisible things do not trigger as well as the current
+			// player and team members.
+			if (e.isInvisible() || e == player || e.isOnSameTeam(player))
+				continue;
 
-				// Check boss ranges. If distance is > than boss range
-				// then the entity is not a candidate regardless of type.
-				final double dist = e.getDistanceSq(playerPos);
-				if (dist > BOSS_RANGE)
-					return false;
+			final double dist = e.getDistanceSq(playerPos);
+			if (dist > BOSS_RANGE)
+				continue;
 
-				if (!e.isNonBoss()) {
-					if (e instanceof EntityWither || e instanceof EntityDragon)
-						return true;
-					if (dist <= MINI_BOSS_RANGE)
-						return true;
-					return false;
-				} else if (dist > MOB_RANGE) {
-					// If the normal mob is outside of the largest possible
-					// range it is not a candidate.
-					return false;
-				}
-				
+			if (!e.isNonBoss()) {
+				if (e instanceof EntityWither)
+					isWither = true;
+				else if (e instanceof EntityDragon)
+					isDragon = true;
+				else if (dist <= MINI_BOSS_RANGE)
+					isBoss = true;
+			} else if (dist > MOB_RANGE) {
+				// If the normal mob is outside of the largest possible
+				// range it is not a candidate.
+				continue;
+			} else {
 				// Use emoji data to determine if the mob is attacking or in a
 				// panic state.
 				final IEmojiData emoji = e.getCapability(EntityCapability.EMOJI, null);
-				if(emoji != null) {
+				if (emoji != null) {
 					final ActionState state = emoji.getActionState();
-					if(state == ActionState.ATTACKING || state == ActionState.PANIC)
-						return true;
+					if (state == ActionState.ATTACKING || state == ActionState.PANIC)
+						inBattle = true;
 				}
-				
-				return false;
 			}
-		};
-
-		// If nothing matches return
-		final List<Entity> candidates = world.getEntities(Entity.class, hostileFilter);
-		if (candidates.isEmpty()) {
-			if (this.inBattle && tickCounter > this.battleTimer)
-				this.reset();
-			return;
 		}
 
-		this.reset();
-
-		// Battle flag is set regardless of hostile discovered
-		this.inBattle = true;
-		this.battleTimer = tickCounter + BATTLE_TIMER_EXPIRY;
-
-		// Rip through looking for withers, dragons, and mini bosses
-		for (final Entity e : candidates)
-			if (e instanceof EntityWither)
-				this.isWither = true;
-			else if (e instanceof EntityDragon)
-				this.isDragon = true;
-			else if (!e.isNonBoss())
-				this.isBoss = true;
-
-		// Make sure the boss flag is set based on wither/dragon
-		this.isBoss = this.isBoss || this.isWither || this.isDragon;
-
 		// Wither trumps dragon
-		if (this.isWither)
-			this.isDragon = false;
+		if (isWither)
+			isDragon = false;
 
-		// Flags should be set appropriately by now
+		isBoss = isBoss || isWither || isDragon;
+		inBattle = inBattle || isBoss;
+
+		final int tickCounter = EnvironState.getTickCounter();
+
+		if (inBattle) {
+			this.inBattle = inBattle;
+			this.isBoss = isBoss;
+			this.isWither = isWither;
+			this.isDragon = isDragon;
+			this.battleTimer = tickCounter + BATTLE_TIMER_EXPIRY;
+		} else if (this.inBattle && tickCounter > this.battleTimer) {
+			this.reset();
+		}
 	}
 
 }
