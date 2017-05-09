@@ -142,23 +142,17 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	}
 
 	public void queueAmbientSounds(@Nonnull final TObjectFloatHashMap<SoundEffect> sounds) {
-
-		// Get rid of emitters that are completed
-		Iterables.removeIf(this.emitters.values(), new Predicate<Emitter>() {
-			@Override
-			public boolean apply(@Nonnull final Emitter input) {
-				return input.isDonePlaying();
-			}
-		});
-
 		// Iterate through the existing emitters:
-		// * If an emitter does not correspond to an incoming sound, remove.
-		// * If an emitter does correspond, update the volume setting.
+		// * If done, remove
+		// * If not in the incoming list, fade
+		// * If it does exist, update volume throttle and unfade if needed
 		final Iterator<Entry<SoundEffect, Emitter>> itr = this.emitters.entrySet().iterator();
 		while (itr.hasNext()) {
 			final Entry<SoundEffect, Emitter> e = itr.next();
 			final Emitter emitter = e.getValue();
-			if (sounds.contains(e.getKey())) {
+			if (emitter.isDonePlaying())
+				itr.remove();
+			else if (sounds.contains(e.getKey())) {
 				emitter.setVolumeThrottle(sounds.get(e.getKey()));
 				if (emitter.isFading())
 					emitter.unfade();
