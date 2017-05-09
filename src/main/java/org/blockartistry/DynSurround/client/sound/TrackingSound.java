@@ -150,14 +150,4 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 		return this;
 	}
 
-	@Override
-	public boolean equals(final Object anObj) {
-		if (this == anObj)
-			return true;
-		if (anObj instanceof TrackingSound)
-			return this.sameSound(((TrackingSound) anObj).sound);
-		if (anObj instanceof SoundEffect)
-			return this.sameSound((SoundEffect) anObj);
-		return false;
-	}
 }
