@@ -219,11 +219,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 
 	@Override
 	public boolean equals(final Object anObj) {
-		if (this == anObj)
-			return true;
-		if (!(anObj instanceof SoundEffect))
-			return false;
-		return this.soundName.equals(((SoundEffect) anObj).soundName);
+		return this == anObj || this.soundName.equals(((SoundEffect) anObj).soundName);
 	}
 
 	@Override
