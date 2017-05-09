@@ -434,7 +434,17 @@
 			"sounds": [
 				{
 					"sound": "dsurround:battle.normal",
-					"conditions": "battle.inBattle"
+					"conditions": "battle.inBattle  && !(battle.isWither || battle.isDragon)"
+				},
+				{
+					"sound": "dsurround:battle.wither",
+					"title": "Retribution by Tanner Helland",
+					"conditions": "battle.isWither"
+				},
+				{
+					"sound": "dsurround:battle.dragon",
+					"title": "Defiance by Tanner Helland",
+					"conditions": "battle.isDragon"
 				}
 			]
 		}

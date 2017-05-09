@@ -66,6 +66,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	private boolean variable;
 	private int repeatDelayRandom;
 	private int repeatDelay;
+	private String soundTitle = StringUtils.EMPTY;
 
 	protected SoundEffect(final ResourceLocation resource, final SoundCategory category) {
 		this(resource, category, 1.0F, 1.0F, 0, false);
@@ -129,6 +130,15 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	protected SoundEffect setRepeatDelayRandom(final int r) {
 		this.repeatDelayRandom = r;
 		return this;
+	}
+	
+	protected SoundEffect setSoundTitle(@Nonnull final String title) {
+		this.soundTitle = title;
+		return this;
+	}
+	
+	public String getSoundTitle() {
+		return this.soundTitle;
 	}
 
 	public SoundEvent getSound() {
@@ -268,6 +278,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 			this.setVariablePitch(record.variable != null && record.variable.booleanValue());
 			this.setRepeatDelay(record.repeatDelay == null ? 0 : record.repeatDelay.intValue());
 			this.setRepeatDelayRandom(record.repeatDelayRandom == null ? 0 : record.repeatDelayRandom.intValue());
+			this.setSoundTitle(record.title != null ? record.title : StringUtils.EMPTY);
 
 			final SoundType t;
 			if (record.soundType != null) {
@@ -304,6 +315,11 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 			this.setSoundCategory(sc != null ? sc : SoundCategory.AMBIENT);
 		}
 
+		public Builder setSoundTitle(@Nonnull final String title) {
+			this.effect.setSoundTitle(title);
+			return this;
+		}
+		
 		public Builder setVolume(final float v) {
 			this.effect.setVolume(v);
 			return this;
