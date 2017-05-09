@@ -50,13 +50,21 @@ public final class WorldUtils {
 
 	@Nullable
 	public static Entity locateEntity(@Nonnull final World world, @Nonnull final UUID entityId) {
-		if(world == null)
+		if (world == null)
 			return null;
-		
+
 		for (final Entity e : world.getLoadedEntityList())
 			if (e.getUniqueID().equals(entityId))
 				return e;
 		return null;
+	}
+
+	@Nullable
+	public static Entity locateEntity(@Nonnull final World world, final int entityId) {
+		if (world == null)
+			return null;
+
+		return world.getEntityByID(entityId);
 	}
 
 	public static boolean isSolidBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {

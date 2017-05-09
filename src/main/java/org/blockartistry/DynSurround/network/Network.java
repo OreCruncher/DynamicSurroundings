@@ -105,12 +105,12 @@ public final class Network {
 		NETWORK.sendToAllAround(new PacketSpeechBubble(playerId, message, translate), point);
 	}
 
-	public static void sendEntityEmoteUpdate(@Nonnull final UUID id, @Nonnull final ActionState action,
+	public static void sendEntityEmoteUpdate(final int id, @Nonnull final ActionState action,
 			@Nonnull final EmotionalState emotion, @Nonnull final EmojiType type, final int dimensionId) {
 		NETWORK.sendToDimension(new PacketEntityEmote(id, action, emotion, type), dimensionId);
 	}
 
-	public static void sendEntityEmoteUpdateToPlayer(@Nonnull final UUID id, @Nonnull final ActionState action,
+	public static void sendEntityEmoteUpdateToPlayer(final int id, @Nonnull final ActionState action,
 			@Nonnull final EmotionalState emotion, @Nonnull final EmojiType type,
 			@Nonnull final EntityPlayerMP player) {
 		NETWORK.sendTo(new PacketEntityEmote(id, action, emotion, type), player);

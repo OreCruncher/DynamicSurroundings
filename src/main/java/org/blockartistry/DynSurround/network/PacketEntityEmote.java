@@ -24,8 +24,6 @@
 
 package org.blockartistry.DynSurround.network;
 
-import java.util.UUID;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -45,12 +43,13 @@ public class PacketEntityEmote implements IMessage {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketEntityEmote message, @Nullable final MessageContext ctx) {
-			Network.postEvent(new EntityEmojiEvent(message.entityId, message.actionState, message.emotionalState, message.emojiType));
+			Network.postEvent(new EntityEmojiEvent(message.entityId, message.actionState, message.emotionalState,
+					message.emojiType));
 			return null;
 		}
 	}
 
-	private UUID entityId;
+	private int entityId;
 	private ActionState actionState;
 	private EmotionalState emotionalState;
 	private EmojiType emojiType;
@@ -59,7 +58,7 @@ public class PacketEntityEmote implements IMessage {
 
 	}
 
-	public PacketEntityEmote(@Nonnull final UUID entityId, @Nonnull final ActionState action,
+	public PacketEntityEmote(final int entityId, @Nonnull final ActionState action,
 			@Nonnull final EmotionalState emotion, @Nonnull final EmojiType emojiType) {
 		this.entityId = entityId;
 		this.actionState = action;
@@ -69,7 +68,7 @@ public class PacketEntityEmote implements IMessage {
 
 	@Override
 	public void fromBytes(@Nonnull final ByteBuf buf) {
-		this.entityId = new UUID(buf.readLong(), buf.readLong());
+		this.entityId = buf.readInt();
 		this.actionState = ActionState.get(buf.readByte());
 		this.emotionalState = EmotionalState.get(buf.readByte());
 		this.emojiType = EmojiType.get(buf.readByte());
@@ -77,8 +76,7 @@ public class PacketEntityEmote implements IMessage {
 
 	@Override
 	public void toBytes(@Nonnull final ByteBuf buf) {
-		buf.writeLong(this.entityId.getMostSignificantBits());
-		buf.writeLong(this.entityId.getLeastSignificantBits());
+		buf.writeInt(this.entityId);
 		buf.writeByte(ActionState.getId(this.actionState));
 		buf.writeByte(EmotionalState.getId(this.emotionalState));
 		buf.writeByte(EmojiType.getId(this.emojiType));
