@@ -100,17 +100,17 @@ public final class EmojiData implements IEmojiDataSettable {
 	@Override
 	public void sync() {
 		if (this.entity != null && !this.entity.worldObj.isRemote) {
-			Network.sendEntityEmoteUpdate(this.entity.getUniqueID(), this.getActionState(), this.getEmotionalState(),
+			Network.sendEntityEmoteUpdate(this.entity.getEntityId(), this.getActionState(), this.getEmotionalState(),
 					this.getEmojiType(), this.entity.worldObj.provider.getDimension());
 			this.clearDirty();
 		}
 	}
-	
+
 	@Override
 	public void syncPlayer(@Nonnull final EntityPlayerMP player) {
-		if(this.entity != null && !this.entity.worldObj.isRemote) {
-			Network.sendEntityEmoteUpdateToPlayer(this.entity.getUniqueID(), this.getActionState(), this.getEmotionalState(),
-					this.getEmojiType(), player);
+		if (this.entity != null && !this.entity.worldObj.isRemote) {
+			Network.sendEntityEmoteUpdateToPlayer(this.entity.getEntityId(), this.getActionState(),
+					this.getEmotionalState(), this.getEmojiType(), player);
 		}
 	}
 }

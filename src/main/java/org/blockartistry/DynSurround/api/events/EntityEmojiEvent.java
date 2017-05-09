@@ -24,8 +24,6 @@
 
 package org.blockartistry.DynSurround.api.events;
 
-import java.util.UUID;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.api.entity.ActionState;
@@ -35,30 +33,30 @@ import org.blockartistry.DynSurround.api.entity.EmotionalState;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
- * Fires when there is an update to an entities emoji state.
- * Will only fire client side.
+ * Fires when there is an update to an entities emoji state. Will only fire
+ * client side.
  */
 public class EntityEmojiEvent extends Event {
 
 	/**
 	 * Persistent ID of the entity this event is associated with.
 	 */
-	public final UUID entityId;
-	
+	public final int entityId;
+
 	/**
 	 * New ActionState of the Entity.
 	 * 
 	 * @see org.blockartistry.DynSurround.api.entity.ActionState
 	 */
 	public final ActionState actionState;
-	
+
 	/**
 	 * New EmotionalState of the Entity.
 	 * 
 	 * @see org.blockartistry.DynSurround.api.entity.EmotionalState
 	 */
 	public final EmotionalState emotionalState;
-	
+
 	/**
 	 * New EmojiType for the Entity.
 	 * 
@@ -66,8 +64,8 @@ public class EntityEmojiEvent extends Event {
 	 */
 	public final EmojiType emojiType;
 
-	public EntityEmojiEvent(@Nonnull final UUID id, @Nonnull final ActionState action,
-			@Nonnull final EmotionalState emotion, @Nonnull final EmojiType emojiType) {
+	public EntityEmojiEvent(final int id, @Nonnull final ActionState action, @Nonnull final EmotionalState emotion,
+			@Nonnull final EmojiType emojiType) {
 		this.entityId = id;
 		this.actionState = action;
 		this.emotionalState = emotion;
