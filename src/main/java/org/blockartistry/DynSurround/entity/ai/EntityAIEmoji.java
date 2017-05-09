@@ -39,6 +39,7 @@ public class EntityAIEmoji extends EntityAIBase {
 
 	protected final EntityLiving subject;
 	protected IEmojiDataSettable data;
+
 	public EntityAIEmoji(final EntityLiving subject) {
 		this.subject = subject;
 		this.data = (IEmojiDataSettable) subject.getCapability(EntityCapability.EMOJI, null);
@@ -59,7 +60,7 @@ public class EntityAIEmoji extends EntityAIBase {
 		updateEmotionalState();
 		updateEmoji();
 
-		if(this.data.isDirty())
+		if (this.data.isDirty())
 			this.data.sync();
 	}
 
@@ -80,7 +81,11 @@ public class EntityAIEmoji extends EntityAIBase {
 	}
 
 	protected void updateEmoji() {
-		this.data.setEmojiType(EmojiDataTables.getEmoji(this.data.getActionState(), this.data.getEmotionalState()));
+		// If the data is dirty it means that the action and emotional states
+		// changed and so the emoji needs update. If they didn't change
+		// the emoji should be fine.
+		if (this.data.isDirty())
+			this.data.setEmojiType(EmojiDataTables.getEmoji(this.data.getActionState(), this.data.getEmotionalState()));
 	}
 
 }

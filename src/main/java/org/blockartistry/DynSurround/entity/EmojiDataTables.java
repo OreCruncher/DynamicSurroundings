@@ -24,7 +24,6 @@
 
 package org.blockartistry.DynSurround.entity;
 
-import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -37,6 +36,7 @@ import org.blockartistry.DynSurround.api.entity.ActionState;
 import org.blockartistry.DynSurround.api.entity.EmojiType;
 import org.blockartistry.DynSurround.api.entity.EmotionalState;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
@@ -55,40 +55,14 @@ public final class EmojiDataTables {
 
 	}
 
-	private final static class EmojiKey {
-
-		private final ActionState action;
-		private final EmotionalState emotion;
-
-		public EmojiKey(final ActionState action, final EmotionalState emotion) {
-			this.action = action;
-			this.emotion = emotion;
-		}
-
-		@Override
-		public boolean equals(@Nonnull final Object obj) {
-			if (obj == this)
-				return true;
-
-			if (!(obj instanceof EmojiKey))
-				return false;
-
-			final EmojiKey key = (EmojiKey) obj;
-			return this.action == key.action && this.emotion == key.emotion;
-		}
-
-		@Override
-		public int hashCode() {
-			if (this.action == null)
-				return this.emotion.hashCode();
-			else if (this.emotion == null)
-				return this.action.hashCode();
-			return this.action.hashCode() ^ this.emotion.hashCode();
-		}
+	private static int emojiIdx(@Nullable final ActionState action, @Nullable final EmotionalState emotion) {
+		final int aIdx = action != null ? action.ordinal() + 1 : 0;
+		final int eIdx = emotion != null ? emotion.ordinal() + 1 : 0;
+		return (aIdx << 8) | eIdx;
 	}
 
 	private final static Map<Class<? extends EntityAIBase>, ActionState> actions = new IdentityHashMap<>();
-	private final static Map<EmojiKey, EmojiType> emojiMap = new HashMap<EmojiKey, EmojiType>();
+	private final static TIntObjectHashMap<EmojiType> emojiMap = new TIntObjectHashMap<EmojiType>();
 
 	public static void add(@Nonnull final Class<? extends EntityAIBase> clazz, @Nonnull final ActionState state) {
 		if (!actions.containsKey(clazz))
@@ -163,20 +137,20 @@ public final class EmojiDataTables {
 		registerSpecial(EntityRabbit.class, "AIRaidFarm", ActionState.EATING);
 
 		// Mappings to figure out an applicable EmojiType to display
-		emojiMap.put(new EmojiKey(ActionState.ATTACKING, null), EmojiType.ATTACK);
-		emojiMap.put(new EmojiKey(ActionState.EXPLODE, null), EmojiType.ANGRY);
-		emojiMap.put(new EmojiKey(ActionState.PANIC, null), EmojiType.FLEE);
-		emojiMap.put(new EmojiKey(ActionState.LOOKING, null), EmojiType.WATCH);
-		emojiMap.put(new EmojiKey(null, EmotionalState.HAPPY), EmojiType.HAPPY);
-		emojiMap.put(new EmojiKey(null, EmotionalState.SAD), EmojiType.SAD);
-		emojiMap.put(new EmojiKey(null, EmotionalState.SICK), EmojiType.SICK);
-		emojiMap.put(new EmojiKey(null, EmotionalState.HURT), EmojiType.HURT);
-		emojiMap.put(new EmojiKey(ActionState.FARMING, null), EmojiType.FARM);
-		emojiMap.put(new EmojiKey(null, EmotionalState.BUSY), EmojiType.WORK);
-		emojiMap.put(new EmojiKey(ActionState.TRADING, null), EmojiType.TRADE);
-		emojiMap.put(new EmojiKey(null, EmotionalState.ANGRY), EmojiType.ANGRY);
-		emojiMap.put(new EmojiKey(ActionState.EATING, null), EmojiType.EAT);
-		emojiMap.put(new EmojiKey(ActionState.WORKING, null), EmojiType.WORK);
+		emojiMap.put(emojiIdx(ActionState.ATTACKING, null), EmojiType.ATTACK);
+		emojiMap.put(emojiIdx(ActionState.EXPLODE, null), EmojiType.ANGRY);
+		emojiMap.put(emojiIdx(ActionState.PANIC, null), EmojiType.FLEE);
+		emojiMap.put(emojiIdx(ActionState.LOOKING, null), EmojiType.WATCH);
+		emojiMap.put(emojiIdx(null, EmotionalState.HAPPY), EmojiType.HAPPY);
+		emojiMap.put(emojiIdx(null, EmotionalState.SAD), EmojiType.SAD);
+		emojiMap.put(emojiIdx(null, EmotionalState.SICK), EmojiType.SICK);
+		emojiMap.put(emojiIdx(null, EmotionalState.HURT), EmojiType.HURT);
+		emojiMap.put(emojiIdx(ActionState.FARMING, null), EmojiType.FARM);
+		emojiMap.put(emojiIdx(null, EmotionalState.BUSY), EmojiType.WORK);
+		emojiMap.put(emojiIdx(ActionState.TRADING, null), EmojiType.TRADE);
+		emojiMap.put(emojiIdx(null, EmotionalState.ANGRY), EmojiType.ANGRY);
+		emojiMap.put(emojiIdx(ActionState.EATING, null), EmojiType.EAT);
+		emojiMap.put(emojiIdx(ActionState.WORKING, null), EmojiType.WORK);
 	}
 
 	private static void registerSpecial(@Nonnull final Class<? extends EntityLiving> clazz,
@@ -232,11 +206,11 @@ public final class EmojiDataTables {
 
 	@Nonnull
 	public static EmojiType getEmoji(@Nullable ActionState action, @Nullable EmotionalState emotion) {
-		EmojiType type = emojiMap.get(new EmojiKey(action, emotion));
+		EmojiType type = emojiMap.get(emojiIdx(action, emotion));
 		if (type == null)
-			type = emojiMap.get(new EmojiKey(action, null));
+			type = emojiMap.get(emojiIdx(action, null));
 		if (type == null)
-			type = emojiMap.get(new EmojiKey(null, emotion));
+			type = emojiMap.get(emojiIdx(null, emotion));
 		return type != null ? type : EmojiType.NONE;
 	}
 
