@@ -56,7 +56,7 @@ public class BattleScanner implements ITickable {
 
 	private static final int BOSS_RANGE = 65536; // 256 block range
 	private static final int MINI_BOSS_RANGE = 16384; // 128 block range
-	private static final int MOB_RANGE = 256; // 16 block range
+	private static final int MOB_RANGE = 400; // 20 block range
 	private static final int BATTLE_TIMER_EXPIRY = 10;
 
 	protected int battleTimer;
