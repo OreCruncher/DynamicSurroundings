@@ -36,6 +36,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.EnvironmentEvent;
 import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.client.event.ServerDataEvent;
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.handlers.scanners.BattleScanner;
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.DynSurround.registry.ArmorClass;
@@ -152,7 +153,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.lightLevel = Math.max(blockLight, skyLight);
 
 			// Trigger the battle scanner
-			EnvironState.battle.update();
+			if(ModOptions.enableBattleMusic)
+				EnvironState.battle.update();
+			else
+				EnvironState.battle.reset();
 			
 			if (!Minecraft.getMinecraft().isGamePaused())
 				EnvironState.tickCounter++;
