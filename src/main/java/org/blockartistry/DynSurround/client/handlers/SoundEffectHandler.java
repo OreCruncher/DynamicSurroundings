@@ -69,15 +69,15 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	 * Used to track sound in the PENDING list.
 	 */
 	private final static class PendingSound {
-		
+
 		private final int timeMark;
 		private final BasicSound<?> sound;
-		
+
 		public PendingSound(@Nonnull final BasicSound<?> sound, final int delay) {
 			this.timeMark = EnvironState.getTickCounter() + delay;
 			this.sound = sound;
 		}
-		
+
 		public int getTickAge() {
 			return EnvironState.getTickCounter() - this.timeMark;
 		}
@@ -86,8 +86,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 			return this.sound;
 		}
 	}
-	
-	
+
 	private final Map<SoundEffect, Emitter> emitters = new HashMap<SoundEffect, Emitter>();
 	private final ArrayDeque<PendingSound> pending = new ArrayDeque<PendingSound>();
 
@@ -144,17 +143,13 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	public void queueAmbientSounds(@Nonnull final TObjectFloatHashMap<SoundEffect> sounds) {
 
-		// Quick optimization - if there are no sounds coming in we need
-		// to clear out existing emitters and return. No reason to keep
-		// going.
-		if (sounds.size() == 0) {
-			if (this.emitters.size() > 0) {
-				for (final Emitter emit : this.emitters.values())
-					emit.fade();
-				this.emitters.clear();
+		// Get rid of emitters that are completed
+		Iterables.removeIf(this.emitters.values(), new Predicate<Emitter>() {
+			@Override
+			public boolean apply(@Nonnull final Emitter input) {
+				return input.isDonePlaying();
 			}
-			return;
-		}
+		});
 
 		// Iterate through the existing emitters:
 		// * If an emitter does not correspond to an incoming sound, remove.
@@ -162,15 +157,18 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		final Iterator<Entry<SoundEffect, Emitter>> itr = this.emitters.entrySet().iterator();
 		while (itr.hasNext()) {
 			final Entry<SoundEffect, Emitter> e = itr.next();
+			final Emitter emitter = e.getValue();
 			if (sounds.contains(e.getKey())) {
-				e.getValue().setVolumeThrottle(sounds.get(e.getKey()));
+				emitter.setVolumeThrottle(sounds.get(e.getKey()));
+				if (emitter.isFading())
+					emitter.unfade();
 				// Set to 0 so that the "new sound" logic below
 				// will ignore. Cheaper than removing the object
 				// from the collection.
 				sounds.put(e.getKey(), 0F);
 			} else {
-				e.getValue().fade();
-				itr.remove();
+				if (!emitter.isFading())
+					emitter.fade();
 			}
 		}
 
@@ -184,7 +182,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		}
 	}
 
-	public boolean isSoundPlaying(@Nonnull final ISound sound) {
+	public boolean isSoundPlaying(@Nonnull final BasicSound<?> sound) {
 		return SoundEngine.instance().isSoundPlaying(sound);
 	}
 
@@ -193,7 +191,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	}
 
 	@Nullable
-	public String playSound(@Nonnull final ISound sound) {
+	public String playSound(@Nonnull final BasicSound<?> sound) {
 		return sound == null ? null : SoundEngine.instance().playSound(sound);
 	}
 
@@ -228,7 +226,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 			return null;
 
 		final BasicSound<?> s = sound.createSound(pos);
-		if(tickDelay == 0)
+		if (tickDelay == 0)
 			return playSound(s);
 
 		this.pending.add(new PendingSound(s, tickDelay));
@@ -249,7 +247,8 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	 */
 	@SubscribeEvent
 	public void playerJoinWorldEvent(@Nonnull final EntityJoinWorldEvent event) {
-		if (event.getEntity().world.isRemote && EnvironState.isPlayer(event.getEntity()) && !event.getEntity().isDead)
+		if (event.getEntity().world.isRemote && EnvironState.isPlayer(event.getEntity())
+				&& !event.getEntity().isDead)
 			clearSounds();
 	}
 

@@ -44,14 +44,14 @@ import net.minecraftforge.fml.relauncher.Side;
 public abstract class Emitter {
 
 	protected final Random RANDOM = XorShiftRandom.current();
-	
+
 	protected final SoundEffect effect;
 	protected BasicSound<?> activeSound;
 
 	public Emitter(@Nonnull final SoundEffect sound) {
 		this.effect = sound;
 	}
-	
+
 	protected abstract BasicSound<?> createSound();
 
 	public void update() {
@@ -82,21 +82,21 @@ public abstract class Emitter {
 	public float getVolume() {
 		return this.activeSound != null ? this.activeSound.getVolume() : 0.0F;
 	}
-	
+
 	public void setVolumeThrottle(final float throttle) {
-		if(this.activeSound != null)
+		if (this.activeSound != null)
 			this.activeSound.setVolumeThrottle(throttle);
 	}
 
 	public void setPitch(final float pitch) {
-		if(this.activeSound != null)
+		if (this.activeSound != null)
 			this.activeSound.setPitch(pitch);
 	}
 
 	public float getPitch() {
 		return this.activeSound != null ? this.activeSound.getPitch() : 0.0F;
 	}
-	
+
 	public void fade() {
 		if (this.activeSound != null) {
 			DSurround.log().debug("FADE: %s", this.activeSound.toString());
@@ -104,8 +104,28 @@ public abstract class Emitter {
 		}
 	}
 	
+	public boolean isFading() {
+		if (this.activeSound != null) {
+			return this.activeSound.isFading();
+		}
+		return false;
+	}
+
+	public void unfade() {
+		if (this.activeSound != null) {
+			DSurround.log().debug("UNFADE: %s", this.activeSound.toString());
+			this.activeSound.unfade();
+		}
+	}
+
+	public boolean isDonePlaying() {
+		if (this.activeSound != null)
+			return this.activeSound.isDonePlaying();
+		return false;
+	}
+
 	public void stop() {
-		if(this.activeSound != null) {
+		if (this.activeSound != null) {
 			SoundEngine.instance().stopSound(this.activeSound);
 		}
 	}

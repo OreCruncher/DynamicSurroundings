@@ -28,6 +28,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import com.google.common.base.Objects;
@@ -59,6 +60,8 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 	};
 
 	protected final Random RANDOM = XorShiftRandom.current();
+	
+	protected String id = StringUtils.EMPTY;
 	protected float volumeThrottle = 1.0F;
 	protected ISoundScale volumeScale;
 
@@ -79,6 +82,17 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 		this.attenuationType = ISound.AttenuationType.LINEAR;
 
 		super.sound = SoundHandler.MISSING_SOUND;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public T setId(@Nonnull final String id) {
+		this.id = id;
+		return (T) this;
+	}
+	
+	@Nonnull
+	public String getId() {
+		return this.id;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -151,6 +165,18 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 
 	public void fade() {
 
+	}
+	
+	public void unfade() {
+		
+	}
+	
+	public boolean isFading() {
+		return false;
+	}
+	
+	public boolean isDonePlaying() {
+		return false;
 	}
 
 	@Override

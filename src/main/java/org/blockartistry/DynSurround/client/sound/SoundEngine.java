@@ -98,7 +98,7 @@ public class SoundEngine {
 		return currentSoundCount() < (SoundSystemConfig.getNumberNormalChannels() - SOUND_QUEUE_SLACK);
 	}
 
-	public boolean isSoundPlaying(@Nonnull final ISound sound) {
+	public boolean isSoundPlaying(@Nonnull final BasicSound<?> sound) {
 		return this.manager.isSoundPlaying(sound) || this.manager.invPlayingSounds.containsKey(sound)
 				|| this.manager.delayedSounds.containsKey(sound);
 	}
@@ -114,7 +114,7 @@ public class SoundEngine {
 			this.manager.stop(sound, cat);
 	}
 
-	public void stopSound(@Nonnull final ISound sound) {
+	public void stopSound(@Nonnull final BasicSound<?> sound) {
 		if (sound != null)
 			this.manager.stopSound(sound);
 	}
@@ -123,24 +123,22 @@ public class SoundEngine {
 		this.manager.stopAllSounds();
 	}
 
-	private ISound currentSound;
-	private String soundId;
-
 	@Nullable
-	public String playSound(@Nonnull final ISound sound) {
+	public String playSound(@Nonnull final BasicSound<?> sound) {
 		if (!canFitSound()) {
 			if (ModOptions.enableDebugLogging)
 				DSurround.log().debug("> NO ROOM: [%s]", sound.toString());
 			return null;
 		}
 
-		this.soundId = null;
-		this.currentSound = sound;
+		if(!StringUtils.isEmpty(sound.getId()))
+			this.manager.stopSound(sound);
+		
+		sound.setId(StringUtils.EMPTY);
 		this.manager.playSound(sound);
-		this.currentSound = null;
 
 		if (ModOptions.enableDebugLogging) {
-			if (this.soundId == null) {
+			if (StringUtils.isEmpty(sound.getId())) {
 				DSurround.log().debug("> NOT QUEUED: [%s]", sound.toString());
 			} else {
 				final SoundSystem ss = this.manager.sndSystem;
@@ -148,13 +146,13 @@ public class SoundEngine {
 				// the actual volume and pitch used within the
 				// sound library.
 				ss.CommandQueue(null);
-				final float v = ss.getVolume(this.soundId);
-				final float p = ss.getPitch(this.soundId);
+				final float v = ss.getVolume(sound.getId());
+				final float p = ss.getPitch(sound.getId());
 				DSurround.log().debug("> QUEUED: [%s]; v: %f, p: %f", sound.toString(), v, p);
 			}
 		}
 
-		return this.soundId;
+		return sound.getId();
 	}
 
 	@Nullable
@@ -171,8 +169,9 @@ public class SoundEngine {
 	 */
 	@SubscribeEvent
 	public void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
-		if (event.getSound() == this.currentSound)
-			this.soundId = event.getUuid();
+		final ISound sound = event.getSound();
+		if (sound instanceof BasicSound<?>)
+			((BasicSound<?>) sound).setId(event.getUuid());
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)

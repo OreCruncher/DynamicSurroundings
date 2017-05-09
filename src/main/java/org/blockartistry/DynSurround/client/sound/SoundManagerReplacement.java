@@ -35,6 +35,7 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ITickableSound;
@@ -71,7 +72,7 @@ public class SoundManagerReplacement extends SoundManager {
 	}
 
 	private final static float MUTE_VOLUME = 0.00001F;
-	
+
 	private SoundRegistry registry = null;
 
 	public SoundManagerReplacement(final SoundHandler handler, final GameSettings settings) {
@@ -174,16 +175,16 @@ public class SoundManagerReplacement extends SoundManager {
 			}
 		}
 	}
-	
+
 	public boolean isMuted() {
-		return ((SoundSystem)this.sndSystem).getMasterVolume() == MUTE_VOLUME;
+		return ((SoundSystem) this.sndSystem).getMasterVolume() == MUTE_VOLUME;
 	}
-	
+
 	public void setMuted(final boolean flag) {
 		// If not loaded return
-		if(!this.loaded)
+		if (!this.loaded)
 			return;
-		
+
 		final SoundSystem ss = (SoundSystem) this.sndSystem;
 
 		// OpenEye: Looks like the command thread is dead or not initialized.
