@@ -129,5 +129,10 @@ public abstract class Emitter {
 			SoundEngine.instance().stopSound(this.activeSound);
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return this.activeSound.toString();
+	}
 
 }

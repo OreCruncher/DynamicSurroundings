@@ -255,8 +255,8 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		builder.append("SoundSystem: ").append(soundCount).append('/').append(maxCount);
 		event.output.add(builder.toString());
 
-		for (final SoundEffect effect : this.emitters.keySet())
-			event.output.add("EMITTER: " + effect.toString() + "[vol:" + this.emitters.get(effect).getVolume() + "]");
+		for (final Emitter effect : this.emitters.values())
+			event.output.add("EMITTER: " + effect.toString());
 		for (final PendingSound effect : this.pending)
 			event.output.add((effect.getTickAge() < 0 ? "DELAYED: " : "PENDING: ") + effect.getSound().toString());
 	}
