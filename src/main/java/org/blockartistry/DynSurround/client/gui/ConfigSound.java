@@ -26,10 +26,11 @@ package org.blockartistry.DynSurround.client.gui;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.sound.BasicSound;
+
 import com.google.common.base.Objects;
 
 import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,7 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * regardless of how the config is set up.
  */
 @SideOnly(Side.CLIENT)
-public class ConfigSound extends PositionedSound {
+public class ConfigSound extends BasicSound<ConfigSound> {
 
 	public ConfigSound(@Nonnull final String soundResource, final float volume) {
 		super(new ResourceLocation(soundResource), SoundCategory.MASTER);

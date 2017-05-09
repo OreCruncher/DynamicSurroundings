@@ -29,9 +29,9 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.ThunderEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 
-import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -62,7 +62,7 @@ public class WeatherHandler extends EffectHandlerBase {
 		if (!ModOptions.allowBackgroundThunder)
 			return;
 
-		final ISound thunder = Sounds.THUNDER.createSound(event.location).setVolume(ModOptions.thunderVolume);
+		final BasicSound<?> thunder = Sounds.THUNDER.createSound(event.location).setVolume(ModOptions.thunderVolume);
 		SoundEffectHandler.INSTANCE.playSound(thunder);
 
 		if (event.doFlash)

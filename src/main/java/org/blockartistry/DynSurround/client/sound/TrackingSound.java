@@ -80,6 +80,10 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 	public void fade() {
 		this.isFading = true;
 	}
+	
+	public void unfade() {
+		this.isFading = false;
+	}
 
 	public boolean isFading() {
 		return this.isFading;

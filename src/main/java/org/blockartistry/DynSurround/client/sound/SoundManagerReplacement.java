@@ -182,9 +182,9 @@ public class SoundManagerReplacement extends SoundManager {
 
 	public void setMuted(final boolean flag) {
 		// If not loaded return
-		if(!this.loaded)
+		if (!this.loaded)
 			return;
-		
+
 		final SoundSystem ss = (SoundSystem) this.sndSystem;
 
 		// OpenEye: Looks like the command thread is dead or not initialized.
