@@ -25,13 +25,16 @@ package org.blockartistry.DynSurround.client.sound;
 
 import java.util.Random;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.SoundSystemConfig;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 
 /*
@@ -46,19 +49,32 @@ public abstract class Emitter {
 	protected final Random RANDOM = XorShiftRandom.current();
 
 	protected final SoundEffect effect;
+	@Nullable
+	protected final String title;
 	protected BasicSound<?> activeSound;
 
 	public Emitter(@Nonnull final SoundEffect sound) {
 		this.effect = sound;
+		this.title = StringUtils.isEmpty(sound.getSoundTitle()) ? null : sound.getSoundTitle();
 	}
 
 	protected abstract BasicSound<?> createSound();
+
+	protected void processTitle() {
+		if (this.title != null) {
+			if (!(this.isFading() || this.isDonePlaying())) {
+				Minecraft.getMinecraft().ingameGUI.setRecordPlaying(this.title, false);
+			}
+		}
+	}
 
 	public void update() {
 		// If the volume is turned off don't send
 		// down a sound.
 		if (SoundSystemConfig.getMasterGain() <= 0)
 			return;
+
+		processTitle();
 
 		// Allocate a new sound to send down if needed
 		if (this.activeSound == null) {
@@ -103,7 +119,7 @@ public abstract class Emitter {
 			this.activeSound.fade();
 		}
 	}
-	
+
 	public boolean isFading() {
 		if (this.activeSound != null) {
 			return this.activeSound.isFading();
@@ -129,7 +145,7 @@ public abstract class Emitter {
 			SoundEngine.instance().stopSound(this.activeSound);
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.activeSound.toString();

@@ -30,6 +30,8 @@ import com.google.gson.annotations.SerializedName;
 public class SoundConfig {
 	@SerializedName("sound")
 	public String sound = null;
+	@SerializedName("title")
+	public String title = null;
 	@SerializedName("conditions")
 	public String conditions = StringUtils.EMPTY;
 	@SerializedName("soundType")

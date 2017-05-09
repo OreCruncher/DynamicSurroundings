@@ -171,8 +171,10 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		final TObjectFloatIterator<SoundEffect> newSounds = sounds.iterator();
 		while (newSounds.hasNext()) {
 			newSounds.advance();
-			if (newSounds.value() > 0)
-				this.emitters.put(newSounds.key(), new PlayerEmitter(newSounds.key()));
+			if (newSounds.value() > 0) {
+				final SoundEffect effect = newSounds.key();
+				this.emitters.put(effect, new PlayerEmitter(effect));
+			}
 		}
 	}
 
