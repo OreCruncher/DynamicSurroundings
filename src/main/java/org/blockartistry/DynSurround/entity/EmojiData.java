@@ -25,40 +25,24 @@
 package org.blockartistry.DynSurround.entity;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.api.entity.ActionState;
 import org.blockartistry.DynSurround.api.entity.EmojiType;
 import org.blockartistry.DynSurround.api.entity.EmotionalState;
-import org.blockartistry.DynSurround.api.entity.EntityCapability;
+import org.blockartistry.DynSurround.network.Network;
 
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 
-public final class EmojiData implements ICapabilityProvider, IEmojiDataSettable {
+public final class EmojiData implements IEmojiDataSettable {
 
-	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(DSurround.MOD_ID, "entityEmojiData");
-
+	private final Entity entity;
 	private boolean isDirty = false;
 	private ActionState actionState = ActionState.NONE;
 	private EmotionalState emotionalState = EmotionalState.NEUTRAL;
 	private EmojiType emojiType = EmojiType.NONE;
 
-	@Override
-	public boolean hasCapability(@Nonnull final Capability<?> capability, @Nullable final EnumFacing facing) {
-		return capability == EntityCapability.EMOJI;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	@Nullable
-	public <T> T getCapability(@Nonnull final Capability<T> capability, @Nullable final EnumFacing facing) {
-		if (capability == EntityCapability.EMOJI)
-			return (T) this;
-		return null;
+	public EmojiData(@Nonnull final Entity entity) {
+		this.entity = entity;
 	}
 
 	@Override
@@ -67,7 +51,6 @@ public final class EmojiData implements ICapabilityProvider, IEmojiDataSettable 
 			this.actionState = state;
 			this.isDirty = true;
 		}
-
 	}
 
 	@Override
@@ -114,4 +97,20 @@ public final class EmojiData implements ICapabilityProvider, IEmojiDataSettable 
 		return this.emojiType;
 	}
 
+	@Override
+	public void sync() {
+		if (this.entity != null && !this.entity.worldObj.isRemote) {
+			Network.sendEntityEmoteUpdate(this.entity.getUniqueID(), this.getActionState(), this.getEmotionalState(),
+					this.getEmojiType(), this.entity.worldObj.provider.getDimension());
+			this.clearDirty();
+		}
+	}
+	
+	@Override
+	public void syncPlayer(@Nonnull final EntityPlayerMP player) {
+		if(this.entity != null && !this.entity.worldObj.isRemote) {
+			Network.sendEntityEmoteUpdateToPlayer(this.entity.getUniqueID(), this.getActionState(), this.getEmotionalState(),
+					this.getEmojiType(), player);
+		}
+	}
 }

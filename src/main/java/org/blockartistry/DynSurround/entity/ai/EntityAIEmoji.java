@@ -28,7 +28,6 @@ import org.blockartistry.DynSurround.api.entity.EmotionalState;
 import org.blockartistry.DynSurround.api.entity.EntityCapability;
 import org.blockartistry.DynSurround.entity.EmojiDataTables;
 import org.blockartistry.DynSurround.entity.IEmojiDataSettable;
-import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.lib.EntityUtils;
 
 import net.minecraft.entity.EntityLiving;
@@ -60,11 +59,8 @@ public class EntityAIEmoji extends EntityAIBase {
 		updateEmotionalState();
 		updateEmoji();
 
-		if (this.data.isDirty()) {
-			Network.sendEntityEmoteUpdate(this.subject.getPersistentID(), this.data.getActionState(),
-					this.data.getEmotionalState(), this.data.getEmojiType(), this.subject.worldObj.provider.getDimension());
-			this.data.clearDirty();
-		}
+		if(this.data.isDirty())
+			this.data.sync();
 	}
 
 	protected void updateActionState() {

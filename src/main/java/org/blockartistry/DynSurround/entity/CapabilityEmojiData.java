@@ -26,39 +26,97 @@ package org.blockartistry.DynSurround.entity;
 
 import java.util.concurrent.Callable;
 
-import org.blockartistry.DynSurround.api.entity.IEmojiData;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.api.entity.ActionState;
+import org.blockartistry.DynSurround.api.entity.EmojiType;
+import org.blockartistry.DynSurround.api.entity.EmotionalState;
+import org.blockartistry.DynSurround.api.entity.IEmojiData;
+import org.blockartistry.lib.capability.CapabilityProviderSerializable;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class CapabilityEmojiData {
-	
-	public static final class Storage implements Capability.IStorage<IEmojiData> {
 
-		@Override
-		public NBTBase writeNBT(Capability<IEmojiData> capability, IEmojiData instance, EnumFacing side) {
-			return null;
-		}
+	@CapabilityInject(IEmojiData.class)
+	public static final Capability<IEmojiData> EMOJI = null;
+	public static final EnumFacing DEFAULT_FACING = null;
+	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(DSurround.MOD_ID, "emojiData");
 
-		@Override
-		public void readNBT(Capability<IEmojiData> capability, IEmojiData instance, EnumFacing side, NBTBase nbt) {
-		}
-		
-	}
-	
-	public static final class Factory implements Callable<IEmojiData> {
-
-		@Override
-		public IEmojiData call() throws Exception {
-			return new EmojiData();
-		}
-		
-	}
-	
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IEmojiData.class, new Storage(), new Factory());
+		CapabilityManager.INSTANCE.register(IEmojiData.class, new Capability.IStorage<IEmojiData>() {
+			@Override
+			public NBTBase writeNBT(@Nonnull final Capability<IEmojiData> capability,
+					@Nonnull final IEmojiData instance, @Nullable final EnumFacing side) {
+				final NBTTagCompound nbt = new NBTTagCompound();
+				nbt.setInteger("as", instance.getActionState().ordinal());
+				nbt.setInteger("et", instance.getEmojiType().ordinal());
+				nbt.setInteger("es", instance.getEmotionalState().ordinal());
+				return nbt;
+			}
+
+			@Override
+			public void readNBT(@Nonnull final Capability<IEmojiData> capability, @Nonnull final IEmojiData instance,
+					@Nullable final EnumFacing side, @Nonnull final NBTBase nbt) {
+				final NBTTagCompound data = (NBTTagCompound) nbt;
+				final IEmojiDataSettable settable = (IEmojiDataSettable) instance;
+				settable.setActionState(ActionState.get(data.getInteger("as")));
+				settable.setEmojiType(EmojiType.get(data.getInteger("et")));
+				settable.setEmotionalState(EmotionalState.get(data.getInteger("es")));
+				settable.clearDirty();
+			}
+		}, new Callable<IEmojiData>() {
+			@Override
+			public IEmojiData call() throws Exception {
+				return new EmojiData(null);
+			}
+		});
+	}
+
+	@Nonnull
+	public static ICapabilityProvider createProvider(final IEmojiData data) {
+		return new CapabilityProviderSerializable<IEmojiData>(EMOJI, DEFAULT_FACING, data);
+	}
+
+	@Mod.EventBusSubscriber
+	private static class EventHandler {
+		@SubscribeEvent
+		public static void attachCapabilities(final AttachCapabilitiesEvent<Entity> event) {
+			if (event.getObject() instanceof EntityLivingBase) {
+				final EmojiData emojiData = new EmojiData(event.getObject());
+				event.addCapability(CAPABILITY_ID, createProvider(emojiData));
+			}
+		}
+
+		@SubscribeEvent(priority = EventPriority.LOWEST)
+		public static void playerJoinWorld(@Nonnull final EntityJoinWorldEvent event) {
+			if (event.getEntity() instanceof EntityPlayerMP) {
+				final EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
+				for (final Entity e : player.worldObj.loadedEntityList) {
+					final IEmojiDataSettable settable = (IEmojiDataSettable) e.getCapability(EMOJI, DEFAULT_FACING);
+					if (settable != null) {
+						settable.syncPlayer(player);
+					}
+				}
+			}
+		}
 	}
 
 }
