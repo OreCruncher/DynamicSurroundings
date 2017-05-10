@@ -27,6 +27,8 @@ package org.blockartistry.DynSurround.client.gui;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.sound.BasicSound;
+import org.blockartistry.DynSurround.registry.SoundMetadata;
+import org.blockartistry.DynSurround.registry.SoundRegistry;
 
 import com.google.common.base.Objects;
 
@@ -53,6 +55,10 @@ public class ConfigSound extends BasicSound<ConfigSound> {
 		this.repeat = false;
 		this.repeatDelay = 0;
 		this.attenuationType = ISound.AttenuationType.NONE;
+
+		final SoundMetadata data = SoundRegistry.getSoundMetadata(this.positionedSoundLocation);
+		if (data != null)
+			this.category = data.getCategory();
 	}
 
 	@Override
