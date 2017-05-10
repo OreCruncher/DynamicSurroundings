@@ -30,9 +30,12 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.DynSurround.registry.SoundMetadata;
+import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.lib.ForgeUtils;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
@@ -87,8 +90,31 @@ public class SoundConfigEntry extends NumberSliderEntry {
 		this.sliderHover = new HoverChecker(null, 800);
 
 		// Replace the slider tooltip with our own version
-		final String modName = TextFormatting.GREEN + ForgeUtils.getModName(new ResourceLocation(soundName));
-		this.toolTip = ImmutableList.of(modName, TextFormatting.GOLD + soundName);
+		final List<String> text = Lists.newArrayList();
+		final ResourceLocation soundResource = new ResourceLocation(soundName);
+		text.add(TextFormatting.GREEN + ForgeUtils.getModName(soundResource));
+		text.add(TextFormatting.GOLD + soundName);
+
+		final SoundMetadata data = SoundRegistry.getSoundMetadata(soundResource);
+		if (data != null) {
+			boolean spaceAdded = false;
+			final String title = data.getTitle();
+			if (!StringUtils.isEmpty(title)) {
+				spaceAdded = true;
+				text.add("");
+				text.add(TextFormatting.YELLOW + title);
+			}
+
+			final List<String> credits = data.getCredits();
+			if (credits != null && credits.size() > 0) {
+				if (!spaceAdded)
+					text.add("");
+				for (final String s : credits)
+					text.add(s);
+			}
+		}
+
+		this.toolTip = ImmutableList.copyOf(text);
 
 		this.realConfig = configElement;
 

@@ -1,6 +1,10 @@
 {
 	"fs.armor.light_walk": {
 		"category": "player",
+		"credits": [
+			"§aFoley",
+			"Samulis"
+		],
 		"sounds": [
 			"dsurround:footsteps/armor/light_1",
 			"dsurround:footsteps/armor/light_2",
@@ -9,6 +13,10 @@
 	},
 	"fs.armor.light_run": {
 		"category": "player",
+		"credits": [
+			"§aFoley",
+			"Samulis"
+		],
 		"sounds": [
 			"dsurround:footsteps/armor/light_1",
 			"dsurround:footsteps/armor/light_2",
@@ -17,6 +25,14 @@
 	},
 	"fs.armor.medium_walk": {
 		"category": "player",
+		"credits": [
+			"§aFoley",
+			"Samulis",
+			"",
+			"§achain drop",
+			"satanicupsman",
+			"Creative Commons 0"
+		],
 		"sounds": [
 			"dsurround:footsteps/armor/medium_walk1",
 			"dsurround:footsteps/armor/medium_walk2",
@@ -63,6 +79,11 @@
 	},
 	"fs.armor.heavy_walk": {
 		"category": "player",
+		"credits": [
+			"§aClanking Armor",
+			"LordSane",
+			"Attribution"
+		],
 		"sounds": [
 			"dsurround:footsteps/armor/heavy_walk1",
 			"dsurround:footsteps/armor/heavy_walk2",
@@ -74,6 +95,11 @@
 	},
 	"fs.armor.heavy_run": {
 		"category": "player",
+		"credits": [
+			"§aClanking Armor",
+			"LordSane",
+			"Attribution"
+		],
 		"sounds": [
 			"dsurround:footsteps/armor/heavy_run1",
 			"dsurround:footsteps/armor/heavy_run2",
@@ -812,6 +838,31 @@
 	},
 	"thunder": {
 		"category": "weather",
+		"credits": [
+			"§aThunder 1",
+			"Yoyodaman234",
+			"Creative Commons 0",
+			"",
+			"§aDonner1.wav",
+			"swuing",
+			"Attribution",
+			"",
+			"§aThunder - 1",
+			"bone666138",
+			"Attribution",
+			"",
+			"§aThunder - 2",
+			"bone666138",
+			"Attribution",
+			"",
+			"§aDistant Thunder.wav",
+			"sarson",
+			"Creative Commons 0",
+			"",
+			"§aNM-Mejor-Lado-Thunder-01.wav",
+			"aaronstar",
+			"Creative Commons 0"
+		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/weather/thunder1",
@@ -881,6 +932,11 @@
 	},
 	"wind": {
 		"category": "ambient",
+		"credits": [
+			"§aWind blowing into some cactus spine, on the top of the mountain, in the desert of Atacama (Chile).",
+			"felix.blume",
+			"Creative Commons 0"
+		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/wind",
@@ -890,6 +946,11 @@
 	},
 	"crickets": {
 		"category": "ambient",
+		"credits": [
+			"§aSoft, Chilled Crickets Field Recording",
+			"rayjensen",
+			"Creative Commons 0"
+		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/crickets",
@@ -899,6 +960,11 @@
 	},
 	"plains": {
 		"category": "ambient",
+		"credits": [
+			"§aCalm Morning Outdoor Ambience",
+			"blouhond",
+			"Attribution"
+		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/plains",
@@ -908,6 +974,11 @@
 	},
 	"forest": {
 		"category": "ambient",
+		"credits": [
+			"§a001_forrest.wav",
+			"joepsporck",
+			"Creative Commons 0"
+		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/forest",
@@ -917,6 +988,11 @@
 	},
 	"beach": {
 		"category": "ambient",
+		"credits": [
+			"§aFiji Beach (Stereo)128kbps.mp3",
+			"c97059890",
+			"Creative Commons 0"
+		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/beach",
@@ -926,6 +1002,11 @@
 	},
 	"river": {
 		"category": "ambient",
+		"credits": [
+			"§aunderwater ambience.wav",
+			"AlienXXX",
+			"Attribution"
+		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/river",
@@ -935,6 +1016,11 @@
 	},
 	"bog": {
 		"category": "ambient",
+		"credits": [
+			"§arbh Mpls Bog birds.wav",
+			"RHumphries",
+			"Attribution"
+		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/bog",
@@ -1007,6 +1093,11 @@
 	},
 	"crow": {
 		"category": "ambient",
+		"credits": [
+			"§aANML_M_Ext_Crow_Calls_Single1.wav",
+			"conleec",
+			"Creative Commons 0"
+		],
 		"sounds": [
 			"dsurround:ambient/birds/crow1",
 			"dsurround:ambient/birds/crow2",
@@ -1049,6 +1140,15 @@
 	},
 	"rockfall": {
 		"category": "ambient",
+		"credits": [
+			"§aRocks falling over rocks, over a steep hill, like a cliff.flac",
+			"gfrog",
+			"Creative Commons 0",
+			"",
+			"§aRocks.wav",
+			"adamgryu",
+			"Creative Commons 0"
+		],
 		"sounds": [
 			"dsurround:ambient/underground/smallslide1",
 			"dsurround:ambient/underground/smallslide2",
@@ -1057,6 +1157,15 @@
 	},
 	"bigrockfall": {
 		"category": "ambient",
+		"credits": [
+			"§aRockfall in mine.wav",
+			"Benboncan",
+			"Attribution",
+			"",
+			"§aRocks.wav",
+			"adamgryu",
+			"Creative Commons 0"
+		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/underground/bigslide1",
@@ -1087,6 +1196,11 @@
 	},
 	"waterdrips": {
 		"category": "ambient",
+		"credits": [
+			"§aDripping, Very Fast, A.wav",
+			"InspectorJ",
+			"Attribution"
+		],
 		"sounds": [
 			"dsurround:ambient/droplets/drop1",
 			"dsurround:ambient/droplets/drop2",
@@ -1109,6 +1223,11 @@
 	},
 	"coyote": {
 		"category": "ambient",
+		"credits": [
+			"§acoyote barks and howls",
+			"dkaufman",
+			"Creative Commons 0"
+		],
 		"sounds": [
 			"dsurround:ambient/coyote/coyote1",
 			"dsurround:ambient/coyote/coyote2",
@@ -1141,6 +1260,11 @@
 	},
 	"underdeepocean": {
 		"category": "ambient",
+		"credits": [
+			"§aunderwater ambience.wav",
+			"AlienXXX",
+			"Attribution"
+		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/underwater/deepocean",
@@ -1150,6 +1274,11 @@
 	},
 	"underocean": {
 		"category": "ambient",
+		"credits": [
+			"§aunderwater ambience.wav",
+			"AlienXXX",
+			"Attribution"
+		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/underwater/ocean",
@@ -1168,6 +1297,11 @@
 	},
 	"underwater": {
 		"category": "ambient",
+		"credits": [
+			"§aUnderwaterDrowning01.wav",
+			"Abolla",
+			"Creative Commons 0"
+		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/underwater/water",
@@ -1469,12 +1603,22 @@
 	},
 	"waterfall": {
 		"category": "ambient",
+		"credits": [
+			"§aRunning-water-mountain-stream.mp3",
+			"Alexander",
+			"Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)"
+		],
 		"sounds": [
 			"dsurround:ambient/stream/waterfall"
 		]
 	},
 	"village.rooster": {
 		"category": "ambient",
+		"credits": [
+			"§aVillage ambience rooster and light birds with wind .wav",
+			"Ramston",
+			"Creative Commons 0"
+		],
 		"sounds": [
 			"dsurround:ambient/village/rooster1",
 			"dsurround:ambient/village/rooster2",
@@ -1483,6 +1627,11 @@
 	},
 	"village.anvil": {
 		"category": "ambient",
+		"credits": [
+			"§aAnvil",
+			"MrAuralization",
+			"Attribution"
+		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/village/anvil1",
@@ -1504,6 +1653,11 @@
 	},
 	"village.dogbark": {
 		"category": "ambient",
+		"credits": [
+			"§aDogs Barking",
+			"darranambler",
+			"Creative Commons 0"
+		],
 		"sounds": [
 			"dsurround:ambient/village/dogbark1",
 			"dsurround:ambient/village/dogbark2",
@@ -1515,6 +1669,11 @@
 	},
 	"dimension.nether": {
 		"category": "ambient",
+		"credits": [
+			"§aCreepy Dungeon Ambience",
+			"DrMinky",
+			"Attribution"
+		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/dimension/nether",
@@ -1601,6 +1760,11 @@
 	},
 	"battle.normal": {
 		"category": "ambient",
+		"credits": [
+			"§aIntense Battle Loop.wav",
+			"furbyguy",
+			"Creative Commons 0"
+		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/battle/normal_battle",
@@ -1611,6 +1775,11 @@
 	},
 	"battle.dragon": {
 		"category": "ambient",
+		"title": "Defiance",
+		"credits": [
+			"Tanner Helland",
+			"Creative Commons Attribution-Share Alike 3.0"
+		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/battle/defiance",
@@ -1621,6 +1790,11 @@
 	},
 	"battle.wither": {
 		"category": "ambient",
+		"title": "Retribution",
+		"credits": [
+			"Tanner Helland",
+			"Creative Commons Attribution-Share Alike 3.0"
+		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/battle/retribution",
