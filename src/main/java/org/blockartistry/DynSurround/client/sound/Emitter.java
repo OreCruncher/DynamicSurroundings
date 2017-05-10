@@ -31,6 +31,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.registry.SoundMetadata;
+import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.lib.gui.RecordTitleEmitter;
 import org.blockartistry.lib.random.XorShiftRandom;
 
@@ -64,8 +66,25 @@ public abstract class Emitter {
 			}
 		};
 
-		this.titleEmitter = StringUtils.isEmpty(sound.getSoundTitle()) ? null
-				: new RecordTitleEmitter(sound.getSoundTitle(), timer);
+		if (StringUtils.isEmpty(sound.getSoundTitle())) {
+			final SoundMetadata data = SoundRegistry.getSoundMetadata(this.effect.getSound().getRegistryName());
+			if (data != null) {
+				if (!StringUtils.isEmpty(data.getTitle())) {
+					final StringBuilder builder = new StringBuilder();
+					builder.append(data.getTitle());
+					if (data.getCredits().size() > 0)
+						builder.append(" by ").append(data.getCredits().get(0));
+					this.titleEmitter = new RecordTitleEmitter(builder.toString(), timer);
+				} else {
+					this.titleEmitter = null;
+				}
+			} else {
+				this.titleEmitter = null;
+			}
+
+		} else {
+			this.titleEmitter = new RecordTitleEmitter(sound.getSoundTitle(), timer);
+		}
 	}
 
 	protected abstract BasicSound<?> createSound();

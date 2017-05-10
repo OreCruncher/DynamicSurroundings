@@ -438,12 +438,10 @@
 				},
 				{
 					"sound": "dsurround:battle.wither",
-					"title": "Retribution by Tanner Helland",
 					"conditions": "battle.isWither"
 				},
 				{
 					"sound": "dsurround:battle.dragon",
-					"title": "Defiance by Tanner Helland",
 					"conditions": "battle.isDragon"
 				}
 			]
