@@ -54,6 +54,10 @@ msg.RainTimeSet=§9Rain time set to %1$s
 msg.ThunderTimeSet=§9Thunder time set to %1$s
 msg.ThunderThresholdSet=§9Thunder threshold set to %1$s
 
+msg.Autorestart.notice=It looks like the sound system has crashed.
+msg.Autorestart.restart=Attempting to restart...
+msg.Autorestart.manual=Restart of client recommended.
+
 # Version checking strings
 msg.NewVersion.dsurround=["§6Update Available: §9[",{"text":"§2%1$s §ev%2$s§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Click for CurseForge Project Page","color":"aqua"}},"clickEvent":{"action":"open_url","value":"%3$s"}},"§9]"]
 
@@ -171,6 +175,8 @@ cfg.block.effects.Splash.tooltip=Enable/disable Water Splash effects when water 
 
 cfg.sound.cat.Sound=Sound Options
 cfg.sound.cat.Sound.tooltip=General options for defining sound effects
+cfg.sound.Autorestart=Auto-restart Sound System
+cfg.sound.Autorestart.tooltip=Enable auto-restart of crashed sound system
 cfg.sound.BiomeSounds=Biome Sounds
 cfg.sound.BiomeSounds.tooltip=Enable/disable biome background and spot sounds
 cfg.sound.MasterScale=Master Sound Scale Factor

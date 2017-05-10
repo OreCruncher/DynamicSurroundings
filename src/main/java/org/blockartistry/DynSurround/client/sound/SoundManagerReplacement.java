@@ -31,10 +31,12 @@ import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
+import org.blockartistry.lib.Localization;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
@@ -42,6 +44,7 @@ import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
@@ -72,25 +75,45 @@ public class SoundManagerReplacement extends SoundManager {
 	}
 
 	private final static float MUTE_VOLUME = 0.00001F;
-
+	private final static int CHECK_INTERVAL = 30 * 20; // 30 seconds
 	private SoundRegistry registry = null;
+	private int checkCount = 0;
+	private int nextCheck = 0;
 
 	public SoundManagerReplacement(final SoundHandler handler, final GameSettings settings) {
 		super(handler, settings);
 	}
 
 	private void keepAlive() {
-		if (streamThread == null)
+		if (!this.loaded || streamThread == null)
 			return;
+
+		// Don't want to spam attempts
+		if (++this.checkCount < this.nextCheck)
+			return;
+
+		this.nextCheck = this.checkCount + CHECK_INTERVAL;
 
 		try {
 			final Library l = (Library) soundLibrary.get(this.sndSystem);
 			final StreamThread t = (StreamThread) streamThread.get(l);
 			if (t != null && !t.isAlive()) {
-				if (EnvironState.getPlayer() != null)
-					EnvironState.getPlayer().sendMessage(new TextComponentString("Auto-restart of sound system!"));
-				DSurround.log().warn("Auto-restart of sound system!");
-				this.reloadSoundSystem();
+				final String msg1 = Localization.format("msg.Autorestart.notice");
+				final String msg2 = Localization.format(
+						ModOptions.enableSoundSystemAutorestart ? "msg.Autorestart.restart" : "msg.Autorestart.manual");
+				final String msg3 = Localization.format(Minecraft.getMinecraft().debug);
+
+				final EntityPlayer player = EnvironState.getPlayer();
+				if (player != null) {
+					player.sendMessage(new TextComponentString(msg1));
+					player.sendMessage(new TextComponentString(msg2));
+					player.sendMessage(new TextComponentString(msg3));
+				}
+				DSurround.log().warn(msg1);
+				DSurround.log().warn(msg2);
+				DSurround.log().warn(msg3);
+				if (ModOptions.enableSoundSystemAutorestart)
+					this.reloadSoundSystem();
 			}
 		} catch (final Throwable t) {
 			;
