@@ -1613,7 +1613,7 @@
 		"category": "ambient",
 		"sounds": [
 			{
-				"name": "dsurround:ambient/battle/Defiance",
+				"name": "dsurround:ambient/battle/defiance",
 				"volume": 0.35,
 				"stream": true
 			}
@@ -1623,7 +1623,7 @@
 		"category": "ambient",
 		"sounds": [
 			{
-				"name": "dsurround:ambient/battle/Retribution",
+				"name": "dsurround:ambient/battle/retribution",
 				"volume": 0.35,
 				"stream": true
 			}
