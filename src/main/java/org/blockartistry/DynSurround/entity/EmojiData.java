@@ -24,6 +24,8 @@
 
 package org.blockartistry.DynSurround.entity;
 
+import java.util.UUID;
+
 import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.api.entity.ActionState;
 import org.blockartistry.DynSurround.api.entity.EmojiType;
@@ -35,6 +37,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 public final class EmojiData implements IEmojiDataSettable {
 
+	public static UUID NO_ENTITY = new UUID(0, 0);
+
 	private final Entity entity;
 	private boolean isDirty = false;
 	private ActionState actionState = ActionState.NONE;
@@ -43,6 +47,11 @@ public final class EmojiData implements IEmojiDataSettable {
 
 	public EmojiData(@Nonnull final Entity entity) {
 		this.entity = entity;
+	}
+
+	@Override
+	public UUID getEntityUuid() {
+		return this.entity != null ? this.entity.getUniqueID() : NO_ENTITY;
 	}
 
 	@Override
@@ -100,8 +109,7 @@ public final class EmojiData implements IEmojiDataSettable {
 	@Override
 	public void sync() {
 		if (this.entity != null && !this.entity.world.isRemote) {
-			Network.sendEntityEmoteUpdate(this.entity.getEntityId(), this.getActionState(), this.getEmotionalState(),
-					this.getEmojiType(), this.entity.world.provider.getDimension());
+			Network.sendEntityEmoteUpdate(this, this.entity.world.provider.getDimension());
 			this.clearDirty();
 		}
 	}
@@ -109,8 +117,7 @@ public final class EmojiData implements IEmojiDataSettable {
 	@Override
 	public void syncPlayer(@Nonnull final EntityPlayerMP player) {
 		if (this.entity != null && !this.entity.world.isRemote) {
-			Network.sendEntityEmoteUpdateToPlayer(this.entity.getEntityId(), this.getActionState(),
-					this.getEmotionalState(), this.getEmojiType(), player);
+			Network.sendEntityEmoteUpdateToPlayer(this, player);
 		}
 	}
 }

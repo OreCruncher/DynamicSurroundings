@@ -29,9 +29,8 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.api.entity.ActionState;
-import org.blockartistry.DynSurround.api.entity.EmojiType;
-import org.blockartistry.DynSurround.api.entity.EmotionalState;
+import org.blockartistry.DynSurround.api.entity.IEmojiData;
+
 import gnu.trove.map.hash.TIntDoubleHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -105,15 +104,13 @@ public final class Network {
 		NETWORK.sendToAllAround(new PacketSpeechBubble(playerId, message, translate), point);
 	}
 
-	public static void sendEntityEmoteUpdate(final int id, @Nonnull final ActionState action,
-			@Nonnull final EmotionalState emotion, @Nonnull final EmojiType type, final int dimensionId) {
-		NETWORK.sendToDimension(new PacketEntityEmote(id, action, emotion, type), dimensionId);
+	public static void sendEntityEmoteUpdate(@Nonnull final IEmojiData data, final int dimensionId) {
+		NETWORK.sendToDimension(new PacketEntityEmote(data), dimensionId);
 	}
 
-	public static void sendEntityEmoteUpdateToPlayer(final int id, @Nonnull final ActionState action,
-			@Nonnull final EmotionalState emotion, @Nonnull final EmojiType type,
+	public static void sendEntityEmoteUpdateToPlayer(@Nonnull final IEmojiData data,
 			@Nonnull final EntityPlayerMP player) {
-		NETWORK.sendTo(new PacketEntityEmote(id, action, emotion, type), player);
+		NETWORK.sendTo(new PacketEntityEmote(data), player);
 	}
 
 	public static void sendThunder(final int dimensionId, final boolean doFlash, final float x, final float y,

@@ -24,12 +24,15 @@
 
 package org.blockartistry.DynSurround.network;
 
+import java.util.UUID;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.api.entity.ActionState;
 import org.blockartistry.DynSurround.api.entity.EmojiType;
 import org.blockartistry.DynSurround.api.entity.EmotionalState;
+import org.blockartistry.DynSurround.api.entity.IEmojiData;
 import org.blockartistry.DynSurround.api.events.EntityEmojiEvent;
 
 import io.netty.buffer.ByteBuf;
@@ -49,26 +52,27 @@ public class PacketEntityEmote implements IMessage {
 		}
 	}
 
-	private int entityId;
-	private ActionState actionState;
-	private EmotionalState emotionalState;
-	private EmojiType emojiType;
+	private UUID entityId;
+	private ActionState actionState = ActionState.NONE;
+	private EmotionalState emotionalState = EmotionalState.NEUTRAL;
+	private EmojiType emojiType = EmojiType.NONE;
 
 	public PacketEntityEmote() {
 
 	}
 
-	public PacketEntityEmote(final int entityId, @Nonnull final ActionState action,
-			@Nonnull final EmotionalState emotion, @Nonnull final EmojiType emojiType) {
-		this.entityId = entityId;
-		this.actionState = action;
-		this.emotionalState = emotion;
-		this.emojiType = emojiType;
+	public PacketEntityEmote(@Nonnull final IEmojiData data) {
+		this.entityId = data.getEntityUuid();
+		this.actionState = data.getActionState();
+		this.emotionalState = data.getEmotionalState();
+		this.emojiType = data.getEmojiType();
 	}
 
 	@Override
 	public void fromBytes(@Nonnull final ByteBuf buf) {
-		this.entityId = buf.readInt();
+		final long msb = buf.readLong();
+		final long lsb = buf.readLong();
+		this.entityId = new UUID(msb, lsb);
 		this.actionState = ActionState.get(buf.readByte());
 		this.emotionalState = EmotionalState.get(buf.readByte());
 		this.emojiType = EmojiType.get(buf.readByte());
@@ -76,7 +80,8 @@ public class PacketEntityEmote implements IMessage {
 
 	@Override
 	public void toBytes(@Nonnull final ByteBuf buf) {
-		buf.writeInt(this.entityId);
+		buf.writeLong(this.entityId.getMostSignificantBits());
+		buf.writeLong(this.entityId.getLeastSignificantBits());
 		buf.writeByte(ActionState.getId(this.actionState));
 		buf.writeByte(EmotionalState.getId(this.emotionalState));
 		buf.writeByte(EmojiType.getId(this.emojiType));
