@@ -42,12 +42,13 @@ public class RecordTitleEmitter implements ITickable {
 	// the record name is set.
 	private static final int VANILLA_DISPLAY_TIME = 60;
 
+	// Default amount of ticks to display the title
 	private static final int DEFAULT_DISPLAY_TIME = 200;
 
 	protected final Minecraft mc = Minecraft.getMinecraft();
 	protected final String title;
 	protected final ITimeKeeper time;
-	protected final int expiry;
+	protected int expiry;
 
 	public RecordTitleEmitter(@Nonnull final String title, @Nonnull final ITimeKeeper time) {
 		this(title, time, DEFAULT_DISPLAY_TIME);
@@ -63,6 +64,11 @@ public class RecordTitleEmitter implements ITickable {
 	public void update() {
 		if (this.time.getTickMark() <= this.expiry) {
 			this.mc.ingameGUI.setRecordPlaying(this.title, false);
+		} else {
+			// Depending on ticking there could be some lag where the timer
+			// expires, unexpires, and expires again.  Setting to 0 makes
+			// sure it stays expires when it does.
+			this.expiry = 0;
 		}
 	}
 }
