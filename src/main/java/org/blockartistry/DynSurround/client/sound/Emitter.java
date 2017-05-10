@@ -30,11 +30,12 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.lib.gui.RecordTitleEmitter;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.SoundSystemConfig;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 
 /*
@@ -50,23 +51,24 @@ public abstract class Emitter {
 
 	protected final SoundEffect effect;
 	@Nullable
-	protected final String title;
+	protected final RecordTitleEmitter titleEmitter;
 	protected BasicSound<?> activeSound;
 
 	public Emitter(@Nonnull final SoundEffect sound) {
 		this.effect = sound;
-		this.title = StringUtils.isEmpty(sound.getSoundTitle()) ? null : sound.getSoundTitle();
+
+		final RecordTitleEmitter.ITimeKeeper timer = new RecordTitleEmitter.ITimeKeeper() {
+			@Override
+			public int getTickMark() {
+				return EnvironState.getTickCounter();
+			}
+		};
+
+		this.titleEmitter = StringUtils.isEmpty(sound.getSoundTitle()) ? null
+				: new RecordTitleEmitter(sound.getSoundTitle(), timer);
 	}
 
 	protected abstract BasicSound<?> createSound();
-
-	protected void processTitle() {
-		if (this.title != null) {
-			if (!(this.isFading() || this.isDonePlaying())) {
-				Minecraft.getMinecraft().ingameGUI.setOverlayMessage(this.title, false);
-			}
-		}
-	}
 
 	public void update() {
 		// If the volume is turned off don't send
@@ -74,7 +76,8 @@ public abstract class Emitter {
 		if (SoundSystemConfig.getMasterGain() <= 0)
 			return;
 
-		processTitle();
+		if (this.titleEmitter != null)
+			this.titleEmitter.update();
 
 		// Allocate a new sound to send down if needed
 		if (this.activeSound == null) {
