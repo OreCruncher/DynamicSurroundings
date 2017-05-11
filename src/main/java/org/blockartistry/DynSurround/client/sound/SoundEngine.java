@@ -131,9 +131,9 @@ public class SoundEngine {
 			return null;
 		}
 
-		if(!StringUtils.isEmpty(sound.getId()))
+		if (!StringUtils.isEmpty(sound.getId()))
 			this.manager.stopSound(sound);
-		
+
 		sound.setId(StringUtils.EMPTY);
 		this.manager.playSound(sound);
 
@@ -170,8 +170,9 @@ public class SoundEngine {
 	@SubscribeEvent
 	public void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
 		final ISound sound = event.getSound();
-		if (sound instanceof BasicSound<?>)
+		if (sound instanceof BasicSound<?>) {
 			((BasicSound<?>) sound).setId(event.getUuid());
+		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
