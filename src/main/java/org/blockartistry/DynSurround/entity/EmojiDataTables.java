@@ -87,7 +87,7 @@ public final class EmojiDataTables {
 		add(EntityAIFollowOwner.class, ActionState.FOLLOWING);
 		add(EntityAIFollowParent.class, ActionState.FOLLOWING);
 		add(EntityAIHarvestFarmland.class, ActionState.FARMING);
-		add(EntityAIHurtByTarget.class, ActionState.NONE);
+		add(EntityAIHurtByTarget.class, ActionState.ANGRY);
 		add(EntityAILeapAtTarget.class, ActionState.ATTACKING);
 		add(EntityAILookAtTradePlayer.class, ActionState.LOOKING);
 		add(EntityAILookAtVillager.class, ActionState.LOOKING);
@@ -133,13 +133,14 @@ public final class EmojiDataTables {
 		registerSpecial(EntitySlime.class, "AISlimeAttack", ActionState.ATTACKING);
 		registerSpecial(EntitySlime.class, "AISlimeHop", ActionState.MOVING);
 		registerSpecial(EntitySpider.class, "AISpiderAttack", ActionState.ATTACKING);
-		registerSpecial(EntityRabbit.class, "AIAvoidEntity", ActionState.PANIC);
+		registerSpecial(EntityRabbit.class, "AIAvoidEntity", ActionState.CRAZY);
 		registerSpecial(EntityRabbit.class, "AIRaidFarm", ActionState.EATING);
 
 		// Mappings to figure out an applicable EmojiType to display
 		emojiMap.put(emojiIdx(ActionState.ATTACKING, null), EmojiType.ATTACK);
 		emojiMap.put(emojiIdx(ActionState.EXPLODE, null), EmojiType.ANGRY);
 		emojiMap.put(emojiIdx(ActionState.PANIC, null), EmojiType.FLEE);
+		emojiMap.put(emojiIdx(ActionState.CRAZY, null), EmojiType.FLEE);
 		emojiMap.put(emojiIdx(ActionState.LOOKING, null), EmojiType.WATCH);
 		emojiMap.put(emojiIdx(null, EmotionalState.HAPPY), EmojiType.HAPPY);
 		emojiMap.put(emojiIdx(null, EmotionalState.SAD), EmojiType.SAD);

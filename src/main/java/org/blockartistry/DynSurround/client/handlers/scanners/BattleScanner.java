@@ -121,7 +121,7 @@ public class BattleScanner implements ITickable {
 				final IEmojiData emoji = e.getCapability(CapabilityEmojiData.EMOJI, null);
 				if (emoji != null) {
 					final ActionState state = emoji.getActionState();
-					if (state == ActionState.ATTACKING || state == ActionState.PANIC)
+					if (state == ActionState.ATTACKING)
 						inBattle = true;
 				}
 			}
