@@ -34,6 +34,8 @@ import org.blockartistry.DynSurround.api.entity.ActionState;
 import org.blockartistry.DynSurround.api.entity.EmojiType;
 import org.blockartistry.DynSurround.api.entity.EmotionalState;
 import org.blockartistry.DynSurround.api.entity.IEmojiData;
+import org.blockartistry.DynSurround.network.Network;
+import org.blockartistry.DynSurround.network.PacketEntityEmote;
 import org.blockartistry.lib.capability.CapabilityProviderSerializable;
 
 import net.minecraft.entity.Entity;
@@ -48,9 +50,8 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class CapabilityEmojiData {
@@ -97,6 +98,10 @@ public class CapabilityEmojiData {
 
 	@Mod.EventBusSubscriber
 	private static class EventHandler {
+		
+		/*
+		 * Attach the capability to the Entity when it is created.
+		 */
 		@SubscribeEvent
 		public static void attachCapabilities(final AttachCapabilitiesEvent<Entity> event) {
 			if (event.getObject() instanceof EntityLivingBase) {
@@ -105,16 +110,15 @@ public class CapabilityEmojiData {
 			}
 		}
 
-		@SubscribeEvent(priority = EventPriority.LOWEST)
-		public static void playerJoinWorld(@Nonnull final EntityJoinWorldEvent event) {
-			if (event.getEntity() instanceof EntityPlayerMP) {
-				final EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
-				for (final Entity e : player.worldObj.loadedEntityList) {
-					final IEmojiDataSettable settable = (IEmojiDataSettable) e.getCapability(EMOJI, DEFAULT_FACING);
-					if (settable != null) {
-						settable.syncPlayer(player);
-					}
-				}
+		/*
+		 * Event generated when a player starts tracking an Entity. Need to send
+		 * an initial sync to the player.
+		 */
+		@SubscribeEvent
+		public static void trackingEvent(@Nonnull final PlayerEvent.StartTracking event) {
+			final IEmojiData data = event.getTarget().getCapability(EMOJI, DEFAULT_FACING);
+			if (data != null) {
+				Network.sendToPlayer((EntityPlayerMP) event.getEntityPlayer(), new PacketEntityEmote(data));
 			}
 		}
 	}

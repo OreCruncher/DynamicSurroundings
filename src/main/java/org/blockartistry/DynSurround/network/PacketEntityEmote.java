@@ -24,8 +24,6 @@
 
 package org.blockartistry.DynSurround.network;
 
-import java.util.UUID;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -52,7 +50,7 @@ public class PacketEntityEmote implements IMessage {
 		}
 	}
 
-	private UUID entityId;
+	private int entityId;
 	private ActionState actionState = ActionState.NONE;
 	private EmotionalState emotionalState = EmotionalState.NEUTRAL;
 	private EmojiType emojiType = EmojiType.NONE;
@@ -62,7 +60,7 @@ public class PacketEntityEmote implements IMessage {
 	}
 
 	public PacketEntityEmote(@Nonnull final IEmojiData data) {
-		this.entityId = data.getEntityUuid();
+		this.entityId = data.getEntityId();
 		this.actionState = data.getActionState();
 		this.emotionalState = data.getEmotionalState();
 		this.emojiType = data.getEmojiType();
@@ -70,9 +68,7 @@ public class PacketEntityEmote implements IMessage {
 
 	@Override
 	public void fromBytes(@Nonnull final ByteBuf buf) {
-		final long msb = buf.readLong();
-		final long lsb = buf.readLong();
-		this.entityId = new UUID(msb, lsb);
+		this.entityId = buf.readInt();
 		this.actionState = ActionState.get(buf.readByte());
 		this.emotionalState = EmotionalState.get(buf.readByte());
 		this.emojiType = EmojiType.get(buf.readByte());
@@ -80,8 +76,7 @@ public class PacketEntityEmote implements IMessage {
 
 	@Override
 	public void toBytes(@Nonnull final ByteBuf buf) {
-		buf.writeLong(this.entityId.getMostSignificantBits());
-		buf.writeLong(this.entityId.getLeastSignificantBits());
+		buf.writeInt(this.entityId);
 		buf.writeByte(ActionState.getId(this.actionState));
 		buf.writeByte(EmotionalState.getId(this.emotionalState));
 		buf.writeByte(EmojiType.getId(this.emojiType));

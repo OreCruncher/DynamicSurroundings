@@ -70,15 +70,14 @@ public class Proxy {
 
 	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		registerLanguage();
+		
+		CapabilityEmojiData.register();
 	}
 
 	public void init(@Nonnull final FMLInitializationEvent event) {
 		ModEnvironment.initialize();
 
 		Network.initialize();
-		
-		// Capabilities
-		CapabilityEmojiData.register();
 	}
 
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {

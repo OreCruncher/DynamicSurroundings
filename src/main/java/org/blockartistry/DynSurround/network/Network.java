@@ -37,10 +37,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -87,7 +89,18 @@ public final class Network {
 			}
 		});
 	}
+	
+	// Basic packet routines
+	public static void sendToPlayer(@Nonnull final EntityPlayerMP player, @Nonnull final IMessage msg) {
+		NETWORK.sendTo(msg, player);
+	}
+	
+	public static void sendToEntityViewers(@Nonnull final Entity entity, @Nonnull final IMessage msg) {
+		((WorldServer) entity.getEntityWorld()).getEntityTracker().sendToTrackingAndSelf(entity,
+				NETWORK.getPacketFrom(msg));
+	}
 
+	// Specific packet routines
 	public static void sendWeatherUpdate(final int dimension, final float intensity, final float maxIntensity,
 			final int nextRainChange, final float thunderStrength, final int thunderChange, final int thunderEvent) {
 		NETWORK.sendToDimension(new PacketWeatherUpdate(dimension, intensity, maxIntensity, nextRainChange,
@@ -104,8 +117,8 @@ public final class Network {
 		NETWORK.sendToAllAround(new PacketSpeechBubble(playerId, message, translate), point);
 	}
 
-	public static void sendEntityEmoteUpdate(@Nonnull final IEmojiData data, final int dimensionId) {
-		NETWORK.sendToDimension(new PacketEntityEmote(data), dimensionId);
+	public static void sendEntityEmoteUpdate(@Nonnull final Entity entity, @Nonnull final IEmojiData data) {
+		sendToEntityViewers(entity, new PacketEntityEmote(data));
 	}
 
 	public static void sendEntityEmoteUpdateToPlayer(@Nonnull final IEmojiData data,

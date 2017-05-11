@@ -25,9 +25,9 @@
 package org.blockartistry.DynSurround.client.handlers.scanners;
 
 import org.blockartistry.DynSurround.api.entity.ActionState;
-import org.blockartistry.DynSurround.api.entity.EntityCapability;
 import org.blockartistry.DynSurround.api.entity.IEmojiData;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.entity.CapabilityEmojiData;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
@@ -118,7 +118,7 @@ public class BattleScanner implements ITickable {
 			} else {
 				// Use emoji data to determine if the mob is attacking or in a
 				// panic state.
-				final IEmojiData emoji = e.getCapability(EntityCapability.EMOJI, null);
+				final IEmojiData emoji = e.getCapability(CapabilityEmojiData.EMOJI, null);
 				if (emoji != null) {
 					final ActionState state = emoji.getActionState();
 					if (state == ActionState.ATTACKING || state == ActionState.PANIC)
