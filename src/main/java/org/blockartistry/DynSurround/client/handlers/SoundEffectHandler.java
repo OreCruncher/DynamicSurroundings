@@ -33,6 +33,7 @@ import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
@@ -150,9 +151,10 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		while (itr.hasNext()) {
 			final Entry<SoundEffect, Emitter> e = itr.next();
 			final Emitter emitter = e.getValue();
-			if (emitter.isDonePlaying())
+			if (emitter.isDonePlaying()) {
+				DSurround.log().debug("Removing emitter: %s", emitter.toString());
 				itr.remove();
-			else if (sounds.contains(e.getKey())) {
+			} else if (sounds.contains(e.getKey())) {
 				emitter.setVolumeThrottle(sounds.get(e.getKey()));
 				if (emitter.isFading())
 					emitter.unfade();

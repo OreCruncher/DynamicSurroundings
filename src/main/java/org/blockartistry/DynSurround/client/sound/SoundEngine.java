@@ -170,8 +170,9 @@ public class SoundEngine {
 	@SubscribeEvent
 	public void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
 		final ISound sound = event.getSound();
-		if (sound instanceof BasicSound<?>)
+		if (sound instanceof BasicSound<?>) {
 			((BasicSound<?>) sound).setId(event.getUuid());
+		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)

@@ -55,6 +55,7 @@ public abstract class Emitter {
 	@Nullable
 	protected final RecordTitleEmitter titleEmitter;
 	protected BasicSound<?> activeSound;
+	protected boolean done = false;
 
 	public Emitter(@Nonnull final SoundEffect sound) {
 		this.effect = sound;
@@ -102,6 +103,14 @@ public abstract class Emitter {
 		if (this.activeSound == null) {
 			this.activeSound = createSound();
 		} else if (SoundEffectHandler.INSTANCE.isSoundPlaying(this.activeSound)) {
+			return;
+		} else if (this.isFading()) {
+			// If we get here the sound is no longer playing and is in the
+			// fading
+			// state. This is possible because the actual sound volume down in
+			// the engine could have hit 0 but the tick handler on the sound
+			// did not have a chance to get there first.
+			this.done = true;
 			return;
 		}
 
@@ -158,8 +167,8 @@ public abstract class Emitter {
 
 	public boolean isDonePlaying() {
 		if (this.activeSound != null)
-			return this.activeSound.isDonePlaying();
-		return false;
+			return this.done || this.activeSound.isDonePlaying();
+		return this.done;
 	}
 
 	public void stop() {

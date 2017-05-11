@@ -36,8 +36,8 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class TrackingSound extends BasicSound<TrackingSound> implements ITickableSound {
 
-	private static final float DONE_VOLUME_THRESHOLD = 0.001F;
-	private static final float FADE_AMOUNT = 0.015F;
+	private static final float DONE_VOLUME_THRESHOLD = 0.00001F;
+	private static final float FADE_AMOUNT = 0.02F;
 	
 	private final EntityLivingBase attachedTo;
 	private final SoundEffect sound;
