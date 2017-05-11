@@ -55,7 +55,7 @@ public enum EmotionalState {
 	public static EmotionalState get(int id) {
 		final EmotionalState[] v = EmotionalState.values();
 		if (id > v.length || id < 0)
-			return null;
+			return NEUTRAL;
 		return v[id];
 	}
 

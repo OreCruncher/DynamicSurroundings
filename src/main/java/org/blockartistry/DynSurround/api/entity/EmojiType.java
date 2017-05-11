@@ -75,7 +75,7 @@ public enum EmojiType {
 	public static EmojiType get(int id) {
 		final EmojiType[] v = EmojiType.values();
 		if (id > v.length || id < 0)
-			return null;
+			return NONE;
 		return v[id];
 	}
 
