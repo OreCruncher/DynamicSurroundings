@@ -24,6 +24,8 @@
 
 package org.blockartistry.DynSurround.client.fx.particle;
 
+import java.lang.ref.WeakReference;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
@@ -38,6 +40,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -57,10 +60,11 @@ public class ParticleEmoji extends ParticleBase {
 	// the particle is dismissed.
 	private static final int HOLD_TICK_COUNT = 40;
 
-	private final Entity subject;
+	private final WeakReference<Entity> subject;
 	private final IEmojiData emoji;
 	private ResourceLocation activeTexture;
 
+	private boolean shouldRender;
 	private int holdTicks;
 	private float period;
 	private float radius;
@@ -78,7 +82,7 @@ public class ParticleEmoji extends ParticleBase {
 		this.motionX = 0.0D;
 		this.motionY = 0.0D;
 		this.motionZ = 0.0D;
-		this.subject = entity;
+		this.subject = new WeakReference<Entity>(entity);
 
 		this.particleAlpha = 0.99F;
 		this.radius = (entity.width / 2.0F) + 0.25F;
@@ -89,17 +93,11 @@ public class ParticleEmoji extends ParticleBase {
 	}
 
 	public boolean shouldExpire() {
-		if (!this.isAlive())
+		if (!this.isAlive() || this.subject.isEnqueued())
 			return true;
 
-		if (this.subject == null || !this.subject.isEntityAlive())
-			return true;
-
-		if (this.subject.isInvisibleToPlayer(EnvironState.getPlayer()))
-			return true;
-
-		final double rangeSq = ModOptions.speechBubbleRange * ModOptions.speechBubbleRange;
-		if (this.subject.getDistanceSqToCenter(EnvironState.getPlayerPosition()) > rangeSq)
+		final Entity entity = this.subject.get();
+		if (!entity.isEntityAlive() || entity.isInvisibleToPlayer(EnvironState.getPlayer()))
 			return true;
 
 		return this.emoji == null;
@@ -115,8 +113,9 @@ public class ParticleEmoji extends ParticleBase {
 			this.prevPosY = this.posY;
 			this.prevPosZ = this.posZ;
 
-			final double newY = this.subject.posY + this.subject.height - (this.subject.isSneaking() ? 0.25D : 0);
-			this.setPosition(this.subject.posX, newY, this.subject.posZ);
+			final Entity entity = this.subject.get();
+			final double newY = entity.posY + entity.height - (entity.isSneaking() ? 0.25D : 0);
+			this.setPosition(entity.posX, newY, entity.posZ);
 
 			// Calculate the current period values
 			this.period = MathStuff.wrapDegrees(this.period + ORBITAL_TICK);
@@ -136,6 +135,17 @@ public class ParticleEmoji extends ParticleBase {
 			this.activeTexture = this.emoji.getEmojiType().getResource();
 
 		}
+
+		this.shouldRender = shouldRender();
+	}
+
+	protected boolean shouldRender() {
+		if (this.activeTexture == null || this.isExpired)
+			return false;
+
+		final EntityPlayer player = EnvironState.getPlayer();
+		final double distSq = ModOptions.speechBubbleRange * ModOptions.speechBubbleRange;
+		return player.getDistanceSq(this.posX, this.posY, this.posZ) <= distSq;
 	}
 
 	// Good resource:
@@ -145,7 +155,7 @@ public class ParticleEmoji extends ParticleBase {
 			final float edgeLRdirectionX, final float edgeUDdirectionY, final float edgeLRdirectionZ,
 			final float edgeUDdirectionX, final float edgeUDdirectionZ) {
 
-		if (this.activeTexture == null)
+		if (!this.shouldRender)
 			return;
 
 		bindTexture(this.activeTexture);
@@ -202,7 +212,7 @@ public class ParticleEmoji extends ParticleBase {
 		// final int FULL_BRIGHTNESS_VALUE = 0xf000f0;
 		// return FULL_BRIGHTNESS_VALUE;
 
-		return this.subject.getBrightnessForRender(partialTick);
+		return this.subject.get().getBrightnessForRender(partialTick);
 
 		// if you want the brightness to be the local illumination (from block
 		// light and sky light) you can just use

@@ -24,14 +24,11 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.entity.EmojiType;
 import org.blockartistry.DynSurround.api.entity.EntityCapability;
-import org.blockartistry.DynSurround.api.entity.IEmojiData;
 import org.blockartistry.DynSurround.api.events.EntityEmojiEvent;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleEmoji;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
@@ -39,13 +36,10 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.entity.IEmojiDataSettable;
 import org.blockartistry.lib.WorldUtils;
 
-import com.google.common.base.Predicate;
-
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -76,29 +70,6 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 					data.remove();
 			}
 		}
-		
-		if(!ModOptions.enableEntityEmojis)
-			return;
-		
-		// Spawn any new ones
-		final BlockPos pos = EnvironState.getPlayerPosition();
-		final double rangeSq = ModOptions.speechBubbleRange * ModOptions.speechBubbleRange;
-		final Predicate<Entity> needFilter = new Predicate<Entity>() {
-			@Override
-			public boolean apply(@Nonnull final Entity input) {
-				return input.isEntityAlive() && input.getDistanceSq(pos) <= rangeSq && !EntityEmojiHandler.this.emojiParticles.contains(input.getEntityId());
-			}
-		};
-		
-		final List<Entity> newOnes = world.getEntities(Entity.class, needFilter);
-		for(final Entity e: newOnes) {
-			final IEmojiData emoji = e.getCapability(EntityCapability.EMOJI, null);
-			if(emoji != null && emoji.getEmojiType() != EmojiType.NONE) {
-				final ParticleEmoji p = new ParticleEmoji(e);
-				this.emojiParticles.put(e.getEntityId(), p);
-				ParticleHelper.addParticle(p);
-			}
-		}
 
 	}
 
@@ -110,6 +81,13 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 			data.setActionState(event.actionState);
 			data.setEmotionalState(event.emotionalState);
 			data.setEmojiType(event.emojiType);
+
+			if (ModOptions.enableEntityEmojis && entity.isEntityAlive() && data.getEmojiType() != EmojiType.NONE
+					&& !this.emojiParticles.contains(event.entityId)) {
+				final ParticleEmoji p = new ParticleEmoji(entity);
+				this.emojiParticles.put(event.entityId, p);
+				ParticleHelper.addParticle(p);
+			}
 		}
 	}
 
