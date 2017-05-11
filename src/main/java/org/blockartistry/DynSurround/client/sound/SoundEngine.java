@@ -224,12 +224,4 @@ public class SoundEngine {
 		SoundSystemConfig.setNumberStreamingChannels(streamChannelCount);
 	}
 
-	private static class AdhocSound extends BasicSound<AdhocSound> {
-
-		public AdhocSound(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
-			super(event, cat);
-		}
-
-	}
-
 }
