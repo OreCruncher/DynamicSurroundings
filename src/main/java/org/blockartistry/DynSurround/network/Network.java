@@ -24,19 +24,12 @@
 
 package org.blockartistry.DynSurround.network;
 
-import java.util.UUID;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.api.entity.IEmojiData;
-
-import gnu.trove.map.hash.TIntDoubleHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -89,54 +82,27 @@ public final class Network {
 			}
 		});
 	}
-	
+
 	// Basic packet routines
 	public static void sendToPlayer(@Nonnull final EntityPlayerMP player, @Nonnull final IMessage msg) {
 		NETWORK.sendTo(msg, player);
 	}
-	
+
 	public static void sendToEntityViewers(@Nonnull final Entity entity, @Nonnull final IMessage msg) {
 		((WorldServer) entity.getEntityWorld()).getEntityTracker().sendToTrackingAndSelf(entity,
 				NETWORK.getPacketFrom(msg));
 	}
 
-	// Specific packet routines
-	public static void sendWeatherUpdate(final int dimension, final float intensity, final float maxIntensity,
-			final int nextRainChange, final float thunderStrength, final int thunderChange, final int thunderEvent) {
-		NETWORK.sendToDimension(new PacketWeatherUpdate(dimension, intensity, maxIntensity, nextRainChange,
-				thunderStrength, thunderChange, thunderEvent), dimension);
+	public static void sendToDimension(final int dimensionId, @Nonnull final IMessage msg) {
+		NETWORK.sendToDimension(msg, dimensionId);
 	}
 
-	public static void sendHealthUpdate(@Nonnull final UUID id, final float x, final float y, final float z,
-			final boolean isCritical, final int amount, @Nonnull final TargetPoint point) {
-		NETWORK.sendToAllAround(new PacketHealthChange(id, x, y, z, isCritical, amount), point);
+	public static void sendToAll(@Nonnull final IMessage msg) {
+		NETWORK.sendToAll(msg);
 	}
 
-	public static void sendChatBubbleUpdate(@Nonnull final UUID playerId, @Nonnull final String message,
-			final boolean translate, @Nonnull final TargetPoint point) {
-		NETWORK.sendToAllAround(new PacketSpeechBubble(playerId, message, translate), point);
+	public static void sendToAllAround(@Nonnull final TargetPoint point, @Nonnull final IMessage msg) {
+		NETWORK.sendToAllAround(msg, point);
 	}
 
-	public static void sendEntityEmoteUpdate(@Nonnull final Entity entity, @Nonnull final IEmojiData data) {
-		sendToEntityViewers(entity, new PacketEntityEmote(data));
-	}
-
-	public static void sendEntityEmoteUpdateToPlayer(@Nonnull final IEmojiData data,
-			@Nonnull final EntityPlayerMP player) {
-		NETWORK.sendTo(new PacketEntityEmote(data), player);
-	}
-
-	public static void sendThunder(final int dimensionId, final boolean doFlash, final float x, final float y,
-			final float z) {
-		NETWORK.sendToDimension(new PacketThunder(dimensionId, doFlash, new BlockPos(x, y, z)), dimensionId);
-	}
-
-	public static void sendEnvironmentUpdate(final EntityPlayer player, final boolean inVillage) {
-		NETWORK.sendTo(new PacketEnvironment(inVillage), (EntityPlayerMP) player);
-	}
-
-	public static void sendServerDataUpdate(@Nonnull final TIntDoubleHashMap dimTps, final double meanTps,
-			final int freeMemory, final int totalMemory, final int maxMemory) {
-		NETWORK.sendToAll(new PacketServerData(dimTps, meanTps, freeMemory, totalMemory, maxMemory));
-	}
 }

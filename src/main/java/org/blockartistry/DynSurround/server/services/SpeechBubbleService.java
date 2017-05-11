@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.network.Network;
+import org.blockartistry.DynSurround.network.PacketSpeechBubble;
 
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -39,15 +40,17 @@ public final class SpeechBubbleService extends Service {
 	SpeechBubbleService() {
 		super("SpeechBubbleService");
 	}
-	
+
 	// Received when the server is processing a regular chat
 	// message - not a command, etc.
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onChatMessageEvent(@Nonnull final ServerChatEvent event) {
-		if(!ModOptions.enableSpeechBubbles)
+		if (!ModOptions.enableSpeechBubbles)
 			return;
-		
+
 		final TargetPoint point = Network.getTargetPoint(event.getPlayer(), ModOptions.speechBubbleRange);
-		Network.sendChatBubbleUpdate(event.getPlayer().getUniqueID(), event.getMessage(), false, point);
+		final PacketSpeechBubble packet = new PacketSpeechBubble(event.getPlayer().getUniqueID(), event.getMessage(),
+				false);
+		Network.sendToAllAround(point, packet);
 	}
 }

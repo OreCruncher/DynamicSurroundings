@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.network.Network;
+import org.blockartistry.DynSurround.network.PacketServerData;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
@@ -137,6 +138,7 @@ public final class ServiceManager extends Service {
 		final int max = (int) (Runtime.getRuntime().maxMemory() / 1024L / 1024L);
 		final int free = (int) (Runtime.getRuntime().freeMemory() / 1024L / 1024L);
 
-		Network.sendServerDataUpdate(map, meanTickTime, free, total, max);
+		final PacketServerData packet = new PacketServerData(map, meanTickTime, free, total, max);
+		Network.sendToAll(packet);
 	}
 }
