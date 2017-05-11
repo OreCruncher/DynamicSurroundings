@@ -25,7 +25,7 @@
 package org.blockartistry.DynSurround.entity.ai;
 
 import org.blockartistry.DynSurround.api.entity.EmotionalState;
-import org.blockartistry.DynSurround.api.entity.EntityCapability;
+import org.blockartistry.DynSurround.entity.CapabilityEmojiData;
 import org.blockartistry.DynSurround.entity.EmojiDataTables;
 import org.blockartistry.DynSurround.entity.IEmojiDataSettable;
 import org.blockartistry.lib.EntityUtils;
@@ -42,7 +42,6 @@ public class EntityAIEmoji extends EntityAIBase {
 
 	public EntityAIEmoji(final EntityLiving subject) {
 		this.subject = subject;
-		this.data = (IEmojiDataSettable) subject.getCapability(EntityCapability.EMOJI, null);
 	}
 
 	@Override
@@ -56,6 +55,11 @@ public class EntityAIEmoji extends EntityAIBase {
 
 	@Override
 	public void updateTask() {
+
+		if (this.data == null)
+			this.data = (IEmojiDataSettable) subject.getCapability(CapabilityEmojiData.EMOJI,
+					CapabilityEmojiData.DEFAULT_FACING);
+
 		updateActionState();
 		updateEmotionalState();
 		updateEmoji();

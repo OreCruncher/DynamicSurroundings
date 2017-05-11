@@ -96,7 +96,7 @@ public class CapabilityEmojiData {
 		return new CapabilityProviderSerializable<IEmojiData>(EMOJI, DEFAULT_FACING, data);
 	}
 
-	@Mod.EventBusSubscriber
+	@Mod.EventBusSubscriber(modid = DSurround.MOD_ID)
 	private static class EventHandler {
 		
 		/*
