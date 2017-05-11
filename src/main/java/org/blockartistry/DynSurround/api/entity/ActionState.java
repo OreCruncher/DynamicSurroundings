@@ -90,7 +90,7 @@ public enum ActionState {
 	public static ActionState get(int id) {
 		final ActionState[] v = ActionState.values();
 		if (id > v.length || id < 0)
-			return null;
+			return NONE;
 		return v[id];
 	}
 
