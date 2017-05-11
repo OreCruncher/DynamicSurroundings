@@ -42,8 +42,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod.EventBusSubscriber(Side.CLIENT)
 public final class HumDinger {
 
-	private static final String[] possibles = { "entity.experience_orb.pickup", "entity.player.levelup",
-			"entity.villager.yes", "entity.chicken.egg" };
+	private static final String[] possibles = { "entity.experience_orb.pickup", "entity.chicken.egg" };
 
 	private static boolean hasPlayed = false;
 
