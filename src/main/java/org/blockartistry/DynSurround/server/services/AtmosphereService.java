@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.server.services;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -41,6 +42,8 @@ import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.data.DimensionEffectData;
 import org.blockartistry.DynSurround.network.Network;
+import org.blockartistry.DynSurround.network.PacketThunder;
+import org.blockartistry.DynSurround.network.PacketWeatherUpdate;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
@@ -82,10 +85,8 @@ public final class AtmosphereService extends Service {
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void tickEvent(@Nonnull final TickEvent.WorldTickEvent event) {
 
-		if (!ModOptions.enableWeatherASM || ModEnvironment.Weather2.isLoaded())
-			return;
-
-		if (event.side != Side.SERVER || event.phase == Phase.START)
+		if (event.side != Side.SERVER || event.phase == Phase.START || !ModOptions.enableWeatherASM
+				|| ModEnvironment.Weather2.isLoaded())
 			return;
 
 		final World world = event.world;
@@ -175,8 +176,9 @@ public final class AtmosphereService extends Service {
 					final EntityPlayer player = PlayerUtils.getRandomPlayer(world);
 					final float theY = this.dimensions.getSkyHeight(world);
 					if (player != null) {
-						Network.sendThunder(data.getDimensionId(), doFlash(data.getCurrentRainIntensity()),
-								(float) player.posX, (float) theY, (float) player.posZ);
+						final PacketThunder packet = new PacketThunder(data.getDimensionId(),
+								doFlash(data.getCurrentRainIntensity()), new BlockPos(player.posX, theY, player.posZ));
+						Network.sendToDimension(data.getDimensionId(), packet);
 					}
 				}
 				// set new time
@@ -190,9 +192,10 @@ public final class AtmosphereService extends Service {
 		}
 
 		// Send the weather update to all players in the dimension.
-		Network.sendWeatherUpdate(data.getDimensionId(), data.getCurrentRainIntensity(), data.getRainIntensity(),
-				info.getRainTime(), world.getThunderStrength(1.0F), info.getThunderTime(), data.getThunderTimer());
-
+		final PacketWeatherUpdate packet = new PacketWeatherUpdate(data.getDimensionId(),
+				data.getCurrentRainIntensity(), data.getRainIntensity(), info.getRainTime(),
+				world.getThunderStrength(1.0F), info.getThunderTime(), data.getThunderTimer());
+		Network.sendToDimension(data.getDimensionId(), packet);
 	}
 
 }

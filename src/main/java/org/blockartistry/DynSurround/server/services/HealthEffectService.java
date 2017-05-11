@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.network.Network;
+import org.blockartistry.DynSurround.network.PacketHealthChange;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -60,9 +61,9 @@ public final class HealthEffectService extends Service {
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onLivingHurt(@Nonnull final LivingHurtEvent event) {
-		if(!ModOptions.enableDamagePopoffs)
+		if (!ModOptions.enableDamagePopoffs)
 			return;
-		
+
 		if (event == null || event.getEntity() == null || event.getEntity().world == null
 				|| event.getEntity().world.isRemote)
 			return;
@@ -89,14 +90,14 @@ public final class HealthEffectService extends Service {
 
 		final Entity entity = event.getEntityLiving();
 		final TargetPoint point = Network.getTargetPoint(entity, RANGE);
-		Network.sendHealthUpdate(entity.getUniqueID(), (float) entity.posX,
-				(float) entity.posY + (entity.height / 2.0F), (float) entity.posZ, isCrit, (int) event.getAmount(),
-				point);
+		final PacketHealthChange packet = new PacketHealthChange(entity.getUniqueID(), (float) entity.posX,
+				(float) entity.posY + (entity.height / 2.0F), (float) entity.posZ, isCrit, (int) event.getAmount());
+		Network.sendToAllAround(point, packet);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onLivingHeal(@Nonnull final LivingHealEvent event) {
-		if(!ModOptions.enableDamagePopoffs)
+		if (!ModOptions.enableDamagePopoffs)
 			return;
 
 		if (event == null || event.getEntity() == null || event.getEntity().world == null
@@ -110,9 +111,9 @@ public final class HealthEffectService extends Service {
 
 		final Entity entity = event.getEntityLiving();
 		final TargetPoint point = Network.getTargetPoint(entity, RANGE);
-		Network.sendHealthUpdate(entity.getUniqueID(), (float) entity.posX,
-				(float) entity.posY + (entity.height / 2.0F), (float) entity.posZ, false, -(int) event.getAmount(),
-				point);
+		final PacketHealthChange packet = new PacketHealthChange(entity.getUniqueID(), (float) entity.posX,
+				(float) entity.posY + (entity.height / 2.0F), (float) entity.posZ, false, -(int) event.getAmount());
+		Network.sendToAllAround(point, packet);
 	}
 
 }

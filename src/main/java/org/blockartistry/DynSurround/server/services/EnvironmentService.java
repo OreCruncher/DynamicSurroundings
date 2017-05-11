@@ -29,10 +29,12 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.network.Network;
+import org.blockartistry.DynSurround.network.PacketEnvironment;
 import org.blockartistry.lib.MyUtils;
 
 import com.google.common.base.Predicate;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.village.Village;
 import net.minecraft.village.VillageCollection;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -46,6 +48,7 @@ public final class EnvironmentService extends Service {
 		super("EnvironmentService");
 	}
 
+	// TODO: PlayerTick event?
 	@SubscribeEvent
 	public void tickEvent(@Nonnull final TickEvent.WorldTickEvent event) {
 		if (event.phase != Phase.END || event.side != Side.SERVER)
@@ -63,7 +66,8 @@ public final class EnvironmentService extends Service {
 				}
 			});
 
-			Network.sendEnvironmentUpdate(player, inVillage);
+			final PacketEnvironment packet = new PacketEnvironment(inVillage);
+			Network.sendToPlayer((EntityPlayerMP) player, packet);
 		}
 	}
 

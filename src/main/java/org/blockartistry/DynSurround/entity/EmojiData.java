@@ -29,6 +29,8 @@ import org.blockartistry.DynSurround.api.entity.ActionState;
 import org.blockartistry.DynSurround.api.entity.EmojiType;
 import org.blockartistry.DynSurround.api.entity.EmotionalState;
 import org.blockartistry.DynSurround.network.Network;
+import org.blockartistry.DynSurround.network.PacketEntityEmote;
+
 import net.minecraft.entity.Entity;
 
 public final class EmojiData implements IEmojiDataSettable {
@@ -105,7 +107,7 @@ public final class EmojiData implements IEmojiDataSettable {
 	@Override
 	public void sync() {
 		if (this.entity != null && !this.entity.world.isRemote) {
-			Network.sendEntityEmoteUpdate(this.entity, this);
+			Network.sendToEntityViewers(this.entity, new PacketEntityEmote(this));
 			this.clearDirty();
 		}
 	}
