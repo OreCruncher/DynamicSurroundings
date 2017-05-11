@@ -162,7 +162,7 @@ public class SoundEngine {
 		sound.setVolume(volume).setPitch(pitch).setPosition(pos);
 		return this.playSound(sound);
 	}
-
+	
 	/**
 	 * This event hook attempts to associate the internal UUID of the sound play
 	 * event with a sound.
@@ -222,14 +222,6 @@ public class SoundEngine {
 				streamChannelCount, totalChannels == -1 ? "UNKNOWN" : Integer.toString(totalChannels));
 		SoundSystemConfig.setNumberNormalChannels(normalChannelCount);
 		SoundSystemConfig.setNumberStreamingChannels(streamChannelCount);
-	}
-
-	private static class AdhocSound extends BasicSound<AdhocSound> {
-
-		public AdhocSound(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
-			super(event, cat);
-		}
-
 	}
 
 }
