@@ -1,5 +1,5 @@
 ### Dynamic Surroundings
-Forge 1.11.x mod that improves the audio and visual experience of Minecraft.  Same feature set as the 1.10.x version.
+Forge mod that improves the audio and visual experience of Minecraft.
 
 <a href="https://minecraft.curseforge.com/projects/dynamic-surroundings"><img src="http://cf.way2muchnoise.eu/versions/dynamic-surroundings.svg" alt="CurseForge Project"/></a>
 </br></br>
@@ -63,22 +63,10 @@ whether LPs can be monetized on the various streaming services.
      <li>S: <a href="https://www.freesound.org/people/adamgryu/sounds/336023/">Rocks.wav</a> by <a href="https://www.freesound.org/people/adamgryu/">adamgryu</a> | License: Creative Commons 0</li>
 </ul>
 
-*dsurround:bowpull*
-
-<ul>
-     <li>S: <a href="https://www.freesound.org/people/cmusounddesign/sounds/119878/">BC arrow shoot.wav</a> by <a href="https://www.freesound.org/people/cmusounddesign/">cmusounddesign</a> | License: Attribution</li> 
-</ul>
-
 *dsurround:crickets*
 
 <ul>
      <li>S: <a href="https://www.freesound.org/people/rayjensen/sounds/202749/">Soft, Chilled Crickets Field Recording</a> by <a href="https://www.freesound.org/people/rayjensen/">rayjensen</a> | License: Creative Commons 0</li>
-</ul>
-
-*dsurround:swoosh*
-
-<ul>
-     <li>S: <a href="https://www.freesound.org/people/yutface/sounds/257015/">Swing Whoosh.wav</a> by <a href="https://www.freesound.org/people/yutface/">yutface</a> | License: Creative Commons 0</li>
 </ul>
 
 *dsurround:thunder*
@@ -116,7 +104,7 @@ whether LPs can be monetized on the various streaming services.
 <li> <a href="http://www.nexusmods.com/skyrim/mods/24352/?">Clanking Armor</a> by LordSane | See permissions in link</li>
 </ul>
 
-*dsurround:river / dsurround:ocean / dsurround:deepocean*
+*dsurround:underriver / dsurround:underocean / dsurround:underdeepocean*
 
 <ul>
      <li>S: <a href="https://www.freesound.org/people/AlienXXX/sounds/218276/">underwater ambience.wav</a> by <a href="https://www.freesound.org/people/AlienXXX/">AlienXXX</a> | License: Attribution</li> 
@@ -139,7 +127,7 @@ whether LPs can be monetized on the various streaming services.
 <ul>
      <li>P: <a href="https://www.freesound.org/people/Samulis/packs/12606/">Foley</a> by <a href="https://www.freesound.org/people/Samulis/">Samulis</a></li>
      <li>S: <a href="https://www.freesound.org/people/satanicupsman/sounds/147589/">chain drop</a> by <a href="https://www.freesound.org/people/satanicupsman/">satanicupsman</a> | License: Creative Commons 0</li></ul>
-     
+
 *dsurround:coyote*
 
 <ul>
@@ -182,6 +170,7 @@ whether LPs can be monetized on the various streaming services.
      <li>S: <a href="https://www.freesound.org/people/DrMinky/sounds/166187/">Creepy Dungeon Ambience</a> by <a href="https://www.freesound.org/people/DrMinky/">DrMinky</a> | License: Attribution</li> 
 </ul>
 
+
 *dsurround:crow*
 
 <ul>
@@ -192,4 +181,22 @@ whether LPs can be monetized on the various streaming services.
 
 <ul>
      <li>S: <a href="https://www.freesound.org/people/RHumphries/sounds/1050/">rbh Mpls Bog birds.wav</a> by <a href="https://www.freesound.org/people/RHumphries/">RHumphries</a> | License: Attribution</li> 
+</ul>
+
+*dsurround:battle.normal*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/furbyguy/sounds/331869/">Intense Battle Loop.wav</a> by <a href="https://www.freesound.org/people/furbyguy/">furbyguy</a> | License: Creative Commons 0</li> 
+</ul>
+
+*dsurround:battle.dragon*
+
+<ul>
+     <li>S: <a href="http://www.tannerhelland.com/">Defiance.ogg</a> by <a href="http://www.tannerhelland.com/">Tanner Helland</a> | License:<a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0</a></li> 
+</ul>
+
+*dsurround:battle.wither*
+
+<ul>
+     <li>S: <a href="http://www.tannerhelland.com/">Retribution.ogg</a> by <a href="http://www.tannerhelland.com/">Tanner Helland</a> | License: <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0</a></li> 
 </ul>
