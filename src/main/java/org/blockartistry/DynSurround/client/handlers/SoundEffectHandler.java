@@ -137,6 +137,9 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	}
 
 	public void clearSounds() {
+		for(final Emitter e: this.emitters.values()) {
+			e.stop();
+		}
 		this.emitters.clear();
 		this.pending.clear();
 		SoundEngine.instance().stopAllSounds();
