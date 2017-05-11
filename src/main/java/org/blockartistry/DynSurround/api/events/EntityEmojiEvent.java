@@ -24,8 +24,6 @@
 
 package org.blockartistry.DynSurround.api.events;
 
-import java.util.UUID;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.api.entity.ActionState;
@@ -43,7 +41,7 @@ public class EntityEmojiEvent extends Event {
 	/**
 	 * Persistent ID of the entity this event is associated with.
 	 */
-	public final UUID entityId;
+	public final int entityId;
 
 	/**
 	 * New ActionState of the Entity.
@@ -66,7 +64,7 @@ public class EntityEmojiEvent extends Event {
 	 */
 	public final EmojiType emojiType;
 
-	public EntityEmojiEvent(@Nonnull final UUID id, @Nonnull final ActionState action, @Nonnull final EmotionalState emotion,
+	public EntityEmojiEvent(@Nonnull final int id, @Nonnull final ActionState action, @Nonnull final EmotionalState emotion,
 			@Nonnull final EmojiType emojiType) {
 		this.entityId = id;
 		this.actionState = action;

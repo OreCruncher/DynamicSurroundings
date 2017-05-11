@@ -24,8 +24,6 @@
 
 package org.blockartistry.DynSurround.api.entity;
 
-import java.util.UUID;
-
 import javax.annotation.Nonnull;
 
 public interface IEmojiData {
@@ -33,10 +31,9 @@ public interface IEmojiData {
 	/**
 	 * The unique ID of the entity this data is associated.
 	 * 
-	 * @return UUID of the associated entity
+	 * @return id of the associated entity
 	 */
-	@Nonnull
-	UUID getEntityUuid();
+	int getEntityId();
 	
 	/**
 	 * The current ActionState of the entity
