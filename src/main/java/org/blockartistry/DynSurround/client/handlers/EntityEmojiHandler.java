@@ -30,8 +30,8 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.entity.EmojiType;
 import org.blockartistry.DynSurround.api.entity.EntityCapability;
 import org.blockartistry.DynSurround.api.events.EntityEmojiEvent;
-import org.blockartistry.DynSurround.client.fx.particle.ParticleEmoji;
-import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
+import org.blockartistry.DynSurround.client.fx.ParticleCollections;
+import org.blockartistry.DynSurround.client.fx.particle.mote.IParticleMote;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.entity.IEmojiDataSettable;
 import org.blockartistry.lib.WorldUtils;
@@ -48,7 +48,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityEmojiHandler extends EffectHandlerBase {
 
-	private final TIntObjectHashMap<ParticleEmoji> emojiParticles = new TIntObjectHashMap<ParticleEmoji>();
+	private final TIntObjectHashMap<IParticleMote> emojiParticles = new TIntObjectHashMap<IParticleMote>();
 
 	public EntityEmojiHandler() {
 	}
@@ -63,10 +63,10 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 
 		if (this.emojiParticles.size() > 0) {
 			// Get rid of dead particles
-			final TIntObjectIterator<ParticleEmoji> data = this.emojiParticles.iterator();
+			final TIntObjectIterator<IParticleMote> data = this.emojiParticles.iterator();
 			while (data.hasNext()) {
 				data.advance();
-				if (data.value().shouldExpire())
+				if (!data.value().isAlive())
 					data.remove();
 			}
 		}
@@ -84,9 +84,8 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 
 			if (ModOptions.enableEntityEmojis && entity.isEntityAlive() && data.getEmojiType() != EmojiType.NONE
 					&& !this.emojiParticles.contains(event.entityId)) {
-				final ParticleEmoji p = new ParticleEmoji(entity);
-				this.emojiParticles.put(event.entityId, p);
-				ParticleHelper.addParticle(p);
+				final IParticleMote mote = ParticleCollections.addEmoji(entity);
+				this.emojiParticles.put(event.entityId, mote);
 			}
 		}
 	}

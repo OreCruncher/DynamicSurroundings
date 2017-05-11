@@ -27,49 +27,34 @@ package org.blockartistry.DynSurround.api.entity;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.DSurround;
-
-import net.minecraft.util.ResourceLocation;
-
 public enum EmojiType {
 
 	/** No emoji will be displayed */
-	NONE("none"),
+	NONE,
 	/** The attack emoji will be displayed */
-	ATTACK("emoji_attack"),
+	ATTACK,
 	/** The flee emoji will be displayed */
-	FLEE("emoji_flee"),
+	FLEE,
 	/** The happy emoji will be displayed */
-	HAPPY("emoji_happy"),
+	HAPPY,
 	/** The sad emoji will be displayed */
-	SAD("emoji_sad"),
+	SAD,
 	/** The sick emoji will be displayed */
-	SICK("emoji_sick"),
+	SICK,
 	/** The hurt emoji will be displayed */
-	HURT("emoji_hurt"),
+	HURT,
 	/** The watch emoji will be displayed */
-	WATCH("emoji_watch"),
+	WATCH,
 	/** The farm farm will be displayed */
-	FARM("emoji_farm"),
+	FARM,
 	/** The work emoji will be displayed */
-	WORK("emoji_work"),
+	WORK,
 	/** The trade emoji will be displayed */
-	TRADE("emoji_trade"),
+	TRADE,
 	/** The angry emoji will be displayed */
-	ANGRY("emoji_angry"),
+	ANGRY,
 	/** The eat emoji will be displayed */
-	EAT("emoji_eat");
-
-	private final ResourceLocation resource;
-
-	private EmojiType(@Nonnull final String texture) {
-		this.resource = new ResourceLocation(DSurround.RESOURCE_ID, "textures/particles/" + texture + ".png");
-	}
-
-	@Nonnull
-	public ResourceLocation getResource() {
-		return this.resource;
-	}
+	EAT;
 
 	@Nullable
 	public static EmojiType get(int id) {
@@ -78,9 +63,9 @@ public enum EmojiType {
 			return NONE;
 		return v[id];
 	}
-
-	public static int getId(@Nonnull final EmojiType state) {
-		return state.ordinal();
+	
+	public static int getId(@Nonnull final EmojiType type) {
+		return type.ordinal();
 	}
 
 }
