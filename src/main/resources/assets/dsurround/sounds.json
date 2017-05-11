@@ -1773,6 +1773,21 @@
 			}
 		]
 	},
+	"battle.miniboss": {
+		"category": "ambient",
+		"credits": [
+			"§adetermined_persuit_loop.wav",
+			"Emma_MA",
+			"Creative Commons 0"
+		],
+		"sounds": [
+			{
+				"name": "dsurround:ambient/battle/miniboss_battle",
+				"volume": 0.35,
+				"stream": true
+			}
+		]
+	},
 	"battle.dragon": {
 		"category": "ambient",
 		"title": "Defiance",

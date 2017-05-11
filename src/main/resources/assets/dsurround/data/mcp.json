@@ -430,11 +430,15 @@
 		},
 		{
 			"conditions": "biome.name == 'BattleMusic'",
-			"_comment": "Basic Battle Music",
+			"_comment": "Dynamic Surroundings Battle Music",
 			"sounds": [
 				{
 					"sound": "dsurround:battle.normal",
-					"conditions": "battle.inBattle  && !(battle.isWither || battle.isDragon)"
+					"conditions": "battle.inBattle && !(battle.isWither || battle.isDragon)"
+				},
+				{
+					"sound": "dsurround:battle.miniboss",
+					"conditions": "battle.isBoss && !(battle.isWither || battle.isDragon)"
 				},
 				{
 					"sound": "dsurround:battle.wither",
