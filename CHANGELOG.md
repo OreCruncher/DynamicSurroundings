@@ -1,3 +1,28 @@
+###DynamicSurroundings-1.10.2-3.4.2.0
+**What's New**
+* Remember [Battle Music](http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1291283-battle-music-v1-5-12-july-make-your-battles-epic)?  Dynamic Surroundings has it's own version!  Currently it is disabled by default and can be turned on under Sound Options.
+    * It's WIP - looking for the right sounds.  Suggestions for tracks appreciated.  (Need mini-boss track.)
+    * 3 tracks - generic battle as well as Wither and Dragon
+    * Uses internal data from emojis; deploy mod on the server for better effect
+    * If not installed on a server BattleMusic will only play for bosses
+    * Turn down the master music volume slider to have a better experience (Vanilla music is too loud IMO)
+    * [Rules can be set](https://github.com/OreCruncher/DynamicSurroundings/wiki/Tutorial:-Condition-Strings) for the "BattleMusic" fake biome in the configuration so that pack authors can provide their own music
+* Option to disable the auto-restart of a crashed sound system.  You will still get chat messages indicating that the sound system has crashed and client should be restarted.
+* Tooltip for sounds in the Individual Sound Configuration dialog will now display attribution information if applicable.  (I get a lot of sounds from www.freesound.org.)
+    
+**Fixes**
+* Handle situation where the Biome registry becomes inconsistant with the Biome.PLAINS identity value (mod compatibility)
+
+**Changes**
+* Refactored mcp.json (the main configuration file for Dynamic Surroundings):
+    * Coyote, Owl, Woodpecker, and Crow sounds are available in more biomes
+* Auroras render in a different location:
+    * Render at chunk view distance; has to be at least 6 to render
+    * Render across the "background" behind terrain
+    * Band base is at sea level and scales higher the larger the client chunk view distance
+    * Aurora options that no longer apply have been removed
+    * Main purpose of the change is to give them more of a borealis feel and become a sky painting rather than a "hey, look, a couple of colored bands in the sky". 
+
 ###DynamicSurroundings-1.10.2-3.4.1.0
 **What's New**
 * Aurora spawn is now 100% client side!  This means auroras will display in polar biomes even though a server may not have Dynamic Surroundings installed.
