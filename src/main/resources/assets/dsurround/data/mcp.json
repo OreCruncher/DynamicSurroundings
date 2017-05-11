@@ -434,7 +434,7 @@
 			"sounds": [
 				{
 					"sound": "dsurround:battle.normal",
-					"conditions": "battle.inBattle && !(battle.isWither || battle.isDragon)"
+					"conditions": "battle.inBattle && !battle.isBoss"
 				},
 				{
 					"sound": "dsurround:battle.miniboss",
