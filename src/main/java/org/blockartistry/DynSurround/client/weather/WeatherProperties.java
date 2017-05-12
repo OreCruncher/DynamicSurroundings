@@ -28,14 +28,15 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.api.events.WeatherUpdateEvent;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.data.DimensionEffectData;
 import org.blockartistry.lib.SoundUtils;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
@@ -85,12 +86,16 @@ public enum WeatherProperties {
 		this.dustSound = SoundUtils.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "dust"));
 	}
 
+	private static World getWorld() {
+		return Minecraft.getMinecraft().world;
+	}
+	
 	public static boolean isRaining() {
 		return getIntensityLevel() > 0F;
 	}
 
 	public static boolean isThundering() {
-		return EnvironState.getWorld().isThundering();
+		return getWorld().isThundering();
 	}
 
 	@Nonnull
@@ -99,7 +104,7 @@ public enum WeatherProperties {
 	}
 
 	public static float getIntensityLevel() {
-		return serverSideSupport ? intensityLevel : EnvironState.getWorld().getRainStrength(1.0F);
+		return serverSideSupport ? intensityLevel : getWorld().getRainStrength(1.0F);
 	}
 
 	public static float getMaxIntensityLevel() {
@@ -107,15 +112,15 @@ public enum WeatherProperties {
 	}
 
 	public static int getNextRainChange() {
-		return serverSideSupport ? nextRainChange : EnvironState.getWorld().getWorldInfo().getRainTime();
+		return serverSideSupport ? nextRainChange : getWorld().getWorldInfo().getRainTime();
 	}
 
 	public static float getThunderStrength() {
-		return serverSideSupport ? thunderStrength : EnvironState.getWorld().getThunderStrength(1.0F);
+		return serverSideSupport ? thunderStrength : getWorld().getThunderStrength(1.0F);
 	}
 
 	public static int getNextThunderChange() {
-		return serverSideSupport ? nextThunderChange : EnvironState.getWorld().getWorldInfo().getThunderTime();
+		return serverSideSupport ? nextThunderChange : getWorld().getWorldInfo().getThunderTime();
 	}
 
 	public static int getNextThunderEvent() {
@@ -219,7 +224,7 @@ public enum WeatherProperties {
 	@SubscribeEvent
 	public static void onWeatherUpdateEvent(@Nonnull final WeatherUpdateEvent event) {
 		serverSideSupport = true;
-		if (EnvironState.getDimensionId() != event.world.provider.getDimension())
+		if (getWorld().provider.getDimension() != event.world.provider.getDimension())
 			return;
 		setMaximumIntensity(event.maxRainIntensity);
 		setCurrentIntensity(event.rainIntensity);
@@ -242,7 +247,7 @@ public enum WeatherProperties {
 		builder.append("Storm: ").append(intensity.name());
 		builder.append(" level: ").append(getIntensity()).append('/').append(getMaxIntensityLevel());
 		builder.append(" dust:").append(fogDensity);
-		builder.append(" str:").append(EnvironState.getWorld().getRainStrength(1.0F));
+		builder.append(" str:").append(getWorld().getRainStrength(1.0F));
 		return builder.toString();
 	}
 }
