@@ -36,7 +36,6 @@ import com.google.common.collect.Iterables;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -100,28 +99,10 @@ public class ParticleCollection extends Particle {
 			final float rotX, final float rotZ, final float rotYZ, final float rotXY, final float rotXZ) {
 
 		this.bindTexture(this.texture);
-
-		GlStateManager.disableLighting();
-		GlStateManager.pushMatrix();
-		GlStateManager.pushAttrib();
-
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.enableAlpha();
-		GlStateManager.depthMask(false);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		for (final IParticleMote mote : this.myParticles)
 			mote.renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
 		Tessellator.getInstance().draw();
-
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.disableBlend();
-		GlStateManager.enableLighting();
-		GlStateManager.popAttrib();
-		GlStateManager.popMatrix();
-
 	}
 
 	@Override

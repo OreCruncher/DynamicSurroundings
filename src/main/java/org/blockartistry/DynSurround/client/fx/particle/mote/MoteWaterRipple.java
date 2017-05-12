@@ -24,6 +24,7 @@
 
 package org.blockartistry.DynSurround.client.fx.particle.mote;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
@@ -64,10 +65,12 @@ public class MoteWaterRipple extends MoteBase {
 		final float y = renderY(partialTicks);
 		final float z = renderZ(partialTicks);
 
+		GlStateManager.depthMask(true);
 		drawVertex(buffer, -this.scaledWidth + x, y, this.scaledWidth + z, 0, 1);
 		drawVertex(buffer, this.scaledWidth + x, y, this.scaledWidth + z, 1, 1);
 		drawVertex(buffer, this.scaledWidth + x, y, -this.scaledWidth + z, 1, 0);
 		drawVertex(buffer, -this.scaledWidth + x, y, -this.scaledWidth + z, 0, 0);
+		GlStateManager.depthMask(false);
 	}
 
 }
