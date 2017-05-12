@@ -88,8 +88,9 @@ public class MoteEmoji extends MoteMotionBase {
 
 		// This particle doesn't age like normal. It hangs
 		// around until it is no longer needed.
-		this.age = 0;
 		this.maxAge = Integer.MAX_VALUE;
+
+		this.scale = 0.125F;
 
 		this.emoji = entity.getCapability(EntityCapability.EMOJI, null);
 	}
@@ -118,9 +119,6 @@ public class MoteEmoji extends MoteMotionBase {
 			this.isAlive = false;
 			return;
 		}
-
-		// Forever young...
-		this.age = 0;
 
 		this.prevX = this.posX;
 		this.prevY = this.posY;
@@ -152,7 +150,6 @@ public class MoteEmoji extends MoteMotionBase {
 		this.texU2 = this.texU1 + 0.25F;
 		this.texV1 = texY * 0.25F;
 		this.texV2 = this.texV1 + 0.25F;
-		this.scale = 0.125F;
 
 		// Reset the hold counter
 		this.holdTicks = 0;
