@@ -91,7 +91,9 @@ public class StormRenderer {
 	 */
 	public void render(@Nonnull final EntityRenderer renderer, final float partialTicks) {
 
-		final World world = EnvironState.getWorld();
+		// Don't use EnvironState - may not have been initialized when rendering
+		// starts.
+		final World world = Minecraft.getMinecraft().world;
 
 		if (!this.dimensions.hasWeather(world))
 			return;
