@@ -31,6 +31,7 @@ import org.blockartistry.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.DynSurround.client.handlers.EffectManager;
 import org.blockartistry.DynSurround.client.handlers.ExpressionStateHandler;
 import org.blockartistry.DynSurround.client.hud.GuiHUDHandler;
+import org.blockartistry.DynSurround.client.sound.MusicTickerReplacement;
 import org.blockartistry.DynSurround.commands.CommandCalc;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.lib.Localization;
@@ -40,6 +41,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
@@ -80,6 +82,11 @@ public class ProxyClient extends Proxy {
 		
 		if(ModOptions.disableWaterSuspendParticle)
 			Minecraft.getMinecraft().effectRenderer.registerParticle(EnumParticleTypes.SUSPENDED.getParticleID(), null);
+	}
+
+	@Override
+	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
+		MusicTickerReplacement.initialize();
 	}
 
 	@Override

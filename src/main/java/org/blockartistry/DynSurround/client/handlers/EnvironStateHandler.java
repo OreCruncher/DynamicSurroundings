@@ -111,8 +111,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static int lightLevel;
 		private static int tickCounter;
 
-		private static MinecraftClock clock;
-		private static BattleScanner battle;
+		private static MinecraftClock clock = new MinecraftClock();
+		private static BattleScanner battle = new BattleScanner();
 
 		private static BlockPos getPlayerPos() {
 			return new BlockPos(player.posX, player.getEntityBoundingBox().minY, player.posZ);
