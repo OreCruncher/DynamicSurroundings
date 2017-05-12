@@ -43,18 +43,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * have their volumes dynamically scaled.  Purpose is to reduce normal music
  * volume so that battle music can play.  Once battle is over volume of the
  * sound will return to normal.
+ * 
+ * The music sound is queued as an ITickableSound so that the sound engine
+ * will update the volume dynamically.
  */
 @SideOnly(Side.CLIENT)
 public class MusicTickerReplacement extends MusicTicker {
 
 	private static final float MIN_VOLUME_SCALE = 0.001F;
 	private static final float FADE_AMOUNT = 0.02F;
-	private static float currentScale = 1.0F;
+	
+	private float currentScale = 1.0F;
 
-	private static final BasicSound.ISoundScale MUSIC_SCALER = new BasicSound.ISoundScale() {
+	private final BasicSound.ISoundScale MUSIC_SCALER = new BasicSound.ISoundScale() {
 		@Override
 		public float getScale() {
-			return currentScale;
+			return MusicTickerReplacement.this.currentScale;
 		}
 	};
 
@@ -66,13 +70,13 @@ public class MusicTickerReplacement extends MusicTicker {
 	public void update() {
 		// Adjust volume scale based on battle state
 		if (EnvironState.getBattleScanner().inBattle()) {
-			currentScale -= FADE_AMOUNT * 2;
+			this.currentScale -= FADE_AMOUNT * 2;
 		} else {
-			currentScale += FADE_AMOUNT;
+			this.currentScale += FADE_AMOUNT;
 		}
 
 		// Make sure it is properly bounded
-		currentScale = MathStuff.clamp(currentScale, MIN_VOLUME_SCALE, 1.0F);
+		this.currentScale = MathStuff.clamp(this.currentScale, MIN_VOLUME_SCALE, 1.0F);
 
 		// Let Vanilla take a bite
 		super.update();
@@ -80,7 +84,7 @@ public class MusicTickerReplacement extends MusicTicker {
 
 	@Override
 	public void playMusic(@Nonnull final MusicTicker.MusicType requestedMusicType) {
-		this.currentMusic = new MusicSound(requestedMusicType.getMusicLocation()).setVolumeScale(MUSIC_SCALER);
+		this.currentMusic = new MusicSound(requestedMusicType.getMusicLocation()).setVolumeScale(this.MUSIC_SCALER);
 		SoundEngine.instance().playSound((BasicSound<?>) this.currentMusic);
 		this.timeUntilNextMusic = Integer.MAX_VALUE;
 	}
