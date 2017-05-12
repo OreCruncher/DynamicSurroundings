@@ -96,8 +96,8 @@ public class Transformer implements IClassTransformer {
 				final InsnList list = new InsnList();
 				list.add(new VarInsnNode(ALOAD, 0));
 				final String sig = "(Lnet/minecraft/client/renderer/EntityRenderer;)V";
-				list.add(new MethodInsnNode(INVOKESTATIC,
-						"org/blockartistry/DynSurround/client/weather/RenderWeather", targetName, sig, false));
+				list.add(new MethodInsnNode(INVOKESTATIC, "org/blockartistry/DynSurround/client/weather/RenderWeather",
+						targetName, sig, false));
 				list.add(new InsnNode(RETURN));
 				m.instructions.insertBefore(m.instructions.getFirst(), list);
 			}
