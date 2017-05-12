@@ -30,6 +30,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.lib.MathStuff;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MusicTicker;
@@ -47,17 +48,34 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class MusicTickerReplacement extends MusicTicker {
 
 	private static final float MIN_VOLUME_SCALE = 0.001F;
+	private static final float FADE_AMOUNT = 0.02F;
+	private static float currentScale = 1.0F;
 
 	private static final BasicSound.ISoundScale MUSIC_SCALER = new BasicSound.ISoundScale() {
 		@Override
 		public float getScale() {
-			return EnvironState.getBattleScanner().inBattle() ? MIN_VOLUME_SCALE : 1.0F;
+			return currentScale;
 		}
 	};
 
 	public MusicTickerReplacement(@Nonnull final Minecraft mcIn) {
 		super(mcIn);
+	}
 
+	@Override
+	public void update() {
+		// Adjust volume scale based on battle state
+		if (EnvironState.getBattleScanner().inBattle()) {
+			currentScale -= FADE_AMOUNT * 2;
+		} else {
+			currentScale += FADE_AMOUNT;
+		}
+
+		// Make sure it is properly bounded
+		currentScale = MathStuff.clamp(currentScale, MIN_VOLUME_SCALE, 1.0F);
+
+		// Let Vanilla take a bite
+		super.update();
 	}
 
 	@Override
