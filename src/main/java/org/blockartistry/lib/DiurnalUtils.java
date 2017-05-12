@@ -53,7 +53,7 @@ public final class DiurnalUtils {
 	}
 
 	public static DayCycle getCycle(@Nonnull final World world) {
-		if (world.provider.getHasNoSky())
+		if (world == null || world.provider.getHasNoSky())
 			return DayCycle.NO_SKY;
 
 		final float brFactor = world.provider.getSunBrightnessFactor(1.0f);
@@ -67,7 +67,7 @@ public final class DiurnalUtils {
 	}
 
 	public static float getMoonPhaseFactor(@Nonnull final World world) {
-		return world.getCurrentMoonPhaseFactor();
+		return world == null ? 0F : world.getCurrentMoonPhaseFactor();
 	}
 
 	public static boolean isAuroraVisible(@Nonnull final World world) {

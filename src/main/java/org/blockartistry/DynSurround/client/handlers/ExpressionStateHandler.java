@@ -70,7 +70,7 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		variables.add(dv);
 	}
 
-	static {
+	public static void register() {
 		register(new Dynamic.DynamicBoolean("isDay") {
 			@Override
 			public void update() {
@@ -110,7 +110,8 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		register(new Dynamic.DynamicBoolean("hasSky") {
 			@Override
 			public void update() {
-				this.value = !EnvironState.getWorld().provider.getHasNoSky();
+				final World world = EnvironState.getWorld();
+				this.value = world != null && !world.provider.getHasNoSky();
 			}
 		});
 		register(new Dynamic.DynamicString("season") {
@@ -160,7 +161,8 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		register(new Dynamic.DynamicBoolean("player.isDead") {
 			@Override
 			public void update() {
-				this.value = EnvironState.getPlayer().isDead;
+				final EntityPlayer player = EnvironState.getPlayer();
+				this.value = player != null && player.isDead;
 			}
 		});
 		register(new Dynamic.DynamicBoolean("player.isHurt") {
@@ -226,25 +228,29 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		register(new Dynamic.DynamicBoolean("player.isWet") {
 			@Override
 			public void update() {
-				this.value = EnvironState.getPlayer().isWet();
+				final EntityPlayer player = EnvironState.getPlayer();
+				this.value = player != null && player.isWet();
 			}
 		});
 		register(new Dynamic.DynamicBoolean("player.isUnderwater") {
 			@Override
 			public void update() {
-				this.value = EnvironState.getPlayer().isInsideOfMaterial(Material.WATER);
+				final EntityPlayer player = EnvironState.getPlayer();
+				this.value = player != null && player.isInsideOfMaterial(Material.WATER);
 			}
 		});
 		register(new Dynamic.DynamicBoolean("player.isRiding") {
 			@Override
 			public void update() {
-				this.value = EnvironState.getPlayer().isRiding();
+				final EntityPlayer player = EnvironState.getPlayer();
+				this.value = player != null && player.isRiding();
 			}
 		});
 		register(new Dynamic.DynamicBoolean("player.isOnGround") {
 			@Override
 			public void update() {
-				this.value = EnvironState.getPlayer().onGround;
+				final EntityPlayer player = EnvironState.getPlayer();
+				this.value = player != null && player.onGround;
 			}
 		});
 		register(new Dynamic.DynamicBoolean("player.isMoving") {
@@ -316,53 +322,68 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		register(new Dynamic.DynamicNumber("player.health") {
 			@Override
 			public void update() {
-				this.value = EnvironState.getPlayer().getHealth();
+				final EntityPlayer player = EnvironState.getPlayer();
+				this.value = player != null ? player.getHealth() : Integer.MAX_VALUE;
 			}
 		});
 		register(new Dynamic.DynamicNumber("player.maxHealth") {
 			@Override
 			public void update() {
-				this.value = EnvironState.getPlayer().getMaxHealth();
+				final EntityPlayer player = EnvironState.getPlayer();
+				this.value = player != null ? player.getMaxHealth() : Integer.MAX_VALUE;
 			}
 		});
 		register(new Dynamic.DynamicNumber("player.luck") {
 			@Override
 			public void update() {
-				this.value = EnvironState.getPlayer().getLuck();
+				final EntityPlayer player = EnvironState.getPlayer();
+				this.value = player != null ? player.getLuck() : 0;
 			}
 		});
 		register(new Dynamic.DynamicNumber("player.food.saturation") {
 			@Override
 			public void update() {
-				this.value = EnvironState.getPlayer().getFoodStats().getSaturationLevel();
+				final EntityPlayer player = EnvironState.getPlayer();
+				this.value = player != null ? player.getFoodStats().getSaturationLevel() : 0;
 			}
 		});
 		register(new Dynamic.DynamicNumber("player.food.level") {
 			@Override
 			public void update() {
-				this.value = EnvironState.getPlayer().getFoodStats().getFoodLevel();
+				final EntityPlayer player = EnvironState.getPlayer();
+				this.value = player != null ? player.getFoodStats().getFoodLevel() : 0;
 			}
 		});
 		register(new Dynamic.DynamicBoolean("player.canRainOn") {
 			@Override
 			public void update() {
 				final World world = EnvironState.getWorld();
-				final BlockPos pos = EnvironState.getPlayerPosition().add(0, 2, 0);
-				this.value = world.canBlockSeeSky(pos) && !(world.getTopSolidOrLiquidBlock(pos).getY() > pos.getY());
+				if (world != null) {
+					final BlockPos pos = EnvironState.getPlayerPosition().add(0, 2, 0);
+					this.value = world.canBlockSeeSky(pos)
+							&& !(world.getTopSolidOrLiquidBlock(pos).getY() > pos.getY());
+				} else {
+					this.value = false;
+				}
 			}
 		});
 		register(new Dynamic.DynamicBoolean("player.canSeeSky") {
 			@Override
 			public void update() {
 				final World world = EnvironState.getWorld();
-				final BlockPos pos = EnvironState.getPlayerPosition().add(0, 2, 0);
-				this.value = world.canBlockSeeSky(pos);
+				if (world != null) {
+					final BlockPos pos = EnvironState.getPlayerPosition().add(0, 2, 0);
+					this.value = world.canBlockSeeSky(pos);
+				} else {
+					this.value = false;
+				}
 			}
 		});
 		register(new Dynamic.DynamicBoolean("player.inBoat") {
 			@Override
 			public void update() {
-				this.value = EnvironState.getPlayer().getRidingEntity() instanceof EntityBoat;
+				final EntityPlayer player = EnvironState.getPlayer();
+				this.value = player != null && player.getRidingEntity() instanceof EntityBoat;
 			}
 		});
 		register(new Dynamic.DynamicNumber("player.lightLevel") {
@@ -429,7 +450,6 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 						.getValue();
 			}
 		});
-
 
 		// Battle state
 		register(new Dynamic.DynamicBoolean("battle.inBattle") {

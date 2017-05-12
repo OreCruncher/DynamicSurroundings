@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.DynSurround.client.handlers.EffectManager;
+import org.blockartistry.DynSurround.client.handlers.ExpressionStateHandler;
 import org.blockartistry.DynSurround.client.hud.GuiHUDHandler;
 import org.blockartistry.DynSurround.commands.CommandCalc;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
@@ -66,6 +67,7 @@ public class ProxyClient extends Proxy {
 	@Override
 	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		super.preInit(event);
+		ExpressionStateHandler.register();
 		SoundRegistry.initializeRegistry();
 	}
 
