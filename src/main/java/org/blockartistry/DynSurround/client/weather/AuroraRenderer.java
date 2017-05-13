@@ -25,23 +25,60 @@
 package org.blockartistry.DynSurround.client.weather;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraftforge.client.IRenderHandler;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import org.blockartistry.DynSurround.client.handlers.AuroraEffectHandler;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Color;
 import org.lwjgl.opengl.GL11;
 
-@SideOnly(Side.CLIENT)
-public final class AuroraRenderer {
+@Mod.EventBusSubscriber(Side.CLIENT)
+public final class AuroraRenderer extends IRenderHandler {
+
+	protected final IRenderHandler handler;
+
+	public AuroraRenderer(@Nullable final IRenderHandler handler) {
+		this.handler = handler;
+	}
+
+	@Override
+	public void render(final float partialTicks, @Nonnull final WorldClient world, @Nonnull final Minecraft mc) {
+		if (this.handler == null) {
+			// There isn't another handler. This means we have to call back
+			// into the Minecraft code to render the normal sky. This is tricky
+			// because we need to unhook ourselves and rehook after rendering.
+			world.provider.setSkyRenderer(null);
+			try {
+				mc.renderGlobal.renderSky(partialTicks, 2);
+			} catch(final Throwable t) {
+				;
+			}
+			world.provider.setSkyRenderer(this);
+		} else {
+			// Call the existing handler
+			this.handler.render(partialTicks, world, mc);
+		}
+
+		// Render our aurora if it is present
+		final Aurora aurora = AuroraEffectHandler.getCurrentAurora();
+		if (aurora != null)
+			renderAurora(partialTicks, aurora);
+	}
 
 	protected final DimensionRegistry dimensions = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION);
 
@@ -53,7 +90,7 @@ public final class AuroraRenderer {
 		return 4D + 16D * ((Minecraft.getMinecraft().gameSettings.renderDistanceChunks - 6D) / 24D);
 	}
 
-	public void renderAurora(final float partialTick, @Nonnull final Aurora aurora) {
+	protected void renderAurora(final float partialTick, @Nonnull final Aurora aurora) {
 
 		final float alpha = aurora.getAlphaf();
 		if (alpha <= 0.0F)
@@ -163,4 +200,14 @@ public final class AuroraRenderer {
 		GlStateManager.popAttrib();
 		GlStateManager.popMatrix();
 	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void doRender(@Nonnull final RenderWorldLastEvent event) {
+		// Make sure that the sky renderer is an aurora renderer
+		if (!(Minecraft.getMinecraft().theWorld.provider.getSkyRenderer() instanceof AuroraRenderer)) {
+			final AuroraRenderer hook = new AuroraRenderer(Minecraft.getMinecraft().theWorld.provider.getSkyRenderer());
+			Minecraft.getMinecraft().theWorld.provider.setSkyRenderer(hook);
+		}
+	}
+
 }
