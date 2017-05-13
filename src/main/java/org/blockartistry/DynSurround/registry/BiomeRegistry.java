@@ -34,10 +34,14 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
+
+import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -67,10 +71,18 @@ public final class BiomeRegistry extends Registry {
 	private static final FakeBiome WTF = new WTFFakeBiome();
 
 	private final Map<Biome, BiomeInfo> registry = new IdentityHashMap<Biome, BiomeInfo>();
+	private final TIntObjectHashMap<BiomeInfo> fallback = new TIntObjectHashMap<BiomeInfo>();
+
 	private final Map<String, String> biomeAliases = new HashMap<String, String>();
 
 	BiomeRegistry(@Nonnull final Side side) {
 		super(side);
+	}
+
+	private void register(@Nonnull final Biome biome) {
+		final BiomeInfo e = new BiomeInfo(biome);
+		this.registry.put(e.biome, e);
+		this.fallback.put(e.getBiomeId(), e);
 	}
 
 	@Override
@@ -85,25 +97,31 @@ public final class BiomeRegistry extends Registry {
 			}
 		}
 
-		for (Iterator<Biome> itr = Biome.REGISTRY.iterator(); itr.hasNext();) {
-			final BiomeInfo e = new BiomeInfo(itr.next());
-			this.registry.put(e.biome, e);
-		}
+		for (Iterator<Biome> itr = Biome.REGISTRY.iterator(); itr.hasNext();)
+			register(itr.next());
 
 		// Add our fake biomes
-		this.registry.put(UNDERWATER, new BiomeInfo(UNDERWATER));
-		this.registry.put(UNDEROCEAN, new BiomeInfo(UNDEROCEAN));
-		this.registry.put(UNDERDEEPOCEAN, new BiomeInfo(UNDERDEEPOCEAN));
-		this.registry.put(UNDERRIVER, new BiomeInfo(UNDERRIVER));
+		register(UNDERWATER);
+		register(UNDEROCEAN);
+		register(UNDERDEEPOCEAN);
+		register(UNDERRIVER);
+		register(PLAYER);
+		register(VILLAGE);
+		register(UNDERGROUND);
+		register(CLOUDS);
+		register(OUTERSPACE);
+		register(BATTLE_MUSIC);
 
-		this.registry.put(WTF, WTF_INFO = new BiomeInfo(WTF));
-		this.registry.put(PLAYER, PLAYER_INFO = new BiomeInfo(PLAYER));
-		this.registry.put(VILLAGE, VILLAGE_INFO = new BiomeInfo(VILLAGE));
-		this.registry.put(UNDERGROUND, UNDERGROUND_INFO = new BiomeInfo(UNDERGROUND));
-		this.registry.put(CLOUDS, CLOUDS_INFO = new BiomeInfo(CLOUDS));
-		this.registry.put(OUTERSPACE, OUTERSPACE_INFO = new BiomeInfo(OUTERSPACE));
+		this.PLAYER_INFO = resolve(PLAYER);
+		this.VILLAGE_INFO = resolve(VILLAGE);
+		this.UNDERGROUND_INFO = resolve(UNDERGROUND);
+		this.CLOUDS_INFO = resolve(CLOUDS);
+		this.OUTERSPACE_INFO = resolve(OUTERSPACE);
+		this.BATTLE_MUSIC_INFO = resolve(BATTLE_MUSIC);
 
-		this.registry.put(BATTLE_MUSIC, BATTLE_MUSIC_INFO = new BiomeInfo(BATTLE_MUSIC));
+		// WTF is a strange animal
+		register(WTF);
+		this.WTF_INFO = resolve(WTF);
 	}
 
 	@Override
@@ -125,54 +143,45 @@ public final class BiomeRegistry extends Registry {
 
 	}
 
+	private int biomeId(@Nonnull final Biome biome) {
+		int result = Biome.getIdForBiome(biome);
+		if (result == -1) {
+			final String name = biome.getBiomeName();
+			if ("Plains".equals(name))
+				result = 1;
+			else if ("Ocean".equals(name))
+				result = 0;
+		}
+		return result;
+	}
+
+	@Nullable
+	private BiomeInfo resolve(@Nonnull final Biome biome) {
+		BiomeInfo result = this.registry.get(biome);
+		if (result == null) {
+			final int id = biomeId(biome);
+			result = this.fallback.get(id);
+		}
+		return result;
+	}
+
 	@Nonnull
 	public BiomeInfo get(@Nonnull final Biome biome) {
 		// This shouldn't happen, but...
 		if (biome == null)
 			return WTF_INFO;
 
-		BiomeInfo result = this.registry.get(biome);
+		BiomeInfo result = resolve(biome);
 		if (result == null) {
-			// Two possibilities:
-			// - A biome could have been dynamically added after the mod's init
-			// phase. Open Terrain Generation can do this.
-			//
-			// - A mod replaced a vanilla biome in the biome registry but did
-			// not update the identity instance in Biome. An example of this
-			// is Biome.PLAINS. It is the default biome returned and a
-			// chunk isn't fully loaded. If a mod updates the PLAINS entry
-			// in the REGISTRY and did NOT update Biome.PLAINS with the new
-			// object reference things have become inconsistent.
-			final int id = Biome.getIdForBiome(biome);
-			if (id == -1) {
-				final Biome tryBiome;
-				// Check for the second case
-				if ("Ocean".equals(biome.getBiomeName()))
-					tryBiome = Biome.getBiomeForId(0);
-				else if ("Plains".equals(biome.getBiomeName()))
-					tryBiome = Biome.getBiomeForId(1);
-				else
-					tryBiome = null;
-
-				if (tryBiome == null) {
-					final String err = String.format("Unknown biome [%s] (%s)", biome.getBiomeName(),
-							biome.getClass().getName());
-					throw new RuntimeException(err);
-				} else {
-					result = this.registry.get(tryBiome);
-				}
-			}
-
-			// Handle the first case
-			if (result == null) {
-				DSurround.log().warn("Biome [%s] not detected during initialization - forcing reload (%s)",
-						biome.getBiomeName(), biome.getClass());
-				RegistryManager.reloadResources(this.side);
-				result = this.registry.get(biome);
-			}
+			DSurround.log().warn("Biome [%s] not detected during initialization - forcing reload (%s)",
+					biome.getBiomeName(), biome.getClass());
+			RegistryManager.reloadResources(this.side);
+			result = resolve(biome);
 
 			if (result == null) {
-				throw new RuntimeException("What's going on with biomes?");
+				DSurround.log().warn("Unable to locate biome [%s] (%s) after reload", biome.getBiomeName(),
+						biome.getClass().getName());
+				result = WTF_INFO;
 			}
 		}
 		return result;
