@@ -34,6 +34,7 @@ import org.blockartistry.DynSurround.client.fx.particle.mote.MoteRainSplash;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteWaterRipple;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteWaterSpray;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollection;
+import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionRipples;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.entity.Entity;
@@ -46,23 +47,36 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public final class ParticleCollections {
 
 	private static class CollectionHelper {
-		
+
+		private final Class<? extends ParticleCollection> factory;
 		private final ResourceLocation texture;
+
 		private ParticleCollection collection;
-		
+
 		public CollectionHelper(@Nonnull final ResourceLocation texture) {
-			this.texture = texture;
+			this(ParticleCollection.class, texture);
 		}
-		
+
+		public CollectionHelper(@Nonnull final Class<? extends ParticleCollection> clazz,
+				@Nonnull final ResourceLocation texture) {
+			this.texture = texture;
+			this.factory = clazz;
+		}
+
 		public ParticleCollection get() {
-			if(this.collection == null || this.collection.shouldDie()) {
-				this.collection = new ParticleCollection(EnvironState.getWorld(), this.texture);
+			if (this.collection == null || this.collection.shouldDie()) {
+				try {
+					this.collection = this.factory.getConstructor(World.class, ResourceLocation.class)
+							.newInstance(EnvironState.getWorld(), this.texture);
+				} catch (final Throwable t) {
+					throw new RuntimeException("Unknown ParticleCollection type!");
+				}
 				ParticleHelper.addParticle(this.collection);
 			}
 			return this.collection;
 		}
 	}
-	
+
 	private static final ResourceLocation RIPPLE_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
 			"textures/particles/ripple.png");
 	private static final ResourceLocation SPRAY_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
@@ -70,28 +84,32 @@ public final class ParticleCollections {
 	private static final ResourceLocation EMOJI_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
 			"textures/particles/emojis.png");
 
-	private final static CollectionHelper theRipples = new CollectionHelper(RIPPLE_TEXTURE);
+	private final static CollectionHelper theRipples = new CollectionHelper(ParticleCollectionRipples.class,
+			RIPPLE_TEXTURE);
 	private final static CollectionHelper theSprays = new CollectionHelper(SPRAY_TEXTURE);
 	private final static CollectionHelper theEmojis = new CollectionHelper(EMOJI_TEXTURE);
-	
-	public static IParticleMote addWaterRipple(@Nonnull final World world, final double x, final double y, final double z) {
+
+	public static IParticleMote addWaterRipple(@Nonnull final World world, final double x, final double y,
+			final double z) {
 		final IParticleMote mote = new MoteWaterRipple(world, x, y, z);
 		theRipples.get().addParticle(mote);
 		return mote;
 	}
 
-	public static IParticleMote addWaterSpray(@Nonnull final World world, final double x, final double y, final double z, final double dX, final double dY, final double dZ) {
+	public static IParticleMote addWaterSpray(@Nonnull final World world, final double x, final double y,
+			final double z, final double dX, final double dY, final double dZ) {
 		final IParticleMote mote = new MoteWaterSpray(world, x, y, z, dX, dY, dZ);
 		theSprays.get().addParticle(mote);
 		return mote;
 	}
-	
-	public static IParticleMote addRainSplash(@Nonnull final World world, final double x, final double y, final double z) {
+
+	public static IParticleMote addRainSplash(@Nonnull final World world, final double x, final double y,
+			final double z) {
 		final IParticleMote mote = new MoteRainSplash(world, x, y, z);
 		theSprays.get().addParticle(mote);
 		return mote;
 	}
-	
+
 	public static IParticleMote addEmoji(@Nonnull final Entity entity) {
 		final IParticleMote mote = new MoteEmoji(entity);
 		theEmojis.get().addParticle(mote);

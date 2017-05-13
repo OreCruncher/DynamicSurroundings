@@ -93,18 +93,30 @@ public class ParticleCollection extends Particle {
 			this.setExpired();
 		}
 	}
+	
+	protected void preRender() {
+		
+	}
 
 	@Override
 	public void renderParticle(final VertexBuffer buffer, final Entity entityIn, final float partialTicks,
 			final float rotX, final float rotZ, final float rotYZ, final float rotXY, final float rotXZ) {
 
 		this.bindTexture(this.texture);
+		this.preRender();
+		
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		for (final IParticleMote mote : this.myParticles)
 			mote.renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
 		Tessellator.getInstance().draw();
+		
+		this.postRender();
 	}
 
+	protected void postRender() {
+		
+	}
+	
 	@Override
 	public int getFXLayer() {
 		return 3;
