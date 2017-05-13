@@ -24,7 +24,6 @@
 package org.blockartistry.DynSurround.registry;
 
 import java.lang.reflect.Field;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -191,12 +190,9 @@ public abstract class BiomeMatcher {
 			}
 
 			// Add the biomes in the biome list
-			for (Iterator<Biome> itr = Biome.REGISTRY.iterator(); itr.hasNext();) {
-				final Biome b = itr.next();
-				final ResourceLocation resource = b.getRegistryName();
-				if ("minecraft".equals(resource.getResourceDomain()))
-					this.exp.addVariable(new StringValue("biome." + resource.getResourcePath(), resource.toString()));
-			}
+			for (final ResourceLocation b : Biome.REGISTRY.getKeys())
+				if ("minecraft".equals(b.getResourceDomain()))
+					this.exp.addVariable(new StringValue("biomeType." + b.getResourcePath(), b.toString()));
 
 			// Add a function to do some biome comparisons
 			this.exp.addFunction(new Function("biome.isLike", 1) {
