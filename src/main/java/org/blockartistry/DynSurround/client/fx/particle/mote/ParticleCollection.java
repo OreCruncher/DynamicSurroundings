@@ -24,15 +24,13 @@
 
 package org.blockartistry.DynSurround.client.fx.particle.mote;
 
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.lwjgl.opengl.GL11;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -47,13 +45,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ParticleCollection extends Particle {
-
-	protected static final Predicate<IParticleMote> REMOVE_CRITERIA = new Predicate<IParticleMote>() {
-		@Override
-		public boolean apply(final IParticleMote input) {
-			return !input.isAlive();
-		}
-	};
 
 	protected final ResourceLocation texture;
 	protected final LinkedHashSet<IParticleMote> myParticles = new LinkedHashSet<IParticleMote>();
@@ -82,20 +73,21 @@ public class ParticleCollection extends Particle {
 		if (!this.isAlive())
 			return;
 
-		// Update mote state
-		for (final IParticleMote mote : this.myParticles)
+		// Update mote state and remove dead ones
+		for (final Iterator<IParticleMote> itr = this.myParticles.iterator(); itr.hasNext();) {
+			final IParticleMote mote = itr.next();
 			mote.onUpdate();
-
-		// Remove the dead ones
-		Iterables.removeIf(this.myParticles, REMOVE_CRITERIA);
+			if (!mote.isAlive())
+				itr.remove();
+		}
 
 		if (this.shouldDie()) {
 			this.setExpired();
 		}
 	}
-	
+
 	protected void preRender() {
-		
+
 	}
 
 	@Override
@@ -104,19 +96,19 @@ public class ParticleCollection extends Particle {
 
 		this.bindTexture(this.texture);
 		this.preRender();
-		
+
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		for (final IParticleMote mote : this.myParticles)
 			mote.renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
 		Tessellator.getInstance().draw();
-		
+
 		this.postRender();
 	}
 
 	protected void postRender() {
-		
+
 	}
-	
+
 	@Override
 	public int getFXLayer() {
 		return 3;
