@@ -48,5 +48,11 @@ public class MusicSound extends BasicSound<MusicSound> implements ITickableSound
 		// will dynamically adjust it's volume per tick.  Otherwise, the sound
 		// will play at the same volume regardless of the volume scale.
 	}
+	
+	// Silly abstract method error
+	@Override
+	public boolean isDonePlaying() {
+		return super.isDonePlaying();
+	}
 
 }
