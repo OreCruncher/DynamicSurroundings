@@ -31,7 +31,6 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.Aurora;
-import org.blockartistry.DynSurround.client.weather.AuroraRenderer;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
@@ -42,8 +41,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
@@ -53,11 +50,10 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	private static Aurora current;
 	private static int dimensionId;
 
-	private final AuroraRenderer auroraRenderer;
 	private final DimensionRegistry registry = RegistryManager.get(RegistryType.DIMENSION);
 
 	public AuroraEffectHandler() {
-		this.auroraRenderer = new AuroraRenderer();
+
 	}
 
 	@Nullable
@@ -126,9 +122,4 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		dimensionId = EnvironState.getDimensionId();
 	}
 
-	@SubscribeEvent
-	public void doRender(@Nonnull final RenderWorldLastEvent event) {
-		if (current != null)
-			this.auroraRenderer.renderAurora(event.getPartialTicks(), current);
-	}
 }
