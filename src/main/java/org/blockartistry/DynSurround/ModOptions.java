@@ -51,6 +51,11 @@ public final class ModOptions {
 	// Various version breaks for upgrading options automatically
 	private static final String VERSION_A = "3.2.4.0";
 
+	// Trace bits for debugging
+	public static class Trace {
+		public static final int TRUE_SOUND_VOLUME = 0x1;
+	};
+	
 	private ModOptions() {
 	}
 
@@ -82,8 +87,9 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_ONLINE_VERSION_CHECK = "Enable Online Version Check";
 	public static final String CONFIG_ENABLE_DEBUG_DIALOG = "Enable Debug Dialog";
 	public static final String CONFIG_REPORT_SERVER_STATS = "Report Server Stats";
+	public static final String CONFIG_DEBUG_FLAG_MASK = "Debug Flag Mask";
 	private static final List<String> loggingSort = Arrays.asList(CONFIG_ENABLE_ONLINE_VERSION_CHECK,
-			CONFIG_ENABLE_DEBUG_LOGGING, CONFIG_REPORT_SERVER_STATS);
+			CONFIG_ENABLE_DEBUG_LOGGING, CONFIG_REPORT_SERVER_STATS, CONFIG_DEBUG_FLAG_MASK);
 
 	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_ENABLE_DEBUG_LOGGING, defaultValue = "false", lang = "cfg.logging.EnableDebug")
 	@Comment("Enables/disables debug logging of the mod")
@@ -100,6 +106,10 @@ public final class ModOptions {
 	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_REPORT_SERVER_STATS, defaultValue = "false", lang = "cfg.logging.ServerStats")
 	@Comment("Enables/disables reporting of server stats")
 	public static boolean reportServerStats = false;
+	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_DEBUG_FLAG_MASK, defaultValue = "0", lang = "cfg.logging.FlagMask")
+	@Comment("Bitmask for toggling various debug traces")
+	@Hidden
+	public static int debugFlagMask = 0;
 
 	public static final String CATEGORY_RAIN = "rain";
 	public static final String CONFIG_RAIN_PARTICLE_BASE = "Particle Count Base";

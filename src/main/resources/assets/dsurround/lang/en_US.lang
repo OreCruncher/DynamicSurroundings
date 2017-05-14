@@ -81,6 +81,8 @@ cfg.logging.DebugDialog=Debug Dialog
 cfg.logging.DebugDialog.tooltip=Enables/disables display of debug dialog
 cfg.logging.ServerStats=Report Server Stats
 cfg.logging.ServerStats.tooltip=Enables/disables reporting of server stats
+cfg.logging.FlagMask=Debug Flag Mask
+cfg.logging.FlagMask.tooltip=Bitmask for toggling various debug traces
 
 cfg.rain.cat.Rain=Rain Options
 cfg.rain.cat.Rain.tooltip=Options that control rain effects in the client

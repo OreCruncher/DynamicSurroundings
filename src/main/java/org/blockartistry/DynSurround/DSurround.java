@@ -133,6 +133,7 @@ public class DSurround {
 		config.save();
 
 		logger.setDebug(ModOptions.enableDebugLogging);
+		logger.setTraceMask(ModOptions.debugFlagMask);
 
 		proxy.preInit(event);
 	}
