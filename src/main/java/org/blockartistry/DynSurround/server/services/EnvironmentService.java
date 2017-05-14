@@ -28,7 +28,10 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.api.events.FootstepEvent;
 import org.blockartistry.DynSurround.network.Network;
+import org.blockartistry.DynSurround.network.PacketDisplayFootstep;
 import org.blockartistry.DynSurround.network.PacketEnvironment;
 import org.blockartistry.lib.MyUtils;
 
@@ -40,6 +43,7 @@ import net.minecraft.village.VillageCollection;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 
 public final class EnvironmentService extends Service {
@@ -68,6 +72,18 @@ public final class EnvironmentService extends Service {
 
 			final PacketEnvironment packet = new PacketEnvironment(inVillage);
 			Network.sendToPlayer((EntityPlayerMP) player, packet);
+		}
+	}
+
+	// TODO: Remove when satisfied!
+	//@SubscribeEvent
+	public void generateFootstep(@Nonnull final FootstepEvent.Send event) {
+		if (ModOptions.enableFootprints) {
+			final PacketDisplayFootstep packet = new PacketDisplayFootstep(event.dimensionId, event.location,
+					event.rotation, event.isRightFoot);
+			final TargetPoint point = Network.getTargetPoint(event.dimensionId, event.location,
+					ModOptions.specialEffectRange);
+			Network.sendToAllAround(point, packet);
 		}
 	}
 

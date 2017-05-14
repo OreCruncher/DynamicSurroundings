@@ -24,23 +24,30 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.api.events.FootstepEvent;
+import org.blockartistry.DynSurround.client.fx.particle.ParticleFootprint;
+import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
+import org.blockartistry.DynSurround.client.fx.particle.ParticleFootprint.Style;
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.FootstepsRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-// Simple shim to forward to the FootstepsRegistry engine.  Needed to seperate
-// because of startup issues.
 @SideOnly(Side.CLIENT)
 public class FootstepsHandler extends EffectHandlerBase {
 
 	private FootstepsRegistry footsteps;
-	
+
 	@Override
 	public String getHandlerName() {
 		return "FootstepsHandler";
@@ -48,19 +55,30 @@ public class FootstepsHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(final World world, final EntityPlayer player) {
-		if(ModOptions.enableFootstepSounds)
+		if (ModOptions.enableFootstepSounds)
 			this.footsteps.process(world, player);
-		else if(player.nextStepDistance == Integer.MAX_VALUE)
+		else if (player.nextStepDistance == Integer.MAX_VALUE)
 			player.nextStepDistance = 0;
 	}
-	
+
 	@Override
 	public void onConnect() {
 		this.footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
 	}
-	
+
 	@Override
 	public void onDisconnect() {
 		this.footsteps = null;
+	}
+
+	@SubscribeEvent
+	public void onDisplayFootstep(@Nonnull final FootstepEvent.Display event) {
+		if (ModOptions.enableFootprints) {
+			final Style style = Style.getStyle(ModOptions.footprintStyle);
+			final Vec3d stepLoc = event.location;
+			ParticleHelper.addParticle(new ParticleFootprint(EnvironState.getWorld(), stepLoc.xCoord, stepLoc.yCoord,
+					stepLoc.zCoord, event.rotation, event.isRightFoot, style));
+		}
+
 	}
 }

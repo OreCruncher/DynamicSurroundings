@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 
@@ -58,6 +59,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
+import net.minecraftforge.fml.common.network.NetworkCheckHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -82,30 +84,33 @@ public class DSurround {
 
 	@SidedProxy(clientSide = "org.blockartistry.DynSurround.proxy.ProxyClient", serverSide = "org.blockartistry.DynSurround.proxy.Proxy")
 	protected static Proxy proxy;
+	protected static ModLog logger = ModLog.NULL_LOGGER;
+	protected static Configuration config;
+	protected static File dataDirectory;
+	protected static boolean installedOnServer;
 
 	@Nonnull
 	public static Proxy proxy() {
 		return proxy;
 	}
 
-	protected static ModLog logger = ModLog.NULL_LOGGER;
-	protected static Configuration config;
-
 	@Nonnull
 	public static Configuration config() {
 		return config;
 	}
-	
+
 	@Nonnull
 	public static ModLog log() {
 		return logger;
 	}
 
-	protected static File dataDirectory;
-
 	@Nonnull
 	public static File dataDirectory() {
 		return dataDirectory;
+	}
+	
+	public static boolean isInstalledOnServer() {
+		return installedOnServer;
 	}
 
 	@Nonnull
@@ -115,7 +120,7 @@ public class DSurround {
 	}
 
 	public DSurround() {
-		logger = ModLog.setLogger(MOD_ID, LogManager.getLogger(MOD_ID));
+		logger = ModLog.setLogger(DSurround.MOD_ID, LogManager.getLogger(MOD_ID));
 	}
 
 	@EventHandler
@@ -170,6 +175,16 @@ public class DSurround {
 	// Client state events
 	//
 	////////////////////////
+	
+	@NetworkCheckHandler
+	public boolean checkModLists(@Nonnull final Map<String, String> modList, @Nonnull final Side side) {
+		if (side == Side.SERVER) {
+			installedOnServer = modList.containsKey(DSurround.MOD_ID);
+		}
+
+		return true;
+	}
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
 		proxy.clientConnect(event);
@@ -178,6 +193,7 @@ public class DSurround {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void clientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
 		proxy.clientDisconnect(event);
+		installedOnServer = false;
 	}
 
 	@SubscribeEvent
