@@ -141,14 +141,19 @@ public class SoundEngine {
 			if (StringUtils.isEmpty(sound.getId())) {
 				DSurround.log().debug("> NOT QUEUED: [%s]", sound.toString());
 			} else {
-				final SoundSystem ss = this.manager.sndSystem;
-				// Force a flush of all commands so we can get
-				// the actual volume and pitch used within the
-				// sound library.
-				ss.CommandQueue(null);
-				final float v = ss.getVolume(sound.getId());
-				final float p = ss.getPitch(sound.getId());
-				DSurround.log().debug("> QUEUED: [%s]; v: %f, p: %f", sound.toString(), v, p);
+				final StringBuilder builder = new StringBuilder();
+				builder.append("> QUEUED: [").append(sound.toString()).append(']');
+				if (DSurround.log().testTrace(ModOptions.Trace.TRUE_SOUND_VOLUME)) {
+					final SoundSystem ss = this.manager.sndSystem;
+					// Force a flush of all commands so we can get
+					// the actual volume and pitch used within the
+					// sound library.
+					ss.CommandQueue(null);
+					final float v = ss.getVolume(sound.getId());
+					final float p = ss.getPitch(sound.getId());
+					builder.append("; v: ").append(v).append(", p: ").append(p);
+				}
+				DSurround.log().debug(builder.toString());
 			}
 		}
 

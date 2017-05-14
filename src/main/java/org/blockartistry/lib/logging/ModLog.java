@@ -40,10 +40,12 @@ public class ModLog {
 
 	private final Logger logger;
 	private boolean DEBUGGING;
+	private int traceMask;
 
 	private ModLog(@Nonnull final Logger logger) {
 		this.logger = logger;
 		this.DEBUGGING = false;
+		this.traceMask = 0;
 	}
 
 	@Nonnull
@@ -62,8 +64,18 @@ public class ModLog {
 		return result;
 	}
 
-	public void setDebug(final boolean flag) {
+	public ModLog setDebug(final boolean flag) {
 		this.DEBUGGING = flag;
+		return this;
+	}
+
+	public ModLog setTraceMask(final int mask) {
+		this.traceMask = mask;
+		return this;
+	}
+	
+	public boolean testTrace(final int mask) {
+		return (this.traceMask & mask) != 0;
 	}
 
 	public boolean isDebugging() {
@@ -86,6 +98,11 @@ public class ModLog {
 				this.logger.info(s);
 	}
 
+	public void debug(final int mask, @Nonnull final String msg, @Nullable final Object... parms) {
+		if (this.testTrace(mask))
+			this.debug(msg, parms);
+	}
+
 	public void error(@Nonnull final String msg, @Nonnull final Throwable e) {
 		for (final String s : formatLines(msg))
 			this.logger.error(s);
@@ -100,7 +117,13 @@ public class ModLog {
 	public static final ModLog NULL_LOGGER = new ModLog(null) {
 
 		@Override
-		public void setDebug(final boolean flag) {
+		public ModLog setDebug(final boolean flag) {
+			return this;
+		}
+		
+		@Override
+		public ModLog setTraceMask(final int mask) {
+			return this;
 		}
 
 		@Override
@@ -118,6 +141,10 @@ public class ModLog {
 
 		@Override
 		public void debug(@Nonnull final String msg, @Nullable final Object... parms) {
+		}
+
+		@Override
+		public void debug(final int mask, @Nonnull final String msg, @Nullable final Object... parms) {
 		}
 
 		@Override
