@@ -30,8 +30,11 @@ import org.blockartistry.DynSurround.DSurround;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.IThreadListener;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -51,6 +54,7 @@ public final class Network {
 
 	public static void initialize() {
 
+		// Server -> Client messages
 		NETWORK.registerMessage(PacketWeatherUpdate.PacketHandler.class, PacketWeatherUpdate.class, ++discriminator,
 				Side.CLIENT);
 		NETWORK.registerMessage(PacketHealthChange.PacketHandler.class, PacketHealthChange.class, ++discriminator,
@@ -64,7 +68,12 @@ public final class Network {
 				Side.CLIENT);
 		NETWORK.registerMessage(PacketServerData.PacketHandler.class, PacketServerData.class, ++discriminator,
 				Side.CLIENT);
+		NETWORK.registerMessage(PacketDisplayFootstep.PacketHandler.class, PacketDisplayFootstep.class, ++discriminator,
+				Side.CLIENT);
 
+		// Client -> Server messages
+		NETWORK.registerMessage(PacketGenerateFootstep.PacketHandler.class, PacketGenerateFootstep.class,
+				++discriminator, Side.SERVER);
 	}
 
 	@Nonnull
@@ -73,17 +82,35 @@ public final class Network {
 				range);
 	}
 
-	// Package level helper method to fire events based on incoming packets
+	@Nonnull
+	public static TargetPoint getTargetPoint(final int dimensionId, @Nonnull final Vec3d loc, final double range) {
+		return new TargetPoint(dimensionId, loc.xCoord, loc.yCoord, loc.zCoord, range);
+	}
+
+	// Package level helper method to fire client side events based on incoming
+	// packets
 	@SideOnly(Side.CLIENT)
 	static void postEvent(@Nonnull final Event event) {
-		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+		postEvent(Side.CLIENT, event);
+	}
+
+	private static void postEvent(@Nonnull final Side side, @Nonnull final Event event) {
+		final IThreadListener tl = side == Side.SERVER ? FMLCommonHandler.instance().getMinecraftServerInstance()
+				: Minecraft.getMinecraft();
+		tl.addScheduledTask(new Runnable() {
 			public void run() {
 				MinecraftForge.EVENT_BUS.post(event);
 			}
 		});
 	}
 
-	// Basic packet routines
+	// Package level helper method to fire server side events based on incoming
+	// packets
+	static void postEventServer(@Nonnull final Event event) {
+		postEvent(Side.SERVER, event);
+	}
+
+	// Basic server -> client packet routines
 	public static void sendToPlayer(@Nonnull final EntityPlayerMP player, @Nonnull final IMessage msg) {
 		NETWORK.sendTo(msg, player);
 	}
@@ -105,4 +132,8 @@ public final class Network {
 		NETWORK.sendToAllAround(msg, point);
 	}
 
+	// Basic client -> server packet routines
+	public static void sendToServer(@Nonnull final IMessage msg) {
+		NETWORK.sendToServer(msg);
+	}
 }
