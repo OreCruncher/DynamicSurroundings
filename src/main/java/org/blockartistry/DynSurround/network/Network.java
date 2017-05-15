@@ -31,13 +31,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.IThreadListener;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -78,17 +76,6 @@ public final class Network {
 				++discriminator, Side.SERVER);
 		NETWORK.registerMessage(PacketPlaySound.PacketHandler.class, PacketPlaySound.class, ++discriminator,
 				Side.SERVER);
-	}
-
-	@Nonnull
-	public static TargetPoint getTargetPoint(@Nonnull final Entity entity, final double range) {
-		return new TargetPoint(entity.getEntityWorld().provider.getDimension(), entity.posX, entity.posY, entity.posZ,
-				range);
-	}
-
-	@Nonnull
-	public static TargetPoint getTargetPoint(final int dimensionId, @Nonnull final Vec3d loc, final double range) {
-		return new TargetPoint(dimensionId, loc.xCoord, loc.yCoord, loc.zCoord, range);
 	}
 
 	// Package level helper method to fire client side events based on incoming
@@ -132,7 +119,7 @@ public final class Network {
 		NETWORK.sendToAll(msg);
 	}
 
-	public static void sendToAllAround(@Nonnull final TargetPoint point, @Nonnull final IMessage msg) {
+	public static void sendToAllAround(@Nonnull final Locus point, @Nonnull final IMessage msg) {
 		NETWORK.sendToAllAround(msg, point);
 	}
 

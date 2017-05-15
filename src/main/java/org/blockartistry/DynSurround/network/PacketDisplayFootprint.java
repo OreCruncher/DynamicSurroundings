@@ -32,9 +32,9 @@ import org.blockartistry.DynSurround.api.events.FootstepEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -49,22 +49,22 @@ public class PacketDisplayFootprint implements IMessage {
 			if (ctx.side == Side.CLIENT) {
 				// Don't forward if it the current player sent it
 				final EntityPlayer player = EnvironState.getPlayer();
-				if (player != null && message.entityId != player.getEntityId())
-					Network.postEvent(new FootstepEvent.Display(message.pos, message.rotation, message.isRightFoot));
+				if (player != null && message.locus.entityId != player.getEntityId()) {
+					final Vec3d pos = new Vec3d(message.locus.x, message.locus.y, message.locus.z);
+					Network.postEvent(new FootstepEvent.Display(pos, message.rotation, message.isRightFoot));
+				}
 			} else {
 				// No event - turn around quick and broadcast to necessary
 				// clients. This should take place on a Netty thread.
-				final TargetPoint point = Network.getTargetPoint(ctx.getServerHandler().playerEntity,
-						ModOptions.specialEffectRange);
-				Network.sendToAllAround(point, message);
+				final Locus newLocus = new Locus(message.locus, ModOptions.specialEffectRange);
+				Network.sendToAllAround(newLocus, message);
 			}
 			return null;
 		}
 	}
 
 	// Package level
-	protected int entityId;
-	protected Vec3d pos = Vec3d.ZERO;
+	protected Locus locus;
 	protected float rotation = 0F;
 	protected boolean isRightFoot = false;
 
@@ -72,31 +72,23 @@ public class PacketDisplayFootprint implements IMessage {
 
 	}
 
-	public PacketDisplayFootprint(final int entityId, @Nonnull final Vec3d pos, final float rotation,
+	public PacketDisplayFootprint(@Nonnull final Entity entity, @Nonnull final Vec3d pos, final float rotation,
 			final boolean rightFoot) {
-		this.entityId = entityId;
-		this.pos = pos;
+		this.locus = new Locus(entity, pos, ModOptions.specialEffectRange);
 		this.rotation = rotation;
 		this.isRightFoot = rightFoot;
 	}
 
 	@Override
 	public void fromBytes(@Nonnull final ByteBuf buf) {
-		this.entityId = buf.readInt();
-		final double x = buf.readFloat();
-		final double y = buf.readFloat();
-		final double z = buf.readFloat();
-		this.pos = new Vec3d(x, y, z);
+		this.locus = new Locus(buf);
 		this.rotation = buf.readFloat();
 		this.isRightFoot = buf.readBoolean();
 	}
 
 	@Override
 	public void toBytes(@Nonnull final ByteBuf buf) {
-		buf.writeInt(this.entityId);
-		buf.writeFloat((float) this.pos.xCoord);
-		buf.writeFloat((float) this.pos.yCoord);
-		buf.writeFloat((float) this.pos.zCoord);
+		this.locus.toBytes(buf);
 		buf.writeFloat(this.rotation);
 		buf.writeBoolean(this.isRightFoot);
 	}

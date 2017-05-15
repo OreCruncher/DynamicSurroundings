@@ -107,8 +107,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 		// Route message to server if installed
 		if (!EnvironState.isPlayerSneaking() && DSurround.isInstalledOnServer()) {
-			final PacketDisplayFootprint packet = new PacketDisplayFootprint(EnvironState.getPlayer().getEntityId(),
-					pos, rotation, rightFoot);
+			final PacketDisplayFootprint packet = new PacketDisplayFootprint(EnvironState.getPlayer(), pos, rotation,
+					rightFoot);
 			Network.sendToServer(packet);
 		}
 	}

@@ -27,6 +27,7 @@ package org.blockartistry.DynSurround.server.services;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.network.Locus;
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.network.PacketHealthChange;
 
@@ -41,7 +42,6 @@ import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public final class HealthEffectService extends Service {
 
@@ -89,7 +89,7 @@ public final class HealthEffectService extends Service {
 		}
 
 		final Entity entity = event.getEntityLiving();
-		final TargetPoint point = Network.getTargetPoint(entity, RANGE);
+		final Locus point = new Locus(entity, RANGE);
 		final PacketHealthChange packet = new PacketHealthChange(entity.getUniqueID(), (float) entity.posX,
 				(float) entity.posY + (entity.height / 2.0F), (float) entity.posZ, isCrit, (int) event.getAmount());
 		Network.sendToAllAround(point, packet);
@@ -110,7 +110,7 @@ public final class HealthEffectService extends Service {
 			return;
 
 		final Entity entity = event.getEntityLiving();
-		final TargetPoint point = Network.getTargetPoint(entity, RANGE);
+		final Locus point = new Locus(entity, RANGE);
 		final PacketHealthChange packet = new PacketHealthChange(entity.getUniqueID(), (float) entity.posX,
 				(float) entity.posY + (entity.height / 2.0F), (float) entity.posZ, false, -(int) event.getAmount());
 		Network.sendToAllAround(point, packet);

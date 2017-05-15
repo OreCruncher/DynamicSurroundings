@@ -201,7 +201,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 		// If it is a routable sound do so if possible
 		if (sound.shouldRoute() && DSurround.isInstalledOnServer()) {
-			final PacketPlaySound packet = new PacketPlaySound(EnvironState.getPlayer().getEntityId(), sound);
+			final PacketPlaySound packet = new PacketPlaySound(EnvironState.getPlayer(), sound);
 			Network.sendToServer(packet);
 		}
 
