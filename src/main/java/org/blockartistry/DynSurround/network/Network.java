@@ -106,26 +106,36 @@ public final class Network {
 
 	// Basic server -> client packet routines
 	public static void sendToPlayer(@Nonnull final EntityPlayerMP player, @Nonnull final IMessage msg) {
-		NETWORK.sendTo(msg, player);
+		synchronized (NETWORK) {
+			NETWORK.sendTo(msg, player);
+		}
 	}
 
 	public static void sendToEntityViewers(@Nonnull final Entity entity, @Nonnull final IMessage msg) {
 		final Set<? extends EntityPlayer> players = ((WorldServer) entity.getEntityWorld()).getEntityTracker()
 				.getTrackingPlayers(entity);
-		for (final EntityPlayer player : players)
-			NETWORK.sendTo(msg, (EntityPlayerMP) player);
+		synchronized (NETWORK) {
+			for (final EntityPlayer player : players)
+				NETWORK.sendTo(msg, (EntityPlayerMP) player);
+		}
 	}
 
 	public static void sendToDimension(final int dimensionId, @Nonnull final IMessage msg) {
-		NETWORK.sendToDimension(msg, dimensionId);
+		synchronized (NETWORK) {
+			NETWORK.sendToDimension(msg, dimensionId);
+		}
 	}
 
 	public static void sendToAll(@Nonnull final IMessage msg) {
-		NETWORK.sendToAll(msg);
+		synchronized (NETWORK) {
+			NETWORK.sendToAll(msg);
+		}
 	}
 
 	public static void sendToAllAround(@Nonnull final Locus point, @Nonnull final IMessage msg) {
-		NETWORK.sendToAllAround(msg, point);
+		synchronized (NETWORK) {
+			NETWORK.sendToAllAround(msg, point);
+		}
 	}
 
 	// Basic client -> server packet routines
