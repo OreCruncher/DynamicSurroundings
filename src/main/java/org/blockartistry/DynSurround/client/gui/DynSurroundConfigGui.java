@@ -73,11 +73,8 @@ public class DynSurroundConfigGui extends GuiConfig {
 		addConfigElement(ModOptions.CATEGORY_FOG, ModOptions.CONFIG_ENABLE_BIOME_FOG);
 		addConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_BIOME_SOUNDS);
 		addConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_JUMP_SOUND);
-		addConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_SWING_SOUND);
 		addConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_EQUIP_SOUND);
 		addConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_CRAFTING_SOUND);
-		addConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_BOW_PULL_SOUND);
-		addConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_FOOTSTEPS_SOUND);
 		addConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_ARMOR_SOUND);
 		addConfigElement(ModOptions.CATEGORY_PLAYER, ModOptions.CONFIG_ENABLE_FOOTPRINTS);
 		addConfigElement(ModOptions.CATEGORY_POTION_HUD, ModOptions.CONFIG_POTION_HUD_ENABLE);
