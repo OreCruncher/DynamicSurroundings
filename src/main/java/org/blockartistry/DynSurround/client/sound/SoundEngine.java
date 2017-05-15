@@ -32,9 +32,6 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.network.Network;
-import org.blockartistry.DynSurround.network.PacketPlaySound;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
@@ -128,13 +125,6 @@ public class SoundEngine {
 
 	@Nullable
 	public String playSound(@Nonnull final BasicSound<?> sound) {
-
-		// If it is a routable sound do so if possible
-		if (sound.shouldRoute() && DSurround.isInstalledOnServer()) {
-			final PacketPlaySound packet = new PacketPlaySound(EnvironState.getPlayer().getEntityId(), sound);
-			Network.sendToServer(packet);
-		}
-
 		if (!canFitSound()) {
 			if (ModOptions.enableDebugLogging)
 				DSurround.log().debug("> NO ROOM: [%s]", sound.toString());

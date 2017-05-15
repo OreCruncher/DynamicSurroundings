@@ -46,6 +46,8 @@ import org.blockartistry.DynSurround.client.sound.PlayerEmitter;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.DynSurround.client.sound.Sounds;
+import org.blockartistry.DynSurround.network.Network;
+import org.blockartistry.DynSurround.network.PacketPlaySound;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -194,7 +196,16 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	@Nullable
 	public String playSound(@Nonnull final BasicSound<?> sound) {
-		return sound == null ? null : SoundEngine.instance().playSound(sound);
+		if (sound == null)
+			return null;
+
+		// If it is a routable sound do so if possible
+		if (sound.shouldRoute() && DSurround.isInstalledOnServer()) {
+			final PacketPlaySound packet = new PacketPlaySound(EnvironState.getPlayer().getEntityId(), sound);
+			Network.sendToServer(packet);
+		}
+
+		return SoundEngine.instance().playSound(sound);
 	}
 
 	@SubscribeEvent

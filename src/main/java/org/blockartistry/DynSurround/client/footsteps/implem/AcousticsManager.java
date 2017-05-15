@@ -43,9 +43,9 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IStepPlayer;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions.Option;
 import org.blockartistry.DynSurround.client.footsteps.system.Association;
 import org.blockartistry.DynSurround.client.footsteps.system.Isolator;
+import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.FootstepSound;
-import org.blockartistry.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.network.PacketDisplayFootprint;
 import org.blockartistry.lib.BlockPosHelper;
@@ -225,7 +225,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 			final FootstepSound s = new FootstepSound(location, sound).setVolume(volume).setPitch(pitch);
 			if(EnvironState.isPlayerSneaking())
 				s.setRoutable(false);
-			SoundEngine.instance().playSound(s);
+			SoundEffectHandler.INSTANCE.playSound(s);
 		} catch (final Throwable t) {
 			DSurround.log().error("Unable to play sound", t);
 		}
