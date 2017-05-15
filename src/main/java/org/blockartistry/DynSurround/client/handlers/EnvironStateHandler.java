@@ -315,6 +315,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			return player != null && player.distanceWalkedModified != player.prevDistanceWalkedModified;
 		}
 
+		public static boolean isPlayerSneaking() {
+			return player != null && player.isSneaking();
+		}
+
 		public static boolean isPlayerInside() {
 			return inside;
 		}

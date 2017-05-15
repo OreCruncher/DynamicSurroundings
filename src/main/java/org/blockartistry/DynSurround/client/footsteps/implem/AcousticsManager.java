@@ -106,7 +106,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		MinecraftForge.EVENT_BUS.post(event);
 
 		// Route message to server if installed
-		if (DSurround.isInstalledOnServer()) {
+		if (!EnvironState.isPlayerSneaking() && DSurround.isInstalledOnServer()) {
 			final PacketDisplayFootprint packet = new PacketDisplayFootprint(EnvironState.getPlayer().getEntityId(),
 					pos, rotation, rightFoot);
 			Network.sendToServer(packet);
@@ -223,6 +223,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 		try {
 			final FootstepSound s = new FootstepSound(location, sound).setVolume(volume).setPitch(pitch);
+			if(EnvironState.isPlayerSneaking())
+				s.setRoutable(false);
 			SoundEngine.instance().playSound(s);
 		} catch (final Throwable t) {
 			DSurround.log().error("Unable to play sound", t);
