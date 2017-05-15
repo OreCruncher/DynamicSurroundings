@@ -37,16 +37,18 @@ import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
+public class BasicSound<T extends BasicSound<?>> extends PositionedSound implements INBTSerializable<NBTTagCompound> {
 
 	public static interface ISoundScale {
 		float getScale();
@@ -59,11 +61,21 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 		}
 	};
 
+	private static class NBT {
+		public static final String SOUND_EVENT = "s";
+		public static final String VOLUME = "v";
+		public static final String PITCH = "p";
+		public static final String X_COORD = "x";
+		public static final String Y_COORD = "y";
+		public static final String Z_COORD = "z";
+	};
+
 	protected final Random RANDOM = XorShiftRandom.current();
-	
+
 	protected String id = StringUtils.EMPTY;
 	protected float volumeThrottle = 1.0F;
 	protected ISoundScale volumeScale;
+	protected boolean route;
 
 	public BasicSound(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
 		this(event.getSoundName(), cat);
@@ -81,15 +93,30 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 		this.repeatDelay = 0;
 		this.attenuationType = ISound.AttenuationType.LINEAR;
 
+		// Sounds are not routed by default. Need to be turned on
+		// in a derived class or set via setter.
+		this.route = false;
+
 		super.sound = SoundHandler.MISSING_SOUND;
+
 	}
-	
+
+	public boolean shouldRoute() {
+		return this.route;
+	}
+
+	@SuppressWarnings("unchecked")
+	public T setRoutable(final boolean flag) {
+		this.route = flag;
+		return (T) this;
+	}
+
 	@SuppressWarnings("unchecked")
 	public T setId(@Nonnull final String id) {
 		this.id = id;
 		return (T) this;
 	}
-	
+
 	@Nonnull
 	public String getId() {
 		return this.id;
@@ -151,7 +178,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 		this.volumeScale = scale;
 		return (T) this;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public T setVolumeThrottle(final float throttle) {
 		this.volumeThrottle = throttle;
@@ -166,17 +193,40 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound {
 	public void fade() {
 
 	}
-	
+
 	public void unfade() {
-		
+
 	}
-	
+
 	public boolean isFading() {
 		return false;
 	}
-	
+
 	public boolean isDonePlaying() {
 		return false;
+	}
+
+	@Nonnull
+	@Override
+	public NBTTagCompound serializeNBT() {
+		final NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setString(NBT.SOUND_EVENT, this.positionedSoundLocation.toString());
+		nbt.setFloat(NBT.VOLUME, this.volume);
+		nbt.setFloat(NBT.PITCH, this.pitch);
+		nbt.setFloat(NBT.X_COORD, this.xPosF);
+		nbt.setFloat(NBT.Y_COORD, this.yPosF);
+		nbt.setFloat(NBT.Z_COORD, this.zPosF);
+		return nbt;
+	}
+
+	@Override
+	public void deserializeNBT(@Nonnull final NBTTagCompound nbt) {
+		this.positionedSoundLocation = new ResourceLocation(nbt.getString(NBT.SOUND_EVENT));
+		this.volume = nbt.getFloat(NBT.VOLUME);
+		this.pitch = nbt.getFloat(NBT.PITCH);
+		this.xPosF = nbt.getFloat(NBT.X_COORD);
+		this.yPosF = nbt.getFloat(NBT.Y_COORD);
+		this.zPosF = nbt.getFloat(NBT.Z_COORD);
 	}
 
 	@Override

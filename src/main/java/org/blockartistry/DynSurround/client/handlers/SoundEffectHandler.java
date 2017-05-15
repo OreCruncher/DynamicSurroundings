@@ -37,6 +37,7 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
+import org.blockartistry.DynSurround.client.event.PlayDistributedSoundEvent;
 import org.blockartistry.DynSurround.client.event.RegistryEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
@@ -137,7 +138,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	}
 
 	public void clearSounds() {
-		for(final Emitter e: this.emitters.values()) {
+		for (final Emitter e : this.emitters.values()) {
 			e.stop();
 		}
 		this.emitters.clear();
@@ -232,6 +233,18 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 		this.pending.add(new PendingSound(s, tickDelay));
 		return null;
+	}
+
+	@SubscribeEvent
+	public void onDistributedSound(@Nonnull final PlayDistributedSoundEvent event) {
+		try {
+			final BasicSound<?> sound = (BasicSound<?>) Class.forName(event.soundClass).newInstance();
+			sound.deserializeNBT(event.nbt);
+			sound.setRoutable(false);
+			this.playSound((BasicSound<?>) sound);
+		} catch (final Throwable t) {
+			;
+		}
 	}
 
 	/*

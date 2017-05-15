@@ -46,6 +46,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public final class Network {
 
 	private static int discriminator = 0;
+	private static int discriminatorServer = 0;
 
 	private Network() {
 	}
@@ -68,12 +69,16 @@ public final class Network {
 				Side.CLIENT);
 		NETWORK.registerMessage(PacketServerData.PacketHandler.class, PacketServerData.class, ++discriminator,
 				Side.CLIENT);
-		NETWORK.registerMessage(PacketDisplayFootstep.PacketHandler.class, PacketDisplayFootstep.class, ++discriminator,
+		NETWORK.registerMessage(PacketDisplayFootprint.PacketHandler.class, PacketDisplayFootprint.class,
+				++discriminator, Side.CLIENT);
+		NETWORK.registerMessage(PacketPlaySound.PacketHandler.class, PacketPlaySound.class, ++discriminator,
 				Side.CLIENT);
 
 		// Client -> Server messages
-		NETWORK.registerMessage(PacketGenerateFootstep.PacketHandler.class, PacketGenerateFootstep.class,
-				++discriminator, Side.SERVER);
+		NETWORK.registerMessage(PacketDisplayFootprint.PacketHandler.class, PacketDisplayFootprint.class,
+				++discriminatorServer, Side.SERVER);
+		NETWORK.registerMessage(PacketPlaySound.PacketHandler.class, PacketPlaySound.class, ++discriminatorServer,
+				Side.SERVER);
 	}
 
 	@Nonnull

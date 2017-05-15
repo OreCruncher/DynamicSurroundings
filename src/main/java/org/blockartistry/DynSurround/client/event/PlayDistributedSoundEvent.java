@@ -21,38 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.blockartistry.DynSurround.api.events;
+
+package org.blockartistry.DynSurround.client.event;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-/**
- * Fires when a footstep event occurs. If received on client it means a footstep
- * is going to be displayed; if on server it means a client is requesting it to
- * be distributed to other attached clients.
- */
-public class FootstepEvent extends Event {
-
-	public final Vec3d location;
-	public final float rotation;
-	public final boolean isRightFoot;
-
-	protected FootstepEvent(@Nonnull final Vec3d loc, final float rotation, final boolean rightFoot) {
-		this.location = loc;
-		this.rotation = rotation;
-		this.isRightFoot = rightFoot;
-	}
-
-	/**
-	 * Event received client side when the server requests that footprints be
-	 * displayed.
-	 */
-	public static class Display extends FootstepEvent {
-		public Display(@Nonnull final Vec3d pos, final float rotation, final boolean rightFoot) {
-			super(pos, rotation, rightFoot);
-		}
+public class PlayDistributedSoundEvent extends Event {
+	
+	public final String soundClass;
+	public final NBTTagCompound nbt;
+	
+	public PlayDistributedSoundEvent(@Nonnull final String soundClass, @Nonnull final NBTTagCompound nbt) {
+		this.soundClass = soundClass;
+		this.nbt = nbt;
 	}
 
 }
