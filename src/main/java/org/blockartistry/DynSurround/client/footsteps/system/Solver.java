@@ -69,9 +69,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public class Solver {
-	
+
 	private final Isolator isolator;
-	
+
 	public Solver(@Nonnull final Isolator isolator) {
 		this.isolator = isolator;
 	}
@@ -352,8 +352,8 @@ public class Solver {
 	 */
 	public boolean playSpecialStoppingConditions(@Nonnull final EntityPlayer ply) {
 		if (ply.isInWater()) {
-			final float volume = (float) MathStuff.sqrt(
-					ply.motionX * ply.motionX + ply.motionY * ply.motionY + ply.motionZ * ply.motionZ) * 1.25F;
+			final float volume = (float) MathStuff
+					.sqrt(ply.motionX * ply.motionX + ply.motionY * ply.motionY + ply.motionZ * ply.motionZ) * 1.25F;
 			final ConfigOptions options = new ConfigOptions();
 			options.getMap().put(Option.GLIDING_VOLUME, volume > 1 ? 1 : volume);
 			// material water, see EntityLivingBase line 286
@@ -438,26 +438,24 @@ public class Solver {
 	@Nonnull
 	public Association addSoundOverlay(@Nullable Association assoc) {
 
-		if (ModOptions.enableArmorSounds) {
-			final IAcoustic armorAddon = this.isolator.getAcoustics()
-					.getAcoustic(EnvironState.getPlayerArmorClass().getAcoustic());
-			IAcoustic footAddon = this.isolator.getAcoustics()
-					.getAcoustic(EnvironState.getPlayerFootArmorClass().getFootAcoustic());
+		final IAcoustic armorAddon = this.isolator.getAcoustics()
+				.getAcoustic(EnvironState.getPlayerArmorClass().getAcoustic());
+		IAcoustic footAddon = this.isolator.getAcoustics()
+				.getAcoustic(EnvironState.getPlayerFootArmorClass().getFootAcoustic());
 
-			if (armorAddon == null && footAddon == null)
-				return assoc;
+		if (armorAddon == null && footAddon == null)
+			return assoc;
 
-			// Eliminate duplicates
-			if (armorAddon == footAddon)
-				footAddon = null;
+		// Eliminate duplicates
+		if (armorAddon == footAddon)
+			footAddon = null;
 
-			if (assoc == null)
-				assoc = new Association();
-			if (armorAddon != null)
-				assoc.add(armorAddon);
-			if (footAddon != null)
-				assoc.add(footAddon);
-		}
+		if (assoc == null)
+			assoc = new Association();
+		if (armorAddon != null)
+			assoc.add(armorAddon);
+		if (footAddon != null)
+			assoc.add(footAddon);
 
 		return assoc;
 	}

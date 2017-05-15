@@ -69,7 +69,7 @@ public class SoundCullHandler extends EffectHandlerBase {
 		final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
 		for (final Object resource : handler.soundRegistry.getKeys()) {
 			final String rs = resource.toString();
-			if (getSoundRegistry().isSoundBlocked(rs)) {
+			if (getSoundRegistry().isSoundBlockedLogical(rs)) {
 				DSurround.log().debug("Blocking sound '%s'", rs);
 				this.soundsToBlock.add(rs);
 			} else if (getSoundRegistry().isSoundCulled(rs)) {
