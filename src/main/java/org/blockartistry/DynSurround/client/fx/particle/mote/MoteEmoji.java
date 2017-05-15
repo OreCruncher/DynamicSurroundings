@@ -68,12 +68,13 @@ public class MoteEmoji extends MoteMotionBase {
 	protected float texV1, texV2;
 
 	public MoteEmoji(@Nonnull final Entity entity) {
-		super(entity.getEntityWorld(), entity.posX, entity.posY, entity.posZ, 0, 0, 0);
+		super(entity.getEntityWorld(), 0, 0, 0, 0, 0, 0);
+		
 		final double newY = entity.posY + entity.height - (entity.isSneaking() ? 0.25D : 0);
-
-		this.prevX = entity.posX;
-		this.prevY = newY;
-		this.prevZ = entity.posZ;
+		this.prevX = this.posX = entity.posX;
+		this.prevY = this.posY = newY;
+		this.prevZ = this.posZ = entity.posZ;
+		this.position.setPos(this.posX, this.posY, this.posZ);
 
 		this.motionX = 0.0D;
 		this.motionY = 0.0D;
@@ -128,6 +129,7 @@ public class MoteEmoji extends MoteMotionBase {
 		this.posX = entity.posX;
 		this.posY = entity.posY + entity.height - (entity.isSneaking() ? 0.25D : 0);
 		this.posZ = entity.posZ;
+		this.position.setPos(this.posX, this.posY, this.posZ);
 
 		// Calculate the current period values
 		this.period = MathStuff.wrapDegrees(this.period + ORBITAL_TICK);
