@@ -32,10 +32,10 @@ import org.blockartistry.DynSurround.client.event.PlayDistributedSoundEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -50,22 +50,19 @@ public class PacketPlaySound implements IMessage {
 			if (ctx.side == Side.CLIENT) {
 				// Don't forward if it the current player sent it
 				final EntityPlayer player = EnvironState.getPlayer();
-				if (player != null && message.entityId != player.getEntityId())
+				if (player != null && message.locus.entityId != player.getEntityId())
 					Network.postEvent(new PlayDistributedSoundEvent(message.soundClass, message.nbt));
 			} else {
 				// No event - turn around quick and broadcast to necessary
-				// clients.
-				// This should take place on a Netty thread.
-				final TargetPoint point = Network.getTargetPoint(ctx.getServerHandler().playerEntity,
-						ModOptions.specialEffectRange);
-				Network.sendToAllAround(point, message);
+				// clients. This should take place on a Netty thread.
+				final Locus newLocus = new Locus(message.locus, ModOptions.specialEffectRange);
+				Network.sendToAllAround(newLocus, message);
 			}
 			return null;
 		}
 	}
 
-	// Package level
-	protected int entityId;
+	protected Locus locus;
 	protected String soundClass;
 	protected NBTTagCompound nbt = new NBTTagCompound();
 
@@ -73,22 +70,22 @@ public class PacketPlaySound implements IMessage {
 
 	}
 
-	public PacketPlaySound(final int entityId, @Nonnull final BasicSound<?> sound) {
-		this.entityId = entityId;
+	public PacketPlaySound(@Nonnull final Entity entity, @Nonnull final BasicSound<?> sound) {
+		this.locus = new Locus(entity, sound.getXPosF(), sound.getYPosF(), sound.getZPosF(), ModOptions.specialEffectRange);
 		this.soundClass = sound.getClass().getName();
 		this.nbt = sound.serializeNBT();
 	}
 
 	@Override
 	public void fromBytes(@Nonnull final ByteBuf buf) {
-		this.entityId = buf.readInt();
+		this.locus = new Locus(buf);
 		this.soundClass = ByteBufUtils.readUTF8String(buf);
 		this.nbt = ByteBufUtils.readTag(buf);
 	}
 
 	@Override
 	public void toBytes(@Nonnull final ByteBuf buf) {
-		buf.writeInt(this.entityId);
+		this.locus.toBytes(buf);
 		ByteBufUtils.writeUTF8String(buf, this.soundClass);
 		ByteBufUtils.writeTag(buf, this.nbt);
 	}

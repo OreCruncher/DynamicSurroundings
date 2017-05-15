@@ -27,13 +27,13 @@ package org.blockartistry.DynSurround.server.services;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.network.Locus;
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.network.PacketSpeechBubble;
 
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public final class SpeechBubbleService extends Service {
 
@@ -48,7 +48,7 @@ public final class SpeechBubbleService extends Service {
 		if (!ModOptions.enableSpeechBubbles)
 			return;
 
-		final TargetPoint point = Network.getTargetPoint(event.getPlayer(), ModOptions.speechBubbleRange);
+		final Locus point = new Locus(event.getPlayer(), ModOptions.speechBubbleRange);
 		final PacketSpeechBubble packet = new PacketSpeechBubble(event.getPlayer().getUniqueID(), event.getMessage(),
 				false);
 		Network.sendToAllAround(point, packet);

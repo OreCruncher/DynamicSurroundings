@@ -36,6 +36,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.network.Locus;
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.network.PacketSpeechBubble;
 import org.blockartistry.lib.Translations;
@@ -49,7 +50,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class EntityAIChat extends EntityAIBase {
 
@@ -178,7 +178,7 @@ public class EntityAIChat extends EntityAIBase {
 
 	@Override
 	public void startExecuting() {
-		final TargetPoint point = Network.getTargetPoint(this.theEntity, ModOptions.speechBubbleRange);
+		final Locus point = new Locus(this.theEntity, ModOptions.speechBubbleRange);
 		final PacketSpeechBubble packet = new PacketSpeechBubble(this.theEntity.getPersistentID(), getChatMessage(), true);
 		Network.sendToAllAround(point, packet);
 		this.nextChat = getWorldTicks() + getNextChatTime();
