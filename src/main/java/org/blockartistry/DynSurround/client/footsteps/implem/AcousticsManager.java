@@ -47,7 +47,7 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.client.sound.FootstepSound;
 import org.blockartistry.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.DynSurround.network.Network;
-import org.blockartistry.DynSurround.network.PacketGenerateFootstep;
+import org.blockartistry.DynSurround.network.PacketDisplayFootprint;
 import org.blockartistry.lib.BlockPosHelper;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.TimeUtils;
@@ -100,12 +100,16 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	protected void produceFootprint(final int dim, @Nonnull final Vec3d pos, final float rotation,
 			final boolean rightFoot) {
+
+		// Display the current player footprint
+		final FootstepEvent.Display event = new FootstepEvent.Display(pos, rotation, rightFoot);
+		MinecraftForge.EVENT_BUS.post(event);
+
+		// Route message to server if installed
 		if (DSurround.isInstalledOnServer()) {
-			final PacketGenerateFootstep packet = new PacketGenerateFootstep(dim, pos, rotation, rightFoot);
+			final PacketDisplayFootprint packet = new PacketDisplayFootprint(EnvironState.getPlayer().getEntityId(),
+					pos, rotation, rightFoot);
 			Network.sendToServer(packet);
-		} else {
-			final FootstepEvent.Display event = new FootstepEvent.Display(dim, pos, rotation, rightFoot);
-			MinecraftForge.EVENT_BUS.post(event);
 		}
 	}
 

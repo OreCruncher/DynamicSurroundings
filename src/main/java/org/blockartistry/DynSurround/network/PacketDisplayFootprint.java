@@ -28,42 +28,53 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.api.events.FootstepEvent;
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
 
-public class PacketGenerateFootstep implements IMessage {
+public class PacketDisplayFootprint implements IMessage {
 
-	public static class PacketHandler implements IMessageHandler<PacketGenerateFootstep, IMessage> {
+	public static class PacketHandler implements IMessageHandler<PacketDisplayFootprint, IMessage> {
 		@Override
 		@Nullable
-		public IMessage onMessage(@Nonnull final PacketGenerateFootstep message, @Nullable final MessageContext ctx) {
-			// No event - turn around quick and broadcast to necessary clients.
-			// This should take place on a Netty thread.
-			final PacketDisplayFootstep packet = new PacketDisplayFootstep(message);
-			final TargetPoint point = Network.getTargetPoint(message.dimensionId, message.pos,
-					ModOptions.specialEffectRange);
-			Network.sendToAllAround(point, packet);
+		public IMessage onMessage(@Nonnull final PacketDisplayFootprint message, @Nullable final MessageContext ctx) {
+			if (ctx.side == Side.CLIENT) {
+				// Don't forward if it the current player sent it
+				final EntityPlayer player = EnvironState.getPlayer();
+				if (player != null && message.entityId != player.getEntityId())
+					Network.postEvent(new FootstepEvent.Display(message.pos, message.rotation, message.isRightFoot));
+			} else {
+				// No event - turn around quick and broadcast to necessary
+				// clients. This should take place on a Netty thread.
+				final TargetPoint point = Network.getTargetPoint(ctx.getServerHandler().playerEntity,
+						ModOptions.specialEffectRange);
+				Network.sendToAllAround(point, message);
+			}
 			return null;
 		}
 	}
 
 	// Package level
-	int dimensionId = 0;
-	Vec3d pos = Vec3d.ZERO;
-	float rotation = 0F;
-	boolean isRightFoot = false;
+	protected int entityId;
+	protected Vec3d pos = Vec3d.ZERO;
+	protected float rotation = 0F;
+	protected boolean isRightFoot = false;
 
-	public PacketGenerateFootstep() {
+	public PacketDisplayFootprint() {
 
 	}
 
-	public PacketGenerateFootstep(final int dimensionId, @Nonnull final Vec3d pos, final float rotation,
+	public PacketDisplayFootprint(final int entityId, @Nonnull final Vec3d pos, final float rotation,
 			final boolean rightFoot) {
-		this.dimensionId = dimensionId;
+		this.entityId = entityId;
 		this.pos = pos;
 		this.rotation = rotation;
 		this.isRightFoot = rightFoot;
@@ -71,7 +82,7 @@ public class PacketGenerateFootstep implements IMessage {
 
 	@Override
 	public void fromBytes(@Nonnull final ByteBuf buf) {
-		this.dimensionId = buf.readInt();
+		this.entityId = buf.readInt();
 		final double x = buf.readFloat();
 		final double y = buf.readFloat();
 		final double z = buf.readFloat();
@@ -82,7 +93,7 @@ public class PacketGenerateFootstep implements IMessage {
 
 	@Override
 	public void toBytes(@Nonnull final ByteBuf buf) {
-		buf.writeInt(this.dimensionId);
+		buf.writeInt(this.entityId);
 		buf.writeFloat((float) this.pos.xCoord);
 		buf.writeFloat((float) this.pos.yCoord);
 		buf.writeFloat((float) this.pos.zCoord);
