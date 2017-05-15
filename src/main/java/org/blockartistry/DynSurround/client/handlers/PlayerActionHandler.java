@@ -142,9 +142,6 @@ public class PlayerActionHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void onItemSwing(@Nonnull final PlayerInteractEvent.LeftClickEmpty event) {
-		if (!ModOptions.enableSwingSound)
-			return;
-
 		if (event.getEntityPlayer() == null || event.getEntityPlayer().worldObj == null)
 			return;
 
@@ -182,9 +179,6 @@ public class PlayerActionHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void onItemUse(@Nonnull final PlayerInteractEvent.RightClickItem event) {
-		if (!ModOptions.enableBowPullSound)
-			return;
-
 		if (event.getEntityPlayer() == null || event.getEntityPlayer().worldObj == null || event.getItemStack() == null)
 			return;
 

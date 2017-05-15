@@ -55,7 +55,7 @@ public final class ModOptions {
 	public static class Trace {
 		public static final int TRUE_SOUND_VOLUME = 0x1;
 	};
-	
+
 	private ModOptions() {
 	}
 
@@ -308,11 +308,8 @@ public final class ModOptions {
 	public static final String CONFIG_STREAMING_CHANNEL_COUNT = "Number Streaming Channels";
 	public static final String CONFIG_MUTE_WHEN_BACKGROUND = "Mute when Background";
 	public static final String CONFIG_ENABLE_JUMP_SOUND = "Jump Sound";
-	public static final String CONFIG_ENABLE_SWING_SOUND = "Swing Sound";
 	public static final String CONFIG_ENABLE_EQUIP_SOUND = "Equip Sound";
 	public static final String CONFIG_ENABLE_CRAFTING_SOUND = "Crafting Sound";
-	public static final String CONFIG_ENABLE_BOW_PULL_SOUND = "Bow Pull Sound";
-	public static final String CONFIG_ENABLE_FOOTSTEPS_SOUND = "Footsteps";
 	public static final String CONFIG_FOOTSTEPS_SOUND_FACTOR = "Footsteps Sound Factor";
 	public static final String CONFIG_FOOTSTEPS_QUAD = "Footsteps as Quadruped";
 	public static final String CONFIG_ENABLE_ARMOR_SOUND = "Armor Sound";
@@ -323,10 +320,9 @@ public final class ModOptions {
 	public static final String CONFIG_THUNDER_VOLUME = "Thunder Volume";
 	public static final String CONFIG_ENABLE_BATTLEMUSIC = "Battle Music";
 	private static final List<String> soundsSort = Arrays.asList(CONFIG_RESTART_SOUND_SYSTEM,
-			CONFIG_ENABLE_BIOME_SOUNDS, CONFIG_MASTER_SOUND_FACTOR, CONFIG_ENABLE_FOOTSTEPS_SOUND,
-			CONFIG_FOOTSTEPS_SOUND_FACTOR, CONFIG_FOOTSTEPS_QUAD, CONFIG_ENABLE_ARMOR_SOUND, CONFIG_ENABLE_JUMP_SOUND,
-			CONFIG_ENABLE_SWING_SOUND, CONFIG_ENABLE_EQUIP_SOUND, CONFIG_ENABLE_CRAFTING_SOUND,
-			CONFIG_ENABLE_BOW_PULL_SOUND, CONFIG_AUTO_CONFIG_CHANNELS, CONFIG_NORMAL_CHANNEL_COUNT,
+			CONFIG_ENABLE_BIOME_SOUNDS, CONFIG_MASTER_SOUND_FACTOR, CONFIG_FOOTSTEPS_SOUND_FACTOR,
+			CONFIG_FOOTSTEPS_QUAD, CONFIG_ENABLE_ARMOR_SOUND, CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_EQUIP_SOUND,
+			CONFIG_ENABLE_CRAFTING_SOUND, CONFIG_AUTO_CONFIG_CHANNELS, CONFIG_NORMAL_CHANNEL_COUNT,
 			CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS,
 			CONFIG_SOUND_CULL_THRESHOLD, CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES, CONFIG_ENABLE_BATTLEMUSIC);
 
@@ -364,21 +360,12 @@ public final class ModOptions {
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_JUMP_SOUND, defaultValue = "true", lang = "cfg.sound.Jump")
 	@Comment("Enable player Jump sound effect")
 	public static boolean enableJumpSound = true;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_SWING_SOUND, defaultValue = "true", lang = "cfg.sound.Swing")
-	@Comment("Enable Weapon/Tool Swing sound effect")
-	public static boolean enableSwingSound = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_EQUIP_SOUND, defaultValue = "true", lang = "cfg.sound.Equip")
 	@Comment("Enable Weapon/Tool Equip sound effect")
 	public static boolean enableEquipSound = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_CRAFTING_SOUND, defaultValue = "true", lang = "cfg.sound.Craft")
 	@Comment("Enable Item Crafted sound effect")
 	public static boolean enableCraftingSound = true;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BOW_PULL_SOUND, defaultValue = "true", lang = "cfg.sound.Bow")
-	@Comment("Enable Bow Pull sound effect")
-	public static boolean enableBowPullSound = true;
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_FOOTSTEPS_SOUND, defaultValue = "true", lang = "cfg.sound.Footsteps")
-	@Comment("Enable Footstep sound effects")
-	public static boolean enableFootstepSounds = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_FOOTSTEPS_SOUND_FACTOR, defaultValue = "0.35", lang = "cfg.sound.FootstepScale")
 	@MinMaxFloat(min = 0.0F, max = 1.0F)
 	@Comment("Volume scale factor for footstep sounds")
