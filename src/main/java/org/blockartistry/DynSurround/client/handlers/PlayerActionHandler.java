@@ -2,8 +2,10 @@ package org.blockartistry.DynSurround.client.handlers;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.DynSurround.client.sound.Sounds;
@@ -62,10 +64,15 @@ public class PlayerActionHandler extends EffectHandlerBase {
 				SoundEngine.instance().stopSound(this.soundId, SoundCategory.PLAYERS);
 
 				final ItemStack currentStack = player.getHeldItem(this.hand);
-				final SoundEffect sound = PlayerActionHandler.this.itemRegistry.getEquipSound(currentStack);
-
-				this.soundId = sound == null ? null : SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound);
-				this.lastHeld = currentStack == null ? null : currentStack.getItem();
+				final SoundEffect soundEffect = PlayerActionHandler.this.itemRegistry.getEquipSound(currentStack);
+				if (soundEffect != null) {
+					final BasicSound<?> sound = soundEffect.createSound(player);
+					this.soundId = SoundEffectHandler.INSTANCE.playSound(sound);
+					this.lastHeld = currentStack.getItem();
+				} else {
+					this.soundId = null;
+					this.lastHeld = null;
+				}
 			}
 		}
 	}
@@ -127,8 +134,10 @@ public class PlayerActionHandler extends EffectHandlerBase {
 		if (event.getEntity() == null || event.getEntity().worldObj == null)
 			return;
 
-		if (event.getEntity().worldObj.isRemote && EnvironState.isPlayer(event.getEntity()))
-			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), Sounds.JUMP);
+		if (event.getEntity().worldObj.isRemote && EnvironState.isPlayer(event.getEntity())) {
+			final BasicSound<?> sound = Sounds.JUMP.createSound(EnvironState.getPlayer());
+			SoundEffectHandler.INSTANCE.playSound(sound);
+		}
 	}
 
 	@SubscribeEvent
@@ -141,9 +150,12 @@ public class PlayerActionHandler extends EffectHandlerBase {
 
 		if (event.getEntityPlayer().worldObj.isRemote && EnvironState.isPlayer(event.getEntityPlayer())) {
 			final ItemStack currentItem = event.getEntityPlayer().getHeldItem(event.getHand());
-			final SoundEffect sound = this.itemRegistry.getSwingSound(currentItem);
-			if (sound != null)
-				SoundEffectHandler.INSTANCE.playSoundAtPlayer(event.getEntityPlayer(), sound);
+			final SoundEffect soundEffect = this.itemRegistry.getSwingSound(currentItem);
+			if (soundEffect != null) {
+				final BasicSound<?> sound = soundEffect.createSound(EnvironState.getPlayer());
+				sound.setRoutable(DSurround.isInstalledOnServer());
+				SoundEffectHandler.INSTANCE.playSound(sound);
+			}
 		}
 	}
 
@@ -162,7 +174,8 @@ public class PlayerActionHandler extends EffectHandlerBase {
 
 		if (event.player.worldObj.isRemote && EnvironState.isPlayer(event.player)) {
 			this.craftSoundThrottle = EnvironState.getTickCounter();
-			SoundEffectHandler.INSTANCE.playSoundAtPlayer(EnvironState.getPlayer(), Sounds.CRAFTING);
+			final BasicSound<?> sound = Sounds.CRAFTING.createSound(EnvironState.getPlayer());
+			SoundEffectHandler.INSTANCE.playSound(sound);
 		}
 
 	}
@@ -177,9 +190,12 @@ public class PlayerActionHandler extends EffectHandlerBase {
 
 		if (event.getEntityPlayer().worldObj.isRemote && this.itemRegistry.doBowSound(event.getItemStack())) {
 			final ItemStack currentItem = event.getEntityPlayer().getHeldItem(event.getHand());
-			final SoundEffect sound = this.itemRegistry.getUseSound(currentItem);
-			if (sound != null)
-				SoundEffectHandler.INSTANCE.playSoundAtPlayer(event.getEntityPlayer(), sound);
+			final SoundEffect soundEffect = this.itemRegistry.getUseSound(currentItem);
+			if (soundEffect != null) {
+				final BasicSound<?> sound = soundEffect.createSound(EnvironState.getPlayer());
+				sound.setRoutable(DSurround.isInstalledOnServer());
+				SoundEffectHandler.INSTANCE.playSound(sound);
+			}
 		}
 	}
 
