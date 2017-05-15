@@ -27,7 +27,6 @@ package org.blockartistry.DynSurround.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.event.PlayDistributedSoundEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
@@ -55,12 +54,14 @@ public class PacketPlaySound implements IMessage {
 			} else {
 				// No event - turn around quick and broadcast to necessary
 				// clients. This should take place on a Netty thread.
-				final Locus newLocus = new Locus(message.locus, ModOptions.specialEffectRange);
-				Network.sendToAllAround(newLocus, message);
+				Network.sendToAllAround(message.locus, message);
 			}
 			return null;
 		}
 	}
+	
+	// Sounds have a range of 16 blocks per normal
+	private static final int RANGE = 16;
 
 	protected Locus locus;
 	protected String soundClass;
@@ -71,7 +72,7 @@ public class PacketPlaySound implements IMessage {
 	}
 
 	public PacketPlaySound(@Nonnull final Entity entity, @Nonnull final BasicSound<?> sound) {
-		this.locus = new Locus(entity, sound.getXPosF(), sound.getYPosF(), sound.getZPosF(), ModOptions.specialEffectRange);
+		this.locus = new Locus(entity, sound.getXPosF(), sound.getYPosF(), sound.getZPosF(), RANGE);
 		this.soundClass = sound.getClass().getName();
 		this.nbt = sound.serializeNBT();
 	}
