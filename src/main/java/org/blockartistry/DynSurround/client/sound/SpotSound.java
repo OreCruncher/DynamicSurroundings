@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.ModOptions;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
@@ -44,6 +45,11 @@ public class SpotSound extends BasicSound<SpotSound> {
 			return ModOptions.masterSoundScaleFactor;
 		}
 	};
+
+	public SpotSound() {
+		super((ResourceLocation) null, SoundCategory.PLAYERS);
+		this.setVolumeScale(BIOME_EFFECT);
+	}
 
 	SpotSound(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound) {
 		super(sound.getSound(), sound.getCategory());
@@ -70,9 +76,9 @@ public class SpotSound extends BasicSound<SpotSound> {
 		this.repeatDelay = 0;
 
 		this.setPosition(player);
-		
+
 		// If it is not a player sound randomize the location around the player
-		if(sound.getCategory() != SoundCategory.PLAYERS) {
+		if (sound.getCategory() != SoundCategory.PLAYERS) {
 			this.xPosF += randomRange(SPOT_SOUND_RANGE);
 			this.yPosF += randomRange(SPOT_SOUND_RANGE);
 			this.zPosF += randomRange(SPOT_SOUND_RANGE);
