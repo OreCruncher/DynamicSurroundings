@@ -56,6 +56,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 //@SideOnly(Side.CLIENT)
 public final class SoundRegistry extends Registry {
 
+	private static final String ARMOR_SOUND_PREFIX = DSurround.MOD_ID + ":fs.armor.";
+	
 	private final static Map<ResourceLocation, SoundMetadata> soundMetadata = Maps.newHashMap();
 
 	private final List<String> cullSoundNames = new ArrayList<String>();
@@ -101,6 +103,10 @@ public final class SoundRegistry extends Registry {
 
 	public boolean isSoundBlocked(@Nonnull final String sound) {
 		return this.blockSoundNames.contains(sound);
+	}
+	
+	public boolean isSoundBlockedLogical(@Nonnull final String sound) {
+		return this.isSoundBlocked(sound) || (!ModOptions.enableArmorSounds && sound.startsWith(ARMOR_SOUND_PREFIX));
 	}
 
 	public float getVolumeScale(@Nonnull final String soundName) {

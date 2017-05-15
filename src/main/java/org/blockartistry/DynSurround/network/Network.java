@@ -24,11 +24,14 @@
 
 package org.blockartistry.DynSurround.network;
 
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.WorldServer;
@@ -107,8 +110,10 @@ public final class Network {
 	}
 
 	public static void sendToEntityViewers(@Nonnull final Entity entity, @Nonnull final IMessage msg) {
-		((WorldServer) entity.getEntityWorld()).getEntityTracker().sendToTrackingAndSelf(entity,
-				NETWORK.getPacketFrom(msg));
+		final Set<? extends EntityPlayer> players = ((WorldServer) entity.getEntityWorld()).getEntityTracker()
+				.getTrackingPlayers(entity);
+		for (final EntityPlayer player : players)
+			NETWORK.sendTo(msg, (EntityPlayerMP) player);
 	}
 
 	public static void sendToDimension(final int dimensionId, @Nonnull final IMessage msg) {
