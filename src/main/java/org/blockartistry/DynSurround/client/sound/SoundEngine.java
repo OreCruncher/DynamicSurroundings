@@ -227,6 +227,14 @@ public class SoundEngine {
 				streamChannelCount, totalChannels == -1 ? "UNKNOWN" : Integer.toString(totalChannels));
 		SoundSystemConfig.setNumberNormalChannels(normalChannelCount);
 		SoundSystemConfig.setNumberStreamingChannels(streamChannelCount);
+
+		// Setup sound buffering
+		if (ModOptions.streamBufferCount != 0)
+			SoundSystemConfig.setNumberStreamingBuffers(ModOptions.streamBufferCount);
+		if (ModOptions.streamBufferSize != 0)
+			SoundSystemConfig.setStreamingBufferSize(ModOptions.streamBufferSize * 1024);
+		DSurround.log().info("Stream buffers: %d x %d", SoundSystemConfig.getNumberStreamingBuffers(),
+				SoundSystemConfig.getStreamingBufferSize());
 	}
 
 }
