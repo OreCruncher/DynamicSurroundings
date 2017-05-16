@@ -25,47 +25,64 @@
 package org.blockartistry.DynSurround.api.entity;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 public enum EmojiType {
 
 	/** No emoji will be displayed */
-	NONE,
+	NONE(0),
 	/** The attack emoji will be displayed */
-	ATTACK,
+	ATTACK(1),
 	/** The flee emoji will be displayed */
-	FLEE,
+	FLEE(2),
 	/** The happy emoji will be displayed */
-	HAPPY,
+	HAPPY(3),
 	/** The sad emoji will be displayed */
-	SAD,
+	SAD(4),
 	/** The sick emoji will be displayed */
-	SICK,
+	SICK(5),
 	/** The hurt emoji will be displayed */
-	HURT,
+	HURT(6),
 	/** The watch emoji will be displayed */
-	WATCH,
+	WATCH(7),
 	/** The farm farm will be displayed */
-	FARM,
+	FARM(8),
 	/** The work emoji will be displayed */
-	WORK,
+	WORK(9),
 	/** The trade emoji will be displayed */
-	TRADE,
+	TRADE(10),
 	/** The angry emoji will be displayed */
-	ANGRY,
+	ANGRY(11),
 	/** The eat emoji will be displayed */
-	EAT;
+	EAT(12);
 
-	@Nullable
-	public static EmojiType get(int id) {
-		final EmojiType[] v = EmojiType.values();
-		if (id > v.length || id < 0)
-			return NONE;
-		return v[id];
+	private static final TIntObjectHashMap<EmojiType> lookup = new TIntObjectHashMap<EmojiType>();
+	static {
+		for (final EmojiType state : EmojiType.values()) {
+			lookup.put(state.getId(), state);
+		}
 	}
-	
+
+	private final int id;
+
+	EmojiType(final int id) {
+		this.id = id;
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	@Nonnull
+	public static EmojiType get(int id) {
+		EmojiType result = lookup.get(id);
+		if (result == null)
+			result = EmojiType.NONE;
+		return result;
+	}
+
 	public static int getId(@Nonnull final EmojiType type) {
-		return type.ordinal();
+		return type.getId();
 	}
 
 }
