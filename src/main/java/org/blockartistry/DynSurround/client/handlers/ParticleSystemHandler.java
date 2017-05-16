@@ -24,7 +24,7 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import javax.annotation.Nonnull;
 
@@ -35,9 +35,7 @@ import org.blockartistry.DynSurround.client.fx.particle.system.ParticleSystem;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.BlockPosHelper;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-
+import com.google.common.collect.HashBiMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -51,7 +49,7 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 
 	public static ParticleSystemHandler INSTANCE;
 
-	private final Map<BlockPos, ParticleSystem> systems = new HashMap<BlockPos, ParticleSystem>();
+	private final Map<BlockPos, ParticleSystem> systems = HashBiMap.create(32);
 
 	public ParticleSystemHandler() {
 		INSTANCE = this;
@@ -66,30 +64,28 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 
-		if(this.systems.size() == 0)
+		if (this.systems.size() == 0)
 			return;
 
-		// Process the system list.  Remove entries that have expired
-		// or gone out of range; trigger and update() on remaining ones.
-		// Note that particles will be updated via the Minecraft
-		// particle manager or a ParticleCollection.
 		final double range = ModOptions.specialEffectRange;
 		final BlockPos min = EnvironState.getPlayerPosition().add(-range, -range, -range);
 		final BlockPos max = EnvironState.getPlayerPosition().add(range, range, range);
 
-		Iterables.removeIf(this.systems.values(), new Predicate<ParticleSystem>() {
-			@Override
-			public boolean apply(@Nonnull final ParticleSystem input) {
-				if (!input.isAlive())
-					return true;
-				if (!BlockPosHelper.contains(input.getPos(), min, max)) {
-					input.setExpired();
-					return true;
-				}
-				input.onUpdate();
-				return !input.isAlive();
+		final Iterator<ParticleSystem> itr = this.systems.values().iterator();
+		while (itr.hasNext()) {
+			final ParticleSystem system = itr.next();
+
+			// If it is out of range expire, else update
+			if (!BlockPosHelper.contains(system.getPos(), min, max)) {
+				system.setExpired();
+			} else {
+				system.onUpdate();
 			}
-		});
+
+			// If it's dead remove from the list
+			if (!system.isAlive())
+				itr.remove();
+		}
 	}
 
 	@Override
@@ -105,7 +101,7 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 	private static boolean interestingEvent(final BlockEffectEvent event) {
 		return event.effect != BlockEffectType.FIREFLY;
 	}
-	
+
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onBlockEffectEvent(@Nonnull final BlockEffectEvent event) {
 		if (interestingEvent(event) && !okToSpawn(event.location))
