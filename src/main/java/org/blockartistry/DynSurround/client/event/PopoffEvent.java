@@ -24,20 +24,18 @@
 
 package org.blockartistry.DynSurround.client.event;
 
-import java.util.UUID;
-
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class PopoffEvent extends Event {
 
-	public final UUID entityId;
+	public final int entityId;
 	public final float posX;
 	public final float posY;
 	public final float posZ;
 	public final boolean isCritical;
 	public final int amount;
 
-	public PopoffEvent(final UUID id, final float x, final float y, final float z, final boolean isCritical,
+	public PopoffEvent(final int id, final float x, final float y, final float z, final boolean isCritical,
 			final int amount) {
 		this.entityId = id;
 		this.posX = x;

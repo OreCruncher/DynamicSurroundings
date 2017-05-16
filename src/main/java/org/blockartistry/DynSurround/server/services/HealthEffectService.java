@@ -90,7 +90,7 @@ public final class HealthEffectService extends Service {
 
 		final Entity entity = event.getEntityLiving();
 		final Locus point = new Locus(entity, RANGE);
-		final PacketHealthChange packet = new PacketHealthChange(entity.getUniqueID(), (float) entity.posX,
+		final PacketHealthChange packet = new PacketHealthChange(entity.getEntityId(), (float) entity.posX,
 				(float) entity.posY + (entity.height / 2.0F), (float) entity.posZ, isCrit, (int) event.getAmount());
 		Network.sendToAllAround(point, packet);
 	}
@@ -111,7 +111,7 @@ public final class HealthEffectService extends Service {
 
 		final Entity entity = event.getEntityLiving();
 		final Locus point = new Locus(entity, RANGE);
-		final PacketHealthChange packet = new PacketHealthChange(entity.getUniqueID(), (float) entity.posX,
+		final PacketHealthChange packet = new PacketHealthChange(entity.getEntityId(), (float) entity.posX,
 				(float) entity.posY + (entity.height / 2.0F), (float) entity.posZ, false, -(int) event.getAmount());
 		Network.sendToAllAround(point, packet);
 	}
