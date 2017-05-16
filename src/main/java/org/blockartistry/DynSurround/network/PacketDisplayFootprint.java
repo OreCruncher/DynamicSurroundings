@@ -37,6 +37,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketDisplayFootprint implements IMessage {
 
@@ -73,6 +75,7 @@ public class PacketDisplayFootprint implements IMessage {
 
 	}
 
+	@SideOnly(Side.CLIENT)
 	public PacketDisplayFootprint(@Nonnull final Entity entity, @Nonnull final Vec3d pos, final float rotation,
 			final boolean rightFoot) {
 		this.locus = new Locus(entity, pos, ModOptions.specialEffectRange);
