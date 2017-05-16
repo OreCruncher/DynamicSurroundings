@@ -1,3 +1,32 @@
+###DynamicSurroundings-1.10.2-3.4.3.0
+**What's New**
+* Ding or Egg Pop sound when client starts.
+* Distributed footprints, meaning footprints of other players will display on your client
+    * Requires server side install of Dynamic Surroundings; if not installed server side you will only see your prints as usual
+    * Footprint style based on what your client is configured for
+    * Will not display if player is sneaking
+    * Quadruped determined by a given player's client
+* Distributed sounds
+    * Requires server side install of Dynamic Surroundings; if not installed server side you will only hear your sounds as usual
+    * Footstep and item use actions will trigger sound for players nearby
+    * Footstep sounds will not play if player is sneaking
+    * Each player can still block sounds per normal
+* Mini-boss battle music.  Will play if entity is a boss but not a Dragon or Wither.
+
+**Fixes**
+* Emoji's no longer render behind water texture
+* Aurora was rendering funny with OptiFine installed.  This does not address the "gray aurora" effect with some of the advanced shader packs.
+* FINALLY killed pesky exception when Biome Dictionary becomes somewhat inconsistent.
+* Cleaned up emoji capability data - should be more consistent.
+
+**Changes**
+* Built against Forge 12.18.3.2297
+* Reworked emoji particles into motes.  Should speed up rendering when having large quantities of entities in an area all doing something.
+* Background Minecraft music will fade when battle music plays, then fade back in when battle ends.
+* Battle scanner changes
+    * Boss battle only requires a boss to be in range, no LOS requirement
+    * Mob battle requires the mob to be attacking something, and the mob seeing the player or the player seeing the mob
+
 ###DynamicSurroundings-1.10.2-3.4.2.0
 **What's New**
 * Remember [Battle Music](http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1291283-battle-music-v1-5-12-july-make-your-battles-epic)?  Dynamic Surroundings has it's own version!  Currently it is disabled by default and can be turned on under Sound Options.
