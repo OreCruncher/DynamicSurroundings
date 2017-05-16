@@ -37,6 +37,8 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketPlaySound implements IMessage {
 
@@ -74,6 +76,7 @@ public class PacketPlaySound implements IMessage {
 
 	}
 
+	@SideOnly(Side.CLIENT)
 	public PacketPlaySound(@Nonnull final Entity entity, @Nonnull final BasicSound<?> sound) {
 		this.locus = new Locus(entity, sound.getXPosF(), sound.getYPosF(), sound.getZPosF(), RANGE);
 		this.soundClass = sound.getClass().getName();
