@@ -105,17 +105,18 @@ public class EntityAIChat extends EntityAIBase {
 	protected static String getEntityClassName(@Nonnull final Class<? extends EntityLiving> entityClass) {
 		String name = null;
 		final ResourceLocation key = EntityList.getKey(entityClass);
-		if(key != null) {
+		if (key != null) {
 			name = EntityList.getTranslationName(key);
 		}
-		if(name == null) {
+		if (name == null) {
 			DSurround.log().debug("Can't find entity name for class [%s]", entityClass.getName());
 			return "EntityHasNoClass";
 		}
 		return name.toLowerCase();
 	}
 
-	private static void setTimers(@Nonnull final Class<? extends EntityLiving> entity, final int base, final int random) {
+	private static void setTimers(@Nonnull final Class<? extends EntityLiving> entity, final int base,
+			final int random) {
 		setTimers(getEntityClassName(entity), base, random);
 	}
 
@@ -179,7 +180,7 @@ public class EntityAIChat extends EntityAIBase {
 	@Override
 	public void startExecuting() {
 		final Locus point = new Locus(this.theEntity, ModOptions.speechBubbleRange);
-		final PacketSpeechBubble packet = new PacketSpeechBubble(this.theEntity.getPersistentID(), getChatMessage(), true);
+		final PacketSpeechBubble packet = new PacketSpeechBubble(this.theEntity.getEntityId(), getChatMessage(), true);
 		Network.sendToAllAround(point, packet);
 		this.nextChat = getWorldTicks() + getNextChatTime();
 	}

@@ -24,8 +24,6 @@
 
 package org.blockartistry.DynSurround.api.events;
 
-import java.util.UUID;
-
 import javax.annotation.Nonnull;
 
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
@@ -41,9 +39,9 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 public class SpeechTextEvent extends Event {
 	
 	/**
-	 * Persistent ID of the entity this event is associated with.
+	 * ID of the entity this event is associated with.
 	 */
-	public final UUID entityId;
+	public final int entityId;
 	
 	/**
 	 * The message to be displayed, or the message ID to be translated.
@@ -59,10 +57,10 @@ public class SpeechTextEvent extends Event {
 	/**
 	 * Creates an event for a message to be displayed without modification.
 	 * 
-	 * @param id Entity UUID that this message is associated with
+	 * @param id Entity ID that this message is associated with
 	 * @param message The text message to display
 	 */
-	public SpeechTextEvent(@Nonnull final UUID id, @Nonnull final String message) {
+	public SpeechTextEvent(final int id, @Nonnull final String message) {
 		this(id, message, false);
 	}
 	
@@ -70,11 +68,11 @@ public class SpeechTextEvent extends Event {
 	 * Creates an event that will permit translation.  The message ID would be
 	 * provided in the message variable.  Translation occurs client side.
 	 * 
-	 * @param id Entity UUID that the message is associated with
+	 * @param id Entity ID that the message is associated with
 	 * @param message The message ID/message to be displayed
 	 * @param translate Indicates that the message is a message ID that needs translation
 	 */
-	public SpeechTextEvent(@Nonnull final UUID id, @Nonnull final String message, final boolean translate) {
+	public SpeechTextEvent(final int id, @Nonnull final String message, final boolean translate) {
 		this.entityId = id;
 		this.message = message;
 		this.translate = translate;
