@@ -24,8 +24,6 @@
 
 package org.blockartistry.DynSurround.network;
 
-import java.util.UUID;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -48,15 +46,15 @@ public class PacketSpeechBubble implements IMessage {
 		}
 	}
 
-	private UUID entityId;
-	private String message;
-	private boolean translate;
+	protected int entityId;
+	protected String message;
+	protected boolean translate;
 
 	public PacketSpeechBubble() {
 
 	}
 
-	public PacketSpeechBubble(@Nonnull final UUID playerId, @Nonnull final String message, final boolean translate) {
+	public PacketSpeechBubble(final int playerId, @Nonnull final String message, final boolean translate) {
 		this.entityId = playerId;
 		this.message = message;
 		this.translate = translate;
@@ -64,15 +62,14 @@ public class PacketSpeechBubble implements IMessage {
 
 	@Override
 	public void fromBytes(@Nonnull final ByteBuf buf) {
-		this.entityId = new UUID(buf.readLong(), buf.readLong());
+		this.entityId = buf.readInt();
 		this.message = ByteBufUtils.readUTF8String(buf);
 		this.translate = buf.readBoolean();
 	}
 
 	@Override
 	public void toBytes(@Nonnull final ByteBuf buf) {
-		buf.writeLong(this.entityId.getMostSignificantBits());
-		buf.writeLong(this.entityId.getLeastSignificantBits());
+		buf.writeInt(this.entityId);
 		ByteBufUtils.writeUTF8String(buf, this.message);
 		buf.writeBoolean(this.translate);
 	}

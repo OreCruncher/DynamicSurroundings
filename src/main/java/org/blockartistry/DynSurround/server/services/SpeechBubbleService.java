@@ -49,7 +49,7 @@ public final class SpeechBubbleService extends Service {
 			return;
 
 		final Locus point = new Locus(event.getPlayer(), ModOptions.speechBubbleRange);
-		final PacketSpeechBubble packet = new PacketSpeechBubble(event.getPlayer().getUniqueID(), event.getMessage(),
+		final PacketSpeechBubble packet = new PacketSpeechBubble(event.getPlayer().getEntityId(), event.getMessage(),
 				false);
 		Network.sendToAllAround(point, packet);
 	}

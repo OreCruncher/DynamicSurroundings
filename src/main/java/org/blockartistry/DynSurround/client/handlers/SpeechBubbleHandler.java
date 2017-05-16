@@ -31,8 +31,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.UUID;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -177,7 +175,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		loadText();
 	}
 
-	private void addSpeechBubbleFormatted(@Nonnull final UUID entityId, @Nonnull final String message,
+	private void addSpeechBubbleFormatted(final int entityId, @Nonnull final String message,
 			final Object... parms) {
 		if (!ModOptions.enableSpeechBubbles && !ModOptions.enableEntityChat)
 			return;
@@ -188,8 +186,8 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		addSpeechBubble(entityId, xlated);
 	}
 
-	private void addSpeechBubble(@Nonnull final UUID entityId, @Nonnull final String message) {
-		if (!(ModOptions.enableSpeechBubbles || ModOptions.enableEntityChat) || entityId == null
+	private void addSpeechBubble(final int entityId, @Nonnull final String message) {
+		if (!(ModOptions.enableSpeechBubbles || ModOptions.enableEntityChat) 
 				|| StringUtils.isEmpty(message))
 			return;
 

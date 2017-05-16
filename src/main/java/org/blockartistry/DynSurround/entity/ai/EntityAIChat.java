@@ -174,7 +174,7 @@ public class EntityAIChat extends EntityAIBase {
 	@Override
 	public void startExecuting() {
 		final Locus point = new Locus(this.theEntity, ModOptions.speechBubbleRange);
-		final PacketSpeechBubble packet = new PacketSpeechBubble(this.theEntity.getPersistentID(), getChatMessage(), true);
+		final PacketSpeechBubble packet = new PacketSpeechBubble(this.theEntity.getEntityId(), getChatMessage(), true);
 		Network.sendToAllAround(point, packet);
 		this.nextChat = getWorldTicks() + getNextChatTime();
 	}
