@@ -24,8 +24,6 @@
 
 package org.blockartistry.DynSurround.network;
 
-import java.util.UUID;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -48,7 +46,7 @@ public class PacketHealthChange implements IMessage {
 		}
 	}
 
-	private UUID entityId;
+	private int entityId;
 	private float posX;
 	private float posY;
 	private float posZ;
@@ -59,7 +57,7 @@ public class PacketHealthChange implements IMessage {
 
 	}
 
-	public PacketHealthChange(@Nonnull final UUID id, final float x, final float y, final float z, final boolean isCritical,
+	public PacketHealthChange(final int id, final float x, final float y, final float z, final boolean isCritical,
 			final int amount) {
 		this.entityId = id;
 		this.posX = x;
@@ -71,7 +69,7 @@ public class PacketHealthChange implements IMessage {
 
 	@Override
 	public void fromBytes(@Nonnull final ByteBuf buf) {
-		this.entityId = new UUID(buf.readLong(), buf.readLong());
+		this.entityId = buf.readInt();
 		this.posX = buf.readFloat();
 		this.posY = buf.readFloat();
 		this.posZ = buf.readFloat();
@@ -81,8 +79,7 @@ public class PacketHealthChange implements IMessage {
 
 	@Override
 	public void toBytes(@Nonnull final ByteBuf buf) {
-		buf.writeLong(this.entityId.getMostSignificantBits());
-		buf.writeLong(this.entityId.getLeastSignificantBits());
+		buf.writeInt(this.entityId);
 		buf.writeFloat(this.posX);
 		buf.writeFloat(this.posY);
 		buf.writeFloat(this.posZ);

@@ -256,6 +256,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		public static boolean isPlayer(final UUID id) {
 			return player == null || player.getUniqueID().equals(id);
 		}
+		
+		public static boolean isPlayer(final int id) {
+			return player == null || player.getEntityId() == id;
+		}
 
 		public static boolean isCreative() {
 			return player != null && player.capabilities.isCreativeMode;
