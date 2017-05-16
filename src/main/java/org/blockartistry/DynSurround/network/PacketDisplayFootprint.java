@@ -33,12 +33,10 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class PacketDisplayFootprint implements IMessage {
 
@@ -46,24 +44,27 @@ public class PacketDisplayFootprint implements IMessage {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketDisplayFootprint message, @Nullable final MessageContext ctx) {
-			if (ctx.side == Side.CLIENT) {
-				// Don't forward if it the current player sent it
-				final EntityPlayer player = EnvironState.getPlayer();
-				if (player != null && message.locus.entityId != player.getEntityId()) {
-					final Vec3d pos = new Vec3d(message.locus.x, message.locus.y, message.locus.z);
-					Network.postEvent(new FootstepEvent.Display(pos, message.rotation, message.isRightFoot));
-				}
-			} else {
-				// No event - turn around quick and broadcast to necessary
-				// clients. This should take place on a Netty thread.
-				final Locus newLocus = new Locus(message.locus, ModOptions.specialEffectRange);
-				Network.sendToAllAround(newLocus, message);
+			// Don't forward if it the current player sent it
+			if (!message.locus.isAssociatedEntity(EnvironState.getPlayer())) {
+				Network.postEvent(
+						new FootstepEvent.Display(message.locus.getCoords(), message.rotation, message.isRightFoot));
 			}
 			return null;
 		}
 	}
 
-	// Package level
+	public static class PacketHandlerServer implements IMessageHandler<PacketDisplayFootprint, IMessage> {
+		@Override
+		@Nullable
+		public IMessage onMessage(@Nonnull final PacketDisplayFootprint message, @Nullable final MessageContext ctx) {
+			// No event - turn around quick and broadcast to necessary
+			// clients. This should take place on a Netty thread.
+			message.locus = new Locus(message.locus, ModOptions.specialEffectRange);
+			Network.sendToAllAround(message.locus, message);
+			return null;
+		}
+	}
+
 	protected Locus locus;
 	protected float rotation = 0F;
 	protected boolean isRightFoot = false;

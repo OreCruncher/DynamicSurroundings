@@ -32,13 +32,11 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class PacketPlaySound implements IMessage {
 
@@ -46,20 +44,25 @@ public class PacketPlaySound implements IMessage {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketPlaySound message, @Nullable final MessageContext ctx) {
-			if (ctx.side == Side.CLIENT) {
-				// Don't forward if it the current player sent it
-				final EntityPlayer player = EnvironState.getPlayer();
-				if (player != null && message.locus.entityId != player.getEntityId())
-					Network.postEvent(new PlayDistributedSoundEvent(message.soundClass, message.nbt));
-			} else {
-				// No event - turn around quick and broadcast to necessary
-				// clients. This should take place on a Netty thread.
-				Network.sendToAllAround(message.locus, message);
+			// Don't forward if it the current player sent it
+			if (!message.locus.isAssociatedEntity(EnvironState.getPlayer())) {
+				Network.postEvent(new PlayDistributedSoundEvent(message.soundClass, message.nbt));
 			}
 			return null;
 		}
 	}
-	
+
+	public static class PacketHandlerServer implements IMessageHandler<PacketPlaySound, IMessage> {
+		@Override
+		@Nullable
+		public IMessage onMessage(@Nonnull final PacketPlaySound message, @Nullable final MessageContext ctx) {
+			// No event - turn around quick and broadcast to necessary
+			// clients. This should take place on a Netty thread.
+			Network.sendToAllAround(message.locus, message);
+			return null;
+		}
+	}
+
 	// Sounds have a range of 16 blocks per normal
 	private static final int RANGE = 16;
 
