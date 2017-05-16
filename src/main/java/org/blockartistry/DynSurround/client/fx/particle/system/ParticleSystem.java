@@ -24,8 +24,9 @@
 
 package org.blockartistry.DynSurround.client.fx.particle.system;
 
-import java.util.LinkedList;
+import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 
@@ -34,9 +35,7 @@ import org.blockartistry.DynSurround.client.fx.particle.ParticleMoteAdapter;
 import org.blockartistry.DynSurround.client.fx.particle.mote.IParticleMote;
 import org.blockartistry.lib.random.XorShiftRandom;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -49,13 +48,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public abstract class ParticleSystem {
 
-	protected static final Predicate<IParticleMote> REMOVE_CRITERIA = new Predicate<IParticleMote>() {
-		@Override
-		public boolean apply(@Nonnull final IParticleMote input) {
-			return !input.isAlive();
-		}
-	};
-
 	protected static final Random RANDOM = XorShiftRandom.current();
 	protected static final GameSettings SETTINGS = Minecraft.getMinecraft().gameSettings;
 
@@ -64,7 +56,7 @@ public abstract class ParticleSystem {
 	protected final double posY;
 	protected final double posZ;
 	protected final BlockPos position;
-	protected final LinkedList<IParticleMote> myParticles = Lists.newLinkedList();
+	protected Set<IParticleMote> myParticles = Sets.newHashSet();
 	protected int particleLimit;
 	protected boolean isAlive = true;
 
@@ -147,7 +139,7 @@ public abstract class ParticleSystem {
 	 * Perform any cleanup activities prior to dying.
 	 */
 	protected void cleanUp() {
-		this.myParticles.clear();
+		this.myParticles = null;
 	}
 
 	/*
@@ -156,18 +148,24 @@ public abstract class ParticleSystem {
 	 * have to be ticked.
 	 */
 	public void onUpdate() {
+		if (this.shouldDie()) {
+			this.setExpired();
+			return;
+		}
+
 		// Let the system mull over what it wants to do
 		this.think();
 
-		if (this.shouldDie()) {
-			this.isAlive = false;
-			this.cleanUp();
-		}
-
 		if (this.isAlive()) {
+			
 			// Remove the dead ones
-			Iterables.removeIf(this.myParticles, REMOVE_CRITERIA);
-
+			final Iterator<IParticleMote> itr = this.myParticles.iterator();
+			while(itr.hasNext()) {
+				final IParticleMote mote = itr.next();
+				if(!mote.isAlive())
+					itr.remove();
+			}
+			
 			// Update any sounds
 			this.soundUpdate();
 		}

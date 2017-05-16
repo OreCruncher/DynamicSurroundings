@@ -24,8 +24,9 @@
 
 package org.blockartistry.DynSurround.client.fx.particle.mote;
 
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 
@@ -47,7 +48,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ParticleCollection extends Particle {
 
 	protected final ResourceLocation texture;
-	protected final LinkedHashSet<IParticleMote> myParticles = new LinkedHashSet<IParticleMote>();
+	protected final Set<IParticleMote> myParticles = new HashSet<IParticleMote>();
 
 	public ParticleCollection(@Nonnull final World world, @Nonnull final ResourceLocation tex) {
 		super(world, 0, 0, 0);
