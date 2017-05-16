@@ -46,14 +46,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public final class Network {
 
-	private static int discriminator = 0;
-
 	private Network() {
 	}
 
 	private static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(DSurround.MOD_ID);
 
 	public static void initialize() {
+
+		int discriminator = 0;
 
 		// Server -> Client messages
 		NETWORK.registerMessage(PacketWeatherUpdate.PacketHandler.class, PacketWeatherUpdate.class, ++discriminator,
@@ -75,9 +75,9 @@ public final class Network {
 				Side.CLIENT);
 
 		// Client -> Server messages
-		NETWORK.registerMessage(PacketDisplayFootprint.PacketHandler.class, PacketDisplayFootprint.class,
+		NETWORK.registerMessage(PacketDisplayFootprint.PacketHandlerServer.class, PacketDisplayFootprint.class,
 				++discriminator, Side.SERVER);
-		NETWORK.registerMessage(PacketPlaySound.PacketHandler.class, PacketPlaySound.class, ++discriminator,
+		NETWORK.registerMessage(PacketPlaySound.PacketHandlerServer.class, PacketPlaySound.class, ++discriminator,
 				Side.SERVER);
 	}
 
