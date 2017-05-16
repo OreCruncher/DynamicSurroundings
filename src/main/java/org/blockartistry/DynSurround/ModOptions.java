@@ -306,6 +306,8 @@ public final class ModOptions {
 	public static final String CONFIG_AUTO_CONFIG_CHANNELS = "Autoconfigure Channels";
 	public static final String CONFIG_NORMAL_CHANNEL_COUNT = "Number Normal Channels";
 	public static final String CONFIG_STREAMING_CHANNEL_COUNT = "Number Streaming Channels";
+	public static final String CONFIG_STREAM_BUFFER_SIZE = "Stream Buffer Size";
+	public static final String CONFIG_STREAM_BUFFER_COUNT = "Number of Stream Buffers per Channel";
 	public static final String CONFIG_MUTE_WHEN_BACKGROUND = "Mute when Background";
 	public static final String CONFIG_ENABLE_JUMP_SOUND = "Jump Sound";
 	public static final String CONFIG_ENABLE_EQUIP_SOUND = "Equip Sound";
@@ -323,8 +325,9 @@ public final class ModOptions {
 			CONFIG_ENABLE_BIOME_SOUNDS, CONFIG_MASTER_SOUND_FACTOR, CONFIG_FOOTSTEPS_SOUND_FACTOR,
 			CONFIG_FOOTSTEPS_QUAD, CONFIG_ENABLE_ARMOR_SOUND, CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_EQUIP_SOUND,
 			CONFIG_ENABLE_CRAFTING_SOUND, CONFIG_AUTO_CONFIG_CHANNELS, CONFIG_NORMAL_CHANNEL_COUNT,
-			CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS,
-			CONFIG_SOUND_CULL_THRESHOLD, CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES, CONFIG_ENABLE_BATTLEMUSIC);
+			CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_STREAM_BUFFER_SIZE, CONFIG_STREAM_BUFFER_COUNT,
+			CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS, CONFIG_SOUND_CULL_THRESHOLD,
+			CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES, CONFIG_ENABLE_BATTLEMUSIC);
 
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_RESTART_SOUND_SYSTEM, defaultValue = "true", lang = "cfg.sound.Autorestart")
 	@Comment("Enable auto-restart of crashed sound system")
@@ -350,6 +353,16 @@ public final class ModOptions {
 	@Comment("Number of streaming sound channels to configure in the sound system (manual)")
 	@RestartRequired(server = true)
 	public static int streamingSoundChannelCount = 4;
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_STREAM_BUFFER_SIZE, defaultValue = "0", lang = "cfg.sound.StreamBufferSize")
+	@MinMaxInt(min = 0)
+	@Comment("Size of a stream buffer in kilobytes (0: system default - usually 128K bytes)")
+	@RestartRequired(server = true)
+	public static int streamBufferSize = 0;
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_STREAM_BUFFER_COUNT, defaultValue = "0", lang = "cfg.sound.StreamBufferCount")
+	@MinMaxInt(min = 0)
+	@Comment("Number of stream buffers per channel (0: system default - usually 3 buffers)")
+	@RestartRequired(server = true)
+	public static int streamBufferCount = 0;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_MUTE_WHEN_BACKGROUND, defaultValue = "true", lang = "cfg.sound.Mute")
 	@Comment("Mute sound when Minecraft is in the background")
 	public static boolean muteWhenBackground = true;
