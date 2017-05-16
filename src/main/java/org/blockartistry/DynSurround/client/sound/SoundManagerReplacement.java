@@ -200,12 +200,12 @@ public class SoundManagerReplacement extends SoundManager {
 	}
 
 	public boolean isMuted() {
-		return ((SoundSystem) this.sndSystem).getMasterVolume() == MUTE_VOLUME;
+		return this.sndSystem != null && ((SoundSystem) this.sndSystem).getMasterVolume() == MUTE_VOLUME;
 	}
 
 	public void setMuted(final boolean flag) {
 		// If not loaded return
-		if (!this.loaded)
+		if (!this.loaded || this.sndSystem == null)
 			return;
 
 		final SoundSystem ss = (SoundSystem) this.sndSystem;
