@@ -139,6 +139,7 @@ public final class Network {
 	}
 
 	// Basic client -> server packet routines
+	@SideOnly(Side.CLIENT)
 	public static void sendToServer(@Nonnull final IMessage msg) {
 		NETWORK.sendToServer(msg);
 	}
