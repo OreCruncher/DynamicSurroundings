@@ -30,6 +30,7 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.entity.CapabilityEmojiData;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.player.EntityPlayer;
@@ -105,34 +106,37 @@ public class BattleScanner implements ITickable {
 				continue;
 
 			if (!e.isNonBoss()) {
-				if (e instanceof EntityWither)
-					isWither = true;
-				else if (e instanceof EntityDragon)
-					isDragon = true;
-				else if (dist <= MINI_BOSS_RANGE)
-					isBoss = true;
-			} else if (dist > MOB_RANGE) {
-				// If the normal mob is outside of the largest possible
-				// range it is not a candidate.
+				if (e instanceof EntityWither) {
+					inBattle = isWither = isBoss = true;
+					isDragon = false;
+					// Wither will override *any* other mob
+					// so terminate early.
+					break;
+				} else if (e instanceof EntityDragon) {
+					inBattle = isDragon = isBoss = true;
+				} else if (dist <= MINI_BOSS_RANGE) {
+					inBattle = isBoss = true;
+				}
+			} else if (inBattle || dist > MOB_RANGE) {
+				// If we are flagged to be in battle or if the normal
+				// mob is outside of the largest possible range it is
+				// not a candidate.
 				continue;
-			} else {
-				// Use emoji data to determine if the mob is attacking or in a
-				// panic state.
-				final IEmojiData emoji = e.getCapability(CapabilityEmojiData.EMOJI, null);
+			} else if (e instanceof EntityLiving) {
+				final EntityLiving living = (EntityLiving) e;
+				// Use emoji data to determine if the mob is attacking
+				final IEmojiData emoji = living.getCapability(CapabilityEmojiData.EMOJI, null);
 				if (emoji != null) {
 					final ActionState state = emoji.getActionState();
-					if (state == ActionState.ATTACKING)
-						inBattle = true;
+					if (state == ActionState.ATTACKING) {
+						// Only in battle if the entity sees the player, or the
+						// player sees the entity
+						if (living.getEntitySenses().canSee(player) || player.canEntityBeSeen(living))
+							inBattle = true;
+					}
 				}
 			}
 		}
-
-		// Wither trumps dragon
-		if (isWither)
-			isDragon = false;
-
-		isBoss = isBoss || isWither || isDragon;
-		inBattle = inBattle || isBoss;
 
 		final int tickCounter = EnvironState.getTickCounter();
 
