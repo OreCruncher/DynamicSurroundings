@@ -30,13 +30,14 @@ import javax.annotation.Nullable;
 import org.blockartistry.DynSurround.api.events.SpeechTextEvent;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketSpeechBubble implements IMessage {
-	
+
 	public static class PacketHandler implements IMessageHandler<PacketSpeechBubble, IMessage> {
 		@Override
 		@Nullable
@@ -54,8 +55,9 @@ public class PacketSpeechBubble implements IMessage {
 
 	}
 
-	public PacketSpeechBubble(final int playerId, @Nonnull final String message, final boolean translate) {
-		this.entityId = playerId;
+	public PacketSpeechBubble(@Nonnull final Entity player, @Nonnull final String message,
+			final boolean translate) {
+		this.entityId = player.getEntityId();
 		this.message = message;
 		this.translate = translate;
 	}
