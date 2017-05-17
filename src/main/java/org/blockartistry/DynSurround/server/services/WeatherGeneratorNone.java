@@ -28,27 +28,18 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.world.World;
 
-public class WeatherGeneratorVanilla extends WeatherGenerator {
-
-	public WeatherGeneratorVanilla(@Nonnull final World world) {
+public class WeatherGeneratorNone extends WeatherGenerator {
+	
+	public WeatherGeneratorNone(@Nonnull final World world) {
 		super(world);
 	}
-
+	
 	@Override
-	protected void doRain() {
-		// For vanilla just transcribe what vanilla is doing
-		final float str = this.world.getRainStrength(1.0F);
-		if (this.info.isRaining() || str > 0F) {
-			this.data.setRainIntensity(1.0F);
-			this.data.setCurrentRainIntensity(str);
-		} else {
-			this.data.setRainIntensity(0F);
-			this.data.setCurrentRainIntensity(0F);
-		}
+	protected void process() {
+		// Force the settings to 0 because there isn't any rain/thunder
+		this.data.setRainIntensity(0);
+		this.data.setCurrentRainIntensity(0);
+		this.data.setThunderTimer(0);
 	}
 
-	@Override
-	protected void doThunder() {
-		// Vanilla is doing the heavy lifting on thunder timer
-	}
 }

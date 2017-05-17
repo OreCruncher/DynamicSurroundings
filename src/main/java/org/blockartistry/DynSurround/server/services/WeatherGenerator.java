@@ -48,25 +48,11 @@ import net.minecraft.world.storage.WorldInfo;
 
 public class WeatherGenerator {
 
-	public static final WeatherGenerator NONE = new WeatherGenerator() {
-		@Override
-		public void process() {
-			// Do nothing
-		}
-	};
-
 	protected final Random RANDOM = XorShiftRandom.current();
 	protected final DimensionInfo dimension;
 	protected final World world;
 	protected final WorldInfo info;
 	protected final DimensionEffectData data;
-
-	private WeatherGenerator() {
-		this.world = null;
-		this.info = null;
-		this.data = null;
-		this.dimension = null;
-	}
 
 	public WeatherGenerator(@Nonnull final World world) {
 		this.world = world;
@@ -123,11 +109,11 @@ public class WeatherGenerator {
 		} else {
 
 			if (this.world.getRainStrength(1.0F) > 0.0F) {
-				// It's not raining and the worldReference has strength. Means
+				// It's not raining and the world has strength. Means
 				// that it is on the way out so reflect the worlds strength.
 				this.data.setCurrentRainIntensity(this.world.getRainStrength(1.0F));
 			} else if (this.data.getCurrentRainIntensity() > 0) {
-				// We get here the worldReference is not raining and there is no
+				// We get here the world is not raining and there is no
 				// strength, but our record indicates something. Means we
 				// stopped.
 				this.data.setRainIntensity(0);
@@ -174,7 +160,7 @@ public class WeatherGenerator {
 					final EntityPlayer player = PlayerUtils.getRandomPlayer(this.world);
 					final float theY = this.dimension.getSkyHeight();
 					if (player != null) {
-						final PacketThunder packet = new PacketThunder(data.getDimensionId(), doFlash(intensity),
+						final PacketThunder packet = new PacketThunder(this.data.getDimensionId(), doFlash(intensity),
 								new BlockPos(player.posX, theY, player.posZ));
 						Network.sendToDimension(this.data.getDimensionId(), packet);
 					}
@@ -194,20 +180,26 @@ public class WeatherGenerator {
 
 	}
 
-	public void process() {
+	public final void update() {
+		this.process();
+		this.sendUpdate();
+	}
+
+	protected void process() {
 		this.preProcess();
 		this.doRain();
 		this.doThunder();
 		this.doAmbientThunder();
 		this.postProcess();
-		this.sendUpdate();
 	}
 
 	protected void sendUpdate() {
 		// Send the weather update to all players in the dimension.
-		final PacketWeatherUpdate packet = new PacketWeatherUpdate(this.data.getDimensionId(),
-				this.data.getCurrentRainIntensity(), this.data.getRainIntensity(), this.info.getRainTime(),
-				this.world.getThunderStrength(1.0F), this.info.getThunderTime(), this.data.getThunderTimer());
-		Network.sendToDimension(this.data.getDimensionId(), packet);
+		if (this.world.playerEntities.size() > 0) {
+			final PacketWeatherUpdate packet = new PacketWeatherUpdate(this.data.getDimensionId(),
+					this.data.getCurrentRainIntensity(), this.data.getRainIntensity(), this.info.getRainTime(),
+					this.world.getThunderStrength(1.0F), this.info.getThunderTime(), this.data.getThunderTimer());
+			Network.sendToDimension(this.data.getDimensionId(), packet);
+		}
 	}
 }

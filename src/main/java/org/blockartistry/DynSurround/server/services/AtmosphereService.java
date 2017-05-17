@@ -35,6 +35,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModEnvironment;
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
@@ -50,11 +51,8 @@ public final class AtmosphereService extends Service {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void tickEvent(@Nonnull final TickEvent.WorldTickEvent event) {
-
-		if (event.side != Side.SERVER || event.phase == Phase.START)
-			return;
-
-		getGenerator(event.world).process();
+		if (event.side == Side.SERVER && event.phase == Phase.END)
+			getGenerator(event.world).update();
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -63,12 +61,11 @@ public final class AtmosphereService extends Service {
 		if (world.isRemote)
 			return;
 
-		final int dimId = world.provider.getDimension();
-		this.generators.put(dimId, createGenerator(world));
+		getGenerator(world);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void onWorldLoad(final WorldEvent.Unload e) {
+	public void onWorldUnload(final WorldEvent.Unload e) {
 		final World world = e.getWorld();
 		if (world.isRemote)
 			return;
@@ -79,12 +76,21 @@ public final class AtmosphereService extends Service {
 
 	private final TIntObjectHashMap<WeatherGenerator> generators = new TIntObjectHashMap<WeatherGenerator>();
 
+	private WeatherGenerator getGenerator(@Nonnull final World world) {
+		final int dimId = world.provider.getDimension();
+		WeatherGenerator result = this.generators.get(dimId);
+		if (result == null) {
+			this.generators.put(dimId, result = createGenerator(world));
+		}
+		return result;
+	}
+
 	private boolean doVanillaRain(@Nonnull final World world) {
-		return ModEnvironment.Weather2.isLoaded();
+		return ModOptions.doVanillaRain || ModEnvironment.Weather2.isLoaded();
 	}
 
 	private WeatherGenerator createGenerator(@Nonnull final World world) {
-		WeatherGenerator result = WeatherGenerator.NONE;
+		WeatherGenerator result = null;
 		if (this.dimensions.hasWeather(world)) {
 			final int dimId = world.provider.getDimension();
 			if (doVanillaRain(world)) {
@@ -97,13 +103,10 @@ public final class AtmosphereService extends Service {
 			}
 		}
 
-		return result;
-	}
+		if (result == null)
+			result = new WeatherGeneratorNone(world);
 
-	private WeatherGenerator getGenerator(@Nonnull final World world) {
-		final int dimId = world.provider.getDimension();
-		WeatherGenerator result = this.generators.get(dimId);
-		return result == null ? WeatherGenerator.NONE : result;
+		return result;
 	}
 
 }
