@@ -24,13 +24,10 @@
 
 package org.blockartistry.DynSurround.client.fx.particle.mote;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.lib.collections.ObjectArray;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -47,8 +44,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleCollection extends Particle {
 
+	protected static final int ALLOCATION_SIZE = 1024;
+
+	protected final ObjectArray<IParticleMote> myParticles = new ObjectArray<IParticleMote>(ALLOCATION_SIZE);
 	protected final ResourceLocation texture;
-	protected final Set<IParticleMote> myParticles = new HashSet<IParticleMote>();
 
 	public ParticleCollection(@Nonnull final World world, @Nonnull final ResourceLocation tex) {
 		super(world, 0, 0, 0);
@@ -74,13 +73,8 @@ public class ParticleCollection extends Particle {
 		if (!this.isAlive())
 			return;
 
-		// Update mote state and remove dead ones
-		for (final Iterator<IParticleMote> itr = this.myParticles.iterator(); itr.hasNext();) {
-			final IParticleMote mote = itr.next();
-			mote.onUpdate();
-			if (!mote.isAlive())
-				itr.remove();
-		}
+		// Update state and remove the dead ones
+		this.myParticles.removeIf(IParticleMote.UPDATE_REMOVE);
 
 		if (this.shouldDie()) {
 			this.setExpired();
@@ -99,8 +93,8 @@ public class ParticleCollection extends Particle {
 		this.preRender();
 
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-		for (final IParticleMote mote : this.myParticles)
-			mote.renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
+		for(int i = 0; i < this.myParticles.size(); i++)
+			this.myParticles.get(i).renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
 		Tessellator.getInstance().draw();
 
 		this.postRender();

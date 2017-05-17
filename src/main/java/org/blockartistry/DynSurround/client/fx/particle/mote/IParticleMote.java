@@ -24,6 +24,10 @@
 
 package org.blockartistry.DynSurround.client.fx.particle.mote;
 
+import javax.annotation.Nonnull;
+
+import com.google.common.base.Predicate;
+
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,10 +36,32 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public interface IParticleMote {
 
+	/**
+	 * Predicate used to detect dead motes.
+	 */
+	public static final Predicate<IParticleMote> IS_DEAD = new Predicate<IParticleMote>() {
+		@Override
+		public boolean apply(@Nonnull final IParticleMote mote) {
+			return !mote.isAlive();
+		}
+	};
+
+	/**
+	 * Predicate used to update a mote and return whether it is
+	 * dead or not.
+	 */
+	public static final Predicate<IParticleMote> UPDATE_REMOVE = new Predicate<IParticleMote>() {
+		@Override
+		public boolean apply(@Nonnull final IParticleMote mote) {
+			mote.onUpdate();
+			return !mote.isAlive();
+		}
+	};
+
 	boolean isAlive();
 
 	void onUpdate();
-	
+
 	void renderParticle(final VertexBuffer buffer, final Entity entityIn, final float partialTicks, final float rotX,
 			final float rotZ, final float rotYZ, final float rotXY, final float rotXZ);
 

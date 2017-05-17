@@ -24,18 +24,14 @@
 
 package org.blockartistry.DynSurround.client.fx.particle.system;
 
-import java.util.Iterator;
 import java.util.Random;
-import java.util.Set;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleMoteAdapter;
 import org.blockartistry.DynSurround.client.fx.particle.mote.IParticleMote;
+import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.random.XorShiftRandom;
-
-import com.google.common.collect.Sets;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -50,13 +46,14 @@ public abstract class ParticleSystem {
 
 	protected static final Random RANDOM = XorShiftRandom.current();
 	protected static final GameSettings SETTINGS = Minecraft.getMinecraft().gameSettings;
+	protected static final int ALLOCATION_SIZE = 8;
 
 	protected final World world;
 	protected final double posX;
 	protected final double posY;
 	protected final double posZ;
 	protected final BlockPos position;
-	protected Set<IParticleMote> myParticles = Sets.newHashSet();
+	protected ObjectArray<IParticleMote> myParticles = new ObjectArray<IParticleMote>(ALLOCATION_SIZE);
 	protected int particleLimit;
 	protected boolean isAlive = true;
 
@@ -159,12 +156,7 @@ public abstract class ParticleSystem {
 		if (this.isAlive()) {
 			
 			// Remove the dead ones
-			final Iterator<IParticleMote> itr = this.myParticles.iterator();
-			while(itr.hasNext()) {
-				final IParticleMote mote = itr.next();
-				if(!mote.isAlive())
-					itr.remove();
-			}
+			this.myParticles.removeIf(IParticleMote.IS_DEAD);
 			
 			// Update any sounds
 			this.soundUpdate();
