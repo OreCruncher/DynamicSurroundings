@@ -29,6 +29,7 @@ import java.lang.reflect.Field;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.MathStuff;
 
@@ -52,7 +53,7 @@ public class MusicTickerReplacement extends MusicTicker {
 
 	private static final float MIN_VOLUME_SCALE = 0.001F;
 	private static final float FADE_AMOUNT = 0.02F;
-	
+
 	private float currentScale = 1.0F;
 
 	private final BasicSound.ISoundScale MUSIC_SCALER = new BasicSound.ISoundScale() {
@@ -99,14 +100,18 @@ public class MusicTickerReplacement extends MusicTicker {
 	}
 
 	public static void initialize() {
-		try {
-			final Field ticker = ReflectionHelper.findField(Minecraft.class, "mcMusicTicker", "field_147126_aw");
-			if (ticker != null) {
-				final Minecraft mc = Minecraft.getMinecraft();
-				ticker.set(mc, new MusicTickerReplacement(mc));
+		if (ModEnvironment.ActualMusic.isLoaded()) {
+			DSurround.log().info("ActualMusic is installed; MusicTicker is NOT being replaced!");
+		} else {
+			try {
+				final Field ticker = ReflectionHelper.findField(Minecraft.class, "mcMusicTicker", "field_147126_aw");
+				if (ticker != null) {
+					final Minecraft mc = Minecraft.getMinecraft();
+					ticker.set(mc, new MusicTickerReplacement(mc));
+				}
+			} catch (final Throwable t) {
+				DSurround.log().error("Unable to replace MusicTicker!", t);
 			}
-		} catch (final Throwable t) {
-			DSurround.log().error("Unable to replace MusicTicker!", t);
 		}
 	}
 

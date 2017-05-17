@@ -38,7 +38,8 @@ public enum ModEnvironment {
 	Weather2("weather2"),
 	EnderIO("EnderIO"),
 	Chisel("chisel"),
-	OpenTerrainGenerator("openterraingenerator");
+	OpenTerrainGenerator("openterraingenerator"),
+	ActualMusic("actualmusic");
 	
 	protected final String modId;
 	protected boolean isLoaded;
