@@ -34,6 +34,7 @@ import org.blockartistry.DynSurround.data.DimensionEffectData;
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.network.PacketThunder;
 import org.blockartistry.DynSurround.network.PacketWeatherUpdate;
+import org.blockartistry.DynSurround.registry.DimensionInfo;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
@@ -55,7 +56,7 @@ public class WeatherGenerator {
 	};
 
 	protected final Random RANDOM = XorShiftRandom.current();
-	protected final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
+	protected final DimensionInfo dimension;
 	protected final World world;
 	protected final WorldInfo info;
 	protected final DimensionEffectData data;
@@ -64,12 +65,14 @@ public class WeatherGenerator {
 		this.world = null;
 		this.info = null;
 		this.data = null;
+		this.dimension = null;
 	}
 
 	public WeatherGenerator(@Nonnull final World world) {
 		this.world = world;
 		this.info = world.getWorldInfo();
 		this.data = DimensionEffectData.get(world);
+		this.dimension = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION).getData(world);
 	}
 
 	protected int nextRainInterval(final boolean isRaining) {
@@ -147,12 +150,19 @@ public class WeatherGenerator {
 			this.info.setThunderTime(nextThunderInterval(this.info.isThundering()));
 		}
 
-		// Do background thunder. For it to happen it has to be enabled,
-		// has to be in the thunder window, and rain intensity must meet
-		// the threshold.
-		if (ModOptions.allowBackgroundThunder && this.info.isThundering()
-				&& this.data.getCurrentRainIntensity() >= ModOptions.stormThunderThreshold) {
+	}
 
+	protected void doAmbientThunder() {
+
+		// If not enabled, return
+		if (!ModOptions.allowBackgroundThunder)
+			return;
+
+		// Gather the intensity for rain
+		final float intensity = this.data.getCurrentRainIntensity();
+
+		// If it is thundering and the intensity exceeds our threshold...
+		if (this.info.isThundering() && intensity >= ModOptions.stormThunderThreshold) {
 			int time = this.data.getThunderTimer() - 1;
 			if (time <= 0) {
 				// If it is 0 we just counted down to this. If it were
@@ -162,16 +172,15 @@ public class WeatherGenerator {
 					// locus of the event. Center it at build height above
 					// their head.
 					final EntityPlayer player = PlayerUtils.getRandomPlayer(this.world);
-					final float theY = this.dimensions.getSkyHeight(this.world);
+					final float theY = this.dimension.getSkyHeight();
 					if (player != null) {
-						final PacketThunder packet = new PacketThunder(data.getDimensionId(),
-								doFlash(this.data.getCurrentRainIntensity()),
+						final PacketThunder packet = new PacketThunder(data.getDimensionId(), doFlash(intensity),
 								new BlockPos(player.posX, theY, player.posZ));
 						Network.sendToDimension(this.data.getDimensionId(), packet);
 					}
 				}
 				// set new time
-				time = nextThunderEvent(this.data.getCurrentRainIntensity());
+				time = nextThunderEvent(intensity);
 			}
 			this.data.setThunderTimer(time);
 
@@ -189,6 +198,7 @@ public class WeatherGenerator {
 		this.preProcess();
 		this.doRain();
 		this.doThunder();
+		this.doAmbientThunder();
 		this.postProcess();
 		this.sendUpdate();
 	}
@@ -199,6 +209,5 @@ public class WeatherGenerator {
 				this.data.getCurrentRainIntensity(), this.data.getRainIntensity(), this.info.getRainTime(),
 				this.world.getThunderStrength(1.0F), this.info.getThunderTime(), this.data.getThunderTimer());
 		Network.sendToDimension(this.data.getDimensionId(), packet);
-
 	}
 }

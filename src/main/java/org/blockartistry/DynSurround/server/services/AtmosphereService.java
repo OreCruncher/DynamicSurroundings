@@ -35,7 +35,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModEnvironment;
-import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
@@ -52,8 +51,7 @@ public final class AtmosphereService extends Service {
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void tickEvent(@Nonnull final TickEvent.WorldTickEvent event) {
 
-		if (event.side != Side.SERVER || event.phase == Phase.START || !ModOptions.enableWeatherASM
-				|| ModEnvironment.Weather2.isLoaded())
+		if (event.side != Side.SERVER || event.phase == Phase.START)
 			return;
 
 		getGenerator(event.world).process();
@@ -62,9 +60,9 @@ public final class AtmosphereService extends Service {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onWorldLoad(final WorldEvent.Load e) {
 		final World world = e.getWorld();
-		if(world.isRemote)
+		if (world.isRemote)
 			return;
-		
+
 		final int dimId = world.provider.getDimension();
 		this.generators.put(dimId, createGenerator(world));
 	}
@@ -72,7 +70,7 @@ public final class AtmosphereService extends Service {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onWorldLoad(final WorldEvent.Unload e) {
 		final World world = e.getWorld();
-		if(world.isRemote)
+		if (world.isRemote)
 			return;
 
 		final int dimId = world.provider.getDimension();
@@ -81,13 +79,22 @@ public final class AtmosphereService extends Service {
 
 	private final TIntObjectHashMap<WeatherGenerator> generators = new TIntObjectHashMap<WeatherGenerator>();
 
+	private boolean doVanillaRain(@Nonnull final World world) {
+		return ModEnvironment.Weather2.isLoaded();
+	}
+
 	private WeatherGenerator createGenerator(@Nonnull final World world) {
 		WeatherGenerator result = WeatherGenerator.NONE;
 		if (this.dimensions.hasWeather(world)) {
-			if (world.provider.getDimension() == -1)
+			final int dimId = world.provider.getDimension();
+			if (doVanillaRain(world)) {
+				if (dimId != -1)
+					result = new WeatherGeneratorVanilla(world);
+			} else if (dimId == -1) {
 				result = new WeatherGeneratorNether(world);
-			else
+			} else {
 				result = new WeatherGenerator(world);
+			}
 		}
 
 		return result;

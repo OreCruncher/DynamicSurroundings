@@ -24,41 +24,29 @@
 
 package org.blockartistry.DynSurround.server.services;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.world.World;
 
-public class WeatherGeneratorNether extends WeatherGenerator {
+public class WeatherGeneratorVanilla extends WeatherGenerator {
 
-	public WeatherGeneratorNether(@Nonnull final World world) {
+	public WeatherGeneratorVanilla(World world) {
 		super(world);
 	}
 
-	// Need to manually turn the crank on the Nether since
-	// it has no sky
 	@Override
-	protected void preProcess() {
-		
-		this.world.provider.hasNoSky = false;
-		try {
-			this.world.updateWeatherBody();
-		} catch (final Throwable t) {
-			;
+	protected void doRain() {
+		// For vanilla just transcribe what vanilla is doing
+		final float str = this.world.getRainStrength(1.0F);
+		if (this.info.isRaining() || str > 0F) {
+			this.data.setRainIntensity(1.0F);
+			this.data.setCurrentRainIntensity(str);
+		} else {
+			this.data.setRainIntensity(0F);
+			this.data.setCurrentRainIntensity(0F);
 		}
-		this.world.provider.hasNoSky = true;
-
 	}
-	
-	// No thunder in the nether
+
 	@Override
 	protected void doThunder() {
-		
+		// Vanilla is doing the heavy lifting on thunder timer
 	}
-	
-	// No ambient thunder, either
-	@Override
-	protected void doAmbientThunder() {
-		
-	}
-
 }

@@ -30,10 +30,10 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
@@ -87,13 +87,19 @@ public final class DimensionEffectData extends WorldSavedData {
 	}
 
 	public void setRainIntensity(final float intensity) {
-		this.intensity = MathHelper.clamp(intensity, MIN_INTENSITY, MAX_INTENSITY);
-		this.setDirty(true);
+		final float i = MathStuff.clamp(intensity, MIN_INTENSITY, MAX_INTENSITY);
+		if (this.intensity != i) {
+			this.intensity = i;
+			this.markDirty();
+		}
 	}
 
 	public void setCurrentRainIntensity(final float intensity) {
-		this.currentIntensity = MathHelper.clamp(intensity, 0, this.intensity);
-		this.setDirty(true);
+		final float i = MathStuff.clamp(intensity, 0, this.intensity);
+		if (this.currentIntensity != i) {
+			this.currentIntensity = i;
+			this.markDirty();
+		}
 	}
 
 	public float getMinRainIntensity() {
@@ -101,8 +107,11 @@ public final class DimensionEffectData extends WorldSavedData {
 	}
 
 	public void setMinRainIntensity(final float intensity) {
-		this.minIntensity = MathHelper.clamp(intensity, MIN_INTENSITY, this.maxIntensity);
-		this.setDirty(true);
+		final float i = MathStuff.clamp(intensity, MIN_INTENSITY, this.maxIntensity);
+		if (this.minIntensity != i) {
+			this.minIntensity = i;
+			this.markDirty();
+		}
 	}
 
 	public float getMaxRainIntensity() {
@@ -110,8 +119,11 @@ public final class DimensionEffectData extends WorldSavedData {
 	}
 
 	public void setMaxRainIntensity(final float intensity) {
-		this.maxIntensity = MathHelper.clamp(intensity, this.minIntensity, MAX_INTENSITY);
-		this.setDirty(true);
+		final float i = MathStuff.clamp(intensity, this.minIntensity, MAX_INTENSITY);
+		if (this.maxIntensity != i) {
+			this.maxIntensity = i;
+			this.markDirty();
+		}
 	}
 
 	public int getThunderTimer() {
@@ -119,8 +131,11 @@ public final class DimensionEffectData extends WorldSavedData {
 	}
 
 	public void setThunderTimer(final int time) {
-		this.thunderTimer = MathHelper.clamp(time, 0, Integer.MAX_VALUE);
-		this.setDirty(true);
+		final int t = MathStuff.clamp(time, 0, Integer.MAX_VALUE);
+		if (this.thunderTimer != t) {
+			this.thunderTimer = t;
+			this.markDirty();
+		}
 	}
 
 	public void randomizeRain() {
@@ -132,34 +147,33 @@ public final class DimensionEffectData extends WorldSavedData {
 			final float mid = delta / 2.0F;
 			result = this.minIntensity + RANDOM.nextFloat() * mid + RANDOM.nextFloat() * mid;
 		}
-		setRainIntensity(MathHelper.clamp(result, 0.01F, MAX_INTENSITY));
+		setRainIntensity(MathStuff.clamp(result, 0.01F, MAX_INTENSITY));
 		setCurrentRainIntensity(0.0F);
 	}
 
 	@Override
 	public void readFromNBT(@Nonnull final NBTTagCompound nbt) {
 		this.dimensionId = nbt.getInteger(NBT.DIMENSION);
-		this.intensity = MathHelper.clamp(nbt.getFloat(NBT.INTENSITY), MIN_INTENSITY, MAX_INTENSITY);
+		this.setRainIntensity(nbt.getFloat(NBT.INTENSITY));
 		if (nbt.hasKey(NBT.CURRENT_INTENSITY))
-			this.currentIntensity = MathHelper.clamp(nbt.getFloat(NBT.CURRENT_INTENSITY), 0, this.intensity);
+			this.setCurrentRainIntensity(nbt.getFloat(NBT.CURRENT_INTENSITY));
 		if (nbt.hasKey(NBT.MIN_INTENSITY))
-			this.minIntensity = MathHelper.clamp(nbt.getFloat(NBT.MIN_INTENSITY), MIN_INTENSITY, MAX_INTENSITY);
+			this.setMinRainIntensity(nbt.getFloat(NBT.MIN_INTENSITY));
 		if (nbt.hasKey(NBT.MAX_INTENSITY))
-			this.maxIntensity = MathHelper.clamp(nbt.getFloat(NBT.MAX_INTENSITY), this.minIntensity,
-					MAX_INTENSITY);
+			this.setMaxRainIntensity(nbt.getFloat(NBT.MAX_INTENSITY));
 		if (nbt.hasKey(NBT.THUNDER_TIMER))
-			this.thunderTimer = MathHelper.clamp(nbt.getInteger(NBT.THUNDER_TIMER), 0, Integer.MAX_VALUE);
+			this.setThunderTimer(nbt.getInteger(NBT.THUNDER_TIMER));
 	}
 
 	@Override
 	@Nonnull
 	public NBTTagCompound writeToNBT(@Nonnull final NBTTagCompound nbt) {
-		nbt.setInteger(NBT.DIMENSION, this.dimensionId);
-		nbt.setFloat(NBT.INTENSITY, this.intensity);
-		nbt.setFloat(NBT.CURRENT_INTENSITY, this.currentIntensity);
-		nbt.setFloat(NBT.MIN_INTENSITY, this.minIntensity);
-		nbt.setFloat(NBT.MAX_INTENSITY, this.maxIntensity);
-		nbt.setInteger(NBT.THUNDER_TIMER, this.thunderTimer);
+		nbt.setInteger(NBT.DIMENSION, this.getDimensionId());
+		nbt.setFloat(NBT.INTENSITY, this.getRainIntensity());
+		nbt.setFloat(NBT.CURRENT_INTENSITY, this.getCurrentRainIntensity());
+		nbt.setFloat(NBT.MIN_INTENSITY, this.getMinRainIntensity());
+		nbt.setFloat(NBT.MAX_INTENSITY, this.getMaxRainIntensity());
+		nbt.setInteger(NBT.THUNDER_TIMER, this.getThunderTimer());
 		return nbt;
 	}
 

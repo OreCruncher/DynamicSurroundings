@@ -34,7 +34,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.client.event.PlayDistributedSoundEvent;
@@ -210,10 +209,6 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void soundPlay(@Nonnull final PlaySoundEvent e) {
-		// Don't patch up - Weather2 has it's own sound
-		if (ModEnvironment.Weather2.isLoaded())
-			return;
-
 		if (e.getName().equals("entity.lightning.thunder")) {
 			final ISound sound = e.getSound();
 			final BlockPos pos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
