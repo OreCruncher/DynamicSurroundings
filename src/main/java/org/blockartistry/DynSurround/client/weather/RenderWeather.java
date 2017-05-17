@@ -27,7 +27,6 @@ package org.blockartistry.DynSurround.client.weather;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.client.Minecraft;
@@ -70,7 +69,7 @@ public final class RenderWeather extends IRenderHandler {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onWorldLoad(@Nonnull final WorldEvent.Load e) {
 
-		if (DSurround.proxy().effectiveSide() == Side.SERVER || !ModOptions.enableWeatherASM)
+		if (DSurround.proxy().effectiveSide() == Side.SERVER)
 			return;
 
 		// Only want to hook if the provider doesn't have special

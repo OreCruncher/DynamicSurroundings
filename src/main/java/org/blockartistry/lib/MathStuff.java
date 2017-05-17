@@ -201,13 +201,21 @@ public class MathStuff {
 		final int i = (int) value;
 		return value < (double) i ? i - 1 : i;
 	}
-	
+
 	public static int floor(final float value) {
-		final int i = (int)value;
+		final int i = (int) value;
 		return value < (float) i ? i - 1 : i;
 	}
 
 	public static float clamp(final float num, final float min, final float max) {
+		return num < min ? min : (num > max ? max : num);
+	}
+
+	public static double clamp(final double num, final double min, final double max) {
+		return num < min ? min : (num > max ? max : num);
+	}
+
+	public static int clamp(final int num, final int min, final int max) {
 		return num < min ? min : (num > max ? max : num);
 	}
 
