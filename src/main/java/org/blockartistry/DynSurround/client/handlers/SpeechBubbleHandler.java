@@ -175,24 +175,16 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		loadText();
 	}
 
-	private void addSpeechBubbleFormatted(final int entityId, @Nonnull final String message,
+	private void addSpeechBubbleFormatted(@Nonnull final Entity entity, @Nonnull final String message,
 			final Object... parms) {
-		if (!ModOptions.enableSpeechBubbles && !ModOptions.enableEntityChat)
-			return;
-
 		String xlated = this.xlate.format(message, parms);
 		if (SPLASH_TOKEN.equals(xlated))
 			xlated = this.minecraftSplashText.get(RANDOM.nextInt(this.minecraftSplashText.size()));
-		addSpeechBubble(entityId, xlated);
+		addSpeechBubble(entity, xlated);
 	}
 
-	private void addSpeechBubble(final int entityId, @Nonnull final String message) {
-		if (!(ModOptions.enableSpeechBubbles || ModOptions.enableEntityChat) 
-				|| StringUtils.isEmpty(message))
-			return;
-
-		final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), entityId);
-		if (entity == null)
+	private void addSpeechBubble(@Nonnull final Entity entity, @Nonnull final String message) {
+		if (StringUtils.isEmpty(message))
 			return;
 
 		EntityBubbleContext ctx = this.messages.get(entity.getEntityId());
@@ -227,10 +219,10 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
-		
-		if(this.messages.size() == 0)
+
+		if (this.messages.size() == 0)
 			return;
-		
+
 		// Go through the cached messages and get rid of those
 		// that expire.
 		final ExpireFilter filter = new ExpireFilter(EnvironState.getTickCounter());
@@ -256,9 +248,18 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onSpeechTextEvent(@Nonnull final SpeechTextEvent event) {
+
+		final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), event.entityId);
+		if (entity == null)
+			return;
+		else if ((entity instanceof EntityPlayer) && !ModOptions.enableSpeechBubbles)
+			return;
+		else if (!ModOptions.enableEntityChat)
+			return;
+
 		if (event.translate)
-			addSpeechBubbleFormatted(event.entityId, event.message);
+			addSpeechBubbleFormatted(entity, event.message);
 		else
-			addSpeechBubble(event.entityId, event.message);
+			addSpeechBubble(entity, event.message);
 	}
 }
