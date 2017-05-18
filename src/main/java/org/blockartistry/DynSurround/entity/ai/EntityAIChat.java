@@ -87,8 +87,19 @@ public class EntityAIChat extends EntityAIBase {
 					EntityChatData data = messages.get(key);
 					if (data == null)
 						messages.put(key, data = new EntityChatData());
-					final String weight = matcher2.group(1);
-					data.table.add(input.getKey(), Integer.parseInt(weight));
+					final int weight = Integer.parseInt(matcher2.group(1));
+					final String item = input.getKey();
+					data.table.add(new WeightTable.IItem<String>() {
+						@Override
+						public int getWeight() {
+							return weight;
+						}
+
+						@Override
+						public String getItem() {
+							return item;
+						}
+					});
 				} else {
 					DSurround.log().warn("Invalid value in language file: %s", input.getValue());
 				}

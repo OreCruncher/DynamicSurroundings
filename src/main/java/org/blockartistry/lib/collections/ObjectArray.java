@@ -41,7 +41,7 @@ public class ObjectArray<T> implements Collection<T> {
 		this(DEFAULT_SIZE);
 	}
 
-	public ObjectArray(final int size) {
+	public ObjectArray(int size) {
 		this.data = new Object[size];
 	}
 
@@ -63,14 +63,11 @@ public class ObjectArray<T> implements Collection<T> {
 		return null;
 	}
 
-	private T remove0(final int idx) {
-		@SuppressWarnings("unchecked")
-		final T removed = (T) this.data[idx];
+	private void remove0(final int idx) {
 		final Object m = this.data[--this.insertionIdx];
 		this.data[this.insertionIdx] = null;
-		if (idx != this.insertionIdx)
+		if (idx < this.insertionIdx)
 			this.data[idx] = m;
-		return removed;
 	}
 
 	@SuppressWarnings("unchecked")

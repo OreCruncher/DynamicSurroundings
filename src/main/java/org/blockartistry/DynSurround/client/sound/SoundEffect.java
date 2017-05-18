@@ -37,7 +37,9 @@ import org.blockartistry.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.DynSurround.data.xface.SoundType;
 import org.blockartistry.DynSurround.registry.Evaluator;
 import org.blockartistry.lib.SoundUtils;
+import org.blockartistry.lib.WeightTable;
 import org.blockartistry.lib.WeightTable.IEntrySource;
+import org.blockartistry.lib.WeightTable.IItem;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -50,7 +52,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffect> {
+public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffect>, WeightTable.IItem<SoundEffect> {
 
 	private static final float[] pitchDelta = { -0.2F, 0.0F, 0.0F, 0.2F, 0.2F, 0.2F };
 
@@ -149,21 +151,6 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 		return this.category;
 	}
 
-	// IEntrySource
-	public int getWeight() {
-		return this.weight;
-	}
-
-	// IEntrySource
-	public SoundEffect getItem() {
-		return this;
-	}
-	
-	// IEntrySource
-	public boolean matches() {
-		return Evaluator.check(this.conditions);
-	}
-
 	public SoundType getSoundType() {
 		return this.type;
 	}
@@ -235,6 +222,29 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	@Override
 	public int hashCode() {
 		return this.sound.hashCode();
+	}
+
+	// WeightTable.IItem<T>
+	@Override
+	public SoundEffect getItem() {
+		return this;
+	}
+
+	// WeightTable.IItem<T>
+	@Override
+	public int getWeight() {
+		return this.weight;
+	}
+
+	// IEntrySource<T>
+	@Override
+	public IItem<SoundEffect> getEntry() {
+		return this;
+	}
+
+	// IEntrySource<T>
+	public boolean matches() {
+		return Evaluator.check(this.conditions);
 	}
 
 	public String toString() {

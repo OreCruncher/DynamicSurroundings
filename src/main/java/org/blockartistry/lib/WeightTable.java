@@ -30,20 +30,16 @@ import javax.annotation.Nonnull;
 import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.random.XorShiftRandom;
 
-public class WeightTable<T> extends ObjectArray<WeightTable.Item<T>> {
+public class WeightTable<T> extends ObjectArray<WeightTable.IItem<T>> {
 
 	protected final Random RANDOM = XorShiftRandom.current();
 	protected int totalWeight = 0;
 
-	public static class Item<T> {
+	public static interface IItem<T> {
+		
+		int getWeight();
 
-		public final int itemWeight;
-		public final T item;
-
-		public Item(@Nonnull final T item, final int weight) {
-			this.itemWeight = weight;
-			this.item = item;
-		}
+		T getItem();
 	}
 
 	public WeightTable() {
@@ -53,21 +49,13 @@ public class WeightTable<T> extends ObjectArray<WeightTable.Item<T>> {
 	public WeightTable(@Nonnull final IEntrySource<T>... src) {
 		for (int i = 0; i < src.length; i++)
 			if (src[i].matches())
-				this.add(new Item<T>(src[i].getItem(), src[i].getWeight()));
-	}
-
-	public boolean add(@Nonnull final T entry, final int itemWeight) {
-		assert itemWeight > 0;
-		assert entry != null;
-		return this.add(new Item<T>(entry, itemWeight));
+				this.add(src[i].getEntry());
 	}
 
 	@Override
-	public boolean add(@Nonnull final Item<T> entry) {
+	public boolean add(@Nonnull final WeightTable.IItem<T> entry) {
 		assert entry != null;
-		assert entry.itemWeight > 0;
-		assert entry.item != null;
-		this.totalWeight += entry.itemWeight;
+		this.totalWeight += entry.getWeight();
 		return super.add(entry);
 	}
 
@@ -79,20 +67,18 @@ public class WeightTable<T> extends ObjectArray<WeightTable.Item<T>> {
 
 		int targetWeight = this.RANDOM.nextInt(this.totalWeight);
 
-		WeightTable.Item<T> selected = null;
+		WeightTable.IItem<T> selected = null;
 		int i = -1;
 		do {
-			selected = (WeightTable.Item<T>) this.data[++i];
-			targetWeight -= selected.itemWeight;
+			selected = (WeightTable.IItem<T>) this.data[++i];
+			targetWeight -= selected.getWeight();
 		} while (targetWeight >= 0);
 
-		return selected.item;
+		return selected.getItem();
 	}
 
 	public static interface IEntrySource<T> {
-		int getWeight();
-
-		T getItem();
+		WeightTable.IItem<T> getEntry();
 
 		boolean matches();
 	}
