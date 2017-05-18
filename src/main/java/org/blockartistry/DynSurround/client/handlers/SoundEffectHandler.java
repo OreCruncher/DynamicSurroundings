@@ -24,7 +24,6 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
-import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -47,9 +46,9 @@ import org.blockartistry.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.network.PacketPlaySound;
+import org.blockartistry.lib.collections.ObjectArray;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import gnu.trove.iterator.TObjectFloatIterator;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.client.audio.ISound;
@@ -67,6 +66,18 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	private static final int AGE_THRESHOLD_TICKS = 10;
 	public static final SoundEffectHandler INSTANCE = new SoundEffectHandler();
+
+	private static final Predicate<PendingSound> PENDING_SOUNDS = new Predicate<PendingSound>() {
+		@Override
+		public boolean apply(final PendingSound input) {
+			if (input.getTickAge() >= AGE_THRESHOLD_TICKS)
+				return true;
+			if (input.getTickAge() >= 0) {
+				return INSTANCE.playSound(input.getSound()) != null;
+			}
+			return false;
+		}
+	};
 
 	/*
 	 * Used to track sound in the PENDING list.
@@ -91,7 +102,8 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	}
 
 	private final Map<SoundEffect, Emitter> emitters = new HashMap<SoundEffect, Emitter>();
-	private final ArrayDeque<PendingSound> pending = new ArrayDeque<PendingSound>();
+	private final ObjectArray<PendingSound> pending = new ObjectArray<PendingSound>();
+	private final ObjectArray<BasicSound<?>> sendToServer = new ObjectArray<BasicSound<?>>();
 
 	private SoundEffectHandler() {
 
@@ -107,24 +119,20 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 
 		// Only execute every 4 ticks.
-		if ((EnvironState.getTickCounter() % 4) != 0)
-			return;
+		if ((EnvironState.getTickCounter() % 4) == 0) {
+			for (final Emitter emitter : this.emitters.values())
+				emitter.update();
 
-		for (final Emitter emitter : this.emitters.values())
-			emitter.update();
+			if (this.pending.size() > 0)
+				this.pending.removeIf(PENDING_SOUNDS);
+		}
 
-		if (this.pending.size() > 0) {
-			Iterables.removeIf(this.pending, new Predicate<PendingSound>() {
-				@Override
-				public boolean apply(final PendingSound input) {
-					if (input.getTickAge() >= AGE_THRESHOLD_TICKS)
-						return true;
-					if (input.getTickAge() >= 0) {
-						return playSound(input.getSound()) != null;
-					}
-					return false;
-				}
-			});
+		// Flush out cached sounds
+		if (this.sendToServer.size() > 0) {
+			for (int i = 0; i < this.sendToServer.size(); i++) {
+				Network.sendToServer(new PacketPlaySound(player, this.sendToServer.get(i)));
+			}
+			this.sendToServer.clear();
 		}
 	}
 
@@ -199,10 +207,8 @@ public class SoundEffectHandler extends EffectHandlerBase {
 			return null;
 
 		// If it is a routable sound do so if possible
-		if (sound.shouldRoute() && DSurround.isInstalledOnServer()) {
-			final PacketPlaySound packet = new PacketPlaySound(EnvironState.getPlayer(), sound);
-			Network.sendToServer(packet);
-		}
+		if (sound.shouldRoute() && DSurround.isInstalledOnServer())
+			this.sendToServer.add(sound);
 
 		return SoundEngine.instance().playSound(sound);
 	}
