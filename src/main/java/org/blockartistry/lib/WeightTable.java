@@ -23,15 +23,16 @@
 
 package org.blockartistry.lib;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Random;
+
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.random.XorShiftRandom;
 
-public class WeightTable<T> {
+public class WeightTable<T> extends ObjectArray<WeightTable.Item<T>> {
 
-	protected final List<Item<T>> items = new ArrayList<Item<T>>(16);
+	protected final Random RANDOM = XorShiftRandom.current();
 	protected int totalWeight = 0;
 
 	public static class Item<T> {
@@ -47,46 +48,45 @@ public class WeightTable<T> {
 
 	public WeightTable() {
 	}
-	
+
 	@SafeVarargs
 	public WeightTable(@Nonnull final IEntrySource<T>... src) {
 		for (int i = 0; i < src.length; i++)
 			if (src[i].matches())
-				this.add(src[i].getItem(), src[i].getWeight());
+				this.add(new Item<T>(src[i].getItem(), src[i].getWeight()));
 	}
 
-	public WeightTable<T> add(@Nonnull final T entry, final int itemWeight) {
+	public boolean add(@Nonnull final T entry, final int itemWeight) {
 		assert itemWeight > 0;
 		assert entry != null;
-
-		this.totalWeight += itemWeight;
-		this.items.add(new Item<T>(entry, itemWeight));
-		return this;
+		return this.add(new Item<T>(entry, itemWeight));
 	}
 
-	public WeightTable<T> add(@Nonnull final Item<T> entry) {
+	@Override
+	public boolean add(@Nonnull final Item<T> entry) {
 		assert entry != null;
 		assert entry.itemWeight > 0;
 		assert entry.item != null;
-
 		this.totalWeight += entry.itemWeight;
-		this.items.add(entry);
-		return this;
+		return super.add(entry);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Nonnull
 	public T next() {
-		if(this.totalWeight <= 0)
+		if (this.totalWeight <= 0)
 			return null;
-		
-		int targetWeight = XorShiftRandom.current().nextInt(this.totalWeight);
 
+		int targetWeight = this.RANDOM.nextInt(this.totalWeight);
+
+		WeightTable.Item<T> selected = null;
 		int i = -1;
 		do {
-			targetWeight -= this.items.get(++i).itemWeight;
+			selected = (WeightTable.Item<T>) this.data[++i];
+			targetWeight -= selected.itemWeight;
 		} while (targetWeight >= 0);
 
-		return this.items.get(i).item;
+		return selected.item;
 	}
 
 	public static interface IEntrySource<T> {
