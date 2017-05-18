@@ -78,6 +78,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	private final HashMap<String, IAcoustic> acoustics = new HashMap<String, IAcoustic>();
 	private final ObjectArray<PendingSound> pending = new ObjectArray<PendingSound>();
+	private final ObjectArray<Association> footprints = new ObjectArray<Association>();
 	private final Isolator isolator;
 	private final BlockPos.MutableBlockPos stepCheck = new BlockPos.MutableBlockPos();
 
@@ -119,14 +120,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 			@Nonnull final EventType event) {
 		playAcoustic(location, acousticName.getData(), event, null);
 
-		if (acousticName.hasFootstepImprint()) {
-			final Vec3d stepLoc = acousticName.getStepLocation();
-			if (stepLoc != null && WorldUtils.isSolidBlock(EnvironState.getWorld(),
-					BlockPosHelper.setPos(this.stepCheck, stepLoc).move(EnumFacing.DOWN, 1))) {
-				produceFootprint(EnvironState.getDimensionId(), stepLoc, acousticName.getRotation(),
-						acousticName.isRightFoot());
-			}
-		}
+		// Delay processing footprints until the think phase
+		this.footprints.add(acousticName);
 	}
 
 	private void logAcousticPlay(@Nonnull final IAcoustic[] acoustics, @Nonnull final EventType event) {
@@ -245,21 +240,35 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	public void think() {
 
-		if (this.pending.isEmpty())
-			return;
+		if (!this.pending.isEmpty())
+			this.pending.removeIf(new Predicate<PendingSound>() {
+				private final long time = TimeUtils.currentTimeMillis();
 
-		this.pending.removeIf(new Predicate<PendingSound>() {
-			private final long time = TimeUtils.currentTimeMillis();
-			@Override
-			public boolean apply(@Nonnull final PendingSound sound) {
-				if (sound.getTimeToPlay() <= this.time) {
-					if (!sound.isLate(this.time))
-						sound.playSound(AcousticsManager.this);
-					return true;
+				@Override
+				public boolean apply(@Nonnull final PendingSound sound) {
+					if (sound.getTimeToPlay() <= this.time) {
+						if (!sound.isLate(this.time))
+							sound.playSound(AcousticsManager.this);
+						return true;
+					}
+					return false;
 				}
-				return false;
+			});
+
+		if (!this.footprints.isEmpty()) {
+			for (int i = 0; i < this.footprints.size(); i++) {
+				final Association assoc = this.footprints.get(i);
+				if (assoc.hasFootstepImprint()) {
+					final Vec3d stepLoc = assoc.getStepLocation();
+					if (stepLoc != null && WorldUtils.isSolidBlock(EnvironState.getWorld(),
+							BlockPosHelper.setPos(this.stepCheck, stepLoc).move(EnumFacing.DOWN, 1))) {
+						produceFootprint(EnvironState.getDimensionId(), stepLoc, assoc.getRotation(),
+								assoc.isRightFoot());
+					}
+				}
 			}
-		});
+			this.footprints.clear();
+		}
 
 	}
 
