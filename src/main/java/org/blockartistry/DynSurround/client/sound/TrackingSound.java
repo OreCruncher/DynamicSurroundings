@@ -149,5 +149,5 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 			this.maxVolume = volume;
 		return this;
 	}
-
+	
 }

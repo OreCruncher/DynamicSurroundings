@@ -203,7 +203,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	@Nullable
 	public String playSound(@Nonnull final BasicSound<?> sound) {
-		if (sound == null)
+		if (sound == null || !sound.canSoundBeHeard(EnvironState.getPlayerPosition()))
 			return null;
 
 		// If it is a routable sound do so if possible

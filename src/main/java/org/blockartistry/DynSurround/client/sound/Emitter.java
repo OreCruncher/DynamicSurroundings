@@ -106,16 +106,18 @@ public abstract class Emitter {
 			return;
 		} else if (this.isFading()) {
 			// If we get here the sound is no longer playing and is in the
-			// fading
-			// state. This is possible because the actual sound volume down in
-			// the engine could have hit 0 but the tick handler on the sound
-			// did not have a chance to get there first.
+			// fading state. This is possible because the actual sound
+			// volume down in the engine could have hit 0 but the tick
+			// handler on the sound did not have a chance to get there
+			// first.
 			this.done = true;
 			return;
 		}
 
 		try {
-			SoundEffectHandler.INSTANCE.playSound(this.activeSound);
+			// Don't play if the player can't hear
+			if (this.activeSound.canSoundBeHeard(EnvironState.getPlayerPosition()))
+				SoundEffectHandler.INSTANCE.playSound(this.activeSound);
 		} catch (final Throwable t) {
 			DSurround.log().error("Unable to play sound", t);
 		}
