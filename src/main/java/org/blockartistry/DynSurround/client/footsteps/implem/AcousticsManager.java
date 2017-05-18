@@ -24,7 +24,6 @@
 
 package org.blockartistry.DynSurround.client.footsteps.implem;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,7 +51,10 @@ import org.blockartistry.lib.BlockPosHelper;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.TimeUtils;
 import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.random.XorShiftRandom;
+
+import com.google.common.base.Predicate;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.entity.Entity;
@@ -75,7 +77,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	private final Random RANDOM = XorShiftRandom.current();
 
 	private final HashMap<String, IAcoustic> acoustics = new HashMap<String, IAcoustic>();
-	private final ArrayDeque<PendingSound> pending = new ArrayDeque<PendingSound>();
+	private final ObjectArray<PendingSound> pending = new ObjectArray<PendingSound>();
 	private final Isolator isolator;
 	private final BlockPos.MutableBlockPos stepCheck = new BlockPos.MutableBlockPos();
 
@@ -246,20 +248,19 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		if (this.pending.isEmpty())
 			return;
 
-		final long time = TimeUtils.currentTimeMillis();
-
-		while (this.pending.peek().getTimeToPlay() <= time) {
-			final PendingSound sound = this.pending.poll();
-			if (!sound.isLate(time)) {
-				sound.playSound(this);
-			} else if (DSurround.log().isDebugging()) {
-				DSurround.log().debug("    Skipped late sound (late by " + sound.howLate(time) + "ms, tolerence is "
-						+ sound.getLateTolerance() + "ms)");
+		this.pending.removeIf(new Predicate<PendingSound>() {
+			private final long time = TimeUtils.currentTimeMillis();
+			@Override
+			public boolean apply(@Nonnull final PendingSound sound) {
+				if (sound.getTimeToPlay() <= this.time) {
+					if (!sound.isLate(this.time))
+						sound.playSound(AcousticsManager.this);
+					return true;
+				}
+				return false;
 			}
+		});
 
-			if (this.pending.isEmpty())
-				break;
-		}
 	}
 
 	@Nonnull
