@@ -41,6 +41,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -71,6 +72,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 	};
 
 	protected final Random RANDOM = XorShiftRandom.current();
+	protected final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
 	protected String id = StringUtils.EMPTY;
 	protected float volumeThrottle = 1.0F;
@@ -88,7 +90,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 
 		this.volume = 1F;
 		this.pitch = 1F;
-		this.xPosF = this.yPosF = this.zPosF = 0F;
+		this.setPosition(0, 0, 0);
 		this.repeat = false;
 		this.repeatDelay = 0;
 		this.attenuationType = ISound.AttenuationType.LINEAR;
@@ -139,6 +141,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 		this.xPosF = x;
 		this.yPosF = y;
 		this.zPosF = z;
+		this.pos.setPos(x, y, z);
 		return (T) this;
 	}
 
@@ -206,6 +209,17 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 		return false;
 	}
 
+	public boolean canSoundBeHeard(@Nonnull final BlockPos soundPos) {
+		if (this.getVolume() == 0.0F)
+			return false;
+		final double distanceSq = this.pos.distanceSq(soundPos);
+		final double DROPOFF = 16 * 16;
+		if (distanceSq <= DROPOFF)
+			return true;
+		final double power = this.getVolume() * DROPOFF;
+		return distanceSq <= power;
+	}
+
 	@Nonnull
 	@Override
 	public NBTTagCompound serializeNBT() {
@@ -227,6 +241,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 		this.xPosF = nbt.getFloat(NBT.X_COORD);
 		this.yPosF = nbt.getFloat(NBT.Y_COORD);
 		this.zPosF = nbt.getFloat(NBT.Z_COORD);
+		this.pos.setPos(this.xPosF, this.yPosF, this.zPosF);
 	}
 
 	@Override

@@ -203,7 +203,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	@Nullable
 	public String playSound(@Nonnull final BasicSound<?> sound) {
-		if (sound == null)
+		if (sound == null || !sound.canSoundBeHeard(EnvironState.getPlayerPosition()))
 			return null;
 
 		// If it is a routable sound do so if possible
@@ -235,9 +235,6 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	@Nullable
 	public String playSoundAt(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int tickDelay) {
-
-		if (!sound.canSoundBeHeard(pos))
-			return null;
 
 		final BasicSound<?> s = sound.createSound(pos);
 		if (tickDelay == 0)
@@ -273,8 +270,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	 */
 	@SubscribeEvent
 	public void playerJoinWorldEvent(@Nonnull final EntityJoinWorldEvent event) {
-		if (event.getEntity().world.isRemote && EnvironState.isPlayer(event.getEntity())
-				&& !event.getEntity().isDead)
+		if (event.getEntity().world.isRemote && EnvironState.isPlayer(event.getEntity()) && !event.getEntity().isDead)
 			clearSounds();
 	}
 
