@@ -103,16 +103,11 @@ public class EntityAIChat extends EntityAIBase {
 
 	@Nonnull
 	protected static String getEntityClassName(@Nonnull final Class<? extends EntityLiving> entityClass) {
-		String name = null;
 		final ResourceLocation key = EntityList.getKey(entityClass);
-		if (key != null) {
-			name = EntityList.getTranslationName(key);
-		}
-		if (name == null) {
-			DSurround.log().debug("Can't find entity name for class [%s]", entityClass.getName());
-			return "EntityHasNoClass";
-		}
-		return name.toLowerCase();
+		if (key != null)
+			return key.getResourcePath();
+		DSurround.log().debug("Can't find entity name for class [%s]", entityClass.getName());
+		return "EntityHasNoClass";
 	}
 
 	private static void setTimers(@Nonnull final Class<? extends EntityLiving> entity, final int base,

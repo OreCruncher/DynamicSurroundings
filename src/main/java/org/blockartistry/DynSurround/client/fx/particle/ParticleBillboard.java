@@ -33,7 +33,7 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.lib.Color;
 import org.lwjgl.opengl.GL11;
 
-import com.google.common.base.Function;
+import com.google.common.base.Supplier;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -61,7 +61,7 @@ public class ParticleBillboard extends ParticleBase {
 
 	private final float scale;
 	private final Entity subject;
-	private final Function<Integer, List<String>> accessor;
+	private final Supplier<List<String>> accessor;
 	private List<String> text;
 
 	private int textWidth;
@@ -73,7 +73,7 @@ public class ParticleBillboard extends ParticleBase {
 
 	private boolean canBeSeen;
 
-	public ParticleBillboard(@Nonnull final Entity entity, @Nonnull final Function<Integer, List<String>> accessor) {
+	public ParticleBillboard(@Nonnull final Entity entity, @Nonnull final Supplier<List<String>> accessor) {
 		super(entity.getEntityWorld(), entity.posX, entity.posY, entity.posZ);
 
 		this.subject = entity;
@@ -107,7 +107,7 @@ public class ParticleBillboard extends ParticleBase {
 		if (!this.isAlive() || !this.subject.isEntityAlive())
 			return true;
 
-		this.text = this.accessor.apply(this.subject.getEntityId());
+		this.text = this.accessor.get();
 		return this.text == null || this.text.isEmpty();
 	}
 
