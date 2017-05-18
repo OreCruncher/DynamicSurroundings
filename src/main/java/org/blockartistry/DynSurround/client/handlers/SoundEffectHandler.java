@@ -236,9 +236,6 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	@Nullable
 	public String playSoundAt(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int tickDelay) {
 
-		if (!sound.canSoundBeHeard(pos))
-			return null;
-
 		final BasicSound<?> s = sound.createSound(pos);
 		if (tickDelay == 0)
 			return playSound(s);

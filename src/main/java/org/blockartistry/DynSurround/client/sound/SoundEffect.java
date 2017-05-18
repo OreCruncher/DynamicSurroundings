@@ -32,7 +32,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.fx.ISpecialEffect;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.DynSurround.data.xface.SoundType;
 import org.blockartistry.DynSurround.registry.Evaluator;
@@ -190,17 +189,6 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 		if (player instanceof EntityPlayer)
 			return new PlayerTrackingSound(this, fadeIn);
 		return new TrackingSound(player, this, fadeIn);
-	}
-
-	public boolean canSoundBeHeard(@Nonnull final BlockPos soundPos) {
-		if (this.getVolume() == 0.0F)
-			return false;
-		final double distanceSq = EnvironState.getPlayerPosition().distanceSq(soundPos);
-		final double DROPOFF = 16 * 16;
-		if (distanceSq <= DROPOFF)
-			return true;
-		final double power = this.getVolume() * DROPOFF;
-		return distanceSq <= power;
 	}
 
 	@Override
