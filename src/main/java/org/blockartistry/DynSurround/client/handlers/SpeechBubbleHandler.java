@@ -32,27 +32,20 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.SpeechTextEvent;
-import org.blockartistry.DynSurround.client.fx.particle.ParticleBillboard;
-import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.handlers.bubbles.EntityBubbleContext;
+import org.blockartistry.DynSurround.client.handlers.bubbles.SpeechBubbleData;
 import org.blockartistry.lib.Translations;
 import org.blockartistry.lib.WorldUtils;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -66,30 +59,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SpeechBubbleHandler extends EffectHandlerBase {
 
-	public static SpeechBubbleHandler INSTANCE;
-
-	private static final int MIN_TEXT_WIDTH = 60;
-	private static final int MAX_TEXT_WIDTH = MIN_TEXT_WIDTH * 3;
 	private static final String SPLASH_TOKEN = "$MINECRAFT$";
 	private static final ResourceLocation SPLASH_TEXT = new ResourceLocation("texts/splashes.txt");
 
 	private final TIntObjectHashMap<EntityBubbleContext> messages = new TIntObjectHashMap<EntityBubbleContext>();
 	private final Translations xlate = new Translations();
 	private final List<String> minecraftSplashText = new ArrayList<String>();
-
-	private static class ExpireFilter implements Predicate<SpeechBubbleData> {
-
-		private final long timeThreshold;
-
-		public ExpireFilter(final long threshhold) {
-			this.timeThreshold = threshhold;
-		}
-
-		@Override
-		public boolean apply(@Nonnull final SpeechBubbleData input) {
-			return this.timeThreshold > input.expires;
-		}
-	};
 
 	private static class Stripper implements Function<Entry<String, String>, String> {
 
@@ -101,45 +76,6 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 			return matcher.matches() ? matcher.group(2) : input.getValue();
 		}
 
-	}
-
-	private static final Function<Integer, List<String>> ACCESSOR = new Function<Integer, List<String>>() {
-
-		@Override
-		public List<String> apply(@Nonnull final Integer input) {
-			return INSTANCE.getMessages(input.intValue());
-		}
-
-	};
-
-	private static class SpeechBubbleData {
-		public final long expires = EnvironState.getTickCounter() + (long) (ModOptions.speechBubbleDuration * 20F);
-		private String incomingText;
-		private List<String> messages;
-
-		public SpeechBubbleData(@Nonnull final String message) {
-			this.incomingText = message.replaceAll("(\\xA7.)", "");
-		}
-
-		// Need to do lazy formatting of the text. Reason is that events
-		// can be fired before the client is fully constructed meaning that
-		// the font renderer would be non-existent.
-		@Nonnull
-		public List<String> getText() {
-			if (this.messages == null) {
-				final FontRenderer font = Minecraft.getMinecraft().getRenderManager().getFontRenderer();
-				if (font == null)
-					return ImmutableList.of();
-				this.messages = font.listFormattedStringToWidth(this.incomingText, MAX_TEXT_WIDTH);
-				this.incomingText = null;
-			}
-			return this.messages;
-		}
-	}
-
-	private static class EntityBubbleContext {
-		public final List<SpeechBubbleData> data = new ArrayList<SpeechBubbleData>();
-		public ParticleBillboard bubble;
 	}
 
 	private void loadText() {
@@ -171,7 +107,6 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 	}
 
 	public SpeechBubbleHandler() {
-		INSTANCE = this;
 		loadText();
 	}
 
@@ -192,24 +127,9 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 			this.messages.put(entity.getEntityId(), ctx = new EntityBubbleContext());
 		}
 
-		ctx.data.add(new SpeechBubbleData(message));
-
-		if (ctx.bubble == null || ctx.bubble.shouldExpire()) {
-			final ParticleBillboard particle = new ParticleBillboard(entity, ACCESSOR);
-			ParticleHelper.addParticle(particle);
-			ctx.bubble = particle;
-		}
-	}
-
-	@Nullable
-	private List<String> getMessages(final int entityId) {
-		final EntityBubbleContext ctx = this.messages.get(entityId);
-		if (ctx == null || ctx.data == null || ctx.data.isEmpty())
-			return null;
-		final List<String> result = new ArrayList<String>();
-		for (final SpeechBubbleData entry : ctx.data)
-			result.addAll(entry.getText());
-		return result;
+		final int expiry = EnvironState.getTickCounter() + (int) (ModOptions.speechBubbleDuration * 20F);
+		ctx.add(new SpeechBubbleData(message, expiry));
+		ctx.handleBubble(entity);
 	}
 
 	@Override
@@ -225,13 +145,12 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 
 		// Go through the cached messages and get rid of those
 		// that expire.
-		final ExpireFilter filter = new ExpireFilter(EnvironState.getTickCounter());
+		final int currentTick = EnvironState.getTickCounter();
 		final TIntObjectIterator<EntityBubbleContext> entityData = this.messages.iterator();
 		while (entityData.hasNext()) {
 			entityData.advance();
 			final EntityBubbleContext ctx = entityData.value();
-			Iterables.removeIf(ctx.data, filter);
-			if (ctx.data.isEmpty())
+			if (ctx.clean(currentTick))
 				entityData.remove();
 		}
 	}
