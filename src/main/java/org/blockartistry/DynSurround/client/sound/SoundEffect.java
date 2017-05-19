@@ -35,6 +35,8 @@ import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.DynSurround.data.xface.SoundType;
 import org.blockartistry.DynSurround.registry.Evaluator;
+import org.blockartistry.DynSurround.registry.SoundMetadata;
+import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.lib.SoundUtils;
 import org.blockartistry.lib.WeightTable;
 import org.blockartistry.lib.WeightTable.IEntrySource;
@@ -132,12 +134,12 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 		this.repeatDelayRandom = r;
 		return this;
 	}
-	
+
 	protected SoundEffect setSoundTitle(@Nonnull final String title) {
 		this.soundTitle = title;
 		return this;
 	}
-	
+
 	public String getSoundTitle() {
 		return this.soundTitle;
 	}
@@ -267,7 +269,8 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 		}
 
 		public Builder(@Nonnull final SoundConfig record) {
-			this.effect = new SoundEffect(new ResourceLocation(record.sound), null);
+			final ResourceLocation resource = new ResourceLocation(record.sound);
+			this.effect = new SoundEffect(resource, null);
 
 			this.setConditions(StringUtils.isEmpty(record.conditions) ? StringUtils.EMPTY : record.conditions.intern());
 			this.setVolume(record.volume == null ? 1.0F : record.volume.floatValue());
@@ -298,15 +301,23 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 			if (record.soundCategory != null) {
 				sc = SoundCategory.getByName(record.soundCategory);
 			} else {
-				switch (t) {
-				case BACKGROUND:
-				case PERIODIC:
-				case SPOT:
-					sc = SoundCategory.AMBIENT;
-					break;
-				case STEP:
-				default:
-					sc = SoundCategory.BLOCKS;
+				// There isn't an override - defer to the category info in
+				// the sounds.json.
+				final SoundMetadata meta = SoundRegistry.getSoundMetadata(resource);
+				if (meta != null) {
+					sc = meta.getCategory();
+				} else {
+					// No info in sounds.json - best guess.
+					switch (t) {
+					case BACKGROUND:
+					case PERIODIC:
+					case SPOT:
+						sc = SoundCategory.AMBIENT;
+						break;
+					case STEP:
+					default:
+						sc = SoundCategory.BLOCKS;
+					}
 				}
 			}
 
@@ -317,7 +328,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 			this.effect.setSoundTitle(title);
 			return this;
 		}
-		
+
 		public Builder setVolume(final float v) {
 			this.effect.setVolume(v);
 			return this;

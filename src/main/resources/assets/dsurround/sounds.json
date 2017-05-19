@@ -1759,7 +1759,7 @@
 		]
 	},
 	"battle.normal": {
-		"category": "ambient",
+		"category": "music",
 		"credits": [
 			"§aIntense Battle Loop.wav",
 			"furbyguy",
@@ -1768,13 +1768,13 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/battle/normal_battle",
-				"volume": 0.25,
+				"volume": 0.6,
 				"stream": true
 			}
 		]
 	},
 	"battle.miniboss": {
-		"category": "ambient",
+		"category": "music",
 		"credits": [
 			"§adetermined_persuit_loop.wav",
 			"Emma_MA",
@@ -1783,13 +1783,12 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/battle/miniboss_battle",
-				"volume": 0.35,
 				"stream": true
 			}
 		]
 	},
 	"battle.dragon": {
-		"category": "ambient",
+		"category": "music",
 		"title": "Defiance",
 		"credits": [
 			"Tanner Helland",
@@ -1798,13 +1797,12 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/battle/defiance",
-				"volume": 0.35,
 				"stream": true
 			}
 		]
 	},
 	"battle.wither": {
-		"category": "ambient",
+		"category": "music",
 		"title": "Retribution",
 		"credits": [
 			"Tanner Helland",
@@ -1813,7 +1811,6 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/battle/retribution",
-				"volume": 0.35,
 				"stream": true
 			}
 		]
