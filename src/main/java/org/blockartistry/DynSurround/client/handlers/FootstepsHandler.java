@@ -28,9 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.FootstepEvent;
-import org.blockartistry.DynSurround.client.fx.particle.ParticleFootprint;
-import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
-import org.blockartistry.DynSurround.client.fx.particle.ParticleFootprint.Style;
+import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.FootstepsRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
@@ -71,10 +69,9 @@ public class FootstepsHandler extends EffectHandlerBase {
 	@SubscribeEvent
 	public void onDisplayFootstep(@Nonnull final FootstepEvent.Display event) {
 		if (ModOptions.enableFootprints) {
-			final Style style = Style.getStyle(ModOptions.footprintStyle);
 			final Vec3d stepLoc = event.location;
-			ParticleHelper.addParticle(new ParticleFootprint(EnvironState.getWorld(), stepLoc.xCoord, stepLoc.yCoord,
-					stepLoc.zCoord, event.rotation, event.isRightFoot, style));
+			ParticleCollections.addFootprint(EnvironState.getWorld(), stepLoc.xCoord, stepLoc.yCoord, stepLoc.zCoord,
+					event.rotation, event.isRightFoot);
 		}
 
 	}

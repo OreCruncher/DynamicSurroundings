@@ -26,16 +26,10 @@ package org.blockartistry.DynSurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.lib.collections.ObjectArray;
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.Tessellator;
+import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.ModOptions;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -43,52 +37,39 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ParticleCollection extends Particle {
+public class ParticleCollectionFootprint extends ParticleCollection {
 
-	protected static final int ALLOCATION_SIZE = 1024;
+	public static enum Style {
 
-	protected final ObjectArray<IParticleMote> myParticles = new ObjectArray<IParticleMote>(ALLOCATION_SIZE);
-	protected final ResourceLocation texture;
+		SHOE("textures/particles/footprint.png"),
+		SQUARE("textures/particles/footprint_square.png"),
+		HORSESHOE("textures/particles/footprint_horseshoe.png");
 
-	public ParticleCollection(@Nonnull final World world, @Nonnull final ResourceLocation tex) {
-		super(world, 0, 0, 0);
+		private final ResourceLocation resource;
 
-		this.canCollide = false;
-		this.texture = tex;
-	}
+		private Style(@Nonnull final String texture) {
+			this.resource = new ResourceLocation(DSurround.RESOURCE_ID, texture);
+		}
 
-	protected void bindTexture(@Nonnull final ResourceLocation resource) {
-		Minecraft.getMinecraft().getTextureManager().bindTexture(resource);
-	}
+		public ResourceLocation getTexture() {
+			return this.resource;
+		}
 
-	public void addParticle(@Nonnull final IParticleMote mote) {
-		this.myParticles.add(mote);
-	}
-
-	public boolean shouldDie() {
-		return this.myParticles.size() == 0 || this.world != EnvironState.getWorld();
-	}
-
-	@Override
-	public void onUpdate() {
-		if (!this.isAlive())
-			return;
-
-		// Update state and remove the dead ones
-		this.myParticles.removeIf(IParticleMote.UPDATE_REMOVE);
-
-		if (this.shouldDie()) {
-			this.setExpired();
+		public static Style getStyle(final int v) {
+			if (v >= values().length)
+				return SHOE;
+			return values()[v];
 		}
 	}
 
-	@Nonnull
-	protected VertexFormat getVertexFormat() {
-		return DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP;
-	}
-	
-	protected void preRender() {
+	public ParticleCollectionFootprint(World world, ResourceLocation tex) {
+		super(world, tex);
 
+	}
+
+	protected void bindTexture(@Nonnull final ResourceLocation resource) {
+		final ResourceLocation res = Style.getStyle(ModOptions.footprintStyle).getTexture();
+		super.bindTexture(res);
 	}
 
 	@Override
@@ -96,23 +77,14 @@ public class ParticleCollection extends Particle {
 			final float rotX, final float rotZ, final float rotYZ, final float rotXY, final float rotXZ) {
 
 		this.bindTexture(this.texture);
-		this.preRender();
+		
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-		buffer.begin(GL11.GL_QUADS, getVertexFormat());
 		for(int i = 0; i < this.myParticles.size(); i++)
 			this.myParticles.get(i).renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
-		Tessellator.getInstance().draw();
 
-		this.postRender();
+		GlStateManager.disableBlend();
 	}
-
-	protected void postRender() {
-
-	}
-
-	@Override
-	public int getFXLayer() {
-		return 3;
-	}
-
+	
 }
