@@ -1,3 +1,18 @@
+###DynamicSurroundings-1.11.2-3.4.4.0
+**Fixes**
+* OpenEye report of NPE in sound muting
+* Do not replace MusicTicker if Actual Music is installed.  It is recommended that Battle Music not be enabled if you are using Actual Music because of song clash.
+* Footprints will be properly lit; should stand out less in darkness
+* Ice Plains and Tundra no longer have desert dust effect
+
+**Changes**
+* New rain option to configure Dynamic Surroundings to use Vanilla processing of rain/thunder rather than it's own
+    * Provides generic compatibility when needed (or some folks just like Vanilla rain)
+    * Vanilla will have a an intensity of 100 when rain kicks into full gear
+    * Background thunder will always be triggered if it is currently storming (can be turned off with a different setting)
+    * Dynamic Surroundings rendering of dust/rain textures as well as rain splash particle effects will still be present
+    * Other mods may manipulate the vanilla rain/thunder settings in world data.  This will affect how Dynamic Surroundings behaves.
+    
 ###DynamicSurroundings-1.11.2-3.4.3.0
 **What's New**
 * Ding or Egg Pop sound when client starts.
