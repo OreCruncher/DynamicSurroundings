@@ -44,7 +44,6 @@ import org.blockartistry.lib.WeightTable;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
@@ -273,8 +272,6 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 			if (RegistryManager.<SoundRegistry>get(RegistryType.SOUND).isSoundBlocked(sr.sound))
 				continue;
 			final SoundEffect.Builder b = new SoundEffect.Builder(sr);
-			if (sr.soundCategory == null)
-				b.setSoundCategory(SoundCategory.AMBIENT);
 			final SoundEffect s = b.build();
 			if (s.getSoundType() == SoundType.SPOT)
 				this.addSpotSound(s);
