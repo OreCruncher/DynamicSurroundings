@@ -30,10 +30,12 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.fx.particle.mote.IParticleMote;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteEmoji;
+import org.blockartistry.DynSurround.client.fx.particle.mote.MoteFootprint;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteRainSplash;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteWaterRipple;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteWaterSpray;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollection;
+import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionFootprint;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionRipples;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
@@ -83,11 +85,15 @@ public final class ParticleCollections {
 			"textures/particles/rainsplash.png");
 	private static final ResourceLocation EMOJI_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
 			"textures/particles/emojis.png");
+	private static final ResourceLocation FOOTPRINT_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
+			"textures/particles/footprint.png");
 
 	private final static CollectionHelper theRipples = new CollectionHelper(ParticleCollectionRipples.class,
 			RIPPLE_TEXTURE);
 	private final static CollectionHelper theSprays = new CollectionHelper(SPRAY_TEXTURE);
 	private final static CollectionHelper theEmojis = new CollectionHelper(EMOJI_TEXTURE);
+	private final static CollectionHelper thePrints = new CollectionHelper(ParticleCollectionFootprint.class,
+			FOOTPRINT_TEXTURE);
 
 	public static IParticleMote addWaterRipple(@Nonnull final World world, final double x, final double y,
 			final double z) {
@@ -113,6 +119,13 @@ public final class ParticleCollections {
 	public static IParticleMote addEmoji(@Nonnull final Entity entity) {
 		final IParticleMote mote = new MoteEmoji(entity);
 		theEmojis.get().addParticle(mote);
+		return mote;
+	}
+
+	public static IParticleMote addFootprint(@Nonnull final World world, final double x, final double y, final double z,
+			final float rot, final boolean isRight) {
+		final IParticleMote mote = new MoteFootprint(world, x, y, z, rot, isRight);
+		thePrints.get().addParticle(mote);
 		return mote;
 	}
 

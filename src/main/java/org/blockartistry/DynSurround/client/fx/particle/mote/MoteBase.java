@@ -130,10 +130,20 @@ public abstract class MoteBase implements IParticleMote {
 		return (float) (this.posZ - interpZ());
 	}
 
+	protected void applyColor(@Nonnull final VertexBuffer buffer) {
+		buffer.color(this.red, this.green, this.blue, this.alpha);
+	}
+
+	protected void applyLightmap(@Nonnull final VertexBuffer buffer) {
+		buffer.lightmap(this.slX16, this.blX16);
+	}
+
 	protected void drawVertex(final VertexBuffer buffer, final double x, final double y, final double z, final double u,
 			final double v) {
-		buffer.pos(x, y, z).tex(u, v).color(this.red, this.green, this.blue, this.alpha)
-				.lightmap(this.slX16, this.blX16).endVertex();
+		buffer.pos(x, y, z).tex(u, v);
+		applyColor(buffer);
+		applyLightmap(buffer);
+		buffer.endVertex();
 	}
 
 	@Override
