@@ -40,6 +40,7 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.gui.ConfigSound;
 import org.blockartistry.DynSurround.data.xface.SoundMetadataConfig;
+import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.SoundUtils;
 
@@ -56,14 +57,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 //@SideOnly(Side.CLIENT)
 public final class SoundRegistry extends Registry {
 
+	public static final float MIN_SOUNDFACTOR = 0F;
+	public static final float MAX_SOUNDFACTOR = 4F;
+	public static final float DEFAULT_SOUNDFACTOR = 1F;
+
 	private static final String ARMOR_SOUND_PREFIX = DSurround.MOD_ID + ":fs.armor.";
-	
+
 	private final static Map<ResourceLocation, SoundMetadata> soundMetadata = Maps.newHashMap();
 
 	private final List<String> cullSoundNames = new ArrayList<String>();
 	private final List<String> blockSoundNames = new ArrayList<String>();
 	private final TObjectFloatHashMap<String> volumeControl = new TObjectFloatHashMap<String>(
-			Constants.DEFAULT_CAPACITY, Constants.DEFAULT_LOAD_FACTOR, 1.0F);
+			Constants.DEFAULT_CAPACITY, Constants.DEFAULT_LOAD_FACTOR, DEFAULT_SOUNDFACTOR);
 
 	public SoundRegistry(@Nonnull final Side side) {
 		super(side);
@@ -84,7 +89,7 @@ public final class SoundRegistry extends Registry {
 			if (tokens.length == 2) {
 				try {
 					final float vol = Integer.parseInt(tokens[1]) / 100.0F;
-					this.volumeControl.put(tokens[0], vol);
+					this.volumeControl.put(tokens[0], MathStuff.clamp(vol, MIN_SOUNDFACTOR, MAX_SOUNDFACTOR));
 				} catch (final Throwable t) {
 					DSurround.log().error("Unable to process sound volume entry: " + volume, t);
 				}
@@ -104,7 +109,7 @@ public final class SoundRegistry extends Registry {
 	public boolean isSoundBlocked(@Nonnull final String sound) {
 		return this.blockSoundNames.contains(sound);
 	}
-	
+
 	public boolean isSoundBlockedLogical(@Nonnull final String sound) {
 		return this.isSoundBlocked(sound) || (!ModOptions.enableArmorSounds && sound.startsWith(ARMOR_SOUND_PREFIX));
 	}
@@ -152,7 +157,7 @@ public final class SoundRegistry extends Registry {
 		}
 
 	}
-	
+
 	@Nullable
 	public static SoundMetadata getSoundMetadata(@Nonnull final ResourceLocation resource) {
 		return soundMetadata.get(resource);

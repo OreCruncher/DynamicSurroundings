@@ -206,7 +206,7 @@ public class SoundConfigEntry extends NumberSliderEntry {
 
 		return true;
 	}
-	
+
 	@Override
 	public void onGuiClosed() {
 		this.play.stopSound();
@@ -248,7 +248,7 @@ public class SoundConfigEntry extends NumberSliderEntry {
 			final String n = ((String) element.get()).replace(GuiConstants.TOKEN_CULL, "")
 					.replace(GuiConstants.TOKEN_BLOCK, "").trim();
 			if (StringUtils.isEmpty(n))
-				this.initialValue = 100;
+				this.initialValue = (int) (SoundRegistry.DEFAULT_SOUNDFACTOR * 100F);
 			else
 				this.initialValue = Integer.parseInt(n);
 		}
@@ -315,7 +315,7 @@ public class SoundConfigEntry extends NumberSliderEntry {
 
 		@Override
 		public boolean isDefault() {
-			return this.initialValue == 100;
+			return this.initialValue == (int) (SoundRegistry.DEFAULT_SOUNDFACTOR * 100F);
 		}
 
 		@Override
@@ -375,12 +375,12 @@ public class SoundConfigEntry extends NumberSliderEntry {
 
 		@Override
 		public Object getMinValue() {
-			return 0;
+			return (int) (SoundRegistry.MIN_SOUNDFACTOR);
 		}
 
 		@Override
 		public Object getMaxValue() {
-			return 200;
+			return (int) (SoundRegistry.MAX_SOUNDFACTOR * 100F);
 		}
 
 		@Override
