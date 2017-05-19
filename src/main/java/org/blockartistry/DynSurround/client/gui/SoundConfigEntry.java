@@ -206,6 +206,11 @@ public class SoundConfigEntry extends NumberSliderEntry {
 
 		return true;
 	}
+	
+	@Override
+	public void onGuiClosed() {
+		this.play.stopSound();
+	}
 
 	@Override
 	public boolean saveConfigElement() {

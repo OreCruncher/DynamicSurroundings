@@ -30,6 +30,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModEnvironment;
+import org.blockartistry.DynSurround.client.gui.ConfigSound;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.MathStuff;
 
@@ -78,9 +79,22 @@ public class MusicTickerReplacement extends MusicTicker {
 
 		// Make sure it is properly bounded
 		this.currentScale = MathStuff.clamp(this.currentScale, MIN_VOLUME_SCALE, 1.0F);
-
-		// Let Vanilla take a bite
-		super.update();
+		
+		if(this.currentMusic instanceof ConfigSound) {
+			if(!SoundEngine.instance().isSoundPlaying((BasicSound<?>) this.currentMusic)) {
+				this.currentMusic = null;
+				this.timeUntilNextMusic = 60;
+				super.update();
+			}
+		} else {
+			super.update();
+		}
+	}
+	
+	public void setPlaying(@Nonnull final ConfigSound sound) {
+		this.stopMusic();
+		this.currentMusic = sound;
+		SoundEngine.instance().playSound((BasicSound<?>) this.currentMusic);
 	}
 
 	@Override
