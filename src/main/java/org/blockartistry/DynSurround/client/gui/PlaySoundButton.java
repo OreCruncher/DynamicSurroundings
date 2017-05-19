@@ -27,9 +27,11 @@ package org.blockartistry.DynSurround.client.gui;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.sound.BasicSound;
+import org.blockartistry.DynSurround.client.sound.MusicTickerReplacement;
 import org.blockartistry.DynSurround.client.sound.SoundEngine;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.MusicTicker;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -69,17 +71,32 @@ public class PlaySoundButton extends GuiButtonExt {
 
 	}
 	
+	private void doPlay(@Nonnull final ConfigSound sound) {
+		final MusicTicker ticker = Minecraft.getMinecraft().getMusicTicker();
+		this.playingSound = sound;
+		if(ticker instanceof MusicTickerReplacement) {
+			final MusicTickerReplacement mtr = (MusicTickerReplacement)ticker;
+			mtr.setPlaying(sound);
+		} else {
+			this.soundEngine.playSound(sound);
+		}
+	}
+	
 	public void playSound(@Nonnull final Minecraft mc, final float volume) {
 		if (this.playingSound != null) {
 			this.soundEngine.stopSound(this.playingSound);
 			this.playingSound = null;
 		} else {
 			this.soundEngine.stopAllSounds();
-			this.playingSound = new ConfigSound(this.soundResource, volume);
-			this.soundEngine.playSound(this.playingSound);
+			doPlay(new ConfigSound(this.soundResource, volume));
 		}
 		
 		updateDisplayText();
+	}
+	
+	public void stopSound() {
+		if(this.playingSound != null)
+			this.playSound(null, 0F);
 	}
 
 }
