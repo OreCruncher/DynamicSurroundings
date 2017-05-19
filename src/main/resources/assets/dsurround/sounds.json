@@ -1768,7 +1768,7 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/battle/normal_battle",
-				"volume": 0.6,
+				"volume": 0.75,
 				"stream": true
 			}
 		]
