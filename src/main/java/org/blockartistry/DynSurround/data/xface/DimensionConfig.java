@@ -44,6 +44,8 @@ public class DimensionConfig {
 	public Boolean hasAurora = null;
 	@SerializedName("weather")
 	public Boolean hasWeather = null;
+	@SerializedName("fog")
+	public Boolean hasFog;
 
 	@Override
 	@Nonnull
@@ -65,6 +67,8 @@ public class DimensionConfig {
 			builder.append("hasHaze: ").append(Boolean.toString(this.hasHaze.booleanValue())).append(" ");
 		if (this.hasWeather != null)
 			builder.append("hasWeather: ").append(Boolean.toString(this.hasWeather.booleanValue())).append(" ");
+		if (this.hasFog != null)
+			builder.append("hasFog: ").append(Boolean.toString(this.hasFog.booleanValue())).append(" ");
 		return builder.toString();
 	}
 

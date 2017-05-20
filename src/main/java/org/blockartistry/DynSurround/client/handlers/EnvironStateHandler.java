@@ -42,6 +42,8 @@ import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.DynSurround.registry.ArmorClass;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.DynSurround.registry.BiomeRegistry;
+import org.blockartistry.DynSurround.registry.DimensionInfo;
+import org.blockartistry.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.DynSurround.registry.Evaluator;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.SeasonRegistry;
@@ -91,6 +93,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static SeasonType season;
 		private static int dimensionId;
 		private static String dimensionName;
+		private static DimensionInfo dimInfo = DimensionInfo.NONE;
 		private static BlockPos playerPosition;
 		private static EntityPlayer player;
 		private static World world;
@@ -126,6 +129,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			season = SeasonType.NONE;
 			dimensionId = 0;
 			dimensionName = StringUtils.EMPTY;
+			dimInfo = DimensionInfo.NONE;
 			playerPosition = BlockPos.ORIGIN;
 			player = null;
 			world = null;
@@ -151,9 +155,11 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 			final BiomeRegistry biomes = RegistryManager.<BiomeRegistry>get(RegistryType.BIOME);
 			final SeasonRegistry seasons = RegistryManager.<SeasonRegistry>get(RegistryType.SEASON);
+			final DimensionRegistry dimensions = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION);
 
 			EnvironState.player = player;
 			EnvironState.world = player.world;
+			EnvironState.dimInfo = dimensions.getData(player.world);
 			EnvironState.clock.update(EnvironState.world);
 			EnvironState.playerBiome = PlayerUtils.getPlayerBiome(player, false);
 			EnvironState.biomeName = EnvironState.playerBiome.getBiomeName();
@@ -199,6 +205,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		public static BattleScanner getBattleScanner() {
 			return battle;
+		}
+		
+		public static DimensionInfo getDimensionInfo() {
+			return dimInfo;
 		}
 
 		public static BiomeInfo getPlayerBiome() {

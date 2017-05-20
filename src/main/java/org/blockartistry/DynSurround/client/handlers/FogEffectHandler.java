@@ -55,14 +55,17 @@ public class FogEffectHandler extends EffectHandlerBase {
 	public String getHandlerName() {
 		return "FogEffectHandler";
 	}
-	
-	private static boolean ignoreFog() {
-		return !(ModOptions.enableBiomeFog || ModOptions.allowDesertFog);
+
+	private boolean ignoreFog() {
+		if (!(ModOptions.enableBiomeFog || ModOptions.allowDesertFog))
+			return false;
+
+		return !EnvironState.getDimensionInfo().getHasFog();
 	}
 
 	@Override
 	public void process(final World world, final EntityPlayer player) {
-		if(!ignoreFog())
+		if (!ignoreFog())
 			this.scanner.update();
 	}
 
@@ -73,9 +76,9 @@ public class FogEffectHandler extends EffectHandlerBase {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void fogColorEvent(final EntityViewRenderEvent.FogColors event) {
 
-		if(ignoreFog())
+		if (ignoreFog())
 			return;
-		
+
 		final IBlockState block = ActiveRenderInfo.getBlockStateAtEntityViewpoint(event.getEntity().world,
 				event.getEntity(), (float) event.getRenderPartialTicks());
 		if (block.getMaterial() == Material.LAVA || block.getMaterial() == Material.WATER)
@@ -113,7 +116,7 @@ public class FogEffectHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void diagnostics(final DiagnosticEvent.Gather event) {
-		if(ignoreFog())
+		if (ignoreFog())
 			event.output.add("FOG: IGNORED");
 		else
 			event.output.add(this.scanner.toString());

@@ -151,5 +151,9 @@ public final class DimensionRegistry extends Registry {
 	public boolean hasWeather(@Nonnull final World world) {
 		return getData(world).getHasWeather();
 	}
+	
+	public boolean hasFog(@Nonnull final World world) {
+		return getData(world).getHasFog();
+	}
 
 }
