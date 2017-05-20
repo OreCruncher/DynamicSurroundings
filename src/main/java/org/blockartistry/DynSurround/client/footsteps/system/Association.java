@@ -35,8 +35,7 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.MyUtils;
-
-import com.google.common.collect.Sets;
+import org.blockartistry.lib.collections.IdentityHashSet;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -50,7 +49,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class Association {
 
-	private static final Set<Material> FOOTPRINTABLE = Sets.newIdentityHashSet();
+	private static final Set<Material> FOOTPRINTABLE = new IdentityHashSet<Material>();
 	static {
 		FOOTPRINTABLE.add(Material.CLAY);
 		FOOTPRINTABLE.add(Material.GRASS);

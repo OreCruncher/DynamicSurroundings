@@ -25,6 +25,7 @@ package org.blockartistry.lib.collections;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
@@ -80,6 +81,12 @@ public class ObjectArray<T> implements Collection<T> {
 			}
 		}
 		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	public void forEvery(@Nonnull final Consumer<T> consumer) {
+		for (int i = this.insertionIdx - 1; i >= 0; i--)
+			consumer.accept((T) this.data[i]);
 	}
 
 	@Override

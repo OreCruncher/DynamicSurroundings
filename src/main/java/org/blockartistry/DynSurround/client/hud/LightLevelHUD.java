@@ -24,9 +24,6 @@
 
 package org.blockartistry.DynSurround.client.hud;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
@@ -34,6 +31,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.Color;
+import org.blockartistry.lib.collections.ObjectArray;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -82,8 +80,8 @@ public final class LightLevelHUD extends GuiOverlay {
 
 	private static enum ColorSet {
 
-		BRIGHT(Color.MC_GREEN, Color.MC_YELLOW, Color.MC_RED, Color.MC_DARKAQUA), DARK(Color.MC_DARKGREEN,
-				Color.MC_GOLD, Color.MC_DARKRED, Color.MC_DARKBLUE);
+		BRIGHT(Color.MC_GREEN, Color.MC_YELLOW, Color.MC_RED, Color.MC_DARKAQUA),
+		DARK(Color.MC_DARKGREEN, Color.MC_GOLD, Color.MC_DARKRED, Color.MC_DARKBLUE);
 
 		private static final float ALPHA = 0.75F;
 
@@ -180,7 +178,7 @@ public final class LightLevelHUD extends GuiOverlay {
 	private static DisplayStyle displayStyle = DisplayStyle.SURFACE_ROTATE;
 	private static final BlockStateProvider blocks = new BlockStateProvider();
 	private static final int ALLOCATION_SIZE = 2048;
-	private static final List<LightCoord> lightLevels = new ArrayList<LightCoord>(ALLOCATION_SIZE);
+	private static final ObjectArray<LightCoord> lightLevels = new ObjectArray<LightCoord>(ALLOCATION_SIZE);
 	private static final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 	private static int nextCoord = 0;
 
@@ -372,7 +370,7 @@ public final class LightLevelHUD extends GuiOverlay {
 		final boolean thirdPerson = manager.options.thirdPersonView == 2;
 		final float pitch = manager.playerViewX * (thirdPerson ? -1 : 1);
 		final float yaw = -manager.playerViewY;
-
+		
 		for (int i = 0; i < nextCoord; i++) {
 			final LightCoord coord = lightLevels.get(i);
 			final double x = coord.x - manager.viewerPosX;
