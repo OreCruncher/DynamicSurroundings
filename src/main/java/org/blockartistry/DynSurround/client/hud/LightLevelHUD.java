@@ -24,15 +24,13 @@
 
 package org.blockartistry.DynSurround.client.hud;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.Color;
+import org.blockartistry.lib.collections.ObjectArray;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -179,7 +177,7 @@ public final class LightLevelHUD extends GuiOverlay {
 	private static DisplayStyle displayStyle = DisplayStyle.SURFACE_ROTATE;
 	private static final BlockStateProvider blocks = new BlockStateProvider();
 	private static final int ALLOCATION_SIZE = 2048;
-	private static final List<LightCoord> lightLevels = new ArrayList<LightCoord>(ALLOCATION_SIZE);
+	private static final ObjectArray<LightCoord> lightLevels = new ObjectArray<LightCoord>(ALLOCATION_SIZE);
 	private static final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 	private static int nextCoord = 0;
 

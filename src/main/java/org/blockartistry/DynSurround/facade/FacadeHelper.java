@@ -59,8 +59,8 @@ public final class FacadeHelper {
 	@Nonnull
 	public static IBlockState resolveState(@Nonnull final IBlockState state, @Nonnull final World world,
 			@Nonnull final BlockPos pos, @Nullable final EnumFacing side) {
-		for (final IFacadeAccessor accessor : accessors) {
-			final IBlockState newState = accessor.getBlockState(state, world, pos, side);
+		for(int i = 0; i < accessors.size(); i++) {
+			final IBlockState newState = accessors.get(i).getBlockState(state, world, pos, side);
 			if (newState != null)
 				return newState;
 		}

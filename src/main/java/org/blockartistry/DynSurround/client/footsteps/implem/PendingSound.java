@@ -35,7 +35,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class PendingSound implements Comparable<PendingSound> {
+public class PendingSound {
 
 	private static final float LATENESS_THRESHOLD_DIVIDER = 1.2f;
 
@@ -104,8 +104,4 @@ public class PendingSound implements Comparable<PendingSound> {
 		return time - this.timeToPlay;
 	}
 
-	@Override
-	public int compareTo(@Nonnull final PendingSound o) {
-		return (int) (this.timeToPlay - o.timeToPlay);
-	}
 }
