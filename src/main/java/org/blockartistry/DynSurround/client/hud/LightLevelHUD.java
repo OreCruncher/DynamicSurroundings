@@ -31,7 +31,9 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.Color;
+import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.collections.ObjectArray;
+import org.blockartistry.lib.font.FastFontRenderer;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -46,7 +48,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.WorldEntitySpawner;
@@ -83,19 +84,19 @@ public final class LightLevelHUD extends GuiOverlay {
 		BRIGHT(Color.MC_GREEN, Color.MC_YELLOW, Color.MC_RED, Color.MC_DARKAQUA),
 		DARK(Color.MC_DARKGREEN, Color.MC_GOLD, Color.MC_DARKRED, Color.MC_DARKBLUE);
 
-		private static final float ALPHA = 0.75F;
+		static final float ALPHA = 0.75F;
 
-		public final int safe;
-		public final int caution;
-		public final int hazard;
-		public final int noSpawn;
+		public final Color safe;
+		public final Color caution;
+		public final Color hazard;
+		public final Color noSpawn;
 
 		private ColorSet(@Nonnull final Color safe, @Nonnull final Color caution, @Nonnull final Color hazard,
 				@Nonnull final Color noSpawn) {
-			this.safe = safe.rgbWithAlpha(ALPHA);
-			this.caution = caution.rgbWithAlpha(ALPHA);
-			this.hazard = hazard.rgbWithAlpha(ALPHA);
-			this.noSpawn = noSpawn.rgbWithAlpha(ALPHA);
+			this.safe = safe; //.rgbWithAlpha(ALPHA);
+			this.caution = caution; //.rgbWithAlpha(ALPHA);
+			this.hazard = hazard; //.rgbWithAlpha(ALPHA);
+			this.noSpawn = noSpawn; //.rgbWithAlpha(ALPHA);
 		}
 
 		public static ColorSet getStyle(final int v) {
@@ -116,7 +117,7 @@ public final class LightLevelHUD extends GuiOverlay {
 				GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
 				GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);
 				GlStateManager.scale(-this.scale, -this.scale, this.scale);
-				font.drawString(coord.text, coord.margin, 0, coord.color);
+				FastFontRenderer.drawString(coord.text, coord.margin, 0, coord.color, ColorSet.ALPHA);
 
 			}
 		},
@@ -127,7 +128,7 @@ public final class LightLevelHUD extends GuiOverlay {
 				GlStateManager.translate(x + 0.45D, y + 0.0005D, z + 0.8D);
 				GlStateManager.rotate(90F, 1F, 0F, 0F);
 				GlStateManager.scale(-this.scale, -this.scale, this.scale);
-				font.drawString(coord.text, coord.margin, 0, coord.color);
+				FastFontRenderer.drawString(coord.text, coord.margin, 0, coord.color, ColorSet.ALPHA);
 			}
 		},
 		SURFACE_ROTATE(0.08F) {
@@ -140,7 +141,7 @@ public final class LightLevelHUD extends GuiOverlay {
 				GlStateManager.translate(-0.05D, 0.0005D, 0.3D);
 				GlStateManager.rotate(90F, 1F, 0F, 0F);
 				GlStateManager.scale(-this.scale, -this.scale, this.scale);
-				font.drawString(coord.text, coord.margin, 0, coord.color);
+				FastFontRenderer.drawString(coord.text, coord.margin, 0, coord.color, ColorSet.ALPHA);
 			}
 		};
 
@@ -166,7 +167,7 @@ public final class LightLevelHUD extends GuiOverlay {
 		public double y;
 		public int z;
 		public String text;
-		public int color;
+		public Color color;
 		public int margin;
 	}
 
@@ -272,9 +273,9 @@ public final class LightLevelHUD extends GuiOverlay {
 		final int skyLightSub = EnvironState.getWorld().calculateSkylightSubtracted(1.0F);
 		final int rangeXZ = ModOptions.llBlockRange * 2 + 1;
 		final int rangeY = ModOptions.llBlockRange + 1;
-		final int originX = MathHelper.floor(x) - (rangeXZ / 2);
-		final int originZ = MathHelper.floor(z) - (rangeXZ / 2);
-		final int originY = MathHelper.floor(y) - (rangeY - 3);
+		final int originX = MathStuff.floor(x) - (rangeXZ / 2);
+		final int originZ = MathStuff.floor(z) - (rangeXZ / 2);
+		final int originY = MathStuff.floor(y) - (rangeY - 3);
 
 		blocks.setWorld(EnvironState.getWorld());
 		
@@ -311,7 +312,7 @@ public final class LightLevelHUD extends GuiOverlay {
 							final int effective = Math.max(blockLight, skyLight);
 							final int result = displayMode == Mode.BLOCK_SKY ? effective : blockLight;
 
-							int color = colors.safe;
+							Color color = colors.safe;
 							if (!mobSpawn) {
 								color = colors.noSpawn;
 							} else if (blockLight <= ModOptions.llSpawnThreshold) {
@@ -340,7 +341,7 @@ public final class LightLevelHUD extends GuiOverlay {
 	
 	@Override
 	public void doTick(final int tickRef) {
-		if (!showHUD || tickRef == 0 || tickRef % 4 != 0)
+		if (!showHUD || tickRef == 0 || tickRef % 3 != 0)
 			return;
 
 		displayStyle = DisplayStyle.getStyle(ModOptions.llStyle);
@@ -360,10 +361,10 @@ public final class LightLevelHUD extends GuiOverlay {
 		GlStateManager.disableLighting();
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.enableAlpha();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.enableDepth();
 		GlStateManager.depthMask(true);
+		FastFontRenderer.prepare();
 
 		final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
 
