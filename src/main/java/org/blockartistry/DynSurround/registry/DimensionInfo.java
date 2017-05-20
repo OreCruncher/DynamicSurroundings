@@ -33,6 +33,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 
 public final class DimensionInfo {
+	
+	public static final DimensionInfo NONE = new DimensionInfo();
 
 	private static final int SPACE_HEIGHT_OFFSET = 32;
 
@@ -45,7 +47,12 @@ public final class DimensionInfo {
 	protected boolean hasHaze;
 	protected boolean hasAuroras;
 	protected boolean hasWeather;
+	protected boolean hasFog;
 
+	private DimensionInfo() {
+		this.dimensionId = Integer.MIN_VALUE;
+	}
+	
 	public DimensionInfo(@Nonnull final World world) {
 		this.dimensionId = world.provider.getDimension();
 		this.name = world.provider.getDimensionType().getName();
@@ -81,6 +88,8 @@ public final class DimensionInfo {
 			this.hasWeather = entry.hasWeather;
 		if (entry.cloudHeight != null)
 			this.cloudHeight = entry.cloudHeight;
+		if (entry.hasFog != null)
+			this.hasFog = entry.hasFog;
 
 		this.spaceHeight = this.skyHeight + SPACE_HEIGHT_OFFSET;
 	}
@@ -120,6 +129,10 @@ public final class DimensionInfo {
 	public boolean getHasWeather() {
 		return this.hasWeather;
 	}
+	
+	public boolean getHasFog() {
+		return this.hasFog;
+	}
 
 	@Override
 	@Nonnull
@@ -132,6 +145,7 @@ public final class DimensionInfo {
 		builder.append(" haze:").append(Boolean.toString(this.hasHaze));
 		builder.append(" aurora:").append(Boolean.toString(this.hasAuroras));
 		builder.append(" weather:").append(Boolean.toString(this.hasWeather));
+		builder.append(" fog:").append(Boolean.toString(this.hasFog));
 		return builder.toString();
 	}
 

@@ -698,8 +698,13 @@
 	},
 	"dimensions": [
 		{
+			"dimId": 0,
+			"fog": true
+		},
+		{
 			"dimId": -1,
 			"weather": true,
+			"fog": true,
 			"haze": false,
 			"aurora": false,
 			"seaLevel": 0
