@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.registry;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -47,6 +48,18 @@ import org.blockartistry.DynSurround.client.footsteps.util.ConfigProperty;
 import org.blockartistry.lib.JsonUtils;
 import org.blockartistry.lib.MCHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCrops;
+import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockFence;
+import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BlockIce;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockMushroom;
+import net.minecraft.block.BlockOre;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.BlockReed;
+import net.minecraft.block.BlockSapling;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -77,6 +90,8 @@ public class FootstepsRegistry extends Registry {
 		reloadAcoustics(repo);
 		reloadPrimitiveMap(repo);
 
+		seedMap();
+		
 		this.isolator.setSolver(new Solver(this.isolator));
 		this.isolator.setGenerator(
 				ModOptions.foostepsQuadruped ? new GeneratorQP(this.isolator) : new Generator(this.isolator));
@@ -173,6 +188,45 @@ public class FootstepsRegistry extends Registry {
 		this.isolator.setAcoustics(acoustics);
 		this.isolator.setSoundPlayer(acoustics);
 		this.isolator.setDefaultStepPlayer(acoustics);
+	}
+
+	private void seedMap() {
+		// Iterate through the blockmap looking for known pattern types.
+		// Though they probably should all be registered with Forge
+		// dictionary it's not a requirement.
+		final Iterator<Block> itr = Block.REGISTRY.iterator();
+		while (itr.hasNext()) {
+			final Block block = itr.next();
+			final String blockName = MCHelper.nameOf(block);
+			if (block instanceof BlockCrops) {
+				final BlockCrops crop = (BlockCrops) block;
+				if (crop.getMaxAge() == 3) {
+					this.registerBlocks("#beets", blockName);
+				} else if (blockName.equals("minecraft:wheat")) {
+					this.registerBlocks("#wheat", blockName);
+				} else if (crop.getMaxAge() == 7) {
+					this.registerBlocks("#crop", blockName);
+				}
+			} else if (block instanceof BlockSapling) {
+				this.registerBlocks("#sapling", blockName);
+			} else if (block instanceof BlockReed) {
+				this.registerBlocks("#reed", blockName);
+			} else if (block instanceof BlockFence) {
+				this.registerBlocks("#fence", blockName);
+			} else if (block instanceof BlockFlower || block instanceof BlockMushroom) {
+				this.registerBlocks("NOT_EMITTER", blockName);
+			} else if (block instanceof BlockLog || block instanceof BlockPlanks) {
+				this.registerBlocks("wood", blockName);
+			} else if (block instanceof BlockDoor) {
+				this.registerBlocks("bluntwood", blockName);
+			} else if (block instanceof BlockLeaves) {
+				this.registerBlocks("leaves", blockName);
+			} else if (block instanceof BlockOre) {
+				this.registerBlocks("ore", blockName);
+			} else if (block instanceof BlockIce) {
+				this.registerBlocks("ice", blockName);
+			}
+		}
 	}
 
 	public void process(@Nonnull World world, @Nonnull EntityPlayer player) {
