@@ -1,5 +1,4 @@
-/*
- * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -22,21 +21,40 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.lib;
+package org.blockartistry.lib.collections;
+
+import java.util.Collection;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import net.minecraft.nbt.NBTTagCompound;
+import gnu.trove.set.hash.THashSet;
 
-public interface INBTSerialization {
+public final class IdentityHashSet<T> extends THashSet<T> {
 
-	/**
-	 * Used to deserialize data from an NBT structure
-	 */
-	public void readFromNBT(@Nonnull final NBTTagCompound nbt);
+	public IdentityHashSet() {
+		super();
+	}
 
-	/**
-	 * Used to serialize data into an NBT structure;
-	 */
-	public void writeToNBT(@Nonnull final NBTTagCompound nbt);
+	public IdentityHashSet(final int initialCapacity) {
+		super(initialCapacity);
+	}
+
+	public IdentityHashSet(final int initialCapacity, final float loadFactor) {
+		super(initialCapacity, loadFactor);
+	}
+
+	public IdentityHashSet(@Nonnull final Collection<? extends T> collection) {
+		super(collection);
+	}
+
+	@Override
+	protected int hash(@Nonnull final Object notnull) {
+		return System.identityHashCode(notnull);
+	}
+
+	@Override
+	protected boolean equals(@Nonnull final Object notnull, @Nullable final Object two) {
+		return notnull == two;
+	}
 }
