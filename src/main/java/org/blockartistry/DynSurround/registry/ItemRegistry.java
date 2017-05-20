@@ -28,6 +28,8 @@ import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
@@ -35,7 +37,8 @@ import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.data.xface.ItemConfig;
 import org.blockartistry.lib.MCHelper;
-import gnu.trove.set.hash.THashSet;
+import org.blockartistry.lib.collections.IdentityHashSet;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -44,11 +47,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemRegistry extends Registry {
 
-	private final THashSet<Class<?>> swordItems = new THashSet<Class<?>>();
-	private final THashSet<Class<?>> axeItems = new THashSet<Class<?>>();
-	private final THashSet<Class<?>> bowItems = new THashSet<Class<?>>();
-	private final THashSet<Class<?>> toolItems = new THashSet<Class<?>>();
-	private final THashSet<Class<?>> shieldItems = new THashSet<Class<?>>();
+	private final Set<Class<?>> swordItems = new IdentityHashSet<Class<?>>();
+	private final Set<Class<?>> axeItems = new IdentityHashSet<Class<?>>();
+	private final Set<Class<?>> bowItems = new IdentityHashSet<Class<?>>();
+	private final Set<Class<?>> toolItems = new IdentityHashSet<Class<?>>();
+	private final Set<Class<?>> shieldItems = new IdentityHashSet<Class<?>>();
 
 	private final Map<Item, ArmorClass> armorMap = new IdentityHashMap<Item, ArmorClass>();
 
@@ -66,7 +69,7 @@ public class ItemRegistry extends Registry {
 		this.armorMap.clear();
 	}
 
-	private boolean postProcess(THashSet<Class<?>> itemSet, final Item item) {
+	private boolean postProcess(@Nonnull final Set<Class<?>> itemSet, @Nonnull final Item item) {
 		final Class<?> itemClass = item.getClass();
 
 		// If the item is in the collection already, return
@@ -110,7 +113,7 @@ public class ItemRegistry extends Registry {
 
 	}
 
-	private void process(@Nonnull final List<String> classes, @Nonnull final THashSet<Class<?>> theList) {
+	private void process(@Nonnull final List<String> classes, @Nonnull final Set<Class<?>> theList) {
 		for (final String c : classes) {
 			try {
 				final Class<?> clazz = Class.forName(c, false, ItemRegistry.class.getClassLoader());

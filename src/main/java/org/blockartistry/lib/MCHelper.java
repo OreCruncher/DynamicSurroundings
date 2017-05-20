@@ -34,7 +34,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.google.common.collect.Sets;
+import org.blockartistry.lib.collections.IdentityHashSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
@@ -53,7 +53,7 @@ public final class MCHelper {
 	private static final String MATERIAL_CUSTOM = "Custom";
 	private static final String MATERIAL_NONE = "None";
 	private static final Map<Material, String> materialMap = new IdentityHashMap<Material, String>();
-	private static final Set<Block> hasVariants = Sets.newIdentityHashSet();
+	private static final Set<Block> hasVariants = new IdentityHashSet<Block>();
 
 	private static boolean variantCheck(@Nonnull final Block block) {
 		final Item item = Item.getItemFromBlock(block);
