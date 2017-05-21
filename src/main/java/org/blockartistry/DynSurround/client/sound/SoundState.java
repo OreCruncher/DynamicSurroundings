@@ -35,21 +35,50 @@ public enum SoundState {
 	/*
 	 * The sound was just created
 	 */
-	NONE,
+	NONE(false, false),
 	/*
 	 * Currently playing
 	 */
-	PLAYING,
+	PLAYING(true, false),
 	/*
 	 * In the delay queue
 	 */
-	DELAYED,
+	DELAYED(true, false),
+	/*
+	 * Has been paused
+	 */
+	PAUSED(true, false),
 	/*
 	 * Completed play
 	 */
-	DONE,
+	DONE(false, true),
 	/*
 	 * There was an error of some sort
 	 */
-	ERROR
+	ERROR(false, true);
+
+	private final boolean isActive;
+	private final boolean isTerminal;
+
+	SoundState(final boolean active, final boolean terminal) {
+		this.isActive = active;
+		this.isTerminal = terminal;
+	}
+
+	/*
+	 * A sound in this state is actively queued in the SoundManager.
+	 */
+	public boolean isActive() {
+		return this.isActive;
+	}
+
+	/*
+	 * A sound in this state is considered terminal.  It was
+	 * processed by the SoundManager and has reached a state
+	 * where it has completed either because it ran it's
+	 * course or ended in error.
+	 */
+	public boolean isTerminal() {
+		return this.isTerminal;
+	}
 }
