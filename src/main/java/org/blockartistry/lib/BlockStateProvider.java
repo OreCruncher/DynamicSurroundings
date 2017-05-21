@@ -41,6 +41,8 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
  */
 public class BlockStateProvider {
 
+	protected static final IBlockState AIR_STATE = Blocks.AIR.getDefaultState();
+	
 	protected World world;
 	protected Chunk chunk;
 	
@@ -95,7 +97,7 @@ public class BlockStateProvider {
 			}
 		}
 
-		return Blocks.AIR.getDefaultState();
+		return AIR_STATE;
 	}
 
 	public boolean isAvailable(final int x, final int z) {
