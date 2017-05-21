@@ -66,8 +66,6 @@ cfg.asm.cat.ASM=ASM Transformer Options
 cfg.asm.cat.ASM.tooltip=Controls ASM transforms Dynamic Surroundings performs at startup
 cfg.asm.EnableWeather=Weather Control
 cfg.asm.EnableWeather.tooltip=Enable/disable ASM transformations to permit weather (rain, snow, splash, dust storms, auroras)
-cfg.asm.EnableSoundScaling=Sound Volume Scaling Control
-cfg.asm.EnableSoundScaling.tooltip=Enable/disable ASM transformations for sound volume scaling
 cfg.asm.EnableSleepReset=Weather Reset on Sleep Control
 cfg.asm.EnableSleepReset.tooltip=Enable/disable ASM transformations to allow control of player sleep impact on weather reset
 

@@ -43,6 +43,7 @@ import org.blockartistry.DynSurround.client.sound.Emitter;
 import org.blockartistry.DynSurround.client.sound.PlayerEmitter;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.SoundEngine;
+import org.blockartistry.DynSurround.client.sound.SoundState;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.network.PacketPlaySound;
@@ -70,8 +71,10 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	private static final Predicate<PendingSound> PENDING_SOUNDS = new Predicate<PendingSound>() {
 		@Override
 		public boolean apply(final PendingSound input) {
-			if (input.getTickAge() >= AGE_THRESHOLD_TICKS)
+			if (input.getTickAge() >= AGE_THRESHOLD_TICKS) {
+				input.getSound().setState(SoundState.ERROR);
 				return true;
+			}
 			if (input.getTickAge() >= 0) {
 				return INSTANCE.playSound(input.getSound()) != null;
 			}
@@ -118,14 +121,11 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 
-		// Only execute every 4 ticks.
-		if ((EnvironState.getTickCounter() % 4) == 0) {
-			for (final Emitter emitter : this.emitters.values())
-				emitter.update();
+		for (final Emitter emitter : this.emitters.values())
+			emitter.update();
 
-			if (this.pending.size() > 0)
-				this.pending.removeIf(PENDING_SOUNDS);
-		}
+		if (this.pending.size() > 0)
+			this.pending.removeIf(PENDING_SOUNDS);
 
 		// Flush out cached sounds
 		if (this.sendToServer.size() > 0) {
@@ -240,6 +240,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		if (tickDelay == 0)
 			return playSound(s);
 
+		s.setState(SoundState.DELAYED);
 		this.pending.add(new PendingSound(s, tickDelay));
 		return null;
 	}

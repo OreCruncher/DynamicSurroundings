@@ -69,10 +69,8 @@ public class Transformer implements IClassTransformer {
 				basicClass = transformWorldServer(basicClass);
 			}
 		} else if (isOneOf(transformedName, new String[] { "net.minecraft.client.audio.SoundHandler", "bzw" })) {
-			if (ModOptions.enableSoundVolumeASM) {
-				logger.debug("Transforming " + transformedName);
-				basicClass = transformSoundManager(basicClass);
-			}
+			logger.debug("Transforming " + transformedName);
+			basicClass = transformSoundManager(basicClass);
 		}
 
 		if (ModOptions.enableRandomReplace) {
