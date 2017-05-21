@@ -49,14 +49,18 @@ import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.Library;
 import paulscode.sound.SoundSystem;
+import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.StreamThread;
 
-@SideOnly(Side.CLIENT)
+@Mod.EventBusSubscriber(Side.CLIENT)
 public class SoundManagerReplacement extends SoundManager {
 
 	private static Field soundLibrary = null;
@@ -78,11 +82,11 @@ public class SoundManagerReplacement extends SoundManager {
 	private final static float MUTE_VOLUME = 0.00001F;
 	private final static int CHECK_INTERVAL = 30 * 20; // 30 seconds
 	private SoundRegistry registry = null;
-	private int checkCount = 0;
 	private int nextCheck = 0;
 
 	public SoundManagerReplacement(final SoundHandler handler, final GameSettings settings) {
 		super(handler, settings);
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	private void keepAlive() {
@@ -90,10 +94,10 @@ public class SoundManagerReplacement extends SoundManager {
 			return;
 
 		// Don't want to spam attempts
-		if (++this.checkCount < this.nextCheck)
+		if (this.playTime < this.nextCheck)
 			return;
 
-		this.nextCheck = this.checkCount + CHECK_INTERVAL;
+		this.nextCheck = this.playTime + CHECK_INTERVAL;
 
 		try {
 			final Library l = (Library) soundLibrary.get(this.sndSystem);
@@ -123,23 +127,28 @@ public class SoundManagerReplacement extends SoundManager {
 
 	@Override
 	public void playSound(@Nonnull final ISound sound) {
-		super.playSound(sound);
-
 		if (sound instanceof BasicSound<?>) {
 			final BasicSound<?> state = (BasicSound<?>) sound;
+			state.setId(StringUtils.EMPTY);
+			super.playSound(sound);
 			if (StringUtils.isEmpty(state.getId()))
 				state.setState(SoundState.ERROR);
 			else
 				state.setState(SoundState.PLAYING);
+		} else {
+			super.playSound(sound);
 		}
 	}
 
 	@Override
 	public void playDelayedSound(@Nonnull final ISound sound, final int delay) {
-		super.playDelayedSound(sound, delay);
 		if (sound instanceof BasicSound<?>) {
 			final BasicSound<?> state = (BasicSound<?>) sound;
+			state.setId(StringUtils.EMPTY);
+			super.playDelayedSound(sound, delay);
 			state.setState(SoundState.DELAYED);
+		} else {
+			super.playDelayedSound(sound, delay);
 		}
 	}
 
@@ -147,7 +156,7 @@ public class SoundManagerReplacement extends SoundManager {
 	public void stopAllSounds() {
 		if (this.loaded) {
 			// Need to make sure all our sounds have been marked
-			// as DONE.  Reason is the underlying routine just
+			// as DONE. Reason is the underlying routine just
 			// wipes out all the lists.
 			for (final ISound s : this.playingSounds.values())
 				if (s instanceof BasicSound<?>) {
@@ -161,6 +170,30 @@ public class SoundManagerReplacement extends SoundManager {
 				}
 		}
 		super.stopAllSounds();
+	}
+
+	@Override
+	public void pauseAllSounds() {
+		for (final ISound s : this.playingSounds.values())
+			if (s instanceof BasicSound<?>) {
+				final BasicSound<?> state = (BasicSound<?>) s;
+				if (state.getState() == SoundState.PLAYING)
+					state.setState(SoundState.PAUSED);
+			}
+
+		super.pauseAllSounds();
+	}
+
+	@Override
+	public void resumeAllSounds() {
+		for (final ISound s : this.playingSounds.values())
+			if (s instanceof BasicSound<?>) {
+				final BasicSound<?> state = (BasicSound<?>) s;
+				if (state.getState() == SoundState.PAUSED)
+					state.setState(SoundState.PLAYING);
+			}
+
+		super.resumeAllSounds();
 	}
 
 	@Override
@@ -179,10 +212,12 @@ public class SoundManagerReplacement extends SoundManager {
 				this.stopSound(itickablesound);
 			} else {
 				final String s = this.invPlayingSounds.get(itickablesound);
-				sndSystem.setVolume(s, this.getClampedVolume(itickablesound));
-				sndSystem.setPitch(s, this.getClampedPitch(itickablesound));
-				sndSystem.setPosition(s, itickablesound.getXPosF(), itickablesound.getYPosF(),
-						itickablesound.getZPosF());
+				synchronized (SoundSystemConfig.THREAD_SYNC) {
+					sndSystem.setVolume(s, this.getClampedVolume(itickablesound));
+					sndSystem.setPitch(s, this.getClampedPitch(itickablesound));
+					sndSystem.setPosition(s, itickablesound.getXPosF(), itickablesound.getYPosF(),
+							itickablesound.getZPosF());
+				}
 			}
 		}
 
@@ -242,6 +277,14 @@ public class SoundManagerReplacement extends SoundManager {
 				this.playSound(isound1);
 				iterator1.remove();
 			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
+		final ISound sound = event.getSound();
+		if (sound instanceof BasicSound<?>) {
+			((BasicSound<?>) sound).setId(event.getUuid());
 		}
 	}
 

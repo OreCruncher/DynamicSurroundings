@@ -37,7 +37,6 @@ import org.blockartistry.lib.gui.RecordTitleEmitter;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
-import paulscode.sound.SoundSystemConfig;
 import net.minecraftforge.fml.relauncher.Side;
 
 /*
@@ -91,18 +90,13 @@ public abstract class Emitter {
 	protected abstract BasicSound<?> createSound();
 
 	public void update() {
-		// If the volume is turned off don't send
-		// down a sound.
-		if (SoundSystemConfig.getMasterGain() <= 0)
-			return;
-
 		if (this.titleEmitter != null)
 			this.titleEmitter.update();
 
 		// Allocate a new sound to send down if needed
 		if (this.activeSound == null) {
 			this.activeSound = createSound();
-		} else if (this.activeSound.getState() == SoundState.PLAYING || this.activeSound.getState() == SoundState.DELAYED) {
+		} else if (this.activeSound.getState().isActive()) {
 			return;
 		} else if (this.isFading()) {
 			// If we get here the sound is no longer playing and is in the

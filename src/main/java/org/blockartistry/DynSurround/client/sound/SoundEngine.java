@@ -39,14 +39,11 @@ import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALC11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.ISoundEventListener;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
 import net.minecraftforge.client.event.sound.SoundSetupEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -76,14 +73,6 @@ public class SoundEngine {
 
 	private SoundEngine() {
 		MinecraftForge.EVENT_BUS.register(this);
-	}
-
-	public void addListender(@Nonnull final ISoundEventListener listener) {
-		this.manager.addListener(listener);
-	}
-
-	public void removeListener(@Nonnull final ISoundEventListener listener) {
-		this.manager.removeListener(listener);
 	}
 
 	public int currentSoundCount() {
@@ -134,7 +123,6 @@ public class SoundEngine {
 		if (!StringUtils.isEmpty(sound.getId()))
 			this.manager.stopSound(sound);
 
-		sound.setId(StringUtils.EMPTY);
 		this.manager.playSound(sound);
 
 		if (ModOptions.enableDebugLogging) {
@@ -166,18 +154,6 @@ public class SoundEngine {
 		final BasicSound<?> sound = new AdhocSound(soundIn, category);
 		sound.setVolume(volume).setPitch(pitch).setPosition(pos);
 		return this.playSound(sound);
-	}
-
-	/**
-	 * This event hook attempts to associate the internal UUID of the sound play
-	 * event with a sound.
-	 */
-	@SubscribeEvent
-	public void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
-		final ISound sound = event.getSound();
-		if (sound instanceof BasicSound<?>) {
-			((BasicSound<?>) sound).setId(event.getUuid());
-		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
