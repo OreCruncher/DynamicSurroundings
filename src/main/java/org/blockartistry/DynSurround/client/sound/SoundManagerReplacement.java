@@ -30,6 +30,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -37,6 +38,7 @@ import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Localization;
+import org.blockartistry.lib.MathStuff;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
@@ -46,7 +48,6 @@ import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -121,6 +122,48 @@ public class SoundManagerReplacement extends SoundManager {
 	}
 
 	@Override
+	public void playSound(@Nonnull final ISound sound) {
+		super.playSound(sound);
+
+		if (sound instanceof BasicSound<?>) {
+			final BasicSound<?> state = (BasicSound<?>) sound;
+			if (StringUtils.isEmpty(state.getId()))
+				state.setState(SoundState.ERROR);
+			else
+				state.setState(SoundState.PLAYING);
+		}
+	}
+
+	@Override
+	public void playDelayedSound(@Nonnull final ISound sound, final int delay) {
+		super.playDelayedSound(sound, delay);
+		if (sound instanceof BasicSound<?>) {
+			final BasicSound<?> state = (BasicSound<?>) sound;
+			state.setState(SoundState.DELAYED);
+		}
+	}
+
+	@Override
+	public void stopAllSounds() {
+		if (this.loaded) {
+			// Need to make sure all our sounds have been marked
+			// as DONE.  Reason is the underlying routine just
+			// wipes out all the lists.
+			for (final ISound s : this.playingSounds.values())
+				if (s instanceof BasicSound<?>) {
+					final BasicSound<?> state = (BasicSound<?>) s;
+					state.setState(SoundState.DONE);
+				}
+			for (final ISound s : this.delayedSounds.keySet())
+				if (s instanceof BasicSound<?>) {
+					final BasicSound<?> state = (BasicSound<?>) s;
+					state.setState(SoundState.DONE);
+				}
+		}
+		super.stopAllSounds();
+	}
+
+	@Override
 	public void updateAllSounds() {
 
 		keepAlive();
@@ -162,6 +205,9 @@ public class SoundManagerReplacement extends SoundManager {
 					// don't delay a requeue.
 					if (isound.canRepeat() && j >= minThresholdDelay) {
 						this.playDelayedSound(isound, j);
+					} else if (isound instanceof BasicSound<?>) {
+						final BasicSound<?> state = (BasicSound<?>) isound;
+						state.setState(SoundState.DONE);
 					}
 
 					iterator.remove();
@@ -232,7 +278,7 @@ public class SoundManagerReplacement extends SoundManager {
 
 		final float volumeScale = this.registry.getVolumeScale(sound);
 		final float volume = sound.getVolume() * getVolume(sound.getCategory()) * volumeScale;
-		return MathHelper.clamp(volume, 0.0F, 1.0F);
+		return MathStuff.clamp(volume, 0.0F, 1.0F);
 	}
 
 }

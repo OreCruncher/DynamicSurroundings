@@ -49,7 +49,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class BasicSound<T extends BasicSound<?>> extends PositionedSound implements INBTSerializable<NBTTagCompound> {
+public class BasicSound<T extends BasicSound<?>> extends PositionedSound
+		implements INBTSerializable<NBTTagCompound> {
 
 	public static interface ISoundScale {
 		float getScale();
@@ -78,6 +79,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 	protected float volumeThrottle = 1.0F;
 	protected ISoundScale volumeScale;
 	protected boolean route;
+	protected SoundState state = SoundState.NONE;
 
 	public BasicSound(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
 		this(event.getSoundName(), cat);
@@ -101,6 +103,16 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 
 		super.sound = SoundHandler.MISSING_SOUND;
 
+	}
+
+	public SoundState getState() {
+		return this.state;
+	}
+
+	@SuppressWarnings("unchecked")
+	public T setState(@Nonnull final SoundState state) {
+		this.state = state;
+		return (T) this;
 	}
 
 	public boolean shouldRoute() {
@@ -247,8 +259,8 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this).addValue(this.positionedSoundLocation.toString())
-				.addValue(this.category.toString()).add("v", this.getVolume()).add("p", this.getPitch())
-				.add("s", this.volumeScale.getScale()).addValue(this.getAttenuationType()).add("x", this.getXPosF())
-				.add("y", this.getYPosF()).add("z", this.getZPosF()).toString();
+				.addValue(this.category.toString()).add("state", this.getState()).add("v", this.getVolume())
+				.add("p", this.getPitch()).add("s", this.volumeScale.getScale()).addValue(this.getAttenuationType())
+				.add("x", this.getXPosF()).add("y", this.getYPosF()).add("z", this.getZPosF()).toString();
 	}
 }

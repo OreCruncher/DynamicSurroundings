@@ -102,7 +102,7 @@ public abstract class Emitter {
 		// Allocate a new sound to send down if needed
 		if (this.activeSound == null) {
 			this.activeSound = createSound();
-		} else if (SoundEffectHandler.INSTANCE.isSoundPlaying(this.activeSound)) {
+		} else if (this.activeSound.getState() == SoundState.PLAYING || this.activeSound.getState() == SoundState.DELAYED) {
 			return;
 		} else if (this.isFading()) {
 			// If we get here the sound is no longer playing and is in the

@@ -20,8 +20,6 @@ cfg.asm.cat.ASM=Настройки ASM преобразователя
 cfg.asm.cat.ASM.tooltip=Управляет ASM преобразованиями Dynamic Surroundings, происходящими при запуске
 cfg.asm.EnableWeather=Управление погодой
 cfg.asm.EnableWeather.tooltip=Включить/выключить ASM преобразования для возможности управлять погодой (Дождь, снег, брызги, песчаная буря, северное сияние)
-cfg.asm.EnableSoundScaling=Управление громкостью звуков
-cfg.asm.EnableSoundScaling.tooltip=Включить/выключить ASM преобразования для управления громкостью звуков
 cfg.asm.EnableSleepReset=Управление сбросом погоды во время сна
 cfg.asm.EnableSleepReset.tooltip=Включить/выключить ASM преобразования, чтобы позволить влияние сна игрока на сброс погоды
 

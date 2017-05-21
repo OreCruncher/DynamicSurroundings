@@ -69,13 +69,11 @@ public class Transformer implements IClassTransformer {
 				basicClass = transformWorldServer(basicClass);
 			}
 		} else if (isOneOf(transformedName, new String[] { "net.minecraft.client.audio.SoundHandler", "ccp" })) {
-			if (ModOptions.enableSoundVolumeASM) {
-				logger.debug("Transforming " + transformedName);
-				basicClass = transformSoundManager(basicClass);
-			}
+			logger.debug("Transforming " + transformedName);
+			basicClass = transformSoundManager(basicClass);
 		}
-		
-		if(ModOptions.enableRandomReplace) {
+
+		if (ModOptions.enableRandomReplace) {
 			basicClass = replaceRandom(transformedName, basicClass);
 		}
 
@@ -96,8 +94,8 @@ public class Transformer implements IClassTransformer {
 				final InsnList list = new InsnList();
 				list.add(new VarInsnNode(ALOAD, 0));
 				final String sig = "(Lnet/minecraft/client/renderer/EntityRenderer;)V";
-				list.add(new MethodInsnNode(INVOKESTATIC,
-						"org/blockartistry/DynSurround/client/weather/RenderWeather", targetName, sig, false));
+				list.add(new MethodInsnNode(INVOKESTATIC, "org/blockartistry/DynSurround/client/weather/RenderWeather",
+						targetName, sig, false));
 				list.add(new InsnNode(RETURN));
 				m.instructions.insertBefore(m.instructions.getFirst(), list);
 			}
@@ -171,7 +169,7 @@ public class Transformer implements IClassTransformer {
 		cn.accept(cw);
 		return cw.toByteArray();
 	}
-	
+
 	private byte[] replaceRandom(final String name, final byte[] classBytes) {
 
 		final String randomToReplace = "java/util/Random";

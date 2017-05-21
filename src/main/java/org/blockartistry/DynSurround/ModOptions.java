@@ -61,7 +61,6 @@ public final class ModOptions {
 
 	public static final String CATEGORY_ASM = "asm";
 	public static final String CONFIG_ENABLE_WEATHER = "Enable Weather Control";
-	public static final String CONFIG_ENABLE_SOUND_VOLUME_SCALING = "Enable Sound Volume Scaling Control";
 	public static final String CONFIG_ENABLE_RESET_WEATHER_ON_SLEEP = "Enable Weather Reset on Sleep Control";
 	public static final String CONFIG_ENABLE_RANDOM_REPLACE = "Enable Replace of Java Random class";
 
@@ -69,10 +68,6 @@ public final class ModOptions {
 	@Comment("Enable ASM transformations to permit weather (rain, snow, splash, dust storms, auroras)")
 	@RestartRequired(server = true)
 	public static boolean enableWeatherASM = true;
-	@Parameter(category = CATEGORY_ASM, property = CONFIG_ENABLE_SOUND_VOLUME_SCALING, defaultValue = "true", lang = "cfg.asm.EnableSoundScaling")
-	@Comment("Enable ASM transformations for sound volume scaling")
-	@RestartRequired(server = true)
-	public static boolean enableSoundVolumeASM = true;
 	@Parameter(category = CATEGORY_ASM, property = CONFIG_ENABLE_RESET_WEATHER_ON_SLEEP, defaultValue = "true", lang = "cfg.asm.EnableSleepReset")
 	@Comment("Enable ASM transformations to allow control of player sleep impact on weather reset")
 	@RestartRequired(server = true)
