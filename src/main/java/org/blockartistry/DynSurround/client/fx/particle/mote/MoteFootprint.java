@@ -29,7 +29,6 @@ import javax.annotation.Nonnull;
 import org.blockartistry.lib.WorldUtils;
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -38,13 +37,16 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class MoteFootprint extends MoteBase {
 
 	private static float zFighter = 0F;
 
-	protected boolean isSnowLayer;
-	protected BlockPos downPos;
+	protected final boolean isSnowLayer;
+	protected final BlockPos downPos;
 
 	protected final float rotation;
 	protected final float texU1, texU2;
@@ -65,8 +67,7 @@ public class MoteFootprint extends MoteBase {
 
 		// If the block is a snow layer block need to adjust the
 		// y up so the footprint rides on top.
-		final IBlockState state = world.getBlockState(this.position);
-		this.isSnowLayer = state.getBlock() == Blocks.SNOW_LAYER;
+		this.isSnowLayer = WorldUtils.getBlockState(this.world, this.position).getBlock() == Blocks.SNOW_LAYER;
 		if (this.isSnowLayer) {
 			this.posY += 0.125F;
 		}
