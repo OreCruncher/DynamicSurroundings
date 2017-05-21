@@ -27,11 +27,14 @@ package org.blockartistry.DynSurround.registry;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.event.RegistryEvent;
+import org.blockartistry.lib.SideLocal;
+
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;
@@ -46,34 +49,26 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public final class RegistryManager {
 
-	public static class RegistryType {
-		public final static int SOUND = 0;
-		public final static int BIOME = 1;
-		public final static int BLOCK = 2;
-		public final static int DIMENSION = 3;
-		public final static int FOOTSTEPS = 4;
-		public final static int SEASON = 5;
-		public final static int ITEMS = 6;
-
-		public final static int LENGTH = 7;
+	public static enum RegistryType {
+		SOUND,
+		BIOME,
+		BLOCK,
+		DIMENSION,
+		FOOTSTEPS,
+		SEASON,
+		ITEMS
 	}
 
-	private static final RegistryManager[] managers = { null, null };
-
-	@Nonnull
-	private static RegistryManager getManager() {
-		final Side side = FMLCommonHandler.instance().getEffectiveSide();
-		final int idx = side.ordinal();
-		if (managers[idx] == null) {
-			managers[idx] = new RegistryManager(side);
-			managers[idx].reload();
+	private static final SideLocal<RegistryManager> managers = new SideLocal<RegistryManager>() {
+		@Override
+		protected RegistryManager initialValue(@Nonnull final Side side) {
+			return new RegistryManager(side);
 		}
-		return managers[idx];
-	}
+	};
 
 	@Nonnull
-	public static <T extends Registry> T get(@Nonnull final int type) {
-		return (T) getManager().<T>getRegistry(type);
+	public static <T extends Registry> T get(@Nonnull final RegistryType type) {
+		return (T) managers.get().<T>getRegistry(type);
 	}
 
 	public static void reloadResources() {
@@ -84,16 +79,15 @@ public final class RegistryManager {
 	public static void reloadResources(@Nonnull final Side side) {
 		// Reload can be called on either side so make sure we queue
 		// up a scheduled task appropriately.
-		final int idx = side.ordinal();
-		if (managers[idx] != null) {
+		if (managers.hasValue(side)) {
 			final IThreadListener tl = side == Side.SERVER ? FMLCommonHandler.instance().getMinecraftServerInstance()
 					: Minecraft.getMinecraft();
 			if (tl == null)
-				managers[idx] = null;
+				managers.clear(side);
 			else
 				tl.addScheduledTask(new Runnable() {
 					public void run() {
-						managers[idx].reload();
+						managers.get().reload();
 					}
 				});
 		}
@@ -101,19 +95,20 @@ public final class RegistryManager {
 
 	protected final Side side;
 	protected final ResourceLocation SCRIPT;
-	protected final Registry[] registries = new Registry[RegistryType.LENGTH];
+	protected final EnumMap<RegistryType, Registry> registries = new EnumMap<RegistryType, Registry>(RegistryType.class);
+	protected boolean initialized;
 
 	RegistryManager(final Side side) {
 		this.side = side;
-		this.registries[RegistryType.DIMENSION] = new DimensionRegistry(side);
-		this.registries[RegistryType.BIOME] = new BiomeRegistry(side);
-		this.registries[RegistryType.SOUND] = new SoundRegistry(side);
-		this.registries[RegistryType.SEASON] = new SeasonRegistry(side);
+		this.registries.put(RegistryType.DIMENSION, new DimensionRegistry(side));
+		this.registries.put(RegistryType.BIOME, new BiomeRegistry(side));
+		this.registries.put(RegistryType.SOUND, new SoundRegistry(side));
+		this.registries.put(RegistryType.SEASON, new SeasonRegistry(side));
 
 		if (side == Side.CLIENT) {
-			this.registries[RegistryType.BLOCK] = new BlockRegistry(side);
-			this.registries[RegistryType.FOOTSTEPS] = new FootstepsRegistry(side);
-			this.registries[RegistryType.ITEMS] = new ItemRegistry(side);
+			this.registries.put(RegistryType.BLOCK, new BlockRegistry(side));
+			this.registries.put(RegistryType.FOOTSTEPS, new FootstepsRegistry(side));
+			this.registries.put(RegistryType.ITEMS, new ItemRegistry(side));
 			this.SCRIPT = new ResourceLocation(DSurround.RESOURCE_ID, "configure.json");
 		} else {
 			this.SCRIPT = null;
@@ -131,13 +126,13 @@ public final class RegistryManager {
 	}
 
 	void reload() {
-		for (final Registry r : this.registries)
+		for (final Registry r : this.registries.values())
 			if (r != null)
 				r.init();
 
 		new DataScripts(this.side).execute(getAdditionalScripts());
 
-		for (final Registry r : this.registries)
+		for (final Registry r : this.registries.values())
 			if (r != null)
 				r.initComplete();
 
@@ -145,8 +140,12 @@ public final class RegistryManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <T> T getRegistry(final int type) {
-		return (T) this.registries[type];
+	protected <T> T getRegistry(@Nonnull final RegistryType type) {
+		if(!this.initialized) {
+			this.initialized = true;
+			this.reload();
+		}
+		return (T) this.registries.get(type);
 	}
 
 	// NOTE: Server side has no resource packs so the client specific
