@@ -52,5 +52,21 @@ public abstract class SideLocal<T> {
 
 		return (T) result;
 	}
+	
+	public final void clear() {
+		this.clear(FMLCommonHandler.instance().getEffectiveSide());
+	}
+	
+	public final void clear(@Nonnull final Side side) {
+		this.sideData[side.ordinal()] = null;
+	}
+	
+	public final boolean hasValue() {
+		return this.hasValue(FMLCommonHandler.instance().getEffectiveSide());
+	}
+	
+	public final boolean hasValue(@Nonnull final Side side) {
+		return this.sideData[side.ordinal()] != null;
+	}
 
 }
