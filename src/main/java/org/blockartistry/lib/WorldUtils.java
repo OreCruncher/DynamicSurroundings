@@ -34,12 +34,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 
 public final class WorldUtils {
 
-	private static final ThreadLocal<BlockStateProvider> blockProvider = new ThreadLocal<BlockStateProvider>() {
+	private static final SideLocal<BlockStateProvider> blockProvider = new SideLocal<BlockStateProvider>() {
 		@Override
-		protected BlockStateProvider initialValue() {
+		protected BlockStateProvider initialValue(@Nonnull final Side side) {
 			return new BlockStateProvider();
 		}
 	};
