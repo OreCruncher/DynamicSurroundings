@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * Scans the area around the player in a continuous pattern.
@@ -219,6 +220,7 @@ public abstract class CuboidScanner extends Scanner {
 		return null;
 	}
 
+	@SubscribeEvent(receiveCanceled = false)
 	public void onBlockUpdate(@Nonnull final IBlockState oldState, @Nonnull final IBlockState newState,
 			@Nonnull final BlockPos pos, final int flags) {
 		try {
