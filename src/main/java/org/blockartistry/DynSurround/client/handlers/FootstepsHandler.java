@@ -46,24 +46,15 @@ public class FootstepsHandler extends EffectHandlerBase {
 
 	private FootstepsRegistry footsteps;
 
-	@Override
-	public String getHandlerName() {
-		return "FootstepsHandler";
-	}
+	public FootstepsHandler() {
+		super("FootstepsHandler");
 
-	@Override
-	public void process(final World world, final EntityPlayer player) {
-		this.footsteps.process(world, player);
-	}
-
-	@Override
-	public void onConnect() {
 		this.footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
 	}
-
+	
 	@Override
-	public void onDisconnect() {
-		this.footsteps = null;
+	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+		this.footsteps.process(world, player);
 	}
 
 	@SubscribeEvent

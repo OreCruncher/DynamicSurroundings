@@ -24,8 +24,6 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
-import java.util.Iterator;
-import java.util.Map;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
@@ -35,7 +33,8 @@ import org.blockartistry.DynSurround.client.fx.particle.system.ParticleSystem;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.BlockPosHelper;
 
-import com.google.common.collect.HashBiMap;
+import gnu.trove.iterator.TLongObjectIterator;
+import gnu.trove.map.hash.TLongObjectHashMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -49,16 +48,11 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 
 	public static ParticleSystemHandler INSTANCE;
 
-	private final Map<BlockPos, ParticleSystem> systems = HashBiMap.create(32);
+	private final TLongObjectHashMap<ParticleSystem> systems = new TLongObjectHashMap<ParticleSystem>();
 
 	public ParticleSystemHandler() {
+		super("ParticleSystemHandler");
 		INSTANCE = this;
-	}
-
-	@Override
-	@Nonnull
-	public String getHandlerName() {
-		return "ParticleSystemHandler";
 	}
 
 	@Override
@@ -71,19 +65,19 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 		final BlockPos min = EnvironState.getPlayerPosition().add(-range, -range, -range);
 		final BlockPos max = EnvironState.getPlayerPosition().add(range, range, range);
 
-		final Iterator<ParticleSystem> itr = this.systems.values().iterator();
+		final TLongObjectIterator<ParticleSystem> itr = this.systems.iterator();
 		while (itr.hasNext()) {
-			final ParticleSystem system = itr.next();
+			itr.advance();
 
 			// If it is out of range expire, else update
-			if (!BlockPosHelper.contains(system.getPos(), min, max)) {
-				system.setExpired();
+			if (!BlockPosHelper.contains(itr.value().getPos(), min, max)) {
+				itr.value().setExpired();
 			} else {
-				system.onUpdate();
+				itr.value().onUpdate();
 			}
 
 			// If it's dead remove from the list
-			if (!system.isAlive())
+			if (!itr.value().isAlive())
 				itr.remove();
 		}
 	}
@@ -111,11 +105,11 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 	// Determines if it is OK to spawn a particle system at the specified
 	// location. Generally only a single system can occupy a block.
 	private boolean okToSpawn(@Nonnull final BlockPos pos) {
-		return !this.systems.containsKey(pos);
+		return !this.systems.containsKey(pos.toLong());
 	}
 
 	public void addSystem(@Nonnull final ParticleSystem system) {
-		this.systems.put(system.getPos(), system);
+		this.systems.put(system.getPos().toLong(), system);
 	}
 
 }

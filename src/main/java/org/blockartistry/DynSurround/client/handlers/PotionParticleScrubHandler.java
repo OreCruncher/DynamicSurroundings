@@ -24,6 +24,8 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.DynSurround.ModOptions;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -35,13 +37,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class PotionParticleScrubHandler extends EffectHandlerBase {
 
-	@Override
-	public String getHandlerName() {
-		return "PotionParticleScrubHandler";
+	public PotionParticleScrubHandler() {
+		super("PotionParticleScrubHandler");
 	}
-
+	
 	@Override
-	public void process(final World world, final EntityPlayer player) {
+	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 		if(ModOptions.suppressPotionParticles)
 			player.getDataManager().set(EntityLivingBase.HIDE_PARTICLES, true);
 	}

@@ -28,17 +28,14 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.registry.BiomeRegistry;
-import org.blockartistry.DynSurround.registry.BlockRegistry;
-import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.SoundRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.random.XorShiftRandom;
+
+import com.google.common.base.Objects;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
@@ -46,40 +43,20 @@ public abstract class EffectHandlerBase {
 	
 	protected final Random RANDOM = XorShiftRandom.current();
 	
-	// Used to obtain the name of the handler for logging purposes
-	public abstract String getHandlerName();
+	private final String handlerName;
 	
-	/**
-	 * Override to provide pre process logic
-	 */
-	public void pre(@Nonnull final World world, @Nonnull final EntityPlayer player) {
-		
+	EffectHandlerBase(@Nonnull final String name) {
+		this.handlerName = name;
+	}
+	
+	// Used to obtain the name of the handler for logging purposes
+	public final String getHandlerName() {
+		return this.handlerName;
 	}
 	
 	// The meat of the processing logic.  Invoked every client tick.
-	public abstract void process(final World world, final EntityPlayer player);
-	
-	/**
-	 * Override to provide post process logic
-	 */
-	public void post(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 		
-	}
-	
-	protected BiomeRegistry getBiomeRegistry() {
-		return RegistryManager.get(RegistryType.BIOME);
-	}
-	
-	protected BlockRegistry getBlockRegistry() {
-		return RegistryManager.get(RegistryType.BLOCK);
-	}
-	
-	protected DimensionRegistry getDimensionRegistry() {
-		return RegistryManager.get(RegistryType.DIMENSION);
-	}
-	
-	protected SoundRegistry getSoundRegistry() {
-		return RegistryManager.get(RegistryType.SOUND);
 	}
 	
 	// Called when the client is connecting to a server.  Useful for initializing
@@ -99,10 +76,17 @@ public abstract class EffectHandlerBase {
 	//////////////////////////////
 	final void connect0() {
 		this.onConnect();
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
 	final void disconnect0() {
+		MinecraftForge.EVENT_BUS.unregister(this);
 		this.onDisconnect();
+	}
+	
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this).add("name", this.getHandlerName()).toString();
 	}
 	
 }

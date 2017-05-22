@@ -107,6 +107,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 	}
 
 	public SpeechBubbleHandler() {
+		super("SpeechBubbleHandler");
 		loadText();
 	}
 
@@ -130,11 +131,6 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		final int expiry = EnvironState.getTickCounter() + (int) (ModOptions.speechBubbleDuration * 20F);
 		ctx.add(new SpeechBubbleData(message, expiry));
 		ctx.handleBubble(entity);
-	}
-
-	@Override
-	public String getHandlerName() {
-		return "SpeechBubbleHandler";
 	}
 
 	@Override

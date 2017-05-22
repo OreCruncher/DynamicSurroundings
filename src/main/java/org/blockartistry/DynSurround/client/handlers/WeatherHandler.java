@@ -44,11 +44,10 @@ public class WeatherHandler extends EffectHandlerBase {
  
 	private int timer = 0;
 
-	@Override
-	public String getHandlerName() {
-		return "WeatherHandler";
+	public WeatherHandler() {
+		super("WeatherHandler");
 	}
-
+	
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 		if (this.timer > 0) {

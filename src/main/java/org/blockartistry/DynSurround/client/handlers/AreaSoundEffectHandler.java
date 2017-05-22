@@ -34,6 +34,8 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.DynSurround.registry.BiomeRegistry;
+import org.blockartistry.DynSurround.registry.RegistryManager;
+import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 
 import gnu.trove.iterator.TObjectFloatIterator;
 import gnu.trove.iterator.TObjectIntIterator;
@@ -76,12 +78,14 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		}
 	}
 
-	@Override
-	@Nonnull
-	public String getHandlerName() {
-		return "AreaSoundEffectHandler";
+	protected final BiomeRegistry registry;
+	
+	public AreaSoundEffectHandler() {
+		super("AreaSoundEffectHandler");
+		
+		this.registry = RegistryManager.<BiomeRegistry>get(RegistryType.BIOME);
 	}
-
+	
 	private static boolean skipTick(@Nonnull final EntityPlayer player) {
 		// Skip processing this tick IF:
 		// * Option is disabled
@@ -101,14 +105,12 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		if (doBiomeSounds())
 			getBiomeSounds(sounds);
 
-		final BiomeRegistry registry = this.getBiomeRegistry();
-
 		final List<SoundEffect> playerSounds = new ArrayList<SoundEffect>();
-		registry.PLAYER_INFO.findSoundMatches(playerSounds);
+		this.registry.PLAYER_INFO.findSoundMatches(playerSounds);
 		if (ModOptions.enableBattleMusic)
-			registry.BATTLE_MUSIC_INFO.findSoundMatches(playerSounds);
+			this.registry.BATTLE_MUSIC_INFO.findSoundMatches(playerSounds);
 		if (EnvironState.inVillage())
-			registry.VILLAGE_INFO.findSoundMatches(playerSounds);
+			this.registry.VILLAGE_INFO.findSoundMatches(playerSounds);
 
 		for (final SoundEffect effect : playerSounds)
 			sounds.put(effect, 1.0F);
@@ -117,12 +119,12 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 
 		if (doBiomeSounds()) {
 			final BiomeInfo playerBiome = EnvironState.getPlayerBiome();
-			final SoundEffect sound = playerBiome.getSpotSound(RANDOM);
+			final SoundEffect sound = playerBiome.getSpotSound(this.RANDOM);
 			if (sound != null)
 				SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound);
 		}
 
-		final SoundEffect sound = registry.PLAYER_INFO.getSpotSound(RANDOM);
+		final SoundEffect sound = this.registry.PLAYER_INFO.getSpotSound(this.RANDOM);
 		if (sound != null)
 			SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound);
 	}

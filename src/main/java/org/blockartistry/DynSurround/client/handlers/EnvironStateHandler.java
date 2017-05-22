@@ -74,7 +74,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod.EventBusSubscriber(Side.CLIENT)
+@Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
 public class EnvironStateHandler extends EffectHandlerBase {
 
 	// Diagnostic strings to display in the debug HUD
@@ -156,7 +156,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			final BiomeRegistry biomes = RegistryManager.<BiomeRegistry>get(RegistryType.BIOME);
 			final SeasonRegistry seasons = RegistryManager.<SeasonRegistry>get(RegistryType.SEASON);
 			final DimensionRegistry dimensions = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION);
-
+			
 			EnvironState.player = player;
 			EnvironState.world = player.world;
 			EnvironState.dimInfo = dimensions.getData(player.world);
@@ -262,7 +262,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			}
 			return false;
 		}
-		
+
 		public static boolean isPlayer(final UUID id) {
 			return player == null || player.getUniqueID().equals(id);
 		}
@@ -328,7 +328,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		public static boolean isPlayerMoving() {
 			return player != null && player.distanceWalkedModified != player.prevDistanceWalkedModified;
 		}
-
+		
 		public static boolean isPlayerSneaking() {
 			return player != null && player.isSneaking();
 		}
@@ -386,18 +386,13 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 	}
 
-	@Override
-	public String getHandlerName() {
-		return "EnvironStateEffectHandler";
+	public EnvironStateHandler() {
+		super("EnvironStateEffectHandler");
 	}
-
-	@Override
-	public void pre(@Nonnull final World world, @Nonnull final EntityPlayer player) {
-		EnvironState.tick(world, player);
-	}
-
+	
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+		EnvironState.tick(world, player);
 
 		// Gather diagnostics if needed
 		if (Minecraft.getMinecraft().gameSettings.showDebugInfo && ModOptions.enableDebugLogging) {

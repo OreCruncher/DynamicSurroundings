@@ -154,24 +154,24 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		});
 
 		// Scan the BiomeDictionary adding the the types
-				try {
-					final Field accessor = ReflectionHelper.findField(BiomeDictionary.Type.class, "byName");
-					if (accessor != null) {
-						@SuppressWarnings("unchecked")
-						final Map<String, BiomeDictionary.Type> stuff = (Map<String, BiomeDictionary.Type>) accessor.get(null);
-						for (final Entry<String, Type> e : stuff.entrySet()) {
-							register(new Dynamic.DynamicBoolean("biome.is" + e.getKey()) {
-								@Override
-								public void update() {
-									this.value = EnvironState.getTruePlayerBiome().isBiomeType(e.getValue());
-								}
-							});
+		try {
+			final Field accessor = ReflectionHelper.findField(BiomeDictionary.Type.class, "byName");
+			if (accessor != null) {
+				@SuppressWarnings("unchecked")
+				final Map<String, BiomeDictionary.Type> stuff = (Map<String, BiomeDictionary.Type>) accessor.get(null);
+				for (final Entry<String, Type> e : stuff.entrySet()) {
+					register(new Dynamic.DynamicBoolean("biome.is" + e.getKey()) {
+						@Override
+						public void update() {
+							this.value = EnvironState.getTruePlayerBiome().isBiomeType(e.getValue());
 						}
-					}
-
-				} catch (final Throwable t) {
-					throw new RuntimeException("Cannot locate BiomeDictionary.Type table!");
+					});
 				}
+			}
+
+		} catch (final Throwable t) {
+			throw new RuntimeException("Cannot locate BiomeDictionary.Type table!");
+		}
 
 		// Player variables
 		register(new Dynamic.DynamicBoolean("player.isDead") {
@@ -503,22 +503,17 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 
 	}
 
-	@Override
-	@Nonnull
-	public String getHandlerName() {
-		return "ExpressionStateHandler";
-	}
-
-	@Override
-	public void pre(@Nonnull final World world, @Nonnull final EntityPlayer player) {
-		// Iterate through the variables and get the data cached for this ticks
-		// expression evaluations.
-		for (final IDynamicValue dv : variables)
-			dv.update();
+	public ExpressionStateHandler() {
+		super("ExpressionStateHandler");
 	}
 
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+		// Iterate through the variables and get the data cached for this ticks
+		// expression evaluations.
+		for (int i = 0; i < variables.size(); i++)
+			variables.get(i).update();
+		
 		if (ModOptions.showDebugDialog)
 			DiagnosticPanel.refresh();
 	}
@@ -537,8 +532,8 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void onExpressionCreate(@Nonnull final ExpressionEvent.Create event) {
-		for (final IDynamicValue v : variables)
-			event.expression.addVariable((Variant) v);
+		for (int i = 0; i < variables.size(); i++)
+			event.expression.addVariable((Variant) variables.get(i));
 	}
 
 }

@@ -121,13 +121,14 @@ public class PlayerActionHandler extends EffectHandlerBase {
 		}
 	}
 
-	@Override
-	public String getHandlerName() {
-		return "PlayerActionHandler";
-	}
-
 	protected final MainHandTracker mainHand = new MainHandTracker();
 	protected final HandTracker offHand = new HandTracker();
+
+	public PlayerActionHandler() {
+		super("PlayerActionHandler");
+
+		this.itemRegistry = RegistryManager.get(RegistryType.ITEMS);
+	}
 
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
@@ -138,16 +139,6 @@ public class PlayerActionHandler extends EffectHandlerBase {
 
 		this.mainHand.update();
 		this.offHand.update();
-	}
-
-	@Override
-	public void onConnect() {
-		this.itemRegistry = RegistryManager.get(RegistryType.ITEMS);
-	}
-
-	@Override
-	public void onDisconnect() {
-		this.itemRegistry = null;
 	}
 
 	@SubscribeEvent

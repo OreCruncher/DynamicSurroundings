@@ -31,7 +31,6 @@ import org.blockartistry.DynSurround.client.fx.particle.ParticleTextPopOff;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.Color;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -63,6 +62,7 @@ public final class PopoffEffectHandler extends EffectHandlerBase {
 	}
 
 	public PopoffEffectHandler() {
+		super("PopoffEffectHandler");
 	}
 
 	@SubscribeEvent
@@ -94,12 +94,4 @@ public final class PopoffEffectHandler extends EffectHandlerBase {
 		ParticleHelper.addParticle(particle);
 	}
 
-	@Override
-	public String getHandlerName() {
-		return "PopoffEffectHandler";
-	}
-
-	@Override
-	public void process(final World world, final EntityPlayer player) {
-	}
 }
