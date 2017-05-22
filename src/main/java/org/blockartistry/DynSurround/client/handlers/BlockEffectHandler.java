@@ -24,14 +24,14 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
-import javax.annotation.Nonnull;
-
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.event.BlockUpdateEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.handlers.scanners.AlwaysOnBlockEffectScanner;
 import org.blockartistry.DynSurround.client.handlers.scanners.RandomBlockEffectScanner;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.DynSurround.registry.BlockRegistry;
+import org.blockartistry.DynSurround.registry.RegistryManager;
+import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.WorldUtils;
 
 import net.minecraft.block.state.IBlockState;
@@ -40,7 +40,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 /*
@@ -52,9 +51,12 @@ public class BlockEffectHandler extends EffectHandlerBase {
 	protected final RandomBlockEffectScanner effects = new RandomBlockEffectScanner(ModOptions.specialEffectRange);
 	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(ModOptions.specialEffectRange);
 
-	@Override
-	public String getHandlerName() {
-		return "BlockEffectHandler";
+	protected final BlockRegistry registry;
+
+	public BlockEffectHandler() {
+		super("BlockEffectHandler");
+
+		this.registry = RegistryManager.<BlockRegistry>get(RegistryType.BLOCK);
 	}
 
 	@Override
@@ -65,16 +67,10 @@ public class BlockEffectHandler extends EffectHandlerBase {
 		if (EnvironState.isPlayerOnGround() && EnvironState.isPlayerMoving()) {
 			final BlockPos pos = EnvironState.getPlayerPosition().down(1);
 			final IBlockState state = WorldUtils.getBlockState(world, pos);
-			final SoundEffect sound = getBlockRegistry().getStepSoundToPlay(state, RANDOM);
+			final SoundEffect sound = this.registry.getStepSoundToPlay(state, RANDOM);
 			if (sound != null)
 				sound.doEffect(state, world, pos, RANDOM);
 		}
-	}
-
-	@SubscribeEvent(receiveCanceled = false)
-	public void onBlockUpdate(@Nonnull final BlockUpdateEvent event) {
-		// Notify the always on cuboid scanner that a block has changed
-		this.alwaysOn.onBlockUpdate(event.oldState, event.newState, event.pos, event.flags);
 	}
 
 	@Override

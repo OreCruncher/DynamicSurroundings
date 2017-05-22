@@ -386,18 +386,13 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 	}
 
-	@Override
-	public String getHandlerName() {
-		return "EnvironStateEffectHandler";
+	public EnvironStateHandler() {
+		super("EnvironStateEffectHandler");
 	}
-
-	@Override
-	public void pre(@Nonnull final World world, @Nonnull final EntityPlayer player) {
-		EnvironState.tick(world, player);
-	}
-
+	
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+		EnvironState.tick(world, player);
 
 		// Gather diagnostics if needed
 		if (Minecraft.getMinecraft().gameSettings.showDebugInfo && ModOptions.enableDebugLogging) {

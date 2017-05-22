@@ -49,11 +49,7 @@ public class FogEffectHandler extends EffectHandlerBase {
 	private AreaFogScanner scanner = new AreaFogScanner();
 
 	public FogEffectHandler() {
-	}
-
-	@Override
-	public String getHandlerName() {
-		return "FogEffectHandler";
+		super("FogEffectHandler");
 	}
 
 	private boolean ignoreFog() {

@@ -109,13 +109,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	private final ObjectArray<BasicSound<?>> sendToServer = new ObjectArray<BasicSound<?>>();
 
 	private SoundEffectHandler() {
-
-	}
-
-	@Override
-	@Nonnull
-	public String getHandlerName() {
-		return "SoundEffectHandler";
+		super("SoundEffectHandler");
 	}
 
 	@Override

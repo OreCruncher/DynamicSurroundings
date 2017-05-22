@@ -487,22 +487,17 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 
 	}
 
-	@Override
-	@Nonnull
-	public String getHandlerName() {
-		return "ExpressionStateHandler";
-	}
-
-	@Override
-	public void pre(@Nonnull final World world, @Nonnull final EntityPlayer player) {
-		// Iterate through the variables and get the data cached for this ticks
-		// expression evaluations.
-		for (final IDynamicValue dv : variables)
-			dv.update();
+	public ExpressionStateHandler() {
+		super("ExpressionStateHandler");
 	}
 
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+		// Iterate through the variables and get the data cached for this ticks
+		// expression evaluations.
+		for (int i = 0; i < variables.size(); i++)
+			variables.get(i).update();
+		
 		if (ModOptions.showDebugDialog)
 			DiagnosticPanel.refresh();
 	}
@@ -521,8 +516,8 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void onExpressionCreate(@Nonnull final ExpressionEvent.Create event) {
-		for (final IDynamicValue v : variables)
-			event.expression.addVariable((Variant) v);
+		for (int i = 0; i < variables.size(); i++)
+			event.expression.addVariable((Variant) variables.get(i));
 	}
 
 }

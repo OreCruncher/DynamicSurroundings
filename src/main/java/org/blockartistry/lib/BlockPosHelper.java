@@ -91,9 +91,9 @@ public final class BlockPosHelper {
 	 * method is used, the resulting BlockPos instances can only be used inside
 	 * the iteration loop.
 	 * 
-	 * NOTE: This is similar to the logic in Forge.  Difference is that it
-	 * favors iterating along the Y axis first before X/Z.  Goal is to maximize
-	 * chunk caching for area scanning.
+	 * NOTE: This is similar to the logic in Forge. Difference is that it favors
+	 * iterating along the Y axis first before X/Z. Goal is to maximize chunk
+	 * caching for area scanning.
 	 */
 	public static Iterable<BlockPos.MutableBlockPos> getAllInBoxMutable(BlockPos from, BlockPos to) {
 		final BlockPos blockpos = createMinPoint(from, to);

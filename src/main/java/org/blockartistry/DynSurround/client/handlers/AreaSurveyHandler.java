@@ -33,6 +33,8 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.DynSurround.registry.BiomeRegistry;
+import org.blockartistry.DynSurround.registry.RegistryManager;
+import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.MathStuff;
 
 import gnu.trove.map.custom_hash.TObjectIntCustomHashMap;
@@ -154,6 +156,14 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 		reallyInside = ceilingCoverageRatio > INSIDE_THRESHOLD;
 	}
 
+	protected final BiomeRegistry registry;
+	
+	public AreaSurveyHandler() {
+		super("AreaSurveyEffectHandler");
+		
+		this.registry = RegistryManager.<BiomeRegistry>get(RegistryType.BIOME);
+	}
+	
 	/*
 	 * Perform a biome survey around the player at the specified range.
 	 */
@@ -165,22 +175,16 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 			biomeArea = 1;
 			weights.put(EnvironState.getPlayerBiome(), 1);
 		} else {
-			final BiomeRegistry registry = getBiomeRegistry();
 			final World world = EnvironState.getWorld();
 
 			for (int dX = -BIOME_SURVEY_RANGE; dX <= BIOME_SURVEY_RANGE; dX++)
 				for (int dZ = -BIOME_SURVEY_RANGE; dZ <= BIOME_SURVEY_RANGE; dZ++) {
 					biomeArea++;
 					mutable.setPos(surveyedPosition.getX() + dX, surveyedPosition.getY(), surveyedPosition.getZ() + dZ);
-					final BiomeInfo biome = registry.get(world.getBiome(mutable));
+					final BiomeInfo biome = this.registry.get(world.getBiome(mutable));
 					weights.adjustOrPutValue(biome, 1, 1);
 				}
 		}
-	}
-
-	@Override
-	public String getHandlerName() {
-		return "AreaSurveyEffectHandler";
 	}
 
 	// Analyzes the area around the player and caches the results.

@@ -53,7 +53,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	private final DimensionRegistry registry = RegistryManager.get(RegistryType.DIMENSION);
 
 	public AuroraEffectHandler() {
-
+		super("AuroraEffectHandler");
 	}
 
 	@Nullable
@@ -69,12 +69,6 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	@Override
 	public void onDisconnect() {
 		current = null;
-	}
-
-	@Override
-	@Nonnull
-	public String getHandlerName() {
-		return "AuroraEffectHandler";
 	}
 
 	private boolean spawnAurora(@Nonnull final World world) {

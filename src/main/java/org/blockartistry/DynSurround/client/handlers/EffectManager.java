@@ -24,10 +24,9 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.lib.collections.ObjectArray;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,7 +44,7 @@ public class EffectManager {
 
 	private static EffectManager INSTANCE = null;
 
-	private final List<EffectHandlerBase> effectHandlers = new ArrayList<EffectHandlerBase>();
+	private final ObjectArray<EffectHandlerBase> effectHandlers = new ObjectArray<EffectHandlerBase>();
 
 	private EffectManager() {
 	}
@@ -73,17 +72,13 @@ public class EffectManager {
 		// Add this one last so it goes last
 		this.effectHandlers.add(SoundEffectHandler.INSTANCE);
 
-		for (final EffectHandlerBase h : this.effectHandlers) {
+		for (final EffectHandlerBase h : this.effectHandlers)
 			h.connect0();
-			MinecraftForge.EVENT_BUS.register(h);
-		}
 	}
 
 	private void fini() {
-		for (final EffectHandlerBase h : this.effectHandlers) {
-			MinecraftForge.EVENT_BUS.unregister(h);
+		for (final EffectHandlerBase h : this.effectHandlers)
 			h.disconnect0();
-		}
 		this.effectHandlers.clear();
 	}
 
@@ -101,36 +96,31 @@ public class EffectManager {
 
 	@SubscribeEvent
 	public void clientTick(final TickEvent.ClientTickEvent event) {
-		if (Minecraft.getMinecraft().isGamePaused())
+		if (event.phase == Phase.END || Minecraft.getMinecraft().isGamePaused())
 			return;
 
 		final World world = FMLClientHandler.instance().getClient().theWorld;
 		if (world == null)
 			return;
 
-		if (event.phase == Phase.START) {
-			DSurround.getProfiler().startSection("DSurroundEffectManager");
+		final boolean tickProfile = DSurround.log().testTrace(ModOptions.Trace.TICK_PROFILE);
+		DSurround.getProfiler().startSection("DSurroundEffectManager");
 
-			final EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
+		final EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
 
-			// Fire pre calls
-			for (final EffectHandlerBase handler : effectHandlers) {
-				handler.pre(world, player);
-			}
-
-			for (final EffectHandlerBase handler : effectHandlers) {
+		if (tickProfile) {
+			for (int i = 0; i < this.effectHandlers.size(); i++) {
+				final EffectHandlerBase handler = this.effectHandlers.get(i);
 				DSurround.getProfiler().startSection(handler.getHandlerName());
 				handler.process(world, player);
 				DSurround.getProfiler().endSection();
 			}
-
-			// Fire post calls
-			for (final EffectHandlerBase handler : effectHandlers) {
-				handler.post(world, player);
-			}
-
-			DSurround.getProfiler().endSection();
+		} else {
+			for (int i = 0; i < this.effectHandlers.size(); i++)
+				this.effectHandlers.get(i).process(world, player);
 		}
+
+		DSurround.getProfiler().endSection();
 	}
 
 }

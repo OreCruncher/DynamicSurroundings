@@ -24,19 +24,22 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.event.RegistryEvent;
 import org.blockartistry.DynSurround.client.gui.ConfigSound;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
+import org.blockartistry.DynSurround.registry.SoundRegistry;
+import org.blockartistry.DynSurround.registry.RegistryManager;
+
+import com.google.common.collect.Sets;
+
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -46,20 +49,15 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class SoundCullHandler extends EffectHandlerBase {
 
-	private final List<String> soundsToBlock = new ArrayList<String>();
+	private final Set<String> soundsToBlock = Sets.newHashSet();
 	private final TObjectIntHashMap<String> soundCull = new TObjectIntHashMap<String>();
 
+	protected final SoundRegistry registry;
+
 	public SoundCullHandler() {
-	}
+		super("SoundCullHandler");
 
-	@Override
-	public String getHandlerName() {
-		return "SoundCullHandler";
-	}
-
-	@Override
-	public void process(final World world, final EntityPlayer player) {
-
+		this.registry = RegistryManager.<SoundRegistry>get(RegistryType.SOUND);
 	}
 
 	@Override
@@ -69,10 +67,10 @@ public class SoundCullHandler extends EffectHandlerBase {
 		final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
 		for (final Object resource : handler.soundRegistry.getKeys()) {
 			final String rs = resource.toString();
-			if (getSoundRegistry().isSoundBlockedLogical(rs)) {
+			if (this.registry.isSoundBlockedLogical(rs)) {
 				DSurround.log().debug("Blocking sound '%s'", rs);
 				this.soundsToBlock.add(rs);
-			} else if (getSoundRegistry().isSoundCulled(rs)) {
+			} else if (this.registry.isSoundCulled(rs)) {
 				DSurround.log().debug("Culling sound '%s'", rs);
 				this.soundCull.put(rs, -ModOptions.soundCullingThreshold);
 			}
@@ -81,7 +79,7 @@ public class SoundCullHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void soundConfigReload(final RegistryEvent.Reload event) {
-		if (event.getSide() == Side.CLIENT && getSoundRegistry() != null)
+		if (event.getSide() == Side.CLIENT)
 			onConnect();
 	}
 
@@ -89,7 +87,7 @@ public class SoundCullHandler extends EffectHandlerBase {
 	public void soundEvent(final PlaySoundEvent event) {
 		if (event.getSound() == null || event.getSound() instanceof ConfigSound)
 			return;
-		
+
 		final String resource = event.getSound().getSoundLocation().toString();
 		if (this.soundsToBlock.contains(resource)) {
 			event.setResultSound(null);

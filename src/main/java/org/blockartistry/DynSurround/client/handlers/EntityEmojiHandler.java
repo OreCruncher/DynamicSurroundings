@@ -51,11 +51,7 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 	private final TIntObjectHashMap<IParticleMote> emojiParticles = new TIntObjectHashMap<IParticleMote>();
 
 	public EntityEmojiHandler() {
-	}
-
-	@Override
-	public String getHandlerName() {
-		return "EntityEmojiHandler";
+		super("EntityEmojiHandler");
 	}
 
 	@Override
