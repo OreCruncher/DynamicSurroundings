@@ -27,6 +27,8 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.DynSurround.client.event.BlockUpdateEvent;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -221,11 +223,10 @@ public abstract class CuboidScanner extends Scanner {
 	}
 
 	@SubscribeEvent(receiveCanceled = false)
-	public void onBlockUpdate(@Nonnull final IBlockState oldState, @Nonnull final IBlockState newState,
-			@Nonnull final BlockPos pos, final int flags) {
+	public void onBlockUpdate(@Nonnull final BlockUpdateEvent event) {
 		try {
-			if (this.activeCuboid != null && this.activeCuboid.contains(pos) && this.interestingBlock(newState))
-				blockScan(newState, pos, this.random);
+			if (this.activeCuboid != null && this.activeCuboid.contains(event.pos) && this.interestingBlock(event.newState))
+				blockScan(event.newState, event.pos, this.random);
 		} catch (final Throwable t) {
 			this.log.error("onBlockUpdate() error", t);
 		}
