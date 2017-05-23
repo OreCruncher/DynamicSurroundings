@@ -1,3 +1,16 @@
+###DynamicSurroundings-1.10.2-3.4.5.0
+**Fixes**
+* Playing a sound in the Individual Sound Configuration dialog will mute playing music.  This will only work if Dynamic Surroundings replaces Vanilla's MusicTicker (i.e. if Actual Music is installed it will not work).
+* Stop playing sound when the Individual Sound Configuration dialog is closed.
+* A lot of sound effects were assigned the AMBIENT sound category; fixed bad logic - categories should be auto assigned based on sounds.json
+
+**Changes**
+* Battle Music volumes have been increased, and are now properly placed into the MUSIC sound category
+* Individual sound scale factors can now be up to 400 (4x)
+* Added fog property to dimension config that controls whether Dynamic Surroundings applies fog/dust effects to a dimension.  By default it is only ON for Overworld and Nether.  (Out of the box compatibility with Galacticraft.)
+* Better rendering performance for footprints.
+* Two new footprint styles: (3) bird and (4) animal paw
+
 ###DynamicSurroundings-1.10.2-3.4.4.0
 **Fixes**
 * OpenEye report of NPE in sound muting
