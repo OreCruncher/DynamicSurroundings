@@ -46,7 +46,13 @@ public class ParticleCollectionFootprint extends ParticleCollection {
 		SQUARE("textures/particles/footprint_square.png"),
 
 		// Horseshoe shaped print. Good with Quadruped feature enabled
-		HORSESHOE("textures/particles/footprint_horseshoe.png");
+		HORSESHOE("textures/particles/footprint_horseshoe.png"),
+		
+		// Bird 3 toed prints.
+		BIRD("textures/particles/footprint_bird.png"),
+
+		// Animal paw
+		PAW("textures/particles/footprint_paw.png");
 
 		private final ResourceLocation resource;
 
