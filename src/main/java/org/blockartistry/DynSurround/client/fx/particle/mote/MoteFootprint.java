@@ -26,16 +26,13 @@ package org.blockartistry.DynSurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.WorldUtils;
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,16 +40,28 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class MoteFootprint extends MoteBase {
 
+	// Basic layout of the footprint
+	private static final float WIDTH = 0.125F;
+	private static final float LENGTH = WIDTH * 2.0F;
+	private static final Vec3d FIRST_POINT = new Vec3d(-WIDTH, 0, LENGTH);
+	private static final Vec3d SECOND_POINT = new Vec3d(WIDTH, 0, LENGTH);
+	private static final Vec3d THIRD_POINT = new Vec3d(WIDTH, 0, -LENGTH);
+	private static final Vec3d FOURTH_POINT = new Vec3d(-WIDTH, 0, -LENGTH);
+
+	// Micro Y adjuster to avoid z-fighting when rendering
+	// multiple overlapping prints.
 	private static float zFighter = 0F;
 
 	protected final boolean isSnowLayer;
 	protected final BlockPos downPos;
 
-	protected final float rotation;
 	protected final float texU1, texU2;
 	protected final float texV1, texV2;
-	protected final float width = 0.125F;
-	protected final float length = this.width * 2.0F;
+
+	protected final Vec3d firstPoint;
+	protected final Vec3d secondPoint;
+	protected final Vec3d thirdPoint;
+	protected final Vec3d fourthPoint;
 
 	public MoteFootprint(@Nonnull final World world, final double x, final double y, final double z,
 			final float rotation, final boolean isRight) {
@@ -73,12 +82,21 @@ public class MoteFootprint extends MoteBase {
 		}
 
 		this.downPos = this.position.down();
-		this.rotation = -rotation + 180;
 
 		this.texU1 = isRight ? 0.5F : 0F;
 		this.texU2 = isRight ? 1.0F : 0.5F;
 		this.texV1 = 0F;
 		this.texV2 = 1F;
+
+		// Rotate our vertex coordinates.  Since prints are static
+		// doing the rotation on the vertex points during
+		// constructions makes for a much more efficient render
+		// process.
+		final float theRotation = MathStuff.toRadians(-rotation + 180);
+		this.firstPoint = FIRST_POINT.rotateYaw(theRotation);
+		this.secondPoint = SECOND_POINT.rotateYaw(theRotation);
+		this.thirdPoint = THIRD_POINT.rotateYaw(theRotation);
+		this.fourthPoint = FOURTH_POINT.rotateYaw(theRotation);
 	}
 
 	@Override
@@ -110,18 +128,10 @@ public class MoteFootprint extends MoteBase {
 		final double y = renderY(partialTicks);
 		final double z = renderZ(partialTicks);
 
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y, z);
-		GlStateManager.rotate(this.rotation, 0F, 1F, 0F);
-
-		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-		drawVertex(buffer, -this.width, 0, +this.length, this.texU1, this.texV2);
-		drawVertex(buffer, +this.width, 0, +this.length, this.texU2, this.texV2);
-		drawVertex(buffer, +this.width, 0, -this.length, this.texU2, this.texV1);
-		drawVertex(buffer, -this.width, 0, -this.length, this.texU1, this.texV1);
-		Tessellator.getInstance().draw();
-
-		GlStateManager.popMatrix();
+		drawVertex(buffer, x + this.firstPoint.xCoord, y, z + this.firstPoint.zCoord, this.texU1, this.texV2);
+		drawVertex(buffer, x + this.secondPoint.xCoord, y, z + this.secondPoint.zCoord, this.texU2, this.texV2);
+		drawVertex(buffer, x + this.thirdPoint.xCoord, y, z + this.thirdPoint.zCoord, this.texU2, this.texV1);
+		drawVertex(buffer, x + this.fourthPoint.xCoord, y, z + this.fourthPoint.zCoord, this.texU1, this.texV1);
 	}
 
 }

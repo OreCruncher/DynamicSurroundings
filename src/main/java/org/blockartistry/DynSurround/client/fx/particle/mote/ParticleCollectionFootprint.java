@@ -29,8 +29,6 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,8 +39,13 @@ public class ParticleCollectionFootprint extends ParticleCollection {
 
 	public static enum Style {
 
+		// Regular shoe print style
 		SHOE("textures/particles/footprint.png"),
+
+		// Print that looks like a square and matches Minecraft blockiness
 		SQUARE("textures/particles/footprint_square.png"),
+
+		// Horseshoe shaped print. Good with Quadruped feature enabled
 		HORSESHOE("textures/particles/footprint_horseshoe.png");
 
 		private final ResourceLocation resource;
@@ -51,10 +54,12 @@ public class ParticleCollectionFootprint extends ParticleCollection {
 			this.resource = new ResourceLocation(DSurround.RESOURCE_ID, texture);
 		}
 
+		@Nonnull
 		public ResourceLocation getTexture() {
 			return this.resource;
 		}
 
+		@Nonnull
 		public static Style getStyle(final int v) {
 			if (v >= values().length)
 				return SHOE;
@@ -62,7 +67,7 @@ public class ParticleCollectionFootprint extends ParticleCollection {
 		}
 	}
 
-	public ParticleCollectionFootprint(World world, ResourceLocation tex) {
+	public ParticleCollectionFootprint(@Nonnull final World world, @Nonnull final ResourceLocation tex) {
 		super(world, tex);
 
 	}
@@ -73,18 +78,14 @@ public class ParticleCollectionFootprint extends ParticleCollection {
 	}
 
 	@Override
-	public void renderParticle(final VertexBuffer buffer, final Entity entityIn, final float partialTicks,
-			final float rotX, final float rotZ, final float rotYZ, final float rotXY, final float rotXZ) {
-
-		this.bindTexture(this.texture);
-		
+	protected void preRender() {
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+	}
 
-		for(int i = 0; i < this.myParticles.size(); i++)
-			this.myParticles.get(i).renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
-
+	@Override
+	protected void postRender() {
 		GlStateManager.disableBlend();
 	}
-	
+
 }
