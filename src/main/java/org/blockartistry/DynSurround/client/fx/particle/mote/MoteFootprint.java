@@ -32,7 +32,7 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,10 +43,10 @@ public class MoteFootprint extends MoteBase {
 	// Basic layout of the footprint
 	private static final float WIDTH = 0.125F;
 	private static final float LENGTH = WIDTH * 2.0F;
-	private static final Vec3d FIRST_POINT = new Vec3d(-WIDTH, 0, LENGTH);
-	private static final Vec3d SECOND_POINT = new Vec3d(WIDTH, 0, LENGTH);
-	private static final Vec3d THIRD_POINT = new Vec3d(WIDTH, 0, -LENGTH);
-	private static final Vec3d FOURTH_POINT = new Vec3d(-WIDTH, 0, -LENGTH);
+	private static final Vec2f FIRST_POINT = new Vec2f(-WIDTH, LENGTH);
+	private static final Vec2f SECOND_POINT = new Vec2f(WIDTH, LENGTH);
+	private static final Vec2f THIRD_POINT = new Vec2f(WIDTH, -LENGTH);
+	private static final Vec2f FOURTH_POINT = new Vec2f(-WIDTH, -LENGTH);
 
 	// Micro Y adjuster to avoid z-fighting when rendering
 	// multiple overlapping prints.
@@ -58,10 +58,10 @@ public class MoteFootprint extends MoteBase {
 	protected final float texU1, texU2;
 	protected final float texV1, texV2;
 
-	protected final Vec3d firstPoint;
-	protected final Vec3d secondPoint;
-	protected final Vec3d thirdPoint;
-	protected final Vec3d fourthPoint;
+	protected final Vec2f firstPoint;
+	protected final Vec2f secondPoint;
+	protected final Vec2f thirdPoint;
+	protected final Vec2f fourthPoint;
 
 	public MoteFootprint(@Nonnull final World world, final double x, final double y, final double z,
 			final float rotation, final boolean isRight) {
@@ -88,15 +88,15 @@ public class MoteFootprint extends MoteBase {
 		this.texV1 = 0F;
 		this.texV2 = 1F;
 
-		// Rotate our vertex coordinates.  Since prints are static
+		// Rotate our vertex coordinates. Since prints are static
 		// doing the rotation on the vertex points during
 		// constructions makes for a much more efficient render
 		// process.
 		final float theRotation = MathStuff.toRadians(-rotation + 180);
-		this.firstPoint = FIRST_POINT.rotateYaw(theRotation);
-		this.secondPoint = SECOND_POINT.rotateYaw(theRotation);
-		this.thirdPoint = THIRD_POINT.rotateYaw(theRotation);
-		this.fourthPoint = FOURTH_POINT.rotateYaw(theRotation);
+		this.firstPoint = MathStuff.rotate(FIRST_POINT, theRotation);
+		this.secondPoint = MathStuff.rotate(SECOND_POINT, theRotation);
+		this.thirdPoint = MathStuff.rotate(THIRD_POINT, theRotation);
+		this.fourthPoint = MathStuff.rotate(FOURTH_POINT, theRotation);
 	}
 
 	@Override
@@ -128,10 +128,10 @@ public class MoteFootprint extends MoteBase {
 		final double y = renderY(partialTicks);
 		final double z = renderZ(partialTicks);
 
-		drawVertex(buffer, x + this.firstPoint.xCoord, y, z + this.firstPoint.zCoord, this.texU1, this.texV2);
-		drawVertex(buffer, x + this.secondPoint.xCoord, y, z + this.secondPoint.zCoord, this.texU2, this.texV2);
-		drawVertex(buffer, x + this.thirdPoint.xCoord, y, z + this.thirdPoint.zCoord, this.texU2, this.texV1);
-		drawVertex(buffer, x + this.fourthPoint.xCoord, y, z + this.fourthPoint.zCoord, this.texU1, this.texV1);
+		drawVertex(buffer, x + this.firstPoint.x, y, z + this.firstPoint.y, this.texU1, this.texV2);
+		drawVertex(buffer, x + this.secondPoint.x, y, z + this.secondPoint.y, this.texU2, this.texV2);
+		drawVertex(buffer, x + this.thirdPoint.x, y, z + this.thirdPoint.y, this.texU2, this.texV1);
+		drawVertex(buffer, x + this.fourthPoint.x, y, z + this.fourthPoint.y, this.texU1, this.texV1);
 	}
 
 }

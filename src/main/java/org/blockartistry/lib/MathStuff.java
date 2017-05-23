@@ -24,6 +24,10 @@
 
 package org.blockartistry.lib;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.util.math.Vec2f;
+
 /**
  * Replacement algos for SIN_TABLE/cos in Minecraft's MathStuff routines. Use
  * the Riven method:
@@ -217,6 +221,15 @@ public class MathStuff {
 
 	public static int clamp(final int num, final int min, final int max) {
 		return num < min ? min : (num > max ? max : num);
+	}
+	
+	// Assumes center at origin.
+	public static Vec2f rotate(@Nonnull final Vec2f coord, final float radians) {
+        final float f = cos(radians);
+        final float f1 = sin(radians);
+        final float d0 = coord.x * f + coord.y * f1;
+        final float d1 = coord.y * f - coord.x * f1;
+        return new Vec2f(d0, d1);
 	}
 
 }
