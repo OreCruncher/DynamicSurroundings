@@ -30,11 +30,33 @@ import org.blockartistry.lib.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public final class FastFontRenderer {
+public class FastFontRenderer {
+
+	public static final FastFontRenderer INSTANCE;
+
+	static {
+		// OptiFine demolishes the font renderer so
+		// let it try and speed up string rendering
+		if (FMLClientHandler.instance().hasOptifine()) {
+			INSTANCE = new FastFontRenderer() {
+				public void prepare() {
+
+				}
+
+				public void drawString(@Nonnull final String text, final float x, final float y,
+						@Nonnull final Color color, final float alpha) {
+					font.drawString(text, x, y, color.rgbWithAlpha(alpha), false);
+				}
+			};
+		} else {
+			INSTANCE = new FastFontRenderer();
+		}
+	}
 
 	private static final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
 
@@ -42,12 +64,12 @@ public final class FastFontRenderer {
 
 	}
 
-	public static void prepare() {
+	public void prepare() {
 		GlStateManager.enableAlpha();
 		Minecraft.getMinecraft().getTextureManager().bindTexture(font.locationFontTexture);
 	}
 
-	public static void drawString(@Nonnull final String text, final float x, final float y, @Nonnull final Color color,
+	public void drawString(@Nonnull final String text, final float x, final float y, @Nonnull final Color color,
 			final float alpha) {
 
 		GlStateManager.color(color.red, color.green, color.blue, alpha);
