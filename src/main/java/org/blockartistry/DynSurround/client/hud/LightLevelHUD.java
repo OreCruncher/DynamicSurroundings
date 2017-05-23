@@ -117,7 +117,7 @@ public final class LightLevelHUD extends GuiOverlay {
 				GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
 				GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);
 				GlStateManager.scale(-this.scale, -this.scale, this.scale);
-				FastFontRenderer.drawString(coord.text, coord.margin, 0, coord.color, ColorSet.ALPHA);
+				FastFontRenderer.INSTANCE.drawString(coord.text, coord.margin, 0, coord.color, ColorSet.ALPHA);
 
 			}
 		},
@@ -128,7 +128,7 @@ public final class LightLevelHUD extends GuiOverlay {
 				GlStateManager.translate(x + 0.45D, y + 0.0005D, z + 0.8D);
 				GlStateManager.rotate(90F, 1F, 0F, 0F);
 				GlStateManager.scale(-this.scale, -this.scale, this.scale);
-				FastFontRenderer.drawString(coord.text, coord.margin, 0, coord.color, ColorSet.ALPHA);
+				FastFontRenderer.INSTANCE.drawString(coord.text, coord.margin, 0, coord.color, ColorSet.ALPHA);
 			}
 		},
 		SURFACE_ROTATE(0.08F) {
@@ -141,7 +141,7 @@ public final class LightLevelHUD extends GuiOverlay {
 				GlStateManager.translate(-0.05D, 0.0005D, 0.3D);
 				GlStateManager.rotate(90F, 1F, 0F, 0F);
 				GlStateManager.scale(-this.scale, -this.scale, this.scale);
-				FastFontRenderer.drawString(coord.text, coord.margin, 0, coord.color, ColorSet.ALPHA);
+				FastFontRenderer.INSTANCE.drawString(coord.text, coord.margin, 0, coord.color, ColorSet.ALPHA);
 			}
 		};
 
@@ -364,7 +364,7 @@ public final class LightLevelHUD extends GuiOverlay {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.enableDepth();
 		GlStateManager.depthMask(true);
-		FastFontRenderer.prepare();
+		FastFontRenderer.INSTANCE.prepare();
 
 		final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
 
