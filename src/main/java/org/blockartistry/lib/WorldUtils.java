@@ -109,5 +109,9 @@ public final class WorldUtils {
 	public static boolean isFullWaterBlock(@Nonnull final IBlockState state) {
 		return state.getMaterial() == Material.WATER && state.getBlock().getDefaultState() == state;
 	}
+	
+	public static boolean isChunkAvailable(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return blockProvider.get().setWorld(world).isAvailable(pos);
+	}
 
 }

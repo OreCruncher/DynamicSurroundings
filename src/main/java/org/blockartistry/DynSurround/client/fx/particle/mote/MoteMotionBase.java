@@ -86,7 +86,7 @@ public abstract class MoteMotionBase extends MoteBase {
 		this.position.setPos(this.posX, this.posY, this.posZ);
 
 		if (WorldUtils.isSolidBlock(this.world, this.position)) {
-			this.isAlive = false;
+			this.kill();
 		} else {
 			this.motionX *= 0.9800000190734863D;
 			this.motionY *= 0.9800000190734863D;

@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.WorldUtils;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -100,12 +101,20 @@ public class MoteFootprint extends MoteBase {
 	}
 
 	@Override
+	protected boolean advanceAge() {
+		// Footprints age faster when raining
+		if (WeatherProperties.isRaining())
+			this.age += (WeatherProperties.getIntensityLevel() * 100F) / 4;
+		return super.advanceAge();
+	}
+
+	@Override
 	protected void update() {
 		if (!WorldUtils.isSolidBlock(this.world, this.downPos)) {
-			this.isAlive = false;
+			this.kill();
 		} else if (this.isSnowLayer
 				&& WorldUtils.getBlockState(this.world, this.position).getBlock() != Blocks.SNOW_LAYER) {
-			this.isAlive = false;
+			this.kill();
 		}
 	}
 
