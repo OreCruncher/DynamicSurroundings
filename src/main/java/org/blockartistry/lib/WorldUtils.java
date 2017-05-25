@@ -110,4 +110,8 @@ public final class WorldUtils {
 		return state.getMaterial() == Material.WATER && state.getBlock().getDefaultState() == state;
 	}
 
+	public static boolean isChunkAvailable(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return blockProvider.get().setWorld(world).isAvailable(pos);
+	}
+	
 }

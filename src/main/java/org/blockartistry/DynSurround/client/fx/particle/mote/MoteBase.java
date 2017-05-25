@@ -28,6 +28,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraft.client.Minecraft;
@@ -78,12 +79,24 @@ public abstract class MoteBase implements IParticleMote {
 	public boolean isAlive() {
 		return this.isAlive;
 	}
+	
+	protected void kill() {
+		this.isAlive = false;
+	}
 
+	protected boolean advanceAge() {
+		return this.age++ >= this.maxAge;
+	}
+	
 	@Override
 	public final void onUpdate() {
 
-		if (this.age++ >= this.maxAge) {
-			this.isAlive = false;
+		if (advanceAge()) {
+			// The mote reached it's life expectancy
+			this.kill();
+		} else if(!WorldUtils.isChunkAvailable(this.world, this.position)) {
+			// The chunk it was in must have unloaded
+			this.kill();
 		}
 
 		if (!this.isAlive())
