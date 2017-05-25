@@ -104,7 +104,7 @@ public class MoteFootprint extends MoteBase {
 	protected boolean advanceAge() {
 		// Footprints age faster when raining
 		if (WeatherProperties.isRaining())
-			this.age += (WeatherProperties.getIntensityLevel() * 100F) / 4;
+			this.age += (WeatherProperties.getIntensityLevel() * 100F) / 25;
 		return super.advanceAge();
 	}
 
