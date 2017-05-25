@@ -24,6 +24,8 @@
 
 package org.blockartistry.lib;
 
+import java.lang.ref.WeakReference;
+
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.state.IBlockState;
@@ -42,35 +44,39 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 public class BlockStateProvider {
 
 	protected static final IBlockState AIR_STATE = Blocks.AIR.getDefaultState();
+	protected static final WeakReference<Chunk> NULL_CHUNK = new WeakReference<Chunk>(null);
 	
-	protected World world;
-	protected Chunk chunk;
+	protected WeakReference<World> world;
+	protected WeakReference<Chunk> chunk;
 	
 	public BlockStateProvider() {
 		this(null);
 	}
 
 	public BlockStateProvider(final World world) {
-		this.world = world;
+		this.world = new WeakReference<World>(world);
+		this.chunk = NULL_CHUNK;
 	}
 
 	@Nonnull
 	protected Chunk resolveChunk(final int x, final int z) {
 		final int cX = x >> 4;
 		final int cZ = z >> 4;
-
-		if (this.chunk == null || !this.chunk.isAtLocation(cX, cZ)) {
-			this.chunk = this.world.getChunkFromChunkCoords(cX, cZ);
+		
+		Chunk c;
+		if ((c = this.chunk.get()) == null || !c.isAtLocation(cX, cZ)) {
+			final World w = this.world.get();
+			this.chunk = new WeakReference<Chunk>(c = w.getChunkFromChunkCoords(cX, cZ));
 		}
 
-		return this.chunk;
+		return c;
 	}
 
 	@Nonnull
 	public BlockStateProvider setWorld(@Nonnull final World world) {
-		if (this.world != world) {
-			this.world = world;
-			this.chunk = null;
+		if (this.world.get() != world) {
+			this.world = new WeakReference<World>(world);
+			this.chunk = NULL_CHUNK;
 		}
 		return this;
 	}
@@ -104,11 +110,16 @@ public class BlockStateProvider {
 		final int cX = x >> 4;
 		final int cZ = z >> 4;
 
-		if (this.chunk == null || !this.chunk.isAtLocation(cX, cZ)) {
-			this.chunk = this.world.getChunkProvider().getLoadedChunk(cX, cZ);
+		final World w = this.world.get();
+		if(w == null)
+			return false;
+		
+		Chunk c;
+		if ((c = this.chunk.get()) == null || !c.isAtLocation(cX, cZ)) {
+			this.chunk = new WeakReference<Chunk>(c = w.getChunkProvider().getLoadedChunk(cX, cZ));
 		}
 
-		return this.chunk != null;
+		return c != null;
 	}
 
 	public boolean isAvailable(@Nonnull final BlockPos pos) {
