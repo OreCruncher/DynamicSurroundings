@@ -215,7 +215,7 @@
 			]
 		},
 		{
-			"conditions": "!(biome.isOcean || biome.isRiver || biome.isNether || biome.isEnd || biome.isMushroom) && !(biome.isFake || biome.isSnowy || biome.isSandy || biome.isBeach || biome.isMountain)",
+			"conditions": "weather.isNotRaining && !(biome.isOcean || biome.isRiver || biome.isNether || biome.isEnd || biome.isMushroom) && !(biome.isFake || biome.isSnowy || biome.isSandy || biome.isBeach || biome.isMountain)",
 			"_comment": "Insect buzz",
 			"sounds": [
 				{
