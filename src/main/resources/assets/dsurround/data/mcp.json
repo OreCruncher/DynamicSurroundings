@@ -215,11 +215,12 @@
 			]
 		},
 		{
-			"conditions": "weather.isNotRaining && !(biome.isOcean || biome.isRiver || biome.isNether || biome.isEnd || biome.isMushroom) && !(biome.isFake || biome.isSnowy || biome.isSandy || biome.isBeach || biome.isMountain)",
+			"conditions": "!(biome.isOcean || biome.isRiver || biome.isNether || biome.isEnd || biome.isMushroom) && !(biome.isFake || biome.isSnowy || biome.isSandy || biome.isBeach || biome.isMountain)",
 			"_comment": "Insect buzz",
 			"sounds": [
 				{
 					"sound": "dsurround:insectbuzz",
+					"conditions": "weather.isNotRaining",
 					"soundType": "spot",
 					"variable": true
 				}
