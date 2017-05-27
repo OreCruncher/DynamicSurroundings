@@ -24,40 +24,142 @@
 
 package org.blockartistry.DynSurround.api.effects;
 
+import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.fx.BlockEffect;
+import org.blockartistry.DynSurround.client.fx.BubbleJetEffect;
+import org.blockartistry.DynSurround.client.fx.DustJetEffect;
+import org.blockartistry.DynSurround.client.fx.FireFlyEffect;
+import org.blockartistry.DynSurround.client.fx.FireJetEffect;
+import org.blockartistry.DynSurround.client.fx.FountainJetEffect;
+import org.blockartistry.DynSurround.client.fx.SteamJetEffect;
+import org.blockartistry.DynSurround.client.fx.WaterSplashJetEffect;
 
 /**
  * Describes the various types of block effects that can be generated.
  */
 public enum BlockEffectType {
-	
+
+	/**
+	 * Generic UNKNOWN effect
+	 */
+	UNKNOWN("UNKNOWN", null) {
+		@Override
+		public boolean isEnabled() {
+			return false;
+		}
+	},
+
 	/**
 	 * Not used currently
 	 */
-	SOUND("sound"),
-	
+	SOUND("sound", null) {
+		@Override
+		public boolean isEnabled() {
+			return false;
+		}
+	},
+
 	/**
 	 * Firefly mote effect
 	 */
-	FIREFLY("firefly"),
+	FIREFLY("firefly", FireFlyEffect.class) {
+		@Override
+		public boolean isEnabled() {
+			return ModOptions.enableFireflies;
+		}
+	},
 
 	/**
 	 * Various jet like particle effects
 	 */
-	STEAM_JET("steam"),
-	FIRE_JET("fire"),
-	BUBBLE_JET("bubble"),
-	DUST_JET("dust"),
-	FOUNTAIN_JET("fountain"),
-	SPLASH_JET("splash");
+	STEAM_JET("steam", SteamJetEffect.class) {
+		@Override
+		public boolean isEnabled() {
+			return ModOptions.enableSteamJets;
+		}
+	},
+	FIRE_JET("fire", FireJetEffect.class) {
+		@Override
+		public boolean isEnabled() {
+			return ModOptions.enableFireJets;
+		}
+	},
+	BUBBLE_JET("bubble", BubbleJetEffect.class) {
+		@Override
+		public boolean isEnabled() {
+			return ModOptions.enableBubbleJets;
+		}
+	},
+	DUST_JET("dust", DustJetEffect.class) {
+		@Override
+		public boolean isEnabled() {
+			return ModOptions.enableDustJets;
+		}
+	},
+	FOUNTAIN_JET("fountain", FountainJetEffect.class) {
+		@Override
+		public boolean isEnabled() {
+			return ModOptions.enableFountainJets;
+		}
+	},
+	SPLASH_JET("splash", WaterSplashJetEffect.class) {
+		@Override
+		public boolean isEnabled() {
+			return ModOptions.enableWaterSplash;
+		}
+	};
+
+	private static final Map<String, BlockEffectType> typeMap = new HashMap<String, BlockEffectType>();
+	static {
+		for (final BlockEffectType effect : BlockEffectType.values())
+			typeMap.put(effect.getName(), effect);
+	}
+
+	@Nonnull
+	public static BlockEffectType get(@Nonnull final String name) {
+		final BlockEffectType result = typeMap.get(name);
+		return result == null ? BlockEffectType.UNKNOWN : result;
+	}
 
 	protected final String name;
-	private BlockEffectType(@Nonnull final String name) {
+	protected Constructor<?> factory;
+
+	private BlockEffectType(@Nonnull final String name, @Nullable final Class<?> clazz) {
 		this.name = name;
+
+		try {
+
+			this.factory = clazz.getConstructor(int.class);
+
+		} catch (@Nonnull final Throwable t) {
+			;
+		}
 	}
-	
+
 	@Nonnull
 	public String getName() {
 		return this.name;
+	}
+
+	public abstract boolean isEnabled();
+
+	@Nullable
+	public BlockEffect getInstance(final int chance) {
+		if (this.factory != null) {
+			try {
+				return (BlockEffect) this.factory.newInstance(chance);
+			} catch (final Throwable t) {
+				;
+			}
+		}
+
+		return null;
 	}
 }
