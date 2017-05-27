@@ -32,10 +32,13 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -46,10 +49,27 @@ import org.blockartistry.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Color;
+import org.blockartistry.lib.collections.IdentityHashSet;
 import org.lwjgl.opengl.GL11;
 
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
 public final class AuroraRenderer extends IRenderHandler {
+
+	protected static final DimensionRegistry registry = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION);
+	protected static final Set<Class<?>> BLACK_LIST = new IdentityHashSet<Class<?>>();
+
+	private static void registerBlackListClass(@Nonnull final String clazz) {
+		try {
+			BLACK_LIST.add(Class.forName(clazz));
+		} catch (@Nonnull final ClassNotFoundException e) {
+			// Mods may not be loaded
+			;
+		}
+	}
+	
+	static {
+		registerBlackListClass("micdoodle8.mods.galacticraft.core.client.SkyProviderOrbit");
+	}
 
 	protected final IRenderHandler handler;
 
@@ -66,7 +86,7 @@ public final class AuroraRenderer extends IRenderHandler {
 			world.provider.setSkyRenderer(null);
 			try {
 				mc.renderGlobal.renderSky(partialTicks, 2);
-			} catch(final Throwable t) {
+			} catch (final Throwable t) {
 				;
 			}
 			world.provider.setSkyRenderer(this);
@@ -202,10 +222,21 @@ public final class AuroraRenderer extends IRenderHandler {
 		GlStateManager.popMatrix();
 	}
 
+	private static boolean shouldHook(@Nonnull final World world) {
+		final IRenderHandler handler = world.provider.getSkyRenderer();
+		if (handler instanceof AuroraRenderer)
+			return false;
+
+		if (!registry.hasAuroras(world))
+			return false;
+
+		return handler == null || !BLACK_LIST.contains(handler.getClass());
+	}
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void doRender(@Nonnull final RenderWorldLastEvent event) {
 		// Make sure that the sky renderer is an aurora renderer
-		if (!(Minecraft.getMinecraft().world.provider.getSkyRenderer() instanceof AuroraRenderer)) {
+		if (shouldHook(Minecraft.getMinecraft().world)) {
 			final AuroraRenderer hook = new AuroraRenderer(Minecraft.getMinecraft().world.provider.getSkyRenderer());
 			Minecraft.getMinecraft().world.provider.setSkyRenderer(hook);
 		}
