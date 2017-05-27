@@ -33,15 +33,8 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
-import org.blockartistry.DynSurround.client.fx.BubbleJetEffect;
-import org.blockartistry.DynSurround.client.fx.DustJetEffect;
-import org.blockartistry.DynSurround.client.fx.FireFlyEffect;
-import org.blockartistry.DynSurround.client.fx.FireJetEffect;
-import org.blockartistry.DynSurround.client.fx.FountainJetEffect;
-import org.blockartistry.DynSurround.client.fx.SteamJetEffect;
-import org.blockartistry.DynSurround.client.fx.WaterSplashJetEffect;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.data.xface.BlockConfig;
 import org.blockartistry.DynSurround.data.xface.EffectConfig;
@@ -197,40 +190,21 @@ public final class BlockRegistry extends Registry {
 			}
 
 			for (final EffectConfig e : entry.effects) {
+
 				if (StringUtils.isEmpty(e.effect))
 					continue;
-				BlockEffect blockEffect = null;
-				final int chance = e.chance != null ? e.chance.intValue() : 100;
-				if (StringUtils.equalsIgnoreCase("steam", e.effect)) {
-					if (ModOptions.enableSteamJets)
-						blockEffect = new SteamJetEffect(chance);
-				} else if (StringUtils.equalsIgnoreCase("fire", e.effect)) {
-					if (ModOptions.enableFireJets)
-						blockEffect = new FireJetEffect(chance);
-				} else if (StringUtils.equalsIgnoreCase("bubble", e.effect)) {
-					if (ModOptions.enableBubbleJets)
-						blockEffect = new BubbleJetEffect(chance);
-				} else if (StringUtils.equalsIgnoreCase("dust", e.effect)) {
-					if (ModOptions.enableDustJets)
-						blockEffect = new DustJetEffect(chance);
-				} else if (StringUtils.equalsIgnoreCase("fountain", e.effect)) {
-					if (ModOptions.enableFountainJets)
-						blockEffect = new FountainJetEffect(chance);
-				} else if (StringUtils.equalsIgnoreCase("firefly", e.effect)) {
-					if (ModOptions.enableFireflies)
-						blockEffect = new FireFlyEffect(chance);
-				} else if (StringUtils.equalsIgnoreCase("splash", e.effect)) {
-					if (ModOptions.enableWaterSplash)
-						blockEffect = new WaterSplashJetEffect(chance);
-				} else {
-					DSurround.log().warn("Unknown effect type in config: '%s'", e.effect);
-					continue;
-				}
 
-				if (blockEffect != null) {
-					if (e.conditions != null)
-						blockEffect.setConditions(e.conditions);
-					blockData.addEffect(blockEffect);
+				final BlockEffectType type = BlockEffectType.get(e.effect);
+				if (type == BlockEffectType.UNKNOWN) {
+					DSurround.log().warn("Unknown block effect type in configuration: [%s]", e.effect);
+				} else if (type.isEnabled()) {
+					final int chance = e.chance != null ? e.chance.intValue() : 100;
+					final BlockEffect blockEffect = type.getInstance(chance);
+					if (blockEffect != null) {
+						if (e.conditions != null)
+							blockEffect.setConditions(e.conditions);
+						blockData.addEffect(blockEffect);
+					}
 				}
 			}
 		}
