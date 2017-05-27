@@ -30,7 +30,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.implem.ConfigOptions;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
@@ -121,7 +120,7 @@ public class Solver {
 		final BlockPos pos = new BlockPos(xx, minY - 0.1D - verticalOffsetAsMinus, zz);
 
 		final Association result = addSoundOverlay(findAssociationForLocation(player, pos));
-		if (ModOptions.enableFootprints && result != null && !player.isJumping)
+		if (result != null && !player.isJumping)
 			result.setStepLocation(new Vec3d(xx, minY, zz), rotDegrees, isRightFoot);
 
 		return result;
