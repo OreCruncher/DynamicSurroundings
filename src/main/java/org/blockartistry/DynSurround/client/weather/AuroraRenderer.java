@@ -55,7 +55,6 @@ import org.lwjgl.opengl.GL11;
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
 public final class AuroraRenderer extends IRenderHandler {
 
-	protected static final DimensionRegistry registry = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION);
 	protected static final Set<Class<?>> BLACK_LIST = new IdentityHashSet<Class<?>>();
 
 	private static void registerBlackListClass(@Nonnull final String clazz) {
@@ -226,7 +225,8 @@ public final class AuroraRenderer extends IRenderHandler {
 		final IRenderHandler handler = world.provider.getSkyRenderer();
 		if (handler instanceof AuroraRenderer)
 			return false;
-
+		
+		final DimensionRegistry registry = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION);
 		if (!registry.hasAuroras(world))
 			return false;
 
