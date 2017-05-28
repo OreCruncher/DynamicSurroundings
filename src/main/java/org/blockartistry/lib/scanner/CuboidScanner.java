@@ -47,16 +47,18 @@ public abstract class CuboidScanner extends Scanner {
 	protected BlockPos lastPos;
 	protected int lastDimension = 0;
 
-	protected CuboidScanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int range, final int blocksPerTick) {
+	protected CuboidScanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int range,
+			final int blocksPerTick) {
 		super(locus, name, range, blocksPerTick);
 	}
 
-	protected CuboidScanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int xRange, final int yRange, final int zRange) {
+	protected CuboidScanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int xRange,
+			final int yRange, final int zRange) {
 		super(locus, name, xRange, yRange, zRange);
 	}
 
-	protected CuboidScanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int xSize, final int ySize, final int zSize,
-			final int blocksPerTick) {
+	protected CuboidScanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int xSize,
+			final int ySize, final int zSize, final int blocksPerTick) {
 		super(locus, name, xSize, ySize, zSize, blocksPerTick);
 	}
 
@@ -222,11 +224,25 @@ public abstract class CuboidScanner extends Scanner {
 		return null;
 	}
 
+	protected boolean isInteresting(@Nonnull final BlockUpdateEvent event) {
+		if (this.activeCuboid == null || event.oldState == event.newState)
+			return false;
+
+		if (!this.activeCuboid.contains(event.pos))
+			return false;
+
+		if (!this.interestingBlock(event.newState))
+			return false;
+
+		return this.blockProvider.isAvailable(event.pos);
+	}
+
 	@SubscribeEvent(receiveCanceled = false)
 	public void onBlockUpdate(@Nonnull final BlockUpdateEvent event) {
 		try {
-			if (this.activeCuboid != null && this.activeCuboid.contains(event.pos) && this.interestingBlock(event.newState))
+			if (isInteresting(event)) {
 				blockScan(event.newState, event.pos, this.random);
+			}
 		} catch (final Throwable t) {
 			this.log.error("onBlockUpdate() error", t);
 		}
