@@ -1,3 +1,12 @@
+###DynamicSurroundings-1.10.2-3.4.5.1
+**Fixes**
+* An empty potion bubble would display in the HUD when a Tinker's trait effect happened.  Added additional checks to prevent it from happening.
+* No more insect buzz spot sound when it is raining
+* Address crash related to Galacticraft Orbital Station dimension
+
+**Changes**
+* Footprints age faster when raining; more intense the storm the faster the rate of decay
+
 ###DynamicSurroundings-1.10.2-3.4.5.0
 **Fixes**
 * Playing a sound in the Individual Sound Configuration dialog will mute playing music.  This will only work if Dynamic Surroundings replaces Vanilla's MusicTicker (i.e. if Actual Music is installed it will not work).
