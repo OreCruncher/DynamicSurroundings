@@ -33,13 +33,24 @@ import net.minecraftforge.fml.common.Loader;
  */
 public enum ModEnvironment {
 	
+	//
 	ToughAsNails("ToughAsNails"),
+	//
 	CalendarAPI("CalendarAPI"),
+	//
 	Weather2("weather2"),
+	//
 	EnderIO("EnderIO"),
+	//
 	Chisel("chisel"),
+	//
 	OpenTerrainGenerator("openterraingenerator"),
-	ActualMusic("actualmusic");
+	//
+	ActualMusic("actualmusic"),
+	//
+	GalacticraftCore("galacticraftcore"),
+	//
+	GalacticraftPlanets("galacticraftplanets");
 	
 	protected final String modId;
 	protected boolean isLoaded;
