@@ -32,6 +32,7 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.RegistryManager;
@@ -127,16 +128,20 @@ public class SoundManagerReplacement extends SoundManager {
 
 	@Override
 	public void playSound(@Nonnull final ISound sound) {
-		if (sound instanceof BasicSound<?>) {
-			final BasicSound<?> state = (BasicSound<?>) sound;
-			state.setId(StringUtils.EMPTY);
-			super.playSound(sound);
-			if (StringUtils.isEmpty(state.getId()))
-				state.setState(SoundState.ERROR);
-			else
-				state.setState(SoundState.PLAYING);
-		} else {
-			super.playSound(sound);
+		if (sound != null) {
+			if (sound instanceof BasicSound<?>) {
+				final BasicSound<?> state = (BasicSound<?>) sound;
+				state.setId(StringUtils.EMPTY);
+				if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC)
+					super.playSound(sound);
+				if (StringUtils.isEmpty(state.getId()))
+					state.setState(SoundState.ERROR);
+				else
+					state.setState(SoundState.PLAYING);
+			} else {
+				if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC)
+					super.playSound(sound);
+			}
 		}
 	}
 
