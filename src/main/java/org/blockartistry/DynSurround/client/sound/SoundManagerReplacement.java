@@ -127,6 +127,13 @@ public class SoundManagerReplacement extends SoundManager {
 
 	@Override
 	public void playSound(@Nonnull final ISound sound) {
+		if (ModEnvironment.ActualMusic.isLoaded()) {
+			if ( sound == null )
+				return;
+			
+			if ( sound.getCategory() == SoundCategory.MUSIC )
+				return;
+		}
 		if (sound instanceof BasicSound<?>) {
 			final BasicSound<?> state = (BasicSound<?>) sound;
 			state.setId(StringUtils.EMPTY);
