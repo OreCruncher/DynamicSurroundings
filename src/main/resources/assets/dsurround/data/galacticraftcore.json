@@ -1,0 +1,88 @@
+{
+	"biomes": [
+		{
+			"conditions": "MATCH('(?i)(.*space.*)', biome.name)",
+			"_comment": "Galacticraft Space",
+			"soundReset": true,
+			"sounds": [
+			]
+		},
+		{
+			"conditions": "MATCH('(?i)(.*moon.*)', biome.name)",
+			"_comment": "Galacticraft Moon",
+			"soundReset": true,
+			"sounds": [
+			]
+		},
+		{
+			"conditions": "MATCH('(?i)(.*mars flat.*)', biome.name)",
+			"_comment": "Galacticraft Mars",
+			"stepSoundReset": true,
+			"soundReset": true,
+			"sounds": [
+				{
+					"sound": "dsurround:wind",
+					"volume": 0.3,
+					"repeatDelayRandom": 60
+				}
+			]
+		},
+		{
+			"conditions": "MATCH('(?i)(.*asteroids.*)', biome.name)",
+			"_comment": "Galacticraft Asteroids",
+			"soundReset": true,
+			"sounds": [
+			]
+		},
+		{
+			"conditions": "MATCH('(?i)(.*venus.*)', biome.name)",
+			"_comment": "Galacticraft Venus",
+			"stepSoundReset": true,
+			"soundReset": true,
+			"sounds": [
+				{
+					"sound": "dsurround:wind",
+					"volume": 1.2,
+					"repeatDelayRandom": 10
+				}
+			]
+		}
+	],
+	"dimensions": [
+		{
+			"dimId": 2,
+			"weather": false,
+			"haze": false,
+			"aurora": false,
+			"seaLevel": 0
+		},
+		{
+			"dimId": -28,
+			"weather": false,
+			"haze": false,
+			"aurora": false,
+			"seaLevel": 0
+		},
+		{
+			"dimId": -29,
+			"weather": false,
+			"haze": false,
+			"aurora": false,
+			"seaLevel": 0
+		},
+		{
+			"dimId": -30,
+			"weather": false,
+			"haze": false,
+			"aurora": false,
+			"seaLevel": 0
+		},
+		{
+			"dimId": -31,
+			"weather": false,
+			"haze": false,
+			"aurora": false,
+			"seaLevel": 0
+		}
+	]
+}

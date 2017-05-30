@@ -231,7 +231,10 @@ public class FootstepsRegistry extends Registry {
 
 	public void process(@Nonnull World world, @Nonnull EntityPlayer player) {
 		this.isolator.onFrame(player);
-		player.nextStepDistance = Integer.MAX_VALUE;
+		if (ModOptions.footstepsSoundFactor > 0)
+			player.nextStepDistance = Integer.MAX_VALUE;
+		else if(player.nextStepDistance == Integer.MAX_VALUE)
+			player.nextStepDistance = 0;
 	}
 
 	@Nonnull
