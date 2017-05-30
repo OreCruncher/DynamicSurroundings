@@ -51,9 +51,9 @@ public class VolumeControlGui extends GuiScreen implements GuiResponder {
 			return Localization.format("dlg.format.Display", name, (int) (value * 100));
 		}
 	};
-	
+
 	public static final int SLIDER_WIDTH = 200;
-	
+
 	private static final int ID_MASTER_SOUND = 1;
 	private static final int ID_BIOME_SOUND = 2;
 	private static final int ID_FOOTSTEP_SOUND = 3;
@@ -67,32 +67,36 @@ public class VolumeControlGui extends GuiScreen implements GuiResponder {
 	protected float footstep = ModOptions.footstepsSoundFactor;
 
 	protected Panel panel = new Panel();
-	
+
 	private void addSlider(final GuiSlider slider) {
 		slider.setWidth(SLIDER_WIDTH);
 		addButton(slider);
 	}
-	
+
 	@Override
 	public void initGui() {
 		final int drawX = (this.width + 1) / 2 - SLIDER_WIDTH / 2;
 		final int drawY = 40;
-		
-		addSlider(new GuiSlider(this, ID_MASTER_SOUND, drawX, drawY, "dlg.name.MasterSound", 0F, 1F, this.master, FORMAT));
-		addSlider(new GuiSlider(this, ID_BIOME_SOUND, drawX, drawY + 25, "dlg.name.BiomeSound", 0F, 1F, this.biome, FORMAT));
-		addSlider(new GuiSlider(this, ID_FOOTSTEP_SOUND, drawX, drawY + 50, "dlg.name.FootstepSound", 0F, 1F, this.footstep, FORMAT));
 
-		final GuiLabel label = new GuiLabel(mc.fontRendererObj, ID_LABEL, drawX, drawY + 75, SLIDER_WIDTH, 10, Color.MC_WHITE.rgb());
+		addSlider(new GuiSlider(this, ID_MASTER_SOUND, drawX, drawY, "dlg.name.MasterSound", 0F, 1F, this.master,
+				FORMAT));
+		addSlider(new GuiSlider(this, ID_BIOME_SOUND, drawX, drawY + 25, "dlg.name.BiomeSound", 0F, 1F, this.biome,
+				FORMAT));
+		addSlider(new GuiSlider(this, ID_FOOTSTEP_SOUND, drawX, drawY + 50, "dlg.name.FootstepSound", 0F, 1F,
+				this.footstep, FORMAT));
+
+		final GuiLabel label = new GuiLabel(mc.fontRendererObj, ID_LABEL, drawX, drawY + 75, SLIDER_WIDTH, 10,
+				Color.MC_WHITE.rgb());
 		label.setCentered().addLine(Localization.format("dlg.name.Close"));
 		this.labelList.add(label);
-		
+
 		this.panel.setMinimumWidth(SLIDER_WIDTH + mc.fontRendererObj.FONT_HEIGHT * 2);
 		this.panel.setMinimumHeight(4 * 25);
 	}
-	
+
 	@Override
-    public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
-        this.drawDefaultBackground();
+	public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
+		this.drawDefaultBackground();
 		final int drawX = (this.width + 1) / 2;
 		final int drawY = 30;
 		this.panel.render(drawX, drawY, Reference.TOP_CENTER);
@@ -130,6 +134,11 @@ public class VolumeControlGui extends GuiScreen implements GuiResponder {
 
 		ModOptions.masterSoundScaleFactor = this.biome;
 		ModOptions.footstepsSoundFactor = this.footstep;
+
+		this.config.getCategory(ModOptions.CATEGORY_SOUND).get(ModOptions.CONFIG_MASTER_SOUND_FACTOR)
+				.set(ModOptions.masterSoundScaleFactor);
+		this.config.getCategory(ModOptions.CATEGORY_SOUND).get(ModOptions.CONFIG_FOOTSTEPS_SOUND_FACTOR)
+				.set(ModOptions.footstepsSoundFactor);
 		this.config.save();
 	}
 

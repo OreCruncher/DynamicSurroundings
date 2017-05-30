@@ -91,7 +91,7 @@ public class FootstepsRegistry extends Registry {
 		reloadPrimitiveMap(repo);
 
 		seedMap();
-		
+
 		this.isolator.setSolver(new Solver(this.isolator));
 		this.isolator.setGenerator(
 				ModOptions.foostepsQuadruped ? new GeneratorQP(this.isolator) : new Generator(this.isolator));
@@ -231,7 +231,10 @@ public class FootstepsRegistry extends Registry {
 
 	public void process(@Nonnull World world, @Nonnull EntityPlayer player) {
 		this.isolator.onFrame(player);
-		player.nextStepDistance = Integer.MAX_VALUE;
+		if (ModOptions.footstepsSoundFactor > 0)
+			player.nextStepDistance = Integer.MAX_VALUE;
+		else if(player.nextStepDistance == Integer.MAX_VALUE)
+			player.nextStepDistance = 0;
 	}
 
 	@Nonnull

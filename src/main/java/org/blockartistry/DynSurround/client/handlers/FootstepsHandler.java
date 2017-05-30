@@ -51,7 +51,7 @@ public class FootstepsHandler extends EffectHandlerBase {
 
 		this.footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
 	}
-	
+
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 		this.footsteps.process(world, player);
