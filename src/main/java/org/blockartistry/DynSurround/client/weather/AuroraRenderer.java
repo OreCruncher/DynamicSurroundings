@@ -43,6 +43,8 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.client.handlers.AuroraEffectHandler;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
@@ -59,14 +61,15 @@ public final class AuroraRenderer extends IRenderHandler {
 	private static void registerBlackListClass(@Nonnull final String clazz) {
 		try {
 			BLACK_LIST.add(Class.forName(clazz));
+			DSurround.log().info("Aurora provider blacklist detected [%s]", clazz);
 		} catch (@Nonnull final ClassNotFoundException e) {
-			// Mods may not be loaded
-			;
+			DSurround.log().warn("Aurora provider unable to blacklist [%s]", clazz);
 		}
 	}
-	
-	static {
-		registerBlackListClass("micdoodle8.mods.galacticraft.core.client.SkyProviderOrbit");
+
+	public static void initialize() {
+		if (ModEnvironment.GalacticraftCore.isLoaded())
+			registerBlackListClass("micdoodle8.mods.galacticraft.core.client.SkyProviderOrbit");
 	}
 
 	protected final IRenderHandler handler;

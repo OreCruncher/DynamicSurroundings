@@ -70,7 +70,7 @@ public class DSurround {
 	public static final String RESOURCE_ID = "dsurround";
 	public static final String MOD_NAME = "Dynamic Surroundings";
 	public static final String VERSION = "@VERSION@";
-	public static final String DEPENDENCIES = "before:presets";
+	public static final String DEPENDENCIES = "before:presets; after:galacticraftcore";
 	public static final String GUI_FACTORY = "org.blockartistry.DynSurround.client.gui.ConfigGuiFactory";
 	public static final String UPDATE_URL = "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json";
 
