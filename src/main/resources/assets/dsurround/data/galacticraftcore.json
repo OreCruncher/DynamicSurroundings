@@ -50,35 +50,35 @@
 	],
 	"dimensions": [
 		{
-			"dimId": 2,
+			"name": "Space Station",
 			"weather": false,
 			"haze": false,
 			"aurora": false,
 			"seaLevel": 0
 		},
 		{
-			"dimId": -28,
+			"name": "Moon",
 			"weather": false,
 			"haze": false,
 			"aurora": false,
 			"seaLevel": 0
 		},
 		{
-			"dimId": -29,
+			"name": "Mars",
 			"weather": false,
 			"haze": false,
 			"aurora": false,
 			"seaLevel": 0
 		},
 		{
-			"dimId": -30,
+			"name": "Asteroids",
 			"weather": false,
 			"haze": false,
 			"aurora": false,
 			"seaLevel": 0
 		},
 		{
-			"dimId": -31,
+			"name": "Venus",
 			"weather": false,
 			"haze": false,
 			"aurora": false,
