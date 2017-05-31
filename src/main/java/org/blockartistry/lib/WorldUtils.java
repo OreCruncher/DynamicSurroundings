@@ -49,6 +49,11 @@ public final class WorldUtils {
 
 	}
 
+	@Nonnull
+	public static BlockStateProvider getDefaultBlockStateProvider() {
+		return blockProvider.get();
+	}
+
 	@Nullable
 	public static Entity locateEntity(@Nonnull final World world, @Nonnull final UUID entityId) {
 		if (world == null)
@@ -94,24 +99,24 @@ public final class WorldUtils {
 
 	@Nonnull
 	public static IBlockState getBlockState(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return blockProvider.get().setWorld(world).getBlockState(pos);
+		return getDefaultBlockStateProvider().setWorld(world).getBlockState(pos);
 	}
 
 	@Nonnull
 	public static IBlockState getBlockState(@Nonnull final World world, final int x, final int y, final int z) {
-		return blockProvider.get().setWorld(world).getBlockState(x, y, z);
+		return getDefaultBlockStateProvider().setWorld(world).getBlockState(x, y, z);
 	}
 
 	public static boolean isFullWaterBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return isFullWaterBlock(blockProvider.get().setWorld(world).getBlockState(pos));
+		return isFullWaterBlock(getDefaultBlockStateProvider().setWorld(world).getBlockState(pos));
 	}
 
 	public static boolean isFullWaterBlock(@Nonnull final IBlockState state) {
 		return state.getMaterial() == Material.WATER && state.getBlock().getDefaultState() == state;
 	}
-	
+
 	public static boolean isChunkAvailable(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return blockProvider.get().setWorld(world).isAvailable(pos);
+		return getDefaultBlockStateProvider().setWorld(world).isAvailable(pos);
 	}
 
 }
