@@ -51,37 +51,22 @@
 	"dimensions": [
 		{
 			"name": "Space Station",
-			"weather": false,
-			"haze": false,
-			"aurora": false,
 			"seaLevel": 0
 		},
 		{
 			"name": "Moon",
-			"weather": false,
-			"haze": false,
-			"aurora": false,
 			"seaLevel": 0
 		},
 		{
 			"name": "Mars",
-			"weather": false,
-			"haze": false,
-			"aurora": false,
 			"seaLevel": 0
 		},
 		{
 			"name": "Asteroids",
-			"weather": false,
-			"haze": false,
-			"aurora": false,
 			"seaLevel": 0
 		},
 		{
 			"name": "Venus",
-			"weather": false,
-			"haze": false,
-			"aurora": false,
 			"seaLevel": 0
 		}
 	]

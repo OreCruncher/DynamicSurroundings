@@ -38,39 +38,19 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-import java.util.Set;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.client.handlers.AuroraEffectHandler;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Color;
-import org.blockartistry.lib.collections.IdentityHashSet;
 import org.lwjgl.opengl.GL11;
 
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
 public final class AuroraRenderer extends IRenderHandler {
-
-	protected static final Set<Class<?>> BLACK_LIST = new IdentityHashSet<Class<?>>();
-
-	private static void registerBlackListClass(@Nonnull final String clazz) {
-		try {
-			BLACK_LIST.add(Class.forName(clazz));
-			DSurround.log().info("Aurora provider blacklist detected [%s]", clazz);
-		} catch (@Nonnull final ClassNotFoundException e) {
-			DSurround.log().warn("Aurora provider unable to blacklist [%s]", clazz);
-		}
-	}
-
-	public static void initialize() {
-		if (ModEnvironment.GalacticraftCore.isLoaded())
-			registerBlackListClass("micdoodle8.mods.galacticraft.core.client.SkyProviderOrbit");
-	}
 
 	protected final IRenderHandler handler;
 
@@ -227,14 +207,11 @@ public final class AuroraRenderer extends IRenderHandler {
 		final IRenderHandler handler = world.provider.getSkyRenderer();
 		if (handler instanceof AuroraRenderer)
 			return false;
-		
+
 		final DimensionRegistry registry = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION);
-		if (!registry.hasAuroras(world))
-			return false;
-
-		return handler == null || !BLACK_LIST.contains(handler.getClass());
+		return registry.hasAuroras(world);
 	}
-
+	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void doRender(@Nonnull final RenderWorldLastEvent event) {
 		// Make sure that the sky renderer is an aurora renderer

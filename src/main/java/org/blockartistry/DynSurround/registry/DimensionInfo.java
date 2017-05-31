@@ -29,39 +29,41 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.data.xface.DimensionConfig;
 
+import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
+
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 
 public final class DimensionInfo {
-	
+
 	public static final DimensionInfo NONE = new DimensionInfo();
 
 	private static final int SPACE_HEIGHT_OFFSET = 32;
 
 	protected final int dimensionId;
-	protected String name = "<NOT SET>";
+	protected final String name;
+
 	protected int seaLevel;
 	protected int skyHeight;
 	protected int cloudHeight;
 	protected int spaceHeight;
-	protected boolean hasHaze;
-	protected boolean hasAuroras;
-	protected boolean hasWeather;
-	protected boolean hasFog;
+	protected boolean hasHaze = false;
+	protected boolean hasAuroras = false;
+	protected boolean hasWeather = false;
+	protected boolean hasFog = false;
 
 	private DimensionInfo() {
 		this.dimensionId = Integer.MIN_VALUE;
+		this.name = "<NOT SET>";
 	}
-	
+
 	public DimensionInfo(@Nonnull final World world) {
 		this.dimensionId = world.provider.getDimension();
 		this.name = world.provider.getDimensionType().getName();
 		this.seaLevel = world.getSeaLevel();
 		this.skyHeight = world.getHeight();
-		this.hasHaze = !world.provider.hasNoSky();
-		this.hasAuroras = !world.provider.hasNoSky();
-		this.hasWeather = !world.provider.hasNoSky();
-		this.cloudHeight = this.hasHaze ? this.skyHeight / 2 : this.skyHeight;
+		this.cloudHeight = this.skyHeight;
 		this.spaceHeight = this.skyHeight + SPACE_HEIGHT_OFFSET;
 
 		// Force sea level based on known world types that give heartburn
@@ -88,6 +90,8 @@ public final class DimensionInfo {
 			this.hasWeather = entry.hasWeather;
 		if (entry.cloudHeight != null)
 			this.cloudHeight = entry.cloudHeight;
+		else
+			this.cloudHeight = this.hasHaze ? this.skyHeight / 2 : this.skyHeight;
 		if (entry.hasFog != null)
 			this.hasFog = entry.hasFog;
 
@@ -129,7 +133,7 @@ public final class DimensionInfo {
 	public boolean getHasWeather() {
 		return this.hasWeather;
 	}
-	
+
 	public boolean getHasFog() {
 		return this.hasFog;
 	}
@@ -137,15 +141,16 @@ public final class DimensionInfo {
 	@Override
 	@Nonnull
 	public String toString() {
-		final StringBuilder builder = new StringBuilder();
-		builder.append(this.dimensionId).append('/').append(this.name).append(':');
-		builder.append(" seaLevel:").append(this.seaLevel);
-		builder.append(" cloudH:").append(this.cloudHeight);
-		builder.append(" skyH:").append(this.skyHeight);
-		builder.append(" haze:").append(Boolean.toString(this.hasHaze));
-		builder.append(" aurora:").append(Boolean.toString(this.hasAuroras));
-		builder.append(" weather:").append(Boolean.toString(this.hasWeather));
-		builder.append(" fog:").append(Boolean.toString(this.hasFog));
+		final ToStringHelper builder = Objects.toStringHelper(this);
+		builder.add("id", this.dimensionId);
+		builder.add("name", this.name);
+		builder.add("seaLevel", this.seaLevel);
+		builder.add("cloudHeight", this.cloudHeight);
+		builder.add("skyHeight", this.skyHeight);
+		builder.add("haze", this.hasHaze);
+		builder.add("aurora", this.hasAuroras);
+		builder.add("weather", this.hasWeather);
+		builder.add("fog", this.hasFog);
 		return builder.toString();
 	}
 
