@@ -700,21 +700,19 @@
 	"dimensions": [
 		{
 			"dimId": 0,
-			"fog": true
+			"weather": true,
+			"fog": true,
+			"haze": true,
+			"aurora": true
 		},
 		{
 			"dimId": -1,
 			"weather": true,
 			"fog": true,
-			"haze": false,
-			"aurora": false,
 			"seaLevel": 0
 		},
 		{
 			"dimId": 1,
-			"weather": false,
-			"haze": false,
-			"aurora": false,
 			"seaLevel": 0,
 			"cloudHeight": 128
 		}

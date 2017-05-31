@@ -45,7 +45,7 @@ public class DimensionConfig {
 	@SerializedName("weather")
 	public Boolean hasWeather = null;
 	@SerializedName("fog")
-	public Boolean hasFog;
+	public Boolean hasFog = null;
 
 	@Override
 	@Nonnull
