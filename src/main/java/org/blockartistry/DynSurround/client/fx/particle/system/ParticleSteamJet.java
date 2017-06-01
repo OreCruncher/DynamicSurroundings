@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.fx.particle.system;
 
 import org.blockartistry.DynSurround.client.fx.SteamJetEffect;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleSteamCloud;
+import org.blockartistry.lib.WorldUtils;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
@@ -41,7 +42,7 @@ public class ParticleSteamJet extends ParticleJet {
 
 	@Override
 	public boolean shouldDie() {
-		return !SteamJetEffect.isValidSpawnBlock(this.world, this.getPos());
+		return !SteamJetEffect.isValidSpawnBlock(WorldUtils.getDefaultBlockStateProvider(), this.getPos());
 	}
 
 	@Override

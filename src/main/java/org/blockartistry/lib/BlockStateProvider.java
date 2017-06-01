@@ -27,6 +27,7 @@ package org.blockartistry.lib;
 import java.lang.ref.WeakReference;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -80,6 +81,11 @@ public class BlockStateProvider {
 		}
 		return this;
 	}
+	
+	@Nullable
+	public World getWorld() {
+		return this.world.get();
+	}
 
 	@Nonnull
 	public IBlockState getBlockState(@Nonnull final BlockPos pos) {
@@ -92,10 +98,11 @@ public class BlockStateProvider {
 		if (y >= 0 && y < 256) {
 
 			final ExtendedBlockStorage[] storageArrays = resolveChunk(x, z).getBlockStorageArray();
+			final int idx = y >> 4;
 
-			if (y >> 4 < storageArrays.length) {
+			if (idx < storageArrays.length) {
 
-				final ExtendedBlockStorage extendedblockstorage = storageArrays[y >> 4];
+				final ExtendedBlockStorage extendedblockstorage = storageArrays[idx];
 
 				if (extendedblockstorage != Chunk.NULL_BLOCK_STORAGE) {
 					return extendedblockstorage.get(x & 15, y & 15, z & 15);

@@ -26,12 +26,11 @@ package org.blockartistry.DynSurround.client.fx;
 
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
 import org.blockartistry.DynSurround.client.handlers.ParticleSystemHandler;
-import org.blockartistry.lib.WorldUtils;
-
+import org.blockartistry.lib.BlockStateProvider;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -40,11 +39,12 @@ public abstract class JetEffect extends BlockEffect {
 
 	protected static final int MAX_STRENGTH = 10;
 
-	protected static int countBlocks(final World world, final BlockPos pos, final IBlockState state, final int dir) {
+	protected static int countBlocks(final BlockStateProvider provider, final BlockPos pos, final IBlockState state, final int dir) {
 		int count = 0;
 		int idx = pos.getY();
 		while (count < MAX_STRENGTH) {
-			if (WorldUtils.getBlockState(world, pos.getX(), idx, pos.getZ()).getBlock() != state.getBlock())
+			final Block block = provider.getBlockState(pos.getX(), idx, pos.getZ()).getBlock();
+			if (block != state.getBlock())
 				return count;
 			count++;
 			idx += dir;

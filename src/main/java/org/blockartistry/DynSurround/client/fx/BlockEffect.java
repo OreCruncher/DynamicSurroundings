@@ -33,10 +33,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.DynSurround.api.events.BlockEffectEvent;
 import org.blockartistry.DynSurround.registry.Evaluator;
+import org.blockartistry.lib.BlockStateProvider;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -74,24 +74,24 @@ public abstract class BlockEffect implements ISpecialEffect {
 	public int getChance() {
 		return this.chance;
 	}
-	
+
 	public boolean alwaysExecute() {
 		return this.chance == 0;
 	}
 
 	/**
-	 * Determines if the effect can trigger.  Classes that override this method should
-	 * make sure to call the parent last to avoid necessary CPU churn related to
-	 * the script check.
+	 * Determines if the effect can trigger. Classes that override this method
+	 * should make sure to call the parent last to avoid necessary CPU churn
+	 * related to the script check.
 	 */
 	@Override
-	public boolean canTrigger(@Nonnull final IBlockState state, @Nonnull final World world, @Nonnull final BlockPos pos,
-			@Nonnull final Random random) {
+	public boolean canTrigger(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		if (!alwaysExecute() && random.nextInt(getChance()) != 0)
 			return false;
 
 		if (Evaluator.check(getConditions())) {
-			final BlockEffectEvent event = new BlockEffectEvent(world, getEffectType(), pos);
+			final BlockEffectEvent event = new BlockEffectEvent(provider.getWorld(), getEffectType(), pos);
 			return !MinecraftForge.EVENT_BUS.post(event);
 		}
 
@@ -102,7 +102,7 @@ public abstract class BlockEffect implements ISpecialEffect {
 	 * Override to provide the body of the effect that is to take place.
 	 */
 	@Override
-	public abstract void doEffect(@Nonnull final IBlockState state, @Nonnull final World world,
+	public abstract void doEffect(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random);
 
 	@Override

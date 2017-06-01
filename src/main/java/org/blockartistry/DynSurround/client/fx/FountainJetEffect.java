@@ -31,11 +31,10 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleFountainJet;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
-import org.blockartistry.lib.WorldUtils;
-
+import org.blockartistry.lib.BlockStateProvider;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -53,14 +52,17 @@ public class FountainJetEffect extends JetEffect {
 	}
 
 	@Override
-	public boolean canTrigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		return WorldUtils.isAirBlock(world, pos.getX(), pos.getY() + 1, pos.getZ())
-				&& super.canTrigger(state, world, pos, random);
+	public boolean canTrigger(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+			@Nonnull final BlockPos pos, @Nonnull final Random random) {
+		final boolean isAirBlock = provider.getBlockState(pos.getX(), pos.getY() + 1, pos.getZ())
+				.getMaterial() == Material.AIR;
+		return isAirBlock && super.canTrigger(provider, state, pos, random);
 	}
 
 	@Override
-	public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		final ParticleJet effect = new ParticleFountainJet(5, world, pos.getX() + 0.5D, pos.getY() + 1.1D,
+	public void doEffect(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+			@Nonnull final BlockPos pos, @Nonnull final Random random) {
+		final ParticleJet effect = new ParticleFountainJet(5, provider.getWorld(), pos.getX() + 0.5D, pos.getY() + 1.1D,
 				pos.getZ() + 0.5D, state);
 		addEffect(effect);
 	}
