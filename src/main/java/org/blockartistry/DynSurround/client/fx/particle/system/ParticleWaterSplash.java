@@ -49,7 +49,7 @@ public class ParticleWaterSplash extends ParticleJet {
 
 	@Override
 	public boolean shouldDie() {
-		return !WaterSplashJetEffect.isValidSpawnBlock(this.world, this.getPos());
+		return !WaterSplashJetEffect.isValidSpawnBlock(WorldUtils.getDefaultBlockStateProvider(), this.getPos());
 	}
 
 	private boolean setupSound() {

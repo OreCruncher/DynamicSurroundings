@@ -69,7 +69,7 @@ public class BlockEffectHandler extends EffectHandlerBase {
 			final IBlockState state = WorldUtils.getBlockState(world, pos);
 			final SoundEffect sound = this.registry.getStepSoundToPlay(state, RANDOM);
 			if (sound != null)
-				sound.doEffect(state, world, pos, RANDOM);
+				sound.doEffect(WorldUtils.getDefaultBlockStateProvider(), state, pos, RANDOM);
 		}
 	}
 

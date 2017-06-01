@@ -31,12 +31,12 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleFireFly;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
+import org.blockartistry.lib.BlockStateProvider;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -54,11 +54,12 @@ public class FireFlyEffect extends BlockEffect {
 	}
 
 	@Override
-	public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		final AxisAlignedBB box = state.getBoundingBox(world, pos);
+	public void doEffect(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+			@Nonnull final BlockPos pos, @Nonnull final Random random) {
+		final AxisAlignedBB box = state.getBoundingBox(provider.getWorld(), pos);
 		final Vec3d loc = box.getCenter();
-		final ParticleFireFly fly = new ParticleFireFly(world, pos.getX() + loc.xCoord, pos.getY() + box.maxY,
-				pos.getZ() + loc.zCoord);
+		final ParticleFireFly fly = new ParticleFireFly(provider.getWorld(), pos.getX() + loc.xCoord,
+				pos.getY() + box.maxY, pos.getZ() + loc.zCoord);
 		ParticleHelper.addParticle(fly);
 	}
 

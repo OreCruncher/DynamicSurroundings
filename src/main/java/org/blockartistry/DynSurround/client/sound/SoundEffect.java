@@ -37,6 +37,7 @@ import org.blockartistry.DynSurround.data.xface.SoundType;
 import org.blockartistry.DynSurround.registry.Evaluator;
 import org.blockartistry.DynSurround.registry.SoundMetadata;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
+import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.SoundUtils;
 import org.blockartistry.lib.WeightTable;
 import org.blockartistry.lib.WeightTable.IEntrySource;
@@ -49,7 +50,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -194,13 +194,14 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	}
 
 	@Override
-	public boolean canTrigger(@Nonnull final IBlockState state, @Nonnull final World world, @Nonnull final BlockPos pos,
-			@Nonnull final Random random) {
+	public boolean canTrigger(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		return true;
 	}
 
 	@Override
-	public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
+	public void doEffect(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		SoundEffectHandler.INSTANCE.playSoundAt(pos, this, 0);
 	}
 

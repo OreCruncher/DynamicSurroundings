@@ -31,11 +31,10 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleFireJet;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
-import org.blockartistry.lib.WorldUtils;
-
+import org.blockartistry.lib.BlockStateProvider;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -53,19 +52,19 @@ public class FireJetEffect extends JetEffect {
 	}
 
 	@Override
-	public boolean canTrigger(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		return WorldUtils.isAirBlock(world, pos.getX(), pos.getY() + 1, pos.getZ())
-				&& super.canTrigger(state, world, pos, random);
-		// return super.canTrigger(state, world, pos, random)
-		// && WorldUtils.isAirBlock(world, pos.getX(), pos.getY() + 1,
-		// pos.getZ());
+	public boolean canTrigger(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+			@Nonnull final BlockPos pos, @Nonnull final Random random) {
+		final boolean isAirBlock = provider.getBlockState(pos.getX(), pos.getY() + 1, pos.getZ())
+				.getMaterial() == Material.AIR;
+		return isAirBlock && super.canTrigger(provider, state, pos, random);
 	}
 
 	@Override
-	public void doEffect(final IBlockState state, final World world, final BlockPos pos, final Random random) {
-		final int lavaBlocks = countBlocks(world, pos, state, -1);
+	public void doEffect(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+			@Nonnull final BlockPos pos, @Nonnull final Random random) {
+		final int lavaBlocks = countBlocks(provider, pos, state, -1);
 		final double spawnHeight = jetSpawnHeight(state, pos);
-		final ParticleJet effect = new ParticleFireJet(lavaBlocks, world, pos.getX() + 0.5D, spawnHeight,
+		final ParticleJet effect = new ParticleFireJet(lavaBlocks, provider.getWorld(), pos.getX() + 0.5D, spawnHeight,
 				pos.getZ() + 0.5D);
 		addEffect(effect);
 	}

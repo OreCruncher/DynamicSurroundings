@@ -30,7 +30,6 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.BlockProfile;
 import org.blockartistry.DynSurround.registry.BlockRegistry;
@@ -40,7 +39,6 @@ import org.blockartistry.lib.scanner.RandomScanner;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -78,18 +76,16 @@ public class RandomBlockEffectScanner extends RandomScanner {
 	@Override
 	public void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final Random rand) {
 
-		final World world = EnvironState.getWorld();
-
 		final BlockEffect[] effects = this.profile.getEffects();
 		for (int i = 0; i < effects.length; i++) {
 			final BlockEffect be = effects[i];
-			if (be.canTrigger(state, world, pos, rand))
-				be.doEffect(state, world, pos, rand);
+			if (be.canTrigger(this.blockProvider, state, pos, rand))
+				be.doEffect(this.blockProvider, state, pos, rand);
 		}
 
 		final SoundEffect sound = this.profile.getSoundToPlay(rand);
 		if (sound != null)
-			sound.doEffect(state, world, pos, rand);
+			sound.doEffect(this.blockProvider, state, pos, rand);
 	}
 
 }
