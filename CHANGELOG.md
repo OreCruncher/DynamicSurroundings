@@ -1,3 +1,12 @@
+###DynamicSurroundings-1.11.2-3.4.5.2
+**Fixes**
+* Changed volume scales using the volume dialog weren't saved in the config file (weren't sticky)
+* Setting footstep sound volume scale to 0 will revert to normal Vanilla footstep sounds
+* Fix compatibility with latest ActualMusic (v1.2.0.114+)
+
+**Changes**
+* WIP: Galacticraft/Planets support for biomes/dimensions (based on the work of Ezer'Arch)
+
 ###DynamicSurroundings-1.11.2-3.4.5.1
 **Fixes**
 * An empty potion bubble would display in the HUD when a Tinker's trait effect happened.  Added additional checks to prevent it from happening.
