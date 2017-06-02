@@ -69,6 +69,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class Solver {
 
+	private static final IBlockState AIR_STATE = Blocks.AIR.getDefaultState();
+
 	private final Isolator isolator;
 
 	public Solver(@Nonnull final Isolator isolator) {
@@ -224,18 +226,17 @@ public class Solver {
 		BlockPos tPos = pos.up();
 		final IBlockState above = WorldUtils.getBlockState(world, tPos);
 
-		IAcoustic[] association = isolator.getBlockMap().getBlockSubstrateAcoustics(above, tPos, "carpet");
+		IAcoustic[] association = null;
 
-		// PFLog.debugf("Walking on block: %0 -- Being in block: %1", in,
-		// above);
+		if (above != AIR_STATE)
+			association = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, tPos, "carpet");
 
 		if (association == null || association == AcousticsManager.NOT_EMITTER) {
 			// This condition implies that if the carpet is NOT_EMITTER, solving
 			// will CONTINUE with the actual block surface the player is walking
-			// on
-			// > NOT_EMITTER carpets will not cause solving to skip
+			// on NOT_EMITTER carpets will not cause solving to skip
 
-			if (WorldUtils.isAirBlock(in)) {
+			if (in == AIR_STATE) {
 				tPos = pos.down();
 				final IBlockState below = WorldUtils.getBlockState(world, tPos);
 				association = this.isolator.getBlockMap().getBlockSubstrateAcoustics(below, tPos, "bigger");
@@ -247,16 +248,14 @@ public class Solver {
 			}
 
 			if (association == null) {
-				association = isolator.getBlockMap().getBlockAcoustics(in, pos);
+				association = this.isolator.getBlockMap().getBlockAcoustics(in, pos);
 			}
 
 			if (association != null && association != AcousticsManager.NOT_EMITTER) {
 				// This condition implies that foliage over a NOT_EMITTER block
-				// CANNOT PLAY
-				// This block most not be executed if the association is a
-				// carpet
-				// => this block of code is here, not outside this if else
-				// group.
+				// CANNOT PLAY This block most not be executed if the association
+				// is a carpet => this block of code is here, not outside this
+				// if else group.
 
 				IAcoustic[] foliage = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, pos.up(),
 						"foliage");
@@ -305,7 +304,7 @@ public class Solver {
 	@Nonnull
 	private IAcoustic[] resolvePrimitive(@Nonnull final IBlockState state) {
 
-		if (state.getBlock() == Blocks.AIR)
+		if (state == AIR_STATE)
 			return AcousticsManager.NOT_EMITTER;
 
 		final SoundType type = MCHelper.getSoundType(state);
@@ -382,6 +381,9 @@ public class Solver {
 		final World world = EnvironState.getWorld();
 		final BlockPos up = pos.up();
 		final IBlockState above = WorldUtils.getBlockState(world, up);
+		
+		if (above == AIR_STATE)
+			return null;
 
 		IAcoustic[] association = null;
 		boolean found = false;

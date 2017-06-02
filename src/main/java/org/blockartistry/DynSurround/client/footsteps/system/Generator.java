@@ -69,7 +69,7 @@ public class Generator {
 	private long brushesTime;
 
 	public Generator(@Nonnull final Isolator isolator) {
-		mod = isolator;
+		this.mod = isolator;
 	}
 
 	public void generateFootsteps(@Nonnull final EntityPlayer ply) {
@@ -80,13 +80,13 @@ public class Generator {
 
 	protected boolean stoppedImmobile(float reference) {
 		final long current = TimeUtils.currentTimeMillis();
-		final float diff = lastReference - reference;
-		lastReference = reference;
-		if (!isImmobile && diff == 0f) {
-			timeImmobile = current;
-			isImmobile = true;
-		} else if (isImmobile && diff != 0f) {
-			isImmobile = false;
+		final float diff = this.lastReference - reference;
+		this.lastReference = reference;
+		if (!this.isImmobile && diff == 0f) {
+			this.timeImmobile = current;
+			this.isImmobile = true;
+		} else if (this.isImmobile && diff != 0f) {
+			this.isImmobile = false;
 			return current - timeImmobile > VAR.IMMOBILE_DURATION;
 		}
 
@@ -96,55 +96,54 @@ public class Generator {
 	protected void simulateFootsteps(@Nonnull final EntityPlayer ply) {
 		final float distanceReference = ply.distanceWalkedOnStepModified;
 
-		stepThisFrame = false;
+		this.stepThisFrame = false;
 
-		if (dmwBase > distanceReference) {
-			dmwBase = 0;
-			dwmYChange = 0;
+		if (this.dmwBase > distanceReference) {
+			this.dmwBase = 0;
+			this.dwmYChange = 0;
 		}
 
-		double movX = ply.motionX;
-		double movZ = ply.motionZ;
+		final double movX = ply.motionX;
+		final double movZ = ply.motionZ;
 
-		double scal = movX * xMovec + movZ * zMovec;
-		if (scalStat != scal < 0.001f) {
-			scalStat = !scalStat;
+		double scal = movX * this.xMovec + movZ * this.zMovec;
+		if (this.scalStat != scal < 0.001f) {
+			this.scalStat = !this.scalStat;
 
-			if (scalStat && VAR.PLAY_WANDER && !mod.getSolver().hasSpecialStoppingConditions(ply)) {
-				playSinglefoot(ply, 0d, EventType.WANDER, isRightFoot);
+			if (this.scalStat && VAR.PLAY_WANDER && !this.mod.getSolver().hasSpecialStoppingConditions(ply)) {
+				playSinglefoot(ply, 0d, EventType.WANDER, this.isRightFoot);
 			}
 		}
-		xMovec = movX;
-		zMovec = movZ;
+
+		this.xMovec = movX;
+		this.zMovec = movZ;
 
 		if (ply.onGround || ply.isInWater() || ply.isOnLadder()) {
 			EventType event = null;
 
-			float dwm = distanceReference - dmwBase;
-			boolean immobile = stoppedImmobile(distanceReference);
+			float dwm = distanceReference - this.dmwBase;
+			final boolean immobile = stoppedImmobile(distanceReference);
 			if (immobile && !ply.isOnLadder()) {
 				dwm = 0;
-				dmwBase = distanceReference;
+				this.dmwBase = distanceReference;
 			}
 
 			float distance = 0f;
-			double verticalOffsetAsMinus = 0f;
 
 			if (ply.isOnLadder() && !ply.onGround) {
 				distance = VAR.DISTANCE_LADDER;
 			} else if (!ply.isInWater() && MathStuff.abs(this.yPosition - ply.posY) > 0.4d) {
 				// This ensures this does not get recorded as landing, but as a
 				// step
-				if (yPosition < ply.posY) { // Going upstairs
+				if (this.yPosition < ply.posY) { // Going upstairs
 					distance = VAR.DISTANCE_STAIR;
 					event = speedDisambiguator(ply, EventType.UP, EventType.UP_RUN);
 				} else if (!ply.isSneaking()) { // Going downstairs
 					distance = -1f;
-					verticalOffsetAsMinus = 0f;
 					event = speedDisambiguator(ply, EventType.DOWN, EventType.DOWN_RUN);
 				}
 
-				dwmYChange = distanceReference;
+				this.dwmYChange = distanceReference;
 
 			} else {
 				distance = VAR.DISTANCE_HUMAN;
@@ -155,18 +154,19 @@ public class Generator {
 			}
 
 			distance = reevaluateDistance(event, distance);
-			
+
 			if (dwm > distance) {
-				produceStep(ply, event, verticalOffsetAsMinus);
+				produceStep(ply, event, 0F);
 				stepped(ply, event);
-				dmwBase = distanceReference;
+				this.dmwBase = distanceReference;
 			}
 		}
 
-		if (ply.onGround) { // This fixes an issue where the value is evaluated
-							// while the player is between two steps in the air
-							// while descending stairs
-			yPosition = ply.posY;
+		// This fixes an issue where the value is evaluated
+		// while the player is between two steps in the air
+		// while descending stairs
+		if (ply.onGround) {
+			this.yPosition = ply.posY;
 		}
 	}
 
@@ -183,33 +183,33 @@ public class Generator {
 
 	protected void produceStep(@Nonnull final EntityPlayer ply, @Nullable EventType event,
 			final double verticalOffsetAsMinus) {
-		if (!mod.getSolver().playSpecialStoppingConditions(ply)) {
+		if (!this.mod.getSolver().playSpecialStoppingConditions(ply)) {
 			if (event == null)
 				event = speedDisambiguator(ply, EventType.WALK, EventType.RUN);
-			playSinglefoot(ply, verticalOffsetAsMinus, event, isRightFoot);
-			isRightFoot = !isRightFoot;
+			playSinglefoot(ply, verticalOffsetAsMinus, event, this.isRightFoot);
+			this.isRightFoot = !this.isRightFoot;
 		}
 
-		stepThisFrame = true;
+		this.stepThisFrame = true;
 	}
 
 	protected void simulateAirborne(@Nonnull final EntityPlayer ply) {
-		if ((ply.onGround || ply.isOnLadder()) == isFlying) {
-			isFlying = !isFlying;
+		if ((ply.onGround || ply.isOnLadder()) == this.isFlying) {
+			this.isFlying = !this.isFlying;
 			simulateJumpingLanding(ply);
 		}
 
-		if (isFlying)
-			fallDistance = ply.fallDistance;
+		if (this.isFlying)
+			this.fallDistance = ply.fallDistance;
 	}
 
 	protected void simulateJumpingLanding(@Nonnull final EntityPlayer ply) {
-		if (mod.getSolver().hasSpecialStoppingConditions(ply))
+		if (this.mod.getSolver().hasSpecialStoppingConditions(ply))
 			return;
 
 		final boolean isJumping = ply.isJumping;
 
-		if (isFlying && isJumping) { // ply.isJumping)
+		if (this.isFlying && isJumping) { // ply.isJumping)
 			if (VAR.EVENT_ON_JUMP) {
 				double speed = ply.motionX * ply.motionX + ply.motionZ * ply.motionZ;
 
@@ -220,22 +220,22 @@ public class Generator {
 																// for vertical
 																// offset?)
 				} else {
-					playSinglefoot(ply, 0.4d, EventType.JUMP, isRightFoot); // RUNNING
+					playSinglefoot(ply, 0.4d, EventType.JUMP, this.isRightFoot); // RUNNING
 																			// JUMP
 					// Do not toggle foot: After landing sounds, the first foot
 					// will be same as the one used to jump.
 				}
 			}
-		} else if (!isFlying) {
-			if (fallDistance > VAR.LAND_HARD_DISTANCE_MIN) {
+		} else if (!this.isFlying) {
+			if (this.fallDistance > VAR.LAND_HARD_DISTANCE_MIN) {
 				playMultifoot(ply, 0d, EventType.LAND); // Always assume the
 														// player lands on their
 														// two feet
 				// Do not toggle foot: After landing sounds, the first foot will
 				// be same as the one used to jump.
 			} else if (!this.stepThisFrame && !ply.isSneaking()) {
-				playSinglefoot(ply, 0d, speedDisambiguator(ply, EventType.CLIMB, EventType.CLIMB_RUN), isRightFoot);
-				isRightFoot = !isRightFoot;
+				playSinglefoot(ply, 0d, speedDisambiguator(ply, EventType.CLIMB, EventType.CLIMB_RUN), this.isRightFoot);
+				this.isRightFoot = !this.isRightFoot;
 			}
 
 		}
@@ -243,22 +243,22 @@ public class Generator {
 
 	protected EventType speedDisambiguator(@Nonnull final EntityPlayer ply, @Nonnull final EventType walk,
 			@Nonnull final EventType run) {
-		double velocity = ply.motionX * ply.motionX + ply.motionZ * ply.motionZ;
+		final double velocity = ply.motionX * ply.motionX + ply.motionZ * ply.motionZ;
 		return velocity > VAR.SPEED_TO_RUN ? run : walk;
 	}
 
 	private void simulateBrushes(@Nonnull final EntityPlayer ply) {
 		final long current = TimeUtils.currentTimeMillis();
-		if (brushesTime > current)
+		if (this.brushesTime > current)
 			return;
 
-		brushesTime = current + 100;
+		this.brushesTime = current + 100;
 
 		if ((ply.motionX == 0d && ply.motionZ == 0d) || ply.isSneaking())
 			return;
 
 		final int yy = MathStuff.floor(ply.posY - 0.1d - ply.getYOffset() - (ply.onGround ? 0d : 0.25d));
-		final Association assos = mod.getSolver().findAssociationMessyFoliage(new BlockPos(ply.posX, yy, ply.posZ));
+		final Association assos = this.mod.getSolver().findAssociationMessyFoliage(new BlockPos(ply.posX, yy, ply.posZ));
 		if (assos != null) {
 			if (!this.isMessyFoliage) {
 				this.isMessyFoliage = true;
@@ -278,10 +278,11 @@ public class Generator {
 	protected void playMultifoot(@Nonnull final EntityPlayer ply, final double verticalOffsetAsMinus,
 			final EventType eventType) {
 		// STILL JUMP
-		final Association leftFoot = this.mod.getSolver().findAssociationForPlayer(ply, verticalOffsetAsMinus, false);
-		final Association rightFoot = this.mod.getSolver().findAssociationForPlayer(ply, verticalOffsetAsMinus, true);
-		this.mod.getSolver().playAssociation(ply, leftFoot, eventType);
-		this.mod.getSolver().playAssociation(ply, rightFoot, eventType);
+		final Solver s = this.mod.getSolver();
+		final Association leftFoot = s.findAssociationForPlayer(ply, verticalOffsetAsMinus, false);
+		final Association rightFoot = s.findAssociationForPlayer(ply, verticalOffsetAsMinus, true);
+		s.playAssociation(ply, leftFoot, eventType);
+		s.playAssociation(ply, rightFoot, eventType);
 	}
 
 	protected float scalex(final float number, final float min, final float max) {
