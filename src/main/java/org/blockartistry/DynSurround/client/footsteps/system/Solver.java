@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.implem.ConfigOptions;
+import org.blockartistry.DynSurround.client.footsteps.implem.Substrate;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions.Option;
@@ -229,7 +230,7 @@ public class Solver {
 		IAcoustic[] association = null;
 
 		if (above != AIR_STATE)
-			association = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, tPos, "carpet");
+			association = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, tPos, Substrate.CARPET);
 
 		if (association == null || association == AcousticsManager.NOT_EMITTER) {
 			// This condition implies that if the carpet is NOT_EMITTER, solving
@@ -239,7 +240,7 @@ public class Solver {
 			if (in == AIR_STATE) {
 				tPos = pos.down();
 				final IBlockState below = WorldUtils.getBlockState(world, tPos);
-				association = this.isolator.getBlockMap().getBlockSubstrateAcoustics(below, tPos, "bigger");
+				association = this.isolator.getBlockMap().getBlockSubstrateAcoustics(below, tPos, Substrate.FENCE);
 				if (association != null) {
 					pos = tPos;
 					in = below;
@@ -253,15 +254,18 @@ public class Solver {
 
 			if (association != null && association != AcousticsManager.NOT_EMITTER) {
 				// This condition implies that foliage over a NOT_EMITTER block
-				// CANNOT PLAY This block most not be executed if the association
+				// CANNOT PLAY This block most not be executed if the
+				// association
 				// is a carpet => this block of code is here, not outside this
 				// if else group.
 
-				IAcoustic[] foliage = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, pos.up(),
-						"foliage");
-				if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
-					association = MyUtils.concatenate(association, foliage);
-					DSurround.log().debug("Foliage detected");
+				if (above != AIR_STATE) {
+					IAcoustic[] foliage = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, pos.up(),
+							Substrate.FOLIAGE);
+					if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
+						association = MyUtils.concatenate(association, foliage);
+						DSurround.log().debug("Foliage detected");
+					}
 				}
 			}
 		} else {
@@ -381,7 +385,7 @@ public class Solver {
 		final World world = EnvironState.getWorld();
 		final BlockPos up = pos.up();
 		final IBlockState above = WorldUtils.getBlockState(world, up);
-		
+
 		if (above == AIR_STATE)
 			return null;
 
@@ -410,13 +414,13 @@ public class Solver {
 		 * => this block of code is here, not outside this if else group.
 		 */
 
-		IAcoustic[] foliage = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, up, "foliage");
+		IAcoustic[] foliage = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, up, Substrate.FOLIAGE);
 		if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 			// we discard the normal block association, and mark the foliage as
 			// detected
 			// association = association + "," + foliage;
 			association = foliage;
-			IAcoustic[] isMessy = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, up, "messy");
+			IAcoustic[] isMessy = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, up, Substrate.MESSY);
 
 			if (isMessy != null && isMessy == AcousticsManager.MESSY_GROUND)
 				found = true;

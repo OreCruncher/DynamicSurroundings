@@ -25,7 +25,7 @@
 package org.blockartistry.DynSurround.client.footsteps.implem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -35,7 +35,6 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.system.Isolator;
@@ -43,8 +42,6 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.DynSurround.registry.BlockInfo;
 import org.blockartistry.lib.MCHelper;
-import com.google.common.collect.ImmutableMap;
-
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -60,7 +57,7 @@ public class BlockMap {
 
 	private final Isolator isolator;
 	private final BlockAcousticMap metaMap = new BlockAcousticMap();
-	private Map<String, BlockAcousticMap> substrateMap = new HashMap<String, BlockAcousticMap>();
+	private Map<Substrate, BlockAcousticMap> substrateMap = new EnumMap<Substrate, BlockAcousticMap>(Substrate.class);
 
 	private static class MacroEntry {
 		public final int meta;
@@ -141,7 +138,7 @@ public class BlockMap {
 
 	@Nullable
 	public IAcoustic[] getBlockSubstrateAcoustics(@Nonnull final IBlockState state, @Nonnull final BlockPos pos,
-			@Nonnull final String substrate) {
+			@Nonnull final Substrate substrate) {
 		final IBlockState trueState = FacadeHelper.resolveState(state, EnvironState.getWorld(), pos, EnumFacing.UP);
 		final BlockAcousticMap sub = this.substrateMap.get(substrate);
 		return sub != null ? sub.getBlockAcousticsWithSpecial(trueState) : null;
@@ -150,14 +147,15 @@ public class BlockMap {
 	private void put(@Nonnull final Block block, final int meta, @Nonnull final String substrate,
 			@Nonnull final String value) {
 
+		final Substrate s = Substrate.get(substrate);
 		final IAcoustic[] acoustics = this.isolator.getAcoustics().compileAcoustics(value);
 
-		if (StringUtils.isEmpty(substrate)) {
+		if (s == null) {
 			this.metaMap.put(new BlockInfo(block, meta), acoustics);
 		} else {
-			BlockAcousticMap sub = this.substrateMap.get(substrate);
+			BlockAcousticMap sub = this.substrateMap.get(s);
 			if (sub == null)
-				this.substrateMap.put(substrate.intern(), sub = new BlockAcousticMap());
+				this.substrateMap.put(s, sub = new BlockAcousticMap());
 			sub.put(new BlockInfo(block, meta), acoustics);
 		}
 	}
@@ -218,7 +216,7 @@ public class BlockMap {
 		if (temp != null)
 			data.add(combine(temp));
 
-		for(final Entry<String, BlockAcousticMap> e: this.substrateMap.entrySet()) {
+		for (final Entry<Substrate, BlockAcousticMap> e : this.substrateMap.entrySet()) {
 			final IAcoustic[] acoustics = e.getValue().getBlockAcousticsWithSpecial(state);
 			if (acoustics != null)
 				data.add(e.getKey() + ":" + combine(acoustics));
@@ -227,12 +225,11 @@ public class BlockMap {
 
 	public void clear() {
 		this.metaMap.clear();
-		this.substrateMap = new HashMap<String, BlockAcousticMap>();
+		this.substrateMap = new EnumMap<Substrate, BlockAcousticMap>(Substrate.class);
 		this.metaMap.put(new BlockInfo(Blocks.AIR), AcousticsManager.NOT_EMITTER);
 	}
-	
+
 	public void freeze() {
 		this.metaMap.freeze();
-		this.substrateMap = new ImmutableMap.Builder<String, BlockAcousticMap>().putAll(this.substrateMap).build();
 	}
 }
