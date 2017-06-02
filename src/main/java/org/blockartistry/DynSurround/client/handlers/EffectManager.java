@@ -59,7 +59,6 @@ public class EffectManager {
 		this.effectHandlers.add(new ParticleSystemHandler());
 		this.effectHandlers.add(new PlayerActionHandler());
 		this.effectHandlers.add(new SoundCullHandler());
-		this.effectHandlers.add(new PotionParticleScrubHandler());
 		this.effectHandlers.add(new PopoffEffectHandler());
 		this.effectHandlers.add(new FootstepsHandler());
 		this.effectHandlers.add(new AreaSoundEffectHandler());
