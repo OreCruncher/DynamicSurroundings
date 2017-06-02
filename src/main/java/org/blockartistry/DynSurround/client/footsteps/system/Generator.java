@@ -271,23 +271,17 @@ public class Generator {
 
 	protected void playSinglefoot(@Nonnull final EntityPlayer ply, final double verticalOffsetAsMinus,
 			@Nonnull final EventType eventType, final boolean foot) {
-		final Association assos = mod.getSolver().findAssociationForPlayer(ply, verticalOffsetAsMinus, foot);
-		mod.getSolver().playAssociation(ply, assos, eventType);
+		final Association assos = this.mod.getSolver().findAssociationForPlayer(ply, verticalOffsetAsMinus, foot);
+		this.mod.getSolver().playAssociation(ply, assos, eventType);
 	}
 
 	protected void playMultifoot(@Nonnull final EntityPlayer ply, final double verticalOffsetAsMinus,
 			final EventType eventType) {
 		// STILL JUMP
-		final Association leftFoot = mod.getSolver().findAssociationForPlayer(ply, verticalOffsetAsMinus, false);
-		Association rightFoot = mod.getSolver().findAssociationForPlayer(ply, verticalOffsetAsMinus, true);
-
-		if (leftFoot != null && leftFoot.equals(rightFoot) && !leftFoot.getNoAssociation()) {
-			rightFoot = null; // If the two feet solve to the same sound, except
-								// NO_ASSOCIATION, only play the sound once
-		}
-
-		mod.getSolver().playAssociation(ply, leftFoot, eventType);
-		mod.getSolver().playAssociation(ply, rightFoot, eventType);
+		final Association leftFoot = this.mod.getSolver().findAssociationForPlayer(ply, verticalOffsetAsMinus, false);
+		final Association rightFoot = this.mod.getSolver().findAssociationForPlayer(ply, verticalOffsetAsMinus, true);
+		this.mod.getSolver().playAssociation(ply, leftFoot, eventType);
+		this.mod.getSolver().playAssociation(ply, rightFoot, eventType);
 	}
 
 	protected float scalex(final float number, final float min, final float max) {
