@@ -123,8 +123,8 @@ public class Solver {
 		final BlockPos pos = new BlockPos(xx, minY - 0.1D - verticalOffsetAsMinus, zz);
 
 		final Association result = addSoundOverlay(findAssociationForLocation(player, pos));
-		if (result != null && !player.isJumping)
-			result.setStepLocation(new Vec3d(xx, minY, zz), rotDegrees, isRightFoot);
+		if (result != null && !player.isJumping && result.hasFootstepImprint())
+			result.generatePrint(new Vec3d(xx, minY, zz), rotDegrees, isRightFoot);
 
 		return result;
 	}
