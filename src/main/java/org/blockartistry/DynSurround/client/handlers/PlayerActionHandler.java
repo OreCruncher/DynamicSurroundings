@@ -37,6 +37,7 @@ import org.blockartistry.DynSurround.registry.ItemRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -133,12 +134,14 @@ public class PlayerActionHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 
-		// Handle item equip sounds
-		if (!ModOptions.enableEquipSound)
-			return;
+		if (ModOptions.suppressPotionParticles)
+			player.getDataManager().set(EntityLivingBase.HIDE_PARTICLES, true);
 
-		this.mainHand.update();
-		this.offHand.update();
+		// Handle item equip sounds
+		if (ModOptions.enableEquipSound) {
+			this.mainHand.update();
+			this.offHand.update();
+		}
 	}
 
 	@SubscribeEvent
