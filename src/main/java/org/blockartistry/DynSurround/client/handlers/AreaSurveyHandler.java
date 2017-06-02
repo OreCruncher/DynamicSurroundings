@@ -30,7 +30,10 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.handlers.scanners.AlwaysOnBlockEffectScanner;
+import org.blockartistry.DynSurround.client.handlers.scanners.RandomBlockEffectScanner;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
@@ -43,6 +46,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -156,6 +160,8 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 		reallyInside = ceilingCoverageRatio > INSIDE_THRESHOLD;
 	}
 
+	protected final RandomBlockEffectScanner effects = new RandomBlockEffectScanner(ModOptions.specialEffectRange);
+	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(ModOptions.specialEffectRange);
 	protected final BiomeRegistry registry;
 	
 	public AreaSurveyHandler() {
@@ -187,10 +193,11 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 		}
 	}
 
-	// Analyzes the area around the player and caches the results.
-	// Generally it is called once a tick.
 	@Override
 	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+
+		this.effects.update();
+		this.alwaysOn.update();
 
 		// Only process on the correct interval
 		if (EnvironState.getTickCounter() % SURVEY_INTERVAL != 0)
@@ -212,5 +219,12 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	@Override
 	public void onConnect() {
 		weights.clear();
+		MinecraftForge.EVENT_BUS.register(this.alwaysOn);
 	}
+	
+	@Override
+	public void onDisconnect() {
+		MinecraftForge.EVENT_BUS.unregister(this.alwaysOn);
+	}
+
 }
