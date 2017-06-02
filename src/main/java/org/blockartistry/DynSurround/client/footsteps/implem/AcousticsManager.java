@@ -41,6 +41,7 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IStepPlayer;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions.Option;
 import org.blockartistry.DynSurround.client.footsteps.system.Association;
+import org.blockartistry.DynSurround.client.footsteps.system.Footprint;
 import org.blockartistry.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -63,7 +64,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -78,7 +78,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	private final HashMap<String, IAcoustic> acoustics = new HashMap<String, IAcoustic>();
 	private final ObjectArray<PendingSound> pending = new ObjectArray<PendingSound>();
-	private final ObjectArray<Association> footprints = new ObjectArray<Association>();
+	private final ObjectArray<Footprint> footprints = new ObjectArray<Footprint>();
 	private final Isolator isolator;
 	private final BlockPos.MutableBlockPos stepCheck = new BlockPos.MutableBlockPos();
 
@@ -101,17 +101,17 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		return this.acoustics.get(name);
 	}
 
-	protected void produceFootprint(final int dim, @Nonnull final Vec3d pos, final float rotation,
-			final boolean rightFoot) {
+	protected void produceFootprint(final int dim, @Nonnull final Footprint print) {
 
 		// Display the current player footprint
-		final FootstepEvent.Display event = new FootstepEvent.Display(pos, rotation, rightFoot);
+		final FootstepEvent.Display event = new FootstepEvent.Display(print.getStepLocation(), print.getRotation(),
+				print.isRightFoot());
 		MinecraftForge.EVENT_BUS.post(event);
 
 		// Route message to server if installed
 		if (!EnvironState.isPlayerSneaking() && DSurround.isInstalledOnServer()) {
-			final PacketDisplayFootprint packet = new PacketDisplayFootprint(EnvironState.getPlayer(), pos, rotation,
-					rightFoot);
+			final PacketDisplayFootprint packet = new PacketDisplayFootprint(EnvironState.getPlayer(),
+					print.getStepLocation(), print.getRotation(), print.isRightFoot());
 			Network.sendToServer(packet);
 		}
 	}
@@ -121,7 +121,9 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		playAcoustic(location, acousticName.getData(), event, null);
 
 		// Delay processing footprints until the think phase
-		this.footprints.add(acousticName);
+		final Footprint print = acousticName.getPrint();
+		if (print != null)
+			this.footprints.add(print);
 	}
 
 	private void logAcousticPlay(@Nonnull final IAcoustic[] acoustics, @Nonnull final EventType event) {
@@ -257,14 +259,10 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 		if (!this.footprints.isEmpty()) {
 			for (int i = 0; i < this.footprints.size(); i++) {
-				final Association assoc = this.footprints.get(i);
-				if (assoc.hasFootstepImprint()) {
-					final Vec3d stepLoc = assoc.getStepLocation();
-					if (stepLoc != null && WorldUtils.isSolidBlock(EnvironState.getWorld(),
-							BlockPosHelper.setPos(this.stepCheck, stepLoc).move(EnumFacing.DOWN, 1))) {
-						produceFootprint(EnvironState.getDimensionId(), stepLoc, assoc.getRotation(),
-								assoc.isRightFoot());
-					}
+				final Footprint print = this.footprints.get(i);
+				if (WorldUtils.isSolidBlock(EnvironState.getWorld(),
+						BlockPosHelper.setPos(this.stepCheck, print.getStepLocation()).move(EnumFacing.DOWN, 1))) {
+					produceFootprint(EnvironState.getDimensionId(), print);
 				}
 			}
 			this.footprints.clear();
