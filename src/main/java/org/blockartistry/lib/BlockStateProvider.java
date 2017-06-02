@@ -46,10 +46,10 @@ public class BlockStateProvider {
 
 	protected static final IBlockState AIR_STATE = Blocks.AIR.getDefaultState();
 	protected static final WeakReference<Chunk> NULL_CHUNK = new WeakReference<Chunk>(null);
-	
+
 	protected WeakReference<World> world;
 	protected WeakReference<Chunk> chunk;
-	
+
 	public BlockStateProvider() {
 		this(null);
 	}
@@ -63,11 +63,14 @@ public class BlockStateProvider {
 	protected Chunk resolveChunk(final int x, final int z) {
 		final int cX = x >> 4;
 		final int cZ = z >> 4;
-		
-		Chunk c;
+
+		Chunk c = null;
 		if ((c = this.chunk.get()) == null || !c.isAtLocation(cX, cZ)) {
 			final World w = this.world.get();
-			this.chunk = new WeakReference<Chunk>(c = w.getChunkFromChunkCoords(cX, cZ));
+			if (w == null)
+				this.chunk = NULL_CHUNK;
+			else
+				this.chunk = new WeakReference<Chunk>(c = w.getChunkFromChunkCoords(cX, cZ));
 		}
 
 		return c;
@@ -81,7 +84,7 @@ public class BlockStateProvider {
 		}
 		return this;
 	}
-	
+
 	@Nullable
 	public World getWorld() {
 		return this.world.get();
@@ -97,7 +100,11 @@ public class BlockStateProvider {
 
 		if (y >= 0 && y < 256) {
 
-			final ExtendedBlockStorage[] storageArrays = resolveChunk(x, z).getBlockStorageArray();
+			final Chunk c = resolveChunk(x, z);
+			if (c == null)
+				return AIR_STATE;
+
+			final ExtendedBlockStorage[] storageArrays = c.getBlockStorageArray();
 			final int idx = y >> 4;
 
 			if (idx < storageArrays.length) {
@@ -118,9 +125,9 @@ public class BlockStateProvider {
 		final int cZ = z >> 4;
 
 		final World w = this.world.get();
-		if(w == null)
+		if (w == null)
 			return false;
-		
+
 		Chunk c;
 		if ((c = this.chunk.get()) == null || !c.isAtLocation(cX, cZ)) {
 			this.chunk = new WeakReference<Chunk>(c = w.getChunkProvider().getLoadedChunk(cX, cZ));
