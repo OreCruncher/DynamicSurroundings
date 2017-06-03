@@ -64,6 +64,8 @@ msg.NewVersion.dsurround=["§6Update Available: §9[",{"text":"§2%1$s §ev%2$s�
 # Configuration option strings
 cfg.asm.cat.ASM=ASM Transformer Options
 cfg.asm.cat.ASM.tooltip=Controls ASM transforms Dynamic Surroundings performs at startup
+cfg.asm.EnableSoundCache=Sound Caching
+cfg.asm.EnableSoundCache.tooltip=Enable/disable ASM transformations to permit sound caching
 cfg.asm.EnableWeather=Weather Control
 cfg.asm.EnableWeather.tooltip=Enable/disable ASM transformations to permit weather (rain, snow, splash, dust storms, auroras)
 cfg.asm.EnableSleepReset=Weather Reset on Sleep Control

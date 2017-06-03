@@ -70,7 +70,12 @@ public class Transformer implements IClassTransformer {
 			}
 		} else if (isOneOf(transformedName, new String[] { "net.minecraft.client.audio.SoundHandler", "bzw" })) {
 			logger.debug("Transforming " + transformedName);
-			basicClass = transformSoundManager(basicClass);
+			basicClass = transformSoundHandler(basicClass);
+		} else if (isOneOf(transformedName, new String[] { "net.minecraft.client.audio.SoundManager", "bzu" })) {
+			if (ModOptions.enableSoundCache) {
+				logger.debug("Transforming " + transformedName);
+				basicClass = transformSoundManager(basicClass);
+			}
 		}
 
 		if (ModOptions.enableRandomReplace) {
@@ -133,7 +138,7 @@ public class Transformer implements IClassTransformer {
 		return cw.toByteArray();
 	}
 
-	private byte[] transformSoundManager(final byte[] classBytes) {
+	private byte[] transformSoundHandler(final byte[] classBytes) {
 		final String managerToReplace = "net/minecraft/client/audio/SoundManager";
 		final String newManager = "org/blockartistry/DynSurround/client/sound/SoundManagerReplacement";
 
@@ -162,6 +167,33 @@ public class Transformer implements IClassTransformer {
 						}
 					}
 				}
+			}
+		}
+
+		final ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+		cn.accept(cw);
+		return cw.toByteArray();
+	}
+
+	private byte[] transformSoundManager(final byte[] classBytes) {
+		final String names[] = { "func_148612_a", "getURLForSoundResource" };
+		final String targetName = "getURLForSoundResource";
+
+		final ClassReader cr = new ClassReader(classBytes);
+		final ClassNode cn = new ClassNode(ASM5);
+		cr.accept(cn, 0);
+
+		for (final MethodNode m : cn.methods) {
+			if (isOneOf(m.name, names)) {
+				logger.debug("Hooking " + m.name);
+				InsnList list = new InsnList();
+				list.add(new VarInsnNode(ALOAD, 0));
+				final String sig = "(Lnet/minecraft/util/ResourceLocation;)Ljava/net/URL;";
+				list.add(new MethodInsnNode(INVOKESTATIC, "org/blockartistry/lib/sound/SoundCache", targetName, sig,
+						false));
+				list.add(new InsnNode(ARETURN));
+				m.instructions.insertBefore(m.instructions.getFirst(), list);
+				break;
 			}
 		}
 

@@ -61,10 +61,15 @@ public final class ModOptions {
 	}
 
 	public static final String CATEGORY_ASM = "asm";
+	public static final String CONFIG_ENABLE_SOUND_CACHING = "Enable Sound Caching";
 	public static final String CONFIG_ENABLE_WEATHER = "Enable Weather Control";
 	public static final String CONFIG_ENABLE_RESET_WEATHER_ON_SLEEP = "Enable Weather Reset on Sleep Control";
 	public static final String CONFIG_ENABLE_RANDOM_REPLACE = "Enable Replace of Java Random class";
 
+	@Parameter(category = CATEGORY_ASM, property = CONFIG_ENABLE_SOUND_CACHING, defaultValue = "true", lang = "cfg.asm.EnableSoundCache")
+	@Comment("Enable ASM transformations to permit sound caching")
+	@RestartRequired(server = true)
+	public static boolean enableSoundCache = true;
 	@Parameter(category = CATEGORY_ASM, property = CONFIG_ENABLE_WEATHER, defaultValue = "true", lang = "cfg.asm.EnableWeather")
 	@Comment("Enable ASM transformations to permit weather (rain, snow, splash, dust storms, auroras)")
 	@RestartRequired(server = true)
