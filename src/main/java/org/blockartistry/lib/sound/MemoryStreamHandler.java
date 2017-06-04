@@ -29,7 +29,10 @@ import java.net.URLConnection;
 import javax.annotation.Nonnull;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class MemoryStreamHandler extends SoundStreamHandler {
 
 	protected final byte[] buffer;
@@ -41,7 +44,7 @@ public class MemoryStreamHandler extends SoundStreamHandler {
 
 	@Override
 	protected URLConnection createConnection(@Nonnull final URL url) {
-		return new MemoryURLConnection(url, this.resource, this.buffer);
+		return new MemoryURLConnection(url, this.buffer);
 	}
 
 }

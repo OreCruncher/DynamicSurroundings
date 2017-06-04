@@ -31,18 +31,17 @@ import java.net.URLConnection;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class MemoryURLConnection extends URLConnection {
 
-	protected final ResourceLocation resource;
 	protected final byte[] buffer;
 
-	protected MemoryURLConnection(@Nonnull final URL url, @Nonnull final ResourceLocation resource,
-			@Nonnull final byte[] buffer) {
+	protected MemoryURLConnection(@Nonnull final URL url, @Nonnull final byte[] buffer) {
 		super(url);
 
-		this.resource = resource;
 		this.buffer = buffer;
 	}
 
