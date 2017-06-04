@@ -22,7 +22,7 @@
 			"sounds": [
 				{
 					"sound": "dsurround:wind",
-					"volume": 0.3,
+					"volume": 0.4,
 					"repeatDelayRandom": 60
 				}
 			]
