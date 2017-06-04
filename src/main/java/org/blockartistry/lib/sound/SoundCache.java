@@ -25,11 +25,11 @@ package org.blockartistry.lib.sound;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.google.common.io.ByteStreams;
 
 import net.minecraft.client.Minecraft;
@@ -45,13 +45,21 @@ public final class SoundCache {
 	private static final int BUFFER_SIZE = 64 * 1024;
 	private static final byte[] BUFFER = new byte[BUFFER_SIZE];
 	private static final IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
+	private static final Map<ResourceLocation, URL> cache = new HashMap<ResourceLocation, URL>(256);
 
-	protected static byte[] getBuffer(@Nonnull final ResourceLocation resource) {
+	private static byte[] getBuffer(@Nonnull final ResourceLocation resource) {
 		try (final InputStream stream = manager.getResource(resource).getInputStream()) {
+			// It's possible that available() returns 0.  This generally means
+			// the stream has no idea about the number of bytes.  If it reports
+			// 64K or greater assume it needs to be streamed from the JAR.
 			if (stream != null && stream.available() < BUFFER_SIZE) {
 				final int bytesRead = ByteStreams.read(stream, BUFFER, 0, BUFFER_SIZE);
+				// If no bytes were returned, or the total read was 64K, assume
+				// that it needs to be streamed.
 				if (bytesRead == 0 || bytesRead == BUFFER_SIZE)
 					return null;
+				// Make a new array containing the data.  Don't want to
+				// pass back BUFFER.
 				return Arrays.copyOf(BUFFER, bytesRead);
 			}
 		} catch (@Nonnull final Throwable t) {
@@ -61,34 +69,33 @@ public final class SoundCache {
 		return null;
 	}
 
-	private static final LoadingCache<ResourceLocation, URL> cache = CacheBuilder.newBuilder()
-			.build(new CacheLoader<ResourceLocation, URL>() {
-				@Override
-				public URL load(@Nonnull final ResourceLocation key) throws Exception {
+	private static URL load(@Nonnull final ResourceLocation key) throws Exception {
 
-					final byte[] buffer = getBuffer(key);
-					final SoundStreamHandler handler;
+		final byte[] buffer = getBuffer(key);
+		final SoundStreamHandler handler;
 
-					if (buffer == null) {
-						handler = new SoundStreamHandler(key);
-					} else {
-						handler = new MemoryStreamHandler(key, buffer);
-					}
+		if (buffer == null) {
+			handler = new SoundStreamHandler(key);
+		} else {
+			handler = new MemoryStreamHandler(key, buffer);
+		}
 
-					return new URL((URL) null, handler.getSpec(), handler);
-				}
-			});
+		return new URL((URL) null, handler.getSpec(), handler);
+	}
 
 	private SoundCache() {
 
 	}
 
 	public static URL getURLForSoundResource(@Nonnull final ResourceLocation soundResource) {
-		try {
-			return cache.get(soundResource);
-		} catch (@Nonnull final Throwable t) {
-			throw new Error("Unable to load sound from cache!");
-		}
+		URL result = cache.get(soundResource);
+		if (result == null)
+			try {
+				cache.put(soundResource, result = load(soundResource));
+			} catch (@Nonnull final Throwable t) {
+				throw new Error("Unable to load sound from cache!");
+			}
+		return result;
 	}
 
 }
