@@ -28,6 +28,10 @@ import java.io.InputStream;
 
 import javax.annotation.Nonnull;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
 public class SoundInputStream extends InputStream {
 
 	protected final InputStream stream;

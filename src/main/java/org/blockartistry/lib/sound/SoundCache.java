@@ -24,46 +24,36 @@
 package org.blockartistry.lib.sound;
 
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.Nonnull;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.io.ByteStreams;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import scala.actors.threadpool.Arrays;
 
 @SideOnly(Side.CLIENT)
-public class SoundCache {
+public final class SoundCache {
 
 	private static final int BUFFER_SIZE = 64 * 1024;
-	private static final Map<ResourceLocation, URL> handlers = new HashMap<ResourceLocation, URL>();
-
-	private SoundCache() {
-
-	}
+	private static final byte[] BUFFER = new byte[BUFFER_SIZE];
+	private static final IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
 
 	protected static byte[] getBuffer(@Nonnull final ResourceLocation resource) {
-
-
-		try {
-			try (final InputStream stream = Minecraft.getMinecraft().getResourceManager().getResource(resource)
-					.getInputStream()) {
-				if (stream != null && stream.available() < BUFFER_SIZE) {
-					final byte[] buffer = new byte[BUFFER_SIZE];
-					final int bytesRead = ByteStreams.read(stream, buffer, 0, BUFFER_SIZE);
-					if (bytesRead == 0 || bytesRead == BUFFER_SIZE)
-						return null;
-					return Arrays.copyOf(buffer, bytesRead);
-				}
+		try (final InputStream stream = manager.getResource(resource).getInputStream()) {
+			if (stream != null && stream.available() < BUFFER_SIZE) {
+				final int bytesRead = ByteStreams.read(stream, BUFFER, 0, BUFFER_SIZE);
+				if (bytesRead == 0 || bytesRead == BUFFER_SIZE)
+					return null;
+				return Arrays.copyOf(BUFFER, bytesRead);
 			}
-
 		} catch (@Nonnull final Throwable t) {
 			return null;
 		}
@@ -71,28 +61,34 @@ public class SoundCache {
 		return null;
 	}
 
+	private static final LoadingCache<ResourceLocation, URL> cache = CacheBuilder.newBuilder()
+			.build(new CacheLoader<ResourceLocation, URL>() {
+				@Override
+				public URL load(@Nonnull final ResourceLocation key) throws Exception {
+
+					final byte[] buffer = getBuffer(key);
+					final SoundStreamHandler handler;
+
+					if (buffer == null) {
+						handler = new SoundStreamHandler(key);
+					} else {
+						handler = new MemoryStreamHandler(key, buffer);
+					}
+
+					return new URL((URL) null, handler.getSpec(), handler);
+				}
+			});
+
+	private SoundCache() {
+
+	}
+
 	public static URL getURLForSoundResource(@Nonnull final ResourceLocation soundResource) {
-		URL url = handlers.get(soundResource);
-
-		if (url == null) {
-
-			final byte[] buffer = getBuffer(soundResource);
-			final SoundStreamHandler handler;
-
-			if (buffer == null)
-				handler = new SoundStreamHandler(soundResource);
-			else
-				handler = new MemoryStreamHandler(soundResource, buffer);
-
-			try {
-				url = new URL((URL) null, handler.getSpec(), handler);
-				handlers.put(soundResource, url);
-			} catch (@Nonnull final MalformedURLException t) {
-				throw new Error("TODO: Sanely handle url exception! :D");
-			}
-
+		try {
+			return cache.get(soundResource);
+		} catch (@Nonnull final Throwable t) {
+			throw new Error("Unable to load sound from cache!");
 		}
-		return url;
 	}
 
 }
