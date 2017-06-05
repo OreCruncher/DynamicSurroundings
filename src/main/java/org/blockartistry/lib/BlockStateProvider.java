@@ -69,10 +69,12 @@ public class BlockStateProvider {
 		Chunk c = null;
 		if ((c = this.chunk.get()) == null || !c.isAtLocation(cX, cZ)) {
 			final World w = this.world.get();
-			if (w == null)
+			if (w == null) {
 				this.chunk = NULL_CHUNK;
-			else
+				c = null;
+			} else {
 				this.chunk = new WeakReference<Chunk>(c = w.getChunkFromChunkCoords(cX, cZ));
+			}
 		}
 
 		return c;
@@ -99,30 +101,25 @@ public class BlockStateProvider {
 
 	@Nonnull
 	private IBlockState getBlockState0(final Chunk chunk, final int x, final int y, final int z) {
-		final ExtendedBlockStorage[] storageArrays = chunk.getBlockStorageArray();
-		final int idx = y >> 4;
+		if (chunk != null) {
+			final ExtendedBlockStorage[] storageArrays = chunk.getBlockStorageArray();
+			final int idx = y >> 4;
 
-		if (idx < storageArrays.length) {
+			if (idx < storageArrays.length) {
 
-			final ExtendedBlockStorage extendedblockstorage = storageArrays[idx];
+				final ExtendedBlockStorage extendedblockstorage = storageArrays[idx];
 
-			if (extendedblockstorage != Chunk.NULL_BLOCK_STORAGE) {
-				return extendedblockstorage.get(x & 15, y & 15, z & 15);
+				if (extendedblockstorage != Chunk.NULL_BLOCK_STORAGE) {
+					return extendedblockstorage.get(x & 15, y & 15, z & 15);
+				}
 			}
 		}
-
 		return AIR_STATE;
 	}
 
 	@Nonnull
 	public IBlockState getBlockState(final int x, final int y, final int z) {
-
-		if (y >= 0 && y < 256) {
-			final Chunk c = resolveChunk(x, z);
-			return c == null ? AIR_STATE : getBlockState0(c, x, y, z);
-		}
-
-		return AIR_STATE;
+		return (y >= 0 && y < 256) ? getBlockState0(resolveChunk(x, z), x, y, z) : AIR_STATE;
 	}
 
 	public boolean isAvailable(final int x, final int z) {
@@ -135,7 +132,12 @@ public class BlockStateProvider {
 
 		Chunk c;
 		if ((c = this.chunk.get()) == null || !c.isAtLocation(cX, cZ)) {
-			this.chunk = new WeakReference<Chunk>(c = w.getChunkProvider().getLoadedChunk(cX, cZ));
+			c = w.getChunkProvider().getLoadedChunk(cX, cZ);
+			if (c == null) {
+				this.chunk = NULL_CHUNK;
+			} else {
+				this.chunk = new WeakReference<Chunk>(c);
+			}
 		}
 
 		return c != null;
@@ -146,14 +148,19 @@ public class BlockStateProvider {
 	}
 
 	public int getLightFor(@Nonnull final EnumSkyBlock type, @Nonnull final BlockPos pos) {
-		return resolveChunk(pos.getX(), pos.getZ()).getLightFor(type, pos);
+		final Chunk chunk = resolveChunk(pos.getX(), pos.getY());
+		return chunk != null ? chunk.getLightFor(type, pos) : type.defaultLightValue;
 	}
 
 	public BlockPos getTopSolidOrLiquidBlock(@Nonnull final BlockPos pos) {
 		final int x = pos.getX();
 		final int z = pos.getZ();
+		final Chunk chunk = resolveChunk(x, z);
+
+		if (chunk == null)
+			return pos;
+
 		final World world = this.getWorld();
-		final Chunk chunk = this.resolveChunk(x, z);
 
 		for (int dY = chunk.getTopFilledSegment() + 16 - 1; dY >= 0; dY--) {
 			final IBlockState state = getBlockState0(chunk, x, dY, z);
