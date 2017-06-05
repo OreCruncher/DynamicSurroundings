@@ -119,4 +119,8 @@ public final class WorldUtils {
 		return getDefaultBlockStateProvider().setWorld(world).isAvailable(pos);
 	}
 
+	public static BlockPos getTopSolidOrLiquidBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return getDefaultBlockStateProvider().setWorld(world).getTopSolidOrLiquidBlock(pos);
+	}
+
 }

@@ -39,6 +39,7 @@ import org.blockartistry.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.MathStuff;
+import org.blockartistry.lib.WorldUtils;
 
 import gnu.trove.map.custom_hash.TObjectIntCustomHashMap;
 import gnu.trove.strategy.IdentityHashingStrategy;
@@ -56,66 +57,8 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	private static final int BIOME_SURVEY_RANGE = 6;
 	private static final int INSIDE_SURVEY_RANGE = 3;
 
-	private static final class Cell implements Comparable<Cell> {
-
-		private final Vec3i offset;
-		private final float points;
-		private final BlockPos.MutableBlockPos working;
-
-		public Cell(@Nonnull final Vec3i offset, final int range) {
-			this.offset = offset;
-			final float xV = range - MathStuff.abs(offset.getX()) + 1;
-			final float zV = range - MathStuff.abs(offset.getZ()) + 1;
-			final float candidate = Math.min(xV, zV);
-			this.points = candidate * candidate;
-			this.working = new BlockPos.MutableBlockPos();
-		}
-
-		public float potentialPoints() {
-			return this.points;
-		}
-
-		public float score(@Nonnull final BlockPos playerPos) {
-			this.working.setPos(playerPos.getX() + this.offset.getX(), playerPos.getY() + this.offset.getY(),
-					playerPos.getZ() + this.offset.getZ());
-			final int y = EnvironState.getWorld().getTopSolidOrLiquidBlock(this.working).getY();
-			return ((y - playerPos.getY()) < 3) ? this.points : 0.0F;
-		}
-
-		@Override
-		public int compareTo(@Nonnull final Cell cell) {
-			// Want big scores first in the list
-			return -Float.compare(this.potentialPoints(), cell.potentialPoints());
-		}
-
-		@Override
-		@Nonnull
-		public String toString() {
-			final StringBuilder builder = new StringBuilder();
-			builder.append(this.offset.toString());
-			builder.append(" points: ").append(this.points);
-			return builder.toString();
-		}
-
-	}
-
-	private static final List<Cell> cellList = new ArrayList<Cell>();
+	private static final Cell[] cells;
 	private static final float TOTAL_POINTS;
-
-	static {
-		// Build our cell map
-		for (int x = -INSIDE_SURVEY_RANGE; x <= INSIDE_SURVEY_RANGE; x++)
-			for (int z = -INSIDE_SURVEY_RANGE; z <= INSIDE_SURVEY_RANGE; z++)
-				cellList.add(new Cell(new Vec3i(x, 0, z), INSIDE_SURVEY_RANGE));
-
-		// Sort so the highest score cells are first
-		Collections.sort(cellList);
-
-		float totalPoints = 0.0F;
-		for (final Cell c : cellList)
-			totalPoints += c.potentialPoints();
-		TOTAL_POINTS = totalPoints;
-	}
 
 	// Used to throttle processing
 	private static final int SURVEY_INTERVAL = 2;
@@ -134,12 +77,30 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	private static float ceilingCoverageRatio = 0.0F;
 	private static boolean reallyInside = false;
 
-	public static int getBiomeArea() {
-		return biomeArea;
+	protected final RandomBlockEffectScanner effects = new RandomBlockEffectScanner(ModOptions.specialEffectRange);
+	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(ModOptions.specialEffectRange);
+	protected final BiomeRegistry registry;
+
+	static {
+
+		final List<Cell> cellList = new ArrayList<Cell>();
+		// Build our cell map
+		for (int x = -INSIDE_SURVEY_RANGE; x <= INSIDE_SURVEY_RANGE; x++)
+			for (int z = -INSIDE_SURVEY_RANGE; z <= INSIDE_SURVEY_RANGE; z++)
+				cellList.add(new Cell(new Vec3i(x, 0, z), INSIDE_SURVEY_RANGE));
+
+		// Sort so the highest score cells are first
+		Collections.sort(cellList);
+		cells = cellList.toArray(new Cell[0]);
+
+		float totalPoints = 0.0F;
+		for (final Cell c : cellList)
+			totalPoints += c.potentialPoints();
+		TOTAL_POINTS = totalPoints;
 	}
 
-	public static float getCeilingCoverageRatio() {
-		return ceilingCoverageRatio;
+	public static int getBiomeArea() {
+		return biomeArea;
 	}
 
 	public static boolean isReallyInside() {
@@ -153,23 +114,19 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	private static void doCeilingCoverageRatio() {
 		final BlockPos pos = EnvironState.getPlayerPosition();
 		float score = 0.0F;
-		for (int i = 0; i < cellList.size(); i++)
-			score += cellList.get(i).score(pos);
+		for (int i = 0; i < cells.length; i++)
+			score += cells[i].score(pos);
 
 		ceilingCoverageRatio = 1.0F - (score / TOTAL_POINTS);
 		reallyInside = ceilingCoverageRatio > INSIDE_THRESHOLD;
 	}
 
-	protected final RandomBlockEffectScanner effects = new RandomBlockEffectScanner(ModOptions.specialEffectRange);
-	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(ModOptions.specialEffectRange);
-	protected final BiomeRegistry registry;
-	
 	public AreaSurveyHandler() {
 		super("AreaSurveyEffectHandler");
-		
+
 		this.registry = RegistryManager.<BiomeRegistry>get(RegistryType.BIOME);
 	}
-	
+
 	/*
 	 * Perform a biome survey around the player at the specified range.
 	 */
@@ -221,10 +178,53 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 		weights.clear();
 		MinecraftForge.EVENT_BUS.register(this.alwaysOn);
 	}
-	
+
 	@Override
 	public void onDisconnect() {
 		MinecraftForge.EVENT_BUS.unregister(this.alwaysOn);
+	}
+
+	private static final class Cell implements Comparable<Cell> {
+
+		private final Vec3i offset;
+		private final float points;
+		private final BlockPos.MutableBlockPos working;
+
+		public Cell(@Nonnull final Vec3i offset, final int range) {
+			this.offset = offset;
+			final float xV = range - MathStuff.abs(offset.getX()) + 1;
+			final float zV = range - MathStuff.abs(offset.getZ()) + 1;
+			final float candidate = Math.min(xV, zV);
+			this.points = candidate * candidate;
+			this.working = new BlockPos.MutableBlockPos();
+		}
+
+		public float potentialPoints() {
+			return this.points;
+		}
+
+		public float score(@Nonnull final BlockPos playerPos) {
+			this.working.setPos(playerPos.getX() + this.offset.getX(), playerPos.getY() + this.offset.getY(),
+					playerPos.getZ() + this.offset.getZ());
+			final int y = WorldUtils.getTopSolidOrLiquidBlock(EnvironState.getWorld(), this.working).getY();
+			return ((y - playerPos.getY()) < 3) ? this.points : 0.0F;
+		}
+
+		@Override
+		public int compareTo(@Nonnull final Cell cell) {
+			// Want big scores first in the list
+			return -Float.compare(this.potentialPoints(), cell.potentialPoints());
+		}
+
+		@Override
+		@Nonnull
+		public String toString() {
+			final StringBuilder builder = new StringBuilder();
+			builder.append(this.offset.toString());
+			builder.append(" points: ").append(this.points);
+			return builder.toString();
+		}
+
 	}
 
 }
