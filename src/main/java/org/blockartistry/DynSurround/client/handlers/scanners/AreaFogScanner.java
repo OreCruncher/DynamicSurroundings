@@ -27,7 +27,6 @@ package org.blockartistry.DynSurround.client.handlers.scanners;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.handlers.AreaSurveyHandler;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
@@ -78,10 +77,6 @@ public class AreaFogScanner implements ITickable {
 	private float fogDensity;
 
 	private float planeDistanceScale;
-
-	// TODO: Do we need this to clear up fog for buildings?
-	@SuppressWarnings("unused")
-	private float insideFogOffset;
 
 	public AreaFogScanner() {
 
@@ -185,8 +180,6 @@ public class AreaFogScanner implements ITickable {
 		final float farPlaneDistanceScaleBiome = (0.1f * (1 - fpDistanceBiomeFogAvg) + 0.75f * fpDistanceBiomeFogAvg);
 		this.planeDistanceScale = (float) ((farPlaneDistanceScaleBiome * this.biomeWeight + 0.75f * this.weightDefault)
 				/ AREA);
-
-		this.insideFogOffset = AreaSurveyHandler.getCeilingCoverageRatio() * 15.0F;
 
 	}
 

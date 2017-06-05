@@ -29,6 +29,7 @@ import java.lang.ref.WeakReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -47,6 +48,7 @@ public class BlockStateProvider {
 	protected static final IBlockState AIR_STATE = Blocks.AIR.getDefaultState();
 	protected static final WeakReference<Chunk> NULL_CHUNK = new WeakReference<Chunk>(null);
 
+	protected final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 	protected WeakReference<World> world;
 	protected WeakReference<Chunk> chunk;
 
@@ -96,25 +98,28 @@ public class BlockStateProvider {
 	}
 
 	@Nonnull
+	private IBlockState getBlockState0(final Chunk chunk, final int x, final int y, final int z) {
+		final ExtendedBlockStorage[] storageArrays = chunk.getBlockStorageArray();
+		final int idx = y >> 4;
+
+		if (idx < storageArrays.length) {
+
+			final ExtendedBlockStorage extendedblockstorage = storageArrays[idx];
+
+			if (extendedblockstorage != Chunk.NULL_BLOCK_STORAGE) {
+				return extendedblockstorage.get(x & 15, y & 15, z & 15);
+			}
+		}
+
+		return AIR_STATE;
+	}
+
+	@Nonnull
 	public IBlockState getBlockState(final int x, final int y, final int z) {
 
 		if (y >= 0 && y < 256) {
-
 			final Chunk c = resolveChunk(x, z);
-			if (c == null)
-				return AIR_STATE;
-
-			final ExtendedBlockStorage[] storageArrays = c.getBlockStorageArray();
-			final int idx = y >> 4;
-
-			if (idx < storageArrays.length) {
-
-				final ExtendedBlockStorage extendedblockstorage = storageArrays[idx];
-
-				if (extendedblockstorage != Chunk.NULL_BLOCK_STORAGE) {
-					return extendedblockstorage.get(x & 15, y & 15, z & 15);
-				}
-			}
+			return c == null ? AIR_STATE : getBlockState0(c, x, y, z);
 		}
 
 		return AIR_STATE;
@@ -144,4 +149,20 @@ public class BlockStateProvider {
 		return resolveChunk(pos.getX(), pos.getZ()).getLightFor(type, pos);
 	}
 
+	public BlockPos getTopSolidOrLiquidBlock(@Nonnull final BlockPos pos) {
+		final int x = pos.getX();
+		final int z = pos.getZ();
+		final World world = this.getWorld();
+		final Chunk chunk = this.resolveChunk(x, z);
+
+		for (int dY = chunk.getTopFilledSegment() + 16 - 1; dY >= 0; dY--) {
+			final IBlockState state = getBlockState0(chunk, x, dY, z);
+			final Material material = state.getMaterial();
+			if (material.blocksMovement() && material != Material.LEAVES
+					&& !state.getBlock().isFoliage(world, this.mutable.setPos(x, dY, z)))
+				return this.mutable.toImmutable();
+
+		}
+		return pos;
+	}
 }
