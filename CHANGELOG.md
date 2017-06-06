@@ -1,3 +1,9 @@
+###DynamicSurroundings-1.10.2-3.4.5.3
+**Changes**
+* Improved area block scan/processing efficiency
+* Optimized footstep sound processing
+* Use ASM to hook Minecraft sound stream loading to improve responsiveness and reduce stream errors; can be turned off in config if needed
+
 ###DynamicSurroundings-1.10.2-3.4.5.2
 **Fixes**
 * Changed volume scales using the volume dialog weren't saved in the config file (weren't sticky)
