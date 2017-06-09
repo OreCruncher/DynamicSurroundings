@@ -148,7 +148,7 @@ public class BlockStateProvider {
 	}
 
 	public int getLightFor(@Nonnull final EnumSkyBlock type, @Nonnull final BlockPos pos) {
-		final Chunk chunk = resolveChunk(pos.getX(), pos.getY());
+		final Chunk chunk = resolveChunk(pos.getX(), pos.getZ());
 		return chunk != null ? chunk.getLightFor(type, pos) : type.defaultLightValue;
 	}
 
