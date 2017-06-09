@@ -72,14 +72,19 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	}
 
 	private boolean spawnAurora(@Nonnull final World world) {
-		if (!ModOptions.auroraEnable || current != null
-				|| Minecraft.getMinecraft().gameSettings.renderDistanceChunks < 6
+		if (!ModOptions.auroraEnable)
+			return false;
+
+		if (current != null || Minecraft.getMinecraft().gameSettings.renderDistanceChunks < 6
 				|| DiurnalUtils.isAuroraInvisible(world))
 			return false;
 		return this.registry.hasAuroras(world) && EnvironState.getPlayerBiome().getHasAurora();
 	}
 
 	private boolean canAuroraStay(@Nonnull final World world) {
+		if (!ModOptions.auroraEnable)
+			return false;
+
 		return Minecraft.getMinecraft().gameSettings.renderDistanceChunks < 6
 				|| DiurnalUtils.isAuroraVisible(world) && EnvironState.getPlayerBiome().getHasAurora();
 	}
@@ -95,7 +100,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		if (current != null) {
 			// If completed or the player changed dimensions we want to kill
 			// outright
-			if (current.isComplete() || dimensionId != EnvironState.getDimensionId()) {
+			if (current.isComplete() || dimensionId != EnvironState.getDimensionId() || !ModOptions.auroraEnable) {
 				current = null;
 			} else {
 				current.update();
