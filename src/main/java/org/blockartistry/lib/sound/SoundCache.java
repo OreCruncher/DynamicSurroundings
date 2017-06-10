@@ -31,6 +31,8 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.LibLog;
+
 import com.google.common.io.ByteStreams;
 
 import net.minecraft.client.Minecraft;
@@ -47,23 +49,29 @@ public final class SoundCache {
 	private static final IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
 	private static final Map<ResourceLocation, URL> cache = new HashMap<ResourceLocation, URL>(256);
 
+	private static final byte[] SILENCE = getBuffer(new ResourceLocation("dsurround:sounds/ambient/silence.ogg"));
+
 	private static byte[] getBuffer(@Nonnull final ResourceLocation resource) {
 		try (final InputStream stream = manager.getResource(resource).getInputStream()) {
-			// It's possible that available() returns 0.  This generally means
-			// the stream has no idea about the number of bytes.  If it reports
+			// It's possible that available() returns 0. This generally means
+			// the stream has no idea about the number of bytes. If it reports
 			// 64K or greater assume it needs to be streamed from the JAR.
-			if (stream != null && stream.available() < BUFFER_SIZE) {
+			if (stream == null) {
+				LibLog.log().warn("No stream returned for [%s]", resource.toString());
+				return SILENCE;
+			} else if (stream.available() < BUFFER_SIZE) {
 				final int bytesRead = ByteStreams.read(stream, BUFFER, 0, BUFFER_SIZE);
 				// If no bytes were returned, or the total read was 64K, assume
 				// that it needs to be streamed.
 				if (bytesRead == 0 || bytesRead == BUFFER_SIZE)
 					return null;
-				// Make a new array containing the data.  Don't want to
+				// Make a new array containing the data. Don't want to
 				// pass back BUFFER.
 				return Arrays.copyOf(BUFFER, bytesRead);
 			}
 		} catch (@Nonnull final Throwable t) {
-			return null;
+			LibLog.log().warn("Error reading stream [%s]", resource.toString());
+			return SILENCE;
 		}
 
 		return null;

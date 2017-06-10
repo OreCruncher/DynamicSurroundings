@@ -1814,5 +1814,11 @@
 				"stream": true
 			}
 		]
+	},
+	"silence": {
+		"category": "ambient",
+		"sounds": [
+			"dsurround:ambient/silence"
+		]
 	}
 }
