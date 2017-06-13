@@ -61,7 +61,7 @@ import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.StreamThread;
 
-@Mod.EventBusSubscriber(Side.CLIENT)
+@Mod.EventBusSubscriber(value = Side.CLIENT)
 public class SoundManagerReplacement extends SoundManager {
 
 	private static Field soundLibrary = null;
@@ -84,6 +84,7 @@ public class SoundManagerReplacement extends SoundManager {
 	private final static int CHECK_INTERVAL = 30 * 20; // 30 seconds
 	private SoundRegistry registry = null;
 	private int nextCheck = 0;
+	private boolean givenNotice = false;
 
 	public SoundManagerReplacement(final SoundHandler handler, final GameSettings settings) {
 		super(handler, settings);
@@ -107,19 +108,20 @@ public class SoundManagerReplacement extends SoundManager {
 				final String msg1 = Localization.format("msg.Autorestart.notice");
 				final String msg2 = Localization.format(
 						ModOptions.enableSoundSystemAutorestart ? "msg.Autorestart.restart" : "msg.Autorestart.manual");
-				final String msg3 = Localization.format(Minecraft.getMinecraft().debug);
 
 				final EntityPlayer player = EnvironState.getPlayer();
-				if (player != null) {
+				if (player != null  && !givenNotice) {
 					player.addChatMessage(new TextComponentString(msg1));
 					player.addChatMessage(new TextComponentString(msg2));
-					player.addChatMessage(new TextComponentString(msg3));
 				}
 				DSurround.log().warn(msg1);
 				DSurround.log().warn(msg2);
-				DSurround.log().warn(msg3);
 				if (ModOptions.enableSoundSystemAutorestart)
 					this.reloadSoundSystem();
+				else
+					givenNotice = true;
+			} else {
+				givenNotice = false;
 			}
 		} catch (final Throwable t) {
 			;
