@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.Presets.proxy.Proxy;
 import org.blockartistry.lib.ForgeUtils;
 import org.blockartistry.lib.Localization;
@@ -30,13 +31,23 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@net.minecraftforge.fml.common.Mod(modid = Presets.MOD_ID, useMetadata = true, dependencies = Presets.DEPENDENCIES, version = Presets.VERSION, guiFactory = Presets.GUI_FACTORY, updateJSON = Presets.UPDATE_URL, clientSideOnly = true)
+@net.minecraftforge.fml.common.Mod(
+		modid = Presets.MOD_ID,
+		useMetadata = true,
+		dependencies = Presets.DEPENDENCIES,
+		version = Presets.VERSION,
+		acceptedMinecraftVersions = DSurround.MINECRAFT_VERSIONS,
+		guiFactory = Presets.GUI_FACTORY,
+		updateJSON = Presets.UPDATE_URL,
+		clientSideOnly = true
+)
 public class Presets {
 	public static final String MOD_ID = "presets";
 	public static final String API_ID = MOD_ID + "API";
 	public static final String RESOURCE_ID = "presets";
 	public static final String MOD_NAME = "Presets";
 	public static final String VERSION = "@VERSION@";
+	public static final String MINECRAFT_VERSIONS = "[1.11]";
 	public static final String DEPENDENCIES = "";
 	public static final String GUI_FACTORY = "org.blockartistry.Presets.gui.ConfigGuiFactory";
 	public static final String UPDATE_URL = "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json";

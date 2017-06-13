@@ -63,14 +63,23 @@ import net.minecraftforge.fml.common.network.NetworkCheckHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@net.minecraftforge.fml.common.Mod(modid = DSurround.MOD_ID, useMetadata = true, dependencies = DSurround.DEPENDENCIES, version = DSurround.VERSION, guiFactory = DSurround.GUI_FACTORY, updateJSON = DSurround.UPDATE_URL)
+@net.minecraftforge.fml.common.Mod(
+		modid = DSurround.MOD_ID,
+		useMetadata = true,
+		dependencies = DSurround.DEPENDENCIES,
+		version = DSurround.VERSION,
+		acceptedMinecraftVersions = DSurround.MINECRAFT_VERSIONS,
+		guiFactory = DSurround.GUI_FACTORY,
+		updateJSON = DSurround.UPDATE_URL
+)
 public class DSurround {
 	public static final String MOD_ID = "dsurround";
 	public static final String API_ID = MOD_ID + "API";
 	public static final String RESOURCE_ID = "dsurround";
 	public static final String MOD_NAME = "Dynamic Surroundings";
 	public static final String VERSION = "@VERSION@";
-	public static final String DEPENDENCIES = "before:presets; after:galacticraftcore";
+	public static final String MINECRAFT_VERSIONS = "[1.11]";
+	public static final String DEPENDENCIES = "after:galacticraftcore"; //"before:presets; after:galacticraftcore";
 	public static final String GUI_FACTORY = "org.blockartistry.DynSurround.client.gui.ConfigGuiFactory";
 	public static final String UPDATE_URL = "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json";
 
