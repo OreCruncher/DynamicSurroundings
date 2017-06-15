@@ -1,3 +1,11 @@
+###DynamicSurroundings-1.11.2-3.4.5.4
+**Fixes**
+* Light level hud should now show correct values
+* Mod should now load for Minecraft version 1.11
+
+**Changes**
+* Don't spam sound engine restart needed if auto-restart is not enabled and sound stream thread dies
+
 ###DynamicSurroundings-1.11.2-3.4.5.3
 **Changes**
 * Improved area block scan/processing efficiency
