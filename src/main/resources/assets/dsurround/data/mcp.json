@@ -21,6 +21,16 @@
 			]
 		},
 		{
+			"conditions": "biome.isSandy && biome.isDry && !(biome.isLush || biome.isHills || biome.isMountain || biome.isPlains)",
+			"_comment": "Desert wind",
+			"sounds": [
+				{
+					"sound": "dsurround:desert.wind",
+					"volume": 0.3
+				}
+			]
+		},
+		{
 			"conditions": "biome.isJungle && biome.isWet",
 			"_comment": "Basic Jungle and Tropical",
 			"soundReset": true,
@@ -57,7 +67,7 @@
 			]
 		},
 		{
-			"conditions":"biome.isPlains && !biome.isSnowy",
+			"conditions": "biome.isPlains && !biome.isSnowy",
 			"_comment": "Bison!",
 			"sounds": [
 				{
@@ -68,7 +78,7 @@
 			]
 		},
 		{
-			"conditions":"biome.isForest && !(biome.isHot || biome.isSwamp || biome.isDead || biome.isSnowy || biome.isCold || biome.isOcean || biome.isWasteland || biome.isJungle)",
+			"conditions": "biome.isForest && !(biome.isHot || biome.isSwamp || biome.isDead || biome.isSnowy || biome.isCold || biome.isOcean || biome.isWasteland || biome.isJungle)",
 			"_comment": "Basic Forest w/Crickets",
 			"sounds": [
 				{
@@ -144,7 +154,7 @@
 			"fogDensity": 0.6
 		},
 		{
-			"conditions":"biome.isSwamp && !(biome.isForest || biome.isDead || biome.isCold)",
+			"conditions": "biome.isSwamp && !(biome.isForest || biome.isDead || biome.isCold)",
 			"_comment": "Basic Swamp Sounds",
 			"biomeName": "(?i)(?!.*dead.*)(.*swamp.*)",
 			"sounds": [
@@ -171,7 +181,7 @@
 			"fogDensity": 0.6
 		},
 		{
-			"conditions":"biome.isSwamp && !(biome.isDead || biome.isHills || biome.isMountain || biome.isCold || biome.isSnowy || biome.isForest)",
+			"conditions": "biome.isSwamp && !(biome.isDead || biome.isHills || biome.isMountain || biome.isCold || biome.isSnowy || biome.isForest)",
 			"_comment": "Crocodiles",
 			"sounds": [
 				{
@@ -260,7 +270,7 @@
 			]
 		},
 		{
-			"conditions":"biome.isForest && !(biome.isHot || biome.isSwamp || biome.isDead || biome.isCold || biome.isOcean || biome.isWasteland || biome.isJungle)",
+			"conditions": "biome.isForest && !(biome.isHot || biome.isSwamp || biome.isDead || biome.isCold || biome.isOcean || biome.isWasteland || biome.isJungle)",
 			"_comment": "Birds",
 			"sounds": [
 				{
@@ -271,7 +281,7 @@
 			]
 		},
 		{
-			"conditions":"biome.isForest && !(biome.isEnd || biome.isNether || biome.isOcean || biome.isRiver)",
+			"conditions": "biome.isForest && !(biome.isEnd || biome.isNether || biome.isOcean || biome.isRiver)",
 			"_comment": "Woodpecker",
 			"sounds": [
 				{
