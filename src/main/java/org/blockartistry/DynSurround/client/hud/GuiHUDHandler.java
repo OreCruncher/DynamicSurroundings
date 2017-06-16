@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.Permissions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.client.Minecraft;
@@ -49,9 +50,13 @@ public final class GuiHUDHandler {
 
 	private GuiHUDHandler() {
 		register(new PotionHUD());
-		register(new CompassHUD());
 		register(new BlockInfoHelperHUD());
-		register(new LightLevelHUD());
+
+		if (Permissions.instance().allowCompassAndClockHUD())
+			register(new CompassHUD());
+
+		if (Permissions.instance().allowLightLevelHUD())
+			register(new LightLevelHUD());
 	}
 
 	private final List<GuiOverlay> overlays = new ArrayList<GuiOverlay>();

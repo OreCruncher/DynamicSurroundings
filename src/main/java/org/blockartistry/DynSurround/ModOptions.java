@@ -616,6 +616,24 @@ public final class ModOptions {
 	@Parameter(category = CONFIG_COMMANDS_CALC, property = CONFIG_COMMAND_ALIAS, defaultValue = "c math", lang = "cfg.commands.Calc.Alias")
 	@Comment("Alias for the command")
 	public static String commandAliasCalc = "c math";
+	
+	public static final String CATEGORY_FEATURES = "features";
+	public static final String CONFIG_FEATURES_ALLOW_LLHUD = "Allow Light Level HUD";
+	public static final String CONFIG_FEATURES_ALLOW_CHUNKBOARDERS = "Allow Chunk Border HUD";
+	public static final String CONFIG_FEATURES_ALLOW_COMPASSCLOCK = "Allow Compass and Clock HUD";
+	
+	@Parameter(category = CATEGORY_FEATURES, property = CONFIG_FEATURES_ALLOW_LLHUD, defaultValue = "true", lang = "")
+	@Comment("Allow the player to activate the Light Level HUD")
+	@Hidden
+	public static boolean allowLightLevelHUD = true;
+	@Parameter(category = CATEGORY_FEATURES, property = CONFIG_FEATURES_ALLOW_CHUNKBOARDERS, defaultValue = "true", lang = "")
+	@Comment("Allow the player to activate the Chunk Board HUD")
+	@Hidden
+	public static boolean allowChunkBorderHUD = true;
+	@Parameter(category = CATEGORY_FEATURES, property = CONFIG_FEATURES_ALLOW_COMPASSCLOCK, defaultValue = "true", lang = "")
+	@Comment("Allow the player to activate the Chunk Board HUD")
+	@Hidden
+	public static boolean allowCompassClockHUD = true;
 
 	private static void setDefault(@Nonnull final Configuration config, @Nonnull final String cat,
 			@Nonnull final String prop, final float prevDefault, final float newDefault) {
