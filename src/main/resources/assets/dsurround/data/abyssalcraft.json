@@ -13,6 +13,7 @@
 		{
 			"conditions": "biome.name == 'Darklands'",
 			"_comment": "Darklands fog override",
+			"dust": false,
 			"fog": true,
 			"fogColor": "128,0,128",
 			"fogDensity": 0.6
@@ -20,13 +21,15 @@
 		{
 			"conditions": "biome.name == 'Darklands Forest'",
 			"_comment": "Darklands Forest fog override",
+			"dust": false,
 			"fog": true,
 			"fogColor": "128,0,128",
 			"fogDensity": 0.6
 		},
 		{
-			"conditions": "biome.name == 'Darklands Forest'",
-			"_comment": "Darklands Forest fog override",
+			"conditions": "biome.name == 'Darklands Plains'",
+			"_comment": "Darklands Plains fog override",
+			"dust": false,
 			"fog": true,
 			"fogColor": "128,0,128",
 			"fogDensity": 0.6
@@ -34,6 +37,7 @@
 		{
 			"conditions": "biome.name == 'Darklands Highland'",
 			"_comment": "Darklands Highland fog override",
+			"dust": false,
 			"fog": true,
 			"fogColor": "128,0,128",
 			"fogDensity": 0.6
@@ -45,6 +49,7 @@
 		{
 			"conditions": "biome.name == 'Coralium Infested Swamp'",
 			"_comment": "Coralium Infested Swamp fog override",
+			"dust": false,
 			"fog": true,
 			"fogColor": "34,228,144",
 			"fogDensity": 0.6
@@ -52,6 +57,7 @@
 		{
 			"conditions": "biome.name == 'Coralium Infested Ocean'",
 			"_comment": "Coralium Infested Ocean fog override",
+			"dust": false,
 			"fog": true,
 			"fogColor": "28,107,160",
 			"fogDensity": 0.6
