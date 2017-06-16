@@ -42,6 +42,21 @@
 			]
 		},
 		{
+			"conditions": "biome.isSavanna",
+			"_comment": "Basic Savanna",
+			"soundReset": true,
+			"sounds": [
+				{
+					"sound": "dsurround:savanna.day",
+					"conditions": "isDay"
+				},
+				{
+					"sound": "dsurround:savanna.night",
+					"conditions": "isNight"
+				}
+			]
+		},
+		{
 			"conditions": "biome.isJungle && biome.isWet && !biome.isForest",
 			"_comment": "Primates",
 			"sounds": [
@@ -403,8 +418,8 @@
 					"sound": "dsurround:village.anvil",
 					"conditions": "!player.isInside && isDay && weather.isNotRaining",
 					"soundType": "periodic",
-					"repeatDelay": 100,
-					"repeatDelayRandom": 200
+					"repeatDelay": 1200,
+					"repeatDelayRandom": 2400
 				},
 				{
 					"sound": "dsurround:village.dogbark",
