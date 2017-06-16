@@ -944,6 +944,19 @@
 			}
 		]
 	},
+	"desert.wind": {
+		"category": "ambient",
+		"credits": [
+			"§adesertwind1FINAL.wav",
+			"nageor",
+			"Creative Commons 0"
+		],
+		"sounds": [
+			{
+				"name": "dsurround:ambient/outside/desert_wind"
+			}
+		]
+	},
 	"crickets": {
 		"category": "ambient",
 		"credits": [
