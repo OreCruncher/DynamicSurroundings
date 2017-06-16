@@ -957,6 +957,34 @@
 			}
 		]
 	},
+	"savanna.day": {
+		"category": "ambient",
+		"credits": [
+			"§aMerlothPark_morning_ambiance.wav",
+			"reinsamba",
+			"Attribution"
+		],
+		"sounds": [
+			{
+				"name": "dsurround:ambient/outside/savanna_day",
+				"stream": true
+			}
+		]
+	},
+	"savanna.night": {
+		"category": "ambient",
+		"credits": [
+			"§aMerlothPark_crickets2.WAV",
+			"reinsamba",
+			"Attribution"
+		],
+		"sounds": [
+			{
+				"name": "dsurround:ambient/outside/savanna_night",
+				"stream": true
+			}
+		]
+	},
 	"crickets": {
 		"category": "ambient",
 		"credits": [
@@ -1647,20 +1675,10 @@
 		],
 		"sounds": [
 			{
-				"name": "dsurround:ambient/village/anvil1",
-				"weight": 20
+				"name": "dsurround:ambient/village/anvil1"
 			},
 			{
-				"name": "dsurround:ambient/village/anvil2",
-				"weight": 20
-			},
-			{
-				"name": "dsurround:ambient/village/anvil3",
-				"weight": 10
-			},
-			{
-				"name": "dsurround:ambient/village/anvil4",
-				"weight": 10
+				"name": "dsurround:ambient/village/anvil2"
 			}
 		]
 	},
