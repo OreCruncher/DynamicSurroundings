@@ -34,6 +34,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.Permissions;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
@@ -82,8 +83,11 @@ public class DynSurroundConfigGui extends GuiConfig {
 		addConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES, ModOptions.CONFIG_OPTION_ENABLE_EMOJIS);
 		addConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES, ModOptions.CONFIG_OPTION_ENABLE_ENTITY_CHAT);
 		addConfigElement(ModOptions.CATEGORY_EXPLOSIONS, ModOptions.CONFIG_ENABLE_EXPLOSIONS);
-		addConfigElement(ModOptions.CATEGORY_COMPASS, ModOptions.CONFIG_COMPASS_ENABLE);
-		addConfigElement(ModOptions.CATEGORY_COMPASS, ModOptions.CONFIG_CLOCK_ENABLE);
+
+		if (Permissions.instance().allowCompassAndClockHUD()) {
+			addConfigElement(ModOptions.CATEGORY_COMPASS, ModOptions.CONFIG_COMPASS_ENABLE);
+			addConfigElement(ModOptions.CATEGORY_COMPASS, ModOptions.CONFIG_CLOCK_ENABLE);
+		}
 
 		// Synthetic options for handling sound blocking and volume
 		this.soundCategory = new ConfigCategory("Individual Sound Configuration")
@@ -95,7 +99,8 @@ public class DynSurroundConfigGui extends GuiConfig {
 		// Tack on the rest of the categories for configuration
 		addConfigCategory(ModOptions.CATEGORY_GENERAL);
 		addConfigCategory(ModOptions.CATEGORY_PLAYER);
-		addConfigCategory(ModOptions.CATEGORY_COMPASS);
+		if (Permissions.instance().allowCompassAndClockHUD())
+			addConfigCategory(ModOptions.CATEGORY_COMPASS);
 		addConfigCategory(ModOptions.CATEGORY_EXPLOSIONS);
 		addConfigCategory(ModOptions.CATEGORY_RAIN);
 		addConfigCategory(ModOptions.CATEGORY_FOG);
@@ -103,7 +108,8 @@ public class DynSurroundConfigGui extends GuiConfig {
 		addConfigCategory(ModOptions.CATEGORY_BLOCK);
 		addConfigCategory(ModOptions.CATEGORY_BIOMES);
 		addConfigCategory(ModOptions.CATEGORY_SOUND);
-		addConfigCategory(ModOptions.CATEGORY_LIGHT_LEVEL);
+		if (Permissions.instance().allowLightLevelHUD())
+			addConfigCategory(ModOptions.CATEGORY_LIGHT_LEVEL);
 		addConfigCategory(ModOptions.CATEGORY_SPEECHBUBBLES);
 		addConfigCategory(ModOptions.CATEGORY_COMMANDS);
 		addConfigCategory(ModOptions.CATEGORY_ASM);

@@ -623,15 +623,15 @@ public final class ModOptions {
 	public static final String CONFIG_FEATURES_ALLOW_COMPASSCLOCK = "Allow Compass and Clock HUD";
 	
 	@Parameter(category = CATEGORY_FEATURES, property = CONFIG_FEATURES_ALLOW_LLHUD, defaultValue = "true", lang = "")
-	@Comment("Allow the player to activate the Light Level HUD")
+	@Comment("Allow the Light Level HUD")
 	@Hidden
 	public static boolean allowLightLevelHUD = true;
 	@Parameter(category = CATEGORY_FEATURES, property = CONFIG_FEATURES_ALLOW_CHUNKBOARDERS, defaultValue = "true", lang = "")
-	@Comment("Allow the player to activate the Chunk Board HUD")
+	@Comment("Allow the Chunk Border HUD")
 	@Hidden
 	public static boolean allowChunkBorderHUD = true;
 	@Parameter(category = CATEGORY_FEATURES, property = CONFIG_FEATURES_ALLOW_COMPASSCLOCK, defaultValue = "true", lang = "")
-	@Comment("Allow the player to activate the Chunk Board HUD")
+	@Comment("Allow the Compass and Clock HUD")
 	@Hidden
 	public static boolean allowCompassClockHUD = true;
 
@@ -770,6 +770,11 @@ public final class ModOptions {
 		config.setCategoryRequiresWorldRestart(CATEGORY_COMMANDS, true);
 		config.setCategoryComment(CATEGORY_COMMANDS, "Options for configuring commands");
 		config.setCategoryLanguageKey(CATEGORY_COMMANDS, "cfg.commands.cat.Commands");
+
+		// CATEGORY: features
+		config.setCategoryRequiresMcRestart(CATEGORY_FEATURES, true);
+		config.setCategoryRequiresWorldRestart(CATEGORY_FEATURES, true);
+		config.setCategoryComment(CATEGORY_FEATURES, "Controls whether features are available");
 
 		// Iterate through the config list looking for properties without
 		// comments. These will be scrubbed.
