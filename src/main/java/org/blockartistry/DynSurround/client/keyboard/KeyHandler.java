@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.Permissions;
 import org.blockartistry.DynSurround.client.gui.VolumeControlGui;
 import org.blockartistry.DynSurround.client.hud.LightLevelHUD;
 import org.blockartistry.DynSurround.client.hud.LightLevelHUD.Mode;
@@ -52,19 +53,32 @@ public class KeyHandler {
 
 	private static final String SECTION_NAME = DSurround.MOD_NAME;
 
-	private static final KeyBinding SELECTIONBOX_KEY = new KeyBinding("cfg.keybind.SelectionBox", Keyboard.KEY_B,
-			SECTION_NAME);
-	private static final KeyBinding LIGHTLEVEL_KEY = new KeyBinding("cfg.keybind.LightLevel", Keyboard.KEY_L,
-			SECTION_NAME);
-	private static final KeyBinding CHUNKBORDER_KEY = new KeyBinding("cfg.keybind.ChunkBorders", Keyboard.KEY_F9,
-			SECTION_NAME);
-	private static final KeyBinding VOLUME_KEY = new KeyBinding("cfg.keybind.Volume", Keyboard.KEY_V, SECTION_NAME);
+	private static final KeyBinding SELECTIONBOX_KEY;
+	private static final KeyBinding LIGHTLEVEL_KEY;
+	private static final KeyBinding CHUNKBORDER_KEY;
+	private static final KeyBinding VOLUME_KEY;
 
 	static {
+
+		SELECTIONBOX_KEY = new KeyBinding("cfg.keybind.SelectionBox", Keyboard.KEY_B, SECTION_NAME);
 		ClientRegistry.registerKeyBinding(SELECTIONBOX_KEY);
-		ClientRegistry.registerKeyBinding(LIGHTLEVEL_KEY);
-		ClientRegistry.registerKeyBinding(CHUNKBORDER_KEY);
+
+		VOLUME_KEY = new KeyBinding("cfg.keybind.Volume", Keyboard.KEY_V, SECTION_NAME);
 		ClientRegistry.registerKeyBinding(VOLUME_KEY);
+
+		if (Permissions.instance().allowLightLevelHUD()) {
+			LIGHTLEVEL_KEY = new KeyBinding("cfg.keybind.LightLevel", Keyboard.KEY_L, SECTION_NAME);
+			ClientRegistry.registerKeyBinding(LIGHTLEVEL_KEY);
+		} else {
+			LIGHTLEVEL_KEY = null;
+		}
+
+		if (Permissions.instance().allowChunkBorderHUD()) {
+			CHUNKBORDER_KEY = new KeyBinding("cfg.keybind.ChunkBorders", Keyboard.KEY_F9, SECTION_NAME);
+			ClientRegistry.registerKeyBinding(CHUNKBORDER_KEY);
+		} else {
+			CHUNKBORDER_KEY = null;
+		}
 	}
 
 	private static String getOnOff(final boolean flag) {
@@ -91,12 +105,17 @@ public class KeyHandler {
 			sendPlayerMessage("cfg.keybind.msg.Fencing", getOnOff(renderer.drawBlockOutline));
 		}
 
-		if (CHUNKBORDER_KEY.isPressed()) {
+		if (VOLUME_KEY.isPressed() && Minecraft.getMinecraft().currentScreen == null) {
+			final VolumeControlGui gui = new VolumeControlGui();
+			Minecraft.getMinecraft().displayGuiScreen(gui);
+		}
+
+		if (CHUNKBORDER_KEY != null && CHUNKBORDER_KEY.isPressed()) {
 			final boolean result = Minecraft.getMinecraft().debugRenderer.toggleDebugScreen();
 			sendPlayerMessage("cfg.keybind.msg.ChunkBorder", getOnOff(result));
 		}
 
-		if (LIGHTLEVEL_KEY.isPressed()) {
+		if (LIGHTLEVEL_KEY != null && LIGHTLEVEL_KEY.isPressed()) {
 			if (GuiScreen.isCtrlKeyDown()) {
 				// Only change mode when visible
 				if (LightLevelHUD.showHUD) {
@@ -114,11 +133,6 @@ public class KeyHandler {
 				LightLevelHUD.showHUD = !LightLevelHUD.showHUD;
 				sendPlayerMessage("cfg.keybind.msg.LLDisplay", getOnOff(LightLevelHUD.showHUD));
 			}
-		}
-
-		if (VOLUME_KEY.isPressed() && Minecraft.getMinecraft().currentScreen == null) {
-			final VolumeControlGui gui = new VolumeControlGui();
-			Minecraft.getMinecraft().displayGuiScreen(gui);
 		}
 
 	}
