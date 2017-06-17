@@ -409,21 +409,21 @@
 			"sounds": [
 				{
 					"sound": "dsurround:village.rooster",
-					"conditions": "!player.isInside && isSunrise && weather.isNotRaining",
+					"conditions": "player.dimension == 0 && !player.isInside && isSunrise && weather.isNotRaining",
 					"soundType": "periodic",
 					"repeatDelay": 100,
 					"repeatDelayRandom": 100
 				},
 				{
 					"sound": "dsurround:village.anvil",
-					"conditions": "!player.isInside && isDay && weather.isNotRaining",
+					"conditions": "player.dimension == 0 && !player.isInside && isDay && weather.isNotRaining",
 					"soundType": "periodic",
 					"repeatDelay": 1200,
 					"repeatDelayRandom": 2400
 				},
 				{
 					"sound": "dsurround:village.dogbark",
-					"conditions": "!player.isInside && weather.isNotRaining",
+					"conditions": "player.dimension == 0 && !player.isInside && weather.isNotRaining",
 					"soundType": "periodic",
 					"repeatDelay": 200,
 					"repeatDelayRandom": 200
