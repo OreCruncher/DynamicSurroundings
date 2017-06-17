@@ -61,7 +61,7 @@ public class ParticleWaterSplash extends ParticleJet {
 		if (setupSound()) {
 			pos.setPos(this.posX, this.posY, this.posZ);
 			this.emitter = new PositionedEmitter(Sounds.WATERFALL, pos);
-			final float volume = this.jetStrength / 10.0F;
+			final float volume = this.jetStrength / 15.0F;
 			final float pitch = 1.0F - 0.7F * (volume / 3.0F) + (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F;
 			this.emitter.setVolume(volume);
 			this.emitter.setPitch(pitch);
