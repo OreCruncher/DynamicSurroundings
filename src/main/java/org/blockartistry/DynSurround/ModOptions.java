@@ -128,11 +128,11 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_BACKGROUND_THUNDER = "Enable Background Thunder";
 	public static final String CONFIG_THUNDER_THRESHOLD = "Rain Intensity for Background Thunder";
 
-	private static final List<String> rainSort = Arrays.asList(CONFIG_VANILLA_RAIN, CONFIG_ALLOW_DESERT_DUST, CONFIG_RESET_RAIN_ON_SLEEP,
-			CONFIG_RAIN_PARTICLE_BASE, CONFIG_RAIN_ACTIVE_TIME_CONST, CONFIG_RAIN_ACTIVE_TIME_VARIABLE,
-			CONFIG_RAIN_INACTIVE_TIME_CONST, CONFIG_RAIN_INACTIVE_TIME_VARIABLE, CONFIG_STORM_ACTIVE_TIME_CONST,
-			CONFIG_STORM_ACTIVE_TIME_VARIABLE, CONFIG_STORM_INACTIVE_TIME_CONST, CONFIG_STORM_INACTIVE_TIME_VARIABLE,
-			CONFIG_ENABLE_BACKGROUND_THUNDER, CONFIG_THUNDER_THRESHOLD);
+	private static final List<String> rainSort = Arrays.asList(CONFIG_VANILLA_RAIN, CONFIG_ALLOW_DESERT_DUST,
+			CONFIG_RESET_RAIN_ON_SLEEP, CONFIG_RAIN_PARTICLE_BASE, CONFIG_RAIN_ACTIVE_TIME_CONST,
+			CONFIG_RAIN_ACTIVE_TIME_VARIABLE, CONFIG_RAIN_INACTIVE_TIME_CONST, CONFIG_RAIN_INACTIVE_TIME_VARIABLE,
+			CONFIG_STORM_ACTIVE_TIME_CONST, CONFIG_STORM_ACTIVE_TIME_VARIABLE, CONFIG_STORM_INACTIVE_TIME_CONST,
+			CONFIG_STORM_INACTIVE_TIME_VARIABLE, CONFIG_ENABLE_BACKGROUND_THUNDER, CONFIG_THUNDER_THRESHOLD);
 
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_VANILLA_RAIN, defaultValue = "false", lang = "cfg.rain.VanillaRain")
 	@Comment("Let Vanilla handle rain intensity and time windows")
@@ -228,8 +228,11 @@ public final class ModOptions {
 	public static final String CONFIG_MAX_RAIN_STRENGTH = "Default Maximum Rain Strength";
 	public static final String CONFIG_FX_RANGE = "Special Effect Range";
 	public static final String CONFIG_DISABLE_SUSPEND = "Disable Water Suspend Particles";
-	private static final List<String> generalSort = ImmutableList.<String>builder().add(CONFIG_DISABLE_SUSPEND,
-			CONFIG_FX_RANGE, CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH, CONFIG_EXTERNAL_SCRIPTS).build();
+	public static final String CONFIG_STARTUP_SOUND_LIST = "Startup Sound List";
+	private static final List<String> generalSort = ImmutableList.<String>builder()
+			.add(CONFIG_DISABLE_SUSPEND, CONFIG_FX_RANGE, CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH,
+					CONFIG_EXTERNAL_SCRIPTS, CONFIG_STARTUP_SOUND_LIST)
+			.build();
 
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_DISABLE_SUSPEND, defaultValue = "false", lang = "cfg.general.Suspend")
 	@Comment("Enable/disable water depth particle effect")
@@ -250,6 +253,10 @@ public final class ModOptions {
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_EXTERNAL_SCRIPTS, defaultValue = "", lang = "cfg.general.ExternalScripts")
 	@Comment("Configuration files for customization")
 	public static String[] externalScriptFiles = {};
+	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_STARTUP_SOUND_LIST, defaultValue = "minecraft:entity.experience_orb.pickup,minecraft:entity.chicken.egg", lang = "cfg.general.StartupSounds")
+	@Comment("Possible sounds to play when client reaches main game menu")
+	public static String[] startupSoundList = { "minecraft:entity.experience_orb.pickup",
+			"minecraft:entity.chicken.egg" };
 
 	public static final String CATEGORY_AURORA = "aurora";
 	public static final String CONFIG_AURORA_ENABLED = "Enabled";
@@ -616,12 +623,12 @@ public final class ModOptions {
 	@Parameter(category = CONFIG_COMMANDS_CALC, property = CONFIG_COMMAND_ALIAS, defaultValue = "c math", lang = "cfg.commands.Calc.Alias")
 	@Comment("Alias for the command")
 	public static String commandAliasCalc = "c math";
-	
+
 	public static final String CATEGORY_FEATURES = "features";
 	public static final String CONFIG_FEATURES_ALLOW_LLHUD = "Allow Light Level HUD";
 	public static final String CONFIG_FEATURES_ALLOW_CHUNKBOARDERS = "Allow Chunk Border HUD";
 	public static final String CONFIG_FEATURES_ALLOW_COMPASSCLOCK = "Allow Compass and Clock HUD";
-	
+
 	@Parameter(category = CATEGORY_FEATURES, property = CONFIG_FEATURES_ALLOW_LLHUD, defaultValue = "true", lang = "")
 	@Comment("Allow the Light Level HUD")
 	@Hidden

@@ -144,6 +144,8 @@ cfg.general.FXRange=Special Effect Range
 cfg.general.FXRange.tooltip=Block radius/range around player for special effect application
 cfg.general.ExternalScripts=External Configuration Files
 cfg.general.ExternalScripts.tooltip=Configuration files for customization
+cfg.general.StartupSounds=Startup Sound List
+cfg.general.StartupSounds.tooltip=Possible sounds to play when client reaches main game menu
 
 cfg.aurora.cat.Aurora=Aurora Options
 cfg.aurora.cat.Aurora.tooltip=Options that control Aurora behavior and rendering

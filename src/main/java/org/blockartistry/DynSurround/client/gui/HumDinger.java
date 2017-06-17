@@ -27,6 +27,7 @@ package org.blockartistry.DynSurround.client.gui;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.sound.AdhocSound;
 import org.blockartistry.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.lib.random.XorShiftRandom;
@@ -43,14 +44,15 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
 public final class HumDinger {
 
-	private static final String[] possibles = { "entity.experience_orb.pickup", "entity.chicken.egg" };
-
 	private static boolean hasPlayed = false;
 
 	@SubscribeEvent
 	public static void onGuiOpen(@Nonnull final GuiOpenEvent event) {
 		if (!hasPlayed && event.getGui() instanceof GuiMainMenu) {
 			hasPlayed = true;
+			final String[] possibles = ModOptions.startupSoundList;
+			if (possibles == null || possibles.length == 0)
+				return;
 			final SoundEvent se = SoundEvent.REGISTRY
 					.getObject(new ResourceLocation(possibles[XorShiftRandom.current().nextInt(possibles.length)]));
 			SoundEngine.instance().playSound(new AdhocSound(se, SoundCategory.MASTER));
