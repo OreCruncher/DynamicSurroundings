@@ -124,11 +124,7 @@ public class MoteFootprint extends MoteBase {
 
 		float f = ((float) this.age + partialTicks) / ((float) this.maxAge + 1);
 		f = f * f;
-		this.alpha = 2.0F - f * 2.0F;
-
-		if (this.alpha > 1.0F) {
-			this.alpha = 1.0F;
-		}
+		this.alpha = MathStuff.clamp(1.0F - f, 0F, 1F);
 
 		// Sets the alpha
 		this.alpha = this.alpha * 0.4F;
