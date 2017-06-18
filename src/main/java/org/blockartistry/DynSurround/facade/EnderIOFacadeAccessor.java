@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.facade.FacadeHelper.IFacadeAccessor;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -53,7 +54,6 @@ final class EnderIOFacadeAccessor implements IFacadeAccessor {
 			}
 		} catch (@Nonnull final Throwable t) {
 			DSurround.log().warn("Unable to locate %s.%s()", CLASS, METHOD);
-			DSurround.log().catching(t);
 		}
 	}
 

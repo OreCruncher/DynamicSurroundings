@@ -32,7 +32,7 @@ import net.minecraftforge.fml.common.Loader;
  * Helper enum to track mods that Dynamic Surroundings is interested in.
  */
 public enum ModEnvironment {
-	
+
 	//
 	ToughAsNails("ToughAsNails"),
 	//
@@ -44,6 +44,8 @@ public enum ModEnvironment {
 	//
 	Chisel("chisel"),
 	//
+	ChiselAPI("ctm-api"),
+	//
 	OpenTerrainGenerator("openterraingenerator"),
 	//
 	ActualMusic("actualmusic"),
@@ -51,20 +53,20 @@ public enum ModEnvironment {
 	GalacticraftCore("galacticraftcore"),
 	//
 	GalacticraftPlanets("galacticraftplanets");
-	
+
 	protected final String modId;
 	protected boolean isLoaded;
-	
+
 	private ModEnvironment(@Nonnull final String modId) {
-		this.modId = modId.toLowerCase();
+		this.modId = modId;
 	}
-	
+
 	public boolean isLoaded() {
 		return this.isLoaded;
 	}
-	
+
 	public static void initialize() {
-		for(final ModEnvironment me: ModEnvironment.values())
+		for (final ModEnvironment me : ModEnvironment.values())
 			me.isLoaded = Loader.isModLoaded(me.modId);
 	}
 
