@@ -37,9 +37,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-final class ChiselFacadeAccessor implements IFacadeAccessor {
+final class ChiselAPIFacadeAccessor implements IFacadeAccessor {
 
-	private static final String CLASS = "team.chisel.api.IFacade";
+	private static final String CLASS = "team.chisel.ctm.api.IFacade";
 	private static final String METHOD = "getFacade";
 
 	private static Class<?> IFacadeClass;

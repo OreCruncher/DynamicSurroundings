@@ -44,6 +44,8 @@ public enum ModEnvironment {
 	//
 	Chisel("chisel"),
 	//
+	ChiselAPI("ctm-api"),
+	//
 	OpenTerrainGenerator("openterraingenerator"),
 	//
 	ActualMusic("actualmusic"),
