@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.facade.FacadeHelper;
+import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.collections.IdentityHashSet;
 
 import net.minecraft.block.material.Material;
@@ -64,6 +65,15 @@ public class Footprint {
 			final IBlockState footstepState = FacadeHelper.resolveState(state, EnvironState.getWorld(), pos,
 					EnumFacing.UP);
 			return FOOTPRINTABLE.contains(footstepState.getMaterial());
+		}
+		return false;
+	}
+	
+	public static boolean hasFootstepImprint(@Nonnull final Vec3d pos) {
+		final BlockPos blockPos = new BlockPos(pos);
+		final IBlockState state = WorldUtils.getBlockState(EnvironState.getWorld(), blockPos);
+		if (state != null) {
+			return hasFootstepImprint(state, blockPos);
 		}
 		return false;
 	}
