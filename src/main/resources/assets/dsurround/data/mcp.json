@@ -307,6 +307,17 @@
 			]
 		},
 		{
+			"conditions": "!(biome.isMushroom || biome.isDead || biome.isSwamp || biome.isJungle || biome.isWasteland || biome.isOcean || biome.isSnowy || biome.isNether || biome.isEnd || biome.isFake)",
+			"_comment": "Raptors",
+			"sounds": [
+				{
+					"sound": "dsurround:raptor",
+					"conditions": "weather.isNotRaining && isDay",
+					"soundType": "spot"
+				}
+			]
+		},
+		{
 			"conditions": "(biome.isCold || biome.isSnowy) && !(biome.isDead || biome.isSwamp || biome.isEnd)",
 			"_comment": "Display aurora",
 			"aurora": true
