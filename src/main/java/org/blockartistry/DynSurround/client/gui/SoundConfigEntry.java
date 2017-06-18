@@ -127,8 +127,8 @@ public class SoundConfigEntry extends NumberSliderEntry {
 		final boolean canHover = mouseY < this.owningScreen.entryList.bottom
 				&& mouseY > this.owningScreen.entryList.top;
 
-		if (this.sliderHover.checkHover(mouseX, mouseY))
-			this.owningScreen.drawToolTip(this.toolTip, mouseX, mouseY);
+		//if (this.sliderHover.checkHover(mouseX, mouseY))
+		//	this.owningScreen.drawToolTip(this.toolTip, mouseX, mouseY);
 
 		if (this.cullHover.checkHover(mouseX, mouseY, canHover))
 			this.owningScreen.drawToolTip(this.toolTip, mouseX, mouseY);
@@ -144,23 +144,24 @@ public class SoundConfigEntry extends NumberSliderEntry {
 	public void drawEntry(final int slotIndex, final int x, final int y, final int listWidth, final int slotHeight,
 			final int mouseX, final int mouseY, final boolean isSelected) {
 
-		this.owningEntryList.controlWidth -= 148;
+		this.owningEntryList.controlWidth -= 205;
 		super.drawEntry(slotIndex, x, y, listWidth, slotHeight, mouseX, mouseY, isSelected);
-		this.owningEntryList.controlWidth += 148;
+		this.owningEntryList.controlWidth += 205;
 
 		this.sliderHover.updateBounds(y, y + slotHeight, x, this.owningEntryList.scrollBarX - 196);
 
-		this.play.xPosition = this.owningEntryList.scrollBarX - 82;
+		final int buttonWidth = 68;
+		this.play.xPosition = this.owningEntryList.scrollBarX - 115;
 		this.play.yPosition = y;
 		this.play.enabled = enabled();
 		this.play.drawButton(this.mc, mouseX, mouseY);
 
-		this.cull.xPosition = this.owningEntryList.scrollBarX - 138;
+		this.cull.xPosition = this.owningEntryList.scrollBarX - 115 - (buttonWidth);
 		this.cull.yPosition = y;
 		this.cull.enabled = enabled();
 		this.cull.drawButton(this.mc, mouseX, mouseY);
 
-		this.block.xPosition = this.owningEntryList.scrollBarX - 194;
+		this.block.xPosition = this.owningEntryList.scrollBarX - 115 - (buttonWidth * 2);
 		this.block.yPosition = y;
 		this.block.enabled = enabled();
 		this.block.drawButton(this.mc, mouseX, mouseY);
