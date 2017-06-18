@@ -1132,6 +1132,13 @@
 			"dsurround:ambient/birds/woodpecker5"
 		]
 	},
+	"raptor": {
+		"category": "ambient",
+		"sounds": [
+			"dsurround:ambient/birds/bald_eagle_chirp",
+			"dsurround:ambient/birds/red_tailed_hawk"
+		]
+	},
 	"crow": {
 		"category": "ambient",
 		"credits": [
