@@ -44,7 +44,7 @@ public class PlaySoundButton extends GuiButtonExt {
 	private BasicSound<?> playingSound;
 
 	public PlaySoundButton(final int id, @Nonnull final String sound) {
-		super(id, 0, 0, 34, 18, GuiConstants.TEXT_PLAY);
+		super(id, 0, 0, 68, 18, GuiConstants.TEXT_PLAY);
 		
 		this.soundEngine = SoundEngine.instance();
 		this.soundResource = sound;

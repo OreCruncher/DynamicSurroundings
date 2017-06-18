@@ -45,7 +45,7 @@ public class CheckBoxButton extends GuiButtonExt {
 
 	public CheckBoxButton(final int id, @Nonnull final String prefix, final boolean initialState,
 			final boolean defaultState) {
-		super(id, 0, 0, 52, 18, "");
+		super(id, 0, 0, 68, 18, "");
 
 		this.prefix = prefix;
 		this.initialState = initialState;
