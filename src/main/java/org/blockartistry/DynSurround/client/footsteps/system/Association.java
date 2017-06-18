@@ -97,10 +97,6 @@ public class Association {
 		return this.data == AcousticsManager.NOT_EMITTER;
 	}
 	
-	public boolean hasFootstepImprint() {
-		return Footprint.hasFootstepImprint(this.state, this.pos);
-	}
-	
 	public void generatePrint(@Nonnull final Vec3d position, final float rotation, final boolean isRight) {
 		this.print = Footprint.produce(position, rotation, isRight);
 	}
