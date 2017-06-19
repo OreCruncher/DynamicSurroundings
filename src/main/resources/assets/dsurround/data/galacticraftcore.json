@@ -17,8 +17,12 @@
 		{
 			"conditions": "MATCH('(?i)(.*mars flat.*)', biome.name)",
 			"_comment": "Galacticraft Mars",
-			"stepSoundReset": true,
 			"soundReset": true,
+			"dust": true,
+			"dustColor": "204,185,102",
+			"fog": true,
+			"fogDensity": 0.80,
+			"fogColor": "64,128,64",
 			"sounds": [
 				{
 					"sound": "dsurround:wind",
@@ -37,13 +41,16 @@
 		{
 			"conditions": "MATCH('(?i)(.*venus.*)', biome.name)",
 			"_comment": "Galacticraft Venus",
-			"stepSoundReset": true,
 			"soundReset": true,
+			"dust": true,
+			"dustColor": "204,185,102",
+			"fog": true,
+			"fogDensity": 0.18,
+			"fogColor": "64,128,64",
 			"sounds": [
 				{
 					"sound": "dsurround:wind",
-					"volume": 1.2,
-					"repeatDelayRandom": 10
+					"volume": 1.2
 				}
 			]
 		}
@@ -59,7 +66,9 @@
 		},
 		{
 			"name": "Mars",
-			"seaLevel": 0
+			"seaLevel": 0,
+			"fog": true,
+			"weather": true
 		},
 		{
 			"name": "Asteroids",
@@ -67,7 +76,17 @@
 		},
 		{
 			"name": "Venus",
-			"seaLevel": 0
+			"seaLevel": 0,
+			"fog": true,
+			"weather": true
 		}
-	]
+	],
+	"footsteps": {
+		"galacticraftcore:basic_block_moon^5": "snow",
+		"galacticraftplanets:mars^5": "gravel",
+		"galacticraftplanets:mars^6": "dirt",
+		"galacticraftplanets:venus^0": "dirt",
+		"galacticraftplanets:venus^1": "dirt",
+		"galacticraftplanets:venus^3": "gravel"
+	}
 }
