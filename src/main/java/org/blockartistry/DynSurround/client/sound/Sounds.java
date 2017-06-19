@@ -78,6 +78,12 @@ public final class Sounds {
 	public static final SoundEffect FIRE = new SoundEffect.Builder(new ResourceLocation("minecraft:block.fire.ambient"),
 			SoundCategory.BLOCKS).build();
 
-	public static final SoundEffect WATERFALL = new SoundEffect.Builder("waterfall", SoundCategory.AMBIENT).build();
+	// Waterfalls
+	public static final SoundEffect WATERFALL0 = new SoundEffect.Builder("waterfall.0", SoundCategory.AMBIENT).build();
+	public static final SoundEffect WATERFALL1 = new SoundEffect.Builder("waterfall.1", SoundCategory.AMBIENT).build();
+	public static final SoundEffect WATERFALL2 = new SoundEffect.Builder("waterfall.2", SoundCategory.AMBIENT).build();
+	public static final SoundEffect WATERFALL3 = new SoundEffect.Builder("waterfall.3", SoundCategory.AMBIENT).build();
+	public static final SoundEffect WATERFALL4 = new SoundEffect.Builder("waterfall.4", SoundCategory.AMBIENT).build();
+	public static final SoundEffect WATERFALL5 = new SoundEffect.Builder("waterfall.5", SoundCategory.AMBIENT).build();
 
 }
