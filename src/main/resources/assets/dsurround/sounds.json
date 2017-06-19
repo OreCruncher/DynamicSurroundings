@@ -1649,7 +1649,18 @@
 			}
 		]
 	},
-	"waterfall": {
+	"waterfall.0": {
+		"category": "ambient",
+		"credits": [
+			"§aWaterfall Winspit Dorset.wav",
+			"genghis attenborough",
+			"Attribution Noncommercial"
+		],
+		"sounds": [
+			"dsurround:ambient/stream/waterfall0"
+		]
+	},
+	"waterfall.1": {
 		"category": "ambient",
 		"credits": [
 			"§aRunning-water-mountain-stream.mp3",
@@ -1657,7 +1668,51 @@
 			"Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)"
 		],
 		"sounds": [
-			"dsurround:ambient/stream/waterfall"
+			"dsurround:ambient/stream/waterfall1"
+		]
+	},
+	"waterfall.2": {
+		"category": "ambient",
+		"credits": [
+			"§aWaterfall",
+			"Orpheuz",
+			"Creative Commons 0"
+		],
+		"sounds": [
+			"dsurround:ambient/stream/waterfall2"
+		]
+	},
+	"waterfall.3": {
+		"category": "ambient",
+		"credits": [
+			"§aSmall Waterfall at the Mill",
+			"willstepp",
+			"Creative Commons 0"
+		],
+		"sounds": [
+			"dsurround:ambient/stream/waterfall3"
+		]
+	},
+	"waterfall.4": {
+		"category": "ambient",
+		"credits": [
+			"§a Waterfall, Large, A.wav",
+			"InspectorJ",
+			"Attribution"
+		],
+		"sounds": [
+			"dsurround:ambient/stream/waterfall4"
+		]
+	},
+	"waterfall.5": {
+		"category": "ambient",
+		"credits": [
+			"§aWaterfall, Small, B.wav",
+			"InspectorJ",
+			"Attribution"
+		],
+		"sounds": [
+			"dsurround:ambient/stream/waterfall5"
 		]
 	},
 	"village.rooster": {
