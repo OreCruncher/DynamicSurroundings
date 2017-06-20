@@ -2,7 +2,11 @@
 	"itemConfig": {
 		"axeSound": [
 			"slimeknights.tconstruct.tools.tools.Hatchet",
-			"slimeknights.tconstruct.tools.tools.LumberAxe"
+			"slimeknights.tconstruct.tools.tools.LumberAxe",
+			"slimeknights.tconstruct.tools.tools.Scythe"
+		],
+		"toolSound": [
+			"slimeknights.tconstruct.tools.tools.Shovel"
 		],
 		"bowSound": [
 			"slimeknights.tconstruct.tools.ranged.item.LongBow",
