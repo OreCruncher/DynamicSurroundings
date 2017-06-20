@@ -97,14 +97,16 @@ public class EffectManager {
 		if (event.phase == Phase.END || Minecraft.getMinecraft().isGamePaused())
 			return;
 
+		final EntityPlayer player = FMLClientHandler.instance().getClient().player;
+		if (player == null)
+			return;
+
 		final World world = FMLClientHandler.instance().getClient().world;
 		if (world == null)
 			return;
-
+		
 		final boolean tickProfile = DSurround.log().testTrace(ModOptions.Trace.TICK_PROFILE);
 		DSurround.getProfiler().startSection("DSurroundEffectManager");
-
-		final EntityPlayer player = FMLClientHandler.instance().getClient().player;
 
 		if (tickProfile) {
 			for (int i = 0; i < this.effectHandlers.size(); i++) {
