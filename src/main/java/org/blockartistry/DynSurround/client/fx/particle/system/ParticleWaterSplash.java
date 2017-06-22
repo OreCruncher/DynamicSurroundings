@@ -30,6 +30,7 @@ import org.blockartistry.DynSurround.client.fx.particle.mote.IParticleMote;
 import org.blockartistry.DynSurround.client.sound.PositionedEmitter;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.Sounds;
+import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.WorldUtils;
 
 import net.minecraft.util.math.BlockPos;
@@ -40,9 +41,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleWaterSplash extends ParticleJet {
 
-	private static final SoundEffect[] fallSounds = new SoundEffect[10];
+	private static final SoundEffect[] fallSounds = new SoundEffect[11];
 	static {
-		// 0 and 1 are not used
+		fallSounds[0] = Sounds.WATERFALL0;
+		fallSounds[1] = Sounds.WATERFALL0;
 		fallSounds[2] = Sounds.WATERFALL0;
 		fallSounds[3] = Sounds.WATERFALL1;
 		fallSounds[4] = Sounds.WATERFALL2;
@@ -51,6 +53,7 @@ public class ParticleWaterSplash extends ParticleJet {
 		fallSounds[7] = Sounds.WATERFALL4;
 		fallSounds[8] = Sounds.WATERFALL4;
 		fallSounds[9] = Sounds.WATERFALL5;
+		fallSounds[10] = Sounds.WATERFALL5;
 	}
 
 	private static final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
@@ -74,7 +77,8 @@ public class ParticleWaterSplash extends ParticleJet {
 	protected void soundUpdate() {
 		if (setupSound()) {
 			pos.setPos(this.posX, this.posY, this.posZ);
-			this.emitter = new PositionedEmitter(fallSounds[this.jetStrength], pos);
+			final int idx = MathStuff.clamp(this.jetStrength, 0, fallSounds.length - 1);
+			this.emitter = new PositionedEmitter(fallSounds[idx], pos);
 			this.emitter.setPitch(1F + 0.2F * (RANDOM.nextFloat() - RANDOM.nextFloat()));
 		}
 
