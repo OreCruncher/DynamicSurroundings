@@ -1,3 +1,7 @@
+###DynamicSurroundings-1.11.2-3.4.5.6
+**Fixes**
+* Array out of bounds exception processing waterfall column
+
 ###DynamicSurroundings-1.11.2-3.4.5.5
 **What's New**
 * Russian (ru_RU) translations for Presets!/Dynamic Surroundings (thanks Xottab-DUTY!)
