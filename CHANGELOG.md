@@ -1,3 +1,33 @@
+###DynamicSurroundings-1.11.2-3.4.5.5
+**What's New**
+* Russian (ru_RU) translations for Presets!/Dynamic Surroundings (thanks Xottab-DUTY!)
+* Deserts have a wind style background sound
+* Support for Simple Corn
+* Savanna has daytime and nighttime biome sounds
+* Raptor (bald eagle/red tailed hawk) spot sounds
+* Config file options to turn off certain features
+    * Used by modpack authors to control player experience
+    * Applies to Light Level, Compass/Clock, and Chunk Fencing HUDs
+    * When turned off feature will not be available in game
+    * Config options for said features will also be suppressed from the config GUI
+    * Keybindings for features are disabled
+* Configuration options for specifying startup sound list
+    * To prevent sound from playing remove all entries from config list
+
+**Fixes**
+* No more "hanging chad" footprints when walking off the edge of a block onto tall grass plant
+* Tooltip no longer blocks the volume slider control in the Individual Sound Config GUI
+* Added missing Tinker's Shovel and Scythe sounds
+
+**Changes**
+* Sacred Springs biome from BoP have forest like sounds rather than jungle
+* AbyssalCraft Darklands biome should not have dust
+* Changed village anvil to be lower pitch and not as frequent
+* Square and hoof footprint textures are darker and alpha processing changed to make the prints less stark
+* Limit village sounds to Overworld
+* Support new Chisel API (facades)
+* Improved waterfall sounds; multiple different sounds based on the strength of the fall
+
 ###DynamicSurroundings-1.11.2-3.4.5.4
 **Fixes**
 * Light level hud should now show correct values

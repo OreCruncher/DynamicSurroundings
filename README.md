@@ -80,7 +80,37 @@ whether LPs can be monetized on the various streaming services.
      <li>S: <a href="https://www.freesound.org/people/aaronstar/sounds/194849/">NM-Mejor-Lado-Thunder-01.wav</a> by <a href="https://www.freesound.org/people/aaronstar/">aaronstar</a> | License: Creative Commons 0</li> 
 </ul>
 
-*dsurround:waterfall*
+*dsurround:waterfall.0*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/genghis%20attenborough/sounds/28266/">Waterfall Winspit Dorset.wav</a> by <a href="https://www.freesound.org/people/genghis%20attenborough/">genghis attenborough</a> | License: Attribution Noncommercial</li> 
+</ul>
+
+*dsurround:waterfall.1*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/InspectorJ/sounds/365921/">Waterfall, Small, B.wav</a> by <a href="https://www.freesound.org/people/InspectorJ/">InspectorJ</a> | License: Attribution</li> 
+</ul>
+
+*dsurround:waterfall.2*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/Orpheuz/sounds/321886/">Waterfall</a> by <a href="https://www.freesound.org/people/Orpheuz/">Orpheuz</a> | License: Creative Commons 0</li> 
+</ul>
+
+*dsurround:waterfall.3*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/willstepp/sounds/188295/">Small Waterfall at the Mill</a> by <a href="https://www.freesound.org/people/willstepp/">willstepp</a> | License: Creative Commons 0</li> 
+</ul>
+
+*dsurround:waterfall.4*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/InspectorJ/sounds/335992/">Waterfall, Large, A.wav</a> by <a href="https://www.freesound.org/people/InspectorJ/">InspectorJ</a> | License: Attribution</li> 
+</ul>
+
+*dsurround:waterfall.5*
 
 <ul>
 <li> <a href="http://www.orangefreesounds.com/running-water-sound-mountain-stream/">Running-water-mountain-stream.mp3</a> by Alexander | License Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)</li>
@@ -181,6 +211,24 @@ whether LPs can be monetized on the various streaming services.
 
 <ul>
      <li>S: <a href="https://www.freesound.org/people/RHumphries/sounds/1050/">rbh Mpls Bog birds.wav</a> by <a href="https://www.freesound.org/people/RHumphries/">RHumphries</a> | License: Attribution</li> 
+</ul>
+
+*dsurround:desert.wind*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/nageor/sounds/112296/">desertwind1FINAL.wav</a> by <a href="https://www.freesound.org/people/nageor/">nageor</a> | License: Creative Commons 0</li> 
+</ul>
+
+*dsurround:savanna.night*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/reinsamba/sounds/58236/">MerlothPark_crickets2.WAV</a> by <a href="https://www.freesound.org/people/reinsamba/">reinsamba</a> | License: Attribution</li>
+</ul>
+
+*dsurround:savanna.day*
+
+<ul> 
+     <li>S: <a href="https://www.freesound.org/people/reinsamba/sounds/58237/">MerlothPark_morning_ambiance.wav</a> by <a href="https://www.freesound.org/people/reinsamba/">reinsamba</a> | License: Attribution</li> 
 </ul>
 
 *dsurround:battle.normal*
