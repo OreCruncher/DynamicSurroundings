@@ -91,12 +91,12 @@ dependencies {
 
     compile "foxie:Calendar:1.10.2-1.5-10:deobf"
     compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
-    compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.10.2-5.0.0.2155:deobf"
+    compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.10.2-5.0.0.2236:deobf"
     
-    deobfCompile "mezz.jei:jei_1.10.2:3.14.5.406:api"
-    runtime "mezz.jei:jei_1.10.2:3.14.5.406"
+    deobfCompile "mezz.jei:jei_1.10.2:3.14.7.420:api"
+    runtime "mezz.jei:jei_1.10.2:3.14.7.420"
     
-	deobfCompile "team.chisel:Chisel:MC1.10.2-0.0.7.7:api"    
+	deobfCompile "team.chisel:Chisel:MC1.10.2-0.0.11.25:api"    
 }
 
 processResources
