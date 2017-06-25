@@ -66,7 +66,7 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 	protected final String DELETE_WARNING_TEXT = Localization.format("presets.dlg.DeleteWarning");
 
 	protected final String RESTART_REQUIRED_TEXT = TextFormatting.RED
-			+ Localization.format("presets.dlg.RestartRequired");
+			+ Localization.format("presets.dlg.RestartRequired") + TextFormatting.RESET;
 	protected final String TOOLTIP_RESTART_REQUIRED = TextFormatting.RED
 			+ Localization.format("presets.dlg.RestartRequired.tooltip") + TextFormatting.RESET;
 
@@ -262,7 +262,7 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 				if (info.isRestartRequired())
 					builder.append('\n').append(TOOLTIP_RESTART_REQUIRED);
 				if (!StringUtils.isEmpty(info.getDescription().trim()))
-					builder.append("\n\n").append(info.getDescription());
+					builder.append("\n\n").append(TextFormatting.RESET).append(info.getDescription());
 				this.tooltips.set(i, new GuiTooltip(this, button, builder.toString(), PRESET_TOOLTIP_WIDTH));
 			}
 		}

@@ -1,0 +1,29 @@
+{
+	"title": "Computer Level 3 - High",
+	"description": "Settings for a computer that is considered a T-Rex of desktop computation",
+	"restartRequired": true,
+	"data": {
+		"minecraft": {
+			"options.graphics": "true",
+			"options.ao": "2",
+			"options.mipmapLevels": "4",
+			"options.renderDistance": "16",
+			"options.renderClouds": "1",
+			"options.entityShadows": "true",
+			"options.particles": "0"
+		},
+		"dsurround": {
+			"lightlevel.Block Range": "24",
+			"rain.Particle Count Base": "100",
+			"general.Special Effect Range": "32",
+			"block.effects.Enable Water Splash": "true",
+			"block.effects.Enable DustJetEffect Motes": "true",
+			"general.Disable Water Suspend Particles": "false",
+			"player.Footprints": "true",
+			"block.effects.Enable Steam": "true",
+			"explosions.Enable Explosion Enhancement": "true",
+			"block.effects.Enable FireJetEffect Jets": "true",
+			"block.effects.Enable FountainJetEffect": "true"
+		}
+	}
+}

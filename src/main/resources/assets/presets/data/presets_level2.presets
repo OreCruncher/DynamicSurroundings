@@ -1,0 +1,29 @@
+{
+	"title": "Computer Level 2 - Medium",
+	"description": "Settings for a computer which enjoys a middle niche in the food chain",
+	"restartRequired": true,
+	"data": {
+		"minecraft": {
+			"options.graphics": "true",
+			"options.ao": "2",
+			"options.mipmapLevels": "2",
+			"options.renderDistance": "12",
+			"options.renderClouds": "1",
+			"options.entityShadows": "true",
+			"options.particles": "0"
+		},
+		"dsurround": {
+			"lightlevel.Block Range": "24",
+			"rain.Particle Count Base": "100",
+			"general.Special Effect Range": "24",
+			"block.effects.Enable Water Splash": "true",
+			"block.effects.Enable DustJetEffect Motes": "true",
+			"general.Disable Water Suspend Particles": "false",
+			"player.Footprints": "true",
+			"block.effects.Enable Steam": "true",
+			"explosions.Enable Explosion Enhancement": "true",
+			"block.effects.Enable FireJetEffect Jets": "true",
+			"block.effects.Enable FountainJetEffect": "true"
+		}
+	}
+}
