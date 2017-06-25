@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.client.fx;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
@@ -95,37 +96,53 @@ public final class ParticleCollections {
 	private final static CollectionHelper thePrints = new CollectionHelper(ParticleCollectionFootprint.class,
 			FOOTPRINT_TEXTURE);
 
+	@Nullable
 	public static IParticleMote addWaterRipple(@Nonnull final World world, final double x, final double y,
 			final double z) {
-		final IParticleMote mote = new MoteWaterRipple(world, x, y, z);
-		theRipples.get().addParticle(mote);
+		IParticleMote mote = null;
+		if (theRipples.get().canFit()) {
+			mote = new MoteWaterRipple(world, x, y, z);
+			theRipples.get().addParticle(mote);
+		}
 		return mote;
 	}
 
 	public static IParticleMote addWaterSpray(@Nonnull final World world, final double x, final double y,
 			final double z, final double dX, final double dY, final double dZ) {
-		final IParticleMote mote = new MoteWaterSpray(world, x, y, z, dX, dY, dZ);
-		theSprays.get().addParticle(mote);
+		IParticleMote mote = null;
+		if (theSprays.get().canFit()) {
+			mote = new MoteWaterSpray(world, x, y, z, dX, dY, dZ);
+			theSprays.get().addParticle(mote);
+		}
 		return mote;
 	}
 
 	public static IParticleMote addRainSplash(@Nonnull final World world, final double x, final double y,
 			final double z) {
-		final IParticleMote mote = new MoteRainSplash(world, x, y, z);
-		theSprays.get().addParticle(mote);
+		IParticleMote mote = null;
+		if (theSprays.get().canFit()) {
+			mote = new MoteRainSplash(world, x, y, z);
+			theSprays.get().addParticle(mote);
+		}
 		return mote;
 	}
 
 	public static IParticleMote addEmoji(@Nonnull final Entity entity) {
-		final IParticleMote mote = new MoteEmoji(entity);
-		theEmojis.get().addParticle(mote);
+		IParticleMote mote = null;
+		if (theEmojis.get().canFit()) {
+			mote = new MoteEmoji(entity);
+			theEmojis.get().addParticle(mote);
+		}
 		return mote;
 	}
 
 	public static IParticleMote addFootprint(@Nonnull final World world, final double x, final double y, final double z,
 			final float rot, final boolean isRight) {
-		final IParticleMote mote = new MoteFootprint(world, x, y, z, rot, isRight);
-		thePrints.get().addParticle(mote);
+		IParticleMote mote = null;
+		if (thePrints.get().canFit()) {
+			mote = new MoteFootprint(world, x, y, z, rot, isRight);
+			thePrints.get().addParticle(mote);
+		}
 		return mote;
 	}
 

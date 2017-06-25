@@ -111,7 +111,8 @@ public class ParticleWaterSplash extends ParticleJet {
 			final double motionZ = zOffset * (this.jetStrength / 40.D);
 			final IParticleMote particle = ParticleCollections.addWaterSpray(this.world, this.posX + xOffset,
 					(double) (this.posY), this.posZ + zOffset, motionX, motionY, motionZ);
-			addParticle(particle);
+			if (particle != null)
+				addParticle(particle);
 		}
 	}
 

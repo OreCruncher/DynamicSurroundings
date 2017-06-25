@@ -81,7 +81,8 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 			if (ModOptions.enableEntityEmojis && entity.isEntityAlive() && data.getEmojiType() != EmojiType.NONE
 					&& !this.emojiParticles.contains(event.entityId)) {
 				final IParticleMote mote = ParticleCollections.addEmoji(entity);
-				this.emojiParticles.put(event.entityId, mote);
+				if (mote != null)
+					this.emojiParticles.put(event.entityId, mote);
 			}
 		}
 	}

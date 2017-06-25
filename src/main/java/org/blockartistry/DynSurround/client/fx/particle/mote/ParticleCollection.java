@@ -45,6 +45,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleCollection extends Particle {
 
+	protected static final int MAX_PARTICLES = 4000;
 	protected static final int ALLOCATION_SIZE = 1024;
 
 	protected final ObjectArray<IParticleMote> myParticles = new ObjectArray<IParticleMote>(ALLOCATION_SIZE);
@@ -60,9 +61,18 @@ public class ParticleCollection extends Particle {
 	protected void bindTexture(@Nonnull final ResourceLocation resource) {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(resource);
 	}
+	
+	public boolean canFit() {
+		return this.myParticles.size() < MAX_PARTICLES;
+	}
 
-	public void addParticle(@Nonnull final IParticleMote mote) {
-		this.myParticles.add(mote);
+	public boolean addParticle(@Nonnull final IParticleMote mote) {
+		
+		if(this.canFit()) {
+			this.myParticles.add(mote);
+			return true;
+		}
+		return false;
 	}
 
 	public boolean shouldDie() {
