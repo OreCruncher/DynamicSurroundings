@@ -24,10 +24,18 @@
 
 package org.blockartistry.Presets.proxy;
 
+import java.io.File;
+import java.io.InputStream;
 import javax.annotation.Nonnull;
 
+import org.blockartistry.Presets.Presets;
 import org.blockartistry.lib.Localization;
+import org.blockartistry.lib.io.Streams;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -36,6 +44,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ProxyClient extends Proxy {
+
+	// List of preset files to copy.  Temporary until I can figure a way to
+	// automagically enumerate the files in a jar
+	private static final String[] presetFiles = new String[] {
+		"presets_level0",
+		"presets_level1",
+		"presets_level2",
+		"presets_level3",
+		"dsurround_skyblock",
+		"dsurround_emojis"
+	};
 	
 	@Override
 	protected void registerLanguage() {
@@ -55,6 +74,22 @@ public class ProxyClient extends Proxy {
 	@Override
 	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		super.preInit(event);
+		
+		// Extract the preset config files present in the JAR
+		final IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
+
+		for(final String preset : presetFiles) {
+			final String name = preset + ".presets";
+			try {
+				final IResource r = manager.getResource(new ResourceLocation(Presets.MOD_ID, "data/" + name));
+				try(final InputStream stream = r.getInputStream()) {
+					Streams.copy(stream, new File(Presets.dataDirectory(), name));
+				}
+			} catch(final Throwable t) {
+				Presets.log().error("Unable to extract preset file " + name, t);
+			}
+		}
+		
 	}
 
 	@Override

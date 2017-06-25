@@ -1,0 +1,29 @@
+{
+	"title": "Computer Level 0 - Potato",
+	"description": "Settings for a computer that is no better than a potato",
+	"restartRequired": true,
+	"data": {
+		"minecraft": {
+			"options.graphics": "false",
+			"options.ao": "0",
+			"options.mipmapLevels": "0",
+			"options.renderDistance": "8",
+			"options.renderClouds": "0",
+			"options.entityShadows": "false",
+			"options.particles": "2"
+		},
+		"dsurround": {
+			"lightlevel.Block Range": "16",
+			"rain.Particle Count Base": "100",
+			"general.Special Effect Range": "16",
+			"block.effects.Enable Water Splash": "false",
+			"block.effects.Enable DustJetEffect Motes": "false",
+			"general.Disable Water Suspend Particles": "true",
+			"player.Footprints": "false",
+			"block.effects.Enable Steam": "false",
+			"explosions.Enable Explosion Enhancement": "false",
+			"block.effects.Enable FireJetEffect Jets": "false",
+			"block.effects.Enable FountainJetEffect": "false"
+		}
+	}
+}
