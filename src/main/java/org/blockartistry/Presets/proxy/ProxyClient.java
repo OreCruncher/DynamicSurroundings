@@ -53,7 +53,8 @@ public class ProxyClient extends Proxy {
 		"presets_level2",
 		"presets_level3",
 		"dsurround_skyblock",
-		"dsurround_emojis"
+		"dsurround_emojis",
+		"dsurround_turnalloff"
 	};
 	
 	@Override
