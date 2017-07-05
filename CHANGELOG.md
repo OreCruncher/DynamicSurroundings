@@ -1,3 +1,15 @@
+###DynamicSurroundings-1.11.2-3.4.5.7
+**What's New**
+* "Built-in" Preset configurations for:
+    * Minecraft/Dynamic Surroundings settings based on computer capability
+    * SkyBlock maps
+    * Turning on entity Emoji's, chat, and player speech bubbles
+* Support for the Gravel Ore Mod by Elucent
+    
+**Fixes**
+* Cap ParticleCollection particle count to reduce lag created because of an excessive number of particles generated due to unusual terrain
+* Sometimes a waterfall sound source didn't want to go away.
+
 ###DynamicSurroundings-1.11.2-3.4.5.6
 **Fixes**
 * Array out of bounds exception processing waterfall column
