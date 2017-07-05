@@ -1,3 +1,14 @@
+###DynamicSurroundings-1.10.2-3.4.5.7
+**What's New**
+* "Built-in" Preset configurations for:
+    * Minecraft/Dynamic Surroundings settings based on computer capability
+    * SkyBlock maps
+    * Turning on entity Emoji's, chat, and player speech bubbles
+    
+**Fixes**
+* Cap ParticleCollection particle count to reduce lag created because of an excessive number of particles generated due to unusual terrain
+* Sometimes a waterfall sound source didn't want to go away.
+
 ###DynamicSurroundings-1.10.2-3.4.5.6
 **Fixes**
 * Array out of bounds exception processing waterfall column
