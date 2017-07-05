@@ -1,0 +1,11 @@
+{
+	"footsteps": {
+		"gravelores:coal_gravel_ore": "gravel",
+		"gravelores:iron_gravel_ore": "gravel",
+		"gravelores:lapis_gravel_ore": "gravel",
+		"gravelores:gold_gravel_ore": "gravel",
+		"gravelores:redstone_gravel_ore": "gravel",
+		"gravelores:diamond_gravel_ore": "gravel",
+		"gravelores:emerald_gravel_ore": "gravel"
+	}
+}
