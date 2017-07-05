@@ -1,3 +1,18 @@
+###DynamicSurroundings-1.12-3.4.5.7
+**What's New**
+* Minecraft 1.12 support.  Duh.
+    * It's WIP, so report problems in the [Issue Tracker](https://github.com/OreCruncher/DynamicSurroundings/issues).
+    * Same feature set as the 1.10.x/1.11.2 releases
+* "Built-in" Preset configurations for:
+    * Minecraft/Dynamic Surroundings settings based on computer capability
+    * SkyBlock maps
+    * Turning on entity Emoji's, chat, and player speech bubbles
+* Support for the Gravel Ore Mod by Elucent
+    
+**Fixes**
+* Cap ParticleCollection particle count to reduce lag created because of an excessive number of particles generated due to unusual terrain
+* Sometimes a waterfall sound source didn't want to go away.
+
 ###DynamicSurroundings-1.11.2-3.4.5.6
 **Fixes**
 * Array out of bounds exception processing waterfall column
