@@ -6,6 +6,11 @@
 		"gravelores:gold_gravel_ore": "gravel",
 		"gravelores:redstone_gravel_ore": "gravel",
 		"gravelores:diamond_gravel_ore": "gravel",
-		"gravelores:emerald_gravel_ore": "gravel"
+		"gravelores:emerald_gravel_ore": "gravel",
+		"gravelores:tin_gravel_ore": "gravel",
+		"gravelores:nickel_gravel_ore": "gravel",	
+		"gravelores:silver_gravel_ore": "gravel",
+		"gravelores:lead_gravel_ore": "gravel",	
+		"gravelores:copper_gravel_ore": "gravel"					
 	}
 }
