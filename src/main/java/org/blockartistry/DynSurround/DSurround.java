@@ -46,6 +46,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -70,7 +71,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 		version = DSurround.VERSION,
 		acceptedMinecraftVersions = DSurround.MINECRAFT_VERSIONS,
 		guiFactory = DSurround.GUI_FACTORY,
-		updateJSON = DSurround.UPDATE_URL
+		updateJSON = DSurround.UPDATE_URL,
+		certificateFingerprint = DSurround.FINGERPRINT
 )
 public class DSurround {
 	public static final String MOD_ID = "dsurround";
@@ -82,6 +84,7 @@ public class DSurround {
 	public static final String DEPENDENCIES = "after:galacticraftcore"; //"before:presets; after:galacticraftcore";
 	public static final String GUI_FACTORY = "org.blockartistry.DynSurround.client.gui.ConfigGuiFactory";
 	public static final String UPDATE_URL = "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json";
+	public static final String FINGERPRINT = "b08d8a51fbdb6ebc0e095daed5669e889d4ab780";
 
 	@Instance(MOD_ID)
 	protected static DSurround instance;
@@ -179,6 +182,11 @@ public class DSurround {
 		proxy.loadCompleted(event);
 	}
 
+    @EventHandler
+    public void onFingerprintViolation(@Nonnull final FMLFingerprintViolationEvent event) {
+        log().warn("Invalid fingerprint detected!");
+    }
+    
 	////////////////////////
 	//
 	// Client state events
