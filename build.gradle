@@ -143,6 +143,22 @@ task deobfJar(type: Jar) {
     }
 }
 
+// https://gist.github.com/matthewprenger/9b2da059b89433a01c1c
+task signJar(type: SignJar, dependsOn: reobfJar) {
+    onlyIf { // Skip the task if our secret data isn't available
+        project.hasProperty('keyStore')
+    }
+
+    keyStore = project.keyStore // This needs to be a path to the keystore file
+    alias = project.keyStoreAlias
+    storePass = project.keyStorePass
+    keyPass = project.keyStoreKeyPass
+    inputFile = jar.archivePath
+    outputFile = jar.archivePath
+}
+
+build.dependsOn signJar
+
 artifacts {
     archives deobfJar
 }
