@@ -96,13 +96,14 @@ public class Transformer implements IClassTransformer {
 		for (final MethodNode m : cn.methods) {
 			if (isOneOf(m.name, names)) {
 				logger.debug("Hooking " + m.name);
+				m.localVariables = null;
 				final InsnList list = new InsnList();
 				list.add(new VarInsnNode(ALOAD, 0));
 				final String sig = "(Lnet/minecraft/client/renderer/EntityRenderer;)V";
 				list.add(new MethodInsnNode(INVOKESTATIC, "org/blockartistry/DynSurround/client/weather/RenderWeather",
 						targetName, sig, false));
 				list.add(new InsnNode(RETURN));
-				m.instructions.insertBefore(m.instructions.getFirst(), list);
+				m.instructions = list;
 			}
 		}
 
@@ -122,13 +123,14 @@ public class Transformer implements IClassTransformer {
 		for (final MethodNode m : cn.methods) {
 			if (isOneOf(m.name, names)) {
 				logger.debug("Hooking " + m.name);
+				m.localVariables = null;
 				InsnList list = new InsnList();
 				list.add(new VarInsnNode(ALOAD, 0));
 				final String sig = "(Lnet/minecraft/world/WorldServer;)V";
 				list.add(new MethodInsnNode(INVOKESTATIC, "org/blockartistry/DynSurround/server/PlayerSleepHandler",
 						targetName, sig, false));
 				list.add(new InsnNode(RETURN));
-				m.instructions.insertBefore(m.instructions.getFirst(), list);
+				m.instructions = list;
 				break;
 			}
 		}
@@ -186,18 +188,19 @@ public class Transformer implements IClassTransformer {
 		for (final MethodNode m : cn.methods) {
 			if (isOneOf(m.name, names)) {
 				logger.debug("Hooking " + m.name);
+				//m.localVariables = null;
 				InsnList list = new InsnList();
 				list.add(new VarInsnNode(ALOAD, 0));
 				final String sig = "(Lnet/minecraft/util/ResourceLocation;)Ljava/net/URL;";
 				list.add(new MethodInsnNode(INVOKESTATIC, "org/blockartistry/lib/sound/SoundCache", targetName, sig,
 						false));
 				list.add(new InsnNode(ARETURN));
-				m.instructions.insertBefore(m.instructions.getFirst(), list);
+				m.instructions.insert(m.instructions.getFirst(), list);
 				break;
 			}
 		}
 
-		final ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+		final ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
 		cn.accept(cw);
 		return cw.toByteArray();
 	}

@@ -32,7 +32,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
-//@IFMLLoadingPlugin.MCVersion("1.11.2")
+@IFMLLoadingPlugin.MCVersion("1.12")
 @IFMLLoadingPlugin.TransformerExclusions({ "org.blockartistry.DynSurround.asm.",
 		"org.blockartistry.DynSurround.ModOptions" })
 @IFMLLoadingPlugin.SortingIndex(10001)

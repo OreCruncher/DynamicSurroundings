@@ -30,6 +30,7 @@ import org.blockartistry.DynSurround.DSurround;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public final class SoundUtils {
 
@@ -52,9 +53,12 @@ public final class SoundUtils {
 	public static SoundEvent getOrRegisterSound(@Nonnull final ResourceLocation location) {
 		if (SoundEvent.REGISTRY.containsKey(location))
 			return SoundEvent.REGISTRY.getObject(location);
+		
+		if(ForgeRegistries.SOUND_EVENTS.containsKey(location))
+			return ForgeRegistries.SOUND_EVENTS.getValue(location);
 
 		final SoundEvent sound = new SoundEvent(location).setRegistryName(location);
-		SoundEvent.REGISTRY.putObject(location,  sound);
+		ForgeRegistries.SOUND_EVENTS.register(sound);
 		return sound;
 	}
 

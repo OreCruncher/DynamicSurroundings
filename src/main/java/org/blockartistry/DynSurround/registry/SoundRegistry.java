@@ -51,6 +51,8 @@ import gnu.trove.impl.Constants;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -123,6 +125,10 @@ public final class SoundRegistry extends Registry {
 				: this.volumeControl.get(sound.getSoundLocation().toString());
 	}
 
+	public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {
+		
+	}
+	
 	@SideOnly(Side.CLIENT)
 	public static void initializeRegistry() {
 		final ParameterizedType TYPE = new ParameterizedType() {
