@@ -191,7 +191,7 @@ public class PotionHUD extends GuiOverlay {
 		final float SCALE = ModOptions.potionHudScale;
 
 		final Minecraft mc = Minecraft.getMinecraft();
-		final FontRenderer font = mc.fontRendererObj;
+		final FontRenderer font = mc.fontRenderer;
 
 		final int guiLeft = 2;
 		int guiTop = 2;

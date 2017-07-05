@@ -29,7 +29,8 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.WorldUtils;
-import net.minecraft.client.renderer.VertexBuffer;
+
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -119,7 +120,7 @@ public class MoteFootprint extends MoteBase {
 	}
 
 	@Override
-	public void renderParticle(VertexBuffer buffer, Entity entityIn, float partialTicks, float rotX, float rotZ,
+	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotX, float rotZ,
 			float rotYZ, float rotXY, float rotXZ) {
 
 		float f = ((float) this.age + partialTicks) / ((float) this.maxAge + 1);

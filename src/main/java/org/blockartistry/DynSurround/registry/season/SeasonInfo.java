@@ -33,8 +33,7 @@ import org.blockartistry.DynSurround.registry.SeasonType;
 import org.blockartistry.DynSurround.registry.TemperatureRating;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 
-import com.google.common.base.Objects;
-
+import com.google.common.base.MoreObjects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -110,7 +109,7 @@ public class SeasonInfo {
 	
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("name", this.dimensionName).toString();
+		return MoreObjects.toStringHelper(this).add("name", this.dimensionName).toString();
 	}
 
 }

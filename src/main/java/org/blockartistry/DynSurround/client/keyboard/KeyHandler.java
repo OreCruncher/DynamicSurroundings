@@ -111,7 +111,7 @@ public class KeyHandler {
 		}
 
 		if (CHUNKBORDER_KEY != null && CHUNKBORDER_KEY.isPressed()) {
-			final boolean result = Minecraft.getMinecraft().debugRenderer.toggleDebugScreen();
+			final boolean result = Minecraft.getMinecraft().debugRenderer.toggleChunkBorders();
 			sendPlayerMessage("cfg.keybind.msg.ChunkBorder", getOnOff(result));
 		}
 

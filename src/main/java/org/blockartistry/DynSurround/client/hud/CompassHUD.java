@@ -195,7 +195,7 @@ public class CompassHUD extends GuiOverlay {
 			return;
 
 		final Minecraft mc = Minecraft.getMinecraft();
-		final FontRenderer font = mc.fontRendererObj;
+		final FontRenderer font = mc.fontRenderer;
 
 		final ScaledResolution resolution = event.getResolution();
 		final int centerX = (resolution.getScaledWidth() + 1) / 2;

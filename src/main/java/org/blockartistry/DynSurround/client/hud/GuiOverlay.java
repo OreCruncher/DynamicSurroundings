@@ -25,9 +25,9 @@
 package org.blockartistry.DynSurround.client.hud;
 
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -73,7 +73,7 @@ public abstract class GuiOverlay extends Gui {
 		GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 		GlStateManager.shadeModel(7425);
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer t = tessellator.getBuffer();
+		BufferBuilder t = tessellator.getBuffer();
 		t.begin(7, DefaultVertexFormats.POSITION_COLOR);
 		t.pos((double) (left + right), (double) top, (double) zLevel).color(f1, f2, f3, f).endVertex();
 		t.pos((double) left, (double) top, (double) zLevel).color(f1, f2, f3, f).endVertex();

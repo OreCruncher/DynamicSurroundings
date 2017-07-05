@@ -104,7 +104,6 @@ public class MusicTickerReplacement extends MusicTicker {
 		this.timeUntilNextMusic = Integer.MAX_VALUE;
 	}
 
-	@Override
 	public void stopMusic() {
 		if (this.currentMusic != null) {
 			SoundEngine.instance().stopSound((BasicSound<?>) this.currentMusic);

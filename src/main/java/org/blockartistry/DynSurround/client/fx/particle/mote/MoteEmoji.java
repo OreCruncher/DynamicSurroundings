@@ -34,7 +34,8 @@ import org.blockartistry.DynSurround.api.entity.EntityCapability;
 import org.blockartistry.DynSurround.api.entity.IEmojiData;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.MathStuff;
-import net.minecraft.client.renderer.VertexBuffer;
+
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -161,7 +162,7 @@ public class MoteEmoji extends MoteMotionBase {
 	}
 
 	@Override
-	public void renderParticle(final VertexBuffer buffer, final Entity entityIn, final float partialTicks,
+	public void renderParticle(final BufferBuilder buffer, final Entity entityIn, final float partialTicks,
 			final float edgeLRdirectionX, final float edgeUDdirectionY, final float edgeLRdirectionZ,
 			final float edgeUDdirectionX, final float edgeUDdirectionZ) {
 

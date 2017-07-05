@@ -30,8 +30,7 @@ import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.registry.SoundMetadata;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
 
-import com.google.common.base.Objects;
-
+import com.google.common.base.MoreObjects;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -63,7 +62,7 @@ public class ConfigSound extends BasicSound<ConfigSound> {
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).addValue(this.positionedSoundLocation.toString()).add("volume", this.volume)
+		return MoreObjects.toStringHelper(this).addValue(this.positionedSoundLocation.toString()).add("volume", this.volume)
 				.add("pitch", this.pitch).add("attenuation", this.attenuationType).toString();
 	}
 }

@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 import com.google.common.base.Predicate;
 
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -62,7 +62,7 @@ public interface IParticleMote {
 
 	void onUpdate();
 
-	void renderParticle(final VertexBuffer buffer, final Entity entityIn, final float partialTicks, final float rotX,
+	void renderParticle(final BufferBuilder buffer, final Entity entityIn, final float partialTicks, final float rotX,
 			final float rotZ, final float rotYZ, final float rotXY, final float rotXZ);
 
 }

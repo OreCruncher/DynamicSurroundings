@@ -58,8 +58,8 @@ public class FireFlyEffect extends BlockEffect {
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		final AxisAlignedBB box = state.getBoundingBox(provider.getWorld(), pos);
 		final Vec3d loc = box.getCenter();
-		final ParticleFireFly fly = new ParticleFireFly(provider.getWorld(), pos.getX() + loc.xCoord,
-				pos.getY() + box.maxY, pos.getZ() + loc.zCoord);
+		final ParticleFireFly fly = new ParticleFireFly(provider.getWorld(), pos.getX() + loc.x, pos.getY() + box.maxY,
+				pos.getZ() + loc.z);
 		ParticleHelper.addParticle(fly);
 	}
 

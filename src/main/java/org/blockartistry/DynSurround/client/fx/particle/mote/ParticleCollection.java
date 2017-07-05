@@ -32,8 +32,8 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.Entity;
@@ -102,7 +102,7 @@ public class ParticleCollection extends Particle {
 	}
 
 	@Override
-	public void renderParticle(final VertexBuffer buffer, final Entity entityIn, final float partialTicks,
+	public void renderParticle(final BufferBuilder buffer, final Entity entityIn, final float partialTicks,
 			final float rotX, final float rotZ, final float rotYZ, final float rotXY, final float rotXZ) {
 
 		this.bindTexture(this.texture);

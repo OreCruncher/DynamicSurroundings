@@ -39,10 +39,10 @@ import org.blockartistry.lib.random.XorShiftRandom;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
@@ -107,7 +107,7 @@ public class StormRenderer {
 		renderer.enableLightmap();
 
 		final Tessellator tess = Tessellator.getInstance();
-		final VertexBuffer worldrenderer = tess.getBuffer();
+		final BufferBuilder worldrenderer = tess.getBuffer();
 
 		GlStateManager.disableCull();
 		GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);

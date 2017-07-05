@@ -42,7 +42,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -63,7 +62,7 @@ public final class MCHelper {
 			return true;
 
 		final NonNullList<ItemStack> stacks = NonNullList.create();
-		block.getSubBlocks(item, null, stacks);
+		block.getSubBlocks(null, stacks);
 		return stacks.size() > 1;
 	}
 
@@ -137,9 +136,11 @@ public final class MCHelper {
 
 	@Nonnull
 	public static Block getBlockByName(@Nonnull final String blockName) {
+		return Block.getBlockFromName(blockName);
+		
 		// Yes yes. I know what I am doing here. Need to know if the block
 		// doesn't exist because of bad data in a config file or some such.
-		return Block.REGISTRY.getObjectBypass(new ResourceLocation(blockName));
+		//return Block.REGISTRY.getObjectBypass(new ResourceLocation(blockName));
 	}
 
 	@Nullable

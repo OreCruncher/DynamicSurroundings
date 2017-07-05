@@ -29,9 +29,9 @@ import javax.annotation.Nonnull;
 import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.WorldUtils;
 
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -154,7 +154,7 @@ public abstract class ParticleAsset extends ParticleBase {
 	}
 
 	@Override
-	public final void renderParticle(VertexBuffer buffer, Entity entityIn, float partialTicks, float rotationX,
+	public final void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX,
 			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 
 		final float x = ((float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpX()));

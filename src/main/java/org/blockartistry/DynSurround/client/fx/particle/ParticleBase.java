@@ -41,7 +41,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class ParticleBase extends Particle {
 	
 	protected final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
-	protected final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
+	protected final FontRenderer font = Minecraft.getMinecraft().fontRenderer;
 
 	protected ParticleBase(@Nonnull final World worldIn, final double posXIn, final double posYIn,
 			final double posZIn) {

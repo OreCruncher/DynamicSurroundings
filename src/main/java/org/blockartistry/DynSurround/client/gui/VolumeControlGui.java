@@ -85,12 +85,12 @@ public class VolumeControlGui extends GuiScreen implements GuiResponder {
 		addSlider(new GuiSlider(this, ID_FOOTSTEP_SOUND, drawX, drawY + 50, "dlg.name.FootstepSound", 0F, 1F,
 				this.footstep, FORMAT));
 
-		final GuiLabel label = new GuiLabel(mc.fontRendererObj, ID_LABEL, drawX, drawY + 75, SLIDER_WIDTH, 10,
+		final GuiLabel label = new GuiLabel(mc.fontRenderer, ID_LABEL, drawX, drawY + 75, SLIDER_WIDTH, 10,
 				Color.MC_WHITE.rgb());
 		label.setCentered().addLine(Localization.format("dlg.name.Close"));
 		this.labelList.add(label);
 
-		this.panel.setMinimumWidth(SLIDER_WIDTH + mc.fontRendererObj.FONT_HEIGHT * 2);
+		this.panel.setMinimumWidth(SLIDER_WIDTH + mc.fontRenderer.FONT_HEIGHT * 2);
 		this.panel.setMinimumHeight(4 * 25);
 	}
 

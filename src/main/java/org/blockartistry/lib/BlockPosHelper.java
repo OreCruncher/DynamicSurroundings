@@ -41,7 +41,7 @@ public final class BlockPosHelper {
 
 	public static BlockPos.MutableBlockPos setPos(@Nonnull final BlockPos.MutableBlockPos pos,
 			@Nonnull final Vec3d vec) {
-		return pos.setPos(vec.xCoord, vec.yCoord, vec.zCoord);
+		return pos.setPos(vec.x, vec.y, vec.z);
 	}
 
 	public static BlockPos setPos(@Nonnull final BlockPos pos, @Nonnull final Vec3d vec) {

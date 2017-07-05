@@ -77,7 +77,7 @@ public class FootstepsHandler extends EffectHandlerBase {
 	public void onDisplayFootstep(@Nonnull final FootstepEvent.Display event) {
 		if (ModOptions.enableFootprints) {
 			final Vec3d stepLoc = event.location;
-			ParticleCollections.addFootprint(EnvironState.getWorld(), stepLoc.xCoord, stepLoc.yCoord, stepLoc.zCoord,
+			ParticleCollections.addFootprint(EnvironState.getWorld(), stepLoc.x, stepLoc.y, stepLoc.z,
 					event.rotation, event.isRightFoot);
 		}
 

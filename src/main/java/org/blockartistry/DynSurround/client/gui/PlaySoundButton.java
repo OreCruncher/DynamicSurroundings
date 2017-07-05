@@ -59,8 +59,8 @@ public class PlaySoundButton extends GuiButtonExt {
 	}
 	
 	@Override
-	public void drawButton(@Nonnull final Minecraft mc, final int x, final int y) {
-		super.drawButton(mc, x, y);
+	public void drawButton(@Nonnull final Minecraft mc, final int x, final int y, final float partial) {
+		super.drawButton(mc, x, y, partial);
 		
 		if (this.playingSound != null) {
 			if (!this.soundEngine.isSoundPlaying(this.playingSound)) {

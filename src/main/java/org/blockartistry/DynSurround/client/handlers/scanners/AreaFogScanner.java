@@ -37,8 +37,7 @@ import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.MathStuff;
 
-import com.google.common.base.Objects;
-
+import com.google.common.base.MoreObjects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -305,7 +304,7 @@ public class AreaFogScanner implements ITickable {
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("color", getFogColor(EnvironState.getWorld(), 1.0F))
+		return MoreObjects.toStringHelper(this).add("color", getFogColor(EnvironState.getWorld(), 1.0F))
 				.add("planeDistanceScale", this.planeDistanceScale).toString();
 	}
 }

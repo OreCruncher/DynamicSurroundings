@@ -123,10 +123,10 @@ public class PresetInfoModifyGui extends GuiScreen {
 		this.anchorY = (this.height - REGION_HEIGHT) / 2;
 
 		final String theTitle = this.editMode ? EDIT_TITLE : CREATE_TITLE;
-		final int titleWidth = this.fontRendererObj.getStringWidth(theTitle);
+		final int titleWidth = this.fontRenderer.getStringWidth(theTitle);
 		int X = this.anchorX + (REGION_WIDTH - titleWidth) / 2;
 		int Y = this.anchorY + MARGIN;
-		GuiLabel label = new GuiLabel(this.fontRendererObj, ID_TITLE, X, Y, REGION_WIDTH, BUTTON_HEIGHT,
+		GuiLabel label = new GuiLabel(this.fontRenderer, ID_TITLE, X, Y, REGION_WIDTH, BUTTON_HEIGHT,
 				Color.MC_GOLD.rgb());
 		label.addLine(theTitle);
 		this.labelList.add(label);
@@ -136,20 +136,20 @@ public class PresetInfoModifyGui extends GuiScreen {
 
 		final int entryWidth = REGION_WIDTH - MARGIN * 2;
 		final int labelColor = Color.WHITE.rgb();
-		final int requiredWidth = this.fontRendererObj.getStringWidth(REQUIRED_TEXT);
+		final int requiredWidth = this.fontRenderer.getStringWidth(REQUIRED_TEXT);
 
-		label = new GuiLabel(this.fontRendererObj, ID_PRESET_FILENAME, X, Y, LABEL_WIDTH, BUTTON_HEIGHT, labelColor);
+		label = new GuiLabel(this.fontRenderer, ID_PRESET_FILENAME, X, Y, LABEL_WIDTH, BUTTON_HEIGHT, labelColor);
 		label.addLine(FILENAME_LABEL);
 		this.labelList.add(label);
 
-		this.fileNameRequired = new GuiLabel(this.fontRendererObj, ID_FILENAME_REQUIRED, X + entryWidth - requiredWidth,
+		this.fileNameRequired = new GuiLabel(this.fontRenderer, ID_FILENAME_REQUIRED, X + entryWidth - requiredWidth,
 				Y, LABEL_WIDTH, BUTTON_HEIGHT, Color.RED.rgb());
 		this.fileNameRequired.addLine(REQUIRED_TEXT);
 		this.fileNameRequired.visible = false;
 		this.labelList.add(this.fileNameRequired);
 
 		Y += BUTTON_HEIGHT;
-		this.fileName = new GuiTextField(ID_PRESET_FILENAME_TEXT, this.fontRendererObj, X, Y, entryWidth,
+		this.fileName = new GuiTextField(ID_PRESET_FILENAME_TEXT, this.fontRenderer, X, Y, entryWidth,
 				BUTTON_HEIGHT);
 		this.fileName.setMaxStringLength(32);
 		this.fileName.setText(this.info.getFilename());
@@ -161,29 +161,29 @@ public class PresetInfoModifyGui extends GuiScreen {
 		});
 
 		Y += BUTTON_HEIGHT + INSET;
-		label = new GuiLabel(this.fontRendererObj, ID_PRESET_FILENAME, X, Y, LABEL_WIDTH, BUTTON_HEIGHT, labelColor);
+		label = new GuiLabel(this.fontRenderer, ID_PRESET_FILENAME, X, Y, LABEL_WIDTH, BUTTON_HEIGHT, labelColor);
 		label.addLine(PRESET_TITLE_LABEL);
 		this.labelList.add(label);
 
-		this.presetTitleRequired = new GuiLabel(this.fontRendererObj, ID_TITLE_REQUIRED, X + entryWidth - requiredWidth,
+		this.presetTitleRequired = new GuiLabel(this.fontRenderer, ID_TITLE_REQUIRED, X + entryWidth - requiredWidth,
 				Y, LABEL_WIDTH, BUTTON_HEIGHT, Color.RED.rgb());
 		this.presetTitleRequired.addLine(REQUIRED_TEXT);
 		this.presetTitleRequired.visible = false;
 		this.labelList.add(this.presetTitleRequired);
 
 		Y += BUTTON_HEIGHT;
-		this.presetTitle = new GuiTextField(ID_PRESET_TITLE_TEXT, this.fontRendererObj, X, Y, entryWidth,
+		this.presetTitle = new GuiTextField(ID_PRESET_TITLE_TEXT, this.fontRenderer, X, Y, entryWidth,
 				BUTTON_HEIGHT);
 		this.presetTitle.setMaxStringLength(48);
 		this.presetTitle.setText(this.info.getTitle());
 
 		Y += BUTTON_HEIGHT + INSET;
-		label = new GuiLabel(this.fontRendererObj, ID_PRESET_FILENAME, X, Y, LABEL_WIDTH, BUTTON_HEIGHT, labelColor);
+		label = new GuiLabel(this.fontRenderer, ID_PRESET_FILENAME, X, Y, LABEL_WIDTH, BUTTON_HEIGHT, labelColor);
 		label.addLine(PRESET_DESCRIPTION_LABEL);
 		this.labelList.add(label);
 
 		Y += BUTTON_HEIGHT;
-		this.presetDescription = new GuiTextField(ID_PRESET_DESCRIPTION_TEXT, this.fontRendererObj, X, Y, entryWidth,
+		this.presetDescription = new GuiTextField(ID_PRESET_DESCRIPTION_TEXT, this.fontRenderer, X, Y, entryWidth,
 				BUTTON_HEIGHT);
 		this.presetDescription.setMaxStringLength(255);
 		this.presetDescription.setText(this.info.getDescription());

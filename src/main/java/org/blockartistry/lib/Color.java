@@ -142,7 +142,7 @@ public class Color {
 	}
 
 	public Color(@Nonnull final Vec3d vec) {
-		this((float) vec.xCoord, (float) vec.yCoord, (float) vec.zCoord);
+		this((float) vec.x, (float) vec.y, (float) vec.z);
 	}
 
 	public Color(final float red, final float green, final float blue) {
@@ -225,19 +225,19 @@ public class Color {
 
 	@Nonnull
 	public Color adjust(@Nonnull final Vec3d adjust, @Nonnull final Color target) {
-		this.red += adjust.xCoord;
-		if ((adjust.xCoord < 0.0F && this.red < target.red) || (adjust.xCoord > 0.0F && this.red > target.red)) {
+		this.red += adjust.x;
+		if ((adjust.x < 0.0F && this.red < target.red) || (adjust.x > 0.0F && this.red > target.red)) {
 			this.red = target.red;
 		}
 
-		this.green += adjust.yCoord;
-		if ((adjust.yCoord < 0.0F && this.green < target.green)
-				|| (adjust.yCoord > 0.0F && this.green > target.green)) {
+		this.green += adjust.y;
+		if ((adjust.y < 0.0F && this.green < target.green)
+				|| (adjust.y > 0.0F && this.green > target.green)) {
 			this.green = target.green;
 		}
 
-		this.blue += adjust.zCoord;
-		if ((adjust.zCoord < 0.0F && this.blue < target.blue) || (adjust.zCoord > 0.0F && this.blue > target.blue)) {
+		this.blue += adjust.z;
+		if ((adjust.z < 0.0F && this.blue < target.blue) || (adjust.z > 0.0F && this.blue > target.blue)) {
 			this.blue = target.blue;
 		}
 		return this;

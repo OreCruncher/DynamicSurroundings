@@ -28,9 +28,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
@@ -100,7 +100,7 @@ public final class AuroraRenderer extends IRenderHandler {
 
 		final Minecraft mc = Minecraft.getMinecraft();
 		final Tessellator tess = Tessellator.getInstance();
-		final VertexBuffer renderer = tess.getBuffer();
+		final BufferBuilder renderer = tess.getBuffer();
 
 		final double tranY = this.dimensions.getSeaLevel(mc.world)
 				- ((mc.player.lastTickPosY + (mc.player.posY - mc.player.lastTickPosY) * partialTick));

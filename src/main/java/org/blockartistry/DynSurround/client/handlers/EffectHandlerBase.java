@@ -30,8 +30,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.lib.random.XorShiftRandom;
 
-import com.google.common.base.Objects;
-
+import com.google.common.base.MoreObjects;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -86,7 +85,7 @@ public abstract class EffectHandlerBase {
 	
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("name", this.getHandlerName()).toString();
+		return MoreObjects.toStringHelper(this).add("name", this.getHandlerName()).toString();
 	}
 	
 }

@@ -89,6 +89,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		this.xlate.transform(new Stripper());
 
 		try (final IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(SPLASH_TEXT)) {
+			@SuppressWarnings("deprecation")
 			final BufferedReader bufferedreader = new BufferedReader(
 					new InputStreamReader(resource.getInputStream(), Charsets.UTF_8));
 			String s;

@@ -38,7 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class TextPanel extends Panel {
 
-	private final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
+	private final FontRenderer font = Minecraft.getMinecraft().fontRenderer;
 
 	private List<String> text = ImmutableList.of();
 

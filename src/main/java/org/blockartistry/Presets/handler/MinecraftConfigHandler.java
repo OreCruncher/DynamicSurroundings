@@ -437,7 +437,7 @@ public class MinecraftConfigHandler {
 				mc.renderGlobal.loadRenderers();
 
 			if (refreshUnicodeFlag)
-				mc.fontRendererObj
+				mc.fontRenderer
 						.setUnicodeFlag(mc.getLanguageManager().isCurrentLocaleUnicode() || settings.forceUnicodeFont);
 
 			if (refreshResources)

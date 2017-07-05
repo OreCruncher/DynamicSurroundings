@@ -35,10 +35,10 @@ import org.lwjgl.opengl.GL11;
 
 import com.google.common.base.Supplier;
 
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -147,7 +147,7 @@ public class ParticleBillboard extends ParticleBase {
 	}
 
 	@Override
-	public void renderParticle(final VertexBuffer buffer, final Entity entityIn, final float partialTicks,
+	public void renderParticle(final BufferBuilder buffer, final Entity entityIn, final float partialTicks,
 			final float rotationX, final float rotationZ, final float rotationYZ, final float rotationXY,
 			final float rotationXZ) {
 
@@ -229,7 +229,7 @@ public class ParticleBillboard extends ParticleBase {
 
 	@Override
 	public int getBrightnessForRender(final float partialTick) {
-		return this.subject.getBrightnessForRender(partialTick);
+		return this.subject.getBrightnessForRender();
 	}
 
 	@Override

@@ -76,14 +76,14 @@ public final class HealthEffectService extends Service {
 		boolean isCrit = false;
 		if (event.getSource() instanceof EntityDamageSourceIndirect) {
 			final EntityDamageSourceIndirect dmgSource = (EntityDamageSourceIndirect) event.getSource();
-			if (dmgSource.getSourceOfDamage() instanceof EntityArrow) {
-				final EntityArrow arrow = (EntityArrow) dmgSource.getSourceOfDamage();
+			if (dmgSource.getImmediateSource() instanceof EntityArrow) {
+				final EntityArrow arrow = (EntityArrow) dmgSource.getImmediateSource();
 				isCrit = arrow.getIsCritical();
 			}
 		} else if (event.getSource() instanceof EntityDamageSource) {
 			final EntityDamageSource dmgSource = (EntityDamageSource) event.getSource();
-			if (dmgSource.getSourceOfDamage() instanceof EntityPlayer) {
-				final EntityPlayer player = (EntityPlayer) dmgSource.getSourceOfDamage();
+			if (dmgSource.getTrueSource() instanceof EntityPlayer) {
+				final EntityPlayer player = (EntityPlayer) dmgSource.getTrueSource();
 				isCrit = isCritical(player, event.getEntityLiving());
 			}
 		}

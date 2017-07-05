@@ -29,7 +29,7 @@ import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleSimpleAnimated;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
@@ -96,7 +96,7 @@ public class ParticleFireFly extends ParticleSimpleAnimated {
 		return this.manager.viewerPosZ;
 	}
 
-	protected void drawVertex(final VertexBuffer buffer, final double x, final double y, final double z, final double u,
+	protected void drawVertex(final BufferBuilder buffer, final double x, final double y, final double z, final double u,
 			final double v) {
 		buffer.pos(x, y, z).tex(u, v).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha)
 				.lightmap(this.slX16, this.blX16).endVertex();
@@ -105,7 +105,7 @@ public class ParticleFireFly extends ParticleSimpleAnimated {
 	/**
 	 * Renders the particle
 	 */
-	public void renderParticle(VertexBuffer buffer, Entity entityIn, float partialTicks, float rotationX,
+	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX,
 			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		if (this.doRender) {
 			final double x = (this.prevPosX + (this.posX - this.prevPosX) * (double) partialTicks - interpX());

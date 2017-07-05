@@ -29,9 +29,8 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.data.xface.DimensionConfig;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
-
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 
@@ -141,7 +140,7 @@ public final class DimensionInfo {
 	@Override
 	@Nonnull
 	public String toString() {
-		final ToStringHelper builder = Objects.toStringHelper(this);
+		final ToStringHelper builder = MoreObjects.toStringHelper(this);
 		builder.add("id", this.dimensionId);
 		builder.add("name", this.name);
 		builder.add("seaLevel", this.seaLevel);

@@ -52,7 +52,7 @@ public class GuiTooltip {
 	}
 
 	public GuiTooltip(@Nonnull final ITooltipRenderer renderer, @Nonnull GuiButton button, @Nonnull final String tipText, final int width) {
-		final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
+		final FontRenderer font = Minecraft.getMinecraft().fontRenderer;
 		this.renderer = renderer;
 		this.checker = new HoverChecker(button, 800);
 		this.tooltip = generateTooltip(font, tipText, width);

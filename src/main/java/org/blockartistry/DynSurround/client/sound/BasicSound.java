@@ -31,8 +31,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.lib.random.XorShiftRandom;
 
-import com.google.common.base.Objects;
-
+import com.google.common.base.MoreObjects;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.client.audio.SoundHandler;
@@ -169,7 +168,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 	}
 
 	public T setPosition(@Nonnull final Vec3d pos) {
-		return this.setPosition((float) pos.xCoord, (float) pos.yCoord, (float) pos.zCoord);
+		return this.setPosition((float) pos.x, (float) pos.y, (float) pos.z);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -267,7 +266,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).addValue(this.positionedSoundLocation.toString())
+		return MoreObjects.toStringHelper(this).addValue(this.positionedSoundLocation.toString())
 				.addValue(this.category.toString()).add("state", this.getState()).add("v", this.getVolume())
 				.add("p", this.getPitch()).add("s", this.volumeScale.getScale()).addValue(this.getAttenuationType())
 				.add("x", this.getXPosF()).add("y", this.getYPosF()).add("z", this.getZPosF()).toString();

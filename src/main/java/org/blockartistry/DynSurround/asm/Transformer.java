@@ -58,20 +58,20 @@ public class Transformer implements IClassTransformer {
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] basicClass) {
-		if (isOneOf(transformedName, new String[] { "net.minecraft.client.renderer.EntityRenderer", "bqc" })) {
+		if (isOneOf(transformedName, new String[] { "net.minecraft.client.renderer.EntityRenderer", "buo" })) {
 			if (ModOptions.enableWeatherASM) {
 				logger.debug("Transforming " + transformedName);
 				basicClass = transformEntityRenderer(basicClass);
 			}
-		} else if (isOneOf(transformedName, new String[] { "net.minecraft.world.WorldServer", "lw" })) {
+		} else if (isOneOf(transformedName, new String[] { "net.minecraft.world.WorldServer", "om" })) {
 			if (ModOptions.enableResetOnSleepASM) {
 				logger.debug("Transforming " + transformedName);
 				basicClass = transformWorldServer(basicClass);
 			}
-		} else if (isOneOf(transformedName, new String[] { "net.minecraft.client.audio.SoundHandler", "ccp" })) {
+		} else if (isOneOf(transformedName, new String[] { "net.minecraft.client.audio.SoundHandler", "chm" })) {
 			logger.debug("Transforming " + transformedName);
 			basicClass = transformSoundHandler(basicClass);
-		} else if (isOneOf(transformedName, new String[] { "net.minecraft.client.audio.SoundManager", "ccn" })) {
+		} else if (isOneOf(transformedName, new String[] { "net.minecraft.client.audio.SoundManager", "chk" })) {
 			if (ModOptions.enableSoundCache) {
 				logger.debug("Transforming " + transformedName);
 				basicClass = transformSoundManager(basicClass);

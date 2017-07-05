@@ -240,7 +240,7 @@ public final class LightLevelHUD extends GuiOverlay {
 	protected static void updateLightInfo(@Nonnull final RenderManager manager, final double x, final double y,
 			final double z) {
 		
-		font = Minecraft.getMinecraft().fontRendererObj;
+		font = Minecraft.getMinecraft().fontRenderer;
 		final boolean isThirdPerson = manager.options.thirdPersonView == 2;
 
 		// Position frustum behind the player in order to reduce
@@ -251,14 +251,14 @@ public final class LightLevelHUD extends GuiOverlay {
 		final Vec3d lookVec = player.getLookVec();
 		final double fX, fY, fZ;
 		if (isThirdPerson) {
-			fX = x + lookVec.xCoord * 2D;
-			fY = y + lookVec.yCoord * 2D;
-			fZ = z + lookVec.zCoord * 2D;
+			fX = x + lookVec.x * 2D;
+			fY = y + lookVec.y * 2D;
+			fZ = z + lookVec.z * 2D;
 
 		} else {
-			fX = x - lookVec.xCoord * 2D;
-			fY = y - lookVec.yCoord * 2D;
-			fZ = z - lookVec.zCoord * 2D;
+			fX = x - lookVec.x * 2D;
+			fY = y - lookVec.y * 2D;
+			fZ = z - lookVec.z * 2D;
 		}
 		frustum.setPosition(fX, fY, fZ);
 		nextCoord = 0;

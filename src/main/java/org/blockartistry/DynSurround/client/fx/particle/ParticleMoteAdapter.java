@@ -27,9 +27,8 @@ package org.blockartistry.DynSurround.client.fx.particle;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.fx.particle.mote.IParticleMote;
-
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -58,7 +57,7 @@ public final class ParticleMoteAdapter implements IParticleMote {
 	}
 
 	@Override
-	public void renderParticle(VertexBuffer buffer, Entity entityIn, float partialTicks, float rotX, float rotZ,
+	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotX, float rotZ,
 			float rotYZ, float rotXY, float rotXZ) {
 		this.particle.renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
 	}

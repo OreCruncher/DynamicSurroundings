@@ -156,10 +156,10 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 		this.anchorX = (this.width - REGION_WIDTH) / 2;
 		this.anchorY = (this.height - REGION_HEIGHT) / 2;
 
-		final int titleWidth = this.fontRendererObj.getStringWidth(TITLE);
+		final int titleWidth = this.fontRenderer.getStringWidth(TITLE);
 		final int titleX = this.anchorX + (REGION_WIDTH - titleWidth) / 2;
 		int Y = this.anchorY + INSET;
-		GuiLabel title = new GuiLabel(this.fontRendererObj, ID_TITLE, titleX, Y, REGION_WIDTH, BUTTON_HEIGHT,
+		GuiLabel title = new GuiLabel(this.fontRenderer, ID_TITLE, titleX, Y, REGION_WIDTH, BUTTON_HEIGHT,
 				Color.MC_GOLD.rgb());
 		title.addLine(TITLE);
 		this.labelList.add(title);

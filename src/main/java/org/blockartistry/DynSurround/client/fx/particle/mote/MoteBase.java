@@ -32,7 +32,7 @@ import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
@@ -143,15 +143,15 @@ public abstract class MoteBase implements IParticleMote {
 		return (float) (this.posZ - interpZ());
 	}
 
-	protected void applyColor(@Nonnull final VertexBuffer buffer) {
+	protected void applyColor(@Nonnull final BufferBuilder buffer) {
 		buffer.color(this.red, this.green, this.blue, this.alpha);
 	}
 
-	protected void applyLightmap(@Nonnull final VertexBuffer buffer) {
+	protected void applyLightmap(@Nonnull final BufferBuilder buffer) {
 		buffer.lightmap(this.slX16, this.blX16);
 	}
 
-	protected void drawVertex(final VertexBuffer buffer, final double x, final double y, final double z, final double u,
+	protected void drawVertex(final BufferBuilder buffer, final double x, final double y, final double z, final double u,
 			final double v) {
 		buffer.pos(x, y, z).tex(u, v);
 		applyColor(buffer);
@@ -160,7 +160,7 @@ public abstract class MoteBase implements IParticleMote {
 	}
 
 	@Override
-	public abstract void renderParticle(VertexBuffer buffer, Entity entityIn, float partialTicks, float rotX,
+	public abstract void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotX,
 			float rotZ, float rotYZ, float rotXY, float rotXZ);
 
 	public int getBrightnessForRender(final float partialTicks) {

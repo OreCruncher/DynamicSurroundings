@@ -44,7 +44,7 @@ public class FakeBiome extends Biome {
 		this.spawnableCreatureList = null;
 		this.spawnableMonsterList = null;
 		this.spawnableWaterCreatureList = null;
-		this.theBiomeDecorator = null;
+		this.decorator = null;
 	}
 	
 	public int getBiomeId() {

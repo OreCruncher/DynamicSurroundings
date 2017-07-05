@@ -58,7 +58,7 @@ public class FastFontRenderer {
 		}
 	}
 
-	private static final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
+	private static final FontRenderer font = Minecraft.getMinecraft().fontRenderer;
 
 	private FastFontRenderer() {
 

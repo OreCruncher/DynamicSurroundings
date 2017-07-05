@@ -44,7 +44,7 @@ public class Locus extends TargetPoint {
 	}
 
 	public Locus(@Nonnull final Entity entity, @Nonnull final Vec3d pos, final double range) {
-		this(entity, pos.xCoord, pos.yCoord, pos.zCoord, range);
+		this(entity, pos.x, pos.y, pos.z, range);
 	}
 
 	public Locus(@Nonnull final Entity entity, final double x, final double y, final double z, final double range) {

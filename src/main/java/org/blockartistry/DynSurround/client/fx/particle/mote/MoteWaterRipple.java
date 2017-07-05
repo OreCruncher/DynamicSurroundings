@@ -24,7 +24,7 @@
 
 package org.blockartistry.DynSurround.client.fx.particle.mote;
 
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -57,7 +57,7 @@ public class MoteWaterRipple extends MoteBase {
 	}
 
 	@Override
-	public void renderParticle(VertexBuffer buffer, Entity entityIn, float partialTicks, float rotationX,
+	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX,
 			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 
 		final float x = renderX(partialTicks);
