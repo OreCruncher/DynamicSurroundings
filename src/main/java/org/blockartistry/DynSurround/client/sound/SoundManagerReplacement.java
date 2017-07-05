@@ -91,6 +91,10 @@ public class SoundManagerReplacement extends SoundManager {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
+	private SoundSystem getSoundSystem() {
+		return this.sndSystem;
+	}
+	
 	private void keepAlive() {
 		if (!this.loaded || streamThread == null)
 			return;
@@ -110,7 +114,7 @@ public class SoundManagerReplacement extends SoundManager {
 						ModOptions.enableSoundSystemAutorestart ? "msg.Autorestart.restart" : "msg.Autorestart.manual");
 
 				final EntityPlayer player = EnvironState.getPlayer();
-				if (player != null  && !givenNotice) {
+				if (player != null && !givenNotice) {
 					player.sendMessage(new TextComponentString(msg1));
 					player.sendMessage(new TextComponentString(msg2));
 				}
@@ -125,6 +129,19 @@ public class SoundManagerReplacement extends SoundManager {
 			}
 		} catch (final Throwable t) {
 			;
+		}
+	}
+
+	@Override
+	public void stopSound(@Nonnull final ISound sound) {
+		if (sound != null) {
+			if (sound instanceof BasicSound<?>) {
+				final BasicSound<?> state = (BasicSound<?>) sound;
+				if (!StringUtils.isEmpty(state.getId())) {
+					getSoundSystem().stop(state.getId());
+				}
+			}
+			super.stopSound(sound);
 		}
 	}
 
@@ -208,7 +225,7 @@ public class SoundManagerReplacement extends SoundManager {
 
 		keepAlive();
 
-		final SoundSystem sndSystem = this.sndSystem;
+		final SoundSystem sndSystem = getSoundSystem();
 
 		++this.playTime;
 
@@ -296,7 +313,7 @@ public class SoundManagerReplacement extends SoundManager {
 	}
 
 	public boolean isMuted() {
-		return this.sndSystem != null && ((SoundSystem) this.sndSystem).getMasterVolume() == MUTE_VOLUME;
+		return this.sndSystem != null && getSoundSystem().getMasterVolume() == MUTE_VOLUME;
 	}
 
 	public void setMuted(final boolean flag) {
@@ -304,7 +321,7 @@ public class SoundManagerReplacement extends SoundManager {
 		if (!this.loaded || this.sndSystem == null)
 			return;
 
-		final SoundSystem ss = (SoundSystem) this.sndSystem;
+		final SoundSystem ss = getSoundSystem();
 
 		// OpenEye: Looks like the command thread is dead or not initialized.
 		try {

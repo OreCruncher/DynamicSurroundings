@@ -104,8 +104,9 @@ public class SoundEngine {
 	}
 
 	public void stopSound(@Nonnull final BasicSound<?> sound) {
-		if (sound != null)
+		if (sound != null) {
 			this.manager.stopSound(sound);
+		}
 	}
 
 	public void stopAllSounds() {
