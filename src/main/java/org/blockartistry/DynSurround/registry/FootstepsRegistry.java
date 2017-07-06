@@ -26,10 +26,11 @@ package org.blockartistry.DynSurround.registry;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
@@ -45,6 +46,8 @@ import org.blockartistry.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.DynSurround.client.footsteps.system.ResourcePacks;
 import org.blockartistry.DynSurround.client.footsteps.system.Solver;
 import org.blockartistry.DynSurround.client.footsteps.util.ConfigProperty;
+import org.blockartistry.DynSurround.util.BlockState;
+import org.blockartistry.DynSurround.util.BlockState.Consumer;
 import org.blockartistry.lib.JsonUtils;
 import org.blockartistry.lib.MCHelper;
 import net.minecraft.block.Block;
@@ -60,6 +63,7 @@ import net.minecraft.block.BlockOre;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockReed;
 import net.minecraft.block.BlockSapling;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -101,6 +105,31 @@ public class FootstepsRegistry extends Registry {
 	public void initComplete() {
 		this.getBlockMap().freeze();
 		AcousticsManager.SWIM = this.isolator.getAcoustics().compileAcoustics("_SWIM");
+
+		// Traverse the IBlockState entries looking for states that do not
+		// have a configuration associated.
+		if (ModOptions.enableDebugLogging) {
+			final ArrayList<String> missingAcoustics = new ArrayList<String>();
+			BlockState.forEach(new Consumer<IBlockState>() {
+				@Override
+				public void accept(final IBlockState t) {
+					if (!FootstepsRegistry.this.getBlockMap().hasAcoustics(t)) {
+						final String blockName = new BlockInfo(t).toString();
+						if (!missingAcoustics.contains(blockName))
+							missingAcoustics.add(blockName);
+					}
+				}
+			});
+
+			if (missingAcoustics.size() > 0) {
+				Collections.sort(missingAcoustics);
+				DSurround.log().info("MISSING ACOUSTIC ENTRIES");
+				DSurround.log().info("========================");
+				for (final String s : missingAcoustics) {
+					DSurround.log().info(s);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -233,7 +262,7 @@ public class FootstepsRegistry extends Registry {
 		this.isolator.onFrame(player);
 		if (ModOptions.footstepsSoundFactor > 0)
 			player.nextStepDistance = Integer.MAX_VALUE;
-		else if(player.nextStepDistance == Integer.MAX_VALUE)
+		else if (player.nextStepDistance == Integer.MAX_VALUE)
 			player.nextStepDistance = 0;
 	}
 
