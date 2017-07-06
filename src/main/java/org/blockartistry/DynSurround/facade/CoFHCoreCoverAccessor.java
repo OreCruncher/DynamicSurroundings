@@ -23,55 +23,55 @@
 
 package org.blockartistry.DynSurround.facade;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Method;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.ModEnvironment;
+import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.facade.FacadeHelper.IFacadeAccessor;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public final class FacadeHelper {
+public class CoFHCoreCoverAccessor implements IFacadeAccessor {
 
-	public static interface IFacadeAccessor {
-		IBlockState getBlockState(@Nonnull final IBlockState state, @Nonnull final World world,
-				@Nonnull final BlockPos pos, @Nullable final EnumFacing side);
-	}
+	private static final String CLASS = "cofh.core.render.IBlockAppearance";
+	private static final String METHOD = "getVisualState";
 
-	private static final List<IFacadeAccessor> accessors = new ArrayList<IFacadeAccessor>();
+	private static Class<?> IFacadeClass;
+	private static Method method;
+
 	static {
-
-		if (ModEnvironment.ChiselAPI.isLoaded())
-			accessors.add(new ChiselAPIFacadeAccessor());
-		else if (ModEnvironment.Chisel.isLoaded())
-			accessors.add(new ChiselFacadeAccessor());
-
-		if (ModEnvironment.EnderIO.isLoaded())
-			accessors.add(new EnderIOFacadeAccessor());
-
-		if (ModEnvironment.CoFHCore.isLoaded())
-			accessors.add(new CoFHCoreCoverAccessor());
-	}
-
-	protected FacadeHelper() {
-
-	}
-
-	@Nonnull
-	public static IBlockState resolveState(@Nonnull final IBlockState state, @Nonnull final World world,
-			@Nonnull final BlockPos pos, @Nullable final EnumFacing side) {
-		for (int i = 0; i < accessors.size(); i++) {
-			final IBlockState newState = accessors.get(i).getBlockState(state, world, pos, side);
-			if (newState != null)
-				return newState;
+		try {
+			IFacadeClass = Class.forName(CLASS);
+			if (IFacadeClass != null) {
+				method = IFacadeClass.getMethod(METHOD, IBlockAccess.class, BlockPos.class, EnumFacing.class);
+			}
+		} catch (@Nonnull final Throwable t) {
+			DSurround.log().warn("Unable to locate %s.%s()", CLASS, METHOD);
 		}
+	}
 
-		return state;
+	@Override
+	public IBlockState getBlockState(IBlockState state, World world, BlockPos pos, EnumFacing side) {
+		if (IFacadeClass == null || method == null)
+			return null;
+
+		final Block block = state.getBlock();
+
+		try {
+			if (IFacadeClass.isInstance(block))
+				return (IBlockState) method.invoke(block, world, pos, side);
+		} catch (@Nonnull final Exception ex) {
+			DSurround.log().warn("Unable to invoke %s.%s()", CLASS, METHOD);
+			DSurround.log().catching(ex);
+			method = null;
+		}
+		return null;
 	}
 
 }
