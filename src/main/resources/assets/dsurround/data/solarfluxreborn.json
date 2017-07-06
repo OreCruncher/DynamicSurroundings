@@ -1,0 +1,17 @@
+{
+	"footsteps": {
+		"solarfluxreborn:solar0": "ice",
+		"solarfluxreborn:solar1": "ice",
+		"solarfluxreborn:solar2": "ice",
+		"solarfluxreborn:solar3": "ice",
+		"solarfluxreborn:solar4": "ice",
+		"solarfluxreborn:solar5": "ice",
+		"solarfluxreborn:solar6": "ice",
+		"solarfluxreborn:solar7": "ice",
+		"solarfluxreborn:solarchaotic": "ice",
+		"solarfluxreborn:solardraconic": "ice",
+		"solarfluxreborn:wire_1": "stoneutility",
+		"solarfluxreborn:wire_2": "stoneutility",
+		"solarfluxreborn:wire_3": "stoneutility"
+	}
+}

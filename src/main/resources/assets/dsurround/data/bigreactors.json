@@ -1,0 +1,31 @@
+{
+	"footsteps": {
+		"bigreactors:brore": "ore",
+		"bigreactors:cyanite": "hardmetal",
+		"bigreactors:reactoraccessport": "hardmetal",
+		"bigreactors:reactorcasing": "hardmetal",
+		"bigreactors:reactorcomputerport": "hardmetal",
+		"bigreactors:reactorcontroller": "hardmetal",
+		"bigreactors:reactorcontrolrod": "sandstone",
+		"bigreactors:reactorcoolantport": "hardmetal",
+		"bigreactors:reactorcreativecoolantport": "hardmetal",
+		"bigreactors:reactorfuelrod": "sandstone",
+		"bigreactors:reactorglass": "glass",
+		"bigreactors:reactorpowertaprf": "hardmetal",
+		"bigreactors:reactorpowertaptesla": "hardmetal",
+		"bigreactors:reactorrednetport": "hardmetal",
+		"bigreactors:reactorredstoneport": "hardmetal",
+		"bigreactors:turbinebearing": "hardmetal",
+		"bigreactors:turbinecomputerport": "hardmetal",
+		"bigreactors:turbinecontroller": "hardmetal",
+		"bigreactors:turbinecreativesteamgenerator": "hardmetal",
+		"bigreactors:turbinefluidport": "hardmetal",
+		"bigreactors:turbineglass": "glass",
+		"bigreactors:turbinehousing": "metalbar",
+		"bigreactors:turbinepowertaprf": "hardmetal",
+		"bigreactors:turbinepowertaptesla": "hardmetal",
+		"bigreactors:turbinerotorblade": "metalbar",
+		"bigreactors:turbinerotorshaft": "metalbar",
+		"bigreactors:yellorium": "hardmetal"
+	}
+}

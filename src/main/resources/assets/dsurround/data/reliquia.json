@@ -1,0 +1,16 @@
+{
+	"footprints": {
+		"reliquia:candle_holder_gold": "stoneutility",
+		"reliquia:candle_holder_iron": "stoneutility",
+		"reliquia:fancy_crafting_table": "wood",
+		"reliquia:fancy_crafting_table_natura": "wood",
+		"reliquia:handheld_candle": "NOT_EMITTER",
+		"reliquia:lantern_gold": "metalbar",
+		"reliquia:lantern_iron": "metalbar",
+		"reliquia:potion_holder": "wood",
+		"reliquia:potion_holder_natura": "wood",
+		"reliquia:sword_plinth": "stone",
+		"reliquia:toolrack": "wood",
+		"reliquia:toolrack_natura": "wood"
+	}
+}

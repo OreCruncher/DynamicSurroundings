@@ -1,0 +1,22 @@
+{
+	"footsteps": {
+		"tp:AndesiteBrick": "brickstone",
+		"tp:BoneBlock": "sandstone",
+		"tp:DioriteBrick": "brickstone",
+		"tp:DirtyGlass": "glass",
+		"tp:FleshBlock": "organic",
+		"tp:GraniteBrick": "brickstone",
+		"tp:ReinforcedGlass": "glass",
+		"tp:ReinforcedObsidian": "obsidian",
+		"tp:SmoothEndStone": "brickstone",
+		"tp:StoneTorch": "NOT_EMITTER",
+		"tp:blaze_cobblegen_block": "stoneutility",
+		"tp:cobblegen_block": "stoneutility",
+		"tp:diamond_cobblegen_block": "stoneutility",
+		"tp:emerald_cobblegen_block": "stoneutility",
+		"tp:growth_block": "glass",
+		"tp:growth_upgrade": "glass",
+		"tp:growth_upgrade_two": "glass",
+		"tp:iron_cobblegen_block": "stoneutility"
+	}
+}
