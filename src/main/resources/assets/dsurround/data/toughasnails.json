@@ -1,0 +1,14 @@
+{
+	"footsteps": {
+		"toughasnails:campfire": "NOT_EMITTER",
+		"toughasnails:dead_crops": "straw",
+		"toughasnails:glowstone_torch": "NOT_EMITTER",
+		"toughasnails:rain_collector": "metalbar",
+		"toughasnails:season_sensor_autumn": "wood",
+		"toughasnails:season_sensor_spring": "wood",
+		"toughasnails:season_sensor_summer": "wood",
+		"toughasnails:season_sensor_winter": "wood",
+		"toughasnails:temperature_coil": "hardmetal",
+		"toughasnails:torch_new": "NOT_EMITTER"
+	}
+}
