@@ -1,7 +1,12 @@
 {
 	"footsteps": {
-		"thermalexpansion:tank": "glass",
+		"thermalexpansion:apparatus": "hardmetal",
+		"thermalexpansion:cache": "hardmetal",
+		"thermalexpansion:cell": "stoneutility",
+		"thermalexpansion:device": "hardmetal",
+		"thermalexpansion:dynamo": "stonemachine",
 		"thermalexpansion:machine": "hardmetal",
-		"thermalexpansion:dynamo": "hardmetal"
+		"thermalexpansion:strongbox": "hardmetal",
+		"thermalexpansion:tank": "glass"
 	}
 }
