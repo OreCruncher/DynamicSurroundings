@@ -1,0 +1,30 @@
+{
+	"footsteps": {
+		"refinedstorage:cable": "stoneutility",
+		"refinedstorage:constructor": "stoneutility",
+		"refinedstorage:controller": "stoneutility",
+		"refinedstorage:crafter": "stoneutility",
+		"refinedstorage:crafting_monitor": "stoneutility",
+		"refinedstorage:destructor": "stoneutility",
+		"refinedstorage:detector": "stoneutility",
+		"refinedstorage:disk_drive": "stoneutility",
+		"refinedstorage:disk_manipulator": "stoneutility",
+		"refinedstorage:exporter": "stoneutility",
+		"refinedstorage:external_storage": "stoneutility",
+		"refinedstorage:fluid_interface": "stoneutility",
+		"refinedstorage:fluid_storage": "stoneutility",
+		"refinedstorage:grid": "stoneutility",
+		"refinedstorage:importer": "stoneutility",
+		"refinedstorage:interface": "stoneutility",
+		"refinedstorage:machine_casing": "stoneutility",
+		"refinedstorage:network_receiver": "stoneutility",
+		"refinedstorage:network_transmitter": "stoneutility",
+		"refinedstorage:processing_pattern_encoder": "stoneutility",
+		"refinedstorage:reader": "stoneutility",
+		"refinedstorage:relay": "stoneutility",
+		"refinedstorage:solderer": "stoneutility",
+		"refinedstorage:storage": "stoneutility",
+		"refinedstorage:wireless_transmitter": "stoneutility",
+		"refinedstorage:writer": "stoneutility"
+	}
+}
