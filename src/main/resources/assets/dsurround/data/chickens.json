@@ -1,0 +1,10 @@
+{
+	"footsteps": {
+		"chickens:henhouse": "wood",
+		"chickens:henhouse_acacia": "wood",
+		"chickens:henhouse_birch": "wood",
+		"chickens:henhouse_dark_oak": "wood",
+		"chickens:henhouse_jungle": "wood",
+		"chickens:henhouse_spruce": "wood"
+	}
+}

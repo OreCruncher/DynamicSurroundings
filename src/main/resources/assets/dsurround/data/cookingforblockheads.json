@@ -1,0 +1,14 @@
+{
+	"footsteps": {
+		"cookingforblockheads:cookingTable": "stoneutility",
+		"cookingforblockheads:counter": "wood",
+		"cookingforblockheads:cowJar": "glass",
+		"cookingforblockheads:fridge": "stoneutility",
+		"cookingforblockheads:milkJar": "glass",
+		"cookingforblockheads:oven": "stoneutility",
+		"cookingforblockheads:sink": "stoneutility",
+		"cookingforblockheads:spiceRack": "squeakywood",
+		"cookingforblockheads:toaster": "metalbar",
+		"cookingforblockheads:toolRack": "squeakywood"
+	}
+}

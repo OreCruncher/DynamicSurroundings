@@ -1,0 +1,13 @@
+{
+	"footsteps": {
+		"exnihiloadscensio:blockBarrel0": "wood",
+		"exnihiloadscensio:blockBarrel1": "stone",
+		"exnihiloadscensio:blockCrucible^0": "wood",
+		"exnihiloadscensio:blockCrucible^1": "stone",
+		"exnihiloadscensio:blockDust": "sand",
+		"exnihiloadscensio:blockEndstoneCrushed": "gravel",
+		"exnihiloadscensio:blockNetherrackCrushed": "gravel",
+		"exnihiloadscensio:blockSieve": "wood",
+		"exnihiloadscensio:witchwater": "NOT_EMITTER"
+	}
+}
