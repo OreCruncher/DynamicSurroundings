@@ -121,6 +121,7 @@ public class BlockMap {
 		macros.put("#beets", entries);
 
 		entries = new ArrayList<MacroEntry>();
+		entries.add(new MacroEntry(null, "NOT_EMITTER"));
 		entries.add(new MacroEntry("bigger", "bluntwood"));
 		macros.put("#fence", entries);
 	}
@@ -130,6 +131,12 @@ public class BlockMap {
 		this.metaMap.put(new BlockInfo(Blocks.AIR), AcousticsManager.NOT_EMITTER);
 	}
 
+	@Nullable
+	public boolean hasAcoustics(@Nonnull final IBlockState state) {
+		final IAcoustic[] a = this.metaMap.getBlockAcoustics(state);
+		return a != null && a != BlockAcousticMap.NO_ACOUSTICS;
+	}
+	
 	@Nullable
 	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
 		final IBlockState trueState = FacadeHelper.resolveState(state, EnvironState.getWorld(), pos, EnumFacing.UP);
