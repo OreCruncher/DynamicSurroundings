@@ -52,7 +52,10 @@ public class ParticleCollectionFootprint extends ParticleCollection {
 		BIRD("textures/particles/footprint_bird.png"),
 
 		// Animal paw
-		PAW("textures/particles/footprint_paw.png");
+		PAW("textures/particles/footprint_paw.png"),
+		
+		// Solid Square
+		SQUARE_SOLID("textures/particles/footprint_square_solid.png");
 
 		private final ResourceLocation resource;
 
