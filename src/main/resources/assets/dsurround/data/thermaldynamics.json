@@ -1,0 +1,9 @@
+{
+	"footsteps": {
+		"thermaldynamics:duct_0": "metalbar",
+		"thermaldynamics:duct_16": "metalbar",
+		"thermaldynamics:duct_32": "metalbar",
+		"thermaldynamics:duct_48": "metalbar",
+		"thermaldynamics:duct_64": "metalbar"
+	}
+}
