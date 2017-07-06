@@ -44,7 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class BlockAcousticMap {
 
-	private static final IAcoustic[] NO_ACOUSTICS = {};
+	public static final IAcoustic[] NO_ACOUSTICS = {};
 
 	private final BlockInfoMutable key = new BlockInfoMutable();
 	private Map<BlockInfo, IAcoustic[]> data = new HashMap<BlockInfo, IAcoustic[]>();
