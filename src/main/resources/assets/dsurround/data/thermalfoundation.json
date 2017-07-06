@@ -1,0 +1,19 @@
+{
+	"footsteps": {
+		"thermalfoundation:fluid_aerotheum": "NOT_EMITTER",
+		"thermalfoundation:fluid_crude_oil": "NOT_EMITTER",
+		"thermalfoundation:fluid_cryotheum": "NOT_EMITTER",
+		"thermalfoundation:fluid_ender": "NOT_EMITTER",
+		"thermalfoundation:fluid_glowstone": "NOT_EMITTER",
+		"thermalfoundation:fluid_mana": "NOT_EMITTER",
+		"thermalfoundation:fluid_petrotheum": "NOT_EMITTER",
+		"thermalfoundation:fluid_pyrotheum": "NOT_EMITTER",
+		"thermalfoundation:fluid_redstone": "NOT_EMITTER",
+		"thermalfoundation:glass": "glass",
+		"thermalfoundation:glass_alloy": "glass",
+		"thermalfoundation:ore": "ore",
+		"thermalfoundation:ore_fluid": "ore",
+		"thermalfoundation:rockwool": "rug",
+		"thermalfoundation:storage": "hardmetal"
+	}
+}
