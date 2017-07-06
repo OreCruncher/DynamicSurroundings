@@ -295,6 +295,10 @@
 		"biomesoplenty:double_plant^1+foliage": "brush_straw_transition",
 		"biomesoplenty:double_plant^2+foliage": "organic",
 		"biomesoplenty:double_plant^8+foliage": "brush",
-		"biomesoplenty:double_plant^9+foliage": "brush"
+		"biomesoplenty:double_plant^9+foliage": "brush",
+		"biomesoplenty:white_sandstone": "sandstone",
+		"biomesoplenty:white_sandstone_stairs": "sandstone",
+		"biomesoplenty:willow_vine": "leaves",
+		"biomesoplenty:willow_vine+foliage": "leaves"
 	}
 }

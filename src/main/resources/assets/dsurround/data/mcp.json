@@ -1046,7 +1046,24 @@
 		"minecraft:standing_banner": "rug,straw,squeakywood",
 		"minecraft:standing_banner+foliage": "rug,straw,squeakywood",
 		"minecraft:wall_banner": "rug,straw",
-		"minecraft:end_rod": "glass"
+		"minecraft:end_rod": "glass",
+		"minecraft:observer": "stoneutility",
+		"minecraft:black_shulker_box": "marble",
+		"minecraft:blue_shulker_box": "marble",
+		"minecraft:brown_shulker_box": "marble",
+		"minecraft:cyan_shulker_box": "marble",
+		"minecraft:gray_shulker_box": "marble",
+		"minecraft:green_shulker_box": "marble",
+		"minecraft:light_blue_shulker_box": "marble",
+		"minecraft:lime_shulker_box": "marble",
+		"minecraft:magenta_shulker_box": "marble",
+		"minecraft:orange_shulker_box": "marble",
+		"minecraft:pink_shulker_box": "marble",
+		"minecraft:purple_shulker_box": "marble",
+		"minecraft:red_shulker_box": "marble",
+		"minecraft:silver_shulker_box": "marble",
+		"minecraft:white_shulker_box": "marble",
+		"minecraft:yellow_shulker_box": "marble"
 	},
 	"forgeMappings": [
 		{
