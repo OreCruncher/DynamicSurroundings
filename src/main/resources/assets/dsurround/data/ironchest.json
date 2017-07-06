@@ -1,0 +1,9 @@
+{
+	"footsteps": {
+		"ironchest:BlockIronChest": "hardmetal",
+		"ironchest:BlockIronChest^2": "composite",
+		"ironchest:BlockIronChest^5": "ice",
+		"ironchest:BlockIronChest^6": "obsidian",
+		"ironchest:BlockIronChest^7": "dirt"
+	}
+}

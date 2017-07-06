@@ -1,0 +1,14 @@
+{
+	"footsteps": {
+		"hatchery:digester_generator": "stonemachine",
+		"hatchery:feeder": "stoneutility",
+		"hatchery:fertilized_farmland": "dirt",
+		"hatchery:fertilizer_mixer": "stonemachine",
+		"hatchery:liquid_fertilizer": "NOT_EMITTER",
+		"hatchery:manure_block": "mud",
+		"hatchery:nest": "straw",
+		"hatchery:nursery_block": "wood",
+		"hatchery:pen": "wood",
+		"hatchery:pen_chicken": "wood"
+	}
+}
