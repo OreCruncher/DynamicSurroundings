@@ -1,0 +1,15 @@
+{
+	"footsteps": {
+		"ceramics:clay_hard": "sandstone",
+		"ceramics:clay_slab": "sandstone",
+		"ceramics:clay_soft": "dirt",
+		"ceramics:clay_wall": "NOT_EMITTER",
+		"ceramics:clay_wall+bigger": "sandstone",
+		"ceramics:dark_bricks_stairs": "sandstone",
+		"ceramics:dragon_bricks_stairs": "sandstone",
+		"ceramics:golden_bricks_stairs": "sandstone",
+		"ceramics:marine_bricks_stairs": "sandstone",
+		"ceramics:porcelain": "sandstone",
+		"ceramics:porcelain_bricks_stairs": "sandstone"
+	}
+}

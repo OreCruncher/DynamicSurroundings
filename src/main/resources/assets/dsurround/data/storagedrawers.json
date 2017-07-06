@@ -1,0 +1,13 @@
+{
+	"footsteps": {
+		"storagedrawers:basicDrawers": "wood",
+		"storagedrawers:compDrawers": "stonemachine",
+		"storagedrawers:controller": "stonemachine",
+		"storagedrawers:controllerSlave": "stonemachine",
+		"storagedrawers:customDrawers": "wood",
+		"storagedrawers:customTrim": "wood",
+		"storagedrawers:framingTable": "wood",
+		"storagedrawers:keybutton": "NOT_EMITTER",
+		"storagedrawers:trim": "wood"
+	}
+}

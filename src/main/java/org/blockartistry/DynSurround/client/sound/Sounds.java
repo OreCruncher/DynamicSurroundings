@@ -86,4 +86,10 @@ public final class Sounds {
 	public static final SoundEffect WATERFALL4 = new SoundEffect.Builder("waterfall.4", SoundCategory.AMBIENT).build();
 	public static final SoundEffect WATERFALL5 = new SoundEffect.Builder("waterfall.5", SoundCategory.AMBIENT).build();
 
+	// Essentially does nothing.  By referring to it during init it will cause the
+	// class members to intialize and in turn register the sounds appropriately.
+	public static void register() {
+		
+	}
+
 }
