@@ -1,0 +1,14 @@
+{
+	"footsteps": {
+		"excompressum:auto_compressed_hammer": "hardmetal",
+		"excompressum:auto_compressor": "hardmetal",
+		"excompressum:auto_hammer": "hardmetal",
+		"excompressum:auto_heavy_sieve": "hardmetal",
+		"excompressum:auto_sieve": "hardmetal",
+		"excompressum:bait": "straw",
+		"excompressum:compressed_block": "stone",
+		"excompressum:heavy_sieve": "wood",
+		"excompressum:mana_sieve": "wood",
+		"excompressum:wooden_crucible": "wood"
+	}
+}

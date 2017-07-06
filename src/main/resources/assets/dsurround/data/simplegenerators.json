@@ -1,0 +1,19 @@
+{
+	"footsteps": {
+		"simplegenerators:culinary_generator": "stonemachine",
+		"simplegenerators:culinary_generator_2": "stonemachine",
+		"simplegenerators:culinary_generator_3": "stonemachine",
+		"simplegenerators:ender_generator": "stonemachine",
+		"simplegenerators:ender_generator_2": "stonemachine",
+		"simplegenerators:ender_generator_3": "stonemachine",
+		"simplegenerators:furnace_generator": "stonemachine",
+		"simplegenerators:furnace_generator_2": "stonemachine",
+		"simplegenerators:furnace_generator_3": "stonemachine",
+		"simplegenerators:lava_generator": "stonemachine",
+		"simplegenerators:lava_generator_2": "stonemachine",
+		"simplegenerators:lava_generator_3": "stonemachine",
+		"simplegenerators:netherstar_generator": "stonemachine",
+		"simplegenerators:netherstar_generator_2": "stonemachine",
+		"simplegenerators:netherstar_generator_3": "stonemachine"
+	}
+}
