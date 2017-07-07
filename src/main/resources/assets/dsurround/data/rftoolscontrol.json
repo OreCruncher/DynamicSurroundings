@@ -1,0 +1,10 @@
+{
+	"footsteps": {
+		"rftoolscontrol:craftingstation": "stoneutility",
+		"rftoolscontrol:node": "stoneutility",
+		"rftoolscontrol:processor": "stoneutility",
+		"rftoolscontrol:programmer": "stoneutility",
+		"rftoolscontrol:tank": "glass",
+		"rftoolscontrol:workbench": "stoneutility"
+	}
+}
