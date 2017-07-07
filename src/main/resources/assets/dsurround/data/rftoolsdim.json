@@ -1,0 +1,23 @@
+{
+	"footsteps": {
+		"rftoolsdim:activity_probe": "stoneutility",
+		"rftoolsdim:biome_absorber": "stoneutility",
+		"rftoolsdim:dimension_builder": "stoneutility",
+		"rftoolsdim:dimension_editor": "stoneutility",
+		"rftoolsdim:dimension_enscriber": "stoneutility",
+		"rftoolsdim:dimensional_blank_block": "stone",
+		"rftoolsdim:dimensional_block": "stone",
+		"rftoolsdim:dimensional_cross2_block": "stone",
+		"rftoolsdim:dimensional_cross_block": "stone",
+		"rftoolsdim:dimensional_pattern1_block": "stone",
+		"rftoolsdim:dimensional_pattern2_block": "stone",
+		"rftoolsdim:dimensional_small_blocks": "stone",
+		"rftoolsdim:dimlet_workbench": "stoneutility",
+		"rftoolsdim:energy_extractor": "stoneutility",
+		"rftoolsdim:feature_absorber": "stoneutility",
+		"rftoolsdim:liquid_absorber": "stoneutility",
+		"rftoolsdim:material_absorber": "stoneutility",
+		"rftoolsdim:terrain_absorber": "stoneutility",
+		"rftoolsdim:time_absorber": "stoneutility"
+	}
+}
