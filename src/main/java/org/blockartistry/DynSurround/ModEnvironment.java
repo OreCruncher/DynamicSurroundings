@@ -69,7 +69,7 @@ public enum ModEnvironment {
 
 	public static void initialize() {
 		for (final ModEnvironment me : ModEnvironment.values())
-			me.isLoaded = Loader.isModLoaded(me.modId);
+			me.isLoaded = Loader.isModLoaded(me.modId.toLowerCase());
 	}
 
 }
