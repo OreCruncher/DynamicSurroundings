@@ -55,7 +55,7 @@ public abstract class ParticleSystem {
 	protected final BlockPos position;
 	protected ObjectArray<IParticleMote> myParticles = new ObjectArray<IParticleMote>(ALLOCATION_SIZE);
 	protected int particleLimit;
-	protected boolean isAlive = true;
+	private boolean isAlive = true;
 
 	protected ParticleSystem(final World worldIn, final double posXIn, final double posYIn, final double posZIn) {
 		this.world = worldIn;
