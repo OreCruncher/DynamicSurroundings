@@ -1,3 +1,17 @@
+###DynamicSurroundings-1.11.2-3.4.6.0
+**What's New**
+* The Dynamic Surroundings JAR is now signed.  This shouldn't affect your game play.
+* Solid square footprint style (5)
+* Support CoFHCore covers (generate footstep sounds based on the cover, not the block)
+
+**Fixes**
+* Weather rendering with Tough as Nails should work again
+
+**Changes**
+* Mod profile updates for "out of the box" support:
+    * Added Hatchery, Chickens, Iron Chest, Advanced Generators, Storage Drawers, Simple Generators, Simple Barrels, Ceramics, Cooking for Blockheads, Ender Storage, Ex Nihlio Adscensio, Ex Compressum, Thermal Foundation, Thermal Expansion, Thermal Dynamics, Reliquia, Refined Storage, Tiny Progressions, Solar Flux Reborn, Big Reactors, Blood Magic, RFTools, Quark
+    * Refreshed Minecraft, Biomes O'Plenty, Tinker's Construct, Harvestcraft, Natura, Tough as Nails, Subtratum, Actually Additions, Gravel Ores
+
 ###DynamicSurroundings-1.11.2-3.4.5.7
 **What's New**
 * "Built-in" Preset configurations for:
