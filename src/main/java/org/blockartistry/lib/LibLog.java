@@ -24,6 +24,7 @@
 
 package org.blockartistry.lib;
 
+import org.apache.logging.log4j.LogManager;
 import org.blockartistry.lib.logging.ModLog;
 
 public final class LibLog {
@@ -32,7 +33,8 @@ public final class LibLog {
 		
 	}
 	
-	private static final ModLog logger = ModLog.getLogger("blockartistry.lib");
+	private static final ModLog logger = ModLog.setLogger("blockartistry.lib",
+			LogManager.getLogger("blockartistry.lib"));
 	
 	public static ModLog log() {
 		return logger;
