@@ -95,6 +95,11 @@ public class SoundManagerReplacement extends SoundManager {
 		return this.sndSystem;
 	}
 	
+	private void fastRestart() {
+		this.unloadSoundSystem();
+		this.loadSoundSystem();
+	}
+	
 	private void keepAlive() {
 		if (!this.loaded || streamThread == null)
 			return;
@@ -121,7 +126,7 @@ public class SoundManagerReplacement extends SoundManager {
 				DSurround.log().warn(msg1);
 				DSurround.log().warn(msg2);
 				if (ModOptions.enableSoundSystemAutorestart)
-					this.reloadSoundSystem();
+					this.fastRestart();
 				else
 					givenNotice = true;
 			} else {
