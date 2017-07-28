@@ -45,7 +45,7 @@ public class ParticleWaterSplash extends ParticleJet {
 	static {
 		fallSounds[0] = Sounds.WATERFALL0;
 		fallSounds[1] = Sounds.WATERFALL0;
-		fallSounds[2] = Sounds.WATERFALL0;
+		fallSounds[2] = Sounds.WATERFALL1;
 		fallSounds[3] = Sounds.WATERFALL1;
 		fallSounds[4] = Sounds.WATERFALL2;
 		fallSounds[5] = Sounds.WATERFALL3;
@@ -58,15 +58,17 @@ public class ParticleWaterSplash extends ParticleJet {
 
 	private static final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
+	private final BlockPos location;
 	private PositionedEmitter emitter;
 
-	public ParticleWaterSplash(final int strength, final World world, final double x, final double y, final double z) {
+	public ParticleWaterSplash(final int strength, final World world, final BlockPos loc, final double x, final double y, final double z) {
 		super(strength, world, x, y, z);
+		this.location = loc.toImmutable();
 	}
 
 	@Override
 	public boolean shouldDie() {
-		return !WaterSplashJetEffect.isValidSpawnBlock(WorldUtils.getDefaultBlockStateProvider(), this.getPos());
+		return !WaterSplashJetEffect.isValidSpawnBlock(WorldUtils.getDefaultBlockStateProvider(), this.location);
 	}
 
 	private boolean setupSound() {
@@ -106,9 +108,9 @@ public class ParticleWaterSplash extends ParticleJet {
 			if (WorldUtils.isSolidBlock(this.world, pos.setPos(this.posX + xOffset, this.posY, this.posZ + zOffset)))
 				continue;
 
-			final double motionX = xOffset * (this.jetStrength / 40.0D);
+			final double motionX = xOffset * (this.jetStrength / 25.0D);
 			final double motionY = 0.1D + RANDOM.nextDouble() * this.jetStrength / 20.0D;
-			final double motionZ = zOffset * (this.jetStrength / 40.D);
+			final double motionZ = zOffset * (this.jetStrength / 25.D);
 			final IParticleMote particle = ParticleCollections.addWaterSpray(this.world, this.posX + xOffset,
 					(double) (this.posY), this.posZ + zOffset, motionX, motionY, motionZ);
 			if (particle != null)
