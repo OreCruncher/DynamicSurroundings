@@ -158,7 +158,7 @@ task signJar(type: SignJar, dependsOn: reobfJar) {
     outputFile = jar.archivePath
 }
 
-build.dependsOn signJar
+signJar.dependsOn build
 
 artifacts {
     archives deobfJar
