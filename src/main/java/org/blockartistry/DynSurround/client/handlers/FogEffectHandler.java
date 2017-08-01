@@ -52,16 +52,13 @@ public class FogEffectHandler extends EffectHandlerBase {
 		super("FogEffectHandler");
 	}
 
-	private boolean ignoreFog() {
-		if (!(ModOptions.enableBiomeFog || ModOptions.allowDesertFog))
-			return false;
-
-		return !EnvironState.getDimensionInfo().getHasFog();
+	private boolean doFog() {
+		return (ModOptions.enableBiomeFog || ModOptions.allowDesertFog) && EnvironState.getDimensionInfo().getHasFog();
 	}
 
 	@Override
 	public void process(final World world, final EntityPlayer player) {
-		if (!ignoreFog())
+		if (doFog())
 			this.scanner.update();
 	}
 
@@ -71,20 +68,19 @@ public class FogEffectHandler extends EffectHandlerBase {
 	 */
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void fogColorEvent(final EntityViewRenderEvent.FogColors event) {
+		if (doFog()) {
+			final IBlockState block = ActiveRenderInfo.getBlockStateAtEntityViewpoint(event.getEntity().worldObj,
+					event.getEntity(), (float) event.getRenderPartialTicks());
+			if (block.getMaterial() == Material.LAVA || block.getMaterial() == Material.WATER)
+				return;
 
-		if (ignoreFog())
-			return;
-
-		final IBlockState block = ActiveRenderInfo.getBlockStateAtEntityViewpoint(event.getEntity().worldObj,
-				event.getEntity(), (float) event.getRenderPartialTicks());
-		if (block.getMaterial() == Material.LAVA || block.getMaterial() == Material.WATER)
-			return;
-
-		final Color color = this.scanner.getFogColor(EnvironState.getWorld(), (float) event.getRenderPartialTicks());
-		if (color != null) {
-			event.setRed(color.red);
-			event.setGreen(color.green);
-			event.setBlue(color.blue);
+			final Color color = this.scanner.getFogColor(EnvironState.getWorld(),
+					(float) event.getRenderPartialTicks());
+			if (color != null) {
+				event.setRed(color.red);
+				event.setGreen(color.green);
+				event.setBlue(color.blue);
+			}
 		}
 	}
 
@@ -95,7 +91,7 @@ public class FogEffectHandler extends EffectHandlerBase {
 	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void fogRenderEvent(final EntityViewRenderEvent.RenderFogEvent event) {
-		if (ignoreFog() || event.getResult() != Result.DEFAULT)
+		if (!doFog() || event.getResult() != Result.DEFAULT)
 			return;
 
 		final float planeDistance = this.scanner.getPlaneDistance(event.getFarPlaneDistance());
@@ -112,10 +108,10 @@ public class FogEffectHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void diagnostics(final DiagnosticEvent.Gather event) {
-		if (ignoreFog())
-			event.output.add("FOG: IGNORED");
-		else
+		if (doFog())
 			event.output.add(this.scanner.toString());
+		else
+			event.output.add("FOG: IGNORED");
 	}
 
 }
