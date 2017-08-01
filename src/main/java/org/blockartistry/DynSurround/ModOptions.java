@@ -342,9 +342,9 @@ public final class ModOptions {
 			CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS, CONFIG_SOUND_CULL_THRESHOLD,
 			CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES, CONFIG_ENABLE_BATTLEMUSIC);
 
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_RESTART_SOUND_SYSTEM, defaultValue = "false", lang = "cfg.sound.Autorestart")
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_RESTART_SOUND_SYSTEM, defaultValue = "true", lang = "cfg.sound.Autorestart")
 	@Comment("Enable auto-restart of crashed sound system")
-	public static boolean enableSoundSystemAutorestart = false;
+	public static boolean enableSoundSystemAutorestart = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BIOME_SOUNDS, defaultValue = "true", lang = "cfg.sound.BiomeSounds")
 	@Comment("Enable biome background and spot sounds")
 	public static boolean enableBiomeSounds = true;

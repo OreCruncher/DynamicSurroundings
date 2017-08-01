@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.client.sound;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
@@ -57,6 +58,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import paulscode.sound.Library;
+import paulscode.sound.SimpleThread;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.StreamThread;
@@ -96,6 +98,25 @@ public class SoundManagerReplacement extends SoundManager {
 	}
 	
 	private void fastRestart() {
+		try {
+			final Field commandThread = ReflectionHelper.findField(SoundSystem.class, "commandThread");
+			Thread t = (Thread) commandThread.get(getSoundSystem());
+
+			// Kill off the command thread aggressively. Avoids the built in
+			// delay because it will not respond.
+			final Method alive = ReflectionHelper.findMethod(SimpleThread.class, "alive", null, boolean.class,
+					boolean.class);
+			alive.invoke(t, true, false);
+
+			// Kill off the stream thread, too
+			final Library l = (Library) soundLibrary.get(this.sndSystem);
+			t = (StreamThread) streamThread.get(l);
+			alive.invoke(t, true, false);
+
+		} catch (final Throwable t) {
+			DSurround.log().error("Unable to terminate sound system threads!", t);
+		}
+
 		this.unloadSoundSystem();
 		this.loadSoundSystem();
 	}
