@@ -24,8 +24,10 @@
 
 package org.blockartistry.lib;
 
+import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -63,7 +65,11 @@ public final class MCHelper {
 			return true;
 
 		final NonNullList<ItemStack> stacks = NonNullList.create();
-		block.getSubBlocks(item, null, stacks);
+		try {
+			block.getSubBlocks(item, block.getCreativeTabToDisplayOn(), stacks);
+		} catch (final Throwable t) {
+			return false;
+		}
 		return stacks.size() > 1;
 	}
 
