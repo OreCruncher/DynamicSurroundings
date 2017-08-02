@@ -196,7 +196,7 @@ public class AreaFogScanner implements ITickable {
 
 		final Color defaultFogColor = worldFogColor(world, partialTick);
 
-		if (this.blendedColor == null || this.biomeWeight == 0)
+		if (this.blendedColor == null || this.biomeWeight == 0 || world.provider == null)
 			return defaultFogColor;
 
 		final int dimId = world.provider.getDimension();
