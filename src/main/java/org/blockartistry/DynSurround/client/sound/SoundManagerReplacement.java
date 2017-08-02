@@ -68,12 +68,28 @@ public class SoundManagerReplacement extends SoundManager {
 
 	private static Field soundLibrary = null;
 	private static Field streamThread = null;
+	private static Field commandThread = null;
+	private static Method alive = null;
+	private static Method kill = null;
 
 	static {
 
 		try {
 			soundLibrary = ReflectionHelper.findField(SoundSystem.class, "soundLibrary");
 			streamThread = ReflectionHelper.findField(Library.class, "streamThread");
+
+			try {
+				commandThread = ReflectionHelper.findField(SoundSystem.class, "commandThread");
+				alive = ReflectionHelper.findMethod(SimpleThread.class, "alive", null, boolean.class,
+						boolean.class);
+				kill = ReflectionHelper.findMethod(SimpleThread.class, "kill", null);
+			} catch (final Throwable t) {
+				DSurround.log().warn("Cannot find SimpleThread methods; fast sound system restart not enabled");
+				commandThread = null;
+				alive = null;
+				kill = null;
+			}
+
 		} catch (final Throwable t) {
 			DSurround.log().warn("Cannot find sound manager fields; auto-restart not enabled");
 			soundLibrary = null;
@@ -98,23 +114,21 @@ public class SoundManagerReplacement extends SoundManager {
 	}
 
 	private void fastRestart() {
-		try {
-			final Field commandThread = ReflectionHelper.findField(SoundSystem.class, "commandThread");
-			Thread t = (Thread) commandThread.get(getSoundSystem());
+		if (alive != null && kill != null) {
+			try {
+				// Kill off the command thread
+				Thread t = (Thread) commandThread.get(getSoundSystem());
+				kill.invoke(t);
+				alive.invoke(t, true, false);
 
-			// Kill off the command thread aggressively. Avoids the built in
-			// delay because it will not respond.
-			final Method alive = ReflectionHelper.findMethod(SimpleThread.class, "alive", null, boolean.class,
-					boolean.class);
-			alive.invoke(t, true, false);
-
-			// Kill off the stream thread, too
-			final Library l = (Library) soundLibrary.get(this.sndSystem);
-			t = (StreamThread) streamThread.get(l);
-			alive.invoke(t, true, false);
-
-		} catch (final Throwable t) {
-			DSurround.log().error("Unable to terminate sound system threads!", t);
+				// Kill off the stream thread
+				final Library l = (Library) soundLibrary.get(this.sndSystem);
+				t = (StreamThread) streamThread.get(l);
+				kill.invoke(t);
+				alive.invoke(t, true, false);
+			} catch (final Throwable t) {
+				DSurround.log().error("Unable to terminate sound system threads!", t);
+			}
 		}
 
 		this.unloadSoundSystem();
