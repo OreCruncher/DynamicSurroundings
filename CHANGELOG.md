@@ -1,3 +1,12 @@
+###DynamicSurroundings-1.10.2-3.4.6.1
+**Fixes**
+* Cleanup waterfall splash effect.  Should disappear properly, and small falls no longer sound like the men's room at a pub during happy hour.
+* Fix permissions level for calc command.
+
+**Changes**
+* Built against Forge 12.18.3.2422
+* Improved performance of sound system restart after it crashes.
+
 ###DynamicSurroundings-1.10.2-3.4.6.0
 **What's New**
 * The Dynamic Surroundings JAR is now signed.  This shouldn't affect your game play.
