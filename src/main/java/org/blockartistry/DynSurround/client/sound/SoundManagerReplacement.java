@@ -177,7 +177,7 @@ public class SoundManagerReplacement extends SoundManager {
 		if (sound != null) {
 			if (sound instanceof BasicSound<?>) {
 				final BasicSound<?> state = (BasicSound<?>) sound;
-				if (!StringUtils.isEmpty(state.getId())) {
+				if (!StringUtils.isEmpty(state.getId()) && getSoundSystem() != null) {
 					getSoundSystem().stop(state.getId());
 				}
 			}
