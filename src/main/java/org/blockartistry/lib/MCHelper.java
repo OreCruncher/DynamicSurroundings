@@ -64,7 +64,11 @@ public final class MCHelper {
 			return true;
 
 		final List<ItemStack> stacks = new ArrayList<ItemStack>();
-		block.getSubBlocks(item, null, stacks);
+		try {
+			block.getSubBlocks(item, block.getCreativeTabToDisplayOn(), stacks);
+		} catch (final Throwable t) {
+			return false;
+		}
 		return stacks.size() > 1;
 	}
 
