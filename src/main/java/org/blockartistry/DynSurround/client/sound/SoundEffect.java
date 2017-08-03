@@ -38,7 +38,6 @@ import org.blockartistry.DynSurround.registry.Evaluator;
 import org.blockartistry.DynSurround.registry.SoundMetadata;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.lib.BlockStateProvider;
-import org.blockartistry.lib.SoundUtils;
 import org.blockartistry.lib.WeightTable;
 import org.blockartistry.lib.WeightTable.IEntrySource;
 import org.blockartistry.lib.WeightTable.IItem;
@@ -78,7 +77,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	protected SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume,
 			final float pitch, final int repeatDelay, final boolean variable) {
 		this.soundName = resource.toString();
-		this.sound = SoundUtils.getOrRegisterSound(resource);
+		this.sound = Sounds.getSound(resource);
 		this.volume = volume;
 		this.pitch = pitch;
 		this.conditions = StringUtils.EMPTY;

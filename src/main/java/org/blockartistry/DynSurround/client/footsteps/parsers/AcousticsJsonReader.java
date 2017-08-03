@@ -38,13 +38,14 @@ import org.blockartistry.DynSurround.client.footsteps.implem.ProbabilityWeightsA
 import org.blockartistry.DynSurround.client.footsteps.implem.SimultaneousAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
-import org.blockartistry.lib.SoundUtils;
+import org.blockartistry.DynSurround.client.sound.Sounds;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -230,13 +231,15 @@ public class AcousticsJsonReader {
 
 	private void setupSoundName(final BasicAcoustic a, final String soundName) {
 		try {
+			final ResourceLocation res;
 			if ("@".equals(soundName)) {
-				a.setSound(SoundUtils.getOrRegisterSound("MISSING"));
+				res = new ResourceLocation("meta:missing_sound");
 			} else if (soundName.charAt(0) != '@') {
-				a.setSound(SoundUtils.getOrRegisterSound(this.soundRoot + soundName));
+				res = new ResourceLocation(DSurround.RESOURCE_ID, this.soundRoot + soundName);
 			} else {
-				a.setSound(SoundUtils.getOrRegisterSound("minecraft:" + soundName.substring(1)));
+				res = new ResourceLocation("minecraft", soundName.substring(1));
 			}
+			a.setSound(Sounds.getSound(res));
 		} catch (final Throwable t) {
 			DSurround.log().warn("Unable to locate sound [%s]", soundName);
 		}

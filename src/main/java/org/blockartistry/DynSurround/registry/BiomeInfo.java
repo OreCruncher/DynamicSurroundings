@@ -23,6 +23,7 @@
 
 package org.blockartistry.DynSurround.registry;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -31,6 +32,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.handlers.AreaSoundEffectHandler;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
@@ -48,8 +50,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public final class BiomeInfo implements Comparable<BiomeInfo> {
+
+	private static Field biomeName = null;
+
+	static {
+		try {
+			biomeName = ReflectionHelper.findField(Biome.class, "biomeName", "field_76791_y");
+		} catch (final Throwable t) {
+			DSurround.log().error("Unable to obtain Biome::biomeName field reference!", t);
+		}
+	}
 
 	public final static int DEFAULT_SPOT_CHANCE = 1000 / AreaSoundEffectHandler.SCAN_INTERVAL;
 	public final static SoundEffect[] NO_SOUNDS = {};
@@ -101,7 +114,11 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	}
 
 	public String getBiomeName() {
-		return this.biome.getBiomeName();
+		try {
+			return (String) biomeName.get(this.biome);
+		} catch (final Throwable t) {
+			return "UNKNOWN";
+		}
 	}
 
 	public boolean getHasPrecipitation() {

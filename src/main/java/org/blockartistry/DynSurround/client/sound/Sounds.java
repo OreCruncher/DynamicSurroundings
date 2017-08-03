@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -38,8 +39,6 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.data.xface.SoundMetadataConfig;
 import org.blockartistry.DynSurround.registry.SoundMetadata;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
-import org.blockartistry.lib.SoundUtils;
-
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 
@@ -48,10 +47,11 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.registries.IForgeRegistry;
 
-@Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
+@Mod.EventBusSubscriber(modid = DSurround.MOD_ID)
 public final class Sounds {
 
 	private Sounds() {
@@ -95,10 +95,20 @@ public final class Sounds {
 	public static SoundEffect WATERFALL4;
 	public static SoundEffect WATERFALL5;
 
-	private final static Map<ResourceLocation, SoundMetadata> soundMetadata = Maps.newHashMap();
+	// Weather stuff
+	public static SoundEvent RAIN;
+	public static SoundEvent DUST;
 
-	@SubscribeEvent
-	public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {
+	// Quiet!
+	public static SoundEvent SILENCE;
+
+	private final static Map<ResourceLocation, SoundMetadata> soundMetadata = Maps.newHashMap();
+	private final static Map<ResourceLocation, SoundEvent> myRegistry = Maps.newHashMap();
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void registerSounds(final RegistryEvent.Register<SoundEvent> event) {
+		DSurround.log().info("Registering sounds");
+
 		final ParameterizedType TYPE = new ParameterizedType() {
 			public Type[] getActualTypeArguments() {
 				return new Type[] { String.class, SoundMetadataConfig.class };
@@ -113,6 +123,7 @@ public final class Sounds {
 			}
 		};
 
+		final IForgeRegistry<SoundEvent> registry = event.getRegistry();
 		try (final InputStream stream = SoundRegistry.class.getResourceAsStream("/assets/dsurround/sounds.json")) {
 			if (stream != null) {
 				@SuppressWarnings("unchecked")
@@ -122,13 +133,40 @@ public final class Sounds {
 					final String soundName = e.getKey();
 					final SoundMetadata data = new SoundMetadata(e.getValue());
 					final ResourceLocation resource = new ResourceLocation(DSurround.RESOURCE_ID, soundName);
-					SoundUtils.getOrRegisterSound(resource);
+					final SoundEvent sound = new SoundEvent(resource).setRegistryName(resource);
+					registry.register(sound);
 					soundMetadata.put(resource, data);
 				}
 			}
 		} catch (final Throwable t) {
 			DSurround.log().error("Unable to read the mod sound file!", t);
 		}
+
+		// Scan the "public" registries making a private one. The entries are
+		// based on what the client
+		// sees and disregards what the server wants. Not entirely sure why the
+		// server has to dictate
+		// what is client data.
+		Iterator<SoundEvent> itr = SoundEvent.REGISTRY.iterator();
+		while (itr.hasNext()) {
+			final SoundEvent se = itr.next();
+			myRegistry.put(se.getRegistryName(), se);
+		}
+
+		itr = registry.iterator();
+		while (itr.hasNext()) {
+			final SoundEvent se = itr.next();
+			myRegistry.put(se.getRegistryName(), se);
+		}
+
+		SILENCE = Sounds.getSound(new ResourceLocation(DSurround.RESOURCE_ID, "silence"));
+
+		// Weather
+
+		RAIN = Sounds.getSound(new ResourceLocation(DSurround.RESOURCE_ID, "rain"));
+		DUST = Sounds.getSound(new ResourceLocation(DSurround.RESOURCE_ID, "dust"));
+
+		// SoundEffects
 
 		JUMP = new SoundEffect.Builder("jump", SoundCategory.PLAYERS).setVariablePitch(true).build();
 		CRAFTING = new SoundEffect.Builder("crafting", SoundCategory.PLAYERS).build();
@@ -174,6 +212,15 @@ public final class Sounds {
 	@Nullable
 	public static SoundMetadata getSoundMetadata(@Nonnull final ResourceLocation resource) {
 		return soundMetadata.get(resource);
+	}
+
+	public static SoundEvent getSound(final ResourceLocation sound) {
+		final SoundEvent evt = myRegistry.get(sound);
+		if (evt == null) {
+			DSurround.log().warn("Cannot find sound that should be registered [%s]", sound.toString());
+			return SILENCE;
+		}
+		return evt;
 	}
 
 }
