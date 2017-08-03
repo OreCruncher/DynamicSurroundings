@@ -32,9 +32,7 @@ import org.blockartistry.DynSurround.client.handlers.EffectManager;
 import org.blockartistry.DynSurround.client.handlers.ExpressionStateHandler;
 import org.blockartistry.DynSurround.client.hud.GuiHUDHandler;
 import org.blockartistry.DynSurround.client.sound.MusicTickerReplacement;
-import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.commands.CommandCalc;
-import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.lib.Localization;
 
 import net.minecraft.client.Minecraft;
@@ -71,8 +69,6 @@ public class ProxyClient extends Proxy {
 	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		super.preInit(event);
 		ExpressionStateHandler.register();
-		SoundRegistry.initializeRegistry();
-		Sounds.register();
 	}
 
 	@Override

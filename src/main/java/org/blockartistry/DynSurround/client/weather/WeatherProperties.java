@@ -28,9 +28,8 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.api.events.WeatherUpdateEvent;
+import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.data.DimensionEffectData;
-import org.blockartistry.lib.SoundUtils;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.util.ResourceLocation;
@@ -62,16 +61,12 @@ public enum WeatherProperties {
 	private final ResourceLocation rainTexture;
 	private final ResourceLocation snowTexture;
 	private final ResourceLocation dustTexture;
-	private final SoundEvent rainSound;
-	private final SoundEvent dustSound;
 
 	private WeatherProperties() {
 		this.level = -10.0F;
 		this.rainTexture = EntityRenderer.RAIN_TEXTURES;
 		this.snowTexture = EntityRenderer.SNOW_TEXTURES;
 		this.dustTexture = new ResourceLocation(DSurround.RESOURCE_ID, "textures/environment/dust_calm.png");
-		this.rainSound = SoundUtils.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "rain"));
-		this.dustSound = SoundUtils.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "dust"));
 	}
 
 	private WeatherProperties(final float level, @Nonnull final String intensity) {
@@ -82,8 +77,6 @@ public enum WeatherProperties {
 				String.format("textures/environment/snow_%s.png", intensity));
 		this.dustTexture = new ResourceLocation(DSurround.RESOURCE_ID,
 				String.format("textures/environment/dust_%s.png", intensity));
-		this.rainSound = SoundUtils.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "rain"));
-		this.dustSound = SoundUtils.getOrRegisterSound(new ResourceLocation(DSurround.RESOURCE_ID, "dust"));
 	}
 
 	private static World getWorld() {
@@ -133,12 +126,12 @@ public enum WeatherProperties {
 
 	@Nonnull
 	public SoundEvent getStormSound() {
-		return this.rainSound;
+		return Sounds.RAIN;
 	}
 
 	@Nonnull
 	public SoundEvent getDustSound() {
-		return this.dustSound;
+		return Sounds.DUST;
 	}
 	
 	@Nonnull
@@ -162,12 +155,12 @@ public enum WeatherProperties {
 
 	@Nonnull
 	public static SoundEvent getCurrentStormSound() {
-		return intensity.rainSound;
+		return intensity.getStormSound();
 	}
 
 	@Nonnull
 	public static SoundEvent getCurrentDustSound() {
-		return intensity.dustSound;
+		return intensity.getDustSound();
 	}
 
 	public static boolean doVanilla() {
