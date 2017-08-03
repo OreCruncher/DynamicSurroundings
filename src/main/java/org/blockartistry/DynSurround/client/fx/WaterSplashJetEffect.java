@@ -35,6 +35,7 @@ import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.WorldUtils;
 
+import net.minecraft.block.BlockDynamicLiquid;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -98,12 +99,13 @@ public class WaterSplashJetEffect extends JetEffect {
 	public static boolean isValidSpawnBlock(final BlockStateProvider provider, final BlockPos pos) {
 		if (provider.getBlockState(pos).getMaterial() != Material.WATER)
 			return false;
-		if (provider.getBlockState(pos.up()).getMaterial() != Material.WATER)
-			return false;
 		if (!provider.getBlockState(pos.down()).getMaterial().isSolid())
 			return false;
+		final IBlockState stateUp = provider.getBlockState(pos.up());
+		if (stateUp.getMaterial() != Material.WATER)
+			return false;
 
-		return isUnboundedLiquid(provider, pos);
+		return stateUp.getBlock() instanceof BlockDynamicLiquid || isUnboundedLiquid(provider, pos);
 	}
 
 	@Override
