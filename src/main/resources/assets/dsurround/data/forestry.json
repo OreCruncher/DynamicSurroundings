@@ -19,7 +19,9 @@
 		},
 		{
 			"blocks": [
-				"forestry:beehives:*"
+				"forestry:beehives:*",
+				"forestry:bee_house:*",
+				"forestry:apiary:*"
 			],
 			"chance": 5,
 			"sounds": [
