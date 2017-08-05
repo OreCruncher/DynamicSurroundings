@@ -1,0 +1,17 @@
+{
+	"footsteps": {
+		"terraqueous:cloudfancy": "NOT_EMITTER",
+		"terraqueous:clouds": "NOT_EMITTER",
+		"terraqueous:crafting": "stoneutility",
+		"terraqueous:doodads": "stoneutility",
+		"terraqueous:earth_ore": "ore",
+		"terraqueous:ender_table": "stoneutility",
+		"terraqueous:flowerpot": "brickstone",
+		"terraqueous:flowers_cluster": "brush",
+		"terraqueous:flowers_single": "brush",
+		"terraqueous:hay": "straw",
+		"terraqueous:pergola": "wood",
+		"terraqueous:plants": "NOT_EMITTER",
+		"terraqueous:type_cloud": "NOT_EMITTER"
+	}
+}

@@ -1,0 +1,33 @@
+{
+	"footsteps": {
+		"astralsorcery:blockaltar": "marble",
+		"astralsorcery:blockattunementaltar": "marble",
+		"astralsorcery:blockattunementrelay": "marble",
+		"astralsorcery:blockblackmarble": "marble",
+		"astralsorcery:blockcelestialcollectorcrystal": "marble",
+		"astralsorcery:blockcelestialcrystals": "composite",
+		"astralsorcery:blockcelestialgateway": "marble",
+		"astralsorcery:blockcollectorcrystal": "marble",
+		"astralsorcery:blockcustomflower": "NOT_EMITTER",
+		"astralsorcery:blockcustomore": "ore",
+		"astralsorcery:blockcustomsandore": "sand",
+		"astralsorcery:blockfaketree": "wood",
+		"astralsorcery:blockflarelight": "NOT_EMITTER",
+		"astralsorcery:blocklens": "glass",
+		"astralsorcery:blockmachine": "stonemachine",
+		"astralsorcery:blockmapdrawingtable": "marble",
+		"astralsorcery:blockmarbledoubleslab": "marble",
+		"astralsorcery:blockmarbleslab": "marble",
+		"astralsorcery:blockmarblestairs": "marble",
+		"astralsorcery:blockprism": "composite",
+		"astralsorcery:blockrituallink": "marble",
+		"astralsorcery:blockritualpedestal": "marble",
+		"astralsorcery:blockstarlightinfuser": "marble",
+		"astralsorcery:blockstructural": "marble",
+		"astralsorcery:blocktranslucentblock": "glass",
+		"astralsorcery:blocktreebeacon": "stonemachine",
+		"astralsorcery:blockwell": "marble",
+		"astralsorcery:blockworldilluminator": "glass",
+		"astralsorcery:fluidblockliquidstarlight": "NOT_EMITTER"
+	}
+}
