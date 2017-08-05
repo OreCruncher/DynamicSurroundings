@@ -1,4 +1,39 @@
 {
+	"blocks": [
+		{
+			"blocks": [
+				"terraqueous:planks:*",
+				"terraqueous:type_earth:40",
+				"terraqueous:type_earth:41",
+				"terraqueous:type_earth:42",
+				"terraqueous:type_earth:43",
+				"terraqueous:type_earth:44",
+				"terraqueous:type_earth:45",
+				"terraqueous:type_earth:46",
+				"terraqueous:type_earth:47",
+				"terraqueous:type_earth:48",
+				"terraqueous:type_earth:49",
+				"terraqueous:type_earth:50",
+				"terraqueous:type_earth:51",
+				"terraqueous:type_earth:52",
+				"terraqueous:type_earth:53",
+				"terraqueous:type_earth:54",
+				"terraqueous:type_earth:55",
+				"terraqueous:type_earth:56",
+				"terraqueous:type_earth:57",
+				"terraqueous:type_earth:58",
+				"terraqueous:type_earth:59"
+			],
+			"stepChance": 150,
+			"sounds": [
+				{
+					"sound": "dsurround:floorsqueak",
+					"soundType": "step",
+					"variable": true
+				}
+			]
+		}
+	],
 	"footsteps": {
 		"terraqueous:cloudfancy": "NOT_EMITTER",
 		"terraqueous:clouds": "NOT_EMITTER",
@@ -34,7 +69,7 @@
 		"terraqueous:hay^13+foliage": "brush",
 		"terraqueous:hay^14+foliage": "brush",
 		"terraqueous:hay^15+foliage": "brush",
-		"terraqueous:pergola": "bigger",
+		"terraqueous:pergola": "bluntwood",
 		"terraqueous:pergola^1": "leaves",
 		"terraqueous:pergola^1+foliage": "leaves",
 		"terraqueous:pergola^2": "leaves",
