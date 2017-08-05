@@ -1,78 +1,121 @@
 {
-	"blocks":[
+	"blocks": [
 		{
-			"blocks":[
+			"blocks": [
 				"forestry:planks.0",
 				"forestry:planks.1",
 				"forestry:planks.fireproof.0",
 				"forestry:planks.fireproof.1",
 				"forestry:planks.vanilla.fireproof.0"
 			],
-			"stepChance":150,
-			"sounds":[
+			"stepChance": 150,
+			"sounds": [
 				{
-					"sound":"dsurround:floorsqueak",
-					"soundType":"step",
-					"variable":true
+					"sound": "dsurround:floorsqueak",
+					"soundType": "step",
+					"variable": true
 				}
-				
 			]
-			
 		},
 		{
-			"blocks":[
+			"blocks": [
 				"forestry:beehives:*"
 			],
-			"chance":5,
-			"sounds":[
+			"chance": 5,
+			"sounds": [
 				{
-					"sound":"dsurround:bees",
-					"conditions":"isDay && weather.isNotRaining",
-					"variable":true
+					"sound": "dsurround:bees",
+					"conditions": "isDay && weather.isNotRaining",
+					"variable": true
 				}
-				
 			]
-			
 		}
-		
 	],
-	"footsteps":{
-		"forestry:ffarm":"stoneutility",
-		"forestry:beehives":"organic_dry",
-		"forestry:cocoon":"organic_dry",
-		"forestry:cocoon.solid":"organic_dry",
-		"forestry:pods.cocoa":"organic_dry",
-		"forestry:pods.dates":"organic_dry",
-		"forestry:pods.papaya":"organic_dry",
-		"forestry:bee_chest":"squeakywood",
-		"forestry:tree_chest":"squeakywood",
-		"forestry:butterfly_chest":"squeakywood",
-		"forestry:apiary":"woodutility",
-		"forestry:bee_house":"woodutility",
-		"forestry:worktable":"woodutility",
-		"forestry:escritoire":"woodutility",
-		"forestry:alveary.plain":"woodutility",
-		"forestry:alveary.swarmer":"woodutility",
-		"forestry:alveary.fan":"woodutility",
-		"forestry:alveary.heater":"woodutility",
-		"forestry:alveary.hygro":"woodutility",
-		"forestry:alveary.stabiliser":"woodutility",
-		"forestry:alveary.sieve":"woodutility",
-		"forestry:greenhouse.plain":"stoneutility",
-		"forestry:greenhouse.glass":"stoneutility",
-		"forestry:greenhouse.hatch_input":"stoneutility",
-		"forestry:greenhouse.hatch_output":"stoneutility",
-		"forestry:greenhouse.gearbox":"stoneutility",
-		"forestry:greenhouse.valve":"stoneutility",
-		"forestry:greenhouse.fan":"stoneutility",
-		"forestry:greenhouse.heater":"stoneutility",
-		"forestry:greenhouse.dryer":"stoneutility",
-		"forestry:greenhouse.control":"stoneutility",
-		"forestry:greenhouse.sprinkler":"stoneutility",
-		"forestry:greenhouse.door":"stoneutility",
-		"forestry:greenhouse.climate_control":"stoneutility",
-		"forestry:greenhouse.window":"stoneutility",
-		"forestry:greenhouse.window_up":"stoneutility",
-		"forestry:greenhouse.butterfly_hatch":"stoneutility"
+	"footsteps": {
+		"forestry:ffarm": "stoneutility",
+		"forestry:beehives": "organic_dry",
+		"forestry:cocoon": "organic_dry",
+		"forestry:cocoon.solid": "organic_dry",
+		"forestry:pods.cocoa": "organic_dry",
+		"forestry:pods.dates": "organic_dry",
+		"forestry:pods.papaya": "organic_dry",
+		"forestry:bee_chest": "squeakywood",
+		"forestry:tree_chest": "squeakywood",
+		"forestry:butterfly_chest": "squeakywood",
+		"forestry:apiary": "woodutility",
+		"forestry:bee_house": "woodutility",
+		"forestry:worktable": "woodutility",
+		"forestry:escritoire": "woodutility",
+		"forestry:alveary.plain": "woodutility",
+		"forestry:alveary.swarmer": "woodutility",
+		"forestry:alveary.fan": "woodutility",
+		"forestry:alveary.heater": "woodutility",
+		"forestry:alveary.hygro": "woodutility",
+		"forestry:alveary.stabiliser": "woodutility",
+		"forestry:alveary.sieve": "woodutility",
+		"forestry:greenhouse.plain": "stoneutility",
+		"forestry:greenhouse.glass": "stoneutility",
+		"forestry:greenhouse.hatch_input": "stoneutility",
+		"forestry:greenhouse.hatch_output": "stoneutility",
+		"forestry:greenhouse.gearbox": "stoneutility",
+		"forestry:greenhouse.valve": "stoneutility",
+		"forestry:greenhouse.fan": "stoneutility",
+		"forestry:greenhouse.heater": "stoneutility",
+		"forestry:greenhouse.dryer": "stoneutility",
+		"forestry:greenhouse.control": "stoneutility",
+		"forestry:greenhouse.sprinkler": "stoneutility",
+		"forestry:greenhouse.door": "stoneutility",
+		"forestry:greenhouse.climate_control": "stoneutility",
+		"forestry:greenhouse.window": "stoneutility",
+		"forestry:greenhouse.window_up": "stoneutility",
+		"forestry:greenhouse.butterfly_hatch": "stoneutility",
+		"forestry:bee_combs_0": "organic_dry",
+		"forestry:bog_earth": "dirt",
+		"forestry:candle": "NOT_EMITTER",
+		"forestry:analyzer": "stonemachine",
+		"forestry:bottler": "stonemachine",
+		"forestry:carpenter": "stonemachine",
+		"forestry:centrifuge": "stonemachine",
+		"forestry:charcoal": "stone",
+		"forestry:engine_biogas": "stonemachine",
+		"forestry:engine_clockwork": "hardmetal",
+		"forestry:engine_peat": "hardmetal",
+		"forestry:fabricator": "stonemachine",
+		"forestry:fermenter": "stonemachine",
+		"forestry:fluid.bio.ethanol": "NOT_EMITTER",
+		"forestry:fluid.biomass": "NOT_EMITTER",
+		"forestry:fluid.for.honey": "NOT_EMITTER",
+		"forestry:fluid.glass": "NOT_EMITTER",
+		"forestry:fluid.ice": "NOT_EMITTER",
+		"forestry:fluid.juice": "NOT_EMITTER",
+		"forestry:fluid.milk": "NOT_EMITTER",
+		"forestry:fluid.seed.oil": "NOT_EMITTER",
+		"forestry:fluid.short.mead": "NOT_EMITTER",
+		"forestry:greenhouse.dehumidifier": "stoneutility",
+		"forestry:greenhouse.humidifier": "stoneutility",
+		"forestry:greenhouse.nursery": "stoneutility",
+		"forestry:humus": "grass",
+		"forestry:loam": "grass",
+		"forestry:mailbox": "stoneutility",
+		"forestry:moistener": "stoneutility",
+		"forestry:mushroom": "organic",
+		"forestry:rainmaker": "stoneutility",
+		"forestry:raintank": "stoneutility",
+		"forestry:resource_storage": "stoneutility",
+		"forestry:slabs.double.0": "wood",
+		"forestry:slabs.double.1": "wood",
+		"forestry:slabs.double.2": "wood",
+		"forestry:slabs.double.3": "wood",
+		"forestry:slabs.double.fireproof.0": "wood",
+		"forestry:slabs.double.fireproof.1": "wood",
+		"forestry:slabs.double.fireproof.2": "wood",
+		"forestry:slabs.double.fireproof.3": "wood",
+		"forestry:slabs.vanilla.double.fireproof.0": "wood",
+		"forestry:squeezer": "stoneutility",
+		"forestry:stamp_collector": "stoneutility",
+		"forestry:still": "stoneutility",
+		"forestry:stump": "wood",
+		"forestry:trade_station": "stoneutility",
+		"forestry:wood_pile": "wood"
 	}
 }
