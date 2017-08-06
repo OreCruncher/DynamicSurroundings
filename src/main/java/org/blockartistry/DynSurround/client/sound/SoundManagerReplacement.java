@@ -26,6 +26,8 @@ package org.blockartistry.DynSurround.client.sound;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
@@ -35,6 +37,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
@@ -42,6 +45,8 @@ import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Localization;
 import org.blockartistry.lib.MathStuff;
 
+import gnu.trove.iterator.TObjectIntIterator;
+import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ITickableSound;
@@ -51,9 +56,11 @@ import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -352,6 +359,28 @@ public class SoundManagerReplacement extends SoundManager {
 		}
 	}
 
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public void diagnostics(final DiagnosticEvent.Gather event) {
+		final TObjectIntHashMap<String> counts = new TObjectIntHashMap<String>();
+
+		final Iterator<Entry<String, ISound>> iterator = this.playingSounds.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Entry<String, ISound> entry = iterator.next();
+			ISound isound = entry.getValue();
+			counts.adjustOrPutValue(isound.getSound().getSoundLocation().toString(), 1, 1);
+		}
+
+		final ArrayList<String> results = new ArrayList<String>();
+		final TObjectIntIterator<String> itr = counts.iterator();
+		while (itr.hasNext()) {
+			itr.advance();
+			results.add(String.format(TextFormatting.GOLD + "%s: %d", itr.key(), itr.value()));
+		}
+		Collections.sort(results);
+		event.output.addAll(results);
+
+	}
+	
 	public boolean isMuted() {
 		return this.sndSystem != null && getSoundSystem().getMasterVolume() == MUTE_VOLUME;
 	}
