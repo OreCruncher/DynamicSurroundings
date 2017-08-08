@@ -63,6 +63,10 @@ repositories {
     	name "Chisel"
     	url "http://maven.tterrag.com"
     }
+
+    maven {
+		url 'https://repo.elytradev.com/'
+	}
 }
 
 dependencies {
@@ -98,6 +102,8 @@ dependencies {
     runtime "mezz.jei:jei_1.11.2:4.5.0.289"
 	
 	deobfCompile "team.chisel:Chisel:MC1.11.2-0.0.11.16:api"    
+
+	compile 'elucent:albedo:1.0-SNAPSHOT'    
 }
 
 processResources
