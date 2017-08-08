@@ -1,3 +1,21 @@
+###DynamicSurroundings-1.10.2-3.4.6.2
+**What's New**
+* Mod support:
+    * Astral Sorcery
+    * Charset
+    * Glass Hearts
+    * Terraqueous
+
+**Fixes**
+* OpenEye: NPE in getFogColor() - world provider property is null for some reason
+* OpenEye: SoundSystem reference was null for some reason
+* OpenEye: Use blocks creative tab reference in call to getBlockSubtypes()
+
+**Changes**
+* Refreshed support for the following mods:
+    * Ceramics
+    * Forestry
+    
 ###DynamicSurroundings-1.10.2-3.4.6.1
 **Fixes**
 * Cleanup waterfall splash effect.  Should disappear properly, and small falls no longer sound like the men's room at a pub during happy hour.
