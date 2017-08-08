@@ -1,3 +1,23 @@
+###DynamicSurroundings-1.12.2-3.4.6.2
+**What's New**
+* Mod support:
+    * Astral Sorcery
+    * Charset
+    * Glass Hearts
+    * Terraqueous
+    
+**Fixes**
+* OpenEye: NPE in getFogColor() - world provider property is null for some reason
+* OpenEye: SoundSystem reference was null for some reason
+* OpenEye: Use blocks creative tab reference in call to getBlockSubtypes()
+* Fixed sound disappearing when editing configuration while attached to a remote server.  This fix also addresses additional late sound registrations when attaching to a remote server.
+
+**Changes**
+* Refreshed support for the following mods:
+    * Ceramics
+    * Forestry
+    * Rustic
+
 ###DynamicSurroundings-1.12.2-3.4.6.1
 **Fixes**
 * Cleanup waterfall splash effect.  Should disappear properly, and small falls no longer sound like the men's room at a pub during happy hour.
