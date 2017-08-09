@@ -47,7 +47,7 @@ public class Presets {
 	public static final String RESOURCE_ID = "presets";
 	public static final String MOD_NAME = "Presets";
 	public static final String VERSION = "@VERSION@";
-	public static final String MINECRAFT_VERSIONS = "[1.11]";
+	public static final String MINECRAFT_VERSIONS = "[1.12,1.12.1]";
 	public static final String DEPENDENCIES = "";
 	public static final String GUI_FACTORY = "org.blockartistry.Presets.gui.ConfigGuiFactory";
 	public static final String UPDATE_URL = "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json";
