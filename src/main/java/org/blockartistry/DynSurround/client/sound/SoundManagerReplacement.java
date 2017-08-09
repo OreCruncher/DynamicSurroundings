@@ -87,8 +87,7 @@ public class SoundManagerReplacement extends SoundManager {
 
 			try {
 				commandThread = ReflectionHelper.findField(SoundSystem.class, "commandThread");
-				alive = ReflectionHelper.findMethod(SimpleThread.class, null, new String[] { "alive" }, boolean.class,
-						boolean.class);
+				alive = ReflectionHelper.findMethod(SimpleThread.class, null, new String[] { "alive" }, null, boolean.class, boolean.class);
 				kill = ReflectionHelper.findMethod(SimpleThread.class, null, new String[] { "kill" });
 			} catch (final Throwable t) {
 				DSurround.log().warn("Cannot find SimpleThread methods; fast sound system restart not enabled");
@@ -120,10 +119,6 @@ public class SoundManagerReplacement extends SoundManager {
 		return this.sndSystem;
 	}
 
-	public boolean isLoaded() {
-		return this.loaded;
-	}
-
 	private void fastRestart() {
 		if (alive != null && kill != null) {
 			try {
@@ -147,13 +142,13 @@ public class SoundManagerReplacement extends SoundManager {
 	}
 
 	private void keepAlive() {
-		if (streamThread == null)
+		if (!this.loaded || streamThread == null)
 			return;
 
 		// Don't want to spam attempts
 		if (this.playTime < this.nextCheck)
 			return;
-		
+
 		this.nextCheck = this.playTime + CHECK_INTERVAL;
 
 		try {
@@ -183,105 +178,106 @@ public class SoundManagerReplacement extends SoundManager {
 		}
 	}
 
+	private void setState(@Nonnull final ISound sound, @Nonnull final SoundState state) {
+		if (sound instanceof BasicSound) {
+			((BasicSound<?>) sound).setState(state);
+		}
+	}
+
+	private void setStateIf(@Nonnull final ISound sound, @Nonnull final SoundState current,
+			@Nonnull final SoundState state) {
+		if (sound instanceof BasicSound) {
+			final BasicSound<?> s = (BasicSound<?>) sound;
+			if (s.getState() == current)
+				s.setState(state);
+		}
+	}
+
+	private void stopSound(@Nonnull final BasicSound<?> sound) {
+		if (!StringUtils.isEmpty(sound.getId()) && getSoundSystem() != null) {
+			getSoundSystem().stop(sound.getId());
+		}
+		super.stopSound(sound);
+	}
+
 	@Override
 	public void stopSound(@Nonnull final ISound sound) {
-		if (sound != null && this.isLoaded()) {
+		if (sound != null) {
 			if (sound instanceof BasicSound<?>) {
-				final BasicSound<?> state = (BasicSound<?>) sound;
-				if (!StringUtils.isEmpty(state.getId()) && getSoundSystem() != null) {
-					getSoundSystem().stop(state.getId());
-				}
+				this.stopSound((BasicSound<?>) sound);
+			} else {
+				super.stopSound(sound);
 			}
-			super.stopSound(sound);
 		}
+	}
+
+	private void playSound(@Nonnull final BasicSound<?> sound) {
+		sound.setId(StringUtils.EMPTY);
+		if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC)
+			super.playSound(sound);
+		if (StringUtils.isEmpty(sound.getId()))
+			sound.setState(SoundState.ERROR);
+		else
+			sound.setState(SoundState.PLAYING);
 	}
 
 	@Override
 	public void playSound(@Nonnull final ISound sound) {
-		if (sound != null && this.isLoaded()) {
-			if (sound instanceof BasicSound<?>) {
-				final BasicSound<?> state = (BasicSound<?>) sound;
-				state.setId(StringUtils.EMPTY);
-				if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC)
-					super.playSound(sound);
-				if (StringUtils.isEmpty(state.getId()))
-					state.setState(SoundState.ERROR);
-				else
-					state.setState(SoundState.PLAYING);
-			} else {
-				if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC)
-					super.playSound(sound);
-			}
+		if (sound != null) {
+			if (sound instanceof BasicSound<?>)
+				this.playSound((BasicSound<?>) sound);
+			else if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC)
+				super.playSound(sound);
 		}
+	}
+
+	private void playDelayedSound(@Nonnull final BasicSound<?> sound, final int delay) {
+		sound.setId(StringUtils.EMPTY);
+		super.playDelayedSound(sound, delay);
+		sound.setState(SoundState.DELAYED);
 	}
 
 	@Override
 	public void playDelayedSound(@Nonnull final ISound sound, final int delay) {
-		if (sound != null && this.isLoaded()) {
-			if (sound instanceof BasicSound<?>) {
-				final BasicSound<?> state = (BasicSound<?>) sound;
-				state.setId(StringUtils.EMPTY);
-				super.playDelayedSound(sound, delay);
-				state.setState(SoundState.DELAYED);
-			} else {
-				super.playDelayedSound(sound, delay);
-			}
+		if (sound instanceof BasicSound<?>) {
+			this.playDelayedSound((BasicSound<?>) sound, delay);
+		} else {
+			super.playDelayedSound(sound, delay);
 		}
 	}
 
 	@Override
 	public void stopAllSounds() {
-		if (this.isLoaded()) {
+		if (this.loaded) {
 			// Need to make sure all our sounds have been marked
 			// as DONE. Reason is the underlying routine just
 			// wipes out all the lists.
 			for (final ISound s : this.playingSounds.values())
-				if (s instanceof BasicSound<?>) {
-					final BasicSound<?> state = (BasicSound<?>) s;
-					state.setState(SoundState.DONE);
-				}
+				this.setState(s, SoundState.DONE);
 			for (final ISound s : this.delayedSounds.keySet())
-				if (s instanceof BasicSound<?>) {
-					final BasicSound<?> state = (BasicSound<?>) s;
-					state.setState(SoundState.DONE);
-				}
+				this.setState(s, SoundState.DONE);
 		}
 		super.stopAllSounds();
 	}
 
 	@Override
 	public void pauseAllSounds() {
-		if (this.isLoaded()) {
-			for (final ISound s : this.playingSounds.values())
-				if (s instanceof BasicSound<?>) {
-					final BasicSound<?> state = (BasicSound<?>) s;
-					if (state.getState() == SoundState.PLAYING)
-						state.setState(SoundState.PAUSED);
-				}
+		for (final ISound s : this.playingSounds.values())
+			this.setStateIf(s, SoundState.PLAYING, SoundState.PAUSED);
 
-			super.pauseAllSounds();
-		}
+		super.pauseAllSounds();
 	}
 
 	@Override
 	public void resumeAllSounds() {
-		if (this.isLoaded()) {
-			for (final ISound s : this.playingSounds.values())
-				if (s instanceof BasicSound<?>) {
-					final BasicSound<?> state = (BasicSound<?>) s;
-					if (state.getState() == SoundState.PAUSED)
-						state.setState(SoundState.PLAYING);
-				}
+		for (final ISound s : this.playingSounds.values())
+			this.setStateIf(s, SoundState.PAUSED, SoundState.PLAYING);
 
-			super.resumeAllSounds();
-		}
+		super.resumeAllSounds();
 	}
 
 	@Override
 	public void updateAllSounds() {
-
-		if (!this.isLoaded())
-			return;
 
 		keepAlive();
 
@@ -313,35 +309,30 @@ public class SoundManagerReplacement extends SoundManager {
 			final String s1 = entry.getKey();
 
 			if (!sndSystem.playing(s1)) {
-				final int i = this.playingSoundsStopTime.get(s1).intValue();
+				final ISound isound = entry.getValue();
+				final int j = isound.getRepeatDelay();
+				final int minThresholdDelay = isound instanceof BasicSound ? 0 : 1;
 
-				if (i <= this.playTime) {
-					final ISound isound = entry.getValue();
-					final int j = isound.getRepeatDelay();
-					final int minThresholdDelay = isound instanceof BasicSound ? 0 : 1;
+				// Repeatable sound could have a delay of 0, meaning
+				// don't delay a requeue.
+				if (isound.canRepeat() && j >= minThresholdDelay) {
+					this.playDelayedSound(isound, j);
+				} else {
+					this.setState(isound, SoundState.DONE);
+				}
 
-					// Repeatable sound could have a delay of 0, meaning
-					// don't delay a requeue.
-					if (isound.canRepeat() && j >= minThresholdDelay) {
-						this.playDelayedSound(isound, j);
-					} else if (isound instanceof BasicSound<?>) {
-						final BasicSound<?> state = (BasicSound<?>) isound;
-						state.setState(SoundState.DONE);
-					}
+				iterator.remove();
+				sndSystem.removeSource(s1);
+				this.playingSoundsStopTime.remove(s1);
 
-					iterator.remove();
-					sndSystem.removeSource(s1);
-					this.playingSoundsStopTime.remove(s1);
+				try {
+					this.categorySounds.remove(isound.getCategory(), s1);
+				} catch (RuntimeException var8) {
+					;
+				}
 
-					try {
-						this.categorySounds.remove(isound.getCategory(), s1);
-					} catch (RuntimeException var8) {
-						;
-					}
-
-					if (isound instanceof ITickableSound) {
-						this.tickableSounds.remove(isound);
-					}
+				if (isound instanceof ITickableSound) {
+					this.tickableSounds.remove(isound);
 				}
 			}
 		}
@@ -393,14 +384,14 @@ public class SoundManagerReplacement extends SoundManager {
 		event.output.addAll(results);
 
 	}
-	
+
 	public boolean isMuted() {
 		return this.sndSystem != null && getSoundSystem().getMasterVolume() == MUTE_VOLUME;
 	}
 
 	public void setMuted(final boolean flag) {
 		// If not loaded return
-		if (!this.isLoaded() || this.sndSystem == null)
+		if (!this.loaded || this.sndSystem == null)
 			return;
 
 		final SoundSystem ss = getSoundSystem();
