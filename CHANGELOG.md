@@ -1,4 +1,10 @@
-###DynamicSurroundings-1.12.2-3.4.6.2
+###DynamicSurroundings-1.12-3.4.6.3
+**Fixes**
+* Sounds should no longer cut out soon after starting world.
+
+NOTE: No need to update if you are *not* running Minecraft 1.12.1!
+
+###DynamicSurroundings-1.12-3.4.6.2
 **What's New**
 * Mod support:
     * Astral Sorcery
@@ -18,7 +24,7 @@
     * Forestry
     * Rustic
 
-###DynamicSurroundings-1.12.2-3.4.6.1
+###DynamicSurroundings-1.12-3.4.6.1
 **Fixes**
 * Cleanup waterfall splash effect.  Should disappear properly, and small falls no longer sound like the men's room at a pub during happy hour.
 * Register sounds in response to Forge registry event.
