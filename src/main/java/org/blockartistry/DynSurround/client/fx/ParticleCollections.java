@@ -41,12 +41,18 @@ import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionF
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionFootprint;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionRipples;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.lib.collections.ObjectArray;
 
+import elucent.albedo.event.GatherLightsEvent;
+import elucent.albedo.lighting.ILightProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @SideOnly(Side.CLIENT)
 public final class ParticleCollections {
@@ -82,6 +88,37 @@ public final class ParticleCollections {
 		}
 	}
 
+	private static class LightedCollectionHelper extends CollectionHelper {
+
+		@SuppressWarnings("unused")
+		public LightedCollectionHelper(@Nonnull final ResourceLocation texture) {
+			this(ParticleCollection.class, texture);
+		}
+
+		public LightedCollectionHelper(@Nonnull final Class<? extends ParticleCollection> clazz,
+				@Nonnull final ResourceLocation texture) {
+			super(clazz, texture);
+			MinecraftForge.EVENT_BUS.register(this);
+		}
+
+		@Optional.Method(modid = "albedo")
+		@SubscribeEvent
+		public void onGatherLight(@Nonnull final GatherLightsEvent event) {
+			final ObjectArray<IParticleMote> motes = this.get().getParticles();
+			if (motes == null || motes.size() == 0)
+				return;
+
+			for (int i = 0; i < motes.size(); i++) {
+				final IParticleMote m = motes.get(i);
+				if (m instanceof ILightProvider) {
+					final ILightProvider provider = (ILightProvider) m;
+					event.getLightList().add(provider.provideLight());
+				}
+			}
+		}
+
+	}
+
 	private static final ResourceLocation RIPPLE_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
 			"textures/particles/ripple.png");
 	private static final ResourceLocation SPRAY_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
@@ -98,7 +135,7 @@ public final class ParticleCollections {
 	private final static CollectionHelper theEmojis = new CollectionHelper(EMOJI_TEXTURE);
 	private final static CollectionHelper thePrints = new CollectionHelper(ParticleCollectionFootprint.class,
 			FOOTPRINT_TEXTURE);
-	private final static CollectionHelper theFireFlies = new CollectionHelper(ParticleCollectionFireFly.class,
+	private final static CollectionHelper theFireFlies = new LightedCollectionHelper(ParticleCollectionFireFly.class,
 			FIREFLY_TEXTURE);
 
 	@Nullable
