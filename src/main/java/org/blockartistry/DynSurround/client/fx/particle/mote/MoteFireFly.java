@@ -105,7 +105,8 @@ public class MoteFireFly extends MoteAnimatedBase implements ILightProvider {
 		final double x = lightedX(partialTicks);
 		final double y = lightedY(partialTicks);
 		final double z = lightedZ(partialTicks);
-		return Light.builder().pos(x, y, z).color(this.red, this.green, this.blue, 0.5F).radius(1.0F).build();
+		final float alpha = 0.5F * this.alpha;
+		return Light.builder().pos(x, y, z).color(this.red, this.green, this.blue, alpha).radius(1.0F).build();
 	}
 
 }
