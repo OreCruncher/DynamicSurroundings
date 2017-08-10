@@ -26,14 +26,19 @@ package org.blockartistry.DynSurround.client.fx.particle.mote;
 
 import org.blockartistry.lib.Color;
 
+import elucent.albedo.lighting.ILightProvider;
+import elucent.albedo.lighting.Light;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.Optional;
 
 @SideOnly(Side.CLIENT)
-public class MoteFireFly extends MoteAnimatedBase {
+@Optional.Interface(iface = "elucent.albedo.lighting.ILightProvider", modid = "albedo")
+public class MoteFireFly extends MoteAnimatedBase implements ILightProvider {
 
 	private static final int startColorRGB = Color.YELLOW.rgb();
 	private static final int fadeColorRGB = Color.LGREEN.rgb();
@@ -52,7 +57,7 @@ public class MoteFireFly extends MoteAnimatedBase {
 		this.xAcceleration = RANDOM.nextGaussian() * ACCELERATION;
 		this.yAcceleration = RANDOM.nextGaussian() / 2.0D * ACCELERATION;
 		this.zAcceleration = RANDOM.nextGaussian() * ACCELERATION;
-		
+
 		this.gravity = 0D;
 
 		this.particleScale *= 0.75F * 0.25F * 0.1F;
@@ -76,6 +81,31 @@ public class MoteFireFly extends MoteAnimatedBase {
 		if (this.doRender)
 			super.renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
 
+	}
+
+	@Optional.Method(modid = "albedo")
+	protected double lightedX(final float partialTicks) {
+		return (float) (this.prevX + (this.posX - this.prevX) * (double) partialTicks);
+	}
+
+	@Optional.Method(modid = "albedo")
+	protected double lightedY(final float partialTicks) {
+		return (float) (this.prevY + (this.posY - this.prevY) * (double) partialTicks);
+	}
+
+	@Optional.Method(modid = "albedo")
+	protected double lightedZ(final float partialTicks) {
+		return (float) (this.prevZ + (this.posZ - this.prevZ) * (double) partialTicks);
+	}
+
+	@Optional.Method(modid = "albedo")
+	@Override
+	public Light provideLight() {
+		final float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
+		final double x = lightedX(partialTicks);
+		final double y = lightedY(partialTicks);
+		final double z = lightedZ(partialTicks);
+		return Light.builder().pos(x, y, z).color(this.red, this.green, this.blue, 0.5F).radius(1.0F).build();
 	}
 
 }
