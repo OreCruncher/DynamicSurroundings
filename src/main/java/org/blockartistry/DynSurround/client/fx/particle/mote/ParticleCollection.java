@@ -74,6 +74,10 @@ public class ParticleCollection extends Particle {
 		}
 		return false;
 	}
+	
+	public ObjectArray<IParticleMote> getParticles() {
+		return this.myParticles;
+	}
 
 	public boolean shouldDie() {
 		return this.myParticles.size() == 0 || this.worldObj != EnvironState.getWorld();
