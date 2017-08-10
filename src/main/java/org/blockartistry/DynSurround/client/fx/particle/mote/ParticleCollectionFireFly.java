@@ -22,42 +22,28 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.client.fx;
-
-import java.util.Random;
+package org.blockartistry.DynSurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.api.effects.BlockEffectType;
-import org.blockartistry.lib.BlockStateProvider;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+public class ParticleCollectionFireFly extends ParticleCollection {
 
-@SideOnly(Side.CLIENT)
-public class FireFlyEffect extends BlockEffect {
-
-	public FireFlyEffect(int chance) {
-		super(chance);
+	public ParticleCollectionFireFly(@Nonnull final World world, @Nonnull final ResourceLocation tex) {
+		super(world, tex);
 	}
 
 	@Override
-	@Nonnull
-	public BlockEffectType getEffectType() {
-		return BlockEffectType.FIREFLY;
+	protected void preRender() {
+		GlStateManager.enableBlend();
+		GlStateManager.depthMask(false);
 	}
 
 	@Override
-	public void doEffect(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
-			@Nonnull final BlockPos pos, @Nonnull final Random random) {
-		final AxisAlignedBB box = state.getBoundingBox(provider.getWorld(), pos);
-		final Vec3d loc = box.getCenter();
-		ParticleCollections.addFireFly(provider.getWorld(), pos.getX() + loc.x, pos.getY() + box.maxY,
-				pos.getZ() + loc.z);
+	protected void postRender() {
+		GlStateManager.disableBlend();
 	}
-
 }

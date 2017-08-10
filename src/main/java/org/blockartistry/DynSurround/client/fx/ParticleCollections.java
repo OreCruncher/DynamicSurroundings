@@ -31,11 +31,13 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.fx.particle.mote.IParticleMote;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteEmoji;
+import org.blockartistry.DynSurround.client.fx.particle.mote.MoteFireFly;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteFootprint;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteRainSplash;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteWaterRipple;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteWaterSpray;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollection;
+import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionFireFly;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionFootprint;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionRipples;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -88,6 +90,7 @@ public final class ParticleCollections {
 			"textures/particles/emojis.png");
 	private static final ResourceLocation FOOTPRINT_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
 			"textures/particles/footprint.png");
+	private static final ResourceLocation FIREFLY_TEXTURE = new ResourceLocation("textures/particle/particles.png");
 
 	private final static CollectionHelper theRipples = new CollectionHelper(ParticleCollectionRipples.class,
 			RIPPLE_TEXTURE);
@@ -95,6 +98,8 @@ public final class ParticleCollections {
 	private final static CollectionHelper theEmojis = new CollectionHelper(EMOJI_TEXTURE);
 	private final static CollectionHelper thePrints = new CollectionHelper(ParticleCollectionFootprint.class,
 			FOOTPRINT_TEXTURE);
+	private final static CollectionHelper theFireFlies = new CollectionHelper(ParticleCollectionFireFly.class,
+			FIREFLY_TEXTURE);
 
 	@Nullable
 	public static IParticleMote addWaterRipple(@Nonnull final World world, final double x, final double y,
@@ -146,4 +151,12 @@ public final class ParticleCollections {
 		return mote;
 	}
 
+	public static IParticleMote addFireFly(@Nonnull final World world, final double x, final double y, final double z) {
+		IParticleMote mote = null;
+		if (theFireFlies.get().canFit()) {
+			mote = new MoteFireFly(world, x, y, z);
+			theFireFlies.get().addParticle(mote);
+		}
+		return mote;
+	}
 }
