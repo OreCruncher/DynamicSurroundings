@@ -45,6 +45,7 @@ import org.blockartistry.lib.collections.ObjectArray;
 
 import elucent.albedo.event.GatherLightsEvent;
 import elucent.albedo.lighting.ILightProvider;
+import elucent.albedo.lighting.Light;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -112,7 +113,10 @@ public final class ParticleCollections {
 				final IParticleMote m = motes.get(i);
 				if (m instanceof ILightProvider) {
 					final ILightProvider provider = (ILightProvider) m;
-					event.getLightList().add(provider.provideLight());
+					final Light l = provider.provideLight();
+					if (l != null) {
+						event.getLightList().add(l);
+					}
 				}
 			}
 		}

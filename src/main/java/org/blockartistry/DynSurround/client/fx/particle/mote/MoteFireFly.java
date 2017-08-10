@@ -24,6 +24,9 @@
 
 package org.blockartistry.DynSurround.client.fx.particle.mote;
 
+import javax.annotation.Nullable;
+
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.lib.Color;
 
 import elucent.albedo.lighting.ILightProvider;
@@ -100,13 +103,17 @@ public class MoteFireFly extends MoteAnimatedBase implements ILightProvider {
 
 	@Optional.Method(modid = "albedo")
 	@Override
+	@Nullable
 	public Light provideLight() {
-		final float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
-		final double x = lightedX(partialTicks);
-		final double y = lightedY(partialTicks);
-		final double z = lightedZ(partialTicks);
-		final float alpha = 0.5F * this.alpha;
-		return Light.builder().pos(x, y, z).color(this.red, this.green, this.blue, alpha).radius(1.0F).build();
+		if (ModOptions.enableAlbedoSupport && ModOptions.enableFireFlyLighting) {
+			final float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
+			final double x = lightedX(partialTicks);
+			final double y = lightedY(partialTicks);
+			final double z = lightedZ(partialTicks);
+			final float alpha = 0.5F * this.alpha;
+			return Light.builder().pos(x, y, z).color(this.red, this.green, this.blue, alpha).radius(1.0F).build();
+		}
+		return null;
 	}
 
 }
