@@ -87,7 +87,8 @@ public class SoundManagerReplacement extends SoundManager {
 
 			try {
 				commandThread = ReflectionHelper.findField(SoundSystem.class, "commandThread");
-				alive = ReflectionHelper.findMethod(SimpleThread.class, null, new String[] { "alive" }, null, boolean.class, boolean.class);
+				alive = ReflectionHelper.findMethod(SimpleThread.class, null, new String[] { "alive" }, null,
+						boolean.class, boolean.class);
 				kill = ReflectionHelper.findMethod(SimpleThread.class, null, new String[] { "kill" });
 			} catch (final Throwable t) {
 				DSurround.log().warn("Cannot find SimpleThread methods; fast sound system restart not enabled");
@@ -203,10 +204,14 @@ public class SoundManagerReplacement extends SoundManager {
 	@Override
 	public void stopSound(@Nonnull final ISound sound) {
 		if (sound != null) {
-			if (sound instanceof BasicSound<?>) {
-				this.stopSound((BasicSound<?>) sound);
-			} else {
-				super.stopSound(sound);
+			try {
+				if (sound instanceof BasicSound<?>) {
+					this.stopSound((BasicSound<?>) sound);
+				} else {
+					super.stopSound(sound);
+				}
+			} catch (final Throwable t) {
+				// Stop more weirdness from a crashed sound system
 			}
 		}
 	}
@@ -224,10 +229,14 @@ public class SoundManagerReplacement extends SoundManager {
 	@Override
 	public void playSound(@Nonnull final ISound sound) {
 		if (sound != null) {
-			if (sound instanceof BasicSound<?>)
-				this.playSound((BasicSound<?>) sound);
-			else if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC)
-				super.playSound(sound);
+			try {
+				if (sound instanceof BasicSound<?>)
+					this.playSound((BasicSound<?>) sound);
+				else if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC)
+					super.playSound(sound);
+			} catch (final Throwable t) {
+				// Stop more weirdness from a crashed sound system
+			}
 		}
 	}
 
@@ -239,10 +248,16 @@ public class SoundManagerReplacement extends SoundManager {
 
 	@Override
 	public void playDelayedSound(@Nonnull final ISound sound, final int delay) {
-		if (sound instanceof BasicSound<?>) {
-			this.playDelayedSound((BasicSound<?>) sound, delay);
-		} else {
-			super.playDelayedSound(sound, delay);
+		if (sound != null) {
+			try {
+				if (sound instanceof BasicSound<?>) {
+					this.playDelayedSound((BasicSound<?>) sound, delay);
+				} else {
+					super.playDelayedSound(sound, delay);
+				}
+			} catch (final Throwable t) {
+				// Stop more weirdness from a crashed sound system
+			}
 		}
 	}
 
