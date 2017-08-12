@@ -40,6 +40,7 @@ public class ParticleCollectionRipples extends ParticleCollection {
 
 	@Override
 	protected void preRender() {
+		GlStateManager.enableAlpha();
 		GlStateManager.enableBlend();
 		GlStateManager.depthMask(false);
 	}
