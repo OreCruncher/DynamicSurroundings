@@ -23,8 +23,6 @@
 
 package org.blockartistry.lib;
 
-import java.util.UUID;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -55,24 +53,19 @@ public final class WorldUtils {
 	}
 
 	@Nullable
-	public static Entity locateEntity(@Nonnull final World world, @Nonnull final UUID entityId) {
-		if (world == null)
-			return null;
-
-		for (final Entity e : world.getLoadedEntityList())
-			if (e.getUniqueID().equals(entityId))
-				return e;
-		return null;
-	}
-
-	@Nullable
 	public static Entity locateEntity(@Nonnull final World world, final int entityId) {
-		if (world == null)
-			return null;
+		Entity entity = null;
+		if (world != null) {
+			try {
+				entity = world.getEntityByID(entityId);
+			} catch (final Throwable t) {
+				;
+			}
+		}
 
-		return world.getEntityByID(entityId);
+		return entity;
 	}
-
+	
 	public static boolean isSolidBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getBlockState(world, pos).getMaterial().isSolid();
 	}
