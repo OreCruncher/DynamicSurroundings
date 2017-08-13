@@ -1135,8 +1135,18 @@
 	"raptor": {
 		"category": "ambient",
 		"sounds": [
-			"dsurround:ambient/birds/bald_eagle_chirp",
-			"dsurround:ambient/birds/red_tailed_hawk"
+			{
+				"name": "dsurround:ambient/birds/bald_eagle_chirp",
+				"weight": 2
+			},
+			{
+				"name": "dsurround:ambient/birds/red_tailed_hawk",
+				"weight": 1
+			},
+			{
+				"name": "dsurround:ambient/birds/red_shouldered_hawk",
+				"weight": 2
+			}
 		]
 	},
 	"crow": {
