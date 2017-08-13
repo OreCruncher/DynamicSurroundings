@@ -95,7 +95,8 @@ dependencies {
 
     // compile "foxie:Calendar:1.10.2-1.5-10:deobf"
     // compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
-    compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.12-7.0.0.2288:deobf"
+    compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.12-7.0.0.2291:deobf"
+    compile "com.github.glitchfiend.biomesoplenty:ToughAsNails:1.12-3.0.0.62:deobf"
     
 	// http://dvs1.progwml6.com/files/maven/mezz/jei/
     deobfCompile "mezz.jei:jei_1.12:4.7.1.71:api"
