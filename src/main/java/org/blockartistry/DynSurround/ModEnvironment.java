@@ -54,7 +54,9 @@ public enum ModEnvironment {
 	//
 	GalacticraftPlanets("galacticraftplanets"),
 	//
-	CoFHCore("cofhcore");
+	CoFHCore("cofhcore"),
+	//
+	Albedo("albedo");
 
 	protected final String modId;
 	protected boolean isLoaded;

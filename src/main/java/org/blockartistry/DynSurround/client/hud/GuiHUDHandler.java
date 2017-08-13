@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.Permissions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
@@ -51,7 +52,9 @@ public final class GuiHUDHandler {
 	private GuiHUDHandler() {
 		register(new PotionHUD());
 		register(new BlockInfoHelperHUD());
-		register(new LightingEffectHUD());
+		
+		if (ModEnvironment.Albedo.isLoaded())
+			register(new LightingEffectHUD());
 
 		if (Permissions.instance().allowCompassAndClockHUD())
 			register(new CompassHUD());
