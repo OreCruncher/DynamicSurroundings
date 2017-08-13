@@ -23,7 +23,9 @@
  */
 package org.blockartistry.DynSurround.client.hud;
 
+import java.util.ArrayList;
 import java.util.IdentityHashMap;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
@@ -31,8 +33,14 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.Color;
+
+import com.google.common.base.Predicates;
+
 import elucent.albedo.event.GatherLightsEvent;
+import elucent.albedo.lighting.ILightProvider;
 import elucent.albedo.lighting.Light;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -54,6 +62,31 @@ public class LightingEffectHUD extends GuiOverlay {
 			this.color = color.rgbWithAlpha(alpha);
 			this.radius = radius;
 		}
+
+		public Light build(@Nonnull final Entity entity) {
+			return Light.builder().pos(entity.getEntityBoundingBox().getCenter()).color(this.color, true)
+					.radius(this.radius).build();
+		}
+	}
+
+	private static final class EntityLightSource implements ILightProvider {
+
+		private final Entity entity;
+		private final Light source;
+
+		public EntityLightSource(@Nonnull final Entity entity, @Nonnull final LightSourceData data) {
+			this.entity = entity;
+			this.source = data.build(entity);
+		}
+
+		@Override
+		public Light provideLight() {
+			final Vec3d loc = this.entity.getEntityBoundingBox().getCenter();
+			this.source.x = (float) loc.xCoord;
+			this.source.y = (float) loc.yCoord;
+			this.source.z = (float) loc.zCoord;
+			return this.source;
+		}
 	}
 
 	private static final LightSourceData TORCH_SOURCE = new LightSourceData(new Color(255, 204, 178), 8, 0.75F);
@@ -72,10 +105,6 @@ public class LightingEffectHUD extends GuiOverlay {
 		sources.put(Item.getItemFromBlock(Blocks.SEA_LANTERN), SEA_LANTERN_SOURCE);
 	}
 
-	private static Vec3d getPoint() {
-		return EnvironState.getPlayer().getEntityBoundingBox().getCenter();
-	}
-
 	private static LightSourceData resolveLightSource(final ItemStack stack) {
 		LightSourceData result = null;
 		if (stack != null && !stack.isEmpty()) {
@@ -86,30 +115,36 @@ public class LightingEffectHUD extends GuiOverlay {
 		return result;
 	}
 
-	private static LightSourceData resolveLightSource() {
-		LightSourceData result = resolveLightSource(EnvironState.getPlayer().getHeldItemMainhand());
+	private static LightSourceData resolveLightSource(@Nonnull final EntityPlayer player) {
+		LightSourceData result = resolveLightSource(player.getHeldItemMainhand());
 		if (result == null)
-			result = resolveLightSource(EnvironState.getPlayer().getHeldItemOffhand());
+			result = resolveLightSource(player.getHeldItemOffhand());
 		return result;
 	}
 
-	private static LightSourceData source = null;
+	private static ArrayList<ILightProvider> lights = null;
 
 	public void doTick(final int tickRef) {
 
-		source = null;
+		lights = new ArrayList<ILightProvider>();
 
 		if (ModOptions.enableAlbedoSupport && ModOptions.enablePlayerLighting) {
-			source = resolveLightSource();
+			final List<EntityPlayer> players = EnvironState.getWorld().getPlayers(EntityPlayer.class,
+					Predicates.alwaysTrue());
+			for (final EntityPlayer p : players) {
+				final LightSourceData lsd = resolveLightSource(p);
+				if (lsd != null)
+					lights.add(new EntityLightSource(p, lsd));
+			}
 		}
 	}
 
 	@Optional.Method(modid = "albedo")
 	@SubscribeEvent
 	public static void onGatherLight(@Nonnull final GatherLightsEvent event) {
-		if (source != null) {
-			final Light l = Light.builder().pos(getPoint()).color(source.color, true).radius(source.radius).build();
-			event.getLightList().add(l);
+		if (lights != null && lights.size() > 0) {
+			for (final ILightProvider lp : lights)
+				event.getLightList().add(lp.provideLight());
 		}
 	}
 }
