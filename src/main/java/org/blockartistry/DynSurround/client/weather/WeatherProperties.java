@@ -216,8 +216,12 @@ public enum WeatherProperties {
 
 	@SubscribeEvent
 	public static void onWeatherUpdateEvent(@Nonnull final WeatherUpdateEvent event) {
+		final World world = getWorld();
+		if (world == null || world.provider == null)
+			return;
+
 		serverSideSupport = true;
-		if (getWorld().provider.getDimension() != event.world.provider.getDimension())
+		if (world.provider.getDimension() != event.world.provider.getDimension())
 			return;
 		setMaximumIntensity(event.maxRainIntensity);
 		setCurrentIntensity(event.rainIntensity);
