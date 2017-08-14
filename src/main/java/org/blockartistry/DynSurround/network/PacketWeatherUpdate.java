@@ -43,7 +43,7 @@ public final class PacketWeatherUpdate implements IMessage {
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketWeatherUpdate message, @Nullable final MessageContext ctx) {
 			final World world = EnvironState.getWorld();
-			if (world != null && world.provider.getDimension() == message.dimension)
+			if (world != null && world.provider != null && world.provider.getDimension() == message.dimension)
 				Network.postEvent(new WeatherUpdateEvent(world, message.intensity, message.maxIntensity,
 						message.nextRainChange, message.thunderStrength, message.thunderChange, message.thunderEvent));
 			return null;
