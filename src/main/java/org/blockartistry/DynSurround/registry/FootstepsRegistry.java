@@ -66,6 +66,9 @@ import net.minecraft.block.BlockSapling;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemBlockSpecial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -271,11 +274,22 @@ public class FootstepsRegistry extends Registry {
 		return this.isolator.getBlockMap();
 	}
 
+	private static Block resolveToBlock(@Nonnull final ItemStack stack) {
+		if (stack == null || stack.isEmpty())
+			return null;
+		final Item item = stack.getItem();
+		if (item instanceof ItemBlock)
+			return ((ItemBlock) item).getBlock();
+		if (item instanceof ItemBlockSpecial)
+			return ((ItemBlockSpecial) item).getBlock();
+		return null;
+	}
+
 	public void registerForgeEntries(@Nonnull final String blockClass, @Nonnull final String... entries) {
 		for (final String dictionaryName : entries) {
 			final List<ItemStack> stacks = OreDictionary.getOres(dictionaryName, false);
 			for (final ItemStack stack : stacks) {
-				final Block block = Block.getBlockFromItem(stack.getItem());
+				final Block block = resolveToBlock(stack);
 				if (block != null) {
 					String blockName = MCHelper.nameOf(block);
 					if (stack.getHasSubtypes() && stack.getItemDamage() != OreDictionary.WILDCARD_VALUE)
