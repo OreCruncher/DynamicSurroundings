@@ -73,10 +73,12 @@ public class WaterSplashJetEffect extends JetEffect {
 
 	private static boolean isUnboundedLiquid(final BlockStateProvider provider, final BlockPos pos) {
 		for (int i = 0; i < cardinal_offsets.length; i++) {
-			final IBlockState state = provider.getBlockState(pos.add(cardinal_offsets[i]));
+			final BlockPos tp = pos.add(cardinal_offsets[i]);
+			final IBlockState state = provider.getBlockState(tp);
 			if (WorldUtils.isAirBlock(state))
 				return true;
-			if (isLiquidBlock(state) && !WorldUtils.isFullWaterBlock(state))
+			if (isLiquidBlock(state) && !WorldUtils.isFullWaterBlock(state)
+					&& !provider.getBlockState(tp.up()).getMaterial().isLiquid())
 				return true;
 		}
 
@@ -119,7 +121,7 @@ public class WaterSplashJetEffect extends JetEffect {
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 
 		final int strength = liquidBlockCount(provider, pos);
-		if (strength <= 0)
+		if (strength <= 1)
 			return;
 
 		final float height = BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state)) + 0.1F;
