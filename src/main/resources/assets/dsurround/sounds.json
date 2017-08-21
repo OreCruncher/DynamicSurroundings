@@ -930,6 +930,28 @@
 			}
 		]
 	},
+	"bullfrog": {
+		"category": "ambient",
+		"credits": [
+			"§aNight Crickets & Bullfrogs.wav",
+			"sunsinger",
+			"Creative Commons Attributions 3.0 Unported"
+		],
+		"sounds": [
+			{
+				"name": "dsurround:ambient/frog/bullfrog1"
+			},
+			{
+				"name": "dsurround:ambient/frog/bullfrog2"
+			},
+			{
+				"name": "dsurround:ambient/frog/bullfrog3"
+			},
+			{
+				"name": "dsurround:ambient/frog/bullfrog4"
+			}
+		]
+	},
 	"wind": {
 		"category": "ambient",
 		"credits": [

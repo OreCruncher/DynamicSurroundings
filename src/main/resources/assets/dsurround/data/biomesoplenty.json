@@ -57,7 +57,13 @@
 				{
 					"sound": "dsurround:frog",
 					"conditions": "!player.isInside",
-					"variable": true
+					"variable": true,
+					"weight": 30
+				},
+				{
+					"sound": "dsurround:bullfrog",
+					"conditions": "!player.isInside",
+					"weight": 10
 				}
 			]
 		},
