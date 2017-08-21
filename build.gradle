@@ -92,7 +92,7 @@ dependencies {
     compile "foxie:Calendar:1.10.2-1.5-10:deobf"
     compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
     compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.10.2-5.0.0.2290:deobf"
-    compile "com.github.glitchfiend.biomesoplenty:ToughAsNails:1.9.4-1.1.1.55:deobf"
+    compile "com.github.glitchfiend.biomesoplenty:ToughAsNails:1.9.4-1.1.1.55:api"
     
     deobfCompile "mezz.jei:jei_1.10.2:3.14.7.420:api"
     runtime "mezz.jei:jei_1.10.2:3.14.7.420"
