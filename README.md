@@ -248,3 +248,9 @@ whether LPs can be monetized on the various streaming services.
 <ul>
      <li>S: <a href="http://www.tannerhelland.com/">Retribution.ogg</a> by <a href="http://www.tannerhelland.com/">Tanner Helland</a> | License: <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0</a></li> 
 </ul>
+
+*dsurround:bullfrog*
+
+<ul>
+     <li>S: <a href="https://freesound.org/people/sunsinger/sounds/80840/">Night Crickets &amp; Bullfrogs.wav</a> by <a href="https://freesound.org/people/sunsinger/">sunsinger</a> | License: Attribution</li> 
+</ul>

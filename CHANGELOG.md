@@ -1,3 +1,16 @@
+###DynamicSurroundings-1.11.2-3.4.7.0
+**What's New**
+* Added Red Shouldered Hawk to the raptor sound set.
+* Added bullfrog sound to the lilypad block.  The chance a lily will play the normal frog croak is 3x that of the bullfrog.
+
+**Fixes**
+* Defensive code when recovering sound system to prevent NPE
+* Defensive code when connecting to a remote server with heavy lag where entity capability data arrives before the client entity list is initialized. 
+* No more underwater falls in water because of falling blocks during worldgen or when digging out resources. (I hope!)
+
+**Changes**
+* Modified weight of the red tailed hawk sound so it does not play as often as compared to other raptor sounds.
+
 ###DynamicSurroundings-1.11.2-3.4.6.2
 **What's New**
 * Mod support:
