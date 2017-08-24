@@ -325,6 +325,7 @@ public final class ModOptions {
 	public static final String CONFIG_MUTE_WHEN_BACKGROUND = "Mute when Background";
 	public static final String CONFIG_ENABLE_JUMP_SOUND = "Jump Sound";
 	public static final String CONFIG_ENABLE_EQUIP_SOUND = "Equip Sound";
+	public static final String CONFIG_SWORD_AS_TOOL_EQUIP_SOUND = "Sword Equip as Tool";
 	public static final String CONFIG_ENABLE_CRAFTING_SOUND = "Crafting Sound";
 	public static final String CONFIG_FOOTSTEPS_SOUND_FACTOR = "Footsteps Sound Factor";
 	public static final String CONFIG_FOOTSTEPS_QUAD = "Footsteps as Quadruped";
@@ -338,10 +339,10 @@ public final class ModOptions {
 	private static final List<String> soundsSort = Arrays.asList(CONFIG_RESTART_SOUND_SYSTEM,
 			CONFIG_ENABLE_BIOME_SOUNDS, CONFIG_MASTER_SOUND_FACTOR, CONFIG_FOOTSTEPS_SOUND_FACTOR,
 			CONFIG_FOOTSTEPS_QUAD, CONFIG_ENABLE_ARMOR_SOUND, CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_EQUIP_SOUND,
-			CONFIG_ENABLE_CRAFTING_SOUND, CONFIG_AUTO_CONFIG_CHANNELS, CONFIG_NORMAL_CHANNEL_COUNT,
-			CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_STREAM_BUFFER_SIZE, CONFIG_STREAM_BUFFER_COUNT,
-			CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS, CONFIG_SOUND_CULL_THRESHOLD,
-			CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES, CONFIG_ENABLE_BATTLEMUSIC);
+			CONFIG_SWORD_AS_TOOL_EQUIP_SOUND, CONFIG_ENABLE_CRAFTING_SOUND, CONFIG_AUTO_CONFIG_CHANNELS,
+			CONFIG_NORMAL_CHANNEL_COUNT, CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_STREAM_BUFFER_SIZE,
+			CONFIG_STREAM_BUFFER_COUNT, CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS,
+			CONFIG_SOUND_CULL_THRESHOLD, CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES, CONFIG_ENABLE_BATTLEMUSIC);
 
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_RESTART_SOUND_SYSTEM, defaultValue = "true", lang = "cfg.sound.Autorestart")
 	@Comment("Enable auto-restart of crashed sound system")
@@ -390,6 +391,9 @@ public final class ModOptions {
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_EQUIP_SOUND, defaultValue = "true", lang = "cfg.sound.Equip")
 	@Comment("Enable Weapon/Tool Equip sound effect")
 	public static boolean enableEquipSound = true;
+	@Parameter(category = CATEGORY_SOUND, property = CONFIG_SWORD_AS_TOOL_EQUIP_SOUND, defaultValue = "false", lang = "cfg.sound.SwordEquipAsTool")
+	@Comment("Enable Sword Equip sound as Tool")
+	public static boolean swordEquipAsTool = false;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_CRAFTING_SOUND, defaultValue = "true", lang = "cfg.sound.Craft")
 	@Comment("Enable Item Crafted sound effect")
 	public static boolean enableCraftingSound = true;

@@ -33,6 +33,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.data.xface.ItemConfig;
@@ -274,7 +275,7 @@ public class ItemRegistry extends Registry {
 			final Class<?> itemClass = stack.getItem().getClass();
 			final SoundEffect sound;
 			if (this.swordItems.contains(itemClass))
-				sound = Sounds.SWORD_EQUIP;
+				sound = ModOptions.swordEquipAsTool ? Sounds.TOOL_EQUIP : Sounds.SWORD_EQUIP;
 			else if (this.axeItems.contains(itemClass))
 				sound = Sounds.AXE_EQUIP;
 			else if (this.toolItems.contains(itemClass))
