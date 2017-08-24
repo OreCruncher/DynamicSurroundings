@@ -323,3 +323,10 @@ cfg.lighting.FireFlyEnable=Enable Fire Fly lighting effects
 cfg.lighting.FireFlyEnable.tooltip=Enable/disable Fire Fly lighting effects using Albedo
 cfg.lighting.PlayerEnable=Enable Player lighting effects
 cfg.lighting.PlayerEnable.tooltip=Enable/disable Player lighting effects using Albedo
+
+cfg.profiles.cat.Profiles=Built-in Profiles
+cfg.profiles.cat.Profiles.tooltip=Enable/disable built-in configuration profiles
+cfg.profiles.noNetherWeather=No Nether Weather
+cfg.profiles.noNetherWeather.tooltip=Enable/disable Nether weather effects
+cfg.profiles.noDustEffects=No Dust Effects
+cfg.profiles.noDustEffects.tooltip=Turns off dust effects for all biomes
