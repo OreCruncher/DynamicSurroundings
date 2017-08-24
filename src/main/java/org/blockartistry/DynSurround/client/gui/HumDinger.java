@@ -26,6 +26,8 @@ package org.blockartistry.DynSurround.client.gui;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.sound.AdhocSound;
 import org.blockartistry.DynSurround.client.sound.SoundEngine;
@@ -52,9 +54,16 @@ public final class HumDinger {
 			final String[] possibles = ModOptions.startupSoundList;
 			if (possibles == null || possibles.length == 0)
 				return;
-			final SoundEvent se = SoundEvent.REGISTRY
-					.getObject(new ResourceLocation(possibles[XorShiftRandom.current().nextInt(possibles.length)]));
-			SoundEngine.instance().playSound(new AdhocSound(se, SoundCategory.MASTER));
+			final String res = possibles[XorShiftRandom.current().nextInt(possibles.length)];
+			if (!StringUtils.isEmpty(res)) {
+				final SoundEvent se = SoundEvent.REGISTRY.getObject(new ResourceLocation(res));
+				if (se != null)
+					SoundEngine.instance().playSound(new AdhocSound(se, SoundCategory.MASTER));
+				else
+					DSurround.log().warn("Unable to locate startup sound [%s]", res);
+			} else {
+				DSurround.log().warn("Improperly formatted startup sound list!");
+			}
 		}
 	}
 }
