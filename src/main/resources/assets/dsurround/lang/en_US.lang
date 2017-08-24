@@ -314,3 +314,19 @@ cfg.commands.Calc.Name=/calc Command Name
 cfg.commands.Calc.Name.tooltip=Name to give the /calc command
 cfg.commands.Calc.Alias=Alias to give the /calc command
 cfg.commands.Calc.Alias.tooltip=One or more alias names to give the /calc command (space separated)
+
+cfg.lighting.cat.Lighting=Lighting Options
+cfg.lighting.cat.Lighting.tooltip=Options for configuring Lighting effects
+cfg.lighting.Enable=Enable Albedo lighting support
+cfg.lighting.Enable.tooltip=Enable/disable Albedo lighting support
+cfg.lighting.FireFlyEnable=Enable Fire Fly lighting effects
+cfg.lighting.FireFlyEnable.tooltip=Enable/disable Fire Fly lighting effects using Albedo
+cfg.lighting.PlayerEnable=Enable Player lighting effects
+cfg.lighting.PlayerEnable.tooltip=Enable/disable Player lighting effects using Albedo
+
+cfg.profiles.cat.Profiles=Built-in Profiles
+cfg.profiles.cat.Profiles.tooltip=Enable/disable built-in configuration profiles
+cfg.profiles.noNetherWeather=No Nether Weather
+cfg.profiles.noNetherWeather.tooltip=Enable/disable Nether weather effects
+cfg.profiles.noDustEffects=No Dust Effects
+cfg.profiles.noDustEffects.tooltip=Turns off dust effects for all biomes

@@ -108,6 +108,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 		addConfigCategory(ModOptions.CATEGORY_BLOCK);
 		addConfigCategory(ModOptions.CATEGORY_BIOMES);
 		addConfigCategory(ModOptions.CATEGORY_SOUND);
+		addConfigCategory(ModOptions.CATEGORY_PROFILES);
 		if (Permissions.instance().allowLightLevelHUD())
 			addConfigCategory(ModOptions.CATEGORY_LIGHT_LEVEL);
 		addConfigCategory(ModOptions.CATEGORY_SPEECHBUBBLES);
