@@ -1,0 +1,9 @@
+{
+    "biomes": [
+        {
+            "conditions": "TRUE",
+            "_comment": "Turns off dust effects for all biomes",
+            "dust": false
+        }
+    ]
+}

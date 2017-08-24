@@ -32,6 +32,7 @@ import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.DynSurround.data.Profiles;
 import org.blockartistry.lib.ConfigProcessor;
 import org.blockartistry.lib.VersionHelper;
 import org.blockartistry.lib.ConfigProcessor.Comment;
@@ -641,12 +642,12 @@ public final class ModOptions {
 	@Comment("Allow the Compass and Clock HUD")
 	@Hidden
 	public static boolean allowCompassClockHUD = true;
-	
+
 	public static final String CATEGORY_LIGHTING = "lighting";
 	public static final String CONFIG_LIGHTING_ENABLE = "Enable Albedo Support";
 	public static final String CONFIG_FIREFLY_ENABLE = "Enable Firefly Lighting Effects";
 	public static final String CONFIG_PLAYER_LIGHT_ENABLE = "Enable Player Lighting Effects";
-	
+
 	@Parameter(category = CATEGORY_LIGHTING, property = CONFIG_LIGHTING_ENABLE, defaultValue = "true", lang = "cfg.lighting.Enable")
 	@Comment("Use Albedo library to provide lighting effects")
 	public static boolean enableAlbedoSupport = true;
@@ -656,6 +657,8 @@ public final class ModOptions {
 	@Parameter(category = CATEGORY_LIGHTING, property = CONFIG_PLAYER_LIGHT_ENABLE, defaultValue = "true", lang = "cfg.lighting.PlayerEnable")
 	@Comment("Enable/disable Player lighting effects")
 	public static boolean enablePlayerLighting = true;
+
+	public static final String CATEGORY_PROFILES = "profiles";
 
 	private static void setDefault(@Nonnull final Configuration config, @Nonnull final String cat,
 			@Nonnull final String prop, final float prevDefault, final float newDefault) {
@@ -678,6 +681,8 @@ public final class ModOptions {
 		}
 
 		ConfigProcessor.process(config, ModOptions.class);
+		if (DSurround.config() != null)
+			Profiles.tickle();
 
 		// CATEGORY: asm
 		config.setCategoryRequiresMcRestart(CATEGORY_ASM, true);
@@ -797,17 +802,24 @@ public final class ModOptions {
 		config.setCategoryRequiresMcRestart(CATEGORY_FEATURES, true);
 		config.setCategoryRequiresWorldRestart(CATEGORY_FEATURES, true);
 		config.setCategoryComment(CATEGORY_FEATURES, "Controls whether features are available");
-		
+
 		// CATEGORY: lighting
 		config.setCategoryRequiresMcRestart(CATEGORY_LIGHTING, false);
 		config.setCategoryRequiresWorldRestart(CATEGORY_LIGHTING, false);
 		config.setCategoryComment(CATEGORY_LIGHTING, "Options for configuring Lighting effects");
 		config.setCategoryLanguageKey(CATEGORY_LIGHTING, "cfg.lighting.cat.Lighting");
 
+		// CATEGORY: profiles
+		config.setCategoryRequiresMcRestart(CATEGORY_PROFILES, false);
+		config.setCategoryRequiresWorldRestart(CATEGORY_PROFILES, false);
+		config.setCategoryComment(CATEGORY_PROFILES, "Enable/disable application of built in profiles");
+		config.setCategoryLanguageKey(CATEGORY_PROFILES, "cfg.profiles.cat.Profiles");
+
 		// Iterate through the config list looking for properties without
 		// comments. These will be scrubbed.
-		for (final String cat : config.getCategoryNames())
-			scrubCategory(config.getCategory(cat));
+		if (DSurround.config() != null)
+			for (final String cat : config.getCategoryNames())
+				scrubCategory(config.getCategory(cat));
 
 	}
 
