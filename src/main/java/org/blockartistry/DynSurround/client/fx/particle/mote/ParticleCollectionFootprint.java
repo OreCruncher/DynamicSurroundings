@@ -55,8 +55,11 @@ public class ParticleCollectionFootprint extends ParticleCollection {
 		PAW("textures/particles/footprint_paw.png"),
 		
 		// Solid Square
-		SQUARE_SOLID("textures/particles/footprint_square_solid.png");
-
+		SQUARE_SOLID("textures/particles/footprint_square_solid.png"),
+		
+		// Low resolution 4x4 square
+		LOWRES_SQUARE("textures/particles/footprint_lowres_square.png");
+		
 		private final ResourceLocation resource;
 
 		private Style(@Nonnull final String texture) {
