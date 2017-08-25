@@ -454,8 +454,8 @@ public final class ModOptions {
 	@Comment("Enable player footprints")
 	public static boolean enableFootprints = true;
 	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_FOOTPRINT_STYLE, defaultValue = "1", lang = "cfg.player.FootprintStyle")
-	@Comment("0: shoe print, 1: square print, 2: horse hoof, 3: bird, 4: paw, 5: solid square")
-	@MinMaxInt(min = 0, max = 5)
+	@Comment("0: shoe print, 1: square print, 2: horse hoof, 3: bird, 4: paw, 5: solid square, 6: lowres square")
+	@MinMaxInt(min = 0, max = 6)
 	public static int footprintStyle = 1;
 	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_HURT_THRESHOLD, defaultValue = "8", lang = "cfg.player.HurtThreshold")
 	@Comment("Amount of health bar remaining to trigger player hurt sound (0 disable)")
