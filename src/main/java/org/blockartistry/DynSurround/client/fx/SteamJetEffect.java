@@ -77,9 +77,13 @@ public class SteamJetEffect extends JetEffect {
 	}
 
 	public static boolean isValidSpawnBlock(@Nonnull final BlockStateProvider provider, @Nonnull final BlockPos pos) {
-		final boolean isAirBlock = provider.getBlockState(pos.getX(), pos.getY() + 1, pos.getZ())
-				.getMaterial() == Material.AIR;
-		return isAirBlock && lavaCount(provider, pos) > 0;
+		if (!provider.getBlockState(pos).getMaterial().isLiquid())
+			return false;
+
+		if (provider.getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).getMaterial() != Material.AIR)
+			return false;
+
+		return lavaCount(provider, pos) > 0;
 	}
 
 	@Override
