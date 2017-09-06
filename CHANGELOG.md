@@ -1,3 +1,16 @@
+###DynamicSurroundings-1.11.2-3.4.7.1
+**What's New**
+* Added built-in profiles for disabling things like Nether weather and biome dust.  Config options are accessible using the Built-in Profiles button from Dynamic Surroundings main configuration page.
+* Sound Option to have the sword equip sound be the tool equip sound.  (This is for those sword enthusiasts that don't like the default metallic ring.)
+* Added a "low res" footprint style (id 6)
+
+**Fixes**
+* Guard against the possibility that a startup sound is not found within the SoundEvent registry.
+* Steam jets will now disappear when water source removed
+
+**Changes**
+* Updated Galacticraft mod support (no more green fog on Mars!)
+
 ###DynamicSurroundings-1.11.2-3.4.7.0
 **What's New**
 * Added Red Shouldered Hawk to the raptor sound set.
