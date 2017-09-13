@@ -87,9 +87,11 @@ public class EffectManager {
 	}
 
 	public static void unregister() {
-		MinecraftForge.EVENT_BUS.unregister(INSTANCE);
-		INSTANCE.fini();
-		INSTANCE = null;
+		if (INSTANCE != null) {
+			MinecraftForge.EVENT_BUS.unregister(INSTANCE);
+			INSTANCE.fini();
+			INSTANCE = null;
+		}
 	}
 
 	@SubscribeEvent
