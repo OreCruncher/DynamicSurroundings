@@ -58,6 +58,13 @@ public class FootstepSound extends BasicSound<FootstepSound> {
 		this.setPosition(player);
 		this.setVolumeScale(FOOTSTEP);
 		this.setRoutable(DSurround.isInstalledOnServer());
+		
+		this.setAttenuationType(AttenuationType.NONE);
+	}
+	
+	@Override
+	public float getYPosF() {
+		return this.getAttenuationType() == AttenuationType.NONE ? super.getYPosF() - 32F: super.getYPosF();
 	}
 
 }
