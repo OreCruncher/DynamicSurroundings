@@ -53,13 +53,12 @@ public class KeyHandler {
 
 	private static final String SECTION_NAME = DSurround.MOD_NAME;
 
-	private static final KeyBinding SELECTIONBOX_KEY;
-	private static final KeyBinding LIGHTLEVEL_KEY;
-	private static final KeyBinding CHUNKBORDER_KEY;
-	private static final KeyBinding VOLUME_KEY;
+	private static KeyBinding SELECTIONBOX_KEY;
+	private static KeyBinding LIGHTLEVEL_KEY;
+	private static KeyBinding CHUNKBORDER_KEY;
+	private static KeyBinding VOLUME_KEY;
 
-	static {
-
+	public static void init() {
 		SELECTIONBOX_KEY = new KeyBinding("cfg.keybind.SelectionBox", Keyboard.KEY_B, SECTION_NAME);
 		ClientRegistry.registerKeyBinding(SELECTIONBOX_KEY);
 
@@ -96,26 +95,30 @@ public class KeyHandler {
 		}
 	}
 
+	private static boolean shouldHandle(@Nonnull final KeyBinding binding) {
+		return binding != null && binding.isPressed();
+	}
+
 	@SubscribeEvent(receiveCanceled = false)
 	public static void onKeyboard(@Nonnull InputEvent.KeyInputEvent event) {
 
-		if (SELECTIONBOX_KEY.isPressed()) {
+		if (shouldHandle(SELECTIONBOX_KEY)) {
 			final EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
 			renderer.drawBlockOutline = !renderer.drawBlockOutline;
 			sendPlayerMessage("cfg.keybind.msg.Fencing", getOnOff(renderer.drawBlockOutline));
 		}
 
-		if (VOLUME_KEY.isPressed() && Minecraft.getMinecraft().currentScreen == null) {
+		if (shouldHandle(VOLUME_KEY) && Minecraft.getMinecraft().currentScreen == null) {
 			final VolumeControlGui gui = new VolumeControlGui();
 			Minecraft.getMinecraft().displayGuiScreen(gui);
 		}
 
-		if (CHUNKBORDER_KEY != null && CHUNKBORDER_KEY.isPressed()) {
+		if (shouldHandle(CHUNKBORDER_KEY)) {
 			final boolean result = Minecraft.getMinecraft().debugRenderer.toggleChunkBorders();
 			sendPlayerMessage("cfg.keybind.msg.ChunkBorder", getOnOff(result));
 		}
 
-		if (LIGHTLEVEL_KEY != null && LIGHTLEVEL_KEY.isPressed()) {
+		if (shouldHandle(LIGHTLEVEL_KEY)) {
 			if (GuiScreen.isCtrlKeyDown()) {
 				// Only change mode when visible
 				if (LightLevelHUD.showHUD) {
