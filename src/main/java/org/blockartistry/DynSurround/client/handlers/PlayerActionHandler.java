@@ -133,7 +133,7 @@ public class PlayerActionHandler extends EffectHandlerBase {
 	}
 	
 	private static BasicSound<?> makeSound(@Nonnull final SoundEffect se) {
-		return se.createSound(EnvironState.getPlayer()).setAttenuationType(AttenuationType.NONE);
+		return se.createSound(EnvironState.getPlayer(), false).setAttenuationType(AttenuationType.NONE);
 	}
 
 	@Override
