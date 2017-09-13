@@ -75,8 +75,10 @@ public final class GuiHUDHandler {
 	}
 
 	public static void unregister() {
-		MinecraftForge.EVENT_BUS.unregister(INSTANCE);
-		INSTANCE = null;
+		if (INSTANCE != null) {
+			MinecraftForge.EVENT_BUS.unregister(INSTANCE);
+			INSTANCE = null;
+		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)

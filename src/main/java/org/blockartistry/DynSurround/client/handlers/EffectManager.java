@@ -87,9 +87,11 @@ public class EffectManager {
 	}
 
 	public static void unregister() {
-		MinecraftForge.EVENT_BUS.unregister(INSTANCE);
-		INSTANCE.fini();
-		INSTANCE = null;
+		if (INSTANCE != null) {
+			MinecraftForge.EVENT_BUS.unregister(INSTANCE);
+			INSTANCE.fini();
+			INSTANCE = null;
+		}
 	}
 
 	@SubscribeEvent
@@ -104,7 +106,7 @@ public class EffectManager {
 		final World world = FMLClientHandler.instance().getClient().world;
 		if (world == null)
 			return;
-		
+
 		final boolean tickProfile = DSurround.log().testTrace(ModOptions.Trace.TICK_PROFILE);
 		DSurround.getProfiler().startSection("DSurroundEffectManager");
 
