@@ -31,6 +31,7 @@ import org.blockartistry.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.DynSurround.client.handlers.EffectManager;
 import org.blockartistry.DynSurround.client.handlers.ExpressionStateHandler;
 import org.blockartistry.DynSurround.client.hud.GuiHUDHandler;
+import org.blockartistry.DynSurround.client.keyboard.KeyHandler;
 import org.blockartistry.DynSurround.client.sound.MusicTickerReplacement;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.commands.CommandCalc;
@@ -78,6 +79,7 @@ public class ProxyClient extends Proxy {
 	@Override
 	public void init(@Nonnull final FMLInitializationEvent event) {
 		super.init(event);
+		KeyHandler.init();
 		ParticleDripOverride.register();
 		
 		ClientCommandHandler.instance.registerCommand(new CommandCalc());
