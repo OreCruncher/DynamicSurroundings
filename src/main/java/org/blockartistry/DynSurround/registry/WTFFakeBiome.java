@@ -35,7 +35,7 @@ import net.minecraft.util.math.BlockPos;
 public class WTFFakeBiome extends FakeBiome {
 
 	public WTFFakeBiome() {
-		super("(WTF Just Happened)");
+		super("WTFJustHappened");
 	}
 
 	@Override

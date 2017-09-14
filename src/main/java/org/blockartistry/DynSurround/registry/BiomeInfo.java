@@ -100,6 +100,19 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		}
 	}
 
+	public static ResourceLocation getKey(@Nonnull final Biome biome) {
+		ResourceLocation res = biome.getRegistryName();
+		if (res == null) {
+			final String name = biome.getClass().getName() + "_" + biome.getBiomeName().replace(' ', '_').toLowerCase();
+			res = new ResourceLocation(DSurround.RESOURCE_ID, name);
+		}
+		return res;
+	}
+
+	public ResourceLocation getKey() {
+		return getKey(this.biome);
+	}
+
 	public int getBiomeId() {
 		return this.biomeId;
 	}
