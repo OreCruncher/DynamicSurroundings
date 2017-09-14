@@ -230,11 +230,15 @@ public final class ModOptions {
 	public static final String CONFIG_FX_RANGE = "Special Effect Range";
 	public static final String CONFIG_DISABLE_SUSPEND = "Disable Water Suspend Particles";
 	public static final String CONFIG_STARTUP_SOUND_LIST = "Startup Sound List";
+	public static final String CONFIG_HIDE_CHAT_NOTICES = "Hide Chat Notices";
 	private static final List<String> generalSort = ImmutableList.<String>builder()
-			.add(CONFIG_DISABLE_SUSPEND, CONFIG_FX_RANGE, CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH,
-					CONFIG_EXTERNAL_SCRIPTS, CONFIG_STARTUP_SOUND_LIST)
+			.add(CONFIG_HIDE_CHAT_NOTICES, CONFIG_DISABLE_SUSPEND, CONFIG_FX_RANGE, CONFIG_MIN_RAIN_STRENGTH,
+					CONFIG_MAX_RAIN_STRENGTH, CONFIG_EXTERNAL_SCRIPTS, CONFIG_STARTUP_SOUND_LIST)
 			.build();
 
+	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_HIDE_CHAT_NOTICES, defaultValue = "false", lang = "cfg.general.HideChat")
+	@Comment("Toggles display of Dynamic Surroundings chat notices")
+	public static boolean hideChatNotices = false;
 	@Parameter(category = CATEGORY_GENERAL, property = CONFIG_DISABLE_SUSPEND, defaultValue = "false", lang = "cfg.general.Suspend")
 	@Comment("Enable/disable water depth particle effect")
 	@RestartRequired(server = true)
