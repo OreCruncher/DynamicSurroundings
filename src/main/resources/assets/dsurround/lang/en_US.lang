@@ -134,6 +134,8 @@ cfg.fog.BiomeFogFactor.tooltip=Visibility factor to apply to biome fog (higher i
 
 cfg.general.cat.General=General Options
 cfg.general.cat.General.tooltip=Miscellaneous settings
+cfg.general.HideChat=Hide Chat Notices
+cfg.general.HideChat.tooltip=Toggles display of Dynamic Surroundings chat notices
 cfg.general.Suspend=Disable Water Suspend Particles
 cfg.general.Suspend.tooltip=Enable/disable water depth particle effect
 cfg.general.MinRainStrength=Default Minimum Rain Strength

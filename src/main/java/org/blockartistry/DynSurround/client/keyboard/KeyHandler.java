@@ -88,6 +88,9 @@ public class KeyHandler {
 			+ TextFormatting.BLUE + "] " + TextFormatting.RESET;
 
 	private static void sendPlayerMessage(final String fmt, final Object... parms) {
+		if (ModOptions.hideChatNotices)
+			return;
+
 		final EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
 		if (player != null) {
 			final String txt = chatPrefix + Localization.format(fmt, parms);
