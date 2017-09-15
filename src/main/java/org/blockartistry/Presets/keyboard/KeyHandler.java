@@ -43,16 +43,21 @@ public class KeyHandler {
 
 	private static final String SECTION_NAME = Presets.MOD_NAME;
 
-	private static final KeyBinding PRESET_KEY = new KeyBinding("presets.cfg.keybind.Presets", Keyboard.KEY_P, SECTION_NAME);
+	private static KeyBinding PRESET_KEY;
 
-	static {
+	public static void init() {
+		PRESET_KEY = new KeyBinding("presets.cfg.keybind.Presets", Keyboard.KEY_P, SECTION_NAME);
 		ClientRegistry.registerKeyBinding(PRESET_KEY);
+	}
+
+	private static boolean shouldHandle(@Nonnull final KeyBinding binding) {
+		return binding != null && binding.isPressed();
 	}
 
 	@SubscribeEvent(receiveCanceled = false)
 	public static void onKeyboard(@Nonnull InputEvent.KeyInputEvent event) {
 
-		if (PRESET_KEY.isPressed()&& Minecraft.getMinecraft().currentScreen == null) {
+		if (shouldHandle(PRESET_KEY) && Minecraft.getMinecraft().currentScreen == null) {
 			final PresetsConfigGui gui = new PresetsConfigGui(null);
 			Minecraft.getMinecraft().displayGuiScreen(gui);
 		}
