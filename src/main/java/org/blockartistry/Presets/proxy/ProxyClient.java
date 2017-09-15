@@ -29,6 +29,7 @@ import java.io.InputStream;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.Presets.Presets;
+import org.blockartistry.Presets.keyboard.KeyHandler;
 import org.blockartistry.lib.Localization;
 import org.blockartistry.lib.io.Streams;
 
@@ -96,6 +97,7 @@ public class ProxyClient extends Proxy {
 	@Override
 	public void init(@Nonnull final FMLInitializationEvent event) {
 		super.init(event);
+		KeyHandler.init();
 	}
 
 }
