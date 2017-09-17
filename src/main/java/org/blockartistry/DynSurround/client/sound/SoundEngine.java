@@ -24,39 +24,26 @@
 
 package org.blockartistry.DynSurround.client.sound;
 
-import java.nio.IntBuffer;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.openal.AL;
-import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.ALC10;
-import org.lwjgl.openal.ALC11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.client.event.sound.SoundSetupEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 
-@Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
+@SideOnly(Side.CLIENT)
 public class SoundEngine {
 
-	private static final int MAX_STREAM_CHANNELS = 16;
 	private static final int SOUND_QUEUE_SLACK = 6;
 
 	private static SoundEngine instance = null;
@@ -72,7 +59,7 @@ public class SoundEngine {
 	private SoundManager manager = this.handler.sndManager;
 
 	private SoundEngine() {
-		MinecraftForge.EVENT_BUS.register(this);
+
 	}
 
 	public int currentSoundCount() {
@@ -155,63 +142,6 @@ public class SoundEngine {
 		final BasicSound<?> sound = new AdhocSound(soundIn, category);
 		sound.setVolume(volume).setPitch(pitch).setPosition(pos);
 		return this.playSound(sound);
-	}
-
-	@SubscribeEvent(priority = EventPriority.HIGH)
-	public static void onSoundSetup(@Nonnull final SoundSetupEvent event) {
-		configureSound();
-	}
-
-	private static void alErrorCheck() {
-		final int error = AL10.alGetError();
-		if (error != AL10.AL_NO_ERROR)
-			DSurround.log().warn("OpenAL error: %d", error);
-	}
-
-	private static void configureSound() {
-		int totalChannels = -1;
-
-		try {
-
-			final boolean create = !AL.isCreated();
-			if (create) {
-				AL.create();
-				alErrorCheck();
-			}
-
-			final IntBuffer ib = BufferUtils.createIntBuffer(1);
-			ALC10.alcGetInteger(AL.getDevice(), ALC11.ALC_MONO_SOURCES, ib);
-			alErrorCheck();
-			totalChannels = ib.get(0);
-
-			if (create)
-				AL.destroy();
-
-		} catch (final Throwable e) {
-			e.printStackTrace();
-		}
-
-		int normalChannelCount = ModOptions.normalSoundChannelCount;
-		int streamChannelCount = ModOptions.streamingSoundChannelCount;
-
-		if (ModOptions.autoConfigureChannels && totalChannels > 64) {
-			totalChannels = ((totalChannels + 1) * 3) / 4;
-			streamChannelCount = Math.min(totalChannels / 5, MAX_STREAM_CHANNELS);
-			normalChannelCount = totalChannels - streamChannelCount;
-		}
-
-		DSurround.log().info("Sound channels: %d normal, %d streaming (total avail: %s)", normalChannelCount,
-				streamChannelCount, totalChannels == -1 ? "UNKNOWN" : Integer.toString(totalChannels));
-		SoundSystemConfig.setNumberNormalChannels(normalChannelCount);
-		SoundSystemConfig.setNumberStreamingChannels(streamChannelCount);
-
-		// Setup sound buffering
-		if (ModOptions.streamBufferCount != 0)
-			SoundSystemConfig.setNumberStreamingBuffers(ModOptions.streamBufferCount);
-		if (ModOptions.streamBufferSize != 0)
-			SoundSystemConfig.setStreamingBufferSize(ModOptions.streamBufferSize * 1024);
-		DSurround.log().info("Stream buffers: %d x %d", SoundSystemConfig.getNumberStreamingBuffers(),
-				SoundSystemConfig.getStreamingBufferSize());
 	}
 
 }
