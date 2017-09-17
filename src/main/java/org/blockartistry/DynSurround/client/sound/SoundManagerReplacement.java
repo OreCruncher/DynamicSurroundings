@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.sound;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -44,6 +45,11 @@ import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Localization;
 import org.blockartistry.lib.MathStuff;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.openal.AL;
+import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.ALC10;
+import org.lwjgl.openal.ALC11;
 
 import gnu.trove.iterator.TObjectIntIterator;
 import gnu.trove.map.hash.TObjectIntHashMap;
@@ -59,19 +65,21 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.Library;
 import paulscode.sound.SimpleThread;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.StreamThread;
 
-@Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
+@SideOnly(value = Side.CLIENT)
 public class SoundManagerReplacement extends SoundManager {
+
+	private static final int MAX_STREAM_CHANNELS = 16;
 
 	private static Field soundLibrary = null;
 	private static Field streamThread = null;
@@ -112,6 +120,7 @@ public class SoundManagerReplacement extends SoundManager {
 
 	public SoundManagerReplacement(final SoundHandler handler, final GameSettings settings) {
 		super(handler, settings);
+		configureSound();
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
@@ -368,7 +377,7 @@ public class SoundManagerReplacement extends SoundManager {
 	}
 
 	@SubscribeEvent
-	public static void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
+	public void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
 		final ISound sound = event.getSound();
 		if (sound instanceof BasicSound<?>) {
 			((BasicSound<?>) sound).setId(event.getUuid());
@@ -431,6 +440,57 @@ public class SoundManagerReplacement extends SoundManager {
 		final float volumeScale = this.registry.getVolumeScale(sound);
 		final float volume = sound.getVolume() * getVolume(sound.getCategory()) * volumeScale;
 		return MathStuff.clamp(volume, 0.0F, 1.0F);
+	}
+	private static void alErrorCheck() {
+		final int error = AL10.alGetError();
+		if (error != AL10.AL_NO_ERROR)
+			DSurround.log().warn("OpenAL error: %d", error);
+	}
+
+	private static void configureSound() {
+		int totalChannels = -1;
+
+		try {
+
+			final boolean create = !AL.isCreated();
+			if (create) {
+				AL.create();
+				alErrorCheck();
+			}
+
+			final IntBuffer ib = BufferUtils.createIntBuffer(1);
+			ALC10.alcGetInteger(AL.getDevice(), ALC11.ALC_MONO_SOURCES, ib);
+			alErrorCheck();
+			totalChannels = ib.get(0);
+
+			if (create)
+				AL.destroy();
+
+		} catch (final Throwable e) {
+			e.printStackTrace();
+		}
+
+		int normalChannelCount = ModOptions.normalSoundChannelCount;
+		int streamChannelCount = ModOptions.streamingSoundChannelCount;
+
+		if (ModOptions.autoConfigureChannels && totalChannels > 64) {
+			totalChannels = ((totalChannels + 1) * 3) / 4;
+			streamChannelCount = Math.min(totalChannels / 5, MAX_STREAM_CHANNELS);
+			normalChannelCount = totalChannels - streamChannelCount;
+		}
+
+		DSurround.log().info("Sound channels: %d normal, %d streaming (total avail: %s)", normalChannelCount,
+				streamChannelCount, totalChannels == -1 ? "UNKNOWN" : Integer.toString(totalChannels));
+		SoundSystemConfig.setNumberNormalChannels(normalChannelCount);
+		SoundSystemConfig.setNumberStreamingChannels(streamChannelCount);
+
+		// Setup sound buffering
+		if (ModOptions.streamBufferCount != 0)
+			SoundSystemConfig.setNumberStreamingBuffers(ModOptions.streamBufferCount);
+		if (ModOptions.streamBufferSize != 0)
+			SoundSystemConfig.setStreamingBufferSize(ModOptions.streamBufferSize * 1024);
+		DSurround.log().info("Stream buffers: %d x %d", SoundSystemConfig.getNumberStreamingBuffers(),
+				SoundSystemConfig.getStreamingBufferSize());
 	}
 
 }
