@@ -223,11 +223,15 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 	}
 
 	public boolean canSoundBeHeard(@Nonnull final BlockPos soundPos) {
+		
+		if (this.getAttenuationType() == AttenuationType.NONE)
+			return true;
+
 		final float v = this.getVolume();
 		if (v <= 0.0F || SoundSystemConfig.getMasterGain() <= 0F)
 			return false;
 
-		// This is from SoundManager.  The idea is that if a sound
+		// This is from SoundManager. The idea is that if a sound
 		// is playing at <= 1F drop off range is about 16 blocks.
 		// If the volume is higher the drop off range is further.
 		// Note that we are dealing with square distances so the
