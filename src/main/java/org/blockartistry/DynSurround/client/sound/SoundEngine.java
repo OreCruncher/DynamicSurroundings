@@ -31,7 +31,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -55,15 +54,16 @@ public class SoundEngine {
 		return instance;
 	}
 
-	private SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
-	private SoundManager manager = this.handler.sndManager;
-
 	private SoundEngine() {
 
 	}
+	
+	private static SoundManager getManager() {
+		return Minecraft.getMinecraft().getSoundHandler().sndManager;
+	}
 
 	public int currentSoundCount() {
-		return this.manager.playingSoundsStopTime.size();
+		return getManager().playingSoundsStopTime.size();
 	}
 
 	public int maxSoundCount() {
@@ -75,29 +75,30 @@ public class SoundEngine {
 	}
 
 	public boolean isSoundPlaying(@Nonnull final BasicSound<?> sound) {
-		return this.manager.isSoundPlaying(sound) || this.manager.invPlayingSounds.containsKey(sound)
-				|| this.manager.delayedSounds.containsKey(sound);
+		final SoundManager manager = getManager();
+		return manager.isSoundPlaying(sound) || manager.invPlayingSounds.containsKey(sound)
+				|| manager.delayedSounds.containsKey(sound);
 	}
 
 	public boolean isSoundPlaying(@Nonnull final String soundId) {
 		if (StringUtils.isEmpty(soundId))
 			return false;
-		return this.manager.playingSounds.containsKey(soundId);
+		return getManager().playingSounds.containsKey(soundId);
 	}
 
 	public void stopSound(@Nonnull final String sound, @Nonnull final SoundCategory cat) {
 		if (sound != null)
-			this.manager.stop(sound, cat);
+			getManager().stop(sound, cat);
 	}
 
 	public void stopSound(@Nonnull final BasicSound<?> sound) {
 		if (sound != null) {
-			this.manager.stopSound(sound);
+			getManager().stopSound(sound);
 		}
 	}
 
 	public void stopAllSounds() {
-		this.manager.stopAllSounds();
+		getManager().stopAllSounds();
 	}
 
 	@Nullable
@@ -108,10 +109,12 @@ public class SoundEngine {
 			return null;
 		}
 
+		final SoundManager manager = getManager();
+		
 		if (!StringUtils.isEmpty(sound.getId()))
-			this.manager.stopSound(sound);
+			manager.stopSound(sound);
 
-		this.manager.playSound(sound);
+		manager.playSound(sound);
 
 		if (ModOptions.enableDebugLogging) {
 			if (StringUtils.isEmpty(sound.getId())) {
@@ -120,7 +123,7 @@ public class SoundEngine {
 				final StringBuilder builder = new StringBuilder();
 				builder.append("> QUEUED: [").append(sound.toString()).append(']');
 				if (DSurround.log().testTrace(ModOptions.Trace.TRUE_SOUND_VOLUME)) {
-					final SoundSystem ss = this.manager.sndSystem;
+					final SoundSystem ss = manager.sndSystem;
 					// Force a flush of all commands so we can get
 					// the actual volume and pitch used within the
 					// sound library.

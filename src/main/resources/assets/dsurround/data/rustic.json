@@ -2,6 +2,7 @@
 	"blocks": [
 		{
 			"blocks": [
+				"rustic:apiary",
 				"rustic:beehive"
 			],
 			"chance": 5,
@@ -37,7 +38,7 @@
 		"rustic:andesite_pillar": "brickstone",
 		"rustic:apple_juice": "NOT_EMITTER",
 		"rustic:apple_seeds": "NOT_EMITTER",
-		"rustic:beehive": "woodutility",
+		"rustic:beehive": "organic_dry",
 		"rustic:blood_orchid": "NOT_EMITTER",
 		"rustic:brewing_barrel": "woodutility",
 		"rustic:cabinet": "bluntwood",
@@ -105,7 +106,7 @@
 		"rustic:tomato_crop+messy": "MESSY_GROUND",
 		"rustic:tomato_crop+foliage": "brush_straw_transition",
 		"rustic:vase": "sandstone",
-		"rustic:wildberry_bush": "NOT_EMITTER",
+		"rustic:wildberry_bush": "leaves",
 		"rustic:wildberry_juice": "NOT_EMITTER",
 		"rustic:wind_thistle": "NOT_EMITTER"
 	}
