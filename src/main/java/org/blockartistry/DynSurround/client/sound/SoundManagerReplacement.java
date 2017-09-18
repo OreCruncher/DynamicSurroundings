@@ -63,20 +63,21 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.event.sound.SoundSetupEvent;
 import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.Library;
 import paulscode.sound.SimpleThread;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.StreamThread;
 
-@SideOnly(value = Side.CLIENT)
+@Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
 public class SoundManagerReplacement extends SoundManager {
 
 	private static final int MAX_STREAM_CHANNELS = 16;
@@ -120,7 +121,6 @@ public class SoundManagerReplacement extends SoundManager {
 
 	public SoundManagerReplacement(final SoundHandler handler, final GameSettings settings) {
 		super(handler, settings);
-		configureSound();
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
@@ -447,7 +447,8 @@ public class SoundManagerReplacement extends SoundManager {
 			DSurround.log().warn("OpenAL error: %d", error);
 	}
 
-	private static void configureSound() {
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void configureSound(@Nonnull final SoundSetupEvent event) {
 		int totalChannels = -1;
 
 		try {
