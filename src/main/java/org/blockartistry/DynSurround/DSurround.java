@@ -78,7 +78,7 @@ public class DSurround {
 	public static final String RESOURCE_ID = "dsurround";
 	public static final String MOD_NAME = "Dynamic Surroundings";
 	public static final String VERSION = "@VERSION@";
-	public static final String DEPENDENCIES = "before:presets; after:galacticraftcore";
+	public static final String DEPENDENCIES = "before: presets; after:galacticraftcore; after:ambientsounds";
 	public static final String GUI_FACTORY = "org.blockartistry.DynSurround.client.gui.ConfigGuiFactory";
 	public static final String UPDATE_URL = "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json";
 	public static final String FINGERPRINT = "7a2128d395ad96ceb9d9030fbd41d035b435753a";

@@ -224,6 +224,10 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 	}
 
 	public boolean canSoundBeHeard(@Nonnull final BlockPos soundPos) {
+		
+		if (this.getAttenuationType() == AttenuationType.NONE)
+			return true;
+
 		final float v = this.getVolume();
 		if (v <= 0.0F || SoundSystemConfig.getMasterGain() <= 0F)
 			return false;
