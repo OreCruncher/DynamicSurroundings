@@ -206,7 +206,7 @@
 			]
 		},
 		{
-			"conditions": "biome.isSandy || biome.isMesa || (biome.isWasteland && !(biome.isCold || biome.isSnowy || biome.isSwamp))",
+			"conditions": "biome.rainfall < 0.1 && (biome.isSandy || biome.isMesa || (biome.isWasteland && !(biome.isCold || biome.isSnowy || biome.isSwamp)))",
 			"_comment": "Dust for desert like biomes",
 			"dust": true,
 			"dustColor": "204,185,102"

@@ -25,6 +25,7 @@ package org.blockartistry.DynSurround.registry;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.util.math.BlockPos;
@@ -45,8 +46,10 @@ public class FakeBiome extends Biome {
 		this.spawnableMonsterList = null;
 		this.spawnableWaterCreatureList = null;
 		this.theBiomeDecorator = null;
+		
+		this.setRegistryName(DSurround.RESOURCE_ID, ("fake_" + name).replace(' ', '_'));
 	}
-	
+
 	public int getBiomeId() {
 		return this.biomeId;
 	}
@@ -87,6 +90,7 @@ public class FakeBiome extends Biome {
 
 	@Override
 	public float getRainfall() {
-		return getTrueBiome().getRainfall();
+		final BiomeInfo info = getTrueBiome();
+		return info == null ? 0F : info.getRainfall();
 	}
 }
