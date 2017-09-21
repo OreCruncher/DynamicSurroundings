@@ -1,3 +1,14 @@
+###DynamicSurroundings-1.10.2-3.4.7.2
+**What's New**
+* General config option for turning off Dynamic Surroundings chat messages when toggling things like light level HUD, chunk border display, etc.
+
+**Fixes**
+* Footstep/item swap sounds playing L/R of the player when moving, such as strafing. Noticeable when using headphones.
+* Client NPE/CME when connection rejected because of a mod mismatch on server.
+
+**Changes**
+* Further restrict desert dust effect to biomes with < 0.1 rainfall - should rain in BoP Steppe now.
+
 ###DynamicSurroundings-1.10.2-3.4.7.1
 **What's New**
 * Added built-in profiles for disabling things like Nether weather and biome dust.  Config options are accessible using the Built-in Profiles button from Dynamic Surroundings main configuration page.
