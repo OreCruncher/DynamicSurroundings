@@ -1,3 +1,24 @@
+###DynamicSurroundings-1.12.2-3.4.7.2
+**What's New**
+* \[WIP\] Support for [Albedo](https://minecraft.curseforge.com/projects/albedo?gameCategorySlug=mc-mods&projectID=275300) client side graphics library:
+    * Fireflies have a glow effect
+    * Holding a light source will provide light around player entity.  Color and radius of the light effect is dependent on the item held.  Experiment with torches, redstone torches, glowstone blocks, sea lanterns, and nether stars.
+    * Firefly and player light source can be turned on/off using configuration.
+    * Dynamic Surroundings will detect presence of Albedo and activate necessary support logic.
+    * Not compatible with OptiFine since shaders are used.
+* General config option for turning off Dynamic Surroundings chat messages when toggling things like light level HUD, chunk border display, etc.
+
+**Fixes**
+* Footstep/item swap sounds playing L/R of the player when moving, such as strafing. Noticeable when using headphones.
+* Keybindings will now show up with latest versions of Forge for 1.12.x
+* Client NPE/CME when connection rejected because of a mod mismatch on server.
+* Open Terrain Generation compatibility updates for 1.12.x
+
+**Changes**
+* Built against Forge 14.23.0.2486, a Minecraft 1.12.2 version.  Mod should still be compatible with Minecraft 1.12.x.
+* Modified biome sound registry to improve OTG compatibility with 1.12.x Minecraft.
+* Further restrict desert dust effect to biomes with < 0.1 rainfall - should rain in BoP Steppe now.
+
 ###DynamicSurroundings-1.12-3.4.7.1
 **What's New**
 * Added built-in profiles for disabling things like Nether weather and biome dust.  Config options are accessible using the Built-in Profiles button from Dynamic Surroundings main configuration page.
