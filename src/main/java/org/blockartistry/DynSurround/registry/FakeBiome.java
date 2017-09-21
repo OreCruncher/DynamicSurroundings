@@ -87,6 +87,7 @@ public class FakeBiome extends Biome {
 
 	@Override
 	public float getRainfall() {
-		return getTrueBiome().getRainfall();
+		final BiomeInfo info = getTrueBiome();
+		return info == null ? 0F : info.getRainfall();
 	}
 }

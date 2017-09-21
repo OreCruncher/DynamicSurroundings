@@ -30,6 +30,7 @@ import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.script.BooleanValue;
 import org.blockartistry.lib.script.Expression;
 import org.blockartistry.lib.script.Function;
+import org.blockartistry.lib.script.NumberValue;
 import org.blockartistry.lib.script.StringValue;
 import org.blockartistry.lib.script.Variant;
 
@@ -137,6 +138,34 @@ public abstract class BiomeMatcher {
 					return new StringValue(this.asString().concat(term.asString()));
 				}
 
+			});
+
+			this.exp.addVariable(new Variant("biome.rainfall") {
+				@Override
+				public int compareTo(Variant o) {
+					return Float.compare(this.asNumber(), o.asNumber());
+				}
+
+				@Override
+				public float asNumber() {
+					return ConditionsImpl.this.current.getRainfall();
+				}
+
+				@Override
+				public String asString() {
+					return Float.toString(this.asNumber());
+				}
+
+				@Override
+				public boolean asBoolean() {
+					return this.asNumber() != 0F;
+				}
+
+				@Override
+				public Variant add(Variant term) {
+					return new NumberValue(this.asNumber() + term.asNumber());
+				}
+				
 			});
 
 			// Fake biome
