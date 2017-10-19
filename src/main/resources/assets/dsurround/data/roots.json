@@ -4,6 +4,6 @@
 		"roots:runestone_brick": "brickstone",
 		"roots:chiseled_runestone": "brickstone",			
 		"roots:offertory_plate": "brickstone",				
-		"roots:thatch": "hay"	
+		"roots:thatch": "leaves"	
 	}
 }
