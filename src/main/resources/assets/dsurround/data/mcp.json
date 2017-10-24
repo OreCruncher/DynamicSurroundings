@@ -775,7 +775,7 @@
 		"minecraft:flowing_lava": "NOT_EMITTER",
 		"minecraft:lava": "NOT_EMITTER",
 		"minecraft:sand": "sand",
-		"minecraft:F": "gravel",
+		"minecraft:gravel": "gravel",
 		"minecraft:gold_ore": "ore",
 		"minecraft:iron_ore": "ore",
 		"minecraft:coal_ore": "ore",
