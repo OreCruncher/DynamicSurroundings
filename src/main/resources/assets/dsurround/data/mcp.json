@@ -1197,7 +1197,12 @@
 				"oreLimonite",
 				"oreBogIron",
 				"oreSulfur",
-				"oreFirestone"
+				"oreFirestone",
+				"oreTrona",
+				"oreScarlite",
+				"oreHephaestite",
+				"oreUmbrium",
+				"oreTopaz"
 			]
 		},
 		{
@@ -1300,7 +1305,8 @@
 				"blockCobalt",
 				"blockArdite",
 				"blockManyullyn",
-				"blockPigiron"
+				"blockPigiron",
+				"blockNethersteel"
 			]
 		},
 		{
