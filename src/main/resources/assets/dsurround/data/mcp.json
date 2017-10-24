@@ -775,7 +775,7 @@
 		"minecraft:flowing_lava": "NOT_EMITTER",
 		"minecraft:lava": "NOT_EMITTER",
 		"minecraft:sand": "sand",
-		"minecraft:gravel": "gravel",
+		"minecraft:F": "gravel",
 		"minecraft:gold_ore": "ore",
 		"minecraft:iron_ore": "ore",
 		"minecraft:coal_ore": "ore",
@@ -1306,7 +1306,8 @@
 				"blockArdite",
 				"blockManyullyn",
 				"blockPigiron",
-				"blockNethersteel"
+				"blockNethersteel",
+				"blockUmbrium"
 			]
 		},
 		{
@@ -1371,7 +1372,8 @@
 				"blockGranite",
 				"stoneGranite",
 				"blockCharcoal",
-				"blockPetoskeyStone"
+				"blockPetoskeyStone",
+				"stoneDefiled"
 			]
 		},
 		{
@@ -1382,7 +1384,8 @@
 				"limestone",
 				"stoneLimestone",
 				"blockLimestone",
-				"coquina"
+				"coquina",
+				"sandstoneDefiled"
 			]
 		},
 		{
@@ -1392,7 +1395,8 @@
 				"blockSalt",
 				"blockPsiDust",
 				"denseSand",
-				"dustAsh"
+				"dustAsh",
+				"sandDefiled"
 			]
 		},
 		{
@@ -1401,7 +1405,8 @@
 				"dirt",
 				"blockDirt",
 				"orePeat",
-				"blockPeat"
+				"blockPeat",
+				"dirtDefiled"
 			]
 		},
 		{
@@ -1480,7 +1485,9 @@
 				"blockAlexandrite",
 				"blockJasper",
 				"blockGarnet",
-				"blockTourmaline"
+				"blockTourmaline",
+				"blockHephaestite",
+				"blockScarlite"
 			]
 		},
 		{
