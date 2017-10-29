@@ -8,6 +8,7 @@
 		"defiledlands:stone_defiled_stairs": "stone",		
 		"defiledlands:sandstone_defiled_stairs": "sandstone",
 		"defiledlands:stone_defiled_bricks_stairs": "brickstone",		
-		"defiledlands:glass_obscure": "glass"	
+		"defiledlands:glass_obscure": "glass",	
+		"defiledlands:vilespine": "brush"		
 	}
 }
