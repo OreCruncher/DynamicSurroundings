@@ -1,0 +1,20 @@
+{
+	"footsteps": {
+		"nex:block_netherrack_path": "stone",
+		"nex:block_netherrack": "stone",
+		"nex:block_rime": "composite",			
+		"nex:block_ice_frostburn": "ice",	
+		"nex:slab_brick_nether": "brickstone",	
+		"nex:slab_vanilla": "brickstone",		
+		"nex:stairs_brick_nether_red": "brickstone",		
+		"nex:stairs_brick_nether_fiery": "brickstone",			
+		"nex:stairs_brick_nether_icy": "brickstone",		
+		"nex:stairs_brick_nether_lively": "brickstone",		
+		"nex:stairs_basalt_normal": "obsidian",	
+		"nex:stairs_basalt_smooth": "obsidian",			
+		"nex:stairs_basalt_brick": "obsidian",	
+		"nex:stairs_basalt_pillar": "obsidian",		
+		"nex:block_brick_nether": "brickstone",				
+		"nex:slab_basalt": "obsidian"			
+	}
+}

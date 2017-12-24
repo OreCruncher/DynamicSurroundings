@@ -1,0 +1,22 @@
+{
+	"footsteps": {
+		"embers:sealed_planks": "wood",
+		"embers:wrapped_sealed_planks": "wood",
+		"embers:block_caminite_brick_slab": "brickstone",			
+		"embers:ashen_stone_slab": "sandstone",				
+		"embers:ashen_brick_slab": "sandstone",	
+		"embers:ashen_tile_slab": "sandstone",		
+		"embers:block_caminite_brick": "brickstone",
+		"embers:stairs_caminite_brick": "brickstone",		
+		"embers:ashen_stone": "sandstone",		
+		"embers:stairs_ashen_stone": "sandstone",	
+		"embers:ashen_brick": "sandstone",	
+		"embers:stairs_ashen_brick": "sandstone",	
+		"embers:ashen_tile": "sandstone",	
+		"embers:stairs_ashen_tile": "sandstone",			
+		"embers:archaic_bricks": "obsidian",		
+		"embers:archaic_edge": "obsidian",		
+		"embers:archaic_tile": "obsidian",			
+		"embers:archaic_light": "obsidian"		
+	}
+}

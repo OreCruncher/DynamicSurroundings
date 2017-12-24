@@ -1197,7 +1197,14 @@
 				"oreLimonite",
 				"oreBogIron",
 				"oreSulfur",
-				"oreFirestone"
+				"oreFirestone",
+				"oreTrona",
+				"oreScarlite",
+				"oreHephaestite",
+				"oreUmbrium",
+				"oreTopaz",
+				"oreRime",
+				"oreRockSalt"
 			]
 		},
 		{
@@ -1300,7 +1307,9 @@
 				"blockCobalt",
 				"blockArdite",
 				"blockManyullyn",
-				"blockPigiron"
+				"blockPigiron",
+				"blockNethersteel",
+				"blockUmbrium"
 			]
 		},
 		{
@@ -1365,7 +1374,8 @@
 				"blockGranite",
 				"stoneGranite",
 				"blockCharcoal",
-				"blockPetoskeyStone"
+				"blockPetoskeyStone",
+				"stoneDefiled"
 			]
 		},
 		{
@@ -1376,7 +1386,8 @@
 				"limestone",
 				"stoneLimestone",
 				"blockLimestone",
-				"coquina"
+				"coquina",
+				"sandstoneDefiled"
 			]
 		},
 		{
@@ -1386,7 +1397,8 @@
 				"blockSalt",
 				"blockPsiDust",
 				"denseSand",
-				"dustAsh"
+				"dustAsh",
+				"sandDefiled"
 			]
 		},
 		{
@@ -1395,7 +1407,8 @@
 				"dirt",
 				"blockDirt",
 				"orePeat",
-				"blockPeat"
+				"blockPeat",
+				"dirtDefiled"
 			]
 		},
 		{
@@ -1474,7 +1487,9 @@
 				"blockAlexandrite",
 				"blockJasper",
 				"blockGarnet",
-				"blockTourmaline"
+				"blockTourmaline",
+				"blockHephaestite",
+				"blockScarlite"
 			]
 		},
 		{
