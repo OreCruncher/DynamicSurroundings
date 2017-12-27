@@ -24,12 +24,9 @@
 
 package org.blockartistry.DynSurround;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
 
 /**
  * Helper enum to track mods that Dynamic Surroundings is interested in.

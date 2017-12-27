@@ -54,10 +54,6 @@ msg.RainTimeSet=§9Время дождя: %1$s
 msg.ThunderTimeSet=§9Время грозы: %1$s
 msg.ThunderThresholdSet=§9Порог грозы: %1$s
 
-msg.Autorestart.notice=Похоже, звуковая система сломалась
-msg.Autorestart.restart=Пытаюсь перезапустить...
-msg.Autorestart.manual=Рекомендуется перезапустить игру.
-
 # Version checking strings – Проверка версии
 msg.NewVersion.dsurround=["§6Доступно обновление: §9[",{"text":"§2%1$s §ev%2$s§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Нажмите, чтобы открыть страницу мода на CurseForge","color":"aqua"}},"clickEvent":{"action":"open_url","value":"%3$s"}},"§9]"]
 
