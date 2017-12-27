@@ -24,34 +24,36 @@
 
 package org.blockartistry.DynSurround.asm;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.blockartistry.lib.asm.MyTransformer;
+import org.blockartistry.lib.asm.Transmorgrifier;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
 
-public class Transformer extends MyTransformer {
+import net.minecraftforge.fml.common.Loader;
 
-	private static final Logger logger = LogManager.getLogger("dsurround Transform");
-	
-	public static Logger log() {
-		return logger;
-	}
+//Based on patches by CreativeMD
+public class SoundCrashFixSource extends Transmorgrifier {
 
-	public Transformer() {
-		super(logger);
+	private static final String[] classNames = { "paulscode.sound.Source" };
+
+	public SoundCrashFixSource() {
+		super(classNames);
 	}
 
 	@Override
-	protected void initTransmorgrifiers() {
-		this.addTransmorgrifier(new PatchEntityRenderer());
-		this.addTransmorgrifier(new PatchWorldServer());
-		this.addTransmorgrifier(new PatchSoundHandler());
-		this.addTransmorgrifier(new PatchSoundManager());
-		this.addTransmorgrifier(new PatchClassRandom());
-		
-		// Sound engine crash patches
-		this.addTransmorgrifier(new SoundCrashFixSource());
-		this.addTransmorgrifier(new SoundCrashFixLibrary());
-		this.addTransmorgrifier(new SoundCrashFixStreamThread());
+	public boolean isEnabled() {
+		return !Loader.isModLoaded("ambientsounds");
+	}
+	
+	@Override
+	public String name() {
+		return "Add removed field";
+	}
+
+	@Override
+	public boolean transmorgrify(final ClassNode cn) {
+		cn.fields.add(new FieldNode(Opcodes.ACC_PUBLIC, "removed", "Z", null, null));
+		return true;
 	}
 
 }

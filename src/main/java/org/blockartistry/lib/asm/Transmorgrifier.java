@@ -27,6 +27,7 @@ package org.blockartistry.lib.asm;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.MethodNode;
 
 public abstract class Transmorgrifier {
@@ -36,20 +37,20 @@ public abstract class Transmorgrifier {
 	public Transmorgrifier(final String... classNames) {
 		this.classNames = classNames;
 	}
-	
+
 	public int classWriterFlags() {
 		return ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES;
 	}
 
 	/*
-	 * Name of the Transmorgrifier.  Used in logging to identify which set of logic
-	 * was operating.
+	 * Name of the Transmorgrifier. Used in logging to identify which set of
+	 * logic was operating.
 	 */
 	public abstract String name();
 
 	/*
-	 * Indicates whether the transmorgrification process should executed.  Override
-	 * to provide custom behavior, such as configuration control.
+	 * Indicates whether the transmorgrification process should executed.
+	 * Override to provide custom behavior, such as configuration control.
 	 */
 	public boolean isEnabled() {
 		return true;
@@ -84,9 +85,16 @@ public abstract class Transmorgrifier {
 		}
 		return null;
 	}
-	
+
 	protected MethodNode findCTOR(final ClassNode cn, final String signature) {
 		return findMethod(cn, "<init>", signature);
+	}
+
+	protected LocalVariableNode findLocalVariable(final MethodNode m, final String name) {
+		for (final LocalVariableNode v : m.localVariables)
+			if (v.name.equals(name))
+				return v;
+		return null;
 	}
 
 	protected void logMethod(final Logger log, final MethodNode node, final String message) {
