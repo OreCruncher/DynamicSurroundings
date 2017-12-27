@@ -47,6 +47,11 @@ public class Transformer extends MyTransformer {
 		this.addTransmorgrifier(new PatchSoundHandler());
 		this.addTransmorgrifier(new PatchSoundManager());
 		this.addTransmorgrifier(new PatchClassRandom());
+		
+		// Sound engine crash patches
+		this.addTransmorgrifier(new SoundCrashFixSource());
+		this.addTransmorgrifier(new SoundCrashFixLibrary());
+		this.addTransmorgrifier(new SoundCrashFixStreamThread());
 	}
 
 }

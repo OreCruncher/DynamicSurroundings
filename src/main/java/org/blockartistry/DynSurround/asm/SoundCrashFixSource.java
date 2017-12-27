@@ -22,61 +22,38 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround;
+package org.blockartistry.DynSurround.asm;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
+import org.blockartistry.lib.asm.Transmorgrifier;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
 
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
 
-/**
- * Helper enum to track mods that Dynamic Surroundings is interested in.
- */
-public enum ModEnvironment {
+//Based on patches by CreativeMD
+public class SoundCrashFixSource extends Transmorgrifier {
 
-	//
-	ToughAsNails("ToughAsNails"),
-	//
-	CalendarAPI("CalendarAPI"),
-	//
-	Weather2("weather2"),
-	//
-	EnderIO("EnderIO"),
-	//
-	Chisel("chisel"),
-	//
-	ChiselAPI("ctm-api"),
-	//
-	OpenTerrainGenerator("openterraingenerator"),
-	//
-	ActualMusic("actualmusic"),
-	//
-	GalacticraftCore("galacticraftcore"),
-	//
-	GalacticraftPlanets("galacticraftplanets"),
-	//
-	CoFHCore("cofhcore"),
-	//
-	Albedo("albedo"),
-	//
-	AmbientSounds("ambientsounds");
+	private static final String[] classNames = { "paulscode.sound.Source" };
 
-	protected final String modId;
-	protected boolean isLoaded;
-
-	private ModEnvironment(@Nonnull final String modId) {
-		this.modId = modId;
+	public SoundCrashFixSource() {
+		super(classNames);
 	}
 
-	public boolean isLoaded() {
-		return this.isLoaded;
+	@Override
+	public boolean isEnabled() {
+		return !Loader.isModLoaded("ambientsounds");
+	}
+	
+	@Override
+	public String name() {
+		return "Add removed field";
 	}
 
-	public static void initialize() {
-		for (final ModEnvironment me : ModEnvironment.values())
-			me.isLoaded = Loader.isModLoaded(me.modId.toLowerCase());
+	@Override
+	public boolean transmorgrify(final ClassNode cn) {
+		cn.fields.add(new FieldNode(Opcodes.ACC_PUBLIC, "removed", "Z", null, null));
+		return true;
 	}
 
 }
