@@ -156,10 +156,13 @@ public class PotionHUD extends GuiOverlay {
 			return;
 
 		final EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		final Collection<PotionEffect> collection = player.getActivePotionEffects();
-		if (collection.isEmpty())
+		if (player == null)
 			return;
 
+		final Collection<PotionEffect> collection = player.getActivePotionEffects();
+		if (collection == null || collection.isEmpty())
+			return;
+		
 		this.potions = new ArrayList<PotionInfo>();
 		for (final PotionEffect effect : Ordering.natural().reverse().sortedCopy(collection)) {
 
