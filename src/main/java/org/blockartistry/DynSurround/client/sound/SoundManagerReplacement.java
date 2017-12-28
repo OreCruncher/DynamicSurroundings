@@ -24,8 +24,6 @@
 
 package org.blockartistry.DynSurround.client.sound;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,11 +37,9 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.lib.Localization;
 import org.blockartistry.lib.MathStuff;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;
@@ -59,9 +55,7 @@ import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.sound.SoundSetupEvent;
 import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
@@ -69,55 +63,16 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
-import paulscode.sound.Library;
-import paulscode.sound.SimpleThread;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
-import paulscode.sound.StreamThread;
 
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
 public class SoundManagerReplacement extends SoundManager {
 
 	private static final int MAX_STREAM_CHANNELS = 16;
-
-	private static Field soundLibrary = null;
-	private static Field streamThread = null;
-	private static Field commandThread = null;
-	private static Method alive = null;
-	private static Method kill = null;
-
-	static {
-
-		try {
-			soundLibrary = ReflectionHelper.findField(SoundSystem.class, "soundLibrary");
-			streamThread = ReflectionHelper.findField(Library.class, "streamThread");
-
-			try {
-				commandThread = ReflectionHelper.findField(SoundSystem.class, "commandThread");
-				alive = ReflectionHelper.findMethod(SimpleThread.class, "alive", null, boolean.class, boolean.class);
-				kill = ReflectionHelper.findMethod(SimpleThread.class, "kill", null);
-			} catch (final Throwable t) {
-				DSurround.log().warn("Cannot find SimpleThread methods; fast sound system restart not enabled");
-				commandThread = null;
-				alive = null;
-				kill = null;
-			}
-
-		} catch (final Throwable t) {
-			DSurround.log().warn("Cannot find sound manager fields; auto-restart not enabled");
-			soundLibrary = null;
-			streamThread = null;
-		}
-
-	}
-
 	private final static float MUTE_VOLUME = 0.00001F;
-	private final static int CHECK_INTERVAL = 30 * 20; // 30 seconds
 	private SoundRegistry registry = null;
-	private int nextCheck = 0;
-	private boolean givenNotice = false;
 
 	public SoundManagerReplacement(final SoundHandler handler, final GameSettings settings) {
 		super(handler, settings);
@@ -126,65 +81,6 @@ public class SoundManagerReplacement extends SoundManager {
 
 	private SoundSystem getSoundSystem() {
 		return this.sndSystem;
-	}
-
-	private void fastRestart() {
-		if (alive != null && kill != null) {
-			try {
-				// Kill off the command thread
-				Thread t = (Thread) commandThread.get(getSoundSystem());
-				kill.invoke(t);
-				alive.invoke(t, true, false);
-
-				// Kill off the stream thread
-				final Library l = (Library) soundLibrary.get(this.sndSystem);
-				t = (StreamThread) streamThread.get(l);
-				kill.invoke(t);
-				alive.invoke(t, true, false);
-			} catch (final Throwable t) {
-				DSurround.log().error("Unable to terminate sound system threads!", t);
-			}
-		}
-
-		this.unloadSoundSystem();
-		this.loadSoundSystem();
-	}
-
-	private void keepAlive() {
-		if (!this.loaded || streamThread == null)
-			return;
-
-		// Don't want to spam attempts
-		if (this.playTime < this.nextCheck)
-			return;
-
-		this.nextCheck = this.playTime + CHECK_INTERVAL;
-
-		try {
-			final Library l = (Library) soundLibrary.get(this.sndSystem);
-			final StreamThread t = (StreamThread) streamThread.get(l);
-			if (t != null && !t.isAlive()) {
-				final String msg1 = Localization.format("msg.Autorestart.notice");
-				final String msg2 = Localization.format(
-						ModOptions.enableSoundSystemAutorestart ? "msg.Autorestart.restart" : "msg.Autorestart.manual");
-
-				final EntityPlayer player = EnvironState.getPlayer();
-				if (player != null && !givenNotice) {
-					player.sendMessage(new TextComponentString(msg1));
-					player.sendMessage(new TextComponentString(msg2));
-				}
-				DSurround.log().warn(msg1);
-				DSurround.log().warn(msg2);
-				if (ModOptions.enableSoundSystemAutorestart)
-					this.fastRestart();
-				else
-					givenNotice = true;
-			} else {
-				givenNotice = false;
-			}
-		} catch (final Throwable t) {
-			;
-		}
 	}
 
 	private void setState(@Nonnull final ISound sound, @Nonnull final SoundState state) {
@@ -299,8 +195,6 @@ public class SoundManagerReplacement extends SoundManager {
 
 	@Override
 	public void updateAllSounds() {
-
-		keepAlive();
 
 		final SoundSystem sndSystem = getSoundSystem();
 
