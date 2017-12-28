@@ -33,6 +33,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
+import net.minecraft.entity.monster.EntityGolem;
+import net.minecraft.entity.monster.EntityPolarBear;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
@@ -83,6 +86,20 @@ public class BattleScanner implements ITickable {
 		return this.isBoss;
 	}
 
+	private boolean isApplicableType(final Entity e) {
+		if (e instanceof EntityLiving) {
+			if (e instanceof IMob)
+				return true;
+			if (e instanceof EntityPlayer)
+				return true;
+			if (e instanceof EntityGolem)
+				return true;
+			if (e instanceof EntityPolarBear)
+				return true;
+		}
+		return false;
+	}
+
 	@Override
 	public void update() {
 
@@ -122,15 +139,15 @@ public class BattleScanner implements ITickable {
 				// mob is outside of the largest possible range it is
 				// not a candidate.
 				continue;
-			} else if (e instanceof EntityLiving) {
-				final EntityLiving living = (EntityLiving) e;
+			} else if (isApplicableType(e)) {
 				// Use emoji data to determine if the mob is attacking
-				final IEmojiData emoji = living.getCapability(CapabilityEmojiData.EMOJI, null);
+				final IEmojiData emoji = e.getCapability(CapabilityEmojiData.EMOJI, null);
 				if (emoji != null) {
 					final ActionState state = emoji.getActionState();
 					if (state == ActionState.ATTACKING) {
 						// Only in battle if the entity sees the player, or the
 						// player sees the entity
+						final EntityLiving living = (EntityLiving) e;
 						if (living.getEntitySenses().canSee(player) || player.canEntityBeSeen(living))
 							inBattle = true;
 					}
