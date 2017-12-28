@@ -136,6 +136,9 @@ public class SoundManagerReplacement extends SoundManager {
 					this.playSound((BasicSound<?>) sound);
 				else if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC)
 					super.playSound(sound);
+
+				// Flush - avoid that pesky missing sound issue due to async
+				getSoundSystem().CommandQueue(null);
 			} catch (final Throwable t) {
 				// Stop more weirdness from a crashed sound system
 			}
