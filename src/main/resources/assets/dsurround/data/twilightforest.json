@@ -1,0 +1,12 @@
+{
+	"dimensions": [
+		{
+			"name": "twilight_forest",
+			"seaLevel": 31,
+			"weather": true,
+			"fog": true,
+			"haze": true,
+			"aurora": true
+		}
+	]
+}
