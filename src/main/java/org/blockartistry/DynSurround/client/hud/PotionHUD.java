@@ -136,14 +136,14 @@ public class PotionHUD extends GuiOverlay {
 		public String getDurationText() {
 			return this.durationText;
 		}
-		
+
 		public int getDurationColor() {
 			return this.durationColor;
 		}
 	}
 
 	protected List<PotionInfo> potions = ImmutableList.of();
-	
+
 	private boolean skipDisplay(@Nonnull final Potion potion, @Nonnull final PotionEffect effect) {
 		return !potion.shouldRenderHUD(effect) || !potion.shouldRenderInvText(effect);
 	}
@@ -156,8 +156,11 @@ public class PotionHUD extends GuiOverlay {
 			return;
 
 		final EntityPlayer player = Minecraft.getMinecraft().player;
+		if (player == null)
+			return;
+
 		final Collection<PotionEffect> collection = player.getActivePotionEffects();
-		if (collection.isEmpty())
+		if (collection == null || collection.isEmpty())
 			return;
 
 		this.potions = new ArrayList<PotionInfo>();
