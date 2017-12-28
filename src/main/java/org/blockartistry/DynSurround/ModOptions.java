@@ -318,7 +318,6 @@ public final class ModOptions {
 	public static boolean enableWaterSplash = true;
 
 	public static final String CATEGORY_SOUND = "sound";
-	public static final String CONFIG_RESTART_SOUND_SYSTEM = "Auto-restart Sound System";
 	public static final String CONFIG_ENABLE_BIOME_SOUNDS = "Enable Biomes Sounds";
 	public static final String CONFIG_MASTER_SOUND_FACTOR = "Master Sound Scale Factor";
 	public static final String CONFIG_AUTO_CONFIG_CHANNELS = "Autoconfigure Channels";
@@ -340,17 +339,14 @@ public final class ModOptions {
 	public static final String CONFIG_SOUND_VOLUMES = "Sound Volume";
 	public static final String CONFIG_THUNDER_VOLUME = "Thunder Volume";
 	public static final String CONFIG_ENABLE_BATTLEMUSIC = "Battle Music";
-	private static final List<String> soundsSort = Arrays.asList(CONFIG_RESTART_SOUND_SYSTEM,
-			CONFIG_ENABLE_BIOME_SOUNDS, CONFIG_MASTER_SOUND_FACTOR, CONFIG_FOOTSTEPS_SOUND_FACTOR,
-			CONFIG_FOOTSTEPS_QUAD, CONFIG_ENABLE_ARMOR_SOUND, CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_EQUIP_SOUND,
-			CONFIG_SWORD_AS_TOOL_EQUIP_SOUND, CONFIG_ENABLE_CRAFTING_SOUND, CONFIG_AUTO_CONFIG_CHANNELS,
-			CONFIG_NORMAL_CHANNEL_COUNT, CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_STREAM_BUFFER_SIZE,
-			CONFIG_STREAM_BUFFER_COUNT, CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS,
-			CONFIG_SOUND_CULL_THRESHOLD, CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES, CONFIG_ENABLE_BATTLEMUSIC);
+	private static final List<String> soundsSort = Arrays.asList(CONFIG_ENABLE_BIOME_SOUNDS, CONFIG_MASTER_SOUND_FACTOR,
+			CONFIG_FOOTSTEPS_SOUND_FACTOR, CONFIG_FOOTSTEPS_QUAD, CONFIG_ENABLE_ARMOR_SOUND, CONFIG_ENABLE_JUMP_SOUND,
+			CONFIG_ENABLE_EQUIP_SOUND, CONFIG_SWORD_AS_TOOL_EQUIP_SOUND, CONFIG_ENABLE_CRAFTING_SOUND,
+			CONFIG_AUTO_CONFIG_CHANNELS, CONFIG_NORMAL_CHANNEL_COUNT, CONFIG_STREAMING_CHANNEL_COUNT,
+			CONFIG_STREAM_BUFFER_SIZE, CONFIG_STREAM_BUFFER_COUNT, CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME,
+			CONFIG_BLOCKED_SOUNDS, CONFIG_SOUND_CULL_THRESHOLD, CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES,
+			CONFIG_ENABLE_BATTLEMUSIC);
 
-	@Parameter(category = CATEGORY_SOUND, property = CONFIG_RESTART_SOUND_SYSTEM, defaultValue = "true", lang = "cfg.sound.Autorestart")
-	@Comment("Enable auto-restart of crashed sound system")
-	public static boolean enableSoundSystemAutorestart = true;
 	@Parameter(category = CATEGORY_SOUND, property = CONFIG_ENABLE_BIOME_SOUNDS, defaultValue = "true", lang = "cfg.sound.BiomeSounds")
 	@Comment("Enable biome background and spot sounds")
 	public static boolean enableBiomeSounds = true;
