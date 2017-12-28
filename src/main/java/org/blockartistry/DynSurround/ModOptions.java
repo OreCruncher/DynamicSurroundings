@@ -65,7 +65,6 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_SOUND_CACHING = "Enable Sound Caching";
 	public static final String CONFIG_ENABLE_WEATHER = "Enable Weather Control";
 	public static final String CONFIG_ENABLE_RESET_WEATHER_ON_SLEEP = "Enable Weather Reset on Sleep Control";
-	public static final String CONFIG_ENABLE_RANDOM_REPLACE = "Enable Replace of Java Random class";
 
 	@Parameter(category = CATEGORY_ASM, property = CONFIG_ENABLE_SOUND_CACHING, defaultValue = "true", lang = "cfg.asm.EnableSoundCache")
 	@Comment("Enable ASM transformations to permit sound caching")
@@ -79,10 +78,6 @@ public final class ModOptions {
 	@Comment("Enable ASM transformations to allow control of player sleep impact on weather reset")
 	@RestartRequired(server = true)
 	public static boolean enableResetOnSleepASM = true;
-	@Parameter(category = CATEGORY_ASM, property = CONFIG_ENABLE_RANDOM_REPLACE, defaultValue = "false", lang = "cfg.asm.EnableRandomReplace")
-	@Comment("HIGHLY EXPERIMENTAL: Enable ASM transformations to replace Java Random() instances with fast variant")
-	@RestartRequired(world = true, server = true)
-	public static boolean enableRandomReplace = false;
 
 	public static final String CATEGORY_LOGGING_CONTROL = "logging";
 	public static final String CONFIG_ENABLE_DEBUG_LOGGING = "Enable Debug Logging";
