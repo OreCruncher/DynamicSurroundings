@@ -53,7 +53,7 @@ public final class DiurnalUtils {
 	}
 
 	public static DayCycle getCycle(@Nonnull final World world) {
-		if (world == null || world.provider == null || world.provider.hasNoSky())
+		if (world == null || world.provider == null || world.provider.world == null || world.provider.hasNoSky())
 			return DayCycle.NO_SKY;
 
 		final float brFactor = world.provider.getSunBrightnessFactor(1.0f);
