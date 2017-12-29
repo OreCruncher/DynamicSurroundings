@@ -45,7 +45,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -134,7 +137,16 @@ public class CompassHUD extends GuiOverlay {
 	}
 
 	protected boolean showClock() {
-		return ModOptions.enableClock && PlayerUtils.isHolding(EnvironState.getPlayer(), Items.CLOCK);
+		if (ModOptions.enableClock) {
+			if (PlayerUtils.isHolding(EnvironState.getPlayer(), Items.CLOCK))
+				return true;
+			final Entity e = PlayerUtils.entityImLookingAt(EnvironState.getPlayer());
+			if (e instanceof EntityItemFrame) {
+				final ItemStack stack = ((EntityItemFrame) e).getDisplayedItem();
+				return stack != null && !stack.isEmpty() && stack.getItem() == Items.CLOCK;
+			}
+		}
+		return false;
 	}
 
 	@Nonnull
