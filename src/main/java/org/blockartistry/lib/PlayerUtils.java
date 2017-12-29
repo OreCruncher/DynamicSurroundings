@@ -40,13 +40,18 @@ import org.blockartistry.lib.random.XorShiftRandom;
 import com.google.common.base.Predicates;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public final class PlayerUtils {
 
@@ -112,5 +117,14 @@ public final class PlayerUtils {
 
 	public static boolean isHolding(@Nonnull final EntityPlayer player, @Nonnull final Item item) {
 		return isHolding(player, item, EnumHand.MAIN_HAND) || isHolding(player, item, EnumHand.OFF_HAND);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Nullable
+	public static Entity entityImLookingAt(@Nonnull final EntityPlayer player) {
+		final RayTraceResult result = Minecraft.getMinecraft().objectMouseOver;
+		if (result != null && result.typeOfHit == RayTraceResult.Type.ENTITY)
+			return result.entityHit;
+		return null;
 	}
 }
