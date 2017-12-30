@@ -60,6 +60,10 @@ public class EntityAIEmoji extends EntityAIBase {
 			this.data = (IEmojiDataSettable) subject.getCapability(CapabilityEmojiData.EMOJI,
 					CapabilityEmojiData.DEFAULT_FACING);
 
+		// Saw in OpenEye. Not sure how this could happen.
+		if (this.data == null)
+			return;
+
 		updateActionState();
 		updateEmotionalState();
 		updateEmoji();
