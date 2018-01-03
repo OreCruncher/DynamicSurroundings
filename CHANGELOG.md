@@ -1,3 +1,24 @@
+###DynamicSurroundings-1.10.2-3.4.8.0
+** What's New**
+* Display the clock hud when player is looking at an item frame that contains a clock.
+
+**Fixes**
+* Removed all that sound engine restart stuff and replaced with patches to the underlying Minecraft sound engine to avoid the situation all together.  Thanks to CreativeMD and his work on getting to the bottom of things!  This should eliminate a variety of reported problems up through and including:
+    * Sound Engine restart lag
+    * Frequency of the sound engine crashes
+    * Various repeating errors in the client log related to sound muting and sounds not being found
+    * Crashes due to sound engine being yanked out from under other mods (such as IC2) 
+* Sometimes a sound instance would not play.  When this occurs something like "Error in class 'LibraryLWJGLOpenAL'" would show in the log.  Put in some additional code to make sure the sound information is flushed down into the sound engine. 
+* OpenEye: Sometimes the display wasn't created thus causing a crash in background mute processing
+* OpenEye: Sometimes the player reference wasn't initialized when hud processing was performed
+
+**Changes**
+* Built against Forge 1.10.2-12.18.3.2511
+* Reworked internal ASM transforms for better compatibility
+* Refined Battle Music logic to only apply it to entities that such as Mobs, Players, Polar Bears, and Golems.  Excludes passives that can attack such as wolves (but not the skellies they go after).  Goal is to reduce Battle Music fatigue.
+
+**NOTE: If you use Ambient Sounds 2.0 as well as Dynamic Surroundings make sure Ambient Sounds is updated to at least v2.2.1!  If you don't the sound engine patches will not be applied.**
+
 ###DynamicSurroundings-1.10.2-3.4.7.2
 **What's New**
 * General config option for turning off Dynamic Surroundings chat messages when toggling things like light level HUD, chunk border display, etc.
