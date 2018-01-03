@@ -27,10 +27,9 @@ package org.blockartistry.DynSurround.registry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
@@ -41,8 +40,9 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 
 public final class BiomeRegistry extends Registry {
@@ -70,9 +70,7 @@ public final class BiomeRegistry extends Registry {
 	// and should default to something to avoid crap.
 	private static final FakeBiome WTF = new WTFFakeBiome();
 
-	private final Map<Biome, BiomeInfo> registry = new IdentityHashMap<Biome, BiomeInfo>();
-	private final TIntObjectHashMap<BiomeInfo> fallback = new TIntObjectHashMap<BiomeInfo>();
-
+	private final Map<ResourceLocation, BiomeInfo> registry = new HashMap<ResourceLocation, BiomeInfo>();
 	private final Map<String, String> biomeAliases = new HashMap<String, String>();
 
 	BiomeRegistry(@Nonnull final Side side) {
@@ -81,8 +79,7 @@ public final class BiomeRegistry extends Registry {
 
 	private void register(@Nonnull final Biome biome) {
 		final BiomeInfo e = new BiomeInfo(biome);
-		this.registry.put(e.biome, e);
-		this.fallback.put(e.getBiomeId(), e);
+		this.registry.put(e.getKey(), e);
 	}
 
 	@Override
@@ -97,8 +94,12 @@ public final class BiomeRegistry extends Registry {
 			}
 		}
 
-		for (Iterator<Biome> itr = Biome.REGISTRY.iterator(); itr.hasNext();)
-			register(itr.next());
+		final Set<ResourceLocation> resourceNames = ForgeRegistries.BIOMES.getKeys();
+		for (final ResourceLocation r : resourceNames) {
+			final Biome b = ForgeRegistries.BIOMES.getValue(r);
+			if (b != null)
+				register(b);
+		}
 
 		// Add our fake biomes
 		register(UNDERWATER);
@@ -143,26 +144,9 @@ public final class BiomeRegistry extends Registry {
 
 	}
 
-	private int biomeId(@Nonnull final Biome biome) {
-		int result = Biome.getIdForBiome(biome);
-		if (result == -1) {
-			final String name = biome.getBiomeName();
-			if ("Plains".equals(name))
-				result = 1;
-			else if ("Ocean".equals(name))
-				result = 0;
-		}
-		return result;
-	}
-
 	@Nullable
 	private BiomeInfo resolve(@Nonnull final Biome biome) {
-		BiomeInfo result = this.registry.get(biome);
-		if (result == null) {
-			final int id = biomeId(biome);
-			result = this.fallback.get(id);
-		}
-		return result;
+		return this.registry.get(BiomeInfo.getKey(biome));
 	}
 
 	@Nonnull
