@@ -27,9 +27,9 @@ package org.blockartistry.DynSurround.registry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
@@ -94,8 +94,12 @@ public final class BiomeRegistry extends Registry {
 			}
 		}
 
-		for (Iterator<Biome> itr = ForgeRegistries.BIOMES.iterator(); itr.hasNext();)
-			register(itr.next());
+		final Set<ResourceLocation> resourceNames = ForgeRegistries.BIOMES.getKeys();
+		for (final ResourceLocation r : resourceNames) {
+			final Biome b = ForgeRegistries.BIOMES.getValue(r);
+			if (b != null)
+				register(b);
+		}
 
 		// Add our fake biomes
 		register(UNDERWATER);
