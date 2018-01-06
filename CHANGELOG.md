@@ -1,3 +1,7 @@
+###DynamicSurroundings-1.11.2-3.4.8.1
+**Fixes**
+* Open Terrain Generator compatibility changes.  No more crash loops!
+
 ###DynamicSurroundings-1.11.2-3.4.8.0
 ** What's New**
 * Display the clock hud when player is looking at an item frame that contains a clock.
