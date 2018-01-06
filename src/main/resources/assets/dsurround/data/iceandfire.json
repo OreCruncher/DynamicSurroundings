@@ -1,0 +1,19 @@
+{
+	"footsteps": {
+		"iceandfire:dragon_ice": "ice",
+		"iceandfire:frozen_grass_path": "ice,grass",			
+		"iceandfire:frozen_splinters": "ice,wood",			
+		"iceandfire:frozen_cobblestone": "ice,stone",			
+		"iceandfire:frozen_stone": "ice,stone",			
+		"iceandfire:frozen_grass": "ice,grass",			
+		"iceandfire:frozen_dirt": "ice,dirt",	
+		"iceandfire:dragon_ice_spikes": "ice",		
+		"iceandfire:jar": "glass",		
+		"iceandfire:jar^1": "glass",		
+		"iceandfire:jar^2": "glass",			
+		"iceandfire:jar^3": "glass",		
+		"iceandfire:jar^4": "glass",	
+		"iceandfire:jar^5": "glass",			
+		"iceandfire:frozen_gravel": "ice,gravel"
+	}
+}
