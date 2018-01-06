@@ -13,7 +13,7 @@
 		"iceandfire:chared_cobblestone": "sandstone",	
 		"iceandfire:chared_dirt": "dirt,sand",	
 		"iceandfire:chared_grass": "grass,sand",		
-		"iceandfire:nest": "stone,gravel,sand",		
+		"iceandfire:nest": "obsidian,gravel",		
 		"iceandfire:jar": "glass",		
 		"iceandfire:jar^1": "glass",		
 		"iceandfire:jar^2": "glass",			
