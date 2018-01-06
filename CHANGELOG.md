@@ -1,3 +1,11 @@
+###DynamicSurroundings-1.12.2-3.4.8.1
+**What's New**
+* Mod support/updates for various mods (thanks again to Sunconure11!)
+    * Plants 2 updates, Simply Tea, Gravel Ores, Soot, Ice and Fire
+
+**Fixes**
+* Open Terrain Generator compatibility changes.  No more crash loops!
+
 ###DynamicSurroundings-1.12.2-3.4.8.0
 **What's New**
 * Display the clock hud when player is looking at an item frame that contains a clock.
