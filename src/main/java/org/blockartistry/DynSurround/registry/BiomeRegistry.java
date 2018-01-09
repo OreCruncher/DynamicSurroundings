@@ -94,12 +94,9 @@ public final class BiomeRegistry extends Registry {
 			}
 		}
 
-		final Set<ResourceLocation> resourceNames = ForgeRegistries.BIOMES.getKeys();
-		for (final ResourceLocation r : resourceNames) {
-			final Biome b = ForgeRegistries.BIOMES.getValue(r);
-			if (b != null)
-				register(b);
-		}
+		final List<Biome> biomes = ForgeRegistries.BIOMES.getValues();
+		for (final Biome b : biomes)
+			register(b);
 
 		// Add our fake biomes
 		register(UNDERWATER);
