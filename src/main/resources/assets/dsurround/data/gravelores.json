@@ -1,17 +1,17 @@
 {
 	"footsteps": {
-		"gravelores:coal_gravel_ore": "gravel",
-		"gravelores:aluminum_gravel_ore": "gravel",		
-		"gravelores:iron_gravel_ore": "gravel",
-		"gravelores:lapis_gravel_ore": "gravel",
-		"gravelores:gold_gravel_ore": "gravel",
-		"gravelores:redstone_gravel_ore": "gravel",
-		"gravelores:diamond_gravel_ore": "gravel",
-		"gravelores:emerald_gravel_ore": "gravel",
-		"gravelores:tin_gravel_ore": "gravel",
-		"gravelores:nickel_gravel_ore": "gravel",	
-		"gravelores:silver_gravel_ore": "gravel",
-		"gravelores:lead_gravel_ore": "gravel",	
-		"gravelores:copper_gravel_ore": "gravel"					
+		"gravelores:coal_gravel_ore": "gravel,ore",
+		"gravelores:aluminum_gravel_ore": "gravel,ore",		
+		"gravelores:iron_gravel_ore": "gravel,ore",
+		"gravelores:lapis_gravel_ore": "gravel,ore",
+		"gravelores:gold_gravel_ore": "gravel,ore",
+		"gravelores:redstone_gravel_ore": "gravel,ore",
+		"gravelores:diamond_gravel_ore": "gravel,ore",
+		"gravelores:emerald_gravel_ore": "gravel,ore",
+		"gravelores:tin_gravel_ore": "gravel,ore",
+		"gravelores:nickel_gravel_ore": "gravel,ore",	
+		"gravelores:silver_gravel_ore": "gravel,ore",
+		"gravelores:lead_gravel_ore": "gravel,ore",	
+		"gravelores:copper_gravel_ore": "gravel,ore"					
 	}
 }
