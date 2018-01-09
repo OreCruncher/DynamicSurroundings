@@ -391,16 +391,14 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	}
 	
 	@Override
-	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
-		EnvironState.tick(world, player);
+	public void process(@Nonnull final EntityPlayer player) {
+		EnvironState.tick(player.world, player);
 
 		// Gather diagnostics if needed
 		if (Minecraft.getMinecraft().gameSettings.showDebugInfo && ModOptions.enableDebugLogging) {
-			DSurround.getProfiler().startSection("GatherDebug");
-			final DiagnosticEvent.Gather gather = new DiagnosticEvent.Gather(world, player);
+			final DiagnosticEvent.Gather gather = new DiagnosticEvent.Gather(player.world, player);
 			MinecraftForge.EVENT_BUS.post(gather);
 			this.diagnostics = gather.output;
-			DSurround.getProfiler().endSection();
 		} else {
 			this.diagnostics = null;
 		}

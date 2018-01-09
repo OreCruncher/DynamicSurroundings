@@ -24,16 +24,11 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
-import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.lib.collections.ObjectArray;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -95,34 +90,16 @@ public class EffectManager {
 	}
 
 	@SubscribeEvent
-	public void clientTick(final TickEvent.ClientTickEvent event) {
-		if (event.phase == Phase.END || Minecraft.getMinecraft().isGamePaused())
+	public void playerTick(final TickEvent.PlayerTickEvent event) {
+
+		if (event.side == Side.SERVER || event.phase == Phase.END || Minecraft.getMinecraft().isGamePaused())
 			return;
 
-		final EntityPlayer player = FMLClientHandler.instance().getClient().player;
-		if (player == null)
+		if (event.player == null || event.player.world == null)
 			return;
 
-		final World world = FMLClientHandler.instance().getClient().world;
-		if (world == null)
-			return;
-
-		final boolean tickProfile = DSurround.log().testTrace(ModOptions.Trace.TICK_PROFILE);
-		DSurround.getProfiler().startSection("DSurroundEffectManager");
-
-		if (tickProfile) {
-			for (int i = 0; i < this.effectHandlers.size(); i++) {
-				final EffectHandlerBase handler = this.effectHandlers.get(i);
-				DSurround.getProfiler().startSection(handler.getHandlerName());
-				handler.process(world, player);
-				DSurround.getProfiler().endSection();
-			}
-		} else {
-			for (int i = 0; i < this.effectHandlers.size(); i++)
-				this.effectHandlers.get(i).process(world, player);
-		}
-
-		DSurround.getProfiler().endSection();
+		for (int i = 0; i < this.effectHandlers.size(); i++)
+			this.effectHandlers.get(i).process(event.player);
 	}
 
 }

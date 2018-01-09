@@ -151,7 +151,7 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	}
 
 	@Override
-	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+	public void process(@Nonnull final EntityPlayer player) {
 
 		this.effects.update();
 		this.alwaysOn.update();

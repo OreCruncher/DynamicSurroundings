@@ -32,7 +32,6 @@ import org.blockartistry.lib.random.XorShiftRandom;
 
 import com.google.common.base.MoreObjects;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
@@ -54,7 +53,7 @@ public abstract class EffectHandlerBase {
 	}
 	
 	// The meat of the processing logic.  Invoked every client tick.
-	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+	public void process(@Nonnull final EntityPlayer player) {
 		
 	}
 	
