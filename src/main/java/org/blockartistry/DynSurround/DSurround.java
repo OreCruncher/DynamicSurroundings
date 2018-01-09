@@ -125,12 +125,6 @@ public class DSurround {
 		return installedOnServer;
 	}
 
-	@Nonnull
-	@SideOnly(Side.CLIENT)
-	public static Profiler getProfiler() {
-		return Minecraft.getMinecraft().mcProfiler;
-	}
-
 	public DSurround() {
 		logger = ModLog.setLogger(DSurround.MOD_ID, LogManager.getLogger(MOD_ID));
 	}

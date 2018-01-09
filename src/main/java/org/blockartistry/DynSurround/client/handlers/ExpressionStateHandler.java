@@ -508,7 +508,7 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 	}
 
 	@Override
-	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+	public void process(@Nonnull final EntityPlayer player) {
 		// Iterate through the variables and get the data cached for this ticks
 		// expression evaluations.
 		for (int i = 0; i < variables.size(); i++)

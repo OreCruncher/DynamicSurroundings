@@ -33,7 +33,6 @@ import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -49,7 +48,7 @@ public class WeatherHandler extends EffectHandlerBase {
 	}
 	
 	@Override
-	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+	public void process(@Nonnull final EntityPlayer player) {
 		if (this.timer > 0) {
 			this.timer--;
 			EnvironState.getWorld().setLastLightningBolt(2);
