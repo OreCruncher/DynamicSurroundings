@@ -38,6 +38,7 @@ public class ParticleCollectionFireFly extends ParticleCollection {
 
 	@Override
 	protected void preRender() {
+		super.preRender();
 		GlStateManager.enableBlend();
 		GlStateManager.depthMask(false);
 	}
@@ -45,5 +46,6 @@ public class ParticleCollectionFireFly extends ParticleCollection {
 	@Override
 	protected void postRender() {
 		GlStateManager.disableBlend();
+		super.postRender();
 	}
 }

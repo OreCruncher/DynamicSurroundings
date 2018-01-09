@@ -33,6 +33,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -102,7 +103,7 @@ public class ParticleCollection extends Particle {
 	}
 	
 	protected void preRender() {
-
+		GlStateManager.enableLighting();
 	}
 
 	@Override
@@ -121,7 +122,7 @@ public class ParticleCollection extends Particle {
 	}
 
 	protected void postRender() {
-
+		GlStateManager.disableLighting();
 	}
 
 	@Override
