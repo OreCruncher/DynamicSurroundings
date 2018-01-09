@@ -94,7 +94,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	}
 
 	@Override
-	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+	public void process(@Nonnull final EntityPlayer player) {
 
 		// Process the current aurora
 		if (current != null) {
@@ -104,7 +104,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 				current = null;
 			} else {
 				current.update();
-				if (current.isAlive() && !canAuroraStay(world)) {
+				if (current.isAlive() && !canAuroraStay(player.worldObj)) {
 					DSurround.log().debug("Aurora fade...");
 					current.die();
 				}
@@ -112,8 +112,8 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		}
 
 		// If there isn't a current aurora see if it needs to spawn
-		if (spawnAurora(world)) {
-			current = new Aurora(getAuroraSeed(world));
+		if (spawnAurora(player.worldObj)) {
+			current = new Aurora(getAuroraSeed(player.worldObj));
 			DSurround.log().debug("New aurora [%s]", current.toString());
 		}
 

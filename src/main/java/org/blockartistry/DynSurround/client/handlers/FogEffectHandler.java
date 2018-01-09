@@ -35,7 +35,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -57,7 +56,7 @@ public class FogEffectHandler extends EffectHandlerBase {
 	}
 
 	@Override
-	public void process(final World world, final EntityPlayer player) {
+	public void process(final EntityPlayer player) {
 		if (doFog())
 			this.scanner.update();
 	}

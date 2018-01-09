@@ -32,7 +32,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.EnvironmentEvent;
 import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
@@ -74,7 +73,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod.EventBusSubscriber(Side.CLIENT)
+@Mod.EventBusSubscriber(value = Side.CLIENT)
 public class EnvironStateHandler extends EffectHandlerBase {
 
 	// Diagnostic strings to display in the debug HUD
@@ -391,16 +390,14 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	}
 	
 	@Override
-	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
-		EnvironState.tick(world, player);
+	public void process(@Nonnull final EntityPlayer player) {
+		EnvironState.tick(player.worldObj, player);
 
 		// Gather diagnostics if needed
 		if (Minecraft.getMinecraft().gameSettings.showDebugInfo && ModOptions.enableDebugLogging) {
-			DSurround.getProfiler().startSection("GatherDebug");
-			final DiagnosticEvent.Gather gather = new DiagnosticEvent.Gather(world, player);
+			final DiagnosticEvent.Gather gather = new DiagnosticEvent.Gather(player.worldObj, player);
 			MinecraftForge.EVENT_BUS.post(gather);
 			this.diagnostics = gather.output;
-			DSurround.getProfiler().endSection();
 		} else {
 			this.diagnostics = null;
 		}
