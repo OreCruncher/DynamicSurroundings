@@ -52,6 +52,7 @@ public class Footprint {
 		FOOTPRINTABLE.add(Material.GRASS);
 		FOOTPRINTABLE.add(Material.GROUND);
 		FOOTPRINTABLE.add(Material.ICE);
+		FOOTPRINTABLE.add(Material.PACKED_ICE);
 		FOOTPRINTABLE.add(Material.SAND);
 		FOOTPRINTABLE.add(Material.CRAFTED_SNOW);
 		FOOTPRINTABLE.add(Material.SNOW);
