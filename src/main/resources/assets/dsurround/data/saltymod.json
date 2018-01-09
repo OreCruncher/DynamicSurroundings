@@ -1,0 +1,9 @@
+{
+	"footsteps": {
+		"saltmod:salt_lake": "sand,ore",	
+		"saltmod:salt_dirt": "sand,dirt",
+		"saltmod:salt_dirt^1": "sand",
+		"saltmod:salt_dirt_lite": "sand,dirt",
+		"saltmod:salt_grass": "grass,sand"
+	}
+}
