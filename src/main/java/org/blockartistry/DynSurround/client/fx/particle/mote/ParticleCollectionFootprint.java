@@ -92,6 +92,7 @@ public class ParticleCollectionFootprint extends ParticleCollection {
 	@Override
 	protected void preRender() {
 		super.preRender();
+		GlStateManager.depthMask(false);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 	}
@@ -99,6 +100,7 @@ public class ParticleCollectionFootprint extends ParticleCollection {
 	@Override
 	protected void postRender() {
 		GlStateManager.disableBlend();
+		GlStateManager.depthMask(true);
 		super.postRender();
 	}
 
