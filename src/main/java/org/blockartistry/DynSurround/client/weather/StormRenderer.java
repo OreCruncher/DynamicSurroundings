@@ -224,12 +224,11 @@ public class StormRenderer {
 								isDrawing = true;
 							}
 
-							Color color = new Color(1.0F, 1.0F, 1.0F);
-							if (biome.getHasDust()) {
-								final Color c = biome.getDustColor();
-								if (c != null)
-									color.mix(c);
-							}
+							final Color color;
+							if (biome.getHasDust())
+								color = biome.getDustColor();
+							else
+								color = new Color(1.0F, 1.0F, 1.0F);
 
 							double d8 = (double) (((float) (renderer.rendererUpdateCount & 511) + partialTicks)
 									/ 512.0F);
@@ -239,7 +238,8 @@ public class StormRenderer {
 							final float factor = biome.getHasDust() ? 0.2F : 0.01F;
 							double d9 = this.random.nextDouble()
 									+ (double) f1 * factor * (double) ((float) this.random.nextGaussian());
-							double d10 = this.random.nextDouble() + (double) (f1 * (float) this.random.nextGaussian()) * 0.001D;
+							double d10 = this.random.nextDouble()
+									+ (double) (f1 * (float) this.random.nextGaussian()) * 0.001D;
 							double d11 = (double) ((float) gridX + 0.5F) - entity.posX;
 							double d12 = (double) ((float) gridZ + 0.5F) - entity.posZ;
 							float f6 = MathHelper.sqrt(d11 * d11 + d12 * d12) / (float) range;
