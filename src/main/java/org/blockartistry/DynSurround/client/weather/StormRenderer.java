@@ -224,12 +224,11 @@ public class StormRenderer {
 								isDrawing = true;
 							}
 
-							Color color = new Color(1.0F, 1.0F, 1.0F);
-							if (biome.getHasDust()) {
-								final Color c = biome.getDustColor();
-								if (c != null)
-									color.mix(c);
-							}
+							final Color color;
+							if (biome.getHasDust())
+								color = biome.getDustColor();
+							else
+								color = new Color(1.0F, 1.0F, 1.0F);
 
 							double d8 = (double) (((float) (renderer.rendererUpdateCount & 511) + partialTicks)
 									/ 512.0F);
