@@ -41,7 +41,6 @@ import gnu.trove.iterator.TObjectFloatIterator;
 import gnu.trove.iterator.TObjectIntIterator;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -96,7 +95,7 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 	}
 
 	@Override
-	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+	public void process(@Nonnull final EntityPlayer player) {
 
 		if (skipTick(player))
 			return;

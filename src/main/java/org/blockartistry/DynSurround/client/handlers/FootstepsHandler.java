@@ -41,7 +41,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -57,15 +56,15 @@ public class FootstepsHandler extends EffectHandlerBase {
 
 		this.footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
 		this.registry = RegistryManager.<BlockRegistry>get(RegistryType.BLOCK);
-}
+	}
 
 	@Override
-	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
-		this.footsteps.process(world, player);
-		
+	public void process(@Nonnull final EntityPlayer player) {
+		this.footsteps.process(player.world, player);
+
 		if (EnvironState.isPlayerOnGround() && EnvironState.isPlayerMoving()) {
 			final BlockPos pos = EnvironState.getPlayerPosition().down(1);
-			final IBlockState state = WorldUtils.getBlockState(world, pos);
+			final IBlockState state = WorldUtils.getBlockState(player.world, pos);
 			final SoundEffect sound = this.registry.getStepSoundToPlay(state, RANDOM);
 			if (sound != null)
 				sound.doEffect(WorldUtils.getDefaultBlockStateProvider(), state, pos, RANDOM);

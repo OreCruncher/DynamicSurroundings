@@ -40,7 +40,6 @@ import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -55,7 +54,7 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 	}
 
 	@Override
-	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
+	public void process(@Nonnull final EntityPlayer player) {
 
 		if (this.emojiParticles.size() > 0) {
 			// Get rid of dead particles
