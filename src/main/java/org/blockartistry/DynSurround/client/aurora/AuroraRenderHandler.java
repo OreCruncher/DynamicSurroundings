@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.client.weather;
+package org.blockartistry.DynSurround.client.aurora;
 
 import javax.annotation.Nonnull;
 
