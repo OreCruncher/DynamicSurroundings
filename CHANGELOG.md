@@ -1,3 +1,13 @@
+###DynamicSurroundings-1.11.2-3.4.8.2
+**Fixes**
+* Handle footprints correctly when snow layered on hard surface or carpet on soft.
+* Footprints will no longer render as "black" on translucent surfaces, such as ice.
+
+**Changes**
+* Internal code refactors and cleanup
+* Allow footprints on packed ice
+* Sandstorm particle texture now tinted correctly by the dust color of the biome.  Means that biomes like BoP Cold Desert will have white "sand" texture rather than yellow.
+
 ###DynamicSurroundings-1.11.2-3.4.8.1
 **Fixes**
 * Open Terrain Generator compatibility changes.  No more crash loops!
