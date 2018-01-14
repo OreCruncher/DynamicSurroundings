@@ -68,10 +68,15 @@ public final class AuroraRenderer extends IRenderHandler {
 	protected final IRenderHandler handler;
 	protected final AuroraRenderHandler auroraRender;
 	
+	private static boolean useShader() {
+		//return OpenGlHelper.areShadersSupported();
+		return false;
+	}
+	
 	public AuroraRenderer(@Nullable final IRenderHandler handler) {
 		this.handler = handler;
 		
-		if(OpenGlHelper.areShadersSupported())
+		if(useShader())
 			this.auroraRender = new AuroraRenderHandlerShader();
 		else
 			this.auroraRender = new AuroraRenderHandler();
