@@ -86,14 +86,14 @@ vec3 lights(vec2 co) {
 	// Green (middle)
 	g = fbm2(co * vec2(2.0, 0.5), 4);
 	gc = 0.8 * middleColor.xyz
-			* clamp(2.0 * pow((3.0 - 2.0 * g) * g * g, 2.5) - 0.5 * co.y, 0.0, 1.0)
-			* smoothstep(-2.0 * d, 0.0, co.y)
+			* clamp(2.0 * pow((3.0 - 2.0 * g) * g * g, 2.5) - 0.5 * co.y, 0.0,
+					1.0) * smoothstep(-2.0 * d, 0.0, co.y)
 			* smoothstep(0.0, 0.3, 1.1 + d - co.y);
 
 	g = fbm2(co * vec2(1.0, 0.2), 2);
 	gc += 0.5 * middleColor.xyz
-			* clamp(2.0 * pow((3.0 - 2.0 * g) * g * g, 2.5) - 0.5 * co.y, 0.0, 1.0)
-			* smoothstep(-2.0 * d, 0.0, co.y)
+			* clamp(2.0 * pow((3.0 - 2.0 * g) * g * g, 2.5) - 0.5 * co.y, 0.0,
+					1.0) * smoothstep(-2.0 * d, 0.0, co.y)
 			* smoothstep(0.0, 0.3, 1.1 + d - co.y);
 
 	// Blue (bottom)
@@ -113,15 +113,26 @@ void main() {
 
 	// Aurora (with some transformation)
 	float s = 0.1 * sin(time);
-	float f = 0.3 + 0.4 * pnoise(vec2(5.0 * uv.x, 0.3 * time), 1);
+	//float f = 0.3 + 0.4 * pnoise(vec2(5.0 * uv.x, 0.3 * time), 1);
+	float f = 0.4 * pnoise(vec2(5.0 * uv.x, 0.3 * time), 1);
 	vec2 aco = co;
 	aco.y -= f;  // This affects height of rendering
-	aco *= 10.0 * uv.x + 5.0;
+	// aco *= 10.0 * uv.x + 5.0;
+	aco *= 10.0 * uv.x + 20.0;
 	col += 0.5 * lights(aco)
 			* (smoothstep(0.3, 0.6, pnoise(vec2(10.0 * uv.x, 0.3 * time), 1))
 					+ 0.5
 							* smoothstep(0.5, 0.7,
 									pnoise(vec2(10.0 * uv.x, time), 1)));
 
-	gl_FragColor = vec4(col, alpha);
+	float ratio = 1.0;
+	if (uv.x < 0.25) {
+		//ratio = uv.x / 0.25;
+		ratio = 0.5;
+	} else if (uv.x > 0.75) {
+		//ratio = (1.0 - uv.x) / 0.25;
+		ratio = 0.5;
+	}
+
+	gl_FragColor = vec4(col, alpha * ratio);
 }
