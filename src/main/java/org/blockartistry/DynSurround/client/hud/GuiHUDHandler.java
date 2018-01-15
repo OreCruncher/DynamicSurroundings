@@ -91,7 +91,7 @@ public final class GuiHUDHandler {
 
 	@SubscribeEvent
 	public void playerTick(final TickEvent.PlayerTickEvent event) {
-		if (event.phase == Phase.END | Minecraft.getMinecraft().isGamePaused())
+		if (event.side == Side.SERVER || event.phase == Phase.END || Minecraft.getMinecraft().isGamePaused())
 			return;
 
 		if (event.player == null || event.player.world == null)
