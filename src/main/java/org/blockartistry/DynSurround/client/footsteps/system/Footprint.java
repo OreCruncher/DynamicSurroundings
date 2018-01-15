@@ -79,9 +79,9 @@ public class Footprint {
 		if (state != null && hasFootstepImprint(state, blockPos))
 			return true;
 		
-		// If the block above is not an air block return false.  That block would
-		// cover up the print.
-		if (state != Blocks.AIR.getDefaultState())
+		// If the block above blocks movement then it's not possible to lay
+		// down a footprint.
+		if (state.getMaterial().blocksMovement())
 			return false;
 
 		// Check the requested block
