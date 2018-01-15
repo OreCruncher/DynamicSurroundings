@@ -184,6 +184,8 @@ public class ObjectArray<T> implements Collection<T> {
 
 	@Override
 	public void clear() {
+		if(this.insertionIdx == 0)
+			return;
 		this.data = new Object[this.data.length];
 		this.insertionIdx = 0;
 	}
