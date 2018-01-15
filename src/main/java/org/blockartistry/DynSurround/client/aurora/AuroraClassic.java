@@ -30,7 +30,6 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.data.ColorPair;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
