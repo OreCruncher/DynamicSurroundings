@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.data;
+package org.blockartistry.DynSurround.client.aurora;
 
 import java.util.ArrayList;
 import java.util.List;
