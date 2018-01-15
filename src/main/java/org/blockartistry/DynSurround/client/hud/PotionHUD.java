@@ -24,17 +24,14 @@
 
 package org.blockartistry.DynSurround.client.hud;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.Localization;
+import org.blockartistry.lib.collections.ObjectArray;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 
 import net.minecraft.client.Minecraft;
@@ -142,7 +139,7 @@ public class PotionHUD extends GuiOverlay {
 		}
 	}
 
-	protected List<PotionInfo> potions = ImmutableList.of();
+	protected final ObjectArray<PotionInfo> potions = new ObjectArray<PotionInfo>();
 
 	private boolean skipDisplay(@Nonnull final PotionEffect effect) {
 		final Potion potion = effect.getPotion();
@@ -151,7 +148,7 @@ public class PotionHUD extends GuiOverlay {
 
 	@Override
 	public void doTick(final int tickRef) {
-		this.potions = ImmutableList.of();
+		this.potions.clear();
 		if (!ModOptions.potionHudEnabled || ModOptions.potionHudNone)
 			return;
 
@@ -163,9 +160,7 @@ public class PotionHUD extends GuiOverlay {
 		if (collection == null || collection.isEmpty())
 			return;
 
-		this.potions = new ArrayList<PotionInfo>();
 		for (final PotionEffect effect : Ordering.natural().reverse().sortedCopy(collection)) {
-
 			if (!this.skipDisplay(effect))
 				this.potions.add(new PotionInfo(effect));
 		}
