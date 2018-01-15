@@ -25,6 +25,8 @@ package org.blockartistry.lib;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.math.MathStuff;
+
 import net.minecraft.world.World;
 
 public final class DiurnalUtils {

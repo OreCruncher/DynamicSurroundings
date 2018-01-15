@@ -26,8 +26,8 @@ package org.blockartistry.DynSurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;

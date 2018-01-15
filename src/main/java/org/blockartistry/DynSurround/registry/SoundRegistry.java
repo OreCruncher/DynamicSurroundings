@@ -33,8 +33,9 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.gui.ConfigSound;
 import org.blockartistry.DynSurround.client.sound.Sounds;
-import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.MyUtils;
+import org.blockartistry.lib.math.MathStuff;
+
 import gnu.trove.impl.Constants;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.client.audio.ISound;

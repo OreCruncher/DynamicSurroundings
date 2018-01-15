@@ -35,11 +35,11 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.DiurnalUtils;
 import org.blockartistry.lib.Localization;
-import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.PlayerUtils;
 import org.blockartistry.lib.DiurnalUtils.DayCycle;
 import org.blockartistry.lib.gui.TextPanel;
 import org.blockartistry.lib.gui.Panel.Reference;
+import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

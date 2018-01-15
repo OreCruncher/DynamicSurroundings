@@ -27,8 +27,8 @@ package org.blockartistry.DynSurround.client.fx.particle.mote;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
-import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;

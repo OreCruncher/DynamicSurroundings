@@ -30,8 +30,8 @@ import org.blockartistry.DynSurround.client.fx.particle.mote.IParticleMote;
 import org.blockartistry.DynSurround.client.sound.PositionedEmitter;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.Sounds;
-import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.lib.MathStuff;
+import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 public final class Expression {
