@@ -30,6 +30,7 @@ import java.io.InputStream;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.Presets.Presets;
+import org.blockartistry.Presets.handler.MinecraftConfigHandler;
 import org.blockartistry.Presets.keyboard.KeyHandler;
 import org.blockartistry.lib.Localization;
 import org.blockartistry.lib.io.Streams;
@@ -62,6 +63,12 @@ public class ProxyClient extends Proxy {
 	@Override
 	protected void registerLanguage() {
 		Localization.initialize(Side.CLIENT);
+	}
+
+	@Override
+	protected void eventBusRegistrations() {
+		register(MinecraftConfigHandler.class);
+		register(KeyHandler.class);
 	}
 
 	@Override

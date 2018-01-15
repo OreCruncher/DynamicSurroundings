@@ -26,8 +26,10 @@ package org.blockartistry.Presets.proxy;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.Presets.Presets;
 import org.blockartistry.lib.Localization;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -38,6 +40,15 @@ public class Proxy {
 	
 	protected void registerLanguage() {
 		Localization.initialize(Side.SERVER);
+	}
+
+	protected static void register(final Class<?> clazz) {
+		Presets.log().info("Registering for Forge events: %s", clazz.getName());
+		MinecraftForge.EVENT_BUS.register(clazz);
+	}
+
+	protected void eventBusRegistrations() {
+
 	}
 	
 	public boolean isRunningAsServer() {

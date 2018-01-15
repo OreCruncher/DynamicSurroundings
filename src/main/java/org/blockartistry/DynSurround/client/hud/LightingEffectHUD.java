@@ -29,7 +29,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.Color;
@@ -46,12 +45,12 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
+@SideOnly(Side.CLIENT)
 public class LightingEffectHUD extends GuiOverlay {
 
 	private static final class LightSourceData {

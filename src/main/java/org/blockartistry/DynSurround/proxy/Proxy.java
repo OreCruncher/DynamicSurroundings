@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.proxy;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.commands.CommandDS;
 import org.blockartistry.DynSurround.entity.CapabilityEmojiData;
@@ -36,6 +37,7 @@ import org.blockartistry.lib.Localization;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -56,6 +58,15 @@ public class Proxy {
 		Localization.initialize(Side.SERVER);
 	}
 	
+	protected static void register(final Class<?> clazz) {
+		DSurround.log().info("Registering for Forge events: %s", clazz.getName());
+		MinecraftForge.EVENT_BUS.register(clazz);
+	}
+
+	protected void eventBusRegistrations() {
+		register(CapabilityEmojiData.EventHandler.class);
+	}
+
 	public long currentSessionDuration() {
 		return System.currentTimeMillis() - this.connectionTime;
 	}
@@ -70,6 +81,7 @@ public class Proxy {
 
 	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		registerLanguage();
+		eventBusRegistrations();
 		
 		CapabilityEmojiData.register();
 	}

@@ -35,12 +35,12 @@ import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
+@SideOnly(Side.CLIENT)
 public final class RenderWeather extends IRenderHandler {
 
 	private final StormRenderer renderer;

@@ -26,7 +26,6 @@ package org.blockartistry.DynSurround.client.hud;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.BlockStateProvider;
@@ -52,11 +51,11 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.WorldEntitySpawner;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
+@SideOnly(Side.CLIENT)
 public final class LightLevelHUD extends GuiOverlay {
 
 	protected static FontRenderer font;

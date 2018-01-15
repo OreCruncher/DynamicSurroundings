@@ -41,12 +41,12 @@ import com.google.common.collect.Sets;
 
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Property;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
+@SideOnly(Side.CLIENT)
 public class PresetHandler {
 
 	private static final Set<String> categoriesToIgnore = Sets.newHashSet();
