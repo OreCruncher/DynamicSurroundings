@@ -36,7 +36,6 @@ import org.blockartistry.lib.collections.IdentityHashSet;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -79,9 +78,9 @@ public class Footprint {
 		if (state != null && hasFootstepImprint(state, blockPos))
 			return true;
 		
-		// If the block above is not an air block return false.  That block would
-		// cover up the print.
-		if (state != Blocks.AIR.getDefaultState())
+		// If the block above blocks movement then it's not possible to lay
+		// down a footprint.
+		if (state.getMaterial().blocksMovement())
 			return false;
 
 		// Check the requested block
