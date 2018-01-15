@@ -42,7 +42,6 @@ import org.blockartistry.DynSurround.client.keyboard.KeyHandler;
 import org.blockartistry.DynSurround.client.sound.BackgroundMute;
 import org.blockartistry.DynSurround.client.sound.MusicTickerReplacement;
 import org.blockartistry.DynSurround.client.sound.SoundManagerReplacement;
-import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.client.weather.RenderWeather;
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.DynSurround.commands.CommandCalc;
@@ -81,7 +80,6 @@ public class ProxyClient extends Proxy {
 		register(KeyHandler.class);
 		register(BackgroundMute.class);
 		register(SoundManagerReplacement.class);
-		register(Sounds.class);
 		register(RenderWeather.class);
 		register(WeatherProperties.class);
 		register(PresetHandler.class);
