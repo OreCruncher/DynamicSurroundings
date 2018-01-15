@@ -60,14 +60,14 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.sound.SoundSetupEvent;
 import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 
-@Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
+@SideOnly(Side.CLIENT)
 public class SoundManagerReplacement extends SoundManager {
 
 	private static final int MAX_STREAM_CHANNELS = 16;

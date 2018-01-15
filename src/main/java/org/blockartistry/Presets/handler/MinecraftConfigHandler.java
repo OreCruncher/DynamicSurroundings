@@ -44,11 +44,11 @@ import net.minecraft.entity.player.EntityPlayer.EnumChatVisibility;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.client.settings.KeyModifier;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod.EventBusSubscriber(value = Side.CLIENT, modid = Presets.MOD_ID)
+@SideOnly(Side.CLIENT)
 public class MinecraftConfigHandler {
 
 	private final static String MINECRAFT = "minecraft";

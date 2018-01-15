@@ -51,7 +51,6 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class CapabilityEmojiData {
@@ -96,8 +95,7 @@ public class CapabilityEmojiData {
 		return new CapabilityProviderSerializable<IEmojiData>(EMOJI, DEFAULT_FACING, data);
 	}
 
-	@Mod.EventBusSubscriber(modid = DSurround.MOD_ID)
-	private static class EventHandler {
+	public static class EventHandler {
 		
 		/*
 		 * Attach the capability to the Entity when it is created.
