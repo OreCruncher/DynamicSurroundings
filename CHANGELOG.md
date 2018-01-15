@@ -1,3 +1,10 @@
+###DynamicSurroundings-1.10.2-3.4.8.3
+**Fixes**
+* Potion HUD would occasionally cause a crash
+* Client crash activating light level HUD
+* Sound engine startup problems because Forge could not find a static event handler
+* Footprints will now show up for blocks when player moves through grass, web, etc.
+
 ###DynamicSurroundings-1.10.2-3.4.8.2
 **Fixes**
 * Handle footprints correctly when snow layered on hard surface or carpet on soft.
