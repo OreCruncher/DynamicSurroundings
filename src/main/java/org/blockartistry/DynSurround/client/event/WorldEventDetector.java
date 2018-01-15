@@ -41,16 +41,16 @@ import net.minecraft.world.IWorldEventListener;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Listener that looks for server events and turns them into Dynamic Surroundings
  * client events.  This is the way it can pick up on things like waterflow changes
  * and liquid being picked up/placed.
  */
-@Mod.EventBusSubscriber(Side.CLIENT)
+@SideOnly(Side.CLIENT)
 public class WorldEventDetector implements IWorldEventListener {
 	
 	protected final World world;

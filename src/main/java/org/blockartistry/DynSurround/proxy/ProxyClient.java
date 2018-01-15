@@ -27,14 +27,25 @@ package org.blockartistry.DynSurround.proxy;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.aurora.AuroraRenderer;
+import org.blockartistry.DynSurround.client.event.WorldEventDetector;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleDripOverride;
+import org.blockartistry.DynSurround.client.gui.HumDinger;
 import org.blockartistry.DynSurround.client.handlers.EffectManager;
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler;
 import org.blockartistry.DynSurround.client.handlers.ExpressionStateHandler;
+import org.blockartistry.DynSurround.client.hud.BlockInfoHelperHUD;
 import org.blockartistry.DynSurround.client.hud.GuiHUDHandler;
+import org.blockartistry.DynSurround.client.hud.LightLevelHUD;
 import org.blockartistry.DynSurround.client.keyboard.KeyHandler;
+import org.blockartistry.DynSurround.client.sound.BackgroundMute;
 import org.blockartistry.DynSurround.client.sound.MusicTickerReplacement;
+import org.blockartistry.DynSurround.client.sound.SoundManagerReplacement;
 import org.blockartistry.DynSurround.client.sound.Sounds;
+import org.blockartistry.DynSurround.client.weather.RenderWeather;
+import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.DynSurround.commands.CommandCalc;
+import org.blockartistry.DynSurround.data.PresetHandler;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.lib.Localization;
 
@@ -56,6 +67,24 @@ public class ProxyClient extends Proxy {
 	@Override
 	protected void registerLanguage() {
 		Localization.initialize(Side.CLIENT);
+	}
+
+	@Override
+	protected void eventBusRegistrations() {
+		super.eventBusRegistrations();
+		register(AuroraRenderer.class);
+		register(HumDinger.class);
+		register(EnvironStateHandler.class);
+		register(BlockInfoHelperHUD.class);
+		register(LightLevelHUD.class);
+		register(KeyHandler.class);
+		register(BackgroundMute.class);
+		register(SoundManagerReplacement.class);
+		register(Sounds.class);
+		register(RenderWeather.class);
+		register(WeatherProperties.class);
+		register(PresetHandler.class);
+		register(WorldEventDetector.class);
 	}
 
 	@Override
