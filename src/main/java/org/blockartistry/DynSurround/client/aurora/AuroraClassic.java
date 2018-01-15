@@ -31,31 +31,36 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.data.ColorPair;
+import org.blockartistry.DynSurround.registry.DimensionRegistry;
+import org.blockartistry.DynSurround.registry.RegistryManager;
+import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
+import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public final class Aurora {
+public final class AuroraClassic implements IAurora {
 
 	private static final float ANGLE1 = MathStuff.PI_F / 16.0F;
 	private static final float ANGLE2 = MathStuff.toRadians(90.0F / 7.0F);
 	private static final float AURORA_SPEED = 0.75F;
 	private static final float AURORA_AMPLITUDE = 18.0F;
 	private static final float AURORA_WAVELENGTH = 8.0F;
-	private static final int ALPHA_INCREMENT_MOD = 8;
 
 	private final Random random;
 
 	private Node[] nodes;
 	private long seed;
 	private float cycle = 0.0F;
-	private int fadeTimer = 0;
 	private int alphaLimit = 128;
-	private int fadeLimit = 128 * ALPHA_INCREMENT_MOD;
-	private boolean isAlive = true;
 	private int length;
 	private float nodeLength;
 	private float nodeWidth;
@@ -64,10 +69,13 @@ public final class Aurora {
 	private final Color baseColor;
 	// Fade color of the aurora
 	private final Color fadeColor;
-	// Alpha setting of the aurora for fade
-	private int alpha = 1;
 
-	public Aurora(final long seed) {
+	private AuroraLifeTracker tracker;
+
+	public AuroraClassic(final long seed) {
+
+		this.tracker = new AuroraLifeTracker(128, 1);
+
 		this.seed = seed;
 		this.random = new XorShiftRandom(seed);
 		final ColorPair pair = ColorPair.get(this.random);
@@ -95,7 +103,6 @@ public final class Aurora {
 		this.nodeLength = this.random.nextBoolean() ? 30 : 15;
 		this.nodeWidth = 2;
 		this.alphaLimit = this.random.nextInt(64) + 64;
-		this.fadeLimit = this.alphaLimit * ALPHA_INCREMENT_MOD;
 	}
 
 	@Nonnull
@@ -109,40 +116,27 @@ public final class Aurora {
 	}
 
 	public int getAlpha() {
-		return this.alpha;
+		return (int) (this.tracker.ageRatio() * this.alphaLimit);
 	}
 
 	public float getAlphaf() {
-		return (float) this.alpha / 255.0F;
+		return this.getAlpha() / 255.0F;
 	}
 
 	public boolean isAlive() {
-		return this.isAlive;
+		return this.tracker.isAlive();
 	}
 
 	public void die() {
-		if (this.isAlive) {
-			this.isAlive = false;
-			this.fadeTimer = 0;
-		}
+		this.tracker.setFading(true);
 	}
 
 	public boolean isComplete() {
-		return !this.isAlive() && this.fadeTimer >= this.fadeLimit;
+		return !this.isAlive();
 	}
 
 	public void update() {
-		if (this.fadeTimer < this.fadeLimit) {
-
-			if ((this.fadeTimer % ALPHA_INCREMENT_MOD) == 0 && this.alpha >= 0)
-				this.alpha += this.isAlive ? 1 : -1;
-
-			if (this.alpha <= 0)
-				this.fadeTimer = this.fadeLimit;
-			else
-				this.fadeTimer++;
-		}
-
+		this.tracker.update();
 		if ((this.cycle += AURORA_SPEED) >= 360.0F)
 			this.cycle -= 360.0F;
 	}
@@ -262,12 +256,135 @@ public final class Aurora {
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append("base").append(this.baseColor.toString());
-		builder.append(", fade").append(this.fadeColor.toString());
-		builder.append(", alpha:").append(this.alpha);
-		if (!this.isAlive)
+		builder.append("<CLASSIC> ");
+		builder.append("base ").append(this.baseColor.toString());
+		builder.append(", fade ").append(this.fadeColor.toString());
+		builder.append(", alpha ").append(this.getAlpha());
+		if (this.tracker.isFading())
 			builder.append(", FADING");
 		return builder.toString();
+	}
+
+	protected final DimensionRegistry dimensions = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION);
+
+	protected int getZOffset() {
+		return (Minecraft.getMinecraft().gameSettings.renderDistanceChunks + 1) * 16;
+	}
+
+	protected double getScaledHeight() {
+		return 4D + 16D * ((Minecraft.getMinecraft().gameSettings.renderDistanceChunks - 6D) / 24D);
+	}
+
+	@Override
+	public void render(final float partialTick) {
+
+		final float alpha = this.getAlphaf();
+		if (alpha <= 0.0F)
+			return;
+
+		final Minecraft mc = Minecraft.getMinecraft();
+		final Tessellator tess = Tessellator.getInstance();
+		final VertexBuffer renderer = tess.getBuffer();
+
+		final double tranY = this.dimensions.getSeaLevel(mc.world)
+				- ((mc.player.lastTickPosY + (mc.player.posY - mc.player.lastTickPosY) * partialTick));
+
+		final double tranX = mc.player.posX
+				- (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTick);
+
+		final double tranZ = (mc.player.posZ - getZOffset())
+				- (mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * partialTick);
+
+		this.translate(partialTick);
+
+		final Color base = this.getBaseColor();
+		final Color fade = this.getFadeColor();
+		final double zero = 0.0D;
+
+		GlStateManager.pushMatrix();
+		GlStateManager.pushAttrib();
+
+		GlStateManager.translate(tranX, tranY, tranZ);
+		GlStateManager.scale(0.5D, getScaledHeight(), 0.5D);
+		GlStateManager.disableTexture2D();
+		GlStateManager.disableFog();
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
+		GlStateManager.disableLighting();
+		GlStateManager.enableBlend();
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
+				GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.disableAlpha();
+		GlStateManager.disableCull();
+		GlStateManager.depthMask(false);
+
+		final Node[] array = this.getNodeList();
+		for (int i = 0; i < array.length - 1; i++) {
+
+			final Node node = array[i];
+
+			final double posY = node.getModdedY();
+			final double posX = node.tetX;
+			final double posZ = node.tetZ;
+			final double tetX = node.tetX2;
+			final double tetZ = node.tetZ2;
+
+			final double posX2;
+			final double posZ2;
+			final double tetX2;
+			final double tetZ2;
+			final double posY2;
+
+			if (i < array.length - 2) {
+				final Node nodePlus = array[i + 1];
+				posX2 = nodePlus.tetX;
+				posZ2 = nodePlus.tetZ;
+				tetX2 = nodePlus.tetX2;
+				tetZ2 = nodePlus.tetZ2;
+				posY2 = nodePlus.getModdedY();
+			} else {
+				posX2 = tetX2 = node.posX;
+				posZ2 = tetZ2 = node.getModdedZ();
+				posY2 = 0.0D;
+			}
+
+			// Front
+			renderer.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
+			renderer.pos(posX, zero, posZ).color(base.red, base.green, base.blue, alpha).endVertex();
+			renderer.pos(posX, posY, posZ).color(fade.red, fade.green, fade.blue, 0).endVertex();
+			renderer.pos(posX2, posY2, posZ2).color(fade.red, fade.green, fade.blue, 0).endVertex();
+			renderer.pos(posX2, zero, posZ2).color(base.red, base.green, base.blue, alpha).endVertex();
+			tess.draw();
+
+			// Bottom
+			renderer.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
+			renderer.pos(posX, zero, posZ).color(base.red, base.green, base.blue, alpha).endVertex();
+			renderer.pos(posX2, zero, posZ2).color(base.red, base.green, base.blue, alpha).endVertex();
+			renderer.pos(tetX2, zero, tetZ2).color(base.red, base.green, base.blue, alpha).endVertex();
+			renderer.pos(tetX, zero, tetZ).color(base.red, base.green, base.blue, alpha).endVertex();
+			tess.draw();
+
+			// Back
+			renderer.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
+			renderer.pos(tetX, zero, tetZ).color(base.red, base.green, base.blue, alpha).endVertex();
+			renderer.pos(tetX, posY, tetZ).color(fade.red, fade.green, fade.blue, 0).endVertex();
+			renderer.pos(tetX2, posY2, tetZ2).color(fade.red, fade.green, fade.blue, 0).endVertex();
+			renderer.pos(tetX2, zero, tetZ2).color(base.red, base.green, base.blue, alpha).endVertex();
+			tess.draw();
+		}
+
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+				GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+				GlStateManager.DestFactor.ZERO);
+		GlStateManager.shadeModel(GL11.GL_FLAT);
+		GlStateManager.depthMask(true);
+		GlStateManager.enableCull();
+		GlStateManager.enableFog();
+		GlStateManager.enableTexture2D();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
+		GlStateManager.disableBlend();
+		GlStateManager.popAttrib();
+		GlStateManager.popMatrix();
 	}
 
 }
