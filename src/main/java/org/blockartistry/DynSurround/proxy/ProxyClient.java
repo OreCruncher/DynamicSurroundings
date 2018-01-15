@@ -80,7 +80,6 @@ public class ProxyClient extends Proxy {
 		register(KeyHandler.class);
 		register(BackgroundMute.class);
 		register(SoundManagerReplacement.class);
-		register(Sounds.class);
 		register(RenderWeather.class);
 		register(WeatherProperties.class);
 		register(PresetHandler.class);
