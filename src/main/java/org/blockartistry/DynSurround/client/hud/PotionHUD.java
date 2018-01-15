@@ -144,13 +144,13 @@ public class PotionHUD extends GuiOverlay {
 
 	protected List<PotionInfo> potions = ImmutableList.of();
 
-	private boolean skipDisplay(@Nonnull final Potion potion, @Nonnull final PotionEffect effect) {
-		return !potion.shouldRenderHUD(effect) || !potion.shouldRenderInvText(effect);
+	private boolean skipDisplay(@Nonnull final PotionEffect effect) {
+		final Potion potion = effect.getPotion();
+		return potion == null || !potion.shouldRenderHUD(effect) || !potion.shouldRenderInvText(effect);
 	}
 
 	@Override
 	public void doTick(final int tickRef) {
-
 		this.potions = ImmutableList.of();
 		if (!ModOptions.potionHudEnabled || ModOptions.potionHudNone)
 			return;
@@ -166,11 +166,8 @@ public class PotionHUD extends GuiOverlay {
 		this.potions = new ArrayList<PotionInfo>();
 		for (final PotionEffect effect : Ordering.natural().reverse().sortedCopy(collection)) {
 
-			final Potion potion = effect.getPotion();
-			if (this.skipDisplay(potion, effect))
-				continue;
-
-			this.potions.add(new PotionInfo(effect));
+			if (!this.skipDisplay(effect))
+				this.potions.add(new PotionInfo(effect));
 		}
 	}
 
