@@ -30,9 +30,6 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
@@ -73,7 +70,7 @@ public final class AuroraClassic implements IAurora {
 
 	public AuroraClassic(final long seed) {
 
-		this.tracker = new AuroraLifeTracker(128, 1);
+		this.tracker = new AuroraLifeTracker(AuroraUtils.AURORA_PEAK_AGE, AuroraUtils.AURORA_AGE_RATE);
 
 		this.seed = seed;
 		this.random = new XorShiftRandom(seed);
@@ -264,14 +261,12 @@ public final class AuroraClassic implements IAurora {
 		return builder.toString();
 	}
 
-	protected final DimensionRegistry dimensions = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION);
-
 	protected int getZOffset() {
-		return (Minecraft.getMinecraft().gameSettings.renderDistanceChunks + 1) * 16;
+		return (AuroraUtils.getChunkRenderDistance() + 1) * 16;
 	}
 
 	protected double getScaledHeight() {
-		return 4D + 16D * ((Minecraft.getMinecraft().gameSettings.renderDistanceChunks - 6D) / 24D);
+		return 4D + 16D * ((AuroraUtils.getChunkRenderDistance() - 6D) / 24D);
 	}
 
 	@Override
@@ -285,7 +280,7 @@ public final class AuroraClassic implements IAurora {
 		final Tessellator tess = Tessellator.getInstance();
 		final VertexBuffer renderer = tess.getBuffer();
 
-		final double tranY = this.dimensions.getSeaLevel(mc.world)
+		final double tranY = AuroraUtils.getSeaLevel()
 				- ((mc.player.lastTickPosY + (mc.player.posY - mc.player.lastTickPosY) * partialTick));
 
 		final double tranX = mc.player.posX

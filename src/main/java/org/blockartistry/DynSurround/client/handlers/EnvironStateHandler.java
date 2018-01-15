@@ -381,6 +381,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			return tickCounter;
 		}
 
+		public static float getPartialTick() {
+			return Minecraft.getMinecraft().getRenderPartialTicks();
+		}
+
 		public static double distanceToPlayer(final double x, final double y, final double z) {
 			return player != null ? player.getDistanceSq(x, y, z) : 0D;
 		}
