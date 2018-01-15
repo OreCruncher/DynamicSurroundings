@@ -29,7 +29,9 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.aurora.Aurora;
+import org.blockartistry.DynSurround.client.aurora.AuroraEngineClassic;
+import org.blockartistry.DynSurround.client.aurora.IAurora;
+import org.blockartistry.DynSurround.client.aurora.IAuroraEngine;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
@@ -47,17 +49,20 @@ import net.minecraftforge.fml.relauncher.Side;
 public final class AuroraEffectHandler extends EffectHandlerBase {
 
 	// Aurora information
-	private static Aurora current;
+	private static IAurora current;
 	private static int dimensionId;
 
 	private final DimensionRegistry registry = RegistryManager.get(RegistryType.DIMENSION);
 
+	private final IAuroraEngine auroraEngine;
+
 	public AuroraEffectHandler() {
 		super("AuroraEffectHandler");
+		this.auroraEngine = new AuroraEngineClassic();
 	}
 
 	@Nullable
-	public static Aurora getCurrentAurora() {
+	public static IAurora getCurrentAurora() {
 		return current;
 	}
 
@@ -113,7 +118,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 
 		// If there isn't a current aurora see if it needs to spawn
 		if (spawnAurora(player.worldObj)) {
-			current = new Aurora(getAuroraSeed(player.worldObj));
+			current = this.auroraEngine.produce(getAuroraSeed(player.worldObj));
 			DSurround.log().debug("New aurora [%s]", current.toString());
 		}
 
