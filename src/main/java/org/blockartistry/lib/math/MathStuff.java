@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.lib;
+package org.blockartistry.lib.math;
 
 import javax.annotation.Nonnull;
 

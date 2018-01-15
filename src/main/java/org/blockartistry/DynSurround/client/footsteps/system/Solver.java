@@ -38,9 +38,10 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions.Option;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.MCHelper;
-import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.lib.math.MathStuff;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

@@ -29,8 +29,8 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.client.footsteps.implem.NormalVariator;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
-import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.TimeUtils;
+import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;

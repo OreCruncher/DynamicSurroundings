@@ -28,7 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.lib.MathStuff;
+import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraftforge.fml.relauncher.Side;
 
