@@ -30,9 +30,9 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.Color;
-import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.font.FastFontRenderer;
+import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

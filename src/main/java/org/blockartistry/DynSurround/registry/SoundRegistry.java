@@ -40,9 +40,9 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.gui.ConfigSound;
 import org.blockartistry.DynSurround.data.xface.SoundMetadataConfig;
-import org.blockartistry.lib.MathStuff;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.SoundUtils;
+import org.blockartistry.lib.math.MathStuff;
 
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;

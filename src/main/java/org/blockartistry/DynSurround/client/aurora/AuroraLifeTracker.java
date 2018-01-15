@@ -1,6 +1,6 @@
 package org.blockartistry.DynSurround.client.aurora;
 
-import org.blockartistry.lib.MathStuff;
+import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
