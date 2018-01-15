@@ -195,6 +195,7 @@ public class PotionHUD extends GuiOverlay {
 		GlStateManager.translate(GUILEFT, GUITOP, 0.0F);
 		GlStateManager.scale(SCALE, SCALE, SCALE);
 		GlStateManager.enableAlpha();
+		GlStateManager.enableBlend();
 
 		int k = 33;
 
@@ -205,7 +206,6 @@ public class PotionHUD extends GuiOverlay {
 		for (final PotionInfo potion : this.potions) {
 
 			mc.getTextureManager().bindTexture(GuiContainer.INVENTORY_BACKGROUND);
-			GlStateManager.enableBlend();
 
 			GlStateManager.color(1.0F, 1.0F, 1.0F, ModOptions.potionHudTransparency);
 			this.drawTexturedModalRect(guiLeft, guiTop, 0, 166, 140, 32);
@@ -230,6 +230,9 @@ public class PotionHUD extends GuiOverlay {
 
 			guiTop += k;
 		}
+		
+		GlStateManager.disableAlpha();
+		GlStateManager.disableBlend();
 		GlStateManager.popMatrix();
 	}
 }

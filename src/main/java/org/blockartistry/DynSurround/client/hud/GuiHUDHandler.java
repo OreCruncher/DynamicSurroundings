@@ -30,7 +30,6 @@ import java.util.List;
 import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.Permissions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -95,11 +94,12 @@ public final class GuiHUDHandler {
 		if (event.phase == Phase.END | Minecraft.getMinecraft().isGamePaused())
 			return;
 
-		if(event.player == null || event.player.world == null)
+		if (event.player == null || event.player.world == null)
 			return;
-		
+
 		final int tickRef = EnvironState.getTickCounter();
 		for (int i = 0; i < this.overlays.size(); i++)
 			this.overlays.get(i).doTick(tickRef);
+
 	}
 }
