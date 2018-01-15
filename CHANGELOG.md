@@ -1,3 +1,13 @@
+###DynamicSurroundings-1.12.2-3.4.8.3
+**Fixes**
+* Potion HUD would occasionally cause a crash
+* Client crash activating light level HUD
+* Sound engine startup problems because Forge could not find a static event handler
+* Footprints will now show up for blocks when player moves through grass, web, etc.
+
+**Changes**
+* Built against Forge 14.23.1.2589
+
 ###DynamicSurroundings-1.12.2-3.4.8.2
 **Fixes**
 * Particles should render correctly when Albedo is installed.
