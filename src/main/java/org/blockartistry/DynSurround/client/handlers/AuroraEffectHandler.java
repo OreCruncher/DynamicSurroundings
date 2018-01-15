@@ -31,12 +31,10 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.aurora.AuroraEngineClassic;
 import org.blockartistry.DynSurround.client.aurora.AuroraEngineShader;
+import org.blockartistry.DynSurround.client.aurora.AuroraUtils;
 import org.blockartistry.DynSurround.client.aurora.IAurora;
 import org.blockartistry.DynSurround.client.aurora.IAuroraEngine;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.DiurnalUtils;
 import org.blockartistry.lib.random.MurmurHash3;
 
@@ -54,21 +52,16 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	private static IAurora current;
 	private static int dimensionId;
 
-	private final DimensionRegistry registry = RegistryManager.get(RegistryType.DIMENSION);
-
 	private final IAuroraEngine auroraEngine;
 
 	public AuroraEffectHandler() {
 		super("AuroraEffectHandler");
 
-		/*
 		if (OpenGlHelper.areShadersSupported())
 			this.auroraEngine = new AuroraEngineShader();
 		else
 			this.auroraEngine = new AuroraEngineClassic();
-			*/
-		
-		this.auroraEngine = new AuroraEngineClassic();
+
 	}
 
 	@Nullable
@@ -93,7 +86,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		if (current != null || Minecraft.getMinecraft().gameSettings.renderDistanceChunks < 6
 				|| DiurnalUtils.isAuroraInvisible(world))
 			return false;
-		return this.registry.hasAuroras(world) && EnvironState.getPlayerBiome().getHasAurora();
+		return AuroraUtils.hasAuroras() && EnvironState.getPlayerBiome().getHasAurora();
 	}
 
 	private boolean canAuroraStay(@Nonnull final World world) {
@@ -128,7 +121,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 
 		// If there isn't a current aurora see if it needs to spawn
 		if (spawnAurora(player.world)) {
-			current = auroraEngine.produce(getAuroraSeed(player.world));
+			current = this.auroraEngine.produce(getAuroraSeed(player.world));
 			DSurround.log().debug("New aurora [%s]", current.toString());
 		}
 

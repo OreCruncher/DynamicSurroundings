@@ -25,10 +25,6 @@
 package org.blockartistry.DynSurround.client.aurora;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.shaders.ShaderProgram;
 import org.blockartistry.lib.shaders.ShaderProgram.IShaderUseCallback;
@@ -46,9 +42,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class AuroraShader implements IAurora {
 
-	protected final DimensionRegistry dimensions = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION);
-
-	// New school shader for aurora - WIP
 	protected ShaderProgram program;
 	protected IShaderUseCallback callback;
 
@@ -56,23 +49,20 @@ public class AuroraShader implements IAurora {
 	protected static final Color middleColor = new Color(0.5F, 1.0F, 0.0F);
 	protected static final Color bottomColor = new Color(0.0F, 0.8F, 1.0F);
 
-	protected static final int MAX_ALPHA_TIME = 128;
-	protected static final int ALPHA_TIME_DELTA = 1;
-
 	protected AuroraLifeTracker tracker;
 
 	public AuroraShader() {
 		try {
 
 			// Setup the life cycle
-			this.tracker = new AuroraLifeTracker(MAX_ALPHA_TIME, ALPHA_TIME_DELTA);
+			this.tracker = new AuroraLifeTracker(AuroraUtils.AURORA_PEAK_AGE, AuroraUtils.AURORA_AGE_RATE);
 
 			this.program = ShaderProgram.createProgram("Aurora Shader",
 					new ResourceLocation(DSurround.MOD_ID, "shaders/aurora.vert"),
 					new ResourceLocation(DSurround.MOD_ID, "shaders/aurora.frag"));
 
 			this.callback = shader -> {
-				shader.set("time", (EnvironState.getTickCounter() + EnvironState.getPartialTick()) / 20F * 0.75F);
+				shader.set("time", AuroraUtils.getTimeSeconds() * 0.75F);
 				shader.set("resolution", AuroraShader.this.getAuroraWidth(), AuroraShader.this.getAuroraHeight());
 				shader.set("topColor", AuroraShader.topColor);
 				shader.set("middleColor", AuroraShader.middleColor);
@@ -89,11 +79,11 @@ public class AuroraShader implements IAurora {
 	}
 
 	protected int getZOffset() {
-		return (Minecraft.getMinecraft().gameSettings.renderDistanceChunks + 1) * 16;
+		return (AuroraUtils.getChunkRenderDistance() + 1) * 16;
 	}
 
 	protected int getAuroraWidth() {
-		final int chunks = Math.min(Minecraft.getMinecraft().gameSettings.renderDistanceChunks - 1, 8);
+		final int chunks = Math.min(AuroraUtils.getChunkRenderDistance() - 1, 8);
 		return chunks * 16 * 5;
 	}
 
@@ -125,7 +115,7 @@ public class AuroraShader implements IAurora {
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("<SHADER> ");
-		builder.append("alpha: ").append((int)(this.tracker.ageRatio() * 255));
+		builder.append("alpha: ").append((int) (this.tracker.ageRatio() * 255));
 		if (!this.tracker.isAlive())
 			builder.append(", DEAD");
 		else if (this.tracker.isFading())
@@ -145,7 +135,7 @@ public class AuroraShader implements IAurora {
 
 			final Minecraft mc = Minecraft.getMinecraft();
 
-			final double tranY = this.dimensions.getSeaLevel(mc.world)
+			final double tranY = AuroraUtils.getSeaLevel()
 					- ((mc.player.lastTickPosY + (mc.player.posY - mc.player.lastTickPosY) * partialTick));
 
 			final double tranX = mc.player.posX

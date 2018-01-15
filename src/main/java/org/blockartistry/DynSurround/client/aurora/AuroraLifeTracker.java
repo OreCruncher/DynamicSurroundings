@@ -8,14 +8,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class AuroraLifeTracker {
 
-	protected final int maxAge;
+	protected final int peakAge;
 	protected final int ageDelta;
 	protected int timer;
 	protected boolean isAlive = true;
 	protected boolean isFading = false;
 
-	public AuroraLifeTracker(final int maxAge, final int ageDelta) {
-		this.maxAge = maxAge;
+	public AuroraLifeTracker(final int peakAge, final int ageDelta) {
+		this.peakAge = peakAge;
 		this.ageDelta = ageDelta;
 	}
 
@@ -37,7 +37,7 @@ public class AuroraLifeTracker {
 	}
 
 	public float ageRatio() {
-		return (float) this.timer / (float) this.maxAge;
+		return (float) this.timer / (float) this.peakAge;
 	}
 
 	public void update() {
@@ -51,7 +51,7 @@ public class AuroraLifeTracker {
 			this.timer += this.ageDelta;
 		}
 
-		this.timer = MathStuff.clamp(this.timer, 0, this.maxAge);
+		this.timer = MathStuff.clamp(this.timer, 0, this.peakAge);
 
 		if (this.timer == 0 && this.isFading)
 			this.isAlive = false;
