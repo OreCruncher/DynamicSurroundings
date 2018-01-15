@@ -30,7 +30,6 @@ import javax.annotation.Nullable;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.aurora.AuroraEngineClassic;
-import org.blockartistry.DynSurround.client.aurora.AuroraEngineShader;
 import org.blockartistry.DynSurround.client.aurora.AuroraUtils;
 import org.blockartistry.DynSurround.client.aurora.IAurora;
 import org.blockartistry.DynSurround.client.aurora.IAuroraEngine;
@@ -39,7 +38,6 @@ import org.blockartistry.lib.DiurnalUtils;
 import org.blockartistry.lib.random.MurmurHash3;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -57,11 +55,13 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	public AuroraEffectHandler() {
 		super("AuroraEffectHandler");
 
+		/*
 		if (OpenGlHelper.areShadersSupported())
 			this.auroraEngine = new AuroraEngineShader();
 		else
 			this.auroraEngine = new AuroraEngineClassic();
-
+		 */
+		this.auroraEngine = new AuroraEngineClassic();
 	}
 
 	@Nullable
@@ -98,7 +98,8 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	}
 
 	private long getAuroraSeed(@Nonnull final World world) {
-		return MurmurHash3.hash(world.getWorldTime() / 24000L);
+		final long t = (world.getWorldTime() / 24000L) ^ 0xcafebabecafed00dL;
+		return MurmurHash3.hash(t);
 	}
 
 	@Override
