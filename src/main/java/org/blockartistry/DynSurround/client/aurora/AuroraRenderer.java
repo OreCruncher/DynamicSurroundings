@@ -28,7 +28,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -66,20 +65,9 @@ public final class AuroraRenderer extends IRenderHandler {
 	}
 
 	protected final IRenderHandler handler;
-	protected final AuroraRenderHandler auroraRender;
-	
-	private static boolean useShader() {
-		//return OpenGlHelper.areShadersSupported();
-		return false;
-	}
 	
 	public AuroraRenderer(@Nullable final IRenderHandler handler) {
 		this.handler = handler;
-		
-		if(useShader())
-			this.auroraRender = new AuroraRenderHandlerShader();
-		else
-			this.auroraRender = new AuroraRenderHandler();
 	}
 
 	@Override
@@ -101,9 +89,9 @@ public final class AuroraRenderer extends IRenderHandler {
 		}
 
 		// Render our aurora if it is present
-		final Aurora aurora = AuroraEffectHandler.getCurrentAurora();
+		final IAurora aurora = AuroraEffectHandler.getCurrentAurora();
 		if (aurora != null) {
-			this.auroraRender.renderAurora(partialTicks, aurora);
+			aurora.render(partialTicks);
 		}
 	}
 

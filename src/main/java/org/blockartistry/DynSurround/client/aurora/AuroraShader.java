@@ -24,10 +24,11 @@
 
 package org.blockartistry.DynSurround.client.aurora;
 
-import javax.annotation.Nonnull;
-
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.registry.DimensionRegistry;
+import org.blockartistry.DynSurround.registry.RegistryManager;
+import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.shaders.ShaderProgram;
 import org.blockartistry.lib.shaders.ShaderProgram.IShaderUseCallback;
@@ -43,60 +44,100 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class AuroraRenderHandlerShader extends AuroraRenderHandler {
+public class AuroraShader implements IAurora {
+
+	protected final DimensionRegistry dimensions = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION);
 
 	// New school shader for aurora - WIP
 	protected ShaderProgram program;
 	protected IShaderUseCallback callback;
-	
+
 	protected static final Color topColor = new Color(1.0F, 0F, 0F);
 	protected static final Color middleColor = new Color(0.5F, 1.0F, 0.0F);
 	protected static final Color bottomColor = new Color(0.0F, 0.8F, 1.0F);
-	
-	protected final float alpha = 1F;
-	
-	public AuroraRenderHandlerShader() {
+
+	protected static final int MAX_ALPHA_TIME = 128;
+	protected static final int ALPHA_TIME_DELTA = 1;
+
+	protected AuroraLifeTracker tracker;
+
+	public AuroraShader() {
 		try {
+
+			// Setup the life cycle
+			this.tracker = new AuroraLifeTracker(MAX_ALPHA_TIME, ALPHA_TIME_DELTA);
+
 			this.program = ShaderProgram.createProgram("Aurora Shader",
-					new ResourceLocation(DSurround.MOD_ID, "shaders/aurora2.vert"),
-					new ResourceLocation(DSurround.MOD_ID, "shaders/aurora2.frag"));
+					new ResourceLocation(DSurround.MOD_ID, "shaders/aurora.vert"),
+					new ResourceLocation(DSurround.MOD_ID, "shaders/aurora.frag"));
 
 			this.callback = shader -> {
 				shader.set("time", (EnvironState.getTickCounter() + EnvironState.getPartialTick()) / 20F * 0.75F);
-				shader.set("resolution", AuroraRenderHandlerShader.this.getAuroraWidth(),
-						AuroraRenderHandlerShader.this.getAuroraHeight());
-				shader.set("topColor", AuroraRenderHandlerShader.topColor);
-				shader.set("middleColor", AuroraRenderHandlerShader.middleColor);
-				shader.set("bottomColor", AuroraRenderHandlerShader.bottomColor);
-				shader.set("alpha", this.alpha);
+				shader.set("resolution", AuroraShader.this.getAuroraWidth(), AuroraShader.this.getAuroraHeight());
+				shader.set("topColor", AuroraShader.topColor);
+				shader.set("middleColor", AuroraShader.middleColor);
+				shader.set("bottomColor", AuroraShader.bottomColor);
+				shader.set("alpha", this.tracker.ageRatio());
 			};
-			
+
 		} catch (final Exception ex) {
 			ex.printStackTrace();
 			this.program = null;
 			this.callback = null;
+			this.tracker = null;
 		}
 	}
-	
+
+	protected int getZOffset() {
+		return (Minecraft.getMinecraft().gameSettings.renderDistanceChunks + 1) * 16;
+	}
+
 	protected int getAuroraWidth() {
 		final int chunks = Math.min(Minecraft.getMinecraft().gameSettings.renderDistanceChunks - 1, 8);
 		return chunks * 16 * 5;
 	}
-	
+
 	protected int getAuroraHeight() {
 		return 200;
 	}
-	
-	public void renderAurora(final float partialTick, @Nonnull final Aurora aurora) {
-		
-		// If we are screwed default to using the original aurora code
-		if(this.program == null) {
-			super.renderAurora(partialTick, aurora);
-			return;
-		}
+
+	@Override
+	public boolean isAlive() {
+		return this.tracker.isAlive();
+	}
+
+	@Override
+	public void die() {
+		this.tracker.setFading(true);
+	}
+
+	@Override
+	public void update() {
+		this.tracker.update();
+	}
+
+	@Override
+	public boolean isComplete() {
+		return !this.tracker.isAlive();
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder builder = new StringBuilder();
+		builder.append("<SHADER> ");
+		builder.append("alpha: ").append((int)(this.tracker.ageRatio() * 255));
+		if (!this.tracker.isAlive())
+			builder.append(", DEAD");
+		else if (this.tracker.isFading())
+			builder.append(", FADING");
+		return builder.toString();
+	}
+
+	@Override
+	public void render(final float partialTick) {
 
 		try {
-			
+
 			final int width = this.getAuroraWidth();
 			final int height = this.getAuroraHeight();
 			final int xOffset = -(width / 2);
@@ -119,9 +160,9 @@ public class AuroraRenderHandlerShader extends AuroraRenderHandler {
 			GlStateManager.translate(tranX + xOffset, tranY + yOffset, tranZ);
 			GlStateManager.disableLighting();
 			GlStateManager.enableBlend();
-			
+
 			this.program.use(this.callback);
-			
+
 			final BufferBuilder renderer = Tessellator.getInstance().getBuffer();
 			GL11.glFrontFace(GL11.GL_CW);
 			renderer.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_TEX);
@@ -131,7 +172,7 @@ public class AuroraRenderHandlerShader extends AuroraRenderHandler {
 			renderer.pos(width, height, 0).tex(1, 1).endVertex();
 			Tessellator.getInstance().draw();
 			GL11.glFrontFace(GL11.GL_CCW);
-			
+
 			this.program.unUse();
 
 			GlStateManager.disableBlend();
@@ -145,5 +186,4 @@ public class AuroraRenderHandlerShader extends AuroraRenderHandler {
 			this.program = null;
 		}
 	}
-
 }
