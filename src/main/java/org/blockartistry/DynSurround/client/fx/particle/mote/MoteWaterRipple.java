@@ -54,7 +54,6 @@ public class MoteWaterRipple extends MoteBase {
 		this.red = waterColor.red;
 		this.green = waterColor.green;
 		this.blue = waterColor.blue;
-		this.alpha = 1F;
 	}
 
 	@Override
