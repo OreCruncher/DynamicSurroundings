@@ -28,6 +28,8 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.lib.OpenGlUtil;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -59,7 +61,7 @@ public class ParticleCollectionFootprint extends ParticleCollection {
 		
 		// Low resolution 4x4 square
 		LOWRES_SQUARE("textures/particles/footprint_lowres_square.png");
-		
+
 		private final ResourceLocation resource;
 
 		private Style(@Nonnull final String texture) {
@@ -93,15 +95,8 @@ public class ParticleCollectionFootprint extends ParticleCollection {
 	protected void preRender() {
 		super.preRender();
 		GlStateManager.depthMask(false);
+		OpenGlUtil.setStandardBlend();
 		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 	}
 
-	@Override
-	protected void postRender() {
-		GlStateManager.disableBlend();
-		GlStateManager.depthMask(true);
-		super.postRender();
-	}
-	
 }

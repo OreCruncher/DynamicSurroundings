@@ -26,6 +26,8 @@ package org.blockartistry.DynSurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.OpenGlUtil;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -37,13 +39,15 @@ public class ParticleCollectionFireFly extends ParticleCollection {
 	}
 
 	@Override
-	protected void preRender() {
-		GlStateManager.enableBlend();
-		GlStateManager.depthMask(false);
+	protected boolean enableLighting() {
+		return false;
 	}
-
+	
 	@Override
-	protected void postRender() {
-		GlStateManager.disableBlend();
+	protected void preRender() {
+		super.preRender();
+		GlStateManager.depthMask(false);
+		OpenGlUtil.setStandardBlend();
 	}
+	
 }
