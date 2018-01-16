@@ -98,6 +98,9 @@ public final class GuiHUDHandler {
 		if (event.player == null || event.player.world == null)
 			return;
 
+		if(event.player != Minecraft.getMinecraft().player)
+			return;
+
 		final int tickRef = EnvironState.getTickCounter();
 		for (int i = 0; i < this.overlays.size(); i++)
 			this.overlays.get(i).doTick(tickRef);

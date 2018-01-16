@@ -24,6 +24,8 @@
 
 package org.blockartistry.DynSurround.client.fx.particle.mote;
 
+import org.blockartistry.lib.Color;
+
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
@@ -58,6 +60,11 @@ public class MoteWaterSpray extends MoteMotionBase {
 		// Tweak the constant to change the size of the raindrop
 		this.f4 = 0.07F * this.scale;
 
+		final Color waterColor = MoteBase.getBiomeWaterColor(world, x, y, z);
+		this.red = waterColor.red;
+		this.green = waterColor.green;
+		this.blue = waterColor.blue;
+		this.alpha = 1F;
 	}
 
 	@Override

@@ -28,6 +28,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.Color;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.random.XorShiftRandom;
 
@@ -37,6 +38,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -167,4 +169,7 @@ public abstract class MoteBase implements IParticleMote {
 		return this.world.getCombinedLight(this.position, 0);
 	}
 
+	public static Color getBiomeWaterColor(final World world, final double x, final double y, final double z) {
+		return new Color(BiomeColorHelper.getWaterColorAtPos(world, new BlockPos(x, y, z)));
+	}
 }
