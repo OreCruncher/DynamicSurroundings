@@ -49,12 +49,11 @@ public class MoteWaterRipple extends MoteBase {
 		this.scale = this.growthRate;
 		this.scaledWidth = this.scale * TEX_SIZE_HALF;
 		this.posY -= 0.2D;
-
+	
 		final Color waterColor = MoteBase.getBiomeWaterColor(world, x, y, z);
 		this.red = waterColor.red;
 		this.green = waterColor.green;
 		this.blue = waterColor.blue;
-		this.alpha = 1F;
 	}
 
 	@Override

@@ -121,13 +121,15 @@ public class ParticleCollection extends Particle {
 	}
 
 	protected boolean enableLighting() {
-		return true;
+		return false;
 	}
 
 	protected void preRender() {
 		this.glState = OpenGlState.push();
 		if (this.enableLighting())
 			GlStateManager.enableLighting();
+		else
+			GlStateManager.disableLighting();
 	}
 
 	protected void postRender() {
