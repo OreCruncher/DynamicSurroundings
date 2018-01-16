@@ -91,11 +91,14 @@ public class EffectManager {
 
 	@SubscribeEvent
 	public void playerTick(final TickEvent.PlayerTickEvent event) {
-
+		
 		if (event.side == Side.SERVER || event.phase == Phase.END || Minecraft.getMinecraft().isGamePaused())
 			return;
 
 		if (event.player == null || event.player.world == null)
+			return;
+		
+		if(event.player != Minecraft.getMinecraft().player)
 			return;
 
 		for (int i = 0; i < this.effectHandlers.size(); i++)

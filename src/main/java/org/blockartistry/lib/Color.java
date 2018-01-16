@@ -144,6 +144,10 @@ public class Color {
 	public Color(@Nonnull final Vec3d vec) {
 		this((float) vec.x, (float) vec.y, (float) vec.z);
 	}
+	
+	public Color(final int rgb) {
+		this((rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff);
+	}
 
 	public Color(final float red, final float green, final float blue) {
 		this.red = red;
