@@ -1,5 +1,4 @@
-/*
- * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -22,31 +21,19 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.client.fx.particle.mote;
-
-import javax.annotation.Nonnull;
-
-import org.blockartistry.lib.OpenGlUtil;
+package org.blockartistry.lib;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
-public class ParticleCollectionRipples extends ParticleCollection {
-
-	public ParticleCollectionRipples(@Nonnull final World world, @Nonnull final ResourceLocation tex) {
-		super(world, tex);
+public final class OpenGlUtil {
+	
+	private OpenGlUtil() {
+		
 	}
-
-	@Override
-	protected void preRender() {
-		super.preRender();
-		GlStateManager.enableDepth();
-		GlStateManager.depthMask(false);
-		OpenGlUtil.setStandardBlend();
+	
+	public static void setStandardBlend() {
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 	}
 
 }

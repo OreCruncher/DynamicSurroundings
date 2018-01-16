@@ -27,6 +27,7 @@ package org.blockartistry.DynSurround.client.fx.particle.mote;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.lib.OpenGlState;
 import org.blockartistry.lib.collections.ObjectArray;
 import org.lwjgl.opengl.GL11;
 
@@ -52,6 +53,8 @@ public class ParticleCollection extends Particle {
 	protected final ObjectArray<IParticleMote> myParticles = new ObjectArray<IParticleMote>(ALLOCATION_SIZE);
 	protected final ResourceLocation texture;
 
+	protected OpenGlState glState;
+
 	public ParticleCollection(@Nonnull final World world, @Nonnull final ResourceLocation tex) {
 		super(world, 0, 0, 0);
 
@@ -62,20 +65,20 @@ public class ParticleCollection extends Particle {
 	protected void bindTexture(@Nonnull final ResourceLocation resource) {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(resource);
 	}
-	
+
 	public boolean canFit() {
 		return this.myParticles.size() < MAX_PARTICLES;
 	}
 
 	public boolean addParticle(@Nonnull final IParticleMote mote) {
-		
-		if(this.canFit()) {
+
+		if (this.canFit()) {
 			this.myParticles.add(mote);
 			return true;
 		}
 		return false;
 	}
-	
+
 	public ObjectArray<IParticleMote> getParticles() {
 		return this.myParticles;
 	}
@@ -101,10 +104,6 @@ public class ParticleCollection extends Particle {
 	protected VertexFormat getVertexFormat() {
 		return DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP;
 	}
-	
-	protected void preRender() {
-		GlStateManager.enableLighting();
-	}
 
 	@Override
 	public void renderParticle(final BufferBuilder buffer, final Entity entityIn, final float partialTicks,
@@ -114,15 +113,25 @@ public class ParticleCollection extends Particle {
 		this.preRender();
 
 		buffer.begin(GL11.GL_QUADS, getVertexFormat());
-		for(int i = 0; i < this.myParticles.size(); i++)
+		for (int i = 0; i < this.myParticles.size(); i++)
 			this.myParticles.get(i).renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
 		Tessellator.getInstance().draw();
 
 		this.postRender();
 	}
 
+	protected boolean enableLighting() {
+		return true;
+	}
+
+	protected void preRender() {
+		this.glState = OpenGlState.push();
+		if (this.enableLighting())
+			GlStateManager.enableLighting();
+	}
+
 	protected void postRender() {
-		GlStateManager.disableLighting();
+		OpenGlState.pop(this.glState);
 	}
 
 	@Override
