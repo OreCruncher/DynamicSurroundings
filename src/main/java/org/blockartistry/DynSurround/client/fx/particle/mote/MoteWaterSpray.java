@@ -59,8 +59,12 @@ public class MoteWaterSpray extends MoteMotionBase {
 
 		// Tweak the constant to change the size of the raindrop
 		this.f4 = 0.07F * this.scale;
-		
-		final Color waterColor = MoteBase.getBiomeWaterColor(world, x, y, z);
+
+	}
+	
+	@Override
+	public void configureColor() {
+		final Color waterColor = MoteBase.getBiomeWaterColor(this.world, this.posX, this.posY, this.posZ);
 		this.red = waterColor.red;
 		this.green = waterColor.green;
 		this.blue = waterColor.blue;

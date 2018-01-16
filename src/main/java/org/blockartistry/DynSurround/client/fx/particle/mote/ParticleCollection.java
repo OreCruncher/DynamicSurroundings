@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.OpenGlState;
 import org.blockartistry.lib.collections.ObjectArray;
@@ -121,13 +122,15 @@ public class ParticleCollection extends Particle {
 	}
 
 	protected boolean enableLighting() {
-		return true;
+		return ModEnvironment.Albedo.isLoaded();
 	}
 
 	protected void preRender() {
 		this.glState = OpenGlState.push();
 		if (this.enableLighting())
 			GlStateManager.enableLighting();
+		else
+			GlStateManager.disableLighting();
 	}
 
 	protected void postRender() {

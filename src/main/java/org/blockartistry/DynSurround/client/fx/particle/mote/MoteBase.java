@@ -74,6 +74,11 @@ public abstract class MoteBase implements IParticleMote {
 		this.posY = y;
 		this.posZ = z;
 		this.position.setPos(x, y, z);
+		
+		this.configureColor();
+	}
+	
+	public void configureColor() {
 		this.red = this.green = this.blue = this.alpha = 1F;
 	}
 

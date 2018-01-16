@@ -49,7 +49,11 @@ public class MoteRainSplash extends MoteWaterSpray {
 		this.motionX *= 0.30000001192092896D;
 		this.motionY = RANDOM.nextDouble() * 0.20000000298023224D + 0.10000000149011612D;
 		this.motionZ *= 0.30000001192092896D;
-
+	}
+	
+	@Override
+	public void configureColor() {
+		this.red = this.green = this.blue = this.alpha = 1F;
 	}
 
 }
