@@ -145,6 +145,10 @@ public class Color {
 		this((float) vec.xCoord, (float) vec.yCoord, (float) vec.zCoord);
 	}
 
+	public Color(final int rgb) {
+		this((rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff);
+	}
+
 	public Color(final float red, final float green, final float blue) {
 		this.red = red;
 		this.green = green;

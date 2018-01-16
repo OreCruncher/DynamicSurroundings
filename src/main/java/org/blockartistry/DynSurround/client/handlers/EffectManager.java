@@ -98,6 +98,9 @@ public class EffectManager {
 		if (event.player == null || event.player.worldObj == null)
 			return;
 
+		if(event.player != Minecraft.getMinecraft().thePlayer)
+			return;
+
 		for (int i = 0; i < this.effectHandlers.size(); i++)
 			this.effectHandlers.get(i).process(event.player);
 	}
