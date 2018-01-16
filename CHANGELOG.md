@@ -1,3 +1,11 @@
+###DynamicSurroundings-1.11.2-3.4.8.4
+**What's New**
+* Based on feedback brought the auroras back as hovering bands rather than rendered at view range.  There are no configuration options available currently.  Working on further changes and those changes affect what I do.
+* Water splash/ripple effects change color based on the biomes water color.
+
+**Fixes**
+* Fixed "rapid fire sounds" when playing on a server with other players present
+
 ###DynamicSurroundings-1.11.2-3.4.8.3
 **Fixes**
 * Potion HUD would occasionally cause a crash
