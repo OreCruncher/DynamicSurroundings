@@ -63,14 +63,16 @@ public class AuroraShaderBand implements IAurora {
 	protected AuroraLifeTracker tracker;
 	protected final Random random;
 
-	protected final AuroraBand band;
+	protected final AuroraBand[] bands;
+
 	protected final float auroraWidth;
 	protected final float panelTexWidth;
 
 	public AuroraShaderBand(final long seed) {
 		// Setup the life cycle
 		this.tracker = new AuroraLifeTracker(AuroraUtils.AURORA_PEAK_AGE, AuroraUtils.AURORA_AGE_RATE);
-		this.random = new XorShiftRandom(seed);
+		this.random = new XorShiftRandom(seed * 2);
+		this.bands = new AuroraBand[this.random.nextInt(3) + 1];
 		final AuroraColor colors = AuroraColor.get(this.random);
 		this.baseColor = colors.baseColor;
 		this.fadeColor = colors.fadeColor;
@@ -88,13 +90,18 @@ public class AuroraShaderBand implements IAurora {
 		};
 
 		final AuroraGeometry geo = AuroraGeometry.get(this.random);
-		this.band = new AuroraBand(this.random, geo, true, true);
-		this.auroraWidth = this.band.getNodeList().length * this.band.getNodeWidth();
-		this.panelTexWidth = this.band.getNodeWidth() / this.auroraWidth;
+		this.bands[0] = new AuroraBand(this.random, geo, true, true);
+		if (this.bands.length > 1) {
+			for (int i = 1; i < this.bands.length; i++)
+				this.bands[i] = this.bands[0].copy(geo.bandOffset * i);
+		}
+
+		this.auroraWidth = this.bands[0].getNodeList().length * this.bands[0].getNodeWidth();
+		this.panelTexWidth = this.bands[0].getNodeWidth() / this.auroraWidth;
 	}
 
 	protected float getAlpha() {
-		return MathStuff.clamp((this.band.getAlphaLimit() / 255F) * this.tracker.ageRatio() * 1.5F, 0F, 1F);
+		return MathStuff.clamp((this.bands[0].getAlphaLimit() / 255F) * this.tracker.ageRatio() * 1.75F, 0F, 1F);
 	}
 
 	protected float getZOffset() {
@@ -141,7 +148,7 @@ public class AuroraShaderBand implements IAurora {
 		builder.append(" base: ").append(this.baseColor.toString());
 		builder.append(", mid: ").append(this.middleColor.toString());
 		builder.append(", fade: ").append(this.fadeColor.toString());
-		builder.append("alpha: ").append((int) (this.getAlpha() * 255));
+		builder.append(", alpha: ").append((int) (this.getAlpha() * 255));
 		if (!this.tracker.isAlive())
 			builder.append(", DEAD");
 		else if (this.tracker.isFading())
@@ -154,8 +161,6 @@ public class AuroraShaderBand implements IAurora {
 
 		if (this.program == null)
 			return;
-
-		this.band.translate(partialTick);
 
 		final Minecraft mc = Minecraft.getMinecraft();
 		final Tessellator tess = Tessellator.getInstance();
@@ -181,43 +186,47 @@ public class AuroraShaderBand implements IAurora {
 		try {
 			this.program.use(this.callback);
 
-			final Node[] array = this.band.getNodeList();
-			for (int i = 0; i < array.length - 1; i++) {
+			for (int b = 0; b < this.bands.length; b++) {
+				this.bands[b].translate(partialTick);
 
-				final float v1 = 0;
-				final float v2 = 1F;
-				final float u1 = i * this.panelTexWidth;
-				final float u2 = u1 + this.panelTexWidth;
+				final Node[] array = this.bands[b].getNodeList();
+				for (int i = 0; i < array.length - 1; i++) {
 
-				final Node node = array[i];
+					final float v1 = 0;
+					final float v2 = 1F;
+					final float u1 = i * this.panelTexWidth;
+					final float u2 = u1 + this.panelTexWidth;
 
-				final double posY = node.getModdedY();
-				final double posX = node.tetX;
-				final double posZ = node.tetZ;
-				final double zero = 0;
+					final Node node = array[i];
 
-				final double posX2;
-				final double posZ2;
-				final double posY2;
+					final double posY = node.getModdedY();
+					final double posX = node.tetX;
+					final double posZ = node.tetZ;
+					final double zero = 0;
 
-				if (i < array.length - 2) {
-					final Node nodePlus = array[i + 1];
-					posX2 = nodePlus.tetX;
-					posZ2 = nodePlus.tetZ;
-					posY2 = nodePlus.getModdedY();
-				} else {
-					posX2 = node.posX;
-					posZ2 = node.getModdedZ();
-					posY2 = 0.0D;
+					final double posX2;
+					final double posZ2;
+					final double posY2;
+
+					if (i < array.length - 2) {
+						final Node nodePlus = array[i + 1];
+						posX2 = nodePlus.tetX;
+						posZ2 = nodePlus.tetZ;
+						posY2 = nodePlus.getModdedY();
+					} else {
+						posX2 = node.posX;
+						posZ2 = node.getModdedZ();
+						posY2 = 0.0D;
+					}
+
+					renderer.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_TEX);
+					renderer.pos(posX, zero, posZ).tex(u1, v1).endVertex();
+					renderer.pos(posX, posY, posZ).tex(u1, v2).endVertex();
+					renderer.pos(posX2, posY2, posZ2).tex(u2, v2).endVertex();
+					renderer.pos(posX2, zero, posZ2).tex(u2, v1).endVertex();
+					tess.draw();
+
 				}
-
-				renderer.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_TEX);
-				renderer.pos(posX, zero, posZ).tex(u1, v1).endVertex();
-				renderer.pos(posX, posY, posZ).tex(u1, v2).endVertex();
-				renderer.pos(posX2, posY2, posZ2).tex(u2, v2).endVertex();
-				renderer.pos(posX2, zero, posZ2).tex(u2, v1).endVertex();
-				tess.draw();
-
 			}
 
 			this.program.unUse();
