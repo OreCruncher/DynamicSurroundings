@@ -46,20 +46,20 @@ public final class AuroraGeometry {
 
 	static {
 		// 10/5; 90/45
-		PRESET.add(new AuroraGeometry(128, 30.0F, 2.0F, 45, 48));
-		PRESET.add(new AuroraGeometry(128, 15.0F, 2.0F, 27, 48));
-		PRESET.add(new AuroraGeometry(64, 30.0F, 2.0F, 45, 48));
-		PRESET.add(new AuroraGeometry(64, 15.0F, 2.0F, 27, 48));
+		PRESET.add(new AuroraGeometry(128, 30.0F, 2.0F, 45, 96));
+		PRESET.add(new AuroraGeometry(128, 15.0F, 2.0F, 27, 96));
+		PRESET.add(new AuroraGeometry(64, 30.0F, 2.0F, 45, 96));
+		PRESET.add(new AuroraGeometry(64, 15.0F, 2.0F, 27, 96));
+
+		PRESET.add(new AuroraGeometry(128, 30.0F, 2.0F, 45, 64));
+		PRESET.add(new AuroraGeometry(128, 15.0F, 2.0F, 27, 64));
+		PRESET.add(new AuroraGeometry(64, 30.0F, 2.0F, 45, 64));
+		PRESET.add(new AuroraGeometry(64, 15.0F, 2.0F, 27, 64));
 
 		PRESET.add(new AuroraGeometry(128, 30.0F, 2.0F, 45, 32));
 		PRESET.add(new AuroraGeometry(128, 15.0F, 2.0F, 27, 32));
 		PRESET.add(new AuroraGeometry(64, 30.0F, 2.0F, 45, 32));
 		PRESET.add(new AuroraGeometry(64, 15.0F, 2.0F, 27, 32));
-
-		PRESET.add(new AuroraGeometry(128, 30.0F, 2.0F, 45, 16));
-		PRESET.add(new AuroraGeometry(128, 15.0F, 2.0F, 27, 16));
-		PRESET.add(new AuroraGeometry(64, 30.0F, 2.0F, 45, 16));
-		PRESET.add(new AuroraGeometry(64, 15.0F, 2.0F, 27, 16));
 	}
 
 	private AuroraGeometry(final int length, final float nodeLength, final float nodeWidth, final int bandOffset,
