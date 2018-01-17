@@ -30,12 +30,10 @@ import javax.annotation.Nullable;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.aurora.AuroraEngineClassic;
+import org.blockartistry.DynSurround.client.aurora.AuroraUtils;
 import org.blockartistry.DynSurround.client.aurora.IAurora;
 import org.blockartistry.DynSurround.client.aurora.IAuroraEngine;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.DiurnalUtils;
 import org.blockartistry.lib.random.MurmurHash3;
 
@@ -48,16 +46,18 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public final class AuroraEffectHandler extends EffectHandlerBase {
 
-	// Aurora information
+	private final IAuroraEngine auroraEngine;
+
 	private static IAurora current;
 	private static int dimensionId;
 
-	private final DimensionRegistry registry = RegistryManager.get(RegistryType.DIMENSION);
-
-	private final IAuroraEngine auroraEngine;
-
 	public AuroraEffectHandler() {
 		super("AuroraEffectHandler");
+
+		/*
+		 * if (OpenGlHelper.areShadersSupported()) this.auroraEngine = new
+		 * AuroraEngineShader(); else this.auroraEngine = new AuroraEngineClassic();
+		 */
 		this.auroraEngine = new AuroraEngineClassic();
 	}
 
@@ -83,7 +83,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		if (current != null || Minecraft.getMinecraft().gameSettings.renderDistanceChunks < 6
 				|| DiurnalUtils.isAuroraInvisible(world))
 			return false;
-		return this.registry.hasAuroras(world) && EnvironState.getPlayerBiome().getHasAurora();
+		return AuroraUtils.hasAuroras() && EnvironState.getPlayerBiome().getHasAurora();
 	}
 
 	private boolean canAuroraStay(@Nonnull final World world) {
@@ -95,7 +95,8 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	}
 
 	private long getAuroraSeed(@Nonnull final World world) {
-		return MurmurHash3.hash(world.getWorldTime() / 24000L);
+		final long t = (world.getWorldTime() / 24000L) ^ 0xcafebabecafed00dL;
+		return MurmurHash3.hash(t);
 	}
 
 	@Override
@@ -109,9 +110,14 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 				current = null;
 			} else {
 				current.update();
-				if (current.isAlive() && !canAuroraStay(player.world)) {
+				final boolean isDying = current.isDying();
+				final boolean canStay = canAuroraStay(player.world);
+				if (isDying && canStay) {
+					DSurround.log().debug("Unfading aurora...");
+					current.setFading(false);
+				} else if (!isDying && !canStay) {
 					DSurround.log().debug("Aurora fade...");
-					current.die();
+					current.setFading(true);
 				}
 			}
 		}
