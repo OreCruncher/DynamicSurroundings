@@ -29,6 +29,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import com.google.common.base.Objects;
@@ -224,7 +225,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 	}
 
 	public boolean canSoundBeHeard(@Nonnull final BlockPos soundPos) {
-		
+
 		if (this.getAttenuationType() == AttenuationType.NONE)
 			return true;
 
@@ -232,7 +233,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 		if (v <= 0.0F || SoundSystemConfig.getMasterGain() <= 0F)
 			return false;
 
-		// This is from SoundManager.  The idea is that if a sound
+		// This is from SoundManager. The idea is that if a sound
 		// is playing at <= 1F drop off range is about 16 blocks.
 		// If the volume is higher the drop off range is further.
 		// Note that we are dealing with square distances so the
@@ -275,5 +276,9 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 				.addValue(this.category.toString()).add("state", this.getState()).add("v", this.getVolume())
 				.add("p", this.getPitch()).add("s", this.volumeScale.getScale()).addValue(this.getAttenuationType())
 				.add("x", this.getXPosF()).add("y", this.getYPosF()).add("z", this.getZPosF()).toString();
+	}
+
+	public static AttenuationType noAttenuation() {
+		return ModEnvironment.SoundPhysics.isLoaded() ? AttenuationType.LINEAR : AttenuationType.NONE;
 	}
 }

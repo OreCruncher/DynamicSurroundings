@@ -56,9 +56,10 @@ public enum ModEnvironment {
 	//
 	CoFHCore("cofhcore"),
 	//
-	Albedo("albedo");
+	Albedo("albedo"),
+	//
+	SoundPhysics("soundphysics");
 
-	
 	protected final String modId;
 	protected boolean isLoaded;
 
