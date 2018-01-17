@@ -26,6 +26,8 @@ package org.blockartistry.DynSurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.lib.OpenGlUtil;
 
 import net.minecraft.client.renderer.GlStateManager;
@@ -37,8 +39,43 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleCollectionRipples extends ParticleCollection {
 
+	public static enum Style {
+
+		// Original texture
+		ORIGINAL("textures/particles/ripple.png"),
+		
+		// Circle, a bit darker
+		CIRCLE("textures/particles/ripple1.png"),
+
+		// Square that matches Minecraft's blockiness
+		SQUARE("textures/particles/ripple2.png");
+
+		private final ResourceLocation resource;
+
+		private Style(@Nonnull final String texture) {
+			this.resource = new ResourceLocation(DSurround.RESOURCE_ID, texture);
+		}
+
+		@Nonnull
+		public ResourceLocation getTexture() {
+			return this.resource;
+		}
+
+		@Nonnull
+		public static Style getStyle(final int v) {
+			if (v >= values().length)
+				return CIRCLE;
+			return values()[v];
+		}
+	}
+
 	public ParticleCollectionRipples(@Nonnull final World world, @Nonnull final ResourceLocation tex) {
 		super(world, tex);
+	}
+
+	protected void bindTexture(@Nonnull final ResourceLocation resource) {
+		final ResourceLocation res = Style.getStyle(ModOptions.rainRippleStyle).getTexture();
+		super.bindTexture(res);
 	}
 
 	@Override

@@ -123,17 +123,23 @@ public final class ModOptions {
 	public static final String CONFIG_STORM_INACTIVE_TIME_VARIABLE = "Inactive duration of thunder, variable";
 	public static final String CONFIG_ENABLE_BACKGROUND_THUNDER = "Enable Background Thunder";
 	public static final String CONFIG_THUNDER_THRESHOLD = "Rain Intensity for Background Thunder";
+	public static final String CONFIG_RAIN_RIPPLE_STYLE = "Style of rain water ripple";
 
-	private static final List<String> rainSort = Arrays.asList(CONFIG_VANILLA_RAIN, CONFIG_ALLOW_DESERT_DUST,
-			CONFIG_RESET_RAIN_ON_SLEEP, CONFIG_RAIN_PARTICLE_BASE, CONFIG_RAIN_ACTIVE_TIME_CONST,
-			CONFIG_RAIN_ACTIVE_TIME_VARIABLE, CONFIG_RAIN_INACTIVE_TIME_CONST, CONFIG_RAIN_INACTIVE_TIME_VARIABLE,
-			CONFIG_STORM_ACTIVE_TIME_CONST, CONFIG_STORM_ACTIVE_TIME_VARIABLE, CONFIG_STORM_INACTIVE_TIME_CONST,
-			CONFIG_STORM_INACTIVE_TIME_VARIABLE, CONFIG_ENABLE_BACKGROUND_THUNDER, CONFIG_THUNDER_THRESHOLD);
+	private static final List<String> rainSort = Arrays.asList(CONFIG_VANILLA_RAIN, CONFIG_RAIN_RIPPLE_STYLE,
+			CONFIG_ALLOW_DESERT_DUST, CONFIG_RESET_RAIN_ON_SLEEP, CONFIG_RAIN_PARTICLE_BASE,
+			CONFIG_RAIN_ACTIVE_TIME_CONST, CONFIG_RAIN_ACTIVE_TIME_VARIABLE, CONFIG_RAIN_INACTIVE_TIME_CONST,
+			CONFIG_RAIN_INACTIVE_TIME_VARIABLE, CONFIG_STORM_ACTIVE_TIME_CONST, CONFIG_STORM_ACTIVE_TIME_VARIABLE,
+			CONFIG_STORM_INACTIVE_TIME_CONST, CONFIG_STORM_INACTIVE_TIME_VARIABLE, CONFIG_ENABLE_BACKGROUND_THUNDER,
+			CONFIG_THUNDER_THRESHOLD);
 
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_VANILLA_RAIN, defaultValue = "false", lang = "cfg.rain.VanillaRain")
 	@Comment("Let Vanilla handle rain intensity and time windows")
 	@RestartRequired
 	public static boolean doVanillaRain = false;
+	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_RIPPLE_STYLE, defaultValue = "0", lang = "cfg.rain.RippleStyle")
+	@MinMaxInt(min = 0, max = 2)
+	@Comment("0: original round, 1: darker round, 2: square")
+	public static int rainRippleStyle = 0;
 	@Parameter(category = CATEGORY_RAIN, property = CONFIG_RAIN_PARTICLE_BASE, defaultValue = "100", lang = "cfg.rain.ParticleCount")
 	@MinMaxInt(min = 0, max = 500)
 	@Comment("Base count of rain splash particles to generate per tick")
