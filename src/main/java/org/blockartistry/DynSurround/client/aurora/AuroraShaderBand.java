@@ -24,8 +24,12 @@
 
 package org.blockartistry.DynSurround.client.aurora;
 
+import java.util.Random;
+
 import org.blockartistry.DynSurround.client.shader.Shaders;
 import org.blockartistry.lib.Color;
+import org.blockartistry.lib.OpenGlState;
+import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.lib.shaders.ShaderProgram;
 import org.blockartistry.lib.shaders.ShaderProgram.IShaderUseCallback;
 import org.lwjgl.opengl.GL11;
@@ -38,8 +42,11 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/*
+ * Renders a shader generated aurora along a curved path.  Makes it ribbon like.
+ */
 @SideOnly(Side.CLIENT)
-public class AuroraShader implements IAurora {
+public class AuroraShaderBand implements IAurora {
 
 	protected ShaderProgram program;
 	protected IShaderUseCallback callback;
@@ -49,34 +56,44 @@ public class AuroraShader implements IAurora {
 	protected static final Color bottomColor = new Color(0.0F, 0.8F, 1.0F);
 
 	protected AuroraLifeTracker tracker;
+	protected final Random random;
 
-	public AuroraShader() {
+	protected final AuroraBand band;
+	protected final float auroraWidth;
+	protected final float panelTexWidth;
+
+	public AuroraShaderBand(final long seed) {
 		// Setup the life cycle
 		this.tracker = new AuroraLifeTracker(AuroraUtils.AURORA_PEAK_AGE, AuroraUtils.AURORA_AGE_RATE);
+		this.random = new XorShiftRandom(seed);
 
 		this.program = Shaders.AURORA;
 
 		this.callback = shader -> {
 			shader.set("time", AuroraUtils.getTimeSeconds() * 0.75F);
-			shader.set("resolution", AuroraShader.this.getAuroraWidth(), AuroraShader.this.getAuroraHeight());
+			shader.set("resolution", AuroraShaderBand.this.getAuroraWidth(), AuroraShaderBand.this.getAuroraHeight());
 			shader.set("topColor", AuroraShader.topColor);
 			shader.set("middleColor", AuroraShader.middleColor);
 			shader.set("bottomColor", AuroraShader.bottomColor);
 			shader.set("alpha", this.tracker.ageRatio());
 		};
+
+		final AuroraGeometry geo = AuroraGeometry.get(this.random);
+		this.band = new AuroraBand(this.random, geo, true, true);
+		this.auroraWidth = this.band.getNodeList().length * this.band.getNodeWidth();
+		this.panelTexWidth = this.band.getNodeWidth() / this.auroraWidth;
 	}
 
-	protected int getZOffset() {
+	protected float getZOffset() {
 		return (AuroraUtils.getChunkRenderDistance() + 1) * 16;
 	}
 
-	protected int getAuroraWidth() {
-		final int chunks = Math.min(AuroraUtils.getChunkRenderDistance() - 1, 8);
-		return chunks * 16 * 5;
+	protected float getAuroraWidth() {
+		return this.auroraWidth;
 	}
 
-	protected int getAuroraHeight() {
-		return 200;
+	protected float getAuroraHeight() {
+		return AuroraBand.AURORA_AMPLITUDE;
 	}
 
 	@Override
@@ -118,57 +135,86 @@ public class AuroraShader implements IAurora {
 
 	@Override
 	public void render(final float partialTick) {
-		
-		if(this.program == null)
+
+		if (this.program == null)
 			return;
 
+		this.band.translate(partialTick);
+
+		final float width = this.getAuroraWidth();
+		final float xOffset = -(width / 2);
+		final float yOffset = 20;
+
+		final Minecraft mc = Minecraft.getMinecraft();
+		final Tessellator tess = Tessellator.getInstance();
+		final BufferBuilder renderer = tess.getBuffer();
+
+		final double tranY = AuroraUtils.PLAYER_FIXED_Y_OFFSET;
+
+		final double tranX = mc.player.posX
+				- (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTick);
+
+		final double tranZ = (mc.player.posZ - getZOffset())
+				- (mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * partialTick);
+
+		final OpenGlState glState = OpenGlState.push();
+
+		GlStateManager.translate(tranX + xOffset, tranY + yOffset, tranZ);
+		GlStateManager.disableLighting();
+		GlStateManager.enableBlend();
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
+				GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+
+		GL11.glFrontFace(GL11.GL_CW);
+
 		try {
-
-			final int width = this.getAuroraWidth();
-			final int height = this.getAuroraHeight();
-			final int xOffset = -(width / 2);
-			final int yOffset = 20;
-
-			final Minecraft mc = Minecraft.getMinecraft();
-
-			final double tranY = AuroraUtils.getSeaLevel()
-					- ((mc.player.lastTickPosY + (mc.player.posY - mc.player.lastTickPosY) * partialTick));
-
-			final double tranX = mc.player.posX
-					- (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTick);
-
-			final double tranZ = (mc.player.posZ - getZOffset())
-					- (mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * partialTick);
-
-			GlStateManager.pushMatrix();
-			GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-
-			GlStateManager.translate(tranX + xOffset, tranY + yOffset, tranZ);
-			GlStateManager.disableLighting();
-			GlStateManager.enableBlend();
-
 			this.program.use(this.callback);
 
-			final BufferBuilder renderer = Tessellator.getInstance().getBuffer();
-			GL11.glFrontFace(GL11.GL_CW);
-			renderer.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_TEX);
-			renderer.pos(0, 0, 0).tex(0, 0).endVertex();
-			renderer.pos(0, height, 0).tex(0, 1).endVertex();
-			renderer.pos(width, 0, 0).tex(1, 0).endVertex();
-			renderer.pos(width, height, 0).tex(1, 1).endVertex();
-			Tessellator.getInstance().draw();
-			GL11.glFrontFace(GL11.GL_CCW);
+			final Node[] array = this.band.getNodeList();
+			for (int i = 0; i < array.length - 1; i++) {
+
+				final Node node = array[i];
+
+				final double posY = node.getModdedY();
+				final double posX = node.posX;
+				final double posZ = node.getModdedZ();
+
+				final double posX2;
+				final double posZ2;
+				final double posY2;
+
+				if (i < array.length - 2) {
+					final Node nodePlus = array[i + 1];
+					posX2 = nodePlus.posX;
+					posZ2 = nodePlus.getModdedZ();
+					posY2 = nodePlus.getModdedY();
+				} else {
+					posX2 = posX;
+					posZ2 = posZ;
+					posY2 = posY;
+				}
+
+				final float v1 = 0;
+				final float v2 = 1F;
+				final float u1 = i * this.panelTexWidth;
+				final float u2 = u1 + this.panelTexWidth;
+
+				renderer.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_TEX);
+				renderer.pos(posX, posY, posZ).tex(u1, v1).endVertex();
+				renderer.pos(posX, posY2, posZ).tex(u1, v2).endVertex();
+				renderer.pos(posX2, posY2, posZ2).tex(u2, v2).endVertex();
+				renderer.pos(posX2, posY, posZ2).tex(u2, v1).endVertex();
+				tess.draw();
+
+			}
 
 			this.program.unUse();
-
-			GlStateManager.disableBlend();
-			GlStateManager.popAttrib();
-			GlStateManager.popMatrix();
-
 		} catch (final Exception ex) {
 			ex.printStackTrace();
-			// Disable the shader - something went wrong
 			this.program = null;
 		}
+
+		GL11.glFrontFace(GL11.GL_CCW);
+		OpenGlState.pop(glState);
 	}
 }

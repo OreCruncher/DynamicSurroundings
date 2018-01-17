@@ -44,9 +44,6 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public final class AuroraClassic implements IAurora {
 
-	protected static final int PLAYER_FIXED_Y_OFFSET = 64;
-	protected static final int PLAYER_FIXED_Z_OFFSET = 150;
-
 	protected final Random random;
 	protected final AuroraBand[] bands;
 
@@ -132,7 +129,7 @@ public final class AuroraClassic implements IAurora {
 	}
 
 	protected int getZOffset() {
-		return PLAYER_FIXED_Z_OFFSET;
+		return AuroraUtils.PLAYER_FIXED_Z_OFFSET;
 	}
 
 	@Override
@@ -146,7 +143,7 @@ public final class AuroraClassic implements IAurora {
 		final Tessellator tess = Tessellator.getInstance();
 		final BufferBuilder renderer = tess.getBuffer();
 
-		final double tranY = PLAYER_FIXED_Y_OFFSET;
+		final double tranY = AuroraUtils.PLAYER_FIXED_Y_OFFSET;
 
 		final double tranX = mc.player.posX
 				- (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTick);

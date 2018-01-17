@@ -80,6 +80,7 @@ final class Node {
 	private static final float COEFF_2 = COEFF_1 * 3.0F;
 	private static final float CONST = 1e-10F;
 
+	@SuppressWarnings("unused")
 	private static final float atan2_fast(final float y, final float x) {
 		final float abs_y = MathStuff.abs(y) + CONST;
 		final float angle;
@@ -119,9 +120,9 @@ final class Node {
 	public void findAngles(final Node next) {
 		this.tetX = this.tetX2 = this.posX;
 		this.tetZ = this.tetZ2 = this.getModdedZ();
-		this.angle = 0.0F;
+		//this.angle = 0.0F;
 		if (next != null) {
-			this.angle = atan2_fast(this.getModdedZ() - next.getModdedZ(), this.posX - next.posX);
+			//this.angle = atan2_fast(this.getModdedZ() - next.getModdedZ(), this.posX - next.posX);
 			this.tetX += this.cosDeg90;
 			this.tetX2 += this.cosDeg270;
 			this.tetZ += this.sinDeg90;

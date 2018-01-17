@@ -21,18 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.blockartistry.DynSurround.client.shader;
 
-package org.blockartistry.DynSurround.client.aurora;
+import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.lib.shaders.ShaderProgram;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.util.ResourceLocation;
 
-@SideOnly(Side.CLIENT)
-public class AuroraEngineShader implements IAuroraEngine {
+public final class Shaders {
 
-	@Override
-	public IAurora produce(final long seed) {
-		return new AuroraShaderBand(seed);
+	public static final ShaderProgram AURORA;
+
+	static {
+
+		AURORA = register("Aurora", new ResourceLocation(DSurround.MOD_ID, "shaders/aurora.vert"),
+				new ResourceLocation(DSurround.MOD_ID, "shaders/aurora.frag"));
+	}
+	
+	public static boolean useShaders() {
+		return false; //OpenGlHelper.areShadersSupported();
 	}
 
+	private static ShaderProgram register(final String name, final ResourceLocation vertex,
+			final ResourceLocation fragment) {
+		try {
+			return ShaderProgram.createProgram(name, vertex, fragment);
+		} catch (final Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return null;
+	}
 }
