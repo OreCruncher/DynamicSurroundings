@@ -1,3 +1,14 @@
+###DynamicSurroundings-1.11.2-3.4.8.5
+**What's New**
+* Two new water ripple textures to select courtesy of yahlirs4!  In addition to the classic lighter colored round ripple there is a darker round ripple as well as a square (for those that like the blockiness theme).  You can find the option to change the style under "Rain Options".
+
+**Fixes**
+* Unfade a fading aurora if conditions permit.  This condition is frequent if bouncing between biomes where one supports auroras and the other doesn't.
+* Changed when auroras render to the display.  Auroras should display with Astral Sorcery, Stellar Sky, Extended Days, and Weather Storms & Tornadoes.
+
+**Changes**
+* Adjust aurora alpha so they are more visible (brighter?)
+
 ###DynamicSurroundings-1.11.2-3.4.8.4
 **What's New**
 * Based on feedback brought the auroras back as hovering bands rather than rendered at view range.  There are no configuration options available currently.  Working on further changes and those changes affect what I do.

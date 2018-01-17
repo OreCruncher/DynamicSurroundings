@@ -46,6 +46,10 @@ public class Color {
 		ImmutableColor(final int red, final int green, final int blue) {
 			super(red, green, blue);
 		}
+		
+		ImmutableColor(final float red, final float green, final float blue) {
+			super(red, green, blue);
+		}
 
 		@Override
 		public Color scale(final float scaleFactor) {
@@ -104,6 +108,11 @@ public class Color {
 	public static final Color MC_LIGHTPURPLE = new ImmutableColor(255, 85, 255);
 	public static final Color MC_YELLOW = new ImmutableColor(255, 255, 85);
 	public static final Color MC_WHITE = new ImmutableColor(255, 255, 255);
+	
+	// Basic Aurora color
+	public static final Color AURORA_RED = new ImmutableColor(1.0F, 0F, 0F);
+	public static final Color AURORA_GREEN = new ImmutableColor(0.5F, 1.0F, 0.0F);
+	public static final Color AURORA_BLUE = new ImmutableColor(0F, 0.8F, 1.0F);
 
 	private static final Map<TextFormatting, Color> colorLookup = new EnumMap<TextFormatting, Color>(TextFormatting.class);
 	static {
@@ -144,7 +153,7 @@ public class Color {
 	public Color(@Nonnull final Vec3d vec) {
 		this((float) vec.xCoord, (float) vec.yCoord, (float) vec.zCoord);
 	}
-
+	
 	public Color(final int rgb) {
 		this((rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff);
 	}
