@@ -132,7 +132,7 @@ public class AuroraBand {
 		for (int i = 0; i < this.length; i++) {
 			// Scale the widths at the head and tail of the
 			// aurora band. This makes them taper.
-			final float width;
+			float width;
 			if (noTaper) {
 				width = this.nodeWidth;
 			} else if (i < lowerBound) {
@@ -164,7 +164,8 @@ public class AuroraBand {
 			for (int k = 7; k >= 0; k--) {
 				final int idx = i * 8 + k;
 				if (idx == bound) {
-					nodeList[idx] = new Node(0.0F, 7.0F + this.random.nextFloat(), 0.0F, angle);
+					final float amplitude = fixedHeight ? AURORA_AMPLITUDE : (7.0F + this.random.nextFloat());
+					nodeList[idx] = new Node(0.0F, amplitude, 0.0F, angle);
 				} else {
 					float y;
 					if (fixedHeight)
@@ -195,7 +196,9 @@ public class AuroraBand {
 			}
 			for (int h = 0; h < 8; h++) {
 				float y;
-				if (j == this.length / 8 - 1)
+				if (fixedHeight) {
+					y = AURORA_AMPLITUDE;
+				} else if (j == this.length / 8 - 1)
 					y = MathStuff.cos(ANGLE2 * h) * 7.0F + this.random.nextFloat() / 2.0F;
 				else
 					y = 10.0F + this.random.nextFloat() * 5.0F;
