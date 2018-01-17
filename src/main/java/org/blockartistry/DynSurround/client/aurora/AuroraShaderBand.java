@@ -29,6 +29,8 @@ import java.util.Random;
 import org.blockartistry.DynSurround.client.shader.Shaders;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.OpenGlState;
+import org.blockartistry.lib.OpenGlUtil;
+import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.lib.shaders.ShaderProgram;
 import org.blockartistry.lib.shaders.ShaderProgram.IShaderUseCallback;
@@ -51,9 +53,12 @@ public class AuroraShaderBand implements IAurora {
 	protected ShaderProgram program;
 	protected IShaderUseCallback callback;
 
-	protected static final Color topColor = new Color(1.0F, 0F, 0F);
-	protected static final Color middleColor = new Color(0.5F, 1.0F, 0.0F);
-	protected static final Color bottomColor = new Color(0.0F, 0.8F, 1.0F);
+	// Base color of the aurora
+	protected final Color baseColor;
+	// Fade color of the aurora
+	protected final Color fadeColor;
+	// Middle color
+	protected final Color middleColor;
 
 	protected AuroraLifeTracker tracker;
 	protected final Random random;
@@ -66,16 +71,20 @@ public class AuroraShaderBand implements IAurora {
 		// Setup the life cycle
 		this.tracker = new AuroraLifeTracker(AuroraUtils.AURORA_PEAK_AGE, AuroraUtils.AURORA_AGE_RATE);
 		this.random = new XorShiftRandom(seed);
+		final AuroraColor colors = AuroraColor.get(this.random);
+		this.baseColor = colors.baseColor;
+		this.fadeColor = colors.fadeColor;
+		this.middleColor = colors.middleColor;
 
 		this.program = Shaders.AURORA;
 
 		this.callback = shader -> {
 			shader.set("time", AuroraUtils.getTimeSeconds() * 0.75F);
 			shader.set("resolution", AuroraShaderBand.this.getAuroraWidth(), AuroraShaderBand.this.getAuroraHeight());
-			shader.set("topColor", AuroraShader.topColor);
-			shader.set("middleColor", AuroraShader.middleColor);
-			shader.set("bottomColor", AuroraShader.bottomColor);
-			shader.set("alpha", this.tracker.ageRatio());
+			shader.set("topColor", AuroraShaderBand.this.fadeColor);
+			shader.set("middleColor", AuroraShaderBand.this.middleColor);
+			shader.set("bottomColor", AuroraShaderBand.this.baseColor);
+			shader.set("alpha", AuroraShaderBand.this.getAlpha());
 		};
 
 		final AuroraGeometry geo = AuroraGeometry.get(this.random);
@@ -84,8 +93,12 @@ public class AuroraShaderBand implements IAurora {
 		this.panelTexWidth = this.band.getNodeWidth() / this.auroraWidth;
 	}
 
+	protected float getAlpha() {
+		return MathStuff.clamp((this.band.getAlphaLimit() / 255F) * this.tracker.ageRatio() * 1.5F, 0F, 1F);
+	}
+
 	protected float getZOffset() {
-		return (AuroraUtils.getChunkRenderDistance() + 1) * 16;
+		return AuroraUtils.PLAYER_FIXED_Z_OFFSET;
 	}
 
 	protected float getAuroraWidth() {
@@ -125,7 +138,10 @@ public class AuroraShaderBand implements IAurora {
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("<SHADER> ");
-		builder.append("alpha: ").append((int) (this.tracker.ageRatio() * 255));
+		builder.append(" base: ").append(this.baseColor.toString());
+		builder.append(", mid: ").append(this.middleColor.toString());
+		builder.append(", fade: ").append(this.fadeColor.toString());
+		builder.append("alpha: ").append((int) (this.getAlpha() * 255));
 		if (!this.tracker.isAlive())
 			builder.append(", DEAD");
 		else if (this.tracker.isFading())
@@ -141,15 +157,11 @@ public class AuroraShaderBand implements IAurora {
 
 		this.band.translate(partialTick);
 
-		final float width = this.getAuroraWidth();
-		final float xOffset = -(width / 2);
-		final float yOffset = 20;
-
 		final Minecraft mc = Minecraft.getMinecraft();
 		final Tessellator tess = Tessellator.getInstance();
 		final BufferBuilder renderer = tess.getBuffer();
 
-		final double tranY = AuroraUtils.PLAYER_FIXED_Y_OFFSET;
+		final double tranY = AuroraUtils.PLAYER_FIXED_Y_OFFSET - 20;
 
 		final double tranX = mc.player.posX
 				- (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTick);
@@ -159,11 +171,10 @@ public class AuroraShaderBand implements IAurora {
 
 		final OpenGlState glState = OpenGlState.push();
 
-		GlStateManager.translate(tranX + xOffset, tranY + yOffset, tranZ);
+		GlStateManager.translate(tranX, tranY, tranZ);
+		GlStateManager.scale(0.5D, 10.0D, 0.5D);
 		GlStateManager.disableLighting();
-		GlStateManager.enableBlend();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
-				GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		OpenGlUtil.setAuroraBlend();
 
 		GL11.glFrontFace(GL11.GL_CW);
 
@@ -173,11 +184,17 @@ public class AuroraShaderBand implements IAurora {
 			final Node[] array = this.band.getNodeList();
 			for (int i = 0; i < array.length - 1; i++) {
 
+				final float v1 = 0;
+				final float v2 = 1F;
+				final float u1 = i * this.panelTexWidth;
+				final float u2 = u1 + this.panelTexWidth;
+
 				final Node node = array[i];
 
 				final double posY = node.getModdedY();
-				final double posX = node.posX;
-				final double posZ = node.getModdedZ();
+				final double posX = node.tetX;
+				final double posZ = node.tetZ;
+				final double zero = 0;
 
 				final double posX2;
 				final double posZ2;
@@ -185,25 +202,20 @@ public class AuroraShaderBand implements IAurora {
 
 				if (i < array.length - 2) {
 					final Node nodePlus = array[i + 1];
-					posX2 = nodePlus.posX;
-					posZ2 = nodePlus.getModdedZ();
+					posX2 = nodePlus.tetX;
+					posZ2 = nodePlus.tetZ;
 					posY2 = nodePlus.getModdedY();
 				} else {
-					posX2 = posX;
-					posZ2 = posZ;
-					posY2 = posY;
+					posX2 = node.posX;
+					posZ2 = node.getModdedZ();
+					posY2 = 0.0D;
 				}
 
-				final float v1 = 0;
-				final float v2 = 1F;
-				final float u1 = i * this.panelTexWidth;
-				final float u2 = u1 + this.panelTexWidth;
-
-				renderer.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_TEX);
-				renderer.pos(posX, posY, posZ).tex(u1, v1).endVertex();
-				renderer.pos(posX, posY2, posZ).tex(u1, v2).endVertex();
+				renderer.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_TEX);
+				renderer.pos(posX, zero, posZ).tex(u1, v1).endVertex();
+				renderer.pos(posX, posY, posZ).tex(u1, v2).endVertex();
 				renderer.pos(posX2, posY2, posZ2).tex(u2, v2).endVertex();
-				renderer.pos(posX2, posY, posZ2).tex(u2, v1).endVertex();
+				renderer.pos(posX2, zero, posZ2).tex(u2, v1).endVertex();
 				tess.draw();
 
 			}

@@ -44,10 +44,6 @@ public class AuroraShader implements IAurora {
 	protected ShaderProgram program;
 	protected IShaderUseCallback callback;
 
-	protected static final Color topColor = new Color(1.0F, 0F, 0F);
-	protected static final Color middleColor = new Color(0.5F, 1.0F, 0.0F);
-	protected static final Color bottomColor = new Color(0.0F, 0.8F, 1.0F);
-
 	protected AuroraLifeTracker tracker;
 
 	public AuroraShader() {
@@ -59,9 +55,9 @@ public class AuroraShader implements IAurora {
 		this.callback = shader -> {
 			shader.set("time", AuroraUtils.getTimeSeconds() * 0.75F);
 			shader.set("resolution", AuroraShader.this.getAuroraWidth(), AuroraShader.this.getAuroraHeight());
-			shader.set("topColor", AuroraShader.topColor);
-			shader.set("middleColor", AuroraShader.middleColor);
-			shader.set("bottomColor", AuroraShader.bottomColor);
+			shader.set("topColor", Color.AURORA_RED);
+			shader.set("middleColor", Color.AURORA_GREEN);
+			shader.set("bottomColor", Color.AURORA_BLUE);
 			shader.set("alpha", this.tracker.ageRatio());
 		};
 	}

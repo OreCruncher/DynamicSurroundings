@@ -58,7 +58,7 @@ public final class AuroraClassic implements IAurora {
 		this.tracker = new AuroraLifeTracker(AuroraUtils.AURORA_PEAK_AGE, AuroraUtils.AURORA_AGE_RATE);
 		this.random = new XorShiftRandom(seed);
 		this.bands = new AuroraBand[this.random.nextInt(3) + 1];
-		final ColorPair pair = ColorPair.get(this.random);
+		final AuroraColor pair = AuroraColor.get(this.random);
 		this.baseColor = pair.baseColor;
 		this.fadeColor = pair.fadeColor;
 

@@ -26,14 +26,20 @@ package org.blockartistry.lib;
 import net.minecraft.client.renderer.GlStateManager;
 
 public final class OpenGlUtil {
-	
+
 	private OpenGlUtil() {
-		
+
 	}
-	
+
 	public static void setStandardBlend() {
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+	}
+
+	public static void setAuroraBlend() {
+		GlStateManager.enableBlend();
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
+				GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 	}
 
 }
