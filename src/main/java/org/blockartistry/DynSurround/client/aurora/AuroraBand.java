@@ -39,8 +39,8 @@ public class AuroraBand {
 	protected static final float ANGLE1 = MathStuff.PI_F / 16.0F;
 	protected static final float ANGLE2 = MathStuff.toRadians(90.0F / 7.0F);
 	protected static final float AURORA_SPEED = 0.75F;
-	protected static final float AURORA_AMPLITUDE = 18.0F;
 	protected static final float AURORA_WAVELENGTH = 8.0F;
+	public static final float AURORA_AMPLITUDE = 18.0F;
 
 	protected final Random random;
 
@@ -51,11 +51,15 @@ public class AuroraBand {
 	protected float nodeLength;
 	protected float nodeWidth;
 
-	public AuroraBand(final Random random, final AuroraGeometry geo) {
+	public AuroraBand(final Random random, final AuroraGeometry geo, final boolean noTaper, final boolean fixedHeight) {
 		this.random = random;
 		this.preset(geo);
-		this.generateBands();
+		this.generateBands(noTaper, fixedHeight);
 		this.translate(0);
+	}
+
+	public AuroraBand(final Random random, final AuroraGeometry geo) {
+		this(random, geo, false, false);
 	}
 
 	protected AuroraBand(final Node[] nodes, final AuroraBand band) {
@@ -76,6 +80,10 @@ public class AuroraBand {
 	@Nonnull
 	public Node[] getNodeList() {
 		return this.nodes;
+	}
+
+	public float getNodeWidth() {
+		return this.nodeWidth;
 	}
 
 	public void update() {
@@ -114,8 +122,8 @@ public class AuroraBand {
 		this.alphaLimit = geo.alphaLimit;
 	}
 
-	protected void generateBands() {
-		this.nodes = populate();
+	protected void generateBands(final boolean noTaper, final boolean fixedHeight) {
+		this.nodes = populate(noTaper, fixedHeight);
 		final float factor = MathStuff.PI_F / (this.length / 4);
 		final int lowerBound = this.length / 8 + 1;
 		final int upperBound = this.length * 7 / 8 - 1;
@@ -125,7 +133,9 @@ public class AuroraBand {
 			// Scale the widths at the head and tail of the
 			// aurora band. This makes them taper.
 			final float width;
-			if (i < lowerBound) {
+			if (noTaper) {
+				width = this.nodeWidth;
+			} else if (i < lowerBound) {
 				width = MathStuff.sin(factor * count++) * this.nodeWidth;
 			} else if (i > upperBound) {
 				width = MathStuff.sin(factor * count--) * this.nodeWidth;
@@ -138,7 +148,7 @@ public class AuroraBand {
 	}
 
 	@Nonnull
-	protected Node[] populate() {
+	protected Node[] populate(final boolean noTaper, final boolean fixedHeight) {
 		final Node[] nodeList = new Node[this.length];
 		final int bound = this.length / 2 - 1;
 
@@ -157,7 +167,9 @@ public class AuroraBand {
 					nodeList[idx] = new Node(0.0F, 7.0F + this.random.nextFloat(), 0.0F, angle);
 				} else {
 					float y;
-					if (i == 0)
+					if (fixedHeight)
+						y = AURORA_AMPLITUDE;
+					else if (i == 0)
 						y = MathStuff.sin(ANGLE1 * k) * 7.0F + this.random.nextFloat() / 2.0F;
 					else
 						y = 10.0F + this.random.nextFloat() * 5.0F;
