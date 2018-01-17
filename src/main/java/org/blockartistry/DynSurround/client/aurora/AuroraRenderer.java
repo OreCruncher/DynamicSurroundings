@@ -28,7 +28,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,28 +37,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.client.handlers.AuroraEffectHandler;
-import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 
 @SideOnly(Side.CLIENT)
 public final class AuroraRenderer extends IRenderHandler {
 
-	private static boolean shouldHook(@Nonnull final World world) {
-		final IRenderHandler handler = world.provider.getSkyRenderer();
-		if (handler instanceof AuroraRenderer)
-			return false;
-
-		final DimensionRegistry registry = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION);
-		return registry.hasAuroras(world);
-	}
-
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void doRender(@Nonnull final RenderWorldLastEvent event) {
-		// Make sure that the sky renderer is an aurora renderer
-		if (shouldHook(Minecraft.getMinecraft().world)) {
-			final AuroraRenderer hook = new AuroraRenderer(Minecraft.getMinecraft().world.provider.getSkyRenderer());
-			Minecraft.getMinecraft().world.provider.setSkyRenderer(hook);
+
+		// Render our aurora if it is present
+		final IAurora aurora = AuroraEffectHandler.getCurrentAurora();
+		if (aurora != null) {
+			aurora.render(event.getPartialTicks());
 		}
 	}
 
@@ -70,28 +58,8 @@ public final class AuroraRenderer extends IRenderHandler {
 	}
 
 	@Override
-	public void render(final float partialTicks, @Nonnull final WorldClient world, @Nonnull final Minecraft mc) {
-		if (this.handler == null) {
-			// There isn't another handler. This means we have to call back
-			// into the Minecraft code to render the normal sky. This is tricky
-			// because we need to unhook ourselves and rehook after rendering.
-			world.provider.setSkyRenderer(null);
-			try {
-				mc.renderGlobal.renderSky(partialTicks, 2);
-			} catch (final Throwable t) {
-				;
-			}
-			world.provider.setSkyRenderer(this);
-		} else {
-			// Call the existing handler
-			this.handler.render(partialTicks, world, mc);
-		}
+	public void render(float partialTicks, WorldClient world, Minecraft mc) {
 
-		// Render our aurora if it is present
-		final IAurora aurora = AuroraEffectHandler.getCurrentAurora();
-		if (aurora != null) {
-			aurora.render(partialTicks);
-		}
 	}
 
 }
