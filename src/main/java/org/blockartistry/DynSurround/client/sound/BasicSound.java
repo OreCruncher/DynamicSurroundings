@@ -29,6 +29,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import com.google.common.base.MoreObjects;
@@ -223,7 +224,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 	}
 
 	public boolean canSoundBeHeard(@Nonnull final BlockPos soundPos) {
-		
+
 		if (this.getAttenuationType() == AttenuationType.NONE)
 			return true;
 
@@ -274,5 +275,9 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 				.addValue(this.category.toString()).add("state", this.getState()).add("v", this.getVolume())
 				.add("p", this.getPitch()).add("s", this.volumeScale.getScale()).addValue(this.getAttenuationType())
 				.add("x", this.getXPosF()).add("y", this.getYPosF()).add("z", this.getZPosF()).toString();
+	}
+
+	public static AttenuationType noAttenuation() {
+		return ModEnvironment.SoundPhysics.isLoaded() ? AttenuationType.LINEAR : AttenuationType.NONE;
 	}
 }

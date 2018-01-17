@@ -130,9 +130,9 @@ public class PlayerActionHandler extends EffectHandlerBase {
 
 		this.itemRegistry = RegistryManager.get(RegistryType.ITEMS);
 	}
-	
+
 	private static BasicSound<?> makeSound(@Nonnull final SoundEffect se) {
-		return se.createSound(EnvironState.getPlayer(), false).setAttenuationType(AttenuationType.NONE);
+		return se.createSound(EnvironState.getPlayer(), false).setAttenuationType(BasicSound.noAttenuation());
 	}
 
 	@Override

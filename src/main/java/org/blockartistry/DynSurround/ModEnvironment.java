@@ -58,7 +58,9 @@ public enum ModEnvironment {
 	//
 	Albedo("albedo"),
 	//
-	AmbientSounds("ambientsounds");
+	AmbientSounds("ambientsounds"),
+	//
+	SoundPhysics("soundphysics");
 
 	protected final String modId;
 	protected boolean isLoaded;
