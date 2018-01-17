@@ -97,8 +97,13 @@ public class AuroraShader implements IAurora {
 	}
 
 	@Override
-	public void die() {
-		this.tracker.setFading(true);
+	public void setFading(final boolean flag) {
+		this.tracker.setFading(flag);
+	}
+	
+	@Override
+	public boolean isDying() {
+		return this.tracker.isFading();
 	}
 
 	@Override

@@ -46,20 +46,17 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public final class AuroraEffectHandler extends EffectHandlerBase {
 
-	// AuroraClassic information
+	private final IAuroraEngine auroraEngine;
+
 	private static IAurora current;
 	private static int dimensionId;
-
-	private final IAuroraEngine auroraEngine;
 
 	public AuroraEffectHandler() {
 		super("AuroraEffectHandler");
 
 		/*
-		if (OpenGlHelper.areShadersSupported())
-			this.auroraEngine = new AuroraEngineShader();
-		else
-			this.auroraEngine = new AuroraEngineClassic();
+		 * if (OpenGlHelper.areShadersSupported()) this.auroraEngine = new
+		 * AuroraEngineShader(); else this.auroraEngine = new AuroraEngineClassic();
 		 */
 		this.auroraEngine = new AuroraEngineClassic();
 	}
@@ -113,9 +110,14 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 				current = null;
 			} else {
 				current.update();
-				if (current.isAlive() && !canAuroraStay(player.world)) {
+				final boolean isDying = current.isDying();
+				final boolean canStay = canAuroraStay(player.world);
+				if (isDying && canStay) {
+					DSurround.log().debug("Unfading aurora...");
+					current.setFading(false);
+				} else if (!isDying && !canStay) {
 					DSurround.log().debug("Aurora fade...");
-					current.die();
+					current.setFading(true);
 				}
 			}
 		}

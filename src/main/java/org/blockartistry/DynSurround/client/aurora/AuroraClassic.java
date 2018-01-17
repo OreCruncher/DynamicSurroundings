@@ -73,18 +73,27 @@ public final class AuroraClassic implements IAurora {
 		}
 	}
 
+	@Override
 	public boolean isAlive() {
 		return this.tracker.isAlive();
 	}
 
-	public void die() {
-		this.tracker.setFading(true);
+	@Override
+	public void setFading(final boolean flag) {
+		this.tracker.setFading(flag);
+	}
+	
+	@Override
+	public boolean isDying() {
+		return this.tracker.isFading();
 	}
 
+	@Override
 	public boolean isComplete() {
 		return !this.isAlive();
 	}
 
+	@Override
 	public void update() {
 		this.tracker.update();
 		for (int i = 0; i < this.bands.length; i++)
@@ -95,9 +104,10 @@ public final class AuroraClassic implements IAurora {
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("<CLASSIC> ");
-		builder.append("base ").append(this.baseColor.toString());
-		builder.append(", fade ").append(this.fadeColor.toString());
-		builder.append(", alpha ").append(this.getAlpha());
+		builder.append("bands: ").append(this.bands.length);
+		builder.append(", base: ").append(this.baseColor.toString());
+		builder.append(", fade: ").append(this.fadeColor.toString());
+		builder.append(", alpha: ").append(this.getAlpha());
 		if (this.tracker.isFading())
 			builder.append(", FADING");
 		return builder.toString();

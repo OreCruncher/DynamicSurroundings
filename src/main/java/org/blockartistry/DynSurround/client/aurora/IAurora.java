@@ -42,7 +42,12 @@ public interface IAurora {
 	 * Instructs the aurora to start the process of decay
 	 * (i.e. start to fade)
 	 */
-	void die();
+	void setFading(final boolean flag);
+	
+	/*
+	 * Indicates if the aurora is in the process of dying
+	 */
+	boolean isDying();
 	
 	/*
 	 * Perform the necessary housekeeping for the aurora.  Occurs
