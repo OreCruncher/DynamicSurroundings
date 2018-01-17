@@ -101,7 +101,7 @@ public class AuroraShaderBand implements IAurora {
 	}
 
 	protected float getAlpha() {
-		return MathStuff.clamp((this.bands[0].getAlphaLimit() / 255F) * this.tracker.ageRatio() * 1.75F, 0F, 1F);
+		return MathStuff.clamp((this.bands[0].getAlphaLimit() / 255F) * this.tracker.ageRatio() * 2.0F, 0F, 1F);
 	}
 
 	protected float getZOffset() {
