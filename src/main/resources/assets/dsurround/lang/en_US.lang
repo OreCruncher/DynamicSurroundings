@@ -82,6 +82,8 @@ cfg.logging.FlagMask.tooltip=Bitmask for toggling various debug traces
 
 cfg.rain.cat.Rain=Rain Options
 cfg.rain.cat.Rain.tooltip=Options that control rain effects in the client
+cfg.rain.RippleStyle=Style of rain water ripple
+cfg.rain.RippleStyle.tooltip=0: original round, 1: darker round, 2: square
 cfg.rain.RainVolume=Rain Sound Level
 cfg.rain.RainVolume.tooltip=Volume scale factor to apply to rain sound level to adjust
 cfg.rain.VanillaRain=Use Vanilla Algorithms
