@@ -38,6 +38,7 @@ import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.registry.ItemRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
+import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -228,7 +229,7 @@ public class PlayerActionHandler extends EffectHandlerBase {
 		final double distSq = ModOptions.specialEffectRange * ModOptions.specialEffectRange;
 		for (final Entity e : EnvironState.getWorld().loadedEntityList) {
 			if (isRightMobType(e)) {
-				final int v = ((EnvironState.getTickCounter() + e.getEntityId()) / 10) % 8;
+				final int v = getTickInterval(e);
 				if (v < 3 && !e.isInvisibleToPlayer(EnvironState.getPlayer())
 						&& e.getDistanceSqToEntity(EnvironState.getPlayer()) <= distSq
 						&& EnvironState.getPlayer().canEntityBeSeen(e)) {
@@ -236,6 +237,10 @@ public class PlayerActionHandler extends EffectHandlerBase {
 				}
 			}
 		}
+	}
+	
+	protected int getTickInterval(final Entity e) {
+		return ((EnvironState.getTickCounter() + MathStuff.abs(e.getPersistentID().hashCode())) / 10) % 8;
 	}
 
 	protected boolean isRightMobType(final Entity e) {
