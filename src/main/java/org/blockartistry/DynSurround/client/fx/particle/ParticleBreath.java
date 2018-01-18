@@ -79,6 +79,11 @@ public class ParticleBreath extends ParticleCloud {
 	}
 
 	@Override
+	public boolean isTransparent() {
+		return true;
+	}
+
+	@Override
 	public void onUpdate() {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
