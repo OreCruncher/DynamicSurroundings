@@ -438,9 +438,10 @@ public final class ModOptions {
 	public static final String CONFIG_HUNGER_THRESHOLD = "Hunger Threshold";
 	public static final String CONFIG_ENABLE_FOOTPRINTS = "Footprints";
 	public static final String CONFIG_FOOTPRINT_STYLE = "Footprint Style";
+	public static final String CONFIG_SHOW_BREATH = "Show Frost Breath";
 	private static final List<String> playerSort = Arrays.asList(CONFIG_SUPPRESS_POTION_PARTICLES,
 			CONFIG_ENABLE_POPOFFS, CONFIG_SHOW_CRIT_WORDS, CONFIG_ENABLE_FOOTPRINTS, CONFIG_FOOTPRINT_STYLE,
-			CONFIG_HURT_THRESHOLD, CONFIG_HUNGER_THRESHOLD);
+			CONFIG_HURT_THRESHOLD, CONFIG_HUNGER_THRESHOLD, CONFIG_SHOW_BREATH);
 
 	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_SUPPRESS_POTION_PARTICLES, defaultValue = "false", lang = "cfg.player.PotionParticles")
 	@Comment("Suppress player's potion particles from rendering")
@@ -466,6 +467,9 @@ public final class ModOptions {
 	@Comment("Amount of food bar remaining to trigger player hunger sound (0 disable)")
 	@MinMaxInt(min = 0, max = 10)
 	public static int playerHungerThreshold = 8;
+	@Parameter(category = CATEGORY_PLAYER, property = CONFIG_SHOW_BREATH, defaultValue = "true", lang = "cfg.player.ShowBreath")
+	@Comment("Show player frost breath in cold weather")
+	public static boolean showBreath = true;
 
 	public static final String CATEGORY_POTION_HUD = "player.potion hud";
 	public static final String CONFIG_POTION_HUD_NONE = "No Potion HUD";

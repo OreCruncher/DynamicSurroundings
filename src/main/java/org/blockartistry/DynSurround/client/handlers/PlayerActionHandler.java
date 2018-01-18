@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.fx.particle.ParticleBreath;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
@@ -37,6 +38,7 @@ import org.blockartistry.DynSurround.registry.ItemRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound.AttenuationType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -130,7 +132,7 @@ public class PlayerActionHandler extends EffectHandlerBase {
 
 		this.itemRegistry = RegistryManager.get(RegistryType.ITEMS);
 	}
-	
+
 	private static BasicSound<?> makeSound(@Nonnull final SoundEffect se) {
 		return se.createSound(EnvironState.getPlayer(), false).setAttenuationType(AttenuationType.NONE);
 	}
@@ -146,6 +148,10 @@ public class PlayerActionHandler extends EffectHandlerBase {
 			this.mainHand.update();
 			this.offHand.update();
 		}
+
+		// Frost breath if enabled
+		if (ModOptions.showBreath)
+			this.doFrostBreath();
 	}
 
 	@SubscribeEvent
@@ -211,6 +217,17 @@ public class PlayerActionHandler extends EffectHandlerBase {
 				final BasicSound<?> sound = makeSound(soundEffect);
 				sound.setRoutable(DSurround.isInstalledOnServer());
 				SoundEffectHandler.INSTANCE.playSound(sound);
+			}
+		}
+	}
+
+	protected void doFrostBreath() {
+		final int v = (EnvironState.getTickCounter() / 10) % 6;
+		if (v < 3) {
+			// < 0.2D is considered COLD
+			final float temp = EnvironState.getPlayerBiome().getFloatTemperature(EnvironState.getPlayerPosition());
+			if (temp < 0.2F) {
+				Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleBreath(EnvironState.getPlayer()));
 			}
 		}
 	}
