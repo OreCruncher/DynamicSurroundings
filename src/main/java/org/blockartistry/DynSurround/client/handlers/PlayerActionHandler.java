@@ -39,13 +39,17 @@ import org.blockartistry.DynSurround.registry.ItemRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.AbstractIllager;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -221,13 +225,29 @@ public class PlayerActionHandler extends EffectHandlerBase {
 	}
 
 	protected void doFrostBreath() {
-		final int v = (EnvironState.getTickCounter() / 10) % 8;
-		if (v < 3) {
-			// < 0.2D is considered COLD
-			final float temp = EnvironState.getPlayerBiome().getFloatTemperature(EnvironState.getPlayerPosition());
-			if (temp < 0.2F) {
-				ParticleHelper.addParticle(new ParticleBreath(EnvironState.getPlayer()));
+		final double distSq = ModOptions.specialEffectRange * ModOptions.specialEffectRange;
+		for (final Entity e : EnvironState.getWorld().loadedEntityList) {
+			if (isRightMobType(e)) {
+				final int v = ((EnvironState.getTickCounter() + e.getEntityId()) / 10) % 8;
+				if (v < 3 && !e.isInvisibleToPlayer(EnvironState.getPlayer())
+						&& e.getDistanceSqToEntity(EnvironState.getPlayer()) <= distSq
+						&& EnvironState.getPlayer().canEntityBeSeen(e)) {
+					handleEntityBreath(e);
+				}
 			}
+		}
+	}
+
+	protected boolean isRightMobType(final Entity e) {
+		return e instanceof EntityPlayer || e instanceof EntityVillager || e instanceof AbstractIllager;
+	}
+	
+	protected void handleEntityBreath(final Entity entity) {
+		// < 0.2D is considered COLD
+		final BlockPos entityPos = entity.getPosition();
+		final float temp = entity.getEntityWorld().getBiome(entityPos).getFloatTemperature(entityPos);
+		if (temp < 0.2F) {
+			ParticleHelper.addParticle(new ParticleBreath(entity));
 		}
 	}
 
