@@ -27,11 +27,10 @@ package org.blockartistry.DynSurround.client.fx.particle;
 import java.lang.reflect.Field;
 import java.util.Random;
 
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraft.client.particle.ParticleCloud;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -42,20 +41,20 @@ public class ParticleBreath extends ParticleCloud {
 
 	protected static final Field sizeField = ReflectionHelper.findField(ParticleCloud.class, "field_70569_a", "oSize");
 
-	public ParticleBreath(final EntityPlayer player) {
-		super(player.world, 0, 0, 0, 0, 0, 0);
+	public ParticleBreath(final Entity entity) {
+		super(entity.world, 0, 0, 0, 0, 0, 0);
 
 		final Random random = XorShiftRandom.current();
 
 		// Generate steam particle vectoring from player's head in the direction
 		// they are looking. Need to offset out of the head block and down a little
 		// bit towards the mouth.
-		final Vec3d eyePosition = EnvironState.getPlayer().getPositionEyes(1.0F);
-		final Vec3d vector = EnvironState.getPlayer().getLookVec();
-		final Vec3d origin = eyePosition.add(vector.addVector(0D, -0.2D, 0D).scale(0.5D));
+		final Vec3d eyePosition = entity.getPositionEyes(1.0F);
+		final Vec3d look = entity.getLookVec();
+		final Vec3d origin = eyePosition.add(look.addVector(0D, -0.3D, 0D).scale(0.5D));
 		final Vec3d jitter = new Vec3d(random.nextGaussian() / 5F, random.nextGaussian() / 5F,
 				random.nextGaussian() / 5F);
-		final Vec3d acc = vector.add(jitter).scale(0.01D);
+		final Vec3d acc = look.add(jitter).scale(0.01D);
 
 		this.setPosition(origin.xCoord, origin.yCoord, origin.zCoord);
 		this.prevPosX = this.posX;
@@ -66,7 +65,7 @@ public class ParticleBreath extends ParticleCloud {
 		this.motionY = acc.yCoord;
 		this.motionZ = acc.zCoord;
 
-		this.particleAlpha = 0.25F;
+		this.particleAlpha = 0.2F;
 
 		this.particleGravity = 0F;
 		this.particleScale *= 0.25F;
@@ -77,7 +76,7 @@ public class ParticleBreath extends ParticleCloud {
 			ex.printStackTrace();
 		}
 	}
-
+	
 	@Override
 	public boolean isTransparent() {
 		return true;
