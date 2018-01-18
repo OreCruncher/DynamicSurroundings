@@ -151,6 +151,8 @@ cfg.aurora.cat.Aurora=Aurora Options
 cfg.aurora.cat.Aurora.tooltip=Options that control Aurora behavior and rendering
 cfg.aurora.EnableAurora=Auroras
 cfg.aurora.EnableAurora.tooltip=Enable/disable Aurora processing on server/client
+cfg.aurora.EnableShader=Use Shaders
+cfg.aurora.EnableShader.tooltip=Use shader when rendering aurora
 
 cfg.biomes.cat.Biomes=Biome Options
 cfg.biomes.cat.Biomes.tooltip=Options for controlling biome sound/effects

@@ -1,4 +1,5 @@
-/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/*
+ * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -20,26 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.blockartistry.DynSurround.client.shader;
 
-package org.blockartistry.lib;
+import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.lib.shaders.ShaderProgram;
 
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.util.ResourceLocation;
 
-public final class OpenGlUtil {
+public final class Shaders {
 
-	private OpenGlUtil() {
+	public static final ShaderProgram AURORA;
 
+	static {
+
+		AURORA = register("Aurora", new ResourceLocation(DSurround.MOD_ID, "shaders/aurora.vert"),
+				new ResourceLocation(DSurround.MOD_ID, "shaders/aurora.frag"));
+	}
+	
+	public static boolean areShadersSupported() {
+		return OpenGlHelper.areShadersSupported();
 	}
 
-	public static void setStandardBlend() {
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-	}
+	private static ShaderProgram register(final String name, final ResourceLocation vertex,
+			final ResourceLocation fragment) {
+		try {
+			return ShaderProgram.createProgram(name, vertex, fragment);
+		} catch (final Exception ex) {
+			ex.printStackTrace();
+		}
 
-	public static void setAuroraBlend() {
-		GlStateManager.enableBlend();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
-				GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		return null;
 	}
-
 }

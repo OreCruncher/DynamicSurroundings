@@ -1,4 +1,5 @@
-/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/*
+ * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -21,25 +22,17 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.lib;
+package org.blockartistry.DynSurround.client.aurora;
 
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public final class OpenGlUtil {
+@SideOnly(Side.CLIENT)
+public class AuroraEngineShader implements IAuroraEngine {
 
-	private OpenGlUtil() {
-
-	}
-
-	public static void setStandardBlend() {
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-	}
-
-	public static void setAuroraBlend() {
-		GlStateManager.enableBlend();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
-				GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+	@Override
+	public IAurora produce(final long seed) {
+		return new AuroraShaderBand(seed);
 	}
 
 }

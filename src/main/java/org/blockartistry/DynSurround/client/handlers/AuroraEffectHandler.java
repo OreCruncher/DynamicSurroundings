@@ -30,10 +30,12 @@ import javax.annotation.Nullable;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.aurora.AuroraEngineClassic;
+import org.blockartistry.DynSurround.client.aurora.AuroraEngineShader;
 import org.blockartistry.DynSurround.client.aurora.AuroraUtils;
 import org.blockartistry.DynSurround.client.aurora.IAurora;
 import org.blockartistry.DynSurround.client.aurora.IAuroraEngine;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.shader.Shaders;
 import org.blockartistry.lib.DiurnalUtils;
 import org.blockartistry.lib.random.MurmurHash3;
 
@@ -54,11 +56,10 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	public AuroraEffectHandler() {
 		super("AuroraEffectHandler");
 
-		/*
-		 * if (OpenGlHelper.areShadersSupported()) this.auroraEngine = new
-		 * AuroraEngineShader(); else this.auroraEngine = new AuroraEngineClassic();
-		 */
-		this.auroraEngine = new AuroraEngineClassic();
+		if (ModOptions.auroraUseShader && Shaders.areShadersSupported())
+			this.auroraEngine = new AuroraEngineShader();
+		else
+			this.auroraEngine = new AuroraEngineClassic();
 	}
 
 	@Nullable

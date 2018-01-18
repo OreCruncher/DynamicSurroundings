@@ -24,17 +24,22 @@
 
 package org.blockartistry.lib.io;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.lib.LibLog;
 
 import com.google.common.io.ByteStreams;
+
+import net.minecraft.util.ResourceLocation;
 
 public class Streams {
 
@@ -51,4 +56,20 @@ public class Streams {
 		}
 	}
 
+	public static String readResourceAsString(final ResourceLocation resource) throws Exception {
+		final String assetPath = String.format("/assets/%s/%s", resource.getResourceDomain(), resource.getResourcePath());
+		try (final InputStream stream = Streams.class.getResourceAsStream(assetPath)) {
+			if (stream != null) {
+				try (final BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"))) {
+					final StringBuilder source = new StringBuilder();
+					String line;
+					while ((line = reader.readLine()) != null)
+						source.append(line).append('\n');
+					return source.toString();
+				}
+			}
+		}
+
+		return StringUtils.EMPTY;
+	}
 }
