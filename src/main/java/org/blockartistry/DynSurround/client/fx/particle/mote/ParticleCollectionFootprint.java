@@ -96,7 +96,6 @@ public class ParticleCollectionFootprint extends ParticleCollection {
 		super.preRender();
 		GlStateManager.depthMask(false);
 		OpenGlUtil.setStandardBlend();
-		GlStateManager.enableBlend();
 	}
 
 }

@@ -1316,6 +1316,12 @@
 			]
 		},
 		{
+			"acousticProfile": "#plant",
+			"dictionaryEntries": [
+				"plant"
+			]
+		},
+		{
 			"acousticProfile": "#reed",
 			"dictionaryEntries": [
 				"sugarcane"
