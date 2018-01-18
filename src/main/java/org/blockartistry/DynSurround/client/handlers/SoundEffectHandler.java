@@ -210,9 +210,11 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	public void soundPlay(@Nonnull final PlaySoundEvent e) {
 		if (e.getName().equals("entity.lightning.thunder")) {
 			final ISound sound = e.getSound();
-			final BlockPos pos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
-			final ISound newSound = Sounds.THUNDER.createSound(pos).setVolume(ModOptions.thunderVolume);
-			e.setResultSound(newSound);
+			if (sound != null && sound.getVolume() > 16) {
+				final BlockPos pos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
+				final ISound newSound = Sounds.THUNDER.createSound(pos).setVolume(ModOptions.thunderVolume);
+				e.setResultSound(newSound);
+			}
 		}
 	}
 
@@ -264,8 +266,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	 */
 	@SubscribeEvent
 	public void playerJoinWorldEvent(@Nonnull final EntityJoinWorldEvent event) {
-		if (event.getEntity().world.isRemote && EnvironState.isPlayer(event.getEntity())
-				&& !event.getEntity().isDead)
+		if (event.getEntity().world.isRemote && EnvironState.isPlayer(event.getEntity()) && !event.getEntity().isDead)
 			clearSounds();
 	}
 
