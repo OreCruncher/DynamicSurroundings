@@ -39,11 +39,6 @@ public class ParticleCollectionFireFly extends ParticleCollection {
 	}
 
 	@Override
-	protected boolean enableLighting() {
-		return false;
-	}
-	
-	@Override
 	protected void preRender() {
 		super.preRender();
 		GlStateManager.depthMask(false);
