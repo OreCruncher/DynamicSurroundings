@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.aurora;
 
 import org.blockartistry.DynSurround.client.shader.Shaders;
 import org.blockartistry.lib.Color;
+import org.blockartistry.lib.shaders.ShaderException;
 import org.blockartistry.lib.shaders.ShaderProgram;
 import org.blockartistry.lib.shaders.ShaderProgram.IShaderUseCallback;
 import org.lwjgl.opengl.GL11;
@@ -52,13 +53,16 @@ public class AuroraShader implements IAurora {
 
 		this.program = Shaders.AURORA;
 
-		this.callback = shader -> {
-			shader.set("time", AuroraUtils.getTimeSeconds() * 0.75F);
-			shader.set("resolution", AuroraShader.this.getAuroraWidth(), AuroraShader.this.getAuroraHeight());
-			shader.set("topColor", Color.AURORA_RED);
-			shader.set("middleColor", Color.AURORA_GREEN);
-			shader.set("bottomColor", Color.AURORA_BLUE);
-			shader.set("alpha", this.tracker.ageRatio());
+		this.callback = new IShaderUseCallback() {
+			@Override
+			public void call(final ShaderProgram shader) throws ShaderException {
+				shader.set("time", AuroraUtils.getTimeSeconds() * 0.75F);
+				shader.set("resolution", AuroraShader.this.getAuroraWidth(), AuroraShader.this.getAuroraHeight());
+				shader.set("topColor", Color.AURORA_RED);
+				shader.set("middleColor", Color.AURORA_GREEN);
+				shader.set("bottomColor", Color.AURORA_BLUE);
+				shader.set("alpha", AuroraShader.this.tracker.ageRatio());
+			}
 		};
 	}
 
@@ -114,8 +118,8 @@ public class AuroraShader implements IAurora {
 
 	@Override
 	public void render(final float partialTick) {
-		
-		if(this.program == null)
+
+		if (this.program == null)
 			return;
 
 		try {

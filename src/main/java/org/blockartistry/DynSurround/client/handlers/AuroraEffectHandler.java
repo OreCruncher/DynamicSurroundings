@@ -56,7 +56,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	public AuroraEffectHandler() {
 		super("AuroraEffectHandler");
 
-		if (Shaders.useShaders())
+		if (ModOptions.auroraUseShader && Shaders.areShadersSupported())
 			this.auroraEngine = new AuroraEngineShader();
 		else
 			this.auroraEngine = new AuroraEngineClassic();

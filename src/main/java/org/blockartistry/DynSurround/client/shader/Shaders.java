@@ -39,8 +39,8 @@ public final class Shaders {
 				new ResourceLocation(DSurround.MOD_ID, "shaders/aurora.frag"));
 	}
 	
-	public static boolean useShaders() {
-		return false; //OpenGlHelper.areShadersSupported();
+	public static boolean areShadersSupported() {
+		return OpenGlHelper.areShadersSupported();
 	}
 
 	private static ShaderProgram register(final String name, final ResourceLocation vertex,

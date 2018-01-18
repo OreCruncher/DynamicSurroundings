@@ -248,7 +248,6 @@ public class ShaderProgram {
 				ARBShaderObjects.glGetObjectParameteriARB(obj, ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB));
 	}
 
-	@FunctionalInterface
 	public static interface IShaderUseCallback {
 		void call(final ShaderProgram program) throws ShaderException;
 	}

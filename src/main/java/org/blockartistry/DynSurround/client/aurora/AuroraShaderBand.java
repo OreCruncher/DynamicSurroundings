@@ -32,6 +32,7 @@ import org.blockartistry.lib.OpenGlState;
 import org.blockartistry.lib.OpenGlUtil;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
+import org.blockartistry.lib.shaders.ShaderException;
 import org.blockartistry.lib.shaders.ShaderProgram;
 import org.blockartistry.lib.shaders.ShaderProgram.IShaderUseCallback;
 import org.lwjgl.opengl.GL11;
@@ -80,13 +81,17 @@ public class AuroraShaderBand implements IAurora {
 
 		this.program = Shaders.AURORA;
 
-		this.callback = shader -> {
-			shader.set("time", AuroraUtils.getTimeSeconds() * 0.75F);
-			shader.set("resolution", AuroraShaderBand.this.getAuroraWidth(), AuroraShaderBand.this.getAuroraHeight());
-			shader.set("topColor", AuroraShaderBand.this.fadeColor);
-			shader.set("middleColor", AuroraShaderBand.this.middleColor);
-			shader.set("bottomColor", AuroraShaderBand.this.baseColor);
-			shader.set("alpha", AuroraShaderBand.this.getAlpha());
+		this.callback = new IShaderUseCallback() {
+			@Override
+			public void call(final ShaderProgram shader) throws ShaderException {
+				shader.set("time", AuroraUtils.getTimeSeconds() * 0.75F);
+				shader.set("resolution", AuroraShaderBand.this.getAuroraWidth(),
+						AuroraShaderBand.this.getAuroraHeight());
+				shader.set("topColor", AuroraShaderBand.this.fadeColor);
+				shader.set("middleColor", AuroraShaderBand.this.middleColor);
+				shader.set("bottomColor", AuroraShaderBand.this.baseColor);
+				shader.set("alpha", AuroraShaderBand.this.getAlpha());
+			}
 		};
 
 		final AuroraGeometry geo = AuroraGeometry.get(this.random);
