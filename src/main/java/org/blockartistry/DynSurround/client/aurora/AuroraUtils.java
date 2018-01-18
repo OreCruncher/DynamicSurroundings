@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.client.aurora;
 
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.lib.random.MurmurHash3;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
@@ -34,43 +35,52 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class AuroraUtils {
 
 	private AuroraUtils() {
-		
+
 	}
-	
+
 	public static final int PLAYER_FIXED_Y_OFFSET = 64;
 	public static final int PLAYER_FIXED_Z_OFFSET = 150;
 
 	public static final int AURORA_PEAK_AGE = 512;
 	public static final int AURORA_AGE_RATE = 1;
-	
+
 	/*
 	 * The range in chunks of the player view.
 	 */
 	public static int getChunkRenderDistance() {
 		return Minecraft.getMinecraft().gameSettings.renderDistanceChunks;
 	}
-	
+
 	/*
 	 * Use cached dimension info to obtain the dimensions sealevel setting.
 	 */
 	public static int getSeaLevel() {
 		return EnvironState.getDimensionInfo().getSeaLevel();
 	}
-	
+
 	/*
 	 * Returns a time calculation based on the number of ticks that have occured
-	 * combined with the current partial tick count.  Not usable for actual time
+	 * combined with the current partial tick count. Not usable for actual time
 	 * calculations.
 	 */
 	public static float getTimeSeconds() {
 		return (EnvironState.getTickCounter() + EnvironState.getPartialTick()) / 20F;
 	}
-	
+
 	/*
-	 * Use cached dimension info to determine if auroras are possible for
-	 * the dimension.
+	 * Use cached dimension info to determine if auroras are possible for the
+	 * dimension.
 	 */
 	public static boolean hasAuroras() {
 		return EnvironState.getDimensionInfo().getHasAuroras();
 	}
+
+	/*
+	 * Generate a seed for an aurora
+	 */
+	public static long getSeed() {
+		final long t = EnvironState.getClock().getDay() * 0xcafebabecafed00dL;
+		return MurmurHash3.hash(t);
+	}
+
 }
