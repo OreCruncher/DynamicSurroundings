@@ -266,11 +266,16 @@ public final class ModOptions {
 
 	public static final String CATEGORY_AURORA = "aurora";
 	public static final String CONFIG_AURORA_ENABLED = "Enabled";
-	private static final List<String> auroraSort = Arrays.asList(CONFIG_AURORA_ENABLED);
+	public static final String CONFIG_AURORA_SHADER = "Use Shaders";
+	private static final List<String> auroraSort = Arrays.asList(CONFIG_AURORA_ENABLED, CONFIG_AURORA_SHADER);
 
 	@Parameter(category = CATEGORY_AURORA, property = CONFIG_AURORA_ENABLED, defaultValue = "true", lang = "cfg.aurora.EnableAurora")
 	@Comment("Enable/disable Aurora processing on server/client")
 	public static boolean auroraEnable = true;
+	@Parameter(category = CATEGORY_AURORA, property = CONFIG_AURORA_SHADER, defaultValue = "true", lang = "cfg.aurora.EnableShader")
+	@Comment("Use shader when rendering aurora")
+	@RestartRequired(world = true)
+	public static boolean auroraUseShader = true;
 
 	public static final String CATEGORY_BIOMES = "biomes";
 	public static final String CONFIG_BIOME_SEALEVEL = "Overworld Sealevel Override";
