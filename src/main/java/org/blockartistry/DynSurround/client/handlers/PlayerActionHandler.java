@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleBreath;
+import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
@@ -38,7 +39,6 @@ import org.blockartistry.DynSurround.registry.ItemRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -221,12 +221,12 @@ public class PlayerActionHandler extends EffectHandlerBase {
 	}
 
 	protected void doFrostBreath() {
-		final int v = (EnvironState.getTickCounter() / 10) % 6;
+		final int v = (EnvironState.getTickCounter() / 10) % 8;
 		if (v < 3) {
 			// < 0.2D is considered COLD
 			final float temp = EnvironState.getPlayerBiome().getFloatTemperature(EnvironState.getPlayerPosition());
 			if (temp < 0.2F) {
-				Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleBreath(EnvironState.getPlayer()));
+				ParticleHelper.addParticle(new ParticleBreath(EnvironState.getPlayer()));
 			}
 		}
 	}

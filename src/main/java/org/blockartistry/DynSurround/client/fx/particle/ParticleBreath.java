@@ -66,7 +66,7 @@ public class ParticleBreath extends ParticleCloud {
 		this.motionY = acc.y;
 		this.motionZ = acc.z;
 
-		this.particleAlpha = 0.25F;
+		this.particleAlpha = 0.2F;
 
 		this.particleGravity = 0F;
 		this.particleScale *= 0.25F;
@@ -76,6 +76,11 @@ public class ParticleBreath extends ParticleCloud {
 		} catch (final Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	@Override
+	public boolean shouldDisableDepth() {
+		return true;
 	}
 
 	@Override
