@@ -46,24 +46,26 @@ public class ParticleBreath extends ParticleCloud {
 
 		final Random random = XorShiftRandom.current();
 
-		// Generate steam particle vectoring from player's head in the direction
+		// Generate breath particle vectoring from entities head in the direction
 		// they are looking. Need to offset out of the head block and down a little
 		// bit towards the mouth.
-		final Vec3d eyePosition = entity.getPositionEyes(1.0F);
-		final Vec3d look = entity.getLookVec();
-		final Vec3d origin = eyePosition.add(look.addVector(0D, -0.3D, 0D).scale(0.5D));
-		final Vec3d jitter = new Vec3d(random.nextGaussian() / 5F, random.nextGaussian() / 5F,
-				random.nextGaussian() / 5F);
-		final Vec3d acc = look.add(jitter).scale(0.01D);
+		final Vec3d eyePosition = eyePosition(entity).subtract(0D, 0.2D, 0D);
+		final Vec3d look = entity.getLook(1F); // Don't use the other look vector method!
+		final Vec3d origin = eyePosition.add(look.scale(0.5D));
 
 		this.setPosition(origin.xCoord, origin.yCoord, origin.zCoord);
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 
-		this.motionX = acc.xCoord;
-		this.motionY = acc.yCoord;
-		this.motionZ = acc.zCoord;
+		// Next we want to give some randomness to the breath stream so it
+		// just doesn't look like a line.  This also causes it to drift to the side
+		// a little bit giving the impression of a slight breeze.
+		final Vec3d trajectory = look.rotateYaw(random.nextFloat() * 2F).rotatePitch(random.nextFloat() * 2F)
+				.normalize();
+		this.motionX = trajectory.xCoord * 0.01D;
+		this.motionY = trajectory.yCoord * 0.01D;
+		this.motionZ = trajectory.zCoord * 0.01D;
 
 		this.particleAlpha = 0.2F;
 
@@ -75,6 +77,17 @@ public class ParticleBreath extends ParticleCloud {
 		} catch (final Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	/*
+	 * Use some corrective lenses because the MC routine just doesn't lower the
+	 * height enough for our rendering purpose.
+	 */
+	protected Vec3d eyePosition(final Entity e) {
+		Vec3d t = e.getPositionEyes(1F);
+		if (e.isSneaking())
+			t = t.subtract(0D, 0.25D, 0D);
+		return t;
 	}
 	
 	@Override

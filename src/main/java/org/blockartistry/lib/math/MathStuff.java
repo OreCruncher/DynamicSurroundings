@@ -27,6 +27,7 @@ package org.blockartistry.lib.math;
 import javax.annotation.Nonnull;
 
 import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.Vec3d;
 
 /**
  * Replacement algos for SIN_TABLE/cos in Minecraft's MathStuff routines. Use
@@ -193,6 +194,14 @@ public class MathStuff {
 		return val < 0.0F ? -val : val;
 	}
 
+	public static final long abs(final long val) {
+		return val < 1L ? -val : val;
+	}
+
+	public static final int abs(final int val) {
+		return val < 1 ? -val : val;
+	}
+
 	public static float sqrt(final float value) {
 		return (float) Math.sqrt((double) value);
 	}
@@ -222,14 +231,21 @@ public class MathStuff {
 	public static int clamp(final int num, final int min, final int max) {
 		return num < min ? min : (num > max ? max : num);
 	}
-	
+
 	// Assumes center at origin.
 	public static Vec2f rotate(@Nonnull final Vec2f coord, final float radians) {
-        final float f = cos(radians);
-        final float f1 = sin(radians);
-        final float d0 = coord.x * f + coord.y * f1;
-        final float d1 = coord.y * f - coord.x * f1;
-        return new Vec2f(d0, d1);
+		final float f = cos(radians);
+		final float f1 = sin(radians);
+		final float d0 = coord.x * f + coord.y * f1;
+		final float d1 = coord.y * f - coord.x * f1;
+		return new Vec2f(d0, d1);
 	}
 
+	public static final Vec3d getVectorForRotation(final float pitch, final float yaw) {
+		float f = cos(-yaw * 0.017453292F - PI_F);
+		float f1 = sin(-yaw * 0.017453292F - PI_F);
+		float f2 = -cos(-pitch * 0.017453292F);
+		float f3 = sin(-pitch * 0.017453292F);
+		return new Vec3d((double) (f1 * f2), (double) f3, (double) (f * f2));
+	}
 }
