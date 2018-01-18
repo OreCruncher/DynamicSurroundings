@@ -37,8 +37,6 @@ import org.blockartistry.DynSurround.client.aurora.IAuroraEngine;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.shader.Shaders;
 import org.blockartistry.lib.DiurnalUtils;
-import org.blockartistry.lib.random.MurmurHash3;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -95,11 +93,6 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 				|| DiurnalUtils.isAuroraVisible(world) && EnvironState.getPlayerBiome().getHasAurora();
 	}
 
-	private long getAuroraSeed(@Nonnull final World world) {
-		final long t = (world.getWorldTime() / 24000L) ^ 0xcafebabecafed00dL;
-		return MurmurHash3.hash(t);
-	}
-
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 
@@ -125,7 +118,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 
 		// If there isn't a current aurora see if it needs to spawn
 		if (spawnAurora(player.world)) {
-			current = this.auroraEngine.produce(getAuroraSeed(player.world));
+			current = this.auroraEngine.produce(AuroraUtils.getSeed());
 			DSurround.log().debug("New aurora [%s]", current.toString());
 		}
 
