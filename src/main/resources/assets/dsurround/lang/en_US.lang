@@ -238,6 +238,8 @@ cfg.player.HurtThreshold=Hurt Threshold
 cfg.player.HurtThreshold.tooltip=Amount of health bar remaining to trigger player hurt sound (0 disable)
 cfg.player.HungerThreshold=Hunger Threshold
 cfg.player.HungerThreshold.tooltip=Amount of food bar remaining to trigger player hunger sound (0 disable)
+cfg.player.ShowBreath=Show Frost Breath
+cfg.player.ShowBreath.tooltip=Show player frost breath in cold weather
 
 cfg.player.potionHud.cat.PotionHud=Potion HUD Options
 cfg.player.potionHud.cat.PotionHud.tooltip=Options for the Potion HUD overlay
