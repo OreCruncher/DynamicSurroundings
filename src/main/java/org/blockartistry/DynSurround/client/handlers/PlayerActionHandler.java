@@ -40,6 +40,7 @@ import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.math.MathStuff;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.AbstractIllager;
@@ -230,15 +231,15 @@ public class PlayerActionHandler extends EffectHandlerBase {
 		for (final Entity e : EnvironState.getWorld().loadedEntityList) {
 			if (isRightMobType(e)) {
 				final int v = getTickInterval(e);
-				if (v < 3 && !e.isInvisibleToPlayer(EnvironState.getPlayer())
-						&& e.getDistanceSqToEntity(EnvironState.getPlayer()) <= distSq
+				if (v < 3 && e.getDistanceSqToEntity(EnvironState.getPlayer()) <= distSq
+						&& !e.isInvisibleToPlayer(EnvironState.getPlayer()) && e.isInsideOfMaterial(Material.AIR)
 						&& EnvironState.getPlayer().canEntityBeSeen(e)) {
 					handleEntityBreath(e);
 				}
 			}
 		}
 	}
-	
+
 	protected int getTickInterval(final Entity e) {
 		return ((EnvironState.getTickCounter() + MathStuff.abs(e.getPersistentID().hashCode())) / 10) % 8;
 	}
@@ -246,7 +247,7 @@ public class PlayerActionHandler extends EffectHandlerBase {
 	protected boolean isRightMobType(final Entity e) {
 		return e instanceof EntityPlayer || e instanceof EntityVillager || e instanceof AbstractIllager;
 	}
-	
+
 	protected void handleEntityBreath(final Entity entity) {
 		// < 0.2D is considered COLD
 		final BlockPos entityPos = entity.getPosition();
