@@ -24,7 +24,7 @@
 package org.blockartistry.DynSurround.client.shader;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.lib.shaders.ShaderProgram;
+import org.blockartistry.lib.gfx.shaders.ShaderProgram;
 
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.ResourceLocation;

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.lib.shaders;
+package org.blockartistry.lib.gfx.shaders;
 
 import java.nio.FloatBuffer;
 
