@@ -94,6 +94,12 @@ public class BlockMap {
 		entries = new ArrayList<MacroEntry>();
 		entries.add(new MacroEntry(null, "NOT_EMITTER"));
 		entries.add(new MacroEntry("messy", "MESSY_GROUND"));
+		entries.add(new MacroEntry("foliage", "brush_straw_transition"));
+		macros.put("#bush", entries);
+
+		entries = new ArrayList<MacroEntry>();
+		entries.add(new MacroEntry(null, "NOT_EMITTER"));
+		entries.add(new MacroEntry("messy", "MESSY_GROUND"));
 		entries.add(new MacroEntry(0, "foliage", "NOT_EMITTER"));
 		entries.add(new MacroEntry(1, "foliage", "NOT_EMITTER"));
 		entries.add(new MacroEntry(2, "foliage", "brush"));
