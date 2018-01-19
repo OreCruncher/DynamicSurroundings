@@ -125,7 +125,12 @@ public class BasicAcoustic implements IAcoustic {
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append(this.getAcousticName()).append('[').append(this.sound.getSoundName()).append(']');
+		builder.append(this.getAcousticName()).append('[');
+		if (this.sound != null)
+			builder.append(this.sound.getSoundName());
+		else
+			builder.append("<NO SOUND>");
+		builder.append(']');
 		return builder.toString();
 	}
 
