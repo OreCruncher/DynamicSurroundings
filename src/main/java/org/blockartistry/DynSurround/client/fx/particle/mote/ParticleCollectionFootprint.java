@@ -86,6 +86,11 @@ public class ParticleCollectionFootprint extends ParticleCollection {
 
 	}
 
+	@Override
+	public boolean isTransparent() {
+		return true;
+	}
+
 	protected void bindTexture(@Nonnull final ResourceLocation resource) {
 		final ResourceLocation res = Style.getStyle(ModOptions.footprintStyle).getTexture();
 		super.bindTexture(res);
