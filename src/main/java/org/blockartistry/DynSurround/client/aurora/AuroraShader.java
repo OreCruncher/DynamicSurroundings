@@ -26,9 +26,9 @@ package org.blockartistry.DynSurround.client.aurora;
 
 import org.blockartistry.DynSurround.client.shader.Shaders;
 import org.blockartistry.lib.Color;
-import org.blockartistry.lib.shaders.ShaderException;
-import org.blockartistry.lib.shaders.ShaderProgram;
-import org.blockartistry.lib.shaders.ShaderProgram.IShaderUseCallback;
+import org.blockartistry.lib.gfx.shaders.ShaderException;
+import org.blockartistry.lib.gfx.shaders.ShaderProgram;
+import org.blockartistry.lib.gfx.shaders.ShaderProgram.IShaderUseCallback;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;

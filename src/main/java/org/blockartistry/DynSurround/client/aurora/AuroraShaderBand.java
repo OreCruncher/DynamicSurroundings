@@ -28,13 +28,13 @@ import java.util.Random;
 
 import org.blockartistry.DynSurround.client.shader.Shaders;
 import org.blockartistry.lib.Color;
-import org.blockartistry.lib.OpenGlState;
-import org.blockartistry.lib.OpenGlUtil;
+import org.blockartistry.lib.gfx.OpenGlState;
+import org.blockartistry.lib.gfx.OpenGlUtil;
+import org.blockartistry.lib.gfx.shaders.ShaderException;
+import org.blockartistry.lib.gfx.shaders.ShaderProgram;
+import org.blockartistry.lib.gfx.shaders.ShaderProgram.IShaderUseCallback;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
-import org.blockartistry.lib.shaders.ShaderException;
-import org.blockartistry.lib.shaders.ShaderProgram;
-import org.blockartistry.lib.shaders.ShaderProgram.IShaderUseCallback;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;

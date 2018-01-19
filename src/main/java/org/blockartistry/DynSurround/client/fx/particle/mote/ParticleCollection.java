@@ -28,8 +28,8 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.lib.OpenGlState;
 import org.blockartistry.lib.collections.ObjectArray;
+import org.blockartistry.lib.gfx.OpenGlState;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;

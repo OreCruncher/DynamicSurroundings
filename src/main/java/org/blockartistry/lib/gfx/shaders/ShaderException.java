@@ -1,4 +1,5 @@
-/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/*
+ * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -21,25 +22,21 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.lib;
+package org.blockartistry.lib.gfx.shaders;
 
-import net.minecraft.client.renderer.GlStateManager;
+public class ShaderException extends Exception {
 
-public final class OpenGlUtil {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1543373731942335193L;
 
-	private OpenGlUtil() {
-
+	ShaderException(final String txt) {
+		super(txt);
 	}
 
-	public static void setStandardBlend() {
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-	}
-
-	public static void setAuroraBlend() {
-		GlStateManager.enableBlend();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
-				GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+	ShaderException(final String shaderName, final String txt) {
+		super(shaderName + ": " + txt);
 	}
 
 }
