@@ -233,15 +233,19 @@ public class AcousticsJsonReader {
 		try {
 			final ResourceLocation res;
 			if ("@".equals(soundName)) {
-				res = new ResourceLocation("meta:missing_sound");
+				res = null;
 			} else if (soundName.charAt(0) != '@') {
 				res = new ResourceLocation(DSurround.RESOURCE_ID, this.soundRoot + soundName);
 			} else {
 				res = new ResourceLocation("minecraft", soundName.substring(1));
 			}
-			a.setSound(Sounds.getSound(res));
+			if (res == null)
+				a.setSound(null);
+			else
+				a.setSound(Sounds.getSound(res));
 		} catch (final Throwable t) {
 			DSurround.log().warn("Unable to locate sound [%s]", soundName);
+			a.setSound(null);
 		}
 	}
 
