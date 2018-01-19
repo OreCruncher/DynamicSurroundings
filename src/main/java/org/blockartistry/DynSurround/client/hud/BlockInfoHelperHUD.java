@@ -44,6 +44,7 @@ import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.gui.TextPanel;
 import org.blockartistry.lib.gui.Panel.Reference;
 
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -116,6 +117,10 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 			text.add("BLOCK: " + this.block.toString());
 			text.add(TextFormatting.DARK_AQUA + this.block.getBlock().getClass().getName());
 			text.add("Material: " + MCHelper.getMaterialName(state.getMaterial()));
+			final SoundType st = state.getBlock().getSoundType(state, EnvironState.getWorld(), pos, EnvironState.getPlayer());
+			if(st != null) {
+				text.add("Step Sound: " + st.getStepSound().getSoundName().toString());
+			}
 
 			final BlockMap bm = this.footsteps.getBlockMap();
 			if (bm != null) {
