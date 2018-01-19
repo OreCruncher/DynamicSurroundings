@@ -1322,6 +1322,13 @@
 			]
 		},
 		{
+			"acousticProfile": "#bush",
+			"dictionaryEntries": [
+				"plantShrub",
+				"plantBerrybush"
+			]
+		},
+		{
 			"acousticProfile": "#reed",
 			"dictionaryEntries": [
 				"sugarcane"
