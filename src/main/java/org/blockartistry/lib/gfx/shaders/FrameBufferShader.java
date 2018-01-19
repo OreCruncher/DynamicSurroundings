@@ -22,11 +22,11 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.lib.shaders;
+package org.blockartistry.lib.gfx.shaders;
 
 import java.nio.FloatBuffer;
 
-import org.blockartistry.lib.shaders.ShaderProgram.IShaderUseCallback;
+import org.blockartistry.lib.gfx.shaders.ShaderProgram.IShaderUseCallback;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
