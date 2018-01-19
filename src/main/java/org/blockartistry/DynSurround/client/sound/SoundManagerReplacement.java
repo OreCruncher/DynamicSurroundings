@@ -24,6 +24,7 @@
 
 package org.blockartistry.DynSurround.client.sound;
 
+import java.lang.reflect.Field;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,6 +63,7 @@ import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.SoundSystem;
@@ -70,6 +72,17 @@ import paulscode.sound.SoundSystemConfig;
 @SideOnly(Side.CLIENT)
 public class SoundManagerReplacement extends SoundManager {
 
+	private static Field soundPhysicsGlobalVolume;
+
+	static {
+		try {
+			final Class<?> soundPhysics = Class.forName("com.sonicether.soundphysics.SoundPhysics");
+			soundPhysicsGlobalVolume = ReflectionHelper.findField(soundPhysics, "globalVolumeMultiplier");
+		} catch (final Exception ex) {
+			soundPhysicsGlobalVolume = null;
+		}
+	}
+
 	private static final int MAX_STREAM_CHANNELS = 16;
 	private final static float MUTE_VOLUME = 0.00001F;
 	private SoundRegistry registry = null;
@@ -77,6 +90,9 @@ public class SoundManagerReplacement extends SoundManager {
 	public SoundManagerReplacement(final SoundHandler handler, final GameSettings settings) {
 		super(handler, settings);
 		MinecraftForge.EVENT_BUS.register(this);
+
+		if (soundPhysicsGlobalVolume != null)
+			DSurround.log().info("SoundPhysics present and using global volume multiplier");
 	}
 
 	private SoundSystem getSoundSystem() {
@@ -136,7 +152,7 @@ public class SoundManagerReplacement extends SoundManager {
 					this.playSound((BasicSound<?>) sound);
 				else if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC)
 					super.playSound(sound);
-				
+
 				// Flush - avoid that pesky missing sound issue due to async
 				getSoundSystem().CommandQueue(null);
 			} catch (final Throwable t) {
@@ -336,9 +352,17 @@ public class SoundManagerReplacement extends SoundManager {
 
 		final float volumeScale = this.registry.getVolumeScale(sound);
 		final float volume = sound.getVolume() * getVolume(sound.getCategory()) * volumeScale;
-		return MathStuff.clamp(volume, 0.0F, 1.0F);
+		float result = MathStuff.clamp(volume, 0.0F, 1.0F);
+
+		try {
+			if (soundPhysicsGlobalVolume != null)
+				return result * soundPhysicsGlobalVolume.getFloat(null);
+		} catch (final Exception ex) {
+
+		}
+		return result;
 	}
-	
+
 	private static void alErrorCheck() {
 		final int error = AL10.alGetError();
 		if (error != AL10.AL_NO_ERROR)
