@@ -37,7 +37,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class LightLevelTextureSheet extends GeneratedTexture {
 
-	private static final int TEXEL_PER_SIDE = 16;
+	// Want a good resolution for number rendering if using a decent
+	// resource pack.  Need to find a programmatic way of
+	// determining this value.
+	private static final int TEXEL_PER_SIDE = 64;
+	private static final float SCALE = (float) TEXEL_PER_SIDE / 16F;
 	private static final int SPRITE_COUNT = 16;
 	private static final int WIDTH = SPRITE_COUNT * TEXEL_PER_SIDE;
 	private static final int HEIGHT = TEXEL_PER_SIDE;
@@ -68,7 +72,7 @@ public final class LightLevelTextureSheet extends GeneratedTexture {
 		for (int i = 0; i < 15; i++) {
 
 			final String str = Integer.toString(i);
-			
+
 			final double posX = i * TEXEL_PER_SIDE;
 			final double posY = 0;
 			final double mid = TEXEL_PER_SIDE / 2;
@@ -77,9 +81,10 @@ public final class LightLevelTextureSheet extends GeneratedTexture {
 			GlStateManager.translate(posX + mid, posY + mid, 0);
 
 			// Render the string in the center
-			final int margin = -font.getStringWidth(str) / 2;
-			final int height = -font.FONT_HEIGHT / 2;
-
+			final int margin = -(font.getStringWidth(str) + 1) / 2;
+			final int height = -(font.FONT_HEIGHT) / 2;
+			
+			GlStateManager.scale(SCALE, SCALE, 0);
 			font.drawString(str, margin, height, color);
 
 			GlStateManager.popMatrix();
