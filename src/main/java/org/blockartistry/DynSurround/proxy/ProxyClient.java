@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.aurora.AuroraRenderer;
+import org.blockartistry.DynSurround.client.event.ResourceReloadEvent;
 import org.blockartistry.DynSurround.client.event.WorldEventDetector;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.DynSurround.client.gui.HumDinger;
@@ -50,8 +51,12 @@ import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.lib.Localization;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.client.ClientCommandHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -62,7 +67,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ProxyClient extends Proxy {
+public class ProxyClient extends Proxy implements IResourceManagerReloadListener {
 	
 	@Override
 	protected void registerLanguage() {
@@ -84,6 +89,7 @@ public class ProxyClient extends Proxy {
 		register(WeatherProperties.class);
 		register(PresetHandler.class);
 		register(WorldEventDetector.class);
+		register(LightLevelHUD.class);
 	}
 
 	@Override
@@ -119,6 +125,10 @@ public class ProxyClient extends Proxy {
 	@Override
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
 		MusicTickerReplacement.initialize();
+		
+		// Register for resource load events
+		final IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
+		((IReloadableResourceManager) resourceManager).registerReloadListener(this);
 	}
 
 	@Override
@@ -141,6 +151,11 @@ public class ProxyClient extends Proxy {
 				ProxyClient.this.connectionTime = 0;
 			}
 		});
+	}
+
+	@Override
+	public void onResourceManagerReload(final IResourceManager resourceManager) {
+		MinecraftForge.EVENT_BUS.post(new ResourceReloadEvent(resourceManager));
 	}
 
 }
