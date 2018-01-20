@@ -25,12 +25,18 @@
 package org.blockartistry.lib.gfx;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.util.ResourceLocation;
 
 /*
  * Simple handler class that wraps a shader that will be operating against a framebuffer
@@ -43,55 +49,40 @@ public abstract class GeneratedTexture {
 
 	private static final FloatBuffer CLEAR_COLOR_BUFFER = GLAllocation.createDirectFloatBuffer(16);
 
-	protected Framebuffer blit = null;
-
-	public GeneratedTexture(final int width, final int height) {
-		this.setSize(width, height);
-	}
-
-	public void setSize(final int width, final int height) {
-		if (this.blit != null && (this.blit.framebufferWidth != width || this.blit.framebufferHeight != height)) {
-			this.release();
-		}
-
-		if (this.blit == null) {
-			this.blit = new Framebuffer(width, height, false);
-			this.blit.setFramebufferColor(0F, 0F, 0F, 0F);
-		}
+	protected final DynamicTexture texture;
+	protected final ResourceLocation resource;
+	protected final int width;
+	protected final int height;
+	
+	public GeneratedTexture(final String name, final int width, final int height) {
+		this.width = width;
+		this.height = height;
+		this.texture = new DynamicTexture(this.width, this.height);
+		this.resource = Minecraft.getMinecraft().getTextureManager().getDynamicTextureLocation(name, this.texture);
 	}
 
 	public int getWidth() {
-		return this.blit.framebufferWidth;
+		return this.width;
 	}
 
 	public int getHeight() {
-		return this.blit.framebufferHeight;
+		return this.height;
 	}
 
 	public void bindTexture() {
-		if (this.blit == null)
-			throw new RuntimeException("Texture not available");
-
-		this.blit.bindFramebufferTexture();
+		Minecraft.getMinecraft().getTextureManager().bindTexture(this.resource);
 	}
 
 	public void release() {
-		if (this.blit != null) {
-			this.blit.deleteFramebuffer();
-			this.blit = null;
-		}
+		this.texture.deleteGlTexture();
 	}
 
 	public void updateTexture() {
-
-		if (this.blit == null)
-			throw new RuntimeException("Framebuffer not initialized");
-
-		this.blit.framebufferClear();
-
 		// Save the MC frame buffer and bind ours
 		final Framebuffer mcFrameBuffer = Minecraft.getMinecraft().getFramebuffer();
-		this.blit.bindFramebuffer(true);
+		final Framebuffer blit = new Framebuffer(this.width, this.height, false);
+		blit.framebufferClear();
+		blit.bindFramebuffer(true);
 
 		// Backup attributes
 		GL11.glPushAttrib(GL11.GL_MATRIX_MODE | GL11.GL_VIEWPORT_BIT | GL11.GL_TRANSFORM_BIT);
@@ -133,7 +124,15 @@ public abstract class GeneratedTexture {
 		// Restore matrices
 		GlStateManager.popMatrix();
 
-		// Bind back the MC framebuffer
+		// Copy the data into our texture and update
+	    blit.bindFramebufferTexture();
+	    final IntBuffer pixelBuffer = BufferUtils.createIntBuffer(this.width * this.height);
+	    GL11.glGetTexImage(GL11.GL_TEXTURE_2D, 0, GL12.GL_BGRA, GL12.GL_UNSIGNED_INT_8_8_8_8_REV, pixelBuffer);
+	    pixelBuffer.get(this.texture.getTextureData());
+	    this.texture.updateDynamicTexture();
+	    
+		// Restore our state
+	    blit.deleteFramebuffer();
 		if (mcFrameBuffer != null)
 			mcFrameBuffer.bindFramebuffer(true);
 	}
