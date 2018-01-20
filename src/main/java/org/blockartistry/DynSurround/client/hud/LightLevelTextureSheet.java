@@ -37,12 +37,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class LightLevelTextureSheet extends GeneratedTexture {
 
-	private static final int TEXELS_PER_SIDE = 32;
-	private static final int SPRITES_PER_ROW = 4;
-	private static final int WIDTH = SPRITES_PER_ROW * TEXELS_PER_SIDE;
-	private static final int HEIGHT = SPRITES_PER_ROW * TEXELS_PER_SIDE;
-	private static final float U_SIZE = (float) TEXELS_PER_SIDE / (float) WIDTH;
-	private static final float V_SIZE = (float) TEXELS_PER_SIDE / (float) HEIGHT;
+	private static final int TEXEL_PER_SIDE = 16;
+	private static final int SPRITE_COUNT = 16;
+	private static final int WIDTH = SPRITE_COUNT * TEXEL_PER_SIDE;
+	private static final int HEIGHT = TEXEL_PER_SIDE;
+	private static final float U_SIZE = (float) TEXEL_PER_SIDE / (float) WIDTH;
+	private static final float V_SIZE = (float) TEXEL_PER_SIDE / (float) HEIGHT;
 
 	public LightLevelTextureSheet() {
 		super(WIDTH, HEIGHT);
@@ -50,18 +50,13 @@ public final class LightLevelTextureSheet extends GeneratedTexture {
 
 	// Calculate the min/max U for the specified sprite index
 	public Vec2f getMinMaxU(final int idx) {
-		final int indexX = idx % SPRITES_PER_ROW;
-		final float x1 = indexX * U_SIZE;
-		final float x2 = x1 + U_SIZE;
-		return new Vec2f(x1, x2);
+		float u = idx * U_SIZE;
+		return new Vec2f(u, u + U_SIZE);
 	}
 
 	// Calculate the min/max V for the specified sprite index
 	public Vec2f getMinMaxV(final int idx) {
-		final int indexY = idx / SPRITES_PER_ROW;
-		final float y1 = indexY * V_SIZE;
-		final float y2 = y1 + V_SIZE;
-		return new Vec2f(y1, y2);
+		return new Vec2f(0F, V_SIZE);
 	}
 
 	@Override
@@ -73,18 +68,12 @@ public final class LightLevelTextureSheet extends GeneratedTexture {
 		for (int i = 0; i < 15; i++) {
 
 			final String str = Integer.toString(i);
-
-			// Figure out the sprite location in the sheet
-			final int indexX = i % SPRITES_PER_ROW;
-			final int indexY = i / SPRITES_PER_ROW;
-
-			// Center of the particular sprite so we can
-			// translate.
-			final double posX = indexX * TEXELS_PER_SIDE + TEXELS_PER_SIDE / 2;
-			final double posY = indexY * TEXELS_PER_SIDE + TEXELS_PER_SIDE / 2;
+			final double posX = i * TEXEL_PER_SIDE;
+			final double posY = 0;
+			final double mid = TEXEL_PER_SIDE / 2;
 
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(posX, posY, 0);
+			GlStateManager.translate(posX + mid, posY + mid, 0);
 
 			// Render the string in the center
 			final int margin = -font.getStringWidth(str) / 2;
