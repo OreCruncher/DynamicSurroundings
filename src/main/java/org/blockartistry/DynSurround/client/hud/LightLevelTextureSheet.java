@@ -45,7 +45,7 @@ public final class LightLevelTextureSheet extends GeneratedTexture {
 	private static final float V_SIZE = (float) TEXEL_PER_SIDE / (float) HEIGHT;
 
 	public LightLevelTextureSheet() {
-		super(WIDTH, HEIGHT);
+		super("DSLightLevelTextures", WIDTH, HEIGHT);
 	}
 
 	// Calculate the min/max U for the specified sprite index
