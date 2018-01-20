@@ -13,5 +13,8 @@
 		"gravelores:silver_gravel_ore": "gravel,ore",
 		"gravelores:lead_gravel_ore": "gravel,ore",	
 		"gravelores:copper_gravel_ore": "gravel,ore"					
-	}
+	},
+	"footprints": [
+		"@gravelores:iron_gravel_ore"
+	]
 }

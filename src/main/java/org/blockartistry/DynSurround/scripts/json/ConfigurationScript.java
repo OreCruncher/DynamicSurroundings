@@ -74,6 +74,9 @@ public final class ConfigurationScript {
 
 	@SerializedName("footsteps")
 	public Map<String, String> footsteps = new HashMap<String, String>();
+	
+	@SerializedName("footprints")
+	public List<String> footprints = ImmutableList.of();
 
 	@SerializedName("forgeMappings")
 	public List<ForgeEntry> forgeMappings = ImmutableList.of();
@@ -117,6 +120,10 @@ public final class ConfigurationScript {
 			
 			for (final Entry<String, String> entry : script.footsteps.entrySet()) {
 				footsteps.registerBlocks(entry.getValue(), entry.getKey());
+			}
+			
+			for (final String fp: script.footprints) {
+				footsteps.registerFootrint(fp);
 			}
 
 			final ItemRegistry itemRegistry = RegistryManager.get(RegistryType.ITEMS);

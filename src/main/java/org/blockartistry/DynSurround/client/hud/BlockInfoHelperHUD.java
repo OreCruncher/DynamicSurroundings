@@ -117,10 +117,14 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 			text.add("BLOCK: " + this.block.toString());
 			text.add(TextFormatting.DARK_AQUA + this.block.getBlock().getClass().getName());
 			text.add("Material: " + MCHelper.getMaterialName(state.getMaterial()));
-			final SoundType st = state.getBlock().getSoundType(state, EnvironState.getWorld(), pos, EnvironState.getPlayer());
-			if(st != null) {
+			final SoundType st = state.getBlock().getSoundType(state, EnvironState.getWorld(), pos,
+					EnvironState.getPlayer());
+			if (st != null) {
 				text.add("Step Sound: " + st.getStepSound().getSoundName().toString());
 			}
+
+			if (this.footsteps.hasFootprint(state))
+				text.add("Footprints Generated");
 
 			final BlockMap bm = this.footsteps.getBlockMap();
 			if (bm != null) {

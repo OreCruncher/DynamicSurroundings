@@ -37,6 +37,10 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions.Option;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.facade.FacadeHelper;
+import org.blockartistry.DynSurround.registry.FootstepsRegistry;
+import org.blockartistry.DynSurround.registry.RegistryManager;
+import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.WorldUtils;
@@ -47,6 +51,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -74,6 +79,7 @@ public class Solver {
 	private static final IBlockState AIR_STATE = Blocks.AIR.getDefaultState();
 
 	private final Isolator isolator;
+	private final FootstepsRegistry registry = RegistryManager.<FootstepsRegistry>get(RegistryType.FOOTSTEPS);
 
 	public Solver(@Nonnull final Isolator isolator) {
 		this.isolator = isolator;
@@ -93,16 +99,48 @@ public class Solver {
 		}
 	}
 
+	protected boolean hasFootstepImprint(@Nullable final IBlockState state, @Nonnull final BlockPos pos) {
+		if (state != null) {
+			final IBlockState footstepState = FacadeHelper.resolveState(state, EnvironState.getWorld(), pos,
+					EnumFacing.UP);
+			return this.registry.hasFootprint(footstepState);
+		}
+
+		return false;
+	}
+
+	protected boolean hasFootstepImprint(@Nonnull final Vec3d pos) {
+		// Check the block above to see if it has a footprint. Intended to handle things
+		// like snow on stone.
+		BlockPos blockPos = new BlockPos(pos).up();
+		IBlockState state = WorldUtils.getBlockState(EnvironState.getWorld(), blockPos);
+		if (state != null && hasFootstepImprint(state, blockPos))
+			return true;
+
+		// If the block above blocks movement then it's not possible to lay
+		// down a footprint.
+		if (state.getMaterial().blocksMovement())
+			return false;
+
+		// Check the requested block
+		blockPos = new BlockPos(pos);
+		state = WorldUtils.getBlockState(EnvironState.getWorld(), blockPos);
+		if (state != null) {
+			return hasFootstepImprint(state, blockPos);
+		}
+
+		return false;
+	}
+
 	/**
-	 * Find an association for a player particular foot. This will fetch the
-	 * player angle and use it as a basis to find out what block is below their
-	 * feet (or which block is likely to be below their feet if the player is
-	 * walking on the edge of a block when walking over non-emitting blocks like
-	 * air or water).<br>
+	 * Find an association for a player particular foot. This will fetch the player
+	 * angle and use it as a basis to find out what block is below their feet (or
+	 * which block is likely to be below their feet if the player is walking on the
+	 * edge of a block when walking over non-emitting blocks like air or water).<br>
 	 * <br>
 	 * Returns null if no blocks are valid emitting blocks.<br>
-	 * Returns a string that begins with "_NO_ASSOCIATION" if a matching block
-	 * was found, but has no association in the blockmap.
+	 * Returns a string that begins with "_NO_ASSOCIATION" if a matching block was
+	 * found, but has no association in the blockmap.
 	 */
 	@Nonnull
 	public Association findAssociationForPlayer(@Nonnull final EntityPlayer player, final double verticalOffsetAsMinus,
@@ -126,21 +164,21 @@ public class Solver {
 		final Association result = addSoundOverlay(findAssociationForLocation(player, pos));
 		if (result != null && !player.isJumping) {
 			final Vec3d printLocation = new Vec3d(xx, minY, zz);
-			if(Footprint.hasFootstepImprint(printLocation.addVector(0D, -0.5D, 0D)))
+			if (hasFootstepImprint(printLocation.addVector(0D, -0.5D, 0D)))
 				result.generatePrint(printLocation, rotDegrees, isRightFoot);
 		}
 		return result;
 	}
 
 	/**
-	 * Find an association for a player, and a location. This will try to find
-	 * the best matching block on that location, or near that location, for
-	 * instance if the player is walking on the edge of a block when walking
-	 * over non-emitting blocks like air or water)<br>
+	 * Find an association for a player, and a location. This will try to find the
+	 * best matching block on that location, or near that location, for instance if
+	 * the player is walking on the edge of a block when walking over non-emitting
+	 * blocks like air or water)<br>
 	 * <br>
 	 * Returns null if no blocks are valid emitting blocks.<br>
-	 * Returns a string that begins with "_NO_ASSOCIATION" if a matching block
-	 * was found, but has no association in the blockmap.
+	 * Returns a string that begins with "_NO_ASSOCIATION" if a matching block was
+	 * found, but has no association in the blockmap.
 	 */
 	@Nonnull
 	protected Association findAssociationForLocation(@Nonnull final EntityPlayer player, @Nonnull final BlockPos pos) {
@@ -211,17 +249,17 @@ public class Solver {
 	}
 
 	/**
-	 * Find an association for a certain block assuming the player is standing
-	 * on it. This will sometimes select the block above because some block act
-	 * like carpets. This also applies when the block targeted by the location
-	 * is actually not emitting, such as lilypads on water.<br>
+	 * Find an association for a certain block assuming the player is standing on
+	 * it. This will sometimes select the block above because some block act like
+	 * carpets. This also applies when the block targeted by the location is
+	 * actually not emitting, such as lilypads on water.<br>
 	 * <br>
 	 * Returns null if the block is not a valid emitting block (this causes the
-	 * engine to continue looking for valid blocks). This also happens if the
-	 * carpet is non-emitting.<br>
-	 * Returns a string that begins with "_NO_ASSOCIATION" if the block is
-	 * valid, but has no association in the blockmap. If the carpet was
-	 * selected, this solves to the carpet.
+	 * engine to continue looking for valid blocks). This also happens if the carpet
+	 * is non-emitting.<br>
+	 * Returns a string that begins with "_NO_ASSOCIATION" if the block is valid,
+	 * but has no association in the blockmap. If the carpet was selected, this
+	 * solves to the carpet.
 	 */
 	@Nonnull
 	public Association findAssociationForBlock(@Nonnull BlockPos pos) {
@@ -378,9 +416,8 @@ public class Solver {
 	}
 
 	/**
-	 * Find an association for a certain block assuming the player is standing
-	 * on it, using a custom strategy which strategies are defined by the
-	 * solver.
+	 * Find an association for a certain block assuming the player is standing on
+	 * it, using a custom strategy which strategies are defined by the solver.
 	 */
 	@Nonnull
 	public Association findAssociationMessyFoliage(@Nonnull final BlockPos pos) {
@@ -396,25 +433,22 @@ public class Solver {
 		boolean found = false;
 		// Try to see if the block above is a carpet...
 		/*
-		 * String association =
-		 * this.isolator.getBlockMap().getBlockMapSubstrate(
+		 * String association = this.isolator.getBlockMap().getBlockMapSubstrate(
 		 * PF172Helper.nameOf(xblock), xmetadata, "carpet");
 		 * 
-		 * if (association == null || association.equals("NOT_EMITTER")) { //
-		 * This condition implies that // if the carpet is NOT_EMITTER, solving
-		 * will CONTINUE with the actual // block surface the player is walking
-		 * on // > NOT_EMITTER carpets will not cause solving to skip
+		 * if (association == null || association.equals("NOT_EMITTER")) { // This
+		 * condition implies that // if the carpet is NOT_EMITTER, solving will CONTINUE
+		 * with the actual // block surface the player is walking on // > NOT_EMITTER
+		 * carpets will not cause solving to skip
 		 * 
 		 * // Not a carpet association =
-		 * this.isolator.getBlockMap().getBlockMap(PF172Helper.nameOf(block),
-		 * metadata);
+		 * this.isolator.getBlockMap().getBlockMap(PF172Helper.nameOf(block), metadata);
 		 * 
-		 * if (association != null && !association.equals("NOT_EMITTER")) { //
-		 * This condition implies that // foliage over a NOT_EMITTER block
-		 * CANNOT PLAY
+		 * if (association != null && !association.equals("NOT_EMITTER")) { // This
+		 * condition implies that // foliage over a NOT_EMITTER block CANNOT PLAY
 		 * 
-		 * // This block most not be executed if the association is a carpet //
-		 * => this block of code is here, not outside this if else group.
+		 * // This block most not be executed if the association is a carpet // => this
+		 * block of code is here, not outside this if else group.
 		 */
 
 		IAcoustic[] foliage = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, up, Substrate.FOLIAGE);
@@ -429,8 +463,8 @@ public class Solver {
 				found = true;
 		}
 		/*
-		 * } // else { the information is discarded anyways, the method returns
-		 * null or no association } } else // Is a carpet return null;
+		 * } // else { the information is discarded anyways, the method returns null or
+		 * no association } } else // Is a carpet return null;
 		 */
 
 		if (found && association != null) {
