@@ -557,13 +557,12 @@ public final class ModOptions {
 	public static final String CONFIG_LL_RANGE = "Block Range";
 	public static final String CONFIG_LL_MOB_SPAWN_THRESHOLD = "Mob Spawn Threshold";
 	public static final String CONFIG_LL_DISPLAY_MODE = "Display Mode";
-	public static final String CONFIG_LL_STYLE = "Style";
 	public static final String CONFIG_LL_HIDE_SAFE = "Hide Safe";
 	public static final String CONFIG_LL_INDICATE_CAUTION = "Indicate Caution";
 	public static final String CONFIG_LL_COLORS = "Color Set";
 
 	private static final List<String> llSort = Arrays.asList(CONFIG_LL_RANGE, CONFIG_LL_MOB_SPAWN_THRESHOLD,
-			CONFIG_LL_DISPLAY_MODE, CONFIG_LL_STYLE, CONFIG_LL_HIDE_SAFE, CONFIG_LL_INDICATE_CAUTION, CONFIG_LL_COLORS);
+			CONFIG_LL_DISPLAY_MODE, CONFIG_LL_HIDE_SAFE, CONFIG_LL_INDICATE_CAUTION, CONFIG_LL_COLORS);
 
 	@Parameter(category = CATEGORY_LIGHT_LEVEL, property = CONFIG_LL_RANGE, defaultValue = "24", lang = "cfg.lightlevel.Range")
 	@Comment("Range from player to analyze light levels")
@@ -574,13 +573,9 @@ public final class ModOptions {
 	@MinMaxInt(min = 0, max = 15)
 	public static int llSpawnThreshold = 7;
 	@Parameter(category = CATEGORY_LIGHT_LEVEL, property = CONFIG_LL_DISPLAY_MODE, defaultValue = "0", lang = "cfg.lightlevel.DisplayMode")
-	@Comment("Light level at which mobs can spawn")
+	@Comment("0: Block Light, 1: Block Light + Sky Light")
 	@MinMaxInt(min = 0, max = 1)
 	public static int llDisplayMode = 0;
-	@Parameter(category = CATEGORY_LIGHT_LEVEL, property = CONFIG_LL_STYLE, defaultValue = "2", lang = "cfg.lightlevel.Style")
-	@Comment("Rendering style: 0 upright facing player, 1 along block surface, 2 surface with rotation")
-	@MinMaxInt(min = 0, max = 2)
-	public static int llStyle = 2;
 	@Parameter(category = CATEGORY_LIGHT_LEVEL, property = CONFIG_LL_HIDE_SAFE, defaultValue = "false", lang = "cfg.lightlevel.HideSafe")
 	@Comment("Hide light level information for blocks that are considered safe")
 	public static boolean llHideSafe = false;
