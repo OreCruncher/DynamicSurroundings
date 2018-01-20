@@ -24,7 +24,6 @@
 
 package org.blockartistry.lib.gfx;
 
-import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
@@ -32,7 +31,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.shader.Framebuffer;
@@ -46,8 +44,6 @@ import net.minecraft.util.ResourceLocation;
  * https://github.com/Angry-Pixel/The-Betweenlands/blob/1.12/src/main/java/thebetweenlands/client/render/shader/postprocessing/PostProcessingEffect.java
  */
 public abstract class GeneratedTexture {
-
-	private static final FloatBuffer CLEAR_COLOR_BUFFER = GLAllocation.createDirectFloatBuffer(16);
 
 	protected final DynamicTexture texture;
 	protected final ResourceLocation resource;
@@ -86,7 +82,6 @@ public abstract class GeneratedTexture {
 
 		// Backup attributes
 		GL11.glPushAttrib(GL11.GL_MATRIX_MODE | GL11.GL_VIEWPORT_BIT | GL11.GL_TRANSFORM_BIT);
-		GL11.glGetFloat(GL11.GL_COLOR_CLEAR_VALUE, CLEAR_COLOR_BUFFER);
 
 		// Backup matrices
 		GlStateManager.pushMatrix();
@@ -118,10 +113,6 @@ public abstract class GeneratedTexture {
 
 		// Restore attributes
 		GlStateManager.popAttrib();
-		GlStateManager.clearColor(CLEAR_COLOR_BUFFER.get(0), CLEAR_COLOR_BUFFER.get(1), CLEAR_COLOR_BUFFER.get(2),
-				CLEAR_COLOR_BUFFER.get(3));
-
-		// Restore matrices
 		GlStateManager.popMatrix();
 
 		// Copy the data into our texture and update
