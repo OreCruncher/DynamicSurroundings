@@ -31,6 +31,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
@@ -50,6 +52,8 @@ import org.blockartistry.DynSurround.util.BlockState;
 import org.blockartistry.DynSurround.util.BlockState.Consumer;
 import org.blockartistry.lib.JsonUtils;
 import org.blockartistry.lib.MCHelper;
+import org.blockartistry.lib.collections.IdentityHashSet;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockDoor;
@@ -63,6 +67,7 @@ import net.minecraft.block.BlockOre;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockReed;
 import net.minecraft.block.BlockSapling;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.entity.player.EntityPlayer;
@@ -80,6 +85,9 @@ public class FootstepsRegistry extends Registry {
 	private ResourcePacks dealer = new ResourcePacks();
 	private final Isolator isolator;
 
+	private Set<Material> FOOTPRINT_MATERIAL;
+	private Set<IBlockState> FOOTPRINT_STATES;
+
 	public FootstepsRegistry(@Nonnull final Side side) {
 		super(side);
 		this.isolator = new Isolator();
@@ -87,6 +95,19 @@ public class FootstepsRegistry extends Registry {
 
 	@Override
 	public void init() {
+
+		this.FOOTPRINT_MATERIAL = new IdentityHashSet<Material>();
+		this.FOOTPRINT_STATES = new IdentityHashSet<IBlockState>();
+
+		// Initialize the known materials that leave footprints
+		this.FOOTPRINT_MATERIAL.add(Material.CLAY);
+		this.FOOTPRINT_MATERIAL.add(Material.GRASS);
+		this.FOOTPRINT_MATERIAL.add(Material.GROUND);
+		this.FOOTPRINT_MATERIAL.add(Material.ICE);
+		this.FOOTPRINT_MATERIAL.add(Material.PACKED_ICE);
+		this.FOOTPRINT_MATERIAL.add(Material.SAND);
+		this.FOOTPRINT_MATERIAL.add(Material.CRAFTED_SNOW);
+		this.FOOTPRINT_MATERIAL.add(Material.SNOW);
 
 		// It's a hack - needs refactor
 		AcousticsManager.SWIM = null;
@@ -261,7 +282,7 @@ public class FootstepsRegistry extends Registry {
 		}
 	}
 
-	public void process(@Nonnull World world, @Nonnull EntityPlayer player) {
+	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
 		this.isolator.onFrame(player);
 		if (ModOptions.footstepsSoundFactor > 0)
 			player.nextStepDistance = Integer.MAX_VALUE;
@@ -274,6 +295,10 @@ public class FootstepsRegistry extends Registry {
 		return this.isolator.getBlockMap();
 	}
 
+	public boolean hasFootprint(@Nonnull final IBlockState state) {
+		return this.FOOTPRINT_MATERIAL.contains(state.getMaterial()) || this.FOOTPRINT_STATES.contains(state);
+	}
+
 	private static Block resolveToBlock(@Nonnull final ItemStack stack) {
 		if (stack == null)
 			return null;
@@ -283,6 +308,27 @@ public class FootstepsRegistry extends Registry {
 		if (item instanceof ItemBlockSpecial)
 			return ((ItemBlockSpecial) item).getBlock();
 		return null;
+	}
+
+	public void registerFootrint(@Nonnull final String... blocks) {
+		for (String b : blocks) {
+			boolean materialMatch = false;
+			if (b.startsWith("@")) {
+				materialMatch = true;
+				b = b.substring(1);
+			}
+
+			final BlockInfo bi = BlockInfo.create(b);
+			if (materialMatch) {
+				final IBlockState state = bi.getBlock().getDefaultState();
+				this.FOOTPRINT_MATERIAL.add(state.getMaterial());
+			} else if (!bi.isGeneric()) {
+				final IBlockState state = bi.getBlock().getDefaultState();
+				this.FOOTPRINT_STATES.add(state);
+			} else {
+				DSurround.log().warn("Generic matching is not supported for footprints: %s", b);
+			}
+		}
 	}
 
 	public void registerForgeEntries(@Nonnull final String blockClass, @Nonnull final String... entries) {

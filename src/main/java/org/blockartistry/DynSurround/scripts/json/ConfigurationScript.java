@@ -45,7 +45,6 @@ import org.blockartistry.DynSurround.registry.ItemRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.JsonUtils;
-
 import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
 
@@ -75,6 +74,9 @@ public final class ConfigurationScript {
 
 	@SerializedName("footsteps")
 	public Map<String, String> footsteps = new HashMap<String, String>();
+	
+	@SerializedName("footprints")
+	public List<String> footprints = ImmutableList.of();
 
 	@SerializedName("forgeMappings")
 	public List<ForgeEntry> forgeMappings = ImmutableList.of();
@@ -115,11 +117,15 @@ public final class ConfigurationScript {
 				for (final String name : entry.dictionaryEntries)
 					footsteps.registerForgeEntries(entry.acousticProfile, name);
 			}
-
+			
 			for (final Entry<String, String> entry : script.footsteps.entrySet()) {
 				footsteps.registerBlocks(entry.getValue(), entry.getKey());
 			}
 			
+			for (final String fp: script.footprints) {
+				footsteps.registerFootrint(fp);
+			}
+
 			final ItemRegistry itemRegistry = RegistryManager.get(RegistryType.ITEMS);
 			itemRegistry.register(script.itemConfig);
 			

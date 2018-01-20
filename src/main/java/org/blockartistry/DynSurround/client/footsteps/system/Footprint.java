@@ -24,20 +24,9 @@
 
 package org.blockartistry.DynSurround.client.footsteps.system;
 
-import java.util.Set;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.facade.FacadeHelper;
-import org.blockartistry.lib.WorldUtils;
-import org.blockartistry.lib.collections.IdentityHashSet;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -45,54 +34,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class Footprint {
 
-	private static final Set<Material> FOOTPRINTABLE = new IdentityHashSet<Material>();
-	static {
-		FOOTPRINTABLE.add(Material.CLAY);
-		FOOTPRINTABLE.add(Material.GRASS);
-		FOOTPRINTABLE.add(Material.GROUND);
-		FOOTPRINTABLE.add(Material.ICE);
-		FOOTPRINTABLE.add(Material.PACKED_ICE);
-		FOOTPRINTABLE.add(Material.SAND);
-		FOOTPRINTABLE.add(Material.CRAFTED_SNOW);
-		FOOTPRINTABLE.add(Material.SNOW);
-	}
-
 	private Vec3d stepLoc;
 	private boolean isRightFoot;
 	private float rotation;
 
-	protected static boolean hasFootstepImprint(@Nullable final IBlockState state, @Nonnull final BlockPos pos) {
-		if (state != null) {
-			final IBlockState footstepState = FacadeHelper.resolveState(state, EnvironState.getWorld(), pos,
-					EnumFacing.UP);
-			return FOOTPRINTABLE.contains(footstepState.getMaterial());
-		}
-		return false;
-	}
-
-	public static boolean hasFootstepImprint(@Nonnull final Vec3d pos) {
-		// Check the block above to see if it has a footprint. Intended to handle things
-		// like snow on stone.
-		BlockPos blockPos = new BlockPos(pos).up();
-		IBlockState state = WorldUtils.getBlockState(EnvironState.getWorld(), blockPos);
-		if (state != null && hasFootstepImprint(state, blockPos))
-			return true;
-		
-		// If the block above blocks movement then it's not possible to lay
-		// down a footprint.
-		if (state.getMaterial().blocksMovement())
-			return false;
-
-		// Check the requested block
-		blockPos = new BlockPos(pos);
-		state = WorldUtils.getBlockState(EnvironState.getWorld(), blockPos);
-		if (state != null) {
-			return hasFootstepImprint(state, blockPos);
-		}
-
-		return false;
-	}
-	
 	public static Footprint produce(@Nonnull final Vec3d stepLoc, final float rotation, final boolean rightFoot) {
 		final Footprint print = new Footprint();
 		print.stepLoc = stepLoc;
