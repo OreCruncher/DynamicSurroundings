@@ -1,0 +1,11 @@
+{
+	"footsteps": {
+		"plants2:bush": "leaves",
+		"plants2:leaves_0": "leaves",
+		"plants2:nether_leaves": "leaves",
+		"plants2:crystal_leaves": "leaves",
+		"plants2:crystal": "marble",		
+		"plants2:crystal_sapling": "#sapling",
+		"plants2:groundcover": "dirt"
+	}
+}
