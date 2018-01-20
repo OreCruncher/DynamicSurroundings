@@ -27,6 +27,7 @@ package org.blockartistry.DynSurround.client.hud;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.event.ResourceReloadEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.Color;
@@ -56,6 +57,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.WorldEntitySpawner;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -272,17 +274,11 @@ public final class LightLevelHUD extends GuiOverlay {
 	}
 
 	private final static LightLevelTextureSheet sheet = new LightLevelTextureSheet();
-	private static boolean initialized = false;
 
 	@Override
 	public void doTick(final int tickRef) {
 		if (!showHUD || tickRef == 0 || tickRef % 3 != 0)
 			return;
-
-		if (!initialized) {
-			sheet.updateTexture();
-			initialized = true;
-		}
 
 		final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
 		updateLightInfo(manager, manager.viewerPosX, manager.viewerPosY, manager.viewerPosZ);
@@ -350,6 +346,11 @@ public final class LightLevelHUD extends GuiOverlay {
 		}
 
 		OpenGlState.pop(glState);
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void resourceReloadEvent(final ResourceReloadEvent event) {
+		sheet.updateTexture();
 	}
 
 }

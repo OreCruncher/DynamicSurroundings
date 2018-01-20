@@ -68,6 +68,7 @@ public final class LightLevelTextureSheet extends GeneratedTexture {
 		for (int i = 0; i < 15; i++) {
 
 			final String str = Integer.toString(i);
+			
 			final double posX = i * TEXEL_PER_SIDE;
 			final double posY = 0;
 			final double mid = TEXEL_PER_SIDE / 2;
