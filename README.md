@@ -37,6 +37,15 @@ The following textures were acquired from other sources and require attribution.
      <li>S: <a href="https://github.com/bspkrs/DirectionHUD/tree/master/src/main/resources/assets/directionhud/textures/gui/">compass.png</a> by bspkrs | License: Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0)</li> 
 </ul>
 
+### Shaders
+The following shaders were acquired from other sources and require attribution.
+
+*aurora.vert; aurora.frag*
+
+<ul>
+     <li>S: <a href="https://www.shadertoy.com/view/MsjfRG">Aurora Lights</a> by <a href="https://www.shadertoy.com/user/Mattenii">Mattenii</a> | License: Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0)</li> 
+</ul>
+
 ### Sounds
 The sounds provided with Dynamic Surroundings are from the public
 domain or have Creative Common restrictions.  These restrictions may impact
