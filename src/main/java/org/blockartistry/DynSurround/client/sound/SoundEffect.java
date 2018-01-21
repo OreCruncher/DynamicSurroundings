@@ -34,7 +34,6 @@ import org.blockartistry.DynSurround.client.fx.ISpecialEffect;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.DynSurround.data.xface.SoundType;
-import org.blockartistry.DynSurround.registry.Evaluator;
 import org.blockartistry.DynSurround.registry.SoundMetadata;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.lib.BlockStateProvider;
@@ -42,6 +41,7 @@ import org.blockartistry.lib.SoundUtils;
 import org.blockartistry.lib.WeightTable;
 import org.blockartistry.lib.WeightTable.IEntrySource;
 import org.blockartistry.lib.WeightTable.IItem;
+import org.blockartistry.lib.expression.Evaluator;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;

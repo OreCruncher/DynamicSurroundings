@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.registry;
+package org.blockartistry.lib.expression;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
@@ -31,8 +31,6 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.event.ExpressionEvent;
-import org.blockartistry.lib.expression.Expression;
-import org.blockartistry.lib.expression.Variant;
 
 import net.minecraftforge.common.MinecraftForge;
 
