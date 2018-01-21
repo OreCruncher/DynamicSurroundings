@@ -35,8 +35,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.scripts.IScriptingEngine;
-import org.blockartistry.DynSurround.scripts.JsonScriptingEngine;
+
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -48,9 +47,8 @@ public final class DataScripts {
 
 	// "/assets/dsurround/data/"
 	private String assetDirectory;
-	private IScriptingEngine exe;
 	private Side side;
-	
+
 	public DataScripts(final Side side) {
 		this(side, DSurround.dataDirectory(), "/assets/dsurround/data/");
 	}
@@ -63,21 +61,18 @@ public final class DataScripts {
 
 	public boolean execute(@Nonnull final List<InputStream> resources) {
 
-		if (!this.init())
-			return false;
-
 		for (final ModContainer mod : Loader.instance().getActiveModList()) {
 			runFromArchive(mod.getModId());
 		}
 
-		for(final InputStream stream: resources) {
-			try(final InputStreamReader reader = new InputStreamReader(stream)) {
+		for (final InputStream stream : resources) {
+			try (final InputStreamReader reader = new InputStreamReader(stream)) {
 				runFromStream(reader);
 			} catch (final Throwable t) {
 				DSurround.log().error("Unable to read script from resource pack!", t);
 			}
 		}
-		
+
 		// Load scripts specified in the configuration
 		final String[] configFiles = ModOptions.externalScriptFiles;
 		for (final String file : configFiles) {
@@ -87,25 +82,20 @@ public final class DataScripts {
 		return true;
 	}
 
-	private boolean init() {
-		this.exe = new JsonScriptingEngine(this.side);
-		return this.exe.initialize();
+	private void runFromStream(@Nonnull final Reader reader) {
+		if (reader != null)
+			ModConfigurationFile.process(this.side, reader);
 	}
 
-	private void runFromStream(@Nonnull final Reader reader) {
-		if(reader != null)
-			this.exe.eval(reader);
-	}
-	
 	private void runFromArchive(@Nonnull final String dataFile) {
 		final String fileName = StringUtils.appendIfMissing(
-				StringUtils.appendIfMissing(assetDirectory, "/") + dataFile.replaceAll("[^a-zA-Z0-9.-]", "_"),
-				this.exe.preferredExtension()).toLowerCase();
+				StringUtils.appendIfMissing(assetDirectory, "/") + dataFile.replaceAll("[^a-zA-Z0-9.-]", "_"), ".json")
+				.toLowerCase();
 
 		try (final InputStream stream = DataScripts.class.getResourceAsStream(fileName)) {
 			if (stream != null) {
 				DSurround.log().info("%s: Executing script for mod [%s]", this.side.toString(), dataFile);
-				this.exe.eval(new InputStreamReader(stream));
+				ModConfigurationFile.process(this.side, new InputStreamReader(stream));
 			}
 		} catch (final Throwable t) {
 			DSurround.log().error("Unable to run script!", t);
@@ -113,8 +103,7 @@ public final class DataScripts {
 	}
 
 	private void runFromDirectory(@Nonnull final String dataFile) {
-		final String workingFile = StringUtils.appendIfMissing(Paths.get(dataFile).getFileName().toString(),
-				this.exe.preferredExtension());
+		final String workingFile = StringUtils.appendIfMissing(Paths.get(dataFile).getFileName().toString(), ".json");
 		final File file = new File(dataDirectory, workingFile);
 		if (!file.exists()) {
 			DSurround.log().warn("Could not locate script file [%s]", file.toString());
@@ -128,7 +117,7 @@ public final class DataScripts {
 
 		try (final InputStream stream = new FileInputStream(file)) {
 			DSurround.log().info("%s: Executing script [%s]", this.side.toString(), file.toString());
-			this.exe.eval(new InputStreamReader(stream));
+			ModConfigurationFile.process(this.side, new InputStreamReader(stream));
 		} catch (final Throwable t) {
 			DSurround.log().error("Unable to run script!", t);
 		}
