@@ -30,6 +30,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.sound.SoundEngine;
+import org.blockartistry.DynSurround.client.weather.compat.RandomThings;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
@@ -192,6 +193,10 @@ public class StormSplashRenderer {
 			final int locX = playerX + RANDOM.nextInt(RANGE) - RANDOM.nextInt(RANGE);
 			final int locZ = playerZ + RANDOM.nextInt(RANGE) - RANDOM.nextInt(RANGE);
 			this.pos.setPos(locX, 0, locZ);
+
+			if (!RandomThings.shouldRain(world, this.pos))
+				continue;
+
 			final BlockPos precipHeight = getPrecipitationHeight(world, RANGE / 2, this.pos);
 			final BiomeInfo biome = this.biomes.get(world.getBiome(this.pos));
 			final boolean hasDust = biome.getHasDust();

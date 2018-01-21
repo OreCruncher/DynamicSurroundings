@@ -28,6 +28,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.weather.compat.RandomThings;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
@@ -143,6 +144,10 @@ public class StormRenderer {
 				final double rainX = RAIN_X_COORDS[idx];
 				final double rainY = RAIN_Y_COORDS[idx];
 				this.mutable.setPos(gridX, 0, gridZ);
+				
+				if (!RandomThings.shouldRain(world, this.mutable))
+					continue;
+
 				final BiomeInfo biome = this.biomes.get(world.getBiome(this.mutable));
 
 				if (biome.getHasDust() || biome.getHasPrecipitation()) {
