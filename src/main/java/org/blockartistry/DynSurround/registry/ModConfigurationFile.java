@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.scripts.json;
+package org.blockartistry.DynSurround.registry;
 
 import java.io.Reader;
 import java.util.HashMap;
@@ -37,12 +37,6 @@ import org.blockartistry.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.DynSurround.data.xface.BlockConfig;
 import org.blockartistry.DynSurround.data.xface.DimensionConfig;
 import org.blockartistry.DynSurround.data.xface.ItemConfig;
-import org.blockartistry.DynSurround.registry.BiomeRegistry;
-import org.blockartistry.DynSurround.registry.BlockRegistry;
-import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.FootstepsRegistry;
-import org.blockartistry.DynSurround.registry.ItemRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.JsonUtils;
 import com.google.common.collect.ImmutableList;
@@ -50,7 +44,7 @@ import com.google.gson.annotations.SerializedName;
 
 import net.minecraftforge.fml.relauncher.Side;
 
-public final class ConfigurationScript {
+public final class ModConfigurationFile {
 
 	public static class ForgeEntry {
 		@SerializedName("acousticProfile")
@@ -74,21 +68,21 @@ public final class ConfigurationScript {
 
 	@SerializedName("footsteps")
 	public Map<String, String> footsteps = new HashMap<String, String>();
-	
+
 	@SerializedName("footprints")
 	public List<String> footprints = ImmutableList.of();
 
 	@SerializedName("forgeMappings")
 	public List<ForgeEntry> forgeMappings = ImmutableList.of();
-	
+
 	@SerializedName("itemConfig")
 	public ItemConfig itemConfig = new ItemConfig();
 
 	public static void process(@Nonnull Side side, @Nonnull final Reader reader) {
 
 		try {
-			
-			final ConfigurationScript script = JsonUtils.load(reader, ConfigurationScript.class);
+
+			final ModConfigurationFile script = JsonUtils.load(reader, ModConfigurationFile.class);
 			final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 
 			for (final DimensionConfig dimension : script.dimensions)
@@ -105,7 +99,7 @@ public final class ConfigurationScript {
 
 			// We don't want to process these items if the mod is running
 			// on the server - they apply only to client side.
-			if(side == Side.SERVER)
+			if (side == Side.SERVER)
 				return;
 
 			final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
@@ -117,18 +111,18 @@ public final class ConfigurationScript {
 				for (final String name : entry.dictionaryEntries)
 					footsteps.registerForgeEntries(entry.acousticProfile, name);
 			}
-			
+
 			for (final Entry<String, String> entry : script.footsteps.entrySet()) {
 				footsteps.registerBlocks(entry.getValue(), entry.getKey());
 			}
-			
-			for (final String fp: script.footprints) {
+
+			for (final String fp : script.footprints) {
 				footsteps.registerFootrint(fp);
 			}
 
 			final ItemRegistry itemRegistry = RegistryManager.get(RegistryType.ITEMS);
 			itemRegistry.register(script.itemConfig);
-			
+
 		} catch (final Throwable t) {
 			DSurround.log().error("Unable to process configuration script", t);
 		}
