@@ -32,8 +32,8 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.DynSurround.api.events.BlockEffectEvent;
-import org.blockartistry.DynSurround.registry.Evaluator;
 import org.blockartistry.lib.BlockStateProvider;
+import org.blockartistry.lib.expression.Evaluator;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
