@@ -38,7 +38,7 @@ float shash(vec2 co) {
 	float y = co.y;
 
 	float corners = (hash(x - 1.0, y - 1.0) + hash(x + 1.0, y - 1.0)
-			+ hash(x - 1.0, y + 1.0) + hash(x + 1.0, y + 1.0)) / 16.;
+			+ hash(x - 1.0, y + 1.0) + hash(x + 1.0, y + 1.0)) / 16.0;
 	float sides = (hash(x - 1.0, y) + hash(x + 1.0, y) + hash(x, y - 1.0)
 			+ hash(x, y + 1.0)) / 8.0;
 	float center = hash(co) / 4.0;
