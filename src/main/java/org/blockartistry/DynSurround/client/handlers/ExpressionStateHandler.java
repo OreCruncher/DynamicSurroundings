@@ -41,9 +41,9 @@ import org.blockartistry.DynSurround.client.swing.DiagnosticPanel;
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.DynSurround.registry.TemperatureRating;
 import org.blockartistry.lib.DiurnalUtils;
-import org.blockartistry.lib.script.Dynamic;
-import org.blockartistry.lib.script.IDynamicValue;
-import org.blockartistry.lib.script.Variant;
+import org.blockartistry.lib.expression.Dynamic;
+import org.blockartistry.lib.expression.IDynamicVariant;
+import org.blockartistry.lib.expression.Variant;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityBoat;
@@ -65,14 +65,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ExpressionStateHandler extends EffectHandlerBase {
 
-	private static final List<IDynamicValue> variables = new ArrayList<IDynamicValue>();
+	private static final List<IDynamicVariant> variables = new ArrayList<IDynamicVariant>();
 
-	public static List<IDynamicValue> getVariables() {
+	public static List<IDynamicVariant> getVariables() {
 		return variables;
 	}
 
 	private static void register(@Nonnull final Variant variable) {
-		final IDynamicValue dv = (IDynamicValue) variable;
+		final IDynamicVariant dv = (IDynamicVariant) variable;
 		variables.add(dv);
 	}
 
@@ -494,9 +494,9 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		});
 
 		// Sort them for easy display
-		Collections.sort(variables, new Comparator<IDynamicValue>() {
+		Collections.sort(variables, new Comparator<IDynamicVariant>() {
 			@Override
-			public int compare(@Nonnull final IDynamicValue o1, @Nonnull final IDynamicValue o2) {
+			public int compare(@Nonnull final IDynamicVariant o1, @Nonnull final IDynamicVariant o2) {
 				return o1.getName().compareTo(o2.getName());
 			}
 		});

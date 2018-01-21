@@ -28,40 +28,16 @@
 
 // Sourced from: https://github.com/uklimaschewski/EvalEx
 
-package org.blockartistry.lib.script;
-
-import org.blockartistry.lib.script.Expression.LazyFunction;
-import org.blockartistry.lib.script.Expression.LazyVariant;
+package org.blockartistry.lib.expression;
 
 /**
- * Abstract definition of a supported expression function. A function is defined
- * by a name, the number of parameters and the actual processing implementation.
+ * The expression evaluators exception class.
  */
-public abstract class Function extends LazyFunction {
+public class ExpressionException extends RuntimeException {
+	private static final long serialVersionUID = 1118142866870779047L;
 
-	public Function(final String name, final int numParams) {
-		super(name, numParams);
+	public ExpressionException(final String message) {
+		super(message);
 	}
-
-	public LazyVariant lazyEval(final LazyVariant... lazyParams) {
-		final Variant[] params = new Variant[lazyParams.length];
-		for (int i = 0; i < lazyParams.length; i++)
-			params[i] = lazyParams[i].eval();
-		return new LazyVariant() {
-			public Variant eval() {
-				return Function.this.eval(params);
-			}
-		};
-	}
-
-	/**
-	 * Implementation for this function.
-	 *
-	 * @param params
-	 *            Parameters will be passed by the expression evaluator as an
-	 *            array of {@link Variant} values.
-	 * @return The function must return a new {@link Variant} value as a
-	 *         computing result.
-	 */
-	public abstract Variant eval(final Variant... params);
 }
+

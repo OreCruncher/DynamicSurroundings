@@ -22,54 +22,13 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.lib.script;
+package org.blockartistry.lib.expression;
 
-import javax.annotation.Nonnull;
-
-import org.apache.commons.lang3.StringUtils;
-
-public class StringValue extends Variant {
-
-	protected String value;
-
-	public StringValue() {
-		this.value = StringUtils.EMPTY;
-	}
-
-	public StringValue(@Nonnull final String v) {
-		this.value = v;
-	}
-
-	public StringValue(@Nonnull final String name, @Nonnull final String value) {
-		super(name);
-		this.value = value;
-	}
-
-	@Override
-	public float asNumber() {
-		return Float.parseFloat(this.value);
-	}
-
-	@Override
-	@Nonnull
-	public String asString() {
-		return this.value;
-	}
+public interface IDynamicVariant {
 	
-	@Override
-	public boolean asBoolean() {
-		return !("FALSE".equalsIgnoreCase(this.value));
-	}
+	String getName();
 
-	@Override
-	public int compareTo(@Nonnull final Variant variant) {
-		return this.value.compareTo(variant.asString());
-	}
+	void update();
 
-	@Override
-	@Nonnull
-	public Variant add(@Nonnull final Variant term) {
-		return new StringValue(this.value.concat(term.asString()));
-	}
-
+	String asString();
 }

@@ -31,12 +31,12 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.lib.script.BooleanValue;
-import org.blockartistry.lib.script.Expression;
-import org.blockartistry.lib.script.Function;
-import org.blockartistry.lib.script.NumberValue;
-import org.blockartistry.lib.script.StringValue;
-import org.blockartistry.lib.script.Variant;
+import org.blockartistry.lib.expression.BooleanValue;
+import org.blockartistry.lib.expression.Expression;
+import org.blockartistry.lib.expression.Function;
+import org.blockartistry.lib.expression.NumberValue;
+import org.blockartistry.lib.expression.StringValue;
+import org.blockartistry.lib.expression.Variant;
 
 import com.google.common.primitives.Booleans;
 

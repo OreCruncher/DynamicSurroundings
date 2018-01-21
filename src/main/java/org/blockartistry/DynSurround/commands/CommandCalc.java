@@ -27,9 +27,9 @@ package org.blockartistry.DynSurround.commands;
 import java.util.List;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.lib.script.Expression;
-import org.blockartistry.lib.script.ExpressionException;
-import org.blockartistry.lib.script.Variant;
+import org.blockartistry.lib.expression.Expression;
+import org.blockartistry.lib.expression.ExpressionException;
+import org.blockartistry.lib.expression.Variant;
 
 import com.google.common.collect.ImmutableList;
 

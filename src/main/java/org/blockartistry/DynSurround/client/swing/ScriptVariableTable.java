@@ -29,7 +29,7 @@ import java.util.Observer;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.blockartistry.lib.script.IDynamicValue;
+import org.blockartistry.lib.expression.IDynamicVariant;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -69,7 +69,7 @@ public class ScriptVariableTable extends AbstractTableModel implements Observer 
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		final IDynamicValue v = this.data.getVariables().get(rowIndex);
+		final IDynamicVariant v = this.data.getVariables().get(rowIndex);
 		if (v == null)
 			return "";
 		return columnIndex == 0 ? v.getName() : v.asString();

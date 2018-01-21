@@ -31,8 +31,8 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.event.ExpressionEvent;
-import org.blockartistry.lib.script.Expression;
-import org.blockartistry.lib.script.Variant;
+import org.blockartistry.lib.expression.Expression;
+import org.blockartistry.lib.expression.Variant;
 
 import net.minecraftforge.common.MinecraftForge;
 
