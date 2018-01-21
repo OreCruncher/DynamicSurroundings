@@ -24,32 +24,50 @@
 
 package org.blockartistry.lib.expression;
 
-import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import net.minecraft.util.ITickable;
 
-public final class Dynamic {
+public class DynamicVariantList implements ITickable {
 
-	private Dynamic() {
+	protected final List<IDynamicVariant<?>> variants = new ArrayList<IDynamicVariant<?>>();
+
+	public DynamicVariantList() {
 
 	}
 
-	public abstract static class DynamicNumber extends NumberValue implements IDynamicVariant<NumberValue> {
-		public DynamicNumber(@Nonnull final String name) {
-			super(name);
-		}
+	/*
+	 * Called to update the state of the dynamic variants contain
+	 * within the list.
+	 */
+	@Override
+	public void update() {
+		for (final IDynamicVariant<?> dv : this.variants)
+			dv.update();
 	}
 
-	public abstract static class DynamicString extends StringValue implements IDynamicVariant<StringValue> {
-		public DynamicString(@Nonnull final String name) {
-			super(name, StringUtils.EMPTY);
-		}
+	/*
+	 * Adds a dynamic variant to be managed to the list.
+	 */
+	public void add(final IDynamicVariant<?> dv) {
+		this.variants.add(dv);
 	}
 
-	public abstract static class DynamicBoolean extends BooleanValue implements IDynamicVariant<BooleanValue> {
-		public DynamicBoolean(@Nonnull final String name) {
-			super(name);
-		}
+	/*
+	 * Attaches the dynamic variants in the list to the
+	 * specified expression.
+	 */
+	public void attach(final Expression exp) {
+		for (final IDynamicVariant<?> dv : this.variants)
+			exp.addVariable((Variant) dv);
+	}
+
+	/*
+	 * Gets the list of dynamic variants.
+	 */
+	public List<IDynamicVariant<?>> getList() {
+		return this.variants;
 	}
 
 }

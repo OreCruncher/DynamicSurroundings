@@ -24,7 +24,7 @@
 
 package org.blockartistry.lib.expression;
 
-public interface IDynamicVariant {
+public interface IDynamicVariant<T extends Variant> {
 	
 	String getName();
 

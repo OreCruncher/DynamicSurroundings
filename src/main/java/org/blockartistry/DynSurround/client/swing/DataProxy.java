@@ -79,7 +79,7 @@ public abstract class DataProxy extends Observable {
 			dataPools.add(this);
 		}
 
-		public List<IDynamicVariant> getVariables() {
+		public List<IDynamicVariant<?>> getVariables() {
 			return ExpressionStateHandler.getVariables();
 		}
 

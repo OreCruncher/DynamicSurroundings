@@ -69,7 +69,7 @@ public class ScriptVariableTable extends AbstractTableModel implements Observer 
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		final IDynamicVariant v = this.data.getVariables().get(rowIndex);
+		final IDynamicVariant<?> v = this.data.getVariables().get(rowIndex);
 		if (v == null)
 			return "";
 		return columnIndex == 0 ? v.getName() : v.asString();
