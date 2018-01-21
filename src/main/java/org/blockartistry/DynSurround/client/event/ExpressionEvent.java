@@ -26,7 +26,7 @@ package org.blockartistry.DynSurround.client.event;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.lib.script.Expression;
+import org.blockartistry.lib.expression.Expression;
 
 import net.minecraftforge.fml.common.eventhandler.Event;
 

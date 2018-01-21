@@ -28,7 +28,7 @@
 
 // Sourced from: https://github.com/uklimaschewski/EvalEx
 
-package org.blockartistry.lib.script;
+package org.blockartistry.lib.expression;
 
 import java.util.Iterator;
 import java.util.Set;

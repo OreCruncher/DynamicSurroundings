@@ -22,34 +22,65 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.lib.script;
+package org.blockartistry.lib.expression;
 
 import javax.annotation.Nonnull;
 
-import org.apache.commons.lang3.StringUtils;
+public class BooleanValue extends Variant {
 
-public final class Dynamic {
+	protected boolean value;
+
+	public BooleanValue() {
+		this.value = false;
+	}
 	
-	private Dynamic() {
-		
+	public BooleanValue(final boolean b) {
+		this.value = b;
 	}
 
-	public abstract static class DynamicNumber extends NumberValue implements IDynamicValue {
-		public DynamicNumber(@Nonnull final String name) {
-			super(name);
-		}
+	public BooleanValue(final float f) {
+		this.value = f != 0;
 	}
 
-	public abstract static class DynamicString extends StringValue implements IDynamicValue {
-		public DynamicString(@Nonnull final String name) {
-			super(name, StringUtils.EMPTY);
-		}
+	public BooleanValue(@Nonnull final String name) {
+		super(name);
+	}
+	
+	public BooleanValue(@Nonnull final String name, final boolean b) {
+		super(name);
+		this.value = b;
+	}
+	
+	public BooleanValue(@Nonnull final String name, final float f) {
+		super(name);
+		this.value = f != 0;
 	}
 
-	public abstract static class DynamicBoolean extends BooleanValue implements IDynamicValue {
-		public DynamicBoolean(@Nonnull final String name) {
-			super(name);
-		}
+	@Override
+	public float asNumber() {
+		return this.value ? 1.0F : 0.0F;
+	}
+
+	@Override
+	@Nonnull
+	public String asString() {
+		return this.value ? "TRUE" : "FALSE";
+	}
+
+	@Override
+	public boolean asBoolean() {
+		return this.value;
+	}
+
+	@Override
+	public int compareTo(@Nonnull final Variant variant) {
+		return Boolean.compare(this.value, variant.asBoolean());
+	}
+
+	@Override
+	@Nonnull
+	public Variant add(@Nonnull final Variant term) {
+		return new BooleanValue(this.value || term.asBoolean());
 	}
 
 }
