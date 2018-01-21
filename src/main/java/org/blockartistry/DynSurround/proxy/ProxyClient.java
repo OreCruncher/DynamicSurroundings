@@ -56,6 +56,7 @@ import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -67,7 +68,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ProxyClient extends Proxy implements IResourceManagerReloadListener {
-	
+
 	@Override
 	protected void registerLanguage() {
 		Localization.initialize(Side.CLIENT);
@@ -113,10 +114,10 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 		super.init(event);
 		KeyHandler.init();
 		ParticleDripOverride.register();
-		
+
 		ClientCommandHandler.instance.registerCommand(new CommandCalc());
-		
-		if(ModOptions.disableWaterSuspendParticle)
+
+		if (ModOptions.disableWaterSuspendParticle)
 			Minecraft.getMinecraft().effectRenderer.registerParticle(EnumParticleTypes.SUSPENDED.getParticleID(), null);
 	}
 
@@ -133,6 +134,9 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
 		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
 			public void run() {
+				// Fire it again because of, you know, stupidity
+				if (FMLClientHandler.instance().hasOptifine())
+					onResourceManagerReload(Minecraft.getMinecraft().getResourceManager());
 				EffectManager.register();
 				GuiHUDHandler.register();
 				ProxyClient.this.connectionTime = System.currentTimeMillis();
