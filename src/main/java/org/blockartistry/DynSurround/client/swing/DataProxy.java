@@ -79,7 +79,7 @@ public abstract class DataProxy extends Observable {
 			dataPools.add(this);
 		}
 
-		public List<IDynamicVariant> getVariables() {
+		public List<IDynamicVariant<?>> getVariables() {
 			return ExpressionStateHandler.getVariables();
 		}
 
@@ -198,7 +198,7 @@ public abstract class DataProxy extends Observable {
 				final ItemStack stack = this.state.getBlock().getPickBlock(this.state,
 						Minecraft.getMinecraft().objectMouseOver, EnvironState.getWorld(), this.targetBlock,
 						EnvironState.getPlayer());
-				if (stack != null && !stack.isEmpty())
+				if (stack != null)
 					for (int i : OreDictionary.getOreIDs(stack))
 						result.add(OreDictionary.getOreName(i));
 			}

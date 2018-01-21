@@ -25,9 +25,6 @@
 package org.blockartistry.DynSurround.client.handlers;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -42,9 +39,8 @@ import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.DynSurround.registry.TemperatureRating;
 import org.blockartistry.lib.DiurnalUtils;
 import org.blockartistry.lib.expression.Dynamic;
+import org.blockartistry.lib.expression.DynamicVariantList;
 import org.blockartistry.lib.expression.IDynamicVariant;
-import org.blockartistry.lib.expression.Variant;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
@@ -65,15 +61,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ExpressionStateHandler extends EffectHandlerBase {
 
-	private static final List<IDynamicVariant> variables = new ArrayList<IDynamicVariant>();
+	private static final DynamicVariantList variables = new DynamicVariantList();
 
-	public static List<IDynamicVariant> getVariables() {
-		return variables;
+	public static List<IDynamicVariant<?>> getVariables() {
+		return variables.getList();
 	}
 
-	private static void register(@Nonnull final Variant variable) {
-		final IDynamicVariant dv = (IDynamicVariant) variable;
-		variables.add(dv);
+	private static void register(@Nonnull final IDynamicVariant<?> variable) {
+		variables.add(variable);
 	}
 
 	public static void register() {
@@ -117,7 +112,7 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 			@Override
 			public void update() {
 				final World world = EnvironState.getWorld();
-				this.value = world != null && !world.provider.hasSkyLight();
+				this.value = world != null && !world.provider.hasNoSky;
 			}
 		});
 		register(new Dynamic.DynamicString("season") {
@@ -493,13 +488,14 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 			}
 		});
 
-		// Sort them for easy display
-		Collections.sort(variables, new Comparator<IDynamicVariant>() {
-			@Override
-			public int compare(@Nonnull final IDynamicVariant o1, @Nonnull final IDynamicVariant o2) {
-				return o1.getName().compareTo(o2.getName());
-			}
-		});
+		/*
+		 * // Sort them for easy display Collections.sort(variables, new
+		 * Comparator<IDynamicVariant>() {
+		 * 
+		 * @Override public int compare(@Nonnull final IDynamicVariant o1, @Nonnull
+		 * final IDynamicVariant o2) { return o1.getName().compareTo(o2.getName()); }
+		 * });
+		 */
 
 	}
 
@@ -511,9 +507,8 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 	public void process(@Nonnull final EntityPlayer player) {
 		// Iterate through the variables and get the data cached for this ticks
 		// expression evaluations.
-		for (int i = 0; i < variables.size(); i++)
-			variables.get(i).update();
-		
+		variables.update();
+
 		if (ModOptions.showDebugDialog)
 			DiagnosticPanel.refresh();
 	}
@@ -532,8 +527,7 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void onExpressionCreate(@Nonnull final ExpressionEvent.Create event) {
-		for (int i = 0; i < variables.size(); i++)
-			event.expression.addVariable((Variant) variables.get(i));
+		variables.attach(event.expression);
 	}
 
 }
