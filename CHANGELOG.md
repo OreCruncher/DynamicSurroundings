@@ -1,6 +1,9 @@
 ###DynamicSurroundings-1.10.2-3.4.8.5
 **What's New**
 * Two new water ripple textures to select courtesy of yahlirs4!  In addition to the classic lighter colored round ripple there is a darker round ripple as well as a square (for those that like the blockiness theme).  You can find the option to change the style under "Rain Options".
+* When standing in a cold area breath particles will be emitted from a players/villagers mouth.  Cold is when the biome temperature at a given block is < 0.2.  You can enable/disable the feature using the "Player Options".
+* If your computer supports shaders auroras will be colored using a shader program.  An option to turn this off is under the "Aurora Options".
+* Rain fall, rain splash, and rain sound will be suppressed when a Random Things Rain Shield is nearby.  Prior Random Things and Dynamic Surroundings conflicted thus the rain shield didn't operate as intended.  Note that birds will not magically start singing because it is still really raining.
 
 **Fixes**
 * Unfade a fading aurora if conditions permit.  This condition is frequent if bouncing between biomes where one supports auroras and the other doesn't.
@@ -8,6 +11,8 @@
 
 **Changes**
 * Adjust aurora alpha so they are more visible (brighter?)
+* Improved performance of the light level HUD (use textures instead of draw string).
+* Removed light level HUD styles. HUD will only render light level on the block surface with rotation.
 
 ###DynamicSurroundings-1.10.2-3.4.8.4
 **What's New**
