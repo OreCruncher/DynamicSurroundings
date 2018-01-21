@@ -40,7 +40,7 @@ import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.BlockInfo.BlockInfoMutable;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.MCHelper;
-import org.blockartistry.lib.script.IDynamicValue;
+import org.blockartistry.lib.expression.IDynamicVariant;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -79,7 +79,7 @@ public abstract class DataProxy extends Observable {
 			dataPools.add(this);
 		}
 
-		public List<IDynamicValue> getVariables() {
+		public List<IDynamicVariant> getVariables() {
 			return ExpressionStateHandler.getVariables();
 		}
 

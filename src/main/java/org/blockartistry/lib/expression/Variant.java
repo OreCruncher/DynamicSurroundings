@@ -22,65 +22,47 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.lib.script;
+package org.blockartistry.lib.expression;
 
 import javax.annotation.Nonnull;
 
-public class BooleanValue extends Variant {
+public abstract class Variant implements Comparable<Variant>, Expression.LazyVariant {
 
-	protected boolean value;
-
-	public BooleanValue() {
-		this.value = false;
+	protected final String name;
+	
+	public Variant() {
+		this("<ANON>");
 	}
 	
-	public BooleanValue(final boolean b) {
-		this.value = b;
-	}
-
-	public BooleanValue(final float f) {
-		this.value = f != 0;
-	}
-
-	public BooleanValue(@Nonnull final String name) {
-		super(name);
+	public Variant(@Nonnull final String name) {
+		this.name = name;
 	}
 	
-	public BooleanValue(@Nonnull final String name, final boolean b) {
-		super(name);
-		this.value = b;
+	@Nonnull
+	public String getName() {
+		return this.name;
 	}
 	
-	public BooleanValue(@Nonnull final String name, final float f) {
-		super(name);
-		this.value = f != 0;
-	}
+	public abstract float asNumber();
 
+	@Nonnull
+	public abstract String asString();
+	
+	public abstract boolean asBoolean();
+
+	// Operator support in case of strings
+	@Nonnull
+	public abstract Variant add(@Nonnull final Variant term);
+	
 	@Override
-	public float asNumber() {
-		return this.value ? 1.0F : 0.0F;
+	@Nonnull
+	public final String toString() {
+		return asString();
 	}
 
 	@Override
 	@Nonnull
-	public String asString() {
-		return this.value ? "TRUE" : "FALSE";
+	public final Variant eval() {
+		return this;
 	}
-
-	@Override
-	public boolean asBoolean() {
-		return this.value;
-	}
-
-	@Override
-	public int compareTo(@Nonnull final Variant variant) {
-		return Boolean.compare(this.value, variant.asBoolean());
-	}
-
-	@Override
-	@Nonnull
-	public Variant add(@Nonnull final Variant term) {
-		return new BooleanValue(this.value || term.asBoolean());
-	}
-
 }

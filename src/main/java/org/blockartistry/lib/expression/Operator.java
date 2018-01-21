@@ -28,7 +28,7 @@
 
 // Sourced from: https://github.com/uklimaschewski/EvalEx
 
-package org.blockartistry.lib.script;
+package org.blockartistry.lib.expression;
 
 /**
  * Abstract definition of a supported operator. An operator is defined by its

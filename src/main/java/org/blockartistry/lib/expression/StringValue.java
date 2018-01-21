@@ -22,47 +22,54 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.lib.script;
+package org.blockartistry.lib.expression;
 
 import javax.annotation.Nonnull;
 
-public abstract class Variant implements Comparable<Variant>, Expression.LazyVariant {
+import org.apache.commons.lang3.StringUtils;
 
-	protected final String name;
-	
-	public Variant() {
-		this("<ANON>");
-	}
-	
-	public Variant(@Nonnull final String name) {
-		this.name = name;
-	}
-	
-	@Nonnull
-	public String getName() {
-		return this.name;
-	}
-	
-	public abstract float asNumber();
+public class StringValue extends Variant {
 
-	@Nonnull
-	public abstract String asString();
-	
-	public abstract boolean asBoolean();
+	protected String value;
 
-	// Operator support in case of strings
-	@Nonnull
-	public abstract Variant add(@Nonnull final Variant term);
-	
+	public StringValue() {
+		this.value = StringUtils.EMPTY;
+	}
+
+	public StringValue(@Nonnull final String v) {
+		this.value = v;
+	}
+
+	public StringValue(@Nonnull final String name, @Nonnull final String value) {
+		super(name);
+		this.value = value;
+	}
+
 	@Override
-	@Nonnull
-	public final String toString() {
-		return asString();
+	public float asNumber() {
+		return Float.parseFloat(this.value);
 	}
 
 	@Override
 	@Nonnull
-	public final Variant eval() {
-		return this;
+	public String asString() {
+		return this.value;
 	}
+	
+	@Override
+	public boolean asBoolean() {
+		return !("FALSE".equalsIgnoreCase(this.value));
+	}
+
+	@Override
+	public int compareTo(@Nonnull final Variant variant) {
+		return this.value.compareTo(variant.asString());
+	}
+
+	@Override
+	@Nonnull
+	public Variant add(@Nonnull final Variant term) {
+		return new StringValue(this.value.concat(term.asString()));
+	}
+
 }

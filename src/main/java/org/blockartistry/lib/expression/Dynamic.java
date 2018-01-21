@@ -22,12 +22,34 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.lib.script;
+package org.blockartistry.lib.expression;
 
-public interface IDynamicValue {
-	String getName();
+import javax.annotation.Nonnull;
 
-	void update();
+import org.apache.commons.lang3.StringUtils;
 
-	String asString();
+public final class Dynamic {
+	
+	private Dynamic() {
+		
+	}
+
+	public abstract static class DynamicNumber extends NumberValue implements IDynamicVariant {
+		public DynamicNumber(@Nonnull final String name) {
+			super(name);
+		}
+	}
+
+	public abstract static class DynamicString extends StringValue implements IDynamicVariant {
+		public DynamicString(@Nonnull final String name) {
+			super(name, StringUtils.EMPTY);
+		}
+	}
+
+	public abstract static class DynamicBoolean extends BooleanValue implements IDynamicVariant {
+		public DynamicBoolean(@Nonnull final String name) {
+			super(name);
+		}
+	}
+
 }
