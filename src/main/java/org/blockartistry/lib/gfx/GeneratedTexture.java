@@ -49,10 +49,12 @@ public abstract class GeneratedTexture {
 	protected final ResourceLocation resource;
 	protected final int width;
 	protected final int height;
+	protected final int size;
 	
 	public GeneratedTexture(final String name, final int width, final int height) {
 		this.width = width;
 		this.height = height;
+		this.size = width * height;
 		this.texture = new DynamicTexture(this.width, this.height);
 		this.resource = Minecraft.getMinecraft().getTextureManager().getDynamicTextureLocation(name, this.texture);
 	}
@@ -119,7 +121,8 @@ public abstract class GeneratedTexture {
 	    blit.bindFramebufferTexture();
 	    final IntBuffer pixelBuffer = BufferUtils.createIntBuffer(this.width * this.height);
 	    GL11.glGetTexImage(GL11.GL_TEXTURE_2D, 0, GL12.GL_BGRA, GL12.GL_UNSIGNED_INT_8_8_8_8_REV, pixelBuffer);
-	    pixelBuffer.get(this.texture.getTextureData());
+	    // Seen the DynamicTexture buffer 3x the size with OptiFine so guard against that.
+	    pixelBuffer.get(this.texture.getTextureData(), 0, this.size);
 	    this.texture.updateDynamicTexture();
 	    
 		// Restore our state
