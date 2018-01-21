@@ -30,6 +30,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.sound.SoundEngine;
+import org.blockartistry.DynSurround.client.weather.compat.RandomThings;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
@@ -85,7 +86,7 @@ public class StormSplashRenderer {
 	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
 	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 	private final SeasonRegistry season = RegistryManager.get(RegistryType.SEASON);
-	
+
 	protected StormSplashRenderer() {
 
 	}
@@ -97,7 +98,7 @@ public class StormSplashRenderer {
 				(float) (this.GENERATOR.getValue((world.getWorldTime() % 24000L) / 100, 1) / 5.0F), -bounds, bounds);
 		return MathHelper.clamp(currentVolume + adjust, 0, 1F);
 	}
-	
+
 	protected void spawnBlockParticle(final IBlockState state, final boolean dust, final World world, final double x,
 			final double y, final double z) {
 		final Block block = state.getBlock();
@@ -105,7 +106,7 @@ public class StormSplashRenderer {
 
 		if (dust || block == Blocks.SOUL_SAND) {
 			particleType = null;
-		} else if ((block == Blocks.NETHERRACK  || block == Blocks.MAGMA) && RANDOM.nextInt(20) == 0) {
+		} else if ((block == Blocks.NETHERRACK || block == Blocks.MAGMA) && RANDOM.nextInt(20) == 0) {
 			particleType = EnumParticleTypes.LAVA;
 		} else if (state.getMaterial() == Material.LAVA) {
 			particleType = EnumParticleTypes.SMOKE_NORMAL;
@@ -192,6 +193,10 @@ public class StormSplashRenderer {
 			final int locX = playerX + RANDOM.nextInt(RANGE) - RANDOM.nextInt(RANGE);
 			final int locZ = playerZ + RANDOM.nextInt(RANGE) - RANDOM.nextInt(RANGE);
 			this.pos.setPos(locX, 0, locZ);
+
+			if (!RandomThings.shouldRain(world, this.pos))
+				continue;
+
 			final BlockPos precipHeight = getPrecipitationHeight(world, RANGE / 2, this.pos);
 			final BiomeInfo biome = this.biomes.get(world.getBiome(this.pos));
 			final boolean hasDust = biome.getHasDust();
