@@ -1,3 +1,26 @@
+###DynamicSurroundings-1.12.2-3.4.8.5
+**What's New**
+* Two new water ripple textures to select courtesy of yahlirs4!  In addition to the classic lighter colored round ripple there is a darker round ripple as well as a square (for those that like the blockiness theme).  You can find the option to change the style under "Rain Options".
+* When standing in a cold area breath particles will be emitted from a players/villagers/illagers mouth.  Cold is when the biome temperature at a given block is < 0.2.  You can enable/disable the feature using the "Player Options".
+* If your computer supports shaders auroras will be colored using a shader program.  An option to turn this off is under the "Aurora Options".
+* Rain fall, rain splash, and rain sound will be suppressed when a Random Things Rain Shield is nearby.  Prior Random Things and Dynamic Surroundings conflicted thus the rain shield didn't operate as intended.  Note that birds will not magically start singing because it is still really raining.
+
+**Fixes**
+* Unfade a fading aurora if conditions permit.  This condition is frequent if bouncing between biomes where one supports auroras and the other doesn't.
+* Changed when auroras render to the display.  Auroras should display with Astral Sorcery, Stellar Sky, Extended Days, and Weather Storms & Tornadoes.
+* Put in some haxx to have footstep sounds play with Sound Physics.
+* Finished up Albedo compat for particles.  Particles should render correctly without appearing washed out.
+* Footprints should show on Gravel Ores blocks.
+
+**Changes**
+* Built against Forge 1.12.2-14.23.1.2600
+* Adjust aurora alpha so they are more visible (brighter?)
+* Improved performance of the light level HUD (use textures instead of draw string).
+* Removed light level HUD styles. HUD will only render light level on the block surface with rotation.
+* Updated mod support:
+    * NetherEx (thanks Sunconure11!)
+    * Plants 2
+
 ###DynamicSurroundings-1.12.2-3.4.8.4
 **What's New**
 * Based on feedback brought the auroras back as hovering bands rather than rendered at view range.  There are no configuration options available currently.  Working on further changes and those changes affect what I do.
