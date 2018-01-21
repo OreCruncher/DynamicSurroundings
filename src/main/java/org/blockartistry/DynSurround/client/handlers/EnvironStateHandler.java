@@ -43,7 +43,6 @@ import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.DynSurround.registry.DimensionInfo;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.Evaluator;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.SeasonRegistry;
 import org.blockartistry.DynSurround.registry.SeasonType;
@@ -51,6 +50,7 @@ import org.blockartistry.DynSurround.registry.TemperatureRating;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.MinecraftClock;
 import org.blockartistry.lib.PlayerUtils;
+import org.blockartistry.lib.expression.Evaluator;
 
 import com.google.common.collect.ImmutableList;
 
