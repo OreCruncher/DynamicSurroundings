@@ -43,10 +43,14 @@ public final class OpenGlState {
 	private boolean depthTest;
 	private int depthFunc;
 
+	private boolean cull;
+	private GlStateManager.CullFace cullMode;
+
 	private boolean lighting;
 	private boolean depthMask;
 	private boolean normal;
 	private boolean rescaleNormal;
+	private boolean texture2D;
 
 	private static int getInteger(final int parm) {
 		return GL11.glGetInteger(parm);
@@ -73,10 +77,24 @@ public final class OpenGlState {
 		this.depthTest = isSet(GL11.GL_DEPTH_TEST);
 		this.depthFunc = getInteger(GL11.GL_DEPTH_FUNC);
 
+		this.cull = isSet(GL11.GL_CULL_FACE);
+		switch (getInteger(GL11.GL_CULL_FACE_MODE)) {
+		case 1029:
+			this.cullMode = GlStateManager.CullFace.BACK;
+			break;
+		case 1032:
+			this.cullMode = GlStateManager.CullFace.FRONT_AND_BACK;
+			break;
+		case 1028:
+		default:
+			this.cullMode = GlStateManager.CullFace.FRONT;
+		}
+
 		this.lighting = isSet(GL11.GL_LIGHTING);
 		this.depthMask = isSet(GL11.GL_DEPTH_WRITEMASK);
 		this.normal = isSet(GL11.GL_NORMALIZE);
 		this.rescaleNormal = isSet(GL12.GL_RESCALE_NORMAL);
+		this.texture2D = isSet(GL11.GL_TEXTURE_2D);
 
 		GlStateManager.pushMatrix();
 	}
@@ -107,6 +125,12 @@ public final class OpenGlState {
 			GlStateManager.disableDepth();
 		GlStateManager.depthFunc(state.depthFunc);
 
+		if (state.cull)
+			GlStateManager.enableCull();
+		else
+			GlStateManager.disableCull();
+		GlStateManager.cullFace(state.cullMode);
+
 		if (state.lighting)
 			GlStateManager.enableLighting();
 		else
@@ -127,6 +151,12 @@ public final class OpenGlState {
 		else
 			GlStateManager.disableDepth();
 
+		if (state.texture2D)
+			GlStateManager.enableTexture2D();
+		else
+			GlStateManager.disableTexture2D();
+
 		GlStateManager.depthMask(state.depthMask);
 	}
+
 }

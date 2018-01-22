@@ -42,6 +42,7 @@ import net.minecraft.util.ResourceLocation;
  * 
  * Loosly based on:
  * https://github.com/Angry-Pixel/The-Betweenlands/blob/1.12/src/main/java/thebetweenlands/client/render/shader/postprocessing/PostProcessingEffect.java
+ * https://gist.github.com/TheGreyGhost/96983a0cd47c8c2f294d
  */
 public abstract class GeneratedTexture {
 
@@ -50,7 +51,7 @@ public abstract class GeneratedTexture {
 	protected final int width;
 	protected final int height;
 	protected final int size;
-	
+
 	public GeneratedTexture(final String name, final int width, final int height) {
 		this.width = width;
 		this.height = height;
@@ -67,6 +68,12 @@ public abstract class GeneratedTexture {
 		return this.height;
 	}
 
+	public int getSize() {
+		// Use the size allocated by the DynamicTexture object. OptiFine does some
+		// squirrelly things with it.
+		return this.texture.getTextureData().length;
+	}
+
 	public void bindTexture() {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(this.resource);
 	}
@@ -75,12 +82,18 @@ public abstract class GeneratedTexture {
 		this.texture.deleteGlTexture();
 	}
 
+	public boolean useDepth() {
+		return true;
+	}
+
 	public void updateTexture() {
 		// Save the MC frame buffer and bind ours
 		final Framebuffer mcFrameBuffer = Minecraft.getMinecraft().getFramebuffer();
-		final Framebuffer blit = new Framebuffer(this.width, this.height, false);
+		final Framebuffer blit = new Framebuffer(this.width, this.height, useDepth());
 		blit.framebufferClear();
-		blit.bindFramebuffer(true);
+		blit.bindFramebuffer(this.useDepth());
+
+		final OpenGlState glState = OpenGlState.push();
 
 		// Backup attributes
 		GL11.glPushAttrib(GL11.GL_MATRIX_MODE | GL11.GL_VIEWPORT_BIT | GL11.GL_TRANSFORM_BIT);
@@ -100,6 +113,8 @@ public abstract class GeneratedTexture {
 		GlStateManager.loadIdentity();
 		GlStateManager.translate(0.0F, 0.0F, -2000.0F);
 
+		GlStateManager.enableTexture2D();
+		
 		try {
 			// Do the render supplied by a derived class
 			render();
@@ -117,18 +132,26 @@ public abstract class GeneratedTexture {
 		GlStateManager.popAttrib();
 		GlStateManager.popMatrix();
 
+		OpenGlState.pop(glState);
+
 		// Copy the data into our texture and update
-	    blit.bindFramebufferTexture();
-	    final IntBuffer pixelBuffer = BufferUtils.createIntBuffer(this.width * this.height);
-	    GL11.glGetTexImage(GL11.GL_TEXTURE_2D, 0, GL12.GL_BGRA, GL12.GL_UNSIGNED_INT_8_8_8_8_REV, pixelBuffer);
-	    // Seen the DynamicTexture buffer 3x the size with OptiFine so guard against that.
-	    pixelBuffer.get(this.texture.getTextureData(), 0, this.size);
-	    this.texture.updateDynamicTexture();
-	    
-		// Restore our state
-	    blit.deleteFramebuffer();
-		if (mcFrameBuffer != null)
-			mcFrameBuffer.bindFramebuffer(true);
+
+		try {
+			blit.bindFramebufferTexture();
+			final IntBuffer pixelBuffer = BufferUtils.createIntBuffer(this.getSize());
+			GlStateManager.glGetTexImage(GL11.GL_TEXTURE_2D, 0, GL12.GL_BGRA, GL12.GL_UNSIGNED_INT_8_8_8_8_REV,
+					pixelBuffer);
+			pixelBuffer.get(this.texture.getTextureData(), 0, pixelBuffer.remaining());
+			this.texture.updateDynamicTexture();
+		} catch (final Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			// Restore our state
+			blit.deleteFramebuffer();
+			if (mcFrameBuffer != null)
+				mcFrameBuffer.bindFramebuffer(true);
+		}
+
 	}
 
 	public abstract void render();
