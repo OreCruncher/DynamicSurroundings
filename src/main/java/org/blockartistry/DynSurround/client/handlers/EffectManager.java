@@ -45,9 +45,9 @@ public class EffectManager {
 	}
 
 	private void init() {
-		// These two first in this order
+		// This one goes first since it sets up the state
+		// for the remainder during this tick.
 		this.effectHandlers.add(new EnvironStateHandler());
-		this.effectHandlers.add(new ExpressionStateHandler());
 
 		this.effectHandlers.add(new AreaSurveyHandler());
 		this.effectHandlers.add(new FogEffectHandler());
@@ -62,8 +62,9 @@ public class EffectManager {
 		this.effectHandlers.add(new SpeechBubbleHandler());
 		this.effectHandlers.add(new WeatherHandler());
 
-		// Add this one last so it goes last
+		// These two go last in order
 		this.effectHandlers.add(SoundEffectHandler.INSTANCE);
+		this.effectHandlers.add(new DiagnosticHandler());
 
 		for (final EffectHandlerBase h : this.effectHandlers)
 			h.connect0();
@@ -72,6 +73,7 @@ public class EffectManager {
 	private void fini() {
 		for (final EffectHandlerBase h : this.effectHandlers)
 			h.disconnect0();
+		
 		this.effectHandlers.clear();
 	}
 
@@ -91,13 +93,13 @@ public class EffectManager {
 
 	@SubscribeEvent
 	public void playerTick(final TickEvent.PlayerTickEvent event) {
-
+		
 		if (event.side == Side.SERVER || event.phase == Phase.END || Minecraft.getMinecraft().isGamePaused())
 			return;
 
 		if (event.player == null || event.player.worldObj == null)
 			return;
-
+		
 		if(event.player != Minecraft.getMinecraft().thePlayer)
 			return;
 
