@@ -38,6 +38,7 @@ import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.client.event.ServerDataEvent;
 import org.blockartistry.DynSurround.client.handlers.scanners.BattleScanner;
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
+import org.blockartistry.DynSurround.expression.ExpressionEngine;
 import org.blockartistry.DynSurround.registry.ArmorClass;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.DynSurround.registry.BiomeRegistry;
@@ -463,7 +464,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void diagnostics(final DiagnosticEvent.Gather event) {
 		for (final String s : scripts) {
-			final String result = ExpressionStateHandler.eval(s).toString();
+			final String result = ExpressionEngine.instance().eval(s).toString();
 			event.output.add(result);
 		}
 
@@ -471,7 +472,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		event.output.add("Aurora: " + (AuroraEffectHandler.getCurrentAurora() == null ? "NONE"
 				: AuroraEffectHandler.getCurrentAurora().toString()));
 
-		final List<String> badScripts = ExpressionStateHandler.getNaughtyList();
+		final List<String> badScripts = ExpressionEngine.instance().getNaughtyList();
 		for (final String s : badScripts) {
 			event.output.add("BAD SCRIPT: " + s);
 		}
