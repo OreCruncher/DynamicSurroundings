@@ -31,7 +31,9 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.lib.logging.ModLog;
 
-public class ExpressionCache {
+import net.minecraft.util.ITickable;
+
+public class ExpressionCache implements ITickable {
 
 	protected final ModLog logger;
 	protected final List<DynamicVariantList> variants = new ArrayList<DynamicVariantList>();
@@ -41,25 +43,58 @@ public class ExpressionCache {
 	public ExpressionCache(final ModLog logger) {
 		this.logger = logger;
 	}
-	
+
+	/*
+	 * Adds a DynamicVariantList to the cache. New expressions that are created will
+	 * automatically have these variables added to them. These variants will be
+	 * updated when the ExpressionCache gets ticked.
+	 */
 	public void add(final DynamicVariantList dvl) {
 		this.variants.add(dvl);
 	}
-	
+
+	/*
+	 * Returns a list of expressions that have been examined by the ExpressionCache
+	 * but failed due to some error. Used for diagnostics because ideally there
+	 * should be no failures.
+	 */
 	@Nonnull
 	public List<String> getNaughtyList() {
 		return this.naughtyList;
 	}
 
-	// This forces a compile and validation of the expression
-	// that is passed in. This will make use of any supplied
-	// built-in references. Custom instance variables, functions,
-	// or operators will cause this to fail since they cannot
-	// be set unless there is an Expression instance. Symbols
-	// in the built-in tables will work, however.
-	//
-	// Expressions are cached. If multiple requests come in for
-	// the same expression the cached version is reused.
+	/*
+	 * Returns a list of all dynamic variants available to the ExpressionCache. Used
+	 * for diagnostic purpose.
+	 */
+	@Nonnull
+	public List<IDynamicVariant<?>> getVariantList() {
+		final List<IDynamicVariant<?>> result = new ArrayList<IDynamicVariant<?>>();
+		for (final DynamicVariantList dvl : this.variants)
+			result.addAll(dvl.getList());
+
+		return result;
+	}
+
+	/*
+	 * Ticks the internally cached DynamicVariableList entities.
+	 */
+	@Override
+	public void update() {
+		for (final DynamicVariantList dvl : this.variants)
+			dvl.update();
+	}
+
+	/*
+	 * This forces a compile and validation of the expression that is passed in.
+	 * This will make use of any supplied built-in references. Custom instance
+	 * variables, functions, or operators will cause this to fail since they cannot
+	 * be set unless there is an Expression instance. Symbols in the built-in tables
+	 * will work, however.
+	 *
+	 * Expressions are cached. If multiple requests come in for the same expression
+	 * the cached version is reused.
+	 */
 	@Nonnull
 	private Expression compile(final String expression) {
 		Expression exp = null;
@@ -82,17 +117,24 @@ public class ExpressionCache {
 		return exp;
 	}
 
+	/*
+	 * Evaluates the expression and returns the result. The resulting parse tree is
+	 * cached for performance when a requery is made.
+	 */
 	@Nonnull
 	public Variant eval(@Nonnull final String script) {
 		return compile(script.intern()).eval();
 	}
 
+	/*
+	 * Evaluates the expression and returns the result as a boolean.
+	 */
 	public boolean check(@Nonnull final String conditions) {
-		// If the string is empty return true. They are always
-		// true.
+		// If the string is empty return true.
 		if (StringUtils.isEmpty(conditions))
 			return true;
 
 		return eval(conditions).asBoolean();
 	}
+
 }
