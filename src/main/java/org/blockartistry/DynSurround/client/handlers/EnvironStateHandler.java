@@ -24,8 +24,6 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,7 +33,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.EnvironmentEvent;
 import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
-import org.blockartistry.DynSurround.client.event.ServerDataEvent;
 import org.blockartistry.DynSurround.client.handlers.scanners.BattleScanner;
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.DynSurround.expression.ExpressionEngine;
@@ -51,21 +48,14 @@ import org.blockartistry.DynSurround.registry.TemperatureRating;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.MinecraftClock;
 import org.blockartistry.lib.PlayerUtils;
-import com.google.common.collect.ImmutableList;
-
-import gnu.trove.procedure.TIntDoubleProcedure;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -74,12 +64,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class EnvironStateHandler extends EffectHandlerBase {
-
-	// Diagnostic strings to display in the debug HUD
-	private List<String> diagnostics = ImmutableList.of();
-
-	// TPS status strings to display
-	private List<String> serverDataReport = ImmutableList.of();
 
 	public static class EnvironState {
 
@@ -395,15 +379,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 		EnvironState.tick(player.world, player);
-
-		// Gather diagnostics if needed
-		if (Minecraft.getMinecraft().gameSettings.showDebugInfo && ModOptions.enableDebugLogging) {
-			final DiagnosticEvent.Gather gather = new DiagnosticEvent.Gather(player.world, player);
-			MinecraftForge.EVENT_BUS.post(gather);
-			this.diagnostics = gather.output;
-		} else {
-			this.diagnostics = null;
-		}
+		ExpressionEngine.instance().update();
 	}
 
 	/**
@@ -422,33 +398,13 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		EnvironState.inVillage = event.inVillage;
 	}
 
-	/**
-	 * Hook the Forge text event to add on our diagnostics
-	 */
-	@SubscribeEvent
-	public void onGatherText(@Nonnull final RenderGameOverlayEvent.Text event) {
-		if (this.diagnostics != null && !this.diagnostics.isEmpty()) {
-			event.getLeft().add("");
-			event.getLeft().addAll(this.diagnostics);
-		}
-
-		if (Minecraft.getMinecraft().gameSettings.showDebugInfo && this.serverDataReport != null) {
-			event.getRight().add(" ");
-			event.getRight().addAll(this.serverDataReport);
-		}
-	}
-
 	@Override
 	public void onConnect() {
-		this.diagnostics = null;
-		this.serverDataReport = null;
 		EnvironState.reset();
 	}
 
 	@Override
 	public void onDisconnect() {
-		this.diagnostics = null;
-		this.serverDataReport = null;
 		EnvironState.reset();
 	}
 
@@ -476,42 +432,6 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		for (final String s : badScripts) {
 			event.output.add("BAD SCRIPT: " + s);
 		}
-	}
-
-	@Nonnull
-	private static TextFormatting getTpsFormatPrefix(final int tps) {
-		if (tps <= 10)
-			return TextFormatting.RED;
-		if (tps <= 15)
-			return TextFormatting.YELLOW;
-		return TextFormatting.GREEN;
-	}
-
-	@SubscribeEvent
-	public void serverDataEvent(final ServerDataEvent event) {
-		final ArrayList<String> data = new ArrayList<String>();
-
-		final int diff = event.total - event.free;
-
-		data.add(TextFormatting.GOLD + "Server Information");
-		data.add(String.format("Mem: %d%% %03d/%3dMB", diff * 100 / event.max, diff, event.max));
-		data.add(String.format("Allocated: %d%% %3dMB", event.total * 100 / event.max, event.total));
-		final int tps = (int) Math.min(1000.0D / event.meanTickTime, 20.0D);
-		data.add(String.format("Ticktime Overall:%s %5.3fms (%d TPS)", getTpsFormatPrefix(tps), event.meanTickTime,
-				tps));
-		event.dimTps.forEachEntry(new TIntDoubleProcedure() {
-			@Override
-			public boolean execute(int a, double b) {
-				final String dimName = DimensionManager.getProviderType(a).getName();
-				final int tps = (int) Math.min(1000.0D / b, 20.0D);
-				data.add(String.format("%s (%d):%s %7.3fms (%d TPS)", dimName, a, getTpsFormatPrefix(tps), b, tps));
-				return true;
-			}
-
-		});
-
-		Collections.sort(data.subList(4, data.size()));
-		this.serverDataReport = data;
 	}
 
 }
