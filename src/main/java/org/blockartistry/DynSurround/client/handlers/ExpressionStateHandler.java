@@ -24,22 +24,11 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
-import java.util.List;
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.swing.DiagnosticPanel;
-import org.blockartistry.DynSurround.expression.BattleVariables;
-import org.blockartistry.DynSurround.expression.BiomeTypeVariables;
-import org.blockartistry.DynSurround.expression.BiomeVariables;
-import org.blockartistry.DynSurround.expression.MiscVariables;
-import org.blockartistry.DynSurround.expression.PlayerVariables;
-import org.blockartistry.DynSurround.expression.WeatherVariables;
-import org.blockartistry.lib.expression.ExpressionCache;
-import org.blockartistry.lib.expression.IDynamicVariant;
-import org.blockartistry.lib.expression.Variant;
-
+import org.blockartistry.DynSurround.expression.ExpressionEngine;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -52,30 +41,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ExpressionStateHandler extends EffectHandlerBase {
 
-	private static final ExpressionCache cache = new ExpressionCache(DSurround.log());
-
-	public static List<IDynamicVariant<?>> getVariables() {
-		return cache.getVariantList();
-	}
-
-	public static void register() {
-		cache.add(new BiomeTypeVariables());
-		cache.add(new BiomeVariables());
-		cache.add(new PlayerVariables());
-		cache.add(new WeatherVariables());
-		cache.add(new BattleVariables());
-		cache.add(new MiscVariables());
-	}
-
 	public ExpressionStateHandler() {
 		super("ExpressionStateHandler");
 	}
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-		// Iterate through the variables and get the data cached for this ticks
-		// expression evaluations.
-		cache.update();
+		ExpressionEngine.instance().update();
 
 		if (ModOptions.showDebugDialog)
 			DiagnosticPanel.refresh();
@@ -93,15 +65,4 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 			DiagnosticPanel.destroy();
 	}
 
-	public static Variant eval(final String exp) {
-		return cache.eval(exp);
-	}
-
-	public static List<String> getNaughtyList() {
-		return cache.getNaughtyList();
-	}
-
-	public static boolean check(final String exp) {
-		return cache.check(exp);
-	}
 }

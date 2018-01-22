@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.DynSurround.api.events.BlockEffectEvent;
-import org.blockartistry.DynSurround.client.handlers.ExpressionStateHandler;
+import org.blockartistry.DynSurround.expression.ExpressionEngine;
 import org.blockartistry.lib.BlockStateProvider;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -80,8 +80,8 @@ public abstract class BlockEffect implements ISpecialEffect {
 
 	/**
 	 * Determines if the effect can trigger. Classes that override this method
-	 * should make sure to call the parent last to avoid necessary CPU churn
-	 * related to the script check.
+	 * should make sure to call the parent last to avoid necessary CPU churn related
+	 * to the script check.
 	 */
 	@Override
 	public boolean canTrigger(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
@@ -89,7 +89,7 @@ public abstract class BlockEffect implements ISpecialEffect {
 		if (!alwaysExecute() && random.nextInt(getChance()) != 0)
 			return false;
 
-		if (ExpressionStateHandler.check(getConditions())) {
+		if (ExpressionEngine.instance().check(getConditions())) {
 			final BlockEffectEvent event = new BlockEffectEvent(provider.getWorld(), getEffectType(), pos);
 			return !MinecraftForge.EVENT_BUS.post(event);
 		}

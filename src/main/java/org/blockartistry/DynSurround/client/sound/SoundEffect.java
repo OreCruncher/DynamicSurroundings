@@ -31,10 +31,10 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.fx.ISpecialEffect;
-import org.blockartistry.DynSurround.client.handlers.ExpressionStateHandler;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.DynSurround.data.xface.SoundType;
+import org.blockartistry.DynSurround.expression.ExpressionEngine;
 import org.blockartistry.DynSurround.registry.SoundMetadata;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.lib.BlockStateProvider;
@@ -234,7 +234,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 
 	// IEntrySource<T>
 	public boolean matches() {
-		return ExpressionStateHandler.check(this.conditions);
+		return ExpressionEngine.instance().check(this.conditions);
 	}
 
 	public String toString() {
