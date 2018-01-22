@@ -34,7 +34,6 @@ import org.blockartistry.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.DynSurround.client.gui.HumDinger;
 import org.blockartistry.DynSurround.client.handlers.EffectManager;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler;
-import org.blockartistry.DynSurround.client.handlers.ExpressionStateHandler;
 import org.blockartistry.DynSurround.client.hud.BlockInfoHelperHUD;
 import org.blockartistry.DynSurround.client.hud.GuiHUDHandler;
 import org.blockartistry.DynSurround.client.hud.LightLevelHUD;
@@ -105,7 +104,6 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 	@Override
 	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		super.preInit(event);
-		ExpressionStateHandler.register();
 	}
 
 	@Override

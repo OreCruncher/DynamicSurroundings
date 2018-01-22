@@ -30,10 +30,10 @@ import java.util.Observable;
 
 import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
-import org.blockartistry.DynSurround.client.handlers.ExpressionStateHandler;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
+import org.blockartistry.DynSurround.expression.ExpressionEngine;
 import org.blockartistry.DynSurround.registry.BlockRegistry;
 import org.blockartistry.DynSurround.registry.FootstepsRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
@@ -80,7 +80,7 @@ public abstract class DataProxy extends Observable {
 		}
 
 		public List<IDynamicVariant<?>> getVariables() {
-			return ExpressionStateHandler.getVariables();
+			return ExpressionEngine.instance().getVariables();
 		}
 
 	}
