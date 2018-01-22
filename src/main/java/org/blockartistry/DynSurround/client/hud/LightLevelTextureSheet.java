@@ -38,7 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public final class LightLevelTextureSheet extends GeneratedTexture {
 
 	// Want a good resolution for number rendering if using a decent
-	// resource pack.  Need to find a programmatic way of
+	// resource pack. Need to find a programmatic way of
 	// determining this value.
 	private static final int TEXEL_PER_SIDE = 64;
 	private static final float SCALE = (float) TEXEL_PER_SIDE / 16F;
@@ -48,19 +48,28 @@ public final class LightLevelTextureSheet extends GeneratedTexture {
 	private static final float U_SIZE = (float) TEXEL_PER_SIDE / (float) WIDTH;
 	private static final float V_SIZE = (float) TEXEL_PER_SIDE / (float) HEIGHT;
 
+	private static final Vec2f[] U_COORDS = new Vec2f[SPRITE_COUNT];
+	private static final Vec2f V_COORDS = new Vec2f(0, V_SIZE);
+
+	static {
+		for (int i = 0; i < SPRITE_COUNT; i++) {
+			final float u = (float) i / (float) SPRITE_COUNT;
+			U_COORDS[i] = new Vec2f(u, u + U_SIZE);
+		}
+	}
+
 	public LightLevelTextureSheet() {
 		super("DSLightLevelTextures", WIDTH, HEIGHT);
 	}
 
 	// Calculate the min/max U for the specified sprite index
 	public Vec2f getMinMaxU(final int idx) {
-		float u = idx * U_SIZE;
-		return new Vec2f(u, u + U_SIZE);
+		return U_COORDS[idx];
 	}
 
 	// Calculate the min/max V for the specified sprite index
 	public Vec2f getMinMaxV(final int idx) {
-		return new Vec2f(0F, V_SIZE);
+		return V_COORDS;
 	}
 
 	@Override
@@ -73,17 +82,17 @@ public final class LightLevelTextureSheet extends GeneratedTexture {
 
 			final String str = Integer.toString(i);
 
-			final double posX = i * TEXEL_PER_SIDE;
-			final double posY = 0;
-			final double mid = TEXEL_PER_SIDE / 2;
+			final double mid = TEXEL_PER_SIDE / 2D;
+			final double posX = i * TEXEL_PER_SIDE + mid;
+			final double posY = mid;
 
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(posX + mid, posY + mid, 0);
+			GlStateManager.translate(posX, posY, 0);
 
 			// Render the string in the center
 			final int margin = -(font.getStringWidth(str) + 1) / 2;
 			final int height = -(font.FONT_HEIGHT) / 2;
-			
+
 			GlStateManager.scale(SCALE, SCALE, 0);
 			font.drawString(str, margin, height, color);
 
