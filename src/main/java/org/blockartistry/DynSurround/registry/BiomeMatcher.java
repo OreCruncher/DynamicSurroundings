@@ -23,14 +23,13 @@
 
 package org.blockartistry.DynSurround.registry;
 
-import java.lang.reflect.Field;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
+import org.blockartistry.lib.BiomeUtils;
 import org.blockartistry.lib.expression.BooleanValue;
 import org.blockartistry.lib.expression.Expression;
 import org.blockartistry.lib.expression.Function;
@@ -43,8 +42,6 @@ import com.google.common.primitives.Booleans;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public abstract class BiomeMatcher {
 
@@ -145,7 +142,7 @@ public abstract class BiomeMatcher {
 				}
 
 			});
-
+			
 			this.exp.addVariable(new Variant("biome.rainfall") {
 				@Override
 				public int compareTo(Variant o) {
@@ -205,18 +202,9 @@ public abstract class BiomeMatcher {
 			});
 
 			// Scan the BiomeDictionary adding the the types
-			try {
-				final Field accessor = ReflectionHelper.findField(BiomeDictionary.Type.class, "byName");
-				if (accessor != null) {
-					@SuppressWarnings("unchecked")
-					final Map<String, BiomeDictionary.Type> stuff = (Map<String, BiomeDictionary.Type>) accessor
-							.get(null);
-					for (final Entry<String, Type> e : stuff.entrySet())
-						this.exp.addVariable(new BiomeTypeVariable(e.getValue()));
-				}
-			} catch (final Throwable t) {
-				throw new RuntimeException("Cannot locate BiomeDictionary.Type table!");
-			}
+			final Set<BiomeDictionary.Type> stuff = BiomeUtils.getBiomeTypes();
+			for(final BiomeDictionary.Type t: stuff)
+				this.exp.addVariable(new BiomeTypeVariable(t));
 
 			// Add the biomes in the biome list
 			for (final ResourceLocation b : Biome.REGISTRY.getKeys())

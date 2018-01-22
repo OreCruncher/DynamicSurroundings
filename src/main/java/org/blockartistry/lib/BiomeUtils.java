@@ -1,4 +1,5 @@
-/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/*
+ * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -20,28 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.blockartistry.DynSurround.expression;
 
+package org.blockartistry.lib;
+
+import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.lib.BiomeUtils;
-import org.blockartistry.lib.expression.Dynamic;
-import org.blockartistry.lib.expression.DynamicVariantList;
+import com.google.common.collect.ImmutableSet;
 
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
-public class BiomeTypeVariables extends DynamicVariantList {
-
-	public BiomeTypeVariables() {
-		// Scan the BiomeDictionary adding the the types
-		final Set<BiomeDictionary.Type> types = BiomeUtils.getBiomeTypes();
-		for (final BiomeDictionary.Type t : types)
-			this.add(new Dynamic.DynamicBoolean("biome.is" + t.getName()) {
-				@Override
-				public void update() {
-					this.value = EnvironState.getTruePlayerBiome().isBiomeType(t);
-				}
-			});
+public final class BiomeUtils {
+	
+	private BiomeUtils() {
+		
 	}
+	
+	public static Set<BiomeDictionary.Type> getBiomeTypes() {
+		try {
+			final Field accessor = ReflectionHelper.findField(BiomeDictionary.Type.class, "byName");
+			if (accessor != null) {
+				@SuppressWarnings("unchecked")
+				final Map<String, BiomeDictionary.Type> stuff = (Map<String, BiomeDictionary.Type>) accessor.get(null);
+				return new HashSet<BiomeDictionary.Type>(stuff.values());
+			}
+			
+			return ImmutableSet.of();
+
+		} catch (final Throwable t) {
+			throw new RuntimeException("Cannot locate BiomeDictionary.Type table!");
+		}
+
+	}
+	
 }
