@@ -24,6 +24,8 @@
 package org.blockartistry.lib.expression;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -65,13 +67,20 @@ public class ExpressionCache implements ITickable {
 
 	/*
 	 * Returns a list of all dynamic variants available to the ExpressionCache. Used
-	 * for diagnostic purpose.
+	 * for diagnostic purpose.  The list is sorted before returning.
 	 */
 	@Nonnull
 	public List<IDynamicVariant<?>> getVariantList() {
 		final List<IDynamicVariant<?>> result = new ArrayList<IDynamicVariant<?>>();
 		for (final DynamicVariantList dvl : this.variants)
 			result.addAll(dvl.getList());
+
+		Collections.sort(result, new Comparator<IDynamicVariant<?>>() {
+			@Override
+			public int compare(@Nonnull final IDynamicVariant<?> o1, @Nonnull final IDynamicVariant<?> o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
 
 		return result;
 	}
