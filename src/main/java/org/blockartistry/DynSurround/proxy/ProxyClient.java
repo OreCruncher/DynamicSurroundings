@@ -56,7 +56,6 @@ import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -134,9 +133,6 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
 		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
 			public void run() {
-				// Fire it again because of, you know, stupidity
-				if (FMLClientHandler.instance().hasOptifine())
-					onResourceManagerReload(Minecraft.getMinecraft().getResourceManager());
 				EffectManager.register();
 				GuiHUDHandler.register();
 				ProxyClient.this.connectionTime = System.currentTimeMillis();
