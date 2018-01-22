@@ -273,12 +273,17 @@ public final class LightLevelHUD extends GuiOverlay {
 			}
 	}
 
-	private final static LightLevelTextureSheet sheet = new LightLevelTextureSheet();
+	private static LightLevelTextureSheet sheet;
 
 	@Override
 	public void doTick(final int tickRef) {
 		if (!showHUD || tickRef == 0 || tickRef % 3 != 0)
 			return;
+
+		if (sheet == null) {
+			sheet = new LightLevelTextureSheet();
+			sheet.updateTexture();
+		}
 
 		final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
 		updateLightInfo(manager, manager.viewerPosX, manager.viewerPosY, manager.viewerPosZ);
@@ -287,7 +292,7 @@ public final class LightLevelHUD extends GuiOverlay {
 	@SubscribeEvent
 	public static void doRender(@Nonnull final RenderWorldLastEvent event) {
 
-		if (!showHUD || nextCoord == 0)
+		if (!showHUD || nextCoord == 0 || sheet == null)
 			return;
 
 		final EntityPlayer player = EnvironState.getPlayer();
@@ -347,10 +352,11 @@ public final class LightLevelHUD extends GuiOverlay {
 
 		OpenGlState.pop(glState);
 	}
-	
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void resourceReloadEvent(final ResourceReloadEvent event) {
-		sheet.updateTexture();
+		if (sheet != null)
+			sheet.updateTexture();
 	}
 
 }
