@@ -50,8 +50,6 @@ import org.blockartistry.DynSurround.registry.TemperatureRating;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.MinecraftClock;
 import org.blockartistry.lib.PlayerUtils;
-import org.blockartistry.lib.expression.Evaluator;
-
 import com.google.common.collect.ImmutableList;
 
 import gnu.trove.procedure.TIntDoubleProcedure;
@@ -465,7 +463,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void diagnostics(final DiagnosticEvent.Gather event) {
 		for (final String s : scripts) {
-			final String result = Evaluator.eval(s).toString();
+			final String result = ExpressionStateHandler.eval(s).toString();
 			event.output.add(result);
 		}
 
@@ -473,7 +471,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		event.output.add("Aurora: " + (AuroraEffectHandler.getCurrentAurora() == null ? "NONE"
 				: AuroraEffectHandler.getCurrentAurora().toString()));
 
-		final List<String> badScripts = Evaluator.getNaughtyList();
+		final List<String> badScripts = ExpressionStateHandler.getNaughtyList();
 		for (final String s : badScripts) {
 			event.output.add("BAD SCRIPT: " + s);
 		}

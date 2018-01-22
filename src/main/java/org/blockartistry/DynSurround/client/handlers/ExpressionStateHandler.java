@@ -27,6 +27,7 @@ package org.blockartistry.DynSurround.client.handlers;
 import java.util.List;
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.event.ExpressionEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -36,7 +37,10 @@ import org.blockartistry.DynSurround.registry.TemperatureRating;
 import org.blockartistry.lib.DiurnalUtils;
 import org.blockartistry.lib.expression.Dynamic;
 import org.blockartistry.lib.expression.DynamicVariantList;
+import org.blockartistry.lib.expression.ExpressionCache;
 import org.blockartistry.lib.expression.IDynamicVariant;
+import org.blockartistry.lib.expression.Variant;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
@@ -56,6 +60,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ExpressionStateHandler extends EffectHandlerBase {
 
 	private static final DynamicVariantList variables = new DynamicVariantList();
+	private static final ExpressionCache cache = new ExpressionCache(DSurround.log());
 
 	public static List<IDynamicVariant<?>> getVariables() {
 		return variables.getList();
@@ -481,6 +486,7 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		 * });
 		 */
 
+		cache.add(variables);
 	}
 
 	public ExpressionStateHandler() {
@@ -514,4 +520,15 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 		variables.attach(event.expression);
 	}
 
+	public static Variant eval(final String exp) {
+		return cache.eval(exp);
+	}
+
+	public static List<String> getNaughtyList() {
+		return cache.getNaughtyList();
+	}
+	
+	public static boolean check(final String exp) {
+		return cache.check(exp);
+	}
 }
