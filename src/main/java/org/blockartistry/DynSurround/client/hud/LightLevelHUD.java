@@ -66,6 +66,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public final class LightLevelHUD extends GuiOverlay {
 
 	protected static FontRenderer font;
+	private static LightLevelTextureSheet sheet;
 
 	public static enum Mode {
 		BLOCK, BLOCK_SKY;
@@ -273,8 +274,6 @@ public final class LightLevelHUD extends GuiOverlay {
 			}
 	}
 
-	private static LightLevelTextureSheet sheet;
-
 	@Override
 	public void doTick(final int tickRef) {
 		if (!showHUD || tickRef == 0 || tickRef % 3 != 0)
@@ -292,7 +291,7 @@ public final class LightLevelHUD extends GuiOverlay {
 	@SubscribeEvent
 	public static void doRender(@Nonnull final RenderWorldLastEvent event) {
 
-		if (!showHUD || nextCoord == 0)
+		if (!showHUD || nextCoord == 0 || sheet == null)
 			return;
 
 		final EntityPlayer player = EnvironState.getPlayer();
@@ -310,10 +309,12 @@ public final class LightLevelHUD extends GuiOverlay {
 
 		final OpenGlState glState = OpenGlState.push();
 
+		GlStateManager.enableTexture2D();
 		GlStateManager.disableLighting();
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.enableDepth();
+		GlStateManager.depthFunc(GL11.GL_LEQUAL);
 		GlStateManager.depthMask(true);
 
 		sheet.bindTexture();
