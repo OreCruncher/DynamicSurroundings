@@ -1,4 +1,5 @@
-/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/*
+ * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -20,28 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.blockartistry.DynSurround.expression;
 
+package org.blockartistry.lib;
+
+import java.util.HashSet;
 import java.util.Set;
-
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.lib.BiomeUtils;
-import org.blockartistry.lib.expression.Dynamic;
-import org.blockartistry.lib.expression.DynamicVariantList;
 
 import net.minecraftforge.common.BiomeDictionary;
 
-public class BiomeTypeVariables extends DynamicVariantList {
-
-	public BiomeTypeVariables() {
-		// Scan the BiomeDictionary adding the the types
-		final Set<BiomeDictionary.Type> types = BiomeUtils.getBiomeTypes();
-		for (final BiomeDictionary.Type t : types)
-			this.add(new Dynamic.DynamicBoolean("biome.is" + t.name()) {
-				@Override
-				public void update() {
-					this.value = EnvironState.getTruePlayerBiome().isBiomeType(t);
-				}
-			});
+public final class BiomeUtils {
+	
+	private BiomeUtils() {
+		
 	}
+	
+	public static Set<BiomeDictionary.Type> getBiomeTypes() {
+		final HashSet<BiomeDictionary.Type> result = new HashSet<BiomeDictionary.Type>();
+		for(final BiomeDictionary.Type t: BiomeDictionary.Type.values())
+			result.add(t);
+		return result;
+	}
+	
 }

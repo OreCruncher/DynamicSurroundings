@@ -23,10 +23,13 @@
 
 package org.blockartistry.DynSurround.registry;
 
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
+import org.blockartistry.lib.BiomeUtils;
 import org.blockartistry.lib.expression.BooleanValue;
 import org.blockartistry.lib.expression.Expression;
 import org.blockartistry.lib.expression.Function;
@@ -110,7 +113,7 @@ public abstract class BiomeMatcher {
 		public ConditionsImpl(@Nonnull final BiomeConfig config) {
 			this.exp = new Expression(config.conditions);
 
-			// Biome name
+			// Biome name!
 			this.exp.addVariable(new Variant("biome.name") {
 
 				@Override
@@ -139,7 +142,7 @@ public abstract class BiomeMatcher {
 				}
 
 			});
-
+			
 			this.exp.addVariable(new Variant("biome.rainfall") {
 				@Override
 				public int compareTo(Variant o) {
@@ -199,7 +202,8 @@ public abstract class BiomeMatcher {
 			});
 
 			// Scan the BiomeDictionary adding the the types
-			for (final BiomeDictionary.Type t : BiomeDictionary.Type.values())
+			final Set<BiomeDictionary.Type> stuff = BiomeUtils.getBiomeTypes();
+			for(final BiomeDictionary.Type t: stuff)
 				this.exp.addVariable(new BiomeTypeVariable(t));
 
 			// Add the biomes in the biome list

@@ -401,6 +401,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	@Override
 	public void onConnect() {
 		EnvironState.reset();
+		ExpressionEngine.instance();
 	}
 
 	@Override
