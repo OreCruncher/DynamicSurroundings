@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.fx.ISpecialEffect;
+import org.blockartistry.DynSurround.client.handlers.ExpressionStateHandler;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.DynSurround.data.xface.SoundType;
@@ -40,8 +41,6 @@ import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.WeightTable;
 import org.blockartistry.lib.WeightTable.IEntrySource;
 import org.blockartistry.lib.WeightTable.IItem;
-import org.blockartistry.lib.expression.Evaluator;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -234,7 +233,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 
 	// IEntrySource<T>
 	public boolean matches() {
-		return Evaluator.check(this.conditions);
+		return ExpressionStateHandler.check(this.conditions);
 	}
 
 	public String toString() {

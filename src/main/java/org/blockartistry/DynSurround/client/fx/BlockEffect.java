@@ -32,9 +32,8 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.DynSurround.api.events.BlockEffectEvent;
+import org.blockartistry.DynSurround.client.handlers.ExpressionStateHandler;
 import org.blockartistry.lib.BlockStateProvider;
-import org.blockartistry.lib.expression.Evaluator;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
@@ -90,7 +89,7 @@ public abstract class BlockEffect implements ISpecialEffect {
 		if (!alwaysExecute() && random.nextInt(getChance()) != 0)
 			return false;
 
-		if (Evaluator.check(getConditions())) {
+		if (ExpressionStateHandler.check(getConditions())) {
 			final BlockEffectEvent event = new BlockEffectEvent(provider.getWorld(), getEffectType(), pos);
 			return !MinecraftForge.EVENT_BUS.post(event);
 		}

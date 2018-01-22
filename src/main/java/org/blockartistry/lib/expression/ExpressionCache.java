@@ -29,19 +29,26 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.client.event.ExpressionEvent;
+import org.blockartistry.lib.logging.ModLog;
 
-import net.minecraftforge.common.MinecraftForge;
+public class ExpressionCache {
 
-public final class Evaluator {
+	protected final ModLog logger;
+	protected final List<DynamicVariantList> variants = new ArrayList<DynamicVariantList>();
+	protected final IdentityHashMap<String, Expression> cache = new IdentityHashMap<String, Expression>();
+	protected final List<String> naughtyList = new ArrayList<String>();
 
-	private static final IdentityHashMap<String, Expression> cache = new IdentityHashMap<String, Expression>();
-	private static final List<String> naughtyList = new ArrayList<String>();
-
+	public ExpressionCache(final ModLog logger) {
+		this.logger = logger;
+	}
+	
+	public void add(final DynamicVariantList dvl) {
+		this.variants.add(dvl);
+	}
+	
 	@Nonnull
-	public static List<String> getNaughtyList() {
-		return naughtyList;
+	public List<String> getNaughtyList() {
+		return this.naughtyList;
 	}
 
 	// This forces a compile and validation of the expression
@@ -54,34 +61,34 @@ public final class Evaluator {
 	// Expressions are cached. If multiple requests come in for
 	// the same expression the cached version is reused.
 	@Nonnull
-	private static Expression compile(final String expression) {
+	private Expression compile(final String expression) {
 		Expression exp = null;
 
 		try {
-			exp = cache.get(expression);
+			exp = this.cache.get(expression);
 			if (exp == null) {
 				exp = new Expression(expression);
-				final ExpressionEvent.Create event = new ExpressionEvent.Create(exp);
-				MinecraftForge.EVENT_BUS.post(event);
+				for (final DynamicVariantList dvl : this.variants)
+					dvl.attach(exp);
 				exp.getRPN();
-				cache.put(expression, exp);
+				this.cache.put(expression, exp);
 			}
 		} catch (final Throwable t) {
-			naughtyList.add(expression);
+			this.naughtyList.add(expression);
 			exp = new Expression("'" + t.getMessage() + "'");
-			cache.put(expression, exp);
-			DSurround.log().warn("Unable to compile [%s]: %s", expression, t.getMessage());
+			this.cache.put(expression, exp);
+			this.logger.warn("Unable to compile [%s]: %s", expression, t.getMessage());
 		}
 		return exp;
 	}
 
 	@Nonnull
-	public static Variant eval(@Nonnull final String script) {
+	public Variant eval(@Nonnull final String script) {
 		return compile(script.intern()).eval();
 	}
 
-	public static boolean check(@Nonnull final String conditions) {
-		// If the string is empty return true.  They are always
+	public boolean check(@Nonnull final String conditions) {
+		// If the string is empty return true. They are always
 		// true.
 		if (StringUtils.isEmpty(conditions))
 			return true;
