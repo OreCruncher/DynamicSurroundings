@@ -27,9 +27,9 @@ package org.blockartistry.lib.expression;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.util.ITickable;
+import javax.annotation.Nonnull;
 
-public class DynamicVariantList implements ITickable {
+public class DynamicVariantList {
 
 	protected final List<IDynamicVariant<?>> variants = new ArrayList<IDynamicVariant<?>>();
 
@@ -39,10 +39,9 @@ public class DynamicVariantList implements ITickable {
 
 	/*
 	 * Called to update the state of the dynamic variants contain
-	 * within the list.
+	 * within the list.  Restricted to package scope.
 	 */
-	@Override
-	public void update() {
+	void update() {
 		for (final IDynamicVariant<?> dv : this.variants)
 			dv.update();
 	}
@@ -50,7 +49,7 @@ public class DynamicVariantList implements ITickable {
 	/*
 	 * Adds a dynamic variant to be managed to the list.
 	 */
-	public void add(final IDynamicVariant<?> dv) {
+	public void add(@Nonnull final IDynamicVariant<?> dv) {
 		this.variants.add(dv);
 	}
 
@@ -58,7 +57,7 @@ public class DynamicVariantList implements ITickable {
 	 * Attaches the dynamic variants in the list to the
 	 * specified expression.
 	 */
-	public void attach(final Expression exp) {
+	public void attach(@Nonnull final Expression exp) {
 		for (final IDynamicVariant<?> dv : this.variants)
 			exp.addVariable((Variant) dv);
 	}
@@ -66,8 +65,9 @@ public class DynamicVariantList implements ITickable {
 	/*
 	 * Gets the list of dynamic variants.
 	 */
+	@Nonnull
 	public List<IDynamicVariant<?>> getList() {
-		return this.variants;
+		return new ArrayList<IDynamicVariant<?>>(this.variants);
 	}
 
 }

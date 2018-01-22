@@ -33,7 +33,6 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.event.ExpressionEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.swing.DiagnosticPanel;
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
@@ -52,7 +51,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -69,7 +67,7 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 	private static final ExpressionCache cache = new ExpressionCache(DSurround.log());
 
 	public static List<IDynamicVariant<?>> getVariables() {
-		return variables.getList();
+		return cache.getVariantList();
 	}
 
 	private static void register(@Nonnull final IDynamicVariant<?> variable) {
@@ -513,7 +511,7 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 	public void process(@Nonnull final EntityPlayer player) {
 		// Iterate through the variables and get the data cached for this ticks
 		// expression evaluations.
-		variables.update();
+		cache.update();
 
 		if (ModOptions.showDebugDialog)
 			DiagnosticPanel.refresh();
@@ -531,11 +529,6 @@ public class ExpressionStateHandler extends EffectHandlerBase {
 			DiagnosticPanel.destroy();
 	}
 
-	@SubscribeEvent
-	public void onExpressionCreate(@Nonnull final ExpressionEvent.Create event) {
-		variables.attach(event.expression);
-	}
-	
 	public static Variant eval(final String exp) {
 		return cache.eval(exp);
 	}
