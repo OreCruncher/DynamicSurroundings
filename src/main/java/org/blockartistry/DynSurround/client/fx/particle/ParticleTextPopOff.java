@@ -27,8 +27,6 @@ package org.blockartistry.DynSurround.client.fx.particle;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.lib.Color;
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -48,7 +46,6 @@ public class ParticleTextPopOff extends ParticleBase {
 	protected static final double BOUNCE_STRENGTH = 1.5F;
 
 	protected Color renderColor = Color.WHITE;
-	protected boolean showOnTop = true;
 	protected boolean grow = true;
 
 	protected String text;
@@ -106,36 +103,16 @@ public class ParticleTextPopOff extends ParticleBase {
 		final float locZ = ((float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpZ()));
 
 		GlStateManager.pushMatrix();
-		GlStateManager.pushAttrib();
-
-		if (this.showOnTop) {
-			GlStateManager.depthFunc(GL11.GL_ALWAYS);
-		} else {
-			GlStateManager.depthFunc(GL11.GL_LEQUAL);
-		}
-
 		GlStateManager.translate(locX, locY, locZ);
 		GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);
-
 		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
 		GlStateManager.scale(this.particleScale * 0.008D, this.particleScale * 0.008D, this.particleScale * 0.008D);
-
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 0.003662109F);
 
-		GlStateManager.enableTexture2D();
-		GlStateManager.disableLighting();
-		GlStateManager.depthMask(true);
-		GlStateManager.enableDepth();
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.enableAlpha();
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-
 		this.font.drawStringWithShadow(this.text, this.drawX, this.drawY, this.renderColor.rgb());
-
-		GlStateManager.depthFunc(GL11.GL_LEQUAL);
-		GlStateManager.popAttrib();
+		
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, OpenGlHelper.lastBrightnessX, OpenGlHelper.lastBrightnessY);
 		GlStateManager.popMatrix();
 
 		if (this.grow) {
