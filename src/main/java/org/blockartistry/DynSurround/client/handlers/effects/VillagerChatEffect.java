@@ -27,71 +27,86 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.fx.particle.ParticleBreath;
 import org.blockartistry.lib.effects.IEffect;
 import org.blockartistry.lib.effects.IEffectFactory;
 import org.blockartistry.lib.effects.IEffectHandlerState;
 import org.blockartistry.lib.effects.IFactoryFilter;
-import org.blockartistry.lib.math.MathStuff;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class FrostBreathEffect implements IEffect {
+public class VillagerChatEffect implements IEffect {
+
+	static {
+		// Setup the flee timers for villagers
+		EntityChatEffect.setTimers("villager.flee", 250, 200);
+	}
+
+	protected final Predicate<Entity>[] preds;
+	protected final EntityChatEffect normalChat;
+	protected final EntityChatEffect fleeChat;
+
+	@SuppressWarnings("unchecked")
+	public VillagerChatEffect(@Nonnull final Entity entity) {
+
+		final EntityVillager villager = (EntityVillager) entity;
+		this.preds = new Predicate[] { EntitySelectors.CAN_AI_TARGET, new Predicate<Entity>() {
+			public boolean apply(@Nullable Entity entity) {
+				return entity.isEntityAlive() && villager.getEntitySenses().canSee(entity);
+			}
+		}, Predicates.<Entity>alwaysTrue() };
+
+		this.normalChat = new EntityChatEffect(entity);
+		this.fleeChat = new EntityChatEffect(entity, "villager.flee");
+	}
 
 	@Override
 	public void update(@Nonnull final IEffectHandlerState state) {
-		if (!ModOptions.showBreath)
+		if (!ModOptions.enableEntityChat)
 			return;
-
+		
 		final Optional<Entity> e = state.subject();
 		if (e.isPresent()) {
 			final Entity entity = e.get();
-			final int interval = ((state.getCurrentTick() + MathStuff.abs(entity.getPersistentID().hashCode())) / 10)
-					% 8;
-			if (interval < 3 && isPossibleToShow(entity)) {
-				final EntityPlayer player = state.thePlayer().get();
-				if (!entity.isInvisibleToPlayer(player) && player.canEntityBeSeen(entity)) {
-					state.addParticle(new ParticleBreath(entity));
-				}
-			}
+			if (this.villagerThreatened(entity))
+				this.fleeChat.update(state);
+			else
+				this.normalChat.update(state);
 		}
+
 	}
 
-	protected boolean isPossibleToShow(final Entity entity) {
-		if (entity.isInsideOfMaterial(Material.AIR)) {
-			final BlockPos entityPos = entity.getPosition();
-			final float temp = entity.getEntityWorld().getBiome(entityPos).getFloatTemperature(entityPos);
-			return temp < 0.2F;
-		}
-		return false;
+	protected boolean villagerThreatened(final Entity entity) {
+		final AxisAlignedBB bbox = entity.getEntityBoundingBox().expand((double) 8.0, 3.0D, (double) 8.0);
+		return !entity.world.<EntityZombie>getEntitiesWithinAABB(EntityZombie.class, bbox, Predicates.and(this.preds))
+				.isEmpty();
 	}
 
 	public static final IFactoryFilter DEFAULT_FILTER = new IFactoryFilter() {
 		@Override
 		public boolean applies(@Nonnull final Entity e) {
-			return e instanceof EntityPlayer || e instanceof EntityVillager;
+			return e instanceof EntityVillager && EntityChatEffect.hasMessages(e);
 		}
 	};
 
 	public static class Factory implements IEffectFactory {
 
-		// Since the effect has no state a singleton can be used.
-		private static final List<IEffect> singleton = ImmutableList.of(new FrostBreathEffect());
-
 		@Override
 		public List<IEffect> create(@Nonnull final Entity entity) {
-			return singleton;
+			return ImmutableList.of(new VillagerChatEffect(entity));
 		}
 	}
 

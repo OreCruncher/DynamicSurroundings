@@ -23,8 +23,7 @@
  */
 package org.blockartistry.lib.effects;
 
-import java.util.Optional;
-
+import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,15 +38,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface IEffectFactory {
 
 	/**
-	 * Creates an IEffect for the specified Entity. If for some reason the IEffect
-	 * cannot be created a null is returned.
+	 * Creates 0 or more IEffects for the specified Entity. It is possible that some
+	 * condition on the Entity may prevent creation.
 	 * 
 	 * @param entity
 	 *            The subject of the IEffect
-	 * @return An Optional containing the reference to an applicable IEffect
-	 *         instance, if any.
+	 * @return A list of 0 or more IEffects to attach
 	 */
 	@Nonnull
-	Optional<IEffect> create(@Nonnull final Entity entity);
+	List<IEffect> create(@Nonnull final Entity entity);
 
 }

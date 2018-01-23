@@ -35,7 +35,9 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.handlers.effects.EntityChatEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.FrostBreathEffect;
+import org.blockartistry.DynSurround.client.handlers.effects.VillagerChatEffect;
 import org.blockartistry.lib.effects.EffectHandler;
 import org.blockartistry.lib.effects.EffectLibrary;
 
@@ -53,6 +55,8 @@ public class EntityEffectHandler extends EffectHandlerBase {
 
 	static {
 		library.register(FrostBreathEffect.DEFAULT_FILTER, new FrostBreathEffect.Factory());
+		library.register(EntityChatEffect.DEFAULT_FILTER, new EntityChatEffect.Factory());
+		library.register(VillagerChatEffect.DEFAULT_FILTER, new VillagerChatEffect.Factory());
 	}
 
 	private final Map<UUID, EffectHandler> handlers = new HashMap<UUID, EffectHandler>();
