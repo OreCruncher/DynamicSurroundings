@@ -28,8 +28,6 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.fx.particle.ParticleBreath;
-import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
@@ -38,20 +36,13 @@ import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.registry.ItemRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.lib.math.MathStuff;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.AbstractIllager;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -154,9 +145,6 @@ public class PlayerActionHandler extends EffectHandlerBase {
 			this.offHand.update();
 		}
 
-		// Frost breath if enabled
-		if (ModOptions.showBreath)
-			this.doFrostBreath();
 	}
 
 	@SubscribeEvent
@@ -223,37 +211,6 @@ public class PlayerActionHandler extends EffectHandlerBase {
 				sound.setRoutable(DSurround.isInstalledOnServer());
 				SoundEffectHandler.INSTANCE.playSound(sound);
 			}
-		}
-	}
-
-	protected void doFrostBreath() {
-		final double distSq = ModOptions.specialEffectRange * ModOptions.specialEffectRange;
-		for (final Entity e : EnvironState.getWorld().loadedEntityList) {
-			if (isRightMobType(e)) {
-				final int v = getTickInterval(e);
-				if (v < 3 && e.getDistanceSqToEntity(EnvironState.getPlayer()) <= distSq
-						&& !e.isInvisibleToPlayer(EnvironState.getPlayer()) && e.isInsideOfMaterial(Material.AIR)
-						&& EnvironState.getPlayer().canEntityBeSeen(e)) {
-					handleEntityBreath(e);
-				}
-			}
-		}
-	}
-
-	protected int getTickInterval(final Entity e) {
-		return ((EnvironState.getTickCounter() + MathStuff.abs(e.getPersistentID().hashCode())) / 10) % 8;
-	}
-
-	protected boolean isRightMobType(final Entity e) {
-		return e instanceof EntityPlayer || e instanceof EntityVillager || e instanceof AbstractIllager;
-	}
-
-	protected void handleEntityBreath(final Entity entity) {
-		// < 0.2D is considered COLD
-		final BlockPos entityPos = entity.getPosition();
-		final float temp = entity.getEntityWorld().getBiome(entityPos).getFloatTemperature(entityPos);
-		if (temp < 0.2F) {
-			ParticleHelper.addParticle(new ParticleBreath(entity));
 		}
 	}
 
