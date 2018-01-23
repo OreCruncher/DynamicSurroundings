@@ -102,8 +102,11 @@ public final class BlockNameUtil {
 				this.metaData = META_NOT_SPECIFIED;
 			else if ("*".equals(temp))
 				this.metaData = GENERIC;
-			else
+			else {
 				this.metaData = Integer.parseInt(temp);
+				if (this.metaData < 0 || this.metaData > 15)
+					throw new RuntimeException("Metadata is out of range");
+			}
 
 			this.extras = matcher.group(4);
 		}
