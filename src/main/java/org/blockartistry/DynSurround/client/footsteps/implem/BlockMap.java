@@ -29,9 +29,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -41,6 +38,8 @@ import org.blockartistry.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.DynSurround.registry.BlockInfo;
+import org.blockartistry.lib.BlockNameUtil;
+import org.blockartistry.lib.BlockNameUtil.NameResult;
 import org.blockartistry.lib.MCHelper;
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.block.Block;
@@ -53,7 +52,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class BlockMap {
-	private static final Pattern pattern = Pattern.compile("([^:]+:[^^+]+)\\^?(\\d+)?\\+?(\\w+)?");
 
 	private final Isolator isolator;
 	private final BlockAcousticMap metaMap = new BlockAcousticMap();
@@ -148,7 +146,7 @@ public class BlockMap {
 		final IAcoustic[] a = this.metaMap.getBlockAcoustics(state);
 		return a != null && a != BlockAcousticMap.NO_ACOUSTICS;
 	}
-	
+
 	@Nullable
 	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
 		final IBlockState trueState = FacadeHelper.resolveState(state, EnvironState.getWorld(), pos, EnumFacing.UP);
@@ -192,9 +190,9 @@ public class BlockMap {
 	}
 
 	public void register(@Nonnull final String key, @Nonnull final String value) {
-		final Matcher matcher = pattern.matcher(key);
-		if (matcher.matches()) {
-			final String blockName = matcher.group(1);
+		final NameResult result = BlockNameUtil.parseBlockName(key);
+		if (result != null) {
+			final String blockName = result.getBlockName();
 			final Block block = MCHelper.getBlockByName(blockName);
 			if (block == null) {
 				DSurround.log().debug("Unable to locate block for blockMap '%s'", blockName);
@@ -203,10 +201,14 @@ public class BlockMap {
 			} else if (value.startsWith("#")) {
 				expand(block, value);
 			} else {
-				final int meta = matcher.group(2) == null
-						? (MCHelper.hasVariants(block) ? BlockInfo.GENERIC : BlockInfo.NO_SUBTYPE)
-						: Integer.parseInt(matcher.group(2));
-				final String substrate = matcher.group(3);
+				final int meta;
+				if (result.isGeneric())
+					meta = BlockInfo.GENERIC;
+				else if (result.noMetadataSpecified())
+					meta = MCHelper.hasVariants(block) ? BlockInfo.GENERIC : BlockInfo.NO_SUBTYPE;
+				else
+					meta = result.getMetadata();
+				final String substrate = result.getExtras();
 				put(block, meta, substrate, value);
 			}
 		} else {
