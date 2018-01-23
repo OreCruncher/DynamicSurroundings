@@ -26,12 +26,8 @@ package org.blockartistry.DynSurround.server.services;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.entity.ai.EntityAIChat;
 import org.blockartistry.DynSurround.entity.ai.EntityAIEmoji;
 import org.blockartistry.DynSurround.entity.ai.EntityAIVillagerEmoji;
-import org.blockartistry.DynSurround.entity.ai.EntityAIVillagerFleeChat;
-
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -42,13 +38,6 @@ public final class EntityEmojiService extends Service {
 
 	EntityEmojiService() {
 		super("EntityEmojiService");
-	}
-
-	protected void addChatAI(@Nonnull final EntityLiving entity) {
-		if (EntityAIChat.hasMessages(entity))
-			entity.tasks.addTask(EntityAIChat.PRIORITY, new EntityAIChat(entity));
-		if (entity instanceof EntityVillager)
-			entity.tasks.addTask(EntityAIVillagerFleeChat.PRIORITY, new EntityAIVillagerFleeChat(entity));
 	}
 
 	protected void addEmojiAI(@Nonnull final EntityLiving entity) {
@@ -62,8 +51,6 @@ public final class EntityEmojiService extends Service {
 	public void onJoinWorld(@Nonnull final EntityJoinWorldEvent event) {
 		if (event.getEntity() instanceof EntityLiving) {
 			final EntityLiving entity = (EntityLiving) event.getEntity();
-			if (ModOptions.enableEntityChat)
-				addChatAI(entity);
 			addEmojiAI(entity);
 		}
 	}

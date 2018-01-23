@@ -72,10 +72,11 @@ public class EffectLibrary {
 
 	/**
 	 * Creates an EffectHandler for the specified Entity. The IEffects attached to
-	 * the EffectHandler is determined by an IFactoryFitler.  An EffectHandler will
+	 * the EffectHandler is determined by an IFactoryFitler. An EffectHandler will
 	 * always be created.
 	 * 
-	 * @param entity The subject Entity for which an EffectHandler is created
+	 * @param entity
+	 *            The subject Entity for which an EffectHandler is created
 	 * @return An EffectHandler for the Entity
 	 */
 	@Nonnull
@@ -83,9 +84,8 @@ public class EffectLibrary {
 		final List<IEffect> effectToApply = new ArrayList<IEffect>();
 		for (int i = 0; i < this.filters.size(); i++)
 			if (this.filters.get(i).applies(entity)) {
-				final Optional<IEffect> r = this.factories.get(i).create(entity);
-				if (r.isPresent())
-					effectToApply.add(r.get());
+				final List<IEffect> r = this.factories.get(i).create(entity);
+				effectToApply.addAll(r);
 			}
 
 		final EffectHandler result;
