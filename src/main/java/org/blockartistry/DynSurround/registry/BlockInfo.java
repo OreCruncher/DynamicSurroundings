@@ -24,21 +24,19 @@
 
 package org.blockartistry.DynSurround.registry;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.lib.BlockNameUtil;
 import org.blockartistry.lib.MCHelper;
+import org.blockartistry.lib.BlockNameUtil.NameResult;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 
 public class BlockInfo {
-
-	private static final Pattern pattern = Pattern.compile("^([^:]+:[^:]+)(?::?)([[\\d]+|[\\*]]*)");
 
 	public static final int GENERIC = -1;
 	public static final int NO_SUBTYPE = -100;
@@ -115,25 +113,18 @@ public class BlockInfo {
 		String workingName = blockId;
 		int subType = NO_SUBTYPE;
 
-		// Parse out the possible subtype from the end of the string
-		final Matcher m = pattern.matcher(blockId);
-		if (m.matches()) {
-			workingName = m.group(1);
-			final String num = m.group(2);
+		final NameResult result = BlockNameUtil.parseBlockName(blockId);
+		if (result != null) {
 
-			if (num != null && !num.isEmpty()) {
-				if ("*".compareTo(num) == 0)
-					subType = GENERIC;
-				else {
-					try {
-						subType = Integer.parseInt(num);
-					} catch (Exception e) {
-						// It appears malformed - assume the incoming name
-						// is the real name and continue.
-						;
-					}
-				}
-			}
+			workingName = result.getBlockName();
+			
+			if(result.isGeneric())
+				subType = GENERIC;
+			else if(result.noMetadataSpecified())
+				subType = NO_SUBTYPE;
+			else
+				subType = result.getMetadata();
+
 		} else {
 			DSurround.log().warn("Unkown block id [%s]", blockId);
 		}
