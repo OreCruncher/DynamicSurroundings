@@ -32,7 +32,6 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.SoundEngine;
-import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.registry.ItemRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
@@ -45,7 +44,6 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -160,27 +158,6 @@ public class PlayerActionHandler extends EffectHandlerBase {
 				SoundEffectHandler.INSTANCE.playSound(sound);
 			}
 		}
-	}
-
-	private int craftSoundThrottle = 0;
-
-	@SubscribeEvent
-	public void onCrafting(@Nonnull final ItemCraftedEvent event) {
-		if (!ModOptions.enableCraftingSound)
-			return;
-
-		if (this.craftSoundThrottle >= (EnvironState.getTickCounter() - 30))
-			return;
-
-		if (event.player == null || event.player.worldObj == null)
-			return;
-
-		if (event.player.worldObj.isRemote && EnvironState.isPlayer(event.player)) {
-			this.craftSoundThrottle = EnvironState.getTickCounter();
-			final BasicSound<?> sound = makeSound(Sounds.CRAFTING);
-			SoundEffectHandler.INSTANCE.playSound(sound);
-		}
-
 	}
 
 	@SubscribeEvent
