@@ -74,6 +74,7 @@ public class EventEffectLibrary implements IEventEffectLibraryState {
 	public void cleanup() {
 		for (final EventEffect e : this.effects)
 			MinecraftForge.EVENT_BUS.unregister(e);
+		this.effects.clear();
 	}
 
 	/**
