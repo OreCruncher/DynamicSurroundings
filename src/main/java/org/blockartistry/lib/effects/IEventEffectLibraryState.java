@@ -24,10 +24,13 @@
 package org.blockartistry.lib.effects;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.client.sound.BasicSound;
+import org.blockartistry.DynSurround.client.sound.SoundEffect;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -38,8 +41,21 @@ public interface IEventEffectLibraryState {
 	 * Used by an EventEffect to play a sound.
 	 * 
 	 * @param The sound to play
+	 * @return Unique ID identifying the sound in the sound system
 	 */
-	void playSound(@Nonnull final BasicSound<?> sound);
+	@Nullable
+	String playSound(@Nonnull final BasicSound<?> sound);
+	
+	/**
+	 * Creates a BasicSound<> object for the specified SoundEffect centered at the
+	 * Entity. If the Entity is the current active player the sound will be
+	 * non-attenuated.
+	 * 
+	 * @param se SoundEffect to use as the basis of the sound
+	 * @param player The player location of where the sound will be generated
+	 * @return A BasicSound<?> with applicable properties set 
+	 */
+	BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final EntityPlayer player);
 	
 	/**
 	 * Indicates if the specified player is the one sitting behind

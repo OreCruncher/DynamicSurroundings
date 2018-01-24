@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.blockartistry.DynSurround.client.handlers.effects;
 
-package org.blockartistry.DynSurround.client.handlers;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
@@ -30,26 +31,30 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.DynSurround.registry.ItemRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
-import net.minecraft.entity.EntityLivingBase;
+import org.blockartistry.lib.effects.IEntityEffect;
+import org.blockartistry.lib.effects.IEntityEffectFactory;
+import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
+import org.blockartistry.lib.effects.IEntityEffectHandlerState;
+
+import com.google.common.collect.ImmutableList;
+
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class PlayerActionHandler extends EffectHandlerBase {
+public class PlayerToolBarSoundEffect implements IEntityEffect {
 
-	private ItemRegistry itemRegistry;
+	protected final ItemRegistry itemRegistry = RegistryManager.get(RegistryType.ITEMS);
 
-	private class HandTracker implements ITickable {
+	protected class HandTracker {
 
 		protected final EnumHand hand;
 
@@ -73,18 +78,16 @@ public class PlayerActionHandler extends EffectHandlerBase {
 					|| this.lastHeld != stack.getItem();
 		}
 
-		@Override
-		public void update() {
-			final EntityPlayer player = EnvironState.getPlayer();
+		public void update(@Nonnull final IEntityEffectHandlerState state) {
+			final EntityPlayer player = (EntityPlayer) state.subject().get();
 			if (triggerNewEquipSound(player)) {
 
-				SoundEngine.instance().stopSound(this.soundId, SoundCategory.PLAYERS);
-
+				state.stopSound(this.soundId);
 				final ItemStack currentStack = player.getHeldItem(this.hand);
-				final SoundEffect soundEffect = PlayerActionHandler.this.itemRegistry.getEquipSound(currentStack);
+				final SoundEffect soundEffect = PlayerToolBarSoundEffect.this.itemRegistry.getEquipSound(currentStack);
 				if (soundEffect != null) {
-					final BasicSound<?> sound = makeSound(soundEffect);
-					this.soundId = SoundEffectHandler.INSTANCE.playSound(sound);
+					final BasicSound<?> sound = state.createSound(soundEffect, player);
+					this.soundId = state.playSound(sound);
 					this.lastHeld = currentStack.getItem();
 				} else {
 					this.soundId = null;
@@ -94,7 +97,7 @@ public class PlayerActionHandler extends EffectHandlerBase {
 		}
 	}
 
-	private class MainHandTracker extends HandTracker {
+	protected class MainHandTracker extends HandTracker {
 
 		protected int lastSlot = -1;
 
@@ -108,8 +111,8 @@ public class PlayerActionHandler extends EffectHandlerBase {
 		}
 
 		@Override
-		public void update() {
-			super.update();
+		public void update(@Nonnull final IEntityEffectHandlerState state) {
+			super.update(state);
 			this.lastSlot = EnvironState.getPlayer().inventory.currentItem;
 		}
 	}
@@ -117,28 +120,30 @@ public class PlayerActionHandler extends EffectHandlerBase {
 	protected final MainHandTracker mainHand = new MainHandTracker();
 	protected final HandTracker offHand = new HandTracker();
 
-	public PlayerActionHandler() {
-		super("PlayerActionHandler");
+	public PlayerToolBarSoundEffect() {
 
-		this.itemRegistry = RegistryManager.get(RegistryType.ITEMS);
-	}
-
-	private static BasicSound<?> makeSound(@Nonnull final SoundEffect se) {
-		return se.createSound(EnvironState.getPlayer(), false).setAttenuationType(BasicSound.noAttenuation());
 	}
 
 	@Override
-	public void process(@Nonnull final EntityPlayer player) {
-
-		if (ModOptions.suppressPotionParticles)
-			player.getDataManager().set(EntityLivingBase.HIDE_PARTICLES, true);
-
-		// Handle item equip sounds
+	public void update(@Nonnull final IEntityEffectHandlerState state) {
 		if (ModOptions.enableEquipSound) {
-			this.mainHand.update();
-			this.offHand.update();
+			this.mainHand.update(state);
+			this.offHand.update(state);
 		}
+	}
 
+	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
+		@Override
+		public boolean applies(@Nonnull final Entity e) {
+			return e instanceof EntityPlayer;
+		}
+	};
+
+	public static class Factory implements IEntityEffectFactory {
+		@Override
+		public List<IEntityEffect> create(@Nonnull final Entity entity) {
+			return ImmutableList.of(new PlayerToolBarSoundEffect());
+		}
 	}
 
 }

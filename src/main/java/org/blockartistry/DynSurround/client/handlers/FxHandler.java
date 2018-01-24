@@ -41,6 +41,7 @@ import org.blockartistry.DynSurround.client.handlers.effects.EntityChatEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.FrostBreathEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.ItemSwingSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.PlayerJumpSoundEffect;
+import org.blockartistry.DynSurround.client.handlers.effects.PlayerToolBarSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.VillagerChatEffect;
 import org.blockartistry.lib.effects.EntityEffectHandler;
 import org.blockartistry.lib.effects.EntityEffectLibrary;
@@ -61,6 +62,7 @@ public class FxHandler extends EffectHandlerBase {
 		library.register(FrostBreathEffect.DEFAULT_FILTER, new FrostBreathEffect.Factory());
 		library.register(EntityChatEffect.DEFAULT_FILTER, new EntityChatEffect.Factory());
 		library.register(VillagerChatEffect.DEFAULT_FILTER, new VillagerChatEffect.Factory());
+		library.register(PlayerToolBarSoundEffect.DEFAULT_FILTER, new PlayerToolBarSoundEffect.Factory());
 	}
 
 	private final Map<UUID, EntityEffectHandler> handlers = new HashMap<UUID, EntityEffectHandler>();
