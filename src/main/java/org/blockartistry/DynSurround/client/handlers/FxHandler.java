@@ -42,6 +42,7 @@ import org.blockartistry.DynSurround.client.handlers.effects.FrostBreathEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.ItemSwingSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.PlayerJumpSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.PlayerToolBarSoundEffect;
+import org.blockartistry.DynSurround.client.handlers.effects.PopoffEventEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.VillagerChatEffect;
 import org.blockartistry.lib.effects.EntityEffectHandler;
 import org.blockartistry.lib.effects.EntityEffectLibrary;
@@ -114,6 +115,7 @@ public class FxHandler extends EffectHandlerBase {
 		this.eventLibrary.register(new CraftingSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new BowSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new ItemSwingSoundEffect(this.eventLibrary));
+		this.eventLibrary.register(new PopoffEventEffect(this.eventLibrary));
 	}
 
 	@Override

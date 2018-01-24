@@ -55,7 +55,6 @@ public class EffectManager {
 		this.effectHandlers.add(new FogEffectHandler());
 		this.effectHandlers.add(new ParticleSystemHandler());
 		this.effectHandlers.add(new SoundCullHandler());
-		this.effectHandlers.add(new PopoffEffectHandler());
 		this.effectHandlers.add(new FootstepsHandler());
 		this.effectHandlers.add(new AreaSoundEffectHandler());
 		this.effectHandlers.add(new EntityEmojiHandler());

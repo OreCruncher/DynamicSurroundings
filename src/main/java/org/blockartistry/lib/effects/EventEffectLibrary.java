@@ -29,10 +29,12 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
+import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -72,6 +74,16 @@ public class EventEffectLibrary implements IEventEffectLibraryState {
 	public void cleanup() {
 		for (final EventEffect e : this.effects)
 			MinecraftForge.EVENT_BUS.unregister(e);
+	}
+
+	/**
+	 * Used by an IEntityEffect to add a Particle to the system.
+	 * 
+	 * @param particle
+	 *            The Particle instance to add to the particle system.
+	 */
+	public void addParticle(@Nonnull final Particle particle) {
+		ParticleHelper.addParticle(particle);
 	}
 
 	/**
