@@ -63,7 +63,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 		}
 	};
 
-	private static class NBT {
+	protected static class NBT {
 		public static final String SOUND_EVENT = "s";
 		public static final String VOLUME = "v";
 		public static final String PITCH = "p";
