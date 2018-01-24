@@ -21,24 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.blockartistry.DynSurround.client.handlers.effects;
 
-package org.blockartistry.DynSurround.client.handlers;
+import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.event.PopoffEvent;
-import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleTextPopOff;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.Color;
+import org.blockartistry.lib.effects.EventEffect;
+import org.blockartistry.lib.effects.IEventEffectLibraryState;
+import org.blockartistry.lib.math.MathStuff;
+import org.blockartistry.lib.random.XorShiftRandom;
 
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public final class PopoffEffectHandler extends EffectHandlerBase {
+public class PopoffEventEffect extends EventEffect {
 
 	private static final double DISTANCE = 32;
 	private static final Color CRITICAL_TEXT_COLOR = Color.MC_GOLD;
@@ -58,25 +61,21 @@ public final class PopoffEffectHandler extends EffectHandlerBase {
 			"ZZZZWAP", "ZZZZZWAP" };
 
 	private String getPowerWord() {
-		return POWER_WORDS[this.RANDOM.nextInt(POWER_WORDS.length)] + "!";
+		return POWER_WORDS[XorShiftRandom.current().nextInt(POWER_WORDS.length)] + "!";
 	}
 
-	public PopoffEffectHandler() {
-		super("PopoffEffectHandler");
+	public PopoffEventEffect(@Nonnull final IEventEffectLibraryState state) {
+		super(state);
 	}
 
 	@SubscribeEvent
-	public void handleEvent(final PopoffEvent data) {
-		if (!ModOptions.enableDamagePopoffs)
+	public void onEvent(@Nonnull final PopoffEvent data) {
+		if (!ModOptions.enableDamagePopoffs || EnvironState.isPlayer(data.entityId))
 			return;
 
 		// Don't want to display if too far away.
 		final double distance = EnvironState.distanceToPlayer(data.posX, data.posY, data.posZ);
 		if (distance >= (DISTANCE * DISTANCE))
-			return;
-
-		// Don't show the players pop-offs
-		if (EnvironState.isPlayer(data.entityId))
 			return;
 
 		final World world = EnvironState.getWorld();
@@ -85,13 +84,13 @@ public final class PopoffEffectHandler extends EffectHandlerBase {
 		if (data.isCritical && ModOptions.showCritWords) {
 			particle = new ParticleTextPopOff(world, getPowerWord(), CRITICAL_TEXT_COLOR, data.posX, data.posY + 0.5D,
 					data.posZ);
-			ParticleHelper.addParticle(particle);
+			this.library.addParticle(particle);
 		}
 
-		final String text = String.valueOf(MathHelper.abs(data.amount));
+		final String text = String.valueOf(MathStuff.abs(data.amount));
 		final Color color = data.amount < 0 ? HEAL_TEXT_COLOR : DAMAGE_TEXT_COLOR;
 		particle = new ParticleTextPopOff(world, text, color, data.posX, data.posY, data.posZ);
-		ParticleHelper.addParticle(particle);
+		this.library.addParticle(particle);
 	}
 
 }

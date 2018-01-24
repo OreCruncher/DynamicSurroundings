@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -36,6 +37,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public interface IEventEffectLibraryState {
+
+	/**
+	 * Used by an IEntityEffect to add a Particle to the system.
+	 * 
+	 * @param particle
+	 *            The Particle instance to add to the particle system.
+	 */
+	void addParticle(@Nonnull final Particle particle);
 
 	/**
 	 * Used by an EventEffect to play a sound.
