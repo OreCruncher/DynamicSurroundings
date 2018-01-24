@@ -26,13 +26,14 @@ package org.blockartistry.lib.effects;
 import javax.annotation.Nonnull;
 
 import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * An EventEffect is a special effect that can take place in response to
- * a Forge event.  For example, the JUMP sound would play in response to
- * a LivingJumpEvent. 
+ * An EventEffect is a special effect that can take place in response to a Forge
+ * event. For example, the JUMP sound would play in response to a
+ * LivingJumpEvent.
  */
 @SideOnly(Side.CLIENT)
 public abstract class EventEffect {
@@ -44,10 +45,11 @@ public abstract class EventEffect {
 	}
 
 	/**
-	 * Determines if the EntityEvent is valid in terms of a proper Entity
-	 * being configured and that the event is fired on Side.CLIENT.
+	 * Determines if the EntityEvent is valid in terms of a proper Entity being
+	 * configured and that the event is fired on Side.CLIENT.
 	 * 
-	 * @param event The event to evaluate
+	 * @param event
+	 *            The event to evaluate
 	 * @return true if valid, false otherwise
 	 */
 	protected static boolean isClientValid(@Nonnull final EntityEvent event) {
@@ -58,7 +60,27 @@ public abstract class EventEffect {
 				}
 			}
 		}
-		
+
+		return false;
+	}
+
+	/**
+	 * Determines if the PlayerEvent is valid in terms of a proper Entity being
+	 * configured and that the event is fired on Side.CLIENT.
+	 * 
+	 * @param event
+	 *            The event to evaluate
+	 * @return true if valid, false otherwise
+	 */
+	protected static boolean isClientValid(@Nonnull final PlayerEvent event) {
+		if (event != null) {
+			if (event.player != null) {
+				if (event.player.getEntityWorld() != null) {
+					return event.player.getEntityWorld().isRemote;
+				}
+			}
+		}
+
 		return false;
 	}
 
