@@ -37,10 +37,11 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.handlers.effects.EntityChatEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.FrostBreathEffect;
+import org.blockartistry.DynSurround.client.handlers.effects.PlayerJumpSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.VillagerChatEffect;
 import org.blockartistry.lib.effects.EntityEffectHandler;
 import org.blockartistry.lib.effects.EntityEffectLibrary;
-
+import org.blockartistry.lib.effects.EventEffectLibrary;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
@@ -60,9 +61,11 @@ public class FxHandler extends EffectHandlerBase {
 	}
 
 	private final Map<UUID, EntityEffectHandler> handlers = new HashMap<UUID, EntityEffectHandler>();
-
+	private final EventEffectLibrary eventLibrary = new EventEffectLibrary();
+	
 	public FxHandler() {
 		super("FxHandler");
+		
 	}
 
 	@Override
@@ -102,10 +105,12 @@ public class FxHandler extends EffectHandlerBase {
 	@Override
 	public void onConnect() {
 		this.handlers.clear();
+		this.eventLibrary.register(new PlayerJumpSoundEffect(this.eventLibrary));
 	}
 
 	@Override
 	public void onDisconnect() {
 		this.handlers.clear();
+		this.eventLibrary.cleanup();
 	}
 }

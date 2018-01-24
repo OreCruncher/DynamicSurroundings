@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.sound.BasicSound;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -154,10 +155,10 @@ public class EntityEffectHandler implements IEntityEffectHandlerState {
 	/**
 	 * Used by an IEntityEffect to play a sound.
 	 * 
-	 * TODO: Need to sort this. Not sure what it looks like yet.
+	 * @param The sound to play
 	 */
 	@Override
-	public void playSound() {
+	public void playSound(@Nonnull final BasicSound<?> sound) {
 
 	}
 }
