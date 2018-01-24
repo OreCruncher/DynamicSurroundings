@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 
+import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -39,5 +40,14 @@ public interface IEventEffectLibraryState {
 	 * @param The sound to play
 	 */
 	void playSound(@Nonnull final BasicSound<?> sound);
+	
+	/**
+	 * Indicates if the specified player is the one sitting behind
+	 * the screen.
+	 * 
+	 * @param player The EntityPlayer to check
+	 * @return true if it is the local player, false otherwise
+	 */
+	boolean isActivePlayer(@Nonnull final Entity player);
 
 }

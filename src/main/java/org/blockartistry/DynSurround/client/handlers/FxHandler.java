@@ -35,6 +35,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.handlers.effects.BowSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.CraftingSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.EntityChatEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.FrostBreathEffect;
@@ -109,6 +110,7 @@ public class FxHandler extends EffectHandlerBase {
 		
 		this.eventLibrary.register(new PlayerJumpSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new CraftingSoundEffect(this.eventLibrary));
+		this.eventLibrary.register(new BowSoundEffect(this.eventLibrary));
 	}
 
 	@Override
