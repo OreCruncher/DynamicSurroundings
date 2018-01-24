@@ -34,21 +34,21 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * State from the EffectHandler that is being provided to an IEffect during
+ * State from the EntityEffectHandler that is being provided to an IEntityEffect during
  * processing.
  */
 @SideOnly(Side.CLIENT)
-public interface IEffectHandlerState {
+public interface IEntityEffectHandlerState {
 
 	/**
-	 * Whether the EffectHandler is alive or dead.
+	 * Whether the EntityEffectHandler is alive or dead.
 	 * 
-	 * @return true if the EffectHandler is active, false otherwise.
+	 * @return true if the EntityEffectHandler is active, false otherwise.
 	 */
 	boolean isAlive();
 
 	/**
-	 * The Entity subject the EffectHandler is associated with. May be null if the
+	 * The Entity subject the EntityEffectHandler is associated with. May be null if the
 	 * Entity is no longer in scope.
 	 * 
 	 * @return Optional with a reference to the subject Entity, if any.
@@ -79,7 +79,7 @@ public interface IEffectHandlerState {
 	Optional<EntityPlayer> thePlayer();
 	
 	/**
-	 * Used by an IEffect to add a Particle to the system.
+	 * Used by an IEntityEffect to add a Particle to the system.
 	 * 
 	 * @param particle
 	 *            The Particle instance to add to the particle system.
@@ -87,7 +87,7 @@ public interface IEffectHandlerState {
 	void addParticle(@Nonnull final Particle particle);
 
 	/**
-	 * Used by an IEffect to play a sound.
+	 * Used by an IEntityEffect to play a sound.
 	 * 
 	 * TODO: Need to sort this.  Not sure what it looks like yet.	
 	 */

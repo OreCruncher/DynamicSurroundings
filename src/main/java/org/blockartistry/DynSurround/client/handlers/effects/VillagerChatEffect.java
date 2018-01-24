@@ -30,10 +30,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.lib.effects.IEffect;
-import org.blockartistry.lib.effects.IEffectFactory;
-import org.blockartistry.lib.effects.IEffectHandlerState;
-import org.blockartistry.lib.effects.IFactoryFilter;
+import org.blockartistry.lib.effects.IEntityEffect;
+import org.blockartistry.lib.effects.IEntityEffectFactory;
+import org.blockartistry.lib.effects.IEntityEffectHandlerState;
+import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
@@ -48,7 +48,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class VillagerChatEffect implements IEffect {
+public class VillagerChatEffect implements IEntityEffect {
 
 	static {
 		// Setup the flee timers for villagers
@@ -74,7 +74,7 @@ public class VillagerChatEffect implements IEffect {
 	}
 
 	@Override
-	public void update(@Nonnull final IEffectHandlerState state) {
+	public void update(@Nonnull final IEntityEffectHandlerState state) {
 		if (!ModOptions.enableEntityChat)
 			return;
 		
@@ -95,17 +95,17 @@ public class VillagerChatEffect implements IEffect {
 				.isEmpty();
 	}
 
-	public static final IFactoryFilter DEFAULT_FILTER = new IFactoryFilter() {
+	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
 		public boolean applies(@Nonnull final Entity e) {
 			return e instanceof EntityVillager && EntityChatEffect.hasMessages(e);
 		}
 	};
 
-	public static class Factory implements IEffectFactory {
+	public static class Factory implements IEntityEffectFactory {
 
 		@Override
-		public List<IEffect> create(@Nonnull final Entity entity) {
+		public List<IEntityEffect> create(@Nonnull final Entity entity) {
 			return ImmutableList.of(new VillagerChatEffect(entity));
 		}
 	}

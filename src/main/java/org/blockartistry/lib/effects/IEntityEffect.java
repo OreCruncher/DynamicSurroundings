@@ -32,26 +32,26 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * Interface for an effect.
  */
 @SideOnly(Side.CLIENT)
-public interface IEffect {
+public interface IEntityEffect {
 
 	/**
-	 * Called when an IEffect should update it's state and take action based on
+	 * Called when an IEntityEffect should update it's state and take action based on
 	 * results. Called once per tick.
 	 * 
 	 * @param state
-	 *            Interface to a portion of the EffectHandler's state.
+	 *            Interface to a portion of the EntityEffectHandler's state.
 	 */
-	void update(@Nonnull final IEffectHandlerState state);
+	void update(@Nonnull final IEntityEffectHandlerState state);
 
 	/**
-	 * Called when the EffectHandler decides that the IEffect should die. Normally
+	 * Called when the EntityEffectHandler decides that the IEntityEffect should die. Normally
 	 * this method would not be hooked. Should only be hooked if there is additional
 	 * state in other lists and places that need to be cleaned up.
 	 * 
 	 * @param state
-	 *            Interface to a portion of the EffectHandler's state.
+	 *            Interface to a portion of the EntityEffectHandler's state.
 	 */
-	default void die(@Nonnull final IEffectHandlerState state) {
+	default void die(@Nonnull final IEntityEffectHandlerState state) {
 	};
 
 }

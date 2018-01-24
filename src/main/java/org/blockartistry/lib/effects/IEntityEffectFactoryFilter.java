@@ -23,29 +23,27 @@
  */
 package org.blockartistry.lib.effects;
 
-import java.util.List;
 import javax.annotation.Nonnull;
+
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * An IEffectFactory creates an IEffect when it gets attached to an
- * EffectHandler.
+ * An IEntityEffectFactoryFilter is used by the EntityEffectLibrary to determine if a particular
+ * IEntityEffect would be applied to an Entity. 
+ *
  */
 @SideOnly(Side.CLIENT)
 @FunctionalInterface
-public interface IEffectFactory {
+public interface IEntityEffectFactoryFilter {
 
 	/**
-	 * Creates 0 or more IEffects for the specified Entity. It is possible that some
-	 * condition on the Entity may prevent creation.
+	 * Evaluates the Entity to determine if an IEntityEffect will apply.
 	 * 
-	 * @param entity
-	 *            The subject of the IEffect
-	 * @return A list of 0 or more IEffects to attach
+	 * @param entity The subject of the evaluation
+	 * @return true if the IEntityEffect applies, false otherwise
 	 */
-	@Nonnull
-	List<IEffect> create(@Nonnull final Entity entity);
-
+	boolean applies(@Nonnull final Entity entity);
+	
 }

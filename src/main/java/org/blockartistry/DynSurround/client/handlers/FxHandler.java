@@ -38,8 +38,8 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.client.handlers.effects.EntityChatEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.FrostBreathEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.VillagerChatEffect;
-import org.blockartistry.lib.effects.EffectHandler;
-import org.blockartistry.lib.effects.EffectLibrary;
+import org.blockartistry.lib.effects.EntityEffectHandler;
+import org.blockartistry.lib.effects.EntityEffectLibrary;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,9 +49,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class EntityEffectHandler extends EffectHandlerBase {
+public class FxHandler extends EffectHandlerBase {
 
-	private static final EffectLibrary library = new EffectLibrary();
+	private static final EntityEffectLibrary library = new EntityEffectLibrary();
 
 	static {
 		library.register(FrostBreathEffect.DEFAULT_FILTER, new FrostBreathEffect.Factory());
@@ -59,10 +59,10 @@ public class EntityEffectHandler extends EffectHandlerBase {
 		library.register(VillagerChatEffect.DEFAULT_FILTER, new VillagerChatEffect.Factory());
 	}
 
-	private final Map<UUID, EffectHandler> handlers = new HashMap<UUID, EffectHandler>();
+	private final Map<UUID, EntityEffectHandler> handlers = new HashMap<UUID, EntityEffectHandler>();
 
-	public EntityEffectHandler() {
-		super("EntityEffectHandler");
+	public FxHandler() {
+		super("FxHandler");
 	}
 
 	@Override
@@ -71,8 +71,8 @@ public class EntityEffectHandler extends EffectHandlerBase {
 		final List<UUID> deadOnes = new ArrayList<UUID>();
 
 		// Update our handlers
-		for (final Entry<UUID, EffectHandler> entry : this.handlers.entrySet()) {
-			final EffectHandler eh = entry.getValue();
+		for (final Entry<UUID, EntityEffectHandler> entry : this.handlers.entrySet()) {
+			final EntityEffectHandler eh = entry.getValue();
 			eh.update();
 			if (!eh.isAlive() || eh.distanceSq(player) > distanceThreshold)
 				deadOnes.add(entry.getKey());
@@ -94,7 +94,7 @@ public class EntityEffectHandler extends EffectHandlerBase {
 
 		final double distanceThreshold = ModOptions.specialEffectRange * ModOptions.specialEffectRange;
 		if (entity.isEntityAlive() && entity.getDistanceSqToEntity(EnvironState.getPlayer()) <= distanceThreshold) {
-			final Optional<EffectHandler> handler = library.create(entity);
+			final Optional<EntityEffectHandler> handler = library.create(entity);
 			this.handlers.put(entity.getPersistentID(), handler.get());
 		}
 	}
