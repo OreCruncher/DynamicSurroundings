@@ -26,13 +26,16 @@ package org.blockartistry.DynSurround.client.hud;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.event.ResourceReloadEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.collections.ObjectArray;
+import org.blockartistry.lib.font.FastFontRenderer;
 import org.blockartistry.lib.gfx.OpenGlState;
+import org.blockartistry.lib.gfx.OpenGlUtil;
 import org.blockartistry.lib.math.MathStuff;
 import org.lwjgl.opengl.GL11;
 
@@ -65,7 +68,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class LightLevelHUD extends GuiOverlay {
 
-	protected static FontRenderer font;
+	private static FontRenderer font;
 	private static LightLevelTextureSheet sheet;
 
 	public static enum Mode {
@@ -279,10 +282,10 @@ public final class LightLevelHUD extends GuiOverlay {
 		if (!showHUD || tickRef == 0 || tickRef % 3 != 0)
 			return;
 
-		if (sheet == null) {
-			sheet = new LightLevelTextureSheet();
-			sheet.updateTexture();
-		}
+		// if (sheet == null) {
+		// sheet = new LightLevelTextureSheet();
+		// sheet.updateTexture();
+		// }
 
 		final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
 		updateLightInfo(manager, manager.viewerPosX, manager.viewerPosY, manager.viewerPosZ);
@@ -290,8 +293,7 @@ public final class LightLevelHUD extends GuiOverlay {
 
 	@SubscribeEvent
 	public static void doRender(@Nonnull final RenderWorldLastEvent event) {
-
-		if (!showHUD || nextCoord == 0 || sheet == null)
+		if (!showHUD || nextCoord == 0)
 			return;
 
 		final EntityPlayer player = EnvironState.getPlayer();
@@ -299,13 +301,6 @@ public final class LightLevelHUD extends GuiOverlay {
 			return;
 
 		final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
-
-		final boolean isThirdPerson = manager.options.thirdPersonView == 2;
-		EnumFacing playerFacing = player.getHorizontalFacing();
-		if (isThirdPerson)
-			playerFacing = playerFacing.getOpposite();
-
-		final float rotationAngle = playerFacing.getOpposite().getHorizontalAngle();
 
 		final OpenGlState glState = OpenGlState.push();
 
@@ -316,6 +311,56 @@ public final class LightLevelHUD extends GuiOverlay {
 		GlStateManager.enableDepth();
 		GlStateManager.depthFunc(GL11.GL_LEQUAL);
 		GlStateManager.depthMask(true);
+
+		if (useOldRenderMethod())
+			drawStringRender(player, manager);
+		else
+			textureRender(player, manager);
+		
+		OpenGlState.pop(glState);
+	}
+
+	private static void drawStringRender(final EntityPlayer player, final RenderManager manager) {
+
+		FastFontRenderer.INSTANCE.prepare();
+		
+		final boolean thirdPerson = manager.options.thirdPersonView == 2;
+		EnumFacing playerFacing = player.getHorizontalFacing();
+		if (thirdPerson)
+			playerFacing = playerFacing.getOpposite();
+		if (playerFacing == EnumFacing.SOUTH || playerFacing == EnumFacing.NORTH)
+			playerFacing = playerFacing.getOpposite();
+		final float rotationAngle = playerFacing.getOpposite().getHorizontalAngle();
+
+		for (int i = 0; i < nextCoord; i++) {
+			final LightCoord coord = lightLevels.get(i);
+			final double x = coord.x - manager.viewerPosX;
+			final double y = coord.y - manager.viewerPosY;
+			final double z = coord.z - manager.viewerPosZ;
+
+			final String text = String.valueOf(coord.lightLevel);
+			final int margin = -(font.getStringWidth(text) + 1) / 2;
+			final double scale = 0.08D;
+			
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(x + 0.5D, y, z + 0.5D);
+			GlStateManager.rotate(rotationAngle, 0F, 1F, 0F);
+			GlStateManager.translate(-0.05D, 0.0005D, 0.3D);
+			GlStateManager.rotate(90F, 1F, 0F, 0F);
+			GlStateManager.scale(-scale, -scale, scale);
+			FastFontRenderer.INSTANCE.drawString(text, margin, 0, coord.color, ColorSet.ALPHA);
+			GlStateManager.popMatrix();
+		}
+	}
+
+	private static void textureRender(final EntityPlayer player, final RenderManager manager) {
+
+		final boolean isThirdPerson = manager.options.thirdPersonView == 2;
+		EnumFacing playerFacing = player.getHorizontalFacing();
+		if (isThirdPerson)
+			playerFacing = playerFacing.getOpposite();
+
+		final float rotationAngle = playerFacing.getOpposite().getHorizontalAngle();
 
 		sheet.bindTexture();
 		final VertexBuffer renderer = Tessellator.getInstance().getBuffer();
@@ -350,14 +395,27 @@ public final class LightLevelHUD extends GuiOverlay {
 
 			GlStateManager.popMatrix();
 		}
+	}
 
-		OpenGlState.pop(glState);
+	private static boolean useOldRenderMethod() {
+		return !OpenGlUtil.areFrameBuffersSafe();
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void resourceReloadEvent(final ResourceReloadEvent event) {
-		if (sheet != null)
+		if (useOldRenderMethod()) {
+			DSurround.log().info("Either OptiFine is installed or Framebuffers are disabled");
+			DSurround.log().info("Using drawString method for light level HUD render");
+			if (sheet != null) {
+				sheet.release();
+				sheet = null;
+			}
+		} else {
+			DSurround.log().info("Using cached texture method for light level HUD render");
+			if (sheet == null)
+				sheet = new LightLevelTextureSheet();
 			sheet.updateTexture();
+		}
 	}
 
 }
