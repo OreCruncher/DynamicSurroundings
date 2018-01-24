@@ -24,6 +24,8 @@
 package org.blockartistry.lib.gfx;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 public final class OpenGlUtil {
 
@@ -42,4 +44,7 @@ public final class OpenGlUtil {
 				GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 	}
 
+	public static boolean areFrameBuffersSafe() {
+		return !FMLClientHandler.instance().hasOptifine() && OpenGlHelper.isFramebufferEnabled();
+	}
 }
