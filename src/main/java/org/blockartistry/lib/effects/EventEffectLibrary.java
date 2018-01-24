@@ -35,6 +35,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * The EventEffectLibrary is the focal point of EventEffect management.  It
+ * is repsonsible for registration and tear down of associated events as needed. 
+ *
+ */
 @SideOnly(Side.CLIENT)
 public class EventEffectLibrary implements IEventEffectLibraryState {
 
@@ -44,11 +49,21 @@ public class EventEffectLibrary implements IEventEffectLibraryState {
 
 	}
 
+	/**
+	 * Registers the EventEffect with the EventEffectLibrary.  The reference
+	 * will automatically be registered with Forge, and will be tracked.
+	 * 
+	 * @param effect EventEffect instance to register
+	 */
 	public void register(@Nonnull final EventEffect effect) {
 		this.effects.add(effect);
 		MinecraftForge.EVENT_BUS.register(effect);
 	}
 
+	/**
+	 * Unregisters all EventEffects that have been registered prior to 
+	 * going out of scope.
+	 */
 	public void cleanup() {
 		for (final EventEffect e : this.effects)
 			MinecraftForge.EVENT_BUS.unregister(e);
