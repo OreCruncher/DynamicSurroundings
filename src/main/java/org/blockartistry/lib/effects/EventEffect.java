@@ -25,6 +25,12 @@ package org.blockartistry.lib.effects;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.sound.BasicSound;
+import org.blockartistry.DynSurround.client.sound.SoundEffect;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -52,7 +58,7 @@ public abstract class EventEffect {
 	 *            The event to evaluate
 	 * @return true if valid, false otherwise
 	 */
-	protected static boolean isClientValid(@Nonnull final EntityEvent event) {
+	protected boolean isClientValid(@Nonnull final EntityEvent event) {
 		if (event != null) {
 			if (event.getEntity() != null) {
 				if (event.getEntity().getEntityWorld() != null) {
@@ -72,7 +78,7 @@ public abstract class EventEffect {
 	 *            The event to evaluate
 	 * @return true if valid, false otherwise
 	 */
-	protected static boolean isClientValid(@Nonnull final PlayerEvent event) {
+	protected boolean isClientValid(@Nonnull final PlayerEvent event) {
 		if (event != null) {
 			if (event.player != null) {
 				if (event.player.getEntityWorld() != null) {
@@ -84,4 +90,15 @@ public abstract class EventEffect {
 		return false;
 	}
 
+	/**
+	 * Creates a BasicSound<> object for the specified SoundEffect centered at the
+	 * Entity. If the Entity is the current active player the sound will be
+	 * non-attenuated.
+	 */
+	@Nonnull
+	protected BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull Entity entity) {
+		if (this.library.isActivePlayer(entity))
+			return se.createSound((EntityLivingBase) entity, false);
+		return se.createSound((EntityPlayer) entity);
+	}
 }

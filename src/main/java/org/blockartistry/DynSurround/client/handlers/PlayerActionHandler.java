@@ -160,20 +160,4 @@ public class PlayerActionHandler extends EffectHandlerBase {
 		}
 	}
 
-	@SubscribeEvent
-	public void onItemUse(@Nonnull final PlayerInteractEvent.RightClickItem event) {
-		if (event.getEntityPlayer() == null || event.getEntityPlayer().worldObj == null || event.getItemStack() == null)
-			return;
-
-		if (event.getEntityPlayer().worldObj.isRemote && this.itemRegistry.doBowSound(event.getItemStack())) {
-			final ItemStack currentItem = event.getEntityPlayer().getHeldItem(event.getHand());
-			final SoundEffect soundEffect = this.itemRegistry.getUseSound(currentItem);
-			if (soundEffect != null) {
-				final BasicSound<?> sound = makeSound(soundEffect);
-				sound.setRoutable(DSurround.isInstalledOnServer());
-				SoundEffectHandler.INSTANCE.playSound(sound);
-			}
-		}
-	}
-
 }
