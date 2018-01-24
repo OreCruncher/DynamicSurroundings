@@ -28,7 +28,6 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.client.audio.ISound;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -39,17 +38,6 @@ public class PlayerTrackingSound extends TrackingSound {
 		super(EnvironState.getPlayer(), sound, fadeIn);
 		
 		this.attenuationType = ISound.AttenuationType.NONE;
-	}
-	
-	@Override
-	public void updateLocation() {
-		super.updateLocation();
-		this.yPosF += 32F;
-	}
-
-	@Override
-	public boolean canSoundBeHeard(@Nonnull final BlockPos pos) {
-		return true;
 	}
 
 }

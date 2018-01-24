@@ -53,6 +53,8 @@ import paulscode.sound.SoundSystemConfig;
 @SideOnly(Side.CLIENT)
 public class BasicSound<T extends BasicSound<?>> extends PositionedSound implements INBTSerializable<NBTTagCompound> {
 
+	protected static final float ATTENUATION_OFFSET = 32F;
+
 	public static interface ISoundScale {
 		float getScale();
 	}
@@ -64,8 +66,9 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 		}
 	};
 
-	private static class NBT {
+	protected static class NBT {
 		public static final String SOUND_EVENT = "s";
+		public static final String SOUND_CATEGORY = "c";
 		public static final String VOLUME = "v";
 		public static final String PITCH = "p";
 		public static final String X_COORD = "x";
@@ -173,6 +176,12 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 		return this.setPosition((float) pos.xCoord, (float) pos.yCoord, (float) pos.zCoord);
 	}
 
+	@Override
+	public float getYPosF() {
+		final float y = super.getYPosF();
+		return this.getAttenuationType() == AttenuationType.NONE ? y + ATTENUATION_OFFSET : y;
+	}
+
 	@SuppressWarnings("unchecked")
 	public T setAttenuationType(@Nonnull final ISound.AttenuationType type) {
 		this.attenuationType = type;
@@ -246,11 +255,16 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 		return distanceSq <= dropoff;
 	}
 
+	public Vec3d getLocusPosition() {
+		return new Vec3d(this.xPosF, this.yPosF, this.zPosF);
+	}
+
 	@Nonnull
 	@Override
 	public NBTTagCompound serializeNBT() {
 		final NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setString(NBT.SOUND_EVENT, this.positionedSoundLocation.toString());
+		nbt.setString(NBT.SOUND_CATEGORY, this.category.getName());
 		nbt.setFloat(NBT.VOLUME, this.volume);
 		nbt.setFloat(NBT.PITCH, this.pitch);
 		nbt.setFloat(NBT.X_COORD, this.xPosF);
@@ -261,6 +275,12 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 
 	@Override
 	public void deserializeNBT(@Nonnull final NBTTagCompound nbt) {
+		final String cat = nbt.getString(NBT.SOUND_CATEGORY);
+		if (StringUtils.isEmpty(cat))
+			this.category = SoundCategory.PLAYERS;
+		else
+			this.category = SoundCategory.getByName(cat);
+
 		this.positionedSoundLocation = new ResourceLocation(nbt.getString(NBT.SOUND_EVENT));
 		this.volume = nbt.getFloat(NBT.VOLUME);
 		this.pitch = nbt.getFloat(NBT.PITCH);
