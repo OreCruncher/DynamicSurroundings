@@ -41,10 +41,10 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.SpeechTextEvent;
 import org.blockartistry.lib.Translations;
 import org.blockartistry.lib.WeightTable;
-import org.blockartistry.lib.effects.IEffect;
-import org.blockartistry.lib.effects.IEffectFactory;
-import org.blockartistry.lib.effects.IEffectHandlerState;
-import org.blockartistry.lib.effects.IFactoryFilter;
+import org.blockartistry.lib.effects.IEntityEffect;
+import org.blockartistry.lib.effects.IEntityEffectFactory;
+import org.blockartistry.lib.effects.IEntityEffectHandlerState;
+import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import com.google.common.base.Predicate;
@@ -60,7 +60,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class EntityChatEffect implements IEffect {
+public class EntityChatEffect implements IEntityEffect {
 
 	private static final Map<String, EntityChatData> messages = new HashMap<String, EntityChatData>();
 
@@ -185,7 +185,7 @@ public class EntityChatEffect implements IEffect {
 	}
 
 	@Override
-	public void update(@Nonnull final IEffectHandlerState state) {
+	public void update(@Nonnull final IEntityEffectHandlerState state) {
 		if (!ModOptions.enableEntityChat)
 			return;
 
@@ -203,17 +203,17 @@ public class EntityChatEffect implements IEffect {
 
 	}
 
-	public static final IFactoryFilter DEFAULT_FILTER = new IFactoryFilter() {
+	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
 		public boolean applies(@Nonnull final Entity e) {
 			return !(e instanceof EntityVillager) && EntityChatEffect.hasMessages(e);
 		}
 	};
 
-	public static class Factory implements IEffectFactory {
+	public static class Factory implements IEntityEffectFactory {
 
 		@Override
-		public List<IEffect> create(@Nonnull final Entity entity) {
+		public List<IEntityEffect> create(@Nonnull final Entity entity) {
 			return ImmutableList.of(new EntityChatEffect(entity));
 		}
 	}
