@@ -25,38 +25,44 @@ package org.blockartistry.DynSurround.client.handlers.effects;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
-import org.blockartistry.DynSurround.client.sound.Sounds;
+import org.blockartistry.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.DynSurround.registry.ItemRegistry;
+import org.blockartistry.DynSurround.registry.RegistryManager;
+import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.effects.EventEffect;
 import org.blockartistry.lib.effects.IEventEffectLibraryState;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class CraftingSoundEffect extends EventEffect {
+public class BowSoundEffect extends EventEffect {
 
-	private int craftSoundThrottle = 0;
+	protected final ItemRegistry itemRegistry = RegistryManager.get(RegistryType.ITEMS);
 
-	public CraftingSoundEffect(@Nonnull final IEventEffectLibraryState state) {
+	public BowSoundEffect(@Nonnull final IEventEffectLibraryState state) {
 		super(state);
 	}
 
 	@SubscribeEvent
-	public void onEvent(@Nonnull final ItemCraftedEvent event) {
-		if (!ModOptions.enableCraftingSound || !isClientValid(event))
+	public void onItemUse(@Nonnull final PlayerInteractEvent.RightClickItem event) {
+		if (!isClientValid(event) || event.getItemStack() == null)
 			return;
 
-		if (this.craftSoundThrottle >= (EnvironState.getTickCounter() - 30))
-			return;
-
-		this.craftSoundThrottle = EnvironState.getTickCounter();
-		final BasicSound<?> fx = this.createSound(Sounds.CRAFTING, event.player);
-		this.library.playSound(fx);
+		if (this.itemRegistry.doBowSound(event.getItemStack())) {
+			final ItemStack currentItem = event.getEntityPlayer().getHeldItem(event.getHand());
+			final SoundEffect soundEffect = this.itemRegistry.getUseSound(currentItem);
+			if (soundEffect != null) {
+				final BasicSound<?> fx = this.createSound(soundEffect, event.getEntity());
+				// TODO: Validate sound routing!  Do we need to route or do we get the
+				// event client side for other players?
+				// fx.setRoutable(DSurround.isInstalledOnServer());
+				this.library.playSound(fx);
+			}
+		}
 	}
-
 }

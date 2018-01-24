@@ -29,15 +29,17 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 
+import net.minecraft.entity.Entity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * The EventEffectLibrary is the focal point of EventEffect management.  It
- * is repsonsible for registration and tear down of associated events as needed. 
+ * is responsible for registration and tear down of associated events as needed. 
  *
  */
 @SideOnly(Side.CLIENT)
@@ -78,5 +80,19 @@ public class EventEffectLibrary implements IEventEffectLibraryState {
 	public void playSound(@Nonnull final BasicSound<?> sound) {
 		SoundEffectHandler.INSTANCE.playSound(sound);
 	}
+	
+	/**
+	 * Indicates if the specified player is the one sitting behind
+	 * the screen.
+	 * 
+	 * @param player The EntityPlayer to check
+	 * @return true if it is the local player, false otherwise
+	 */
+	@Override
+	public boolean isActivePlayer(@Nonnull final Entity player) {
+		// TODO: Remove dependency on EnvironState.
+		return EnvironState.isPlayer(player);
+	}
+
 
 }
