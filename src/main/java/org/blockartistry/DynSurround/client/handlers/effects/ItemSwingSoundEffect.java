@@ -59,7 +59,7 @@ public class ItemSwingSoundEffect extends EventEffect {
 		final ItemStack currentItem = event.getEntityPlayer().getHeldItem(event.getHand());
 		final SoundEffect soundEffect = this.itemRegistry.getSwingSound(currentItem);
 		if (soundEffect != null) {
-			final BasicSound<?> fx = this.createSound(soundEffect, event.getEntity());
+			final BasicSound<?> fx = this.library.createSound(soundEffect, event.getEntityPlayer());
 			fx.setRoutable(DSurround.isInstalledOnServer());
 			this.library.playSound(fx);
 		}

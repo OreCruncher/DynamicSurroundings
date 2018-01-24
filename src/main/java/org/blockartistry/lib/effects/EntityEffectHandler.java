@@ -28,21 +28,26 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
+import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
+import org.blockartistry.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.DynSurround.client.sound.SoundEngine;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * An EntityEffectHandler is responsible for managing the effects that are attached to
- * an entity.
+ * An EntityEffectHandler is responsible for managing the effects that are
+ * attached to an entity.
  */
 @SideOnly(Side.CLIENT)
 public class EntityEffectHandler implements IEntityEffectHandlerState {
@@ -57,8 +62,8 @@ public class EntityEffectHandler implements IEntityEffectHandlerState {
 	}
 
 	/**
-	 * Updates the state of the EntityEffectHandler as well as the state of the IEffects
-	 * that are attached.
+	 * Updates the state of the EntityEffectHandler as well as the state of the
+	 * IEffects that are attached.
 	 */
 	public void update() {
 		if (!this.isAlive())
@@ -72,8 +77,8 @@ public class EntityEffectHandler implements IEntityEffectHandlerState {
 	}
 
 	/**
-	 * Instructs the EntityEffectHandler that it should cleanup state because it is about
-	 * to die.
+	 * Instructs the EntityEffectHandler that it should cleanup state because it is
+	 * about to die.
 	 */
 	public void die() {
 		this.isAlive = false;
@@ -96,8 +101,8 @@ public class EntityEffectHandler implements IEntityEffectHandlerState {
 	}
 
 	/**
-	 * The Entity subject the EntityEffectHandler is associated with. May be null if the
-	 * Entity is no longer in scope.
+	 * The Entity subject the EntityEffectHandler is associated with. May be null if
+	 * the Entity is no longer in scope.
 	 * 
 	 * @return Optional with a reference to the subject Entity, if any.
 	 */
@@ -155,10 +160,53 @@ public class EntityEffectHandler implements IEntityEffectHandlerState {
 	/**
 	 * Used by an IEntityEffect to play a sound.
 	 * 
-	 * @param The sound to play
+	 * @param The
+	 *            sound to play
+	 * @return Unique ID identifying the sound in the sound system
 	 */
 	@Override
-	public void playSound(@Nonnull final BasicSound<?> sound) {
+	@Nullable
+	public String playSound(@Nonnull final BasicSound<?> sound) {
+		return SoundEffectHandler.INSTANCE.playSound(sound);
+	}
 
+	/**
+	 * Stops the specified sound in the sound system from playing.
+	 * 
+	 * @param soundId
+	 */
+	@Override
+	public void stopSound(@Nonnull final String soundId) {
+		// TODO: This needs refactor. Should go through the SoundEffectHandler I think.
+		SoundEngine.instance().stopSound(soundId, SoundCategory.PLAYERS);
+	}
+
+	/**
+	 * Creates a BasicSound<> object for the specified SoundEffect centered at the
+	 * Entity. If the Entity is the current active player the sound will be
+	 * non-attenuated.
+	 * 
+	 * @param se SoundEffect to use as the basis of the sound
+	 * @param player The player location of where the sound will be generated
+	 * @return A BasicSound<?> with applicable properties set 
+	 */
+	@Override
+	@Nonnull
+	public BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final EntityPlayer player) {
+		if (this.isActivePlayer(player))
+			return se.createSound(player, false);
+		return se.createSound(player);
+	}
+
+	/**
+	 * Determines if the specified Entity is the current active player.
+	 * 
+	 * @param player
+	 *            The Entity to evaluate
+	 * @return true if the Entity is the current player, false otherwise
+	 */
+	@Override
+	public boolean isActivePlayer(@Nonnull final Entity player) {
+		return EnvironState.isPlayer(player);
 	}
 }
