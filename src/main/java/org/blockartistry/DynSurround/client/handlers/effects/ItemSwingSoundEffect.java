@@ -25,7 +25,6 @@ package org.blockartistry.DynSurround.client.handlers.effects;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.ItemRegistry;
@@ -49,8 +48,6 @@ public class ItemSwingSoundEffect extends EventEffect {
 		super(state);
 	}
 
-	// TODO: Investigate to see if there is another way we can detect player swings
-	// without needing to route the sound through the server.
 	@SubscribeEvent
 	public void onItemSwing(@Nonnull final PlayerInteractEvent.LeftClickEmpty event) {
 		if (!isClientValid(event))
@@ -60,7 +57,7 @@ public class ItemSwingSoundEffect extends EventEffect {
 		final SoundEffect soundEffect = this.itemRegistry.getSwingSound(currentItem);
 		if (soundEffect != null) {
 			final BasicSound<?> fx = this.library.createSound(soundEffect, event.getEntityPlayer());
-			fx.setRoutable(DSurround.isInstalledOnServer());
+			fx.setRoutable(true);
 			this.library.playSound(fx);
 		}
 	}
