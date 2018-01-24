@@ -39,62 +39,62 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * Central repository for a collection of IEffectFactory instances and the
+ * Central repository for a collection of IEntityEffectFactory instances and the
  * IFactoryFilters associated with them. Typically there will be a single
- * instance of the EffectLibrary for a project, but multiples can be created
+ * instance of the EntityEffectLibrary for a project, but multiples can be created
  * based on the circumstances.
  */
 @SideOnly(Side.CLIENT)
-public class EffectLibrary {
+public class EntityEffectLibrary {
 
-	protected final ObjectArray<IFactoryFilter> filters = new ObjectArray<IFactoryFilter>();
-	protected final ObjectArray<IEffectFactory> factories = new ObjectArray<IEffectFactory>();
+	protected final ObjectArray<IEntityEffectFactoryFilter> filters = new ObjectArray<IEntityEffectFactoryFilter>();
+	protected final ObjectArray<IEntityEffectFactory> factories = new ObjectArray<IEntityEffectFactory>();
 
-	public EffectLibrary() {
+	public EntityEffectLibrary() {
 
 	}
 
 	/**
-	 * Registers an IFactoryFilter/IEffectFactory pair. The filter is used by the
-	 * EffectLibrary to determine if an IEffect applies to a target entity.
+	 * Registers an IEntityEffectFactoryFilter/IEntityEffectFactory pair. The filter is used by the
+	 * EntityEffectLibrary to determine if an IEntityEffect applies to a target entity.
 	 * 
 	 * @param filter
-	 *            IFactoryFilter used to determine if the IEffectFactory should be
-	 *            used to create an IEffect.
+	 *            IEntityEffectFactoryFilter used to determine if the IEntityEffectFactory should be
+	 *            used to create an IEntityEffect.
 	 * @param factory
-	 *            IEffectFactory used to create an IEffect if the IFactoryFilter
+	 *            IEntityEffectFactory used to create an IEntityEffect if the IEntityEffectFactoryFilter
 	 *            returns true.
 	 */
-	public void register(@Nonnull final IFactoryFilter filter, @Nonnull final IEffectFactory factory) {
+	public void register(@Nonnull final IEntityEffectFactoryFilter filter, @Nonnull final IEntityEffectFactory factory) {
 		this.filters.add(filter);
 		this.factories.add(factory);
 	}
 
 	/**
-	 * Creates an EffectHandler for the specified Entity. The IEffects attached to
-	 * the EffectHandler is determined by an IFactoryFitler. An EffectHandler will
+	 * Creates an EntityEffectHandler for the specified Entity. The IEffects attached to
+	 * the EntityEffectHandler is determined by an IFactoryFitler. An EntityEffectHandler will
 	 * always be created.
 	 * 
 	 * @param entity
-	 *            The subject Entity for which an EffectHandler is created
-	 * @return An EffectHandler for the Entity
+	 *            The subject Entity for which an EntityEffectHandler is created
+	 * @return An EntityEffectHandler for the Entity
 	 */
 	@Nonnull
-	public Optional<EffectHandler> create(@Nonnull final Entity entity) {
-		final List<IEffect> effectToApply = new ArrayList<IEffect>();
+	public Optional<EntityEffectHandler> create(@Nonnull final Entity entity) {
+		final List<IEntityEffect> effectToApply = new ArrayList<IEntityEffect>();
 		for (int i = 0; i < this.filters.size(); i++)
 			if (this.filters.get(i).applies(entity)) {
-				final List<IEffect> r = this.factories.get(i).create(entity);
+				final List<IEntityEffect> r = this.factories.get(i).create(entity);
 				effectToApply.addAll(r);
 			}
 
-		final EffectHandler result;
+		final EntityEffectHandler result;
 		if (effectToApply.size() > 0)
-			result = new EffectHandler(entity, effectToApply);
+			result = new EntityEffectHandler(entity, effectToApply);
 		else
 			// No effects. Return a dummy handler.
 			// TODO: Revisit - can it be made more slim?
-			result = new EffectHandler(entity, ImmutableList.of()) {
+			result = new EntityEffectHandler(entity, ImmutableList.of()) {
 				@Override
 				public void update() {
 				}

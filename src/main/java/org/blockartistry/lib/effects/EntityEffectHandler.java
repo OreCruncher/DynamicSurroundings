@@ -40,23 +40,23 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * An EffectHandler is responsible for managing the effects that are attached to
+ * An EntityEffectHandler is responsible for managing the effects that are attached to
  * an entity.
  */
 @SideOnly(Side.CLIENT)
-public class EffectHandler implements IEffectHandlerState {
+public class EntityEffectHandler implements IEntityEffectHandlerState {
 
 	protected final WeakReference<Entity> subject;
-	protected final List<IEffect> activeEffects;
+	protected final List<IEntityEffect> activeEffects;
 	protected boolean isAlive = true;
 
-	public EffectHandler(final Entity entity, final List<IEffect> effects) {
+	public EntityEffectHandler(final Entity entity, final List<IEntityEffect> effects) {
 		this.subject = new WeakReference<Entity>(entity);
 		this.activeEffects = effects;
 	}
 
 	/**
-	 * Updates the state of the EffectHandler as well as the state of the IEffects
+	 * Updates the state of the EntityEffectHandler as well as the state of the IEffects
 	 * that are attached.
 	 */
 	public void update() {
@@ -66,28 +66,28 @@ public class EffectHandler implements IEffectHandlerState {
 		final Entity entity = this.subject.get();
 		this.isAlive = entity != null && entity.isEntityAlive();
 
-		for (final IEffect e : activeEffects)
+		for (final IEntityEffect e : activeEffects)
 			e.update(this);
 	}
 
 	/**
-	 * Instructs the EffectHandler that it should cleanup state because it is about
+	 * Instructs the EntityEffectHandler that it should cleanup state because it is about
 	 * to die.
 	 */
 	public void die() {
 		this.isAlive = false;
-		for (final IEffect e : this.activeEffects)
+		for (final IEntityEffect e : this.activeEffects)
 			e.die(this);
 	}
 
 	// ================================================
-	// IEffectHandlerState interface
+	// IEntityEffectHandlerState interface
 	// ================================================
 
 	/**
-	 * Whether the EffectHandler is alive or dead.
+	 * Whether the EntityEffectHandler is alive or dead.
 	 * 
-	 * @return true if the EffectHandler is active, false otherwise.
+	 * @return true if the EntityEffectHandler is active, false otherwise.
 	 */
 	@Override
 	public boolean isAlive() {
@@ -95,7 +95,7 @@ public class EffectHandler implements IEffectHandlerState {
 	}
 
 	/**
-	 * The Entity subject the EffectHandler is associated with. May be null if the
+	 * The Entity subject the EntityEffectHandler is associated with. May be null if the
 	 * Entity is no longer in scope.
 	 * 
 	 * @return Optional with a reference to the subject Entity, if any.
@@ -141,7 +141,7 @@ public class EffectHandler implements IEffectHandlerState {
 	}
 
 	/**
-	 * Used by an IEffect to add a Particle to the system.
+	 * Used by an IEntityEffect to add a Particle to the system.
 	 * 
 	 * @param particle
 	 *            The Particle instance to add to the particle system.
@@ -152,7 +152,7 @@ public class EffectHandler implements IEffectHandlerState {
 	}
 
 	/**
-	 * Used by an IEffect to play a sound.
+	 * Used by an IEntityEffect to play a sound.
 	 * 
 	 * TODO: Need to sort this. Not sure what it looks like yet.
 	 */

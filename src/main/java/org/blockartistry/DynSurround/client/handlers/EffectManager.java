@@ -62,7 +62,7 @@ public class EffectManager {
 		this.effectHandlers.add(new SpeechBubbleHandler());
 		this.effectHandlers.add(new WeatherHandler());
 
-		this.effectHandlers.add(new EntityEffectHandler());
+		this.effectHandlers.add(new FxHandler());
 		
 		// These two go last in order
 		this.effectHandlers.add(SoundEffectHandler.INSTANCE);

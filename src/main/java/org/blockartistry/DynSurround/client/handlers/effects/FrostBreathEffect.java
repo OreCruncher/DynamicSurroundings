@@ -30,10 +30,10 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleBreath;
-import org.blockartistry.lib.effects.IEffect;
-import org.blockartistry.lib.effects.IEffectFactory;
-import org.blockartistry.lib.effects.IEffectHandlerState;
-import org.blockartistry.lib.effects.IFactoryFilter;
+import org.blockartistry.lib.effects.IEntityEffect;
+import org.blockartistry.lib.effects.IEntityEffectFactory;
+import org.blockartistry.lib.effects.IEntityEffectHandlerState;
+import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
 import org.blockartistry.lib.math.MathStuff;
 
 import com.google.common.collect.ImmutableList;
@@ -47,10 +47,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class FrostBreathEffect implements IEffect {
+public class FrostBreathEffect implements IEntityEffect {
 
 	@Override
-	public void update(@Nonnull final IEffectHandlerState state) {
+	public void update(@Nonnull final IEntityEffectHandlerState state) {
 		if (!ModOptions.showBreath)
 			return;
 
@@ -77,20 +77,20 @@ public class FrostBreathEffect implements IEffect {
 		return false;
 	}
 
-	public static final IFactoryFilter DEFAULT_FILTER = new IFactoryFilter() {
+	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
 		public boolean applies(@Nonnull final Entity e) {
 			return e instanceof EntityPlayer || e instanceof EntityVillager;
 		}
 	};
 
-	public static class Factory implements IEffectFactory {
+	public static class Factory implements IEntityEffectFactory {
 
 		// Since the effect has no state a singleton can be used.
-		private static final List<IEffect> singleton = ImmutableList.of(new FrostBreathEffect());
+		private static final List<IEntityEffect> singleton = ImmutableList.of(new FrostBreathEffect());
 
 		@Override
-		public List<IEffect> create(@Nonnull final Entity entity) {
+		public List<IEntityEffect> create(@Nonnull final Entity entity) {
 			return singleton;
 		}
 	}
