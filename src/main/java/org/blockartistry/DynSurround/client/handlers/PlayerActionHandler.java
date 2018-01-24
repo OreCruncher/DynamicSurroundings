@@ -26,7 +26,6 @@ package org.blockartistry.DynSurround.client.handlers;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
@@ -42,8 +41,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -142,22 +139,6 @@ public class PlayerActionHandler extends EffectHandlerBase {
 			this.offHand.update();
 		}
 
-	}
-
-	@SubscribeEvent
-	public void onItemSwing(@Nonnull final PlayerInteractEvent.LeftClickEmpty event) {
-		if (event.getEntityPlayer() == null || event.getEntityPlayer().worldObj == null)
-			return;
-
-		if (event.getEntityPlayer().worldObj.isRemote && EnvironState.isPlayer(event.getEntityPlayer())) {
-			final ItemStack currentItem = event.getEntityPlayer().getHeldItem(event.getHand());
-			final SoundEffect soundEffect = this.itemRegistry.getSwingSound(currentItem);
-			if (soundEffect != null) {
-				final BasicSound<?> sound = makeSound(soundEffect);
-				sound.setRoutable(DSurround.isInstalledOnServer());
-				SoundEffectHandler.INSTANCE.playSound(sound);
-			}
-		}
 	}
 
 }
