@@ -31,15 +31,17 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
+import org.blockartistry.DynSurround.client.sound.SoundEffect;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * The EventEffectLibrary is the focal point of EventEffect management.  It
- * is responsible for registration and tear down of associated events as needed. 
+ * The EventEffectLibrary is the focal point of EventEffect management. It is
+ * responsible for registration and tear down of associated events as needed.
  *
  */
 @SideOnly(Side.CLIENT)
@@ -52,10 +54,11 @@ public class EventEffectLibrary implements IEventEffectLibraryState {
 	}
 
 	/**
-	 * Registers the EventEffect with the EventEffectLibrary.  The reference
-	 * will automatically be registered with Forge, and will be tracked.
+	 * Registers the EventEffect with the EventEffectLibrary. The reference will
+	 * automatically be registered with Forge, and will be tracked.
 	 * 
-	 * @param effect EventEffect instance to register
+	 * @param effect
+	 *            EventEffect instance to register
 	 */
 	public void register(@Nonnull final EventEffect effect) {
 		this.effects.add(effect);
@@ -63,8 +66,8 @@ public class EventEffectLibrary implements IEventEffectLibraryState {
 	}
 
 	/**
-	 * Unregisters all EventEffects that have been registered prior to 
-	 * going out of scope.
+	 * Unregisters all EventEffects that have been registered prior to going out of
+	 * scope.
 	 */
 	public void cleanup() {
 		for (final EventEffect e : this.effects)
@@ -74,25 +77,41 @@ public class EventEffectLibrary implements IEventEffectLibraryState {
 	/**
 	 * Used by an EventEffect to play a sound.
 	 * 
-	 * @param The sound to play
+	 * @param sound
+	 *            The sound to play
+	 * @return Unique ID identifying the sound in the sound system
 	 */
 	@Override
-	public void playSound(@Nonnull final BasicSound<?> sound) {
-		SoundEffectHandler.INSTANCE.playSound(sound);
+	public String playSound(@Nonnull final BasicSound<?> sound) {
+		return SoundEffectHandler.INSTANCE.playSound(sound);
 	}
-	
+
 	/**
-	 * Indicates if the specified player is the one sitting behind
-	 * the screen.
+	 * Indicates if the specified player is the one sitting behind the screen.
 	 * 
-	 * @param player The EntityPlayer to check
+	 * @param player
+	 *            The EntityPlayer to check
 	 * @return true if it is the local player, false otherwise
 	 */
 	@Override
 	public boolean isActivePlayer(@Nonnull final Entity player) {
-		// TODO: Remove dependency on EnvironState.
 		return EnvironState.isPlayer(player);
 	}
 
+	/**
+	 * Creates a BasicSound<> object for the specified SoundEffect centered at the
+	 * Entity. If the Entity is the current active player the sound will be
+	 * non-attenuated.
+	 * 
+	 * @param se SoundEffect to use as the basis of the sound
+	 * @param player The player location of where the sound will be generated
+	 * @return A BasicSound<?> with applicable properties set 
+	 */
+	@Override
+	public BasicSound<?> createSound(SoundEffect se, EntityPlayer player) {
+		if (this.isActivePlayer(player))
+			return se.createSound(player, false);
+		return se.createSound(player);
+	}
 
 }
