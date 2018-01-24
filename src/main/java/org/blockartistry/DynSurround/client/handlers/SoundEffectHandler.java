@@ -38,6 +38,7 @@ import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.client.event.PlayDistributedSoundEvent;
 import org.blockartistry.DynSurround.client.event.RegistryEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.sound.AdhocSound;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.Emitter;
 import org.blockartistry.DynSurround.client.sound.PlayerEmitter;
@@ -248,10 +249,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	@SubscribeEvent
 	public void onDistributedSound(@Nonnull final PlayDistributedSoundEvent event) {
 		try {
-			final BasicSound<?> sound = (BasicSound<?>) Class.forName(event.soundClass).newInstance();
-			sound.deserializeNBT(event.nbt);
-			sound.setRoutable(false);
-			this.playSound((BasicSound<?>) sound);
+			this.playSound(new AdhocSound(event.nbt));
 		} catch (final Throwable t) {
 			;
 		}

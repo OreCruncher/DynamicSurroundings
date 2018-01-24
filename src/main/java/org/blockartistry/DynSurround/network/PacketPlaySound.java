@@ -78,7 +78,7 @@ public class PacketPlaySound implements IMessage {
 
 	@SideOnly(Side.CLIENT)
 	public PacketPlaySound(@Nonnull final Entity entity, @Nonnull final BasicSound<?> sound) {
-		this.locus = new Locus(entity, sound.getXPosF(), sound.getYPosF(), sound.getZPosF(), RANGE);
+		this.locus = new Locus(entity, sound.getLocusPosition(), RANGE);
 		this.soundClass = sound.getClass().getName();
 		this.nbt = sound.serializeNBT();
 	}
