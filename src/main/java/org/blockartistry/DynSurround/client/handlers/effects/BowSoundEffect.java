@@ -60,7 +60,7 @@ public class BowSoundEffect extends EventEffect {
 				final BasicSound<?> fx = this.library.createSound(soundEffect, event.getEntityPlayer());
 				// TODO: Validate sound routing! Do we need to route or do we get the
 				// event client side for other players?
-				// fx.setRoutable(DSurround.isInstalledOnServer());
+				fx.setRoutable(true);
 				this.library.playSound(fx);
 			}
 		}

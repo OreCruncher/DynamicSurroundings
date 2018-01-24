@@ -27,8 +27,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.ItemRegistry;
@@ -61,37 +61,46 @@ public class PlayerToolBarSoundEffect implements IEntityEffect {
 		protected Item lastHeld = null;
 		protected String soundId = null;
 
-		public HandTracker() {
-			this(EnumHand.OFF_HAND);
+		public HandTracker(@Nonnull final EntityPlayer player) {
+			this(player, EnumHand.OFF_HAND);
+
+			this.lastHeld = this.getItemForHand(player, EnumHand.OFF_HAND);
 		}
 
-		protected HandTracker(@Nonnull final EnumHand hand) {
+		protected HandTracker(@Nonnull final EntityPlayer player, @Nonnull final EnumHand hand) {
 			this.hand = hand;
 		}
 
-		protected boolean triggerNewEquipSound(@Nonnull final EntityPlayer player) {
-			final ItemStack stack = player.getHeldItem(this.hand);
-			if (this.lastHeld == null && stack == null)
-				return false;
+		protected Item getItemForHand(final EntityPlayer player, final EnumHand hand) {
+			final ItemStack stack = player.getHeldItem(hand);
+			return stack == null ? null : stack.getItem();
+		}
 
-			return stack == null && this.lastHeld != null || stack != null && this.lastHeld == null
-					|| this.lastHeld != stack.getItem();
+		protected boolean triggerNewEquipSound(@Nonnull final EntityPlayer player) {
+			final Item heldItem = getItemForHand(player, this.hand);
+			return heldItem != this.lastHeld;
+		}
+
+		protected void clearState(@Nonnull final IEntityEffectHandlerState state) {
+			if (!StringUtils.isEmpty(this.soundId))
+				state.stopSound(this.soundId);
+			this.soundId = null;
+			this.lastHeld = null;
 		}
 
 		public void update(@Nonnull final IEntityEffectHandlerState state) {
 			final EntityPlayer player = (EntityPlayer) state.subject().get();
 			if (triggerNewEquipSound(player)) {
-
-				state.stopSound(this.soundId);
+				this.clearState(state);
 				final ItemStack currentStack = player.getHeldItem(this.hand);
-				final SoundEffect soundEffect = PlayerToolBarSoundEffect.this.itemRegistry.getEquipSound(currentStack);
-				if (soundEffect != null) {
-					final BasicSound<?> sound = state.createSound(soundEffect, player);
-					this.soundId = state.playSound(sound);
-					this.lastHeld = currentStack.getItem();
-				} else {
-					this.soundId = null;
-					this.lastHeld = null;
+				if (currentStack != null) {
+					final SoundEffect soundEffect = PlayerToolBarSoundEffect.this.itemRegistry
+							.getEquipSound(currentStack);
+					if (soundEffect != null) {
+						final BasicSound<?> sound = state.createSound(soundEffect, player);
+						this.soundId = state.playSound(sound);
+						this.lastHeld = currentStack.getItem();
+					}
 				}
 			}
 		}
@@ -101,8 +110,9 @@ public class PlayerToolBarSoundEffect implements IEntityEffect {
 
 		protected int lastSlot = -1;
 
-		public MainHandTracker() {
-			super(EnumHand.MAIN_HAND);
+		public MainHandTracker(@Nonnull final EntityPlayer player) {
+			super(player, EnumHand.MAIN_HAND);
+			this.lastSlot = player.inventory.currentItem;
 		}
 
 		@Override
@@ -113,15 +123,16 @@ public class PlayerToolBarSoundEffect implements IEntityEffect {
 		@Override
 		public void update(@Nonnull final IEntityEffectHandlerState state) {
 			super.update(state);
-			this.lastSlot = EnvironState.getPlayer().inventory.currentItem;
+			this.lastSlot = ((EntityPlayer) (state.subject().get())).inventory.currentItem;
 		}
 	}
 
-	protected final MainHandTracker mainHand = new MainHandTracker();
-	protected final HandTracker offHand = new HandTracker();
+	protected final MainHandTracker mainHand;
+	protected final HandTracker offHand;
 
-	public PlayerToolBarSoundEffect() {
-
+	public PlayerToolBarSoundEffect(@Nonnull final EntityPlayer player) {
+		this.mainHand = new MainHandTracker(player);
+		this.offHand = new HandTracker(player);
 	}
 
 	@Override
@@ -142,7 +153,7 @@ public class PlayerToolBarSoundEffect implements IEntityEffect {
 	public static class Factory implements IEntityEffectFactory {
 		@Override
 		public List<IEntityEffect> create(@Nonnull final Entity entity) {
-			return ImmutableList.of(new PlayerToolBarSoundEffect());
+			return ImmutableList.of(new PlayerToolBarSoundEffect((EntityPlayer) entity));
 		}
 	}
 
