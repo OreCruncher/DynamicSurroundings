@@ -26,13 +26,11 @@ package org.blockartistry.DynSurround.client.handlers.effects;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.lib.effects.EventEffect;
 import org.blockartistry.lib.effects.IEventEffectLibraryState;
 
-import net.minecraft.client.audio.ISound.AttenuationType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -56,10 +54,8 @@ public class PlayerJumpSoundEffect extends EventEffect {
 			return;
 
 		final EntityPlayer player = (EntityPlayer) event.getEntity();
-		final BasicSound<?> fx = Sounds.JUMP.createSound(player);
-		if (EnvironState.isPlayer(player))
-			fx.setAttenuationType(AttenuationType.NONE);
-		
+		final BasicSound<?> fx = this.createSound(Sounds.JUMP, player);
+		fx.setRoutable(true);
 		this.library.playSound(fx);
 	}
 }
