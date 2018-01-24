@@ -23,73 +23,18 @@
  */
 package org.blockartistry.lib.effects;
 
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 
-import net.minecraft.client.particle.Particle;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * State from the EntityEffectHandler that is being provided to an IEntityEffect during
- * processing.
- */
 @SideOnly(Side.CLIENT)
-public interface IEntityEffectHandlerState {
+public interface IEventEffectLibraryState {
 
 	/**
-	 * Whether the EntityEffectHandler is alive or dead.
-	 * 
-	 * @return true if the EntityEffectHandler is active, false otherwise.
-	 */
-	boolean isAlive();
-
-	/**
-	 * The Entity subject the EntityEffectHandler is associated with. May be null if the
-	 * Entity is no longer in scope.
-	 * 
-	 * @return Optional with a reference to the subject Entity, if any.
-	 */
-	@Nonnull
-	Optional<Entity> subject();
-
-	/**
-	 * Determines the distance between the Entity subject and the specified Entity.
-	 * 
-	 * @param entity
-	 *            The Entity to which the distance is measured.
-	 * @return The distance between the two Entities in blocks, squared.
-	 */
-	double distanceSq(@Nonnull final Entity entity);
-
-	/**
-	 * Returns the current world tick.
-	 */
-	int getCurrentTick();
-	
-	/**
-	 * Obtain a reference to the client's player
-	 * 
-	 * @return Reference to the EntityPlayer
-	 */
-	@Nonnull
-	Optional<EntityPlayer> thePlayer();
-	
-	/**
-	 * Used by an IEntityEffect to add a Particle to the system.
-	 * 
-	 * @param particle
-	 *            The Particle instance to add to the particle system.
-	 */
-	void addParticle(@Nonnull final Particle particle);
-
-	/**
-	 * Used by an IEntityEffect to play a sound.
+	 * Used by an EventEffect to play a sound.
 	 * 
 	 * @param The sound to play
 	 */

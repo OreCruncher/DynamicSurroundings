@@ -43,7 +43,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
@@ -145,20 +144,6 @@ public class PlayerActionHandler extends EffectHandlerBase {
 			this.offHand.update();
 		}
 
-	}
-
-	@SubscribeEvent
-	public void onJump(@Nonnull final LivingJumpEvent event) {
-		if (!ModOptions.enableJumpSound)
-			return;
-
-		if (event.getEntity() == null || event.getEntity().world == null)
-			return;
-
-		if (event.getEntity().world.isRemote && EnvironState.isPlayer(event.getEntity())) {
-			final BasicSound<?> sound = makeSound(Sounds.JUMP);
-			SoundEffectHandler.INSTANCE.playSound(sound);
-		}
 	}
 
 	@SubscribeEvent
