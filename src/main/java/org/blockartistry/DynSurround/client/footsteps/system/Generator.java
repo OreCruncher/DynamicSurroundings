@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.implem.ConfigOptions;
-import org.blockartistry.DynSurround.client.footsteps.implem.NormalVariator;
+import org.blockartistry.DynSurround.client.footsteps.implem.Variator;
 import org.blockartistry.DynSurround.client.footsteps.implem.Substrate;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
@@ -69,7 +69,7 @@ public class Generator {
 	protected static final IBlockState AIR_STATE = Blocks.AIR.getDefaultState();
 
 	protected final Isolator isolator;
-	protected final NormalVariator VAR = new NormalVariator();
+	protected final Variator VAR = Variator.NORMAL;
 	protected final FootstepsRegistry registry = RegistryManager.<FootstepsRegistry>get(RegistryType.FOOTSTEPS);
 
 	protected float dmwBase;
