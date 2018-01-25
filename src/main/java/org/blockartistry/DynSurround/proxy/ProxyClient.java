@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.proxy;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.aurora.AuroraRenderer;
 import org.blockartistry.DynSurround.client.event.ResourceReloadEvent;
@@ -117,6 +118,9 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 
 		if (ModOptions.disableWaterSuspendParticle)
 			Minecraft.getMinecraft().effectRenderer.registerParticle(EnumParticleTypes.SUSPENDED.getParticleID(), null);
+
+		if (ModEnvironment.AmbientSounds.isLoaded())
+			SoundManagerReplacement.configureSound(null);
 	}
 
 	@Override
