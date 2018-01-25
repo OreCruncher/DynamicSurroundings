@@ -33,7 +33,7 @@ import org.blockartistry.DynSurround.client.fx.particle.ParticleBreath;
 import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
-import org.blockartistry.lib.math.MathStuff;
+import org.blockartistry.lib.effects.IEntityEffectHandlerState;
 
 import com.google.common.collect.ImmutableList;
 
@@ -49,6 +49,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class FrostBreathEffect extends EntityEffect {
 
+	private static final int PRIME = 311;
+
+	private int seed;
+
+	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
+		super.intitialize(state);
+		this.seed = state.subject().get().getEntityId() * PRIME;
+	}
+
 	@Override
 	public void update() {
 		if (!ModOptions.showBreath)
@@ -57,11 +66,10 @@ public class FrostBreathEffect extends EntityEffect {
 		final Optional<Entity> e = this.getState().subject();
 		if (e.isPresent()) {
 			final Entity entity = e.get();
-			final int interval = (int) (((this.getState().getWorldTime()
-					+ MathStuff.abs(entity.getPersistentID().hashCode())) / 10) % 8);
+			final int interval = (int) (((this.getState().getWorldTime() + this.seed) / 10) % 8);
 			if (interval < 3 && isPossibleToShow(entity)) {
 				final EntityPlayer player = this.getState().thePlayer().get();
-				if (!entity.isInvisibleToPlayer(player) && player.canEntityBeSeen(entity)) {
+				if ((entity == player) || (!entity.isInvisibleToPlayer(player) && player.canEntityBeSeen(entity))) {
 					this.getState().addParticle(new ParticleBreath(entity));
 				}
 			}
@@ -86,12 +94,9 @@ public class FrostBreathEffect extends EntityEffect {
 
 	public static class Factory implements IEntityEffectFactory {
 
-		// Since the effect has no state a singleton can be used.
-		private static final List<EntityEffect> singleton = ImmutableList.of(new FrostBreathEffect());
-
 		@Override
 		public List<EntityEffect> create(@Nonnull final Entity entity) {
-			return singleton;
+			return ImmutableList.of(new FrostBreathEffect());
 		}
 	}
 
