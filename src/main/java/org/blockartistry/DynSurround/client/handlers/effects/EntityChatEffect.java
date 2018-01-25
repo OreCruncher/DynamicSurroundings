@@ -41,9 +41,8 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.SpeechTextEvent;
 import org.blockartistry.lib.Translations;
 import org.blockartistry.lib.WeightTable;
-import org.blockartistry.lib.effects.IEntityEffect;
+import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
-import org.blockartistry.lib.effects.IEntityEffectHandlerState;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
 import org.blockartistry.lib.random.XorShiftRandom;
 
@@ -60,7 +59,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class EntityChatEffect implements IEntityEffect {
+public class EntityChatEffect extends EntityEffect {
 
 	private static final Map<String, EntityChatData> messages = new HashMap<String, EntityChatData>();
 
@@ -185,11 +184,11 @@ public class EntityChatEffect implements IEntityEffect {
 	}
 
 	@Override
-	public void update(@Nonnull final IEntityEffectHandlerState state) {
+	public void update() {
 		if (!ModOptions.enableEntityChat)
 			return;
 
-		final Optional<Entity> e = state.subject();
+		final Optional<Entity> e = this.getState().subject();
 		if (e.isPresent()) {
 			final Entity entity = e.get();
 			final long ticks = getWorldTicks(entity);
@@ -213,7 +212,7 @@ public class EntityChatEffect implements IEntityEffect {
 	public static class Factory implements IEntityEffectFactory {
 
 		@Override
-		public List<IEntityEffect> create(@Nonnull final Entity entity) {
+		public List<EntityEffect> create(@Nonnull final Entity entity) {
 			return ImmutableList.of(new EntityChatEffect(entity));
 		}
 	}

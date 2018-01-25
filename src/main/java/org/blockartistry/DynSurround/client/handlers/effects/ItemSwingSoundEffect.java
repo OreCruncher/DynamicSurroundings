@@ -48,6 +48,8 @@ public class ItemSwingSoundEffect extends EventEffect {
 		super(state);
 	}
 
+	// TODO: Investigate to see if there is another way we can detect player swings
+	// without needing to route the sound through the server.
 	@SubscribeEvent
 	public void onItemSwing(@Nonnull final PlayerInteractEvent.LeftClickEmpty event) {
 		if (!isClientValid(event))
@@ -56,9 +58,9 @@ public class ItemSwingSoundEffect extends EventEffect {
 		final ItemStack currentItem = event.getEntityPlayer().getHeldItem(event.getHand());
 		final SoundEffect soundEffect = this.itemRegistry.getSwingSound(currentItem);
 		if (soundEffect != null) {
-			final BasicSound<?> fx = this.library.createSound(soundEffect, event.getEntityPlayer());
+			final BasicSound<?> fx = this.getState().createSound(soundEffect, event.getEntityPlayer());
 			fx.setRoutable(true);
-			this.library.playSound(fx);
+			this.getState().playSound(fx);
 		}
 	}
 

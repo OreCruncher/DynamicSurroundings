@@ -50,18 +50,16 @@ public class BowSoundEffect extends EventEffect {
 
 	@SubscribeEvent
 	public void onItemUse(@Nonnull final PlayerInteractEvent.RightClickItem event) {
-		if (!isClientValid(event) || event.getItemStack() == null)
+		if (!isClientValid(event) || event.getItemStack() == null || event.getItemStack().isEmpty())
 			return;
 
 		if (this.itemRegistry.doBowSound(event.getItemStack())) {
 			final ItemStack currentItem = event.getEntityPlayer().getHeldItem(event.getHand());
 			final SoundEffect soundEffect = this.itemRegistry.getUseSound(currentItem);
 			if (soundEffect != null) {
-				final BasicSound<?> fx = this.library.createSound(soundEffect, event.getEntityPlayer());
-				// TODO: Validate sound routing! Do we need to route or do we get the
-				// event client side for other players?
+				final BasicSound<?> fx = this.getState().createSound(soundEffect, event.getEntityPlayer());
 				fx.setRoutable(true);
-				this.library.playSound(fx);
+				this.getState().playSound(fx);
 			}
 		}
 	}

@@ -23,94 +23,50 @@
  */
 package org.blockartistry.lib.effects;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
-import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * The EventEffectLibrary is the focal point of EventEffect management. It is
- * responsible for registration and tear down of associated events as needed.
- *
+ * Interface common to all states within the effect framework.
  */
 @SideOnly(Side.CLIENT)
-public class EventEffectLibrary extends EffectStateBase implements IEventEffectLibraryState {
-
-	protected final List<EventEffect> effects = new ArrayList<EventEffect>();
-
-	public EventEffectLibrary() {
-
-	}
+public interface IEffectState {
 
 	/**
-	 * Registers the EventEffect with the EventEffectLibrary. The reference will
-	 * automatically be registered with Forge, and will be tracked.
-	 * 
-	 * @param effect
-	 *            EventEffect instance to register
-	 */
-	public void register(@Nonnull final EventEffect effect) {
-		this.effects.add(effect);
-		MinecraftForge.EVENT_BUS.register(effect);
-	}
-
-	/**
-	 * Unregisters all EventEffects that have been registered prior to going out of
-	 * scope.
-	 */
-	public void cleanup() {
-		for (final EventEffect e : this.effects)
-			MinecraftForge.EVENT_BUS.unregister(e);
-		this.effects.clear();
-	}
-
-	/**
-	 * Used by an EntityEffect to add a Particle to the system.
+	 * Used to add a Particle to the system.
 	 * 
 	 * @param particle
 	 *            The Particle instance to add to the particle system.
 	 */
-	public void addParticle(@Nonnull final Particle particle) {
-		ParticleHelper.addParticle(particle);
-	}
+	void addParticle(@Nonnull final Particle particle);
 
 	/**
-	 * Used by an EventEffect to play a sound.
+	 * Used to play a sound.
 	 * 
 	 * @param sound
 	 *            The sound to play
 	 * @return Unique ID identifying the sound in the sound system
 	 */
-	@Override
 	@Nullable
-	public String playSound(@Nonnull final BasicSound<?> sound) {
-		return SoundEffectHandler.INSTANCE.playSound(sound);
-	}
+	String playSound(@Nonnull final BasicSound<?> sound);
 
 	/**
-	 * Indicates if the specified player is the one sitting behind the screen.
+	 * Stops the specified sound in the sound system from playing.
 	 * 
-	 * @param player
-	 *            The EntityPlayer to check
-	 * @return true if it is the local player, false otherwise
+	 * @param soundId
 	 */
-	@Override
-	public boolean isActivePlayer(@Nonnull final Entity player) {
-		return EnvironState.isPlayer(player);
-	}
+	void stopSound(@Nonnull final String soundId);
 
 	/**
 	 * Creates a BasicSound<> object for the specified SoundEffect centered at the
@@ -123,12 +79,24 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	 *            The player location of where the sound will be generated
 	 * @return A BasicSound<?> with applicable properties set
 	 */
-	@Override
 	@Nonnull
-	public BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final EntityPlayer player) {
-		if (this.isActivePlayer(player))
-			return se.createSound(player, false);
-		return se.createSound(player);
-	}
+	BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final EntityPlayer player);
+
+	/**
+	 * Indicates if the specified player is the one sitting behind the screen.
+	 * 
+	 * @param player
+	 *            The EntityPlayer to check
+	 * @return true if it is the local player, false otherwise
+	 */
+	boolean isActivePlayer(@Nonnull final Entity player);
+	
+	/**
+	 * Obtain a reference to the client's player
+	 * 
+	 * @return Reference to the EntityPlayer. Will not be null.
+	 */
+	@Nonnull
+	Optional<EntityPlayer> thePlayer();
 
 }

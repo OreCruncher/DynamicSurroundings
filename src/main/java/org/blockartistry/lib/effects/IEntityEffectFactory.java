@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * An IEntityEffectFactory creates an IEntityEffect when it gets attached to an
+ * An IEntityEffectFactory creates an EntityEffect when it gets attached to an
  * EntityEffectHandler.
  */
 @SideOnly(Side.CLIENT)
@@ -42,10 +42,10 @@ public interface IEntityEffectFactory {
 	 * condition on the Entity may prevent creation.
 	 * 
 	 * @param entity
-	 *            The subject of the IEntityEffect
+	 *            The subject of the EntityEffect
 	 * @return A list of 0 or more IEffects to attach
 	 */
 	@Nonnull
-	List<IEntityEffect> create(@Nonnull final Entity entity);
+	List<EntityEffect> create(@Nonnull final Entity entity);
 
 }

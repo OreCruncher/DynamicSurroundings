@@ -34,7 +34,7 @@ import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.ItemRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.lib.effects.IEntityEffect;
+import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
 import org.blockartistry.lib.effects.IEntityEffectHandlerState;
@@ -50,7 +50,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class PlayerToolBarSoundEffect implements IEntityEffect {
+public class PlayerToolBarSoundEffect extends EntityEffect {
 
 	protected final ItemRegistry itemRegistry = RegistryManager.get(RegistryType.ITEMS);
 
@@ -73,7 +73,7 @@ public class PlayerToolBarSoundEffect implements IEntityEffect {
 
 		protected Item getItemForHand(final EntityPlayer player, final EnumHand hand) {
 			final ItemStack stack = player.getHeldItem(hand);
-			return stack == null ? null : stack.getItem();
+			return (stack == null || stack.isEmpty()) ? null : stack.getItem();
 		}
 
 		protected boolean triggerNewEquipSound(@Nonnull final EntityPlayer player) {
@@ -136,10 +136,10 @@ public class PlayerToolBarSoundEffect implements IEntityEffect {
 	}
 
 	@Override
-	public void update(@Nonnull final IEntityEffectHandlerState state) {
+	public void update() {
 		if (ModOptions.enableEquipSound) {
-			this.mainHand.update(state);
-			this.offHand.update(state);
+			this.mainHand.update(this.getState());
+			this.offHand.update(this.getState());
 		}
 	}
 
@@ -152,7 +152,7 @@ public class PlayerToolBarSoundEffect implements IEntityEffect {
 
 	public static class Factory implements IEntityEffectFactory {
 		@Override
-		public List<IEntityEffect> create(@Nonnull final Entity entity) {
+		public List<EntityEffect> create(@Nonnull final Entity entity) {
 			return ImmutableList.of(new PlayerToolBarSoundEffect((EntityPlayer) entity));
 		}
 	}

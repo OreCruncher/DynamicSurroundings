@@ -35,10 +35,9 @@ import org.blockartistry.DynSurround.registry.FootstepsRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.WorldUtils;
-import org.blockartistry.lib.effects.IEntityEffect;
+import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
-import org.blockartistry.lib.effects.IEntityEffectHandlerState;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import com.google.common.collect.ImmutableList;
@@ -51,7 +50,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class EntityFootprintEffect implements IEntityEffect {
+public class EntityFootprintEffect extends EntityEffect {
 
 	protected static final Random RANDOM = XorShiftRandom.current();
 
@@ -67,8 +66,8 @@ public class EntityFootprintEffect implements IEntityEffect {
 	}
 	
 	@Override
-	public void update(@Nonnull final IEntityEffectHandlerState state) {
-		final EntityPlayer player = state.thePlayer().get();
+	public void update() {
+		final EntityPlayer player = this.getState().thePlayer().get();
 		if (player == null)
 			return;
 
@@ -95,7 +94,7 @@ public class EntityFootprintEffect implements IEntityEffect {
 	public static class Factory implements IEntityEffectFactory {
 
 		@Override
-		public List<IEntityEffect> create(@Nonnull final Entity entity) {
+		public List<EntityEffect> create(@Nonnull final Entity entity) {
 			return ImmutableList.of(new EntityFootprintEffect());
 		}
 	}

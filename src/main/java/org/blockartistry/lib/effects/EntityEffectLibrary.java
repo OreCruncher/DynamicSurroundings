@@ -56,13 +56,13 @@ public class EntityEffectLibrary {
 
 	/**
 	 * Registers an IEntityEffectFactoryFilter/IEntityEffectFactory pair. The filter is used by the
-	 * EntityEffectLibrary to determine if an IEntityEffect applies to a target entity.
+	 * EntityEffectLibrary to determine if an EntityEffect applies to a target entity.
 	 * 
 	 * @param filter
 	 *            IEntityEffectFactoryFilter used to determine if the IEntityEffectFactory should be
-	 *            used to create an IEntityEffect.
+	 *            used to create an EntityEffect.
 	 * @param factory
-	 *            IEntityEffectFactory used to create an IEntityEffect if the IEntityEffectFactoryFilter
+	 *            IEntityEffectFactory used to create an EntityEffect if the IEntityEffectFactoryFilter
 	 *            returns true.
 	 */
 	public void register(@Nonnull final IEntityEffectFactoryFilter filter, @Nonnull final IEntityEffectFactory factory) {
@@ -81,17 +81,17 @@ public class EntityEffectLibrary {
 	 */
 	@Nonnull
 	public Optional<EntityEffectHandler> create(@Nonnull final Entity entity) {
-		final List<IEntityEffect> effectToApply = new ArrayList<IEntityEffect>();
+		final List<EntityEffect> effectToApply = new ArrayList<EntityEffect>();
 		for (int i = 0; i < this.filters.size(); i++)
 			if (this.filters.get(i).applies(entity)) {
-				final List<IEntityEffect> r = this.factories.get(i).create(entity);
+				final List<EntityEffect> r = this.factories.get(i).create(entity);
 				effectToApply.addAll(r);
 			}
 
 		final EntityEffectHandler result;
-		if (effectToApply.size() > 0)
+		if (effectToApply.size() > 0) {
 			result = new EntityEffectHandler(entity, effectToApply);
-		else
+		} else {
 			// No effects. Return a dummy handler.
 			// TODO: Revisit - can it be made more slim?
 			result = new EntityEffectHandler(entity, ImmutableList.of()) {
@@ -99,7 +99,8 @@ public class EntityEffectLibrary {
 				public void update() {
 				}
 			};
-
+		}
+		
 		return Optional.of(result);
 	}
 
