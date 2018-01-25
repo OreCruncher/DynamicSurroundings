@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.implem.ConfigOptions;
 import org.blockartistry.DynSurround.client.footsteps.implem.Variator;
@@ -97,10 +98,15 @@ public class Generator {
 		this.isolator = isolator;
 	}
 
-	public void generateFootsteps(@Nonnull final EntityLivingBase ply) {
-		simulateFootsteps(ply);
-		simulateAirborne(ply);
-		simulateBrushes(ply);
+	public void generateFootsteps(@Nonnull final EntityLivingBase entity) {
+		simulateFootsteps(entity);
+		simulateAirborne(entity);
+		simulateBrushes(entity);
+
+		if (ModOptions.footstepsSoundFactor > 0)
+			entity.nextStepDistance = Integer.MAX_VALUE;
+		else if (entity.nextStepDistance == Integer.MAX_VALUE)
+			entity.nextStepDistance = 0;
 	}
 
 	protected boolean stoppedImmobile(float reference) {
@@ -246,7 +252,7 @@ public class Generator {
 																// offset?)
 				} else {
 					playSinglefoot(ply, 0.4d, EventType.JUMP, this.isRightFoot); // RUNNING
-																			// JUMP
+					// JUMP
 					// Do not toggle foot: After landing sounds, the first foot
 					// will be same as the one used to jump.
 				}
@@ -259,7 +265,8 @@ public class Generator {
 				// Do not toggle foot: After landing sounds, the first foot will
 				// be same as the one used to jump.
 			} else if (!this.stepThisFrame && !ply.isSneaking()) {
-				playSinglefoot(ply, 0d, speedDisambiguator(ply, EventType.CLIMB, EventType.CLIMB_RUN), this.isRightFoot);
+				playSinglefoot(ply, 0d, speedDisambiguator(ply, EventType.CLIMB, EventType.CLIMB_RUN),
+						this.isRightFoot);
 				this.isRightFoot = !this.isRightFoot;
 			}
 
@@ -312,11 +319,11 @@ public class Generator {
 	protected float scalex(final float number, final float min, final float max) {
 		return MathStuff.clamp((number - min) / (max - min), 0.0F, 1.0F);
 	}
-	
+
 	/*
-	 * Former Solver code moved into Generator. 
+	 * Former Solver code moved into Generator.
 	 */
-	
+
 	/**
 	 * Play an association.
 	 */
@@ -375,8 +382,8 @@ public class Generator {
 	 * found, but has no association in the blockmap.
 	 */
 	@Nonnull
-	protected Association findAssociationForPlayer(@Nonnull final EntityLivingBase player, final double verticalOffsetAsMinus,
-			final boolean isRightFoot) {
+	protected Association findAssociationForPlayer(@Nonnull final EntityLivingBase player,
+			final double verticalOffsetAsMinus, final boolean isRightFoot) {
 		// Moved from routine below - why do all this calculation just to toss
 		// it away
 		if (MathStuff.abs(player.motionY) < 0.02)
@@ -413,7 +420,8 @@ public class Generator {
 	 * found, but has no association in the blockmap.
 	 */
 	@Nonnull
-	protected Association findAssociationForLocation(@Nonnull final EntityLivingBase player, @Nonnull final BlockPos pos) {
+	protected Association findAssociationForLocation(@Nonnull final EntityLivingBase player,
+			@Nonnull final BlockPos pos) {
 		// if (MathStuff.abs(player.motionY) < 0.02)
 		// return null; // Don't play sounds on every tiny bounce
 
@@ -503,7 +511,7 @@ public class Generator {
 		IAcoustic[] association = null;
 
 		if (above != AIR_STATE)
-			association = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, tPos, Substrate.CARPET);
+			association = this.registry.getBlockMap().getBlockSubstrateAcoustics(above, tPos, Substrate.CARPET);
 
 		if (association == null || association == AcousticsManager.NOT_EMITTER) {
 			// This condition implies that if the carpet is NOT_EMITTER, solving
@@ -513,7 +521,7 @@ public class Generator {
 			if (in == AIR_STATE) {
 				tPos = pos.down();
 				final IBlockState below = WorldUtils.getBlockState(world, tPos);
-				association = this.isolator.getBlockMap().getBlockSubstrateAcoustics(below, tPos, Substrate.FENCE);
+				association = this.registry.getBlockMap().getBlockSubstrateAcoustics(below, tPos, Substrate.FENCE);
 				if (association != null) {
 					pos = tPos;
 					in = below;
@@ -522,7 +530,7 @@ public class Generator {
 			}
 
 			if (association == null) {
-				association = this.isolator.getBlockMap().getBlockAcoustics(in, pos);
+				association = this.registry.getBlockMap().getBlockAcoustics(in, pos);
 			}
 
 			if (association != null && association != AcousticsManager.NOT_EMITTER) {
@@ -533,7 +541,7 @@ public class Generator {
 				// if else group.
 
 				if (above != AIR_STATE) {
-					IAcoustic[] foliage = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, pos.up(),
+					IAcoustic[] foliage = this.registry.getBlockMap().getBlockSubstrateAcoustics(above, pos.up(),
 							Substrate.FOLIAGE);
 					if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 						association = MyUtils.concatenate(association, foliage);
@@ -683,13 +691,13 @@ public class Generator {
 		 * block of code is here, not outside this if else group.
 		 */
 
-		IAcoustic[] foliage = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, up, Substrate.FOLIAGE);
+		IAcoustic[] foliage = this.registry.getBlockMap().getBlockSubstrateAcoustics(above, up, Substrate.FOLIAGE);
 		if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 			// we discard the normal block association, and mark the foliage as
 			// detected
 			// association = association + "," + foliage;
 			association = foliage;
-			IAcoustic[] isMessy = this.isolator.getBlockMap().getBlockSubstrateAcoustics(above, up, Substrate.MESSY);
+			IAcoustic[] isMessy = this.registry.getBlockMap().getBlockSubstrateAcoustics(above, up, Substrate.MESSY);
 
 			if (isMessy != null && isMessy == AcousticsManager.MESSY_GROUND)
 				found = true;

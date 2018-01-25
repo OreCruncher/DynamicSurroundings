@@ -42,7 +42,6 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IStepPlayer;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions.Option;
 import org.blockartistry.DynSurround.client.footsteps.system.Association;
 import org.blockartistry.DynSurround.client.footsteps.system.Footprint;
-import org.blockartistry.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.FootstepSound;
@@ -78,7 +77,6 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	private final HashMap<String, IAcoustic> acoustics = new HashMap<String, IAcoustic>();
 	private final ObjectArray<PendingSound> pending = new ObjectArray<PendingSound>();
 	private final ObjectArray<Footprint> footprints = new ObjectArray<Footprint>();
-	private final Isolator isolator;
 	private final BlockPos.MutableBlockPos stepCheck = new BlockPos.MutableBlockPos();
 
 	// Special sentinels for equating
@@ -87,8 +85,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	public static final IAcoustic[] MESSY_GROUND = { new BasicAcoustic("MESSY_GROUND") };
 	public static IAcoustic[] SWIM;
 
-	public AcousticsManager(@Nonnull final Isolator isolator) {
-		this.isolator = isolator;
+	public AcousticsManager() {
 	}
 
 	public void addAcoustic(@Nonnull final IAcoustic acoustic) {
@@ -146,7 +143,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 				logAcousticPlay(acoustics, event);
 
 			for (int i = 0; i < acoustics.length; i++) {
-				acoustics[i].playSound(mySoundPlayer(), location, event, inputOptions);
+				acoustics[i].playSound(this, location, event, inputOptions);
 			}
 		}
 	}
@@ -267,8 +264,4 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	}
 
-	@Nonnull
-	protected ISoundPlayer mySoundPlayer() {
-		return isolator.getSoundPlayer();
-	}
 }
