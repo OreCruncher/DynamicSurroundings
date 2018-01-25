@@ -44,8 +44,6 @@ import org.blockartistry.DynSurround.client.footsteps.system.Association;
 import org.blockartistry.DynSurround.client.footsteps.system.Footprint;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.sound.FootstepSound;
-import org.blockartistry.DynSurround.network.Network;
-import org.blockartistry.DynSurround.network.PacketDisplayFootprint;
 import org.blockartistry.lib.BlockPosHelper;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.TimeUtils;
@@ -105,11 +103,13 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		MinecraftForge.EVENT_BUS.post(event);
 
 		// Route message to server if installed
+		/*
 		if (!print.getEntity().isSneaking() && DSurround.routePacketToServer()) {
 			final PacketDisplayFootprint packet = new PacketDisplayFootprint(print.getEntity(), print.getStepLocation(),
 					print.getRotation(), print.isRightFoot());
 			Network.sendToServer(packet);
 		}
+		*/
 	}
 
 	public void playAcoustic(@Nonnull final EntityLivingBase location, @Nonnull final Association acousticName,
@@ -216,8 +216,6 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 		try {
 			final FootstepSound s = new FootstepSound(entity, sound).setVolume(volume).setPitch(pitch);
-			if (entity.isSneaking())
-				s.setRoutable(false);
 			SoundEffectHandler.INSTANCE.playSound(s);
 		} catch (final Throwable t) {
 			DSurround.log().error("Unable to play sound", t);

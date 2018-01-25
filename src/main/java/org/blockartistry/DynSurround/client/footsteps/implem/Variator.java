@@ -30,28 +30,47 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public enum Variator {
 
-	NORMAL() {
+	PLAYER() {
 		{
 			IMMOBILE_DURATION = 200;
 			EVENT_ON_JUMP = true;
 			LAND_HARD_DISTANCE_MIN = 0.9f;
 			SPEED_TO_JUMP_AS_MULTIFOOT = 0.005f;
 			SPEED_TO_RUN = 0.022f;
-			DISTANCE_HUMAN = 0.95f;
-			DISTANCE_STAIR = 0.95f * 0.65f;
-			DISTANCE_LADDER = 0.5f;
+			STRIDE = 1.25F; //0.95f;
+			STRIDE_STAIR = STRIDE * 0.65f;
+			STRIDE_LADDER = 0.5f;
 			PLAY_WANDER = true;
 		}
+	},
+	VILLAGER() {
+		{
+			IMMOBILE_DURATION = 200;
+			EVENT_ON_JUMP = true;
+			LAND_HARD_DISTANCE_MIN = 0.9f;
+			SPEED_TO_JUMP_AS_MULTIFOOT = 0.005f;
+			SPEED_TO_RUN = 0.022f;
+			STRIDE = 1.25F; //0.95f;
+			STRIDE_STAIR = STRIDE * 0.65f;
+			STRIDE_LADDER = 0.5f;
+			PLAY_WANDER = true;
+		}
+		
 	};
+	
+	/*
+	 * Default Variator for unknowns
+	 */
+	public static Variator DEFAULT = PLAYER;
 
 	public int IMMOBILE_DURATION;
 	public boolean EVENT_ON_JUMP;
 	public float LAND_HARD_DISTANCE_MIN;
 	public float SPEED_TO_JUMP_AS_MULTIFOOT;
 	public float SPEED_TO_RUN;
-	public float DISTANCE_HUMAN;
-	public float DISTANCE_STAIR;
-	public float DISTANCE_LADDER;
+	public float STRIDE;
+	public float STRIDE_STAIR;
+	public float STRIDE_LADDER;
 	public boolean PLAY_WANDER;
 
 	// public boolean FORCE_HUMANOID = false;
