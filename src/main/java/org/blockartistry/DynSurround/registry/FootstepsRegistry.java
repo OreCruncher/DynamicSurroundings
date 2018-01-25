@@ -69,12 +69,11 @@ import net.minecraft.block.BlockSapling;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.IResourcePack;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemBlockSpecial;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -83,6 +82,7 @@ public class FootstepsRegistry extends Registry {
 	// System
 	private ResourcePacks dealer = new ResourcePacks();
 	private final Isolator isolator;
+	private final BlockMap blockMap;
 
 	private Set<Material> FOOTPRINT_MATERIAL;
 	private Set<IBlockState> FOOTPRINT_STATES;
@@ -90,6 +90,7 @@ public class FootstepsRegistry extends Registry {
 	public FootstepsRegistry(@Nonnull final Side side) {
 		super(side);
 		this.isolator = new Isolator();
+		this.blockMap = new BlockMap(this.isolator);
 	}
 
 	@Override
@@ -119,8 +120,6 @@ public class FootstepsRegistry extends Registry {
 
 		seedMap();
 
-		this.isolator.setGenerator(
-				ModOptions.foostepsQuadruped ? new GeneratorQP(this.isolator) : new Generator(this.isolator));
 	}
 
 	@Override
@@ -209,7 +208,7 @@ public class FootstepsRegistry extends Registry {
 	}
 
 	private void reloadAcoustics(@Nonnull final List<IResourcePack> repo) {
-		AcousticsManager acoustics = new AcousticsManager(this.isolator);
+		AcousticsManager acoustics = new AcousticsManager();
 		Scanner scanner = null;
 		InputStream stream = null;
 
@@ -277,18 +276,18 @@ public class FootstepsRegistry extends Registry {
 			}
 		}
 	}
+	
+	public Generator createGenerator(@Nonnull final EntityLivingBase entity) {
+		return ModOptions.foostepsQuadruped ? new GeneratorQP(this.isolator) : new Generator(this.isolator);
+	}
 
-	public void process(@Nonnull final World world, @Nonnull final EntityPlayer player) {
-		this.isolator.onFrame(player);
-		if (ModOptions.footstepsSoundFactor > 0)
-			player.nextStepDistance = Integer.MAX_VALUE;
-		else if (player.nextStepDistance == Integer.MAX_VALUE)
-			player.nextStepDistance = 0;
+	public void think() {
+		this.isolator.getAcoustics().think();
 	}
 
 	@Nonnull
 	public BlockMap getBlockMap() {
-		return this.isolator.getBlockMap();
+		return this.blockMap;
 	}
 
 	public boolean hasFootprint(@Nonnull final IBlockState state) {
