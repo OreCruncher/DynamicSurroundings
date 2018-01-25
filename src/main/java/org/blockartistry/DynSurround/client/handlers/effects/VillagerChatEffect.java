@@ -88,7 +88,12 @@ public class VillagerChatEffect extends EntityEffect {
 
 		final Optional<Entity> e = this.getState().subject();
 		if (e.isPresent()) {
-			final Entity entity = e.get();
+
+			// Children don't speak - makes them suspicious...
+			final EntityVillager entity = (EntityVillager) e.get();
+			if (entity.isChild())
+				return;
+
 			if (this.villagerThreatened(entity)) {
 				this.runningScared = true;
 				this.fleeChat.update();
@@ -105,8 +110,8 @@ public class VillagerChatEffect extends EntityEffect {
 
 	protected boolean villagerThreatened(final Entity entity) {
 		final AxisAlignedBB bbox = entity.getEntityBoundingBox().expand((double) 8.0, 3.0D, (double) 8.0);
-		return !entity.worldObj.<EntityZombie>getEntitiesWithinAABB(EntityZombie.class, bbox, Predicates.and(this.preds))
-				.isEmpty();
+		return !entity.worldObj
+				.<EntityZombie>getEntitiesWithinAABB(EntityZombie.class, bbox, Predicates.and(this.preds)).isEmpty();
 	}
 
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
