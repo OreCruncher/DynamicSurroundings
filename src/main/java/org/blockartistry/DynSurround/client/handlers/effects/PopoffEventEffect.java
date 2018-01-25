@@ -84,13 +84,13 @@ public class PopoffEventEffect extends EventEffect {
 		if (data.isCritical && ModOptions.showCritWords) {
 			particle = new ParticleTextPopOff(world, getPowerWord(), CRITICAL_TEXT_COLOR, data.posX, data.posY + 0.5D,
 					data.posZ);
-			this.library.addParticle(particle);
+			this.getState().addParticle(particle);
 		}
 
 		final String text = String.valueOf(MathStuff.abs(data.amount));
 		final Color color = data.amount < 0 ? HEAL_TEXT_COLOR : DAMAGE_TEXT_COLOR;
 		particle = new ParticleTextPopOff(world, text, color, data.posX, data.posY, data.posZ);
-		this.library.addParticle(particle);
+		this.getState().addParticle(particle);
 	}
 
 }

@@ -23,25 +23,8 @@
  */
 package org.blockartistry.lib.effects;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
-import java.util.Optional;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
-import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.client.sound.BasicSound;
-import org.blockartistry.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.DynSurround.client.sound.SoundEngine;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -50,15 +33,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * attached to an entity.
  */
 @SideOnly(Side.CLIENT)
-public class EntityEffectHandler implements IEntityEffectHandlerState {
+public class EntityEffectHandler extends EntityEffectStateBase implements IEntityEffectHandlerState {
 
-	protected final WeakReference<Entity> subject;
-	protected final List<IEntityEffect> activeEffects;
+	protected final List<EntityEffect> activeEffects;
 	protected boolean isAlive = true;
 
-	public EntityEffectHandler(final Entity entity, final List<IEntityEffect> effects) {
-		this.subject = new WeakReference<Entity>(entity);
+	public EntityEffectHandler(final Entity entity, final List<EntityEffect> effects) {
+		super(entity);
 		this.activeEffects = effects;
+		for (final EntityEffect ee : this.activeEffects)
+			ee.intitialize(this);
 	}
 
 	/**
@@ -72,8 +56,8 @@ public class EntityEffectHandler implements IEntityEffectHandlerState {
 		final Entity entity = this.subject.get();
 		this.isAlive = entity != null && entity.isEntityAlive();
 
-		for (final IEntityEffect e : activeEffects)
-			e.update(this);
+		for (final EntityEffect e : activeEffects)
+			e.update();
 	}
 
 	/**
@@ -82,8 +66,8 @@ public class EntityEffectHandler implements IEntityEffectHandlerState {
 	 */
 	public void die() {
 		this.isAlive = false;
-		for (final IEntityEffect e : this.activeEffects)
-			e.die(this);
+		for (final EntityEffect e : this.activeEffects)
+			e.die();
 	}
 
 	// ================================================
@@ -100,113 +84,4 @@ public class EntityEffectHandler implements IEntityEffectHandlerState {
 		return this.isAlive;
 	}
 
-	/**
-	 * The Entity subject the EntityEffectHandler is associated with. May be null if
-	 * the Entity is no longer in scope.
-	 * 
-	 * @return Optional with a reference to the subject Entity, if any.
-	 */
-	@Override
-	public Optional<Entity> subject() {
-		return Optional.ofNullable(this.subject.get());
-	}
-
-	/**
-	 * Determines the distance between the Entity subject and the specified Entity.
-	 * 
-	 * @param entity
-	 *            The Entity to which the distance is measured.
-	 * @return The distance between the two Entities in blocks, squared.
-	 */
-	@Override
-	public double distanceSq(final Entity player) {
-		final Entity e = this.subject.get();
-		if (e == null)
-			return Double.MAX_VALUE;
-		return e.getDistanceSqToEntity(player);
-	}
-
-	/**
-	 * Returns the current world tick.
-	 * 
-	 * TODO: Refactor to avoid EnvironState dependency
-	 */
-	@Override
-	public int getCurrentTick() {
-		return EnvironState.getTickCounter();
-	}
-
-	/**
-	 * Obtain a reference to the client's player
-	 * 
-	 * @return Reference to the EntityPlayer. Will not be null.
-	 */
-	@Nonnull
-	public Optional<EntityPlayer> thePlayer() {
-		return Optional.of(Minecraft.getMinecraft().thePlayer);
-	}
-
-	/**
-	 * Used by an IEntityEffect to add a Particle to the system.
-	 * 
-	 * @param particle
-	 *            The Particle instance to add to the particle system.
-	 */
-	@Override
-	public void addParticle(final Particle particle) {
-		ParticleHelper.addParticle(particle);
-	}
-
-	/**
-	 * Used by an IEntityEffect to play a sound.
-	 * 
-	 * @param The
-	 *            sound to play
-	 * @return Unique ID identifying the sound in the sound system
-	 */
-	@Override
-	@Nullable
-	public String playSound(@Nonnull final BasicSound<?> sound) {
-		return SoundEffectHandler.INSTANCE.playSound(sound);
-	}
-
-	/**
-	 * Stops the specified sound in the sound system from playing.
-	 * 
-	 * @param soundId
-	 */
-	@Override
-	public void stopSound(@Nonnull final String soundId) {
-		// TODO: This needs refactor. Should go through the SoundEffectHandler I think.
-		SoundEngine.instance().stopSound(soundId, SoundCategory.PLAYERS);
-	}
-
-	/**
-	 * Creates a BasicSound<> object for the specified SoundEffect centered at the
-	 * Entity. If the Entity is the current active player the sound will be
-	 * non-attenuated.
-	 * 
-	 * @param se SoundEffect to use as the basis of the sound
-	 * @param player The player location of where the sound will be generated
-	 * @return A BasicSound<?> with applicable properties set 
-	 */
-	@Override
-	@Nonnull
-	public BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final EntityPlayer player) {
-		if (this.isActivePlayer(player))
-			return se.createSound(player, false);
-		return se.createSound(player);
-	}
-
-	/**
-	 * Determines if the specified Entity is the current active player.
-	 * 
-	 * @param player
-	 *            The Entity to evaluate
-	 * @return true if the Entity is the current player, false otherwise
-	 */
-	@Override
-	public boolean isActivePlayer(@Nonnull final Entity player) {
-		return EnvironState.isPlayer(player);
-	}
 }

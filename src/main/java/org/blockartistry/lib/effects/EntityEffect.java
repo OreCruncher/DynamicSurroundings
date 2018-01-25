@@ -24,20 +24,60 @@
 package org.blockartistry.lib.effects;
 
 import javax.annotation.Nonnull;
-import net.minecraft.entity.Entity;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * Interface for an effect.
+ */
 @SideOnly(Side.CLIENT)
-public interface IEventEffectLibraryState extends IEffectState {
+public abstract class EntityEffect {
+
+	private IEntityEffectHandlerState state;
 
 	/**
-	 * Indicates if the specified player is the one sitting behind
-	 * the screen.
-	 * 
-	 * @param player The EntityPlayer to check
-	 * @return true if it is the local player, false otherwise
+	 * Do not perform any heavy initialization in the CTOR! Do it in the
+	 * initialize() method!
 	 */
-	boolean isActivePlayer(@Nonnull final Entity player);
+	public EntityEffect() {
+
+	}
+
+	/**
+	 * Called by the EntityEffectLibrary during the initialization of an
+	 * EntityEffectHandler. Override this method to perform any initialization
+	 * specific to the EntityEffect. Remember to call the super class!
+	 * 
+	 * @param state
+	 *            The state provided by the EntityEffectLibrary
+	 */
+	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
+		this.state = state;
+	}
+
+	/**
+	 * Accessor to obtain the IEntityEffectHandlerState associated with this
+	 * EntityEffect instance.
+	 * 
+	 * @return Associated IEntityEffectHandlerState instance
+	 */
+	protected IEntityEffectHandlerState getState() {
+		return this.state;
+	}
+
+	/**
+	 * Called when an EntityEffect should update it's state and take action based on
+	 * results. Called once per tick.
+	 */
+	public abstract void update();
+
+	/**
+	 * Called when the EntityEffectHandler decides that the EntityEffect should die.
+	 * Normally this method would not be hooked. Should only be hooked if there is
+	 * additional state in other lists and places that need to be cleaned up.
+	 */
+	public void die() {
+	}
 
 }

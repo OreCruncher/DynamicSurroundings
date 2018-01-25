@@ -23,58 +23,31 @@
  */
 package org.blockartistry.lib.effects;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
+import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.DynSurround.client.sound.SoundEngine;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * The EventEffectLibrary is the focal point of EventEffect management. It is
- * responsible for registration and tear down of associated events as needed.
- *
- */
 @SideOnly(Side.CLIENT)
-public class EventEffectLibrary extends EffectStateBase implements IEventEffectLibraryState {
+public class EffectStateBase implements IEffectState {
+	
+	public EffectStateBase() {
 
-	protected final List<EventEffect> effects = new ArrayList<EventEffect>();
-
-	public EventEffectLibrary() {
-
-	}
-
-	/**
-	 * Registers the EventEffect with the EventEffectLibrary. The reference will
-	 * automatically be registered with Forge, and will be tracked.
-	 * 
-	 * @param effect
-	 *            EventEffect instance to register
-	 */
-	public void register(@Nonnull final EventEffect effect) {
-		this.effects.add(effect);
-		MinecraftForge.EVENT_BUS.register(effect);
-	}
-
-	/**
-	 * Unregisters all EventEffects that have been registered prior to going out of
-	 * scope.
-	 */
-	public void cleanup() {
-		for (final EventEffect e : this.effects)
-			MinecraftForge.EVENT_BUS.unregister(e);
-		this.effects.clear();
 	}
 
 	/**
@@ -83,15 +56,16 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	 * @param particle
 	 *            The Particle instance to add to the particle system.
 	 */
-	public void addParticle(@Nonnull final Particle particle) {
+	@Override
+	public void addParticle(final Particle particle) {
 		ParticleHelper.addParticle(particle);
 	}
 
 	/**
-	 * Used by an EventEffect to play a sound.
+	 * Used by an EntityEffect to play a sound.
 	 * 
-	 * @param sound
-	 *            The sound to play
+	 * @param The
+	 *            sound to play
 	 * @return Unique ID identifying the sound in the sound system
 	 */
 	@Override
@@ -99,17 +73,16 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	public String playSound(@Nonnull final BasicSound<?> sound) {
 		return SoundEffectHandler.INSTANCE.playSound(sound);
 	}
-
+	
 	/**
-	 * Indicates if the specified player is the one sitting behind the screen.
+	 * Stops the specified sound in the sound system from playing.
 	 * 
-	 * @param player
-	 *            The EntityPlayer to check
-	 * @return true if it is the local player, false otherwise
+	 * @param soundId
 	 */
 	@Override
-	public boolean isActivePlayer(@Nonnull final Entity player) {
-		return EnvironState.isPlayer(player);
+	public void stopSound(@Nonnull final String soundId) {
+		// TODO: This needs refactor. Should go through the SoundEffectHandler I think.
+		SoundEngine.instance().stopSound(soundId, SoundCategory.PLAYERS);
 	}
 
 	/**
@@ -129,6 +102,28 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 		if (this.isActivePlayer(player))
 			return se.createSound(player, false);
 		return se.createSound(player);
+	}
+
+	/**
+	 * Determines if the specified Entity is the current active player.
+	 * 
+	 * @param player
+	 *            The Entity to evaluate
+	 * @return true if the Entity is the current player, false otherwise
+	 */
+	@Override
+	public boolean isActivePlayer(@Nonnull final Entity player) {
+		return EnvironState.isPlayer(player);
+	}
+
+	/**
+	 * Obtain a reference to the client's player
+	 * 
+	 * @return Reference to the EntityPlayer. Will not be null.
+	 */
+	@Nonnull
+	public Optional<EntityPlayer> thePlayer() {
+		return Optional.of(Minecraft.getMinecraft().thePlayer);
 	}
 
 }

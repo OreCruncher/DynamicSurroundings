@@ -21,43 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.blockartistry.DynSurround.client.handlers.effects;
+package org.blockartistry.lib.effects;
+
+import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.client.sound.BasicSound;
-import org.blockartistry.DynSurround.client.sound.Sounds;
-import org.blockartistry.lib.effects.EventEffect;
-import org.blockartistry.lib.effects.IEventEffectLibraryState;
-
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
+import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class CraftingSoundEffect extends EventEffect {
+public interface IEntityEffectState extends IEffectState {
 
-	private int craftSoundThrottle = 0;
+	/**
+	 * The Entity subject the effect is associated with. May be null if the Entity
+	 * is no longer in scope.
+	 * 
+	 * @return Optional with a reference to the subject Entity, if any.
+	 */
+	@Nonnull
+	Optional<Entity> subject();
 
-	public CraftingSoundEffect(@Nonnull final IEventEffectLibraryState state) {
-		super(state);
-	}
-
-	@SubscribeEvent
-	public void onEvent(@Nonnull final ItemCraftedEvent event) {
-		if (!ModOptions.enableCraftingSound || !isClientValid(event))
-			return;
-
-		if (this.craftSoundThrottle >= (EnvironState.getTickCounter() - 30))
-			return;
-
-		this.craftSoundThrottle = EnvironState.getTickCounter();
-		final BasicSound<?> fx = this.getState().createSound(Sounds.CRAFTING, event.player);
-		fx.setRoutable(true);
-		this.getState().playSound(fx);
-	}
+	/**
+	 * Determines the distance between the Entity subject and the specified Entity.
+	 * 
+	 * @param entity
+	 *            The Entity to which the distance is measured.
+	 * @return The distance between the two Entities in blocks, squared.
+	 */
+	double distanceSq(@Nonnull final Entity entity);
+	
+	/**
+	 * Returns the total world time, in ticks, the entity belongs to.
+	 * 
+	 * @return Total world time
+	 */
+	long getWorldTime();
 
 }
