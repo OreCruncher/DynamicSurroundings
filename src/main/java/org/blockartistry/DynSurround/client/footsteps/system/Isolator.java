@@ -38,13 +38,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class Isolator {
+
 	private AcousticsManager acoustics;
 	private BlockMap blockMap;
 	private PrimitiveMap primitiveMap;
-
-	private ISoundPlayer soundPlayer;
-	private IStepPlayer defaultStepPlayer;
-
 	private Generator generator;
 
 	public Isolator() {
@@ -58,8 +55,6 @@ public class Isolator {
 		this.generator.generateFootsteps(player);
 		this.acoustics.think();
 	}
-
-	//
 
 	@Nonnull
 	public AcousticsManager getAcoustics() {
@@ -78,12 +73,12 @@ public class Isolator {
 
 	@Nonnull
 	public ISoundPlayer getSoundPlayer() {
-		return this.soundPlayer;
+		return this.acoustics;
 	}
 
 	@Nonnull
 	public IStepPlayer getDefaultStepPlayer() {
-		return this.defaultStepPlayer;
+		return this.acoustics;
 	}
 
 	//
@@ -92,20 +87,8 @@ public class Isolator {
 		this.acoustics = acoustics;
 	}
 
-	public void setBlockMap(@Nonnull final BlockMap blockMap) {
-		this.blockMap = blockMap;
-	}
-
 	public void setPrimitiveMap(@Nonnull final PrimitiveMap primitiveMap) {
 		this.primitiveMap = primitiveMap;
-	}
-
-	public void setSoundPlayer(@Nonnull final ISoundPlayer soundPlayer) {
-		this.soundPlayer = soundPlayer;
-	}
-
-	public void setDefaultStepPlayer(@Nonnull final IStepPlayer defaultStepPlayer) {
-		this.defaultStepPlayer = defaultStepPlayer;
 	}
 
 	//
