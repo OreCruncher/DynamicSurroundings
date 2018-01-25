@@ -24,21 +24,17 @@
 
 package org.blockartistry.DynSurround.client.footsteps.system;
 
-import java.util.Random;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
-import org.blockartistry.lib.random.XorShiftRandom;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GeneratorQP extends Generator {
 	
-	private final Random rand = XorShiftRandom.current();
 	private final int USE_FUNCTION = 2;
 
 	private int hoof = 0;
@@ -49,9 +45,9 @@ public class GeneratorQP extends Generator {
 	}
 
 	@Override
-	protected void stepped(@Nonnull final EntityPlayer ply, @Nonnull final EventType event) {
+	protected void stepped(@Nonnull final EntityLivingBase ply, @Nonnull final EventType event) {
 		if (this.hoof == 0 || this.hoof == 2) {
-			this.nextWalkDistanceMultiplier = this.rand.nextFloat();
+			this.nextWalkDistanceMultiplier = RANDOM.nextFloat();
 		}
 
 		if (this.hoof >= 3) {

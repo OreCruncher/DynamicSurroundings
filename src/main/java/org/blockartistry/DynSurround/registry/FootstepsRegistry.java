@@ -46,7 +46,6 @@ import org.blockartistry.DynSurround.client.footsteps.system.Generator;
 import org.blockartistry.DynSurround.client.footsteps.system.GeneratorQP;
 import org.blockartistry.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.DynSurround.client.footsteps.system.ResourcePacks;
-import org.blockartistry.DynSurround.client.footsteps.system.Solver;
 import org.blockartistry.DynSurround.client.footsteps.util.ConfigProperty;
 import org.blockartistry.DynSurround.util.BlockState;
 import org.blockartistry.DynSurround.util.BlockState.Consumer;
@@ -120,7 +119,6 @@ public class FootstepsRegistry extends Registry {
 
 		seedMap();
 
-		this.isolator.setSolver(new Solver(this.isolator));
 		this.isolator.setGenerator(
 				ModOptions.foostepsQuadruped ? new GeneratorQP(this.isolator) : new Generator(this.isolator));
 	}
