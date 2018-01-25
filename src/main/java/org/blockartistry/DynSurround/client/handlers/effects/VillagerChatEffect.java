@@ -58,6 +58,7 @@ public class VillagerChatEffect extends EntityEffect {
 	protected final Predicate<Entity>[] preds;
 	protected final EntityChatEffect normalChat;
 	protected final EntityChatEffect fleeChat;
+	protected boolean runningScared = false;
 
 	@SuppressWarnings("unchecked")
 	public VillagerChatEffect(@Nonnull final Entity entity) {
@@ -72,7 +73,7 @@ public class VillagerChatEffect extends EntityEffect {
 		this.normalChat = new EntityChatEffect(entity);
 		this.fleeChat = new EntityChatEffect(entity, "villager.flee");
 	}
-	
+
 	@Override
 	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
 		super.intitialize(state);
@@ -84,14 +85,20 @@ public class VillagerChatEffect extends EntityEffect {
 	public void update() {
 		if (!ModOptions.enableEntityChat)
 			return;
-		
+
 		final Optional<Entity> e = this.getState().subject();
 		if (e.isPresent()) {
 			final Entity entity = e.get();
-			if (this.villagerThreatened(entity))
+			if (this.villagerThreatened(entity)) {
+				this.runningScared = true;
 				this.fleeChat.update();
-			else
+			} else {
+				if (this.runningScared) {
+					this.runningScared = false;
+					this.normalChat.genNextChatTime();
+				}
 				this.normalChat.update();
+			}
 		}
 
 	}
