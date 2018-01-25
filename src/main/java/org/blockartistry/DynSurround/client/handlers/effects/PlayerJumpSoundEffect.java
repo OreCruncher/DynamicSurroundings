@@ -54,8 +54,8 @@ public class PlayerJumpSoundEffect extends EventEffect {
 			return;
 
 		final EntityPlayer player = (EntityPlayer) event.getEntity();
-		final BasicSound<?> fx = this.createSound(Sounds.JUMP, player);
+		final BasicSound<?> fx = this.getState().createSound(Sounds.JUMP, player);
 		fx.setRoutable(true);
-		this.library.playSound(fx);
+		this.getState().playSound(fx);
 	}
 }

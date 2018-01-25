@@ -30,7 +30,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.lib.effects.IEntityEffect;
+import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectHandlerState;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
@@ -48,7 +48,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class VillagerChatEffect implements IEntityEffect {
+public class VillagerChatEffect extends EntityEffect {
 
 	static {
 		// Setup the flee timers for villagers
@@ -72,19 +72,26 @@ public class VillagerChatEffect implements IEntityEffect {
 		this.normalChat = new EntityChatEffect(entity);
 		this.fleeChat = new EntityChatEffect(entity, "villager.flee");
 	}
+	
+	@Override
+	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
+		super.intitialize(state);
+		this.normalChat.intitialize(state);
+		this.fleeChat.intitialize(state);
+	}
 
 	@Override
-	public void update(@Nonnull final IEntityEffectHandlerState state) {
+	public void update() {
 		if (!ModOptions.enableEntityChat)
 			return;
 		
-		final Optional<Entity> e = state.subject();
+		final Optional<Entity> e = this.getState().subject();
 		if (e.isPresent()) {
 			final Entity entity = e.get();
 			if (this.villagerThreatened(entity))
-				this.fleeChat.update(state);
+				this.fleeChat.update();
 			else
-				this.normalChat.update(state);
+				this.normalChat.update();
 		}
 
 	}
@@ -105,7 +112,7 @@ public class VillagerChatEffect implements IEntityEffect {
 	public static class Factory implements IEntityEffectFactory {
 
 		@Override
-		public List<IEntityEffect> create(@Nonnull final Entity entity) {
+		public List<EntityEffect> create(@Nonnull final Entity entity) {
 			return ImmutableList.of(new VillagerChatEffect(entity));
 		}
 	}

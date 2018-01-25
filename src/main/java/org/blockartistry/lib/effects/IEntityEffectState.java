@@ -23,35 +23,40 @@
  */
 package org.blockartistry.lib.effects;
 
+import java.util.Optional;
+
 import javax.annotation.Nonnull;
 
+import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Interface for an effect.
- */
 @SideOnly(Side.CLIENT)
-public interface IEntityEffect {
+public interface IEntityEffectState extends IEffectState {
 
 	/**
-	 * Called when an IEntityEffect should update it's state and take action based on
-	 * results. Called once per tick.
+	 * The Entity subject the effect is associated with. May be null if the Entity
+	 * is no longer in scope.
 	 * 
-	 * @param state
-	 *            Interface to a portion of the EntityEffectHandler's state.
+	 * @return Optional with a reference to the subject Entity, if any.
 	 */
-	void update(@Nonnull final IEntityEffectHandlerState state);
+	@Nonnull
+	Optional<Entity> subject();
 
 	/**
-	 * Called when the EntityEffectHandler decides that the IEntityEffect should die. Normally
-	 * this method would not be hooked. Should only be hooked if there is additional
-	 * state in other lists and places that need to be cleaned up.
+	 * Determines the distance between the Entity subject and the specified Entity.
 	 * 
-	 * @param state
-	 *            Interface to a portion of the EntityEffectHandler's state.
+	 * @param entity
+	 *            The Entity to which the distance is measured.
+	 * @return The distance between the two Entities in blocks, squared.
 	 */
-	default void die(@Nonnull final IEntityEffectHandlerState state) {
-	};
+	double distanceSq(@Nonnull final Entity entity);
+	
+	/**
+	 * Returns the total world time, in ticks, the entity belongs to.
+	 * 
+	 * @return Total world time
+	 */
+	long getWorldTime();
 
 }
