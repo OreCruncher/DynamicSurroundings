@@ -58,7 +58,6 @@ import org.blockartistry.lib.random.XorShiftRandom;
 import com.google.common.base.Predicate;
 
 import net.minecraft.block.SoundType;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -116,7 +115,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		}
 	}
 
-	public void playAcoustic(@Nonnull final Object location, @Nonnull final Association acousticName,
+	public void playAcoustic(@Nonnull final EntityLivingBase location, @Nonnull final Association acousticName,
 			@Nonnull final EventType event) {
 		playAcoustic(location, acousticName.getData(), event, null);
 
@@ -139,7 +138,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		DSurround.log().debug("Playing acoustic %s for event %s", builder.toString(), event.toString().toUpperCase());
 	}
 
-	public void playAcoustic(@Nonnull final Object location, @Nonnull final IAcoustic[] acoustics,
+	public void playAcoustic(@Nonnull final EntityLivingBase location, @Nonnull final IAcoustic[] acoustics,
 			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
 
 		if (acoustics != null) {
@@ -194,10 +193,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	}
 
 	@Override
-	public void playSound(@Nonnull final Object location, @Nonnull final SoundEvent sound, final float volume,
+	public void playSound(@Nonnull final EntityLivingBase location, @Nonnull final SoundEvent sound, final float volume,
 			final float pitch, @Nullable final IOptions options) {
-		if (!(location instanceof Entity))
-			return;
 
 		try {
 			if (options != null) {
@@ -207,17 +204,17 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 					this.pending.add(new PendingSound(location, sound, volume, pitch, null, delay,
 							options.asLong(Option.DELAY_MAX)));
 				} else {
-					actuallyPlaySound((Entity) location, sound, volume, pitch);
+					actuallyPlaySound(location, sound, volume, pitch);
 				}
 			} else {
-				actuallyPlaySound((Entity) location, sound, volume, pitch);
+				actuallyPlaySound(location, sound, volume, pitch);
 			}
 		} catch (final Throwable t) {
 			DSurround.log().error("Unable to play sound", t);
 		}
 	}
 
-	protected void actuallyPlaySound(@Nonnull final Entity location, @Nonnull final SoundEvent sound,
+	protected void actuallyPlaySound(@Nonnull final EntityLivingBase location, @Nonnull final SoundEvent sound,
 			final float volume, final float pitch) {
 
 		try {
