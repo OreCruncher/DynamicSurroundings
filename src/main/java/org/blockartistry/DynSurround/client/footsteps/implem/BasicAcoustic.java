@@ -35,6 +35,7 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions.Option;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -66,7 +67,7 @@ public class BasicAcoustic implements IAcoustic {
 	}
 
 	@Override
-	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Object location,
+	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final EntityLivingBase location,
 			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
 		// Special case for intentionally empty sounds (as opposed to fall back
 		// sounds)

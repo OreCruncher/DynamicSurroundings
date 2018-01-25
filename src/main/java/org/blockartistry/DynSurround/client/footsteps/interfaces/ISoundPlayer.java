@@ -26,6 +26,10 @@ package org.blockartistry.DynSurround.client.footsteps.interfaces;
 
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -35,8 +39,8 @@ public interface ISoundPlayer {
 	/**
 	 * Plays a sound.
 	 */
-	public void playSound(final Object location, final SoundEvent sound, final float volume, final float pitch,
-			final IOptions options);
+	public void playSound(@Nonnull final EntityLivingBase location, @Nonnull final SoundEvent sound, final float volume, final float pitch,
+			@Nullable final IOptions options);
 
 	/**
 	 * Returns a RANDOM number generator.

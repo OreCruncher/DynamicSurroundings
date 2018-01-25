@@ -26,6 +26,10 @@ package org.blockartistry.DynSurround.client.footsteps.implem;
 
 import com.google.gson.annotations.SerializedName;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
 public class Manifest {
 	
 	public static class Metadata {

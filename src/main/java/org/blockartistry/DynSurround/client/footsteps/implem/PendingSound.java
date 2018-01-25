@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -39,7 +40,7 @@ public class PendingSound {
 
 	private static final float LATENESS_THRESHOLD_DIVIDER = 1.2f;
 
-	private final Object location;
+	private final EntityLivingBase location;
 	private final SoundEvent sound;
 	private final float volume;
 	private final float pitch;
@@ -48,7 +49,7 @@ public class PendingSound {
 	private final long maximum;
 	private final float lateTolerance;
 
-	public PendingSound(@Nonnull final Object location, @Nonnull final SoundEvent sound, final float volume, final float pitch,
+	public PendingSound(@Nonnull final EntityLivingBase location, @Nonnull final SoundEvent sound, final float volume, final float pitch,
 			@Nullable final IOptions options, final long timeToPlay, final long maximum) {
 		this.location = location;
 		this.sound = sound;

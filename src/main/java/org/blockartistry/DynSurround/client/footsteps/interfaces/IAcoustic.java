@@ -24,22 +24,23 @@
 
 package org.blockartistry.DynSurround.client.footsteps.interfaces;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Something that has the ability to play sounds.
- * 
- * @author Hurry
- */
 @SideOnly(Side.CLIENT)
 public interface IAcoustic {
-	
+
+	@Nonnull
 	public String getAcousticName();
-	
+
 	/**
 	 * Plays a sound.
 	 */
-	public void playSound(ISoundPlayer player, Object location, EventType event, IOptions inputOptions);
+	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final EntityLivingBase location,
+			@Nonnull final EventType event, @Nullable final IOptions inputOptions);
 
 }
