@@ -33,6 +33,7 @@ import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.MyUtils;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
@@ -97,8 +98,8 @@ public class Association {
 		return this.data == AcousticsManager.NOT_EMITTER;
 	}
 	
-	public void generatePrint(@Nonnull final Vec3d position, final float rotation, final boolean isRight) {
-		this.print = Footprint.produce(position, rotation, isRight);
+	public void generatePrint(@Nonnull final EntityLivingBase entity, @Nonnull final Vec3d position, final float rotation, final boolean isRight) {
+		this.print = Footprint.produce(entity, position, rotation, isRight);
 	}
 	
 	@Nullable

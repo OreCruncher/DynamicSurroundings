@@ -404,7 +404,7 @@ public class Generator {
 		if (result != null && !player.isJumping) {
 			final Vec3d printLocation = new Vec3d(xx, minY, zz);
 			if (hasFootstepImprint(printLocation.addVector(0D, -0.5D, 0D)))
-				result.generatePrint(printLocation, rotDegrees, isRightFoot);
+				result.generatePrint(player, printLocation, rotDegrees, isRightFoot);
 		}
 		return result;
 	}
@@ -422,14 +422,14 @@ public class Generator {
 	@Nonnull
 	protected Association findAssociationForLocation(@Nonnull final EntityLivingBase player,
 			@Nonnull final BlockPos pos) {
-		// if (MathStuff.abs(player.motionY) < 0.02)
-		// return null; // Don't play sounds on every tiny bounce
 
+		final World world = player.getEntityWorld();
+		
 		if (player.isInWater())
 			DSurround.log().debug(
 					"WARNING!!! Playing a sound while in the water! This is supposed to be halted by the stopping conditions!!");
 
-		Association worked = findAssociationForBlock(pos);
+		Association worked = findAssociationForBlock(world, pos);
 
 		// If it didn't work, the player has walked over the air on the border
 		// of a block.
@@ -467,9 +467,9 @@ public class Generator {
 				// Take the maximum border to produce the sound
 				if (isXdangMax) { // If we are in the positive border, add 1,
 									// else subtract 1
-					worked = findAssociationForBlock(xdang > 0 ? pos.east() : pos.west());
+					worked = findAssociationForBlock(world, xdang > 0 ? pos.east() : pos.west());
 				} else {
-					worked = findAssociationForBlock(zdang > 0 ? pos.south() : pos.north());
+					worked = findAssociationForBlock(world, zdang > 0 ? pos.south() : pos.north());
 				}
 
 				// If that didn't work, then maybe the footstep hit in the
@@ -478,9 +478,9 @@ public class Generator {
 				if (worked == null) { // Take the maximum direction and try with
 										// the orthogonal direction of it
 					if (isXdangMax) {
-						worked = findAssociationForBlock(zdang > 0 ? pos.south() : pos.north());
+						worked = findAssociationForBlock(world, zdang > 0 ? pos.south() : pos.north());
 					} else {
-						worked = findAssociationForBlock(xdang > 0 ? pos.east() : pos.west());
+						worked = findAssociationForBlock(world, xdang > 0 ? pos.east() : pos.west());
 					}
 				}
 			}
@@ -502,8 +502,7 @@ public class Generator {
 	 * solves to the carpet.
 	 */
 	@Nonnull
-	protected Association findAssociationForBlock(@Nonnull BlockPos pos) {
-		final World world = EnvironState.getWorld();
+	protected Association findAssociationForBlock(@Nonnull final World world, @Nonnull BlockPos pos) {
 		IBlockState in = WorldUtils.getBlockState(world, pos);
 		BlockPos tPos = pos.up();
 		final IBlockState above = WorldUtils.getBlockState(world, tPos);
@@ -511,7 +510,7 @@ public class Generator {
 		IAcoustic[] association = null;
 
 		if (above != AIR_STATE)
-			association = this.registry.getBlockMap().getBlockSubstrateAcoustics(above, tPos, Substrate.CARPET);
+			association = this.registry.getBlockMap().getBlockSubstrateAcoustics(world, above, tPos, Substrate.CARPET);
 
 		if (association == null || association == AcousticsManager.NOT_EMITTER) {
 			// This condition implies that if the carpet is NOT_EMITTER, solving
@@ -521,7 +520,7 @@ public class Generator {
 			if (in == AIR_STATE) {
 				tPos = pos.down();
 				final IBlockState below = WorldUtils.getBlockState(world, tPos);
-				association = this.registry.getBlockMap().getBlockSubstrateAcoustics(below, tPos, Substrate.FENCE);
+				association = this.registry.getBlockMap().getBlockSubstrateAcoustics(world, below, tPos, Substrate.FENCE);
 				if (association != null) {
 					pos = tPos;
 					in = below;
@@ -530,7 +529,7 @@ public class Generator {
 			}
 
 			if (association == null) {
-				association = this.registry.getBlockMap().getBlockAcoustics(in, pos);
+				association = this.registry.getBlockMap().getBlockAcoustics(world, in, pos);
 			}
 
 			if (association != null && association != AcousticsManager.NOT_EMITTER) {
@@ -541,7 +540,7 @@ public class Generator {
 				// if else group.
 
 				if (above != AIR_STATE) {
-					IAcoustic[] foliage = this.registry.getBlockMap().getBlockSubstrateAcoustics(above, pos.up(),
+					IAcoustic[] foliage = this.registry.getBlockMap().getBlockSubstrateAcoustics(world, above, pos.up(),
 							Substrate.FOLIAGE);
 					if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 						association = MyUtils.concatenate(association, foliage);
@@ -691,13 +690,13 @@ public class Generator {
 		 * block of code is here, not outside this if else group.
 		 */
 
-		IAcoustic[] foliage = this.registry.getBlockMap().getBlockSubstrateAcoustics(above, up, Substrate.FOLIAGE);
+		IAcoustic[] foliage = this.registry.getBlockMap().getBlockSubstrateAcoustics(world, above, up, Substrate.FOLIAGE);
 		if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 			// we discard the normal block association, and mark the foliage as
 			// detected
 			// association = association + "," + foliage;
 			association = foliage;
-			IAcoustic[] isMessy = this.registry.getBlockMap().getBlockSubstrateAcoustics(above, up, Substrate.MESSY);
+			IAcoustic[] isMessy = this.registry.getBlockMap().getBlockSubstrateAcoustics(world, above, up, Substrate.MESSY);
 
 			if (isMessy != null && isMessy == AcousticsManager.MESSY_GROUND)
 				found = true;
