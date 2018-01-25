@@ -96,6 +96,7 @@ chat.villager.flee.15=5,And that's our cue to ski-doo!
 chat.villager.flee.16=10,Exit! Stage left!
 chat.villager.flee.17=10,You figure this village would have had walls by now.
 chat.villager.flee.18=10,Somebody set up us the bomb!
+chat.villager.flee.19=10,Shop smart! Shop S-Mart!
 
 chat.zombie.0=25,BBBBBRRRRRAAAAAIIIIIINNNNNNSSSS!
 chat.zombie.1=20,Grrrrrr
@@ -108,6 +109,10 @@ chat.zombie.7=10,Can't resist! Must...chase...villager!
 chat.zombie.8=15,My arms are getting tired.
 chat.zombie.9=10,Oh no!  Not again!
 chat.zombie.10=5,All your base are belong to us
+chat.zombie.11=10,Come get some!
+chat.zombie.12=10,Groovy!
+chat.zombie.13=10,Hey kids you remember i'm a professional, don't try this at home!
+chat.zombie.14-10,So many villagers, so little time.
 
 chat.skeleton.0=10,The short fortune teller who escaped from prison was a small medium at large…
 chat.skeleton.1=10,I don't know where I keep my arrows.  It's a mystery, like villagers having no hands.
@@ -120,6 +125,7 @@ chat.skeleton.7=10,Whoever said nothing was impossible obviously never tried sla
 chat.skeleton.8=10,Knowledge is realizing that the street is one-way, wisdom is looking both directions anyway.
 chat.skeleton.9=10,You keep using that word.  I don't think it means what you think it means.
 chat.skeleton.10=10,Chicken!  Fight like a skeleton!
+chat.skeleton.11=10,Oh,look. There's some lovely filth over here.
 
 chat.witch.0=10,Yes, I can drive a stick.
 chat.witch.1=15,By the pricking of my thumbs, something wicked this way comes.
