@@ -35,7 +35,6 @@ import javax.annotation.Nullable;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.system.Isolator;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.DynSurround.registry.BlockInfo;
 import org.blockartistry.lib.BlockNameUtil;
@@ -47,6 +46,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -148,15 +148,15 @@ public class BlockMap {
 	}
 
 	@Nullable
-	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
-		final IBlockState trueState = FacadeHelper.resolveState(state, EnvironState.getWorld(), pos, EnumFacing.UP);
+	public IAcoustic[] getBlockAcoustics(@Nonnull final World world, @Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
+		final IBlockState trueState = FacadeHelper.resolveState(state, world, pos, EnumFacing.UP);
 		return this.metaMap.getBlockAcoustics(trueState);
 	}
 
 	@Nullable
-	public IAcoustic[] getBlockSubstrateAcoustics(@Nonnull final IBlockState state, @Nonnull final BlockPos pos,
+	public IAcoustic[] getBlockSubstrateAcoustics(@Nonnull final World world, @Nonnull final IBlockState state, @Nonnull final BlockPos pos,
 			@Nonnull final Substrate substrate) {
-		final IBlockState trueState = FacadeHelper.resolveState(state, EnvironState.getWorld(), pos, EnumFacing.UP);
+		final IBlockState trueState = FacadeHelper.resolveState(state, world, pos, EnumFacing.UP);
 		final BlockAcousticMap sub = this.substrateMap.get(substrate);
 		return sub != null ? sub.getBlockAcousticsWithSpecial(trueState) : null;
 	}
@@ -230,10 +230,10 @@ public class BlockMap {
 		return builder.toString();
 	}
 
-	public void collectData(@Nonnull final IBlockState state, @Nonnull final BlockPos pos,
+	public void collectData(@Nonnull final World world, @Nonnull final IBlockState state, @Nonnull final BlockPos pos,
 			@Nonnull final List<String> data) {
 
-		final IAcoustic[] temp = getBlockAcoustics(state, pos);
+		final IAcoustic[] temp = getBlockAcoustics(world, state, pos);
 		if (temp != null)
 			data.add(combine(temp));
 

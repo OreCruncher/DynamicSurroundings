@@ -129,7 +129,7 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 			final BlockMap bm = this.footsteps.getBlockMap();
 			if (bm != null) {
 				final List<String> data = new ArrayList<String>();
-				bm.collectData(state, pos, data);
+				bm.collectData(EnvironState.getWorld(), state, pos, data);
 				if (data.size() > 0) {
 					text.add(TEXT_FOOTSTEP_ACOUSTICS);
 					for (final String s : data)
