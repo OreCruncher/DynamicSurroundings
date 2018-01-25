@@ -46,6 +46,9 @@ import org.blockartistry.DynSurround.client.handlers.effects.PlayerJumpSoundEffe
 import org.blockartistry.DynSurround.client.handlers.effects.PlayerToolBarSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.PopoffEventEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.VillagerChatEffect;
+import org.blockartistry.DynSurround.registry.FootstepsRegistry;
+import org.blockartistry.DynSurround.registry.RegistryManager;
+import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.effects.EntityEffectHandler;
 import org.blockartistry.lib.effects.EntityEffectLibrary;
 import org.blockartistry.lib.effects.EventEffectLibrary;
@@ -92,6 +95,10 @@ public class FxHandler extends EffectHandlerBase {
 		// Remove the dead or distant ones
 		for (final UUID id : deadOnes)
 			this.handlers.remove(id);
+		
+		// Tick the footstep stuff
+		// TODO:  Need to refactor!
+		RegistryManager.<FootstepsRegistry>get(RegistryType.FOOTSTEPS).think();
 	}
 
 	@SubscribeEvent(receiveCanceled = true)

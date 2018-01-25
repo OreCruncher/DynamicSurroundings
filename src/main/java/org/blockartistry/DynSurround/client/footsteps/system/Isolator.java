@@ -27,12 +27,9 @@ package org.blockartistry.DynSurround.client.footsteps.system;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
-import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.DynSurround.client.footsteps.implem.PrimitiveMap;
-import org.blockartistry.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IStepPlayer;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -40,20 +37,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class Isolator {
 
 	private AcousticsManager acoustics;
-	private BlockMap blockMap;
 	private PrimitiveMap primitiveMap;
-	private Generator generator;
 
 	public Isolator() {
-		this.blockMap = new BlockMap(this);
-	}
-
-	public void onFrame(@Nonnull final EntityPlayer player) {
-		if (this.generator == null)
-			return;
-
-		this.generator.generateFootsteps(player);
-		this.acoustics.think();
 	}
 
 	@Nonnull
@@ -62,18 +48,8 @@ public class Isolator {
 	}
 
 	@Nonnull
-	public BlockMap getBlockMap() {
-		return this.blockMap;
-	}
-
-	@Nonnull
 	public PrimitiveMap getPrimitiveMap() {
 		return this.primitiveMap;
-	}
-
-	@Nonnull
-	public ISoundPlayer getSoundPlayer() {
-		return this.acoustics;
 	}
 
 	@Nonnull
@@ -91,9 +67,4 @@ public class Isolator {
 		this.primitiveMap = primitiveMap;
 	}
 
-	//
-
-	public void setGenerator(@Nonnull final Generator generator) {
-		this.generator = generator;
-	}
 }
