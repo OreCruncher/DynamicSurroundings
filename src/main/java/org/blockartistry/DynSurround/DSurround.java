@@ -38,6 +38,7 @@ import org.blockartistry.lib.Localization;
 import org.blockartistry.lib.VersionChecker;
 import org.blockartistry.lib.logging.ModLog;
 
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -59,6 +60,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToSe
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.common.network.NetworkCheckHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @net.minecraftforge.fml.common.Mod(
 		modid = DSurround.MOD_ID,
@@ -119,6 +121,11 @@ public class DSurround {
 	
 	public static boolean isInstalledOnServer() {
 		return installedOnServer;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static boolean routePacketToServer() {
+		return DSurround.isInstalledOnServer() && !Minecraft.getMinecraft().isIntegratedServerRunning();
 	}
 
 	public DSurround() {

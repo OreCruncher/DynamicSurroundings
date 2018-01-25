@@ -109,7 +109,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		MinecraftForge.EVENT_BUS.post(event);
 
 		// Route message to server if installed
-		if (!EnvironState.isPlayerSneaking() && DSurround.isInstalledOnServer()) {
+		if (!EnvironState.isPlayerSneaking() && DSurround.routePacketToServer()) {
 			final PacketDisplayFootprint packet = new PacketDisplayFootprint(EnvironState.getPlayer(),
 					print.getStepLocation(), print.getRotation(), print.isRightFoot());
 			Network.sendToServer(packet);

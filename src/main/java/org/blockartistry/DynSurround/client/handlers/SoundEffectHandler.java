@@ -53,7 +53,6 @@ import org.blockartistry.lib.collections.ObjectArray;
 import com.google.common.base.Predicate;
 import gnu.trove.iterator.TObjectFloatIterator;
 import gnu.trove.map.hash.TObjectFloatHashMap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -196,17 +195,13 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		return SoundEngine.instance().isSoundPlaying(soundId);
 	}
 
-	protected boolean doRouting() {
-		return DSurround.isInstalledOnServer() && !Minecraft.getMinecraft().isIntegratedServerRunning();
-	}
-
 	@Nullable
 	public String playSound(@Nonnull final BasicSound<?> sound) {
 		if (sound == null || !sound.canSoundBeHeard(EnvironState.getPlayerPosition()))
 			return null;
 
 		// If it is a routable sound do so if possible
-		if (sound.shouldRoute() && doRouting())
+		if (sound.shouldRoute() && DSurround.routePacketToServer())
 			this.sendToServer.add(sound);
 
 		return SoundEngine.instance().playSound(sound);
