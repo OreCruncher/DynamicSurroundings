@@ -237,8 +237,6 @@ public class FootstepsRegistry extends Registry {
 		}
 
 		this.isolator.setAcoustics(acoustics);
-		this.isolator.setSoundPlayer(acoustics);
-		this.isolator.setDefaultStepPlayer(acoustics);
 	}
 
 	private void seedMap() {
