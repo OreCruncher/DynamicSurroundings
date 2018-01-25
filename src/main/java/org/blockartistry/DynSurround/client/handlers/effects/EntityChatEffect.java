@@ -196,10 +196,14 @@ public class EntityChatEffect extends EntityEffect {
 			if (delta <= 0) {
 				final SpeechTextEvent event = new SpeechTextEvent(entity.getEntityId(), this.getChatMessage(), true);
 				MinecraftForge.EVENT_BUS.post(event);
-				this.nextChat = ticks + getNextChatTime();
+				this.genNextChatTime();
 			}
 		}
 
+	}
+	
+	public void genNextChatTime() {
+		this.nextChat = getWorldTicks(this.getState().subject().get()) + getNextChatTime();
 	}
 
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
