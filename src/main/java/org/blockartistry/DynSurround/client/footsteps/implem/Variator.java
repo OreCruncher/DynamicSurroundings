@@ -28,17 +28,31 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public final class NormalVariator {
-	
-	public int IMMOBILE_DURATION = 200;
-	public boolean EVENT_ON_JUMP = true;
-	public float LAND_HARD_DISTANCE_MIN = 0.9f;
-	public float SPEED_TO_JUMP_AS_MULTIFOOT = 0.005f;
-	public float SPEED_TO_RUN = 0.022f;
-	public float DISTANCE_HUMAN = 0.95f;
-	public float DISTANCE_STAIR = 0.95f * 0.65f;
-	public float DISTANCE_LADDER = 0.5f;
-	public boolean PLAY_WANDER = true;
+public enum Variator {
+
+	NORMAL() {
+		{
+			IMMOBILE_DURATION = 200;
+			EVENT_ON_JUMP = true;
+			LAND_HARD_DISTANCE_MIN = 0.9f;
+			SPEED_TO_JUMP_AS_MULTIFOOT = 0.005f;
+			SPEED_TO_RUN = 0.022f;
+			DISTANCE_HUMAN = 0.95f;
+			DISTANCE_STAIR = 0.95f * 0.65f;
+			DISTANCE_LADDER = 0.5f;
+			PLAY_WANDER = true;
+		}
+	};
+
+	public int IMMOBILE_DURATION;
+	public boolean EVENT_ON_JUMP;
+	public float LAND_HARD_DISTANCE_MIN;
+	public float SPEED_TO_JUMP_AS_MULTIFOOT;
+	public float SPEED_TO_RUN;
+	public float DISTANCE_HUMAN;
+	public float DISTANCE_STAIR;
+	public float DISTANCE_LADDER;
+	public boolean PLAY_WANDER;
 
 	// public boolean FORCE_HUMANOID = false;
 	// public boolean GALLOP_3STEP = true;
