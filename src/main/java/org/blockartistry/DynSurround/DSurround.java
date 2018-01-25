@@ -38,6 +38,7 @@ import org.blockartistry.lib.Localization;
 import org.blockartistry.lib.VersionChecker;
 import org.blockartistry.lib.logging.ModLog;
 
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -60,17 +61,9 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToSe
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.common.network.NetworkCheckHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-@net.minecraftforge.fml.common.Mod(
-		modid = DSurround.MOD_ID,
-		useMetadata = true,
-		dependencies = DSurround.DEPENDENCIES,
-		version = DSurround.VERSION,
-		acceptedMinecraftVersions = DSurround.MINECRAFT_VERSIONS,
-		guiFactory = DSurround.GUI_FACTORY,
-		updateJSON = DSurround.UPDATE_URL,
-		certificateFingerprint = DSurround.FINGERPRINT
-)
+@net.minecraftforge.fml.common.Mod(modid = DSurround.MOD_ID, useMetadata = true, dependencies = DSurround.DEPENDENCIES, version = DSurround.VERSION, acceptedMinecraftVersions = DSurround.MINECRAFT_VERSIONS, guiFactory = DSurround.GUI_FACTORY, updateJSON = DSurround.UPDATE_URL, certificateFingerprint = DSurround.FINGERPRINT)
 public class DSurround {
 	public static final String MOD_ID = "dsurround";
 	public static final String API_ID = MOD_ID + "API";
@@ -117,9 +110,14 @@ public class DSurround {
 	public static File dataDirectory() {
 		return dataDirectory;
 	}
-	
+
 	public static boolean isInstalledOnServer() {
 		return installedOnServer;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static boolean routePacketToServer() {
+		return DSurround.isInstalledOnServer() && !Minecraft.getMinecraft().isIntegratedServerRunning();
 	}
 
 	public DSurround() {
@@ -163,7 +161,8 @@ public class DSurround {
 				data.name = Localization.format("dsurround.metadata.Name");
 				data.credits = Localization.format("dsurround.metadata.Credits");
 				data.description = Localization.format("dsurround.metadata.Description");
-				data.authorList = Arrays.asList(StringUtils.split(Localization.format("dsurround.metadata.Authors"), ','));
+				data.authorList = Arrays
+						.asList(StringUtils.split(Localization.format("dsurround.metadata.Authors"), ','));
 			}
 		}
 	}
@@ -173,17 +172,17 @@ public class DSurround {
 		proxy.loadCompleted(event);
 	}
 
-    @EventHandler
-    public void onFingerprintViolation(@Nonnull final FMLFingerprintViolationEvent event) {
-        log().warn("Invalid fingerprint detected!");
-    }
-    
+	@EventHandler
+	public void onFingerprintViolation(@Nonnull final FMLFingerprintViolationEvent event) {
+		log().warn("Invalid fingerprint detected!");
+	}
+
 	////////////////////////
 	//
 	// Client state events
 	//
 	////////////////////////
-	
+
 	@NetworkCheckHandler
 	public boolean checkModLists(@Nonnull final Map<String, String> modList, @Nonnull final Side side) {
 		if (side == Side.SERVER) {
