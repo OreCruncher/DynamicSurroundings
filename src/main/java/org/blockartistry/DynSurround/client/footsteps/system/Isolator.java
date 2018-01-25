@@ -39,7 +39,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class Isolator {
 	private AcousticsManager acoustics;
-	private Solver solver;
 	private BlockMap blockMap;
 	private PrimitiveMap primitiveMap;
 
@@ -68,11 +67,6 @@ public class Isolator {
 	}
 
 	@Nonnull
-	public Solver getSolver() {
-		return this.solver;
-	}
-
-	@Nonnull
 	public BlockMap getBlockMap() {
 		return this.blockMap;
 	}
@@ -96,10 +90,6 @@ public class Isolator {
 
 	public void setAcoustics(@Nonnull final AcousticsManager acoustics) {
 		this.acoustics = acoustics;
-	}
-
-	public void setSolver(@Nonnull final Solver solver) {
-		this.solver = solver;
 	}
 
 	public void setBlockMap(@Nonnull final BlockMap blockMap) {
