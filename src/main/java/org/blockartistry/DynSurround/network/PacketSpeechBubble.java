@@ -42,6 +42,11 @@ public class PacketSpeechBubble implements IMessage {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketSpeechBubble message, @Nullable final MessageContext ctx) {
+			
+			// Reject mob chat messages since they are generated 100% client side.
+			if(message.translate)
+				return null;
+			
 			Network.postEvent(new SpeechTextEvent(message.entityId, message.message, message.translate));
 			return null;
 		}
