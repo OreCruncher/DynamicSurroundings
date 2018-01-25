@@ -56,6 +56,8 @@ public enum ModEnvironment {
 	//
 	CoFHCore("cofhcore"),
 	//
+	AmbientSounds("ambientsounds"),
+	//
 	SoundPhysics("soundphysics");
 	
 	protected final String modId;
