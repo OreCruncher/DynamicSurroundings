@@ -34,6 +34,7 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -64,7 +65,7 @@ public class ProbabilityWeightsAcoustic implements IAcoustic {
 	}
 	
 	@Override
-	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Object location, @Nonnull final EventType event,
+	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final EntityLivingBase location, @Nonnull final EventType event,
 			@Nullable final IOptions inputOptions) {
 		if (this.totalWeight <= 0)
 			return;

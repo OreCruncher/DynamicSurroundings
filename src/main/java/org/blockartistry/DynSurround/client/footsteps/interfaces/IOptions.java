@@ -24,6 +24,9 @@
 
 package org.blockartistry.DynSurround.client.footsteps.interfaces;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -38,10 +41,11 @@ public interface IOptions {
 		
 	};
 	
-	public boolean hasOption(final Option option);
+	public boolean hasOption(@Nonnull final Option option);
 	
-	public long asLong(final Option option);
-	public float asFloat(final Option option);
+	public long asLong(@Nonnull final Option option);
+	public float asFloat(@Nonnull final Option option);
 
-	public Object getOption(final Option option);
+	@Nullable
+	public Object getOption(@Nonnull final Option option);
 }

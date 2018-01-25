@@ -36,6 +36,7 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
@@ -54,7 +55,7 @@ public class EventSelectorAcoustics implements IAcoustic {
 	}
 
 	@Override
-	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Object location,
+	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final EntityLivingBase location,
 			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
 		final IAcoustic acoustic = this.pairs.get(event);
 		if (acoustic != null)
