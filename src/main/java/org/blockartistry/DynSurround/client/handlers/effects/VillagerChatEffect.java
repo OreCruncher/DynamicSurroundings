@@ -88,7 +88,12 @@ public class VillagerChatEffect extends EntityEffect {
 
 		final Optional<Entity> e = this.getState().subject();
 		if (e.isPresent()) {
-			final Entity entity = e.get();
+
+			// Children don't speak - makes them suspicious...
+			final EntityVillager entity = (EntityVillager) e.get();
+			if (entity.isChild())
+				return;
+			
 			if (this.villagerThreatened(entity)) {
 				this.runningScared = true;
 				this.fleeChat.update();
