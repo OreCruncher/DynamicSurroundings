@@ -42,7 +42,7 @@ public interface IEntityEffectState extends IEffectState {
 	 */
 	@Nonnull
 	Optional<Entity> subject();
-
+	
 	/**
 	 * Determines the distance between the Entity subject and the specified Entity.
 	 * 

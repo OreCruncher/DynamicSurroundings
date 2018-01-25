@@ -70,7 +70,7 @@ public class Generator {
 	protected static final IBlockState AIR_STATE = Blocks.AIR.getDefaultState();
 
 	protected final Isolator isolator;
-	protected final Variator VAR = Variator.NORMAL;
+	protected final Variator VAR;
 	protected final FootstepsRegistry registry = RegistryManager.<FootstepsRegistry>get(RegistryType.FOOTSTEPS);
 
 	protected float dmwBase;
@@ -94,8 +94,12 @@ public class Generator {
 	protected boolean isMessyFoliage;
 	protected long brushesTime;
 
-	public Generator(@Nonnull final Isolator isolator) {
+	// We calc our own because of inconsistencies with Minecraft
+	protected double distanceWalkedOnStepModified;
+
+	public Generator(@Nonnull final Isolator isolator, @Nonnull final Variator var) {
 		this.isolator = isolator;
+		this.VAR = var;
 	}
 
 	public void generateFootsteps(@Nonnull final EntityLivingBase entity) {
@@ -124,8 +128,19 @@ public class Generator {
 		return false;
 	}
 
+	protected void updateWalkedOnStep(@Nonnull final EntityLivingBase entity) {
+		final double dX = entity.posX - entity.prevPosX;
+		final double dY = entity.posY - entity.prevPosY;
+		final double dZ = entity.posZ - entity.prevPosZ;
+		this.distanceWalkedOnStepModified += Math.sqrt(dX * dX + dY * dY + dZ * dZ);
+	}
+
 	protected void simulateFootsteps(@Nonnull final EntityLivingBase ply) {
-		final float distanceReference = ply.distanceWalkedOnStepModified;
+
+		updateWalkedOnStep(ply);
+
+		final float distanceReference = (float) this.distanceWalkedOnStepModified;
+		// final float distanceReference = ply.distanceWalkedOnStepModified;
 
 		this.stepThisFrame = false;
 
@@ -162,12 +177,12 @@ public class Generator {
 			float distance = 0f;
 
 			if (ply.isOnLadder() && !ply.onGround) {
-				distance = VAR.DISTANCE_LADDER;
+				distance = VAR.STRIDE_LADDER;
 			} else if (!ply.isInWater() && MathStuff.abs(this.yPosition - ply.posY) > 0.4d) {
 				// This ensures this does not get recorded as landing, but as a
 				// step
 				if (this.yPosition < ply.posY) { // Going upstairs
-					distance = VAR.DISTANCE_STAIR;
+					distance = VAR.STRIDE_STAIR;
 					event = speedDisambiguator(ply, EventType.UP, EventType.UP_RUN);
 				} else if (!ply.isSneaking()) { // Going downstairs
 					distance = -1f;
@@ -177,7 +192,7 @@ public class Generator {
 				this.dwmYChange = distanceReference;
 
 			} else {
-				distance = VAR.DISTANCE_HUMAN;
+				distance = VAR.STRIDE;
 			}
 
 			if (event == null) {
@@ -424,7 +439,7 @@ public class Generator {
 			@Nonnull final BlockPos pos) {
 
 		final World world = player.getEntityWorld();
-		
+
 		if (player.isInWater())
 			DSurround.log().debug(
 					"WARNING!!! Playing a sound while in the water! This is supposed to be halted by the stopping conditions!!");
@@ -520,7 +535,8 @@ public class Generator {
 			if (in == AIR_STATE) {
 				tPos = pos.down();
 				final IBlockState below = WorldUtils.getBlockState(world, tPos);
-				association = this.registry.getBlockMap().getBlockSubstrateAcoustics(world, below, tPos, Substrate.FENCE);
+				association = this.registry.getBlockMap().getBlockSubstrateAcoustics(world, below, tPos,
+						Substrate.FENCE);
 				if (association != null) {
 					pos = tPos;
 					in = below;
@@ -690,13 +706,15 @@ public class Generator {
 		 * block of code is here, not outside this if else group.
 		 */
 
-		IAcoustic[] foliage = this.registry.getBlockMap().getBlockSubstrateAcoustics(world, above, up, Substrate.FOLIAGE);
+		IAcoustic[] foliage = this.registry.getBlockMap().getBlockSubstrateAcoustics(world, above, up,
+				Substrate.FOLIAGE);
 		if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 			// we discard the normal block association, and mark the foliage as
 			// detected
 			// association = association + "," + foliage;
 			association = foliage;
-			IAcoustic[] isMessy = this.registry.getBlockMap().getBlockSubstrateAcoustics(world, above, up, Substrate.MESSY);
+			IAcoustic[] isMessy = this.registry.getBlockMap().getBlockSubstrateAcoustics(world, above, up,
+					Substrate.MESSY);
 
 			if (isMessy != null && isMessy == AcousticsManager.MESSY_GROUND)
 				found = true;
