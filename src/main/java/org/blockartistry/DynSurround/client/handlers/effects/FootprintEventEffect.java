@@ -21,8 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package org.blockartistry.DynSurround.client.handlers;
+package org.blockartistry.DynSurround.client.handlers.effects;
 
 import javax.annotation.Nonnull;
 
@@ -30,55 +29,28 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.FootstepEvent;
 import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.DynSurround.registry.BlockRegistry;
-import org.blockartistry.DynSurround.registry.FootstepsRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.lib.effects.EventEffect;
+import org.blockartistry.lib.effects.IEventEffectLibraryState;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class FootstepsHandler extends EffectHandlerBase {
+public class FootprintEventEffect extends EventEffect {
 
-	protected final FootstepsRegistry footsteps;
-	protected final BlockRegistry registry;
-
-	public FootstepsHandler() {
-		super("FootstepsHandler");
-
-		this.footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
-		this.registry = RegistryManager.<BlockRegistry>get(RegistryType.BLOCK);
-}
-
-	@Override
-	public void process(@Nonnull final EntityPlayer player) {
-		this.footsteps.process(player.world, player);
-		
-		if (EnvironState.isPlayerOnGround() && EnvironState.isPlayerMoving()) {
-			final BlockPos pos = EnvironState.getPlayerPosition().down(1);
-			final IBlockState state = WorldUtils.getBlockState(player.world, pos);
-			final SoundEffect sound = this.registry.getStepSoundToPlay(state, RANDOM);
-			if (sound != null)
-				sound.doEffect(WorldUtils.getDefaultBlockStateProvider(), state, pos, RANDOM);
-		}
-
+	public FootprintEventEffect(@Nonnull final IEventEffectLibraryState state) {
+		super(state);
 	}
 
 	@SubscribeEvent
-	public void onDisplayFootstep(@Nonnull final FootstepEvent.Display event) {
+	public void onEvent(@Nonnull final FootstepEvent.Display event) {
 		if (ModOptions.enableFootprints) {
 			final Vec3d stepLoc = event.location;
 			ParticleCollections.addFootprint(EnvironState.getWorld(), stepLoc.x, stepLoc.y, stepLoc.z,
 					event.rotation, event.isRightFoot);
 		}
-
 	}
+
 }
