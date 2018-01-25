@@ -41,6 +41,7 @@ import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.DynSurround.client.footsteps.implem.Manifest;
 import org.blockartistry.DynSurround.client.footsteps.implem.PrimitiveMap;
+import org.blockartistry.DynSurround.client.footsteps.implem.Variator;
 import org.blockartistry.DynSurround.client.footsteps.parsers.AcousticsJsonReader;
 import org.blockartistry.DynSurround.client.footsteps.system.Generator;
 import org.blockartistry.DynSurround.client.footsteps.system.GeneratorQP;
@@ -70,6 +71,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemBlockSpecial;
@@ -276,9 +279,20 @@ public class FootstepsRegistry extends Registry {
 			}
 		}
 	}
-	
+
 	public Generator createGenerator(@Nonnull final EntityLivingBase entity) {
-		return ModOptions.foostepsQuadruped ? new GeneratorQP(this.isolator) : new Generator(this.isolator);
+		Generator result;
+		if (entity instanceof EntityVillager) {
+			result = new Generator(this.isolator, Variator.VILLAGER);
+		} else if (entity instanceof EntityPlayer) {
+			if (ModOptions.foostepsQuadruped)
+				result = new GeneratorQP(this.isolator, Variator.PLAYER);
+			else
+				result = new Generator(this.isolator, Variator.PLAYER);
+		} else {
+			result = new Generator(this.isolator, Variator.DEFAULT);
+		}
+		return result;
 	}
 
 	public void think() {

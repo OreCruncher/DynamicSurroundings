@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.footsteps.system;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.footsteps.implem.Variator;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -40,8 +41,8 @@ public class GeneratorQP extends Generator {
 	private int hoof = 0;
 	private float nextWalkDistanceMultiplier = 0.05f;
 
-	public GeneratorQP(@Nonnull final Isolator isolator) {
-		super(isolator);
+	public GeneratorQP(@Nonnull final Isolator isolator, @Nonnull final Variator var) {
+		super(isolator, var);
 	}
 
 	@Override

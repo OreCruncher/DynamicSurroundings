@@ -27,6 +27,7 @@ package org.blockartistry.DynSurround.client.sound;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -54,10 +55,11 @@ public class FootstepSound extends BasicSound<FootstepSound> {
 	public FootstepSound(@Nonnull final Entity player, @Nonnull final SoundEvent event) {
 		super(event, SoundCategory.PLAYERS);
 
+		this.setRoutable(false);
 		this.setPosition(player);
 		this.setVolumeScale(FOOTSTEP);
-		this.setRoutable(true);
-		this.setAttenuationType(noAttenuation());
+		if (EnvironState.isPlayer(player))
+			this.setAttenuationType(noAttenuation());
 	}
 
 }

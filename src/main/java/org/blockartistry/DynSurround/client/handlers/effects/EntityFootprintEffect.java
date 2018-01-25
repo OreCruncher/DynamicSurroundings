@@ -47,7 +47,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -78,15 +78,15 @@ public class EntityFootprintEffect extends EntityEffect {
 
 	@Override
 	public void update() {
-		final EntityPlayer player = this.getState().thePlayer().get();
-		if (player == null)
+		final EntityLivingBase entity = (EntityLivingBase) this.getState().subject().get();
+		if (entity == null)
 			return;
 
-		this.generator.generateFootsteps(player);
+		this.generator.generateFootsteps(entity);
 
-		if (player.onGround && isMoving(player)) {
-			final BlockPos pos = player.getPosition().down(1);
-			final IBlockState bs = WorldUtils.getBlockState(player.worldObj, pos);
+		if (entity.onGround && isMoving(entity)) {
+			final BlockPos pos = entity.getPosition().down(1);
+			final IBlockState bs = WorldUtils.getBlockState(entity.getEntityWorld(), pos);
 			final SoundEffect sound = this.registry.getStepSoundToPlay(bs, RANDOM);
 			if (sound != null)
 				sound.doEffect(WorldUtils.getDefaultBlockStateProvider(), bs, pos, RANDOM);
@@ -98,7 +98,7 @@ public class EntityFootprintEffect extends EntityEffect {
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
 		public boolean applies(@Nonnull final Entity e) {
-			return EnvironState.isPlayer(e);
+			return EnvironState.isPlayer(e) || e instanceof EntityVillager;
 		}
 	};
 
