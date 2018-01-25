@@ -21,14 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.blockartistry.DynSurround.client.handlers.effects;
 
-package org.blockartistry.DynSurround.client.handlers;
+import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.api.events.FootstepEvent;
-import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.BlockRegistry;
@@ -36,49 +35,69 @@ import org.blockartistry.DynSurround.registry.FootstepsRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.lib.effects.IEntityEffect;
+import org.blockartistry.lib.effects.IEntityEffectFactory;
+import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
+import org.blockartistry.lib.effects.IEntityEffectHandlerState;
+import org.blockartistry.lib.random.XorShiftRandom;
+
+import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class FootstepsHandler extends EffectHandlerBase {
+public class EntityFootprintEffect implements IEntityEffect {
 
-	protected final FootstepsRegistry footsteps;
-	protected final BlockRegistry registry;
+	protected static final Random RANDOM = XorShiftRandom.current();
 
-	public FootstepsHandler() {
-		super("FootstepsHandler");
+	protected final FootstepsRegistry footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
+	protected final BlockRegistry registry = RegistryManager.<BlockRegistry>get(RegistryType.BLOCK);;
 
-		this.footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
-		this.registry = RegistryManager.<BlockRegistry>get(RegistryType.BLOCK);
+	public EntityFootprintEffect() {
+
 	}
 
+	protected boolean isMoving(@Nonnull final Entity entity) {
+		return entity.distanceWalkedModified != entity.prevDistanceWalkedModified;
+	}
+	
 	@Override
-	public void process(@Nonnull final EntityPlayer player) {
+	public void update(@Nonnull final IEntityEffectHandlerState state) {
+		final EntityPlayer player = state.thePlayer().get();
+		if (player == null)
+			return;
+
 		this.footsteps.process(player.worldObj, player);
 
-		if (EnvironState.isPlayerOnGround() && EnvironState.isPlayerMoving()) {
-			final BlockPos pos = EnvironState.getPlayerPosition().down(1);
-			final IBlockState state = WorldUtils.getBlockState(player.worldObj, pos);
-			final SoundEffect sound = this.registry.getStepSoundToPlay(state, RANDOM);
+		if (player.onGround && isMoving(player)) {
+			final BlockPos pos = player.getPosition().down(1);
+			final IBlockState bs = WorldUtils.getBlockState(player.worldObj, pos);
+			final SoundEffect sound = this.registry.getStepSoundToPlay(bs, RANDOM);
 			if (sound != null)
-				sound.doEffect(WorldUtils.getDefaultBlockStateProvider(), state, pos, RANDOM);
+				sound.doEffect(WorldUtils.getDefaultBlockStateProvider(), bs, pos, RANDOM);
 		}
-
 	}
 
-	@SubscribeEvent
-	public void onDisplayFootstep(@Nonnull final FootstepEvent.Display event) {
-		if (ModOptions.enableFootprints) {
-			final Vec3d stepLoc = event.location;
-			ParticleCollections.addFootprint(EnvironState.getWorld(), stepLoc.xCoord, stepLoc.yCoord, stepLoc.zCoord,
-					event.rotation, event.isRightFoot);
+	// Currently restricted to the active player.  Have stuff to unwind in the 
+	// footprint code.
+	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
+		@Override
+		public boolean applies(@Nonnull final Entity e) {
+			return EnvironState.isPlayer(e);
 		}
+	};
 
+	public static class Factory implements IEntityEffectFactory {
+
+		@Override
+		public List<IEntityEffect> create(@Nonnull final Entity entity) {
+			return ImmutableList.of(new EntityFootprintEffect());
+		}
 	}
+
 }

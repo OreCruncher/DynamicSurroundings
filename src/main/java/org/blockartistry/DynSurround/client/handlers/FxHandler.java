@@ -38,6 +38,8 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.client.handlers.effects.BowSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.CraftingSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.EntityChatEffect;
+import org.blockartistry.DynSurround.client.handlers.effects.EntityFootprintEffect;
+import org.blockartistry.DynSurround.client.handlers.effects.FootprintEventEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.FrostBreathEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.ItemSwingSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.PlayerJumpSoundEffect;
@@ -64,6 +66,7 @@ public class FxHandler extends EffectHandlerBase {
 		library.register(EntityChatEffect.DEFAULT_FILTER, new EntityChatEffect.Factory());
 		library.register(VillagerChatEffect.DEFAULT_FILTER, new VillagerChatEffect.Factory());
 		library.register(PlayerToolBarSoundEffect.DEFAULT_FILTER, new PlayerToolBarSoundEffect.Factory());
+		library.register(EntityFootprintEffect.DEFAULT_FILTER, new EntityFootprintEffect.Factory());
 	}
 
 	private final Map<UUID, EntityEffectHandler> handlers = new HashMap<UUID, EntityEffectHandler>();
@@ -116,6 +119,7 @@ public class FxHandler extends EffectHandlerBase {
 		this.eventLibrary.register(new BowSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new ItemSwingSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new PopoffEventEffect(this.eventLibrary));
+		this.eventLibrary.register(new FootprintEventEffect(this.eventLibrary));
 	}
 
 	@Override
