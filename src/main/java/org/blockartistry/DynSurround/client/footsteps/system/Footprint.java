@@ -27,6 +27,7 @@ package org.blockartistry.DynSurround.client.footsteps.system;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -34,18 +35,24 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class Footprint {
 
+	private EntityLivingBase entity;
 	private Vec3d stepLoc;
 	private boolean isRightFoot;
 	private float rotation;
 
-	public static Footprint produce(@Nonnull final Vec3d stepLoc, final float rotation, final boolean rightFoot) {
+	public static Footprint produce(@Nonnull final EntityLivingBase entity, @Nonnull final Vec3d stepLoc, final float rotation, final boolean rightFoot) {
 		final Footprint print = new Footprint();
+		print.entity = entity;
 		print.stepLoc = stepLoc;
 		print.rotation = rotation;
 		print.isRightFoot = rightFoot;
 		return print;
 	}
 
+	public EntityLivingBase getEntity() {
+		return this.entity;
+	}
+	
 	@Nullable
 	public Vec3d getStepLocation() {
 		return this.stepLoc;

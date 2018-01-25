@@ -157,7 +157,7 @@ public abstract class DataProxy extends Observable {
 			final BlockMap bm = footsteps.getBlockMap();
 			if (bm != null) {
 				final List<String> data = new ArrayList<String>();
-				bm.collectData(this.state, this.targetBlock, data);
+				bm.collectData(EnvironState.getWorld(), this.state, this.targetBlock, data);
 				result.addAll(data);
 			}
 			return result;

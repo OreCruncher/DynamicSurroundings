@@ -43,7 +43,6 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions.Option
 import org.blockartistry.DynSurround.client.footsteps.system.Association;
 import org.blockartistry.DynSurround.client.footsteps.system.Footprint;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.FootstepSound;
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.network.PacketDisplayFootprint;
@@ -62,6 +61,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -105,9 +105,9 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		MinecraftForge.EVENT_BUS.post(event);
 
 		// Route message to server if installed
-		if (!EnvironState.isPlayerSneaking() && DSurround.routePacketToServer()) {
-			final PacketDisplayFootprint packet = new PacketDisplayFootprint(EnvironState.getPlayer(),
-					print.getStepLocation(), print.getRotation(), print.isRightFoot());
+		if (!print.getEntity().isSneaking() && DSurround.routePacketToServer()) {
+			final PacketDisplayFootprint packet = new PacketDisplayFootprint(print.getEntity(), print.getStepLocation(),
+					print.getRotation(), print.isRightFoot());
 			Network.sendToServer(packet);
 		}
 	}
@@ -176,7 +176,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 			SoundType soundType = assos.getSoundType();
 			if (!assos.isLiquid() && assos.getSoundType() != null) {
 
-				if (WorldUtils.getBlockState(EnvironState.getWorld(), assos.getPos().up())
+				if (WorldUtils.getBlockState(entity.getEntityWorld(), assos.getPos().up())
 						.getBlock() == Blocks.SNOW_LAYER) {
 					soundType = MCHelper.getSoundType(Blocks.SNOW_LAYER);
 				}
@@ -211,12 +211,12 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		}
 	}
 
-	protected void actuallyPlaySound(@Nonnull final EntityLivingBase location, @Nonnull final SoundEvent sound,
+	protected void actuallyPlaySound(@Nonnull final EntityLivingBase entity, @Nonnull final SoundEvent sound,
 			final float volume, final float pitch) {
 
 		try {
-			final FootstepSound s = new FootstepSound(location, sound).setVolume(volume).setPitch(pitch);
-			if (EnvironState.isPlayerSneaking())
+			final FootstepSound s = new FootstepSound(entity, sound).setVolume(volume).setPitch(pitch);
+			if (entity.isSneaking())
 				s.setRoutable(false);
 			SoundEffectHandler.INSTANCE.playSound(s);
 		} catch (final Throwable t) {
@@ -254,9 +254,10 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		if (!this.footprints.isEmpty()) {
 			for (int i = 0; i < this.footprints.size(); i++) {
 				final Footprint print = this.footprints.get(i);
-				if (WorldUtils.isSolidBlock(EnvironState.getWorld(),
+				final World world = print.getEntity().getEntityWorld();
+				if (WorldUtils.isSolidBlock(world,
 						BlockPosHelper.setPos(this.stepCheck, print.getStepLocation()).move(EnumFacing.DOWN, 1))) {
-					produceFootprint(EnvironState.getDimensionId(), print);
+					produceFootprint(world.provider.getDimension(), print);
 				}
 			}
 			this.footprints.clear();
