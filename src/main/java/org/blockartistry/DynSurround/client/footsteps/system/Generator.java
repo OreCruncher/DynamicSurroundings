@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.implem.ConfigOptions;
 import org.blockartistry.DynSurround.client.footsteps.implem.Variator;
@@ -42,9 +43,6 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions.Option
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.DynSurround.registry.ArmorClass;
-import org.blockartistry.DynSurround.registry.FootstepsRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.TimeUtils;
@@ -72,7 +70,6 @@ public class Generator {
 
 	protected final Isolator isolator;
 	protected final Variator VAR;
-	protected final FootstepsRegistry registry = RegistryManager.<FootstepsRegistry>get(RegistryType.FOOTSTEPS);
 
 	protected float dmwBase;
 	protected float dwmYChange;
@@ -358,7 +355,7 @@ public class Generator {
 		if (state != null) {
 			final IBlockState footstepState = FacadeHelper.resolveState(state, EnvironState.getWorld(), pos,
 					EnumFacing.UP);
-			return this.registry.hasFootprint(footstepState);
+			return ClientRegistry.FOOTSTEPS.hasFootprint(footstepState);
 		}
 
 		return false;
@@ -526,7 +523,7 @@ public class Generator {
 		IAcoustic[] association = null;
 
 		if (above != AIR_STATE)
-			association = this.registry.getBlockMap().getBlockSubstrateAcoustics(world, above, tPos, Substrate.CARPET);
+			association = ClientRegistry.FOOTSTEPS.getBlockMap().getBlockSubstrateAcoustics(world, above, tPos, Substrate.CARPET);
 
 		if (association == null || association == AcousticsManager.NOT_EMITTER) {
 			// This condition implies that if the carpet is NOT_EMITTER, solving
@@ -536,7 +533,7 @@ public class Generator {
 			if (in == AIR_STATE) {
 				tPos = pos.down();
 				final IBlockState below = WorldUtils.getBlockState(world, tPos);
-				association = this.registry.getBlockMap().getBlockSubstrateAcoustics(world, below, tPos,
+				association = ClientRegistry.FOOTSTEPS.getBlockMap().getBlockSubstrateAcoustics(world, below, tPos,
 						Substrate.FENCE);
 				if (association != null) {
 					pos = tPos;
@@ -546,7 +543,7 @@ public class Generator {
 			}
 
 			if (association == null) {
-				association = this.registry.getBlockMap().getBlockAcoustics(world, in, pos);
+				association = ClientRegistry.FOOTSTEPS.getBlockMap().getBlockAcoustics(world, in, pos);
 			}
 
 			if (association != null && association != AcousticsManager.NOT_EMITTER) {
@@ -557,7 +554,7 @@ public class Generator {
 				// if else group.
 
 				if (above != AIR_STATE) {
-					IAcoustic[] foliage = this.registry.getBlockMap().getBlockSubstrateAcoustics(world, above, pos.up(),
+					IAcoustic[] foliage = ClientRegistry.FOOTSTEPS.getBlockMap().getBlockSubstrateAcoustics(world, above, pos.up(),
 							Substrate.FOLIAGE);
 					if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 						association = MyUtils.concatenate(association, foliage);
@@ -707,14 +704,14 @@ public class Generator {
 		 * block of code is here, not outside this if else group.
 		 */
 
-		IAcoustic[] foliage = this.registry.getBlockMap().getBlockSubstrateAcoustics(world, above, up,
+		IAcoustic[] foliage = ClientRegistry.FOOTSTEPS.getBlockMap().getBlockSubstrateAcoustics(world, above, up,
 				Substrate.FOLIAGE);
 		if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 			// we discard the normal block association, and mark the foliage as
 			// detected
 			// association = association + "," + foliage;
 			association = foliage;
-			IAcoustic[] isMessy = this.registry.getBlockMap().getBlockSubstrateAcoustics(world, above, up,
+			IAcoustic[] isMessy = ClientRegistry.FOOTSTEPS.getBlockMap().getBlockSubstrateAcoustics(world, above, up,
 					Substrate.MESSY);
 
 			if (isMessy != null && isMessy == AcousticsManager.MESSY_GROUND)
