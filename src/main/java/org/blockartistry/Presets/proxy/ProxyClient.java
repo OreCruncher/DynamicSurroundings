@@ -57,7 +57,8 @@ public class ProxyClient extends Proxy {
 		"presets_level3",
 		"dsurround_skyblock",
 		"dsurround_emojis",
-		"dsurround_turnalloff"
+		"dsurround_turnalloff",
+		"dsurround_ponies"
 	};
 	
 	@Override
@@ -70,7 +71,7 @@ public class ProxyClient extends Proxy {
 		register(MinecraftConfigHandler.class);
 		register(KeyHandler.class);
 	}
-
+	
 	@Override
 	public boolean isRunningAsServer() {
 		return false;
