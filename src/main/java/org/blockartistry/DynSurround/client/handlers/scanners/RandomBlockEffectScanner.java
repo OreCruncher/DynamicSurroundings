@@ -29,12 +29,10 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.BlockProfile;
-import org.blockartistry.DynSurround.registry.BlockRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.scanner.RandomScanner;
 
 import net.minecraft.block.state.IBlockState;
@@ -53,7 +51,6 @@ public class RandomBlockEffectScanner extends RandomScanner {
 	// config files it tuned to this existing behavior.
 	private static final float RATIO = 1000.0F / (16.0F * 16.0F * 16.0F);
 
-	protected final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
 	protected BlockProfile profile = null;
 	protected IBlockState lastState = null;
 
@@ -68,7 +65,7 @@ public class RandomBlockEffectScanner extends RandomScanner {
 			return false;
 		if (this.lastState != state) {
 			this.lastState = state;
-			this.profile = this.blocks.findProfile(state);
+			this.profile = ClientRegistry.BLOCK.findProfile(state);
 		}
 		return this.profile.hasSoundsOrEffects();
 	}

@@ -29,11 +29,9 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.DynSurround.registry.BlockProfile;
-import org.blockartistry.DynSurround.registry.BlockRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.scanner.CuboidScanner;
 
 import net.minecraft.block.state.IBlockState;
@@ -52,7 +50,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 
-	protected final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
 	protected BlockProfile profile = null;
 	protected IBlockState lastState = null;
 
@@ -67,7 +64,7 @@ public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 			return false;
 		if (this.lastState != state) {
 			this.lastState = state;
-			this.profile = this.blocks.findProfile(state);
+			this.profile = ClientRegistry.BLOCK.findProfile(state);
 		}
 		return this.profile.hasAlwaysOnEffects();
 	}

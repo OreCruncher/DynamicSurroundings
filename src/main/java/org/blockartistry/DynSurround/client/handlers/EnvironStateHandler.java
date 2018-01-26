@@ -32,6 +32,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.EnvironmentEvent;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.client.handlers.scanners.BattleScanner;
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
@@ -41,11 +42,9 @@ import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.DynSurround.registry.DimensionInfo;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.SeasonRegistry;
 import org.blockartistry.DynSurround.registry.SeasonType;
 import org.blockartistry.DynSurround.registry.TemperatureRating;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.MinecraftClock;
 import org.blockartistry.lib.PlayerUtils;
 import net.minecraft.client.Minecraft;
@@ -104,7 +103,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		private static void reset() {
-			final BiomeInfo WTF = RegistryManager.<BiomeRegistry>get(RegistryType.BIOME).WTF_INFO;
+			final BiomeInfo WTF = ClientRegistry.BIOME.WTF_INFO;
 			biomeName = StringUtils.EMPTY;
 			playerBiome = WTF;
 			truePlayerBiome = WTF;
@@ -135,9 +134,9 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		private static void tick(final World world, final EntityPlayer player) {
 
-			final BiomeRegistry biomes = RegistryManager.<BiomeRegistry>get(RegistryType.BIOME);
-			final SeasonRegistry seasons = RegistryManager.<SeasonRegistry>get(RegistryType.SEASON);
-			final DimensionRegistry dimensions = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION);
+			final BiomeRegistry biomes = ClientRegistry.BIOME;
+			final SeasonRegistry seasons = ClientRegistry.SEASON;
+			final DimensionRegistry dimensions = ClientRegistry.DIMENSION;
 			
 			EnvironState.player = player;
 			EnvironState.world = player.world;

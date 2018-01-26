@@ -35,9 +35,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.Permissions;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.ConfigProcessor;
 
 import net.minecraft.client.Minecraft;
@@ -193,7 +193,7 @@ public class DynSurroundConfigGui extends GuiConfig {
 			sounds.add(resource.toString());
 		Collections.sort(sounds);
 
-		final SoundRegistry registry = RegistryManager.get(RegistryType.SOUND);
+		final SoundRegistry registry = ClientRegistry.SOUND;
 		for (final String sound : sounds) {
 			final Property prop = new Property(sound, "", Property.Type.STRING);
 			prop.setDefaultValue("");

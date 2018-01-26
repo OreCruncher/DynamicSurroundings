@@ -37,10 +37,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.SoundRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.math.MathStuff;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;
@@ -85,7 +83,6 @@ public class SoundManagerReplacement extends SoundManager {
 
 	private static final int MAX_STREAM_CHANNELS = 16;
 	private final static float MUTE_VOLUME = 0.00001F;
-	private SoundRegistry registry = null;
 
 	public SoundManagerReplacement(final SoundHandler handler, final GameSettings settings) {
 		super(handler, settings);
@@ -344,10 +341,7 @@ public class SoundManagerReplacement extends SoundManager {
 
 	@Override
 	public float getClampedVolume(@Nonnull final ISound sound) {
-		if (this.registry == null)
-			this.registry = RegistryManager.get(RegistryType.SOUND);
-
-		final float volumeScale = this.registry.getVolumeScale(sound);
+		final float volumeScale = ClientRegistry.SOUND.getVolumeScale(sound);
 		final float volume = sound.getVolume() * getVolume(sound.getCategory()) * volumeScale;
 		float result = MathStuff.clamp(volume, 0.0F, 1.0F);
 

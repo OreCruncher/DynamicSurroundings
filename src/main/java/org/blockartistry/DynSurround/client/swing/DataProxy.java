@@ -28,17 +28,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.DynSurround.expression.ExpressionEngine;
-import org.blockartistry.DynSurround.registry.BlockRegistry;
-import org.blockartistry.DynSurround.registry.FootstepsRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.BlockInfo.BlockInfoMutable;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.expression.IDynamicVariant;
 
@@ -120,8 +117,6 @@ public abstract class DataProxy extends Observable {
 	@SideOnly(Side.CLIENT)
 	public static class ViewedBlockData extends DataProxy {
 
-		protected final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
-		protected final FootstepsRegistry footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
 		protected final BlockInfoMutable mutable = new BlockInfoMutable();
 
 		protected BlockPos targetBlock = BlockPos.ORIGIN;
@@ -154,7 +149,7 @@ public abstract class DataProxy extends Observable {
 
 		public List<String> getFootstepAcoustics() {
 			final List<String> result = new ArrayList<String>();
-			final BlockMap bm = footsteps.getBlockMap();
+			final BlockMap bm = ClientRegistry.FOOTSTEPS.getBlockMap();
 			if (bm != null) {
 				final List<String> data = new ArrayList<String>();
 				bm.collectData(EnvironState.getWorld(), this.state, this.targetBlock, data);
@@ -165,12 +160,12 @@ public abstract class DataProxy extends Observable {
 
 		public List<String> getBlockEffects() {
 			final List<String> result = new ArrayList<String>();
-			BlockEffect[] effects = this.blocks.getEffects(state);
+			BlockEffect[] effects = ClientRegistry.BLOCK.getEffects(state);
 			for (final BlockEffect e : effects) {
 				result.add(e.getEffectType().getName());
 			}
 
-			effects = this.blocks.getAlwaysOnEffects(state);
+			effects = ClientRegistry.BLOCK.getAlwaysOnEffects(state);
 			for (final BlockEffect e : effects) {
 				result.add(e.getEffectType().getName() + " (Always on)");
 			}
@@ -179,11 +174,11 @@ public abstract class DataProxy extends Observable {
 
 		public List<String> getBlockSounds() {
 			final List<String> result = new ArrayList<String>();
-			SoundEffect[] sounds = this.blocks.getAllSounds(this.state);
+			SoundEffect[] sounds = ClientRegistry.BLOCK.getAllSounds(this.state);
 			for (final SoundEffect s : sounds)
 				result.add(s.toString());
 
-			sounds = this.blocks.getAllStepSounds(this.state);
+			sounds = ClientRegistry.BLOCK.getAllStepSounds(this.state);
 			if (sounds.length > 0)
 				for (final SoundEffect s : sounds)
 					result.add(s.toString() + " (Step Sound)");

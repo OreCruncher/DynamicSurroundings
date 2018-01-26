@@ -31,13 +31,11 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.handlers.scanners.AlwaysOnBlockEffectScanner;
 import org.blockartistry.DynSurround.client.handlers.scanners.RandomBlockEffectScanner;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
-import org.blockartistry.DynSurround.registry.BiomeRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.math.MathStuff;
 
@@ -79,7 +77,6 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 
 	protected final RandomBlockEffectScanner effects = new RandomBlockEffectScanner(ModOptions.specialEffectRange);
 	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(ModOptions.specialEffectRange);
-	protected final BiomeRegistry registry;
 
 	static {
 
@@ -123,8 +120,6 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 
 	public AreaSurveyHandler() {
 		super("AreaSurveyEffectHandler");
-
-		this.registry = RegistryManager.<BiomeRegistry>get(RegistryType.BIOME);
 	}
 
 	/*
@@ -144,7 +139,7 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 				for (int dZ = -BIOME_SURVEY_RANGE; dZ <= BIOME_SURVEY_RANGE; dZ++) {
 					biomeArea++;
 					mutable.setPos(surveyedPosition.getX() + dX, surveyedPosition.getY(), surveyedPosition.getZ() + dZ);
-					final BiomeInfo biome = this.registry.get(world.getBiome(mutable));
+					final BiomeInfo biome = ClientRegistry.BIOME.get(world.getBiome(mutable));
 					weights.adjustOrPutValue(biome, 1, 1);
 				}
 		}
