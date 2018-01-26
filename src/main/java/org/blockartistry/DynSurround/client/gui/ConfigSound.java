@@ -26,10 +26,9 @@ package org.blockartistry.DynSurround.client.gui;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.registry.SoundMetadata;
-import org.blockartistry.DynSurround.registry.SoundRegistry;
-
 import com.google.common.base.MoreObjects;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.util.ResourceLocation;
@@ -55,14 +54,15 @@ public class ConfigSound extends BasicSound<ConfigSound> {
 		this.repeatDelay = 0;
 		this.attenuationType = ISound.AttenuationType.NONE;
 
-		final SoundMetadata data = SoundRegistry.getSoundMetadata(this.positionedSoundLocation);
+		final SoundMetadata data = ClientRegistry.SOUND.getSoundMetadata(this.positionedSoundLocation);
 		if (data != null)
 			this.category = data.getCategory();
 	}
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).addValue(this.positionedSoundLocation.toString()).add("volume", this.volume)
-				.add("pitch", this.pitch).add("attenuation", this.attenuationType).toString();
+		return MoreObjects.toStringHelper(this).addValue(this.positionedSoundLocation.toString())
+				.add("volume", this.volume).add("pitch", this.pitch).add("attenuation", this.attenuationType)
+				.toString();
 	}
 }

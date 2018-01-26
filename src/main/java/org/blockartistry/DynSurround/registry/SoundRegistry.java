@@ -109,7 +109,7 @@ public final class SoundRegistry extends Registry {
 	}
 
 	@Nullable
-	public static SoundMetadata getSoundMetadata(@Nonnull final ResourceLocation resource) {
+	public SoundMetadata getSoundMetadata(@Nonnull final ResourceLocation resource) {
 		return Sounds.getSoundMetadata(resource);
 	}
 
