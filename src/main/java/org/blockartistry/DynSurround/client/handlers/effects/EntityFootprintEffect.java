@@ -24,6 +24,7 @@
 package org.blockartistry.DynSurround.client.handlers.effects;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -48,6 +49,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -78,18 +80,18 @@ public class EntityFootprintEffect extends EntityEffect {
 
 	@Override
 	public void update() {
-		final EntityLivingBase entity = (EntityLivingBase) this.getState().subject().get();
-		if (entity == null)
-			return;
+		final Optional<Entity> e = this.getState().subject();
+		if (e.isPresent()) {
+			final EntityLivingBase entity = (EntityLivingBase) e.get();
+			this.generator.generateFootsteps(entity);
 
-		this.generator.generateFootsteps(entity);
-
-		if (entity.onGround && isMoving(entity)) {
-			final BlockPos pos = entity.getPosition().down(1);
-			final IBlockState bs = WorldUtils.getBlockState(entity.getEntityWorld(), pos);
-			final SoundEffect sound = this.registry.getStepSoundToPlay(bs, RANDOM);
-			if (sound != null)
-				sound.doEffect(WorldUtils.getDefaultBlockStateProvider(), bs, pos, RANDOM);
+			if (entity instanceof EntityPlayer && entity.onGround && isMoving(entity)) {
+				final BlockPos pos = entity.getPosition().down(1);
+				final IBlockState bs = WorldUtils.getBlockState(entity.getEntityWorld(), pos);
+				final SoundEffect sound = this.registry.getStepSoundToPlay(bs, RANDOM);
+				if (sound != null)
+					sound.doEffect(WorldUtils.getDefaultBlockStateProvider(), bs, pos, RANDOM);
+			}
 		}
 	}
 
