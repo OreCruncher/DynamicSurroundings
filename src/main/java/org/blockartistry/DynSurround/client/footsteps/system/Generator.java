@@ -41,6 +41,7 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions.Option;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.facade.FacadeHelper;
+import org.blockartistry.DynSurround.registry.ArmorClass;
 import org.blockartistry.DynSurround.registry.FootstepsRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
@@ -415,7 +416,7 @@ public class Generator {
 		final double zz = player.posZ + zn * feetDistanceToCenter;
 		final BlockPos pos = new BlockPos(xx, minY - 0.1D - verticalOffsetAsMinus, zz);
 
-		final Association result = addSoundOverlay(findAssociationForLocation(player, pos));
+		final Association result = addSoundOverlay(player, findAssociationForLocation(player, pos));
 		if (result != null && !player.isJumping) {
 			final Vec3d printLocation = new Vec3d(xx, minY, zz);
 			if (hasFootstepImprint(printLocation.addVector(0D, -0.5D, 0D)))
@@ -735,12 +736,21 @@ public class Generator {
 	 * aspects, such as armor being worn.
 	 */
 	@Nonnull
-	protected Association addSoundOverlay(@Nullable Association assoc) {
+	protected Association addSoundOverlay(@Nonnull final EntityLivingBase entity, @Nullable Association assoc) {
 
-		final IAcoustic armorAddon = this.isolator.getAcoustics()
-				.getAcoustic(EnvironState.getPlayerArmorClass().getAcoustic());
-		IAcoustic footAddon = this.isolator.getAcoustics()
-				.getAcoustic(EnvironState.getPlayerFootArmorClass().getFootAcoustic());
+		final ArmorClass armor;
+		final ArmorClass foot;
+
+		if (EnvironState.isPlayer(entity)) {
+			armor = EnvironState.getPlayerArmorClass();
+			foot = EnvironState.getPlayerFootArmorClass();
+		} else {
+			armor = ArmorClass.effectiveArmorClass(entity);
+			foot = ArmorClass.footArmorClass(entity);
+		}
+
+		final IAcoustic armorAddon = this.isolator.getAcoustics().getAcoustic(armor.getAcoustic());
+		IAcoustic footAddon = this.isolator.getAcoustics().getAcoustic(foot.getFootAcoustic());
 
 		if (armorAddon == null && footAddon == null)
 			return assoc;
