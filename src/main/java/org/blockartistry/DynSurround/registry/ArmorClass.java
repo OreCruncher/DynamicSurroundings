@@ -25,8 +25,7 @@ package org.blockartistry.DynSurround.registry;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
-
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 
@@ -73,9 +72,10 @@ public enum ArmorClass {
 	 * sound overlay to add. The chest and leg slots are used.
 	 */
 	public static ArmorClass effectiveArmorClass(@Nonnull final EntityLivingBase entity) {
-		final ItemRegistry registry = RegistryManager.get(RegistryType.ITEMS);
-		final ArmorClass chest = registry.getArmorClass(entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
-		final ArmorClass legs = registry.getArmorClass(entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
+		final ArmorClass chest = ClientRegistry.ITEMS
+				.getArmorClass(entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
+		final ArmorClass legs = ClientRegistry.ITEMS
+				.getArmorClass(entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
 		return chest.compareTo(legs) > 0 ? chest : legs;
 	}
 
@@ -84,8 +84,7 @@ public enum ArmorClass {
 	 * accents when moving.
 	 */
 	public static ArmorClass footArmorClass(@Nonnull final EntityLivingBase entity) {
-		final ItemRegistry registry = RegistryManager.get(RegistryType.ITEMS);
-		return registry.getArmorClass(entity.getItemStackFromSlot(EntityEquipmentSlot.FEET));
+		return ClientRegistry.ITEMS.getArmorClass(entity.getItemStackFromSlot(EntityEquipmentSlot.FEET));
 	}
 
 }

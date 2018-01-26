@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.handlers;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.handlers.effects.BowSoundEffect;
@@ -102,7 +103,7 @@ public class FxHandler extends EffectHandlerBase {
 
 		// Tick the footstep stuff
 		// TODO: Need to refactor!
-		RegistryManager.<FootstepsRegistry>get(RegistryType.FOOTSTEPS).think();
+		ClientRegistry.FOOTSTEPS.think();
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)

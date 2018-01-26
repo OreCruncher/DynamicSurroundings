@@ -27,13 +27,10 @@ package org.blockartistry.DynSurround.client.handlers.scanners;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
-import org.blockartistry.DynSurround.registry.BiomeRegistry;
-import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.math.MathStuff;
 
@@ -62,8 +59,6 @@ public class AreaFogScanner implements ITickable {
 			0.029999999329447746D);
 	private static final Color END_FOG_COLOR = new Color(0.627451F * 0.15F, 0.5019608F * 0.15F, 0.627451F * 0.15F);
 
-	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
-	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 	private final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
 	private BlockPos lastPos = BlockPos.ORIGIN;
@@ -84,7 +79,7 @@ public class AreaFogScanner implements ITickable {
 
 	private float calcHazeBand(final World world, final EntityPlayer player) {
 		final float distance = MathHelper
-				.abs(this.dimensions.getCloudHeight(world) - (float) (player.posY + player.getEyeHeight()));
+				.abs(ClientRegistry.DIMENSION.getCloudHeight(world) - (float) (player.posY + player.getEyeHeight()));
 		final float hazeBandRange = HAZE_THRESHOLD * (1.0F + WeatherProperties.getIntensityLevel() * 2);
 		if (distance < hazeBandRange)
 			return (hazeBandRange - distance) / hazeBandRange * ModOptions.elevationHazeFactor * 0.7F;
@@ -94,8 +89,8 @@ public class AreaFogScanner implements ITickable {
 
 	private float calcHazeGradient(final World world, final EntityPlayer player) {
 		final float factor = 1.0F + WeatherProperties.getIntensityLevel();
-		final float skyHeight = this.dimensions.getSkyHeight(world) / factor;
-		final float groundLevel = this.dimensions.getSeaLevel(world);
+		final float skyHeight = ClientRegistry.DIMENSION.getSkyHeight(world) / factor;
+		final float groundLevel = ClientRegistry.DIMENSION.getSeaLevel(world);
 		final float ratio = (MathHelper.floor_double(player.posY + player.getEyeHeight()) - groundLevel)
 				/ (skyHeight - groundLevel);
 		return ratio * ratio * ratio * ratio * ModOptions.elevationHazeFactor;
@@ -148,7 +143,7 @@ public class AreaFogScanner implements ITickable {
 		this.biomeWeight = 0;
 
 		float heightFog = 0;
-		if (ModOptions.enableElevationHaze && this.dimensions.hasHaze(world)) {
+		if (ModOptions.enableElevationHaze && ClientRegistry.DIMENSION.hasHaze(world)) {
 			heightFog = ModOptions.elevationHazeAsBand ? calcHazeBand(world, EnvironState.getPlayer())
 					: calcHazeGradient(world, EnvironState.getPlayer());
 		}
@@ -156,7 +151,7 @@ public class AreaFogScanner implements ITickable {
 		for (int dX = -RANGE; dX <= RANGE; dX++)
 			for (int dZ = -RANGE; dZ <= RANGE; dZ++) {
 				this.pos.setPos(playerPos.getX() + dX, playerPos.getY(), playerPos.getZ() + dZ);
-				final BiomeInfo biome = this.biomes.get(world.getBiome(pos));
+				final BiomeInfo biome = ClientRegistry.BIOME.get(world.getBiome(pos));
 				final Color theColor;
 				float fog = 0F;
 				if (ModOptions.enableBiomeFog && biome.getHasFog()) {

@@ -30,15 +30,12 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.BlockInfo;
-import org.blockartistry.DynSurround.registry.BlockRegistry;
-import org.blockartistry.DynSurround.registry.FootstepsRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.gui.TextPanel;
@@ -73,8 +70,6 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 	private static final String TEXT_BLOCK_SOUNDS = TextFormatting.DARK_PURPLE + "<Block Sounds>";
 	private static final String TEXT_DICTIONARY_NAMES = TextFormatting.DARK_PURPLE + "<Dictionary Names>";
 
-	private final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
-	private final FootstepsRegistry footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
 	private final BlockInfo.BlockInfoMutable block = new BlockInfo.BlockInfoMutable();
 
 	private static List<String> gatherOreNames(final ItemStack stack) {
@@ -123,10 +118,10 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 				text.add("Step Sound: " + st.getStepSound().getSoundName().toString());
 			}
 
-			if (this.footsteps.hasFootprint(state))
+			if (ClientRegistry.FOOTSTEPS.hasFootprint(state))
 				text.add("Footprints Generated");
 
-			final BlockMap bm = this.footsteps.getBlockMap();
+			final BlockMap bm = ClientRegistry.FOOTSTEPS.getBlockMap();
 			if (bm != null) {
 				final List<String> data = new ArrayList<String>();
 				bm.collectData(EnvironState.getWorld(), state, pos, data);
@@ -137,7 +132,7 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 				}
 			}
 
-			BlockEffect[] effects = this.blocks.getEffects(state);
+			BlockEffect[] effects = ClientRegistry.BLOCK.getEffects(state);
 			if (effects.length > 0) {
 				text.add(TEXT_BLOCK_EFFECTS);
 				for (final BlockEffect e : effects) {
@@ -145,7 +140,7 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 				}
 			}
 
-			effects = this.blocks.getAlwaysOnEffects(state);
+			effects = ClientRegistry.BLOCK.getAlwaysOnEffects(state);
 			if (effects.length > 0) {
 				text.add(TEXT_ALWAYS_ON_EFFECTS);
 				for (final BlockEffect e : effects) {
@@ -153,18 +148,18 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 				}
 			}
 
-			SoundEffect[] sounds = this.blocks.getAllStepSounds(state);
+			SoundEffect[] sounds = ClientRegistry.BLOCK.getAllStepSounds(state);
 			if (sounds.length > 0) {
 				text.add(TEXT_STEP_SOUNDS);
-				text.add(TextFormatting.DARK_GREEN + "Chance: 1 in " + this.blocks.getStepSoundChance(state));
+				text.add(TextFormatting.DARK_GREEN + "Chance: 1 in " + ClientRegistry.BLOCK.getStepSoundChance(state));
 				for (final SoundEffect s : sounds)
 					text.add(TextFormatting.GOLD + s.toString());
 			}
 
-			sounds = this.blocks.getAllSounds(state);
+			sounds = ClientRegistry.BLOCK.getAllSounds(state);
 			if (sounds.length > 0) {
 				text.add(TEXT_BLOCK_SOUNDS);
-				text.add(TextFormatting.DARK_GREEN + "Chance: 1 in " + this.blocks.getSoundChance(state));
+				text.add(TextFormatting.DARK_GREEN + "Chance: 1 in " + ClientRegistry.BLOCK.getSoundChance(state));
 				for (final SoundEffect s : sounds)
 					text.add(TextFormatting.GOLD + s.toString());
 			}
