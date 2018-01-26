@@ -25,11 +25,9 @@ package org.blockartistry.DynSurround.client.handlers.effects;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.DynSurround.registry.ItemRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.effects.EventEffect;
 import org.blockartistry.lib.effects.IEventEffectLibraryState;
 
@@ -41,8 +39,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ItemSwingSoundEffect extends EventEffect {
-
-	protected final ItemRegistry itemRegistry = RegistryManager.get(RegistryType.ITEMS);
 
 	public ItemSwingSoundEffect(@Nonnull final IEventEffectLibraryState state) {
 		super(state);
@@ -56,7 +52,7 @@ public class ItemSwingSoundEffect extends EventEffect {
 			return;
 
 		final ItemStack currentItem = event.getEntityPlayer().getHeldItem(event.getHand());
-		final SoundEffect soundEffect = this.itemRegistry.getSwingSound(currentItem);
+		final SoundEffect soundEffect = ClientRegistry.ITEMS.getSwingSound(currentItem);
 		if (soundEffect != null) {
 			final BasicSound<?> fx = this.getState().createSound(soundEffect, event.getEntityPlayer());
 			fx.setRoutable(true);
