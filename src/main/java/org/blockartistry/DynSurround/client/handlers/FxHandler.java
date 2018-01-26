@@ -23,7 +23,6 @@
  */
 package org.blockartistry.DynSurround.client.handlers;
 
-import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
@@ -49,6 +48,7 @@ import org.blockartistry.lib.effects.EventEffectLibrary;
 
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -85,27 +85,20 @@ public class FxHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 
-		final double distanceThreshold = ModOptions.specialEffectRange * ModOptions.specialEffectRange;
+		if (Minecraft.getMinecraft().gameSettings.showDebugInfo && ModOptions.enableDebugLogging) {
+			this.activeHandlers = 0;
 
-		this.activeHandlers = 0;
-
-		// Process our handlers and get rid of the dead ones.
-		final TIntObjectIterator<EntityEffectHandler> itr = this.handlers.iterator();
-		while (itr.hasNext()) {
-			itr.advance();
-			final EntityEffectHandler eh = itr.value();
-			if (eh.distanceSq(player) > distanceThreshold)
-				eh.die();
-			else
-				eh.update();
-			if (!eh.isAlive()) {
-				itr.remove();
-			} else if (eh.isActive()) {
-				this.activeHandlers++;
+			final TIntObjectIterator<EntityEffectHandler> itr = this.handlers.iterator();
+			while (itr.hasNext()) {
+				itr.advance();
+				final EntityEffectHandler eh = itr.value();
+				if (eh.isActive()) {
+					this.activeHandlers++;
+				}
 			}
-		}
 
-		this.totalHandlers = this.handlers.size();
+			this.totalHandlers = this.handlers.size();
+		}
 
 		// Tick the footstep stuff
 		// TODO: Need to refactor!
@@ -120,21 +113,30 @@ public class FxHandler extends EffectHandlerBase {
 	}
 
 	/**
-	 * Whenever an Entity updates make sure we have a handler for it.
+	 * Whenever an Entity updates make sure we have an appropriate handler, and
+	 * update it's state if necessary.
 	 */
 	@SubscribeEvent(receiveCanceled = true)
 	public void onLivingUpdate(@Nonnull final LivingUpdateEvent event) {
 		final Entity entity = event.getEntity();
-		if (!entity.getEntityWorld().isRemote)
-			return;
-
-		if (this.handlers.containsKey(entity.getEntityId()))
+		if (entity == null || !entity.getEntityWorld().isRemote)
 			return;
 
 		final double distanceThreshold = ModOptions.specialEffectRange * ModOptions.specialEffectRange;
-		if (entity.isEntityAlive() && entity.getDistanceSqToEntity(EnvironState.getPlayer()) <= distanceThreshold) {
-			final Optional<EntityEffectHandler> handler = library.create(entity);
-			this.handlers.put(entity.getEntityId(), handler.get());
+		final boolean inRange = entity.getDistanceSqToEntity(EnvironState.getPlayer()) <= distanceThreshold;
+
+		EntityEffectHandler handler = this.handlers.get(entity.getEntityId());
+		if (handler != null) {
+			if (entity.isEntityAlive() && inRange)
+				handler.update();
+			else
+				handler.die();
+			if (!handler.isAlive())
+				this.handlers.remove(entity.getEntityId());
+		} else if (inRange) {
+			handler = library.create(entity).get();
+			this.handlers.put(entity.getEntityId(), handler);
+			handler.update();
 		}
 	}
 
