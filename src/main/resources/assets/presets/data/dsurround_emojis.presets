@@ -2,10 +2,12 @@
 	"title": "Turn on Emojis!",
 	"description": "Turn on options related to emojis, villager chat, and player speech",
 	"restartRequired": true,
-	"dsurround": {
-		"speechbubbles.Enable SpeechBubbles": "true",
-		"block.effects.Enable Bubbles": "true",
-		"speechbubbles.Enable Entity Emojis": "true",
-		"speechbubbles.Enable Entity Chat": "true"
+	"data": {
+		"dsurround": {
+			"speechbubbles.Enable SpeechBubbles": "true",
+			"block.effects.Enable Bubbles": "true",
+			"speechbubbles.Enable Entity Emojis": "true",
+			"speechbubbles.Enable Entity Chat": "true"
+		}
 	}
 }

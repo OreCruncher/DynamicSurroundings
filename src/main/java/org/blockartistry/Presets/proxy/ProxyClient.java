@@ -26,6 +26,7 @@ package org.blockartistry.Presets.proxy;
 
 import java.io.File;
 import java.io.InputStream;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.Presets.Presets;
@@ -46,7 +47,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ProxyClient extends Proxy {
-
+	
 	// List of preset files to copy.  Temporary until I can figure a way to
 	// automagically enumerate the files in a jar
 	private static final String[] presetFiles = new String[] {
@@ -56,7 +57,8 @@ public class ProxyClient extends Proxy {
 		"presets_level3",
 		"dsurround_skyblock",
 		"dsurround_emojis",
-		"dsurround_turnalloff"
+		"dsurround_turnalloff",
+		"dsurround_ponies"
 	};
 	
 	@Override
@@ -69,7 +71,7 @@ public class ProxyClient extends Proxy {
 		register(MinecraftConfigHandler.class);
 		register(KeyHandler.class);
 	}
-
+	
 	@Override
 	public boolean isRunningAsServer() {
 		return false;
@@ -98,7 +100,6 @@ public class ProxyClient extends Proxy {
 				Presets.log().error("Unable to extract preset file " + name, t);
 			}
 		}
-		
 	}
 
 	@Override
