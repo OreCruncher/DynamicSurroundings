@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.registry.SoundMetadata;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.lib.ForgeUtils;
@@ -95,7 +96,7 @@ public class SoundConfigEntry extends NumberSliderEntry {
 		text.add(TextFormatting.GREEN + ForgeUtils.getModName(soundResource));
 		text.add(TextFormatting.GOLD + soundName);
 
-		final SoundMetadata data = SoundRegistry.getSoundMetadata(soundResource);
+		final SoundMetadata data = ClientRegistry.SOUND.getSoundMetadata(soundResource);
 		if (data != null) {
 			boolean spaceAdded = false;
 			final String title = data.getTitle();
