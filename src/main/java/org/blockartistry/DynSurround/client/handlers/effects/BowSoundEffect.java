@@ -25,11 +25,9 @@ package org.blockartistry.DynSurround.client.handlers.effects;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.DynSurround.registry.ItemRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.effects.EventEffect;
 import org.blockartistry.lib.effects.IEventEffectLibraryState;
 
@@ -42,8 +40,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class BowSoundEffect extends EventEffect {
 
-	protected final ItemRegistry itemRegistry = RegistryManager.get(RegistryType.ITEMS);
-
 	public BowSoundEffect(@Nonnull final IEventEffectLibraryState state) {
 		super(state);
 	}
@@ -53,9 +49,9 @@ public class BowSoundEffect extends EventEffect {
 		if (!isClientValid(event) || event.getItemStack() == null || event.getItemStack().isEmpty())
 			return;
 
-		if (this.itemRegistry.doBowSound(event.getItemStack())) {
+		if (ClientRegistry.ITEMS.doBowSound(event.getItemStack())) {
 			final ItemStack currentItem = event.getEntityPlayer().getHeldItem(event.getHand());
-			final SoundEffect soundEffect = this.itemRegistry.getUseSound(currentItem);
+			final SoundEffect soundEffect = ClientRegistry.ITEMS.getUseSound(currentItem);
 			if (soundEffect != null) {
 				final BasicSound<?> fx = this.getState().createSound(soundEffect, event.getEntityPlayer());
 				fx.setRoutable(true);

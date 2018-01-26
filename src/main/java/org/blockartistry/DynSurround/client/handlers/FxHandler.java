@@ -133,7 +133,7 @@ public class FxHandler extends EffectHandlerBase {
 				handler.die();
 			if (!handler.isAlive())
 				this.handlers.remove(entity.getEntityId());
-		} else if (inRange) {
+		} else if (entity.isEntityAlive() && inRange) {
 			handler = library.create(entity).get();
 			this.handlers.put(entity.getEntityId(), handler);
 			handler.update();

@@ -29,13 +29,10 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.system.Generator;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.DynSurround.registry.BlockRegistry;
-import org.blockartistry.DynSurround.registry.FootstepsRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
@@ -59,9 +56,6 @@ public class EntityFootprintEffect extends EntityEffect {
 
 	protected static final Random RANDOM = XorShiftRandom.current();
 
-	protected final FootstepsRegistry footsteps = RegistryManager.<FootstepsRegistry>get(RegistryType.FOOTSTEPS);
-	protected final BlockRegistry registry = RegistryManager.<BlockRegistry>get(RegistryType.BLOCK);;
-
 	protected Generator generator;
 
 	public EntityFootprintEffect() {
@@ -71,7 +65,7 @@ public class EntityFootprintEffect extends EntityEffect {
 	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
 		super.intitialize(state);
 
-		this.generator = this.footsteps.createGenerator((EntityLivingBase) state.subject().get());
+		this.generator = ClientRegistry.FOOTSTEPS.createGenerator((EntityLivingBase) state.subject().get());
 	}
 
 	protected boolean isMoving(@Nonnull final Entity entity) {
@@ -88,7 +82,7 @@ public class EntityFootprintEffect extends EntityEffect {
 			if (entity instanceof EntityPlayer && entity.onGround && isMoving(entity)) {
 				final BlockPos pos = entity.getPosition().down(1);
 				final IBlockState bs = WorldUtils.getBlockState(entity.getEntityWorld(), pos);
-				final SoundEffect sound = this.registry.getStepSoundToPlay(bs, RANDOM);
+				final SoundEffect sound = ClientRegistry.BLOCK.getStepSoundToPlay(bs, RANDOM);
 				if (sound != null)
 					sound.doEffect(WorldUtils.getDefaultBlockStateProvider(), bs, pos, RANDOM);
 			}
