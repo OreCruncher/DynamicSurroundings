@@ -29,11 +29,9 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.DynSurround.registry.ItemRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
@@ -52,9 +50,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class PlayerToolBarSoundEffect extends EntityEffect {
 
-	protected final ItemRegistry itemRegistry = RegistryManager.get(RegistryType.ITEMS);
-
-	protected class HandTracker {
+	protected static class HandTracker {
 
 		protected final EnumHand hand;
 
@@ -94,8 +90,7 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 				this.clearState(state);
 				final ItemStack currentStack = player.getHeldItem(this.hand);
 				if (currentStack != null) {
-					final SoundEffect soundEffect = PlayerToolBarSoundEffect.this.itemRegistry
-							.getEquipSound(currentStack);
+					final SoundEffect soundEffect = ClientRegistry.ITEMS.getEquipSound(currentStack);
 					if (soundEffect != null) {
 						final BasicSound<?> sound = state.createSound(soundEffect, player);
 						this.soundId = state.playSound(sound);
@@ -106,7 +101,7 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 		}
 	}
 
-	protected class MainHandTracker extends HandTracker {
+	protected static class MainHandTracker extends HandTracker {
 
 		protected int lastSlot = -1;
 
