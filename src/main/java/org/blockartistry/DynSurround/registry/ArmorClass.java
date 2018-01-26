@@ -27,17 +27,21 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 
 public enum ArmorClass {
 
+	//
 	NONE("none", "NOT_EMITTER", "NOT_EMITTER"),
+	//
 	LIGHT("light", "armor_light", "NOT_EMITTER"),
+	//
 	MEDIUM("medium", "armor_medium", "medium_foot"),
+	//
 	CRYSTAL("crystal", "armor_crystal", "crystal_foot"),
-	HEAVY("heavy", "armor_heavy", "heavy_foot")
-	;
+	//
+	HEAVY("heavy", "armor_heavy", "heavy_foot");
 
 	private final String className;
 	private final String acoustic;
@@ -58,30 +62,30 @@ public enum ArmorClass {
 	public String getAcoustic() {
 		return this.acoustic;
 	}
-	
+
 	@Nonnull
 	public String getFootAcoustic() {
 		return this.footAcoustic;
 	}
 
 	/**
-	 * Determines the effective armor class of the player. Used to determine the
+	 * Determines the effective armor class of the Entity. Used to determine the
 	 * sound overlay to add. The chest and leg slots are used.
 	 */
-	public static ArmorClass effectiveArmorClass(@Nonnull final EntityPlayer player) {
+	public static ArmorClass effectiveArmorClass(@Nonnull final EntityLivingBase entity) {
 		final ItemRegistry registry = RegistryManager.get(RegistryType.ITEMS);
-		final ArmorClass chest = registry.getArmorClass(player.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
-		final ArmorClass legs = registry.getArmorClass(player.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
+		final ArmorClass chest = registry.getArmorClass(entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
+		final ArmorClass legs = registry.getArmorClass(entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
 		return chest.compareTo(legs) > 0 ? chest : legs;
 	}
-	
+
 	/**
-	 * Gets the armor class of the player's feet in order to apply additional
-	 * sound accents when moving.
+	 * Gets the armor class of the entities feet in order to apply additional sound
+	 * accents when moving.
 	 */
-	public static ArmorClass footArmorClass(@Nonnull final EntityPlayer player) {
+	public static ArmorClass footArmorClass(@Nonnull final EntityLivingBase entity) {
 		final ItemRegistry registry = RegistryManager.get(RegistryType.ITEMS);
-		return registry.getArmorClass(player.getItemStackFromSlot(EntityEquipmentSlot.FEET));
+		return registry.getArmorClass(entity.getItemStackFromSlot(EntityEquipmentSlot.FEET));
 	}
 
 }
