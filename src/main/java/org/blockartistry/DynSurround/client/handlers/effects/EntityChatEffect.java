@@ -53,6 +53,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
@@ -146,7 +147,7 @@ public class EntityChatEffect extends EntityEffect {
 	}
 
 	static boolean hasMessages(@Nonnull final Entity entity) {
-		return messages.get(getEntityClassName(entity.getClass())) != null;
+		return !(entity instanceof EntityPlayer) && messages.get(getEntityClassName(entity.getClass())) != null;
 	}
 
 	protected final Random random = XorShiftRandom.current();
