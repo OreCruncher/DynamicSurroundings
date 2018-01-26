@@ -27,16 +27,12 @@ package org.blockartistry.DynSurround.client.weather;
 import java.util.Random;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.DynSurround.client.weather.compat.RandomThings;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
-import org.blockartistry.DynSurround.registry.BiomeRegistry;
-import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.SeasonRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.random.XorShiftRandom;
 
@@ -83,10 +79,6 @@ public class StormSplashRenderer {
 	protected final NoiseGeneratorSimplex GENERATOR = new NoiseGeneratorSimplex(RANDOM);
 	protected final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
-	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
-	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
-	private final SeasonRegistry season = RegistryManager.get(RegistryType.SEASON);
-
 	protected StormSplashRenderer() {
 
 	}
@@ -129,11 +121,12 @@ public class StormSplashRenderer {
 	}
 
 	protected BlockPos getPrecipitationHeight(final World world, final int range, final BlockPos pos) {
-		return this.season.getPrecipitationHeight(world, pos);
+		return ClientRegistry.SEASON.getPrecipitationHeight(world, pos);
 	}
 
 	protected boolean biomeHasDust(final Biome biome) {
-		return ModOptions.allowDesertFog && !WeatherProperties.doVanilla() && this.biomes.get(biome).getHasDust();
+		return ModOptions.allowDesertFog && !WeatherProperties.doVanilla()
+				&& ClientRegistry.BIOME.get(biome).getHasDust();
 	}
 
 	protected void playSplashSound(final EntityRenderer renderer, final World world, final Entity player, double x,
@@ -161,7 +154,7 @@ public class StormSplashRenderer {
 			return;
 
 		final World world = theThis.mc.world;
-		if (!this.dimensions.hasWeather(world))
+		if (!ClientRegistry.DIMENSION.hasWeather(world))
 			return;
 
 		float rainStrengthFactor = WeatherProperties.getIntensityLevel();
@@ -198,9 +191,9 @@ public class StormSplashRenderer {
 				continue;
 
 			final BlockPos precipHeight = getPrecipitationHeight(world, RANGE / 2, this.pos);
-			final BiomeInfo biome = this.biomes.get(world.getBiome(this.pos));
+			final BiomeInfo biome = ClientRegistry.BIOME.get(world.getBiome(this.pos));
 			final boolean hasDust = biome.getHasDust();
-			final boolean canSnow = this.season.canWaterFreeze(world, precipHeight);
+			final boolean canSnow = ClientRegistry.SEASON.canWaterFreeze(world, precipHeight);
 
 			if (precipHeight.getY() <= playerY + RANGE && precipHeight.getY() >= playerY - RANGE
 					&& (hasDust || (biome.getHasPrecipitation() && !canSnow))) {

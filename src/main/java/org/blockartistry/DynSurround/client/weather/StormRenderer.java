@@ -27,14 +27,10 @@ package org.blockartistry.DynSurround.client.weather;
 import java.util.Random;
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.compat.RandomThings;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
-import org.blockartistry.DynSurround.registry.BiomeRegistry;
-import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.SeasonRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.random.XorShiftRandom;
 import org.lwjgl.opengl.GL11;
@@ -73,14 +69,11 @@ public class StormRenderer {
 	}
 
 	private final Random random = new XorShiftRandom();
-	private final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
-	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
-	private final SeasonRegistry season = RegistryManager.get(RegistryType.SEASON);
 	private final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
 	@Nonnull
 	private BlockPos getPrecipitationHeight(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return this.season.getPrecipitationHeight(world, pos);
+		return ClientRegistry.SEASON.getPrecipitationHeight(world, pos);
 	}
 
 	private static void bindTexture(@Nonnull final ResourceLocation resource) {
@@ -96,7 +89,7 @@ public class StormRenderer {
 		// starts.
 		final World world = Minecraft.getMinecraft().world;
 
-		if (!this.dimensions.hasWeather(world))
+		if (!ClientRegistry.DIMENSION.hasWeather(world))
 			return;
 
 		final float rainStrength = WeatherProperties.getIntensityLevel();
@@ -148,7 +141,7 @@ public class StormRenderer {
 				if (!RandomThings.shouldRain(world, this.mutable))
 					continue;
 
-				final BiomeInfo biome = this.biomes.get(world.getBiome(this.mutable));
+				final BiomeInfo biome = ClientRegistry.BIOME.get(world.getBiome(this.mutable));
 
 				if (biome.getHasDust() || biome.getHasPrecipitation()) {
 					final int precipHeight = getPrecipitationHeight(world, this.mutable).getY();
@@ -174,7 +167,7 @@ public class StormRenderer {
 						this.random.setSeed((long) (gridX * gridX * 3121 + gridX * 45238971
 								^ gridZ * gridZ * 418711 + gridZ * 13761));
 						this.mutable.setPos(gridX, k2, gridZ);
-						final boolean canSnow = this.season.canWaterFreeze(world, this.mutable);
+						final boolean canSnow = ClientRegistry.SEASON.canWaterFreeze(world, this.mutable);
 
 						if (!biome.getHasDust() && !canSnow) {
 

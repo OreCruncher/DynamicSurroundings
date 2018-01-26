@@ -28,13 +28,10 @@ import java.util.Set;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.event.RegistryEvent;
 import org.blockartistry.DynSurround.client.gui.ConfigSound;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.DynSurround.registry.SoundRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-
 import com.google.common.collect.Sets;
 
 import gnu.trove.map.hash.TObjectIntHashMap;
@@ -52,12 +49,8 @@ public class SoundCullHandler extends EffectHandlerBase {
 	private final Set<String> soundsToBlock = Sets.newHashSet();
 	private final TObjectIntHashMap<String> soundCull = new TObjectIntHashMap<String>();
 
-	protected final SoundRegistry registry;
-
 	public SoundCullHandler() {
 		super("SoundCullHandler");
-
-		this.registry = RegistryManager.<SoundRegistry>get(RegistryType.SOUND);
 	}
 
 	@Override
@@ -67,10 +60,10 @@ public class SoundCullHandler extends EffectHandlerBase {
 		final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
 		for (final Object resource : handler.soundRegistry.getKeys()) {
 			final String rs = resource.toString();
-			if (this.registry.isSoundBlockedLogical(rs)) {
+			if (ClientRegistry.SOUND.isSoundBlockedLogical(rs)) {
 				DSurround.log().debug("Blocking sound '%s'", rs);
 				this.soundsToBlock.add(rs);
-			} else if (this.registry.isSoundCulled(rs)) {
+			} else if (ClientRegistry.SOUND.isSoundCulled(rs)) {
 				DSurround.log().debug("Culling sound '%s'", rs);
 				this.soundCull.put(rs, -ModOptions.soundCullingThreshold);
 			}

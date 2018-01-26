@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.handlers;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.handlers.effects.BowSoundEffect;
@@ -39,9 +40,6 @@ import org.blockartistry.DynSurround.client.handlers.effects.PlayerJumpSoundEffe
 import org.blockartistry.DynSurround.client.handlers.effects.PlayerToolBarSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.PopoffEventEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.VillagerChatEffect;
-import org.blockartistry.DynSurround.registry.FootstepsRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.effects.EntityEffectHandler;
 import org.blockartistry.lib.effects.EntityEffectLibrary;
 import org.blockartistry.lib.effects.EventEffectLibrary;
@@ -102,7 +100,7 @@ public class FxHandler extends EffectHandlerBase {
 
 		// Tick the footstep stuff
 		// TODO: Need to refactor!
-		RegistryManager.<FootstepsRegistry>get(RegistryType.FOOTSTEPS).think();
+		ClientRegistry.FOOTSTEPS.think();
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
