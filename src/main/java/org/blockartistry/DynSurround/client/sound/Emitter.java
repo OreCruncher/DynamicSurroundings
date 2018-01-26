@@ -29,10 +29,10 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.SoundMetadata;
-import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.lib.gui.RecordTitleEmitter;
 import org.blockartistry.lib.random.XorShiftRandom;
 
@@ -67,7 +67,7 @@ public abstract class Emitter {
 		};
 
 		if (StringUtils.isEmpty(sound.getSoundTitle())) {
-			final SoundMetadata data = SoundRegistry.getSoundMetadata(this.effect.getSound().getRegistryName());
+			final SoundMetadata data = ClientRegistry.SOUND.getSoundMetadata(this.effect.getSound().getRegistryName());
 			if (data != null) {
 				if (!StringUtils.isEmpty(data.getTitle())) {
 					final StringBuilder builder = new StringBuilder();

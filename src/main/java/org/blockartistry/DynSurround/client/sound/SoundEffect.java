@@ -30,13 +30,13 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.fx.ISpecialEffect;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.DynSurround.data.xface.SoundType;
 import org.blockartistry.DynSurround.expression.ExpressionEngine;
 import org.blockartistry.DynSurround.registry.SoundMetadata;
-import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.SoundUtils;
 import org.blockartistry.lib.WeightTable;
@@ -303,7 +303,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 			} else {
 				// There isn't an override - defer to the category info in
 				// the sounds.json.
-				final SoundMetadata meta = SoundRegistry.getSoundMetadata(resource);
+				final SoundMetadata meta = ClientRegistry.SOUND.getSoundMetadata(resource);
 				if (meta != null) {
 					sc = meta.getCategory();
 				} else {
