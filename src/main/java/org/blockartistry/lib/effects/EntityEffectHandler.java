@@ -24,6 +24,9 @@
 package org.blockartistry.lib.effects;
 
 import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -34,11 +37,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public class EntityEffectHandler extends EntityEffectStateBase implements IEntityEffectHandlerState {
-
+	
 	protected final List<EntityEffect> activeEffects;
 	protected boolean isAlive = true;
 
-	public EntityEffectHandler(final Entity entity, final List<EntityEffect> effects) {
+	public EntityEffectHandler(@Nonnull final Entity entity) {
+		super(entity);
+		this.activeEffects = null;
+	}
+	
+	public EntityEffectHandler(@Nonnull final Entity entity, @Nonnull final List<EntityEffect> effects) {
 		super(entity);
 		this.activeEffects = effects;
 		for (final EntityEffect ee : this.activeEffects)
@@ -68,6 +76,16 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 		this.isAlive = false;
 		for (final EntityEffect e : this.activeEffects)
 			e.die();
+	}
+	
+	/**
+	 * Used for metric collection to distinguish between active handlers
+	 * and dummies.
+	 * 
+	 * @return true if it is an active handler, false for a dummy
+	 */
+	public boolean isActive() {
+		return true;
 	}
 
 	// ================================================

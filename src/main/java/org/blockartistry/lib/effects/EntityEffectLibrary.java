@@ -32,8 +32,6 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.lib.collections.ObjectArray;
 
-import com.google.common.collect.ImmutableList;
-
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -41,8 +39,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * Central repository for a collection of IEntityEffectFactory instances and the
  * IFactoryFilters associated with them. Typically there will be a single
- * instance of the EntityEffectLibrary for a project, but multiples can be created
- * based on the circumstances.
+ * instance of the EntityEffectLibrary for a project, but multiples can be
+ * created based on the circumstances.
  */
 @SideOnly(Side.CLIENT)
 public class EntityEffectLibrary {
@@ -55,25 +53,27 @@ public class EntityEffectLibrary {
 	}
 
 	/**
-	 * Registers an IEntityEffectFactoryFilter/IEntityEffectFactory pair. The filter is used by the
-	 * EntityEffectLibrary to determine if an EntityEffect applies to a target entity.
+	 * Registers an IEntityEffectFactoryFilter/IEntityEffectFactory pair. The filter
+	 * is used by the EntityEffectLibrary to determine if an EntityEffect applies to
+	 * a target entity.
 	 * 
 	 * @param filter
-	 *            IEntityEffectFactoryFilter used to determine if the IEntityEffectFactory should be
-	 *            used to create an EntityEffect.
+	 *            IEntityEffectFactoryFilter used to determine if the
+	 *            IEntityEffectFactory should be used to create an EntityEffect.
 	 * @param factory
-	 *            IEntityEffectFactory used to create an EntityEffect if the IEntityEffectFactoryFilter
-	 *            returns true.
+	 *            IEntityEffectFactory used to create an EntityEffect if the
+	 *            IEntityEffectFactoryFilter returns true.
 	 */
-	public void register(@Nonnull final IEntityEffectFactoryFilter filter, @Nonnull final IEntityEffectFactory factory) {
+	public void register(@Nonnull final IEntityEffectFactoryFilter filter,
+			@Nonnull final IEntityEffectFactory factory) {
 		this.filters.add(filter);
 		this.factories.add(factory);
 	}
 
 	/**
-	 * Creates an EntityEffectHandler for the specified Entity. The IEffects attached to
-	 * the EntityEffectHandler is determined by an IFactoryFitler. An EntityEffectHandler will
-	 * always be created.
+	 * Creates an EntityEffectHandler for the specified Entity. The IEffects
+	 * attached to the EntityEffectHandler is determined by an IFactoryFitler. An
+	 * EntityEffectHandler will always be created.
 	 * 
 	 * @param entity
 	 *            The subject Entity for which an EntityEffectHandler is created
@@ -93,14 +93,23 @@ public class EntityEffectLibrary {
 			result = new EntityEffectHandler(entity, effectToApply);
 		} else {
 			// No effects. Return a dummy handler.
-			// TODO: Revisit - can it be made more slim?
-			result = new EntityEffectHandler(entity, ImmutableList.of()) {
+			result = new EntityEffectHandler(entity) {
 				@Override
 				public void update() {
 				}
+
+				@Override
+				public void die() {
+					this.isAlive = false;
+				}
+				
+				@Override
+				public boolean isActive() {
+					return false;
+				}
 			};
 		}
-		
+
 		return Optional.of(result);
 	}
 

@@ -23,17 +23,11 @@
  */
 package org.blockartistry.DynSurround.client.handlers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.UUID;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.handlers.effects.BowSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.CraftingSoundEffect;
@@ -52,9 +46,15 @@ import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.effects.EntityEffectHandler;
 import org.blockartistry.lib.effects.EntityEffectLibrary;
 import org.blockartistry.lib.effects.EventEffectLibrary;
+
+import gnu.trove.iterator.TIntObjectIterator;
+import gnu.trove.map.hash.TIntObjectHashMap;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -72,55 +72,93 @@ public class FxHandler extends EffectHandlerBase {
 		library.register(EntityFootprintEffect.DEFAULT_FILTER, new EntityFootprintEffect.Factory());
 	}
 
-	private final Map<UUID, EntityEffectHandler> handlers = new HashMap<UUID, EntityEffectHandler>();
+	private final TIntObjectHashMap<EntityEffectHandler> handlers = new TIntObjectHashMap<EntityEffectHandler>();
 	private final EventEffectLibrary eventLibrary = new EventEffectLibrary();
-	
+
+	private int totalHandlers = 0;
+	private int activeHandlers = 0;
+
 	public FxHandler() {
 		super("FxHandler");
 	}
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-		final double distanceThreshold = ModOptions.specialEffectRange * ModOptions.specialEffectRange;
-		final List<UUID> deadOnes = new ArrayList<UUID>();
 
-		// Update our handlers
-		for (final Entry<UUID, EntityEffectHandler> entry : this.handlers.entrySet()) {
-			final EntityEffectHandler eh = entry.getValue();
-			eh.update();
-			if (!eh.isAlive() || eh.distanceSq(player) > distanceThreshold)
-				deadOnes.add(entry.getKey());
+		final double distanceThreshold = ModOptions.specialEffectRange * ModOptions.specialEffectRange;
+
+		this.activeHandlers = 0;
+
+		// Process our handlers and get rid of the dead ones.
+		final TIntObjectIterator<EntityEffectHandler> itr = this.handlers.iterator();
+		while (itr.hasNext()) {
+			itr.advance();
+			final EntityEffectHandler eh = itr.value();
+			if (eh.distanceSq(player) > distanceThreshold)
+				eh.die();
+			else
+				eh.update();
+			if (!eh.isAlive()) {
+				itr.remove();
+			} else if (eh.isActive()) {
+				this.activeHandlers++;
+			}
 		}
 
-		// Remove the dead or distant ones
-		for (final UUID id : deadOnes)
-			this.handlers.remove(id);
-		
+		this.totalHandlers = this.handlers.size();
+
 		// Tick the footstep stuff
-		// TODO:  Need to refactor!
+		// TODO: Need to refactor!
 		RegistryManager.<FootstepsRegistry>get(RegistryType.FOOTSTEPS).think();
 	}
 
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void diagnostics(@Nonnull final DiagnosticEvent.Gather event) {
+		final StringBuilder builder = new StringBuilder();
+		builder.append("EffectHandlers: ").append(this.activeHandlers).append('/').append(this.totalHandlers);
+		event.output.add(builder.toString());
+	}
+
+	/**
+	 * Whenever an Entity updates make sure we have a handler for it.
+	 */
 	@SubscribeEvent(receiveCanceled = true)
 	public void onLivingUpdate(@Nonnull final LivingUpdateEvent event) {
 		final Entity entity = event.getEntity();
 		if (!entity.getEntityWorld().isRemote)
 			return;
 
-		if (this.handlers.containsKey(entity.getPersistentID()))
+		if (this.handlers.containsKey(entity.getEntityId()))
 			return;
 
 		final double distanceThreshold = ModOptions.specialEffectRange * ModOptions.specialEffectRange;
 		if (entity.isEntityAlive() && entity.getDistanceSqToEntity(EnvironState.getPlayer()) <= distanceThreshold) {
 			final Optional<EntityEffectHandler> handler = library.create(entity);
-			this.handlers.put(entity.getPersistentID(), handler.get());
+			this.handlers.put(entity.getEntityId(), handler.get());
+		}
+	}
+
+	/**
+	 * Check if the player joining the world is the one sitting at the keyboard. If
+	 * so we need to wipe out the existing handler list because the dimension
+	 * changed.
+	 */
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void onEntityJoin(@Nonnull final EntityJoinWorldEvent event) {
+		if (event.getWorld().isRemote && event.getEntity() instanceof EntityPlayerSP) {
+			final TIntObjectIterator<EntityEffectHandler> itr = this.handlers.iterator();
+			while (itr.hasNext()) {
+				itr.advance();
+				itr.value().die();
+			}
+			this.handlers.clear();
 		}
 	}
 
 	@Override
 	public void onConnect() {
 		this.handlers.clear();
-		
+
 		this.eventLibrary.register(new PlayerJumpSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new CraftingSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new BowSoundEffect(this.eventLibrary));
