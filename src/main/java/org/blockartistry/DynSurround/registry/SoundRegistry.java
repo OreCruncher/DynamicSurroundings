@@ -41,8 +41,9 @@ import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-//@SideOnly(Side.CLIENT)
+@SideOnly(Side.CLIENT)
 public final class SoundRegistry extends Registry {
 
 	public static final float MIN_SOUNDFACTOR = 0F;

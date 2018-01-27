@@ -53,7 +53,10 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 	private static Field biomeName = null;
@@ -254,7 +257,8 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	@Nullable
 	public SoundEffect getSpotSound(@Nonnull final Random random) {
 		return this.spotSounds != NO_SOUNDS && random.nextInt(this.spotSoundChance) == 0
-				? new WeightTable<SoundEffect>(this.spotSounds).next() : null;
+				? new WeightTable<SoundEffect>(this.spotSounds).next()
+				: null;
 	}
 
 	void resetSounds() {

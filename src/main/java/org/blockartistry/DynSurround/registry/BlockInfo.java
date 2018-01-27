@@ -29,13 +29,15 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.lib.BlockNameUtil;
-import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.BlockNameUtil.NameResult;
-
+import org.blockartistry.lib.MCHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class BlockInfo {
 
 	public static final int GENERIC = -1;
