@@ -26,14 +26,17 @@ package org.blockartistry.DynSurround.registry;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.data.Profiles;
 import org.blockartistry.DynSurround.data.xface.DataScripts;
+import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.DynSurround.event.RegistryEvent;
 import org.blockartistry.lib.SideLocal;
 
@@ -46,19 +49,15 @@ import net.minecraft.util.IThreadListener;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public final class RegistryManager {
 
 	public static enum RegistryType {
-		SOUND,
-		BIOME,
-		BLOCK,
-		DIMENSION,
-		FOOTSTEPS,
-		SEASON,
-		ITEMS
+		SOUND, BIOME, BLOCK, DIMENSION, FOOTSTEPS, SEASON, ITEMS
 	}
 
 	private static final SideLocal<RegistryManager> managers = new SideLocal<RegistryManager>() {
@@ -97,14 +96,15 @@ public final class RegistryManager {
 
 	protected final Side side;
 	protected final ResourceLocation SCRIPT;
-	protected final EnumMap<RegistryType, Registry> registries = new EnumMap<RegistryType, Registry>(RegistryType.class);
+	protected final EnumMap<RegistryType, Registry> registries = new EnumMap<RegistryType, Registry>(
+			RegistryType.class);
 	protected boolean initialized;
 
 	RegistryManager(final Side side) {
 		this.side = side;
 		this.registries.put(RegistryType.DIMENSION, new DimensionRegistry(side));
-		this.registries.put(RegistryType.BIOME, new BiomeRegistry(side));
 		this.registries.put(RegistryType.SOUND, new SoundRegistry(side));
+		this.registries.put(RegistryType.BIOME, new BiomeRegistry(side));
 		this.registries.put(RegistryType.SEASON, new SeasonRegistry(side));
 
 		if (side == Side.CLIENT) {
@@ -127,12 +127,47 @@ public final class RegistryManager {
 		return pack.getInputStream(SCRIPT);
 	}
 
-	void reload() {
+	protected void processConfiguration(@Nonnull final ModConfigurationFile cfg) {
+		for (final Registry r : this.registries.values())
+			if (r != null)
+				r.configure(cfg);
+	}
+
+	protected void reload() {
 		for (final Registry r : this.registries.values())
 			if (r != null)
 				r.init();
 
-		new DataScripts(this.side).execute(getAdditionalScripts());
+		for (final ModContainer mod : Loader.instance().getActiveModList()) {
+			DSurround.log().info("Loading from archive [%s]", mod.getModId());
+			final ModConfigurationFile cfg = DataScripts.loadFromArchive(mod.getModId());
+			if (cfg != null)
+				processConfiguration(cfg);
+			else
+				DSurround.log().warn("Unable to load configuration data!");
+		}
+		
+		final List<InputStream> resources = getAdditionalScripts();
+		for (final InputStream stream : resources) {
+			try (final InputStreamReader reader = new InputStreamReader(stream)) {
+				final ModConfigurationFile cfg = DataScripts.loadFromStream(reader);
+				if (cfg != null)
+					processConfiguration(cfg);
+			} catch (@Nonnull final Throwable ex) {
+				DSurround.log().error("Unable to read script from resource pack!", ex);
+			}
+		}
+
+		// Load scripts specified in the configuration
+		final String[] configFiles = ModOptions.externalScriptFiles;
+		for (final String file : configFiles) {
+			DSurround.log().info("Loading from directory [%s]", file);
+			final ModConfigurationFile cfg = DataScripts.loadFromDirectory(file);
+			if (cfg != null)
+				processConfiguration(cfg);
+			else
+				DSurround.log().warn("Unable to load configuration data!");
+		}
 
 		for (final Registry r : this.registries.values())
 			if (r != null)
@@ -143,7 +178,7 @@ public final class RegistryManager {
 
 	@SuppressWarnings("unchecked")
 	protected <T> T getRegistry(@Nonnull final RegistryType type) {
-		if(!this.initialized) {
+		if (!this.initialized) {
 			this.initialized = true;
 			this.reload();
 		}
@@ -152,7 +187,7 @@ public final class RegistryManager {
 
 	// NOTE: Server side has no resource packs so the client specific
 	// code is not executed when initializing a server side registry.
-	public List<InputStream> getAdditionalScripts() {
+	protected List<InputStream> getAdditionalScripts() {
 		if (this.side == Side.SERVER)
 			return ImmutableList.of();
 
@@ -174,7 +209,7 @@ public final class RegistryManager {
 				}
 			}
 		}
-		
+
 		// Tack on built-in profiles
 		streams.addAll(Profiles.getProfileStreams());
 

@@ -24,27 +24,11 @@
 
 package org.blockartistry.DynSurround.data.xface;
 
-import java.io.Reader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.annotation.Nonnull;
-
-import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.registry.BiomeRegistry;
-import org.blockartistry.DynSurround.registry.BlockRegistry;
-import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.FootstepsRegistry;
-import org.blockartistry.DynSurround.registry.ItemRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
-import org.blockartistry.lib.JsonUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
-
-import net.minecraftforge.fml.relauncher.Side;
 
 public final class ModConfigurationFile {
 
@@ -80,53 +64,4 @@ public final class ModConfigurationFile {
 	@SerializedName("itemConfig")
 	public ItemConfig itemConfig = new ItemConfig();
 
-	public static void process(@Nonnull Side side, @Nonnull final Reader reader) {
-
-		try {
-
-			final ModConfigurationFile script = JsonUtils.load(reader, ModConfigurationFile.class);
-			final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
-
-			for (final DimensionConfig dimension : script.dimensions)
-				dimensions.register(dimension);
-
-			// Do this first - config may want to alias biomes and that
-			// needs to happen before processing actual biomes
-			final BiomeRegistry biomes = RegistryManager.get(RegistryType.BIOME);
-			for (final Entry<String, String> entry : script.biomeAlias.entrySet())
-				biomes.registerBiomeAlias(entry.getKey(), entry.getValue());
-
-			for (final BiomeConfig biome : script.biomes)
-				biomes.register(biome);
-
-			// We don't want to process these items if the mod is running
-			// on the server - they apply only to client side.
-			if (side == Side.SERVER)
-				return;
-
-			final BlockRegistry blocks = RegistryManager.get(RegistryType.BLOCK);
-			for (final BlockConfig block : script.blocks)
-				blocks.register(block);
-
-			final FootstepsRegistry footsteps = RegistryManager.get(RegistryType.FOOTSTEPS);
-			for (final ForgeEntry entry : script.forgeMappings) {
-				for (final String name : entry.dictionaryEntries)
-					footsteps.registerForgeEntries(entry.acousticProfile, name);
-			}
-
-			for (final Entry<String, String> entry : script.footsteps.entrySet()) {
-				footsteps.registerBlocks(entry.getValue(), entry.getKey());
-			}
-
-			for (final String fp : script.footprints) {
-				footsteps.registerFootrint(fp);
-			}
-
-			final ItemRegistry itemRegistry = RegistryManager.get(RegistryType.ITEMS);
-			itemRegistry.register(script.itemConfig);
-
-		} catch (final Throwable t) {
-			DSurround.log().error("Unable to process configuration script", t);
-		}
-	}
 }

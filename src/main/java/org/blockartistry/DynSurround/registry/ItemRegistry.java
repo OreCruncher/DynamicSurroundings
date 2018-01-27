@@ -37,6 +37,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.data.xface.ItemConfig;
+import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.collections.IdentityHashSet;
 
@@ -60,6 +61,11 @@ public class ItemRegistry extends Registry {
 		super(side);
 	}
 
+	@Override
+	public void configure(@Nonnull final ModConfigurationFile cfg) {
+		this.register(cfg.itemConfig);
+	}
+	
 	@Override
 	public void init() {
 		this.swordItems.clear();
@@ -191,10 +197,10 @@ public class ItemRegistry extends Registry {
 		}
 		return ArmorClass.NONE;
 	}
-
+	
 	@SideOnly(Side.CLIENT)
 	public SoundEffect getSwingSound(@Nonnull final ItemStack stack) {
-		if (stack != null && !stack.isEmpty() && stack.getItem() != null) {
+		if (stack != null && stack.getItem() != null) {
 			final Class<?> itemClass = stack.getItem().getClass();
 			final SoundEffect sound;
 			if (this.swordItems.contains(itemClass))
@@ -235,10 +241,10 @@ public class ItemRegistry extends Registry {
 
 	@SideOnly(Side.CLIENT)
 	public SoundEffect getUseSound(@Nonnull final ItemStack stack) {
-		if (stack != null && !stack.isEmpty() && stack.getItem() != null) {
+		if (stack != null && stack.getItem() != null) {
 			final Class<?> itemClass = stack.getItem().getClass();
 			final SoundEffect sound;
-
+			
 			if (this.bowItems.contains(itemClass))
 				sound = Sounds.BOW_PULL;
 			else if (this.shieldItems.contains(itemClass))
@@ -271,7 +277,7 @@ public class ItemRegistry extends Registry {
 
 	@SideOnly(Side.CLIENT)
 	public SoundEffect getEquipSound(@Nonnull final ItemStack stack) {
-		if (stack != null && !stack.isEmpty() && stack.getItem() != null) {
+		if (stack != null && stack.getItem() != null) {
 			final Class<?> itemClass = stack.getItem().getClass();
 			final SoundEffect sound;
 			if (this.swordItems.contains(itemClass))

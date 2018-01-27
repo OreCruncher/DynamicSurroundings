@@ -38,6 +38,7 @@ import org.blockartistry.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.data.xface.BlockConfig;
 import org.blockartistry.DynSurround.data.xface.EffectConfig;
+import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.DynSurround.data.xface.SoundType;
 import org.blockartistry.DynSurround.registry.BlockInfo.BlockInfoMutable;
@@ -63,6 +64,12 @@ public final class BlockRegistry extends Registry {
 		this.cache = new IdentityHashMap<IBlockState, BlockProfile>();
 	}
 
+	@Override
+	public void configure(@Nonnull final ModConfigurationFile cfg) {
+		for (final BlockConfig block : cfg.blocks)
+			this.register(block);
+	}
+	
 	@Override
 	public void initComplete() {
 		this.registry = ImmutableMap.copyOf(this.registry);

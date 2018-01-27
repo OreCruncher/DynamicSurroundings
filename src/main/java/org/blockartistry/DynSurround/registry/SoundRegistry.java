@@ -33,15 +33,16 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.gui.ConfigSound;
 import org.blockartistry.DynSurround.client.sound.Sounds;
+import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.math.MathStuff;
-
 import gnu.trove.impl.Constants;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 
+//@SideOnly(Side.CLIENT)
 public final class SoundRegistry extends Registry {
 
 	public static final float MIN_SOUNDFACTOR = 0F;
@@ -82,6 +83,11 @@ public final class SoundRegistry extends Registry {
 		}
 	}
 
+	@Override
+	public void configure(@Nonnull final ModConfigurationFile cfg) {
+		// Nothing to configure
+	}
+	
 	@Override
 	public void fini() {
 

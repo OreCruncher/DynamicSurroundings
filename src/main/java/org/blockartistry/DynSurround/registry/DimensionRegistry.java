@@ -31,6 +31,8 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.data.xface.DimensionConfig;
+import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
+
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -45,6 +47,12 @@ public final class DimensionRegistry extends Registry {
 	public void init() {
 		this.cache.clear();
 		this.dimensionData.clear();
+	}
+	
+	@Override
+	public void configure(@Nonnull final ModConfigurationFile cfg) {
+		for (final DimensionConfig dimension : cfg.dimensions)
+			this.register(dimension);
 	}
 
 	@Override

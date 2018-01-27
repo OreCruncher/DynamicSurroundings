@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
@@ -38,6 +39,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
+import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
@@ -121,6 +123,15 @@ public final class BiomeRegistry extends Registry {
 		this.WTF_INFO = resolve(WTF);
 	}
 
+	@Override
+	public void configure(@Nonnull final ModConfigurationFile cfg) {
+		for (final Entry<String, String> entry : cfg.biomeAlias.entrySet())
+			this.registerBiomeAlias(entry.getKey(), entry.getValue());
+
+		for (final BiomeConfig biome : cfg.biomes)
+			this.register(biome);
+	}
+	
 	@Override
 	public void initComplete() {
 		if (ModOptions.enableDebugLogging) {
