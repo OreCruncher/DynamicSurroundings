@@ -29,7 +29,7 @@ import java.util.List;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.data.DimensionEffectData;
-import org.blockartistry.DynSurround.registry.RegistryManager;
+import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.Localization;
 
 import com.google.common.collect.ImmutableList;
@@ -42,6 +42,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 public final class CommandDS extends CommandBase {
 
@@ -136,7 +137,7 @@ public final class CommandDS extends CommandBase {
 				world.provider.resetRainAndThunder();
 				feedback = new TextComponentString(Localization.format("msg.RainReset"));
 			} else if (COMMAND_OPTION_RELOAD.compareToIgnoreCase(parms[0]) == 0) {
-				RegistryManager.reloadResources();
+				MinecraftForge.EVENT_BUS.post(new ReloadEvent.Configuration());
 				feedback = new TextComponentString(Localization.format("msg.BiomeReload"));
 			} else if (COMMAND_OPTION_CONFIG.compareToIgnoreCase(parms[0]) == 0) {
 				feedback = new TextComponentString(config(world, data));

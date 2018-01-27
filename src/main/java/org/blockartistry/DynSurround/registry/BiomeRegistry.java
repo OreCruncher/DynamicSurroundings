@@ -40,9 +40,11 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
+import org.blockartistry.DynSurround.event.ReloadEvent;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -168,7 +170,7 @@ public final class BiomeRegistry extends Registry {
 		if (result == null) {
 			DSurround.log().warn("Biome [%s] not detected during initialization - forcing reload (%s)",
 					biome.getBiomeName(), biome.getClass());
-			RegistryManager.reloadResources(this.side);
+			MinecraftForge.EVENT_BUS.post(new ReloadEvent.Configuration(this.side));
 			result = resolve(biome);
 
 			if (result == null) {

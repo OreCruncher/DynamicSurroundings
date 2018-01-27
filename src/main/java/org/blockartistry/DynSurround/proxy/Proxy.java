@@ -31,6 +31,7 @@ import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.commands.CommandDS;
 import org.blockartistry.DynSurround.entity.CapabilityEmojiData;
 import org.blockartistry.DynSurround.network.Network;
+import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.server.services.ServiceManager;
 import org.blockartistry.lib.Localization;
 
@@ -65,6 +66,7 @@ public class Proxy {
 
 	protected void eventBusRegistrations() {
 		register(CapabilityEmojiData.EventHandler.class);
+		register(RegistryManager.class);
 	}
 
 	public long currentSessionDuration() {
