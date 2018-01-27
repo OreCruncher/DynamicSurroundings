@@ -39,6 +39,7 @@ import org.blockartistry.DynSurround.data.Profiles;
 import org.blockartistry.DynSurround.data.xface.DataScripts;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.DynSurround.event.RegistryEvent;
+import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.SideLocal;
 
 import com.google.common.collect.ImmutableList;
@@ -52,6 +53,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -69,9 +71,18 @@ public final class RegistryManager {
 		return managers.get();
 	}
 
-	public static void reloadResources() {
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public static void onReload(@Nonnull final ReloadEvent.Resources event) {
 		reloadResources(Side.CLIENT);
-		reloadResources(Side.SERVER);
+	}
+
+	@SubscribeEvent
+	public static void onReload(@Nonnull final ReloadEvent.Configuration event) {
+		if (event.side == null || event.side == Side.CLIENT)
+			reloadResources(Side.CLIENT);
+		if (event.side == null || event.side == Side.SERVER)
+			reloadResources(Side.SERVER);
 	}
 
 	public static void reloadResources(@Nonnull final Side side) {
@@ -114,7 +125,7 @@ public final class RegistryManager {
 					"Attempt to get a registry that has not been configured [" + reg.getName() + "]");
 		return (T) this.registries.get(reg);
 	}
-	
+
 	public void register(@Nonnull final Registry reg) {
 		this.registries.put(reg.getClass(), reg);
 		this.initOrder.add(reg);

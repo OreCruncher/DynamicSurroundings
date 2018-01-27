@@ -36,25 +36,23 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.Permissions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.lib.ConfigProcessor;
+import org.blockartistry.lib.gui.GuiConfigBase;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.client.config.GuiConfig;
 import net.minecraftforge.fml.client.config.IConfigElement;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class DynSurroundConfigGui extends GuiConfig {
+public class DynSurroundConfigGui extends GuiConfigBase {
 
 	private final Configuration config = DSurround.config();
 
@@ -129,19 +127,12 @@ public class DynSurroundConfigGui extends GuiConfig {
 	}
 
 	@Override
-	protected void actionPerformed(final GuiButton button) {
-
-		super.actionPerformed(button);
-
-		// Done button was pressed
-		if (button.id == 2000) {
-			saveSoundList();
-			this.config.save();
-			ConfigProcessor.process(this.config, ModOptions.class);
-			RegistryManager.reloadResources();
-		}
+	protected void doFixups() {
+		saveSoundList();
+		this.config.save();
+		ConfigProcessor.process(this.config, ModOptions.class);
 	}
-
+	
 	protected void saveSoundList() {
 		final List<String> culledSounds = new ArrayList<String>();
 		final List<String> blockedSounds = new ArrayList<String>();

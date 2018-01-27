@@ -24,17 +24,44 @@
 
 package org.blockartistry.DynSurround.event;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
-public class ResourceReloadEvent extends Event {
+public class ReloadEvent extends Event {
 
-	public final IResourceManager manager;
-	
-	public ResourceReloadEvent(final IResourceManager manager) {
-		this.manager = manager;
+	/**
+	 * Event fired when resource packs have changed.
+	 */
+	@SideOnly(Side.CLIENT)
+	public static class Resources extends ReloadEvent {
+		
+		public final IResourceManager manager;
+
+		public Resources(final IResourceManager manager) {
+			this.manager = manager;
+		}
 	}
+	
+	/**
+	 * Event fired when the mod configuration file changed.
+	 * @author Ted
+	 *
+	 */
+	public static class Configuration extends ReloadEvent {
+		
+		public final Side side;
+		
+		public Configuration() {
+			this.side = null;
+		}
+		
+		public Configuration(@Nonnull final Side side) {
+			this.side = side;
+		}
+	}
+	
 }
