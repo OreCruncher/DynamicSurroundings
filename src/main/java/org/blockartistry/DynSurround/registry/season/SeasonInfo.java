@@ -26,25 +26,24 @@ package org.blockartistry.DynSurround.registry.season;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.registry.BiomeRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.SeasonType;
 import org.blockartistry.DynSurround.registry.TemperatureRating;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 
 import com.google.common.base.Objects;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class SeasonInfo {
 
-	protected final BiomeRegistry biomes;
 	protected final String dimensionName;
 
 	public SeasonInfo(@Nonnull final World world) {
-		this.biomes = RegistryManager.get(RegistryType.BIOME);
 		this.dimensionName = world.provider.getDimensionType().getName();
 	}
 
@@ -74,7 +73,7 @@ public class SeasonInfo {
 	}
 
 	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		final float biomeTemp = this.biomes.get(world.getBiome(pos)).getFloatTemperature(pos);
+		final float biomeTemp = ClientRegistry.BIOME.get(world.getBiome(pos)).getFloatTemperature(pos);
 		final float heightTemp = world.getBiomeProvider().getTemperatureAtHeight(biomeTemp,
 				getPrecipitationHeight(world, pos).getY());
 		return heightTemp;

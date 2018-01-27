@@ -36,14 +36,9 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 public final class AtmosphereService extends Service {
-
-	private final DimensionRegistry dimensions = RegistryManager.get(RegistryType.DIMENSION);
 
 	AtmosphereService() {
 		super("AtmosphereService");
@@ -91,7 +86,7 @@ public final class AtmosphereService extends Service {
 
 	private WeatherGenerator createGenerator(@Nonnull final World world) {
 		WeatherGenerator result = null;
-		if (this.dimensions.hasWeather(world)) {
+		if (ServerRegistry.DIMENSION.hasWeather(world)) {
 			final int dimId = world.provider.getDimension();
 			if (doVanillaRain(world)) {
 				if (dimId != -1)

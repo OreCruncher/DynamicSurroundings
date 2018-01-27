@@ -39,7 +39,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public final class DimensionRegistry extends Registry {
 
-	DimensionRegistry(@Nonnull final Side side) {
+	public DimensionRegistry(@Nonnull final Side side) {
 		super(side);
 	}
 

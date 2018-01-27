@@ -21,59 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.blockartistry.DynSurround.client;
+package org.blockartistry.DynSurround.server.services;
 
-import org.blockartistry.DynSurround.registry.BiomeRegistry;
-import org.blockartistry.DynSurround.registry.BlockRegistry;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.FootstepsRegistry;
-import org.blockartistry.DynSurround.registry.ItemRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.SeasonRegistry;
-import org.blockartistry.DynSurround.registry.SoundRegistry;
-
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Common references to the various registries used by the client side
- * of the mod.  Consolidate the various reference needs in one place for
- * better management.
- */
-@SideOnly(Side.CLIENT)
-public final class ClientRegistry {
-	
-	private ClientRegistry() {
+public final class ServerRegistry {
+
+	private ServerRegistry() {
 		
 	}
-
-	public static final SoundRegistry SOUND; 
-	public static final BiomeRegistry BIOME;
-	public static final BlockRegistry BLOCK;
+	
 	public static final DimensionRegistry DIMENSION;
-	public static final SeasonRegistry SEASON;
-	public static final ItemRegistry ITEMS;
-	public static final FootstepsRegistry FOOTSTEPS;
 	
 	static {
 		
 		DIMENSION = new DimensionRegistry(Side.CLIENT);
-		SOUND = new SoundRegistry(Side.CLIENT); 
-		BIOME = new BiomeRegistry(Side.CLIENT);
-		BLOCK = new BlockRegistry(Side.CLIENT);
-		SEASON = new SeasonRegistry(Side.CLIENT);
-		ITEMS = new ItemRegistry(Side.CLIENT);
-		FOOTSTEPS = new FootstepsRegistry(Side.CLIENT);
 		
 		final RegistryManager rm = RegistryManager.get();
 		rm.register(DIMENSION);
-		rm.register(SOUND);
-		rm.register(BIOME);
-		rm.register(BLOCK);
-		rm.register(SEASON);
-		rm.register(ITEMS);
-		rm.register(FOOTSTEPS);
 
 		rm.reload();
 	}
+
 }
