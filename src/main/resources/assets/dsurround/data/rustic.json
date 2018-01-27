@@ -2,34 +2,6 @@
 	"blocks": [
 		{
 			"blocks": [
-				"rustic:painted_wood_white",
-				"rustic:painted_wood_orange",
-				"rustic:painted_wood_magenta",
-				"rustic:painted_wood_light_blue",
-				"rustic:painted_wood_yellow",
-				"rustic:painted_wood_lime",
-				"rustic:painted_wood_pink",
-				"rustic:painted_wood_gray",
-				"rustic:painted_wood_silver",
-				"rustic:painted_wood_cyan",
-				"rustic:painted_wood_purple",
-				"rustic:painted_wood_blue",
-				"rustic:painted_wood_brown",
-				"rustic:painted_wood_green",
-				"rustic:painted_wood_red",
-				"rustic:painted_wood_black"
-			],
-			"stepChance": 150,
-			"sounds": [
-				{
-					"sound": "dsurround:floorsqueak",
-					"soundType": "step",
-					"variable": true
-				}
-			]
-		},
-		{
-			"blocks": [
 				"rustic:beehive"
 			],
 			"chance": 5,
@@ -104,11 +76,11 @@
 		"rustic:honey": "NOT_EMITTER",
 		"rustic:horsetail": "NOT_EMITTER",
 		"rustic:ironberry_juice": "NOT_EMITTER",
-		"rustic:ironwood_doubleslab": "wood",
+		"rustic:ironwood_doubleslab": "planks",
 		"rustic:liquid_barrel": "bluntwood",
 		"rustic:marsh_mallow": "NOT_EMITTER",
 		"rustic:mooncap_mushroom": "NOT_EMITTER",
-		"rustic:olive_doubleslab": "wood",
+		"rustic:olive_doubleslab": "planks",
 		"rustic:olive_oil": "NOT_EMITTER",
 		"rustic:retort": "sandstone",
 		"rustic:retort_advanced": "sandstone",

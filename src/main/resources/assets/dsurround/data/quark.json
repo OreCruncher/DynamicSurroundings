@@ -1,7 +1,7 @@
 {
 	"footsteps": {
 		"quark:acacia_trapdoor": "bluntwood",
-		"quark:bark": "wood",
+		"quark:bark": "log",
 		"quark:bark_acacia_wall": "#fence",
 		"quark:bark_birch_wall": "#fence",
 		"quark:bark_dark_oak_wall": "#fence",

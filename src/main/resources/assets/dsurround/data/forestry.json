@@ -2,23 +2,6 @@
 	"blocks": [
 		{
 			"blocks": [
-				"forestry:planks.0",
-				"forestry:planks.1",
-				"forestry:planks.fireproof.0",
-				"forestry:planks.fireproof.1",
-				"forestry:planks.vanilla.fireproof.0"
-			],
-			"stepChance": 150,
-			"sounds": [
-				{
-					"sound": "dsurround:floorsqueak",
-					"soundType": "step",
-					"variable": true
-				}
-			]
-		},
-		{
-			"blocks": [
 				"forestry:beehives:*",
 				"forestry:bee_house:*",
 				"forestry:apiary:*"
@@ -104,20 +87,20 @@
 		"forestry:rainmaker": "stoneutility",
 		"forestry:raintank": "stoneutility",
 		"forestry:resource_storage": "stoneutility",
-		"forestry:slabs.double.0": "wood",
-		"forestry:slabs.double.1": "wood",
-		"forestry:slabs.double.2": "wood",
-		"forestry:slabs.double.3": "wood",
-		"forestry:slabs.double.fireproof.0": "wood",
-		"forestry:slabs.double.fireproof.1": "wood",
-		"forestry:slabs.double.fireproof.2": "wood",
-		"forestry:slabs.double.fireproof.3": "wood",
-		"forestry:slabs.vanilla.double.fireproof.0": "wood",
+		"forestry:slabs.double.0": "planks",
+		"forestry:slabs.double.1": "planks",
+		"forestry:slabs.double.2": "planks",
+		"forestry:slabs.double.3": "planks",
+		"forestry:slabs.double.fireproof.0": "planks",
+		"forestry:slabs.double.fireproof.1": "planks",
+		"forestry:slabs.double.fireproof.2": "planks",
+		"forestry:slabs.double.fireproof.3": "planks",
+		"forestry:slabs.vanilla.double.fireproof.0": "planks",
 		"forestry:squeezer": "stoneutility",
 		"forestry:stamp_collector": "stoneutility",
 		"forestry:still": "stoneutility",
-		"forestry:stump": "wood",
+		"forestry:stump": "log",
 		"forestry:trade_station": "stoneutility",
-		"forestry:wood_pile": "wood"
+		"forestry:wood_pile": "log"
 	}
 }

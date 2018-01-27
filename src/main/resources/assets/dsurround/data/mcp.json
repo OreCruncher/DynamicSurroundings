@@ -582,25 +582,6 @@
 		},
 		{
 			"blocks": [
-				"minecraft:planks",
-				"minecraft:oak_stairs",
-				"minecraft:spruce_stairs",
-				"minecraft:jungle_stairs",
-				"minecraft:birch_stairs",
-				"minecraft:acacia_stairs",
-				"minecraft:dark_oak_stairs"
-			],
-			"stepChance": 150,
-			"sounds": [
-				{
-					"sound": "dsurround:floorsqueak",
-					"soundType": "step",
-					"variable": true
-				}
-			]
-		},
-		{
-			"blocks": [
 				"minecraft:nether_brick",
 				"minecraft:nether_brick_fence",
 				"minecraft:nether_brick_stairs"
@@ -767,7 +748,7 @@
 		"minecraft:grass_path": "grass",
 		"minecraft:dirt": "dirt",
 		"minecraft:cobblestone": "stone",
-		"minecraft:planks": "wood",
+		"minecraft:planks": "planks",
 		"minecraft:sapling": "#sapling",
 		"minecraft:bedrock": "bedrock",
 		"minecraft:flowing_water": "NOT_EMITTER",
@@ -779,8 +760,8 @@
 		"minecraft:gold_ore": "ore",
 		"minecraft:iron_ore": "ore",
 		"minecraft:coal_ore": "ore",
-		"minecraft:log": "wood",
-		"minecraft:log2": "wood",
+		"minecraft:log": "log",
+		"minecraft:log2": "log",
 		"minecraft:leaves": "leaves",
 		"minecraft:chorus_flower": "leaves",
 		"minecraft:chorus_plant": "leaves",
@@ -865,7 +846,7 @@
 		"minecraft:fire": "NOT_EMITTER",
 		"minecraft:fire+foliage": "fire",
 		"minecraft:mob_spawner": "metalbar",
-		"minecraft:oak_stairs": "wood",
+		"minecraft:oak_stairs": "planks",
 		"minecraft:chest": "squeakywood",
 		"minecraft:redstone_wire": "NOT_EMITTER",
 		"minecraft:diamond_ore": "ore",
@@ -977,8 +958,8 @@
 		"minecraft:redstone_lamp": "stoneutility",
 		"minecraft:lit_redstone_lamp": "stoneutility",
 		"minecraft:sea_lantern": "stoneutility",
-		"minecraft:double_wooden_slab": "wood",
-		"minecraft:wooden_slab": "wood",
+		"minecraft:double_wooden_slab": "planks",
+		"minecraft:wooden_slab": "planks",
 		"minecraft:cocoa": "organic_dry",
 		"minecraft:sandstone_stairs": "sandstone",
 		"minecraft:red_sandstone_stairs": "sandstone",
@@ -987,9 +968,9 @@
 		"minecraft:tripwire_hook": "NOT_EMITTER",
 		"minecraft:tripwire": "NOT_EMITTER",
 		"minecraft:emerald_block": "composite",
-		"minecraft:spruce_stairs": "wood",
-		"minecraft:birch_stairs": "wood",
-		"minecraft:jungle_stairs": "wood",
+		"minecraft:spruce_stairs": "planks",
+		"minecraft:birch_stairs": "planks",
+		"minecraft:jungle_stairs": "planks",
 		"minecraft:command_block": "stoneutility",
 		"minecraft:chain_command_block": "stoneutility",
 		"minecraft:repeating_command_block": "stoneutility",
@@ -1025,8 +1006,8 @@
 		"minecraft:stained_hardened_clay": "brickstone",
 		"minecraft:stained_glass_pane": "glass",
 		"minecraft:leaves2": "leaves",
-		"minecraft:acacia_stairs": "wood",
-		"minecraft:dark_oak_stairs": "wood",
+		"minecraft:acacia_stairs": "planks",
+		"minecraft:dark_oak_stairs": "planks",
 		"minecraft:hay_block": "leaves",
 		"minecraft:carpet": "rug",
 		"minecraft:carpet+carpet": "rug",
@@ -1288,16 +1269,26 @@
 		{
 			"acousticProfile": "wood",
 			"dictionaryEntries": [
-				"logWood",
+				"craftingTableWood",
+				"bookshelf"
+			]
+		},
+		{
+			"acousticProfile": "planks",
+			"dictionaryEntries": [
 				"planksWood",
 				"slabWood",
 				"stairWood",
 				"plankBamboo",
 				"slabBamboo",
 				"stairBamboo",
-				"craftingTableWood",
-				"plankWood",
-				"bookshelf"
+				"plankWood"
+			]
+		},
+		{
+			"acousticProfile": "log",
+			"dictionaryEntries": [
+				"logWood"
 			]
 		},
 		{
