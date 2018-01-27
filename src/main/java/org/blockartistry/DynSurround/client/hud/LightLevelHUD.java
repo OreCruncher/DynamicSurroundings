@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.event.ResourceReloadEvent;
+import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.collections.ObjectArray;
@@ -402,7 +402,7 @@ public final class LightLevelHUD extends GuiOverlay {
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void resourceReloadEvent(final ResourceReloadEvent event) {
+	public static void resourceReloadEvent(final ReloadEvent.Resources event) {
 		if (useOldRenderMethod()) {
 			DSurround.log().info("Either OptiFine is installed or Framebuffers are disabled");
 			DSurround.log().info("Using drawString method for light level HUD render");

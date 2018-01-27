@@ -30,7 +30,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.registry.RegistryManager;
+import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.Presets.api.ConfigurationHelper;
 import org.blockartistry.Presets.api.PresetData;
 import org.blockartistry.Presets.api.ConfigurationHelper.IConfigFilter;
@@ -39,6 +39,7 @@ import org.blockartistry.lib.ConfigProcessor;
 
 import com.google.common.collect.Sets;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.Optional;
@@ -85,7 +86,7 @@ public class PresetHandler {
 			helper.load(DSurround.config(), FILTER);
 			DSurround.config().save();
 			ConfigProcessor.process(DSurround.config(), ModOptions.class);
-			RegistryManager.reloadResources();
+			MinecraftForge.EVENT_BUS.post(new ReloadEvent.Configuration());
 		}
 	}
 }

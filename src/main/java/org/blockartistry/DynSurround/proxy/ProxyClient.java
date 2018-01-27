@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.proxy;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.aurora.AuroraRenderer;
@@ -45,7 +46,7 @@ import org.blockartistry.DynSurround.client.weather.RenderWeather;
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.DynSurround.commands.CommandCalc;
 import org.blockartistry.DynSurround.data.PresetHandler;
-import org.blockartistry.DynSurround.event.ResourceReloadEvent;
+import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.DynSurround.event.WorldEventDetector;
 import org.blockartistry.lib.Localization;
 
@@ -56,10 +57,12 @@ import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -76,6 +79,7 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 	@Override
 	protected void eventBusRegistrations() {
 		super.eventBusRegistrations();
+		
 		register(AuroraRenderer.class);
 		register(HumDinger.class);
 		register(EnvironStateHandler.class);
@@ -90,6 +94,8 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 		register(PresetHandler.class);
 		register(WorldEventDetector.class);
 		register(LightLevelHUD.class);
+		
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@Override
@@ -155,7 +161,17 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 	}
 
 	@Override
-	public void onResourceManagerReload(final IResourceManager resourceManager) {
-		MinecraftForge.EVENT_BUS.post(new ResourceReloadEvent(resourceManager));
+	public void onResourceManagerReload(@Nonnull final IResourceManager resourceManager) {
+		MinecraftForge.EVENT_BUS.post(new ReloadEvent.Resources(resourceManager));
+	}
+	
+	@SubscribeEvent
+	public void onConfigChanged(@Nonnull final OnConfigChangedEvent event) {
+		if(event.getModID().equals(DSurround.MOD_ID)) {
+			// The configuration file changed.  Fire an appropriate
+			// event so that various parts of the mod can reinitialize.
+			MinecraftForge.EVENT_BUS.post(new ReloadEvent.Configuration());
+		}
+		
 	}
 }
