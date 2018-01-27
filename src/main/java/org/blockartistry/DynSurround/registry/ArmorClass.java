@@ -28,7 +28,10 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public enum ArmorClass {
 
 	//

@@ -81,9 +81,11 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemBlockSpecial;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class FootstepsRegistry extends Registry {
+@SideOnly(Side.CLIENT)
+public final class FootstepsRegistry extends Registry {
 
 	// System
 	private ResourcePacks dealer = new ResourcePacks();

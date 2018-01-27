@@ -45,7 +45,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public final class BiomeRegistry extends Registry {
 
 	public static final FakeBiome UNDERGROUND = new FakeBiome("Underground");

@@ -51,7 +51,10 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 	private static Field biomeName = null;

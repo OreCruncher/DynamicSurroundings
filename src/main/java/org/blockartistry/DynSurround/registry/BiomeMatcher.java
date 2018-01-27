@@ -28,7 +28,6 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.BiomeUtils;
 import org.blockartistry.lib.expression.BooleanValue;
 import org.blockartistry.lib.expression.Expression;
@@ -42,32 +41,18 @@ import com.google.common.primitives.Booleans;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public abstract class BiomeMatcher {
 
 	public abstract boolean match(@Nonnull final BiomeInfo info);
 
 	public static BiomeMatcher getMatcher(@Nonnull final BiomeConfig cfg) {
-		if (cfg.conditions != null)
-			return new ConditionsImpl(cfg);
-		return new LegacyImpl(RegistryManager.<BiomeRegistry>get(RegistryType.BIOME), cfg);
-	}
-
-	private static class LegacyImpl extends BiomeMatcher {
-
-		protected final BiomeRegistry reg;
-		protected final BiomeConfig config;
-
-		public LegacyImpl(@Nonnull final BiomeRegistry reg, @Nonnull final BiomeConfig cfg) {
-			this.reg = reg;
-			this.config = cfg;
-		}
-
-		@Override
-		public boolean match(@Nonnull final BiomeInfo info) {
-			return this.reg.isBiomeMatch(this.config, info);
-		}
-
+		if (cfg.conditions == null)
+			cfg.conditions = "";
+		return new ConditionsImpl(cfg);
 	}
 
 	private static class ConditionsImpl extends BiomeMatcher {
