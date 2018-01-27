@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 
@@ -48,6 +49,8 @@ import org.blockartistry.DynSurround.client.footsteps.system.GeneratorQP;
 import org.blockartistry.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.DynSurround.client.footsteps.system.ResourcePacks;
 import org.blockartistry.DynSurround.client.footsteps.util.ConfigProperty;
+import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
+import org.blockartistry.DynSurround.data.xface.ModConfigurationFile.ForgeEntry;
 import org.blockartistry.DynSurround.util.BlockState;
 import org.blockartistry.DynSurround.util.BlockState.Consumer;
 import org.blockartistry.lib.JsonUtils;
@@ -123,6 +126,22 @@ public class FootstepsRegistry extends Registry {
 
 		seedMap();
 
+	}
+
+	@Override
+	public void configure(@Nonnull final ModConfigurationFile cfg) {
+		for (final ForgeEntry entry : cfg.forgeMappings) {
+			for (final String name : entry.dictionaryEntries)
+				this.registerForgeEntries(entry.acousticProfile, name);
+		}
+
+		for (final Entry<String, String> entry : cfg.footsteps.entrySet()) {
+			this.registerBlocks(entry.getValue(), entry.getKey());
+		}
+
+		for (final String fp : cfg.footprints) {
+			this.registerFootrint(fp);
+		}
 	}
 
 	@Override

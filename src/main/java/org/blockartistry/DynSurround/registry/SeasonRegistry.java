@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModEnvironment;
+import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.DynSurround.registry.season.SeasonInfo;
 import org.blockartistry.DynSurround.registry.season.SeasonInfoNether;
 import org.blockartistry.DynSurround.registry.season.SeasonInfoToughAsNails;
@@ -44,6 +45,11 @@ public final class SeasonRegistry extends Registry {
 		super(side);
 	}
 
+	@Override
+	public void configure(@Nonnull final ModConfigurationFile cfg) {
+		// Nothing to configure
+	}
+	
 	protected SeasonInfo factory(@Nonnull final World world) {
 
 		if (world.provider.getDimension() == -1) {

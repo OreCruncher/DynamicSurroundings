@@ -37,6 +37,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.data.xface.ItemConfig;
+import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.collections.IdentityHashSet;
 
@@ -60,6 +61,11 @@ public class ItemRegistry extends Registry {
 		super(side);
 	}
 
+	@Override
+	public void configure(@Nonnull final ModConfigurationFile cfg) {
+		this.register(cfg.itemConfig);
+	}
+	
 	@Override
 	public void init() {
 		this.swordItems.clear();
