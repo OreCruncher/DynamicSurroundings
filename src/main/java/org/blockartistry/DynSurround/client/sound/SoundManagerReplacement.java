@@ -54,6 +54,7 @@ import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.sound.SoundSetupEvent;
@@ -97,11 +98,20 @@ public class SoundManagerReplacement extends SoundManager {
 	}
 
 	private void checkForClientThread(final String method) {
+		this.checkForClientThread(method, null);
+	}
+
+	private void checkForClientThread(final String method, final ISound sound) {
 		if (ModOptions.enableDebugLogging) {
 			final String name = Thread.currentThread().getName();
 			if (!name.equals("Client thread")) {
 				this.violationCount++;
 				DSurround.log().warn("SoundManager.%s() access by non-client thread [%s]!", method, name);
+				if (sound != null) {
+					final ResourceLocation rl = sound.getSoundLocation();
+					if (rl != null)
+						DSurround.log().warn("The sound in question is: %s", rl.toString());
+				}
 			}
 		}
 	}
@@ -135,7 +145,7 @@ public class SoundManagerReplacement extends SoundManager {
 	@Override
 	public void stopSound(@Nonnull final ISound sound) {
 		synchronized (this.mutex) {
-			checkForClientThread("stopSound");
+			checkForClientThread("stopSound", sound);
 			try {
 				if (sound instanceof BasicSound<?>) {
 					this.stopSound((BasicSound<?>) sound);
@@ -163,7 +173,7 @@ public class SoundManagerReplacement extends SoundManager {
 		if (sound != null) {
 			try {
 				synchronized (this.mutex) {
-					checkForClientThread("playSound");
+					checkForClientThread("playSound", sound);
 					if (sound instanceof BasicSound<?>)
 						this.playSound((BasicSound<?>) sound);
 					else if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC)
@@ -189,7 +199,7 @@ public class SoundManagerReplacement extends SoundManager {
 		if (sound != null) {
 			try {
 				synchronized (this.mutex) {
-					checkForClientThread("playDelayedSound");
+					checkForClientThread("playDelayedSound", sound);
 					if (sound instanceof BasicSound<?>) {
 						this.playDelayedSound((BasicSound<?>) sound, delay);
 					} else {
