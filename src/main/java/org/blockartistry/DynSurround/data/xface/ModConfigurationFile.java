@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.registry;
+package org.blockartistry.DynSurround.data.xface;
 
 import java.io.Reader;
 import java.util.HashMap;
@@ -33,10 +33,12 @@ import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.data.xface.BiomeConfig;
-import org.blockartistry.DynSurround.data.xface.BlockConfig;
-import org.blockartistry.DynSurround.data.xface.DimensionConfig;
-import org.blockartistry.DynSurround.data.xface.ItemConfig;
+import org.blockartistry.DynSurround.registry.BiomeRegistry;
+import org.blockartistry.DynSurround.registry.BlockRegistry;
+import org.blockartistry.DynSurround.registry.DimensionRegistry;
+import org.blockartistry.DynSurround.registry.FootstepsRegistry;
+import org.blockartistry.DynSurround.registry.ItemRegistry;
+import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.JsonUtils;
 import com.google.common.collect.ImmutableList;
