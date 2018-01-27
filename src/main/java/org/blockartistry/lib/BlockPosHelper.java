@@ -30,6 +30,7 @@ import javax.annotation.Nonnull;
 
 import com.google.common.collect.AbstractIterator;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
@@ -39,13 +40,20 @@ public final class BlockPosHelper {
 
 	}
 
+	/**
+	 * This method determines the BlockPos of the specified entity without
+	 * doing the offset of Y axis.
+	 * 
+	 * @param entity Entity for which the BlockPos is returned
+	 * @return BlockPos with coordinates
+	 */
+	public static BlockPos getNonOffsetPos(@Nonnull final Entity entity) {
+		return new BlockPos(entity.posX, entity.posY, entity.posZ);
+	}
+	
 	public static BlockPos.MutableBlockPos setPos(@Nonnull final BlockPos.MutableBlockPos pos,
 			@Nonnull final Vec3d vec) {
 		return pos.setPos(vec.xCoord, vec.yCoord, vec.zCoord);
-	}
-
-	public static BlockPos setPos(@Nonnull final BlockPos pos, @Nonnull final Vec3d vec) {
-		return new BlockPos(vec);
 	}
 
 	public static boolean canFormCuboid(@Nonnull final BlockPos p1, @Nonnull final BlockPos p2) {
@@ -91,9 +99,9 @@ public final class BlockPosHelper {
 	 * method is used, the resulting BlockPos instances can only be used inside
 	 * the iteration loop.
 	 * 
-	 * NOTE: This is similar to the logic in Forge.  Difference is that it
-	 * favors iterating along the Y axis first before X/Z.  Goal is to maximize
-	 * chunk caching for area scanning.
+	 * NOTE: This is similar to the logic in Forge. Difference is that it favors
+	 * iterating along the Y axis first before X/Z. Goal is to maximize chunk
+	 * caching for area scanning.
 	 */
 	public static Iterable<BlockPos.MutableBlockPos> getAllInBoxMutable(BlockPos from, BlockPos to) {
 		final BlockPos blockpos = createMinPoint(from, to);

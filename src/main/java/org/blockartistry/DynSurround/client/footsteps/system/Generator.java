@@ -34,6 +34,7 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
+import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.DynSurround.client.footsteps.implem.ConfigOptions;
 import org.blockartistry.DynSurround.client.footsteps.implem.Variator;
 import org.blockartistry.DynSurround.client.footsteps.implem.Substrate;
@@ -70,6 +71,7 @@ public class Generator {
 
 	protected final Isolator isolator;
 	protected final Variator VAR;
+	protected final BlockMap blockMap;
 
 	protected float dmwBase;
 	protected float dwmYChange;
@@ -98,6 +100,7 @@ public class Generator {
 	public Generator(@Nonnull final Isolator isolator, @Nonnull final Variator var) {
 		this.isolator = isolator;
 		this.VAR = var;
+		this.blockMap = ClientRegistry.FOOTSTEPS.getBlockMap();
 	}
 
 	public void generateFootsteps(@Nonnull final EntityLivingBase entity) {
@@ -138,7 +141,6 @@ public class Generator {
 		updateWalkedOnStep(ply);
 
 		final float distanceReference = (float) this.distanceWalkedOnStepModified;
-		// final float distanceReference = ply.distanceWalkedOnStepModified;
 
 		this.stepThisFrame = false;
 
@@ -303,7 +305,8 @@ public class Generator {
 			return;
 
 		final int yy = MathStuff.floor(ply.posY - 0.1d - ply.getYOffset() - (ply.onGround ? 0d : 0.25d));
-		final Association assos = this.findAssociationMessyFoliage(new BlockPos(ply.posX, yy, ply.posZ));
+		final Association assos = this.findAssociationMessyFoliage(ply.getEntityWorld(),
+				new BlockPos(ply.posX, yy, ply.posZ));
 		if (assos != null) {
 			if (!this.isMessyFoliage) {
 				this.isMessyFoliage = true;
@@ -333,10 +336,6 @@ public class Generator {
 		return MathStuff.clamp((number - min) / (max - min), 0.0F, 1.0F);
 	}
 
-	/*
-	 * Former Solver code moved into Generator.
-	 */
-
 	/**
 	 * Play an association.
 	 */
@@ -351,22 +350,22 @@ public class Generator {
 		}
 	}
 
-	protected boolean hasFootstepImprint(@Nullable final IBlockState state, @Nonnull final BlockPos pos) {
+	protected boolean hasFootstepImprint(@Nonnull final World world, @Nullable final IBlockState state,
+			@Nonnull final BlockPos pos) {
 		if (state != null) {
-			final IBlockState footstepState = FacadeHelper.resolveState(state, EnvironState.getWorld(), pos,
-					EnumFacing.UP);
+			final IBlockState footstepState = FacadeHelper.resolveState(state, world, pos, EnumFacing.UP);
 			return ClientRegistry.FOOTSTEPS.hasFootprint(footstepState);
 		}
 
 		return false;
 	}
 
-	protected boolean hasFootstepImprint(@Nonnull final Vec3d pos) {
+	protected boolean hasFootstepImprint(@Nonnull World world, @Nonnull final Vec3d pos) {
 		// Check the block above to see if it has a footprint. Intended to handle things
 		// like snow on stone.
 		BlockPos blockPos = new BlockPos(pos).up();
-		IBlockState state = WorldUtils.getBlockState(EnvironState.getWorld(), blockPos);
-		if (state != null && hasFootstepImprint(state, blockPos))
+		IBlockState state = WorldUtils.getBlockState(world, blockPos);
+		if (state != null && hasFootstepImprint(world, state, blockPos))
 			return true;
 
 		// If the block above blocks movement then it's not possible to lay
@@ -376,9 +375,9 @@ public class Generator {
 
 		// Check the requested block
 		blockPos = new BlockPos(pos);
-		state = WorldUtils.getBlockState(EnvironState.getWorld(), blockPos);
+		state = WorldUtils.getBlockState(world, blockPos);
 		if (state != null) {
-			return hasFootstepImprint(state, blockPos);
+			return hasFootstepImprint(world, state, blockPos);
 		}
 
 		return false;
@@ -416,7 +415,7 @@ public class Generator {
 		final Association result = addSoundOverlay(player, findAssociationForLocation(player, pos));
 		if (result != null && !player.isJumping) {
 			final Vec3d printLocation = new Vec3d(xx, minY, zz);
-			if (hasFootstepImprint(printLocation.addVector(0D, -0.5D, 0D)))
+			if (hasFootstepImprint(player.getEntityWorld(), printLocation.addVector(0D, -0.5D, 0D)))
 				result.generatePrint(player, printLocation, rotDegrees, isRightFoot);
 		}
 		return result;
@@ -523,7 +522,7 @@ public class Generator {
 		IAcoustic[] association = null;
 
 		if (above != AIR_STATE)
-			association = ClientRegistry.FOOTSTEPS.getBlockMap().getBlockSubstrateAcoustics(world, above, tPos, Substrate.CARPET);
+			association = this.blockMap.getBlockSubstrateAcoustics(world, above, tPos, Substrate.CARPET);
 
 		if (association == null || association == AcousticsManager.NOT_EMITTER) {
 			// This condition implies that if the carpet is NOT_EMITTER, solving
@@ -533,8 +532,7 @@ public class Generator {
 			if (in == AIR_STATE) {
 				tPos = pos.down();
 				final IBlockState below = WorldUtils.getBlockState(world, tPos);
-				association = ClientRegistry.FOOTSTEPS.getBlockMap().getBlockSubstrateAcoustics(world, below, tPos,
-						Substrate.FENCE);
+				association = this.blockMap.getBlockSubstrateAcoustics(world, below, tPos, Substrate.FENCE);
 				if (association != null) {
 					pos = tPos;
 					in = below;
@@ -543,18 +541,17 @@ public class Generator {
 			}
 
 			if (association == null) {
-				association = ClientRegistry.FOOTSTEPS.getBlockMap().getBlockAcoustics(world, in, pos);
+				association = this.blockMap.getBlockAcoustics(world, in, pos);
 			}
 
 			if (association != null && association != AcousticsManager.NOT_EMITTER) {
 				// This condition implies that foliage over a NOT_EMITTER block
-				// CANNOT PLAY This block most not be executed if the
-				// association
+				// CANNOT PLAY This block most not be executed if the association
 				// is a carpet => this block of code is here, not outside this
 				// if else group.
 
 				if (above != AIR_STATE) {
-					IAcoustic[] foliage = ClientRegistry.FOOTSTEPS.getBlockMap().getBlockSubstrateAcoustics(world, above, pos.up(),
+					IAcoustic[] foliage = this.blockMap.getBlockSubstrateAcoustics(world, above, pos.up(),
 							Substrate.FOLIAGE);
 					if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 						association = MyUtils.concatenate(association, foliage);
@@ -570,30 +567,19 @@ public class Generator {
 
 		if (association != null) {
 			if (association == AcousticsManager.NOT_EMITTER) {
-				// if (in.getBlock() != Blocks.air) { // air block
-				// PFLog.debugf("Not emitter for %0 : %1", in);
-				// }
 				return null; // Player has stepped on a non-emitter block as
 								// defined in the blockmap
 			} else {
-				// PFLog.debugf("Found association for %0 : %1 : %2", in,
-				// association);
 				return new Association(in, pos, association);
 			}
 		} else {
 			IAcoustic[] primitive = resolvePrimitive(in);
 			if (primitive != null) {
 				if (primitive == AcousticsManager.NOT_EMITTER) {
-					// PFLog.debugf("Primitive for %0 : %1 : %2 is NOT_EMITTER!
-					// Following behavior is uncertain.", in, primitive);
 					return null;
 				}
-
-				// PFLog.debugf("Found primitive for %0 : %1 : %2", in,
-				// primitive);
 				return new Association(in, pos, primitive);
 			} else {
-				// PFLog.debugf("No association for %0 : %1", in);
 				return new Association(in, pos);
 			}
 		}
@@ -673,9 +659,8 @@ public class Generator {
 	 * it, using a custom strategy which strategies are defined by the solver.
 	 */
 	@Nonnull
-	protected Association findAssociationMessyFoliage(@Nonnull final BlockPos pos) {
+	protected Association findAssociationMessyFoliage(@Nonnull World world, @Nonnull final BlockPos pos) {
 
-		final World world = EnvironState.getWorld();
 		final BlockPos up = pos.up();
 		final IBlockState above = WorldUtils.getBlockState(world, up);
 
@@ -684,43 +669,17 @@ public class Generator {
 
 		IAcoustic[] association = null;
 		boolean found = false;
-		// Try to see if the block above is a carpet...
-		/*
-		 * String association = this.isolator.getBlockMap().getBlockMapSubstrate(
-		 * PF172Helper.nameOf(xblock), xmetadata, "carpet");
-		 * 
-		 * if (association == null || association.equals("NOT_EMITTER")) { // This
-		 * condition implies that // if the carpet is NOT_EMITTER, solving will CONTINUE
-		 * with the actual // block surface the player is walking on // > NOT_EMITTER
-		 * carpets will not cause solving to skip
-		 * 
-		 * // Not a carpet association =
-		 * this.isolator.getBlockMap().getBlockMap(PF172Helper.nameOf(block), metadata);
-		 * 
-		 * if (association != null && !association.equals("NOT_EMITTER")) { // This
-		 * condition implies that // foliage over a NOT_EMITTER block CANNOT PLAY
-		 * 
-		 * // This block most not be executed if the association is a carpet // => this
-		 * block of code is here, not outside this if else group.
-		 */
 
-		IAcoustic[] foliage = ClientRegistry.FOOTSTEPS.getBlockMap().getBlockSubstrateAcoustics(world, above, up,
-				Substrate.FOLIAGE);
+		IAcoustic[] foliage = this.blockMap.getBlockSubstrateAcoustics(world, above, up, Substrate.FOLIAGE);
 		if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 			// we discard the normal block association, and mark the foliage as
 			// detected
-			// association = association + "," + foliage;
 			association = foliage;
-			IAcoustic[] isMessy = ClientRegistry.FOOTSTEPS.getBlockMap().getBlockSubstrateAcoustics(world, above, up,
-					Substrate.MESSY);
+			IAcoustic[] isMessy = this.blockMap.getBlockSubstrateAcoustics(world, above, up, Substrate.MESSY);
 
 			if (isMessy != null && isMessy == AcousticsManager.MESSY_GROUND)
 				found = true;
 		}
-		/*
-		 * } // else { the information is discarded anyways, the method returns null or
-		 * no association } } else // Is a carpet return null;
-		 */
 
 		if (found && association != null) {
 			return association == AcousticsManager.NOT_EMITTER ? null : new Association(association);
