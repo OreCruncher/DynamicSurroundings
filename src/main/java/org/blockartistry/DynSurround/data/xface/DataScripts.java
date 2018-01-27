@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.registry;
+package org.blockartistry.DynSurround.data.xface;
 
 import java.io.File;
 import java.io.FileInputStream;
