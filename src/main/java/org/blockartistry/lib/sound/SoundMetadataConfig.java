@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.data.xface;
+package org.blockartistry.lib.sound;
 
 import java.util.List;
 
