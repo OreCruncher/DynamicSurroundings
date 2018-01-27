@@ -27,7 +27,6 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
@@ -58,9 +57,6 @@ public class FakeBiome extends Biome {
 	}
 
 	private static BiomeInfo getTrueBiome() {
-		// Nasty hack to work around dedicated server exception
-		if (DSurround.proxy().isRunningAsServer())
-			return RegistryManager.get().<BiomeRegistry>get(BiomeRegistry.class).get(Biomes.PLAINS);
 		return EnvironState.getTruePlayerBiome();
 	}
 
