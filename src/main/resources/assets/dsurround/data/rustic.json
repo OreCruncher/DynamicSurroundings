@@ -2,34 +2,6 @@
 	"blocks": [
 		{
 			"blocks": [
-				"rustic:painted_wood_white",
-				"rustic:painted_wood_orange",
-				"rustic:painted_wood_magenta",
-				"rustic:painted_wood_light_blue",
-				"rustic:painted_wood_yellow",
-				"rustic:painted_wood_lime",
-				"rustic:painted_wood_pink",
-				"rustic:painted_wood_gray",
-				"rustic:painted_wood_silver",
-				"rustic:painted_wood_cyan",
-				"rustic:painted_wood_purple",
-				"rustic:painted_wood_blue",
-				"rustic:painted_wood_brown",
-				"rustic:painted_wood_green",
-				"rustic:painted_wood_red",
-				"rustic:painted_wood_black"
-			],
-			"stepChance": 150,
-			"sounds": [
-				{
-					"sound": "dsurround:floorsqueak",
-					"soundType": "step",
-					"variable": true
-				}
-			]
-		},
-		{
-			"blocks": [
 				"rustic:beehive"
 			],
 			"chance": 5,
@@ -56,22 +28,22 @@
 		"rustic:table_acacia": "woodutility",
 		"rustic:table_jungle": "woodutility",
 		"rustic:clay_wall_diag": "sandstone",
-		"rustic:painted_wood_white": "wood",
-		"rustic:painted_wood_orange": "wood",
-		"rustic:painted_wood_magenta": "wood",
-		"rustic:painted_wood_light_blue": "wood",
-		"rustic:painted_wood_yellow": "wood",
-		"rustic:painted_wood_lime": "wood",
-		"rustic:painted_wood_pink": "wood",
-		"rustic:painted_wood_gray": "wood",
-		"rustic:painted_wood_silver": "wood",
-		"rustic:painted_wood_cyan": "wood",
-		"rustic:painted_wood_purple": "wood",
-		"rustic:painted_wood_blue": "wood",
-		"rustic:painted_wood_brown": "wood",
-		"rustic:painted_wood_green": "wood",
-		"rustic:painted_wood_red": "wood",
-		"rustic:painted_wood_black": "wood",
+		"rustic:painted_wood_white": "planks",
+		"rustic:painted_wood_orange": "planks",
+		"rustic:painted_wood_magenta": "planks",
+		"rustic:painted_wood_light_blue": "planks",
+		"rustic:painted_wood_yellow": "planks",
+		"rustic:painted_wood_lime": "planks",
+		"rustic:painted_wood_pink": "planks",
+		"rustic:painted_wood_gray": "planks",
+		"rustic:painted_wood_silver": "planks",
+		"rustic:painted_wood_cyan": "planks",
+		"rustic:painted_wood_purple": "planks",
+		"rustic:painted_wood_blue": "planks",
+		"rustic:painted_wood_brown": "planks",
+		"rustic:painted_wood_green": "planks",
+		"rustic:painted_wood_red": "planks",
+		"rustic:painted_wood_black": "planks",
 		"rustic:apiary": "woodutility",
 		"rustic:barrel": "woodutility",
 		"rustic:iron_lattice": "metalbar",

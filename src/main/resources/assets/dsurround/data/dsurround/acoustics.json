@@ -503,6 +503,58 @@
 				]
 			}
 		},
+		"planks": {
+			"walk": {
+				"type": "simultaneous",
+				"array": [
+					"wood.wood_walk",
+					{
+						"type": "probability",
+						"array": [
+							1,
+							{
+								"name": "dsurround:floorsqueak"
+							},
+							10,
+							"@"
+						]
+					}
+				]
+			},
+			"wander": "dirt.dirt_wander",
+			"land": {
+				"type": "simultaneous",
+				"array": [
+					"wood.wood_walk",
+					{
+						"type": "delayed",
+						"delay": 30,
+						"name": "wood.wood_walk"
+					}
+				]
+			}
+		},
+		"log": {
+			"walk": {
+				"name": "wood.wood_walk",
+				"pitch_min": 55,
+				"pitch_max": 60
+			},
+			"wander": "dirt.dirt_wander",
+			"land": {
+				"type": "simultaneous",
+				"array": [
+					"wood.wood_walk",
+					{
+						"type": "delayed",
+						"delay": 30,
+						"name": "wood.wood_walk",
+						"pitch_min": 55,
+						"pitch_max": 60
+					}
+				]
+			}
+		},
 		"bedrock": {
 			"run": {
 				"name": "stone.stone_run",

@@ -1,19 +1,5 @@
 {
 	"blocks": [
-		{
-			"blocks": [
-				"natura:overworld_planks:*",
-				"natura:nether_planks:*"
-			],
-			"stepChance": 150,
-			"sounds": [
-				{
-					"sound": "dsurround:floorsqueak",
-					"soundType": "step",
-					"variable": true
-				}
-			]
-		}
 	],
 	"footsteps": {
 		"natura:amaranth_button": "NOT_EMITTER",
