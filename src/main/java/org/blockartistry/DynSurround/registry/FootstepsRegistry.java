@@ -74,6 +74,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.AbstractIllager;
+import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -302,18 +304,18 @@ public final class FootstepsRegistry extends Registry {
 	}
 
 	public Generator createGenerator(@Nonnull final EntityLivingBase entity) {
-		Generator result;
-		if (entity instanceof EntityVillager) {
-			result = new Generator(this.isolator, Variator.VILLAGER);
+		// Assume the default variator parameters
+		Variator var = Variator.DEFAULT;
+
+		if (entity instanceof EntityVillager || entity instanceof EntityWitch || entity instanceof AbstractIllager) {
+			var = entity.isChild() ? Variator.CHILD : Variator.VILLAGER;
 		} else if (entity instanceof EntityPlayer) {
 			if (ModOptions.foostepsQuadruped)
-				result = new GeneratorQP(this.isolator, Variator.PLAYER);
+				var = Variator.PLAYER_QUAD;
 			else
-				result = new Generator(this.isolator, Variator.PLAYER);
-		} else {
-			result = new Generator(this.isolator, Variator.DEFAULT);
+				var = Variator.PLAYER;
 		}
-		return result;
+		return var.QUADRUPED ? new GeneratorQP(this.isolator, var) : new Generator(this.isolator, var);
 	}
 
 	public void think() {
