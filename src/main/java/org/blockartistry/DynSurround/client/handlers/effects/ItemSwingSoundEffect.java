@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.effects.EventEffect;
 import org.blockartistry.lib.effects.IEventEffectLibraryState;
 
@@ -52,6 +53,9 @@ public class ItemSwingSoundEffect extends EventEffect {
 			return;
 
 		final ItemStack currentItem = event.getEntityPlayer().getHeldItem(event.getHand());
+		if (!ItemStackUtil.isValidItemStack(currentItem))
+			return;
+
 		final SoundEffect soundEffect = ClientRegistry.ITEMS.getSwingSound(currentItem);
 		if (soundEffect != null) {
 			final BasicSound<?> fx = this.getState().createSound(soundEffect, event.getEntityPlayer());
