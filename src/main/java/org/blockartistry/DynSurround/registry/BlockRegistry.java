@@ -34,6 +34,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.api.effects.BlockEffectType;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.data.xface.BlockConfig;
@@ -156,7 +157,7 @@ public final class BlockRegistry extends Registry {
 		if (entry.blocks.isEmpty())
 			return;
 
-		final SoundRegistry soundRegistry = RegistryManager.get().<SoundRegistry>get(SoundRegistry.class);
+		final SoundRegistry soundRegistry = ClientRegistry.SOUND;
 
 		for (final String blockName : entry.blocks) {
 			final BlockInfo blockInfo = BlockInfo.create(blockName);
