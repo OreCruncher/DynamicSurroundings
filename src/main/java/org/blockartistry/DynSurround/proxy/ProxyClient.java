@@ -42,12 +42,10 @@ import org.blockartistry.DynSurround.client.keyboard.KeyHandler;
 import org.blockartistry.DynSurround.client.sound.BackgroundMute;
 import org.blockartistry.DynSurround.client.sound.MusicTickerReplacement;
 import org.blockartistry.DynSurround.client.sound.SoundManagerReplacement;
-import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.client.weather.RenderWeather;
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.DynSurround.commands.CommandCalc;
 import org.blockartistry.DynSurround.data.PresetHandler;
-import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.lib.Localization;
 
 import net.minecraft.client.Minecraft;
@@ -105,8 +103,6 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 	@Override
 	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		super.preInit(event);
-		SoundRegistry.initializeRegistry();
-		Sounds.register();
 	}
 
 	@Override

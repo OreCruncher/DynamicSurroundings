@@ -28,7 +28,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.data.xface.SoundMetadataConfig;
+import org.blockartistry.lib.sound.SoundMetadataConfig;
 
 import com.google.common.collect.ImmutableList;
 
