@@ -103,11 +103,11 @@ public final class RegistryManager {
 	RegistryManager(final Side side) {
 		this.side = side;
 		this.registries.put(RegistryType.DIMENSION, new DimensionRegistry(side));
-		this.registries.put(RegistryType.SOUND, new SoundRegistry(side));
-		this.registries.put(RegistryType.BIOME, new BiomeRegistry(side));
-		this.registries.put(RegistryType.SEASON, new SeasonRegistry(side));
 
 		if (side == Side.CLIENT) {
+			this.registries.put(RegistryType.SOUND, new SoundRegistry(side));
+			this.registries.put(RegistryType.BIOME, new BiomeRegistry(side));
+			this.registries.put(RegistryType.SEASON, new SeasonRegistry(side));
 			this.registries.put(RegistryType.BLOCK, new BlockRegistry(side));
 			this.registries.put(RegistryType.FOOTSTEPS, new FootstepsRegistry(side));
 			this.registries.put(RegistryType.ITEMS, new ItemRegistry(side));
@@ -146,7 +146,7 @@ public final class RegistryManager {
 			else
 				DSurround.log().warn("Unable to load configuration data!");
 		}
-		
+
 		final List<InputStream> resources = getAdditionalScripts();
 		for (final InputStream stream : resources) {
 			try (final InputStreamReader reader = new InputStreamReader(stream)) {
@@ -182,7 +182,12 @@ public final class RegistryManager {
 			this.initialized = true;
 			this.reload();
 		}
-		return (T) this.registries.get(type);
+
+		final Object result = this.registries.get(type);
+		if (result == null)
+			throw new RuntimeException(
+					"Attempt to get registry [" + type.name() + "] that is not configured for the side!");
+		return (T) result;
 	}
 
 	// NOTE: Server side has no resource packs so the client specific

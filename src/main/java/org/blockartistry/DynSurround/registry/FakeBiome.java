@@ -32,7 +32,10 @@ import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class FakeBiome extends Biome {
 	
 	private static int biomeIdCounter = -200;

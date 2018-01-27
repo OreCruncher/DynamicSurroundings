@@ -34,6 +34,10 @@ import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.WeightTable;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
 public class BlockProfile {
 
 	public final static BlockEffect[] NO_EFFECTS = {};

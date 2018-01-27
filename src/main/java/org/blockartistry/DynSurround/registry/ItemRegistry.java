@@ -47,7 +47,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemRegistry extends Registry {
+@SideOnly(Side.CLIENT)
+public final class ItemRegistry extends Registry {
 
 	private final Set<Class<?>> swordItems = new IdentityHashSet<Class<?>>();
 	private final Set<Class<?>> axeItems = new IdentityHashSet<Class<?>>();
