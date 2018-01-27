@@ -40,6 +40,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.AbstractIllager;
+import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -88,7 +89,7 @@ public class FrostBreathEffect extends EntityEffect {
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
 		public boolean applies(@Nonnull final Entity e) {
-			return e instanceof EntityPlayer || e instanceof EntityVillager || e instanceof AbstractIllager;
+			return e instanceof EntityPlayer || e instanceof EntityVillager || e instanceof AbstractIllager || e instanceof EntityWitch;
 		}
 	};
 

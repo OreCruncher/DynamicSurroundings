@@ -31,7 +31,6 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.system.Generator;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
@@ -43,6 +42,8 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.AbstractIllager;
+import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -105,7 +106,7 @@ public class EntityFootprintEffect extends EntityEffect {
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
 		public boolean applies(@Nonnull final Entity e) {
-			return EnvironState.isPlayer(e) || e instanceof EntityVillager;
+			return e instanceof EntityPlayer || e instanceof EntityVillager || e instanceof AbstractIllager || e instanceof EntityWitch;
 		}
 	};
 
