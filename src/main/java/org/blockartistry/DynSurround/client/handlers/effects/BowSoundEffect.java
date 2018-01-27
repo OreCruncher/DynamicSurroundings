@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.effects.EventEffect;
 import org.blockartistry.lib.effects.IEventEffectLibraryState;
 
@@ -46,7 +47,7 @@ public class BowSoundEffect extends EventEffect {
 
 	@SubscribeEvent
 	public void onItemUse(@Nonnull final PlayerInteractEvent.RightClickItem event) {
-		if (!isClientValid(event) || event.getItemStack() == null || event.getItemStack().isEmpty())
+		if (!isClientValid(event) || !ItemStackUtil.isValidItemStack(event.getItemStack()))
 			return;
 
 		if (ClientRegistry.ITEMS.doBowSound(event.getItemStack())) {

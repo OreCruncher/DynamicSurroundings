@@ -32,6 +32,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
@@ -69,7 +70,7 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 
 		protected Item getItemForHand(final EntityPlayer player, final EnumHand hand) {
 			final ItemStack stack = player.getHeldItem(hand);
-			return (stack == null || stack.isEmpty()) ? null : stack.getItem();
+			return ItemStackUtil.isValidItemStack(stack) ? stack.getItem() : null;
 		}
 
 		protected boolean triggerNewEquipSound(@Nonnull final EntityPlayer player) {
@@ -89,7 +90,7 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 			if (triggerNewEquipSound(player)) {
 				this.clearState(state);
 				final ItemStack currentStack = player.getHeldItem(this.hand);
-				if (currentStack != null) {
+				if (ItemStackUtil.isValidItemStack(currentStack)) {
 					final SoundEffect soundEffect = ClientRegistry.ITEMS.getEquipSound(currentStack);
 					if (soundEffect != null) {
 						final BasicSound<?> sound = state.createSound(soundEffect, player);
