@@ -84,9 +84,26 @@ public class SoundManagerReplacement extends SoundManager {
 	private static final int MAX_STREAM_CHANNELS = 16;
 	private final static float MUTE_VOLUME = 0.00001F;
 
+	// Protection for bad behaved mods...
+	private final Object mutex = new Object();
+	private int violationCount = 0;
+
 	public SoundManagerReplacement(final SoundHandler handler, final GameSettings settings) {
 		super(handler, settings);
 		MinecraftForge.EVENT_BUS.register(this);
+
+		if (soundPhysicsGlobalVolume != null)
+			DSurround.log().info("SoundPhysics present and using global volume multiplier");
+	}
+
+	private void checkForClientThread(final String method) {
+		if (ModOptions.enableDebugLogging) {
+			final String name = Thread.currentThread().getName();
+			if (!name.equals("Client thread")) {
+				this.violationCount++;
+				DSurround.log().warn("SoundManager.%s() access by non-client thread [%s]!", method, name);
+			}
+		}
 	}
 
 	private SoundSystem getSoundSystem() {
@@ -117,14 +134,17 @@ public class SoundManagerReplacement extends SoundManager {
 
 	@Override
 	public void stopSound(@Nonnull final ISound sound) {
-		try {
-			if (sound instanceof BasicSound<?>) {
-				this.stopSound((BasicSound<?>) sound);
-			} else {
-				super.stopSound(sound);
+		synchronized (this.mutex) {
+			checkForClientThread("stopSound");
+			try {
+				if (sound instanceof BasicSound<?>) {
+					this.stopSound((BasicSound<?>) sound);
+				} else {
+					super.stopSound(sound);
+				}
+			} catch (final Throwable t) {
+				// Stop more weirdness from a crashed sound system
 			}
-		} catch (final Throwable t) {
-			// Stop more weirdness from a crashed sound system
 		}
 	}
 
@@ -142,10 +162,13 @@ public class SoundManagerReplacement extends SoundManager {
 	public void playSound(@Nonnull final ISound sound) {
 		if (sound != null) {
 			try {
-				if (sound instanceof BasicSound<?>)
-					this.playSound((BasicSound<?>) sound);
-				else if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC)
-					super.playSound(sound);
+				synchronized (this.mutex) {
+					checkForClientThread("playSound");
+					if (sound instanceof BasicSound<?>)
+						this.playSound((BasicSound<?>) sound);
+					else if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC)
+						super.playSound(sound);
+				}
 
 				// Flush - avoid that pesky missing sound issue due to async
 				getSoundSystem().CommandQueue(null);
@@ -165,10 +188,13 @@ public class SoundManagerReplacement extends SoundManager {
 	public void playDelayedSound(@Nonnull final ISound sound, final int delay) {
 		if (sound != null) {
 			try {
-				if (sound instanceof BasicSound<?>) {
-					this.playDelayedSound((BasicSound<?>) sound, delay);
-				} else {
-					super.playDelayedSound(sound, delay);
+				synchronized (this.mutex) {
+					checkForClientThread("playDelayedSound");
+					if (sound instanceof BasicSound<?>) {
+						this.playDelayedSound((BasicSound<?>) sound, delay);
+					} else {
+						super.playDelayedSound(sound, delay);
+					}
 				}
 			} catch (final Throwable t) {
 				// Stop more weirdness from a crashed sound system
@@ -178,107 +204,118 @@ public class SoundManagerReplacement extends SoundManager {
 
 	@Override
 	public void stopAllSounds() {
-		if (this.loaded) {
-			// Need to make sure all our sounds have been marked
-			// as DONE. Reason is the underlying routine just
-			// wipes out all the lists.
-			for (final ISound s : this.playingSounds.values())
-				this.setState(s, SoundState.DONE);
-			for (final ISound s : this.delayedSounds.keySet())
-				this.setState(s, SoundState.DONE);
+		synchronized (this.mutex) {
+			checkForClientThread("stopAllSounds");
+			if (this.loaded) {
+				// Need to make sure all our sounds have been marked
+				// as DONE. Reason is the underlying routine just
+				// wipes out all the lists.
+				for (final ISound s : this.playingSounds.values())
+					this.setState(s, SoundState.DONE);
+				for (final ISound s : this.delayedSounds.keySet())
+					this.setState(s, SoundState.DONE);
+			}
+			super.stopAllSounds();
 		}
-		super.stopAllSounds();
 	}
 
 	@Override
 	public void pauseAllSounds() {
-		for (final ISound s : this.playingSounds.values())
-			this.setStateIf(s, SoundState.PLAYING, SoundState.PAUSED);
+		synchronized (this.mutex) {
+			checkForClientThread("pauseAllSounds");
+			for (final ISound s : this.playingSounds.values())
+				this.setStateIf(s, SoundState.PLAYING, SoundState.PAUSED);
 
-		super.pauseAllSounds();
+			super.pauseAllSounds();
+		}
 	}
 
 	@Override
 	public void resumeAllSounds() {
-		for (final ISound s : this.playingSounds.values())
-			this.setStateIf(s, SoundState.PAUSED, SoundState.PLAYING);
+		synchronized (this.mutex) {
+			checkForClientThread("resumeAllSounds");
+			for (final ISound s : this.playingSounds.values())
+				this.setStateIf(s, SoundState.PAUSED, SoundState.PLAYING);
 
-		super.resumeAllSounds();
+			super.resumeAllSounds();
+		}
 	}
 
 	@Override
 	public void updateAllSounds() {
+		synchronized (this.mutex) {
+			checkForClientThread("updateAllSounds");
+			final SoundSystem sndSystem = getSoundSystem();
 
-		final SoundSystem sndSystem = getSoundSystem();
+			++this.playTime;
 
-		++this.playTime;
+			for (final ITickableSound itickablesound : this.tickableSounds) {
+				itickablesound.update();
 
-		for (final ITickableSound itickablesound : this.tickableSounds) {
-			itickablesound.update();
-
-			if (itickablesound.isDonePlaying()) {
-				this.stopSound(itickablesound);
-			} else {
-				final String s = this.invPlayingSounds.get(itickablesound);
-				synchronized (SoundSystemConfig.THREAD_SYNC) {
-					sndSystem.setVolume(s, this.getClampedVolume(itickablesound));
-					sndSystem.setPitch(s, this.getClampedPitch(itickablesound));
-					sndSystem.setPosition(s, itickablesound.getXPosF(), itickablesound.getYPosF(),
-							itickablesound.getZPosF());
-				}
-			}
-		}
-
-		final Iterator<Entry<String, ISound>> iterator = this.playingSounds.entrySet().iterator();
-
-		while (iterator.hasNext()) {
-
-			final Entry<String, ISound> entry = iterator.next();
-			final String s1 = entry.getKey();
-
-			if (!sndSystem.playing(s1)) {
-				final ISound isound = entry.getValue();
-				final int j = isound.getRepeatDelay();
-				final int minThresholdDelay = isound instanceof BasicSound ? 0 : 1;
-
-				// Repeatable sound could have a delay of 0, meaning
-				// don't delay a requeue.
-				if (isound.canRepeat() && j >= minThresholdDelay) {
-					this.playDelayedSound(isound, j);
+				if (itickablesound.isDonePlaying()) {
+					this.stopSound(itickablesound);
 				} else {
-					this.setState(isound, SoundState.DONE);
-				}
-
-				iterator.remove();
-				sndSystem.removeSource(s1);
-				this.playingSoundsStopTime.remove(s1);
-
-				try {
-					this.categorySounds.remove(isound.getCategory(), s1);
-				} catch (RuntimeException var8) {
-					;
-				}
-
-				if (isound instanceof ITickableSound) {
-					this.tickableSounds.remove(isound);
+					final String s = this.invPlayingSounds.get(itickablesound);
+					synchronized (SoundSystemConfig.THREAD_SYNC) {
+						sndSystem.setVolume(s, this.getClampedVolume(itickablesound));
+						sndSystem.setPitch(s, this.getClampedPitch(itickablesound));
+						sndSystem.setPosition(s, itickablesound.getXPosF(), itickablesound.getYPosF(),
+								itickablesound.getZPosF());
+					}
 				}
 			}
-		}
 
-		final Iterator<Entry<ISound, Integer>> iterator1 = this.delayedSounds.entrySet().iterator();
+			final Iterator<Entry<String, ISound>> iterator = this.playingSounds.entrySet().iterator();
 
-		while (iterator1.hasNext()) {
-			final Entry<ISound, Integer> entry1 = iterator1.next();
+			while (iterator.hasNext()) {
 
-			if (this.playTime >= entry1.getValue().intValue()) {
-				final ISound isound1 = entry1.getKey();
+				final Entry<String, ISound> entry = iterator.next();
+				final String s1 = entry.getKey();
 
-				if (isound1 instanceof ITickableSound) {
-					((ITickableSound) isound1).update();
+				if (!sndSystem.playing(s1)) {
+					final ISound isound = entry.getValue();
+					final int j = isound.getRepeatDelay();
+					final int minThresholdDelay = isound instanceof BasicSound ? 0 : 1;
+
+					// Repeatable sound could have a delay of 0, meaning
+					// don't delay a requeue.
+					if (isound.canRepeat() && j >= minThresholdDelay) {
+						this.playDelayedSound(isound, j);
+					} else {
+						this.setState(isound, SoundState.DONE);
+					}
+
+					iterator.remove();
+					sndSystem.removeSource(s1);
+					this.playingSoundsStopTime.remove(s1);
+
+					try {
+						this.categorySounds.remove(isound.getCategory(), s1);
+					} catch (RuntimeException var8) {
+						;
+					}
+
+					if (isound instanceof ITickableSound) {
+						this.tickableSounds.remove(isound);
+					}
 				}
+			}
 
-				this.playSound(isound1);
-				iterator1.remove();
+			final Iterator<Entry<ISound, Integer>> iterator1 = this.delayedSounds.entrySet().iterator();
+
+			while (iterator1.hasNext()) {
+				final Entry<ISound, Integer> entry1 = iterator1.next();
+
+				if (this.playTime >= entry1.getValue().intValue()) {
+					final ISound isound1 = entry1.getKey();
+
+					if (isound1 instanceof ITickableSound) {
+						((ITickableSound) isound1).update();
+					}
+
+					this.playSound(isound1);
+					iterator1.remove();
+				}
 			}
 		}
 	}
@@ -293,28 +330,38 @@ public class SoundManagerReplacement extends SoundManager {
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void diagnostics(final DiagnosticEvent.Gather event) {
-		final TObjectIntHashMap<String> counts = new TObjectIntHashMap<String>();
+		synchronized (this.mutex) {
+			checkForClientThread("diagnostics");
+			if (this.violationCount > 0)
+				event.output
+						.add(String.format(TextFormatting.RED + "SoundManager violations: %d", this.violationCount));
 
-		final Iterator<Entry<String, ISound>> iterator = this.playingSounds.entrySet().iterator();
-		while (iterator.hasNext()) {
-			Entry<String, ISound> entry = iterator.next();
-			ISound isound = entry.getValue();
-			counts.adjustOrPutValue(isound.getSound().getSoundLocation().toString(), 1, 1);
-		}
+			final TObjectIntHashMap<String> counts = new TObjectIntHashMap<String>();
 
-		final ArrayList<String> results = new ArrayList<String>();
-		final TObjectIntIterator<String> itr = counts.iterator();
-		while (itr.hasNext()) {
-			itr.advance();
-			results.add(String.format(TextFormatting.GOLD + "%s: %d", itr.key(), itr.value()));
+			final Iterator<Entry<String, ISound>> iterator = this.playingSounds.entrySet().iterator();
+			while (iterator.hasNext()) {
+				Entry<String, ISound> entry = iterator.next();
+				ISound isound = entry.getValue();
+				counts.adjustOrPutValue(isound.getSound().getSoundLocation().toString(), 1, 1);
+			}
+
+			final ArrayList<String> results = new ArrayList<String>();
+			final TObjectIntIterator<String> itr = counts.iterator();
+			while (itr.hasNext()) {
+				itr.advance();
+				results.add(String.format(TextFormatting.GOLD + "%s: %d", itr.key(), itr.value()));
+			}
+			Collections.sort(results);
+			event.output.addAll(results);
 		}
-		Collections.sort(results);
-		event.output.addAll(results);
 
 	}
 
 	public boolean isMuted() {
-		return this.sndSystem != null && getSoundSystem().getMasterVolume() == MUTE_VOLUME;
+		synchronized (this.mutex) {
+			checkForClientThread("isMuted");
+			return this.sndSystem != null && getSoundSystem().getMasterVolume() == MUTE_VOLUME;
+		}
 	}
 
 	public void setMuted(final boolean flag) {
@@ -322,20 +369,23 @@ public class SoundManagerReplacement extends SoundManager {
 		if (!this.loaded || this.sndSystem == null)
 			return;
 
-		final SoundSystem ss = getSoundSystem();
+		synchronized (this.mutex) {
+			checkForClientThread("setMuted");
+			final SoundSystem ss = getSoundSystem();
 
-		// OpenEye: Looks like the command thread is dead or not initialized.
-		try {
-			if (flag) {
-				ss.setMasterVolume(MUTE_VOLUME);
-			} else {
-				final GameSettings options = Minecraft.getMinecraft().gameSettings;
-				ss.setMasterVolume(options.getSoundLevel(SoundCategory.MASTER));
+			// OpenEye: Looks like the command thread is dead or not initialized.
+			try {
+				if (flag) {
+					ss.setMasterVolume(MUTE_VOLUME);
+				} else {
+					final GameSettings options = Minecraft.getMinecraft().gameSettings;
+					ss.setMasterVolume(options.getSoundLevel(SoundCategory.MASTER));
+				}
+			} catch (final Throwable t) {
+				// Silent - at some point the thread will come back and can be
+				// issued a mute.
+				;
 			}
-		} catch (final Throwable t) {
-			// Silent - at some point the thread will come back and can be
-			// issued a mute.
-			;
 		}
 	}
 
@@ -353,7 +403,7 @@ public class SoundManagerReplacement extends SoundManager {
 		}
 		return result;
 	}
-	
+
 	private static void alErrorCheck() {
 		final int error = AL10.alGetError();
 		if (error != AL10.AL_NO_ERROR)
