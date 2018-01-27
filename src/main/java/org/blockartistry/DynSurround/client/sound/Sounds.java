@@ -24,24 +24,15 @@
 
 package org.blockartistry.DynSurround.client.sound;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.data.xface.SoundMetadataConfig;
 import org.blockartistry.DynSurround.registry.SoundMetadata;
-import org.blockartistry.DynSurround.registry.SoundRegistry;
+import org.blockartistry.lib.sound.SoundConfigProcessor;
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -106,47 +97,26 @@ public final class Sounds {
 	private final static Map<ResourceLocation, SoundEvent> myRegistry = Maps.newHashMap();
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void registerSounds(final RegistryEvent.Register<SoundEvent> event) {
+	public static void registerSounds(@Nonnull final RegistryEvent.Register<SoundEvent> event) {
 		DSurround.log().info("Registering sounds");
 
-		final ParameterizedType TYPE = new ParameterizedType() {
-			public Type[] getActualTypeArguments() {
-				return new Type[] { String.class, SoundMetadataConfig.class };
-			}
-
-			public Type getRawType() {
-				return Map.class;
-			}
-
-			public Type getOwnerType() {
-				return null;
-			}
-		};
-
+		final ResourceLocation soundFile = new ResourceLocation(DSurround.MOD_ID, "sounds.json");
 		final IForgeRegistry<SoundEvent> registry = event.getRegistry();
-		try (final InputStream stream = SoundRegistry.class.getResourceAsStream("/assets/dsurround/sounds.json")) {
-			if (stream != null) {
-				@SuppressWarnings("unchecked")
-				final Map<String, SoundMetadataConfig> sounds = (Map<String, SoundMetadataConfig>) new Gson()
-						.fromJson(new InputStreamReader(stream), TYPE);
-				for (final Entry<String, SoundMetadataConfig> e : sounds.entrySet()) {
-					final String soundName = e.getKey();
-					final SoundMetadata data = new SoundMetadata(e.getValue());
-					final ResourceLocation resource = new ResourceLocation(DSurround.RESOURCE_ID, soundName);
-					final SoundEvent sound = new SoundEvent(resource).setRegistryName(resource);
-					registry.register(sound);
-					soundMetadata.put(resource, data);
-				}
-			}
-		} catch (final Throwable t) {
-			DSurround.log().error("Unable to read the mod sound file!", t);
+		try (final SoundConfigProcessor proc = new SoundConfigProcessor(soundFile)) {
+			proc.forEach((sound, meta) -> {
+				final SoundMetadata data = new SoundMetadata(meta);
+				final ResourceLocation resource = new ResourceLocation(DSurround.RESOURCE_ID, sound);
+				final SoundEvent se = new SoundEvent(resource).setRegistryName(resource);
+				registry.register(se);
+				soundMetadata.put(resource, data);
+			});
+		} catch (@Nonnull final Exception ex) {
+			ex.printStackTrace();
 		}
 
 		// Scan the "public" registries making a private one. The entries are
-		// based on what the client
-		// sees and disregards what the server wants. Not entirely sure why the
-		// server has to dictate
-		// what is client data.
+		// based on what the client sees and disregards what the server wants.
+		// Not entirely sure why the server has to dictate what is client data.
 		Iterator<SoundEvent> itr = SoundEvent.REGISTRY.iterator();
 		while (itr.hasNext()) {
 			final SoundEvent se = itr.next();
