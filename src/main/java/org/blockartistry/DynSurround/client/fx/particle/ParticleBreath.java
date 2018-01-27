@@ -31,6 +31,7 @@ import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraft.client.particle.ParticleCloud;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -42,16 +43,18 @@ public class ParticleBreath extends ParticleCloud {
 	protected static final Field sizeField = ReflectionHelper.findField(ParticleCloud.class, "field_70569_a", "oSize");
 
 	public ParticleBreath(final Entity entity) {
-		super(entity.world, 0, 0, 0, 0, 0, 0);
+		super(entity.getEntityWorld(), 0, 0, 0, 0, 0, 0);
 
 		final Random random = XorShiftRandom.current();
+
+		final boolean isChild = entity instanceof EntityLivingBase && ((EntityLivingBase) entity).isChild();
 
 		// Generate breath particle vectoring from entities head in the direction
 		// they are looking. Need to offset out of the head block and down a little
 		// bit towards the mouth.
-		final Vec3d eyePosition = eyePosition(entity).subtract(0D, 0.2D, 0D);
+		final Vec3d eyePosition = eyePosition(entity).subtract(0D, isChild ? 0.1D : 0.2D, 0D);
 		final Vec3d look = entity.getLook(1F); // Don't use the other look vector method!
-		final Vec3d origin = eyePosition.add(look.scale(0.5D));
+		final Vec3d origin = eyePosition.add(look.scale(isChild ? 0.25D : 0.5D));
 
 		this.setPosition(origin.xCoord, origin.yCoord, origin.zCoord);
 		this.prevPosX = this.posX;
@@ -59,7 +62,7 @@ public class ParticleBreath extends ParticleCloud {
 		this.prevPosZ = this.posZ;
 
 		// Next we want to give some randomness to the breath stream so it
-		// just doesn't look like a line.  This also causes it to drift to the side
+		// just doesn't look like a line. This also causes it to drift to the side
 		// a little bit giving the impression of a slight breeze.
 		final Vec3d trajectory = look.rotateYaw(random.nextFloat() * 2F).rotatePitch(random.nextFloat() * 2F)
 				.normalize();
@@ -70,7 +73,7 @@ public class ParticleBreath extends ParticleCloud {
 		this.particleAlpha = 0.2F;
 
 		this.particleGravity = 0F;
-		this.particleScale *= 0.25F;
+		this.particleScale *= isChild ? 0.125F : 0.25F;
 
 		try {
 			sizeField.set(this, this.particleScale);
@@ -89,7 +92,7 @@ public class ParticleBreath extends ParticleCloud {
 			t = t.subtract(0D, 0.25D, 0D);
 		return t;
 	}
-	
+
 	@Override
 	public boolean isTransparent() {
 		return true;
