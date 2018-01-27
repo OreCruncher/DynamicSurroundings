@@ -37,10 +37,25 @@ public enum Variator {
 			LAND_HARD_DISTANCE_MIN = 0.9f;
 			SPEED_TO_JUMP_AS_MULTIFOOT = 0.005f;
 			SPEED_TO_RUN = 0.022f;
-			STRIDE = 1.25F; //0.95f;
+			STRIDE = 1.25F; // 0.95f;
 			STRIDE_STAIR = STRIDE * 0.65f;
 			STRIDE_LADDER = 0.5f;
 			PLAY_WANDER = true;
+			QUADRUPED = false;
+		}
+	},
+	PLAYER_QUAD() {
+		{
+			IMMOBILE_DURATION = 200;
+			EVENT_ON_JUMP = true;
+			LAND_HARD_DISTANCE_MIN = 0.9f;
+			SPEED_TO_JUMP_AS_MULTIFOOT = 0.005f;
+			SPEED_TO_RUN = 0.022f;
+			STRIDE = 1.25F; // 0.95f;
+			STRIDE_STAIR = STRIDE * 0.65f;
+			STRIDE_LADDER = 0.5f;
+			PLAY_WANDER = true;
+			QUADRUPED = true;
 		}
 	},
 	VILLAGER() {
@@ -50,14 +65,29 @@ public enum Variator {
 			LAND_HARD_DISTANCE_MIN = 0.9f;
 			SPEED_TO_JUMP_AS_MULTIFOOT = 0.005f;
 			SPEED_TO_RUN = 0.022f;
-			STRIDE = 1.25F; //0.95f;
+			STRIDE = 1.25F; // 0.95f;
 			STRIDE_STAIR = STRIDE * 0.65f;
 			STRIDE_LADDER = 0.5f;
 			PLAY_WANDER = true;
+			QUADRUPED = false;
 		}
-		
+
+	},
+	CHILD() {
+		{
+			IMMOBILE_DURATION = 200;
+			EVENT_ON_JUMP = true;
+			LAND_HARD_DISTANCE_MIN = 0.9f;
+			SPEED_TO_JUMP_AS_MULTIFOOT = 0.005f;
+			SPEED_TO_RUN = 0.022f;
+			STRIDE = 0.625F; // 0.95f;
+			STRIDE_STAIR = STRIDE * 0.65f;
+			STRIDE_LADDER = 0.5f;
+			PLAY_WANDER = true;
+			QUADRUPED = false;
+		}
 	};
-	
+
 	/*
 	 * Default Variator for unknowns
 	 */
@@ -72,6 +102,7 @@ public enum Variator {
 	public float STRIDE_STAIR;
 	public float STRIDE_LADDER;
 	public boolean PLAY_WANDER;
+	public boolean QUADRUPED;
 
 	// public boolean FORCE_HUMANOID = false;
 	// public boolean GALLOP_3STEP = true;
