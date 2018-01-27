@@ -32,9 +32,9 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.client.event.RegistryEvent;
 import org.blockartistry.DynSurround.data.Profiles;
 import org.blockartistry.DynSurround.data.xface.DataScripts;
+import org.blockartistry.DynSurround.event.RegistryEvent;
 import org.blockartistry.lib.SideLocal;
 
 import com.google.common.collect.ImmutableList;

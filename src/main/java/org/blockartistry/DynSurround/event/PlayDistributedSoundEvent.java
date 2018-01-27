@@ -22,26 +22,21 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.client.event;
+package org.blockartistry.DynSurround.event;
 
 import javax.annotation.Nonnull;
 
-import gnu.trove.map.hash.TIntDoubleHashMap;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-public class ServerDataEvent extends Event {
+public class PlayDistributedSoundEvent extends Event {
 	
-	  public final double meanTickTime;
-	  public final TIntDoubleHashMap dimTps;
-	  public final int free;
-	  public final int total;
-	  public final int max;
-
-	public ServerDataEvent(@Nonnull final TIntDoubleHashMap dimensionTps, final double meanTickTime, final int freeMemory, final int totalMemory, final int maxMemory) {
-		this.dimTps = dimensionTps;
-		this.meanTickTime = meanTickTime;
-		this.free = freeMemory;
-		this.total = totalMemory;
-		this.max = maxMemory;
+	public final String soundClass;
+	public final NBTTagCompound nbt;
+	
+	public PlayDistributedSoundEvent(@Nonnull final String soundClass, @Nonnull final NBTTagCompound nbt) {
+		this.soundClass = soundClass;
+		this.nbt = nbt;
 	}
+
 }

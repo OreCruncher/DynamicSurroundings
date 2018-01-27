@@ -31,9 +31,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
-import org.blockartistry.DynSurround.client.event.ServerDataEvent;
 import org.blockartistry.DynSurround.client.swing.DiagnosticPanel;
+import org.blockartistry.DynSurround.event.DiagnosticEvent;
+import org.blockartistry.DynSurround.event.ServerDataEvent;
 
 import com.google.common.collect.ImmutableList;
 

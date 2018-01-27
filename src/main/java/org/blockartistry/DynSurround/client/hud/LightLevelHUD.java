@@ -28,8 +28,8 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.event.ResourceReloadEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.event.ResourceReloadEvent;
 import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.collections.ObjectArray;

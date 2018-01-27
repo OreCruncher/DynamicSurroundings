@@ -22,30 +22,30 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.client.event;
+package org.blockartistry.DynSurround.event;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class DiagnosticEvent extends Event {
+public class BlockUpdateEvent extends Event {
 	
-	public static class Gather extends DiagnosticEvent {
-		
-		public final World world;
-		public final EntityPlayer player;
-		public final List<String> output = new ArrayList<String>();
-		
-		public Gather(final World world, final EntityPlayer player) {
-			super();
-			this.world = world;
-			this.player = player;
-		}
+	public final World world;
+	public final BlockPos pos;
+	public final IBlockState oldState;
+	public final IBlockState newState;
+	public final int flags;
+	
+	public BlockUpdateEvent(final World world, final BlockPos pos, final IBlockState oldState, final IBlockState newState, final int flags) {
+		this.world = world;
+		this.pos = pos;
+		this.oldState = oldState;
+		this.newState = newState;
+		this.flags = flags;
 	}
+
 }
