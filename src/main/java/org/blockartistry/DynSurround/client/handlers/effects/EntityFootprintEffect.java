@@ -33,6 +33,7 @@ import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.system.Generator;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
@@ -48,6 +49,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -65,11 +69,30 @@ public class EntityFootprintEffect extends EntityEffect {
 	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
 		super.intitialize(state);
 
-		this.generator = ClientRegistry.FOOTSTEPS.createGenerator((EntityLivingBase) state.subject().get());
+		final EntityLivingBase entity = (EntityLivingBase) this.getState().subject().get();
+		this.generator = ClientRegistry.FOOTSTEPS.createGenerator(entity);
+		if (entity instanceof EntityPlayer)
+			MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	protected boolean isMoving(@Nonnull final Entity entity) {
 		return entity.distanceWalkedModified != entity.prevDistanceWalkedModified;
+	}
+
+	// The player have changed settings that affect footstep/print generation (e.g.
+	// Quadruped)
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public void onEvent(@Nonnull final ReloadEvent.Configuration event) {
+		if (event.side == null || event.side == Side.CLIENT) {
+			this.generator = ClientRegistry.FOOTSTEPS
+					.createGenerator((EntityLivingBase) this.getState().subject().get());
+		}
+	}
+
+	@Override
+	public void die() {
+		super.die();
+		MinecraftForge.EVENT_BUS.unregister(this);
 	}
 
 	@Override

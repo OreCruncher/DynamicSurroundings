@@ -138,6 +138,15 @@ public class FxHandler extends EffectHandlerBase {
 		}
 	}
 
+	protected void clearHandlers() {
+		final TIntObjectIterator<EntityEffectHandler> itr = this.handlers.iterator();
+		while (itr.hasNext()) {
+			itr.advance();
+			itr.value().die();
+		}
+		this.handlers.clear();
+	}
+	
 	/**
 	 * Check if the player joining the world is the one sitting at the keyboard. If
 	 * so we need to wipe out the existing handler list because the dimension
@@ -145,20 +154,15 @@ public class FxHandler extends EffectHandlerBase {
 	 */
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onEntityJoin(@Nonnull final EntityJoinWorldEvent event) {
-		if (event.getWorld().isRemote && event.getEntity() instanceof EntityPlayerSP) {
-			final TIntObjectIterator<EntityEffectHandler> itr = this.handlers.iterator();
-			while (itr.hasNext()) {
-				itr.advance();
-				itr.value().die();
-			}
-			this.handlers.clear();
-		}
+		if (event.getWorld().isRemote && event.getEntity() instanceof EntityPlayerSP)
+			this.clearHandlers();
 	}
 
 	@Override
 	public void onConnect() {
-		this.handlers.clear();
 
+		this.clearHandlers();
+		
 		this.eventLibrary.register(new PlayerJumpSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new CraftingSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new BowSoundEffect(this.eventLibrary));
@@ -169,7 +173,7 @@ public class FxHandler extends EffectHandlerBase {
 
 	@Override
 	public void onDisconnect() {
-		this.handlers.clear();
+		this.clearHandlers();
 		this.eventLibrary.cleanup();
 	}
 }
