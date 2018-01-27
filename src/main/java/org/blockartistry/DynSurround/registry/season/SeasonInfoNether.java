@@ -28,7 +28,10 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class SeasonInfoNether extends SeasonInfo {
 	
 	public SeasonInfoNether(@Nonnull final World world) {

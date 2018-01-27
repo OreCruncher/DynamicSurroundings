@@ -33,12 +33,15 @@ import org.blockartistry.DynSurround.registry.TemperatureRating;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import toughasnails.api.season.Season;
 import toughasnails.api.season.SeasonHelper;
 import toughasnails.api.season.WorldHooks;
 import toughasnails.api.stat.capability.ITemperature;
 import toughasnails.api.temperature.TemperatureHelper;
 
+@SideOnly(Side.CLIENT)
 public class SeasonInfoToughAsNails extends SeasonInfo {
 
 	public SeasonInfoToughAsNails(@Nonnull final World world) {

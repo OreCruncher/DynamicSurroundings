@@ -42,7 +42,6 @@ import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.DynSurround.data.xface.SoundType;
 import org.blockartistry.DynSurround.registry.BlockInfo.BlockInfoMutable;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -56,7 +55,7 @@ public final class BlockRegistry extends Registry {
 	private static final BlockProfile NO_PROFILE = BlockProfile
 			.createProfile(new BlockInfo(Blocks.AIR.getDefaultState())).setChance(0).setStepChance(0);
 
-	BlockRegistry(@Nonnull final Side side) {
+	public BlockRegistry(@Nonnull final Side side) {
 		super(side);
 	}
 
@@ -157,7 +156,7 @@ public final class BlockRegistry extends Registry {
 		if (entry.blocks.isEmpty())
 			return;
 
-		final SoundRegistry soundRegistry = RegistryManager.get(RegistryType.SOUND);
+		final SoundRegistry soundRegistry = RegistryManager.get().<SoundRegistry>get(SoundRegistry.class);
 
 		for (final String blockName : entry.blocks) {
 			final BlockInfo blockInfo = BlockInfo.create(blockName);

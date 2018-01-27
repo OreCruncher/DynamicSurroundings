@@ -28,8 +28,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.EnumMap;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
@@ -56,10 +57,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public final class RegistryManager {
 
-	public static enum RegistryType {
-		SOUND, BIOME, BLOCK, DIMENSION, FOOTSTEPS, SEASON, ITEMS
-	}
-
 	private static final SideLocal<RegistryManager> managers = new SideLocal<RegistryManager>() {
 		@Override
 		protected RegistryManager initialValue(@Nonnull final Side side) {
@@ -68,8 +65,8 @@ public final class RegistryManager {
 	};
 
 	@Nonnull
-	public static <T extends Registry> T get(@Nonnull final RegistryType type) {
-		return (T) managers.get().<T>getRegistry(type);
+	public static RegistryManager get() {
+		return managers.get();
 	}
 
 	public static void reloadResources() {
@@ -96,25 +93,31 @@ public final class RegistryManager {
 
 	protected final Side side;
 	protected final ResourceLocation SCRIPT;
-	protected final EnumMap<RegistryType, Registry> registries = new EnumMap<RegistryType, Registry>(
-			RegistryType.class);
+	protected final Map<Class<? extends Registry>, Registry> registries = new IdentityHashMap<>();
+	protected final List<Registry> initOrder = new ArrayList<>();
 	protected boolean initialized;
 
 	RegistryManager(final Side side) {
 		this.side = side;
-		this.registries.put(RegistryType.DIMENSION, new DimensionRegistry(side));
-
 		if (side == Side.CLIENT) {
-			this.registries.put(RegistryType.SOUND, new SoundRegistry(side));
-			this.registries.put(RegistryType.BIOME, new BiomeRegistry(side));
-			this.registries.put(RegistryType.SEASON, new SeasonRegistry(side));
-			this.registries.put(RegistryType.BLOCK, new BlockRegistry(side));
-			this.registries.put(RegistryType.FOOTSTEPS, new FootstepsRegistry(side));
-			this.registries.put(RegistryType.ITEMS, new ItemRegistry(side));
 			this.SCRIPT = new ResourceLocation(DSurround.RESOURCE_ID, "configure.json");
 		} else {
 			this.SCRIPT = null;
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T get(@Nonnull final Class<? extends Registry> reg) {
+		final Registry o = this.registries.get(reg);
+		if (o == null)
+			throw new RuntimeException(
+					"Attempt to get a registry that has not been configured [" + reg.getName() + "]");
+		return (T) this.registries.get(reg);
+	}
+	
+	public void register(@Nonnull final Registry reg) {
+		this.registries.put(reg.getClass(), reg);
+		this.initOrder.add(reg);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -128,13 +131,13 @@ public final class RegistryManager {
 	}
 
 	protected void processConfiguration(@Nonnull final ModConfigurationFile cfg) {
-		for (final Registry r : this.registries.values())
+		for (final Registry r : this.initOrder)
 			if (r != null)
 				r.configure(cfg);
 	}
 
-	protected void reload() {
-		for (final Registry r : this.registries.values())
+	public void reload() {
+		for (final Registry r : this.initOrder)
 			if (r != null)
 				r.init();
 
@@ -143,8 +146,6 @@ public final class RegistryManager {
 			final ModConfigurationFile cfg = DataScripts.loadFromArchive(mod.getModId());
 			if (cfg != null)
 				processConfiguration(cfg);
-			else
-				DSurround.log().warn("Unable to load configuration data!");
 		}
 
 		final List<InputStream> resources = getAdditionalScripts();
@@ -169,25 +170,11 @@ public final class RegistryManager {
 				DSurround.log().warn("Unable to load configuration data!");
 		}
 
-		for (final Registry r : this.registries.values())
+		for (final Registry r : this.initOrder)
 			if (r != null)
 				r.initComplete();
 
 		MinecraftForge.EVENT_BUS.post(new RegistryEvent.Reload(this.side));
-	}
-
-	@SuppressWarnings("unchecked")
-	protected <T> T getRegistry(@Nonnull final RegistryType type) {
-		if (!this.initialized) {
-			this.initialized = true;
-			this.reload();
-		}
-
-		final Object result = this.registries.get(type);
-		if (result == null)
-			throw new RuntimeException(
-					"Attempt to get registry [" + type.name() + "] that is not configured for the side!");
-		return (T) result;
 	}
 
 	// NOTE: Server side has no resource packs so the client specific

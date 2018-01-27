@@ -38,7 +38,6 @@ import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.DynSurround.data.xface.SoundType;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.WeightTable;
@@ -307,7 +306,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 			this.setSpotSoundChance(entry.spotSoundChance.intValue());
 
 		for (final SoundConfig sr : entry.sounds) {
-			if (RegistryManager.<SoundRegistry>get(RegistryType.SOUND).isSoundBlocked(sr.sound))
+			if (RegistryManager.get().<SoundRegistry>get(SoundRegistry.class).isSoundBlocked(sr.sound))
 				continue;
 			final SoundEffect.Builder b = new SoundEffect.Builder(sr);
 			final SoundEffect s = b.build();
