@@ -1,6 +1,6 @@
 {
 	"footsteps":{
-		"agricraft:crop":"NOT_EMITTER",
+		"agricraft:crop":"#bush",
 		"agricraft:seed_analyzer":"woodutility",
 		"agricraft:water_pad_normal":"dirt",
 		"agricraft:water_pad_full":"waterfine",

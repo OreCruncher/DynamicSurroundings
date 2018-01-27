@@ -32,10 +32,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.system.Generator;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.event.ReloadEvent;
-import org.blockartistry.lib.BlockPosHelper;
-import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
@@ -44,12 +41,10 @@ import org.blockartistry.lib.random.XorShiftRandom;
 
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -102,14 +97,6 @@ public class EntityFootprintEffect extends EntityEffect {
 		if (e.isPresent()) {
 			final EntityLivingBase entity = (EntityLivingBase) e.get();
 			this.generator.generateFootsteps(entity);
-
-			if (entity.onGround && isMoving(entity)) {
-				final BlockPos pos = BlockPosHelper.getNonOffsetPos(entity).down(1);
-				final IBlockState bs = WorldUtils.getBlockState(entity.getEntityWorld(), pos);
-				final SoundEffect sound = ClientRegistry.BLOCK.getStepSoundToPlay(bs, RANDOM);
-				if (sound != null)
-					sound.doEffect(WorldUtils.getDefaultBlockStateProvider(), bs, pos, RANDOM);
-			}
 		}
 	}
 

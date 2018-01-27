@@ -234,6 +234,8 @@ public class AcousticsJsonReader {
 			final ResourceLocation res;
 			if ("@".equals(soundName)) {
 				res = null;
+			} else if (soundName.contains(":")) {
+				res = new ResourceLocation(soundName);
 			} else if (soundName.charAt(0) != '@') {
 				res = new ResourceLocation(DSurround.RESOURCE_ID, this.soundRoot + soundName);
 			} else {
