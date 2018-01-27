@@ -76,7 +76,7 @@ public final class BiomeRegistry extends Registry {
 	private final Map<ResourceLocation, BiomeInfo> registry = new HashMap<ResourceLocation, BiomeInfo>();
 	private final Map<String, String> biomeAliases = new HashMap<String, String>();
 
-	BiomeRegistry(@Nonnull final Side side) {
+	public BiomeRegistry(@Nonnull final Side side) {
 		super(side);
 	}
 

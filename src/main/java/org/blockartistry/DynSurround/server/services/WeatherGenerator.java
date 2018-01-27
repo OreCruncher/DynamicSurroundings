@@ -35,9 +35,6 @@ import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.network.PacketThunder;
 import org.blockartistry.DynSurround.network.PacketWeatherUpdate;
 import org.blockartistry.DynSurround.registry.DimensionInfo;
-import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.PlayerUtils;
 import org.blockartistry.lib.random.XorShiftRandom;
 
@@ -58,7 +55,7 @@ public class WeatherGenerator {
 		this.world = world;
 		this.info = world.getWorldInfo();
 		this.data = DimensionEffectData.get(world);
-		this.dimension = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION).getData(world);
+		this.dimension = ServerRegistry.DIMENSION.getData(world);
 	}
 
 	protected int nextRainInterval(final boolean isRaining) {

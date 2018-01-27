@@ -29,12 +29,10 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.DynSurround.registry.DimensionInfo;
-import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.RegistryManager;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
 
@@ -54,6 +52,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public final class PlayerUtils {
 
 	private static final int INSIDE_Y_ADJUST = 3;
@@ -80,8 +79,7 @@ public final class PlayerUtils {
 				else
 					biome = BiomeRegistry.UNDERWATER;
 			} else {
-				final DimensionInfo dimInfo = RegistryManager.<DimensionRegistry>get(RegistryType.DIMENSION)
-						.getData(player.world);
+				final DimensionInfo dimInfo = ClientRegistry.DIMENSION.getData(player.world);
 				final int theY = MathStuff.floor(player.posY);
 				if ((theY + INSIDE_Y_ADJUST) <= dimInfo.getSeaLevel())
 					biome = BiomeRegistry.UNDERGROUND;
@@ -92,7 +90,7 @@ public final class PlayerUtils {
 			}
 		}
 
-		return RegistryManager.<BiomeRegistry>get(RegistryType.BIOME).get(biome);
+		return ClientRegistry.BIOME.get(biome);
 	}
 
 	@Nullable

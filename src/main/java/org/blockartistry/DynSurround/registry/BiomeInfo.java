@@ -38,7 +38,6 @@ import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.DynSurround.data.xface.SoundType;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.WeightTable;
@@ -253,7 +252,8 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	@Nullable
 	public SoundEffect getSpotSound(@Nonnull final Random random) {
 		return this.spotSounds != NO_SOUNDS && random.nextInt(this.spotSoundChance) == 0
-				? new WeightTable<SoundEffect>(this.spotSounds).next() : null;
+				? new WeightTable<SoundEffect>(this.spotSounds).next()
+				: null;
 	}
 
 	void resetSounds() {
@@ -302,7 +302,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 			this.setSpotSoundChance(entry.spotSoundChance.intValue());
 
 		for (final SoundConfig sr : entry.sounds) {
-			if (RegistryManager.<SoundRegistry>get(RegistryType.SOUND).isSoundBlocked(sr.sound))
+			if (RegistryManager.get().<SoundRegistry>get(SoundRegistry.class).isSoundBlocked(sr.sound))
 				continue;
 			final SoundEffect.Builder b = new SoundEffect.Builder(sr);
 			final SoundEffect s = b.build();

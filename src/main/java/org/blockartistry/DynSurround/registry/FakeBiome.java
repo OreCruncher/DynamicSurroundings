@@ -27,8 +27,6 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.registry.RegistryManager.RegistryType;
-
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
@@ -37,21 +35,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class FakeBiome extends Biome {
-	
+
 	private static int biomeIdCounter = -200;
-	
+
 	protected final int biomeId = --biomeIdCounter;
 
 	public FakeBiome(@Nonnull final String name) {
 		super(new BiomeProperties(name));
-		
+
 		this.flowers = null;
 		this.spawnableCaveCreatureList = null;
 		this.spawnableCreatureList = null;
 		this.spawnableMonsterList = null;
 		this.spawnableWaterCreatureList = null;
 		this.decorator = null;
-		
+
 		this.setRegistryName(DSurround.RESOURCE_ID, ("fake_" + name).replace(' ', '_'));
 	}
 
@@ -62,7 +60,7 @@ public class FakeBiome extends Biome {
 	private static BiomeInfo getTrueBiome() {
 		// Nasty hack to work around dedicated server exception
 		if (DSurround.proxy().isRunningAsServer())
-			return RegistryManager.<BiomeRegistry>get(RegistryType.BIOME).get(Biomes.PLAINS);
+			return RegistryManager.get().<BiomeRegistry>get(BiomeRegistry.class).get(Biomes.PLAINS);
 		return EnvironState.getTruePlayerBiome();
 	}
 
