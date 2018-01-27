@@ -29,97 +29,63 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Paths;
-import java.util.List;
-
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModOptions;
-
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
-import net.minecraftforge.fml.relauncher.Side;
+import org.blockartistry.lib.JsonUtils;
 
 public final class DataScripts {
 
-	// DSurround.dataDirectory()
-	private File dataDirectory;
+	private static final File dataDirectory = DSurround.dataDirectory();
+	private static final String assetDirectory = "/assets/" + DSurround.MOD_ID + "/data/";
 
-	// "/assets/dsurround/data/"
-	private String assetDirectory;
-	private Side side;
-
-	public DataScripts(final Side side) {
-		this(side, DSurround.dataDirectory(), "/assets/dsurround/data/");
-	}
-
-	public DataScripts(@Nonnull Side side, @Nonnull final File file, @Nonnull final String assetDirectory) {
-		this.side = side;
-		this.dataDirectory = file;
-		this.assetDirectory = assetDirectory;
-	}
-
-	public boolean execute(@Nonnull final List<InputStream> resources) {
-
-		for (final ModContainer mod : Loader.instance().getActiveModList()) {
-			runFromArchive(mod.getModId());
+	@Nullable
+	public static ModConfigurationFile loadFromStream(@Nonnull final Reader reader) {
+		try {
+			return JsonUtils.load(reader, ModConfigurationFile.class);
+		} catch (@Nonnull final Exception ex) {
+			DSurround.log().error("Unable to read stream!", ex);
 		}
-
-		for (final InputStream stream : resources) {
-			try (final InputStreamReader reader = new InputStreamReader(stream)) {
-				runFromStream(reader);
-			} catch (final Throwable t) {
-				DSurround.log().error("Unable to read script from resource pack!", t);
-			}
-		}
-
-		// Load scripts specified in the configuration
-		final String[] configFiles = ModOptions.externalScriptFiles;
-		for (final String file : configFiles) {
-			runFromDirectory(file);
-		}
-
-		return true;
+		return null;
 	}
 
-	private void runFromStream(@Nonnull final Reader reader) {
-		if (reader != null)
-			ModConfigurationFile.process(this.side, reader);
-	}
-
-	private void runFromArchive(@Nonnull final String dataFile) {
+	@Nullable
+	public static ModConfigurationFile loadFromArchive(@Nonnull final String modName) {
 		final String fileName = StringUtils.appendIfMissing(
-				StringUtils.appendIfMissing(assetDirectory, "/") + dataFile.replaceAll("[^a-zA-Z0-9.-]", "_"), ".json")
+				StringUtils.appendIfMissing(assetDirectory, "/") + modName.replaceAll("[^a-zA-Z0-9.-]", "_"), ".json")
 				.toLowerCase();
 
 		try (final InputStream stream = DataScripts.class.getResourceAsStream(fileName)) {
-			if (stream != null) {
-				DSurround.log().info("%s: Executing script for mod [%s]", this.side.toString(), dataFile);
-				ModConfigurationFile.process(this.side, new InputStreamReader(stream));
-			}
-		} catch (final Throwable t) {
-			DSurround.log().error("Unable to run script!", t);
+			if (stream != null)
+				return loadFromStream(new InputStreamReader(stream));
+		} catch (@Nonnull final Throwable ex) {
+			DSurround.log().error("Unable to run script!", ex);
 		}
+		return null;
 	}
 
-	private void runFromDirectory(@Nonnull final String dataFile) {
+	@Nullable
+	public static ModConfigurationFile loadFromDirectory(@Nonnull final String dataFile) {
 		final String workingFile = StringUtils.appendIfMissing(Paths.get(dataFile).getFileName().toString(), ".json");
 		final File file = new File(dataDirectory, workingFile);
 		if (!file.exists()) {
 			DSurround.log().warn("Could not locate script file [%s]", file.toString());
-			return;
+			return null;
 		}
 
 		if (!file.isFile()) {
 			DSurround.log().warn("Script file [%s] is not a file", file.toString());
-			return;
+			return null;
 		}
 
 		try (final InputStream stream = new FileInputStream(file)) {
-			DSurround.log().info("%s: Executing script [%s]", this.side.toString(), file.toString());
-			ModConfigurationFile.process(this.side, new InputStreamReader(stream));
-		} catch (final Throwable t) {
-			DSurround.log().error("Unable to run script!", t);
+			return loadFromStream(new InputStreamReader(stream));
+		} catch (@Nonnull final Throwable ex) {
+			DSurround.log().error("Unable to run script!", ex);
 		}
+
+		return null;
 	}
 }
