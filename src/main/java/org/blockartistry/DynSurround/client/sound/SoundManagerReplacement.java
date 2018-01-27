@@ -37,7 +37,7 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
-import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
+import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.lib.math.MathStuff;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;

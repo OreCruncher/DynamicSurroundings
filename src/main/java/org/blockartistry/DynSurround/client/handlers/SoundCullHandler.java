@@ -29,9 +29,10 @@ import java.util.Set;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
-import org.blockartistry.DynSurround.client.event.RegistryEvent;
 import org.blockartistry.DynSurround.client.gui.ConfigSound;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.event.RegistryEvent;
+
 import com.google.common.collect.Sets;
 
 import gnu.trove.map.hash.TObjectIntHashMap;

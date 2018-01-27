@@ -27,7 +27,6 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
-import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.handlers.effects.BowSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.CraftingSoundEffect;
@@ -40,6 +39,7 @@ import org.blockartistry.DynSurround.client.handlers.effects.PlayerJumpSoundEffe
 import org.blockartistry.DynSurround.client.handlers.effects.PlayerToolBarSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.PopoffEventEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.VillagerChatEffect;
+import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.lib.effects.EntityEffectHandler;
 import org.blockartistry.lib.effects.EntityEffectLibrary;
 import org.blockartistry.lib.effects.EventEffectLibrary;

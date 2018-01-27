@@ -22,27 +22,19 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.client.event;
+package org.blockartistry.DynSurround.event;
 
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PopoffEvent extends Event {
+@SideOnly(Side.CLIENT)
+public class ResourceReloadEvent extends Event {
 
-	public final int entityId;
-	public final float posX;
-	public final float posY;
-	public final float posZ;
-	public final boolean isCritical;
-	public final int amount;
-
-	public PopoffEvent(final int id, final float x, final float y, final float z, final boolean isCritical,
-			final int amount) {
-		this.entityId = id;
-		this.posX = x;
-		this.posY = y;
-		this.posZ = z;
-		this.isCritical = isCritical;
-		this.amount = amount;
+	public final IResourceManager manager;
+	
+	public ResourceReloadEvent(final IResourceManager manager) {
+		this.manager = manager;
 	}
-
 }

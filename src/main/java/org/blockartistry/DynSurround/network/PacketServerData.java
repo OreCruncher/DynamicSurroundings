@@ -27,7 +27,7 @@ package org.blockartistry.DynSurround.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.event.ServerDataEvent;
+import org.blockartistry.DynSurround.event.ServerDataEvent;
 
 import gnu.trove.iterator.TIntDoubleIterator;
 import gnu.trove.map.hash.TIntDoubleHashMap;

@@ -22,21 +22,27 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.client.event;
+package org.blockartistry.DynSurround.event;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.relauncher.Side;
 
-public class PlayDistributedSoundEvent extends Event {
-	
-	public final String soundClass;
-	public final NBTTagCompound nbt;
-	
-	public PlayDistributedSoundEvent(@Nonnull final String soundClass, @Nonnull final NBTTagCompound nbt) {
-		this.soundClass = soundClass;
-		this.nbt = nbt;
+public class RegistryEvent extends Event {
+
+	public static class Reload extends RegistryEvent {
+		
+		private final Side side;
+		public Reload(@Nonnull final Side side) {
+			this.side = side;
+		}
+		
+		@Nonnull
+		public Side getSide() {
+			return this.side;
+		}
+
 	}
 
 }
