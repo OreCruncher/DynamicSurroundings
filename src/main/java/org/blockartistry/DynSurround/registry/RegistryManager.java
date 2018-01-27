@@ -142,10 +142,11 @@ public final class RegistryManager {
 				r.init();
 
 		for (final ModContainer mod : Loader.instance().getActiveModList()) {
-			DSurround.log().info("Loading from archive [%s]", mod.getModId());
 			final ModConfigurationFile cfg = DataScripts.loadFromArchive(mod.getModId());
-			if (cfg != null)
+			if (cfg != null) {
+				DSurround.log().info("Loading from archive [%s]", mod.getModId());
 				processConfiguration(cfg);
+			}
 		}
 
 		final List<InputStream> resources = getAdditionalScripts();
@@ -162,12 +163,11 @@ public final class RegistryManager {
 		// Load scripts specified in the configuration
 		final String[] configFiles = ModOptions.externalScriptFiles;
 		for (final String file : configFiles) {
-			DSurround.log().info("Loading from directory [%s]", file);
 			final ModConfigurationFile cfg = DataScripts.loadFromDirectory(file);
-			if (cfg != null)
+			if (cfg != null) {
+				DSurround.log().info("Loading from directory [%s]", file);
 				processConfiguration(cfg);
-			else
-				DSurround.log().warn("Unable to load configuration data!");
+			}
 		}
 
 		for (final Registry r : this.initOrder)
