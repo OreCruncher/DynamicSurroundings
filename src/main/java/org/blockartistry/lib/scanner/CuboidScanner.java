@@ -27,7 +27,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.event.BlockUpdateEvent;
+import org.blockartistry.DynSurround.event.BlockUpdateEvent;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;

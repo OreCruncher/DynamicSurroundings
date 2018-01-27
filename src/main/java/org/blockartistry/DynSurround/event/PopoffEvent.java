@@ -22,30 +22,27 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.client.event;
+package org.blockartistry.DynSurround.event;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
-public class BlockUpdateEvent extends Event {
-	
-	public final World world;
-	public final BlockPos pos;
-	public final IBlockState oldState;
-	public final IBlockState newState;
-	public final int flags;
-	
-	public BlockUpdateEvent(final World world, final BlockPos pos, final IBlockState oldState, final IBlockState newState, final int flags) {
-		this.world = world;
-		this.pos = pos;
-		this.oldState = oldState;
-		this.newState = newState;
-		this.flags = flags;
+public class PopoffEvent extends Event {
+
+	public final int entityId;
+	public final float posX;
+	public final float posY;
+	public final float posZ;
+	public final boolean isCritical;
+	public final int amount;
+
+	public PopoffEvent(final int id, final float x, final float y, final float z, final boolean isCritical,
+			final int amount) {
+		this.entityId = id;
+		this.posX = x;
+		this.posY = y;
+		this.posZ = z;
+		this.isCritical = isCritical;
+		this.amount = amount;
 	}
 
 }

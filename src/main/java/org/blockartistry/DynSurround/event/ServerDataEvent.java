@@ -22,19 +22,26 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.client.event;
+package org.blockartistry.DynSurround.event;
 
-import net.minecraft.client.resources.IResourceManager;
+import javax.annotation.Nonnull;
+
+import gnu.trove.map.hash.TIntDoubleHashMap;
 import net.minecraftforge.fml.common.eventhandler.Event;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
-public class ResourceReloadEvent extends Event {
-
-	public final IResourceManager manager;
+public class ServerDataEvent extends Event {
 	
-	public ResourceReloadEvent(final IResourceManager manager) {
-		this.manager = manager;
+	  public final double meanTickTime;
+	  public final TIntDoubleHashMap dimTps;
+	  public final int free;
+	  public final int total;
+	  public final int max;
+
+	public ServerDataEvent(@Nonnull final TIntDoubleHashMap dimensionTps, final double meanTickTime, final int freeMemory, final int totalMemory, final int maxMemory) {
+		this.dimTps = dimensionTps;
+		this.meanTickTime = meanTickTime;
+		this.free = freeMemory;
+		this.total = totalMemory;
+		this.max = maxMemory;
 	}
 }

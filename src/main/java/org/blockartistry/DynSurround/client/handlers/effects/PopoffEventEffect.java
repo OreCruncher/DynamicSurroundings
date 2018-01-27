@@ -26,9 +26,9 @@ package org.blockartistry.DynSurround.client.handlers.effects;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.event.PopoffEvent;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleTextPopOff;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.event.PopoffEvent;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.effects.EventEffect;
 import org.blockartistry.lib.effects.IEventEffectLibraryState;

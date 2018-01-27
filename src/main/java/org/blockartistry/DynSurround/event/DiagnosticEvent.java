@@ -22,27 +22,30 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.client.event;
+package org.blockartistry.DynSurround.event;
 
-import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class RegistryEvent extends Event {
-
-	public static class Reload extends RegistryEvent {
+@SideOnly(Side.CLIENT)
+public class DiagnosticEvent extends Event {
+	
+	public static class Gather extends DiagnosticEvent {
 		
-		private final Side side;
-		public Reload(@Nonnull final Side side) {
-			this.side = side;
-		}
+		public final World world;
+		public final EntityPlayer player;
+		public final List<String> output = new ArrayList<String>();
 		
-		@Nonnull
-		public Side getSide() {
-			return this.side;
+		public Gather(final World world, final EntityPlayer player) {
+			super();
+			this.world = world;
+			this.player = player;
 		}
-
 	}
-
 }

@@ -29,8 +29,6 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.aurora.AuroraRenderer;
-import org.blockartistry.DynSurround.client.event.ResourceReloadEvent;
-import org.blockartistry.DynSurround.client.event.WorldEventDetector;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.DynSurround.client.gui.HumDinger;
 import org.blockartistry.DynSurround.client.handlers.EffectManager;
@@ -46,6 +44,8 @@ import org.blockartistry.DynSurround.client.weather.RenderWeather;
 import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.DynSurround.commands.CommandCalc;
 import org.blockartistry.DynSurround.data.PresetHandler;
+import org.blockartistry.DynSurround.event.ResourceReloadEvent;
+import org.blockartistry.DynSurround.event.WorldEventDetector;
 import org.blockartistry.lib.Localization;
 
 import net.minecraft.client.Minecraft;

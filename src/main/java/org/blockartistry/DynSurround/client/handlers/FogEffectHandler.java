@@ -25,9 +25,9 @@
 package org.blockartistry.DynSurround.client.handlers;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.handlers.scanners.AreaFogScanner;
+import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.lib.Color;
 
 import net.minecraft.block.material.Material;
