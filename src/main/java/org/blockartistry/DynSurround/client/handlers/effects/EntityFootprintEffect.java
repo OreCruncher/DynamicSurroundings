@@ -34,6 +34,7 @@ import org.blockartistry.DynSurround.client.footsteps.system.Generator;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.event.ReloadEvent;
+import org.blockartistry.lib.BlockPosHelper;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
@@ -102,8 +103,8 @@ public class EntityFootprintEffect extends EntityEffect {
 			final EntityLivingBase entity = (EntityLivingBase) e.get();
 			this.generator.generateFootsteps(entity);
 
-			if (entity instanceof EntityPlayer && entity.onGround && isMoving(entity)) {
-				final BlockPos pos = entity.getPosition().down(1);
+			if (entity.onGround && isMoving(entity)) {
+				final BlockPos pos = BlockPosHelper.getNonOffsetPos(entity).down(1);
 				final IBlockState bs = WorldUtils.getBlockState(entity.getEntityWorld(), pos);
 				final SoundEffect sound = ClientRegistry.BLOCK.getStepSoundToPlay(bs, RANDOM);
 				if (sound != null)
