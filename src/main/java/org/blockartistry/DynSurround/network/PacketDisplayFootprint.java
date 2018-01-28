@@ -28,9 +28,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.api.events.FootstepEvent;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
@@ -46,11 +43,7 @@ public class PacketDisplayFootprint implements IMessage {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketDisplayFootprint message, @Nullable final MessageContext ctx) {
-			// Don't forward if it the current player sent it
-			if (!message.locus.isAssociatedEntity(EnvironState.getPlayer())) {
-				Network.postEvent(
-						new FootstepEvent.Display(message.locus.getCoords(), message.rotation, message.isRightFoot));
-			}
+			// Ignore - client produces all footsteps without the server
 			return null;
 		}
 	}
