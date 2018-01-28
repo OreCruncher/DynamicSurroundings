@@ -33,13 +33,11 @@ import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.DynSurround.client.sound.SoundEngine;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -81,8 +79,7 @@ public class EffectStateBase implements IEffectState {
 	 */
 	@Override
 	public void stopSound(@Nonnull final String soundId) {
-		// TODO: This needs refactor. Should go through the SoundEffectHandler I think.
-		SoundEngine.instance().stopSound(soundId, SoundCategory.PLAYERS);
+		SoundEffectHandler.INSTANCE.stopSound(soundId);
 	}
 
 	/**
