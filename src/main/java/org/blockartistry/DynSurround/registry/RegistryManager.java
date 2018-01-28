@@ -41,16 +41,15 @@ import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.DynSurround.event.RegistryEvent;
 import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.SideLocal;
+import org.blockartistry.lib.task.Scheduler;
 
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.ResourcePackRepository;
-import net.minecraft.util.IThreadListener;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -89,16 +88,7 @@ public final class RegistryManager {
 		// Reload can be called on either side so make sure we queue
 		// up a scheduled task appropriately.
 		if (managers.hasValue(side)) {
-			final IThreadListener tl = side == Side.SERVER ? FMLCommonHandler.instance().getMinecraftServerInstance()
-					: Minecraft.getMinecraft();
-			if (tl == null)
-				managers.clear(side);
-			else
-				tl.addScheduledTask(new Runnable() {
-					public void run() {
-						managers.get().reload();
-					}
-				});
+			Scheduler.schedule(side, () -> managers.get().reload());
 		}
 	}
 
