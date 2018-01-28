@@ -109,7 +109,6 @@
 	],
 	"itemConfig": {
 		"toolSound": [
-			"biomesoplenty.common.item.ItemBOPScythe"
 		]
 	},
 	"footsteps": {

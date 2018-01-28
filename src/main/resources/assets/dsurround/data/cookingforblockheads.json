@@ -1,14 +1,14 @@
 {
 	"footsteps": {
-		"cookingforblockheads:cookingTable": "stoneutility",
+		"cookingforblockheads:cooking_table": "stoneutility",
 		"cookingforblockheads:counter": "wood",
-		"cookingforblockheads:cowJar": "glass",
+		"cookingforblockheads:cow_jar": "glass",
 		"cookingforblockheads:fridge": "stoneutility",
-		"cookingforblockheads:milkJar": "glass",
+		"cookingforblockheads:milk_jar": "glass",
 		"cookingforblockheads:oven": "stoneutility",
 		"cookingforblockheads:sink": "stoneutility",
-		"cookingforblockheads:spiceRack": "squeakywood",
+		"cookingforblockheads:spice_rack": "squeakywood",
 		"cookingforblockheads:toaster": "metalbar",
-		"cookingforblockheads:toolRack": "squeakywood"
+		"cookingforblockheads:tool_rack": "squeakywood"
 	}
 }
