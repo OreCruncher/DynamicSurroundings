@@ -42,7 +42,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityBoat;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
@@ -81,7 +81,7 @@ public class EntitySwingEffect extends EntityEffect {
 					final float reach = Minecraft.getMinecraft().playerController.getBlockReachDistance();
 					final RayTraceResult whatImHitting = entity.rayTrace(reach, 1F);
 					if (whatImHitting.typeOfHit == Type.ENTITY || whatImHitting.typeOfHit == Type.MISS) {
-						final BasicSound<?> sound = this.getState().createSound(soundEffect, (EntityPlayer) entity);
+						final BasicSound<?> sound = this.getState().createSound(soundEffect, entity);
 						this.soundId = this.getState().playSound(sound);
 					}
 				}
@@ -99,7 +99,7 @@ public class EntitySwingEffect extends EntityEffect {
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
 		public boolean applies(@Nonnull final Entity e) {
-			return e instanceof EntityPlayer;
+			return !(e instanceof EntityAnimal) && e instanceof EntityLivingBase;
 		}
 	};
 
