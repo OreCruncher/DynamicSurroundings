@@ -196,7 +196,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	}
 
 	public void stopSound(@Nonnull final String sound) {
-
+		SoundEngine.instance().stopSound(sound);
 	}
 
 	@Nullable

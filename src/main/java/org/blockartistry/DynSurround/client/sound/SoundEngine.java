@@ -79,6 +79,10 @@ public class SoundEngine {
 		return getManager().isSoundPlaying(soundId);
 	}
 
+	public void stopSound(@Nonnull final String sound) {
+		this.stopSound(sound, null);
+	}
+
 	public void stopSound(@Nonnull final String sound, @Nonnull final SoundCategory cat) {
 		getManager().stop(sound, cat);
 	}
