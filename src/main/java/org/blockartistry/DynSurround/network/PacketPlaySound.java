@@ -47,16 +47,10 @@ public class PacketPlaySound implements IMessage {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketPlaySound message, @Nullable final MessageContext ctx) {
-			
-			// Reject any Footstep sounds - they are generated 100% client side.
-			if("org.blockartistry.DynSurround.client.sound.FootstepSound".equals(message.soundClass))
-				return null;
-
 			// Don't forward if it the current player sent it
 			if (!message.locus.isAssociatedEntity(EnvironState.getPlayer())) {
 				Network.postEvent(new PlayDistributedSoundEvent(message.soundClass, message.nbt));
 			}
-			
 			return null;
 		}
 	}
