@@ -54,6 +54,16 @@ public class EntityEffectStateBase extends EffectStateBase implements IEntityEff
 	public Optional<Entity> subject() {
 		return Optional.ofNullable(this.subject.get());
 	}
+	
+	/**
+	 * Indicates if the subject is alive.
+	 * @return true if the subject is alive, false otherwise
+	 */
+	@Override
+	public boolean isSubjectAlive() {
+		final Entity e = this.subject.get();
+		return e != null && e.isEntityAlive();
+	}
 
 	/**
 	 * Determines the distance between the Entity subject and the specified Entity.

@@ -46,7 +46,6 @@ import org.blockartistry.lib.effects.EventEffectLibrary;
 
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -85,20 +84,24 @@ public class FxHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 
-		if (Minecraft.getMinecraft().gameSettings.showDebugInfo && ModOptions.enableDebugLogging) {
-			this.activeHandlers = 0;
+		this.activeHandlers = 0;
 
-			final TIntObjectIterator<EntityEffectHandler> itr = this.handlers.iterator();
-			while (itr.hasNext()) {
-				itr.advance();
-				final EntityEffectHandler eh = itr.value();
-				if (eh.isActive()) {
-					this.activeHandlers++;
-				}
+		final TIntObjectIterator<EntityEffectHandler> itr = this.handlers.iterator();
+		while (itr.hasNext()) {
+			itr.advance();
+			// Need to sanity check whether the entity is still around.  Some clearlag
+			// style programs just make the entity disappear rather than go through
+			// the normal expected lifecycle.
+			final EntityEffectHandler eh = itr.value();
+			if (!eh.isSubjectAlive()) {
+				eh.die();
+				itr.remove();
+			} else if (eh.isActive()) {
+				this.activeHandlers++;
 			}
-
-			this.totalHandlers = this.handlers.size();
 		}
+
+		this.totalHandlers = this.handlers.size();
 
 		// Tick the footstep stuff
 		// TODO: Need to refactor!
@@ -164,7 +167,7 @@ public class FxHandler extends EffectHandlerBase {
 	public void onConnect() {
 
 		this.clearHandlers();
-		
+
 		this.eventLibrary.register(new PlayerJumpSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new CraftingSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new PopoffEventEffect(this.eventLibrary));
