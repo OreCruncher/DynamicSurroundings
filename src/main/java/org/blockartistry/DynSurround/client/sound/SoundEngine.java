@@ -33,12 +33,9 @@ import org.blockartistry.DynSurround.ModOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.SoundSystem;
-import paulscode.sound.SoundSystemConfig;
 
 @SideOnly(Side.CLIENT)
 public class SoundEngine {
@@ -57,44 +54,37 @@ public class SoundEngine {
 	private SoundEngine() {
 
 	}
-	
-	private static SoundManager getManager() {
-		return Minecraft.getMinecraft().getSoundHandler().sndManager;
+
+	private static SoundManagerReplacement getManager() {
+		return (SoundManagerReplacement) Minecraft.getMinecraft().getSoundHandler().sndManager;
 	}
 
 	public int currentSoundCount() {
-		return getManager().playingSoundsStopTime.size();
+		return getManager().currentSoundCount();
 	}
 
 	public int maxSoundCount() {
-		return SoundSystemConfig.getNumberNormalChannels() + SoundSystemConfig.getNumberStreamingChannels();
+		return getManager().maxSoundCount();
 	}
 
 	private boolean canFitSound() {
-		return currentSoundCount() < (SoundSystemConfig.getNumberNormalChannels() - SOUND_QUEUE_SLACK);
+		return currentSoundCount() < (getManager().numberOfNormalChannels() - SOUND_QUEUE_SLACK);
 	}
 
 	public boolean isSoundPlaying(@Nonnull final BasicSound<?> sound) {
-		final SoundManager manager = getManager();
-		return manager.isSoundPlaying(sound) || manager.invPlayingSounds.containsKey(sound)
-				|| manager.delayedSounds.containsKey(sound);
+		return getManager().isSoundPlaying(sound);
 	}
 
 	public boolean isSoundPlaying(@Nonnull final String soundId) {
-		if (StringUtils.isEmpty(soundId))
-			return false;
-		return getManager().playingSounds.containsKey(soundId);
+		return getManager().isSoundPlaying(soundId);
 	}
 
 	public void stopSound(@Nonnull final String sound, @Nonnull final SoundCategory cat) {
-		if (sound != null)
-			getManager().stop(sound, cat);
+		getManager().stop(sound, cat);
 	}
 
 	public void stopSound(@Nonnull final BasicSound<?> sound) {
-		if (sound != null) {
-			getManager().stopSound(sound);
-		}
+		getManager().stopSound(sound);
 	}
 
 	public void stopAllSounds() {
@@ -110,7 +100,7 @@ public class SoundEngine {
 		}
 
 		final SoundManager manager = getManager();
-		
+
 		if (!StringUtils.isEmpty(sound.getId()))
 			manager.stopSound(sound);
 
@@ -137,14 +127,6 @@ public class SoundEngine {
 		}
 
 		return sound.getId();
-	}
-
-	@Nullable
-	public String playSound(@Nonnull final BlockPos pos, @Nonnull final SoundEvent soundIn,
-			@Nonnull final SoundCategory category, final float volume, final float pitch) {
-		final BasicSound<?> sound = new AdhocSound(soundIn, category);
-		sound.setVolume(volume).setPitch(pitch).setPosition(pos);
-		return this.playSound(sound);
 	}
 
 }

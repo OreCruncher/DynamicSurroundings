@@ -30,7 +30,9 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
-import org.blockartistry.DynSurround.client.sound.SoundEngine;
+import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
+import org.blockartistry.DynSurround.client.sound.AdhocSound;
+import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.weather.compat.RandomThings;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.lib.WorldUtils;
@@ -145,7 +147,10 @@ public class StormSplashRenderer {
 				pitch = 0.5F;
 			pitch -= (this.RANDOM.nextFloat() - this.RANDOM.nextFloat()) * 0.1F;
 			this.pos.setPos(x, y, z);
-			SoundEngine.instance().playSound(this.pos, sound, SoundCategory.WEATHER, volume, pitch);
+
+			final BasicSound<?> fx = new AdhocSound(sound, SoundCategory.WEATHER);
+			fx.setVolume(volume).setPitch(pitch).setPosition(this.pos);
+			SoundEffectHandler.INSTANCE.playSound(fx);
 		}
 	}
 

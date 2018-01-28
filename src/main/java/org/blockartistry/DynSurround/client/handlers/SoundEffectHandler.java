@@ -194,6 +194,10 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	public boolean isSoundPlaying(@Nonnull final String soundId) {
 		return SoundEngine.instance().isSoundPlaying(soundId);
 	}
+	
+	public void stopSound(@Nonnull final String sound) {
+		
+	}
 
 	@Nullable
 	public String playSound(@Nonnull final BasicSound<?> sound) {

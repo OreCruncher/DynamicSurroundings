@@ -158,6 +158,38 @@ public class SoundManagerReplacement extends SoundManager {
 		}
 	}
 
+	private boolean isSoundPlaying(@Nonnull final BasicSound<?> sound) {
+		return super.isSoundPlaying(sound) || this.invPlayingSounds.containsKey(sound)
+				|| this.delayedSounds.containsKey(sound);
+	}
+
+	@Override
+	public boolean isSoundPlaying(@Nonnull final ISound sound) {
+		synchronized (this.mutex) {
+			checkForClientThread("isSoundPlaying", sound);
+			try {
+				if (sound instanceof BasicSound<?>) {
+					return this.isSoundPlaying((BasicSound<?>) sound);
+				} else {
+					return super.isSoundPlaying(sound);
+				}
+			} catch (final Throwable t) {
+				;
+			}
+		}
+
+		return false;
+	}
+
+	public boolean isSoundPlaying(@Nonnull final String soundId) {
+		synchronized (this.mutex) {
+			checkForClientThread("isSoundPlaying");
+			if (StringUtils.isEmpty(soundId))
+				return false;
+			return this.playingSounds.containsKey(soundId);
+		}
+	}
+
 	private void playSound(@Nonnull final BasicSound<?> sound) {
 		sound.setId(StringUtils.EMPTY);
 		if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC)
@@ -365,6 +397,28 @@ public class SoundManagerReplacement extends SoundManager {
 			event.output.addAll(results);
 		}
 
+	}
+	
+	public int currentSoundCount() {
+		synchronized(this.mutex) {
+			checkForClientThread("currentSoundCount");
+			return this.playingSoundsStopTime.size();
+		}
+		
+	}
+	
+	public int maxSoundCount() {
+		synchronized(this.mutex) {
+			checkForClientThread("maxSoundCount");
+			return SoundSystemConfig.getNumberNormalChannels() + SoundSystemConfig.getNumberStreamingChannels();
+		}
+	}
+	
+	public int numberOfNormalChannels() {
+		synchronized(this.mutex) {
+			checkForClientThread("numberOfNormalChannels");
+			return SoundSystemConfig.getNumberNormalChannels();
+		}
 	}
 
 	public boolean isMuted() {
