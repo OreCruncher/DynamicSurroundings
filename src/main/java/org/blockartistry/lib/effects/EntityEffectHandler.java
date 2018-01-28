@@ -61,12 +61,13 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 		if (!this.isAlive())
 			return;
 
-		final Entity entity = this.subject.get();
-		this.isAlive = entity != null && entity.isEntityAlive();
+		this.isAlive = this.isSubjectAlive();
 
-		if (entity != null)
-			for (final EntityEffect e : activeEffects)
-				e.update(entity);
+		if (!this.isAlive)
+			return;
+
+		for (final EntityEffect e : activeEffects)
+			e.update(this.subject.get());
 	}
 
 	/**

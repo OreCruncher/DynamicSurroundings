@@ -44,6 +44,12 @@ public interface IEntityEffectState extends IEffectState {
 	Optional<Entity> subject();
 	
 	/**
+	 * Indicates if the subject is alive.
+	 * @return true if the subject is alive, false otherwise
+	 */
+	boolean isSubjectAlive();
+	
+	/**
 	 * Determines the distance between the Entity subject and the specified Entity.
 	 * 
 	 * @param entity
