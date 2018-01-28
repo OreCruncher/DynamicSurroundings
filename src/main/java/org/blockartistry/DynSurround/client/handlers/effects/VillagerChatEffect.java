@@ -24,8 +24,6 @@
 package org.blockartistry.DynSurround.client.handlers.effects;
 
 import java.util.List;
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -82,36 +80,32 @@ public class VillagerChatEffect extends EntityEffect {
 	}
 
 	@Override
-	public void update() {
+	public void update(@Nonnull final Entity subject) {
 		if (!ModOptions.enableEntityChat)
 			return;
 
-		final Optional<Entity> e = this.getState().subject();
-		if (e.isPresent()) {
+		// Children don't speak - makes them suspicious...
+		final EntityVillager entity = (EntityVillager) subject;
+		if (entity.isChild())
+			return;
 
-			// Children don't speak - makes them suspicious...
-			final EntityVillager entity = (EntityVillager) e.get();
-			if (entity.isChild())
-				return;
-
-			if (this.villagerThreatened(entity)) {
-				this.runningScared = true;
-				this.fleeChat.update();
-			} else {
-				if (this.runningScared) {
-					this.runningScared = false;
-					this.normalChat.genNextChatTime();
-				}
-				this.normalChat.update();
+		if (this.villagerThreatened(entity)) {
+			this.runningScared = true;
+			this.fleeChat.update(subject);
+		} else {
+			if (this.runningScared) {
+				this.runningScared = false;
+				this.normalChat.genNextChatTime();
 			}
+			this.normalChat.update(subject);
 		}
 
 	}
 
 	protected boolean villagerThreatened(final Entity entity) {
 		final AxisAlignedBB bbox = entity.getEntityBoundingBox().expand((double) 8.0, 3.0D, (double) 8.0);
-		return !entity.world.<EntityZombie>getEntitiesWithinAABB(EntityZombie.class, bbox, Predicates.and(this.preds))
-				.isEmpty();
+		return !entity.getEntityWorld()
+				.<EntityZombie>getEntitiesWithinAABB(EntityZombie.class, bbox, Predicates.and(this.preds)).isEmpty();
 	}
 
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {

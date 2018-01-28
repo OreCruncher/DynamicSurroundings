@@ -25,6 +25,7 @@ package org.blockartistry.lib.effects;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -70,7 +71,7 @@ public abstract class EntityEffect {
 	 * Called when an EntityEffect should update it's state and take action based on
 	 * results. Called once per tick.
 	 */
-	public abstract void update();
+	public abstract void update(@Nonnull final Entity subject);
 
 	/**
 	 * Called when the EntityEffectHandler decides that the EntityEffect should die.

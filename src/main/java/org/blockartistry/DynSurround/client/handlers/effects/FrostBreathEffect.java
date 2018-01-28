@@ -24,8 +24,6 @@
 package org.blockartistry.DynSurround.client.handlers.effects;
 
 import java.util.List;
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
@@ -59,19 +57,15 @@ public class FrostBreathEffect extends EntityEffect {
 	}
 
 	@Override
-	public void update() {
+	public void update(@Nonnull final Entity subject) {
 		if (!ModOptions.showBreath)
 			return;
 
-		final Optional<Entity> e = this.getState().subject();
-		if (e.isPresent()) {
-			final Entity entity = e.get();
-			final int interval = (int) (((this.getState().getWorldTime() + this.seed) / 10) % 8);
-			if (interval < 3 && isPossibleToShow(entity)) {
-				final EntityPlayer player = this.getState().thePlayer().get();
-				if ((entity == player) || (!entity.isInvisibleToPlayer(player) && player.canEntityBeSeen(entity))) {
-					this.getState().addParticle(new ParticleBreath(entity));
-				}
+		final int interval = (int) (((this.getState().getWorldTime() + this.seed) / 10) % 8);
+		if (interval < 3 && isPossibleToShow(subject)) {
+			final EntityPlayer player = this.getState().thePlayer().get();
+			if ((subject == player) || (!subject.isInvisibleToPlayer(player) && player.canEntityBeSeen(subject))) {
+				this.getState().addParticle(new ParticleBreath(subject));
 			}
 		}
 	}
