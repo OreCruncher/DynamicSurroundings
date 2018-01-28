@@ -24,7 +24,6 @@
 package org.blockartistry.DynSurround.client.handlers.effects;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -92,12 +91,9 @@ public class EntityFootprintEffect extends EntityEffect {
 	}
 
 	@Override
-	public void update() {
-		final Optional<Entity> e = this.getState().subject();
-		if (e.isPresent()) {
-			final EntityLivingBase entity = (EntityLivingBase) e.get();
-			this.generator.generateFootsteps(entity);
-		}
+	public void update(@Nonnull final Entity subject) {
+		final EntityLivingBase entity = (EntityLivingBase) subject;
+		this.generator.generateFootsteps(entity);
 	}
 
 	// Currently restricted to the active player. Have stuff to unwind in the

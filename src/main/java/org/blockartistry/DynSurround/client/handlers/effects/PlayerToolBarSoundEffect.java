@@ -132,7 +132,7 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 	}
 
 	@Override
-	public void update() {
+	public void update(@Nonnull final Entity subject) {
 		if (ModOptions.enableEquipSound) {
 			this.mainHand.update(this.getState());
 			this.offHand.update(this.getState());
