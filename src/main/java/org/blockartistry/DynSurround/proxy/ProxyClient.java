@@ -49,6 +49,7 @@ import org.blockartistry.DynSurround.data.PresetHandler;
 import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.DynSurround.event.WorldEventDetector;
 import org.blockartistry.lib.Localization;
+import org.blockartistry.lib.task.Scheduler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;
@@ -79,7 +80,7 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 	@Override
 	protected void eventBusRegistrations() {
 		super.eventBusRegistrations();
-		
+
 		register(AuroraRenderer.class);
 		register(HumDinger.class);
 		register(EnvironStateHandler.class);
@@ -94,7 +95,7 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 		register(PresetHandler.class);
 		register(WorldEventDetector.class);
 		register(LightLevelHUD.class);
-		
+
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
@@ -140,23 +141,19 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 
 	@Override
 	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
-		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
-			public void run() {
-				EffectManager.register();
-				GuiHUDHandler.register();
-				ProxyClient.this.connectionTime = System.currentTimeMillis();
-			}
+		Scheduler.schedule(Side.CLIENT, () -> {
+			EffectManager.register();
+			GuiHUDHandler.register();
+			ProxyClient.this.connectionTime = System.currentTimeMillis();
 		});
 	}
 
 	@Override
 	public void clientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
-		Minecraft.getMinecraft().addScheduledTask(new Runnable() {
-			public void run() {
-				EffectManager.unregister();
-				GuiHUDHandler.unregister();
-				ProxyClient.this.connectionTime = 0;
-			}
+		Scheduler.schedule(Side.CLIENT, () -> {
+			EffectManager.unregister();
+			GuiHUDHandler.unregister();
+			ProxyClient.this.connectionTime = 0;
 		});
 	}
 
@@ -164,14 +161,14 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 	public void onResourceManagerReload(@Nonnull final IResourceManager resourceManager) {
 		MinecraftForge.EVENT_BUS.post(new ReloadEvent.Resources(resourceManager));
 	}
-	
+
 	@SubscribeEvent
 	public void onConfigChanged(@Nonnull final OnConfigChangedEvent event) {
-		if(event.getModID().equals(DSurround.MOD_ID)) {
-			// The configuration file changed.  Fire an appropriate
+		if (event.getModID().equals(DSurround.MOD_ID)) {
+			// The configuration file changed. Fire an appropriate
 			// event so that various parts of the mod can reinitialize.
 			MinecraftForge.EVENT_BUS.post(new ReloadEvent.Configuration());
 		}
-		
+
 	}
 }
