@@ -30,6 +30,7 @@ import org.blockartistry.DynSurround.client.weather.WeatherProperties;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.math.MathStuff;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -74,16 +75,25 @@ public class MoteFootprint extends MoteBase {
 		if (++zFighter > 20)
 			zFighter = 1;
 
-		this.posY += zFighter * 0.001F;
+		final IBlockState state = WorldUtils.getBlockState(this.world, this.position);
+		this.isSnowLayer = state.getBlock() == Blocks.SNOW_LAYER;
+		
+		// Adjust for blocks like Soul Sand.  They look like a full block but the collision
+		// box is a little less than that Y.  We need to adjust the print to the bounding
+		// box so it can show.
+		if (state.getMaterial().isSolid()) {
+			this.posY = this.position.getY() + state.getBoundingBox(this.world, this.position).maxY;
+		}
 
-		// If the block is a snow layer block need to adjust the
-		// y up so the footprint rides on top.
-		this.isSnowLayer = WorldUtils.getBlockState(this.world, this.position).getBlock() == Blocks.SNOW_LAYER;
+		// If there is a snow layer we need to bump up a bit so it shows.
 		if (this.isSnowLayer) {
 			this.posY += 0.125F;
 		}
 
-		this.downPos = this.position.down();
+		this.posY += zFighter * 0.001F;
+
+		// Make sure that the down position is calculated from the display position!
+		this.downPos = new BlockPos(this.posX, this.posY, this.posZ).down();
 
 		this.texU1 = isRight ? 0.5F : 0F;
 		this.texU2 = isRight ? 1.0F : 0.5F;
