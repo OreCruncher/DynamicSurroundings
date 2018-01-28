@@ -36,7 +36,6 @@ import org.blockartistry.DynSurround.client.sound.SoundEffect;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -125,7 +124,7 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	 */
 	@Override
 	@Nonnull
-	public BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final EntityPlayer player) {
+	public BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player) {
 		if (this.isActivePlayer(player))
 			return se.createSound(player, false);
 		return se.createSound(player);

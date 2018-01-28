@@ -28,8 +28,8 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.client.handlers.effects.BowSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.CraftingSoundEffect;
+import org.blockartistry.DynSurround.client.handlers.effects.EntityBowSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.EntityChatEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.EntityFootprintEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.EntitySwingEffect;
@@ -69,6 +69,7 @@ public class FxHandler extends EffectHandlerBase {
 		library.register(PlayerToolBarSoundEffect.DEFAULT_FILTER, new PlayerToolBarSoundEffect.Factory());
 		library.register(EntityFootprintEffect.DEFAULT_FILTER, new EntityFootprintEffect.Factory());
 		library.register(EntitySwingEffect.DEFAULT_FILTER, new EntitySwingEffect.Factory());
+		library.register(EntityBowSoundEffect.DEFAULT_FILTER, new EntityBowSoundEffect.Factory());
 	}
 
 	private final TIntObjectHashMap<EntityEffectHandler> handlers = new TIntObjectHashMap<EntityEffectHandler>();
@@ -166,7 +167,6 @@ public class FxHandler extends EffectHandlerBase {
 		
 		this.eventLibrary.register(new PlayerJumpSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new CraftingSoundEffect(this.eventLibrary));
-		this.eventLibrary.register(new BowSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new PopoffEventEffect(this.eventLibrary));
 		this.eventLibrary.register(new FootprintEventEffect(this.eventLibrary));
 	}

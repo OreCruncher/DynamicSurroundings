@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -67,7 +67,7 @@ public class SpotSound extends BasicSound<SpotSound> {
 		return this.RANDOM.nextInt(range) - this.RANDOM.nextInt(range);
 	}
 
-	SpotSound(@Nonnull final EntityPlayer player, @Nonnull final SoundEffect sound) {
+	SpotSound(@Nonnull final Entity player, @Nonnull final SoundEffect sound) {
 		super(sound.getSound(), sound.getCategory());
 
 		this.volume = sound.getVolume();
