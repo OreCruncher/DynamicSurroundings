@@ -58,7 +58,7 @@ public final class BlockNameUtil {
 	private static final char NO_CONTROL_CODE = '\0';
 
 	// https://www.regexplanet.com/advanced/java/index.html
-	private static final Pattern pattern = Pattern.compile("(\\W)?(\\w+:[\\w\\.]+)[\\^|:]?(\\d+|\\*)?\\+?(\\w+)?");
+	private static final Pattern pattern = Pattern.compile("(\\W)?(\\w+:[\\w\\.\\-]+)[\\^|:]?(\\d+|\\*)?\\+?(\\w+)?");
 
 	public final static class NameResult {
 
@@ -105,7 +105,7 @@ public final class BlockNameUtil {
 			else {
 				this.metaData = Integer.parseInt(temp);
 				if (this.metaData < 0 || this.metaData > 15)
-					throw new RuntimeException("Metadata is out of range");
+					LibLog.log().warn("Metadata is not in the normal range: %d", this.metaData);
 			}
 
 			this.extras = matcher.group(4);
