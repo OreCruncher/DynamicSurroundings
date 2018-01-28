@@ -24,8 +24,6 @@
 package org.blockartistry.DynSurround.client.handlers.effects;
 
 import java.util.List;
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.ClientRegistry;
@@ -52,28 +50,25 @@ public class EntityBowSoundEffect extends EntityEffect {
 	protected ItemStack lastActiveStack;
 
 	@Override
-	public void update() {
-		final Optional<Entity> e = this.getState().subject();
-		if (e.isPresent()) {
-			final EntityLivingBase entity = (EntityLivingBase) e.get();
-			final ItemStack currentStack = entity.getActiveItemStack();
-			if (ItemStackUtil.isValidItemStack(currentStack)) {
+	public void update(@Nonnull final Entity subject) {
+		final EntityLivingBase entity = (EntityLivingBase) subject;
+		final ItemStack currentStack = entity.getActiveItemStack();
+		if (ItemStackUtil.isValidItemStack(currentStack)) {
 
-				if (this.lastActiveStack == null || !ItemStack.areItemStacksEqual(currentStack, this.lastActiveStack)) {
-					if (ClientRegistry.ITEMS.doBowSound(currentStack)) {
-						final SoundEffect soundEffect = ClientRegistry.ITEMS.getUseSound(currentStack);
-						if (soundEffect != null) {
-							final BasicSound<?> fx = this.getState().createSound(soundEffect, entity);
-							this.getState().playSound(fx);
-						}
+			if (this.lastActiveStack == null || !ItemStack.areItemStacksEqual(currentStack, this.lastActiveStack)) {
+				if (ClientRegistry.ITEMS.doBowSound(currentStack)) {
+					final SoundEffect soundEffect = ClientRegistry.ITEMS.getUseSound(currentStack);
+					if (soundEffect != null) {
+						final BasicSound<?> fx = this.getState().createSound(soundEffect, entity);
+						this.getState().playSound(fx);
 					}
-
-					this.lastActiveStack = currentStack;
 				}
 
-			} else {
-				this.lastActiveStack = null;
+				this.lastActiveStack = currentStack;
 			}
+
+		} else {
+			this.lastActiveStack = null;
 		}
 	}
 

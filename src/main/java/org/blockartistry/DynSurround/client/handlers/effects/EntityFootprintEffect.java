@@ -24,7 +24,6 @@
 package org.blockartistry.DynSurround.client.handlers.effects;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -42,7 +41,6 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.AbstractIllager;
 import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -93,12 +91,9 @@ public class EntityFootprintEffect extends EntityEffect {
 	}
 
 	@Override
-	public void update() {
-		final Optional<Entity> e = this.getState().subject();
-		if (e.isPresent()) {
-			final EntityLivingBase entity = (EntityLivingBase) e.get();
-			this.generator.generateFootsteps(entity);
-		}
+	public void update(@Nonnull final Entity subject) {
+		final EntityLivingBase entity = (EntityLivingBase) subject;
+		this.generator.generateFootsteps(entity);
 	}
 
 	// Currently restricted to the active player. Have stuff to unwind in the
@@ -106,7 +101,7 @@ public class EntityFootprintEffect extends EntityEffect {
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
 		public boolean applies(@Nonnull final Entity e) {
-			return e instanceof EntityPlayer || e instanceof EntityVillager || e instanceof AbstractIllager || e instanceof EntityWitch;
+			return e instanceof EntityPlayer || e instanceof EntityVillager || e instanceof EntityWitch;
 		}
 	};
 

@@ -26,7 +26,6 @@ package org.blockartistry.DynSurround.client.handlers.effects;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Random;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -185,24 +184,20 @@ public class EntityChatEffect extends EntityEffect {
 	}
 
 	@Override
-	public void update() {
+	public void update(@Nonnull final Entity subject) {
 		if (!ModOptions.enableEntityChat)
 			return;
 
-		final Optional<Entity> e = this.getState().subject();
-		if (e.isPresent()) {
-			final Entity entity = e.get();
-			final long ticks = getWorldTicks(entity);
-			final long delta = this.nextChat - ticks;
-			if (delta <= 0) {
-				final SpeechTextEvent event = new SpeechTextEvent(entity.getEntityId(), this.getChatMessage(), true);
-				MinecraftForge.EVENT_BUS.post(event);
-				this.genNextChatTime();
-			}
+		final long ticks = getWorldTicks(subject);
+		final long delta = this.nextChat - ticks;
+		if (delta <= 0) {
+			final SpeechTextEvent event = new SpeechTextEvent(subject.getEntityId(), this.getChatMessage(), true);
+			MinecraftForge.EVENT_BUS.post(event);
+			this.genNextChatTime();
 		}
 
 	}
-	
+
 	public void genNextChatTime() {
 		this.nextChat = getWorldTicks(this.getState().subject().get()) + getNextChatTime();
 	}

@@ -24,8 +24,6 @@
 package org.blockartistry.DynSurround.client.handlers.effects;
 
 import java.util.List;
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
@@ -39,7 +37,6 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.AbstractIllager;
 import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -60,19 +57,15 @@ public class FrostBreathEffect extends EntityEffect {
 	}
 
 	@Override
-	public void update() {
+	public void update(@Nonnull final Entity subject) {
 		if (!ModOptions.showBreath)
 			return;
 
-		final Optional<Entity> e = this.getState().subject();
-		if (e.isPresent()) {
-			final Entity entity = e.get();
-			final int interval = (int) (((this.getState().getWorldTime() + this.seed) / 10) % 8);
-			if (interval < 3 && isPossibleToShow(entity)) {
-				final EntityPlayer player = this.getState().thePlayer().get();
-				if ((entity == player) || (!entity.isInvisibleToPlayer(player) && player.canEntityBeSeen(entity))) {
-					this.getState().addParticle(new ParticleBreath(entity));
-				}
+		final int interval = (int) (((this.getState().getWorldTime() + this.seed) / 10) % 8);
+		if (interval < 3 && isPossibleToShow(subject)) {
+			final EntityPlayer player = this.getState().thePlayer().get();
+			if ((subject == player) || (!subject.isInvisibleToPlayer(player) && player.canEntityBeSeen(subject))) {
+				this.getState().addParticle(new ParticleBreath(subject));
 			}
 		}
 	}
@@ -89,7 +82,7 @@ public class FrostBreathEffect extends EntityEffect {
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
 		public boolean applies(@Nonnull final Entity e) {
-			return e instanceof EntityPlayer || e instanceof EntityVillager || e instanceof AbstractIllager || e instanceof EntityWitch;
+			return e instanceof EntityPlayer || e instanceof EntityVillager || e instanceof EntityWitch;
 		}
 	};
 

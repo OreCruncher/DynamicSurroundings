@@ -37,7 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public class EntityEffectHandler extends EntityEffectStateBase implements IEntityEffectHandlerState {
-	
+
 	protected final List<EntityEffect> activeEffects;
 	protected boolean isAlive = true;
 
@@ -45,7 +45,7 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 		super(entity);
 		this.activeEffects = null;
 	}
-	
+
 	public EntityEffectHandler(@Nonnull final Entity entity, @Nonnull final List<EntityEffect> effects) {
 		super(entity);
 		this.activeEffects = effects;
@@ -55,7 +55,7 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 
 	/**
 	 * Updates the state of the EntityEffectHandler as well as the state of the
-	 * IEffects that are attached.
+	 * EntityEffects that are attached.
 	 */
 	public void update() {
 		if (!this.isAlive())
@@ -64,8 +64,9 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 		final Entity entity = this.subject.get();
 		this.isAlive = entity != null && entity.isEntityAlive();
 
-		for (final EntityEffect e : activeEffects)
-			e.update();
+		if (entity != null)
+			for (final EntityEffect e : activeEffects)
+				e.update(entity);
 	}
 
 	/**
@@ -77,10 +78,10 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 		for (final EntityEffect e : this.activeEffects)
 			e.die();
 	}
-	
+
 	/**
-	 * Used for metric collection to distinguish between active handlers
-	 * and dummies.
+	 * Used for metric collection to distinguish between active handlers and
+	 * dummies.
 	 * 
 	 * @return true if it is an active handler, false for a dummy
 	 */

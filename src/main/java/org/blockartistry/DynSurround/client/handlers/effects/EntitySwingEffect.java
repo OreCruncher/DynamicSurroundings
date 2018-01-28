@@ -24,8 +24,6 @@
 package org.blockartistry.DynSurround.client.handlers.effects;
 
 import java.util.List;
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
@@ -59,46 +57,42 @@ public class EntitySwingEffect extends EntityEffect {
 	protected String soundId;
 
 	@Override
-	public void update() {
-		final Optional<Entity> e = this.getState().subject();
-		if (e.isPresent()) {
-			final EntityLivingBase entity = (EntityLivingBase) e.get();
+	public void update(@Nonnull final Entity subject) {
+		final EntityLivingBase entity = (EntityLivingBase) subject;
 
-			// Boats are strange - ignore them for now
-			if (entity.getRidingEntity() instanceof EntityBoat)
-				return;
+		// Boats are strange - ignore them for now
+		if (entity.getRidingEntity() instanceof EntityBoat)
+			return;
 
-			// Is the swing in motion
-			if (entity.swingProgressInt > this.swingProgress) {
-				if (!this.isSwinging) {
-					if (!StringUtils.isEmpty(this.soundId)) {
-						SoundEffectHandler.INSTANCE.stopSound(this.soundId);
-						this.soundId = null;
-					}
-
-					final ItemStack currentItem = entity.getHeldItem(entity.swingingHand);
-					if (!ItemStackUtil.isValidItemStack(currentItem))
-						return;
-					
-					final SoundEffect soundEffect = ClientRegistry.ITEMS.getSwingSound(currentItem);
-					if (soundEffect != null) {
-						final float reach = Minecraft.getMinecraft().playerController.getBlockReachDistance();
-						final RayTraceResult whatImHitting = entity.rayTrace(reach, 1F);
-						if (whatImHitting.typeOfHit == Type.ENTITY || whatImHitting.typeOfHit == Type.MISS) {
-							final BasicSound<?> sound = this.getState().createSound(soundEffect, (EntityPlayer) entity);
-							this.soundId = this.getState().playSound(sound);
-						}
-					}
+		// Is the swing in motion
+		if (entity.swingProgressInt > this.swingProgress) {
+			if (!this.isSwinging) {
+				if (!StringUtils.isEmpty(this.soundId)) {
+					SoundEffectHandler.INSTANCE.stopSound(this.soundId);
+					this.soundId = null;
 				}
 
-				this.isSwinging = true;
-				this.swingProgress = entity.swingProgressInt;
+				final ItemStack currentItem = entity.getHeldItem(entity.swingingHand);
+				if (!ItemStackUtil.isValidItemStack(currentItem))
+					return;
 
-			} else {
-				this.isSwinging = false;
-				this.swingProgress = entity.swingProgressInt;
+				final SoundEffect soundEffect = ClientRegistry.ITEMS.getSwingSound(currentItem);
+				if (soundEffect != null) {
+					final float reach = Minecraft.getMinecraft().playerController.getBlockReachDistance();
+					final RayTraceResult whatImHitting = entity.rayTrace(reach, 1F);
+					if (whatImHitting.typeOfHit == Type.ENTITY || whatImHitting.typeOfHit == Type.MISS) {
+						final BasicSound<?> sound = this.getState().createSound(soundEffect, (EntityPlayer) entity);
+						this.soundId = this.getState().playSound(sound);
+					}
+				}
 			}
 
+			this.isSwinging = true;
+			this.swingProgress = entity.swingProgressInt;
+
+		} else {
+			this.isSwinging = false;
+			this.swingProgress = entity.swingProgressInt;
 		}
 	}
 
