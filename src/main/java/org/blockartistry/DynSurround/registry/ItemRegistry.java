@@ -38,6 +38,7 @@ import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.data.xface.ItemConfig;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
+import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.collections.IdentityHashSet;
 
@@ -66,7 +67,7 @@ public final class ItemRegistry extends Registry {
 	public void configure(@Nonnull final ModConfigurationFile cfg) {
 		this.register(cfg.itemConfig);
 	}
-	
+
 	@Override
 	public void init() {
 		this.swordItems.clear();
@@ -153,39 +154,27 @@ public final class ItemRegistry extends Registry {
 	}
 
 	public boolean doSwordSound(@Nonnull final ItemStack stack) {
-		if (stack == null || stack.getItem() == null)
-			return false;
-		return this.swordItems.contains(stack.getItem().getClass());
+		return ItemStackUtil.isValidItemStack(stack) ? this.swordItems.contains(stack.getItem().getClass()) : false;
 	}
 
 	public boolean doAxeSound(@Nonnull final ItemStack stack) {
-		if (stack == null || stack.getItem() == null)
-			return false;
-		return this.axeItems.contains(stack.getItem().getClass());
+		return ItemStackUtil.isValidItemStack(stack) ? this.axeItems.contains(stack.getItem().getClass()) : false;
 	}
 
 	public boolean doBowSound(@Nonnull final ItemStack stack) {
-		if (stack == null || stack.getItem() == null)
-			return false;
-		return this.bowItems.contains(stack.getItem().getClass());
+		return ItemStackUtil.isValidItemStack(stack) ? this.bowItems.contains(stack.getItem().getClass()) : false;
 	}
 
 	public boolean doToolSound(@Nonnull final ItemStack stack) {
-		if (stack == null || stack.getItem() == null)
-			return false;
-		return this.toolItems.contains(stack.getItem().getClass());
+		return ItemStackUtil.isValidItemStack(stack) ? this.toolItems.contains(stack.getItem().getClass()) : false;
 	}
 
 	public boolean doShieldSound(@Nonnull final ItemStack stack) {
-		if (stack == null || stack.getItem() == null)
-			return false;
-		return this.shieldItems.contains(stack.getItem().getClass());
+		return ItemStackUtil.isValidItemStack(stack) ? this.shieldItems.contains(stack.getItem().getClass()) : false;
 	}
 
 	public boolean doFoodSound(@Nonnull final ItemStack stack) {
-		if (stack == null || stack.getItem() == null)
-			return false;
-		return stack.getItem() instanceof ItemFood;
+		return ItemStackUtil.isValidItemStack(stack) ? stack.getItem() instanceof ItemFood : false;
 	}
 
 	public ArmorClass getArmorClass(@Nonnull final ItemStack stack) {
@@ -198,7 +187,7 @@ public final class ItemRegistry extends Registry {
 		}
 		return ArmorClass.NONE;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public SoundEffect getSwingSound(@Nonnull final ItemStack stack) {
 		if (stack != null && stack.getItem() != null) {
@@ -245,7 +234,7 @@ public final class ItemRegistry extends Registry {
 		if (stack != null && stack.getItem() != null) {
 			final Class<?> itemClass = stack.getItem().getClass();
 			final SoundEffect sound;
-			
+
 			if (this.bowItems.contains(itemClass))
 				sound = Sounds.BOW_PULL;
 			else if (this.shieldItems.contains(itemClass))
@@ -278,7 +267,7 @@ public final class ItemRegistry extends Registry {
 
 	@SideOnly(Side.CLIENT)
 	public SoundEffect getEquipSound(@Nonnull final ItemStack stack) {
-		if (stack != null && stack.getItem() != null) {
+		if (ItemStackUtil.isValidItemStack(stack)) {
 			final Class<?> itemClass = stack.getItem().getClass();
 			final SoundEffect sound;
 			if (this.swordItems.contains(itemClass))
