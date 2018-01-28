@@ -80,7 +80,7 @@ public interface IEffectState {
 	 * @return A BasicSound<?> with applicable properties set
 	 */
 	@Nonnull
-	BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final EntityPlayer player);
+	BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player);
 
 	/**
 	 * Indicates if the specified player is the one sitting behind the screen.

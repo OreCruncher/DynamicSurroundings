@@ -95,7 +95,7 @@ public class EffectStateBase implements IEffectState {
 	 */
 	@Override
 	@Nonnull
-	public BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final EntityPlayer player) {
+	public BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player) {
 		if (this.isActivePlayer(player))
 			return se.createSound(player, false);
 		return se.createSound(player);

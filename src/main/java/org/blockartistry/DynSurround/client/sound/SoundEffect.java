@@ -42,7 +42,7 @@ import org.blockartistry.lib.WeightTable;
 import org.blockartistry.lib.WeightTable.IEntrySource;
 import org.blockartistry.lib.WeightTable.IItem;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -180,12 +180,12 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	}
 
 	@SideOnly(Side.CLIENT)
-	public BasicSound<?> createSound(@Nonnull final EntityPlayer player) {
+	public BasicSound<?> createSound(@Nonnull final Entity player) {
 		return new SpotSound(player, this);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public BasicSound<?> createSound(@Nonnull final EntityLivingBase player, final boolean fadeIn) {
+	public BasicSound<?> createSound(@Nonnull final Entity player, final boolean fadeIn) {
 		if (player instanceof EntityPlayer)
 			return new PlayerTrackingSound(this, fadeIn);
 		return new TrackingSound(player, this, fadeIn);
