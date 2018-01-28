@@ -30,7 +30,6 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -46,16 +45,9 @@ public class FootstepSound extends BasicSound<FootstepSound> {
 		}
 	};
 
-	public FootstepSound() {
-		super((ResourceLocation) null, SoundCategory.PLAYERS);
-
-		this.setVolumeScale(FOOTSTEP);
-	}
-
 	public FootstepSound(@Nonnull final Entity player, @Nonnull final SoundEvent event) {
 		super(event, SoundCategory.PLAYERS);
 
-		this.setRoutable(false);
 		this.setPosition(player);
 		this.setVolumeScale(FOOTSTEP);
 		if (EnvironState.isPlayer(player))

@@ -32,6 +32,7 @@ import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -248,7 +249,13 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	@SubscribeEvent
 	public void onDistributedSound(@Nonnull final PlayDistributedSoundEvent event) {
 		try {
-			this.playSound(new AdhocSound(event.nbt));
+			// Need to only permit crafting and jump.  The other sounds are dynamically
+			// produced by the client.
+			final String soundResource = event.nbt.getString(BasicSound.NBT.SOUND_EVENT);
+			if(!StringUtils.isEmpty(soundResource)) {
+				if("dsurround:crafting".equals(soundResource) || "dsurround:jump".equals(soundResource))
+					this.playSound(new AdhocSound(event.nbt));
+			}
 		} catch (final Throwable t) {
 			;
 		}
