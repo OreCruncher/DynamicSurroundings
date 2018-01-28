@@ -34,6 +34,6 @@ public class ItemStackUtil {
 	}
 	
 	public static boolean isValidItemStack(@Nullable final ItemStack stack) {
-		return stack != null;
+		return stack != null && stack.getItem() != null;
 	}
 }

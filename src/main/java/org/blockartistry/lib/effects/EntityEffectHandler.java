@@ -86,8 +86,8 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 	 * 
 	 * @return true if it is an active handler, false for a dummy
 	 */
-	public boolean isActive() {
-		return true;
+	public boolean isDummy() {
+		return false;
 	}
 
 	// ================================================
