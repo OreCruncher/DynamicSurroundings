@@ -53,6 +53,7 @@ import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile.ForgeEntry;
 import org.blockartistry.DynSurround.util.BlockState;
 import org.blockartistry.DynSurround.util.BlockState.Consumer;
+import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.JsonUtils;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.collections.IdentityHashSet;
@@ -331,7 +332,7 @@ public final class FootstepsRegistry extends Registry {
 	}
 
 	private static Block resolveToBlock(@Nonnull final ItemStack stack) {
-		if (stack == null)
+		if (!ItemStackUtil.isValidItemStack(stack))
 			return null;
 		final Item item = stack.getItem();
 		if (item instanceof ItemBlock)
