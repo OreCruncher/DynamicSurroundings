@@ -194,9 +194,9 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	public boolean isSoundPlaying(@Nonnull final String soundId) {
 		return SoundEngine.instance().isSoundPlaying(soundId);
 	}
-	
+
 	public void stopSound(@Nonnull final String sound) {
-		
+		SoundEngine.instance().stopSound(sound);
 	}
 
 	@Nullable
@@ -268,7 +268,8 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	 */
 	@SubscribeEvent
 	public void playerJoinWorldEvent(@Nonnull final EntityJoinWorldEvent event) {
-		if (event.getEntity().world.isRemote && EnvironState.isPlayer(event.getEntity()) && !event.getEntity().isDead)
+		if (event.getEntity().getEntityWorld().isRemote && EnvironState.isPlayer(event.getEntity())
+				&& !event.getEntity().isDead)
 			clearSounds();
 	}
 

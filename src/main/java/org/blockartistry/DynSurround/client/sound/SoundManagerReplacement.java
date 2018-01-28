@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
@@ -154,6 +155,19 @@ public class SoundManagerReplacement extends SoundManager {
 				}
 			} catch (final Throwable t) {
 				// Stop more weirdness from a crashed sound system
+			}
+		}
+	}
+
+	public void stopSound(@Nonnull final String soundId, @Nullable final SoundCategory cat) {
+		synchronized (this.mutex) {
+			checkForClientThread("stopSound");
+			if (cat != null) {
+				super.stop(soundId, cat);
+			} else {
+				final ISound s = this.playingSounds.get(soundId);
+				if (s != null)
+					this.stopSound(s);
 			}
 		}
 	}
@@ -398,24 +412,24 @@ public class SoundManagerReplacement extends SoundManager {
 		}
 
 	}
-	
+
 	public int currentSoundCount() {
-		synchronized(this.mutex) {
+		synchronized (this.mutex) {
 			checkForClientThread("currentSoundCount");
 			return this.playingSoundsStopTime.size();
 		}
-		
+
 	}
-	
+
 	public int maxSoundCount() {
-		synchronized(this.mutex) {
+		synchronized (this.mutex) {
 			checkForClientThread("maxSoundCount");
 			return SoundSystemConfig.getNumberNormalChannels() + SoundSystemConfig.getNumberStreamingChannels();
 		}
 	}
-	
+
 	public int numberOfNormalChannels() {
-		synchronized(this.mutex) {
+		synchronized (this.mutex) {
 			checkForClientThread("numberOfNormalChannels");
 			return SoundSystemConfig.getNumberNormalChannels();
 		}
