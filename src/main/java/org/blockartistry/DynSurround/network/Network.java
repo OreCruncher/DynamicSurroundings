@@ -29,14 +29,13 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
-import net.minecraft.client.Minecraft;
+import org.blockartistry.lib.task.Scheduler;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.IThreadListener;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -89,13 +88,7 @@ public final class Network {
 	}
 
 	private static void postEvent(@Nonnull final Side side, @Nonnull final Event event) {
-		final IThreadListener tl = side == Side.SERVER ? FMLCommonHandler.instance().getMinecraftServerInstance()
-				: Minecraft.getMinecraft();
-		tl.addScheduledTask(new Runnable() {
-			public void run() {
-				MinecraftForge.EVENT_BUS.post(event);
-			}
-		});
+		Scheduler.schedule(side, () -> MinecraftForge.EVENT_BUS.post(event));
 	}
 
 	// Package level helper method to fire server side events based on incoming
