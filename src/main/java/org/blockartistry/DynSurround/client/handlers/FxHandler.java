@@ -96,7 +96,7 @@ public class FxHandler extends EffectHandlerBase {
 			if (!eh.isSubjectAlive()) {
 				eh.die();
 				itr.remove();
-			} else if (eh.isActive()) {
+			} else if (!eh.isDummy()) {
 				this.activeHandlers++;
 			}
 		}

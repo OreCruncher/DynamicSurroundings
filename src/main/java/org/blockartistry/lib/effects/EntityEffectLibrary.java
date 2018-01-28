@@ -104,8 +104,8 @@ public class EntityEffectLibrary {
 				}
 				
 				@Override
-				public boolean isActive() {
-					return false;
+				public boolean isDummy() {
+					return true;
 				}
 			};
 		}
