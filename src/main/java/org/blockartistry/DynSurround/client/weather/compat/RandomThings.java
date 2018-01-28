@@ -54,7 +54,7 @@ public final class RandomThings {
 				DSurround.log().info("RandomThings rain shield detected!");
 			}
 		} catch (final Exception ex) {
-			ex.printStackTrace();
+			;
 		}
 	}
 
