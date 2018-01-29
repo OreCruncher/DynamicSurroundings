@@ -32,6 +32,9 @@ import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.client.weather.tracker.ServerDrivenTracker;
 import org.blockartistry.DynSurround.client.weather.tracker.SimulationTracker;
 import org.blockartistry.DynSurround.client.weather.tracker.Tracker;
+import org.blockartistry.DynSurround.data.DimensionEffectData;
+import org.blockartistry.lib.math.MathStuff;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.util.ResourceLocation;
@@ -107,6 +110,34 @@ public class Weather {
 		@Nonnull
 		public SoundEvent getDustSound() {
 			return Sounds.DUST;
+		}
+
+		public static Properties mapRainStrength(float str) {
+
+			Properties result = Properties.VANILLA;
+
+			// If the level is Vanilla it means that
+			// the rainfall in the dimension is to be
+			// that of Vanilla.
+			if (str == Properties.VANILLA.getLevel()) {
+				result = Properties.VANILLA;
+			} else {
+
+				str = MathStuff.clamp(str, DimensionEffectData.MIN_INTENSITY, DimensionEffectData.MAX_INTENSITY);
+
+				if (str <= Properties.NONE.getLevel())
+					result = Properties.NONE;
+				else if (str < Properties.CALM.getLevel())
+					result = Properties.CALM;
+				else if (str < Properties.LIGHT.getLevel())
+					result = Properties.LIGHT;
+				else if (str < Properties.NORMAL.getLevel())
+					result = Properties.NORMAL;
+				else
+					result = Properties.HEAVY;
+			}
+
+			return result;
 		}
 
 	}
@@ -191,8 +222,8 @@ public class Weather {
 	}
 
 	public static void register(final boolean serverAvailable) {
-		if (serverAvailable)
-			tracker = new ServerDrivenTracker();
+		// if (serverAvailable)
+		// tracker = new ServerDrivenTracker();
 	}
 
 	public static void unregister() {
