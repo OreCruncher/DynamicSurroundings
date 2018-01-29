@@ -29,9 +29,8 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.api.events.WeatherUpdateEvent;
 import org.blockartistry.DynSurround.client.sound.Sounds;
-import org.blockartistry.DynSurround.data.DimensionEffectData;
-import org.blockartistry.lib.math.MathStuff;
-
+import org.blockartistry.DynSurround.client.weather.tracker.ServerDrivenTracker;
+import org.blockartistry.DynSurround.client.weather.tracker.Tracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.util.ResourceLocation;
@@ -58,7 +57,7 @@ public class Weather {
 		NORMAL(0.66F, "normal"),
 		//
 		HEAVY(1.0F, "heavy");
-		
+
 		private final float level;
 		private final ResourceLocation rainTexture;
 		private final ResourceLocation snowTexture;
@@ -79,6 +78,10 @@ public class Weather {
 					String.format("textures/environment/snow_%s.png", intensity));
 			this.dustTexture = new ResourceLocation(DSurround.RESOURCE_ID,
 					String.format("textures/environment/dust_%s.png", intensity));
+		}
+
+		public float getLevel() {
+			return this.level;
 		}
 
 		@Nonnull
@@ -108,112 +111,68 @@ public class Weather {
 
 	}
 
+	// Start with the VANILLA storm tracker
+	private static Tracker tracker = new Tracker();
+
 	private static boolean serverSideSupport = false;
-	private static float intensityLevel = 0.0F;
-	private static float maxIntensityLevel = 0.0F;
-	private static int nextRainChange = 0;
-	private static float thunderStrength = 0.0F;
-	private static int nextThunderChange = 0;
-	private static int nextThunderEvent = 0;
-	private static Properties intensity = Properties.VANILLA;
 
 	private static World getWorld() {
 		return Minecraft.getMinecraft().theWorld;
 	}
 
 	public static boolean isRaining() {
-		return getIntensityLevel() > 0F;
+		return tracker.isRaining();
 	}
 
 	public static boolean isThundering() {
-		return getWorld().isThundering();
+		return tracker.isThundering();
 	}
 
 	@Nonnull
 	public static Properties getWeatherProperties() {
-		return intensity;
+		return tracker.getWeatherProperties();
 	}
 
 	public static float getIntensityLevel() {
-		return serverSideSupport ? intensityLevel : getWorld().getRainStrength(1.0F);
+		return tracker.getIntensityLevel();
 	}
 
 	public static float getMaxIntensityLevel() {
-		return serverSideSupport ? maxIntensityLevel : 1.0F;
+		return tracker.getMaxIntensityLevel();
 	}
 
 	public static int getNextRainChange() {
-		return serverSideSupport ? nextRainChange : getWorld().getWorldInfo().getRainTime();
+		return tracker.getNextRainChange();
 	}
 
 	public static float getThunderStrength() {
-		return serverSideSupport ? thunderStrength : getWorld().getThunderStrength(1.0F);
+		return tracker.getThunderStrength();
 	}
 
 	public static int getNextThunderChange() {
-		return serverSideSupport ? nextThunderChange : getWorld().getWorldInfo().getThunderTime();
+		return tracker.getNextThunderChange();
 	}
 
 	public static int getNextThunderEvent() {
-		return serverSideSupport ? nextThunderEvent : 0;
+		return tracker.getNextThunderEvent();
 	}
 
 	public static float getCurrentVolume() {
-		return (doVanilla() ? 0.66F : (0.05F + 0.95F * intensityLevel));
+		return tracker.getCurrentVolume();
 	}
 
 	@Nonnull
 	public static SoundEvent getCurrentStormSound() {
-		return intensity.getStormSound();
+		return tracker.getCurrentStormSound();
 	}
 
 	@Nonnull
 	public static SoundEvent getCurrentDustSound() {
-		return intensity.getDustSound();
+		return tracker.getCurrentDustSound();
 	}
 
 	public static boolean doVanilla() {
-		return intensity == Properties.VANILLA;
-	}
-
-	/**
-	 * Sets the maximum intensity possible for the current weather phenomenon.
-	 */
-	private static void setMaximumIntensity(final float level) {
-		maxIntensityLevel = level;
-	}
-
-	/**
-	 * Sets the rainIntensity based on the intensityLevel level provided. This is
-	 * called by the packet handler when the server wants to set the rainIntensity
-	 * level on the client.
-	 */
-	private static void setCurrentIntensity(float level) {
-
-		// If the level is Vanilla it means that
-		// the rainfall in the dimension is to be
-		// that of Vanilla.
-		if (level == Properties.VANILLA.level) {
-			intensity = Properties.VANILLA;
-			intensityLevel = 0.0F;
-		} else {
-
-			level = MathStuff.clamp(level, DimensionEffectData.MIN_INTENSITY, DimensionEffectData.MAX_INTENSITY);
-
-			if (intensityLevel != level) {
-				intensityLevel = level;
-				if (intensityLevel <= Properties.NONE.level)
-					intensity = Properties.NONE;
-				else if (intensityLevel < Properties.CALM.level)
-					intensity = Properties.CALM;
-				else if (intensityLevel < Properties.LIGHT.level)
-					intensity = Properties.LIGHT;
-				else if (intensityLevel < Properties.NORMAL.level)
-					intensity = Properties.NORMAL;
-				else
-					intensity = Properties.HEAVY;
-			}
-		}
+		return tracker.doVanilla();
 	}
 
 	@SubscribeEvent
@@ -222,30 +181,30 @@ public class Weather {
 		if (world == null || world.provider == null)
 			return;
 
-		serverSideSupport = true;
+		if (!serverSideSupport) {
+			tracker = new ServerDrivenTracker();
+			serverSideSupport = true;
+		}
+
 		if (world.provider.getDimension() != event.world.provider.getDimension())
 			return;
-		setMaximumIntensity(event.maxRainIntensity);
-		setCurrentIntensity(event.rainIntensity);
-		nextRainChange = event.nextRainChange;
-		thunderStrength = event.thunderStrength;
-		nextThunderChange = event.nextThunderChange;
-		nextThunderEvent = event.nextThunderEvent;
+
+		((ServerDrivenTracker) tracker).update(event);
 	}
 
 	@SubscribeEvent
 	public static void onClientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
 		serverSideSupport = false;
-		setMaximumIntensity(1.0F);
-		setCurrentIntensity(Properties.VANILLA.level);
+		tracker = new Tracker();
 	}
 
 	@Nonnull
 	public static String diagnostic() {
+		final Properties props = getWeatherProperties();
 		final StringBuilder builder = new StringBuilder();
-		builder.append("Storm: ").append(intensity.name());
-		builder.append(" level: ").append(getWeatherProperties()).append('/').append(getMaxIntensityLevel());
-		builder.append(" str:").append(getWorld().getRainStrength(1.0F));
+		builder.append("Storm: ").append(props.name());
+		builder.append(" level: ").append(getIntensityLevel()).append('/').append(getMaxIntensityLevel());
+		builder.append(" [vanilla strength: ").append(getWorld().getRainStrength(1.0F)).append(']');
 		return builder.toString();
 	}
 }
