@@ -163,6 +163,11 @@ public class EntityChatEffect extends EntityEffect {
 		this.nextChat = getWorldTicks(entity) + getNextChatTime();
 	}
 
+	@Override
+	public String name() {
+		return "EntityChatEffect";
+	}
+	
 	protected int getBase() {
 		return this.data.baseInterval;
 	}

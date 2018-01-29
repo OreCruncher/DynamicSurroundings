@@ -44,6 +44,14 @@ public abstract class EntityEffect {
 	public EntityEffect() {
 
 	}
+	
+	/**
+	 * Returns the name of the handler
+	 * 
+	 * @return The name of the handler
+	 */
+	@Nonnull
+	public abstract String name();
 
 	/**
 	 * Called by the EntityEffectLibrary during the initialization of an
@@ -79,6 +87,11 @@ public abstract class EntityEffect {
 	 * additional state in other lists and places that need to be cleaned up.
 	 */
 	public void die() {
+	}
+	
+	@Override
+	public String toString() {
+		return this.name();
 	}
 
 }

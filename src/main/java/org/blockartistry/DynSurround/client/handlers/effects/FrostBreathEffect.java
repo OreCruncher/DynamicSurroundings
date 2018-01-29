@@ -51,6 +51,12 @@ public class FrostBreathEffect extends EntityEffect {
 
 	private int seed;
 
+	@Override
+	public String name() {
+		return "FrostBreathEffect";
+	}
+	
+	@Override
 	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
 		super.intitialize(state);
 		this.seed = state.subject().get().getEntityId() * PRIME;
