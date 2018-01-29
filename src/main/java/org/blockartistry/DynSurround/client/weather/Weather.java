@@ -38,7 +38,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -115,8 +114,6 @@ public class Weather {
 	// Start with the VANILLA storm tracker
 	private static Tracker tracker = new SimulationTracker();
 
-	private static boolean serverSideSupport = false;
-
 	private static World getWorld() {
 		return Minecraft.getMinecraft().world;
 	}
@@ -182,20 +179,19 @@ public class Weather {
 		if (world == null || world.provider == null)
 			return;
 
-		if (!serverSideSupport) {
-			tracker = new ServerDrivenTracker();
-			serverSideSupport = true;
-		}
-
 		if (world.provider.getDimension() != event.world.provider.getDimension())
 			return;
 
-		((ServerDrivenTracker) tracker).update(event);
+		if (tracker instanceof ServerDrivenTracker)
+			((ServerDrivenTracker) tracker).update(event);
 	}
 
-	@SubscribeEvent
-	public static void onClientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
-		serverSideSupport = false;
+	public static void register(final boolean serverAvailable) {
+		if (serverAvailable)
+			tracker = new ServerDrivenTracker();
+	}
+
+	public static void unregister() {
 		tracker = new SimulationTracker();
 	}
 

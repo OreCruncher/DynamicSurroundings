@@ -25,8 +25,7 @@
 package org.blockartistry.DynSurround.client.aurora;
 
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.lib.random.MurmurHash3;
-
+import org.blockartistry.lib.TimeUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -79,8 +78,7 @@ public class AuroraUtils {
 	 * Generate a seed for an aurora
 	 */
 	public static long getSeed() {
-		final long t = EnvironState.getClock().getDay() * 0xcafebabecafed00dL;
-		return MurmurHash3.hash(t);
+		return TimeUtils.getGMTDaySeedBase() + EnvironState.getClock().getDay();
 	}
 
 }

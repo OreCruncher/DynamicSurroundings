@@ -27,8 +27,10 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.Weather.Properties;
 import org.blockartistry.DynSurround.data.DimensionEffectData;
+import org.blockartistry.lib.TimeUtils;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
 
@@ -69,8 +71,10 @@ public class SimulationTracker extends Tracker {
 		final float vanillaIntensity = super.getIntensityLevel();
 		if (vanillaIntensity > 0 && this.intensityLevel == 0F) {
 			// Starting to rain. Generate a max intensity to
-			// be used in the simulation.
-			final Random random = XorShiftRandom.current();
+			// be used in the simulation. Use the current MC day
+			// as a seed to get some predictability across
+			// clients on the server.
+			final Random random = new XorShiftRandom(generateSeed());
 			this.maxIntensityLevel = MathStuff.clamp((random.nextFloat() + random.nextFloat()) / 2F, 0.01F, 1F);
 		} else if (vanillaIntensity == 0F && this.intensityLevel > 0F) {
 			// Stopped raining
@@ -113,6 +117,10 @@ public class SimulationTracker extends Tracker {
 					this.intensity = Properties.HEAVY;
 			}
 		}
+	}
+
+	private static long generateSeed() {
+		return TimeUtils.getGMTDaySeedBase() + EnvironState.getClock().getDay();
 	}
 
 }
