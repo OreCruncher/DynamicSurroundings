@@ -141,6 +141,7 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 		Scheduler.schedule(Side.CLIENT, () -> {
 			EffectManager.register();
 			GuiHUDHandler.register();
+			Weather.register(DSurround.isInstalledOnServer());
 			ProxyClient.this.connectionTime = System.currentTimeMillis();
 		});
 	}
@@ -150,6 +151,7 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 		Scheduler.schedule(Side.CLIENT, () -> {
 			EffectManager.unregister();
 			GuiHUDHandler.unregister();
+			Weather.unregister();
 			ProxyClient.this.connectionTime = 0;
 		});
 	}
