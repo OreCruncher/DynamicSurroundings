@@ -26,37 +26,21 @@ package org.blockartistry.DynSurround.client.weather.tracker;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.api.events.WeatherUpdateEvent;
-import org.blockartistry.DynSurround.client.weather.Weather.Properties;
-import org.blockartistry.DynSurround.data.DimensionEffectData;
-import org.blockartistry.lib.math.MathStuff;
-
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ServerDrivenTracker extends Tracker {
+public class ServerDrivenTracker extends SimulationTracker {
 
-	protected float intensityLevel = 0.0F;
-	protected float maxIntensityLevel = 0.0F;
 	protected int nextRainChange = 0;
 	protected float thunderStrength = 0.0F;
 	protected int nextThunderChange = 0;
 	protected int nextThunderEvent = 0;
-	protected Properties intensity = Properties.NONE;
-
-	public Properties getWeatherProperties() {
-		return this.intensity;
-	}
 
 	@Override
-	public float getIntensityLevel() {
-		return this.intensityLevel;
-	}
-
-	@Override
-	public float getMaxIntensityLevel() {
-		return this.maxIntensityLevel;
+	protected String type() {
+		return "SERVER";
 	}
 
 	@Override
@@ -108,39 +92,6 @@ public class ServerDrivenTracker extends Tracker {
 		this.nextThunderChange = event.nextThunderChange;
 		this.nextThunderEvent = event.nextThunderEvent;
 		setCurrentIntensity(event.rainIntensity);
-	}
-
-	/**
-	 * Sets the rainIntensity based on the intensityLevel level provided. This is
-	 * called by the packet handler when the server wants to set the rainIntensity
-	 * level on the client.
-	 */
-	private void setCurrentIntensity(float level) {
-
-		// If the level is Vanilla it means that
-		// the rainfall in the dimension is to be
-		// that of Vanilla.
-		if (level == Properties.VANILLA.getLevel()) {
-			this.intensity = Properties.VANILLA;
-			this.intensityLevel = 0.0F;
-		} else {
-
-			level = MathStuff.clamp(level, DimensionEffectData.MIN_INTENSITY, DimensionEffectData.MAX_INTENSITY);
-
-			if (this.intensityLevel != level) {
-				this.intensityLevel = level;
-				if (this.intensityLevel <= Properties.NONE.getLevel())
-					this.intensity = Properties.NONE;
-				else if (this.intensityLevel < Properties.CALM.getLevel())
-					this.intensity = Properties.CALM;
-				else if (this.intensityLevel < Properties.LIGHT.getLevel())
-					this.intensity = Properties.LIGHT;
-				else if (this.intensityLevel < Properties.NORMAL.getLevel())
-					this.intensity = Properties.NORMAL;
-				else
-					this.intensity = Properties.HEAVY;
-			}
-		}
 	}
 
 }

@@ -35,11 +35,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class Tracker {
-	
+
 	public Tracker() {
-		
+
 	}
-	
+
+	protected String type() {
+		return "VANILLA";
+	}
+
 	public final boolean isRaining() {
 		return getIntensityLevel() > 0F;
 	}
@@ -51,32 +55,32 @@ public class Tracker {
 	public Properties getWeatherProperties() {
 		return Properties.VANILLA;
 	}
-	
+
 	public float getIntensityLevel() {
 		return getWorld().getRainStrength(1.0F);
 	}
-	
+
 	public float getMaxIntensityLevel() {
 		return 1.0F;
 	}
-	
+
 	public int getNextRainChange() {
 		return getWorld().getWorldInfo().getRainTime();
 	}
-	
+
 	public float getThunderStrength() {
 		return getWorld().getThunderStrength(1.0F);
 	}
-	
+
 	public int getNextThunderChange() {
 		return getWorld().getWorldInfo().getThunderTime();
 	}
-	
+
 	public int getNextThunderEvent() {
 		return 0;
 	}
-	
-	public float getCurrentVolume() { 
+
+	public float getCurrentVolume() {
 		return 0.66F;
 	}
 
@@ -89,9 +93,20 @@ public class Tracker {
 	public SoundEvent getCurrentDustSound() {
 		return Properties.VANILLA.getDustSound();
 	}
-	
+
 	public boolean doVanilla() {
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		final Properties props = getWeatherProperties();
+		final StringBuilder builder = new StringBuilder();
+		builder.append("Storm: ").append(props.name());
+		builder.append(" level: ").append(getIntensityLevel()).append('/').append(getMaxIntensityLevel());
+		builder.append(" [vanilla strength: ").append(getWorld().getRainStrength(1.0F)).append("] (")
+				.append(this.type()).append(')');
+		return builder.toString();
 	}
 
 	protected static World getWorld() {
@@ -99,4 +114,3 @@ public class Tracker {
 	}
 
 }
-
