@@ -102,6 +102,11 @@ public class EntityFootprintEffect extends EntityEffect {
 		this.generator.generateFootsteps(entity);
 	}
 	
+	@Override
+	public String toString() {
+		return super.toString() + ": " + this.generator.getPedometer();
+	}
+	
 	// Currently restricted to the active player. Have stuff to unwind in the
 	// footprint code.
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {

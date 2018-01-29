@@ -319,10 +319,6 @@ public final class FootstepsRegistry extends Registry {
 		return var.QUADRUPED ? new GeneratorQP(this.isolator, var) : new Generator(this.isolator, var);
 	}
 
-	public void think() {
-		this.isolator.getAcoustics().think();
-	}
-
 	@Nonnull
 	public BlockMap getBlockMap() {
 		return this.blockMap;
