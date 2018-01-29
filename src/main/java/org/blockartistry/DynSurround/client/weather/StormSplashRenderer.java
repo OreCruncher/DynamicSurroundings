@@ -86,7 +86,7 @@ public class StormSplashRenderer {
 	}
 
 	protected float calculateRainSoundVolume(final World world) {
-		final float currentVolume = WeatherProperties.getCurrentVolume();
+		final float currentVolume = Weather.getCurrentVolume();
 		final float bounds = currentVolume * 0.25F;
 		final float adjust = MathHelper.clamp(
 				(float) (this.GENERATOR.getValue((world.getWorldTime() % 24000L) / 100, 1) / 5.0F), -bounds, bounds);
@@ -116,10 +116,10 @@ public class StormSplashRenderer {
 
 	protected SoundEvent getBlockSoundFX(final Block block, final boolean hasDust, final World world) {
 		if (hasDust)
-			return WeatherProperties.getIntensity().getDustSound();
+			return Weather.getWeatherProperties().getDustSound();
 		if (block == Blocks.NETHERRACK)
 			return SoundEvents.BLOCK_LAVA_POP;
-		return WeatherProperties.getIntensity().getStormSound();
+		return Weather.getWeatherProperties().getStormSound();
 	}
 
 	protected BlockPos getPrecipitationHeight(final World world, final int range, final BlockPos pos) {
@@ -127,7 +127,7 @@ public class StormSplashRenderer {
 	}
 
 	protected boolean biomeHasDust(final Biome biome) {
-		return ModOptions.allowDesertFog && !WeatherProperties.doVanilla()
+		return ModOptions.allowDesertFog && !Weather.doVanilla()
 				&& ClientRegistry.BIOME.get(biome).getHasDust();
 	}
 
@@ -162,7 +162,7 @@ public class StormSplashRenderer {
 		if (!ClientRegistry.DIMENSION.hasWeather(world))
 			return;
 
-		float rainStrengthFactor = WeatherProperties.getIntensityLevel();
+		float rainStrengthFactor = Weather.getIntensityLevel();
 		if (!theThis.mc.gameSettings.fancyGraphics)
 			rainStrengthFactor /= 2.0F;
 

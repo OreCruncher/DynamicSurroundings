@@ -26,7 +26,7 @@ package org.blockartistry.DynSurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.client.weather.WeatherProperties;
+import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.math.MathStuff;
 
@@ -114,8 +114,8 @@ public class MoteFootprint extends MoteBase {
 	@Override
 	protected boolean advanceAge() {
 		// Footprints age faster when raining
-		if (WeatherProperties.isRaining())
-			this.age += (WeatherProperties.getIntensityLevel() * 100F) / 25;
+		if (Weather.isRaining())
+			this.age += (Weather.getIntensityLevel() * 100F) / 25;
 		return super.advanceAge();
 	}
 

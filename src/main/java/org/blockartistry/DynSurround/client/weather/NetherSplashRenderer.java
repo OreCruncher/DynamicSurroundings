@@ -43,7 +43,7 @@ public class NetherSplashRenderer extends StormSplashRenderer {
 
 	@Override
 	protected SoundEvent getBlockSoundFX(final Block block, final boolean hasDust, final World world) {
-		return hasDust ? WeatherProperties.getIntensity().getDustSound() : null;
+		return hasDust ? Weather.getWeatherProperties().getDustSound() : null;
 	}
 
 	@Override

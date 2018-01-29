@@ -30,11 +30,12 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.api.events.WeatherUpdateEvent;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.data.DimensionEffectData;
+import org.blockartistry.lib.math.MathStuff;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
@@ -42,10 +43,70 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public enum WeatherProperties {
+public class Weather {
 
-	VANILLA, NONE(0.0F, "calm"), CALM(0.1F, "calm"), LIGHT(0.33F, "light"), NORMAL(0.66F, "normal"), HEAVY(1.0F,
-			"heavy");
+	public enum Properties {
+		// Regular Vanilla rain - no modification
+		VANILLA,
+		//
+		NONE(0.0F, "calm"),
+		//
+		CALM(0.1F, "calm"),
+		//
+		LIGHT(0.33F, "light"),
+		//
+		NORMAL(0.66F, "normal"),
+		//
+		HEAVY(1.0F, "heavy");
+		
+		private final float level;
+		private final ResourceLocation rainTexture;
+		private final ResourceLocation snowTexture;
+		private final ResourceLocation dustTexture;
+
+		private Properties() {
+			this.level = -10.0F;
+			this.rainTexture = EntityRenderer.RAIN_TEXTURES;
+			this.snowTexture = EntityRenderer.SNOW_TEXTURES;
+			this.dustTexture = new ResourceLocation(DSurround.RESOURCE_ID, "textures/environment/dust_calm.png");
+		}
+
+		private Properties(final float level, @Nonnull final String intensity) {
+			this.level = level;
+			this.rainTexture = new ResourceLocation(DSurround.RESOURCE_ID,
+					String.format("textures/environment/rain_%s.png", intensity));
+			this.snowTexture = new ResourceLocation(DSurround.RESOURCE_ID,
+					String.format("textures/environment/snow_%s.png", intensity));
+			this.dustTexture = new ResourceLocation(DSurround.RESOURCE_ID,
+					String.format("textures/environment/dust_%s.png", intensity));
+		}
+
+		@Nonnull
+		public ResourceLocation getRainTexture() {
+			return this.rainTexture;
+		}
+
+		@Nonnull
+		public ResourceLocation getDustTexture() {
+			return this.dustTexture;
+		}
+
+		@Nonnull
+		public ResourceLocation getSnowTexture() {
+			return this.snowTexture;
+		}
+
+		@Nonnull
+		public SoundEvent getStormSound() {
+			return Sounds.RAIN;
+		}
+
+		@Nonnull
+		public SoundEvent getDustSound() {
+			return Sounds.DUST;
+		}
+
+	}
 
 	private static boolean serverSideSupport = false;
 	private static float intensityLevel = 0.0F;
@@ -54,35 +115,12 @@ public enum WeatherProperties {
 	private static float thunderStrength = 0.0F;
 	private static int nextThunderChange = 0;
 	private static int nextThunderEvent = 0;
-	private static WeatherProperties intensity = VANILLA;
-	private static float fogDensity = 0.0F;
-
-	private final float level;
-	private final ResourceLocation rainTexture;
-	private final ResourceLocation snowTexture;
-	private final ResourceLocation dustTexture;
-
-	private WeatherProperties() {
-		this.level = -10.0F;
-		this.rainTexture = EntityRenderer.RAIN_TEXTURES;
-		this.snowTexture = EntityRenderer.SNOW_TEXTURES;
-		this.dustTexture = new ResourceLocation(DSurround.RESOURCE_ID, "textures/environment/dust_calm.png");
-	}
-
-	private WeatherProperties(final float level, @Nonnull final String intensity) {
-		this.level = level;
-		this.rainTexture = new ResourceLocation(DSurround.RESOURCE_ID,
-				String.format("textures/environment/rain_%s.png", intensity));
-		this.snowTexture = new ResourceLocation(DSurround.RESOURCE_ID,
-				String.format("textures/environment/snow_%s.png", intensity));
-		this.dustTexture = new ResourceLocation(DSurround.RESOURCE_ID,
-				String.format("textures/environment/dust_%s.png", intensity));
-	}
+	private static Properties intensity = Properties.VANILLA;
 
 	private static World getWorld() {
 		return Minecraft.getMinecraft().world;
 	}
-	
+
 	public static boolean isRaining() {
 		return getIntensityLevel() > 0F;
 	}
@@ -92,7 +130,7 @@ public enum WeatherProperties {
 	}
 
 	@Nonnull
-	public static WeatherProperties getIntensity() {
+	public static Properties getWeatherProperties() {
 		return intensity;
 	}
 
@@ -120,35 +158,6 @@ public enum WeatherProperties {
 		return serverSideSupport ? nextThunderEvent : 0;
 	}
 
-	public static float getFogDensity() {
-		return fogDensity;
-	}
-
-	@Nonnull
-	public SoundEvent getStormSound() {
-		return Sounds.RAIN;
-	}
-
-	@Nonnull
-	public SoundEvent getDustSound() {
-		return Sounds.DUST;
-	}
-	
-	@Nonnull
-	public ResourceLocation getRainTexture() {
-		return this.rainTexture;
-	}
-	
-	@Nonnull
-	public ResourceLocation getDustTexture() {
-		return this.dustTexture;
-	}
-	
-	@Nonnull
-	public ResourceLocation getSnowTexture() {
-		return this.snowTexture;
-	}
-
 	public static float getCurrentVolume() {
 		return (doVanilla() ? 0.66F : (0.05F + 0.95F * intensityLevel));
 	}
@@ -164,52 +173,45 @@ public enum WeatherProperties {
 	}
 
 	public static boolean doVanilla() {
-		return intensity == VANILLA;
+		return intensity == Properties.VANILLA;
 	}
 
 	/**
 	 * Sets the maximum intensity possible for the current weather phenomenon.
 	 */
-	public static void setMaximumIntensity(final float level) {
+	private static void setMaximumIntensity(final float level) {
 		maxIntensityLevel = level;
 	}
 
 	/**
-	 * Sets the rainIntensity based on the intensityLevel level provided. This
-	 * is called by the packet handler when the server wants to set the
-	 * rainIntensity level on the client.
+	 * Sets the rainIntensity based on the intensityLevel level provided. This is
+	 * called by the packet handler when the server wants to set the rainIntensity
+	 * level on the client.
 	 */
-	public static void setCurrentIntensity(float level) {
+	private static void setCurrentIntensity(float level) {
 
 		// If the level is Vanilla it means that
 		// the rainfall in the dimension is to be
 		// that of Vanilla.
-		if (level == VANILLA.level) {
-			intensity = VANILLA;
+		if (level == Properties.VANILLA.level) {
+			intensity = Properties.VANILLA;
 			intensityLevel = 0.0F;
-			fogDensity = 0.0F;
 		} else {
 
-			level = MathHelper.clamp(level, DimensionEffectData.MIN_INTENSITY, DimensionEffectData.MAX_INTENSITY);
+			level = MathStuff.clamp(level, DimensionEffectData.MIN_INTENSITY, DimensionEffectData.MAX_INTENSITY);
 
 			if (intensityLevel != level) {
 				intensityLevel = level;
-				if (level > 0) {
-					level += 0.01;
-					fogDensity = level * level * 0.13F;
-				} else {
-					fogDensity = 0.0F;
-				}
-				if (intensityLevel <= NONE.level)
-					intensity = NONE;
-				else if (intensityLevel < CALM.level)
-					intensity = CALM;
-				else if (intensityLevel < LIGHT.level)
-					intensity = LIGHT;
-				else if (intensityLevel < NORMAL.level)
-					intensity = NORMAL;
+				if (intensityLevel <= Properties.NONE.level)
+					intensity = Properties.NONE;
+				else if (intensityLevel < Properties.CALM.level)
+					intensity = Properties.CALM;
+				else if (intensityLevel < Properties.LIGHT.level)
+					intensity = Properties.LIGHT;
+				else if (intensityLevel < Properties.NORMAL.level)
+					intensity = Properties.NORMAL;
 				else
-					intensity = HEAVY;
+					intensity = Properties.HEAVY;
 			}
 		}
 	}
@@ -219,7 +221,7 @@ public enum WeatherProperties {
 		final World world = getWorld();
 		if (world == null || world.provider == null)
 			return;
-		
+
 		serverSideSupport = true;
 		if (world.provider.getDimension() != event.world.provider.getDimension())
 			return;
@@ -235,15 +237,14 @@ public enum WeatherProperties {
 	public static void onClientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
 		serverSideSupport = false;
 		setMaximumIntensity(1.0F);
-		setCurrentIntensity(VANILLA.level);
+		setCurrentIntensity(Properties.VANILLA.level);
 	}
 
 	@Nonnull
 	public static String diagnostic() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("Storm: ").append(intensity.name());
-		builder.append(" level: ").append(getIntensity()).append('/').append(getMaxIntensityLevel());
-		builder.append(" dust:").append(fogDensity);
+		builder.append(" level: ").append(getWeatherProperties()).append('/').append(getMaxIntensityLevel());
 		builder.append(" str:").append(getWorld().getRainStrength(1.0F));
 		return builder.toString();
 	}

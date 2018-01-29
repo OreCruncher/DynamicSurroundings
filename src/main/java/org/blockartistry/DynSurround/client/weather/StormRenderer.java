@@ -92,11 +92,11 @@ public class StormRenderer {
 		if (!ClientRegistry.DIMENSION.hasWeather(world))
 			return;
 
-		final float rainStrength = WeatherProperties.getIntensityLevel();
+		final float rainStrength = Weather.getIntensityLevel();
 		if (rainStrength <= 0.0F)
 			return;
 
-		final float alphaRatio = rainStrength / WeatherProperties.getMaxIntensityLevel();
+		final float alphaRatio = rainStrength / Weather.getMaxIntensityLevel();
 
 		renderer.enableLightmap();
 
@@ -120,7 +120,7 @@ public class StormRenderer {
 
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
-		final WeatherProperties props = WeatherProperties.getIntensity();
+		final Weather.Properties props = Weather.getWeatherProperties();
 		final Entity entity = renderer.mc.getRenderViewEntity();
 
 		boolean isDrawing = false;
