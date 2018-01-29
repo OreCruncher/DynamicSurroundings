@@ -30,6 +30,7 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.api.events.WeatherUpdateEvent;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.client.weather.tracker.ServerDrivenTracker;
+import org.blockartistry.DynSurround.client.weather.tracker.SimulationTracker;
 import org.blockartistry.DynSurround.client.weather.tracker.Tracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -112,7 +113,7 @@ public class Weather {
 	}
 
 	// Start with the VANILLA storm tracker
-	private static Tracker tracker = new Tracker();
+	private static Tracker tracker = new SimulationTracker();
 
 	private static boolean serverSideSupport = false;
 
@@ -195,16 +196,11 @@ public class Weather {
 	@SubscribeEvent
 	public static void onClientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
 		serverSideSupport = false;
-		tracker = new Tracker();
+		tracker = new SimulationTracker();
 	}
 
 	@Nonnull
 	public static String diagnostic() {
-		final Properties props = getWeatherProperties();
-		final StringBuilder builder = new StringBuilder();
-		builder.append("Storm: ").append(props.name());
-		builder.append(" level: ").append(getIntensityLevel()).append('/').append(getMaxIntensityLevel());
-		builder.append(" [vanilla strength: ").append(getWorld().getRainStrength(1.0F)).append(']');
-		return builder.toString();
+		return tracker.toString();
 	}
 }
