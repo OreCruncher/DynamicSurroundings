@@ -23,6 +23,7 @@
  */
 package org.blockartistry.lib.effects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -88,6 +89,23 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 	 */
 	public boolean isDummy() {
 		return false;
+	}
+
+	/**
+	 * Used for collecting diagnostic information.
+	 * 
+	 * @return List of attached handlers
+	 */
+	@Nonnull
+	public List<String> getAttachedEffects() {
+		final List<String> result = new ArrayList<String>();
+		if (this.activeEffects.size() == 0) {
+			result.add("No effects");
+		} else {
+			for (final EntityEffect e : this.activeEffects)
+				result.add(e.toString());
+		}
+		return result;
 	}
 
 	// ================================================

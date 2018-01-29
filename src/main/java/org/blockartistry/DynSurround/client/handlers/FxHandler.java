@@ -23,6 +23,8 @@
  */
 package org.blockartistry.DynSurround.client.handlers;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
@@ -44,6 +46,8 @@ import org.blockartistry.lib.effects.EntityEffectHandler;
 import org.blockartistry.lib.effects.EntityEffectLibrary;
 import org.blockartistry.lib.effects.EventEffectLibrary;
 
+import com.google.common.collect.ImmutableList;
+
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -60,6 +64,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class FxHandler extends EffectHandlerBase {
 
 	private static final EntityEffectLibrary library = new EntityEffectLibrary();
+	
+	public static FxHandler INSTANCE;
 
 	static {
 		library.register(FrostBreathEffect.DEFAULT_FILTER, new FrostBreathEffect.Factory());
@@ -115,6 +121,20 @@ public class FxHandler extends EffectHandlerBase {
 		event.output.add(builder.toString());
 	}
 
+	/**
+	 * Used for diagnostics to get data about an Entity.
+	 * 
+	 * @param entity Entity to get information on
+	 * @return A list of EntityEffects, if any
+	 */
+	public List<String> getEffects(@Nonnull final Entity entity) {
+		final EntityEffectHandler eh = this.handlers.get(entity.getEntityId());
+		if(eh != null) {
+			return eh.getAttachedEffects();
+		}
+		return ImmutableList.of();
+	}
+	
 	/**
 	 * Whenever an Entity updates make sure we have an appropriate handler, and
 	 * update it's state if necessary.
@@ -172,11 +192,14 @@ public class FxHandler extends EffectHandlerBase {
 		this.eventLibrary.register(new CraftingSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new PopoffEventEffect(this.eventLibrary));
 		this.eventLibrary.register(new FootprintEventEffect(this.eventLibrary));
+		
+		INSTANCE = this;
 	}
 
 	@Override
 	public void onDisconnect() {
 		this.clearHandlers();
 		this.eventLibrary.cleanup();
+		INSTANCE = null;
 	}
 }
