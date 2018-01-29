@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.ThunderEvent;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.Weather.Properties;
 import org.blockartistry.DynSurround.data.DimensionEffectData;
@@ -85,13 +86,25 @@ public class SimulationTracker extends Tracker {
 
 	@Override
 	public boolean backgroundThunderPossible() {
-		return this.isThundering() && this.getIntensityLevel() >= ModOptions.stormThunderThreshold;
+		if (!ModOptions.allowBackgroundThunder)
+			return false;
+
+		final int dimId = EnvironState.getDimensionId();
+		return dimId != -1 && dimId != 1 && this.isThundering()
+				&& this.getIntensityLevel() >= ModOptions.stormThunderThreshold;
 	}
 
 	@Override
 	public void update() {
-		updateRainState();
-		doAmbientThunder();
+		if (ClientRegistry.DIMENSION.hasWeather(EnvironState.getWorld())) {
+			updateRainState();
+			doAmbientThunder();
+		} else {
+			this.intensity = Properties.NONE;
+			this.intensityLevel = 0F;
+			this.maxIntensityLevel = 0F;
+			this.nextThunderEvent = 0;
+		}
 	}
 
 	private void updateRainState() {
@@ -102,10 +115,22 @@ public class SimulationTracker extends Tracker {
 			// as a seed to get some predictability across
 			// clients on the server.
 			this.random = new XorShiftRandom(generateSeed());
-			this.maxIntensityLevel = MathStuff.clamp((this.random.nextFloat() + this.random.nextFloat()) / 2F, 0.01F, 1F);
+
+			final float result;
+			final float delta = ModOptions.defaultMaxRainStrength - ModOptions.defaultMinRainStrength;
+			if (delta <= 0.0F) {
+				result = ModOptions.defaultMinRainStrength;
+			} else {
+				final float mid = delta / 2.0F;
+				result = ModOptions.defaultMinRainStrength + (this.random.nextFloat() + this.random.nextFloat()) * mid;
+			}
+
+			this.maxIntensityLevel = MathStuff.clamp(result, 0.01F, DimensionEffectData.MAX_INTENSITY);
+
 		} else if (vanillaIntensity == 0F && this.intensityLevel > 0F) {
 			// Stopped raining
 			this.maxIntensityLevel = 0F;
+			this.nextThunderEvent = 0;
 			this.random = null;
 		}
 
@@ -119,32 +144,15 @@ public class SimulationTracker extends Tracker {
 	 * called by the packet handler when the server wants to set the rainIntensity
 	 * level on the client.
 	 */
-	protected void setCurrentIntensity(float level) {
+	protected void setCurrentIntensity(final float level) {
 
-		// If the level is Vanilla it means that
-		// the rainfall in the dimension is to be
-		// that of Vanilla.
-		if (level == Properties.VANILLA.getLevel()) {
-			this.intensity = Properties.VANILLA;
-			this.intensityLevel = 0.0F;
-		} else {
+		this.intensity = Properties.mapRainStrength(level);
 
-			level = MathStuff.clamp(level, DimensionEffectData.MIN_INTENSITY, DimensionEffectData.MAX_INTENSITY);
-
-			if (this.intensityLevel != level) {
-				this.intensityLevel = level;
-				if (this.intensityLevel <= Properties.NONE.getLevel())
-					this.intensity = Properties.NONE;
-				else if (this.intensityLevel < Properties.CALM.getLevel())
-					this.intensity = Properties.CALM;
-				else if (this.intensityLevel < Properties.LIGHT.getLevel())
-					this.intensity = Properties.LIGHT;
-				else if (this.intensityLevel < Properties.NORMAL.getLevel())
-					this.intensity = Properties.NORMAL;
-				else
-					this.intensity = Properties.HEAVY;
-			}
-		}
+		if (this.intensity == Properties.VANILLA)
+			this.intensityLevel = 0F;
+		else
+			this.intensityLevel = MathStuff.clamp(level, DimensionEffectData.MIN_INTENSITY,
+					DimensionEffectData.MAX_INTENSITY);
 	}
 
 	private static long generateSeed() {
@@ -153,10 +161,6 @@ public class SimulationTracker extends Tracker {
 
 	// Leveraged from WeatherGenerator
 	private void doAmbientThunder() {
-
-		// If not enabled, return
-		if (!ModOptions.allowBackgroundThunder || this.random == null)
-			return;
 
 		// If it is thundering and the intensity exceeds our threshold...
 		if (this.backgroundThunderPossible()) {
@@ -169,7 +173,7 @@ public class SimulationTracker extends Tracker {
 						final float theY = EnvironState.getDimensionInfo().getSkyHeight();
 						final BlockPos pos = new BlockPos(player.posX, theY, player.posZ);
 						MinecraftForge.EVENT_BUS
-								.post(new ThunderEvent(EnvironState.getWorld(), doFlash(intensity), pos));
+								.post(new ThunderEvent(player.getEntityWorld(), doFlash(intensity), pos));
 					}
 				}
 
