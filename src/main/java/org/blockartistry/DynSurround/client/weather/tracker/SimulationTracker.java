@@ -27,13 +27,19 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.api.events.ThunderEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.Weather.Properties;
 import org.blockartistry.DynSurround.data.DimensionEffectData;
+import org.blockartistry.lib.PlayerUtils;
 import org.blockartistry.lib.TimeUtils;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -42,7 +48,9 @@ public class SimulationTracker extends Tracker {
 
 	protected float intensityLevel = 0.0F;
 	protected float maxIntensityLevel = 0.0F;
+	protected int nextThunderEvent = 0;
 	protected Properties intensity = Properties.NONE;
+	protected Random random;
 
 	@Override
 	protected String type() {
@@ -52,19 +60,38 @@ public class SimulationTracker extends Tracker {
 	@Override
 	@Nonnull
 	public Properties getWeatherProperties() {
-		updateRainState();
 		return this.intensity;
 	}
 
 	@Override
 	public float getIntensityLevel() {
-		updateRainState();
 		return this.intensityLevel;
 	}
 
 	@Override
 	public float getMaxIntensityLevel() {
 		return this.maxIntensityLevel;
+	}
+
+	@Override
+	public int getNextThunderEvent() {
+		return this.nextThunderEvent;
+	}
+
+	@Override
+	public boolean doVanilla() {
+		return false;
+	}
+
+	@Override
+	public boolean backgroundThunderPossible() {
+		return this.isThundering() && this.getIntensityLevel() >= ModOptions.stormThunderThreshold;
+	}
+
+	@Override
+	public void update() {
+		updateRainState();
+		doAmbientThunder();
 	}
 
 	private void updateRainState() {
@@ -74,11 +101,12 @@ public class SimulationTracker extends Tracker {
 			// be used in the simulation. Use the current MC day
 			// as a seed to get some predictability across
 			// clients on the server.
-			final Random random = new XorShiftRandom(generateSeed());
-			this.maxIntensityLevel = MathStuff.clamp((random.nextFloat() + random.nextFloat()) / 2F, 0.01F, 1F);
+			this.random = new XorShiftRandom(generateSeed());
+			this.maxIntensityLevel = MathStuff.clamp((this.random.nextFloat() + this.random.nextFloat()) / 2F, 0.01F, 1F);
 		} else if (vanillaIntensity == 0F && this.intensityLevel > 0F) {
 			// Stopped raining
 			this.maxIntensityLevel = 0F;
+			this.random = null;
 		}
 
 		float newIntensity = MathStuff.clamp(vanillaIntensity, 0.0F, this.maxIntensityLevel);
@@ -121,6 +149,49 @@ public class SimulationTracker extends Tracker {
 
 	private static long generateSeed() {
 		return TimeUtils.getGMTDaySeedBase() + EnvironState.getClock().getDay();
+	}
+
+	// Leveraged from WeatherGenerator
+	private void doAmbientThunder() {
+
+		// If not enabled, return
+		if (!ModOptions.allowBackgroundThunder || this.random == null)
+			return;
+
+		// If it is thundering and the intensity exceeds our threshold...
+		if (this.backgroundThunderPossible()) {
+			final float intensity = this.getIntensityLevel();
+			int time = this.nextThunderEvent - 1;
+			if (time <= 0) {
+				if (time == 0) {
+					final EntityPlayer player = PlayerUtils.getRandomPlayer(EnvironState.getWorld());
+					if (player != null) {
+						final float theY = EnvironState.getDimensionInfo().getSkyHeight();
+						final BlockPos pos = new BlockPos(player.posX, theY, player.posZ);
+						MinecraftForge.EVENT_BUS
+								.post(new ThunderEvent(EnvironState.getWorld(), doFlash(intensity), pos));
+					}
+				}
+
+				// set new time
+				time = nextThunderEvent(intensity);
+			}
+			this.nextThunderEvent = time;
+
+		} else {
+			// Clear out the timer data for the next storm
+			this.nextThunderEvent = 0;
+		}
+	}
+
+	private int nextThunderEvent(final float rainIntensity) {
+		final float scale = 2.0F - rainIntensity;
+		return this.random.nextInt((int) (450 * scale)) + 300;
+	}
+
+	protected boolean doFlash(final float rainIntensity) {
+		final int randee = (int) (rainIntensity * 100.0F);
+		return this.random.nextInt(150) <= randee;
 	}
 
 }

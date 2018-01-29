@@ -52,7 +52,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public final class PlayerUtils {
 
 	private static final int INSIDE_Y_ADJUST = 3;
@@ -64,9 +63,10 @@ public final class PlayerUtils {
 	private PlayerUtils() {
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Nonnull
 	public static BiomeInfo getPlayerBiome(@Nonnull final EntityPlayer player, final boolean getTrue) {
-		Biome biome = player.worldObj.getBiome(new BlockPos(player.posX, 0, player.posZ));
+		Biome biome = player.getEntityWorld().getBiome(new BlockPos(player.posX, 0, player.posZ));
 
 		if (!getTrue) {
 			if (player.isInsideOfMaterial(Material.WATER)) {
@@ -79,7 +79,7 @@ public final class PlayerUtils {
 				else
 					biome = BiomeRegistry.UNDERWATER;
 			} else {
-				final DimensionInfo dimInfo = ClientRegistry.DIMENSION.getData(player.worldObj);
+				final DimensionInfo dimInfo = ClientRegistry.DIMENSION.getData(player.getEntityWorld());
 				final int theY = MathStuff.floor(player.posY);
 				if ((theY + INSIDE_Y_ADJUST) <= dimInfo.getSeaLevel())
 					biome = BiomeRegistry.UNDERGROUND;
@@ -104,20 +104,23 @@ public final class PlayerUtils {
 		return null;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static boolean isHolding(@Nonnull final EntityPlayer player, @Nonnull final Item item,
 			@Nonnull final EnumHand hand) {
 		final ItemStack stack = player.getHeldItem(hand);
-		if (stack != null) {
+		if (ItemStackUtil.isValidItemStack(stack)) {
 			if (stack.getItem() == item)
 				return true;
 		}
 		return false;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static boolean isHolding(@Nonnull final EntityPlayer player, @Nonnull final Item item) {
 		return isHolding(player, item, EnumHand.MAIN_HAND) || isHolding(player, item, EnumHand.OFF_HAND);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Nullable
 	public static Entity entityImLookingAt(@Nonnull final EntityPlayer player) {
 		final RayTraceResult result = Minecraft.getMinecraft().objectMouseOver;
