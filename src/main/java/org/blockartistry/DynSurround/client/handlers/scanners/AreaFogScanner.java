@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.client.weather.WeatherProperties;
+import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.math.MathStuff;
@@ -80,7 +80,7 @@ public class AreaFogScanner implements ITickable {
 	private float calcHazeBand(final World world, final EntityPlayer player) {
 		final float distance = MathHelper
 				.abs(ClientRegistry.DIMENSION.getCloudHeight(world) - (float) (player.posY + player.getEyeHeight()));
-		final float hazeBandRange = HAZE_THRESHOLD * (1.0F + WeatherProperties.getIntensityLevel() * 2);
+		final float hazeBandRange = HAZE_THRESHOLD * (1.0F + Weather.getIntensityLevel() * 2);
 		if (distance < hazeBandRange)
 			return (hazeBandRange - distance) / hazeBandRange * ModOptions.elevationHazeFactor * 0.7F;
 
@@ -88,7 +88,7 @@ public class AreaFogScanner implements ITickable {
 	}
 
 	private float calcHazeGradient(final World world, final EntityPlayer player) {
-		final float factor = 1.0F + WeatherProperties.getIntensityLevel();
+		final float factor = 1.0F + Weather.getIntensityLevel();
 		final float skyHeight = ClientRegistry.DIMENSION.getSkyHeight(world) / factor;
 		final float groundLevel = ClientRegistry.DIMENSION.getSeaLevel(world);
 		final float ratio = (MathHelper.floor_double(player.posY + player.getEyeHeight()) - groundLevel)
@@ -124,13 +124,13 @@ public class AreaFogScanner implements ITickable {
 
 		final BlockPos playerPos = EnvironState.getPlayerPosition();
 		if (this.lastPos.equals(playerPos) && this.lastDim == EnvironState.getDimensionId()
-				&& this.lastIntensity == WeatherProperties.getIntensityLevel()
+				&& this.lastIntensity == Weather.getIntensityLevel()
 				&& this.lastBiome == EnvironState.getPlayerBiome())
 			return;
 
 		this.lastPos = playerPos;
 		this.lastDim = EnvironState.getDimensionId();
-		this.lastIntensity = WeatherProperties.getIntensityLevel();
+		this.lastIntensity = Weather.getIntensityLevel();
 		this.lastBiome = EnvironState.getPlayerBiome();
 
 		final World world = EnvironState.getWorld();

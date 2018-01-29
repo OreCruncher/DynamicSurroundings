@@ -33,7 +33,7 @@ import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.DynSurround.client.weather.WeatherProperties;
+import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.DynSurround.expression.ExpressionEngine;
 import org.blockartistry.DynSurround.registry.BlockInfo.BlockInfoMutable;
 import org.blockartistry.lib.MCHelper;
@@ -90,27 +90,27 @@ public abstract class DataProxy extends Observable {
 		}
 
 		public String getRainStatus() {
-			return WeatherProperties.getIntensity().name();
+			return Weather.getWeatherProperties().name();
 		}
 
 		public float getRainIntensity() {
-			return WeatherProperties.getIntensityLevel();
+			return Weather.getIntensityLevel();
 		}
 
 		public int getRainTime() {
-			return WeatherProperties.getNextRainChange();
+			return Weather.getNextRainChange();
 		}
 
 		public float getThunderStrength() {
-			return WeatherProperties.getThunderStrength();
+			return Weather.getThunderStrength();
 		}
 
 		public int getThunderTime() {
-			return WeatherProperties.getNextThunderChange();
+			return Weather.getNextThunderChange();
 		}
 
 		public int getNextThunderEvent() {
-			return WeatherProperties.getNextThunderEvent();
+			return Weather.getNextThunderEvent();
 		}
 	}
 

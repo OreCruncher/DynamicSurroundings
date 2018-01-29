@@ -34,7 +34,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.EnvironmentEvent;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.scanners.BattleScanner;
-import org.blockartistry.DynSurround.client.weather.WeatherProperties;
+import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.expression.ExpressionEngine;
 import org.blockartistry.DynSurround.registry.ArmorClass;
@@ -424,7 +424,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			event.output.add(result);
 		}
 
-		event.output.add(WeatherProperties.diagnostic());
+		event.output.add(Weather.diagnostic());
 		event.output.add("Aurora: " + (AuroraEffectHandler.getCurrentAurora() == null ? "NONE"
 				: AuroraEffectHandler.getCurrentAurora().toString()));
 

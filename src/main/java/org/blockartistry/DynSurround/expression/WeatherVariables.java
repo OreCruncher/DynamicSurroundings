@@ -23,7 +23,7 @@
 package org.blockartistry.DynSurround.expression;
 
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.client.weather.WeatherProperties;
+import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.DynSurround.registry.TemperatureRating;
 import org.blockartistry.lib.expression.Dynamic;
 import org.blockartistry.lib.expression.DynamicVariantList;
@@ -34,31 +34,31 @@ public class WeatherVariables extends DynamicVariantList {
 		this.add(new Dynamic.DynamicBoolean("weather.isRaining") {
 			@Override
 			public void update() {
-				this.value = WeatherProperties.isRaining();
+				this.value = Weather.isRaining();
 			}
 		});
 		this.add(new Dynamic.DynamicBoolean("weather.isThundering") {
 			@Override
 			public void update() {
-				this.value = WeatherProperties.isThundering();
+				this.value = Weather.isThundering();
 			}
 		});
 		this.add(new Dynamic.DynamicBoolean("weather.isNotRaining") {
 			@Override
 			public void update() {
-				this.value = !WeatherProperties.isRaining();
+				this.value = !Weather.isRaining();
 			}
 		});
 		this.add(new Dynamic.DynamicBoolean("weather.isNotThundering") {
 			@Override
 			public void update() {
-				this.value = !WeatherProperties.isThundering();
+				this.value = !Weather.isThundering();
 			}
 		});
 		this.add(new Dynamic.DynamicNumber("weather.rainfall") {
 			@Override
 			public void update() {
-				this.value = WeatherProperties.getIntensityLevel();
+				this.value = Weather.getIntensityLevel();
 			}
 		});
 		this.add(new Dynamic.DynamicNumber("weather.temperatureValue") {
