@@ -173,6 +173,10 @@ public class Weather {
 		return tracker.doVanilla();
 	}
 
+	public static void update() {
+		tracker.update();
+	}
+
 	@SubscribeEvent
 	public static void onWeatherUpdateEvent(@Nonnull final WeatherUpdateEvent event) {
 		final World world = getWorld();

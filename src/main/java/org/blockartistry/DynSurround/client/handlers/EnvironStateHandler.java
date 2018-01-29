@@ -379,6 +379,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 		EnvironState.tick(player.getEntityWorld(), player);
+		Weather.update();
 		ExpressionEngine.instance().update();
 	}
 

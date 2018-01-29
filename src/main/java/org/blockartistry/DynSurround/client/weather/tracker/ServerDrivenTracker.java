@@ -36,7 +36,6 @@ public class ServerDrivenTracker extends SimulationTracker {
 	protected int nextRainChange = 0;
 	protected float thunderStrength = 0.0F;
 	protected int nextThunderChange = 0;
-	protected int nextThunderEvent = 0;
 
 	@Override
 	protected String type() {
@@ -59,11 +58,6 @@ public class ServerDrivenTracker extends SimulationTracker {
 	}
 
 	@Override
-	public int getNextThunderEvent() {
-		return this.nextThunderEvent;
-	}
-
-	@Override
 	public float getCurrentVolume() {
 		return 0.05F + 0.95F * this.intensityLevel;
 	}
@@ -80,11 +74,6 @@ public class ServerDrivenTracker extends SimulationTracker {
 		return this.intensity.getDustSound();
 	}
 
-	@Override
-	public boolean doVanilla() {
-		return false;
-	}
-
 	public void update(@Nonnull final WeatherUpdateEvent event) {
 		this.maxIntensityLevel = event.maxRainIntensity;
 		this.nextRainChange = event.nextRainChange;
@@ -92,6 +81,11 @@ public class ServerDrivenTracker extends SimulationTracker {
 		this.nextThunderChange = event.nextThunderChange;
 		this.nextThunderEvent = event.nextThunderEvent;
 		setCurrentIntensity(event.rainIntensity);
+	}
+
+	@Override
+	public void update() {
+		// Don't want to do the simulation
 	}
 
 }
