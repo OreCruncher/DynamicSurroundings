@@ -53,6 +53,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -139,8 +140,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			final DimensionRegistry dimensions = ClientRegistry.DIMENSION;
 			
 			EnvironState.player = player;
-			EnvironState.world = player.worldObj;
-			EnvironState.dimInfo = dimensions.getData(player.worldObj);
+			EnvironState.world = player.getEntityWorld();
+			EnvironState.dimInfo = dimensions.getData(player.getEntityWorld());
 			EnvironState.clock.update(EnvironState.world);
 			EnvironState.playerBiome = PlayerUtils.getPlayerBiome(player, false);
 			EnvironState.biomeName = EnvironState.playerBiome.getBiomeName();
@@ -377,7 +378,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-		EnvironState.tick(player.worldObj, player);
+		EnvironState.tick(player.getEntityWorld(), player);
 		ExpressionEngine.instance().update();
 	}
 
@@ -412,16 +413,19 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	// for debug. Good for testing.
 	private final static String[] scripts = { "'Dim: ' + player.dimension + '/' + player.dimensionName",
 			"'Biome: ' + biome.name + '; Temp ' + biome.temperature + '/' + biome.temperatureValue + ' rainfall: ' + biome.rainfall",
-			"'Weather: ' + IF(weather.isRaining,'rainfall: ' + weather.rainfall,'not raining') + IF(weather.isThundering,' thundering','') + ' Temp: ' + weather.temperature + '/' + weather.temperatureValue",
+			"'Weather: ' + IF(weather.isRaining,'rainfall: ' + weather.rainfall,'not raining') + IF(weather.isThundering,' thundering','') + ' Temp: ' + weather.temperature + '/' + weather.temperatureValue + ' ' + IF(weather.temperatureValue < 0.2, '(breath)', '')",
 			"'Season: ' + season  + IF(isNight,' night',' day') + IF(player.isInside,' inside',' outside')",
 			"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','') + ' pos: (' + player.X + ',' + player.Y + ',' + player.Z + ') light: ' + player.lightLevel",
 			"'Village: ' + player.inVillage" };
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void diagnostics(final DiagnosticEvent.Gather event) {
+		
+		event.output.add(TextFormatting.DARK_GREEN + "Time: " + EnvironState.getClock().toString());
+		
 		for (final String s : scripts) {
 			final String result = ExpressionEngine.instance().eval(s).toString();
-			event.output.add(result);
+			event.output.add(TextFormatting.YELLOW + result);
 		}
 
 		event.output.add(Weather.diagnostic());
