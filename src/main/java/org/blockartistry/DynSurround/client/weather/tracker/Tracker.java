@@ -98,14 +98,24 @@ public class Tracker {
 		return true;
 	}
 
+	public boolean backgroundThunderPossible() {
+		return false;
+	}
+
+	public void update() {
+
+	}
+
 	@Override
 	public String toString() {
 		final Properties props = getWeatherProperties();
 		final StringBuilder builder = new StringBuilder();
 		builder.append("Storm: ").append(props.name());
-		builder.append(" level: ").append(getIntensityLevel()).append('/').append(getMaxIntensityLevel());
-		builder.append(" [vanilla strength: ").append(getWorld().getRainStrength(1.0F)).append("] (")
-				.append(this.type()).append(')');
+		builder.append(" ").append(getIntensityLevel()).append('/').append(getMaxIntensityLevel());
+		builder.append(" vanilla: ").append(getWorld().getRainStrength(1.0F));
+		if (this.backgroundThunderPossible())
+			builder.append(" thunder event: ").append(this.getNextThunderEvent());
+		builder.append(" (").append(this.type()).append(')');
 		return builder.toString();
 	}
 
