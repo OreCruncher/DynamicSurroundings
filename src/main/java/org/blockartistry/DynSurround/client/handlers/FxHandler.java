@@ -28,7 +28,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.handlers.effects.CraftingSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.EntityBowSoundEffect;
@@ -64,7 +63,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class FxHandler extends EffectHandlerBase {
 
 	private static final EntityEffectLibrary library = new EntityEffectLibrary();
-	
+
 	public static FxHandler INSTANCE;
 
 	static {
@@ -95,23 +94,25 @@ public class FxHandler extends EffectHandlerBase {
 		final TIntObjectIterator<EntityEffectHandler> itr = this.handlers.iterator();
 		while (itr.hasNext()) {
 			itr.advance();
-			// Need to sanity check whether the entity is still around.  Some clearlag
-			// style programs just make the entity disappear rather than go through
-			// the normal expected lifecycle.
+
 			final EntityEffectHandler eh = itr.value();
-			if (!eh.isSubjectAlive()) {
+
+			// If the subject is dead, kill the handler
+			if (!eh.isSubjectAlive())
 				eh.die();
+
+			// If the handler is still alive do an update
+			if (eh.isAlive())
+				eh.update();
+
+			// If after update it is dead remove
+			if (!eh.isAlive())
 				itr.remove();
-			} else if (!eh.isDummy()) {
+			else if (!eh.isDummy())
 				this.activeHandlers++;
-			}
 		}
 
 		this.totalHandlers = this.handlers.size();
-
-		// Tick the footstep stuff
-		// TODO: Need to refactor!
-		ClientRegistry.FOOTSTEPS.think();
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
@@ -124,17 +125,18 @@ public class FxHandler extends EffectHandlerBase {
 	/**
 	 * Used for diagnostics to get data about an Entity.
 	 * 
-	 * @param entity Entity to get information on
+	 * @param entity
+	 *            Entity to get information on
 	 * @return A list of EntityEffects, if any
 	 */
 	public List<String> getEffects(@Nonnull final Entity entity) {
 		final EntityEffectHandler eh = this.handlers.get(entity.getEntityId());
-		if(eh != null) {
+		if (eh != null) {
 			return eh.getAttachedEffects();
 		}
 		return ImmutableList.of();
 	}
-	
+
 	/**
 	 * Whenever an Entity updates make sure we have an appropriate handler, and
 	 * update it's state if necessary.
@@ -150,16 +152,13 @@ public class FxHandler extends EffectHandlerBase {
 
 		EntityEffectHandler handler = this.handlers.get(entity.getEntityId());
 		if (handler != null) {
-			if (entity.isEntityAlive() && inRange)
-				handler.update();
-			else
+			if (!inRange) {
 				handler.die();
-			if (!handler.isAlive())
 				this.handlers.remove(entity.getEntityId());
+			}
 		} else if (entity.isEntityAlive() && inRange) {
 			handler = library.create(entity).get();
 			this.handlers.put(entity.getEntityId(), handler);
-			handler.update();
 		}
 	}
 
@@ -171,7 +170,7 @@ public class FxHandler extends EffectHandlerBase {
 		}
 		this.handlers.clear();
 	}
-	
+
 	/**
 	 * Check if the player joining the world is the one sitting at the keyboard. If
 	 * so we need to wipe out the existing handler list because the dimension
@@ -192,7 +191,7 @@ public class FxHandler extends EffectHandlerBase {
 		this.eventLibrary.register(new CraftingSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new PopoffEventEffect(this.eventLibrary));
 		this.eventLibrary.register(new FootprintEventEffect(this.eventLibrary));
-		
+
 		INSTANCE = this;
 	}
 

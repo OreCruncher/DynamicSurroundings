@@ -97,16 +97,28 @@ public class Generator {
 	// We calc our own because of inconsistencies with Minecraft
 	protected double distanceWalkedOnStepModified;
 
+	protected int pedometer;
+
 	public Generator(@Nonnull final Isolator isolator, @Nonnull final Variator var) {
 		this.isolator = isolator;
 		this.VAR = var;
 		this.blockMap = ClientRegistry.FOOTSTEPS.getBlockMap();
 	}
 
+	public int getPedometer() {
+		return this.pedometer;
+	}
+
 	public void generateFootsteps(@Nonnull final EntityLivingBase entity) {
 		simulateFootsteps(entity);
 		simulateAirborne(entity);
 		simulateBrushes(entity);
+
+		// Flush!
+		this.isolator.getAcoustics().think();
+
+		if (this.stepThisFrame)
+			this.pedometer++;
 
 		if (ModOptions.footstepsSoundFactor > 0)
 			entity.nextStepDistance = Integer.MAX_VALUE;
