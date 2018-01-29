@@ -73,6 +73,11 @@ public class VillagerChatEffect extends EntityEffect {
 	}
 
 	@Override
+	public String name() {
+		return "VillagerChatEffect";
+	}
+	
+	@Override
 	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
 		super.intitialize(state);
 		this.normalChat.intitialize(state);

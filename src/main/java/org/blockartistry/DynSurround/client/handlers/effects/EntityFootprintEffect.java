@@ -61,6 +61,12 @@ public class EntityFootprintEffect extends EntityEffect {
 
 	}
 
+	@Override
+	public String name() {
+		return "EntityFootprintEffect";
+	}
+	
+	@Override
 	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
 		super.intitialize(state);
 
@@ -95,7 +101,7 @@ public class EntityFootprintEffect extends EntityEffect {
 		final EntityLivingBase entity = (EntityLivingBase) subject;
 		this.generator.generateFootsteps(entity);
 	}
-
+	
 	// Currently restricted to the active player. Have stuff to unwind in the
 	// footprint code.
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {

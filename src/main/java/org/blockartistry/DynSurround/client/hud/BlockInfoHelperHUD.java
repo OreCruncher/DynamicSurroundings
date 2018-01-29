@@ -33,6 +33,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
+import org.blockartistry.DynSurround.client.handlers.FxHandler;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.BlockInfo;
@@ -44,6 +45,7 @@ import org.blockartistry.lib.gui.Panel.Reference;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -175,7 +177,15 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 		return text;
 	}
 
-	private static final ItemStack tool = new ItemStack(Items.NETHER_STAR, 64);
+	private List<String> gatherEntityText(@Nonnull final Entity entity, @Nonnull final List<String> text) {
+		text.add(TextFormatting.DARK_AQUA + entity.getName());
+		text.add(entity.getClass().getName());
+		text.add(TextFormatting.GOLD + "Effects");
+		text.addAll(FxHandler.INSTANCE.getEffects(entity));
+		return text;
+	}
+
+	private static final ItemStack tool = new ItemStack(Items.CARROT_ON_A_STICK);
 
 	private static boolean isHolding() {
 		final EntityPlayer player = EnvironState.getPlayer();
@@ -195,23 +205,28 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 
 			this.textPanel.resetText();
 
-			// Only trigger if the player is in creative and is holding a stack
-			// of nether stars
-			if (EnvironState.getPlayer().isCreative() && isHolding()) {
+			if (ModOptions.enableDebugLogging && isHolding()) {
 				final RayTraceResult current = Minecraft.getMinecraft().objectMouseOver;
-				final BlockPos targetBlock = (current == null || current.getBlockPos() == null) ? BlockPos.ORIGIN
-						: current.getBlockPos();
-				final IBlockState state = WorldUtils.getBlockState(EnvironState.getWorld(), targetBlock);
-
 				final List<String> data = new ArrayList<String>();
-				if (!WorldUtils.isAirBlock(state)) {
-					final ItemStack stack = state != null ? state.getBlock().getPickBlock(state, current,
-							EnvironState.getWorld(), targetBlock, EnvironState.getPlayer()) : null;
+				if (current.entityHit != null) {
+					gatherEntityText(current.entityHit, data);
+				} else {
+					final BlockPos targetBlock = (current == null || current.getBlockPos() == null) ? BlockPos.ORIGIN
+							: current.getBlockPos();
+					final IBlockState state = WorldUtils.getBlockState(EnvironState.getWorld(), targetBlock);
 
-					gatherBlockText(stack, data, state, targetBlock);
-					this.textPanel.setText(data);
+					if (!WorldUtils.isAirBlock(state)) {
+						final ItemStack stack = state != null ? state.getBlock().getPickBlock(state, current,
+								EnvironState.getWorld(), targetBlock, EnvironState.getPlayer()) : null;
+
+						gatherBlockText(stack, data, state, targetBlock);
+					}
 				}
+
+				if (data.size() > 0)
+					this.textPanel.setText(data);
 			}
+
 		}
 	}
 

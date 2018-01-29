@@ -32,6 +32,8 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.lib.collections.ObjectArray;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -106,6 +108,11 @@ public class EntityEffectLibrary {
 				@Override
 				public boolean isDummy() {
 					return true;
+				}
+				
+				@Override
+				public List<String> getAttachedEffects() {
+					return ImmutableList.of("Dummy EffectHandler");
 				}
 			};
 		}

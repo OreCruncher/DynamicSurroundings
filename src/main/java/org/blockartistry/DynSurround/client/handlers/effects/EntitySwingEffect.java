@@ -57,6 +57,11 @@ public class EntitySwingEffect extends EntityEffect {
 	protected String soundId;
 
 	@Override
+	public String name() {
+		return "EntitySwingEffect";
+	}
+	
+	@Override
 	public void update(@Nonnull final Entity subject) {
 		final EntityLivingBase entity = (EntityLivingBase) subject;
 

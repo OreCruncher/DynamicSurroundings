@@ -47,6 +47,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EntityBowSoundEffect extends EntityEffect {
 
 	protected ItemStack lastActiveStack;
+	
+	@Override
+	public String name() {
+		return "EntityBowSoundEffect";
+	}
 
 	@Override
 	public void update(@Nonnull final Entity subject) {
