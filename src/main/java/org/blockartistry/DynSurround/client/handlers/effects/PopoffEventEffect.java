@@ -70,7 +70,7 @@ public class PopoffEventEffect extends EventEffect {
 
 	@SubscribeEvent
 	public void onEvent(@Nonnull final PopoffEvent data) {
-		if (!ModOptions.enableDamagePopoffs || EnvironState.isPlayer(data.entityId))
+		if (!ModOptions.player.enableDamagePopoffs || EnvironState.isPlayer(data.entityId))
 			return;
 
 		// Don't want to display if too far away.
@@ -81,7 +81,7 @@ public class PopoffEventEffect extends EventEffect {
 		final World world = EnvironState.getWorld();
 
 		ParticleTextPopOff particle = null;
-		if (data.isCritical && ModOptions.showCritWords) {
+		if (data.isCritical && ModOptions.player.showCritWords) {
 			particle = new ParticleTextPopOff(world, getPowerWord(), CRITICAL_TEXT_COLOR, data.posX, data.posY + 0.5D,
 					data.posZ);
 			this.getState().addParticle(particle);

@@ -41,7 +41,7 @@ public class FootstepSound extends BasicSound<FootstepSound> {
 	public static final ISoundScale FOOTSTEP = new ISoundScale() {
 		@Override
 		public float getScale() {
-			return ModOptions.footstepsSoundFactor;
+			return ModOptions.sound.footstepsSoundFactor;
 		}
 	};
 

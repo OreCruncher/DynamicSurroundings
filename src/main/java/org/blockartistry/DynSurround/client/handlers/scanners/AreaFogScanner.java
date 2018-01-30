@@ -82,7 +82,7 @@ public class AreaFogScanner implements ITickable {
 				.abs(ClientRegistry.DIMENSION.getCloudHeight(world) - (float) (player.posY + player.getEyeHeight()));
 		final float hazeBandRange = HAZE_THRESHOLD * (1.0F + Weather.getIntensityLevel() * 2);
 		if (distance < hazeBandRange)
-			return (hazeBandRange - distance) / hazeBandRange * ModOptions.elevationHazeFactor * 0.7F;
+			return (hazeBandRange - distance) / hazeBandRange * ModOptions.fog.elevationHazeFactor * 0.7F;
 
 		return 0.0F;
 	}
@@ -93,7 +93,7 @@ public class AreaFogScanner implements ITickable {
 		final float groundLevel = ClientRegistry.DIMENSION.getSeaLevel(world);
 		final float ratio = (MathHelper.floor(player.posY + player.getEyeHeight()) - groundLevel)
 				/ (skyHeight - groundLevel);
-		return ratio * ratio * ratio * ratio * ModOptions.elevationHazeFactor;
+		return ratio * ratio * ratio * ratio * ModOptions.fog.elevationHazeFactor;
 	}
 
 	@Nonnull
@@ -143,8 +143,8 @@ public class AreaFogScanner implements ITickable {
 		this.biomeWeight = 0;
 
 		float heightFog = 0;
-		if (ModOptions.enableElevationHaze && ClientRegistry.DIMENSION.hasHaze(world)) {
-			heightFog = ModOptions.elevationHazeAsBand ? calcHazeBand(world, EnvironState.getPlayer())
+		if (ModOptions.fog.enableElevationHaze && ClientRegistry.DIMENSION.hasHaze(world)) {
+			heightFog = ModOptions.fog.elevationHazeAsBand ? calcHazeBand(world, EnvironState.getPlayer())
 					: calcHazeGradient(world, EnvironState.getPlayer());
 		}
 
@@ -154,12 +154,12 @@ public class AreaFogScanner implements ITickable {
 				final BiomeInfo biome = ClientRegistry.BIOME.get(world.getBiome(pos));
 				final Color theColor;
 				float fog = 0F;
-				if (ModOptions.enableBiomeFog && biome.getHasFog()) {
+				if (ModOptions.fog.enableBiomeFog && biome.getHasFog()) {
 					theColor = biome.getFogColor();
-					fog = (biome.getFogDensity() * 0.4F + 0.5F) * ModOptions.biomeFogFactor;
-				} else if (ModOptions.allowDesertFog && biome.getHasDust() && this.lastIntensity > 0) {
+					fog = (biome.getFogDensity() * 0.4F + 0.5F) * ModOptions.fog.biomeFogFactor;
+				} else if (ModOptions.fog.allowDesertFog && biome.getHasDust() && this.lastIntensity > 0) {
 					theColor = Color.scale(biome.getDustColor(), rainStrength).add(scaledDefaultFogColor);
-					fog = (float) (this.lastIntensity * 0.5F + 0.4F) * ModOptions.desertFogFactor * rainStrength;
+					fog = (float) (this.lastIntensity * 0.5F + 0.4F) * ModOptions.fog.desertFogFactor * rainStrength;
 				} else {
 					theColor = worldFogColor;
 				}

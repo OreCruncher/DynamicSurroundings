@@ -88,14 +88,14 @@ public class PotionHUD extends GuiOverlay {
 				this.effectText = s1;
 				this.effectColor = (this.potion.isBadEffect() ? TEXT_POTION_NAME_BAD
 						: this.potionEffect.getIsAmbient() ? TEXT_POTION_NAME_AMBIENT : TEXT_POTION_NAME)
-								.rgbWithAlpha(ModOptions.potionHudTransparency);
+								.rgbWithAlpha(ModOptions.player.potionHUD.potionHudTransparency);
 
 				final int threshold = this.potionEffect.getIsAmbient() ? 170 : 200;
 				final int duration = this.potionEffect.getDuration();
 
 				this.durationColor = (duration <= threshold
 						? (((duration / 10) & 1) != 0 ? TEXT_POTION_DURATION_LOW_DARK : TEXT_POTION_DURATION_LOW)
-						: TEXT_POTION_DURATION).rgbWithAlpha(ModOptions.potionHudTransparency);
+						: TEXT_POTION_DURATION).rgbWithAlpha(ModOptions.player.potionHUD.potionHudTransparency);
 				this.durationText = Potion.getPotionDurationString(this.potionEffect, 1.0F);
 
 			} else {
@@ -133,14 +133,14 @@ public class PotionHUD extends GuiOverlay {
 		public String getDurationText() {
 			return this.durationText;
 		}
-		
+
 		public int getDurationColor() {
 			return this.durationColor;
 		}
 	}
 
 	protected final ObjectArray<PotionInfo> potions = new ObjectArray<PotionInfo>();
-	
+
 	private boolean skipDisplay(@Nonnull final PotionEffect effect) {
 		final Potion potion = effect.getPotion();
 		return potion == null || !potion.shouldRenderHUD(effect) || !potion.shouldRenderInvText(effect);
@@ -149,7 +149,7 @@ public class PotionHUD extends GuiOverlay {
 	@Override
 	public void doTick(final int tickRef) {
 		this.potions.clear();
-		if (!ModOptions.potionHudEnabled || ModOptions.potionHudNone)
+		if (!ModOptions.player.potionHUD.potionHudEnabled || ModOptions.player.potionHUD.potionHudNone)
 			return;
 
 		final EntityPlayer player = Minecraft.getMinecraft().player;
@@ -168,7 +168,7 @@ public class PotionHUD extends GuiOverlay {
 
 	public void doRender(final RenderGameOverlayEvent.Pre event) {
 
-		if (ModOptions.potionHudNone && event.getType() == ElementType.POTION_ICONS) {
+		if (ModOptions.player.potionHUD.potionHudNone && event.getType() == ElementType.POTION_ICONS) {
 			event.setCanceled(true);
 			return;
 		}
@@ -180,10 +180,12 @@ public class PotionHUD extends GuiOverlay {
 		event.setCanceled(true);
 
 		final ScaledResolution resolution = event.getResolution();
-		final float GUITOP = ModOptions.potionHudTopOffset;
-		final float GUILEFT = ModOptions.potionHudAnchor == 0 ? ModOptions.potionHudLeftOffset
-				: resolution.getScaledWidth() - ModOptions.potionHudLeftOffset - 120 * ModOptions.potionHudScale;
-		final float SCALE = ModOptions.potionHudScale;
+		final float GUITOP = ModOptions.player.potionHUD.potionHudTopOffset;
+		final float GUILEFT = ModOptions.player.potionHUD.potionHudAnchor == 0
+				? ModOptions.player.potionHUD.potionHudLeftOffset
+				: resolution.getScaledWidth() - ModOptions.player.potionHUD.potionHudLeftOffset
+						- 120 * ModOptions.player.potionHUD.potionHudScale;
+		final float SCALE = ModOptions.player.potionHUD.potionHudScale;
 
 		final Minecraft mc = Minecraft.getMinecraft();
 		final FontRenderer font = mc.fontRendererObj;
@@ -207,7 +209,7 @@ public class PotionHUD extends GuiOverlay {
 
 			mc.getTextureManager().bindTexture(GuiContainer.INVENTORY_BACKGROUND);
 
-			GlStateManager.color(1.0F, 1.0F, 1.0F, ModOptions.potionHudTransparency);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, ModOptions.player.potionHUD.potionHudTransparency);
 			this.drawTexturedModalRect(guiLeft, guiTop, 0, 166, 140, 32);
 
 			if (potion.hasStatusIcon()) {
@@ -230,7 +232,7 @@ public class PotionHUD extends GuiOverlay {
 
 			guiTop += k;
 		}
-		
+
 		GlStateManager.disableAlpha();
 		GlStateManager.disableBlend();
 		GlStateManager.popMatrix();

@@ -92,7 +92,7 @@ public final class BiomeRegistry extends Registry {
 		this.biomeAliases.clear();
 		this.registry.clear();
 
-		for (final String entry : ModOptions.biomeAliases) {
+		for (final String entry : ModOptions.biomes.biomeAliases) {
 			final String[] parts = StringUtils.split(entry, "=");
 			if (parts.length == 2) {
 				this.biomeAliases.put(parts[0], parts[1]);
@@ -138,7 +138,7 @@ public final class BiomeRegistry extends Registry {
 	
 	@Override
 	public void initComplete() {
-		if (ModOptions.enableDebugLogging) {
+		if (ModOptions.logging.enableDebugLogging) {
 			DSurround.log().info("*** BIOME REGISTRY ***");
 			final List<BiomeInfo> info = new ArrayList<BiomeInfo>(this.registry.values());
 			Collections.sort(info);

@@ -100,7 +100,7 @@ public class ParticleBillboard extends ParticleBase {
 			return false;
 		if (!EnvironState.getPlayer().canEntityBeSeen(this.subject))
 			return false;
-		final double range = ModOptions.speechBubbleRange * ModOptions.speechBubbleRange;
+		final double range = ModOptions.speechbubbles.speechBubbleRange * ModOptions.speechbubbles.speechBubbleRange;
 		return EnvironState.getPlayer().getDistanceSqToEntity(this.subject) <= range;
 	}
 

@@ -60,7 +60,7 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 		if (this.systems.size() == 0)
 			return;
 
-		final double range = ModOptions.specialEffectRange;
+		final double range = ModOptions.general.specialEffectRange;
 		final BlockPos min = EnvironState.getPlayerPosition().add(-range, -range, -range);
 		final BlockPos max = EnvironState.getPlayerPosition().add(range, range, range);
 

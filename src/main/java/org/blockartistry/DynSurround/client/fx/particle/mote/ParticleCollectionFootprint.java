@@ -92,7 +92,7 @@ public class ParticleCollectionFootprint extends ParticleCollection {
 	}
 
 	protected void bindTexture(@Nonnull final ResourceLocation resource) {
-		final ResourceLocation res = Style.getStyle(ModOptions.footprintStyle).getTexture();
+		final ResourceLocation res = Style.getStyle(ModOptions.player.footprintStyle).getTexture();
 		super.bindTexture(res);
 	}
 

@@ -59,7 +59,7 @@ public class PatchEntityRenderer extends Transmorgrifier {
 
 	@Override
 	public boolean isEnabled() {
-		return ModOptions.enableWeatherASM;
+		return ModOptions.asm.enableWeatherASM;
 	}
 
 	@Override

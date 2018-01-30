@@ -127,7 +127,7 @@ public class StormSplashRenderer {
 	}
 
 	protected boolean biomeHasDust(final Biome biome) {
-		return ModOptions.allowDesertFog && !Weather.doVanilla()
+		return ModOptions.fog.allowDesertFog && !Weather.doVanilla()
 				&& ClientRegistry.BIOME.get(biome).getHasDust();
 	}
 
@@ -179,9 +179,9 @@ public class StormSplashRenderer {
 		double spawnZ = 0.0D;
 		int particlesSpawned = 0;
 
-		final int RANGE = Math.max((ModOptions.specialEffectRange + 1) / 2, 10);
+		final int RANGE = Math.max((ModOptions.general.specialEffectRange + 1) / 2, 10);
 		final float rangeFactor = RANGE / 10.0F;
-		int particleCount = (int) (ModOptions.particleCountBase * rainStrengthFactor * rainStrengthFactor
+		int particleCount = (int) (ModOptions.rain.particleCountBase * rainStrengthFactor * rainStrengthFactor
 				* rangeFactor);
 
 		if (theThis.mc.gameSettings.particleSetting == 1)

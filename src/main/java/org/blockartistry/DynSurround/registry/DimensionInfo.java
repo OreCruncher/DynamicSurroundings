@@ -71,8 +71,8 @@ public final class DimensionInfo {
 
 		if (wt == WorldType.FLAT)
 			this.seaLevel = 0;
-		else if (this.dimensionId == 0 && ModOptions.worldSealevelOverride > 0)
-			this.seaLevel = ModOptions.worldSealevelOverride;
+		else if (this.dimensionId == 0 && ModOptions.biomes.worldSealevelOverride > 0)
+			this.seaLevel = ModOptions.biomes.worldSealevelOverride;
 	}
 
 	public DimensionInfo(@Nonnull final World world, @Nonnull final DimensionConfig entry) {

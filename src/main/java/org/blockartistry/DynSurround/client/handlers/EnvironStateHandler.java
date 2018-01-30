@@ -172,7 +172,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.lightLevel = Math.max(blockLight, skyLight);
 
 			// Trigger the battle scanner
-			if (ModOptions.enableBattleMusic)
+			if (ModOptions.sound.enableBattleMusic)
 				EnvironState.battle.update();
 			else
 				EnvironState.battle.reset();
@@ -258,13 +258,13 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static boolean isPlayerHurt() {
-			return player != null && ModOptions.playerHurtThreshold != 0 && !isCreative()
-					&& player.getHealth() <= ModOptions.playerHurtThreshold;
+			return player != null && ModOptions.player.playerHurtThreshold != 0 && !isCreative()
+					&& player.getHealth() <= ModOptions.player.playerHurtThreshold;
 		}
 
 		public static boolean isPlayerHungry() {
-			return player != null && ModOptions.playerHungerThreshold != 0 && !isCreative()
-					&& player.getFoodStats().getFoodLevel() <= ModOptions.playerHungerThreshold;
+			return player != null && ModOptions.player.playerHungerThreshold != 0 && !isCreative()
+					&& player.getFoodStats().getFoodLevel() <= ModOptions.player.playerHungerThreshold;
 		}
 
 		public static boolean isPlayerBurning() {

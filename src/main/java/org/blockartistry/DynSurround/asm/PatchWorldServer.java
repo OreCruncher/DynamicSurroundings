@@ -59,7 +59,7 @@ public class PatchWorldServer extends Transmorgrifier {
 
 	@Override
 	public boolean isEnabled() {
-		return ModOptions.enableResetOnSleepASM;
+		return ModOptions.asm.enableResetOnSleepASM;
 	}
 
 	@Override

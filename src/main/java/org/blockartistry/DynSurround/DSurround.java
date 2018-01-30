@@ -46,6 +46,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -63,16 +64,7 @@ import net.minecraftforge.fml.common.network.NetworkCheckHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@net.minecraftforge.fml.common.Mod(
-		modid = DSurround.MOD_ID,
-		useMetadata = true,
-		dependencies = DSurround.DEPENDENCIES,
-		version = DSurround.VERSION,
-		acceptedMinecraftVersions = DSurround.MINECRAFT_VERSIONS,
-		guiFactory = DSurround.GUI_FACTORY,
-		updateJSON = DSurround.UPDATE_URL,
-		certificateFingerprint = DSurround.FINGERPRINT
-)
+@net.minecraftforge.fml.common.Mod(modid = DSurround.MOD_ID, useMetadata = true, dependencies = DSurround.DEPENDENCIES, version = DSurround.VERSION, acceptedMinecraftVersions = DSurround.MINECRAFT_VERSIONS, guiFactory = DSurround.GUI_FACTORY, updateJSON = DSurround.UPDATE_URL, certificateFingerprint = DSurround.FINGERPRINT)
 public class DSurround {
 	public static final String MOD_ID = "dsurround";
 	public static final String API_ID = MOD_ID + "API";
@@ -84,7 +76,7 @@ public class DSurround {
 	public static final String GUI_FACTORY = "org.blockartistry.DynSurround.client.gui.ConfigGuiFactory";
 	public static final String UPDATE_URL = "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json";
 	public static final String FINGERPRINT = "7a2128d395ad96ceb9d9030fbd41d035b435753a";
-
+	
 	public static final String SERVER_VERSION = "3.4.9.0";
 
 	@Instance(MOD_ID)
@@ -121,7 +113,7 @@ public class DSurround {
 	public static File dataDirectory() {
 		return dataDirectory;
 	}
-	
+
 	public static boolean isInstalledOnServer() {
 		return installedOnServer;
 	}
@@ -149,8 +141,8 @@ public class DSurround {
 		ModOptions.load(config);
 		config.save();
 
-		logger.setDebug(ModOptions.enableDebugLogging);
-		logger.setTraceMask(ModOptions.debugFlagMask);
+		logger.setDebug(ModOptions.logging.enableDebugLogging);
+		logger.setTraceMask(ModOptions.logging.debugFlagMask);
 
 		proxy.preInit(event);
 	}
@@ -172,7 +164,8 @@ public class DSurround {
 				data.name = Localization.format("dsurround.metadata.Name");
 				data.credits = Localization.format("dsurround.metadata.Credits");
 				data.description = Localization.format("dsurround.metadata.Description");
-				data.authorList = Arrays.asList(StringUtils.split(Localization.format("dsurround.metadata.Authors"), ','));
+				data.authorList = Arrays
+						.asList(StringUtils.split(Localization.format("dsurround.metadata.Authors"), ','));
 			}
 		}
 	}
@@ -182,12 +175,17 @@ public class DSurround {
 		proxy.loadCompleted(event);
 	}
 
+	@EventHandler
+	public void onFingerprintViolation(@Nonnull final FMLFingerprintViolationEvent event) {
+		log().warn("Invalid fingerprint detected!");
+	}
+
 	////////////////////////
 	//
 	// Client state events
 	//
 	////////////////////////
-	
+
 	@NetworkCheckHandler
 	public boolean checkModLists(@Nonnull final Map<String, String> modList, @Nonnull final Side side) {
 		final String modVersion = modList.get(DSurround.MOD_ID);
@@ -221,7 +219,7 @@ public class DSurround {
 
 	@SubscribeEvent
 	public void playerLogin(final PlayerLoggedInEvent event) {
-		if (ModOptions.enableVersionChecking)
+		if (ModOptions.logging.enableVersionChecking)
 			new VersionChecker(DSurround.MOD_ID, "msg.NewVersion.dsurround").playerLogin(event);
 	}
 

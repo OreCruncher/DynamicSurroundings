@@ -62,7 +62,7 @@ public class FrostBreathEffect extends EntityEffect {
 
 	@Override
 	public void update(@Nonnull final Entity subject) {
-		if (!ModOptions.showBreath)
+		if (!ModOptions.player.showBreath)
 			return;
 
 		final int interval = (int) (((this.getState().getWorldTime() + this.seed) / 10) % 8);

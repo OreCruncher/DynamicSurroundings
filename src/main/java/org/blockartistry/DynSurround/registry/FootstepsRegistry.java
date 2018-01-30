@@ -158,7 +158,7 @@ public final class FootstepsRegistry extends Registry {
 
 		// Traverse the IBlockState entries looking for states that do not
 		// have a configuration associated.
-		if (ModOptions.enableDebugLogging) {
+		if (ModOptions.logging.enableDebugLogging) {
 			final ArrayList<String> missingAcoustics = new ArrayList<String>();
 			BlockState.forEach(new Consumer<IBlockState>() {
 				@Override
@@ -313,7 +313,7 @@ public final class FootstepsRegistry extends Registry {
 		if (entity instanceof EntityVillager || entity instanceof EntityWitch) {
 			var = entity.isChild() ? Variator.CHILD : Variator.VILLAGER;
 		} else if (entity instanceof EntityPlayer) {
-			if (ModOptions.foostepsQuadruped)
+			if (ModOptions.sound.foostepsQuadruped)
 				var = Variator.PLAYER_QUAD;
 			else
 				var = Variator.PLAYER;

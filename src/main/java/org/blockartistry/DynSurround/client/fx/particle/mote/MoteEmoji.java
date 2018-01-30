@@ -110,7 +110,7 @@ public class MoteEmoji extends MoteMotionBase {
 			return false;
 
 		final EntityPlayer player = EnvironState.getPlayer();
-		final double distSq = ModOptions.speechBubbleRange * ModOptions.speechBubbleRange;
+		final double distSq = ModOptions.speechbubbles.speechBubbleRange * ModOptions.speechbubbles.speechBubbleRange;
 		return player.getDistanceSq(this.posX, this.posY, this.posZ) <= distSq;
 	}
 

@@ -86,7 +86,7 @@ public class VillagerChatEffect extends EntityEffect {
 
 	@Override
 	public void update(@Nonnull final Entity subject) {
-		if (!ModOptions.enableEntityChat)
+		if (!ModOptions.speechbubbles.enableEntityChat)
 			return;
 
 		// Children don't speak - makes them suspicious...

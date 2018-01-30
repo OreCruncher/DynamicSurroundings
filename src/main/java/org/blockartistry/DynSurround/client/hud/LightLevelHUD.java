@@ -207,11 +207,11 @@ public final class LightLevelHUD extends GuiOverlay {
 		frustum.setPosition(fX, fY, fZ);
 		nextCoord = 0;
 
-		final ColorSet colors = ColorSet.getStyle(ModOptions.llColors);
-		final Mode displayMode = Mode.getMode(ModOptions.llDisplayMode);
+		final ColorSet colors = ColorSet.getStyle(ModOptions.lightlevel.llColors);
+		final Mode displayMode = Mode.getMode(ModOptions.lightlevel.llDisplayMode);
 		final int skyLightSub = EnvironState.getWorld().calculateSkylightSubtracted(1.0F);
-		final int rangeXZ = ModOptions.llBlockRange * 2 + 1;
-		final int rangeY = ModOptions.llBlockRange + 1;
+		final int rangeXZ = ModOptions.lightlevel.llBlockRange * 2 + 1;
+		final int rangeY = ModOptions.lightlevel.llBlockRange + 1;
 		final int originX = MathStuff.floor(x) - (rangeXZ / 2);
 		final int originZ = MathStuff.floor(z) - (rangeXZ / 2);
 		final int originY = MathStuff.floor(y) - (rangeY - 3);
@@ -245,7 +245,7 @@ public final class LightLevelHUD extends GuiOverlay {
 						mutable.setPos(trueX, trueY, trueZ);
 
 						final boolean mobSpawn = canMobSpawn(mutable);
-						if (mobSpawn || !ModOptions.llHideSafe) {
+						if (mobSpawn || !ModOptions.lightlevel.llHideSafe) {
 							final int blockLight = blocks.getLightFor(EnumSkyBlock.BLOCK, mutable);
 							final int skyLight = blocks.getLightFor(EnumSkyBlock.SKY, mutable) - skyLightSub;
 							final int effective = Math.max(blockLight, skyLight);
@@ -254,14 +254,14 @@ public final class LightLevelHUD extends GuiOverlay {
 							Color color = colors.safe;
 							if (!mobSpawn) {
 								color = colors.noSpawn;
-							} else if (blockLight <= ModOptions.llSpawnThreshold) {
-								if (effective > ModOptions.llSpawnThreshold)
+							} else if (blockLight <= ModOptions.lightlevel.llSpawnThreshold) {
+								if (effective > ModOptions.lightlevel.llSpawnThreshold)
 									color = colors.caution;
 								else
 									color = colors.hazard;
 							}
 
-							if (!(color == colors.safe && ModOptions.llHideSafe)) {
+							if (!(color == colors.safe && ModOptions.lightlevel.llHideSafe)) {
 								final LightCoord coord = nextCoord();
 								coord.x = trueX;
 								coord.y = trueY + heightAdjustment(state, lastState, mutable);
