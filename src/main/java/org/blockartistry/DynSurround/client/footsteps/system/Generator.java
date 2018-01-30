@@ -711,6 +711,10 @@ public class Generator {
 	@Nonnull
 	protected Association addSoundOverlay(@Nonnull final EntityLivingBase entity, @Nullable Association assoc) {
 
+		// Don't apply armor sound if the Entity is not on the ground
+		if (!entity.onGround)
+			return assoc;
+
 		final ArmorClass armor;
 		final ArmorClass foot;
 
