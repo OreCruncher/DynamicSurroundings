@@ -76,7 +76,7 @@ public class VillagerChatEffect extends EntityEffect {
 	public String name() {
 		return "VillagerChatEffect";
 	}
-	
+
 	@Override
 	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
 		super.intitialize(state);
@@ -115,8 +115,8 @@ public class VillagerChatEffect extends EntityEffect {
 
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
-		public boolean applies(@Nonnull final Entity e) {
-			return e instanceof EntityVillager && EntityChatEffect.hasMessages(e);
+		public boolean applies(@Nonnull final Entity e, @Nonnull final String tokens) {
+			return tokens.contains("chat") && e instanceof EntityVillager && EntityChatEffect.hasMessages(e);
 		}
 	};
 

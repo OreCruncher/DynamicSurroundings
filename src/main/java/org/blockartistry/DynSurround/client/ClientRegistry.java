@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client;
 import org.blockartistry.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.DynSurround.registry.BlockRegistry;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
+import org.blockartistry.DynSurround.registry.EffectRegistry;
 import org.blockartistry.DynSurround.registry.FootstepsRegistry;
 import org.blockartistry.DynSurround.registry.ItemRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
@@ -54,6 +55,7 @@ public final class ClientRegistry {
 	public static final SeasonRegistry SEASON;
 	public static final ItemRegistry ITEMS;
 	public static final FootstepsRegistry FOOTSTEPS;
+	public static final EffectRegistry EFFECTS;
 	
 	static {
 		
@@ -64,6 +66,7 @@ public final class ClientRegistry {
 		SEASON = new SeasonRegistry(Side.CLIENT);
 		ITEMS = new ItemRegistry(Side.CLIENT);
 		FOOTSTEPS = new FootstepsRegistry(Side.CLIENT);
+		EFFECTS = new EffectRegistry(Side.CLIENT);
 		
 		final RegistryManager rm = RegistryManager.get();
 		rm.register(DIMENSION);
@@ -73,6 +76,7 @@ public final class ClientRegistry {
 		rm.register(SEASON);
 		rm.register(ITEMS);
 		rm.register(FOOTSTEPS);
+		rm.register(EFFECTS);
 
 		rm.reload();
 	}
