@@ -1463,7 +1463,7 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/steve/jump",
-				"volume": 0.4
+				"volume": 0.8
 			}
 		]
 	},

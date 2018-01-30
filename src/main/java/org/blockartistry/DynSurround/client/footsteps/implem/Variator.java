@@ -30,6 +30,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public enum Variator {
 
+	DEFAULT() {
+		{
+			IMMOBILE_DURATION = 200;
+			EVENT_ON_JUMP = true;
+			LAND_HARD_DISTANCE_MIN = 0.9f;
+			SPEED_TO_JUMP_AS_MULTIFOOT = 0.005f;
+			SPEED_TO_RUN = 0.022f;
+			STRIDE = 1.25F; // 0.95f;
+			STRIDE_STAIR = STRIDE * 0.65f;
+			STRIDE_LADDER = 0.5f;
+			PLAY_WANDER = true;
+			QUADRUPED = false;
+			PLAY_JUMP = false;
+		}
+	},
 	PLAYER() {
 		{
 			IMMOBILE_DURATION = 200;
@@ -42,6 +57,7 @@ public enum Variator {
 			STRIDE_LADDER = 0.5f;
 			PLAY_WANDER = true;
 			QUADRUPED = false;
+			PLAY_JUMP = true;
 		}
 	},
 	PLAYER_QUAD() {
@@ -56,6 +72,7 @@ public enum Variator {
 			STRIDE_LADDER = 0.5f;
 			PLAY_WANDER = true;
 			QUADRUPED = true;
+			PLAY_JUMP = true;
 		}
 	},
 	VILLAGER() {
@@ -70,8 +87,8 @@ public enum Variator {
 			STRIDE_LADDER = 0.5f;
 			PLAY_WANDER = true;
 			QUADRUPED = false;
+			PLAY_JUMP = false;
 		}
-
 	},
 	CHILD() {
 		{
@@ -85,13 +102,9 @@ public enum Variator {
 			STRIDE_LADDER = 0.5f;
 			PLAY_WANDER = true;
 			QUADRUPED = false;
+			PLAY_JUMP = false;
 		}
 	};
-
-	/*
-	 * Default Variator for unknowns
-	 */
-	public static Variator DEFAULT = PLAYER;
 
 	public int IMMOBILE_DURATION;
 	public boolean EVENT_ON_JUMP;
@@ -103,6 +116,7 @@ public enum Variator {
 	public float STRIDE_LADDER;
 	public boolean PLAY_WANDER;
 	public boolean QUADRUPED;
+	public boolean PLAY_JUMP;
 
 	// public boolean FORCE_HUMANOID = false;
 	// public boolean GALLOP_3STEP = true;

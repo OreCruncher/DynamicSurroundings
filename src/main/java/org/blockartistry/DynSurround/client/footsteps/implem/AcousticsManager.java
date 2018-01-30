@@ -44,22 +44,16 @@ import org.blockartistry.DynSurround.client.footsteps.system.Association;
 import org.blockartistry.DynSurround.client.footsteps.system.Footprint;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.sound.FootstepSound;
-import org.blockartistry.lib.BlockPosHelper;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.TimeUtils;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.random.XorShiftRandom;
 
-import com.google.common.base.Predicate;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -75,13 +69,13 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	private final HashMap<String, IAcoustic> acoustics = new HashMap<String, IAcoustic>();
 	private final ObjectArray<PendingSound> pending = new ObjectArray<PendingSound>();
 	private final ObjectArray<Footprint> footprints = new ObjectArray<Footprint>();
-	private final BlockPos.MutableBlockPos stepCheck = new BlockPos.MutableBlockPos();
 
 	// Special sentinels for equating
 	public static final IAcoustic[] EMPTY = {};
 	public static final IAcoustic[] NOT_EMITTER = { new BasicAcoustic("NOT_EMITTER") };
 	public static final IAcoustic[] MESSY_GROUND = { new BasicAcoustic("MESSY_GROUND") };
 	public static IAcoustic[] SWIM;
+	public static IAcoustic[] JUMP;
 
 	public AcousticsManager() {
 	}
@@ -93,23 +87,6 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	@Nullable
 	public IAcoustic getAcoustic(@Nonnull final String name) {
 		return this.acoustics.get(name);
-	}
-
-	protected void produceFootprint(final int dim, @Nonnull final Footprint print) {
-
-		// Display the current player footprint
-		final FootstepEvent.Display event = new FootstepEvent.Display(print.getStepLocation(), print.getRotation(),
-				print.isRightFoot());
-		MinecraftForge.EVENT_BUS.post(event);
-
-		// Route message to server if installed
-		/*
-		if (!print.getEntity().isSneaking() && DSurround.routePacketToServer()) {
-			final PacketDisplayFootprint packet = new PacketDisplayFootprint(print.getEntity(), print.getStepLocation(),
-					print.getRotation(), print.isRightFoot());
-			Network.sendToServer(packet);
-		}
-		*/
 	}
 
 	public void playAcoustic(@Nonnull final EntityLivingBase location, @Nonnull final Association acousticName,
@@ -234,33 +211,24 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	public void think() {
 
-		if (!this.pending.isEmpty())
-			this.pending.removeIf(new Predicate<PendingSound>() {
-				private final long time = TimeUtils.currentTimeMillis();
+		final long time = TimeUtils.currentTimeMillis();
 
-				@Override
-				public boolean apply(@Nonnull final PendingSound sound) {
-					if (sound.getTimeToPlay() <= this.time) {
-						if (!sound.isLate(this.time))
-							sound.playSound(AcousticsManager.this);
-						return true;
-					}
-					return false;
-				}
-			});
-
-		if (!this.footprints.isEmpty()) {
-			for (int i = 0; i < this.footprints.size(); i++) {
-				final Footprint print = this.footprints.get(i);
-				final World world = print.getEntity().getEntityWorld();
-				if (WorldUtils.isSolidBlock(world,
-						BlockPosHelper.setPos(this.stepCheck, print.getStepLocation()).move(EnumFacing.DOWN, 1))) {
-					produceFootprint(world.provider.getDimension(), print);
-				}
+		this.pending.removeIf(sound -> {
+			if (sound.getTimeToPlay() <= time) {
+				if (!sound.isLate(time))
+					sound.playSound(AcousticsManager.this);
+				return true;
 			}
-			this.footprints.clear();
-		}
+			return false;
+		});
 
+		this.footprints.forEach(print -> {
+			// Display the current player footprint
+			final FootstepEvent.Display event = new FootstepEvent.Display(print.getStepLocation(), print.getRotation(),
+					print.isRightFoot());
+			MinecraftForge.EVENT_BUS.post(event);
+		});
+		this.footprints.clear();
 	}
 
 }

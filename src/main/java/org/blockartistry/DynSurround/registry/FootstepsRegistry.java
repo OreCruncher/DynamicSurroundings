@@ -121,6 +121,8 @@ public final class FootstepsRegistry extends Registry {
 
 		// It's a hack - needs refactor
 		AcousticsManager.SWIM = null;
+		AcousticsManager.JUMP = null;
+		
 		this.getBlockMap().clear();
 		final List<IResourcePack> repo = this.dealer.findResourcePacks();
 
@@ -152,6 +154,7 @@ public final class FootstepsRegistry extends Registry {
 	public void initComplete() {
 		this.getBlockMap().freeze();
 		AcousticsManager.SWIM = this.isolator.getAcoustics().compileAcoustics("_SWIM");
+		AcousticsManager.JUMP = this.isolator.getAcoustics().compileAcoustics("_JUMP");
 
 		// Traverse the IBlockState entries looking for states that do not
 		// have a configuration associated.

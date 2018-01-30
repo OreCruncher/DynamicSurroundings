@@ -49,7 +49,6 @@ public final class Sounds {
 
 	}
 
-	public static SoundEffect JUMP;
 	public static SoundEffect CRAFTING;
 
 	public static SoundEffect SWORD_EQUIP;
@@ -137,8 +136,6 @@ public final class Sounds {
 		DUST = Sounds.getSound(new ResourceLocation(DSurround.RESOURCE_ID, "dust"));
 
 		// SoundEffects
-
-		JUMP = new SoundEffect.Builder("jump", SoundCategory.PLAYERS).setVariablePitch(true).build();
 		CRAFTING = new SoundEffect.Builder("crafting", SoundCategory.PLAYERS).build();
 
 		SWORD_EQUIP = new SoundEffect.Builder("sword.equip", SoundCategory.PLAYERS).setVolume(0.5F).build();
