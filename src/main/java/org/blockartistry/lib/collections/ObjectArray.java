@@ -23,13 +23,13 @@
 
 package org.blockartistry.lib.collections;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
-
-import com.google.common.base.Predicate;
 
 public class ObjectArray<T> implements Collection<T> {
 
@@ -72,10 +72,11 @@ public class ObjectArray<T> implements Collection<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public boolean removeIf(@Nonnull final Predicate<T> pred) {
+	@Override
+	public boolean removeIf(@Nonnull final Predicate<? super T> pred) {
 		boolean result = false;
 		for (int i = this.insertionIdx - 1; i >= 0; i--) {
-			if (pred.apply((T) this.data[i])) {
+			if (pred.test((T) this.data[i])) {
 				result = true;
 				this.remove0(i);
 			}
@@ -133,10 +134,17 @@ public class ObjectArray<T> implements Collection<T> {
 		return result;
 	}
 
-	@SuppressWarnings("hiding")
+	@SuppressWarnings({ "unchecked", "hiding" })
 	@Override
-	public <T> T[] toArray(T[] a) {
-		throw new UnsupportedOperationException();
+	public <T> T[] toArray(@Nonnull T[] a) {
+		// From ArrayList impl
+		if (a.length < this.insertionIdx)
+			// Make a new array of a's runtime type, but my contents:
+			return (T[]) Arrays.copyOf(this.data, this.insertionIdx, a.getClass());
+		System.arraycopy(this.data, 0, a, 0, this.insertionIdx);
+		if (a.length > this.insertionIdx)
+			a[this.insertionIdx] = null;
+		return a;
 	}
 
 	@Override
@@ -172,6 +180,13 @@ public class ObjectArray<T> implements Collection<T> {
 		return result;
 	}
 
+	public boolean addAll(@Nonnull final T[] list) {
+		boolean result = false;
+		for (final T element : list)
+			result = result || this.add(element);
+		return result;
+	}
+
 	@Override
 	public boolean removeAll(@Nonnull final Collection<?> c) {
 		throw new UnsupportedOperationException();
@@ -184,7 +199,7 @@ public class ObjectArray<T> implements Collection<T> {
 
 	@Override
 	public void clear() {
-		if(this.insertionIdx == 0)
+		if (this.insertionIdx == 0)
 			return;
 		this.data = new Object[this.data.length];
 		this.insertionIdx = 0;

@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -51,7 +52,6 @@ import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.network.PacketPlaySound;
 import org.blockartistry.lib.collections.ObjectArray;
 
-import com.google.common.base.Predicate;
 import gnu.trove.iterator.TObjectFloatIterator;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.client.audio.ISound;
@@ -69,18 +69,15 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	private static final int AGE_THRESHOLD_TICKS = 10;
 	public static final SoundEffectHandler INSTANCE = new SoundEffectHandler();
 
-	private static final Predicate<PendingSound> PENDING_SOUNDS = new Predicate<PendingSound>() {
-		@Override
-		public boolean apply(final PendingSound input) {
-			if (input.getTickAge() >= AGE_THRESHOLD_TICKS) {
-				input.getSound().setState(SoundState.ERROR);
-				return true;
-			}
-			if (input.getTickAge() >= 0) {
-				return INSTANCE.playSound(input.getSound()) != null;
-			}
-			return false;
+	private static final Predicate<PendingSound> PENDING_SOUNDS = input -> {
+		if (input.getTickAge() >= AGE_THRESHOLD_TICKS) {
+			input.getSound().setState(SoundState.ERROR);
+			return true;
 		}
+		if (input.getTickAge() >= 0) {
+			return INSTANCE.playSound(input.getSound()) != null;
+		}
+		return false;
 	};
 
 	/*
@@ -253,7 +250,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 			// produced by the client.
 			final String soundResource = event.nbt.getString(BasicSound.NBT.SOUND_EVENT);
 			if(!StringUtils.isEmpty(soundResource)) {
-				if("dsurround:crafting".equals(soundResource) || "dsurround:jump".equals(soundResource))
+				if("dsurround:crafting".equals(soundResource))
 					this.playSound(new AdhocSound(event.nbt));
 			}
 		} catch (final Throwable t) {
