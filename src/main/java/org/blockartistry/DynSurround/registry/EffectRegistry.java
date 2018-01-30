@@ -33,8 +33,6 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
-import org.blockartistry.Presets.ModOptions;
-
 import io.netty.util.internal.StringUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -105,11 +103,16 @@ public class EffectRegistry extends Registry {
 			}
 		}
 
-		if (ModOptions.enableDebugLogging) {
-			DSurround.log().info("Entity Effect Entries");
-			DSurround.log().info("=====================");
-			for (final Entry<Class<? extends Entity>, String> e : this.effects.entrySet())
-				DSurround.log().info("%s = %s", e.getKey().getName(), e.getValue());
+		DSurround.log().debug("Entity Effect Entries");
+		DSurround.log().debug("=====================");
+		for (final Entry<Class<? extends Entity>, String> e : this.effects.entrySet()) {
+			final ResourceLocation r = EntityList.getKey(e.getKey());
+			final String keyName;
+			if (r != null)
+				keyName = r.toString();
+			else
+				keyName = "No ID Found";
+			DSurround.log().debug("%s = %s (%s)", keyName, e.getValue(), e.getKey().getName());
 		}
 	}
 
