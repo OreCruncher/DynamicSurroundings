@@ -359,6 +359,8 @@ public class Generator {
 			} else {
 				this.isolator.getAcoustics().playAcoustic(ply, assos, eventType);
 			}
+		} else if (assos == null) {
+			DSurround.log().debug("No footstep association found for entity %s", ply.toString());
 		}
 	}
 
@@ -408,10 +410,6 @@ public class Generator {
 	@Nonnull
 	protected Association findAssociationForPlayer(@Nonnull final EntityLivingBase player,
 			final double verticalOffsetAsMinus, final boolean isRightFoot) {
-		// Moved from routine below - why do all this calculation just to toss
-		// it away
-		//if (MathStuff.abs(player.motionY) < 0.02)
-		//	return null; // Don't play sounds on every tiny bounce
 
 		final float rotDegrees = MathStuff.wrapDegrees(player.rotationYaw);
 		final double rot = MathStuff.toRadians(rotDegrees);
@@ -427,13 +425,13 @@ public class Generator {
 		final Association result = addSoundOverlay(player, findAssociationForLocation(player, pos));
 		if (result != null) {
 			final Vec3d printLocation;
-			
-			if(player.isJumping) {
+
+			if (player.isJumping) {
 				printLocation = new Vec3d(xx, MathStuff.floor(minY), zz);
 			} else {
 				printLocation = new Vec3d(xx, minY, zz);
 			}
-			
+
 			if (hasFootstepImprint(player.getEntityWorld(), printLocation.addVector(0D, -0.5D, 0D)))
 				result.generatePrint(player, printLocation, rotDegrees, isRightFoot);
 		}
