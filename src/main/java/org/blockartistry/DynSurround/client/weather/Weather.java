@@ -222,8 +222,8 @@ public class Weather {
 	}
 
 	public static void register(final boolean serverAvailable) {
-		// if (serverAvailable)
-		// tracker = new ServerDrivenTracker();
+		if (serverAvailable)
+			tracker = new ServerDrivenTracker();
 	}
 
 	public static void unregister() {
