@@ -11,6 +11,13 @@
 	"contents": {
 		"none": {
 		},
+		"_JUMP": {
+			"jump": {
+				"name": "dsurround:jump",
+				"pitch_min": 80,
+				"pitch_max": 120
+			}
+		},
 		"_SWIM": {
 			"swim": {
 				"name": "@entity.player.swim",

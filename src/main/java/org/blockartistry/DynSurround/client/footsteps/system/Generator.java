@@ -77,6 +77,7 @@ public class Generator {
 	protected float dwmYChange;
 	protected double yPosition;
 
+	protected boolean didJump;
 	protected boolean isFlying;
 	protected float fallDistance;
 
@@ -110,6 +111,10 @@ public class Generator {
 	}
 
 	public void generateFootsteps(@Nonnull final EntityLivingBase entity) {
+
+		// Clear starting state
+		this.didJump = false;
+
 		simulateFootsteps(entity);
 		simulateAirborne(entity);
 		simulateBrushes(entity);
@@ -119,6 +124,11 @@ public class Generator {
 
 		if (this.stepThisFrame)
 			this.pedometer++;
+
+		// Player jump breath
+		if (this.didJump && ModOptions.enableJumpSound && this.VAR.PLAY_JUMP) {
+			this.isolator.getAcoustics().playAcoustic(entity, AcousticsManager.JUMP, EventType.JUMP, null);
+		}
 
 		if (ModOptions.footstepsSoundFactor > 0)
 			entity.nextStepDistance = Integer.MAX_VALUE;
@@ -265,32 +275,22 @@ public class Generator {
 		if (this.hasSpecialStoppingConditions(ply))
 			return;
 
-		final boolean isJumping = ply.isJumping;
-
-		if (this.isFlying && isJumping) { // ply.isJumping)
+		if (this.isFlying && ply.isJumping) {
 			if (VAR.EVENT_ON_JUMP) {
+				this.didJump = true;
 				double speed = ply.motionX * ply.motionX + ply.motionZ * ply.motionZ;
 
-				if (speed < VAR.SPEED_TO_JUMP_AS_MULTIFOOT) { // STILL JUMP
-					playMultifoot(ply, 0.4d, EventType.JUMP); // 2 -
-																// 0.7531999805212d
-																// (magic number
-																// for vertical
-																// offset?)
+				if (speed < VAR.SPEED_TO_JUMP_AS_MULTIFOOT) {
+					// STILL JUMP
+					playMultifoot(ply, 0.4d, EventType.JUMP);
 				} else {
-					playSinglefoot(ply, 0.4d, EventType.JUMP, this.isRightFoot); // RUNNING
-					// JUMP
-					// Do not toggle foot: After landing sounds, the first foot
-					// will be same as the one used to jump.
+					// RUNNING JUMP
+					playSinglefoot(ply, 0.4d, EventType.JUMP, this.isRightFoot);
 				}
 			}
 		} else if (!this.isFlying) {
 			if (this.fallDistance > VAR.LAND_HARD_DISTANCE_MIN) {
-				playMultifoot(ply, 0d, EventType.LAND); // Always assume the
-														// player lands on their
-														// two feet
-				// Do not toggle foot: After landing sounds, the first foot will
-				// be same as the one used to jump.
+				playMultifoot(ply, 0d, EventType.LAND);
 			} else if (!this.stepThisFrame && !ply.isSneaking()) {
 				playSinglefoot(ply, 0d, speedDisambiguator(ply, EventType.CLIMB, EventType.CLIMB_RUN),
 						this.isRightFoot);

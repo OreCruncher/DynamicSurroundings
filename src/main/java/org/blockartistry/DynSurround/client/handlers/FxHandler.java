@@ -36,7 +36,6 @@ import org.blockartistry.DynSurround.client.handlers.effects.EntityFootprintEffe
 import org.blockartistry.DynSurround.client.handlers.effects.EntitySwingEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.FootprintEventEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.FrostBreathEffect;
-import org.blockartistry.DynSurround.client.handlers.effects.PlayerJumpSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.PlayerToolBarSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.PopoffEventEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.VillagerChatEffect;
@@ -187,7 +186,6 @@ public class FxHandler extends EffectHandlerBase {
 
 		this.clearHandlers();
 
-		this.eventLibrary.register(new PlayerJumpSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new CraftingSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new PopoffEventEffect(this.eventLibrary));
 		this.eventLibrary.register(new FootprintEventEffect(this.eventLibrary));
