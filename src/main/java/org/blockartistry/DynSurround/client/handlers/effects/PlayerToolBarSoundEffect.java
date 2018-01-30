@@ -60,12 +60,11 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 
 		public HandTracker(@Nonnull final EntityPlayer player) {
 			this(player, EnumHand.OFF_HAND);
-
-			this.lastHeld = this.getItemForHand(player, EnumHand.OFF_HAND);
 		}
 
 		protected HandTracker(@Nonnull final EntityPlayer player, @Nonnull final EnumHand hand) {
 			this.hand = hand;
+			this.lastHeld = this.getItemForHand(player, hand);
 		}
 
 		protected Item getItemForHand(final EntityPlayer player, final EnumHand hand) {
