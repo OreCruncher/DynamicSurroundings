@@ -37,8 +37,6 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.EntityWitch;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
@@ -87,8 +85,8 @@ public class FrostBreathEffect extends EntityEffect {
 
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
-		public boolean applies(@Nonnull final Entity e) {
-			return e instanceof EntityPlayer || e instanceof EntityVillager || e instanceof EntityWitch;
+		public boolean applies(@Nonnull final Entity e, @Nonnull final String tokens) {
+			return tokens.contains("breath");
 		}
 	};
 

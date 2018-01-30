@@ -37,6 +37,7 @@ import org.blockartistry.DynSurround.client.handlers.FxHandler;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.BlockInfo;
+import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.gui.TextPanel;
@@ -46,6 +47,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -76,7 +78,7 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 
 	private static List<String> gatherOreNames(final ItemStack stack) {
 		final List<String> result = new ArrayList<String>();
-		if (stack != null)
+		if (ItemStackUtil.isValidItemStack(stack))
 			for (int i : OreDictionary.getOreIDs(stack))
 				result.add(OreDictionary.getOreName(i));
 		return result;
@@ -100,7 +102,7 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 	private List<String> gatherBlockText(final ItemStack stack, final List<String> text, final IBlockState state,
 			final BlockPos pos) {
 
-		if (stack != null) {
+		if (ItemStackUtil.isValidItemStack(stack)) {
 			text.add(TextFormatting.RED + stack.getDisplayName());
 			final String itemName = getItemName(stack);
 			if (itemName != null) {
@@ -179,6 +181,7 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 
 	private List<String> gatherEntityText(@Nonnull final Entity entity, @Nonnull final List<String> text) {
 		text.add(TextFormatting.DARK_AQUA + entity.getName());
+		text.add(EntityList.getEntityString(entity).toString());
 		text.add(entity.getClass().getName());
 		text.add(TextFormatting.GOLD + "Effects");
 		text.addAll(FxHandler.INSTANCE.getEffects(entity));

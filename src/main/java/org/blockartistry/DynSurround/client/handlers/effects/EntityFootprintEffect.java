@@ -41,8 +41,6 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityWitch;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -111,8 +109,8 @@ public class EntityFootprintEffect extends EntityEffect {
 	// footprint code.
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
-		public boolean applies(@Nonnull final Entity e) {
-			return e instanceof EntityPlayer || e instanceof EntityVillager || e instanceof EntityWitch;
+		public boolean applies(@Nonnull final Entity e, @Nonnull final String tokens) {
+			return tokens.contains("footprint");
 		}
 	};
 

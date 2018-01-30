@@ -30,6 +30,8 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.lib.collections.ObjectArray;
 
 import com.google.common.collect.ImmutableList;
@@ -84,11 +86,15 @@ public class EntityEffectLibrary {
 	@Nonnull
 	public Optional<EntityEffectHandler> create(@Nonnull final Entity entity) {
 		final List<EntityEffect> effectToApply = new ArrayList<EntityEffect>();
-		for (int i = 0; i < this.filters.size(); i++)
-			if (this.filters.get(i).applies(entity)) {
-				final List<EntityEffect> r = this.factories.get(i).create(entity);
-				effectToApply.addAll(r);
-			}
+
+		final String effectString = ClientRegistry.EFFECTS.getEffects(entity);
+		if (!StringUtils.isEmpty(effectString)) {
+			for (int i = 0; i < this.filters.size(); i++)
+				if (this.filters.get(i).applies(entity, effectString)) {
+					final List<EntityEffect> r = this.factories.get(i).create(entity);
+					effectToApply.addAll(r);
+				}
+		}
 
 		final EntityEffectHandler result;
 		if (effectToApply.size() > 0) {
@@ -104,12 +110,12 @@ public class EntityEffectLibrary {
 				public void die() {
 					this.isAlive = false;
 				}
-				
+
 				@Override
 				public boolean isDummy() {
 					return true;
 				}
-				
+
 				@Override
 				public List<String> getAttachedEffects() {
 					return ImmutableList.of("Dummy EffectHandler");

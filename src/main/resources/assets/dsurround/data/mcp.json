@@ -1461,5 +1461,14 @@
 				"doorWood"
 			]
 		}
-	]
+	],
+	"entityEffects": {
+		"Villager": "bow,swing,footprint,breath,chat",
+		"Skeleton": "bow,swing,chat",
+		"Zombie": "bow,swing,footprint,chat",
+		"PigZombie": "bow,swing,footprint",
+		"Witch": "footprint,breath,chat",
+		"Squid": "chat",
+		"minecraft:player": "bow,swing,footprint,breath,toolbar"
+	}
 }

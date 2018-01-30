@@ -209,8 +209,8 @@ public class EntityChatEffect extends EntityEffect {
 
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
-		public boolean applies(@Nonnull final Entity e) {
-			return !(e instanceof EntityVillager) && EntityChatEffect.hasMessages(e);
+		public boolean applies(@Nonnull final Entity e, @Nonnull final String tokens) {
+			return tokens.contains("chat") && !(e instanceof EntityVillager) && EntityChatEffect.hasMessages(e);
 		}
 	};
 
