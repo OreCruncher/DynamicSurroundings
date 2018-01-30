@@ -46,7 +46,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 public final class CommandDS extends CommandBase {
 
-	private static final String COMMAND = ModOptions.commandNameDS;
+	private static final String COMMAND = ModOptions.commands.ds.commandNameDS;
 	private static final String COMMAND_OPTION_RAIN = "rain";
 	private static final String COMMAND_OPTION_THUNDER = "thunder";
 	private static final String COMMAND_OPTION_STATUS = "status";
@@ -58,7 +58,7 @@ public final class CommandDS extends CommandBase {
 	private static final String COMMAND_OPTION_SETTIME = "settime";
 	private static final String COMMAND_OPTION_CONFIG = "config";
 
-	private static final List<String> ALIAS = ImmutableList.<String>builder().add(ModOptions.commandAliasDS.split(" "))
+	private static final List<String> ALIAS = ImmutableList.<String>builder().add(ModOptions.commands.ds.commandAliasDS.split(" "))
 			.build();
 	private static final DecimalFormat FORMATTER = new DecimalFormat("0.0");
 

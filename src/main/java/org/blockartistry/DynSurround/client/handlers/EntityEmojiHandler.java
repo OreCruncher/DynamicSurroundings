@@ -77,8 +77,8 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 			data.setEmotionalState(event.emotionalState);
 			data.setEmojiType(event.emojiType);
 
-			if (ModOptions.enableEntityEmojis && entity.isEntityAlive() && data.getEmojiType() != EmojiType.NONE
-					&& !this.emojiParticles.contains(event.entityId)) {
+			if (ModOptions.speechbubbles.enableEntityEmojis && entity.isEntityAlive()
+					&& data.getEmojiType() != EmojiType.NONE && !this.emojiParticles.contains(event.entityId)) {
 				final IParticleMote mote = ParticleCollections.addEmoji(entity);
 				if (mote != null)
 					this.emojiParticles.put(event.entityId, mote);

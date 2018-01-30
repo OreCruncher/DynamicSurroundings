@@ -65,26 +65,26 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 
 		// Quick select options. Allow the player to enable/disable features
 		// easily without having to delve into the option tree.
-		addConfigElement(ModOptions.CATEGORY_AURORA, ModOptions.CONFIG_AURORA_ENABLED);
-		addConfigElement(ModOptions.CATEGORY_RAIN, ModOptions.CONFIG_ENABLE_BACKGROUND_THUNDER);
-		addConfigElement(ModOptions.CATEGORY_FOG, ModOptions.CONFIG_ALLOW_DESERT_FOG);
-		addConfigElement(ModOptions.CATEGORY_FOG, ModOptions.CONFIG_ENABLE_ELEVATION_HAZE);
-		addConfigElement(ModOptions.CATEGORY_FOG, ModOptions.CONFIG_ENABLE_BIOME_FOG);
-		addConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_BIOME_SOUNDS);
-		addConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_JUMP_SOUND);
-		addConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_EQUIP_SOUND);
-		addConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_CRAFTING_SOUND);
-		addConfigElement(ModOptions.CATEGORY_SOUND, ModOptions.CONFIG_ENABLE_ARMOR_SOUND);
-		addConfigElement(ModOptions.CATEGORY_PLAYER, ModOptions.CONFIG_ENABLE_FOOTPRINTS);
-		addConfigElement(ModOptions.CATEGORY_POTION_HUD, ModOptions.CONFIG_POTION_HUD_ENABLE);
-		addConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES, ModOptions.CONFIG_OPTION_ENABLE_SPEECHBUBBLES);
-		addConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES, ModOptions.CONFIG_OPTION_ENABLE_EMOJIS);
-		addConfigElement(ModOptions.CATEGORY_SPEECHBUBBLES, ModOptions.CONFIG_OPTION_ENABLE_ENTITY_CHAT);
-		addConfigElement(ModOptions.CATEGORY_EXPLOSIONS, ModOptions.CONFIG_ENABLE_EXPLOSIONS);
+		addConfigElement(ModOptions.aurora.PATH, ModOptions.CONFIG_AURORA_ENABLED);
+		addConfigElement(ModOptions.rain.PATH, ModOptions.CONFIG_ENABLE_BACKGROUND_THUNDER);
+		addConfigElement(ModOptions.fog.PATH, ModOptions.CONFIG_ALLOW_DESERT_FOG);
+		addConfigElement(ModOptions.fog.PATH, ModOptions.CONFIG_ENABLE_ELEVATION_HAZE);
+		addConfigElement(ModOptions.fog.PATH, ModOptions.CONFIG_ENABLE_BIOME_FOG);
+		addConfigElement(ModOptions.sound.PATH, ModOptions.CONFIG_ENABLE_BIOME_SOUNDS);
+		addConfigElement(ModOptions.sound.PATH, ModOptions.CONFIG_ENABLE_JUMP_SOUND);
+		addConfigElement(ModOptions.sound.PATH, ModOptions.CONFIG_ENABLE_EQUIP_SOUND);
+		addConfigElement(ModOptions.sound.PATH, ModOptions.CONFIG_ENABLE_CRAFTING_SOUND);
+		addConfigElement(ModOptions.sound.PATH, ModOptions.CONFIG_ENABLE_ARMOR_SOUND);
+		addConfigElement(ModOptions.player.PATH, ModOptions.CONFIG_ENABLE_FOOTPRINTS);
+		addConfigElement(ModOptions.player.potionHUD.PATH, ModOptions.CONFIG_POTION_HUD_ENABLE);
+		addConfigElement(ModOptions.speechbubbles.PATH, ModOptions.CONFIG_OPTION_ENABLE_SPEECHBUBBLES);
+		addConfigElement(ModOptions.speechbubbles.PATH, ModOptions.CONFIG_OPTION_ENABLE_EMOJIS);
+		addConfigElement(ModOptions.speechbubbles.PATH, ModOptions.CONFIG_OPTION_ENABLE_ENTITY_CHAT);
+		addConfigElement(ModOptions.explosions.PATH, ModOptions.CONFIG_ENABLE_EXPLOSIONS);
 
 		if (Permissions.instance().allowCompassAndClockHUD()) {
-			addConfigElement(ModOptions.CATEGORY_COMPASS, ModOptions.CONFIG_COMPASS_ENABLE);
-			addConfigElement(ModOptions.CATEGORY_COMPASS, ModOptions.CONFIG_CLOCK_ENABLE);
+			addConfigElement(ModOptions.compass.PATH, ModOptions.CONFIG_COMPASS_ENABLE);
+			addConfigElement(ModOptions.compass.PATH, ModOptions.CONFIG_CLOCK_ENABLE);
 		}
 
 		// Synthetic options for handling sound blocking and volume
@@ -95,24 +95,24 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 		this.configElements.add(this.soundElement);
 
 		// Tack on the rest of the categories for configuration
-		addConfigCategory(ModOptions.CATEGORY_GENERAL);
-		addConfigCategory(ModOptions.CATEGORY_PLAYER);
+		addConfigCategory(ModOptions.general.PATH);
+		addConfigCategory(ModOptions.player.PATH);
 		if (Permissions.instance().allowCompassAndClockHUD())
-			addConfigCategory(ModOptions.CATEGORY_COMPASS);
-		addConfigCategory(ModOptions.CATEGORY_EXPLOSIONS);
-		addConfigCategory(ModOptions.CATEGORY_RAIN);
-		addConfigCategory(ModOptions.CATEGORY_FOG);
-		addConfigCategory(ModOptions.CATEGORY_AURORA);
-		addConfigCategory(ModOptions.CATEGORY_BLOCK);
-		addConfigCategory(ModOptions.CATEGORY_BIOMES);
-		addConfigCategory(ModOptions.CATEGORY_SOUND);
-		addConfigCategory(ModOptions.CATEGORY_PROFILES);
+			addConfigCategory(ModOptions.compass.PATH);
+		addConfigCategory(ModOptions.explosions.PATH);
+		addConfigCategory(ModOptions.rain.PATH);
+		addConfigCategory(ModOptions.fog.PATH);
+		addConfigCategory(ModOptions.aurora.PATH);
+		addConfigCategory(ModOptions.block.PATH);
+		addConfigCategory(ModOptions.biomes.PATH);
+		addConfigCategory(ModOptions.sound.PATH);
+		addConfigCategory(ModOptions.profiles.PATH);
 		if (Permissions.instance().allowLightLevelHUD())
-			addConfigCategory(ModOptions.CATEGORY_LIGHT_LEVEL);
-		addConfigCategory(ModOptions.CATEGORY_SPEECHBUBBLES);
-		addConfigCategory(ModOptions.CATEGORY_COMMANDS);
-		addConfigCategory(ModOptions.CATEGORY_ASM);
-		addConfigCategory(ModOptions.CATEGORY_LOGGING_CONTROL);
+			addConfigCategory(ModOptions.lightlevel.PATH);
+		addConfigCategory(ModOptions.speechbubbles.PATH);
+		addConfigCategory(ModOptions.commands.PATH);
+		addConfigCategory(ModOptions.asm.PATH);
+		addConfigCategory(ModOptions.logging.PATH);
 	}
 
 	private void addConfigElement(@Nonnull final String category, @Nonnull final String prop) {
@@ -164,13 +164,13 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 		}
 
 		String[] results = culledSounds.toArray(new String[culledSounds.size()]);
-		this.config.getCategory(ModOptions.CATEGORY_SOUND).get(ModOptions.CONFIG_CULLED_SOUNDS).set(results);
+		this.config.getCategory(ModOptions.sound.PATH).get(ModOptions.CONFIG_CULLED_SOUNDS).set(results);
 
 		results = blockedSounds.toArray(new String[blockedSounds.size()]);
-		this.config.getCategory(ModOptions.CATEGORY_SOUND).get(ModOptions.CONFIG_BLOCKED_SOUNDS).set(results);
+		this.config.getCategory(ModOptions.sound.PATH).get(ModOptions.CONFIG_BLOCKED_SOUNDS).set(results);
 
 		results = soundVolumes.toArray(new String[soundVolumes.size()]);
-		this.config.getCategory(ModOptions.CATEGORY_SOUND).get(ModOptions.CONFIG_SOUND_VOLUMES).set(results);
+		this.config.getCategory(ModOptions.sound.PATH).get(ModOptions.CONFIG_SOUND_VOLUMES).set(results);
 	}
 
 	protected void generateSoundList(final ConfigCategory cat) {

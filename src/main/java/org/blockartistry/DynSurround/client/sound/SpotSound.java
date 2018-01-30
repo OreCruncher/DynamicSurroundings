@@ -42,7 +42,7 @@ public class SpotSound extends BasicSound<SpotSound> {
 	public static final ISoundScale BIOME_EFFECT = new ISoundScale() {
 		@Override
 		public float getScale() {
-			return ModOptions.masterSoundScaleFactor;
+			return ModOptions.sound.masterSoundScaleFactor;
 		}
 	};
 

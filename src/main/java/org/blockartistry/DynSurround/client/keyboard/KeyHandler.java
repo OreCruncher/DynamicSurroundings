@@ -88,7 +88,7 @@ public class KeyHandler {
 			+ TextFormatting.BLUE + "] " + TextFormatting.RESET;
 
 	private static void sendPlayerMessage(final String fmt, final Object... parms) {
-		if (ModOptions.hideChatNotices)
+		if (ModOptions.general.hideChatNotices)
 			return;
 
 		final EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
@@ -125,15 +125,15 @@ public class KeyHandler {
 			if (GuiScreen.isCtrlKeyDown()) {
 				// Only change mode when visible
 				if (LightLevelHUD.showHUD) {
-					ModOptions.llDisplayMode++;
-					if (ModOptions.llDisplayMode >= Mode.values().length)
-						ModOptions.llDisplayMode = 0;
-					sendPlayerMessage("cfg.keybind.msg.LLDisplayMode", Mode.getMode(ModOptions.llDisplayMode).name());
+					ModOptions.lightlevel.llDisplayMode++;
+					if (ModOptions.lightlevel.llDisplayMode >= Mode.values().length)
+						ModOptions.lightlevel.llDisplayMode = 0;
+					sendPlayerMessage("cfg.keybind.msg.LLDisplayMode", Mode.getMode(ModOptions.lightlevel.llDisplayMode).name());
 				}
 			} else if (GuiScreen.isShiftKeyDown()) {
 				if (LightLevelHUD.showHUD) {
-					ModOptions.llHideSafe = !ModOptions.llHideSafe;
-					sendPlayerMessage("cfg.keybind.msg.LLSafeBlocks", getOnOff(ModOptions.llHideSafe));
+					ModOptions.lightlevel.llHideSafe = !ModOptions.lightlevel.llHideSafe;
+					sendPlayerMessage("cfg.keybind.msg.LLSafeBlocks", getOnOff(ModOptions.lightlevel.llHideSafe));
 				}
 			} else {
 				LightLevelHUD.showHUD = !LightLevelHUD.showHUD;

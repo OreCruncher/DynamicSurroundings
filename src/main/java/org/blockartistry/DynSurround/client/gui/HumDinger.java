@@ -51,7 +51,7 @@ public final class HumDinger {
 	public static void onGuiOpen(@Nonnull final GuiOpenEvent event) {
 		if (!hasPlayed && event.getGui() instanceof GuiMainMenu) {
 			hasPlayed = true;
-			final String[] possibles = ModOptions.startupSoundList;
+			final String[] possibles = ModOptions.general.startupSoundList;
 			if (possibles == null || possibles.length == 0)
 				return;
 			final String res = possibles[XorShiftRandom.current().nextInt(possibles.length)];

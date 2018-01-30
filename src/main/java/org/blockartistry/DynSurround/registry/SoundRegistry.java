@@ -68,10 +68,10 @@ public final class SoundRegistry extends Registry {
 		this.blockSoundNames.clear();
 		this.volumeControl.clear();
 
-		MyUtils.addAll(this.cullSoundNames, ModOptions.culledSounds);
-		MyUtils.addAll(this.blockSoundNames, ModOptions.blockedSounds);
+		MyUtils.addAll(this.cullSoundNames, ModOptions.sound.culledSounds);
+		MyUtils.addAll(this.blockSoundNames, ModOptions.sound.blockedSounds);
 
-		for (final String volume : ModOptions.soundVolumes) {
+		for (final String volume : ModOptions.sound.soundVolumes) {
 			final String[] tokens = StringUtils.split(volume, "=");
 			if (tokens.length == 2) {
 				try {
@@ -103,7 +103,7 @@ public final class SoundRegistry extends Registry {
 	}
 
 	public boolean isSoundBlockedLogical(@Nonnull final String sound) {
-		return this.isSoundBlocked(sound) || (!ModOptions.enableArmorSounds && sound.startsWith(ARMOR_SOUND_PREFIX));
+		return this.isSoundBlocked(sound) || (!ModOptions.sound.enableArmorSounds && sound.startsWith(ARMOR_SOUND_PREFIX));
 	}
 
 	public float getVolumeScale(@Nonnull final String soundName) {

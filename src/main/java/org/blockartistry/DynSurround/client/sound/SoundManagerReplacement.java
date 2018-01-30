@@ -103,7 +103,7 @@ public class SoundManagerReplacement extends SoundManager {
 	}
 
 	private void checkForClientThread(final String method, final ISound sound) {
-		if (ModOptions.enableDebugLogging) {
+		if (ModOptions.logging.enableDebugLogging) {
 			final String name = Thread.currentThread().getName();
 			if (!name.equals("Client thread")) {
 				this.violationCount++;
@@ -512,10 +512,10 @@ public class SoundManagerReplacement extends SoundManager {
 			e.printStackTrace();
 		}
 
-		int normalChannelCount = ModOptions.normalSoundChannelCount;
-		int streamChannelCount = ModOptions.streamingSoundChannelCount;
+		int normalChannelCount = ModOptions.sound.normalSoundChannelCount;
+		int streamChannelCount = ModOptions.sound.streamingSoundChannelCount;
 
-		if (ModOptions.autoConfigureChannels && totalChannels > 64) {
+		if (ModOptions.sound.autoConfigureChannels && totalChannels > 64) {
 			totalChannels = ((totalChannels + 1) * 3) / 4;
 			streamChannelCount = Math.min(totalChannels / 5, MAX_STREAM_CHANNELS);
 			normalChannelCount = totalChannels - streamChannelCount;
@@ -527,10 +527,10 @@ public class SoundManagerReplacement extends SoundManager {
 		SoundSystemConfig.setNumberStreamingChannels(streamChannelCount);
 
 		// Setup sound buffering
-		if (ModOptions.streamBufferCount != 0)
-			SoundSystemConfig.setNumberStreamingBuffers(ModOptions.streamBufferCount);
-		if (ModOptions.streamBufferSize != 0)
-			SoundSystemConfig.setStreamingBufferSize(ModOptions.streamBufferSize * 1024);
+		if (ModOptions.sound.streamBufferCount != 0)
+			SoundSystemConfig.setNumberStreamingBuffers(ModOptions.sound.streamBufferCount);
+		if (ModOptions.sound.streamBufferSize != 0)
+			SoundSystemConfig.setStreamingBufferSize(ModOptions.sound.streamBufferSize * 1024);
 		DSurround.log().info("Stream buffers: %d x %d", SoundSystemConfig.getNumberStreamingBuffers(),
 				SoundSystemConfig.getStreamingBufferSize());
 	}

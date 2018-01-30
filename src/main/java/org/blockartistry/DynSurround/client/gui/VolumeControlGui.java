@@ -63,8 +63,8 @@ public class VolumeControlGui extends GuiScreen implements GuiResponder {
 	protected final Minecraft mc = Minecraft.getMinecraft();
 
 	protected float master = mc.gameSettings.getSoundLevel(SoundCategory.MASTER);
-	protected float biome = ModOptions.masterSoundScaleFactor;
-	protected float footstep = ModOptions.footstepsSoundFactor;
+	protected float biome = ModOptions.sound.masterSoundScaleFactor;
+	protected float footstep = ModOptions.sound.footstepsSoundFactor;
 
 	protected Panel panel = new Panel();
 
@@ -132,13 +132,13 @@ public class VolumeControlGui extends GuiScreen implements GuiResponder {
 		this.mc.gameSettings.setSoundLevel(SoundCategory.MASTER, this.master);
 		this.mc.gameSettings.saveOptions();
 
-		ModOptions.masterSoundScaleFactor = this.biome;
-		ModOptions.footstepsSoundFactor = this.footstep;
+		ModOptions.sound.masterSoundScaleFactor = this.biome;
+		ModOptions.sound.footstepsSoundFactor = this.footstep;
 
 		this.config.getCategory(ModOptions.CATEGORY_SOUND).get(ModOptions.CONFIG_MASTER_SOUND_FACTOR)
-				.set(ModOptions.masterSoundScaleFactor);
+				.set(ModOptions.sound.masterSoundScaleFactor);
 		this.config.getCategory(ModOptions.CATEGORY_SOUND).get(ModOptions.CONFIG_FOOTSTEPS_SOUND_FACTOR)
-				.set(ModOptions.footstepsSoundFactor);
+				.set(ModOptions.sound.footstepsSoundFactor);
 		this.config.save();
 	}
 

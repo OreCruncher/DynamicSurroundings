@@ -94,7 +94,7 @@ public class WorldEventDetector implements IWorldEventListener {
 	public void spawnParticle(int particleID, boolean ignoreRange, double x, double y, double z,
 			double xSpeed, double ySpeed, double zSpeed, int... parameters) {
 		
-		if(!ModOptions.enableExplosionEnhancement)
+		if(!ModOptions.explosions.enableExplosionEnhancement)
 			return;
 		
 		if(EnumParticleTypes.EXPLOSION_LARGE.getParticleID() == particleID) {

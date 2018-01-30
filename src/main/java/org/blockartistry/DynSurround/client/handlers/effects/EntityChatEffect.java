@@ -190,7 +190,7 @@ public class EntityChatEffect extends EntityEffect {
 
 	@Override
 	public void update(@Nonnull final Entity subject) {
-		if (!ModOptions.enableEntityChat)
+		if (!ModOptions.speechbubbles.enableEntityChat)
 			return;
 
 		final long ticks = getWorldTicks(subject);

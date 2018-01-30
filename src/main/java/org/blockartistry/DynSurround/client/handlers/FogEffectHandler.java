@@ -52,7 +52,8 @@ public class FogEffectHandler extends EffectHandlerBase {
 	}
 
 	private boolean doFog() {
-		return (ModOptions.enableBiomeFog || ModOptions.allowDesertFog) && EnvironState.getDimensionInfo().getHasFog();
+		return (ModOptions.fog.enableBiomeFog || ModOptions.fog.allowDesertFog)
+				&& EnvironState.getDimensionInfo().getHasFog();
 	}
 
 	@Override

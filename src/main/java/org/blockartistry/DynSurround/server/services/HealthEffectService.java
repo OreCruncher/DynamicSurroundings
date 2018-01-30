@@ -61,7 +61,7 @@ public final class HealthEffectService extends Service {
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onLivingHurt(@Nonnull final LivingHurtEvent event) {
-		if (!ModOptions.enableDamagePopoffs)
+		if (!ModOptions.player.enableDamagePopoffs)
 			return;
 
 		if (event == null || event.getEntity() == null || event.getEntity().worldObj == null
@@ -97,7 +97,7 @@ public final class HealthEffectService extends Service {
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onLivingHeal(@Nonnull final LivingHealEvent event) {
-		if (!ModOptions.enableDamagePopoffs)
+		if (!ModOptions.player.enableDamagePopoffs)
 			return;
 
 		if (event == null || event.getEntity() == null || event.getEntity().worldObj == null

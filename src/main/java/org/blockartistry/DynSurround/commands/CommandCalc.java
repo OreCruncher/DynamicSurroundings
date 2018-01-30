@@ -45,14 +45,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class CommandCalc extends CommandBase {
 
-	private final static String COMMAND = ModOptions.commandNameCalc;
+	private final static String COMMAND = ModOptions.commands.calc.commandNameCalc;
 	private final static String COMMAND_OPTION_HELP = "help";
 	private final static String COMMAND_OPTION_FUNCS = "funcs";
 	private final static String COMMAND_OPTION_VARS = "vars";
 	private final static String COMMAND_OPTION_OPS = "ops";
 
 	private static final List<String> ALIAS = ImmutableList.<String>builder()
-			.add(ModOptions.commandAliasCalc.split(" ")).build();
+			.add(ModOptions.commands.calc.commandAliasCalc.split(" ")).build();
 
 	private static final List<String> HELP = ImmutableList.<String>builder()
 			.add(TextFormatting.GOLD + "Calculator command help:")

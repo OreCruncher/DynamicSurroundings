@@ -40,7 +40,7 @@ public class BackgroundMute {
 	@SubscribeEvent
 	public static void clientTick(final TickEvent.ClientTickEvent event) {
 		// Make sure that the display is created.  OpenEye says that sometimes it isn't.
-		if (ModOptions.muteWhenBackground && Display.isCreated()) {
+		if (ModOptions.sound.muteWhenBackground && Display.isCreated()) {
 			final SoundManager mgr = Minecraft.getMinecraft().getSoundHandler().sndManager;
 			if (mgr instanceof SoundManagerReplacement) {
 				final SoundManagerReplacement sm = (SoundManagerReplacement) mgr;

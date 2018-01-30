@@ -123,8 +123,8 @@ public class CompassHUD extends GuiOverlay {
 	@Nonnull
 	protected String getLocationString() {
 		final BlockPos pos = EnvironState.getPlayerPosition();
-		return TextFormatting.AQUA
-				+ String.format(Locale.getDefault(), ModOptions.compassCoordFormat, pos.getX(), pos.getY(), pos.getZ());
+		return TextFormatting.AQUA + String.format(Locale.getDefault(), ModOptions.compass.compassCoordFormat,
+				pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Nonnull
@@ -133,11 +133,11 @@ public class CompassHUD extends GuiOverlay {
 	}
 
 	protected boolean showCompass() {
-		return ModOptions.enableCompass && PlayerUtils.isHolding(EnvironState.getPlayer(), Items.COMPASS);
+		return ModOptions.compass.enableCompass && PlayerUtils.isHolding(EnvironState.getPlayer(), Items.COMPASS);
 	}
 
 	protected boolean showClock() {
-		if (ModOptions.enableClock) {
+		if (ModOptions.compass.enableClock) {
 			if (PlayerUtils.isHolding(EnvironState.getPlayer(), Items.CLOCK))
 				return true;
 			final Entity e = PlayerUtils.entityImLookingAt(EnvironState.getPlayer());
@@ -213,13 +213,13 @@ public class CompassHUD extends GuiOverlay {
 		final int centerX = (resolution.getScaledWidth() + 1) / 2;
 		final int centerY = (resolution.getScaledHeight() + 1) / 2;
 
-		this.textPanel.setAlpha(ModOptions.compassTransparency);
+		this.textPanel.setAlpha(ModOptions.compass.compassTransparency);
 		this.textPanel.render(centerX, centerY + (int) (font.FONT_HEIGHT * TEXT_LINE_START), Reference.TOP_CENTER);
 
-		final Style style = Style.getStyle(ModOptions.compassStyle);
+		final Style style = Style.getStyle(ModOptions.compass.compassStyle);
 		mc.getTextureManager().bindTexture(style.getTextureResource());
 
-		GlStateManager.color(1F, 1F, 1F, ModOptions.compassTransparency);
+		GlStateManager.color(1F, 1F, 1F, ModOptions.compass.compassTransparency);
 
 		if (this.showCompass)
 			if (!style.isRose()) {
@@ -229,12 +229,12 @@ public class CompassHUD extends GuiOverlay {
 				final int y = (resolution.getScaledHeight() - style.getHeight() + 1) / 2 - style.getHeight();
 
 				if (direction < 128)
-					drawTexturedModalRect(x, y, direction, (ModOptions.compassStyle * (style.getHeight() * 2)),
+					drawTexturedModalRect(x, y, direction, (ModOptions.compass.compassStyle * (style.getHeight() * 2)),
 							style.getWidth(), style.getHeight());
 				else
 					drawTexturedModalRect(x, y, direction - 128,
-							(ModOptions.compassStyle * (style.getHeight() * 2)) + style.getHeight(), style.getWidth(),
-							style.getHeight());
+							(ModOptions.compass.compassStyle * (style.getHeight() * 2)) + style.getHeight(),
+							style.getWidth(), style.getHeight());
 			} else {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(centerX, centerY - BAND_HEIGHT * 2.5F, 0);

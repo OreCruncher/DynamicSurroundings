@@ -54,7 +54,7 @@ public class PacketDisplayFootprint implements IMessage {
 		public IMessage onMessage(@Nonnull final PacketDisplayFootprint message, @Nullable final MessageContext ctx) {
 			// No event - turn around quick and broadcast to necessary
 			// clients. This should take place on a Netty thread.
-			message.locus = new Locus(message.locus, ModOptions.specialEffectRange);
+			message.locus = new Locus(message.locus, ModOptions.general.specialEffectRange);
 			Network.sendToAllAround(message.locus, message);
 			return null;
 		}
@@ -71,7 +71,7 @@ public class PacketDisplayFootprint implements IMessage {
 	@SideOnly(Side.CLIENT)
 	public PacketDisplayFootprint(@Nonnull final Entity entity, @Nonnull final Vec3d pos, final float rotation,
 			final boolean rightFoot) {
-		this.locus = new Locus(entity, pos, ModOptions.specialEffectRange);
+		this.locus = new Locus(entity, pos, ModOptions.general.specialEffectRange);
 		this.rotation = rotation;
 		this.isRightFoot = rightFoot;
 	}

@@ -105,7 +105,7 @@ public class EffectManager {
 			return;
 
 		// TODO: Find a better home....
-		if (ModOptions.suppressPotionParticles)
+		if (ModOptions.player.suppressPotionParticles)
 			event.player.getDataManager().set(EntityLivingBase.HIDE_PARTICLES, true);
 
 		for (int i = 0; i < this.effectHandlers.size(); i++)

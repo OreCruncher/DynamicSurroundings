@@ -98,7 +98,7 @@ public class SoundEngine {
 	@Nullable
 	public String playSound(@Nonnull final BasicSound<?> sound) {
 		if (!canFitSound()) {
-			if (ModOptions.enableDebugLogging)
+			if (ModOptions.logging.enableDebugLogging)
 				DSurround.log().debug("> NO ROOM: [%s]", sound.toString());
 			return null;
 		}
@@ -110,7 +110,7 @@ public class SoundEngine {
 
 		manager.playSound(sound);
 
-		if (ModOptions.enableDebugLogging) {
+		if (ModOptions.logging.enableDebugLogging) {
 			if (StringUtils.isEmpty(sound.getId())) {
 				DSurround.log().debug("> NOT QUEUED: [%s]", sound.toString());
 			} else {

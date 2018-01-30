@@ -59,7 +59,7 @@ public class PatchSoundManager extends Transmorgrifier {
 
 	@Override
 	public boolean isEnabled() {
-		return ModOptions.enableSoundCache;
+		return ModOptions.asm.enableSoundCache;
 	}
 
 	@Override

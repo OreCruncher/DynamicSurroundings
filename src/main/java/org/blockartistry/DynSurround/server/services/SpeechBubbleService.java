@@ -45,7 +45,7 @@ public final class SpeechBubbleService extends Service {
 	// message - not a command, etc.
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onChatMessageEvent(@Nonnull final ServerChatEvent event) {
-		final Locus point = new Locus(event.getPlayer(), ModOptions.speechBubbleRange);
+		final Locus point = new Locus(event.getPlayer(), ModOptions.speechbubbles.speechBubbleRange);
 		final PacketSpeechBubble packet = new PacketSpeechBubble(event.getPlayer(), event.getMessage(), false);
 		Network.sendToAllAround(point, packet);
 	}

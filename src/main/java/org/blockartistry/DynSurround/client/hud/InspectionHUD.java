@@ -215,7 +215,7 @@ public class InspectionHUD extends GuiOverlay {
 
 			this.textPanel.resetText();
 
-			if (ModOptions.enableDebugLogging && isHolding()) {
+			if (ModOptions.logging.enableDebugLogging && isHolding()) {
 				final List<String> data = new ArrayList<String>();
 				final RayTraceResult current = Minecraft.getMinecraft().objectMouseOver;
 
@@ -257,7 +257,7 @@ public class InspectionHUD extends GuiOverlay {
 
 	@SubscribeEvent
 	public static void tooltipEvent(@Nonnull final ItemTooltipEvent event) {
-		if (ModOptions.enableDebugLogging) {
+		if (ModOptions.logging.enableDebugLogging) {
 			final ItemStack stack = event.getItemStack();
 			if (stack != null) {
 				final String itemName = getItemName(stack);
