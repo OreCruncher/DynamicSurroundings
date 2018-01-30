@@ -42,7 +42,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityBoat;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
@@ -103,8 +102,8 @@ public class EntitySwingEffect extends EntityEffect {
 
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
-		public boolean applies(@Nonnull final Entity e) {
-			return !(e instanceof EntityAnimal) && e instanceof EntityLivingBase;
+		public boolean applies(@Nonnull final Entity e, @Nonnull final String tokens) {
+			return tokens.contains("swing");
 		}
 	};
 

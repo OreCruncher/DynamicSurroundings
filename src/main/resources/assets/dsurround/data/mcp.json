@@ -1478,5 +1478,19 @@
 				"doorWood"
 			]
 		}
-	]
+	],
+	"entityEffects": {
+		"minecraft:wither_skeleton": "bow,swing",
+		"minecraft:villager": "bow,swing,footprint,breath,chat",
+		"minecraft:husk": "bow,swing,footprint",
+		"minecraft:zombie_villager": "bow,swing,footprint",
+		"minecraft:evocation_illager": "bow,swing,footprint,breath",
+		"minecraft:vindication_illager": "bow,swing,footprint,breath",
+		"minecraft:skeleton": "bow,swing,chat",
+		"minecraft:zombie": "bow,swing,footprint,chat",
+		"minecraft:zombie_pigman": "bow,swing,footprint",
+		"minecraft:witch": "footprint,breath,chat",
+		"minecraft:squid": "chat",
+		"minecraft:player": "bow,swing,footprint,breath,toolbar"
+	}
 }

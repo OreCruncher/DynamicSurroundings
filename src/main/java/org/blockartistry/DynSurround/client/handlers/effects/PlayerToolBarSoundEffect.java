@@ -145,8 +145,8 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
-		public boolean applies(@Nonnull final Entity e) {
-			return e instanceof EntityPlayer;
+		public boolean applies(@Nonnull final Entity e, @Nonnull final String tokens) {
+			return tokens.contains("toolbar");
 		}
 	};
 
