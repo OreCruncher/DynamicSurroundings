@@ -53,6 +53,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
@@ -180,8 +181,14 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 	}
 
 	private List<String> gatherEntityText(@Nonnull final Entity entity, @Nonnull final List<String> text) {
+		final ResourceLocation key = EntityList.getKey(entity);
+		final String keyName;
+		if(key != null)
+			keyName = key.toString();
+		else
+			keyName = "No ID Found";
 		text.add(TextFormatting.DARK_AQUA + entity.getName());
-		text.add(EntityList.getKey(entity).toString());
+		text.add(keyName);
 		text.add(entity.getClass().getName());
 		text.add(TextFormatting.GOLD + "Effects");
 		text.addAll(FxHandler.INSTANCE.getEffects(entity));
