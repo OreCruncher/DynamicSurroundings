@@ -33,8 +33,6 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
-import org.blockartistry.Presets.ModOptions;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -104,12 +102,14 @@ public class EffectRegistry extends Registry {
 				DSurround.log().debug("Forge reported entity %s but not found in it's own registry!", r.toString());
 			}
 		}
-		
-		if (ModOptions.enableDebugLogging) {
-			DSurround.log().info("Entity Effect Entries");
-			DSurround.log().info("=====================");
-			for (final Entry<Class<? extends Entity>, String> e : this.effects.entrySet())
-				DSurround.log().info("%s = %s", e.getKey().getName(), e.getValue());
+
+		DSurround.log().debug("Entity Effect Entries");
+		DSurround.log().debug("=====================");
+		for (final Entry<Class<? extends Entity>, String> e : this.effects.entrySet()) {
+			String keyName = EntityList.getEntityStringFromClass(e.getKey());
+			if (keyName == null)
+				keyName = "No ID Found";
+			DSurround.log().debug("%s = %s (%s)", keyName, e.getValue(), e.getKey().getName());
 		}
 
 	}

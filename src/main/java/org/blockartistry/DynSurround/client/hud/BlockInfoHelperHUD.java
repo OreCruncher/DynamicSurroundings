@@ -180,8 +180,11 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 	}
 
 	private List<String> gatherEntityText(@Nonnull final Entity entity, @Nonnull final List<String> text) {
+		String keyName = EntityList.getEntityString(entity);
+		if(keyName == null)
+			keyName = "No ID Found";
 		text.add(TextFormatting.DARK_AQUA + entity.getName());
-		text.add(EntityList.getEntityString(entity).toString());
+		text.add(keyName);
 		text.add(entity.getClass().getName());
 		text.add(TextFormatting.GOLD + "Effects");
 		text.addAll(FxHandler.INSTANCE.getEffects(entity));
