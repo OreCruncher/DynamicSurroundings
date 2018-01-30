@@ -61,8 +61,8 @@ public final class DimensionEffectData extends WorldSavedData {
 	private int dimensionId = 0;
 	private float intensity = 0.0F;
 	private float currentIntensity = 0.0F;
-	private float minIntensity = ModOptions.defaultMinRainStrength;
-	private float maxIntensity = ModOptions.defaultMaxRainStrength;
+	private float minIntensity = ModOptions.general.defaultMinRainStrength;
+	private float maxIntensity = ModOptions.general.defaultMaxRainStrength;
 	private int thunderTimer = 0;
 
 	private DimensionEffectData(final int dimension) {

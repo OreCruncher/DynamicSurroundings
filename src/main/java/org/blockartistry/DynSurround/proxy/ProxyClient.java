@@ -123,7 +123,7 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 
 		ClientCommandHandler.instance.registerCommand(new CommandCalc());
 
-		if (ModOptions.disableWaterSuspendParticle)
+		if (ModOptions.general.disableWaterSuspendParticle)
 			Minecraft.getMinecraft().effectRenderer.registerParticle(EnumParticleTypes.SUSPENDED.getParticleID(), null);
 
 		if (ModEnvironment.AmbientSounds.isLoaded())

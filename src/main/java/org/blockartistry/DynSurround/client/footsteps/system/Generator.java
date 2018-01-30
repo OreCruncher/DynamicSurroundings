@@ -126,11 +126,11 @@ public class Generator {
 			this.pedometer++;
 
 		// Player jump breath
-		if (this.didJump && ModOptions.enableJumpSound && this.VAR.PLAY_JUMP) {
+		if (this.didJump && ModOptions.sound.enableJumpSound && this.VAR.PLAY_JUMP) {
 			this.isolator.getAcoustics().playAcoustic(entity, AcousticsManager.JUMP, EventType.JUMP, null);
 		}
 
-		if (ModOptions.footstepsSoundFactor > 0)
+		if (ModOptions.sound.footstepsSoundFactor > 0)
 			entity.nextStepDistance = Integer.MAX_VALUE;
 		else if (entity.nextStepDistance == Integer.MAX_VALUE)
 			entity.nextStepDistance = 0;

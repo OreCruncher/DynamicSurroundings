@@ -117,7 +117,7 @@ public final class ExplosionHelper {
 		final float motionY = rand.nextFloat() * 6.0F + 6.0F;
 
 		final int choice = rand.nextInt(20);
-		if (choice < 3 && ModOptions.addMobParticles) {
+		if (choice < 3 && ModOptions.explosions.addMobParticles) {
 			final String mob = assets.getMob(rand);
 			if (StringUtils.isEmpty(mob))
 				return null;

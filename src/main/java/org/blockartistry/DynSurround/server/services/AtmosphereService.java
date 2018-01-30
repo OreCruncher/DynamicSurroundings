@@ -81,7 +81,7 @@ public final class AtmosphereService extends Service {
 	}
 
 	private boolean doVanillaRain(@Nonnull final World world) {
-		return ModOptions.doVanillaRain || ModEnvironment.Weather2.isLoaded();
+		return ModOptions.rain.doVanillaRain || ModEnvironment.Weather2.isLoaded();
 	}
 
 	private WeatherGenerator createGenerator(@Nonnull final World world) {

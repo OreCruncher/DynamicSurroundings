@@ -128,7 +128,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 			this.messages.put(entity.getEntityId(), ctx = new EntityBubbleContext());
 		}
 
-		final int expiry = EnvironState.getTickCounter() + (int) (ModOptions.speechBubbleDuration * 20F);
+		final int expiry = EnvironState.getTickCounter() + (int) (ModOptions.speechbubbles.speechBubbleDuration * 20F);
 		ctx.add(new SpeechBubbleData(message, expiry));
 		ctx.handleBubble(entity);
 	}
@@ -167,9 +167,9 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), event.entityId);
 		if (entity == null)
 			return;
-		else if ((entity instanceof EntityPlayer) && !ModOptions.enableSpeechBubbles)
+		else if ((entity instanceof EntityPlayer) && !ModOptions.speechbubbles.enableSpeechBubbles)
 			return;
-		else if (!ModOptions.enableEntityChat)
+		else if (!ModOptions.speechbubbles.enableEntityChat)
 			return;
 
 		if (event.translate)

@@ -66,7 +66,7 @@ public class SoundCullHandler extends EffectHandlerBase {
 				this.soundsToBlock.add(rs);
 			} else if (ClientRegistry.SOUND.isSoundCulled(rs)) {
 				DSurround.log().debug("Culling sound '%s'", rs);
-				this.soundCull.put(rs, -ModOptions.soundCullingThreshold);
+				this.soundCull.put(rs, -ModOptions.sound.soundCullingThreshold);
 			}
 		}
 	}
@@ -88,7 +88,7 @@ public class SoundCullHandler extends EffectHandlerBase {
 			return;
 		}
 
-		if (ModOptions.soundCullingThreshold <= 0)
+		if (ModOptions.sound.soundCullingThreshold <= 0)
 			return;
 
 		// Get the last time the sound was seen
@@ -97,7 +97,7 @@ public class SoundCullHandler extends EffectHandlerBase {
 			return;
 
 		final int currentTick = EnvironState.getTickCounter();
-		if ((currentTick - lastOccurance) < ModOptions.soundCullingThreshold) {
+		if ((currentTick - lastOccurance) < ModOptions.sound.soundCullingThreshold) {
 			event.setResultSound(null);
 		} else {
 			this.soundCull.put(resource, currentTick);

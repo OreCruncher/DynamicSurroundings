@@ -112,7 +112,7 @@ public class Presets {
 		ModOptions.load(config);
 		config.save();
 
-		logger.setDebug(ModOptions.enableDebugLogging);
+		logger.setDebug(ModOptions.logging.enableDebugLogging);
 
 		proxy.preInit(event);
 	}
@@ -152,7 +152,7 @@ public class Presets {
 	////////////////////////
 	@SubscribeEvent
 	public void playerLogin(final PlayerLoggedInEvent event) {
-		if (ModOptions.enableVersionChecking)
+		if (ModOptions.logging.enableVersionChecking)
 			new VersionChecker(Presets.MOD_ID, "msg.NewVersion.presets").playerLogin(event);
 	}
 

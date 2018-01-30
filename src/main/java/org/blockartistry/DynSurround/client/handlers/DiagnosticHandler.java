@@ -69,7 +69,7 @@ public class DiagnosticHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 		// Gather diagnostics if needed
-		if (Minecraft.getMinecraft().gameSettings.showDebugInfo && ModOptions.enableDebugLogging) {
+		if (Minecraft.getMinecraft().gameSettings.showDebugInfo && ModOptions.logging.enableDebugLogging) {
 			final DiagnosticEvent.Gather gather = new DiagnosticEvent.Gather(player.world, player);
 			MinecraftForge.EVENT_BUS.post(gather);
 			this.diagnostics = gather.output;
@@ -77,7 +77,7 @@ public class DiagnosticHandler extends EffectHandlerBase {
 			this.diagnostics = null;
 		}
 
-		if (ModOptions.showDebugDialog)
+		if (ModOptions.logging.showDebugDialog)
 			DiagnosticPanel.refresh();
 	}
 
@@ -86,7 +86,7 @@ public class DiagnosticHandler extends EffectHandlerBase {
 		this.diagnostics = null;
 		this.serverDataReport = null;
 
-		if (ModOptions.showDebugDialog)
+		if (ModOptions.logging.showDebugDialog)
 			DiagnosticPanel.create();
 	}
 
@@ -95,7 +95,7 @@ public class DiagnosticHandler extends EffectHandlerBase {
 		this.diagnostics = null;
 		this.serverDataReport = null;
 
-		if (ModOptions.showDebugDialog)
+		if (ModOptions.logging.showDebugDialog)
 			DiagnosticPanel.destroy();
 	}
 

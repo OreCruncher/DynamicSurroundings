@@ -215,7 +215,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 			final ISound sound = e.getSound();
 			if (sound != null && sound.getVolume() > 16) {
 				final BlockPos pos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
-				final ISound newSound = Sounds.THUNDER.createSound(pos).setVolume(ModOptions.thunderVolume);
+				final ISound newSound = Sounds.THUNDER.createSound(pos).setVolume(ModOptions.sound.thunderVolume);
 				e.setResultSound(newSound);
 			}
 		}

@@ -127,7 +127,7 @@ public class LightingEffectHUD extends GuiOverlay {
 
 		lights = new ArrayList<ILightProvider>();
 
-		if (ModOptions.enableAlbedoSupport && ModOptions.enablePlayerLighting) {
+		if (ModOptions.lighting.enableAlbedoSupport && ModOptions.lighting.enablePlayerLighting) {
 			final List<EntityPlayer> players = EnvironState.getWorld().getPlayers(EntityPlayer.class,
 					Predicates.alwaysTrue());
 			for (final EntityPlayer p : players) {

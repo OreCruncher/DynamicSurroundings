@@ -57,7 +57,7 @@ public final class DimensionRegistry extends Registry {
 
 	@Override
 	public void initComplete() {
-		if (ModOptions.enableDebugLogging) {
+		if (ModOptions.logging.enableDebugLogging) {
 			DSurround.log().info("*** DIMENSION REGISTRY (cache) ***");
 			for (final DimensionConfig reg : this.cache)
 				DSurround.log().info(reg.toString());

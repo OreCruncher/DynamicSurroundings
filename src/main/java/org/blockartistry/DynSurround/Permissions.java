@@ -33,14 +33,14 @@ public class Permissions {
 	}
 	
 	public boolean allowLightLevelHUD() {
-		return ModOptions.allowLightLevelHUD;
+		return ModOptions.features.allowLightLevelHUD;
 	}
 	
 	public boolean allowChunkBorderHUD() {
-		return ModOptions.allowChunkBorderHUD;
+		return ModOptions.features.allowChunkBorderHUD;
 	}
 
 	public boolean allowCompassAndClockHUD() {
-		return ModOptions.allowCompassClockHUD;
+		return ModOptions.features.allowCompassClockHUD;
 	}
 }

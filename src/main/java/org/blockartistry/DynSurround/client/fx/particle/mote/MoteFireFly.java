@@ -105,7 +105,7 @@ public class MoteFireFly extends MoteAnimatedBase implements ILightProvider {
 	@Override
 	@Nullable
 	public Light provideLight() {
-		if (ModOptions.enableAlbedoSupport && ModOptions.enableFireFlyLighting) {
+		if (ModOptions.lighting.enableAlbedoSupport && ModOptions.lighting.enableFireFlyLighting) {
 			final float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
 			final double x = lightedX(partialTicks);
 			final double y = lightedY(partialTicks);

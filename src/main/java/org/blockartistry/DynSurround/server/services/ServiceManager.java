@@ -114,7 +114,7 @@ public final class ServiceManager extends Service {
 	 */
 	@SubscribeEvent
 	public void tickEvent(@Nonnull final TickEvent.ServerTickEvent event) {
-		if (!ModOptions.reportServerStats || event.phase != Phase.END)
+		if (!ModOptions.logging.reportServerStats || event.phase != Phase.END)
 			return;
 
 		// Spam once a second

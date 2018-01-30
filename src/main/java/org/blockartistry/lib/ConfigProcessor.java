@@ -29,6 +29,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,25 +39,30 @@ import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public final class ConfigProcessor {
 
 	@Retention(RetentionPolicy.RUNTIME)
-	@Target({ ElementType.FIELD })
-	public static @interface Parameter {
-		String category();
-
-		String property();
-	}
-
-	@Retention(RetentionPolicy.RUNTIME)
-	@Target({ ElementType.FIELD })
-	public static @interface LangKey {
+	@Target({ ElementType.TYPE })
+	public static @interface Category {
 		String value();
 	}
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target({ ElementType.FIELD })
+	public static @interface Option {
+		String value();
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.TYPE, ElementType.FIELD })
+	public static @interface LangKey {
+		String value();
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.TYPE, ElementType.FIELD })
 	public static @interface Comment {
 		String value();
 	}
@@ -84,7 +90,7 @@ public final class ConfigProcessor {
 	}
 
 	@Retention(RetentionPolicy.RUNTIME)
-	@Target({ ElementType.FIELD })
+	@Target({ ElementType.TYPE, ElementType.FIELD })
 	public static @interface RestartRequired {
 		boolean world() default true;
 
@@ -103,11 +109,15 @@ public final class ConfigProcessor {
 
 	public static void process(@Nonnull final Configuration config, @Nonnull final Class<?> clazz,
 			@Nullable final Object parameters) {
+		process(config, null, clazz, parameters);
+	}
+
+	private static void process(@Nonnull final Configuration config, @Nullable final String category,
+			@Nonnull final Class<?> clazz, @Nullable final Object parameters) {
 		for (final Field field : clazz.getFields()) {
-			final Parameter annotation = field.getAnnotation(Parameter.class);
+			final Option annotation = field.getAnnotation(Option.class);
 			if (annotation != null) {
-				final String category = annotation.category();
-				final String property = annotation.property();
+				final String property = annotation.value();
 				final String language = field.getAnnotation(LangKey.class) != null
 						? field.getAnnotation(LangKey.class).value()
 						: null;
@@ -171,6 +181,55 @@ public final class ConfigProcessor {
 				} catch (final Throwable t) {
 					LibLog.log().error("Unable to parse configuration", t);
 				}
+			}
+		}
+
+		// Look for inner static classes with Category tags and recurse
+		for (final Class<?> c : clazz.getDeclaredClasses()) {
+			final Category annotation = c.getAnnotation(Category.class);
+			if (annotation != null) {
+				final String s = StringUtils.isEmpty(category) ? annotation.value()
+						: category + "." + annotation.value();
+
+				final LangKey lk = c.getAnnotation(LangKey.class);
+				if (lk != null)
+					config.setCategoryLanguageKey(s, lk.value());
+
+				final RestartRequired rr = c.getAnnotation(RestartRequired.class);
+				if (rr != null) {
+					config.setCategoryRequiresMcRestart(s, rr.server());
+					config.setCategoryRequiresWorldRestart(s, rr.world());
+				} else {
+					config.setCategoryRequiresMcRestart(s, false);
+					config.setCategoryRequiresWorldRestart(s, false);
+				}
+
+				try {
+					final Field sortOrder = ReflectionHelper.findField(c, "SORT");
+					if (sortOrder != null) {
+						@SuppressWarnings("unchecked")
+						final List<String> order = (List<String>) sortOrder.get(null);
+						if (order != null)
+							config.setCategoryPropertyOrder(s, order);
+					}
+				} catch (@Nonnull final Exception ex) {
+					;
+				}
+
+				try {
+					final Field path = ReflectionHelper.findField(c, "PATH");
+					if (path != null) {
+						path.set(null, s);
+					}
+				} catch (@Nonnull final Exception ex) {
+					;
+				}
+
+				final Comment com = c.getAnnotation(Comment.class);
+				if (com != null)
+					config.setCategoryComment(s, com.value());
+
+				process(config, s, c, parameters);
 			}
 		}
 	}

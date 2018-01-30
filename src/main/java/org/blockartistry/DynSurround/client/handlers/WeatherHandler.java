@@ -57,10 +57,10 @@ public class WeatherHandler extends EffectHandlerBase {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onThunderEvent(@Nonnull final ThunderEvent event) {
-		if (!ModOptions.allowBackgroundThunder)
+		if (!ModOptions.rain.allowBackgroundThunder)
 			return;
 
-		final BasicSound<?> thunder = Sounds.THUNDER.createSound(event.location).setVolume(ModOptions.thunderVolume);
+		final BasicSound<?> thunder = Sounds.THUNDER.createSound(event.location).setVolume(ModOptions.sound.thunderVolume);
 		SoundEffectHandler.INSTANCE.playSound(thunder);
 
 		if (event.doFlash)

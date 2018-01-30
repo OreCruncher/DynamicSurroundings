@@ -48,7 +48,7 @@ public class FootprintEventEffect extends EventEffect {
 
 	@SubscribeEvent
 	public void onEvent(@Nonnull final FootstepEvent.Display event) {
-		if (ModOptions.enableFootprints) {
+		if (ModOptions.player.enableFootprints) {
 			final Vec3d stepLoc = event.location;
 			final IParticleMote mote = ParticleCollections.addFootprint(EnvironState.getWorld(), stepLoc.x, stepLoc.y,
 					stepLoc.z, event.rotation, event.isRightFoot);

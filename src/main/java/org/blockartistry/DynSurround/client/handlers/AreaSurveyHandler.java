@@ -75,8 +75,8 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	private static float ceilingCoverageRatio = 0.0F;
 	private static boolean reallyInside = false;
 
-	protected final RandomBlockEffectScanner effects = new RandomBlockEffectScanner(ModOptions.specialEffectRange);
-	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(ModOptions.specialEffectRange);
+	protected final RandomBlockEffectScanner effects = new RandomBlockEffectScanner(ModOptions.general.specialEffectRange);
+	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(ModOptions.general.specialEffectRange);
 
 	static {
 

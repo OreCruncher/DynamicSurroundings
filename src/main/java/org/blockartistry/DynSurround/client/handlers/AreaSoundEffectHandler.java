@@ -83,7 +83,7 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		// * Option is disabled
 		// * It's not the appropriate tick interval
 		// * The chunk the player is in is not loaded
-		return !(ModOptions.enableBiomeSounds && (EnvironState.getTickCounter() % SCAN_INTERVAL) == 0
+		return !(ModOptions.sound.enableBiomeSounds && (EnvironState.getTickCounter() % SCAN_INTERVAL) == 0
 				&& EnvironState.getWorld().isBlockLoaded(EnvironState.getPlayerPosition()));
 	}
 
@@ -99,7 +99,7 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 
 		final List<SoundEffect> playerSounds = new ArrayList<SoundEffect>();
 		ClientRegistry.BIOME.PLAYER_INFO.findSoundMatches(playerSounds);
-		if (ModOptions.enableBattleMusic)
+		if (ModOptions.sound.enableBattleMusic)
 			ClientRegistry.BIOME.BATTLE_MUSIC_INFO.findSoundMatches(playerSounds);
 		if (EnvironState.inVillage())
 			ClientRegistry.BIOME.VILLAGE_INFO.findSoundMatches(playerSounds);

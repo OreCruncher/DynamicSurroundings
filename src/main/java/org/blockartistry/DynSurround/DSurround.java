@@ -141,8 +141,8 @@ public class DSurround {
 		ModOptions.load(config);
 		config.save();
 
-		logger.setDebug(ModOptions.enableDebugLogging);
-		logger.setTraceMask(ModOptions.debugFlagMask);
+		logger.setDebug(ModOptions.logging.enableDebugLogging);
+		logger.setTraceMask(ModOptions.logging.debugFlagMask);
 
 		proxy.preInit(event);
 	}
@@ -219,7 +219,7 @@ public class DSurround {
 
 	@SubscribeEvent
 	public void playerLogin(final PlayerLoggedInEvent event) {
-		if (ModOptions.enableVersionChecking)
+		if (ModOptions.logging.enableVersionChecking)
 			new VersionChecker(DSurround.MOD_ID, "msg.NewVersion.dsurround").playerLogin(event);
 	}
 

@@ -161,7 +161,7 @@ public final class RegistryManager {
 		}
 
 		// Load scripts specified in the configuration
-		final String[] configFiles = ModOptions.externalScriptFiles;
+		final String[] configFiles = ModOptions.general.externalScriptFiles;
 		for (final String file : configFiles) {
 			final ModConfigurationFile cfg = DataScripts.loadFromDirectory(file);
 			if (cfg != null) {

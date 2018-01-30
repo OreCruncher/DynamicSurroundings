@@ -30,10 +30,11 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.lib.ConfigProcessor.Category;
 import org.blockartistry.lib.ConfigProcessor.Comment;
 import org.blockartistry.lib.ConfigProcessor.DefaultValue;
 import org.blockartistry.lib.ConfigProcessor.LangKey;
-import org.blockartistry.lib.ConfigProcessor.Parameter;
+import org.blockartistry.lib.ConfigProcessor.Option;
 import org.blockartistry.lib.ConfigProcessor.RestartRequired;
 
 import net.minecraftforge.common.config.ConfigCategory;
@@ -45,34 +46,34 @@ public final class ModOptions {
 	public static final String CATEGORY_LOGGING_CONTROL = "logging";
 	public static final String CONFIG_ENABLE_DEBUG_LOGGING = "Enable Debug Logging";
 	public static final String CONFIG_ENABLE_ONLINE_VERSION_CHECK = "Enable Online Version Check";
-	private static final List<String> loggingSort = Arrays.asList(CONFIG_ENABLE_ONLINE_VERSION_CHECK,
-			CONFIG_ENABLE_DEBUG_LOGGING);
 
-	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_ENABLE_DEBUG_LOGGING)
-	@DefaultValue("false")
-	@LangKey("presets.cfg.logging.EnableDebug")
-	@Comment("Enables/disables debug logging of the mod")
-	@RestartRequired
-	public static boolean enableDebugLogging = false;
+	@Category(CATEGORY_LOGGING_CONTROL)
+	@LangKey("presets.cfg.logging.cat.Logging")
+	@Comment("Defines how Presets! logging will behave")
+	public static class logging {
 
-	@Parameter(category = CATEGORY_LOGGING_CONTROL, property = CONFIG_ENABLE_ONLINE_VERSION_CHECK)
-	@DefaultValue("true")
-	@LangKey("presets.cfg.logging.VersionCheck")
-	@Comment("Enables/disables display of version check information")
-	@RestartRequired
-	public static boolean enableVersionChecking = true;
+		public static final List<String> SORT = Arrays.asList(CONFIG_ENABLE_ONLINE_VERSION_CHECK,
+				CONFIG_ENABLE_DEBUG_LOGGING);
+
+		@Option(CONFIG_ENABLE_DEBUG_LOGGING)
+		@DefaultValue("false")
+		@LangKey("presets.cfg.logging.EnableDebug")
+		@Comment("Enables/disables debug logging of the mod")
+		@RestartRequired
+		public static boolean enableDebugLogging = false;
+
+		@Option(CONFIG_ENABLE_ONLINE_VERSION_CHECK)
+		@DefaultValue("true")
+		@LangKey("presets.cfg.logging.VersionCheck")
+		@Comment("Enables/disables display of version check information")
+		@RestartRequired
+		public static boolean enableVersionChecking = true;
+	}
 
 	private ModOptions() {
 	}
 
 	public static void load(final Configuration config) {
-
-		// CATEGORY: Logging
-		config.setCategoryRequiresMcRestart(CATEGORY_LOGGING_CONTROL, false);
-		config.setCategoryRequiresWorldRestart(CATEGORY_LOGGING_CONTROL, false);
-		config.setCategoryComment(CATEGORY_LOGGING_CONTROL, "Defines how Presets! logging will behave");
-		config.setCategoryPropertyOrder(CATEGORY_LOGGING_CONTROL, new ArrayList<String>(loggingSort));
-		config.setCategoryLanguageKey(CATEGORY_LOGGING_CONTROL, "presets.cfg.logging.cat.Logging");
 
 		// Iterate through the config list looking for properties without
 		// comments. These will be scrubbed.

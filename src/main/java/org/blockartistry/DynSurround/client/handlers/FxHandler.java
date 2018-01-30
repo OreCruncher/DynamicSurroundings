@@ -146,7 +146,7 @@ public class FxHandler extends EffectHandlerBase {
 		if (entity == null || !entity.getEntityWorld().isRemote)
 			return;
 
-		final double distanceThreshold = ModOptions.specialEffectRange * ModOptions.specialEffectRange;
+		final double distanceThreshold = ModOptions.general.specialEffectRange * ModOptions.general.specialEffectRange;
 		final boolean inRange = entity.getDistanceSqToEntity(EnvironState.getPlayer()) <= distanceThreshold;
 
 		EntityEffectHandler handler = this.handlers.get(entity.getEntityId());

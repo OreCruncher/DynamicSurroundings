@@ -271,7 +271,7 @@ public final class ItemRegistry extends Registry {
 			final Class<?> itemClass = stack.getItem().getClass();
 			final SoundEffect sound;
 			if (this.swordItems.contains(itemClass))
-				sound = ModOptions.swordEquipAsTool ? Sounds.TOOL_EQUIP : Sounds.SWORD_EQUIP;
+				sound = ModOptions.sound.swordEquipAsTool ? Sounds.TOOL_EQUIP : Sounds.SWORD_EQUIP;
 			else if (this.axeItems.contains(itemClass))
 				sound = Sounds.AXE_EQUIP;
 			else if (this.toolItems.contains(itemClass))

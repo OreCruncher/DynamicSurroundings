@@ -74,7 +74,7 @@ public class ParticleCollectionRipples extends ParticleCollection {
 	}
 
 	protected void bindTexture(@Nonnull final ResourceLocation resource) {
-		final ResourceLocation res = Style.getStyle(ModOptions.rainRippleStyle).getTexture();
+		final ResourceLocation res = Style.getStyle(ModOptions.rain.rainRippleStyle).getTexture();
 		super.bindTexture(res);
 	}
 

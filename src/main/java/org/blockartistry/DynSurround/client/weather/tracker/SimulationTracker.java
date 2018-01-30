@@ -86,12 +86,12 @@ public class SimulationTracker extends Tracker {
 
 	@Override
 	public boolean backgroundThunderPossible() {
-		if (!ModOptions.allowBackgroundThunder)
+		if (!ModOptions.rain.allowBackgroundThunder)
 			return false;
 
 		final int dimId = EnvironState.getDimensionId();
 		return dimId != -1 && dimId != 1 && this.isThundering()
-				&& this.getIntensityLevel() >= ModOptions.stormThunderThreshold;
+				&& this.getIntensityLevel() >= ModOptions.rain.stormThunderThreshold;
 	}
 
 	@Override
@@ -117,12 +117,12 @@ public class SimulationTracker extends Tracker {
 			this.random = new XorShiftRandom(generateSeed());
 
 			final float result;
-			final float delta = ModOptions.defaultMaxRainStrength - ModOptions.defaultMinRainStrength;
+			final float delta = ModOptions.general.defaultMaxRainStrength - ModOptions.general.defaultMinRainStrength;
 			if (delta <= 0.0F) {
-				result = ModOptions.defaultMinRainStrength;
+				result = ModOptions.general.defaultMinRainStrength;
 			} else {
 				final float mid = delta / 2.0F;
-				result = ModOptions.defaultMinRainStrength + (this.random.nextFloat() + this.random.nextFloat()) * mid;
+				result = ModOptions.general.defaultMinRainStrength + (this.random.nextFloat() + this.random.nextFloat()) * mid;
 			}
 
 			this.maxIntensityLevel = MathStuff.clamp(result, 0.01F, DimensionEffectData.MAX_INTENSITY);

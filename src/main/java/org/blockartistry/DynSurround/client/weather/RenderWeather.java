@@ -69,7 +69,7 @@ public final class RenderWeather extends IRenderHandler {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onWorldLoad(@Nonnull final WorldEvent.Load e) {
 
-		if (DSurround.proxy().effectiveSide() == Side.SERVER || !ModOptions.enableWeatherASM)
+		if (DSurround.proxy().effectiveSide() == Side.SERVER || !ModOptions.asm.enableWeatherASM)
 			return;
 
 		// Only want to hook if the provider doesn't have special
