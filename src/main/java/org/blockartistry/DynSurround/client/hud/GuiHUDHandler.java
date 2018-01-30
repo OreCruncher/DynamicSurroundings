@@ -47,7 +47,7 @@ public final class GuiHUDHandler {
 
 	private GuiHUDHandler() {
 		register(new PotionHUD());
-		register(new BlockInfoHelperHUD());
+		register(new InspectionHUD());
 
 		if (ModEnvironment.Albedo.isLoaded())
 			register(new LightingEffectHUD());

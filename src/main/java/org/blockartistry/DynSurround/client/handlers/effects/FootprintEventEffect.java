@@ -25,9 +25,11 @@ package org.blockartistry.DynSurround.client.handlers.effects;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.FootstepEvent;
 import org.blockartistry.DynSurround.client.fx.ParticleCollections;
+import org.blockartistry.DynSurround.client.fx.particle.mote.IParticleMote;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.effects.EventEffect;
 import org.blockartistry.lib.effects.IEventEffectLibraryState;
@@ -48,8 +50,10 @@ public class FootprintEventEffect extends EventEffect {
 	public void onEvent(@Nonnull final FootstepEvent.Display event) {
 		if (ModOptions.enableFootprints) {
 			final Vec3d stepLoc = event.location;
-			ParticleCollections.addFootprint(EnvironState.getWorld(), stepLoc.x, stepLoc.y, stepLoc.z,
-					event.rotation, event.isRightFoot);
+			final IParticleMote mote = ParticleCollections.addFootprint(EnvironState.getWorld(), stepLoc.x, stepLoc.y,
+					stepLoc.z, event.rotation, event.isRightFoot);
+			if (mote == null)
+				DSurround.log().debug("Unable to create footprint particle!");
 		}
 	}
 
