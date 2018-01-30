@@ -65,7 +65,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 @SideOnly(Side.CLIENT)
-public class BlockInfoHelperHUD extends GuiOverlay {
+public class InspectionHUD extends GuiOverlay {
 
 	private static final String TEXT_FOOTSTEP_ACOUSTICS = TextFormatting.DARK_PURPLE + "<Footstep Accoustics>";
 	private static final String TEXT_BLOCK_EFFECTS = TextFormatting.DARK_PURPLE + "<Block Effects>";
@@ -180,14 +180,18 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 	}
 
 	private List<String> gatherEntityText(@Nonnull final Entity entity, @Nonnull final List<String> text) {
-		String keyName = EntityList.getEntityString(entity);
-		if(keyName == null)
-			keyName = "No ID Found";
-		text.add(TextFormatting.DARK_AQUA + entity.getName());
-		text.add(keyName);
-		text.add(entity.getClass().getName());
-		text.add(TextFormatting.GOLD + "Effects");
-		text.addAll(FxHandler.INSTANCE.getEffects(entity));
+		try {
+			String keyName = EntityList.getEntityString(entity);
+			if (keyName == null)
+				keyName = "No ID Found";
+			text.add(TextFormatting.DARK_AQUA + entity.getName());
+			text.add(keyName);
+			text.add(entity.getClass().getName());
+			text.add(TextFormatting.GOLD + "Effects");
+			text.addAll(FxHandler.INSTANCE.getEffects(entity));
+		} catch (@Nonnull final Exception ex) {
+			text.add(TextFormatting.RED + "!! ERROR !!");
+		}
 		return text;
 	}
 
@@ -200,7 +204,7 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 
 	private final TextPanel textPanel;
 
-	public BlockInfoHelperHUD() {
+	public InspectionHUD() {
 		this.textPanel = new TextPanel();
 	}
 
@@ -212,20 +216,26 @@ public class BlockInfoHelperHUD extends GuiOverlay {
 			this.textPanel.resetText();
 
 			if (ModOptions.enableDebugLogging && isHolding()) {
-				final RayTraceResult current = Minecraft.getMinecraft().objectMouseOver;
 				final List<String> data = new ArrayList<String>();
-				if (current.entityHit != null) {
-					gatherEntityText(current.entityHit, data);
-				} else {
-					final BlockPos targetBlock = (current == null || current.getBlockPos() == null) ? BlockPos.ORIGIN
-							: current.getBlockPos();
-					final IBlockState state = WorldUtils.getBlockState(EnvironState.getWorld(), targetBlock);
+				final RayTraceResult current = Minecraft.getMinecraft().objectMouseOver;
 
-					if (!WorldUtils.isAirBlock(state)) {
-						final ItemStack stack = state != null ? state.getBlock().getPickBlock(state, current,
-								EnvironState.getWorld(), targetBlock, EnvironState.getPlayer()) : null;
+				if (current != null) {
+					if (current.entityHit != null) {
+						gatherEntityText(current.entityHit, data);
+					} else {
+						final BlockPos targetBlock = (current == null || current.getBlockPos() == null)
+								? BlockPos.ORIGIN
+								: current.getBlockPos();
+						final IBlockState state = WorldUtils.getBlockState(EnvironState.getWorld(), targetBlock);
 
-						gatherBlockText(stack, data, state, targetBlock);
+						if (!WorldUtils.isAirBlock(state)) {
+							final ItemStack stack = state != null
+									? state.getBlock().getPickBlock(state, current, EnvironState.getWorld(),
+											targetBlock, EnvironState.getPlayer())
+									: null;
+
+							gatherBlockText(stack, data, state, targetBlock);
+						}
 					}
 				}
 
