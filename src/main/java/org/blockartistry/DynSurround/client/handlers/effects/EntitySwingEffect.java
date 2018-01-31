@@ -35,6 +35,7 @@ import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
+import org.blockartistry.lib.math.RayTrace;
 
 import com.google.common.collect.ImmutableList;
 
@@ -83,7 +84,7 @@ public class EntitySwingEffect extends EntityEffect {
 				final SoundEffect soundEffect = ClientRegistry.ITEMS.getSwingSound(currentItem);
 				if (soundEffect != null) {
 					final float reach = Minecraft.getMinecraft().playerController.getBlockReachDistance();
-					final RayTraceResult whatImHitting = entity.rayTrace(reach, 1F);
+					final RayTraceResult whatImHitting = new RayTrace(entity).trace(reach);
 					if (whatImHitting.typeOfHit == Type.ENTITY || whatImHitting.typeOfHit == Type.MISS) {
 						final BasicSound<?> sound = this.getState().createSound(soundEffect, entity);
 						this.soundId = this.getState().playSound(sound);
