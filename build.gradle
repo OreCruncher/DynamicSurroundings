@@ -19,9 +19,9 @@ version= "${config.version.minecraft}-${config.version.mod.major}.${config.versi
 group= "${config.group}"
 archivesBaseName = "${config.archive}"
 
-sourceCompatibility = targetCompatibility = "1.7" // Need this here so eclipse task generates correctly.
+sourceCompatibility = targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
 compileJava {
-    sourceCompatibility = targetCompatibility = "1.7"
+    sourceCompatibility = targetCompatibility = "1.8"
 }
 
 minecraft {
