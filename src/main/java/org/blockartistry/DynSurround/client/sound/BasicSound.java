@@ -54,16 +54,12 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 
 	protected static final float ATTENUATION_OFFSET = 32F;
 
+	@FunctionalInterface
 	public static interface ISoundScale {
 		float getScale();
 	}
 
-	public static final ISoundScale DEFAULT_SCALE = new ISoundScale() {
-		@Override
-		public float getScale() {
-			return 1.0F;
-		}
-	};
+	public static final ISoundScale DEFAULT_SCALE = () -> { return 1.0F; };
 
 	public static class NBT {
 		public static final String SOUND_EVENT = "s";

@@ -39,11 +39,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class SpotSound extends BasicSound<SpotSound> {
 
 	private static final int SPOT_SOUND_RANGE = 8;
-	public static final ISoundScale BIOME_EFFECT = new ISoundScale() {
-		@Override
-		public float getScale() {
-			return ModOptions.sound.masterSoundScaleFactor;
-		}
+	public static final ISoundScale BIOME_EFFECT = () -> {
+		return ModOptions.sound.masterSoundScaleFactor;
 	};
 
 	public SpotSound() {
@@ -76,9 +73,9 @@ public class SpotSound extends BasicSound<SpotSound> {
 		this.repeatDelay = 0;
 
 		this.setPosition(player);
-		
+
 		// If it is not a player sound randomize the location around the player
-		if(sound.getCategory() != SoundCategory.PLAYERS) {
+		if (sound.getCategory() != SoundCategory.PLAYERS) {
 			this.xPosF += randomRange(SPOT_SOUND_RANGE);
 			this.yPosF += randomRange(SPOT_SOUND_RANGE);
 			this.zPosF += randomRange(SPOT_SOUND_RANGE);
