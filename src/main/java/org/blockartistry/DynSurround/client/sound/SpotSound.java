@@ -39,11 +39,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class SpotSound extends BasicSound<SpotSound> {
 
 	private static final int SPOT_SOUND_RANGE = 8;
-	public static final ISoundScale BIOME_EFFECT = new ISoundScale() {
-		@Override
-		public float getScale() {
-			return ModOptions.sound.masterSoundScaleFactor;
-		}
+	public static final ISoundScale BIOME_EFFECT = () -> {
+		return ModOptions.sound.masterSoundScaleFactor;
 	};
 
 	public SpotSound() {
