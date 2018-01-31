@@ -1,3 +1,35 @@
+###DynamicSurroundings-1.12.2-3.4.9.0
+**What's New**
+* Reworked the internal effect handling to move most of it 100% client side (craft sound requires server for sound routing):
+    * Footstep sounds and prints - These effects will play for other players without requiring server support.  As a bonus, Villagers, Illagers, Witches, and Zombies leave footprints and have the same footstep sounds.
+    * Item swing sound - As with footsteps/prints these will play when other players swing without the need of server support.  As a bonus all other living entities that are not animals can produce swing sounds if an appropriate item is being wielded.  (Check out Zombies with swords.)
+    * Bow use sound - same as item swing.  And as a bonus there is a sound effect when using a shield to block.  (Check out the skellies with their bows.)
+    * Entity chat - server side support is no longer required for it to work for you.  Note that with this change the timing and message will vary between players.  For those that do not know what this is this feature is turned off by default.  Try turning it on and visit Villagers. :)
+    * Player equip sounds for players nearby will be heard.  No server side support required.  Does not extend to other mobs.
+* Added a client side "weather simulator".  If using Dynamic Surroundings on a server that does not have the mod installed, the client will generate varying rain intensity and produce background thunder during thunder storms.  The logic will obey the settings in the configuration file.  As there is no persistence (i.e. saved state) the /ds commands will not work with the simulator.
+* Frosted breath effect extended to Illagers and Witches.
+* For pack developers there are two new acoustics, both a variation on "wood":
+    * "planks" - on a step there is a chance a floorsqueak can occur.  If you don't want this squeak use "wood".
+    * "log" - has a lower pitch than the "wood" acoustic.  Intended to give the feeling of weight.
+* For pack developers the inspection tool and behavior changed:
+    * If debug is set and you are holding a carrot on a stick viewing blocks will give DS information about the block.  You no longer need to be in creative mode or carry a stack of nether stars.
+    * Added Entity inspection so if you are looking at an entity it will list the various affects that DS is tracking on the Entity.
+
+**Fixes**
+* Improved OptiFine compatibility with Light Level HUD changes.
+* Multiplayer sound routing fixed - got busted along the way somewhere.
+* Footprints should show correctly on blocks like Soul Sand and BoP Mud.
+* Frost breath effect will scale appropriately for Villager children.
+* Fixed issue where footprint would not show on "primitive" blocks (one that has no predefined profile)
+* Fixed issue where sounds would play too low for "primitive" blocks
+
+**Changes**
+* Added a Preset! called "Reveal your inner Pony!".  This will configure the footprint feature for being a quadruped and have the hoof print style.
+* Floorsqueak and Jump sound effects are now a footstep acoustics.  Volume has been muted a bit.
+* Walking on a log will give a lower pitched sound than regular wood planks.
+* Addressed a pile of technical debt that accumulated.  These changes should not affect gameplay but keep an eye out for unusual things.
+
+
 ###DynamicSurroundings-1.12.2-3.4.8.5
 **What's New**
 * Two new water ripple textures to select courtesy of yahlirs4!  In addition to the classic lighter colored round ripple there is a darker round ripple as well as a square (for those that like the blockiness theme).  You can find the option to change the style under "Rain Options".
