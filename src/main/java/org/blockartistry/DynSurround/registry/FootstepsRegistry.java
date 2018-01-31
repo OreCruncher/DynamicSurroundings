@@ -27,6 +27,7 @@ package org.blockartistry.DynSurround.registry;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -52,7 +53,6 @@ import org.blockartistry.DynSurround.client.footsteps.util.ConfigProperty;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile.ForgeEntry;
 import org.blockartistry.DynSurround.util.BlockState;
-import org.blockartistry.DynSurround.util.BlockState.Consumer;
 import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.JsonUtils;
 import org.blockartistry.lib.MCHelper;
@@ -71,6 +71,7 @@ import net.minecraft.block.BlockOre;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockReed;
 import net.minecraft.block.BlockSapling;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.IResourcePack;
@@ -82,12 +83,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemBlockSpecial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 @SideOnly(Side.CLIENT)
 public final class FootstepsRegistry extends Registry {
+
+	private static final List<String> FOOTPRINT_SOUND_PROFILE = Arrays.asList("minecraft:block.sand.step",
+			"minecraft:block.gravel.step", "minecraft:block.snow.step");
 
 	// System
 	private ResourcePacks dealer = new ResourcePacks();
@@ -122,7 +128,7 @@ public final class FootstepsRegistry extends Registry {
 		// It's a hack - needs refactor
 		AcousticsManager.SWIM = null;
 		AcousticsManager.JUMP = null;
-		
+
 		this.getBlockMap().clear();
 		final List<IResourcePack> repo = this.dealer.findResourcePacks();
 
@@ -156,28 +162,48 @@ public final class FootstepsRegistry extends Registry {
 		AcousticsManager.SWIM = this.isolator.getAcoustics().compileAcoustics("_SWIM");
 		AcousticsManager.JUMP = this.isolator.getAcoustics().compileAcoustics("_JUMP");
 
-		// Traverse the IBlockState entries looking for states that do not
-		// have a configuration associated.
-		if (ModOptions.logging.enableDebugLogging) {
-			final ArrayList<String> missingAcoustics = new ArrayList<String>();
-			BlockState.forEach(new Consumer<IBlockState>() {
-				@Override
-				public void accept(final IBlockState t) {
-					if (!FootstepsRegistry.this.getBlockMap().hasAcoustics(t)) {
-						final String blockName = new BlockInfo(t).toString();
-						if (!missingAcoustics.contains(blockName))
-							missingAcoustics.add(blockName);
+		final ArrayList<String> missingAcoustics = new ArrayList<String>();
+		BlockState.forEach(state -> {
+			// Track missing acoustic for logging
+			if (!FootstepsRegistry.this.getBlockMap().hasAcoustics(state)) {
+				final String blockName = new BlockInfo(state).toString();
+				if (!missingAcoustics.contains(blockName))
+					missingAcoustics.add(blockName);
+			}
+
+			// See if we can identify states that could produce footprints based
+			// on the step sound they make.
+			final Material material = state.getMaterial();
+			if (material.blocksMovement() && !this.FOOTPRINT_MATERIAL.contains(material)
+					&& !this.FOOTPRINT_STATES.contains(state)) {
+				// No nothing about the block. Get the step sound for the block.
+				final SoundType sound = MCHelper.getSoundType(state);
+				if (sound != null) {
+					final SoundEvent event = sound.getStepSound();
+					if (event != null) {
+						final ResourceLocation resource = event.getSoundName();
+						if (resource != null) {
+							final String soundName = resource.toString();
+							if (FOOTPRINT_SOUND_PROFILE.contains(soundName)) {
+								this.FOOTPRINT_STATES.add(state);
+								DSurround.log().debug("Added blockstate [%s] to footprint list",
+										new BlockInfo(state).toString());
+							}
+						}
 					}
 				}
-			});
+			}
 
-			if (missingAcoustics.size() > 0) {
-				Collections.sort(missingAcoustics);
-				DSurround.log().info("MISSING ACOUSTIC ENTRIES");
-				DSurround.log().info("========================");
-				for (final String s : missingAcoustics) {
-					DSurround.log().info(s);
-				}
+		});
+
+		// Traverse the IBlockState entries looking for states that do not
+		// have a configuration associated.
+		if (ModOptions.logging.enableDebugLogging && missingAcoustics.size() > 0) {
+			Collections.sort(missingAcoustics);
+			DSurround.log().info("MISSING ACOUSTIC ENTRIES");
+			DSurround.log().info("========================");
+			for (final String s : missingAcoustics) {
+				DSurround.log().info(s);
 			}
 		}
 	}
