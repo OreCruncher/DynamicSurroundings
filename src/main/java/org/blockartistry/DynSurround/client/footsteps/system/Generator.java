@@ -354,11 +354,7 @@ public class Generator {
 	protected void playAssociation(@Nonnull final EntityLivingBase ply, @Nullable final Association assos,
 			@Nonnull final EventType eventType) {
 		if (assos != null && !assos.isNotEmitter()) {
-			if (assos.getNoAssociation()) {
-				this.isolator.getDefaultStepPlayer().playStep(ply, assos);
-			} else {
-				this.isolator.getAcoustics().playAcoustic(ply, assos, eventType);
-			}
+			this.isolator.getAcoustics().playAcoustic(ply, assos, eventType);
 		} else if (assos == null) {
 			DSurround.log().debug("No footstep association found for entity %s", ply.toString());
 		}

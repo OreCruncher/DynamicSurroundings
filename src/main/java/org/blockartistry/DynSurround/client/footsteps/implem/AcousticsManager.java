@@ -43,6 +43,7 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions.Option
 import org.blockartistry.DynSurround.client.footsteps.system.Association;
 import org.blockartistry.DynSurround.client.footsteps.system.Footprint;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
+import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.FootstepSound;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.TimeUtils;
@@ -91,7 +92,12 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	public void playAcoustic(@Nonnull final EntityLivingBase location, @Nonnull final Association acousticName,
 			@Nonnull final EventType event) {
-		playAcoustic(location, acousticName.getData(), event, null);
+
+		if (acousticName.getNoAssociation()) {
+			playStep(location, acousticName);
+		} else {
+			playAcoustic(location, acousticName.getData(), event, null);
+		}
 
 		// Delay processing footprints until the think phase
 		final Footprint print = acousticName.getPrint();
@@ -158,8 +164,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 					soundType = MCHelper.getSoundType(Blocks.SNOW_LAYER);
 				}
 
-				actuallyPlaySound(entity, soundType.getStepSound(), soundType.getVolume() * 0.15F,
-						soundType.getPitch());
+				actuallyPlaySound(entity, soundType.getStepSound(), soundType.getVolume(), soundType.getPitch(), true);
 			}
 		} catch (final Throwable t) {
 			DSurround.log().error("Unable to play step sound", t);
@@ -190,9 +195,16 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 	protected void actuallyPlaySound(@Nonnull final EntityLivingBase entity, @Nonnull final SoundEvent sound,
 			final float volume, final float pitch) {
+		this.actuallyPlaySound(entity, sound, volume, pitch, false);
+	}
+
+	protected void actuallyPlaySound(@Nonnull final EntityLivingBase entity, @Nonnull final SoundEvent sound,
+			final float volume, final float pitch, final boolean noScale) {
 
 		try {
 			final FootstepSound s = new FootstepSound(entity, sound).setVolume(volume).setPitch(pitch);
+			if (noScale)
+				s.setVolumeScale(BasicSound.DEFAULT_SCALE);
 			SoundEffectHandler.INSTANCE.playSound(s);
 		} catch (final Throwable t) {
 			DSurround.log().error("Unable to play sound", t);

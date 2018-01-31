@@ -38,11 +38,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class FootstepSound extends BasicSound<FootstepSound> {
 
-	public static final ISoundScale FOOTSTEP = new ISoundScale() {
-		@Override
-		public float getScale() {
-			return ModOptions.sound.footstepsSoundFactor;
-		}
+	public static final ISoundScale FOOTSTEP = () -> {
+		return ModOptions.sound.footstepsSoundFactor;
 	};
 
 	public FootstepSound(@Nonnull final Entity player, @Nonnull final SoundEvent event) {
