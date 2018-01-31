@@ -1487,6 +1487,7 @@
 		"minecraft:evocation_illager": "bow,swing,footprint,breath",
 		"minecraft:vindication_illager": "bow,swing,footprint,breath",
 		"minecraft:skeleton": "bow,swing,chat",
+		"minecraft:stray": "bow,swing",
 		"minecraft:zombie": "bow,swing,footprint,chat",
 		"minecraft:zombie_pigman": "bow,swing,footprint",
 		"minecraft:witch": "footprint,breath,chat",
