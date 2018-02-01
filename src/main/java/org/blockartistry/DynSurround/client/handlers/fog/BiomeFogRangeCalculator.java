@@ -89,8 +89,6 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 					distancePart = 1F - DUST_FOG_IMPACT * rainStr;
 				} else if (biome.getHasFog()) {
 					distancePart = biome.getFogDensity();
-				} else {
-					continue;
 				}
 
 				fpDistanceBiomeFog += distancePart;
