@@ -24,9 +24,15 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.client.handlers.scanners.AreaFogScanner;
+import org.blockartistry.DynSurround.client.handlers.fog.FogResult;
+import org.blockartistry.DynSurround.client.handlers.fog.HolisticFogColorCalculator;
+import org.blockartistry.DynSurround.client.handlers.fog.HolisticFogRangeCalculator;
+import org.blockartistry.DynSurround.client.handlers.fog.IFogColorCalculator;
+import org.blockartistry.DynSurround.client.handlers.fog.IFogRangeCalculator;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.lib.Color;
 
@@ -45,8 +51,6 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class FogEffectHandler extends EffectHandlerBase {
 
-	private AreaFogScanner scanner = new AreaFogScanner();
-
 	public FogEffectHandler() {
 		super("FogEffectHandler");
 	}
@@ -57,10 +61,12 @@ public class FogEffectHandler extends EffectHandlerBase {
 	}
 
 	@Override
-	public void process(final EntityPlayer player) {
-		if (doFog())
-			this.scanner.update();
+	public void process(@Nonnull final EntityPlayer player) {
+
 	}
+
+	protected final IFogColorCalculator fogColor = new HolisticFogColorCalculator();
+	protected final IFogRangeCalculator fogRange = new HolisticFogRangeCalculator();
 
 	/*
 	 * Hook the fog color event so we can tell the renderer what color the fog
@@ -69,13 +75,13 @@ public class FogEffectHandler extends EffectHandlerBase {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void fogColorEvent(final EntityViewRenderEvent.FogColors event) {
 		if (doFog()) {
+
 			final IBlockState block = ActiveRenderInfo.getBlockStateAtEntityViewpoint(event.getEntity().worldObj,
 					event.getEntity(), (float) event.getRenderPartialTicks());
 			if (block.getMaterial() == Material.LAVA || block.getMaterial() == Material.WATER)
 				return;
 
-			final Color color = this.scanner.getFogColor(EnvironState.getWorld(),
-					(float) event.getRenderPartialTicks());
+			final Color color = this.fogColor.calculate(event);
 			if (color != null) {
 				event.setRed(color.red);
 				event.setGreen(color.green);
@@ -94,13 +100,10 @@ public class FogEffectHandler extends EffectHandlerBase {
 		if (!doFog() || event.getResult() != Result.DEFAULT)
 			return;
 
-		final float planeDistance = this.scanner.getPlaneDistance(event.getFarPlaneDistance());
-		if (event.getFogMode() < 0) {
-			GlStateManager.setFogStart(0F);
-			GlStateManager.setFogEnd(planeDistance);
-		} else {
-			GlStateManager.setFogStart(planeDistance * this.scanner.getPlaneDistanceScale());
-			GlStateManager.setFogEnd(planeDistance);
+		final FogResult result = this.fogRange.calculate(event);
+		if (result != null) {
+			GlStateManager.setFogStart(result.getStart());
+			GlStateManager.setFogEnd(result.getEnd());
 		}
 
 		event.setResult(Result.ALLOW);
@@ -108,9 +111,10 @@ public class FogEffectHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void diagnostics(final DiagnosticEvent.Gather event) {
-		if (doFog())
-			event.output.add(this.scanner.toString());
-		else
+		if (doFog()) {
+			event.output.add("Fog Range: " + this.fogRange.toString());
+			event.output.add("Fog Color: " + this.fogColor.toString());
+		} else
 			event.output.add("FOG: IGNORED");
 	}
 
