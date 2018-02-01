@@ -211,6 +211,14 @@ public class Color {
 		return this;
 	}
 
+	@Nonnull
+	public Color add(final float red, final float green, final float blue) {
+		this.red += red;
+		this.green += green;
+		this.blue += blue;
+		return this;
+	}
+
 	private static float blend(final float c1, final float c2, final float factor) {
 		return (float) Math.sqrt((1.0F - factor) * c1 * c1 + factor * c2 * c2);
 	}

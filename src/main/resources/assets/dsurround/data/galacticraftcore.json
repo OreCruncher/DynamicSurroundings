@@ -21,7 +21,7 @@
 			"dust": true,
 			"dustColor": "131,100,89",
 			"fog": true,
-			"fogDensity": 0.3,
+			"fogDensity": 0.2,
 			"fogColor": "217,173,112",
 			"sounds": [
 				{
@@ -45,7 +45,7 @@
 			"dust": true,
 			"dustColor": "89,87,87",
 			"fog": true,
-			"fogDensity": 0.6,
+			"fogDensity": 0.4,
 			"fogColor": "255,211,92",
 			"sounds": [
 				{
