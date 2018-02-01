@@ -1839,6 +1839,15 @@
 			"dsurround:ambient/items/bow_pull5"
 		]
 	},
+	"bow.loose": {
+		"category": "player",
+		"sounds": [
+			"dsurround:ambient/items/bow_loose1",
+			"dsurround:ambient/items/bow_loose2",
+			"dsurround:ambient/items/bow_loose3",
+			"dsurround:ambient/items/bow_loose4"
+		]
+	},
 	"sword.equip": {
 		"category": "player",
 		"sounds": [
