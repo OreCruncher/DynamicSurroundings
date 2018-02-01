@@ -58,7 +58,9 @@ public enum ModEnvironment {
 	//
 	AmbientSounds("ambientsounds"),
 	//
-	SoundPhysics("soundphysics");
+	SoundPhysics("soundphysics"),
+	//
+	BiomesOPlenty("biomesoplenty");
 	
 	protected final String modId;
 	protected boolean isLoaded;
