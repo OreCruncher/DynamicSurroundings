@@ -72,9 +72,9 @@ public final class ModOptions {
 	@Comment("Controls ASM transforms Dynamic Surroundings performs at startup")
 	@RestartRequired(server = true, world = true)
 	public static class asm {
-		
+
 		public static String PATH = null;
-		
+
 		@Option(CONFIG_ENABLE_SOUND_CACHING)
 		@DefaultValue("true")
 		@LangKey("cfg.asm.EnableSoundCache")
@@ -277,13 +277,12 @@ public final class ModOptions {
 	}
 
 	public static final String CATEGORY_FOG = "fog";
+	public static final String CONFIG_ENABLE_FOG_PROCESSING = "Enable Fog Processing";
+	public static final String CONFIG_ENABLE_MORNING_FOG = "Morning Fog";
+	public static final String CONFIG_ENABLE_WEATHER_FOG = "Weather Fog";
 	public static final String CONFIG_ALLOW_DESERT_FOG = "Desert Fog";
-	public static final String CONFIG_DESERT_FOG_FACTOR = "Desert Fog Factor";
 	public static final String CONFIG_ENABLE_ELEVATION_HAZE = "Elevation Haze";
-	public static final String CONFIG_ELEVATION_HAZE_FACTOR = "Elevation Haze Factor";
-	public static final String CONFIG_ELEVATION_HAZE_AS_BAND = "Elevation Haze as Band";
 	public static final String CONFIG_ENABLE_BIOME_FOG = "Biomes Fog";
-	public static final String CONFIG_BIOME_FOG_FACTOR = "Biomes Fog Factor";
 
 	@Category(CATEGORY_FOG)
 	@LangKey("cfg.fog.cat.Fog")
@@ -291,9 +290,27 @@ public final class ModOptions {
 	public static class fog {
 
 		public static String PATH = null;
-		public static final List<String> SORT = Arrays.asList(CONFIG_ALLOW_DESERT_FOG, CONFIG_DESERT_FOG_FACTOR,
-				CONFIG_ENABLE_BIOME_FOG, CONFIG_BIOME_FOG_FACTOR, CONFIG_ENABLE_ELEVATION_HAZE,
-				CONFIG_ELEVATION_HAZE_FACTOR, CONFIG_ELEVATION_HAZE_AS_BAND);
+		public static final List<String> SORT = Arrays.asList(CONFIG_ENABLE_FOG_PROCESSING, CONFIG_ENABLE_MORNING_FOG,
+				CONFIG_ENABLE_WEATHER_FOG, CONFIG_ALLOW_DESERT_FOG, CONFIG_ENABLE_BIOME_FOG,
+				CONFIG_ENABLE_ELEVATION_HAZE);
+
+		@Option(CONFIG_ENABLE_FOG_PROCESSING)
+		@DefaultValue("true")
+		@LangKey("cfg.fog.Enable")
+		@Comment("Enable/disable fog processing")
+		public static boolean enableFogProcessing = true;
+
+		@Option(CONFIG_ENABLE_MORNING_FOG)
+		@DefaultValue("true")
+		@LangKey("cfg.fog.EnableMorning")
+		@Comment("Show morning fog that eventually burns off")
+		public static boolean enableMorningFog = true;
+
+		@Option(CONFIG_ENABLE_WEATHER_FOG)
+		@DefaultValue("true")
+		@LangKey("cfg.fog.EnableWeather")
+		@Comment("Increase fog based on the strength of rain")
+		public static boolean enableWeatherFog = true;
 
 		@Option(CONFIG_ALLOW_DESERT_FOG)
 		@DefaultValue("true")
@@ -301,44 +318,17 @@ public final class ModOptions {
 		@Comment("Enable/disable desert fog when raining")
 		public static boolean allowDesertFog = true;
 
-		@Option(CONFIG_DESERT_FOG_FACTOR)
-		@DefaultValue("1.0")
-		@LangKey("cfg.fog.DesertFogFactor")
-		@RangeFloat(min = 0.0F, max = 1.0F)
-		@Comment("Visibility factor to apply to desert fog (higher is thicker)")
-		public static float desertFogFactor = 1.0F;
-
 		@Option(CONFIG_ENABLE_ELEVATION_HAZE)
 		@DefaultValue("true")
 		@LangKey("cfg.fog.ElevationHaze")
 		@Comment("Higher the player elevation the more haze that is experienced")
 		public static boolean enableElevationHaze = true;
 
-		@Option(CONFIG_ELEVATION_HAZE_FACTOR)
-		@DefaultValue("1.0")
-		@LangKey("cfg.fog.ElevationHazFactor")
-		@RangeFloat(min = 0.0F, max = 1.4F)
-		@Comment("Visibility factor to apply to elevation haze (higher is thicker)")
-		public static float elevationHazeFactor = 1.0F;
-
-		@Option(CONFIG_ELEVATION_HAZE_AS_BAND)
-		@DefaultValue("true")
-		@LangKey("cfg.fog.ElevationHazeBand")
-		@Comment("Calculate haze as a band at cloud height rather than gradient to build height")
-		public static boolean elevationHazeAsBand = true;
-
 		@Option(CONFIG_ENABLE_BIOME_FOG)
 		@DefaultValue("true")
 		@LangKey("cfg.fog.BiomeFog")
 		@Comment("Enable biome specific fog density and color")
 		public static boolean enableBiomeFog = true;
-
-		@Option(CONFIG_BIOME_FOG_FACTOR)
-		@DefaultValue("1.0")
-		@LangKey("cfg.fog.BiomeFogFactor")
-		@RangeFloat(min = 0.0F, max = 1.9F)
-		@Comment("Visibility factor to apply to biome fog (higher is thicker)")
-		public static float biomeFogFactor = 1.0F;
 	}
 
 	public static final String CATEGORY_GENERAL = "general";
@@ -474,14 +464,14 @@ public final class ModOptions {
 	@LangKey("cfg.block.cat.Blocks")
 	@Comment("Options for defining block specific sounds/effects")
 	public static class block {
-		
+
 		public static String PATH = null;
 
 		@Category(CATEGORY_BLOCK_EFFECTS)
 		@LangKey("cfg.block.effects.cat.BlockEffects")
 		@Comment("Options for disabling various block effects")
 		public static class effects {
-		
+
 			public static String PATH = null;
 
 			@Option(CONFIG_BLOCK_EFFECT_STEAM)
@@ -1046,7 +1036,7 @@ public final class ModOptions {
 
 		@Category(CONFIG_COMMANDS_DS)
 		public static class ds {
-		
+
 			public static String PATH = null;
 
 			@Option(CONFIG_COMMAND_NAME)
@@ -1118,7 +1108,7 @@ public final class ModOptions {
 	@LangKey("cfg.profiles.cat.Profiles")
 	@Comment("Enable/disable application of built in profiles")
 	public static class profiles {
-		
+
 		public static String PATH = null;
 		// Dynamically created during initialization
 	}
