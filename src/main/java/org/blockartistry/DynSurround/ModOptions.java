@@ -68,7 +68,7 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_RESET_WEATHER_ON_SLEEP = "Enable Weather Reset on Sleep Control";
 
 	@Category(CATEGORY_ASM)
-	@LangKey("cfg.asm.cat.ASM")
+	@LangKey("dsurround.cfg.asm.cat.ASM")
 	@Comment("Controls ASM transforms Dynamic Surroundings performs at startup")
 	@RestartRequired(server = true, world = true)
 	public static class asm {
@@ -77,21 +77,21 @@ public final class ModOptions {
 
 		@Option(CONFIG_ENABLE_SOUND_CACHING)
 		@DefaultValue("true")
-		@LangKey("cfg.asm.EnableSoundCache")
+		@LangKey("dsurround.cfg.asm.EnableSoundCache")
 		@Comment("Enable ASM transformations to permit sound caching")
 		@RestartRequired(server = true)
 		public static boolean enableSoundCache = true;
 
 		@Option(CONFIG_ENABLE_WEATHER)
 		@DefaultValue("true")
-		@LangKey("cfg.asm.EnableWeather")
+		@LangKey("dsurround.cfg.asm.EnableWeather")
 		@Comment("Enable ASM transformations to permit weather (rain, snow, splash, dust storms, auroras)")
 		@RestartRequired(server = true)
 		public static boolean enableWeatherASM = true;
 
 		@Option(CONFIG_ENABLE_RESET_WEATHER_ON_SLEEP)
 		@DefaultValue("true")
-		@LangKey("cfg.asm.EnableSleepReset")
+		@LangKey("dsurround.cfg.asm.EnableSleepReset")
 		@Comment("Enable ASM transformations to allow control of player sleep impact on weather reset")
 		@RestartRequired(server = true)
 		public static boolean enableResetOnSleepASM = true;
@@ -105,7 +105,7 @@ public final class ModOptions {
 	public static final String CONFIG_DEBUG_FLAG_MASK = "Debug Flag Mask";
 
 	@Category(CATEGORY_LOGGING_CONTROL)
-	@LangKey("cfg.logging.cat.Logging")
+	@LangKey("dsurround.cfg.logging.cat.Logging")
 	@Comment("Defines how Dynamic Surroundings logging will behave")
 	public static class logging {
 
@@ -116,34 +116,34 @@ public final class ModOptions {
 
 		@Option(CONFIG_ENABLE_DEBUG_LOGGING)
 		@DefaultValue("false")
-		@LangKey("cfg.logging.EnableDebug")
+		@LangKey("dsurround.cfg.logging.EnableDebug")
 		@Comment("Enables/disables debug logging of the mod")
 		@RestartRequired
 		public static boolean enableDebugLogging = false;
 
 		@Option(CONFIG_ENABLE_ONLINE_VERSION_CHECK)
 		@DefaultValue("true")
-		@LangKey("cfg.logging.VersionCheck")
+		@LangKey("dsurround.cfg.logging.VersionCheck")
 		@Comment("Enables/disables display of version check information")
 		@RestartRequired
 		public static boolean enableVersionChecking = true;
 
 		@Option(CONFIG_ENABLE_DEBUG_DIALOG)
 		@DefaultValue("false")
-		@LangKey("cfg.logging.DebugDialog")
+		@LangKey("dsurround.cfg.logging.DebugDialog")
 		@Comment("Enables/disables display of debug dialog")
 		@RestartRequired
 		public static boolean showDebugDialog = false;
 
 		@Option(CONFIG_REPORT_SERVER_STATS)
 		@DefaultValue("false")
-		@LangKey("cfg.logging.ServerStats")
+		@LangKey("dsurround.cfg.logging.ServerStats")
 		@Comment("Enables/disables reporting of server stats")
 		public static boolean reportServerStats = false;
 
 		@Option(CONFIG_DEBUG_FLAG_MASK)
 		@DefaultValue("0")
-		@LangKey("cfg.logging.FlagMask")
+		@LangKey("dsurround.cfg.logging.FlagMask")
 		@Comment("Bitmask for toggling various debug traces")
 		@Hidden
 		public static int debugFlagMask = 0;
@@ -167,7 +167,7 @@ public final class ModOptions {
 	public static final String CONFIG_RAIN_RIPPLE_STYLE = "Style of rain water ripple";
 
 	@Category(CATEGORY_RAIN)
-	@LangKey("cfg.rain.cat.Rain")
+	@LangKey("dsurround.cfg.rain.cat.Rain")
 	@Comment("Options that control rain effects in the client")
 	public static class rain {
 
@@ -181,96 +181,96 @@ public final class ModOptions {
 
 		@Option(CONFIG_VANILLA_RAIN)
 		@DefaultValue("false")
-		@LangKey("cfg.rain.VanillaRain")
+		@LangKey("dsurround.cfg.rain.VanillaRain")
 		@Comment("Let Vanilla handle rain intensity and time windows")
 		@RestartRequired
 		public static boolean doVanillaRain = false;
 
 		@Option(CONFIG_RAIN_RIPPLE_STYLE)
 		@DefaultValue("0")
-		@LangKey("cfg.rain.RippleStyle")
+		@LangKey("dsurround.cfg.rain.RippleStyle")
 		@RangeInt(min = 0, max = 2)
 		@Comment("0: original round, 1: darker round, 2: square")
 		public static int rainRippleStyle = 0;
 
 		@Option(CONFIG_RAIN_PARTICLE_BASE)
 		@DefaultValue("100")
-		@LangKey("cfg.rain.ParticleCount")
+		@LangKey("dsurround.cfg.rain.ParticleCount")
 		@RangeInt(min = 0, max = 500)
 		@Comment("Base count of rain splash particles to generate per tick")
 		public static int particleCountBase = 100;
 
 		@Option(CONFIG_RESET_RAIN_ON_SLEEP)
 		@DefaultValue("true")
-		@LangKey("cfg.rain.ResetOnSleep")
+		@LangKey("dsurround.cfg.rain.ResetOnSleep")
 		@Comment("Reset rain/thunder when all players sleep")
 		public static boolean resetRainOnSleep = true;
 
 		@Option(CONFIG_RAIN_ACTIVE_TIME_CONST)
 		@DefaultValue("12000")
-		@LangKey("cfg.rain.ActiveTimeConst")
+		@LangKey("dsurround.cfg.rain.ActiveTimeConst")
 		@RangeInt(min = 0)
 		@Comment("Base time rain is active, in ticks")
 		public static int rainActiveTimeConst = 12000;
 
 		@Option(CONFIG_RAIN_ACTIVE_TIME_VARIABLE)
 		@DefaultValue("12000")
-		@LangKey("cfg.rain.ActiveTimeVariable")
+		@LangKey("dsurround.cfg.rain.ActiveTimeVariable")
 		@RangeInt(min = 0)
 		@Comment("Variable amount of ticks rain is active, added to the base")
 		public static int rainActiveTimeVariable = 12000;
 
 		@Option(CONFIG_RAIN_INACTIVE_TIME_CONST)
 		@DefaultValue("12000")
-		@LangKey("cfg.rain.InactiveTimeConst")
+		@LangKey("dsurround.cfg.rain.InactiveTimeConst")
 		@RangeInt(min = 0)
 		@Comment("Base time rain is inactive, in ticks")
 		public static int rainInactiveTimeConst = 12000;
 
 		@Option(CONFIG_RAIN_INACTIVE_TIME_VARIABLE)
 		@DefaultValue("168000")
-		@LangKey("cfg.rain.InactiveTimeVariable")
+		@LangKey("dsurround.cfg.rain.InactiveTimeVariable")
 		@RangeInt(min = 0)
 		@Comment("Variable amount of ticks rain is inactive, added to the base")
 		public static int rainInactiveTimeVariable = 168000;
 
 		@Option(CONFIG_STORM_ACTIVE_TIME_CONST)
 		@DefaultValue("3600")
-		@LangKey("cfg.rain.StormActiveTimeConst")
+		@LangKey("dsurround.cfg.rain.StormActiveTimeConst")
 		@RangeInt(min = 0)
 		@Comment("Base time storm (thunder) is active, in ticks")
 		public static int stormActiveTimeConst = 3600;
 
 		@Option(CONFIG_STORM_ACTIVE_TIME_VARIABLE)
 		@DefaultValue("12000")
-		@LangKey("cfg.rain.StormActiveTimeVariable")
+		@LangKey("dsurround.cfg.rain.StormActiveTimeVariable")
 		@RangeInt(min = 0)
 		@Comment("Variable amount of ticks storm (thunder) is active, added to the base")
 		public static int stormActiveTimeVariable = 12000;
 
 		@Option(CONFIG_STORM_INACTIVE_TIME_CONST)
 		@DefaultValue("12000")
-		@LangKey("cfg.rain.StormInactiveTimeConst")
+		@LangKey("dsurround.cfg.rain.StormInactiveTimeConst")
 		@RangeInt(min = 0)
 		@Comment("Base time storm (thunder) is inactive, in ticks")
 		public static int stormInactiveTimeConst = 12000;
 
 		@Option(CONFIG_STORM_INACTIVE_TIME_VARIABLE)
 		@DefaultValue("168000")
-		@LangKey("cfg.rain.StormInactiveTimeVariable")
+		@LangKey("dsurround.cfg.rain.StormInactiveTimeVariable")
 		@RangeInt(min = 0)
 		@Comment("Variable amount of ticks storm (thunder) is inactive, added to the base")
 		public static int stormInactiveTimeVariable = 12000;
 
 		@Option(CONFIG_ENABLE_BACKGROUND_THUNDER)
 		@DefaultValue("true")
-		@LangKey("cfg.rain.EnableThunder")
+		@LangKey("dsurround.cfg.rain.EnableThunder")
 		@Comment("Allow background thunder when storming")
 		public static boolean allowBackgroundThunder = true;
 
 		@Option(CONFIG_THUNDER_THRESHOLD)
 		@DefaultValue("0.75")
-		@LangKey("cfg.rain.ThunderThreshold")
+		@LangKey("dsurround.cfg.rain.ThunderThreshold")
 		@RangeFloat(min = 0)
 		@Comment("Minimum rain intensity level for background thunder to occur")
 		public static float stormThunderThreshold = 0.75F;
@@ -285,7 +285,7 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_BIOME_FOG = "Biomes Fog";
 
 	@Category(CATEGORY_FOG)
-	@LangKey("cfg.fog.cat.Fog")
+	@LangKey("dsurround.cfg.fog.cat.Fog")
 	@Comment("Options that control the various fog effects in the client")
 	public static class fog {
 
@@ -296,37 +296,37 @@ public final class ModOptions {
 
 		@Option(CONFIG_ENABLE_FOG_PROCESSING)
 		@DefaultValue("true")
-		@LangKey("cfg.fog.Enable")
+		@LangKey("dsurround.cfg.fog.Enable")
 		@Comment("Enable/disable fog processing")
 		public static boolean enableFogProcessing = true;
 
 		@Option(CONFIG_ENABLE_MORNING_FOG)
 		@DefaultValue("true")
-		@LangKey("cfg.fog.EnableMorning")
+		@LangKey("dsurround.cfg.fog.EnableMorning")
 		@Comment("Show morning fog that eventually burns off")
 		public static boolean enableMorningFog = true;
 
 		@Option(CONFIG_ENABLE_WEATHER_FOG)
 		@DefaultValue("true")
-		@LangKey("cfg.fog.EnableWeather")
+		@LangKey("dsurround.cfg.fog.EnableWeather")
 		@Comment("Increase fog based on the strength of rain")
 		public static boolean enableWeatherFog = true;
 
 		@Option(CONFIG_ALLOW_DESERT_FOG)
 		@DefaultValue("true")
-		@LangKey("cfg.fog.DesertFog")
+		@LangKey("dsurround.cfg.fog.DesertFog")
 		@Comment("Enable/disable desert fog when raining")
 		public static boolean allowDesertFog = true;
 
 		@Option(CONFIG_ENABLE_ELEVATION_HAZE)
 		@DefaultValue("true")
-		@LangKey("cfg.fog.ElevationHaze")
+		@LangKey("dsurround.cfg.fog.ElevationHaze")
 		@Comment("Higher the player elevation the more haze that is experienced")
 		public static boolean enableElevationHaze = true;
 
 		@Option(CONFIG_ENABLE_BIOME_FOG)
 		@DefaultValue("true")
-		@LangKey("cfg.fog.BiomeFog")
+		@LangKey("dsurround.cfg.fog.BiomeFog")
 		@Comment("Enable biome specific fog density and color")
 		public static boolean enableBiomeFog = true;
 	}
@@ -341,7 +341,7 @@ public final class ModOptions {
 	public static final String CONFIG_HIDE_CHAT_NOTICES = "Hide Chat Notices";
 
 	@Category(CATEGORY_GENERAL)
-	@LangKey("cfg.general.cat.General")
+	@LangKey("dsurround.cfg.general.cat.General")
 	@Comment("Miscellaneous settings")
 	public static class general {
 
@@ -352,47 +352,47 @@ public final class ModOptions {
 
 		@Option(CONFIG_HIDE_CHAT_NOTICES)
 		@DefaultValue("false")
-		@LangKey("cfg.general.HideChat")
+		@LangKey("dsurround.cfg.general.HideChat")
 		@Comment("Toggles display of Dynamic Surroundings chat notices")
 		public static boolean hideChatNotices = false;
 
 		@Option(CONFIG_DISABLE_SUSPEND)
 		@DefaultValue("false")
-		@LangKey("cfg.general.Suspend")
+		@LangKey("dsurround.cfg.general.Suspend")
 		@Comment("Enable/disable water depth particle effect")
 		@RestartRequired(server = true)
 		public static boolean disableWaterSuspendParticle = false;
 
 		@Option(CONFIG_MIN_RAIN_STRENGTH)
 		@DefaultValue("0.0")
-		@LangKey("cfg.general.MinRainStrength")
+		@LangKey("dsurround.cfg.general.MinRainStrength")
 		@RangeFloat(min = 0.0F, max = 1.0F)
 		@Comment("Default minimum rain strength for a dimension")
 		public static float defaultMinRainStrength = 0.0F;
 
 		@Option(CONFIG_MAX_RAIN_STRENGTH)
 		@DefaultValue("1.0")
-		@LangKey("cfg.general.MaxRainStrength")
+		@LangKey("dsurround.cfg.general.MaxRainStrength")
 		@RangeFloat(min = 0.0F, max = 1.0F)
 		@Comment("Default maximum rain strength for a dimension")
 		public static float defaultMaxRainStrength = 1.0F;
 
 		@Option(CONFIG_FX_RANGE)
 		@DefaultValue("24")
-		@LangKey("cfg.general.FXRange")
+		@LangKey("dsurround.cfg.general.FXRange")
 		@RangeInt(min = 16, max = 64)
 		@Comment("Block radius/range around player for special effect application")
 		public static int specialEffectRange = 24;
 
 		@Option(CONFIG_EXTERNAL_SCRIPTS)
 		@DefaultValue("")
-		@LangKey("cfg.general.ExternalScripts")
+		@LangKey("dsurround.cfg.general.ExternalScripts")
 		@Comment("Configuration files for customization")
 		public static String[] externalScriptFiles = {};
 
 		@Option(CONFIG_STARTUP_SOUND_LIST)
 		@DefaultValue("minecraft:entity.experience_orb.pickup,minecraft:entity.chicken.egg")
-		@LangKey("cfg.general.StartupSounds")
+		@LangKey("dsurround.cfg.general.StartupSounds")
 		@Comment("Possible sounds to play when client reaches main game menu")
 		public static String[] startupSoundList = { "minecraft:entity.experience_orb.pickup",
 				"minecraft:entity.chicken.egg" };
@@ -403,7 +403,7 @@ public final class ModOptions {
 	public static final String CONFIG_AURORA_SHADER = "Use Shaders";
 
 	@Category(CATEGORY_AURORA)
-	@LangKey("cfg.aurora.cat.Aurora")
+	@LangKey("dsurround.cfg.aurora.cat.Aurora")
 	@Comment("Options that control Aurora behavior and rendering")
 	public static class aurora {
 
@@ -412,13 +412,13 @@ public final class ModOptions {
 
 		@Option(CONFIG_AURORA_ENABLED)
 		@DefaultValue("true")
-		@LangKey("cfg.aurora.EnableAurora")
+		@LangKey("dsurround.cfg.aurora.EnableAurora")
 		@Comment("Enable/disable Aurora processing on server/client")
 		public static boolean auroraEnable = true;
 
 		@Option(CONFIG_AURORA_SHADER)
 		@DefaultValue("true")
-		@LangKey("cfg.aurora.EnableShader")
+		@LangKey("dsurround.cfg.aurora.EnableShader")
 		@Comment("Use shader when rendering aurora")
 		@RestartRequired(world = true)
 		public static boolean auroraUseShader = true;
@@ -429,7 +429,7 @@ public final class ModOptions {
 	public static final String CONFIG_BIOME_ALIASES = "Biomes Alias";
 
 	@Category(CATEGORY_BIOMES)
-	@LangKey("cfg.biomes.cat.Biomes")
+	@LangKey("dsurround.cfg.biomes.cat.Biomes")
 	@Comment("Options for controlling biome sound/effects")
 	public static class biomes {
 
@@ -438,14 +438,14 @@ public final class ModOptions {
 
 		@Option(CONFIG_BIOME_SEALEVEL)
 		@DefaultValue("0")
-		@LangKey("cfg.biomes.Sealevel")
+		@LangKey("dsurround.cfg.biomes.Sealevel")
 		@RangeInt(min = 0, max = 255)
 		@Comment("Sealevel to set for Overworld (0 use default for World)")
 		public static int worldSealevelOverride = 0;
 
 		@Option(CONFIG_BIOME_ALIASES)
 		@DefaultValue("")
-		@LangKey("cfg.biomes.Aliases")
+		@LangKey("dsurround.cfg.biomes.Aliases")
 		@Comment("Biomes alias list")
 		public static String[] biomeAliases = {};
 	}
@@ -461,14 +461,14 @@ public final class ModOptions {
 	public static final String CONFIG_BLOCK_EFFECT_SPLASH = "Enable Water Splash";
 
 	@Category(CATEGORY_BLOCK)
-	@LangKey("cfg.block.cat.Blocks")
+	@LangKey("dsurround.cfg.block.cat.Blocks")
 	@Comment("Options for defining block specific sounds/effects")
 	public static class block {
 
 		public static String PATH = null;
 
 		@Category(CATEGORY_BLOCK_EFFECTS)
-		@LangKey("cfg.block.effects.cat.BlockEffects")
+		@LangKey("dsurround.cfg.block.effects.cat.BlockEffects")
 		@Comment("Options for disabling various block effects")
 		public static class effects {
 
@@ -476,43 +476,43 @@ public final class ModOptions {
 
 			@Option(CONFIG_BLOCK_EFFECT_STEAM)
 			@DefaultValue("true")
-			@LangKey("cfg.block.effects.Steam")
+			@LangKey("dsurround.cfg.block.effects.Steam")
 			@Comment("Enable Steam Jets where lava meets water")
 			public static boolean enableSteamJets = true;
 
 			@Option(CONFIG_BLOCK_EFFECT_FIRE)
 			@DefaultValue("true")
-			@LangKey("cfg.block.effects.Fire")
+			@LangKey("dsurround.cfg.block.effects.Fire")
 			@Comment("Enable FireJetEffect Jets in lava")
 			public static boolean enableFireJets = true;
 
 			@Option(CONFIG_BLOCK_EFFECT_BUBBLE)
 			@DefaultValue("true")
-			@LangKey("cfg.block.effects.Bubble")
+			@LangKey("dsurround.cfg.block.effects.Bubble")
 			@Comment("Enable BubbleJetEffect Jets under water")
 			public static boolean enableBubbleJets = true;
 
 			@Option(CONFIG_BLOCK_EFFECT_DUST)
 			@DefaultValue("true")
-			@LangKey("cfg.block.effects.Dust")
+			@LangKey("dsurround.cfg.block.effects.Dust")
 			@Comment("Enable DustJetEffect motes dropping from blocks")
 			public static boolean enableDustJets = true;
 
 			@Option(CONFIG_BLOCK_EFFECT_FOUNTAIN)
 			@DefaultValue("true")
-			@LangKey("cfg.block.effects.Fountain")
+			@LangKey("dsurround.cfg.block.effects.Fountain")
 			@Comment("Enable FountainJetEffect jets")
 			public static boolean enableFountainJets = true;
 
 			@Option(CONFIG_BLOCK_EFFECT_FIREFLY)
 			@DefaultValue("true")
-			@LangKey("cfg.block.effects.Fireflies")
+			@LangKey("dsurround.cfg.block.effects.Fireflies")
 			@Comment("Enable Firefly effect around plants")
 			public static boolean enableFireflies = true;
 
 			@Option(CONFIG_BLOCK_EFFECT_SPLASH)
 			@DefaultValue("true")
-			@LangKey("cfg.block.effects.Splash")
+			@LangKey("dsurround.cfg.block.effects.Splash")
 			@Comment("Enable Water Splash effects when water spills down")
 			public static boolean enableWaterSplash = true;
 		}
@@ -542,7 +542,7 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_BATTLEMUSIC = "Battle Music";
 
 	@Category(CATEGORY_SOUND)
-	@LangKey("cfg.sound.cat.Sound")
+	@LangKey("dsurround.cfg.sound.cat.Sound")
 	@Comment("General options for defining sound effects")
 	public static class sound {
 
@@ -557,27 +557,27 @@ public final class ModOptions {
 
 		@Option(CONFIG_ENABLE_BIOME_SOUNDS)
 		@DefaultValue("true")
-		@LangKey("cfg.sound.BiomeSounds")
+		@LangKey("dsurround.cfg.sound.BiomeSounds")
 		@Comment("Enable biome background and spot sounds")
 		public static boolean enableBiomeSounds = true;
 
 		@Option(CONFIG_MASTER_SOUND_FACTOR)
 		@DefaultValue("1.0")
-		@LangKey("cfg.sound.MasterScale")
+		@LangKey("dsurround.cfg.sound.MasterScale")
 		@RangeFloat(min = 0.0F, max = 1.0F)
 		@Comment("Master volume scale factor for biome and block sounds")
 		public static float masterSoundScaleFactor = 1.0F;
 
 		@Option(CONFIG_AUTO_CONFIG_CHANNELS)
 		@DefaultValue("true")
-		@LangKey("cfg.sound.AutoConfig")
+		@LangKey("dsurround.cfg.sound.AutoConfig")
 		@Comment("Automatically configure sound channels")
 		@RestartRequired(server = true)
 		public static boolean autoConfigureChannels = true;
 
 		@Option(CONFIG_NORMAL_CHANNEL_COUNT)
 		@DefaultValue("28")
-		@LangKey("cfg.sound.NormalChannels")
+		@LangKey("dsurround.cfg.sound.NormalChannels")
 		@RangeInt(min = 28, max = 255)
 		@Comment("Number of normal sound channels to configure in the sound system (manual)")
 		@RestartRequired(server = true)
@@ -585,7 +585,7 @@ public final class ModOptions {
 
 		@Option(CONFIG_STREAMING_CHANNEL_COUNT)
 		@DefaultValue("4")
-		@LangKey("cfg.sound.StreamingChannels")
+		@LangKey("dsurround.cfg.sound.StreamingChannels")
 		@RangeInt(min = 4, max = 255)
 		@Comment("Number of streaming sound channels to configure in the sound system (manual)")
 		@RestartRequired(server = true)
@@ -593,7 +593,7 @@ public final class ModOptions {
 
 		@Option(CONFIG_STREAM_BUFFER_SIZE)
 		@DefaultValue("0")
-		@LangKey("cfg.sound.StreamBufferSize")
+		@LangKey("dsurround.cfg.sound.StreamBufferSize")
 		@RangeInt(min = 0)
 		@Comment("Size of a stream buffer in kilobytes (0: system default - usually 128K bytes)")
 		@RestartRequired(server = true)
@@ -601,7 +601,7 @@ public final class ModOptions {
 
 		@Option(CONFIG_STREAM_BUFFER_COUNT)
 		@DefaultValue("0")
-		@LangKey("cfg.sound.StreamBufferCount")
+		@LangKey("dsurround.cfg.sound.StreamBufferCount")
 		@RangeInt(min = 0, max = 8)
 		@Comment("Number of stream buffers per channel (0: system default - usually 3 buffers)")
 		@RestartRequired(server = true)
@@ -609,76 +609,76 @@ public final class ModOptions {
 
 		@Option(CONFIG_MUTE_WHEN_BACKGROUND)
 		@DefaultValue("true")
-		@LangKey("cfg.sound.Mute")
+		@LangKey("dsurround.cfg.sound.Mute")
 		@Comment("Mute sound when Minecraft is in the background")
 		public static boolean muteWhenBackground = true;
 
 		@Option(CONFIG_THUNDER_VOLUME)
 		@DefaultValue("10000")
-		@LangKey("cfg.sound.ThunderVolume")
+		@LangKey("dsurround.cfg.sound.ThunderVolume")
 		@Comment("Sound Volume of Thunder")
 		@RangeFloat(min = 15F, max = 10000F)
 		public static float thunderVolume = 10000F;
 
 		@Option(CONFIG_ENABLE_JUMP_SOUND)
 		@DefaultValue("true")
-		@LangKey("cfg.sound.Jump")
+		@LangKey("dsurround.cfg.sound.Jump")
 		@Comment("Enable player Jump sound effect")
 		public static boolean enableJumpSound = true;
 
 		@Option(CONFIG_ENABLE_EQUIP_SOUND)
 		@DefaultValue("true")
-		@LangKey("cfg.sound.Equip")
+		@LangKey("dsurround.cfg.sound.Equip")
 		@Comment("Enable Weapon/Tool Equip sound effect")
 		public static boolean enableEquipSound = true;
 
 		@Option(CONFIG_SWORD_AS_TOOL_EQUIP_SOUND)
 		@DefaultValue("false")
-		@LangKey("cfg.sound.SwordEquipAsTool")
+		@LangKey("dsurround.cfg.sound.SwordEquipAsTool")
 		@Comment("Enable Sword Equip sound as Tool")
 		public static boolean swordEquipAsTool = false;
 
 		@Option(CONFIG_ENABLE_CRAFTING_SOUND)
 		@DefaultValue("true")
-		@LangKey("cfg.sound.Craft")
+		@LangKey("dsurround.cfg.sound.Craft")
 		@Comment("Enable Item Crafted sound effect")
 		public static boolean enableCraftingSound = true;
 
 		@Option(CONFIG_FOOTSTEPS_SOUND_FACTOR)
 		@DefaultValue("0.35")
-		@LangKey("cfg.sound.FootstepScale")
+		@LangKey("dsurround.cfg.sound.FootstepScale")
 		@RangeFloat(min = 0.0F, max = 1.0F)
 		@Comment("Volume scale factor for footstep sounds")
 		public static float footstepsSoundFactor = 0.35F;
 
 		@Option(CONFIG_FOOTSTEPS_QUAD)
 		@DefaultValue("false")
-		@LangKey("cfg.sound.FootstepQuad")
+		@LangKey("dsurround.cfg.sound.FootstepQuad")
 		@Comment("Simulate quadruped with Footstep effects (horse)")
 		public static boolean foostepsQuadruped = false;
 
 		@Option(CONFIG_ENABLE_ARMOR_SOUND)
 		@DefaultValue("true")
-		@LangKey("cfg.sound.Armor")
+		@LangKey("dsurround.cfg.sound.Armor")
 		@Comment("Enable/disable armor sounds when moving")
 		public static boolean enableArmorSounds = true;
 
 		@Option(CONFIG_SOUND_CULL_THRESHOLD)
 		@DefaultValue("20")
-		@LangKey("cfg.sound.CullInterval")
+		@LangKey("dsurround.cfg.sound.CullInterval")
 		@RangeInt(min = 0)
 		@Comment("Ticks between culled sound events (0 to disable culling)")
 		public static int soundCullingThreshold = 20;
 
 		@Option(CONFIG_ENABLE_BATTLEMUSIC)
 		@DefaultValue("false")
-		@LangKey("cfg.sound.BattleMusic")
+		@LangKey("dsurround.cfg.sound.BattleMusic")
 		@Comment("Enable/disable Battle Music")
 		public static boolean enableBattleMusic = false;
 
 		@Option(CONFIG_CULLED_SOUNDS)
 		@DefaultValue("minecraft:block.water.ambient,minecraft:block.lava.ambient,minecraft:entity.sheep.ambient,minecraft:entity.chicken.ambient,minecraft:entity.cow.ambient,minecraft:entity.pig.ambient")
-		@LangKey("cfg.sound.CulledSounds")
+		@LangKey("dsurround.cfg.sound.CulledSounds")
 		@Comment("Sounds to cull from frequent playing")
 		@Hidden
 		public static String[] culledSounds = { "minecraft:block.water.ambient", "minecraft:block.lava.ambient",
@@ -687,14 +687,14 @@ public final class ModOptions {
 
 		@Option(CONFIG_BLOCKED_SOUNDS)
 		@DefaultValue("dsurround:bison")
-		@LangKey("cfg.sound.BlockedSounds")
+		@LangKey("dsurround.cfg.sound.BlockedSounds")
 		@Comment("Sounds to block from playing")
 		@Hidden
 		public static String[] blockedSounds = { "dsurround:bison" };
 
 		@Option(CONFIG_SOUND_VOLUMES)
 		@DefaultValue("")
-		@LangKey("cfg.sound.SoundVolumes")
+		@LangKey("dsurround.cfg.sound.SoundVolumes")
 		@Comment("Individual sound volume scaling factors")
 		@Hidden
 		public static String[] soundVolumes = {};
@@ -720,7 +720,7 @@ public final class ModOptions {
 	public static final String CONFIG_POTION_HUD_ANCHOR = "HUD Location";
 
 	@Category(CATEGORY_PLAYER)
-	@LangKey("cfg.player.cat.Player")
+	@LangKey("dsurround.cfg.player.cat.Player")
 	@Comment("General options for defining sound and effects the player entity")
 	public static class player {
 
@@ -731,57 +731,57 @@ public final class ModOptions {
 
 		@Option(CONFIG_SUPPRESS_POTION_PARTICLES)
 		@DefaultValue("false")
-		@LangKey("cfg.player.PotionParticles")
+		@LangKey("dsurround.cfg.player.PotionParticles")
 		@Comment("Suppress player's potion particles from rendering")
 		public static boolean suppressPotionParticles = false;
 
 		@Option(CONFIG_ENABLE_POPOFFS)
 		@DefaultValue("true")
-		@LangKey("cfg.player.Popoffs")
+		@LangKey("dsurround.cfg.player.Popoffs")
 		@Comment("Controls display of damage pop-offs when an entity is damaged")
 		public static boolean enableDamagePopoffs = true;
 
 		@Option(CONFIG_SHOW_CRIT_WORDS)
 		@DefaultValue("true")
-		@LangKey("cfg.player.CritWords")
+		@LangKey("dsurround.cfg.player.CritWords")
 		@Comment("Display random power word on critical hit")
 		public static boolean showCritWords = true;
 
 		@Option(CONFIG_ENABLE_FOOTPRINTS)
 		@DefaultValue("true")
-		@LangKey("cfg.player.Footprints")
+		@LangKey("dsurround.cfg.player.Footprints")
 		@Comment("Enable player footprints")
 		public static boolean enableFootprints = true;
 
 		@Option(CONFIG_FOOTPRINT_STYLE)
 		@DefaultValue("6")
-		@LangKey("cfg.player.FootprintStyle")
+		@LangKey("dsurround.cfg.player.FootprintStyle")
 		@Comment("0: shoe print, 1: square print, 2: horse hoof, 3: bird, 4: paw, 5: solid square, 6: lowres square")
 		@RangeInt(min = 0, max = 6)
 		public static int footprintStyle = 6;
 
 		@Option(CONFIG_HURT_THRESHOLD)
 		@DefaultValue("8")
-		@LangKey("cfg.player.HurtThreshold")
+		@LangKey("dsurround.cfg.player.HurtThreshold")
 		@Comment("Amount of health bar remaining to trigger player hurt sound (0 disable)")
 		@RangeInt(min = 0, max = 10)
 		public static int playerHurtThreshold = 8;
 
 		@Option(CONFIG_HUNGER_THRESHOLD)
 		@DefaultValue("8")
-		@LangKey("cfg.player.HungerThreshold")
+		@LangKey("dsurround.cfg.player.HungerThreshold")
 		@Comment("Amount of food bar remaining to trigger player hunger sound (0 disable)")
 		@RangeInt(min = 0, max = 10)
 		public static int playerHungerThreshold = 8;
 
 		@Option(CONFIG_SHOW_BREATH)
 		@DefaultValue("true")
-		@LangKey("cfg.player.ShowBreath")
+		@LangKey("dsurround.cfg.player.ShowBreath")
 		@Comment("Show player frost breath in cold weather")
 		public static boolean showBreath = true;
 
 		@Category(CATEGORY_POTION_HUD)
-		@LangKey("cfg.player.potionHud.cat.PotionHud")
+		@LangKey("dsurround.cfg.player.potionHud.cat.PotionHud")
 		@Comment("Options for the Potion HUD overlay")
 		public static class potionHUD {
 
@@ -792,47 +792,47 @@ public final class ModOptions {
 
 			@Option(CONFIG_POTION_HUD_NONE)
 			@DefaultValue("false")
-			@LangKey("cfg.player.potionHud.NoHUD")
+			@LangKey("dsurround.cfg.player.potionHud.NoHUD")
 			@Comment("Disables Vanilla and Dynamic Surroundings potion HUD")
 			public static boolean potionHudNone = false;
 
 			@Option(CONFIG_POTION_HUD_ENABLE)
 			@DefaultValue("true")
-			@LangKey("cfg.player.potionHud.Enable")
+			@LangKey("dsurround.cfg.player.potionHud.Enable")
 			@Comment("Enable display of potion icons in display")
 			public static boolean potionHudEnabled = true;
 
 			@Option(CONFIG_POTION_HUD_TRANSPARENCY)
 			@DefaultValue("0.75")
-			@LangKey("cfg.player.potionHud.Transparency")
+			@LangKey("dsurround.cfg.player.potionHud.Transparency")
 			@RangeFloat(min = 0.0F, max = 1.0F)
 			@Comment("Transparency factor for icons (higher more solid)")
 			public static float potionHudTransparency = 0.75F;
 
 			@Option(CONFIG_POTION_HUD_LEFT_OFFSET)
 			@DefaultValue("5")
-			@LangKey("cfg.player.potionHud.LeftOffset")
+			@LangKey("dsurround.cfg.player.potionHud.LeftOffset")
 			@RangeInt(min = 0)
 			@Comment("Offset from left side of screen")
 			public static int potionHudLeftOffset = 5;
 
 			@Option(CONFIG_POTION_HUD_TOP_OFFSET)
 			@DefaultValue("5")
-			@LangKey("cfg.player.potionHud.TopOffset")
+			@LangKey("dsurround.cfg.player.potionHud.TopOffset")
 			@RangeInt(min = 0)
 			@Comment("Offset from top of screen")
 			public static int potionHudTopOffset = 5;
 
 			@Option(CONFIG_POTION_HUD_SCALE)
 			@DefaultValue("0.75")
-			@LangKey("cfg.player.potionHud.Scale")
+			@LangKey("dsurround.cfg.player.potionHud.Scale")
 			@RangeFloat(min = 0.0F, max = 1.0F)
 			@Comment("Size scale of icons (lower is smaller)")
 			public static float potionHudScale = 0.75F;
 
 			@Option(CONFIG_POTION_HUD_ANCHOR)
 			@DefaultValue("0")
-			@LangKey("cfg.player.potionHud.Location")
+			@LangKey("dsurround.cfg.player.potionHud.Location")
 			@RangeInt(min = 0, max = 1)
 			@Comment("Area of the display the Potion HUD is displayed (0 upper left, 1 upper right)")
 			public static int potionHudAnchor = 0;
@@ -847,7 +847,7 @@ public final class ModOptions {
 	public static final String CONFIG_OPTION_SPEECHBUBBLE_RANGE = "Visibility Range";
 
 	@Category(CATEGORY_SPEECHBUBBLES)
-	@LangKey("cfg.speech.cat.Speech")
+	@LangKey("dsurround.cfg.speech.cat.Speech")
 	@Comment("Options for configuring SpeechBubbles")
 	public static class speechbubbles {
 
@@ -858,32 +858,32 @@ public final class ModOptions {
 
 		@Option(CONFIG_OPTION_ENABLE_SPEECHBUBBLES)
 		@DefaultValue("false")
-		@LangKey("cfg.speech.EnableSpeechBubbles")
+		@LangKey("dsurround.cfg.speech.EnableSpeechBubbles")
 		@Comment("Enables/disables speech bubbles above player heads")
 		public static boolean enableSpeechBubbles = false;
 
 		@Option(CONFIG_OPTION_ENABLE_ENTITY_CHAT)
 		@DefaultValue("false")
-		@LangKey("cfg.speech.EnableEntityChat")
+		@LangKey("dsurround.cfg.speech.EnableEntityChat")
 		@Comment("Enables/disables entity chat bubbles")
 		public static boolean enableEntityChat = false;
 
 		@Option(CONFIG_OPTION_ENABLE_EMOJIS)
 		@DefaultValue("false")
-		@LangKey("cfg.speech.EnableEntityEmojis")
+		@LangKey("dsurround.cfg.speech.EnableEntityEmojis")
 		@Comment("Enables/disables entity emojis")
 		public static boolean enableEntityEmojis = false;
 
 		@Option(CONFIG_OPTION_SPEECHBUBBLE_DURATION)
 		@DefaultValue("7")
-		@LangKey("cfg.speech.Duration")
+		@LangKey("dsurround.cfg.speech.Duration")
 		@RangeFloat(min = 5.0F, max = 15.0F)
 		@Comment("Number of seconds to display speech before removing")
 		public static float speechBubbleDuration = 7.0F;
 
 		@Option(CONFIG_OPTION_SPEECHBUBBLE_RANGE)
 		@DefaultValue("16")
-		@LangKey("cfg.speech.Range")
+		@LangKey("dsurround.cfg.speech.Range")
 		@RangeInt(min = 16, max = 32)
 		@Comment("Range at which a SpeechBubble is visible.  Filtering occurs server side.")
 		public static float speechBubbleRange = 16;
@@ -894,7 +894,7 @@ public final class ModOptions {
 	public static final String CONFIG_ADD_MOB_PARTICLES = "Add Mob Models";
 
 	@Category(CATEGORY_EXPLOSIONS)
-	@LangKey("cfg.explosions.cat.Explosions")
+	@LangKey("dsurround.cfg.explosions.cat.Explosions")
 	@Comment("Options for configuring Explosion Enhancement")
 	public static class explosions {
 
@@ -902,13 +902,13 @@ public final class ModOptions {
 
 		@Option(CONFIG_ENABLE_EXPLOSIONS)
 		@DefaultValue("true")
-		@LangKey("cfg.explosions.EnableExplosions")
+		@LangKey("dsurround.cfg.explosions.EnableExplosions")
 		@Comment("Enables/disables explosion enhancement")
 		public static boolean enableExplosionEnhancement = false;
 
 		@Option(CONFIG_ADD_MOB_PARTICLES)
 		@DefaultValue("false")
-		@LangKey("cfg.explosions.AddMobs")
+		@LangKey("dsurround.cfg.explosions.AddMobs")
 		@Comment("Enables/disables addition of mob models in explosion debris")
 		public static boolean addMobParticles = false;
 	}
@@ -922,7 +922,7 @@ public final class ModOptions {
 	public static final String CONFIG_LL_COLORS = "Color Set";
 
 	@Category(CATEGORY_LIGHT_LEVEL)
-	@LangKey("cfg.lightlevel.cat.LightLevel")
+	@LangKey("dsurround.cfg.lightlevel.cat.LightLevel")
 	@Comment("Options for configuring Light Level HUD")
 	public static class lightlevel {
 
@@ -932,40 +932,40 @@ public final class ModOptions {
 
 		@Option(CONFIG_LL_RANGE)
 		@DefaultValue("24")
-		@LangKey("cfg.lightlevel.Range")
+		@LangKey("dsurround.cfg.lightlevel.Range")
 		@Comment("Range from player to analyze light levels")
 		@RangeInt(min = 16, max = 32)
 		public static int llBlockRange = 24;
 
 		@Option(CONFIG_LL_MOB_SPAWN_THRESHOLD)
 		@DefaultValue("7")
-		@LangKey("cfg.lightlevel.MobSpawnThreshold")
+		@LangKey("dsurround.cfg.lightlevel.MobSpawnThreshold")
 		@Comment("Light level at which mobs can spawn")
 		@RangeInt(min = 0, max = 15)
 		public static int llSpawnThreshold = 7;
 
 		@Option(CONFIG_LL_DISPLAY_MODE)
 		@DefaultValue("0")
-		@LangKey("cfg.lightlevel.DisplayMode")
+		@LangKey("dsurround.cfg.lightlevel.DisplayMode")
 		@Comment("0: Block Light, 1: Block Light + Sky Light")
 		@RangeInt(min = 0, max = 1)
 		public static int llDisplayMode = 0;
 
 		@Option(CONFIG_LL_HIDE_SAFE)
 		@DefaultValue("false")
-		@LangKey("cfg.lightlevel.HideSafe")
+		@LangKey("dsurround.cfg.lightlevel.HideSafe")
 		@Comment("Hide light level information for blocks that are considered safe")
 		public static boolean llHideSafe = false;
 
 		@Option(CONFIG_LL_INDICATE_CAUTION)
 		@DefaultValue("true")
-		@LangKey("cfg.lightlevel.IndicateCaution")
+		@LangKey("dsurround.cfg.lightlevel.IndicateCaution")
 		@Comment("Indicate current light levels that will change at night which could result in mob spawns")
 		public static boolean llIndicateCaution = true;
 
 		@Option(CONFIG_LL_COLORS)
 		@DefaultValue("0")
-		@LangKey("cfg.lightlevel.Colors")
+		@LangKey("dsurround.cfg.lightlevel.Colors")
 		@Comment("Color set: 0 bright, 1 dark")
 		@RangeInt(min = 0, max = 1)
 		public static int llColors = 0;
@@ -979,7 +979,7 @@ public final class ModOptions {
 	public static final String CONFIG_COMPASS_COORD_FORMAT = "Coord Format";
 
 	@Category(CATEGORY_COMPASS)
-	@LangKey("cfg.compass.cat.Compass")
+	@LangKey("dsurround.cfg.compass.cat.Compass")
 	@Comment("Options for configuring compass HUD")
 	public static class compass {
 
@@ -989,33 +989,33 @@ public final class ModOptions {
 
 		@Option(CONFIG_COMPASS_ENABLE)
 		@DefaultValue("true")
-		@LangKey("cfg.compass.Enable")
+		@LangKey("dsurround.cfg.compass.Enable")
 		@Comment("Enable/disable compass HUD when compass is held")
 		public static boolean enableCompass = true;
 
 		@Option(CONFIG_CLOCK_ENABLE)
 		@DefaultValue("true")
-		@LangKey("cfg.compass.ClockEnable")
+		@LangKey("dsurround.cfg.compass.ClockEnable")
 		@Comment("Enable/disable clock HUD when clock is held")
 		public static boolean enableClock = true;
 
 		@Option(CONFIG_COMPASS_STYLE)
 		@DefaultValue("0")
-		@LangKey("cfg.compass.Style")
+		@LangKey("dsurround.cfg.compass.Style")
 		@Comment("Style of compass bar")
 		@RangeInt(min = 0, max = 6)
 		public static int compassStyle = 0;
 
 		@Option(CONFIG_COMPASS_TRANSPARENCY)
 		@DefaultValue("0.4")
-		@LangKey("cfg.compass.Transparency")
+		@LangKey("dsurround.cfg.compass.Transparency")
 		@Comment("Compass transparency")
 		@RangeFloat(min = 0F, max = 1.0F)
 		public static float compassTransparency = 0.4F;
 
 		@Option(CONFIG_COMPASS_COORD_FORMAT)
 		@DefaultValue("x: %1$d, z: %3$d")
-		@LangKey("cfg.compass.Format")
+		@LangKey("dsurround.cfg.compass.Format")
 		@Comment("Format string for location coordinates")
 		public static String compassCoordFormat = "x: %1$d, z: %3$d";
 	}
@@ -1027,7 +1027,7 @@ public final class ModOptions {
 	public static final String CONFIG_COMMAND_ALIAS = "alias";
 
 	@Category(CATEGORY_COMMANDS)
-	@LangKey("cfg.commands.cat.Commands")
+	@LangKey("dsurround.cfg.commands.cat.Commands")
 	@Comment("Options for configuring commands")
 	@RestartRequired(server = true, world = true)
 	public static class commands {
@@ -1041,13 +1041,13 @@ public final class ModOptions {
 
 			@Option(CONFIG_COMMAND_NAME)
 			@DefaultValue("ds")
-			@LangKey("cfg.commands.DS.Name")
+			@LangKey("dsurround.cfg.commands.DS.Name")
 			@Comment("Name of the command")
 			public static String commandNameDS = "ds";
 
 			@Option(CONFIG_COMMAND_ALIAS)
 			@DefaultValue("dsurround rain")
-			@LangKey("cfg.commands.DS.Alias")
+			@LangKey("dsurround.cfg.commands.DS.Alias")
 			@Comment("Alias for the command")
 			public static String commandAliasDS = "dsurround rain";
 		}
@@ -1059,13 +1059,13 @@ public final class ModOptions {
 
 			@Option(CONFIG_COMMAND_NAME)
 			@DefaultValue("calc")
-			@LangKey("cfg.commands.Calc.Name")
+			@LangKey("dsurround.cfg.commands.Calc.Name")
 			@Comment("Name of the command")
 			public static String commandNameCalc = "calc";
 
 			@Option(CONFIG_COMMAND_ALIAS)
 			@DefaultValue("c math")
-			@LangKey("cfg.commands.Calc.Alias")
+			@LangKey("dsurround.cfg.commands.Calc.Alias")
 			@Comment("Alias for the command")
 			public static String commandAliasCalc = "c math";
 		}
@@ -1105,7 +1105,7 @@ public final class ModOptions {
 	public static final String CATEGORY_PROFILES = "profiles";
 
 	@Category(CATEGORY_PROFILES)
-	@LangKey("cfg.profiles.cat.Profiles")
+	@LangKey("dsurround.cfg.profiles.cat.Profiles")
 	@Comment("Enable/disable application of built in profiles")
 	public static class profiles {
 

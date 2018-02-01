@@ -220,7 +220,7 @@ public class DSurround {
 	@SubscribeEvent
 	public void playerLogin(final PlayerLoggedInEvent event) {
 		if (ModOptions.logging.enableVersionChecking)
-			new VersionChecker(DSurround.MOD_ID, "msg.NewVersion.dsurround").playerLogin(event);
+			new VersionChecker(DSurround.MOD_ID, "dsurround.msg.NewVersion.dsurround").playerLogin(event);
 	}
 
 	////////////////////////

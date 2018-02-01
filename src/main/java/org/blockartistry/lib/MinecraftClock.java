@@ -29,8 +29,8 @@ import net.minecraft.world.World;
 
 public class MinecraftClock {
 
-	private static final String AM = Localization.format("format.AM");
-	private static final String PM = Localization.format("format.PM");
+	private static final String AM = Localization.format("dsurround.format.AM");
+	private static final String PM = Localization.format("dsurround.format.PM");
 
 	protected int day;
 	protected int hour;
@@ -82,7 +82,7 @@ public class MinecraftClock {
 
 	@Override
 	public String toString() {
-		return Localization.format("format.TimeOfDay", this.day, this.hour > 12 ? this.hour - 12 : this.hour,
+		return Localization.format("dsurround.format.TimeOfDay", this.day, this.hour > 12 ? this.hour - 12 : this.hour,
 				this.minute, this.isAM ? AM : PM);
 	}
 }

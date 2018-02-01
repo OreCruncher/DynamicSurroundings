@@ -89,7 +89,7 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 
 		// Synthetic options for handling sound blocking and volume
 		this.soundCategory = new ConfigCategory("Individual Sound Configuration")
-				.setLanguageKey("cfg.sound.SoundConfig");
+				.setLanguageKey("dsurround.cfg.sound.SoundConfig");
 		this.soundElement = new ConfigElement(this.soundCategory);
 		generateSoundList(this.soundCategory);
 		this.configElements.add(this.soundElement);

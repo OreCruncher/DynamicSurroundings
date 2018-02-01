@@ -40,9 +40,9 @@ public final class GuiConstants {
 	public static final String TOKEN_CULL = "cull";
 	public static final String TOKEN_BLOCK  = "block";
 
-	public static final String TEXT_CULL = Localization.format("format.Cull");
-	public static final String TEXT_BLOCK = Localization.format("format.Block");
-	public static final String TEXT_PLAY = Localization.format("format.Play");
-	public static final String TEXT_STOP = TextFormatting.RED + Localization.format("format.Stop");
+	public static final String TEXT_CULL = Localization.format("dsurround.format.Cull");
+	public static final String TEXT_BLOCK = Localization.format("dsurround.format.Block");
+	public static final String TEXT_PLAY = Localization.format("dsurround.format.Play");
+	public static final String TEXT_STOP = TextFormatting.RED + Localization.format("dsurround.format.Stop");
 
 }
