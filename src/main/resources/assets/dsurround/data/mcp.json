@@ -166,7 +166,7 @@
 			"_comment": "Basic Swamp Fog",
 			"fog": true,
 			"fogColor": "64,96,64",
-			"fogDensity": 0.6
+			"fogDensity": 0.4
 		},
 		{
 			"conditions": "biome.isSwamp && !(biome.isForest || biome.isDead || biome.isCold)",
@@ -193,7 +193,7 @@
 			],
 			"fog": true,
 			"fogColor": "128,128,128",
-			"fogDensity": 0.6
+			"fogDensity": 0.4
 		},
 		{
 			"conditions": "biome.isSwamp && !(biome.isDead || biome.isHills || biome.isMountain || biome.isCold || biome.isSnowy || biome.isForest)",
@@ -209,7 +209,7 @@
 			"conditions": "biome.rainfall < 0.1 && (biome.isSandy || biome.isMesa || (biome.isWasteland && !(biome.isCold || biome.isSnowy || biome.isSwamp)))",
 			"_comment": "Dust for desert like biomes",
 			"dust": true,
-			"dustColor": "204,185,102"
+			"dustColor": "255,234,151"
 		},
 		{
 			"conditions": "biome.name == 'Cold Desert'",

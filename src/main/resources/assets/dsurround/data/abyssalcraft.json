@@ -16,7 +16,7 @@
 			"dust": false,
 			"fog": true,
 			"fogColor": "128,0,128",
-			"fogDensity": 0.6
+			"fogDensity": 0.4
 		},
 		{
 			"conditions": "biome.name == 'Darklands Forest'",
@@ -24,7 +24,7 @@
 			"dust": false,
 			"fog": true,
 			"fogColor": "128,0,128",
-			"fogDensity": 0.6
+			"fogDensity": 0.4
 		},
 		{
 			"conditions": "biome.name == 'Darklands Plains'",
@@ -32,7 +32,7 @@
 			"dust": false,
 			"fog": true,
 			"fogColor": "128,0,128",
-			"fogDensity": 0.6
+			"fogDensity": 0.4
 		},
 		{
 			"conditions": "biome.name == 'Darklands Highland'",
@@ -40,7 +40,7 @@
 			"dust": false,
 			"fog": true,
 			"fogColor": "128,0,128",
-			"fogDensity": 0.6
+			"fogDensity": 0.4
 		},
 		{
 			"conditions": "biome.name == 'Darklands Mountains'",
@@ -52,7 +52,7 @@
 			"dust": false,
 			"fog": true,
 			"fogColor": "34,228,144",
-			"fogDensity": 0.6
+			"fogDensity": 0.4
 		},
 		{
 			"conditions": "biome.name == 'Coralium Infested Ocean'",
@@ -60,7 +60,7 @@
 			"dust": false,
 			"fog": true,
 			"fogColor": "28,107,160",
-			"fogDensity": 0.6
+			"fogDensity": 0.4
 		},
 		{
 			"conditions": "biome.name == 'Abyssal Wasteland'",
