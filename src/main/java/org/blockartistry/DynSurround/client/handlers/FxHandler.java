@@ -34,7 +34,6 @@ import org.blockartistry.DynSurround.client.handlers.effects.EntityBowSoundEffec
 import org.blockartistry.DynSurround.client.handlers.effects.EntityChatEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.EntityFootprintEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.EntitySwingEffect;
-import org.blockartistry.DynSurround.client.handlers.effects.FootprintEventEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.FrostBreathEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.PlayerToolBarSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.PopoffEventEffect;
@@ -188,7 +187,6 @@ public class FxHandler extends EffectHandlerBase {
 
 		this.eventLibrary.register(new CraftingSoundEffect(this.eventLibrary));
 		this.eventLibrary.register(new PopoffEventEffect(this.eventLibrary));
-		this.eventLibrary.register(new FootprintEventEffect(this.eventLibrary));
 
 		INSTANCE = this;
 	}
