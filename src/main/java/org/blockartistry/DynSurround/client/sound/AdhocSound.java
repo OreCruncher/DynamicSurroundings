@@ -23,22 +23,48 @@
 
 package org.blockartistry.DynSurround.client.sound;
 
+import java.lang.reflect.Field;
+
 import javax.annotation.Nonnull;
 
+import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class AdhocSound extends BasicSound<AdhocSound> {
-	
+
+	protected static Field getVolume;
+	protected static Field getPitch;
+
+	static {
+		getVolume = ReflectionHelper.findField(PositionedSound.class, "volume");
+		getPitch = ReflectionHelper.findField(PositionedSound.class, "pitch");
+	}
+
 	// Used for sound routing
 	public AdhocSound(@Nonnull final NBTTagCompound nbt) {
-		super((ResourceLocation)null, null);
+		super((ResourceLocation) null, null);
 		this.deserializeNBT(nbt);
+	}
+
+	public AdhocSound(@Nonnull final SoundEvent event, @Nonnull final PositionedSound sound) {
+		super(event, sound.getCategory());
+
+		this.setPosition(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
+		this.setAttenuationType(sound.getAttenuationType());
+
+		try {
+			this.setVolume(getVolume.getFloat(sound));
+			this.setPitch(getPitch.getFloat(sound));
+		} catch (final Throwable t) {
+
+		}
 	}
 
 	public AdhocSound(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
@@ -46,4 +72,3 @@ public class AdhocSound extends BasicSound<AdhocSound> {
 	}
 
 }
-

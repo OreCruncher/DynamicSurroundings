@@ -55,10 +55,14 @@ import org.blockartistry.lib.collections.ObjectArray;
 import gnu.trove.iterator.TObjectFloatIterator;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -78,7 +82,6 @@ public class SoundEffectHandler extends EffectHandlerBase {
 			return INSTANCE.playSound(input.getSound()) != null;
 		}
 		return false;
-
 	};
 
 	/*
@@ -106,27 +109,23 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	private final Map<SoundEffect, Emitter> emitters = new HashMap<SoundEffect, Emitter>();
 	private final ObjectArray<PendingSound> pending = new ObjectArray<PendingSound>();
 	private final ObjectArray<BasicSound<?>> sendToServer = new ObjectArray<BasicSound<?>>();
+	private final Map<String, SoundEvent> replacements = new HashMap<String, SoundEvent>();
 
 	private SoundEffectHandler() {
 		super("SoundEffectHandler");
+
+		final SoundEvent bowLoose = Sounds.getSound(new ResourceLocation(DSurround.MOD_ID, "bow.loose"));
+		this.replacements.put("minecraft:entity.arrow.shoot", bowLoose);
+		this.replacements.put("minecraft:entity.skeleton.shoot", bowLoose);
 	}
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 
-		for (final Emitter emitter : this.emitters.values())
-			emitter.update();
-
-		if (this.pending.size() > 0)
-			this.pending.removeIf(PENDING_SOUNDS);
-
-		// Flush out cached sounds
-		if (this.sendToServer.size() > 0) {
-			for (int i = 0; i < this.sendToServer.size(); i++) {
-				Network.sendToServer(new PacketPlaySound(player, this.sendToServer.get(i)));
-			}
-			this.sendToServer.clear();
-		}
+		this.emitters.values().forEach(emitter -> emitter.update());
+		this.pending.removeIf(PENDING_SOUNDS);
+		this.sendToServer.forEach(sound -> Network.sendToServer(new PacketPlaySound(player, sound)));
+		this.sendToServer.clear();
 	}
 
 	@Override
@@ -140,9 +139,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	}
 
 	public void clearSounds() {
-		for (final Emitter e : this.emitters.values()) {
-			e.stop();
-		}
+		this.emitters.values().forEach(emitter -> emitter.stop());
 		this.emitters.clear();
 		this.pending.clear();
 		SoundEngine.instance().stopAllSounds();
@@ -210,7 +207,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		return SoundEngine.instance().playSound(sound);
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void soundPlay(@Nonnull final PlaySoundEvent e) {
 		if (e.getName().equals("entity.lightning.thunder")) {
 			final ISound sound = e.getSound();
@@ -218,6 +215,16 @@ public class SoundEffectHandler extends EffectHandlerBase {
 				final BlockPos pos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
 				final ISound newSound = Sounds.THUNDER.createSound(pos).setVolume(ModOptions.sound.thunderVolume);
 				e.setResultSound(newSound);
+			}
+			return;
+		}
+
+		final ISound s = e.getSound();
+		if (s instanceof PositionedSound) {
+			final PositionedSound ps = (PositionedSound) s;
+			final SoundEvent rep = this.replacements.get(ps.getSoundLocation().toString());
+			if (rep != null) {
+				e.setResultSound(new AdhocSound(rep, (PositionedSound) s));
 			}
 		}
 	}
@@ -287,10 +294,9 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		builder.append("SoundSystem: ").append(soundCount).append('/').append(maxCount);
 		event.output.add(builder.toString());
 
-		for (final Emitter effect : this.emitters.values())
-			event.output.add("EMITTER: " + effect.toString());
-		for (final PendingSound effect : this.pending)
-			event.output.add((effect.getTickAge() < 0 ? "DELAYED: " : "PENDING: ") + effect.getSound().toString());
+		this.emitters.values().forEach(emitter -> event.output.add("EMITTER: " + emitter.toString()));
+		this.pending.forEach(effect -> event.output
+				.add((effect.getTickAge() < 0 ? "DELAYED: " : "PENDING: ") + effect.getSound().toString()));
 	}
 
 }
