@@ -115,20 +115,18 @@ cfg.rain.ThunderThreshold.tooltip=Minimum rain intensity level for background th
 
 cfg.fog.cat.Fog=Fog Options
 cfg.fog.cat.Fog.tooltip=Options that control the various fog effects in the client
+cfg.fog.Enable=Enable Fog Processing
+cfg.fog.Enable.tooltip=Enable/disable fog processing
+cfg.fog.EnableMorning=Morning Fog
+cfg.fog.EnableMorning.tooltip=Show morning fog that eventually burns off
+cfg.fog.EnableWeather=Weather Fog
+cfg.fog.EnableWeather.tooltip=Increase fog based on the strength of rain
 cfg.fog.DesertFog=Desert Fog
 cfg.fog.DesertFog.tooltip=Enable/disable desert fog when raining
-cfg.fog.DesertFogFactor=Desert Fog Factor
-cfg.fog.DesertFogFactor.tooltip=Visibility factor to apply to desert fog (higher is thicker)
 cfg.fog.ElevationHaze=Elevation Haze
 cfg.fog.ElevationHaze.tooltip=Higher the player elevation the more haze that is experienced
-cfg.fog.ElevationHazeFactor=Elevation Haze Factor
-cfg.fog.ElevationHazeFactor.tooltip=Visibility factor to apply to elevation haze (higher is thicker)
-cfg.fog.ElevationHazeBand=Elevation Haze as Band
-cfg.fog.ElevationHazeBand.tooltip=Calculate haze as a band at cloud height rather than gradient to build height
 cfg.fog.BiomeFog=Biome Fog
 cfg.fog.BiomeFog.tooltip=Enable biome specific fog density and color
-cfg.fog.BiomeFogFactor=Biome Fog Factor
-cfg.fog.BiomeFogFactor.tooltip=Visibility factor to apply to biome fog (higher is thicker)
 
 cfg.general.cat.General=General Options
 cfg.general.cat.General.tooltip=Miscellaneous settings

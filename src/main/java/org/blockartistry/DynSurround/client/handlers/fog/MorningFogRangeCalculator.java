@@ -25,6 +25,7 @@ package org.blockartistry.DynSurround.client.handlers.fog;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.math.MathStuff;
 
@@ -46,15 +47,17 @@ public class MorningFogRangeCalculator extends VanillaFogRangeCalculator {
 	@Nonnull
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 		this.cache.set(event);
-		if (this.cache.getStart() > RESERVE) {
-			if (EnvironState.getDimensionId() != 1 && EnvironState.getDimensionId() != -1) {
-				final float ca = EnvironState.getWorld().getCelestialAngle((float) event.getRenderPartialTicks());
-				if (ca >= START && ca <= END) {
-					final float factor = 1F - MathStuff.abs(ca - MID) / (MID - START);
-					final float shift = this.cache.getStart() * factor;
-					final float newEnd = this.cache.getEnd() - shift;
-					final float newStart = MathStuff.clamp(this.cache.getStart() - shift * 2, RESERVE, newEnd);
-					this.cache.set(newStart, newEnd);
+		if (ModOptions.fog.enableMorningFog) {
+			if (this.cache.getStart() > RESERVE) {
+				if (EnvironState.getDimensionId() != 1 && EnvironState.getDimensionId() != -1) {
+					final float ca = EnvironState.getWorld().getCelestialAngle((float) event.getRenderPartialTicks());
+					if (ca >= START && ca <= END) {
+						final float factor = 1F - MathStuff.abs(ca - MID) / (MID - START);
+						final float shift = this.cache.getStart() * factor;
+						final float newEnd = this.cache.getEnd() - shift;
+						final float newStart = MathStuff.clamp(this.cache.getStart() - shift * 2, RESERVE, newEnd);
+						this.cache.set(newStart, newEnd);
+					}
 				}
 			}
 		}
