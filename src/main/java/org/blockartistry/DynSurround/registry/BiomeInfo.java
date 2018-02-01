@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.AreaSoundEffectHandler;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
@@ -58,6 +59,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 	private static Field biomeName = null;
+	private static Class<?> bopBiome = null;
+	private static Field bopBiomeFogDensity = null;
+	private static Field bopBiomeFogColor = null;
 
 	static {
 		try {
@@ -65,6 +69,17 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		} catch (final Throwable t) {
 			DSurround.log().error("Unable to obtain Biome::biomeName field reference!", t);
 		}
+
+		if (ModEnvironment.BiomesOPlenty.isLoaded())
+			try {
+				bopBiome = Class.forName("biomesoplenty.common.biome.BOPBiome");
+				bopBiomeFogDensity = ReflectionHelper.findField(bopBiome, "fogDensity");
+				bopBiomeFogColor = ReflectionHelper.findField(bopBiome, "fogColor");
+			} catch (final Throwable t) {
+				bopBiome = null;
+				bopBiomeFogDensity = null;
+				bopBiomeFogColor = null;
+			}
 	}
 
 	public final static int DEFAULT_SPOT_CHANCE = 1000 / AreaSoundEffectHandler.SCAN_INTERVAL;
@@ -100,6 +115,21 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		} else {
 			this.biomeTypes = ImmutableSet.of();
 			this.biomeId = ((FakeBiome) this.biome).getBiomeId();
+		}
+
+		// If it is a BOP biome initialize from the BoP Biome
+		// instance. May be overwritten by DS config.
+		if (bopBiome != null && bopBiome.isInstance(biome)) {
+			try {
+				final int color = bopBiomeFogColor.getInt(biome);
+				if (color > 0) {
+					this.hasFog = true;
+					this.fogColor = new Color(color);
+					this.fogDensity = bopBiomeFogDensity.getFloat(biome);
+				}
+			} catch (final Exception ex) {
+
+			}
 		}
 	}
 

@@ -48,7 +48,7 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 	protected static final float DUST_FOG_IMPACT = 0.9F;
 
 	protected final FogResult cached = new FogResult();
-	
+
 	protected int posX;
 	protected int posZ;
 	protected float farPlaneDistance;
@@ -69,7 +69,7 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 
 		if (playerX == this.posX && playerZ == this.posZ && this.cached.isValid(event))
 			return this.cached;
-
+		
 		float fpDistanceBiomeFog = 0F;
 		float weightBiomeFog = 0;
 		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(0, 0, 0);
@@ -89,8 +89,6 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 					distancePart = 1F - DUST_FOG_IMPACT * rainStr;
 				} else if (biome.getHasFog()) {
 					distancePart = biome.getFogDensity();
-				} else {
-					continue;
 				}
 
 				fpDistanceBiomeFog += distancePart;
