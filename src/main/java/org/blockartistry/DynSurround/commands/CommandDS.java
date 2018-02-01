@@ -135,10 +135,10 @@ public final class CommandDS extends CommandBase {
 				showHelp = true;
 			} else if (COMMAND_OPTION_RESET.compareToIgnoreCase(parms[0]) == 0) {
 				world.provider.resetRainAndThunder();
-				feedback = new TextComponentString(Localization.format("msg.RainReset"));
+				feedback = new TextComponentString(Localization.format("dsurround.msg.RainReset"));
 			} else if (COMMAND_OPTION_RELOAD.compareToIgnoreCase(parms[0]) == 0) {
 				MinecraftForge.EVENT_BUS.post(new ReloadEvent.Configuration());
-				feedback = new TextComponentString(Localization.format("msg.BiomeReload"));
+				feedback = new TextComponentString(Localization.format("dsurround.msg.BiomeReload"));
 			} else if (COMMAND_OPTION_CONFIG.compareToIgnoreCase(parms[0]) == 0) {
 				feedback = new TextComponentString(config(world, data));
 			} else if (COMMAND_OPTION_STATUS.compareToIgnoreCase(parms[0]) == 0) {
@@ -156,11 +156,11 @@ public final class CommandDS extends CommandBase {
 					final double d = parseDouble(parms[2], 0.0D, 1000.0D) * 20.0D * 60.0D;
 					if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
 						world.getWorldInfo().setRainTime((int) d);
-						feedback = new TextComponentString(Localization.format("msg.RainTimeSet", FORMATTER.format(d)));
+						feedback = new TextComponentString(Localization.format("dsurround.msg.RainTimeSet", FORMATTER.format(d)));
 					} else if (COMMAND_OPTION_THUNDER.compareToIgnoreCase(parms[1]) == 0) {
 						world.getWorldInfo().setThunderTime((int) d);
 						feedback = new TextComponentString(
-								Localization.format("msg.ThunderTimeSet", FORMATTER.format(d)));
+								Localization.format("dsurround.msg.ThunderTimeSet", FORMATTER.format(d)));
 					} else {
 						showHelp = true;
 					}
@@ -172,7 +172,7 @@ public final class CommandDS extends CommandBase {
 					final double d = parseDouble(parms[2], 0.0D, 100.0D) / 100.0D;
 					if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
 						data.setRainIntensity((float) d);
-						feedback = new TextComponentString(Localization.format("msg.RainIntensitySet",
+						feedback = new TextComponentString(Localization.format("dsurround.msg.RainIntensitySet",
 								FORMATTER.format(data.getRainIntensity() * 100)));
 					} else {
 						showHelp = true;
@@ -185,7 +185,7 @@ public final class CommandDS extends CommandBase {
 					final double d = parseDouble(parms[2], 0.0D, 100.0D) / 100.0D;
 					if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
 						data.setMinRainIntensity((float) d);
-						feedback = new TextComponentString(Localization.format("msg.MinRainIntensitySet",
+						feedback = new TextComponentString(Localization.format("dsurround.msg.MinRainIntensitySet",
 								FORMATTER.format(data.getMinRainIntensity() * 100)));
 					} else {
 						showHelp = true;
@@ -199,7 +199,7 @@ public final class CommandDS extends CommandBase {
 					final double d = parseDouble(parms[2], 0.0D, 100.0D) / 100.0D;
 					if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
 						data.setMaxRainIntensity((float) d);
-						feedback = new TextComponentString(Localization.format("msg.MaxRainIntensitySet",
+						feedback = new TextComponentString(Localization.format("dsurround.msg.MaxRainIntensitySet",
 								FORMATTER.format(data.getMaxRainIntensity() * 100)));
 					} else {
 						showHelp = true;

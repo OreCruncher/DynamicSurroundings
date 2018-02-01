@@ -67,20 +67,27 @@ public class CompassHUD extends GuiOverlay {
 
 	private static final float TEXT_LINE_START = 1.5F;
 
-	private static final String NO_SKY = Localization.format("format.NoSky");
-	private static final String SUNRISE = Localization.format("format.Sunrise");
-	private static final String SUNSET = Localization.format("format.Sunset");
-	private static final String DAYTIME = Localization.format("format.Daytime");
-	private static final String NIGHTTIME = Localization.format("format.Nighttime");
+	private static final String NO_SKY = Localization.format("dsurround.format.NoSky");
+	private static final String SUNRISE = Localization.format("dsurround.format.Sunrise");
+	private static final String SUNSET = Localization.format("dsurround.format.Sunset");
+	private static final String DAYTIME = Localization.format("dsurround.format.Daytime");
+	private static final String NIGHTTIME = Localization.format("dsurround.format.Nighttime");
 
 	private static enum Style {
-		BAND_0(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT), BAND_1(false,
-				"textures/gui/compass/compass.png", BAND_WIDTH,
-				BAND_HEIGHT), BAND_2(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT), BAND_3(false,
-						"textures/gui/compass/compass.png", BAND_WIDTH,
-						BAND_HEIGHT), ROSE_1(true, "textures/gui/compass/compassrose1.png", ROSE_DIM, ROSE_DIM), ROSE_2(
-								true, "textures/gui/compass/compassrose2.png", ROSE_DIM,
-								ROSE_DIM), ROSE_3(true, "textures/gui/compass/compassrose3.png", ROSE_DIM, ROSE_DIM);
+		//
+		BAND_0(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT),
+		//
+		BAND_1(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT),
+		//
+		BAND_2(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT),
+		//
+		BAND_3(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT),
+		//
+		ROSE_1(true, "textures/gui/compass/compassrose1.png", ROSE_DIM, ROSE_DIM),
+		//
+		ROSE_2(true, "textures/gui/compass/compassrose2.png", ROSE_DIM, ROSE_DIM),
+		//
+		ROSE_3(true, "textures/gui/compass/compassrose3.png", ROSE_DIM, ROSE_DIM);
 
 		private final boolean isRose;
 		private final ResourceLocation texture;
@@ -123,8 +130,8 @@ public class CompassHUD extends GuiOverlay {
 	@Nonnull
 	protected String getLocationString() {
 		final BlockPos pos = EnvironState.getPlayerPosition();
-		return TextFormatting.AQUA
-				+ String.format(Locale.getDefault(), ModOptions.compass.compassCoordFormat, pos.getX(), pos.getY(), pos.getZ());
+		return TextFormatting.AQUA + String.format(Locale.getDefault(), ModOptions.compass.compassCoordFormat,
+				pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Nonnull
@@ -192,7 +199,7 @@ public class CompassHUD extends GuiOverlay {
 
 				text.add(EnvironState.getClock().toString());
 				text.add(diurnalName());
-				text.add(Localization.format("format.SessionTime", elapsedHours, elapsedMinutes, elapsedSeconds));
+				text.add(Localization.format("dsurround.format.SessionTime", elapsedHours, elapsedMinutes, elapsedSeconds));
 			}
 
 			if (text.size() > 0)
@@ -233,8 +240,8 @@ public class CompassHUD extends GuiOverlay {
 							style.getWidth(), style.getHeight());
 				else
 					drawTexturedModalRect(x, y, direction - 128,
-							(ModOptions.compass.compassStyle * (style.getHeight() * 2)) + style.getHeight(), style.getWidth(),
-							style.getHeight());
+							(ModOptions.compass.compassStyle * (style.getHeight() * 2)) + style.getHeight(),
+							style.getWidth(), style.getHeight());
 			} else {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(centerX, centerY - BAND_HEIGHT * 2.5F, 0);

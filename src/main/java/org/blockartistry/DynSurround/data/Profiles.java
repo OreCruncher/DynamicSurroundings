@@ -80,7 +80,7 @@ public enum Profiles {
 		// Make sure the prop is properly filled out with the mods
 		// latest info.
 		prop.setComment(this.desc);
-		prop.setLanguageKey("cfg." + ModOptions.CATEGORY_PROFILES + "." + this.root);
+		prop.setLanguageKey("dsurround.cfg." + ModOptions.CATEGORY_PROFILES + "." + this.root);
 		prop.setRequiresMcRestart(false);
 		prop.setRequiresWorldRestart(false);
 		prop.setDefaultValue(false);

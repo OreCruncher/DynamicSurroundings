@@ -59,21 +59,21 @@ public class KeyHandler {
 	private static KeyBinding VOLUME_KEY;
 
 	public static void init() {
-		SELECTIONBOX_KEY = new KeyBinding("cfg.keybind.SelectionBox", Keyboard.KEY_B, SECTION_NAME);
+		SELECTIONBOX_KEY = new KeyBinding("dsurround.cfg.keybind.SelectionBox", Keyboard.KEY_B, SECTION_NAME);
 		ClientRegistry.registerKeyBinding(SELECTIONBOX_KEY);
 
-		VOLUME_KEY = new KeyBinding("cfg.keybind.Volume", Keyboard.KEY_V, SECTION_NAME);
+		VOLUME_KEY = new KeyBinding("dsurround.cfg.keybind.Volume", Keyboard.KEY_V, SECTION_NAME);
 		ClientRegistry.registerKeyBinding(VOLUME_KEY);
 
 		if (Permissions.instance().allowLightLevelHUD()) {
-			LIGHTLEVEL_KEY = new KeyBinding("cfg.keybind.LightLevel", Keyboard.KEY_L, SECTION_NAME);
+			LIGHTLEVEL_KEY = new KeyBinding("dsurround.cfg.keybind.LightLevel", Keyboard.KEY_L, SECTION_NAME);
 			ClientRegistry.registerKeyBinding(LIGHTLEVEL_KEY);
 		} else {
 			LIGHTLEVEL_KEY = null;
 		}
 
 		if (Permissions.instance().allowChunkBorderHUD()) {
-			CHUNKBORDER_KEY = new KeyBinding("cfg.keybind.ChunkBorders", Keyboard.KEY_F9, SECTION_NAME);
+			CHUNKBORDER_KEY = new KeyBinding("dsurround.cfg.keybind.ChunkBorders", Keyboard.KEY_F9, SECTION_NAME);
 			ClientRegistry.registerKeyBinding(CHUNKBORDER_KEY);
 		} else {
 			CHUNKBORDER_KEY = null;
@@ -81,7 +81,7 @@ public class KeyHandler {
 	}
 
 	private static String getOnOff(final boolean flag) {
-		return Localization.format(flag ? "cfg.keybind.msg.ON" : "cfg.keybind.msg.OFF");
+		return Localization.format(flag ? "dsurround.cfg.keybind.msg.ON" : "dsurround.cfg.keybind.msg.OFF");
 	}
 
 	private static final String chatPrefix = TextFormatting.BLUE + "[" + TextFormatting.GREEN + DSurround.MOD_NAME
@@ -108,7 +108,7 @@ public class KeyHandler {
 		if (shouldHandle(SELECTIONBOX_KEY)) {
 			final EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
 			renderer.drawBlockOutline = !renderer.drawBlockOutline;
-			sendPlayerMessage("cfg.keybind.msg.Fencing", getOnOff(renderer.drawBlockOutline));
+			sendPlayerMessage("dsurround.cfg.keybind.msg.Fencing", getOnOff(renderer.drawBlockOutline));
 		}
 
 		if (shouldHandle(VOLUME_KEY) && Minecraft.getMinecraft().currentScreen == null) {
@@ -118,7 +118,7 @@ public class KeyHandler {
 
 		if (shouldHandle(CHUNKBORDER_KEY)) {
 			final boolean result = Minecraft.getMinecraft().debugRenderer.toggleChunkBorders();
-			sendPlayerMessage("cfg.keybind.msg.ChunkBorder", getOnOff(result));
+			sendPlayerMessage("dsurround.cfg.keybind.msg.ChunkBorder", getOnOff(result));
 		}
 
 		if (shouldHandle(LIGHTLEVEL_KEY)) {
@@ -128,17 +128,18 @@ public class KeyHandler {
 					ModOptions.lightlevel.llDisplayMode++;
 					if (ModOptions.lightlevel.llDisplayMode >= Mode.values().length)
 						ModOptions.lightlevel.llDisplayMode = 0;
-					sendPlayerMessage("cfg.keybind.msg.LLDisplayMode",
+					sendPlayerMessage("dsurround.cfg.keybind.msg.LLDisplayMode",
 							Mode.getMode(ModOptions.lightlevel.llDisplayMode).name());
 				}
 			} else if (GuiScreen.isShiftKeyDown()) {
 				if (LightLevelHUD.showHUD) {
 					ModOptions.lightlevel.llHideSafe = !ModOptions.lightlevel.llHideSafe;
-					sendPlayerMessage("cfg.keybind.msg.LLSafeBlocks", getOnOff(ModOptions.lightlevel.llHideSafe));
+					sendPlayerMessage("dsurround.cfg.keybind.msg.LLSafeBlocks",
+							getOnOff(ModOptions.lightlevel.llHideSafe));
 				}
 			} else {
 				LightLevelHUD.showHUD = !LightLevelHUD.showHUD;
-				sendPlayerMessage("cfg.keybind.msg.LLDisplay", getOnOff(LightLevelHUD.showHUD));
+				sendPlayerMessage("dsurround.cfg.keybind.msg.LLDisplay", getOnOff(LightLevelHUD.showHUD));
 			}
 		}
 
