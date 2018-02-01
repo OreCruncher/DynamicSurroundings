@@ -33,7 +33,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.api.events.FootstepEvent;
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions;
@@ -42,6 +42,7 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IStepPlayer;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions.Option;
 import org.blockartistry.DynSurround.client.footsteps.system.Association;
 import org.blockartistry.DynSurround.client.footsteps.system.Footprint;
+import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.FootstepSound;
@@ -55,7 +56,8 @@ import net.minecraft.block.SoundType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.SoundEvent;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -234,12 +236,14 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 			return false;
 		});
 
-		this.footprints.forEach(print -> {
-			// Display the current player footprint
-			final FootstepEvent.Display event = new FootstepEvent.Display(print.getStepLocation(), print.getRotation(),
-					print.isRightFoot());
-			MinecraftForge.EVENT_BUS.post(event);
-		});
+		if (ModOptions.player.enableFootprints) {
+			this.footprints.forEach(print -> {
+				final Vec3d loc = print.getStepLocation();
+				final World world = print.getEntity().getEntityWorld();
+				ParticleCollections.addFootprint(world, loc.xCoord, loc.yCoord, loc.zCoord, print.getRotation(),
+						print.isRightFoot());
+			});
+		}
 		this.footprints.clear();
 	}
 
