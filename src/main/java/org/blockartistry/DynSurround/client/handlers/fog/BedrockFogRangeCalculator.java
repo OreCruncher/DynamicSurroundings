@@ -23,50 +23,62 @@
  */
 package org.blockartistry.DynSurround.client.handlers.fog;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.lib.WorldUtils;
+
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * Consults various different fog calculators and aggregates the results into a
- * single set.
+ * Implements the void fog (the fog at bedrock) of older versions of Minecraft.
  */
 @SideOnly(Side.CLIENT)
-public class HolisticFogRangeCalculator implements IFogRangeCalculator {
-
-	protected final List<IFogRangeCalculator> calculators = new ArrayList<>();
+public class BedrockFogRangeCalculator extends VanillaFogRangeCalculator {
 
 	protected final FogResult cached = new FogResult();
 
-	public HolisticFogRangeCalculator() {
-		this.calculators.add(new BiomeFogRangeCalculator());
-		this.calculators.add(new HazeFogRangeCalculator());
-		this.calculators.add(new WeatherFogRangeCalculator());
-		this.calculators.add(new MorningFogRangeCalculator());
-		this.calculators.add(new BedrockFogRangeCalculator());
+	public BedrockFogRangeCalculator() {
+
 	}
 
+	@Override
 	@Nonnull
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
-		float start = event.getFarPlaneDistance();
-		float end = event.getFarPlaneDistance();
 
-		for (final IFogRangeCalculator calc : this.calculators) {
-			final FogResult result = calc.calculate(event);
-			start = Math.min(start, result.getStart());
-			end = Math.min(end, result.getEnd());
+		this.cached.set(event);
+		if (ModOptions.fog.enableBedrockFog && WorldUtils.hasVoidPartiles(EnvironState.getWorld())) {
+			final EntityLivingBase player = EnvironState.getPlayer();
+			final double factor = (player.lastTickPosY
+					+ (player.posY - player.lastTickPosY) * (double) event.getRenderPartialTicks() + 4.0D) / 32.0D;
+			final double skyLight = (player.getBrightnessForRender() & 0xF00000) >> 20;
+			double d0 = (skyLight / 16.0D) + factor;
+
+			float end = event.getFarPlaneDistance();
+			if (d0 < 1.0D) {
+				if (d0 < 0.0D) {
+					d0 = 0.0D;
+				}
+
+				d0 *= d0;
+				float f2 = 100.0F * (float) d0;
+
+				if (f2 < 5.0F) {
+					f2 = 5.0F;
+				}
+
+				if (end > f2) {
+					end = f2;
+				}
+			}
+
+			this.cached.set(event.getFogMode(), end, FogResult.DEFAULT_PLANE_SCALE);
 		}
-		this.cached.set(start, end);
-		return this.cached;
-	}
 
-	@Nonnull
-	public String toString() {
-		return this.cached.toString();
+		return this.cached;
 	}
 }

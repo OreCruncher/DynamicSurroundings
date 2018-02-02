@@ -280,6 +280,7 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_FOG_PROCESSING = "Enable Fog Processing";
 	public static final String CONFIG_ENABLE_MORNING_FOG = "Morning Fog";
 	public static final String CONFIG_ENABLE_WEATHER_FOG = "Weather Fog";
+	public static final String CONFIG_ENABLE_BEDROCK_FOG = "Bedrock Fog";
 	public static final String CONFIG_ALLOW_DESERT_FOG = "Desert Fog";
 	public static final String CONFIG_ENABLE_ELEVATION_HAZE = "Elevation Haze";
 	public static final String CONFIG_ENABLE_BIOME_FOG = "Biomes Fog";
@@ -291,7 +292,7 @@ public final class ModOptions {
 
 		public static String PATH = null;
 		public static final List<String> SORT = Arrays.asList(CONFIG_ENABLE_FOG_PROCESSING, CONFIG_ENABLE_MORNING_FOG,
-				CONFIG_ENABLE_WEATHER_FOG, CONFIG_ALLOW_DESERT_FOG, CONFIG_ENABLE_BIOME_FOG,
+				CONFIG_ENABLE_WEATHER_FOG, CONFIG_ENABLE_BEDROCK_FOG, CONFIG_ALLOW_DESERT_FOG, CONFIG_ENABLE_BIOME_FOG,
 				CONFIG_ENABLE_ELEVATION_HAZE);
 
 		@Option(CONFIG_ENABLE_FOG_PROCESSING)
@@ -311,6 +312,12 @@ public final class ModOptions {
 		@LangKey("dsurround.cfg.fog.EnableWeather")
 		@Comment("Increase fog based on the strength of rain")
 		public static boolean enableWeatherFog = true;
+
+		@Option(CONFIG_ENABLE_BEDROCK_FOG)
+		@DefaultValue("true")
+		@LangKey("dsurround.cfg.fog.EnableBedrock")
+		@Comment("Increase fog at bedrock layers")
+		public static boolean enableBedrockFog = true;
 
 		@Option(CONFIG_ALLOW_DESERT_FOG)
 		@DefaultValue("true")
