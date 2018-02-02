@@ -31,7 +31,7 @@ import org.blockartistry.lib.asm.MyTransformer;
 public class Transformer extends MyTransformer {
 
 	private static final Logger logger = LogManager.getLogger("dsurround Transform");
-	
+
 	public static Logger log() {
 		return logger;
 	}
@@ -46,7 +46,8 @@ public class Transformer extends MyTransformer {
 		this.addTransmorgrifier(new PatchWorldServer());
 		this.addTransmorgrifier(new PatchSoundHandler());
 		this.addTransmorgrifier(new PatchSoundManager());
-		
+		this.addTransmorgrifier(new PatchEntityArrow());
+
 		// Sound engine crash patches
 		this.addTransmorgrifier(new SoundCrashFixSource());
 		this.addTransmorgrifier(new SoundCrashFixLibrary());

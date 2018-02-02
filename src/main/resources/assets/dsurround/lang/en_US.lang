@@ -66,6 +66,8 @@ dsurround.cfg.asm.EnableWeather=Weather Control
 dsurround.cfg.asm.EnableWeather.tooltip=Enable/disable ASM transformations to permit weather (rain, snow, splash, dust storms, auroras)
 dsurround.cfg.asm.EnableSleepReset=Weather Reset on Sleep Control
 dsurround.cfg.asm.EnableSleepReset.tooltip=Enable/disable ASM transformations to allow control of player sleep impact on weather reset
+dsurround.cfg.asm.DisableArrow=Arrow Particle Trail
+dsurround.cfg.asm.DisableArrow.tooltip=Disable particle trail left by an arrow when it flies
 
 dsurround.cfg.logging.cat.Logging=Logging Options
 dsurround.cfg.logging.cat.Logging.tooltip=Defines how Dynamic Surroundings logging will behave
