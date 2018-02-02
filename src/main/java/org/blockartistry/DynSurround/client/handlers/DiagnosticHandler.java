@@ -34,6 +34,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.swing.DiagnosticPanel;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.event.ServerDataEvent;
+import org.blockartistry.lib.math.TimerEMA;
 
 import com.google.common.collect.ImmutableList;
 
@@ -56,14 +57,24 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class DiagnosticHandler extends EffectHandlerBase {
 
+	public static DiagnosticHandler INSTANCE;
+
 	// Diagnostic strings to display in the debug HUD
 	private List<String> diagnostics = ImmutableList.of();
 
 	// TPS status strings to display
 	private List<String> serverDataReport = ImmutableList.of();
 
+	private List<TimerEMA> timers = new ArrayList<>();
+
 	public DiagnosticHandler() {
 		super("DiagnosticHandler");
+
+		INSTANCE = this;
+	}
+
+	public void addTimer(@Nonnull final TimerEMA timer) {
+		this.timers.add(timer);
 	}
 
 	@Override
@@ -94,6 +105,7 @@ public class DiagnosticHandler extends EffectHandlerBase {
 	public void onDisconnect() {
 		this.diagnostics = null;
 		this.serverDataReport = null;
+		INSTANCE = null;
 
 		if (ModOptions.logging.showDebugDialog)
 			DiagnosticPanel.destroy();
@@ -109,9 +121,16 @@ public class DiagnosticHandler extends EffectHandlerBase {
 			event.getLeft().addAll(this.diagnostics);
 		}
 
-		if (Minecraft.getMinecraft().gameSettings.showDebugInfo && this.serverDataReport != null) {
+		if (Minecraft.getMinecraft().gameSettings.showDebugInfo) {
 			event.getRight().add(" ");
-			event.getRight().addAll(this.serverDataReport);
+			for (final TimerEMA timer : this.timers)
+				event.getRight()
+						.add(TextFormatting.AQUA + String.format("%s: %-2.2fms", timer.name(), timer.getMSecs()));
+
+			if (this.serverDataReport != null) {
+				event.getRight().add(" ");
+				event.getRight().addAll(this.serverDataReport);
+			}
 		}
 	}
 

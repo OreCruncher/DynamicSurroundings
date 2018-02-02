@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.handlers;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.lib.collections.ObjectArray;
+import org.blockartistry.lib.math.TimerEMA;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
@@ -42,6 +43,7 @@ public class EffectManager {
 	private static EffectManager INSTANCE = null;
 
 	private final ObjectArray<EffectHandlerBase> effectHandlers = new ObjectArray<EffectHandlerBase>();
+	private TimerEMA computeTime;
 
 	private EffectManager() {
 	}
@@ -69,6 +71,9 @@ public class EffectManager {
 
 		for (final EffectHandlerBase h : this.effectHandlers)
 			h.connect0();
+		
+		this.computeTime = new TimerEMA("EffectManager Process");
+		DiagnosticHandler.INSTANCE.addTimer(this.computeTime);
 	}
 
 	private void fini() {
@@ -76,6 +81,7 @@ public class EffectManager {
 			h.disconnect0();
 		
 		this.effectHandlers.clear();
+		this.computeTime = null;
 	}
 
 	public static void register() {
@@ -91,6 +97,10 @@ public class EffectManager {
 			INSTANCE = null;
 		}
 	}
+	
+	public double getProcessTimeNanos() {
+		return this.computeTime.get();
+	}
 
 	@SubscribeEvent
 	public void playerTick(final TickEvent.PlayerTickEvent event) {
@@ -104,12 +114,20 @@ public class EffectManager {
 		if(event.player != Minecraft.getMinecraft().player)
 			return;
 
+		final long start = System.nanoTime();
+		
 		// TODO: Find a better home....
 		if (ModOptions.player.suppressPotionParticles)
 			event.player.getDataManager().set(EntityLivingBase.HIDE_PARTICLES, true);
 
-		for (int i = 0; i < this.effectHandlers.size(); i++)
-			this.effectHandlers.get(i).process(event.player);
+		for (int i = 0; i < this.effectHandlers.size(); i++) {
+			final EffectHandlerBase handler = this.effectHandlers.get(i);
+			final long mark = System.nanoTime();
+			handler.process(event.player);
+			handler.updateTimer(System.nanoTime() - mark);
+		}
+		
+		this.computeTime.update(System.nanoTime() - start);
 	}
 
 }
