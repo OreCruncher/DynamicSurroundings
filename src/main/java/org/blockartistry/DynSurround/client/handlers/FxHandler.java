@@ -42,6 +42,7 @@ import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.lib.effects.EntityEffectHandler;
 import org.blockartistry.lib.effects.EntityEffectLibrary;
 import org.blockartistry.lib.effects.EventEffectLibrary;
+import org.blockartistry.lib.math.TimerEMA;
 
 import com.google.common.collect.ImmutableList;
 
@@ -79,6 +80,9 @@ public class FxHandler extends EffectHandlerBase {
 
 	private int totalHandlers = 0;
 	private int activeHandlers = 0;
+	
+	private TimerEMA compute = new TimerEMA("FxHandler Updates");
+	private long nanos;
 
 	public FxHandler() {
 		super("FxHandler");
@@ -111,6 +115,8 @@ public class FxHandler extends EffectHandlerBase {
 		}
 
 		this.totalHandlers = this.handlers.size();
+		this.compute.update(this.nanos);
+		this.nanos = 0;
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
@@ -145,6 +151,8 @@ public class FxHandler extends EffectHandlerBase {
 		if (entity == null || !entity.getEntityWorld().isRemote)
 			return;
 
+		final long start = System.nanoTime();
+		
 		final double distanceThreshold = ModOptions.general.specialEffectRange * ModOptions.general.specialEffectRange;
 		final boolean inRange = entity.getDistanceSqToEntity(EnvironState.getPlayer()) <= distanceThreshold;
 
@@ -158,6 +166,8 @@ public class FxHandler extends EffectHandlerBase {
 			handler = library.create(entity).get();
 			this.handlers.put(entity.getEntityId(), handler);
 		}
+		
+		this.nanos += (System.nanoTime() - start);
 	}
 
 	protected void clearHandlers() {
@@ -189,6 +199,8 @@ public class FxHandler extends EffectHandlerBase {
 		this.eventLibrary.register(new PopoffEventEffect(this.eventLibrary));
 
 		INSTANCE = this;
+		
+		DiagnosticHandler.INSTANCE.addTimer(this.compute);
 	}
 
 	@Override

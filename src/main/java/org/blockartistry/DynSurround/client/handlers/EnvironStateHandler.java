@@ -422,7 +422,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void diagnostics(final DiagnosticEvent.Gather event) {
 		
-		event.output.add(TextFormatting.DARK_GREEN + "Time: " + EnvironState.getClock().toString());
+		event.output.add(TextFormatting.GREEN + "Minecraft Date: " + EnvironState.getClock().toString());
 		
 		for (final String s : scripts) {
 			final String result = ExpressionEngine.instance().eval(s).toString();

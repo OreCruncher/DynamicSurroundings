@@ -29,7 +29,6 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.aurora.AuroraRenderer;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.DynSurround.client.gui.HumDinger;
 import org.blockartistry.DynSurround.client.handlers.EffectManager;
@@ -80,7 +79,6 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 	protected void eventBusRegistrations() {
 		super.eventBusRegistrations();
 
-		register(AuroraRenderer.class);
 		register(HumDinger.class);
 		register(EnvironStateHandler.class);
 		register(InspectionHUD.class);

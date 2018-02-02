@@ -21,45 +21,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package org.blockartistry.DynSurround.client.aurora;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraftforge.client.IRenderHandler;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+package org.blockartistry.lib.math;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.handlers.AuroraEffectHandler;
+/**
+ * Simple EMA calculator.
+ */
+public class EMA {
 
-@SideOnly(Side.CLIENT)
-public final class AuroraRenderer extends IRenderHandler {
+	private final String name;
+	private double ema;
+	private double factor;
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void doRender(@Nonnull final RenderWorldLastEvent event) {
-
-		// Render our aurora if it is present
-		final IAurora aurora = AuroraEffectHandler.getCurrentAurora();
-		if (aurora != null) {
-			aurora.render(event.getPartialTicks());
-		}
+	public EMA() {
+		this("UNNAMED");
 	}
 
-	protected final IRenderHandler handler;
+	public EMA(@Nonnull final String name) {
+		this(name, 100);
+	}
 	
-	public AuroraRenderer(@Nullable final IRenderHandler handler) {
-		this.handler = handler;
+	public EMA(@Nonnull final String name, final int periods) {
+		this.name = name;
+		this.factor = 2D / (periods + 1);
+		this.ema = Double.NaN;
 	}
 
-	@Override
-	public void render(float partialTicks, WorldClient world, Minecraft mc) {
+	public double update(final double newValue) {
+		if (Double.isNaN(this.ema)) {
+			this.ema = newValue;
+		} else {
+			this.ema = (newValue - this.ema) * this.factor + this.ema;
+		}
+		return this.ema;
+	}
 
+	public String name() {
+		return this.name;
+	}
+	
+	public double get() {
+		return this.ema;
 	}
 
 }
