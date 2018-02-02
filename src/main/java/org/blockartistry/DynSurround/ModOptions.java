@@ -66,6 +66,7 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_SOUND_CACHING = "Enable Sound Caching";
 	public static final String CONFIG_ENABLE_WEATHER = "Enable Weather Control";
 	public static final String CONFIG_ENABLE_RESET_WEATHER_ON_SLEEP = "Enable Weather Reset on Sleep Control";
+	public static final String CONFIG_DISABLE_ARROW_CRITICAL_TRAIL = "Disable Arrow Critical Particle Trail";
 
 	@Category(CATEGORY_ASM)
 	@LangKey("dsurround.cfg.asm.cat.ASM")
@@ -95,6 +96,13 @@ public final class ModOptions {
 		@Comment("Enable ASM transformations to allow control of player sleep impact on weather reset")
 		@RestartRequired(server = true)
 		public static boolean enableResetOnSleepASM = true;
+	
+		@Option(CONFIG_DISABLE_ARROW_CRITICAL_TRAIL)
+		@DefaultValue("true")
+		@LangKey("dsurround.cfg.asm.DisableArrow")
+		@Comment("Disable particle trail left by an arrow when it flies")
+		@RestartRequired(server = true)
+		public static boolean disableArrowParticleTrail = true;
 	}
 
 	public static final String CATEGORY_LOGGING_CONTROL = "logging";
