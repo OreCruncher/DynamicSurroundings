@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
@@ -51,13 +52,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class ItemRegistry extends Registry {
 
-	private final Set<Class<?>> swordItems = new IdentityHashSet<Class<?>>();
-	private final Set<Class<?>> axeItems = new IdentityHashSet<Class<?>>();
-	private final Set<Class<?>> bowItems = new IdentityHashSet<Class<?>>();
-	private final Set<Class<?>> toolItems = new IdentityHashSet<Class<?>>();
-	private final Set<Class<?>> shieldItems = new IdentityHashSet<Class<?>>();
+	private static final int SET_CAPACITY = 64;
+	private static final int MAP_CAPACITY = 256;
 
-	private final Map<Item, ArmorClass> armorMap = new IdentityHashMap<Item, ArmorClass>();
+	private final Set<Class<?>> swordItems = new IdentityHashSet<>(SET_CAPACITY);
+	private final Set<Class<?>> axeItems = new IdentityHashSet<>(SET_CAPACITY);
+	private final Set<Class<?>> bowItems = new IdentityHashSet<>(SET_CAPACITY);
+	private final Set<Class<?>> toolItems = new IdentityHashSet<>(SET_CAPACITY);
+	private final Set<Class<?>> shieldItems = new IdentityHashSet<>(SET_CAPACITY);
+	private final Map<Item, ArmorClass> armorMap = new IdentityHashMap<>(SET_CAPACITY);
+	private final Map<Item, SoundEffect> swings = new IdentityHashMap<>(MAP_CAPACITY);
+	private final Map<Item, SoundEffect> uses = new IdentityHashMap<>(MAP_CAPACITY);
+	private final Map<Item, SoundEffect> equips = new IdentityHashMap<>(MAP_CAPACITY);
 
 	public ItemRegistry(@Nonnull final Side side) {
 		super(side);
@@ -76,6 +82,10 @@ public final class ItemRegistry extends Registry {
 		this.toolItems.clear();
 		this.shieldItems.clear();
 		this.armorMap.clear();
+
+		this.swings.clear();
+		this.uses.clear();
+		this.equips.clear();
 	}
 
 	private boolean postProcess(@Nonnull final Set<Class<?>> itemSet, @Nonnull final Item item) {
@@ -105,16 +115,29 @@ public final class ItemRegistry extends Registry {
 		while (iterator.hasNext()) {
 			final Item item = iterator.next();
 			if (postProcess(this.swordItems, item))
+				;
+			else if (postProcess(this.axeItems, item))
 				continue;
-			if (postProcess(this.axeItems, item))
-				continue;
-			if (postProcess(this.toolItems, item))
-				continue;
-			if (postProcess(this.shieldItems, item))
-				continue;
+			else if (postProcess(this.toolItems, item))
+				;
+			else if (postProcess(this.shieldItems, item))
+				;
+			else
+				postProcess(this.bowItems, item);
 
-			postProcess(this.bowItems, item);
+			SoundEffect se = this.getSwingSound(item);
+			if (se != null)
+				this.swings.put(item, se);
+
+			se = this.getUseSound(item);
+			if (se != null)
+				this.uses.put(item, se);
+
+			se = this.getEquipSound(item);
+			if (se != null)
+				this.equips.put(item, se);
 		}
+
 	}
 
 	@Override
@@ -153,156 +176,144 @@ public final class ItemRegistry extends Registry {
 		process(config.lightArmor, ArmorClass.LIGHT);
 	}
 
-	public boolean doSwordSound(@Nonnull final ItemStack stack) {
-		return ItemStackUtil.isValidItemStack(stack) ? this.swordItems.contains(stack.getItem().getClass()) : false;
-	}
-
-	public boolean doAxeSound(@Nonnull final ItemStack stack) {
-		return ItemStackUtil.isValidItemStack(stack) ? this.axeItems.contains(stack.getItem().getClass()) : false;
-	}
-
-	public boolean doBowSound(@Nonnull final ItemStack stack) {
+	public boolean isBow(@Nonnull final ItemStack stack) {
 		return ItemStackUtil.isValidItemStack(stack) ? this.bowItems.contains(stack.getItem().getClass()) : false;
 	}
 
-	public boolean doToolSound(@Nonnull final ItemStack stack) {
-		return ItemStackUtil.isValidItemStack(stack) ? this.toolItems.contains(stack.getItem().getClass()) : false;
-	}
-
-	public boolean doShieldSound(@Nonnull final ItemStack stack) {
+	public boolean isShield(@Nonnull final ItemStack stack) {
 		return ItemStackUtil.isValidItemStack(stack) ? this.shieldItems.contains(stack.getItem().getClass()) : false;
 	}
 
-	public boolean doFoodSound(@Nonnull final ItemStack stack) {
-		return ItemStackUtil.isValidItemStack(stack) ? stack.getItem() instanceof ItemFood : false;
-	}
-
 	public ArmorClass getArmorClass(@Nonnull final ItemStack stack) {
-		if (stack != null) {
-			final Item item = stack.getItem();
-			if (item != null) {
-				final ArmorClass result = this.armorMap.get(item);
-				return result != null ? result : ArmorClass.NONE;
-			}
-		}
-		return ArmorClass.NONE;
+		return ItemStackUtil.isValidItemStack(stack) ? getArmorClass(stack.getItem()) : ArmorClass.NONE;
 	}
 
-	@SideOnly(Side.CLIENT)
+	protected ArmorClass getArmorClass(@Nonnull final Item item) {
+		final ArmorClass result = this.armorMap.get(item);
+		return result != null ? result : ArmorClass.NONE;
+	}
+
+	protected SoundEffect getSwingSound(@Nonnull final Item item) {
+		final Class<?> itemClass = item.getClass();
+		final SoundEffect sound;
+		if (this.swordItems.contains(itemClass))
+			sound = Sounds.SWORD_SWING;
+		else if (this.axeItems.contains(itemClass))
+			sound = Sounds.AXE_SWING;
+		else if (this.toolItems.contains(itemClass))
+			sound = Sounds.TOOL_SWING;
+		else if (this.bowItems.contains(itemClass))
+			sound = Sounds.TOOL_SWING;
+		else if (this.shieldItems.contains(itemClass))
+			sound = Sounds.TOOL_SWING;
+		else {
+			final ArmorClass armor = this.getArmorClass(item);
+			switch (armor) {
+			case LIGHT:
+				sound = Sounds.LIGHT_ARMOR_EQUIP;
+				break;
+			case MEDIUM:
+				sound = Sounds.MEDIUM_ARMOR_EQUIP;
+				break;
+			case HEAVY:
+				sound = Sounds.HEAVY_ARMOR_EQUIP;
+				break;
+			case CRYSTAL:
+				sound = Sounds.CRYSTAL_ARMOR_EQUIP;
+				break;
+			default:
+				sound = null;
+			}
+		}
+
+		return sound;
+	}
+
+	protected SoundEffect getUseSound(@Nonnull final Item item) {
+		final Class<?> itemClass = item.getClass();
+		final SoundEffect sound;
+
+		if (this.bowItems.contains(itemClass))
+			sound = Sounds.BOW_PULL;
+		else if (this.shieldItems.contains(itemClass))
+			sound = Sounds.SHIELD_USE;
+		else {
+			final ArmorClass armor = this.getArmorClass(item);
+			switch (armor) {
+			case LIGHT:
+				sound = Sounds.LIGHT_ARMOR_EQUIP;
+				break;
+			case MEDIUM:
+				sound = Sounds.MEDIUM_ARMOR_EQUIP;
+				break;
+			case HEAVY:
+				sound = Sounds.HEAVY_ARMOR_EQUIP;
+				break;
+			case CRYSTAL:
+				sound = Sounds.CRYSTAL_ARMOR_EQUIP;
+				break;
+			default:
+				sound = null;
+			}
+		}
+
+		return sound;
+	}
+
+	protected SoundEffect getEquipSound(@Nonnull final Item item) {
+		final Class<?> itemClass = item.getClass();
+		final SoundEffect sound;
+		if (item instanceof ItemFood)
+			sound = Sounds.FOOD_EQUIP;
+		else if (this.swordItems.contains(itemClass))
+			sound = ModOptions.sound.swordEquipAsTool ? Sounds.TOOL_EQUIP : Sounds.SWORD_EQUIP;
+		else if (this.axeItems.contains(itemClass))
+			sound = Sounds.AXE_EQUIP;
+		else if (this.toolItems.contains(itemClass))
+			sound = Sounds.TOOL_EQUIP;
+		else if (this.bowItems.contains(itemClass))
+			sound = Sounds.BOW_EQUIP;
+		else if (this.shieldItems.contains(itemClass))
+			sound = Sounds.SHIELD_EQUIP;
+		else {
+			final ArmorClass armor = this.getArmorClass(item);
+			switch (armor) {
+			case LIGHT:
+				sound = Sounds.LIGHT_ARMOR_EQUIP;
+				break;
+			case MEDIUM:
+				sound = Sounds.MEDIUM_ARMOR_EQUIP;
+				break;
+			case HEAVY:
+				sound = Sounds.HEAVY_ARMOR_EQUIP;
+				break;
+			case CRYSTAL:
+				sound = Sounds.CRYSTAL_ARMOR_EQUIP;
+				break;
+			default:
+				sound = null;
+			}
+		}
+
+		return sound;
+	}
+
+	@Nullable
 	public SoundEffect getSwingSound(@Nonnull final ItemStack stack) {
-		if (ItemStackUtil.isValidItemStack(stack)) {
-			final Class<?> itemClass = stack.getItem().getClass();
-			final SoundEffect sound;
-			if (this.swordItems.contains(itemClass))
-				sound = Sounds.SWORD_SWING;
-			else if (this.axeItems.contains(itemClass))
-				sound = Sounds.AXE_SWING;
-			else if (this.toolItems.contains(itemClass))
-				sound = Sounds.TOOL_SWING;
-			else if (this.bowItems.contains(itemClass))
-				sound = Sounds.TOOL_SWING;
-			else if (this.shieldItems.contains(itemClass))
-				sound = Sounds.TOOL_SWING;
-			else {
-				final ArmorClass armor = this.getArmorClass(stack);
-				switch (armor) {
-				case LIGHT:
-					sound = Sounds.LIGHT_ARMOR_EQUIP;
-					break;
-				case MEDIUM:
-					sound = Sounds.MEDIUM_ARMOR_EQUIP;
-					break;
-				case HEAVY:
-					sound = Sounds.HEAVY_ARMOR_EQUIP;
-					break;
-				case CRYSTAL:
-					sound = Sounds.CRYSTAL_ARMOR_EQUIP;
-					break;
-				default:
-					sound = null;
-				}
-			}
-
-			return sound;
-		}
-
-		return null;
+		return ItemStackUtil.isValidItemStack(stack) ? this.swings.get(stack.getItem()) : null;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Nullable
 	public SoundEffect getUseSound(@Nonnull final ItemStack stack) {
-		if (stack != null && stack.getItem() != null) {
-			final Class<?> itemClass = stack.getItem().getClass();
-			final SoundEffect sound;
-
-			if (this.bowItems.contains(itemClass))
-				sound = Sounds.BOW_PULL;
-			else if (this.shieldItems.contains(itemClass))
-				sound = Sounds.TOOL_EQUIP;
-			else {
-				final ArmorClass armor = this.getArmorClass(stack);
-				switch (armor) {
-				case LIGHT:
-					sound = Sounds.LIGHT_ARMOR_EQUIP;
-					break;
-				case MEDIUM:
-					sound = Sounds.MEDIUM_ARMOR_EQUIP;
-					break;
-				case HEAVY:
-					sound = Sounds.HEAVY_ARMOR_EQUIP;
-					break;
-				case CRYSTAL:
-					sound = Sounds.CRYSTAL_ARMOR_EQUIP;
-					break;
-				default:
-					sound = null;
-				}
-			}
-
-			return sound;
-		}
-
-		return null;
+		return ItemStackUtil.isValidItemStack(stack) ? this.uses.get(stack.getItem()) : null;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Nullable
 	public SoundEffect getEquipSound(@Nonnull final ItemStack stack) {
-		if (stack != null && stack.getItem() != null) {
-			final Class<?> itemClass = stack.getItem().getClass();
-			final SoundEffect sound;
-			if (this.swordItems.contains(itemClass))
-				sound = ModOptions.sound.swordEquipAsTool ? Sounds.TOOL_EQUIP : Sounds.SWORD_EQUIP;
-			else if (this.axeItems.contains(itemClass))
-				sound = Sounds.AXE_EQUIP;
-			else if (this.toolItems.contains(itemClass))
-				sound = Sounds.TOOL_EQUIP;
-			else if (this.bowItems.contains(itemClass))
-				sound = Sounds.BOW_EQUIP;
-			else if (this.shieldItems.contains(itemClass))
-				sound = Sounds.SHIELD_EQUIP;
-			else {
-				final ArmorClass armor = this.getArmorClass(stack);
-				switch (armor) {
-				case LIGHT:
-					sound = Sounds.LIGHT_ARMOR_EQUIP;
-					break;
-				case MEDIUM:
-					sound = Sounds.MEDIUM_ARMOR_EQUIP;
-					break;
-				case HEAVY:
-					sound = Sounds.HEAVY_ARMOR_EQUIP;
-					break;
-				case CRYSTAL:
-					sound = Sounds.CRYSTAL_ARMOR_EQUIP;
-					break;
-				default:
-					sound = Sounds.UTILITY_EQUIP;
-				}
-			}
-
-			return sound;
+		if (ItemStackUtil.isValidItemStack(stack)) {
+			final SoundEffect result = this.equips.get(stack.getItem());
+			return result != null ? result : Sounds.UTILITY_EQUIP;
 		}
-
 		return null;
 	}
 

@@ -29,13 +29,16 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
@@ -44,6 +47,7 @@ import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.DynSurround.client.footsteps.implem.Manifest;
 import org.blockartistry.DynSurround.client.footsteps.implem.PrimitiveMap;
 import org.blockartistry.DynSurround.client.footsteps.implem.Variator;
+import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.parsers.AcousticsJsonReader;
 import org.blockartistry.DynSurround.client.footsteps.system.Generator;
 import org.blockartistry.DynSurround.client.footsteps.system.GeneratorQP;
@@ -103,6 +107,9 @@ public final class FootstepsRegistry extends Registry {
 
 	private Set<Material> FOOTPRINT_MATERIAL;
 	private Set<IBlockState> FOOTPRINT_STATES;
+	
+	private Map<ArmorClass, IAcoustic> ARMOR_SOUND;
+	private Map<ArmorClass, IAcoustic> ARMOR_SOUND_FOOT;
 
 	public FootstepsRegistry(@Nonnull final Side side) {
 		super(side);
@@ -113,8 +120,8 @@ public final class FootstepsRegistry extends Registry {
 	@Override
 	public void init() {
 
-		this.FOOTPRINT_MATERIAL = new IdentityHashSet<Material>();
-		this.FOOTPRINT_STATES = new IdentityHashSet<IBlockState>();
+		this.FOOTPRINT_MATERIAL = new IdentityHashSet<>();
+		this.FOOTPRINT_STATES = new IdentityHashSet<>();
 
 		// Initialize the known materials that leave footprints
 		this.FOOTPRINT_MATERIAL.add(Material.CLAY);
@@ -125,6 +132,9 @@ public final class FootstepsRegistry extends Registry {
 		this.FOOTPRINT_MATERIAL.add(Material.SAND);
 		this.FOOTPRINT_MATERIAL.add(Material.CRAFTED_SNOW);
 		this.FOOTPRINT_MATERIAL.add(Material.SNOW);
+		
+		this.ARMOR_SOUND = new EnumMap<>(ArmorClass.class);
+		this.ARMOR_SOUND_FOOT = new EnumMap<>(ArmorClass.class);
 
 		// It's a hack - needs refactor
 		AcousticsManager.SWIM = null;
@@ -162,6 +172,18 @@ public final class FootstepsRegistry extends Registry {
 		this.getBlockMap().freeze();
 		AcousticsManager.SWIM = this.isolator.getAcoustics().compileAcoustics("_SWIM");
 		AcousticsManager.JUMP = this.isolator.getAcoustics().compileAcoustics("_JUMP");
+		
+		final AcousticsManager am = this.isolator.getAcoustics();
+		this.ARMOR_SOUND.put(ArmorClass.NONE, am.getAcoustic("NOT_EMITTER"));
+		this.ARMOR_SOUND.put(ArmorClass.LIGHT, am.getAcoustic("armor_light"));
+		this.ARMOR_SOUND.put(ArmorClass.MEDIUM, am.getAcoustic("armor_medium"));
+		this.ARMOR_SOUND.put(ArmorClass.CRYSTAL, am.getAcoustic("armor_crystal"));
+		this.ARMOR_SOUND.put(ArmorClass.HEAVY, am.getAcoustic("armor_heavy"));
+		this.ARMOR_SOUND_FOOT.put(ArmorClass.NONE, am.getAcoustic("NOT_EMITTER"));
+		this.ARMOR_SOUND_FOOT.put(ArmorClass.LIGHT, am.getAcoustic("armor_light"));
+		this.ARMOR_SOUND_FOOT.put(ArmorClass.MEDIUM, am.getAcoustic("medium_foot"));
+		this.ARMOR_SOUND_FOOT.put(ArmorClass.CRYSTAL, am.getAcoustic("crystal_foot"));
+		this.ARMOR_SOUND_FOOT.put(ArmorClass.HEAVY, am.getAcoustic("heavy_foot"));
 
 		final ArrayList<String> missingAcoustics = new ArrayList<String>();
 		BlockState.forEach(state -> {
@@ -355,6 +377,16 @@ public final class FootstepsRegistry extends Registry {
 
 	public boolean hasFootprint(@Nonnull final IBlockState state) {
 		return this.FOOTPRINT_MATERIAL.contains(state.getMaterial()) || this.FOOTPRINT_STATES.contains(state);
+	}
+	
+	@Nullable
+	public IAcoustic getArmorAcoustic(@Nonnull final ArmorClass ac) {
+		return ac != null ? this.ARMOR_SOUND.get(ac) : null;
+	}
+	
+	@Nullable
+	public IAcoustic getFootArmorAcoustic(@Nonnull final ArmorClass ac) {
+		return ac != null ? this.ARMOR_SOUND_FOOT.get(ac) : null;
 	}
 
 	private static Block resolveToBlock(@Nonnull final ItemStack stack) {

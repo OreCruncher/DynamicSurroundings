@@ -31,7 +31,6 @@ import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
@@ -78,9 +77,6 @@ public class EntitySwingEffect extends EntityEffect {
 				}
 
 				final ItemStack currentItem = entity.getHeldItem(entity.swingingHand);
-				if (!ItemStackUtil.isValidItemStack(currentItem))
-					return;
-
 				final SoundEffect soundEffect = ClientRegistry.ITEMS.getSwingSound(currentItem);
 				if (soundEffect != null) {
 					final float reach = Minecraft.getMinecraft().playerController.getBlockReachDistance();

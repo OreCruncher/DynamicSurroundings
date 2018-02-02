@@ -35,24 +35,20 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public enum ArmorClass {
 
 	//
-	NONE("none", "NOT_EMITTER", "NOT_EMITTER"),
+	NONE("none"),
 	//
-	LIGHT("light", "armor_light", "NOT_EMITTER"),
+	LIGHT("light"),
 	//
-	MEDIUM("medium", "armor_medium", "medium_foot"),
+	MEDIUM("medium"),
 	//
-	CRYSTAL("crystal", "armor_crystal", "crystal_foot"),
+	CRYSTAL("crystal"),
 	//
-	HEAVY("heavy", "armor_heavy", "heavy_foot");
+	HEAVY("heavy");
 
 	private final String className;
-	private final String acoustic;
-	private final String footAcoustic;
 
-	private ArmorClass(@Nonnull final String name, @Nonnull final String acoustic, @Nonnull final String footAcoustic) {
+	private ArmorClass(@Nonnull final String name) {
 		this.className = name;
-		this.acoustic = acoustic;
-		this.footAcoustic = footAcoustic;
 	}
 
 	@Nonnull
@@ -60,19 +56,9 @@ public enum ArmorClass {
 		return this.className;
 	}
 
-	@Nonnull
-	public String getAcoustic() {
-		return this.acoustic;
-	}
-
-	@Nonnull
-	public String getFootAcoustic() {
-		return this.footAcoustic;
-	}
-
 	/**
-	 * Determines the effective armor class of the Entity. Used to determine the
-	 * sound overlay to add. The chest and leg slots are used.
+	 * Determines the effective armor class of the Entity. Chest and legs are used
+	 * to make the determination.
 	 */
 	public static ArmorClass effectiveArmorClass(@Nonnull final EntityLivingBase entity) {
 		final ArmorClass chest = ClientRegistry.ITEMS
@@ -83,8 +69,7 @@ public enum ArmorClass {
 	}
 
 	/**
-	 * Gets the armor class of the entities feet in order to apply additional sound
-	 * accents when moving.
+	 * Gets the armor class of the entities feet.
 	 */
 	public static ArmorClass footArmorClass(@Nonnull final EntityLivingBase entity) {
 		return ClientRegistry.ITEMS.getArmorClass(entity.getItemStackFromSlot(EntityEquipmentSlot.FEET));

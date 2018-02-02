@@ -60,8 +60,9 @@ public final class Sounds {
 	public static SoundEffect TOOL_EQUIP;
 	public static SoundEffect TOOL_SWING;
 	public static SoundEffect UTILITY_EQUIP;
-
-	public static SoundEffect SHIELD_EQUIP = TOOL_EQUIP;
+	public static SoundEffect FOOD_EQUIP;
+	public static SoundEffect SHIELD_EQUIP;
+	public static SoundEffect SHIELD_USE;
 
 	public static SoundEffect LIGHT_ARMOR_EQUIP;
 	public static SoundEffect MEDIUM_ARMOR_EQUIP;
@@ -147,8 +148,9 @@ public final class Sounds {
 		TOOL_EQUIP = new SoundEffect.Builder("tool.equip", SoundCategory.PLAYERS).setVolume(0.30F).build();
 		TOOL_SWING = new SoundEffect.Builder("tool.swing", SoundCategory.PLAYERS).build();
 		UTILITY_EQUIP = new SoundEffect.Builder("utility.equip", SoundCategory.PLAYERS).setVolume(0.35F).build();
-
-		SHIELD_EQUIP = TOOL_EQUIP;
+		FOOD_EQUIP = new SoundEffect.Builder("food.equip", SoundCategory.PLAYERS).setVolume(0.35F).build();
+		SHIELD_EQUIP = new SoundEffect.Builder("shield.equip", SoundCategory.PLAYERS).setVolume(0.30F).build();
+		SHIELD_USE = new SoundEffect.Builder("shield.use", SoundCategory.PLAYERS).setVolume(0.30F).build();
 
 		LIGHT_ARMOR_EQUIP = new SoundEffect.Builder("fs.armor.light_walk", SoundCategory.PLAYERS).build();
 		MEDIUM_ARMOR_EQUIP = new SoundEffect.Builder("fs.armor.medium_walk", SoundCategory.PLAYERS).build();
