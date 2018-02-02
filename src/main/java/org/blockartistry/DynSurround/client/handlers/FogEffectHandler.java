@@ -66,6 +66,9 @@ public class FogEffectHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 
+		this.fogRange.tick();
+		this.fogColor.tick();
+		
 		this.timer.update(this.nanos);
 		this.nanos = 0;
 	}

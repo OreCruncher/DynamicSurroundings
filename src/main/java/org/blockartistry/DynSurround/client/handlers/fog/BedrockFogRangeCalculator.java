@@ -41,6 +41,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BedrockFogRangeCalculator extends VanillaFogRangeCalculator {
 
 	protected final FogResult cached = new FogResult();
+	protected double skyLight;
 
 	public BedrockFogRangeCalculator() {
 
@@ -55,9 +56,7 @@ public class BedrockFogRangeCalculator extends VanillaFogRangeCalculator {
 			final EntityLivingBase player = EnvironState.getPlayer();
 			final double factor = (player.lastTickPosY
 					+ (player.posY - player.lastTickPosY) * (double) event.getRenderPartialTicks() + 4.0D) / 32.0D;
-			final double skyLight = (player.getBrightnessForRender((float) event.getRenderPartialTicks())
-					& 0xF00000) >> 20;
-			double d0 = (skyLight / 16.0D) + factor;
+			double d0 = (this.skyLight / 16.0D) + factor;
 
 			float end = event.getFarPlaneDistance();
 			if (d0 < 1.0D) {
@@ -81,5 +80,10 @@ public class BedrockFogRangeCalculator extends VanillaFogRangeCalculator {
 		}
 
 		return this.cached;
+	}
+
+	@Override
+	public void tick() {
+		this.skyLight = (EnvironState.getPlayer().getBrightnessForRender(1F) & 0xF00000) >> 20;
 	}
 }

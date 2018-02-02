@@ -47,6 +47,11 @@ public class HolisticFogColorCalculator implements IFogColorCalculator {
 		return this.cached = biomeColor;
 	}
 	
+	@Override
+	public void tick() {
+		this.biome.tick();
+	}
+	
 	public String toString() {
 		return this.cached != null ? this.cached.toString() : "<NOT SET>";
 	}
