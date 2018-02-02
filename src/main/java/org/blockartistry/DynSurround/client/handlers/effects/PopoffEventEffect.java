@@ -30,11 +30,14 @@ import org.blockartistry.DynSurround.client.fx.particle.ParticleTextPopOff;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.event.PopoffEvent;
 import org.blockartistry.lib.Color;
+import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.effects.EventEffect;
 import org.blockartistry.lib.effects.IEventEffectLibraryState;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -80,17 +83,25 @@ public class PopoffEventEffect extends EventEffect {
 
 		final World world = EnvironState.getWorld();
 
-		ParticleTextPopOff particle = null;
-		if (data.isCritical && ModOptions.player.showCritWords) {
-			particle = new ParticleTextPopOff(world, getPowerWord(), CRITICAL_TEXT_COLOR, data.posX, data.posY + 0.5D,
-					data.posZ);
+		// Calculate the location of where it should display
+		final Entity entity = WorldUtils.locateEntity(world, data.entityId);
+		if (entity != null) {
+			final AxisAlignedBB bb = entity.getEntityBoundingBox();
+			final double posX = entity.posX;
+			final double posY = bb.maxY + 0.5D;
+			final double posZ = entity.posZ;
+
+			ParticleTextPopOff particle = null;
+			if (data.isCritical && ModOptions.player.showCritWords) {
+				particle = new ParticleTextPopOff(world, getPowerWord(), CRITICAL_TEXT_COLOR, posX, posY + 0.5D, posZ);
+				this.getState().addParticle(particle);
+			}
+
+			final String text = String.valueOf(MathStuff.abs(data.amount));
+			final Color color = data.amount < 0 ? HEAL_TEXT_COLOR : DAMAGE_TEXT_COLOR;
+			particle = new ParticleTextPopOff(world, text, color, posX, posY, posZ);
 			this.getState().addParticle(particle);
 		}
-
-		final String text = String.valueOf(MathStuff.abs(data.amount));
-		final Color color = data.amount < 0 ? HEAL_TEXT_COLOR : DAMAGE_TEXT_COLOR;
-		particle = new ParticleTextPopOff(world, text, color, data.posX, data.posY, data.posZ);
-		this.getState().addParticle(particle);
 	}
 
 }
