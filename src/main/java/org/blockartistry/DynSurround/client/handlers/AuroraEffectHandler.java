@@ -37,10 +37,15 @@ import org.blockartistry.DynSurround.client.aurora.IAuroraEngine;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.shader.Shaders;
 import org.blockartistry.lib.DiurnalUtils;
+import org.blockartistry.lib.math.TimerEMA;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
@@ -50,6 +55,9 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 
 	private static IAurora current;
 	private static int dimensionId;
+
+	private final TimerEMA timer = new TimerEMA("Aurora Render");
+	private long nanos;
 
 	public AuroraEffectHandler() {
 		super("AuroraEffectHandler");
@@ -68,6 +76,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	@Override
 	public void onConnect() {
 		current = null;
+		DiagnosticHandler.INSTANCE.addTimer(this.timer);
 	}
 
 	@Override
@@ -100,7 +109,8 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		if (current != null) {
 			// If completed or the player changed dimensions we want to kill
 			// outright
-			if (current.isComplete() || dimensionId != EnvironState.getDimensionId() || !ModOptions.aurora.auroraEnable) {
+			if (current.isComplete() || dimensionId != EnvironState.getDimensionId()
+					|| !ModOptions.aurora.auroraEnable) {
 				current = null;
 			} else {
 				current.update();
@@ -124,6 +134,23 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 
 		// Set the dimension in case it changed
 		dimensionId = EnvironState.getDimensionId();
+
+		this.timer.update(this.nanos);
+		this.nanos = 0;
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void doRender(@Nonnull final RenderWorldLastEvent event) {
+
+		final long start = System.nanoTime();
+
+		// Render our aurora if it is present
+		final IAurora aurora = getCurrentAurora();
+		if (aurora != null) {
+			aurora.render(event.getPartialTicks());
+		}
+
+		this.nanos += System.nanoTime() - start;
 	}
 
 }

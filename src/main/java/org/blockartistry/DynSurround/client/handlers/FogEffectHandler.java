@@ -35,6 +35,7 @@ import org.blockartistry.DynSurround.client.handlers.fog.IFogColorCalculator;
 import org.blockartistry.DynSurround.client.handlers.fog.IFogRangeCalculator;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.lib.Color;
+import org.blockartistry.lib.math.TimerEMA;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -51,6 +52,9 @@ import net.minecraftforge.fml.relauncher.Side;
 @SideOnly(Side.CLIENT)
 public class FogEffectHandler extends EffectHandlerBase {
 
+	private final TimerEMA timer = new TimerEMA("Fog Render");
+	private long nanos;
+	
 	public FogEffectHandler() {
 		super("FogEffectHandler");
 	}
@@ -62,6 +66,8 @@ public class FogEffectHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 
+		this.timer.update(this.nanos);
+		this.nanos = 0;
 	}
 
 	protected final IFogColorCalculator fogColor = new HolisticFogColorCalculator();
@@ -74,6 +80,7 @@ public class FogEffectHandler extends EffectHandlerBase {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void fogColorEvent(final EntityViewRenderEvent.FogColors event) {
 		if (doFog()) {
+			final long start = System.nanoTime();
 
 			final IBlockState block = ActiveRenderInfo.getBlockStateAtEntityViewpoint(event.getEntity().world,
 					event.getEntity(), (float) event.getRenderPartialTicks());
@@ -86,6 +93,7 @@ public class FogEffectHandler extends EffectHandlerBase {
 				event.setGreen(color.green);
 				event.setBlue(color.blue);
 			}
+			this.nanos += System.nanoTime() - start;
 		}
 	}
 
@@ -99,6 +107,8 @@ public class FogEffectHandler extends EffectHandlerBase {
 		if (!doFog() || event.getResult() != Result.DEFAULT)
 			return;
 
+		final long start = System.nanoTime();
+
 		final FogResult result = this.fogRange.calculate(event);
 		if (result != null) {
 			GlStateManager.setFogStart(result.getStart());
@@ -106,6 +116,7 @@ public class FogEffectHandler extends EffectHandlerBase {
 		}
 
 		event.setResult(Result.ALLOW);
+		this.nanos += System.nanoTime() - start;
 	}
 
 	@SubscribeEvent
@@ -115,6 +126,11 @@ public class FogEffectHandler extends EffectHandlerBase {
 			event.output.add("Fog Color: " + this.fogColor.toString());
 		} else
 			event.output.add("FOG: IGNORED");
+	}
+	
+	@Override
+	public void onConnect() {
+		DiagnosticHandler.INSTANCE.addTimer(this.timer);
 	}
 
 }

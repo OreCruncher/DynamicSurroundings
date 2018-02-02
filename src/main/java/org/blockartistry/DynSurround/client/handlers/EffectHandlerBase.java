@@ -28,6 +28,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.math.TimerEMA;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import com.google.common.base.MoreObjects;
@@ -40,11 +41,13 @@ import net.minecraftforge.fml.relauncher.Side;
 public abstract class EffectHandlerBase {
 	
 	protected final Random RANDOM = XorShiftRandom.current();
+	private final TimerEMA timer;
 	
 	private final String handlerName;
 	
 	EffectHandlerBase(@Nonnull final String name) {
 		this.handlerName = name;
+		this.timer = new TimerEMA(name);
 	}
 	
 	// Used to obtain the name of the handler for logging purposes
@@ -72,7 +75,12 @@ public abstract class EffectHandlerBase {
 	//  DO NOT HOOK THESE EVENTS!
 	//
 	//////////////////////////////
+	final void updateTimer(final long nanos) {
+		this.timer.update(nanos);
+	}
+	
 	final void connect0() {
+		DiagnosticHandler.INSTANCE.addTimer(this.timer);
 		this.onConnect();
 		MinecraftForge.EVENT_BUS.register(this);
 	}
