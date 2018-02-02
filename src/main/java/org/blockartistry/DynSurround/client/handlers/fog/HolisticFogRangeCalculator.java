@@ -64,6 +64,12 @@ public class HolisticFogRangeCalculator implements IFogRangeCalculator {
 		this.cached.set(start, end);
 		return this.cached;
 	}
+	
+	@Override
+	public void tick() {
+		for (final IFogRangeCalculator calc : this.calculators)
+			calc.tick();
+	}
 
 	@Nonnull
 	public String toString() {
