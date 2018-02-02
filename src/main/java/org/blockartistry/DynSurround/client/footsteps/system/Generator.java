@@ -706,7 +706,7 @@ public class Generator {
 	 * Adds additional sound overlays to the acoustic based on other environment
 	 * aspects, such as armor being worn.
 	 */
-	@Nonnull
+	@Nullable
 	protected Association addSoundOverlay(@Nonnull final EntityLivingBase entity, @Nullable Association assoc) {
 
 		// Don't apply armor sound if the Entity is not on the ground
@@ -724,8 +724,8 @@ public class Generator {
 			foot = ArmorClass.footArmorClass(entity);
 		}
 
-		final IAcoustic armorAddon = this.isolator.getAcoustics().getAcoustic(armor.getAcoustic());
-		IAcoustic footAddon = this.isolator.getAcoustics().getAcoustic(foot.getFootAcoustic());
+		final IAcoustic armorAddon = ClientRegistry.FOOTSTEPS.getArmorAcoustic(armor);
+		IAcoustic footAddon = ClientRegistry.FOOTSTEPS.getFootArmorAcoustic(foot);
 
 		if (armorAddon == null && footAddon == null)
 			return assoc;

@@ -1892,6 +1892,24 @@
 			"dsurround:ambient/items/utility_draw"
 		]
 	},
+	"shield.equip": {
+		"category": "player",
+		"sounds": [
+			"dsurround:ambient/items/tool_draw"
+		]
+	},
+	"shield.use": {
+		"category": "player",
+		"sounds": [
+			"dsurround:ambient/items/tool_draw"
+		]
+	},
+	"food.equip": {
+		"category": "player",
+		"sounds": [
+			"dsurround:ambient/items/utility_draw"
+		]
+	},
 	"battle.normal": {
 		"category": "music",
 		"credits": [
