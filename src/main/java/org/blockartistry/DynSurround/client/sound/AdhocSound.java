@@ -43,8 +43,8 @@ public class AdhocSound extends BasicSound<AdhocSound> {
 	protected static Field getPitch;
 
 	static {
-		getVolume = ReflectionHelper.findField(PositionedSound.class, "volume");
-		getPitch = ReflectionHelper.findField(PositionedSound.class, "pitch");
+		getVolume = ReflectionHelper.findField(PositionedSound.class, "volume", "field_147662_b");
+		getPitch = ReflectionHelper.findField(PositionedSound.class, "pitch", "field_147663_c");
 	}
 
 	// Used for sound routing
