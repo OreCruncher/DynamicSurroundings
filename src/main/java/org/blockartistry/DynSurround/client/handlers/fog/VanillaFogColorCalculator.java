@@ -43,5 +43,10 @@ public class VanillaFogColorCalculator implements IFogColorCalculator {
 	public Color calculate(@Nonnull final EntityViewRenderEvent.FogColors event) {
 		return new Color(event.getRed(), event.getGreen(), event.getBlue());
 	}
+	
+	@Override
+	public void tick() {
+		
+	}
 
 }

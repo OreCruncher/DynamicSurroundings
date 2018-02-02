@@ -30,10 +30,23 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-@FunctionalInterface
 public interface IFogRangeCalculator {
 
+	/**
+	 * Called during the render pass to obtain parameters for fog rendering.
+	 * 
+	 * @param event
+	 *            The event that is being fired
+	 * @return FogResult containing the fog information the calculator is interested
+	 *         in reporting
+	 */
 	@Nonnull
 	FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event);
+
+	/**
+	 * Called once every client side tick. Up to the calculator to figure out what
+	 * to do with the time, if anything.
+	 */
+	void tick();
 
 }
