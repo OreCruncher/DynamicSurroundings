@@ -59,7 +59,7 @@ public class EntityBowSoundEffect extends EntityEffect {
 		if (ItemStackUtil.isValidItemStack(currentStack)) {
 
 			if (this.lastActiveStack == null || !ItemStack.areItemStacksEqual(currentStack, this.lastActiveStack)) {
-				if (ClientRegistry.ITEMS.doBowSound(currentStack) || ClientRegistry.ITEMS.doShieldSound(currentStack)) {
+				if (ClientRegistry.ITEMS.isBow(currentStack) || ClientRegistry.ITEMS.isShield(currentStack)) {
 					final SoundEffect soundEffect = ClientRegistry.ITEMS.getUseSound(currentStack);
 					if (soundEffect != null) {
 						final BasicSound<?> fx = this.getState().createSound(soundEffect, entity);

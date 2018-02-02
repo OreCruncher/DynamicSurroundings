@@ -89,13 +89,11 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 			if (triggerNewEquipSound(player)) {
 				this.clearState(state);
 				final ItemStack currentStack = player.getHeldItem(this.hand);
-				if (ItemStackUtil.isValidItemStack(currentStack)) {
-					final SoundEffect soundEffect = ClientRegistry.ITEMS.getEquipSound(currentStack);
-					if (soundEffect != null) {
-						final BasicSound<?> sound = state.createSound(soundEffect, player);
-						this.soundId = state.playSound(sound);
-						this.lastHeld = currentStack.getItem();
-					}
+				final SoundEffect soundEffect = ClientRegistry.ITEMS.getEquipSound(currentStack);
+				if (soundEffect != null) {
+					final BasicSound<?> sound = state.createSound(soundEffect, player);
+					this.soundId = state.playSound(sound);
+					this.lastHeld = currentStack.getItem();
 				}
 			}
 		}
@@ -134,7 +132,7 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 	public String name() {
 		return "PlayerToolBarSoundEffect";
 	}
-	
+
 	@Override
 	public void update(@Nonnull final Entity subject) {
 		if (ModOptions.sound.enableEquipSound) {
