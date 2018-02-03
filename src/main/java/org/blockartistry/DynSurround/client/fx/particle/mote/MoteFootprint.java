@@ -41,7 +41,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class MoteFootprint extends MoteBase {
+public class MoteFootprint extends MoteAgeable {
 
 	// Basic layout of the footprint
 	private static final float WIDTH = 0.125F;
