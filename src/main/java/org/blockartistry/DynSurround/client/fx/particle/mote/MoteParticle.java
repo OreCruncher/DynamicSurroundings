@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.blockartistry.DynSurround.client.fx.particle.mote;
 
 import java.util.Random;
@@ -42,8 +41,11 @@ import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * A particle that stays fixed at a certain point of the world.
+ */
 @SideOnly(Side.CLIENT)
-public abstract class MoteBase implements IParticleMote {
+public abstract class MoteParticle implements IParticleMote {
 
 	protected static final Random RANDOM = XorShiftRandom.current();
 	protected static final RenderManager RENDERER = Minecraft.getMinecraft().getRenderManager();
@@ -51,9 +53,6 @@ public abstract class MoteBase implements IParticleMote {
 	protected final World world;
 
 	protected boolean isAlive = true;
-	protected int age;
-	protected int maxAge;
-
 	protected double posX;
 	protected double posY;
 	protected double posZ;
@@ -67,17 +66,19 @@ public abstract class MoteBase implements IParticleMote {
 	protected float blue;
 	protected float alpha;
 
-	protected MoteBase(@Nonnull final World world, final double x, final double y, final double z) {
+	public MoteParticle(@Nonnull final World world, final double x, final double y, final double z) {
 		this.world = world;
-		this.age = 0;
-		this.posX = x;
-		this.posY = y;
-		this.posZ = z;
-		this.position.setPos(x, y, z);
-		
+		this.setPosition(x, y, z);
 		this.configureColor();
 	}
-	
+
+	public void setPosition(final double posX, final double posY, final double posZ) {
+		this.posX = posX;
+		this.posY = posY;
+		this.posZ = posZ;
+		this.position.setPos(posX, posY, posZ);
+	}
+
 	public void configureColor() {
 		this.red = this.green = this.blue = this.alpha = 1F;
 	}
@@ -86,22 +87,15 @@ public abstract class MoteBase implements IParticleMote {
 	public boolean isAlive() {
 		return this.isAlive;
 	}
-	
+
 	protected void kill() {
 		this.isAlive = false;
 	}
 
-	protected boolean advanceAge() {
-		return this.age++ >= this.maxAge;
-	}
-	
 	@Override
-	public final void onUpdate() {
+	public void onUpdate() {
 
-		if (advanceAge()) {
-			// The mote reached it's life expectancy
-			this.kill();
-		} else if(!WorldUtils.isChunkAvailable(this.world, this.position)) {
+		if (!WorldUtils.isChunkAvailable(this.world, this.position)) {
 			// The chunk it was in must have unloaded
 			this.kill();
 		}
@@ -158,8 +152,8 @@ public abstract class MoteBase implements IParticleMote {
 		buffer.lightmap(this.slX16, this.blX16);
 	}
 
-	protected void drawVertex(final BufferBuilder buffer, final double x, final double y, final double z, final double u,
-			final double v) {
+	protected void drawVertex(final BufferBuilder buffer, final double x, final double y, final double z,
+			final double u, final double v) {
 		buffer.pos(x, y, z).tex(u, v);
 		applyColor(buffer);
 		applyLightmap(buffer);
@@ -174,7 +168,7 @@ public abstract class MoteBase implements IParticleMote {
 		return this.world.getCombinedLight(this.position, 0);
 	}
 
-	public static Color getBiomeWaterColor(final World world, final double x, final double y, final double z) {
-		return new Color(BiomeColorHelper.getWaterColorAtPos(world, new BlockPos(x, y, z)));
+	public static Color getBiomeWaterColor(final World world, @Nonnull final BlockPos pos) {
+		return new Color(BiomeColorHelper.getWaterColorAtPos(world, pos));
 	}
 }
