@@ -53,13 +53,17 @@ public class Weather {
 		//
 		NONE(0.0F, "calm"),
 		//
-		CALM(0.1F, "calm"),
+		CALM(0.165F, "calm"),
 		//
-		LIGHT(0.33F, "light"),
+		LIGHT(0.330F, "light"),
 		//
-		NORMAL(0.66F, "normal"),
+		GENTLE(0.495F, "gentle"),
 		//
-		HEAVY(1.0F, "heavy");
+		MODERATE(0.660F, "moderate"),
+		//
+		HEAVY(0.826F, "heavy"),
+		//
+		STRONG(1.0F, "strong");
 
 		private final float level;
 		private final ResourceLocation rainTexture;
@@ -124,17 +128,15 @@ public class Weather {
 			} else {
 
 				str = MathStuff.clamp(str, DimensionEffectData.MIN_INTENSITY, DimensionEffectData.MAX_INTENSITY);
+				result = Properties.NONE;
 
-				if (str <= Properties.NONE.getLevel())
-					result = Properties.NONE;
-				else if (str < Properties.CALM.getLevel())
-					result = Properties.CALM;
-				else if (str < Properties.LIGHT.getLevel())
-					result = Properties.LIGHT;
-				else if (str < Properties.NORMAL.getLevel())
-					result = Properties.NORMAL;
-				else
-					result = Properties.HEAVY;
+				for (int i = 0; i < Properties.values().length; i++) {
+					final Properties p = Properties.values()[i];
+					if (str <= p.getLevel()) {
+						result = p;
+						break;
+					}
+				}
 			}
 
 			return result;
