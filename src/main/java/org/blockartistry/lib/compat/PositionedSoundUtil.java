@@ -20,41 +20,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.blockartistry.lib.compat;
 
-package org.blockartistry.DynSurround.client.sound;
+import java.lang.reflect.Field;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.lib.compat.PositionedSoundUtil;
-
 import net.minecraft.client.audio.PositionedSound;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class AdhocSound extends BasicSound<AdhocSound> {
+public class PositionedSoundUtil {
+	
+	protected static Field getVolume;
+	protected static Field getPitch;
 
-	// Used for sound routing
-	public AdhocSound(@Nonnull final NBTTagCompound nbt) {
-		super((ResourceLocation) null, null);
-		this.deserializeNBT(nbt);
+	static {
+		getVolume = ReflectionHelper.findField(PositionedSound.class, "volume", "field_147662_b");
+		getPitch = ReflectionHelper.findField(PositionedSound.class, "pitch", "field_147663_c");
 	}
 
-	public AdhocSound(@Nonnull final SoundEvent event, @Nonnull final PositionedSound sound) {
-		super(event, sound.getCategory());
-
-		this.setPosition(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
-		this.setAttenuationType(sound.getAttenuationType());
-		this.setVolume(PositionedSoundUtil.getVolume(sound));
-		this.setPitch(PositionedSoundUtil.getPitch(sound));
+	public static float getVolume(@Nonnull final PositionedSound sound) {
+		try {
+			return getVolume.getFloat(sound);
+		} catch (final Throwable t) {
+			return 1F;
+		}
 	}
 
-	public AdhocSound(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
-		super(event, cat);
+	public static float getPitch(@Nonnull final PositionedSound sound) {
+		try {
+			return getPitch.getFloat(sound);
+		} catch (final Throwable t) {
+			return 1F;
+		}
 	}
 
 }

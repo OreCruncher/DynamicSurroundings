@@ -51,6 +51,7 @@ import org.blockartistry.DynSurround.event.RegistryEvent;
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.network.PacketPlaySound;
 import org.blockartistry.lib.collections.ObjectArray;
+import org.blockartistry.lib.compat.PositionedSoundUtil;
 
 import gnu.trove.iterator.TObjectFloatIterator;
 import gnu.trove.map.hash.TObjectFloatHashMap;
@@ -210,8 +211,8 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void soundPlay(@Nonnull final PlaySoundEvent e) {
 		if (e.getName().equals("entity.lightning.thunder")) {
-			final ISound sound = e.getSound();
-			if (sound != null && sound.getVolume() > 16) {
+			final PositionedSound sound = (PositionedSound) e.getSound();
+			if (sound != null && PositionedSoundUtil.getVolume(sound) > 16) {
 				final BlockPos pos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
 				final ISound newSound = Sounds.THUNDER.createSound(pos).setVolume(ModOptions.sound.thunderVolume);
 				e.setResultSound(newSound);
