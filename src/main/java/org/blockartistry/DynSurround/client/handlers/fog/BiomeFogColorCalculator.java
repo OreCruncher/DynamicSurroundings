@@ -29,7 +29,9 @@ import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
+import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.Color;
+import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.client.Minecraft;
@@ -64,14 +66,16 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 		final int playerX = MathStuff.floor(player.posX);
 		final int playerZ = MathStuff.floor(player.posZ);
 
+		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(0, 0, 0);
+		final BlockStateProvider provider = WorldUtils.getDefaultBlockStateProvider().setWorld(world);
+
 		Color biomeFogColor = new Color(0, 0, 0);
 		double weightBiomeFog = 0;
-		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(0, 0, 0);
 
 		for (int x = -distance; x <= distance; ++x) {
 			for (int z = -distance; z <= distance; ++z) {
 				pos.setPos(playerX + x, 0, playerZ + z);
-				final BiomeInfo biome = ClientRegistry.BIOME.get(world.getBiome(pos));
+				final BiomeInfo biome = ClientRegistry.BIOME.get(provider.getBiome(pos));
 
 				final Color color;
 				float weightPart = 1F;

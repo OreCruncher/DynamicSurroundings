@@ -35,6 +35,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
@@ -171,5 +172,17 @@ public class BlockStateProvider {
 
 		}
 		return pos;
+	}
+	
+	public Biome getBiome(@Nonnull final BlockPos pos) {
+		final int x = pos.getX();
+		final int z = pos.getZ();
+		final Chunk chunk = resolveChunk(x, z);
+
+		if (chunk == null)
+			return null;
+
+		final World world = this.getWorld();
+		return chunk.getBiome(pos, world.provider.biomeProvider);
 	}
 }
