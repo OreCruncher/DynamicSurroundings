@@ -55,6 +55,7 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 	// the area, again.
 	protected double weightBiomeFog;
 	protected Color biomeFogColor;
+	protected boolean redo = true;
 
 	@Override
 	@Nonnull
@@ -66,9 +67,6 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 		final int playerX = MathStuff.floor(player.posX);
 		final int playerZ = MathStuff.floor(player.posZ);
 
-		if (!provider.isAvailable(playerX, playerZ))
-			return Color.BLACK;
-
 		// ForgeHooksClient.getSkyBlendColour()
 		GameSettings settings = Minecraft.getMinecraft().gameSettings;
 		final int[] ranges = ForgeModContainer.blendRanges;
@@ -79,7 +77,9 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 
 		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(0, 0, 0);
 
-		if (this.posX != playerX || this.posZ != playerZ) {
+		if (this.redo || this.posX != playerX || this.posZ != playerZ) {
+			
+			this.redo = false;
 			this.posX = playerX;
 			this.posZ = playerZ;
 			this.biomeFogColor = new Color(0, 0, 0);
@@ -88,6 +88,11 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 			for (int x = -distance; x <= distance; ++x) {
 				for (int z = -distance; z <= distance; ++z) {
 					pos.setPos(playerX + x, 0, playerZ + z);
+					
+					// If the chunk is not available redo will be
+					// set true
+					this.redo |= !provider.isAvailable(pos);
+
 					final BiomeInfo biome = ClientRegistry.BIOME.get(provider.getBiome(pos));
 
 					final Color color;

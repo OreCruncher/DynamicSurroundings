@@ -54,6 +54,7 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 	protected int[] posZ = { 0, 0 };
 	protected float[] rain = { 0, 0 };
 	protected float[] lastFarPlane = { 0, 0 };
+	protected boolean[] redo = { true, true };
 
 	public BiomeFogRangeCalculator() {
 
@@ -69,13 +70,9 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 		final int playerX = MathStuff.floor(player.posX);
 		final int playerZ = MathStuff.floor(player.posZ);
 		final int idx = event.getFogMode() < 0 ? 0 : 1;
-
-		if (!provider.isAvailable(playerX, playerZ))
-			return this.cached[idx];
-		
 		final float rainStr = Weather.getIntensityLevel();
 
-		if (playerX == this.posX[idx] && playerZ == this.posZ[idx] && rainStr == this.rain[idx]
+		if (!this.redo[idx] && playerX == this.posX[idx] && playerZ == this.posZ[idx] && rainStr == this.rain[idx]
 				&& this.lastFarPlane[idx] == event.getFarPlaneDistance() && this.cached[idx].isValid(event))
 			return this.cached[idx];
 
@@ -86,10 +83,16 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 
 		final boolean isRaining = Weather.isRaining();
 		this.rain[idx] = rainStr;
+		this.redo[idx] = false;
 
 		for (int x = -DISTANCE; x <= DISTANCE; ++x) {
 			for (int z = -DISTANCE; z <= DISTANCE; ++z) {
 				pos.setPos(playerX + x, 0, playerZ + z);
+
+				// If the chunk is not available redo will be
+				// set true
+				this.redo[idx] |= !provider.isAvailable(pos);
+
 				final BiomeInfo biome = ClientRegistry.BIOME.get(provider.getBiome(pos));
 
 				float distancePart = 1F;
