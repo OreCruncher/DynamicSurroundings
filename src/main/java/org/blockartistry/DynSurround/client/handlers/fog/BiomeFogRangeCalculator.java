@@ -29,6 +29,8 @@ import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
+import org.blockartistry.lib.BlockStateProvider;
+import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.entity.Entity;
@@ -69,20 +71,23 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 
 		final int idx = event.getFogMode() < 0 ? 0 : 1;
 
-		if (playerX == this.posX[idx] && playerZ == this.posZ[idx] && rainStr == this.rain[idx] && this.cached[idx].isValid(event))
+		if (playerX == this.posX[idx] && playerZ == this.posZ[idx] && rainStr == this.rain[idx]
+				&& this.cached[idx].isValid(event))
 			return this.cached[idx];
+
+		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(0, 0, 0);
+		final BlockStateProvider provider = WorldUtils.getDefaultBlockStateProvider().setWorld(world);
 
 		float fpDistanceBiomeFog = 0F;
 		float weightBiomeFog = 0;
-		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(0, 0, 0);
 
 		final boolean isRaining = Weather.isRaining();
 		this.rain[idx] = rainStr;
-		
+
 		for (int x = -DISTANCE; x <= DISTANCE; ++x) {
 			for (int z = -DISTANCE; z <= DISTANCE; ++z) {
 				pos.setPos(playerX + x, 0, playerZ + z);
-				final BiomeInfo biome = ClientRegistry.BIOME.get(world.getBiome(pos));
+				final BiomeInfo biome = ClientRegistry.BIOME.get(provider.getBiome(pos));
 
 				float distancePart = 1F;
 				float weightPart = 1;

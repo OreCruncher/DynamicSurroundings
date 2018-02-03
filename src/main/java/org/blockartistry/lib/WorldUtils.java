@@ -33,6 +33,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 
 public final class WorldUtils {
@@ -119,5 +120,9 @@ public final class WorldUtils {
 
 	public static boolean hasVoidPartiles(@Nonnull final World world) {
 		return world.getWorldType() != WorldType.FLAT && !world.provider.hasNoSky;
+	}
+	
+	public static Biome getBiome(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return getDefaultBlockStateProvider().setWorld(world).getBiome(pos);
 	}
 }
