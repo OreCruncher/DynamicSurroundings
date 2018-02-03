@@ -36,6 +36,7 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.client.handlers.scanners.AlwaysOnBlockEffectScanner;
 import org.blockartistry.DynSurround.client.handlers.scanners.RandomBlockEffectScanner;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
+import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.math.MathStuff;
 
@@ -52,7 +53,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class AreaSurveyHandler extends EffectHandlerBase {
 
-	private static final int BIOME_SURVEY_RANGE = 6;
+	private static final int BIOME_SURVEY_RANGE = 20;
 	private static final int INSIDE_SURVEY_RANGE = 3;
 
 	private static final Cell[] cells;
@@ -75,8 +76,10 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	private static float ceilingCoverageRatio = 0.0F;
 	private static boolean reallyInside = false;
 
-	protected final RandomBlockEffectScanner effects = new RandomBlockEffectScanner(ModOptions.general.specialEffectRange);
-	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(ModOptions.general.specialEffectRange);
+	protected final RandomBlockEffectScanner effects = new RandomBlockEffectScanner(
+			ModOptions.general.specialEffectRange);
+	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(
+			ModOptions.general.specialEffectRange);
 
 	static {
 
@@ -134,12 +137,13 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 			weights.put(EnvironState.getPlayerBiome(), 1);
 		} else {
 			final World world = EnvironState.getWorld();
+			final BlockStateProvider provider = WorldUtils.getDefaultBlockStateProvider().setWorld(world);
 
 			for (int dX = -BIOME_SURVEY_RANGE; dX <= BIOME_SURVEY_RANGE; dX++)
 				for (int dZ = -BIOME_SURVEY_RANGE; dZ <= BIOME_SURVEY_RANGE; dZ++) {
 					biomeArea++;
 					mutable.setPos(surveyedPosition.getX() + dX, surveyedPosition.getY(), surveyedPosition.getZ() + dZ);
-					final BiomeInfo biome = ClientRegistry.BIOME.get(world.getBiome(mutable));
+					final BiomeInfo biome = ClientRegistry.BIOME.get(provider.getBiome(mutable));
 					weights.adjustOrPutValue(biome, 1, 1);
 				}
 		}
@@ -151,10 +155,6 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 		this.effects.update();
 		this.alwaysOn.update();
 
-		// Only process on the correct interval
-		if (EnvironState.getTickCounter() % SURVEY_INTERVAL != 0)
-			return;
-
 		final BlockPos position = EnvironState.getPlayerPosition();
 
 		if (surveyedBiome != EnvironState.getPlayerBiome() || surveyedDimension != EnvironState.getDimensionId()
@@ -165,7 +165,8 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 			doSurvey();
 		}
 
-		doCeilingCoverageRatio();
+		if (EnvironState.getTickCounter() % SURVEY_INTERVAL == 0)
+			doCeilingCoverageRatio();
 	}
 
 	@Override
