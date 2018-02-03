@@ -49,12 +49,22 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 	protected static final int DISTANCE = 20;
 	protected static final float DUST_FOG_IMPACT = 0.9F;
 
-	protected final FogResult[] cached = { new FogResult(), new FogResult() };
-	protected int[] posX = { 0, 0 };
-	protected int[] posZ = { 0, 0 };
-	protected float[] rain = { 0, 0 };
-	protected float[] lastFarPlane = { 0, 0 };
-	protected boolean[] redo = { true, true };
+	private static class Context {
+		public int posX;
+		public int posZ;
+		public float rain;
+		public float lastFarPlane;
+		public boolean doScan = true;
+		public final FogResult cached = new FogResult();
+
+		public boolean returnCached(final int pX, final int pZ, final float r,
+				@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
+			return !this.doScan && pX == this.posX && pZ == this.posZ && r == this.rain
+					&& this.lastFarPlane == event.getFarPlaneDistance() && this.cached.isValid(event);
+		}
+	}
+
+	protected final Context[] context = { new Context(), new Context() };
 
 	public BiomeFogRangeCalculator() {
 
@@ -69,12 +79,12 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 		final BlockStateProvider provider = WorldUtils.getDefaultBlockStateProvider().setWorld(world);
 		final int playerX = MathStuff.floor(player.posX);
 		final int playerZ = MathStuff.floor(player.posZ);
-		final int idx = event.getFogMode() < 0 ? 0 : 1;
 		final float rainStr = Weather.getIntensityLevel();
 
-		if (!this.redo[idx] && playerX == this.posX[idx] && playerZ == this.posZ[idx] && rainStr == this.rain[idx]
-				&& this.lastFarPlane[idx] == event.getFarPlaneDistance() && this.cached[idx].isValid(event))
-			return this.cached[idx];
+		final Context ctx = this.context[event.getFogMode() == -1 ? 0 : 1];
+
+		if (ctx.returnCached(playerX, playerZ, rainStr, event))
+			return ctx.cached;
 
 		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(0, 0, 0);
 
@@ -82,16 +92,18 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 		float weightBiomeFog = 0;
 
 		final boolean isRaining = Weather.isRaining();
-		this.rain[idx] = rainStr;
-		this.redo[idx] = false;
+		ctx.rain = rainStr;
+		ctx.doScan = false;
 
-		for (int x = -DISTANCE; x <= DISTANCE; ++x) {
+		breakOut: for (int x = -DISTANCE; x <= DISTANCE; ++x) {
 			for (int z = -DISTANCE; z <= DISTANCE; ++z) {
 				pos.setPos(playerX + x, 0, playerZ + z);
 
-				// If the chunk is not available redo will be
+				// If the chunk is not available doScan will be
 				// set true
-				this.redo[idx] |= !provider.isAvailable(pos);
+				ctx.doScan |= !provider.isAvailable(pos);
+				if (ctx.doScan)
+					break breakOut;
 
 				final BiomeInfo biome = ClientRegistry.BIOME.get(provider.getBiome(pos));
 
@@ -109,22 +121,30 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 			}
 		}
 
-		final float weightMixed = (DISTANCE * 2 + 1) * (DISTANCE * 2 + 1);
-		final float weightDefault = weightMixed - weightBiomeFog;
+		// If we have to scan again just return what Forge wants.  It's going to update
+		// in the next render pass or two.
+		if (ctx.doScan) {
+			ctx.cached.set(event);
+		} else {
+			final float weightMixed = (DISTANCE * 2 + 1) * (DISTANCE * 2 + 1);
+			final float weightDefault = weightMixed - weightBiomeFog;
 
-		final float fpDistanceBiomeFogAvg = (weightBiomeFog == 0) ? 0 : fpDistanceBiomeFog / weightBiomeFog;
+			final float fpDistanceBiomeFogAvg = (weightBiomeFog == 0) ? 0 : fpDistanceBiomeFog / weightBiomeFog;
 
-		float farPlaneDistance = (fpDistanceBiomeFog * 240 + event.getFarPlaneDistance() * weightDefault) / weightMixed;
-		final float farPlaneDistanceScaleBiome = (0.1f * (1 - fpDistanceBiomeFogAvg) + 0.75f * fpDistanceBiomeFogAvg);
-		final float farPlaneDistanceScale = (farPlaneDistanceScaleBiome * weightBiomeFog + 0.75f * weightDefault)
-				/ weightMixed;
+			float farPlaneDistance = (fpDistanceBiomeFog * 240 + event.getFarPlaneDistance() * weightDefault)
+					/ weightMixed;
+			final float farPlaneDistanceScaleBiome = (0.1f * (1 - fpDistanceBiomeFogAvg)
+					+ 0.75f * fpDistanceBiomeFogAvg);
+			final float farPlaneDistanceScale = (farPlaneDistanceScaleBiome * weightBiomeFog + 0.75f * weightDefault)
+					/ weightMixed;
 
-		this.posX[idx] = playerX;
-		this.posZ[idx] = playerZ;
-		this.lastFarPlane[idx] = event.getFarPlaneDistance();
-		farPlaneDistance = Math.min(farPlaneDistance, event.getFarPlaneDistance());
+			ctx.posX = playerX;
+			ctx.posZ = playerZ;
+			ctx.lastFarPlane = event.getFarPlaneDistance();
+			farPlaneDistance = Math.min(farPlaneDistance, event.getFarPlaneDistance());
 
-		this.cached[idx].set(event.getFogMode(), farPlaneDistance, farPlaneDistanceScale);
-		return this.cached[idx];
+			ctx.cached.set(event.getFogMode(), farPlaneDistance, farPlaneDistanceScale);
+		}
+		return ctx.cached;
 	}
 }
