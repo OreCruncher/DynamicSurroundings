@@ -33,7 +33,7 @@ import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.math.MathStuff;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -63,21 +63,23 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 	@Nonnull
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 
-		final Entity player = EnvironState.getPlayer();
+		final EntityLivingBase player = EnvironState.getPlayer();
 		final World world = EnvironState.getWorld();
-
+		final BlockStateProvider provider = WorldUtils.getDefaultBlockStateProvider().setWorld(world);
 		final int playerX = MathStuff.floor(player.posX);
 		final int playerZ = MathStuff.floor(player.posZ);
-		final float rainStr = Weather.getIntensityLevel();
-
 		final int idx = event.getFogMode() < 0 ? 0 : 1;
+
+		if (!provider.isAvailable(playerX, playerZ))
+			return this.cached[idx];
+		
+		final float rainStr = Weather.getIntensityLevel();
 
 		if (playerX == this.posX[idx] && playerZ == this.posZ[idx] && rainStr == this.rain[idx]
 				&& this.lastFarPlane[idx] == event.getFarPlaneDistance() && this.cached[idx].isValid(event))
 			return this.cached[idx];
 
 		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(0, 0, 0);
-		final BlockStateProvider provider = WorldUtils.getDefaultBlockStateProvider().setWorld(world);
 
 		float fpDistanceBiomeFog = 0F;
 		float weightBiomeFog = 0;

@@ -60,6 +60,15 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 	@Nonnull
 	public Color calculate(@Nonnull final EntityViewRenderEvent.FogColors event) {
 
+		final EntityLivingBase player = EnvironState.getPlayer();
+		final World world = EnvironState.getWorld();
+		final BlockStateProvider provider = WorldUtils.getDefaultBlockStateProvider().setWorld(world);
+		final int playerX = MathStuff.floor(player.posX);
+		final int playerZ = MathStuff.floor(player.posZ);
+
+		if (!provider.isAvailable(playerX, playerZ))
+			return Color.BLACK;
+
 		// ForgeHooksClient.getSkyBlendColour()
 		GameSettings settings = Minecraft.getMinecraft().gameSettings;
 		final int[] ranges = ForgeModContainer.blendRanges;
@@ -68,14 +77,7 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 			distance = ranges[MathStuff.clamp(settings.renderDistanceChunks, 0, ranges.length - 1)];
 		}
 
-		final EntityLivingBase player = EnvironState.getPlayer();
-		final World world = EnvironState.getWorld();
-
-		final int playerX = MathStuff.floor(player.posX);
-		final int playerZ = MathStuff.floor(player.posZ);
-
 		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(0, 0, 0);
-		final BlockStateProvider provider = WorldUtils.getDefaultBlockStateProvider().setWorld(world);
 
 		if (this.posX != playerX || this.posZ != playerZ) {
 			this.posX = playerX;
