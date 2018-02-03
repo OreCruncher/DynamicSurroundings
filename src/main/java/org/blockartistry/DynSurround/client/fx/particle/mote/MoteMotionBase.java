@@ -32,8 +32,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * A particle that is capable of moving it's position in the world.
+ */
 @SideOnly(Side.CLIENT)
-public abstract class MoteMotionBase extends MoteBase {
+public abstract class MoteMotionBase extends MoteAgeable {
 
 	protected double motionX;
 	protected double motionY;

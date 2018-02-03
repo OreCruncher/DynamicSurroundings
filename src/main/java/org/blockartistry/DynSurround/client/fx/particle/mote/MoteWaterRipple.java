@@ -33,7 +33,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class MoteWaterRipple extends MoteBase {
+public class MoteWaterRipple extends MoteAgeable {
 
 	private static final float TEX_SIZE_HALF = 0.5F;
 
@@ -50,7 +50,7 @@ public class MoteWaterRipple extends MoteBase {
 		this.scaledWidth = this.scale * TEX_SIZE_HALF;
 		this.posY -= 0.2D;
 	
-		final Color waterColor = MoteBase.getBiomeWaterColor(world, x, y, z);
+		final Color waterColor = MoteParticle.getBiomeWaterColor(world, this.position);
 		this.red = waterColor.red;
 		this.green = waterColor.green;
 		this.blue = waterColor.blue;
