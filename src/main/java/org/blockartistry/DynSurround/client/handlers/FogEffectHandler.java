@@ -38,15 +38,12 @@ import org.blockartistry.lib.Color;
 import org.blockartistry.lib.math.TimerEMA;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
@@ -54,7 +51,7 @@ public class FogEffectHandler extends EffectHandlerBase {
 
 	private final TimerEMA timer = new TimerEMA("Fog Render");
 	private long nanos;
-	
+
 	public FogEffectHandler() {
 		super("FogEffectHandler");
 	}
@@ -66,9 +63,11 @@ public class FogEffectHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 
-		this.fogRange.tick();
-		this.fogColor.tick();
-		
+		if (doFog()) {
+			this.fogRange.tick();
+			this.fogColor.tick();
+		}
+
 		this.timer.update(this.nanos);
 		this.nanos = 0;
 	}
@@ -76,50 +75,37 @@ public class FogEffectHandler extends EffectHandlerBase {
 	protected final IFogColorCalculator fogColor = new HolisticFogColorCalculator();
 	protected final IFogRangeCalculator fogRange = new HolisticFogRangeCalculator();
 
-	/*
-	 * Hook the fog color event so we can tell the renderer what color the fog
-	 * should be.
-	 */
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void fogColorEvent(final EntityViewRenderEvent.FogColors event) {
 		if (doFog()) {
 			final long start = System.nanoTime();
-
-			final IBlockState block = ActiveRenderInfo.getBlockStateAtEntityViewpoint(event.getEntity().world,
-					event.getEntity(), (float) event.getRenderPartialTicks());
-			if (block.getMaterial() == Material.LAVA || block.getMaterial() == Material.WATER)
-				return;
-
-			final Color color = this.fogColor.calculate(event);
-			if (color != null) {
-				event.setRed(color.red);
-				event.setGreen(color.green);
-				event.setBlue(color.blue);
+			final Material material = event.getState().getMaterial();
+			if (material != Material.LAVA && material != Material.WATER) {
+				final Color color = this.fogColor.calculate(event);
+				if (color != null) {
+					event.setRed(color.red);
+					event.setGreen(color.green);
+					event.setBlue(color.blue);
+				}
 			}
 			this.nanos += System.nanoTime() - start;
 		}
 	}
 
-	/*
-	 * Hook the fog density event so that the fog settings can be reset based on
-	 * RAIN rainIntensity. This routine will overwrite what the vanilla code has
-	 * done in terms of fog.
-	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void fogRenderEvent(final EntityViewRenderEvent.RenderFogEvent event) {
-		if (!doFog() || event.getResult() != Result.DEFAULT)
-			return;
-
-		final long start = System.nanoTime();
-
-		final FogResult result = this.fogRange.calculate(event);
-		if (result != null) {
-			GlStateManager.setFogStart(result.getStart());
-			GlStateManager.setFogEnd(result.getEnd());
+		if (doFog()) {
+			final long start = System.nanoTime();
+			final Material material = event.getState().getMaterial();
+			if (material != Material.LAVA && material != Material.WATER) {
+				final FogResult result = this.fogRange.calculate(event);
+				if (result != null) {
+					GlStateManager.setFogStart(result.getStart());
+					GlStateManager.setFogEnd(result.getEnd());
+				}
+			}
+			this.nanos += System.nanoTime() - start;
 		}
-
-		event.setResult(Result.ALLOW);
-		this.nanos += System.nanoTime() - start;
 	}
 
 	@SubscribeEvent
@@ -130,7 +116,7 @@ public class FogEffectHandler extends EffectHandlerBase {
 		} else
 			event.output.add("FOG: IGNORED");
 	}
-	
+
 	@Override
 	public void onConnect() {
 		DiagnosticHandler.INSTANCE.addTimer(this.timer);
