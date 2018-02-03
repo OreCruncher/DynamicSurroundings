@@ -48,6 +48,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 
+	protected int posX;
+	protected int posZ;
+
+	// Last pass calculations. We can reuse if possible to avoid scanning
+	// the area, again.
+	protected double weightBiomeFog;
+	protected Color biomeFogColor;
+
 	@Override
 	@Nonnull
 	public Color calculate(@Nonnull final EntityViewRenderEvent.FogColors event) {
@@ -69,35 +77,38 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(0, 0, 0);
 		final BlockStateProvider provider = WorldUtils.getDefaultBlockStateProvider().setWorld(world);
 
-		Color biomeFogColor = new Color(0, 0, 0);
-		double weightBiomeFog = 0;
+		if (this.posX != playerX || this.posZ != playerZ) {
+			this.posX = playerX;
+			this.posZ = playerZ;
+			this.biomeFogColor = new Color(0, 0, 0);
+			this.weightBiomeFog = 0;
 
-		for (int x = -distance; x <= distance; ++x) {
-			for (int z = -distance; z <= distance; ++z) {
-				pos.setPos(playerX + x, 0, playerZ + z);
-				final BiomeInfo biome = ClientRegistry.BIOME.get(provider.getBiome(pos));
+			for (int x = -distance; x <= distance; ++x) {
+				for (int z = -distance; z <= distance; ++z) {
+					pos.setPos(playerX + x, 0, playerZ + z);
+					final BiomeInfo biome = ClientRegistry.BIOME.get(provider.getBiome(pos));
 
-				final Color color;
-				float weightPart = 1F;
+					final Color color;
 
-				// Fetch the color we are dealing with.
-				if (biome.getHasDust()) {
-					color = biome.getDustColor();
-				} else if (biome.getHasFog()) {
-					color = biome.getFogColor();
-				} else {
-					color = null;
-				}
+					// Fetch the color we are dealing with.
+					if (biome.getHasDust()) {
+						color = biome.getDustColor();
+					} else if (biome.getHasFog()) {
+						color = biome.getFogColor();
+					} else {
+						color = null;
+					}
 
-				if (color != null) {
-					biomeFogColor.add(color);
-					weightBiomeFog += weightPart;
+					if (color != null) {
+						this.biomeFogColor.add(color);
+						this.weightBiomeFog += 1F;
+					}
 				}
 			}
 		}
 
 		// If we have nothing then just return whatever Vanilla wanted
-		if (weightBiomeFog == 0 || distance == 0)
+		if (this.weightBiomeFog == 0 || distance == 0)
 			return super.calculate(event);
 
 		// WorldProvider.getFogColor() - need to calculate the scale based
@@ -130,27 +141,28 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 		// Normalize the blended color components based on the biome weight.
 		// The components contain a summation of all the fog components
 		// in the area around the player.
-		biomeFogColor.scale(
+		final Color fogColor = new Color(this.biomeFogColor);
+		fogColor.scale(
 				//
-				(float) (rScale / weightBiomeFog),
+				(float) (rScale / this.weightBiomeFog),
 				//
-				(float) (gScale / weightBiomeFog),
+				(float) (gScale / this.weightBiomeFog),
 				//
-				(float) (bScale / weightBiomeFog));
+				(float) (bScale / this.weightBiomeFog));
 
-		final Color processedColor = applyPlayerEffects(world, player, biomeFogColor, partialTicks);
+		final Color processedColor = applyPlayerEffects(world, player, fogColor, partialTicks);
 
 		final double weightMixed = (distance * 2 + 1) * (distance * 2 + 1);
-		final double weightDefault = weightMixed - weightBiomeFog;
+		final double weightDefault = weightMixed - this.weightBiomeFog;
 		final Color vanillaColor = super.calculate(event);
 
-		processedColor.scale((float) weightBiomeFog);
+		processedColor.scale((float) this.weightBiomeFog);
 		vanillaColor.scale((float) weightDefault);
 		return processedColor.add(vanillaColor).scale((float) (1 / weightMixed));
 	}
 
 	protected Color applyPlayerEffects(@Nonnull final World world, @Nonnull final EntityLivingBase player,
-			@Nonnull final Color biomeFogColor, final float renderPartialTicks) {
+			@Nonnull final Color fogColor, final float renderPartialTicks) {
 		float darkScale = (float) ((player.lastTickPosY + (player.posY - player.lastTickPosY) * renderPartialTicks)
 				* world.provider.getVoidFogYFactor());
 
@@ -163,7 +175,7 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 
 		if (darkScale < 1) {
 			darkScale = (darkScale < 0) ? 0 : darkScale * darkScale;
-			biomeFogColor.scale(darkScale);
+			fogColor.scale(darkScale);
 		}
 
 		// EntityRenderer.updateFogColor() - If the player has nightvision going
@@ -173,13 +185,13 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 			final float brightness = (duration > 200) ? 1
 					: 0.7f + MathStuff.sin((float) ((duration - renderPartialTicks) * MathStuff.PI_F * 0.2f)) * 0.3f;
 
-			float scale = 1 / biomeFogColor.red;
-			scale = Math.min(scale, 1F / biomeFogColor.green);
-			scale = Math.min(scale, 1F / biomeFogColor.blue);
+			float scale = 1 / fogColor.red;
+			scale = Math.min(scale, 1F / fogColor.green);
+			scale = Math.min(scale, 1F / fogColor.blue);
 
-			return biomeFogColor.scale((1F - brightness) + scale * brightness);
+			return fogColor.scale((1F - brightness) + scale * brightness);
 		}
 
-		return biomeFogColor;
+		return fogColor;
 	}
 }
