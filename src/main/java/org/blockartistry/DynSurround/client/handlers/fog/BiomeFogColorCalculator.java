@@ -55,7 +55,7 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 	// the area, again.
 	protected double weightBiomeFog;
 	protected Color biomeFogColor;
-	protected boolean redo = true;
+	protected boolean doScan = true;
 
 	@Override
 	@Nonnull
@@ -76,25 +76,26 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 		}
 
 		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(0, 0, 0);
+		this.doScan |= this.posX != playerX || this.posZ != playerZ;
 
-		if (this.redo || this.posX != playerX || this.posZ != playerZ) {
-			
-			this.redo = false;
+		if (this.doScan) {
+			this.doScan = false;
 			this.posX = playerX;
 			this.posZ = playerZ;
 			this.biomeFogColor = new Color(0, 0, 0);
 			this.weightBiomeFog = 0;
 
-			for (int x = -distance; x <= distance; ++x) {
+			breakOut: for (int x = -distance; x <= distance; ++x) {
 				for (int z = -distance; z <= distance; ++z) {
 					pos.setPos(playerX + x, 0, playerZ + z);
-					
-					// If the chunk is not available redo will be
+
+					// If the chunk is not available doScan will be
 					// set true
-					this.redo |= !provider.isAvailable(pos);
+					this.doScan |= !provider.isAvailable(pos);
+					if (this.doScan)
+						break breakOut;
 
 					final BiomeInfo biome = ClientRegistry.BIOME.get(provider.getBiome(pos));
-
 					final Color color;
 
 					// Fetch the color we are dealing with.
