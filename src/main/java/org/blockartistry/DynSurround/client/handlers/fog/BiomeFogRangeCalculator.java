@@ -53,6 +53,7 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 	protected int[] posX = { 0, 0 };
 	protected int[] posZ = { 0, 0 };
 	protected float[] rain = { 0, 0 };
+	protected float[] lastFarPlane = { 0, 0 };
 
 	public BiomeFogRangeCalculator() {
 
@@ -72,7 +73,7 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 		final int idx = event.getFogMode() < 0 ? 0 : 1;
 
 		if (playerX == this.posX[idx] && playerZ == this.posZ[idx] && rainStr == this.rain[idx]
-				&& this.cached[idx].isValid(event))
+				&& this.lastFarPlane[idx] == event.getFarPlaneDistance() && this.cached[idx].isValid(event))
 			return this.cached[idx];
 
 		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(0, 0, 0);
@@ -115,6 +116,7 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 
 		this.posX[idx] = playerX;
 		this.posZ[idx] = playerZ;
+		this.lastFarPlane[idx] = event.getFarPlaneDistance();
 		farPlaneDistance = Math.min(farPlaneDistance, event.getFarPlaneDistance());
 
 		this.cached[idx].set(event.getFogMode(), farPlaneDistance, farPlaneDistanceScale);
