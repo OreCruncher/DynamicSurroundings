@@ -38,5 +38,10 @@ public class TimerEMA extends EMA {
 	public double getMSecs() {
 		return super.get() / 1000000;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s:%7.3fms", this.name(), this.getMSecs());
+	}
 
 }
