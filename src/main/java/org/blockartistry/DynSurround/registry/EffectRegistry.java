@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
@@ -120,10 +119,10 @@ public class EffectRegistry extends Registry {
 
 	}
 
-	@Nullable
+	@Nonnull
 	public String getEffects(@Nonnull final Entity entity) {
 		if (entity instanceof EntityPlayer)
 			return this.playerEffects;
-		return this.effects.get(entity.getClass());
+		return this.effects.getOrDefault(entity.getClass(), "");
 	}
 }

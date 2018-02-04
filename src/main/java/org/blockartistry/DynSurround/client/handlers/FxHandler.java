@@ -33,10 +33,10 @@ import org.blockartistry.DynSurround.client.handlers.effects.CraftingSoundEffect
 import org.blockartistry.DynSurround.client.handlers.effects.EntityBowSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.EntityChatEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.EntityFootprintEffect;
+import org.blockartistry.DynSurround.client.handlers.effects.EntityHealthPopoffEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.EntitySwingEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.FrostBreathEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.PlayerToolBarSoundEffect;
-import org.blockartistry.DynSurround.client.handlers.effects.PopoffEventEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.VillagerChatEffect;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.lib.effects.EntityEffectHandler;
@@ -72,6 +72,7 @@ public class FxHandler extends EffectHandlerBase {
 		library.register(EntityFootprintEffect.DEFAULT_FILTER, new EntityFootprintEffect.Factory());
 		library.register(EntitySwingEffect.DEFAULT_FILTER, new EntitySwingEffect.Factory());
 		library.register(EntityBowSoundEffect.DEFAULT_FILTER, new EntityBowSoundEffect.Factory());
+		library.register(EntityHealthPopoffEffect.DEFAULT_FILTER, new EntityHealthPopoffEffect.Factory());
 	}
 
 	private final TIntObjectHashMap<EntityEffectHandler> handlers = new TIntObjectHashMap<EntityEffectHandler>(256);
@@ -145,7 +146,7 @@ public class FxHandler extends EffectHandlerBase {
 		if (handler != null) {
 			if (!inRange)
 				handler.die();
-		} else if (entity.isEntityAlive() && inRange) {
+		} else if (inRange) {
 			handler = library.create(entity).get();
 			this.handlers.put(entity.getEntityId(), handler);
 		}
@@ -178,7 +179,6 @@ public class FxHandler extends EffectHandlerBase {
 		this.clearHandlers();
 
 		this.eventLibrary.register(new CraftingSoundEffect(this.eventLibrary));
-		this.eventLibrary.register(new PopoffEventEffect(this.eventLibrary));
 
 		INSTANCE = this;
 
