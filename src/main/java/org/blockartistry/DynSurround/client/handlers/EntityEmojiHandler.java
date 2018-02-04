@@ -36,7 +36,6 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.entity.IEmojiDataSettable;
 import org.blockartistry.lib.WorldUtils;
 
-import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,17 +54,9 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-
-		if (this.emojiParticles.size() > 0) {
-			// Get rid of dead particles
-			final TIntObjectIterator<IParticleMote> data = this.emojiParticles.iterator();
-			while (data.hasNext()) {
-				data.advance();
-				if (!data.value().isAlive())
-					data.remove();
-			}
-		}
-
+		this.emojiParticles.retainEntries((idx, emoji) -> {
+			return emoji.isAlive();
+		});
 	}
 
 	@SubscribeEvent

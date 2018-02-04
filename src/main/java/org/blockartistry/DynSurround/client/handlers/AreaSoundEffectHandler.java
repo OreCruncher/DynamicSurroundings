@@ -34,6 +34,8 @@ import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
+
+import gnu.trove.impl.Constants;
 import gnu.trove.iterator.TObjectFloatIterator;
 import gnu.trove.iterator.TObjectIntIterator;
 import gnu.trove.map.hash.TObjectFloatHashMap;
@@ -93,7 +95,8 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		if (skipTick(player))
 			return;
 
-		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<SoundEffect>();
+		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<SoundEffect>(Constants.DEFAULT_CAPACITY,
+				Constants.DEFAULT_LOAD_FACTOR, -1F);
 		if (doBiomeSounds())
 			getBiomeSounds(sounds);
 

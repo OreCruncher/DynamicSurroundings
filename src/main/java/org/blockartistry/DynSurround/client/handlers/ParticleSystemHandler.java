@@ -33,7 +33,6 @@ import org.blockartistry.DynSurround.client.fx.particle.system.ParticleSystem;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.BlockPosHelper;
 
-import gnu.trove.iterator.TLongObjectIterator;
 import gnu.trove.map.hash.TLongObjectHashMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -64,21 +63,14 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 		final BlockPos min = EnvironState.getPlayerPosition().add(-range, -range, -range);
 		final BlockPos max = EnvironState.getPlayerPosition().add(range, range, range);
 
-		final TLongObjectIterator<ParticleSystem> itr = this.systems.iterator();
-		while (itr.hasNext()) {
-			itr.advance();
-
-			// If it is out of range expire, else update
-			if (!BlockPosHelper.contains(itr.value().getPos(), min, max)) {
-				itr.value().setExpired();
+		this.systems.retainEntries((idx, system) -> {
+			if (!BlockPosHelper.contains(system.getPos(), min, max)) {
+				system.setExpired();
 			} else {
-				itr.value().onUpdate();
+				system.onUpdate();
 			}
-
-			// If it's dead remove from the list
-			if (!itr.value().isAlive())
-				itr.remove();
-		}
+			return system.isAlive();
+		});
 	}
 
 	@Override
