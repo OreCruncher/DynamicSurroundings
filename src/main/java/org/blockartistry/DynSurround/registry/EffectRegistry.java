@@ -29,11 +29,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
-import io.netty.util.internal.StringUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,7 +43,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EffectRegistry extends Registry {
 
 	protected final Map<Class<? extends Entity>, String> effects = new IdentityHashMap<>();
-	protected String playerEffects = StringUtil.EMPTY_STRING;
+	protected String playerEffects = "";
 
 	public EffectRegistry(@Nonnull final Side side) {
 		super(side);
@@ -121,10 +119,10 @@ public class EffectRegistry extends Registry {
 
 	}
 
-	@Nullable
+	@Nonnull
 	public String getEffects(@Nonnull final Entity entity) {
 		if (entity instanceof EntityPlayer)
 			return this.playerEffects;
-		return this.effects.get(entity.getClass());
+		return this.effects.getOrDefault(entity.getClass(), "");
 	}
 }

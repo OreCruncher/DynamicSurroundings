@@ -58,7 +58,7 @@ public class EntityFootprintEffect extends EntityEffect {
 
 	@Override
 	public String name() {
-		return "EntityFootprintEffect";
+		return "EntityHealthPopoff";
 	}
 
 	@Override

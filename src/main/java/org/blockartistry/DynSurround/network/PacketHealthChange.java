@@ -27,8 +27,6 @@ package org.blockartistry.DynSurround.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.event.PopoffEvent;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -40,8 +38,7 @@ public class PacketHealthChange implements IMessage {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketHealthChange message, @Nullable final MessageContext ctx) {
-			Network.postEvent(new PopoffEvent(message.entityId, message.posX, message.posY, message.posZ,
-					message.isCritical, message.amount));
+			// Ignore - client produces all footsteps without the server
 			return null;
 		}
 	}

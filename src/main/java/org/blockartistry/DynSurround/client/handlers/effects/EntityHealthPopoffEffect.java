@@ -23,30 +23,34 @@
  */
 package org.blockartistry.DynSurround.client.handlers.effects;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleTextPopOff;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.event.PopoffEvent;
 import org.blockartistry.lib.Color;
-import org.blockartistry.lib.WorldUtils;
-import org.blockartistry.lib.effects.EventEffect;
-import org.blockartistry.lib.effects.IEventEffectLibraryState;
+import org.blockartistry.lib.effects.EntityEffect;
+import org.blockartistry.lib.effects.IEntityEffectFactory;
+import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
+import org.blockartistry.lib.effects.IEntityEffectHandlerState;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class PopoffEventEffect extends EventEffect {
+public class EntityHealthPopoffEffect extends EntityEffect {
 
-	private static final double DISTANCE = 32;
 	private static final Color CRITICAL_TEXT_COLOR = Color.MC_GOLD;
 	private static final Color HEAL_TEXT_COLOR = Color.MC_GREEN;
 	private static final Color DAMAGE_TEXT_COLOR = Color.MC_RED;
@@ -67,40 +71,66 @@ public class PopoffEventEffect extends EventEffect {
 		return POWER_WORDS[XorShiftRandom.current().nextInt(POWER_WORDS.length)] + "!";
 	}
 
-	public PopoffEventEffect(@Nonnull final IEventEffectLibraryState state) {
-		super(state);
+	protected float criticalAmount;
+	protected float lastHealth;
+
+	@Override
+	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
+		super.intitialize(state);
+		final EntityLivingBase entity = (EntityLivingBase) this.getState().subject().get();
+		this.lastHealth = entity.getHealth();
+		this.criticalAmount = (entity.getMaxHealth() / 2.5F);
 	}
 
-	@SubscribeEvent
-	public void onEvent(@Nonnull final PopoffEvent data) {
-		if (!ModOptions.player.enableDamagePopoffs || EnvironState.isPlayer(data.entityId))
+	@Override
+	public String name() {
+		return null;
+	}
+
+	@Override
+	public void update(@Nonnull final Entity subject) {
+		if (!ModOptions.player.enableDamagePopoffs)
 			return;
 
-		// Don't want to display if too far away.
-		final double distance = EnvironState.distanceToPlayer(data.posX, data.posY, data.posZ);
-		if (distance >= (DISTANCE * DISTANCE))
-			return;
+		final EntityLivingBase entity = (EntityLivingBase) subject;
+		if (this.lastHealth != entity.getHealth()) {
+			final World world = EnvironState.getWorld();
+			final int adjustment = MathHelper.ceil(entity.getHealth() - this.lastHealth);
+			final int delta = MathStuff.abs(adjustment);
 
-		final World world = EnvironState.getWorld();
-
-		// Calculate the location of where it should display
-		final Entity entity = WorldUtils.locateEntity(world, data.entityId);
-		if (entity != null) {
 			final AxisAlignedBB bb = entity.getEntityBoundingBox();
 			final double posX = entity.posX;
 			final double posY = bb.maxY + 0.5D;
 			final double posZ = entity.posZ;
+			final String text = String.valueOf(delta);
+			final Color color = adjustment > 0 ? HEAL_TEXT_COLOR : DAMAGE_TEXT_COLOR;
 
 			ParticleTextPopOff particle = null;
-			if (data.isCritical && ModOptions.player.showCritWords) {
+			if (ModOptions.player.showCritWords && delta >= this.criticalAmount) {
 				particle = new ParticleTextPopOff(world, getPowerWord(), CRITICAL_TEXT_COLOR, posX, posY + 0.5D, posZ);
 				this.getState().addParticle(particle);
 			}
-
-			final String text = String.valueOf(MathStuff.abs(data.amount));
-			final Color color = data.amount < 0 ? HEAL_TEXT_COLOR : DAMAGE_TEXT_COLOR;
 			particle = new ParticleTextPopOff(world, text, color, posX, posY, posZ);
 			this.getState().addParticle(particle);
+
+			this.lastHealth = entity.getHealth();
+		}
+	}
+
+	// Currently restricted to the active player. Have stuff to unwind in the
+	// footprint code.
+	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
+		@Override
+		public boolean applies(@Nonnull final Entity e, @Nonnull final String tokens) {
+			return e instanceof EntityLivingBase;
+		}
+	};
+
+	public static class Factory implements IEntityEffectFactory {
+
+		@Override
+		public List<EntityEffect> create(@Nonnull final Entity entity) {
+			return ImmutableList.of(new EntityHealthPopoffEffect());
 		}
 	}
 
