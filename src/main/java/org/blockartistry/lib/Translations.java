@@ -68,6 +68,12 @@ public class Translations {
 		final String xlated = this.lookup.get(translateKey);
 		return xlated == null ? translateKey : String.format(xlated, parameters);
 	}
+	
+	@Nonnull
+	public String loadString(@Nonnull final String translateKey) {
+		final String xlated = this.lookup.get(translateKey);
+		return xlated == null ? translateKey : xlated;
+	}
 
 	public void put(@Nonnull final String key, @Nonnull final String value) {
 		this.lookup.put(key, value);

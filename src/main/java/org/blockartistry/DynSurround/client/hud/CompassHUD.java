@@ -33,11 +33,10 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.lib.DiurnalUtils;
 import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.Localization;
+import org.blockartistry.lib.MinecraftClock;
 import org.blockartistry.lib.PlayerUtils;
-import org.blockartistry.lib.DiurnalUtils.DayCycle;
 import org.blockartistry.lib.gui.TextPanel;
 import org.blockartistry.lib.gui.Panel.Reference;
 import org.blockartistry.lib.math.MathStuff;
@@ -66,12 +65,6 @@ public class CompassHUD extends GuiOverlay {
 	private static final int ROSE_DIM = 256;
 
 	private static final float TEXT_LINE_START = 1.5F;
-
-	private static final String NO_SKY = Localization.format("dsurround.format.NoSky");
-	private static final String SUNRISE = Localization.format("dsurround.format.Sunrise");
-	private static final String SUNSET = Localization.format("dsurround.format.Sunset");
-	private static final String DAYTIME = Localization.format("dsurround.format.Daytime");
-	private static final String NIGHTTIME = Localization.format("dsurround.format.Nighttime");
 
 	private static enum Style {
 		//
@@ -160,23 +153,6 @@ public class CompassHUD extends GuiOverlay {
 		return false;
 	}
 
-	@Nonnull
-	private static String diurnalName() {
-		final DayCycle cycle = DiurnalUtils.getCycle(EnvironState.getWorld());
-		switch (cycle) {
-		case NO_SKY:
-			return CompassHUD.NO_SKY;
-		case SUNRISE:
-			return CompassHUD.SUNRISE;
-		case SUNSET:
-			return CompassHUD.SUNSET;
-		case DAYTIME:
-			return CompassHUD.DAYTIME;
-		default:
-			return CompassHUD.NIGHTTIME;
-		}
-	}
-
 	@Override
 	public void doTick(final int tickRef) {
 		if (tickRef != 0 && tickRef % 4 == 0) {
@@ -201,8 +177,9 @@ public class CompassHUD extends GuiOverlay {
 				time -= elapsedMinutes * 60000;
 				final int elapsedSeconds = (int) (time / 1000);
 
-				text.add(EnvironState.getClock().toString());
-				text.add(diurnalName());
+				final MinecraftClock clock = EnvironState.getClock();
+				text.add(clock.getFormattedTime());
+				text.add(clock.getTimeOfDay());
 				text.add(Localization.format("dsurround.format.SessionTime", elapsedHours, elapsedMinutes,
 						elapsedSeconds));
 			}
