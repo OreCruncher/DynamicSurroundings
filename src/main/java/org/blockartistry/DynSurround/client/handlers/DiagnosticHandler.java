@@ -45,7 +45,10 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -66,6 +69,8 @@ public class DiagnosticHandler extends EffectHandlerBase {
 	private List<String> serverDataReport = ImmutableList.of();
 
 	private List<TimerEMA> timers = new ArrayList<>();
+	private TimerEMA clientTick = new TimerEMA("Client Tick");
+	private long timeMark;
 
 	public DiagnosticHandler() {
 		super("DiagnosticHandler");
@@ -81,7 +86,7 @@ public class DiagnosticHandler extends EffectHandlerBase {
 	public void process(@Nonnull final EntityPlayer player) {
 		// Gather diagnostics if needed
 		if (Minecraft.getMinecraft().gameSettings.showDebugInfo && ModOptions.logging.enableDebugLogging) {
-			final DiagnosticEvent.Gather gather = new DiagnosticEvent.Gather(player.world, player);
+			final DiagnosticEvent.Gather gather = new DiagnosticEvent.Gather(player.getEntityWorld(), player);
 			MinecraftForge.EVENT_BUS.post(gather);
 			this.diagnostics = gather.output;
 		} else {
@@ -111,6 +116,18 @@ public class DiagnosticHandler extends EffectHandlerBase {
 			DiagnosticPanel.destroy();
 	}
 
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void tickStart(@Nonnull final TickEvent.ClientTickEvent event) {
+		if (event.phase == Phase.START)
+			this.timeMark = System.nanoTime();
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void tickEnd(@Nonnull final TickEvent.ClientTickEvent event) {
+		if (event.phase == Phase.END)
+			this.clientTick.update(System.nanoTime() - this.timeMark);
+	}
+
 	/**
 	 * Hook the Forge text event to add on our diagnostics
 	 */
@@ -123,9 +140,9 @@ public class DiagnosticHandler extends EffectHandlerBase {
 
 		if (Minecraft.getMinecraft().gameSettings.showDebugInfo) {
 			event.getRight().add(" ");
+			event.getRight().add(TextFormatting.LIGHT_PURPLE + this.clientTick.toString());
 			for (final TimerEMA timer : this.timers)
-				event.getRight()
-						.add(TextFormatting.AQUA + String.format("%s: %-2.2fms", timer.name(), timer.getMSecs()));
+				event.getRight().add(TextFormatting.AQUA + timer.toString());
 
 			if (this.serverDataReport != null) {
 				event.getRight().add(" ");
