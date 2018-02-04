@@ -27,6 +27,8 @@ package org.blockartistry.DynSurround.client.fx.particle;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.lib.Color;
+import org.blockartistry.lib.gfx.OpenGlState;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -102,19 +104,19 @@ public class ParticleTextPopOff extends ParticleBase {
 		final float locY = ((float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpY()));
 		final float locZ = ((float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpZ()));
 
-		GlStateManager.pushMatrix();
+		final OpenGlState glState = OpenGlState.push();
 		GlStateManager.translate(locX, locY, locZ);
 		GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);
 		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
 		GlStateManager.scale(this.particleScale * 0.008D, this.particleScale * 0.008D, this.particleScale * 0.008D);
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 0.003662109F);
-
-		this.font.drawStringWithShadow(this.text, this.drawX, this.drawY, this.renderColor.rgb());
-		
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
+		this.font.drawString(this.text, this.drawX, this.drawY, 0x00000000, false);
+		GlStateManager.translate(-0.3F, -0.3F, -0.001F);
+		this.font.drawString(this.text, this.drawX, this.drawY, this.renderColor.rgb(), false);
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, OpenGlHelper.lastBrightnessX, OpenGlHelper.lastBrightnessY);
-		GlStateManager.popMatrix();
-
+		OpenGlState.pop(glState);
+		
 		if (this.grow) {
 			this.particleScale *= 1.08F;
 			if (this.particleScale > SIZE * 3.0D) {
