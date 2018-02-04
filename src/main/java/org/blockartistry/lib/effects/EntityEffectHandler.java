@@ -28,6 +28,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,6 +40,31 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public class EntityEffectHandler extends EntityEffectStateBase implements IEntityEffectHandlerState {
+
+	public static class Dummy extends EntityEffectHandler {
+		public Dummy(@Nonnull final Entity entity) {
+			super(entity);
+		}
+
+		@Override
+		public void update() {
+		}
+
+		@Override
+		public void die() {
+			this.isAlive = false;
+		}
+
+		@Override
+		public boolean isDummy() {
+			return true;
+		}
+
+		@Override
+		public List<String> getAttachedEffects() {
+			return ImmutableList.of("Dummy EffectHandler");
+		}
+	};
 
 	protected final List<EntityEffect> activeEffects;
 	protected boolean isAlive = true;
@@ -77,8 +104,6 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 	 */
 	public void die() {
 		this.isAlive = false;
-		for (final EntityEffect e : this.activeEffects)
-			e.die();
 	}
 
 	/**

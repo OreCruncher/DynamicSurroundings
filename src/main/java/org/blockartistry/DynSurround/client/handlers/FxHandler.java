@@ -46,7 +46,6 @@ import org.blockartistry.lib.math.TimerEMA;
 
 import com.google.common.collect.ImmutableList;
 
-import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
@@ -75,12 +74,12 @@ public class FxHandler extends EffectHandlerBase {
 		library.register(EntityBowSoundEffect.DEFAULT_FILTER, new EntityBowSoundEffect.Factory());
 	}
 
-	private final TIntObjectHashMap<EntityEffectHandler> handlers = new TIntObjectHashMap<EntityEffectHandler>();
+	private final TIntObjectHashMap<EntityEffectHandler> handlers = new TIntObjectHashMap<EntityEffectHandler>(256);
 	private final EventEffectLibrary eventLibrary = new EventEffectLibrary();
 
 	private int totalHandlers = 0;
 	private int activeHandlers = 0;
-	
+
 	private TimerEMA compute = new TimerEMA("FxHandler Updates");
 	private long nanos;
 
@@ -93,26 +92,12 @@ public class FxHandler extends EffectHandlerBase {
 
 		this.activeHandlers = 0;
 
-		final TIntObjectIterator<EntityEffectHandler> itr = this.handlers.iterator();
-		while (itr.hasNext()) {
-			itr.advance();
-
-			final EntityEffectHandler eh = itr.value();
-
-			// If the subject is dead, kill the handler
-			if (!eh.isSubjectAlive())
-				eh.die();
-
-			// If the handler is still alive do an update
-			if (eh.isAlive())
-				eh.update();
-
-			// If after update it is dead remove
-			if (!eh.isAlive())
-				itr.remove();
-			else if (!eh.isDummy())
+		this.handlers.retainEntries((idx, handler) -> {
+			handler.update();
+			if (!handler.isDummy())
 				this.activeHandlers++;
-		}
+			return handler.isAlive();
+		});
 
 		this.totalHandlers = this.handlers.size();
 		this.compute.update(this.nanos);
@@ -152,30 +137,27 @@ public class FxHandler extends EffectHandlerBase {
 			return;
 
 		final long start = System.nanoTime();
-		
+
 		final double distanceThreshold = ModOptions.general.specialEffectRange * ModOptions.general.specialEffectRange;
 		final boolean inRange = entity.getDistanceSqToEntity(EnvironState.getPlayer()) <= distanceThreshold;
 
 		EntityEffectHandler handler = this.handlers.get(entity.getEntityId());
 		if (handler != null) {
-			if (!inRange) {
+			if (!inRange)
 				handler.die();
-				this.handlers.remove(entity.getEntityId());
-			}
 		} else if (entity.isEntityAlive() && inRange) {
 			handler = library.create(entity).get();
 			this.handlers.put(entity.getEntityId(), handler);
 		}
-		
+
 		this.nanos += (System.nanoTime() - start);
 	}
 
 	protected void clearHandlers() {
-		final TIntObjectIterator<EntityEffectHandler> itr = this.handlers.iterator();
-		while (itr.hasNext()) {
-			itr.advance();
-			itr.value().die();
-		}
+		this.handlers.forEachEntry((idx, handler) -> {
+			handler.die();
+			return true;
+		});
 		this.handlers.clear();
 	}
 
@@ -199,7 +181,7 @@ public class FxHandler extends EffectHandlerBase {
 		this.eventLibrary.register(new PopoffEventEffect(this.eventLibrary));
 
 		INSTANCE = this;
-		
+
 		DiagnosticHandler.INSTANCE.addTimer(this.compute);
 	}
 

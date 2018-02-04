@@ -28,9 +28,9 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.system.Generator;
-import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
@@ -41,10 +41,6 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -54,6 +50,7 @@ public class EntityFootprintEffect extends EntityEffect {
 	protected static final Random RANDOM = XorShiftRandom.current();
 
 	protected Generator generator;
+	protected int lastStyle;
 
 	public EntityFootprintEffect() {
 
@@ -63,48 +60,35 @@ public class EntityFootprintEffect extends EntityEffect {
 	public String name() {
 		return "EntityFootprintEffect";
 	}
-	
+
 	@Override
 	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
 		super.intitialize(state);
 
 		final EntityLivingBase entity = (EntityLivingBase) this.getState().subject().get();
 		this.generator = ClientRegistry.FOOTSTEPS.createGenerator(entity);
-		if (entity instanceof EntityPlayer)
-			MinecraftForge.EVENT_BUS.register(this);
+		this.lastStyle = ModOptions.player.footprintStyle;
 	}
 
 	protected boolean isMoving(@Nonnull final Entity entity) {
 		return entity.distanceWalkedModified != entity.prevDistanceWalkedModified;
 	}
 
-	// The player have changed settings that affect footstep/print generation (e.g.
-	// Quadruped)
-	@SubscribeEvent(priority = EventPriority.LOW)
-	public void onEvent(@Nonnull final ReloadEvent.Configuration event) {
-		if (event.side == null || event.side == Side.CLIENT) {
-			this.generator = ClientRegistry.FOOTSTEPS
-					.createGenerator((EntityLivingBase) this.getState().subject().get());
-		}
-	}
-
-	@Override
-	public void die() {
-		super.die();
-		MinecraftForge.EVENT_BUS.unregister(this);
-	}
-
 	@Override
 	public void update(@Nonnull final Entity subject) {
 		final EntityLivingBase entity = (EntityLivingBase) subject;
+		if (this.getState().isActivePlayer(entity) && this.lastStyle != ModOptions.player.footprintStyle) {
+			this.generator = ClientRegistry.FOOTSTEPS.createGenerator(entity);
+			this.lastStyle = ModOptions.player.footprintStyle;
+		}
 		this.generator.generateFootsteps(entity);
 	}
-	
+
 	@Override
 	public String toString() {
 		return super.toString() + ": " + this.generator.getPedometer();
 	}
-	
+
 	// Currently restricted to the active player. Have stuff to unwind in the
 	// footprint code.
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {

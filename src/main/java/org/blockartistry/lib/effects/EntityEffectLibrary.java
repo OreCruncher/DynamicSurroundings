@@ -34,8 +34,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.lib.collections.ObjectArray;
 
-import com.google.common.collect.ImmutableList;
-
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -101,26 +99,7 @@ public class EntityEffectLibrary {
 			result = new EntityEffectHandler(entity, effectToApply);
 		} else {
 			// No effects. Return a dummy handler.
-			result = new EntityEffectHandler(entity) {
-				@Override
-				public void update() {
-				}
-
-				@Override
-				public void die() {
-					this.isAlive = false;
-				}
-
-				@Override
-				public boolean isDummy() {
-					return true;
-				}
-
-				@Override
-				public List<String> getAttachedEffects() {
-					return ImmutableList.of("Dummy EffectHandler");
-				}
-			};
+			result = new EntityEffectHandler.Dummy(entity);
 		}
 
 		return Optional.of(result);
