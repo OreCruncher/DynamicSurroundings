@@ -25,22 +25,31 @@ package org.blockartistry.lib;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.DiurnalUtils.DayCycle;
+
 import net.minecraft.world.World;
 
 public class MinecraftClock {
 
 	private static final String AM = Localization.format("dsurround.format.AM");
 	private static final String PM = Localization.format("dsurround.format.PM");
+	private static final String NO_SKY = Localization.format("dsurround.format.NoSky");
+	private static final String SUNRISE = Localization.format("dsurround.format.Sunrise");
+	private static final String SUNSET = Localization.format("dsurround.format.Sunset");
+	private static final String DAYTIME = Localization.format("dsurround.format.Daytime");
+	private static final String NIGHTTIME = Localization.format("dsurround.format.Nighttime");
+	private static final String TIME_FORMAT = Localization.loadString("dsurround.format.TimeOfDay");
 
 	protected int day;
 	protected int hour;
 	protected int minute;
 	protected boolean isAM;
+	protected DayCycle cycle = DayCycle.DAYTIME;
 
 	public MinecraftClock() {
 
 	}
-	
+
 	public MinecraftClock(@Nonnull final World world) {
 		update(world);
 	}
@@ -62,6 +71,8 @@ public class MinecraftClock {
 		}
 
 		this.isAM = this.hour < 12;
+
+		this.cycle = DiurnalUtils.getCycle(world);
 	}
 
 	public int getDay() {
@@ -80,9 +91,30 @@ public class MinecraftClock {
 		return this.isAM;
 	}
 
+	public String getTimeOfDay() {
+		switch (this.cycle) {
+		case NO_SKY:
+			return MinecraftClock.NO_SKY;
+		case SUNRISE:
+			return MinecraftClock.SUNRISE;
+		case SUNSET:
+			return MinecraftClock.SUNSET;
+		case DAYTIME:
+			return MinecraftClock.DAYTIME;
+		default:
+			return MinecraftClock.NIGHTTIME;
+		}
+	}
+
+	public String getFormattedTime() {
+		return String.format(TIME_FORMAT, this.day, this.hour > 12 ? this.hour - 12 : this.hour, this.minute,
+				this.isAM ? AM : PM);
+	}
+
 	@Override
 	public String toString() {
-		return Localization.format("dsurround.format.TimeOfDay", this.day, this.hour > 12 ? this.hour - 12 : this.hour,
-				this.minute, this.isAM ? AM : PM);
+		final StringBuilder builder = new StringBuilder();
+		return builder.append('[').append(this.getFormattedTime()).append('.').append(this.getTimeOfDay()).append(']')
+				.toString();
 	}
 }
