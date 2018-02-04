@@ -81,14 +81,6 @@ public abstract class EntityEffect {
 	 */
 	public abstract void update(@Nonnull final Entity subject);
 
-	/**
-	 * Called when the EntityEffectHandler decides that the EntityEffect should die.
-	 * Normally this method would not be hooked. Should only be hooked if there is
-	 * additional state in other lists and places that need to be cleaned up.
-	 */
-	public void die() {
-	}
-	
 	@Override
 	public String toString() {
 		return this.name();
