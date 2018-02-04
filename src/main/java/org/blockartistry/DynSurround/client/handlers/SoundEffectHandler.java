@@ -24,10 +24,6 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
@@ -53,7 +49,7 @@ import org.blockartistry.DynSurround.network.PacketPlaySound;
 import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.compat.PositionedSoundUtil;
 
-import gnu.trove.iterator.TObjectFloatIterator;
+import gnu.trove.map.hash.THashMap;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSound;
@@ -107,10 +103,10 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		}
 	}
 
-	private final Map<SoundEffect, Emitter> emitters = new HashMap<SoundEffect, Emitter>();
-	private final ObjectArray<PendingSound> pending = new ObjectArray<PendingSound>();
-	private final ObjectArray<BasicSound<?>> sendToServer = new ObjectArray<BasicSound<?>>();
-	private final Map<String, SoundEvent> replacements = new HashMap<String, SoundEvent>();
+	private final THashMap<SoundEffect, Emitter> emitters = new THashMap<>();
+	private final THashMap<String, SoundEvent> replacements = new THashMap<>();
+	private final ObjectArray<PendingSound> pending = new ObjectArray<>();
+	private final ObjectArray<BasicSound<?>> sendToServer = new ObjectArray<>();
 
 	private SoundEffectHandler() {
 		super("SoundEffectHandler");
@@ -122,7 +118,6 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-
 		this.emitters.values().forEach(emitter -> emitter.update());
 		this.pending.removeIf(PENDING_SOUNDS);
 		this.sendToServer.forEach(sound -> Network.sendToServer(new PacketPlaySound(player, sound)));
@@ -151,37 +146,30 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		// * If done, remove
 		// * If not in the incoming list, fade
 		// * If it does exist, update volume throttle and unfade if needed
-		final Iterator<Entry<SoundEffect, Emitter>> itr = this.emitters.entrySet().iterator();
-		while (itr.hasNext()) {
-			final Entry<SoundEffect, Emitter> e = itr.next();
-			final Emitter emitter = e.getValue();
+		this.emitters.retainEntries((fx, emitter) -> {
 			if (emitter.isDonePlaying()) {
 				DSurround.log().debug("Removing emitter: %s", emitter.toString());
-				itr.remove();
-			} else if (sounds.contains(e.getKey())) {
-				emitter.setVolumeThrottle(sounds.get(e.getKey()));
+				return false;
+			}
+			final float volume = sounds.get(fx);
+			if (volume >= 0) {
+				emitter.setVolumeThrottle(volume);
 				if (emitter.isFading())
 					emitter.unfade();
-				// Set to 0 so that the "new sound" logic below
-				// will ignore. Cheaper than removing the object
-				// from the collection.
-				sounds.put(e.getKey(), 0F);
-			} else {
-				if (!emitter.isFading())
-					emitter.fade();
+				sounds.put(fx, 0F);
+			} else if (!emitter.isFading()) {
+				emitter.fade();
 			}
-		}
+			return true;
+		});
 
 		// Any sounds left in the list are new and need
 		// an emitter created.
-		final TObjectFloatIterator<SoundEffect> newSounds = sounds.iterator();
-		while (newSounds.hasNext()) {
-			newSounds.advance();
-			if (newSounds.value() > 0) {
-				final SoundEffect effect = newSounds.key();
-				this.emitters.put(effect, new PlayerEmitter(effect));
-			}
-		}
+		sounds.forEachEntry((fx, volume) -> {
+			if (volume > 0)
+				this.emitters.put(fx, new PlayerEmitter(fx));
+			return true;
+		});
 	}
 
 	public boolean isSoundPlaying(@Nonnull final BasicSound<?> sound) {

@@ -43,7 +43,6 @@ import org.blockartistry.lib.Translations;
 import org.blockartistry.lib.WorldUtils;
 
 import com.google.common.base.Function;
-import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
@@ -135,20 +134,10 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-
-		if (this.messages.size() == 0)
-			return;
-
-		// Go through the cached messages and get rid of those
-		// that expire.
 		final int currentTick = EnvironState.getTickCounter();
-		final TIntObjectIterator<EntityBubbleContext> entityData = this.messages.iterator();
-		while (entityData.hasNext()) {
-			entityData.advance();
-			final EntityBubbleContext ctx = entityData.value();
-			if (ctx.clean(currentTick))
-				entityData.remove();
-		}
+		this.messages.retainEntries((idx, ctx) -> {
+			return !ctx.clean(currentTick);
+		});
 	}
 
 	@Override
