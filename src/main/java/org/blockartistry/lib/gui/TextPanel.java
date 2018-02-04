@@ -36,7 +36,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class TextPanel extends Panel {
+public class TextPanel extends Panel<TextPanel> {
 
 	private final FontRenderer font = Minecraft.getMinecraft().fontRenderer;
 
@@ -89,10 +89,10 @@ public class TextPanel extends Panel {
 
 		super.render(locX, locY, ref);
 
-		final int textRGB = this.getForegroundColor().rgbWithAlpha(this.alpha);
-
 		GlStateManager.color(1F, 1F, 1F, this.alpha);
 		GlStateManager.enableBlend();
+
+		final int textRGB = this.getForegroundColor().rgbWithAlpha(this.alpha);
 
 		final int drawX;
 
