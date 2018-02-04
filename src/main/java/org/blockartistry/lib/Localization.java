@@ -27,7 +27,11 @@ package org.blockartistry.lib;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.lib.compat.I18nUtil;
+import org.blockartistry.lib.compat.LocaleUtil;
+
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.Locale;
 import net.minecraftforge.fml.relauncher.Side;
 
 public final class Localization {
@@ -36,6 +40,8 @@ public final class Localization {
 
 	private abstract static class Local {
 		public abstract String format(final String translateKey, final Object... parameters);
+
+		public abstract String loadString(final String translateKey);
 	}
 
 	private static class ClientImpl extends Local {
@@ -45,6 +51,11 @@ public final class Localization {
 		public String format(final String translateKey, final Object... parameters) {
 			// Let I18n do the heavy lifting
 			return I18n.format(translateKey, parameters);
+		}
+
+		public String loadString(final String translateKey) {
+			final Locale locale = I18nUtil.getLocale();
+			return LocaleUtil.translateKeyPrivate(locale, translateKey);
 		}
 	}
 
@@ -62,6 +73,11 @@ public final class Localization {
 		public String format(final String translateKey, final Object... parameters) {
 			return this.xlate.format(translateKey, parameters);
 		}
+
+		@Override
+		public String loadString(final String translateKey) {
+			return this.xlate.loadString(translateKey);
+		}
 	}
 
 	public static void initialize(@Nonnull final Side side) {
@@ -75,5 +91,9 @@ public final class Localization {
 	@Nonnull
 	public static String format(@Nonnull final String translateKey, @Nullable final Object... parameters) {
 		return impl.format(translateKey, parameters);
+	}
+
+	public static String loadString(@Nonnull final String translateKey) {
+		return impl.loadString(translateKey);
 	}
 }
