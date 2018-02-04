@@ -28,14 +28,15 @@ import javax.annotation.Nonnull;
 import org.blockartistry.lib.Color;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class Panel {
+public class Panel<T extends Panel<?>> {
 
-	public static final Color BACKGROUND_COLOR = Color.DARKSLATEGRAY;
-	public static final Color BORDER_COLOR = Color.MC_WHITE;
+	public static final Color BACKGROUND_COLOR = new Color(33, 33, 33);
+	public static final Color BORDER_COLOR = Color.MC_DARKGRAY;
 	public static final Color TEXT_COLOR = Color.MC_YELLOW;
 
 	private static final int DEFAULT_WIDTH = 10;
@@ -56,9 +57,9 @@ public class Panel {
 		UPPER_LEFT
 	};
 
-	protected final Color foreground;
-	protected final Color background;
-	protected final Color border;
+	protected Color foreground;
+	protected Color background;
+	protected Color border;
 
 	protected int width;
 	protected int height;
@@ -70,6 +71,10 @@ public class Panel {
 	protected boolean drawBackground = true;
 
 	protected ResourceLocation backgroundTexture = null;
+	protected int textureWidth;
+	protected int textureHeight;
+	protected Vec2f U = new Vec2f(0, 0);
+	protected Vec2f V = new Vec2f(1, 1);
 
 	public Panel() {
 		this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -87,60 +92,120 @@ public class Panel {
 		this.minWidth = this.width = width;
 		this.minHeight = this.height = height;
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	public T setBackgroundTexture(@Nonnull final ResourceLocation texture) {
+		this.backgroundTexture = texture;
+		return (T) this;
+	}
+
+	@SuppressWarnings("unchecked")
+	public T setTextureDimensions(final int width, final int height) {
+		this.textureHeight = height;
+		this.textureWidth = width;
+		return (T) this;
+	}
+
+	@SuppressWarnings("unchecked")
+	public T setTextureU(final int start, final int end) {
+		this.U = GuiUtils.calculateSpan(this.textureWidth, start, end);
+		return (T) this;
+	}
+
+	@SuppressWarnings("unchecked")
+	public T setTextureV(final int start, final int end) {
+		this.V = GuiUtils.calculateSpan(this.textureHeight, start, end);
+		return (T) this;
+	}
+
+	@SuppressWarnings("unchecked")
+	public T setTextureCoords(@Nonnull final Vec2f u, @Nonnull final Vec2f v) {
+		this.U = u;
+		this.V = v;
+		return (T) this;
+	}
+
+	@SuppressWarnings("unchecked")
+	public T setForegroundColor(@Nonnull final Color c) {
+		this.foreground = c;
+		return (T) this;
+	}
+
+	@SuppressWarnings("unchecked")
+	public T setBackgroundColor(@Nonnull final Color c) {
+		this.background = c;
+		return (T) this;
+	}
+
+	@SuppressWarnings("unchecked")
+	public T setBorderColor(@Nonnull final Color c) {
+		this.border = c;
+		return (T) this;
+	}
+
+	public ResourceLocation getBackgroundTexture() {
+		return this.backgroundTexture;
+	}
+
 	@Nonnull
 	public Color getForegroundColor() {
 		return this.foreground;
 	}
-	
+
 	@Nonnull
 	public Color getBackgroundColor() {
 		return this.background;
 	}
-	
-	@Nonnull Color getFrameColor() {
+
+	@Nonnull
+	Color getFrameColor() {
 		return this.border;
 	}
 
-	public Panel setAlpha(final float a) {
+	@SuppressWarnings("unchecked")
+	public T setAlpha(final float a) {
 		this.alpha = a;
-		return this;
+		return (T) this;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Nonnull
-	public Panel setMinimumWidth(final int w) {
+	public T setMinimumWidth(final int w) {
 		this.minWidth = w;
 		this.width = Math.max(this.width, w);
-		return this;
+		return (T) this;
 	}
 
 	public int getMinimumWidth() {
 		return this.minWidth;
 	}
 
-	public Panel setWidth(final int w) {
+	@SuppressWarnings("unchecked")
+	public T setWidth(final int w) {
 		this.width = Math.max(w, this.minWidth);
-		return this;
+		return (T) this;
 	}
 
 	public int getWidth() {
 		return this.width;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Nonnull
-	public Panel setMinimumHeight(final int h) {
+	public T setMinimumHeight(final int h) {
 		this.minHeight = h;
 		this.height = Math.max(this.height, h);
-		return this;
+		return (T) this;
 	}
 
 	public int getMinimumHeight() {
 		return this.minHeight;
 	}
 
-	public Panel setHeight(final int h) {
+	@SuppressWarnings("unchecked")
+	public T setHeight(final int h) {
 		this.height = Math.max(h, this.minHeight);
-		return this;
+		return (T) this;
 	}
 
 	public int getHeight() {
@@ -155,19 +220,21 @@ public class Panel {
 		return (this.height + 1) / 2;
 	}
 
-	public Panel drawFrame(final boolean flag) {
+	@SuppressWarnings("unchecked")
+	public T drawFrame(final boolean flag) {
 		this.drawFrame = flag;
-		return this;
+		return (T) this;
 	}
 
-	public Panel drawBackground(final boolean flag) {
+	@SuppressWarnings("unchecked")
+	public T drawBackground(final boolean flag) {
 		this.drawBackground = flag;
-		return this;
+		return (T) this;
 	}
 
 	public void render(final int locX, final int locY, @Nonnull final Reference ref) {
 
-		if (!(this.drawFrame && this.drawBackground))
+		if (!(this.drawFrame || this.drawBackground))
 			return;
 
 		final int posX;
@@ -188,18 +255,20 @@ public class Panel {
 			posY = locY;
 		}
 
-		final int backgroundRGB = background.rgbWithAlpha(this.alpha);
-		final int frameRGB = border.rgbWithAlpha(this.alpha);
-
 		if (this.drawBackground) {
-			if (this.backgroundTexture != null)
-				GuiUtils.drawTexturedModalRect(this.backgroundTexture, posX, posY, this.width, this.height);
-			else
+			if (this.backgroundTexture != null) {
+				GuiUtils.drawTexturedModalRect(this.backgroundTexture, posX, posY, this.width, this.height, this.U,
+						this.V);
+			} else {
+				final int backgroundRGB = background.rgbWithAlpha(this.alpha);
 				GuiUtils.drawRect(posX + 2, posY + 2, posX + this.width - 1, posY + this.height - 1, backgroundRGB);
+			}
 		}
 
-		if (this.drawFrame)
+		if (this.drawFrame) {
+			final int frameRGB = border.rgbWithAlpha(this.alpha);
 			GuiUtils.drawTooltipBox(posX, posY, this.width, this.height, frameRGB, frameRGB, frameRGB);
+		}
 
 	}
 

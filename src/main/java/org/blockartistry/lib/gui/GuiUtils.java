@@ -34,6 +34,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -131,17 +132,21 @@ public final class GuiUtils {
 	}
 
 	public static void drawTexturedModalRect(@Nonnull final ResourceLocation texture, final int x, final int y,
-			final int width, final int height) {
+			final int width, final int height, @Nonnull final Vec2f u, @Nonnull final Vec2f v) {
 		final float zLevel = 0F;
-		
+
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer vertexbuffer = tessellator.getBuffer();
+		final Tessellator tessellator = Tessellator.getInstance();
+		final VertexBuffer vertexbuffer = tessellator.getBuffer();
 		vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		vertexbuffer.pos((double) (x + 0), (double) (y + height), (double) zLevel).endVertex();
-		vertexbuffer.pos((double) (x + width), (double) (y + height), (double) zLevel).endVertex();
-		vertexbuffer.pos((double) (x + width), (double) (y + 0), (double) zLevel).endVertex();
-		vertexbuffer.pos((double) (x + 0), (double) (y + 0), (double) zLevel).endVertex();
+		vertexbuffer.pos((double) (x + 0), (double) (y + height), (double) zLevel).tex(u.x, v.x).endVertex();
+		vertexbuffer.pos((double) (x + width), (double) (y + height), (double) zLevel).tex(u.y, v.x).endVertex();
+		vertexbuffer.pos((double) (x + width), (double) (y + 0), (double) zLevel).tex(u.y, v.y).endVertex();
+		vertexbuffer.pos((double) (x + 0), (double) (y + 0), (double) zLevel).tex(u.x, v.y).endVertex();
 		tessellator.draw();
+	}
+
+	public static Vec2f calculateSpan(final int sheetDimension, final int first, final int second) {
+		return new Vec2f(first / (float) sheetDimension, second / (float) sheetDimension);
 	}
 }
