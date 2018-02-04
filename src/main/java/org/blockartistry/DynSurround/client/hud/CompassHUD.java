@@ -34,6 +34,7 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.DiurnalUtils;
+import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.Localization;
 import org.blockartistry.lib.PlayerUtils;
 import org.blockartistry.lib.DiurnalUtils.DayCycle;
@@ -51,7 +52,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -124,8 +124,12 @@ public class CompassHUD extends GuiOverlay {
 		}
 	}
 
-	private final TextPanel textPanel = new TextPanel();
+	private final TextPanel textPanel;
 	private boolean showCompass = false;
+
+	public CompassHUD() {
+		this.textPanel = new TextPanel();
+	}
 
 	@Nonnull
 	protected String getLocationString() {
@@ -150,7 +154,7 @@ public class CompassHUD extends GuiOverlay {
 			final Entity e = PlayerUtils.entityImLookingAt(EnvironState.getPlayer());
 			if (e instanceof EntityItemFrame) {
 				final ItemStack stack = ((EntityItemFrame) e).getDisplayedItem();
-				return stack != null && stack.getItem() == Items.CLOCK;
+				return ItemStackUtil.isValidItemStack(stack) && stack.getItem() == Items.CLOCK;
 			}
 		}
 		return false;
@@ -199,7 +203,8 @@ public class CompassHUD extends GuiOverlay {
 
 				text.add(EnvironState.getClock().toString());
 				text.add(diurnalName());
-				text.add(Localization.format("dsurround.format.SessionTime", elapsedHours, elapsedMinutes, elapsedSeconds));
+				text.add(Localization.format("dsurround.format.SessionTime", elapsedHours, elapsedMinutes,
+						elapsedSeconds));
 			}
 
 			if (text.size() > 0)
@@ -226,12 +231,11 @@ public class CompassHUD extends GuiOverlay {
 		final Style style = Style.getStyle(ModOptions.compass.compassStyle);
 		mc.getTextureManager().bindTexture(style.getTextureResource());
 
-		GlStateManager.color(1F, 1F, 1F, ModOptions.compass.compassTransparency);
-
-		if (this.showCompass)
+		if (this.showCompass) {
+			GlStateManager.color(1F, 1F, 1F, ModOptions.compass.compassTransparency);
 			if (!style.isRose()) {
 
-				final int direction = MathHelper.floor_double(((mc.thePlayer.rotationYaw * 256F) / 360F) + 0.5D) & 255;
+				final int direction = MathStuff.floor(((mc.thePlayer.rotationYaw * 256F) / 360F) + 0.5D) & 255;
 				final int x = (resolution.getScaledWidth() - style.getWidth() + 1) / 2;
 				final int y = (resolution.getScaledHeight() - style.getHeight() + 1) / 2 - style.getHeight();
 
@@ -252,6 +256,7 @@ public class CompassHUD extends GuiOverlay {
 				drawTexturedModalRect(x, y, 0, 0, style.getWidth(), style.getHeight());
 				GlStateManager.popMatrix();
 			}
+		}
 
 		GlStateManager.color(1F, 1F, 1F, 1F);
 	}
