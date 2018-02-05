@@ -147,6 +147,7 @@ public final class MCHelper {
 		return Block.REGISTRY.getObjectBypass(new ResourceLocation(blockName));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Nullable
 	public static SoundType getSoundType(@Nonnull final Block block) {
 		return block.getSoundType();
