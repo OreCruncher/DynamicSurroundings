@@ -39,6 +39,7 @@ import org.blockartistry.DynSurround.client.handlers.effects.FrostBreathEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.PlayerToolBarSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.VillagerChatEffect;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
+import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.effects.EntityEffectHandler;
 import org.blockartistry.lib.effects.EntityEffectLibrary;
 import org.blockartistry.lib.effects.EventEffectLibrary;
@@ -171,6 +172,15 @@ public class FxHandler extends EffectHandlerBase {
 	public void onEntityJoin(@Nonnull final EntityJoinWorldEvent event) {
 		if (event.getWorld().isRemote && event.getEntity() instanceof EntityPlayerSP)
 			this.clearHandlers();
+	}
+	
+	/**
+	 * Wipe out the effect handlers on a registry reload.  Possible something changed
+	 * in the effect configuration.
+	 */
+	@SubscribeEvent
+	public void registryReload(@Nonnull final ReloadEvent.Registry event) {
+		this.clearHandlers();
 	}
 
 	@Override
