@@ -24,9 +24,6 @@
 
 package org.blockartistry.DynSurround.client.footsteps.implem;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -34,6 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class DelayedAcoustic extends BasicAcoustic implements IOptions {
+	
 	protected long delayMin = 0;
 	protected long delayMax = 0;
 
@@ -44,22 +42,13 @@ public class DelayedAcoustic extends BasicAcoustic implements IOptions {
 	}
 
 	@Override
-	public boolean hasOption(@Nonnull final Option option) {
-		return option == Option.DELAY_MIN || option == Option.DELAY_MAX;
+	public long getDelayMin() {
+		return this.delayMin;
 	}
 
 	@Override
-	@Nullable
-	public Object getOption(@Nonnull final Option option) {
-		return option == Option.DELAY_MIN ? this.delayMin : option == Option.DELAY_MAX ? this.delayMax : null;
-	}
-
-	public long asLong(@Nonnull final Option option) {
-		return (Long) getOption(option);
-	}
-
-	public float asFloat(@Nonnull final Option option) {
-		return (Float) getOption(option);
+	public long getDelayMax() {
+		return this.delayMax;
 	}
 
 	public void setDelayMin(final long delay) {
