@@ -80,6 +80,14 @@ public abstract class EntityEffect {
 	 * results. Called once per tick.
 	 */
 	public abstract void update(@Nonnull final Entity subject);
+	
+	/**
+	 * Indicates to the EntityEffectHandler that the EntityEffect wants to be called
+	 * one last time after the Entity dies.
+	 */
+	public boolean receiveLastCall() {
+		return false;
+	}
 
 	@Override
 	public String toString() {
