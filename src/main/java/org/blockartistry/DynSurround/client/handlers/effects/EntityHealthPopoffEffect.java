@@ -82,7 +82,7 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 
 	@Override
 	public String name() {
-		return null;
+		return "EntityHealthPopoffEffect";
 	}
 
 	@Override
