@@ -1,3 +1,28 @@
+###DynamicSurroundings-1.10.2-3.4.9.1
+**What's New**
+* Morning fog.  It starts setting in about 3AM and peaks at about sunrise.  It burns off just after daytime.  There is an option to disable.
+* Bedrock fog.  Essentially the classic void fog.  It occurs near at the bedrock layers.  There is an option to disable. I did not add void particles!
+* More fog when raining.  The higher intensity the rain the more fog there is.  There is an option to disable.
+* Added a master control setting to enable/disable fog processing.  Because of how Minecraft/Forge handles fog processing it is possible to run into conflicts with other mods.  This option will allow you to turn off fog processing by Dynamic Surroundings.
+* Replaced the Minecraft bow loose sound with a new one.
+* ASM is used to disable an arrows particle trail on critical.  I mean, almost every bow shot is a critical and those particles get in my way. :)  There is an option under ASM Options to disable this patching.  This does not affect potion arrows particle swirls!
+* Added two intensity levels for rain.  This will allow for a better transition between rain/snow/dust textures when the weather fades in and out.
+* Damage popoffs are now 100% client side.  As a result some of the behavior has changed:
+    * Based on the entities health change from the last tick regardless of reason.
+    * Critical is based on a health change that exceeds a percentage of max health.
+
+**Fixes**
+* Minecraft thunder sound is again properly replaced.
+
+**Changes**
+* Reworked fog system.  Works much better.
+* Compatibility with BoP biomes where fog is concerned.
+* Eliminated biome and desert fog factors.  They were seldom used and would cause challenges with BoP fog compatibility changes.
+* Footstep and jump sounds, as well as footprint generation, will not occur if player is sneaking.
+* Adjust display position of damage popoffs so they are more visible.
+* Increased range of area biome scanner by quite a bit.  Result is better sound blending at biome transition points.  For example, when standing in a river biome in the middle of the forest you will get both river and forest biome sounds.
+* Enhanced F3 debug display when DS debug tracing is enabled.  Most notable is the addition of timing values for the various processes that take place within DS.
+
 ###DynamicSurroundings-1.10.2-3.4.9.0
 **What's New**
 * REQUIRES JAVA 8!
