@@ -38,7 +38,6 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.data.Profiles;
 import org.blockartistry.DynSurround.data.xface.DataScripts;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
-import org.blockartistry.DynSurround.event.RegistryEvent;
 import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.SideLocal;
 import org.blockartistry.lib.task.Scheduler;
@@ -174,7 +173,7 @@ public final class RegistryManager {
 			if (r != null)
 				r.initComplete();
 
-		MinecraftForge.EVENT_BUS.post(new RegistryEvent.Reload(this.side));
+		MinecraftForge.EVENT_BUS.post(new ReloadEvent.Registry(this.side));
 	}
 
 	// NOTE: Server side has no resource packs so the client specific

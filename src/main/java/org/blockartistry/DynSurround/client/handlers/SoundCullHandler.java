@@ -31,7 +31,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.gui.ConfigSound;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.event.RegistryEvent;
+import org.blockartistry.DynSurround.event.ReloadEvent;
 
 import com.google.common.collect.Sets;
 
@@ -72,8 +72,8 @@ public class SoundCullHandler extends EffectHandlerBase {
 	}
 
 	@SubscribeEvent
-	public void soundConfigReload(final RegistryEvent.Reload event) {
-		if (event.getSide() == Side.CLIENT)
+	public void soundConfigReload(final ReloadEvent.Registry event) {
+		if (event.side == Side.CLIENT)
 			onConnect();
 	}
 
