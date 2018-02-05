@@ -43,7 +43,7 @@ import org.blockartistry.DynSurround.client.sound.SoundState;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.event.PlayDistributedSoundEvent;
-import org.blockartistry.DynSurround.event.RegistryEvent;
+import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.network.PacketPlaySound;
 import org.blockartistry.lib.collections.ObjectArray;
@@ -255,18 +255,12 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		}
 	}
 
-	/*
-	 * Fired when the underlying biome config is reloaded.
-	 */
 	@SubscribeEvent
-	public void registryReloadEvent(@Nonnull final RegistryEvent.Reload event) {
-		if (event.getSide() == Side.CLIENT)
+	public void registryReloadEvent(@Nonnull final ReloadEvent.Registry event) {
+		if (event.side == Side.CLIENT)
 			clearSounds();
 	}
 
-	/*
-	 * Fired when the player joins a world, such as when the dimension changes.
-	 */
 	@SubscribeEvent
 	public void playerJoinWorldEvent(@Nonnull final EntityJoinWorldEvent event) {
 		if (event.getEntity().getEntityWorld().isRemote && EnvironState.isPlayer(event.getEntity())
