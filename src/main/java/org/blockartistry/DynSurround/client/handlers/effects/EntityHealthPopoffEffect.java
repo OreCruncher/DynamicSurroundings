@@ -86,6 +86,11 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 	public String name() {
 		return null;
 	}
+	
+	@Override
+	public boolean receiveLastCall() {
+		return true;
+	}
 
 	@Override
 	public void update(@Nonnull final Entity subject) {
