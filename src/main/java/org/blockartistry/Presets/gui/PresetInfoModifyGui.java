@@ -30,8 +30,8 @@ import javax.annotation.Nonnull;
 import org.blockartistry.Presets.data.PresetInfo;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.Localization;
-import org.blockartistry.lib.gui.Panel;
 import org.blockartistry.lib.gui.Panel.Reference;
+import org.blockartistry.lib.gui.StandardPanel;
 
 import com.google.common.base.Predicate;
 
@@ -98,7 +98,7 @@ public class PresetInfoModifyGui extends GuiScreen {
 	protected GuiLabel fileNameRequired;
 	protected GuiLabel presetTitleRequired;
 
-	protected final Panel backgroundPanel = new Panel();
+	protected final StandardPanel backgroundPanel = new StandardPanel();
 
 	protected final int buttonId;
 	protected final boolean editMode;
