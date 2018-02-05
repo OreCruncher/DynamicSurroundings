@@ -41,6 +41,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityEffectHandler extends EntityEffectStateBase implements IEntityEffectHandlerState {
 
+	/**
+	 * Dummy do nothing handler.
+	 */
 	public static class Dummy extends EntityEffectHandler {
 		public Dummy(@Nonnull final Entity entity) {
 			super(entity);
@@ -89,10 +92,11 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 		if (!this.isAlive())
 			return;
 
-		for (final EntityEffect e : activeEffects)
-			e.update(this.subject.get());
-
 		this.isAlive = this.isSubjectAlive();
+
+		for (final EntityEffect e : activeEffects)
+			if (this.isAlive || e.receiveLastCall())
+				e.update(this.subject.get());
 	}
 
 	/**

@@ -88,6 +88,11 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 	}
 
 	@Override
+	public boolean receiveLastCall() {
+		return true;
+	}
+
+	@Override
 	public void update(@Nonnull final Entity subject) {
 		if (!ModOptions.player.enableDamagePopoffs)
 			return;
