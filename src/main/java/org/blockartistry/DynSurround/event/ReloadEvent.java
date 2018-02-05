@@ -48,8 +48,6 @@ public class ReloadEvent extends Event {
 	
 	/**
 	 * Event fired when the mod configuration file changed.
-	 * @author Ted
-	 *
 	 */
 	public static class Configuration extends ReloadEvent {
 		
@@ -60,6 +58,19 @@ public class ReloadEvent extends Event {
 		}
 		
 		public Configuration(@Nonnull final Side side) {
+			this.side = side;
+		}
+	}
+	
+	/**
+	 * Event fired when the RegistryManager finished reloading
+	 * registries and is notifying listeners of the fact.
+	 */
+	public static class Registry extends ReloadEvent {
+		
+		public final Side side;
+		
+		public Registry(@Nonnull final Side side) {
 			this.side = side;
 		}
 	}
