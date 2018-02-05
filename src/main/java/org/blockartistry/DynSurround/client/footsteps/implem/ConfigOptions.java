@@ -24,12 +24,6 @@
 
 package org.blockartistry.DynSurround.client.footsteps.implem;
 
-import java.util.EnumMap;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,31 +31,50 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ConfigOptions implements IOptions {
-	private final Map<Option, Object> map = new EnumMap<Option, Object>(Option.class);
+
+	protected long delayMin = 0;
+	protected long delayMax = 0;
+	protected float glidingVolume = 0;
+	protected float glidingPitch = 0;
 
 	public ConfigOptions() {
-	}
 
-	public Map<Option, Object> getMap() {
-		return this.map;
 	}
 
 	@Override
-	public boolean hasOption(@Nonnull final Option option) {
-		return this.map.containsKey(option);
+	public long getDelayMin() {
+		return this.delayMin;
+	}
+
+	public void setDelayMin(final long v) {
+		this.delayMin = v;
 	}
 
 	@Override
-	@Nullable
-	public Object getOption(@Nonnull final Option option) {
-		return this.map.get(option);
+	public long getDelayMax() {
+		return this.delayMax;
 	}
-	
-	public long asLong(@Nonnull final Option option) {
-		return (Long)getOption(option);
+
+	public void setDelayMax(final long v) {
+		this.delayMax = v;
 	}
-	
-	public float asFloat(@Nonnull final Option option) {
-		return (Float)getOption(option);
+
+	@Override
+	public float getGlidingVolume() {
+		return this.glidingVolume;
 	}
+
+	public void setGlidingVolume(final float v) {
+		this.glidingVolume = v;
+	}
+
+	@Override
+	public float getGlidingPitch() {
+		return this.glidingPitch;
+	}
+
+	public void setGlidingPitch(final float v) {
+		this.glidingPitch = v;
+	}
+
 }
