@@ -40,7 +40,6 @@ import org.blockartistry.DynSurround.client.footsteps.implem.Variator;
 import org.blockartistry.DynSurround.client.footsteps.implem.Substrate;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
-import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions.Option;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.DynSurround.registry.ArmorClass;
@@ -652,7 +651,7 @@ public class Generator {
 					entity.motionX * entity.motionX + entity.motionY * entity.motionY + entity.motionZ * entity.motionZ)
 					* 1.25F;
 			final ConfigOptions options = new ConfigOptions();
-			options.getMap().put(Option.GLIDING_VOLUME, volume > 1 ? 1 : volume);
+			options.setGlidingVolume(volume > 1 ? 1 : volume);
 			// material water, see EntityLivingBase line 286
 			this.isolator.getAcoustics().playAcoustic(entity, AcousticsManager.SWIM,
 					entity.isInsideOfMaterial(Material.WATER) ? EventType.SWIM : EventType.WALK, options);

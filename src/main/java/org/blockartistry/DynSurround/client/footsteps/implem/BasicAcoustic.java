@@ -33,8 +33,6 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.ISoundPlayer;
-import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions.Option;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -77,11 +75,11 @@ public class BasicAcoustic implements IAcoustic {
 		float volume = generateVolume(player.getRNG());
 		float pitch = generatePitch(player.getRNG());
 		if (inputOptions != null) {
-			if (inputOptions.hasOption(Option.GLIDING_VOLUME)) {
-				volume = this.volMin + (this.volMax - this.volMin) * inputOptions.asFloat(Option.GLIDING_VOLUME);
+			if (inputOptions.getGlidingVolume() > 0) {
+				volume = this.volMin + (this.volMax - this.volMin) * inputOptions.getGlidingVolume();
 			}
-			if (inputOptions.hasOption(Option.GLIDING_PITCH)) {
-				pitch = this.pitchMin + (this.pitchMax - this.pitchMin) * inputOptions.asFloat(Option.GLIDING_PITCH);
+			if (inputOptions.getGlidingPitch() > 0) {
+				pitch = this.pitchMin + (this.pitchMax - this.pitchMin) * inputOptions.getGlidingPitch();
 			}
 		}
 

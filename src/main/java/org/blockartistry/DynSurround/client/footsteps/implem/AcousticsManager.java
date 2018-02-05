@@ -39,7 +39,6 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IStepPlayer;
-import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions.Option;
 import org.blockartistry.DynSurround.client.footsteps.system.Association;
 import org.blockartistry.DynSurround.client.footsteps.system.Footprint;
 import org.blockartistry.DynSurround.client.fx.ParticleCollections;
@@ -179,11 +178,11 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 
 		try {
 			if (options != null) {
-				if (options.hasOption(Option.DELAY_MIN) && options.hasOption(Option.DELAY_MAX)) {
+				if (options.getDelayMin() > 0 && options.getDelayMax() > 0) {
 					final long delay = TimeUtils.currentTimeMillis()
-							+ randAB(RANDOM, options.asLong(Option.DELAY_MIN), options.asLong(Option.DELAY_MAX));
-					this.pending.add(new PendingSound(location, sound, volume, pitch, null, delay,
-							options.asLong(Option.DELAY_MAX)));
+							+ randAB(RANDOM, options.getDelayMin(), options.getDelayMax());
+					this.pending
+							.add(new PendingSound(location, sound, volume, pitch, null, delay, options.getDelayMax()));
 				} else {
 					actuallyPlaySound(location, sound, volume, pitch);
 				}

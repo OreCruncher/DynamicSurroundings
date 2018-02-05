@@ -24,28 +24,25 @@
 
 package org.blockartistry.DynSurround.client.footsteps.interfaces;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public interface IOptions {
-	
-	public static enum Option {
-		DELAY_MIN,
-		DELAY_MAX,
-		GLIDING_VOLUME,
-		GLIDING_PITCH
-		
-	};
-	
-	public boolean hasOption(@Nonnull final Option option);
-	
-	public long asLong(@Nonnull final Option option);
-	public float asFloat(@Nonnull final Option option);
 
-	@Nullable
-	public Object getOption(@Nonnull final Option option);
+	default long getDelayMin() {
+		return 0;
+	}
+
+	default long getDelayMax() {
+		return 0;
+	}
+
+	default float getGlidingVolume() {
+		return 0;
+	}
+
+	default float getGlidingPitch() {
+		return 0;
+	}
 }
