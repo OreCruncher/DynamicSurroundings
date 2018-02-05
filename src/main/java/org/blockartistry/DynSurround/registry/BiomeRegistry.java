@@ -99,9 +99,7 @@ public final class BiomeRegistry extends Registry {
 			}
 		}
 
-		final List<Biome> biomes = ForgeRegistries.BIOMES.getValues();
-		for (final Biome b : biomes)
-			register(b);
+		ForgeRegistries.BIOMES.getValuesCollection().forEach(biome -> register(biome));
 
 		// Add our fake biomes
 		register(UNDERWATER);
@@ -135,7 +133,7 @@ public final class BiomeRegistry extends Registry {
 		for (final BiomeConfig biome : cfg.biomes)
 			this.register(biome);
 	}
-	
+
 	@Override
 	public void initComplete() {
 		if (ModOptions.logging.enableDebugLogging) {
