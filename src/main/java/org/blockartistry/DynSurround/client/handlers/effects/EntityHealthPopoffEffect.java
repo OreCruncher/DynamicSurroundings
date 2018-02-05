@@ -71,7 +71,6 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 		return POWER_WORDS[XorShiftRandom.current().nextInt(POWER_WORDS.length)] + "!";
 	}
 
-	protected float criticalAmount;
 	protected float lastHealth;
 
 	@Override
@@ -79,7 +78,6 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 		super.intitialize(state);
 		final EntityLivingBase entity = (EntityLivingBase) this.getState().subject().get();
 		this.lastHealth = entity.getHealth();
-		this.criticalAmount = (entity.getMaxHealth() / 2.5F);
 	}
 
 	@Override
@@ -101,7 +99,8 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 		if (this.lastHealth != entity.getHealth()) {
 			final World world = EnvironState.getWorld();
 			final int adjustment = MathHelper.ceil(entity.getHealth() - this.lastHealth);
-			final int delta = MathStuff.abs(adjustment);
+			final int delta = Math.max(1, MathStuff.abs(adjustment));
+			final int criticalAmount = (int) (entity.getMaxHealth() / 2.5F);
 
 			final AxisAlignedBB bb = entity.getEntityBoundingBox();
 			final double posX = entity.posX;
@@ -111,7 +110,7 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 			final Color color = adjustment > 0 ? HEAL_TEXT_COLOR : DAMAGE_TEXT_COLOR;
 
 			ParticleTextPopOff particle = null;
-			if (ModOptions.player.showCritWords && delta >= this.criticalAmount) {
+			if (ModOptions.player.showCritWords && adjustment < 0 && delta >= criticalAmount) {
 				particle = new ParticleTextPopOff(world, getPowerWord(), CRITICAL_TEXT_COLOR, posX, posY + 0.5D, posZ);
 				this.getState().addParticle(particle);
 			}
