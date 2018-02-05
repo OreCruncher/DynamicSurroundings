@@ -28,8 +28,8 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.Localization;
-import org.blockartistry.lib.gui.Panel;
 import org.blockartistry.lib.gui.Panel.Reference;
+import org.blockartistry.lib.gui.StandardPanel;
 
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiPageButtonList.GuiResponder;
@@ -66,7 +66,7 @@ public class VolumeControlGui extends GuiScreen implements GuiResponder {
 	protected float biome = ModOptions.sound.masterSoundScaleFactor;
 	protected float footstep = ModOptions.sound.footstepsSoundFactor;
 
-	protected Panel panel = new Panel();
+	protected StandardPanel panel = new StandardPanel();
 
 	private void addSlider(final GuiSlider slider) {
 		slider.setWidth(SLIDER_WIDTH);

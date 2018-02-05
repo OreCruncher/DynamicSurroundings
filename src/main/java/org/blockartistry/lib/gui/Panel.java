@@ -33,7 +33,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class Panel<T extends Panel<?>> {
+public abstract class Panel<T extends Panel<?>> {
 
 	public static final Color BACKGROUND_COLOR = new Color(33, 33, 33);
 	public static final Color BORDER_COLOR = Color.MC_DARKGRAY;
