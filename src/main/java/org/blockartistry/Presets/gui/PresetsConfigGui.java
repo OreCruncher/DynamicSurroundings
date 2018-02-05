@@ -37,8 +37,8 @@ import org.blockartistry.lib.Color;
 import org.blockartistry.lib.Localization;
 import org.blockartistry.lib.gui.GuiTooltip;
 import org.blockartistry.lib.gui.GuiTooltip.ITooltipRenderer;
-import org.blockartistry.lib.gui.Panel;
 import org.blockartistry.lib.gui.Panel.Reference;
+import org.blockartistry.lib.gui.StandardPanel;
 
 import com.google.common.collect.Lists;
 
@@ -101,8 +101,8 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 	protected final GuiScreen parentScreen;
 	protected final PresetConfig config;
 
-	protected final Panel backgroundPanel = new Panel();
-	protected final Panel presetPanel = new Panel(0, 0, Color.GOLD, Color.BLACK, Color.GRAY);
+	protected final StandardPanel backgroundPanel = new StandardPanel();
+	protected final StandardPanel presetPanel = new StandardPanel(0, 0, Color.GOLD, Color.BLACK, Color.GRAY);
 
 	protected int anchorX;
 	protected int anchorY;
