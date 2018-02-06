@@ -26,16 +26,12 @@ package org.blockartistry.lib.effects;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
-import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 
-import net.minecraft.client.particle.Particle;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -50,8 +46,8 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 
 	protected final List<EventEffect> effects = new ArrayList<EventEffect>();
 
-	public EventEffectLibrary() {
-
+	public EventEffectLibrary(@Nonnull final IParticleHelper ph, @Nonnull final ISoundHelper sh) {
+		super(ph, sh);
 	}
 
 	/**
@@ -77,29 +73,6 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	}
 
 	/**
-	 * Used by an EntityEffect to add a Particle to the system.
-	 * 
-	 * @param particle
-	 *            The Particle instance to add to the particle system.
-	 */
-	public void addParticle(@Nonnull final Particle particle) {
-		ParticleHelper.addParticle(particle);
-	}
-
-	/**
-	 * Used by an EventEffect to play a sound.
-	 * 
-	 * @param sound
-	 *            The sound to play
-	 * @return Unique ID identifying the sound in the sound system
-	 */
-	@Override
-	@Nullable
-	public String playSound(@Nonnull final BasicSound<?> sound) {
-		return SoundEffectHandler.INSTANCE.playSound(sound);
-	}
-
-	/**
 	 * Indicates if the specified player is the one sitting behind the screen.
 	 * 
 	 * @param player
@@ -108,7 +81,8 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	 */
 	@Override
 	public boolean isActivePlayer(@Nonnull final Entity player) {
-		return EnvironState.isPlayer(player);
+		final EntityPlayer ep = Minecraft.getMinecraft().player;
+		return ep != null && ep.getEntityId() == player.getEntityId();
 	}
 
 	/**
