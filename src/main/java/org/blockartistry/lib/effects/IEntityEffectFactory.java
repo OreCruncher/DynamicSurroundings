@@ -25,6 +25,7 @@ package org.blockartistry.lib.effects;
 
 import java.util.List;
 import javax.annotation.Nonnull;
+
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,9 +44,11 @@ public interface IEntityEffectFactory {
 	 * 
 	 * @param entity
 	 *            The subject of the EntityEffect
+	 * @param eei
+	 *            An object containing the Entities configuration parameters
 	 * @return A list of 0 or more IEffects to attach
 	 */
 	@Nonnull
-	List<EntityEffect> create(@Nonnull final Entity entity);
+	List<EntityEffect> create(@Nonnull final Entity entity, @Nonnull final EntityEffectInfo eei);
 
 }

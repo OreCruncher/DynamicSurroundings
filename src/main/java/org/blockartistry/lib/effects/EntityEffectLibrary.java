@@ -31,7 +31,6 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.ClientRegistry;
-import org.blockartistry.DynSurround.registry.EntityEffectInfo;
 import org.blockartistry.lib.collections.ObjectArray;
 
 import net.minecraft.entity.Entity;
@@ -87,8 +86,8 @@ public class EntityEffectLibrary {
 
 		final EntityEffectInfo eei = ClientRegistry.EFFECTS.getEffects(entity);
 		for (int i = 0; i < this.filters.size(); i++)
-			if (this.filters.get(i).applies(entity, eei.effects)) {
-				final List<EntityEffect> r = this.factories.get(i).create(entity);
+			if (this.filters.get(i).applies(entity, eei)) {
+				final List<EntityEffect> r = this.factories.get(i).create(entity, eei);
 				effectToApply.addAll(r);
 			}
 

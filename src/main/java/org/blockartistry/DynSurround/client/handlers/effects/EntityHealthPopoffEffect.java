@@ -32,6 +32,7 @@ import org.blockartistry.DynSurround.client.fx.particle.ParticleTextPopOff;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.effects.EntityEffect;
+import org.blockartistry.lib.effects.EntityEffectInfo;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
 import org.blockartistry.lib.effects.IEntityEffectHandlerState;
@@ -125,7 +126,7 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 	// footprint code.
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
-		public boolean applies(@Nonnull final Entity e, @Nonnull final String tokens) {
+		public boolean applies(@Nonnull final Entity e, @Nonnull final EntityEffectInfo eei) {
 			return e instanceof EntityLivingBase;
 		}
 	};
@@ -133,7 +134,7 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 	public static class Factory implements IEntityEffectFactory {
 
 		@Override
-		public List<EntityEffect> create(@Nonnull final Entity entity) {
+		public List<EntityEffect> create(@Nonnull final Entity entity, @Nonnull final EntityEffectInfo eei) {
 			return ImmutableList.of(new EntityHealthPopoffEffect());
 		}
 	}
