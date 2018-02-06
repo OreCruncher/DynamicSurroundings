@@ -129,22 +129,14 @@ public final class RegistryManager {
 		return pack.getInputStream(SCRIPT);
 	}
 
-	protected void processConfiguration(@Nonnull final ModConfigurationFile cfg) {
-		for (final Registry r : this.initOrder)
-			if (r != null)
-				r.configure(cfg);
-	}
-
 	public void reload() {
-		for (final Registry r : this.initOrder)
-			if (r != null)
-				r.init();
+		this.initOrder.forEach(reg -> reg.init());
 
 		for (final ModContainer mod : Loader.instance().getActiveModList()) {
 			final ModConfigurationFile cfg = DataScripts.loadFromArchive(mod.getModId());
 			if (cfg != null) {
 				DSurround.log().info("Loading from archive [%s]", mod.getModId());
-				processConfiguration(cfg);
+				this.initOrder.forEach(reg -> reg.configure(cfg));
 			}
 		}
 
@@ -153,7 +145,7 @@ public final class RegistryManager {
 			try (final InputStreamReader reader = new InputStreamReader(stream)) {
 				final ModConfigurationFile cfg = DataScripts.loadFromStream(reader);
 				if (cfg != null)
-					processConfiguration(cfg);
+					this.initOrder.forEach(reg -> reg.configure(cfg));
 			} catch (@Nonnull final Throwable ex) {
 				DSurround.log().error("Unable to read script from resource pack!", ex);
 			}
@@ -165,14 +157,11 @@ public final class RegistryManager {
 			final ModConfigurationFile cfg = DataScripts.loadFromDirectory(file);
 			if (cfg != null) {
 				DSurround.log().info("Loading from directory [%s]", file);
-				processConfiguration(cfg);
+				this.initOrder.forEach(reg -> reg.configure(cfg));
 			}
 		}
 
-		for (final Registry r : this.initOrder)
-			if (r != null)
-				r.initComplete();
-
+		this.initOrder.forEach(reg -> reg.initComplete());
 		MinecraftForge.EVENT_BUS.post(new ReloadEvent.Registry(this.side));
 	}
 
