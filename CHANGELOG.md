@@ -1,3 +1,7 @@
+###DynamicSurroundings-1.11.2-3.4.9.2
+**What's New**
+* Dynamic Trees support.  Added a mod profile so Dynamic Surroundings doesn't need to infer footstep behavior.
+
 ###DynamicSurroundings-1.11.2-3.4.9.1
 **What's New**
 * Morning fog.  It starts setting in about 3AM and peaks at about sunrise.  It burns off just after daytime.  There is an option to disable.
