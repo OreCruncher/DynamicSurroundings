@@ -38,11 +38,15 @@ import org.blockartistry.DynSurround.client.handlers.effects.EntitySwingEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.FrostBreathEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.PlayerToolBarSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.VillagerChatEffect;
+import org.blockartistry.DynSurround.client.sound.BasicSound;
+import org.blockartistry.lib.effects.ISoundHelper;
+import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.effects.EntityEffectHandler;
 import org.blockartistry.lib.effects.EntityEffectLibrary;
 import org.blockartistry.lib.effects.EventEffectLibrary;
+import org.blockartistry.lib.effects.IParticleHelper;
 import org.blockartistry.lib.math.TimerEMA;
 
 import com.google.common.collect.ImmutableList;
@@ -61,7 +65,20 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class FxHandler extends EffectHandlerBase {
 
-	private static final EntityEffectLibrary library = new EntityEffectLibrary();
+	private static final IParticleHelper PARTICLE_HELPER = (p) -> ParticleHelper.addParticle(p);
+	private static final ISoundHelper SOUND_HELPER = new ISoundHelper() {
+		@Override
+		public String playSound(@Nonnull final BasicSound<?> sound) {
+			return SoundEffectHandler.INSTANCE.playSound(sound);
+		}
+
+		@Override
+		public void stopSound(@Nonnull final String id) {
+			SoundEffectHandler.INSTANCE.stopSound(id);
+		}
+	};
+
+	private static final EntityEffectLibrary library = new EntityEffectLibrary(PARTICLE_HELPER, SOUND_HELPER);
 
 	public static FxHandler INSTANCE;
 
@@ -77,7 +94,7 @@ public class FxHandler extends EffectHandlerBase {
 	}
 
 	private final TIntObjectHashMap<EntityEffectHandler> handlers = new TIntObjectHashMap<EntityEffectHandler>(256);
-	private final EventEffectLibrary eventLibrary = new EventEffectLibrary();
+	private final EventEffectLibrary eventLibrary = new EventEffectLibrary(PARTICLE_HELPER, SOUND_HELPER);
 
 	private int totalHandlers = 0;
 	private int activeHandlers = 0;
@@ -175,7 +192,7 @@ public class FxHandler extends EffectHandlerBase {
 	}
 
 	/**
-	 * Wipe out the effect handlers on a registry reload.  Possible something changed
+	 * Wipe out the effect handlers on a registry reload. Possible something changed
 	 * in the effect configuration.
 	 */
 	@SubscribeEvent

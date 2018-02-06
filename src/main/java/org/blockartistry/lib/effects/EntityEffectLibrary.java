@@ -48,9 +48,12 @@ public class EntityEffectLibrary {
 
 	protected final ObjectArray<IEntityEffectFactoryFilter> filters = new ObjectArray<IEntityEffectFactoryFilter>();
 	protected final ObjectArray<IEntityEffectFactory> factories = new ObjectArray<IEntityEffectFactory>();
+	protected final IParticleHelper particleHelper;
+	protected final ISoundHelper soundHelper;
 
-	public EntityEffectLibrary() {
-
+	public EntityEffectLibrary(@Nonnull final IParticleHelper ph, @Nonnull final ISoundHelper sh) {
+		this.particleHelper = ph;
+		this.soundHelper = sh;
 	}
 
 	/**
@@ -93,7 +96,7 @@ public class EntityEffectLibrary {
 
 		final EntityEffectHandler result;
 		if (effectToApply.size() > 0) {
-			result = new EntityEffectHandler(entity, effectToApply);
+			result = new EntityEffectHandler(entity, effectToApply, this.particleHelper, this.soundHelper);
 		} else {
 			// No effects. Return a dummy handler.
 			result = new EntityEffectHandler.Dummy(entity);
