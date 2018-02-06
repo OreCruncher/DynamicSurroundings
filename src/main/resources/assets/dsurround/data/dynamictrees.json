@@ -1,0 +1,15 @@
+{
+	"footsteps": {
+		"dynamictrees:rootydirt": "dirt",
+		"dynamictrees:leaves0": "leaves",
+		"dynamictrees:oakbranch": "wood",
+		"dynamictrees:darkoakbranch": "wood",
+		"dynamictrees:birchbranch": "wood",
+		"dynamictrees:junglebranch": "wood",
+		"dynamictrees:acaciabranch": "wood",
+		"dynamictrees:sprucebranch": "wood"
+	},
+	"footprints": [
+		"dynamictrees:rootydirt"
+	]
+}

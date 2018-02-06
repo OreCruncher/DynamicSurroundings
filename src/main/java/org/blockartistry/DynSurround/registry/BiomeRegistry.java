@@ -87,6 +87,7 @@ public final class BiomeRegistry extends Registry {
 		this.registry.put(e.getKey(), e);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void init() {
 		this.biomeAliases.clear();
@@ -99,7 +100,8 @@ public final class BiomeRegistry extends Registry {
 			}
 		}
 
-		ForgeRegistries.BIOMES.getValuesCollection().forEach(biome -> register(biome));
+		//ForgeRegistries.BIOMES.getValuesCollection().forEach(biome -> register(biome));
+		ForgeRegistries.BIOMES.getValues().forEach(biome -> register(biome));
 
 		// Add our fake biomes
 		register(UNDERWATER);
