@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.system.Generator;
+import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
@@ -39,8 +40,12 @@ import org.blockartistry.lib.random.XorShiftRandom;
 
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -51,6 +56,7 @@ public class EntityFootprintEffect extends EntityEffect {
 
 	protected Generator generator;
 	protected int lastStyle;
+	protected boolean eventRegistered;
 
 	public EntityFootprintEffect() {
 
@@ -68,6 +74,11 @@ public class EntityFootprintEffect extends EntityEffect {
 		final EntityLivingBase entity = (EntityLivingBase) this.getState().subject().get();
 		this.generator = ClientRegistry.FOOTSTEPS.createGenerator(entity);
 		this.lastStyle = ModOptions.player.footprintStyle;
+
+		if (entity instanceof EntityPlayerSP) {
+			this.eventRegistered = true;
+			MinecraftForge.EVENT_BUS.register(this);
+		}
 	}
 
 	protected boolean isMoving(@Nonnull final Entity entity) {
@@ -82,6 +93,15 @@ public class EntityFootprintEffect extends EntityEffect {
 			this.lastStyle = ModOptions.player.footprintStyle;
 		}
 		this.generator.generateFootsteps(entity);
+
+		if (this.eventRegistered && !subject.isEntityAlive()) {
+			MinecraftForge.EVENT_BUS.unregister(this);
+		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void diagnostic(@Nonnull final DiagnosticEvent.Gather event) {
+		event.output.add("Footsteps: " + this.generator.toString());
 	}
 
 	@Override
