@@ -34,8 +34,9 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.lib.compat.ModEnvironment;
+
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 public final class AtmosphereService extends Service {

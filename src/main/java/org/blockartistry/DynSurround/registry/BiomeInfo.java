@@ -33,7 +33,6 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.AreaSoundEffectHandler;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
@@ -43,6 +42,7 @@ import org.blockartistry.DynSurround.data.xface.SoundType;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.WeightTable;
+import org.blockartistry.lib.compat.ModEnvironment;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;

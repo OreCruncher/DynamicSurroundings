@@ -22,14 +22,15 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.client.sound;
+package org.blockartistry.lib.sound;
 
 import java.util.Random;
 
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.DynSurround.ModEnvironment;
+import org.blockartistry.DynSurround.client.sound.SoundState;
+import org.blockartistry.lib.compat.ModEnvironment;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import com.google.common.base.Objects;

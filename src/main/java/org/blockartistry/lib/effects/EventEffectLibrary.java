@@ -26,8 +26,9 @@ package org.blockartistry.lib.effects;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
-import org.blockartistry.DynSurround.client.sound.BasicSound;
+
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.lib.sound.BasicSound;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;

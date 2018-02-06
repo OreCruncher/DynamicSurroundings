@@ -29,10 +29,11 @@ import java.lang.reflect.Field;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.client.gui.ConfigSound;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.lib.compat.ModEnvironment;
 import org.blockartistry.lib.math.MathStuff;
+import org.blockartistry.lib.sound.BasicSound;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MusicTicker;

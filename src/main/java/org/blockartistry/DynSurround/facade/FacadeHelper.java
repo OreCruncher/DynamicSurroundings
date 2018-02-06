@@ -29,7 +29,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.ModEnvironment;
+import org.blockartistry.lib.compat.ModEnvironment;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;

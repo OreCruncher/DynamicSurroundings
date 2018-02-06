@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround;
+package org.blockartistry.lib.compat;
 
 import javax.annotation.Nonnull;
 
