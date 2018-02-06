@@ -1,3 +1,10 @@
+###DynamicSurroundings-1.12.2-3.4.9.2
+**What's New**
+* Dynamic Trees support.  Added a mod profile so Dynamic Surroundings doesn't need to infer footstep behavior.
+
+**Fixes**
+* Reverted code change that caused incompatibility with older versions of Forge.  Dynamic Surroundings is compatible back to the latest released version 14.23.1.2555.
+
 ###DynamicSurroundings-1.12.2-3.4.9.1
 **What's New**
 * Morning fog.  It starts setting in about 3AM and peaks at about sunrise.  It burns off just after daytime.  There is an option to disable.
