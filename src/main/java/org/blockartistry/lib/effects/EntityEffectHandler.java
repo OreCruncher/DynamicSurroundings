@@ -75,7 +75,8 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 	protected boolean isAlive = true;
 	protected double rangeToPlayer;
 
-	public EntityEffectHandler(@Nonnull final Entity entity, @Nonnull final IParticleHelper ph, @Nonnull final ISoundHelper sh) {
+	public EntityEffectHandler(@Nonnull final Entity entity, @Nonnull final IParticleHelper ph,
+			@Nonnull final ISoundHelper sh) {
 		super(entity, ph, sh);
 		this.activeEffects = null;
 	}
@@ -98,12 +99,14 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 
 		this.isAlive = this.isSubjectAlive();
 		final Entity entity = this.subject.get();
-		final EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		this.rangeToPlayer = entity.getDistanceSqToEntity(player);
+		if (entity != null) {
+			final EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			this.rangeToPlayer = entity.getDistanceSqToEntity(player);
 
-		for (final EntityEffect e : activeEffects)
-			if (this.isAlive || e.receiveLastCall())
-				e.update(entity);
+			for (final EntityEffect e : activeEffects)
+				if (this.isAlive || e.receiveLastCall())
+					e.update(entity);
+		}
 	}
 
 	/**
