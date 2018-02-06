@@ -85,6 +85,7 @@ public class Generator {
 	protected long timeImmobile;
 
 	protected boolean isRightFoot;
+	protected boolean isOnLadder;
 
 	protected double xMovec;
 	protected double zMovec;
@@ -114,6 +115,8 @@ public class Generator {
 		// Clear starting state
 		this.didJump = false;
 		this.stepThisFrame = false;
+
+		this.isOnLadder = entity.isOnLadder();
 
 		simulateFootsteps(entity);
 		simulateAirborne(entity);
@@ -741,6 +744,17 @@ public class Generator {
 			assoc.add(footAddon);
 
 		return assoc;
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder builder = new StringBuilder();
+		builder.append("didJump: ").append(Boolean.toString(this.didJump)).append(' ');
+		builder.append("isOnLadder: ").append(Boolean.toString(this.isOnLadder)).append(' ');
+		builder.append("isFlying: ").append(Boolean.toString(this.isFlying)).append(' ');
+		builder.append("isImmobile: ").append(Boolean.toString(this.isImmobile)).append(' ');
+		builder.append("isMessy: ").append(Boolean.toString(this.isMessyFoliage));
+		return builder.toString();
 	}
 
 }
