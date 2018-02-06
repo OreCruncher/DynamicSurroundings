@@ -166,6 +166,10 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 			return "UNKNOWN";
 		}
 	}
+	
+	public boolean hasWeatherEffect() {
+		return this.getHasPrecipitation() || this.getHasDust();
+	}
 
 	public boolean getHasPrecipitation() {
 		return this.hasPrecipitation;
