@@ -37,12 +37,13 @@ public class EntityEffectStateBase extends EffectStateBase implements IEntityEff
 
 	protected final WeakReference<Entity> subject;
 
-	public EntityEffectStateBase(@Nonnull final Entity entity) {
-		super();
-		
+	public EntityEffectStateBase(@Nonnull final Entity entity, @Nonnull final IParticleHelper ph,
+			@Nonnull final ISoundHelper sh) {
+		super(ph, sh);
+
 		this.subject = new WeakReference<Entity>(entity);
 	}
-	
+
 	/**
 	 * The Entity subject the EntityEffectHandler is associated with. May be null if
 	 * the Entity is no longer in scope.
@@ -54,9 +55,10 @@ public class EntityEffectStateBase extends EffectStateBase implements IEntityEff
 	public Optional<Entity> subject() {
 		return Optional.ofNullable(this.subject.get());
 	}
-	
+
 	/**
 	 * Indicates if the subject is alive.
+	 * 
 	 * @return true if the subject is alive, false otherwise
 	 */
 	@Override
@@ -73,11 +75,11 @@ public class EntityEffectStateBase extends EffectStateBase implements IEntityEff
 	 * @return The distance between the two Entities in blocks, squared.
 	 */
 	@Override
-	public double distanceSq(final Entity player) {
+	public double distanceSq(final Entity entity) {
 		final Entity e = this.subject.get();
 		if (e == null)
 			return Double.MAX_VALUE;
-		return e.getDistanceSqToEntity(player);
+		return e.getDistanceSqToEntity(entity);
 	}
 
 	/**

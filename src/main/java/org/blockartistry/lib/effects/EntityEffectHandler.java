@@ -30,7 +30,9 @@ import javax.annotation.Nonnull;
 
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -46,7 +48,7 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 	 */
 	public static class Dummy extends EntityEffectHandler {
 		public Dummy(@Nonnull final Entity entity) {
-			super(entity);
+			super(entity, null, null);
 		}
 
 		@Override
@@ -71,14 +73,16 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 
 	protected final List<EntityEffect> activeEffects;
 	protected boolean isAlive = true;
+	protected double rangeToPlayer;
 
-	public EntityEffectHandler(@Nonnull final Entity entity) {
-		super(entity);
+	public EntityEffectHandler(@Nonnull final Entity entity, @Nonnull final IParticleHelper ph, @Nonnull final ISoundHelper sh) {
+		super(entity, ph, sh);
 		this.activeEffects = null;
 	}
 
-	public EntityEffectHandler(@Nonnull final Entity entity, @Nonnull final List<EntityEffect> effects) {
-		super(entity);
+	public EntityEffectHandler(@Nonnull final Entity entity, @Nonnull final List<EntityEffect> effects,
+			@Nonnull final IParticleHelper ph, @Nonnull final ISoundHelper sh) {
+		super(entity, ph, sh);
 		this.activeEffects = effects;
 		for (final EntityEffect ee : this.activeEffects)
 			ee.intitialize(this);
@@ -93,10 +97,13 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 			return;
 
 		this.isAlive = this.isSubjectAlive();
+		final Entity entity = this.subject.get();
+		final EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		this.rangeToPlayer = entity.getDistanceSqToEntity(player);
 
 		for (final EntityEffect e : activeEffects)
 			if (this.isAlive || e.receiveLastCall())
-				e.update(this.subject.get());
+				e.update(entity);
 	}
 
 	/**
@@ -146,6 +153,16 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 	@Override
 	public boolean isAlive() {
 		return this.isAlive;
+	}
+
+	/**
+	 * Provides the distance, squared, to the player entity behind the keyboard.
+	 * 
+	 * @return Range to client player, squared.
+	 */
+	@Override
+	public double rangeToPlayerSq() {
+		return this.rangeToPlayer;
 	}
 
 }
