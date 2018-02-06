@@ -30,7 +30,6 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 
-import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.data.xface.EntityConfig;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
@@ -44,8 +43,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EffectRegistry extends Registry {
 
-	protected final Map<Class<? extends Entity>, EntityConfig> effects = new IdentityHashMap<>();
-	protected EntityConfig playerEffects;
+	public static final EntityEffectInfo DEFAULT = new EntityEffectInfo();
+
+	protected final Map<Class<? extends Entity>, EntityEffectInfo> effects = new IdentityHashMap<>();
+	protected EntityEffectInfo playerEffects = DEFAULT;
 
 	public EffectRegistry(@Nonnull final Side side) {
 		super(side);
@@ -64,13 +65,13 @@ public class EffectRegistry extends Registry {
 			final EntityConfig entityEffects = e.getValue();
 
 			if ("minecraft:player".equals(entityName)) {
-				this.playerEffects = entityEffects;
+				this.playerEffects = new EntityEffectInfo(entityEffects);
 				continue;
 			}
 
 			final Class<? extends Entity> clazz = EntityList.getClassFromName(entityName);
 			if (clazz != null) {
-				this.effects.put(clazz, entityEffects);
+				this.effects.put(clazz, new EntityEffectInfo(entityEffects));
 			} else {
 				DSurround.log().warn("Unrecognized resource name for entity: %s", entityName);
 			}
@@ -87,10 +88,10 @@ public class EffectRegistry extends Registry {
 			if (clazz != null) {
 				if (!this.effects.containsKey(clazz)) {
 					// Not found. Scan our list looking for those that can be assigned
-					final Iterator<Entry<Class<? extends Entity>, EntityConfig>> itr = this.effects.entrySet()
+					final Iterator<Entry<Class<? extends Entity>, EntityEffectInfo>> itr = this.effects.entrySet()
 							.iterator();
 					while (itr.hasNext()) {
-						final Entry<Class<? extends Entity>, EntityConfig> e = itr.next();
+						final Entry<Class<? extends Entity>, EntityEffectInfo> e = itr.next();
 						if (e.getKey().isAssignableFrom(clazz)) {
 							this.effects.put(clazz, e.getValue());
 							break;
@@ -106,7 +107,7 @@ public class EffectRegistry extends Registry {
 
 		DSurround.log().debug("Entity Effect Entries");
 		DSurround.log().debug("=====================");
-		for (final Entry<Class<? extends Entity>, EntityConfig> e : this.effects.entrySet()) {
+		for (final Entry<Class<? extends Entity>, EntityEffectInfo> e : this.effects.entrySet()) {
 			final ResourceLocation r = EntityList.getKey(e.getKey());
 			final String keyName;
 			if (r != null)
@@ -123,10 +124,9 @@ public class EffectRegistry extends Registry {
 	}
 
 	@Nonnull
-	public String getEffects(@Nonnull final Entity entity) {
+	public EntityEffectInfo getEffects(@Nonnull final Entity entity) {
 		if (entity instanceof EntityPlayer)
-			return this.playerEffects.effects;
-		final EntityConfig ec = this.effects.get(entity.getClass());
-		return ec == null ? StringUtils.EMPTY : ec.effects;
+			return this.playerEffects;
+		return this.effects.getOrDefault(entity.getClass(), DEFAULT);
 	}
 }

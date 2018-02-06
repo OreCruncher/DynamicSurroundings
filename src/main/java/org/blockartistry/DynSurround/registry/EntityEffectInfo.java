@@ -20,17 +20,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.blockartistry.DynSurround.data.xface;
+package org.blockartistry.DynSurround.registry;
+
+import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.DynSurround.data.xface.EntityConfig;
 
-import com.google.gson.annotations.SerializedName;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityConfig {
+@SideOnly(Side.CLIENT)
+public class EntityEffectInfo {
+	
+	public final String effects;
+	public final float stepVolume;
+	public final int footprintStyle;
+	
+	public EntityEffectInfo() {
+		this.effects = StringUtils.EMPTY;
+		this.stepVolume = 1.0F;
+		this.footprintStyle = 6;
+	}
+	
+	public EntityEffectInfo(@Nonnull final EntityConfig ec) {
+		this.effects = ec.effects;
+		this.stepVolume = ec.stepVolume;
+		this.footprintStyle = 6;
+	}
 
-	@SerializedName("effects")
-	public String effects = StringUtils.EMPTY;
-	@SerializedName("stepVolume")
-	public float stepVolume = 1.0F;
+	@Override
+	public String toString() {
+		return new StringBuilder().append("effects: ").append(this.effects).append(", stepVolume: ")
+				.append(this.stepVolume).toString();
+	}
 
 }
