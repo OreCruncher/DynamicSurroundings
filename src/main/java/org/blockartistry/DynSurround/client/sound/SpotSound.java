@@ -27,6 +27,7 @@ package org.blockartistry.DynSurround.client.sound;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.lib.sound.BasicSound;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;

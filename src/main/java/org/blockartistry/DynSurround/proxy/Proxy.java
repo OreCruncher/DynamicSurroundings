@@ -27,13 +27,13 @@ package org.blockartistry.DynSurround.proxy;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.commands.CommandDS;
 import org.blockartistry.DynSurround.entity.CapabilityEmojiData;
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.registry.RegistryManager;
 import org.blockartistry.DynSurround.server.services.ServiceManager;
 import org.blockartistry.lib.Localization;
+import org.blockartistry.lib.compat.ModEnvironment;
 
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;

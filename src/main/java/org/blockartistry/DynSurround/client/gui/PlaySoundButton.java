@@ -26,9 +26,9 @@ package org.blockartistry.DynSurround.client.gui;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.MusicTickerReplacement;
 import org.blockartistry.DynSurround.client.sound.SoundEngine;
+import org.blockartistry.lib.sound.BasicSound;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MusicTicker;

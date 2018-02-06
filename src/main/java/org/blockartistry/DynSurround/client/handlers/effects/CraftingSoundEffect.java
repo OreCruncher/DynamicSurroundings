@@ -27,10 +27,10 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.lib.effects.EventEffect;
 import org.blockartistry.lib.effects.IEventEffectLibraryState;
+import org.blockartistry.lib.sound.BasicSound;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;

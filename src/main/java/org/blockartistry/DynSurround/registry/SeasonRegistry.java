@@ -27,11 +27,12 @@ package org.blockartistry.DynSurround.registry;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.DynSurround.registry.season.SeasonInfo;
 import org.blockartistry.DynSurround.registry.season.SeasonInfoNether;
 import org.blockartistry.DynSurround.registry.season.SeasonInfoToughAsNails;
+import org.blockartistry.lib.compat.ModEnvironment;
+
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

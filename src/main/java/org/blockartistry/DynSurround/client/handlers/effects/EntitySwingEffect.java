@@ -29,13 +29,13 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
-import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.EntityEffectInfo;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
 import org.blockartistry.lib.math.RayTrace;
+import org.blockartistry.lib.sound.BasicSound;
 
 import com.google.common.collect.ImmutableList;
 

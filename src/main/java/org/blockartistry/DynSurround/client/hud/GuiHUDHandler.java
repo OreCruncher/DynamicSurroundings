@@ -27,9 +27,10 @@ package org.blockartistry.DynSurround.client.hud;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.Permissions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.lib.compat.ModEnvironment;
+
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
