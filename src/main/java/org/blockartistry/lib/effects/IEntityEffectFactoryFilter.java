@@ -42,9 +42,9 @@ public interface IEntityEffectFactoryFilter {
 	 * Evaluates the Entity to determine if an EntityEffect will apply.
 	 * 
 	 * @param entity The subject of the evaluation
-	 * @param tokens A string of tokens from the effect registry
+	 * @param eei An object containing the Entities effect parameters
 	 * @return true if the EntityEffect applies, false otherwise
 	 */
-	boolean applies(@Nonnull final Entity entity, @Nonnull final String tokens);
+	boolean applies(@Nonnull final Entity entity, @Nonnull final EntityEffectInfo eei);
 	
 }
