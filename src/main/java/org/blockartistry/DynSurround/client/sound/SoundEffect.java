@@ -41,6 +41,8 @@ import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.WeightTable;
 import org.blockartistry.lib.WeightTable.IEntrySource;
 import org.blockartistry.lib.WeightTable.IItem;
+import org.blockartistry.lib.sound.BasicSound;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

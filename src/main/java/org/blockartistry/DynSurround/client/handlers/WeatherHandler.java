@@ -29,8 +29,8 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.ThunderEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.Sounds;
+import org.blockartistry.lib.sound.BasicSound;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;

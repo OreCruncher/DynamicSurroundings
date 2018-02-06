@@ -27,7 +27,6 @@ package org.blockartistry.DynSurround.proxy;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModEnvironment;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.DynSurround.client.gui.HumDinger;
@@ -47,6 +46,7 @@ import org.blockartistry.DynSurround.data.PresetHandler;
 import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.DynSurround.event.WorldEventDetector;
 import org.blockartistry.lib.Localization;
+import org.blockartistry.lib.compat.ModEnvironment;
 import org.blockartistry.lib.task.Scheduler;
 
 import net.minecraft.client.Minecraft;

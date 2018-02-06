@@ -25,7 +25,7 @@ package org.blockartistry.lib.effects;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.client.sound.BasicSound;
+import org.blockartistry.lib.sound.BasicSound;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

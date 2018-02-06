@@ -35,6 +35,7 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.registry.SoundMetadata;
 import org.blockartistry.lib.gui.RecordTitleEmitter;
 import org.blockartistry.lib.random.XorShiftRandom;
+import org.blockartistry.lib.sound.BasicSound;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;

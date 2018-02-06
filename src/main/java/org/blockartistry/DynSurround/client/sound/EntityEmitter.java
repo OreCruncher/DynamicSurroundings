@@ -25,6 +25,8 @@ package org.blockartistry.DynSurround.client.sound;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.sound.BasicSound;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

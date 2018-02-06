@@ -34,7 +34,6 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.AdhocSound;
-import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.Emitter;
 import org.blockartistry.DynSurround.client.sound.PlayerEmitter;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
@@ -48,6 +47,7 @@ import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.network.PacketPlaySound;
 import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.compat.PositionedSoundUtil;
+import org.blockartistry.lib.sound.BasicSound;
 
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.map.hash.TObjectFloatHashMap;
