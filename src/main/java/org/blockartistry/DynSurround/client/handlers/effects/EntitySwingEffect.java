@@ -60,7 +60,7 @@ public class EntitySwingEffect extends EntityEffect {
 	public String name() {
 		return "EntitySwingEffect";
 	}
-	
+
 	@Override
 	public void update(@Nonnull final Entity subject) {
 		final EntityLivingBase entity = (EntityLivingBase) subject;
@@ -82,7 +82,8 @@ public class EntitySwingEffect extends EntityEffect {
 				if (soundEffect != null) {
 					final float reach = Minecraft.getMinecraft().playerController.getBlockReachDistance();
 					final RayTraceResult whatImHitting = new RayTrace(entity).trace(reach);
-					if (whatImHitting.typeOfHit == Type.ENTITY || whatImHitting.typeOfHit == Type.MISS) {
+					if (whatImHitting != null
+							&& (whatImHitting.typeOfHit == Type.ENTITY || whatImHitting.typeOfHit == Type.MISS)) {
 						final BasicSound<?> sound = this.getState().createSound(soundEffect, entity);
 						this.soundId = this.getState().playSound(sound);
 					}
