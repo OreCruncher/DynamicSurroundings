@@ -30,7 +30,9 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.data.xface.EntityConfig;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -41,8 +43,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EffectRegistry extends Registry {
 
-	protected final Map<Class<? extends Entity>, String> effects = new IdentityHashMap<>();
-	protected String playerEffects = "";
+	protected final Map<Class<? extends Entity>, EntityConfig> effects = new IdentityHashMap<>();
+	protected EntityConfig playerEffects;
 
 	public EffectRegistry(@Nonnull final Side side) {
 		super(side);
@@ -55,10 +57,10 @@ public class EffectRegistry extends Registry {
 
 	@Override
 	public void configure(@Nonnull final ModConfigurationFile cfg) {
-		for (final Entry<String, String> e : cfg.entityEffects.entrySet()) {
+		for (final Entry<String, EntityConfig> e : cfg.entities.entrySet()) {
 
 			final String entityName = e.getKey();
-			final String entityEffects = e.getValue();
+			final EntityConfig entityEffects = e.getValue();
 
 			if ("minecraft:player".equals(entityName)) {
 				this.playerEffects = entityEffects;
@@ -86,9 +88,10 @@ public class EffectRegistry extends Registry {
 			if (clazz != null) {
 				if (!this.effects.containsKey(clazz)) {
 					// Not found. Scan our list looking for those that can be assigned
-					final Iterator<Entry<Class<? extends Entity>, String>> itr = this.effects.entrySet().iterator();
+					final Iterator<Entry<Class<? extends Entity>, EntityConfig>> itr = this.effects.entrySet()
+							.iterator();
 					while (itr.hasNext()) {
-						final Entry<Class<? extends Entity>, String> e = itr.next();
+						final Entry<Class<? extends Entity>, EntityConfig> e = itr.next();
 						if (e.getKey().isAssignableFrom(clazz)) {
 							this.effects.put(clazz, e.getValue());
 							break;
@@ -104,11 +107,11 @@ public class EffectRegistry extends Registry {
 
 		DSurround.log().debug("Entity Effect Entries");
 		DSurround.log().debug("=====================");
-		for (final Entry<Class<? extends Entity>, String> e : this.effects.entrySet()) {
+		for (final Entry<Class<? extends Entity>, EntityConfig> e : this.effects.entrySet()) {
 			String keyName = EntityList.getEntityStringFromClass(e.getKey());
 			if (keyName == null)
 				keyName = "No ID Found";
-			DSurround.log().debug("%s = %s (%s)", keyName, e.getValue(), e.getKey().getName());
+			DSurround.log().debug("%s = %s (%s)", keyName, e.getValue().toString(), e.getKey().getName());
 		}
 
 	}
@@ -121,7 +124,8 @@ public class EffectRegistry extends Registry {
 	@Nonnull
 	public String getEffects(@Nonnull final Entity entity) {
 		if (entity instanceof EntityPlayer)
-			return this.playerEffects;
-		return this.effects.getOrDefault(entity.getClass(), "");
+			return this.playerEffects.effects;
+		final EntityConfig ec = this.effects.get(entity.getClass());
+		return ec == null ? StringUtils.EMPTY : ec.effects;
 	}
 }

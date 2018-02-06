@@ -1462,13 +1462,27 @@
 			]
 		}
 	],
-	"entityEffects": {
-		"Villager": "bow,swing,footprint,breath,chat",
-		"Skeleton": "bow,swing,chat",
-		"Zombie": "bow,swing,footprint,chat",
-		"PigZombie": "bow,swing,footprint",
-		"Witch": "footprint,breath,chat",
-		"Squid": "chat",
-		"minecraft:player": "bow,swing,footprint,breath,toolbar"
+	"entities": {
+		"Villager": {
+			"effects": "bow,swing,footprint,breath,chat"
+		},
+		"Skeleton": {
+			"effects": "bow,swing,footprint"
+		},
+		"Zombie": {
+			"effects": "bow,swing,footprint"
+		},
+		"PigZombie": {
+			"effects": "bow,swing,footprint"
+		},
+		"Witch": {
+			"effects": "footprint,breath,chat"
+		},
+		"Squid": {
+			"effects": "chat"
+		},
+		"minecraft:player": {
+			"effects": "bow,swing,footprint,breath,toolbar"
+		}
 	}
 }
