@@ -27,22 +27,14 @@ package org.blockartistry.DynSurround.client.sound;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.lib.sound.BasicSound;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundManager;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import paulscode.sound.SoundSystem;
 
 @SideOnly(Side.CLIENT)
 public class SoundEngine {
-
-	private static final int SOUND_QUEUE_SLACK = 6;
 
 	private static SoundEngine instance = null;
 
@@ -58,7 +50,7 @@ public class SoundEngine {
 	}
 
 	private static SoundManagerReplacement getManager() {
-		return (SoundManagerReplacement) Minecraft.getMinecraft().getSoundHandler().sndManager;
+		return SoundManagerReplacement.getSoundManager();
 	}
 
 	public int currentSoundCount() {
@@ -67,10 +59,6 @@ public class SoundEngine {
 
 	public int maxSoundCount() {
 		return getManager().maxSoundCount();
-	}
-
-	private boolean canFitSound() {
-		return currentSoundCount() < (getManager().numberOfNormalChannels() - SOUND_QUEUE_SLACK);
 	}
 
 	public boolean isSoundPlaying(@Nonnull final BasicSound<?> sound) {
@@ -99,39 +87,7 @@ public class SoundEngine {
 
 	@Nullable
 	public String playSound(@Nonnull final BasicSound<?> sound) {
-		if (!canFitSound()) {
-			if (ModOptions.logging.enableDebugLogging)
-				DSurround.log().debug("> NO ROOM: [%s]", sound.toString());
-			return null;
-		}
-
-		final SoundManager manager = getManager();
-
-		if (!StringUtils.isEmpty(sound.getId()))
-			manager.stopSound(sound);
-
-		manager.playSound(sound);
-
-		if (ModOptions.logging.enableDebugLogging) {
-			if (StringUtils.isEmpty(sound.getId())) {
-				DSurround.log().debug("> NOT QUEUED: [%s]", sound.toString());
-			} else {
-				final StringBuilder builder = new StringBuilder();
-				builder.append("> QUEUED: [").append(sound.toString()).append(']');
-				if (DSurround.log().testTrace(ModOptions.Trace.TRUE_SOUND_VOLUME)) {
-					final SoundSystem ss = manager.sndSystem;
-					// Force a flush of all commands so we can get
-					// the actual volume and pitch used within the
-					// sound library.
-					ss.CommandQueue(null);
-					final float v = ss.getVolume(sound.getId());
-					final float p = ss.getPitch(sound.getId());
-					builder.append("; v: ").append(v).append(", p: ").append(p);
-				}
-				DSurround.log().debug(builder.toString());
-			}
-		}
-
+		getManager().playSound(sound);
 		return sound.getId();
 	}
 

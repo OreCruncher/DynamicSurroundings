@@ -84,6 +84,11 @@ public class SoundManagerReplacement extends SoundManager {
 		}
 	}
 
+	public static SoundManagerReplacement getSoundManager() {
+		return (SoundManagerReplacement) Minecraft.getMinecraft().getSoundHandler().sndManager;
+	}
+
+	private static final int SOUND_QUEUE_SLACK = 6;
 	private static final int MAX_STREAM_CHANNELS = 16;
 	private final static float MUTE_VOLUME = 0.00001F;
 
@@ -205,7 +210,20 @@ public class SoundManagerReplacement extends SoundManager {
 		}
 	}
 
+	private boolean canFitSound() {
+		return currentSoundCount() < (numberOfNormalChannels() - SOUND_QUEUE_SLACK);
+	}
+
 	private void playSound(@Nonnull final BasicSound<?> sound) {
+
+		if (!canFitSound()) {
+			if (ModOptions.logging.enableDebugLogging)
+				DSurround.log().debug("> NO ROOM: [%s]", sound.toString());
+		}
+
+		if (!StringUtils.isEmpty(sound.getId()))
+			this.stopSound(sound);
+
 		sound.setId(StringUtils.EMPTY);
 		if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC)
 			super.playSound(sound);
@@ -213,6 +231,27 @@ public class SoundManagerReplacement extends SoundManager {
 			sound.setState(SoundState.ERROR);
 		else
 			sound.setState(SoundState.PLAYING);
+
+		if (ModOptions.logging.enableDebugLogging) {
+			if (StringUtils.isEmpty(sound.getId())) {
+				DSurround.log().debug("> NOT QUEUED: [%s]", sound.toString());
+			} else {
+				final StringBuilder builder = new StringBuilder();
+				builder.append("> QUEUED: [").append(sound.toString()).append(']');
+				if (DSurround.log().testTrace(ModOptions.Trace.TRUE_SOUND_VOLUME)) {
+					final SoundSystem ss = this.getSoundSystem();
+					// Force a flush of all commands so we can get
+					// the actual volume and pitch used within the
+					// sound library.
+					ss.CommandQueue(null);
+					final float v = ss.getVolume(sound.getId());
+					final float p = ss.getPitch(sound.getId());
+					builder.append("; v: ").append(v).append(", p: ").append(p);
+				}
+				DSurround.log().debug(builder.toString());
+			}
+		}
+
 	}
 
 	@Override
@@ -223,8 +262,11 @@ public class SoundManagerReplacement extends SoundManager {
 					checkForClientThread("playSound", sound);
 					if (sound instanceof BasicSound<?>)
 						this.playSound((BasicSound<?>) sound);
-					else if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC)
+					else if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC) {
+						if (DSurround.log().testTrace(ModOptions.Trace.TRACE_VANILLA_SOUNDS))
+							DSurround.log().debug("Playing vanilla sound [%s]", sound.getSoundLocation().toString());
 						super.playSound(sound);
+					}
 				}
 
 				// Flush - avoid that pesky missing sound issue due to async
