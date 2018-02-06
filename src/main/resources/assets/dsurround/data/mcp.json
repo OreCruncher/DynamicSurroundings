@@ -1512,20 +1512,48 @@
 			]
 		}
 	],
-	"entityEffects": {
-		"minecraft:wither_skeleton": "bow,swing",
-		"minecraft:villager": "bow,swing,footprint,breath,chat",
-		"minecraft:husk": "bow,swing,footprint",
-		"minecraft:zombie_villager": "bow,swing,footprint",
-		"minecraft:evocation_illager": "bow,swing,footprint,breath",
-		"minecraft:vindication_illager": "bow,swing,footprint,breath",
-		"minecraft:illusion_illager": "bow,swing,footprint,breath",
-		"minecraft:skeleton": "bow,swing,chat",
-		"minecraft:stray": "bow,swing",
-		"minecraft:zombie": "bow,swing,footprint,chat",
-		"minecraft:zombie_pigman": "bow,swing,footprint",
-		"minecraft:witch": "footprint,breath,chat",
-		"minecraft:squid": "chat",
-		"minecraft:player": "bow,swing,footprint,breath,toolbar"
+	"entities": {
+		"minecraft:wither_skeleton": {
+			"effects": "bow,swing"
+		},
+		"minecraft:villager": {
+			"effects": "bow,swing,footprint,breath,chat"
+		},
+		"minecraft:husk": {
+			"effects": "bow,swing,footprint"
+		},
+		"minecraft:zombie_villager": {
+			"effects": "bow,swing,footprint"
+		},
+		"minecraft:evocation_illager": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"minecraft:vindication_illager": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"minecraft:illusion_illager": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"minecraft:skeleton": {
+			"effects": "bow,swing,chat"
+		},
+		"minecraft:stray": {
+			"effects": "bow,swing"
+		},
+		"minecraft:zombie": {
+			"effects": "bow,swing,footprint,chat"
+		},
+		"minecraft:zombie_pigman": {
+			"effects": "bow,swing,footprint"
+		},
+		"minecraft:witch": {
+			"effects": "footprint,breath,chat"
+		},
+		"minecraft:squid": {
+			"effects": "chat"
+		},
+		"minecraft:player": {
+			"effects": "bow,swing,footprint,breath,toolbar"
+		}
 	}
 }

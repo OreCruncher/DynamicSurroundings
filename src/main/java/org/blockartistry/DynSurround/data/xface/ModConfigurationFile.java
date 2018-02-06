@@ -44,7 +44,7 @@ public final class ModConfigurationFile {
 	public List<BiomeConfig> biomes = ImmutableList.of();
 
 	@SerializedName("biomeAlias")
-	public Map<String, String> biomeAlias = new HashMap<String, String>();
+	public Map<String, String> biomeAlias = new HashMap<>();
 
 	@SerializedName("blocks")
 	public List<BlockConfig> blocks = ImmutableList.of();
@@ -53,7 +53,7 @@ public final class ModConfigurationFile {
 	public List<DimensionConfig> dimensions = ImmutableList.of();
 
 	@SerializedName("footsteps")
-	public Map<String, String> footsteps = new HashMap<String, String>();
+	public Map<String, String> footsteps = new HashMap<>();
 
 	@SerializedName("footprints")
 	public List<String> footprints = ImmutableList.of();
@@ -64,7 +64,7 @@ public final class ModConfigurationFile {
 	@SerializedName("itemConfig")
 	public ItemConfig itemConfig = new ItemConfig();
 
-	@SerializedName("entityEffects")
-	public Map<String, String> entityEffects = new HashMap<String, String>();
+	@SerializedName("entities")
+	public Map<String, EntityConfig> entities = new HashMap<>();
 
 }
