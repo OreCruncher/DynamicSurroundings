@@ -29,7 +29,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
@@ -99,6 +98,8 @@ public final class BiomeRegistry extends Registry {
 			}
 		}
 
+		// ForgeRegistries.BIOMES.getValuesCollection().forEach(biome ->
+		// register(biome));
 		ForgeRegistries.BIOMES.getValues().forEach(biome -> register(biome));
 
 		// Add our fake biomes
@@ -127,21 +128,17 @@ public final class BiomeRegistry extends Registry {
 
 	@Override
 	public void configure(@Nonnull final ModConfigurationFile cfg) {
-		for (final Entry<String, String> entry : cfg.biomeAlias.entrySet())
-			this.registerBiomeAlias(entry.getKey(), entry.getValue());
-
-		for (final BiomeConfig biome : cfg.biomes)
-			this.register(biome);
+		cfg.biomeAlias.forEach((alias, biome) -> this.registerBiomeAlias(alias, biome));
+		cfg.biomes.forEach(biome -> this.register(biome));
 	}
-	
+
 	@Override
 	public void initComplete() {
 		if (ModOptions.logging.enableDebugLogging) {
 			DSurround.log().info("*** BIOME REGISTRY ***");
 			final List<BiomeInfo> info = new ArrayList<BiomeInfo>(this.registry.values());
 			Collections.sort(info);
-			for (final BiomeInfo entry : info)
-				DSurround.log().info(entry.toString());
+			info.forEach(e -> DSurround.log().info(e.toString()));
 		}
 
 		// Free memory because we no longer need
@@ -193,9 +190,9 @@ public final class BiomeRegistry extends Registry {
 
 	public void register(@Nonnull final BiomeConfig entry) {
 		final BiomeMatcher matcher = BiomeMatcher.getMatcher(entry);
-		for (final BiomeInfo biomeEntry : this.registry.values()) {
-			if (matcher.match(biomeEntry))
-				biomeEntry.update(entry);
-		}
+		this.registry.values().forEach(info -> {
+			if (matcher.match(info))
+				info.update(entry);
+		});
 	}
 }

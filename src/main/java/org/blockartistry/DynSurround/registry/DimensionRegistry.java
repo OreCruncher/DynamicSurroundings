@@ -48,27 +48,25 @@ public final class DimensionRegistry extends Registry {
 		this.cache.clear();
 		this.dimensionData.clear();
 	}
-	
+
 	@Override
 	public void configure(@Nonnull final ModConfigurationFile cfg) {
-		for (final DimensionConfig dimension : cfg.dimensions)
-			this.register(dimension);
+		cfg.dimensions.forEach(dim -> this.register(dim));
 	}
 
 	@Override
 	public void initComplete() {
 		if (ModOptions.logging.enableDebugLogging) {
 			DSurround.log().info("*** DIMENSION REGISTRY (cache) ***");
-			for (final DimensionConfig reg : this.cache)
-				DSurround.log().info(reg.toString());
+			this.cache.forEach(dim -> DSurround.log().info(dim.toString()));
 		}
 	}
 
 	@Override
 	public void fini() {
-		
+
 	}
-	
+
 	private final List<DimensionConfig> cache = new ArrayList<DimensionConfig>();
 	private final TIntObjectHashMap<DimensionInfo> dimensionData = new TIntObjectHashMap<DimensionInfo>();
 
@@ -79,7 +77,7 @@ public final class DimensionRegistry extends Registry {
 	@Nonnull
 	private DimensionConfig getData(@Nonnull final DimensionConfig entry) {
 		for (final DimensionConfig e : this.cache)
-			if(e.equals(entry))
+			if (e.equals(entry))
 				return e;
 		this.cache.add(entry);
 		return entry;
@@ -125,8 +123,8 @@ public final class DimensionRegistry extends Registry {
 			} else {
 				data = new DimensionInfo(world, entry);
 			}
-			
-			dimensionData.put(world.provider.getDimension(), data);
+
+			this.dimensionData.put(world.provider.getDimension(), data);
 			DSurround.log().info(data.toString());
 		}
 		return data;
@@ -159,7 +157,7 @@ public final class DimensionRegistry extends Registry {
 	public boolean hasWeather(@Nonnull final World world) {
 		return getData(world).getHasWeather();
 	}
-	
+
 	public boolean hasFog(@Nonnull final World world) {
 		return getData(world).getHasFog();
 	}
