@@ -32,6 +32,7 @@ import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.lib.effects.EntityEffect;
+import org.blockartistry.lib.effects.EntityEffectInfo;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
 import org.blockartistry.lib.math.RayTrace;
@@ -99,15 +100,15 @@ public class EntitySwingEffect extends EntityEffect {
 
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
-		public boolean applies(@Nonnull final Entity e, @Nonnull final String tokens) {
-			return tokens.contains("swing");
+		public boolean applies(@Nonnull final Entity e, @Nonnull final EntityEffectInfo eei) {
+			return eei.effects.contains("swing");
 		}
 	};
 
 	public static class Factory implements IEntityEffectFactory {
 
 		@Override
-		public List<EntityEffect> create(@Nonnull final Entity entity) {
+		public List<EntityEffect> create(@Nonnull final Entity entity, @Nonnull final EntityEffectInfo eei) {
 			return ImmutableList.of(new EntitySwingEffect());
 		}
 	}

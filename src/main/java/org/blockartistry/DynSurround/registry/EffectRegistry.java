@@ -33,6 +33,8 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.data.xface.EntityConfig;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
+import org.blockartistry.lib.effects.EntityEffectInfo;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
