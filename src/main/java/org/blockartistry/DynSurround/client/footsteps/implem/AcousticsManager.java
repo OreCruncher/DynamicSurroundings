@@ -239,7 +239,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 			this.footprints.forEach(print -> {
 				final Vec3d loc = print.getStepLocation();
 				final World world = print.getEntity().getEntityWorld();
-				ParticleCollections.addFootprint(world, loc.x, loc.y, loc.z, print.getRotation(), print.isRightFoot());
+				ParticleCollections.addFootprint(world, loc.x, loc.y, loc.z, print.getRotation(), print.getScale(),
+						print.isRightFoot());
 			});
 		}
 		this.footprints.clear();
