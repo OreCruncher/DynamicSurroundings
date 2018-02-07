@@ -43,6 +43,7 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.DynSurround.registry.ArmorClass;
+import org.blockartistry.lib.BlockPosHelper;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.TimeUtils;
@@ -67,6 +68,7 @@ public class Generator {
 
 	protected static final Random RANDOM = XorShiftRandom.current();
 	protected static final IBlockState AIR_STATE = Blocks.AIR.getDefaultState();
+	protected static final BlockPos.MutableBlockPos SCRATCH = new BlockPos.MutableBlockPos();
 
 	protected final Isolator isolator;
 	protected final Variator VAR;
@@ -376,9 +378,10 @@ public class Generator {
 	protected boolean hasFootstepImprint(@Nonnull World world, @Nonnull final Vec3d pos) {
 		// Check the block above to see if it has a footprint. Intended to handle things
 		// like snow on stone.
-		BlockPos blockPos = new BlockPos(pos).up();
+		BlockPosHelper.setPos(SCRATCH, pos);
+		BlockPos blockPos = SCRATCH.move(EnumFacing.UP);
 		IBlockState state = WorldUtils.getBlockState(world, blockPos);
-		if (state != null && hasFootstepImprint(world, state, blockPos))
+		if (hasFootstepImprint(world, state, blockPos))
 			return true;
 
 		// If the block above blocks movement then it's not possible to lay
@@ -387,13 +390,9 @@ public class Generator {
 			return false;
 
 		// Check the requested block
-		blockPos = new BlockPos(pos);
+		SCRATCH.move(EnumFacing.DOWN);
 		state = WorldUtils.getBlockState(world, blockPos);
-		if (state != null) {
-			return hasFootstepImprint(world, state, blockPos);
-		}
-
-		return false;
+		return hasFootstepImprint(world, state, blockPos);
 	}
 
 	/**
@@ -414,7 +413,7 @@ public class Generator {
 		final double rot = MathStuff.toRadians(rotDegrees);
 		final double xn = MathStuff.cos(rot);
 		final double zn = MathStuff.sin(rot);
-		final float feetDistanceToCenter = 0.2f * (isRightFoot ? -1 : 1);
+		final float feetDistanceToCenter = isRightFoot ? -this.VAR.DISTANCE_TO_CENTER : this.VAR.DISTANCE_TO_CENTER;
 
 		final double xx = player.posX + xn * feetDistanceToCenter;
 		final double minY = player.getEntityBoundingBox().minY;
@@ -422,15 +421,11 @@ public class Generator {
 		final BlockPos pos = new BlockPos(xx, minY - 0.1D - verticalOffsetAsMinus, zz);
 
 		final Association result = addSoundOverlay(player, findAssociationForLocation(player, pos));
-		if (result != null) {
-			final Vec3d printLocation;
-
-			if (player.isJumping) {
-				printLocation = new Vec3d(xx, MathStuff.floor(minY), zz);
-			} else {
-				printLocation = new Vec3d(xx, minY, zz);
-			}
-
+		if (result != null && this.VAR.HAS_FOOTPRINT) {
+			// If the player is jump they just launched so we want to get to the surface of
+			// the block beneath.
+			final double baseY = player.isJumping ? MathStuff.floor(minY) : minY;
+			final Vec3d printLocation = new Vec3d(xx, baseY, zz);
 			if (hasFootstepImprint(player.getEntityWorld(), printLocation.addVector(0D, -0.5D, 0D)))
 				result.generatePrint(player, printLocation, rotDegrees, isRightFoot);
 		}
@@ -482,7 +477,7 @@ public class Generator {
 			// V z
 
 			// If the player is at the edge of that
-			if (Math.max(MathStuff.abs(xdang), MathStuff.abs(zdang)) > 0.2f) {
+			if (Math.max(MathStuff.abs(xdang), MathStuff.abs(zdang)) > this.VAR.DISTANCE_TO_CENTER) {
 				// Find the maximum absolute value of X or Z
 				boolean isXdangMax = MathStuff.abs(xdang) > MathStuff.abs(zdang);
 				// --------------------- ^ maxofZ-
