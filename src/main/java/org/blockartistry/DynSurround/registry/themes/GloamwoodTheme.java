@@ -21,54 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.blockartistry.DynSurround.client.handlers.fog;
+package org.blockartistry.DynSurround.registry.themes;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.blockartistry.DynSurround.registry.ThemeInfo;
 
-import javax.annotation.Nonnull;
-
-import org.blockartistry.lib.Color;
-
-import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class HolisticFogColorCalculator implements IFogColorCalculator {
+public class GloamwoodTheme extends ThemeInfo {
 
-	protected List<IFogColorCalculator> calculators = new ArrayList<>();
-	protected Color cached;
-
-	public HolisticFogColorCalculator() {
-
+	public GloamwoodTheme() {
+		super();
+		this.doMorningFog = false;
+		this.minFogDistance = 20F;
+		this.maxFogDistance = 60F;
+		//this.maxLightLevel = 8;
 	}
-
-	public void add(@Nonnull final IFogColorCalculator calc) {
-		this.calculators.add(calc);
-	}
-
+	
 	@Override
-	public Color calculate(@Nonnull final EntityViewRenderEvent.FogColors event) {
-		Color result = null;
-		for (final IFogColorCalculator calc : this.calculators) {
-			final Color color = calc.calculate(event);
-			if (result == null)
-				result = color;
-			else if (color != null)
-				result = result.mix(color);
-		}
-		return this.cached = result;
+	public String name() {
+		return "Gloamwood";
 	}
-
-	@Override
-	public void tick() {
-		for (final IFogColorCalculator calc : this.calculators)
-			calc.tick();
-	}
-
-	public String toString() {
-		return this.cached != null ? this.cached.toString() : "<NOT SET>";
-	}
-
 }

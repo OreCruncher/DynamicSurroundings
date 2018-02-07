@@ -25,7 +25,6 @@ package org.blockartistry.DynSurround.client.handlers.fog;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.DimensionInfo;
 
@@ -54,30 +53,28 @@ public class HazeFogRangeCalculator extends VanillaFogRangeCalculator {
 	@Override
 	@Nonnull
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
-		if (ModOptions.fog.enableElevationHaze) {
-			final DimensionInfo di = EnvironState.getDimensionInfo();
-			if (di.getHasHaze()) {
-				final float lowY = di.getCloudHeight() - BAND_OFFSETS;
-				final float highY = di.getCloudHeight() + BAND_OFFSETS + BAND_CORE_SIZE;
+		final DimensionInfo di = EnvironState.getDimensionInfo();
+		if (di.getHasHaze()) {
+			final float lowY = di.getCloudHeight() - BAND_OFFSETS;
+			final float highY = di.getCloudHeight() + BAND_OFFSETS + BAND_CORE_SIZE;
 
-				// Calculate the players Y. If it's in the band range calculate the fog
-				// parameters
-				final Vec3d eyes = EnvironState.getPlayer().getPositionEyes((float) event.getRenderPartialTicks());
-				if (eyes.yCoord >= lowY && eyes.yCoord <= highY) {
-					final float coreLowY = lowY + BAND_OFFSETS;
-					final float coreHighY = coreLowY + BAND_CORE_SIZE;
+			// Calculate the players Y. If it's in the band range calculate the fog
+			// parameters
+			final Vec3d eyes = EnvironState.getPlayer().getPositionEyes((float) event.getRenderPartialTicks());
+			if (eyes.yCoord >= lowY && eyes.yCoord <= highY) {
+				final float coreLowY = lowY + BAND_OFFSETS;
+				final float coreHighY = coreLowY + BAND_CORE_SIZE;
 
-					float scale = IMPACT;
-					if (eyes.yCoord < coreLowY) {
-						scale *= (eyes.yCoord - lowY) / BAND_OFFSETS;
-					} else if (eyes.yCoord > coreHighY) {
-						scale *= (highY - eyes.yCoord) / BAND_OFFSETS;
-					}
-
-					final float end = event.getFarPlaneDistance() * (1F - scale);
-					this.cached.set(1, end, FogResult.DEFAULT_PLANE_SCALE);
-					return this.cached;
+				float scale = IMPACT;
+				if (eyes.yCoord < coreLowY) {
+					scale *= (eyes.yCoord - lowY) / BAND_OFFSETS;
+				} else if (eyes.yCoord > coreHighY) {
+					scale *= (highY - eyes.yCoord) / BAND_OFFSETS;
 				}
+
+				final float end = event.getFarPlaneDistance() * (1F - scale);
+				this.cached.set(1, end, FogResult.DEFAULT_PLANE_SCALE);
+				return this.cached;
 			}
 		}
 
