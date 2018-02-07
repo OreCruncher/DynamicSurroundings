@@ -430,7 +430,7 @@ public class Generator {
 		if (result != null && this.VAR.HAS_FOOTPRINT) {
 			final Vec3d printPos = footstepPosition(player.getEntityWorld(), result.getPos(), xx, zz);
 			if (printPos != null) {
-				result.generatePrint(player, printPos, rotDegrees, isRightFoot);
+				result.generatePrint(player, printPos, rotDegrees, this.VAR.FOOTPRINT_SCALE, isRightFoot);
 			}
 		}
 		return result;

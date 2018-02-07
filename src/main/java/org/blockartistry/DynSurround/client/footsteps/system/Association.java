@@ -98,8 +98,8 @@ public class Association {
 		return this.data == AcousticsManager.NOT_EMITTER;
 	}
 	
-	public void generatePrint(@Nonnull final EntityLivingBase entity, @Nonnull final Vec3d position, final float rotation, final boolean isRight) {
-		this.print = Footprint.produce(entity, position, rotation, isRight);
+	public void generatePrint(@Nonnull final EntityLivingBase entity, @Nonnull final Vec3d position, final float rotation, final float scale, final boolean isRight) {
+		this.print = Footprint.produce(entity, position, rotation, scale, isRight);
 	}
 	
 	@Nullable

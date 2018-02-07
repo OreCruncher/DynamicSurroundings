@@ -41,12 +41,12 @@ import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionF
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionFootprint;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionRipples;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.common.MinecraftForge;
 
 @SideOnly(Side.CLIENT)
 public final class ParticleCollections {
@@ -82,6 +82,21 @@ public final class ParticleCollections {
 		}
 	}
 
+	private static class LightedCollectionHelper extends CollectionHelper {
+
+		@SuppressWarnings("unused")
+		public LightedCollectionHelper(@Nonnull final ResourceLocation texture) {
+			this(ParticleCollection.class, texture);
+		}
+
+		public LightedCollectionHelper(@Nonnull final Class<? extends ParticleCollection> clazz,
+				@Nonnull final ResourceLocation texture) {
+			super(clazz, texture);
+			MinecraftForge.EVENT_BUS.register(this);
+		}
+
+	}
+
 	private static final ResourceLocation RIPPLE_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
 			"textures/particles/ripple.png");
 	private static final ResourceLocation SPRAY_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
@@ -98,7 +113,7 @@ public final class ParticleCollections {
 	private final static CollectionHelper theEmojis = new CollectionHelper(EMOJI_TEXTURE);
 	private final static CollectionHelper thePrints = new CollectionHelper(ParticleCollectionFootprint.class,
 			FOOTPRINT_TEXTURE);
-	private final static CollectionHelper theFireFlies = new CollectionHelper(ParticleCollectionFireFly.class,
+	private final static CollectionHelper theFireFlies = new LightedCollectionHelper(ParticleCollectionFireFly.class,
 			FIREFLY_TEXTURE);
 
 	@Nullable
@@ -142,10 +157,10 @@ public final class ParticleCollections {
 	}
 
 	public static IParticleMote addFootprint(@Nonnull final World world, final double x, final double y, final double z,
-			final float rot, final boolean isRight) {
+			final float rot, final float scale, final boolean isRight) {
 		IParticleMote mote = null;
 		if (thePrints.get().canFit()) {
-			mote = new MoteFootprint(world, x, y, z, rot, isRight);
+			mote = new MoteFootprint(world, x, y, z, rot, scale, isRight);
 			thePrints.get().addParticle(mote);
 		}
 		return mote;
