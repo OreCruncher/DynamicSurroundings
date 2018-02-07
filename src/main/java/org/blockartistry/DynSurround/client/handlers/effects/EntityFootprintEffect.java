@@ -93,11 +93,14 @@ public class EntityFootprintEffect extends EntityEffect {
 			this.generator = ClientRegistry.FOOTSTEPS.createGenerator(entity);
 			this.lastStyle = ModOptions.player.footprintStyle;
 		}
+		
 		this.generator.generateFootsteps(entity);
+	}
 
-		if (this.eventRegistered && !subject.isEntityAlive()) {
+	@Override
+	public void die() {
+		if(this.eventRegistered)
 			MinecraftForge.EVENT_BUS.unregister(this);
-		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)

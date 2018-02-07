@@ -115,6 +115,8 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 	 */
 	public void die() {
 		this.isAlive = false;
+		for (final EntityEffect e : activeEffects)
+			e.die();
 	}
 
 	/**
