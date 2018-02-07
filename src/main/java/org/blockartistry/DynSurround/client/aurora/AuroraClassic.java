@@ -171,7 +171,7 @@ public final class AuroraClassic implements IAurora {
 		GlStateManager.disableCull();
 		GlStateManager.depthMask(false);
 
-		renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+		renderer.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
 
 		for (int b = 0; b < this.bands.length; b++) {
 			this.bands[b].translate(partialTick);
@@ -207,28 +207,28 @@ public final class AuroraClassic implements IAurora {
 				}
 
 				// Front
-				//renderer.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
 				renderer.pos(posX, zero, posZ).color(base.red, base.green, base.blue, alpha).endVertex();
 				renderer.pos(posX, posY, posZ).color(fade.red, fade.green, fade.blue, 0).endVertex();
 				renderer.pos(posX2, posY2, posZ2).color(fade.red, fade.green, fade.blue, 0).endVertex();
+				renderer.pos(posX2, posY2, posZ2).color(fade.red, fade.green, fade.blue, 0).endVertex();
 				renderer.pos(posX2, zero, posZ2).color(base.red, base.green, base.blue, alpha).endVertex();
-				//tess.draw();
+				renderer.pos(posX, zero, posZ).color(base.red, base.green, base.blue, alpha).endVertex();
 
 				// Bottom
-				//renderer.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
 				renderer.pos(posX, zero, posZ).color(base.red, base.green, base.blue, alpha).endVertex();
 				renderer.pos(posX2, zero, posZ2).color(base.red, base.green, base.blue, alpha).endVertex();
 				renderer.pos(tetX2, zero, tetZ2).color(base.red, base.green, base.blue, alpha).endVertex();
+				renderer.pos(tetX2, zero, tetZ2).color(base.red, base.green, base.blue, alpha).endVertex();
 				renderer.pos(tetX, zero, tetZ).color(base.red, base.green, base.blue, alpha).endVertex();
-				//tess.draw();
+				renderer.pos(posX, zero, posZ).color(base.red, base.green, base.blue, alpha).endVertex();
 
 				// Back
-				//renderer.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
 				renderer.pos(tetX, zero, tetZ).color(base.red, base.green, base.blue, alpha).endVertex();
 				renderer.pos(tetX, posY, tetZ).color(fade.red, fade.green, fade.blue, 0).endVertex();
 				renderer.pos(tetX2, posY2, tetZ2).color(fade.red, fade.green, fade.blue, 0).endVertex();
+				renderer.pos(tetX2, posY2, tetZ2).color(fade.red, fade.green, fade.blue, 0).endVertex();
 				renderer.pos(tetX2, zero, tetZ2).color(base.red, base.green, base.blue, alpha).endVertex();
-				//tess.draw();
+				renderer.pos(tetX, zero, tetZ).color(base.red, base.green, base.blue, alpha).endVertex();
 			}
 		}
 
