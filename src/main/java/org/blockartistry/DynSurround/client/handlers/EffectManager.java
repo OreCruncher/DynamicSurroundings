@@ -54,7 +54,7 @@ public class EffectManager {
 		this.effectHandlers.add(new EnvironStateHandler());
 
 		this.effectHandlers.add(new AreaSurveyHandler());
-		this.effectHandlers.add(new FogEffectHandler());
+		this.effectHandlers.add(new EnvironmentEffectHandler());
 		this.effectHandlers.add(new ParticleSystemHandler());
 		this.effectHandlers.add(new SoundCullHandler());
 		this.effectHandlers.add(new AreaSoundEffectHandler());
