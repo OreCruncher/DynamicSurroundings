@@ -81,6 +81,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.AbstractIllager;
+import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -361,6 +362,8 @@ public final class FootstepsRegistry extends Registry {
 
 		if (entity instanceof EntityVillager || entity instanceof EntityWitch || entity instanceof AbstractIllager) {
 			var = entity.isChild() ? Variator.CHILD : Variator.VILLAGER;
+		} else if(entity instanceof EntitySkeleton) {
+			var = entity.isChild() ? Variator.CHILD : Variator.SKELETON;
 		} else if (entity instanceof EntityPlayer) {
 			if (ModOptions.sound.foostepsQuadruped)
 				var = Variator.PLAYER_QUAD;
