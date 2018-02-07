@@ -43,7 +43,6 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.DynSurround.registry.ArmorClass;
-import org.blockartistry.lib.BlockPosHelper;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.TimeUtils;
@@ -68,7 +67,6 @@ public class Generator {
 
 	protected static final Random RANDOM = XorShiftRandom.current();
 	protected static final IBlockState AIR_STATE = Blocks.AIR.getDefaultState();
-	protected static final BlockPos.MutableBlockPos SCRATCH = new BlockPos.MutableBlockPos();
 
 	protected final Isolator isolator;
 	protected final Variator VAR;
@@ -375,24 +373,32 @@ public class Generator {
 		return false;
 	}
 
-	protected boolean hasFootstepImprint(@Nonnull World world, @Nonnull final Vec3d pos) {
-		// Check the block above to see if it has a footprint. Intended to handle things
-		// like snow on stone.
-		BlockPosHelper.setPos(SCRATCH, pos);
-		BlockPos blockPos = SCRATCH.move(EnumFacing.UP);
-		IBlockState state = WorldUtils.getBlockState(world, blockPos);
-		if (hasFootstepImprint(world, state, blockPos))
-			return true;
+	/**
+	 * Determines the actual footprint location based on the BlockPos provided. The
+	 * print is to ride on top of the bounding box. If the block does not have a
+	 * print a null is returned.
+	 * 
+	 * @param world
+	 *            The Entity world
+	 * @param pos
+	 *            The block position where the footprint is to be placed on top
+	 * @param xx
+	 *            Calculated foot position for X
+	 * @param zz
+	 *            Calculated foot position for Z
+	 * @return Vector containing footprint coordinates or null if no footprint is to
+	 *         be generated
+	 */
+	@Nullable
+	protected Vec3d footstepPosition(@Nonnull final World world, @Nonnull final BlockPos pos, final double xx,
+			final double zz) {
+		final IBlockState state = WorldUtils.getBlockState(world, pos);
+		if (hasFootstepImprint(world, state, pos)) {
+			final double posY = pos.getY() + state.getBoundingBox(world, pos).maxY;
+			return new Vec3d(xx, posY, zz);
 
-		// If the block above blocks movement then it's not possible to lay
-		// down a footprint.
-		if (state.getMaterial().blocksMovement())
-			return false;
-
-		// Check the requested block
-		SCRATCH.move(EnumFacing.DOWN);
-		state = WorldUtils.getBlockState(world, blockPos);
-		return hasFootstepImprint(world, state, blockPos);
+		}
+		return null;
 	}
 
 	/**
@@ -422,12 +428,10 @@ public class Generator {
 
 		final Association result = addSoundOverlay(player, findAssociationForLocation(player, pos));
 		if (result != null && this.VAR.HAS_FOOTPRINT) {
-			// If the player is jump they just launched so we want to get to the surface of
-			// the block beneath.
-			final double baseY = player.isJumping ? MathStuff.floor(minY) : minY;
-			final Vec3d printLocation = new Vec3d(xx, baseY, zz);
-			if (hasFootstepImprint(player.getEntityWorld(), printLocation.addVector(0D, -0.5D, 0D)))
-				result.generatePrint(player, printLocation, rotDegrees, isRightFoot);
+			final Vec3d printPos = footstepPosition(player.getEntityWorld(), result.getPos(), xx, zz);
+			if (printPos != null) {
+				result.generatePrint(player, printPos, rotDegrees, isRightFoot);
+			}
 		}
 		return result;
 	}
