@@ -40,15 +40,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class HolisticFogRangeCalculator implements IFogRangeCalculator {
 
 	protected final List<IFogRangeCalculator> calculators = new ArrayList<>();
-
 	protected final FogResult cached = new FogResult();
 
 	public HolisticFogRangeCalculator() {
-		this.calculators.add(new BiomeFogRangeCalculator());
-		this.calculators.add(new HazeFogRangeCalculator());
-		this.calculators.add(new WeatherFogRangeCalculator());
-		this.calculators.add(new MorningFogRangeCalculator());
-		this.calculators.add(new BedrockFogRangeCalculator());
+	}
+
+	public void add(@Nonnull final IFogRangeCalculator calc) {
+		this.calculators.add(calc);
 	}
 
 	@Nonnull
@@ -64,7 +62,7 @@ public class HolisticFogRangeCalculator implements IFogRangeCalculator {
 		this.cached.set(start, end);
 		return this.cached;
 	}
-	
+
 	@Override
 	public void tick() {
 		for (final IFogRangeCalculator calc : this.calculators)

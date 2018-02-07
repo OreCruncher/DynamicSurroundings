@@ -34,6 +34,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.data.xface.EntityConfig;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
+import org.blockartistry.DynSurround.registry.themes.GloamwoodTheme;
 import org.blockartistry.lib.effects.EntityEffectInfo;
 
 import net.minecraft.entity.Entity;
@@ -48,12 +49,13 @@ public class EffectRegistry extends Registry {
 
 	public static final EntityEffectInfo DEFAULT = new EntityEffectInfo();
 	public static final ResourceLocation DEFAULT_THEME = new ResourceLocation(DSurround.MOD_ID, "default");
+	private static final ThemeInfo DEFAULT_THEME_INFO = new ThemeInfo();
 
 	protected final Map<Class<? extends Entity>, EntityEffectInfo> effects = new IdentityHashMap<>();
 	protected EntityEffectInfo playerEffects = DEFAULT;
 
 	protected final Map<ResourceLocation, ThemeInfo> themes = new HashMap<>();
-	protected ThemeInfo activeTheme = new ThemeInfo();
+	protected ThemeInfo activeTheme = DEFAULT_THEME_INFO;
 
 	public EffectRegistry(@Nonnull final Side side) {
 		super(side);
@@ -64,7 +66,9 @@ public class EffectRegistry extends Registry {
 		this.playerEffects = DEFAULT;
 		this.effects.clear();
 		this.themes.clear();
-		this.activeTheme = new ThemeInfo();
+		this.activeTheme = DEFAULT_THEME_INFO;
+		this.themes.put(DEFAULT_THEME, DEFAULT_THEME_INFO);
+		this.themes.put(new ResourceLocation(DSurround.MOD_ID, "gloamwood"), new GloamwoodTheme());
 	}
 
 	@Override
@@ -140,14 +144,10 @@ public class EffectRegistry extends Registry {
 		return this.effects.getOrDefault(entity.getClass(), DEFAULT);
 	}
 
-	public void setTheme(@Nonnull final ResourceLocation theme) {
-		if (!theme.equals(DEFAULT_THEME)) {
-			this.activeTheme = this.themes.get(theme);
-			if (this.activeTheme == null)
-				this.activeTheme = new ThemeInfo();
-		} else {
-			this.activeTheme = new ThemeInfo();
-		}
+	@Nonnull
+	public ThemeInfo setTheme(@Nonnull final ResourceLocation theme) {
+		this.activeTheme = this.themes.getOrDefault(theme, DEFAULT_THEME_INFO);
+		return this.activeTheme;
 	}
 
 	@Nonnull

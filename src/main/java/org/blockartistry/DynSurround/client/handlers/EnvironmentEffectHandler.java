@@ -27,20 +27,31 @@ package org.blockartistry.DynSurround.client.handlers;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.handlers.fog.BedrockFogRangeCalculator;
+import org.blockartistry.DynSurround.client.handlers.fog.BiomeFogColorCalculator;
+import org.blockartistry.DynSurround.client.handlers.fog.BiomeFogRangeCalculator;
+import org.blockartistry.DynSurround.client.handlers.fog.FixedFogRangeCalculator;
 import org.blockartistry.DynSurround.client.handlers.fog.FogResult;
+import org.blockartistry.DynSurround.client.handlers.fog.HazeFogRangeCalculator;
 import org.blockartistry.DynSurround.client.handlers.fog.HolisticFogColorCalculator;
 import org.blockartistry.DynSurround.client.handlers.fog.HolisticFogRangeCalculator;
-import org.blockartistry.DynSurround.client.handlers.fog.IFogColorCalculator;
-import org.blockartistry.DynSurround.client.handlers.fog.IFogRangeCalculator;
+import org.blockartistry.DynSurround.client.handlers.fog.MorningFogRangeCalculator;
+import org.blockartistry.DynSurround.client.handlers.fog.WeatherFogRangeCalculator;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
+import org.blockartistry.DynSurround.event.ReloadEvent;
+import org.blockartistry.DynSurround.registry.EffectRegistry;
+import org.blockartistry.DynSurround.registry.ThemeInfo;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.math.TimerEMA;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -51,6 +62,9 @@ public class EnvironmentEffectHandler extends EffectHandlerBase {
 
 	private final TimerEMA timer = new TimerEMA("Fog Render");
 	private long nanos;
+
+	private ThemeInfo theme;
+	private float[] lightMapSave;
 
 	public EnvironmentEffectHandler() {
 		super("EnvironmentEffectHandler");
@@ -72,8 +86,8 @@ public class EnvironmentEffectHandler extends EffectHandlerBase {
 		this.nanos = 0;
 	}
 
-	protected final IFogColorCalculator fogColor = new HolisticFogColorCalculator();
-	protected final IFogRangeCalculator fogRange = new HolisticFogRangeCalculator();
+	protected HolisticFogColorCalculator fogColor = new HolisticFogColorCalculator();
+	protected HolisticFogRangeCalculator fogRange = new HolisticFogRangeCalculator();
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void fogColorEvent(final EntityViewRenderEvent.FogColors event) {
@@ -110,6 +124,7 @@ public class EnvironmentEffectHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void diagnostics(final DiagnosticEvent.Gather event) {
+		event.output.add("Theme: " + this.theme.name());
 		if (doFog()) {
 			event.output.add("Fog Range: " + this.fogRange.toString());
 			event.output.add("Fog Color: " + this.fogColor.toString());
@@ -120,6 +135,57 @@ public class EnvironmentEffectHandler extends EffectHandlerBase {
 	@Override
 	public void onConnect() {
 		DiagnosticHandler.INSTANCE.addTimer(this.timer);
+	}
+
+	@SubscribeEvent(receiveCanceled = false, priority = EventPriority.LOWEST)
+	public void onWorldLoad(@Nonnull final WorldEvent.Load event) {
+		// Only want client side world things
+		if (!event.getWorld().isRemote)
+			return;
+
+		setupTheme(event.getWorld());
+	}
+	
+	@SubscribeEvent
+	public void onConfigurationChanged(@Nonnull final ReloadEvent.Configuration event) {
+		setupTheme(EnvironState.getWorld());
+	}
+
+	protected void setupTheme(@Nonnull final World world) {
+
+		this.theme = ClientRegistry.EFFECTS.setTheme(EffectRegistry.DEFAULT_THEME);
+		//this.theme = ClientRegistry.EFFECTS.setTheme(new ResourceLocation("dsurround:gloamwood"));
+
+		this.fogColor = new HolisticFogColorCalculator();
+		this.fogRange = new HolisticFogRangeCalculator();
+
+		if (this.theme.doBiomeFog()) {
+			this.fogColor.add(new BiomeFogColorCalculator());
+			this.fogRange.add(new BiomeFogRangeCalculator());
+		}
+
+		if (this.theme.doElevationHaze())
+			this.fogRange.add(new HazeFogRangeCalculator());
+
+		if (this.theme.doMorningFog())
+			this.fogRange.add(new MorningFogRangeCalculator());
+
+		if (this.theme.doBedrockFog())
+			this.fogRange.add(new BedrockFogRangeCalculator());
+
+		if (this.theme.doWeatherFog())
+			this.fogRange.add(new WeatherFogRangeCalculator());
+
+		if (this.theme.doFixedFog())
+			this.fogRange
+					.add(new FixedFogRangeCalculator(this.theme.getMinFogDistance(), this.theme.getMaxFogDistance()));
+
+		if (this.theme.doMaxLightLevel()) {
+			this.lightMapSave = world.provider.lightBrightnessTable;
+			final float v = this.lightMapSave[this.theme.getMaxLightLevel()];
+			for (int i = this.theme.getMaxLightLevel(); i < this.lightMapSave.length; i++)
+				this.lightMapSave[i] = v;
+		}
 	}
 
 }
