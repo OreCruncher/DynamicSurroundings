@@ -89,6 +89,14 @@ public abstract class EntityEffect {
 		return false;
 	}
 
+	/**
+	 * Called when the EntityEffectHandler is cleaning up giving the EntityEffect
+	 * a chance to do some house cleaning, like unregistering events.
+	 */
+	public void die() {
+		
+	}
+
 	@Override
 	public String toString() {
 		return this.name();
