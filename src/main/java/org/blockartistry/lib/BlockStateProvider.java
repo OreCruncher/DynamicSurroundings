@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
@@ -173,16 +174,22 @@ public class BlockStateProvider {
 		}
 		return pos;
 	}
-	
+
 	public Biome getBiome(@Nonnull final BlockPos pos) {
 		final int x = pos.getX();
 		final int z = pos.getZ();
 		final Chunk chunk = resolveChunk(x, z);
 
-		if (chunk == null)
-			return null;
+		if (chunk != null) {
+			try {
+				final World world = this.getWorld();
+				return chunk.getBiome(pos, world.provider.biomeProvider);
+			} catch (@Nonnull final Throwable t) {
+				;
+			}
+		}
 
-		final World world = this.getWorld();
-		return chunk.getBiome(pos, world.provider.biomeProvider);
+		// Foobar
+		return Biomes.PLAINS;
 	}
 }
