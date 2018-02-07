@@ -78,18 +78,6 @@ public class MoteFootprint extends MoteAgeable {
 		final IBlockState state = WorldUtils.getBlockState(this.world, this.position);
 		this.isSnowLayer = state.getBlock() == Blocks.SNOW_LAYER;
 		
-		// Adjust for blocks like Soul Sand.  They look like a full block but the collision
-		// box is a little less than that Y.  We need to adjust the print to the bounding
-		// box so it can show.
-		if (state.getMaterial().isSolid()) {
-			this.posY = this.position.getY() + state.getBoundingBox(this.world, this.position).maxY;
-		}
-
-		// If there is a snow layer we need to bump up a bit so it shows.
-		if (this.isSnowLayer) {
-			this.posY += 0.125F;
-		}
-
 		this.posY += zFighter * 0.001F;
 
 		// Make sure that the down position is calculated from the display position!
