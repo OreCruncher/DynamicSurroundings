@@ -23,6 +23,7 @@
  */
 package org.blockartistry.DynSurround.registry;
 
+import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -46,9 +47,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EffectRegistry extends Registry {
 
 	public static final EntityEffectInfo DEFAULT = new EntityEffectInfo();
+	public static final ResourceLocation DEFAULT_THEME = new ResourceLocation(DSurround.MOD_ID, "default");
 
 	protected final Map<Class<? extends Entity>, EntityEffectInfo> effects = new IdentityHashMap<>();
 	protected EntityEffectInfo playerEffects = DEFAULT;
+
+	protected final Map<ResourceLocation, ThemeInfo> themes = new HashMap<>();
+	protected ThemeInfo activeTheme = new ThemeInfo();
 
 	public EffectRegistry(@Nonnull final Side side) {
 		super(side);
@@ -56,7 +61,10 @@ public class EffectRegistry extends Registry {
 
 	@Override
 	public void init() {
-
+		this.playerEffects = DEFAULT;
+		this.effects.clear();
+		this.themes.clear();
+		this.activeTheme = new ThemeInfo();
 	}
 
 	@Override
@@ -130,5 +138,20 @@ public class EffectRegistry extends Registry {
 		if (entity instanceof EntityPlayer)
 			return this.playerEffects;
 		return this.effects.getOrDefault(entity.getClass(), DEFAULT);
+	}
+
+	public void setTheme(@Nonnull final ResourceLocation theme) {
+		if (!theme.equals(DEFAULT_THEME)) {
+			this.activeTheme = this.themes.get(theme);
+			if (this.activeTheme == null)
+				this.activeTheme = new ThemeInfo();
+		} else {
+			this.activeTheme = new ThemeInfo();
+		}
+	}
+
+	@Nonnull
+	public ThemeInfo getTheme() {
+		return this.activeTheme;
 	}
 }

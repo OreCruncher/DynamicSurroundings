@@ -47,13 +47,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
-public class FogEffectHandler extends EffectHandlerBase {
+public class EnvironmentEffectHandler extends EffectHandlerBase {
 
 	private final TimerEMA timer = new TimerEMA("Fog Render");
 	private long nanos;
 
-	public FogEffectHandler() {
-		super("FogEffectHandler");
+	public EnvironmentEffectHandler() {
+		super("EnvironmentEffectHandler");
 	}
 
 	private boolean doFog() {
