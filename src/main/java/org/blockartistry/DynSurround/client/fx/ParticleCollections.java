@@ -41,9 +41,16 @@ import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionF
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionFootprint;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionRipples;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.lib.collections.ObjectArray;
+
+import elucent.albedo.event.GatherLightsEvent;
+import elucent.albedo.lighting.ILightProvider;
+import elucent.albedo.lighting.Light;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.common.MinecraftForge;
@@ -95,6 +102,24 @@ public final class ParticleCollections {
 			MinecraftForge.EVENT_BUS.register(this);
 		}
 
+		@Optional.Method(modid = "albedo")
+		@SubscribeEvent
+		public void onGatherLight(@Nonnull final GatherLightsEvent event) {
+			final ObjectArray<IParticleMote> motes = this.get().getParticles();
+			if (motes == null || motes.size() == 0)
+				return;
+
+			for (int i = 0; i < motes.size(); i++) {
+				final IParticleMote m = motes.get(i);
+				if (m instanceof ILightProvider) {
+					final ILightProvider provider = (ILightProvider) m;
+					final Light l = provider.provideLight();
+					if (l != null) {
+						event.getLightList().add(l);
+					}
+				}
+			}
+		}
 	}
 
 	private static final ResourceLocation RIPPLE_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
