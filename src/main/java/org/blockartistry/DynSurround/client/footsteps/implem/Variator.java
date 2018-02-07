@@ -43,6 +43,8 @@ public enum Variator {
 			PLAY_WANDER = true;
 			QUADRUPED = false;
 			PLAY_JUMP = false;
+			DISTANCE_TO_CENTER = 0.2F;
+			HAS_FOOTPRINT = true;
 		}
 	},
 	PLAYER() {
@@ -58,6 +60,8 @@ public enum Variator {
 			PLAY_WANDER = true;
 			QUADRUPED = false;
 			PLAY_JUMP = true;
+			DISTANCE_TO_CENTER = 0.2F;
+			HAS_FOOTPRINT = true;
 		}
 	},
 	PLAYER_QUAD() {
@@ -73,6 +77,8 @@ public enum Variator {
 			PLAY_WANDER = true;
 			QUADRUPED = true;
 			PLAY_JUMP = true;
+			DISTANCE_TO_CENTER = 0.2F;
+			HAS_FOOTPRINT = true;
 		}
 	},
 	VILLAGER() {
@@ -88,6 +94,8 @@ public enum Variator {
 			PLAY_WANDER = true;
 			QUADRUPED = false;
 			PLAY_JUMP = false;
+			DISTANCE_TO_CENTER = 0.2F;
+			HAS_FOOTPRINT = true;
 		}
 	},
 	CHILD() {
@@ -103,6 +111,8 @@ public enum Variator {
 			PLAY_WANDER = true;
 			QUADRUPED = false;
 			PLAY_JUMP = false;
+			DISTANCE_TO_CENTER = 0.2F;
+			HAS_FOOTPRINT = true;
 		}
 	};
 
@@ -117,6 +127,8 @@ public enum Variator {
 	public boolean PLAY_WANDER;
 	public boolean QUADRUPED;
 	public boolean PLAY_JUMP;
+	public float DISTANCE_TO_CENTER;
+	public boolean HAS_FOOTPRINT;
 
 	// public boolean FORCE_HUMANOID = false;
 	// public boolean GALLOP_3STEP = true;
