@@ -25,7 +25,6 @@ package org.blockartistry.DynSurround.client.handlers.fog;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.WorldUtils;
 
@@ -52,7 +51,7 @@ public class BedrockFogRangeCalculator extends VanillaFogRangeCalculator {
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 
 		this.cached.set(event);
-		if (ModOptions.fog.enableBedrockFog && WorldUtils.hasVoidPartiles(EnvironState.getWorld())) {
+		if (WorldUtils.hasVoidPartiles(EnvironState.getWorld())) {
 			final EntityLivingBase player = EnvironState.getPlayer();
 			final double factor = (player.lastTickPosY
 					+ (player.posY - player.lastTickPosY) * (double) event.getRenderPartialTicks() + 4.0D) / 32.0D;

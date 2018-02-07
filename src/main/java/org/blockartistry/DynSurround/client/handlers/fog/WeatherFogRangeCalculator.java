@@ -25,7 +25,6 @@ package org.blockartistry.DynSurround.client.handlers.fog;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.weather.Weather;
 
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -49,14 +48,12 @@ public class WeatherFogRangeCalculator extends VanillaFogRangeCalculator {
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 		// Start with what vanilla thinks
 		this.cache.set(event);
-		if (ModOptions.fog.enableWeatherFog) {
-			final float rainStr = Weather.getIntensityLevel();
-			if (rainStr > 0) {
-				// Calculate our scaling factor
-				final float startScale = 1F - (START_IMPACT * rainStr);
-				final float endScale = 1F - (END_IMPACT * rainStr);
-				this.cache.set(this.cache.getStart() * startScale, this.cache.getEnd() * endScale);
-			}
+		final float rainStr = Weather.getIntensityLevel();
+		if (rainStr > 0) {
+			// Calculate our scaling factor
+			final float startScale = 1F - (START_IMPACT * rainStr);
+			final float endScale = 1F - (END_IMPACT * rainStr);
+			this.cache.set(this.cache.getStart() * startScale, this.cache.getEnd() * endScale);
 		}
 
 		return this.cache;
