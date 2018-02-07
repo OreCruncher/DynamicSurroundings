@@ -190,6 +190,7 @@ public class AuroraShaderBand implements IAurora {
 
 		try {
 			this.program.use(this.callback);
+			renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
 			for (int b = 0; b < this.bands.length; b++) {
 				this.bands[b].translate(partialTick);
@@ -224,20 +225,24 @@ public class AuroraShaderBand implements IAurora {
 						posY2 = 0.0D;
 					}
 
-					renderer.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_TEX);
 					renderer.pos(posX, zero, posZ).tex(u1, v1).endVertex();
 					renderer.pos(posX, posY, posZ).tex(u1, v2).endVertex();
 					renderer.pos(posX2, posY2, posZ2).tex(u2, v2).endVertex();
 					renderer.pos(posX2, zero, posZ2).tex(u2, v1).endVertex();
-					tess.draw();
-
 				}
 			}
 
-			this.program.unUse();
 		} catch (final Exception ex) {
 			ex.printStackTrace();
 			this.program = null;
+		} finally {
+			tess.draw();
+			try {
+				if(this.program != null)
+					this.program.unUse();
+			} catch (final Throwable t) {
+				;
+			}
 		}
 
 		GL11.glFrontFace(GL11.GL_CCW);
