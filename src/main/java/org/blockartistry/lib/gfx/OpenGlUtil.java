@@ -40,7 +40,7 @@ public final class OpenGlUtil {
 
 	public static void setAuroraBlend() {
 		GlStateManager.enableBlend();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.SRC_ALPHA,
 				GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 	}
 
