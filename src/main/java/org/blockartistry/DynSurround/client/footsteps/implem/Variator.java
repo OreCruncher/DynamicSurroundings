@@ -119,6 +119,24 @@ public enum Variator {
 			HAS_FOOTPRINT = true;
 			FOOTPRINT_SCALE = 0.5F;
 		}
+	},
+	SKELETON() {
+		{
+			IMMOBILE_DURATION = 200;
+			EVENT_ON_JUMP = true;
+			LAND_HARD_DISTANCE_MIN = 0.9f;
+			SPEED_TO_JUMP_AS_MULTIFOOT = 0.005f;
+			SPEED_TO_RUN = 0.022f;
+			STRIDE = 1.25F; // 0.95f;
+			STRIDE_STAIR = STRIDE * 0.65f;
+			STRIDE_LADDER = 0.5f;
+			PLAY_WANDER = true;
+			QUADRUPED = false;
+			PLAY_JUMP = false;
+			DISTANCE_TO_CENTER = 0.2F;
+			HAS_FOOTPRINT = true;
+			FOOTPRINT_SCALE = 0.5F;
+		}
 	};
 
 	public int IMMOBILE_DURATION;

@@ -1481,7 +1481,7 @@
 	],
 	"entities": {
 		"minecraft:wither_skeleton": {
-			"effects": "bow,swing"
+			"effects": "bow,swing,footprint"
 		},
 		"minecraft:villager": {
 			"effects": "bow,swing,footprint,breath,chat"
@@ -1502,10 +1502,10 @@
 			"effects": "bow,swing,footprint,breath"
 		},
 		"minecraft:skeleton": {
-			"effects": "bow,swing,chat"
+			"effects": "bow,swing,footprint,chat"
 		},
 		"minecraft:stray": {
-			"effects": "bow,swing"
+			"effects": "bow,swing,footprint"
 		},
 		"minecraft:zombie": {
 			"effects": "bow,swing,footprint,chat"
