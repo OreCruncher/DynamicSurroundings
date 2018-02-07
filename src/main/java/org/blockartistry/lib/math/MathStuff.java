@@ -233,12 +233,16 @@ public class MathStuff {
 	}
 
 	// Assumes center at origin.
-	public static Vec2f rotate(@Nonnull final Vec2f coord, final float radians) {
+	public static Vec2f rotateScale(@Nonnull final Vec2f coord, final float radians, final float scale) {
 		final float f = cos(radians);
 		final float f1 = sin(radians);
 		final float d0 = coord.x * f + coord.y * f1;
 		final float d1 = coord.y * f - coord.x * f1;
-		return new Vec2f(d0, d1);
+		return new Vec2f(d0 * scale, d1 * scale);
+	}
+	
+	public static Vec2f rotate(@Nonnull final Vec2f coord, final float radians) {
+		return rotateScale(coord, radians, 1F);
 	}
 
 	public static final Vec3d getVectorForRotation(final float pitch, final float yaw) {

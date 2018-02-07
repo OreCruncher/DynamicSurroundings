@@ -39,13 +39,15 @@ public class Footprint {
 	private Vec3d stepLoc;
 	private boolean isRightFoot;
 	private float rotation;
+	private float scale;
 
-	public static Footprint produce(@Nonnull final EntityLivingBase entity, @Nonnull final Vec3d stepLoc, final float rotation, final boolean rightFoot) {
+	public static Footprint produce(@Nonnull final EntityLivingBase entity, @Nonnull final Vec3d stepLoc, final float rotation, final float scale, final boolean rightFoot) {
 		final Footprint print = new Footprint();
 		print.entity = entity;
 		print.stepLoc = stepLoc;
 		print.rotation = rotation;
 		print.isRightFoot = rightFoot;
+		print.scale = scale;
 		return print;
 	}
 
@@ -64,6 +66,10 @@ public class Footprint {
 
 	public float getRotation() {
 		return this.rotation;
+	}
+	
+	public float getScale() {
+		return this.scale;
 	}
 
 }

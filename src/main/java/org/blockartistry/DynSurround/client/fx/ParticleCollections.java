@@ -157,10 +157,10 @@ public final class ParticleCollections {
 	}
 
 	public static IParticleMote addFootprint(@Nonnull final World world, final double x, final double y, final double z,
-			final float rot, final boolean isRight) {
+			final float rot, final float scale, final boolean isRight) {
 		IParticleMote mote = null;
 		if (thePrints.get().canFit()) {
-			mote = new MoteFootprint(world, x, y, z, rot, isRight);
+			mote = new MoteFootprint(world, x, y, z, rot, scale, isRight);
 			thePrints.get().addParticle(mote);
 		}
 		return mote;
