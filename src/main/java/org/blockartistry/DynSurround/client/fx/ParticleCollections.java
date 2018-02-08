@@ -41,12 +41,16 @@ import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionF
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionFootprint;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionRipples;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.WorldEvent;
 
 @SideOnly(Side.CLIENT)
 public final class ParticleCollections {
@@ -79,6 +83,13 @@ public final class ParticleCollections {
 				ParticleHelper.addParticle(this.collection);
 			}
 			return this.collection;
+		}
+
+		public void clear() {
+			if (this.collection != null) {
+				this.collection.setExpired();
+				this.collection = null;
+			}
 		}
 	}
 
@@ -173,5 +184,18 @@ public final class ParticleCollections {
 			theFireFlies.get().addParticle(mote);
 		}
 		return mote;
+	}
+	
+	@SubscribeEvent
+	public static void onWorldUnload(@Nonnull final WorldEvent.Unload event) {
+		if (event.getWorld() instanceof WorldClient) {
+			DSurround.log().debug("World [%s] unloading, clearing particle collections",
+					event.getWorld().provider.getDimensionType().getName());
+			theRipples.clear();
+			theSprays.clear();
+			theEmojis.clear();
+			thePrints.clear();
+			theFireFlies.clear();
+		}
 	}
 }
