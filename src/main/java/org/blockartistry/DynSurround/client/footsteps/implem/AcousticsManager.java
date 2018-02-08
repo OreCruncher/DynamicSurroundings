@@ -78,6 +78,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	public static final IAcoustic[] MESSY_GROUND = { new BasicAcoustic("MESSY_GROUND") };
 	public static IAcoustic[] SWIM;
 	public static IAcoustic[] JUMP;
+	public static IAcoustic[] SPLASH;
 
 	public AcousticsManager() {
 	}

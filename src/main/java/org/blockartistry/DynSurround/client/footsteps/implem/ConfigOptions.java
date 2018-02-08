@@ -36,6 +36,8 @@ public class ConfigOptions implements IOptions {
 	protected long delayMax = 0;
 	protected float glidingVolume = 0;
 	protected float glidingPitch = 0;
+	protected float volumeScale = 1F;
+	protected float pitchScale = 1F;
 
 	public ConfigOptions() {
 
@@ -75,6 +77,24 @@ public class ConfigOptions implements IOptions {
 
 	public void setGlidingPitch(final float v) {
 		this.glidingPitch = v;
+	}
+	
+	@Override
+	public float getVolumeScale() {
+		return this.volumeScale;
+	}
+	
+	public void setVolumeScale(final float s) {
+		this.volumeScale = s;
+	}
+	
+	@Override
+	public float getPitchScale() {
+		return this.pitchScale;
+	}
+	
+	public void setPitchScale(final float p) {
+		this.pitchScale = p;
 	}
 
 }
