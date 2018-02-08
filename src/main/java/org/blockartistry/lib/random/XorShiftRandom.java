@@ -120,7 +120,7 @@ public final class XorShiftRandom extends Random {
 	public long nextLong() {
 		final long result = this.s0 + this.s1;
 		final long s1 = this.s1 ^ this.s0;
-		this.s0 = Long.rotateLeft(this.s0, 55) ^ s1 ^ s1 << 14;
+		this.s0 = Long.rotateLeft(this.s0, 55) ^ s1 ^ (s1 << 14);
 		this.s1 = Long.rotateLeft(s1, 36);
 		return result;
 	}
