@@ -1,3 +1,18 @@
+###DynamicSurroundings-1.12.2-3.4.9.3
+**What's New**
+* Ability to have footprints scaled.  Villager children now have smaller prints and the spacing is more appropriate to the model size.
+* Skeletons now have footprints.  Scaled down in size to match their spindly legs.
+
+**Fixes**
+* Several crashes related to null references
+* Fixed slow memory leak related to changing dimensions (unregister event handler)
+* Auroras should be more compatible with shaders.  I tested with SEUS Renewed and they show up.  Yay!  If you still run into rendering issues try turning off custom sky.
+* Fixed problem where tools like axes and picks would not make item swap or swing sounds.
+
+**Changes**
+* It's been reported that footsteps stop appearing but the step sounds still play.  I am not able to repro the problem, but I have a suspicion.  I made some code changes based on my suspicion.  As a side effect the process is more streamlined. :)
+* Improved aurora rendering performance quite a bit for both classic and shader.
+
 ###DynamicSurroundings-1.12.2-3.4.9.2
 **What's New**
 * Dynamic Trees support.  Added a mod profile so Dynamic Surroundings doesn't need to infer footstep behavior.
