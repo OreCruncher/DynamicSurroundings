@@ -190,10 +190,11 @@ public class AuroraShaderBand implements IAurora {
 
 		try {
 			this.program.use(this.callback);
-			renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
 			for (int b = 0; b < this.bands.length; b++) {
+
 				this.bands[b].translate(partialTick);
+				renderer.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_TEX);
 
 				final Node[] array = this.bands[b].getNodeList();
 				for (int i = 0; i < array.length - 1; i++) {
@@ -227,18 +228,18 @@ public class AuroraShaderBand implements IAurora {
 
 					renderer.pos(posX, zero, posZ).tex(u1, v1).endVertex();
 					renderer.pos(posX, posY, posZ).tex(u1, v2).endVertex();
-					renderer.pos(posX2, posY2, posZ2).tex(u2, v2).endVertex();
 					renderer.pos(posX2, zero, posZ2).tex(u2, v1).endVertex();
+					renderer.pos(posX2, posY2, posZ2).tex(u2, v2).endVertex();
 				}
+				tess.draw();
 			}
 
 		} catch (final Exception ex) {
 			ex.printStackTrace();
 			this.program = null;
 		} finally {
-			tess.draw();
 			try {
-				if(this.program != null)
+				if (this.program != null)
 					this.program.unUse();
 			} catch (final Throwable t) {
 				;
