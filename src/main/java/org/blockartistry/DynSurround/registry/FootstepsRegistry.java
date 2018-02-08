@@ -46,6 +46,7 @@ import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.DynSurround.client.footsteps.implem.Manifest;
 import org.blockartistry.DynSurround.client.footsteps.implem.PrimitiveMap;
+import org.blockartistry.DynSurround.client.footsteps.implem.RainSplashAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.implem.Variator;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.parsers.AcousticsJsonReader;
@@ -107,7 +108,7 @@ public final class FootstepsRegistry extends Registry {
 
 	private Set<Material> FOOTPRINT_MATERIAL;
 	private Set<IBlockState> FOOTPRINT_STATES;
-	
+
 	private Map<ArmorClass, IAcoustic> ARMOR_SOUND;
 	private Map<ArmorClass, IAcoustic> ARMOR_SOUND_FOOT;
 
@@ -132,13 +133,14 @@ public final class FootstepsRegistry extends Registry {
 		this.FOOTPRINT_MATERIAL.add(Material.SAND);
 		this.FOOTPRINT_MATERIAL.add(Material.CRAFTED_SNOW);
 		this.FOOTPRINT_MATERIAL.add(Material.SNOW);
-		
+
 		this.ARMOR_SOUND = new EnumMap<>(ArmorClass.class);
 		this.ARMOR_SOUND_FOOT = new EnumMap<>(ArmorClass.class);
 
 		// It's a hack - needs refactor
 		AcousticsManager.SWIM = null;
 		AcousticsManager.JUMP = null;
+		AcousticsManager.SPLASH = null;
 
 		this.getBlockMap().clear();
 		final List<IResourcePack> repo = this.dealer.findResourcePacks();
@@ -172,7 +174,9 @@ public final class FootstepsRegistry extends Registry {
 		this.getBlockMap().freeze();
 		AcousticsManager.SWIM = this.isolator.getAcoustics().compileAcoustics("_SWIM");
 		AcousticsManager.JUMP = this.isolator.getAcoustics().compileAcoustics("_JUMP");
-		
+		AcousticsManager.SPLASH = new IAcoustic[] {
+				new RainSplashAcoustic(this.isolator.getAcoustics().compileAcoustics("waterfine")) };
+
 		final AcousticsManager am = this.isolator.getAcoustics();
 		this.ARMOR_SOUND.put(ArmorClass.NONE, am.getAcoustic("NOT_EMITTER"));
 		this.ARMOR_SOUND.put(ArmorClass.LIGHT, am.getAcoustic("armor_light"));
@@ -361,7 +365,7 @@ public final class FootstepsRegistry extends Registry {
 
 		if (entity instanceof EntityVillager || entity instanceof EntityWitch) {
 			var = entity.isChild() ? Variator.CHILD : Variator.VILLAGER;
-		} else if(entity instanceof EntitySkeleton) {
+		} else if (entity instanceof EntitySkeleton) {
 			var = entity.isChild() ? Variator.CHILD : Variator.SKELETON;
 		} else if (entity instanceof EntityPlayer) {
 			if (ModOptions.sound.foostepsQuadruped)
@@ -380,12 +384,12 @@ public final class FootstepsRegistry extends Registry {
 	public boolean hasFootprint(@Nonnull final IBlockState state) {
 		return this.FOOTPRINT_MATERIAL.contains(state.getMaterial()) || this.FOOTPRINT_STATES.contains(state);
 	}
-	
+
 	@Nullable
 	public IAcoustic getArmorAcoustic(@Nonnull final ArmorClass ac) {
 		return ac != null ? this.ARMOR_SOUND.get(ac) : null;
 	}
-	
+
 	@Nullable
 	public IAcoustic getFootArmorAcoustic(@Nonnull final ArmorClass ac) {
 		return ac != null ? this.ARMOR_SOUND_FOOT.get(ac) : null;

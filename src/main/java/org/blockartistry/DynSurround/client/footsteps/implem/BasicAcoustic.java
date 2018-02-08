@@ -81,6 +81,8 @@ public class BasicAcoustic implements IAcoustic {
 			if (inputOptions.getGlidingPitch() > 0) {
 				pitch = this.pitchMin + (this.pitchMax - this.pitchMin) * inputOptions.getGlidingPitch();
 			}
+			volume *= inputOptions.getVolumeScale();
+			pitch *= inputOptions.getPitchScale();
 		}
 
 		player.playSound(location, this.sound, volume, pitch, this.outputOptions);

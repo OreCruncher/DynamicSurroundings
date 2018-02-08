@@ -21,36 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.blockartistry.DynSurround.client.footsteps.implem;
 
-package org.blockartistry.DynSurround.client.footsteps.interfaces;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
+import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
+import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions;
+import org.blockartistry.DynSurround.client.footsteps.interfaces.ISoundPlayer;
+import org.blockartistry.DynSurround.client.weather.Weather;
+
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public interface IOptions {
+public class RainSplashAcoustic implements IAcoustic {
 
-	default long getDelayMin() {
-		return 0;
-	}
+	protected final IAcoustic[] acoustics;
 
-	default long getDelayMax() {
-		return 0;
+	public RainSplashAcoustic(@Nonnull final IAcoustic[] acoustics) {
+		this.acoustics = acoustics;
 	}
 
-	default float getGlidingVolume() {
-		return 0;
+	@Override
+	public String getAcousticName() {
+		return "RainSplash";
 	}
 
-	default float getGlidingPitch() {
-		return 0;
-	}
-	
-	default float getVolumeScale() {
-		return 1F;
-	}
-	
-	default float getPitchScale() {
-		return 1F;
+	@Override
+	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final EntityLivingBase location,
+			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
+		final ConfigOptions ops = new ConfigOptions();
+		ops.setVolumeScale(Weather.getIntensityLevel() * 0.8F);
+		ops.setPitchScale(1.75F);
+		for (int i = 0; i < this.acoustics.length; i++)
+			this.acoustics[i].playSound(player, location, event, ops);
 	}
 }

@@ -78,6 +78,7 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	public static final IAcoustic[] MESSY_GROUND = { new BasicAcoustic("MESSY_GROUND") };
 	public static IAcoustic[] SWIM;
 	public static IAcoustic[] JUMP;
+	public static IAcoustic[] SPLASH;
 
 	public AcousticsManager() {
 	}
@@ -239,8 +240,8 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 			this.footprints.forEach(print -> {
 				final Vec3d loc = print.getStepLocation();
 				final World world = print.getEntity().getEntityWorld();
-				ParticleCollections.addFootprint(world, loc.xCoord, loc.yCoord, loc.zCoord, print.getRotation(),
-						print.getScale(), print.isRightFoot());
+				ParticleCollections.addFootprint(world, loc.xCoord, loc.yCoord, loc.zCoord, print.getRotation(), print.getScale(),
+						print.isRightFoot());
 			});
 		}
 		this.footprints.clear();
