@@ -47,6 +47,7 @@ import elucent.albedo.event.GatherLightsEvent;
 import elucent.albedo.lighting.ILightProvider;
 import elucent.albedo.lighting.Light;
 import net.minecraftforge.fml.common.Optional;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -54,6 +55,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.WorldEvent;
 
 @SideOnly(Side.CLIENT)
 public final class ParticleCollections {
@@ -86,6 +88,13 @@ public final class ParticleCollections {
 				ParticleHelper.addParticle(this.collection);
 			}
 			return this.collection;
+		}
+
+		public void clear() {
+			if (this.collection != null) {
+				this.collection.setExpired();
+				this.collection = null;
+			}
 		}
 	}
 
@@ -152,6 +161,7 @@ public final class ParticleCollections {
 		return mote;
 	}
 
+	@Nullable
 	public static IParticleMote addWaterSpray(@Nonnull final World world, final double x, final double y,
 			final double z, final double dX, final double dY, final double dZ) {
 		IParticleMote mote = null;
@@ -162,6 +172,7 @@ public final class ParticleCollections {
 		return mote;
 	}
 
+	@Nullable
 	public static IParticleMote addRainSplash(@Nonnull final World world, final double x, final double y,
 			final double z) {
 		IParticleMote mote = null;
@@ -172,6 +183,7 @@ public final class ParticleCollections {
 		return mote;
 	}
 
+	@Nullable
 	public static IParticleMote addEmoji(@Nonnull final Entity entity) {
 		IParticleMote mote = null;
 		if (theEmojis.get().canFit()) {
@@ -181,6 +193,7 @@ public final class ParticleCollections {
 		return mote;
 	}
 
+	@Nullable
 	public static IParticleMote addFootprint(@Nonnull final World world, final double x, final double y, final double z,
 			final float rot, final float scale, final boolean isRight) {
 		IParticleMote mote = null;
@@ -191,6 +204,7 @@ public final class ParticleCollections {
 		return mote;
 	}
 
+	@Nullable
 	public static IParticleMote addFireFly(@Nonnull final World world, final double x, final double y, final double z) {
 		IParticleMote mote = null;
 		if (theFireFlies.get().canFit()) {
@@ -198,5 +212,18 @@ public final class ParticleCollections {
 			theFireFlies.get().addParticle(mote);
 		}
 		return mote;
+	}
+
+	@SubscribeEvent
+	public static void onWorldUnload(@Nonnull final WorldEvent.Unload event) {
+		if (event.getWorld() instanceof WorldClient) {
+			DSurround.log().debug("World [%s] unloading, clearing particle collections",
+					event.getWorld().provider.getDimensionType().getName());
+			theRipples.clear();
+			theSprays.clear();
+			theEmojis.clear();
+			thePrints.clear();
+			theFireFlies.clear();
+		}
 	}
 }

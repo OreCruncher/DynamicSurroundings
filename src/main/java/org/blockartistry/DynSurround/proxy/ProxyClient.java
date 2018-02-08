@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.DynSurround.client.gui.HumDinger;
 import org.blockartistry.DynSurround.client.handlers.EffectManager;
@@ -93,6 +94,7 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 		register(PresetHandler.class);
 		register(WorldEventDetector.class);
 		register(LightLevelHUD.class);
+		register(ParticleCollections.class);
 
 		MinecraftForge.EVENT_BUS.register(this);
 	}
