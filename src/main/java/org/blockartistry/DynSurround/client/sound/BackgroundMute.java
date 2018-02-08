@@ -50,10 +50,10 @@ public class BackgroundMute {
 
 				if (active && muted) {
 					sm.setMuted(false);
-					DSurround.log().info("Unmuting sounds");
+					DSurround.log().debug("Unmuting sounds");
 				} else if (!active && !muted) {
 					sm.setMuted(true);
-					DSurround.log().info("Muting sounds");
+					DSurround.log().debug("Muting sounds");
 				}
 			}
 		}
