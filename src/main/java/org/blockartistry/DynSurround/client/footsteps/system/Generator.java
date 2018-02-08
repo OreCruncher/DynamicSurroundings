@@ -41,8 +41,10 @@ import org.blockartistry.DynSurround.client.footsteps.implem.Substrate;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.DynSurround.registry.ArmorClass;
+import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.TimeUtils;
@@ -712,7 +714,7 @@ public class Generator {
 	@Nullable
 	protected Association addSoundOverlay(@Nonnull final EntityLivingBase entity, @Nullable Association assoc) {
 
-		// Don't apply armor sound if the Entity is not on the ground
+		// Don't apply overlays if the entity is not on the ground
 		if (!entity.onGround)
 			return assoc;
 
@@ -730,19 +732,36 @@ public class Generator {
 		final IAcoustic armorAddon = ClientRegistry.FOOTSTEPS.getArmorAcoustic(armor);
 		IAcoustic footAddon = ClientRegistry.FOOTSTEPS.getFootArmorAcoustic(foot);
 
-		if (armorAddon == null && footAddon == null)
-			return assoc;
+		if (armorAddon != null || footAddon != null) {
+			// Eliminate duplicates
+			if (armorAddon == footAddon)
+				footAddon = null;
 
-		// Eliminate duplicates
-		if (armorAddon == footAddon)
-			footAddon = null;
+			if (assoc == null)
+				assoc = new Association();
+			if (armorAddon != null)
+				assoc.add(armorAddon);
+			if (footAddon != null)
+				assoc.add(footAddon);
+		}
 
-		if (assoc == null)
-			assoc = new Association();
-		if (armorAddon != null)
-			assoc.add(armorAddon);
-		if (footAddon != null)
-			assoc.add(footAddon);
+		if (Weather.isRaining()) {
+			final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+			pos.setPos(entity);
+			final int precipHeight = ClientRegistry.SEASON.getPrecipitationHeight(entity.getEntityWorld(), pos).getY();
+			if (precipHeight == pos.getY()) {
+				final BiomeInfo biome = ClientRegistry.BIOME.get(WorldUtils.getBiome(entity.getEntityWorld(), pos));
+				if (biome.hasWeatherEffect() && !biome.getHasDust()) {
+					pos.setPos(pos.getX(), precipHeight, pos.getZ());
+					final boolean canSnow = ClientRegistry.SEASON.canWaterFreeze(entity.getEntityWorld(), pos);
+					if (!canSnow) {
+						if (assoc == null)
+							assoc = new Association();
+						assoc.add(AcousticsManager.SPLASH);
+					}
+				}
+			}
+		}
 
 		return assoc;
 	}

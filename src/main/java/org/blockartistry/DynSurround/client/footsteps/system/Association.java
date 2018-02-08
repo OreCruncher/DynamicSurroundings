@@ -88,6 +88,10 @@ public class Association {
 	public void add(@Nonnull final IAcoustic acoustics) {
 		this.data = MyUtils.append(this.data, acoustics);
 	}
+	
+	public void add(@Nonnull final IAcoustic[] acoustics) {
+		this.data = MyUtils.concatenate(this.data, acoustics);
+	}
 
 	@Nonnull
 	public BlockPos getPos() {
