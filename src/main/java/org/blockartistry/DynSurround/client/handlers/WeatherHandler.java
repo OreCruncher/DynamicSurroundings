@@ -30,6 +30,8 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.ThunderEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.Sounds;
+import org.blockartistry.DynSurround.client.weather.Weather;
+import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.lib.sound.BasicSound;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -66,6 +68,11 @@ public class WeatherHandler extends EffectHandlerBase {
 		if (event.doFlash)
 			this.timer = 2;
 
+	}
+	
+	@SubscribeEvent
+	public void diagnostic(@Nonnull final DiagnosticEvent.Gather event) {
+		event.output.add(Weather.diagnostic());
 	}
 
 }
