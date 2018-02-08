@@ -117,7 +117,7 @@ public final class ItemRegistry extends Registry {
 			if (postProcess(this.swordItems, item))
 				;
 			else if (postProcess(this.axeItems, item))
-				continue;
+				;
 			else if (postProcess(this.toolItems, item))
 				;
 			else if (postProcess(this.shieldItems, item))
