@@ -27,8 +27,6 @@ package org.blockartistry.DynSurround.client.handlers;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.api.effects.BlockEffectType;
-import org.blockartistry.DynSurround.api.events.BlockEffectEvent;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleSystem;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.BlockPosHelper;
@@ -36,8 +34,6 @@ import org.blockartistry.lib.BlockPosHelper;
 import gnu.trove.map.hash.TLongObjectHashMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -83,19 +79,9 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 		this.systems.clear();
 	}
 
-	private static boolean interestingEvent(final BlockEffectEvent event) {
-		return event.effect != BlockEffectType.FIREFLY;
-	}
-
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void onBlockEffectEvent(@Nonnull final BlockEffectEvent event) {
-		if (interestingEvent(event) && !okToSpawn(event.location))
-			event.setCanceled(true);
-	}
-
 	// Determines if it is OK to spawn a particle system at the specified
 	// location. Generally only a single system can occupy a block.
-	private boolean okToSpawn(@Nonnull final BlockPos pos) {
+	public boolean okToSpawn(@Nonnull final BlockPos pos) {
 		return !this.systems.containsKey(pos.toLong());
 	}
 
