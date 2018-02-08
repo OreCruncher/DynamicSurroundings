@@ -47,7 +47,7 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
  */
 public class BlockStateProvider {
 
-	protected static final IBlockState AIR_STATE = Blocks.AIR.getDefaultState();
+	public static final IBlockState AIR_STATE = Blocks.AIR.getDefaultState();
 	protected static final WeakReference<Chunk> NULL_CHUNK = new WeakReference<Chunk>(null);
 
 	protected final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
@@ -174,7 +174,7 @@ public class BlockStateProvider {
 		}
 		return pos;
 	}
-	
+
 	public Biome getBiome(@Nonnull final BlockPos pos) {
 		final int x = pos.getX();
 		final int z = pos.getZ();

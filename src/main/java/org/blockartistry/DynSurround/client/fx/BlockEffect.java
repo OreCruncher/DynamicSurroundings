@@ -31,18 +31,16 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.api.effects.BlockEffectType;
-import org.blockartistry.DynSurround.api.events.BlockEffectEvent;
 import org.blockartistry.DynSurround.expression.ExpressionEngine;
 import org.blockartistry.lib.BlockStateProvider;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract class BlockEffect implements ISpecialEffect {
-
+	
 	private int chance;
 	protected String conditions = StringUtils.EMPTY;
 
@@ -89,12 +87,7 @@ public abstract class BlockEffect implements ISpecialEffect {
 		if (!alwaysExecute() && random.nextInt(getChance()) != 0)
 			return false;
 
-		if (ExpressionEngine.instance().check(getConditions())) {
-			final BlockEffectEvent event = new BlockEffectEvent(provider.getWorld(), getEffectType(), pos);
-			return !MinecraftForge.EVENT_BUS.post(event);
-		}
-
-		return false;
+		return ExpressionEngine.instance().check(getConditions());
 	}
 
 	/**
