@@ -32,7 +32,6 @@ import org.blockartistry.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleDustJet;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
 import org.blockartistry.lib.BlockStateProvider;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
@@ -54,9 +53,8 @@ public class DustJetEffect extends JetEffect {
 	@Override
 	public boolean canTrigger(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
-		final boolean isAirBlock = provider.getBlockState(pos.getX(), pos.getY() - 1, pos.getZ())
-				.getMaterial() == Material.AIR;
-		return isAirBlock && super.canTrigger(provider, state, pos, random);
+		return provider.getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()) == BlockStateProvider.AIR_STATE
+				&& super.canTrigger(provider, state, pos, random);
 	}
 
 	@Override

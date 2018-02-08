@@ -24,8 +24,13 @@
 
 package org.blockartistry.DynSurround.client.fx;
 
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
 import org.blockartistry.DynSurround.client.handlers.ParticleSystemHandler;
+import org.blockartistry.DynSurround.expression.ExpressionEngine;
 import org.blockartistry.lib.BlockStateProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -39,7 +44,8 @@ public abstract class JetEffect extends BlockEffect {
 
 	protected static final int MAX_STRENGTH = 10;
 
-	protected static int countBlocks(final BlockStateProvider provider, final BlockPos pos, final IBlockState state, final int dir) {
+	protected static int countBlocks(final BlockStateProvider provider, final BlockPos pos, final IBlockState state,
+			final int dir) {
 		int count = 0;
 		int idx = pos.getY();
 		while (count < MAX_STRENGTH) {
@@ -60,6 +66,13 @@ public abstract class JetEffect extends BlockEffect {
 
 	public JetEffect(final int chance) {
 		super(chance);
+	}
+
+	@Override
+	public boolean canTrigger(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+			@Nonnull final BlockPos pos, @Nonnull final Random random) {
+		return (alwaysExecute() || random.nextInt(getChance()) == 0) && ParticleSystemHandler.INSTANCE.okToSpawn(pos)
+				&& ExpressionEngine.instance().check(getConditions());
 	}
 
 	protected void addEffect(final ParticleJet fx) {
