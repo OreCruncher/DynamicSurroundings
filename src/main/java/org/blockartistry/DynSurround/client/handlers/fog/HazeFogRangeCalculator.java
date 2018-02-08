@@ -42,7 +42,8 @@ public class HazeFogRangeCalculator extends VanillaFogRangeCalculator {
 
 	protected static final int BAND_OFFSETS = 15;
 	protected static final int BAND_CORE_SIZE = 10;
-	protected static final float IMPACT = 0.7F;
+	protected static final float IMPACT_FAR = 0.6F;
+	protected static final float IMPACT_NEAR = 0.95F;
 
 	protected final FogResult cached = new FogResult();
 
@@ -65,15 +66,21 @@ public class HazeFogRangeCalculator extends VanillaFogRangeCalculator {
 				final float coreLowY = lowY + BAND_OFFSETS;
 				final float coreHighY = coreLowY + BAND_CORE_SIZE;
 
-				float scale = IMPACT;
+				float scaleFar = IMPACT_FAR;
+				float scaleNear = IMPACT_NEAR;
 				if (eyes.yCoord < coreLowY) {
-					scale *= (eyes.yCoord - lowY) / BAND_OFFSETS;
+					final float factor = (float) ((eyes.yCoord - lowY) / BAND_OFFSETS);
+					scaleFar *= factor;
+					scaleNear *= factor;
 				} else if (eyes.yCoord > coreHighY) {
-					scale *= (highY - eyes.yCoord) / BAND_OFFSETS;
+					final float factor = (float) ((highY - eyes.yCoord) / BAND_OFFSETS);
+					scaleFar *= factor;
+					scaleNear *= factor;
 				}
 
-				final float end = event.getFarPlaneDistance() * (1F - scale);
-				this.cached.set(1, end, FogResult.DEFAULT_PLANE_SCALE);
+				final float end = event.getFarPlaneDistance() * (1F - scaleFar);
+				final float start = event.getFarPlaneDistance() * (1F - scaleNear);
+				this.cached.set(start, end);
 				return this.cached;
 			}
 		}
