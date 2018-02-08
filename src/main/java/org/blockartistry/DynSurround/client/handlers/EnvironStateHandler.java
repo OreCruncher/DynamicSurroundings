@@ -138,7 +138,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			final BiomeRegistry biomes = ClientRegistry.BIOME;
 			final SeasonRegistry seasons = ClientRegistry.SEASON;
 			final DimensionRegistry dimensions = ClientRegistry.DIMENSION;
-			
+
 			EnvironState.player = player;
 			EnvironState.world = player.getEntityWorld();
 			EnvironState.dimInfo = dimensions.getData(player.getEntityWorld());
@@ -188,7 +188,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		public static BattleScanner getBattleScanner() {
 			return battle;
 		}
-		
+
 		public static DimensionInfo getDimensionInfo() {
 			return dimInfo;
 		}
@@ -248,7 +248,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		public static boolean isPlayer(final UUID id) {
 			return player == null || player.getUniqueID().equals(id);
 		}
-		
+
 		public static boolean isPlayer(final int id) {
 			return player == null || player.getEntityId() == id;
 		}
@@ -310,7 +310,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		public static boolean isPlayerMoving() {
 			return player != null && player.distanceWalkedModified != player.prevDistanceWalkedModified;
 		}
-		
+
 		public static boolean isPlayerSneaking() {
 			return player != null && player.isSneaking();
 		}
@@ -362,7 +362,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		public static int getTickCounter() {
 			return tickCounter;
 		}
-		
+
 		public static float getPartialTick() {
 			return Minecraft.getMinecraft().getRenderPartialTicks();
 		}
@@ -375,7 +375,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	public EnvironStateHandler() {
 		super("EnvironStateEffectHandler");
 	}
-	
+
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 		EnvironState.tick(player.getEntityWorld(), player);
@@ -421,17 +421,13 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void diagnostics(final DiagnosticEvent.Gather event) {
-		
+
 		event.output.add(TextFormatting.GREEN + "Minecraft Date: " + EnvironState.getClock().toString());
-		
+
 		for (final String s : scripts) {
 			final String result = ExpressionEngine.instance().eval(s).toString();
 			event.output.add(TextFormatting.YELLOW + result);
 		}
-
-		event.output.add(Weather.diagnostic());
-		event.output.add("Aurora: " + (AuroraEffectHandler.getCurrentAurora() == null ? "NONE"
-				: AuroraEffectHandler.getCurrentAurora().toString()));
 
 		final List<String> badScripts = ExpressionEngine.instance().getNaughtyList();
 		for (final String s : badScripts) {

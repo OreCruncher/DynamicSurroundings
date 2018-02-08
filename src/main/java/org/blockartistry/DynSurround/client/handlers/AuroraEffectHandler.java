@@ -25,8 +25,6 @@
 package org.blockartistry.DynSurround.client.handlers;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.aurora.AuroraEngineClassic;
@@ -36,6 +34,7 @@ import org.blockartistry.DynSurround.client.aurora.IAurora;
 import org.blockartistry.DynSurround.client.aurora.IAuroraEngine;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.shader.Shaders;
+import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.lib.DiurnalUtils;
 import org.blockartistry.lib.math.TimerEMA;
 
@@ -53,8 +52,8 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 
 	private final IAuroraEngine auroraEngine;
 
-	private static IAurora current;
-	private static int dimensionId;
+	private IAurora current;
+	private int dimensionId;
 
 	private final TimerEMA timer = new TimerEMA("Aurora Render");
 	private long nanos;
@@ -68,27 +67,22 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 			this.auroraEngine = new AuroraEngineClassic();
 	}
 
-	@Nullable
-	public static IAurora getCurrentAurora() {
-		return current;
-	}
-
 	@Override
 	public void onConnect() {
-		current = null;
+		this.current = null;
 		DiagnosticHandler.INSTANCE.addTimer(this.timer);
 	}
 
 	@Override
 	public void onDisconnect() {
-		current = null;
+		this.current = null;
 	}
 
 	private boolean spawnAurora(@Nonnull final World world) {
 		if (!ModOptions.aurora.auroraEnable)
 			return false;
 
-		if (current != null || Minecraft.getMinecraft().gameSettings.renderDistanceChunks < 6
+		if (this.current != null || Minecraft.getMinecraft().gameSettings.renderDistanceChunks < 6
 				|| DiurnalUtils.isAuroraInvisible(world))
 			return false;
 		return AuroraUtils.hasAuroras() && EnvironState.getPlayerBiome().getHasAurora();
@@ -106,34 +100,34 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	public void process(@Nonnull final EntityPlayer player) {
 
 		// Process the current aurora
-		if (current != null) {
+		if (this.current != null) {
 			// If completed or the player changed dimensions we want to kill
 			// outright
-			if (current.isComplete() || dimensionId != EnvironState.getDimensionId()
+			if (this.current.isComplete() || this.dimensionId != EnvironState.getDimensionId()
 					|| !ModOptions.aurora.auroraEnable) {
-				current = null;
+				this.current = null;
 			} else {
-				current.update();
-				final boolean isDying = current.isDying();
+				this.current.update();
+				final boolean isDying = this.current.isDying();
 				final boolean canStay = canAuroraStay(player.worldObj);
 				if (isDying && canStay) {
 					DSurround.log().debug("Unfading aurora...");
-					current.setFading(false);
+					this.current.setFading(false);
 				} else if (!isDying && !canStay) {
 					DSurround.log().debug("Aurora fade...");
-					current.setFading(true);
+					this.current.setFading(true);
 				}
 			}
 		}
 
 		// If there isn't a current aurora see if it needs to spawn
 		if (spawnAurora(player.worldObj)) {
-			current = this.auroraEngine.produce(AuroraUtils.getSeed());
-			DSurround.log().debug("New aurora [%s]", current.toString());
+			this.current = this.auroraEngine.produce(AuroraUtils.getSeed());
+			DSurround.log().debug("New aurora [%s]", this.current.toString());
 		}
 
 		// Set the dimension in case it changed
-		dimensionId = EnvironState.getDimensionId();
+		this.dimensionId = EnvironState.getDimensionId();
 
 		this.timer.update(this.nanos);
 		this.nanos = 0;
@@ -144,13 +138,15 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 
 		final long start = System.nanoTime();
 
-		// Render our aurora if it is present
-		final IAurora aurora = getCurrentAurora();
-		if (aurora != null) {
-			aurora.render(event.getPartialTicks());
-		}
+		if (this.current != null)
+			this.current.render(event.getPartialTicks());
 
 		this.nanos += System.nanoTime() - start;
+	}
+
+	@SubscribeEvent
+	public void diagnostic(@Nonnull final DiagnosticEvent.Gather event) {
+		event.output.add("Aurora: " + (this.current == null ? "NONE" : this.current.toString()));
 	}
 
 }
