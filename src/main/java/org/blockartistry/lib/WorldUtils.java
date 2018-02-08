@@ -35,9 +35,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public final class WorldUtils {
 
+	// TODO: Not used currently. Server side doesn't make use of this class
+	// so for the moment do not use side sensitive version to reduce
+	// overhead of figuring what side is executing.
+	@SuppressWarnings("unused")
 	private static final SideLocal<BlockStateProvider> blockProvider = new SideLocal<BlockStateProvider>() {
 		@Override
 		protected BlockStateProvider initialValue(@Nonnull final Side side) {
@@ -45,13 +51,16 @@ public final class WorldUtils {
 		}
 	};
 
+	private static final BlockStateProvider provider = new BlockStateProvider();
+
 	private WorldUtils() {
 
 	}
 
 	@Nonnull
 	public static BlockStateProvider getDefaultBlockStateProvider() {
-		return blockProvider.get();
+		return provider;
+		// return blockProvider.get();
 	}
 
 	@Nullable
@@ -121,7 +130,7 @@ public final class WorldUtils {
 	public static boolean hasVoidPartiles(@Nonnull final World world) {
 		return world.getWorldType() != WorldType.FLAT && !world.provider.hasNoSky;
 	}
-	
+
 	public static Biome getBiome(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getDefaultBlockStateProvider().setWorld(world).getBiome(pos);
 	}
