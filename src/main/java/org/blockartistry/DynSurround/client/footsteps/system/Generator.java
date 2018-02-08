@@ -427,7 +427,9 @@ public class Generator {
 		final BlockPos pos = new BlockPos(xx, minY - 0.1D - verticalOffsetAsMinus, zz);
 
 		final Association result = addSoundOverlay(player, findAssociationForLocation(player, pos));
-		if (result != null && this.VAR.HAS_FOOTPRINT) {
+		// It is possible that the association has no position, so it
+		// needs to be checked.
+		if (result != null && result.getPos() != null && this.VAR.HAS_FOOTPRINT) {
 			final Vec3d printPos = footstepPosition(player.getEntityWorld(), result.getPos(), xx, zz);
 			if (printPos != null) {
 				result.generatePrint(player, printPos, rotDegrees, this.VAR.FOOTPRINT_SCALE, isRightFoot);
