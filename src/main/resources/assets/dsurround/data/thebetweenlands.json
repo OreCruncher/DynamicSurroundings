@@ -3,7 +3,7 @@
 		{
 			"name": "betweenlands",
 			"seaLevel": 121,
-			"weather": true,
+			"weather": false,
 			"fog": false,
 			"haze": false,
 			"aurora": false
@@ -53,58 +53,74 @@
 	],
 	"itemConfig": {
 		"axeSound": [
-			"thebetweenlands.common.item.tools.ItemBLAxe",
-			"thebetweenlands.common.item.tools.ItemBLPickaxe",
-			"thebetweenlands.common.item.tools.ItemHagHacker",
-			"thebetweenlands.common.item.tools.ItemSwiftPick"
+			"thebetweenlands:weedwood_axe",
+			"thebetweenlands:weedwood_pickaxe",
+			"thebetweenlands:bone_axe",
+			"thebetweenlands:bone_pickaxe",
+			"thebetweenlands:octine_axe",
+			"thebetweenlands:octine_pickaxe",
+			"thebetweenlands:valonite_axe",
+			"thebetweenlands:valonite_pickaxe",
+			"thebetweenlands:critter_cruncher"
 		],
 		"bowSound": [
-			"thebetweenlands.common.item.tools.bow.ItemBLBow"
+			"thebetweenlands:weedwood_bow"
 		],
 		"swordSound": [
-			"thebetweenlands.common.item.tools.ItemBLSword",
-			"thebetweenlands.common.item.tools.ItemShockwaveSword",
-			"thebetweenlands.common.item.tools.ItemLootSword",
-			"thebetweenlands.common.item.tools.ItemSickle"
+			"thebetweenlands:weedwood_sword",
+			"thebetweenlands:bone_sword",
+			"thebetweenlands:octine_sword",
+			"thebetweenlands:valonite_sword",
+			"thebetweenlands:sickle",
+			"thebetweenlands:shockwave_sword",
+			"thebetweenlands:wights_bane",
+			"thebetweenlands:sludge_slicer"
 		],
 		"toolSound": [
-			"thebetweenlands.common.item.tools.ItemBLShovel"
+			"thebetweenlands:weedwood_shovel",
+			"thebetweenlands:bone_shovel",
+			"thebetweenlands:octine_shovel",
+			"thebetweenlands:valonite_sword"
 		],
 		"shieldSound": [
-			"thebetweenlands.common.item.shields.ItemOctineShield",
-			"thebetweenlands.common.item.shields.ItemValoniteShield",
-			"thebetweenlands.common.item.shields.ItemWeedwoodShield",
-			"thebetweenlands.common.item.shields.ItemSyrmoriteShield",
-			"thebetweenlands.common.item.tools.ItemBLShield",
-			"thebetweenlands.common.item.shields.ItemDentrothystShield"
+			"thebetweenlands:octine_shield",
+			"thebetweenlands:valonite_shield",
+			"thebetweenlands:weedwood_shield",
+			"thebetweenlands:syrmorite_shield",
+			"thebetweenlands:bone_shield",
+			"thebetweenlands:dentrothyst_shield_green",
+			"thebetweenlands:dentrothyst_shield_green_polished",
+			"thebetweenlands:dentrothyst_shield_orange",
+			"thebetweenlands:dentrothyst_shield_orange_polished",
+			"thebetweenlands:lurker_skin_shield"
 		],
 		"lightArmor": [
-			"minecraft:leather_boots",
-			"minecraft:leather_leggings",
-			"minecraft:leather_chestplate",
-			"minecraft:leather_helmet"
+			"thebetweenlands:bone_helmet",
+			"thebetweenlands:bone_chestplate",
+			"thebetweenlands:bone_leggings",
+			"thebetweenlands:bone_boots",
+			"thebetweenlands:lurker_skin_helmet",
+			"thebetweenlands:lurker_skin_chestplate",
+			"thebetweenlands:lurker_skin_leggings",
+			"thebetweenlands:lurker_skin_boots",
+			"thebetweenlands:rubber_boots",
+			"thebetweenlands:marsh_runner_boots",
+			"thebetweenlands:skull_mask",
+			"thebetweenlands:explorers_hat"
 		],
 		"mediumArmor": [
-			"minecraft:chainmail_boots",
-			"minecraft:chainmail_leggings",
-			"minecraft:chainmail_chestplate",
-			"minecraft:chainmail_helmet"
 		],
 		"crystalArmor": [
-			"minecraft:diamond_boots",
-			"minecraft:diamond_leggings",
-			"minecraft:diamond_chestplate",
-			"minecraft:diamond_helmet"
 		],
 		"heavyArmor": [
-			"minecraft:iron_boots",
-			"minecraft:iron_leggings",
-			"minecraft:iron_chestplate",
-			"minecraft:iron_helmet",
-			"minecraft:golden_boots",
-			"minecraft:golden_leggings",
-			"minecraft:golden_chestplate",
-			"minecraft:golden_helmet"
+			"thebetweenlands:syrmorite_helmet",
+			"thebetweenlands:syrmorite_chestplate",
+			"thebetweenlands:syrmorite_leggings",
+			"thebetweenlands:syrmorite_boots",
+			"thebetweenlands:valonite_helmet",
+			"thebetweenlands:valonite_chestplate",
+			"thebetweenlands:valonite_leggings",
+			"thebetweenlands:valonite_boots"
 		]
 	},
 	"footsteps": {
@@ -177,7 +193,26 @@
 		"thebetweenlands:thorns": "leaves",
 		"thebetweenlands:thorns+foliage": "leaves",
 		"thebetweenlands:scabyst_ore": "ore",
-		"thebetweenlands:limestone": "sandstone"
+		"thebetweenlands:limestone": "sandstone",
+		"thebetweenlands:puddle": "waterfine",
+		"thebetweenlands:puddle+carpet": "waterfine",
+		"thebetweenlands:weedwood_ladder": "ladder_default",
+		"thebetweenlands:druid_altar": "stoneutility",
+		"thebetweenlands:purifier": "woodutility",
+		"thebetweenlands:weedwood_workbench": "wood",
+		"thebetweenlands:compost_bin": "woodutility",
+		"thebetweenlands:weedwood_jukebox": "woodutility",
+		"thebetweenlands:sulfur_furnace": "stoneutility",
+		"thebetweenlands:sulfur_furnace_dual": "stoneutility",
+		"thebetweenlands:rubber_tree_plank_trapdoor": "bluntwood",
+		"thebetweenlands:giant_root_plank_trapdoor": "bluntwood",
+		"thebetweenlands:syrmorite_trapdoor": "hardmetal",
+		"thebetweenlands:syrmorite_hopper": "metalbar",
+		"thebetweenlands:mud_flower_pot": "sandstone",
+		"thebetweenlands:infuser": "hardmetal",
+		"thebetweenlands:mortar": "stoneutility",
+		"thebetweenlands:alembic": "stoneutility",
+		"thebetweenlands:animator": "woodutility"
 	},
 	"forgeMappings": [
 		{
@@ -185,7 +220,10 @@
 			"dictionaryEntries": [
 				"oreSyrmorite",
 				"oreOctine",
-				"oreValonite"
+				"oreValonite",
+				"oreAquaMiddleGem",
+				"oreCrimsonMiddleGem",
+				"oreCrimsonGreenGem"
 			]
 		},
 		{
