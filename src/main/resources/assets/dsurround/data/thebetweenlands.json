@@ -3,7 +3,7 @@
 		{
 			"name": "betweenlands",
 			"seaLevel": 121,
-			"weather": false,
+			"weather": true,
 			"fog": false,
 			"haze": false,
 			"aurora": false
