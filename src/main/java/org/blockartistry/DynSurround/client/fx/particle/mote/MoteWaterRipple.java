@@ -24,6 +24,7 @@
 
 package org.blockartistry.DynSurround.client.fx.particle.mote;
 
+import org.blockartistry.lib.BiomeUtils;
 import org.blockartistry.lib.Color;
 
 import net.minecraft.client.renderer.VertexBuffer;
@@ -50,7 +51,7 @@ public class MoteWaterRipple extends MoteAgeable {
 		this.scaledWidth = this.scale * TEX_SIZE_HALF;
 		this.posY -= 0.2D;
 	
-		final Color waterColor = MoteParticle.getBiomeWaterColor(world, this.position);
+		final Color waterColor = BiomeUtils.getColorForLiquid(world, this.position);
 		this.red = waterColor.red;
 		this.green = waterColor.green;
 		this.blue = waterColor.blue;
