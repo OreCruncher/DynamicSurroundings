@@ -287,6 +287,7 @@ public final class ModOptions {
 	public static final String CATEGORY_FOG = "fog";
 	public static final String CONFIG_ENABLE_FOG_PROCESSING = "Enable Fog Processing";
 	public static final String CONFIG_ENABLE_MORNING_FOG = "Morning Fog";
+	public static final String CONFIG_MORNING_FOG_CHANCE = "Morning Fog Chance";
 	public static final String CONFIG_ENABLE_WEATHER_FOG = "Weather Fog";
 	public static final String CONFIG_ENABLE_BEDROCK_FOG = "Bedrock Fog";
 	public static final String CONFIG_ALLOW_DESERT_FOG = "Desert Fog";
@@ -300,8 +301,8 @@ public final class ModOptions {
 
 		public static String PATH = null;
 		public static final List<String> SORT = Arrays.asList(CONFIG_ENABLE_FOG_PROCESSING, CONFIG_ENABLE_MORNING_FOG,
-				CONFIG_ENABLE_WEATHER_FOG, CONFIG_ENABLE_BEDROCK_FOG, CONFIG_ALLOW_DESERT_FOG, CONFIG_ENABLE_BIOME_FOG,
-				CONFIG_ENABLE_ELEVATION_HAZE);
+				CONFIG_MORNING_FOG_CHANCE, CONFIG_ENABLE_WEATHER_FOG, CONFIG_ENABLE_BEDROCK_FOG,
+				CONFIG_ALLOW_DESERT_FOG, CONFIG_ENABLE_BIOME_FOG, CONFIG_ENABLE_ELEVATION_HAZE);
 
 		@Option(CONFIG_ENABLE_FOG_PROCESSING)
 		@DefaultValue("true")
@@ -344,6 +345,13 @@ public final class ModOptions {
 		@LangKey("dsurround.cfg.fog.BiomeFog")
 		@Comment("Enable biome specific fog density and color")
 		public static boolean enableBiomeFog = true;
+
+		@Option(CONFIG_MORNING_FOG_CHANCE)
+		@DefaultValue("1")
+		@RangeInt(min = 1, max = 10)
+		@LangKey("dsurround.cfg.fog.MorningFogChance")
+		@Comment("Chance morning fog will occurs expressed as 1 in N")
+		public static int morningFogChance = 1;
 	}
 
 	public static final String CATEGORY_GENERAL = "general";
