@@ -24,6 +24,7 @@
 package org.blockartistry.DynSurround.client.footsteps.system.accents;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
@@ -36,6 +37,7 @@ import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.collections.ObjectArray;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -51,11 +53,17 @@ public class RainSplashAccent implements IFootstepAccentProvider {
 
 	@Override
 	@Nonnull
-	public ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity,
+	public ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos blockPos,
 			@Nonnull final ObjectArray<IAcoustic> in) {
 		if (Weather.isRaining() && EnvironState.isPlayer(entity)) {
-			final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-			pos.setPos(entity);
+			final BlockPos.MutableBlockPos pos;
+			if (blockPos != null) {
+				pos = new BlockPos.MutableBlockPos(blockPos);
+				pos.move(EnumFacing.UP);
+			} else {
+				pos = new BlockPos.MutableBlockPos();
+				pos.setPos(entity);
+			}
 			final int precipHeight = ClientRegistry.SEASON.getPrecipitationHeight(entity.getEntityWorld(), pos).getY();
 			if (precipHeight == pos.getY()) {
 				final BiomeInfo biome = ClientRegistry.BIOME.get(WorldUtils.getBiome(entity.getEntityWorld(), pos));
