@@ -25,8 +25,10 @@ package org.blockartistry.DynSurround.client.handlers.fog;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.math.MathStuff;
+import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,13 +42,16 @@ public class MorningFogRangeCalculator extends VanillaFogRangeCalculator {
 	protected static final float END = 0.830F;
 	protected static final float RESERVE = 10F;
 
+	protected int fogDay = -1;
+	protected boolean doFog = false;
+
 	protected final FogResult cache = new FogResult();
 
 	@Override
 	@Nonnull
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 		this.cache.set(event);
-		if (this.cache.getStart() > RESERVE) {
+		if (this.doFog && this.cache.getStart() > RESERVE) {
 			if (EnvironState.getDimensionId() != 1 && EnvironState.getDimensionId() != -1) {
 				final float ca = EnvironState.getWorld().getCelestialAngle((float) event.getRenderPartialTicks());
 				if (ca >= START && ca <= END) {
@@ -60,4 +65,16 @@ public class MorningFogRangeCalculator extends VanillaFogRangeCalculator {
 		}
 		return this.cache;
 	}
+
+	@Override
+	public void tick() {
+		// Determine if fog is going to be done this Minecraft day
+		final int day = EnvironState.getClock().getDay();
+		if (this.fogDay != day) {
+			this.fogDay = day;
+			this.doFog = ModOptions.fog.morningFogChance < 2
+					|| XorShiftRandom.current().nextInt(ModOptions.fog.morningFogChance) == 0;
+		}
+	}
+
 }
