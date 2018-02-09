@@ -103,12 +103,23 @@ public enum Profiles {
 
 	// Gets a list of all the InputStreams for the enabled
 	// Json configurations.
-	public static List<InputStream> getProfileStreams() {
-		final List<InputStream> results = new ArrayList<InputStream>();
+	public static List<ProfileScript> getProfileStreams() {
+		final List<ProfileScript> results = new ArrayList<>();
 		for (final Profiles p : values())
 			if (p.isEnabled())
-				results.add(p.getStream());
+				results.add(new ProfileScript(p.name(), p.getStream()));
 
 		return results;
 	}
+
+	public static class ProfileScript {
+		public final String packName;
+		public final InputStream stream;
+
+		public ProfileScript(@Nonnull final String name, @Nonnull final InputStream strm) {
+			this.packName = name;
+			this.stream = strm;
+		}
+	}
+
 }

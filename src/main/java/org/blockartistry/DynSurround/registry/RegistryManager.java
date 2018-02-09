@@ -36,6 +36,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.data.Profiles;
+import org.blockartistry.DynSurround.data.Profiles.ProfileScript;
 import org.blockartistry.DynSurround.data.xface.DataScripts;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.DynSurround.event.ReloadEvent;
@@ -148,20 +149,22 @@ public final class RegistryManager {
 			}
 		}
 
-		final List<InputStream> resources = getAdditionalScripts();
-		for (final InputStream stream : resources) {
-			try (final InputStreamReader reader = new InputStreamReader(stream)) {
+		final List<ProfileScript> resources = getAdditionalScripts();
+		for (final ProfileScript script : resources) {
+			try (final InputStreamReader reader = new InputStreamReader(script.stream)) {
 				final ModConfigurationFile cfg = DataScripts.loadFromStream(reader);
-				if (cfg != null)
+				if (cfg != null) {
+					DSurround.log().info("Loading from resource pack [%s]", script.packName);
 					this.initOrder.forEach(reg -> {
 						try {
 							reg.configure(cfg);
 						} catch (@Nonnull final Throwable t) {
-							final String txt = String.format("[%s] had issues with a resource pack!",
-									reg.getClass().getSimpleName());
+							final String txt = String.format("[%s] had issues with resource pack [%s]!",
+									reg.getClass().getSimpleName(), script.packName);
 							DSurround.log().error(txt, t);
 						}
 					});
+				}
 			} catch (@Nonnull final Throwable ex) {
 				DSurround.log().error("Unable to read script from resource pack!", ex);
 			}
@@ -191,14 +194,14 @@ public final class RegistryManager {
 
 	// NOTE: Server side has no resource packs so the client specific
 	// code is not executed when initializing a server side registry.
-	protected List<InputStream> getAdditionalScripts() {
+	protected List<ProfileScript> getAdditionalScripts() {
 		if (this.side == Side.SERVER)
 			return ImmutableList.of();
 
 		final List<ResourcePackRepository.Entry> repo = Minecraft.getMinecraft().getResourcePackRepository()
 				.getRepositoryEntries();
 
-		final List<InputStream> streams = new ArrayList<InputStream>();
+		final List<ProfileScript> streams = new ArrayList<>();
 
 		// Look in other resource packs for more configuration data
 		for (final ResourcePackRepository.Entry pack : repo) {
@@ -207,7 +210,7 @@ public final class RegistryManager {
 				try {
 					final InputStream stream = openScript(pack.getResourcePack());
 					if (stream != null)
-						streams.add(stream);
+						streams.add(new ProfileScript(pack.getResourcePackName(), stream));
 				} catch (final Throwable t) {
 					DSurround.log().error("Unable to open script in resource pack", t);
 				}
