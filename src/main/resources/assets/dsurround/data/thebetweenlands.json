@@ -1,0 +1,202 @@
+{
+	"dimensions": [
+		{
+			"name": "betweenlands",
+			"seaLevel": 121,
+			"weather": true,
+			"fog": false,
+			"haze": false,
+			"aurora": false
+		}
+	],
+	"biomes": [
+		{
+			"conditions": "biome.name == 'Swamplands' || biome.name == 'Coarse Islands' || biome.name == 'Deep Waters' || biome.name == 'Marsh 0' || biome.name == 'Marsh 1' || biome.name == 'Patchy Islands' || biome.name == 'Sludge Plains'",
+			"_comment": "The Betweenlands Biome Reset",
+			"soundReset": true,
+			"fog": false,
+			"dust": false
+		}
+	],
+	"blocks": [
+		{
+			"blocks": [
+				"thebetweenlands:swamp_dirt"
+			],
+			"effects": [
+				{
+					"effect": "dust",
+					"chance": 500
+				}
+			]
+		},
+		{
+			"blocks": [
+				"thebetweenlands:stagnant_water",
+				"thebetweenlands:swamp_water"
+			],
+			"effects": [
+				{
+					"effect": "bubble",
+					"chance": 1800
+				},
+				{
+					"effect": "steam",
+					"chance": 0
+				},
+				{
+					"effect": "splash",
+					"chance": 0
+				}
+			]
+		}
+	],
+	"itemConfig": {
+		"axeSound": [
+			"thebetweenlands.common.item.tools.ItemBLAxe",
+			"thebetweenlands.common.item.tools.ItemBLPickaxe",
+			"thebetweenlands.common.item.tools.ItemHagHacker",
+			"thebetweenlands.common.item.tools.ItemSwiftPick"
+		],
+		"bowSound": [
+			"thebetweenlands.common.item.tools.bow.ItemBLBow"
+		],
+		"swordSound": [
+			"thebetweenlands.common.item.tools.ItemBLSword",
+			"thebetweenlands.common.item.tools.ItemShockwaveSword",
+			"thebetweenlands.common.item.tools.ItemLootSword",
+			"thebetweenlands.common.item.tools.ItemSickle"
+		],
+		"toolSound": [
+			"thebetweenlands.common.item.tools.ItemBLShovel"
+		],
+		"shieldSound": [
+			"thebetweenlands.common.item.shields.ItemOctineShield",
+			"thebetweenlands.common.item.shields.ItemValoniteShield",
+			"thebetweenlands.common.item.shields.ItemWeedwoodShield",
+			"thebetweenlands.common.item.shields.ItemSyrmoriteShield",
+			"thebetweenlands.common.item.tools.ItemBLShield",
+			"thebetweenlands.common.item.shields.ItemDentrothystShield"
+		],
+		"lightArmor": [
+			"minecraft:leather_boots",
+			"minecraft:leather_leggings",
+			"minecraft:leather_chestplate",
+			"minecraft:leather_helmet"
+		],
+		"mediumArmor": [
+			"minecraft:chainmail_boots",
+			"minecraft:chainmail_leggings",
+			"minecraft:chainmail_chestplate",
+			"minecraft:chainmail_helmet"
+		],
+		"crystalArmor": [
+			"minecraft:diamond_boots",
+			"minecraft:diamond_leggings",
+			"minecraft:diamond_chestplate",
+			"minecraft:diamond_helmet"
+		],
+		"heavyArmor": [
+			"minecraft:iron_boots",
+			"minecraft:iron_leggings",
+			"minecraft:iron_chestplate",
+			"minecraft:iron_helmet",
+			"minecraft:golden_boots",
+			"minecraft:golden_leggings",
+			"minecraft:golden_chestplate",
+			"minecraft:golden_helmet"
+		]
+	},
+	"footsteps": {
+		"thebetweenlands:stagnant_water": "NOT_EMITTER",
+		"thebetweenlands:swamp_water": "NOT_EMITTER",
+		"thebetweenlands:mud": "mud",
+		"thebetweenlands:dead_grass": "grass",
+		"thebetweenlands:swamp_grass": "grass",
+		"thebetweenlands:swamp_double_tallgrass": "#reed",
+		"thebetweenlands:swamp_reed": "#reed",
+		"thebetweenlands:swamp_reed_underwater": "#bush",
+		"thebetweenlands:swamp_plant": "#plant",
+		"thebetweenlands:phragmites": "#reed",
+		"thebetweenlands:soft_rush": "#bush",
+		"thebetweenlands:copper_iris": "#plant",
+		"thebetweenlands:blue_iris": "#plant",
+		"thebetweenlands:boneset": "#plant",
+		"thebetweenlands:milkweed": "#plant",
+		"thebetweenlands:sludgecreep": "#plant",
+		"thebetweenlands:marsh_hibiscus": "#plant",
+		"thebetweenlands:bladderwort_flower": "#bush",
+		"thebetweenlands:bladderwort_stalk": "#bush",
+		"thebetweenlands:broomsedge": "#reed",
+		"thebetweenlands:sundew": "#reed",
+		"thebetweenlands:cardinal_flower": "#reed",
+		"thebetweenlands:weeping_blue": "#reed",
+		"thebetweenlands:swamp_tallgrass": "#plant",
+		"thebetweenlands:black_hat_mushroom": "#plant",
+		"thebetweenlands:flat_head_mushroom": "#plant",
+		"thebetweenlands:bulb_capped_mushroom": "#plant",
+		"thebetweenlands:bulb_capped_mushroom_stalk": "organic",
+		"thebetweenlands:bulb_capped_mushroom_cap": "organic",
+		"thebetweenlands:venus_fly_trap": "#plant",
+		"thebetweenlands:fallen_leaves": "NOT_EMITTER",
+		"thebetweenlands:fallen_leaves+messy": "MESSY_GROUND",
+		"thebetweenlands:fallen_leaves+foliage": "leaves",
+		"thebetweenlands:poison_ivy": "leaves",
+		"thebetweenlands:poison_ivy+foliage": "leaves",
+		"thebetweenlands:hanger": "leaves",
+		"thebetweenlands:hanger+foliage": "leaves",
+		"thebetweenlands:hollow_log": "wood",
+		"thebetweenlands:weedwood_bush": "NOT_EMITTER",
+		"thebetweenlands:dead_weedwood_bush": "NOT_EMITTER",
+		"thebetweenlands:dead_weedwood_bush+messy": "MESSY_GROUND",
+		"thebetweenlands:dead_weedwood_bush+foliage": "straw",
+		"thebetweenlands:volarpad": "#reed",
+		"thebetweenlands:pitcher_plant": "#reed",
+		"thebetweenlands:tall_cattail": "#reed",
+		"thebetweenlands:cattail": "#bush",
+		"thebetweenlands:shelf_fungus": "organic_dry",
+		"thebetweenlands:mob_spawner": "composite",
+		"thebetweenlands:dentrothyst": "composite",
+		"thebetweenlands:gecko_cage": "squeakywood",
+		"thebetweenlands:marsh_marigold_flower": "#plant",
+		"thebetweenlands:marsh_marigold_stalk": "#plant",
+		"thebetweenlands:golden_club_flower": "#plant",
+		"thebetweenlands:golden_club_stalk": "#plant",
+		"thebetweenlands:swamp_kelp": "NOT_EMITTER",
+		"thebetweenlands:wisp": "NOT_EMITTER",
+		"thebetweenlands:cave_moss": "NOT_EMITTER",
+		"thebetweenlands:cave_moss+messy": "MESSY_GROUND",
+		"thebetweenlands:cave_moss+foliage": "brush_straw_transition",
+		"thebetweenlands:lichen": "NOT_EMITTER",
+		"thebetweenlands:lichen+carpet": "brush",
+		"thebetweenlands:moss": "NOT_EMITTER",
+		"thebetweenlands:moss+carpet": "brush",
+		"thebetweenlands:loot_pot": "sandstone,glass",
+		"thebetweenlands:cave_grass": "#bush",
+		"thebetweenlands:pitstone": "sandstone",
+		"thebetweenlands:thorns": "leaves",
+		"thebetweenlands:thorns+foliage": "leaves",
+		"thebetweenlands:scabyst_ore": "ore",
+		"thebetweenlands:limestone": "sandstone"
+	},
+	"forgeMappings": [
+		{
+			"acousticProfile": "ore",
+			"dictionaryEntries": [
+				"oreSyrmorite",
+				"oreOctine",
+				"oreValonite"
+			]
+		},
+		{
+			"acousticProfile": "sandstone,organic",
+			"dictionaryEntries": [
+				"oreBone"
+			]
+		}
+	],
+	"footprints": [
+		"thebetweenlands:mud",
+		"thebetweenlands:sludge"
+	]
+}
