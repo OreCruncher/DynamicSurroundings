@@ -55,11 +55,21 @@ public final class ItemRegistry extends Registry {
 	private static final int SET_CAPACITY = 64;
 	private static final int MAP_CAPACITY = 256;
 
-	private final Set<Class<?>> swordItems = new IdentityHashSet<>(SET_CAPACITY);
-	private final Set<Class<?>> axeItems = new IdentityHashSet<>(SET_CAPACITY);
-	private final Set<Class<?>> bowItems = new IdentityHashSet<>(SET_CAPACITY);
-	private final Set<Class<?>> toolItems = new IdentityHashSet<>(SET_CAPACITY);
-	private final Set<Class<?>> shieldItems = new IdentityHashSet<>(SET_CAPACITY);
+	private static enum ItemType {
+		SWORD, AXE, BOW, TOOL, SHIELD, ARMOR, FOOD
+	}
+
+	private Set<Class<?>> swordItems = new IdentityHashSet<>(SET_CAPACITY);
+	private Set<Class<?>> axeItems = new IdentityHashSet<>(SET_CAPACITY);
+	private Set<Class<?>> bowItems = new IdentityHashSet<>(SET_CAPACITY);
+	private Set<Class<?>> toolItems = new IdentityHashSet<>(SET_CAPACITY);
+	private Set<Class<?>> shieldItems = new IdentityHashSet<>(SET_CAPACITY);
+	private Set<Class<?>> crystalItems = new IdentityHashSet<>(SET_CAPACITY);
+	private Set<Class<?>> heavyItems = new IdentityHashSet<>(SET_CAPACITY);
+	private Set<Class<?>> mediumItems = new IdentityHashSet<>(SET_CAPACITY);
+	private Set<Class<?>> lightItems = new IdentityHashSet<>(SET_CAPACITY);
+
+	private final Map<Item, ItemType> items = new IdentityHashMap<>(MAP_CAPACITY);
 	private final Map<Item, ArmorClass> armorMap = new IdentityHashMap<>(SET_CAPACITY);
 	private final Map<Item, SoundEffect> swings = new IdentityHashMap<>(MAP_CAPACITY);
 	private final Map<Item, SoundEffect> uses = new IdentityHashMap<>(MAP_CAPACITY);
@@ -70,25 +80,111 @@ public final class ItemRegistry extends Registry {
 	}
 
 	@Override
-	public void configure(@Nonnull final ModConfigurationFile cfg) {
-		this.register(cfg.itemConfig);
-	}
-
-	@Override
 	public void init() {
-		this.swordItems.clear();
-		this.axeItems.clear();
-		this.bowItems.clear();
-		this.toolItems.clear();
-		this.shieldItems.clear();
-		this.armorMap.clear();
+		this.swordItems = new IdentityHashSet<>(SET_CAPACITY);
+		this.axeItems = new IdentityHashSet<>(SET_CAPACITY);
+		this.bowItems = new IdentityHashSet<>(SET_CAPACITY);
+		this.toolItems = new IdentityHashSet<>(SET_CAPACITY);
+		this.shieldItems = new IdentityHashSet<>(SET_CAPACITY);
+		this.crystalItems = new IdentityHashSet<>(SET_CAPACITY);
+		this.heavyItems = new IdentityHashSet<>(SET_CAPACITY);
+		this.mediumItems = new IdentityHashSet<>(SET_CAPACITY);
+		this.lightItems = new IdentityHashSet<>(SET_CAPACITY);
 
+		this.items.clear();
+		this.armorMap.clear();
 		this.swings.clear();
 		this.uses.clear();
 		this.equips.clear();
 	}
 
-	private boolean postProcess(@Nonnull final Set<Class<?>> itemSet, @Nonnull final Item item) {
+	@Override
+	public void configure(@Nonnull final ModConfigurationFile cfg) {
+		final ItemConfig config = cfg.itemConfig;
+		process(config.axeSound, this.axeItems, ItemType.AXE, null);
+		process(config.bowSound, this.bowItems, ItemType.BOW, null);
+		process(config.swordSound, this.swordItems, ItemType.SWORD, null);
+		process(config.toolSound, this.toolItems, ItemType.TOOL, null);
+		process(config.shieldSound, this.shieldItems, ItemType.SHIELD, null);
+		process(config.crystalArmor, this.crystalItems, ItemType.ARMOR, ArmorClass.CRYSTAL);
+		process(config.heavyArmor, this.heavyItems, ItemType.ARMOR, ArmorClass.HEAVY);
+		process(config.mediumArmor, this.mediumItems, ItemType.ARMOR, ArmorClass.MEDIUM);
+		process(config.lightArmor, this.lightItems, ItemType.ARMOR, ArmorClass.LIGHT);
+	}
+
+	@Override
+	public void initComplete() {
+
+		// Iterate through the list of registered Items to see
+		// if we know about them, or can infer based on class
+		// matching.
+		final Iterator<Item> iterator = Item.REGISTRY.iterator();
+		while (iterator.hasNext()) {
+			final Item item = iterator.next();
+			if (!this.items.containsKey(item)) {
+				if (doesBelong(this.swordItems, item)) {
+					this.items.put(item, ItemType.SWORD);
+				} else if (doesBelong(this.axeItems, item)) {
+					this.items.put(item, ItemType.AXE);
+				} else if (doesBelong(this.toolItems, item)) {
+					this.items.put(item, ItemType.TOOL);
+				} else if (doesBelong(this.shieldItems, item)) {
+					this.items.put(item, ItemType.SHIELD);
+				} else if (doesBelong(this.bowItems, item)) {
+					this.items.put(item, ItemType.BOW);
+				} else if (doesBelong(this.crystalItems, item)) {
+					this.items.put(item, ItemType.ARMOR);
+					this.armorMap.put(item, ArmorClass.CRYSTAL);
+				} else if (doesBelong(this.heavyItems, item)) {
+					this.items.put(item, ItemType.ARMOR);
+					this.armorMap.put(item, ArmorClass.HEAVY);
+				} else if (doesBelong(this.mediumItems, item)) {
+					this.items.put(item, ItemType.ARMOR);
+					this.armorMap.put(item, ArmorClass.MEDIUM);
+				} else if (doesBelong(this.lightItems, item)) {
+					this.items.put(item, ItemType.ARMOR);
+					this.armorMap.put(item, ArmorClass.LIGHT);
+				} else if (item instanceof ItemFood) {
+					this.items.put(item, ItemType.FOOD);
+				}
+			}
+
+			// Process sounds for Items that we are concerned with
+			final ItemType t = this.items.get(item);
+			if (t != null) {
+				SoundEffect se = this.getSwingSound(item, t);
+				if (se != null)
+					this.swings.put(item, se);
+
+				se = this.getUseSound(item, t);
+				if (se != null)
+					this.uses.put(item, se);
+
+				se = this.getEquipSound(item, t);
+				if (se != null)
+					this.equips.put(item, se);
+			}
+		}
+
+		// Free up resources that are no longer needed
+		this.swordItems = null;
+		this.axeItems = null;
+		this.bowItems = null;
+		this.toolItems = null;
+		this.shieldItems = null;
+		this.crystalItems = null;
+		this.heavyItems = null;
+		this.mediumItems = null;
+		this.lightItems = null;
+	}
+
+	@Override
+	public void fini() {
+
+	}
+
+	private boolean doesBelong(@Nonnull final Set<Class<?>> itemSet, @Nonnull final Item item) {
+
 		final Class<?> itemClass = item.getClass();
 
 		// If the item is in the collection already, return
@@ -107,85 +203,36 @@ public final class ItemRegistry extends Registry {
 		return false;
 	}
 
-	@Override
-	public void initComplete() {
+	private void process(@Nonnull final List<String> items, @Nonnull final Set<Class<?>> theList,
+			@Nonnull final ItemType it, @Nullable final ArmorClass armor) {
+		for (final String c : items) {
+			final boolean likeMatch = c.startsWith("@") || !c.contains(":");
+			final Item item = c.contains(":") ? MCHelper.getItemByName(c) : null;
 
-		// Post process item list looking for similar items
-		final Iterator<Item> iterator = Item.REGISTRY.iterator();
-		while (iterator.hasNext()) {
-			final Item item = iterator.next();
-			if (postProcess(this.swordItems, item))
-				;
-			else if (postProcess(this.axeItems, item))
-				;
-			else if (postProcess(this.toolItems, item))
-				;
-			else if (postProcess(this.shieldItems, item))
-				;
-			else
-				postProcess(this.bowItems, item);
-
-			SoundEffect se = this.getSwingSound(item);
-			if (se != null)
-				this.swings.put(item, se);
-
-			se = this.getUseSound(item);
-			if (se != null)
-				this.uses.put(item, se);
-
-			se = this.getEquipSound(item);
-			if (se != null)
-				this.equips.put(item, se);
-		}
-
-	}
-
-	@Override
-	public void fini() {
-
-	}
-
-	private void process(@Nonnull final List<String> classes, @Nonnull final Set<Class<?>> theList) {
-		for (final String c : classes) {
-			try {
-				final Class<?> clazz = Class.forName(c, false, ItemRegistry.class.getClassLoader());
-				theList.add(clazz);
-			} catch (final ClassNotFoundException e) {
-				DSurround.log().warn("Cannot locate class '%s' for ItemRegistry", c);
+			// If its not a like match it has to be a concrete item
+			if (!likeMatch) {
+				if (item != null) {
+					this.items.put(item, it);
+					if (armor != null)
+						this.armorMap.put(item, armor);
+				} else {
+					DSurround.log().warn("Cannot locate item [%s] for ItemRegistry", c);
+				}
+			} else {
+				try {
+					// If we don't have an Item assume its a class name. If it is an item
+					// we want that class.
+					final Class<?> clazz;
+					if (item == null)
+						clazz = Class.forName(c, false, ItemRegistry.class.getClassLoader());
+					else
+						clazz = item.getClass();
+					theList.add(clazz);
+				} catch (@Nonnull final ClassNotFoundException e) {
+					DSurround.log().warn("Cannot locate class '%s' for ItemRegistry", c);
+				}
 			}
 		}
-	}
-
-	private void process(@Nonnull final List<String> itemList, @Nonnull final ArmorClass ac) {
-		for (final String i : itemList) {
-			final Item item = MCHelper.getItemByName(i);
-			if (item != null)
-				this.armorMap.put(item, ac);
-		}
-	}
-
-	public void register(@Nonnull final ItemConfig config) {
-		process(config.axeSound, this.axeItems);
-		process(config.bowSound, this.bowItems);
-		process(config.swordSound, this.swordItems);
-		process(config.toolSound, this.toolItems);
-		process(config.shieldSound, this.shieldItems);
-		process(config.crystalArmor, ArmorClass.CRYSTAL);
-		process(config.heavyArmor, ArmorClass.HEAVY);
-		process(config.mediumArmor, ArmorClass.MEDIUM);
-		process(config.lightArmor, ArmorClass.LIGHT);
-	}
-
-	public boolean isBow(@Nonnull final ItemStack stack) {
-		return ItemStackUtil.isValidItemStack(stack) ? this.bowItems.contains(stack.getItem().getClass()) : false;
-	}
-
-	public boolean isShield(@Nonnull final ItemStack stack) {
-		return ItemStackUtil.isValidItemStack(stack) ? this.shieldItems.contains(stack.getItem().getClass()) : false;
-	}
-
-	public ArmorClass getArmorClass(@Nonnull final ItemStack stack) {
-		return ItemStackUtil.isValidItemStack(stack) ? getArmorClass(stack.getItem()) : ArmorClass.NONE;
 	}
 
 	protected ArmorClass getArmorClass(@Nonnull final Item item) {
@@ -193,20 +240,21 @@ public final class ItemRegistry extends Registry {
 		return result != null ? result : ArmorClass.NONE;
 	}
 
-	protected SoundEffect getSwingSound(@Nonnull final Item item) {
-		final Class<?> itemClass = item.getClass();
+	protected SoundEffect getSwingSound(@Nonnull final Item item, @Nonnull final ItemType t) {
 		final SoundEffect sound;
-		if (this.swordItems.contains(itemClass))
+		switch (t) {
+		case SWORD:
 			sound = Sounds.SWORD_SWING;
-		else if (this.axeItems.contains(itemClass))
+			break;
+		case AXE:
 			sound = Sounds.AXE_SWING;
-		else if (this.toolItems.contains(itemClass))
+			break;
+		case BOW:
+		case TOOL:
+		case SHIELD:
 			sound = Sounds.TOOL_SWING;
-		else if (this.bowItems.contains(itemClass))
-			sound = Sounds.TOOL_SWING;
-		else if (this.shieldItems.contains(itemClass))
-			sound = Sounds.TOOL_SWING;
-		else {
+			break;
+		case ARMOR:
 			final ArmorClass armor = this.getArmorClass(item);
 			switch (armor) {
 			case LIGHT:
@@ -224,20 +272,25 @@ public final class ItemRegistry extends Registry {
 			default:
 				sound = null;
 			}
+			break;
+		case FOOD:
+		default:
+			sound = null;
 		}
 
 		return sound;
 	}
 
-	protected SoundEffect getUseSound(@Nonnull final Item item) {
-		final Class<?> itemClass = item.getClass();
+	protected SoundEffect getUseSound(@Nonnull final Item item, @Nonnull final ItemType t) {
 		final SoundEffect sound;
-
-		if (this.bowItems.contains(itemClass))
+		switch (t) {
+		case BOW:
 			sound = Sounds.BOW_PULL;
-		else if (this.shieldItems.contains(itemClass))
+			break;
+		case SHIELD:
 			sound = Sounds.SHIELD_USE;
-		else {
+			break;
+		case ARMOR:
 			final ArmorClass armor = this.getArmorClass(item);
 			switch (armor) {
 			case LIGHT:
@@ -255,27 +308,36 @@ public final class ItemRegistry extends Registry {
 			default:
 				sound = null;
 			}
+			break;
+		default:
+			sound = null;
 		}
 
 		return sound;
 	}
 
-	protected SoundEffect getEquipSound(@Nonnull final Item item) {
-		final Class<?> itemClass = item.getClass();
+	protected SoundEffect getEquipSound(@Nonnull final Item item, @Nonnull final ItemType t) {
 		final SoundEffect sound;
-		if (item instanceof ItemFood)
+		switch (t) {
+		case FOOD:
 			sound = Sounds.FOOD_EQUIP;
-		else if (this.swordItems.contains(itemClass))
+			break;
+		case SWORD:
 			sound = ModOptions.sound.swordEquipAsTool ? Sounds.TOOL_EQUIP : Sounds.SWORD_EQUIP;
-		else if (this.axeItems.contains(itemClass))
+			break;
+		case AXE:
 			sound = Sounds.AXE_EQUIP;
-		else if (this.toolItems.contains(itemClass))
+			break;
+		case TOOL:
 			sound = Sounds.TOOL_EQUIP;
-		else if (this.bowItems.contains(itemClass))
+			break;
+		case BOW:
 			sound = Sounds.BOW_EQUIP;
-		else if (this.shieldItems.contains(itemClass))
+			break;
+		case SHIELD:
 			sound = Sounds.SHIELD_EQUIP;
-		else {
+			break;
+		case ARMOR:
 			final ArmorClass armor = this.getArmorClass(item);
 			switch (armor) {
 			case LIGHT:
@@ -293,9 +355,30 @@ public final class ItemRegistry extends Registry {
 			default:
 				sound = null;
 			}
+			break;
+		default:
+			sound = null;
 		}
 
 		return sound;
+	}
+
+	@Nullable
+	public ItemType getItemType(@Nonnull final ItemStack stack) {
+		return ItemStackUtil.isValidItemStack(stack) ? this.items.get(stack.getItem()) : null;
+	}
+
+	public boolean isBow(@Nonnull final ItemStack stack) {
+		return this.getItemType(stack) == ItemType.BOW;
+	}
+
+	public boolean isShield(@Nonnull final ItemStack stack) {
+		return this.getItemType(stack) == ItemType.SHIELD;
+	}
+
+	@Nonnull
+	public ArmorClass getArmorClass(@Nonnull final ItemStack stack) {
+		return ItemStackUtil.isValidItemStack(stack) ? getArmorClass(stack.getItem()) : ArmorClass.NONE;
 	}
 
 	@Nullable
