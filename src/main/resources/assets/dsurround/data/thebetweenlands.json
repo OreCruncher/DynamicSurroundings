@@ -61,7 +61,8 @@
 			"thebetweenlands:octine_pickaxe",
 			"thebetweenlands:valonite_axe",
 			"thebetweenlands:valonite_pickaxe",
-			"thebetweenlands:critter_cruncher"
+			"thebetweenlands:critter_cruncher",
+			"thebetweenlands:net"
 		],
 		"bowSound": [
 			"thebetweenlands:weedwood_bow"
@@ -126,6 +127,8 @@
 	"footsteps": {
 		"thebetweenlands:stagnant_water": "NOT_EMITTER",
 		"thebetweenlands:swamp_water": "NOT_EMITTER",
+		"thebetweenlands:tar": "NOT_EMITTER",
+		"thebetweenlands:algae": "NOT_EMITTER",
 		"thebetweenlands:mud": "mud",
 		"thebetweenlands:dead_grass": "grass",
 		"thebetweenlands:swamp_grass": "grass",
@@ -206,13 +209,28 @@
 		"thebetweenlands:sulfur_furnace_dual": "stoneutility",
 		"thebetweenlands:rubber_tree_plank_trapdoor": "bluntwood",
 		"thebetweenlands:giant_root_plank_trapdoor": "bluntwood",
+		"thebetweenlands:weedwood_trapdoor": "bluntwood",
 		"thebetweenlands:syrmorite_trapdoor": "hardmetal",
 		"thebetweenlands:syrmorite_hopper": "metalbar",
 		"thebetweenlands:mud_flower_pot": "sandstone",
 		"thebetweenlands:infuser": "hardmetal",
 		"thebetweenlands:mortar": "stoneutility",
 		"thebetweenlands:alembic": "stoneutility",
-		"thebetweenlands:animator": "woodutility"
+		"thebetweenlands:animator": "woodutility",
+		"thebetweenlands:aspectrus_crop": "#fence",
+		"thebetweenlands:fungus_crop": "#bush",
+		"thebetweenlands:middle_fruit_bush": "#bush",
+		"thebetweenlands:walkway": "wood",
+		"thebetweenlands:wood_chip_path": "sand,brush",
+		"thebetweenlands:snow": "snow",
+		"thebetweenlands:snow+carpet": "snow",
+		"thebetweenlands:thatch": "straw",
+		"thebetweenlands:thatch_slab": "straw",
+		"thebetweenlands:thatch_roof": "straw",
+		"thebetweenlands:mud_brick_roof": "sandstone",
+		"thebetweenlands:standing_weedwood_sign": "NOT_EMITTER",
+		"thebetweenlands:wall_weedwood_sign": "NOT_EMITTER",
+		"thebetweenlands:repeller": "woodutility"
 	},
 	"forgeMappings": [
 		{
@@ -231,10 +249,18 @@
 			"dictionaryEntries": [
 				"oreBone"
 			]
+		},
+		{
+			"acousticProfile": "hardmetal",
+			"dictionaryEntries": [
+				"blockOctine",
+				"blockSyrmorite"
+			]
 		}
 	],
 	"footprints": [
 		"thebetweenlands:mud",
-		"thebetweenlands:sludge"
+		"thebetweenlands:sludge",
+		"thebetweenlands:wood_chip_path"
 	]
 }
