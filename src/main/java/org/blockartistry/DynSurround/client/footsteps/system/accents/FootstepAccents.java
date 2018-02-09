@@ -27,12 +27,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IFootstepAccentProvider;
 import org.blockartistry.lib.collections.ObjectArray;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -52,8 +54,8 @@ public class FootstepAccents {
 
 	@Nonnull
 	public static ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity,
-			@Nonnull final ObjectArray<IAcoustic> in) {
-		providers.forEach(provider -> provider.provide(entity, in));
+			@Nullable final BlockPos pos, @Nonnull final ObjectArray<IAcoustic> in) {
+		providers.forEach(provider -> provider.provide(entity, pos, in));
 		return in;
 	}
 }

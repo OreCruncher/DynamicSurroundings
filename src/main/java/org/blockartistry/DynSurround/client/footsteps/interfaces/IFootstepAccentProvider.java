@@ -24,10 +24,12 @@
 package org.blockartistry.DynSurround.client.footsteps.interfaces;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.lib.collections.ObjectArray;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -40,6 +42,6 @@ public interface IFootstepAccentProvider {
 	
 	String getName();
 	
-	ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity, @Nonnull final ObjectArray<IAcoustic> in);
+	ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos pos, @Nonnull final ObjectArray<IAcoustic> in);
 
 }
