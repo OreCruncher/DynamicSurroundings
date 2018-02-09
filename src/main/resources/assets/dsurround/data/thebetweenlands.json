@@ -11,7 +11,7 @@
 	],
 	"biomes": [
 		{
-			"conditions": "biome.name == 'Swamplands' || biome.name == 'Coarse Islands' || biome.name == 'Deep Waters' || biome.name == 'Marsh 0' || biome.name == 'Marsh 1' || biome.name == 'Patchy Islands' || biome.name == 'Sludge Plains'",
+			"conditions": "biome.modid == 'thebetweenlands'",
 			"_comment": "The Betweenlands Biome Reset",
 			"soundReset": true,
 			"fog": false,

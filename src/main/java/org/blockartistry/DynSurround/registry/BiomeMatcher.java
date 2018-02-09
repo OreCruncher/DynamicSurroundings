@@ -127,7 +127,65 @@ public abstract class BiomeMatcher {
 				}
 
 			});
-			
+
+			this.exp.addVariable(new Variant("biome.id") {
+
+				@Override
+				public int compareTo(Variant o) {
+					return this.asString().compareTo(o.asString());
+				}
+
+				@Override
+				public float asNumber() {
+					return 0;
+				}
+
+				@Override
+				public String asString() {
+					return ConditionsImpl.this.current.getKey().toString();
+				}
+
+				@Override
+				public boolean asBoolean() {
+					return false;
+				}
+
+				@Override
+				public Variant add(Variant term) {
+					return new StringValue(this.asString().concat(term.asString()));
+				}
+
+			});
+
+			this.exp.addVariable(new Variant("biome.modid") {
+
+				@Override
+				public int compareTo(Variant o) {
+					return this.asString().compareTo(o.asString());
+				}
+
+				@Override
+				public float asNumber() {
+					return 0;
+				}
+
+				@Override
+				public String asString() {
+					return ConditionsImpl.this.current.getKey().getResourceDomain();
+				}
+
+				@Override
+				public boolean asBoolean() {
+					return false;
+				}
+
+				@Override
+				public Variant add(Variant term) {
+					return new StringValue(this.asString().concat(term.asString()));
+				}
+
+			});
+
 			this.exp.addVariable(new Variant("biome.rainfall") {
 				@Override
 				public int compareTo(Variant o) {
@@ -153,7 +211,7 @@ public abstract class BiomeMatcher {
 				public Variant add(Variant term) {
 					return new NumberValue(this.asNumber() + term.asNumber());
 				}
-				
+
 			});
 
 			// Fake biome
@@ -188,7 +246,7 @@ public abstract class BiomeMatcher {
 
 			// Scan the BiomeDictionary adding the the types
 			final Set<BiomeDictionary.Type> stuff = BiomeUtils.getBiomeTypes();
-			for(final BiomeDictionary.Type t: stuff)
+			for (final BiomeDictionary.Type t : stuff)
 				this.exp.addVariable(new BiomeTypeVariable(t));
 
 			// Add the biomes in the biome list

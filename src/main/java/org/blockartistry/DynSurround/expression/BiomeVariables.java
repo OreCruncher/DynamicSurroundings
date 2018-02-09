@@ -35,6 +35,18 @@ public class BiomeVariables extends DynamicVariantList {
 				this.value = EnvironState.getBiomeName();
 			}
 		});
+		this.add(new Dynamic.DynamicString("biome.id") {
+			@Override
+			public void update() {
+				this.value = EnvironState.getPlayerBiome().getKey().toString();
+			}
+		});
+		this.add(new Dynamic.DynamicString("biome.modid") {
+			@Override
+			public void update() {
+				this.value = EnvironState.getPlayerBiome().getKey().getResourceDomain();
+			}
+		});
 		this.add(new Dynamic.DynamicString("biome.temperature") {
 			@Override
 			public void update() {
