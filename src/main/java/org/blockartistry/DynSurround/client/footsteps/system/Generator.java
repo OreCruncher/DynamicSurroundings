@@ -714,7 +714,8 @@ public class Generator {
 		// Don't apply overlays if the entity is not on the ground
 		if (entity.onGround) {
 			final ObjectArray<IAcoustic> accents = new ObjectArray<>();
-			FootstepAccents.provide(entity, accents);
+			final BlockPos pos = assoc != null ? assoc.getPos() : null;
+			FootstepAccents.provide(entity, pos, accents);
 			if (accents.size() > 0) {
 				final Association a = assoc == null ? new Association() : assoc;
 				accents.forEvery(acoustic -> a.add(acoustic));
