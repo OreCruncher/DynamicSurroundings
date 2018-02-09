@@ -27,19 +27,57 @@ package org.blockartistry.lib;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 public final class BiomeUtils {
-	
+
+	private static final Color NO_COLOR = new Color.ImmutableColor(1F, 1F, 1F);
+
 	private BiomeUtils() {
-		
+
 	}
-	
+
 	public static Set<BiomeDictionary.Type> getBiomeTypes() {
 		final HashSet<BiomeDictionary.Type> result = new HashSet<BiomeDictionary.Type>();
 		for(final BiomeDictionary.Type t: BiomeDictionary.Type.values())
 			result.add(t);
 		return result;
 	}
-	
+
+	@Nonnull
+	public static Color getBiomeWaterColor(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return new Color(BiomeColorHelper.getWaterColorAtPos(world, pos));
+	}
+
+	@Nullable
+	public static Color getColorForLiquid(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return getColorForLiquid(world, WorldUtils.getBlockState(world, pos), pos);
+	}
+
+	@Nonnull
+	public static Color getColorForLiquid(@Nonnull final World world, @Nonnull final IBlockState state,
+			@Nonnull final BlockPos pos) {
+		final Block liquid = state.getBlock();
+		if (liquid == Blocks.WATER) {
+			return getBiomeWaterColor(world, pos);
+		} else {
+			// Lookup in fluid registry
+			final Fluid fluid = FluidRegistry.lookupFluidForBlock(liquid);
+			if (fluid != null) {
+				return new Color(fluid.getColor());
+			}
+		}
+		return NO_COLOR;
+	}
 }
