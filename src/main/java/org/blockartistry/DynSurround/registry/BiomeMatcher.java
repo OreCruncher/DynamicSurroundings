@@ -156,6 +156,64 @@ public abstract class BiomeMatcher {
 				
 			});
 
+			this.exp.addVariable(new Variant("biome.id") {
+
+				@Override
+				public int compareTo(Variant o) {
+					return this.asString().compareTo(o.asString());
+				}
+
+				@Override
+				public float asNumber() {
+					return 0;
+				}
+
+				@Override
+				public String asString() {
+					return ConditionsImpl.this.current.getKey().toString();
+				}
+
+				@Override
+				public boolean asBoolean() {
+					return false;
+				}
+
+				@Override
+				public Variant add(Variant term) {
+					return new StringValue(this.asString().concat(term.asString()));
+				}
+
+			});
+
+			this.exp.addVariable(new Variant("biome.modid") {
+
+				@Override
+				public int compareTo(Variant o) {
+					return this.asString().compareTo(o.asString());
+				}
+
+				@Override
+				public float asNumber() {
+					return 0;
+				}
+
+				@Override
+				public String asString() {
+					return ConditionsImpl.this.current.getKey().getResourceDomain();
+				}
+
+				@Override
+				public boolean asBoolean() {
+					return false;
+				}
+
+				@Override
+				public Variant add(Variant term) {
+					return new StringValue(this.asString().concat(term.asString()));
+				}
+
+			});
+
 			// Fake biome
 			this.exp.addVariable(new Variant("biome.isFake") {
 
