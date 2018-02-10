@@ -21,59 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.blockartistry.DynSurround.registry;
+
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import static net.minecraftforge.common.BiomeDictionary.Type;
+
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/*
- * Special fake biome to prevent strange stack issues if
- * a bogus biome comes into the registry.
- */
 @SideOnly(Side.CLIENT)
-public class WTFFakeBiome extends FakeBiome {
+public interface IBiome {
 
-	public WTFFakeBiome() {
-		super("WTFJustHappened");
-	}
-
-	@Override
-	public boolean canRain() {
+	Biome getBiome();
+	
+	int getId();
+	
+	ResourceLocation getKey();
+	
+	String getName();
+	
+	Set<Type> getTypes();
+	
+	boolean canRain();
+	
+	boolean getEnableSnow();
+	
+	float getFloatTemperature(@Nonnull final BlockPos pos);
+	
+	float getTemperature();
+	
+	TempCategory getTempCategory();
+	
+	boolean isHighHumidity();
+	
+	float getRainfall();
+	
+	default boolean isFake() {
 		return false;
-	}
-
-	@Override
-	public boolean getEnableSnow() {
-		return false;
-	}
-
-	@Override
-	public float getFloatTemperature(@Nonnull final BlockPos pos) {
-		return 0F;
-	}
-
-	@Override
-	public float getTemperature() {
-		return 0F;
-	}
-
-	@Override
-	public TempCategory getTempCategory() {
-		return TempCategory.COLD;
-	}
-
-	@Override
-	public boolean isHighHumidity() {
-		return false;
-	}
-
-	@Override
-	public float getRainfall() {
-		return 0F;
 	}
 }

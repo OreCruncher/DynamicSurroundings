@@ -20,92 +20,65 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.blockartistry.DynSurround.registry;
 
+import java.lang.reflect.Field;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class FakeBiome implements IBiome {
+public class BiomeHandler implements IBiome {
 
-	private static int biomeIdCounter = -200;
+	private static Field biomeName = ReflectionHelper.findField(Biome.class, "biomeName", "field_76791_y");
 
-	protected final int biomeId = --biomeIdCounter;
-	protected final String name;
-	protected final ResourceLocation key;
+	protected final Biome biome;
+	protected final int id;
+	protected final ResourceLocation regName;
+	protected String name;
+	protected final Set<Type> types;
 
-	public FakeBiome(@Nonnull final String name) {
-		this.name = name;
-		this.key = new ResourceLocation(DSurround.RESOURCE_ID, ("fake_" + name).replace(' ', '_'));
-	}
-
-	private static BiomeInfo getTrueBiome() {
-		return EnvironState.getTruePlayerBiome();
-	}
-
-	public int getId() {
-		return this.biomeId;
-	}
-
-	@Override
-	public boolean canRain() {
-		return getTrueBiome().canRain();
-	}
-
-	@Override
-	public boolean getEnableSnow() {
-		return getTrueBiome().getEnableSnow();
-	}
-
-	@Override
-	public float getFloatTemperature(@Nonnull final BlockPos pos) {
-		return getTrueBiome().getFloatTemperature(pos);
-	}
-
-	@Override
-	public float getTemperature() {
-		return getTrueBiome().getTemperature();
-	}
-
-	@Override
-	public TempCategory getTempCategory() {
-		return getTrueBiome().getTempCategory();
-	}
-
-	@Override
-	public boolean isHighHumidity() {
-		return getTrueBiome().isHighHumidity();
-	}
-
-	@Override
-	public float getRainfall() {
-		final BiomeInfo info = getTrueBiome();
-		return info == null ? 0F : info.getRainfall();
+	public BiomeHandler(@Nonnull final Biome biome) {
+		this.biome = biome;
+		this.id = Biome.getIdForBiome(this.biome);
+		this.regName = getKey(this.biome);
+		this.types = Sets.newIdentityHashSet();
+		for (final BiomeDictionary.Type t : BiomeDictionary.getTypesForBiome(this.biome))
+			this.types.add(t);
+		try {
+			this.name = (String) biomeName.get(this.biome);
+		} catch (@Nonnull final Throwable t) {
+			;
+		}
 	}
 
 	@Override
 	public Biome getBiome() {
-		return null;
+		return this.biome;
+	}
+
+	@Override
+	public int getId() {
+		return this.id;
 	}
 
 	@Override
 	public ResourceLocation getKey() {
-		return this.key;
+		return this.biome.getRegistryName();
 	}
 
 	@Override
@@ -115,6 +88,51 @@ public class FakeBiome implements IBiome {
 
 	@Override
 	public Set<Type> getTypes() {
-		return ImmutableSet.of();
+		return this.types;
 	}
+
+	@Override
+	public boolean canRain() {
+		return this.biome.canRain();
+	}
+
+	@Override
+	public boolean getEnableSnow() {
+		return this.biome.getEnableSnow();
+	}
+
+	@Override
+	public float getFloatTemperature(@Nonnull final BlockPos pos) {
+		return this.biome.getFloatTemperature(pos);
+	}
+
+	@Override
+	public float getTemperature() {
+		return this.biome.getTemperature();
+	}
+
+	@Override
+	public TempCategory getTempCategory() {
+		return this.biome.getTempCategory();
+	}
+
+	@Override
+	public boolean isHighHumidity() {
+		return this.biome.isHighHumidity();
+	}
+
+	@Override
+	public float getRainfall() {
+		return this.biome.getRainfall();
+	}
+
+	public static ResourceLocation getKey(@Nonnull final Biome biome) {
+		ResourceLocation res = biome.getRegistryName();
+		if (res == null) {
+			final String name = biome.getClass().getName() + "_" + biome.getBiomeName().replace(' ', '_').toLowerCase();
+			res = new ResourceLocation(DSurround.RESOURCE_ID, name);
+		}
+		return res;
+	}
+
 }
