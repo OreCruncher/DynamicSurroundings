@@ -31,7 +31,6 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
-import org.blockartistry.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.DynSurround.registry.DimensionInfo;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
@@ -67,30 +66,34 @@ public final class PlayerUtils {
 	@Nonnull
 	public static BiomeInfo getPlayerBiome(@Nonnull final EntityPlayer player, final boolean getTrue) {
 		Biome biome = player.getEntityWorld().getBiome(new BlockPos(player.posX, 0, player.posZ));
+		BiomeInfo info = null;
 
 		if (!getTrue) {
 			if (player.isInsideOfMaterial(Material.WATER)) {
 				if (REGEX_RIVER.matcher(biome.getBiomeName()).matches())
-					biome = BiomeRegistry.UNDERRIVER;
+					info = ClientRegistry.BIOME.UNDERRIVER_INFO;
 				else if (REGEX_OCEAN.matcher(biome.getBiomeName()).matches())
-					biome = BiomeRegistry.UNDEROCEAN;
+					info = ClientRegistry.BIOME.UNDEROCEAN_INFO;
 				else if (REGEX_DEEP_OCEAN.matcher(biome.getBiomeName()).matches())
-					biome = BiomeRegistry.UNDERDEEPOCEAN;
+					info = ClientRegistry.BIOME.UNDERDEEPOCEAN_INFO;
 				else
-					biome = BiomeRegistry.UNDERWATER;
+					info = ClientRegistry.BIOME.UNDERWATER_INFO;
 			} else {
 				final DimensionInfo dimInfo = ClientRegistry.DIMENSION.getData(player.getEntityWorld());
 				final int theY = MathStuff.floor(player.posY);
 				if ((theY + INSIDE_Y_ADJUST) <= dimInfo.getSeaLevel())
-					biome = BiomeRegistry.UNDERGROUND;
+					info = ClientRegistry.BIOME.UNDERGROUND_INFO;
 				else if (theY >= dimInfo.getSpaceHeight())
-					biome = BiomeRegistry.OUTERSPACE;
+					info = ClientRegistry.BIOME.OUTERSPACE_INFO;
 				else if (theY >= dimInfo.getCloudHeight())
-					biome = BiomeRegistry.CLOUDS;
+					info = ClientRegistry.BIOME.CLOUDS_INFO;
 			}
 		}
 
-		return ClientRegistry.BIOME.get(biome);
+		if (info == null)
+			info = ClientRegistry.BIOME.get(biome);
+
+		return info;
 	}
 
 	@Nullable
