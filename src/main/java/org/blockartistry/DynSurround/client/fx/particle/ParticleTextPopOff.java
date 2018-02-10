@@ -27,7 +27,6 @@ package org.blockartistry.DynSurround.client.fx.particle;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.lib.Color;
-import org.blockartistry.lib.font.FastFontRenderer;
 import org.blockartistry.lib.gfx.OpenGlState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -46,8 +45,9 @@ public class ParticleTextPopOff extends ParticleBase {
 	protected static final float SIZE = 3.0F;
 	protected static final int LIFESPAN = 12;
 	protected static final double BOUNCE_STRENGTH = 1.5F;
+	protected static final int SHADOW_COLOR = Color.BLACK.rgbWithAlpha(1F);
 
-	protected Color renderColor = Color.WHITE;
+	protected int renderColor = Color.WHITE.rgbWithAlpha(1F);
 	protected boolean grow = true;
 
 	protected String text;
@@ -63,7 +63,7 @@ public class ParticleTextPopOff extends ParticleBase {
 			final double z, final double dX, final double dY, final double dZ) {
 		super(world, x, y, z, dX, dY, dZ);
 
-		this.renderColor = color;
+		this.renderColor = color.rgbWithAlpha(1F);
 		this.motionX = dX;
 		this.motionY = dY;
 		this.motionZ = dZ;
@@ -89,7 +89,7 @@ public class ParticleTextPopOff extends ParticleBase {
 	}
 
 	public ParticleTextPopOff setColor(@Nonnull final Color color) {
-		this.renderColor = color;
+		this.renderColor = color.rgbWithAlpha(1F);
 		return this;
 	}
 
@@ -105,16 +105,15 @@ public class ParticleTextPopOff extends ParticleBase {
 		final float locZ = ((float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpZ()));
 
 		final OpenGlState glState = OpenGlState.push();
-		FastFontRenderer.INSTANCE.prepare();
 		GlStateManager.translate(locX, locY, locZ);
 		GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);
 		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
 		GlStateManager.scale(this.particleScale * 0.008D, this.particleScale * 0.008D, this.particleScale * 0.008D);
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 0.003662109F);
-		FastFontRenderer.INSTANCE.drawString(this.text, this.drawX, this.drawY, Color.BLACK, 1F);
+		this.font.drawString(this.text, this.drawX, this.drawY, SHADOW_COLOR, false);
 		GlStateManager.translate(-0.3F, -0.3F, -0.001F);
-		FastFontRenderer.INSTANCE.drawString(this.text, this.drawX, this.drawY, this.renderColor, 1F);
+		this.font.drawString(this.text, this.drawX, this.drawY, this.renderColor, false);
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, OpenGlHelper.lastBrightnessX,
 				OpenGlHelper.lastBrightnessY);
 		OpenGlState.pop(glState);
