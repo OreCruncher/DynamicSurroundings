@@ -51,7 +51,6 @@ public final class BiomeUtils {
 
 	}
 
-	@Nonnull
 	public static Set<Type> getBiomeTypes() {
 		return new IdentityHashSet<Type>(BiomeDictionary.Type.values());
 	}
@@ -84,10 +83,10 @@ public final class BiomeUtils {
 
 	@Nonnull
 	public static Set<Type> getBiomeTypes(@Nonnull final Biome biome) {
-		final Set<Type> result = new IdentityHashSet<>();
-		final Type[] types = BiomeDictionary.getTypesForBiome(biome);
-		for (int i = 0; i < types.length; i++)
-			result.add(types[i]);
-		return result;
+		return new IdentityHashSet<>(BiomeDictionary.getTypesForBiome(biome));
+	}
+
+	public static boolean areBiomesSimilar(@Nonnull final Biome b1, @Nonnull final Biome b2) {
+		return BiomeDictionary.areBiomesEquivalent(b1, b2);
 	}
 }

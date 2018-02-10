@@ -29,7 +29,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
@@ -49,7 +48,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
@@ -210,16 +208,15 @@ public final class BiomeRegistry extends Registry {
 		BiomeInfo info = this.get(biome);
 
 		if (!getTrue) {
-			final Set<Type> bt = info.getBiomeTypes();
 			if (player.isInsideOfMaterial(Material.WATER)) {
-				if (bt.contains(Type.RIVER))
+				if (info.isRiver())
 					info = this.UNDERRIVER_INFO;
-				else if (!bt.contains(Type.OCEAN))
-					info = this.UNDERWATER_INFO;
-				else if (info.getBiomeName().matches("(?i).*deep.*ocean.*|.*abyss.*"))
+				else if (info.isDeepOcean())
 					info = this.UNDERDEEPOCEAN_INFO;
-				else
+				else if (info.isOcean())
 					info = this.UNDEROCEAN_INFO;
+				else
+					info = this.UNDERWATER_INFO;
 			} else {
 				final DimensionInfo dimInfo = EnvironState.getDimensionInfo();
 				final int theY = MathStuff.floor(player.posY);
