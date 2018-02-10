@@ -122,7 +122,7 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	}
 
 	public AreaSurveyHandler() {
-		super("AreaSurveyEffectHandler");
+		super("Area Survey");
 	}
 
 	/*

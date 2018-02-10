@@ -28,7 +28,6 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.ThunderEvent;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
@@ -42,19 +41,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class WeatherHandler extends EffectHandlerBase {
- 
+
 	private int timer = 0;
 
 	public WeatherHandler() {
-		super("WeatherHandler");
+		super("Weather");
 	}
-	
+
+	@Override
+	public boolean doTick(final int tick) {
+		return this.timer > 0;
+	}
+
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-		if (this.timer > 0) {
-			this.timer--;
-			EnvironState.getWorld().setLastLightningBolt(2);
-		}
+		this.timer--;
+		player.getEntityWorld().setLastLightningBolt(2);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
@@ -62,14 +64,15 @@ public class WeatherHandler extends EffectHandlerBase {
 		if (!ModOptions.rain.allowBackgroundThunder)
 			return;
 
-		final BasicSound<?> thunder = Sounds.THUNDER.createSound(event.location).setVolume(ModOptions.sound.thunderVolume);
+		final BasicSound<?> thunder = Sounds.THUNDER.createSound(event.location)
+				.setVolume(ModOptions.sound.thunderVolume);
 		SoundEffectHandler.INSTANCE.playSound(thunder);
 
 		if (event.doFlash)
 			this.timer = 2;
 
 	}
-	
+
 	@SubscribeEvent
 	public void diagnostic(@Nonnull final DiagnosticEvent.Gather event) {
 		event.output.add(Weather.diagnostic());

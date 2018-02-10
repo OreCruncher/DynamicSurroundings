@@ -103,7 +103,7 @@ public class FxHandler extends EffectHandlerBase {
 	private long nanos;
 
 	public FxHandler() {
-		super("FxHandler");
+		super("Special Effects");
 	}
 
 	@Override

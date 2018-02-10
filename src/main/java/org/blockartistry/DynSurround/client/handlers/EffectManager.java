@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.client.handlers;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.compat.EntityLivingBaseUtil;
 import org.blockartistry.lib.math.TimerEMA;
@@ -64,22 +65,22 @@ public class EffectManager {
 		this.effectHandlers.add(new WeatherHandler());
 
 		this.effectHandlers.add(new FxHandler());
-		
+
 		// These two go last in order
 		this.effectHandlers.add(SoundEffectHandler.INSTANCE);
 		this.effectHandlers.add(new DiagnosticHandler());
 
 		for (final EffectHandlerBase h : this.effectHandlers)
 			h.connect0();
-		
-		this.computeTime = new TimerEMA("EffectManager Process");
+
+		this.computeTime = new TimerEMA("Processing");
 		DiagnosticHandler.INSTANCE.addTimer(this.computeTime);
 	}
 
 	private void fini() {
 		for (final EffectHandlerBase h : this.effectHandlers)
 			h.disconnect0();
-		
+
 		this.effectHandlers.clear();
 		this.computeTime = null;
 	}
@@ -97,36 +98,35 @@ public class EffectManager {
 			INSTANCE = null;
 		}
 	}
-	
-	public double getProcessTimeNanos() {
-		return this.computeTime.get();
-	}
 
 	@SubscribeEvent
 	public void playerTick(final TickEvent.PlayerTickEvent event) {
-		
+
 		if (event.side == Side.SERVER || event.phase == Phase.END || Minecraft.getMinecraft().isGamePaused())
 			return;
 
 		if (event.player == null || event.player.getEntityWorld() == null)
 			return;
-		
-		if(event.player != Minecraft.getMinecraft().player)
+
+		if (event.player != Minecraft.getMinecraft().player)
 			return;
 
 		final long start = System.nanoTime();
-		
-		// TODO: Find a better home....
+
 		if (ModOptions.player.suppressPotionParticles)
 			event.player.getDataManager().set(EntityLivingBaseUtil.getHideParticles(), true);
 
+		final int tick = EnvironState.getTickCounter();
+
 		for (int i = 0; i < this.effectHandlers.size(); i++) {
 			final EffectHandlerBase handler = this.effectHandlers.get(i);
-			final long mark = System.nanoTime();
-			handler.process(event.player);
-			handler.updateTimer(System.nanoTime() - mark);
+			if (handler.doTick(tick)) {
+				final long mark = System.nanoTime();
+				handler.process(event.player);
+				handler.updateTimer(System.nanoTime() - mark);
+			}
 		}
-		
+
 		this.computeTime.update(System.nanoTime() - start);
 	}
 

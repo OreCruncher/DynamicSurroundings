@@ -51,7 +51,7 @@ public class SoundCullHandler extends EffectHandlerBase {
 	private final TObjectIntHashMap<String> soundCull = new TObjectIntHashMap<String>();
 
 	public SoundCullHandler() {
-		super("SoundCullHandler");
+		super("Sound Culling");
 	}
 
 	@Override

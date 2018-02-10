@@ -106,7 +106,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	private final ObjectArray<BasicSound<?>> sendToServer = new ObjectArray<>();
 
 	private SoundEffectHandler() {
-		super("SoundEffectHandler");
+		super("Sound Effects");
 
 		final SoundEvent bowLoose = Sounds.getSound(new ResourceLocation(DSurround.MOD_ID, "bow.loose"));
 		this.replacements.put("minecraft:entity.arrow.shoot", bowLoose);

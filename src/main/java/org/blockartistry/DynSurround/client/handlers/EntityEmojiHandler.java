@@ -49,7 +49,12 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 	private final TIntObjectHashMap<IParticleMote> emojiParticles = new TIntObjectHashMap<IParticleMote>();
 
 	public EntityEmojiHandler() {
-		super("EntityEmojiHandler");
+		super("Entity Emojis");
+	}
+	
+	@Override
+	public boolean doTick(final int tick) {
+		return this.emojiParticles.size() > 0;
 	}
 
 	@Override
