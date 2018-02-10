@@ -33,6 +33,7 @@ import org.blockartistry.DynSurround.client.gui.VolumeControlGui;
 import org.blockartistry.DynSurround.client.hud.LightLevelHUD;
 import org.blockartistry.DynSurround.client.hud.LightLevelHUD.Mode;
 import org.blockartistry.lib.Localization;
+import org.blockartistry.lib.compat.EntityRendererUtil;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
@@ -107,8 +108,9 @@ public class KeyHandler {
 
 		if (shouldHandle(SELECTIONBOX_KEY)) {
 			final EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
-			renderer.drawBlockOutline = !renderer.drawBlockOutline;
-			sendPlayerMessage("dsurround.cfg.keybind.msg.Fencing", getOnOff(renderer.drawBlockOutline));
+			final boolean result = !EntityRendererUtil.getDrawBlockOutline(renderer);
+			EntityRendererUtil.setDrawBlockOutline(renderer, result);
+			sendPlayerMessage("dsurround.cfg.keybind.msg.Fencing", getOnOff(result));
 		}
 
 		if (shouldHandle(VOLUME_KEY) && Minecraft.getMinecraft().currentScreen == null) {
@@ -128,12 +130,14 @@ public class KeyHandler {
 					ModOptions.lightlevel.llDisplayMode++;
 					if (ModOptions.lightlevel.llDisplayMode >= Mode.values().length)
 						ModOptions.lightlevel.llDisplayMode = 0;
-					sendPlayerMessage("dsurround.cfg.keybind.msg.LLDisplayMode", Mode.getMode(ModOptions.lightlevel.llDisplayMode).name());
+					sendPlayerMessage("dsurround.cfg.keybind.msg.LLDisplayMode",
+							Mode.getMode(ModOptions.lightlevel.llDisplayMode).name());
 				}
 			} else if (GuiScreen.isShiftKeyDown()) {
 				if (LightLevelHUD.showHUD) {
 					ModOptions.lightlevel.llHideSafe = !ModOptions.lightlevel.llHideSafe;
-					sendPlayerMessage("dsurround.cfg.keybind.msg.LLSafeBlocks", getOnOff(ModOptions.lightlevel.llHideSafe));
+					sendPlayerMessage("dsurround.cfg.keybind.msg.LLSafeBlocks",
+							getOnOff(ModOptions.lightlevel.llHideSafe));
 				}
 			} else {
 				LightLevelHUD.showHUD = !LightLevelHUD.showHUD;

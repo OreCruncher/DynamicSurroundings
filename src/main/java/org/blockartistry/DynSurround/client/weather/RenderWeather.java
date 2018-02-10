@@ -27,8 +27,8 @@ package org.blockartistry.DynSurround.client.weather;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -44,6 +44,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public final class RenderWeather extends IRenderHandler {
 
 	private final StormRenderer renderer;
+	
+	public static int rendererUpdateCount = 0;
 
 	protected RenderWeather() {
 		this.renderer = new StormRenderer();
@@ -54,6 +56,7 @@ public final class RenderWeather extends IRenderHandler {
 	 * hook like that for rain/snow rendering?
 	 */
 	public static void addRainParticles(@Nonnull final EntityRenderer theThis) {
+		rendererUpdateCount++;
 		if(EnvironState.getWorld() != null)
 			StormSplashRenderer.renderStormSplashes(EnvironState.getDimensionId(), theThis);
 	}
@@ -69,7 +72,7 @@ public final class RenderWeather extends IRenderHandler {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onWorldLoad(@Nonnull final WorldEvent.Load e) {
 
-		if (DSurround.proxy().effectiveSide() == Side.SERVER)
+		if (DSurround.proxy().effectiveSide() == Side.SERVER || !ModOptions.asm.enableWeatherASM)
 			return;
 
 		// Only want to hook if the provider doesn't have special
