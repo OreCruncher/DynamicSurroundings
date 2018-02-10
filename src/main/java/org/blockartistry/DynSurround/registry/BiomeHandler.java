@@ -45,14 +45,12 @@ public class BiomeHandler implements IBiome {
 
 	protected final Biome biome;
 	protected final int id;
-	protected final ResourceLocation regName;
 	protected String name;
 	protected final Set<Type> types;
 	
 	public BiomeHandler(@Nonnull final Biome biome) {
 		this.biome = biome;
 		this.id = Biome.getIdForBiome(this.biome);
-		this.regName = getKey(this.biome);
 		this.types = BiomeUtils.getBiomeTypes(this.biome);
 		
 		try {
@@ -122,6 +120,7 @@ public class BiomeHandler implements IBiome {
 		return this.biome.getRainfall();
 	}
 
+	@Nonnull
 	public static ResourceLocation getKey(@Nonnull final Biome biome) {
 		ResourceLocation res = biome.getRegistryName();
 		if (res == null) {
