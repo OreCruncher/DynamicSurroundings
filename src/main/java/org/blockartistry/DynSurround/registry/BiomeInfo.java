@@ -38,6 +38,7 @@ import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.DynSurround.data.xface.SoundType;
+import org.blockartistry.lib.BiomeUtils;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.WeightTable;
@@ -95,6 +96,10 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 	protected final List<String> comments = Lists.newArrayList();
 
+	protected final boolean isRiver;
+	protected final boolean isOcean;
+	protected final boolean isDeepOcean;
+
 	public BiomeInfo(@Nonnull final IBiome biome) {
 		this.biome = biome;
 
@@ -116,6 +121,22 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 			}
 		}
+
+		this.isRiver = this.biome.getTypes().contains(Type.RIVER);
+		this.isOcean = this.biome.getTypes().contains(Type.OCEAN);
+		this.isDeepOcean = this.isOcean && this.getBiomeName().matches("(?i).*deep.*ocean.*|.*abyss.*");
+	}
+
+	public boolean isRiver() {
+		return this.isRiver;
+	}
+
+	public boolean isOcean() {
+		return this.isOcean;
+	}
+
+	public boolean isDeepOcean() {
+		return this.isDeepOcean;
 	}
 
 	public ResourceLocation getKey() {
@@ -125,7 +146,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	public int getBiomeId() {
 		return this.biome.getId();
 	}
-	
+
 	public Set<Type> getBiomeTypes() {
 		return this.biome.getTypes();
 	}
@@ -142,7 +163,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	public String getBiomeName() {
 		return this.biome.getName();
 	}
-	
+
 	public boolean hasWeatherEffect() {
 		return this.getHasPrecipitation() || this.getHasDust();
 	}
@@ -278,7 +299,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	}
 
 	public boolean areBiomesSameClass(@Nonnull final Biome biome) {
-		return BiomeDictionary.areSimilar(this.biome.getBiome(), biome);
+		return BiomeUtils.areBiomesSimilar(this.biome.getBiome(), biome);
 	}
 
 	// Internal to the package

@@ -101,8 +101,10 @@ public final class BiomeUtils {
 
 	@Nonnull
 	public static Set<Type> getBiomeTypes(@Nonnull final Biome biome) {
-		final Set<Type> result = new IdentityHashSet<>();
-		BiomeDictionary.getTypes(biome).forEach(t -> result.add(t));
-		return result;
+		return new IdentityHashSet<>(BiomeDictionary.getTypes(biome));
+	}
+	
+	public static boolean areBiomesSimilar(@Nonnull final Biome b1, @Nonnull final Biome b2) {
+		return BiomeDictionary.areSimilar(b1, b2);
 	}
 }
