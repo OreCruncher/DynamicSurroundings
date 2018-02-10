@@ -81,9 +81,6 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		return false;
 	};
 
-	/*
-	 * Used to track sound in the PENDING list.
-	 */
 	private final static class PendingSound {
 
 		private final int timeMark;
@@ -109,7 +106,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	private final ObjectArray<BasicSound<?>> sendToServer = new ObjectArray<>();
 
 	private SoundEffectHandler() {
-		super("SoundEffectHandler");
+		super("Sound Effects");
 
 		final SoundEvent bowLoose = Sounds.getSound(new ResourceLocation(DSurround.MOD_ID, "bow.loose"));
 		this.replacements.put("minecraft:entity.arrow.shoot", bowLoose);
@@ -243,7 +240,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	@SubscribeEvent
 	public void onDistributedSound(@Nonnull final PlayDistributedSoundEvent event) {
 		try {
-			// Need to only permit crafting and jump. The other sounds are dynamically
+			// Need to only permit crafting. The other sounds are dynamically
 			// produced by the client.
 			final String soundResource = event.nbt.getString(BasicSound.NBT.SOUND_EVENT);
 			if (!StringUtils.isEmpty(soundResource)) {

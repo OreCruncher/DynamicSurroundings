@@ -59,7 +59,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	private long nanos;
 
 	public AuroraEffectHandler() {
-		super("AuroraEffectHandler");
+		super("Aurora Effect");
 
 		if (ModOptions.aurora.auroraUseShader && Shaders.areShadersSupported())
 			this.auroraEngine = new AuroraEngineShader();
@@ -109,7 +109,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 			} else {
 				this.current.update();
 				final boolean isDying = this.current.isDying();
-				final boolean canStay = canAuroraStay(player.worldObj);
+				final boolean canStay = canAuroraStay(player.getEntityWorld());
 				if (isDying && canStay) {
 					DSurround.log().debug("Unfading aurora...");
 					this.current.setFading(false);
@@ -121,7 +121,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		}
 
 		// If there isn't a current aurora see if it needs to spawn
-		if (spawnAurora(player.worldObj)) {
+		if (spawnAurora(player.getEntityWorld())) {
 			this.current = this.auroraEngine.produce(AuroraUtils.getSeed());
 			DSurround.log().debug("New aurora [%s]", this.current.toString());
 		}
