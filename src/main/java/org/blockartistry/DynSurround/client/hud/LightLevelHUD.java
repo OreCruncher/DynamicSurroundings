@@ -33,7 +33,6 @@ import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.collections.ObjectArray;
-import org.blockartistry.lib.font.FastFontRenderer;
 import org.blockartistry.lib.gfx.OpenGlState;
 import org.blockartistry.lib.gfx.OpenGlUtil;
 import org.blockartistry.lib.math.MathStuff;
@@ -96,7 +95,7 @@ public final class LightLevelHUD extends GuiOverlay {
 		//
 		DARK(Color.MC_DARKGREEN, Color.MC_GOLD, Color.MC_DARKRED, Color.MC_DARKBLUE);
 
-		public static final float ALPHA = 0.75F;
+		public static final float ALPHA = 1F; // 0.75F;
 
 		public final Color safe;
 		public final Color caution;
@@ -282,11 +281,6 @@ public final class LightLevelHUD extends GuiOverlay {
 		if (!showHUD || tickRef == 0 || tickRef % 3 != 0)
 			return;
 
-		// if (sheet == null) {
-		// sheet = new LightLevelTextureSheet();
-		// sheet.updateTexture();
-		// }
-
 		final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
 		updateLightInfo(manager, manager.viewerPosX, manager.viewerPosY, manager.viewerPosZ);
 	}
@@ -316,14 +310,12 @@ public final class LightLevelHUD extends GuiOverlay {
 			drawStringRender(player, manager);
 		else
 			textureRender(player, manager);
-		
+
 		OpenGlState.pop(glState);
 	}
 
 	private static void drawStringRender(final EntityPlayer player, final RenderManager manager) {
 
-		FastFontRenderer.INSTANCE.prepare();
-		
 		final boolean thirdPerson = manager.options.thirdPersonView == 2;
 		EnumFacing playerFacing = player.getHorizontalFacing();
 		if (thirdPerson)
@@ -341,14 +333,17 @@ public final class LightLevelHUD extends GuiOverlay {
 			final String text = String.valueOf(coord.lightLevel);
 			final int margin = -(font.getStringWidth(text) + 1) / 2;
 			final double scale = 0.08D;
-			
+
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x + 0.5D, y, z + 0.5D);
 			GlStateManager.rotate(rotationAngle, 0F, 1F, 0F);
 			GlStateManager.translate(-0.05D, 0.0005D, 0.3D);
 			GlStateManager.rotate(90F, 1F, 0F, 0F);
 			GlStateManager.scale(-scale, -scale, scale);
-			FastFontRenderer.INSTANCE.drawString(text, margin, 0, coord.color, ColorSet.ALPHA);
+			GlStateManager.translate(0.3F, 0.3F, 0F);
+			font.drawString(text, margin, 0, Color.BLACK.rgbWithAlpha(0.99F), false);
+			GlStateManager.translate(-0.3F, -0.3F, -0.001F);
+			font.drawString(text, margin, 0, coord.color.rgbWithAlpha(0.99F), false);
 			GlStateManager.popMatrix();
 		}
 	}
@@ -402,7 +397,7 @@ public final class LightLevelHUD extends GuiOverlay {
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void resourceReloadEvent(@Nonnull final ReloadEvent.Resources event) {
+	public static void resourceReloadEvent(final ReloadEvent.Resources event) {
 		if (useOldRenderMethod()) {
 			DSurround.log().info("Either OptiFine is installed or Framebuffers are disabled");
 			DSurround.log().info("Using drawString method for light level HUD render");

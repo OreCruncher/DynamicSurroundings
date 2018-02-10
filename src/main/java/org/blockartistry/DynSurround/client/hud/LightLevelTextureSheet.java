@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.client.hud;
 
 import org.blockartistry.lib.gfx.GeneratedTexture;
+import org.blockartistry.lib.gfx.OpenGlUtil;
 import org.blockartistry.lib.Color;
 
 import net.minecraft.client.Minecraft;
@@ -76,8 +77,10 @@ public final class LightLevelTextureSheet extends GeneratedTexture {
 	public void render() {
 
 		final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
-		final int color = Color.WHITE.rgbWithAlpha(1.0F);
+		final int color = Color.WHITE.rgbWithAlpha(0.99F);
+		final int shadow = Color.MC_DARKGRAY.rgbWithAlpha(0.99F);
 
+		OpenGlUtil.setStandardBlend();
 		for (int i = 0; i < 15; i++) {
 
 			final String str = Integer.toString(i);
@@ -94,6 +97,9 @@ public final class LightLevelTextureSheet extends GeneratedTexture {
 			final int height = -(font.FONT_HEIGHT) / 2;
 
 			GlStateManager.scale(SCALE, SCALE, 0);
+			GlStateManager.translate(0.3F, 0.3F, 0F);
+			font.drawString(str, margin, height, shadow);
+			GlStateManager.translate(-0.3F, -0.3F, -0.001F);
 			font.drawString(str, margin, height, color);
 
 			GlStateManager.popMatrix();
