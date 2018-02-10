@@ -28,14 +28,11 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
-
-import com.google.common.collect.Sets;
-
+import org.blockartistry.lib.BiomeUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -43,7 +40,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class BiomeHandler implements IBiome {
-
+	
 	private static Field biomeName = ReflectionHelper.findField(Biome.class, "biomeName", "field_76791_y");
 
 	protected final Biome biome;
@@ -51,18 +48,17 @@ public class BiomeHandler implements IBiome {
 	protected final ResourceLocation regName;
 	protected String name;
 	protected final Set<Type> types;
-
+	
 	public BiomeHandler(@Nonnull final Biome biome) {
 		this.biome = biome;
 		this.id = Biome.getIdForBiome(this.biome);
 		this.regName = getKey(this.biome);
-		this.types = Sets.newIdentityHashSet();
-		for (final BiomeDictionary.Type t : BiomeDictionary.getTypesForBiome(this.biome))
-			this.types.add(t);
+		this.types = BiomeUtils.getBiomeTypes(this.biome);
+		
 		try {
-			this.name = (String) biomeName.get(this.biome);
-		} catch (@Nonnull final Throwable t) {
-			;
+			this.name = (String)biomeName.get(this.biome);
+		} catch(@Nonnull final Throwable t) {
+			this.name = "UNKNOWN";
 		}
 	}
 

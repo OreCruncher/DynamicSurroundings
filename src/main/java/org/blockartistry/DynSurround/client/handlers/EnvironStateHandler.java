@@ -46,7 +46,6 @@ import org.blockartistry.DynSurround.registry.SeasonRegistry;
 import org.blockartistry.DynSurround.registry.SeasonType;
 import org.blockartistry.DynSurround.registry.TemperatureRating;
 import org.blockartistry.lib.MinecraftClock;
-import org.blockartistry.lib.PlayerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
@@ -143,7 +142,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.world = player.getEntityWorld();
 			EnvironState.dimInfo = dimensions.getData(player.getEntityWorld());
 			EnvironState.clock.update(EnvironState.world);
-			EnvironState.playerBiome = PlayerUtils.getPlayerBiome(player, false);
+			EnvironState.playerBiome = ClientRegistry.BIOME.getPlayerBiome(player, false);
 			EnvironState.biomeName = EnvironState.playerBiome.getBiomeName();
 			EnvironState.season = seasons.getSeasonType(world);
 			EnvironState.dimensionId = world.provider.getDimension();
@@ -151,7 +150,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.playerPosition = getPlayerPos();
 			EnvironState.inside = AreaSurveyHandler.isReallyInside();
 
-			EnvironState.truePlayerBiome = PlayerUtils.getPlayerBiome(player, true);
+			EnvironState.truePlayerBiome = ClientRegistry.BIOME.getPlayerBiome(player, true);
 			EnvironState.freezing = EnvironState.truePlayerBiome
 					.getFloatTemperature(EnvironState.playerPosition) < 0.15F;
 			EnvironState.playerTemperature = seasons.getPlayerTemperature(world);

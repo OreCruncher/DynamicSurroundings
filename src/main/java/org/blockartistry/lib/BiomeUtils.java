@@ -24,19 +24,22 @@
 
 package org.blockartistry.lib;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.blockartistry.lib.collections.IdentityHashSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
@@ -48,11 +51,9 @@ public final class BiomeUtils {
 
 	}
 
-	public static Set<BiomeDictionary.Type> getBiomeTypes() {
-		final HashSet<BiomeDictionary.Type> result = new HashSet<BiomeDictionary.Type>();
-		for(final BiomeDictionary.Type t: BiomeDictionary.Type.values())
-			result.add(t);
-		return result;
+	@Nonnull
+	public static Set<Type> getBiomeTypes() {
+		return new IdentityHashSet<Type>(BiomeDictionary.Type.values());
 	}
 
 	@Nonnull
@@ -79,5 +80,14 @@ public final class BiomeUtils {
 			}
 		}
 		return NO_COLOR;
+	}
+
+	@Nonnull
+	public static Set<Type> getBiomeTypes(@Nonnull final Biome biome) {
+		final Set<Type> result = new IdentityHashSet<>();
+		final Type[] types = BiomeDictionary.getTypesForBiome(biome);
+		for (int i = 0; i < types.length; i++)
+			result.add(types[i]);
+		return result;
 	}
 }
