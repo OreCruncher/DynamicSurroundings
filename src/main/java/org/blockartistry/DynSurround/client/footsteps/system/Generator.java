@@ -47,6 +47,8 @@ import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.TimeUtils;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.collections.ObjectArray;
+import org.blockartistry.lib.compat.EntityLivingBaseUtil;
+import org.blockartistry.lib.compat.EntityUtil;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
 
@@ -133,10 +135,13 @@ public class Generator {
 			this.isolator.getAcoustics().playAcoustic(entity, AcousticsManager.JUMP, EventType.JUMP, null);
 		}
 
-		if (ModOptions.sound.footstepsSoundFactor > 0)
-			entity.nextStepDistance = Integer.MAX_VALUE;
-		else if (entity.nextStepDistance == Integer.MAX_VALUE)
-			entity.nextStepDistance = 0;
+		if (ModOptions.sound.footstepsSoundFactor > 0) {
+			EntityUtil.setNextStepDistance(entity, Integer.MAX_VALUE);
+		} else {
+			final int dist = EntityUtil.getNextStepDistance(entity);
+			if (dist == Integer.MAX_VALUE)
+				EntityUtil.setNextStepDistance(entity, 0);
+		}
 	}
 
 	protected boolean stoppedImmobile(float reference) {
@@ -276,7 +281,7 @@ public class Generator {
 		if (this.hasSpecialStoppingConditions(entity))
 			return;
 
-		if (this.isFlying && entity.isJumping) {
+		if (this.isFlying && EntityLivingBaseUtil.isJumping(entity)) {
 			if (VAR.EVENT_ON_JUMP) {
 				this.didJump = true;
 				double speed = entity.motionX * entity.motionX + entity.motionZ * entity.motionZ;
