@@ -115,7 +115,8 @@ public class StormRenderer {
 
 		// Don't use EnvironState - may not have been initialized when rendering
 		// starts.
-		final World world = Minecraft.getMinecraft().world;
+		final Minecraft mc = Minecraft.getMinecraft();
+		final World world = mc.world;
 
 		if (!ClientRegistry.DIMENSION.hasWeather(world))
 			return;
@@ -136,13 +137,13 @@ public class StormRenderer {
 				GlStateManager.DestFactor.ZERO);
 		GlStateManager.alphaFunc(516, 0.1F);
 
-		final int range = renderer.mc.gameSettings.fancyGraphics ? 10 : 5;
-		float f1 = (float) renderer.rendererUpdateCount + partialTicks;
+		final int range = mc.gameSettings.fancyGraphics ? 10 : 5;
+		float f1 = (float) RenderWeather.rendererUpdateCount + partialTicks;
 
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		final Weather.Properties props = Weather.getWeatherProperties();
-		final Entity entity = renderer.mc.getRenderViewEntity();
+		final Entity entity = mc.getRenderViewEntity();
 
 		final BlockPos playerPos = EnvironState.getPlayerPosition();
 		final int playerX = playerPos.getX();
@@ -186,7 +187,7 @@ public class StormRenderer {
 					setupForRender(props.getRainTexture());
 
 					// d8 makes the rain fall down. Assumes texture height of 512 pixels.
-					final double d5 = ((double) (renderer.rendererUpdateCount + gridX * gridX * 3121 + gridX * 45238971
+					final double d5 = ((double) (RenderWeather.rendererUpdateCount + gridX * gridX * 3121 + gridX * 45238971
 							+ gridZ * gridZ * 418711 + gridZ * 13761 & 31) + (double) partialTicks) / 32.0D
 							* (3.0D + this.random.nextDouble());
 
@@ -222,7 +223,7 @@ public class StormRenderer {
 						color = Color.WHITE;
 
 					// d8 makes the snow fall down. Assumes texture height of 512 pixels.
-					final double d8 = (double) (((float) (renderer.rendererUpdateCount & 511) + partialTicks) / 512.0F);
+					final double d8 = (double) (((float) (RenderWeather.rendererUpdateCount & 511) + partialTicks) / 512.0F);
 					// The 0.2F factor was originally 0.01F. It
 					// affects the horizontal movement of particles,
 					// which works well for dust.

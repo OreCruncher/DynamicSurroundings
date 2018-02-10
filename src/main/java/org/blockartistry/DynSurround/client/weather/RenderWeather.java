@@ -44,6 +44,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public final class RenderWeather extends IRenderHandler {
 
 	private final StormRenderer renderer;
+	
+	public static int rendererUpdateCount = 0;
 
 	protected RenderWeather() {
 		this.renderer = new StormRenderer();
@@ -54,6 +56,7 @@ public final class RenderWeather extends IRenderHandler {
 	 * hook like that for rain/snow rendering?
 	 */
 	public static void addRainParticles(@Nonnull final EntityRenderer theThis) {
+		rendererUpdateCount++;
 		if(EnvironState.getWorld() != null)
 			StormSplashRenderer.renderStormSplashes(EnvironState.getDimensionId(), theThis);
 	}

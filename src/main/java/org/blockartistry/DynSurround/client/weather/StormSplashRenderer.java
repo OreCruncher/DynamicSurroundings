@@ -42,6 +42,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -80,6 +81,8 @@ public class StormSplashRenderer {
 	protected final Random RANDOM = new XorShiftRandom();
 	protected final NoiseGeneratorSimplex GENERATOR = new NoiseGeneratorSimplex(RANDOM);
 	protected final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+	
+	protected int rainSoundCounter = 0;
 
 	protected StormSplashRenderer() {
 
@@ -155,22 +158,23 @@ public class StormSplashRenderer {
 	}
 
 	public void addRainParticles(final EntityRenderer theThis) {
-		if (theThis.mc.gameSettings.particleSetting == 2)
+		final Minecraft mc = Minecraft.getMinecraft();
+		if (mc.gameSettings.particleSetting == 2)
 			return;
 
-		final World world = theThis.mc.world;
+		final World world = mc.world;
 		if (!ClientRegistry.DIMENSION.hasWeather(world))
 			return;
 
 		float rainStrengthFactor = Weather.getIntensityLevel();
-		if (!theThis.mc.gameSettings.fancyGraphics)
+		if (!mc.gameSettings.fancyGraphics)
 			rainStrengthFactor /= 2.0F;
 
 		if (rainStrengthFactor <= 0.0F)
 			return;
 
-		RANDOM.setSeed((long) theThis.rendererUpdateCount * 312987231L);
-		final Entity entity = theThis.mc.getRenderViewEntity();
+		RANDOM.setSeed((long) RenderWeather.rendererUpdateCount * 312987231L);
+		final Entity entity = mc.getRenderViewEntity();
 		final int playerX = MathHelper.floor(entity.posX);
 		final int playerY = MathHelper.floor(entity.posY);
 		final int playerZ = MathHelper.floor(entity.posZ);
@@ -184,7 +188,7 @@ public class StormSplashRenderer {
 		int particleCount = (int) (ModOptions.rain.particleCountBase * rainStrengthFactor * rainStrengthFactor
 				* rangeFactor);
 
-		if (theThis.mc.gameSettings.particleSetting == 1)
+		if (mc.gameSettings.particleSetting == 1)
 			particleCount >>= 1;
 
 		for (int j1 = 0; j1 < particleCount; ++j1) {
@@ -219,8 +223,8 @@ public class StormSplashRenderer {
 			}
 		}
 
-		if (particlesSpawned > 0 && RANDOM.nextInt(PARTICLE_SOUND_CHANCE) < theThis.rainSoundCounter++) {
-			theThis.rainSoundCounter = 0;
+		if (particlesSpawned > 0 && RANDOM.nextInt(PARTICLE_SOUND_CHANCE) < this.rainSoundCounter++) {
+			this.rainSoundCounter = 0;
 			playSplashSound(theThis, world, entity, spawnX, spawnY, spawnZ);
 		}
 	}

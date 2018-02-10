@@ -36,7 +36,6 @@ import org.blockartistry.DynSurround.data.DimensionEffectData;
 import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -72,8 +71,8 @@ public class Weather {
 
 		private Properties() {
 			this.level = -10.0F;
-			this.rainTexture = EntityRenderer.RAIN_TEXTURES;
-			this.snowTexture = EntityRenderer.SNOW_TEXTURES;
+			this.rainTexture = new ResourceLocation("textures/environment/rain.png");
+			this.snowTexture = new ResourceLocation("textures/environment/snow.png");
 			this.dustTexture = new ResourceLocation(DSurround.RESOURCE_ID, "textures/environment/dust_calm.png");
 		}
 
