@@ -35,6 +35,7 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.api.entity.ActionState;
 import org.blockartistry.DynSurround.api.entity.EmojiType;
 import org.blockartistry.DynSurround.api.entity.EmotionalState;
+import org.blockartistry.lib.compat.EntityLivingUtil;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.entity.EntityLiving;
@@ -199,7 +200,8 @@ public final class EmojiDataTables {
 		final ActionState second = eval(entity.targetTasks.executingTaskEntries);
 
 		ActionState result = first.getPriority() > second.getPriority() ? first : second;
-		if (entity.attackTarget != null && ActionState.ATTACKING.getPriority() > result.getPriority())
+		if (EntityLivingUtil.getAttackTarget(entity) != null
+				&& ActionState.ATTACKING.getPriority() > result.getPriority())
 			result = ActionState.ATTACKING;
 
 		return result;

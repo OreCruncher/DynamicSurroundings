@@ -26,10 +26,10 @@ package org.blockartistry.DynSurround.client.handlers;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.lib.collections.ObjectArray;
+import org.blockartistry.lib.compat.EntityLivingBaseUtil;
 import org.blockartistry.lib.math.TimerEMA;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -118,7 +118,7 @@ public class EffectManager {
 		
 		// TODO: Find a better home....
 		if (ModOptions.player.suppressPotionParticles)
-			event.player.getDataManager().set(EntityLivingBase.HIDE_PARTICLES, true);
+			event.player.getDataManager().set(EntityLivingBaseUtil.getHideParticles(), true);
 
 		for (int i = 0; i < this.effectHandlers.size(); i++) {
 			final EffectHandlerBase handler = this.effectHandlers.get(i);
