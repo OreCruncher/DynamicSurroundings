@@ -36,6 +36,12 @@ public final class IdentityHashSet<T> extends THashSet<T> {
 		super();
 	}
 
+	public IdentityHashSet(@Nonnull final T[] objs) {
+		super();
+		for (int i = 0; i < objs.length; i++)
+			this.add(objs[i]);
+	}
+
 	public IdentityHashSet(final int initialCapacity) {
 		super(initialCapacity);
 	}

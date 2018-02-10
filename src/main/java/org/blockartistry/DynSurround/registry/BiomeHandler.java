@@ -28,12 +28,11 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
-
+import org.blockartistry.lib.BiomeUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -54,11 +53,12 @@ public class BiomeHandler implements IBiome {
 		this.biome = biome;
 		this.id = Biome.getIdForBiome(this.biome);
 		this.regName = getKey(this.biome);
-		this.types = BiomeDictionary.getTypes(this.biome);
+		this.types = BiomeUtils.getBiomeTypes(this.biome);
+		
 		try {
 			this.name = (String)biomeName.get(this.biome);
 		} catch(@Nonnull final Throwable t) {
-			;
+			this.name = "UNKNOWN";
 		}
 	}
 
