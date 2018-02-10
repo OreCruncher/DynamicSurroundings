@@ -62,13 +62,18 @@ public final class BiomeRegistry extends Registry {
 	public static final FakeBiome VILLAGE = new FakeBiome("Village");
 	public static final FakeBiome BATTLE_MUSIC = new FakeBiome("BattleMusic");
 
-	public BiomeInfo VILLAGE_INFO;
-	public BiomeInfo PLAYER_INFO;
 	public BiomeInfo UNDERGROUND_INFO;
+	public BiomeInfo PLAYER_INFO;
+	public BiomeInfo UNDERRIVER_INFO;
+	public BiomeInfo UNDEROCEAN_INFO;
+	public BiomeInfo UNDERDEEPOCEAN_INFO;
+	public BiomeInfo UNDERWATER_INFO;
+	
+	public BiomeInfo VILLAGE_INFO;
 	public BiomeInfo CLOUDS_INFO;
 	public BiomeInfo OUTERSPACE_INFO;
-	public BiomeInfo WTF_INFO;
 	public BiomeInfo BATTLE_MUSIC_INFO;
+	public BiomeInfo WTF_INFO;
 
 	// This is for cases when the biome coming in doesn't make sense
 	// and should default to something to avoid crap.
@@ -82,8 +87,11 @@ public final class BiomeRegistry extends Registry {
 	}
 
 	private void register(@Nonnull final Biome biome) {
-		final BiomeInfo e = new BiomeInfo(biome);
-		this.registry.put(e.getKey(), e);
+		register(new BiomeHandler(biome));
+	}
+
+	private void register(@Nonnull final IBiome biome) {
+		this.registry.put(biome.getKey(), new BiomeInfo(biome));
 	}
 
 	@SuppressWarnings("deprecation")
@@ -115,9 +123,14 @@ public final class BiomeRegistry extends Registry {
 		register(OUTERSPACE);
 		register(BATTLE_MUSIC);
 
-		this.PLAYER_INFO = resolve(PLAYER);
-		this.VILLAGE_INFO = resolve(VILLAGE);
 		this.UNDERGROUND_INFO = resolve(UNDERGROUND);
+		this.PLAYER_INFO = resolve(PLAYER);
+		this.UNDERRIVER_INFO = resolve(UNDERRIVER);
+		this.UNDEROCEAN_INFO = resolve(UNDEROCEAN);
+		this.UNDERDEEPOCEAN_INFO = resolve(UNDERDEEPOCEAN);
+		
+		this.UNDERWATER_INFO = resolve(UNDERWATER);
+		this.VILLAGE_INFO = resolve(VILLAGE);
 		this.CLOUDS_INFO = resolve(CLOUDS);
 		this.OUTERSPACE_INFO = resolve(OUTERSPACE);
 		this.BATTLE_MUSIC_INFO = resolve(BATTLE_MUSIC);
@@ -152,8 +165,13 @@ public final class BiomeRegistry extends Registry {
 	}
 
 	@Nullable
+	BiomeInfo resolve(@Nonnull final IBiome biome) {
+		return this.registry.get(biome.getKey());
+	}
+
+	@Nullable
 	private BiomeInfo resolve(@Nonnull final Biome biome) {
-		return this.registry.get(BiomeInfo.getKey(biome));
+		return this.registry.get(BiomeHandler.getKey(biome));
 	}
 
 	@Nonnull
