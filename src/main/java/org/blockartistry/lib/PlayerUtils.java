@@ -24,76 +24,27 @@
 package org.blockartistry.lib;
 
 import java.util.List;
-import java.util.regex.Pattern;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.ClientRegistry;
-import org.blockartistry.DynSurround.registry.BiomeInfo;
-import org.blockartistry.DynSurround.registry.DimensionInfo;
-import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import com.google.common.base.Predicates;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public final class PlayerUtils {
 
-	private static final int INSIDE_Y_ADJUST = 3;
-
-	private static final Pattern REGEX_DEEP_OCEAN = Pattern.compile("(?i).*deep.*ocean.*|.*abyss.*");
-	private static final Pattern REGEX_OCEAN = Pattern.compile("(?i)(?!.*deep.*)(.*ocean.*|.*kelp.*|.*coral.*)");
-	private static final Pattern REGEX_RIVER = Pattern.compile("(?i).*river.*");
-
 	private PlayerUtils() {
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Nonnull
-	public static BiomeInfo getPlayerBiome(@Nonnull final EntityPlayer player, final boolean getTrue) {
-		Biome biome = player.getEntityWorld().getBiome(new BlockPos(player.posX, 0, player.posZ));
-		BiomeInfo info = null;
-
-		if (!getTrue) {
-			if (player.isInsideOfMaterial(Material.WATER)) {
-				if (REGEX_RIVER.matcher(biome.getBiomeName()).matches())
-					info = ClientRegistry.BIOME.UNDERRIVER_INFO;
-				else if (REGEX_OCEAN.matcher(biome.getBiomeName()).matches())
-					info = ClientRegistry.BIOME.UNDEROCEAN_INFO;
-				else if (REGEX_DEEP_OCEAN.matcher(biome.getBiomeName()).matches())
-					info = ClientRegistry.BIOME.UNDERDEEPOCEAN_INFO;
-				else
-					info = ClientRegistry.BIOME.UNDERWATER_INFO;
-			} else {
-				final DimensionInfo dimInfo = ClientRegistry.DIMENSION.getData(player.getEntityWorld());
-				final int theY = MathStuff.floor(player.posY);
-				if ((theY + INSIDE_Y_ADJUST) <= dimInfo.getSeaLevel())
-					info = ClientRegistry.BIOME.UNDERGROUND_INFO;
-				else if (theY >= dimInfo.getSpaceHeight())
-					info = ClientRegistry.BIOME.OUTERSPACE_INFO;
-				else if (theY >= dimInfo.getCloudHeight())
-					info = ClientRegistry.BIOME.CLOUDS_INFO;
-			}
-		}
-
-		if (info == null)
-			info = ClientRegistry.BIOME.get(biome);
-
-		return info;
 	}
 
 	@Nullable

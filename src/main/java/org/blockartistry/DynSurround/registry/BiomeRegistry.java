@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
@@ -37,12 +38,18 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.DynSurround.event.ReloadEvent;
+import org.blockartistry.lib.math.MathStuff;
 
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,6 +57,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public final class BiomeRegistry extends Registry {
+
+	private static final int INSIDE_Y_ADJUST = 3;
 
 	public static final FakeBiome UNDERGROUND = new FakeBiome("Underground");
 	public static final FakeBiome PLAYER = new FakeBiome("Player");
@@ -68,7 +77,7 @@ public final class BiomeRegistry extends Registry {
 	public BiomeInfo UNDEROCEAN_INFO;
 	public BiomeInfo UNDERDEEPOCEAN_INFO;
 	public BiomeInfo UNDERWATER_INFO;
-	
+
 	public BiomeInfo VILLAGE_INFO;
 	public BiomeInfo CLOUDS_INFO;
 	public BiomeInfo OUTERSPACE_INFO;
@@ -128,7 +137,7 @@ public final class BiomeRegistry extends Registry {
 		this.UNDERRIVER_INFO = resolve(UNDERRIVER);
 		this.UNDEROCEAN_INFO = resolve(UNDEROCEAN);
 		this.UNDERDEEPOCEAN_INFO = resolve(UNDERDEEPOCEAN);
-		
+
 		this.UNDERWATER_INFO = resolve(UNDERWATER);
 		this.VILLAGE_INFO = resolve(VILLAGE);
 		this.CLOUDS_INFO = resolve(CLOUDS);
@@ -194,6 +203,37 @@ public final class BiomeRegistry extends Registry {
 			}
 		}
 		return result;
+	}
+
+	@Nonnull
+	public BiomeInfo getPlayerBiome(@Nonnull final EntityPlayer player, final boolean getTrue) {
+		Biome biome = player.getEntityWorld().getBiome(new BlockPos(player.posX, 0, player.posZ));
+		BiomeInfo info = this.get(biome);
+
+		if (!getTrue) {
+			final Set<Type> bt = info.getBiomeTypes();
+			if (player.isInsideOfMaterial(Material.WATER)) {
+				if (bt.contains(Type.RIVER))
+					info = this.UNDERRIVER_INFO;
+				else if (!bt.contains(Type.OCEAN))
+					info = this.UNDERWATER_INFO;
+				else if (info.getBiomeName().matches("(?i).*deep.*ocean.*|.*abyss.*"))
+					info = this.UNDERDEEPOCEAN_INFO;
+				else
+					info = this.UNDEROCEAN_INFO;
+			} else {
+				final DimensionInfo dimInfo = EnvironState.getDimensionInfo();
+				final int theY = MathStuff.floor(player.posY);
+				if ((theY + INSIDE_Y_ADJUST) <= dimInfo.getSeaLevel())
+					info = this.UNDERGROUND_INFO;
+				else if (theY >= dimInfo.getSpaceHeight())
+					info = this.OUTERSPACE_INFO;
+				else if (theY >= dimInfo.getCloudHeight())
+					info = this.CLOUDS_INFO;
+			}
+		}
+
+		return info;
 	}
 
 	final boolean isBiomeMatch(@Nonnull final BiomeConfig entry, @Nonnull final BiomeInfo info) {
