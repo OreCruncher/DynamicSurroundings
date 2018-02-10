@@ -105,7 +105,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 	}
 
 	public SpeechBubbleHandler() {
-		super("SpeechBubbleHandler");
+		super("Speech Bubbles");
 		loadText();
 	}
 
@@ -131,6 +131,11 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 		ctx.handleBubble(entity);
 	}
 
+	@Override
+	public boolean doTick(final int tick) {
+		return this.messages.size() > 0;
+	}
+	
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 		final int currentTick = EnvironState.getTickCounter();

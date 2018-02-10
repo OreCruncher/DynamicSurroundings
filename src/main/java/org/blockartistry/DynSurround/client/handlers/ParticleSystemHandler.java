@@ -45,16 +45,17 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 	private final TLongObjectHashMap<ParticleSystem> systems = new TLongObjectHashMap<ParticleSystem>();
 
 	public ParticleSystemHandler() {
-		super("ParticleSystemHandler");
+		super("Particle Systems");
 		INSTANCE = this;
 	}
 
 	@Override
+	public boolean doTick(final int tick) {
+		return this.systems.size() > 0;
+	}
+
+	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-
-		if (this.systems.size() == 0)
-			return;
-
 		final double range = ModOptions.general.specialEffectRange;
 		final BlockPos min = EnvironState.getPlayerPosition().add(-range, -range, -range);
 		final BlockPos max = EnvironState.getPlayerPosition().add(range, range, range);

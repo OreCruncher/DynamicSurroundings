@@ -64,10 +64,9 @@ public class EnvironmentEffectHandler extends EffectHandlerBase {
 	private long nanos;
 
 	private ThemeInfo theme;
-	private float[] lightMapSave;
 
 	public EnvironmentEffectHandler() {
-		super("EnvironmentEffectHandler");
+		super("Environment");
 	}
 
 	private boolean doFog() {
@@ -179,13 +178,6 @@ public class EnvironmentEffectHandler extends EffectHandlerBase {
 		if (this.theme.doFixedFog())
 			this.fogRange
 					.add(new FixedFogRangeCalculator(this.theme.getMinFogDistance(), this.theme.getMaxFogDistance()));
-
-		if (this.theme.doMaxLightLevel()) {
-			this.lightMapSave = world.provider.lightBrightnessTable;
-			final float v = this.lightMapSave[this.theme.getMaxLightLevel()];
-			for (int i = this.theme.getMaxLightLevel(); i < this.lightMapSave.length; i++)
-				this.lightMapSave[i] = v;
-		}
 	}
 
 }

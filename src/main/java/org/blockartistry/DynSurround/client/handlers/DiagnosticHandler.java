@@ -73,7 +73,7 @@ public class DiagnosticHandler extends EffectHandlerBase {
 	private long timeMark;
 
 	public DiagnosticHandler() {
-		super("DiagnosticHandler");
+		super("Diagnostics");
 
 		INSTANCE = this;
 	}

@@ -48,11 +48,11 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 
 	public static final int SCAN_INTERVAL = 4;
 
-	private static boolean doBiomeSounds() {
+	private boolean doBiomeSounds() {
 		return EnvironState.isPlayerUnderground() || !EnvironState.isPlayerInside();
 	}
 
-	private static void getBiomeSounds(@Nonnull final TObjectFloatHashMap<SoundEffect> result) {
+	private void getBiomeSounds(@Nonnull final TObjectFloatHashMap<SoundEffect> result) {
 		// Need to collect sounds from all the applicable biomes
 		// along with their weights.
 		final TObjectIntIterator<BiomeInfo> info = AreaSurveyHandler.getBiomes().iterator();
@@ -77,23 +77,17 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 	}
 
 	public AreaSoundEffectHandler() {
-		super("AreaSoundEffectHandler");
+		super("Area Sound Effects");
 	}
 
-	private static boolean skipTick(@Nonnull final EntityPlayer player) {
-		// Skip processing this tick IF:
-		// * Option is disabled
-		// * It's not the appropriate tick interval
-		// * The chunk the player is in is not loaded
-		return !(ModOptions.sound.enableBiomeSounds && (EnvironState.getTickCounter() % SCAN_INTERVAL) == 0
-				&& EnvironState.getWorld().isBlockLoaded(EnvironState.getPlayerPosition()));
+	@Override
+	public boolean doTick(final int tick) {
+		return ModOptions.sound.enableBiomeSounds && (tick % SCAN_INTERVAL) == 0
+				&& EnvironState.getWorld().isBlockLoaded(EnvironState.getPlayerPosition());
 	}
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-
-		if (skipTick(player))
-			return;
 
 		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<SoundEffect>(Constants.DEFAULT_CAPACITY,
 				Constants.DEFAULT_LOAD_FACTOR, -1F);

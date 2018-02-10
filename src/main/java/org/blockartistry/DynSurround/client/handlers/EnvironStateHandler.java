@@ -372,7 +372,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	}
 
 	public EnvironStateHandler() {
-		super("EnvironStateEffectHandler");
+		super("State Handler");
 	}
 
 	@Override
