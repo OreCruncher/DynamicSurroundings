@@ -557,6 +557,7 @@ public final class ModOptions {
 	public static final String CONFIG_FOOTSTEPS_SOUND_FACTOR = "Footsteps Sound Factor";
 	public static final String CONFIG_FOOTSTEPS_QUAD = "Footsteps as Quadruped";
 	public static final String CONFIG_ENABLE_ARMOR_SOUND = "Armor Sound";
+	public static final String CONFIG_ENABLE_PUDDLE_SOUND = "Rain Puddle Sound";
 	public static final String CONFIG_SOUND_CULL_THRESHOLD = "Sound Culling Threshold";
 	public static final String CONFIG_CULLED_SOUNDS = "Culled Sounds";
 	public static final String CONFIG_BLOCKED_SOUNDS = "Blocked Sounds";
@@ -572,11 +573,11 @@ public final class ModOptions {
 		public static String PATH = null;
 		public static final List<String> SORT = Arrays.asList(CONFIG_ENABLE_BIOME_SOUNDS, CONFIG_MASTER_SOUND_FACTOR,
 				CONFIG_FOOTSTEPS_SOUND_FACTOR, CONFIG_FOOTSTEPS_QUAD, CONFIG_ENABLE_ARMOR_SOUND,
-				CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_EQUIP_SOUND, CONFIG_SWORD_AS_TOOL_EQUIP_SOUND,
-				CONFIG_ENABLE_CRAFTING_SOUND, CONFIG_AUTO_CONFIG_CHANNELS, CONFIG_NORMAL_CHANNEL_COUNT,
-				CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_STREAM_BUFFER_SIZE, CONFIG_STREAM_BUFFER_COUNT,
-				CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS, CONFIG_SOUND_CULL_THRESHOLD,
-				CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES, CONFIG_ENABLE_BATTLEMUSIC);
+				CONFIG_ENABLE_PUDDLE_SOUND, CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_EQUIP_SOUND,
+				CONFIG_SWORD_AS_TOOL_EQUIP_SOUND, CONFIG_ENABLE_CRAFTING_SOUND, CONFIG_AUTO_CONFIG_CHANNELS,
+				CONFIG_NORMAL_CHANNEL_COUNT, CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_STREAM_BUFFER_SIZE,
+				CONFIG_STREAM_BUFFER_COUNT, CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS,
+				CONFIG_SOUND_CULL_THRESHOLD, CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES, CONFIG_ENABLE_BATTLEMUSIC);
 
 		@Option(CONFIG_ENABLE_BIOME_SOUNDS)
 		@DefaultValue("true")
@@ -686,6 +687,12 @@ public final class ModOptions {
 		@Comment("Enable/disable armor sounds when moving")
 		public static boolean enableArmorSounds = true;
 
+		@Option(CONFIG_ENABLE_PUDDLE_SOUND)
+		@DefaultValue("true")
+		@LangKey("dsurround.cfg.sound.Puddle")
+		@Comment("Enable/disable rain puddle sound when moving in the rain")
+		public static boolean enablePuddleSound = true;
+		
 		@Option(CONFIG_SOUND_CULL_THRESHOLD)
 		@DefaultValue("20")
 		@LangKey("dsurround.cfg.sound.CullInterval")
