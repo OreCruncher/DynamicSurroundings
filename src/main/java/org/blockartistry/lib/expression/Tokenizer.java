@@ -34,8 +34,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * Expression tokenizer that allows to iterate over a {@link String}
- * expression token by token. Blank characters will be skipped.
+ * Expression tokenizer that allows to iterate over a {@link String} expression
+ * token by token. Blank characters will be skipped.
  */
 public final class Tokenizer implements Iterator<String> {
 
@@ -53,7 +53,7 @@ public final class Tokenizer implements Iterator<String> {
 	 * What character to use for enclosing a string literal
 	 */
 	public static final char quote = '\'';
-	
+
 	/**
 	 * What character to use for the not
 	 */
@@ -72,7 +72,7 @@ public final class Tokenizer implements Iterator<String> {
 	 * The previous token or <code>null</code> if none.
 	 */
 	private String previousToken;
-	
+
 	/**
 	 * List of operators for the engine
 	 */
@@ -121,8 +121,8 @@ public final class Tokenizer implements Iterator<String> {
 			while ((Character.isDigit(ch) || ch == decimalSeparator || ch == 'e' || ch == 'E'
 					|| (ch == minusSign && token.length() > 0
 							&& ('e' == token.charAt(token.length() - 1) || 'E' == token.charAt(token.length() - 1)))
-					|| (ch == '+' && token.length() > 0 && ('e' == token.charAt(token.length() - 1)
-							|| 'E' == token.charAt(token.length() - 1))))
+					|| (ch == '+' && token.length() > 0
+							&& ('e' == token.charAt(token.length() - 1) || 'E' == token.charAt(token.length() - 1))))
 					&& (pos < input.length())) {
 				token.append(input.charAt(pos++));
 				ch = pos == input.length() ? 0 : input.charAt(pos);
@@ -155,7 +155,7 @@ public final class Tokenizer implements Iterator<String> {
 			pos++;
 		} else {
 			while (!Character.isLetter(ch) && !Character.isDigit(ch) && ch != '_' && !Character.isWhitespace(ch)
-					&& ch != '(' && ch != ')' && ch != ',' && (pos < input.length())) {
+					&& ch != '(' && ch != ')' && ch != ',' && ch != quote && (pos < input.length())) {
 				token.append(input.charAt(pos));
 				pos++;
 				ch = pos == input.length() ? 0 : input.charAt(pos);
@@ -186,4 +186,3 @@ public final class Tokenizer implements Iterator<String> {
 	}
 
 }
-
