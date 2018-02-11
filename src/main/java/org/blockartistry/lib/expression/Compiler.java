@@ -73,7 +73,7 @@ public final class Compiler {
 					final LazyVariant v1 = stack.pop();
 					result = new LazyVariant() {
 						public Variant eval() {
-							return op.eval(v1.eval());
+							return op.eval(v1);
 						}
 					};
 				} else {
@@ -81,7 +81,7 @@ public final class Compiler {
 					final LazyVariant v2 = stack.pop();
 					result = new LazyVariant() {
 						public Variant eval() {
-							return op.eval(v2.eval(), v1.eval());
+							return op.eval(v2, v1);
 						}
 					};
 				}

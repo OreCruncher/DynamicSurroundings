@@ -74,105 +74,105 @@ public final class Expression {
 	static {
 		addBuiltInOperator(new Operator("!", 20, false, true) {
 			@Override
-			public Variant eval(final Variant... operands) {
-				return operands[0].asBoolean() ? FALSE : TRUE;
+			public Variant eval(final LazyVariant... operands) {
+				return operands[0].eval().asBoolean() ? FALSE : TRUE;
 			}
 		});
 		addBuiltInOperator(new Operator("+", 20, true) {
 			@Override
-			public Variant eval(final Variant... operands) {
-				return operands[0].add(operands[1]);
+			public Variant eval(final LazyVariant... operands) {
+				return operands[0].eval().add(operands[1].eval());
 			}
 		});
 		addBuiltInOperator(new Operator("-", 20, true) {
 			@Override
-			public Variant eval(final Variant... operands) {
-				return new NumberValue(operands[0].asNumber() - operands[1].asNumber());
+			public Variant eval(final LazyVariant... operands) {
+				return new NumberValue(operands[0].eval().asNumber() - operands[1].eval().asNumber());
 			}
 		});
 		addBuiltInOperator(new Operator("*", 30, true) {
 			@Override
-			public Variant eval(final Variant... operands) {
-				return new NumberValue(operands[0].asNumber() * operands[1].asNumber());
+			public Variant eval(final LazyVariant... operands) {
+				return new NumberValue(operands[0].eval().asNumber() * operands[1].eval().asNumber());
 			}
 		});
 		addBuiltInOperator(new Operator("/", 30, true) {
 			@Override
-			public Variant eval(final Variant... operands) {
-				return new NumberValue(operands[0].asNumber() / operands[1].asNumber());
+			public Variant eval(final LazyVariant... operands) {
+				return new NumberValue(operands[0].eval().asNumber() / operands[1].eval().asNumber());
 			}
 		});
 		addBuiltInOperator(new Operator("%", 30, true) {
 			@Override
-			public Variant eval(final Variant... operands) {
-				return new NumberValue(operands[0].asNumber() % operands[1].asNumber());
+			public Variant eval(final LazyVariant... operands) {
+				return new NumberValue(operands[0].eval().asNumber() % operands[1].eval().asNumber());
 			}
 		});
 		addBuiltInOperator(new Operator("&&", 4, false) {
 			@Override
-			public Variant eval(final Variant... operands) {
-				return operands[0].asBoolean() && operands[1].asBoolean() ? TRUE : FALSE;
+			public Variant eval(final LazyVariant... operands) {
+				return operands[0].eval().asBoolean() && operands[1].eval().asBoolean() ? TRUE : FALSE;
 			}
 		});
 
 		addBuiltInOperator(new Operator("||", 2, false) {
 			@Override
-			public Variant eval(final Variant... operands) {
-				return operands[0].asBoolean() || operands[1].asBoolean() ? TRUE : FALSE;
+			public Variant eval(final LazyVariant... operands) {
+				return operands[0].eval().asBoolean() || operands[1].eval().asBoolean() ? TRUE : FALSE;
 			}
 		});
 
 		addBuiltInOperator(new Operator(">", 10, false) {
 			@Override
-			public Variant eval(final Variant... operands) {
-				return operands[0].compareTo(operands[1]) > 0 ? TRUE : FALSE;
+			public Variant eval(final LazyVariant... operands) {
+				return operands[0].eval().compareTo(operands[1].eval()) > 0 ? TRUE : FALSE;
 			}
 		});
 
 		addBuiltInOperator(new Operator(">=", 10, false) {
 			@Override
-			public Variant eval(final Variant... operands) {
-				return operands[0].compareTo(operands[1]) >= 0 ? TRUE : FALSE;
+			public Variant eval(final LazyVariant... operands) {
+				return operands[0].eval().compareTo(operands[1].eval()) >= 0 ? TRUE : FALSE;
 			}
 		});
 
 		addBuiltInOperator(new Operator("<", 10, false) {
 			@Override
-			public Variant eval(final Variant... operands) {
-				return operands[0].compareTo(operands[1]) < 0 ? TRUE : FALSE;
+			public Variant eval(final LazyVariant... operands) {
+				return operands[0].eval().compareTo(operands[1].eval()) < 0 ? TRUE : FALSE;
 			}
 		});
 
 		addBuiltInOperator(new Operator("<=", 10, false) {
 			@Override
-			public Variant eval(final Variant... operands) {
-				return operands[0].compareTo(operands[1]) <= 0 ? TRUE : FALSE;
+			public Variant eval(final LazyVariant... operands) {
+				return operands[0].eval().compareTo(operands[1].eval()) <= 0 ? TRUE : FALSE;
 			}
 		});
 
 		addBuiltInOperator(new Operator("=", 7, false) {
 			@Override
-			public Variant eval(final Variant... operands) {
-				return operands[0].compareTo(operands[1]) == 0 ? TRUE : FALSE;
+			public Variant eval(final LazyVariant... operands) {
+				return operands[0].eval().compareTo(operands[1].eval()) == 0 ? TRUE : FALSE;
 			}
 		});
 		addBuiltInOperator(new Operator("==", 7, false) {
 			@Override
-			public Variant eval(final Variant... operands) {
-				return operands[0].compareTo(operands[1]) == 0 ? TRUE : FALSE;
+			public Variant eval(final LazyVariant... operands) {
+				return operands[0].eval().compareTo(operands[1].eval()) == 0 ? TRUE : FALSE;
 			}
 		});
 
 		addBuiltInOperator(new Operator("!=", 7, false) {
 			@Override
-			public Variant eval(final Variant... operands) {
-				return operands[0].compareTo(operands[1]) != 0 ? TRUE : FALSE;
+			public Variant eval(final LazyVariant... operands) {
+				return operands[0].eval().compareTo(operands[1].eval()) != 0 ? TRUE : FALSE;
 			}
 		});
 		addBuiltInOperator(new Operator("<>", 7, false) {
 			@Override
-			public Variant eval(final Variant... operands) {
-				return operands[0].compareTo(operands[1]) != 0 ? TRUE : FALSE;
+			public Variant eval(final LazyVariant... operands) {
+				return operands[0].eval().compareTo(operands[1].eval()) != 0 ? TRUE : FALSE;
 			}
 		});
 		addBuiltInFunction(new Function("MATCH", 2) {
