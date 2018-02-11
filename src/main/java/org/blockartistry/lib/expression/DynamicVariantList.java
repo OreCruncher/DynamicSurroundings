@@ -31,43 +31,48 @@ import javax.annotation.Nonnull;
 
 public class DynamicVariantList {
 
-	protected final List<IDynamicVariant<?>> variants = new ArrayList<IDynamicVariant<?>>();
+	protected final List<IDynamicVariant<?>> variants = new ArrayList<>();
 
 	public DynamicVariantList() {
 
 	}
 
-	/*
-	 * Called to update the state of the dynamic variants contain
-	 * within the list.  Restricted to package scope.
+	/**
+	 * Called to update the state of the dynamic variants contain within the list.
+	 * Restricted to package scope.
 	 */
 	void update() {
-		for (final IDynamicVariant<?> dv : this.variants)
-			dv.update();
+		this.variants.forEach(IDynamicVariant::update);
 	}
 
-	/*
+	/**
 	 * Adds a dynamic variant to be managed to the list.
+	 * 
+	 * @param dv
+	 *            Dynamic variant to add to the list
 	 */
 	public void add(@Nonnull final IDynamicVariant<?> dv) {
 		this.variants.add(dv);
 	}
 
-	/*
-	 * Attaches the dynamic variants in the list to the
-	 * specified expression.
+	/**
+	 * Attaches the dynamic variants in the list to the specified expression.
+	 * 
+	 * @param exp
+	 *            Expression to which the dynamic variants are added.
 	 */
 	public void attach(@Nonnull final Expression exp) {
-		for (final IDynamicVariant<?> dv : this.variants)
-			exp.addVariable((Variant) dv);
+		this.variants.forEach(v -> exp.addVariable((Variant) v));
 	}
 
-	/*
+	/**
 	 * Gets the list of dynamic variants.
+	 * 
+	 * @return The list of dynamic variants
 	 */
 	@Nonnull
 	public List<IDynamicVariant<?>> getList() {
-		return new ArrayList<IDynamicVariant<?>>(this.variants);
+		return new ArrayList<>(this.variants);
 	}
 
 }
