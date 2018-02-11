@@ -120,11 +120,10 @@ public class EffectManager {
 
 		for (int i = 0; i < this.effectHandlers.size(); i++) {
 			final EffectHandlerBase handler = this.effectHandlers.get(i);
-			if (handler.doTick(tick)) {
-				final long mark = System.nanoTime();
+			final long mark = System.nanoTime();
+			if (handler.doTick(tick))
 				handler.process(event.player);
-				handler.updateTimer(System.nanoTime() - mark);
-			}
+			handler.updateTimer(System.nanoTime() - mark);
 		}
 
 		this.computeTime.update(System.nanoTime() - start);
