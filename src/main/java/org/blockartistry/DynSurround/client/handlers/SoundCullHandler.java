@@ -26,7 +26,6 @@ package org.blockartistry.DynSurround.client.handlers;
 
 import java.util.Set;
 
-import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.gui.ConfigSound;
@@ -37,7 +36,7 @@ import com.google.common.collect.Sets;
 
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -58,17 +57,15 @@ public class SoundCullHandler extends EffectHandlerBase {
 	public void onConnect() {
 		this.soundsToBlock.clear();
 		this.soundCull.clear();
-		final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
-		for (final Object resource : handler.soundRegistry.getKeys()) {
+		final Set<ResourceLocation> reg = Minecraft.getMinecraft().getSoundHandler().soundRegistry.getKeys();
+		reg.forEach(resource -> {
 			final String rs = resource.toString();
 			if (ClientRegistry.SOUND.isSoundBlockedLogical(rs)) {
-				DSurround.log().debug("Blocking sound '%s'", rs);
 				this.soundsToBlock.add(rs);
 			} else if (ClientRegistry.SOUND.isSoundCulled(rs)) {
-				DSurround.log().debug("Culling sound '%s'", rs);
 				this.soundCull.put(rs, -ModOptions.sound.soundCullingThreshold);
 			}
-		}
+		});
 	}
 
 	@SubscribeEvent
