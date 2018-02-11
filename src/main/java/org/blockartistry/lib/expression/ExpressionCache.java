@@ -24,6 +24,7 @@
 package org.blockartistry.lib.expression;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -36,56 +37,69 @@ import net.minecraft.util.ITickable;
 public class ExpressionCache implements ITickable {
 
 	protected final ModLog logger;
-	protected final List<DynamicVariantList> variants = new ArrayList<DynamicVariantList>();
-	protected final IdentityHashMap<String, Expression> cache = new IdentityHashMap<String, Expression>();
-	protected final List<String> naughtyList = new ArrayList<String>();
+	protected final List<DynamicVariantList> variants = new ArrayList<>();
+	protected final IdentityHashMap<String, LazyVariant> cache = new IdentityHashMap<>();
+	protected final List<String> naughtyList = new ArrayList<>();
 
-	public ExpressionCache(final ModLog logger) {
+	protected List<IDynamicVariant<?>> cachedList;
+
+	public ExpressionCache(@Nonnull final ModLog logger) {
 		this.logger = logger;
 	}
 
-	/*
-	 * Adds a DynamicVariantList to the cache. New expressions that are created will
-	 * automatically have these variables added to them. These variants will be
-	 * updated when the ExpressionCache gets ticked.
+	/**
+	 * Adds a DynamicVariantList to the cache. New expressions that are created
+	 * using this cache will automatically have these variables added to them. These
+	 * variants will be updated when the ExpressionCache gets ticked.
+	 * 
+	 * @param dvl
+	 *            DynamicVariantList to add to the cache
 	 */
-	public void add(final DynamicVariantList dvl) {
+	public void add(@Nonnull final DynamicVariantList dvl) {
 		this.variants.add(dvl);
+		this.cachedList = null;
 	}
 
-	/*
+	/**
 	 * Returns a list of expressions that have been examined by the ExpressionCache
 	 * but failed due to some error. Used for diagnostics because ideally there
 	 * should be no failures.
+	 * 
+	 * @return List of expressions that failed compilation
 	 */
 	@Nonnull
 	public List<String> getNaughtyList() {
 		return this.naughtyList;
 	}
 
-	/*
+	/**
 	 * Returns a list of all dynamic variants available to the ExpressionCache. Used
-	 * for diagnostic purpose.
+	 * for diagnostic purpose. The list is sorted before returning.
+	 * 
+	 * @return List of dynamic variants registered with the expression cache
 	 */
 	@Nonnull
 	public List<IDynamicVariant<?>> getVariantList() {
-		final List<IDynamicVariant<?>> result = new ArrayList<IDynamicVariant<?>>();
-		for (final DynamicVariantList dvl : this.variants)
-			result.addAll(dvl.getList());
+		if (this.cachedList == null) {
+			this.cachedList = new ArrayList<>();
+			this.variants.forEach(dvl -> this.cachedList.addAll(dvl.getList()));
+			Collections.sort(this.cachedList, (o1, o2) -> {
+				return o1.getName().compareTo(o2.getName());
+			});
+		}
 
-		return result;
+		return this.cachedList;
 	}
 
-	/*
+	/**
 	 * Ticks the internally cached DynamicVariableList entities.
 	 */
 	@Override
 	public void update() {
-		for (final DynamicVariantList dvl : this.variants)
-			dvl.update();
+		this.variants.forEach(DynamicVariantList::update);
 	}
 
-	/*
+	/**
 	 * This forces a compile and validation of the expression that is passed in.
 	 * This will make use of any supplied built-in references. Custom instance
 	 * variables, functions, or operators will cause this to fail since they cannot
@@ -94,47 +108,56 @@ public class ExpressionCache implements ITickable {
 	 *
 	 * Expressions are cached. If multiple requests come in for the same expression
 	 * the cached version is reused.
+	 * 
+	 * @param expression
+	 *            The expression to compile
+	 * @return The compiled expression. If there was a failure the resulting
+	 *         expression will have the error message.
 	 */
 	@Nonnull
-	private Expression compile(final String expression) {
-		Expression exp = null;
+	private LazyVariant compile(@Nonnull final String expression) {
+		LazyVariant exp = null;
 
 		try {
 			exp = this.cache.get(expression);
 			if (exp == null) {
-				exp = new Expression(expression);
-				for (final DynamicVariantList dvl : this.variants)
-					dvl.attach(exp);
-				exp.getRPN();
+				final Expression x = new Expression(expression);
+				this.variants.forEach(dvl -> dvl.attach(x));
+				exp = x.getProgram();
 				this.cache.put(expression, exp);
 			}
 		} catch (final Throwable t) {
 			this.naughtyList.add(expression);
-			exp = new Expression("'" + t.getMessage() + "'");
-			this.cache.put(expression, exp);
+			this.cache.put(expression, new StringValue(t.getMessage()));
 			this.logger.warn("Unable to compile [%s]: %s", expression, t.getMessage());
 		}
 		return exp;
 	}
 
-	/*
+	/**
 	 * Evaluates the expression and returns the result. The resulting parse tree is
 	 * cached for performance when a requery is made.
+	 * 
+	 * @return Variant containing the results of the evaluation
 	 */
 	@Nonnull
 	public Variant eval(@Nonnull final String script) {
 		return compile(script.intern()).eval();
 	}
 
-	/*
+	/**
 	 * Evaluates the expression and returns the result as a boolean.
+	 * 
+	 * @param expression
+	 *            The expression to evaluate
+	 * @return true of the expression evaluates true, false otherwise
 	 */
-	public boolean check(@Nonnull final String conditions) {
+	public boolean check(@Nonnull final String expression) {
 		// If the string is empty return true.
-		if (StringUtils.isEmpty(conditions))
+		if (StringUtils.isEmpty(expression))
 			return true;
 
-		return eval(conditions).asBoolean();
+		return eval(expression).asBoolean();
 	}
 
 }

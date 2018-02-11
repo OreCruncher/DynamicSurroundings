@@ -21,48 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.blockartistry.lib.expression;
+
+import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
 
-public abstract class Variant implements Comparable<Variant>, LazyVariant {
+@SuppressWarnings("serial")
+public final class OperatorTable extends TreeMap<String, Operator> {
 
-	protected final String name;
-	
-	public Variant() {
-		this("<ANON>");
+	public OperatorTable() {
+		super(String.CASE_INSENSITIVE_ORDER);
 	}
 	
-	public Variant(@Nonnull final String name) {
-		this.name = name;
+	public OperatorTable(@Nonnull final OperatorTable table) {
+		this();
+		this.putAll(table);
 	}
 	
-	@Nonnull
-	public String getName() {
-		return this.name;
-	}
-	
-	public abstract float asNumber();
-
-	@Nonnull
-	public abstract String asString();
-	
-	public abstract boolean asBoolean();
-
-	// Operator support in case of strings
-	@Nonnull
-	public abstract Variant add(@Nonnull final Variant term);
-	
-	@Override
-	@Nonnull
-	public final String toString() {
-		return asString();
-	}
-
-	@Override
-	@Nonnull
-	public final Variant eval() {
-		return this;
-	}
 }

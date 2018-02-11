@@ -21,48 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.blockartistry.lib.expression;
 
-import javax.annotation.Nonnull;
-
-public abstract class Variant implements Comparable<Variant>, LazyVariant {
-
-	protected final String name;
-	
-	public Variant() {
-		this("<ANON>");
-	}
-	
-	public Variant(@Nonnull final String name) {
-		this.name = name;
-	}
-	
-	@Nonnull
-	public String getName() {
-		return this.name;
-	}
-	
-	public abstract float asNumber();
-
-	@Nonnull
-	public abstract String asString();
-	
-	public abstract boolean asBoolean();
-
-	// Operator support in case of strings
-	@Nonnull
-	public abstract Variant add(@Nonnull final Variant term);
-	
-	@Override
-	@Nonnull
-	public final String toString() {
-		return asString();
-	}
-
-	@Override
-	@Nonnull
-	public final Variant eval() {
-		return this;
-	}
+/**
+ * LazyVariant interface created for lazily evaluated functions
+ */
+public interface LazyVariant {
+	Variant eval();
 }
