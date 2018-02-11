@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.footsteps.system.accents;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
@@ -55,7 +56,7 @@ public class RainSplashAccent implements IFootstepAccentProvider {
 	@Nonnull
 	public ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos blockPos,
 			@Nonnull final ObjectArray<IAcoustic> in) {
-		if (Weather.isRaining() && EnvironState.isPlayer(entity)) {
+		if (ModOptions.sound.enablePuddleSound && Weather.isRaining() && EnvironState.isPlayer(entity)) {
 			final BlockPos.MutableBlockPos pos;
 			if (blockPos != null) {
 				pos = new BlockPos.MutableBlockPos(blockPos);
