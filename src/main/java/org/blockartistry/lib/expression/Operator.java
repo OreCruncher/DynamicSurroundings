@@ -102,5 +102,5 @@ public abstract class Operator {
 	 *            Operand 2.
 	 * @return The result of the operation.
 	 */
-	public abstract Variant eval(final Variant... operands);
+	public abstract Variant eval(final LazyVariant... operands);
 }
