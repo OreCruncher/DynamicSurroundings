@@ -34,10 +34,7 @@ import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
-
 import gnu.trove.impl.Constants;
-import gnu.trove.iterator.TObjectFloatIterator;
-import gnu.trove.iterator.TObjectIntIterator;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -55,25 +52,18 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 	private void getBiomeSounds(@Nonnull final TObjectFloatHashMap<SoundEffect> result) {
 		// Need to collect sounds from all the applicable biomes
 		// along with their weights.
-		final TObjectIntIterator<BiomeInfo> info = AreaSurveyHandler.getBiomes().iterator();
-		while (info.hasNext()) {
-			info.advance();
-			final List<SoundEffect> bs = new ArrayList<SoundEffect>();
-			info.key().findSoundMatches(bs);
-			for (final SoundEffect sound : bs) {
-				final int w = info.value();
-				result.adjustOrPutValue(sound, w, w);
-			}
-		}
+		AreaSurveyHandler.getBiomes().forEachEntry((biome, w) -> {
+			final List<SoundEffect> bs = new ArrayList<>();
+			biome.findSoundMatches(bs);
+			bs.forEach(fx -> result.adjustOrPutValue(fx, w, w));
+			return true;
+		});
 
 		// Scale the volumes in the resulting list based on the weights
-		final int area = AreaSurveyHandler.getBiomeArea();
-		final TObjectFloatIterator<SoundEffect> itr = result.iterator();
-		while (itr.hasNext()) {
-			itr.advance();
-			final float scale = 0.1F + 0.9F * ((float) itr.value() / (float) area);
-			itr.setValue(scale);
-		}
+		final float area = AreaSurveyHandler.getBiomeArea();
+		result.transformValues(v -> {
+			return 0.1F + 0.9F * (v / area);
+		});
 	}
 
 	public AreaSoundEffectHandler() {
@@ -101,8 +91,7 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 		if (EnvironState.inVillage())
 			ClientRegistry.BIOME.VILLAGE_INFO.findSoundMatches(playerSounds);
 
-		for (final SoundEffect effect : playerSounds)
-			sounds.put(effect, 1.0F);
+		playerSounds.forEach(fx -> sounds.put(fx, 1.0F));
 
 		SoundEffectHandler.INSTANCE.queueAmbientSounds(sounds);
 

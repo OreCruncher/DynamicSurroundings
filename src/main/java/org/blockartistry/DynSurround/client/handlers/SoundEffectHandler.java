@@ -115,7 +115,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-		this.emitters.values().forEach(emitter -> emitter.update());
+		this.emitters.values().forEach(Emitter::update);
 		this.pending.removeIf(PENDING_SOUNDS);
 		this.sendToServer.forEach(sound -> Network.sendToServer(new PacketPlaySound(player, sound)));
 		this.sendToServer.clear();
@@ -132,7 +132,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	}
 
 	public void clearSounds() {
-		this.emitters.values().forEach(emitter -> emitter.stop());
+		this.emitters.values().forEach(Emitter::stop);
 		this.emitters.clear();
 		this.pending.clear();
 		SoundEngine.instance().stopAllSounds();
@@ -145,7 +145,6 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		// * If it does exist, update volume throttle and unfade if needed
 		this.emitters.retainEntries((fx, emitter) -> {
 			if (emitter.isDonePlaying()) {
-				DSurround.log().debug("Removing emitter: %s", emitter.toString());
 				return false;
 			}
 			final float volume = sounds.get(fx);

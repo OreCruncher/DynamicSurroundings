@@ -96,9 +96,6 @@ public class FxHandler extends EffectHandlerBase {
 	private final TIntObjectHashMap<EntityEffectHandler> handlers = new TIntObjectHashMap<EntityEffectHandler>(256);
 	private final EventEffectLibrary eventLibrary = new EventEffectLibrary(PARTICLE_HELPER, SOUND_HELPER);
 
-	private int totalHandlers = 0;
-	private int activeHandlers = 0;
-
 	private TimerEMA compute = new TimerEMA("FxHandler Updates");
 	private long nanos;
 
@@ -109,16 +106,11 @@ public class FxHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 
-		this.activeHandlers = 0;
-
 		this.handlers.retainEntries((idx, handler) -> {
 			handler.update();
-			if (!handler.isDummy())
-				this.activeHandlers++;
 			return handler.isAlive();
 		});
 
-		this.totalHandlers = this.handlers.size();
 		this.compute.update(this.nanos);
 		this.nanos = 0;
 	}
@@ -126,7 +118,7 @@ public class FxHandler extends EffectHandlerBase {
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void diagnostics(@Nonnull final DiagnosticEvent.Gather event) {
 		final StringBuilder builder = new StringBuilder();
-		builder.append("EffectHandlers: ").append(this.activeHandlers).append('/').append(this.totalHandlers);
+		builder.append("EffectHandlers: ").append(this.handlers.size());
 		event.output.add(builder.toString());
 	}
 
@@ -173,10 +165,7 @@ public class FxHandler extends EffectHandlerBase {
 	}
 
 	protected void clearHandlers() {
-		this.handlers.forEachEntry((idx, handler) -> {
-			handler.die();
-			return true;
-		});
+		this.handlers.valueCollection().forEach(EntityEffectHandler::die);
 		this.handlers.clear();
 	}
 
