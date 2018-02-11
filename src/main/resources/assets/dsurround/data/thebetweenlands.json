@@ -262,5 +262,16 @@
 		"thebetweenlands:mud",
 		"thebetweenlands:sludge",
 		"thebetweenlands:wood_chip_path"
-	]
+	],
+	"entities": {
+		"thebetweenlands:dark_druid": {
+			"effects": "footprint"
+		},
+		"thebetweenlands:tar_beast": {
+			"effects": "footprint"
+		},
+		"thebetweenlands:swamp_hag": {
+			"effects": "footprint"
+		}
+	}
 }
