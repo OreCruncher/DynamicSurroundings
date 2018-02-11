@@ -21,48 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.blockartistry.lib.expression;
 
-import javax.annotation.Nonnull;
+import java.util.Locale;
 
-public abstract class Variant implements Comparable<Variant>, LazyVariant {
+public abstract class LazyFunction {
+	/**
+	 * Name of this function.
+	 */
+	private String name;
+	/**
+	 * NumberValue of parameters expected for this function. <code>-1</code> denotes
+	 * a variable number of parameters.
+	 */
+	private int numParams;
 
-	protected final String name;
-	
-	public Variant() {
-		this("<ANON>");
+	/**
+	 * Creates a new function with given name and parameter count.
+	 *
+	 * @param name
+	 *            The name of the function.
+	 * @param numParams
+	 *            The number of parameters for this function. <code>-1</code>
+	 *            denotes a variable number of parameters.
+	 */
+	public LazyFunction(final String name, final int numParams) {
+		this.name = name.toUpperCase(Locale.ROOT);
+		this.numParams = numParams;
 	}
-	
-	public Variant(@Nonnull final String name) {
-		this.name = name;
-	}
-	
-	@Nonnull
+
 	public String getName() {
 		return this.name;
 	}
-	
-	public abstract float asNumber();
 
-	@Nonnull
-	public abstract String asString();
-	
-	public abstract boolean asBoolean();
-
-	// Operator support in case of strings
-	@Nonnull
-	public abstract Variant add(@Nonnull final Variant term);
-	
-	@Override
-	@Nonnull
-	public final String toString() {
-		return asString();
+	public int getNumParams() {
+		return this.numParams;
 	}
 
-	@Override
-	@Nonnull
-	public final Variant eval() {
-		return this;
+	public boolean numParamsVaries() {
+		return this.numParams < 0;
 	}
+
+	public abstract LazyVariant lazyEval(final LazyVariant... lazyParams);
 }
+

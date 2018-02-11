@@ -30,9 +30,6 @@
 
 package org.blockartistry.lib.expression;
 
-import org.blockartistry.lib.expression.Expression.LazyFunction;
-import org.blockartistry.lib.expression.Expression.LazyVariant;
-
 /**
  * Abstract definition of a supported expression function. A function is defined
  * by a name, the number of parameters and the actual processing implementation.
