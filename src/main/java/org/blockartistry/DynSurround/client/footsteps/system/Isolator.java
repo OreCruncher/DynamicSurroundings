@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.implem.PrimitiveMap;
-import org.blockartistry.DynSurround.client.footsteps.interfaces.IStepPlayer;
+import org.blockartistry.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -53,7 +53,7 @@ public class Isolator {
 	}
 
 	@Nonnull
-	public IStepPlayer getDefaultStepPlayer() {
+	public ISoundPlayer getDefaultStepPlayer() {
 		return this.acoustics;
 	}
 
