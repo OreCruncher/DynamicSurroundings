@@ -24,9 +24,8 @@
 
 package org.blockartistry.DynSurround.client.footsteps.implem;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -38,7 +37,6 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.ISoundPlayer;
-import org.blockartistry.DynSurround.client.footsteps.interfaces.IStepPlayer;
 import org.blockartistry.DynSurround.client.footsteps.system.Association;
 import org.blockartistry.DynSurround.client.footsteps.system.Footprint;
 import org.blockartistry.DynSurround.client.fx.ParticleCollections;
@@ -66,7 +64,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * A ILibrary that can also play sounds and default footsteps.
  */
 @SideOnly(Side.CLIENT)
-public class AcousticsManager implements ISoundPlayer, IStepPlayer {
+public class AcousticsManager implements ISoundPlayer {
 
 	private final Random RANDOM = XorShiftRandom.current();
 
@@ -114,25 +112,17 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	}
 
 	private void logAcousticPlay(@Nonnull final IAcoustic[] acoustics, @Nonnull final EventType event) {
-		final StringBuilder builder = new StringBuilder();
-		boolean doComma = false;
-		for (int i = 0; i < acoustics.length; i++) {
-			if (doComma)
-				builder.append(",");
-			else
-				doComma = true;
-			builder.append(acoustics[i].getAcousticName());
+		if (DSurround.log().isDebugging()) {
+			final String txt = String.join(",",
+					Arrays.stream(acoustics).map(IAcoustic::getAcousticName).toArray(String[]::new));
+			DSurround.log().debug("Playing acoustic %s for event %s", txt, event.toString().toUpperCase());
 		}
-		DSurround.log().debug("Playing acoustic %s for event %s", builder.toString(), event.toString().toUpperCase());
 	}
 
 	public void playAcoustic(@Nonnull final EntityLivingBase location, @Nonnull final IAcoustic[] acoustics,
 			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
-
 		if (acoustics != null) {
-			if (DSurround.log().isDebugging())
-				logAcousticPlay(acoustics, event);
-
+			logAcousticPlay(acoustics, event);
 			for (int i = 0; i < acoustics.length; i++) {
 				acoustics[i].playSound(this, location, event, inputOptions);
 			}
@@ -146,19 +136,16 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		else if (acousticName.equals("MESSY_GROUND"))
 			return MESSY_GROUND;
 
-		final List<IAcoustic> acoustics = new ArrayList<IAcoustic>();
-
-		final String fragments[] = acousticName.split(",");
-		for (final String fragment : fragments) {
-			final IAcoustic acoustic = this.acoustics.get(fragment);
-			if (acoustic == null) {
+		final IAcoustic[] result = Arrays.stream(acousticName.split(",")).map(fragment -> {
+			final IAcoustic a = this.acoustics.get(fragment);
+			if (a == null)
 				DSurround.log().warn("Acoustic '%s' not found!", fragment);
-			} else {
-				acoustics.add(acoustic);
-			}
-		}
+			return a;
+		}).filter(a -> {
+			return a != null;
+		}).toArray(IAcoustic[]::new);
 
-		return acoustics.size() == 0 ? EMPTY : acoustics.toArray(new IAcoustic[acoustics.size()]);
+		return result.length == 0 ? EMPTY : result;
 	}
 
 	@Override
@@ -229,8 +216,9 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 		return RANDOM;
 	}
 
+	// TODO: This state should move to Generator since it operates
+	// per generator.
 	public void think() {
-
 		final long time = TimeUtils.currentTimeMillis();
 
 		this.pending.removeIf(sound -> {
