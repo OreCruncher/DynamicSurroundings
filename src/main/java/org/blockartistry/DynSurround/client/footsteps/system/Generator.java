@@ -566,7 +566,6 @@ public class Generator {
 				if (association != null) {
 					pos = tPos;
 					in = below;
-					DSurround.log().debug("Fence detected");
 				}
 			}
 
