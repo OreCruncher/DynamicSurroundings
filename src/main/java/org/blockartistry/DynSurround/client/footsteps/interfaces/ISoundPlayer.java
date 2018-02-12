@@ -29,6 +29,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.DynSurround.client.footsteps.implem.Variator;
 import org.blockartistry.DynSurround.client.footsteps.system.Association;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -41,13 +42,13 @@ public interface ISoundPlayer {
 	/**
 	 * Play a step sound from a block.
 	 */
-	public void playStep(@Nonnull final EntityLivingBase entity, @Nonnull final Association non);
+	public void playStep(@Nonnull final EntityLivingBase entity, @Nonnull final Association non, @Nonnull final Variator var);
 
 	/**
 	 * Plays a sound.
 	 */
 	public void playSound(@Nonnull final EntityLivingBase location, @Nonnull final SoundEvent sound, final float volume, final float pitch,
-			@Nullable final IOptions options);
+			@Nonnull final Variator var, @Nullable final IOptions options);
 
 	/**
 	 * Returns a RANDOM number generator.
