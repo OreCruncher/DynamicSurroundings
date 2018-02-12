@@ -92,6 +92,9 @@ public final class Sounds {
 
 	// Quiet!
 	public static SoundEvent SILENCE;
+	
+	// Minecraft Cave Stuff
+	public static SoundEffect AMBIENT_CAVE;
 
 	private final static Map<ResourceLocation, SoundMetadata> soundMetadata = Maps.newHashMap();
 	private final static Map<ResourceLocation, SoundEvent> myRegistry = Maps.newHashMap();
@@ -175,6 +178,8 @@ public final class Sounds {
 		WATERFALL3 = new SoundEffect.Builder("waterfall.3", SoundCategory.AMBIENT).build();
 		WATERFALL4 = new SoundEffect.Builder("waterfall.4", SoundCategory.AMBIENT).build();
 		WATERFALL5 = new SoundEffect.Builder("waterfall.5", SoundCategory.AMBIENT).build();
+		
+		AMBIENT_CAVE = new SoundEffect.Builder(new ResourceLocation("minecraft:ambient.cave"), SoundCategory.AMBIENT).build();
 
 	}
 
