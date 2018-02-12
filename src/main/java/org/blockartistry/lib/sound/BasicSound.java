@@ -48,7 +48,6 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import paulscode.sound.SoundSystemConfig;
 
 @SideOnly(Side.CLIENT)
 public class BasicSound<T extends BasicSound<?>> extends PositionedSound implements INBTSerializable<NBTTagCompound> {
@@ -60,7 +59,9 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 		float getScale();
 	}
 
-	public static final ISoundScale DEFAULT_SCALE = () -> { return 1.0F; };
+	public static final ISoundScale DEFAULT_SCALE = () -> {
+		return 1.0F;
+	};
 
 	public static class NBT {
 		public static final String SOUND_EVENT = "s";
@@ -71,8 +72,6 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 		public static final String Y_COORD = "y";
 		public static final String Z_COORD = "z";
 	};
-
-	private static final float DROPOFF = 16 * 16;
 
 	protected final Random RANDOM = XorShiftRandom.current();
 	protected final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
@@ -230,25 +229,8 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 	}
 
 	public boolean canSoundBeHeard(@Nonnull final BlockPos soundPos) {
-
-		if (this.getAttenuationType() == AttenuationType.NONE)
-			return true;
-
-		final float v = this.getVolume();
-		if (v <= 0.0F || SoundSystemConfig.getMasterGain() <= 0F)
-			return false;
-
-		// This is from SoundManager. The idea is that if a sound
-		// is playing at <= 1F drop off range is about 16 blocks.
-		// If the volume is higher the drop off range is further.
-		// Note that we are dealing with square distances so the
-		// math looks kinda funny.
-		float dropoff = DROPOFF;
-		if (v > 1F)
-			dropoff *= (v * v);
-
-		final double distanceSq = this.pos.distanceSq(soundPos);
-		return distanceSq <= dropoff;
+		return this.getAttenuationType() == AttenuationType.NONE ? true
+				: SoundUtils.canBeHeard(this.pos, soundPos, this.getVolume());
 	}
 
 	public Vec3d getLocusPosition() {

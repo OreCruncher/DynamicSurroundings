@@ -41,6 +41,7 @@ import org.blockartistry.DynSurround.client.footsteps.implem.Substrate;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.system.accents.FootstepAccents;
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.MyUtils;
@@ -51,6 +52,7 @@ import org.blockartistry.lib.compat.EntityLivingBaseUtil;
 import org.blockartistry.lib.compat.EntityUtil;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
+import org.blockartistry.lib.sound.SoundUtils;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -319,43 +321,46 @@ public class Generator {
 
 		this.brushesTime = current + 100;
 
-		if ((entity.motionX == 0d && entity.motionZ == 0d) || entity.isSneaking())
-			return;
+		if (proceedWithStep(entity)) {
+			if (entity.motionX == 0d && entity.motionZ == 0d)
+				return;
 
-		final int yy = MathStuff.floor(entity.posY - 0.1d - entity.getYOffset() - (entity.onGround ? 0d : 0.25d));
-		final Association assos = this.findAssociationMessyFoliage(entity.getEntityWorld(),
-				new BlockPos(entity.posX, yy, entity.posZ));
-		if (assos != null) {
-			if (!this.isMessyFoliage) {
-				this.isMessyFoliage = true;
-				this.playAssociation(entity, assos, EventType.WALK);
+			final int yy = MathStuff.floor(entity.posY - 0.1d - entity.getYOffset() - (entity.onGround ? 0d : 0.25d));
+			final Association assos = this.findAssociationMessyFoliage(entity.getEntityWorld(),
+					new BlockPos(entity.posX, yy, entity.posZ));
+			if (assos != null) {
+				if (!this.isMessyFoliage) {
+					this.isMessyFoliage = true;
+					this.playAssociation(entity, assos, EventType.WALK);
+				}
+			} else {
+				this.isMessyFoliage = false;
 			}
-		} else {
-			this.isMessyFoliage = false;
 		}
+	}
+
+	protected boolean proceedWithStep(@Nonnull final EntityLivingBase entity) {
+		return !entity.isSneaking();
 	}
 
 	protected void playSinglefoot(@Nonnull final EntityLivingBase entity, final double verticalOffsetAsMinus,
 			@Nonnull final EventType eventType, final boolean foot) {
-
-		if (entity.isSneaking())
-			return;
-
-		final Association assos = this.findAssociationForPlayer(entity, verticalOffsetAsMinus, foot);
-		this.playAssociation(entity, assos, eventType);
+		if (proceedWithStep(entity)) {
+			final Association assos = this.findAssociationForPlayer(entity, verticalOffsetAsMinus, foot);
+			this.playAssociation(entity, assos, eventType);
+		}
 	}
 
 	protected void playMultifoot(@Nonnull final EntityLivingBase entity, final double verticalOffsetAsMinus,
 			final EventType eventType) {
 
-		if (entity.isSneaking())
-			return;
-
-		// STILL JUMP
-		final Association leftFoot = this.findAssociationForPlayer(entity, verticalOffsetAsMinus, false);
-		final Association rightFoot = this.findAssociationForPlayer(entity, verticalOffsetAsMinus, true);
-		this.playAssociation(entity, leftFoot, eventType);
-		this.playAssociation(entity, rightFoot, eventType);
+		if (proceedWithStep(entity)) {
+			// STILL JUMP
+			final Association leftFoot = this.findAssociationForPlayer(entity, verticalOffsetAsMinus, false);
+			final Association rightFoot = this.findAssociationForPlayer(entity, verticalOffsetAsMinus, true);
+			this.playAssociation(entity, leftFoot, eventType);
+			this.playAssociation(entity, rightFoot, eventType);
+		}
 	}
 
 	/**
@@ -431,7 +436,10 @@ public class Generator {
 		final double zz = player.posZ + zn * feetDistanceToCenter;
 		final BlockPos pos = new BlockPos(xx, minY - 0.1D - verticalOffsetAsMinus, zz);
 
-		final Association result = addSoundOverlay(player, findAssociationForLocation(player, pos));
+		Association result = findAssociationForLocation(player, pos);
+		if (SoundUtils.canBeHeard(player, EnvironState.getPlayerPosition()))
+			result = addSoundOverlay(player, result);
+
 		// It is possible that the association has no position, so it
 		// needs to be checked.
 		if (result != null && result.getPos() != null && this.VAR.HAS_FOOTPRINT) {
@@ -577,14 +585,12 @@ public class Generator {
 							Substrate.FOLIAGE);
 					if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 						association = MyUtils.concatenate(association, foliage);
-						DSurround.log().debug("Foliage detected");
 					}
 				}
 			}
 		} else {
 			pos = tPos;
 			in = above;
-			DSurround.log().debug("Carpet detected");
 		}
 
 		if (association != null) {
@@ -656,14 +662,15 @@ public class Generator {
 	 */
 	protected boolean playSpecialStoppingConditions(@Nonnull final EntityLivingBase entity) {
 		if (entity.isInWater()) {
-			final float volume = (float) MathStuff.sqrt(
-					entity.motionX * entity.motionX + entity.motionY * entity.motionY + entity.motionZ * entity.motionZ)
-					* 1.25F;
-			final ConfigOptions options = new ConfigOptions();
-			options.setGlidingVolume(volume > 1 ? 1 : volume);
-			// material water, see EntityLivingBase line 286
-			this.isolator.getAcoustics().playAcoustic(entity, AcousticsManager.SWIM,
-					entity.isInsideOfMaterial(Material.WATER) ? EventType.SWIM : EventType.WALK, options);
+			if (proceedWithStep(entity)) {
+				final float volume = (float) MathStuff.sqrt(entity.motionX * entity.motionX
+						+ entity.motionY * entity.motionY + entity.motionZ * entity.motionZ) * 1.25F;
+				final ConfigOptions options = new ConfigOptions();
+				options.setGlidingVolume(volume > 1 ? 1 : volume);
+				// material water, see EntityLivingBase line 286
+				this.isolator.getAcoustics().playAcoustic(entity, AcousticsManager.SWIM,
+						entity.isInsideOfMaterial(Material.WATER) ? EventType.SWIM : EventType.WALK, options);
+			}
 			return true;
 		}
 
