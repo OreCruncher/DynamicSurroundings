@@ -290,7 +290,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 					if (iblockstate.getMaterial() == Material.AIR)
 						if (wc.getLightFor(EnumSkyBlock.SKY, blockpos) <= 0)
 							if (wc.getLight(blockpos) <= this.RANDOM.nextInt(8)) {
-								final BasicSound<?> fx = Sounds.AMBIENT_CAVE.createSound(blockpos).setVolume(0.7F)
+								final BasicSound<?> fx = Sounds.AMBIENT_CAVE.createSound(blockpos).setVolume(0.8F)
 										.setPitch(0.8F + this.RANDOM.nextFloat() * 0.2F);
 								this.playSound(fx);
 								wc.ambienceTicks = this.RANDOM.nextInt(12000) + 6000;
@@ -308,6 +308,9 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void diagnostics(@Nonnull final DiagnosticEvent.Gather event) {
+
+		event.output.add(String.format("Ambiance Timer: %d", ((WorldClient) EnvironState.getWorld()).ambienceTicks));
+
 		final int soundCount = SoundEngine.instance().currentSoundCount();
 		final int maxCount = SoundEngine.instance().maxSoundCount();
 
