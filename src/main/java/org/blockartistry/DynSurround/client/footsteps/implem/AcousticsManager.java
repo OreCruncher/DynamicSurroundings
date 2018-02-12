@@ -32,14 +32,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 import org.blockartistry.DynSurround.client.footsteps.system.Association;
-import org.blockartistry.DynSurround.client.footsteps.system.Footprint;
-import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.FootstepSound;
@@ -55,8 +52,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -70,7 +65,6 @@ public class AcousticsManager implements ISoundPlayer {
 
 	private final HashMap<String, IAcoustic> acoustics = new HashMap<String, IAcoustic>();
 	private final ObjectArray<PendingSound> pending = new ObjectArray<PendingSound>();
-	private final ObjectArray<Footprint> footprints = new ObjectArray<Footprint>();
 
 	// Special sentinels for equating
 	public static final IAcoustic[] EMPTY = {};
@@ -93,22 +87,17 @@ public class AcousticsManager implements ISoundPlayer {
 	}
 
 	public void playAcoustic(@Nonnull final EntityLivingBase location, @Nonnull final Association acousticName,
-			@Nonnull final EventType event) {
+			@Nonnull final EventType event, @Nonnull final Variator var) {
 
 		// If the sound can't be heard by the player at the keyboard, just skip
 		// this part.
 		if (SoundUtils.canBeHeard(location, EnvironState.getPlayerPosition())) {
 			if (acousticName.getNoAssociation()) {
-				playStep(location, acousticName);
+				playStep(location, acousticName, var);
 			} else {
-				playAcoustic(location, acousticName.getData(), event, null);
+				playAcoustic(location, acousticName.getData(), event, var, null);
 			}
 		}
-
-		// Delay processing footprints until the think phase
-		final Footprint print = acousticName.getPrint();
-		if (print != null)
-			this.footprints.add(print);
 	}
 
 	private void logAcousticPlay(@Nonnull final IAcoustic[] acoustics, @Nonnull final EventType event) {
@@ -120,11 +109,11 @@ public class AcousticsManager implements ISoundPlayer {
 	}
 
 	public void playAcoustic(@Nonnull final EntityLivingBase location, @Nonnull final IAcoustic[] acoustics,
-			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
+			@Nonnull final EventType event, @Nonnull final Variator var, @Nullable final IOptions inputOptions) {
 		if (acoustics != null) {
 			logAcousticPlay(acoustics, event);
 			for (int i = 0; i < acoustics.length; i++) {
-				acoustics[i].playSound(this, location, event, inputOptions);
+				acoustics[i].playSound(this, location, event, var, inputOptions);
 			}
 		}
 	}
@@ -149,7 +138,8 @@ public class AcousticsManager implements ISoundPlayer {
 	}
 
 	@Override
-	public void playStep(@Nonnull final EntityLivingBase entity, @Nonnull final Association assos) {
+	public void playStep(@Nonnull final EntityLivingBase entity, @Nonnull final Association assos,
+			@Nonnull final Variator var) {
 		try {
 			SoundType soundType = assos.getSoundType();
 			if (!assos.isLiquid() && assos.getSoundType() != null) {
@@ -159,7 +149,8 @@ public class AcousticsManager implements ISoundPlayer {
 					soundType = MCHelper.getSoundType(Blocks.SNOW_LAYER);
 				}
 
-				actuallyPlaySound(entity, soundType.getStepSound(), soundType.getVolume(), soundType.getPitch(), true);
+				actuallyPlaySound(entity, soundType.getStepSound(), soundType.getVolume(), soundType.getPitch(), var,
+						true);
 			}
 		} catch (final Throwable t) {
 			DSurround.log().error("Unable to play step sound", t);
@@ -168,7 +159,7 @@ public class AcousticsManager implements ISoundPlayer {
 
 	@Override
 	public void playSound(@Nonnull final EntityLivingBase location, @Nonnull final SoundEvent sound, final float volume,
-			final float pitch, @Nullable final IOptions options) {
+			final float pitch, @Nonnull final Variator var, @Nullable final IOptions options) {
 
 		try {
 			if (options != null) {
@@ -178,10 +169,10 @@ public class AcousticsManager implements ISoundPlayer {
 					this.pending
 							.add(new PendingSound(location, sound, volume, pitch, null, delay, options.getDelayMax()));
 				} else {
-					actuallyPlaySound(location, sound, volume, pitch);
+					actuallyPlaySound(location, sound, volume, pitch, var);
 				}
 			} else {
-				actuallyPlaySound(location, sound, volume, pitch);
+				actuallyPlaySound(location, sound, volume, pitch, var);
 			}
 		} catch (final Throwable t) {
 			DSurround.log().error("Unable to play sound", t);
@@ -189,15 +180,16 @@ public class AcousticsManager implements ISoundPlayer {
 	}
 
 	protected void actuallyPlaySound(@Nonnull final EntityLivingBase entity, @Nonnull final SoundEvent sound,
-			final float volume, final float pitch) {
-		this.actuallyPlaySound(entity, sound, volume, pitch, false);
+			final float volume, final float pitch, @Nonnull final Variator var) {
+		this.actuallyPlaySound(entity, sound, volume, pitch, var, false);
 	}
 
 	protected void actuallyPlaySound(@Nonnull final EntityLivingBase entity, @Nonnull final SoundEvent sound,
-			final float volume, final float pitch, final boolean noScale) {
+			final float volume, final float pitch, @Nonnull final Variator var, final boolean noScale) {
 
 		try {
-			final FootstepSound s = new FootstepSound(entity, sound).setVolume(volume).setPitch(pitch);
+			final FootstepSound s = new FootstepSound(entity, sound).setVolume(volume * var.VOLUME_SCALE)
+					.setPitch(pitch);
 			if (noScale)
 				s.setVolumeScale(BasicSound.DEFAULT_SCALE);
 			SoundEffectHandler.INSTANCE.playSound(s);
@@ -218,27 +210,17 @@ public class AcousticsManager implements ISoundPlayer {
 
 	// TODO: This state should move to Generator since it operates
 	// per generator.
-	public void think() {
+	public void think(@Nonnull final Variator var) {
 		final long time = TimeUtils.currentTimeMillis();
 
 		this.pending.removeIf(sound -> {
 			if (sound.getTimeToPlay() <= time) {
 				if (!sound.isLate(time))
-					sound.playSound(AcousticsManager.this);
+					sound.playSound(AcousticsManager.this, var);
 				return true;
 			}
 			return false;
 		});
-
-		if (ModOptions.player.enableFootprints) {
-			this.footprints.forEach(print -> {
-				final Vec3d loc = print.getStepLocation();
-				final World world = print.getEntity().getEntityWorld();
-				ParticleCollections.addFootprint(world, loc.x, loc.y, loc.z, print.getRotation(), print.getScale(),
-						print.isRightFoot());
-			});
-		}
-		this.footprints.clear();
 	}
 
 }
