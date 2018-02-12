@@ -46,6 +46,7 @@ public enum Variator {
 			DISTANCE_TO_CENTER = 0.2F;
 			HAS_FOOTPRINT = true;
 			FOOTPRINT_SCALE = 1F;
+			VOLUME_SCALE = 1F;
 		}
 	},
 	PLAYER() {
@@ -64,6 +65,7 @@ public enum Variator {
 			DISTANCE_TO_CENTER = 0.2F;
 			HAS_FOOTPRINT = true;
 			FOOTPRINT_SCALE = 1F;
+			VOLUME_SCALE = 1F;
 		}
 	},
 	PLAYER_QUAD() {
@@ -82,6 +84,7 @@ public enum Variator {
 			DISTANCE_TO_CENTER = 0.2F;
 			HAS_FOOTPRINT = true;
 			FOOTPRINT_SCALE = 0.75F;
+			VOLUME_SCALE = 1F;
 		}
 	},
 	VILLAGER() {
@@ -100,6 +103,7 @@ public enum Variator {
 			DISTANCE_TO_CENTER = 0.2F;
 			HAS_FOOTPRINT = true;
 			FOOTPRINT_SCALE = 1F;
+			VOLUME_SCALE = 1F;
 		}
 	},
 	CHILD() {
@@ -118,6 +122,7 @@ public enum Variator {
 			DISTANCE_TO_CENTER = 0.1F;
 			HAS_FOOTPRINT = true;
 			FOOTPRINT_SCALE = 0.5F;
+			VOLUME_SCALE = 0.25F;
 		}
 	},
 	SKELETON() {
@@ -136,6 +141,7 @@ public enum Variator {
 			DISTANCE_TO_CENTER = 0.2F;
 			HAS_FOOTPRINT = true;
 			FOOTPRINT_SCALE = 0.5F;
+			VOLUME_SCALE = 0.25F;
 		}
 	};
 
@@ -153,6 +159,7 @@ public enum Variator {
 	public float DISTANCE_TO_CENTER;
 	public boolean HAS_FOOTPRINT;
 	public float FOOTPRINT_SCALE;
+	public float VOLUME_SCALE;
 
 	// public boolean FORCE_HUMANOID = false;
 	// public boolean GALLOP_3STEP = true;

@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.footsteps.system;
 
 import java.util.Locale;
 import java.util.Random;
+import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,6 +42,7 @@ import org.blockartistry.DynSurround.client.footsteps.implem.Substrate;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.system.accents.FootstepAccents;
+import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.lib.MCHelper;
@@ -71,6 +73,13 @@ public class Generator {
 
 	protected static final Random RANDOM = XorShiftRandom.current();
 	protected static final IBlockState AIR_STATE = Blocks.AIR.getDefaultState();
+
+	protected static final Consumer<Footprint> GENERATE_PRINT = print -> {
+		final Vec3d loc = print.getStepLocation();
+		final World world = print.getEntity().getEntityWorld();
+		ParticleCollections.addFootprint(world, loc.xCoord, loc.yCoord, loc.zCoord, print.getRotation(),
+				print.getScale(), print.isRightFoot());
+	};
 
 	protected final Isolator isolator;
 	protected final Variator VAR;
@@ -104,6 +113,8 @@ public class Generator {
 
 	protected int pedometer;
 
+	protected final ObjectArray<Footprint> footprints = new ObjectArray<Footprint>();
+
 	public Generator(@Nonnull final Isolator isolator, @Nonnull final Variator var) {
 		this.isolator = isolator;
 		this.VAR = var;
@@ -127,14 +138,19 @@ public class Generator {
 		simulateBrushes(entity);
 
 		// Flush!
-		this.isolator.getAcoustics().think();
+		this.isolator.getAcoustics().think(this.VAR);
+
+		if (this.footprints.size() > 0) {
+			this.footprints.forEach(GENERATE_PRINT);
+			this.footprints.clear();
+		}
 
 		if (this.stepThisFrame)
 			this.pedometer++;
 
 		// Player jump breath
 		if (this.didJump && ModOptions.sound.enableJumpSound && this.VAR.PLAY_JUMP && !entity.isSneaking()) {
-			this.isolator.getAcoustics().playAcoustic(entity, AcousticsManager.JUMP, EventType.JUMP, null);
+			this.isolator.getAcoustics().playAcoustic(entity, AcousticsManager.JUMP, EventType.JUMP, this.VAR, null);
 		}
 
 		if (ModOptions.sound.footstepsSoundFactor > 0) {
@@ -369,7 +385,7 @@ public class Generator {
 	protected void playAssociation(@Nonnull final EntityLivingBase entity, @Nullable final Association assos,
 			@Nonnull final EventType eventType) {
 		if (assos != null && !assos.isNotEmitter()) {
-			this.isolator.getAcoustics().playAcoustic(entity, assos, eventType);
+			this.isolator.getAcoustics().playAcoustic(entity, assos, eventType, this.VAR);
 		}
 	}
 
@@ -427,13 +443,11 @@ public class Generator {
 
 		final float rotDegrees = MathStuff.wrapDegrees(player.rotationYaw);
 		final double rot = MathStuff.toRadians(rotDegrees);
-		final double xn = MathStuff.cos(rot);
-		final double zn = MathStuff.sin(rot);
 		final float feetDistanceToCenter = isRightFoot ? -this.VAR.DISTANCE_TO_CENTER : this.VAR.DISTANCE_TO_CENTER;
 
-		final double xx = player.posX + xn * feetDistanceToCenter;
+		final double xx = player.posX + MathStuff.cos(rot) * feetDistanceToCenter;
+		final double zz = player.posZ + MathStuff.sin(rot) * feetDistanceToCenter;
 		final double minY = player.getEntityBoundingBox().minY;
-		final double zz = player.posZ + zn * feetDistanceToCenter;
 		final BlockPos pos = new BlockPos(xx, minY - 0.1D - verticalOffsetAsMinus, zz);
 
 		Association result = findAssociationForLocation(player, pos);
@@ -442,10 +456,12 @@ public class Generator {
 
 		// It is possible that the association has no position, so it
 		// needs to be checked.
-		if (result != null && result.getPos() != null && this.VAR.HAS_FOOTPRINT) {
+		if (ModOptions.player.enableFootprints && result != null && result.getPos() != null && this.VAR.HAS_FOOTPRINT) {
 			final Vec3d printPos = footstepPosition(player.getEntityWorld(), result.getPos(), xx, zz);
 			if (printPos != null) {
-				result.generatePrint(player, printPos, rotDegrees, this.VAR.FOOTPRINT_SCALE, isRightFoot);
+				final Footprint print = Footprint.produce(player, printPos, rotDegrees, this.VAR.FOOTPRINT_SCALE,
+						isRightFoot);
+				this.footprints.add(print);
 			}
 		}
 		return result;
@@ -668,7 +684,7 @@ public class Generator {
 				options.setGlidingVolume(volume > 1 ? 1 : volume);
 				// material water, see EntityLivingBase line 286
 				this.isolator.getAcoustics().playAcoustic(entity, AcousticsManager.SWIM,
-						entity.isInsideOfMaterial(Material.WATER) ? EventType.SWIM : EventType.WALK, options);
+						entity.isInsideOfMaterial(Material.WATER) ? EventType.SWIM : EventType.WALK, this.VAR, options);
 			}
 			return true;
 		}

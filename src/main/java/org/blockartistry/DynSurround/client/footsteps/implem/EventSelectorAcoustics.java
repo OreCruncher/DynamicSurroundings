@@ -56,12 +56,12 @@ public class EventSelectorAcoustics implements IAcoustic {
 
 	@Override
 	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final EntityLivingBase location,
-			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
+			@Nonnull final EventType event, @Nonnull final Variator var, @Nullable final IOptions inputOptions) {
 		final IAcoustic acoustic = this.pairs.get(event);
 		if (acoustic != null)
-			acoustic.playSound(player, location, event, inputOptions);
+			acoustic.playSound(player, location, event, var, inputOptions);
 		else if (event.canTransition())
-			playSound(player, location, event.getTransitionDestination(), inputOptions);
+			playSound(player, location, event.getTransitionDestination(), var, inputOptions);
 	}
 
 	public void setAcousticPair(@Nonnull final EventType type, @Nonnull final IAcoustic acoustic) {

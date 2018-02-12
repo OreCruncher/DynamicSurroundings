@@ -67,8 +67,8 @@ public class PendingSound {
 	 * 
 	 * @param player
 	 */
-	public void playSound(@Nonnull final ISoundPlayer player) {
-		player.playSound(this.location, this.sound, this.volume, this.pitch, this.options);
+	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Variator var) {
+		player.playSound(this.location, this.sound, this.volume, this.pitch, var, this.options);
 	}
 
 	/**
