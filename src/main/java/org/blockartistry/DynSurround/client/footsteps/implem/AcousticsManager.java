@@ -43,6 +43,7 @@ import org.blockartistry.DynSurround.client.footsteps.system.Association;
 import org.blockartistry.DynSurround.client.footsteps.system.Footprint;
 import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.FootstepSound;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.TimeUtils;
@@ -50,6 +51,7 @@ import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.lib.sound.BasicSound;
+import org.blockartistry.lib.sound.SoundUtils;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.entity.EntityLivingBase;
@@ -95,10 +97,14 @@ public class AcousticsManager implements ISoundPlayer, IStepPlayer {
 	public void playAcoustic(@Nonnull final EntityLivingBase location, @Nonnull final Association acousticName,
 			@Nonnull final EventType event) {
 
-		if (acousticName.getNoAssociation()) {
-			playStep(location, acousticName);
-		} else {
-			playAcoustic(location, acousticName.getData(), event, null);
+		// If the sound can't be heard by the player at the keyboard, just skip
+		// this part.
+		if (SoundUtils.canBeHeard(location, EnvironState.getPlayerPosition())) {
+			if (acousticName.getNoAssociation()) {
+				playStep(location, acousticName);
+			} else {
+				playAcoustic(location, acousticName.getData(), event, null);
+			}
 		}
 
 		// Delay processing footprints until the think phase
