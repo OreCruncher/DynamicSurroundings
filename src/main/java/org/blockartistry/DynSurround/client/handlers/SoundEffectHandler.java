@@ -283,9 +283,9 @@ public class SoundEffectHandler extends EffectHandlerBase {
 				final int deltaX = this.RANDOM.nextInt(30) - 15;
 				final int deltaY = this.RANDOM.nextInt(30) - 15;
 				final int deltaZ = this.RANDOM.nextInt(30) - 15;
-				final BlockPos blockpos = EnvironState.getPlayerPosition().add(deltaX, deltaY, deltaZ);
-				final int distance = (int) EnvironState.getPlayer().getDistanceSq(blockpos);
+				final int distance = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
 				if (distance > 4 && distance <= 255) {
+					final BlockPos blockpos = EnvironState.getPlayerPosition().add(deltaX, deltaY, deltaZ);
 					final IBlockState iblockstate = wc.getBlockState(blockpos);
 					if (iblockstate.getMaterial() == Material.AIR)
 						if (wc.getLightFor(EnumSkyBlock.SKY, blockpos) <= 0)
