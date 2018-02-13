@@ -52,7 +52,6 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.parsers.AcousticsJsonReader;
 import org.blockartistry.DynSurround.client.footsteps.system.Generator;
 import org.blockartistry.DynSurround.client.footsteps.system.GeneratorQP;
-import org.blockartistry.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.DynSurround.client.footsteps.system.ResourcePacks;
 import org.blockartistry.DynSurround.client.footsteps.util.ConfigProperty;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
@@ -103,8 +102,10 @@ public final class FootstepsRegistry extends Registry {
 
 	// System
 	private ResourcePacks dealer = new ResourcePacks();
-	private final Isolator isolator;
-	private final BlockMap blockMap;
+
+	private AcousticsManager acousticsManager;
+	private PrimitiveMap primitiveMap;
+	private BlockMap blockMap;
 
 	private Set<Material> FOOTPRINT_MATERIAL;
 	private Set<IBlockState> FOOTPRINT_STATES;
@@ -114,15 +115,18 @@ public final class FootstepsRegistry extends Registry {
 
 	public FootstepsRegistry(@Nonnull final Side side) {
 		super(side);
-		this.isolator = new Isolator();
-		this.blockMap = new BlockMap(this.isolator);
 	}
 
 	@Override
 	public void init() {
 
+		this.acousticsManager = new AcousticsManager();
+		this.blockMap = new BlockMap(this.acousticsManager);
+		this.primitiveMap = new PrimitiveMap(this.acousticsManager);
 		this.FOOTPRINT_MATERIAL = new IdentityHashSet<>();
 		this.FOOTPRINT_STATES = new IdentityHashSet<>();
+		this.ARMOR_SOUND = new EnumMap<>(ArmorClass.class);
+		this.ARMOR_SOUND_FOOT = new EnumMap<>(ArmorClass.class);
 
 		// Initialize the known materials that leave footprints
 		this.FOOTPRINT_MATERIAL.add(Material.CLAY);
@@ -134,15 +138,11 @@ public final class FootstepsRegistry extends Registry {
 		this.FOOTPRINT_MATERIAL.add(Material.CRAFTED_SNOW);
 		this.FOOTPRINT_MATERIAL.add(Material.SNOW);
 
-		this.ARMOR_SOUND = new EnumMap<>(ArmorClass.class);
-		this.ARMOR_SOUND_FOOT = new EnumMap<>(ArmorClass.class);
-
 		// It's a hack - needs refactor
 		AcousticsManager.SWIM = null;
 		AcousticsManager.JUMP = null;
 		AcousticsManager.SPLASH = null;
 
-		this.getBlockMap().clear();
 		final List<IResourcePack> repo = this.dealer.findResourcePacks();
 
 		reloadManifests(repo);
@@ -172,12 +172,12 @@ public final class FootstepsRegistry extends Registry {
 	@Override
 	public void initComplete() {
 		this.getBlockMap().freeze();
-		AcousticsManager.SWIM = this.isolator.getAcoustics().compileAcoustics("_SWIM");
-		AcousticsManager.JUMP = this.isolator.getAcoustics().compileAcoustics("_JUMP");
+		AcousticsManager.SWIM = this.acousticsManager.compileAcoustics("_SWIM");
+		AcousticsManager.JUMP = this.acousticsManager.compileAcoustics("_JUMP");
 		AcousticsManager.SPLASH = new IAcoustic[] {
-				new RainSplashAcoustic(this.isolator.getAcoustics().compileAcoustics("waterfine")) };
+				new RainSplashAcoustic(this.acousticsManager.compileAcoustics("waterfine")) };
 
-		final AcousticsManager am = this.isolator.getAcoustics();
+		final AcousticsManager am = this.acousticsManager;
 		this.ARMOR_SOUND.put(ArmorClass.NONE, am.getAcoustic("NOT_EMITTER"));
 		this.ARMOR_SOUND.put(ArmorClass.LIGHT, am.getAcoustic("armor_light"));
 		this.ARMOR_SOUND.put(ArmorClass.MEDIUM, am.getAcoustic("armor_medium"));
@@ -229,9 +229,7 @@ public final class FootstepsRegistry extends Registry {
 			Collections.sort(missingAcoustics);
 			DSurround.log().info("MISSING ACOUSTIC ENTRIES");
 			DSurround.log().info("========================");
-			for (final String s : missingAcoustics) {
-				DSurround.log().info(s);
-			}
+			missingAcoustics.forEach(DSurround.log()::info);
 		}
 	}
 
@@ -242,9 +240,7 @@ public final class FootstepsRegistry extends Registry {
 
 	private void reloadManifests(@Nonnull final List<IResourcePack> repo) {
 		for (final IResourcePack pack : repo) {
-			InputStream stream = null;
-			try {
-				stream = this.dealer.openPackDescriptor(pack);
+			try (final InputStream stream = this.dealer.openPackDescriptor(pack)) {
 				if (stream != null) {
 					final Manifest manifest = JsonUtils.load(stream, Manifest.class);
 					if (manifest != null) {
@@ -254,70 +250,34 @@ public final class FootstepsRegistry extends Registry {
 				}
 			} catch (final Exception e) {
 				DSurround.log().debug("Unable to load variator data from pack %s", pack.getPackName());
-			} finally {
-				if (stream != null)
-					try {
-						stream.close();
-					} catch (final IOException e) {
-						;
-					}
 			}
 		}
 	}
 
 	private void reloadPrimitiveMap(@Nonnull final List<IResourcePack> repo) {
-		final PrimitiveMap primitiveMap = new PrimitiveMap(this.isolator);
-
 		for (final IResourcePack pack : repo) {
-			InputStream stream = null;
-			try {
-				stream = this.dealer.openPrimitiveMap(pack);
+			try (final InputStream stream = this.dealer.openPrimitiveMap(pack)) {
 				if (stream != null)
-					primitiveMap.setup(ConfigProperty.fromStream(stream));
+					this.primitiveMap.setup(ConfigProperty.fromStream(stream));
 			} catch (final IOException e) {
 				DSurround.log().debug("Unable to load primitive map data from pack %s", pack.getPackName());
-			} finally {
-				if (stream != null)
-					try {
-						stream.close();
-					} catch (final IOException e) {
-						;
-					}
 			}
 		}
-
-		this.isolator.setPrimitiveMap(primitiveMap);
 	}
 
 	private void reloadAcoustics(@Nonnull final List<IResourcePack> repo) {
-		AcousticsManager acoustics = new AcousticsManager();
-		Scanner scanner = null;
-		InputStream stream = null;
-
 		for (final IResourcePack pack : repo) {
-			try {
-				stream = this.dealer.openAcoustics(pack);
-				if (stream != null) {
-					scanner = new Scanner(stream);
-					final String jasonString = scanner.useDelimiter("\\Z").next();
+			try (final InputStream stream = this.dealer.openAcoustics(pack)) {
+				if (stream != null)
+					try (final Scanner scanner = new Scanner(stream)) {
+						final String jasonString = scanner.useDelimiter("\\Z").next();
 
-					new AcousticsJsonReader("").parseJSON(jasonString, acoustics);
-				}
+						new AcousticsJsonReader("").parseJSON(jasonString, this.acousticsManager);
+					}
 			} catch (final IOException e) {
 				DSurround.log().debug("Unable to load acoustic data from pack %s", pack.getPackName());
-			} finally {
-				try {
-					if (scanner != null)
-						scanner.close();
-					if (stream != null)
-						stream.close();
-				} catch (final IOException e) {
-					;
-				}
 			}
 		}
-
-		this.isolator.setAcoustics(acoustics);
 	}
 
 	private void seedMap() {
@@ -373,12 +333,17 @@ public final class FootstepsRegistry extends Registry {
 			else
 				var = Variator.PLAYER;
 		}
-		return var.QUADRUPED ? new GeneratorQP(this.isolator, var) : new Generator(this.isolator, var);
+		return var.QUADRUPED ? new GeneratorQP(var) : new Generator(var);
 	}
 
 	@Nonnull
 	public BlockMap getBlockMap() {
 		return this.blockMap;
+	}
+
+	@Nonnull
+	public PrimitiveMap getPrimitiveMap() {
+		return this.primitiveMap;
 	}
 
 	public boolean hasFootprint(@Nonnull final IBlockState state) {
