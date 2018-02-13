@@ -27,8 +27,6 @@ package org.blockartistry.DynSurround.client.footsteps.interfaces;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.footsteps.implem.Variator;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,6 +41,6 @@ public interface IAcoustic {
 	 * Plays a sound.
 	 */
 	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final EntityLivingBase location,
-			@Nonnull final EventType event, @Nonnull final Variator var, @Nullable final IOptions inputOptions);
+			@Nonnull final EventType event, @Nullable final IOptions inputOptions);
 
 }
