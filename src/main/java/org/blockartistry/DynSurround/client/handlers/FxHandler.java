@@ -160,7 +160,7 @@ public class FxHandler extends EffectHandlerBase {
 		final EntityEffectHandler handler = this.handlers.get(entity.getUniqueID());
 		if (handler != null && !inRange) {
 			handler.die();
-		} else if (handler == null && inRange) {
+		} else if (handler == null && inRange && entity.isEntityAlive()) {
 			this.handlers.put(entity.getUniqueID(), library.create(entity).get());
 		}
 
