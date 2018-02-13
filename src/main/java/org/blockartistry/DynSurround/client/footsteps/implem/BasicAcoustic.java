@@ -66,7 +66,7 @@ public class BasicAcoustic implements IAcoustic {
 
 	@Override
 	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final EntityLivingBase location,
-			@Nonnull final EventType event, @Nonnull final Variator var, @Nullable final IOptions inputOptions) {
+			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
 		// Special case for intentionally empty sounds (as opposed to fall back
 		// sounds)
 		if (this.sound == null)
@@ -85,7 +85,7 @@ public class BasicAcoustic implements IAcoustic {
 			pitch *= inputOptions.getPitchScale();
 		}
 
-		player.playSound(location, this.sound, volume, pitch, var, this.outputOptions);
+		player.playSound(location, this.sound, volume, pitch, this.outputOptions);
 	}
 
 	private float generateVolume(@Nonnull final Random rng) {

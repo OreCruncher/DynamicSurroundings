@@ -53,9 +53,9 @@ public class SimultaneousAcoustic implements IAcoustic {
 
 	@Override
 	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final EntityLivingBase location,
-			@Nonnull final EventType event, @Nonnull final Variator var, @Nullable final IOptions inputOptions) {
+			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
 		for (int i = 0; i < this.acoustics.length; i++)
-			this.acoustics[i].playSound(player, location, event, var, inputOptions);
+			this.acoustics[i].playSound(player, location, event, inputOptions);
 	}
 
 }

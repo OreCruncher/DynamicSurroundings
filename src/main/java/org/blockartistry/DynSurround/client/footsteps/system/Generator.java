@@ -114,11 +114,13 @@ public class Generator {
 	protected int pedometer;
 
 	protected final ObjectArray<Footprint> footprints = new ObjectArray<Footprint>();
+	protected final SoundPlayer soundPlayer;
 
 	public Generator(@Nonnull final Isolator isolator, @Nonnull final Variator var) {
 		this.isolator = isolator;
 		this.VAR = var;
 		this.blockMap = ClientRegistry.FOOTSTEPS.getBlockMap();
+		this.soundPlayer = new SoundPlayer(this.VAR);
 	}
 
 	public int getPedometer() {
@@ -138,7 +140,7 @@ public class Generator {
 		simulateBrushes(entity);
 
 		// Flush!
-		this.isolator.getAcoustics().think(this.VAR);
+		this.soundPlayer.think();
 
 		if (this.footprints.size() > 0) {
 			this.footprints.forEach(GENERATE_PRINT);
@@ -150,7 +152,7 @@ public class Generator {
 
 		// Player jump breath
 		if (this.didJump && ModOptions.sound.enableJumpSound && this.VAR.PLAY_JUMP && !entity.isSneaking()) {
-			this.isolator.getAcoustics().playAcoustic(entity, AcousticsManager.JUMP, EventType.JUMP, this.VAR, null);
+			this.soundPlayer.playAcoustic(entity, AcousticsManager.JUMP, EventType.JUMP, null);
 		}
 
 		if (ModOptions.sound.footstepsSoundFactor > 0) {
@@ -385,7 +387,7 @@ public class Generator {
 	protected void playAssociation(@Nonnull final EntityLivingBase entity, @Nullable final Association assos,
 			@Nonnull final EventType eventType) {
 		if (assos != null && !assos.isNotEmitter()) {
-			this.isolator.getAcoustics().playAcoustic(entity, assos, eventType, this.VAR);
+			this.soundPlayer.playAcoustic(entity, assos, eventType);
 		}
 	}
 
@@ -683,8 +685,8 @@ public class Generator {
 				final ConfigOptions options = new ConfigOptions();
 				options.setGlidingVolume(volume > 1 ? 1 : volume);
 				// material water, see EntityLivingBase line 286
-				this.isolator.getAcoustics().playAcoustic(entity, AcousticsManager.SWIM,
-						entity.isInsideOfMaterial(Material.WATER) ? EventType.SWIM : EventType.WALK, this.VAR, options);
+				this.soundPlayer.playAcoustic(entity, AcousticsManager.SWIM,
+						entity.isInsideOfMaterial(Material.WATER) ? EventType.SWIM : EventType.WALK, options);
 			}
 			return true;
 		}

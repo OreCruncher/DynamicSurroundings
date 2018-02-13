@@ -25,9 +25,6 @@
 package org.blockartistry.DynSurround.client.footsteps.implem;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -44,18 +41,16 @@ public class PendingSound {
 	private final SoundEvent sound;
 	private final float volume;
 	private final float pitch;
-	private final IOptions options;
 	private final long timeToPlay;
 	private final long maximum;
 	private final float lateTolerance;
 
 	public PendingSound(@Nonnull final EntityLivingBase location, @Nonnull final SoundEvent sound, final float volume, final float pitch,
-			@Nullable final IOptions options, final long timeToPlay, final long maximum) {
+			final long timeToPlay, final long maximum) {
 		this.location = location;
 		this.sound = sound;
 		this.volume = volume;
 		this.pitch = pitch;
-		this.options = options;
 
 		this.timeToPlay = timeToPlay;
 		this.maximum = maximum;
@@ -67,8 +62,8 @@ public class PendingSound {
 	 * 
 	 * @param player
 	 */
-	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Variator var) {
-		player.playSound(this.location, this.sound, this.volume, this.pitch, var, this.options);
+	public void playSound(@Nonnull final ISoundPlayer player) {
+		player.playSound(this.location, this.sound, this.volume, this.pitch, null);
 	}
 
 	/**
