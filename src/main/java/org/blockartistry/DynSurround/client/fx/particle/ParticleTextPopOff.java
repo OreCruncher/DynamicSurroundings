@@ -28,7 +28,6 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.gfx.OpenGlState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -97,8 +96,8 @@ public class ParticleTextPopOff extends ParticleBase {
 	public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX,
 			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 
-		final float yaw = (-Minecraft.getMinecraft().player.rotationYaw);
-		final float pitch = Minecraft.getMinecraft().player.rotationPitch;
+		final float pitch = this.manager.playerViewX * (isThirdPersonView() ? -1 : 1);
+		final float yaw = -this.manager.playerViewY;
 
 		final float locX = ((float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpX()));
 		final float locY = ((float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpY()));
