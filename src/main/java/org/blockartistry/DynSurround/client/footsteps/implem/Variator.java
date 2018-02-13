@@ -122,7 +122,7 @@ public enum Variator {
 			DISTANCE_TO_CENTER = 0.1F;
 			HAS_FOOTPRINT = true;
 			FOOTPRINT_SCALE = 0.5F;
-			VOLUME_SCALE = 0.25F;
+			VOLUME_SCALE = 0.35F;
 		}
 	},
 	SKELETON() {
@@ -141,7 +141,7 @@ public enum Variator {
 			DISTANCE_TO_CENTER = 0.2F;
 			HAS_FOOTPRINT = true;
 			FOOTPRINT_SCALE = 0.5F;
-			VOLUME_SCALE = 0.25F;
+			VOLUME_SCALE = 0.35F;
 		}
 	};
 
