@@ -301,7 +301,9 @@ public class Generator {
 
 		if (this.isFlying && EntityLivingBaseUtil.isJumping(entity)) {
 			if (VAR.EVENT_ON_JUMP) {
-				this.didJump = true;
+				// If climbing stairs motion will be negative
+				if (entity.motionY > 0)
+					this.didJump = true;
 				double speed = entity.motionX * entity.motionX + entity.motionZ * entity.motionZ;
 
 				if (speed < VAR.SPEED_TO_JUMP_AS_MULTIFOOT) {
