@@ -166,6 +166,8 @@ public class SoundPlayer implements ISoundPlayer {
 			if (sound.getTimeToPlay() <= time) {
 				if (!sound.isLate(time))
 					sound.playSound(this);
+				else
+					DSurround.log().debug("Late sound: %d", (int) sound.howLate(time));
 				return true;
 			}
 			return false;

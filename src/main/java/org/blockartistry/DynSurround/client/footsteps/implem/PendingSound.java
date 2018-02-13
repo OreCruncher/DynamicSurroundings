@@ -35,7 +35,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class PendingSound {
 
-	private static final float LATENESS_THRESHOLD_DIVIDER = 1.2f;
+	private static final float LATENESS_SLACK_FACTOR = 1.2f;
 
 	private final EntityLivingBase location;
 	private final SoundEvent sound;
@@ -54,7 +54,7 @@ public class PendingSound {
 
 		this.timeToPlay = timeToPlay;
 		this.maximum = maximum;
-		this.lateTolerance = maximum / LATENESS_THRESHOLD_DIVIDER;
+		this.lateTolerance = maximum * LATENESS_SLACK_FACTOR;
 	}
 
 	/**
