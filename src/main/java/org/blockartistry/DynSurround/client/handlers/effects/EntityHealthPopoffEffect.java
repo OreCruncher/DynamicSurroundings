@@ -41,6 +41,7 @@ import org.blockartistry.lib.random.XorShiftRandom;
 
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -100,25 +101,32 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 		if (this.lastHealth != entity.getHealth()) {
 			final World world = EnvironState.getWorld();
 			final int adjustment = MathHelper.ceil(entity.getHealth() - this.lastHealth);
-			final int delta = Math.max(1, MathStuff.abs(adjustment));
-			final int criticalAmount = (int) (entity.getMaxHealth() / 2.5F);
-
-			final AxisAlignedBB bb = entity.getEntityBoundingBox();
-			final double posX = entity.posX;
-			final double posY = bb.maxY + 0.5D;
-			final double posZ = entity.posZ;
-			final String text = String.valueOf(delta);
-			final Color color = adjustment > 0 ? HEAL_TEXT_COLOR : DAMAGE_TEXT_COLOR;
-
-			ParticleTextPopOff particle = null;
-			if (ModOptions.player.showCritWords && adjustment < 0 && delta >= criticalAmount) {
-				particle = new ParticleTextPopOff(world, getPowerWord(), CRITICAL_TEXT_COLOR, posX, posY + 0.5D, posZ);
-				this.getState().addParticle(particle);
-			}
-			particle = new ParticleTextPopOff(world, text, color, posX, posY, posZ);
-			this.getState().addParticle(particle);
 
 			this.lastHealth = entity.getHealth();
+
+			// Don't display if it is the current player in first person view
+			if (!EnvironState.isPlayer(subject)
+					|| Minecraft.getMinecraft().getRenderManager().options.thirdPersonView != 0) {
+
+				final int delta = Math.max(1, MathStuff.abs(adjustment));
+				final int criticalAmount = (int) (entity.getMaxHealth() / 2.5F);
+
+				final AxisAlignedBB bb = entity.getEntityBoundingBox();
+				final double posX = entity.posX;
+				final double posY = bb.maxY + 0.5D;
+				final double posZ = entity.posZ;
+				final String text = String.valueOf(delta);
+				final Color color = adjustment > 0 ? HEAL_TEXT_COLOR : DAMAGE_TEXT_COLOR;
+
+				ParticleTextPopOff particle = null;
+				if (ModOptions.player.showCritWords && adjustment < 0 && delta >= criticalAmount) {
+					particle = new ParticleTextPopOff(world, getPowerWord(), CRITICAL_TEXT_COLOR, posX, posY + 0.5D,
+							posZ);
+					this.getState().addParticle(particle);
+				}
+				particle = new ParticleTextPopOff(world, text, color, posX, posY, posZ);
+				this.getState().addParticle(particle);
+			}
 		}
 	}
 
