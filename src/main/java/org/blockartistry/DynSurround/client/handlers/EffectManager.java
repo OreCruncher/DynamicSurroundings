@@ -57,7 +57,6 @@ public class EffectManager {
 		this.effectHandlers.add(new AreaSurveyHandler());
 		this.effectHandlers.add(new EnvironmentEffectHandler());
 		this.effectHandlers.add(new ParticleSystemHandler());
-		this.effectHandlers.add(new SoundCullHandler());
 		this.effectHandlers.add(new AreaSoundEffectHandler());
 		this.effectHandlers.add(new EntityEmojiHandler());
 		this.effectHandlers.add(new AuroraEffectHandler());
