@@ -38,12 +38,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public abstract class EventEffect {
 
-	private final IEventEffectLibraryState library;
+	private IEventEffectLibraryState library;
 
-	public EventEffect(@Nonnull final IEventEffectLibraryState state) {
-		this.library = state;
+	public EventEffect() {
 	}
 
+	/**
+	 * Used by the framework to configure the EffectLibrary to which it is
+	 * associated.  It is set during registration.
+	 * 
+	 * @param state The library set to configure for the EventEffect
+	 */
+	void setState(@Nonnull final IEventEffectLibraryState state) {
+		this.library = state;
+	}
+	
 	/**
 	 * Accessor to obtain the IEventEffectLibraryState associated with this
 	 * EventEffect instance.
