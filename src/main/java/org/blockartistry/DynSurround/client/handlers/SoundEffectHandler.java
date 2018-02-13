@@ -24,6 +24,7 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
+import java.util.Set;
 import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
@@ -32,6 +33,8 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientRegistry;
+import org.blockartistry.DynSurround.client.gui.ConfigSound;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.AdhocSound;
 import org.blockartistry.DynSurround.client.sound.Emitter;
@@ -49,10 +52,14 @@ import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.compat.PositionedSoundUtil;
 import org.blockartistry.lib.sound.BasicSound;
 
+import com.google.common.collect.Sets;
+
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.map.hash.TObjectFloatHashMap;
+import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -110,6 +117,8 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	private final THashMap<String, SoundEvent> replacements = new THashMap<>();
 	private final ObjectArray<PendingSound> pending = new ObjectArray<>();
 	private final ObjectArray<BasicSound<?>> sendToServer = new ObjectArray<>();
+	private final Set<String> soundsToBlock = Sets.newHashSet();
+	private final TObjectIntHashMap<String> soundCull = new TObjectIntHashMap<String>();
 
 	private SoundEffectHandler() {
 		super("Sound Effects");
@@ -130,6 +139,17 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	@Override
 	public void onConnect() {
 		clearSounds();
+		this.soundsToBlock.clear();
+		this.soundCull.clear();
+		final Set<ResourceLocation> reg = Minecraft.getMinecraft().getSoundHandler().soundRegistry.getKeys();
+		reg.forEach(resource -> {
+			final String rs = resource.toString();
+			if (ClientRegistry.SOUND.isSoundBlockedLogical(rs)) {
+				this.soundsToBlock.add(rs);
+			} else if (ClientRegistry.SOUND.isSoundCulled(rs)) {
+				this.soundCull.put(rs, -ModOptions.sound.soundCullingThreshold);
+			}
+		});
 	}
 
 	@Override
@@ -200,8 +220,45 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void soundPlay(@Nonnull final PlaySoundEvent e) {
+		// Don't mess with our ConfigSound instances from the config
+		// menu
+		final ISound theSound = e.getSound();
+		if (theSound instanceof ConfigSound)
+			return;
+
+		final ResourceLocation soundResource = theSound != null ? theSound.getSoundLocation() : null;
+
+		// Check to see if the sound is blocked
+		if (theSound != null && soundResource != null) {
+			final String resource = soundResource.toString();
+			if (this.soundsToBlock.contains(resource)) {
+				e.setResultSound(null);
+				return;
+			}
+		}
+
+		// Check to see if it needs to be culled
+		if (ModOptions.sound.soundCullingThreshold > 0 && soundResource != null) {
+			// Get the last time the sound was seen
+			final int lastOccurance = this.soundCull.get(soundResource);
+			if (lastOccurance != 0) {
+				final int currentTick = EnvironState.getTickCounter();
+				if ((currentTick - lastOccurance) < ModOptions.sound.soundCullingThreshold) {
+					// It's been culled!
+					e.setResultSound(null);
+					return;
+				} else {
+					// Set when it happened and fall through for remapping and stuff
+					this.soundCull.put(soundResource.toString(), currentTick);
+				}
+			}
+		}
+
+		// If it is Minecraft thunder handle the sound remapping to Dynamic Surroundings
+		// thunder
+		// and set the appropriate volume.
 		if (e.getName().equals("entity.lightning.thunder")) {
-			final PositionedSound sound = (PositionedSound) e.getSound();
+			final PositionedSound sound = (PositionedSound) theSound;
 			if (sound != null && PositionedSoundUtil.getVolume(sound) > 16) {
 				final BlockPos pos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
 				final ISound newSound = Sounds.THUNDER.createSound(pos).setVolume(ModOptions.sound.thunderVolume);
@@ -210,12 +267,11 @@ public class SoundEffectHandler extends EffectHandlerBase {
 			return;
 		}
 
-		final ISound s = e.getSound();
-		if (s instanceof PositionedSound) {
-			final PositionedSound ps = (PositionedSound) s;
-			final SoundEvent rep = this.replacements.get(ps.getSoundLocation().toString());
+		// Check to see if the sound is going to be replaced with another sound
+		if (theSound instanceof PositionedSound && soundResource != null) {
+			final SoundEvent rep = this.replacements.get(soundResource.toString());
 			if (rep != null) {
-				e.setResultSound(new AdhocSound(rep, (PositionedSound) s));
+				e.setResultSound(new AdhocSound(rep, (PositionedSound) theSound));
 			}
 		}
 	}
@@ -259,8 +315,9 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void registryReloadEvent(@Nonnull final ReloadEvent.Registry event) {
-		if (event.side == Side.CLIENT)
-			clearSounds();
+		if (event.side == Side.CLIENT) {
+			onConnect();
+		}
 	}
 
 	@SubscribeEvent
