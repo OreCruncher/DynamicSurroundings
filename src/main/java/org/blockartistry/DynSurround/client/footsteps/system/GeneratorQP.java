@@ -41,8 +41,8 @@ public class GeneratorQP extends Generator {
 	private int hoof = 0;
 	private float nextWalkDistanceMultiplier = 0.05f;
 
-	public GeneratorQP(@Nonnull final Isolator isolator, @Nonnull final Variator var) {
-		super(isolator, var);
+	public GeneratorQP(@Nonnull final Variator var) {
+		super(var);
 	}
 
 	@Override

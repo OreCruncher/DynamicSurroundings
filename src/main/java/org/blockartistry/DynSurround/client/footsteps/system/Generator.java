@@ -81,7 +81,6 @@ public class Generator {
 				print.isRightFoot());
 	};
 
-	protected final Isolator isolator;
 	protected final Variator VAR;
 	protected final BlockMap blockMap;
 
@@ -116,8 +115,7 @@ public class Generator {
 	protected final ObjectArray<Footprint> footprints = new ObjectArray<Footprint>();
 	protected final SoundPlayer soundPlayer;
 
-	public Generator(@Nonnull final Isolator isolator, @Nonnull final Variator var) {
-		this.isolator = isolator;
+	public Generator(@Nonnull final Variator var) {
 		this.VAR = var;
 		this.blockMap = ClientRegistry.FOOTSTEPS.getBlockMap();
 		this.soundPlayer = new SoundPlayer(this.VAR);
@@ -653,14 +651,15 @@ public class Generator {
 		final String substrate = String.format(Locale.ENGLISH, "%.2f_%.2f", type.getVolume(), type.getPitch());
 
 		// Check for primitive in register
-		IAcoustic[] primitive = this.isolator.getPrimitiveMap().getPrimitiveMapSubstrate(soundName, substrate);
+		IAcoustic[] primitive = ClientRegistry.FOOTSTEPS.getPrimitiveMap().getPrimitiveMapSubstrate(soundName,
+				substrate);
 		if (primitive == null) {
 			if (flag) {
-				primitive = this.isolator.getPrimitiveMap().getPrimitiveMapSubstrate(soundName, "break_" + soundName); // Check
-																														// sound
+				primitive = ClientRegistry.FOOTSTEPS.getPrimitiveMap().getPrimitiveMapSubstrate(soundName,
+						"break_" + soundName); // Check sound
 			}
 			if (primitive == null) {
-				primitive = this.isolator.getPrimitiveMap().getPrimitiveMap(soundName);
+				primitive = ClientRegistry.FOOTSTEPS.getPrimitiveMap().getPrimitiveMap(soundName);
 			}
 		}
 
