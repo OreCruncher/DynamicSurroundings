@@ -66,7 +66,7 @@ public class ProbabilityWeightsAcoustic implements IAcoustic {
 	
 	@Override
 	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final EntityLivingBase location, @Nonnull final EventType event,
-			@Nonnull final Variator var, @Nullable final IOptions inputOptions) {
+			@Nullable final IOptions inputOptions) {
 		if (this.totalWeight <= 0)
 			return;
 
@@ -76,6 +76,6 @@ public class ProbabilityWeightsAcoustic implements IAcoustic {
 		for (i = this.weights.length; (targetWeight -= this.weights[i - 1]) >= 0; i--)
 			;
 
-		this.acoustics[i - 1].playSound(player, location, event, var, inputOptions);
+		this.acoustics[i - 1].playSound(player, location, event, inputOptions);
 	}
 }
