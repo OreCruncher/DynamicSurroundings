@@ -59,6 +59,7 @@ import org.blockartistry.lib.sound.SoundUtils;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -302,16 +303,17 @@ public class Generator {
 		if (this.isFlying && EntityLivingBaseUtil.isJumping(entity)) {
 			if (VAR.EVENT_ON_JUMP) {
 				// If climbing stairs motion will be negative
-				if (entity.motionY > 0)
+				if (entity.motionY > 0) {
 					this.didJump = true;
-				double speed = entity.motionX * entity.motionX + entity.motionZ * entity.motionZ;
+					double speed = entity.motionX * entity.motionX + entity.motionZ * entity.motionZ;
 
-				if (speed < VAR.SPEED_TO_JUMP_AS_MULTIFOOT) {
-					// STILL JUMP
-					playMultifoot(entity, 0.4d, EventType.JUMP);
-				} else {
-					// RUNNING JUMP
-					playSinglefoot(entity, 0.4d, EventType.JUMP, this.isRightFoot);
+					if (speed < VAR.SPEED_TO_JUMP_AS_MULTIFOOT) {
+						// STILL JUMP
+						playMultifoot(entity, 0.4d, EventType.JUMP);
+					} else {
+						// RUNNING JUMP
+						playSinglefoot(entity, 0.4d, EventType.JUMP, this.isRightFoot);
+					}
 				}
 			}
 		} else if (!this.isFlying) {
@@ -429,39 +431,45 @@ public class Generator {
 		return null;
 	}
 
+	protected boolean shouldProducePrint(@Nonnull final Entity entity) {
+		return ModOptions.player.enableFootprints && this.VAR.HAS_FOOTPRINT
+				&& !entity.isInvisibleToPlayer(EnvironState.getPlayer());
+	}
+
 	/**
-	 * Find an association for a player particular foot. This will fetch the player
-	 * angle and use it as a basis to find out what block is below their feet (or
-	 * which block is likely to be below their feet if the player is walking on the
-	 * edge of a block when walking over non-emitting blocks like air or water).<br>
+	 * Find an association for an entities particular foot. This will fetch the
+	 * player angle and use it as a basis to find out what block is below their feet
+	 * (or which block is likely to be below their feet if the player is walking on
+	 * the edge of a block when walking over non-emitting blocks like air or
+	 * water).<br>
 	 * <br>
 	 * Returns null if no blocks are valid emitting blocks.<br>
 	 * Returns a string that begins with "_NO_ASSOCIATION" if a matching block was
 	 * found, but has no association in the blockmap.
 	 */
 	@Nonnull
-	protected Association findAssociationForPlayer(@Nonnull final EntityLivingBase player,
+	protected Association findAssociationForPlayer(@Nonnull final EntityLivingBase entity,
 			final double verticalOffsetAsMinus, final boolean isRightFoot) {
 
-		final float rotDegrees = MathStuff.wrapDegrees(player.rotationYaw);
+		final float rotDegrees = MathStuff.wrapDegrees(entity.rotationYaw);
 		final double rot = MathStuff.toRadians(rotDegrees);
 		final float feetDistanceToCenter = isRightFoot ? -this.VAR.DISTANCE_TO_CENTER : this.VAR.DISTANCE_TO_CENTER;
 
-		final double xx = player.posX + MathStuff.cos(rot) * feetDistanceToCenter;
-		final double zz = player.posZ + MathStuff.sin(rot) * feetDistanceToCenter;
-		final double minY = player.getEntityBoundingBox().minY;
+		final double xx = entity.posX + MathStuff.cos(rot) * feetDistanceToCenter;
+		final double zz = entity.posZ + MathStuff.sin(rot) * feetDistanceToCenter;
+		final double minY = entity.getEntityBoundingBox().minY;
 		final BlockPos pos = new BlockPos(xx, minY - 0.1D - verticalOffsetAsMinus, zz);
 
-		Association result = findAssociationForLocation(player, pos);
-		if (SoundUtils.canBeHeard(player, EnvironState.getPlayerPosition()))
-			result = addSoundOverlay(player, result);
+		Association result = findAssociationForLocation(entity, pos);
+		if (SoundUtils.canBeHeard(entity, EnvironState.getPlayerPosition()))
+			result = addSoundOverlay(entity, result);
 
 		// It is possible that the association has no position, so it
 		// needs to be checked.
-		if (ModOptions.player.enableFootprints && result != null && result.getPos() != null && this.VAR.HAS_FOOTPRINT) {
-			final Vec3d printPos = footstepPosition(player.getEntityWorld(), result.getPos(), xx, zz);
+		if (result != null && result.getPos() != null && shouldProducePrint(entity)) {
+			final Vec3d printPos = footstepPosition(entity.getEntityWorld(), result.getPos(), xx, zz);
 			if (printPos != null) {
-				final Footprint print = Footprint.produce(player, printPos, rotDegrees, this.VAR.FOOTPRINT_SCALE,
+				final Footprint print = Footprint.produce(entity, printPos, rotDegrees, this.VAR.FOOTPRINT_SCALE,
 						isRightFoot);
 				this.footprints.add(print);
 			}
@@ -470,7 +478,7 @@ public class Generator {
 	}
 
 	/**
-	 * Find an association for a player, and a location. This will try to find the
+	 * Find an association for an entity, and a location. This will try to find the
 	 * best matching block on that location, or near that location, for instance if
 	 * the player is walking on the edge of a block when walking over non-emitting
 	 * blocks like air or water)<br>
@@ -480,12 +488,12 @@ public class Generator {
 	 * found, but has no association in the blockmap.
 	 */
 	@Nonnull
-	protected Association findAssociationForLocation(@Nonnull final EntityLivingBase player,
+	protected Association findAssociationForLocation(@Nonnull final EntityLivingBase entity,
 			@Nonnull final BlockPos pos) {
 
-		final World world = player.getEntityWorld();
+		final World world = entity.getEntityWorld();
 
-		if (player.isInWater())
+		if (entity.isInWater())
 			DSurround.log().debug(
 					"WARNING!!! Playing a sound while in the water! This is supposed to be halted by the stopping conditions!!");
 
@@ -502,8 +510,8 @@ public class Generator {
 		if (worked == null) {
 			// Create a trigo. mark contained inside the block the player is
 			// over
-			double xdang = (player.posX - pos.getX()) * 2 - 1;
-			double zdang = (player.posZ - pos.getZ()) * 2 - 1;
+			double xdang = (entity.posX - pos.getX()) * 2 - 1;
+			double zdang = (entity.posZ - pos.getZ()) * 2 - 1;
 			// -1 0 1
 			// ------- -1
 			// | o |
