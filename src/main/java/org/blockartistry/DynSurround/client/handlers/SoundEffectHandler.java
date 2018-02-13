@@ -122,10 +122,6 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	private SoundEffectHandler() {
 		super("Sound Effects");
-
-		final SoundEvent bowLoose = Sounds.getSound(new ResourceLocation(DSurround.MOD_ID, "bow.loose"));
-		this.replacements.put("minecraft:entity.arrow.shoot", bowLoose);
-		this.replacements.put("minecraft:entity.skeleton.shoot", bowLoose);
 	}
 
 	@Override
@@ -141,6 +137,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		clearSounds();
 		this.soundsToBlock.clear();
 		this.soundCull.clear();
+		this.replacements.clear();
 		final Set<ResourceLocation> reg = Minecraft.getMinecraft().getSoundHandler().soundRegistry.getKeys();
 		reg.forEach(resource -> {
 			final String rs = resource.toString();
@@ -150,6 +147,13 @@ public class SoundEffectHandler extends EffectHandlerBase {
 				this.soundCull.put(rs, -ModOptions.sound.soundCullingThreshold);
 			}
 		});
+
+		final ResourceLocation bowLooseResource = new ResourceLocation(DSurround.MOD_ID, "bow.loose");
+		final SoundEvent bowLoose = Sounds.getSound(bowLooseResource);
+		if (!this.soundsToBlock.contains(bowLooseResource.toString())) {
+			this.replacements.put("minecraft:entity.arrow.shoot", bowLoose);
+			this.replacements.put("minecraft:entity.skeleton.shoot", bowLoose);
+		}
 	}
 
 	@Override
@@ -258,13 +262,16 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		// thunder
 		// and set the appropriate volume.
 		if (e.getName().equals("entity.lightning.thunder")) {
-			final PositionedSound sound = (PositionedSound) theSound;
-			if (sound != null && PositionedSoundUtil.getVolume(sound) > 16) {
-				final BlockPos pos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
-				final ISound newSound = Sounds.THUNDER.createSound(pos).setVolume(ModOptions.sound.thunderVolume);
-				e.setResultSound(newSound);
+			final String thunderSound = Sounds.THUNDER.getSoundName();
+			if (!this.soundsToBlock.contains(thunderSound)) {
+				final PositionedSound sound = (PositionedSound) theSound;
+				if (sound != null && PositionedSoundUtil.getVolume(sound) > 16) {
+					final BlockPos pos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
+					final ISound newSound = Sounds.THUNDER.createSound(pos).setVolume(ModOptions.sound.thunderVolume);
+					e.setResultSound(newSound);
+				}
+				return;
 			}
-			return;
 		}
 
 		// Check to see if the sound is going to be replaced with another sound

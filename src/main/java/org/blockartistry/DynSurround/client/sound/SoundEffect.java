@@ -139,6 +139,10 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 		this.soundTitle = title;
 		return this;
 	}
+	
+	public String getSoundName() {
+		return this.soundName;
+	}
 
 	public String getSoundTitle() {
 		return this.soundTitle;
