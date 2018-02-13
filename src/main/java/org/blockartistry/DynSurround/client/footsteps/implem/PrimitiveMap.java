@@ -33,7 +33,6 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
-import org.blockartistry.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.DynSurround.client.footsteps.util.ConfigProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -41,11 +40,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class PrimitiveMap {
 
-	private final Isolator isolator;
+	private final AcousticsManager acousticsManager;
 	private final HashMap<String, IAcoustic[]> primitiveMap = new HashMap<String, IAcoustic[]>();
-	
-	public PrimitiveMap(@Nonnull final Isolator isolator) {
-		this.isolator = isolator;
+
+	public PrimitiveMap(@Nonnull final AcousticsManager manager) {
+		this.acousticsManager = manager;
 	}
 
 	@Nullable
@@ -59,7 +58,7 @@ public class PrimitiveMap {
 	}
 
 	public void register(@Nonnull final String key, @Nonnull final String value) {
-		this.primitiveMap.put(key, this.isolator.getAcoustics().compileAcoustics(value));
+		this.primitiveMap.put(key, this.acousticsManager.compileAcoustics(value));
 	}
 
 	public void setup(@Nonnull final ConfigProperty props) {
@@ -68,7 +67,7 @@ public class PrimitiveMap {
 			try {
 				register(entry.getKey(), entry.getValue());
 			} catch (final Exception e) {
-				DSurround.log().warn("Error making registration " + entry.getKey() + ": " + e.getMessage());
+				DSurround.log().info("Error making registration %s: %s", entry.getKey(), e.getMessage());
 			}
 		}
 	}

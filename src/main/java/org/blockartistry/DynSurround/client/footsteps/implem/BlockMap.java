@@ -34,7 +34,6 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
-import org.blockartistry.DynSurround.client.footsteps.system.Isolator;
 import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.DynSurround.registry.BlockInfo;
 import org.blockartistry.lib.BlockNameUtil;
@@ -53,7 +52,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class BlockMap {
 
-	private final Isolator isolator;
+	private final AcousticsManager acousticsManager;
 	private final BlockAcousticMap metaMap = new BlockAcousticMap();
 	private Map<Substrate, BlockAcousticMap> substrateMap = new EnumMap<Substrate, BlockAcousticMap>(Substrate.class);
 
@@ -136,8 +135,8 @@ public class BlockMap {
 		macros.put("#fence", entries);
 	}
 
-	public BlockMap(@Nonnull final Isolator isolator) {
-		this.isolator = isolator;
+	public BlockMap(@Nonnull final AcousticsManager manager) {
+		this.acousticsManager = manager;
 		this.metaMap.put(new BlockInfo(Blocks.AIR), AcousticsManager.NOT_EMITTER);
 	}
 
@@ -165,7 +164,7 @@ public class BlockMap {
 			@Nonnull final String value) {
 
 		final Substrate s = Substrate.get(substrate);
-		final IAcoustic[] acoustics = this.isolator.getAcoustics().compileAcoustics(value);
+		final IAcoustic[] acoustics = this.acousticsManager.compileAcoustics(value);
 
 		if (s == null) {
 			this.metaMap.put(new BlockInfo(block, meta), acoustics);
