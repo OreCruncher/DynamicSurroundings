@@ -59,6 +59,7 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	 *            EventEffect instance to register
 	 */
 	public void register(@Nonnull final EventEffect effect) {
+		effect.setState(this);
 		this.effects.add(effect);
 		MinecraftForge.EVENT_BUS.register(effect);
 	}
@@ -68,8 +69,7 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	 * scope.
 	 */
 	public void cleanup() {
-		for (final EventEffect e : this.effects)
-			MinecraftForge.EVENT_BUS.unregister(e);
+		this.effects.forEach(MinecraftForge.EVENT_BUS::unregister);
 		this.effects.clear();
 	}
 

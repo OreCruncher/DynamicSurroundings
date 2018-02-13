@@ -23,7 +23,11 @@
  */
 package org.blockartistry.DynSurround.client.handlers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 
@@ -51,7 +55,6 @@ import org.blockartistry.lib.sound.BasicSound;
 
 import com.google.common.collect.ImmutableList;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -78,6 +81,12 @@ public class FxHandler extends EffectHandlerBase {
 		}
 	};
 
+	// Used to process handler entries during the client tick
+	private static final Predicate<EntityEffectHandler> HANDLER_UPDATE_REMOVE = handler -> {
+		handler.update();
+		return !handler.isAlive();
+	};
+
 	private static final EntityEffectLibrary library = new EntityEffectLibrary(PARTICLE_HELPER, SOUND_HELPER);
 
 	public static FxHandler INSTANCE;
@@ -93,7 +102,7 @@ public class FxHandler extends EffectHandlerBase {
 		library.register(EntityHealthPopoffEffect.DEFAULT_FILTER, new EntityHealthPopoffEffect.Factory());
 	}
 
-	private final TIntObjectHashMap<EntityEffectHandler> handlers = new TIntObjectHashMap<EntityEffectHandler>(256);
+	private final Map<UUID, EntityEffectHandler> handlers = new HashMap<>(256);
 	private final EventEffectLibrary eventLibrary = new EventEffectLibrary(PARTICLE_HELPER, SOUND_HELPER);
 
 	private TimerEMA compute = new TimerEMA("FxHandler Updates");
@@ -105,12 +114,7 @@ public class FxHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-
-		this.handlers.retainEntries((idx, handler) -> {
-			handler.update();
-			return handler.isAlive();
-		});
-
+		this.handlers.values().removeIf(HANDLER_UPDATE_REMOVE);
 		this.compute.update(this.nanos);
 		this.nanos = 0;
 	}
@@ -130,7 +134,7 @@ public class FxHandler extends EffectHandlerBase {
 	 * @return A list of EntityEffects, if any
 	 */
 	public List<String> getEffects(@Nonnull final Entity entity) {
-		final EntityEffectHandler eh = this.handlers.get(entity.getEntityId());
+		final EntityEffectHandler eh = this.handlers.get(entity.getUniqueID());
 		if (eh != null) {
 			return eh.getAttachedEffects();
 		}
@@ -150,22 +154,21 @@ public class FxHandler extends EffectHandlerBase {
 		final long start = System.nanoTime();
 
 		final double distanceThreshold = ModOptions.general.specialEffectRange * ModOptions.general.specialEffectRange;
-		final boolean inRange = entity.getDistanceSqToEntity(EnvironState.getPlayer()) <= distanceThreshold;
+		final boolean inRange = entity.getDistanceSqToEntity(EnvironState.getPlayer()) <= distanceThreshold
+				&& entity.dimension == EnvironState.getDimensionId();
 
-		EntityEffectHandler handler = this.handlers.get(entity.getEntityId());
-		if (handler != null) {
-			if (!inRange)
-				handler.die();
-		} else if (inRange) {
-			handler = library.create(entity).get();
-			this.handlers.put(entity.getEntityId(), handler);
+		final EntityEffectHandler handler = this.handlers.get(entity.getUniqueID());
+		if (handler != null && !inRange) {
+			handler.die();
+		} else if (handler == null && inRange) {
+			this.handlers.put(entity.getUniqueID(), library.create(entity).get());
 		}
 
 		this.nanos += (System.nanoTime() - start);
 	}
 
 	protected void clearHandlers() {
-		this.handlers.valueCollection().forEach(EntityEffectHandler::die);
+		this.handlers.values().forEach(EntityEffectHandler::die);
 		this.handlers.clear();
 	}
 
@@ -191,13 +194,9 @@ public class FxHandler extends EffectHandlerBase {
 
 	@Override
 	public void onConnect() {
-
 		this.clearHandlers();
-
-		this.eventLibrary.register(new CraftingSoundEffect(this.eventLibrary));
-
+		this.eventLibrary.register(new CraftingSoundEffect());
 		INSTANCE = this;
-
 		DiagnosticHandler.INSTANCE.addTimer(this.compute);
 	}
 
