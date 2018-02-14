@@ -34,10 +34,8 @@ import net.minecraftforge.fml.common.Loader;
 //Based on patches by CreativeMD
 public class SoundCrashFixSource extends Transmorgrifier {
 
-	private static final String[] classNames = { "paulscode.sound.Source" };
-
 	public SoundCrashFixSource() {
-		super(classNames);
+		super("paulscode.sound.Source");
 	}
 
 	@Override

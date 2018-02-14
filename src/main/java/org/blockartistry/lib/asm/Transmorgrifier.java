@@ -24,6 +24,8 @@
 
 package org.blockartistry.lib.asm;
 
+import javax.annotation.Nonnull;
+
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
@@ -32,10 +34,10 @@ import org.objectweb.asm.tree.MethodNode;
 
 public abstract class Transmorgrifier {
 
-	private final String[] classNames;
+	private final String className;
 
-	public Transmorgrifier(final String... classNames) {
-		this.classNames = classNames;
+	public Transmorgrifier(final String className) {
+		this.className = className;
 	}
 
 	public int classWriterFlags() {
@@ -43,25 +45,32 @@ public abstract class Transmorgrifier {
 	}
 
 	/*
-	 * Name of the Transmorgrifier. Used in logging to identify which set of
-	 * logic was operating.
+	 * Name of the Transmorgrifier. Used in logging to identify which set of logic
+	 * was operating.
 	 */
+	@Nonnull
 	public abstract String name();
 
+	/**
+	 * Obtains the name of the class this Transmorgrifier is targeting
+	 * 
+	 * @return Target class name
+	 */
+	@Nonnull
+	public String getClassName() {
+		return this.className;
+	}
+
 	/*
-	 * Indicates whether the transmorgrification process should executed.
-	 * Override to provide custom behavior, such as configuration control.
+	 * Indicates whether the transmorgrification process should executed. Override
+	 * to provide custom behavior, such as configuration control.
 	 */
 	public boolean isEnabled() {
 		return true;
 	}
 
-	public boolean matches(final String... names) {
-		for (final String s : names)
-			for (final String cn : this.classNames)
-				if (s.equals(cn))
-					return true;
-		return false;
+	public boolean matches(final String name) {
+		return this.className.equals(name);
 	}
 
 	/*

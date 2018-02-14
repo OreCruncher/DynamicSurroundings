@@ -39,17 +39,8 @@ import org.objectweb.asm.tree.VarInsnNode;
 
 public class PatchEntityRenderer extends Transmorgrifier {
 
-	// 1.10.x
-	private static final String[] classNames = { "net.minecraft.client.renderer.EntityRenderer", "bnz", "bnd" };
-	
-	// 1.11.x
-	//private static final String[] classNames = { "net.minecraft.client.renderer.EntityRenderer", "bqc" };
-	
-	// 1.12.x
-	//private static final String[] classNames = { "net.minecraft.client.renderer.EntityRenderer", "buo" };
-
 	public PatchEntityRenderer() {
-		super(classNames);
+		super("net.minecraft.client.renderer.EntityRenderer");
 	}
 
 	@Override
@@ -65,7 +56,7 @@ public class PatchEntityRenderer extends Transmorgrifier {
 	@Override
 	public boolean transmorgrify(final ClassNode cn) {
 
-		final String names[] = { "func_78484_h", "addRainParticles" };
+		final String names[] = { "addRainParticles", "func_78484_h" };
 		final String sigs[] = { "()V", "()V" };
 
 		final MethodNode m = findMethod(cn, names, sigs);
@@ -84,9 +75,11 @@ public class PatchEntityRenderer extends Transmorgrifier {
 			list.add(new InsnNode(RETURN));
 			m.instructions = list;
 			return true;
+		} else {
+			Transformer.log().error("Unable to locate method {}{}", names[0], sigs[0]);
 		}
 
-		Transformer.log().info("Unable to patch [net.minecraft.client.renderer.EntityRenderer]!");
+		Transformer.log().info("Unable to patch [{}]!", this.getClassName());
 
 		return false;
 	}
