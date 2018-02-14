@@ -75,7 +75,7 @@ public class VillagerChatEffect extends EntityEffect {
 
 	@Override
 	public String name() {
-		return "VillagerChatEffect";
+		return "Villager Chat";
 	}
 
 	@Override
