@@ -58,7 +58,7 @@ public class EntitySwingEffect extends EntityEffect {
 
 	@Override
 	public String name() {
-		return "EntitySwingEffect";
+		return "Item Swing";
 	}
 
 	@Override

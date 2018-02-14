@@ -27,15 +27,17 @@ import java.lang.reflect.Field;
 import javax.annotation.Nonnull;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public final class EntityUtil {
-	
+
 	private static Field nextStepDistance = ReflectionHelper.findField(Entity.class, "nextStepDistance",
 			"field_70150_b");
 
 	private EntityUtil() {
-		
+
 	}
 
 	public static int getNextStepDistance(@Nonnull final Entity entity) {
@@ -55,4 +57,11 @@ public final class EntityUtil {
 		}
 	}
 
+	@Nonnull
+	public static String getClassName(@Nonnull final Class<? extends Entity> entityClass) {
+		final ResourceLocation key = EntityList.getKey(entityClass);
+		if (key != null)
+			return key.getResourcePath();
+		return "EntityHasNoClass";
+	}
 }

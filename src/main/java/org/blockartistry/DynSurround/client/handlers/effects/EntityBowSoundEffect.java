@@ -50,7 +50,7 @@ public class EntityBowSoundEffect extends EntityEffect {
 	
 	@Override
 	public String name() {
-		return "EntityBowSoundEffect";
+		return "Bow Sound";
 	}
 
 	@Override

@@ -65,7 +65,7 @@ public class EntityFootprintEffect extends EntityEffect {
 
 	@Override
 	public String name() {
-		return "EntityFootprintEffect";
+		return "Footstep/Prints";
 	}
 
 	@Override
@@ -80,10 +80,6 @@ public class EntityFootprintEffect extends EntityEffect {
 			this.eventRegistered = true;
 			MinecraftForge.EVENT_BUS.register(this);
 		}
-	}
-
-	protected boolean isMoving(@Nonnull final Entity entity) {
-		return entity.distanceWalkedModified != entity.prevDistanceWalkedModified;
 	}
 
 	@Override
@@ -113,8 +109,6 @@ public class EntityFootprintEffect extends EntityEffect {
 		return super.toString() + ": " + this.generator.getPedometer();
 	}
 
-	// Currently restricted to the active player. Have stuff to unwind in the
-	// footprint code.
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
 		@Override
 		public boolean applies(@Nonnull final Entity e, @Nonnull final EntityEffectInfo eei) {

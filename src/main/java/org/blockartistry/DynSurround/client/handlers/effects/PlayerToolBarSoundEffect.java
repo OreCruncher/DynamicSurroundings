@@ -131,7 +131,7 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 
 	@Override
 	public String name() {
-		return "PlayerToolBarSoundEffect";
+		return "Toolbar";
 	}
 
 	@Override
