@@ -38,17 +38,15 @@ import net.minecraftforge.fml.common.Loader;
 //Based on patches by CreativeMD
 public class SoundCrashFixLibrary extends Transmorgrifier {
 
-	private static final String[] classNames = { "paulscode.sound.Library" };
-
 	public SoundCrashFixLibrary() {
-		super(classNames);
+		super("paulscode.sound.Library");
 	}
 
 	@Override
 	public boolean isEnabled() {
 		return !Loader.isModLoaded("ambientsounds");
 	}
-	
+
 	@Override
 	public String name() {
 		return "removeSource";
@@ -56,7 +54,10 @@ public class SoundCrashFixLibrary extends Transmorgrifier {
 
 	@Override
 	public boolean transmorgrify(final ClassNode cn) {
-		MethodNode m = findMethod(cn, "removeSource", "(Ljava/lang/String;)V");
+		final String name = "removeSource";
+		final String sig = "(Ljava/lang/String;)V";
+
+		final MethodNode m = findMethod(cn, name, sig);
 		if (m != null) {
 			for (Iterator<?> iterator = m.instructions.iterator(); iterator.hasNext();) {
 				final AbstractInsnNode insn = (AbstractInsnNode) iterator.next();
@@ -70,7 +71,11 @@ public class SoundCrashFixLibrary extends Transmorgrifier {
 					return true;
 				}
 			}
+		} else {
+			Transformer.log().error("Unable to locate method {}{}", name, sig);
 		}
+
+		Transformer.log().info("Unable to patch [{}]!", this.getClassName());
 
 		return false;
 	}

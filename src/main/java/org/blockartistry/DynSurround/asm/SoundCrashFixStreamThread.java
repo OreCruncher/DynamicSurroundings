@@ -40,17 +40,15 @@ import net.minecraftforge.fml.common.Loader;
 // Based on patches by CreativeMD
 public class SoundCrashFixStreamThread extends Transmorgrifier {
 
-	private static final String[] classNames = { "paulscode.sound.StreamThread" };
-
 	public SoundCrashFixStreamThread() {
-		super(classNames);
+		super("paulscode.sound.StreamThread");
 	}
 
 	@Override
 	public boolean isEnabled() {
 		return !Loader.isModLoaded("ambientsounds");
 	}
-	
+
 	@Override
 	public String name() {
 		return "removeSource";
@@ -58,8 +56,11 @@ public class SoundCrashFixStreamThread extends Transmorgrifier {
 
 	@Override
 	public boolean transmorgrify(final ClassNode cn) {
-		final MethodNode m = findMethod(cn, "run", "()V");
+		final String name = "run";
+		final String sig = "()V";
+		final MethodNode m = findMethod(cn, name, sig);
 		if (m != null) {
+			this.logMethod(Transformer.log(), m, "Found!");
 			for (Iterator<?> iterator = m.instructions.iterator(); iterator.hasNext();) {
 				AbstractInsnNode insn = (AbstractInsnNode) iterator.next();
 				if (insn instanceof MethodInsnNode && ((MethodInsnNode) insn).owner.equals("java/util/ListIterator")
@@ -78,7 +79,11 @@ public class SoundCrashFixStreamThread extends Transmorgrifier {
 					}
 				}
 			}
+		} else {
+			Transformer.log().error("Unable to locate method {}{}", name, sig);
 		}
+
+		Transformer.log().info("Unable to patch [{}]!", this.getClassName());
 
 		return false;
 
