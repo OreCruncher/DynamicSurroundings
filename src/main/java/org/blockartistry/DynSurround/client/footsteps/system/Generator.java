@@ -128,6 +128,10 @@ public class Generator {
 
 	public void generateFootsteps(@Nonnull final EntityLivingBase entity) {
 
+		// If an entity is a passenger then no footsteps to process
+		if (entity.isRiding())
+			return;
+
 		// Clear starting state
 		this.didJump = false;
 		this.stepThisFrame = false;
