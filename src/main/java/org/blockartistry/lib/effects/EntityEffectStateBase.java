@@ -79,7 +79,7 @@ public class EntityEffectStateBase extends EffectStateBase implements IEntityEff
 		final Entity e = this.subject.get();
 		if (e == null)
 			return Double.MAX_VALUE;
-		return e.getDistanceSqToEntity(entity);
+		return e.getDistanceSq(entity);
 	}
 
 	/**

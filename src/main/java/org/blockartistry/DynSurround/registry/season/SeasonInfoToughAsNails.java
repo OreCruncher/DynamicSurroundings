@@ -82,10 +82,10 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		final Biome biome = world.getBiome(pos);
 
-		if (biome.getTemperature() <= 0.7F && getSeasonData(world) == Season.WINTER)
+		if (biome.getDefaultTemperature() <= 0.7F && getSeasonData(world) == Season.WINTER)
 			return 0.0F;
 
-		return biome.getFloatTemperature(pos);
+		return biome.getTemperature(pos);
 	}
 
 	@Nonnull

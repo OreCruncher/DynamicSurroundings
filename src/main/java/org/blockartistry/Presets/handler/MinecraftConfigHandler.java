@@ -61,7 +61,7 @@ public class MinecraftConfigHandler {
 		final GameSettings settings = Minecraft.getMinecraft().gameSettings;
 
 		for (final Options option : GameSettings.Options.values()) {
-			final String theName = option.getEnumString();
+			final String theName = option.getTranslation();
 			switch (option) {
 			case INVERT_MOUSE:
 				data.setBoolean(theName, settings.invertMouse);
@@ -456,7 +456,7 @@ public class MinecraftConfigHandler {
 	@Nullable
 	private static Options getOptionByName(@Nonnull final String name) {
 		for (final Options o : Options.values())
-			if (name.equals(o.getEnumString()))
+			if (name.equals(o.getTranslation()))
 				return o;
 		return null;
 	}

@@ -101,7 +101,7 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 		final Entity entity = this.subject.get();
 		if (entity != null) {
 			final EntityPlayer player = Minecraft.getMinecraft().player;
-			this.rangeToPlayer = entity.getDistanceSqToEntity(player);
+			this.rangeToPlayer = entity.getDistanceSq(player);
 
 			for (final EntityEffect e : activeEffects)
 				if (this.isAlive || e.receiveLastCall())

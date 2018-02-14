@@ -78,7 +78,7 @@ public class FrostBreathEffect extends EntityEffect {
 	protected boolean isPossibleToShow(final Entity entity) {
 		if (entity.isInsideOfMaterial(Material.AIR)) {
 			final BlockPos entityPos = entity.getPosition();
-			final float temp = entity.getEntityWorld().getBiome(entityPos).getFloatTemperature(entityPos);
+			final float temp = entity.getEntityWorld().getBiome(entityPos).getTemperature(entityPos);
 			return temp < 0.2F;
 		}
 		return false;

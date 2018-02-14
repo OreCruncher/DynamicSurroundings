@@ -34,7 +34,7 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20170624"
+    mappings = "${config.version.snapshot}"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
@@ -95,8 +95,8 @@ dependencies {
 
     // compile "foxie:Calendar:1.10.2-1.5-10:deobf"
     // compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
-    compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.12-7.0.0.2291:deobf"
-    compile "com.github.glitchfiend.biomesoplenty:ToughAsNails:1.12-3.0.0.62:deobf"
+    compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.12.2-7.0.1.2302:deobf"
+    compile "com.github.glitchfiend.biomesoplenty:ToughAsNails:1.12.2-3.1.0.73:deobf"
     
 	// http://dvs1.progwml6.com/files/maven/mezz/jei/
     deobfCompile "mezz.jei:jei_1.12.2:4.8.5.146:api"

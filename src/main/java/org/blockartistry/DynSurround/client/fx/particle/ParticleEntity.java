@@ -89,7 +89,7 @@ public class ParticleEntity extends ParticleAsset {
 
 		// From mob spawner
 		this.prototype.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
-		this.manager.doRenderEntity(this.prototype, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, false);
+		this.manager.renderEntity(this.prototype, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, false);
 
 	}
 

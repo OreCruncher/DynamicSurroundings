@@ -97,12 +97,12 @@ public class BiomeHandler implements IBiome {
 
 	@Override
 	public float getFloatTemperature(@Nonnull final BlockPos pos) {
-		return this.biome.getFloatTemperature(pos);
+		return this.biome.getTemperature(pos);
 	}
 
 	@Override
 	public float getTemperature() {
-		return this.biome.getTemperature();
+		return this.biome.getDefaultTemperature();
 	}
 
 	@Override
