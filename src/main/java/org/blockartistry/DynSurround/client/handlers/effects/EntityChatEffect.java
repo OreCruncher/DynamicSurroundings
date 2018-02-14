@@ -40,6 +40,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.api.events.SpeechTextEvent;
 import org.blockartistry.lib.Translations;
 import org.blockartistry.lib.WeightTable;
+import org.blockartistry.lib.compat.EntityUtil;
 import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.EntityEffectInfo;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
@@ -50,7 +51,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -124,18 +124,8 @@ public class EntityChatEffect extends EntityEffect {
 
 	}
 
-	@Nonnull
-	protected static String getEntityClassName(@Nonnull final Class<? extends Entity> entityClass) {
-		final String name = EntityList.getEntityStringFromClass(entityClass);
-		if (name == null) {
-			DSurround.log().debug("getEntityStringFromClass([%s]) returned null", entityClass.getName());
-			return "EntityHasNoClass";
-		}
-		return name.toLowerCase();
-	}
-
 	static void setTimers(@Nonnull final Class<? extends Entity> entity, final int base, final int random) {
-		setTimers(getEntityClassName(entity), base, random);
+		setTimers(EntityUtil.getClassName(entity), base, random);
 	}
 
 	static void setTimers(@Nonnull final String entity, final int base, final int random) {
@@ -147,7 +137,7 @@ public class EntityChatEffect extends EntityEffect {
 	}
 
 	static boolean hasMessages(@Nonnull final Entity entity) {
-		return !(entity instanceof EntityPlayer) && messages.get(getEntityClassName(entity.getClass())) != null;
+		return !(entity instanceof EntityPlayer) && messages.get(EntityUtil.getClassName(entity.getClass())) != null;
 	}
 
 	protected final Random random = XorShiftRandom.current();
@@ -159,14 +149,15 @@ public class EntityChatEffect extends EntityEffect {
 	}
 
 	public EntityChatEffect(@Nonnull final Entity entity, @Nullable final String entityName) {
-		final String theName = StringUtils.isEmpty(entityName) ? getEntityClassName(entity.getClass()) : entityName;
+		final String theName = StringUtils.isEmpty(entityName) ? EntityUtil.getClassName(entity.getClass())
+				: entityName;
 		this.data = messages.get(theName);
 		this.nextChat = getWorldTicks(entity) + getNextChatTime();
 	}
 
 	@Override
 	public String name() {
-		return "EntityChatEffect";
+		return "Entity Chat";
 	}
 
 	protected int getBase() {

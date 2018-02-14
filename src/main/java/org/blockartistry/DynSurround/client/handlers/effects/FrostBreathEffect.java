@@ -52,7 +52,7 @@ public class FrostBreathEffect extends EntityEffect {
 
 	@Override
 	public String name() {
-		return "FrostBreathEffect";
+		return "Frost Breath";
 	}
 	
 	@Override

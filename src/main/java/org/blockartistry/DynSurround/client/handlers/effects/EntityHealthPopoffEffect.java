@@ -84,7 +84,7 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 
 	@Override
 	public String name() {
-		return "EntityHealthPopoffEffect";
+		return "Health Tracker";
 	}
 
 	@Override

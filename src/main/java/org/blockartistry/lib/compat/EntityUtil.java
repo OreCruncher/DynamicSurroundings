@@ -27,15 +27,16 @@ import java.lang.reflect.Field;
 import javax.annotation.Nonnull;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public final class EntityUtil {
-	
+
 	private static Field nextStepDistance = ReflectionHelper.findField(Entity.class, "nextStepDistance",
 			"field_70150_b");
 
 	private EntityUtil() {
-		
+
 	}
 
 	public static int getNextStepDistance(@Nonnull final Entity entity) {
@@ -55,4 +56,12 @@ public final class EntityUtil {
 		}
 	}
 
+	@Nonnull
+	public static String getClassName(@Nonnull final Class<? extends Entity> entityClass) {
+		final String name = EntityList.getEntityStringFromClass(entityClass);
+		if (name == null) {
+			return "EntityHasNoClass";
+		}
+		return name.toLowerCase();
+	}
 }
