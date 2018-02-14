@@ -39,17 +39,8 @@ import org.objectweb.asm.tree.VarInsnNode;
 
 public class PatchSoundManager extends Transmorgrifier {
 
-	// 1.10.x
-	//private static final String[] classNames = { "net.minecraft.client.audio.SoundManager", "bzu" };
-	
-	// 1.11.x
-	//private static final String[] classNames = { "net.minecraft.client.audio.SoundManager", "ccn" };
-	
-	// 1.12.x
-	private static final String[] classNames = { "net.minecraft.client.audio.SoundManager", "chk" };
-
 	public PatchSoundManager() {
-		super(classNames);
+		super("net.minecraft.client.audio.SoundManager");
 	}
 
 	@Override
@@ -64,7 +55,7 @@ public class PatchSoundManager extends Transmorgrifier {
 
 	@Override
 	public boolean transmorgrify(final ClassNode cn) {
-		final String names[] = { "func_148612_a", "getURLForSoundResource" };
+		final String names[] = { "getURLForSoundResource", "func_148612_a" };
 		final String sigs[] = { "(Lnet/minecraft/util/ResourceLocation;)Ljava/net/URL;",
 				"(Lnet/minecraft/util/ResourceLocation;)Ljava/net/URL;" };
 
@@ -78,14 +69,16 @@ public class PatchSoundManager extends Transmorgrifier {
 			final String owner = "org/blockartistry/lib/sound/SoundCache";
 			final String targetName = "getURLForSoundResource";
 			final String sig = "(Lnet/minecraft/util/ResourceLocation;)Ljava/net/URL;";
-			
+
 			list.add(new MethodInsnNode(INVOKESTATIC, owner, targetName, sig, false));
 			list.add(new InsnNode(ARETURN));
 			m.instructions.insert(m.instructions.getFirst(), list);
 			return true;
+		} else {
+			Transformer.log().error("Unable to locate method {}{}", names[0], sigs[0]);
 		}
 
-		Transformer.log().info("Unable to patch [net.minecraft.client.audio.SoundManager]!");
+		Transformer.log().info("Unable to patch [{}]!", this.getClassName());
 
 		return false;
 	}

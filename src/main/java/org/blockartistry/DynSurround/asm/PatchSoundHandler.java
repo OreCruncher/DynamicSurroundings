@@ -39,26 +39,15 @@ import org.objectweb.asm.tree.TypeInsnNode;
 
 public class PatchSoundHandler extends Transmorgrifier {
 
-	// 1.10.x
-	// private static final String[] classNames = {
-	// "net.minecraft.client.audio.SoundHandler", "bzw" };
-
-	// 1.11.x
-	// private static final String[] classNames = {
-	// "net.minecraft.client.audio.SoundHandler", "ccp" };
-
-	// 1.12.x
-	private static final String[] classNames = { "net.minecraft.client.audio.SoundHandler", "chm" };
-
 	public PatchSoundHandler() {
-		super(classNames);
+		super("net.minecraft.client.audio.SoundHandler");
 	}
 
 	@Override
 	public int classWriterFlags() {
 		return ClassWriter.COMPUTE_MAXS;
 	}
-	
+
 	@Override
 	public String name() {
 		return "SoundManager Replace";
@@ -67,14 +56,17 @@ public class PatchSoundHandler extends Transmorgrifier {
 	@Override
 	public boolean transmorgrify(final ClassNode cn) {
 
+		final String name = "<init>";
+		final String sig = "(Lnet/minecraft/client/resources/IResourceManager;Lnet/minecraft/client/settings/GameSettings;)V";
+
 		final String managerToReplace = "net/minecraft/client/audio/SoundManager";
 		final String newManager = "org/blockartistry/DynSurround/client/sound/SoundManagerReplacement";
 
 		boolean modified = false;
 
-		final MethodNode m = findCTOR(cn,
-				"(Lnet/minecraft/client/resources/IResourceManager;Lnet/minecraft/client/settings/GameSettings;)V");
+		final MethodNode m = findCTOR(cn, sig);
 		if (m != null) {
+			this.logMethod(Transformer.log(), m, "Found!");
 			final ListIterator<AbstractInsnNode> itr = m.instructions.iterator();
 			boolean foundNew = false;
 			while (itr.hasNext()) {
@@ -90,8 +82,7 @@ public class PatchSoundHandler extends Transmorgrifier {
 					final MethodInsnNode theInvoke = (MethodInsnNode) node;
 					if (managerToReplace.equals(theInvoke.owner)) {
 						if (foundNew) {
-							Transformer.log()
-									.info(String.format("%s.%s%s", theInvoke.owner, theInvoke.name, theInvoke.desc));
+							Transformer.log().info("{}.{}{}", theInvoke.owner, theInvoke.name, theInvoke.desc);
 							m.instructions.set(node, new MethodInsnNode(INVOKESPECIAL, newManager, theInvoke.name,
 									theInvoke.desc, false));
 							modified = true;
@@ -100,10 +91,12 @@ public class PatchSoundHandler extends Transmorgrifier {
 					}
 				}
 			}
+		} else {
+			Transformer.log().error("Unable to locate method {}{}", name, sig);
 		}
 
 		if (!modified)
-			Transformer.log().info("Unable to patch [net.minecraft.client.audio.SoundHandler]!");
+			Transformer.log().info("Unable to patch [{}]!", this.getClassName());
 
 		return modified;
 	}

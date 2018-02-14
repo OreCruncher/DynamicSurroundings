@@ -39,8 +39,6 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 @IFMLLoadingPlugin.Name("DynamicSurroundingsCore")
 public class TransformLoader implements IFMLLoadingPlugin {
 
-	public static boolean runtimeDeobEnabled = true;
-
 	@Override
 	public String[] getASMTransformerClass() {
 		return new String[] { Transformer.class.getName() };
@@ -58,12 +56,6 @@ public class TransformLoader implements IFMLLoadingPlugin {
 
 	@Override
 	public void injectData(final Map<String, Object> map) {
-
-		final Object v = map.get("runtimeDeobfuscationEnabled");
-		if (v != null) {
-			runtimeDeobEnabled = ((Boolean) v).booleanValue();
-		}
-
 		// Tickle the configuration so we can get some options initialized
 		final File configFile = new File((File) map.get("mcLocation"), "/config/dsurround/dsurround.cfg");
 		final Configuration config = new Configuration(configFile);

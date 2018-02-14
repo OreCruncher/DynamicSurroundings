@@ -34,19 +34,8 @@ import org.objectweb.asm.tree.MethodNode;
 
 public class PatchEntityArrow extends Transmorgrifier {
 
-	// 1.10.x
-	// private static final String[] classNames = {
-	// "net.minecraft.entity.projectile.EntityArrow", "zv" };
-
-	// 1.11.x
-	// private static final String[] classNames = {
-	// "net.minecraft.entity.projectile.EntityArrow", "aba" };
-
-	// 1.12.x
-	private static final String[] classNames = { "net.minecraft.entity.projectile.EntityArrow", "aef" };
-
 	public PatchEntityArrow() {
-		super(classNames);
+		super("net.minecraft.entity.projectile.EntityArrow");
 	}
 
 	@Override
@@ -61,7 +50,7 @@ public class PatchEntityArrow extends Transmorgrifier {
 
 	@Override
 	public boolean transmorgrify(final ClassNode cn) {
-		final String names[] = { "func_70071_h_", "onUpdate" };
+		final String names[] = { "onUpdate", "func_70071_h_" };
 		final String sigs[] = { "()V", "()V" };
 
 		final MethodNode m = findMethod(cn, names, sigs);
@@ -81,9 +70,11 @@ public class PatchEntityArrow extends Transmorgrifier {
 					}
 				}
 			}
+		} else {
+			Transformer.log().error("Unable to locate method {}{}", names[0], sigs[0]);
 		}
 
-		Transformer.log().info("Unable to patch [net.minecraft.entity.projectile.EntityArrow]!");
+		Transformer.log().info("Unable to patch [{}]!", this.getClassName());
 
 		return false;
 	}

@@ -39,17 +39,8 @@ import org.objectweb.asm.tree.VarInsnNode;
 
 public class PatchWorldServer extends Transmorgrifier {
 
-	// 1.10.x
-	//private static final String[] classNames = { "net.minecraft.world.WorldServer", "ls", "lq" };
-	
-	// 1.11.x
-	//private static final String[] classNames = { "net.minecraft.world.WorldServer", "lw" };
-	
-	// 1.12.x
-	private static final String[] classNames = { "net.minecraft.world.WorldServer", "om" };
-
 	public PatchWorldServer() {
-		super(classNames);
+		super("net.minecraft.world.WorldServer");
 	}
 
 	@Override
@@ -65,7 +56,7 @@ public class PatchWorldServer extends Transmorgrifier {
 	@Override
 	public boolean transmorgrify(final ClassNode cn) {
 
-		final String names[] = { "func_73051_P", "resetRainAndThunder" };
+		final String names[] = { "resetRainAndThunder", "func_73051_P" };
 		final String sigs[] = { "()V", "()V" };
 
 		final MethodNode m = findMethod(cn, names, sigs);
@@ -84,9 +75,11 @@ public class PatchWorldServer extends Transmorgrifier {
 			list.add(new InsnNode(RETURN));
 			m.instructions = list;
 			return true;
+		} else {
+			Transformer.log().error("Unable to locate method {}{}", names[0], sigs[0]);
 		}
 
-		Transformer.log().info("Unable to patch [net.minecraft.world.WorldServer]!");
+		Transformer.log().info("Unable to patch [{}]!", this.getClassName());
 
 		return false;
 	}
