@@ -34,6 +34,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.swing.DiagnosticPanel;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.event.ServerDataEvent;
+import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.math.TimerEMA;
 
 import com.google.common.collect.ImmutableList;
@@ -70,7 +71,10 @@ public class DiagnosticHandler extends EffectHandlerBase {
 
 	private List<TimerEMA> timers = new ArrayList<>();
 	private TimerEMA clientTick = new TimerEMA("Client Tick");
+	private TimerEMA lastTick = new TimerEMA("Last Tick");
 	private long timeMark;
+	private long lastTickMark = -1;
+	private float tps = 0;
 
 	public DiagnosticHandler() {
 		super("Diagnostics");
@@ -118,8 +122,14 @@ public class DiagnosticHandler extends EffectHandlerBase {
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void tickStart(@Nonnull final TickEvent.ClientTickEvent event) {
-		if (event.phase == Phase.START)
+		if (event.phase == Phase.START) {
 			this.timeMark = System.nanoTime();
+			if (this.lastTickMark != -1) {
+				this.lastTick.update(this.timeMark - this.lastTickMark);
+				this.tps = MathStuff.clamp((float) (50F / this.lastTick.getMSecs() * 20F), 0F, 20F);
+			}
+			this.lastTickMark = this.timeMark;
+		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -141,6 +151,8 @@ public class DiagnosticHandler extends EffectHandlerBase {
 		if (Minecraft.getMinecraft().gameSettings.showDebugInfo) {
 			event.getRight().add(" ");
 			event.getRight().add(TextFormatting.LIGHT_PURPLE + this.clientTick.toString());
+			event.getRight().add(TextFormatting.LIGHT_PURPLE + this.lastTick.toString());
+			event.getRight().add(TextFormatting.LIGHT_PURPLE + String.format("TPS:%7.3fms", this.tps));
 			for (final TimerEMA timer : this.timers)
 				event.getRight().add(TextFormatting.AQUA + timer.toString());
 
