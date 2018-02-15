@@ -24,6 +24,7 @@
 
 package org.blockartistry.DynSurround.client.footsteps.implem;
 
+import org.blockartistry.DynSurround.client.footsteps.interfaces.FootprintStyle;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -45,6 +46,7 @@ public enum Variator {
 			PLAY_JUMP = false;
 			DISTANCE_TO_CENTER = 0.2F;
 			HAS_FOOTPRINT = true;
+			FOOTPRINT_STYLE = FootprintStyle.LOWRES_SQUARE;
 			FOOTPRINT_SCALE = 1F;
 			VOLUME_SCALE = 1F;
 		}
@@ -64,6 +66,7 @@ public enum Variator {
 			PLAY_JUMP = true;
 			DISTANCE_TO_CENTER = 0.2F;
 			HAS_FOOTPRINT = true;
+			FOOTPRINT_STYLE = null;
 			FOOTPRINT_SCALE = 1F;
 			VOLUME_SCALE = 1F;
 		}
@@ -83,6 +86,7 @@ public enum Variator {
 			PLAY_JUMP = true;
 			DISTANCE_TO_CENTER = 0.2F;
 			HAS_FOOTPRINT = true;
+			FOOTPRINT_STYLE = null;
 			FOOTPRINT_SCALE = 0.75F;
 			VOLUME_SCALE = 1F;
 		}
@@ -102,6 +106,7 @@ public enum Variator {
 			PLAY_JUMP = false;
 			DISTANCE_TO_CENTER = 0.2F;
 			HAS_FOOTPRINT = true;
+			FOOTPRINT_STYLE = FootprintStyle.LOWRES_SQUARE;
 			FOOTPRINT_SCALE = 1F;
 			VOLUME_SCALE = 1F;
 		}
@@ -121,6 +126,7 @@ public enum Variator {
 			PLAY_JUMP = false;
 			DISTANCE_TO_CENTER = 0.1F;
 			HAS_FOOTPRINT = true;
+			FOOTPRINT_STYLE = FootprintStyle.LOWRES_SQUARE;
 			FOOTPRINT_SCALE = 0.5F;
 			VOLUME_SCALE = 0.35F;
 		}
@@ -140,6 +146,7 @@ public enum Variator {
 			PLAY_JUMP = false;
 			DISTANCE_TO_CENTER = 0.2F;
 			HAS_FOOTPRINT = true;
+			FOOTPRINT_STYLE = FootprintStyle.LOWRES_SQUARE;
 			FOOTPRINT_SCALE = 0.5F;
 			VOLUME_SCALE = 0.35F;
 		}
@@ -158,6 +165,7 @@ public enum Variator {
 	public boolean PLAY_JUMP;
 	public float DISTANCE_TO_CENTER;
 	public boolean HAS_FOOTPRINT;
+	public FootprintStyle FOOTPRINT_STYLE;
 	public float FOOTPRINT_SCALE;
 	public float VOLUME_SCALE;
 

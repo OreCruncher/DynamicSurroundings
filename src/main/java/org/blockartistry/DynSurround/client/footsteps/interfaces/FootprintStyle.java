@@ -21,62 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package org.blockartistry.DynSurround.client.fx.particle.mote;
+package org.blockartistry.DynSurround.client.footsteps.interfaces;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.lib.gfx.OpenGlUtil;
-
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ParticleCollectionFootprint extends ParticleCollection {
+public enum FootprintStyle {
 
-	public static enum Style {
+	// Regular shoe print style
+	SHOE,
+	// Print that looks like a square and matches Minecraft blockiness
+	SQUARE,
+	// Horseshoe shaped print. Good with Quadruped feature enabled
+	HORSESHOE,
+	// Bird 3 toed prints.
+	BIRD,
+	// Animal paw
+	PAW,
+	// Solid Square
+	SQUARE_SOLID,
+	// Low resolution 4x4 square
+	LOWRES_SQUARE;
 
-		// Regular shoe print style
-		SHOE,
-		// Print that looks like a square and matches Minecraft blockiness
-		SQUARE,
-		// Horseshoe shaped print. Good with Quadruped feature enabled
-		HORSESHOE,
-		// Bird 3 toed prints.
-		BIRD,
-		// Animal paw
-		PAW,
-		// Solid Square
-		SQUARE_SOLID,
-		// Low resolution 4x4 square
-		LOWRES_SQUARE;
-
-		@Nonnull
-		public static Style getStyle(final int v) {
-			if (v >= values().length)
-				return SHOE;
-			return values()[v];
-		}
+	@Nonnull
+	public static FootprintStyle getStyle(final int v) {
+		if (v >= values().length)
+			return LOWRES_SQUARE;
+		return values()[v];
 	}
-
-	public ParticleCollectionFootprint(@Nonnull final World world, @Nonnull final ResourceLocation tex) {
-		super(world, tex);
-
-	}
-
-	@Override
-	public boolean isTransparent() {
-		return true;
-	}
-
-	@Override
-	protected void preRender() {
-		super.preRender();
-		GlStateManager.depthMask(false);
-		OpenGlUtil.setStandardBlend();
-	}
-
 }

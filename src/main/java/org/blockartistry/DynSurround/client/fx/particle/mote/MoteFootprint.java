@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.footsteps.interfaces.FootprintStyle;
 import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.math.MathStuff;
@@ -42,6 +43,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class MoteFootprint extends MoteAgeable {
+
+	// Texture properties of the print
+	private static final float TEXEL_WIDTH = 1F / 8F;
+	private static final float TEXEL_PRINT_WIDTH = TEXEL_WIDTH / 2F;
 
 	// Basic layout of the footprint
 	private static final float WIDTH = 0.125F;
@@ -67,8 +72,9 @@ public class MoteFootprint extends MoteAgeable {
 	protected final Vec2f thirdPoint;
 	protected final Vec2f fourthPoint;
 
-	public MoteFootprint(@Nonnull final World world, final double x, final double y, final double z,
-			final float rotation, final float scale, final boolean isRight) {
+	public MoteFootprint(@Nonnull final FootprintStyle style, @Nonnull final World world,
+			final double x, final double y, final double z, final float rotation, final float scale,
+			final boolean isRight) {
 		super(world, x, y, z);
 
 		this.maxAge = 200;
@@ -84,8 +90,11 @@ public class MoteFootprint extends MoteAgeable {
 		// Make sure that the down position is calculated from the display position!
 		this.downPos = new BlockPos(this.posX, this.posY, this.posZ).down();
 
-		this.texU1 = isRight ? 0.5F : 0F;
-		this.texU2 = isRight ? 1.0F : 0.5F;
+		float u1 = style.ordinal() * TEXEL_WIDTH + 1/256F;
+		if (isRight)
+			u1 += TEXEL_PRINT_WIDTH;
+		this.texU1 = u1;
+		this.texU2 = u1 + TEXEL_PRINT_WIDTH;
 		this.texV1 = 0F;
 		this.texV2 = 1F;
 		this.scale = scale;
