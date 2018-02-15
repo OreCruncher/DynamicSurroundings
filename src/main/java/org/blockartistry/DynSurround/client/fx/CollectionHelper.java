@@ -65,7 +65,7 @@ public class CollectionHelper {
 	@Nonnull
 	public ParticleCollection get() {
 		ParticleCollection pc = this.collection != null ? this.collection.get() : null;
-		if (pc == null || !pc.isAlive()) {
+		if (pc == null || !pc.isAlive() || pc.shouldDie()) {
 			pc = this.factory.create(EnvironState.getWorld(), this.texture);
 			this.collection = new WeakReference<ParticleCollection>(pc);
 			ParticleHelper.addParticle(pc);
@@ -90,6 +90,8 @@ public class CollectionHelper {
 			builder.append("No Collection");
 		else if (!pc.isAlive())
 			builder.append("Expired");
+		else if (pc.shouldDie())
+			builder.append("Should Die");
 		else
 			builder.append(pc.size());
 		return builder.toString();
