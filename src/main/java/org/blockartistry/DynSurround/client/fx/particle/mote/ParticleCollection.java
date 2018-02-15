@@ -91,6 +91,10 @@ public class ParticleCollection extends Particle {
 		return this.myParticles;
 	}
 
+	public int size() {
+		return this.myParticles.size();
+	}
+
 	public boolean shouldDie() {
 		return this.myParticles.size() == 0 || this.world != EnvironState.getWorld();
 	}

@@ -39,9 +39,12 @@ import org.blockartistry.DynSurround.client.fx.particle.mote.MoteWaterSpray;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionFireFly;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionFootprint;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionRipples;
+import org.blockartistry.DynSurround.event.DiagnosticEvent;
+
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -61,14 +64,14 @@ public final class ParticleCollections {
 			"textures/particles/footprint.png");
 	private static final ResourceLocation FIREFLY_TEXTURE = new ResourceLocation("textures/particle/particles.png");
 
-	private final static CollectionHelper theRipples = new CollectionHelper(ParticleCollectionRipples.FACTORY,
-			RIPPLE_TEXTURE);
-	private final static CollectionHelper theSprays = new CollectionHelper(SPRAY_TEXTURE);
-	private final static CollectionHelper theEmojis = new CollectionHelper(EMOJI_TEXTURE);
-	private final static CollectionHelper thePrints = new CollectionHelper(ParticleCollectionFootprint.FACTORY,
-			FOOTPRINT_TEXTURE);
-	private final static CollectionHelper theFireFlies = new LightedCollectionHelper(ParticleCollectionFireFly.FACTORY,
-			FIREFLY_TEXTURE);
+	private final static CollectionHelper theRipples = new CollectionHelper("Rain Ripples",
+			ParticleCollectionRipples.FACTORY, RIPPLE_TEXTURE);
+	private final static CollectionHelper theSprays = new CollectionHelper("Water Spray", SPRAY_TEXTURE);
+	private final static CollectionHelper theEmojis = new CollectionHelper("Emojis", EMOJI_TEXTURE);
+	private final static CollectionHelper thePrints = new CollectionHelper("Footprints",
+			ParticleCollectionFootprint.FACTORY, FOOTPRINT_TEXTURE);
+	private final static CollectionHelper theFireFlies = new LightedCollectionHelper("Fireflies",
+			ParticleCollectionFireFly.FACTORY, FIREFLY_TEXTURE);
 
 	@Nullable
 	public static IParticleMote addWaterRipple(@Nonnull final World world, final double x, final double y,
@@ -145,5 +148,14 @@ public final class ParticleCollections {
 			thePrints.clear();
 			theFireFlies.clear();
 		}
+	}
+
+	@SubscribeEvent
+	public static void diagnostics(@Nonnull final DiagnosticEvent.Gather event) {
+		event.output.add(TextFormatting.AQUA + thePrints.toString());
+		event.output.add(TextFormatting.AQUA + theRipples.toString());
+		event.output.add(TextFormatting.AQUA + theSprays.toString());
+		event.output.add(TextFormatting.AQUA + theFireFlies.toString());
+		event.output.add(TextFormatting.AQUA + theEmojis.toString());
 	}
 }
