@@ -38,6 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class CollectionHelper {
 
+	private final String name;
 	private final ICollectionFactory factory;
 	private final ResourceLocation texture;
 
@@ -45,18 +46,26 @@ public class CollectionHelper {
 	// particle manager for some reason.
 	private WeakReference<ParticleCollection> collection;
 
-	public CollectionHelper(@Nonnull final ResourceLocation texture) {
-		this(ParticleCollection.FACTORY, texture);
+	public CollectionHelper(@Nonnull final String name, @Nonnull final ResourceLocation texture) {
+		this(name, ParticleCollection.FACTORY, texture);
 	}
 
-	public CollectionHelper(@Nonnull final ICollectionFactory factory, @Nonnull final ResourceLocation texture) {
+	public CollectionHelper(@Nonnull final String name, @Nonnull final ICollectionFactory factory,
+			@Nonnull final ResourceLocation texture) {
+		this.name = name;
 		this.texture = texture;
 		this.factory = factory;
 	}
 
+	@Nonnull
+	public String name() {
+		return this.name;
+	}
+
+	@Nonnull
 	public ParticleCollection get() {
 		ParticleCollection pc = this.collection != null ? this.collection.get() : null;
-		if (pc == null || pc.shouldDie()) {
+		if (pc == null || !pc.isAlive()) {
 			pc = this.factory.create(EnvironState.getWorld(), this.texture);
 			this.collection = new WeakReference<ParticleCollection>(pc);
 			ParticleHelper.addParticle(pc);
@@ -70,5 +79,19 @@ public class CollectionHelper {
 			pc.setExpired();
 			this.collection = null;
 		}
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder builder = new StringBuilder();
+		builder.append(this.name).append('=');
+		ParticleCollection pc = this.collection != null ? this.collection.get() : null;
+		if (pc == null)
+			builder.append("No Collection");
+		else if (!pc.isAlive())
+			builder.append("Expired");
+		else
+			builder.append(pc.size());
+		return builder.toString();
 	}
 }
