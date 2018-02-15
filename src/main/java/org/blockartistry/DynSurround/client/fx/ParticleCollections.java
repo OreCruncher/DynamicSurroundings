@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.client.footsteps.interfaces.FootprintStyle;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.fx.particle.mote.IParticleMote;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteEmoji;
@@ -41,7 +42,6 @@ import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionF
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionFootprint;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionRipples;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -105,7 +105,6 @@ public final class ParticleCollections {
 			super(clazz, texture);
 			MinecraftForge.EVENT_BUS.register(this);
 		}
-
 	}
 
 	private static final ResourceLocation RIPPLE_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
@@ -138,6 +137,7 @@ public final class ParticleCollections {
 		return mote;
 	}
 
+	@Nullable
 	public static IParticleMote addWaterSpray(@Nonnull final World world, final double x, final double y,
 			final double z, final double dX, final double dY, final double dZ) {
 		IParticleMote mote = null;
@@ -148,6 +148,7 @@ public final class ParticleCollections {
 		return mote;
 	}
 
+	@Nullable
 	public static IParticleMote addRainSplash(@Nonnull final World world, final double x, final double y,
 			final double z) {
 		IParticleMote mote = null;
@@ -158,6 +159,7 @@ public final class ParticleCollections {
 		return mote;
 	}
 
+	@Nullable
 	public static IParticleMote addEmoji(@Nonnull final Entity entity) {
 		IParticleMote mote = null;
 		if (theEmojis.get().canFit()) {
@@ -167,16 +169,18 @@ public final class ParticleCollections {
 		return mote;
 	}
 
-	public static IParticleMote addFootprint(@Nonnull final World world, final double x, final double y, final double z,
+	@Nullable
+	public static IParticleMote addFootprint(@Nonnull final FootprintStyle style, @Nonnull final World world, final double x, final double y, final double z,
 			final float rot, final float scale, final boolean isRight) {
 		IParticleMote mote = null;
 		if (thePrints.get().canFit()) {
-			mote = new MoteFootprint(world, x, y, z, rot, scale, isRight);
+			mote = new MoteFootprint(style, world, x, y, z, rot, scale, isRight);
 			thePrints.get().addParticle(mote);
 		}
 		return mote;
 	}
 
+	@Nullable
 	public static IParticleMote addFireFly(@Nonnull final World world, final double x, final double y, final double z) {
 		IParticleMote mote = null;
 		if (theFireFlies.get().canFit()) {
@@ -185,7 +189,7 @@ public final class ParticleCollections {
 		}
 		return mote;
 	}
-	
+
 	@SubscribeEvent
 	public static void onWorldUnload(@Nonnull final WorldEvent.Unload event) {
 		if (event.getWorld() instanceof WorldClient) {
