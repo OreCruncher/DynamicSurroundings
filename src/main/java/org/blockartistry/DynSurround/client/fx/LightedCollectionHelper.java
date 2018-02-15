@@ -34,11 +34,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class LightedCollectionHelper extends CollectionHelper {
 
-	public LightedCollectionHelper(@Nonnull final ResourceLocation texture) {
-		this(ParticleCollection.FACTORY, texture);
+	public LightedCollectionHelper(@Nonnull final String name, @Nonnull final ResourceLocation texture) {
+		this(name, ParticleCollection.FACTORY, texture);
 	}
 
-	public LightedCollectionHelper(@Nonnull final ICollectionFactory factory, @Nonnull final ResourceLocation texture) {
-		super(factory, texture);
+	public LightedCollectionHelper(@Nonnull final String name, @Nonnull final ICollectionFactory factory,
+			@Nonnull final ResourceLocation texture) {
+		super(name, factory, texture);
 	}
 }
