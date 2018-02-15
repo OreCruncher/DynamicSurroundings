@@ -43,7 +43,7 @@ import org.blockartistry.DynSurround.client.handlers.effects.FrostBreathEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.PlayerToolBarSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.VillagerChatEffect;
 import org.blockartistry.lib.effects.ISoundHelper;
-import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
+import org.blockartistry.lib.gfx.ParticleHelper;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.effects.EntityEffectHandler;

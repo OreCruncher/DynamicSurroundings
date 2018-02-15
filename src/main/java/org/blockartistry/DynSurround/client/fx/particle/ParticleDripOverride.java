@@ -31,6 +31,7 @@ import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.lib.gfx.ParticleHelper;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
