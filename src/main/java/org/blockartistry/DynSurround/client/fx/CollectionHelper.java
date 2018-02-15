@@ -26,10 +26,10 @@ package org.blockartistry.DynSurround.client.fx;
 import java.lang.ref.WeakReference;
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollection;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollection.ICollectionFactory;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.lib.gfx.ParticleHelper;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
