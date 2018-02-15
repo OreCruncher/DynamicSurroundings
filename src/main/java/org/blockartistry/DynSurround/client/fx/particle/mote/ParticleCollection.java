@@ -47,6 +47,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleCollection extends Particle {
 
+	/**
+	 * Factory interface for creating particle collection instances. Used by the
+	 * ParticleCollections manager.
+	 */
+	public static interface ICollectionFactory {
+		ParticleCollection create(@Nonnull final World world, @Nonnull final ResourceLocation texture);
+	}
+
 	protected static final int MAX_PARTICLES = 4000;
 	protected static final int ALLOCATION_SIZE = 1024;
 
@@ -140,5 +148,9 @@ public class ParticleCollection extends Particle {
 	public int getFXLayer() {
 		return 3;
 	}
+
+	public static final ICollectionFactory FACTORY = (world, texture) -> {
+		return new ParticleCollection(world, texture);
+	};
 
 }

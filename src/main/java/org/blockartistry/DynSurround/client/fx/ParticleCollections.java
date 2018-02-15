@@ -29,7 +29,6 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.FootprintStyle;
-import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.fx.particle.mote.IParticleMote;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteEmoji;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteFireFly;
@@ -37,11 +36,9 @@ import org.blockartistry.DynSurround.client.fx.particle.mote.MoteFootprint;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteRainSplash;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteWaterRipple;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteWaterSpray;
-import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollection;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionFireFly;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionFootprint;
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollectionRipples;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -49,63 +46,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
 
 @SideOnly(Side.CLIENT)
 public final class ParticleCollections {
-
-	private static class CollectionHelper {
-
-		private final Class<? extends ParticleCollection> factory;
-		private final ResourceLocation texture;
-
-		private ParticleCollection collection;
-
-		public CollectionHelper(@Nonnull final ResourceLocation texture) {
-			this(ParticleCollection.class, texture);
-		}
-
-		public CollectionHelper(@Nonnull final Class<? extends ParticleCollection> clazz,
-				@Nonnull final ResourceLocation texture) {
-			this.texture = texture;
-			this.factory = clazz;
-		}
-
-		public ParticleCollection get() {
-			if (this.collection == null || this.collection.shouldDie()) {
-				try {
-					this.collection = this.factory.getConstructor(World.class, ResourceLocation.class)
-							.newInstance(EnvironState.getWorld(), this.texture);
-				} catch (final Throwable t) {
-					throw new RuntimeException("Unknown ParticleCollection type!");
-				}
-				ParticleHelper.addParticle(this.collection);
-			}
-			return this.collection;
-		}
-
-		public void clear() {
-			if (this.collection != null) {
-				this.collection.setExpired();
-				this.collection = null;
-			}
-		}
-	}
-
-	private static class LightedCollectionHelper extends CollectionHelper {
-
-		@SuppressWarnings("unused")
-		public LightedCollectionHelper(@Nonnull final ResourceLocation texture) {
-			this(ParticleCollection.class, texture);
-		}
-
-		public LightedCollectionHelper(@Nonnull final Class<? extends ParticleCollection> clazz,
-				@Nonnull final ResourceLocation texture) {
-			super(clazz, texture);
-			MinecraftForge.EVENT_BUS.register(this);
-		}
-	}
 
 	private static final ResourceLocation RIPPLE_TEXTURE = new ResourceLocation(DSurround.RESOURCE_ID,
 			"textures/particles/ripple.png");
@@ -117,13 +61,13 @@ public final class ParticleCollections {
 			"textures/particles/footprint.png");
 	private static final ResourceLocation FIREFLY_TEXTURE = new ResourceLocation("textures/particle/particles.png");
 
-	private final static CollectionHelper theRipples = new CollectionHelper(ParticleCollectionRipples.class,
+	private final static CollectionHelper theRipples = new CollectionHelper(ParticleCollectionRipples.FACTORY,
 			RIPPLE_TEXTURE);
 	private final static CollectionHelper theSprays = new CollectionHelper(SPRAY_TEXTURE);
 	private final static CollectionHelper theEmojis = new CollectionHelper(EMOJI_TEXTURE);
-	private final static CollectionHelper thePrints = new CollectionHelper(ParticleCollectionFootprint.class,
+	private final static CollectionHelper thePrints = new CollectionHelper(ParticleCollectionFootprint.FACTORY,
 			FOOTPRINT_TEXTURE);
-	private final static CollectionHelper theFireFlies = new LightedCollectionHelper(ParticleCollectionFireFly.class,
+	private final static CollectionHelper theFireFlies = new LightedCollectionHelper(ParticleCollectionFireFly.FACTORY,
 			FIREFLY_TEXTURE);
 
 	@Nullable
@@ -170,8 +114,8 @@ public final class ParticleCollections {
 	}
 
 	@Nullable
-	public static IParticleMote addFootprint(@Nonnull final FootprintStyle style, @Nonnull final World world, final double x, final double y, final double z,
-			final float rot, final float scale, final boolean isRight) {
+	public static IParticleMote addFootprint(@Nonnull final FootprintStyle style, @Nonnull final World world,
+			final double x, final double y, final double z, final float rot, final float scale, final boolean isRight) {
 		IParticleMote mote = null;
 		if (thePrints.get().canFit()) {
 			mote = new MoteFootprint(style, world, x, y, z, rot, scale, isRight);
