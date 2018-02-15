@@ -31,7 +31,10 @@ import org.blockartistry.lib.gfx.OpenGlUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ParticleCollectionFireFly extends ParticleCollection {
 
 	public ParticleCollectionFireFly(@Nonnull final World world, @Nonnull final ResourceLocation tex) {
@@ -44,5 +47,9 @@ public class ParticleCollectionFireFly extends ParticleCollection {
 		GlStateManager.depthMask(false);
 		OpenGlUtil.setStandardBlend();
 	}
-	
+
+	public static final ICollectionFactory FACTORY = (world, texture) -> {
+		return new ParticleCollectionFireFly(world, texture);
+	};
+
 }
