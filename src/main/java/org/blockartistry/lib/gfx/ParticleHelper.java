@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.client.fx.particle;
+package org.blockartistry.lib.gfx;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

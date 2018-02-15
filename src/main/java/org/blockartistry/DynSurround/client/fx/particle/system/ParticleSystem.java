@@ -27,10 +27,10 @@ package org.blockartistry.DynSurround.client.fx.particle.system;
 import java.util.Random;
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleMoteAdapter;
 import org.blockartistry.DynSurround.client.fx.particle.mote.IParticleMote;
 import org.blockartistry.lib.collections.ObjectArray;
+import org.blockartistry.lib.gfx.ParticleHelper;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraft.client.Minecraft;

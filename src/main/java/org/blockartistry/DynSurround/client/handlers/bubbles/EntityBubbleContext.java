@@ -31,7 +31,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.fx.particle.ParticleBillboard;
-import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
+import org.blockartistry.lib.gfx.ParticleHelper;
 
 import com.google.common.base.Supplier;
 
