@@ -37,34 +37,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleCollectionFootprint extends ParticleCollection {
 
-	public static enum Style {
-
-		// Regular shoe print style
-		SHOE,
-		// Print that looks like a square and matches Minecraft blockiness
-		SQUARE,
-		// Horseshoe shaped print. Good with Quadruped feature enabled
-		HORSESHOE,
-		// Bird 3 toed prints.
-		BIRD,
-		// Animal paw
-		PAW,
-		// Solid Square
-		SQUARE_SOLID,
-		// Low resolution 4x4 square
-		LOWRES_SQUARE;
-
-		@Nonnull
-		public static Style getStyle(final int v) {
-			if (v >= values().length)
-				return SHOE;
-			return values()[v];
-		}
-	}
-
 	public ParticleCollectionFootprint(@Nonnull final World world, @Nonnull final ResourceLocation tex) {
 		super(world, tex);
-
 	}
 
 	@Override
@@ -78,5 +52,9 @@ public class ParticleCollectionFootprint extends ParticleCollection {
 		GlStateManager.depthMask(false);
 		OpenGlUtil.setStandardBlend();
 	}
+
+	public static final ICollectionFactory FACTORY = (world, texture) -> {
+		return new ParticleCollectionFootprint(world, texture);
+	};
 
 }

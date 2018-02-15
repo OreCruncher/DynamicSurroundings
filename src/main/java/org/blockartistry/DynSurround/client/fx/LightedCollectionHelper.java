@@ -21,35 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package org.blockartistry.DynSurround.client.fx.particle.mote;
+package org.blockartistry.DynSurround.client.fx;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.lib.gfx.OpenGlUtil;
-
-import net.minecraft.client.renderer.GlStateManager;
+import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollection;
+import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollection.ICollectionFactory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ParticleCollectionFireFly extends ParticleCollection {
+public class LightedCollectionHelper extends CollectionHelper {
 
-	public ParticleCollectionFireFly(@Nonnull final World world, @Nonnull final ResourceLocation tex) {
-		super(world, tex);
+	public LightedCollectionHelper(@Nonnull final ResourceLocation texture) {
+		this(ParticleCollection.FACTORY, texture);
 	}
 
-	@Override
-	protected void preRender() {
-		super.preRender();
-		GlStateManager.depthMask(false);
-		OpenGlUtil.setStandardBlend();
+	public LightedCollectionHelper(@Nonnull final ICollectionFactory factory, @Nonnull final ResourceLocation texture) {
+		super(factory, texture);
 	}
-
-	public static final ICollectionFactory FACTORY = (world, texture) -> {
-		return new ParticleCollectionFireFly(world, texture);
-	};
-
 }
