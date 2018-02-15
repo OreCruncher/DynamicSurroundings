@@ -57,10 +57,12 @@ public class ParticleCollection extends Particle {
 
 	protected static final int MAX_PARTICLES = 4000;
 	protected static final int ALLOCATION_SIZE = 1024;
+	protected static final int TICK_GRACE = 2;
 
 	protected final ObjectArray<IParticleMote> myParticles = new ObjectArray<IParticleMote>(ALLOCATION_SIZE);
 	protected final ResourceLocation texture;
 
+	protected int lastTickUpdate;
 	protected OpenGlState glState;
 
 	public ParticleCollection(@Nonnull final World world, @Nonnull final ResourceLocation tex) {
@@ -68,6 +70,7 @@ public class ParticleCollection extends Particle {
 
 		this.canCollide = false;
 		this.texture = tex;
+		this.lastTickUpdate = EnvironState.getTickCounter();
 	}
 
 	protected void bindTexture(@Nonnull final ResourceLocation resource) {
@@ -96,13 +99,16 @@ public class ParticleCollection extends Particle {
 	}
 
 	public boolean shouldDie() {
-		return this.myParticles.size() == 0 || this.worldObj != EnvironState.getWorld();
+		final boolean timeout = (EnvironState.getTickCounter() - this.lastTickUpdate) > TICK_GRACE;
+		return timeout || this.size() == 0 || this.worldObj != EnvironState.getWorld();
 	}
 
 	@Override
 	public void onUpdate() {
 		if (!this.isAlive())
 			return;
+
+		this.lastTickUpdate = EnvironState.getTickCounter();
 
 		// Update state and remove the dead ones
 		this.myParticles.removeIf(IParticleMote.UPDATE_REMOVE);
