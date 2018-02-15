@@ -26,8 +26,6 @@ package org.blockartistry.DynSurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.lib.gfx.OpenGlUtil;
 
 import net.minecraft.client.renderer.GlStateManager;
@@ -42,36 +40,19 @@ public class ParticleCollectionFootprint extends ParticleCollection {
 	public static enum Style {
 
 		// Regular shoe print style
-		SHOE("textures/particles/footprint.png"),
-
+		SHOE,
 		// Print that looks like a square and matches Minecraft blockiness
-		SQUARE("textures/particles/footprint_square.png"),
-
+		SQUARE,
 		// Horseshoe shaped print. Good with Quadruped feature enabled
-		HORSESHOE("textures/particles/footprint_horseshoe.png"),
-		
+		HORSESHOE,
 		// Bird 3 toed prints.
-		BIRD("textures/particles/footprint_bird.png"),
-
+		BIRD,
 		// Animal paw
-		PAW("textures/particles/footprint_paw.png"),
-		
+		PAW,
 		// Solid Square
-		SQUARE_SOLID("textures/particles/footprint_square_solid.png"),
-		
+		SQUARE_SOLID,
 		// Low resolution 4x4 square
-		LOWRES_SQUARE("textures/particles/footprint_lowres_square.png");
-
-		private final ResourceLocation resource;
-
-		private Style(@Nonnull final String texture) {
-			this.resource = new ResourceLocation(DSurround.RESOURCE_ID, texture);
-		}
-
-		@Nonnull
-		public ResourceLocation getTexture() {
-			return this.resource;
-		}
+		LOWRES_SQUARE;
 
 		@Nonnull
 		public static Style getStyle(final int v) {
@@ -89,11 +70,6 @@ public class ParticleCollectionFootprint extends ParticleCollection {
 	@Override
 	public boolean shouldDisableDepth() {
 		return true;
-	}
-
-	protected void bindTexture(@Nonnull final ResourceLocation resource) {
-		final ResourceLocation res = Style.getStyle(ModOptions.player.footprintStyle).getTexture();
-		super.bindTexture(res);
 	}
 
 	@Override

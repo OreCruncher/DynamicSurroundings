@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.client.footsteps.interfaces.FootprintStyle;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleHelper;
 import org.blockartistry.DynSurround.client.fx.particle.mote.IParticleMote;
 import org.blockartistry.DynSurround.client.fx.particle.mote.MoteEmoji;
@@ -194,11 +195,11 @@ public final class ParticleCollections {
 	}
 
 	@Nullable
-	public static IParticleMote addFootprint(@Nonnull final World world, final double x, final double y, final double z,
+	public static IParticleMote addFootprint(@Nonnull final FootprintStyle style, @Nonnull final World world, final double x, final double y, final double z,
 			final float rot, final float scale, final boolean isRight) {
 		IParticleMote mote = null;
 		if (thePrints.get().canFit()) {
-			mote = new MoteFootprint(world, x, y, z, rot, scale, isRight);
+			mote = new MoteFootprint(style, world, x, y, z, rot, scale, isRight);
 			thePrints.get().addParticle(mote);
 		}
 		return mote;

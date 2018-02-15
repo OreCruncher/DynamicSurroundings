@@ -21,62 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package org.blockartistry.DynSurround.client.footsteps.system;
+package org.blockartistry.DynSurround.client.footsteps.interfaces;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.footsteps.interfaces.FootprintStyle;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class Footprint {
+public enum FootprintStyle {
 
-	private FootprintStyle style;
-	private EntityLivingBase entity;
-	private Vec3d stepLoc;
-	private boolean isRightFoot;
-	private float rotation;
-	private float scale;
+	// Regular shoe print style
+	SHOE,
+	// Print that looks like a square and matches Minecraft blockiness
+	SQUARE,
+	// Horseshoe shaped print. Good with Quadruped feature enabled
+	HORSESHOE,
+	// Bird 3 toed prints.
+	BIRD,
+	// Animal paw
+	PAW,
+	// Solid Square
+	SQUARE_SOLID,
+	// Low resolution 4x4 square
+	LOWRES_SQUARE;
 
-	public static Footprint produce(@Nonnull final FootprintStyle style, @Nonnull final EntityLivingBase entity, @Nonnull final Vec3d stepLoc, final float rotation, final float scale, final boolean rightFoot) {
-		final Footprint print = new Footprint();
-		print.style = style;
-		print.entity = entity;
-		print.stepLoc = stepLoc;
-		print.rotation = rotation;
-		print.isRightFoot = rightFoot;
-		print.scale = scale;
-		return print;
+	@Nonnull
+	public static FootprintStyle getStyle(final int v) {
+		if (v >= values().length)
+			return LOWRES_SQUARE;
+		return values()[v];
 	}
-
-	public FootprintStyle getStyle() {
-		return this.style;
-	}
-	
-	public EntityLivingBase getEntity() {
-		return this.entity;
-	}
-	
-	@Nullable
-	public Vec3d getStepLocation() {
-		return this.stepLoc;
-	}
-
-	public boolean isRightFoot() {
-		return this.isRightFoot;
-	}
-
-	public float getRotation() {
-		return this.rotation;
-	}
-	
-	public float getScale() {
-		return this.scale;
-	}
-
 }

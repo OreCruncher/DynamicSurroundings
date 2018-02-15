@@ -40,6 +40,7 @@ import org.blockartistry.DynSurround.client.footsteps.implem.ConfigOptions;
 import org.blockartistry.DynSurround.client.footsteps.implem.Variator;
 import org.blockartistry.DynSurround.client.footsteps.implem.Substrate;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
+import org.blockartistry.DynSurround.client.footsteps.interfaces.FootprintStyle;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.system.accents.FootstepAccents;
 import org.blockartistry.DynSurround.client.fx.ParticleCollections;
@@ -78,8 +79,8 @@ public class Generator {
 	protected static final Consumer<Footprint> GENERATE_PRINT = print -> {
 		final Vec3d loc = print.getStepLocation();
 		final World world = print.getEntity().getEntityWorld();
-		ParticleCollections.addFootprint(world, loc.x, loc.y, loc.z, print.getRotation(), print.getScale(),
-				print.isRightFoot());
+		ParticleCollections.addFootprint(print.getStyle(), world, loc.x, loc.y, loc.z, print.getRotation(),
+				print.getScale(), print.isRightFoot());
 	};
 
 	protected final Variator VAR;
@@ -473,7 +474,11 @@ public class Generator {
 		if (result != null && result.getPos() != null && shouldProducePrint(entity)) {
 			final Vec3d printPos = footstepPosition(entity.getEntityWorld(), result.getPos(), xx, zz);
 			if (printPos != null) {
-				final Footprint print = Footprint.produce(entity, printPos, rotDegrees, this.VAR.FOOTPRINT_SCALE,
+				FootprintStyle style = this.VAR.FOOTPRINT_STYLE;
+				if (style == null) {
+					style = FootprintStyle.getStyle(ModOptions.player.footprintStyle);
+				}
+				final Footprint print = Footprint.produce(style, entity, printPos, rotDegrees, this.VAR.FOOTPRINT_SCALE,
 						isRightFoot);
 				this.footprints.add(print);
 			}
