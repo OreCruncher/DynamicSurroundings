@@ -24,7 +24,6 @@
 
 package org.blockartistry.DynSurround.registry;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -35,6 +34,8 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.footsteps.system.ResourcePacks;
+import org.blockartistry.DynSurround.client.footsteps.system.ResourcePacks.Pack;
 import org.blockartistry.DynSurround.data.Profiles;
 import org.blockartistry.DynSurround.data.Profiles.ProfileScript;
 import org.blockartistry.DynSurround.data.xface.DataScripts;
@@ -43,10 +44,6 @@ import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.SideLocal;
 import org.blockartistry.lib.task.Scheduler;
 
-import com.google.common.collect.ImmutableList;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IResourcePack;
-import net.minecraft.client.resources.ResourcePackRepository;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
@@ -92,18 +89,12 @@ public final class RegistryManager {
 	}
 
 	protected final Side side;
-	protected final ResourceLocation SCRIPT;
 	protected final Map<Class<? extends Registry>, Registry> registries = new IdentityHashMap<>();
 	protected final List<Registry> initOrder = new ArrayList<>();
 	protected boolean initialized;
 
 	RegistryManager(final Side side) {
 		this.side = side;
-		if (side == Side.CLIENT) {
-			this.SCRIPT = new ResourceLocation(DSurround.RESOURCE_ID, "configure.json");
-		} else {
-			this.SCRIPT = null;
-		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -120,53 +111,74 @@ public final class RegistryManager {
 		this.initOrder.add(reg);
 	}
 
-	@SideOnly(Side.CLIENT)
-	private boolean checkCompatible(@Nonnull final ResourcePackRepository.Entry pack) {
-		return pack.getResourcePack().resourceExists(SCRIPT);
+	protected void configRegistries(@Nonnull final ModConfigurationFile cfg, @Nonnull final String txt) {
+		if (cfg != null) {
+			DSurround.log().info("Loading %s", txt);
+			this.initOrder.forEach(reg -> {
+				try {
+					reg.configure(cfg);
+				} catch (@Nonnull final Throwable t) {
+					final String temp = String.format("[%s] had issues loading %s!", reg.getClass().getSimpleName(),
+							txt);
+					DSurround.log().error(temp, t);
+				}
+			});
+		}
 	}
 
-	@SideOnly(Side.CLIENT)
-	private InputStream openScript(@Nonnull final IResourcePack pack) throws IOException {
-		return pack.getInputStream(SCRIPT);
+	protected void process(@Nonnull final Pack p, @Nonnull ResourceLocation rl, @Nonnull final String txt) {
+		try (final InputStream stream = p.getInputStream(rl)) {
+			if (stream != null) {
+				try (final InputStreamReader reader = new InputStreamReader(stream)) {
+					final ModConfigurationFile cfg = DataScripts.loadFromStream(reader);
+					this.configRegistries(cfg, txt);
+				}
+			}
+		} catch (@Nonnull final Throwable t) {
+			final String temp = String.format("Error loading %s", txt);
+			DSurround.log().error(temp, t);
+		}
 	}
 
 	public void reload() {
+
+		// Collect the locations where DS data is configured
+		final List<Pack> packs = ResourcePacks.findResourcePacks();
+		final List<ModContainer> activeMods = Loader.instance().getActiveModList();
+
+		DSurround.log().info("Identified the following resource pack locations");
+		packs.stream().map(Pack::toString).forEach(DSurround.log()::info);
+
+		// Do the preinit
 		this.initOrder.forEach(reg -> reg.init());
 
-		for (final ModContainer mod : Loader.instance().getActiveModList()) {
-			final ModConfigurationFile cfg = DataScripts.loadFromArchive(mod.getModId());
-			if (cfg != null) {
-				DSurround.log().info("Loading from archive [%s]", mod.getModId());
-				this.initOrder.forEach(reg -> {
-					try {
-						reg.configure(cfg);
-					} catch (@Nonnull final Throwable t) {
-						final String txt = String.format("[%s] had issues with [%s]!", reg.getClass().getSimpleName(),
-								mod.getModId());
-						DSurround.log().error(txt, t);
-					}
-				});
+		// Process mod specific config files from our packs
+		for (final ModContainer mod : activeMods) {
+			final String name = mod.getModId().toLowerCase();
+			final ResourceLocation rl = new ResourceLocation(DSurround.MOD_ID, "data/" + name + ".json");
+			for (final Pack p : packs) {
+				final String loadingText = "[" + rl.toString() + "] <- [" + p.getModName() + "]";
+				this.process(p, rl, loadingText);
 			}
 		}
 
-		final List<ProfileScript> resources = getAdditionalScripts();
+		// Process general config files from our packs
+		final ResourceLocation rl = ResourcePacks.CONFIGURE_RESOURCE;
+		for (final Pack p : packs) {
+			final String loadingText = "[" + rl.toString() + "] <- [" + p.getModName() + "]";
+			this.process(p, rl, loadingText);
+		}
+
+		// Apply built-in profiles
+		final List<ProfileScript> resources = Profiles.getProfileStreams();
 		for (final ProfileScript script : resources) {
 			try (final InputStreamReader reader = new InputStreamReader(script.stream)) {
 				final ModConfigurationFile cfg = DataScripts.loadFromStream(reader);
-				if (cfg != null) {
-					DSurround.log().info("Loading from resource pack [%s]", script.packName);
-					this.initOrder.forEach(reg -> {
-						try {
-							reg.configure(cfg);
-						} catch (@Nonnull final Throwable t) {
-							final String txt = String.format("[%s] had issues with resource pack [%s]!",
-									reg.getClass().getSimpleName(), script.packName);
-							DSurround.log().error(txt, t);
-						}
-					});
-				}
+				final String loadingText = "[" + DSurround.MOD_ID + "] <- [" + script.packName + "]";
+				this.configRegistries(cfg, loadingText);
 			} catch (@Nonnull final Throwable ex) {
-				DSurround.log().error("Unable to read script from resource pack!", ex);
+				final String temp = String.format("Unable to load profile [%s]", script.packName);
+				DSurround.log().error(temp, ex);
 			}
 		}
 
@@ -174,53 +186,15 @@ public final class RegistryManager {
 		final String[] configFiles = ModOptions.general.externalScriptFiles;
 		for (final String file : configFiles) {
 			final ModConfigurationFile cfg = DataScripts.loadFromDirectory(file);
-			if (cfg != null) {
-				DSurround.log().info("Loading from directory [%s]", file);
-				this.initOrder.forEach(reg -> {
-					try {
-						reg.configure(cfg);
-					} catch (@Nonnull final Throwable t) {
-						final String txt = String.format("[%s] had issues with [%s]!", reg.getClass().getSimpleName(),
-								file);
-						DSurround.log().error(txt, t);
-					}
-				});
-			}
+			final String loadingText = "[" + file + "]";
+			this.configRegistries(cfg, loadingText);
 		}
 
+		// Have the registries finalize their settings
 		this.initOrder.forEach(reg -> reg.initComplete());
+		
+		// Let everyone know a reload happened
 		MinecraftForge.EVENT_BUS.post(new ReloadEvent.Registry(this.side));
-	}
-
-	// NOTE: Server side has no resource packs so the client specific
-	// code is not executed when initializing a server side registry.
-	protected List<ProfileScript> getAdditionalScripts() {
-		if (this.side == Side.SERVER)
-			return ImmutableList.of();
-
-		final List<ResourcePackRepository.Entry> repo = Minecraft.getMinecraft().getResourcePackRepository()
-				.getRepositoryEntries();
-
-		final List<ProfileScript> streams = new ArrayList<>();
-
-		// Look in other resource packs for more configuration data
-		for (final ResourcePackRepository.Entry pack : repo) {
-			if (checkCompatible(pack)) {
-				DSurround.log().debug("Found script in resource pack: %s", pack.getResourcePackName());
-				try {
-					final InputStream stream = openScript(pack.getResourcePack());
-					if (stream != null)
-						streams.add(new ProfileScript(pack.getResourcePackName(), stream));
-				} catch (final Throwable t) {
-					DSurround.log().error("Unable to open script in resource pack", t);
-				}
-			}
-		}
-
-		// Tack on built-in profiles
-		streams.addAll(Profiles.getProfileStreams());
-
-		return streams;
 	}
 
 }
