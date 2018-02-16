@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.client.footsteps.implem;
+package org.blockartistry.DynSurround.packs;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.client.footsteps.system;
+package org.blockartistry.DynSurround.packs;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,7 +32,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.client.footsteps.implem.Manifest;
 import org.blockartistry.lib.JsonUtils;
 
 import net.minecraft.client.Minecraft;
