@@ -27,6 +27,7 @@ package org.blockartistry.DynSurround.registry;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,24 +151,21 @@ public final class RegistryManager {
 		packs.stream().map(Pack::toString).forEach(DSurround.log()::info);
 
 		// Do the preinit
-		this.initOrder.forEach(reg -> reg.init());
+		this.initOrder.forEach(Registry::init);
 
-		// Process mod specific config files from our packs
-		for (final ModContainer mod : activeMods) {
-			final String name = mod.getModId().toLowerCase();
-			final ResourceLocation rl = new ResourceLocation(DSurround.MOD_ID, "data/" + name + ".json");
-			for (final Pack p : packs) {
+		// Process the mod config from each of our packs
+		activeMods.stream().map(mod -> {
+			return new ResourceLocation(DSurround.MOD_ID, "data/" + mod.getModId().toLowerCase() + ".json");
+		}).forEach(rl -> {
+			packs.forEach(p -> {
 				final String loadingText = "[" + rl.toString() + "] <- [" + p.getModName() + "]";
-				this.process(p, rl, loadingText);
-			}
-		}
+				process(p, rl, loadingText);
+			});
+		});
 
 		// Process general config files from our packs
 		final ResourceLocation rl = ResourcePacks.CONFIGURE_RESOURCE;
-		for (final Pack p : packs) {
-			final String loadingText = "[" + rl.toString() + "] <- [" + p.getModName() + "]";
-			this.process(p, rl, loadingText);
-		}
+		packs.stream().forEach(p -> process(p, rl, "[" + rl.toString() + "] <- [" + p.getModName() + "]"));
 
 		// Apply built-in profiles
 		final List<ProfileScript> resources = Profiles.getProfileStreams();
@@ -183,16 +181,12 @@ public final class RegistryManager {
 		}
 
 		// Load scripts specified in the configuration
-		final String[] configFiles = ModOptions.general.externalScriptFiles;
-		for (final String file : configFiles) {
-			final ModConfigurationFile cfg = DataScripts.loadFromDirectory(file);
-			final String loadingText = "[" + file + "]";
-			this.configRegistries(cfg, loadingText);
-		}
+		Arrays.stream(ModOptions.general.externalScriptFiles)
+				.forEach(cfg -> configRegistries(DataScripts.loadFromDirectory(cfg), "[" + cfg + "]"));
 
 		// Have the registries finalize their settings
-		this.initOrder.forEach(reg -> reg.initComplete());
-		
+		this.initOrder.forEach(Registry::initComplete);
+
 		// Let everyone know a reload happened
 		MinecraftForge.EVENT_BUS.post(new ReloadEvent.Registry(this.side));
 	}
