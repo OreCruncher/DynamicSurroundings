@@ -28,8 +28,8 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleBreath;
+import org.blockartistry.DynSurround.registry.EntityEffectInfo;
 import org.blockartistry.lib.effects.EntityEffect;
-import org.blockartistry.lib.effects.EntityEffectInfo;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
 import org.blockartistry.lib.effects.IEntityEffectHandlerState;

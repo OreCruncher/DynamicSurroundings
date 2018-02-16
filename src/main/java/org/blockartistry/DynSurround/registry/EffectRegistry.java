@@ -35,7 +35,6 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.data.xface.EntityConfig;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.DynSurround.registry.themes.GloamwoodTheme;
-import org.blockartistry.lib.effects.EntityEffectInfo;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;

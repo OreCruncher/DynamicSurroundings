@@ -64,6 +64,9 @@ public final class ModConfigurationFile {
 	@SerializedName("itemConfig")
 	public ItemConfig itemConfig = new ItemConfig();
 
+	@SerializedName("variators")
+	public Map<String, VariatorConfig> variators = new HashMap<>();
+	
 	@SerializedName("entities")
 	public Map<String, EntityConfig> entities = new HashMap<>();
 
