@@ -45,7 +45,7 @@ public enum Profiles {
 	NO_DUST_EFFECTS("noDustEffects", "No Dust Effects", "Turns off dust effects for all biomes");
 
 	// Path within the JAR where the Json configuration files are located
-	private final static String PROFILE_PATH = "/assets/dsurround/data/profiles/";
+	private final static String PROFILE_PATH = "/assets/dsurround/profiles/";
 
 	// Token used to uniquely identify this entry. It is used to reference a
 	// Json config in the JAR as well as lookup string translations for the
