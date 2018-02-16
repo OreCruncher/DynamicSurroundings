@@ -35,15 +35,15 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
-import net.minecraft.client.Minecraft;
+
+import com.google.common.collect.ImmutableSet;
+
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.ResourcePackRepository;
 import net.minecraft.client.resources.data.IMetadataSection;
 import net.minecraft.client.resources.data.MetadataSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.relauncher.Side;
 
 @SideOnly(Side.CLIENT)
@@ -52,29 +52,20 @@ public class ResourcePacks {
 	private final ResourceLocation manifest = new ResourceLocation(DSurround.RESOURCE_ID, "manifest.json");
 	private final ResourceLocation acoustics = new ResourceLocation(DSurround.RESOURCE_ID, "acoustics.json");
 	private final ResourceLocation primitivemap = new ResourceLocation(DSurround.RESOURCE_ID, "primitivemap.json");
-	
-	// Resource pack reference for the built in pack.
-	private static class DefaultPack implements IResourcePack {
+
+	private static class Pack implements IResourcePack {
 
 		private final String mod;
 
-		public DefaultPack() {
-			this.mod = null;
-		}
-
-		public DefaultPack(@Nonnull final String mod) {
+		public Pack(@Nonnull final String mod) {
 			this.mod = mod;
 		}
 
 		@Override
 		public InputStream getInputStream(@Nonnull final ResourceLocation loc) throws IOException {
 			final StringBuilder builder = new StringBuilder();
-			builder.append("/assets/dsurround/data/");
-			builder.append(loc.getResourceDomain());
-			builder.append('/');
-			if (this.mod != null)
-				builder.append(this.mod).append('_');
-			builder.append(loc.getResourcePath());
+			builder.append("/assets/").append(this.mod).append('/');
+			builder.append(loc.getResourceDomain()).append('/').append(loc.getResourcePath());
 			return DSurround.class.getResourceAsStream(builder.toString());
 		}
 
@@ -83,11 +74,10 @@ public class ResourcePacks {
 			return true;
 		}
 
-		@SuppressWarnings({ "rawtypes", "unchecked" })
 		@Override
-		@Nullable
-		public Set getResourceDomains() {
-			return null;
+		@Nonnull
+		public Set<String> getResourceDomains() {
+			return ImmutableSet.of();
 		}
 
 		@Override
@@ -99,8 +89,6 @@ public class ResourcePacks {
 		@Override
 		@Nonnull
 		public String getPackName() {
-			if (this.mod == null)
-				return "DEFAULT";
 			return "DEFAULT: " + this.mod;
 		}
 
@@ -111,32 +99,41 @@ public class ResourcePacks {
 			return null;
 		}
 
+		@Override
+		@Nonnull
+		public String toString() {
+			return this.getPackName();
+		}
+
 	}
 
-	@Nonnull 
+	@Nonnull
 	public List<IResourcePack> findResourcePacks() {
-		final List<ResourcePackRepository.Entry> repo = Minecraft.getMinecraft().getResourcePackRepository()
-				.getRepositoryEntries();
+		//final List<ResourcePackRepository.Entry> repo = Minecraft.getMinecraft().getResourcePackRepository()
+		//		.getRepositoryEntries();
 
 		final List<IResourcePack> foundEntries = new ArrayList<IResourcePack>();
-		foundEntries.add(new DefaultPack());
+		foundEntries.add(new Pack(DSurround.MOD_ID));
 
-		// Add a default back for mods that are loaded - there may be a default
-		// configuration privided in the archive
-		for (final ModContainer mod : Loader.instance().getActiveModList())
-			foundEntries.add(new DefaultPack(mod.getModId()));
+		
+		// Add a default pack for mods that are loaded - there may be a default
+		// configuration provided in the archive
+		//for (final ModContainer mod : Loader.instance().getActiveModList())
+		//	foundEntries.add(new Pack(mod.getModId()));
 
 		// Look in other resource packs for more configuration data
-		for (final ResourcePackRepository.Entry pack : repo) {
-			DSurround.log().debug("Resource Pack: %s", pack.getResourcePackName());
-			if (checkCompatible(pack)) {
-				DSurround.log().debug("Found FootstepsRegistry resource pack: %s", pack.getResourcePackName());
-				foundEntries.add(pack.getResourcePack());
-			}
-		}
+		//for (final ResourcePackRepository.Entry pack : repo) {
+		//	DSurround.log().debug("Resource Pack: %s", pack.getResourcePackName());
+		//	if (checkCompatible(pack)) {
+		//		DSurround.log().debug("Found FootstepsRegistry resource pack: %s", pack.getResourcePackName());
+		//		foundEntries.add(pack.getResourcePack());
+		//	}
+		//}
+		
 		return foundEntries;
 	}
 
+	@SuppressWarnings("unused")
 	private boolean checkCompatible(@Nonnull final ResourcePackRepository.Entry pack) {
 		return pack.getResourcePack().resourceExists(this.manifest);
 	}
