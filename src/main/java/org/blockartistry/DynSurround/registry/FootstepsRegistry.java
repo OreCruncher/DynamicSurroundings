@@ -44,7 +44,6 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
-import org.blockartistry.DynSurround.client.footsteps.implem.Manifest;
 import org.blockartistry.DynSurround.client.footsteps.implem.PrimitiveMap;
 import org.blockartistry.DynSurround.client.footsteps.implem.RainSplashAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.implem.Variator;
@@ -53,12 +52,12 @@ import org.blockartistry.DynSurround.client.footsteps.parsers.AcousticsJsonReade
 import org.blockartistry.DynSurround.client.footsteps.system.Generator;
 import org.blockartistry.DynSurround.client.footsteps.system.GeneratorQP;
 import org.blockartistry.DynSurround.client.footsteps.system.ResourcePacks;
+import org.blockartistry.DynSurround.client.footsteps.system.ResourcePacks.Pack;
 import org.blockartistry.DynSurround.client.footsteps.util.ConfigProperty;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile.ForgeEntry;
 import org.blockartistry.DynSurround.util.BlockState;
 import org.blockartistry.lib.ItemStackUtil;
-import org.blockartistry.lib.JsonUtils;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.collections.IdentityHashSet;
 
@@ -78,7 +77,6 @@ import net.minecraft.block.BlockSapling;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityWitch;
@@ -99,9 +97,6 @@ public final class FootstepsRegistry extends Registry {
 
 	private static final List<String> FOOTPRINT_SOUND_PROFILE = Arrays.asList("minecraft:block.sand.step",
 			"minecraft:block.gravel.step", "minecraft:block.snow.step");
-
-	// System
-	private ResourcePacks dealer = new ResourcePacks();
 
 	private AcousticsManager acousticsManager;
 	private PrimitiveMap primitiveMap;
@@ -143,7 +138,7 @@ public final class FootstepsRegistry extends Registry {
 		AcousticsManager.JUMP = null;
 		AcousticsManager.SPLASH = null;
 
-		final List<IResourcePack> repo = this.dealer.findResourcePacks();
+		final List<Pack> repo = ResourcePacks.findResourcePacks();
 
 		reloadManifests(repo);
 		reloadAcoustics(repo);
@@ -238,36 +233,24 @@ public final class FootstepsRegistry extends Registry {
 
 	}
 
-	private void reloadManifests(@Nonnull final List<IResourcePack> repo) {
-		for (final IResourcePack pack : repo) {
-			try (final InputStream stream = this.dealer.openPackDescriptor(pack)) {
-				if (stream != null) {
-					final Manifest manifest = JsonUtils.load(stream, Manifest.class);
-					if (manifest != null) {
-						DSurround.log().info("Resource pack %s: %s by %s (%s)", pack.getPackName(), manifest.getName(),
-								manifest.getAuthor(), manifest.getWebsite());
-					}
-				}
-			} catch (final Exception e) {
-				DSurround.log().debug("Unable to load variator data from pack %s", pack.getPackName());
-			}
-		}
+	private void reloadManifests(@Nonnull final List<Pack> repo) {
+		repo.stream().map(Pack::toString).forEach(DSurround.log()::info);
 	}
 
-	private void reloadPrimitiveMap(@Nonnull final List<IResourcePack> repo) {
-		for (final IResourcePack pack : repo) {
-			try (final InputStream stream = this.dealer.openPrimitiveMap(pack)) {
+	private void reloadPrimitiveMap(@Nonnull final List<Pack> repo) {
+		for (final Pack pack : repo) {
+			try (final InputStream stream = pack.getInputStream(ResourcePacks.PRIMITIVEMAP_RESOURCE)) {
 				if (stream != null)
 					this.primitiveMap.setup(ConfigProperty.fromStream(stream));
 			} catch (final IOException e) {
-				DSurround.log().debug("Unable to load primitive map data from pack %s", pack.getPackName());
+				DSurround.log().debug("Unable to load primitive map data from pack %s", pack.getModName());
 			}
 		}
 	}
 
-	private void reloadAcoustics(@Nonnull final List<IResourcePack> repo) {
-		for (final IResourcePack pack : repo) {
-			try (final InputStream stream = this.dealer.openAcoustics(pack)) {
+	private void reloadAcoustics(@Nonnull final List<Pack> repo) {
+		for (final Pack pack : repo) {
+			try (final InputStream stream = pack.getInputStream(ResourcePacks.ACOUSTICS_RESOURCE)) {
 				if (stream != null)
 					try (final Scanner scanner = new Scanner(stream)) {
 						final String jasonString = scanner.useDelimiter("\\Z").next();
@@ -275,7 +258,7 @@ public final class FootstepsRegistry extends Registry {
 						new AcousticsJsonReader("").parseJSON(jasonString, this.acousticsManager);
 					}
 			} catch (final IOException e) {
-				DSurround.log().debug("Unable to load acoustic data from pack %s", pack.getPackName());
+				DSurround.log().debug("Unable to load acoustic data from pack %s", pack.getModName());
 			}
 		}
 	}
