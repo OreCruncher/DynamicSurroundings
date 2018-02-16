@@ -139,8 +139,6 @@ public final class FootstepsRegistry extends Registry {
 		AcousticsManager.SPLASH = null;
 
 		final List<Pack> repo = ResourcePacks.findResourcePacks();
-
-		reloadManifests(repo);
 		reloadAcoustics(repo);
 		reloadPrimitiveMap(repo);
 
@@ -231,10 +229,6 @@ public final class FootstepsRegistry extends Registry {
 	@Override
 	public void fini() {
 
-	}
-
-	private void reloadManifests(@Nonnull final List<Pack> repo) {
-		repo.stream().map(Pack::toString).forEach(DSurround.log()::info);
 	}
 
 	private void reloadPrimitiveMap(@Nonnull final List<Pack> repo) {

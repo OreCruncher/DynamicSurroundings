@@ -31,40 +31,29 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class Manifest {
-	
-	public static class Metadata {
-		@SerializedName("name")
-		public String name = null;
-		@SerializedName("author")
-		public String author = null;
-		@SerializedName("website")
-		public String website = null;
+
+	@SerializedName("version")
+	protected int version = 0;
+	@SerializedName("name")
+	protected String name = "(unspecified)";
+	@SerializedName("author")
+	protected String author = "(unspecified)";
+	@SerializedName("website")
+	protected String website = "(unspecified)";
+
+	public int getVersion() {
+		return this.version;
 	}
-	
-	@SerializedName("type")
-	public String type = null;
-	@SerializedName("engineVersion")
-	public Integer engineVersion = 0;
-	@SerializedName("metadata")
-	public Metadata metadata = null;
-	
-	public String getType() {
-		return this.type;
-	}
-	
-	public int getEngineVersion() {
-		return this.engineVersion.intValue();
-	}
-	
+
 	public String getName() {
-		return this.metadata != null && this.metadata.name != null ? this.metadata.name : "UNKNOWN";
+		return this.name != null ? this.name : "(unspecified)";
 	}
-	
+
 	public String getAuthor() {
-		return this.metadata != null && this.metadata.author != null ? this.metadata.author : "UNKNOWN";
+		return this.author != null ? this.author : "(unspecified)";
 	}
 
 	public String getWebsite() {
-		return this.metadata != null && this.metadata.website != null ? this.metadata.website : "UNKNOWN";
+		return this.website != null ? this.website : "(unspecified)";
 	}
 }
