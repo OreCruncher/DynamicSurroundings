@@ -70,7 +70,7 @@ public class EntitySwingEffect extends EntityEffect {
 			return;
 
 		// Is the swing in motion
-		if (entity.swingProgressInt > this.swingProgress) {
+		if (entity.swingingHand != null && entity.swingProgressInt > this.swingProgress) {
 			if (!this.isSwinging) {
 				if (!StringUtils.isEmpty(this.soundId)) {
 					SoundEffectHandler.INSTANCE.stopSound(this.soundId);
