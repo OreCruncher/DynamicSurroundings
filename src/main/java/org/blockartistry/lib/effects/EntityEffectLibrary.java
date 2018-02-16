@@ -31,6 +31,7 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.ClientRegistry;
+import org.blockartistry.DynSurround.registry.EntityEffectInfo;
 import org.blockartistry.lib.collections.ObjectArray;
 
 import net.minecraft.entity.Entity;

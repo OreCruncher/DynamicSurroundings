@@ -22,15 +22,40 @@
  */
 package org.blockartistry.DynSurround.data.xface;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.gson.annotations.SerializedName;
 
-public class EntityConfig {
+public class VariatorConfig {
 
-	@SerializedName("effects")
-	public String effects = StringUtils.EMPTY;
-	@SerializedName("variator")
-	public String variator = "default";
-
+	@SerializedName("immobileDuration")
+	public int immobileDuration = 200;
+	@SerializedName("eventOnJump")
+	public boolean eventOnJump = true;
+	@SerializedName("landHardDistanceMin")
+	public float landHardDistanceMin = 0.9F;
+	@SerializedName("speedToJumpAsMultifoot")
+	public float speedToJumpAsMultifoot = 0.005F;
+	@SerializedName("speedToRun")
+	public float speedToRun = 0.22F;
+	@SerializedName("stride")
+	public float stride = 1.25F; // 0.95F
+	@SerializedName("strideStair")
+	public float strideStair = this.stride * 0.65F;
+	@SerializedName("strideLadder")
+	public float strideLadder = 0.5F;
+	@SerializedName("playWander")
+	public boolean playWander = true;
+	@SerializedName("quadruped")
+	public boolean quadruped = false;
+	@SerializedName("playJump")
+	public boolean playJump = false;
+	@SerializedName("distanceToCenter")
+	public float distanceToCenter = 0.2F;
+	@SerializedName("hasFootprint")
+	public boolean hasFootprint = true;
+	@SerializedName("footprintStyle")
+	public int footprintStyle = 6;
+	@SerializedName("footprintScale")
+	public float footprintScale = 1.0F;
+	@SerializedName("volumeScale")
+	public float volumeScale = 1.0F;
 }

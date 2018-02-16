@@ -26,8 +26,8 @@ package org.blockartistry.DynSurround.client.footsteps.system;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.client.footsteps.implem.Variator;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
+import org.blockartistry.DynSurround.registry.Variator;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;

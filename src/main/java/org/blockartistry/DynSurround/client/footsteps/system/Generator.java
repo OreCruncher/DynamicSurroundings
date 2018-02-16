@@ -37,7 +37,6 @@ import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.DynSurround.client.footsteps.implem.ConfigOptions;
-import org.blockartistry.DynSurround.client.footsteps.implem.Variator;
 import org.blockartistry.DynSurround.client.footsteps.implem.Substrate;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.FootprintStyle;
@@ -46,6 +45,7 @@ import org.blockartistry.DynSurround.client.footsteps.system.accents.FootstepAcc
 import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.facade.FacadeHelper;
+import org.blockartistry.DynSurround.registry.Variator;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.TimeUtils;

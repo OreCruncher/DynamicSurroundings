@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.blockartistry.lib.effects;
+package org.blockartistry.DynSurround.registry;
 
 import javax.annotation.Nonnull;
 
@@ -32,26 +32,23 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class EntityEffectInfo {
-	
+
 	public final String effects;
-	public final float stepVolume;
-	public final int footprintStyle;
-	
+	public final String variator;
+
 	public EntityEffectInfo() {
 		this.effects = StringUtils.EMPTY;
-		this.stepVolume = 1.0F;
-		this.footprintStyle = 6;
-	}
-	
-	public EntityEffectInfo(@Nonnull final EntityConfig ec) {
-		this.effects = ec.effects;
-		this.stepVolume = ec.stepVolume;
-		this.footprintStyle = 6;
+		this.variator = "default";
 	}
 
+	public EntityEffectInfo(@Nonnull final EntityConfig ec) {
+		this.effects = ec.effects;
+		this.variator = ec.variator;
+	}
+
+	@Override
 	public String toString() {
-		return new StringBuilder().append("effects: ").append(this.effects).append(", stepVolume: ")
-				.append(this.stepVolume).toString();
+		return this.effects;
 	}
 
 }
