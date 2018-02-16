@@ -56,10 +56,9 @@ public class PatchSoundManager extends Transmorgrifier {
 	@Override
 	public boolean transmorgrify(final ClassNode cn) {
 		final String names[] = { "getURLForSoundResource", "func_148612_a" };
-		final String sigs[] = { "(Lnet/minecraft/util/ResourceLocation;)Ljava/net/URL;",
-				"(Lnet/minecraft/util/ResourceLocation;)Ljava/net/URL;" };
+		final String sig = "(Lnet/minecraft/util/ResourceLocation;)Ljava/net/URL;";
 
-		final MethodNode m = findMethod(cn, names, sigs);
+		final MethodNode m = findMethod(cn, sig, names);
 		if (m != null) {
 			this.logMethod(Transformer.log(), m, "Found!");
 
@@ -68,14 +67,14 @@ public class PatchSoundManager extends Transmorgrifier {
 
 			final String owner = "org/blockartistry/lib/sound/SoundCache";
 			final String targetName = "getURLForSoundResource";
-			final String sig = "(Lnet/minecraft/util/ResourceLocation;)Ljava/net/URL;";
+			final String sig1 = "(Lnet/minecraft/util/ResourceLocation;)Ljava/net/URL;";
 
-			list.add(new MethodInsnNode(INVOKESTATIC, owner, targetName, sig, false));
+			list.add(new MethodInsnNode(INVOKESTATIC, owner, targetName, sig1, false));
 			list.add(new InsnNode(ARETURN));
 			m.instructions.insert(m.instructions.getFirst(), list);
 			return true;
 		} else {
-			Transformer.log().error("Unable to locate method {}{}", names[0], sigs[0]);
+			Transformer.log().error("Unable to locate method {}{}", names[0], sig);
 		}
 
 		Transformer.log().info("Unable to patch [{}]!", this.getClassName());

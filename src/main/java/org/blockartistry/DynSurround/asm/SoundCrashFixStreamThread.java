@@ -58,7 +58,7 @@ public class SoundCrashFixStreamThread extends Transmorgrifier {
 	public boolean transmorgrify(final ClassNode cn) {
 		final String name = "run";
 		final String sig = "()V";
-		final MethodNode m = findMethod(cn, name, sig);
+		final MethodNode m = findMethod(cn, sig, name);
 		if (m != null) {
 			this.logMethod(Transformer.log(), m, "Found!");
 			for (Iterator<?> iterator = m.instructions.iterator(); iterator.hasNext();) {
