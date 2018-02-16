@@ -34,13 +34,13 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.footsteps.system.ResourcePacks;
-import org.blockartistry.DynSurround.client.footsteps.system.ResourcePacks.Pack;
 import org.blockartistry.DynSurround.data.Profiles;
 import org.blockartistry.DynSurround.data.Profiles.ProfileScript;
 import org.blockartistry.DynSurround.data.xface.DataScripts;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.DynSurround.event.ReloadEvent;
+import org.blockartistry.DynSurround.packs.ResourcePacks;
+import org.blockartistry.DynSurround.packs.ResourcePacks.Pack;
 import org.blockartistry.lib.SideLocal;
 import org.blockartistry.lib.task.Scheduler;
 
