@@ -26,10 +26,6 @@ package org.blockartistry.DynSurround.packs;
 
 import com.google.gson.annotations.SerializedName;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-@SideOnly(Side.CLIENT)
 public class Manifest {
 
 	@SerializedName("version")
