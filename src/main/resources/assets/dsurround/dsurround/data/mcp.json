@@ -1512,9 +1512,33 @@
 			]
 		}
 	],
+	"variators": {
+		"default": {
+		},
+		"player": {
+			"playJump": true
+		},
+		"quadruped": {
+			"playJump": true,
+			"quadruped": true,
+			"footprintScale": 0.75
+		},
+		"child": {
+			"stride": 0.625,
+			"strideStair": 0.40625,
+			"distanceToCenter": 0.1,
+			"footprintScale": 0.5,
+			"volumeScale": 0.35
+		},
+		"skeleton": {
+			"footprintScale": 0.5,
+			"volumeScale": 0.35
+		}
+	},
 	"entities": {
 		"minecraft:wither_skeleton": {
-			"effects": "bow,swing,footprint"
+			"effects": "bow,swing,footprint",
+			"variator": "skeleton"
 		},
 		"minecraft:villager": {
 			"effects": "bow,swing,footprint,breath,chat"
@@ -1535,10 +1559,12 @@
 			"effects": "bow,swing,footprint,breath"
 		},
 		"minecraft:skeleton": {
-			"effects": "bow,swing,footprint,chat"
+			"effects": "bow,swing,footprint,chat",
+			"variator": "skeleton"
 		},
 		"minecraft:stray": {
-			"effects": "bow,swing,footprint"
+			"effects": "bow,swing,footprint",
+			"variator": "skeleton"
 		},
 		"minecraft:zombie": {
 			"effects": "bow,swing,footprint,chat"
@@ -1553,7 +1579,8 @@
 			"effects": "chat"
 		},
 		"minecraft:player": {
-			"effects": "bow,swing,footprint,breath,toolbar"
+			"effects": "bow,swing,footprint,breath,toolbar",
+			"variator": "player"
 		}
 	}
 }

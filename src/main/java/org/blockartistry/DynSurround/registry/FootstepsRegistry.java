@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -42,17 +43,18 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.DynSurround.client.footsteps.implem.PrimitiveMap;
 import org.blockartistry.DynSurround.client.footsteps.implem.RainSplashAcoustic;
-import org.blockartistry.DynSurround.client.footsteps.implem.Variator;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.parsers.AcousticsJsonReader;
 import org.blockartistry.DynSurround.client.footsteps.system.Generator;
 import org.blockartistry.DynSurround.client.footsteps.system.GeneratorQP;
 import org.blockartistry.DynSurround.client.footsteps.util.ConfigProperty;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
+import org.blockartistry.DynSurround.data.xface.VariatorConfig;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile.ForgeEntry;
 import org.blockartistry.DynSurround.packs.ResourcePacks;
 import org.blockartistry.DynSurround.packs.ResourcePacks.Pack;
@@ -78,9 +80,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntityWitch;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -108,6 +107,10 @@ public final class FootstepsRegistry extends Registry {
 	private Map<ArmorClass, IAcoustic> ARMOR_SOUND;
 	private Map<ArmorClass, IAcoustic> ARMOR_SOUND_FOOT;
 
+	private Map<String, Variator> variators;
+	private Variator childVariator;
+	private Variator playerQuadruped;
+
 	public FootstepsRegistry(@Nonnull final Side side) {
 		super(side);
 	}
@@ -122,6 +125,7 @@ public final class FootstepsRegistry extends Registry {
 		this.FOOTPRINT_STATES = new IdentityHashSet<>();
 		this.ARMOR_SOUND = new EnumMap<>(ArmorClass.class);
 		this.ARMOR_SOUND_FOOT = new EnumMap<>(ArmorClass.class);
+		this.variators = new HashMap<>();
 
 		// Initialize the known materials that leave footprints
 		this.FOOTPRINT_MATERIAL.add(Material.CLAY);
@@ -160,6 +164,9 @@ public final class FootstepsRegistry extends Registry {
 		for (final String fp : cfg.footprints) {
 			this.registerFootrint(fp);
 		}
+
+		for (final Entry<String, VariatorConfig> entry : cfg.variators.entrySet())
+			this.variators.put(entry.getKey(), new Variator(entry.getValue()));
 	}
 
 	@Override
@@ -181,6 +188,9 @@ public final class FootstepsRegistry extends Registry {
 		this.ARMOR_SOUND_FOOT.put(ArmorClass.MEDIUM, am.getAcoustic("medium_foot"));
 		this.ARMOR_SOUND_FOOT.put(ArmorClass.CRYSTAL, am.getAcoustic("crystal_foot"));
 		this.ARMOR_SOUND_FOOT.put(ArmorClass.HEAVY, am.getAcoustic("heavy_foot"));
+
+		this.childVariator = this.getVariator("child");
+		this.playerQuadruped = this.getVariator("quadruped");
 
 		final ArrayList<String> missingAcoustics = new ArrayList<String>();
 		BlockState.forEach(state -> {
@@ -297,20 +307,18 @@ public final class FootstepsRegistry extends Registry {
 	}
 
 	public Generator createGenerator(@Nonnull final EntityLivingBase entity) {
-		// Assume the default variator parameters
-		Variator var = Variator.DEFAULT;
-
-		if (entity instanceof EntityVillager || entity instanceof EntityWitch) {
-			var = entity.isChild() ? Variator.CHILD : Variator.VILLAGER;
-		} else if (entity instanceof EntitySkeleton) {
-			var = entity.isChild() ? Variator.CHILD : Variator.SKELETON;
-		} else if (entity instanceof EntityPlayer) {
-			if (ModOptions.sound.foostepsQuadruped)
-				var = Variator.PLAYER_QUAD;
-			else
-				var = Variator.PLAYER;
-		}
+		final EntityEffectInfo info = ClientRegistry.EFFECTS.getEffects(entity);
+		Variator var = this.getVariator(info.variator);
+		if (entity.isChild())
+			var = this.childVariator;
+		else if (entity instanceof EntityPlayer && ModOptions.sound.foostepsQuadruped)
+			var = this.playerQuadruped;
 		return var.QUADRUPED ? new GeneratorQP(var) : new Generator(var);
+	}
+
+	@Nonnull
+	public Variator getVariator(@Nonnull final String varName) {
+		return this.variators.getOrDefault(varName, Variator.DEFAULT);
 	}
 
 	@Nonnull

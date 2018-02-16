@@ -26,6 +26,8 @@ package org.blockartistry.lib.effects;
 import java.util.List;
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.registry.EntityEffectInfo;
+
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
