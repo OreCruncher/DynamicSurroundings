@@ -57,7 +57,7 @@ public class SoundCrashFixLibrary extends Transmorgrifier {
 		final String name = "removeSource";
 		final String sig = "(Ljava/lang/String;)V";
 
-		final MethodNode m = findMethod(cn, name, sig);
+		final MethodNode m = findMethod(cn, sig, name);
 		if (m != null) {
 			for (Iterator<?> iterator = m.instructions.iterator(); iterator.hasNext();) {
 				final AbstractInsnNode insn = (AbstractInsnNode) iterator.next();

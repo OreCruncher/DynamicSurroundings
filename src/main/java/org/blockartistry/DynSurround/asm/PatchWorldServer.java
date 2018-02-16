@@ -57,9 +57,9 @@ public class PatchWorldServer extends Transmorgrifier {
 	public boolean transmorgrify(final ClassNode cn) {
 
 		final String names[] = { "resetRainAndThunder", "func_73051_P" };
-		final String sigs[] = { "()V", "()V" };
+		final String sig = "()V";
 
-		final MethodNode m = findMethod(cn, names, sigs);
+		final MethodNode m = findMethod(cn, sig, names);
 		if (m != null) {
 			this.logMethod(Transformer.log(), m, "Found!");
 
@@ -69,14 +69,14 @@ public class PatchWorldServer extends Transmorgrifier {
 
 			final String owner = "org/blockartistry/DynSurround/server/PlayerSleepHandler";
 			final String targetName = "resetRainAndThunder";
-			final String sig = "(Lnet/minecraft/world/WorldServer;)V";
+			final String sig1 = "(Lnet/minecraft/world/WorldServer;)V";
 
-			list.add(new MethodInsnNode(INVOKESTATIC, owner, targetName, sig, false));
+			list.add(new MethodInsnNode(INVOKESTATIC, owner, targetName, sig1, false));
 			list.add(new InsnNode(RETURN));
 			m.instructions = list;
 			return true;
 		} else {
-			Transformer.log().error("Unable to locate method {}{}", names[0], sigs[0]);
+			Transformer.log().error("Unable to locate method {}{}", names[0], sig);
 		}
 
 		Transformer.log().info("Unable to patch [{}]!", this.getClassName());

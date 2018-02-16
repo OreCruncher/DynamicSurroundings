@@ -51,9 +51,9 @@ public class PatchEntityArrow extends Transmorgrifier {
 	@Override
 	public boolean transmorgrify(final ClassNode cn) {
 		final String names[] = { "onUpdate", "func_70071_h_" };
-		final String sigs[] = { "()V", "()V" };
+		final String sig = "()V";
 
-		final MethodNode m = findMethod(cn, names, sigs);
+		final MethodNode m = findMethod(cn, sig, names);
 		if (m != null) {
 			this.logMethod(Transformer.log(), m, "Found!");
 
@@ -71,7 +71,7 @@ public class PatchEntityArrow extends Transmorgrifier {
 				}
 			}
 		} else {
-			Transformer.log().error("Unable to locate method {}{}", names[0], sigs[0]);
+			Transformer.log().error("Unable to locate method {}{}", names[0], sig);
 		}
 
 		Transformer.log().info("Unable to patch [{}]!", this.getClassName());

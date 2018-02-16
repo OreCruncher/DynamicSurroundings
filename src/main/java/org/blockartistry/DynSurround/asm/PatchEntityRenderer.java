@@ -57,9 +57,9 @@ public class PatchEntityRenderer extends Transmorgrifier {
 	public boolean transmorgrify(final ClassNode cn) {
 
 		final String names[] = { "addRainParticles", "func_78484_h" };
-		final String sigs[] = { "()V", "()V" };
+		final String sig = "()V";
 
-		final MethodNode m = findMethod(cn, names, sigs);
+		final MethodNode m = findMethod(cn, sig, names);
 		if (m != null) {
 			this.logMethod(Transformer.log(), m, "Found!");
 
@@ -69,14 +69,14 @@ public class PatchEntityRenderer extends Transmorgrifier {
 
 			final String owner = "org/blockartistry/DynSurround/client/weather/RenderWeather";
 			final String targetName = "addRainParticles";
-			final String sig = "(Lnet/minecraft/client/renderer/EntityRenderer;)V";
+			final String sig1 = "(Lnet/minecraft/client/renderer/EntityRenderer;)V";
 
-			list.add(new MethodInsnNode(INVOKESTATIC, owner, targetName, sig, false));
+			list.add(new MethodInsnNode(INVOKESTATIC, owner, targetName, sig1, false));
 			list.add(new InsnNode(RETURN));
 			m.instructions = list;
 			return true;
 		} else {
-			Transformer.log().error("Unable to locate method {}{}", names[0], sigs[0]);
+			Transformer.log().error("Unable to locate method {}{}", names[0], sig);
 		}
 
 		Transformer.log().info("Unable to patch [{}]!", this.getClassName());
