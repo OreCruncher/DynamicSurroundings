@@ -62,6 +62,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -475,7 +476,7 @@ public class Generator {
 			final Vec3d printPos = footstepPosition(entity.getEntityWorld(), result.getPos(), xx, zz);
 			if (printPos != null) {
 				FootprintStyle style = this.VAR.FOOTPRINT_STYLE;
-				if (style == null) {
+				if (entity instanceof EntityPlayer) {
 					style = FootprintStyle.getStyle(ModOptions.player.footprintStyle);
 				}
 				final Footprint print = Footprint.produce(style, entity, printPos, rotDegrees, this.VAR.FOOTPRINT_SCALE,
