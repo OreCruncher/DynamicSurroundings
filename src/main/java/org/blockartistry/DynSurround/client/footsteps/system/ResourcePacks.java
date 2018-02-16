@@ -24,132 +24,156 @@
 
 package org.blockartistry.DynSurround.client.footsteps.system;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.client.footsteps.implem.Manifest;
+import org.blockartistry.lib.JsonUtils;
 
-import com.google.common.collect.ImmutableSet;
-
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.ResourcePackRepository;
-import net.minecraft.client.resources.data.IMetadataSection;
-import net.minecraft.client.resources.data.MetadataSerializer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 
-@SideOnly(Side.CLIENT)
-public class ResourcePacks {
+public final class ResourcePacks {
 
-	private final ResourceLocation manifest = new ResourceLocation(DSurround.RESOURCE_ID, "manifest.json");
-	private final ResourceLocation acoustics = new ResourceLocation(DSurround.RESOURCE_ID, "acoustics.json");
-	private final ResourceLocation primitivemap = new ResourceLocation(DSurround.RESOURCE_ID, "primitivemap.json");
+	private ResourcePacks() {
 
-	private static class Pack implements IResourcePack {
+	}
 
-		private final String mod;
+	public static final ResourceLocation MANIFEST_RESOURCE = new ResourceLocation(DSurround.RESOURCE_ID,
+			"manifest.json");
+	public static final ResourceLocation ACOUSTICS_RESOURCE = new ResourceLocation(DSurround.RESOURCE_ID,
+			"acoustics.json");
+	public static final ResourceLocation PRIMITIVEMAP_RESOURCE = new ResourceLocation(DSurround.RESOURCE_ID,
+			"primitivemap.json");
+	public static final ResourceLocation CONFIGURE_RESOURCE = new ResourceLocation(DSurround.RESOURCE_ID,
+			"configure.json");
 
-		public Pack(@Nonnull final String mod) {
-			this.mod = mod;
+	public static class Pack {
+
+		protected final String modName;
+		protected final String packPath;
+		protected Manifest manifest;
+
+		public Pack(@Nonnull final String modName) {
+			this.modName = modName;
+			this.packPath = "/assets/" + modName + "/";
 		}
 
-		@Override
+		public boolean hasManifest() {
+			if (this.manifest == null) {
+				try (final InputStream stream = this.getInputStream(MANIFEST_RESOURCE)) {
+					if (stream != null)
+						this.manifest = JsonUtils.load(stream, Manifest.class);
+				} catch (final Throwable t) {
+				}
+			}
+
+			return this.manifest != null;
+		}
+
+		@Nonnull
+		public String getModName() {
+			return this.modName;
+		}
+
+		@Nullable
+		public Manifest getManifest() {
+			return this.manifest;
+		}
+
 		public InputStream getInputStream(@Nonnull final ResourceLocation loc) throws IOException {
 			final StringBuilder builder = new StringBuilder();
-			builder.append("/assets/").append(this.mod).append('/');
+			builder.append(this.packPath);
 			builder.append(loc.getResourceDomain()).append('/').append(loc.getResourcePath());
 			return DSurround.class.getResourceAsStream(builder.toString());
 		}
 
+		public boolean resourceExists(@Nonnull final ResourceLocation loc) {
+			try (final InputStream stream = this.getInputStream(loc)) {
+				return stream != null;
+			} catch (@Nonnull final Throwable t) {
+
+			}
+			return false;
+		}
+
+		public String toString() {
+			final StringBuilder builder = new StringBuilder();
+			builder.append("Resource pack ").append(this.getModName()).append(": ");
+			if (this.manifest != null)
+				builder.append(String.format("%s by %s (%s)", this.manifest.getName(), this.manifest.getAuthor(),
+						this.manifest.getWebsite()));
+			else
+				builder.append("No manifest");
+			return builder.toString();
+		}
+	}
+
+	private static class ResourcePack extends Pack {
+
+		protected final IResourcePack pack;
+
+		public ResourcePack(@Nonnull IResourcePack resource) {
+			super(resource.getPackName());
+			this.pack = resource;
+		}
+
+		@Override
+		public InputStream getInputStream(@Nonnull final ResourceLocation loc) throws IOException {
+			return this.pack.getInputStream(loc);
+		}
+
 		@Override
 		public boolean resourceExists(@Nonnull final ResourceLocation loc) {
-			return true;
+			return this.pack.resourceExists(loc);
 		}
-
-		@Override
-		@Nonnull
-		public Set<String> getResourceDomains() {
-			return ImmutableSet.of();
-		}
-
-		@Override
-		@Nullable
-		public BufferedImage getPackImage() throws IOException {
-			return null;
-		}
-
-		@Override
-		@Nonnull
-		public String getPackName() {
-			return "DEFAULT: " + this.mod;
-		}
-
-		@Override
-		@Nullable
-		public <T extends IMetadataSection> T getPackMetadata(MetadataSerializer metadataSerializer,
-				String metadataSectionName) throws IOException {
-			return null;
-		}
-
-		@Override
-		@Nonnull
-		public String toString() {
-			return this.getPackName();
-		}
-
 	}
 
 	@Nonnull
-	public List<IResourcePack> findResourcePacks() {
-		//final List<ResourcePackRepository.Entry> repo = Minecraft.getMinecraft().getResourcePackRepository()
-		//		.getRepositoryEntries();
+	public static List<Pack> findResourcePacks() {
 
-		final List<IResourcePack> foundEntries = new ArrayList<IResourcePack>();
-		foundEntries.add(new Pack(DSurround.MOD_ID));
+		final List<Pack> foundEntries = new ArrayList<>();
 
-		
-		// Add a default pack for mods that are loaded - there may be a default
-		// configuration provided in the archive
-		//for (final ModContainer mod : Loader.instance().getActiveModList())
-		//	foundEntries.add(new Pack(mod.getModId()));
+		// Add ourselves to the list as the first entry
+		Pack p = new Pack(DSurround.MOD_ID);
+		if (!p.hasManifest())
+			throw new RuntimeException("Missing configuration!");
+		foundEntries.add(p);
 
-		// Look in other resource packs for more configuration data
-		//for (final ResourcePackRepository.Entry pack : repo) {
-		//	DSurround.log().debug("Resource Pack: %s", pack.getResourcePackName());
-		//	if (checkCompatible(pack)) {
-		//		DSurround.log().debug("Found FootstepsRegistry resource pack: %s", pack.getResourcePackName());
-		//		foundEntries.add(pack.getResourcePack());
-		//	}
-		//}
-		
+		// Scan the mods that are loaded to see if they have a
+		// configuration we are interested in.
+		for (final ModContainer mod : Loader.instance().getActiveModList()) {
+			// DS is already added so we have to skip
+			if (!mod.getModId().equals(DSurround.MOD_ID)) {
+				p = new Pack(mod.getModId());
+				if (p.hasManifest())
+					foundEntries.add(p);
+			}
+		}
+
+		// Look in other resource packs for more configuration data.  Only do
+		// this if NOT running as a dedicated server.
+		if (!DSurround.proxy().isRunningAsServer()) {
+			final List<ResourcePackRepository.Entry> repo = Minecraft.getMinecraft().getResourcePackRepository()
+					.getRepositoryEntries();
+
+			for (final ResourcePackRepository.Entry pack : repo) {
+				p = new ResourcePack(pack.getResourcePack());
+				if (p.hasManifest())
+					foundEntries.add(p);
+			}
+		}
+
 		return foundEntries;
 	}
 
-	@SuppressWarnings("unused")
-	private boolean checkCompatible(@Nonnull final ResourcePackRepository.Entry pack) {
-		return pack.getResourcePack().resourceExists(this.manifest);
-	}
-
-	@Nullable
-	public InputStream openPackDescriptor(@Nonnull final IResourcePack pack) throws IOException {
-		return pack.getInputStream(this.manifest);
-	}
-
-	@Nullable
-	public InputStream openAcoustics(@Nonnull final IResourcePack pack) throws IOException {
-		return pack.getInputStream(this.acoustics);
-	}
-
-	@Nullable
-	public InputStream openPrimitiveMap(@Nonnull final IResourcePack pack) throws IOException {
-		return pack.getInputStream(this.primitivemap);
-	}
 }
