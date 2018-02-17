@@ -108,6 +108,22 @@
 		"rustic:vase": "sandstone",
 		"rustic:wildberry_bush": "leaves",
 		"rustic:wildberry_juice": "NOT_EMITTER",
-		"rustic:wind_thistle": "NOT_EMITTER"
+		"rustic:wind_thistle": "NOT_EMITTER",
+		"rustic:painted_wood_white": "planks",
+		"rustic:painted_wood_orange": "planks",
+		"rustic:painted_wood_magenta": "planks",
+		"rustic:painted_wood_light_blue": "planks",
+		"rustic:painted_wood_yellow": "planks",
+		"rustic:painted_wood_lime": "planks",
+		"rustic:painted_wood_pink": "planks",
+		"rustic:painted_wood_gray": "planks",
+		"rustic:painted_wood_silver": "planks",
+		"rustic:painted_wood_cyan": "planks",
+		"rustic:painted_wood_purple": "planks",
+		"rustic:painted_wood_blue": "planks",
+		"rustic:painted_wood_brown": "planks",
+		"rustic:painted_wood_green": "planks",
+		"rustic:painted_wood_red": "planks",
+		"rustic:painted_wood_black": "planks"
 	}
 }

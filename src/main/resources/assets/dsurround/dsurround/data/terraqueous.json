@@ -57,6 +57,9 @@
 		"terraqueous:plants^3+foliage": "brush",
 		"terraqueous:plants^4+foliage": "brush_straw_transition",
 		"terraqueous:plants^5+foliage": "straw",
-		"terraqueous:type_cloud": "NOT_EMITTER"
+		"terraqueous:type_cloud": "NOT_EMITTER",
+		"terraqueous:tall_grass": "NOT_EMITTER",
+		"terraqueous:tall_grass+messy": "MESSY_GROUND",
+		"terraqueous:tall_grass+foliage": "brush_straw_transition"
 	}
 }

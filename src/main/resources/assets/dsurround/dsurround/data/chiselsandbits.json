@@ -1,0 +1,18 @@
+{
+	"footsteps": {
+		"chiselsandbits:chiseled_clay": "dirt",
+		"chiselsandbits:chiseled_cloth": "rug",
+		"chiselsandbits:chiseled_fluid": "NOT_EMITTER",
+		"chiselsandbits:chiseled_glass": "glass",
+		"chiselsandbits:chiseled_grass": "grass",
+		"chiselsandbits:chiseled_ground": "gravel",
+		"chiselsandbits:chiseled_ice": "ice",
+		"chiselsandbits:chiseled_iron": "hardmetal",
+		"chiselsandbits:chiseled_leaves": "leaves",
+		"chiselsandbits:chiseled_packedice": "stone,snow",
+		"chiselsandbits:chiseled_rock": "stone",
+		"chiselsandbits:chiseled_sand": "sand",
+		"chiselsandbits:chiseled_snow": "snow",
+		"chiselsandbits:chiseled_wood": "wood"
+	}
+}

@@ -1,0 +1,23 @@
+{
+	"footsteps": {
+		"animania:block_hamster_wheel": "metalbar",
+		"animania:block_mud": "mud",
+		"animania:block_nest": "straw",
+		"animania:block_seeds": "brush_straw_transition",
+		"animania:block_trough": "woodutility",
+		"animania:cheese_friesian": "organic",
+		"animania:cheese_goat": "mud",
+		"animania:cheese_holstein": "organic",
+		"animania:cheese_jersey": "organic",
+		"animania:cheese_mold": "woodutility",
+		"animania:cheese_sheep": "organic",
+		"animania:invisiblock": "NOT_EMITTER",
+		"animania:milk_friesian": "NOT_EMITTER",
+		"animania:milk_goat": "NOT_EMITTER",
+		"animania:milk_holstein": "NOT_EMITTER",
+		"animania:milk_jersey": "NOT_EMITTER",
+		"animania:milk_sheep": "NOT_EMITTER",
+		"animania:salt_lick": "composite",
+		"animania:slop": "NOT_EMITTER"
+	}
+}

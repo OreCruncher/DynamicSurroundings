@@ -4,6 +4,22 @@
 		"ironchest:iron_chest:2": "composite",
 		"ironchest:iron_chest:5": "ice",
 		"ironchest:iron_chest:6": "obsidian",
-		"ironchest:iron_chest:7": "dirt"
+		"ironchest:iron_chest:7": "dirt",
+		"ironchest:iron_shulker_box_black": "composite",
+		"ironchest:iron_shulker_box_blue": "composite",
+		"ironchest:iron_shulker_box_brown": "composite",
+		"ironchest:iron_shulker_box_cyan": "composite",
+		"ironchest:iron_shulker_box_gray": "composite",
+		"ironchest:iron_shulker_box_green": "composite",
+		"ironchest:iron_shulker_box_light_blue": "composite",
+		"ironchest:iron_shulker_box_lime": "composite",
+		"ironchest:iron_shulker_box_magenta": "composite",
+		"ironchest:iron_shulker_box_orange": "composite",
+		"ironchest:iron_shulker_box_pink": "composite",
+		"ironchest:iron_shulker_box_purple": "composite",
+		"ironchest:iron_shulker_box_red": "composite",
+		"ironchest:iron_shulker_box_silver": "composite",
+		"ironchest:iron_shulker_box_white": "composite",
+		"ironchest:iron_shulker_box_yellow": "composite"
 	}
 }
