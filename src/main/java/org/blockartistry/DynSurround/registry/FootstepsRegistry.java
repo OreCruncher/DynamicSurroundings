@@ -31,6 +31,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -58,6 +59,7 @@ import org.blockartistry.DynSurround.data.xface.VariatorConfig;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile.ForgeEntry;
 import org.blockartistry.DynSurround.packs.ResourcePacks;
 import org.blockartistry.DynSurround.packs.ResourcePacks.Pack;
+import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.collections.IdentityHashSet;
@@ -119,8 +121,8 @@ public final class FootstepsRegistry extends Registry {
 	public void init() {
 
 		this.acousticsManager = new AcousticsManager();
-		this.blockMap = new BlockMap(this.acousticsManager);
 		this.primitiveMap = new PrimitiveMap(this.acousticsManager);
+		this.blockMap = new BlockMap(this.acousticsManager);
 		this.FOOTPRINT_MATERIAL = new IdentityHashSet<>();
 		this.FOOTPRINT_STATES = new IdentityHashSet<>();
 		this.ARMOR_SOUND = new EnumMap<>(ArmorClass.class);
@@ -198,16 +200,18 @@ public final class FootstepsRegistry extends Registry {
 				.map(block -> block.getBlockState().getValidStates()).flatMap(l -> l.stream())
 				.collect(Collectors.toSet());
 
-		// Collect the set of missing acoustics and print them out
-		if (ModOptions.logging.enableDebugLogging) {
-			final Set<String> missingAcoustics = blockStates.stream()
-					.filter(bs -> !FootstepsRegistry.this.getBlockMap().hasAcoustics(bs)).map(IBlockState::toString)
-					.collect(Collectors.toSet());
+		// Scan the block list looking for any block states that do not have sounds
+		// definitions supplied by configuration files or by primitives. This scan
+		// has the side effect of priming the caches.
+		final Set<IBlockState> missingAcoustics = blockStates.stream()
+				.filter(bs -> !FootstepsRegistry.this.getBlockMap().hasAcoustics(bs)).collect(Collectors.toSet());
 
+		if (ModOptions.logging.enableDebugLogging) {
 			if (missingAcoustics.size() > 0) {
-				DSurround.log().info("MISSING ACOUSTIC ENTRIES");
-				DSurround.log().info("========================");
-				missingAcoustics.stream().sorted().forEach(DSurround.log()::info);
+				DSurround.log().info("          >>>> MISSING ACOUSTIC ENTRIES <<<< ");
+				DSurround.log().info("Sounds for these states will default to their step sound");
+				DSurround.log().info("========================================================");
+				missingAcoustics.stream().map(IBlockState::toString).sorted().forEach(DSurround.log()::info);
 			}
 		}
 
@@ -229,10 +233,7 @@ public final class FootstepsRegistry extends Registry {
 						}
 					}
 					return false;
-				}).forEach(bs -> {
-					this.FOOTPRINT_STATES.add(bs);
-					DSurround.log().debug("Added blockstate [%s] to footprint list", bs.toString());
-				});
+				}).forEach(bs -> this.FOOTPRINT_STATES.add(bs));
 	}
 
 	@Override
@@ -325,9 +326,54 @@ public final class FootstepsRegistry extends Registry {
 		return this.blockMap;
 	}
 
-	@Nonnull
-	public PrimitiveMap getPrimitiveMap() {
-		return this.primitiveMap;
+	/**
+	 * Used to determine what acoustics to play based on the block's sound
+	 * attributes. It's a fallback method in case there isn't a configuration
+	 * defined acoustic profile for a block state.
+	 * 
+	 * @param state
+	 *            BlockState for which the acoustic profile is being generated
+	 * @return Acoustic profile for the BlockState, if any
+	 */
+	@Nullable
+	public IAcoustic[] resolvePrimitive(@Nonnull final IBlockState state) {
+
+		if (state == BlockStateProvider.AIR_STATE)
+			return AcousticsManager.NOT_EMITTER;
+
+		final SoundType type = MCHelper.getSoundType(state);
+
+		if (type == null)
+			return AcousticsManager.NOT_EMITTER;
+
+		final String soundName;
+		boolean flag = false;
+
+		if (type.getStepSound() == null || type.getStepSound().getSoundName().getResourcePath().isEmpty()) {
+			soundName = "UNDEFINED";
+			flag = true;
+		} else
+			soundName = type.getStepSound().getSoundName().toString();
+
+		final String substrate = String.format(Locale.ENGLISH, "%.2f_%.2f", type.getVolume(), type.getPitch());
+
+		// Check for primitive in register
+		IAcoustic[] primitive = this.primitiveMap.getPrimitiveMapSubstrate(soundName, substrate);
+		if (primitive == null) {
+			if (flag) {
+				// Check sound
+				primitive = this.primitiveMap.getPrimitiveMapSubstrate(soundName, "break_" + soundName);
+			}
+			if (primitive == null) {
+				primitive = this.primitiveMap.getPrimitiveMap(soundName);
+			}
+		}
+
+		if (primitive == null) {
+			// TODO: Generate an acoustic profile on the fly and insert into the map?
+		}
+		
+		return primitive;
 	}
 
 	public boolean hasFootprint(@Nonnull final IBlockState state) {

@@ -38,6 +38,7 @@ import org.blockartistry.DynSurround.registry.BlockInfo.BlockInfoMutable;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -46,15 +47,35 @@ public class BlockAcousticMap {
 
 	public static final IAcoustic[] NO_ACOUSTICS = {};
 
+	/**
+	 * A callback interface for when the acoustic map cannot resolve a blockState
+	 * sound and needs external assistance to back fill. The results are added to
+	 * the cache for future lookups.
+	 */
+	public static interface IAcousticResolver {
+		IAcoustic[] resolve(@Nonnull final IBlockState state);
+	}
+
+	private final IAcousticResolver resolver;
 	private final BlockInfoMutable key = new BlockInfoMutable();
 	private Map<BlockInfo, IAcoustic[]> data = new HashMap<BlockInfo, IAcoustic[]>();
 	private Map<IBlockState, IAcoustic[]> cache = new IdentityHashMap<IBlockState, IAcoustic[]>();
 	private Map<IBlockState, IAcoustic[]> specialCache = new IdentityHashMap<IBlockState, IAcoustic[]>();
 
+	public BlockAcousticMap() {
+		this(null);
+	}
+
+	public BlockAcousticMap(@Nullable final IAcousticResolver resolver) {
+		this.resolver = resolver;
+		
+		// Air is a very known quantity
+		this.data.put(new BlockInfo(Blocks.AIR), AcousticsManager.NOT_EMITTER);
+	}
+
 	/**
-	 * Obtain acoustic information for a block. If the block has variants
-	 * (subtypes) it will fall back to searching for a generic if a specific one
-	 * is not found.
+	 * Obtain acoustic information for a block. If the block has variants (subtypes)
+	 * it will fall back to searching for a generic if a specific one is not found.
 	 */
 	@Nullable
 	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state) {
@@ -64,6 +85,8 @@ public class BlockAcousticMap {
 			if (result == null && this.key.hasSubTypes()) {
 				result = this.data.get(this.key.asGeneric());
 			}
+			if (result == null && this.resolver != null)
+				result = this.resolver.resolve(state);
 			if (result == null)
 				result = NO_ACOUSTICS;
 			this.cache.put(state, result);
@@ -72,10 +95,9 @@ public class BlockAcousticMap {
 	}
 
 	/**
-	 * Similar to getBlockMap(), but includes an additional check if the block
-	 * has special metadata. For example, a BlockCrop may not have subtypes, but
-	 * it would have growth data stored in the meta. An example of this is
-	 * Wheat.
+	 * Similar to getBlockMap(), but includes an additional check if the block has
+	 * special metadata. For example, a BlockCrop may not have subtypes, but it
+	 * would have growth data stored in the meta. An example of this is Wheat.
 	 */
 	@Nullable
 	public IAcoustic[] getBlockAcousticsWithSpecial(@Nonnull final IBlockState state) {
