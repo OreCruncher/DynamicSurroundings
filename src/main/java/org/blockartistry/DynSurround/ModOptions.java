@@ -1002,11 +1002,11 @@ public final class ModOptions {
 		public static boolean llIndicateCaution = true;
 
 		@Option(CONFIG_LL_COLORS)
-		@DefaultValue("0")
+		@DefaultValue("1")
 		@LangKey("dsurround.cfg.lightlevel.Colors")
 		@Comment("Color set: 0 bright, 1 dark")
 		@RangeInt(min = 0, max = 1)
-		public static int llColors = 0;
+		public static int llColors = 1;
 	}
 
 	public static final String CATEGORY_COMPASS = "compass";
