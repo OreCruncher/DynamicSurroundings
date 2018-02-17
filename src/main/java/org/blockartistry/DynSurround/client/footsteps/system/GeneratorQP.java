@@ -68,7 +68,7 @@ public class GeneratorQP extends Generator {
 	}
 
 	protected float walkFunction2(final float distance) {
-		final float overallMultiplier = 2.5f / 2;
+		final float overallMultiplier = this.VAR.QUADRUPED_MULTIPLIER;
 		final float ndm = 0.2F;
 		float pond = this.nextWalkDistanceMultiplier;
 		pond *= pond;
