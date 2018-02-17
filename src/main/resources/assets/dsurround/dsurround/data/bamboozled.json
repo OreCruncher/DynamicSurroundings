@@ -1,0 +1,11 @@
+{
+	"footsteps": {
+		"bamboozled:bamboo": "leaves",
+		"bamboozled:bamboo_wall": "#fence",
+		"bamboozled:bamboo_bundle": "woodutility",
+		"bamboozled:salt_ore": "ore",
+		"bamboozled:salt_block": "sand",
+		"bamboozled:salt_pile": "NOT_EMITTER",
+		"bamboozled:rope": "rug"
+	}
+}
