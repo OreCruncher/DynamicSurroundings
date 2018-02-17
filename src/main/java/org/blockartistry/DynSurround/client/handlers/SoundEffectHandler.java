@@ -354,7 +354,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 					if (iblockstate.getMaterial() == Material.AIR)
 						if (wc.getLightFor(EnumSkyBlock.SKY, blockpos) <= 0)
 							if (wc.getLight(blockpos) <= this.RANDOM.nextInt(8)) {
-								final BasicSound<?> fx = Sounds.AMBIENT_CAVE.createSound(blockpos).setVolume(0.8F)
+								final BasicSound<?> fx = Sounds.AMBIENT_CAVE.createSound(blockpos).setVolume(0.9F)
 										.setPitch(0.8F + this.RANDOM.nextFloat() * 0.2F);
 								this.playSound(fx);
 								wc.ambienceTicks = this.RANDOM.nextInt(12000) + 6000;
