@@ -45,6 +45,7 @@ public class Variator {
 	public final float STRIDE;
 	public final float STRIDE_STAIR;
 	public final float STRIDE_LADDER;
+	public final float QUADRUPED_MULTIPLIER;
 	public final boolean PLAY_WANDER;
 	public final boolean QUADRUPED;
 	public final boolean PLAY_JUMP;
@@ -59,10 +60,11 @@ public class Variator {
 		this.EVENT_ON_JUMP = true;
 		this.LAND_HARD_DISTANCE_MIN = 0.9F;
 		this.SPEED_TO_JUMP_AS_MULTIFOOT = 0.005F;
-		this.SPEED_TO_RUN = 0.22F;
-		this.STRIDE = 1.25F;
+		this.SPEED_TO_RUN = 0.22F; // 0.022F;
+		this.STRIDE = 0.75F; //0.95F;
 		this.STRIDE_STAIR = this.STRIDE * 0.65F;
 		this.STRIDE_LADDER = 0.5F;
+		this.QUADRUPED_MULTIPLIER = 1.25F;
 		this.PLAY_WANDER = true;
 		this.QUADRUPED = false;
 		this.PLAY_JUMP = false;
@@ -82,6 +84,7 @@ public class Variator {
 		this.STRIDE = cfg.stride;
 		this.STRIDE_STAIR = cfg.strideStair;
 		this.STRIDE_LADDER = cfg.strideLadder;
+		this.QUADRUPED_MULTIPLIER = cfg.quadrupedMultiplier;
 		this.PLAY_WANDER = cfg.playWander;
 		this.QUADRUPED = cfg.quadruped;
 		this.PLAY_JUMP = cfg.playJump;

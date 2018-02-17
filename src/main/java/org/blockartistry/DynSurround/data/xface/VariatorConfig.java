@@ -35,13 +35,17 @@ public class VariatorConfig {
 	@SerializedName("speedToJumpAsMultifoot")
 	public float speedToJumpAsMultifoot = 0.005F;
 	@SerializedName("speedToRun")
-	public float speedToRun = 0.22F;
+	public float speedToRun = 0.22F; // 0.022F; slow
+
 	@SerializedName("stride")
-	public float stride = 1.25F; // 0.95F
+	public float stride = 0.75F; // 0.95F; slow
 	@SerializedName("strideStair")
 	public float strideStair = this.stride * 0.65F;
 	@SerializedName("strideLadder")
 	public float strideLadder = 0.5F;
+	@SerializedName("quadrupedMultiplier")
+	public float quadrupedMultiplier = 1.25F; // 0.925; slow
+
 	@SerializedName("playWander")
 	public boolean playWander = true;
 	@SerializedName("quadruped")
