@@ -95,7 +95,8 @@ dependencies {
 
     // compile "foxie:Calendar:1.10.2-1.5-10:deobf"
     // compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
-    compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.12.2-7.0.1.2302:deobf"
+    // Conflict with snapshot between BoP and TaN :\
+    //compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.12.2-7.0.1.2302:deobf"
     compile "com.github.glitchfiend.biomesoplenty:ToughAsNails:1.12.2-3.1.0.73:deobf"
     
 	// http://dvs1.progwml6.com/files/maven/mezz/jei/
