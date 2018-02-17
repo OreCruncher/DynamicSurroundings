@@ -33,6 +33,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.DynSurround.registry.BlockInfo;
@@ -53,7 +54,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockMap {
 
 	private final AcousticsManager acousticsManager;
-	private final BlockAcousticMap metaMap = new BlockAcousticMap();
+	private final BlockAcousticMap metaMap;
 	private Map<Substrate, BlockAcousticMap> substrateMap = new EnumMap<Substrate, BlockAcousticMap>(Substrate.class);
 
 	private static class MacroEntry {
@@ -137,24 +138,38 @@ public class BlockMap {
 
 	public BlockMap(@Nonnull final AcousticsManager manager) {
 		this.acousticsManager = manager;
-		this.metaMap.put(new BlockInfo(Blocks.AIR), AcousticsManager.NOT_EMITTER);
+		this.metaMap = new BlockAcousticMap(bs -> this.resolve(bs));
 	}
 
+	/**
+	 * Used by the underlying BlockAcousticMap to resolve a blockState acoustics if
+	 * it is unable to match from it's configuration and cache. The results are
+	 * typically cached for future lookup.
+	 * 
+	 * @param state
+	 *            Block state that needs acoustic help
+	 * @return Acoustics for the block state, if any
+	 */
 	@Nullable
+	public IAcoustic[] resolve(@Nonnull final IBlockState state) {
+		return ClientRegistry.FOOTSTEPS.resolvePrimitive(state);
+	}
+
 	public boolean hasAcoustics(@Nonnull final IBlockState state) {
 		final IAcoustic[] a = this.metaMap.getBlockAcoustics(state);
 		return a != null && a != BlockAcousticMap.NO_ACOUSTICS;
 	}
 
 	@Nullable
-	public IAcoustic[] getBlockAcoustics(@Nonnull final World world, @Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
+	public IAcoustic[] getBlockAcoustics(@Nonnull final World world, @Nonnull final IBlockState state,
+			@Nonnull final BlockPos pos) {
 		final IBlockState trueState = FacadeHelper.resolveState(state, world, pos, EnumFacing.UP);
 		return this.metaMap.getBlockAcoustics(trueState);
 	}
 
 	@Nullable
-	public IAcoustic[] getBlockSubstrateAcoustics(@Nonnull final World world, @Nonnull final IBlockState state, @Nonnull final BlockPos pos,
-			@Nonnull final Substrate substrate) {
+	public IAcoustic[] getBlockSubstrateAcoustics(@Nonnull final World world, @Nonnull final IBlockState state,
+			@Nonnull final BlockPos pos, @Nonnull final Substrate substrate) {
 		final IBlockState trueState = FacadeHelper.resolveState(state, world, pos, EnumFacing.UP);
 		final BlockAcousticMap sub = this.substrateMap.get(substrate);
 		return sub != null ? sub.getBlockAcousticsWithSpecial(trueState) : null;
