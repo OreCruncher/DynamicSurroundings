@@ -24,7 +24,6 @@
 
 package org.blockartistry.DynSurround.client.footsteps.system;
 
-import java.util.Locale;
 import java.util.Random;
 import java.util.function.Consumer;
 
@@ -46,7 +45,6 @@ import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.DynSurround.registry.Variator;
-import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.TimeUtils;
 import org.blockartistry.lib.WorldUtils;
@@ -57,7 +55,6 @@ import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.lib.sound.SoundUtils;
 
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -630,66 +627,17 @@ public class Generator {
 
 		if (association != null) {
 			if (association == AcousticsManager.NOT_EMITTER) {
-				return null; // Player has stepped on a non-emitter block as
-								// defined in the blockmap
+				// Player has stepped on a non-emitter block as defined in the blockmap
+				return null;
 			} else {
+				// Let's play the fancy acoustics we have defined for the block
 				return new Association(in, pos, association);
 			}
 		} else {
-			IAcoustic[] primitive = resolvePrimitive(in);
-			if (primitive != null) {
-				if (primitive == AcousticsManager.NOT_EMITTER) {
-					return null;
-				}
-				return new Association(in, pos, primitive);
-			} else {
-				return new Association(in, pos);
-			}
+			// No acoustics. Calling logic will default to playing the normal block
+			// step sound if available.
+			return new Association(in, pos);
 		}
-	}
-
-	@Nonnull
-	protected IAcoustic[] resolvePrimitive(@Nonnull final IBlockState state) {
-
-		if (state == AIR_STATE)
-			return AcousticsManager.NOT_EMITTER;
-
-		final SoundType type = MCHelper.getSoundType(state);
-
-		if (type == null)
-			return AcousticsManager.NOT_EMITTER;
-
-		final String soundName;
-		boolean flag = false;
-
-		if (type.getStepSound() == null || type.getStepSound().getSoundName().getResourcePath().isEmpty()) {
-			soundName = "UNDEFINED";
-			flag = true;
-		} else
-			soundName = type.getStepSound().getSoundName().toString();
-
-		final String substrate = String.format(Locale.ENGLISH, "%.2f_%.2f", type.getVolume(), type.getPitch());
-
-		// Check for primitive in register
-		IAcoustic[] primitive = ClientRegistry.FOOTSTEPS.getPrimitiveMap().getPrimitiveMapSubstrate(soundName,
-				substrate);
-		if (primitive == null) {
-			if (flag) {
-				primitive = ClientRegistry.FOOTSTEPS.getPrimitiveMap().getPrimitiveMapSubstrate(soundName,
-						"break_" + soundName); // Check sound
-			}
-			if (primitive == null) {
-				primitive = ClientRegistry.FOOTSTEPS.getPrimitiveMap().getPrimitiveMap(soundName);
-			}
-		}
-
-		if (primitive != null) {
-			DSurround.log().debug("Primitive found for %s: %s", soundName, substrate);
-			return primitive;
-		}
-
-		DSurround.log().debug("No primitive for %s: %s", soundName, substrate);
-		return null;
 	}
 
 	/**
