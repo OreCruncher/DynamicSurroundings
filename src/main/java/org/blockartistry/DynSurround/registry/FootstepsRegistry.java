@@ -111,7 +111,8 @@ public final class FootstepsRegistry extends Registry {
 
 	private Map<String, Variator> variators;
 	private Variator childVariator;
-	private Variator playerQuadruped;
+	private Variator playerVariator;
+	private Variator playerQuadrupedVariator;
 
 	public FootstepsRegistry(@Nonnull final Side side) {
 		super(side);
@@ -192,7 +193,9 @@ public final class FootstepsRegistry extends Registry {
 		this.ARMOR_SOUND_FOOT.put(ArmorClass.HEAVY, am.getAcoustic("heavy_foot"));
 
 		this.childVariator = this.getVariator("child");
-		this.playerQuadruped = this.getVariator("quadruped");
+		this.playerVariator = this.getVariator(ModOptions.sound.firstPersonFootstepCadence ? "playerSlow" : "player");
+		this.playerQuadrupedVariator = this
+				.getVariator(ModOptions.sound.firstPersonFootstepCadence ? "quadrupedSlow" : "quadruped");
 
 		// Generate a list of IBlockState objects for all blocks registered
 		// with Forge.
@@ -309,10 +312,11 @@ public final class FootstepsRegistry extends Registry {
 	public Generator createGenerator(@Nonnull final EntityLivingBase entity) {
 		final EntityEffectInfo info = ClientRegistry.EFFECTS.getEffects(entity);
 		Variator var = this.getVariator(info.variator);
-		if (entity.isChild())
+		if (entity.isChild()) {
 			var = this.childVariator;
-		else if (entity instanceof EntityPlayer && ModOptions.sound.foostepsQuadruped)
-			var = this.playerQuadruped;
+		} else if (entity instanceof EntityPlayer) {
+			var = ModOptions.sound.foostepsQuadruped ? this.playerQuadrupedVariator : this.playerVariator;
+		}
 		return var.QUADRUPED ? new GeneratorQP(var) : new Generator(var);
 	}
 
@@ -372,7 +376,7 @@ public final class FootstepsRegistry extends Registry {
 		if (primitive == null) {
 			// TODO: Generate an acoustic profile on the fly and insert into the map?
 		}
-		
+
 		return primitive;
 	}
 

@@ -185,7 +185,7 @@ public class Generator {
 		final double dX = entity.posX - entity.prevPosX;
 		final double dY = entity.posY - entity.prevPosY;
 		final double dZ = entity.posZ - entity.prevPosZ;
-		this.distanceWalkedOnStepModified += Math.sqrt(dX * dX + dY * dY + dZ * dZ);
+		this.distanceWalkedOnStepModified += Math.sqrt(dX * dX + dY * dY + dZ * dZ) * 0.6F;
 	}
 
 	protected void simulateFootsteps(@Nonnull final EntityLivingBase entity) {
