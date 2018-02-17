@@ -1,3 +1,33 @@
+###DynamicSurroundings-1.12.2-3.4.9.4
+**What's New**
+* When walking in the rain footsteps will produce splash sounds.  Obviously, this will not occur in deserts and areas where it's snowing. :)  The volume of the sound is based on the intensity of the rain.  Depending on your sound environment they may be difficult to hear.  The sound will only generate for you, the player, not other entities.  There is an option to turn it off under "Sound Options".
+* Support for the mod The Betweenlands.  When in The Betweenlands dimension:
+    * Fog modification by Dynamic Surroundings is disabled. BL provides it's own fog effects that are neat.
+    * All sound modifications for biomes by Dynamic Surroundings is disabled.  BL provides it's own sound effects that are decent.
+    * The Betweenlands likes controlling it's own weather patterns.  However, DS should still be able to render the downfall, rain splashes, ripples, replace thunder sounds, etc.
+* Add built-in support for Animania, Chisels & Bits, and Bamboozled.
+* Generate cave ambiance similar to what happened in previous versions of Minecraft.  I did not fix MC or patch it.  I have my own logic that executes when the ambient timer is due.  The logic is client side so what one client experiences another may not.
+* Added an option for choosing between the older, slower footstep cadence and the newer, faster cadence.  The differences between the two are:
+    * Older one is geared to match the arm swing when in first person.  If you look as you walk the cadence matches the arm swing motion of your hand.  However, it does not match the leg swing motion of other players you see.
+    * New one matches the the leg swing motion of other players you see, but it is out of sync with your arm swing motion.
+
+**Fixes**
+* Release particle collections when world unloads.  Prior method adopted a lazy approach which lead to the WorldClient being held after logging out of a world.
+* Text for light level and entity chat will now honor the unicode setting.
+* No more jump breath/wander sound when climbing up stairs.
+* Blocking dsurround:bow.loose sound will allow the standard Minecraft bow loose sound to play, unless it is also blocked.
+* Blocking dsurround:thunder will allow the standard Minecraft thunder to play, unless it is also blocked.
+* Issue where Villagers in minecarts would try to walk and would generate footstep sounds while riding the rails.
+* OpenEye: Swinging hand is null for some reason.
+
+**Changes**
+* Tweaked elevation fog calculations so that the result is a more cloudy experience.
+* The ItemRegistry was redone to accommodate changes in support of The Between Lands.  Let me know if you run into problems with item sounds and the like.
+* Added an option to define the chance that morning fog will happen.  Defaults to 1.  The number is interpreted as a 1 in N chance.  For example, if set to "5" its a "1 in 5" chance, or 20%, that morning fog will occurs.  This is evaluated once per Minecraft day.  If you change dimensions the settings will be reset and a new determination will be made.
+* Added a drop shadow to light level numbers to give it more definition.
+* Footstep volume for skellies and child entities have been lowered.
+* Merged footprints into a single texture sheet.  As a result mobs have independent footprint styles different from the player.
+
 ###DynamicSurroundings-1.12.2-3.4.9.3
 **What's New**
 * Ability to have footprints scaled.  Villager children now have smaller prints and the spacing is more appropriate to the model size.
