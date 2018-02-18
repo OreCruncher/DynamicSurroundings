@@ -32,6 +32,8 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.handlers.trace.TraceParticleManager;
 import org.blockartistry.DynSurround.client.swing.DiagnosticPanel;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.event.ServerDataEvent;
@@ -40,9 +42,11 @@ import org.blockartistry.lib.math.TimerEMA;
 
 import com.google.common.collect.ImmutableList;
 
+import gnu.trove.map.hash.TObjectIntHashMap;
 import gnu.trove.procedure.TIntDoubleProcedure;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -102,6 +106,21 @@ public class DiagnosticHandler extends EffectHandlerBase {
 
 		if (ModOptions.logging.showDebugDialog)
 			DiagnosticPanel.refresh();
+
+		if (DSurround.log().testTrace(ModOptions.Trace.TRACE_PARTICLE_MANAGER)) {
+			final ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
+			if (!(pm instanceof TraceParticleManager)) {
+				DSurround.log().info("Wrapping particle manager [%s]", pm.getClass().getName());
+				Minecraft.getMinecraft().effectRenderer = new TraceParticleManager(pm);
+			} else if (pm instanceof TraceParticleManager && (EnvironState.getTickCounter() % 200) == 0) {
+				final TObjectIntHashMap<Class<?>> stats = ((TraceParticleManager) pm).getSnaptshot();
+				stats.forEachEntry((k, i) -> {
+					DSurround.log().info("STATS: [%s]=%d", k.getName(), i);
+					return true;
+				});
+			}
+		}
+
 	}
 
 	@Override
@@ -138,14 +157,16 @@ public class DiagnosticHandler extends EffectHandlerBase {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void worldLoad(@Nonnull final WorldEvent.Load event) {
 		if (ModOptions.logging.enableDebugLogging && event.getWorld() instanceof WorldClient) {
-			DSurround.log().debug("World class     : %s", event.getWorld().getClass());
-			DSurround.log().debug("World Provider  : %s", event.getWorld().provider.getClass());
-			DSurround.log().debug("Weather Renderer: %s", event.getWorld().provider.getWeatherRenderer().getClass());
-			DSurround.log().debug("Entity Renderer : %s", Minecraft.getMinecraft().entityRenderer.getClass());
-			DSurround.log().debug("Particle Manager: %s", Minecraft.getMinecraft().effectRenderer.getClass());
-			DSurround.log().debug("Music Ticker    : %s", Minecraft.getMinecraft().getMusicTicker().getClass());
+			DSurround.log().debug("World class     : %s", event.getWorld().getClass().getName());
+			DSurround.log().debug("World Provider  : %s", event.getWorld().provider.getClass().getName());
+			DSurround.log().debug("Weather Renderer: %s",
+					event.getWorld().provider.getWeatherRenderer().getClass().getName());
+			DSurround.log().debug("Entity Renderer : %s", Minecraft.getMinecraft().entityRenderer.getClass().getName());
+			DSurround.log().debug("Particle Manager: %s", Minecraft.getMinecraft().effectRenderer.getClass().getName());
+			DSurround.log().debug("Music Ticker    : %s",
+					Minecraft.getMinecraft().getMusicTicker().getClass().getName());
 			DSurround.log().debug("Sound Manager   : %s",
-					Minecraft.getMinecraft().getSoundHandler().sndManager.getClass());
+					Minecraft.getMinecraft().getSoundHandler().sndManager.getClass().getName());
 		}
 	}
 
