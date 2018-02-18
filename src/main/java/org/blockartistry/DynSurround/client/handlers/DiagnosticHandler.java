@@ -30,6 +30,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.swing.DiagnosticPanel;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
@@ -41,11 +42,13 @@ import com.google.common.collect.ImmutableList;
 
 import gnu.trove.procedure.TIntDoubleProcedure;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -129,6 +132,20 @@ public class DiagnosticHandler extends EffectHandlerBase {
 				this.tps = MathStuff.clamp((float) (50F / this.lastTick.getMSecs() * 20F), 0F, 20F);
 			}
 			this.lastTickMark = this.timeMark;
+		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void worldLoad(@Nonnull final WorldEvent.Load event) {
+		if (ModOptions.logging.enableDebugLogging && event.getWorld() instanceof WorldClient) {
+			DSurround.log().debug("World class     : %s", event.getWorld().getClass());
+			DSurround.log().debug("World Provider  : %s", event.getWorld().provider.getClass());
+			DSurround.log().debug("Weather Renderer: %s", event.getWorld().provider.getWeatherRenderer().getClass());
+			DSurround.log().debug("Entity Renderer : %s", Minecraft.getMinecraft().entityRenderer.getClass());
+			DSurround.log().debug("Particle Manager: %s", Minecraft.getMinecraft().effectRenderer.getClass());
+			DSurround.log().debug("Music Ticker    : %s", Minecraft.getMinecraft().getMusicTicker().getClass());
+			DSurround.log().debug("Sound Manager   : %s",
+					Minecraft.getMinecraft().getSoundHandler().sndManager.getClass());
 		}
 	}
 
