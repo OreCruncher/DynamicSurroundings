@@ -57,6 +57,7 @@ public final class ModOptions {
 	public static class Trace {
 		public static final int TRUE_SOUND_VOLUME = 0x1;
 		public static final int TRACE_VANILLA_SOUNDS = 0x2;
+		public static final int TRACE_PARTICLE_MANAGER = 0x4;
 	};
 
 	private ModOptions() {
