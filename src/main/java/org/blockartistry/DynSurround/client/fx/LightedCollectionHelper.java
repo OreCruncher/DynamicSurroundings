@@ -56,17 +56,20 @@ public class LightedCollectionHelper extends CollectionHelper {
 	@Optional.Method(modid = "albedo")
 	@SubscribeEvent
 	public void onGatherLight(@Nonnull final GatherLightsEvent event) {
-		final ObjectArray<IParticleMote> motes = this.get().getParticles();
-		if (motes == null || motes.size() == 0)
-			return;
+		final ParticleCollection pc = this.collection != null ? this.collection.get() : null;
+		if (pc != null) {
+			final ObjectArray<IParticleMote> motes = pc.getParticles();
+			if (motes == null || motes.size() == 0)
+				return;
 
-		for (int i = 0; i < motes.size(); i++) {
-			final IParticleMote m = motes.get(i);
-			if (m instanceof ILightProvider) {
-				final ILightProvider provider = (ILightProvider) m;
-				final Light l = provider.provideLight();
-				if (l != null) {
-					event.getLightList().add(l);
+			for (int i = 0; i < motes.size(); i++) {
+				final IParticleMote m = motes.get(i);
+				if (m instanceof ILightProvider) {
+					final ILightProvider provider = (ILightProvider) m;
+					final Light l = provider.provideLight();
+					if (l != null) {
+						event.getLightList().add(l);
+					}
 				}
 			}
 		}

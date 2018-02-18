@@ -38,13 +38,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class CollectionHelper {
 
-	private final String name;
-	private final ICollectionFactory factory;
-	private final ResourceLocation texture;
+	protected final String name;
+	protected final ICollectionFactory factory;
+	protected final ResourceLocation texture;
 
 	// Weak reference because the particle could be evicted from Minecraft's
 	// particle manager for some reason.
-	private WeakReference<ParticleCollection> collection;
+	protected WeakReference<ParticleCollection> collection;
 
 	public CollectionHelper(@Nonnull final String name, @Nonnull final ResourceLocation texture) {
 		this(name, ParticleCollection.FACTORY, texture);
