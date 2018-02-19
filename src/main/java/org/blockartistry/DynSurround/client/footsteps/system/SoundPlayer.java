@@ -36,7 +36,6 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.FootstepSound;
 import org.blockartistry.DynSurround.registry.Variator;
 import org.blockartistry.lib.MCHelper;
@@ -45,8 +44,6 @@ import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.lib.sound.BasicSound;
-import org.blockartistry.lib.sound.SoundUtils;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -68,14 +65,10 @@ public class SoundPlayer implements ISoundPlayer {
 
 	public void playAcoustic(@Nonnull final EntityLivingBase entity, @Nonnull final Association assoc,
 			@Nonnull final EventType event) {
-		// If the sound can't be heard by the player at the keyboard, just skip
-		// this part.
-		if (SoundUtils.canBeHeard(entity, EnvironState.getPlayerPosition())) {
-			if (assoc.getNoAssociation()) {
-				playStep(entity, assoc, event);
-			} else {
-				playAcoustic(entity, assoc.getData(), event, null);
-			}
+		if (assoc.getNoAssociation()) {
+			playStep(entity, assoc, event);
+		} else {
+			playAcoustic(entity, assoc.getData(), event, null);
 		}
 	}
 
