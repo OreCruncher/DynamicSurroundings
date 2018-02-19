@@ -138,7 +138,7 @@ public class BlockMap {
 
 	public BlockMap(@Nonnull final AcousticsManager manager) {
 		this.acousticsManager = manager;
-		this.metaMap = new BlockAcousticMap(bs -> this.resolve(bs));
+		this.metaMap = new BlockAcousticMap(bs -> ClientRegistry.FOOTSTEPS.resolve(bs));
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class BlockMap {
 
 	public boolean hasAcoustics(@Nonnull final IBlockState state) {
 		final IAcoustic[] a = this.metaMap.getBlockAcoustics(state);
-		return a != null && a != BlockAcousticMap.NO_ACOUSTICS;
+		return a != null && a != AcousticProfile.NO_ACOUSTICS;
 	}
 
 	@Nullable
