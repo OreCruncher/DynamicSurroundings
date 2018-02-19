@@ -93,6 +93,7 @@ public class DSurround {
 	protected static Configuration config;
 	protected static File dataDirectory;
 	protected static boolean installedOnServer;
+	protected static boolean devMode;
 
 	@Nonnull
 	public static Proxy proxy() {
@@ -118,6 +119,10 @@ public class DSurround {
 		return installedOnServer;
 	}
 
+	public static boolean isDeveloperMode() {
+		return devMode;
+	}
+
 	@SideOnly(Side.CLIENT)
 	public static boolean routePacketToServer() {
 		return DSurround.isInstalledOnServer() && !Minecraft.getMinecraft().isIntegratedServerRunning();
@@ -125,6 +130,12 @@ public class DSurround {
 
 	public DSurround() {
 		logger = ModLog.setLogger(DSurround.MOD_ID, LogManager.getLogger(MOD_ID));
+
+		final String cmdText = System.getProperty("dsurround.devMode");
+		if(!StringUtils.isEmpty(cmdText) && "true".equals(cmdText)) {
+			devMode = true;
+			logger.info("RUNNING IN DEVELOPMENT MODE");
+		}
 	}
 
 	@EventHandler

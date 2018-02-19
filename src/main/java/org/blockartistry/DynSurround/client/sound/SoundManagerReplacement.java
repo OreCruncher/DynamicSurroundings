@@ -95,7 +95,7 @@ public class SoundManagerReplacement extends SoundManager {
 
 	// Protection for bad behaved mods...
 	private final ThreadGuard guard = new ThreadGuard(DSurround.log(), Side.CLIENT, "SoundManager")
-			.setAction(ModOptions.features.developmentMode ? Action.EXCEPTION
+			.setAction(DSurround.isDeveloperMode() ? Action.EXCEPTION
 					: ModOptions.logging.enableDebugLogging ? Action.LOG : Action.NONE);
 	private final Object mutex = new Object();
 
