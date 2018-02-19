@@ -26,6 +26,11 @@ package org.blockartistry.DynSurround.client.handlers.trace;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.DynSurround.DSurround;
+import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.lib.ThreadGuard;
+import org.blockartistry.lib.ThreadGuard.Action;
+
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
@@ -44,10 +49,18 @@ public class TraceParticleManager extends ParticleManager {
 	protected final ParticleManager manager;
 	protected TObjectIntHashMap<Class<?>> counts = new TObjectIntHashMap<>();
 
+	protected final ThreadGuard guard = new ThreadGuard(DSurround.log(), Side.CLIENT, "ParticleManager")
+			.setAction(ModOptions.features.developmentMode ? Action.EXCEPTION
+					: ModOptions.logging.enableDebugLogging ? Action.LOG : Action.NONE);
+
 	public TraceParticleManager(@Nonnull final ParticleManager manager) {
 		super(null, null);
 
 		this.manager = manager;
+	}
+
+	private void checkForClientThread(final String method) {
+		this.guard.check(method);
 	}
 
 	public TObjectIntHashMap<Class<?>> getSnaptshot() {
@@ -57,54 +70,60 @@ public class TraceParticleManager extends ParticleManager {
 	}
 
 	public void emitParticleAtEntity(Entity entityIn, EnumParticleTypes particleTypes) {
+		checkForClientThread("emitParticleAtEntity");
 		this.manager.emitParticleAtEntity(entityIn, particleTypes);
-	}
-
-	public void emitParticleAtEntity(Entity p_191271_1_, EnumParticleTypes p_191271_2_, int p_191271_3_) {
-		this.emitParticleAtEntity(p_191271_1_, p_191271_2_, p_191271_3_);
 	}
 
 	public Particle spawnEffectParticle(int particleId, double xCoord, double yCoord, double zCoord, double xSpeed,
 			double ySpeed, double zSpeed, int... parameters) {
+		checkForClientThread("spawnEffectParticle");
 		return this.manager.spawnEffectParticle(particleId, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, parameters);
 	}
 
 	public void addEffect(Particle effect) {
+		checkForClientThread("addEffect");
 		if (effect != null)
 			this.counts.adjustOrPutValue(effect.getClass(), 1, 1);
 		this.manager.addEffect(effect);
 	}
 
 	public void updateEffects() {
+		checkForClientThread("updateEffects");
 		this.manager.updateEffects();
 	}
 
 	public void renderParticles(Entity entityIn, float partialTicks) {
+		checkForClientThread("renderParticles");
 		this.manager.renderParticles(entityIn, partialTicks);
 	}
 
 	public void renderLitParticles(Entity entityIn, float partialTick) {
+		checkForClientThread("renderLitParticles");
 		this.manager.renderLitParticles(entityIn, partialTick);
 	}
 
 	public void clearEffects(@Nullable World worldIn) {
-		new Throwable("TraceParticleManager: It's a trace!").printStackTrace();
+		checkForClientThread("clearEffects");
 		this.manager.clearEffects(worldIn);
 	}
 
 	public void addBlockDestroyEffects(BlockPos pos, IBlockState state) {
+		checkForClientThread("addBlockDestroyEffects");
 		this.manager.addBlockDestroyEffects(pos, state);
 	}
 
 	public void addBlockHitEffects(BlockPos pos, EnumFacing side) {
+		checkForClientThread("addBlockHitEffects");
 		this.manager.addBlockHitEffects(pos, side);
 	}
 
 	public void addBlockHitEffects(BlockPos pos, net.minecraft.util.math.RayTraceResult target) {
+		checkForClientThread("addBlockHitEffects");
 		this.manager.addBlockHitEffects(pos, target);
 	}
 
 	public String getStatistics() {
+		checkForClientThread("getStatistics");
 		return this.manager.getStatistics();
 	}
 }

@@ -39,6 +39,8 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
+import org.blockartistry.lib.ThreadGuard;
+import org.blockartistry.lib.ThreadGuard.Action;
 import org.blockartistry.lib.compat.ModEnvironment;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.sound.BasicSound;
@@ -56,7 +58,6 @@ import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.sound.SoundSetupEvent;
@@ -93,8 +94,10 @@ public class SoundManagerReplacement extends SoundManager {
 	private final static float MUTE_VOLUME = 0.00001F;
 
 	// Protection for bad behaved mods...
+	private final ThreadGuard guard = new ThreadGuard(DSurround.log(), Side.CLIENT, "SoundManager")
+			.setAction(ModOptions.features.developmentMode ? Action.EXCEPTION
+					: ModOptions.logging.enableDebugLogging ? Action.LOG : Action.NONE);
 	private final Object mutex = new Object();
-	private int violationCount = 0;
 
 	public SoundManagerReplacement(final SoundHandler handler, final GameSettings settings) {
 		super(handler, settings);
@@ -105,22 +108,7 @@ public class SoundManagerReplacement extends SoundManager {
 	}
 
 	private void checkForClientThread(final String method) {
-		this.checkForClientThread(method, null);
-	}
-
-	private void checkForClientThread(final String method, final ISound sound) {
-		if (ModOptions.logging.enableDebugLogging) {
-			final String name = Thread.currentThread().getName();
-			if (!name.equals("Client thread")) {
-				this.violationCount++;
-				DSurround.log().warn("SoundManager.%s() access by non-client thread [%s]!", method, name);
-				if (sound != null) {
-					final ResourceLocation rl = sound.getSoundLocation();
-					if (rl != null)
-						DSurround.log().warn("The sound in question is: %s", rl.toString());
-				}
-			}
-		}
+		this.guard.check(method);
 	}
 
 	private SoundSystem getSoundSystem() {
@@ -152,7 +140,7 @@ public class SoundManagerReplacement extends SoundManager {
 	@Override
 	public void stopSound(@Nonnull final ISound sound) {
 		synchronized (this.mutex) {
-			checkForClientThread("stopSound", sound);
+			checkForClientThread("stopSound");
 			try {
 				if (sound instanceof BasicSound<?>) {
 					this.stopSound((BasicSound<?>) sound);
@@ -186,7 +174,7 @@ public class SoundManagerReplacement extends SoundManager {
 	@Override
 	public boolean isSoundPlaying(@Nonnull final ISound sound) {
 		synchronized (this.mutex) {
-			checkForClientThread("isSoundPlaying", sound);
+			checkForClientThread("isSoundPlaying");
 			try {
 				if (sound instanceof BasicSound<?>) {
 					return this.isSoundPlaying((BasicSound<?>) sound);
@@ -259,7 +247,7 @@ public class SoundManagerReplacement extends SoundManager {
 		if (sound != null) {
 			try {
 				synchronized (this.mutex) {
-					checkForClientThread("playSound", sound);
+					checkForClientThread("playSound");
 					if (sound instanceof BasicSound<?>)
 						this.playSound((BasicSound<?>) sound);
 					else if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC) {
@@ -288,7 +276,7 @@ public class SoundManagerReplacement extends SoundManager {
 		if (sound != null) {
 			try {
 				synchronized (this.mutex) {
-					checkForClientThread("playDelayedSound", sound);
+					checkForClientThread("playDelayedSound");
 					if (sound instanceof BasicSound<?>) {
 						this.playDelayedSound((BasicSound<?>) sound, delay);
 					} else {
@@ -431,10 +419,6 @@ public class SoundManagerReplacement extends SoundManager {
 	public void diagnostics(final DiagnosticEvent.Gather event) {
 		synchronized (this.mutex) {
 			checkForClientThread("diagnostics");
-			if (this.violationCount > 0)
-				event.output
-						.add(String.format(TextFormatting.RED + "SoundManager violations: %d", this.violationCount));
-
 			final TObjectIntHashMap<String> counts = new TObjectIntHashMap<String>();
 
 			final Iterator<Entry<String, ISound>> iterator = this.playingSounds.entrySet().iterator();
