@@ -50,7 +50,7 @@ public class TraceParticleManager extends ParticleManager {
 	protected TObjectIntHashMap<Class<?>> counts = new TObjectIntHashMap<>();
 
 	protected final ThreadGuard guard = new ThreadGuard(DSurround.log(), Side.CLIENT, "ParticleManager")
-			.setAction(ModOptions.features.developmentMode ? Action.EXCEPTION
+			.setAction(DSurround.isDeveloperMode() ? Action.EXCEPTION
 					: ModOptions.logging.enableDebugLogging ? Action.LOG : Action.NONE);
 
 	public TraceParticleManager(@Nonnull final ParticleManager manager) {

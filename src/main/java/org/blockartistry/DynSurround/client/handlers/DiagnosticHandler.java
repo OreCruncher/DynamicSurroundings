@@ -94,10 +94,15 @@ public class DiagnosticHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 		// Gather diagnostics if needed
-		if (Minecraft.getMinecraft().gameSettings.showDebugInfo && ModOptions.logging.enableDebugLogging) {
-			final DiagnosticEvent.Gather gather = new DiagnosticEvent.Gather(player.getEntityWorld(), player);
-			MinecraftForge.EVENT_BUS.post(gather);
-			this.diagnostics = gather.output;
+		if (Minecraft.getMinecraft().gameSettings.showDebugInfo) {
+			this.diagnostics = new ArrayList<>();
+			if (DSurround.isDeveloperMode())
+				this.diagnostics.add(TextFormatting.RED + "DEVELOPER MODE ENABLED");
+			if (ModOptions.logging.enableDebugLogging) {
+				final DiagnosticEvent.Gather gather = new DiagnosticEvent.Gather(player.getEntityWorld(), player);
+				MinecraftForge.EVENT_BUS.post(gather);
+				this.diagnostics.addAll(gather.output);
+			}
 		} else {
 			this.diagnostics = null;
 		}
@@ -105,7 +110,7 @@ public class DiagnosticHandler extends EffectHandlerBase {
 		if (ModOptions.logging.showDebugDialog)
 			DiagnosticPanel.refresh();
 
-		if (ModOptions.features.developmentMode) {
+		if (DSurround.isDeveloperMode()) {
 			final ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
 			if (!(pm instanceof TraceParticleManager)) {
 				DSurround.log().info("Wrapping particle manager [%s]", pm.getClass().getName());
