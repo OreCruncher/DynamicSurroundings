@@ -45,6 +45,7 @@ import javax.annotation.Nullable;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
+import org.blockartistry.DynSurround.client.footsteps.implem.AcousticProfile;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.DynSurround.client.footsteps.implem.PrimitiveMap;
@@ -328,6 +329,22 @@ public final class FootstepsRegistry extends Registry {
 	@Nonnull
 	public BlockMap getBlockMap() {
 		return this.blockMap;
+	}
+
+	/**
+	 * Used by the cache routines to resolve a block state that it cannot be solved
+	 * using configuration data. Typically it involves deeper analysis of a block
+	 * state to determine the correct acoustic profile.
+	 * 
+	 * @param state
+	 *            The state for which an AcousticProfile needs to be resolved
+	 * @return AcousticProfile for the state, null otherwise
+	 */
+	@Nullable
+	public AcousticProfile resolve(@Nonnull final IBlockState state) {
+		// TODO: Change when dynamic states are put in place
+		final IAcoustic[] acoustics = this.resolvePrimitive(state);
+		return acoustics != null ? new AcousticProfile.Static(acoustics) : AcousticProfile.NO_PROFILE;
 	}
 
 	/**

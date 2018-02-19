@@ -45,22 +45,20 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class BlockAcousticMap {
 
-	public static final IAcoustic[] NO_ACOUSTICS = {};
-
 	/**
 	 * A callback interface for when the acoustic map cannot resolve a blockState
 	 * sound and needs external assistance to back fill. The results are added to
 	 * the cache for future lookups.
 	 */
 	public static interface IAcousticResolver {
-		IAcoustic[] resolve(@Nonnull final IBlockState state);
+		AcousticProfile resolve(@Nonnull final IBlockState state);
 	}
 
 	private final IAcousticResolver resolver;
 	private final BlockInfoMutable key = new BlockInfoMutable();
-	private Map<BlockInfo, IAcoustic[]> data = new HashMap<BlockInfo, IAcoustic[]>();
-	private Map<IBlockState, IAcoustic[]> cache = new IdentityHashMap<IBlockState, IAcoustic[]>();
-	private Map<IBlockState, IAcoustic[]> specialCache = new IdentityHashMap<IBlockState, IAcoustic[]>();
+	private Map<BlockInfo, AcousticProfile> data = new HashMap<>();
+	private Map<IBlockState, AcousticProfile> cache = new IdentityHashMap<>();
+	private Map<IBlockState, AcousticProfile> specialCache = new IdentityHashMap<>();
 
 	public BlockAcousticMap() {
 		this(null);
@@ -68,9 +66,9 @@ public class BlockAcousticMap {
 
 	public BlockAcousticMap(@Nullable final IAcousticResolver resolver) {
 		this.resolver = resolver;
-		
+
 		// Air is a very known quantity
-		this.data.put(new BlockInfo(Blocks.AIR), AcousticsManager.NOT_EMITTER);
+		this.data.put(new BlockInfo(Blocks.AIR), new AcousticProfile.Static(AcousticsManager.NOT_EMITTER));
 	}
 
 	/**
@@ -79,19 +77,18 @@ public class BlockAcousticMap {
 	 */
 	@Nullable
 	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state) {
-		IAcoustic[] result = this.cache.get(state);
+		AcousticProfile result = this.cache.get(state);
 		if (result == null) {
 			result = this.data.get(this.key.set(state));
-			if (result == null && this.key.hasSubTypes()) {
+			if (result == null && this.key.hasSubTypes())
 				result = this.data.get(this.key.asGeneric());
-			}
 			if (result == null && this.resolver != null)
 				result = this.resolver.resolve(state);
 			if (result == null)
-				result = NO_ACOUSTICS;
+				result = AcousticProfile.NO_PROFILE;
 			this.cache.put(state, result);
 		}
-		return result == NO_ACOUSTICS ? null : result;
+		return result == AcousticProfile.NO_PROFILE ? null : result.get();
 	}
 
 	/**
@@ -101,7 +98,7 @@ public class BlockAcousticMap {
 	 */
 	@Nullable
 	public IAcoustic[] getBlockAcousticsWithSpecial(@Nonnull final IBlockState state) {
-		IAcoustic[] result = this.specialCache.get(state);
+		AcousticProfile result = this.specialCache.get(state);
 		if (result == null) {
 			result = this.data.get(this.key.set(state));
 			if (result == null) {
@@ -112,23 +109,23 @@ public class BlockAcousticMap {
 				}
 			}
 			if (result == null)
-				result = NO_ACOUSTICS;
+				result = AcousticProfile.NO_PROFILE;
 			this.specialCache.put(state, result);
 		}
-		return result == NO_ACOUSTICS ? null : result;
+		return result == AcousticProfile.NO_PROFILE ? null : result.get();
 	}
 
 	public void put(@Nonnull final BlockInfo info, final IAcoustic[] acoustics) {
-		this.data.put(info, acoustics);
+		this.data.put(info, new AcousticProfile.Static(acoustics));
 	}
 
 	public void clear() {
-		this.data = new HashMap<BlockInfo, IAcoustic[]>(this.data.size());
-		this.cache = new IdentityHashMap<IBlockState, IAcoustic[]>(this.cache.size());
-		this.specialCache = new IdentityHashMap<IBlockState, IAcoustic[]>(this.specialCache.size());
+		this.data = new HashMap<>(this.data.size());
+		this.cache = new IdentityHashMap<>(this.cache.size());
+		this.specialCache = new IdentityHashMap<>(this.specialCache.size());
 	}
 
 	public void freeze() {
-		this.data = new ImmutableMap.Builder<BlockInfo, IAcoustic[]>().putAll(this.data).build();
+		this.data = new ImmutableMap.Builder<BlockInfo, AcousticProfile>().putAll(this.data).build();
 	}
 }
