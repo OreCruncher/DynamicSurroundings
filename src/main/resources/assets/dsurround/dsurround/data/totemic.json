@@ -1,0 +1,12 @@
+{
+	"footsteps": {
+		"totemic:wind_chime": "metalbar",
+		"totemic:tipi": "rug",
+		"totemic:dummy_tipi": "rug"
+	},
+	"entities": {
+		"totemic:baykok": {
+			"effects": "bow,swing,footprint"
+		}
+	}
+}
