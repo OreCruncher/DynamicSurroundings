@@ -48,6 +48,7 @@ import org.blockartistry.lib.sound.BasicSound;
 import org.blockartistry.lib.sound.SoundUtils;
 
 import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.SoundEvent;
@@ -71,7 +72,7 @@ public class SoundPlayer implements ISoundPlayer {
 		// this part.
 		if (SoundUtils.canBeHeard(entity, EnvironState.getPlayerPosition())) {
 			if (assoc.getNoAssociation()) {
-				playStep(entity, assoc);
+				playStep(entity, assoc, event);
 			} else {
 				playAcoustic(entity, assoc.getData(), event, null);
 			}
@@ -96,18 +97,16 @@ public class SoundPlayer implements ISoundPlayer {
 		}
 	}
 
-	@Override
-	public void playStep(@Nonnull final EntityLivingBase entity, @Nonnull final Association assoc) {
+	protected void playStep(@Nonnull final EntityLivingBase entity, @Nonnull final Association assoc,
+			@Nonnull final EventType event) {
 		try {
 			SoundType soundType = assoc.getSoundType();
 			if (!assoc.isLiquid() && assoc.getSoundType() != null) {
-
-				if (WorldUtils.getBlockState(entity.getEntityWorld(), assoc.getPos().up())
-						.getBlock() == Blocks.SNOW_LAYER) {
-					soundType = MCHelper.getSoundType(Blocks.SNOW_LAYER);
-				}
-
-				actuallyPlaySound(entity, soundType.getStepSound(), soundType.getVolume(), soundType.getPitch(), true);
+				final IBlockState upState = WorldUtils.getBlockState(entity.getEntityWorld(), assoc.getPos().up());
+				if (upState.getBlock() == Blocks.SNOW_LAYER)
+					soundType = MCHelper.getSoundType(upState);
+				final SoundEvent se = event == EventType.LAND ? soundType.getFallSound() : soundType.getStepSound();
+				actuallyPlaySound(entity, se, soundType.getVolume(), soundType.getPitch(), true);
 			}
 		} catch (final Throwable t) {
 			DSurround.log().error("Unable to play step sound", t);
