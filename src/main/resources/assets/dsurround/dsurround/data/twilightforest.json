@@ -73,7 +73,7 @@
 			"weather": true,
 			"fog": true,
 			"haze": true,
-			"aurora": true
+			"aurora": false
 		}
 	],
 	"footsteps": {
