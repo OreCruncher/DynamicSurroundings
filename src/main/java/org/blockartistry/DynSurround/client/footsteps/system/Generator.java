@@ -53,8 +53,6 @@ import org.blockartistry.lib.compat.EntityLivingBaseUtil;
 import org.blockartistry.lib.compat.EntityUtil;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
-import org.blockartistry.lib.sound.SoundUtils;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -463,9 +461,7 @@ public class Generator {
 		final double minY = entity.getEntityBoundingBox().minY;
 		final BlockPos pos = new BlockPos(xx, minY - 0.1D - verticalOffsetAsMinus, zz);
 
-		Association result = findAssociationForLocation(entity, pos);
-		if (SoundUtils.canBeHeard(entity, EnvironState.getPlayerPosition()))
-			result = addSoundOverlay(entity, result);
+		final Association result = addSoundOverlay(entity, findAssociationForLocation(entity, pos));
 
 		// It is possible that the association has no position, so it
 		// needs to be checked.

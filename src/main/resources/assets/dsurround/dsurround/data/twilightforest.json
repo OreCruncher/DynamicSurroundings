@@ -1,4 +1,71 @@
 {
+	"blocks": [
+		{
+			"blocks": [
+				"twilightforest:firefly",
+				"twilightforest:twilight_plant:1",
+				"twilightforest:twilight_plant:3",
+				"twilightforest:twilight_plant:5"
+			],
+			"effects": [
+				{
+					"effect": "firefly",
+					"conditions": "player.dimensionName == 'twilight_forest' && weather.isNotRaining && !(biome.isHot || biome.isCold || biome.isSnowy)",
+					"chance": 30
+				}
+			]
+		},
+		{
+			"blocks": [
+				"twilightforest:firefly"
+			],
+			"effects": [
+				{
+					"effect": "firefly",
+					"conditions": "player.dimensionName == 'twilight_forest' && weather.isNotRaining && !(biome.isHot || biome.isCold || biome.isSnowy)",
+					"chance": 10
+				}
+			]
+		}
+	],
+	"itemConfig": {
+		"lightArmor": [
+			"twilightforest:yeti_helmet",
+			"twilightforest:yeti_chestplate",
+			"twilightforest:yeti_leggings",
+			"twilightforest:yeti_boots",
+			"twilightforest:arctic_helmet",
+			"twilightforest:arctic_chestplate",
+			"twilightforest:arctic_leggings",
+			"twilightforest:arctic_boots"
+		],
+		"mediumArmor": [
+			"twilightforest:naga_chestplate",
+			"twilightforest:naga_leggings",
+			"twilightforest:steeleaf_helmet",
+			"twilightforest:steeleaf_chestplate",
+			"twilightforest:steeleaf_leggings",
+			"twilightforest:steeleaf_boots"
+		],
+		"crystalArmor": [
+		],
+		"heavyArmor": [
+			"twilightforest:ironwood_helmet",
+			"twilightforest:ironwood_chestplate",
+			"twilightforest:ironwood_leggings",
+			"twilightforest:ironwood_boots",
+			"twilightforest:fiery_helmet",
+			"twilightforest:fiery_chestplate",
+			"twilightforest:fiery_leggings",
+			"twilightforest:fiery_boots",
+			"twilightforest:knightmetal_helmet",
+			"twilightforest:knightmetal_chestplate",
+			"twilightforest:knightmetal_leggings",
+			"twilightforest:knightmetal_boots",
+			"twilightforest:phantom_helmet",
+			"twilightforest:phantom_chestplate"
+		]
+	},
 	"dimensions": [
 		{
 			"name": "twilight_forest",
@@ -8,5 +75,104 @@
 			"haze": true,
 			"aurora": true
 		}
-	]
+	],
+	"footsteps": {
+		"twilightforest:root": "log",
+		"twilightforest:twilight_plant": "NOT_EMITTER",
+		"twilightforest:twilight_plant+messy": "MESSY_GROUND",
+		"twilightforest:twilight_plant+foliage": "brush",
+		"twilightforest:twilight_plant:0+carpet": "rug",
+		"twilightforest:twilight_plant:6+foliage": "straw",
+		"twilightforest:twilight_plant:8+foliage": "straw",
+		"twilightforest:huge_lilypad": "waterfine",
+		"twilightforest:huge_lilypad+carpet": "waterfine",
+		"twilightforest:huge_waterlily": "brush_straw_transition",
+		"twilightforest:huge_waterlily+messy": "MESSY_GROUND",
+		"twilightforest:huge_waterlily+foliage": "brush_straw_transition",
+		"twilightforest:firefly_jar": "woodutility",
+		"twilightforest:firefly": "NOT_EMITTER"
+	},
+	"variators": {
+		"twilightforest_kobold": {
+			"stride": 0.375,
+			"strideStair": 0.24375,
+			"distanceToCenter": 0.1
+		},
+		"twilightforest_blockchain": {
+			"distanceToCenter": 0.1
+		},
+		"twilightforest_redcap": {
+			"distanceToCenter": 0.1,
+			"footprintScale": 0.75
+		},
+		"twilightforest_alphayeti": {
+			"distanceToCenter": 1.25,
+			"footprintScale": 10,
+			"volumeScale": 3
+		},
+		"twilightforest_yeti": {
+			"distanceToCenter": 0.35,
+			"footprintScale": 2,
+			"volumeScale": 3
+		},
+		"twilightforest_giant": {
+			"distanceToCenter": 0.8,
+			"footprintScale": 5,
+			"volumeScale": 10
+		}
+	},
+	"entities": {
+		"twilightforest:kobold": {
+			"effects": "footprint,breath,swing,bow",
+			"variator": "twilightforest_kobold"
+		},
+		"twilightforest:redcap": {
+			"effects": "footprint,breath,swing,bow",
+			"variator": "twilightforest_redcap"
+		},
+		"twilightforest:redcap_sapper": {
+			"effects": "footprint,breath,swing,bow",
+			"variator": "twilightforest_redcap"
+		},
+		"twilightforest:goblin_knight_upper": {
+			"effects": "footprint,swing,bow"
+		},
+		"twilightforest:goblin_knight_lower": {
+			"effects": "footprint,swing,bow"
+		},
+		"twilightforest:blockchain_goblin": {
+			"effects": "footprint,swing,bow",
+			"variator": "twilightforest_blockchain"
+		},
+		"twilightforest:minoshroom": {
+			"effects": "bow,swing"
+		},
+		"twilightforest:minotaur": {
+			"effects": "bow,swing,footprint"
+		},
+		"twilightforest:lich": {
+			"effects": "bow,swing,footprint",
+			"variator": "skeleton"
+		},
+		"twilightforest:yeti_alpha": {
+			"effects": "footprint",
+			"variator": "twilightforest_alphayeti"
+		},
+		"twilightforest:yeti": {
+			"effects": "footprint",
+			"variator": "twilightforest_yeti"
+		},
+		"twilightforest:troll": {
+			"effects": "footprint",
+			"variator": "twilightforest_yeti"
+		},
+		"twilightforest:giant_miner": {
+			"effects": "footprint,bow,swing",
+			"variator": "twilightforest_giant"
+		},
+		"twilightforest:armored_giant": {
+			"effects": "footprint,bow,swing",
+			"variator": "twilightforest_giant"
+		}
+	}
 }
