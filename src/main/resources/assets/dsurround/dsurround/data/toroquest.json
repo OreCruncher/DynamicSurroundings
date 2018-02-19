@@ -1,0 +1,63 @@
+{
+	"itemConfig": {
+		"lightArmor": [
+			"toroquest:samurai_boots",
+			"toroquest:samurai_leggings",
+			"toroquest:samurai_chestplate",
+			"toroquest:samurai_helmet"
+		],
+		"mediumArmor": [
+			"toroquest:toro_armor_boots",
+			"toroquest:toro_armor_leggings",
+			"toroquest:toro_armor_chestplate",
+			"toroquest:toro_armor_helmet"
+		],
+		"crystalArmor": [
+			"toroquest:reinforced_diamond_boots",
+			"toroquest:reinforced_diamond_leggings",
+			"toroquest:reinforced_diamond_chestplate",
+			"toroquest:reinforced_diamond_helmet"
+		],
+		"heavyArmor": [
+			"toroquest:royal_boots",
+			"toroquest:royal_leggings",
+			"toroquest:royal_chestplate",
+			"toroquest:royal_helmet"
+		]
+	},
+	"variators": {
+		"tq_bas": {
+			"volumeScale": 1.5,
+			"footprintScale": 1.5
+		},
+		"tq_rainbow_king": {
+			"volumeScale": 2,
+			"footprintScale": 2
+		}
+	},
+	"entities": {
+		"toroquest:toroquest_bas": {
+			"effects": "bow,swing,footprint",
+			"variator": "tq_bas"
+		},
+		"toroquest:toroquest_rainbow_guard": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"toroquest:toroquest_sentry": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"toroquest:toroquest_guard": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"toroquest:toroquest_village_lord": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"toroquest:toroquest_mage": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"toroquest:toroquest_rainbow_king": {
+			"effects": "bow,swing,footprint",
+			"variator": "tq_rainbow_king"
+		}
+	}
+}
