@@ -29,8 +29,6 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.footsteps.system.Association;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,11 +36,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public interface ISoundPlayer {
-	/**
-	 * Play a step sound from a block.
-	 */
-	public void playStep(@Nonnull final EntityLivingBase entity, @Nonnull final Association non);
-
 	/**
 	 * Plays a sound.
 	 */

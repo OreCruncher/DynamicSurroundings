@@ -26,10 +26,11 @@ package org.blockartistry.lib;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,7 +44,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -112,13 +113,9 @@ public final class MCHelper {
 
 		// Scan the block registry looking for blocks that have subtypes
 		// and add them to the subtype list.
-		final Iterator<Block> itr = Block.REGISTRY.iterator();
-		while (itr.hasNext()) {
-			final Block block = itr.next();
-			if (variantCheck(block))
-				hasVariants.add(block);
-		}
-
+		final Set<Block> blocks = StreamSupport.stream(Block.REGISTRY.spliterator(), false)
+				.filter(MCHelper::variantCheck).collect(Collectors.toSet());
+		hasVariants.addAll(blocks);
 	}
 
 	protected MCHelper() {
@@ -142,20 +139,25 @@ public final class MCHelper {
 
 	@Nonnull
 	public static Block getBlockByName(@Nonnull final String blockName) {
-		// Yes yes. I know what I am doing here. Need to know if the block
-		// doesn't exist because of bad data in a config file or some such.
-		return Block.REGISTRY.getObjectBypass(new ResourceLocation(blockName));
-	}
-
-	@SuppressWarnings("deprecation")
-	@Nullable
-	public static SoundType getSoundType(@Nonnull final Block block) {
-		return block.getSoundType();
+		return Block.getBlockFromName(blockName);
 	}
 
 	@Nullable
 	public static SoundType getSoundType(@Nonnull final IBlockState state) {
-		return getSoundType(state.getBlock());
+		return getSoundType(state, null);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Nullable
+	public static SoundType getSoundType(@Nonnull final IBlockState state, @Nullable final World world) {
+		try {
+			return state.getBlock().getSoundType(state, world, null, null);
+		} catch (@Nonnull final Throwable t) {
+			// getSoundType() allows pos and entity to be null - nothing said about
+			// world. Fallback to the classic deprecated way if there is an
+			// error of some sort.
+			return state.getBlock().getSoundType();
+		}
 	}
 
 	public static boolean hasVariants(@Nonnull final Block block) {
