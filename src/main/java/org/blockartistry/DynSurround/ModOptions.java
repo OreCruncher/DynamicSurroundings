@@ -1114,6 +1114,7 @@ public final class ModOptions {
 	public static final String CONFIG_FEATURES_ALLOW_LLHUD = "Allow Light Level HUD";
 	public static final String CONFIG_FEATURES_ALLOW_CHUNKBOARDERS = "Allow Chunk Border HUD";
 	public static final String CONFIG_FEATURES_ALLOW_COMPASSCLOCK = "Allow Compass and Clock HUD";
+	public static final String CONFIG_FEATURES_DEVELOPMENT_MODE = "Development Mode";
 
 	@Category(CATEGORY_FEATURES)
 	@Comment("Controls whether features are available")
@@ -1139,6 +1140,12 @@ public final class ModOptions {
 		@Comment("Allow the Compass and Clock HUD")
 		@Hidden
 		public static boolean allowCompassClockHUD = true;
+
+		@Option(CONFIG_FEATURES_DEVELOPMENT_MODE)
+		@DefaultValue("false")
+		@Comment("Development mode only: throw runtime exception on invalid side access of SoundManager or ParticleManager")
+		@Hidden
+		public static boolean developmentMode = false;
 	}
 
 	public static final String CATEGORY_LIGHTING = "lighting";
