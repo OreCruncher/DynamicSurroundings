@@ -37,6 +37,10 @@ public interface IOptions {
 	default long getDelayMax() {
 		return 0;
 	}
+	
+	default boolean isDelayedSound() {
+		return this.getDelayMin() > 0 && this.getDelayMax() > 0;
+	}
 
 	default float getGlidingVolume() {
 		return 0;

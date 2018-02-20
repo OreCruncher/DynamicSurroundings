@@ -56,7 +56,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class SoundPlayer implements ISoundPlayer {
 
 	protected final Random random = XorShiftRandom.current();
-	protected final ObjectArray<PendingSound> pending = new ObjectArray<PendingSound>();
+	protected final ObjectArray<PendingSound> pending = new ObjectArray<>();
 	protected final Variator var;
 
 	public SoundPlayer(@Nonnull final Variator var) {
@@ -90,51 +90,37 @@ public class SoundPlayer implements ISoundPlayer {
 		}
 	}
 
+	/**
+	 * Used to play a block native sound because there is no acoustic profile
+	 * defined for the block.
+	 */
 	protected void playStep(@Nonnull final EntityLivingBase entity, @Nonnull final Association assoc,
 			@Nonnull final EventType event) {
-		try {
-			SoundType soundType = assoc.getSoundType();
-			if (!assoc.isLiquid() && assoc.getSoundType() != null) {
-				final IBlockState upState = WorldUtils.getBlockState(entity.getEntityWorld(), assoc.getPos().up());
-				if (upState.getBlock() == Blocks.SNOW_LAYER)
-					soundType = MCHelper.getSoundType(upState);
-				final SoundEvent se = event == EventType.LAND ? soundType.getFallSound() : soundType.getStepSound();
-				actuallyPlaySound(entity, se, soundType.getVolume(), soundType.getPitch(), true);
-			}
-		} catch (final Throwable t) {
-			DSurround.log().error("Unable to play step sound", t);
+		SoundType soundType = assoc.getSoundType();
+		if (soundType != null && !assoc.isLiquid()) {
+			final IBlockState upState = WorldUtils.getBlockState(entity.getEntityWorld(), assoc.getPos().up());
+			if (upState.getBlock() == Blocks.SNOW_LAYER)
+				soundType = MCHelper.getSoundType(upState);
+			final SoundEvent se = event == EventType.LAND ? soundType.getFallSound() : soundType.getStepSound();
+			actuallyPlaySound(entity, se, soundType.getVolume(), soundType.getPitch(), true);
 		}
 	}
 
 	@Override
 	public void playSound(@Nonnull final EntityLivingBase entity, @Nonnull final SoundEvent sound, final float volume,
 			final float pitch, @Nullable final IOptions options) {
-
-		try {
-			if (options != null) {
-				if (options.getDelayMin() > 0 && options.getDelayMax() > 0) {
-					final long delay = TimeUtils.currentTimeMillis()
-							+ randAB(this.random, options.getDelayMin(), options.getDelayMax());
-					this.pending.add(new PendingSound(entity, sound, volume, pitch, delay, options.getDelayMax()));
-				} else {
-					actuallyPlaySound(entity, sound, volume, pitch);
-				}
-			} else {
-				actuallyPlaySound(entity, sound, volume, pitch);
-			}
-		} catch (final Throwable t) {
-			DSurround.log().error("Unable to play sound", t);
+		// If it is a delayed sound queue it up. Otherwise play it.
+		if (options != null && options.isDelayedSound()) {
+			final long delay = TimeUtils.currentTimeMillis()
+					+ randAB(this.random, options.getDelayMin(), options.getDelayMax());
+			this.pending.add(new PendingSound(entity, sound, volume, pitch, delay, options.getDelayMax()));
+		} else {
+			actuallyPlaySound(entity, sound, volume, pitch, false);
 		}
 	}
 
 	protected void actuallyPlaySound(@Nonnull final EntityLivingBase entity, @Nonnull final SoundEvent sound,
-			final float volume, final float pitch) {
-		this.actuallyPlaySound(entity, sound, volume, pitch, false);
-	}
-
-	protected void actuallyPlaySound(@Nonnull final EntityLivingBase entity, @Nonnull final SoundEvent sound,
 			final float volume, final float pitch, final boolean noScale) {
-
 		try {
 			final FootstepSound s = new FootstepSound(entity, sound).setVolume(volume * this.var.VOLUME_SCALE)
 					.setPitch(pitch);
@@ -158,8 +144,6 @@ public class SoundPlayer implements ISoundPlayer {
 			if (sound.getTimeToPlay() <= time) {
 				if (!sound.isLate(time))
 					sound.playSound(this);
-				else
-					DSurround.log().debug("Late sound: %d", (int) sound.howLate(time));
 				return true;
 			}
 			return false;
