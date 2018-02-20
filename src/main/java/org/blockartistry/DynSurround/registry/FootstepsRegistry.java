@@ -175,7 +175,6 @@ public final class FootstepsRegistry extends Registry {
 
 	@Override
 	public void initComplete() {
-		this.getBlockMap().freeze();
 		AcousticsManager.SWIM = this.acousticsManager.compileAcoustics("_SWIM");
 		AcousticsManager.JUMP = this.acousticsManager.compileAcoustics("_JUMP");
 		AcousticsManager.SPLASH = new IAcoustic[] {

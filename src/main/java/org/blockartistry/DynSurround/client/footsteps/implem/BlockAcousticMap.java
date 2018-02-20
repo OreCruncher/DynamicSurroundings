@@ -35,15 +35,12 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.registry.BlockInfo;
 import org.blockartistry.DynSurround.registry.BlockInfo.BlockInfoMutable;
 
-import com.google.common.collect.ImmutableMap;
-
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class BlockAcousticMap {
+public final class BlockAcousticMap {
 
 	/**
 	 * A callback interface for when the acoustic map cannot resolve a blockState
@@ -54,21 +51,45 @@ public class BlockAcousticMap {
 		AcousticProfile resolve(@Nonnull final IBlockState state);
 	}
 
-	private final IAcousticResolver resolver;
-	private final BlockInfoMutable key = new BlockInfoMutable();
-	private Map<BlockInfo, AcousticProfile> data = new HashMap<>();
-	private Map<IBlockState, AcousticProfile> cache = new IdentityHashMap<>();
-	private Map<IBlockState, AcousticProfile> specialCache = new IdentityHashMap<>();
+	// Shared mutable. Does some minor caching when processing
+	// the same IBlockState across multiple substrate map lookups.
+	// Not thread safe, but since it is running on the client thread
+	// it should be OK.
+	protected static final BlockInfoMutable key = new BlockInfoMutable();
 
+	protected final IAcousticResolver resolver;
+	protected Map<BlockInfo, AcousticProfile> data = new HashMap<>();
+	protected Map<IBlockState, AcousticProfile> cache = new IdentityHashMap<>();
+
+	/**
+	 * CTOR for building a map that has no resolver and performs special lookups
+	 * based on block properties (i.e. used for substrate maps).
+	 */
 	public BlockAcousticMap() {
 		this(null);
 	}
 
-	public BlockAcousticMap(@Nullable final IAcousticResolver resolver) {
+	public BlockAcousticMap(@Nonnull final IAcousticResolver resolver) {
 		this.resolver = resolver;
 
 		// Air is a very known quantity
-		this.data.put(new BlockInfo(Blocks.AIR), new AcousticProfile.Static(AcousticsManager.NOT_EMITTER));
+		this.data.put(BlockInfo.AIR, AcousticProfile.Static.NOT_EMITTER);
+	}
+
+	@Nonnull
+	protected AcousticProfile cacheMiss(@Nonnull final IBlockState state) {
+		AcousticProfile result = this.data.get(key.set(state));
+		if (result != null)
+			return result;
+		if (key.hasSubTypes())
+			result = this.data.get(key.asGeneric());
+		if (result != null)
+			return result;
+		if (this.resolver != null)
+			result = this.resolver.resolve(state);
+		else if (key.hasSpecialMeta())
+			result = this.data.get(key.asSpecial());
+		return result != null ? result : AcousticProfile.NO_PROFILE;
 	}
 
 	/**
@@ -79,53 +100,18 @@ public class BlockAcousticMap {
 	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state) {
 		AcousticProfile result = this.cache.get(state);
 		if (result == null) {
-			result = this.data.get(this.key.set(state));
-			if (result == null && this.key.hasSubTypes())
-				result = this.data.get(this.key.asGeneric());
-			if (result == null && this.resolver != null)
-				result = this.resolver.resolve(state);
-			if (result == null)
-				result = AcousticProfile.NO_PROFILE;
+			result = cacheMiss(state);
 			this.cache.put(state, result);
 		}
-		return result == AcousticProfile.NO_PROFILE ? null : result.get();
+		return result.get();
 	}
 
-	/**
-	 * Similar to getBlockMap(), but includes an additional check if the block has
-	 * special metadata. For example, a BlockCrop may not have subtypes, but it
-	 * would have growth data stored in the meta. An example of this is Wheat.
-	 */
-	@Nullable
-	public IAcoustic[] getBlockAcousticsWithSpecial(@Nonnull final IBlockState state) {
-		AcousticProfile result = this.specialCache.get(state);
-		if (result == null) {
-			result = this.data.get(this.key.set(state));
-			if (result == null) {
-				if (this.key.hasSubTypes()) {
-					result = this.data.get(this.key.asGeneric());
-				} else if (this.key.hasSpecialMeta()) {
-					result = this.data.get(this.key.asSpecial());
-				}
-			}
-			if (result == null)
-				result = AcousticProfile.NO_PROFILE;
-			this.specialCache.put(state, result);
-		}
-		return result == AcousticProfile.NO_PROFILE ? null : result.get();
-	}
-
-	public void put(@Nonnull final BlockInfo info, final IAcoustic[] acoustics) {
+	public void put(@Nonnull final BlockInfo info, @Nonnull final IAcoustic[] acoustics) {
 		this.data.put(info, new AcousticProfile.Static(acoustics));
 	}
 
 	public void clear() {
 		this.data = new HashMap<>(this.data.size());
 		this.cache = new IdentityHashMap<>(this.cache.size());
-		this.specialCache = new IdentityHashMap<>(this.specialCache.size());
-	}
-
-	public void freeze() {
-		this.data = new ImmutableMap.Builder<BlockInfo, AcousticProfile>().putAll(this.data).build();
 	}
 }
