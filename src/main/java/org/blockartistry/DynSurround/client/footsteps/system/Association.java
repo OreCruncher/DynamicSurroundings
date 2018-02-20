@@ -28,7 +28,8 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.lib.MCHelper;
-import org.blockartistry.lib.MyUtils;
+import org.blockartistry.lib.collections.ObjectArray;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -40,8 +41,9 @@ public class Association {
 
 	private final IBlockState state;
 	private final BlockPos pos;
-	private IAcoustic[] data;
-	
+	private final ObjectArray<IAcoustic> data = new ObjectArray<>(8);
+	private final boolean isNotEmitter;
+
 	public Association() {
 		this(AcousticsManager.EMPTY);
 	}
@@ -58,17 +60,18 @@ public class Association {
 			@Nonnull final IAcoustic[] association) {
 		this.state = state;
 		this.pos = pos;
-		this.data = association == null ? AcousticsManager.EMPTY : association;
+		this.data.addAll(association == null ? AcousticsManager.EMPTY : association);
+		this.isNotEmitter = association == AcousticsManager.NOT_EMITTER;
 	}
 
 	@Nonnull
 	public IAcoustic[] getData() {
-		return this.data;
+		return this.data.toArray(new IAcoustic[0]);
 	}
 
 	@Nonnull
 	public boolean getNoAssociation() {
-		return this.data.length == 0;
+		return this.data.size() == 0;
 	}
 
 	public boolean isLiquid() {
@@ -80,11 +83,11 @@ public class Association {
 	}
 
 	public void add(@Nonnull final IAcoustic acoustics) {
-		this.data = MyUtils.append(this.data, acoustics);
+		this.data.add(acoustics);
 	}
-	
+
 	public void add(@Nonnull final IAcoustic[] acoustics) {
-		this.data = MyUtils.concatenate(this.data, acoustics);
+		this.data.addAll(acoustics);
 	}
 
 	@Nonnull
@@ -93,7 +96,7 @@ public class Association {
 	}
 
 	public boolean isNotEmitter() {
-		return this.data == AcousticsManager.NOT_EMITTER;
+		return this.isNotEmitter;
 	}
-	
+
 }
