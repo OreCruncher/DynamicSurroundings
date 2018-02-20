@@ -20,11 +20,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.blockartistry.DynSurround.facade;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Method;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,45 +32,58 @@ import org.blockartistry.DynSurround.DSurround;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public final class FacadeHelper {
+class FacadeAccessor {
 
-	private static final List<FacadeAccessor> accessors = new ArrayList<>();
+	protected Class<?> IFacadeClass;
+	protected Method accessor;
 
-	private static void addAccessor(@Nonnull final FacadeAccessor accessor) {
-		if (accessor.isValid()) {
-			DSurround.log().info("Facade Accessor: %s", accessor.getName());
-			accessors.add(accessor);
+	public FacadeAccessor(@Nonnull final String clazz, @Nonnull final String method) {
+		try {
+			this.IFacadeClass = Class.forName(clazz);
+			if (this.IFacadeClass != null)
+				this.accessor = getMethod(method);
+			else
+				this.accessor = null;
+		} catch (@Nonnull final Throwable t) {
+			this.IFacadeClass = null;
+			this.accessor = null;
 		}
 	}
-
-	static {
-		// Run down the list of supported accessors. The instance will
-		// tell us if it is valid or not.
-		addAccessor(new ChiselAPIFacadeAccessor());
-		addAccessor(new ChiselFacadeAccessor());
-		addAccessor(new EnderIOFacadeAccessor());
-		addAccessor(new CoFHCoreCoverAccessor());
+	
+	public String getName() {
+		return this.isValid() ? this.IFacadeClass.getName() : "INVALID";
 	}
 
-	protected FacadeHelper() {
-
+	protected Method getMethod(@Nonnull final String method) throws Throwable {
+		return this.IFacadeClass.getMethod(method, IBlockAccess.class, BlockPos.class, EnumFacing.class);
 	}
 
-	@Nonnull
-	public static IBlockState resolveState(@Nonnull final IBlockState state, @Nonnull final World world,
+	protected IBlockState call(@Nonnull final IBlockState state, @Nonnull final World world,
+			@Nonnull final BlockPos pos, @Nullable final EnumFacing side) throws Throwable {
+		return (IBlockState) this.accessor.invoke(state.getBlock(), world, pos, side);
+	}
+
+	public boolean isValid() {
+		return this.accessor != null;
+	}
+
+	@Nullable
+	public IBlockState getBlockState(@Nonnull final IBlockState state, @Nonnull final World world,
 			@Nonnull final BlockPos pos, @Nullable final EnumFacing side) {
-		for (int i = 0; i < accessors.size(); i++) {
-			final FacadeAccessor accessor = accessors.get(i);
-			if (accessor.isValid()) {
-				final IBlockState newState = accessor.getBlockState(state, world, pos, side);
-				if (newState != null)
-					return newState;
+		if (this.isValid())
+			try {
+				if (this.IFacadeClass.isInstance(state.getBlock()))
+					return this.call(state, world, pos, side);
+			} catch (@Nonnull final Throwable ex) {
+				DSurround.log().catching(ex);
+				this.IFacadeClass = null;
+				this.accessor = null;
 			}
-		}
 
-		return state;
+		return null;
 	}
 
 }

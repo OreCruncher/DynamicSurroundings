@@ -23,58 +23,13 @@
 
 package org.blockartistry.DynSurround.facade;
 
-import java.lang.reflect.Method;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.facade.FacadeHelper.IFacadeAccessor;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
-final class ChiselAPIFacadeAccessor implements IFacadeAccessor {
+final class ChiselAPIFacadeAccessor extends FacadeAccessor {
 
 	private static final String CLASS = "team.chisel.ctm.api.IFacade";
 	private static final String METHOD = "getFacade";
 
-	private static Class<?> IFacadeClass;
-	private static Method method;
-
-	static {
-		try {
-			IFacadeClass = Class.forName(CLASS);
-			if (IFacadeClass != null) {
-				method = IFacadeClass.getMethod(METHOD, IBlockAccess.class, BlockPos.class, EnumFacing.class);
-			}
-		} catch (@Nonnull final Throwable t) {
-			DSurround.log().warn("Unable to locate %s.%s()", CLASS, METHOD);
-		}
+	public ChiselAPIFacadeAccessor() {
+		super(CLASS, METHOD);
 	}
-
-	@Override
-	@Nullable
-	public IBlockState getBlockState(@Nonnull final IBlockState state, @Nonnull final World world,
-			@Nonnull final BlockPos pos, @Nullable final EnumFacing side) {
-
-		if (IFacadeClass == null || method == null)
-			return null;
-
-		final Block block = state.getBlock();
-
-		try {
-			if (IFacadeClass.isInstance(block))
-				return (IBlockState) method.invoke(block, world, pos, side);
-		} catch (@Nonnull final Exception ex) {
-			DSurround.log().warn("Unable to invoke %s.%s()", CLASS, METHOD);
-			DSurround.log().catching(ex);
-			method = null;
-		}
-		return null;
-	}
-
+	
 }
