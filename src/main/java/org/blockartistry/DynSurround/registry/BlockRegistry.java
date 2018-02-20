@@ -53,8 +53,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class BlockRegistry extends Registry {
 
-	private static final BlockProfile NO_PROFILE = BlockProfile
-			.createProfile(new BlockInfo(Blocks.AIR.getDefaultState())).setChance(0).setStepChance(0);
+	private static final BlockProfile NO_PROFILE = BlockProfile.createProfile(BlockInfo.AIR).setChance(0)
+			.setStepChance(0);
+
+	private final BlockInfoMutable key = new BlockInfoMutable();
+	private Map<BlockInfo, BlockProfile> registry;
+	private Map<IBlockState, BlockProfile> cache;
 
 	public BlockRegistry(@Nonnull final Side side) {
 		super(side);
@@ -62,8 +66,8 @@ public final class BlockRegistry extends Registry {
 
 	@Override
 	public void init() {
-		this.registry = new HashMap<BlockInfo, BlockProfile>();
-		this.cache = new IdentityHashMap<IBlockState, BlockProfile>();
+		this.registry = new HashMap<>();
+		this.cache = new IdentityHashMap<>();
 	}
 
 	@Override
@@ -71,7 +75,7 @@ public final class BlockRegistry extends Registry {
 		for (final BlockConfig block : cfg.blocks)
 			this.register(block);
 	}
-	
+
 	@Override
 	public void initComplete() {
 		this.registry = ImmutableMap.copyOf(this.registry);
@@ -81,11 +85,6 @@ public final class BlockRegistry extends Registry {
 	public void fini() {
 
 	}
-
-	private Map<BlockInfo, BlockProfile> registry = new HashMap<BlockInfo, BlockProfile>();
-	private Map<IBlockState, BlockProfile> cache = new IdentityHashMap<IBlockState, BlockProfile>();
-
-	private final BlockInfoMutable key = new BlockInfoMutable();
 
 	@Nonnull
 	public BlockProfile findProfile(@Nonnull final IBlockState state) {

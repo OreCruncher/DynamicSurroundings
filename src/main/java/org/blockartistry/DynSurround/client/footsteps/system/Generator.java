@@ -581,7 +581,7 @@ public class Generator {
 		IAcoustic[] association = null;
 
 		if (above != AIR_STATE)
-			association = this.blockMap.getBlockSubstrateAcoustics(world, above, tPos, Substrate.CARPET);
+			association = this.blockMap.getBlockAcoustics(world, above, tPos, Substrate.CARPET);
 
 		if (association == null || association == AcousticsManager.NOT_EMITTER) {
 			// This condition implies that if the carpet is NOT_EMITTER, solving
@@ -591,7 +591,7 @@ public class Generator {
 			if (in == AIR_STATE) {
 				tPos = pos.down();
 				final IBlockState below = WorldUtils.getBlockState(world, tPos);
-				association = this.blockMap.getBlockSubstrateAcoustics(world, below, tPos, Substrate.FENCE);
+				association = this.blockMap.getBlockAcoustics(world, below, tPos, Substrate.FENCE);
 				if (association != null) {
 					pos = tPos;
 					in = below;
@@ -609,8 +609,7 @@ public class Generator {
 				// if else group.
 
 				if (above != AIR_STATE) {
-					IAcoustic[] foliage = this.blockMap.getBlockSubstrateAcoustics(world, above, pos.up(),
-							Substrate.FOLIAGE);
+					IAcoustic[] foliage = this.blockMap.getBlockAcoustics(world, above, pos.up(), Substrate.FOLIAGE);
 					if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 						association = MyUtils.concatenate(association, foliage);
 					}
@@ -680,12 +679,12 @@ public class Generator {
 		IAcoustic[] association = null;
 		boolean found = false;
 
-		IAcoustic[] foliage = this.blockMap.getBlockSubstrateAcoustics(world, above, up, Substrate.FOLIAGE);
+		IAcoustic[] foliage = this.blockMap.getBlockAcoustics(world, above, up, Substrate.FOLIAGE);
 		if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 			// we discard the normal block association, and mark the foliage as
 			// detected
 			association = foliage;
-			IAcoustic[] isMessy = this.blockMap.getBlockSubstrateAcoustics(world, above, up, Substrate.MESSY);
+			IAcoustic[] isMessy = this.blockMap.getBlockAcoustics(world, above, up, Substrate.MESSY);
 
 			if (isMessy != null && isMessy == AcousticsManager.MESSY_GROUND)
 				found = true;

@@ -43,6 +43,8 @@ public class BlockInfo {
 	public static final int GENERIC = -1;
 	public static final int NO_SUBTYPE = -100;
 
+	public static final BlockInfo AIR = new BlockInfo(Blocks.AIR);
+
 	protected Block block;
 	protected int meta;
 	protected int specialMeta;
@@ -55,22 +57,6 @@ public class BlockInfo {
 
 	public BlockInfo(@Nonnull final Block block) {
 		this(block, NO_SUBTYPE);
-	}
-
-	public BlockInfo(@Nonnull final IBlockState state) {
-		configure(state);
-	}
-
-	protected void configure(@Nonnull final IBlockState state) {
-		this.block = state.getBlock();
-		if (this.block == Blocks.AIR) {
-			this.meta = NO_SUBTYPE;
-			this.specialMeta = NO_SUBTYPE;
-		} else {
-			this.meta = MCHelper.hasVariants(this.block) ? state.getBlock().getMetaFromState(state) : NO_SUBTYPE;
-			this.specialMeta = MCHelper.hasSpecialMeta(this.block) ? state.getBlock().getMetaFromState(state)
-					: NO_SUBTYPE;
-		}
 	}
 
 	@Nonnull
@@ -107,7 +93,7 @@ public class BlockInfo {
 
 	@Override
 	public boolean equals(final Object obj) {
-		return this.block == ((BlockInfo)obj).block && this.meta == ((BlockInfo)obj).meta;
+		return this.block == ((BlockInfo) obj).block && this.meta == ((BlockInfo) obj).meta;
 	}
 
 	@Nullable
@@ -119,10 +105,10 @@ public class BlockInfo {
 		if (result != null) {
 
 			workingName = result.getBlockName();
-			
-			if(result.isGeneric())
+
+			if (result.isGeneric())
 				subType = GENERIC;
-			else if(result.noMetadataSpecified())
+			else if (result.noMetadataSpecified())
 				subType = NO_SUBTYPE;
 			else
 				subType = result.getMetadata();
@@ -159,12 +145,12 @@ public class BlockInfo {
 
 		public BlockInfoMutable() {
 			super((Block) null);
-			
+
 			this.originalMeta = this.meta;
 		}
 
 		public BlockInfoMutable set(@Nonnull final IBlockState state) {
-			if(this.lastState == state) {
+			if (this.lastState == state) {
 				this.meta = this.originalMeta;
 			} else {
 				configure(state);
@@ -189,6 +175,18 @@ public class BlockInfo {
 		public BlockInfoMutable asSpecial() {
 			this.meta = this.specialMeta;
 			return this;
+		}
+
+		protected void configure(@Nonnull final IBlockState state) {
+			this.block = state.getBlock();
+			if (this.block == Blocks.AIR) {
+				this.meta = NO_SUBTYPE;
+				this.specialMeta = NO_SUBTYPE;
+			} else {
+				this.meta = MCHelper.hasVariants(this.block) ? state.getBlock().getMetaFromState(state) : NO_SUBTYPE;
+				this.specialMeta = MCHelper.hasSpecialMeta(this.block) ? state.getBlock().getMetaFromState(state)
+						: NO_SUBTYPE;
+			}
 		}
 
 	}
