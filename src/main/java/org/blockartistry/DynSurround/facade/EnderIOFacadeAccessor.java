@@ -28,54 +28,28 @@ import java.lang.reflect.Method;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.facade.FacadeHelper.IFacadeAccessor;
-
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-final class EnderIOFacadeAccessor implements IFacadeAccessor {
+final class EnderIOFacadeAccessor extends FacadeAccessor {
 
 	private static final String CLASS = "crazypants.enderio.paint.IPaintable";
 	private static final String METHOD = "getPaintSource";
 
-	private static Class<?> IFacadeClass;
-	private static Method method;
-
-	static {
-		try {
-			IFacadeClass = Class.forName(CLASS);
-			if (IFacadeClass != null) {
-				method = IFacadeClass.getMethod(METHOD, IBlockState.class, IBlockAccess.class, BlockPos.class);
-			}
-		} catch (@Nonnull final Throwable t) {
-			DSurround.log().warn("Unable to locate %s.%s()", CLASS, METHOD);
-		}
+	public EnderIOFacadeAccessor() {
+		super(CLASS, METHOD);
 	}
 
 	@Override
-	@Nullable
-	public IBlockState getBlockState(@Nonnull final IBlockState state, @Nonnull final World world,
-			@Nonnull final BlockPos pos, @Nullable final EnumFacing side) {
-
-		if (IFacadeClass == null || method == null)
-			return null;
-
-		final Block block = state.getBlock();
-
-		try {
-			if (IFacadeClass.isInstance(block))
-				return (IBlockState) method.invoke(block, state, world, pos);
-		} catch (@Nonnull final Exception ex) {
-			DSurround.log().warn("Unable to invoke %s.%s()", CLASS, METHOD);
-			DSurround.log().catching(ex);
-			method = null;
-		}
-		return null;
+	protected Method getMethod(@Nonnull final String method) throws Throwable {
+		return this.IFacadeClass.getMethod(method, IBlockState.class, IBlockAccess.class, BlockPos.class);
 	}
 
+	protected IBlockState call(@Nonnull final IBlockState state, @Nonnull final World world,
+			@Nonnull final BlockPos pos, @Nullable final EnumFacing side) throws Throwable {
+		return (IBlockState) this.accessor.invoke(state.getBlock(), state, world, pos);
+	}
 }
