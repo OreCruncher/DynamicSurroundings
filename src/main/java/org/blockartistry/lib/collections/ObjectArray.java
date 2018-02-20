@@ -42,7 +42,7 @@ public class ObjectArray<T> implements Collection<T> {
 		this(DEFAULT_SIZE);
 	}
 
-	public ObjectArray(int size) {
+	public ObjectArray(final int size) {
 		this.data = new Object[size];
 	}
 
@@ -108,6 +108,7 @@ public class ObjectArray<T> implements Collection<T> {
 	}
 
 	@Override
+	@Nonnull
 	public Iterator<T> iterator() {
 		return new Iterator<T>() {
 
@@ -128,6 +129,7 @@ public class ObjectArray<T> implements Collection<T> {
 	}
 
 	@Override
+	@Nonnull
 	public Object[] toArray() {
 		final Object[] result = new Object[this.insertionIdx];
 		System.arraycopy(this.data, 0, result, 0, this.insertionIdx);
@@ -136,7 +138,8 @@ public class ObjectArray<T> implements Collection<T> {
 
 	@SuppressWarnings({ "unchecked", "hiding" })
 	@Override
-	public <T> T[] toArray(@Nonnull T[] a) {
+	@Nonnull
+	public <T> T[] toArray(@Nonnull final T[] a) {
 		// From ArrayList impl
 		if (a.length < this.insertionIdx)
 			// Make a new array of a's runtime type, but my contents:
@@ -176,14 +179,14 @@ public class ObjectArray<T> implements Collection<T> {
 	public boolean addAll(@Nonnull final Collection<? extends T> c) {
 		boolean result = false;
 		for (final T element : c)
-			result = result || this.add(element);
+			result |= this.add(element);
 		return result;
 	}
 
 	public boolean addAll(@Nonnull final T[] list) {
 		boolean result = false;
 		for (final T element : list)
-			result = result || this.add(element);
+			result |= this.add(element);
 		return result;
 	}
 
