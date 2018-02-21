@@ -117,23 +117,25 @@ public class ParticleWaterSplash extends ParticleJet {
 	// Entity.resetHeight()
 	@Override
 	protected void spawnJetParticle() {
+		if (ParticleCollections.canFitWaterSpray()) {
+			final int splashCount = this.getSpawnCount();
 
-		final int splashCount = this.getSpawnCount();
+			for (int j = 0; (float) j < splashCount; ++j) {
+				final double xOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
+				final double zOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
+				if (WorldUtils.isSolidBlock(this.world,
+						pos.setPos(this.posX + xOffset, this.posY, this.posZ + zOffset)))
+					continue;
 
-		for (int j = 0; (float) j < splashCount; ++j) {
-			final double xOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
-			final double zOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
-			if (WorldUtils.isSolidBlock(this.world, pos.setPos(this.posX + xOffset, this.posY, this.posZ + zOffset)))
-				continue;
-
-			final double motionX = xOffset * (this.jetStrength / 25.0D);
-			final double motionZ = zOffset * (this.jetStrength / 25.0D);
-			final double motionY = 0.1D + RANDOM.nextFloat() * this.jetStrength / 20.0D;
-			final IParticleMote particle = ParticleCollections.addWaterSpray(this.world, this.posX + xOffset,
-					(double) (this.posY), this.posZ + zOffset, motionX, motionY, motionZ);
-			// If we could not add the collection is full. No sense beating a dead horse.
-			if (particle == null)
-				break;
+				final double motionX = xOffset * (this.jetStrength / 25.0D);
+				final double motionZ = zOffset * (this.jetStrength / 25.0D);
+				final double motionY = 0.1D + RANDOM.nextFloat() * this.jetStrength / 20.0D;
+				final IParticleMote particle = ParticleCollections.addWaterSpray(this.world, this.posX + xOffset,
+						(double) (this.posY), this.posZ + zOffset, motionX, motionY, motionZ);
+				// If we could not add the collection is full. No sense beating a dead horse.
+				if (particle == null)
+					break;
+			}
 		}
 	}
 
