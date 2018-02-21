@@ -69,6 +69,7 @@ public class Generator {
 
 	protected static final Random RANDOM = XorShiftRandom.current();
 	protected static final IBlockState AIR_STATE = Blocks.AIR.getDefaultState();
+	protected static final int BRUSH_INTERVAL = 100;
 
 	protected static final Consumer<Footprint> GENERATE_PRINT = print -> {
 		final Vec3d loc = print.getStepLocation();
@@ -338,7 +339,7 @@ public class Generator {
 		if (this.brushesTime > current)
 			return;
 
-		this.brushesTime = current + 100;
+		this.brushesTime = current + BRUSH_INTERVAL;
 
 		if (proceedWithStep(entity)) {
 			if (entity.motionX == 0d && entity.motionZ == 0d)
