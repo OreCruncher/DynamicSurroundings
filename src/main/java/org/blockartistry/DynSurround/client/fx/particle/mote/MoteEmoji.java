@@ -29,10 +29,10 @@ import java.lang.ref.WeakReference;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.api.entity.EmojiType;
-import org.blockartistry.DynSurround.api.entity.EntityCapability;
-import org.blockartistry.DynSurround.api.entity.IEmojiData;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.internal.entity.EmojiType;
+import org.blockartistry.DynSurround.internal.entity.EntityCapability;
+import org.blockartistry.DynSurround.internal.entity.IEmojiData;
 import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.client.renderer.BufferBuilder;

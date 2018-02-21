@@ -35,10 +35,10 @@ import javax.annotation.Nonnull;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.api.events.SpeechTextEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.handlers.bubbles.EntityBubbleContext;
 import org.blockartistry.DynSurround.client.handlers.bubbles.SpeechBubbleData;
+import org.blockartistry.DynSurround.internal.events.SpeechTextEvent;
 import org.blockartistry.lib.Translations;
 import org.blockartistry.lib.WorldUtils;
 

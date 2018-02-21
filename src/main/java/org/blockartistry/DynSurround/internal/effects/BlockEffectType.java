@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.api.effects;
+package org.blockartistry.DynSurround.internal.effects;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;

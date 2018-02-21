@@ -27,8 +27,8 @@ package org.blockartistry.DynSurround.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.api.events.WeatherUpdateEvent;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.internal.events.WeatherUpdateEvent;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.world.World;

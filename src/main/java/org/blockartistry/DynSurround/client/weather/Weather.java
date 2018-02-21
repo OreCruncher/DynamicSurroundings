@@ -27,12 +27,12 @@ package org.blockartistry.DynSurround.client.weather;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.api.events.WeatherUpdateEvent;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.client.weather.tracker.ServerDrivenTracker;
 import org.blockartistry.DynSurround.client.weather.tracker.SimulationTracker;
 import org.blockartistry.DynSurround.client.weather.tracker.Tracker;
 import org.blockartistry.DynSurround.data.DimensionEffectData;
+import org.blockartistry.DynSurround.internal.events.WeatherUpdateEvent;
 import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.client.Minecraft;

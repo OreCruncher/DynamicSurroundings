@@ -22,50 +22,45 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.api.entity;
+package org.blockartistry.DynSurround.internal.entity;
 
 import javax.annotation.Nonnull;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
-public enum EmojiType {
+/**
+ * Describes how an Entity "feels". Though an ActionState has a default
+ * EmotionalState, the EntityAI may select a different EmotionalState based on
+ * other factors.
+ */
+public enum EmotionalState {
 
-	/** No emoji will be displayed */
-	NONE(0),
-	/** The attack emoji will be displayed */
-	ATTACK(1),
-	/** The flee emoji will be displayed */
-	FLEE(2),
-	/** The happy emoji will be displayed */
-	HAPPY(3),
-	/** The sad emoji will be displayed */
-	SAD(4),
-	/** The sick emoji will be displayed */
-	SICK(5),
-	/** The hurt emoji will be displayed */
-	HURT(6),
-	/** The watch emoji will be displayed */
-	WATCH(7),
-	/** The farm farm will be displayed */
-	FARM(8),
-	/** The work emoji will be displayed */
-	WORK(9),
-	/** The trade emoji will be displayed */
-	TRADE(10),
-	/** The angry emoji will be displayed */
-	ANGRY(11),
-	/** The eat emoji will be displayed */
-	EAT(12);
+	/** The Entity has no real opinion at the moment. */
+	NEUTRAL(0),
+	/** The Entity is happy, like when being tempted with food. */
+	HAPPY(1),
+	/** The entity is sad. */
+	SAD(2),
+	/** The Entity is angry such as when attacking. */
+	ANGRY(3),
+	/** The Entity is afraid, such as when fleeing. */
+	AFRAID(4),
+	/** The Entity is busy with an activity, like Farming. */
+	BUSY(5),
+	/** The Entity feels sick because of a negative potion effect. */
+	SICK(6),
+	/** The Entity feels hurt because it's health has been reduced. */
+	HURT(7);
 
-	private static final TIntObjectHashMap<EmojiType> lookup = new TIntObjectHashMap<EmojiType>();
+	private static final TIntObjectHashMap<EmotionalState> lookup = new TIntObjectHashMap<EmotionalState>();
 	static {
-		for (final EmojiType state : EmojiType.values()) {
+		for (final EmotionalState state : EmotionalState.values()) {
 			lookup.put(state.getId(), state);
 		}
 	}
 
 	private final int id;
 
-	EmojiType(final int id) {
+	EmotionalState(final int id) {
 		this.id = id;
 	}
 
@@ -74,14 +69,14 @@ public enum EmojiType {
 	}
 
 	@Nonnull
-	public static EmojiType get(int id) {
-		EmojiType result = lookup.get(id);
+	public static EmotionalState get(int id) {
+		EmotionalState result = lookup.get(id);
 		if (result == null)
-			result = EmojiType.NONE;
+			result = EmotionalState.NEUTRAL;
 		return result;
 	}
 
-	public static int getId(@Nonnull final EmojiType type) {
+	public static int getId(@Nonnull final EmotionalState type) {
 		return type.getId();
 	}
 
