@@ -74,8 +74,8 @@ public class Generator {
 	protected static final Consumer<Footprint> GENERATE_PRINT = print -> {
 		final Vec3d loc = print.getStepLocation();
 		final World world = print.getEntity().getEntityWorld();
-		ParticleCollections.addFootprint(print.getStyle(), world, loc.xCoord, loc.yCoord, loc.zCoord,
-				print.getRotation(), print.getScale(), print.isRightFoot());
+		ParticleCollections.addFootprint(print.getStyle(), world, loc, print.getRotation(), print.getScale(),
+				print.isRightFoot());
 	};
 
 	protected final Variator VAR;
@@ -101,7 +101,7 @@ public class Generator {
 	protected boolean scalStat;
 	protected boolean stepThisFrame;
 
-	protected boolean isMessyFoliage;
+	protected BlockPos messyPos = BlockPos.ORIGIN;
 	protected long brushesTime;
 
 	// We calc our own because of inconsistencies with Minecraft
@@ -324,7 +324,6 @@ public class Generator {
 						this.isRightFoot);
 				this.isRightFoot = !this.isRightFoot;
 			}
-
 		}
 	}
 
@@ -336,25 +335,18 @@ public class Generator {
 
 	protected void simulateBrushes(@Nonnull final EntityLivingBase entity) {
 		final long current = TimeUtils.currentTimeMillis();
-		if (this.brushesTime > current)
-			return;
-
-		this.brushesTime = current + BRUSH_INTERVAL;
-
-		if (proceedWithStep(entity)) {
-			if (entity.motionX == 0d && entity.motionZ == 0d)
-				return;
-
-			final int yy = MathStuff.floor(entity.posY - 0.1d - entity.getYOffset() - (entity.onGround ? 0d : 0.25d));
-			final Association assos = this.findAssociationMessyFoliage(entity.getEntityWorld(),
-					new BlockPos(entity.posX, yy, entity.posZ));
-			if (assos != null) {
-				if (!this.isMessyFoliage) {
-					this.isMessyFoliage = true;
-					this.playAssociation(entity, assos, EventType.WALK);
+		if (current >= this.brushesTime) {
+			this.brushesTime = current + BRUSH_INTERVAL;
+			if (proceedWithStep(entity) && (entity.motionX != 0d || entity.motionZ != 0d)) {
+				final int yy = MathStuff
+						.floor(entity.posY - 0.1d - entity.getYOffset() - (entity.onGround ? 0d : 0.25d));
+				final BlockPos pos = new BlockPos(entity.posX, yy, entity.posZ);
+				if (!this.messyPos.equals(pos)) {
+					this.messyPos = pos;
+					final Association assos = this.findAssociationMessyFoliage(entity.getEntityWorld(), pos);
+					if (assos != null)
+						this.playAssociation(entity, assos, EventType.WALK);
 				}
-			} else {
-				this.isMessyFoliage = false;
 			}
 		}
 	}
@@ -701,10 +693,10 @@ public class Generator {
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("didJump: ").append(Boolean.toString(this.didJump)).append(' ');
-		builder.append("isOnLadder: ").append(Boolean.toString(this.isOnLadder)).append(' ');
-		builder.append("isFlying: ").append(Boolean.toString(this.isFlying)).append(' ');
-		builder.append("isImmobile: ").append(Boolean.toString(this.isImmobile)).append(' ');
-		builder.append("isMessy: ").append(Boolean.toString(this.isMessyFoliage));
+		builder.append("onLadder: ").append(Boolean.toString(this.isOnLadder)).append(' ');
+		builder.append("flying: ").append(Boolean.toString(this.isFlying)).append(' ');
+		builder.append("immobile: ").append(Boolean.toString(this.isImmobile)).append(' ');
+		builder.append("steps: ").append(this.pedometer);
 		return builder.toString();
 	}
 
