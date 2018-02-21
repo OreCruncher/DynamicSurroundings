@@ -47,7 +47,7 @@ public class MoteWaterSpray extends MoteMotionBase {
 
 		super(world, x, y, z, dX, dY, dZ);
 
-		this.maxAge = (int) (8.0D / (RANDOM.nextDouble() * 0.8D + 0.2D));
+		this.maxAge = (int) (8.0F / (RANDOM.nextFloat() * 0.8F + 0.2F));
 		this.scale = (RANDOM.nextFloat() * 0.5F + 0.5F) * 2.0F;
 
 		final int textureIdx = RANDOM.nextInt(4);
