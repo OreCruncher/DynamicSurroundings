@@ -61,8 +61,9 @@ public class ParticleWaterSplash extends ParticleJet {
 	private final BlockPos location;
 	private PositionedEmitter emitter;
 
-	public ParticleWaterSplash(final int strength, final World world, final BlockPos loc, final double x, final double y, final double z) {
-		super(strength, world, x, y, z);
+	public ParticleWaterSplash(final int strength, final World world, final BlockPos loc, final double x,
+			final double y, final double z) {
+		super(0, strength, world, x, y, z, 2);
 		this.location = loc.toImmutable();
 	}
 
@@ -72,7 +73,7 @@ public class ParticleWaterSplash extends ParticleJet {
 	}
 
 	private boolean setupSound() {
-		return this.isAlive() && this.emitter == null && RANDOM.nextInt(4) == 0;
+		return this.isAlive() && this.emitter == null && RANDOM.nextInt(6) == 0;
 	}
 
 	@Override
@@ -100,21 +101,26 @@ public class ParticleWaterSplash extends ParticleJet {
 	@Override
 	protected void spawnJetParticle() {
 
-		final int splashCount = Math.min(this.getParticleLimit() - getCurrentParticleCount(), 100);
+		// Spawn at most 15 particles per operation.
+		final int splashCount = Math.min(this.getParticleLimit() - getCurrentParticleCount(), 15);
 
 		for (int j = 0; (float) j < splashCount; ++j) {
-			final double xOffset = (RANDOM.nextDouble() * 2.0F - 1.0F);
-			final double zOffset = (RANDOM.nextDouble() * 2.0F - 1.0F);
+			final double xOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
+			final double zOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
 			if (WorldUtils.isSolidBlock(this.world, pos.setPos(this.posX + xOffset, this.posY, this.posZ + zOffset)))
 				continue;
 
 			final double motionX = xOffset * (this.jetStrength / 25.0D);
-			final double motionY = 0.1D + RANDOM.nextDouble() * this.jetStrength / 20.0D;
-			final double motionZ = zOffset * (this.jetStrength / 25.D);
+			final double motionZ = zOffset * (this.jetStrength / 25.0D);
+			final double motionY = 0.1D + RANDOM.nextFloat() * this.jetStrength / 20.0D;
 			final IParticleMote particle = ParticleCollections.addWaterSpray(this.world, this.posX + xOffset,
 					(double) (this.posY), this.posZ + zOffset, motionX, motionY, motionZ);
-			if (particle != null)
+			if (particle != null) {
 				addParticle(particle);
+			} else {
+				// If we could not add the collection is full. No sense beating a dead horse.
+				break;
+			}
 		}
 	}
 
