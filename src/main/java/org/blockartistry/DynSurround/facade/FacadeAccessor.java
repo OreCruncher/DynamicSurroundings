@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -52,9 +53,13 @@ class FacadeAccessor {
 			this.accessor = null;
 		}
 	}
-	
+
 	public String getName() {
 		return this.isValid() ? this.IFacadeClass.getName() : "INVALID";
+	}
+
+	public boolean instanceOf(@Nonnull final Block block) {
+		return this.isValid() && this.IFacadeClass.isInstance(block);
 	}
 
 	protected Method getMethod(@Nonnull final String method) throws Throwable {
@@ -75,7 +80,7 @@ class FacadeAccessor {
 			@Nonnull final BlockPos pos, @Nullable final EnumFacing side) {
 		if (this.isValid())
 			try {
-				if (this.IFacadeClass.isInstance(state.getBlock()))
+				if (this.instanceOf(state.getBlock()))
 					return this.call(state, world, pos, side);
 			} catch (@Nonnull final Throwable ex) {
 				DSurround.log().catching(ex);
