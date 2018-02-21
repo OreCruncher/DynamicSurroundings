@@ -76,8 +76,8 @@ public class FxHandler extends EffectHandlerBase {
 		}
 
 		@Override
-		public void stopSound(@Nonnull final String id) {
-			SoundEffectHandler.INSTANCE.stopSound(id);
+		public void stopSound(@Nonnull final BasicSound<?> sound) {
+			SoundEffectHandler.INSTANCE.stopSound(sound);
 		}
 	};
 

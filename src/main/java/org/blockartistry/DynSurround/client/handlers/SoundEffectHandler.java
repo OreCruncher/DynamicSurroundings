@@ -206,10 +206,10 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		return SoundEngine.instance().isSoundPlaying(soundId);
 	}
 
-	public void stopSound(@Nonnull final String sound) {
+	public void stopSound(@Nonnull final BasicSound<?> sound) {
 		SoundEngine.instance().stopSound(sound);
 	}
-
+	
 	@Nullable
 	public String playSound(@Nonnull final BasicSound<?> sound) {
 		if (sound == null || !sound.canSoundBeHeard(EnvironState.getPlayerPosition()))

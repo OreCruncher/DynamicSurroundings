@@ -79,8 +79,8 @@ public class EffectStateBase implements IEffectState {
 	 * @param soundId
 	 */
 	@Override
-	public void stopSound(@Nonnull final String soundId) {
-		this.soundHelper.stopSound(soundId);
+	public void stopSound(@Nonnull final BasicSound<?> sound) {
+		this.soundHelper.stopSound(sound);
 	}
 
 	/**

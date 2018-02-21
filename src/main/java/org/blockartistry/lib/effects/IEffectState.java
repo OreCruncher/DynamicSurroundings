@@ -64,9 +64,10 @@ public interface IEffectState {
 	/**
 	 * Stops the specified sound in the sound system from playing.
 	 * 
-	 * @param soundId
+	 * @param sound
+	 *            The sound to stop playing
 	 */
-	void stopSound(@Nonnull final String soundId);
+	void stopSound(@Nonnull final BasicSound<?> sound);
 
 	/**
 	 * Creates a BasicSound<> object for the specified SoundEffect centered at the
@@ -90,7 +91,7 @@ public interface IEffectState {
 	 * @return true if it is the local player, false otherwise
 	 */
 	boolean isActivePlayer(@Nonnull final Entity player);
-	
+
 	/**
 	 * Obtain a reference to the client's player
 	 * 
