@@ -60,11 +60,28 @@ public class ParticleWaterSplash extends ParticleJet {
 
 	private final BlockPos location;
 	private PositionedEmitter emitter;
+	protected int particleLimit;
 
 	public ParticleWaterSplash(final int strength, final World world, final BlockPos loc, final double x,
 			final double y, final double z) {
 		super(0, strength, world, x, y, z, 2);
 		this.location = loc.toImmutable();
+		this.setSpawnCount((int) (strength * 2.5F));
+	}
+
+	public void setSpawnCount(final int limit) {
+		this.particleLimit = MathStuff.clamp(limit, 5, 15);
+	}
+
+	public int getSpawnCount() {
+		switch (SETTINGS.particleSetting) {
+		case 2:
+			return 0;
+		case 0:
+			return this.particleLimit;
+		default:
+			return this.particleLimit / 2;
+		}
 	}
 
 	@Override
@@ -101,8 +118,7 @@ public class ParticleWaterSplash extends ParticleJet {
 	@Override
 	protected void spawnJetParticle() {
 
-		// Spawn at most 15 particles per operation.
-		final int splashCount = Math.min(this.getParticleLimit() - getCurrentParticleCount(), 15);
+		final int splashCount = this.getSpawnCount();
 
 		for (int j = 0; (float) j < splashCount; ++j) {
 			final double xOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
@@ -115,12 +131,9 @@ public class ParticleWaterSplash extends ParticleJet {
 			final double motionY = 0.1D + RANDOM.nextFloat() * this.jetStrength / 20.0D;
 			final IParticleMote particle = ParticleCollections.addWaterSpray(this.world, this.posX + xOffset,
 					(double) (this.posY), this.posZ + zOffset, motionX, motionY, motionZ);
-			if (particle != null) {
-				addParticle(particle);
-			} else {
-				// If we could not add the collection is full. No sense beating a dead horse.
+			// If we could not add the collection is full. No sense beating a dead horse.
+			if (particle == null)
 				break;
-			}
 		}
 	}
 
