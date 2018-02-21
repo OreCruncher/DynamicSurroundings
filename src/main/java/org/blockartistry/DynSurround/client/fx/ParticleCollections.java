@@ -94,6 +94,10 @@ public final class ParticleCollections {
 		}
 		return mote;
 	}
+	
+	public static boolean canFitWaterSpray() {
+		return theSprays.get().canFit();
+	}
 
 	@Nullable
 	public static IParticleMote addRainSplash(@Nonnull final World world, final double x, final double y,
