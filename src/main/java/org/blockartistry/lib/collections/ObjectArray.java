@@ -85,7 +85,8 @@ public class ObjectArray<T> implements Collection<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void forEvery(@Nonnull final Consumer<T> consumer) {
+	@Override
+	public void forEach(@Nonnull final Consumer<? super T> consumer) {
 		for (int i = this.insertionIdx - 1; i >= 0; i--)
 			consumer.accept((T) this.data[i]);
 	}
@@ -105,27 +106,6 @@ public class ObjectArray<T> implements Collection<T> {
 	@Override
 	public boolean contains(@Nonnull final Object o) {
 		return find(o) != -1;
-	}
-
-	@Override
-	@Nonnull
-	public Iterator<T> iterator() {
-		return new Iterator<T>() {
-
-			private int idx = -1;
-
-			@Override
-			public boolean hasNext() {
-				return (this.idx + 1) < ObjectArray.this.insertionIdx;
-			}
-
-			@SuppressWarnings("unchecked")
-			@Override
-			public T next() {
-				return (T) ObjectArray.this.data[++this.idx];
-			}
-
-		};
 	}
 
 	@Override
@@ -185,8 +165,8 @@ public class ObjectArray<T> implements Collection<T> {
 
 	public boolean addAll(@Nonnull final T[] list) {
 		boolean result = false;
-		for (final T element : list)
-			result |= this.add(element);
+		for (int i = 0; i < list.length; i++)
+			result |= this.add(list[i]);
 		return result;
 	}
 
@@ -202,10 +182,30 @@ public class ObjectArray<T> implements Collection<T> {
 
 	@Override
 	public void clear() {
-		if (this.insertionIdx == 0)
-			return;
-		this.data = new Object[this.data.length];
+		for (int i = 0; i < this.insertionIdx; i++)
+			this.data[i] = null;
 		this.insertionIdx = 0;
+	}
+
+	@Override
+	@Nonnull
+	public Iterator<T> iterator() {
+		return new Iterator<T>() {
+
+			private int idx = -1;
+
+			@Override
+			public boolean hasNext() {
+				return (this.idx + 1) < ObjectArray.this.insertionIdx;
+			}
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public T next() {
+				return (T) ObjectArray.this.data[++this.idx];
+			}
+
+		};
 	}
 
 }
