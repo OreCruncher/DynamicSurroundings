@@ -36,8 +36,6 @@ import net.minecraft.world.World;
 @SideOnly(Side.CLIENT)
 public abstract class ParticleJet extends ParticleSystem {
 
-	private static final int MAX_STRENGTH_FOR_COUNT = 7;
-
 	protected final int jetStrength;
 	protected final int updateFrequency;
 
@@ -55,8 +53,6 @@ public abstract class ParticleJet extends ParticleSystem {
 		this.jetStrength = strength;
 		this.updateFrequency = freq;
 		this.particleMaxAge = (RANDOM.nextInt(strength) + 2) * 20;
-		final int str = Math.min(strength, MAX_STRENGTH_FOR_COUNT);
-		this.setParticleLimit(str * str * 5);
 	}
 
 	/*
