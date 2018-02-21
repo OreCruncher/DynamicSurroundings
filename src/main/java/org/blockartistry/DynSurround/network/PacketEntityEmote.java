@@ -27,11 +27,11 @@ package org.blockartistry.DynSurround.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.internal.entity.ActionState;
-import org.blockartistry.DynSurround.internal.entity.EmojiType;
-import org.blockartistry.DynSurround.internal.entity.EmotionalState;
-import org.blockartistry.DynSurround.internal.entity.IEmojiData;
-import org.blockartistry.DynSurround.internal.events.EntityEmojiEvent;
+import org.blockartistry.DynSurround.entity.ActionState;
+import org.blockartistry.DynSurround.entity.EmojiType;
+import org.blockartistry.DynSurround.entity.EmotionalState;
+import org.blockartistry.DynSurround.entity.IEmojiData;
+import org.blockartistry.DynSurround.event.EntityEmojiEvent;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

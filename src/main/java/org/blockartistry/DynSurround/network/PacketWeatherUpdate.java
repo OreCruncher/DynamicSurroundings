@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.internal.events.WeatherUpdateEvent;
+import org.blockartistry.DynSurround.event.WeatherUpdateEvent;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.world.World;

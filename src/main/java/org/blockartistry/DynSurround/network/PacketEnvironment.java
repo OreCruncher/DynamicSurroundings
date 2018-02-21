@@ -27,7 +27,7 @@ package org.blockartistry.DynSurround.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.internal.events.EnvironmentEvent;
+import org.blockartistry.DynSurround.event.EnvironmentEvent;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

@@ -22,54 +22,60 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.internal.events;
+package org.blockartistry.DynSurround.event;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.internal.entity.ActionState;
-import org.blockartistry.DynSurround.internal.entity.EmojiType;
-import org.blockartistry.DynSurround.internal.entity.EmotionalState;
-
+import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
- * Fires when there is an update to an entities emoji state. Will only fire
- * client side.
+ * Event raised when on the client when speech data is received.
+ * This event will only fire client side.
+ * 
+ * Can be canceled.
  */
-public class EntityEmojiEvent extends Event {
-
+@Cancelable
+public class SpeechTextEvent extends Event {
+	
 	/**
-	 * Persistent ID of the entity this event is associated with.
+	 * ID of the entity this event is associated with.
 	 */
 	public final int entityId;
+	
+	/**
+	 * The message to be displayed, or the message ID to be translated.
+	 */
+	public final String message;
+	
+	/**
+	 * Indicates whether the message should be translated prior to
+	 * display.
+	 */
+	public final boolean translate;
 
 	/**
-	 * New ActionState of the Entity.
+	 * Creates an event for a message to be displayed without modification.
 	 * 
-	 * @see org.blockartistry.DynSurround.internal.entity.ActionState
+	 * @param id Entity ID that this message is associated with
+	 * @param message The text message to display
 	 */
-	public final ActionState actionState;
-
+	public SpeechTextEvent(final int id, @Nonnull final String message) {
+		this(id, message, false);
+	}
+	
 	/**
-	 * New EmotionalState of the Entity.
+	 * Creates an event that will permit translation.  The message ID would be
+	 * provided in the message variable.  Translation occurs client side.
 	 * 
-	 * @see org.blockartistry.DynSurround.internal.entity.EmotionalState
+	 * @param id Entity ID that the message is associated with
+	 * @param message The message ID/message to be displayed
+	 * @param translate Indicates that the message is a message ID that needs translation
 	 */
-	public final EmotionalState emotionalState;
-
-	/**
-	 * New EmojiType for the Entity.
-	 * 
-	 * @see org.blockartistry.DynSurround.internal.entity.EmojiType
-	 */
-	public final EmojiType emojiType;
-
-	public EntityEmojiEvent(@Nonnull final int id, @Nonnull final ActionState action, @Nonnull final EmotionalState emotion,
-			@Nonnull final EmojiType emojiType) {
+	public SpeechTextEvent(final int id, @Nonnull final String message, final boolean translate) {
 		this.entityId = id;
-		this.actionState = action;
-		this.emotionalState = emotion;
-		this.emojiType = emojiType;
+		this.message = message;
+		this.translate = translate;
 	}
 
 }

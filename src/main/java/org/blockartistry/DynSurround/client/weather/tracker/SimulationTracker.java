@@ -32,7 +32,7 @@ import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.Weather.Properties;
 import org.blockartistry.DynSurround.data.DimensionEffectData;
-import org.blockartistry.DynSurround.internal.events.ThunderEvent;
+import org.blockartistry.DynSurround.event.ThunderEvent;
 import org.blockartistry.lib.PlayerUtils;
 import org.blockartistry.lib.TimeUtils;
 import org.blockartistry.lib.math.MathStuff;

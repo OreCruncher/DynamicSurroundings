@@ -22,60 +22,54 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.internal.events;
+package org.blockartistry.DynSurround.event;
 
 import javax.annotation.Nonnull;
 
-import net.minecraftforge.fml.common.eventhandler.Cancelable;
+import org.blockartistry.DynSurround.entity.ActionState;
+import org.blockartistry.DynSurround.entity.EmojiType;
+import org.blockartistry.DynSurround.entity.EmotionalState;
+
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
- * Event raised when on the client when speech data is received.
- * This event will only fire client side.
- * 
- * Can be canceled.
+ * Fires when there is an update to an entities emoji state. Will only fire
+ * client side.
  */
-@Cancelable
-public class SpeechTextEvent extends Event {
-	
-	/**
-	 * ID of the entity this event is associated with.
-	 */
-	public final int entityId;
-	
-	/**
-	 * The message to be displayed, or the message ID to be translated.
-	 */
-	public final String message;
-	
-	/**
-	 * Indicates whether the message should be translated prior to
-	 * display.
-	 */
-	public final boolean translate;
+public class EntityEmojiEvent extends Event {
 
 	/**
-	 * Creates an event for a message to be displayed without modification.
-	 * 
-	 * @param id Entity ID that this message is associated with
-	 * @param message The text message to display
+	 * Persistent ID of the entity this event is associated with.
 	 */
-	public SpeechTextEvent(final int id, @Nonnull final String message) {
-		this(id, message, false);
-	}
-	
+	public final int entityId;
+
 	/**
-	 * Creates an event that will permit translation.  The message ID would be
-	 * provided in the message variable.  Translation occurs client side.
+	 * New ActionState of the Entity.
 	 * 
-	 * @param id Entity ID that the message is associated with
-	 * @param message The message ID/message to be displayed
-	 * @param translate Indicates that the message is a message ID that needs translation
+	 * @see org.blockartistry.DynSurround.entity.ActionState
 	 */
-	public SpeechTextEvent(final int id, @Nonnull final String message, final boolean translate) {
+	public final ActionState actionState;
+
+	/**
+	 * New EmotionalState of the Entity.
+	 * 
+	 * @see org.blockartistry.DynSurround.entity.EmotionalState
+	 */
+	public final EmotionalState emotionalState;
+
+	/**
+	 * New EmojiType for the Entity.
+	 * 
+	 * @see org.blockartistry.DynSurround.entity.EmojiType
+	 */
+	public final EmojiType emojiType;
+
+	public EntityEmojiEvent(@Nonnull final int id, @Nonnull final ActionState action, @Nonnull final EmotionalState emotion,
+			@Nonnull final EmojiType emojiType) {
 		this.entityId = id;
-		this.message = message;
-		this.translate = translate;
+		this.actionState = action;
+		this.emotionalState = emotion;
+		this.emojiType = emojiType;
 	}
 
 }
