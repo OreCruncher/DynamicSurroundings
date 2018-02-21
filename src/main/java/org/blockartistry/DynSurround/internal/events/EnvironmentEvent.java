@@ -22,33 +22,22 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.api;
+package org.blockartistry.DynSurround.internal.events;
 
-import javax.annotation.Nonnull;
-
-import org.blockartistry.DynSurround.api.entity.ActionState;
-import org.blockartistry.DynSurround.entity.EmojiDataTables;
-
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
- * Encapsulates the configuration API available with Dynamic Surroundings.
+ * Fires when an Environment update packet is received from the server.
  */
-public final class Configure {
-	private Configure() {
-		
-	}
+public class EnvironmentEvent extends Event {
 
 	/**
-	 * Dynamic Surroundings determines what ActionState to set for an Entity based
-	 * on it's currently executing EntityAI tasks.  If a mod adds custom AI for a mob
-	 * it can be registered using this API so that it can be recognized by the
-	 * ActionState routines.
-	 * 
-	 * @param clazz EntityAIBase class for which an ActionState is being set.
-	 * @param state  ActionState to set.
+	 * Indicates if the player is within a village radius
 	 */
-	public static void addEntityAIMapping(@Nonnull final Class<? extends EntityAIBase> clazz, @Nonnull final ActionState state) {
-		EmojiDataTables.add(clazz, state);
+	public final boolean inVillage;
+
+	public EnvironmentEvent(final boolean inVillage) {
+		this.inVillage = inVillage;
 	}
+
 }

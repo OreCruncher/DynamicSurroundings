@@ -28,9 +28,9 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.api.effects.BlockEffectType;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleWaterSplash;
+import org.blockartistry.DynSurround.internal.effects.BlockEffectType;
 import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.math.MathStuff;

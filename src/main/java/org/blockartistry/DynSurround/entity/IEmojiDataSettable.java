@@ -26,10 +26,10 @@ package org.blockartistry.DynSurround.entity;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.api.entity.ActionState;
-import org.blockartistry.DynSurround.api.entity.EmojiType;
-import org.blockartistry.DynSurround.api.entity.EmotionalState;
-import org.blockartistry.DynSurround.api.entity.IEmojiData;
+import org.blockartistry.DynSurround.internal.entity.ActionState;
+import org.blockartistry.DynSurround.internal.entity.EmojiType;
+import org.blockartistry.DynSurround.internal.entity.EmotionalState;
+import org.blockartistry.DynSurround.internal.entity.IEmojiData;
 
 public interface IEmojiDataSettable extends IEmojiData {
 	void setActionState(@Nonnull final ActionState state);

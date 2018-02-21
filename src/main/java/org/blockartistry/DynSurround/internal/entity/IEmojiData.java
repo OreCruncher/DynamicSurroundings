@@ -22,15 +22,40 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.api.entity;
+package org.blockartistry.DynSurround.internal.entity;
 
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import javax.annotation.Nonnull;
 
-public class EntityCapability {
+public interface IEmojiData {
 	
-	@CapabilityInject(IEmojiData.class)
-	public static final Capability<IEmojiData> EMOJI = null;
+	/**
+	 * The unique ID of the entity this data is associated.
+	 * 
+	 * @return id of the associated entity
+	 */
+	int getEntityId();
 	
-
+	/**
+	 * The current ActionState of the entity
+	 * 
+	 * @return Current ActionState of the entity
+	 */
+	@Nonnull
+	ActionState getActionState();
+	
+	/**
+	 * The current EmotionalState of the entity
+	 * 
+	 * @return Current EmotionalState of the entity
+	 */
+	@Nonnull
+	EmotionalState getEmotionalState();
+	
+	/**
+	 * The current emoji associated with the entity
+	 * 
+	 * @return Current EmojiType of the entity
+	 */
+	@Nonnull
+	EmojiType getEmojiType();
 }

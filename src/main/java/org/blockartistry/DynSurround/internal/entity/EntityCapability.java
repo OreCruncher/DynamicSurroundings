@@ -22,22 +22,15 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.api.events;
+package org.blockartistry.DynSurround.internal.entity;
 
-import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 
-/**
- * Fires when an Environment update packet is received from the server.
- */
-public class EnvironmentEvent extends Event {
-
-	/**
-	 * Indicates if the player is within a village radius
-	 */
-	public final boolean inVillage;
-
-	public EnvironmentEvent(final boolean inVillage) {
-		this.inVillage = inVillage;
-	}
+public class EntityCapability {
+	
+	@CapabilityInject(IEmojiData.class)
+	public static final Capability<IEmojiData> EMOJI = null;
+	
 
 }

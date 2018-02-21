@@ -32,9 +32,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.api.entity.ActionState;
-import org.blockartistry.DynSurround.api.entity.EmojiType;
-import org.blockartistry.DynSurround.api.entity.EmotionalState;
+import org.blockartistry.DynSurround.internal.entity.ActionState;
+import org.blockartistry.DynSurround.internal.entity.EmojiType;
+import org.blockartistry.DynSurround.internal.entity.EmotionalState;
 import org.blockartistry.lib.compat.EntityLivingUtil;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
