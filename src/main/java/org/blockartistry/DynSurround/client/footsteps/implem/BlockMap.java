@@ -78,28 +78,31 @@ public class BlockMap {
 	private static final THashMap<String, List<MacroEntry>> macros = new THashMap<>();
 
 	static {
+		
+		final MacroEntry MESSY = new MacroEntry("messy", "MESSY_GROUND");
+		
 		List<MacroEntry> entries = new ArrayList<>();
 		entries.add(new MacroEntry(null, "NOT_EMITTER"));
-		entries.add(new MacroEntry("messy", "MESSY_GROUND"));
+		entries.add(MESSY);
 		entries.add(new MacroEntry("foliage", "straw"));
 		macros.put("#sapling", entries);
 		macros.put("#reed", entries);
 
 		entries = new ArrayList<>();
 		entries.add(new MacroEntry(null, "leaves"));
-		entries.add(new MacroEntry("messy", "MESSY_GROUND"));
+		entries.add(MESSY);
 		entries.add(new MacroEntry("foliage", "brush"));
 		macros.put("#plant", entries);
 
 		entries = new ArrayList<>();
 		entries.add(new MacroEntry(null, "leaves"));
-		entries.add(new MacroEntry("messy", "MESSY_GROUND"));
+		entries.add(MESSY);
 		entries.add(new MacroEntry("foliage", "brush_straw_transition"));
 		macros.put("#bush", entries);
 
 		entries = new ArrayList<>();
 		entries.add(new MacroEntry(null, "NOT_EMITTER"));
-		entries.add(new MacroEntry("messy", "MESSY_GROUND"));
+		entries.add(MESSY);
 		entries.add(new MacroEntry(0, "foliage", "NOT_EMITTER"));
 		entries.add(new MacroEntry(1, "foliage", "NOT_EMITTER"));
 		entries.add(new MacroEntry(2, "foliage", "brush"));
@@ -112,7 +115,7 @@ public class BlockMap {
 
 		entries = new ArrayList<>();
 		entries.add(new MacroEntry(null, "NOT_EMITTER"));
-		entries.add(new MacroEntry("messy", "MESSY_GROUND"));
+		entries.add(MESSY);
 		entries.add(new MacroEntry(0, "foliage", "NOT_EMITTER"));
 		entries.add(new MacroEntry(1, "foliage", "NOT_EMITTER"));
 		entries.add(new MacroEntry(2, "foliage", "NOT_EMITTER"));
@@ -125,7 +128,7 @@ public class BlockMap {
 
 		entries = new ArrayList<>();
 		entries.add(new MacroEntry(null, "NOT_EMITTER"));
-		entries.add(new MacroEntry("messy", "MESSY_GROUND"));
+		entries.add(MESSY);
 		entries.add(new MacroEntry(0, "foliage", "NOT_EMITTER"));
 		entries.add(new MacroEntry(1, "foliage", "NOT_EMITTER"));
 		entries.add(new MacroEntry(2, "foliage", "brush"));
@@ -136,7 +139,18 @@ public class BlockMap {
 		entries.add(new MacroEntry(null, "NOT_EMITTER"));
 		entries.add(new MacroEntry("bigger", "bluntwood"));
 		macros.put("#fence", entries);
-	}
+
+		entries = new ArrayList<>();
+		entries.add(new MacroEntry(null, "straw"));
+		entries.add(MESSY);
+		entries.add(new MacroEntry("foliage", "straw"));
+		macros.put("#vine", entries);
+
+		entries = new ArrayList<>();
+		entries.add(new MacroEntry(null, "NOT_EMITTER"));
+		entries.add(new MacroEntry("carpet", "rug"));
+		macros.put("#moss", entries);
+}
 
 	public BlockMap(@Nonnull final AcousticsManager manager) {
 		this.acousticsManager = manager;
