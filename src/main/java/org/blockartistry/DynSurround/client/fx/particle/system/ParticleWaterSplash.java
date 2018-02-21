@@ -90,7 +90,7 @@ public class ParticleWaterSplash extends ParticleJet {
 	}
 
 	private boolean setupSound() {
-		return this.isAlive() && this.emitter == null && RANDOM.nextInt(6) == 0;
+		return this.isAlive() && this.jetStrength > 2 && this.emitter == null && RANDOM.nextInt(6) == 0;
 	}
 
 	@Override

@@ -98,6 +98,9 @@ public abstract class Emitter {
 		if (this.activeSound == null) {
 			this.activeSound = createSound();
 		} else if (this.activeSound.getState().isActive()) {
+			if (!this.activeSound.canSoundBeHeard(EnvironState.getPlayerPosition())) {
+				SoundEffectHandler.INSTANCE.stopSound(this.activeSound);
+			}
 			return;
 		} else if (this.isFading()) {
 			// If we get here the sound is no longer playing and is in the
