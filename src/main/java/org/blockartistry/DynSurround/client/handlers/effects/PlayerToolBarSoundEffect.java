@@ -27,7 +27,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
@@ -55,9 +54,7 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 	protected static class HandTracker {
 
 		protected final EnumHand hand;
-
 		protected Item lastHeld = null;
-		protected String soundId = null;
 
 		public HandTracker(@Nonnull final EntityPlayer player) {
 			this(player, EnumHand.OFF_HAND);
@@ -79,9 +76,6 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 		}
 
 		protected void clearState(@Nonnull final IEntityEffectHandlerState state) {
-			if (!StringUtils.isEmpty(this.soundId))
-				state.stopSound(this.soundId);
-			this.soundId = null;
 			this.lastHeld = null;
 		}
 
@@ -92,8 +86,8 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 				final ItemStack currentStack = player.getHeldItem(this.hand);
 				final SoundEffect soundEffect = ClientRegistry.ITEMS.getEquipSound(currentStack);
 				if (soundEffect != null) {
-					final BasicSound<?> sound = state.createSound(soundEffect, player);
-					this.soundId = state.playSound(sound);
+					final BasicSound<?> snd = state.createSound(soundEffect, player);
+					state.playSound(snd);
 					this.lastHeld = currentStack.getItem();
 				}
 			}

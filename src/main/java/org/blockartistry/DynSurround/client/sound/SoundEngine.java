@@ -29,7 +29,6 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.lib.sound.BasicSound;
 
-import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -67,14 +66,6 @@ public class SoundEngine {
 
 	public boolean isSoundPlaying(@Nonnull final String soundId) {
 		return getManager().isSoundPlaying(soundId);
-	}
-
-	public void stopSound(@Nonnull final String sound) {
-		this.stopSound(sound, null);
-	}
-
-	public void stopSound(@Nonnull final String sound, @Nonnull final SoundCategory cat) {
-		getManager().stop(sound, cat);
 	}
 
 	public void stopSound(@Nonnull final BasicSound<?> sound) {

@@ -26,9 +26,7 @@ package org.blockartistry.DynSurround.client.handlers.effects;
 import java.util.List;
 import javax.annotation.Nonnull;
 
-import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.client.ClientRegistry;
-import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.EntityEffectInfo;
 import org.blockartistry.lib.effects.EntityEffect;
@@ -54,7 +52,6 @@ public class EntitySwingEffect extends EntityEffect {
 
 	protected int swingProgress = 0;
 	protected boolean isSwinging = false;
-	protected String soundId;
 
 	@Override
 	public String name() {
@@ -72,11 +69,6 @@ public class EntitySwingEffect extends EntityEffect {
 		// Is the swing in motion
 		if (entity.swingingHand != null && entity.swingProgressInt > this.swingProgress) {
 			if (!this.isSwinging) {
-				if (!StringUtils.isEmpty(this.soundId)) {
-					SoundEffectHandler.INSTANCE.stopSound(this.soundId);
-					this.soundId = null;
-				}
-
 				final ItemStack currentItem = entity.getHeldItem(entity.swingingHand);
 				final SoundEffect soundEffect = ClientRegistry.ITEMS.getSwingSound(currentItem);
 				if (soundEffect != null) {
@@ -84,8 +76,8 @@ public class EntitySwingEffect extends EntityEffect {
 					final RayTraceResult whatImHitting = new RayTrace(entity).trace(reach);
 					if (whatImHitting != null
 							&& (whatImHitting.typeOfHit == Type.ENTITY || whatImHitting.typeOfHit == Type.MISS)) {
-						final BasicSound<?> sound = this.getState().createSound(soundEffect, entity);
-						this.soundId = this.getState().playSound(sound);
+						final BasicSound<?> snd = this.getState().createSound(soundEffect, entity);
+						this.getState().playSound(snd);
 					}
 				}
 			}
