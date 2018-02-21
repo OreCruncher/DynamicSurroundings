@@ -55,7 +55,6 @@ import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -409,8 +408,8 @@ public class Generator {
 	 * print is to ride on top of the bounding box. If the block does not have a
 	 * print a null is returned.
 	 * 
-	 * @param world
-	 *            The Entity world
+	 * @param entity
+	 *            The Entity generating the print
 	 * @param pos
 	 *            The block position where the footprint is to be placed on top
 	 * @param xx
@@ -421,19 +420,22 @@ public class Generator {
 	 *         be generated
 	 */
 	@Nullable
-	protected Vec3d footstepPosition(@Nonnull final World world, @Nonnull final BlockPos pos, final double xx,
-			final double zz) {
+	protected Vec3d footstepPosition(@Nonnull final EntityLivingBase entity, @Nonnull final BlockPos pos,
+			final double xx, final double zz) {
+		final World world = entity.getEntityWorld();
 		final IBlockState state = WorldUtils.getBlockState(world, pos);
 		if (hasFootstepImprint(world, state, pos)) {
-			final double posY = pos.getY() + state.getBoundingBox(world, pos).maxY;
-			return new Vec3d(xx, posY, zz);
+			final double entityY = entity.getEntityBoundingBox().minY;
+			final double blockY = pos.getY() + state.getBoundingBox(world, pos).maxY;
+			return new Vec3d(xx, Math.max(entityY, blockY), zz);
 
 		}
 		return null;
 	}
 
-	protected boolean shouldProducePrint(@Nonnull final Entity entity) {
+	protected boolean shouldProducePrint(@Nonnull final EntityLivingBase entity) {
 		return ModOptions.player.enableFootprints && this.VAR.HAS_FOOTPRINT
+				&& (entity.onGround || !(EntityLivingBaseUtil.isJumping(entity) || entity.isAirBorne))
 				&& !entity.isInvisibleToPlayer(EnvironState.getPlayer());
 	}
 
@@ -441,12 +443,7 @@ public class Generator {
 	 * Find an association for an entities particular foot. This will fetch the
 	 * player angle and use it as a basis to find out what block is below their feet
 	 * (or which block is likely to be below their feet if the player is walking on
-	 * the edge of a block when walking over non-emitting blocks like air or
-	 * water).<br>
-	 * <br>
-	 * Returns null if no blocks are valid emitting blocks.<br>
-	 * Returns a string that begins with "_NO_ASSOCIATION" if a matching block was
-	 * found, but has no association in the blockmap.
+	 * the edge of a block when walking over non-emitting blocks like air or water).
 	 */
 	@Nonnull
 	protected Association findAssociationForPlayer(@Nonnull final EntityLivingBase entity,
@@ -466,7 +463,7 @@ public class Generator {
 		// It is possible that the association has no position, so it
 		// needs to be checked.
 		if (result != null && result.getPos() != null && shouldProducePrint(entity)) {
-			final Vec3d printPos = footstepPosition(entity.getEntityWorld(), result.getPos(), xx, zz);
+			final Vec3d printPos = footstepPosition(entity, result.getPos(), xx, zz);
 			if (printPos != null) {
 				FootprintStyle style = this.VAR.FOOTPRINT_STYLE;
 				if (entity instanceof EntityPlayer) {
