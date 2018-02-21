@@ -27,7 +27,7 @@ package org.blockartistry.DynSurround.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.internal.events.SpeechTextEvent;
+import org.blockartistry.DynSurround.event.SpeechTextEvent;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;

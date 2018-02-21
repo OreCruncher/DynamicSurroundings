@@ -25,7 +25,7 @@ package org.blockartistry.DynSurround.client.weather.tracker;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.internal.events.WeatherUpdateEvent;
+import org.blockartistry.DynSurround.event.WeatherUpdateEvent;
 
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;

@@ -30,7 +30,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
-import org.blockartistry.DynSurround.internal.events.ThunderEvent;
+import org.blockartistry.DynSurround.event.ThunderEvent;
 import org.blockartistry.lib.sound.BasicSound;
 
 import net.minecraft.entity.player.EntityPlayer;

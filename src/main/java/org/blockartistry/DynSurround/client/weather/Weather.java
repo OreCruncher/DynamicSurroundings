@@ -32,7 +32,7 @@ import org.blockartistry.DynSurround.client.weather.tracker.ServerDrivenTracker;
 import org.blockartistry.DynSurround.client.weather.tracker.SimulationTracker;
 import org.blockartistry.DynSurround.client.weather.tracker.Tracker;
 import org.blockartistry.DynSurround.data.DimensionEffectData;
-import org.blockartistry.DynSurround.internal.events.WeatherUpdateEvent;
+import org.blockartistry.DynSurround.event.WeatherUpdateEvent;
 import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.client.Minecraft;

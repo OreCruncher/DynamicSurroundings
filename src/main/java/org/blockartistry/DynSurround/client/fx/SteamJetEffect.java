@@ -31,7 +31,6 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleSteamJet;
-import org.blockartistry.DynSurround.internal.effects.BlockEffectType;
 import org.blockartistry.lib.BlockStateProvider;
 import com.google.common.collect.Sets;
 

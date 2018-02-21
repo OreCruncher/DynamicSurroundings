@@ -30,10 +30,10 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.fx.particle.mote.IParticleMote;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.entity.EmojiType;
+import org.blockartistry.DynSurround.entity.EntityCapability;
 import org.blockartistry.DynSurround.entity.IEmojiDataSettable;
-import org.blockartistry.DynSurround.internal.entity.EmojiType;
-import org.blockartistry.DynSurround.internal.entity.EntityCapability;
-import org.blockartistry.DynSurround.internal.events.EntityEmojiEvent;
+import org.blockartistry.DynSurround.event.EntityEmojiEvent;
 import org.blockartistry.lib.WorldUtils;
 
 import gnu.trove.map.hash.TIntObjectHashMap;

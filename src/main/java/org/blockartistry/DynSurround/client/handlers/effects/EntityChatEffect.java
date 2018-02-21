@@ -37,7 +37,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.internal.events.SpeechTextEvent;
+import org.blockartistry.DynSurround.event.SpeechTextEvent;
 import org.blockartistry.DynSurround.registry.EntityEffectInfo;
 import org.blockartistry.lib.Translations;
 import org.blockartistry.lib.WeightTable;
