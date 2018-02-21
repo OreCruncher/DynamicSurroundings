@@ -30,7 +30,6 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
@@ -106,10 +105,10 @@ public class Generator {
 
 	// We calc our own because of inconsistencies with Minecraft
 	protected double distanceWalkedOnStepModified;
-
 	protected int pedometer;
 
-	protected final ObjectArray<Footprint> footprints = new ObjectArray<Footprint>();
+	protected static final ObjectArray<IAcoustic> accents = new ObjectArray<>(4);
+	protected final ObjectArray<Footprint> footprints = new ObjectArray<>(4);
 	protected final SoundPlayer soundPlayer;
 
 	public Generator(@Nonnull final Variator var) {
@@ -481,21 +480,17 @@ public class Generator {
 	 * Find an association for an entity, and a location. This will try to find the
 	 * best matching block on that location, or near that location, for instance if
 	 * the player is walking on the edge of a block when walking over non-emitting
-	 * blocks like air or water)<br>
-	 * <br>
-	 * Returns null if no blocks are valid emitting blocks.<br>
-	 * Returns a string that begins with "_NO_ASSOCIATION" if a matching block was
-	 * found, but has no association in the blockmap.
+	 * blocks like air or water)
+	 * 
+	 * Returns null if no blocks are valid emitting blocks. Returns a string that
+	 * begins with "_NO_ASSOCIATION" if a matching block was found, but has no
+	 * association in the blockmap.
 	 */
 	@Nonnull
 	protected Association findAssociationForLocation(@Nonnull final EntityLivingBase entity,
 			@Nonnull final BlockPos pos) {
 
 		final World world = entity.getEntityWorld();
-
-		if (entity.isInWater())
-			DSurround.log().debug(
-					"WARNING!!! Playing a sound while in the water! This is supposed to be halted by the stopping conditions!!");
 
 		Association worked = findAssociationForBlock(world, pos);
 
@@ -533,18 +528,19 @@ public class Generator {
 				// | . |
 				// < maxofX- maxofX+ >
 				// Take the maximum border to produce the sound
-				if (isXdangMax) { // If we are in the positive border, add 1,
-									// else subtract 1
+				if (isXdangMax) {
+					// If we are in the positive border, add 1,
+					// else subtract 1
 					worked = findAssociationForBlock(world, xdang > 0 ? pos.east() : pos.west());
 				} else {
 					worked = findAssociationForBlock(world, zdang > 0 ? pos.south() : pos.north());
 				}
 
 				// If that didn't work, then maybe the footstep hit in the
-				// direction of walking
-				// Try with the other closest block
-				if (worked == null) { // Take the maximum direction and try with
-										// the orthogonal direction of it
+				// direction of walking. Try with the other closest block
+				if (worked == null) {
+					// Take the maximum direction and try with
+					// the orthogonal direction of it
 					if (isXdangMax) {
 						worked = findAssociationForBlock(world, zdang > 0 ? pos.south() : pos.north());
 					} else {
@@ -560,11 +556,12 @@ public class Generator {
 	 * Find an association for a certain block assuming the player is standing on
 	 * it. This will sometimes select the block above because some block act like
 	 * carpets. This also applies when the block targeted by the location is
-	 * actually not emitting, such as lilypads on water.<br>
-	 * <br>
+	 * actually not emitting, such as lilypads on water.
+	 * 
 	 * Returns null if the block is not a valid emitting block (this causes the
 	 * engine to continue looking for valid blocks). This also happens if the carpet
-	 * is non-emitting.<br>
+	 * is non-emitting.
+	 * 
 	 * Returns a string that begins with "_NO_ASSOCIATION" if the block is valid,
 	 * but has no association in the blockmap. If the carpet was selected, this
 	 * solves to the carpet.
@@ -698,16 +695,16 @@ public class Generator {
 	 * aspects, such as armor being worn.
 	 */
 	@Nullable
-	protected Association addSoundOverlay(@Nonnull final EntityLivingBase entity, @Nullable final Association assoc) {
+	protected Association addSoundOverlay(@Nonnull final EntityLivingBase entity, @Nullable Association assoc) {
 		// Don't apply overlays if the entity is not on the ground
 		if (entity.onGround) {
-			final ObjectArray<IAcoustic> accents = new ObjectArray<>();
+			accents.clear();
 			final BlockPos pos = assoc != null ? assoc.getPos() : null;
 			FootstepAccents.provide(entity, pos, accents);
 			if (accents.size() > 0) {
-				final Association a = assoc == null ? new Association() : assoc;
-				accents.forEvery(acoustic -> a.add(acoustic));
-				return a;
+				if (assoc == null)
+					assoc = new Association();
+				assoc.add(accents);
 			}
 		}
 
