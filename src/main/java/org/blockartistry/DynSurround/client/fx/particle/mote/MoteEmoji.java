@@ -30,8 +30,8 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.entity.CapabilityEmojiData;
 import org.blockartistry.DynSurround.entity.EmojiType;
-import org.blockartistry.DynSurround.entity.EntityCapability;
 import org.blockartistry.DynSurround.entity.IEmojiData;
 import org.blockartistry.lib.math.MathStuff;
 
@@ -94,7 +94,7 @@ public class MoteEmoji extends MoteMotionBase {
 
 		this.scale = 0.125F;
 
-		this.emoji = entity.getCapability(EntityCapability.EMOJI, null);
+		this.emoji = entity.getCapability(CapabilityEmojiData.EMOJI, null);
 	}
 
 	protected boolean shouldExpire() {
