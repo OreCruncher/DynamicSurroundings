@@ -1,0 +1,54 @@
+{
+	"itemConfig": {
+		"axeSound": [
+			"erebus.items.ItemAxeJade",
+			"erebus.items.ItemJadePaxel",
+			"erebus.items.ItemWarHammer"
+		],
+		"shieldSound": [
+			"erebus.items.ItemErebusShield"
+		],
+		"lightArmor": [
+		],
+		"mediumArmor": [
+		],
+		"crystalArmor": [
+			"erebus:jade_boots",
+			"erebus:jade_leggings",
+			"erebus:jade_chestplate",
+			"erebus:jade_helmet"
+		],
+		"heavyArmor": [
+		]
+	},
+	"dimensions": [
+		{
+			"name": "EREBUS",
+			"seaLevel": 20,
+			"weather": false,
+			"fog": false,
+			"haze": false,
+			"aurora": false
+		}
+	],
+	"footsteps": {
+		"erebus:mud": "mud",
+		"erebus:ore_temple": "ore",
+		"erebus:small_plant": "#plant",
+		"erebus:dark_fruit_vine": "#vine",
+		"erebus:thorns": "#vine",
+		"erebus:double_plant": "straw",
+		"erebus:double_plant+messy": "MESSY_GROUND",
+		"erebus:double_plant+foliage": "straw",
+		"erebus:giant_flower": "organic_dry",
+		"erebus:giant_flower_stigma": "organic_dry",
+		"erebus:wall_plants": "#moss",
+		"erebus:algae": "NOT_EMITTER",
+		"erebus:grandmas_shoes_mushroom_block": "organic",
+		"erebus:sarcastic_czech_mushroom_block": "organic",
+		"erebus:dark_capped_mushroom_block": "organic",
+		"erebus:dutch_cap_mushroom_block": "organic",
+		"erebus:swamp_berry_bush": "leaves",
+		"erebus:swamp_vent": "grass"
+	}
+}
