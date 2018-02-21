@@ -28,11 +28,11 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.api.events.ThunderEvent;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.Weather.Properties;
 import org.blockartistry.DynSurround.data.DimensionEffectData;
+import org.blockartistry.DynSurround.internal.events.ThunderEvent;
 import org.blockartistry.lib.PlayerUtils;
 import org.blockartistry.lib.TimeUtils;
 import org.blockartistry.lib.math.MathStuff;

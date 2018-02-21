@@ -22,43 +22,54 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.api.events;
+package org.blockartistry.DynSurround.internal.events;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.eventhandler.Cancelable;
+import org.blockartistry.DynSurround.internal.entity.ActionState;
+import org.blockartistry.DynSurround.internal.entity.EmojiType;
+import org.blockartistry.DynSurround.internal.entity.EmotionalState;
+
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
- * Event raised when a server requests that thunder and visuals
- * play.  This event will only fire client side.
- * 
- * Can be canceled.
+ * Fires when there is an update to an entities emoji state. Will only fire
+ * client side.
  */
-@Cancelable
-public class ThunderEvent extends Event {
-	
+public class EntityEmojiEvent extends Event {
+
 	/**
-	 * The world in which the event is occuring.
+	 * Persistent ID of the entity this event is associated with.
 	 */
-	public final World world;
-	
+	public final int entityId;
+
 	/**
-	 * Whether a flash will be played.
+	 * New ActionState of the Entity.
+	 * 
+	 * @see org.blockartistry.DynSurround.internal.entity.ActionState
 	 */
-	public final boolean doFlash;
-	
+	public final ActionState actionState;
+
 	/**
-	 * Epicenter of the event
+	 * New EmotionalState of the Entity.
+	 * 
+	 * @see org.blockartistry.DynSurround.internal.entity.EmotionalState
 	 */
-	public final BlockPos location;
-	
-	public ThunderEvent(@Nonnull final World world, final boolean doFlash, @Nonnull final BlockPos pos) {
-		this.world = world;
-		this.doFlash = doFlash;
-		this.location = pos;
+	public final EmotionalState emotionalState;
+
+	/**
+	 * New EmojiType for the Entity.
+	 * 
+	 * @see org.blockartistry.DynSurround.internal.entity.EmojiType
+	 */
+	public final EmojiType emojiType;
+
+	public EntityEmojiEvent(@Nonnull final int id, @Nonnull final ActionState action, @Nonnull final EmotionalState emotion,
+			@Nonnull final EmojiType emojiType) {
+		this.entityId = id;
+		this.actionState = action;
+		this.emotionalState = emotion;
+		this.emojiType = emojiType;
 	}
 
 }

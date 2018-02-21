@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.api.entity;
+package org.blockartistry.DynSurround.internal.entity;
 
 import javax.annotation.Nonnull;
 import gnu.trove.map.hash.TIntObjectHashMap;

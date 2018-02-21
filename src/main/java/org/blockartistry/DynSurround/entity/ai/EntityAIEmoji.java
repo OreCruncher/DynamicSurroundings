@@ -24,10 +24,10 @@
 
 package org.blockartistry.DynSurround.entity.ai;
 
-import org.blockartistry.DynSurround.api.entity.EmotionalState;
 import org.blockartistry.DynSurround.entity.CapabilityEmojiData;
 import org.blockartistry.DynSurround.entity.EmojiDataTables;
 import org.blockartistry.DynSurround.entity.IEmojiDataSettable;
+import org.blockartistry.DynSurround.internal.entity.EmotionalState;
 import org.blockartistry.lib.EntityUtils;
 
 import net.minecraft.entity.EntityLiving;

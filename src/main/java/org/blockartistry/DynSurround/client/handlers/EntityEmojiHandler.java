@@ -27,13 +27,13 @@ package org.blockartistry.DynSurround.client.handlers;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.api.entity.EmojiType;
-import org.blockartistry.DynSurround.api.entity.EntityCapability;
-import org.blockartistry.DynSurround.api.events.EntityEmojiEvent;
 import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.fx.particle.mote.IParticleMote;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.entity.IEmojiDataSettable;
+import org.blockartistry.DynSurround.internal.entity.EmojiType;
+import org.blockartistry.DynSurround.internal.entity.EntityCapability;
+import org.blockartistry.DynSurround.internal.events.EntityEmojiEvent;
 import org.blockartistry.lib.WorldUtils;
 
 import gnu.trove.map.hash.TIntObjectHashMap;

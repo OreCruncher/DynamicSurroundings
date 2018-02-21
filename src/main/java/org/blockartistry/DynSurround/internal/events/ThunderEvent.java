@@ -22,54 +22,43 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.api.events;
+package org.blockartistry.DynSurround.internal.events;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.api.entity.ActionState;
-import org.blockartistry.DynSurround.api.entity.EmojiType;
-import org.blockartistry.DynSurround.api.entity.EmotionalState;
-
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
- * Fires when there is an update to an entities emoji state. Will only fire
- * client side.
+ * Event raised when a server requests that thunder and visuals
+ * play.  This event will only fire client side.
+ * 
+ * Can be canceled.
  */
-public class EntityEmojiEvent extends Event {
-
+@Cancelable
+public class ThunderEvent extends Event {
+	
 	/**
-	 * Persistent ID of the entity this event is associated with.
+	 * The world in which the event is occuring.
 	 */
-	public final int entityId;
-
+	public final World world;
+	
 	/**
-	 * New ActionState of the Entity.
-	 * 
-	 * @see org.blockartistry.DynSurround.api.entity.ActionState
+	 * Whether a flash will be played.
 	 */
-	public final ActionState actionState;
-
+	public final boolean doFlash;
+	
 	/**
-	 * New EmotionalState of the Entity.
-	 * 
-	 * @see org.blockartistry.DynSurround.api.entity.EmotionalState
+	 * Epicenter of the event
 	 */
-	public final EmotionalState emotionalState;
-
-	/**
-	 * New EmojiType for the Entity.
-	 * 
-	 * @see org.blockartistry.DynSurround.api.entity.EmojiType
-	 */
-	public final EmojiType emojiType;
-
-	public EntityEmojiEvent(@Nonnull final int id, @Nonnull final ActionState action, @Nonnull final EmotionalState emotion,
-			@Nonnull final EmojiType emojiType) {
-		this.entityId = id;
-		this.actionState = action;
-		this.emotionalState = emotion;
-		this.emojiType = emojiType;
+	public final BlockPos location;
+	
+	public ThunderEvent(@Nonnull final World world, final boolean doFlash, @Nonnull final BlockPos pos) {
+		this.world = world;
+		this.doFlash = doFlash;
+		this.location = pos;
 	}
 
 }

@@ -28,7 +28,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.api.effects.BlockEffectType;
+import org.blockartistry.DynSurround.internal.effects.BlockEffectType;
 import org.blockartistry.lib.BlockStateProvider;
 
 import net.minecraft.block.state.IBlockState;
