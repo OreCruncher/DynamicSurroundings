@@ -44,6 +44,7 @@ import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -122,10 +123,10 @@ public final class ParticleCollections {
 
 	@Nullable
 	public static IParticleMote addFootprint(@Nonnull final FootprintStyle style, @Nonnull final World world,
-			final double x, final double y, final double z, final float rot, final float scale, final boolean isRight) {
+			final Vec3d loc, final float rot, final float scale, final boolean isRight) {
 		IParticleMote mote = null;
 		if (thePrints.get().canFit()) {
-			mote = new MoteFootprint(style, world, x, y, z, rot, scale, isRight);
+			mote = new MoteFootprint(style, world, loc.xCoord, loc.yCoord, loc.zCoord, rot, scale, isRight);
 			thePrints.get().addParticle(mote);
 		}
 		return mote;
