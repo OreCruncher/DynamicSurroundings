@@ -658,37 +658,22 @@ public class Generator {
 		return entity.isInWater();
 	}
 
-	/**
-	 * Find an association for a certain block assuming the player is standing on
-	 * it, using a custom strategy which strategies are defined by the solver.
-	 */
-	@Nonnull
-	protected Association findAssociationMessyFoliage(@Nonnull World world, @Nonnull final BlockPos pos) {
-
+	@Nullable
+	protected Association findAssociationMessyFoliage(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		Association result = null;
 		final BlockPos up = pos.up();
 		final IBlockState above = WorldUtils.getBlockState(world, up);
 
-		if (above == AIR_STATE)
-			return null;
+		if (above != AIR_STATE) {
+			IAcoustic[] acoustics = this.blockMap.getBlockAcoustics(world, above, up, Substrate.MESSY);
+			if (acoustics == AcousticsManager.MESSY_GROUND) {
+				acoustics = this.blockMap.getBlockAcoustics(world, above, up, Substrate.FOLIAGE);
+				if (acoustics != null && acoustics != AcousticsManager.NOT_EMITTER)
+					result = new Association(acoustics);
 
-		IAcoustic[] association = null;
-		boolean found = false;
-
-		IAcoustic[] foliage = this.blockMap.getBlockAcoustics(world, above, up, Substrate.FOLIAGE);
-		if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
-			// we discard the normal block association, and mark the foliage as
-			// detected
-			association = foliage;
-			IAcoustic[] isMessy = this.blockMap.getBlockAcoustics(world, above, up, Substrate.MESSY);
-
-			if (isMessy != null && isMessy == AcousticsManager.MESSY_GROUND)
-				found = true;
+			}
 		}
-
-		if (found && association != null) {
-			return association == AcousticsManager.NOT_EMITTER ? null : new Association(association);
-		}
-		return null;
+		return result;
 	}
 
 	/**
