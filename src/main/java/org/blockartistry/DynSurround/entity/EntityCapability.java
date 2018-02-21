@@ -22,43 +22,15 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.internal.events;
+package org.blockartistry.DynSurround.entity;
 
-import javax.annotation.Nonnull;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.eventhandler.Cancelable;
-import net.minecraftforge.fml.common.eventhandler.Event;
-
-/**
- * Event raised when a server requests that thunder and visuals
- * play.  This event will only fire client side.
- * 
- * Can be canceled.
- */
-@Cancelable
-public class ThunderEvent extends Event {
+public class EntityCapability {
 	
-	/**
-	 * The world in which the event is occuring.
-	 */
-	public final World world;
+	@CapabilityInject(IEmojiData.class)
+	public static final Capability<IEmojiData> EMOJI = null;
 	
-	/**
-	 * Whether a flash will be played.
-	 */
-	public final boolean doFlash;
-	
-	/**
-	 * Epicenter of the event
-	 */
-	public final BlockPos location;
-	
-	public ThunderEvent(@Nonnull final World world, final boolean doFlash, @Nonnull final BlockPos pos) {
-		this.world = world;
-		this.doFlash = doFlash;
-		this.location = pos;
-	}
 
 }

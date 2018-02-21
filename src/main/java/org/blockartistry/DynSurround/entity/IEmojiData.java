@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.internal.entity;
+package org.blockartistry.DynSurround.entity;
 
 import javax.annotation.Nonnull;
 

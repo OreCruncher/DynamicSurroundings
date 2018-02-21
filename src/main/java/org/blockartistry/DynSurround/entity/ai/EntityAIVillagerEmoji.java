@@ -26,7 +26,7 @@ package org.blockartistry.DynSurround.entity.ai;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.internal.entity.ActionState;
+import org.blockartistry.DynSurround.entity.ActionState;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityVillager;

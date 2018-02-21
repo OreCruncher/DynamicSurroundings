@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.internal.effects;
+package org.blockartistry.DynSurround.client.fx;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -32,14 +32,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.fx.BlockEffect;
-import org.blockartistry.DynSurround.client.fx.BubbleJetEffect;
-import org.blockartistry.DynSurround.client.fx.DustJetEffect;
-import org.blockartistry.DynSurround.client.fx.FireFlyEffect;
-import org.blockartistry.DynSurround.client.fx.FireJetEffect;
-import org.blockartistry.DynSurround.client.fx.FountainJetEffect;
-import org.blockartistry.DynSurround.client.fx.SteamJetEffect;
-import org.blockartistry.DynSurround.client.fx.WaterSplashJetEffect;
 
 /**
  * Describes the various types of block effects that can be generated.

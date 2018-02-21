@@ -38,7 +38,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.handlers.bubbles.EntityBubbleContext;
 import org.blockartistry.DynSurround.client.handlers.bubbles.SpeechBubbleData;
-import org.blockartistry.DynSurround.internal.events.SpeechTextEvent;
+import org.blockartistry.DynSurround.event.SpeechTextEvent;
 import org.blockartistry.lib.Translations;
 import org.blockartistry.lib.WorldUtils;
 

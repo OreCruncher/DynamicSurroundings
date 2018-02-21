@@ -30,9 +30,9 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.internal.entity.EmojiType;
-import org.blockartistry.DynSurround.internal.entity.EntityCapability;
-import org.blockartistry.DynSurround.internal.entity.IEmojiData;
+import org.blockartistry.DynSurround.entity.EmojiType;
+import org.blockartistry.DynSurround.entity.EntityCapability;
+import org.blockartistry.DynSurround.entity.IEmojiData;
 import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.client.renderer.BufferBuilder;

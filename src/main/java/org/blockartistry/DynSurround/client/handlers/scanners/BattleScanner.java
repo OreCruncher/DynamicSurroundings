@@ -25,9 +25,9 @@
 package org.blockartistry.DynSurround.client.handlers.scanners;
 
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.entity.ActionState;
 import org.blockartistry.DynSurround.entity.CapabilityEmojiData;
-import org.blockartistry.DynSurround.internal.entity.ActionState;
-import org.blockartistry.DynSurround.internal.entity.IEmojiData;
+import org.blockartistry.DynSurround.entity.IEmojiData;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;

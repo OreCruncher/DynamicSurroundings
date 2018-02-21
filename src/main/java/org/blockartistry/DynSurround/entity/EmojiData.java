@@ -26,9 +26,6 @@ package org.blockartistry.DynSurround.entity;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.internal.entity.ActionState;
-import org.blockartistry.DynSurround.internal.entity.EmojiType;
-import org.blockartistry.DynSurround.internal.entity.EmotionalState;
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.network.PacketEntityEmote;
 
