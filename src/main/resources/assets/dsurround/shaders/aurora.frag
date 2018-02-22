@@ -130,7 +130,7 @@ void main() {
 	// Aurora (with some transformation)
 	float s = 0.1 * sin(time);
 	//float f = 0.3 + 0.4 * pnoise(vec2(5.0 * uv.x, 0.3 * time), 1);
-	float f = 0.4 * pnoise(vec2(5.0 * uv.x, 0.3 * time), 1);
+	float f = 0.15 * pnoise(vec2(5.0 * uv.x, 0.3 * time), 1);
 	vec2 aco = co;
 	aco.y -= f;  // This affects height of rendering
 	// aco *= 10.0 * uv.x + 5.0;
