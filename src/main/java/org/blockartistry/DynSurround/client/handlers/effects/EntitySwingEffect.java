@@ -37,7 +37,6 @@ import org.blockartistry.lib.sound.BasicSound;
 
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityBoat;
@@ -72,10 +71,8 @@ public class EntitySwingEffect extends EntityEffect {
 				final ItemStack currentItem = entity.getHeldItem(entity.swingingHand);
 				final SoundEffect soundEffect = ClientRegistry.ITEMS.getSwingSound(currentItem);
 				if (soundEffect != null) {
-					final float reach = Minecraft.getMinecraft().playerController.getBlockReachDistance();
-					final RayTraceResult whatImHitting = new RayTrace(entity).trace(reach);
-					if (whatImHitting != null
-							&& (whatImHitting.typeOfHit == Type.ENTITY || whatImHitting.typeOfHit == Type.MISS)) {
+					final RayTraceResult whatImHitting = RayTrace.trace(entity);
+					if (whatImHitting == null || whatImHitting.typeOfHit != Type.BLOCK) {
 						final BasicSound<?> snd = this.getState().createSound(soundEffect, entity);
 						this.getState().playSound(snd);
 					}
