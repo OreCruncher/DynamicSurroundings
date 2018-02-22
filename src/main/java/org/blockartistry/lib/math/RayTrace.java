@@ -32,6 +32,8 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -45,28 +47,27 @@ import net.minecraft.world.World;
  * works similar to the getMouseOver() code, but tweaked to be able to plug in
  * any Entity.
  */
-public class RayTrace {
+public final class RayTrace {
 
-	protected final Entity entity;
+	private RayTrace() {
 
-	public RayTrace(@Nonnull final Entity entity) {
-		this.entity = entity;
 	}
 
-	public RayTraceResult trace(float range) {
-		return this.trace(range, 1F);
-	}
+	public static RayTraceResult trace(@Nonnull final EntityLivingBase entity) {
 
-	public RayTraceResult trace(final float range, final float partialTicks) {
-
-		final Entity entity = this.entity;
-		final World world = this.entity.getEntityWorld();
-
-		final Vec3d eyes = entity.getPositionEyes(partialTicks);
-		final Vec3d look = entity.getLook(partialTicks); // 1.0F?
+		final double range;
+		if (entity instanceof EntityPlayer) {
+			range = 4F;
+		} else {
+			// From EntityAIAttackMelee::getAttackReachSqr - approximate
+			range = entity.width * 2F + 0.6F; // 0.6 == default entity width
+		}
+		final World world = entity.getEntityWorld();
+		final Vec3d eyes = entity.getPositionEyes(1F);
+		final Vec3d look = entity.getLook(1F); // 1.0F?
 		final Vec3d rangedLook = eyes.addVector(look.xCoord * range, look.yCoord * range, look.zCoord * range);
 
-		RayTraceResult traceResult = entity.rayTrace(range, partialTicks);
+		RayTraceResult traceResult = entity.rayTrace(range, 1F);
 
 		Entity pointedEntity = null;
 		boolean flag = false;
@@ -81,14 +82,15 @@ public class RayTrace {
 		}
 
 		Vec3d hitLocation = null;
-		List<Entity> list = world.getEntitiesInAABBexcluding(entity,
-				entity.getEntityBoundingBox().addCoord(look.xCoord * range, look.yCoord * range, look.zCoord * range)
-						.expand(1.0D, 1.0D, 1.0D),
-				Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
-					public boolean apply(@Nullable final Entity e) {
-						return e != null && e.canBeCollidedWith();
-					}
-				}));
+		List<Entity> list = world
+				.getEntitiesInAABBexcluding(
+						entity, entity.getEntityBoundingBox().expand(look.xCoord * range, look.yCoord * range, look.zCoord * range)
+								.expand(1.0D, 1.0D, 1.0D),
+						Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
+							public boolean apply(@Nullable final Entity e) {
+								return e != null && e.canBeCollidedWith();
+							}
+						}));
 
 		double d2 = range1;
 
