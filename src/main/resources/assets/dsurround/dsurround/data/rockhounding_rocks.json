@@ -1,0 +1,22 @@
+{
+	"footsteps": {
+		"rockhounding_rocks:lanterns_a": "stoneutility",
+		"rockhounding_rocks:lanterns_a+bigger": "stoneutility",
+		"rockhounding_rocks:lanterns_b": "stoneutility",
+		"rockhounding_rocks:lanterns_b+bigger": "stoneutility",
+		"rockhounding_rocks:lanterns_c": "stoneutility",
+		"rockhounding_rocks:lanterns_c+bigger": "stoneutility",
+		"rockhounding_rocks:lanterns_d": "stoneutility",
+		"rockhounding_rocks:lanterns_d+bigger": "stoneutility",
+		"rockhounding_rocks:lanterns_e": "stoneutility",
+		"rockhounding_rocks:lanterns_e+bigger": "stoneutility",
+		"rockhounding_rocks:lanterns_f": "stoneutility",
+		"rockhounding_rocks:lanterns_f+bigger": "stoneutility",
+		"rockhounding_rocks:lanterns_g": "stoneutility",
+		"rockhounding_rocks:lanterns_g+bigger": "stoneutility",
+		"rockhounding_rocks:lanterns_clay": "sandstone",
+		"rockhounding_rocks:lanterns_clay+bigger": "sandstone",
+		"rockhounding_rocks:lanterns_vanilla": "brickstone",
+		"rockhounding_rocks:lanterns_vanilla+bigger": "brickstone"
+	}
+}
