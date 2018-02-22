@@ -24,15 +24,16 @@
 
 package org.blockartistry.DynSurround.client.fx.particle.mote;
 
+import java.util.function.Predicate;
+
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.fx.particle.ParticleBase;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.gfx.OpenGlState;
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -45,21 +46,21 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ParticleCollection extends Particle {
+public class ParticleCollection extends ParticleBase {
 
 	/**
-	 * Factory interface for creating particle collection instances. Used by the
-	 * ParticleCollections manager.
+	 * Predicate used to update a mote and return whether it is dead or not.
 	 */
-	public static interface ICollectionFactory {
-		ParticleCollection create(@Nonnull final World world, @Nonnull final ResourceLocation texture);
-	}
+	private static final Predicate<IParticleMote> UPDATE_REMOVE = mote -> {
+		mote.onUpdate();
+		return !mote.isAlive();
+	};
 
 	protected static final int MAX_PARTICLES = 4000;
-	protected static final int ALLOCATION_SIZE = 1024;
+	protected static final int ALLOCATION_SIZE = 128;
 	protected static final int TICK_GRACE = 2;
 
-	protected final ObjectArray<IParticleMote> myParticles = new ObjectArray<IParticleMote>(ALLOCATION_SIZE);
+	protected final ObjectArray<IParticleMote> myParticles = new ObjectArray<>(ALLOCATION_SIZE);
 	protected final ResourceLocation texture;
 
 	protected int lastTickUpdate;
@@ -71,10 +72,6 @@ public class ParticleCollection extends Particle {
 		this.canCollide = false;
 		this.texture = tex;
 		this.lastTickUpdate = EnvironState.getTickCounter();
-	}
-
-	protected void bindTexture(@Nonnull final ResourceLocation resource) {
-		Minecraft.getMinecraft().getTextureManager().bindTexture(resource);
 	}
 
 	public boolean canFit() {
@@ -111,7 +108,7 @@ public class ParticleCollection extends Particle {
 		this.lastTickUpdate = EnvironState.getTickCounter();
 
 		// Update state and remove the dead ones
-		this.myParticles.removeIf(IParticleMote.UPDATE_REMOVE);
+		this.myParticles.removeIf(UPDATE_REMOVE);
 
 		if (this.shouldDie()) {
 			this.setExpired();
@@ -152,11 +149,20 @@ public class ParticleCollection extends Particle {
 
 	protected void postRender() {
 		OpenGlState.pop(this.glState);
+		this.glState = null;
 	}
 
 	@Override
 	public int getFXLayer() {
 		return 3;
+	}
+
+	/**
+	 * Factory interface for creating particle collection instances. Used by the
+	 * ParticleCollections manager.
+	 */
+	public static interface ICollectionFactory {
+		ParticleCollection create(@Nonnull final World world, @Nonnull final ResourceLocation texture);
 	}
 
 	public static final ICollectionFactory FACTORY = (world, texture) -> {
