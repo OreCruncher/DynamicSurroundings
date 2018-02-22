@@ -24,6 +24,8 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
+import javax.annotation.Nonnull;
+
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.collections.ObjectArray;
@@ -31,6 +33,7 @@ import org.blockartistry.lib.compat.EntityLivingBaseUtil;
 import org.blockartistry.lib.math.TimerEMA;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -45,6 +48,7 @@ public class EffectManager {
 
 	private final ObjectArray<EffectHandlerBase> effectHandlers = new ObjectArray<EffectHandlerBase>();
 	private TimerEMA computeTime;
+	private boolean isReadyToGo;
 
 	private EffectManager() {
 	}
@@ -98,17 +102,36 @@ public class EffectManager {
 		}
 	}
 
+	// All the strange crap I have seen...
+	protected boolean checkReady(@Nonnull final TickEvent.PlayerTickEvent event) {
+		if (Minecraft.getMinecraft().gameSettings == null)
+			return false;
+
+		if (Minecraft.getMinecraft().getRenderManager().options == null)
+			return false;
+
+		final EntityPlayerSP player = Minecraft.getMinecraft().player;
+
+		if (player == null || player.getEntityWorld() == null)
+			return false;
+
+		if (event.player == null || event.player.getEntityWorld() == null)
+			return false;
+
+		return true;
+	}
+
 	@SubscribeEvent
-	public void playerTick(final TickEvent.PlayerTickEvent event) {
+	public void playerTick(@Nonnull final TickEvent.PlayerTickEvent event) {
 
 		if (event.side == Side.SERVER || event.phase == Phase.END || Minecraft.getMinecraft().isGamePaused())
 			return;
 
-		if (event.player == null || event.player.getEntityWorld() == null)
-			return;
-
-		if (event.player != Minecraft.getMinecraft().player)
-			return;
+		if (!this.isReadyToGo) {
+			this.isReadyToGo = checkReady(event);
+			if (!this.isReadyToGo)
+				return;
+		}
 
 		final long start = System.nanoTime();
 

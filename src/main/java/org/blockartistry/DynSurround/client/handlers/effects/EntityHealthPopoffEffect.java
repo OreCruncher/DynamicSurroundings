@@ -41,7 +41,6 @@ import org.blockartistry.lib.random.XorShiftRandom;
 
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -105,8 +104,7 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 			this.lastHealth = entity.getHealth();
 
 			// Don't display if it is the current player in first person view
-			if (!EnvironState.isPlayer(subject)
-					|| Minecraft.getMinecraft().getRenderManager().options.thirdPersonView != 0) {
+			if (!EnvironState.isPlayer(subject) || !this.isFirstPersonView()) {
 
 				final int delta = Math.max(1, MathStuff.abs(adjustment));
 				final int criticalAmount = (int) (entity.getMaxHealth() / 2.5F);
