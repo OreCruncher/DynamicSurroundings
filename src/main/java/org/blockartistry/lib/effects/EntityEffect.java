@@ -25,6 +25,8 @@ package org.blockartistry.lib.effects;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -44,7 +46,7 @@ public abstract class EntityEffect {
 	public EntityEffect() {
 
 	}
-	
+
 	/**
 	 * Returns the name of the handler
 	 * 
@@ -80,7 +82,7 @@ public abstract class EntityEffect {
 	 * results. Called once per tick.
 	 */
 	public abstract void update(@Nonnull final Entity subject);
-	
+
 	/**
 	 * Indicates to the EntityEffectHandler that the EntityEffect wants to be called
 	 * one last time after the Entity dies.
@@ -90,11 +92,21 @@ public abstract class EntityEffect {
 	}
 
 	/**
-	 * Called when the EntityEffectHandler is cleaning up giving the EntityEffect
-	 * a chance to do some house cleaning, like unregistering events.
+	 * Called when the EntityEffectHandler is cleaning up giving the EntityEffect a
+	 * chance to do some house cleaning, like unregistering events.
 	 */
 	public void die() {
-		
+
+	}
+
+	/**
+	 * Indicates if the keyboard jockey is in 1st person view.
+	 * 
+	 * @return true if in first person view, false otherwise
+	 */
+	public boolean isFirstPersonView() {
+		final GameSettings settings = Minecraft.getMinecraft().getRenderManager().options;
+		return settings == null || settings.thirdPersonView == 0;
 	}
 
 	@Override
