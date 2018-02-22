@@ -85,7 +85,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		if (this.current != null || Minecraft.getMinecraft().gameSettings.renderDistanceChunks < 6
 				|| DiurnalUtils.isAuroraInvisible(world))
 			return false;
-		return AuroraUtils.hasAuroras() && EnvironState.getPlayerBiome().getHasAurora();
+		return AuroraUtils.hasAuroras() && EnvironState.getTruePlayerBiome().getHasAurora();
 	}
 
 	private boolean canAuroraStay(@Nonnull final World world) {
@@ -93,7 +93,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 			return false;
 
 		return Minecraft.getMinecraft().gameSettings.renderDistanceChunks < 6
-				|| DiurnalUtils.isAuroraVisible(world) && EnvironState.getPlayerBiome().getHasAurora();
+				|| DiurnalUtils.isAuroraVisible(world) && EnvironState.getTruePlayerBiome().getHasAurora();
 	}
 
 	@Override

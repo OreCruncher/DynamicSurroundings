@@ -26,7 +26,9 @@ package org.blockartistry.DynSurround.client.aurora;
 
 import java.util.Random;
 
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.shader.Shaders;
+import org.blockartistry.DynSurround.registry.DimensionInfo;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.gfx.OpenGlState;
 import org.blockartistry.lib.gfx.OpenGlUtil;
@@ -171,7 +173,16 @@ public class AuroraShaderBand implements IAurora {
 		final Tessellator tess = Tessellator.getInstance();
 		final BufferBuilder renderer = tess.getBuffer();
 
-		final double tranY = AuroraUtils.PLAYER_FIXED_Y_OFFSET - 20;
+		final DimensionInfo dimInfo = EnvironState.getDimensionInfo();
+		double heightScale = 1D;
+		if (mc.player.posY > dimInfo.getSeaLevel()) {
+			final double limit = (dimInfo.getSkyHeight() + dimInfo.getCloudHeight()) / 2D;
+			final double d1 = limit - dimInfo.getSeaLevel();
+			final double d2 = mc.player.posY - dimInfo.getSeaLevel();
+			heightScale = (d1 - d2) / d1;
+		}
+
+		final double tranY = AuroraUtils.PLAYER_FIXED_Y_OFFSET * heightScale;
 
 		final double tranX = mc.player.posX
 				- (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTick);
