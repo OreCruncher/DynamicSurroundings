@@ -21,17 +21,6 @@
 	"blocks": [
 		{
 			"blocks": [
-				"thebetweenlands:swamp_dirt"
-			],
-			"effects": [
-				{
-					"effect": "dust",
-					"chance": 500
-				}
-			]
-		},
-		{
-			"blocks": [
 				"thebetweenlands:stagnant_water",
 				"thebetweenlands:swamp_water"
 			],
