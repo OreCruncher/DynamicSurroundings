@@ -93,12 +93,12 @@ public class ObjectArray<T> implements Collection<T> {
 
 	@Override
 	public boolean isEmpty() {
-		return this.insertionIdx == 0;
+		return this.size() == 0;
 	}
 
 	private int find(@Nonnull final Object o) {
 		for (int i = 0; i < this.insertionIdx; i++)
-			if (this.data[i] == o)
+			if (o.equals(this.data[i]))
 				return i;
 		return -1;
 	}
@@ -152,7 +152,10 @@ public class ObjectArray<T> implements Collection<T> {
 
 	@Override
 	public boolean containsAll(@Nonnull final Collection<?> c) {
-		throw new UnsupportedOperationException();
+		for (final Object obj : c)
+			if (!this.contains(obj))
+				return false;
+		return true;
 	}
 
 	@Override
@@ -172,12 +175,12 @@ public class ObjectArray<T> implements Collection<T> {
 
 	@Override
 	public boolean removeAll(@Nonnull final Collection<?> c) {
-		throw new UnsupportedOperationException();
+		return this.removeIf(entry -> c.contains(entry));
 	}
 
 	@Override
-	public boolean retainAll(Collection<?> c) {
-		throw new UnsupportedOperationException();
+	public boolean retainAll(@Nonnull final Collection<?> c) {
+		return this.removeIf(entry -> !c.contains(entry));
 	}
 
 	@Override
