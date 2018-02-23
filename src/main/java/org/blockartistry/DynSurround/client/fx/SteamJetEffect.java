@@ -32,7 +32,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleSteamJet;
 import org.blockartistry.lib.BlockStateProvider;
-import com.google.common.collect.Sets;
+import org.blockartistry.lib.collections.IdentityHashSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -45,7 +45,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SteamJetEffect extends JetEffect {
 
-	private static final Set<Block> hotBlocks = Sets.newIdentityHashSet();
+	private static final Set<Block> hotBlocks = new IdentityHashSet<>();
 
 	static {
 		hotBlocks.add(Blocks.LAVA);
