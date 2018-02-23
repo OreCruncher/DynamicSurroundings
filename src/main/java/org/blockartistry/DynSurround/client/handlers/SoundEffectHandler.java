@@ -165,7 +165,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		this.emitters.values().forEach(Emitter::stop);
 		this.emitters.clear();
 		this.pending.clear();
-		SoundEngine.instance().stopAllSounds();
+		SoundEngine.stopAllSounds();
 	}
 
 	public void queueAmbientSounds(@Nonnull final TObjectFloatHashMap<SoundEffect> sounds) {
@@ -199,15 +199,15 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	}
 
 	public boolean isSoundPlaying(@Nonnull final BasicSound<?> sound) {
-		return SoundEngine.instance().isSoundPlaying(sound);
+		return SoundEngine.isSoundPlaying(sound);
 	}
 
 	public boolean isSoundPlaying(@Nonnull final String soundId) {
-		return SoundEngine.instance().isSoundPlaying(soundId);
+		return SoundEngine.isSoundPlaying(soundId);
 	}
 
 	public void stopSound(@Nonnull final BasicSound<?> sound) {
-		SoundEngine.instance().stopSound(sound);
+		SoundEngine.stopSound(sound);
 	}
 	
 	@Nullable
@@ -219,7 +219,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		if (sound.shouldRoute() && DSurround.routePacketToServer())
 			this.sendToServer.add(sound);
 
-		return SoundEngine.instance().playSound(sound);
+		return SoundEngine.playSound(sound);
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
