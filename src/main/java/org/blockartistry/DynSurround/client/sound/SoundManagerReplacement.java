@@ -45,6 +45,7 @@ import org.blockartistry.lib.ThreadGuard.Action;
 import org.blockartistry.lib.compat.ModEnvironment;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.sound.BasicSound;
+import org.blockartistry.lib.sound.ITrackedSound;
 import org.blockartistry.lib.sound.SoundState;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;
@@ -119,21 +120,21 @@ public class SoundManagerReplacement extends SoundManager {
 	}
 
 	private void setState(@Nonnull final ISound sound, @Nonnull final SoundState state) {
-		if (sound instanceof BasicSound) {
-			((BasicSound<?>) sound).setState(state);
+		if (sound instanceof ITrackedSound) {
+			((ITrackedSound) sound).setState(state);
 		}
 	}
 
 	private void setStateIf(@Nonnull final ISound sound, @Nonnull final SoundState current,
 			@Nonnull final SoundState state) {
-		if (sound instanceof BasicSound) {
-			final BasicSound<?> s = (BasicSound<?>) sound;
+		if (sound instanceof ITrackedSound) {
+			final ITrackedSound s = (ITrackedSound) sound;
 			if (s.getState() == current)
 				s.setState(state);
 		}
 	}
 
-	private void stopSound(@Nonnull final BasicSound<?> sound) {
+	private void stopSound(@Nonnull final ITrackedSound sound) {
 		if (!StringUtils.isEmpty(sound.getId()) && getSoundSystem() != null) {
 			getSoundSystem().stop(sound.getId());
 			sound.setState(SoundState.DONE);
@@ -145,8 +146,8 @@ public class SoundManagerReplacement extends SoundManager {
 		synchronized (this.mutex) {
 			checkForClientThread("stopSound");
 			try {
-				if (sound instanceof BasicSound<?>) {
-					this.stopSound((BasicSound<?>) sound);
+				if (sound instanceof ITrackedSound) {
+					this.stopSound((ITrackedSound) sound);
 				} else {
 					super.stopSound(sound);
 				}
@@ -169,7 +170,7 @@ public class SoundManagerReplacement extends SoundManager {
 		}
 	}
 
-	private boolean isSoundPlaying(@Nonnull final BasicSound<?> sound) {
+	private boolean isSoundPlaying(@Nonnull final ITrackedSound sound) {
 		return super.isSoundPlaying(sound) || this.invPlayingSounds.containsKey(sound)
 				|| this.delayedSounds.containsKey(sound);
 	}
@@ -179,8 +180,8 @@ public class SoundManagerReplacement extends SoundManager {
 		synchronized (this.mutex) {
 			checkForClientThread("isSoundPlaying");
 			try {
-				if (sound instanceof BasicSound<?>) {
-					return this.isSoundPlaying((BasicSound<?>) sound);
+				if (sound instanceof ITrackedSound) {
+					return this.isSoundPlaying((ITrackedSound) sound);
 				} else {
 					return super.isSoundPlaying(sound);
 				}
@@ -205,7 +206,7 @@ public class SoundManagerReplacement extends SoundManager {
 		return currentSoundCount() < (numberOfNormalChannels() - SOUND_QUEUE_SLACK);
 	}
 
-	private void playSound(@Nonnull final BasicSound<?> sound) {
+	private void playSound(@Nonnull final ITrackedSound sound) {
 
 		if (!canFitSound()) {
 			if (ModOptions.logging.enableDebugLogging)
@@ -251,8 +252,8 @@ public class SoundManagerReplacement extends SoundManager {
 			try {
 				synchronized (this.mutex) {
 					checkForClientThread("playSound");
-					if (sound instanceof BasicSound<?>)
-						this.playSound((BasicSound<?>) sound);
+					if (sound instanceof ITrackedSound)
+						this.playSound((ITrackedSound) sound);
 					else if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC) {
 						if (DSurround.log().testTrace(ModOptions.Trace.TRACE_VANILLA_SOUNDS))
 							DSurround.log().debug("Playing vanilla sound [%s]", sound.getSoundLocation().toString());
@@ -268,7 +269,7 @@ public class SoundManagerReplacement extends SoundManager {
 		}
 	}
 
-	private void playDelayedSound(@Nonnull final BasicSound<?> sound, final int delay) {
+	private void playDelayedSound(@Nonnull final ITrackedSound sound, final int delay) {
 		sound.setId(StringUtils.EMPTY);
 		super.playDelayedSound(sound, delay);
 		sound.setState(SoundState.DELAYED);
@@ -280,8 +281,8 @@ public class SoundManagerReplacement extends SoundManager {
 			try {
 				synchronized (this.mutex) {
 					checkForClientThread("playDelayedSound");
-					if (sound instanceof BasicSound<?>) {
-						this.playDelayedSound((BasicSound<?>) sound, delay);
+					if (sound instanceof ITrackedSound) {
+						this.playDelayedSound((ITrackedSound) sound, delay);
 					} else {
 						super.playDelayedSound(sound, delay);
 					}
@@ -413,8 +414,8 @@ public class SoundManagerReplacement extends SoundManager {
 	@SubscribeEvent
 	public void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
 		final ISound sound = event.getSound();
-		if (sound instanceof BasicSound<?>) {
-			((BasicSound<?>) sound).setId(event.getUuid());
+		if (sound instanceof ITrackedSound) {
+			((ITrackedSound) sound).setId(event.getUuid());
 		}
 	}
 
