@@ -372,16 +372,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void diagnostics(@Nonnull final DiagnosticEvent.Gather event) {
-
 		event.output.add(String.format("Ambiance Timer: %d", ((WorldClient) EnvironState.getWorld()).ambienceTicks));
-
-		final int soundCount = SoundEngine.instance().currentSoundCount();
-		final int maxCount = SoundEngine.instance().maxSoundCount();
-
-		final StringBuilder builder = new StringBuilder();
-		builder.append("SoundSystem: ").append(soundCount).append('/').append(maxCount);
-		event.output.add(builder.toString());
-
 		this.emitters.values().forEach(emitter -> event.output.add("EMITTER: " + emitter.toString()));
 		this.pending.forEach(effect -> event.output
 				.add((effect.getTickAge() < 0 ? "DELAYED: " : "PENDING: ") + effect.getSound().toString()));

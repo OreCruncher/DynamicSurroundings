@@ -29,6 +29,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
@@ -58,6 +59,7 @@ import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.sound.SoundSetupEvent;
@@ -419,20 +421,25 @@ public class SoundManagerReplacement extends SoundManager {
 	public void diagnostics(final DiagnosticEvent.Gather event) {
 		synchronized (this.mutex) {
 			checkForClientThread("diagnostics");
-			final TObjectIntHashMap<String> counts = new TObjectIntHashMap<String>();
+
+			final int soundCount = this.currentSoundCount();
+			final int maxCount = this.maxSoundCount();
+			event.output.add("SoundSystem: " + soundCount + "/" + maxCount);
+
+			final TObjectIntHashMap<ResourceLocation> counts = new TObjectIntHashMap<>();
 
 			final Iterator<Entry<String, ISound>> iterator = this.playingSounds.entrySet().iterator();
 			while (iterator.hasNext()) {
 				Entry<String, ISound> entry = iterator.next();
 				ISound isound = entry.getValue();
-				counts.adjustOrPutValue(isound.getSound().getSoundLocation().toString(), 1, 1);
+				counts.adjustOrPutValue(isound.getSound().getSoundLocation(), 1, 1);
 			}
 
-			final ArrayList<String> results = new ArrayList<String>();
-			final TObjectIntIterator<String> itr = counts.iterator();
+			final List<String> results = new ArrayList<>();
+			final TObjectIntIterator<ResourceLocation> itr = counts.iterator();
 			while (itr.hasNext()) {
 				itr.advance();
-				results.add(String.format(TextFormatting.GOLD + "%s: %d", itr.key(), itr.value()));
+				results.add(String.format(TextFormatting.GOLD + "%s: %d", itr.key().toString(), itr.value()));
 			}
 			Collections.sort(results);
 			event.output.addAll(results);
@@ -440,26 +447,16 @@ public class SoundManagerReplacement extends SoundManager {
 
 	}
 
-	public int currentSoundCount() {
-		synchronized (this.mutex) {
-			checkForClientThread("currentSoundCount");
-			return this.playingSoundsStopTime.size();
-		}
-
+	protected int currentSoundCount() {
+		return this.playingSoundsStopTime.size();
 	}
 
-	public int maxSoundCount() {
-		synchronized (this.mutex) {
-			checkForClientThread("maxSoundCount");
-			return SoundSystemConfig.getNumberNormalChannels() + SoundSystemConfig.getNumberStreamingChannels();
-		}
+	protected int maxSoundCount() {
+		return SoundSystemConfig.getNumberNormalChannels() + SoundSystemConfig.getNumberStreamingChannels();
 	}
 
-	public int numberOfNormalChannels() {
-		synchronized (this.mutex) {
-			checkForClientThread("numberOfNormalChannels");
-			return SoundSystemConfig.getNumberNormalChannels();
-		}
+	protected int numberOfNormalChannels() {
+		return SoundSystemConfig.getNumberNormalChannels();
 	}
 
 	public boolean isMuted() {
