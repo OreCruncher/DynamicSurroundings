@@ -29,7 +29,6 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.blockartistry.DynSurround.client.sound.SoundState;
 import org.blockartistry.lib.compat.ModEnvironment;
 import org.blockartistry.lib.random.XorShiftRandom;
 

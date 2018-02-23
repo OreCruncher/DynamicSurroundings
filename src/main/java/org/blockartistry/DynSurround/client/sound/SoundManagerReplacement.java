@@ -45,6 +45,7 @@ import org.blockartistry.lib.ThreadGuard.Action;
 import org.blockartistry.lib.compat.ModEnvironment;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.sound.BasicSound;
+import org.blockartistry.lib.sound.SoundState;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
