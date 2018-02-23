@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.DynSurround.client.sound;
+package org.blockartistry.lib.sound;
 
 /*
  * Used by sounds that have long term state that gets manipulated
