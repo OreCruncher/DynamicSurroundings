@@ -52,14 +52,6 @@ public class SoundEngine {
 		return SoundManagerReplacement.getSoundManager();
 	}
 
-	public int currentSoundCount() {
-		return getManager().currentSoundCount();
-	}
-
-	public int maxSoundCount() {
-		return getManager().maxSoundCount();
-	}
-
 	public boolean isSoundPlaying(@Nonnull final BasicSound<?> sound) {
 		return getManager().isSoundPlaying(sound);
 	}
