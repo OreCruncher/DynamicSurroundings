@@ -33,16 +33,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class SoundEngine {
-
-	private static SoundEngine instance = null;
-
-	public static SoundEngine instance() {
-		if (instance == null)
-			instance = new SoundEngine();
-
-		return instance;
-	}
+public final class SoundEngine {
 
 	private SoundEngine() {
 
@@ -52,24 +43,24 @@ public class SoundEngine {
 		return SoundManagerReplacement.getSoundManager();
 	}
 
-	public boolean isSoundPlaying(@Nonnull final BasicSound<?> sound) {
+	public static boolean isSoundPlaying(@Nonnull final BasicSound<?> sound) {
 		return getManager().isSoundPlaying(sound);
 	}
 
-	public boolean isSoundPlaying(@Nonnull final String soundId) {
+	public static boolean isSoundPlaying(@Nonnull final String soundId) {
 		return getManager().isSoundPlaying(soundId);
 	}
 
-	public void stopSound(@Nonnull final BasicSound<?> sound) {
+	public static void stopSound(@Nonnull final BasicSound<?> sound) {
 		getManager().stopSound(sound);
 	}
 
-	public void stopAllSounds() {
+	public static void stopAllSounds() {
 		getManager().stopAllSounds();
 	}
 
 	@Nullable
-	public String playSound(@Nonnull final BasicSound<?> sound) {
+	public static String playSound(@Nonnull final BasicSound<?> sound) {
 		getManager().playSound(sound);
 		return sound.getId();
 	}

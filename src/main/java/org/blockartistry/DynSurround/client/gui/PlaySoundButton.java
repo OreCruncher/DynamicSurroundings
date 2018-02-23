@@ -39,14 +39,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class PlaySoundButton extends GuiButtonExt {
 	
-	private final SoundEngine soundEngine;
 	private final String soundResource;
 	private BasicSound<?> playingSound;
 
 	public PlaySoundButton(final int id, @Nonnull final String sound) {
 		super(id, 0, 0, 68, 18, GuiConstants.TEXT_PLAY);
-		
-		this.soundEngine = SoundEngine.instance();
 		this.soundResource = sound;
 	}
 	
@@ -63,7 +60,7 @@ public class PlaySoundButton extends GuiButtonExt {
 		super.drawButton(mc, x, y);
 		
 		if (this.playingSound != null) {
-			if (!this.soundEngine.isSoundPlaying(this.playingSound)) {
+			if (!SoundEngine.isSoundPlaying(this.playingSound)) {
 				this.playingSound = null;
 				updateDisplayText();
 			}
@@ -78,16 +75,16 @@ public class PlaySoundButton extends GuiButtonExt {
 			final MusicTickerReplacement mtr = (MusicTickerReplacement)ticker;
 			mtr.setPlaying(sound);
 		} else {
-			this.soundEngine.playSound(sound);
+			SoundEngine.playSound(sound);
 		}
 	}
 	
 	public void playSound(@Nonnull final Minecraft mc, final float volume) {
 		if (this.playingSound != null) {
-			this.soundEngine.stopSound(this.playingSound);
+			SoundEngine.stopSound(this.playingSound);
 			this.playingSound = null;
 		} else {
-			this.soundEngine.stopAllSounds();
+			SoundEngine.stopAllSounds();
 			doPlay(new ConfigSound(this.soundResource, volume));
 		}
 		
