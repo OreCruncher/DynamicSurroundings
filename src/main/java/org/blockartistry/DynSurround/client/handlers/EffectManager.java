@@ -33,7 +33,7 @@ import org.blockartistry.lib.compat.EntityLivingBaseUtil;
 import org.blockartistry.lib.math.TimerEMA;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -102,28 +102,29 @@ public class EffectManager {
 		}
 	}
 
+	protected EntityPlayer getPlayer() {
+		return Minecraft.getMinecraft().player;
+	}
+
 	// All the strange crap I have seen...
-	protected boolean checkReady(@Nonnull final TickEvent.PlayerTickEvent event) {
+	protected boolean checkReady(@Nonnull final TickEvent.ClientTickEvent event) {
 		if (Minecraft.getMinecraft().gameSettings == null)
 			return false;
 
 		if (Minecraft.getMinecraft().getRenderManager().options == null)
 			return false;
 
-		final EntityPlayerSP player = Minecraft.getMinecraft().player;
+		final EntityPlayer player = getPlayer();
 
 		if (player == null || player.getEntityWorld() == null)
 			return false;
 
-		if (event.player == null || event.player.getEntityWorld() == null)
-			return false;
-
 		return true;
 	}
-
+	
 	@SubscribeEvent
-	public void playerTick(@Nonnull final TickEvent.PlayerTickEvent event) {
-
+	public void onTick(@Nonnull final TickEvent.ClientTickEvent event) {
+		
 		if (event.side == Side.SERVER || event.phase == Phase.END || Minecraft.getMinecraft().isGamePaused())
 			return;
 
@@ -136,7 +137,7 @@ public class EffectManager {
 		final long start = System.nanoTime();
 
 		if (ModOptions.player.suppressPotionParticles)
-			event.player.getDataManager().set(EntityLivingBaseUtil.getHideParticles(), true);
+			getPlayer().getDataManager().set(EntityLivingBaseUtil.getHideParticles(), true);
 
 		final int tick = EnvironState.getTickCounter();
 
@@ -144,7 +145,7 @@ public class EffectManager {
 			final EffectHandlerBase handler = this.effectHandlers.get(i);
 			final long mark = System.nanoTime();
 			if (handler.doTick(tick))
-				handler.process(event.player);
+				handler.process(getPlayer());
 			handler.updateTimer(System.nanoTime() - mark);
 		}
 
