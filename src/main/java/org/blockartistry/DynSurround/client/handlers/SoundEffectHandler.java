@@ -41,7 +41,6 @@ import org.blockartistry.DynSurround.client.sound.Emitter;
 import org.blockartistry.DynSurround.client.sound.PlayerEmitter;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.SoundEngine;
-import org.blockartistry.DynSurround.client.sound.SoundState;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.event.PlayDistributedSoundEvent;
@@ -51,6 +50,7 @@ import org.blockartistry.DynSurround.network.PacketPlaySound;
 import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.compat.PositionedSoundUtil;
 import org.blockartistry.lib.sound.BasicSound;
+import org.blockartistry.lib.sound.SoundState;
 
 import com.google.common.collect.Sets;
 
