@@ -133,8 +133,6 @@ public class SoundManagerReplacement extends SoundManager {
 	private void stopSound(@Nonnull final BasicSound<?> sound) {
 		if (!StringUtils.isEmpty(sound.getId()) && getSoundSystem() != null) {
 			getSoundSystem().stop(sound.getId());
-			this.playingSounds.remove(sound.getId());
-			this.playingSoundsStopTime.remove(sound.getId());
 			sound.setState(SoundState.DONE);
 		}
 	}
