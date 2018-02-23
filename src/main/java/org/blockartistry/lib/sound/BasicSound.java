@@ -50,7 +50,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class BasicSound<T extends BasicSound<?>> extends PositionedSound implements INBTSerializable<NBTTagCompound> {
+public class BasicSound<T extends BasicSound<?>> extends PositionedSound implements ITrackedSound, INBTSerializable<NBTTagCompound> {
 
 	protected static final float ATTENUATION_OFFSET = 32F;
 
@@ -110,10 +110,8 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 		return this.state;
 	}
 
-	@SuppressWarnings("unchecked")
-	public T setState(@Nonnull final SoundState state) {
+	public void setState(@Nonnull final SoundState state) {
 		this.state = state;
-		return (T) this;
 	}
 
 	public boolean shouldRoute() {
@@ -126,10 +124,8 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 		return (T) this;
 	}
 
-	@SuppressWarnings("unchecked")
-	public T setId(@Nonnull final String id) {
+	public void setId(@Nonnull final String id) {
 		this.id = id;
-		return (T) this;
 	}
 
 	@Nonnull
