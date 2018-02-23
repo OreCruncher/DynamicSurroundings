@@ -71,7 +71,7 @@ public final class ParticleCollections {
 	private final static CollectionHelper theEmojis = new CollectionHelper("Emojis", EMOJI_TEXTURE);
 	private final static CollectionHelper thePrints = new CollectionHelper("Footprints",
 			ParticleCollectionFootprint.FACTORY, FOOTPRINT_TEXTURE);
-	private final static CollectionHelper theFireFlies = new LightedCollectionHelper("Fireflies",
+	private final static CollectionHelper theFireFlies = new CollectionHelper("Fireflies",
 			ParticleCollectionFireFly.FACTORY, FIREFLY_TEXTURE);
 
 	@Nullable
@@ -95,7 +95,7 @@ public final class ParticleCollections {
 		}
 		return mote;
 	}
-	
+
 	public static boolean canFitWaterSpray() {
 		return theSprays.get().canFit();
 	}
