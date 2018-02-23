@@ -30,6 +30,7 @@ import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.Sounds;
+import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.gfx.ParticleHelper;
 
@@ -51,6 +52,7 @@ public class ParticleDripOverride extends ParticleDrip {
 
 	private boolean firstTime = true;
 	private final Material materialType;
+	private final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
 	protected ParticleDripOverride(final World worldIn, final double xCoordIn, final double yCoordIn,
 			final double zCoordIn, final Material materialType) {
@@ -76,31 +78,31 @@ public class ParticleDripOverride extends ParticleDrip {
 			} else if (this.firstTime) {
 
 				this.firstTime = false;
+				final BlockStateProvider provider = WorldUtils.getDefaultBlockStateProvider().setWorld(this.worldObj);
 
 				// If the particle is not positioned in an air block kill it
-				// right
-				// away. No sense wasting time with it.
-				final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-				pos.setPos(this.posX, this.posY, this.posZ);
-				if (!WorldUtils.isAirBlock(this.worldObj, pos)) {
+				// right away. No sense wasting time with it.
+				this.pos.setPos(this.posX, this.posY, this.posZ);
+				IBlockState state = provider.getBlockState(pos);
+				if (!WorldUtils.isAirBlock(state)) {
 					setExpired();
 				} else {
-					pos.setPos(this.posX, this.posY + 0.3D, this.posZ);
-					final int y = pos.getY();
+					this.pos.setPos(this.posX, this.posY + 0.3D, this.posZ);
+					final int y = this.pos.getY();
 
-					IBlockState state = this.worldObj.getBlockState(pos);
+					state = provider.getBlockState(pos);
 					if (!WorldUtils.isAirBlock(state) && !WorldUtils.isLeaves(state)) {
 						// Find out where it is going to hit
 						do {
-							pos.move(EnumFacing.DOWN, 1);
-							state = this.worldObj.getBlockState(pos);
-						} while (pos.getY() > 0 && WorldUtils.isAirBlock(state));
+							this.pos.move(EnumFacing.DOWN, 1);
+							state = provider.getBlockState(this.pos);
+						} while (this.pos.getY() > 0 && WorldUtils.isAirBlock(state));
 
-						if (pos.getY() < 1)
+						if (this.pos.getY() < 1)
 							return;
 
-						final int delay = 40 + (y - pos.getY()) * 2;
-						pos.move(EnumFacing.UP, 1);
+						final int delay = 40 + (y - this.pos.getY()) * 2;
+						this.pos.move(EnumFacing.UP, 1);
 
 						final SoundEffect effect;
 
@@ -118,18 +120,18 @@ public class ParticleDripOverride extends ParticleDrip {
 							effect = Sounds.WATER_DROP;
 						}
 
-						SoundEffectHandler.INSTANCE.playSoundAt(pos, effect, delay);
+						SoundEffectHandler.INSTANCE.playSoundAt(this.pos, effect, delay);
 					}
 				}
 			}
 		}
 
-		final BlockPos pos = new BlockPos(this.posX, this.posY, this.posZ);
+		this.pos.setPos(this.posX, this.posY, this.posZ);
 		if (WorldUtils.isFullWaterBlock(this.worldObj, pos)) {
 			if (ParticleCollections.addWaterRipple(this.worldObj, this.posX, pos.getY() + 1, this.posZ) != null
 					&& this.materialType == Material.LAVA)
-				ParticleHelper.addParticle(
-						new ParticleSteamCloud(this.worldObj, this.posX, pos.getY() + 1, this.posZ, 0.01D));
+				ParticleHelper
+						.addParticle(new ParticleSteamCloud(this.worldObj, this.posX, pos.getY() + 1, this.posZ, 0.01D));
 		}
 
 	}
