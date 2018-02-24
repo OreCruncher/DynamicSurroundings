@@ -32,6 +32,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.handlers.scanners.BiomeScanner;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
 
@@ -42,33 +43,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class AreaSoundEffectHandler extends EffectHandlerBase {
+public class BiomeSoundEffectsHandler extends EffectHandlerBase {
 
 	public static final int SCAN_INTERVAL = 4;
 
-	private boolean doBiomeSounds() {
-		return EnvironState.isPlayerUnderground() || !EnvironState.isPlayerInside();
-	}
+	protected final BiomeScanner biomes = new BiomeScanner();
 
-	private void getBiomeSounds(@Nonnull final TObjectFloatHashMap<SoundEffect> result) {
-		// Need to collect sounds from all the applicable biomes
-		// along with their weights.
-		AreaSurveyHandler.getBiomes().forEachEntry((biome, w) -> {
-			final List<SoundEffect> bs = new ArrayList<>();
-			biome.findSoundMatches(bs);
-			bs.forEach(fx -> result.adjustOrPutValue(fx, w, w));
-			return true;
-		});
-
-		// Scale the volumes in the resulting list based on the weights
-		final float area = AreaSurveyHandler.getBiomeArea();
-		result.transformValues(v -> {
-			return 0.1F + 0.9F * (v / area);
-		});
-	}
-
-	public AreaSoundEffectHandler() {
-		super("Area Sound Effects");
+	public BiomeSoundEffectsHandler() {
+		super("Biome Sound Effects");
 	}
 
 	@Override
@@ -77,8 +59,31 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 				&& EnvironState.getWorld().isBlockLoaded(EnvironState.getPlayerPosition());
 	}
 
+	private boolean doBiomeSounds() {
+		return EnvironState.isPlayerUnderground() || !EnvironState.isPlayerInside();
+	}
+
+	private void getBiomeSounds(@Nonnull final TObjectFloatHashMap<SoundEffect> result) {
+		// Need to collect sounds from all the applicable biomes
+		// along with their weights.
+		this.biomes.getBiomes().forEachEntry((biome, w) -> {
+			final List<SoundEffect> bs = new ArrayList<>();
+			biome.findSoundMatches(bs);
+			bs.forEach(fx -> result.adjustOrPutValue(fx, w, w));
+			return true;
+		});
+
+		// Scale the volumes in the resulting list based on the weights
+		final float area = this.biomes.getBiomeArea();
+		result.transformValues(v -> {
+			return 0.1F + 0.9F * (v / area);
+		});
+	}
+
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
+
+		this.biomes.update();
 
 		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<>(Constants.DEFAULT_CAPACITY,
 				Constants.DEFAULT_LOAD_FACTOR, -1F);

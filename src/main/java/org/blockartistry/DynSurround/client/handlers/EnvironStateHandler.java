@@ -33,6 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.scanners.BattleScanner;
+import org.blockartistry.DynSurround.client.handlers.scanners.CeilingCoverage;
 import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.event.EnvironmentEvent;
@@ -149,7 +150,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.dimensionId = world.provider.getDimension();
 			EnvironState.dimensionName = world.provider.getDimensionType().getName();
 			EnvironState.playerPosition = getPlayerPos();
-			EnvironState.inside = AreaSurveyHandler.isReallyInside();
+			EnvironState.inside = EnvironStateHandler.ceiling.isReallyInside();
 
 			EnvironState.truePlayerBiome = ClientRegistry.BIOME.getPlayerBiome(player, true);
 			EnvironState.freezing = EnvironState.truePlayerBiome
@@ -376,11 +377,14 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		super("State Handler");
 	}
 
+	protected static CeilingCoverage ceiling;
+
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 		EnvironState.tick(player.getEntityWorld(), player);
 		Weather.update();
 		ExpressionEngine.instance().update();
+		ceiling.update();
 	}
 
 	/**
@@ -401,6 +405,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 	@Override
 	public void onConnect() {
+		EnvironStateHandler.ceiling = new CeilingCoverage();
 		EnvironState.reset();
 		ExpressionEngine.instance();
 	}
@@ -408,6 +413,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	@Override
 	public void onDisconnect() {
 		EnvironState.reset();
+		EnvironStateHandler.ceiling = null;
 	}
 
 	// Use the new scripting system to pull out data to display
