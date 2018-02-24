@@ -1,3 +1,27 @@
+###DynamicSurroundings-1.12.2-3.4.9.5
+**What's New**
+* Added a command line option "dsurround.devMode".  It helps modpack developers by identifying mods that attempt to access the SoundManager or ParticleManager from a thread other than the client thread.
+    * To use specify "-Ddsurround.devMode=true" as part of the Java command line when launching.
+    * If a violation occurs a RuntimeException will be thrown.  This will cause the client to crash.  The callstack will contain information pointing to the offending mod.
+    * This will help pinpoint sources of problems such as concurrency exceptions within the SoundManager and particle rendering/not rendering weirdness with the ParticleManager.
+* Support for Twilight Forest mod
+    * TF has it's own weather renderer.  Reason is that weather rendering is tied into the TF progression system.  DS will not override.
+    * DS will still generate rain intensity and make rain splashes based on that.
+    * DS will provide effects to the various mobs in Twilight Forest.  Checkout the giant footprints. :)
+    * Fireflies will spawn around Firefly blocks as well as certain plants **while in** the Twilight Forest dimension.  Normal light rules do not apply.
+* Initial support for Erebus mod; WIP
+    * No weather, fog, or aurora effects in Erebus dimension (duh)
+* Mod support: ToroQuest, Totemic
+
+**Fixes**
+* Footprints should render appropriately on CoFH covers
+* Made a huge dent in sound lag around really large waterfalls.  A side effect of this change is that small falls will not have sounds.  This is a point of future development.
+* Aurora would fade out if the player is high enough because of the change to the "Cloud" fake biome.
+
+**Changes**
+* Aurora will now position themselves roughly between cloud height and sky height.  When the player increases elevation the aurora will position relative to that fixed location.
+* Dust effect limited to dirt blocks; stone type blocks will no longer generate dust.
+
 ###DynamicSurroundings-1.12.2-3.4.9.4
 **What's New**
 * When walking in the rain footsteps will produce splash sounds.  Obviously, this will not occur in deserts and areas where it's snowing. :)  The volume of the sound is based on the intensity of the rain.  Depending on your sound environment they may be difficult to hear.  The sound will only generate for you, the player, not other entities.  There is an option to turn it off under "Sound Options".
