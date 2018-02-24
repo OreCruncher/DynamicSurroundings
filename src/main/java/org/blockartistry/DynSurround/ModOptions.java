@@ -34,7 +34,6 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.data.Profiles;
 import org.blockartistry.lib.ConfigProcessor;
-import org.blockartistry.lib.VersionHelper;
 import org.blockartistry.lib.ConfigProcessor.Category;
 import org.blockartistry.lib.ConfigProcessor.Comment;
 import org.blockartistry.lib.ConfigProcessor.DefaultValue;
@@ -44,6 +43,8 @@ import org.blockartistry.lib.ConfigProcessor.Option;
 import org.blockartistry.lib.ConfigProcessor.RangeFloat;
 import org.blockartistry.lib.ConfigProcessor.RangeInt;
 import org.blockartistry.lib.ConfigProcessor.RestartRequired;
+import org.blockartistry.lib.VersionHelper;
+
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -1213,7 +1214,7 @@ public final class ModOptions {
 	}
 
 	private static void scrubCategory(final ConfigCategory category) {
-		final List<String> killList = new ArrayList<String>();
+		final List<String> killList = new ArrayList<>();
 		for (final Entry<String, Property> entry : category.entrySet())
 			if (StringUtils.isEmpty(entry.getValue().getComment()))
 				killList.add(entry.getKey());

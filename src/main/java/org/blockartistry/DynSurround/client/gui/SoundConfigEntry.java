@@ -43,14 +43,14 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.ConfigGuiType;
 import net.minecraftforge.fml.client.config.GuiConfig;
 import net.minecraftforge.fml.client.config.GuiConfigEntries;
-import net.minecraftforge.fml.client.config.GuiSlider;
-import net.minecraftforge.fml.client.config.HoverChecker;
 import net.minecraftforge.fml.client.config.GuiConfigEntries.IConfigEntry;
 import net.minecraftforge.fml.client.config.GuiConfigEntries.NumberSliderEntry;
 import net.minecraftforge.fml.client.config.GuiEditArrayEntries.IArrayEntry;
+import net.minecraftforge.fml.client.config.GuiSlider;
+import net.minecraftforge.fml.client.config.HoverChecker;
+import net.minecraftforge.fml.client.config.IConfigElement;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.client.config.IConfigElement;
 
 @SideOnly(Side.CLIENT)
 public class SoundConfigEntry extends NumberSliderEntry {
@@ -77,7 +77,7 @@ public class SoundConfigEntry extends NumberSliderEntry {
 		final String soundName = configElement.getName();
 
 		// Parse out our parameter string
-		String parms = (String) configElement.get();
+		final String parms = (String) configElement.get();
 		final boolean culled = parms.contains(GuiConstants.TOKEN_CULL);
 		final boolean blocked = parms.contains(GuiConstants.TOKEN_BLOCK);
 
@@ -128,8 +128,8 @@ public class SoundConfigEntry extends NumberSliderEntry {
 		final boolean canHover = mouseY < this.owningScreen.entryList.bottom
 				&& mouseY > this.owningScreen.entryList.top;
 
-		//if (this.sliderHover.checkHover(mouseX, mouseY))
-		//	this.owningScreen.drawToolTip(this.toolTip, mouseX, mouseY);
+		// if (this.sliderHover.checkHover(mouseX, mouseY))
+		// this.owningScreen.drawToolTip(this.toolTip, mouseX, mouseY);
 
 		if (this.cullHover.checkHover(mouseX, mouseY, canHover))
 			this.owningScreen.drawToolTip(this.toolTip, mouseX, mouseY);
@@ -201,7 +201,7 @@ public class SoundConfigEntry extends NumberSliderEntry {
 		} else if (this.block.mousePressed(this.mc, x, y)) {
 			this.block.toggleState();
 		} else if (this.play.mousePressed(this.mc, x, y)) {
-			final float volume = ((Integer) this.getCurrentValue()) / 100F;
+			final float volume = ((Integer) getCurrentValue()) / 100F;
 			this.play.playSound(this.mc, volume);
 		} else
 			return super.mousePressed(index, x, y, mouseEvent, relativeX, relativeY);
@@ -216,7 +216,7 @@ public class SoundConfigEntry extends NumberSliderEntry {
 
 	@Override
 	public boolean saveConfigElement() {
-		if (this.enabled() && this.isChanged()) {
+		if (enabled() && isChanged()) {
 			final StringBuilder builder = new StringBuilder();
 			if (this.cull.getValue())
 				builder.append(GuiConstants.TOKEN_CULL).append(' ');
@@ -232,12 +232,11 @@ public class SoundConfigEntry extends NumberSliderEntry {
 	}
 
 	/**
-	 * The NumberSliderEntry super class assumes a single source value as a
-	 * value to manipulate. Since the SoundConfigEntry is a composite of 3
-	 * different config values, we need to process the parameter string to
-	 * extract out the volume scale information. This adapter is used because
-	 * the NumberSliderEntry CTOR is invoked before any other data processing
-	 * can take place.
+	 * The NumberSliderEntry super class assumes a single source value as a value to
+	 * manipulate. Since the SoundConfigEntry is a composite of 3 different config
+	 * values, we need to process the parameter string to extract out the volume
+	 * scale information. This adapter is used because the NumberSliderEntry CTOR is
+	 * invoked before any other data processing can take place.
 	 */
 	private static class ConfigElementSliderAdapter implements IConfigElement {
 

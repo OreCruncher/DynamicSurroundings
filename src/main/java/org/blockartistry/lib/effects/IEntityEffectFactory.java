@@ -24,6 +24,7 @@
 package org.blockartistry.lib.effects;
 
 import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.registry.EntityEffectInfo;
@@ -43,7 +44,7 @@ public interface IEntityEffectFactory {
 	/**
 	 * Creates 0 or more IEffects for the specified Entity. It is possible that some
 	 * condition on the Entity may prevent creation.
-	 * 
+	 *
 	 * @param entity
 	 *            The subject of the EntityEffect
 	 * @param eei

@@ -72,9 +72,8 @@ public class MoteFootprint extends MoteAgeable {
 	protected final Vec2f thirdPoint;
 	protected final Vec2f fourthPoint;
 
-	public MoteFootprint(@Nonnull final FootprintStyle style, @Nonnull final World world,
-			final double x, final double y, final double z, final float rotation, final float scale,
-			final boolean isRight) {
+	public MoteFootprint(@Nonnull final FootprintStyle style, @Nonnull final World world, final double x,
+			final double y, final double z, final float rotation, final float scale, final boolean isRight) {
 		super(world, x, y, z);
 
 		this.maxAge = 200;
@@ -90,7 +89,7 @@ public class MoteFootprint extends MoteAgeable {
 		// Make sure that the down position is calculated from the display position!
 		this.downPos = new BlockPos(this.posX, this.posY, this.posZ).down();
 
-		float u1 = style.ordinal() * TEXEL_WIDTH + 1/256F;
+		float u1 = style.ordinal() * TEXEL_WIDTH + 1 / 256F;
 		if (isRight)
 			u1 += TEXEL_PRINT_WIDTH;
 		this.texU1 = u1;
@@ -121,10 +120,10 @@ public class MoteFootprint extends MoteAgeable {
 	@Override
 	protected void update() {
 		if (!WorldUtils.isSolidBlock(this.world, this.downPos)) {
-			this.kill();
+			kill();
 		} else if (this.isSnowLayer
 				&& WorldUtils.getBlockState(this.world, this.position).getBlock() != Blocks.SNOW_LAYER) {
-			this.kill();
+			kill();
 		}
 	}
 
@@ -132,7 +131,7 @@ public class MoteFootprint extends MoteAgeable {
 	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotX, float rotZ,
 			float rotYZ, float rotXY, float rotXZ) {
 
-		float f = ((float) this.age + partialTicks) / ((float) this.maxAge + 1);
+		float f = (this.age + partialTicks) / ((float) this.maxAge + 1);
 		f = f * f;
 		this.alpha = MathStuff.clamp(1.0F - f, 0F, 1F);
 

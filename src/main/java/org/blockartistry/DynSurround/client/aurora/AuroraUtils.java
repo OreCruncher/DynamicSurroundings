@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.aurora;
 
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.TimeUtils;
+
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

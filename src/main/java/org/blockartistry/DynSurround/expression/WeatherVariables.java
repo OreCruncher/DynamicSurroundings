@@ -31,43 +31,43 @@ import org.blockartistry.lib.expression.DynamicVariantList;
 public class WeatherVariables extends DynamicVariantList {
 
 	public WeatherVariables() {
-		this.add(new Dynamic.DynamicBoolean("weather.isRaining") {
+		add(new Dynamic.DynamicBoolean("weather.isRaining") {
 			@Override
 			public void update() {
 				this.value = Weather.isRaining();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("weather.isThundering") {
+		add(new Dynamic.DynamicBoolean("weather.isThundering") {
 			@Override
 			public void update() {
 				this.value = Weather.isThundering();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("weather.isNotRaining") {
+		add(new Dynamic.DynamicBoolean("weather.isNotRaining") {
 			@Override
 			public void update() {
 				this.value = !Weather.isRaining();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("weather.isNotThundering") {
+		add(new Dynamic.DynamicBoolean("weather.isNotThundering") {
 			@Override
 			public void update() {
 				this.value = !Weather.isThundering();
 			}
 		});
-		this.add(new Dynamic.DynamicNumber("weather.rainfall") {
+		add(new Dynamic.DynamicNumber("weather.rainfall") {
 			@Override
 			public void update() {
 				this.value = Weather.getIntensityLevel();
 			}
 		});
-		this.add(new Dynamic.DynamicNumber("weather.temperatureValue") {
+		add(new Dynamic.DynamicNumber("weather.temperatureValue") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getPlayerBiome().getFloatTemperature(EnvironState.getPlayerPosition());
 			}
 		});
-		this.add(new Dynamic.DynamicString("weather.temperature") {
+		add(new Dynamic.DynamicString("weather.temperature") {
 			@Override
 			public void update() {
 				this.value = TemperatureRating

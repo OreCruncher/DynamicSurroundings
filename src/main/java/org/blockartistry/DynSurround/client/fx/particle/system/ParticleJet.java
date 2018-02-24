@@ -24,9 +24,9 @@
 
 package org.blockartistry.DynSurround.client.fx.particle.system;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /*
  * Base for particle entities that are long lived and generate
@@ -60,13 +60,13 @@ public abstract class ParticleJet extends ParticleSystem {
 	 */
 	protected abstract void spawnJetParticle();
 
+	@Override
 	public boolean shouldDie() {
 		return this.particleAge >= this.particleMaxAge;
 	}
 
 	/*
-	 * During update see if a particle needs to be spawned so that it can rise
-	 * up.
+	 * During update see if a particle needs to be spawned so that it can rise up.
 	 */
 	@Override
 	public void think() {

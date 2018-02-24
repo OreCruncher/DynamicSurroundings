@@ -45,27 +45,27 @@ public class EntityEmojiEvent extends Event {
 
 	/**
 	 * New ActionState of the Entity.
-	 * 
+	 *
 	 * @see org.blockartistry.DynSurround.entity.ActionState
 	 */
 	public final ActionState actionState;
 
 	/**
 	 * New EmotionalState of the Entity.
-	 * 
+	 *
 	 * @see org.blockartistry.DynSurround.entity.EmotionalState
 	 */
 	public final EmotionalState emotionalState;
 
 	/**
 	 * New EmojiType for the Entity.
-	 * 
+	 *
 	 * @see org.blockartistry.DynSurround.entity.EmojiType
 	 */
 	public final EmojiType emojiType;
 
-	public EntityEmojiEvent(@Nonnull final int id, @Nonnull final ActionState action, @Nonnull final EmotionalState emotion,
-			@Nonnull final EmojiType emojiType) {
+	public EntityEmojiEvent(@Nonnull final int id, @Nonnull final ActionState action,
+			@Nonnull final EmotionalState emotion, @Nonnull final EmojiType emojiType) {
 		this.entityId = id;
 		this.actionState = action;
 		this.emotionalState = emotion;

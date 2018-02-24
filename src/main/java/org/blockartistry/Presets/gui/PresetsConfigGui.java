@@ -156,12 +156,12 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 		this.anchorX = (this.width - REGION_WIDTH) / 2;
 		this.anchorY = (this.height - REGION_HEIGHT) / 2;
 
-		final int titleWidth = this.fontRenderer.getStringWidth(TITLE);
+		final int titleWidth = this.fontRenderer.getStringWidth(this.TITLE);
 		final int titleX = this.anchorX + (REGION_WIDTH - titleWidth) / 2;
 		int Y = this.anchorY + INSET;
-		GuiLabel title = new GuiLabel(this.fontRenderer, ID_TITLE, titleX, Y, REGION_WIDTH, BUTTON_HEIGHT,
+		final GuiLabel title = new GuiLabel(this.fontRenderer, ID_TITLE, titleX, Y, REGION_WIDTH, BUTTON_HEIGHT,
 				Color.MC_GOLD.rgb());
-		title.addLine(TITLE);
+		title.addLine(this.TITLE);
 		this.labelList.add(title);
 
 		Y += INSET + BUTTON_HEIGHT;
@@ -231,7 +231,7 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 		final int doneY = this.anchorY + this.regionHeight - (int) (BUTTON_HEIGHT * 1.5F);
 		setupButton(ID_DONE, doneX, doneY, "presets.button.Done");
 
-		this.reload();
+		reload();
 	}
 
 	public void reload() {
@@ -240,7 +240,7 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 		this.config.scan();
 		this.presets = this.config.getPresets();
 		this.maxPage = (this.presets.size() - 1) / MAX_PRESETS_PAGE;
-		this.setPresetButtonText();
+		setPresetButtonText();
 	}
 
 	public void setPresetButtonText() {
@@ -260,14 +260,14 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 				builder.append(TextFormatting.GOLD + info.getTitle()).append('\n');
 				builder.append(TextFormatting.AQUA + info.getFilename());
 				if (info.isRestartRequired())
-					builder.append('\n').append(TOOLTIP_RESTART_REQUIRED);
+					builder.append('\n').append(this.TOOLTIP_RESTART_REQUIRED);
 				if (!StringUtils.isEmpty(info.getDescription().trim()))
 					builder.append("\n\n").append(TextFormatting.RESET).append(info.getDescription());
 				this.tooltips.set(i, new GuiTooltip(this, button, builder.toString(), PRESET_TOOLTIP_WIDTH));
 			}
 		}
 
-		this.updateButtonState();
+		updateButtonState();
 	}
 
 	protected void updateButtonState() {
@@ -281,7 +281,7 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 
 	@Override
 	public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
-		this.drawDefaultBackground();
+		drawDefaultBackground();
 		this.backgroundPanel.render(this.anchorX, this.anchorY, Reference.UPPER_LEFT);
 		this.presetPanel.render(this.anchorX + MARGIN, this.anchorY + MARGIN + INSET * 3, Reference.UPPER_LEFT);
 		super.drawScreen(mouseX, mouseY, partialTicks);
@@ -310,8 +310,8 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 			final StringBuilder builder = new StringBuilder();
 			builder.append(pi.getTitle());
 			if (pi.isRestartRequired())
-				builder.append("\n\n").append(RESTART_REQUIRED_TEXT);
-			final GuiYesNo yn = new GuiYesNo(this, APPLY_WARNING_TEXT, builder.toString(), ID_APPLY);
+				builder.append("\n\n").append(this.RESTART_REQUIRED_TEXT);
+			final GuiYesNo yn = new GuiYesNo(this, this.APPLY_WARNING_TEXT, builder.toString(), ID_APPLY);
 			this.mc.displayGuiScreen(yn);
 		}
 			break;
@@ -327,28 +327,28 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 		}
 			break;
 		case ID_SAVE: {
-			final GuiYesNo yn = new GuiYesNo(this, SAVE_WARNING_TEXT, pi.getTitle(), ID_SAVE);
+			final GuiYesNo yn = new GuiYesNo(this, this.SAVE_WARNING_TEXT, pi.getTitle(), ID_SAVE);
 			this.mc.displayGuiScreen(yn);
 		}
 			break;
 		case ID_DELETE: {
-			final GuiYesNo yn = new GuiYesNo(this, DELETE_WARNING_TEXT, pi.getTitle(), ID_DELETE);
+			final GuiYesNo yn = new GuiYesNo(this, this.DELETE_WARNING_TEXT, pi.getTitle(), ID_DELETE);
 			this.mc.displayGuiScreen(yn);
 		}
 			break;
 		case ID_REFRESH:
-			this.reload();
+			reload();
 			break;
 		case ID_PREV_PAGE:
 			if (this.currentPage > 0) {
 				this.currentPage--;
-				this.setPresetButtonText();
+				setPresetButtonText();
 			}
 			break;
 		case ID_NEXT_PAGE:
 			if (this.currentPage < this.maxPage) {
 				this.currentPage++;
-				this.setPresetButtonText();
+				setPresetButtonText();
 			}
 			break;
 		default:
@@ -371,7 +371,7 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 				}
 				this.selectedPreset = this.currentPage * MAX_PRESETS_PAGE + buttonMashed;
 				this.presetButtons.get(buttonMashed).enabled = false;
-				this.updateButtonState();
+				updateButtonState();
 			}
 		}
 	}
@@ -390,7 +390,7 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 		case ID_DELETE:
 			if (answer) {
 				this.config.delete(pi);
-				this.reload();
+				reload();
 			}
 			break;
 		case ID_APPLY:
@@ -410,12 +410,12 @@ public class PresetsConfigGui extends GuiScreen implements GuiYesNoCallback, ITo
 			if (answer) {
 				this.config.collectPreset(info);
 				this.config.save(info);
-				this.reload();
+				reload();
 			}
 		case ID_EDIT:
 			if (answer) {
 				this.config.save(info);
-				this.reload();
+				reload();
 			}
 		default:
 			;

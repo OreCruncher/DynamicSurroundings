@@ -45,10 +45,10 @@ public class VanillaFogRangeCalculator implements IFogRangeCalculator {
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 		return new FogResult(event);
 	}
-	
+
 	@Override
 	public void tick() {
-		
+
 	}
 
 }

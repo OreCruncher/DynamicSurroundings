@@ -57,7 +57,7 @@ public class AcousticProfile {
 	public static class Static extends AcousticProfile {
 
 		public static final Static NOT_EMITTER = new AcousticProfile.Static(AcousticsManager.NOT_EMITTER);
-		
+
 		protected final IAcoustic[] acoustics;
 
 		public Static(@Nonnull final IAcoustic[] acoustics) {

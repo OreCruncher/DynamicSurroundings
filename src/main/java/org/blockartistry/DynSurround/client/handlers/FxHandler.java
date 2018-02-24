@@ -42,14 +42,14 @@ import org.blockartistry.DynSurround.client.handlers.effects.EntitySwingEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.FrostBreathEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.PlayerToolBarSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.VillagerChatEffect;
-import org.blockartistry.lib.effects.ISoundHelper;
-import org.blockartistry.lib.gfx.ParticleHelper;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.effects.EntityEffectHandler;
 import org.blockartistry.lib.effects.EntityEffectLibrary;
 import org.blockartistry.lib.effects.EventEffectLibrary;
 import org.blockartistry.lib.effects.IParticleHelper;
+import org.blockartistry.lib.effects.ISoundHelper;
+import org.blockartistry.lib.gfx.ParticleHelper;
 import org.blockartistry.lib.math.TimerEMA;
 import org.blockartistry.lib.sound.BasicSound;
 
@@ -105,7 +105,7 @@ public class FxHandler extends EffectHandlerBase {
 	private final Map<UUID, EntityEffectHandler> handlers = new HashMap<>(256);
 	private final EventEffectLibrary eventLibrary = new EventEffectLibrary(PARTICLE_HELPER, SOUND_HELPER);
 
-	private TimerEMA compute = new TimerEMA("FxHandler Updates");
+	private final TimerEMA compute = new TimerEMA("FxHandler Updates");
 	private long nanos;
 
 	public FxHandler() {
@@ -128,7 +128,7 @@ public class FxHandler extends EffectHandlerBase {
 
 	/**
 	 * Used for diagnostics to get data about an Entity.
-	 * 
+	 *
 	 * @param entity
 	 *            Entity to get information on
 	 * @return A list of EntityEffects, if any
@@ -180,7 +180,7 @@ public class FxHandler extends EffectHandlerBase {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onEntityJoin(@Nonnull final EntityJoinWorldEvent event) {
 		if (event.getWorld().isRemote && event.getEntity() instanceof EntityPlayerSP)
-			this.clearHandlers();
+			clearHandlers();
 	}
 
 	/**
@@ -189,12 +189,12 @@ public class FxHandler extends EffectHandlerBase {
 	 */
 	@SubscribeEvent
 	public void registryReload(@Nonnull final ReloadEvent.Registry event) {
-		this.clearHandlers();
+		clearHandlers();
 	}
 
 	@Override
 	public void onConnect() {
-		this.clearHandlers();
+		clearHandlers();
 		this.eventLibrary.register(new CraftingSoundEffect());
 		INSTANCE = this;
 		DiagnosticHandler.INSTANCE.addTimer(this.compute);
@@ -202,7 +202,7 @@ public class FxHandler extends EffectHandlerBase {
 
 	@Override
 	public void onDisconnect() {
-		this.clearHandlers();
+		clearHandlers();
 		this.eventLibrary.cleanup();
 		INSTANCE = null;
 	}

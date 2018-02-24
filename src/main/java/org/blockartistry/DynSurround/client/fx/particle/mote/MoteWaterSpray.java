@@ -62,7 +62,7 @@ public class MoteWaterSpray extends MoteMotionBase {
 		this.f4 = 0.07F * this.scale;
 
 	}
-	
+
 	@Override
 	public void configureColor() {
 		final Color waterColor = BiomeUtils.getColorForLiquid(this.world, this.position);
@@ -80,14 +80,14 @@ public class MoteWaterSpray extends MoteMotionBase {
 		final float y = renderY(partialTicks);
 		final float z = renderZ(partialTicks);
 
-		drawVertex(buffer, x + (-rotationX * f4 - rotationXY * f4), y + (-rotationZ * f4),
-				z + (-rotationYZ * f4 - rotationXZ * f4), this.texU2, this.texV2);
-		drawVertex(buffer, x + (-rotationX * f4 + rotationXY * f4), y + (rotationZ * f4),
-				z + (-rotationYZ * f4 + rotationXZ * f4), this.texU2, this.texV1);
-		drawVertex(buffer, x + (rotationX * f4 + rotationXY * f4), y + (rotationZ * f4),
-				z + (rotationYZ * f4 + rotationXZ * f4), this.texU1, this.texV1);
-		drawVertex(buffer, x + (rotationX * f4 - rotationXY * f4), y + (-rotationZ * f4),
-				z + (rotationYZ * f4 - rotationXZ * f4), this.texU1, this.texV2);
+		drawVertex(buffer, x + (-rotationX * this.f4 - rotationXY * this.f4), y + (-rotationZ * this.f4),
+				z + (-rotationYZ * this.f4 - rotationXZ * this.f4), this.texU2, this.texV2);
+		drawVertex(buffer, x + (-rotationX * this.f4 + rotationXY * this.f4), y + (rotationZ * this.f4),
+				z + (-rotationYZ * this.f4 + rotationXZ * this.f4), this.texU2, this.texV1);
+		drawVertex(buffer, x + (rotationX * this.f4 + rotationXY * this.f4), y + (rotationZ * this.f4),
+				z + (rotationYZ * this.f4 + rotationXZ * this.f4), this.texU1, this.texV1);
+		drawVertex(buffer, x + (rotationX * this.f4 - rotationXY * this.f4), y + (-rotationZ * this.f4),
+				z + (rotationYZ * this.f4 - rotationXZ * this.f4), this.texU1, this.texV2);
 	}
 
 }

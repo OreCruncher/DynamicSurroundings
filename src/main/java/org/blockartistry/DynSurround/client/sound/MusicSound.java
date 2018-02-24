@@ -41,13 +41,13 @@ public class MusicSound extends BasicSound<MusicSound> implements ITickableSound
 	public MusicSound(@Nonnull final SoundEvent event) {
 		super(event, SoundCategory.MUSIC);
 
-		this.setAttenuationType(ISound.AttenuationType.NONE);
+		setAttenuationType(ISound.AttenuationType.NONE);
 	}
 
 	@Override
 	public void update() {
-		// Do nothing.  The sound is ITickableSound so that the sound manager
-		// will dynamically adjust it's volume per tick.  Otherwise, the sound
+		// Do nothing. The sound is ITickableSound so that the sound manager
+		// will dynamically adjust it's volume per tick. Otherwise, the sound
 		// will play at the same volume regardless of the volume scale.
 	}
 

@@ -30,7 +30,9 @@ import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.SeasonType;
 import org.blockartistry.DynSurround.registry.TemperatureRating;
+
 import com.google.common.base.MoreObjects;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -85,10 +87,10 @@ public class SeasonInfo {
 	}
 
 	/*
-	 * Indicates if it is cold enough that water can freeze. Could result in
-	 * snow or frozen ice. Does not take into account any other environmental
-	 * factors - just whether its cold enough. If environmental sensitive
-	 * versions are needed look at canBlockFreeze() and canSnowAt().
+	 * Indicates if it is cold enough that water can freeze. Could result in snow or
+	 * frozen ice. Does not take into account any other environmental factors - just
+	 * whether its cold enough. If environmental sensitive versions are needed look
+	 * at canBlockFreeze() and canSnowAt().
 	 */
 	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getTemperature(world, pos) < 0.15F;
@@ -101,10 +103,11 @@ public class SeasonInfo {
 		return world.canSnowAt(pos, false);
 	}
 
-	public boolean canBlockFreeze(@Nonnull final World world, @Nonnull final BlockPos pos, final boolean noWaterAdjacent) {
+	public boolean canBlockFreeze(@Nonnull final World world, @Nonnull final BlockPos pos,
+			final boolean noWaterAdjacent) {
 		return world.canBlockFreeze(pos, noWaterAdjacent);
 	}
-	
+
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("name", this.dimensionName).toString();

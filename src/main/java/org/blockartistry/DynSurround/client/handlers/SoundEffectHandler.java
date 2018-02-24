@@ -118,7 +118,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	private final ObjectArray<PendingSound> pending = new ObjectArray<>();
 	private final ObjectArray<BasicSound<?>> sendToServer = new ObjectArray<>();
 	private final Set<String> soundsToBlock = Sets.newHashSet();
-	private final TObjectIntHashMap<String> soundCull = new TObjectIntHashMap<String>();
+	private final TObjectIntHashMap<String> soundCull = new TObjectIntHashMap<>();
 
 	private SoundEffectHandler() {
 		super("Sound Effects");
@@ -209,7 +209,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	public void stopSound(@Nonnull final BasicSound<?> sound) {
 		SoundEngine.stopSound(sound);
 	}
-	
+
 	@Nullable
 	public String playSound(@Nonnull final BasicSound<?> sound) {
 		if (sound == null || !sound.canSoundBeHeard(EnvironState.getPlayerPosition()))
@@ -313,7 +313,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 			final String soundResource = event.nbt.getString(BasicSound.NBT.SOUND_EVENT);
 			if (!StringUtils.isEmpty(soundResource)) {
 				if ("dsurround:crafting".equals(soundResource))
-					this.playSound(new AdhocSound(event.nbt));
+					playSound(new AdhocSound(event.nbt));
 			}
 		} catch (final Throwable t) {
 			;
@@ -356,7 +356,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 							if (wc.getLight(blockpos) <= this.RANDOM.nextInt(8)) {
 								final BasicSound<?> fx = Sounds.AMBIENT_CAVE.createSound(blockpos).setVolume(0.9F)
 										.setPitch(0.8F + this.RANDOM.nextFloat() * 0.2F);
-								this.playSound(fx);
+								playSound(fx);
 								wc.ambienceTicks = this.RANDOM.nextInt(12000) + 6000;
 								DSurround.log().debug("Next ambient event: %d ticks", wc.ambienceTicks);
 							}

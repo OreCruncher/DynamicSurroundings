@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.client.hud;
 
 import java.util.Collection;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
@@ -139,7 +140,7 @@ public class PotionHUD extends GuiOverlay {
 		}
 	}
 
-	protected final ObjectArray<PotionInfo> potions = new ObjectArray<PotionInfo>();
+	protected final ObjectArray<PotionInfo> potions = new ObjectArray<>();
 
 	private boolean skipDisplay(@Nonnull final PotionEffect effect) {
 		final Potion potion = effect.getPotion();
@@ -161,11 +162,12 @@ public class PotionHUD extends GuiOverlay {
 			return;
 
 		for (final PotionEffect effect : Ordering.natural().reverse().sortedCopy(collection)) {
-			if (!this.skipDisplay(effect))
+			if (!skipDisplay(effect))
 				this.potions.add(new PotionInfo(effect));
 		}
 	}
 
+	@Override
 	public void doRender(final RenderGameOverlayEvent.Pre event) {
 
 		if (ModOptions.player.potionHUD.potionHudNone && event.getType() == ElementType.POTION_ICONS) {

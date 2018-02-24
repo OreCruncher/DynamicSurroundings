@@ -120,10 +120,10 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 	}
 
 	/*
-	 * Indicates if it is cold enough that water can freeze. Could result in
-	 * snow or frozen ice. Does not take into account any other environmental
-	 * factors - just whether its cold enough. If environmental sensitive
-	 * versions are needed look at canBlockFreeze() and canSnowAt().
+	 * Indicates if it is cold enough that water can freeze. Could result in snow or
+	 * frozen ice. Does not take into account any other environmental factors - just
+	 * whether its cold enough. If environmental sensitive versions are needed look
+	 * at canBlockFreeze() and canSnowAt().
 	 */
 	@Override
 	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
@@ -133,10 +133,12 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 	/*
 	 * Essentially snow layer stuff.
 	 */
+	@Override
 	public boolean canSnowAt(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return WorldHooks.canSnowAtInSeason(world, pos, true, getSeasonData(world));
 	}
 
+	@Override
 	public boolean canBlockFreeze(@Nonnull final World world, @Nonnull final BlockPos pos,
 			final boolean noWaterAdjacent) {
 		return WorldHooks.canBlockFreezeInSeason(world, pos, noWaterAdjacent, getSeasonData(world));

@@ -64,7 +64,7 @@ public abstract class ParticleAsset extends ParticleBase {
 		super(world, x, y, z, dX, dY, dZ);
 
 		this.scale = 0.25F;
-		this.setSize(0.25F, 0.25F);
+		setSize(0.25F, 0.25F);
 
 		this.particleGravity = 0.12F;
 		this.dieOnGround = true;
@@ -80,7 +80,7 @@ public abstract class ParticleAsset extends ParticleBase {
 
 	public void setScale(final float scale) {
 		this.scale = scale;
-		this.setSize(this.scale, this.scale);
+		setSize(this.scale, this.scale);
 	}
 
 	public void setPitchRate(final float rate) {
@@ -120,7 +120,7 @@ public abstract class ParticleAsset extends ParticleBase {
 		super.onUpdate();
 
 		if (this.dieOnGround && isOnGround()) {
-			this.setExpired();
+			setExpired();
 		}
 
 		if (this.pitchRate != 0)
@@ -132,15 +132,15 @@ public abstract class ParticleAsset extends ParticleBase {
 	}
 
 	/**
-	 * Override to provide the necessary rendering for the asset in question.
-	 * Render position and rotations have already been set.
+	 * Override to provide the necessary rendering for the asset in question. Render
+	 * position and rotations have already been set.
 	 */
 	protected abstract void handleRender(final float partialTicks);
 
 	/**
 	 * Override to provide a translation different than the default. This
-	 * translation occurs after rotation. Purpose is to "center" the rendering
-	 * on the rotation point.
+	 * translation occurs after rotation. Purpose is to "center" the rendering on
+	 * the rotation point.
 	 */
 	protected void doModelTranslate() {
 		GlStateManager.translate(-0.5F, -0.5F, 0.5F);
@@ -182,10 +182,10 @@ public abstract class ParticleAsset extends ParticleBase {
 		GlStateManager.rotate(pitch, 1.0F, 0, 0);
 		GlStateManager.rotate(yaw, 0, 1.0F, 0);
 
-		final int i = this.getBrightnessForRender(partialTicks);
+		final int i = getBrightnessForRender(partialTicks);
 		final int j = i % 65536;
 		final int k = i / 65536;
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j, k);
 
 		doModelTranslate();
 		handleRender(partialTicks);

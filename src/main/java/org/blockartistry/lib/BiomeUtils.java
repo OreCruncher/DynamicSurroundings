@@ -62,7 +62,7 @@ public final class BiomeUtils {
 			if (accessor != null) {
 				@SuppressWarnings("unchecked")
 				final Map<String, BiomeDictionary.Type> stuff = (Map<String, BiomeDictionary.Type>) accessor.get(null);
-				return new IdentityHashSet<Type>(stuff.values());
+				return new IdentityHashSet<>(stuff.values());
 			}
 
 			return ImmutableSet.of();
@@ -103,7 +103,7 @@ public final class BiomeUtils {
 	public static Set<Type> getBiomeTypes(@Nonnull final Biome biome) {
 		return new IdentityHashSet<>(BiomeDictionary.getTypes(biome));
 	}
-	
+
 	public static boolean areBiomesSimilar(@Nonnull final Biome b1, @Nonnull final Biome b2) {
 		return BiomeDictionary.areSimilar(b1, b2);
 	}

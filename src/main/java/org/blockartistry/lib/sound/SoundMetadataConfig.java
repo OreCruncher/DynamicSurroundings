@@ -29,7 +29,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
 
 public class SoundMetadataConfig {
-	
+
 	@SerializedName("category")
 	public String category = "neutral";
 	@SerializedName("title")

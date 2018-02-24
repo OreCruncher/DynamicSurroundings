@@ -56,7 +56,7 @@ import net.minecraftforge.oredict.OreDictionary;
 @SideOnly(Side.CLIENT)
 public abstract class DataProxy extends Observable {
 
-	public static final List<Observable> dataPools = new ArrayList<Observable>();
+	public static final List<Observable> dataPools = new ArrayList<>();
 
 	public static void update() {
 		for (final Observable o : dataPools)
@@ -65,7 +65,7 @@ public abstract class DataProxy extends Observable {
 
 	@Override
 	public void notifyObservers() {
-		this.setChanged();
+		setChanged();
 		super.notifyObservers();
 	}
 
@@ -148,10 +148,10 @@ public abstract class DataProxy extends Observable {
 		}
 
 		public List<String> getFootstepAcoustics() {
-			final List<String> result = new ArrayList<String>();
+			final List<String> result = new ArrayList<>();
 			final BlockMap bm = ClientRegistry.FOOTSTEPS.getBlockMap();
 			if (bm != null) {
-				final List<String> data = new ArrayList<String>();
+				final List<String> data = new ArrayList<>();
 				bm.collectData(EnvironState.getWorld(), this.state, this.targetBlock, data);
 				result.addAll(data);
 			}
@@ -159,13 +159,13 @@ public abstract class DataProxy extends Observable {
 		}
 
 		public List<String> getBlockEffects() {
-			final List<String> result = new ArrayList<String>();
-			BlockEffect[] effects = ClientRegistry.BLOCK.getEffects(state);
+			final List<String> result = new ArrayList<>();
+			BlockEffect[] effects = ClientRegistry.BLOCK.getEffects(this.state);
 			for (final BlockEffect e : effects) {
 				result.add(e.getEffectType().getName());
 			}
 
-			effects = ClientRegistry.BLOCK.getAlwaysOnEffects(state);
+			effects = ClientRegistry.BLOCK.getAlwaysOnEffects(this.state);
 			for (final BlockEffect e : effects) {
 				result.add(e.getEffectType().getName() + " (Always on)");
 			}
@@ -173,7 +173,7 @@ public abstract class DataProxy extends Observable {
 		}
 
 		public List<String> getBlockSounds() {
-			final List<String> result = new ArrayList<String>();
+			final List<String> result = new ArrayList<>();
 			SoundEffect[] sounds = ClientRegistry.BLOCK.getAllSounds(this.state);
 			for (final SoundEffect s : sounds)
 				result.add(s.toString());
@@ -187,14 +187,14 @@ public abstract class DataProxy extends Observable {
 		}
 
 		public List<String> getBlockOreDictionary() {
-			final List<String> result = new ArrayList<String>();
+			final List<String> result = new ArrayList<>();
 			final Item item = Item.getItemFromBlock(this.state.getBlock());
 			if (item != null) {
 				final ItemStack stack = this.state.getBlock().getPickBlock(this.state,
 						Minecraft.getMinecraft().objectMouseOver, EnvironState.getWorld(), this.targetBlock,
 						EnvironState.getPlayer());
 				if (stack != null && !stack.isEmpty())
-					for (int i : OreDictionary.getOreIDs(stack))
+					for (final int i : OreDictionary.getOreIDs(stack))
 						result.add(OreDictionary.getOreName(i));
 			}
 			return result;

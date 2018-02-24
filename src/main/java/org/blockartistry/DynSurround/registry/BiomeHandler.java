@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.lib.BiomeUtils;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
@@ -40,22 +41,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class BiomeHandler implements IBiome {
-	
+
 	private static Field biomeName = ReflectionHelper.findField(Biome.class, "biomeName", "field_76791_y");
 
 	protected final Biome biome;
 	protected final int id;
 	protected String name;
 	protected final Set<Type> types;
-	
+
 	public BiomeHandler(@Nonnull final Biome biome) {
 		this.biome = biome;
 		this.id = Biome.getIdForBiome(this.biome);
 		this.types = BiomeUtils.getBiomeTypes(this.biome);
-		
+
 		try {
-			this.name = (String)biomeName.get(this.biome);
-		} catch(@Nonnull final Throwable t) {
+			this.name = (String) biomeName.get(this.biome);
+		} catch (@Nonnull final Throwable t) {
 			this.name = "UNKNOWN";
 		}
 	}

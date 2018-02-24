@@ -26,13 +26,16 @@ package org.blockartistry.DynSurround.client.sound;
 
 import java.util.Iterator;
 import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.registry.SoundMetadata;
 import org.blockartistry.lib.sound.SoundConfigProcessor;
+
 import com.google.common.collect.Maps;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -92,7 +95,7 @@ public final class Sounds {
 
 	// Quiet!
 	public static SoundEvent SILENCE;
-	
+
 	// Minecraft Cave Stuff
 	public static SoundEffect AMBIENT_CAVE;
 
@@ -178,8 +181,9 @@ public final class Sounds {
 		WATERFALL3 = new SoundEffect.Builder("waterfall.3", SoundCategory.AMBIENT).build();
 		WATERFALL4 = new SoundEffect.Builder("waterfall.4", SoundCategory.AMBIENT).build();
 		WATERFALL5 = new SoundEffect.Builder("waterfall.5", SoundCategory.AMBIENT).build();
-		
-		AMBIENT_CAVE = new SoundEffect.Builder(new ResourceLocation("minecraft:ambient.cave"), SoundCategory.AMBIENT).build();
+
+		AMBIENT_CAVE = new SoundEffect.Builder(new ResourceLocation("minecraft:ambient.cave"), SoundCategory.AMBIENT)
+				.build();
 
 	}
 

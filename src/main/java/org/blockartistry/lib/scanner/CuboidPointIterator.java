@@ -34,28 +34,28 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 
 /**
- * Implements a "peeking" iterator.  The iterator uses
- * mutables for position so they aren't safe to cache.
+ * Implements a "peeking" iterator. The iterator uses mutables for position so
+ * they aren't safe to cache.
  */
 public class CuboidPointIterator implements IPointIterator {
-	
+
 	static final CuboidPointIterator NULL_ITERATOR = new CuboidPointIterator() {
-		
+
 		@Override
 		public BlockPos next() {
 			return null;
 		}
-		
+
 		@Override
 		public BlockPos peek() {
 			return null;
 		}
-		
+
 	};
-	
+
 	protected final Iterator<MutableBlockPos> itr;
 	protected BlockPos peeked;
-	
+
 	private CuboidPointIterator() {
 		this.itr = null;
 	}

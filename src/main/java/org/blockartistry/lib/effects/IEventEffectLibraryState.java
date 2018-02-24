@@ -24,6 +24,7 @@
 package org.blockartistry.lib.effects;
 
 import javax.annotation.Nonnull;
+
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -32,12 +33,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface IEventEffectLibraryState extends IEffectState {
 
 	/**
-	 * Indicates if the specified player is the one sitting behind
-	 * the screen.
-	 * 
-	 * @param player The EntityPlayer to check
+	 * Indicates if the specified player is the one sitting behind the screen.
+	 *
+	 * @param player
+	 *            The EntityPlayer to check
 	 * @return true if it is the local player, false otherwise
 	 */
+	@Override
 	boolean isActivePlayer(@Nonnull final Entity player);
 
 }

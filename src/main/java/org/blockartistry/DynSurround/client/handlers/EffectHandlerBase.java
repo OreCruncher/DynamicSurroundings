@@ -32,10 +32,11 @@ import org.blockartistry.lib.math.TimerEMA;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import com.google.common.base.MoreObjects;
+
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract class EffectHandlerBase {
@@ -52,7 +53,7 @@ public abstract class EffectHandlerBase {
 
 	/**
 	 * Used to obtain the handler name for logging purposes.
-	 * 
+	 *
 	 * @return Name of the handler
 	 */
 	public final String getHandlerName() {
@@ -61,7 +62,7 @@ public abstract class EffectHandlerBase {
 
 	/**
 	 * Indicates whether the handler needs to be invoked for the given tick.
-	 * 
+	 *
 	 * @return true that the handler needs to be invoked, false otherwise
 	 */
 	public boolean doTick(final int tick) {
@@ -71,7 +72,7 @@ public abstract class EffectHandlerBase {
 	/**
 	 * Meat of the handlers processing logic. Will be invoked if doTick() returns
 	 * true.
-	 * 
+	 *
 	 * @param player
 	 *            The player currently behind the keyboard.
 	 */
@@ -104,18 +105,18 @@ public abstract class EffectHandlerBase {
 
 	final void connect0() {
 		DiagnosticHandler.INSTANCE.addTimer(this.timer);
-		this.onConnect();
+		onConnect();
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	final void disconnect0() {
 		MinecraftForge.EVENT_BUS.unregister(this);
-		this.onDisconnect();
+		onDisconnect();
 	}
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("name", this.getHandlerName()).toString();
+		return MoreObjects.toStringHelper(this).add("name", getHandlerName()).toString();
 	}
 
 }

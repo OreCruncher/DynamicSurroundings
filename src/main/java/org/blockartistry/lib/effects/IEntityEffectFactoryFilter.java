@@ -32,8 +32,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * An IEntityEffectFactoryFilter is used by the EntityEffectLibrary to determine if a particular
- * EntityEffect would be applied to an Entity. 
+ * An IEntityEffectFactoryFilter is used by the EntityEffectLibrary to determine
+ * if a particular EntityEffect would be applied to an Entity.
  *
  */
 @SideOnly(Side.CLIENT)
@@ -42,11 +42,13 @@ public interface IEntityEffectFactoryFilter {
 
 	/**
 	 * Evaluates the Entity to determine if an EntityEffect will apply.
-	 * 
-	 * @param entity The subject of the evaluation
-	 * @param eei An object containing the Entities effect parameters
+	 *
+	 * @param entity
+	 *            The subject of the evaluation
+	 * @param eei
+	 *            An object containing the Entities effect parameters
 	 * @return true if the EntityEffect applies, false otherwise
 	 */
 	boolean applies(@Nonnull final Entity entity, @Nonnull final EntityEffectInfo eei);
-	
+
 }

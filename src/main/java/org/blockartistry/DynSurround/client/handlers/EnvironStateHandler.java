@@ -46,6 +46,7 @@ import org.blockartistry.DynSurround.registry.SeasonRegistry;
 import org.blockartistry.DynSurround.registry.SeasonType;
 import org.blockartistry.DynSurround.registry.TemperatureRating;
 import org.blockartistry.lib.MinecraftClock;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;

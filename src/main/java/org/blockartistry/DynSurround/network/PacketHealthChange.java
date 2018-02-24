@@ -33,7 +33,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketHealthChange implements IMessage {
-	
+
 	public static class PacketHandler implements IMessageHandler<PacketHealthChange, IMessage> {
 		@Override
 		@Nullable

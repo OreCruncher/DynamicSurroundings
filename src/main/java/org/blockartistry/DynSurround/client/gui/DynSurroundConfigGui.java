@@ -47,9 +47,9 @@ import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.client.config.IConfigElement;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class DynSurroundConfigGui extends GuiConfigBase {
@@ -132,11 +132,11 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 		this.config.save();
 		ConfigProcessor.process(this.config, ModOptions.class);
 	}
-	
+
 	protected void saveSoundList() {
-		final List<String> culledSounds = new ArrayList<String>();
-		final List<String> blockedSounds = new ArrayList<String>();
-		final List<String> soundVolumes = new ArrayList<String>();
+		final List<String> culledSounds = new ArrayList<>();
+		final List<String> blockedSounds = new ArrayList<>();
+		final List<String> soundVolumes = new ArrayList<>();
 
 		for (final Entry<String, Property> entry : this.soundCategory.entrySet()) {
 			final String sound = entry.getKey();
@@ -179,7 +179,7 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 		cat.setRequiresWorldRestart(false);
 
 		final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
-		final List<String> sounds = new ArrayList<String>();
+		final List<String> sounds = new ArrayList<>();
 		for (final Object resource : handler.soundRegistry.getKeys())
 			sounds.add(resource.toString());
 		Collections.sort(sounds);

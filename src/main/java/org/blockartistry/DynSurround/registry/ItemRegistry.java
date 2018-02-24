@@ -369,11 +369,11 @@ public final class ItemRegistry extends Registry {
 	}
 
 	public boolean isBow(@Nonnull final ItemStack stack) {
-		return this.getItemType(stack) == ItemType.BOW;
+		return getItemType(stack) == ItemType.BOW;
 	}
 
 	public boolean isShield(@Nonnull final ItemStack stack) {
-		return this.getItemType(stack) == ItemType.SHIELD;
+		return getItemType(stack) == ItemType.SHIELD;
 	}
 
 	@Nonnull

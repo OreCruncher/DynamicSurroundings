@@ -49,13 +49,13 @@ public class TextPanel extends Panel<TextPanel> {
 	@Nonnull
 	public TextPanel setText(@Nonnull final List<String> text) {
 		this.text = text;
-		this.setHeight((text.size() + 1) * font.FONT_HEIGHT);
+		setHeight((text.size() + 1) * this.font.FONT_HEIGHT);
 
 		int w = 0;
 		for (final String s : text)
-			w = Math.max(font.getStringWidth(s), w);
-		w += font.FONT_HEIGHT;
-		this.setWidth(w);
+			w = Math.max(this.font.getStringWidth(s), w);
+		w += this.font.FONT_HEIGHT;
+		setWidth(w);
 		return this;
 	}
 
@@ -69,6 +69,7 @@ public class TextPanel extends Panel<TextPanel> {
 		return !this.text.isEmpty();
 	}
 
+	@Override
 	public void render(final int locX, final int locY, @Nonnull final Reference ref) {
 
 		if (this.text.isEmpty())
@@ -92,7 +93,7 @@ public class TextPanel extends Panel<TextPanel> {
 		GlStateManager.color(1F, 1F, 1F, this.alpha);
 		GlStateManager.enableBlend();
 
-		final int textRGB = this.getForegroundColor().rgbWithAlpha(this.alpha);
+		final int textRGB = getForegroundColor().rgbWithAlpha(this.alpha);
 
 		final int drawX;
 

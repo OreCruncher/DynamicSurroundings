@@ -1,10 +1,10 @@
 /*
  * Copyright 2012 Udo Klimaschewski
  * Copyright 2016 OreCruncher
- * 
+ *
  * http://UdoJava.com/
  * http://about.me/udo.klimaschewski
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -12,10 +12,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -23,7 +23,7 @@
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  */
 
 // Sourced from: https://github.com/uklimaschewski/EvalEx
@@ -38,22 +38,22 @@ public abstract class Operator {
 	/**
 	 * This operators name (pattern).
 	 */
-	private String oper;
+	private final String oper;
 
 	/**
 	 * Operators precedence.
 	 */
-	private int precedence;
+	private final int precedence;
 
 	/**
 	 * Operator is left associative.
 	 */
-	private boolean leftAssoc;
+	private final boolean leftAssoc;
 
 	/**
 	 * Operator is unary
 	 */
-	private boolean unary;
+	private final boolean unary;
 
 	public Operator(final String oper, final int precedence, final boolean leftAssoc) {
 		this(oper, precedence, leftAssoc, false);
@@ -61,7 +61,7 @@ public abstract class Operator {
 
 	/**
 	 * Creates a new operator.
-	 * 
+	 *
 	 * @param oper
 	 *            The operator name (pattern).
 	 * @param precedence
@@ -95,7 +95,7 @@ public abstract class Operator {
 
 	/**
 	 * Implementation for this operator.
-	 * 
+	 *
 	 * @param v1
 	 *            Operand 1.
 	 * @param v2

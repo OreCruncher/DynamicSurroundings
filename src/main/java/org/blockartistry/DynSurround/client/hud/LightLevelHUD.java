@@ -130,7 +130,7 @@ public final class LightLevelHUD extends GuiOverlay {
 
 	private static final BlockStateProvider blocks = new BlockStateProvider();
 	private static final int ALLOCATION_SIZE = 2048;
-	private static final ObjectArray<LightCoord> lightLevels = new ObjectArray<LightCoord>(ALLOCATION_SIZE);
+	private static final ObjectArray<LightCoord> lightLevels = new ObjectArray<>(ALLOCATION_SIZE);
 	private static final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 	private static int nextCoord = 0;
 

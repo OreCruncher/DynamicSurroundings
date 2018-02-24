@@ -94,7 +94,7 @@ public class LightingEffectHUD extends GuiOverlay {
 	private static final LightSourceData GLOWSTONE_SOURCE = new LightSourceData(Color.MC_YELLOW, 8, 0.75F);
 	private static final LightSourceData SEA_LANTERN_SOURCE = new LightSourceData(Color.MC_AQUA, 8, 0.75F);
 
-	private static final IdentityHashMap<Item, LightSourceData> sources = new IdentityHashMap<Item, LightSourceData>();
+	private static final IdentityHashMap<Item, LightSourceData> sources = new IdentityHashMap<>();
 
 	static {
 		sources.put(Item.getItemFromBlock(Blocks.TORCH), TORCH_SOURCE);
@@ -123,9 +123,10 @@ public class LightingEffectHUD extends GuiOverlay {
 
 	private static ArrayList<ILightProvider> lights = null;
 
+	@Override
 	public void doTick(final int tickRef) {
 
-		lights = new ArrayList<ILightProvider>();
+		lights = new ArrayList<>();
 
 		if (ModOptions.lighting.enableAlbedoSupport && ModOptions.lighting.enablePlayerLighting) {
 			final List<EntityPlayer> players = EnvironState.getWorld().getPlayers(EntityPlayer.class,

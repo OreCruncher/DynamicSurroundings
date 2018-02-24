@@ -32,8 +32,8 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.Presets.api.ConfigurationHelper;
-import org.blockartistry.Presets.api.PresetData;
 import org.blockartistry.Presets.api.ConfigurationHelper.IConfigFilter;
+import org.blockartistry.Presets.api.PresetData;
 import org.blockartistry.Presets.api.events.PresetEvent;
 import org.blockartistry.lib.ConfigProcessor;
 

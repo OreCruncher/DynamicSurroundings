@@ -47,10 +47,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.event.world.WorldEvent;
 
 @SideOnly(Side.CLIENT)
 public final class ParticleCollections {
@@ -95,7 +95,7 @@ public final class ParticleCollections {
 		}
 		return mote;
 	}
-	
+
 	public static boolean canFitWaterSpray() {
 		return theSprays.get().canFit();
 	}

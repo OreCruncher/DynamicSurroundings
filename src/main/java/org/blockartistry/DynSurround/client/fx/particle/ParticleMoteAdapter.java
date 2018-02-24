@@ -27,6 +27,7 @@ package org.blockartistry.DynSurround.client.fx.particle;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.fx.particle.mote.IParticleMote;
+
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
@@ -34,14 +35,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * Special adapter that allows a regular vanilla particle to be inserted
- * into a particle system. 
+ * Special adapter that allows a regular vanilla particle to be inserted into a
+ * particle system.
  */
 @SideOnly(Side.CLIENT)
 public final class ParticleMoteAdapter implements IParticleMote {
-	
+
 	private final Particle particle;
-	
+
 	public ParticleMoteAdapter(@Nonnull final Particle particle) {
 		this.particle = particle;
 	}

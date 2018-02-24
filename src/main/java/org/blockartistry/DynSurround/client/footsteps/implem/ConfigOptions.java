@@ -78,21 +78,21 @@ public class ConfigOptions implements IOptions {
 	public void setGlidingPitch(final float v) {
 		this.glidingPitch = v;
 	}
-	
+
 	@Override
 	public float getVolumeScale() {
 		return this.volumeScale;
 	}
-	
+
 	public void setVolumeScale(final float s) {
 		this.volumeScale = s;
 	}
-	
+
 	@Override
 	public float getPitchScale() {
 		return this.pitchScale;
 	}
-	
+
 	public void setPitchScale(final float p) {
 		this.pitchScale = p;
 	}

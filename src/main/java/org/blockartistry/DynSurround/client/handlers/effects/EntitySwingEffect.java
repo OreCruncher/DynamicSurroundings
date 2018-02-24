@@ -24,6 +24,7 @@
 package org.blockartistry.DynSurround.client.handlers.effects;
 
 import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.ClientRegistry;
@@ -73,8 +74,8 @@ public class EntitySwingEffect extends EntityEffect {
 				if (soundEffect != null) {
 					final RayTraceResult whatImHitting = RayTrace.trace(entity);
 					if (whatImHitting == null || whatImHitting.typeOfHit != Type.BLOCK) {
-						final BasicSound<?> snd = this.getState().createSound(soundEffect, entity);
-						this.getState().playSound(snd);
+						final BasicSound<?> snd = getState().createSound(soundEffect, entity);
+						getState().playSound(snd);
 					}
 				}
 			}
@@ -88,12 +89,8 @@ public class EntitySwingEffect extends EntityEffect {
 		}
 	}
 
-	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
-		@Override
-		public boolean applies(@Nonnull final Entity e, @Nonnull final EntityEffectInfo eei) {
-			return eei.effects.contains("swing");
-		}
-	};
+	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = (@Nonnull final Entity e,
+			@Nonnull final EntityEffectInfo eei) -> eei.effects.contains("swing");
 
 	public static class Factory implements IEntityEffectFactory {
 

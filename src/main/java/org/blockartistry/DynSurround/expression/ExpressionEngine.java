@@ -53,7 +53,7 @@ public final class ExpressionEngine {
 	public void update() {
 		this.cache.update();
 	}
-	
+
 	public List<IDynamicVariant<?>> getVariables() {
 		return this.cache.getVariantList();
 	}

@@ -54,5 +54,5 @@ public class SoundConfig {
 	public Boolean spotSound = null;
 	@SerializedName("step")
 	public Boolean step = null;
-	
+
 }

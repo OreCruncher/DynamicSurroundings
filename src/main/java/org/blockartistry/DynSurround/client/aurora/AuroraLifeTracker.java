@@ -30,7 +30,7 @@ public class AuroraLifeTracker {
 	public void setFading(final boolean f) {
 		this.isFading = f;
 	}
-	
+
 	public void kill() {
 		this.isAlive = false;
 		this.timer = 0;

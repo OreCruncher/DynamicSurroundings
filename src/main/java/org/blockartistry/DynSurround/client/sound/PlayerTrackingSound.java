@@ -36,7 +36,7 @@ public class PlayerTrackingSound extends TrackingSound {
 
 	PlayerTrackingSound(@Nonnull final SoundEffect sound, final boolean fadeIn) {
 		super(EnvironState.getPlayer(), sound, fadeIn);
-		
+
 		this.attenuationType = ISound.AttenuationType.NONE;
 	}
 

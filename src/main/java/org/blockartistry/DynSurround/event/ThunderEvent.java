@@ -32,29 +32,29 @@ import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
- * Event raised when a server requests that thunder and visuals
- * play.  This event will only fire client side.
- * 
+ * Event raised when a server requests that thunder and visuals play. This event
+ * will only fire client side.
+ *
  * Can be canceled.
  */
 @Cancelable
 public class ThunderEvent extends Event {
-	
+
 	/**
 	 * The world in which the event is occuring.
 	 */
 	public final World world;
-	
+
 	/**
 	 * Whether a flash will be played.
 	 */
 	public final boolean doFlash;
-	
+
 	/**
 	 * Epicenter of the event
 	 */
 	public final BlockPos location;
-	
+
 	public ThunderEvent(@Nonnull final World world, final boolean doFlash, @Nonnull final BlockPos pos) {
 		this.world = world;
 		this.doFlash = doFlash;

@@ -24,8 +24,6 @@
 
 package org.blockartistry.DynSurround.client.aurora;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -40,6 +38,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public final class AuroraClassic implements IAurora {
@@ -79,7 +78,7 @@ public final class AuroraClassic implements IAurora {
 	public void setFading(final boolean flag) {
 		this.tracker.setFading(flag);
 	}
-	
+
 	@Override
 	public boolean isDying() {
 		return this.tracker.isFading();
@@ -87,7 +86,7 @@ public final class AuroraClassic implements IAurora {
 
 	@Override
 	public boolean isComplete() {
-		return !this.isAlive();
+		return !isAlive();
 	}
 
 	@Override
@@ -104,7 +103,7 @@ public final class AuroraClassic implements IAurora {
 		builder.append("bands: ").append(this.bands.length);
 		builder.append(", base: ").append(this.baseColor.toString());
 		builder.append(", fade: ").append(this.fadeColor.toString());
-		builder.append(", alpha: ").append(this.getAlpha());
+		builder.append(", alpha: ").append(getAlpha());
 		if (this.tracker.isFading())
 			builder.append(", FADING");
 		return builder.toString();
@@ -125,7 +124,7 @@ public final class AuroraClassic implements IAurora {
 	}
 
 	protected float getAlphaf() {
-		return this.getAlpha() / 255.0F;
+		return getAlpha() / 255.0F;
 	}
 
 	protected int getZOffset() {
@@ -135,7 +134,7 @@ public final class AuroraClassic implements IAurora {
 	@Override
 	public void render(final float partialTick) {
 
-		final float alpha = this.getAlphaf();
+		final float alpha = getAlphaf();
 		if (alpha <= 0.0F)
 			return;
 
@@ -151,8 +150,8 @@ public final class AuroraClassic implements IAurora {
 		final double tranZ = (mc.player.posZ - getZOffset())
 				- (mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * partialTick);
 
-		final Color base = this.getBaseColor();
-		final Color fade = this.getFadeColor();
+		final Color base = getBaseColor();
+		final Color fade = getFadeColor();
 		final double zero = 0.0D;
 
 		GlStateManager.pushMatrix();

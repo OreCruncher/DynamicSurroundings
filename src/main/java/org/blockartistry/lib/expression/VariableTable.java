@@ -36,6 +36,6 @@ public final class VariableTable extends TreeMap<String, LazyVariant> {
 
 	public VariableTable(@Nonnull final VariableTable table) {
 		this();
-		this.putAll(table);
+		putAll(table);
 	}
 }

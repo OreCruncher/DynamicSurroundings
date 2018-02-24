@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.entity;
 
 import javax.annotation.Nonnull;
+
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 public enum EmojiType {
@@ -56,7 +57,7 @@ public enum EmojiType {
 	/** The eat emoji will be displayed */
 	EAT(12);
 
-	private static final TIntObjectHashMap<EmojiType> lookup = new TIntObjectHashMap<EmojiType>();
+	private static final TIntObjectHashMap<EmojiType> lookup = new TIntObjectHashMap<>();
 	static {
 		for (final EmojiType state : EmojiType.values()) {
 			lookup.put(state.getId(), state);

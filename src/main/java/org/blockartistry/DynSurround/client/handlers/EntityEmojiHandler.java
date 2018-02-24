@@ -46,12 +46,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityEmojiHandler extends EffectHandlerBase {
 
-	private final TIntObjectHashMap<IParticleMote> emojiParticles = new TIntObjectHashMap<IParticleMote>();
+	private final TIntObjectHashMap<IParticleMote> emojiParticles = new TIntObjectHashMap<>();
 
 	public EntityEmojiHandler() {
 		super("Entity Emojis");
 	}
-	
+
 	@Override
 	public boolean doTick(final int tick) {
 		return this.emojiParticles.size() > 0;

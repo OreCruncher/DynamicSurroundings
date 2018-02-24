@@ -40,7 +40,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ProbabilityWeightsAcoustic implements IAcoustic {
-	
+
 	protected final IAcoustic[] acoustics;
 	protected final int[] weights;
 	protected final int totalWeight;
@@ -63,10 +63,10 @@ public class ProbabilityWeightsAcoustic implements IAcoustic {
 	public String getAcousticName() {
 		return "Probability Weights Acoustic";
 	}
-	
+
 	@Override
-	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final EntityLivingBase location, @Nonnull final EventType event,
-			@Nullable final IOptions inputOptions) {
+	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final EntityLivingBase location,
+			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
 		if (this.totalWeight <= 0)
 			return;
 

@@ -1,10 +1,10 @@
 /*
  * Copyright 2012 Udo Klimaschewski
  * Copyright 2016 OreCruncher
- * 
+ *
  * http://UdoJava.com/
  * http://about.me/udo.klimaschewski
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -12,10 +12,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -23,7 +23,7 @@
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  */
 
 // Sourced from: https://github.com/uklimaschewski/EvalEx
@@ -248,7 +248,7 @@ public final class Expression {
 					throw new ExpressionException("MAX requires at least one parameter");
 				}
 				Variant max = null;
-				for (Variant parameter : parameters) {
+				for (final Variant parameter : parameters) {
 					if (max == null || parameter.compareTo(max) > 0) {
 						max = parameter;
 					}
@@ -277,7 +277,7 @@ public final class Expression {
 					throw new ExpressionException("MIN requires at least one parameter");
 				}
 				Variant min = null;
-				for (Variant parameter : parameters) {
+				for (final Variant parameter : parameters) {
 					if (min == null || parameter.compareTo(min) < 0) {
 						min = parameter;
 					}
@@ -354,22 +354,22 @@ public final class Expression {
 	/**
 	 * All defined operators with name and implementation.
 	 */
-	private OperatorTable operators;
+	private final OperatorTable operators;
 
 	/**
 	 * All defined functions with name and implementation.
 	 */
-	private FunctionTable functions;
+	private final FunctionTable functions;
 
 	/**
 	 * All defined variables with name and value.
 	 */
-	private VariableTable variables;
+	private final VariableTable variables;
 
 	/**
 	 * Creates a new expression instance from an expression string with a given
 	 * default match context of {@link MathContext#DECIMAL32}.
-	 * 
+	 *
 	 * @param expression
 	 *            The expression. E.g. <code>"2.4*sin(3)/(2-4)"</code> or
 	 *            <code>"sin(y)>0 & max(z, 3)>3"</code>
@@ -383,17 +383,17 @@ public final class Expression {
 
 	/**
 	 * Evaluates the expression.
-	 * 
+	 *
 	 * @return The result of the expression.
 	 */
 	public Variant eval() {
-		return this.getProgram().eval();
+		return getProgram().eval();
 	}
 
 	/**
 	 * Returns the compiled program. Useful for when the Expression object itself is
 	 * no longer needed but the caller wishes to retain the compiled results.
-	 * 
+	 *
 	 * @return The compiled program
 	 */
 	public LazyVariant getProgram() {
@@ -411,19 +411,19 @@ public final class Expression {
 	 * Cached access to the RPN notation of this expression, ensures only one
 	 * calculation of the RPN per expression instance. If no cached instance exists,
 	 * a new one will be created and put to the cache.
-	 * 
+	 *
 	 * @return The cached RPN instance.
 	 */
 	public List<String> getRPN() {
 		if (this.rpn == null)
-			this.getProgram();
+			getProgram();
 		return this.rpn;
 	}
 
 	/**
 	 * Get a string representation of the RPN (Reverse Polish Notation) for this
 	 * expression.
-	 * 
+	 *
 	 * @return A string with the RPN representation for this expression.
 	 */
 	public String toRPN() {
@@ -436,7 +436,7 @@ public final class Expression {
 	}
 
 	public Expression addVariables(@Nonnull final List<? extends Variant> list) {
-		list.forEach(v -> this.addVariable(v));
+		list.forEach(v -> addVariable(v));
 		return this;
 	}
 
@@ -453,7 +453,7 @@ public final class Expression {
 
 	/**
 	 * Exposing declared variables in the expression.
-	 * 
+	 *
 	 * @return All declared variables.
 	 */
 	public Set<String> getDeclaredVariables() {
@@ -462,7 +462,7 @@ public final class Expression {
 
 	/**
 	 * Exposing declared operators in the expression.
-	 * 
+	 *
 	 * @return All declared operators.
 	 */
 	public Set<String> getDeclaredOperators() {
@@ -471,7 +471,7 @@ public final class Expression {
 
 	/**
 	 * Exposing declared functions.
-	 * 
+	 *
 	 * @return All declared functions.
 	 */
 	public Set<String> getDeclaredFunctions() {
@@ -492,7 +492,7 @@ public final class Expression {
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
-		Expression that = (Expression) o;
+		final Expression that = (Expression) o;
 		if (this.expression == null) {
 			return that.expression == null;
 		} else {

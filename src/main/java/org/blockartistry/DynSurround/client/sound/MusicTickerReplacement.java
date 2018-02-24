@@ -46,7 +46,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * have their volumes dynamically scaled.  Purpose is to reduce normal music
  * volume so that battle music can play.  Once battle is over volume of the
  * sound will return to normal.
- * 
+ *
  * The music sound is queued as an ITickableSound so that the sound engine
  * will update the volume dynamically.
  */
@@ -90,7 +90,7 @@ public class MusicTickerReplacement extends MusicTicker {
 	}
 
 	public void setPlaying(@Nonnull final ConfigSound sound) {
-		this.stopMusic();
+		stopMusic();
 		this.currentMusic = sound;
 		SoundEngine.playSound((BasicSound<?>) this.currentMusic);
 	}

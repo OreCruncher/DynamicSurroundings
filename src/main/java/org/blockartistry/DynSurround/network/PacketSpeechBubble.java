@@ -42,11 +42,11 @@ public class PacketSpeechBubble implements IMessage {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketSpeechBubble message, @Nullable final MessageContext ctx) {
-			
+
 			// Reject mob chat messages since they are generated 100% client side.
-			if(message.translate)
+			if (message.translate)
 				return null;
-			
+
 			Network.postEvent(new SpeechTextEvent(message.entityId, message.message, message.translate));
 			return null;
 		}
@@ -60,8 +60,7 @@ public class PacketSpeechBubble implements IMessage {
 
 	}
 
-	public PacketSpeechBubble(@Nonnull final Entity player, @Nonnull final String message,
-			final boolean translate) {
+	public PacketSpeechBubble(@Nonnull final Entity player, @Nonnull final String message, final boolean translate) {
 		this.entityId = player.getEntityId();
 		this.message = message;
 		this.translate = translate;

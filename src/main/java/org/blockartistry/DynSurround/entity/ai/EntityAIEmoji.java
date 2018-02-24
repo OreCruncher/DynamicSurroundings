@@ -57,7 +57,7 @@ public class EntityAIEmoji extends EntityAIBase {
 	public void updateTask() {
 
 		if (this.data == null)
-			this.data = (IEmojiDataSettable) subject.getCapability(CapabilityEmojiData.EMOJI,
+			this.data = (IEmojiDataSettable) this.subject.getCapability(CapabilityEmojiData.EMOJI,
 					CapabilityEmojiData.DEFAULT_FACING);
 
 		// Saw in OpenEye. Not sure how this could happen.

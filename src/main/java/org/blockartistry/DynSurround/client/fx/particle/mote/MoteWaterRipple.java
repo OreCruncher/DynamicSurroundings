@@ -50,7 +50,7 @@ public class MoteWaterRipple extends MoteAgeable {
 		this.scale = this.growthRate;
 		this.scaledWidth = this.scale * TEX_SIZE_HALF;
 		this.posY -= 0.2D;
-	
+
 		final Color waterColor = BiomeUtils.getColorForLiquid(world, this.position);
 		this.red = waterColor.red;
 		this.green = waterColor.green;

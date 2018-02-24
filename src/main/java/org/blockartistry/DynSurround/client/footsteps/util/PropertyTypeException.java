@@ -31,7 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class PropertyTypeException extends RuntimeException {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -294806176942571859L;
 

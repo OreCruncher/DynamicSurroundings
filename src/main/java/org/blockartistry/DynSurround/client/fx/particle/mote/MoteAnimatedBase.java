@@ -36,9 +36,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class MoteAnimatedBase extends MoteMotionBase {
 
 	/**
-	 * The base texture index. The texture index starts at this +
-	 * (numAgingFrames - 1), and works its way down to this number as the
-	 * particle decays.
+	 * The base texture index. The texture index starts at this + (numAgingFrames -
+	 * 1), and works its way down to this number as the particle decays.
 	 */
 	protected int textureIdx;
 	/**
@@ -73,37 +72,37 @@ public abstract class MoteAnimatedBase extends MoteMotionBase {
 
 		this.textureIdx = textureIdx;
 		this.numAgingFrames = numFrames;
-        this.particleScale = (RANDOM.nextFloat() * 0.5F + 0.5F) * 2.0F;
+		this.particleScale = (RANDOM.nextFloat() * 0.5F + 0.5F) * 2.0F;
 
 	}
 
 	public void setColor(final int rgb) {
-		this.red = (float) ((rgb & 16711680) >> 16) / 255.0F;
-		this.green = (float) ((rgb & 65280) >> 8) / 255.0F;
-		this.blue = (float) ((rgb & 255) >> 0) / 255.0F;
+		this.red = ((rgb & 16711680) >> 16) / 255.0F;
+		this.green = ((rgb & 65280) >> 8) / 255.0F;
+		this.blue = ((rgb & 255) >> 0) / 255.0F;
 		this.alpha = 1.0F;
 	}
 
 	/**
-	 * sets a color for the particle to drift toward (20% closer each tick,
-	 * never actually getting very close)
+	 * sets a color for the particle to drift toward (20% closer each tick, never
+	 * actually getting very close)
 	 */
 	public void setColorFade(final int rgb) {
-		this.fadeTargetRed = (float) ((rgb & 16711680) >> 16) / 255.0F;
-		this.fadeTargetGreen = (float) ((rgb & 65280) >> 8) / 255.0F;
-		this.fadeTargetBlue = (float) ((rgb & 255) >> 0) / 255.0F;
+		this.fadeTargetRed = ((rgb & 16711680) >> 16) / 255.0F;
+		this.fadeTargetGreen = ((rgb & 65280) >> 8) / 255.0F;
+		this.fadeTargetBlue = ((rgb & 255) >> 0) / 255.0F;
 		this.fadingColor = true;
 	}
-	
+
 	@Override
 	public void handleCollision() {
-        this.motionX *= 0.699999988079071D;
-        this.motionZ *= 0.699999988079071D;
+		this.motionX *= 0.699999988079071D;
+		this.motionZ *= 0.699999988079071D;
 	}
 
 	@Override
 	public void update() {
-		
+
 		this.motionY += this.yAcceleration;
 		this.motionX += this.xAcceleration;
 		this.motionZ += this.zAcceleration;
@@ -113,10 +112,10 @@ public abstract class MoteAnimatedBase extends MoteMotionBase {
 
 		super.update();
 
-		if (this.isAlive()) {
+		if (isAlive()) {
 
 			if (this.age > this.maxAge / 2) {
-				this.alpha = (1.0F - ((float) this.age - (float) (this.maxAge / 2)) / (float) this.maxAge);
+				this.alpha = (1.0F - ((float) this.age - (float) (this.maxAge / 2)) / this.maxAge);
 
 				if (this.fadingColor) {
 					this.red += (this.fadeTargetRed - this.red) * 0.2F;
@@ -125,7 +124,7 @@ public abstract class MoteAnimatedBase extends MoteMotionBase {
 				}
 			}
 
-			this.setParticleTextureIndex(
+			setParticleTextureIndex(
 					this.textureIdx + (this.numAgingFrames - 1 - this.age * this.numAgingFrames / this.maxAge));
 		}
 	}
@@ -138,7 +137,7 @@ public abstract class MoteAnimatedBase extends MoteMotionBase {
 	@Override
 	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX,
 			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		
+
 		final double x = renderX(partialTicks);
 		final double y = renderY(partialTicks);
 		final double z = renderZ(partialTicks);

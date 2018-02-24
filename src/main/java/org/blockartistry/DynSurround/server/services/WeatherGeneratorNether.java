@@ -38,7 +38,7 @@ public class WeatherGeneratorNether extends WeatherGenerator {
 	// it has no sky
 	@Override
 	protected void preProcess() {
-		
+
 		this.world.provider.hasSkyLight = true;
 		try {
 			this.world.updateWeatherBody();
@@ -48,17 +48,17 @@ public class WeatherGeneratorNether extends WeatherGenerator {
 		this.world.provider.hasSkyLight = false;
 
 	}
-	
+
 	// No thunder in the nether
 	@Override
 	protected void doThunder() {
-		
+
 	}
-	
+
 	// No ambient thunder, either
 	@Override
 	protected void doAmbientThunder() {
-		
+
 	}
 
 }

@@ -42,7 +42,7 @@ public final class FogResult {
 		this.fogMode = 0;
 		this.end = this.start = 0F;
 	}
-	
+
 	public FogResult(final int fogMode, final float distance, final float scale) {
 		this.set(fogMode, distance, scale);
 	}
@@ -70,11 +70,11 @@ public final class FogResult {
 	public void set(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 		this.set(event.getFogMode(), event.getFarPlaneDistance(), DEFAULT_PLANE_SCALE);
 	}
-	
+
 	public int getFogMode() {
 		return this.fogMode;
 	}
-	
+
 	public float getStart() {
 		return this.start;
 	}
@@ -82,11 +82,11 @@ public final class FogResult {
 	public float getEnd() {
 		return this.end;
 	}
-	
+
 	public boolean isValid(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 		return this.end > this.start && event.getFogMode() == this.fogMode;
 	}
-	
+
 	@Override
 	public String toString() {
 		return String.format("[mode: %d, start: %f, end: %f]", this.fogMode, this.start, this.end);

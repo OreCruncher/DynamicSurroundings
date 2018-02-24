@@ -41,7 +41,6 @@ import org.blockartistry.lib.math.TimerEMA;
 
 import com.google.common.collect.ImmutableList;
 
-import gnu.trove.procedure.TIntDoubleProcedure;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.particle.ParticleManager;
@@ -74,9 +73,9 @@ public class DiagnosticHandler extends EffectHandlerBase {
 	// TPS status strings to display
 	private List<String> serverDataReport = ImmutableList.of();
 
-	private List<TimerEMA> timers = new ArrayList<>();
-	private TimerEMA clientTick = new TimerEMA("Client Tick");
-	private TimerEMA lastTick = new TimerEMA("Last Tick");
+	private final List<TimerEMA> timers = new ArrayList<>();
+	private final TimerEMA clientTick = new TimerEMA("Client Tick");
+	private final TimerEMA lastTick = new TimerEMA("Last Tick");
 	private long timeMark;
 	private long lastTickMark = -1;
 	private float tps = 0;
@@ -209,7 +208,7 @@ public class DiagnosticHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void serverDataEvent(final ServerDataEvent event) {
-		final ArrayList<String> data = new ArrayList<String>();
+		final ArrayList<String> data = new ArrayList<>();
 
 		final int diff = event.total - event.free;
 
@@ -219,15 +218,11 @@ public class DiagnosticHandler extends EffectHandlerBase {
 		final int tps = (int) Math.min(1000.0D / event.meanTickTime, 20.0D);
 		data.add(String.format("Ticktime Overall:%s %5.3fms (%d TPS)", getTpsFormatPrefix(tps), event.meanTickTime,
 				tps));
-		event.dimTps.forEachEntry(new TIntDoubleProcedure() {
-			@Override
-			public boolean execute(int a, double b) {
-				final String dimName = DimensionManager.getProviderType(a).getName();
-				final int tps = (int) Math.min(1000.0D / b, 20.0D);
-				data.add(String.format("%s (%d):%s %7.3fms (%d TPS)", dimName, a, getTpsFormatPrefix(tps), b, tps));
-				return true;
-			}
-
+		event.dimTps.forEachEntry((a, b) -> {
+			final String dimName = DimensionManager.getProviderType(a).getName();
+			final int tps1 = (int) Math.min(1000.0D / b, 20.0D);
+			data.add(String.format("%s (%d):%s %7.3fms (%d TPS)", dimName, a, getTpsFormatPrefix(tps1), b, tps1));
+			return true;
 		});
 
 		Collections.sort(data.subList(4, data.size()));

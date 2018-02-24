@@ -24,8 +24,6 @@
 
 package org.blockartistry.DynSurround.entity;
 
-import java.util.concurrent.Callable;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -78,17 +76,12 @@ public class CapabilityEmojiData {
 				settable.setEmotionalState(EmotionalState.get(data.getInteger("es")));
 				settable.clearDirty();
 			}
-		}, new Callable<IEmojiData>() {
-			@Override
-			public IEmojiData call() throws Exception {
-				return new EmojiData(null);
-			}
-		});
+		}, () -> new EmojiData(null));
 	}
 
 	@Nonnull
 	public static ICapabilityProvider createProvider(final IEmojiData data) {
-		return new CapabilityProviderSerializable<IEmojiData>(EMOJI, DEFAULT_FACING, data);
+		return new CapabilityProviderSerializable<>(EMOJI, DEFAULT_FACING, data);
 	}
 
 	public static class EventHandler {

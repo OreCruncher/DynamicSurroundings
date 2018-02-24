@@ -33,7 +33,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class SeasonInfoNether extends SeasonInfo {
-	
+
 	public SeasonInfoNether(@Nonnull final World world) {
 		super(world);
 	}
@@ -48,10 +48,10 @@ public class SeasonInfoNether extends SeasonInfo {
 	public BlockPos getPrecipitationHeight(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return new BlockPos(pos.getX(), 0, pos.getZ());
 	}
-	
+
 	@Override
 	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return false;
 	}
-	
+
 }

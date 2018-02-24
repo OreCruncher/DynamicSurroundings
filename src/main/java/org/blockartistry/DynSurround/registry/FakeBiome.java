@@ -58,6 +58,7 @@ public class FakeBiome implements IBiome {
 		return EnvironState.getTruePlayerBiome();
 	}
 
+	@Override
 	public int getId() {
 		return this.biomeId;
 	}

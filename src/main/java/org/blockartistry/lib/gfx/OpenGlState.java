@@ -31,26 +31,26 @@ import net.minecraft.client.renderer.GlStateManager;
 
 public final class OpenGlState {
 
-	private boolean enableBlend;
-	private int blendSource;
-	private int blendDest;
-	private int blendEquation;
+	private final boolean enableBlend;
+	private final int blendSource;
+	private final int blendDest;
+	private final int blendEquation;
 
-	private boolean enableAlphaTest;
-	private int alphaTestFunc;
-	private float alphaTestRef;
+	private final boolean enableAlphaTest;
+	private final int alphaTestFunc;
+	private final float alphaTestRef;
 
-	private boolean depthTest;
-	private int depthFunc;
+	private final boolean depthTest;
+	private final int depthFunc;
 
-	private boolean cull;
+	private final boolean cull;
 	private GlStateManager.CullFace cullMode;
 
-	private boolean lighting;
-	private boolean depthMask;
-	private boolean normal;
-	private boolean rescaleNormal;
-	private boolean texture2D;
+	private final boolean lighting;
+	private final boolean depthMask;
+	private final boolean normal;
+	private final boolean rescaleNormal;
+	private final boolean texture2D;
 
 	private static int getInteger(final int parm) {
 		return GL11.glGetInteger(parm);

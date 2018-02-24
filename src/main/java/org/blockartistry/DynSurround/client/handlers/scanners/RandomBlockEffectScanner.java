@@ -56,7 +56,7 @@ public class RandomBlockEffectScanner extends RandomScanner {
 
 	public RandomBlockEffectScanner(final int range) {
 		super(ClientPlayerLocus.INSTANCE, "RandomBlockEffectScanner", range, (int) (range * range * range * RATIO));
-		this.setLogger(DSurround.log());
+		setLogger(DSurround.log());
 	}
 
 	@Override

@@ -31,6 +31,7 @@ import org.blockartistry.DynSurround.data.xface.DimensionConfig;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
+
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 

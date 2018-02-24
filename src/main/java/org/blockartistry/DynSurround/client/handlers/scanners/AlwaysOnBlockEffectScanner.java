@@ -42,7 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * This guy scans a large area around the player looking for blocks to spawn
  * "always on" effects such as waterfall splash and steam jets.
- * 
+ *
  * The CuboidScanner tries to only scan new blocks that come into range as the
  * player moves. Once all the blocks are scanned in the region (cuboid) it will
  * stop. It will start again once the player moves location.
@@ -55,7 +55,7 @@ public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 
 	public AlwaysOnBlockEffectScanner(final int range) {
 		super(ClientPlayerLocus.INSTANCE, "AlwaysOnBlockEffectScanner", range, 0);
-		this.setLogger(DSurround.log());
+		setLogger(DSurround.log());
 	}
 
 	@Override

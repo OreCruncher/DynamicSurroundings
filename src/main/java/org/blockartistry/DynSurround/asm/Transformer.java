@@ -42,16 +42,16 @@ public class Transformer extends MyTransformer {
 
 	@Override
 	protected void initTransmorgrifiers() {
-		this.addTransmorgrifier(new PatchEntityRenderer());
-		this.addTransmorgrifier(new PatchWorldServer());
-		this.addTransmorgrifier(new PatchSoundHandler());
-		this.addTransmorgrifier(new PatchSoundManager());
-		this.addTransmorgrifier(new PatchEntityArrow());
+		addTransmorgrifier(new PatchEntityRenderer());
+		addTransmorgrifier(new PatchWorldServer());
+		addTransmorgrifier(new PatchSoundHandler());
+		addTransmorgrifier(new PatchSoundManager());
+		addTransmorgrifier(new PatchEntityArrow());
 
 		// Sound engine crash patches
-		this.addTransmorgrifier(new SoundCrashFixSource());
-		this.addTransmorgrifier(new SoundCrashFixLibrary());
-		this.addTransmorgrifier(new SoundCrashFixStreamThread());
+		addTransmorgrifier(new SoundCrashFixSource());
+		addTransmorgrifier(new SoundCrashFixLibrary());
+		addTransmorgrifier(new SoundCrashFixStreamThread());
 	}
 
 }

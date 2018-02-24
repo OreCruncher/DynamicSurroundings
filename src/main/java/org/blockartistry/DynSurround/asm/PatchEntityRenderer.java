@@ -61,7 +61,7 @@ public class PatchEntityRenderer extends Transmorgrifier {
 
 		final MethodNode m = findMethod(cn, sig, names);
 		if (m != null) {
-			this.logMethod(Transformer.log(), m, "Found!");
+			logMethod(Transformer.log(), m, "Found!");
 
 			m.localVariables = null;
 			final InsnList list = new InsnList();
@@ -79,7 +79,7 @@ public class PatchEntityRenderer extends Transmorgrifier {
 			Transformer.log().error("Unable to locate method {}{}", names[0], sig);
 		}
 
-		Transformer.log().info("Unable to patch [{}]!", this.getClassName());
+		Transformer.log().info("Unable to patch [{}]!", getClassName());
 
 		return false;
 	}

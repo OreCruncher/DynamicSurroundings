@@ -83,7 +83,7 @@ public final class ModOptions {
 	}
 
 	private static void scrubCategory(final ConfigCategory category) {
-		final List<String> killList = new ArrayList<String>();
+		final List<String> killList = new ArrayList<>();
 		for (final Entry<String, Property> entry : category.entrySet())
 			if (StringUtils.isEmpty(entry.getValue().getComment()))
 				killList.add(entry.getKey());

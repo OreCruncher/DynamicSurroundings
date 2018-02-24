@@ -35,9 +35,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.common.Optional;
 
 @SideOnly(Side.CLIENT)
 @Optional.Interface(iface = "elucent.albedo.lighting.ILightProvider", modid = "albedo")
@@ -66,8 +66,8 @@ public class MoteFireFly extends MoteAnimatedBase implements ILightProvider {
 		this.particleScale *= 0.75F * 0.25F * 0.1F;
 		this.maxAge = 48 + RANDOM.nextInt(12);
 
-		this.setColor(startColorRGB);
-		this.setColorFade(fadeColorRGB);
+		setColor(startColorRGB);
+		setColorFade(fadeColorRGB);
 	}
 
 	@Override
@@ -88,17 +88,17 @@ public class MoteFireFly extends MoteAnimatedBase implements ILightProvider {
 
 	@Optional.Method(modid = "albedo")
 	protected double lightedX(final float partialTicks) {
-		return (float) (this.prevX + (this.posX - this.prevX) * (double) partialTicks);
+		return (float) (this.prevX + (this.posX - this.prevX) * partialTicks);
 	}
 
 	@Optional.Method(modid = "albedo")
 	protected double lightedY(final float partialTicks) {
-		return (float) (this.prevY + (this.posY - this.prevY) * (double) partialTicks);
+		return (float) (this.prevY + (this.posY - this.prevY) * partialTicks);
 	}
 
 	@Optional.Method(modid = "albedo")
 	protected double lightedZ(final float partialTicks) {
-		return (float) (this.prevZ + (this.posZ - this.prevZ) * (double) partialTicks);
+		return (float) (this.prevZ + (this.posZ - this.prevZ) * partialTicks);
 	}
 
 	@Optional.Method(modid = "albedo")

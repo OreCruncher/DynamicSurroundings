@@ -60,8 +60,8 @@ public class SoundCrashFixStreamThread extends Transmorgrifier {
 		final String sig = "()V";
 		final MethodNode m = findMethod(cn, sig, name);
 		if (m != null) {
-			this.logMethod(Transformer.log(), m, "Found!");
-			for (Iterator<?> iterator = m.instructions.iterator(); iterator.hasNext();) {
+			logMethod(Transformer.log(), m, "Found!");
+			for (final Iterator<?> iterator = m.instructions.iterator(); iterator.hasNext();) {
 				AbstractInsnNode insn = (AbstractInsnNode) iterator.next();
 				if (insn instanceof MethodInsnNode && ((MethodInsnNode) insn).owner.equals("java/util/ListIterator")
 						&& ((MethodInsnNode) insn).name.equals("next")) {
@@ -83,7 +83,7 @@ public class SoundCrashFixStreamThread extends Transmorgrifier {
 			Transformer.log().error("Unable to locate method {}{}", name, sig);
 		}
 
-		Transformer.log().info("Unable to patch [{}]!", this.getClassName());
+		Transformer.log().info("Unable to patch [{}]!", getClassName());
 
 		return false;
 

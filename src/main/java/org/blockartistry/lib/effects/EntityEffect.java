@@ -49,7 +49,7 @@ public abstract class EntityEffect {
 
 	/**
 	 * Returns the name of the handler
-	 * 
+	 *
 	 * @return The name of the handler
 	 */
 	@Nonnull
@@ -59,7 +59,7 @@ public abstract class EntityEffect {
 	 * Called by the EntityEffectLibrary during the initialization of an
 	 * EntityEffectHandler. Override this method to perform any initialization
 	 * specific to the EntityEffect. Remember to call the super class!
-	 * 
+	 *
 	 * @param state
 	 *            The state provided by the EntityEffectLibrary
 	 */
@@ -70,7 +70,7 @@ public abstract class EntityEffect {
 	/**
 	 * Accessor to obtain the IEntityEffectHandlerState associated with this
 	 * EntityEffect instance.
-	 * 
+	 *
 	 * @return Associated IEntityEffectHandlerState instance
 	 */
 	protected IEntityEffectHandlerState getState() {
@@ -101,7 +101,7 @@ public abstract class EntityEffect {
 
 	/**
 	 * Indicates if the keyboard jockey is in 1st person view.
-	 * 
+	 *
 	 * @return true if in first person view, false otherwise
 	 */
 	public boolean isFirstPersonView() {
@@ -111,7 +111,7 @@ public abstract class EntityEffect {
 
 	@Override
 	public String toString() {
-		return this.name();
+		return name();
 	}
 
 }

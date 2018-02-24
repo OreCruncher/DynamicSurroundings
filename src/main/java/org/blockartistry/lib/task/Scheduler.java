@@ -45,11 +45,11 @@ public final class Scheduler {
 	 * Schedules the specified task for execution. It is possible that the task will
 	 * executed immediately because the current thread of execution is appropriate
 	 * for the request.
-	 * 
+	 *
 	 * It is possible that the specified side does not exist, such as a client side
 	 * request on a dedicated server. In that case the task will not be executed and
 	 * the return value of the method will indicate this condition.
-	 * 
+	 *
 	 * @param side
 	 *            The side on which the task is to execute
 	 * @param task

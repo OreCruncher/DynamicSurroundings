@@ -45,12 +45,13 @@ import org.blockartistry.lib.WeightTable;
 import org.blockartistry.lib.compat.ModEnvironment;
 
 import com.google.common.collect.Lists;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
-import static net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -103,7 +104,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	public BiomeInfo(@Nonnull final IBiome biome) {
 		this.biome = biome;
 
-		if (!this.isFake()) {
+		if (!isFake()) {
 			this.hasPrecipitation = canRain() || getEnableSnow();
 		}
 
@@ -124,7 +125,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 		this.isRiver = this.biome.getTypes().contains(Type.RIVER);
 		this.isOcean = this.biome.getTypes().contains(Type.OCEAN);
-		this.isDeepOcean = this.isOcean && this.getBiomeName().matches("(?i).*deep.*ocean.*|.*abyss.*");
+		this.isDeepOcean = this.isOcean && getBiomeName().matches("(?i).*deep.*ocean.*|.*abyss.*");
 	}
 
 	public boolean isRiver() {
@@ -165,7 +166,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	}
 
 	public boolean hasWeatherEffect() {
-		return this.getHasPrecipitation() || this.getHasDust();
+		return getHasPrecipitation() || getHasDust();
 	}
 
 	public boolean getHasPrecipitation() {
@@ -284,7 +285,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	@Nullable
 	public SoundEffect getSpotSound(@Nonnull final Random random) {
 		return this.spotSounds != NO_SOUNDS && random.nextInt(this.spotSoundChance) == 0
-				? new WeightTable<SoundEffect>(this.spotSounds).next()
+				? new WeightTable<>(this.spotSounds).next()
 				: null;
 	}
 
@@ -295,7 +296,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	}
 
 	public boolean isBiomeType(@Nonnull final BiomeDictionary.Type type) {
-		return this.getBiomeTypes().contains(type);
+		return getBiomeTypes().contains(type);
 	}
 
 	public boolean areBiomesSameClass(@Nonnull final Biome biome) {
@@ -304,34 +305,34 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 	// Internal to the package
 	void update(@Nonnull final BiomeConfig entry) {
-		this.addComment(entry.comment);
+		addComment(entry.comment);
 		if (entry.hasPrecipitation != null)
-			this.setHasPrecipitation(entry.hasPrecipitation.booleanValue());
+			setHasPrecipitation(entry.hasPrecipitation.booleanValue());
 		if (entry.hasAurora != null)
-			this.setHasAurora(entry.hasAurora.booleanValue());
+			setHasAurora(entry.hasAurora.booleanValue());
 		if (entry.hasDust != null)
-			this.setHasDust(entry.hasDust.booleanValue());
+			setHasDust(entry.hasDust.booleanValue());
 		if (entry.hasFog != null)
-			this.setHasFog(entry.hasFog.booleanValue());
+			setHasFog(entry.hasFog.booleanValue());
 		if (entry.fogDensity != null)
-			this.setFogDensity(entry.fogDensity.floatValue());
+			setFogDensity(entry.fogDensity.floatValue());
 		if (entry.fogColor != null) {
 			final int[] rgb = MyUtils.splitToInts(entry.fogColor, ',');
 			if (rgb.length == 3)
-				this.setFogColor(new Color(rgb[0], rgb[1], rgb[2]));
+				setFogColor(new Color(rgb[0], rgb[1], rgb[2]));
 		}
 		if (entry.dustColor != null) {
 			final int[] rgb = MyUtils.splitToInts(entry.dustColor, ',');
 			if (rgb.length == 3)
-				this.setDustColor(new Color(rgb[0], rgb[1], rgb[2]));
+				setDustColor(new Color(rgb[0], rgb[1], rgb[2]));
 		}
 		if (entry.soundReset != null && entry.soundReset.booleanValue()) {
-			this.addComment("> Sound Reset");
-			this.resetSounds();
+			addComment("> Sound Reset");
+			resetSounds();
 		}
 
 		if (entry.spotSoundChance != null)
-			this.setSpotSoundChance(entry.spotSoundChance.intValue());
+			setSpotSoundChance(entry.spotSoundChance.intValue());
 
 		for (final SoundConfig sr : entry.sounds) {
 			if (ClientRegistry.SOUND.isSoundBlocked(sr.sound))
@@ -339,9 +340,9 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 			final SoundEffect.Builder b = new SoundEffect.Builder(sr);
 			final SoundEffect s = b.build();
 			if (s.getSoundType() == SoundType.SPOT)
-				this.addSpotSound(s);
+				addSpotSound(s);
 			else
-				this.addSound(s);
+				addSound(s);
 		}
 
 	}
@@ -350,15 +351,15 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	@Nonnull
 	public String toString() {
 		final ResourceLocation rl = this.biome.getKey();
-		final String registryName = rl == null ? (this.isFake() ? "FAKE" : "UNKNOWN") : rl.toString();
+		final String registryName = rl == null ? (isFake() ? "FAKE" : "UNKNOWN") : rl.toString();
 
 		final StringBuilder builder = new StringBuilder();
-		builder.append("Biome [").append(this.getBiomeName()).append('/').append(registryName).append("] (")
-				.append(this.getBiomeId()).append("):");
-		if (!this.isFake()) {
+		builder.append("Biome [").append(getBiomeName()).append('/').append(registryName).append("] (")
+				.append(getBiomeId()).append("):");
+		if (!isFake()) {
 			builder.append("\n+ ").append('<');
 			boolean comma = false;
-			for (final BiomeDictionary.Type t : this.getBiomeTypes()) {
+			for (final BiomeDictionary.Type t : getBiomeTypes()) {
 				if (comma)
 					builder.append(',');
 				else
@@ -366,9 +367,9 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 				builder.append(t.getName());
 			}
 			builder.append('>').append('\n');
-			builder.append("+ temp: ").append(this.getTemperature()).append(" (")
-					.append(getTemperatureRating().getValue()).append(")");
-			builder.append(" rain: ").append(this.getRainfall());
+			builder.append("+ temp: ").append(getTemperature()).append(" (").append(getTemperatureRating().getValue())
+					.append(")");
+			builder.append(" rain: ").append(getRainfall());
 		}
 
 		if (this.hasPrecipitation)
@@ -412,6 +413,6 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 	@Override
 	public int compareTo(@Nonnull final BiomeInfo o) {
-		return this.getBiomeName().compareTo(o.getBiomeName());
+		return getBiomeName().compareTo(o.getBiomeName());
 	}
 }

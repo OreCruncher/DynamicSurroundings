@@ -24,21 +24,22 @@
 package org.blockartistry.DynSurround.client.sound;
 
 import java.util.Random;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.ClientRegistry;
-import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.registry.SoundMetadata;
 import org.blockartistry.lib.gui.RecordTitleEmitter;
 import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.lib.sound.BasicSound;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /*
  * Emitters are used to produce sounds that are continuous
@@ -60,12 +61,7 @@ public abstract class Emitter {
 	public Emitter(@Nonnull final SoundEffect sound) {
 		this.effect = sound;
 
-		final RecordTitleEmitter.ITimeKeeper timer = new RecordTitleEmitter.ITimeKeeper() {
-			@Override
-			public int getTickMark() {
-				return EnvironState.getTickCounter();
-			}
-		};
+		final RecordTitleEmitter.ITimeKeeper timer = () -> EnvironState.getTickCounter();
 
 		if (StringUtils.isEmpty(sound.getSoundTitle())) {
 			final SoundMetadata data = ClientRegistry.SOUND.getSoundMetadata(this.effect.getSound().getRegistryName());
@@ -102,7 +98,7 @@ public abstract class Emitter {
 				SoundEffectHandler.INSTANCE.stopSound(this.activeSound);
 			}
 			return;
-		} else if (this.isFading()) {
+		} else if (isFading()) {
 			// If we get here the sound is no longer playing and is in the
 			// fading state. This is possible because the actual sound
 			// volume down in the engine could have hit 0 but the tick

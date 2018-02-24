@@ -33,7 +33,7 @@ public class BooleanValue extends Variant {
 	public BooleanValue() {
 		this.value = false;
 	}
-	
+
 	public BooleanValue(final boolean b) {
 		this.value = b;
 	}
@@ -45,12 +45,12 @@ public class BooleanValue extends Variant {
 	public BooleanValue(@Nonnull final String name) {
 		super(name);
 	}
-	
+
 	public BooleanValue(@Nonnull final String name, final boolean b) {
 		super(name);
 		this.value = b;
 	}
-	
+
 	public BooleanValue(@Nonnull final String name, final float f) {
 		super(name);
 		this.value = f != 0;

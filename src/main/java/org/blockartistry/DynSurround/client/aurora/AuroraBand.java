@@ -53,9 +53,9 @@ public class AuroraBand {
 
 	public AuroraBand(final Random random, final AuroraGeometry geo, final boolean noTaper, final boolean fixedHeight) {
 		this.random = random;
-		this.preset(geo);
-		this.generateBands(noTaper, fixedHeight);
-		this.translate(0);
+		preset(geo);
+		generateBands(noTaper, fixedHeight);
+		translate(0);
 	}
 
 	public AuroraBand(final Random random, final AuroraGeometry geo) {
@@ -70,7 +70,7 @@ public class AuroraBand {
 		this.nodeLength = band.nodeLength;
 		this.nodeWidth = band.nodeWidth;
 		this.alphaLimit = band.alphaLimit;
-		this.translate(0);
+		translate(0);
 	}
 
 	public int getAlphaLimit() {

@@ -40,7 +40,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class EffectStateBase implements IEffectState {
-	
+
 	protected final IParticleHelper particleHelper;
 	protected final ISoundHelper soundHelper;
 
@@ -51,7 +51,7 @@ public class EffectStateBase implements IEffectState {
 
 	/**
 	 * Used by an EntityEffect to add a Particle to the system.
-	 * 
+	 *
 	 * @param particle
 	 *            The Particle instance to add to the particle system.
 	 */
@@ -62,7 +62,7 @@ public class EffectStateBase implements IEffectState {
 
 	/**
 	 * Used by an EntityEffect to play a sound.
-	 * 
+	 *
 	 * @param The
 	 *            sound to play
 	 * @return Unique ID identifying the sound in the sound system
@@ -75,7 +75,7 @@ public class EffectStateBase implements IEffectState {
 
 	/**
 	 * Stops the specified sound in the sound system from playing.
-	 * 
+	 *
 	 * @param soundId
 	 */
 	@Override
@@ -87,7 +87,7 @@ public class EffectStateBase implements IEffectState {
 	 * Creates a BasicSound<> object for the specified SoundEffect centered at the
 	 * Entity. If the Entity is the current active player the sound will be
 	 * non-attenuated.
-	 * 
+	 *
 	 * @param se
 	 *            SoundEffect to use as the basis of the sound
 	 * @param player
@@ -97,14 +97,14 @@ public class EffectStateBase implements IEffectState {
 	@Override
 	@Nonnull
 	public BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player) {
-		if (this.isActivePlayer(player))
+		if (isActivePlayer(player))
 			return se.createSound(player, false);
 		return se.createSound(player);
 	}
 
 	/**
 	 * Determines if the specified Entity is the current active player.
-	 * 
+	 *
 	 * @param player
 	 *            The Entity to evaluate
 	 * @return true if the Entity is the current player, false otherwise
@@ -117,9 +117,10 @@ public class EffectStateBase implements IEffectState {
 
 	/**
 	 * Obtain a reference to the client's player
-	 * 
+	 *
 	 * @return Reference to the EntityPlayer. Will not be null.
 	 */
+	@Override
 	@Nonnull
 	public Optional<EntityPlayer> thePlayer() {
 		return Optional.of(Minecraft.getMinecraft().player);

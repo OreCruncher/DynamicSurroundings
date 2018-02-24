@@ -29,14 +29,14 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.potion.PotionEffect;
 
 public final class EntityUtils {
-	
+
 	private EntityUtils() {
-		
+
 	}
-	
+
 	public static boolean hasNegativePotionEffects(@Nonnull final EntityLiving entity) {
-		for(final PotionEffect effect:entity.getActivePotionEffects())
-			if(effect.getPotion().isBadEffect())
+		for (final PotionEffect effect : entity.getActivePotionEffects())
+			if (effect.getPotion().isBadEffect())
 				return true;
 		return false;
 	}

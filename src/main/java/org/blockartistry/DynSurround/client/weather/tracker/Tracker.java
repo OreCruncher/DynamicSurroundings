@@ -113,9 +113,9 @@ public class Tracker {
 		builder.append("Storm: ").append(props.name());
 		builder.append(" ").append(getIntensityLevel()).append('/').append(getMaxIntensityLevel());
 		builder.append(" vanilla: ").append(getWorld().getRainStrength(1.0F));
-		if (this.backgroundThunderPossible())
-			builder.append(" thunder event: ").append(this.getNextThunderEvent());
-		builder.append(" (").append(this.type()).append(')');
+		if (backgroundThunderPossible())
+			builder.append(" thunder event: ").append(getNextThunderEvent());
+		builder.append(" (").append(type()).append(')');
 		return builder.toString();
 	}
 

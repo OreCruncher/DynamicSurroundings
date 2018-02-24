@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleFountainJet;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
 import org.blockartistry.lib.BlockStateProvider;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;

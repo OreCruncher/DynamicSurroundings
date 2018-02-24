@@ -25,20 +25,21 @@ package org.blockartistry.DynSurround.server.services;
 
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
 import org.blockartistry.DynSurround.registry.RegistryManager;
+
 import net.minecraftforge.fml.relauncher.Side;
 
 public final class ServerRegistry {
 
 	private ServerRegistry() {
-		
+
 	}
-	
+
 	public static final DimensionRegistry DIMENSION;
-	
+
 	static {
-		
+
 		DIMENSION = new DimensionRegistry(Side.CLIENT);
-		
+
 		final RegistryManager rm = RegistryManager.get();
 		rm.register(DIMENSION);
 

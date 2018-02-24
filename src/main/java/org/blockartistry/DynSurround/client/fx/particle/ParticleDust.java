@@ -47,17 +47,17 @@ public class ParticleDust extends ParticleBlockDust {
 		super(world, x, y, z, 0, 0, 0, block);
 
 		this.canCollide = false;
-		
+
 		this.rand = XorShiftRandom.current();
 
-		this.multipleParticleScaleBy((float) (0.3F + this.rand.nextGaussian() / 30.0F));
-		this.setPosition(this.posX, this.posY, this.posZ);
+		multipleParticleScaleBy((float) (0.3F + this.rand.nextGaussian() / 30.0F));
+		setPosition(this.posX, this.posY, this.posZ);
 
-		f = this.particleTexture.getInterpolatedU((double) (this.particleTextureJitterX / 4.0F * 16.0F));
-		f1 = this.particleTexture.getInterpolatedU((double) ((this.particleTextureJitterX + 1.0F) / 4.0F * 16.0F));
-		f2 = this.particleTexture.getInterpolatedV((double) (this.particleTextureJitterY / 4.0F * 16.0F));
-		f3 = this.particleTexture.getInterpolatedV((double) ((this.particleTextureJitterY + 1.0F) / 4.0F * 16.0F));
-		f4 = 0.1F * this.particleScale;
+		this.f = this.particleTexture.getInterpolatedU(this.particleTextureJitterX / 4.0F * 16.0F);
+		this.f1 = this.particleTexture.getInterpolatedU((this.particleTextureJitterX + 1.0F) / 4.0F * 16.0F);
+		this.f2 = this.particleTexture.getInterpolatedV(this.particleTextureJitterY / 4.0F * 16.0F);
+		this.f3 = this.particleTexture.getInterpolatedV((this.particleTextureJitterY + 1.0F) / 4.0F * 16.0F);
+		this.f4 = 0.1F * this.particleScale;
 	}
 
 	@Override
@@ -72,8 +72,8 @@ public class ParticleDust extends ParticleBlockDust {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		this.motionY -= 0.04D * (double) this.particleGravity;
-		this.move(this.motionX, this.motionY, this.motionZ);
+		this.motionY -= 0.04D * this.particleGravity;
+		move(this.motionX, this.motionY, this.motionZ);
 		this.motionX *= 0.9800000190734863D;
 		this.motionY *= 0.9800000190734863D;
 		this.motionZ *= 0.9800000190734863D;
@@ -81,12 +81,12 @@ public class ParticleDust extends ParticleBlockDust {
 		this.pos.setPos(this.posX, this.posY, this.posZ);
 
 		if (this.particleMaxAge-- <= 0) {
-			this.setExpired();
+			setExpired();
 		} else if (WorldUtils.isSolidBlock(this.world, this.pos)) {
-			this.setExpired();
+			setExpired();
 		}
 
-		final int combinedLight = this.getBrightnessForRender(0);
+		final int combinedLight = getBrightnessForRender(0);
 		this.slX16 = combinedLight >> 16 & 65535;
 		this.blX16 = combinedLight & 65535;
 	}
@@ -94,29 +94,29 @@ public class ParticleDust extends ParticleBlockDust {
 	@Override
 	public void renderParticle(BufferBuilder worldRendererIn, Entity entityIn, float partialTicks, float rotationX,
 			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		float f5 = (float) (this.prevPosX + (this.posX - this.prevPosX) * (double) partialTicks - interpPosX);
-		float f6 = (float) (this.prevPosY + (this.posY - this.prevPosY) * (double) partialTicks - interpPosY);
-		float f7 = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * (double) partialTicks - interpPosZ);
+		final float f5 = (float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX);
+		final float f6 = (float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY);
+		final float f7 = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpPosZ);
 		worldRendererIn
-				.pos((double) (f5 - rotationX * f4 - rotationXY * f4), (double) (f6 - rotationZ * f4),
-						(double) (f7 - rotationYZ * f4 - rotationXZ * f4))
-				.tex((double) f, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, 1.0F)
-				.lightmap(slX16, blX16).endVertex();
+				.pos(f5 - rotationX * this.f4 - rotationXY * this.f4, f6 - rotationZ * this.f4,
+						f7 - rotationYZ * this.f4 - rotationXZ * this.f4)
+				.tex(this.f, this.f3).color(this.particleRed, this.particleGreen, this.particleBlue, 1.0F)
+				.lightmap(this.slX16, this.blX16).endVertex();
 		worldRendererIn
-				.pos((double) (f5 - rotationX * f4 + rotationXY * f4), (double) (f6 + rotationZ * f4),
-						(double) (f7 - rotationYZ * f4 + rotationXZ * f4))
-				.tex((double) f, (double) f2).color(this.particleRed, this.particleGreen, this.particleBlue, 1.0F)
-				.lightmap(slX16, blX16).endVertex();
+				.pos(f5 - rotationX * this.f4 + rotationXY * this.f4, f6 + rotationZ * this.f4,
+						f7 - rotationYZ * this.f4 + rotationXZ * this.f4)
+				.tex(this.f, this.f2).color(this.particleRed, this.particleGreen, this.particleBlue, 1.0F)
+				.lightmap(this.slX16, this.blX16).endVertex();
 		worldRendererIn
-				.pos((double) (f5 + rotationX * f4 + rotationXY * f4), (double) (f6 + rotationZ * f4),
-						(double) (f7 + rotationYZ * f4 + rotationXZ * f4))
-				.tex((double) f1, (double) f2).color(this.particleRed, this.particleGreen, this.particleBlue, 1.0F)
-				.lightmap(slX16, blX16).endVertex();
+				.pos(f5 + rotationX * this.f4 + rotationXY * this.f4, f6 + rotationZ * this.f4,
+						f7 + rotationYZ * this.f4 + rotationXZ * this.f4)
+				.tex(this.f1, this.f2).color(this.particleRed, this.particleGreen, this.particleBlue, 1.0F)
+				.lightmap(this.slX16, this.blX16).endVertex();
 		worldRendererIn
-				.pos((double) (f5 + rotationX * f4 - rotationXY * f4), (double) (f6 - rotationZ * f4),
-						(double) (f7 + rotationYZ * f4 - rotationXZ * f4))
-				.tex((double) f1, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, 1.0F)
-				.lightmap(slX16, blX16).endVertex();
+				.pos(f5 + rotationX * this.f4 - rotationXY * this.f4, f6 - rotationZ * this.f4,
+						f7 + rotationYZ * this.f4 - rotationXZ * this.f4)
+				.tex(this.f1, this.f3).color(this.particleRed, this.particleGreen, this.particleBlue, 1.0F)
+				.lightmap(this.slX16, this.blX16).endVertex();
 	}
 
 	@Override

@@ -32,50 +32,50 @@ import net.minecraft.world.World;
 public class MiscVariables extends DynamicVariantList {
 
 	public MiscVariables() {
-		this.add(new Dynamic.DynamicBoolean("isDay") {
+		add(new Dynamic.DynamicBoolean("isDay") {
 			@Override
 			public void update() {
 				this.value = DiurnalUtils.isDaytime(EnvironState.getWorld());
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("isNight") {
+		add(new Dynamic.DynamicBoolean("isNight") {
 			@Override
 			public void update() {
 				this.value = DiurnalUtils.isNighttime(EnvironState.getWorld());
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("isSunrise") {
+		add(new Dynamic.DynamicBoolean("isSunrise") {
 			@Override
 			public void update() {
 				this.value = DiurnalUtils.isSunrise(EnvironState.getWorld());
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("isSunset") {
+		add(new Dynamic.DynamicBoolean("isSunset") {
 			@Override
 			public void update() {
 				this.value = DiurnalUtils.isSunset(EnvironState.getWorld());
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("isAuroraVisible") {
+		add(new Dynamic.DynamicBoolean("isAuroraVisible") {
 			@Override
 			public void update() {
 				this.value = DiurnalUtils.isAuroraVisible(EnvironState.getWorld());
 			}
 		});
-		this.add(new Dynamic.DynamicNumber("moonPhaseFactor") {
+		add(new Dynamic.DynamicNumber("moonPhaseFactor") {
 			@Override
 			public void update() {
 				this.value = DiurnalUtils.getMoonPhaseFactor(EnvironState.getWorld());
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("hasSky") {
+		add(new Dynamic.DynamicBoolean("hasSky") {
 			@Override
 			public void update() {
 				final World world = EnvironState.getWorld();
 				this.value = world != null && world.provider.hasSkyLight();
 			}
 		});
-		this.add(new Dynamic.DynamicString("season") {
+		add(new Dynamic.DynamicString("season") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getSeason().getValue();

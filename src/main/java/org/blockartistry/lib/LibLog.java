@@ -28,14 +28,14 @@ import org.apache.logging.log4j.LogManager;
 import org.blockartistry.lib.logging.ModLog;
 
 public final class LibLog {
-	
+
 	private LibLog() {
-		
+
 	}
-	
+
 	private static final ModLog logger = ModLog.setLogger("blockartistry.lib",
 			LogManager.getLogger("blockartistry.lib"));
-	
+
 	public static ModLog log() {
 		return logger;
 	}

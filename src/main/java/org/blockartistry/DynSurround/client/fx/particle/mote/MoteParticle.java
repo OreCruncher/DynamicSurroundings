@@ -66,8 +66,8 @@ public abstract class MoteParticle implements IParticleMote {
 
 	public MoteParticle(@Nonnull final World world, final double x, final double y, final double z) {
 		this.world = world;
-		this.setPosition(x, y, z);
-		this.configureColor();
+		setPosition(x, y, z);
+		configureColor();
 	}
 
 	public void setPosition(final double posX, final double posY, final double posZ) {
@@ -95,17 +95,17 @@ public abstract class MoteParticle implements IParticleMote {
 
 		if (!WorldUtils.isChunkAvailable(this.world, this.position)) {
 			// The chunk it was in must have unloaded
-			this.kill();
+			kill();
 		}
 
-		if (!this.isAlive())
+		if (!isAlive())
 			return;
 
-		this.update();
+		update();
 
 		// The update() may have killed the mote
-		if (this.isAlive())
-			this.updateBrightness();
+		if (isAlive())
+			updateBrightness();
 	}
 
 	protected void update() {
@@ -113,7 +113,7 @@ public abstract class MoteParticle implements IParticleMote {
 	}
 
 	public void updateBrightness() {
-		final int combinedLight = this.getBrightnessForRender(0);
+		final int combinedLight = getBrightnessForRender(0);
 		this.slX16 = combinedLight >> 16 & 65535;
 		this.blX16 = combinedLight & 65535;
 	}

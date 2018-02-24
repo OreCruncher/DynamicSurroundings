@@ -30,6 +30,7 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.Presets.api.PresetData;
+
 import com.google.common.collect.Maps;
 
 public class PresetInfo implements Comparable<PresetInfo> {
@@ -90,7 +91,7 @@ public class PresetInfo implements Comparable<PresetInfo> {
 		this.restartRequired = flag;
 		return this;
 	}
-	
+
 	@Override
 	public int compareTo(@Nonnull final PresetInfo o) {
 		return this.title.compareTo(o.title);
@@ -118,10 +119,10 @@ public class PresetInfo implements Comparable<PresetInfo> {
 	}
 
 	PresetInfo set(@Nonnull final PresetDataFile data) {
-		this.setTitle(data.title);
-		this.setDescription(data.description);
-		this.set0(data.data);
-		this.setRestartRequired(data.restartRequired);
+		setTitle(data.title);
+		setDescription(data.description);
+		set0(data.data);
+		setRestartRequired(data.restartRequired);
 		return this;
 	}
 

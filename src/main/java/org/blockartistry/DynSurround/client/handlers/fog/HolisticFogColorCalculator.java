@@ -67,6 +67,7 @@ public class HolisticFogColorCalculator implements IFogColorCalculator {
 			calc.tick();
 	}
 
+	@Override
 	public String toString() {
 		return this.cached != null ? this.cached.toString() : "<NOT SET>";
 	}

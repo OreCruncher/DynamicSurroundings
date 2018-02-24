@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -44,7 +45,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public final class RenderWeather extends IRenderHandler {
 
 	private final StormRenderer renderer;
-	
+
 	public static int rendererUpdateCount = 0;
 
 	protected RenderWeather() {
@@ -57,13 +58,13 @@ public final class RenderWeather extends IRenderHandler {
 	 */
 	public static void addRainParticles(@Nonnull final EntityRenderer theThis) {
 		rendererUpdateCount++;
-		if(EnvironState.getWorld() != null)
+		if (EnvironState.getWorld() != null)
 			StormSplashRenderer.renderStormSplashes(EnvironState.getDimensionId(), theThis);
 	}
 
 	@Override
 	public void render(final float partialTicks, @Nonnull final WorldClient world, @Nonnull final Minecraft mc) {
-		this.renderer.render(mc.entityRenderer,  partialTicks);
+		this.renderer.render(mc.entityRenderer, partialTicks);
 	}
 
 	/**

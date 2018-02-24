@@ -52,10 +52,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class EnvironmentEffectHandler extends EffectHandlerBase {
@@ -153,7 +153,8 @@ public class EnvironmentEffectHandler extends EffectHandlerBase {
 	protected void setupTheme(@Nonnull final World world) {
 
 		this.theme = ClientRegistry.EFFECTS.setTheme(EffectRegistry.DEFAULT_THEME);
-		//this.theme = ClientRegistry.EFFECTS.setTheme(new ResourceLocation("dsurround:gloamwood"));
+		// this.theme = ClientRegistry.EFFECTS.setTheme(new
+		// ResourceLocation("dsurround:gloamwood"));
 
 		this.fogColor = new HolisticFogColorCalculator();
 		this.fogRange = new HolisticFogRangeCalculator();

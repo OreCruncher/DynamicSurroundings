@@ -26,22 +26,22 @@ package org.blockartistry.lib.math;
 import javax.annotation.Nonnull;
 
 /**
- * Specialization of the EMA based on measuring time.  The time unit it expects
+ * Specialization of the EMA based on measuring time. The time unit it expects
  * to deal with is nanoseconds.
  */
 public class TimerEMA extends EMA {
-	
+
 	public TimerEMA(@Nonnull final String name) {
 		super(name);
 	}
-	
+
 	public double getMSecs() {
 		return super.get() / 1000000;
 	}
-	
+
 	@Override
 	public String toString() {
-		return String.format("%s:%7.3fms", this.name(), this.getMSecs());
+		return String.format("%s:%7.3fms", name(), getMSecs());
 	}
 
 }

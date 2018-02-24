@@ -42,7 +42,7 @@ public class SoundCrashFixSource extends Transmorgrifier {
 	public boolean isEnabled() {
 		return !Loader.isModLoaded("ambientsounds");
 	}
-	
+
 	@Override
 	public String name() {
 		return "Add removed field";

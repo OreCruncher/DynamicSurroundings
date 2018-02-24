@@ -27,7 +27,7 @@ package org.blockartistry.lib.gfx.shaders;
 public class ShaderException extends Exception {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -1543373731942335193L;
 

@@ -55,7 +55,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * be/i7IE9gLwLUU?t=1m28s</a><br>
  * <br>
  * A JSON parser that creates a ILibrary of Acoustics.
- * 
+ *
  * @author Hurry
  */
 @SideOnly(Side.CLIENT)
@@ -72,50 +72,50 @@ public class AcousticsJsonReader {
 	private final float DIVIDE = 100f;
 
 	public AcousticsJsonReader(String root) {
-		soundRoot = root;
+		this.soundRoot = root;
 	}
 
 	public void parseJSON(final String jasonString, final AcousticsManager lib) {
 		try {
 			parseJSONUnsafe(jasonString, lib);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	private void parseJSONUnsafe(final String jsonString, final AcousticsManager lib) throws JsonParseException {
-		JsonObject json = new JsonParser().parse(jsonString).getAsJsonObject();
+		final JsonObject json = new JsonParser().parse(jsonString).getAsJsonObject();
 
 		if (!json.get("type").getAsString().equals("library"))
 			throw new JsonParseException("Invalid type: \"library\"");
-		if (json.get("engineversion").getAsInt() != ENGINEVERSION)
-			throw new JsonParseException("Unrecognised Engine version: " + ENGINEVERSION + " expected, got "
+		if (json.get("engineversion").getAsInt() != this.ENGINEVERSION)
+			throw new JsonParseException("Unrecognised Engine version: " + this.ENGINEVERSION + " expected, got "
 					+ json.get("engineversion").getAsInt());
 		if (!json.has("contents"))
 			throw new JsonParseException("Empty contents");
 
 		if (json.has("soundroot")) {
-			soundRoot += json.get("soundroot").getAsString();
+			this.soundRoot += json.get("soundroot").getAsString();
 		}
 
-		default_volMin = 1f;
-		default_volMax = 1f;
-		default_pitchMin = 1f;
-		default_pitchMax = 1f;
+		this.default_volMin = 1f;
+		this.default_volMax = 1f;
+		this.default_pitchMin = 1f;
+		this.default_pitchMax = 1f;
 
 		if (json.has("defaults")) {
-			JsonObject defaults = json.getAsJsonObject("defaults");
+			final JsonObject defaults = json.getAsJsonObject("defaults");
 			if (defaults.has("vol_min")) {
-				default_volMin = processPitchOrVolume(defaults, "vol_min");
+				this.default_volMin = processPitchOrVolume(defaults, "vol_min");
 			}
 			if (defaults.has("vol_max")) {
-				default_volMax = processPitchOrVolume(defaults, "vol_max");
+				this.default_volMax = processPitchOrVolume(defaults, "vol_max");
 			}
 			if (defaults.has("pitch_min")) {
-				default_pitchMin = processPitchOrVolume(defaults, "pitch_min");
+				this.default_pitchMin = processPitchOrVolume(defaults, "pitch_min");
 			}
 			if (defaults.has("pitch_max")) {
-				default_pitchMax = processPitchOrVolume(defaults, "pitch_max");
+				this.default_pitchMax = processPitchOrVolume(defaults, "pitch_max");
 			}
 		}
 
@@ -172,7 +172,7 @@ public class AcousticsJsonReader {
 		} else {
 			final String type = unsolved.get("type").getAsString();
 			if (type.equals("simultaneous")) {
-				final List<IAcoustic> acoustics = new ArrayList<IAcoustic>();
+				final List<IAcoustic> acoustics = new ArrayList<>();
 				final JsonArray sim = unsolved.getAsJsonArray("array");
 				final Iterator<JsonElement> iter = sim.iterator();
 				while (iter.hasNext()) {
@@ -197,8 +197,8 @@ public class AcousticsJsonReader {
 
 				ret = a;
 			} else if (type.equals("probability")) {
-				final List<Integer> weights = new ArrayList<Integer>();
-				final List<IAcoustic> acoustics = new ArrayList<IAcoustic>();
+				final List<Integer> weights = new ArrayList<>();
+				final List<IAcoustic> acoustics = new ArrayList<>();
 
 				final JsonArray sim = unsolved.getAsJsonArray("array");
 				final Iterator<JsonElement> iter = sim.iterator();
@@ -268,6 +268,6 @@ public class AcousticsJsonReader {
 	}
 
 	private float processPitchOrVolume(final JsonObject object, final String param) {
-		return object.get(param).getAsFloat() / DIVIDE;
+		return object.get(param).getAsFloat() / this.DIVIDE;
 	}
 }

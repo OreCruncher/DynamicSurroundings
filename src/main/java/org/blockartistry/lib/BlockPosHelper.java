@@ -24,8 +24,6 @@
 
 package org.blockartistry.lib;
 
-import java.util.Iterator;
-
 import javax.annotation.Nonnull;
 
 import com.google.common.collect.AbstractIterator;
@@ -41,16 +39,17 @@ public final class BlockPosHelper {
 	}
 
 	/**
-	 * This method determines the BlockPos of the specified entity without
-	 * doing the offset of Y axis.
-	 * 
-	 * @param entity Entity for which the BlockPos is returned
+	 * This method determines the BlockPos of the specified entity without doing the
+	 * offset of Y axis.
+	 *
+	 * @param entity
+	 *            Entity for which the BlockPos is returned
 	 * @return BlockPos with coordinates
 	 */
 	public static BlockPos getNonOffsetPos(@Nonnull final Entity entity) {
 		return new BlockPos(entity.posX, entity.posY, entity.posZ);
 	}
-	
+
 	public static BlockPos.MutableBlockPos setPos(@Nonnull final BlockPos.MutableBlockPos pos,
 			@Nonnull final Vec3d vec) {
 		return pos.setPos(vec.x, vec.y, vec.z);
@@ -71,11 +70,11 @@ public final class BlockPosHelper {
 	}
 
 	/**
-	 * Determines if the test point is contained within the volume described by
-	 * two other points. It is expected that the calling routine has ensured
-	 * that the min/max points are valid. If they are not valid the results will
-	 * more than likely be erroneous.
-	 * 
+	 * Determines if the test point is contained within the volume described by two
+	 * other points. It is expected that the calling routine has ensured that the
+	 * min/max points are valid. If they are not valid the results will more than
+	 * likely be erroneous.
+	 *
 	 * @param test
 	 *            The point that is being tested
 	 * @param min
@@ -89,16 +88,17 @@ public final class BlockPosHelper {
 			@Nonnull final BlockPos max) {
 		return test.getX() >= min.getX() && test.getX() <= max.getX()
 				? (test.getY() >= min.getY() && test.getY() <= max.getY()
-						? test.getZ() >= min.getZ() && test.getZ() <= max.getZ() : false)
+						? test.getZ() >= min.getZ() && test.getZ() <= max.getZ()
+						: false)
 				: false;
 
 	}
 
 	/**
-	 * Like getAllInBox but reuses a single MutableBlockPos instead. If this
-	 * method is used, the resulting BlockPos instances can only be used inside
-	 * the iteration loop.
-	 * 
+	 * Like getAllInBox but reuses a single MutableBlockPos instead. If this method
+	 * is used, the resulting BlockPos instances can only be used inside the
+	 * iteration loop.
+	 *
 	 * NOTE: This is similar to the logic in Forge. Difference is that it favors
 	 * iterating along the Y axis first before X/Z. Goal is to maximize chunk
 	 * caching for area scanning.
@@ -106,39 +106,35 @@ public final class BlockPosHelper {
 	public static Iterable<BlockPos.MutableBlockPos> getAllInBoxMutable(BlockPos from, BlockPos to) {
 		final BlockPos blockpos = createMinPoint(from, to);
 		final BlockPos blockpos1 = createMaxPoint(from, to);
-		return new Iterable<BlockPos.MutableBlockPos>() {
-			public Iterator<BlockPos.MutableBlockPos> iterator() {
-				return new AbstractIterator<BlockPos.MutableBlockPos>() {
-					private BlockPos.MutableBlockPos theBlockPos;
+		return () -> new AbstractIterator<BlockPos.MutableBlockPos>() {
+			private BlockPos.MutableBlockPos theBlockPos;
 
-					protected BlockPos.MutableBlockPos computeNext() {
-						if (this.theBlockPos == null) {
-							this.theBlockPos = new BlockPos.MutableBlockPos(blockpos.getX(), blockpos.getY(),
-									blockpos.getZ());
-							return this.theBlockPos;
-						} else if (this.theBlockPos.equals(blockpos1)) {
-							return (BlockPos.MutableBlockPos) this.endOfData();
-						} else {
-							int i = this.theBlockPos.getX();
-							int j = this.theBlockPos.getY();
-							int k = this.theBlockPos.getZ();
+			@Override
+			protected BlockPos.MutableBlockPos computeNext() {
+				if (this.theBlockPos == null) {
+					this.theBlockPos = new BlockPos.MutableBlockPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());
+					return this.theBlockPos;
+				} else if (this.theBlockPos.equals(blockpos1)) {
+					return endOfData();
+				} else {
+					int i = this.theBlockPos.getX();
+					int j = this.theBlockPos.getY();
+					int k = this.theBlockPos.getZ();
 
-							if (j < blockpos1.getY()) {
-								++j;
-							} else if (i < blockpos1.getX()) {
-								j = blockpos.getY();
-								++i;
-							} else if (k < blockpos1.getZ()) {
-								i = blockpos.getX();
-								j = blockpos.getY();
-								++k;
-							}
-
-							this.theBlockPos.setPos(i, j, k);
-							return this.theBlockPos;
-						}
+					if (j < blockpos1.getY()) {
+						++j;
+					} else if (i < blockpos1.getX()) {
+						j = blockpos.getY();
+						++i;
+					} else if (k < blockpos1.getZ()) {
+						i = blockpos.getX();
+						j = blockpos.getY();
+						++k;
 					}
-				};
+
+					this.theBlockPos.setPos(i, j, k);
+					return this.theBlockPos;
+				}
 			}
 		};
 	}

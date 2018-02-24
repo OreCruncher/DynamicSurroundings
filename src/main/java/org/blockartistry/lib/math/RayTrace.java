@@ -88,22 +88,17 @@ public final class RayTrace {
 		}
 
 		Vec3d hitLocation = null;
-		List<Entity> list = world
-				.getEntitiesInAABBexcluding(
-						entity, entity.getEntityBoundingBox().expand(look.x * range, look.y * range, look.z * range)
-								.grow(1.0D, 1.0D, 1.0D),
-						Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
-							public boolean apply(@Nullable final Entity e) {
-								return e != null && e.canBeCollidedWith();
-							}
-						}));
+		final List<Entity> list = world.getEntitiesInAABBexcluding(entity,
+				entity.getEntityBoundingBox().expand(look.x * range, look.y * range, look.z * range).grow(1.0D, 1.0D,
+						1.0D),
+				Predicates.and(EntitySelectors.NOT_SPECTATING,
+						(Predicate<Entity>) (@Nullable final Entity e) -> e != null && e.canBeCollidedWith()));
 
 		double d2 = range1;
 
 		for (int j = 0; j < list.size(); ++j) {
 			final Entity entity1 = list.get(j);
-			final AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox()
-					.grow((double) entity1.getCollisionBorderSize());
+			final AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow(entity1.getCollisionBorderSize());
 			final RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(eyes, rangedLook);
 
 			if (axisalignedbb.contains(eyes)) {
@@ -154,9 +149,9 @@ public final class RayTrace {
 
 		if (!Double.isNaN(vec31.x) && !Double.isNaN(vec31.y) && !Double.isNaN(vec31.z)) {
 			if (!Double.isNaN(vec32.x) && !Double.isNaN(vec32.y) && !Double.isNaN(vec32.z)) {
-				int i = MathStuff.floor(vec32.x);
-				int j = MathStuff.floor(vec32.y);
-				int k = MathStuff.floor(vec32.z);
+				final int i = MathStuff.floor(vec32.x);
+				final int j = MathStuff.floor(vec32.y);
+				final int k = MathStuff.floor(vec32.z);
 
 				int l = MathStuff.floor(vec31.x);
 				int i1 = MathStuff.floor(vec31.y);
@@ -169,7 +164,7 @@ public final class RayTrace {
 				if ((!ignoreBlockWithoutBoundingBox
 						|| iblockstate.getCollisionBoundingBox(world, blockpos) != Block.NULL_AABB)
 						&& block.canCollideCheck(iblockstate, stopOnLiquid)) {
-					RayTraceResult raytraceresult = iblockstate.collisionRayTrace(world, blockpos, vec31, vec32);
+					final RayTraceResult raytraceresult = iblockstate.collisionRayTrace(world, blockpos, vec31, vec32);
 
 					if (raytraceresult != null) {
 						return raytraceresult;
@@ -196,25 +191,25 @@ public final class RayTrace {
 					double d2 = 999.0D;
 
 					if (i > l) {
-						d0 = (double) l + 1.0D;
+						d0 = l + 1.0D;
 					} else if (i < l) {
-						d0 = (double) l + 0.0D;
+						d0 = l + 0.0D;
 					} else {
 						flag2 = false;
 					}
 
 					if (j > i1) {
-						d1 = (double) i1 + 1.0D;
+						d1 = i1 + 1.0D;
 					} else if (j < i1) {
-						d1 = (double) i1 + 0.0D;
+						d1 = i1 + 0.0D;
 					} else {
 						flag = false;
 					}
 
 					if (k > j1) {
-						d2 = (double) j1 + 1.0D;
+						d2 = j1 + 1.0D;
 					} else if (k < j1) {
-						d2 = (double) j1 + 0.0D;
+						d2 = j1 + 0.0D;
 					} else {
 						flag1 = false;
 					}
@@ -222,9 +217,9 @@ public final class RayTrace {
 					double d3 = 999.0D;
 					double d4 = 999.0D;
 					double d5 = 999.0D;
-					double d6 = vec32.x - vec31.x;
-					double d7 = vec32.y - vec31.y;
-					double d8 = vec32.z - vec31.z;
+					final double d6 = vec32.x - vec31.x;
+					final double d7 = vec32.y - vec31.y;
+					final double d8 = vec32.z - vec31.z;
 
 					if (flag2) {
 						d3 = (d0 - vec31.x) / d6;
@@ -273,7 +268,7 @@ public final class RayTrace {
 					if (!ignoreBlockWithoutBoundingBox || iblockstate.getMaterial() == Material.PORTAL
 							|| iblockstate.getCollisionBoundingBox(world, blockpos) != Block.NULL_AABB) {
 						if (block.canCollideCheck(iblockstate, stopOnLiquid)) {
-							RayTraceResult raytraceresult1 = iblockstate.collisionRayTrace(world, blockpos, vec31,
+							final RayTraceResult raytraceresult1 = iblockstate.collisionRayTrace(world, blockpos, vec31,
 									vec32);
 
 							if (raytraceresult1 != null) {

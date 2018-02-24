@@ -35,203 +35,203 @@ import net.minecraft.world.World;
 public class PlayerVariables extends DynamicVariantList {
 
 	public PlayerVariables() {
-		this.add(new Dynamic.DynamicBoolean("player.isDead") {
+		add(new Dynamic.DynamicBoolean("player.isDead") {
 			@Override
 			public void update() {
 				final EntityPlayer player = EnvironState.getPlayer();
 				this.value = player != null && player.isDead;
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isHurt") {
+		add(new Dynamic.DynamicBoolean("player.isHurt") {
 			@Override
 			public void update() {
 				this.value = EnvironState.isPlayerHurt();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isHungry") {
+		add(new Dynamic.DynamicBoolean("player.isHungry") {
 			@Override
 			public void update() {
 				this.value = EnvironState.isPlayerHungry();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isBurning") {
+		add(new Dynamic.DynamicBoolean("player.isBurning") {
 			@Override
 			public void update() {
 				this.value = EnvironState.isPlayerBurning();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isSuffocating") {
+		add(new Dynamic.DynamicBoolean("player.isSuffocating") {
 			@Override
 			public void update() {
 				this.value = EnvironState.isPlayerSuffocating();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isFlying") {
+		add(new Dynamic.DynamicBoolean("player.isFlying") {
 			@Override
 			public void update() {
 				this.value = EnvironState.isPlayerFlying();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isSprinting") {
+		add(new Dynamic.DynamicBoolean("player.isSprinting") {
 			@Override
 			public void update() {
 				this.value = EnvironState.isPlayerSprinting();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isInLava") {
+		add(new Dynamic.DynamicBoolean("player.isInLava") {
 			@Override
 			public void update() {
 				this.value = EnvironState.isPlayerInLava();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isInvisible") {
+		add(new Dynamic.DynamicBoolean("player.isInvisible") {
 			@Override
 			public void update() {
 				this.value = EnvironState.isPlayerInvisible();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isBlind") {
+		add(new Dynamic.DynamicBoolean("player.isBlind") {
 			@Override
 			public void update() {
 				this.value = EnvironState.isPlayerBlind();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isInWater") {
+		add(new Dynamic.DynamicBoolean("player.isInWater") {
 			@Override
 			public void update() {
 				this.value = EnvironState.isPlayerInWater();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isWet") {
+		add(new Dynamic.DynamicBoolean("player.isWet") {
 			@Override
 			public void update() {
 				final EntityPlayer player = EnvironState.getPlayer();
 				this.value = player != null && player.isWet();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isUnderwater") {
+		add(new Dynamic.DynamicBoolean("player.isUnderwater") {
 			@Override
 			public void update() {
 				final EntityPlayer player = EnvironState.getPlayer();
 				this.value = player != null && player.isInsideOfMaterial(Material.WATER);
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isRiding") {
+		add(new Dynamic.DynamicBoolean("player.isRiding") {
 			@Override
 			public void update() {
 				final EntityPlayer player = EnvironState.getPlayer();
 				this.value = player != null && player.isRiding();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isOnGround") {
+		add(new Dynamic.DynamicBoolean("player.isOnGround") {
 			@Override
 			public void update() {
 				final EntityPlayer player = EnvironState.getPlayer();
 				this.value = player != null && player.onGround;
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isMoving") {
+		add(new Dynamic.DynamicBoolean("player.isMoving") {
 			@Override
 			public void update() {
 				this.value = EnvironState.isPlayerMoving();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isInside") {
+		add(new Dynamic.DynamicBoolean("player.isInside") {
 			@Override
 			public void update() {
 				this.value = EnvironState.isPlayerInside();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isUnderground") {
+		add(new Dynamic.DynamicBoolean("player.isUnderground") {
 			@Override
 			public void update() {
 				this.value = EnvironState.isPlayerUnderground();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isInSpace") {
+		add(new Dynamic.DynamicBoolean("player.isInSpace") {
 			@Override
 			public void update() {
 				this.value = EnvironState.isPlayerInSpace();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.isInClouds") {
+		add(new Dynamic.DynamicBoolean("player.isInClouds") {
 			@Override
 			public void update() {
 				this.value = EnvironState.isPlayerInClouds();
 			}
 		});
-		this.add(new Dynamic.DynamicString("player.temperature") {
+		add(new Dynamic.DynamicString("player.temperature") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getPlayerTemperature().getValue();
 			}
 		});
-		this.add(new Dynamic.DynamicNumber("player.dimension") {
+		add(new Dynamic.DynamicNumber("player.dimension") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getDimensionId();
 			}
 		});
-		this.add(new Dynamic.DynamicString("player.dimensionName") {
+		add(new Dynamic.DynamicString("player.dimensionName") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getDimensionName();
 			}
 		});
-		this.add(new Dynamic.DynamicNumber("player.X") {
+		add(new Dynamic.DynamicNumber("player.X") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getPlayerPosition().getX();
 			}
 		});
-		this.add(new Dynamic.DynamicNumber("player.Y") {
+		add(new Dynamic.DynamicNumber("player.Y") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getPlayerPosition().getY();
 			}
 		});
-		this.add(new Dynamic.DynamicNumber("player.Z") {
+		add(new Dynamic.DynamicNumber("player.Z") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getPlayerPosition().getZ();
 			}
 		});
-		this.add(new Dynamic.DynamicNumber("player.health") {
+		add(new Dynamic.DynamicNumber("player.health") {
 			@Override
 			public void update() {
 				final EntityPlayer player = EnvironState.getPlayer();
 				this.value = player != null ? player.getHealth() : Integer.MAX_VALUE;
 			}
 		});
-		this.add(new Dynamic.DynamicNumber("player.maxHealth") {
+		add(new Dynamic.DynamicNumber("player.maxHealth") {
 			@Override
 			public void update() {
 				final EntityPlayer player = EnvironState.getPlayer();
 				this.value = player != null ? player.getMaxHealth() : Integer.MAX_VALUE;
 			}
 		});
-		this.add(new Dynamic.DynamicNumber("player.luck") {
+		add(new Dynamic.DynamicNumber("player.luck") {
 			@Override
 			public void update() {
 				final EntityPlayer player = EnvironState.getPlayer();
 				this.value = player != null ? player.getLuck() : 0;
 			}
 		});
-		this.add(new Dynamic.DynamicNumber("player.food.saturation") {
+		add(new Dynamic.DynamicNumber("player.food.saturation") {
 			@Override
 			public void update() {
 				final EntityPlayer player = EnvironState.getPlayer();
 				this.value = player != null ? player.getFoodStats().getSaturationLevel() : 0;
 			}
 		});
-		this.add(new Dynamic.DynamicNumber("player.food.level") {
+		add(new Dynamic.DynamicNumber("player.food.level") {
 			@Override
 			public void update() {
 				final EntityPlayer player = EnvironState.getPlayer();
 				this.value = player != null ? player.getFoodStats().getFoodLevel() : 0;
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.canRainOn") {
+		add(new Dynamic.DynamicBoolean("player.canRainOn") {
 			@Override
 			public void update() {
 				final World world = EnvironState.getWorld();
@@ -244,7 +244,7 @@ public class PlayerVariables extends DynamicVariantList {
 				}
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.canSeeSky") {
+		add(new Dynamic.DynamicBoolean("player.canSeeSky") {
 			@Override
 			public void update() {
 				final World world = EnvironState.getWorld();
@@ -256,26 +256,26 @@ public class PlayerVariables extends DynamicVariantList {
 				}
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.inBoat") {
+		add(new Dynamic.DynamicBoolean("player.inBoat") {
 			@Override
 			public void update() {
 				final EntityPlayer player = EnvironState.getPlayer();
 				this.value = player != null && player.getRidingEntity() instanceof EntityBoat;
 			}
 		});
-		this.add(new Dynamic.DynamicNumber("player.lightLevel") {
+		add(new Dynamic.DynamicNumber("player.lightLevel") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getLightLevel();
 			}
 		});
-		this.add(new Dynamic.DynamicString("player.armor") {
+		add(new Dynamic.DynamicString("player.armor") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getPlayerArmorClass().getClassName();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("player.inVillage") {
+		add(new Dynamic.DynamicBoolean("player.inVillage") {
 			@Override
 			public void update() {
 				this.value = EnvironState.inVillage();

@@ -34,7 +34,7 @@ import net.minecraft.util.math.BlockPos;
  * space in c1 not in i and at most 3 cuboids describing the space in c2 not in
  * i. This class builds those 3 cuboids as "segments" so that the space in c1 or
  * c2 but not in i can be iterated efficiently.
- * 
+ *
  * Updated to use "peeking" iterator pattern.
  */
 public class ComplementsPointIterator implements IPointIterator {
@@ -122,7 +122,7 @@ public class ComplementsPointIterator implements IPointIterator {
 	@Override
 	@Nullable
 	public BlockPos next() {
-		BlockPos result = this.peeked;
+		final BlockPos result = this.peeked;
 		this.peeked = next0();
 		return result;
 	}

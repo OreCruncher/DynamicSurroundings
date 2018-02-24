@@ -46,33 +46,32 @@ public final class GuiUtils {
 	}
 
 	public static void drawCenteredString(FontRenderer fontRendererIn, String text, int x, int y, int color) {
-		fontRendererIn.drawStringWithShadow(text, (float) (x - fontRendererIn.getStringWidth(text) / 2), (float) y,
-				color);
+		fontRendererIn.drawStringWithShadow(text, x - fontRendererIn.getStringWidth(text) / 2, y, color);
 	}
 
 	public static void drawString(FontRenderer fontRendererIn, String text, int x, int y, int color) {
-		fontRendererIn.drawStringWithShadow(text, (float) x, (float) y, color);
+		fontRendererIn.drawStringWithShadow(text, x, y, color);
 	}
 
 	public static void drawRect(int left, int top, int right, int bottom, int color) {
 		if (left < right) {
-			int i = left;
+			final int i = left;
 			left = right;
 			right = i;
 		}
 
 		if (top < bottom) {
-			int j = top;
+			final int j = top;
 			top = bottom;
 			bottom = j;
 		}
 
-		float f3 = (float) (color >> 24 & 255) / 255.0F;
-		float f = (float) (color >> 16 & 255) / 255.0F;
-		float f1 = (float) (color >> 8 & 255) / 255.0F;
-		float f2 = (float) (color & 255) / 255.0F;
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder vertexbuffer = tessellator.getBuffer();
+		final float f3 = (color >> 24 & 255) / 255.0F;
+		final float f = (color >> 16 & 255) / 255.0F;
+		final float f1 = (color >> 8 & 255) / 255.0F;
+		final float f2 = (color & 255) / 255.0F;
+		final Tessellator tessellator = Tessellator.getInstance();
+		final BufferBuilder vertexbuffer = tessellator.getBuffer();
 		GlStateManager.enableBlend();
 		GlStateManager.disableTexture2D();
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
@@ -80,10 +79,10 @@ public final class GuiUtils {
 				GlStateManager.DestFactor.ZERO);
 		GlStateManager.color(f, f1, f2, f3);
 		vertexbuffer.begin(7, DefaultVertexFormats.POSITION);
-		vertexbuffer.pos((double) left, (double) bottom, 0.0D).endVertex();
-		vertexbuffer.pos((double) right, (double) bottom, 0.0D).endVertex();
-		vertexbuffer.pos((double) right, (double) top, 0.0D).endVertex();
-		vertexbuffer.pos((double) left, (double) top, 0.0D).endVertex();
+		vertexbuffer.pos(left, bottom, 0.0D).endVertex();
+		vertexbuffer.pos(right, bottom, 0.0D).endVertex();
+		vertexbuffer.pos(right, top, 0.0D).endVertex();
+		vertexbuffer.pos(left, top, 0.0D).endVertex();
 		tessellator.draw();
 		GlStateManager.enableTexture2D();
 		GlStateManager.disableBlend();
@@ -91,28 +90,28 @@ public final class GuiUtils {
 
 	public static void drawGradientRect(int left, int top, int right, int bottom, int startColor, int endColor) {
 
-		float zLevel = 0.0F;
+		final float zLevel = 0.0F;
 
-		float f = (float) (startColor >> 24 & 255) / 255.0F;
-		float f1 = (float) (startColor >> 16 & 255) / 255.0F;
-		float f2 = (float) (startColor >> 8 & 255) / 255.0F;
-		float f3 = (float) (startColor & 255) / 255.0F;
-		float f4 = (float) (endColor >> 24 & 255) / 255.0F;
-		float f5 = (float) (endColor >> 16 & 255) / 255.0F;
-		float f6 = (float) (endColor >> 8 & 255) / 255.0F;
-		float f7 = (float) (endColor & 255) / 255.0F;
+		final float f = (startColor >> 24 & 255) / 255.0F;
+		final float f1 = (startColor >> 16 & 255) / 255.0F;
+		final float f2 = (startColor >> 8 & 255) / 255.0F;
+		final float f3 = (startColor & 255) / 255.0F;
+		final float f4 = (endColor >> 24 & 255) / 255.0F;
+		final float f5 = (endColor >> 16 & 255) / 255.0F;
+		final float f6 = (endColor >> 8 & 255) / 255.0F;
+		final float f7 = (endColor & 255) / 255.0F;
 		GlStateManager.disableTexture2D();
 		GlStateManager.enableBlend();
 		GlStateManager.disableAlpha();
 		GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 		GlStateManager.shadeModel(7425);
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder t = tessellator.getBuffer();
+		final Tessellator tessellator = Tessellator.getInstance();
+		final BufferBuilder t = tessellator.getBuffer();
 		t.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		t.pos((double) (left + right), (double) top, (double) zLevel).color(f1, f2, f3, f).endVertex();
-		t.pos((double) left, (double) top, (double) zLevel).color(f1, f2, f3, f).endVertex();
-		t.pos((double) left, (double) (top + bottom), (double) zLevel).color(f5, f6, f7, f4).endVertex();
-		t.pos((double) (left + right), (double) (top + bottom), (double) zLevel).color(f5, f6, f7, f4).endVertex();
+		t.pos(left + right, top, zLevel).color(f1, f2, f3, f).endVertex();
+		t.pos(left, top, zLevel).color(f1, f2, f3, f).endVertex();
+		t.pos(left, top + bottom, zLevel).color(f5, f6, f7, f4).endVertex();
+		t.pos(left + right, top + bottom, zLevel).color(f5, f6, f7, f4).endVertex();
 		tessellator.draw();
 		GlStateManager.shadeModel(7424);
 		GlStateManager.disableBlend();
@@ -139,10 +138,10 @@ public final class GuiUtils {
 		final Tessellator tessellator = Tessellator.getInstance();
 		final BufferBuilder vertexbuffer = tessellator.getBuffer();
 		vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		vertexbuffer.pos((double) (x + 0), (double) (y + height), (double) zLevel).tex(u.x, v.x).endVertex();
-		vertexbuffer.pos((double) (x + width), (double) (y + height), (double) zLevel).tex(u.y, v.x).endVertex();
-		vertexbuffer.pos((double) (x + width), (double) (y + 0), (double) zLevel).tex(u.y, v.y).endVertex();
-		vertexbuffer.pos((double) (x + 0), (double) (y + 0), (double) zLevel).tex(u.x, v.y).endVertex();
+		vertexbuffer.pos(x + 0, y + height, zLevel).tex(u.x, v.x).endVertex();
+		vertexbuffer.pos(x + width, y + height, zLevel).tex(u.y, v.x).endVertex();
+		vertexbuffer.pos(x + width, y + 0, zLevel).tex(u.y, v.y).endVertex();
+		vertexbuffer.pos(x + 0, y + 0, zLevel).tex(u.x, v.y).endVertex();
 		tessellator.draw();
 	}
 

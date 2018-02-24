@@ -24,13 +24,12 @@
 
 package org.blockartistry.DynSurround.client.aurora;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 final class Node {
@@ -119,10 +118,11 @@ final class Node {
 
 	public void findAngles(final Node next) {
 		this.tetX = this.tetX2 = this.posX;
-		this.tetZ = this.tetZ2 = this.getModdedZ();
-		//this.angle = 0.0F;
+		this.tetZ = this.tetZ2 = getModdedZ();
+		// this.angle = 0.0F;
 		if (next != null) {
-			//this.angle = atan2_fast(this.getModdedZ() - next.getModdedZ(), this.posX - next.posX);
+			// this.angle = atan2_fast(this.getModdedZ() - next.getModdedZ(), this.posX -
+			// next.posX);
 			this.tetX += this.cosDeg90;
 			this.tetX2 += this.cosDeg270;
 			this.tetZ += this.sinDeg90;

@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.data;
 
 import java.text.DecimalFormat;
 import java.util.Random;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
@@ -90,7 +91,7 @@ public final class DimensionEffectData extends WorldSavedData {
 		final float i = MathStuff.clamp(intensity, MIN_INTENSITY, MAX_INTENSITY);
 		if (this.intensity != i) {
 			this.intensity = i;
-			this.markDirty();
+			markDirty();
 		}
 	}
 
@@ -98,7 +99,7 @@ public final class DimensionEffectData extends WorldSavedData {
 		final float i = MathStuff.clamp(intensity, 0, this.intensity);
 		if (this.currentIntensity != i) {
 			this.currentIntensity = i;
-			this.markDirty();
+			markDirty();
 		}
 	}
 
@@ -110,7 +111,7 @@ public final class DimensionEffectData extends WorldSavedData {
 		final float i = MathStuff.clamp(intensity, MIN_INTENSITY, this.maxIntensity);
 		if (this.minIntensity != i) {
 			this.minIntensity = i;
-			this.markDirty();
+			markDirty();
 		}
 	}
 
@@ -122,7 +123,7 @@ public final class DimensionEffectData extends WorldSavedData {
 		final float i = MathStuff.clamp(intensity, this.minIntensity, MAX_INTENSITY);
 		if (this.maxIntensity != i) {
 			this.maxIntensity = i;
-			this.markDirty();
+			markDirty();
 		}
 	}
 
@@ -134,7 +135,7 @@ public final class DimensionEffectData extends WorldSavedData {
 		final int t = MathStuff.clamp(time, 0, Integer.MAX_VALUE);
 		if (this.thunderTimer != t) {
 			this.thunderTimer = t;
-			this.markDirty();
+			markDirty();
 		}
 	}
 
@@ -142,10 +143,10 @@ public final class DimensionEffectData extends WorldSavedData {
 		final float result;
 		final float delta = this.maxIntensity - this.minIntensity;
 		if (delta <= 0.0F) {
-			result = (float) this.minIntensity;
+			result = this.minIntensity;
 		} else {
 			final float mid = delta / 2.0F;
-			result = this.minIntensity + RANDOM.nextFloat() * mid + RANDOM.nextFloat() * mid;
+			result = this.minIntensity + this.RANDOM.nextFloat() * mid + this.RANDOM.nextFloat() * mid;
 		}
 		setRainIntensity(MathStuff.clamp(result, 0.01F, MAX_INTENSITY));
 		setCurrentRainIntensity(0.0F);
@@ -154,26 +155,26 @@ public final class DimensionEffectData extends WorldSavedData {
 	@Override
 	public void readFromNBT(@Nonnull final NBTTagCompound nbt) {
 		this.dimensionId = nbt.getInteger(NBT.DIMENSION);
-		this.setRainIntensity(nbt.getFloat(NBT.INTENSITY));
+		setRainIntensity(nbt.getFloat(NBT.INTENSITY));
 		if (nbt.hasKey(NBT.CURRENT_INTENSITY))
-			this.setCurrentRainIntensity(nbt.getFloat(NBT.CURRENT_INTENSITY));
+			setCurrentRainIntensity(nbt.getFloat(NBT.CURRENT_INTENSITY));
 		if (nbt.hasKey(NBT.MIN_INTENSITY))
-			this.setMinRainIntensity(nbt.getFloat(NBT.MIN_INTENSITY));
+			setMinRainIntensity(nbt.getFloat(NBT.MIN_INTENSITY));
 		if (nbt.hasKey(NBT.MAX_INTENSITY))
-			this.setMaxRainIntensity(nbt.getFloat(NBT.MAX_INTENSITY));
+			setMaxRainIntensity(nbt.getFloat(NBT.MAX_INTENSITY));
 		if (nbt.hasKey(NBT.THUNDER_TIMER))
-			this.setThunderTimer(nbt.getInteger(NBT.THUNDER_TIMER));
+			setThunderTimer(nbt.getInteger(NBT.THUNDER_TIMER));
 	}
 
 	@Override
 	@Nonnull
 	public NBTTagCompound writeToNBT(@Nonnull final NBTTagCompound nbt) {
-		nbt.setInteger(NBT.DIMENSION, this.getDimensionId());
-		nbt.setFloat(NBT.INTENSITY, this.getRainIntensity());
-		nbt.setFloat(NBT.CURRENT_INTENSITY, this.getCurrentRainIntensity());
-		nbt.setFloat(NBT.MIN_INTENSITY, this.getMinRainIntensity());
-		nbt.setFloat(NBT.MAX_INTENSITY, this.getMaxRainIntensity());
-		nbt.setInteger(NBT.THUNDER_TIMER, this.getThunderTimer());
+		nbt.setInteger(NBT.DIMENSION, getDimensionId());
+		nbt.setFloat(NBT.INTENSITY, getRainIntensity());
+		nbt.setFloat(NBT.CURRENT_INTENSITY, getCurrentRainIntensity());
+		nbt.setFloat(NBT.MIN_INTENSITY, getMinRainIntensity());
+		nbt.setFloat(NBT.MAX_INTENSITY, getMaxRainIntensity());
+		nbt.setInteger(NBT.THUNDER_TIMER, getThunderTimer());
 		return nbt;
 	}
 

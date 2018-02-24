@@ -92,7 +92,7 @@ public class Cuboid {
 
 		BlockPos vx2 = null;
 		for (final BlockPos vx : o.vertices) {
-			if (this.contains(vx) && BlockPosHelper.canFormCuboid(vx, vx1)) {
+			if (contains(vx) && BlockPosHelper.canFormCuboid(vx, vx1)) {
 				vx2 = vx;
 				break;
 			}

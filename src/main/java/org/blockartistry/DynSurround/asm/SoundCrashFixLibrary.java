@@ -59,7 +59,7 @@ public class SoundCrashFixLibrary extends Transmorgrifier {
 
 		final MethodNode m = findMethod(cn, sig, name);
 		if (m != null) {
-			for (Iterator<?> iterator = m.instructions.iterator(); iterator.hasNext();) {
+			for (final Iterator<?> iterator = m.instructions.iterator(); iterator.hasNext();) {
 				final AbstractInsnNode insn = (AbstractInsnNode) iterator.next();
 				if (insn instanceof MethodInsnNode && ((MethodInsnNode) insn).owner.equals("paulscode/sound/Source")
 						&& ((MethodInsnNode) insn).name.equals("cleanup")) {
@@ -75,7 +75,7 @@ public class SoundCrashFixLibrary extends Transmorgrifier {
 			Transformer.log().error("Unable to locate method {}{}", name, sig);
 		}
 
-		Transformer.log().info("Unable to patch [{}]!", this.getClassName());
+		Transformer.log().info("Unable to patch [{}]!", getClassName());
 
 		return false;
 	}

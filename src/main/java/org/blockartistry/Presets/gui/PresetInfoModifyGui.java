@@ -25,6 +25,7 @@
 package org.blockartistry.Presets.gui;
 
 import java.io.IOException;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.Presets.data.PresetInfo;
@@ -32,8 +33,6 @@ import org.blockartistry.lib.Color;
 import org.blockartistry.lib.Localization;
 import org.blockartistry.lib.gui.Panel.Reference;
 import org.blockartistry.lib.gui.StandardPanel;
-
-import com.google.common.base.Predicate;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -142,38 +141,31 @@ public class PresetInfoModifyGui extends GuiScreen {
 		label.addLine(FILENAME_LABEL);
 		this.labelList.add(label);
 
-		this.fileNameRequired = new GuiLabel(this.fontRenderer, ID_FILENAME_REQUIRED, X + entryWidth - requiredWidth,
-				Y, LABEL_WIDTH, BUTTON_HEIGHT, Color.RED.rgb());
+		this.fileNameRequired = new GuiLabel(this.fontRenderer, ID_FILENAME_REQUIRED, X + entryWidth - requiredWidth, Y,
+				LABEL_WIDTH, BUTTON_HEIGHT, Color.RED.rgb());
 		this.fileNameRequired.addLine(REQUIRED_TEXT);
 		this.fileNameRequired.visible = false;
 		this.labelList.add(this.fileNameRequired);
 
 		Y += BUTTON_HEIGHT;
-		this.fileName = new GuiTextField(ID_PRESET_FILENAME_TEXT, this.fontRenderer, X, Y, entryWidth,
-				BUTTON_HEIGHT);
+		this.fileName = new GuiTextField(ID_PRESET_FILENAME_TEXT, this.fontRenderer, X, Y, entryWidth, BUTTON_HEIGHT);
 		this.fileName.setMaxStringLength(32);
 		this.fileName.setText(this.info.getFilename());
-		this.fileName.setValidator(new Predicate<String>() {
-			@Override
-			public boolean apply(String input) {
-				return !input.matches(FILENAME_VALIDATION_REGEX);
-			}
-		});
+		this.fileName.setValidator(input -> !input.matches(FILENAME_VALIDATION_REGEX));
 
 		Y += BUTTON_HEIGHT + INSET;
 		label = new GuiLabel(this.fontRenderer, ID_PRESET_FILENAME, X, Y, LABEL_WIDTH, BUTTON_HEIGHT, labelColor);
 		label.addLine(PRESET_TITLE_LABEL);
 		this.labelList.add(label);
 
-		this.presetTitleRequired = new GuiLabel(this.fontRenderer, ID_TITLE_REQUIRED, X + entryWidth - requiredWidth,
-				Y, LABEL_WIDTH, BUTTON_HEIGHT, Color.RED.rgb());
+		this.presetTitleRequired = new GuiLabel(this.fontRenderer, ID_TITLE_REQUIRED, X + entryWidth - requiredWidth, Y,
+				LABEL_WIDTH, BUTTON_HEIGHT, Color.RED.rgb());
 		this.presetTitleRequired.addLine(REQUIRED_TEXT);
 		this.presetTitleRequired.visible = false;
 		this.labelList.add(this.presetTitleRequired);
 
 		Y += BUTTON_HEIGHT;
-		this.presetTitle = new GuiTextField(ID_PRESET_TITLE_TEXT, this.fontRenderer, X, Y, entryWidth,
-				BUTTON_HEIGHT);
+		this.presetTitle = new GuiTextField(ID_PRESET_TITLE_TEXT, this.fontRenderer, X, Y, entryWidth, BUTTON_HEIGHT);
 		this.presetTitle.setMaxStringLength(48);
 		this.presetTitle.setText(this.info.getTitle());
 
@@ -203,18 +195,18 @@ public class PresetInfoModifyGui extends GuiScreen {
 
 		// Cancel button
 		doneX += BUTTON_WIDTH * 2;
-		GuiButtonExt button = new GuiButtonExt(ID_CANCEL, doneX, doneY, BUTTON_WIDTH, BUTTON_HEIGHT,
+		final GuiButtonExt button = new GuiButtonExt(ID_CANCEL, doneX, doneY, BUTTON_WIDTH, BUTTON_HEIGHT,
 				CANCEL_BUTTON_LABEL);
 		this.buttonList.add(button);
 
 		// Filename field has first focus
 		this.fileName.setFocused(true);
-		this.doneEnableCheck();
+		doneEnableCheck();
 	}
 
 	@Override
 	public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
-		this.drawDefaultBackground();
+		drawDefaultBackground();
 		this.backgroundPanel.render(this.anchorX, this.anchorY, Reference.UPPER_LEFT);
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.fileName.drawTextBox();
@@ -264,6 +256,6 @@ public class PresetInfoModifyGui extends GuiScreen {
 		} else if (this.presetDescription.isFocused()) {
 			this.presetDescription.textboxKeyTyped(typedChar, keyCode);
 		}
-		this.doneEnableCheck();
+		doneEnableCheck();
 	}
 }

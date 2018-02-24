@@ -84,7 +84,7 @@ public class PacketServerData implements IMessage {
 	public void toBytes(@Nonnull final ByteBuf buf) {
 		buf.writeDouble(this.meanTickTime);
 		buf.writeInt(this.tMap.size());
-		TIntDoubleIterator i = this.tMap.iterator();
+		final TIntDoubleIterator i = this.tMap.iterator();
 		while (i.hasNext()) {
 			i.advance();
 			buf.writeInt(i.key());

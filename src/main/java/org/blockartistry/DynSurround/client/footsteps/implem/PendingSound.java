@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.client.footsteps.implem;
 
 import javax.annotation.Nonnull;
+
 import org.blockartistry.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -45,8 +46,8 @@ public class PendingSound {
 	private final long maximum;
 	private final float lateTolerance;
 
-	public PendingSound(@Nonnull final EntityLivingBase location, @Nonnull final SoundEvent sound, final float volume, final float pitch,
-			final long timeToPlay, final long maximum) {
+	public PendingSound(@Nonnull final EntityLivingBase location, @Nonnull final SoundEvent sound, final float volume,
+			final float pitch, final long timeToPlay, final long maximum) {
 		this.location = location;
 		this.sound = sound;
 		this.volume = volume;
@@ -59,7 +60,7 @@ public class PendingSound {
 
 	/**
 	 * Play the sound stored in this pending sound.
-	 * 
+	 *
 	 * @param player
 	 */
 	public void playSound(@Nonnull final ISoundPlayer player) {
@@ -68,7 +69,7 @@ public class PendingSound {
 
 	/**
 	 * Returns the time after which this sound plays.
-	 * 
+	 *
 	 * @return
 	 */
 	public long getTimeToPlay() {
@@ -76,9 +77,9 @@ public class PendingSound {
 	}
 
 	/**
-	 * Get the maximum delay of this sound, for threshold purposes. If the value
-	 * is negative, the sound will not be skippable.
-	 * 
+	 * Get the maximum delay of this sound, for threshold purposes. If the value is
+	 * negative, the sound will not be skippable.
+	 *
 	 * @return
 	 */
 	public long getMaximumBase() {

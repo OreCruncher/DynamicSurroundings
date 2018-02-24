@@ -37,9 +37,9 @@ public interface IOptions {
 	default long getDelayMax() {
 		return 0;
 	}
-	
+
 	default boolean isDelayedSound() {
-		return this.getDelayMin() > 0 && this.getDelayMax() > 0;
+		return getDelayMin() > 0 && getDelayMax() > 0;
 	}
 
 	default float getGlidingVolume() {
@@ -49,11 +49,11 @@ public interface IOptions {
 	default float getGlidingPitch() {
 		return 0;
 	}
-	
+
 	default float getVolumeScale() {
 		return 1F;
 	}
-	
+
 	default float getPitchScale() {
 		return 1F;
 	}

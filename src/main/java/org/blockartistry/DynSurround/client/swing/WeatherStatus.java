@@ -24,12 +24,12 @@
 
 package org.blockartistry.DynSurround.client.swing;
 
-import javax.swing.JPanel;
-
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -60,55 +60,55 @@ public class WeatherStatus extends JPanel implements Observer {
 	public WeatherStatus() {
 		setLayout(null);
 
-		this.setName("Weather Status");
+		setName("Weather Status");
 
-		lblRainStatus.setBounds(10, 11, 88, 14);
-		add(lblRainStatus);
+		this.lblRainStatus.setBounds(10, 11, 88, 14);
+		add(this.lblRainStatus);
 
-		lblThunderStatus.setBounds(10, 118, 87, 14);
-		add(lblThunderStatus);
+		this.lblThunderStatus.setBounds(10, 118, 87, 14);
+		add(this.lblThunderStatus);
 
-		lblStatus.setBounds(32, 36, 66, 14);
-		add(lblStatus);
+		this.lblStatus.setBounds(32, 36, 66, 14);
+		add(this.lblStatus);
 
-		lblStatus_1.setBounds(32, 151, 66, 14);
-		add(lblStatus_1);
+		this.lblStatus_1.setBounds(32, 151, 66, 14);
+		add(this.lblStatus_1);
 
-		lblStrength.setBounds(32, 61, 66, 14);
-		add(lblStrength);
+		this.lblStrength.setBounds(32, 61, 66, 14);
+		add(this.lblStrength);
 
-		lblStrength_1.setBounds(32, 176, 66, 14);
-		add(lblStrength_1);
+		this.lblStrength_1.setBounds(32, 176, 66, 14);
+		add(this.lblStrength_1);
 
-		lblTime.setBounds(32, 86, 66, 14);
-		add(lblTime);
+		this.lblTime.setBounds(32, 86, 66, 14);
+		add(this.lblTime);
 
-		lblTime_1.setBounds(32, 201, 66, 14);
-		add(lblTime_1);
+		this.lblTime_1.setBounds(32, 201, 66, 14);
+		add(this.lblTime_1);
 
-		rainStatus.setBounds(103, 36, 66, 14);
-		add(rainStatus);
+		this.rainStatus.setBounds(103, 36, 66, 14);
+		add(this.rainStatus);
 
-		rainStrength.setBounds(103, 61, 66, 14);
-		add(rainStrength);
+		this.rainStrength.setBounds(103, 61, 66, 14);
+		add(this.rainStrength);
 
-		rainTime.setBounds(103, 86, 66, 14);
-		add(rainTime);
+		this.rainTime.setBounds(103, 86, 66, 14);
+		add(this.rainTime);
 
-		thunderStatus.setBounds(103, 151, 66, 14);
-		add(thunderStatus);
+		this.thunderStatus.setBounds(103, 151, 66, 14);
+		add(this.thunderStatus);
 
-		thunderStrength.setBounds(103, 176, 66, 14);
-		add(thunderStrength);
+		this.thunderStrength.setBounds(103, 176, 66, 14);
+		add(this.thunderStrength);
 
-		thunderTime.setBounds(103, 201, 66, 14);
-		add(thunderTime);
+		this.thunderTime.setBounds(103, 201, 66, 14);
+		add(this.thunderTime);
 
-		lblNewLabel_1.setBounds(32, 226, 66, 14);
-		add(lblNewLabel_1);
+		this.lblNewLabel_1.setBounds(32, 226, 66, 14);
+		add(this.lblNewLabel_1);
 
-		nextThunderEvent.setBounds(103, 226, 66, 14);
-		add(nextThunderEvent);
+		this.nextThunderEvent.setBounds(103, 226, 66, 14);
+		add(this.nextThunderEvent);
 
 		this.data = new DataProxy.WeatherData();
 		this.data.addObserver(this);
@@ -122,7 +122,7 @@ public class WeatherStatus extends JPanel implements Observer {
 		this.rainStrength.setText("" + (int) (this.data.getRainIntensity() * 100));
 		this.rainTime.setText("" + this.data.getRainTime());
 		this.thunderStatus.setText(this.data.getThunderStrength() > 0.9 ? "Thundering" : "No thunder");
-		this.thunderStrength.setText("" + (int)(this.data.getThunderStrength() * 100));
+		this.thunderStrength.setText("" + (int) (this.data.getThunderStrength() * 100));
 		this.thunderTime.setText("" + this.data.getThunderTime());
 		this.nextThunderEvent.setText("" + this.data.getNextThunderEvent());
 

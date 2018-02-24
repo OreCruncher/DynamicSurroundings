@@ -39,9 +39,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public interface IFootstepAccentProvider {
-	
+
 	String getName();
-	
-	ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos pos, @Nonnull final ObjectArray<IAcoustic> in);
+
+	ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos pos,
+			@Nonnull final ObjectArray<IAcoustic> in);
 
 }

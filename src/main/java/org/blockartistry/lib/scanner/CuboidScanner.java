@@ -24,6 +24,7 @@
 package org.blockartistry.lib.scanner;
 
 import java.util.Random;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -68,7 +69,7 @@ public abstract class CuboidScanner extends Scanner {
 
 	protected BlockPos[] getMinMaxPointsForVolume(@Nonnull final BlockPos pos) {
 		BlockPos min = pos.add(-this.xRange, -this.yRange, -this.zRange);
-		BlockPos max = pos.add(this.xRange, this.yRange, this.zRange);
+		final BlockPos max = pos.add(this.xRange, this.yRange, this.zRange);
 
 		if (min.getY() < 0)
 			min = new BlockPos(min.getX(), 0, min.getZ());
@@ -152,8 +153,8 @@ public abstract class CuboidScanner extends Scanner {
 	}
 
 	/**
-	 * This is the hook that gets called when a block goes out of scope because
-	 * the player moved or something.
+	 * This is the hook that gets called when a block goes out of scope because the
+	 * player moved or something.
 	 */
 	public void blockUnscan(final IBlockState state, final BlockPos pos, final Random rand) {
 
@@ -231,7 +232,7 @@ public abstract class CuboidScanner extends Scanner {
 		if (!this.activeCuboid.contains(event.pos))
 			return false;
 
-		if (!this.interestingBlock(event.newState))
+		if (!interestingBlock(event.newState))
 			return false;
 
 		return this.blockProvider.isAvailable(event.pos);

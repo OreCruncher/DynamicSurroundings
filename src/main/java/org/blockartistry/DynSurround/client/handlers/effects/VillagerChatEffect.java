@@ -24,15 +24,15 @@
 package org.blockartistry.DynSurround.client.handlers.effects;
 
 import java.util.List;
+
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.registry.EntityEffectInfo;
 import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
-import org.blockartistry.lib.effects.IEntityEffectHandlerState;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
+import org.blockartistry.lib.effects.IEntityEffectHandlerState;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
@@ -63,11 +63,9 @@ public class VillagerChatEffect extends EntityEffect {
 	public VillagerChatEffect(@Nonnull final Entity entity) {
 
 		final EntityVillager villager = (EntityVillager) entity;
-		this.preds = new Predicate[] { EntitySelectors.CAN_AI_TARGET, new Predicate<Entity>() {
-			public boolean apply(@Nullable Entity entity) {
-				return entity.isEntityAlive() && villager.getEntitySenses().canSee(entity);
-			}
-		}, Predicates.<Entity>alwaysTrue() };
+		this.preds = new Predicate[] { EntitySelectors.CAN_AI_TARGET,
+				entity1 -> ((Entity) entity1).isEntityAlive() && villager.getEntitySenses().canSee((Entity) entity1),
+				Predicates.<Entity>alwaysTrue() };
 
 		this.normalChat = new EntityChatEffect(entity);
 		this.fleeChat = new EntityChatEffect(entity, "villager.flee");
@@ -95,7 +93,7 @@ public class VillagerChatEffect extends EntityEffect {
 		if (entity.isChild())
 			return;
 
-		if (this.villagerThreatened(entity)) {
+		if (villagerThreatened(entity)) {
 			this.runningScared = true;
 			this.fleeChat.update(subject);
 		} else {
@@ -109,17 +107,14 @@ public class VillagerChatEffect extends EntityEffect {
 	}
 
 	protected boolean villagerThreatened(final Entity entity) {
-		final AxisAlignedBB bbox = entity.getEntityBoundingBox().expand((double) 8.0, 3.0D, (double) 8.0);
+		final AxisAlignedBB bbox = entity.getEntityBoundingBox().expand(8.0, 3.0D, 8.0);
 		return !entity.getEntityWorld()
 				.<EntityZombie>getEntitiesWithinAABB(EntityZombie.class, bbox, Predicates.and(this.preds)).isEmpty();
 	}
 
-	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
-		@Override
-		public boolean applies(@Nonnull final Entity e, @Nonnull final EntityEffectInfo eei) {
-			return eei.effects.contains("chat") && e instanceof EntityVillager && EntityChatEffect.hasMessages(e);
-		}
-	};
+	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = (@Nonnull final Entity e,
+			@Nonnull final EntityEffectInfo eei) -> eei.effects.contains("chat") && e instanceof EntityVillager
+					&& EntityChatEffect.hasMessages(e);
 
 	public static class Factory implements IEntityEffectFactory {
 

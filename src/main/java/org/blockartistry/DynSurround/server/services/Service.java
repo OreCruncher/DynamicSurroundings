@@ -27,32 +27,30 @@ package org.blockartistry.DynSurround.server.services;
 import javax.annotation.Nonnull;
 
 public abstract class Service {
-	
+
 	protected final String serviceName;
-	
+
 	protected Service(@Nonnull final String serviceName) {
 		this.serviceName = serviceName;
 	}
-	
+
 	public String getServiceName() {
 		return this.serviceName;
 	}
-	
+
 	/*
-	 * Called by the service manager when services are starting up.
-	 * It's an appropriate time to initialize state before execution
-	 * starts.
+	 * Called by the service manager when services are starting up. It's an
+	 * appropriate time to initialize state before execution starts.
 	 */
 	public void init() {
-		
+
 	}
-	
+
 	/*
-	 * Called by the service manager when services are shutting down.
-	 * It's an appropriate time to cleanup state before being
-	 * released.
+	 * Called by the service manager when services are shutting down. It's an
+	 * appropriate time to cleanup state before being released.
 	 */
 	public void fini() {
-		
+
 	}
 }

@@ -27,7 +27,7 @@ final class ChiselFacadeAccessor extends FacadeAccessor {
 
 	private static final String CLASS = "team.chisel.api.IFacade";
 	private static final String METHOD = "getFacade";
-	
+
 	public ChiselFacadeAccessor() {
 		super(CLASS, METHOD);
 	}

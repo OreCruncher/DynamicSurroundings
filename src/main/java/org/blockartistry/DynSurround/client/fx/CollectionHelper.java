@@ -24,6 +24,7 @@
 package org.blockartistry.DynSurround.client.fx;
 
 import java.lang.ref.WeakReference;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.fx.particle.mote.ParticleCollection;
@@ -67,14 +68,14 @@ public class CollectionHelper {
 		ParticleCollection pc = this.collection != null ? this.collection.get() : null;
 		if (pc == null || !pc.isAlive() || pc.shouldDie()) {
 			pc = this.factory.create(EnvironState.getWorld(), this.texture);
-			this.collection = new WeakReference<ParticleCollection>(pc);
+			this.collection = new WeakReference<>(pc);
 			ParticleHelper.addParticle(pc);
 		}
 		return pc;
 	}
 
 	public void clear() {
-		ParticleCollection pc = this.collection != null ? this.collection.get() : null;
+		final ParticleCollection pc = this.collection != null ? this.collection.get() : null;
 		if (pc != null) {
 			pc.setExpired();
 			this.collection = null;
@@ -85,7 +86,7 @@ public class CollectionHelper {
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append(this.name).append('=');
-		ParticleCollection pc = this.collection != null ? this.collection.get() : null;
+		final ParticleCollection pc = this.collection != null ? this.collection.get() : null;
 		if (pc == null)
 			builder.append("No Collection");
 		else if (!pc.isAlive())

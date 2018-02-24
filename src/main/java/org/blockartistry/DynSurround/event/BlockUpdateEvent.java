@@ -33,14 +33,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class BlockUpdateEvent extends Event {
-	
+
 	public final World world;
 	public final BlockPos pos;
 	public final IBlockState oldState;
 	public final IBlockState newState;
 	public final int flags;
-	
-	public BlockUpdateEvent(final World world, final BlockPos pos, final IBlockState oldState, final IBlockState newState, final int flags) {
+
+	public BlockUpdateEvent(final World world, final BlockPos pos, final IBlockState oldState,
+			final IBlockState newState, final int flags) {
 		this.world = world;
 		this.pos = pos;
 		this.oldState = oldState;
