@@ -58,10 +58,10 @@ public class EffectManager {
 		// for the remainder during this tick.
 		this.effectHandlers.add(new EnvironStateHandler());
 
-		this.effectHandlers.add(new AreaSurveyHandler());
+		this.effectHandlers.add(new AreaBlockEffectsHandler());
 		this.effectHandlers.add(new EnvironmentEffectHandler());
 		this.effectHandlers.add(new ParticleSystemHandler());
-		this.effectHandlers.add(new AreaSoundEffectHandler());
+		this.effectHandlers.add(new BiomeSoundEffectsHandler());
 		this.effectHandlers.add(new EntityEmojiHandler());
 		this.effectHandlers.add(new AuroraEffectHandler());
 		this.effectHandlers.add(new SpeechBubbleHandler());

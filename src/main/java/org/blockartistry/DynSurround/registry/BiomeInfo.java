@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.client.ClientRegistry;
-import org.blockartistry.DynSurround.client.handlers.AreaSoundEffectHandler;
+import org.blockartistry.DynSurround.client.handlers.BiomeSoundEffectsHandler;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.data.xface.BiomeConfig;
 import org.blockartistry.DynSurround.data.xface.SoundConfig;
@@ -77,7 +77,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 			}
 	}
 
-	public final static int DEFAULT_SPOT_CHANCE = 1000 / AreaSoundEffectHandler.SCAN_INTERVAL;
+	public final static int DEFAULT_SPOT_CHANCE = 1000 / BiomeSoundEffectsHandler.SCAN_INTERVAL;
 	public final static SoundEffect[] NO_SOUNDS = {};
 
 	protected final IBiome biome;
