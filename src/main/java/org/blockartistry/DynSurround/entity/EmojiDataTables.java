@@ -36,8 +36,59 @@ import org.blockartistry.lib.compat.EntityLivingUtil;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIAttackRanged;
+import net.minecraft.entity.ai.EntityAIAttackRangedBow;
+import net.minecraft.entity.ai.EntityAIAvoidEntity;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityAIBeg;
+import net.minecraft.entity.ai.EntityAIBreakDoor;
+import net.minecraft.entity.ai.EntityAICreeperSwell;
+import net.minecraft.entity.ai.EntityAIDefendVillage;
+import net.minecraft.entity.ai.EntityAIDoorInteract;
+import net.minecraft.entity.ai.EntityAIEatGrass;
+import net.minecraft.entity.ai.EntityAIFindEntityNearest;
+import net.minecraft.entity.ai.EntityAIFindEntityNearestPlayer;
+import net.minecraft.entity.ai.EntityAIFleeSun;
+import net.minecraft.entity.ai.EntityAIFollowGolem;
+import net.minecraft.entity.ai.EntityAIFollowOwner;
+import net.minecraft.entity.ai.EntityAIFollowParent;
+import net.minecraft.entity.ai.EntityAIHarvestFarmland;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILeapAtTarget;
+import net.minecraft.entity.ai.EntityAILookAtTradePlayer;
+import net.minecraft.entity.ai.EntityAILookAtVillager;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIMate;
+import net.minecraft.entity.ai.EntityAIMoveIndoors;
+import net.minecraft.entity.ai.EntityAIMoveThroughVillage;
+import net.minecraft.entity.ai.EntityAIMoveToBlock;
+import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
+import net.minecraft.entity.ai.EntityAIMoveTowardsTarget;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAIOcelotAttack;
+import net.minecraft.entity.ai.EntityAIOcelotSit;
+import net.minecraft.entity.ai.EntityAIOpenDoor;
+import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
+import net.minecraft.entity.ai.EntityAIPanic;
+import net.minecraft.entity.ai.EntityAIPlay;
+import net.minecraft.entity.ai.EntityAIRestrictOpenDoor;
+import net.minecraft.entity.ai.EntityAIRestrictSun;
+import net.minecraft.entity.ai.EntityAIRunAroundLikeCrazy;
+import net.minecraft.entity.ai.EntityAISit;
+import net.minecraft.entity.ai.EntityAISkeletonRiders;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAITarget;
+import net.minecraft.entity.ai.EntityAITargetNonTamed;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
+import net.minecraft.entity.ai.EntityAITempt;
+import net.minecraft.entity.ai.EntityAITradePlayer;
+import net.minecraft.entity.ai.EntityAIVillagerInteract;
+import net.minecraft.entity.ai.EntityAIVillagerMate;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.EntityAIWatchClosest2;
+import net.minecraft.entity.ai.EntityAIZombieAttack;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityGuardian;
@@ -60,7 +111,7 @@ public final class EmojiDataTables {
 	}
 
 	private final static Map<Class<? extends EntityAIBase>, ActionState> actions = new IdentityHashMap<>();
-	private final static TIntObjectHashMap<EmojiType> emojiMap = new TIntObjectHashMap<EmojiType>();
+	private final static TIntObjectHashMap<EmojiType> emojiMap = new TIntObjectHashMap<>();
 
 	public static void add(@Nonnull final Class<? extends EntityAIBase> clazz, @Nonnull final ActionState state) {
 		if (!actions.containsKey(clazz))
@@ -166,7 +217,7 @@ public final class EmojiDataTables {
 	private static Class<? extends EntityAIBase> findInternalClass(@Nonnull Class<? extends EntityLiving> clazz,
 			@Nonnull final String className) {
 
-		Class<?>[] classes = clazz.getDeclaredClasses();
+		final Class<?>[] classes = clazz.getDeclaredClasses();
 		for (final Class<?> c : classes) {
 			if (c.getName().endsWith(className) && EntityAIBase.class.isAssignableFrom(c))
 				return (Class<? extends EntityAIBase>) c;

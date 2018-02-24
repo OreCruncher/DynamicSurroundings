@@ -90,8 +90,8 @@ public class SimulationTracker extends Tracker {
 			return false;
 
 		final int dimId = EnvironState.getDimensionId();
-		return dimId != -1 && dimId != 1 && this.isThundering()
-				&& this.getIntensityLevel() >= ModOptions.rain.stormThunderThreshold;
+		return dimId != -1 && dimId != 1 && isThundering()
+				&& getIntensityLevel() >= ModOptions.rain.stormThunderThreshold;
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class SimulationTracker extends Tracker {
 			this.random = null;
 		}
 
-		float newIntensity = MathStuff.clamp(vanillaIntensity, 0.0F, this.maxIntensityLevel);
+		final float newIntensity = MathStuff.clamp(vanillaIntensity, 0.0F, this.maxIntensityLevel);
 
 		setCurrentIntensity(newIntensity);
 	}
@@ -164,8 +164,8 @@ public class SimulationTracker extends Tracker {
 	private void doAmbientThunder() {
 
 		// If it is thundering and the intensity exceeds our threshold...
-		if (this.backgroundThunderPossible()) {
-			final float intensity = this.getIntensityLevel();
+		if (backgroundThunderPossible()) {
+			final float intensity = getIntensityLevel();
 			int time = this.nextThunderEvent - 1;
 			if (time <= 0) {
 				if (time == 0) {

@@ -47,9 +47,9 @@ public class FootstepSound extends BasicSound<FootstepSound> {
 		super(event, SoundCategory.PLAYERS);
 
 		this.setPosition(player);
-		this.setVolumeScale(FOOTSTEP);
+		setVolumeScale(FOOTSTEP);
 		if (EnvironState.isPlayer(player))
-			this.setAttenuationType(noAttenuation());
+			setAttenuationType(noAttenuation());
 	}
 
 }

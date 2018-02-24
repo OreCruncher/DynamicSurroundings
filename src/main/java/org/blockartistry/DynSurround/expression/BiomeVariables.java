@@ -29,37 +29,37 @@ import org.blockartistry.lib.expression.DynamicVariantList;
 public class BiomeVariables extends DynamicVariantList {
 
 	public BiomeVariables() {
-		this.add(new Dynamic.DynamicString("biome.name") {
+		add(new Dynamic.DynamicString("biome.name") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getBiomeName();
 			}
 		});
-		this.add(new Dynamic.DynamicString("biome.id") {
+		add(new Dynamic.DynamicString("biome.id") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getPlayerBiome().getKey().toString();
 			}
 		});
-		this.add(new Dynamic.DynamicString("biome.modid") {
+		add(new Dynamic.DynamicString("biome.modid") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getPlayerBiome().getKey().getResourceDomain();
 			}
 		});
-		this.add(new Dynamic.DynamicString("biome.temperature") {
+		add(new Dynamic.DynamicString("biome.temperature") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getBiomeTemperature().getValue();
 			}
 		});
-		this.add(new Dynamic.DynamicNumber("biome.rainfall") {
+		add(new Dynamic.DynamicNumber("biome.rainfall") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getPlayerBiome().getRainfall();
 			}
 		});
-		this.add(new Dynamic.DynamicNumber("biome.temperatureValue") {
+		add(new Dynamic.DynamicNumber("biome.temperatureValue") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getPlayerBiome().getTemperature();

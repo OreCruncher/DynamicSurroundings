@@ -26,14 +26,14 @@ package org.blockartistry.lib;
 
 public class TimeUtils {
 
-	private TimeUtils(){
-		
+	private TimeUtils() {
+
 	}
-	
+
 	public static long currentTimeMillis() {
 		return System.nanoTime() / 1000000L;
 	}
-	
+
 	public static long getGMTDaySeedBase() {
 		return (System.currentTimeMillis() / (1000 * 60 * 24)) * 311;
 	}

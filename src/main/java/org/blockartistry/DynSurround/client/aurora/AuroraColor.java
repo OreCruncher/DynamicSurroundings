@@ -52,7 +52,7 @@ public final class AuroraColor {
 	 */
 	public final Color middleColor;
 
-	private static final List<AuroraColor> COLOR_SETS = new ArrayList<AuroraColor>();
+	private static final List<AuroraColor> COLOR_SETS = new ArrayList<>();
 
 	private static final float WARMER = 0.3F;
 	private static final float COOLER = -0.3F;

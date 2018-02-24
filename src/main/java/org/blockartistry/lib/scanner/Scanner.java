@@ -25,6 +25,7 @@ package org.blockartistry.lib.scanner;
 
 import java.util.Random;
 import java.util.concurrent.Callable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -53,7 +54,7 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 	protected final int zSize;
 	protected final int blocksPerTick;
 	protected final int volume;
-	
+
 	protected final ScanLocus locus;
 
 	protected final Random random = new XorShiftRandom();
@@ -92,7 +93,7 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 			this.blocksPerTick = Math.min(this.volume / 20, MAX_BLOCKS_TICK);
 		else
 			this.blocksPerTick = Math.min(blocksPerTick, MAX_BLOCKS_TICK);
-		
+
 		this.locus = locus;
 	}
 
@@ -108,16 +109,16 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 	}
 
 	/**
-	 * Invoked when a block of interest is discovered. The BlockPos provided is
-	 * not safe to hold on to beyond the call so if it needs to be kept it needs
-	 * to be copied.
+	 * Invoked when a block of interest is discovered. The BlockPos provided is not
+	 * safe to hold on to beyond the call so if it needs to be kept it needs to be
+	 * copied.
 	 */
 	public abstract void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos,
 			@Nonnull final Random rand);
 
 	/**
-	 * Determines if the block is of interest to the effects. Override to
-	 * provide logic beyond the basics.
+	 * Determines if the block is of interest to the effects. Override to provide
+	 * logic beyond the basics.
 	 */
 	protected boolean interestingBlock(final IBlockState state) {
 		return state != AIR_BLOCK;
@@ -159,9 +160,9 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 	}
 
 	/**
-	 * Provide the next block position to be processed. For memory efficiency
-	 * the provided mutable should be used to store the coordinate information
-	 * and returned from the function call.
+	 * Provide the next block position to be processed. For memory efficiency the
+	 * provided mutable should be used to store the coordinate information and
+	 * returned from the function call.
 	 */
 	@Nullable
 	protected abstract BlockPos nextPos(@Nonnull final BlockPos.MutableBlockPos pos, @Nonnull final Random rand);

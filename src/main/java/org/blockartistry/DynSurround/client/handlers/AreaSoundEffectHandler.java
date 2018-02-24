@@ -34,11 +34,12 @@ import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
+
 import gnu.trove.impl.Constants;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class AreaSoundEffectHandler extends EffectHandlerBase {
@@ -79,12 +80,12 @@ public class AreaSoundEffectHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 
-		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<SoundEffect>(Constants.DEFAULT_CAPACITY,
+		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<>(Constants.DEFAULT_CAPACITY,
 				Constants.DEFAULT_LOAD_FACTOR, -1F);
 		if (doBiomeSounds())
 			getBiomeSounds(sounds);
 
-		final List<SoundEffect> playerSounds = new ArrayList<SoundEffect>();
+		final List<SoundEffect> playerSounds = new ArrayList<>();
 		ClientRegistry.BIOME.PLAYER_INFO.findSoundMatches(playerSounds);
 		if (ModOptions.sound.enableBattleMusic)
 			ClientRegistry.BIOME.BATTLE_MUSIC_INFO.findSoundMatches(playerSounds);

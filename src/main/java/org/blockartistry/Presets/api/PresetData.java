@@ -51,12 +51,12 @@ public final class PresetData {
 	public PresetData(@Nonnull final Map<String, String> data) {
 		this.data = data;
 	}
-	
+
 	public PresetData restartRequired() {
 		this.restartRequired = true;
 		return this;
 	}
-	
+
 	public boolean isRestartRequired() {
 		return this.restartRequired;
 	}
@@ -68,7 +68,7 @@ public final class PresetData {
 
 	public PresetData setIntList(@Nonnull final String id, @Nonnull final int[] values) {
 		final String result = StringUtils.join(Utils.toStringArray(values), SPLIT_SPACE_CHAR);
-		this.setString(id, result);
+		setString(id, result);
 		return this;
 	}
 
@@ -79,7 +79,7 @@ public final class PresetData {
 
 	public PresetData setBooleanList(@Nonnull final String id, @Nonnull final boolean[] values) {
 		final String result = StringUtils.join(Utils.toStringArray(values), SPLIT_SPACE_CHAR);
-		this.setString(id, result);
+		setString(id, result);
 		return this;
 	}
 
@@ -90,7 +90,7 @@ public final class PresetData {
 
 	public PresetData setDoubleList(@Nonnull final String id, @Nonnull final double[] values) {
 		final String result = StringUtils.join(Utils.toStringArray(values), SPLIT_SPACE_CHAR);
-		this.setString(id, result);
+		setString(id, result);
 		return this;
 	}
 
@@ -100,7 +100,7 @@ public final class PresetData {
 	}
 
 	public PresetData setStringList(@Nonnull final String id, @Nonnull final String[] values, final char splitChar) {
-		this.setString(id, StringUtils.join(values, splitChar));
+		setString(id, StringUtils.join(values, splitChar));
 		return this;
 	}
 
@@ -160,7 +160,7 @@ public final class PresetData {
 	public boolean contains(@Nonnull final String id) {
 		return this.data.containsKey(id);
 	}
-	
+
 	@Nonnull
 	public Set<Entry<String, String>> getEntries() {
 		return ImmutableSet.copyOf(this.data.entrySet());

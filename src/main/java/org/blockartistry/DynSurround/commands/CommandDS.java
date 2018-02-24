@@ -156,7 +156,8 @@ public final class CommandDS extends CommandBase {
 					final double d = parseDouble(parms[2], 0.0D, 1000.0D) * 20.0D * 60.0D;
 					if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
 						world.getWorldInfo().setRainTime((int) d);
-						feedback = new TextComponentString(Localization.format("dsurround.msg.RainTimeSet", FORMATTER.format(d)));
+						feedback = new TextComponentString(
+								Localization.format("dsurround.msg.RainTimeSet", FORMATTER.format(d)));
 					} else if (COMMAND_OPTION_THUNDER.compareToIgnoreCase(parms[1]) == 0) {
 						world.getWorldInfo().setThunderTime((int) d);
 						feedback = new TextComponentString(

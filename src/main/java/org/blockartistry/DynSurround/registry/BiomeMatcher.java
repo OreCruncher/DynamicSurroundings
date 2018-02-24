@@ -68,17 +68,17 @@ public abstract class BiomeMatcher {
 
 			@Override
 			public int compareTo(Variant o) {
-				return Booleans.compare(this.asBoolean(), o.asBoolean());
+				return Booleans.compare(asBoolean(), o.asBoolean());
 			}
 
 			@Override
 			public float asNumber() {
-				return this.asBoolean() ? 1 : 0;
+				return asBoolean() ? 1 : 0;
 			}
 
 			@Override
 			public String asString() {
-				return Boolean.toString(this.asBoolean());
+				return Boolean.toString(asBoolean());
 			}
 
 			@Override
@@ -88,7 +88,7 @@ public abstract class BiomeMatcher {
 
 			@Override
 			public Variant add(Variant term) {
-				return new BooleanValue(this.asBoolean() || term.asBoolean());
+				return new BooleanValue(asBoolean() || term.asBoolean());
 			}
 		}
 
@@ -103,7 +103,7 @@ public abstract class BiomeMatcher {
 
 				@Override
 				public int compareTo(Variant o) {
-					return this.asString().compareTo(o.asString());
+					return asString().compareTo(o.asString());
 				}
 
 				@Override
@@ -123,15 +123,15 @@ public abstract class BiomeMatcher {
 
 				@Override
 				public Variant add(Variant term) {
-					return new StringValue(this.asString().concat(term.asString()));
+					return new StringValue(asString().concat(term.asString()));
 				}
 
 			});
-			
+
 			this.exp.addVariable(new Variant("biome.rainfall") {
 				@Override
 				public int compareTo(Variant o) {
-					return Float.compare(this.asNumber(), o.asNumber());
+					return Float.compare(asNumber(), o.asNumber());
 				}
 
 				@Override
@@ -141,26 +141,26 @@ public abstract class BiomeMatcher {
 
 				@Override
 				public String asString() {
-					return Float.toString(this.asNumber());
+					return Float.toString(asNumber());
 				}
 
 				@Override
 				public boolean asBoolean() {
-					return this.asNumber() != 0F;
+					return asNumber() != 0F;
 				}
 
 				@Override
 				public Variant add(Variant term) {
-					return new NumberValue(this.asNumber() + term.asNumber());
+					return new NumberValue(asNumber() + term.asNumber());
 				}
-				
+
 			});
 
 			this.exp.addVariable(new Variant("biome.id") {
 
 				@Override
 				public int compareTo(Variant o) {
-					return this.asString().compareTo(o.asString());
+					return asString().compareTo(o.asString());
 				}
 
 				@Override
@@ -180,7 +180,7 @@ public abstract class BiomeMatcher {
 
 				@Override
 				public Variant add(Variant term) {
-					return new StringValue(this.asString().concat(term.asString()));
+					return new StringValue(asString().concat(term.asString()));
 				}
 
 			});
@@ -189,7 +189,7 @@ public abstract class BiomeMatcher {
 
 				@Override
 				public int compareTo(Variant o) {
-					return this.asString().compareTo(o.asString());
+					return asString().compareTo(o.asString());
 				}
 
 				@Override
@@ -209,7 +209,7 @@ public abstract class BiomeMatcher {
 
 				@Override
 				public Variant add(Variant term) {
-					return new StringValue(this.asString().concat(term.asString()));
+					return new StringValue(asString().concat(term.asString()));
 				}
 
 			});
@@ -219,17 +219,17 @@ public abstract class BiomeMatcher {
 
 				@Override
 				public int compareTo(Variant o) {
-					return this.asString().compareTo(o.asString());
+					return asString().compareTo(o.asString());
 				}
 
 				@Override
 				public float asNumber() {
-					return this.asBoolean() ? 1 : 0;
+					return asBoolean() ? 1 : 0;
 				}
 
 				@Override
 				public String asString() {
-					return Boolean.toString(this.asBoolean());
+					return Boolean.toString(asBoolean());
 				}
 
 				@Override
@@ -239,14 +239,14 @@ public abstract class BiomeMatcher {
 
 				@Override
 				public Variant add(Variant term) {
-					return new BooleanValue(this.asBoolean() || term.asBoolean());
+					return new BooleanValue(asBoolean() || term.asBoolean());
 				}
 
 			});
 
 			// Scan the BiomeDictionary adding the the types
 			final Set<BiomeDictionary.Type> stuff = BiomeUtils.getBiomeTypes();
-			for(final BiomeDictionary.Type t: stuff)
+			for (final BiomeDictionary.Type t : stuff)
 				this.exp.addVariable(new BiomeTypeVariable(t));
 
 			// Add the biomes in the biome list

@@ -36,7 +36,7 @@ public class WeightTable<T> extends ObjectArray<WeightTable.IItem<T>> {
 	protected int totalWeight = 0;
 
 	public static interface IItem<T> {
-		
+
 		int getWeight();
 
 		T getItem();

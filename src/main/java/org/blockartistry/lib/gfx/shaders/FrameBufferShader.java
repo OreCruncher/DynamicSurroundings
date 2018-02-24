@@ -39,7 +39,7 @@ import net.minecraft.client.shader.Framebuffer;
 /*
  * Simple handler class that wraps a shader that will be operating against a framebuffer
  * for later use.  Kinda like a dynamic texture.
- * 
+ *
  * Loosly based on:
  * https://github.com/Angry-Pixel/The-Betweenlands/blob/1.12/src/main/java/thebetweenlands/client/render/shader/postprocessing/PostProcessingEffect.java
  */
@@ -58,7 +58,7 @@ public class FrameBufferShader {
 
 	public void setSize(final int width, final int height) {
 		if (this.blit != null && (this.blit.framebufferWidth != width || this.blit.framebufferHeight != height)) {
-			this.release();
+			release();
 		}
 
 		if (this.blit == null) {
@@ -135,7 +135,7 @@ public class FrameBufferShader {
 		GlStateManager.glTexCoord2f(0, 0);
 		GlStateManager.glVertex3f(0, 0, 0);
 		GlStateManager.glEnd();
-		
+
 		this.shader.unUse();
 
 		// Bind previous shader

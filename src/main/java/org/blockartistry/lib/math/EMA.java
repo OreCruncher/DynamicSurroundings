@@ -32,7 +32,7 @@ public class EMA {
 
 	private final String name;
 	private double ema;
-	private double factor;
+	private final double factor;
 
 	public EMA() {
 		this("UNNAMED");
@@ -41,7 +41,7 @@ public class EMA {
 	public EMA(@Nonnull final String name) {
 		this(name, 100);
 	}
-	
+
 	public EMA(@Nonnull final String name, final int periods) {
 		this.name = name;
 		this.factor = 2D / (periods + 1);
@@ -60,7 +60,7 @@ public class EMA {
 	public String name() {
 		return this.name;
 	}
-	
+
 	public double get() {
 		return this.ema;
 	}

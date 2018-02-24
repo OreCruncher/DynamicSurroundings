@@ -46,7 +46,7 @@ public class PresetEvent extends Event {
 	protected PresetEvent(@Nonnull final Map<String, PresetData> data) {
 		this.data = data;
 	}
-	
+
 	/*
 	 * Get a read only copy of the underlying data.
 	 */
@@ -56,8 +56,8 @@ public class PresetEvent extends Event {
 	}
 
 	/*
-	 * Retrieves the configuration data for the specified mod from
-	 * the preset data.  If not present a null will be returned.
+	 * Retrieves the configuration data for the specified mod from the preset data.
+	 * If not present a null will be returned.
 	 */
 	@Nullable
 	public PresetData getModData(@Nonnull final String modId) {
@@ -65,10 +65,9 @@ public class PresetEvent extends Event {
 	}
 
 	/*
-	 * Event to read configuration data from a preset.  Typically
-	 * the data is read and set in a mod's Configuration object
-	 * then saved to disk as needed.  Actual implementation is up
-	 * to a given mod.
+	 * Event to read configuration data from a preset. Typically the data is read
+	 * and set in a mod's Configuration object then saved to disk as needed. Actual
+	 * implementation is up to a given mod.
 	 */
 	public static class Load extends PresetEvent {
 
@@ -79,9 +78,9 @@ public class PresetEvent extends Event {
 	}
 
 	/*
-	 * Event to save mod configuration data into a preset.  Typically
-	 * data is read from a mod's Configuration object, however, the
-	 * actual implementation is up to the mod in question.
+	 * Event to save mod configuration data into a preset. Typically data is read
+	 * from a mod's Configuration object, however, the actual implementation is up
+	 * to the mod in question.
 	 */
 	public static class Save extends PresetEvent {
 
@@ -90,9 +89,8 @@ public class PresetEvent extends Event {
 		}
 
 		/*
-		 * Retrieves the configuration data for the specified mod
-		 * from the preset data.  If not present a new section will
-		 * be created and returned.
+		 * Retrieves the configuration data for the specified mod from the preset data.
+		 * If not present a new section will be created and returned.
 		 */
 		@Override
 		@Nonnull

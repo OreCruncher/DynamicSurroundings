@@ -72,7 +72,7 @@ public class EntityFootprintEffect extends EntityEffect {
 	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
 		super.intitialize(state);
 
-		final EntityLivingBase entity = (EntityLivingBase) this.getState().subject().get();
+		final EntityLivingBase entity = (EntityLivingBase) getState().subject().get();
 		this.generator = ClientRegistry.FOOTSTEPS.createGenerator(entity);
 		this.lastStyle = ModOptions.player.footprintStyle;
 
@@ -85,17 +85,17 @@ public class EntityFootprintEffect extends EntityEffect {
 	@Override
 	public void update(@Nonnull final Entity subject) {
 		final EntityLivingBase entity = (EntityLivingBase) subject;
-		if (this.getState().isActivePlayer(entity) && this.lastStyle != ModOptions.player.footprintStyle) {
+		if (getState().isActivePlayer(entity) && this.lastStyle != ModOptions.player.footprintStyle) {
 			this.generator = ClientRegistry.FOOTSTEPS.createGenerator(entity);
 			this.lastStyle = ModOptions.player.footprintStyle;
 		}
-		
+
 		this.generator.generateFootsteps(entity);
 	}
 
 	@Override
 	public void die() {
-		if(this.eventRegistered)
+		if (this.eventRegistered)
 			MinecraftForge.EVENT_BUS.unregister(this);
 	}
 
@@ -109,12 +109,8 @@ public class EntityFootprintEffect extends EntityEffect {
 		return super.toString() + ": " + this.generator.getPedometer();
 	}
 
-	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
-		@Override
-		public boolean applies(@Nonnull final Entity e, @Nonnull final EntityEffectInfo eei) {
-			return eei.effects.contains("footprint");
-		}
-	};
+	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = (@Nonnull final Entity e,
+			@Nonnull final EntityEffectInfo eei) -> eei.effects.contains("footprint");
 
 	public static class Factory implements IEntityEffectFactory {
 

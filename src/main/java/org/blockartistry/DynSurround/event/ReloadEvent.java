@@ -38,41 +38,41 @@ public class ReloadEvent extends Event {
 	 */
 	@SideOnly(Side.CLIENT)
 	public static class Resources extends ReloadEvent {
-		
+
 		public final IResourceManager manager;
 
 		public Resources(final IResourceManager manager) {
 			this.manager = manager;
 		}
 	}
-	
+
 	/**
 	 * Event fired when the mod configuration file changed.
 	 */
 	public static class Configuration extends ReloadEvent {
-		
+
 		public final Side side;
-		
+
 		public Configuration() {
 			this.side = null;
 		}
-		
+
 		public Configuration(@Nonnull final Side side) {
 			this.side = side;
 		}
 	}
-	
+
 	/**
-	 * Event fired when the RegistryManager finished reloading
-	 * registries and is notifying listeners of the fact.
+	 * Event fired when the RegistryManager finished reloading registries and is
+	 * notifying listeners of the fact.
 	 */
 	public static class Registry extends ReloadEvent {
-		
+
 		public final Side side;
-		
+
 		public Registry(@Nonnull final Side side) {
 			this.side = side;
 		}
 	}
-	
+
 }

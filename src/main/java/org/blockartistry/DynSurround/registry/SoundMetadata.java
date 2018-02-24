@@ -35,26 +35,26 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.util.SoundCategory;
 
 public class SoundMetadata {
-	
+
 	protected final String title;
 	protected final SoundCategory category;
 	protected final List<String> credits;
-	
+
 	public SoundMetadata(@Nonnull final SoundMetadataConfig cfg) {
 		this.title = cfg.title;
 		final SoundCategory cat = SoundCategory.getByName(cfg.category);
 		this.category = cat != null ? cat : SoundCategory.NEUTRAL;
 		this.credits = ImmutableList.copyOf(cfg.credits);
 	}
-	
+
 	public String getTitle() {
 		return this.title;
 	}
-	
+
 	public SoundCategory getCategory() {
 		return this.category;
 	}
-	
+
 	public List<String> getCredits() {
 		return this.credits;
 	}

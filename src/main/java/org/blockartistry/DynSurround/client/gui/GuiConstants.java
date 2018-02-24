@@ -32,13 +32,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public final class GuiConstants {
-	
+
 	private GuiConstants() {
-		
+
 	}
-	
+
 	public static final String TOKEN_CULL = "cull";
-	public static final String TOKEN_BLOCK  = "block";
+	public static final String TOKEN_BLOCK = "block";
 
 	public static final String TEXT_CULL = Localization.format("dsurround.format.Cull");
 	public static final String TEXT_BLOCK = Localization.format("dsurround.format.Block");

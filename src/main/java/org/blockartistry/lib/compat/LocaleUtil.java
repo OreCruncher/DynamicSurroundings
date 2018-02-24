@@ -33,17 +33,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public final class LocaleUtil {
-	
-	private static Method tpk = ReflectionHelper.findMethod(Locale.class, "translateKeyPrivate", "func_135026_c", String.class);
-	
+
+	private static Method tpk = ReflectionHelper.findMethod(Locale.class, "translateKeyPrivate", "func_135026_c",
+			String.class);
+
 	private LocaleUtil() {
-		
+
 	}
-	
+
 	public static String translateKeyPrivate(@Nonnull final Locale locale, @Nonnull final String key) {
 		try {
-			return (String)tpk.invoke(locale, key);
-		} catch(@Nonnull final Throwable t) {
+			return (String) tpk.invoke(locale, key);
+		} catch (@Nonnull final Throwable t) {
 			return key;
 		}
 	}

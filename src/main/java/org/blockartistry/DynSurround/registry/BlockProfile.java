@@ -134,13 +134,15 @@ public class BlockProfile {
 	@Nullable
 	public SoundEffect getSoundToPlay(@Nonnull final Random random) {
 		return this.sounds != NO_SOUNDS && random.nextInt(getChance()) == 0
-				? new WeightTable<SoundEffect>(this.sounds).next() : null;
+				? new WeightTable<>(this.sounds).next()
+				: null;
 	}
 
 	@Nullable
 	public SoundEffect getStepSoundToPlay(@Nonnull final Random random) {
 		return this.stepSounds != NO_SOUNDS && random.nextInt(getStepChance()) == 0
-				? new WeightTable<SoundEffect>(this.stepSounds).next() : null;
+				? new WeightTable<>(this.stepSounds).next()
+				: null;
 	}
 
 	public boolean hasSoundsOrEffects() {

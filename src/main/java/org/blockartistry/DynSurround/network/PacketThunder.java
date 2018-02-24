@@ -37,14 +37,14 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketThunder implements IMessage  {
-	
+public class PacketThunder implements IMessage {
+
 	public static class PacketHandler implements IMessageHandler<PacketThunder, IMessage> {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketThunder message, @Nullable final MessageContext ctx) {
 			final World world = EnvironState.getWorld();
-			if(world != null && world.provider.getDimension() == message.dimension)
+			if (world != null && world.provider.getDimension() == message.dimension)
 				Network.postEvent(new ThunderEvent(world, message.doFlash, message.pos));
 			return null;
 		}

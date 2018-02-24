@@ -79,7 +79,7 @@ public class NumberValue extends Variant {
 			return Integer.toString(i);
 		return Float.toString(this.value);
 	}
-	
+
 	@Override
 	public boolean asBoolean() {
 		return this.value != 0;

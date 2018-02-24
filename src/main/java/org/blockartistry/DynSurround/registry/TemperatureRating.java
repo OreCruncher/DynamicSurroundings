@@ -31,12 +31,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public enum TemperatureRating {
-	
-	ICY("icy", 0.0F),
-	COOL("cool", 0.2F),
-	MILD("mild", 1.0F),
-	WARM("warm", 1.8F),
-	HOT("hot", 100.F);
+
+	ICY("icy", 0.0F), COOL("cool", 0.2F), MILD("mild", 1.0F), WARM("warm", 1.8F), HOT("hot", 100.F);
 
 	private final String val;
 	private final float tempRange;

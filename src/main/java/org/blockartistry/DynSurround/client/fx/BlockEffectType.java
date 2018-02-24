@@ -108,7 +108,7 @@ public enum BlockEffectType {
 		}
 	};
 
-	private static final Map<String, BlockEffectType> typeMap = new HashMap<String, BlockEffectType>();
+	private static final Map<String, BlockEffectType> typeMap = new HashMap<>();
 	static {
 		for (final BlockEffectType effect : BlockEffectType.values())
 			typeMap.put(effect.getName(), effect);

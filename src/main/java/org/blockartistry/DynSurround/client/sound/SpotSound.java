@@ -46,7 +46,7 @@ public class SpotSound extends BasicSound<SpotSound> {
 
 	public SpotSound() {
 		super((ResourceLocation) null, SoundCategory.PLAYERS);
-		this.setVolumeScale(BIOME_EFFECT);
+		setVolumeScale(BIOME_EFFECT);
 	}
 
 	SpotSound(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound) {
@@ -58,7 +58,7 @@ public class SpotSound extends BasicSound<SpotSound> {
 		this.repeatDelay = 0;
 
 		this.setPosition(pos);
-		this.setVolumeScale(BIOME_EFFECT);
+		setVolumeScale(BIOME_EFFECT);
 	}
 
 	private float randomRange(final int range) {
@@ -82,7 +82,7 @@ public class SpotSound extends BasicSound<SpotSound> {
 			this.zPosF += randomRange(SPOT_SOUND_RANGE);
 		}
 
-		this.setVolumeScale(BIOME_EFFECT);
+		setVolumeScale(BIOME_EFFECT);
 	}
 
 }

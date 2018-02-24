@@ -69,22 +69,26 @@ public class TraceParticleManager extends ParticleManager {
 		return result;
 	}
 
+	@Override
 	public void emitParticleAtEntity(Entity entityIn, EnumParticleTypes particleTypes) {
 		checkForClientThread("emitParticleAtEntity");
 		this.manager.emitParticleAtEntity(entityIn, particleTypes);
 	}
 
+	@Override
 	public void emitParticleAtEntity(Entity p_191271_1_, EnumParticleTypes p_191271_2_, int p_191271_3_) {
 		checkForClientThread("emitParticleAtEntity");
 		this.manager.emitParticleAtEntity(p_191271_1_, p_191271_2_, p_191271_3_);
 	}
 
+	@Override
 	public Particle spawnEffectParticle(int particleId, double xCoord, double yCoord, double zCoord, double xSpeed,
 			double ySpeed, double zSpeed, int... parameters) {
 		checkForClientThread("spawnEffectParticle");
 		return this.manager.spawnEffectParticle(particleId, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, parameters);
 	}
 
+	@Override
 	public void addEffect(Particle effect) {
 		checkForClientThread("addEffect");
 		if (effect != null)
@@ -92,41 +96,49 @@ public class TraceParticleManager extends ParticleManager {
 		this.manager.addEffect(effect);
 	}
 
+	@Override
 	public void updateEffects() {
 		checkForClientThread("updateEffects");
 		this.manager.updateEffects();
 	}
 
+	@Override
 	public void renderParticles(Entity entityIn, float partialTicks) {
 		checkForClientThread("renderParticles");
 		this.manager.renderParticles(entityIn, partialTicks);
 	}
 
+	@Override
 	public void renderLitParticles(Entity entityIn, float partialTick) {
 		checkForClientThread("renderLitParticles");
 		this.manager.renderLitParticles(entityIn, partialTick);
 	}
 
+	@Override
 	public void clearEffects(@Nullable World worldIn) {
 		checkForClientThread("clearEffects");
 		this.manager.clearEffects(worldIn);
 	}
 
+	@Override
 	public void addBlockDestroyEffects(BlockPos pos, IBlockState state) {
 		checkForClientThread("addBlockDestroyEffects");
 		this.manager.addBlockDestroyEffects(pos, state);
 	}
 
+	@Override
 	public void addBlockHitEffects(BlockPos pos, EnumFacing side) {
 		checkForClientThread("addBlockHitEffects");
 		this.manager.addBlockHitEffects(pos, side);
 	}
 
+	@Override
 	public void addBlockHitEffects(BlockPos pos, net.minecraft.util.math.RayTraceResult target) {
 		checkForClientThread("addBlockHitEffects");
 		this.manager.addBlockHitEffects(pos, target);
 	}
 
+	@Override
 	public String getStatistics() {
 		checkForClientThread("getStatistics");
 		return this.manager.getStatistics();

@@ -42,7 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityBubbleContext implements Supplier<List<String>> {
 
-	private final List<SpeechBubbleData> data = new ArrayList<SpeechBubbleData>();
+	private final List<SpeechBubbleData> data = new ArrayList<>();
 	private List<String> preppedList;
 	private ParticleBillboard bubble;
 
@@ -78,7 +78,7 @@ public class EntityBubbleContext implements Supplier<List<String>> {
 	@Override
 	public List<String> get() {
 		if (this.preppedList == null && this.data.size() > 0) {
-			this.preppedList = new ArrayList<String>();
+			this.preppedList = new ArrayList<>();
 			for (final SpeechBubbleData entry : this.data)
 				this.preppedList.addAll(entry.getText());
 		}

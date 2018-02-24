@@ -48,6 +48,7 @@ final class EnderIOFacadeAccessor extends FacadeAccessor {
 		return this.IFacadeClass.getMethod(method, IBlockState.class, IBlockAccess.class, BlockPos.class);
 	}
 
+	@Override
 	protected IBlockState call(@Nonnull final IBlockState state, @Nonnull final World world,
 			@Nonnull final BlockPos pos, @Nullable final EnumFacing side) throws Throwable {
 		return (IBlockState) this.accessor.invoke(state.getBlock(), state, world, pos);

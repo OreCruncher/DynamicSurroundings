@@ -33,22 +33,22 @@ import net.minecraftforge.fml.relauncher.Side;
 public abstract class Registry {
 
 	public final Side side;
-	
+
 	Registry(@Nonnull final Side side) {
 		this.side = side;
 	}
-	
+
 	public void init() {
-		
+
 	}
-	
+
 	public abstract void configure(@Nonnull final ModConfigurationFile cfg);
-	
+
 	public void initComplete() {
-		
+
 	}
-	
+
 	public void fini() {
-		
+
 	}
 }

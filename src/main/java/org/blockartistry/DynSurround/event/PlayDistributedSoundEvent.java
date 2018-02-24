@@ -30,10 +30,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class PlayDistributedSoundEvent extends Event {
-	
+
 	public final String soundClass;
 	public final NBTTagCompound nbt;
-	
+
 	public PlayDistributedSoundEvent(@Nonnull final String soundClass, @Nonnull final NBTTagCompound nbt) {
 		this.soundClass = soundClass;
 		this.nbt = nbt;

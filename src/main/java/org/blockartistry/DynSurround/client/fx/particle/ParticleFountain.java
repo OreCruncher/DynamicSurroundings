@@ -36,8 +36,8 @@ public class ParticleFountain extends ParticleBlockDust {
 	public ParticleFountain(final World world, final double x, final double y, final double z, final double dX,
 			final double dY, final double dZ, final IBlockState block) {
 		super(world, x, y, z, dX, dY, dZ, block);
-		this.multipleParticleScaleBy((float) (0.3F + this.rand.nextGaussian() / 10.0F));
-		this.setPosition(this.posX, this.posY, this.posZ);
+		multipleParticleScaleBy((float) (0.3F + this.rand.nextGaussian() / 10.0F));
+		setPosition(this.posX, this.posY, this.posZ);
 	}
 
 }

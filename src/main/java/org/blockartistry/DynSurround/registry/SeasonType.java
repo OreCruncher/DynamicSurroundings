@@ -31,12 +31,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public enum SeasonType {
-	
-	NONE("noseason"),
-	SPRING("spring"),
-	SUMMER("summer"),
-	AUTUMN("autumn"),
-	WINTER("winter");
+
+	NONE("noseason"), SPRING("spring"), SUMMER("summer"), AUTUMN("autumn"), WINTER("winter");
 
 	private final String val;
 

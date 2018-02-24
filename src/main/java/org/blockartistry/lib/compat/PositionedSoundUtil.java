@@ -33,7 +33,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class PositionedSoundUtil {
-	
+
 	protected static Field getVolume;
 	protected static Field getPitch;
 

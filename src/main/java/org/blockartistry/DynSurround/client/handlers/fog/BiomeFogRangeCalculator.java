@@ -108,7 +108,7 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 				final BiomeInfo biome = ClientRegistry.BIOME.get(provider.getBiome(pos));
 
 				float distancePart = 1F;
-				float weightPart = 1;
+				final float weightPart = 1;
 
 				if (isRaining && biome.getHasDust()) {
 					distancePart = 1F - DUST_FOG_IMPACT * rainStr;
@@ -121,7 +121,7 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 			}
 		}
 
-		// If we have to scan again just return what Forge wants.  It's going to update
+		// If we have to scan again just return what Forge wants. It's going to update
 		// in the next render pass or two.
 		if (ctx.doScan) {
 			ctx.cached.set(event);

@@ -27,7 +27,7 @@ package org.blockartistry.lib.random;
  * @see "http://sites.google.com/site/murmurhash/"
  */
 public final class MurmurHash3 {
-	
+
 	private MurmurHash3() {
 		// no instances.
 	}

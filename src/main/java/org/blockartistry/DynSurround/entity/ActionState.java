@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.entity;
 
 import javax.annotation.Nonnull;
+
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
@@ -37,8 +38,8 @@ public enum ActionState {
 	/** Moving various model parts around, like shifting head orientation */
 	IDLE(1, 1, EmotionalState.NEUTRAL),
 	/**
-	 * Entity is angry and doing something related to that anger. Enderman
-	 * agitation is an example.
+	 * Entity is angry and doing something related to that anger. Enderman agitation
+	 * is an example.
 	 */
 	ANGRY(2, 2, EmotionalState.ANGRY),
 	/** The entity has a target and is attempting to attack. */
@@ -77,7 +78,7 @@ public enum ActionState {
 	/** The entity is on the move. */
 	MOVING(17, 15, EmotionalState.NEUTRAL);
 
-	private static final TIntObjectHashMap<ActionState> lookup = new TIntObjectHashMap<ActionState>();
+	private static final TIntObjectHashMap<ActionState> lookup = new TIntObjectHashMap<>();
 	static {
 		for (final ActionState state : ActionState.values()) {
 			lookup.put(state.getId(), state);

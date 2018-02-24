@@ -61,25 +61,25 @@ public abstract class MoteMotionBase extends MoteAgeable {
 
 	@Override
 	protected float renderX(final float partialTicks) {
-		return (float) (this.prevX + (this.posX - this.prevX) * (double) partialTicks - interpX());
+		return (float) (this.prevX + (this.posX - this.prevX) * partialTicks - interpX());
 	}
 
 	@Override
 	protected float renderY(final float partialTicks) {
-		return (float) (this.prevY + (this.posY - this.prevY) * (double) partialTicks - interpY());
+		return (float) (this.prevY + (this.posY - this.prevY) * partialTicks - interpY());
 	}
 
 	@Override
 	protected float renderZ(final float partialTicks) {
-		return (float) (this.prevZ + (this.posZ - this.prevZ) * (double) partialTicks - interpZ());
+		return (float) (this.prevZ + (this.posZ - this.prevZ) * partialTicks - interpZ());
 	}
-	
+
 	protected boolean hasCollided() {
 		return WorldUtils.isSolidBlock(this.world, this.position);
 	}
-	
+
 	protected void handleCollision() {
-		this.kill();
+		kill();
 	}
 
 	@Override
@@ -96,8 +96,8 @@ public abstract class MoteMotionBase extends MoteAgeable {
 
 		this.position.setPos(this.posX, this.posY, this.posZ);
 
-		if (this.hasCollided()) {
-			this.handleCollision();
+		if (hasCollided()) {
+			handleCollision();
 		} else {
 			this.motionX *= 0.9800000190734863D;
 			this.motionY *= 0.9800000190734863D;

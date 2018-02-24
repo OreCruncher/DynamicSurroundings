@@ -33,9 +33,9 @@ public final class FunctionTable extends TreeMap<String, LazyFunction> {
 	public FunctionTable() {
 		super(String.CASE_INSENSITIVE_ORDER);
 	}
-	
+
 	public FunctionTable(@Nonnull final FunctionTable table) {
 		this();
-		this.putAll(table);
+		putAll(table);
 	}
 }

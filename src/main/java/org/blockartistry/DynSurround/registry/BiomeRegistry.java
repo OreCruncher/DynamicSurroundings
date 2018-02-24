@@ -86,8 +86,8 @@ public final class BiomeRegistry extends Registry {
 	// and should default to something to avoid crap.
 	private static final FakeBiome WTF = new WTFFakeBiome();
 
-	private final Map<ResourceLocation, BiomeInfo> registry = new HashMap<ResourceLocation, BiomeInfo>();
-	private final Map<String, String> biomeAliases = new HashMap<String, String>();
+	private final Map<ResourceLocation, BiomeInfo> registry = new HashMap<>();
+	private final Map<String, String> biomeAliases = new HashMap<>();
 
 	public BiomeRegistry(@Nonnull final Side side) {
 		super(side);
@@ -148,7 +148,7 @@ public final class BiomeRegistry extends Registry {
 
 	@Override
 	public void configure(@Nonnull final ModConfigurationFile cfg) {
-		cfg.biomeAlias.forEach((alias, biome) -> this.registerBiomeAlias(alias, biome));
+		cfg.biomeAlias.forEach((alias, biome) -> registerBiomeAlias(alias, biome));
 		cfg.biomes.forEach(biome -> this.register(biome));
 	}
 
@@ -156,7 +156,7 @@ public final class BiomeRegistry extends Registry {
 	public void initComplete() {
 		if (ModOptions.logging.enableDebugLogging) {
 			DSurround.log().info("*** BIOME REGISTRY ***");
-			final List<BiomeInfo> info = new ArrayList<BiomeInfo>(this.registry.values());
+			final List<BiomeInfo> info = new ArrayList<>(this.registry.values());
 			Collections.sort(info);
 			info.forEach(e -> DSurround.log().info(e.toString()));
 		}
@@ -184,7 +184,7 @@ public final class BiomeRegistry extends Registry {
 	public BiomeInfo get(@Nonnull final Biome biome) {
 		// This shouldn't happen, but...
 		if (biome == null)
-			return WTF_INFO;
+			return this.WTF_INFO;
 
 		BiomeInfo result = resolve(biome);
 		if (result == null) {
@@ -196,7 +196,7 @@ public final class BiomeRegistry extends Registry {
 			if (result == null) {
 				DSurround.log().warn("Unable to locate biome [%s] (%s) after reload", biome.getBiomeName(),
 						biome.getClass().getName());
-				result = WTF_INFO;
+				result = this.WTF_INFO;
 			}
 		}
 		return result;
@@ -204,8 +204,8 @@ public final class BiomeRegistry extends Registry {
 
 	@Nonnull
 	public BiomeInfo getPlayerBiome(@Nonnull final EntityPlayer player, final boolean getTrue) {
-		Biome biome = player.getEntityWorld().getBiome(new BlockPos(player.posX, 0, player.posZ));
-		BiomeInfo info = this.get(biome);
+		final Biome biome = player.getEntityWorld().getBiome(new BlockPos(player.posX, 0, player.posZ));
+		BiomeInfo info = get(biome);
 
 		if (!getTrue) {
 			if (player.isInsideOfMaterial(Material.WATER)) {

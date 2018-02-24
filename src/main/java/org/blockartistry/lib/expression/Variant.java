@@ -29,31 +29,31 @@ import javax.annotation.Nonnull;
 public abstract class Variant implements Comparable<Variant>, LazyVariant {
 
 	protected final String name;
-	
+
 	public Variant() {
 		this("<ANON>");
 	}
-	
+
 	public Variant(@Nonnull final String name) {
 		this.name = name;
 	}
-	
+
 	@Nonnull
 	public String getName() {
 		return this.name;
 	}
-	
+
 	public abstract float asNumber();
 
 	@Nonnull
 	public abstract String asString();
-	
+
 	public abstract boolean asBoolean();
 
 	// Operator support in case of strings
 	@Nonnull
 	public abstract Variant add(@Nonnull final Variant term);
-	
+
 	@Override
 	@Nonnull
 	public final String toString() {

@@ -64,8 +64,8 @@ import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.client.event.sound.SoundSetupEvent;
 import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
+import net.minecraftforge.client.event.sound.SoundSetupEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -231,7 +231,7 @@ public class SoundManagerReplacement extends SoundManager {
 				final StringBuilder builder = new StringBuilder();
 				builder.append("> QUEUED: [").append(sound.toString()).append(']');
 				if (DSurround.log().testTrace(ModOptions.Trace.TRUE_SOUND_VOLUME)) {
-					final SoundSystem ss = this.getSoundSystem();
+					final SoundSystem ss = getSoundSystem();
 					// Force a flush of all commands so we can get
 					// the actual volume and pitch used within the
 					// sound library.
@@ -302,9 +302,9 @@ public class SoundManagerReplacement extends SoundManager {
 				// as DONE. Reason is the underlying routine just
 				// wipes out all the lists.
 				for (final ISound s : this.playingSounds.values())
-					this.setState(s, SoundState.DONE);
+					setState(s, SoundState.DONE);
 				for (final ISound s : this.delayedSounds.keySet())
-					this.setState(s, SoundState.DONE);
+					setState(s, SoundState.DONE);
 			}
 			super.stopAllSounds();
 		}
@@ -315,7 +315,7 @@ public class SoundManagerReplacement extends SoundManager {
 		synchronized (this.mutex) {
 			checkForClientThread("pauseAllSounds");
 			for (final ISound s : this.playingSounds.values())
-				this.setStateIf(s, SoundState.PLAYING, SoundState.PAUSED);
+				setStateIf(s, SoundState.PLAYING, SoundState.PAUSED);
 
 			super.pauseAllSounds();
 		}
@@ -326,7 +326,7 @@ public class SoundManagerReplacement extends SoundManager {
 		synchronized (this.mutex) {
 			checkForClientThread("resumeAllSounds");
 			for (final ISound s : this.playingSounds.values())
-				this.setStateIf(s, SoundState.PAUSED, SoundState.PLAYING);
+				setStateIf(s, SoundState.PAUSED, SoundState.PLAYING);
 
 			super.resumeAllSounds();
 		}
@@ -348,8 +348,8 @@ public class SoundManagerReplacement extends SoundManager {
 				} else {
 					final String s = this.invPlayingSounds.get(itickablesound);
 					synchronized (SoundSystemConfig.THREAD_SYNC) {
-						sndSystem.setVolume(s, this.getClampedVolume(itickablesound));
-						sndSystem.setPitch(s, this.getClampedPitch(itickablesound));
+						sndSystem.setVolume(s, getClampedVolume(itickablesound));
+						sndSystem.setPitch(s, getClampedPitch(itickablesound));
 						sndSystem.setPosition(s, itickablesound.getXPosF(), itickablesound.getYPosF(),
 								itickablesound.getZPosF());
 					}
@@ -373,7 +373,7 @@ public class SoundManagerReplacement extends SoundManager {
 					if (isound.canRepeat() && j >= minThresholdDelay) {
 						this.playDelayedSound(isound, j);
 					} else {
-						this.setState(isound, SoundState.DONE);
+						setState(isound, SoundState.DONE);
 					}
 
 					iterator.remove();
@@ -382,7 +382,7 @@ public class SoundManagerReplacement extends SoundManager {
 
 					try {
 						this.categorySounds.remove(isound.getCategory(), s1);
-					} catch (RuntimeException var8) {
+					} catch (final RuntimeException var8) {
 						;
 					}
 
@@ -424,16 +424,16 @@ public class SoundManagerReplacement extends SoundManager {
 		synchronized (this.mutex) {
 			checkForClientThread("diagnostics");
 
-			final int soundCount = this.currentSoundCount();
-			final int maxCount = this.maxSoundCount();
+			final int soundCount = currentSoundCount();
+			final int maxCount = maxSoundCount();
 			event.output.add("SoundSystem: " + soundCount + "/" + maxCount);
 
 			final TObjectIntHashMap<ResourceLocation> counts = new TObjectIntHashMap<>();
 
 			final Iterator<Entry<String, ISound>> iterator = this.playingSounds.entrySet().iterator();
 			while (iterator.hasNext()) {
-				Entry<String, ISound> entry = iterator.next();
-				ISound isound = entry.getValue();
+				final Entry<String, ISound> entry = iterator.next();
+				final ISound isound = entry.getValue();
 				counts.adjustOrPutValue(isound.getSound().getSoundLocation(), 1, 1);
 			}
 
@@ -497,7 +497,7 @@ public class SoundManagerReplacement extends SoundManager {
 	public float getClampedVolume(@Nonnull final ISound sound) {
 		final float volumeScale = ClientRegistry.SOUND.getVolumeScale(sound);
 		final float volume = sound.getVolume() * getVolume(sound.getCategory()) * volumeScale;
-		float result = MathStuff.clamp(volume, 0.0F, 1.0F);
+		final float result = MathStuff.clamp(volume, 0.0F, 1.0F);
 
 		try {
 			if (soundPhysicsGlobalVolume != null)

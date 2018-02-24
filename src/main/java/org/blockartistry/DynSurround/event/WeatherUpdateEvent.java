@@ -42,14 +42,13 @@ public class WeatherUpdateEvent extends Event {
 	public final World world;
 
 	/**
-	 * The current rain intensity that is being set. 0 means no intensity, and
-	 * 1.0F means full.
+	 * The current rain intensity that is being set. 0 means no intensity, and 1.0F
+	 * means full.
 	 */
 	public final float rainIntensity;
 
 	/**
-	 * The max possible intensity of the storm. 0 means none, and 1.0F means
-	 * full.
+	 * The max possible intensity of the storm. 0 means none, and 1.0F means full.
 	 */
 	public final float maxRainIntensity;
 
@@ -64,8 +63,7 @@ public class WeatherUpdateEvent extends Event {
 	public final float thunderStrength;
 
 	/**
-	 * Number of ticks until the next thunder change, either starting or
-	 * stopping.
+	 * Number of ticks until the next thunder change, either starting or stopping.
 	 */
 	public final int nextThunderChange;
 

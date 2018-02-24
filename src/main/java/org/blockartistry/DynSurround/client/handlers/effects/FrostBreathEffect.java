@@ -24,6 +24,7 @@
 package org.blockartistry.DynSurround.client.handlers.effects;
 
 import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
@@ -54,7 +55,7 @@ public class FrostBreathEffect extends EntityEffect {
 	public String name() {
 		return "Frost Breath";
 	}
-	
+
 	@Override
 	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
 		super.intitialize(state);
@@ -66,11 +67,11 @@ public class FrostBreathEffect extends EntityEffect {
 		if (!ModOptions.player.showBreath)
 			return;
 
-		final int interval = (int) (((this.getState().getWorldTime() + this.seed) / 10) % 8);
+		final int interval = (int) (((getState().getWorldTime() + this.seed) / 10) % 8);
 		if (interval < 3 && isPossibleToShow(subject)) {
-			final EntityPlayer player = this.getState().thePlayer().get();
+			final EntityPlayer player = getState().thePlayer().get();
 			if ((subject == player) || (!subject.isInvisibleToPlayer(player) && player.canEntityBeSeen(subject))) {
-				this.getState().addParticle(new ParticleBreath(subject));
+				getState().addParticle(new ParticleBreath(subject));
 			}
 		}
 	}
@@ -84,12 +85,8 @@ public class FrostBreathEffect extends EntityEffect {
 		return false;
 	}
 
-	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
-		@Override
-		public boolean applies(@Nonnull final Entity e, @Nonnull final EntityEffectInfo eei) {
-			return eei.effects.contains("breath");
-		}
-	};
+	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = (@Nonnull final Entity e,
+			@Nonnull final EntityEffectInfo eei) -> eei.effects.contains("breath");
 
 	public static class Factory implements IEntityEffectFactory {
 

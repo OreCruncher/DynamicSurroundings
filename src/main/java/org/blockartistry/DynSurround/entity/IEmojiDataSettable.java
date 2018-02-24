@@ -28,9 +28,14 @@ import javax.annotation.Nonnull;
 
 public interface IEmojiDataSettable extends IEmojiData {
 	void setActionState(@Nonnull final ActionState state);
+
 	void setEmotionalState(@Nonnull final EmotionalState state);
+
 	void setEmojiType(@Nonnull final EmojiType type);
+
 	boolean isDirty();
+
 	void clearDirty();
+
 	void sync();
 }

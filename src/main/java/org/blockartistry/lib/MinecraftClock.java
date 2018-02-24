@@ -114,7 +114,6 @@ public class MinecraftClock {
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		return builder.append('[').append(this.getFormattedTime()).append(' ').append(this.getTimeOfDay()).append(']')
-				.toString();
+		return builder.append('[').append(getFormattedTime()).append(' ').append(getTimeOfDay()).append(']').toString();
 	}
 }

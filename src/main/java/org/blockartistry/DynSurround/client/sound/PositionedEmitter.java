@@ -35,18 +35,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class PositionedEmitter extends Emitter {
 
 	private final BlockPos position;
-	
+
 	public PositionedEmitter(@Nonnull final SoundEffect sound, @Nonnull final BlockPos pos) {
 		super(sound);
-		
+
 		this.position = pos.toImmutable();
 		this.activeSound = createSound();
 	}
 
 	@Override
 	protected BasicSound<?> createSound() {
-		// TODO:  The setRepeat() is a hack - should make more formal
+		// TODO: The setRepeat() is a hack - should make more formal
 		return this.effect.createSound(this.position).setRepeat(true);
 	}
-	
+
 }

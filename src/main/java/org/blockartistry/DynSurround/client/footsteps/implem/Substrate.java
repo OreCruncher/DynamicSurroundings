@@ -45,7 +45,7 @@ public enum Substrate {
 	//
 	FENCE("bigger");
 
-	private static final Map<String, Substrate> lookup = new HashMap<String, Substrate>();
+	private static final Map<String, Substrate> lookup = new HashMap<>();
 	static {
 		for (final Substrate s : Substrate.values())
 			lookup.put(s.name, s);

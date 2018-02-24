@@ -35,16 +35,16 @@ public interface IEntityEffectHandlerState extends IEntityEffectState {
 
 	/**
 	 * Whether the EntityEffectHandler is alive or dead.
-	 * 
+	 *
 	 * @return true if the EntityEffectHandler is active, false otherwise.
 	 */
 	boolean isAlive();
 
 	/**
 	 * Provides the distance, squared, to the player entity behind the keyboard.
-	 * 
+	 *
 	 * @return Range to client player, squared.
 	 */
 	double rangeToPlayerSq();
-	
+
 }

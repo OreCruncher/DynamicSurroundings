@@ -30,14 +30,15 @@ import gnu.trove.map.hash.TIntDoubleHashMap;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class ServerDataEvent extends Event {
-	
-	  public final double meanTickTime;
-	  public final TIntDoubleHashMap dimTps;
-	  public final int free;
-	  public final int total;
-	  public final int max;
 
-	public ServerDataEvent(@Nonnull final TIntDoubleHashMap dimensionTps, final double meanTickTime, final int freeMemory, final int totalMemory, final int maxMemory) {
+	public final double meanTickTime;
+	public final TIntDoubleHashMap dimTps;
+	public final int free;
+	public final int total;
+	public final int max;
+
+	public ServerDataEvent(@Nonnull final TIntDoubleHashMap dimensionTps, final double meanTickTime,
+			final int freeMemory, final int totalMemory, final int maxMemory) {
 		this.dimTps = dimensionTps;
 		this.meanTickTime = meanTickTime;
 		this.free = freeMemory;

@@ -34,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class Variator {
-	
+
 	public static final Variator DEFAULT = new Variator();
 
 	public final int IMMOBILE_DURATION;
@@ -61,7 +61,7 @@ public class Variator {
 		this.LAND_HARD_DISTANCE_MIN = 0.9F;
 		this.SPEED_TO_JUMP_AS_MULTIFOOT = 0.005F;
 		this.SPEED_TO_RUN = 0.22F; // 0.022F;
-		this.STRIDE = 0.75F; //0.95F;
+		this.STRIDE = 0.75F; // 0.95F;
 		this.STRIDE_STAIR = this.STRIDE * 0.65F;
 		this.STRIDE_LADDER = 0.5F;
 		this.QUADRUPED_MULTIPLIER = 1.25F;

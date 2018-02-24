@@ -27,6 +27,7 @@ package org.blockartistry.DynSurround.data.xface;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
 
@@ -66,7 +67,7 @@ public final class ModConfigurationFile {
 
 	@SerializedName("variators")
 	public Map<String, VariatorConfig> variators = new HashMap<>();
-	
+
 	@SerializedName("entities")
 	public Map<String, EntityConfig> entities = new HashMap<>();
 

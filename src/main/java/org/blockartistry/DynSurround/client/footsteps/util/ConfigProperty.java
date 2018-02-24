@@ -30,15 +30,16 @@ import java.util.Map;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.lib.JsonUtils;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ConfigProperty {
 	private Map<String, String> properties;
 
 	public ConfigProperty() {
-		this.properties = new HashMap<String, String>();
+		this.properties = new HashMap<>();
 	}
 
 	public String getString(final String name) {
@@ -54,7 +55,7 @@ public class ConfigProperty {
 
 		try {
 			return Boolean.parseBoolean(this.properties.get(name));
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			throw new PropertyTypeException();
 		}
 	}
@@ -65,7 +66,7 @@ public class ConfigProperty {
 
 		try {
 			return Integer.parseInt(this.properties.get(name));
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			throw new PropertyTypeException();
 		}
 	}
@@ -76,7 +77,7 @@ public class ConfigProperty {
 
 		try {
 			return Float.parseFloat(this.properties.get(name));
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			throw new PropertyTypeException();
 		}
 	}
@@ -87,7 +88,7 @@ public class ConfigProperty {
 
 		try {
 			return Long.parseLong(this.properties.get(name));
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			throw new PropertyTypeException();
 		}
 	}
@@ -98,7 +99,7 @@ public class ConfigProperty {
 
 		try {
 			return Double.parseDouble(this.properties.get(name));
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			throw new PropertyTypeException();
 		}
 	}
@@ -119,11 +120,11 @@ public class ConfigProperty {
 
 	@SuppressWarnings("unchecked")
 	public static boolean loadStream(final ConfigProperty properties, final InputStream stream) {
-		if(stream == null)
+		if (stream == null)
 			return false;
 		try {
 			properties.properties = JsonUtils.load(stream, properties.properties.getClass());
-		} catch(final Throwable t) {
+		} catch (final Throwable t) {
 			DSurround.log().error("Unable to load properties", t);
 		}
 		return true;

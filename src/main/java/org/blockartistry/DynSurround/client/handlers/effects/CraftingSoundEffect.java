@@ -50,9 +50,9 @@ public class CraftingSoundEffect extends EventEffect {
 			return;
 
 		this.craftSoundThrottle = EnvironState.getTickCounter();
-		final BasicSound<?> fx = this.getState().createSound(Sounds.CRAFTING, event.player);
+		final BasicSound<?> fx = getState().createSound(Sounds.CRAFTING, event.player);
 		fx.setRoutable(true);
-		this.getState().playSound(fx);
+		getState().playSound(fx);
 	}
 
 }

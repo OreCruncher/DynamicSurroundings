@@ -33,6 +33,7 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.ISoundPlayer;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -126,7 +127,7 @@ public class BasicAcoustic implements IAcoustic {
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append(this.getAcousticName()).append('[');
+		builder.append(getAcousticName()).append('[');
 		if (this.sound != null)
 			builder.append(this.sound.getSoundName());
 		else

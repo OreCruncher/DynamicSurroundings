@@ -66,7 +66,7 @@ public class PatchSoundHandler extends Transmorgrifier {
 
 		final MethodNode m = findCTOR(cn, sig);
 		if (m != null) {
-			this.logMethod(Transformer.log(), m, "Found!");
+			logMethod(Transformer.log(), m, "Found!");
 			final ListIterator<AbstractInsnNode> itr = m.instructions.iterator();
 			boolean foundNew = false;
 			while (itr.hasNext()) {
@@ -96,7 +96,7 @@ public class PatchSoundHandler extends Transmorgrifier {
 		}
 
 		if (!modified)
-			Transformer.log().info("Unable to patch [{}]!", this.getClassName());
+			Transformer.log().info("Unable to patch [{}]!", getClassName());
 
 		return modified;
 	}

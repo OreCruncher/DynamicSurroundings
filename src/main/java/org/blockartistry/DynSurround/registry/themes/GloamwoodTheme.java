@@ -36,9 +36,9 @@ public class GloamwoodTheme extends ThemeInfo {
 		this.doMorningFog = false;
 		this.minFogDistance = 20F;
 		this.maxFogDistance = 60F;
-		//this.maxLightLevel = 8;
+		// this.maxLightLevel = 8;
 	}
-	
+
 	@Override
 	public String name() {
 		return "Gloamwood";

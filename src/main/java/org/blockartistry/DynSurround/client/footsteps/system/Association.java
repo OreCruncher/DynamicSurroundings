@@ -27,6 +27,7 @@ package org.blockartistry.DynSurround.client.footsteps.system;
 import java.util.Collection;
 
 import javax.annotation.Nonnull;
+
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.lib.MCHelper;
@@ -91,7 +92,7 @@ public class Association {
 	public void add(@Nonnull final IAcoustic[] acoustics) {
 		this.data.addAll(acoustics);
 	}
-	
+
 	public void add(@Nonnull final Collection<? extends IAcoustic> collection) {
 		this.data.addAll(collection);
 	}

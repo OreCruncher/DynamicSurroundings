@@ -42,8 +42,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class SeasonRegistry extends Registry {
 
-	private final TIntObjectHashMap<SeasonInfo> seasonData = new TIntObjectHashMap<SeasonInfo>();
-	
+	private final TIntObjectHashMap<SeasonInfo> seasonData = new TIntObjectHashMap<>();
+
 	public SeasonRegistry(@Nonnull final Side side) {
 		super(side);
 	}
@@ -52,7 +52,7 @@ public final class SeasonRegistry extends Registry {
 	public void configure(@Nonnull final ModConfigurationFile cfg) {
 		// Nothing to configure
 	}
-	
+
 	protected SeasonInfo factory(@Nonnull final World world) {
 
 		if (world.provider.getDimension() == -1) {
@@ -66,7 +66,8 @@ public final class SeasonRegistry extends Registry {
 			return new SeasonInfoToughAsNails(world);
 		}
 
-		DSurround.log().info("Creating default SeasonInfo for dimension %s", world.provider.getDimensionType().getName());
+		DSurround.log().info("Creating default SeasonInfo for dimension %s",
+				world.provider.getDimensionType().getName());
 		return new SeasonInfo(world);
 	}
 
@@ -84,17 +85,17 @@ public final class SeasonRegistry extends Registry {
 	public TemperatureRating getPlayerTemperature(@Nonnull final World world) {
 		return getData(world).getPlayerTemperature(world);
 	}
-	
+
 	@Nonnull
 	public TemperatureRating getBiomeTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getData(world).getBiomeTemperature(world, pos);
 	}
-	
+
 	@Nonnull
 	public SeasonType getSeasonType(@Nonnull final World world) {
 		return getData(world).getSeasonType(world);
 	}
-	
+
 	@Nonnull
 	public String getSeasonName(@Nonnull final World world) {
 		return getData(world).getSeasonName(world);
@@ -110,10 +111,10 @@ public final class SeasonRegistry extends Registry {
 	}
 
 	/*
-	 * Indicates if it is cold enough that water can freeze. Could result in
-	 * snow or frozen ice. Does not take into account any other environmental
-	 * factors - just whether its cold enough. If environmental sensitive
-	 * versions are needed look at canBlockFreeze() and canSnowAt().
+	 * Indicates if it is cold enough that water can freeze. Could result in snow or
+	 * frozen ice. Does not take into account any other environmental factors - just
+	 * whether its cold enough. If environmental sensitive versions are needed look
+	 * at canBlockFreeze() and canSnowAt().
 	 */
 	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getData(world).canWaterFreeze(world, pos);

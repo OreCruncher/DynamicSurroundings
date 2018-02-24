@@ -114,9 +114,9 @@ public class ShaderProgram {
 			ARBShaderObjects.glUseProgramObjectARB(0);
 		}
 	}
-	
+
 	public final void delete() {
-		if(this.isValid()) {
+		if (isValid()) {
 			ARBShaderObjects.glUseProgramObjectARB(0);
 			ARBShaderObjects.glDeleteObjectARB(this.programId);
 		}
@@ -132,7 +132,7 @@ public class ShaderProgram {
 	}
 
 	protected final int getUniform(final String name) throws ShaderException {
-		if (!this.isValid())
+		if (!isValid())
 			throw new ShaderException(this.name, "ShaderProgram is not valid!");
 
 		final int id = ARBShaderObjects.glGetUniformLocationARB(this.programId, name);
@@ -171,7 +171,7 @@ public class ShaderProgram {
 
 		}
 	}
-	
+
 	public void setMatrix4(final String name, final FloatBuffer matrix) throws ShaderException {
 		ARBShaderObjects.glUniformMatrix4ARB(getUniform(name), false, matrix);
 	}
@@ -214,8 +214,9 @@ public class ShaderProgram {
 		final String fragment = Streams.readResourceAsString(fragmentResource);
 		this.initialize(vertex, fragment);
 	}
-	
-	public static ShaderProgram createProgram(final String name, final ResourceLocation vertex, final ResourceLocation fragment) throws Exception {
+
+	public static ShaderProgram createProgram(final String name, final ResourceLocation vertex,
+			final ResourceLocation fragment) throws Exception {
 		final ShaderProgram prog = new ShaderProgram(name);
 		prog.initialize(vertex, fragment);
 		return prog;

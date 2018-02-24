@@ -77,7 +77,7 @@ public class ScriptVariableTable extends AbstractTableModel implements Observer 
 
 	@Override
 	public void update(final Observable o, final Object arg) {
-		this.fireTableDataChanged();
+		fireTableDataChanged();
 	}
 
 }

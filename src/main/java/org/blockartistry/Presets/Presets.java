@@ -18,10 +18,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.profiler.Profiler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.ModMetadata;
-import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.ModMetadata;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -31,16 +31,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@net.minecraftforge.fml.common.Mod(
-		modid = Presets.MOD_ID,
-		useMetadata = true,
-		dependencies = Presets.DEPENDENCIES,
-		version = Presets.VERSION,
-		acceptedMinecraftVersions = DSurround.MINECRAFT_VERSIONS,
-		guiFactory = Presets.GUI_FACTORY,
-		updateJSON = Presets.UPDATE_URL,
-		clientSideOnly = true
-)
+@net.minecraftforge.fml.common.Mod(modid = Presets.MOD_ID, useMetadata = true, dependencies = Presets.DEPENDENCIES, version = Presets.VERSION, acceptedMinecraftVersions = DSurround.MINECRAFT_VERSIONS, guiFactory = Presets.GUI_FACTORY, updateJSON = Presets.UPDATE_URL, clientSideOnly = true)
 public class Presets {
 	public static final String MOD_ID = "presets";
 	public static final String API_ID = MOD_ID + "API";

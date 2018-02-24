@@ -105,7 +105,7 @@ public class ParticleBillboard extends ParticleBase {
 	}
 
 	public boolean shouldExpire() {
-		if (!this.isAlive() || !this.subject.isEntityAlive())
+		if (!isAlive() || !this.subject.isEntityAlive())
 			return true;
 
 		this.text = this.accessor.get();
@@ -119,13 +119,13 @@ public class ParticleBillboard extends ParticleBase {
 
 		final AxisAlignedBB box = this.subject.getEntityBoundingBox();
 		final double newY = box.maxY + (this.subject.isSneaking() ? 0.25D : 0.5D);
-		this.setPosition(this.subject.posX, newY, this.subject.posZ);
+		setPosition(this.subject.posX, newY, this.subject.posZ);
 	}
 
 	@Override
 	public void onUpdate() {
 		if (shouldExpire()) {
-			this.setExpired();
+			setExpired();
 		} else {
 
 			updatePosition();
@@ -138,7 +138,7 @@ public class ParticleBillboard extends ParticleBase {
 					this.textWidth = Math.max(this.textWidth, this.font.getStringWidth(s));
 
 				this.numberOfMessages = this.text.size();
-				this.top = -(numberOfMessages) * 9 - BUBBLE_MARGIN;
+				this.top = -(this.numberOfMessages) * 9 - BUBBLE_MARGIN;
 				this.bottom = BUBBLE_MARGIN;
 				this.left = -(this.textWidth / 2.0D + BUBBLE_MARGIN);
 				this.right = this.textWidth / 2.0D + BUBBLE_MARGIN;

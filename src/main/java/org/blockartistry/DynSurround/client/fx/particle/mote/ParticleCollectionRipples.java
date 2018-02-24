@@ -43,7 +43,7 @@ public class ParticleCollectionRipples extends ParticleCollection {
 
 		// Original texture
 		ORIGINAL("textures/particles/ripple.png"),
-		
+
 		// Circle, a bit darker
 		CIRCLE("textures/particles/ripple1.png"),
 
@@ -73,6 +73,7 @@ public class ParticleCollectionRipples extends ParticleCollection {
 		super(world, tex);
 	}
 
+	@Override
 	protected void bindTexture(@Nonnull final ResourceLocation resource) {
 		final ResourceLocation res = Style.getStyle(ModOptions.rain.rainRippleStyle).getTexture();
 		super.bindTexture(res);

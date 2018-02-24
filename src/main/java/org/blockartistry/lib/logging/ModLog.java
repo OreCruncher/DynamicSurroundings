@@ -73,7 +73,7 @@ public class ModLog {
 		this.traceMask = mask;
 		return this;
 	}
-	
+
 	public boolean testTrace(final int mask) {
 		return (this.traceMask & mask) != 0;
 	}
@@ -99,7 +99,7 @@ public class ModLog {
 	}
 
 	public void debug(final int mask, @Nonnull final String msg, @Nullable final Object... parms) {
-		if (this.testTrace(mask))
+		if (testTrace(mask))
 			this.debug(msg, parms);
 	}
 
@@ -120,7 +120,7 @@ public class ModLog {
 		public ModLog setDebug(final boolean flag) {
 			return this;
 		}
-		
+
 		@Override
 		public ModLog setTraceMask(final int mask) {
 			return this;

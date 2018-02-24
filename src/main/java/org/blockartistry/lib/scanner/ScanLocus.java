@@ -39,7 +39,7 @@ public abstract class ScanLocus {
 	public abstract BlockPos getCenter();
 
 	public int getDimension() {
-		return this.getWorld().provider.getDimension();
+		return getWorld().provider.getDimension();
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public abstract class ScanLocus {
 			return true;
 		;
 		final ScanLocus sl = (ScanLocus) o;
-		return this.getWorld() == sl.getWorld() && this.getCenter().equals(sl.getCenter());
+		return getWorld() == sl.getWorld() && getCenter().equals(sl.getCenter());
 	}
 
 }

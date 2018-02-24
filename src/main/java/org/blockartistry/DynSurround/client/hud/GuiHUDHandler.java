@@ -56,7 +56,7 @@ public final class GuiHUDHandler {
 			register(new LightLevelHUD());
 	}
 
-	private final List<GuiOverlay> overlays = new ArrayList<GuiOverlay>();
+	private final List<GuiOverlay> overlays = new ArrayList<>();
 
 	public void register(final GuiOverlay overlay) {
 		this.overlays.add(overlay);
@@ -94,7 +94,7 @@ public final class GuiHUDHandler {
 		if (event.player == null || event.player.world == null)
 			return;
 
-		if(event.player != Minecraft.getMinecraft().player)
+		if (event.player != Minecraft.getMinecraft().player)
 			return;
 
 		final int tickRef = EnvironState.getTickCounter();

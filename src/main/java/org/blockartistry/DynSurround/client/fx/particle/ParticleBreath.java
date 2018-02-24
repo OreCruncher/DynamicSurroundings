@@ -56,7 +56,7 @@ public class ParticleBreath extends ParticleCloud {
 		final Vec3d look = entity.getLook(1F); // Don't use the other look vector method!
 		final Vec3d origin = eyePosition.add(look.scale(isChild ? 0.25D : 0.5D));
 
-		this.setPosition(origin.xCoord, origin.yCoord, origin.zCoord);
+		setPosition(origin.xCoord, origin.yCoord, origin.zCoord);
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
@@ -105,11 +105,11 @@ public class ParticleBreath extends ParticleCloud {
 		this.prevPosZ = this.posZ;
 
 		if (this.particleAge++ >= this.particleMaxAge) {
-			this.setExpired();
+			setExpired();
 		}
 
-		this.setParticleTextureIndex(7 - this.particleAge * 8 / this.particleMaxAge);
-		this.move(this.motionX, this.motionY, this.motionZ);
+		setParticleTextureIndex(7 - this.particleAge * 8 / this.particleMaxAge);
+		move(this.motionX, this.motionY, this.motionZ);
 		this.motionX *= 0.9599999785423279D;
 		this.motionY *= 0.9599999785423279D;
 		this.motionZ *= 0.9599999785423279D;

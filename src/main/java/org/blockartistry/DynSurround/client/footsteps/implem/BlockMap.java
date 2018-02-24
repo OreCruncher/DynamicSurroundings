@@ -30,6 +30,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -39,9 +40,10 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.DynSurround.registry.BlockInfo;
 import org.blockartistry.lib.BlockNameUtil;
-import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.BlockNameUtil.NameResult;
+import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.MCHelper;
+
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -78,9 +80,9 @@ public class BlockMap {
 	private static final THashMap<String, List<MacroEntry>> macros = new THashMap<>();
 
 	static {
-		
+
 		final MacroEntry MESSY = new MacroEntry("messy", "MESSY_GROUND");
-		
+
 		List<MacroEntry> entries = new ArrayList<>();
 		entries.add(new MacroEntry(null, "NOT_EMITTER"));
 		entries.add(MESSY);
@@ -150,7 +152,7 @@ public class BlockMap {
 		entries.add(new MacroEntry(null, "NOT_EMITTER"));
 		entries.add(new MacroEntry("carpet", "rug"));
 		macros.put("#moss", entries);
-}
+	}
 
 	public BlockMap(@Nonnull final AcousticsManager manager) {
 		this.acousticsManager = manager;

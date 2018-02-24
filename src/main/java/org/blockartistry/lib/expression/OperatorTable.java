@@ -33,10 +33,10 @@ public final class OperatorTable extends TreeMap<String, Operator> {
 	public OperatorTable() {
 		super(String.CASE_INSENSITIVE_ORDER);
 	}
-	
+
 	public OperatorTable(@Nonnull final OperatorTable table) {
 		this();
-		this.putAll(table);
+		putAll(table);
 	}
-	
+
 }

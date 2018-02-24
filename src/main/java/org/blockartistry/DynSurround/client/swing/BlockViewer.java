@@ -28,16 +28,15 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.JPanel;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import javax.annotation.Nonnull;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SuppressWarnings("serial")
 @SideOnly(Side.CLIENT)
@@ -55,68 +54,68 @@ public class BlockViewer extends JPanel implements Observer {
 
 	private final JLabel blockName = new JLabel("block name");
 	private final JLabel blockMaterial = new JLabel("material");
-	private final JList<String> footstepAcoustics = new JList<String>();
-	private final JList<String> blockEffects = new JList<String>();
-	private final JList<String> blockSounds = new JList<String>();
-	private final JList<String> blockOreEntries = new JList<String>();
+	private final JList<String> footstepAcoustics = new JList<>();
+	private final JList<String> blockEffects = new JList<>();
+	private final JList<String> blockSounds = new JList<>();
+	private final JList<String> blockOreEntries = new JList<>();
 
 	protected final DataProxy.ViewedBlockData data;
 
 	public BlockViewer() {
 		setLayout(null);
 
-		this.setName("Block Data");
+		setName("Block Data");
 
-		lblNewLabel.setBounds(10, 11, 100, 14);
-		add(lblNewLabel);
+		this.lblNewLabel.setBounds(10, 11, 100, 14);
+		add(this.lblNewLabel);
 
-		blockName.setBounds(120, 11, 320, 14);
-		add(blockName);
+		this.blockName.setBounds(120, 11, 320, 14);
+		add(this.blockName);
 
-		lblBlockMaterial.setBounds(10, 36, 100, 14);
-		add(lblBlockMaterial);
+		this.lblBlockMaterial.setBounds(10, 36, 100, 14);
+		add(this.lblBlockMaterial);
 
-		blockMaterial.setBounds(120, 36, 320, 14);
-		add(blockMaterial);
+		this.blockMaterial.setBounds(120, 36, 320, 14);
+		add(this.blockMaterial);
 
-		lblNewLabel_1.setBounds(10, 153, 100, 14);
-		add(lblNewLabel_1);
+		this.lblNewLabel_1.setBounds(10, 153, 100, 14);
+		add(this.lblNewLabel_1);
 
-		scrollPane.setBounds(120, 151, 320, 77);
-		add(scrollPane);
+		this.scrollPane.setBounds(120, 151, 320, 77);
+		add(this.scrollPane);
 
-		footstepAcoustics.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		scrollPane.setViewportView(footstepAcoustics);
+		this.footstepAcoustics.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.scrollPane.setViewportView(this.footstepAcoustics);
 
-		lblBlockEffects.setBounds(10, 245, 100, 14);
-		add(lblBlockEffects);
+		this.lblBlockEffects.setBounds(10, 245, 100, 14);
+		add(this.lblBlockEffects);
 
-		scrollPane_1.setBounds(120, 243, 320, 77);
-		add(scrollPane_1);
-		blockEffects.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.scrollPane_1.setBounds(120, 243, 320, 77);
+		add(this.scrollPane_1);
+		this.blockEffects.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		scrollPane_1.setViewportView(blockEffects);
+		this.scrollPane_1.setViewportView(this.blockEffects);
 
 		this.data = new DataProxy.ViewedBlockData();
 		this.data.addObserver(this);
-		lblSounds.setBounds(10, 333, 100, 14);
+		this.lblSounds.setBounds(10, 333, 100, 14);
 
-		add(lblSounds);
-		scrollPane_2.setBounds(120, 331, 320, 77);
+		add(this.lblSounds);
+		this.scrollPane_2.setBounds(120, 331, 320, 77);
 
-		add(scrollPane_2);
-		blockSounds.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		add(this.scrollPane_2);
+		this.blockSounds.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		scrollPane_2.setViewportView(blockSounds);
+		this.scrollPane_2.setViewportView(this.blockSounds);
 
-		JScrollPane scrollPane_3 = new JScrollPane();
+		final JScrollPane scrollPane_3 = new JScrollPane();
 		scrollPane_3.setBounds(120, 61, 320, 79);
 		add(scrollPane_3);
 
-		scrollPane_3.setViewportView(blockOreEntries);
+		scrollPane_3.setViewportView(this.blockOreEntries);
 
-		lblOreDictionary.setBounds(10, 63, 100, 14);
-		add(lblOreDictionary);
+		this.lblOreDictionary.setBounds(10, 63, 100, 14);
+		add(this.lblOreDictionary);
 	}
 
 	protected String[] asArray(@Nonnull final List<String> list) {

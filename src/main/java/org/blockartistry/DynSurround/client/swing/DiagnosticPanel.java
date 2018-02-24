@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -46,7 +47,7 @@ public class DiagnosticPanel extends JPanel {
 
 	protected DiagnosticPanel() {
 
-		this.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 
 		this.frame = new JFrame("Dynamic Surroundings Diagnostics");
 		this.frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -65,19 +66,14 @@ public class DiagnosticPanel extends JPanel {
 	}
 
 	public void close() {
-		this.setVisible(false);
+		setVisible(false);
 		this.frame.dispose();
 	}
 
 	private static DiagnosticPanel INSTANCE = null;
 
 	public static void create() {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				INSTANCE = new DiagnosticPanel();
-			}
-		});
+		SwingUtilities.invokeLater(() -> INSTANCE = new DiagnosticPanel());
 	}
 
 	public static void refresh() {

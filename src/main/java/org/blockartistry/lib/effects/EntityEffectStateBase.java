@@ -41,13 +41,13 @@ public class EntityEffectStateBase extends EffectStateBase implements IEntityEff
 			@Nonnull final ISoundHelper sh) {
 		super(ph, sh);
 
-		this.subject = new WeakReference<Entity>(entity);
+		this.subject = new WeakReference<>(entity);
 	}
 
 	/**
 	 * The Entity subject the EntityEffectHandler is associated with. May be null if
 	 * the Entity is no longer in scope.
-	 * 
+	 *
 	 * @return Optional with a reference to the subject Entity, if any.
 	 */
 	@Override
@@ -58,7 +58,7 @@ public class EntityEffectStateBase extends EffectStateBase implements IEntityEff
 
 	/**
 	 * Indicates if the subject is alive.
-	 * 
+	 *
 	 * @return true if the subject is alive, false otherwise
 	 */
 	@Override
@@ -69,7 +69,7 @@ public class EntityEffectStateBase extends EffectStateBase implements IEntityEff
 
 	/**
 	 * Determines the distance between the Entity subject and the specified Entity.
-	 * 
+	 *
 	 * @param entity
 	 *            The Entity to which the distance is measured.
 	 * @return The distance between the two Entities in blocks, squared.
@@ -84,7 +84,7 @@ public class EntityEffectStateBase extends EffectStateBase implements IEntityEff
 
 	/**
 	 * Returns the total world time, in ticks, the entity belongs to.
-	 * 
+	 *
 	 * @return Total world time
 	 */
 	@Override

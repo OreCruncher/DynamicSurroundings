@@ -1,6 +1,6 @@
 /*
  * From: http://jabelarminecraft.blogspot.com/p/minecraft-forge-172-quick-tips-gl11-and.html
- * 
+ *
  * User: The Grey Ghost Date: 9/02/14
  */
 
@@ -18,11 +18,11 @@ public class UtilityGL11Debug {
 	public class GLproperty {
 		public GLproperty(int init_gLconstant, String init_name, String init_description, String init_category,
 				String init_fetchCommand) {
-			gLconstant = init_gLconstant;
-			name = init_name;
-			description = init_description;
-			category = init_category;
-			fetchCommand = init_fetchCommand;
+			this.gLconstant = init_gLconstant;
+			this.name = init_name;
+			this.description = init_description;
+			this.category = init_category;
+			this.fetchCommand = init_fetchCommand;
 		}
 
 		public int gLconstant;
@@ -40,19 +40,19 @@ public class UtilityGL11Debug {
 				builder.append(Boolean.toString(GL11.glIsEnabled(this.gLconstant)));
 			} else if ("glGetBooleanv()".equals(this.fetchCommand)) {
 				final ByteBuffer params = BufferUtils.createByteBuffer(16);
-				GL11.glGetBoolean(gLconstant, params);
+				GL11.glGetBoolean(this.gLconstant, params);
 				for (int i = 0; i < params.remaining(); ++i) {
 					builder.append(i == 0 ? " " : ", ").append(params.get(i));
 				}
 			} else if ("glGetFloatv()".equals(this.fetchCommand)) {
 				final FloatBuffer params = BufferUtils.createFloatBuffer(16);
-				GL11.glGetFloat(gLconstant, params);
+				GL11.glGetFloat(this.gLconstant, params);
 				for (int i = 0; i < params.remaining(); ++i) {
 					builder.append(i == 0 ? " " : ", ").append(params.get(i));
 				}
 			} else if ("glGetIntegerv()".equals(this.fetchCommand)) {
 				final IntBuffer params = BufferUtils.createIntBuffer(16);
-				GL11.glGetInteger(gLconstant, params);
+				GL11.glGetInteger(this.gLconstant, params);
 				for (int i = 0; i < params.remaining(); ++i) {
 					builder.append(i == 0 ? " " : ", ").append(params.get(i));
 				}

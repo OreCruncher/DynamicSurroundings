@@ -27,6 +27,7 @@ package org.blockartistry.DynSurround.client.fx.particle;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -47,30 +48,30 @@ public class ParticleEntity extends ParticleAsset {
 			final double z, final double dX, final double dY, final double dZ) {
 		this(new ResourceLocation(entity), world, x, y, z, dX, dY, dZ);
 	}
-	
+
 	public ParticleEntity(@Nonnull ResourceLocation entity, @Nonnull final World world, final double x, final double y,
 			final double z, final double dX, final double dY, final double dZ) {
 		super(world, x, y, z, dX, dY, dZ);
 
 		this.prototype = EntityList.createEntityByIDFromName(entity, world);
-		if(this.prototype == null) {
+		if (this.prototype == null) {
 			this.normalScale = 0;
 			DSurround.log().warn("Entity missing? [%s]", entity.toString());
 			return;
 		}
-		
+
 		// From mob spawner block
 		float f = 0.53125F;
-		float f1 = Math.max(this.prototype.width, this.prototype.height);
+		final float f1 = Math.max(this.prototype.width, this.prototype.height);
 
-		if ((double) f1 > 1.0D) {
+		if (f1 > 1.0D) {
 			f /= f1;
 		}
 
 		this.normalScale = f;
-		this.setScale(0.1F);
+		setScale(0.1F);
 	}
-	
+
 	@Override
 	public void setScale(final float scale) {
 		super.setScale(scale * this.normalScale);
@@ -78,13 +79,13 @@ public class ParticleEntity extends ParticleAsset {
 
 	@Override
 	protected void doModelTranslate() {
-        GlStateManager.translate(0.0F, -0.2F, 0.0F);
+		GlStateManager.translate(0.0F, -0.2F, 0.0F);
 	}
-	
+
 	@Override
 	protected void handleRender(final float partialTicks) {
-		
-		if(this.prototype == null)
+
+		if (this.prototype == null)
 			return;
 
 		// From mob spawner

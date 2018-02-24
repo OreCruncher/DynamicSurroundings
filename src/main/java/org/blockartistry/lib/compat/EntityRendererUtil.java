@@ -34,25 +34,26 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class EntityRendererUtil {
 
-	private static final Field drawBlockOutline = ReflectionHelper.findField(EntityRenderer.class, "drawBlockOutline", "field_175073_D");
-	
+	private static final Field drawBlockOutline = ReflectionHelper.findField(EntityRenderer.class, "drawBlockOutline",
+			"field_175073_D");
+
 	private EntityRendererUtil() {
-		
+
 	}
-	
+
 	public static boolean getDrawBlockOutline(@Nonnull final EntityRenderer renderer) {
 		try {
 			return drawBlockOutline.getBoolean(renderer);
-		} catch(@Nonnull final Throwable t) {
+		} catch (@Nonnull final Throwable t) {
 			;
 		}
 		return true;
 	}
-	
+
 	public static void setDrawBlockOutline(@Nonnull final EntityRenderer renderer, final boolean value) {
 		try {
 			drawBlockOutline.setBoolean(renderer, value);
-		} catch(@Nonnull final Throwable t) {
+		} catch (@Nonnull final Throwable t) {
 			;
 		}
 	}

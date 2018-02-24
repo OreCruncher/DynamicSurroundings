@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.client.fx.particle.system;
 
 import java.util.Random;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.lib.gfx.ParticleHelper;
@@ -78,7 +79,7 @@ public abstract class ParticleSystem {
 
 	public void setExpired() {
 		this.isAlive = false;
-		this.cleanUp();
+		cleanUp();
 	}
 
 	/*
@@ -102,17 +103,17 @@ public abstract class ParticleSystem {
 	 * be ticked.
 	 */
 	public void onUpdate() {
-		if (this.shouldDie()) {
-			this.setExpired();
+		if (shouldDie()) {
+			setExpired();
 			return;
 		}
 
 		// Let the system mull over what it wants to do
-		this.think();
+		think();
 
-		if (this.isAlive())
+		if (isAlive())
 			// Update any sounds
-			this.soundUpdate();
+			soundUpdate();
 	}
 
 	/*

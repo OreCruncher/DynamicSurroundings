@@ -29,11 +29,11 @@ import javax.annotation.Nonnull;
 import net.minecraft.world.World;
 
 public class WeatherGeneratorNone extends WeatherGenerator {
-	
+
 	public WeatherGeneratorNone(@Nonnull final World world) {
 		super(world);
 	}
-	
+
 	@Override
 	protected void process() {
 		// Force the settings to 0 because there isn't any rain/thunder

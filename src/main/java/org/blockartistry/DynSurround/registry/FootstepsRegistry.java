@@ -33,9 +33,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -56,8 +56,8 @@ import org.blockartistry.DynSurround.client.footsteps.system.Generator;
 import org.blockartistry.DynSurround.client.footsteps.system.GeneratorQP;
 import org.blockartistry.DynSurround.client.footsteps.util.ConfigProperty;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
-import org.blockartistry.DynSurround.data.xface.VariatorConfig;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile.ForgeEntry;
+import org.blockartistry.DynSurround.data.xface.VariatorConfig;
 import org.blockartistry.DynSurround.packs.ResourcePacks;
 import org.blockartistry.DynSurround.packs.ResourcePacks.Pack;
 import org.blockartistry.lib.BlockStateProvider;
@@ -158,15 +158,15 @@ public final class FootstepsRegistry extends Registry {
 	public void configure(@Nonnull final ModConfigurationFile cfg) {
 		for (final ForgeEntry entry : cfg.forgeMappings) {
 			for (final String name : entry.dictionaryEntries)
-				this.registerForgeEntries(entry.acousticProfile, name);
+				registerForgeEntries(entry.acousticProfile, name);
 		}
 
 		for (final Entry<String, String> entry : cfg.footsteps.entrySet()) {
-			this.registerBlocks(entry.getValue(), entry.getKey());
+			registerBlocks(entry.getValue(), entry.getKey());
 		}
 
 		for (final String fp : cfg.footprints) {
-			this.registerFootrint(fp);
+			registerFootrint(fp);
 		}
 
 		for (final Entry<String, VariatorConfig> entry : cfg.variators.entrySet())
@@ -192,10 +192,10 @@ public final class FootstepsRegistry extends Registry {
 		this.ARMOR_SOUND_FOOT.put(ArmorClass.CRYSTAL, am.getAcoustic("crystal_foot"));
 		this.ARMOR_SOUND_FOOT.put(ArmorClass.HEAVY, am.getAcoustic("heavy_foot"));
 
-		this.childVariator = this.getVariator("child");
-		this.playerVariator = this.getVariator(ModOptions.sound.firstPersonFootstepCadence ? "playerSlow" : "player");
-		this.playerQuadrupedVariator = this
-				.getVariator(ModOptions.sound.firstPersonFootstepCadence ? "quadrupedSlow" : "quadruped");
+		this.childVariator = getVariator("child");
+		this.playerVariator = getVariator(ModOptions.sound.firstPersonFootstepCadence ? "playerSlow" : "player");
+		this.playerQuadrupedVariator = getVariator(
+				ModOptions.sound.firstPersonFootstepCadence ? "quadrupedSlow" : "quadruped");
 
 		// Generate a list of IBlockState objects for all blocks registered
 		// with Forge.
@@ -281,37 +281,37 @@ public final class FootstepsRegistry extends Registry {
 			if (block instanceof BlockCrops) {
 				final BlockCrops crop = (BlockCrops) block;
 				if (crop.getMaxAge() == 3) {
-					this.registerBlocks("#beets", blockName);
+					registerBlocks("#beets", blockName);
 				} else if (blockName.equals("minecraft:wheat")) {
-					this.registerBlocks("#wheat", blockName);
+					registerBlocks("#wheat", blockName);
 				} else if (crop.getMaxAge() == 7) {
-					this.registerBlocks("#crop", blockName);
+					registerBlocks("#crop", blockName);
 				}
 			} else if (block instanceof BlockSapling) {
-				this.registerBlocks("#sapling", blockName);
+				registerBlocks("#sapling", blockName);
 			} else if (block instanceof BlockReed) {
-				this.registerBlocks("#reed", blockName);
+				registerBlocks("#reed", blockName);
 			} else if (block instanceof BlockFence) {
-				this.registerBlocks("#fence", blockName);
+				registerBlocks("#fence", blockName);
 			} else if (block instanceof BlockFlower || block instanceof BlockMushroom) {
-				this.registerBlocks("NOT_EMITTER", blockName);
+				registerBlocks("NOT_EMITTER", blockName);
 			} else if (block instanceof BlockLog || block instanceof BlockPlanks) {
-				this.registerBlocks("wood", blockName);
+				registerBlocks("wood", blockName);
 			} else if (block instanceof BlockDoor) {
-				this.registerBlocks("bluntwood", blockName);
+				registerBlocks("bluntwood", blockName);
 			} else if (block instanceof BlockLeaves) {
-				this.registerBlocks("leaves", blockName);
+				registerBlocks("leaves", blockName);
 			} else if (block instanceof BlockOre) {
-				this.registerBlocks("ore", blockName);
+				registerBlocks("ore", blockName);
 			} else if (block instanceof BlockIce) {
-				this.registerBlocks("ice", blockName);
+				registerBlocks("ice", blockName);
 			}
 		}
 	}
 
 	public Generator createGenerator(@Nonnull final EntityLivingBase entity) {
 		final EntityEffectInfo info = ClientRegistry.EFFECTS.getEffects(entity);
-		Variator var = this.getVariator(info.variator);
+		Variator var = getVariator(info.variator);
 		if (entity.isChild()) {
 			var = this.childVariator;
 		} else if (entity instanceof EntityPlayer) {
@@ -334,7 +334,7 @@ public final class FootstepsRegistry extends Registry {
 	 * Used by the cache routines to resolve a block state that it cannot be solved
 	 * using configuration data. Typically it involves deeper analysis of a block
 	 * state to determine the correct acoustic profile.
-	 * 
+	 *
 	 * @param state
 	 *            The state for which an AcousticProfile needs to be resolved
 	 * @return AcousticProfile for the state, null otherwise
@@ -342,7 +342,7 @@ public final class FootstepsRegistry extends Registry {
 	@Nullable
 	public AcousticProfile resolve(@Nonnull final IBlockState state) {
 		// TODO: Change when dynamic states are put in place
-		final IAcoustic[] acoustics = this.resolvePrimitive(state);
+		final IAcoustic[] acoustics = resolvePrimitive(state);
 		return acoustics != null ? new AcousticProfile.Static(acoustics) : AcousticProfile.NO_PROFILE;
 	}
 
@@ -350,7 +350,7 @@ public final class FootstepsRegistry extends Registry {
 	 * Used to determine what acoustics to play based on the block's sound
 	 * attributes. It's a fallback method in case there isn't a configuration
 	 * defined acoustic profile for a block state.
-	 * 
+	 *
 	 * @param state
 	 *            BlockState for which the acoustic profile is being generated
 	 * @return Acoustic profile for the BlockState, if any

@@ -26,8 +26,8 @@ package org.blockartistry.DynSurround.client.handlers.effects;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -61,7 +61,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityChatEffect extends EntityEffect {
 
-	private static final Map<String, EntityChatData> messages = new HashMap<String, EntityChatData>();
+	private static final Map<String, EntityChatData> messages = new HashMap<>();
 
 	static {
 		final Translations xlate = new Translations();
@@ -78,7 +78,7 @@ public class EntityChatEffect extends EntityEffect {
 		public int baseInterval = DEFAULT_INTERVAL;
 		public int baseRandom = DEFAULT_RANDOM;
 
-		public final WeightTable<String> table = new WeightTable<String>();
+		public final WeightTable<String> table = new WeightTable<>();
 	}
 
 	private static class WeightTableBuilder implements Predicate<Entry<String, String>> {
@@ -91,10 +91,10 @@ public class EntityChatEffect extends EntityEffect {
 
 		@Override
 		public boolean apply(@Nonnull final Entry<String, String> input) {
-			final Matcher matcher1 = TYPE_PATTERN.matcher(input.getKey());
+			final Matcher matcher1 = this.TYPE_PATTERN.matcher(input.getKey());
 			if (matcher1.matches()) {
 				final String key = matcher1.group(1).toLowerCase();
-				final Matcher matcher2 = WEIGHT_PATTERN.matcher(input.getValue());
+				final Matcher matcher2 = this.WEIGHT_PATTERN.matcher(input.getValue());
 				if (matcher2.matches()) {
 					EntityChatData data = messages.get(key);
 					if (data == null)
@@ -188,23 +188,20 @@ public class EntityChatEffect extends EntityEffect {
 		final long ticks = getWorldTicks(subject);
 		final long delta = this.nextChat - ticks;
 		if (delta <= 0) {
-			final SpeechTextEvent event = new SpeechTextEvent(subject.getEntityId(), this.getChatMessage(), true);
+			final SpeechTextEvent event = new SpeechTextEvent(subject.getEntityId(), getChatMessage(), true);
 			MinecraftForge.EVENT_BUS.post(event);
-			this.genNextChatTime();
+			genNextChatTime();
 		}
 
 	}
 
 	public void genNextChatTime() {
-		this.nextChat = getWorldTicks(this.getState().subject().get()) + getNextChatTime();
+		this.nextChat = getWorldTicks(getState().subject().get()) + getNextChatTime();
 	}
 
-	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
-		@Override
-		public boolean applies(@Nonnull final Entity e, @Nonnull final EntityEffectInfo eei) {
-			return eei.effects.contains("chat") && !(e instanceof EntityVillager) && EntityChatEffect.hasMessages(e);
-		}
-	};
+	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = (@Nonnull final Entity e,
+			@Nonnull final EntityEffectInfo eei) -> eei.effects.contains("chat") && !(e instanceof EntityVillager)
+					&& EntityChatEffect.hasMessages(e);
 
 	public static class Factory implements IEntityEffectFactory {
 

@@ -39,7 +39,7 @@ public final class VersionChecker {
 
 	private final String modId;
 	private final String messageId;
-	
+
 	public VersionChecker(@Nonnull final String id, @Nonnull final String messageId) {
 		this.modId = id;
 		this.messageId = messageId;

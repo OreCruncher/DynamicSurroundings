@@ -27,36 +27,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class Compiler {
-	
+
 	public static class Result {
 		public final LazyVariant expression;
 		public final List<String> rpn;
-		
+
 		Result(@Nonnull final LazyVariant exp, @Nonnull final List<String> rpn) {
 			this.expression = exp;
 			this.rpn = rpn;
 		}
 	}
-	
+
 	/**
 	 * The Float representation of the left parenthesis, used for parsing varying
 	 * numbers of function parameters.
 	 */
-	private static final LazyVariant PARAMS_START = new LazyVariant() {
-		public Variant eval() {
-			return null;
-		}
-	};
+	private static final LazyVariant PARAMS_START = () -> null;
 
 	private final OperatorTable operators;
 	private final FunctionTable functions;
 	private final VariableTable variables;
-	
-	public Compiler(@Nullable final OperatorTable operators, @Nullable final FunctionTable functions, @Nullable final VariableTable variables) {
+
+	public Compiler(@Nullable final OperatorTable operators, @Nullable final FunctionTable functions,
+			@Nullable final VariableTable variables) {
 		this.operators = operators != null ? operators : new OperatorTable();
 		this.functions = functions != null ? functions : new FunctionTable();
 		this.variables = variables != null ? variables : new VariableTable();
@@ -71,26 +69,18 @@ public final class Compiler {
 				final LazyVariant result;
 				if (op.isUnary()) {
 					final LazyVariant v1 = stack.pop();
-					result = new LazyVariant() {
-						public Variant eval() {
-							return op.eval(v1);
-						}
-					};
+					result = () -> op.eval(v1);
 				} else {
 					final LazyVariant v1 = stack.pop();
 					final LazyVariant v2 = stack.pop();
-					result = new LazyVariant() {
-						public Variant eval() {
-							return op.eval(v2, v1);
-						}
-					};
+					result = () -> op.eval(v2, v1);
 				}
 				stack.push(result);
 			} else if (this.variables.containsKey(token)) {
 				stack.push(this.variables.get(token));
 			} else if (this.functions.containsKey(token.toUpperCase(Locale.ROOT))) {
-				final LazyFunction f = functions.get(token.toUpperCase(Locale.ROOT));
-				final ArrayList<LazyVariant> p = new ArrayList<LazyVariant>(
+				final LazyFunction f = this.functions.get(token.toUpperCase(Locale.ROOT));
+				final ArrayList<LazyVariant> p = new ArrayList<>(
 						!f.numParamsVaries() ? f.getNumParams() : 0);
 				// pop parameters off the stack until we hit the start of
 				// this function's parameter list
@@ -102,11 +92,7 @@ public final class Compiler {
 				}
 				final LazyVariant[] parms = new LazyVariant[p.size()];
 				p.toArray(parms);
-				final LazyVariant fResult = new LazyVariant() {
-					public Variant eval() {
-						return f.lazyEval(parms).eval();
-					}
-				};
+				final LazyVariant fResult = () -> f.lazyEval(parms).eval();
 				stack.push(fResult);
 			} else if ("(".equals(token)) {
 				stack.push(PARAMS_START);
@@ -123,7 +109,7 @@ public final class Compiler {
 
 	/**
 	 * Is the string a number?
-	 * 
+	 *
 	 * @param st
 	 *            The string.
 	 * @return <code>true</code>, if the input string is a number.
@@ -135,7 +121,7 @@ public final class Compiler {
 			return false;
 		if (st.charAt(0) == 'e' || st.charAt(0) == 'E')
 			return false;
-		for (char ch : st.toCharArray()) {
+		for (final char ch : st.toCharArray()) {
 			if (!Character.isDigit(ch) && ch != Tokenizer.minusSign && ch != Tokenizer.decimalSeparator && ch != 'e'
 					&& ch != 'E' && ch != '+')
 				return false;
@@ -146,21 +132,21 @@ public final class Compiler {
 	/**
 	 * Implementation of the <i>Shunting Yard</i> algorithm to transform an infix
 	 * expression to a RPN expression.
-	 * 
+	 *
 	 * @param expression
 	 *            The input expression in infx.
 	 * @return A RPN representation of the expression, with each token as a list
 	 *         member.
 	 */
 	private List<String> shuntingYard(final String expression) {
-		final List<String> outputQueue = new ArrayList<String>();
-		final Stack<String> stack = new Stack<String>();
+		final List<String> outputQueue = new ArrayList<>();
+		final Stack<String> stack = new Stack<>();
 		final Tokenizer tokenizer = new Tokenizer(expression, this.operators.keySet());
 
 		String lastFunction = null;
 		String previousToken = null;
 		while (tokenizer.hasNext()) {
-			String token = tokenizer.next();
+			final String token = tokenizer.next();
 			if (isNumber(token)) {
 				outputQueue.add(token);
 			} else if (token.charAt(0) == Tokenizer.quote) {
@@ -188,7 +174,7 @@ public final class Compiler {
 					throw new ExpressionException("Missing parameter(s) for operator " + token
 							+ " at character position " + (tokenizer.getPos() - token.length()));
 				}
-				Operator o1 = this.operators.get(token);
+				final Operator o1 = this.operators.get(token);
 				String token2 = stack.isEmpty() ? null : stack.peek();
 				while (token2 != null && this.operators.containsKey(token2)
 						&& ((o1.isLeftAssoc() && o1.getPrecedence() <= this.operators.get(token2).getPrecedence())
@@ -210,7 +196,7 @@ public final class Compiler {
 				}
 				stack.push(token);
 			} else if (")".equals(token)) {
-				if (operators.containsKey(previousToken)) {
+				if (this.operators.containsKey(previousToken)) {
 					throw new ExpressionException("Missing parameter(s) for operator " + previousToken
 							+ " at character position " + (tokenizer.getPos() - 1 - previousToken.length()));
 				}
@@ -221,7 +207,7 @@ public final class Compiler {
 					throw new ExpressionException("Mismatched parentheses");
 				}
 				stack.pop();
-				if (!stack.isEmpty() && functions.containsKey(stack.peek().toUpperCase(Locale.ROOT))) {
+				if (!stack.isEmpty() && this.functions.containsKey(stack.peek().toUpperCase(Locale.ROOT))) {
 					outputQueue.add(stack.pop());
 				}
 			}
@@ -244,7 +230,7 @@ public final class Compiler {
 
 	/**
 	 * Evaluates the expression.
-	 * 
+	 *
 	 * @return The result of the expression.
 	 */
 	public Variant eval() {
@@ -258,7 +244,7 @@ public final class Compiler {
 	 * Cached access to the RPN notation of this expression, ensures only one
 	 * calculation of the RPN per expression instance. If no cached instance exists,
 	 * a new one will be created and put to the cache.
-	 * 
+	 *
 	 * @return The cached RPN instance.
 	 */
 	private List<String> getRPN(@Nonnull final String expression) {
@@ -281,7 +267,7 @@ public final class Compiler {
 		// each
 		// layer on the stack being the count of the number of parameters in
 		// that scope
-		final Stack<Integer> stack = new Stack<Integer>();
+		final Stack<Integer> stack = new Stack<>();
 
 		// push the 'global' scope
 		stack.push(0);
@@ -304,8 +290,8 @@ public final class Compiler {
 			} else if (this.variables.containsKey(token)) {
 				stack.set(stack.size() - 1, stack.peek() + 1);
 			} else if (this.functions.containsKey(token.toUpperCase(Locale.ROOT))) {
-				LazyFunction f = this.functions.get(token.toUpperCase(Locale.ROOT));
-				int numParams = stack.pop();
+				final LazyFunction f = this.functions.get(token.toUpperCase(Locale.ROOT));
+				final int numParams = stack.pop();
 				if (!f.numParamsVaries() && numParams != f.getNumParams()) {
 					throw new ExpressionException(
 							"Function " + token + " expected " + f.getNumParams() + " parameters, got " + numParams);

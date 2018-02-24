@@ -35,18 +35,18 @@ import org.blockartistry.lib.math.TimerEMA;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class EffectManager {
 
 	private static EffectManager INSTANCE = null;
 
-	private final ObjectArray<EffectHandlerBase> effectHandlers = new ObjectArray<EffectHandlerBase>();
+	private final ObjectArray<EffectHandlerBase> effectHandlers = new ObjectArray<>();
 	private TimerEMA computeTime;
 	private boolean isReadyToGo;
 
@@ -121,10 +121,10 @@ public class EffectManager {
 
 		return true;
 	}
-	
+
 	@SubscribeEvent
 	public void onTick(@Nonnull final TickEvent.ClientTickEvent event) {
-		
+
 		if (event.side == Side.SERVER || event.phase == Phase.END || Minecraft.getMinecraft().isGamePaused())
 			return;
 

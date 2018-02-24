@@ -39,8 +39,8 @@ public interface ISoundPlayer {
 	/**
 	 * Plays a sound.
 	 */
-	public void playSound(@Nonnull final EntityLivingBase location, @Nonnull final SoundEvent sound, final float volume, final float pitch,
-			@Nullable final IOptions options);
+	public void playSound(@Nonnull final EntityLivingBase location, @Nonnull final SoundEvent sound, final float volume,
+			final float pitch, @Nullable final IOptions options);
 
 	/**
 	 * Returns a RANDOM number generator.

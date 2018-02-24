@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.client.handlers;
 
 import javax.annotation.Nonnull;
+
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.aurora.AuroraEngineClassic;
@@ -41,11 +42,11 @@ import org.blockartistry.lib.math.TimerEMA;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public final class AuroraEffectHandler extends EffectHandlerBase {

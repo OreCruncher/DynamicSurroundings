@@ -25,17 +25,17 @@
 package org.blockartistry.DynSurround;
 
 public class Permissions {
-	
+
 	private static Permissions perms = new Permissions();
-	
+
 	public static Permissions instance() {
 		return perms;
 	}
-	
+
 	public boolean allowLightLevelHUD() {
 		return ModOptions.features.allowLightLevelHUD;
 	}
-	
+
 	public boolean allowChunkBorderHUD() {
 		return ModOptions.features.allowChunkBorderHUD;
 	}

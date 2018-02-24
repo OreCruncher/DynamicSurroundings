@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.data.Profiles;
@@ -132,7 +133,7 @@ public final class RegistryManager {
 			if (stream != null) {
 				try (final InputStreamReader reader = new InputStreamReader(stream)) {
 					final ModConfigurationFile cfg = DataScripts.loadFromStream(reader);
-					this.configRegistries(cfg, txt);
+					configRegistries(cfg, txt);
 				}
 			}
 		} catch (@Nonnull final Throwable t) {
@@ -173,7 +174,7 @@ public final class RegistryManager {
 			try (final InputStreamReader reader = new InputStreamReader(script.stream)) {
 				final ModConfigurationFile cfg = DataScripts.loadFromStream(reader);
 				final String loadingText = "[" + DSurround.MOD_ID + "] <- [" + script.packName + "]";
-				this.configRegistries(cfg, loadingText);
+				configRegistries(cfg, loadingText);
 			} catch (@Nonnull final Throwable ex) {
 				final String temp = String.format("Unable to load profile [%s]", script.packName);
 				DSurround.log().error(temp, ex);

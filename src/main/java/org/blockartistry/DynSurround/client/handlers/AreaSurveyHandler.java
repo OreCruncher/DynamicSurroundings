@@ -63,7 +63,7 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 	private static final int SURVEY_INTERVAL = 2;
 
 	private static int biomeArea;
-	private static final TObjectIntCustomHashMap<BiomeInfo> weights = new TObjectIntCustomHashMap<BiomeInfo>(
+	private static final TObjectIntCustomHashMap<BiomeInfo> weights = new TObjectIntCustomHashMap<>(
 			IdentityHashingStrategy.INSTANCE);
 	private static final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
@@ -83,7 +83,7 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 
 	static {
 
-		final List<Cell> cellList = new ArrayList<Cell>();
+		final List<Cell> cellList = new ArrayList<>();
 		// Build our cell map
 		for (int x = -INSIDE_SURVEY_RANGE; x <= INSIDE_SURVEY_RANGE; x++)
 			for (int z = -INSIDE_SURVEY_RANGE; z <= INSIDE_SURVEY_RANGE; z++)
@@ -209,7 +209,7 @@ public final class AreaSurveyHandler extends EffectHandlerBase {
 		@Override
 		public int compareTo(@Nonnull final Cell cell) {
 			// Want big scores first in the list
-			return -Float.compare(this.potentialPoints(), cell.potentialPoints());
+			return -Float.compare(potentialPoints(), cell.potentialPoints());
 		}
 
 		@Override

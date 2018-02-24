@@ -47,20 +47,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ProxyClient extends Proxy {
-	
-	// List of preset files to copy.  Temporary until I can figure a way to
+
+	// List of preset files to copy. Temporary until I can figure a way to
 	// automagically enumerate the files in a jar
-	private static final String[] presetFiles = new String[] {
-		"presets_level0",
-		"presets_level1",
-		"presets_level2",
-		"presets_level3",
-		"dsurround_skyblock",
-		"dsurround_emojis",
-		"dsurround_turnalloff",
-		"dsurround_ponies"
-	};
-	
+	private static final String[] presetFiles = new String[] { "presets_level0", "presets_level1", "presets_level2",
+			"presets_level3", "dsurround_skyblock", "dsurround_emojis", "dsurround_turnalloff", "dsurround_ponies" };
+
 	@Override
 	protected void registerLanguage() {
 		Localization.initialize(Side.CLIENT);
@@ -71,7 +63,7 @@ public class ProxyClient extends Proxy {
 		register(MinecraftConfigHandler.class);
 		register(KeyHandler.class);
 	}
-	
+
 	@Override
 	public boolean isRunningAsServer() {
 		return false;
@@ -85,18 +77,18 @@ public class ProxyClient extends Proxy {
 	@Override
 	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		super.preInit(event);
-		
+
 		// Extract the preset config files present in the JAR
 		final IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
 
-		for(final String preset : presetFiles) {
+		for (final String preset : presetFiles) {
 			final String name = preset + ".presets";
 			try {
 				final IResource r = manager.getResource(new ResourceLocation(Presets.MOD_ID, "data/" + name));
-				try(final InputStream stream = r.getInputStream()) {
+				try (final InputStream stream = r.getInputStream()) {
 					Streams.copy(stream, new File(Presets.dataDirectory(), name));
 				}
-			} catch(final Throwable t) {
+			} catch (final Throwable t) {
 				Presets.log().error("Unable to extract preset file " + name, t);
 			}
 		}

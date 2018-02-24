@@ -260,13 +260,13 @@ public abstract class Panel<T extends Panel<?>> {
 				GuiUtils.drawTexturedModalRect(this.backgroundTexture, posX, posY, this.width, this.height, this.U,
 						this.V);
 			} else {
-				final int backgroundRGB = background.rgbWithAlpha(this.alpha);
+				final int backgroundRGB = this.background.rgbWithAlpha(this.alpha);
 				GuiUtils.drawRect(posX + 2, posY + 2, posX + this.width - 1, posY + this.height - 1, backgroundRGB);
 			}
 		}
 
 		if (this.drawFrame) {
-			final int frameRGB = border.rgbWithAlpha(this.alpha);
+			final int frameRGB = this.border.rgbWithAlpha(this.alpha);
 			GuiUtils.drawTooltipBox(posX, posY, this.width, this.height, frameRGB, frameRGB, frameRGB);
 		}
 

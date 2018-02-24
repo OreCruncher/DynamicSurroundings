@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Random;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -43,7 +44,9 @@ import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.DynSurround.data.xface.SoundType;
 import org.blockartistry.DynSurround.registry.BlockInfo.BlockInfoMutable;
+
 import com.google.common.collect.ImmutableMap;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.SoundCategory;
@@ -73,7 +76,7 @@ public final class BlockRegistry extends Registry {
 	@Override
 	public void configure(@Nonnull final ModConfigurationFile cfg) {
 		for (final BlockConfig block : cfg.blocks)
-			this.register(block);
+			register(block);
 	}
 
 	@Override

@@ -37,18 +37,18 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * Common references to the various registries used by the client side
- * of the mod.  Consolidate the various reference needs in one place for
- * better management.
+ * Common references to the various registries used by the client side of the
+ * mod. Consolidate the various reference needs in one place for better
+ * management.
  */
 @SideOnly(Side.CLIENT)
 public final class ClientRegistry {
-	
+
 	private ClientRegistry() {
-		
+
 	}
 
-	public static final SoundRegistry SOUND; 
+	public static final SoundRegistry SOUND;
 	public static final BiomeRegistry BIOME;
 	public static final BlockRegistry BLOCK;
 	public static final DimensionRegistry DIMENSION;
@@ -56,18 +56,18 @@ public final class ClientRegistry {
 	public static final ItemRegistry ITEMS;
 	public static final FootstepsRegistry FOOTSTEPS;
 	public static final EffectRegistry EFFECTS;
-	
+
 	static {
-		
+
 		DIMENSION = new DimensionRegistry(Side.CLIENT);
-		SOUND = new SoundRegistry(Side.CLIENT); 
+		SOUND = new SoundRegistry(Side.CLIENT);
 		BIOME = new BiomeRegistry(Side.CLIENT);
 		BLOCK = new BlockRegistry(Side.CLIENT);
 		SEASON = new SeasonRegistry(Side.CLIENT);
 		ITEMS = new ItemRegistry(Side.CLIENT);
 		FOOTSTEPS = new FootstepsRegistry(Side.CLIENT);
 		EFFECTS = new EffectRegistry(Side.CLIENT);
-		
+
 		final RegistryManager rm = RegistryManager.get();
 		rm.register(DIMENSION);
 		rm.register(SOUND);

@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.client.fx.particle;
 
 import java.util.Random;
+
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
@@ -65,15 +66,15 @@ public final class ExplosionHelper {
 		}
 
 		public Block getBlock(final Random rand) {
-			return blocks != null && blocks.length > 0 ? blocks[rand.nextInt(blocks.length)] : null;
+			return this.blocks != null && this.blocks.length > 0 ? this.blocks[rand.nextInt(this.blocks.length)] : null;
 		}
 
 		public ItemStack getStack(final Random rand) {
-			return stacks != null && stacks.length > 0 ? stacks[rand.nextInt(stacks.length)] : null;
+			return this.stacks != null && this.stacks.length > 0 ? this.stacks[rand.nextInt(this.stacks.length)] : null;
 		}
 
 		public String getMob(final Random rand) {
-			return mobs != null && mobs.length > 0 ? mobs[rand.nextInt(mobs.length)] : null;
+			return this.mobs != null && this.mobs.length > 0 ? this.mobs[rand.nextInt(this.mobs.length)] : null;
 		}
 	}
 

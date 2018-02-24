@@ -31,9 +31,9 @@ import org.blockartistry.DynSurround.ModOptions;
 import net.minecraft.world.WorldServer;
 
 public class PlayerSleepHandler {
-	
+
 	public static void resetRainAndThunder(@Nonnull final WorldServer world) {
-		if(ModOptions.rain.resetRainOnSleep)
+		if (ModOptions.rain.resetRainOnSleep)
 			world.provider.resetRainAndThunder();
 	}
 

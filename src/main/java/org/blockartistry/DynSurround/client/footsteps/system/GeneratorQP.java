@@ -91,7 +91,7 @@ public class GeneratorQP extends Generator {
 
 	protected float walkFunction0(final float distance) {
 		final float overallMultiplier = 1.5f;
-		final float ndm = 0.425f + nextWalkDistanceMultiplier * 0.15f;
+		final float ndm = 0.425f + this.nextWalkDistanceMultiplier * 0.15f;
 
 		if (this.hoof == 1 || this.hoof == 3) {
 			return distance * ndm * overallMultiplier;
@@ -101,7 +101,7 @@ public class GeneratorQP extends Generator {
 
 	@Override
 	protected float reevaluateDistance(@Nonnull final EventType event, @Nonnull final float distance) {
-		float ret = distance;
+		final float ret = distance;
 		if (event == EventType.WALK)
 			switch (USE_FUNCTION) {
 			case 0:

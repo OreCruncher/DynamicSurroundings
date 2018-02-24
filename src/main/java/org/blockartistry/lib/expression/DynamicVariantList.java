@@ -47,7 +47,7 @@ public class DynamicVariantList {
 
 	/**
 	 * Adds a dynamic variant to be managed to the list.
-	 * 
+	 *
 	 * @param dv
 	 *            Dynamic variant to add to the list
 	 */
@@ -57,7 +57,7 @@ public class DynamicVariantList {
 
 	/**
 	 * Attaches the dynamic variants in the list to the specified expression.
-	 * 
+	 *
 	 * @param exp
 	 *            Expression to which the dynamic variants are added.
 	 */
@@ -67,7 +67,7 @@ public class DynamicVariantList {
 
 	/**
 	 * Gets the list of dynamic variants.
-	 * 
+	 *
 	 * @return The list of dynamic variants
 	 */
 	@Nonnull
