@@ -24,6 +24,12 @@
 
 package org.blockartistry.DynSurround.server.services;
 
+import javax.annotation.Nonnull;
+
+import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.lib.compat.ModEnvironment;
+
+import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -31,13 +37,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
-
-import javax.annotation.Nonnull;
-
-import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.lib.compat.ModEnvironment;
-
-import gnu.trove.map.hash.TIntObjectHashMap;
 
 public final class AtmosphereService extends Service {
 
@@ -70,7 +69,7 @@ public final class AtmosphereService extends Service {
 		this.generators.remove(dimId);
 	}
 
-	private final TIntObjectHashMap<WeatherGenerator> generators = new TIntObjectHashMap<WeatherGenerator>();
+	private final TIntObjectHashMap<WeatherGenerator> generators = new TIntObjectHashMap<>();
 
 	private WeatherGenerator getGenerator(@Nonnull final World world) {
 		final int dimId = world.provider.getDimension();

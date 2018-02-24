@@ -48,11 +48,13 @@ public final class Localization {
 		public ClientImpl() {
 		}
 
+		@Override
 		public String format(final String translateKey, final Object... parameters) {
 			// Let I18n do the heavy lifting
 			return I18n.format(translateKey, parameters);
 		}
 
+		@Override
 		public String loadString(final String translateKey) {
 			final Locale locale = I18nUtil.getLocale();
 			return LocaleUtil.translateKeyPrivate(locale, translateKey);

@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.client.hud;
 
 import java.util.Collection;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
@@ -133,14 +134,14 @@ public class PotionHUD extends GuiOverlay {
 		public String getDurationText() {
 			return this.durationText;
 		}
-		
+
 		public int getDurationColor() {
 			return this.durationColor;
 		}
 	}
 
-	protected final ObjectArray<PotionInfo> potions = new ObjectArray<PotionInfo>();
-	
+	protected final ObjectArray<PotionInfo> potions = new ObjectArray<>();
+
 	private boolean skipDisplay(@Nonnull final PotionEffect effect) {
 		final Potion potion = effect.getPotion();
 		return potion == null || !potion.shouldRenderHUD(effect) || !potion.shouldRenderInvText(effect);
@@ -161,11 +162,12 @@ public class PotionHUD extends GuiOverlay {
 			return;
 
 		for (final PotionEffect effect : Ordering.natural().reverse().sortedCopy(collection)) {
-			if (!this.skipDisplay(effect))
+			if (!skipDisplay(effect))
 				this.potions.add(new PotionInfo(effect));
 		}
 	}
 
+	@Override
 	public void doRender(final RenderGameOverlayEvent.Pre event) {
 
 		if (ModOptions.player.potionHUD.potionHudNone && event.getType() == ElementType.POTION_ICONS) {
@@ -181,8 +183,10 @@ public class PotionHUD extends GuiOverlay {
 
 		final ScaledResolution resolution = event.getResolution();
 		final float GUITOP = ModOptions.player.potionHUD.potionHudTopOffset;
-		final float GUILEFT = ModOptions.player.potionHUD.potionHudAnchor == 0 ? ModOptions.player.potionHUD.potionHudLeftOffset
-				: resolution.getScaledWidth() - ModOptions.player.potionHUD.potionHudLeftOffset - 120 * ModOptions.player.potionHUD.potionHudScale;
+		final float GUILEFT = ModOptions.player.potionHUD.potionHudAnchor == 0
+				? ModOptions.player.potionHUD.potionHudLeftOffset
+				: resolution.getScaledWidth() - ModOptions.player.potionHUD.potionHudLeftOffset
+						- 120 * ModOptions.player.potionHUD.potionHudScale;
 		final float SCALE = ModOptions.player.potionHUD.potionHudScale;
 
 		final Minecraft mc = Minecraft.getMinecraft();
@@ -230,7 +234,7 @@ public class PotionHUD extends GuiOverlay {
 
 			guiTop += k;
 		}
-		
+
 		GlStateManager.disableAlpha();
 		GlStateManager.disableBlend();
 		GlStateManager.popMatrix();

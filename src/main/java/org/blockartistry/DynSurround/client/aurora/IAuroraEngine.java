@@ -31,5 +31,5 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface IAuroraEngine {
 
 	IAurora produce(final long seed);
-	
+
 }

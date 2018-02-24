@@ -32,6 +32,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.network.PacketServerData;
+
 import gnu.trove.map.hash.TIntDoubleHashMap;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.DimensionManager;
@@ -47,7 +48,7 @@ public final class ServiceManager extends Service {
 
 	private static final ServiceManager INSTANCE = new ServiceManager();
 
-	private final List<Service> services = new ArrayList<Service>();
+	private final List<Service> services = new ArrayList<>();
 
 	private ServiceManager() {
 		super("ServiceManager");
@@ -100,7 +101,7 @@ public final class ServiceManager extends Service {
 
 	private static long mean(@Nonnull final long[] values) {
 		long sum = 0L;
-		for (long v : values)
+		for (final long v : values)
 			sum += v;
 		return sum / values.length;
 	}
@@ -108,7 +109,7 @@ public final class ServiceManager extends Service {
 	/**
 	 * Collect tick performance data for the loaded dimensions and broadcast to
 	 * attached players.
-	 * 
+	 *
 	 * @param event
 	 */
 	@SubscribeEvent
@@ -120,11 +121,11 @@ public final class ServiceManager extends Service {
 		if ((++tpsCount % 20) != 0)
 			return;
 
-		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+		final MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
 		final TIntDoubleHashMap map = new TIntDoubleHashMap();
-		for (Integer dim : DimensionManager.getIDs()) {
-			map.put(dim.intValue(), mean((long[]) server.worldTickTimes.get(dim)) / 1000000D);
+		for (final Integer dim : DimensionManager.getIDs()) {
+			map.put(dim.intValue(), mean(server.worldTickTimes.get(dim)) / 1000000D);
 		}
 
 		final double meanTickTime = mean(server.tickTimeArray) / 1000000D;

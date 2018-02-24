@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.gfx.OpenGlState;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -132,6 +133,7 @@ public class ParticleTextPopOff extends ParticleBase {
 		return true;
 	}
 
+	@Override
 	public int getFXLayer() {
 		return 3;
 	}

@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.entity;
 
 import javax.annotation.Nonnull;
+
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
@@ -51,7 +52,7 @@ public enum EmotionalState {
 	/** The Entity feels hurt because it's health has been reduced. */
 	HURT(7);
 
-	private static final TIntObjectHashMap<EmotionalState> lookup = new TIntObjectHashMap<EmotionalState>();
+	private static final TIntObjectHashMap<EmotionalState> lookup = new TIntObjectHashMap<>();
 	static {
 		for (final EmotionalState state : EmotionalState.values()) {
 			lookup.put(state.getId(), state);

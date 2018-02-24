@@ -94,16 +94,16 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 	 * EntityEffects that are attached.
 	 */
 	public void update() {
-		if (!this.isAlive())
+		if (!isAlive())
 			return;
 
-		this.isAlive = this.isSubjectAlive();
+		this.isAlive = isSubjectAlive();
 		final Entity entity = this.subject.get();
 		if (entity != null) {
 			final EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			this.rangeToPlayer = entity.getDistanceSqToEntity(player);
 
-			for (final EntityEffect e : activeEffects)
+			for (final EntityEffect e : this.activeEffects)
 				if (this.isAlive || e.receiveLastCall())
 					e.update(entity);
 		}
@@ -115,14 +115,14 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 	 */
 	public void die() {
 		this.isAlive = false;
-		for (final EntityEffect e : activeEffects)
+		for (final EntityEffect e : this.activeEffects)
 			e.die();
 	}
 
 	/**
 	 * Used for metric collection to distinguish between active handlers and
 	 * dummies.
-	 * 
+	 *
 	 * @return true if it is an active handler, false for a dummy
 	 */
 	public boolean isDummy() {
@@ -131,12 +131,12 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 
 	/**
 	 * Used for collecting diagnostic information.
-	 * 
+	 *
 	 * @return List of attached handlers
 	 */
 	@Nonnull
 	public List<String> getAttachedEffects() {
-		final List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<>();
 		if (this.activeEffects.size() == 0) {
 			result.add("No effects");
 		} else {
@@ -152,7 +152,7 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 
 	/**
 	 * Whether the EntityEffectHandler is alive or dead.
-	 * 
+	 *
 	 * @return true if the EntityEffectHandler is active, false otherwise.
 	 */
 	@Override
@@ -162,7 +162,7 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 
 	/**
 	 * Provides the distance, squared, to the player entity behind the keyboard.
-	 * 
+	 *
 	 * @return Range to client player, squared.
 	 */
 	@Override

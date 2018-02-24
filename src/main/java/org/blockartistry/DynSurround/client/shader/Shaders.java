@@ -38,7 +38,7 @@ public final class Shaders {
 		AURORA = register("Aurora", new ResourceLocation(DSurround.MOD_ID, "shaders/aurora.vert"),
 				new ResourceLocation(DSurround.MOD_ID, "shaders/aurora.frag"));
 	}
-	
+
 	public static boolean areShadersSupported() {
 		return OpenGlHelper.areShadersSupported();
 	}

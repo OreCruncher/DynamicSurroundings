@@ -88,22 +88,18 @@ public final class RayTrace {
 		}
 
 		Vec3d hitLocation = null;
-		List<Entity> list = world
-				.getEntitiesInAABBexcluding(
-						entity, entity.getEntityBoundingBox().expand(look.xCoord * range, look.yCoord * range, look.zCoord * range)
-								.expandXyz(1.0D),
-						Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
-							public boolean apply(@Nullable final Entity e) {
-								return e != null && e.canBeCollidedWith();
-							}
-						}));
+		final List<Entity> list = world.getEntitiesInAABBexcluding(entity,
+				entity.getEntityBoundingBox().expand(look.xCoord * range, look.yCoord * range, look.zCoord * range)
+						.expandXyz(1.0D),
+				Predicates.and(EntitySelectors.NOT_SPECTATING,
+						(Predicate<Entity>) (@Nullable final Entity e) -> e != null && e.canBeCollidedWith()));
 
 		double d2 = range1;
 
 		for (int j = 0; j < list.size(); ++j) {
 			final Entity entity1 = list.get(j);
 			final AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox()
-					.expandXyz((double) entity1.getCollisionBorderSize());
+					.expandXyz(entity1.getCollisionBorderSize());
 			final RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(eyes, rangedLook);
 
 			if (axisalignedbb.isVecInside(eyes)) {
@@ -154,9 +150,9 @@ public final class RayTrace {
 
 		if (!Double.isNaN(vec31.xCoord) && !Double.isNaN(vec31.yCoord) && !Double.isNaN(vec31.zCoord)) {
 			if (!Double.isNaN(vec32.xCoord) && !Double.isNaN(vec32.yCoord) && !Double.isNaN(vec32.zCoord)) {
-				int i = MathStuff.floor(vec32.xCoord);
-				int j = MathStuff.floor(vec32.yCoord);
-				int k = MathStuff.floor(vec32.zCoord);
+				final int i = MathStuff.floor(vec32.xCoord);
+				final int j = MathStuff.floor(vec32.yCoord);
+				final int k = MathStuff.floor(vec32.zCoord);
 
 				int l = MathStuff.floor(vec31.xCoord);
 				int i1 = MathStuff.floor(vec31.yCoord);
@@ -169,7 +165,7 @@ public final class RayTrace {
 				if ((!ignoreBlockWithoutBoundingBox
 						|| iblockstate.getCollisionBoundingBox(world, blockpos) != Block.NULL_AABB)
 						&& block.canCollideCheck(iblockstate, stopOnLiquid)) {
-					RayTraceResult raytraceresult = iblockstate.collisionRayTrace(world, blockpos, vec31, vec32);
+					final RayTraceResult raytraceresult = iblockstate.collisionRayTrace(world, blockpos, vec31, vec32);
 
 					if (raytraceresult != null) {
 						return raytraceresult;
@@ -196,25 +192,25 @@ public final class RayTrace {
 					double d2 = 999.0D;
 
 					if (i > l) {
-						d0 = (double) l + 1.0D;
+						d0 = l + 1.0D;
 					} else if (i < l) {
-						d0 = (double) l + 0.0D;
+						d0 = l + 0.0D;
 					} else {
 						flag2 = false;
 					}
 
 					if (j > i1) {
-						d1 = (double) i1 + 1.0D;
+						d1 = i1 + 1.0D;
 					} else if (j < i1) {
-						d1 = (double) i1 + 0.0D;
+						d1 = i1 + 0.0D;
 					} else {
 						flag = false;
 					}
 
 					if (k > j1) {
-						d2 = (double) j1 + 1.0D;
+						d2 = j1 + 1.0D;
 					} else if (k < j1) {
-						d2 = (double) j1 + 0.0D;
+						d2 = j1 + 0.0D;
 					} else {
 						flag1 = false;
 					}
@@ -222,9 +218,9 @@ public final class RayTrace {
 					double d3 = 999.0D;
 					double d4 = 999.0D;
 					double d5 = 999.0D;
-					double d6 = vec32.xCoord - vec31.xCoord;
-					double d7 = vec32.yCoord - vec31.yCoord;
-					double d8 = vec32.zCoord - vec31.zCoord;
+					final double d6 = vec32.xCoord - vec31.xCoord;
+					final double d7 = vec32.yCoord - vec31.yCoord;
+					final double d8 = vec32.zCoord - vec31.zCoord;
 
 					if (flag2) {
 						d3 = (d0 - vec31.xCoord) / d6;
@@ -273,7 +269,7 @@ public final class RayTrace {
 					if (!ignoreBlockWithoutBoundingBox || iblockstate.getMaterial() == Material.PORTAL
 							|| iblockstate.getCollisionBoundingBox(world, blockpos) != Block.NULL_AABB) {
 						if (block.canCollideCheck(iblockstate, stopOnLiquid)) {
-							RayTraceResult raytraceresult1 = iblockstate.collisionRayTrace(world, blockpos, vec31,
+							final RayTraceResult raytraceresult1 = iblockstate.collisionRayTrace(world, blockpos, vec31,
 									vec32);
 
 							if (raytraceresult1 != null) {

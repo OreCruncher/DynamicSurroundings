@@ -106,7 +106,7 @@ public final class EmojiData implements IEmojiDataSettable {
 	public void sync() {
 		if (this.entity != null && !this.entity.worldObj.isRemote) {
 			Network.sendToEntityViewers(this.entity, new PacketEntityEmote(this));
-			this.clearDirty();
+			clearDirty();
 		}
 	}
 

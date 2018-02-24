@@ -35,15 +35,15 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IOptions;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.ISoundPlayer;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class EventSelectorAcoustics implements IAcoustic {
 	private final String name;
 
-	private final Map<EventType, IAcoustic> pairs = new EnumMap<EventType, IAcoustic>(EventType.class);
+	private final Map<EventType, IAcoustic> pairs = new EnumMap<>(EventType.class);
 
 	public EventSelectorAcoustics(@Nonnull final String acousticName) {
 		this.name = acousticName;
@@ -67,7 +67,7 @@ public class EventSelectorAcoustics implements IAcoustic {
 	public void setAcousticPair(@Nonnull final EventType type, @Nonnull final IAcoustic acoustic) {
 		this.pairs.put(type, acoustic);
 	}
-	
+
 	@Override
 	public String toString() {
 		return getAcousticName();

@@ -35,14 +35,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * Special adapter that allows a regular vanilla particle to be inserted
- * into a particle system. 
+ * Special adapter that allows a regular vanilla particle to be inserted into a
+ * particle system.
  */
 @SideOnly(Side.CLIENT)
 public final class ParticleMoteAdapter implements IParticleMote {
-	
+
 	private final Particle particle;
-	
+
 	public ParticleMoteAdapter(@Nonnull final Particle particle) {
 		this.particle = particle;
 	}

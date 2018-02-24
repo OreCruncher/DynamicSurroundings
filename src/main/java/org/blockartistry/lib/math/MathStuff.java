@@ -32,7 +32,7 @@ import net.minecraft.util.math.Vec3d;
 /**
  * Replacement algos for SIN_TABLE/cos in Minecraft's MathStuff routines. Use
  * the Riven method:
- * 
+ *
  * http://riven8192.blogspot.com/2009/08/fastmath-sincos-lookup-tables.html
  * http://riven8192.blogspot.com/2009/08/fastmath-atan2-lookup-table.html
  */
@@ -145,7 +145,7 @@ public class MathStuff {
 	public static final double atan2(final double y, final double x) {
 		final float tmp1 = (float) y;
 		final float tmp2 = (float) x;
-		return (double) atan2(tmp1, tmp2);
+		return atan2(tmp1, tmp2);
 	}
 
 	// Misc functions
@@ -203,7 +203,7 @@ public class MathStuff {
 	}
 
 	public static float sqrt(final float value) {
-		return (float) Math.sqrt((double) value);
+		return (float) Math.sqrt(value);
 	}
 
 	public static double sqrt(final double value) {
@@ -212,12 +212,12 @@ public class MathStuff {
 
 	public static int floor(final double value) {
 		final int i = (int) value;
-		return value < (double) i ? i - 1 : i;
+		return value < i ? i - 1 : i;
 	}
 
 	public static int floor(final float value) {
 		final int i = (int) value;
-		return value < (float) i ? i - 1 : i;
+		return value < i ? i - 1 : i;
 	}
 
 	public static float clamp(final float num, final float min, final float max) {
@@ -240,16 +240,16 @@ public class MathStuff {
 		final float d1 = coord.y * f - coord.x * f1;
 		return new Vec2f(d0 * scale, d1 * scale);
 	}
-	
+
 	public static Vec2f rotate(@Nonnull final Vec2f coord, final float radians) {
 		return rotateScale(coord, radians, 1F);
 	}
 
 	public static final Vec3d getVectorForRotation(final float pitch, final float yaw) {
-		float f = cos(-yaw * 0.017453292F - PI_F);
-		float f1 = sin(-yaw * 0.017453292F - PI_F);
-		float f2 = -cos(-pitch * 0.017453292F);
-		float f3 = sin(-pitch * 0.017453292F);
-		return new Vec3d((double) (f1 * f2), (double) f3, (double) (f * f2));
+		final float f = cos(-yaw * 0.017453292F - PI_F);
+		final float f1 = sin(-yaw * 0.017453292F - PI_F);
+		final float f2 = -cos(-pitch * 0.017453292F);
+		final float f3 = sin(-pitch * 0.017453292F);
+		return new Vec3d(f1 * f2, f3, f * f2);
 	}
 }

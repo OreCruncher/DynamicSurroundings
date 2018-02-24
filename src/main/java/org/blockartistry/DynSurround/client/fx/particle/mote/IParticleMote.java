@@ -34,7 +34,7 @@ public interface IParticleMote {
 
 	/**
 	 * Indicates if a mote is active or is considered dead.
-	 * 
+	 *
 	 * @return true if the mote is active; false otherwise
 	 */
 	boolean isAlive();

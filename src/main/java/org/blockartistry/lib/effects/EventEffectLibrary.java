@@ -25,6 +25,7 @@ package org.blockartistry.lib.effects;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
@@ -45,7 +46,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EventEffectLibrary extends EffectStateBase implements IEventEffectLibraryState {
 
-	protected final List<EventEffect> effects = new ArrayList<EventEffect>();
+	protected final List<EventEffect> effects = new ArrayList<>();
 
 	public EventEffectLibrary(@Nonnull final IParticleHelper ph, @Nonnull final ISoundHelper sh) {
 		super(ph, sh);
@@ -54,7 +55,7 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	/**
 	 * Registers the EventEffect with the EventEffectLibrary. The reference will
 	 * automatically be registered with Forge, and will be tracked.
-	 * 
+	 *
 	 * @param effect
 	 *            EventEffect instance to register
 	 */
@@ -75,7 +76,7 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 
 	/**
 	 * Indicates if the specified player is the one sitting behind the screen.
-	 * 
+	 *
 	 * @param player
 	 *            The EntityPlayer to check
 	 * @return true if it is the local player, false otherwise
@@ -90,7 +91,7 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	 * Creates a BasicSound<> object for the specified SoundEffect centered at the
 	 * Entity. If the Entity is the current active player the sound will be
 	 * non-attenuated.
-	 * 
+	 *
 	 * @param se
 	 *            SoundEffect to use as the basis of the sound
 	 * @param player
@@ -100,7 +101,7 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	@Override
 	@Nonnull
 	public BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player) {
-		if (this.isActivePlayer(player))
+		if (isActivePlayer(player))
 			return se.createSound(player, false);
 		return se.createSound(player);
 	}

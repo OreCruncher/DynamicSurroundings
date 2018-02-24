@@ -25,15 +25,16 @@
 package org.blockartistry.DynSurround.data.xface;
 
 import org.apache.commons.lang3.StringUtils;
+
 import com.google.gson.annotations.SerializedName;
 
 public final class EffectConfig {
-	
+
 	@SerializedName("effect")
 	public String effect = null;
 	@SerializedName("conditions")
 	public String conditions = StringUtils.EMPTY;
 	@SerializedName("chance")
 	public Integer chance = null;
-	
+
 }

@@ -37,11 +37,11 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class Proxy {
-	
+
 	protected void registerLanguage() {
 		Localization.initialize(Side.SERVER);
 	}
-	
+
 	protected static void register(final Class<?> clazz) {
 		Presets.log().info("Registering for Forge events: %s", clazz.getName());
 		MinecraftForge.EVENT_BUS.register(clazz);
@@ -50,11 +50,11 @@ public class Proxy {
 	protected void eventBusRegistrations() {
 
 	}
-	
+
 	public boolean isRunningAsServer() {
 		return true;
 	}
-	
+
 	public Side effectiveSide() {
 		return Side.SERVER;
 	}
@@ -69,7 +69,7 @@ public class Proxy {
 
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
 	}
-	
+
 	public void loadCompleted(@Nonnull final FMLLoadCompleteEvent event) {
 	}
 

@@ -35,10 +35,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EntityEmitter extends Emitter {
 
 	protected final EntityLivingBase entity;
-	
+
 	public EntityEmitter(@Nonnull final EntityLivingBase entity, @Nonnull final SoundEffect sound) {
 		super(sound);
-		
+
 		this.entity = entity;
 	}
 

@@ -37,8 +37,8 @@ import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.Localization;
 import org.blockartistry.lib.MinecraftClock;
 import org.blockartistry.lib.PlayerUtils;
-import org.blockartistry.lib.gui.TextPanel;
 import org.blockartistry.lib.gui.Panel.Reference;
+import org.blockartistry.lib.gui.TextPanel;
 import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.client.Minecraft;
@@ -159,7 +159,7 @@ public class CompassHUD extends GuiOverlay {
 
 			this.textPanel.resetText();
 
-			final List<String> text = new ArrayList<String>();
+			final List<String> text = new ArrayList<>();
 
 			if (this.showCompass = showCompass()) {
 				text.add(getLocationString());

@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.client.footsteps.interfaces.FootprintStyle;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
@@ -43,7 +44,8 @@ public class Footprint {
 	private float rotation;
 	private float scale;
 
-	public static Footprint produce(@Nonnull final FootprintStyle style, @Nonnull final EntityLivingBase entity, @Nonnull final Vec3d stepLoc, final float rotation, final float scale, final boolean rightFoot) {
+	public static Footprint produce(@Nonnull final FootprintStyle style, @Nonnull final EntityLivingBase entity,
+			@Nonnull final Vec3d stepLoc, final float rotation, final float scale, final boolean rightFoot) {
 		final Footprint print = new Footprint();
 		print.style = style;
 		print.entity = entity;
@@ -57,11 +59,11 @@ public class Footprint {
 	public FootprintStyle getStyle() {
 		return this.style;
 	}
-	
+
 	public EntityLivingBase getEntity() {
 		return this.entity;
 	}
-	
+
 	@Nullable
 	public Vec3d getStepLocation() {
 		return this.stepLoc;
@@ -74,7 +76,7 @@ public class Footprint {
 	public float getRotation() {
 		return this.rotation;
 	}
-	
+
 	public float getScale() {
 		return this.scale;
 	}

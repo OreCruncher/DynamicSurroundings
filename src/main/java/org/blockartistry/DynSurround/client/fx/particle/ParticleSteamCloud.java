@@ -33,9 +33,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ParticleSteamCloud extends ParticleCloud {
-	
+
 	public ParticleSteamCloud(final World world, final double x, final double y, final double z, final double dY) {
-		super(world, x, y, z, XorShiftRandom.current().nextGaussian() * 0.02D, dY, XorShiftRandom.current().nextGaussian() * 0.02D);
+		super(world, x, y, z, XorShiftRandom.current().nextGaussian() * 0.02D, dY,
+				XorShiftRandom.current().nextGaussian() * 0.02D);
 	}
 
 	@Override
@@ -45,11 +46,11 @@ public class ParticleSteamCloud extends ParticleCloud {
 		this.prevPosZ = this.posZ;
 
 		if (this.particleAge++ >= this.particleMaxAge) {
-			this.setExpired();
+			setExpired();
 		}
 
-		this.setParticleTextureIndex(7 - this.particleAge * 8 / this.particleMaxAge);
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		setParticleTextureIndex(7 - this.particleAge * 8 / this.particleMaxAge);
+		moveEntity(this.motionX, this.motionY, this.motionZ);
 		this.motionX *= 0.9599999785423279D;
 		this.motionY *= 0.9599999785423279D;
 		this.motionZ *= 0.9599999785423279D;

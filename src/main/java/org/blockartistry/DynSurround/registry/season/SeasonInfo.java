@@ -87,10 +87,10 @@ public class SeasonInfo {
 	}
 
 	/*
-	 * Indicates if it is cold enough that water can freeze. Could result in
-	 * snow or frozen ice. Does not take into account any other environmental
-	 * factors - just whether its cold enough. If environmental sensitive
-	 * versions are needed look at canBlockFreeze() and canSnowAt().
+	 * Indicates if it is cold enough that water can freeze. Could result in snow or
+	 * frozen ice. Does not take into account any other environmental factors - just
+	 * whether its cold enough. If environmental sensitive versions are needed look
+	 * at canBlockFreeze() and canSnowAt().
 	 */
 	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getTemperature(world, pos) < 0.15F;
@@ -103,10 +103,11 @@ public class SeasonInfo {
 		return world.canSnowAt(pos, false);
 	}
 
-	public boolean canBlockFreeze(@Nonnull final World world, @Nonnull final BlockPos pos, final boolean noWaterAdjacent) {
+	public boolean canBlockFreeze(@Nonnull final World world, @Nonnull final BlockPos pos,
+			final boolean noWaterAdjacent) {
 		return world.canBlockFreeze(pos, noWaterAdjacent);
 	}
-	
+
 	@Override
 	public String toString() {
 		return Objects.toStringHelper(this).add("name", this.dimensionName).toString();

@@ -66,8 +66,8 @@ public class WeatherGenerator {
 
 	protected int nextThunderInterval(final boolean isThundering) {
 		final int base = isThundering ? ModOptions.rain.stormActiveTimeConst : ModOptions.rain.stormInactiveTimeConst;
-		return base + this.RANDOM
-				.nextInt(isThundering ? ModOptions.rain.stormActiveTimeVariable : ModOptions.rain.stormInactiveTimeVariable);
+		return base + this.RANDOM.nextInt(
+				isThundering ? ModOptions.rain.stormActiveTimeVariable : ModOptions.rain.stormInactiveTimeVariable);
 	}
 
 	protected int nextThunderEvent(final float rainIntensity) {
@@ -178,16 +178,16 @@ public class WeatherGenerator {
 	}
 
 	public final void update() {
-		this.process();
-		this.sendUpdate();
+		process();
+		sendUpdate();
 	}
 
 	protected void process() {
-		this.preProcess();
-		this.doRain();
-		this.doThunder();
-		this.doAmbientThunder();
-		this.postProcess();
+		preProcess();
+		doRain();
+		doThunder();
+		doAmbientThunder();
+		postProcess();
 	}
 
 	protected void sendUpdate() {

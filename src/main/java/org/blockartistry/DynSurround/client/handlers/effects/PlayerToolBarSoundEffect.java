@@ -62,7 +62,7 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 
 		protected HandTracker(@Nonnull final EntityPlayer player, @Nonnull final EnumHand hand) {
 			this.hand = hand;
-			this.lastHeld = this.getItemForHand(player, hand);
+			this.lastHeld = getItemForHand(player, hand);
 		}
 
 		protected Item getItemForHand(final EntityPlayer player, final EnumHand hand) {
@@ -82,7 +82,7 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 		public void update(@Nonnull final IEntityEffectHandlerState state) {
 			final EntityPlayer player = (EntityPlayer) state.subject().get();
 			if (triggerNewEquipSound(player)) {
-				this.clearState(state);
+				clearState(state);
 				final ItemStack currentStack = player.getHeldItem(this.hand);
 				final SoundEffect soundEffect = ClientRegistry.ITEMS.getEquipSound(currentStack);
 				if (soundEffect != null) {
@@ -131,17 +131,13 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 	@Override
 	public void update(@Nonnull final Entity subject) {
 		if (ModOptions.sound.enableEquipSound) {
-			this.mainHand.update(this.getState());
-			this.offHand.update(this.getState());
+			this.mainHand.update(getState());
+			this.offHand.update(getState());
 		}
 	}
 
-	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
-		@Override
-		public boolean applies(@Nonnull final Entity e, @Nonnull final EntityEffectInfo eei) {
-			return eei.effects.contains("toolbar");
-		}
-	};
+	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = (@Nonnull final Entity e,
+			@Nonnull final EntityEffectInfo eei) -> eei.effects.contains("toolbar");
 
 	public static class Factory implements IEntityEffectFactory {
 		@Override

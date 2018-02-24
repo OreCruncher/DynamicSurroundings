@@ -42,7 +42,7 @@ public final class AuroraGeometry {
 	public final int bandOffset;
 	public final int alphaLimit;
 
-	private static final List<AuroraGeometry> PRESET = new ArrayList<AuroraGeometry>();
+	private static final List<AuroraGeometry> PRESET = new ArrayList<>();
 
 	static {
 		// 10/5; 90/45

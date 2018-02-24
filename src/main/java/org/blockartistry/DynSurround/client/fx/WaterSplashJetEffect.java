@@ -83,7 +83,7 @@ public class WaterSplashJetEffect extends JetEffect {
 
 		return false;
 	}
-	
+
 	private int liquidBlockCount(final BlockStateProvider provider, final BlockPos pos) {
 		final BlockPos.MutableBlockPos workBlock = new BlockPos.MutableBlockPos(pos);
 

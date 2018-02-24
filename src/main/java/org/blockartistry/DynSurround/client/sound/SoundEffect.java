@@ -139,7 +139,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 		this.soundTitle = title;
 		return this;
 	}
-	
+
 	public String getSoundName() {
 		return this.soundName;
 	}
@@ -238,13 +238,15 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	}
 
 	// IEntrySource<T>
+	@Override
 	public boolean matches() {
 		return ExpressionEngine.instance().check(this.conditions);
 	}
 
+	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append('[').append(sound == null ? "MISSING_SOUND" : this.soundName);
+		builder.append('[').append(this.sound == null ? "MISSING_SOUND" : this.soundName);
 		builder.append('(').append(this.conditions).append(')');
 		builder.append(", v:").append(this.volume);
 		builder.append(", p:").append(this.pitch);
@@ -277,14 +279,14 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 			final ResourceLocation resource = new ResourceLocation(record.sound);
 			this.effect = new SoundEffect(resource, null);
 
-			this.setConditions(StringUtils.isEmpty(record.conditions) ? StringUtils.EMPTY : record.conditions.intern());
-			this.setVolume(record.volume == null ? 1.0F : record.volume.floatValue());
-			this.setPitch(record.pitch == null ? 1.0F : record.pitch.floatValue());
-			this.setWeight(record.weight == null ? 10 : record.weight.intValue());
-			this.setVariablePitch(record.variable != null && record.variable.booleanValue());
-			this.setRepeatDelay(record.repeatDelay == null ? 0 : record.repeatDelay.intValue());
-			this.setRepeatDelayRandom(record.repeatDelayRandom == null ? 0 : record.repeatDelayRandom.intValue());
-			this.setSoundTitle(record.title != null ? record.title : StringUtils.EMPTY);
+			setConditions(StringUtils.isEmpty(record.conditions) ? StringUtils.EMPTY : record.conditions.intern());
+			setVolume(record.volume == null ? 1.0F : record.volume.floatValue());
+			setPitch(record.pitch == null ? 1.0F : record.pitch.floatValue());
+			setWeight(record.weight == null ? 10 : record.weight.intValue());
+			setVariablePitch(record.variable != null && record.variable.booleanValue());
+			setRepeatDelay(record.repeatDelay == null ? 0 : record.repeatDelay.intValue());
+			setRepeatDelayRandom(record.repeatDelayRandom == null ? 0 : record.repeatDelayRandom.intValue());
+			setSoundTitle(record.title != null ? record.title : StringUtils.EMPTY);
 
 			final SoundType t;
 			if (record.soundType != null) {
@@ -300,7 +302,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 					t = SoundType.BACKGROUND;
 			}
 
-			this.setSoundType(t != null ? t : SoundType.BACKGROUND);
+			setSoundType(t != null ? t : SoundType.BACKGROUND);
 
 			final SoundCategory sc;
 			if (record.soundCategory != null) {
@@ -326,7 +328,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 				}
 			}
 
-			this.setSoundCategory(sc != null ? sc : SoundCategory.AMBIENT);
+			setSoundCategory(sc != null ? sc : SoundCategory.AMBIENT);
 		}
 
 		public Builder setSoundTitle(@Nonnull final String title) {
@@ -380,7 +382,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 		}
 
 		public SoundEffect build() {
-			return effect;
+			return this.effect;
 		}
 	}
 

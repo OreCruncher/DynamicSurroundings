@@ -29,7 +29,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
 
 public final class ItemConfig {
-	
+
 	@SerializedName("swordSound")
 	public List<String> swordSound = ImmutableList.of();
 	@SerializedName("axeSound")

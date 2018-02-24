@@ -52,7 +52,7 @@ public final class BiomeUtils {
 	}
 
 	public static Set<Type> getBiomeTypes() {
-		return new IdentityHashSet<Type>(BiomeDictionary.Type.values());
+		return new IdentityHashSet<>(BiomeDictionary.Type.values());
 	}
 
 	@Nonnull

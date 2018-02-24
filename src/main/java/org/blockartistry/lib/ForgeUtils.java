@@ -62,7 +62,7 @@ public final class ForgeUtils {
 		final ModContainer cont = findModContainer(modId);
 		return cont != null ? cont.getName() : "UNKNOWN";
 	}
-	
+
 	@Nonnull
 	public static String getModName(@Nonnull final ResourceLocation resource) {
 		return getModName(resource.getResourceDomain());

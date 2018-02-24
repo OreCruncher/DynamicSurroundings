@@ -54,7 +54,7 @@ public class BedrockFogRangeCalculator extends VanillaFogRangeCalculator {
 		if (WorldUtils.hasVoidPartiles(EnvironState.getWorld())) {
 			final EntityLivingBase player = EnvironState.getPlayer();
 			final double factor = (player.lastTickPosY
-					+ (player.posY - player.lastTickPosY) * (double) event.getRenderPartialTicks() + 4.0D) / 32.0D;
+					+ (player.posY - player.lastTickPosY) * event.getRenderPartialTicks() + 4.0D) / 32.0D;
 			double d0 = (this.skyLight / 16.0D) + factor;
 
 			float end = event.getFarPlaneDistance();

@@ -37,30 +37,31 @@ public interface IEntityEffectState extends IEffectState {
 	/**
 	 * The Entity subject the effect is associated with. May be null if the Entity
 	 * is no longer in scope.
-	 * 
+	 *
 	 * @return Optional with a reference to the subject Entity, if any.
 	 */
 	@Nonnull
 	Optional<Entity> subject();
-	
+
 	/**
 	 * Indicates if the subject is alive.
+	 * 
 	 * @return true if the subject is alive, false otherwise
 	 */
 	boolean isSubjectAlive();
-	
+
 	/**
 	 * Determines the distance between the Entity subject and the specified Entity.
-	 * 
+	 *
 	 * @param entity
 	 *            The Entity to which the distance is measured.
 	 * @return The distance between the two Entities in blocks, squared.
 	 */
 	double distanceSq(@Nonnull final Entity entity);
-	
+
 	/**
 	 * Returns the total world time, in ticks, the entity belongs to.
-	 * 
+	 *
 	 * @return Total world time
 	 */
 	long getWorldTime();

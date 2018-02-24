@@ -34,6 +34,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 
@@ -41,7 +42,7 @@ public class Translations {
 
 	public static final String DEFAULT_LANGUAGE = "en_US";
 
-	private Map<String, String> lookup = new HashMap<String, String>();
+	private Map<String, String> lookup = new HashMap<>();
 
 	public Translations() {
 
@@ -68,7 +69,7 @@ public class Translations {
 		final String xlated = this.lookup.get(translateKey);
 		return xlated == null ? translateKey : String.format(xlated, parameters);
 	}
-	
+
 	@Nonnull
 	public String loadString(@Nonnull final String translateKey) {
 		final String xlated = this.lookup.get(translateKey);
@@ -86,7 +87,7 @@ public class Translations {
 
 	public void transform(@Nonnull final Function<Entry<String, String>, String> func) {
 		final Map<String, String> old = this.lookup;
-		this.lookup = new HashMap<String, String>();
+		this.lookup = new HashMap<>();
 		for (final Entry<String, String> e : old.entrySet()) {
 			this.lookup.put(e.getKey(), func.apply(e));
 		}

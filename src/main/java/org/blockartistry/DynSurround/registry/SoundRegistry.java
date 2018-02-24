@@ -25,6 +25,7 @@ package org.blockartistry.DynSurround.registry;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -36,6 +37,7 @@ import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.math.MathStuff;
+
 import gnu.trove.impl.Constants;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import net.minecraft.client.audio.ISound;
@@ -52,9 +54,9 @@ public final class SoundRegistry extends Registry {
 
 	private static final String ARMOR_SOUND_PREFIX = DSurround.MOD_ID + ":fs.armor.";
 
-	private final List<String> cullSoundNames = new ArrayList<String>();
-	private final List<String> blockSoundNames = new ArrayList<String>();
-	private final TObjectFloatHashMap<String> volumeControl = new TObjectFloatHashMap<String>(
+	private final List<String> cullSoundNames = new ArrayList<>();
+	private final List<String> blockSoundNames = new ArrayList<>();
+	private final TObjectFloatHashMap<String> volumeControl = new TObjectFloatHashMap<>(
 			Constants.DEFAULT_CAPACITY, Constants.DEFAULT_LOAD_FACTOR, DEFAULT_SOUNDFACTOR);
 
 	public SoundRegistry(@Nonnull final Side side) {
@@ -88,7 +90,7 @@ public final class SoundRegistry extends Registry {
 	public void configure(@Nonnull final ModConfigurationFile cfg) {
 		// Nothing to configure
 	}
-	
+
 	@Override
 	public void fini() {
 
@@ -103,7 +105,7 @@ public final class SoundRegistry extends Registry {
 	}
 
 	public boolean isSoundBlockedLogical(@Nonnull final String sound) {
-		return this.isSoundBlocked(sound) || (!ModOptions.sound.enableArmorSounds && sound.startsWith(ARMOR_SOUND_PREFIX));
+		return isSoundBlocked(sound) || (!ModOptions.sound.enableArmorSounds && sound.startsWith(ARMOR_SOUND_PREFIX));
 	}
 
 	public float getVolumeScale(@Nonnull final String soundName) {

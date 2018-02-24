@@ -29,25 +29,25 @@ import org.blockartistry.lib.expression.DynamicVariantList;
 public class BattleVariables extends DynamicVariantList {
 
 	public BattleVariables() {
-		this.add(new Dynamic.DynamicBoolean("battle.inBattle") {
+		add(new Dynamic.DynamicBoolean("battle.inBattle") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getBattleScanner().inBattle();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("battle.isBoss") {
+		add(new Dynamic.DynamicBoolean("battle.isBoss") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getBattleScanner().isBoss();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("battle.isWither") {
+		add(new Dynamic.DynamicBoolean("battle.isWither") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getBattleScanner().isWither();
 			}
 		});
-		this.add(new Dynamic.DynamicBoolean("battle.isDragon") {
+		add(new Dynamic.DynamicBoolean("battle.isDragon") {
 			@Override
 			public void update() {
 				this.value = EnvironState.getBattleScanner().isDragon();

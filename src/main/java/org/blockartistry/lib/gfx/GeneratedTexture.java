@@ -39,7 +39,7 @@ import net.minecraft.util.ResourceLocation;
 /*
  * Simple handler class that wraps a shader that will be operating against a framebuffer
  * for later use.  Kinda like a dynamic texture.
- * 
+ *
  * Loosly based on:
  * https://github.com/Angry-Pixel/The-Betweenlands/blob/1.12/src/main/java/thebetweenlands/client/render/shader/postprocessing/PostProcessingEffect.java
  * https://gist.github.com/TheGreyGhost/96983a0cd47c8c2f294d
@@ -91,7 +91,7 @@ public abstract class GeneratedTexture {
 		final Framebuffer mcFrameBuffer = Minecraft.getMinecraft().getFramebuffer();
 		final Framebuffer blit = new Framebuffer(this.width, this.height, useDepth());
 		blit.framebufferClear();
-		blit.bindFramebuffer(this.useDepth());
+		blit.bindFramebuffer(useDepth());
 
 		final OpenGlState glState = OpenGlState.push();
 
@@ -108,13 +108,13 @@ public abstract class GeneratedTexture {
 		// Set up 2D matrices
 		GlStateManager.matrixMode(GL11.GL_PROJECTION);
 		GlStateManager.loadIdentity();
-		GlStateManager.ortho(0.0D, this.getWidth(), this.getHeight(), 0.0D, 1000.0D, 3000.0D);
+		GlStateManager.ortho(0.0D, getWidth(), getHeight(), 0.0D, 1000.0D, 3000.0D);
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 		GlStateManager.loadIdentity();
 		GlStateManager.translate(0.0F, 0.0F, -2000.0F);
 
 		GlStateManager.enableTexture2D();
-		
+
 		try {
 			// Do the render supplied by a derived class
 			render();
@@ -138,7 +138,7 @@ public abstract class GeneratedTexture {
 
 		try {
 			blit.bindFramebufferTexture();
-			final IntBuffer pixelBuffer = BufferUtils.createIntBuffer(this.getSize());
+			final IntBuffer pixelBuffer = BufferUtils.createIntBuffer(getSize());
 			GlStateManager.glGetTexImage(GL11.GL_TEXTURE_2D, 0, GL12.GL_BGRA, GL12.GL_UNSIGNED_INT_8_8_8_8_REV,
 					pixelBuffer);
 			pixelBuffer.get(this.texture.getTextureData(), 0, pixelBuffer.remaining());

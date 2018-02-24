@@ -25,7 +25,7 @@
 package org.blockartistry.lib.expression;
 
 public interface IDynamicVariant<T extends Variant> {
-	
+
 	String getName();
 
 	void update();

@@ -35,9 +35,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public final class SoundUtils {
 
 	private SoundUtils() {
-		
+
 	}
-	
+
 	@Nonnull
 	public static SoundEvent getOrRegisterSound(@Nonnull final String location) {
 		final ResourceLocation rl;

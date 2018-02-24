@@ -46,14 +46,17 @@ public final class SoundConfigProcessor implements AutoCloseable {
 	}
 
 	private static final ParameterizedType TYPE = new ParameterizedType() {
+		@Override
 		public Type[] getActualTypeArguments() {
 			return new Type[] { String.class, SoundMetadataConfig.class };
 		}
 
+		@Override
 		public Type getRawType() {
 			return Map.class;
 		}
 
+		@Override
 		public Type getOwnerType() {
 			return null;
 		}
@@ -64,7 +67,7 @@ public final class SoundConfigProcessor implements AutoCloseable {
 	// ResourceLocation in the form of "dsurround:sounds.json"
 	public SoundConfigProcessor(@Nonnull final ResourceLocation soundConfig) {
 		final String asset = String.format("/assets/%s/%s", soundConfig.getResourceDomain(),
-				soundConfig.getResourcePath()); //.replace('.', '/'));
+				soundConfig.getResourcePath()); // .replace('.', '/'));
 		this.stream = SoundConfigProcessor.class.getResourceAsStream(asset);
 	}
 

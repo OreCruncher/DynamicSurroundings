@@ -34,6 +34,7 @@ import javax.annotation.Nullable;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.util.ConfigProperty;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -41,7 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class PrimitiveMap {
 
 	private final AcousticsManager acousticsManager;
-	private final HashMap<String, IAcoustic[]> primitiveMap = new HashMap<String, IAcoustic[]>();
+	private final HashMap<String, IAcoustic[]> primitiveMap = new HashMap<>();
 
 	public PrimitiveMap(@Nonnull final AcousticsManager manager) {
 		this.acousticsManager = manager;

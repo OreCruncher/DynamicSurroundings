@@ -61,7 +61,7 @@ public enum ModEnvironment {
 	SoundPhysics("soundphysics"),
 	//
 	BiomesOPlenty("biomesoplenty");
-	
+
 	protected final String modId;
 	protected boolean isLoaded;
 

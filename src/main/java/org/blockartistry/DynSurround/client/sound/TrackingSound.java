@@ -31,18 +31,18 @@ import org.blockartistry.lib.sound.BasicSound;
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class TrackingSound extends BasicSound<TrackingSound> implements ITickableSound {
 
 	private static final float DONE_VOLUME_THRESHOLD = 0.00001F;
 	private static final float FADE_AMOUNT = 0.02F;
-	
+
 	private final Entity attachedTo;
 	private final SoundEffect sound;
-	
+
 	private boolean isFading;
 	private float maxVolume;
 	private boolean isDonePlaying;
@@ -55,7 +55,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 		this.attachedTo = attachedTo;
 
 		this.repeat = sound.isRepeatable();
-		
+
 		// Don't set volume to 0; MC will optimize out
 		this.sound = sound;
 		this.maxVolume = sound.getVolume();
@@ -64,13 +64,13 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 
 		this.lastTick = EnvironState.getTickCounter() - 1;
 
-		this.updateLocation();
-		this.setVolumeScale(SpotSound.BIOME_EFFECT);
+		updateLocation();
+		setVolumeScale(SpotSound.BIOME_EFFECT);
 	}
 
 	@Override
 	public boolean canRepeat() {
-		return !this.isDonePlaying() && super.canRepeat();
+		return !isDonePlaying() && super.canRepeat();
 	}
 
 	@Override
@@ -78,18 +78,22 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 		return this.sound.getRepeat(this.RANDOM);
 	}
 
+	@Override
 	public void fade() {
 		this.isFading = true;
 	}
-	
+
+	@Override
 	public void unfade() {
 		this.isFading = false;
 	}
 
+	@Override
 	public boolean isFading() {
 		return this.isFading;
 	}
 
+	@Override
 	public boolean isDonePlaying() {
 		return this.isDonePlaying;
 	}
@@ -109,7 +113,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 
 	@Override
 	public void update() {
-		if (this.isDonePlaying())
+		if (isDonePlaying())
 			return;
 
 		if (!isEntityAlive()) {
@@ -123,7 +127,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 
 		this.lastTick = EnvironState.getTickCounter();
 
-		if (this.isFading()) {
+		if (isFading()) {
 			this.volume -= FADE_AMOUNT * tickDelta;
 		} else if (this.volume < this.maxVolume) {
 			this.volume += FADE_AMOUNT * tickDelta;
@@ -150,5 +154,5 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 			this.maxVolume = volume;
 		return this;
 	}
-	
+
 }

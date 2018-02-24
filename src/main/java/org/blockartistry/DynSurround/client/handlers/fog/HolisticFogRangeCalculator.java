@@ -49,6 +49,7 @@ public class HolisticFogRangeCalculator implements IFogRangeCalculator {
 		this.calculators.add(calc);
 	}
 
+	@Override
 	@Nonnull
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 		float start = event.getFarPlaneDistance();
@@ -69,6 +70,7 @@ public class HolisticFogRangeCalculator implements IFogRangeCalculator {
 			calc.tick();
 	}
 
+	@Override
 	@Nonnull
 	public String toString() {
 		return this.cached.toString();

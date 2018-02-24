@@ -53,8 +53,8 @@ public class FootstepAccents {
 	}
 
 	@Nonnull
-	public static ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity,
-			@Nullable final BlockPos pos, @Nonnull final ObjectArray<IAcoustic> in) {
+	public static ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos pos,
+			@Nonnull final ObjectArray<IAcoustic> in) {
 		providers.forEach(provider -> provider.provide(entity, pos, in));
 		return in;
 	}

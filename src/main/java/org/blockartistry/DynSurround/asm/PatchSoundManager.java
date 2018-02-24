@@ -60,9 +60,9 @@ public class PatchSoundManager extends Transmorgrifier {
 
 		final MethodNode m = findMethod(cn, sig, names);
 		if (m != null) {
-			this.logMethod(Transformer.log(), m, "Found!");
+			logMethod(Transformer.log(), m, "Found!");
 
-			InsnList list = new InsnList();
+			final InsnList list = new InsnList();
 			list.add(new VarInsnNode(ALOAD, 0));
 
 			final String owner = "org/blockartistry/lib/sound/SoundCache";
@@ -77,7 +77,7 @@ public class PatchSoundManager extends Transmorgrifier {
 			Transformer.log().error("Unable to locate method {}{}", names[0], sig);
 		}
 
-		Transformer.log().info("Unable to patch [{}]!", this.getClassName());
+		Transformer.log().info("Unable to patch [{}]!", getClassName());
 
 		return false;
 	}

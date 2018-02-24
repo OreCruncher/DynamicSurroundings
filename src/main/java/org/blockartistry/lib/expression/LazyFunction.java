@@ -29,12 +29,12 @@ public abstract class LazyFunction {
 	/**
 	 * Name of this function.
 	 */
-	private String name;
+	private final String name;
 	/**
 	 * NumberValue of parameters expected for this function. <code>-1</code> denotes
 	 * a variable number of parameters.
 	 */
-	private int numParams;
+	private final int numParams;
 
 	/**
 	 * Creates a new function with given name and parameter count.
@@ -64,4 +64,3 @@ public abstract class LazyFunction {
 
 	public abstract LazyVariant lazyEval(final LazyVariant... lazyParams);
 }
-

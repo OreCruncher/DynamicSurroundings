@@ -55,11 +55,11 @@ class FacadeAccessor {
 	}
 
 	public String getName() {
-		return this.isValid() ? this.IFacadeClass.getName() : "INVALID";
+		return isValid() ? this.IFacadeClass.getName() : "INVALID";
 	}
 
 	public boolean instanceOf(@Nonnull final Block block) {
-		return this.isValid() && this.IFacadeClass.isInstance(block);
+		return isValid() && this.IFacadeClass.isInstance(block);
 	}
 
 	protected Method getMethod(@Nonnull final String method) throws Throwable {
@@ -78,10 +78,10 @@ class FacadeAccessor {
 	@Nullable
 	public IBlockState getBlockState(@Nonnull final IBlockState state, @Nonnull final World world,
 			@Nonnull final BlockPos pos, @Nullable final EnumFacing side) {
-		if (this.isValid())
+		if (isValid())
 			try {
-				if (this.instanceOf(state.getBlock()))
-					return this.call(state, world, pos, side);
+				if (instanceOf(state.getBlock()))
+					return call(state, world, pos, side);
 			} catch (@Nonnull final Throwable ex) {
 				DSurround.log().catching(ex);
 				this.IFacadeClass = null;

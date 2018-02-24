@@ -30,9 +30,9 @@ import net.minecraft.item.ItemStack;
 public class ItemStackUtil {
 
 	private ItemStackUtil() {
-		
+
 	}
-	
+
 	public static boolean isValidItemStack(@Nullable final ItemStack stack) {
 		return stack != null && stack.getItem() != null;
 	}

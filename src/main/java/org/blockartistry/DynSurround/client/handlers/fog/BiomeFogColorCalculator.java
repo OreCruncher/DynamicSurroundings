@@ -68,7 +68,7 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 		final int playerZ = MathStuff.floor(player.posZ);
 
 		// ForgeHooksClient.getSkyBlendColour()
-		GameSettings settings = Minecraft.getMinecraft().gameSettings;
+		final GameSettings settings = Minecraft.getMinecraft().gameSettings;
 		final int[] ranges = ForgeModContainer.blendRanges;
 		int distance = 6;
 		if (settings.fancyGraphics && ranges.length > 0) {
@@ -191,7 +191,7 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 		if (player.isPotionActive(MobEffects.NIGHT_VISION)) {
 			final int duration = player.getActivePotionEffect(MobEffects.NIGHT_VISION).getDuration();
 			final float brightness = (duration > 200) ? 1
-					: 0.7f + MathStuff.sin((float) ((duration - renderPartialTicks) * MathStuff.PI_F * 0.2f)) * 0.3f;
+					: 0.7f + MathStuff.sin((duration - renderPartialTicks) * MathStuff.PI_F * 0.2f) * 0.3f;
 
 			float scale = 1 / fogColor.red;
 			scale = Math.min(scale, 1F / fogColor.green);

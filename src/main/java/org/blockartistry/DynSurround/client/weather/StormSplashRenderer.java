@@ -55,14 +55,14 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.NoiseGeneratorSimplex;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class StormSplashRenderer {
 
 	protected static final int PARTICLE_SOUND_CHANCE = 3;
-	private static final TIntObjectHashMap<StormSplashRenderer> splashRenderers = new TIntObjectHashMap<StormSplashRenderer>();
+	private static final TIntObjectHashMap<StormSplashRenderer> splashRenderers = new TIntObjectHashMap<>();
 	private static final StormSplashRenderer DEFAULT = new StormSplashRenderer();
 
 	static {
@@ -79,9 +79,9 @@ public class StormSplashRenderer {
 	}
 
 	protected final Random RANDOM = new XorShiftRandom();
-	protected final NoiseGeneratorSimplex GENERATOR = new NoiseGeneratorSimplex(RANDOM);
+	protected final NoiseGeneratorSimplex GENERATOR = new NoiseGeneratorSimplex(this.RANDOM);
 	protected final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-	
+
 	protected int rainSoundCounter = 0;
 
 	protected StormSplashRenderer() {
@@ -103,7 +103,7 @@ public class StormSplashRenderer {
 
 		if (dust || block == Blocks.SOUL_SAND) {
 			particleType = null;
-		} else if ((block == Blocks.NETHERRACK || block == Blocks.MAGMA) && RANDOM.nextInt(20) == 0) {
+		} else if ((block == Blocks.NETHERRACK || block == Blocks.MAGMA) && this.RANDOM.nextInt(20) == 0) {
 			particleType = EnumParticleTypes.LAVA;
 		} else if (state.getMaterial() == Material.LAVA) {
 			particleType = EnumParticleTypes.SMOKE_NORMAL;
@@ -130,8 +130,7 @@ public class StormSplashRenderer {
 	}
 
 	protected boolean biomeHasDust(final Biome biome) {
-		return ModOptions.fog.allowDesertFog && !Weather.doVanilla()
-				&& ClientRegistry.BIOME.get(biome).getHasDust();
+		return ModOptions.fog.allowDesertFog && !Weather.doVanilla() && ClientRegistry.BIOME.get(biome).getHasDust();
 	}
 
 	protected void playSplashSound(final EntityRenderer renderer, final World world, final Entity player, double x,
@@ -173,7 +172,7 @@ public class StormSplashRenderer {
 		if (rainStrengthFactor <= 0.0F)
 			return;
 
-		RANDOM.setSeed((long) RenderWeather.rendererUpdateCount * 312987231L);
+		this.RANDOM.setSeed(RenderWeather.rendererUpdateCount * 312987231L);
 		final Entity entity = mc.getRenderViewEntity();
 		final int playerX = MathHelper.floor_double(entity.posX);
 		final int playerY = MathHelper.floor_double(entity.posY);
@@ -192,8 +191,8 @@ public class StormSplashRenderer {
 			particleCount >>= 1;
 
 		for (int j1 = 0; j1 < particleCount; ++j1) {
-			final int locX = playerX + RANDOM.nextInt(RANGE) - RANDOM.nextInt(RANGE);
-			final int locZ = playerZ + RANDOM.nextInt(RANGE) - RANDOM.nextInt(RANGE);
+			final int locX = playerX + this.RANDOM.nextInt(RANGE) - this.RANDOM.nextInt(RANGE);
+			final int locZ = playerZ + this.RANDOM.nextInt(RANGE) - this.RANDOM.nextInt(RANGE);
 			this.pos.setPos(locX, 0, locZ);
 
 			if (!RandomThings.shouldRain(world, this.pos))
@@ -209,13 +208,13 @@ public class StormSplashRenderer {
 
 				final BlockPos blockPos = precipHeight.down();
 				final IBlockState state = WorldUtils.getBlockState(world, blockPos);
-				final double posX = locX + RANDOM.nextFloat();
+				final double posX = locX + this.RANDOM.nextFloat();
 				final double posY = precipHeight.getY() + 0.1F - state.getBoundingBox(world, blockPos).minY;
-				final double posZ = locZ + RANDOM.nextFloat();
+				final double posZ = locZ + this.RANDOM.nextFloat();
 
 				spawnBlockParticle(state, hasDust, world, posX, posY, posZ);
 
-				if (RANDOM.nextInt(++particlesSpawned) == 0) {
+				if (this.RANDOM.nextInt(++particlesSpawned) == 0) {
 					spawnX = posX;
 					spawnY = posY;
 					spawnZ = posZ;
@@ -223,7 +222,7 @@ public class StormSplashRenderer {
 			}
 		}
 
-		if (particlesSpawned > 0 && RANDOM.nextInt(PARTICLE_SOUND_CHANCE) < this.rainSoundCounter++) {
+		if (particlesSpawned > 0 && this.RANDOM.nextInt(PARTICLE_SOUND_CHANCE) < this.rainSoundCounter++) {
 			this.rainSoundCounter = 0;
 			playSplashSound(theThis, world, entity, spawnX, spawnY, spawnZ);
 		}

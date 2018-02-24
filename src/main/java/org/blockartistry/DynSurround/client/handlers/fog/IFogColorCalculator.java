@@ -33,9 +33,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public interface IFogColorCalculator {
-	
+
 	@Nonnull
 	Color calculate(@Nonnull final EntityViewRenderEvent.FogColors event);
-	
+
 	void tick();
 }

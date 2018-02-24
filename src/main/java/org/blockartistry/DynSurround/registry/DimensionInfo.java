@@ -36,14 +36,14 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 
 public final class DimensionInfo {
-	
+
 	public static final DimensionInfo NONE = new DimensionInfo();
 
 	private static final int SPACE_HEIGHT_OFFSET = 32;
 
 	protected final int dimensionId;
 	protected final String name;
-	
+
 	protected int seaLevel;
 	protected int skyHeight;
 	protected int cloudHeight;
@@ -57,7 +57,7 @@ public final class DimensionInfo {
 		this.dimensionId = Integer.MIN_VALUE;
 		this.name = "<NOT SET>";
 	}
-	
+
 	public DimensionInfo(@Nonnull final World world) {
 		this.dimensionId = world.provider.getDimension();
 		this.name = world.provider.getDimensionType().getName();
@@ -133,7 +133,7 @@ public final class DimensionInfo {
 	public boolean getHasWeather() {
 		return this.hasWeather;
 	}
-	
+
 	public boolean getHasFog() {
 		return this.hasFog;
 	}

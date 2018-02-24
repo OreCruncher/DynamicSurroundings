@@ -42,7 +42,7 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 
 	public static ParticleSystemHandler INSTANCE;
 
-	private final TLongObjectHashMap<ParticleSystem> systems = new TLongObjectHashMap<ParticleSystem>();
+	private final TLongObjectHashMap<ParticleSystem> systems = new TLongObjectHashMap<>();
 
 	public ParticleSystemHandler() {
 		super("Particle Systems");

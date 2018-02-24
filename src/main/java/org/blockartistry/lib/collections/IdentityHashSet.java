@@ -39,7 +39,7 @@ public final class IdentityHashSet<T> extends THashSet<T> {
 	public IdentityHashSet(@Nonnull final T[] objs) {
 		super();
 		for (int i = 0; i < objs.length; i++)
-			this.add(objs[i]);
+			add(objs[i]);
 	}
 
 	public IdentityHashSet(final int initialCapacity) {

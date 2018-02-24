@@ -46,15 +46,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * Listener that looks for server events and turns them into Dynamic Surroundings
- * client events.  This is the way it can pick up on things like waterflow changes
- * and liquid being picked up/placed.
+ * Listener that looks for server events and turns them into Dynamic
+ * Surroundings client events. This is the way it can pick up on things like
+ * waterflow changes and liquid being picked up/placed.
  */
 @SideOnly(Side.CLIENT)
 public class WorldEventDetector implements IWorldEventListener {
-	
+
 	protected final World world;
-	
+
 	public WorldEventDetector(@Nonnull final World world) {
 		this.world = world;
 	}
@@ -91,13 +91,13 @@ public class WorldEventDetector implements IWorldEventListener {
 	}
 
 	@Override
-	public void spawnParticle(int particleID, boolean ignoreRange, double x, double y, double z,
-			double xSpeed, double ySpeed, double zSpeed, int... parameters) {
-		
-		if(!ModOptions.explosions.enableExplosionEnhancement)
+	public void spawnParticle(int particleID, boolean ignoreRange, double x, double y, double z, double xSpeed,
+			double ySpeed, double zSpeed, int... parameters) {
+
+		if (!ModOptions.explosions.enableExplosionEnhancement)
 			return;
-		
-		if(EnumParticleTypes.EXPLOSION_LARGE.getParticleID() == particleID) {
+
+		if (EnumParticleTypes.EXPLOSION_LARGE.getParticleID() == particleID) {
 			ExplosionHelper.doExplosion(this.world, x, y, z);
 		}
 	}

@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.client.swing;
 
 import java.awt.BorderLayout;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -35,14 +36,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SuppressWarnings("serial")
 @SideOnly(Side.CLIENT)
 public class ScriptVariables extends JPanel {
-	
+
 	protected final ScriptVariableTable variables;
 	protected final JTable table;
 
 	public ScriptVariables() {
-		
-		this.setName("Script Variables");
-		this.setLayout(new BorderLayout());
+
+		setName("Script Variables");
+		setLayout(new BorderLayout());
 
 		this.variables = new ScriptVariableTable();
 		this.table = new JTable(this.variables);

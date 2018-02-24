@@ -48,7 +48,7 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 public class BlockStateProvider {
 
 	public static final IBlockState AIR_STATE = Blocks.AIR.getDefaultState();
-	protected static final WeakReference<Chunk> NULL_CHUNK = new WeakReference<Chunk>(null);
+	protected static final WeakReference<Chunk> NULL_CHUNK = new WeakReference<>(null);
 
 	protected final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 	protected WeakReference<World> world;
@@ -59,7 +59,7 @@ public class BlockStateProvider {
 	}
 
 	public BlockStateProvider(final World world) {
-		this.world = new WeakReference<World>(world);
+		this.world = new WeakReference<>(world);
 		this.chunk = NULL_CHUNK;
 	}
 
@@ -75,7 +75,7 @@ public class BlockStateProvider {
 				this.chunk = NULL_CHUNK;
 				c = null;
 			} else {
-				this.chunk = new WeakReference<Chunk>(c = w.getChunkFromChunkCoords(cX, cZ));
+				this.chunk = new WeakReference<>(c = w.getChunkFromChunkCoords(cX, cZ));
 			}
 		}
 
@@ -85,7 +85,7 @@ public class BlockStateProvider {
 	@Nonnull
 	public BlockStateProvider setWorld(@Nonnull final World world) {
 		if (this.world.get() != world) {
-			this.world = new WeakReference<World>(world);
+			this.world = new WeakReference<>(world);
 			this.chunk = NULL_CHUNK;
 		}
 		return this;
@@ -138,7 +138,7 @@ public class BlockStateProvider {
 			if (c == null) {
 				this.chunk = NULL_CHUNK;
 			} else {
-				this.chunk = new WeakReference<Chunk>(c);
+				this.chunk = new WeakReference<>(c);
 			}
 		}
 
@@ -162,7 +162,7 @@ public class BlockStateProvider {
 		if (chunk == null)
 			return pos;
 
-		final World world = this.getWorld();
+		final World world = getWorld();
 
 		for (int dY = chunk.getTopFilledSegment() + 16 - 1; dY >= 0; dY--) {
 			final IBlockState state = getBlockState0(chunk, x, dY, z);
@@ -182,7 +182,7 @@ public class BlockStateProvider {
 
 		if (chunk != null) {
 			try {
-				final World world = this.getWorld();
+				final World world = getWorld();
 				return chunk.getBiome(pos, world.provider.biomeProvider);
 			} catch (@Nonnull final Throwable t) {
 				;

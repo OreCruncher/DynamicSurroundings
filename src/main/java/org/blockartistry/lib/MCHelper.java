@@ -53,8 +53,8 @@ public final class MCHelper {
 
 	private static final String MATERIAL_CUSTOM = "Custom";
 	private static final String MATERIAL_NONE = "None";
-	private static final Map<Material, String> materialMap = new IdentityHashMap<Material, String>();
-	private static final Set<Block> hasVariants = new IdentityHashSet<Block>();
+	private static final Map<Material, String> materialMap = new IdentityHashMap<>();
+	private static final Set<Block> hasVariants = new IdentityHashSet<>();
 
 	private static boolean variantCheck(@Nonnull final Block block) {
 		final Item item = Item.getItemFromBlock(block);
@@ -64,7 +64,7 @@ public final class MCHelper {
 		if (item.getHasSubtypes())
 			return true;
 
-		final List<ItemStack> stacks = new ArrayList<ItemStack>();
+		final List<ItemStack> stacks = new ArrayList<>();
 		try {
 			block.getSubBlocks(item, block.getCreativeTabToDisplayOn(), stacks);
 		} catch (final Throwable t) {

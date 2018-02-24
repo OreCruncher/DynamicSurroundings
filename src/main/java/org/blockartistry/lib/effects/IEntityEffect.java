@@ -35,19 +35,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface IEntityEffect {
 
 	/**
-	 * Called when an IEntityEffect should update it's state and take action based on
-	 * results. Called once per tick.
-	 * 
+	 * Called when an IEntityEffect should update it's state and take action based
+	 * on results. Called once per tick.
+	 *
 	 * @param state
 	 *            Interface to a portion of the EntityEffectHandler's state.
 	 */
 	void update(@Nonnull final IEntityEffectHandlerState state);
 
 	/**
-	 * Called when the EntityEffectHandler decides that the IEntityEffect should die. Normally
-	 * this method would not be hooked. Should only be hooked if there is additional
-	 * state in other lists and places that need to be cleaned up.
-	 * 
+	 * Called when the EntityEffectHandler decides that the IEntityEffect should
+	 * die. Normally this method would not be hooked. Should only be hooked if there
+	 * is additional state in other lists and places that need to be cleaned up.
+	 *
 	 * @param state
 	 *            Interface to a portion of the EntityEffectHandler's state.
 	 */

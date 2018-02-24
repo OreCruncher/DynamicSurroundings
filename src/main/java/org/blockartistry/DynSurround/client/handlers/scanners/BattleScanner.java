@@ -164,7 +164,7 @@ public class BattleScanner implements ITickable {
 			this.isDragon = isDragon;
 			this.battleTimer = tickCounter + BATTLE_TIMER_EXPIRY;
 		} else if (this.inBattle && tickCounter > this.battleTimer) {
-			this.reset();
+			reset();
 		}
 	}
 

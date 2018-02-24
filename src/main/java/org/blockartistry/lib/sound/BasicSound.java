@@ -50,7 +50,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class BasicSound<T extends BasicSound<?>> extends PositionedSound implements ITrackedSound, INBTSerializable<NBTTagCompound> {
+public class BasicSound<T extends BasicSound<?>> extends PositionedSound
+		implements ITrackedSound, INBTSerializable<NBTTagCompound> {
 
 	protected static final float ATTENUATION_OFFSET = 32F;
 
@@ -106,10 +107,12 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 
 	}
 
+	@Override
 	public SoundState getState() {
 		return this.state;
 	}
 
+	@Override
 	public void setState(@Nonnull final SoundState state) {
 		this.state = state;
 	}
@@ -124,10 +127,12 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 		return (T) this;
 	}
 
+	@Override
 	public void setId(@Nonnull final String id) {
 		this.id = id;
 	}
 
+	@Override
 	@Nonnull
 	public String getId() {
 		return this.id;
@@ -170,7 +175,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 	@Override
 	public float getYPosF() {
 		final float y = super.getYPosF();
-		return this.getAttenuationType() == AttenuationType.NONE ? y + ATTENUATION_OFFSET : y;
+		return getAttenuationType() == AttenuationType.NONE ? y + ATTENUATION_OFFSET : y;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -225,7 +230,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 	}
 
 	public boolean canSoundBeHeard(@Nonnull final BlockPos soundPos) {
-		return this.getAttenuationType() == AttenuationType.NONE ? true
+		return getAttenuationType() == AttenuationType.NONE ? true
 				: SoundUtils.canBeHeard(this.pos, soundPos, this.getVolume());
 	}
 
@@ -268,8 +273,8 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 	public String toString() {
 		return Objects.toStringHelper(this).addValue(this.positionedSoundLocation.toString())
 				.addValue(this.category.toString()).add("state", this.getState()).add("v", this.getVolume())
-				.add("p", this.getPitch()).add("s", this.volumeScale.getScale()).addValue(this.getAttenuationType())
-				.add("x", this.getXPosF()).add("y", this.getYPosF()).add("z", this.getZPosF()).toString();
+				.add("p", getPitch()).add("s", this.volumeScale.getScale()).addValue(getAttenuationType())
+				.add("x", getXPosF()).add("y", this.getYPosF()).add("z", getZPosF()).toString();
 	}
 
 	public static AttenuationType noAttenuation() {

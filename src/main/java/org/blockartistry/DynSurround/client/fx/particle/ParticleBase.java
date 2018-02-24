@@ -40,14 +40,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract class ParticleBase extends Particle {
-	
+
 	protected final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
 	protected final FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
 
 	protected ParticleBase(@Nonnull final World worldIn, final double posXIn, final double posYIn,
 			final double posZIn) {
 		super(worldIn, posXIn, posYIn, posZIn);
-		
+
 		this.rand = XorShiftRandom.current();
 	}
 
@@ -57,19 +57,19 @@ public abstract class ParticleBase extends Particle {
 
 		this.rand = XorShiftRandom.current();
 	}
-	
+
 	protected double interpX() {
 		return this.manager.viewerPosX;
 	}
-	
+
 	protected double interpY() {
 		return this.manager.viewerPosY;
 	}
-	
+
 	protected double interpZ() {
 		return this.manager.viewerPosZ;
 	}
-	
+
 	protected void bindTexture(@Nonnull final ResourceLocation resource) {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(resource);
 	}

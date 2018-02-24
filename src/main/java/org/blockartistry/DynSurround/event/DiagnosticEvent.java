@@ -35,13 +35,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class DiagnosticEvent extends Event {
-	
+
 	public static class Gather extends DiagnosticEvent {
-		
+
 		public final World world;
 		public final EntityPlayer player;
-		public final List<String> output = new ArrayList<String>();
-		
+		public final List<String> output = new ArrayList<>();
+
 		public Gather(final World world, final EntityPlayer player) {
 			super();
 			this.world = world;

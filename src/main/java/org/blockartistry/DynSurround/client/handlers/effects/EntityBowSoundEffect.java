@@ -24,6 +24,7 @@
 package org.blockartistry.DynSurround.client.handlers.effects;
 
 import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.ClientRegistry;
@@ -47,7 +48,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EntityBowSoundEffect extends EntityEffect {
 
 	protected ItemStack lastActiveStack;
-	
+
 	@Override
 	public String name() {
 		return "Bow Sound";
@@ -63,8 +64,8 @@ public class EntityBowSoundEffect extends EntityEffect {
 				if (ClientRegistry.ITEMS.isBow(currentStack) || ClientRegistry.ITEMS.isShield(currentStack)) {
 					final SoundEffect soundEffect = ClientRegistry.ITEMS.getUseSound(currentStack);
 					if (soundEffect != null) {
-						final BasicSound<?> fx = this.getState().createSound(soundEffect, entity);
-						this.getState().playSound(fx);
+						final BasicSound<?> fx = getState().createSound(soundEffect, entity);
+						getState().playSound(fx);
 					}
 				}
 
@@ -76,12 +77,8 @@ public class EntityBowSoundEffect extends EntityEffect {
 		}
 	}
 
-	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
-		@Override
-		public boolean applies(@Nonnull final Entity e, @Nonnull final EntityEffectInfo eei) {
-			return eei.effects.contains("bow");
-		}
-	};
+	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = (@Nonnull final Entity e,
+			@Nonnull final EntityEffectInfo eei) -> eei.effects.contains("bow");
 
 	public static class Factory implements IEntityEffectFactory {
 

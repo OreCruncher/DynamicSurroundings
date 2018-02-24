@@ -83,14 +83,14 @@ public class ParticleDripOverride extends ParticleDrip {
 				// If the particle is not positioned in an air block kill it
 				// right away. No sense wasting time with it.
 				this.pos.setPos(this.posX, this.posY, this.posZ);
-				IBlockState state = provider.getBlockState(pos);
+				IBlockState state = provider.getBlockState(this.pos);
 				if (!WorldUtils.isAirBlock(state)) {
 					setExpired();
 				} else {
 					this.pos.setPos(this.posX, this.posY + 0.3D, this.posZ);
 					final int y = this.pos.getY();
 
-					state = provider.getBlockState(pos);
+					state = provider.getBlockState(this.pos);
 					if (!WorldUtils.isAirBlock(state) && !WorldUtils.isLeaves(state)) {
 						// Find out where it is going to hit
 						do {
@@ -127,16 +127,17 @@ public class ParticleDripOverride extends ParticleDrip {
 		}
 
 		this.pos.setPos(this.posX, this.posY, this.posZ);
-		if (WorldUtils.isFullWaterBlock(this.worldObj, pos)) {
-			if (ParticleCollections.addWaterRipple(this.worldObj, this.posX, pos.getY() + 1, this.posZ) != null
+		if (WorldUtils.isFullWaterBlock(this.worldObj, this.pos)) {
+			if (ParticleCollections.addWaterRipple(this.worldObj, this.posX, this.pos.getY() + 1, this.posZ) != null
 					&& this.materialType == Material.LAVA)
-				ParticleHelper
-						.addParticle(new ParticleSteamCloud(this.worldObj, this.posX, pos.getY() + 1, this.posZ, 0.01D));
+				ParticleHelper.addParticle(
+						new ParticleSteamCloud(this.worldObj, this.posX, this.pos.getY() + 1, this.posZ, 0.01D));
 		}
 
 	}
 
 	public static class LavaFactory implements IParticleFactory {
+		@Override
 		public Particle createParticle(int particleID, World worldIn, double xCoordIn, double yCoordIn, double zCoordIn,
 				double xSpeedIn, double ySpeedIn, double zSpeedIn, int... p_178902_15_) {
 			return new ParticleDripOverride(worldIn, xCoordIn, yCoordIn, zCoordIn, Material.LAVA);
@@ -144,6 +145,7 @@ public class ParticleDripOverride extends ParticleDrip {
 	}
 
 	public static class WaterFactory implements IParticleFactory {
+		@Override
 		public Particle createParticle(int particleID, World worldIn, double xCoordIn, double yCoordIn, double zCoordIn,
 				double xSpeedIn, double ySpeedIn, double zSpeedIn, int... p_178902_15_) {
 			return new ParticleDripOverride(worldIn, xCoordIn, yCoordIn, zCoordIn, Material.WATER);

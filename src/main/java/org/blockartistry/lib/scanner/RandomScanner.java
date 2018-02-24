@@ -43,7 +43,8 @@ public abstract class RandomScanner extends Scanner {
 		super(locus, name, range);
 	}
 
-	public RandomScanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int range, final int blocksPerTick) {
+	public RandomScanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int range,
+			final int blocksPerTick) {
 		super(locus, name, range, blocksPerTick);
 	}
 

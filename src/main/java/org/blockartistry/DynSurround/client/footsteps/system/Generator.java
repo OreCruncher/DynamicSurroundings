@@ -52,6 +52,7 @@ import org.blockartistry.lib.compat.EntityLivingBaseUtil;
 import org.blockartistry.lib.compat.EntityUtil;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -172,7 +173,7 @@ public class Generator {
 			this.isImmobile = true;
 		} else if (this.isImmobile && diff != 0f) {
 			this.isImmobile = false;
-			return current - timeImmobile > VAR.IMMOBILE_DURATION;
+			return current - this.timeImmobile > this.VAR.IMMOBILE_DURATION;
 		}
 
 		return false;
@@ -199,11 +200,11 @@ public class Generator {
 		final double movX = entity.motionX;
 		final double movZ = entity.motionZ;
 
-		double scal = movX * this.xMovec + movZ * this.zMovec;
+		final double scal = movX * this.xMovec + movZ * this.zMovec;
 		if (this.scalStat != scal < 0.001f) {
 			this.scalStat = !this.scalStat;
 
-			if (this.scalStat && VAR.PLAY_WANDER && !this.hasSpecialStoppingConditions(entity)) {
+			if (this.scalStat && this.VAR.PLAY_WANDER && !hasSpecialStoppingConditions(entity)) {
 				playSinglefoot(entity, 0d, EventType.WANDER, this.isRightFoot);
 			}
 		}
@@ -224,12 +225,12 @@ public class Generator {
 			float distance = 0f;
 
 			if (entity.isOnLadder() && !entity.onGround) {
-				distance = VAR.STRIDE_LADDER;
+				distance = this.VAR.STRIDE_LADDER;
 			} else if (!entity.isInWater() && MathStuff.abs(this.yPosition - entity.posY) > 0.4d) {
 				// This ensures this does not get recorded as landing, but as a
 				// step
 				if (this.yPosition < entity.posY) { // Going upstairs
-					distance = VAR.STRIDE_STAIR;
+					distance = this.VAR.STRIDE_STAIR;
 					event = speedDisambiguator(entity, EventType.UP, EventType.UP_RUN);
 				} else if (!entity.isSneaking()) { // Going downstairs
 					distance = -1f;
@@ -239,7 +240,7 @@ public class Generator {
 				this.dwmYChange = distanceReference;
 
 			} else {
-				distance = VAR.STRIDE;
+				distance = this.VAR.STRIDE;
 			}
 
 			if (event == null) {
@@ -276,7 +277,7 @@ public class Generator {
 
 	protected void produceStep(@Nonnull final EntityLivingBase entity, @Nullable EventType event,
 			final double verticalOffsetAsMinus) {
-		if (!this.playSpecialStoppingConditions(entity)) {
+		if (!playSpecialStoppingConditions(entity)) {
 			if (event == null)
 				event = speedDisambiguator(entity, EventType.WALK, EventType.RUN);
 			playSinglefoot(entity, verticalOffsetAsMinus, event, this.isRightFoot);
@@ -297,17 +298,17 @@ public class Generator {
 	}
 
 	protected void simulateJumpingLanding(@Nonnull final EntityLivingBase entity) {
-		if (this.hasSpecialStoppingConditions(entity))
+		if (hasSpecialStoppingConditions(entity))
 			return;
 
 		if (this.isFlying && EntityLivingBaseUtil.isJumping(entity)) {
-			if (VAR.EVENT_ON_JUMP) {
+			if (this.VAR.EVENT_ON_JUMP) {
 				// If climbing stairs motion will be negative
 				if (entity.motionY > 0) {
 					this.didJump = true;
-					double speed = entity.motionX * entity.motionX + entity.motionZ * entity.motionZ;
+					final double speed = entity.motionX * entity.motionX + entity.motionZ * entity.motionZ;
 
-					if (speed < VAR.SPEED_TO_JUMP_AS_MULTIFOOT) {
+					if (speed < this.VAR.SPEED_TO_JUMP_AS_MULTIFOOT) {
 						// STILL JUMP
 						playMultifoot(entity, 0.4d, EventType.JUMP);
 					} else {
@@ -317,7 +318,7 @@ public class Generator {
 				}
 			}
 		} else if (!this.isFlying) {
-			if (this.fallDistance > VAR.LAND_HARD_DISTANCE_MIN) {
+			if (this.fallDistance > this.VAR.LAND_HARD_DISTANCE_MIN) {
 				playMultifoot(entity, 0d, EventType.LAND);
 			} else if (!this.stepThisFrame && !entity.isSneaking()) {
 				playSinglefoot(entity, 0d, speedDisambiguator(entity, EventType.CLIMB, EventType.CLIMB_RUN),
@@ -330,7 +331,7 @@ public class Generator {
 	protected EventType speedDisambiguator(@Nonnull final EntityLivingBase entity, @Nonnull final EventType walk,
 			@Nonnull final EventType run) {
 		final double velocity = entity.motionX * entity.motionX + entity.motionZ * entity.motionZ;
-		return velocity > VAR.SPEED_TO_RUN ? run : walk;
+		return velocity > this.VAR.SPEED_TO_RUN ? run : walk;
 	}
 
 	protected void simulateBrushes(@Nonnull final EntityLivingBase entity) {
@@ -343,9 +344,9 @@ public class Generator {
 				final BlockPos pos = new BlockPos(entity.posX, yy, entity.posZ);
 				if (!this.messyPos.equals(pos)) {
 					this.messyPos = pos;
-					final Association assos = this.findAssociationMessyFoliage(entity.getEntityWorld(), pos);
+					final Association assos = findAssociationMessyFoliage(entity.getEntityWorld(), pos);
 					if (assos != null)
-						this.playAssociation(entity, assos, EventType.WALK);
+						playAssociation(entity, assos, EventType.WALK);
 				}
 			}
 		}
@@ -358,8 +359,8 @@ public class Generator {
 	protected void playSinglefoot(@Nonnull final EntityLivingBase entity, final double verticalOffsetAsMinus,
 			@Nonnull final EventType eventType, final boolean foot) {
 		if (proceedWithStep(entity)) {
-			final Association assos = this.findAssociationForPlayer(entity, verticalOffsetAsMinus, foot);
-			this.playAssociation(entity, assos, eventType);
+			final Association assos = findAssociationForPlayer(entity, verticalOffsetAsMinus, foot);
+			playAssociation(entity, assos, eventType);
 		}
 	}
 
@@ -368,10 +369,10 @@ public class Generator {
 
 		if (proceedWithStep(entity)) {
 			// STILL JUMP
-			final Association leftFoot = this.findAssociationForPlayer(entity, verticalOffsetAsMinus, false);
-			final Association rightFoot = this.findAssociationForPlayer(entity, verticalOffsetAsMinus, true);
-			this.playAssociation(entity, leftFoot, eventType);
-			this.playAssociation(entity, rightFoot, eventType);
+			final Association leftFoot = findAssociationForPlayer(entity, verticalOffsetAsMinus, false);
+			final Association rightFoot = findAssociationForPlayer(entity, verticalOffsetAsMinus, true);
+			playAssociation(entity, leftFoot, eventType);
+			playAssociation(entity, rightFoot, eventType);
 		}
 	}
 
@@ -399,7 +400,7 @@ public class Generator {
 	 * Determines the actual footprint location based on the BlockPos provided. The
 	 * print is to ride on top of the bounding box. If the block does not have a
 	 * print a null is returned.
-	 * 
+	 *
 	 * @param entity
 	 *            The Entity generating the print
 	 * @param pos
@@ -474,7 +475,7 @@ public class Generator {
 	 * best matching block on that location, or near that location, for instance if
 	 * the player is walking on the edge of a block when walking over non-emitting
 	 * blocks like air or water)
-	 * 
+	 *
 	 * Returns null if no blocks are valid emitting blocks. Returns a string that
 	 * begins with "_NO_ASSOCIATION" if a matching block was found, but has no
 	 * association in the blockmap.
@@ -498,8 +499,8 @@ public class Generator {
 		if (worked == null) {
 			// Create a trigo. mark contained inside the block the player is
 			// over
-			double xdang = (entity.posX - pos.getX()) * 2 - 1;
-			double zdang = (entity.posZ - pos.getZ()) * 2 - 1;
+			final double xdang = (entity.posX - pos.getX()) * 2 - 1;
+			final double zdang = (entity.posZ - pos.getZ()) * 2 - 1;
 			// -1 0 1
 			// ------- -1
 			// | o |
@@ -512,7 +513,7 @@ public class Generator {
 			// If the player is at the edge of that
 			if (Math.max(MathStuff.abs(xdang), MathStuff.abs(zdang)) > this.VAR.DISTANCE_TO_CENTER) {
 				// Find the maximum absolute value of X or Z
-				boolean isXdangMax = MathStuff.abs(xdang) > MathStuff.abs(zdang);
+				final boolean isXdangMax = MathStuff.abs(xdang) > MathStuff.abs(zdang);
 				// --------------------- ^ maxofZ-
 				// | . . |
 				// | . . |
@@ -550,11 +551,11 @@ public class Generator {
 	 * it. This will sometimes select the block above because some block act like
 	 * carpets. This also applies when the block targeted by the location is
 	 * actually not emitting, such as lilypads on water.
-	 * 
+	 *
 	 * Returns null if the block is not a valid emitting block (this causes the
 	 * engine to continue looking for valid blocks). This also happens if the carpet
 	 * is non-emitting.
-	 * 
+	 *
 	 * Returns a string that begins with "_NO_ASSOCIATION" if the block is valid,
 	 * but has no association in the blockmap. If the carpet was selected, this
 	 * solves to the carpet.
@@ -596,7 +597,8 @@ public class Generator {
 				// if else group.
 
 				if (above != AIR_STATE) {
-					IAcoustic[] foliage = this.blockMap.getBlockAcoustics(world, above, pos.up(), Substrate.FOLIAGE);
+					final IAcoustic[] foliage = this.blockMap.getBlockAcoustics(world, above, pos.up(),
+							Substrate.FOLIAGE);
 					if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
 						association = MyUtils.concatenate(association, foliage);
 					}

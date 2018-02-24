@@ -51,7 +51,7 @@ public final class DimensionRegistry extends Registry {
 
 	@Override
 	public void configure(@Nonnull final ModConfigurationFile cfg) {
-		cfg.dimensions.forEach(dim -> this.register(dim));
+		cfg.dimensions.forEach(dim -> register(dim));
 	}
 
 	@Override
@@ -67,8 +67,8 @@ public final class DimensionRegistry extends Registry {
 
 	}
 
-	private final List<DimensionConfig> cache = new ArrayList<DimensionConfig>();
-	private final TIntObjectHashMap<DimensionInfo> dimensionData = new TIntObjectHashMap<DimensionInfo>();
+	private final List<DimensionConfig> cache = new ArrayList<>();
+	private final TIntObjectHashMap<DimensionInfo> dimensionData = new TIntObjectHashMap<>();
 
 	public void loading(@Nonnull final World world) {
 		getData(world);

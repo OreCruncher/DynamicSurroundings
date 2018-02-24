@@ -62,7 +62,7 @@ public class MoteEmoji extends MoteMotionBase {
 	private boolean shouldRender;
 	private int holdTicks;
 	private float period;
-	private float radius;
+	private final float radius;
 
 	protected float scale;
 	protected float texU1, texU2;
@@ -70,7 +70,7 @@ public class MoteEmoji extends MoteMotionBase {
 
 	public MoteEmoji(@Nonnull final Entity entity) {
 		super(entity.getEntityWorld(), 0, 0, 0, 0, 0, 0);
-		
+
 		final double newY = entity.posY + entity.height - (entity.isSneaking() ? 0.25D : 0);
 		this.prevX = this.posX = entity.posX;
 		this.prevY = this.posY = newY;
@@ -81,7 +81,7 @@ public class MoteEmoji extends MoteMotionBase {
 		this.motionY = 0.0D;
 		this.motionZ = 0.0D;
 		this.gravity = 0.0D;
-		this.subject = new WeakReference<Entity>(entity);
+		this.subject = new WeakReference<>(entity);
 
 		this.scale = 1.0F;
 		this.alpha = 0.99F;
@@ -98,7 +98,7 @@ public class MoteEmoji extends MoteMotionBase {
 	}
 
 	protected boolean shouldExpire() {
-		if (!this.isAlive() || this.subject.isEnqueued())
+		if (!isAlive() || this.subject.isEnqueued())
 			return true;
 
 		final Entity entity = this.subject.get();
@@ -117,7 +117,7 @@ public class MoteEmoji extends MoteMotionBase {
 	@Override
 	public void update() {
 
-		if (this.shouldExpire()) {
+		if (shouldExpire()) {
 			this.isAlive = false;
 			return;
 		}

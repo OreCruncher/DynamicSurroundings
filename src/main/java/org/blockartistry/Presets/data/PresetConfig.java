@@ -38,8 +38,8 @@ import javax.annotation.Nullable;
 
 import org.blockartistry.Presets.Presets;
 import org.blockartistry.Presets.api.events.PresetEvent;
+
 import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
@@ -51,12 +51,7 @@ import net.minecraftforge.common.MinecraftForge;
 public class PresetConfig {
 
 	protected static final String PRESET_EXT = ".presets";
-	protected static final FilenameFilter FILTER = new FilenameFilter() {
-		@Override
-		public boolean accept(File dir, String name) {
-			return name.endsWith(PRESET_EXT);
-		}
-	};
+	protected static final FilenameFilter FILTER = (dir, name) -> name.endsWith(PRESET_EXT);
 
 	protected final File dir;
 	protected final List<PresetInfo> presets = Lists.newArrayList();
@@ -67,8 +62,8 @@ public class PresetConfig {
 	}
 
 	/*
-	 * Retrieves an immutable list of presets that are present
-	 * within the Presets! config directory.
+	 * Retrieves an immutable list of presets that are present within the Presets!
+	 * config directory.
 	 */
 	@Nonnull
 	public List<PresetInfo> getPresets() {
@@ -78,9 +73,8 @@ public class PresetConfig {
 	}
 
 	/*
-	 * Forces a scan of the Presets! directory to find presets.
-	 * The internal list of presets will be updated with the
-	 * changes.
+	 * Forces a scan of the Presets! directory to find presets. The internal list of
+	 * presets will be updated with the changes.
 	 */
 	public void scan() {
 		this.presets.clear();
@@ -94,8 +88,8 @@ public class PresetConfig {
 	}
 
 	/*
-	 * Takes the given preset and fires an event for mods to load the contained
-	 * data into their configurations.
+	 * Takes the given preset and fires an event for mods to load the contained data
+	 * into their configurations.
 	 */
 	public void applyPreset(@Nonnull final PresetInfo info) {
 		final PresetEvent.Load event = new PresetEvent.Load(info.getData());
@@ -122,12 +116,8 @@ public class PresetConfig {
 
 		save0(info);
 
-		final Optional<PresetInfo> existing = Iterators.tryFind(this.presets.iterator(), new Predicate<PresetInfo>() {
-			@Override
-			public boolean apply(@Nonnull final PresetInfo input) {
-				return input.getFilename().equals(info.getFilename());
-			}
-		});
+		final Optional<PresetInfo> existing = Iterators.tryFind(this.presets.iterator(),
+				(@Nonnull final PresetInfo input) -> input.getFilename().equals(info.getFilename()));
 
 		if (existing.isPresent()) {
 			this.presets.remove(existing.get());
@@ -136,9 +126,8 @@ public class PresetConfig {
 	}
 
 	/*
-	 * Deletes the preset information from disk.  Caller should rescan
-	 * after performing any deletions to ensure a current image of
-	 * the file system.
+	 * Deletes the preset information from disk. Caller should rescan after
+	 * performing any deletions to ensure a current image of the file system.
 	 */
 	public void delete(@Nonnull final PresetInfo info) {
 		final File file = new File(this.dir, info.fileName);

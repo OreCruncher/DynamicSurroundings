@@ -30,8 +30,8 @@ import org.blockartistry.lib.WorldUtils;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ParticleSteamJet extends ParticleJet {
@@ -42,7 +42,7 @@ public class ParticleSteamJet extends ParticleJet {
 
 	@Override
 	public boolean shouldDie() {
-		return !SteamJetEffect.isValidSpawnBlock(WorldUtils.getDefaultBlockStateProvider(), this.getPos());
+		return !SteamJetEffect.isValidSpawnBlock(WorldUtils.getDefaultBlockStateProvider(), getPos());
 	}
 
 	@Override

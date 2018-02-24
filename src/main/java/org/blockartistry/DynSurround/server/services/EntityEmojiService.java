@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.entity.ai.EntityAIEmoji;
 import org.blockartistry.DynSurround.entity.ai.EntityAIVillagerEmoji;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;

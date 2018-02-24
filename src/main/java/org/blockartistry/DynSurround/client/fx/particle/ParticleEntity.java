@@ -49,16 +49,16 @@ public class ParticleEntity extends ParticleAsset {
 
 		// From mob spawner block
 		float f = 0.53125F;
-		float f1 = Math.max(this.prototype.width, this.prototype.height);
+		final float f1 = Math.max(this.prototype.width, this.prototype.height);
 
-		if ((double) f1 > 1.0D) {
+		if (f1 > 1.0D) {
 			f /= f1;
 		}
 
 		this.normalScale = f;
-		this.setScale(0.1F);
+		setScale(0.1F);
 	}
-	
+
 	@Override
 	public void setScale(final float scale) {
 		super.setScale(scale * this.normalScale);
@@ -66,9 +66,9 @@ public class ParticleEntity extends ParticleAsset {
 
 	@Override
 	protected void doModelTranslate() {
-        GlStateManager.translate(0.0F, -0.2F, 0.0F);
+		GlStateManager.translate(0.0F, -0.2F, 0.0F);
 	}
-	
+
 	@Override
 	protected void handleRender(final float partialTicks) {
 

@@ -52,13 +52,13 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnection
 import net.minecraftforge.fml.relauncher.Side;
 
 public class Proxy {
-	
+
 	protected long connectionTime = 0;
 
 	protected void registerLanguage() {
 		Localization.initialize(Side.SERVER);
 	}
-	
+
 	protected static void register(final Class<?> clazz) {
 		DSurround.log().info("Registering for Forge events: %s", clazz.getName());
 		MinecraftForge.EVENT_BUS.register(clazz);
@@ -72,11 +72,11 @@ public class Proxy {
 	public long currentSessionDuration() {
 		return System.currentTimeMillis() - this.connectionTime;
 	}
-	
+
 	public boolean isRunningAsServer() {
 		return true;
 	}
-	
+
 	public Side effectiveSide() {
 		return Side.SERVER;
 	}
@@ -84,7 +84,7 @@ public class Proxy {
 	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		registerLanguage();
 		eventBusRegistrations();
-		
+
 		CapabilityEmojiData.register();
 	}
 
@@ -96,14 +96,14 @@ public class Proxy {
 
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
 	}
-	
+
 	public void loadCompleted(@Nonnull final FMLLoadCompleteEvent event) {
 	}
 
 	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
 		// NOTHING SHOULD BE HERE - OVERRIDE IN ProxyClient!
 	}
-	
+
 	public void clientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
 		// NOTHING SHOULD BE HERE - OVERRIDE IN ProxyClient!
 	}
@@ -118,11 +118,11 @@ public class Proxy {
 		final ServerCommandManager serverCommand = (ServerCommandManager) command;
 		serverCommand.registerCommand(new CommandDS());
 	}
-	
+
 	public void serverStopping(@Nonnull final FMLServerStoppingEvent event) {
 
 	}
-	
+
 	public void serverStopped(@Nonnull final FMLServerStoppedEvent event) {
 		ServiceManager.deinitialize();
 	}

@@ -31,7 +31,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.annotation.Nonnull;
+
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.ModOptions;
@@ -43,6 +45,7 @@ import org.blockartistry.lib.Translations;
 import org.blockartistry.lib.WorldUtils;
 
 import com.google.common.base.Function;
+
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
@@ -60,9 +63,9 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 	private static final String SPLASH_TOKEN = "$MINECRAFT$";
 	private static final ResourceLocation SPLASH_TEXT = new ResourceLocation("texts/splashes.txt");
 
-	private final TIntObjectHashMap<EntityBubbleContext> messages = new TIntObjectHashMap<EntityBubbleContext>();
+	private final TIntObjectHashMap<EntityBubbleContext> messages = new TIntObjectHashMap<>();
 	private final Translations xlate = new Translations();
-	private final List<String> minecraftSplashText = new ArrayList<String>();
+	private final List<String> minecraftSplashText = new ArrayList<>();
 
 	private static class Stripper implements Function<Entry<String, String>, String> {
 
@@ -70,7 +73,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 
 		@Override
 		public String apply(@Nonnull final Entry<String, String> input) {
-			final Matcher matcher = WEIGHT_PATTERN.matcher(input.getValue());
+			final Matcher matcher = this.WEIGHT_PATTERN.matcher(input.getValue());
 			return matcher.matches() ? matcher.group(2) : input.getValue();
 		}
 
@@ -113,7 +116,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 			final Object... parms) {
 		String xlated = this.xlate.format(message, parms);
 		if (SPLASH_TOKEN.equals(xlated))
-			xlated = this.minecraftSplashText.get(RANDOM.nextInt(this.minecraftSplashText.size()));
+			xlated = this.minecraftSplashText.get(this.RANDOM.nextInt(this.minecraftSplashText.size()));
 		addSpeechBubble(entity, xlated);
 	}
 
@@ -135,7 +138,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 	public boolean doTick(final int tick) {
 		return this.messages.size() > 0;
 	}
-	
+
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 		final int currentTick = EnvironState.getTickCounter();

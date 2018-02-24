@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleBubbleJet;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
 import org.blockartistry.lib.BlockStateProvider;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,16 +51,18 @@ public class BubbleJetEffect extends JetEffect {
 	}
 
 	@Override
-	public boolean canTrigger(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final Random random) {
+	public boolean canTrigger(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		final boolean isSolidBlock = provider.getBlockState(pos.down()).getMaterial().isSolid();
 		return isSolidBlock && super.canTrigger(provider, state, pos, random);
 	}
 
 	@Override
-	public void doEffect(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final Random random) {
+	public void doEffect(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		final int waterBlocks = countBlocks(provider, pos, state, 1);
-		final ParticleJet effect = new ParticleBubbleJet(waterBlocks, provider.getWorld(), pos.getX() + 0.5D, pos.getY() + 0.1D,
-				pos.getZ() + 0.5D);
+		final ParticleJet effect = new ParticleBubbleJet(waterBlocks, provider.getWorld(), pos.getX() + 0.5D,
+				pos.getY() + 0.1D, pos.getZ() + 0.5D);
 		addEffect(effect);
 	}
 

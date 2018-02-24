@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -69,7 +70,7 @@ public final class ResourcePacks {
 
 		public boolean hasManifest() {
 			if (this.manifest == null) {
-				try (final InputStream stream = this.getInputStream(MANIFEST_RESOURCE)) {
+				try (final InputStream stream = getInputStream(MANIFEST_RESOURCE)) {
 					if (stream != null)
 						this.manifest = JsonUtils.load(stream, Manifest.class);
 				} catch (final Throwable t) {
@@ -97,7 +98,7 @@ public final class ResourcePacks {
 		}
 
 		public boolean resourceExists(@Nonnull final ResourceLocation loc) {
-			try (final InputStream stream = this.getInputStream(loc)) {
+			try (final InputStream stream = getInputStream(loc)) {
 				return stream != null;
 			} catch (@Nonnull final Throwable t) {
 
@@ -105,9 +106,10 @@ public final class ResourcePacks {
 			return false;
 		}
 
+		@Override
 		public String toString() {
 			final StringBuilder builder = new StringBuilder();
-			builder.append("Resource pack ").append(this.getModName()).append(": ");
+			builder.append("Resource pack ").append(getModName()).append(": ");
 			if (this.manifest != null)
 				builder.append(String.format("%s by %s (%s)", this.manifest.getName(), this.manifest.getAuthor(),
 						this.manifest.getWebsite()));
@@ -159,7 +161,7 @@ public final class ResourcePacks {
 			}
 		}
 
-		// Look in other resource packs for more configuration data.  Only do
+		// Look in other resource packs for more configuration data. Only do
 		// this if NOT running as a dedicated server.
 		if (!DSurround.proxy().isRunningAsServer()) {
 			final List<ResourcePackRepository.Entry> repo = Minecraft.getMinecraft().getResourcePackRepository()

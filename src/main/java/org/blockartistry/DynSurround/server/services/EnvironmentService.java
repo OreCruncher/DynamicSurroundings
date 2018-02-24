@@ -30,6 +30,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.network.PacketEnvironment;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;

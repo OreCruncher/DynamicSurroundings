@@ -24,14 +24,13 @@
 
 package org.blockartistry.DynSurround.client.fx.particle.system;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-
 import org.blockartistry.DynSurround.client.fx.particle.ParticleDust;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ParticleDustJet extends ParticleJet {

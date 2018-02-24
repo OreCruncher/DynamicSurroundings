@@ -32,7 +32,6 @@ import org.blockartistry.DynSurround.registry.DimensionInfo;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.gfx.OpenGlState;
 import org.blockartistry.lib.gfx.OpenGlUtil;
-import org.blockartistry.lib.gfx.shaders.ShaderException;
 import org.blockartistry.lib.gfx.shaders.ShaderProgram;
 import org.blockartistry.lib.gfx.shaders.ShaderProgram.IShaderUseCallback;
 import org.blockartistry.lib.math.MathStuff;
@@ -83,17 +82,13 @@ public class AuroraShaderBand implements IAurora {
 
 		this.program = Shaders.AURORA;
 
-		this.callback = new IShaderUseCallback() {
-			@Override
-			public void call(final ShaderProgram shader) throws ShaderException {
-				shader.set("time", AuroraUtils.getTimeSeconds() * 0.75F);
-				shader.set("resolution", AuroraShaderBand.this.getAuroraWidth(),
-						AuroraShaderBand.this.getAuroraHeight());
-				shader.set("topColor", AuroraShaderBand.this.fadeColor);
-				shader.set("middleColor", AuroraShaderBand.this.middleColor);
-				shader.set("bottomColor", AuroraShaderBand.this.baseColor);
-				shader.set("alpha", AuroraShaderBand.this.getAlpha());
-			}
+		this.callback = shader -> {
+			shader.set("time", AuroraUtils.getTimeSeconds() * 0.75F);
+			shader.set("resolution", AuroraShaderBand.this.getAuroraWidth(), AuroraShaderBand.this.getAuroraHeight());
+			shader.set("topColor", AuroraShaderBand.this.fadeColor);
+			shader.set("middleColor", AuroraShaderBand.this.middleColor);
+			shader.set("bottomColor", AuroraShaderBand.this.baseColor);
+			shader.set("alpha", AuroraShaderBand.this.getAlpha());
 		};
 
 		final AuroraGeometry geo = AuroraGeometry.get(this.random);
@@ -155,7 +150,7 @@ public class AuroraShaderBand implements IAurora {
 		builder.append(" base: ").append(this.baseColor.toString());
 		builder.append(", mid: ").append(this.middleColor.toString());
 		builder.append(", fade: ").append(this.fadeColor.toString());
-		builder.append(", alpha: ").append((int) (this.getAlpha() * 255));
+		builder.append(", alpha: ").append((int) (getAlpha() * 255));
 		if (!this.tracker.isAlive())
 			builder.append(", DEAD");
 		else if (this.tracker.isFading())

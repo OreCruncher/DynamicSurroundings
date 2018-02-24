@@ -47,8 +47,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityEffectLibrary {
 
-	protected final ObjectArray<IEntityEffectFactoryFilter> filters = new ObjectArray<IEntityEffectFactoryFilter>();
-	protected final ObjectArray<IEntityEffectFactory> factories = new ObjectArray<IEntityEffectFactory>();
+	protected final ObjectArray<IEntityEffectFactoryFilter> filters = new ObjectArray<>();
+	protected final ObjectArray<IEntityEffectFactory> factories = new ObjectArray<>();
 	protected final IParticleHelper particleHelper;
 	protected final ISoundHelper soundHelper;
 
@@ -61,7 +61,7 @@ public class EntityEffectLibrary {
 	 * Registers an IEntityEffectFactoryFilter/IEntityEffectFactory pair. The filter
 	 * is used by the EntityEffectLibrary to determine if an EntityEffect applies to
 	 * a target entity.
-	 * 
+	 *
 	 * @param filter
 	 *            IEntityEffectFactoryFilter used to determine if the
 	 *            IEntityEffectFactory should be used to create an EntityEffect.
@@ -79,14 +79,14 @@ public class EntityEffectLibrary {
 	 * Creates an EntityEffectHandler for the specified Entity. The IEffects
 	 * attached to the EntityEffectHandler is determined by an IFactoryFitler. An
 	 * EntityEffectHandler will always be created.
-	 * 
+	 *
 	 * @param entity
 	 *            The subject Entity for which an EntityEffectHandler is created
 	 * @return An EntityEffectHandler for the Entity
 	 */
 	@Nonnull
 	public Optional<EntityEffectHandler> create(@Nonnull final Entity entity) {
-		final List<EntityEffect> effectToApply = new ArrayList<EntityEffect>();
+		final List<EntityEffect> effectToApply = new ArrayList<>();
 
 		final EntityEffectInfo eei = ClientRegistry.EFFECTS.getEffects(entity);
 		for (int i = 0; i < this.filters.size(); i++)

@@ -31,6 +31,7 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.lib.BlockNameUtil;
 import org.blockartistry.lib.BlockNameUtil.NameResult;
 import org.blockartistry.lib.MCHelper;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;

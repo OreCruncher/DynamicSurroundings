@@ -80,7 +80,7 @@ public class ParticleCollection extends ParticleBase {
 
 	public boolean addParticle(@Nonnull final IParticleMote mote) {
 
-		if (this.canFit()) {
+		if (canFit()) {
 			this.myParticles.add(mote);
 			return true;
 		}
@@ -97,12 +97,12 @@ public class ParticleCollection extends ParticleBase {
 
 	public boolean shouldDie() {
 		final boolean timeout = (EnvironState.getTickCounter() - this.lastTickUpdate) > TICK_GRACE;
-		return timeout || this.size() == 0 || this.worldObj != EnvironState.getWorld();
+		return timeout || size() == 0 || this.worldObj != EnvironState.getWorld();
 	}
 
 	@Override
 	public void onUpdate() {
-		if (!this.isAlive())
+		if (!isAlive())
 			return;
 
 		this.lastTickUpdate = EnvironState.getTickCounter();
@@ -110,8 +110,8 @@ public class ParticleCollection extends ParticleBase {
 		// Update state and remove the dead ones
 		this.myParticles.removeIf(UPDATE_REMOVE);
 
-		if (this.shouldDie()) {
-			this.setExpired();
+		if (shouldDie()) {
+			setExpired();
 		}
 	}
 
@@ -124,15 +124,15 @@ public class ParticleCollection extends ParticleBase {
 	public void renderParticle(final VertexBuffer buffer, final Entity entityIn, final float partialTicks,
 			final float rotX, final float rotZ, final float rotYZ, final float rotXY, final float rotXZ) {
 
-		this.bindTexture(this.texture);
-		this.preRender();
+		bindTexture(this.texture);
+		preRender();
 
 		buffer.begin(GL11.GL_QUADS, getVertexFormat());
 		for (int i = 0; i < this.myParticles.size(); i++)
 			this.myParticles.get(i).renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
 		Tessellator.getInstance().draw();
 
-		this.postRender();
+		postRender();
 	}
 
 	protected boolean enableLighting() {
@@ -141,7 +141,7 @@ public class ParticleCollection extends ParticleBase {
 
 	protected void preRender() {
 		this.glState = OpenGlState.push();
-		if (this.enableLighting())
+		if (enableLighting())
 			GlStateManager.enableLighting();
 		else
 			GlStateManager.disableLighting();

@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.client.footsteps.implem;
 
 import java.util.Collection;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

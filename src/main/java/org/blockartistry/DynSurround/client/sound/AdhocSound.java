@@ -42,16 +42,16 @@ public class AdhocSound extends BasicSound<AdhocSound> {
 	// Used for sound routing
 	public AdhocSound(@Nonnull final NBTTagCompound nbt) {
 		super((ResourceLocation) null, null);
-		this.deserializeNBT(nbt);
+		deserializeNBT(nbt);
 	}
 
 	public AdhocSound(@Nonnull final SoundEvent event, @Nonnull final PositionedSound sound) {
 		super(event, sound.getCategory());
 
 		this.setPosition(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
-		this.setAttenuationType(sound.getAttenuationType());
-		this.setVolume(PositionedSoundUtil.getVolume(sound));
-		this.setPitch(PositionedSoundUtil.getPitch(sound));
+		setAttenuationType(sound.getAttenuationType());
+		setVolume(PositionedSoundUtil.getVolume(sound));
+		setPitch(PositionedSoundUtil.getPitch(sound));
 	}
 
 	public AdhocSound(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {

@@ -77,7 +77,7 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 	@Override
 	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
 		super.intitialize(state);
-		final EntityLivingBase entity = (EntityLivingBase) this.getState().subject().get();
+		final EntityLivingBase entity = (EntityLivingBase) getState().subject().get();
 		this.lastHealth = entity.getHealth();
 	}
 
@@ -104,7 +104,7 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 			this.lastHealth = entity.getHealth();
 
 			// Don't display if it is the current player in first person view
-			if (!EnvironState.isPlayer(subject) || !this.isFirstPersonView()) {
+			if (!EnvironState.isPlayer(subject) || !isFirstPersonView()) {
 
 				final int delta = Math.max(1, MathStuff.abs(adjustment));
 				final int criticalAmount = (int) (entity.getMaxHealth() / 2.5F);
@@ -120,22 +120,18 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 				if (ModOptions.player.showCritWords && adjustment < 0 && delta >= criticalAmount) {
 					particle = new ParticleTextPopOff(world, getPowerWord(), CRITICAL_TEXT_COLOR, posX, posY + 0.5D,
 							posZ);
-					this.getState().addParticle(particle);
+					getState().addParticle(particle);
 				}
 				particle = new ParticleTextPopOff(world, text, color, posX, posY, posZ);
-				this.getState().addParticle(particle);
+				getState().addParticle(particle);
 			}
 		}
 	}
 
 	// Currently restricted to the active player. Have stuff to unwind in the
 	// footprint code.
-	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = new IEntityEffectFactoryFilter() {
-		@Override
-		public boolean applies(@Nonnull final Entity e, @Nonnull final EntityEffectInfo eei) {
-			return e instanceof EntityLivingBase;
-		}
-	};
+	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = (@Nonnull final Entity e,
+			@Nonnull final EntityEffectInfo eei) -> e instanceof EntityLivingBase;
 
 	public static class Factory implements IEntityEffectFactory {
 

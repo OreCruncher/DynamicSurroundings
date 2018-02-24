@@ -42,20 +42,22 @@ public class ParticleBlock extends ParticleAsset {
 	protected float brightness;
 
 	protected final BlockRendererDispatcher dispatcher;
-	
-	public ParticleBlock(@Nonnull final Block block, @Nonnull final World world, final double x, final double y, final double z) {
+
+	public ParticleBlock(@Nonnull final Block block, @Nonnull final World world, final double x, final double y,
+			final double z) {
 		this(block, world, x, y, z, 0, 0, 0);
 	}
 
-	public ParticleBlock(@Nonnull final Block block, @Nonnull final World world, final double x, final double y, final double z, final double dX, final double dY, final double dZ) {
+	public ParticleBlock(@Nonnull final Block block, @Nonnull final World world, final double x, final double y,
+			final double z, final double dX, final double dY, final double dZ) {
 		super(world, x, y, z, dX, dY, dZ);
-		
+
 		this.prototype = block;
 		this.state = block.getDefaultState();
 		this.brightness = 1.0F;
 		this.dispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
 	}
-	
+
 	public void setBrightness(final float bright) {
 		this.brightness = bright;
 	}

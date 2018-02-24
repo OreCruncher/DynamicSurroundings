@@ -66,7 +66,7 @@ public class ParticleWaterSplash extends ParticleJet {
 			final double y, final double z) {
 		super(0, strength, world, x, y, z, 2);
 		this.location = loc.toImmutable();
-		this.setSpawnCount((int) (strength * 2.5F));
+		setSpawnCount((int) (strength * 2.5F));
 	}
 
 	public void setSpawnCount(final int limit) {
@@ -90,7 +90,7 @@ public class ParticleWaterSplash extends ParticleJet {
 	}
 
 	private boolean setupSound() {
-		return this.isAlive() && this.jetStrength > 2 && this.emitter == null && RANDOM.nextInt(6) == 0;
+		return isAlive() && this.jetStrength > 2 && this.emitter == null && RANDOM.nextInt(6) == 0;
 	}
 
 	@Override
@@ -118,7 +118,7 @@ public class ParticleWaterSplash extends ParticleJet {
 	@Override
 	protected void spawnJetParticle() {
 		if (ParticleCollections.canFitWaterSpray()) {
-			final int splashCount = this.getSpawnCount();
+			final int splashCount = getSpawnCount();
 
 			for (int j = 0; (float) j < splashCount; ++j) {
 				final double xOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
@@ -131,7 +131,7 @@ public class ParticleWaterSplash extends ParticleJet {
 				final double motionZ = zOffset * (this.jetStrength / 25.0D);
 				final double motionY = 0.1D + RANDOM.nextFloat() * this.jetStrength / 20.0D;
 				final IParticleMote particle = ParticleCollections.addWaterSpray(this.world, this.posX + xOffset,
-						(double) (this.posY), this.posZ + zOffset, motionX, motionY, motionZ);
+						(this.posY), this.posZ + zOffset, motionX, motionY, motionZ);
 				// If we could not add the collection is full. No sense beating a dead horse.
 				if (particle == null)
 					break;

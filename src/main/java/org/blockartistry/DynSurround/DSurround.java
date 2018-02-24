@@ -76,7 +76,7 @@ public class DSurround {
 	public static final String GUI_FACTORY = "org.blockartistry.DynSurround.client.gui.ConfigGuiFactory";
 	public static final String UPDATE_URL = "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json";
 	public static final String FINGERPRINT = "7a2128d395ad96ceb9d9030fbd41d035b435753a";
-	
+
 	public static final String SERVER_VERSION = "3.4.9.0";
 
 	@Instance(MOD_ID)
@@ -132,7 +132,7 @@ public class DSurround {
 		logger = ModLog.setLogger(DSurround.MOD_ID, LogManager.getLogger(MOD_ID));
 
 		final String cmdText = System.getProperty("dsurround.devMode");
-		if(!StringUtils.isEmpty(cmdText) && "true".equals(cmdText)) {
+		if (!StringUtils.isEmpty(cmdText) && "true".equals(cmdText)) {
 			devMode = true;
 			logger.info("RUNNING IN DEVELOPMENT MODE");
 		}
@@ -206,7 +206,8 @@ public class DSurround {
 			if (installedOnServer) {
 				log().info("%s version %s is installed on the server", MOD_NAME, modVersion);
 				if (VersionHelper.compareVersions(modVersion, SERVER_VERSION) < 0) {
-					log().info("For the best experience the server should be running at least version %s", SERVER_VERSION);
+					log().info("For the best experience the server should be running at least version %s",
+							SERVER_VERSION);
 				}
 			}
 		}

@@ -37,34 +37,31 @@ public interface IAurora {
 	 * Indicates if the aurora can be considered active
 	 */
 	boolean isAlive();
-	
+
 	/*
-	 * Instructs the aurora to start the process of decay
-	 * (i.e. start to fade)
+	 * Instructs the aurora to start the process of decay (i.e. start to fade)
 	 */
 	void setFading(final boolean flag);
-	
+
 	/*
 	 * Indicates if the aurora is in the process of dying
 	 */
 	boolean isDying();
-	
+
 	/*
-	 * Perform the necessary housekeeping for the aurora.  Occurs
-	 * once a tick.
+	 * Perform the necessary housekeeping for the aurora. Occurs once a tick.
 	 */
 	void update();
-	
+
 	/*
 	 * Indicates if an aurora as completed it's life cycle and can be removed.
 	 */
 	boolean isComplete();
-	
+
 	/*
-	 * Render the aurora to the client screen.  It is possible that
-	 * other updates can occur to the state, such as doing the
-	 * transformations to animate.
+	 * Render the aurora to the client screen. It is possible that other updates can
+	 * occur to the state, such as doing the transformations to animate.
 	 */
 	public void render(final float partialTick);
-	
+
 }

@@ -31,7 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class DelayedAcoustic extends BasicAcoustic implements IOptions {
-	
+
 	protected long delayMin = 0;
 	protected long delayMax = 0;
 

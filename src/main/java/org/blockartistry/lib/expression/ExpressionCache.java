@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
@@ -51,7 +52,7 @@ public class ExpressionCache implements ITickable {
 	 * Adds a DynamicVariantList to the cache. New expressions that are created
 	 * using this cache will automatically have these variables added to them. These
 	 * variants will be updated when the ExpressionCache gets ticked.
-	 * 
+	 *
 	 * @param dvl
 	 *            DynamicVariantList to add to the cache
 	 */
@@ -64,7 +65,7 @@ public class ExpressionCache implements ITickable {
 	 * Returns a list of expressions that have been examined by the ExpressionCache
 	 * but failed due to some error. Used for diagnostics because ideally there
 	 * should be no failures.
-	 * 
+	 *
 	 * @return List of expressions that failed compilation
 	 */
 	@Nonnull
@@ -75,7 +76,7 @@ public class ExpressionCache implements ITickable {
 	/**
 	 * Returns a list of all dynamic variants available to the ExpressionCache. Used
 	 * for diagnostic purpose. The list is sorted before returning.
-	 * 
+	 *
 	 * @return List of dynamic variants registered with the expression cache
 	 */
 	@Nonnull
@@ -108,7 +109,7 @@ public class ExpressionCache implements ITickable {
 	 *
 	 * Expressions are cached. If multiple requests come in for the same expression
 	 * the cached version is reused.
-	 * 
+	 *
 	 * @param expression
 	 *            The expression to compile
 	 * @return The compiled expression. If there was a failure the resulting
@@ -137,7 +138,7 @@ public class ExpressionCache implements ITickable {
 	/**
 	 * Evaluates the expression and returns the result. The resulting parse tree is
 	 * cached for performance when a requery is made.
-	 * 
+	 *
 	 * @return Variant containing the results of the evaluation
 	 */
 	@Nonnull
@@ -147,7 +148,7 @@ public class ExpressionCache implements ITickable {
 
 	/**
 	 * Evaluates the expression and returns the result as a boolean.
-	 * 
+	 *
 	 * @param expression
 	 *            The expression to evaluate
 	 * @return true of the expression evaluates true, false otherwise

@@ -52,14 +52,14 @@ public class MoteFireFly extends MoteAnimatedBase {
 		this.xAcceleration = RANDOM.nextGaussian() * ACCELERATION;
 		this.yAcceleration = RANDOM.nextGaussian() / 2.0D * ACCELERATION;
 		this.zAcceleration = RANDOM.nextGaussian() * ACCELERATION;
-		
+
 		this.gravity = 0D;
 
 		this.particleScale *= 0.75F * 0.25F * 0.1F;
 		this.maxAge = 48 + RANDOM.nextInt(12);
 
-		this.setColor(startColorRGB);
-		this.setColorFade(fadeColorRGB);
+		setColor(startColorRGB);
+		setColorFade(fadeColorRGB);
 	}
 
 	@Override

@@ -61,10 +61,10 @@ public class PatchWorldServer extends Transmorgrifier {
 
 		final MethodNode m = findMethod(cn, sig, names);
 		if (m != null) {
-			this.logMethod(Transformer.log(), m, "Found!");
+			logMethod(Transformer.log(), m, "Found!");
 
 			m.localVariables = null;
-			InsnList list = new InsnList();
+			final InsnList list = new InsnList();
 			list.add(new VarInsnNode(ALOAD, 0));
 
 			final String owner = "org/blockartistry/DynSurround/server/PlayerSleepHandler";
@@ -79,7 +79,7 @@ public class PatchWorldServer extends Transmorgrifier {
 			Transformer.log().error("Unable to locate method {}{}", names[0], sig);
 		}
 
-		Transformer.log().info("Unable to patch [{}]!", this.getClassName());
+		Transformer.log().info("Unable to patch [{}]!", getClassName());
 
 		return false;
 	}

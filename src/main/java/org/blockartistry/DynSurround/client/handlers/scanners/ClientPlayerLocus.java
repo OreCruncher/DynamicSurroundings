@@ -34,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ClientPlayerLocus extends ScanLocus {
-	
+
 	public static final ClientPlayerLocus INSTANCE = new ClientPlayerLocus();
 
 	@Override

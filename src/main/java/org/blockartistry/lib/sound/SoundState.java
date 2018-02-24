@@ -73,10 +73,9 @@ public enum SoundState {
 	}
 
 	/*
-	 * A sound in this state is considered terminal.  It was
-	 * processed by the SoundManager and has reached a state
-	 * where it has completed either because it ran it's
-	 * course or ended in error.
+	 * A sound in this state is considered terminal. It was processed by the
+	 * SoundManager and has reached a state where it has completed either because it
+	 * ran it's course or ended in error.
 	 */
 	public boolean isTerminal() {
 		return this.isTerminal;

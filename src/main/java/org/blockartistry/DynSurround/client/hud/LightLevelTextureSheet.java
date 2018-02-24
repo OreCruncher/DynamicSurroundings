@@ -24,9 +24,9 @@
 
 package org.blockartistry.DynSurround.client.hud;
 
+import org.blockartistry.lib.Color;
 import org.blockartistry.lib.gfx.GeneratedTexture;
 import org.blockartistry.lib.gfx.OpenGlUtil;
-import org.blockartistry.lib.Color;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -42,7 +42,7 @@ public final class LightLevelTextureSheet extends GeneratedTexture {
 	// resource pack. Need to find a programmatic way of
 	// determining this value.
 	private static final int TEXEL_PER_SIDE = 64;
-	private static final float SCALE = (float) TEXEL_PER_SIDE / 16F;
+	private static final float SCALE = TEXEL_PER_SIDE / 16F;
 	private static final int SPRITE_COUNT = 16;
 	private static final int WIDTH = SPRITE_COUNT * TEXEL_PER_SIDE;
 	private static final int HEIGHT = TEXEL_PER_SIDE;

@@ -35,7 +35,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract class GuiOverlay extends Gui {
-	
+
 	/*
 	 * Override to provide pre render logic.
 	 */
@@ -47,38 +47,38 @@ public abstract class GuiOverlay extends Gui {
 	 */
 	public void doRender(final RenderGameOverlayEvent.Post event) {
 	}
-	
+
 	/*
-	 * Override if the overlay needs to be ticked during the client
-	 * tick phase.
+	 * Override if the overlay needs to be ticked during the client tick phase.
 	 */
 	public void doTick(final int tickRef) {
-		
+
 	}
 
+	@Override
 	protected void drawGradientRect(int left, int top, int right, int bottom, int startColor, int endColor) {
-		float zLevel = 0.0F;
+		final float zLevel = 0.0F;
 
-		float f = (float) (startColor >> 24 & 255) / 255.0F;
-		float f1 = (float) (startColor >> 16 & 255) / 255.0F;
-		float f2 = (float) (startColor >> 8 & 255) / 255.0F;
-		float f3 = (float) (startColor & 255) / 255.0F;
-		float f4 = (float) (endColor >> 24 & 255) / 255.0F;
-		float f5 = (float) (endColor >> 16 & 255) / 255.0F;
-		float f6 = (float) (endColor >> 8 & 255) / 255.0F;
-		float f7 = (float) (endColor & 255) / 255.0F;
+		final float f = (startColor >> 24 & 255) / 255.0F;
+		final float f1 = (startColor >> 16 & 255) / 255.0F;
+		final float f2 = (startColor >> 8 & 255) / 255.0F;
+		final float f3 = (startColor & 255) / 255.0F;
+		final float f4 = (endColor >> 24 & 255) / 255.0F;
+		final float f5 = (endColor >> 16 & 255) / 255.0F;
+		final float f6 = (endColor >> 8 & 255) / 255.0F;
+		final float f7 = (endColor & 255) / 255.0F;
 		GlStateManager.disableTexture2D();
 		GlStateManager.enableBlend();
 		GlStateManager.disableAlpha();
 		GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 		GlStateManager.shadeModel(7425);
-		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer t = tessellator.getBuffer();
+		final Tessellator tessellator = Tessellator.getInstance();
+		final VertexBuffer t = tessellator.getBuffer();
 		t.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		t.pos((double) (left + right), (double) top, (double) zLevel).color(f1, f2, f3, f).endVertex();
-		t.pos((double) left, (double) top, (double) zLevel).color(f1, f2, f3, f).endVertex();
-		t.pos((double) left, (double) (top + bottom), (double) zLevel).color(f5, f6, f7, f4).endVertex();
-		t.pos((double) (left + right), (double) (top + bottom), (double) zLevel).color(f5, f6, f7, f4).endVertex();
+		t.pos(left + right, top, zLevel).color(f1, f2, f3, f).endVertex();
+		t.pos(left, top, zLevel).color(f1, f2, f3, f).endVertex();
+		t.pos(left, top + bottom, zLevel).color(f5, f6, f7, f4).endVertex();
+		t.pos(left + right, top + bottom, zLevel).color(f5, f6, f7, f4).endVertex();
 		tessellator.draw();
 		GlStateManager.shadeModel(7424);
 		GlStateManager.disableBlend();

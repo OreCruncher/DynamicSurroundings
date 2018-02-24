@@ -33,15 +33,15 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
-import org.blockartistry.DynSurround.client.handlers.FxHandler;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.handlers.FxHandler;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.BlockInfo;
 import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.MCHelper;
 import org.blockartistry.lib.WorldUtils;
-import org.blockartistry.lib.gui.TextPanel;
 import org.blockartistry.lib.gui.Panel.Reference;
+import org.blockartistry.lib.gui.TextPanel;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -77,9 +77,9 @@ public class InspectionHUD extends GuiOverlay {
 	private final BlockInfo.BlockInfoMutable block = new BlockInfo.BlockInfoMutable();
 
 	private static List<String> gatherOreNames(final ItemStack stack) {
-		final List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<>();
 		if (ItemStackUtil.isValidItemStack(stack))
-			for (int i : OreDictionary.getOreIDs(stack))
+			for (final int i : OreDictionary.getOreIDs(stack))
 				result.add(OreDictionary.getOreName(i));
 		return result;
 	}
@@ -127,7 +127,7 @@ public class InspectionHUD extends GuiOverlay {
 
 			final BlockMap bm = ClientRegistry.FOOTSTEPS.getBlockMap();
 			if (bm != null) {
-				final List<String> data = new ArrayList<String>();
+				final List<String> data = new ArrayList<>();
 				bm.collectData(EnvironState.getWorld(), state, pos, data);
 				if (data.size() > 0) {
 					text.add(TEXT_FOOTSTEP_ACOUSTICS);
@@ -216,7 +216,7 @@ public class InspectionHUD extends GuiOverlay {
 			this.textPanel.resetText();
 
 			if (ModOptions.logging.enableDebugLogging && isHolding()) {
-				final List<String> data = new ArrayList<String>();
+				final List<String> data = new ArrayList<>();
 				final RayTraceResult current = Minecraft.getMinecraft().objectMouseOver;
 
 				if (current != null) {

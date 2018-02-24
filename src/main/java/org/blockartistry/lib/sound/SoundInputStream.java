@@ -35,48 +35,48 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class SoundInputStream extends InputStream {
 
 	protected final InputStream stream;
-	
+
 	public SoundInputStream(@Nonnull final InputStream stream) {
 		this.stream = stream;
 	}
-	
+
 	@Override
 	public int read() throws IOException {
 		try {
 			return this.stream.read();
-		} catch(@Nonnull final Throwable t) {
+		} catch (@Nonnull final Throwable t) {
 			return -1;
 		}
 	}
-	
+
 	@Override
 	public int available() throws IOException {
 		try {
 			return this.stream.available();
-		} catch(@Nonnull final Throwable t) {
+		} catch (@Nonnull final Throwable t) {
 			return 0;
 		}
 	}
-	
+
 	@Override
 	public void close() {
 		try {
 			this.stream.close();
-		} catch(@Nonnull final Throwable t) {
+		} catch (@Nonnull final Throwable t) {
 			;
 		}
 	}
-	
+
 	@Override
 	public void mark(final int readlimit) {
 		this.stream.mark(readlimit);
 	}
-	
+
 	@Override
 	public boolean markSupported() {
 		return this.stream.markSupported();
 	}
-	
+
 	@Override
 	public void reset() throws IOException {
 		this.stream.reset();

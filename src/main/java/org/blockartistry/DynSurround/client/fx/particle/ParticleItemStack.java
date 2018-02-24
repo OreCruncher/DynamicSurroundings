@@ -61,7 +61,7 @@ public class ParticleItemStack extends ParticleAsset {
 		this.prototype = stack.copy();
 		this.model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(this.prototype, null,
 				(EntityLivingBase) null);
-		this.setScale(1.0F);
+		setScale(1.0F);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class ParticleItemStack extends ParticleAsset {
 
 	@Override
 	protected void handleRender(final float partialTicks) {
-		IBakedModel baked = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(this.model,
+		final IBakedModel baked = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(this.model,
 				ItemCameraTransforms.TransformType.GROUND, false);
 		itemRenderer.renderItem(this.prototype, baked);
 	}

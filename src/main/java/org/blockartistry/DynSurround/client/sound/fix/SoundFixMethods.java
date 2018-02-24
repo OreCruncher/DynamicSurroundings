@@ -7,6 +7,7 @@
 package org.blockartistry.DynSurround.client.sound.fix;
 
 import java.lang.reflect.Field;
+
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import paulscode.sound.Source;
 
