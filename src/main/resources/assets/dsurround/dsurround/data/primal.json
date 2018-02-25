@@ -15,6 +15,15 @@
 		"primal:lantern_redstone": "metalsubparts",
 		"primal:lantern_ignis": "metalsubparts",
 		"primal:barrel": "woodutility",
-		"primal:jackolantern": "organic_dry"
+		"primal:jackolantern": "organic_dry",
+		"primal:cineris_grass": "NOT_EMITTER",
+		"primal:cineris_grass+messy": "MESSY_GROUND",
+		"primal:cineris_grass+foliage": "brush_straw_transition",
+		"primal:cineris_bloom": "NOT_EMITTER",
+		"primal:cineris_bloom+messy": "MESSY_GROUND",
+		"primal:cineris_bloom+foliage": "brush_straw_transition",
+		"primal:nether_vine": "#vine",
+		"primal:strangle_weed": "#vine",
+		"primal:devils_tongue": "#reed"
 	}
 }
