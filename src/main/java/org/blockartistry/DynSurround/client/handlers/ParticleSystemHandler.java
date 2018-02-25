@@ -51,7 +51,7 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 
 	@Override
 	public boolean doTick(final int tick) {
-		return this.systems.size() > 0;
+		return !this.systems.isEmpty();
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 		final BlockPos max = EnvironState.getPlayerPosition().add(range, range, range);
 
 		this.systems.retainEntries((idx, system) -> {
-			if (!BlockPosHelper.contains(system.getPos(), min, max)) {
+			if (BlockPosHelper.notContains(system.getPos(), min, max)) {
 				system.setExpired();
 			} else {
 				system.onUpdate();
