@@ -24,9 +24,6 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
@@ -35,6 +32,7 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.client.handlers.scanners.BiomeScanner;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
+import org.blockartistry.lib.collections.ObjectArray;
 
 import gnu.trove.impl.Constants;
 import gnu.trove.map.hash.TObjectFloatHashMap;
@@ -67,17 +65,13 @@ public class BiomeSoundEffectsHandler extends EffectHandlerBase {
 		// Need to collect sounds from all the applicable biomes
 		// along with their weights.
 		this.biomes.getBiomes().forEachEntry((biome, w) -> {
-			final List<SoundEffect> bs = new ArrayList<>();
-			biome.findSoundMatches(bs);
-			bs.forEach(fx -> result.adjustOrPutValue(fx, w, w));
+			biome.findSoundMatches().forEach(fx -> result.adjustOrPutValue(fx, w, w));
 			return true;
 		});
 
 		// Scale the volumes in the resulting list based on the weights
 		final float area = this.biomes.getBiomeArea();
-		result.transformValues(v -> {
-			return 0.1F + 0.9F * (v / area);
-		});
+		result.transformValues(v -> 0.1F + 0.9F * (v / area));
 	}
 
 	@Override
@@ -90,7 +84,7 @@ public class BiomeSoundEffectsHandler extends EffectHandlerBase {
 		if (doBiomeSounds())
 			getBiomeSounds(sounds);
 
-		final List<SoundEffect> playerSounds = new ArrayList<>();
+		final ObjectArray<SoundEffect> playerSounds = new ObjectArray<>();
 		ClientRegistry.BIOME.PLAYER_INFO.findSoundMatches(playerSounds);
 		if (ModOptions.sound.enableBattleMusic)
 			ClientRegistry.BIOME.BATTLE_MUSIC_INFO.findSoundMatches(playerSounds);

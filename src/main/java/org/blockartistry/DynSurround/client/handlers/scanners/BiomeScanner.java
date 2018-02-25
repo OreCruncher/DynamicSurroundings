@@ -34,6 +34,7 @@ import gnu.trove.strategy.IdentityHashingStrategy;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -45,6 +46,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public final class BiomeScanner implements ITickable {
 
 	private static final int BIOME_SURVEY_RANGE = 20;
+	private static final int MAX_BIOME_AREA = (int) Math.pow(BIOME_SURVEY_RANGE * 2 + 1, 2);
+
 	private int biomeArea;
 	private final TObjectIntCustomHashMap<BiomeInfo> weights = new TObjectIntCustomHashMap<>(
 			IdentityHashingStrategy.INSTANCE);
@@ -62,7 +65,7 @@ public final class BiomeScanner implements ITickable {
 		if (this.surveyedBiome != EnvironState.getPlayerBiome()
 				|| this.surveyedDimension != EnvironState.getDimensionId()
 				|| this.surveyedPosition.compareTo(position) != 0) {
-			
+
 			this.surveyedBiome = EnvironState.getPlayerBiome();
 			this.surveyedDimension = EnvironState.getDimensionId();
 			this.surveyedPosition = position;
@@ -77,14 +80,21 @@ public final class BiomeScanner implements ITickable {
 				final World world = EnvironState.getWorld();
 				final BlockStateProvider provider = WorldUtils.getDefaultBlockStateProvider().setWorld(world);
 
+				// Collect raw biome data before mapping to BiomeInfo - saves lookups
+				final TObjectIntCustomHashMap<Biome> scratch = new TObjectIntCustomHashMap<>(
+						IdentityHashingStrategy.INSTANCE);
+
 				for (int dX = -BIOME_SURVEY_RANGE; dX <= BIOME_SURVEY_RANGE; dX++)
 					for (int dZ = -BIOME_SURVEY_RANGE; dZ <= BIOME_SURVEY_RANGE; dZ++) {
-						this.biomeArea++;
-						this.mutable.setPos(this.surveyedPosition.getX() + dX, this.surveyedPosition.getY(),
-								this.surveyedPosition.getZ() + dZ);
-						final BiomeInfo biome = ClientRegistry.BIOME.get(provider.getBiome(this.mutable));
-						this.weights.adjustOrPutValue(biome, 1, 1);
+						this.mutable.setPos(this.surveyedPosition.getX() + dX, 0, this.surveyedPosition.getZ() + dZ);
+						scratch.adjustOrPutValue(provider.getBiome(this.mutable), 1, 1);
 					}
+
+				this.biomeArea = MAX_BIOME_AREA;
+				scratch.forEachEntry((biome, w) -> {
+					this.weights.put(ClientRegistry.BIOME.get(biome), w);
+					return true;
+				});
 			}
 		}
 	}

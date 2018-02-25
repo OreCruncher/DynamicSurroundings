@@ -182,7 +182,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 				emitter.setVolumeThrottle(volume);
 				if (emitter.isFading())
 					emitter.unfade();
-				sounds.put(fx, 0F);
+				sounds.remove(fx);
 			} else if (!emitter.isFading()) {
 				emitter.fade();
 			}
@@ -192,8 +192,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		// Any sounds left in the list are new and need
 		// an emitter created.
 		sounds.forEachEntry((fx, volume) -> {
-			if (volume > 0)
-				this.emitters.put(fx, new PlayerEmitter(fx));
+			this.emitters.put(fx, new PlayerEmitter(fx));
 			return true;
 		});
 	}
@@ -366,7 +365,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 			// If it didn't process push it back a tick to avoid MC from
 			// triggering.
 			if (wc.ambienceTicks == 1)
-				wc.ambienceTicks++;
+				wc.ambienceTicks = 2;
 		}
 	}
 

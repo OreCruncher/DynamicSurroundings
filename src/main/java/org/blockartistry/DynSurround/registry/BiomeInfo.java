@@ -24,6 +24,7 @@
 package org.blockartistry.DynSurround.registry;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -42,6 +43,7 @@ import org.blockartistry.lib.BiomeUtils;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.WeightTable;
+import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.compat.ModEnvironment;
 
 import com.google.common.collect.Lists;
@@ -274,12 +276,18 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	}
 
 	@Nonnull
-	public void findSoundMatches(@Nonnull final List<SoundEffect> results) {
+	public Collection<SoundEffect> findSoundMatches() {
+		return findSoundMatches(new ObjectArray<SoundEffect>(8));
+	}
+
+	@Nonnull
+	public Collection<SoundEffect> findSoundMatches(@Nonnull final Collection<SoundEffect> results) {
 		for (int i = 0; i < this.sounds.length; i++) {
 			final SoundEffect sound = this.sounds[i];
 			if (sound.matches())
 				results.add(sound);
 		}
+		return results;
 	}
 
 	@Nullable
