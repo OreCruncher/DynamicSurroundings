@@ -91,21 +91,12 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-	// compile "codechicken:CodeChickenCore:1.10.2-2.4.0.101:deobf"
-
-    // compile "foxie:Calendar:1.10.2-1.5-10:deobf"
-    // compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
-    // Conflict with snapshot between BoP and TaN :\
-    //compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.12.2-7.0.1.2302:deobf"
-    compile "com.github.glitchfiend.biomesoplenty:ToughAsNails:1.12.2-3.1.0.73:deobf"
+    compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.12.2-7.0.1.2315:deobf"
+    compile "com.github.glitchfiend.biomesoplenty:ToughAsNails:1.12.2-3.1.0.75:deobf"
     
 	// http://dvs1.progwml6.com/files/maven/mezz/jei/
-    deobfCompile "mezz.jei:jei_1.12.2:4.8.5.146:api"
-    runtime "mezz.jei:jei_1.12.2:4.8.5.146"
-	
-	//deobfCompile "team.chisel:Chisel:MC1.11.2-0.0.11.16:api"
-	
-	//compile 'elucent:albedo:2.0-SNAPSHOT'    
+    deobfCompile "mezz.jei:jei_1.12.2:4.8.5.147:api"
+    runtime "mezz.jei:jei_1.12.2:4.8.5.147"
 }
 
 processResources
