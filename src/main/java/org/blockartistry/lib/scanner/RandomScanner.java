@@ -27,6 +27,8 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.lib.random.LCGRandom;
+
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -34,6 +36,8 @@ import net.minecraft.util.math.BlockPos;
  * selections are closer to the player.
  */
 public abstract class RandomScanner extends Scanner {
+
+	private final LCGRandom lcg = new LCGRandom();
 
 	private int playerX;
 	private int playerY;
@@ -48,8 +52,8 @@ public abstract class RandomScanner extends Scanner {
 		super(locus, name, range, blocksPerTick);
 	}
 
-	private static int randomRange(final int range, final Random rand) {
-		return rand.nextInt(range) - rand.nextInt(range);
+	private int randomRange(final int range) {
+		return this.lcg.nextInt(range) - this.lcg.nextInt(range);
 	}
 
 	@Override
@@ -63,8 +67,8 @@ public abstract class RandomScanner extends Scanner {
 	@Override
 	@Nonnull
 	protected BlockPos nextPos(@Nonnull final BlockPos.MutableBlockPos workingPos, @Nonnull final Random rand) {
-		return workingPos.setPos(this.playerX + randomRange(this.xRange, rand),
-				this.playerY + randomRange(this.yRange, rand), this.playerZ + randomRange(this.zRange, rand));
+		return workingPos.setPos(this.playerX + randomRange(this.xRange), this.playerY + randomRange(this.yRange),
+				this.playerZ + randomRange(this.zRange));
 	}
 
 }
