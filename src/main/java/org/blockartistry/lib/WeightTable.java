@@ -30,9 +30,15 @@ import javax.annotation.Nonnull;
 import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.random.XorShiftRandom;
 
-public class WeightTable<T> extends ObjectArray<WeightTable.IItem<T>> {
+/**
+ * Classic WeightTable for random weighted selection.
+ *
+ * @param <T>
+ */
+public class WeightTable<T> extends ObjectArray<WeightTable.IItem<? extends T>> {
 
-	protected final Random RANDOM = XorShiftRandom.current();
+	protected static final Random RANDOM = XorShiftRandom.current();
+
 	protected int totalWeight = 0;
 
 	public static interface IItem<T> {
@@ -42,19 +48,25 @@ public class WeightTable<T> extends ObjectArray<WeightTable.IItem<T>> {
 		T getItem();
 	}
 
+	public static interface IEntrySource<T> {
+		WeightTable.IItem<T> getEntry();
+
+		boolean matches();
+	}
+
 	public WeightTable() {
 	}
 
 	@SafeVarargs
-	public WeightTable(@Nonnull final IEntrySource<T>... src) {
+	public WeightTable(@Nonnull final IEntrySource<? extends T>... src) {
+		super(src.length);
 		for (int i = 0; i < src.length; i++)
 			if (src[i].matches())
 				this.add(src[i].getEntry());
 	}
 
 	@Override
-	public boolean add(@Nonnull final WeightTable.IItem<T> entry) {
-		assert entry != null;
+	public boolean add(@Nonnull final WeightTable.IItem<? extends T> entry) {
 		this.totalWeight += entry.getWeight();
 		return super.add(entry);
 	}
@@ -65,7 +77,7 @@ public class WeightTable<T> extends ObjectArray<WeightTable.IItem<T>> {
 		if (this.totalWeight <= 0)
 			return null;
 
-		int targetWeight = this.RANDOM.nextInt(this.totalWeight);
+		int targetWeight = RANDOM.nextInt(this.totalWeight);
 
 		WeightTable.IItem<T> selected = null;
 		int i = -1;
@@ -75,11 +87,5 @@ public class WeightTable<T> extends ObjectArray<WeightTable.IItem<T>> {
 		} while (targetWeight >= 0);
 
 		return selected.getItem();
-	}
-
-	public static interface IEntrySource<T> {
-		WeightTable.IItem<T> getEntry();
-
-		boolean matches();
 	}
 }
