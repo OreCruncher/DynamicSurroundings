@@ -87,11 +87,34 @@ public final class BlockPosHelper {
 	public static boolean contains(@Nonnull final BlockPos test, @Nonnull final BlockPos min,
 			@Nonnull final BlockPos max) {
 		return test.getX() >= min.getX() && test.getX() <= max.getX()
-				? (test.getY() >= min.getY() && test.getY() <= max.getY()
-						? test.getZ() >= min.getZ() && test.getZ() <= max.getZ()
-						: false)
-				: false;
+				//
+				&& test.getY() >= min.getY() && test.getY() <= max.getY()
+				//
+				&& test.getZ() >= min.getZ() && test.getZ() <= max.getZ();
+	}
 
+	/**
+	 * Determines if the test point is outside the volume described by two other
+	 * points. It is expected that the calling routine has ensured that the min/max
+	 * points are valid. If they are not valid the results will more than likely be
+	 * erroneous.
+	 *
+	 * @param test
+	 *            The point that is being tested
+	 * @param min
+	 *            The point describing the minimum vertex of the volume
+	 * @param max
+	 *            The point describing the maximum vertex of the volume
+	 * @return Whether the test point is outside the boundaries of the volume,
+	 *         exclusive
+	 */
+	public static boolean notContains(@Nonnull final BlockPos test, @Nonnull final BlockPos min,
+			@Nonnull final BlockPos max) {
+		return test.getX() < min.getX() || test.getX() > max.getX()
+				//
+				|| test.getY() < min.getY() || test.getY() > max.getY()
+				//
+				|| test.getZ() < min.getZ() || test.getZ() > max.getZ();
 	}
 
 	/**
