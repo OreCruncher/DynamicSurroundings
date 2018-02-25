@@ -1,0 +1,16 @@
+{
+	"footsteps": {
+		"forgecraft:ironanvil": "metalcompressed,hardmetal",
+		"forgecraft:stoneanvil": "stone,hardmetal",
+		"forgecraft:blockbreaker": "woodutility",
+		"forgecraft:pistonbellowsoak": "woodutility",
+		"forgecraft:pistonbellowsjungle": "woodutility",
+		"forgecraft:pistonbellowsspruce": "woodutility",
+		"forgecraft:pistonbellowsbirch": "woodutility",
+		"forgecraft:pistonbellowsdarkoak": "woodutility",
+		"forgecraft:pistonbellowsacacia": "woodutility",
+		"forgecraft:yewstave": "woodutility",
+		"forgecraft:castingform": "woodutility",
+		"forgecraft:castingblock": "sandstone"
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"footsteps": {
+		"primal:rush": "#reed",
+		"primal:brickform": "woodutility",
+		"primal:pitfall": "metalbar",
+		"primal:drying_rack": "woodutility",
+		"primal:shelf_half": "wood",
+		"primal:worktable_slab": "woodutility",
+		"primal:worktable_shelf": "wood",
+		"primal:dust_bin": "woodutility",
+		"primal:storage_crate": "woodutility,metalsubparts",
+		"primal:lantern_empty": "metalsubparts",
+		"primal:lantern_torch": "metalsubparts",
+		"primal:lantern_nether": "metalsubparts",
+		"primal:lantern_redstone": "metalsubparts",
+		"primal:lantern_ignis": "metalsubparts",
+		"primal:barrel": "woodutility",
+		"primal:jackolantern": "organic_dry"
+	}
+}
