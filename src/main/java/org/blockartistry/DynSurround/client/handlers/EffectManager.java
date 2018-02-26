@@ -48,7 +48,6 @@ public class EffectManager {
 
 	private final ObjectArray<EffectHandlerBase> effectHandlers = new ObjectArray<>();
 	private TimerEMA computeTime;
-	private boolean isReadyToGo;
 
 	private EffectManager() {
 	}
@@ -128,11 +127,8 @@ public class EffectManager {
 		if (event.side == Side.SERVER || event.phase == Phase.END || Minecraft.getMinecraft().isGamePaused())
 			return;
 
-		if (!this.isReadyToGo) {
-			this.isReadyToGo = checkReady(event);
-			if (!this.isReadyToGo)
-				return;
-		}
+		if (!checkReady(event))
+			return;
 
 		final long start = System.nanoTime();
 
