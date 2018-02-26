@@ -28,7 +28,10 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.registry.DimensionInfo;
 import org.blockartistry.lib.Color;
+import org.blockartistry.lib.gfx.OpenGlState;
 import org.blockartistry.lib.random.XorShiftRandom;
 import org.lwjgl.opengl.GL11;
 
@@ -142,7 +145,16 @@ public final class AuroraClassic implements IAurora {
 		final Tessellator tess = Tessellator.getInstance();
 		final VertexBuffer renderer = tess.getBuffer();
 
-		final double tranY = AuroraUtils.PLAYER_FIXED_Y_OFFSET;
+		final DimensionInfo dimInfo = EnvironState.getDimensionInfo();
+		double heightScale = 1D;
+		if (mc.thePlayer.posY > dimInfo.getSeaLevel()) {
+			final double limit = (dimInfo.getSkyHeight() + dimInfo.getCloudHeight()) / 2D;
+			final double d1 = limit - dimInfo.getSeaLevel();
+			final double d2 = mc.thePlayer.posY - dimInfo.getSeaLevel();
+			heightScale = (d1 - d2) / d1;
+		}
+
+		final double tranY = AuroraUtils.PLAYER_FIXED_Y_OFFSET * heightScale;
 
 		final double tranX = mc.thePlayer.posX
 				- (mc.thePlayer.lastTickPosX + (mc.thePlayer.posX - mc.thePlayer.lastTickPosX) * partialTick);
@@ -154,18 +166,16 @@ public final class AuroraClassic implements IAurora {
 		final Color fade = getFadeColor();
 		final double zero = 0.0D;
 
-		GlStateManager.pushMatrix();
-		GlStateManager.pushAttrib();
-
+		final OpenGlState glState = OpenGlState.push();
+		
 		GlStateManager.translate(tranX, tranY, tranZ);
 		GlStateManager.scale(0.5D, 8.0D, 0.5D);
-		GlStateManager.disableTexture2D();
-		GlStateManager.disableFog();
-		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		GlStateManager.disableLighting();
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
 				GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.disableTexture2D();
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		GlStateManager.disableAlpha();
 		GlStateManager.disableCull();
 		GlStateManager.depthMask(false);
@@ -233,19 +243,7 @@ public final class AuroraClassic implements IAurora {
 
 		tess.draw();
 
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-				GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-				GlStateManager.DestFactor.ZERO);
-		GlStateManager.shadeModel(GL11.GL_FLAT);
-		GlStateManager.depthMask(true);
-		GlStateManager.enableCull();
-		GlStateManager.enableFog();
-		GlStateManager.enableTexture2D();
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-
-		GlStateManager.disableBlend();
-		GlStateManager.popAttrib();
-		GlStateManager.popMatrix();
+		OpenGlState.pop(glState);
 	}
 
 }
