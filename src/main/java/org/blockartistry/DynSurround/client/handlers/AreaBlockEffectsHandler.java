@@ -45,8 +45,10 @@ public final class AreaBlockEffectsHandler extends EffectHandlerBase {
 		return instance;
 	}
 
-	protected final RandomBlockEffectScanner effects = new RandomBlockEffectScanner(
-			ModOptions.general.specialEffectRange);
+	protected final RandomBlockEffectScanner nearEffects = new RandomBlockEffectScanner(
+			RandomBlockEffectScanner.NEAR_RANGE);
+	protected final RandomBlockEffectScanner farEffects = new RandomBlockEffectScanner(
+			RandomBlockEffectScanner.FAR_RANGE);
 	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(
 			ModOptions.general.specialEffectRange);
 	protected final BiomeScanner biomes = new BiomeScanner();
@@ -57,7 +59,8 @@ public final class AreaBlockEffectsHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-		this.effects.update();
+		this.nearEffects.update();
+		this.farEffects.update();
 		this.alwaysOn.update();
 	}
 

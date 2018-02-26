@@ -40,22 +40,29 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * Modeled after WorldClient::doVoidFogParticles() which handles the random
+ * block update client side as well as barrier particles.
+ *
+ * The routine iterates 667 times. During each iteration it creates particles up
+ * to a max of 16 blocks, and then up to a max of 32 blocks. There is some
+ * overlap with the 16 block range when generating the 32 block version, but
+ * since the iteration has been reduce to 667 (from 1000 in MC 1.7.10) it should
+ * compensate.
+ */
 @SideOnly(Side.CLIENT)
 public class RandomBlockEffectScanner extends RandomScanner {
 
-	// Vanilla had a range of 16 in doVoidParticles() and it iterated 1000
-	// times.
-	//
-	// The new doVoidParticles() in 1.10x is different. Loops less, but has two
-	// ranges it works (near and far). Not going to change it as the data in the
-	// config files it tuned to this existing behavior.
-	private static final float RATIO = 1000.0F / (16.0F * 16.0F * 16.0F);
+	private static final int ITERATION_COUNT = 667;
+
+	public static final int NEAR_RANGE = 16;
+	public static final int FAR_RANGE = 32;
 
 	protected BlockProfile profile = null;
 	protected IBlockState lastState = null;
 
 	public RandomBlockEffectScanner(final int range) {
-		super(ClientPlayerLocus.INSTANCE, "RandomBlockEffectScanner", range, (int) (range * range * range * RATIO));
+		super(ClientPlayerLocus.INSTANCE, "RandomBlockScanner: " + range, range, ITERATION_COUNT);
 		setLogger(DSurround.log());
 	}
 
