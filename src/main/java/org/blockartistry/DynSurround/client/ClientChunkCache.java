@@ -29,6 +29,7 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.lib.chunk.DynamicChunkCache;
 import org.blockartistry.lib.chunk.IBlockAccessEx;
+import org.blockartistry.lib.math.TimerEMA;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -53,6 +54,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public final class ClientChunkCache {
 
 	public static final IBlockAccessEx INSTANCE = new DynamicChunkCache();
+	public static final TimerEMA timing = new TimerEMA("Chunk Cache");
 
 	// Figure the block range from the player. The area scanners are up to 32
 	// blocks, but the player may have a configured effect range that is
@@ -69,11 +71,13 @@ public final class ClientChunkCache {
 		if (event.side == Side.CLIENT && event.phase == Phase.START) {
 			final EntityPlayer player = Minecraft.getMinecraft().player;
 			if (player != null) {
+				final long start = System.nanoTime();
 				final int range = range();
 				final BlockPos pos = new BlockPos(player.getPosition());
 				final BlockPos min = pos.add(-range, -range, -range);
 				final BlockPos max = pos.add(range, range, range);
 				((DynamicChunkCache) INSTANCE).update(player.getEntityWorld(), min, max);
+				timing.update(System.nanoTime() - start);
 			} else {
 				// If there is no player reference wipe the cache to ensure resources
 				// are freed.
