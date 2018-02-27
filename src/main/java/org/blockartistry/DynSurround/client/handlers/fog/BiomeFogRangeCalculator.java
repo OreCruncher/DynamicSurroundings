@@ -29,8 +29,8 @@ import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
-import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.lib.chunk.BlockStateProvider;
 import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.entity.EntityLivingBase;

@@ -28,8 +28,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.lib.chunk.BlockStateProvider;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;

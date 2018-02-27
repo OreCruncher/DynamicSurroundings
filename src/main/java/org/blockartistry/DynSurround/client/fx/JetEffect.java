@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
 import org.blockartistry.DynSurround.client.handlers.ParticleSystemHandler;
 import org.blockartistry.DynSurround.expression.ExpressionEngine;
-import org.blockartistry.lib.BlockStateProvider;
+import org.blockartistry.lib.chunk.BlockStateProvider;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
