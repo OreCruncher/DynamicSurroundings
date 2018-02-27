@@ -26,12 +26,13 @@ package org.blockartistry.DynSurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.lib.WorldUtils;
-import org.blockartistry.lib.chunk.BlockStateProvider;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 import org.blockartistry.lib.gfx.ParticleHelper;
 
 import net.minecraft.block.material.Material;
@@ -78,7 +79,7 @@ public class ParticleDripOverride extends ParticleDrip {
 			} else if (this.firstTime) {
 
 				this.firstTime = false;
-				final BlockStateProvider provider = WorldUtils.getDefaultBlockStateProvider().setWorld(this.world);
+				final IBlockAccessEx provider = ClientChunkCache.INSTANCE;
 
 				// If the particle is not positioned in an air block kill it
 				// right away. No sense wasting time with it.

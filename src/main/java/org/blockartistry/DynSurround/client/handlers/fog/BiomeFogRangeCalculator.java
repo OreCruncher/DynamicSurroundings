@@ -25,17 +25,16 @@ package org.blockartistry.DynSurround.client.handlers.fog;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
-import org.blockartistry.lib.WorldUtils;
-import org.blockartistry.lib.chunk.BlockStateProvider;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -75,8 +74,7 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 
 		final EntityLivingBase player = EnvironState.getPlayer();
-		final World world = EnvironState.getWorld();
-		final BlockStateProvider provider = WorldUtils.getDefaultBlockStateProvider().setWorld(world);
+		final IBlockAccessEx provider = ClientChunkCache.INSTANCE;
 		final int playerX = MathStuff.floor(player.posX);
 		final int playerZ = MathStuff.floor(player.posZ);
 		final float rainStr = Weather.getIntensityLevel();
