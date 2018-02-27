@@ -29,8 +29,6 @@ import java.lang.ref.WeakReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.weather.Weather;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Biomes;
@@ -272,38 +270,4 @@ public class BlockStateProvider implements IBlockAccessEx {
 		return state.isSideSolid(getWorld(), pos, side);
 	}
 
-	@Override
-	public boolean isRainingAt(@Nonnull final BlockPos pos) {
-		if (!Weather.isRaining()) {
-			return false;
-		} else if (!canSeeSky(pos)) {
-			return false;
-		} else if (getPrecipitationHeight(pos).getY() > pos.getY()) {
-			return false;
-		} else {
-			final Biome biome = getBiome(pos);
-			if (biome.getEnableSnow()) {
-				return false;
-			} else {
-				return canSnowAt(pos, false) ? false : biome.canRain();
-			}
-		}
-	}
-
-	@Override
-	public boolean canSeeSky(@Nonnull final BlockPos pos) {
-		return resolveChunk(pos).canSeeSky(pos);
-	}
-
-	@Override
-	public boolean canSnowAt(@Nonnull final BlockPos pos, boolean checkLight) {
-		final World w = getWorld();
-		return w == null ? false : w.provider.canSnowAt(pos, checkLight);
-	}
-
-	@Override
-	public boolean canBlockFreeze(BlockPos pos, boolean noWaterAdjacent) {
-		final World w = getWorld();
-		return w == null ? false : w.provider.canBlockFreeze(pos, noWaterAdjacent);
-	}
 }

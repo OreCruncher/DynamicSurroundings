@@ -39,11 +39,6 @@ public class SeasonInfoNether extends SeasonInfo {
 	}
 
 	@Override
-	public String getSeasonName(@Nonnull final World world) {
-		return "hell";
-	}
-
-	@Override
 	@Nonnull
 	public BlockPos getPrecipitationHeight(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return new BlockPos(pos.getX(), 0, pos.getZ());

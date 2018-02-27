@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.registry.season;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.SeasonType;
 import org.blockartistry.DynSurround.registry.TemperatureRating;
@@ -37,7 +38,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import toughasnails.api.season.Season;
 import toughasnails.api.season.SeasonHelper;
-import toughasnails.api.season.WorldHooks;
 import toughasnails.api.stat.capability.ITemperature;
 import toughasnails.api.temperature.TemperatureHelper;
 
@@ -80,11 +80,9 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 
 	@Override
 	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		final Biome biome = world.getBiome(pos);
-
+		final Biome biome = ClientChunkCache.INSTANCE.getBiome(pos);
 		if (biome.getTemperature() <= 0.7F && getSeasonData(world) == Season.WINTER)
 			return 0.0F;
-
 		return biome.getFloatTemperature(pos);
 	}
 
@@ -111,36 +109,4 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 		}
 	}
 
-	/*
-	 * Indicates if rain is striking at the specified position.
-	 */
-	@Override
-	public boolean isRainingAt(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return WorldHooks.isRainingAtInSeason(world, pos, getSeasonData(world));
-	}
-
-	/*
-	 * Indicates if it is cold enough that water can freeze. Could result in snow or
-	 * frozen ice. Does not take into account any other environmental factors - just
-	 * whether its cold enough. If environmental sensitive versions are needed look
-	 * at canBlockFreeze() and canSnowAt().
-	 */
-	@Override
-	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getTemperature(world, pos) < 0.15F;
-	}
-
-	/*
-	 * Essentially snow layer stuff.
-	 */
-	@Override
-	public boolean canSnowAt(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return WorldHooks.canSnowAtInSeason(world, pos, true, getSeasonData(world));
-	}
-
-	@Override
-	public boolean canBlockFreeze(@Nonnull final World world, @Nonnull final BlockPos pos,
-			final boolean noWaterAdjacent) {
-		return WorldHooks.canBlockFreezeInSeason(world, pos, noWaterAdjacent, getSeasonData(world));
-	}
 }
