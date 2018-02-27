@@ -28,7 +28,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.lib.chunk.BlockStateProvider;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -51,7 +51,7 @@ public class FireFlyEffect extends BlockEffect {
 	}
 
 	@Override
-	public void doEffect(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+	public void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		final AxisAlignedBB box = state.getBoundingBox(provider.getWorld(), pos);
 		final Vec3d loc = box.getCenter();

@@ -30,7 +30,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleFireJet;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
-import org.blockartistry.lib.chunk.BlockStateProvider;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -52,7 +52,7 @@ public class FireJetEffect extends JetEffect {
 	}
 
 	@Override
-	public boolean canTrigger(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		final boolean isAirBlock = provider.getBlockState(pos.getX(), pos.getY() + 1, pos.getZ())
 				.getMaterial() == Material.AIR;
@@ -60,7 +60,7 @@ public class FireJetEffect extends JetEffect {
 	}
 
 	@Override
-	public void doEffect(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+	public void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		final int lavaBlocks = countBlocks(provider, pos, state, -1);
 		final double spawnHeight = jetSpawnHeight(state, pos);

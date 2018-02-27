@@ -40,7 +40,7 @@ import org.blockartistry.DynSurround.registry.SoundMetadata;
 import org.blockartistry.lib.WeightTable;
 import org.blockartistry.lib.WeightTable.IEntrySource;
 import org.blockartistry.lib.WeightTable.IItem;
-import org.blockartistry.lib.chunk.BlockStateProvider;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 import org.blockartistry.lib.sound.BasicSound;
 
 import net.minecraft.block.state.IBlockState;
@@ -198,13 +198,13 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	}
 
 	@Override
-	public boolean canTrigger(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		return true;
 	}
 
 	@Override
-	public void doEffect(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+	public void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		SoundEffectHandler.INSTANCE.playSoundAt(pos, this, 0);
 	}

@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleWaterSplash;
 import org.blockartistry.lib.WorldUtils;
-import org.blockartistry.lib.chunk.BlockStateProvider;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.block.BlockDynamicLiquid;
@@ -70,7 +70,7 @@ public class WaterSplashJetEffect extends JetEffect {
 		return state.getBlock() instanceof BlockLiquid;
 	}
 
-	private static boolean isUnboundedLiquid(final BlockStateProvider provider, final BlockPos pos) {
+	private static boolean isUnboundedLiquid(final IBlockAccessEx provider, final BlockPos pos) {
 		for (int i = 0; i < cardinal_offsets.length; i++) {
 			final BlockPos tp = pos.add(cardinal_offsets[i]);
 			final IBlockState state = provider.getBlockState(tp);
@@ -84,7 +84,7 @@ public class WaterSplashJetEffect extends JetEffect {
 		return false;
 	}
 
-	private int liquidBlockCount(final BlockStateProvider provider, final BlockPos pos) {
+	private int liquidBlockCount(final IBlockAccessEx provider, final BlockPos pos) {
 		final BlockPos.MutableBlockPos workBlock = new BlockPos.MutableBlockPos(pos);
 
 		int count;
@@ -97,7 +97,7 @@ public class WaterSplashJetEffect extends JetEffect {
 		return MathStuff.clamp(count, 0, MAX_STRENGTH);
 	}
 
-	public static boolean isValidSpawnBlock(final BlockStateProvider provider, final BlockPos pos) {
+	public static boolean isValidSpawnBlock(final IBlockAccessEx provider, final BlockPos pos) {
 		if (provider.getBlockState(pos).getMaterial() != Material.WATER)
 			return false;
 		if (isUnboundedLiquid(provider, pos)) {
@@ -110,13 +110,13 @@ public class WaterSplashJetEffect extends JetEffect {
 	}
 
 	@Override
-	public boolean canTrigger(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		return isValidSpawnBlock(provider, pos) && super.canTrigger(provider, state, pos, random);
 	}
 
 	@Override
-	public void doEffect(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+	public void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 
 		final int strength = liquidBlockCount(provider, pos);

@@ -1,4 +1,5 @@
-/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/*
+ * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -20,35 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.blockartistry.lib.chunk;
 
-package org.blockartistry.lib.scanner;
+import javax.annotation.Nonnull;
 
-import javax.annotation.Nullable;
-
-import org.blockartistry.lib.chunk.IBlockAccessEx;
-
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
-public abstract class ScanLocus {
+public interface IBlockAccessEx extends IBlockAccess {
 
-	public ScanLocus() {
+	int reference();
+	
+	World getWorld();
 
+	IBlockState getBlockState(final int x, final int y, final int z);
+
+	int getLightFor(@Nonnull final EnumSkyBlock type, @Nonnull final BlockPos pos);
+
+	BlockPos getTopSolidOrLiquidBlock(@Nonnull final BlockPos pos);
+
+	boolean isAvailable(final int x, final int z);
+
+	default boolean isAvailable(@Nonnull final BlockPos pos) {
+		return isAvailable(pos.getX(), pos.getZ());
 	}
-
-	public abstract IBlockAccessEx getWorld();
-
-	public abstract BlockPos getCenter();
-
-	public int getReference() {
-		return getWorld().reference();
-	}
-
-	@Override
-	public boolean equals(@Nullable final Object o) {
-		if (this == o)
-			return true;
-		final ScanLocus sl = (ScanLocus) o;
-		return getWorld() == sl.getWorld() && getCenter().equals(sl.getCenter());
-	}
-
 }

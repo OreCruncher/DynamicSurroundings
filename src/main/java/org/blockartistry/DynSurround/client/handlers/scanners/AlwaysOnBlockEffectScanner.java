@@ -32,7 +32,9 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.DynSurround.registry.BlockProfile;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 import org.blockartistry.lib.scanner.CuboidScanner;
+import org.blockartistry.lib.scanner.ScanLocus;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -53,8 +55,8 @@ public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 	protected BlockProfile profile = null;
 	protected IBlockState lastState = null;
 
-	public AlwaysOnBlockEffectScanner(final int range) {
-		super(ClientPlayerLocus.INSTANCE, "AlwaysOnBlockEffectScanner", range, 0);
+	public AlwaysOnBlockEffectScanner(@Nonnull final ScanLocus locus, final int range) {
+		super(locus, "AlwaysOnBlockEffectScanner", range, 0);
 		setLogger(DSurround.log());
 	}
 
@@ -71,11 +73,12 @@ public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 
 	@Override
 	public void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final Random rand) {
+		final IBlockAccessEx provider = this.locus.getWorld();
 		final BlockEffect[] effects = this.profile.getAlwaysOnEffects();
 		for (int i = 0; i < effects.length; i++) {
 			final BlockEffect be = effects[i];
-			if (be.canTrigger(this.blockProvider, state, pos, rand))
-				be.doEffect(this.blockProvider, state, pos, rand);
+			if (be.canTrigger(provider, state, pos, rand))
+				be.doEffect(provider, state, pos, rand);
 		}
 	}
 

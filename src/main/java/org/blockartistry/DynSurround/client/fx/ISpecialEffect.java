@@ -28,17 +28,17 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.lib.chunk.BlockStateProvider;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 
 public interface ISpecialEffect {
 
-	public boolean canTrigger(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random);
 
-	public void doEffect(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+	public void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random);
 
 }

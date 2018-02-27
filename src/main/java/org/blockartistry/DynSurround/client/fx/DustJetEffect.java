@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleDustJet;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
 import org.blockartistry.lib.chunk.BlockStateProvider;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -51,14 +52,14 @@ public class DustJetEffect extends JetEffect {
 	}
 
 	@Override
-	public boolean canTrigger(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		return provider.getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()) == BlockStateProvider.AIR_STATE
 				&& super.canTrigger(provider, state, pos, random);
 	}
 
 	@Override
-	public void doEffect(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+	public void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		final ParticleJet effect = new ParticleDustJet(2, provider.getWorld(), pos.getX() + 0.5D, pos.getY() - 0.2D,
 				pos.getZ() + 0.5D, state);

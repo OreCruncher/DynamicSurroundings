@@ -24,22 +24,21 @@
 
 package org.blockartistry.DynSurround.client.handlers.scanners;
 
+import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 import org.blockartistry.lib.scanner.ScanLocus;
 
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ClientPlayerLocus extends ScanLocus {
 
-	public static final ClientPlayerLocus INSTANCE = new ClientPlayerLocus();
-
 	@Override
-	public World getWorld() {
-		return EnvironState.getWorld();
+	public IBlockAccessEx getWorld() {
+		return ClientChunkCache.INSTANCE;
 	}
 
 	@Override
