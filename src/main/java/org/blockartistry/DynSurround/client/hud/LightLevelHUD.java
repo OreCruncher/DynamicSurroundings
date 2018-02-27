@@ -28,10 +28,11 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.Color;
-import org.blockartistry.lib.chunk.BlockStateProvider;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.gfx.OpenGlState;
 import org.blockartistry.lib.gfx.OpenGlUtil;
@@ -128,7 +129,6 @@ public final class LightLevelHUD extends GuiOverlay {
 
 	public static boolean showHUD = false;
 
-	private static final BlockStateProvider blocks = new BlockStateProvider();
 	private static final int ALLOCATION_SIZE = 2048;
 	private static final ObjectArray<LightCoord> lightLevels = new ObjectArray<>(ALLOCATION_SIZE);
 	private static final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
@@ -215,7 +215,7 @@ public final class LightLevelHUD extends GuiOverlay {
 		final int originZ = MathStuff.floor(z) - (rangeXZ / 2);
 		final int originY = MathStuff.floor(y) - (rangeY - 3);
 
-		blocks.setWorld(EnvironState.getWorld());
+		final IBlockAccessEx blocks = ClientChunkCache.INSTANCE;
 
 		for (int dX = 0; dX < rangeXZ; dX++)
 			for (int dZ = 0; dZ < rangeXZ; dZ++) {

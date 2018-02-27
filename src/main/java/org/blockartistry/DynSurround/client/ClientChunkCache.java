@@ -54,16 +54,22 @@ public final class ClientChunkCache {
 
 	public static final IBlockAccessEx INSTANCE = new DynamicChunkCache();
 
+	// Figure the block range from the player. The area scanners are up to 32
+	// blocks, but the player may have a configured effect range that is
+	// greater. Add a couple blocks because some of the effects look at
+	// neighbor blocks.
+	private static int range() {
+		int r = Math.max(32, ModOptions.general.specialEffectRange);
+		r = Math.max(r, ModOptions.lightlevel.llBlockRange);
+		return r + 2;
+	}
+
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void clientTick(@Nonnull final TickEvent.ClientTickEvent event) {
 		if (event.side == Side.CLIENT && event.phase == Phase.START) {
 			final EntityPlayer player = Minecraft.getMinecraft().player;
 			if (player != null) {
-				// Figure the block range from the player. The area scanners are up to 32
-				// blocks, but the player may have a configured effect range that is
-				// greater. Add a couple blocks because some of the effects look at
-				// neighbor blocks.
-				final int range = Math.max(32, ModOptions.general.specialEffectRange) + 2;
+				final int range = range();
 				final BlockPos pos = new BlockPos(player.getPosition());
 				final BlockPos min = pos.add(-range, -range, -range);
 				final BlockPos max = pos.add(range, range, range);
