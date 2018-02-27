@@ -97,38 +97,17 @@ public final class SeasonRegistry extends Registry {
 	}
 
 	@Nonnull
-	public String getSeasonName(@Nonnull final World world) {
-		return getData(world).getSeasonName(world);
-	}
-
-	@Nonnull
 	public BlockPos getPrecipitationHeight(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getData(world).getPrecipitationHeight(world, pos);
-	}
-
-	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getData(world).getTemperature(world, pos);
 	}
 
 	/*
 	 * Indicates if it is cold enough that water can freeze. Could result in snow or
 	 * frozen ice. Does not take into account any other environmental factors - just
-	 * whether its cold enough. If environmental sensitive versions are needed look
-	 * at canBlockFreeze() and canSnowAt().
+	 * whether its cold enough.
 	 */
 	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getData(world).canWaterFreeze(world, pos);
 	}
 
-	/*
-	 * Essentially snow layer stuff.
-	 */
-	public boolean canSnowAt(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getData(world).canSnowAt(world, pos);
-	}
-
-	public boolean canBlockFreeze(@Nonnull final World world, @Nonnull final BlockPos pos,
-			final boolean noWaterAdjacent) {
-		return getData(world).canBlockFreeze(world, pos, noWaterAdjacent);
-	}
 }

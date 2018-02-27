@@ -134,45 +134,4 @@ public interface IBlockAccessEx extends IBlockAccess {
 	@Nonnull
 	BlockPos getPrecipitationHeight(@Nonnull final BlockPos pos);
 
-	/**
-	 * Determines if rainfall (precipitation) is occurring at the specified
-	 * BlockPos.
-	 * 
-	 * @param pos
-	 *            Position to check for rainfall
-	 * @return true if it is raining at the specified position, false otherwise
-	 */
-	boolean isRainingAt(@Nonnull final BlockPos pos);
-
-	/**
-	 * Determines if the sky can be seen from the specified location
-	 * 
-	 * @param pos
-	 *            Position to check sky visibility from
-	 * @return true if the sky can be seen, false otherwise
-	 */
-	boolean canSeeSky(@Nonnull final BlockPos pos);
-
-	/**
-	 * Indicates if snow can fall at the specified location.
-	 * 
-	 * @param pos
-	 *            Position to check whether snow can fall
-	 * @param checkLight
-	 *            Flag indicating to check the light levels for snow
-	 * @return true if snowfall can occur, false otherwise
-	 */
-	boolean canSnowAt(@Nonnull final BlockPos pos, final boolean checkLight);
-
-	/**
-	 * Checks whether water can freeze at the specified location
-	 * 
-	 * @param pos
-	 *            Block location to check for freeze
-	 * @param noWaterAdjacent
-	 *            Flag indicating whether there is water adjacent or not
-	 * @return true if water can feeze, false otherwise
-	 */
-	boolean canBlockFreeze(@Nonnull final BlockPos pos, final boolean noWaterAdjacent);
-
 }

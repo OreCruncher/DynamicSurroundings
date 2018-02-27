@@ -28,10 +28,9 @@ import java.util.Arrays;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.weather.Weather;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -197,7 +196,8 @@ public class DynamicChunkCache implements IBlockAccessEx {
 	@Override
 	@Nonnull
 	public Biome getBiome(@Nonnull final BlockPos pos) {
-		return resolveChunk(pos).getBiome(pos, this.world.getBiomeProvider());
+		final World w = getWorld();
+		return w == null ? Biomes.PLAINS : resolveChunk(pos).getBiome(pos, this.world.getBiomeProvider());
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -305,41 +305,6 @@ public class DynamicChunkCache implements IBlockAccessEx {
 	@Nonnull
 	public BlockPos getPrecipitationHeight(@Nonnull final BlockPos pos) {
 		return resolveChunk(pos).getPrecipitationHeight(pos);
-	}
-
-	@Override
-	public boolean canSeeSky(@Nonnull final BlockPos pos) {
-		return resolveChunk(pos).canSeeSky(pos);
-	}
-
-	@Override
-	public boolean canSnowAt(@Nonnull final BlockPos pos, final boolean checkLight) {
-		final World w = getWorld();
-		return w == null ? false : w.provider.canSnowAt(pos, checkLight);
-	}
-
-	@Override
-	public boolean isRainingAt(@Nonnull final BlockPos pos) {
-		if (!Weather.isRaining()) {
-			return false;
-		} else if (!canSeeSky(pos)) {
-			return false;
-		} else if (getPrecipitationHeight(pos).getY() > pos.getY()) {
-			return false;
-		} else {
-			final Biome biome = getBiome(pos);
-			if (biome.getEnableSnow()) {
-				return false;
-			} else {
-				return canSnowAt(pos, false) ? false : biome.canRain();
-			}
-		}
-	}
-
-	@Override
-	public boolean canBlockFreeze(@Nonnull final BlockPos pos, final boolean noWaterAdjacent) {
-		final World w = getWorld();
-		return w == null ? false : w.provider.canBlockFreeze(pos, noWaterAdjacent);
 	}
 
 	@Override

@@ -54,11 +54,6 @@ public class SeasonInfo {
 	}
 
 	@Nonnull
-	public String getSeasonName(@Nonnull final World world) {
-		return getSeasonType(world).getValue();
-	}
-
-	@Nonnull
 	public TemperatureRating getPlayerTemperature(@Nonnull final World world) {
 		return getBiomeTemperature(world, EnvironState.getPlayerPosition());
 	}
@@ -82,13 +77,6 @@ public class SeasonInfo {
 	}
 
 	/*
-	 * Indicates if rain is striking at the specified position.
-	 */
-	public boolean isRainingAt(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return ClientChunkCache.INSTANCE.isRainingAt(pos);
-	}
-
-	/*
 	 * Indicates if it is cold enough that water can freeze. Could result in snow or
 	 * frozen ice. Does not take into account any other environmental factors - just
 	 * whether its cold enough. If environmental sensitive versions are needed look
@@ -96,18 +84,6 @@ public class SeasonInfo {
 	 */
 	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getTemperature(world, pos) < 0.15F;
-	}
-
-	/*
-	 * Essentially snow layer stuff.
-	 */
-	public boolean canSnowAt(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return ClientChunkCache.INSTANCE.canSnowAt(pos, false);
-	}
-
-	public boolean canBlockFreeze(@Nonnull final World world, @Nonnull final BlockPos pos,
-			final boolean noWaterAdjacent) {
-		return ClientChunkCache.INSTANCE.canBlockFreeze(pos, noWaterAdjacent);
 	}
 
 	@Override
