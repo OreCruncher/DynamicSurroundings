@@ -29,7 +29,7 @@ import java.util.concurrent.Callable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.lib.BlockStateProvider;
+import org.blockartistry.lib.chunk.BlockStateProvider;
 import org.blockartistry.lib.logging.ModLog;
 import org.blockartistry.lib.random.XorShiftRandom;
 

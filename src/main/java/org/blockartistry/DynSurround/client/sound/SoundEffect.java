@@ -37,10 +37,10 @@ import org.blockartistry.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.DynSurround.data.xface.SoundType;
 import org.blockartistry.DynSurround.expression.ExpressionEngine;
 import org.blockartistry.DynSurround.registry.SoundMetadata;
-import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.WeightTable;
 import org.blockartistry.lib.WeightTable.IEntrySource;
 import org.blockartistry.lib.WeightTable.IItem;
+import org.blockartistry.lib.chunk.BlockStateProvider;
 import org.blockartistry.lib.sound.BasicSound;
 
 import net.minecraft.block.state.IBlockState;

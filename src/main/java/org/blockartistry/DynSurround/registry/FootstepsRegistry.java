@@ -60,9 +60,9 @@ import org.blockartistry.DynSurround.data.xface.ModConfigurationFile.ForgeEntry;
 import org.blockartistry.DynSurround.data.xface.VariatorConfig;
 import org.blockartistry.DynSurround.packs.ResourcePacks;
 import org.blockartistry.DynSurround.packs.ResourcePacks.Pack;
-import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.MCHelper;
+import org.blockartistry.lib.chunk.BlockStateProvider;
 import org.blockartistry.lib.collections.IdentityHashSet;
 
 import net.minecraft.block.Block;
