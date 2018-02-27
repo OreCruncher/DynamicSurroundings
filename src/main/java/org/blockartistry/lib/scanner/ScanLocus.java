@@ -40,7 +40,7 @@ public abstract class ScanLocus {
 	public abstract BlockPos getCenter();
 
 	public int getReference() {
-		return getWorld().reference();
+		return getWorld().worldReference();
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public abstract class ScanLocus {
 		if (this == o)
 			return true;
 		final ScanLocus sl = (ScanLocus) o;
-		return getWorld() == sl.getWorld() && getCenter().equals(sl.getCenter());
+		return getWorld().getWorld() == sl.getWorld().getWorld() && getCenter().equals(sl.getCenter());
 	}
 
 }

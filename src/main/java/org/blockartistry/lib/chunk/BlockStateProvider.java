@@ -60,7 +60,7 @@ public class BlockStateProvider implements IBlockAccessEx {
 	protected final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 	protected WeakReference<World> world;
 	protected WeakReference<Chunk> chunk = NULL_CHUNK;
-	protected int generation;
+	protected int worldRef;
 
 	public BlockStateProvider() {
 		this(null);
@@ -96,7 +96,7 @@ public class BlockStateProvider implements IBlockAccessEx {
 	@Nonnull
 	public BlockStateProvider setWorld(@Nonnull final World world) {
 		if (getWorld() != world) {
-			this.generation++;
+			this.worldRef++;
 			this.world = new WeakReference<>(world);
 			this.chunk = NULL_CHUNK;
 		}
@@ -105,7 +105,12 @@ public class BlockStateProvider implements IBlockAccessEx {
 
 	@Override
 	public int reference() {
-		return this.generation;
+		return 0;
+	}
+	
+	@Override
+	public int worldReference() {
+		return this.worldRef;
 	}
 	
 	@Override
@@ -206,7 +211,7 @@ public class BlockStateProvider implements IBlockAccessEx {
 
 	@SideOnly(Side.CLIENT)
 	private int getLightForExt(@Nonnull final EnumSkyBlock type, @Nonnull final BlockPos pos) {
-		if (type == EnumSkyBlock.SKY && getWorld().provider.hasNoSky) {
+		if (type == EnumSkyBlock.SKY && getWorld().provider.getHasNoSky()) {
 			return 0;
 		} else if (pos.getY() >= 0 && pos.getY() < 256) {
 			if (getBlockState(pos).useNeighborBrightness()) {

@@ -41,7 +41,8 @@ public class DynamicChunkCache implements IBlockAccessEx {
 	protected int sizeX;
 	protected int sizeZ;
 
-	protected int generation;
+	protected int ref;
+	protected int worldRef;
 	protected Chunk[] chunkArray;
 	protected World world;
 	protected boolean anyEmpty = true;
@@ -66,7 +67,10 @@ public class DynamicChunkCache implements IBlockAccessEx {
 
 		if (this.world != world || from.chunkXPos < this.minCX || from.chunkZPos < this.minCZ
 				|| to.chunkXPos > this.maxCX || to.chunkZPos > this.maxCZ) {
-			this.generation++;
+			this.ref++;
+			if (this.world != world)
+				this.worldRef++;
+
 			this.world = world;
 			this.minCX = from.chunkXPos;
 			this.minCZ = from.chunkZPos;
@@ -172,7 +176,7 @@ public class DynamicChunkCache implements IBlockAccessEx {
 
 	@SideOnly(Side.CLIENT)
 	private int getLightForExt(@Nonnull final EnumSkyBlock type, @Nonnull final BlockPos pos) {
-		if (type == EnumSkyBlock.SKY && this.world.provider.hasNoSky) {
+		if (type == EnumSkyBlock.SKY && this.world.provider.getHasNoSky()) {
 			return 0;
 		} else if (pos.getY() >= 0 && pos.getY() < 256) {
 			if (getBlockState(pos).useNeighborBrightness()) {
@@ -273,7 +277,12 @@ public class DynamicChunkCache implements IBlockAccessEx {
 
 	@Override
 	public int reference() {
-		return this.generation;
+		return this.ref;
+	}
+
+	@Override
+	public int worldReference() {
+		return this.worldRef;
 	}
 
 	private final boolean withinBounds(final int x, final int z) {
