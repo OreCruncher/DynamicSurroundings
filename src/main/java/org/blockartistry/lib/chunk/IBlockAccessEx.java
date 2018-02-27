@@ -21,42 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package org.blockartistry.DynSurround.client.fx;
-
-import java.util.Random;
+package org.blockartistry.lib.chunk;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.lib.chunk.IBlockAccessEx;
-
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
-@SideOnly(Side.CLIENT)
-public class FireFlyEffect extends BlockEffect {
+public interface IBlockAccessEx extends IBlockAccess {
 
-	public FireFlyEffect(int chance) {
-		super(chance);
+	int reference();
+	
+	World getWorld();
+
+	IBlockState getBlockState(final int x, final int y, final int z);
+
+	int getLightFor(@Nonnull final EnumSkyBlock type, @Nonnull final BlockPos pos);
+
+	BlockPos getTopSolidOrLiquidBlock(@Nonnull final BlockPos pos);
+
+	boolean isAvailable(final int x, final int z);
+
+	default boolean isAvailable(@Nonnull final BlockPos pos) {
+		return isAvailable(pos.getX(), pos.getZ());
 	}
-
-	@Override
-	@Nonnull
-	public BlockEffectType getEffectType() {
-		return BlockEffectType.FIREFLY;
-	}
-
-	@Override
-	public void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
-			@Nonnull final BlockPos pos, @Nonnull final Random random) {
-		final AxisAlignedBB box = state.getBoundingBox(provider.getWorld(), pos);
-		final Vec3d loc = box.getCenter();
-		ParticleCollections.addFireFly(provider.getWorld(), pos.getX() + loc.x, pos.getY() + box.maxY,
-				pos.getZ() + loc.z);
-	}
-
 }

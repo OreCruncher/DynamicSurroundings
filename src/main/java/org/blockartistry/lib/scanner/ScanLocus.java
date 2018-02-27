@@ -25,8 +25,9 @@ package org.blockartistry.lib.scanner;
 
 import javax.annotation.Nullable;
 
+import org.blockartistry.lib.chunk.IBlockAccessEx;
+
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public abstract class ScanLocus {
 
@@ -34,19 +35,18 @@ public abstract class ScanLocus {
 
 	}
 
-	public abstract World getWorld();
+	public abstract IBlockAccessEx getWorld();
 
 	public abstract BlockPos getCenter();
 
-	public int getDimension() {
-		return getWorld().provider.getDimension();
+	public int getReference() {
+		return getWorld().reference();
 	}
 
 	@Override
 	public boolean equals(@Nullable final Object o) {
 		if (this == o)
 			return true;
-		;
 		final ScanLocus sl = (ScanLocus) o;
 		return getWorld() == sl.getWorld() && getCenter().equals(sl.getCenter());
 	}

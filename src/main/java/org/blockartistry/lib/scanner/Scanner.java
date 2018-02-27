@@ -29,7 +29,7 @@ import java.util.concurrent.Callable;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.lib.chunk.BlockStateProvider;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 import org.blockartistry.lib.logging.ModLog;
 import org.blockartistry.lib.random.XorShiftRandom;
 
@@ -59,7 +59,6 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 
 	protected final Random random = new XorShiftRandom();
 	protected final BlockPos.MutableBlockPos workingPos = new BlockPos.MutableBlockPos();
-	protected final BlockStateProvider blockProvider = new BlockStateProvider();
 
 	protected ModLog log;
 
@@ -141,15 +140,14 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 	@Override
 	public void update() {
 
-		this.blockProvider.setWorld(this.locus.getWorld());
-
 		preScan();
 
+		final IBlockAccessEx provider = this.locus.getWorld();
 		for (int count = 0; count < this.blocksPerTick; count++) {
 			final BlockPos pos = nextPos(this.workingPos, this.random);
 			if (pos == null)
 				break;
-			final IBlockState state = this.blockProvider.getBlockState(pos);
+			final IBlockState state = provider.getBlockState(pos);
 			if (interestingBlock(state)) {
 				blockScan(state, pos, this.random);
 			}
