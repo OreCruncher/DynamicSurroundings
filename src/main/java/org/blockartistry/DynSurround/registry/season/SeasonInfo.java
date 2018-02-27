@@ -26,15 +26,16 @@ package org.blockartistry.DynSurround.registry.season;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.SeasonType;
 import org.blockartistry.DynSurround.registry.TemperatureRating;
-
 import com.google.common.base.MoreObjects;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -69,11 +70,12 @@ public class SeasonInfo {
 
 	@Nonnull
 	public BlockPos getPrecipitationHeight(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return world.getPrecipitationHeight(pos);
+		return ClientChunkCache.INSTANCE.getPrecipitationHeight(pos);
 	}
 
 	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		final float biomeTemp = ClientRegistry.BIOME.get(world.getBiome(pos)).getFloatTemperature(pos);
+		final Biome biome = ClientChunkCache.INSTANCE.getBiome(pos);
+		final float biomeTemp = ClientRegistry.BIOME.get(biome).getFloatTemperature(pos);
 		final float heightTemp = world.getBiomeProvider().getTemperatureAtHeight(biomeTemp,
 				getPrecipitationHeight(world, pos).getY());
 		return heightTemp;
@@ -83,7 +85,7 @@ public class SeasonInfo {
 	 * Indicates if rain is striking at the specified position.
 	 */
 	public boolean isRainingAt(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return world.isRainingAt(pos);
+		return ClientChunkCache.INSTANCE.isRainingAt(pos);
 	}
 
 	/*
@@ -100,12 +102,12 @@ public class SeasonInfo {
 	 * Essentially snow layer stuff.
 	 */
 	public boolean canSnowAt(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return world.canSnowAt(pos, false);
+		return ClientChunkCache.INSTANCE.canSnowAt(pos, false);
 	}
 
 	public boolean canBlockFreeze(@Nonnull final World world, @Nonnull final BlockPos pos,
 			final boolean noWaterAdjacent) {
-		return world.canBlockFreeze(pos, noWaterAdjacent);
+		return ClientChunkCache.INSTANCE.canBlockFreeze(pos, noWaterAdjacent);
 	}
 
 	@Override
