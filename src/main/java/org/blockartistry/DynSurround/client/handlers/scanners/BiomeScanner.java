@@ -26,8 +26,8 @@ package org.blockartistry.DynSurround.client.handlers.scanners;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
-import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.lib.chunk.BlockStateProvider;
 
 import gnu.trove.map.custom_hash.TObjectIntCustomHashMap;
 import gnu.trove.strategy.IdentityHashingStrategy;

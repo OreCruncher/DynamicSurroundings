@@ -30,8 +30,8 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleWaterSplash;
-import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.lib.chunk.BlockStateProvider;
 import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.block.BlockDynamicLiquid;

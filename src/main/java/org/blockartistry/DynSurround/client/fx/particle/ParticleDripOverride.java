@@ -30,8 +30,8 @@ import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.Sounds;
-import org.blockartistry.lib.BlockStateProvider;
 import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.lib.chunk.BlockStateProvider;
 import org.blockartistry.lib.gfx.ParticleHelper;
 
 import net.minecraft.block.material.Material;

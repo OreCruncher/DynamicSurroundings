@@ -28,7 +28,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.lib.BlockStateProvider;
+import org.blockartistry.lib.chunk.BlockStateProvider;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;

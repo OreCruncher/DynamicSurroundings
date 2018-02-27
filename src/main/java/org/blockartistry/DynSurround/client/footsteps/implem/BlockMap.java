@@ -41,7 +41,7 @@ import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.DynSurround.registry.BlockInfo;
 import org.blockartistry.lib.BlockNameUtil;
 import org.blockartistry.lib.BlockNameUtil.NameResult;
-import org.blockartistry.lib.BlockStateProvider;
+import org.blockartistry.lib.chunk.BlockStateProvider;
 import org.blockartistry.lib.MCHelper;
 
 import gnu.trove.map.hash.THashMap;
