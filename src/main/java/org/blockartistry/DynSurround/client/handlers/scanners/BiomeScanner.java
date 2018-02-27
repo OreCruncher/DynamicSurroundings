@@ -23,17 +23,16 @@
  */
 package org.blockartistry.DynSurround.client.handlers.scanners;
 
+import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
-import org.blockartistry.lib.WorldUtils;
-import org.blockartistry.lib.chunk.BlockStateProvider;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 
 import gnu.trove.map.custom_hash.TObjectIntCustomHashMap;
 import gnu.trove.strategy.IdentityHashingStrategy;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -77,8 +76,7 @@ public final class BiomeScanner implements ITickable {
 				this.biomeArea = 1;
 				this.weights.put(EnvironState.getPlayerBiome(), 1);
 			} else {
-				final World world = EnvironState.getWorld();
-				final BlockStateProvider provider = WorldUtils.getDefaultBlockStateProvider().setWorld(world);
+				final IBlockAccessEx provider = ClientChunkCache.INSTANCE;
 
 				// Collect raw biome data before mapping to BiomeInfo - saves lookups
 				final TObjectIntCustomHashMap<Biome> scratch = new TObjectIntCustomHashMap<>(

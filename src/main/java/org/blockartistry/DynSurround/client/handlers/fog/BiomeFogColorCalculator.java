@@ -25,13 +25,13 @@ package org.blockartistry.DynSurround.client.handlers.fog;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.lib.Color;
-import org.blockartistry.lib.WorldUtils;
-import org.blockartistry.lib.chunk.BlockStateProvider;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.client.Minecraft;
@@ -63,7 +63,7 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 
 		final EntityLivingBase player = EnvironState.getPlayer();
 		final World world = EnvironState.getWorld();
-		final BlockStateProvider provider = WorldUtils.getDefaultBlockStateProvider().setWorld(world);
+		final IBlockAccessEx provider = ClientChunkCache.INSTANCE;
 		final int playerX = MathStuff.floor(player.posX);
 		final int playerZ = MathStuff.floor(player.posZ);
 

@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.lib.WorldUtils;
-import org.blockartistry.lib.chunk.BlockStateProvider;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
@@ -145,7 +145,7 @@ public final class RayTrace {
 			boolean stopOnLiquid, boolean ignoreBlockWithoutBoundingBox, boolean returnLastUncollidableBlock) {
 
 		final BlockPos.MutableBlockPos blockpos = new BlockPos.MutableBlockPos();
-		final BlockStateProvider provider = WorldUtils.getDefaultBlockStateProvider().setWorld(world);
+		final IBlockAccessEx provider = WorldUtils.getDefaultBlockStateProvider();
 
 		if (!Double.isNaN(vec31.x) && !Double.isNaN(vec31.y) && !Double.isNaN(vec31.z)) {
 			if (!Double.isNaN(vec32.x) && !Double.isNaN(vec32.y) && !Double.isNaN(vec32.z)) {
