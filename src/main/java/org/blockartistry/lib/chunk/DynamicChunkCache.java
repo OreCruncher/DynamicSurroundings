@@ -41,7 +41,8 @@ public class DynamicChunkCache implements IBlockAccessEx {
 	protected int sizeX;
 	protected int sizeZ;
 
-	protected int generation;
+	protected int ref;
+	protected int worldRef;
 	protected Chunk[] chunkArray;
 	protected World world;
 	protected boolean anyEmpty = true;
@@ -66,7 +67,10 @@ public class DynamicChunkCache implements IBlockAccessEx {
 
 		if (this.world != world || from.x < this.minCX || from.z < this.minCZ || to.x > this.maxCX
 				|| to.z > this.maxCZ) {
-			this.generation++;
+			this.ref++;
+			if (this.world != world)
+				this.worldRef++;
+
 			this.world = world;
 			this.minCX = from.x;
 			this.minCZ = from.z;
@@ -273,7 +277,12 @@ public class DynamicChunkCache implements IBlockAccessEx {
 
 	@Override
 	public int reference() {
-		return this.generation;
+		return this.ref;
+	}
+	
+	@Override
+	public int worldReference() {
+		return this.worldRef;
 	}
 
 	private final boolean withinBounds(final int x, final int z) {

@@ -24,6 +24,7 @@
 package org.blockartistry.lib.chunk;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -33,18 +34,92 @@ import net.minecraft.world.World;
 
 public interface IBlockAccessEx extends IBlockAccess {
 
+	/**
+	 * Obtains a reference count for the underlying cache system. Used as a token to
+	 * indicate when the cache is refreshed. If the reference changes between ticks
+	 * the cache has been reloaded.
+	 * 
+	 * @return Current reference count of the underlying cache
+	 */
 	int reference();
-	
+
+	/**
+	 * Obtains a reference count for the cache as it relates to world changes (like
+	 * going from Overworld to the Nether).
+	 * 
+	 * @return Current reference count of the underlying cache for world changes
+	 */
+	int worldReference();
+
+	/**
+	 * Gets the underlying world object that the cache uses to obtain chunks.
+	 * 
+	 * @return World reference, if any
+	 */
+	@Nullable
 	World getWorld();
 
+	/**
+	 * Obtains a block state for the given coordinates. If the chunk is not
+	 * available within the cache (when out of bounds or if the chunk has yet to be
+	 * loaded) AIR is returned.
+	 * 
+	 * @param x
+	 *            X coordinate of the block
+	 * @param y
+	 *            Y coordinate of the block
+	 * @param z
+	 *            Z coordinate of the block
+	 * @return Block state for the given block
+	 */
+	@Nonnull
 	IBlockState getBlockState(final int x, final int y, final int z);
 
+	/**
+	 * Obtains the specified light level for the given position
+	 * 
+	 * @param type
+	 *            Type of light to obtain
+	 * @param pos
+	 *            Position for which the light value is being queried
+	 * @return Light level for the specified position (0-15)
+	 */
 	int getLightFor(@Nonnull final EnumSkyBlock type, @Nonnull final BlockPos pos);
 
+	/**
+	 * Obtains the top solid or liquid block for the vertical column defined by the
+	 * provided block position.
+	 * 
+	 * @param pos
+	 *            Position for which the block is to be identified
+	 * @return Position of the top solid or liquid block, or the provided position
+	 *         if there isn't any
+	 */
+	@Nonnull
 	BlockPos getTopSolidOrLiquidBlock(@Nonnull final BlockPos pos);
 
+	/**
+	 * Indicates if the chunk for the block coordinates is available. A chunk may
+	 * not be available because the coordinates are out of bounds, or the chunk may
+	 * not have been loaded.
+	 * 
+	 * @param x
+	 *            Block X coordinate to be tested
+	 * @param z
+	 *            Block Z coordinate to be tested
+	 * @return true if the chunk is available in the cache; false otherwise
+	 */
 	boolean isAvailable(final int x, final int z);
 
+	/**
+	 * Indicates if the chunk for the block position is available. A chunk may not
+	 * be available because the coordinates are out of bounds, or the chunk may not
+	 * have been loaded.
+	 * 
+	 * @param pos
+	 *            Block position to be tested
+	 * @return true if the chunk is available in the cache; false otherwise
+	 */
 	default boolean isAvailable(@Nonnull final BlockPos pos) {
 		return isAvailable(pos.getX(), pos.getZ());
 	}
