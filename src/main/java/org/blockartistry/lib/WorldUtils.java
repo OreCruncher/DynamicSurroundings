@@ -26,7 +26,8 @@ package org.blockartistry.lib;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.lib.chunk.BlockStateProvider;
+import org.blockartistry.DynSurround.client.ClientChunkCache;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -42,27 +43,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class WorldUtils {
 
-	// TODO: Not used currently. Server side doesn't make use of this class
-	// so for the moment do not use side sensitive version to reduce
-	// overhead of figuring what side is executing.
-	@SuppressWarnings("unused")
-	private static final SideLocal<BlockStateProvider> blockProvider = new SideLocal<BlockStateProvider>() {
-		@Override
-		protected BlockStateProvider initialValue(@Nonnull final Side side) {
-			return new BlockStateProvider();
-		}
-	};
-
-	private static final BlockStateProvider provider = new BlockStateProvider();
-
 	private WorldUtils() {
 
 	}
 
 	@Nonnull
-	public static BlockStateProvider getDefaultBlockStateProvider() {
-		return provider;
-		// return blockProvider.get();
+	public static IBlockAccessEx getDefaultBlockStateProvider() {
+		return ClientChunkCache.INSTANCE;
 	}
 
 	@Nullable
@@ -83,10 +70,6 @@ public final class WorldUtils {
 		return getBlockState(world, pos).getMaterial().isSolid();
 	}
 
-	public static boolean isSolidBlock(@Nonnull final World world, final int x, final int y, final int z) {
-		return getBlockState(world, x, y, z).getMaterial().isSolid();
-	}
-
 	public static boolean isAirBlock(@Nonnull final IBlockState state) {
 		return state.getBlock() == Blocks.AIR;
 	}
@@ -99,22 +82,18 @@ public final class WorldUtils {
 		return isAirBlock(getBlockState(world, pos));
 	}
 
-	public static boolean isAirBlock(@Nonnull final World world, final int x, final int y, final int z) {
-		return isAirBlock(getBlockState(world, x, y, z));
-	}
-
 	@Nonnull
 	public static IBlockState getBlockState(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getDefaultBlockStateProvider().setWorld(world).getBlockState(pos);
+		return getDefaultBlockStateProvider().getBlockState(pos);
 	}
 
 	@Nonnull
 	public static IBlockState getBlockState(@Nonnull final World world, final int x, final int y, final int z) {
-		return getDefaultBlockStateProvider().setWorld(world).getBlockState(x, y, z);
+		return getDefaultBlockStateProvider().getBlockState(x, y, z);
 	}
 
 	public static boolean isFullWaterBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return isFullWaterBlock(getDefaultBlockStateProvider().setWorld(world).getBlockState(pos));
+		return isFullWaterBlock(getDefaultBlockStateProvider().getBlockState(pos));
 	}
 
 	public static boolean isFullWaterBlock(@Nonnull final IBlockState state) {
@@ -122,11 +101,11 @@ public final class WorldUtils {
 	}
 
 	public static boolean isChunkAvailable(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getDefaultBlockStateProvider().setWorld(world).isAvailable(pos);
+		return getDefaultBlockStateProvider().isAvailable(pos);
 	}
 
 	public static BlockPos getTopSolidOrLiquidBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getDefaultBlockStateProvider().setWorld(world).getTopSolidOrLiquidBlock(pos);
+		return getDefaultBlockStateProvider().getTopSolidOrLiquidBlock(pos);
 	}
 
 	public static boolean hasVoidPartiles(@Nonnull final World world) {
@@ -134,6 +113,6 @@ public final class WorldUtils {
 	}
 
 	public static Biome getBiome(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getDefaultBlockStateProvider().setWorld(world).getBiome(pos);
+		return getDefaultBlockStateProvider().getBiome(pos);
 	}
 }
