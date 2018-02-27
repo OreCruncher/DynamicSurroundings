@@ -18,6 +18,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import scala.actors.threadpool.Arrays;
 
 /**
  * Based on ChunkCache but allows for altering the range dynamically without
@@ -63,9 +64,8 @@ public class DynamicChunkCache implements IBlockAccessEx {
 		final ChunkPos from = new ChunkPos(min);
 		final ChunkPos to = new ChunkPos(max);
 
-		if (this.anyEmpty || this.world != world || from.x < this.minCX || from.z < this.minCZ || to.x > this.maxCX
+		if (this.world != world || from.x < this.minCX || from.z < this.minCZ || to.x > this.maxCX
 				|| to.z > this.maxCZ) {
-
 			this.generation++;
 			this.world = world;
 			this.minCX = from.x;
@@ -75,18 +75,25 @@ public class DynamicChunkCache implements IBlockAccessEx {
 			this.sizeX = this.maxCX - this.minCX + 1;
 			this.sizeZ = this.maxCZ - this.minCZ + 1;
 			this.chunkArray = new Chunk[this.sizeX * this.sizeZ];
-			this.anyEmpty = false;
+			Arrays.fill(this.chunkArray, NullChunk.NULL_CHUNK);
+			this.anyEmpty = true;
+		}
 
+		if (this.anyEmpty) {
+			this.anyEmpty = false;
 			for (int k = this.minCX; k <= this.maxCX; ++k) {
 				for (int l = this.minCZ; l <= this.maxCZ; ++l) {
-					Chunk c = world.getChunkFromChunkCoords(k, l);
-					if (c == null)
-						c = NullChunk.NULL_CHUNK;
 					final int idx = (k - this.minCX) * this.sizeZ + (l - this.minCZ);
-					this.chunkArray[idx] = c;
-					this.anyEmpty |= c.isEmpty();
+					if (this.chunkArray[idx].isEmpty()) {
+						Chunk c = world.getChunkFromChunkCoords(k, l);
+						if (c == null)
+							c = NullChunk.NULL_CHUNK;
+						this.chunkArray[idx] = c;
+						this.anyEmpty |= c.isEmpty();
+					}
 				}
 			}
+
 		}
 	}
 
