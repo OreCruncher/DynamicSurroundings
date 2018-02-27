@@ -33,7 +33,9 @@ import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.BlockProfile;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 import org.blockartistry.lib.scanner.RandomScanner;
+import org.blockartistry.lib.scanner.ScanLocus;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -61,8 +63,8 @@ public class RandomBlockEffectScanner extends RandomScanner {
 	protected BlockProfile profile = null;
 	protected IBlockState lastState = null;
 
-	public RandomBlockEffectScanner(final int range) {
-		super(ClientPlayerLocus.INSTANCE, "RandomBlockScanner: " + range, range, ITERATION_COUNT);
+	public RandomBlockEffectScanner(@Nonnull final ScanLocus locus, final int range) {
+		super(locus, "RandomBlockScanner: " + range, range, ITERATION_COUNT);
 		setLogger(DSurround.log());
 	}
 
@@ -80,16 +82,17 @@ public class RandomBlockEffectScanner extends RandomScanner {
 	@Override
 	public void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final Random rand) {
 
+		final IBlockAccessEx provider = this.locus.getWorld();
 		final BlockEffect[] effects = this.profile.getEffects();
 		for (int i = 0; i < effects.length; i++) {
 			final BlockEffect be = effects[i];
-			if (be.canTrigger(this.blockProvider, state, pos, rand))
-				be.doEffect(this.blockProvider, state, pos, rand);
+			if (be.canTrigger(provider, state, pos, rand))
+				be.doEffect(provider, state, pos, rand);
 		}
 
 		final SoundEffect sound = this.profile.getSoundToPlay(rand);
 		if (sound != null)
-			sound.doEffect(this.blockProvider, state, pos, rand);
+			sound.doEffect(provider, state, pos, rand);
 	}
 
 }

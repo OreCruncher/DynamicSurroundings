@@ -29,8 +29,8 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.scanners.AlwaysOnBlockEffectScanner;
 import org.blockartistry.DynSurround.client.handlers.scanners.BiomeScanner;
+import org.blockartistry.DynSurround.client.handlers.scanners.ClientPlayerLocus;
 import org.blockartistry.DynSurround.client.handlers.scanners.RandomBlockEffectScanner;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
@@ -45,11 +45,12 @@ public final class AreaBlockEffectsHandler extends EffectHandlerBase {
 		return instance;
 	}
 
-	protected final RandomBlockEffectScanner nearEffects = new RandomBlockEffectScanner(
+	protected final ClientPlayerLocus locus = new ClientPlayerLocus();
+	protected final RandomBlockEffectScanner nearEffects = new RandomBlockEffectScanner(this.locus,
 			RandomBlockEffectScanner.NEAR_RANGE);
-	protected final RandomBlockEffectScanner farEffects = new RandomBlockEffectScanner(
+	protected final RandomBlockEffectScanner farEffects = new RandomBlockEffectScanner(this.locus,
 			RandomBlockEffectScanner.FAR_RANGE);
-	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(
+	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(this.locus,
 			ModOptions.general.specialEffectRange);
 	protected final BiomeScanner biomes = new BiomeScanner();
 

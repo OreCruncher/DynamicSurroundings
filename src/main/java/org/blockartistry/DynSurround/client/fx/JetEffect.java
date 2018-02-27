@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
 import org.blockartistry.DynSurround.client.handlers.ParticleSystemHandler;
 import org.blockartistry.DynSurround.expression.ExpressionEngine;
-import org.blockartistry.lib.chunk.BlockStateProvider;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -45,7 +45,7 @@ public abstract class JetEffect extends BlockEffect {
 
 	protected static final int MAX_STRENGTH = 10;
 
-	protected static int countBlocks(final BlockStateProvider provider, final BlockPos pos, final IBlockState state,
+	protected static int countBlocks(final IBlockAccessEx provider, final BlockPos pos, final IBlockState state,
 			final int dir) {
 		int count = 0;
 		int idx = pos.getY();
@@ -70,7 +70,7 @@ public abstract class JetEffect extends BlockEffect {
 	}
 
 	@Override
-	public boolean canTrigger(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		return (alwaysExecute() || random.nextInt(getChance()) == 0) && ParticleSystemHandler.INSTANCE.okToSpawn(pos)
 				&& ExpressionEngine.instance().check(getConditions());

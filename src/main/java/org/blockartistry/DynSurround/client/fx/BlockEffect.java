@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.expression.ExpressionEngine;
-import org.blockartistry.lib.chunk.BlockStateProvider;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -82,7 +82,7 @@ public abstract class BlockEffect implements ISpecialEffect {
 	 * to the script check.
 	 */
 	@Override
-	public boolean canTrigger(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		if (!alwaysExecute() && random.nextInt(getChance()) != 0)
 			return false;
@@ -94,7 +94,7 @@ public abstract class BlockEffect implements ISpecialEffect {
 	 * Override to provide the body of the effect that is to take place.
 	 */
 	@Override
-	public abstract void doEffect(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+	public abstract void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random);
 
 	@Override

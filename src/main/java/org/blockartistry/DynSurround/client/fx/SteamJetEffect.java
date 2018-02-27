@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleSteamJet;
-import org.blockartistry.lib.chunk.BlockStateProvider;
+import org.blockartistry.lib.chunk.IBlockAccessEx;
 import org.blockartistry.lib.collections.IdentityHashSet;
 
 import net.minecraft.block.Block;
@@ -56,7 +56,7 @@ public class SteamJetEffect extends JetEffect {
 		super(chance);
 	}
 
-	protected static int lavaCount(final BlockStateProvider provider, final BlockPos pos) {
+	protected static int lavaCount(final IBlockAccessEx provider, final BlockPos pos) {
 		int blockCount = 0;
 		for (int i = -1; i <= 1; i++)
 			for (int j = -1; j <= 1; j++)
@@ -75,7 +75,7 @@ public class SteamJetEffect extends JetEffect {
 		return BlockEffectType.STEAM_JET;
 	}
 
-	public static boolean isValidSpawnBlock(@Nonnull final BlockStateProvider provider, @Nonnull final BlockPos pos) {
+	public static boolean isValidSpawnBlock(@Nonnull final IBlockAccessEx provider, @Nonnull final BlockPos pos) {
 		if (!provider.getBlockState(pos).getMaterial().isLiquid())
 			return false;
 
@@ -86,13 +86,13 @@ public class SteamJetEffect extends JetEffect {
 	}
 
 	@Override
-	public boolean canTrigger(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		return isValidSpawnBlock(provider, pos) && super.canTrigger(provider, state, pos, random);
 	}
 
 	@Override
-	public void doEffect(@Nonnull final BlockStateProvider provider, @Nonnull final IBlockState state,
+	public void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		final int strength = lavaCount(provider, pos);
 		final double spawnHeight = jetSpawnHeight(state, pos);
