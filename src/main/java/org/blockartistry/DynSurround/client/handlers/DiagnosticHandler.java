@@ -32,6 +32,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.handlers.trace.TraceParticleManager;
 import org.blockartistry.DynSurround.client.swing.DiagnosticPanel;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
@@ -187,6 +188,7 @@ public class DiagnosticHandler extends EffectHandlerBase {
 			event.getRight().add(TextFormatting.LIGHT_PURPLE + this.clientTick.toString());
 			event.getRight().add(TextFormatting.LIGHT_PURPLE + this.lastTick.toString());
 			event.getRight().add(TextFormatting.LIGHT_PURPLE + String.format("TPS:%7.3fms", this.tps));
+			event.getRight().add(TextFormatting.GREEN + ClientChunkCache.timing.toString());
 			for (final TimerEMA timer : this.timers)
 				event.getRight().add(TextFormatting.AQUA + timer.toString());
 
