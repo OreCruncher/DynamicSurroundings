@@ -29,8 +29,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.math.MathStuff;
 
 import net.minecraft.util.ITickable;
@@ -111,7 +111,7 @@ public final class CeilingCoverage implements ITickable {
 		public float score(@Nonnull final BlockPos playerPos) {
 			this.working.setPos(playerPos.getX() + this.offset.getX(), playerPos.getY() + this.offset.getY(),
 					playerPos.getZ() + this.offset.getZ());
-			final int y = WorldUtils.getTopSolidOrLiquidBlock(EnvironState.getWorld(), this.working).getY();
+			final int y = ClientChunkCache.INSTANCE.getTopSolidOrLiquidBlock(this.working).getY();
 			return ((y - playerPos.getY()) < 3) ? this.points : 0.0F;
 		}
 

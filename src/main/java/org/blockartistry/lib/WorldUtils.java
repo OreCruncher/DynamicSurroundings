@@ -36,7 +36,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -100,19 +99,8 @@ public final class WorldUtils {
 		return state.getMaterial() == Material.WATER && state.getBlock().getDefaultState() == state;
 	}
 
-	public static boolean isChunkAvailable(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getDefaultBlockStateProvider().isAvailable(pos);
-	}
-
-	public static BlockPos getTopSolidOrLiquidBlock(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getDefaultBlockStateProvider().getTopSolidOrLiquidBlock(pos);
-	}
-
 	public static boolean hasVoidPartiles(@Nonnull final World world) {
 		return world.getWorldType() != WorldType.FLAT && world.provider.hasSkyLight();
 	}
 
-	public static Biome getBiome(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getDefaultBlockStateProvider().getBiome(pos);
-	}
 }

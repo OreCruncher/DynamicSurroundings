@@ -27,7 +27,6 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraft.client.Minecraft;
@@ -92,12 +91,6 @@ public abstract class MoteParticle implements IParticleMote {
 
 	@Override
 	public void onUpdate() {
-
-		if (!WorldUtils.isChunkAvailable(this.world, this.position)) {
-			// The chunk it was in must have unloaded
-			kill();
-		}
-
 		if (!isAlive())
 			return;
 
