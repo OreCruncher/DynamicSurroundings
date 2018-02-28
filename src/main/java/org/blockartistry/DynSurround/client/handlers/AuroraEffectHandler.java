@@ -28,8 +28,8 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.aurora.AuroraEngineClassic;
-import org.blockartistry.DynSurround.client.aurora.AuroraEngineShader;
+import org.blockartistry.DynSurround.client.aurora.AuroraClassic;
+import org.blockartistry.DynSurround.client.aurora.AuroraShaderBand;
 import org.blockartistry.DynSurround.client.aurora.AuroraUtils;
 import org.blockartistry.DynSurround.client.aurora.IAurora;
 import org.blockartistry.DynSurround.client.aurora.IAuroraEngine;
@@ -63,9 +63,9 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		super("Aurora Effect");
 
 		if (ModOptions.aurora.auroraUseShader && Shaders.areShadersSupported())
-			this.auroraEngine = new AuroraEngineShader();
+			this.auroraEngine = (seed) -> new AuroraShaderBand(seed);
 		else
-			this.auroraEngine = new AuroraEngineClassic();
+			this.auroraEngine = (seed) -> new AuroraClassic(seed);
 	}
 
 	@Override

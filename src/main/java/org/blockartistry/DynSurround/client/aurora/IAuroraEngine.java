@@ -28,6 +28,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
+@FunctionalInterface
 public interface IAuroraEngine {
 
 	IAurora produce(final long seed);

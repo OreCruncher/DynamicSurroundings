@@ -39,7 +39,7 @@ public class AuroraBand {
 	protected static final float ANGLE1 = MathStuff.PI_F / 16.0F;
 	protected static final float ANGLE2 = MathStuff.toRadians(90.0F / 7.0F);
 	protected static final float AURORA_SPEED = 0.75F;
-	protected static final float AURORA_WAVELENGTH = 8.0F;
+	protected static final int AURORA_WAVELENGTH = 8;
 	public static final float AURORA_AMPLITUDE = 18.0F;
 
 	protected final Random random;
@@ -105,14 +105,19 @@ public class AuroraBand {
 		final float c = this.cycle + AURORA_SPEED * partialTick;
 		for (int i = 0; i < this.nodes.length; i++) {
 			// Travelling sine wave: https://en.wikipedia.org/wiki/Wavelength
-			final float f = MathStuff.cos(MathStuff.toRadians(AURORA_WAVELENGTH * i + c));
-			final float dZ = f * AURORA_AMPLITUDE;
-			final float dY = f * 3.0F;
+			// final float f = MathStuff.cos(MathStuff.toRadians(AURORA_WAVELENGTH * i +
+			// c));
+			final float f = MathStuff.cos(MathStuff.toRadians((i << 3) + c));
 			final Node node = this.nodes[i];
-			node.setDeltaZ(dZ);
-			node.setDeltaY(dY);
+			node.dZ = f * AURORA_AMPLITUDE;
+			node.dY = f * 3.0F;
+
+			final float mZ = node.getModdedZ();
+			node.tetX = node.posX + node.cosDeg90;
+			node.tetX2 = node.posX + node.cosDeg270;
+			node.tetZ = mZ + node.sinDeg90;
+			node.tetZ2 = mZ + node.sinDeg270;
 		}
-		findAngles(this.nodes);
 	}
 
 	protected void preset(final AuroraGeometry geo) {
@@ -216,10 +221,4 @@ public class AuroraBand {
 		return nodeList;
 	}
 
-	protected static void findAngles(@Nonnull final Node[] nodeList) {
-		nodeList[0].findAngles(null);
-		for (int i = 1; i < nodeList.length - 1; i++)
-			nodeList[i].findAngles(nodeList[i + 1]);
-		nodeList[nodeList.length - 1].findAngles(null);
-	}
 }

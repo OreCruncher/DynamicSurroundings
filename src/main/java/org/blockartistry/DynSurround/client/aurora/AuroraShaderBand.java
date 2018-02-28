@@ -24,21 +24,14 @@
 
 package org.blockartistry.DynSurround.client.aurora;
 
-import java.util.Random;
-
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.shader.Shaders;
-import org.blockartistry.DynSurround.registry.DimensionInfo;
-import org.blockartistry.lib.Color;
 import org.blockartistry.lib.gfx.OpenGlState;
 import org.blockartistry.lib.gfx.OpenGlUtil;
 import org.blockartistry.lib.gfx.shaders.ShaderProgram;
 import org.blockartistry.lib.gfx.shaders.ShaderProgram.IShaderUseCallback;
 import org.blockartistry.lib.math.MathStuff;
-import org.blockartistry.lib.random.XorShiftRandom;
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -50,53 +43,26 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * Renders a shader generated aurora along a curved path.  Makes it ribbon like.
  */
 @SideOnly(Side.CLIENT)
-public class AuroraShaderBand implements IAurora {
+public class AuroraShaderBand extends AuroraBase {
 
 	protected ShaderProgram program;
 	protected IShaderUseCallback callback;
-
-	// Base color of the aurora
-	protected final Color baseColor;
-	// Fade color of the aurora
-	protected final Color fadeColor;
-	// Middle color
-	protected final Color middleColor;
-
-	protected AuroraLifeTracker tracker;
-	protected final Random random;
-
-	protected final AuroraBand[] bands;
-
 	protected final float auroraWidth;
 	protected final float panelTexWidth;
 
 	public AuroraShaderBand(final long seed) {
-		// Setup the life cycle
-		this.tracker = new AuroraLifeTracker(AuroraUtils.AURORA_PEAK_AGE, AuroraUtils.AURORA_AGE_RATE);
-		this.random = new XorShiftRandom(seed * 2);
-		this.bands = new AuroraBand[this.random.nextInt(3) + 1];
-		final AuroraColor colors = AuroraColor.get(this.random);
-		this.baseColor = colors.baseColor;
-		this.fadeColor = colors.fadeColor;
-		this.middleColor = colors.middleColor;
-
+		super(seed, true);
+		
 		this.program = Shaders.AURORA;
 
 		this.callback = shader -> {
 			shader.set("time", AuroraUtils.getTimeSeconds() * 0.75F);
 			shader.set("resolution", AuroraShaderBand.this.getAuroraWidth(), AuroraShaderBand.this.getAuroraHeight());
-			shader.set("topColor", AuroraShaderBand.this.fadeColor);
-			shader.set("middleColor", AuroraShaderBand.this.middleColor);
-			shader.set("bottomColor", AuroraShaderBand.this.baseColor);
+			shader.set("topColor", AuroraShaderBand.this.getFadeColor());
+			shader.set("middleColor", AuroraShaderBand.this.getMiddleColor());
+			shader.set("bottomColor", AuroraShaderBand.this.getBaseColor());
 			shader.set("alpha", AuroraShaderBand.this.getAlpha());
 		};
-
-		final AuroraGeometry geo = AuroraGeometry.get(this.random);
-		this.bands[0] = new AuroraBand(this.random, geo, true, true);
-		if (this.bands.length > 1) {
-			for (int i = 1; i < this.bands.length; i++)
-				this.bands[i] = this.bands[0].copy(geo.bandOffset * i);
-		}
 
 		this.auroraWidth = this.bands[0].getNodeList().length * this.bands[0].getNodeWidth();
 		this.panelTexWidth = this.bands[0].getNodeWidth() / this.auroraWidth;
@@ -104,10 +70,6 @@ public class AuroraShaderBand implements IAurora {
 
 	protected float getAlpha() {
 		return MathStuff.clamp((this.bands[0].getAlphaLimit() / 255F) * this.tracker.ageRatio() * 2.0F, 0F, 1F);
-	}
-
-	protected float getZOffset() {
-		return AuroraUtils.PLAYER_FIXED_Z_OFFSET;
 	}
 
 	protected float getAuroraWidth() {
@@ -119,71 +81,17 @@ public class AuroraShaderBand implements IAurora {
 	}
 
 	@Override
-	public boolean isAlive() {
-		return this.tracker.isAlive();
-	}
-
-	@Override
-	public void setFading(final boolean flag) {
-		this.tracker.setFading(flag);
-	}
-
-	@Override
-	public boolean isDying() {
-		return this.tracker.isFading();
-	}
-
-	@Override
-	public void update() {
-		this.tracker.update();
-	}
-
-	@Override
-	public boolean isComplete() {
-		return !this.tracker.isAlive();
-	}
-
-	@Override
-	public String toString() {
-		final StringBuilder builder = new StringBuilder();
-		builder.append("<SHADER> ");
-		builder.append(" base: ").append(this.baseColor.toString());
-		builder.append(", mid: ").append(this.middleColor.toString());
-		builder.append(", fade: ").append(this.fadeColor.toString());
-		builder.append(", alpha: ").append((int) (getAlpha() * 255));
-		if (!this.tracker.isAlive())
-			builder.append(", DEAD");
-		else if (this.tracker.isFading())
-			builder.append(", FADING");
-		return builder.toString();
-	}
-
-	@Override
 	public void render(final float partialTick) {
 
 		if (this.program == null)
 			return;
 
-		final Minecraft mc = Minecraft.getMinecraft();
 		final Tessellator tess = Tessellator.getInstance();
 		final BufferBuilder renderer = tess.getBuffer();
 
-		final DimensionInfo dimInfo = EnvironState.getDimensionInfo();
-		double heightScale = 1D;
-		if (mc.player.posY > dimInfo.getSeaLevel()) {
-			final double limit = (dimInfo.getSkyHeight() + dimInfo.getCloudHeight()) / 2D;
-			final double d1 = limit - dimInfo.getSeaLevel();
-			final double d2 = mc.player.posY - dimInfo.getSeaLevel();
-			heightScale = (d1 - d2) / d1;
-		}
-
-		final double tranY = AuroraUtils.PLAYER_FIXED_Y_OFFSET * heightScale;
-
-		final double tranX = mc.player.posX
-				- (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTick);
-
-		final double tranZ = (mc.player.posZ - getZOffset())
-				- (mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * partialTick);
+		final double tranY = getTranslationY(partialTick);
+		final double tranX = getTranslationX(partialTick);
+		final double tranZ = getTranslationZ(partialTick);
 
 		final OpenGlState glState = OpenGlState.push();
 
@@ -254,5 +162,11 @@ public class AuroraShaderBand implements IAurora {
 
 		GL11.glFrontFace(GL11.GL_CCW);
 		OpenGlState.pop(glState);
+	}
+
+
+	@Override
+	public String toString() {
+		return "<SHADER> " + super.toString();
 	}
 }
