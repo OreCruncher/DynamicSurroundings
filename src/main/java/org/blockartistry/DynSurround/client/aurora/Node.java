@@ -39,13 +39,13 @@ final class Node {
 	private static final float SIN_DEG90_FACTOR = MathStuff.sin(MathStuff.PI_F / 2.0F);
 	private static final float SIN_DEG270_FACTOR = MathStuff.sin(MathStuff.PI_F / 2.0F + MathStuff.PI_F);
 
-	private float dZ = 0.0F;
-	private float dY = 0.0F;
+	public float dZ = 0.0F;
+	public float dY = 0.0F;
 
-	private float cosDeg90 = 0.0F;
-	private float cosDeg270 = 0.0F;
-	private float sinDeg90 = 0.0F;
-	private float sinDeg270 = 0.0F;
+	public float cosDeg90 = 0.0F;
+	public float cosDeg270 = 0.0F;
+	public float sinDeg90 = 0.0F;
+	public float sinDeg270 = 0.0F;
 
 	public float angle;
 	public float posX;
@@ -72,26 +72,6 @@ final class Node {
 		this.angle = theta;
 	}
 
-	// -----------------------------------------------
-	// Fast atan2:
-	// http://dspguru.com/dsp/tricks/fixed-point-atan2-with-self-normalization
-	private static final float COEFF_1 = (float) (Math.PI / 4.0F);
-	private static final float COEFF_2 = COEFF_1 * 3.0F;
-	private static final float CONST = 1e-10F;
-
-	@SuppressWarnings("unused")
-	private static final float atan2_fast(final float y, final float x) {
-		final float abs_y = MathStuff.abs(y) + CONST;
-		final float angle;
-
-		if (x >= 0.0F)
-			angle = COEFF_1 - COEFF_1 * (x - abs_y) / (x + abs_y);
-		else
-			angle = COEFF_2 - COEFF_2 * (x + abs_y) / (abs_y - x);
-
-		return y < 0.0 ? -angle : angle;
-	}
-
 	public void setDeltaZ(final float f) {
 		this.dZ = f;
 	}
@@ -116,17 +96,4 @@ final class Node {
 		this.sinDeg90 = SIN_DEG90_FACTOR * w;
 	}
 
-	public void findAngles(final Node next) {
-		this.tetX = this.tetX2 = this.posX;
-		this.tetZ = this.tetZ2 = getModdedZ();
-		// this.angle = 0.0F;
-		if (next != null) {
-			// this.angle = atan2_fast(this.getModdedZ() - next.getModdedZ(), this.posX -
-			// next.posX);
-			this.tetX += this.cosDeg90;
-			this.tetX2 += this.cosDeg270;
-			this.tetZ += this.sinDeg90;
-			this.tetZ2 += this.sinDeg270;
-		}
-	}
 }
