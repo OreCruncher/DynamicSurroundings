@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
@@ -34,17 +35,19 @@ import org.blockartistry.DynSurround.client.footsteps.interfaces.IFootstepAccent
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
-import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.DynSurround.registry.season.SeasonInfo;
 import org.blockartistry.lib.collections.ObjectArray;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RainSplashAccent implements IFootstepAccentProvider {
+
+	protected final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
 	@Override
 	@Nonnull
@@ -57,21 +60,19 @@ public class RainSplashAccent implements IFootstepAccentProvider {
 	public ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos blockPos,
 			@Nonnull final ObjectArray<IAcoustic> in) {
 		if (ModOptions.sound.enablePuddleSound && Weather.isRaining() && EnvironState.isPlayer(entity)) {
-			final BlockPos.MutableBlockPos pos;
 			if (blockPos != null) {
-				pos = new BlockPos.MutableBlockPos(blockPos);
-				pos.move(EnumFacing.UP);
+				this.mutable.setPos(blockPos.getX(), blockPos.getY() + 1, blockPos.getZ());
 			} else {
-				pos = new BlockPos.MutableBlockPos();
-				pos.setPos(entity);
+				this.mutable.setPos(entity);
 			}
-			final int precipHeight = ClientRegistry.SEASON.getPrecipitationHeight(entity.getEntityWorld(), pos).getY();
-			if (precipHeight == pos.getY()) {
-				final BiomeInfo biome = ClientRegistry.BIOME.get(WorldUtils.getBiome(entity.getEntityWorld(), pos));
+			final World world = entity.getEntityWorld();
+			final SeasonInfo season = ClientRegistry.SEASON.getData(world);
+			final int precipHeight = season.getPrecipitationHeight(world, this.mutable).getY();
+			if (precipHeight == this.mutable.getY()) {
+				final BiomeInfo biome = ClientRegistry.BIOME.get(ClientChunkCache.INSTANCE.getBiome(this.mutable));
 				if (biome.hasWeatherEffect() && !biome.getHasDust()) {
-					pos.setPos(pos.getX(), precipHeight, pos.getZ());
-					final boolean canSnow = ClientRegistry.SEASON.canWaterFreeze(entity.getEntityWorld(), pos);
-					if (!canSnow)
+					this.mutable.setY(precipHeight);
+					if (!season.canWaterFreeze(world, this.mutable))
 						in.addAll(AcousticsManager.SPLASH);
 				}
 			}

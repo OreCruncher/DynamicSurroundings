@@ -72,7 +72,7 @@ public final class SeasonRegistry extends Registry {
 	}
 
 	@Nonnull
-	protected SeasonInfo getData(@Nonnull final World world) {
+	public SeasonInfo getData(@Nonnull final World world) {
 		SeasonInfo result = this.seasonData.get(world.provider.getDimension());
 		if (result == null) {
 			result = factory(world);
