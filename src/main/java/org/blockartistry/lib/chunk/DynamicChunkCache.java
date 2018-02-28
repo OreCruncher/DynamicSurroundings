@@ -156,8 +156,16 @@ public class DynamicChunkCache implements IBlockAccessEx {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getCombinedLight(@Nonnull final BlockPos pos, final int lightValue) {
-		final int i = getLightForExt(EnumSkyBlock.SKY, pos);
-		int j = getLightForExt(EnumSkyBlock.BLOCK, pos);
+		final int i;
+		int j;
+		if (pos.getY() < 0 || pos.getY() >= 256) {
+			i = (this.world == null || this.world.provider.hasNoSky()) ? 0 : EnumSkyBlock.SKY.defaultLightValue;
+			j = EnumSkyBlock.BLOCK.defaultLightValue;
+		} else {
+			final Chunk chunk = resolveChunk(pos);
+			i = getLightForExt(chunk, EnumSkyBlock.SKY, pos);
+			j = getLightForExt(chunk, EnumSkyBlock.BLOCK, pos);
+		}
 
 		if (j < lightValue) {
 			j = lightValue;
@@ -201,31 +209,26 @@ public class DynamicChunkCache implements IBlockAccessEx {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private int getLightForExt(@Nonnull final EnumSkyBlock type, @Nonnull final BlockPos pos) {
-		if (type == EnumSkyBlock.SKY && !this.world.provider.hasSkyLight()) {
-			return 0;
-		} else if (pos.getY() >= 0 && pos.getY() < 256) {
-			if (getBlockState(pos).useNeighborBrightness()) {
-				int l = 0;
+	private int getLightForExt(@Nonnull final Chunk chunk, @Nonnull final EnumSkyBlock type,
+			@Nonnull final BlockPos pos) {
+		if (getBlockState0(chunk, pos.getX(), pos.getY(), pos.getZ()).useNeighborBrightness()) {
+			int l = 0;
 
-				for (final EnumFacing enumfacing : EnumFacing.values()) {
-					final int k = getLightFor(type, pos.offset(enumfacing));
+			for (final EnumFacing enumfacing : EnumFacing.values()) {
+				final int k = chunk.getLightFor(type, pos.offset(enumfacing));
 
-					if (k > l) {
-						l = k;
-					}
-
-					if (l >= 15) {
-						return l;
-					}
+				if (k > l) {
+					l = k;
 				}
 
-				return l;
-			} else {
-				return resolveChunk(pos).getLightFor(type, pos);
+				if (l >= 15) {
+					return l;
+				}
 			}
+
+			return l;
 		} else {
-			return type.defaultLightValue;
+			return chunk.getLightFor(type, pos);
 		}
 	}
 
