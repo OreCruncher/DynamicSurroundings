@@ -24,18 +24,10 @@
 
 package org.blockartistry.DynSurround.client.aurora;
 
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.DynSurround.registry.DimensionInfo;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.gfx.OpenGlState;
-import org.blockartistry.lib.random.XorShiftRandom;
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -44,123 +36,29 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public final class AuroraClassic implements IAurora {
-
-	protected final Random random;
-	protected final AuroraBand[] bands;
-
-	// Base color of the aurora
-	protected final Color baseColor;
-	// Fade color of the aurora
-	protected final Color fadeColor;
-
-	protected final AuroraLifeTracker tracker;
+public final class AuroraClassic extends AuroraBase {
 
 	public AuroraClassic(final long seed) {
-		this.tracker = new AuroraLifeTracker(AuroraUtils.AURORA_PEAK_AGE, AuroraUtils.AURORA_AGE_RATE);
-		this.random = new XorShiftRandom(seed);
-		this.bands = new AuroraBand[this.random.nextInt(3) + 1];
-		final AuroraColor pair = AuroraColor.get(this.random);
-		this.baseColor = pair.baseColor;
-		this.fadeColor = pair.fadeColor;
-
-		final AuroraGeometry geo = AuroraGeometry.get(this.random);
-		this.bands[0] = new AuroraBand(this.random, geo);
-		if (this.bands.length > 1) {
-			for (int i = 1; i < this.bands.length; i++)
-				this.bands[i] = this.bands[0].copy(geo.bandOffset * i);
-		}
-	}
-
-	@Override
-	public boolean isAlive() {
-		return this.tracker.isAlive();
-	}
-
-	@Override
-	public void setFading(final boolean flag) {
-		this.tracker.setFading(flag);
-	}
-
-	@Override
-	public boolean isDying() {
-		return this.tracker.isFading();
-	}
-
-	@Override
-	public boolean isComplete() {
-		return !isAlive();
+		super(seed);
 	}
 
 	@Override
 	public void update() {
-		this.tracker.update();
+		super.update();
 		for (int i = 0; i < this.bands.length; i++)
 			this.bands[i].update();
 	}
 
 	@Override
-	public String toString() {
-		final StringBuilder builder = new StringBuilder();
-		builder.append("<CLASSIC> ");
-		builder.append("bands: ").append(this.bands.length);
-		builder.append(", base: ").append(this.baseColor.toString());
-		builder.append(", fade: ").append(this.fadeColor.toString());
-		builder.append(", alpha: ").append(getAlpha());
-		if (this.tracker.isFading())
-			builder.append(", FADING");
-		return builder.toString();
-	}
-
-	@Nonnull
-	protected Color getBaseColor() {
-		return this.baseColor;
-	}
-
-	@Nonnull
-	protected Color getFadeColor() {
-		return this.fadeColor;
-	}
-
-	protected int getAlpha() {
-		return (int) (this.tracker.ageRatio() * this.bands[0].getAlphaLimit());
-	}
-
-	protected float getAlphaf() {
-		return getAlpha() / 255.0F;
-	}
-
-	protected int getZOffset() {
-		return AuroraUtils.PLAYER_FIXED_Z_OFFSET;
-	}
-
-	@Override
 	public void render(final float partialTick) {
 
-		final float alpha = getAlphaf();
-		if (alpha <= 0.0F)
-			return;
-
-		final Minecraft mc = Minecraft.getMinecraft();
+		final float alpha = getAlpha();
 		final Tessellator tess = Tessellator.getInstance();
 		final VertexBuffer renderer = tess.getBuffer();
 
-		final DimensionInfo dimInfo = EnvironState.getDimensionInfo();
-		double heightScale = 1D;
-		if (mc.player.posY > dimInfo.getSeaLevel()) {
-			final double limit = (dimInfo.getSkyHeight() + dimInfo.getCloudHeight()) / 2D;
-			final double d1 = limit - dimInfo.getSeaLevel();
-			final double d2 = mc.player.posY - dimInfo.getSeaLevel();
-			heightScale = (d1 - d2) / d1;
-		}
-
-		final double tranY = AuroraUtils.PLAYER_FIXED_Y_OFFSET * heightScale;
-
-		final double tranX = mc.player.posX
-				- (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTick);
-
-		final double tranZ = (mc.player.posZ - getZOffset())
-				- (mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * partialTick);
+		final double tranY = getTranslationY(partialTick);
+		final double tranX = getTranslationX(partialTick);
+		final double tranZ = getTranslationZ(partialTick);
 
 		final Color base = getBaseColor();
 		final Color fade = getFadeColor();
@@ -246,4 +144,8 @@ public final class AuroraClassic implements IAurora {
 		OpenGlState.pop(glState);
 	}
 
+	@Override
+	public String toString() {
+		return "<CLASSIC> " + super.toString();
+	}
 }

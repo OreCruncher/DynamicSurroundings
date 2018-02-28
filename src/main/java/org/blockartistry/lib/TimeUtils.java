@@ -24,6 +24,8 @@
 
 package org.blockartistry.lib;
 
+import java.time.Instant;
+
 public class TimeUtils {
 
 	private TimeUtils() {
@@ -35,6 +37,7 @@ public class TimeUtils {
 	}
 
 	public static long getGMTDaySeedBase() {
-		return (System.currentTimeMillis() / (1000 * 60 * 24)) * 311;
+		final long days = Instant.now().toEpochMilli() / (1000L * 60L * 24L);
+		return days * 311;
 	}
 }
