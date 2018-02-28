@@ -262,7 +262,7 @@ public class DynamicChunkCache implements IBlockAccessEx {
 	public boolean isSideSolid(@Nonnull final BlockPos pos, @Nonnull final EnumFacing side, final boolean _default) {
 		if (pos.getY() >= 0 && pos.getY() < 256) {
 			final IBlockState state = getBlockState(pos);
-			return state.isSideSolid(this.world, pos, side);
+			return state.isSideSolid(this, pos, side);
 		}
 		return _default;
 	}
@@ -289,10 +289,10 @@ public class DynamicChunkCache implements IBlockAccessEx {
 			final Chunk chunk = resolveChunk(x, z);
 
 			for (int dY = chunk.getTopFilledSegment() + 16 - 1; dY >= 0; dY--) {
-				final IBlockState state = chunk.getBlockState(x, dY, z);
+				final IBlockState state = getBlockState0(chunk, x, dY, z);
 				final Material material = state.getMaterial();
 				if (material.blocksMovement() && material != Material.LEAVES
-						&& !state.getBlock().isFoliage(world, this.mutable.setPos(x, dY, z)))
+						&& !state.getBlock().isFoliage(this, this.mutable.setPos(x, dY, z)))
 					return this.mutable.toImmutable();
 			}
 		}
