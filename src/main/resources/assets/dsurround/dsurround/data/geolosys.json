@@ -1,0 +1,13 @@
+{
+	"itemConfig": {
+		"toolSound": [
+			"geolosys:pro_pick"
+		]
+	},
+	"footsteps": {
+		"geolosys:ore": "ore",
+		"geolosys:ore_vanilla": "ore",
+		"geolosys:ore_sample": "sandstone",
+		"geolosys:ore_sample_vanilla": "sandstone"
+	}
+}
