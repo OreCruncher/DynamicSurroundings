@@ -28,10 +28,12 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.compat.RandomThings;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
+import org.blockartistry.DynSurround.registry.season.SeasonInfo;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.random.XorShiftRandom;
 import org.lwjgl.opengl.GL11;
@@ -71,11 +73,6 @@ public class StormRenderer {
 
 	private final Random random = new XorShiftRandom();
 	private final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
-
-	@Nonnull
-	private BlockPos getPrecipitationHeight(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return ClientRegistry.SEASON.getPrecipitationHeight(world, pos);
-	}
 
 	private static ResourceLocation effectTexture = null;
 	private static boolean isDrawing = false;
@@ -143,6 +140,7 @@ public class StormRenderer {
 
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
+		final SeasonInfo season = ClientRegistry.SEASON.getData(world);
 		final Weather.Properties props = Weather.getWeatherProperties();
 		final Entity entity = mc.getRenderViewEntity();
 
@@ -161,12 +159,12 @@ public class StormRenderer {
 				if (!RandomThings.shouldRain(world, this.mutable))
 					continue;
 
-				final BiomeInfo biome = ClientRegistry.BIOME.get(world.getBiome(this.mutable));
+				final BiomeInfo biome = ClientRegistry.BIOME.get(ClientChunkCache.INSTANCE.getBiome(this.mutable));
 
 				if (!biome.hasWeatherEffect())
 					continue;
 
-				final int precipHeight = getPrecipitationHeight(world, this.mutable).getY();
+				final int precipHeight = season.getPrecipitationHeight(world, this.mutable).getY();
 				final int k2 = Math.max(playerY - range, precipHeight);
 				final int l2 = Math.max(playerY + range, precipHeight);
 				if (k2 == l2)
@@ -175,12 +173,14 @@ public class StormRenderer {
 
 				this.random.setSeed(gridX * gridX * 3121 + gridX * 45238971 ^ gridZ * gridZ * 418711 + gridZ * 13761);
 				this.mutable.setPos(gridX, k2, gridZ);
-				final boolean canSnow = ClientRegistry.SEASON.canWaterFreeze(world, this.mutable);
+				final boolean canSnow = season.canWaterFreeze(world, this.mutable);
 
 				final double d6 = gridX + 0.5F - entity.posX;
 				final double d7 = gridZ + 0.5F - entity.posZ;
 				final float f3 = MathHelper.sqrt_double(d6 * d6 + d7 * d7) / range;
 				this.mutable.setPos(gridX, i3, gridZ);
+
+				final int combinedLight = ClientChunkCache.INSTANCE.getCombinedLight(this.mutable, 0);
 
 				if (!biome.getHasDust() && !canSnow) {
 
@@ -192,7 +192,6 @@ public class StormRenderer {
 							/ 32.0D * (3.0D + this.random.nextDouble());
 
 					final float alpha = ((1.0F - f3 * f3) * 0.5F + 0.5F) * alphaRatio;
-					final int combinedLight = world.getCombinedLight(this.mutable, 0);
 					final int slX16 = combinedLight >> 16 & 65535;
 					final int blX16 = combinedLight & 65535;
 
@@ -231,9 +230,9 @@ public class StormRenderer {
 					final double d10 = this.random.nextDouble() + f1 * (float) this.random.nextGaussian() * 0.001D;
 
 					final float alpha = ((1.0F - f3 * f3) * 0.3F + 0.5F) * alphaRatio;
-					final int combinedLight = (world.getCombinedLight(this.mutable, 0) * 3 + 15728880) / 4;
-					final int slX16 = combinedLight >> 16 & 65535;
-					final int blX16 = combinedLight & 65535;
+					final int cl = (combinedLight * 3 + 15728880) / 4;
+					final int slX16 = cl >> 16 & 65535;
+					final int blX16 = cl & 65535;
 
 					worldrenderer.pos(gridX - rainX + 0.5D, k2, gridZ - rainY + 0.5D)
 							.tex(0.0D + d9, k2 * 0.25D + d8 + d10).color(color.red, color.green, color.blue, alpha)
