@@ -27,7 +27,7 @@ package org.blockartistry.DynSurround.client.sound;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.lib.sound.BasicSound;
+import org.blockartistry.lib.sound.ITrackedSound;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,7 +43,7 @@ public final class SoundEngine {
 		return SoundManagerReplacement.getSoundManager();
 	}
 
-	public static boolean isSoundPlaying(@Nonnull final BasicSound<?> sound) {
+	public static boolean isSoundPlaying(@Nonnull final ITrackedSound sound) {
 		return getManager().isSoundPlaying(sound);
 	}
 
@@ -51,7 +51,7 @@ public final class SoundEngine {
 		return getManager().isSoundPlaying(soundId);
 	}
 
-	public static void stopSound(@Nonnull final BasicSound<?> sound) {
+	public static void stopSound(@Nonnull final ITrackedSound sound) {
 		getManager().stopSound(sound);
 	}
 
@@ -60,7 +60,7 @@ public final class SoundEngine {
 	}
 
 	@Nullable
-	public static String playSound(@Nonnull final BasicSound<?> sound) {
+	public static String playSound(@Nonnull final ITrackedSound sound) {
 		getManager().playSound(sound);
 		return sound.getId();
 	}
