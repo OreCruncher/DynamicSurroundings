@@ -125,6 +125,12 @@ public class SoundManagerReplacement extends SoundManager {
 		}
 	}
 
+	private boolean isTerminal(@Nonnull final ISound sound) {
+		if (sound instanceof ITrackedSound)
+			return ((ITrackedSound) sound).getState().isTerminal();
+		return false;
+	}
+
 	private void setStateIf(@Nonnull final ISound sound, @Nonnull final SoundState current,
 			@Nonnull final SoundState state) {
 		if (sound instanceof ITrackedSound) {
@@ -370,7 +376,7 @@ public class SoundManagerReplacement extends SoundManager {
 
 					// Repeatable sound could have a delay of 0, meaning
 					// don't delay a requeue.
-					if (isound.canRepeat() && j >= minThresholdDelay) {
+					if (isound.canRepeat() && j >= minThresholdDelay && !isTerminal(isound)) {
 						this.playDelayedSound(isound, j);
 					} else {
 						setState(isound, SoundState.DONE);
