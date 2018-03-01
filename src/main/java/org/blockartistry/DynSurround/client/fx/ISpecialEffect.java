@@ -32,13 +32,16 @@ import org.blockartistry.lib.chunk.IBlockAccessEx;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public interface ISpecialEffect {
 
-	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
+	boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random);
 
-	public void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
-			@Nonnull final BlockPos pos, @Nonnull final Random random);
+	void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state, @Nonnull final BlockPos pos,
+			@Nonnull final Random random);
 
 }
