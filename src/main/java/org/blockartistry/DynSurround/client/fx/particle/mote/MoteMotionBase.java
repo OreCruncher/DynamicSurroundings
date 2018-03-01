@@ -26,8 +26,7 @@ package org.blockartistry.DynSurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.lib.WorldUtils;
-
+import org.blockartistry.DynSurround.client.ClientChunkCache;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -75,7 +74,7 @@ public abstract class MoteMotionBase extends MoteAgeable {
 	}
 
 	protected boolean hasCollided() {
-		return WorldUtils.isSolidBlock(this.world, this.position);
+		return ClientChunkCache.INSTANCE.getBlockState(this.position).getMaterial().isSolid();
 	}
 
 	protected void handleCollision() {
