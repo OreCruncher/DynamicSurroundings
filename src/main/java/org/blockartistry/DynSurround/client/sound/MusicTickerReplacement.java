@@ -34,6 +34,7 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.lib.compat.ModEnvironment;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.sound.BasicSound;
+import org.blockartistry.lib.sound.ITrackedSound;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MusicTicker;
@@ -58,9 +59,7 @@ public class MusicTickerReplacement extends MusicTicker {
 
 	private float currentScale = 1.0F;
 
-	private final BasicSound.ISoundScale MUSIC_SCALER = () -> {
-		return MusicTickerReplacement.this.currentScale;
-	};
+	private final BasicSound.ISoundScale MUSIC_SCALER = () -> MusicTickerReplacement.this.currentScale;
 
 	public MusicTickerReplacement(@Nonnull final Minecraft mcIn) {
 		super(mcIn);
@@ -79,7 +78,7 @@ public class MusicTickerReplacement extends MusicTicker {
 		this.currentScale = MathStuff.clamp(this.currentScale, MIN_VOLUME_SCALE, 1.0F);
 
 		if (this.currentMusic instanceof ConfigSound) {
-			if (!SoundEngine.isSoundPlaying((BasicSound<?>) this.currentMusic)) {
+			if (!SoundEngine.INSTANCE.isSoundPlaying((ITrackedSound) this.currentMusic)) {
 				this.currentMusic = null;
 				this.timeUntilNextMusic = 60;
 				super.update();
@@ -92,20 +91,19 @@ public class MusicTickerReplacement extends MusicTicker {
 	public void setPlaying(@Nonnull final ConfigSound sound) {
 		stopMusic();
 		this.currentMusic = sound;
-		SoundEngine.playSound((BasicSound<?>) this.currentMusic);
+		SoundEngine.INSTANCE.playSound((ITrackedSound) this.currentMusic);
 	}
 
 	@Override
 	public void playMusic(@Nonnull final MusicTicker.MusicType requestedMusicType) {
 		this.currentMusic = new MusicSound(requestedMusicType.getMusicLocation()).setVolumeScale(this.MUSIC_SCALER);
-		SoundEngine.playSound((BasicSound<?>) this.currentMusic);
+		SoundEngine.INSTANCE.playSound((ITrackedSound) this.currentMusic);
 		this.timeUntilNextMusic = Integer.MAX_VALUE;
 	}
 
-	@Override
 	public void stopMusic() {
 		if (this.currentMusic != null) {
-			SoundEngine.stopSound((BasicSound<?>) this.currentMusic);
+			SoundEngine.INSTANCE.stopSound((ITrackedSound) this.currentMusic);
 			this.currentMusic = null;
 			this.timeUntilNextMusic = 0;
 		}

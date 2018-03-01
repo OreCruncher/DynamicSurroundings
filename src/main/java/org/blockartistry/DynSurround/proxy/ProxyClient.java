@@ -39,6 +39,7 @@ import org.blockartistry.DynSurround.client.hud.LightLevelHUD;
 import org.blockartistry.DynSurround.client.keyboard.KeyHandler;
 import org.blockartistry.DynSurround.client.sound.BackgroundMute;
 import org.blockartistry.DynSurround.client.sound.MusicTickerReplacement;
+import org.blockartistry.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.DynSurround.client.sound.SoundManagerReplacement;
 import org.blockartistry.DynSurround.client.weather.RenderWeather;
 import org.blockartistry.DynSurround.client.weather.Weather;
@@ -124,7 +125,7 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 			Minecraft.getMinecraft().effectRenderer.registerParticle(EnumParticleTypes.SUSPENDED.getParticleID(), null);
 
 		if (ModEnvironment.AmbientSounds.isLoaded())
-			SoundManagerReplacement.configureSound(null);
+			SoundEngine.configureSound(null);
 	}
 
 	@Override
