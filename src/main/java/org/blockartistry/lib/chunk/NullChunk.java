@@ -88,7 +88,7 @@ public class NullChunk extends Chunk {
 
 	@Override
 	public IBlockState getBlockState(BlockPos pos) {
-		return BlockStateProvider.AIR_STATE;
+		return DynamicChunkCache.AIR_STATE;
 	}
 
 	@Override
