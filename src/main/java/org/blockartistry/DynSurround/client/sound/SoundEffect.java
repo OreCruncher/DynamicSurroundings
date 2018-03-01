@@ -51,6 +51,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffect>, WeightTable.IItem<SoundEffect> {
 
 	private static final float[] pitchDelta = { -0.2F, 0.0F, 0.0F, 0.2F, 0.2F, 0.2F };
