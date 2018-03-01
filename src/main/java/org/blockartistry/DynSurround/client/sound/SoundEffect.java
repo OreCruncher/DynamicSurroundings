@@ -26,8 +26,6 @@ package org.blockartistry.DynSurround.client.sound;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.ClientRegistry;
@@ -57,9 +55,9 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 
 	private static final float[] pitchDelta = { -0.2F, 0.0F, 0.0F, 0.2F, 0.2F, 0.2F };
 
-	private final @Nullable SoundEvent sound;
-	// Hack around SoundEvent.getName() being client sided
+	private final SoundEvent sound;
 	private final String soundName;
+	
 	private SoundType type;
 	private String conditions;
 	private SoundCategory category;
@@ -78,7 +76,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	protected SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume,
 			final float pitch, final int repeatDelay, final boolean variable) {
 		this.soundName = resource.toString();
-		this.sound = Sounds.getSound(resource);
+		this.sound = SoundLoader.getSound(resource);
 		this.volume = volume;
 		this.pitch = pitch;
 		this.conditions = StringUtils.EMPTY;
@@ -246,7 +244,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append('[').append(this.sound == null ? "MISSING_SOUND" : this.soundName);
+		builder.append('[').append(this.soundName);
 		builder.append('(').append(this.conditions).append(')');
 		builder.append(", v:").append(this.volume);
 		builder.append(", p:").append(this.pitch);
@@ -288,10 +286,11 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 			setRepeatDelayRandom(record.repeatDelayRandom == null ? 0 : record.repeatDelayRandom.intValue());
 			setSoundTitle(record.title != null ? record.title : StringUtils.EMPTY);
 
-			final SoundType t;
-			if (record.soundType != null) {
+			SoundType t = null;
+			if (record.soundType != null)
 				t = SoundType.getType(record.soundType);
-			} else {
+
+			if (t == null) {
 				if (record.repeatDelay != null && record.repeatDelay.intValue() > 0)
 					t = SoundType.PERIODIC;
 				else if (record.step != null && record.step.booleanValue())
@@ -302,33 +301,36 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 					t = SoundType.BACKGROUND;
 			}
 
-			setSoundType(t != null ? t : SoundType.BACKGROUND);
+			setSoundType(t);
 
-			final SoundCategory sc;
-			if (record.soundCategory != null) {
+			SoundCategory sc = null;
+			if (record.soundCategory != null)
 				sc = SoundCategory.getByName(record.soundCategory);
-			} else {
+
+			if (sc == null) {
 				// There isn't an override - defer to the category info in
 				// the sounds.json.
 				final SoundMetadata meta = ClientRegistry.SOUND.getSoundMetadata(resource);
-				if (meta != null) {
+				if (meta != null)
 					sc = meta.getCategory();
-				} else {
-					// No info in sounds.json - best guess.
+
+				// No info in sounds.json - best guess.
+				if (sc == null) {
 					switch (t) {
+					case STEP:
+						sc = SoundCategory.BLOCKS;
+						break;
 					case BACKGROUND:
 					case PERIODIC:
 					case SPOT:
+					default:
 						sc = SoundCategory.AMBIENT;
 						break;
-					case STEP:
-					default:
-						sc = SoundCategory.BLOCKS;
 					}
 				}
 			}
 
-			setSoundCategory(sc != null ? sc : SoundCategory.AMBIENT);
+			setSoundCategory(sc);
 		}
 
 		public Builder setSoundTitle(@Nonnull final String title) {

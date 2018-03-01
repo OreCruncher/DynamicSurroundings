@@ -38,8 +38,7 @@ import org.blockartistry.DynSurround.client.footsteps.implem.ProbabilityWeightsA
 import org.blockartistry.DynSurround.client.footsteps.implem.SimultaneousAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.EventType;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
-import org.blockartistry.DynSurround.client.sound.Sounds;
-
+import org.blockartistry.DynSurround.client.sound.SoundLoader;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -244,7 +243,7 @@ public class AcousticsJsonReader {
 			if (res == null)
 				a.setSound(null);
 			else
-				a.setSound(Sounds.getSound(res));
+				a.setSound(SoundLoader.getSound(res));
 		} catch (final Throwable t) {
 			DSurround.log().warn("Unable to locate sound [%s]", soundName);
 			a.setSound(null);

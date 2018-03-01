@@ -41,6 +41,7 @@ import org.blockartistry.DynSurround.client.sound.Emitter;
 import org.blockartistry.DynSurround.client.sound.PlayerEmitter;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.SoundEngine;
+import org.blockartistry.DynSurround.client.sound.SoundLoader;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.event.PlayDistributedSoundEvent;
@@ -149,7 +150,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		});
 
 		final ResourceLocation bowLooseResource = new ResourceLocation(DSurround.MOD_ID, "bow.loose");
-		final SoundEvent bowLoose = Sounds.getSound(bowLooseResource);
+		final SoundEvent bowLoose = SoundLoader.getSound(bowLooseResource);
 		if (!this.soundsToBlock.contains(bowLooseResource.toString())) {
 			this.replacements.put("minecraft:entity.arrow.shoot", bowLoose);
 			this.replacements.put("minecraft:entity.skeleton.shoot", bowLoose);

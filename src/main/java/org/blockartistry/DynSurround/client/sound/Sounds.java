@@ -24,123 +24,68 @@
 
 package org.blockartistry.DynSurround.client.sound;
 
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.blockartistry.DynSurround.DSurround;
-import org.blockartistry.DynSurround.registry.SoundMetadata;
-import org.blockartistry.lib.sound.SoundConfigProcessor;
-
-import com.google.common.collect.Maps;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.IForgeRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod.EventBusSubscriber(modid = DSurround.MOD_ID)
+@SideOnly(Side.CLIENT)
 public final class Sounds {
 
 	private Sounds() {
 
 	}
 
-	public static SoundEffect CRAFTING;
+	public final static SoundEffect CRAFTING;
+	public final static SoundEffect SWORD_EQUIP;
+	public final static SoundEffect SWORD_SWING;
+	public final static SoundEffect AXE_EQUIP;
+	public final static SoundEffect AXE_SWING;
+	public final static SoundEffect BOW_EQUIP;
+	public final static SoundEffect BOW_PULL;
+	public final static SoundEffect TOOL_EQUIP;
+	public final static SoundEffect TOOL_SWING;
+	public final static SoundEffect UTILITY_EQUIP;
+	public final static SoundEffect FOOD_EQUIP;
+	public final static SoundEffect SHIELD_EQUIP;
+	public final static SoundEffect SHIELD_USE;
 
-	public static SoundEffect SWORD_EQUIP;
-	public static SoundEffect SWORD_SWING;
-	public static SoundEffect AXE_EQUIP;
-	public static SoundEffect AXE_SWING;
-	public static SoundEffect BOW_EQUIP;
-	public static SoundEffect BOW_PULL;
-	public static SoundEffect TOOL_EQUIP;
-	public static SoundEffect TOOL_SWING;
-	public static SoundEffect UTILITY_EQUIP;
-	public static SoundEffect FOOD_EQUIP;
-	public static SoundEffect SHIELD_EQUIP;
-	public static SoundEffect SHIELD_USE;
+	public final static SoundEffect LIGHT_ARMOR_EQUIP;
+	public final static SoundEffect MEDIUM_ARMOR_EQUIP;
+	public final static SoundEffect HEAVY_ARMOR_EQUIP;
+	public final static SoundEffect CRYSTAL_ARMOR_EQUIP;
 
-	public static SoundEffect LIGHT_ARMOR_EQUIP;
-	public static SoundEffect MEDIUM_ARMOR_EQUIP;
-	public static SoundEffect HEAVY_ARMOR_EQUIP;
-	public static SoundEffect CRYSTAL_ARMOR_EQUIP;
+	public final static SoundEffect THUNDER;
+	public final static SoundEffect RAINFALL;
 
-	public static SoundEffect THUNDER;
-	public static SoundEffect RAINFALL;
+	public final static SoundEffect WATER_DROP;
+	public final static SoundEffect WATER_DRIP;
+	public final static SoundEffect STEAM_HISS;
 
-	public static SoundEffect WATER_DROP;
-	public static SoundEffect WATER_DRIP;
-	public static SoundEffect STEAM_HISS;
-
-	public static SoundEffect FIRE;
+	public final static SoundEffect FIRE;
 
 	// Waterfalls
-	public static SoundEffect WATERFALL0;
-	public static SoundEffect WATERFALL1;
-	public static SoundEffect WATERFALL2;
-	public static SoundEffect WATERFALL3;
-	public static SoundEffect WATERFALL4;
-	public static SoundEffect WATERFALL5;
+	public final static SoundEffect WATERFALL0;
+	public final static SoundEffect WATERFALL1;
+	public final static SoundEffect WATERFALL2;
+	public final static SoundEffect WATERFALL3;
+	public final static SoundEffect WATERFALL4;
+	public final static SoundEffect WATERFALL5;
 
 	// Weather stuff
-	public static SoundEvent RAIN;
-	public static SoundEvent DUST;
-
-	// Quiet!
-	public static SoundEvent SILENCE;
+	public final static SoundEvent RAIN;
+	public final static SoundEvent DUST;
 
 	// Minecraft Cave Stuff
-	public static SoundEffect AMBIENT_CAVE;
+	public final static SoundEffect AMBIENT_CAVE;
 
-	private final static Map<ResourceLocation, SoundMetadata> soundMetadata = Maps.newHashMap();
-	private final static Map<ResourceLocation, SoundEvent> myRegistry = Maps.newHashMap();
-
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void registerSounds(@Nonnull final RegistryEvent.Register<SoundEvent> event) {
-		DSurround.log().info("Registering sounds");
-
-		final ResourceLocation soundFile = new ResourceLocation(DSurround.MOD_ID, "sounds.json");
-		final IForgeRegistry<SoundEvent> registry = event.getRegistry();
-		try (final SoundConfigProcessor proc = new SoundConfigProcessor(soundFile)) {
-			proc.forEach((sound, meta) -> {
-				final SoundMetadata data = new SoundMetadata(meta);
-				final ResourceLocation resource = new ResourceLocation(DSurround.RESOURCE_ID, sound);
-				final SoundEvent se = new SoundEvent(resource).setRegistryName(resource);
-				registry.register(se);
-				soundMetadata.put(resource, data);
-			});
-		} catch (@Nonnull final Exception ex) {
-			ex.printStackTrace();
-		}
-
-		// Scan the "public" registries making a private one. The entries are
-		// based on what the client sees and disregards what the server wants.
-		// Not entirely sure why the server has to dictate what is client data.
-		Iterator<SoundEvent> itr = SoundEvent.REGISTRY.iterator();
-		while (itr.hasNext()) {
-			final SoundEvent se = itr.next();
-			myRegistry.put(se.getRegistryName(), se);
-		}
-
-		itr = registry.iterator();
-		while (itr.hasNext()) {
-			final SoundEvent se = itr.next();
-			myRegistry.put(se.getRegistryName(), se);
-		}
-
-		SILENCE = Sounds.getSound(new ResourceLocation(DSurround.RESOURCE_ID, "silence"));
-
+	static {
 		// Weather
-
-		RAIN = Sounds.getSound(new ResourceLocation(DSurround.RESOURCE_ID, "rain"));
-		DUST = Sounds.getSound(new ResourceLocation(DSurround.RESOURCE_ID, "dust"));
+		RAIN = SoundLoader.getSound(new ResourceLocation(DSurround.RESOURCE_ID, "rain"));
+		DUST = SoundLoader.getSound(new ResourceLocation(DSurround.RESOURCE_ID, "dust"));
 
 		// SoundEffects
 		CRAFTING = new SoundEffect.Builder("crafting", SoundCategory.PLAYERS).build();
@@ -185,20 +130,6 @@ public final class Sounds {
 		AMBIENT_CAVE = new SoundEffect.Builder(new ResourceLocation("minecraft:ambient.cave"), SoundCategory.AMBIENT)
 				.build();
 
-	}
-
-	@Nullable
-	public static SoundMetadata getSoundMetadata(@Nonnull final ResourceLocation resource) {
-		return soundMetadata.get(resource);
-	}
-
-	public static SoundEvent getSound(final ResourceLocation sound) {
-		final SoundEvent evt = myRegistry.get(sound);
-		if (evt == null) {
-			DSurround.log().warn("Cannot find sound that should be registered [%s]", sound.toString());
-			return SILENCE;
-		}
-		return evt;
 	}
 
 }
