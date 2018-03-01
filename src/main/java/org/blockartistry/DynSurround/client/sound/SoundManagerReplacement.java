@@ -25,7 +25,6 @@
 package org.blockartistry.DynSurround.client.sound;
 
 import java.lang.reflect.Field;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -47,15 +46,8 @@ import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.sound.BasicSound;
 import org.blockartistry.lib.sound.ITrackedSound;
 import org.blockartistry.lib.sound.SoundState;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.openal.AL;
-import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.ALC10;
-import org.lwjgl.openal.ALC11;
-
 import gnu.trove.iterator.TObjectIntIterator;
 import gnu.trove.map.hash.TObjectIntHashMap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.SoundHandler;
@@ -64,8 +56,6 @@ import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
-import net.minecraftforge.client.event.sound.SoundSetupEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -89,13 +79,7 @@ public class SoundManagerReplacement extends SoundManager {
 		}
 	}
 
-	public static SoundManagerReplacement getSoundManager() {
-		return (SoundManagerReplacement) Minecraft.getMinecraft().getSoundHandler().sndManager;
-	}
-
 	private static final int SOUND_QUEUE_SLACK = 6;
-	private static final int MAX_STREAM_CHANNELS = 16;
-	private final static float MUTE_VOLUME = 0.00001F;
 
 	// Protection for bad behaved mods...
 	private final ThreadGuard guard = new ThreadGuard(DSurround.log(), Side.CLIENT, "SoundManager")
@@ -417,14 +401,6 @@ public class SoundManagerReplacement extends SoundManager {
 		}
 	}
 
-	@SubscribeEvent
-	public void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
-		final ISound sound = event.getSound();
-		if (sound instanceof ITrackedSound) {
-			((ITrackedSound) sound).setId(event.getUuid());
-		}
-	}
-
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void diagnostics(final DiagnosticEvent.Gather event) {
 		synchronized (this.mutex) {
@@ -467,38 +443,6 @@ public class SoundManagerReplacement extends SoundManager {
 		return SoundSystemConfig.getNumberNormalChannels();
 	}
 
-	public boolean isMuted() {
-		synchronized (this.mutex) {
-			checkForClientThread("isMuted");
-			return this.sndSystem != null && getSoundSystem().getMasterVolume() == MUTE_VOLUME;
-		}
-	}
-
-	public void setMuted(final boolean flag) {
-		// If not loaded return
-		if (!this.loaded || this.sndSystem == null)
-			return;
-
-		synchronized (this.mutex) {
-			checkForClientThread("setMuted");
-			final SoundSystem ss = getSoundSystem();
-
-			// OpenEye: Looks like the command thread is dead or not initialized.
-			try {
-				if (flag) {
-					ss.setMasterVolume(MUTE_VOLUME);
-				} else {
-					final GameSettings options = Minecraft.getMinecraft().gameSettings;
-					ss.setMasterVolume(options.getSoundLevel(SoundCategory.MASTER));
-				}
-			} catch (final Throwable t) {
-				// Silent - at some point the thread will come back and can be
-				// issued a mute.
-				;
-			}
-		}
-	}
-
 	@Override
 	public float getClampedVolume(@Nonnull final ISound sound) {
 		final float volumeScale = ClientRegistry.SOUND.getVolumeScale(sound);
@@ -512,59 +456,6 @@ public class SoundManagerReplacement extends SoundManager {
 
 		}
 		return result;
-	}
-
-	private static void alErrorCheck() {
-		final int error = AL10.alGetError();
-		if (error != AL10.AL_NO_ERROR)
-			DSurround.log().warn("OpenAL error: %d", error);
-	}
-
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void configureSound(@Nonnull final SoundSetupEvent event) {
-		int totalChannels = -1;
-
-		try {
-
-			final boolean create = !AL.isCreated();
-			if (create) {
-				AL.create();
-				alErrorCheck();
-			}
-
-			final IntBuffer ib = BufferUtils.createIntBuffer(1);
-			ALC10.alcGetInteger(AL.getDevice(), ALC11.ALC_MONO_SOURCES, ib);
-			alErrorCheck();
-			totalChannels = ib.get(0);
-
-			if (create)
-				AL.destroy();
-
-		} catch (final Throwable e) {
-			e.printStackTrace();
-		}
-
-		int normalChannelCount = ModOptions.sound.normalSoundChannelCount;
-		int streamChannelCount = ModOptions.sound.streamingSoundChannelCount;
-
-		if (ModOptions.sound.autoConfigureChannels && totalChannels > 64) {
-			totalChannels = ((totalChannels + 1) * 3) / 4;
-			streamChannelCount = Math.min(totalChannels / 5, MAX_STREAM_CHANNELS);
-			normalChannelCount = totalChannels - streamChannelCount;
-		}
-
-		DSurround.log().info("Sound channels: %d normal, %d streaming (total avail: %s)", normalChannelCount,
-				streamChannelCount, totalChannels == -1 ? "UNKNOWN" : Integer.toString(totalChannels));
-		SoundSystemConfig.setNumberNormalChannels(normalChannelCount);
-		SoundSystemConfig.setNumberStreamingChannels(streamChannelCount);
-
-		// Setup sound buffering
-		if (ModOptions.sound.streamBufferCount != 0)
-			SoundSystemConfig.setNumberStreamingBuffers(ModOptions.sound.streamBufferCount);
-		if (ModOptions.sound.streamBufferSize != 0)
-			SoundSystemConfig.setStreamingBufferSize(ModOptions.sound.streamBufferSize * 1024);
-		DSurround.log().info("Stream buffers: %d x %d", SoundSystemConfig.getNumberStreamingBuffers(),
-				SoundSystemConfig.getStreamingBufferSize());
 	}
 
 }

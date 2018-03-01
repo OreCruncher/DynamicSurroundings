@@ -43,16 +43,14 @@ public class BackgroundMute {
 		if (ModOptions.sound.muteWhenBackground && Display.isCreated()) {
 			final SoundManager mgr = Minecraft.getMinecraft().getSoundHandler().sndManager;
 			if (mgr instanceof SoundManagerReplacement) {
-				final SoundManagerReplacement sm = (SoundManagerReplacement) mgr;
-
 				final boolean active = Display.isActive();
-				final boolean muted = sm.isMuted();
+				final boolean muted = SoundEngine.INSTANCE.isMuted();
 
 				if (active && muted) {
-					sm.setMuted(false);
+					SoundEngine.INSTANCE.setMuted(false);
 					DSurround.log().debug("Unmuting sounds");
 				} else if (!active && !muted) {
-					sm.setMuted(true);
+					SoundEngine.INSTANCE.setMuted(true);
 					DSurround.log().debug("Muting sounds");
 				}
 			}
