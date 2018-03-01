@@ -33,7 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.gui.ConfigSound;
-import org.blockartistry.DynSurround.client.sound.Sounds;
+import org.blockartistry.DynSurround.client.sound.SoundLoader;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.lib.MyUtils;
 import org.blockartistry.lib.math.MathStuff;
@@ -119,7 +119,7 @@ public final class SoundRegistry extends Registry {
 
 	@Nullable
 	public SoundMetadata getSoundMetadata(@Nonnull final ResourceLocation resource) {
-		return Sounds.getSoundMetadata(resource);
+		return SoundLoader.getSoundMetadata(resource);
 	}
 
 }
