@@ -170,7 +170,7 @@ public abstract class Emitter {
 	public void stop() {
 		if (this.activeSound != null) {
 			this.activeSound.setRepeat(false);
-			SoundEngine.stopSound(this.activeSound);
+			SoundEngine.INSTANCE.stopSound(this.activeSound);
 		}
 	}
 
