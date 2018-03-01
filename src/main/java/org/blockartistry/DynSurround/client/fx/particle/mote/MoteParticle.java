@@ -27,6 +27,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraft.client.Minecraft;
@@ -143,8 +144,8 @@ public abstract class MoteParticle implements IParticleMote {
 		buffer.lightmap(this.slX16, this.blX16);
 	}
 
-	protected void drawVertex(final VertexBuffer buffer, final double x, final double y, final double z, final double u,
-			final double v) {
+	protected void drawVertex(final VertexBuffer buffer, final double x, final double y, final double z,
+			final double u, final double v) {
 		buffer.pos(x, y, z).tex(u, v);
 		applyColor(buffer);
 		applyLightmap(buffer);
@@ -156,7 +157,7 @@ public abstract class MoteParticle implements IParticleMote {
 			float rotZ, float rotYZ, float rotXY, float rotXZ);
 
 	public int getBrightnessForRender(final float partialTicks) {
-		return this.world.getCombinedLight(this.position, 0);
+		return ClientChunkCache.INSTANCE.getCombinedLight(this.position, 0);
 	}
 
 }
