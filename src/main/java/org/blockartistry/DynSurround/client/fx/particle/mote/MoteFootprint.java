@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.FootprintStyle;
 import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.lib.WorldUtils;
@@ -119,10 +120,10 @@ public class MoteFootprint extends MoteAgeable {
 
 	@Override
 	protected void update() {
-		if (!WorldUtils.isSolidBlock(this.world, this.downPos)) {
+		if (!ClientChunkCache.INSTANCE.getBlockState(this.downPos).getMaterial().isSolid()) {
 			kill();
 		} else if (this.isSnowLayer
-				&& WorldUtils.getBlockState(this.world, this.position).getBlock() != Blocks.SNOW_LAYER) {
+				&& ClientChunkCache.INSTANCE.getBlockState(this.position).getBlock() != Blocks.SNOW_LAYER) {
 			kill();
 		}
 	}
