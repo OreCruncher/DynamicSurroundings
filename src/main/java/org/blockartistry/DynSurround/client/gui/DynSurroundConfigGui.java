@@ -36,12 +36,11 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.Permissions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
+import org.blockartistry.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.DynSurround.registry.SoundRegistry;
 import org.blockartistry.lib.ConfigProcessor;
 import org.blockartistry.lib.gui.GuiConfigBase;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
@@ -178,9 +177,8 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 		cat.setRequiresMcRestart(false);
 		cat.setRequiresWorldRestart(false);
 
-		final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
 		final List<String> sounds = new ArrayList<>();
-		for (final Object resource : handler.soundRegistry.getKeys())
+		for (final Object resource : SoundEngine.instance().getSoundRegistry().getKeys())
 			sounds.add(resource.toString());
 		Collections.sort(sounds);
 
