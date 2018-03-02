@@ -21,40 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.blockartistry.DynSurround.asm;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.blockartistry.lib.asm.MyTransformer;
+import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.lib.asm.Transmorgrifier;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
 
-public class Transformer extends MyTransformer {
+public class PatchParticleManagerSync extends Transmorgrifier {
 
-	private static final Logger logger = LogManager.getLogger("dsurround Transform");
-
-	public static Logger log() {
-		return logger;
-	}
-
-	public Transformer() {
-		super(logger);
+	public PatchParticleManagerSync() {
+		super("net.minecraft.client.particle.ParticleManager");
 	}
 
 	@Override
-	protected void initTransmorgrifiers() {
-		addTransmorgrifier(new PatchEntityRenderer());
-		addTransmorgrifier(new PatchWorldServer());
-		addTransmorgrifier(new PatchSoundManager());
-		addTransmorgrifier(new PatchSoundManagerPlayTime());
-		addTransmorgrifier(new PatchSoundManagerClampVolume());
-		addTransmorgrifier(new PatchSoundManagerSync());
-		addTransmorgrifier(new PatchParticleManagerSync());
-		addTransmorgrifier(new PatchEntityArrow());
+	public String name() {
+		return "ParticleManager synchronization";
+	}
 
-		// Sound engine crash patches
-		addTransmorgrifier(new SoundCrashFixSource());
-		addTransmorgrifier(new SoundCrashFixLibrary());
-		addTransmorgrifier(new SoundCrashFixStreamThread());
+	@Override
+	public boolean isEnabled() {
+		return ModOptions.asm.enableParticleManagerSync;
+	}
+
+	@Override
+	public boolean transmorgrify(final ClassNode cn) {
+		// Loop through the method nodes setting the synchronized bit
+		for (final MethodNode m : cn.methods) {
+			if (!m.name.startsWith("<") && (m.access & Opcodes.ACC_PUBLIC) != 0
+					&& (m.access & Opcodes.ACC_SYNCHRONIZED) == 0) {
+				logMethod(Transformer.log(), m, "Synchronized!");
+				m.access |= Opcodes.ACC_SYNCHRONIZED;
+			}
+		}
+
+		return true;
 	}
 
 }

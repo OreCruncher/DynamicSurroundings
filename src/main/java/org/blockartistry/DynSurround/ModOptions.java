@@ -56,9 +56,6 @@ public final class ModOptions {
 
 	// Trace bits for debugging
 	public static class Trace {
-		public static final int TRUE_SOUND_VOLUME = 0x1;
-		public static final int TRACE_VANILLA_SOUNDS = 0x2;
-		public static final int TRACE_PARTICLE_MANAGER = 0x4;
 	};
 
 	private ModOptions() {
@@ -69,6 +66,8 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_WEATHER = "Enable Weather Control";
 	public static final String CONFIG_ENABLE_RESET_WEATHER_ON_SLEEP = "Enable Weather Reset on Sleep Control";
 	public static final String CONFIG_DISABLE_ARROW_CRITICAL_TRAIL = "Disable Arrow Critical Particle Trail";
+	public static final String CONFIG_ENABLE_SYNC_SOUND_MANAGER = "Enable synchronized for SoundManager";
+	public static final String CONFIG_ENABLE_SYNC_PARTICLE_MANAGER = "Enable synchronized for ParticleManager";
 
 	@Category(CATEGORY_ASM)
 	@LangKey("dsurround.cfg.asm.cat.ASM")
@@ -105,7 +104,21 @@ public final class ModOptions {
 		@Comment("Disable particle trail left by an arrow when it flies")
 		@RestartRequired(server = true)
 		public static boolean disableArrowParticleTrail = true;
-	}
+
+		@Option(CONFIG_ENABLE_SYNC_SOUND_MANAGER)
+		@DefaultValue("false")
+		@LangKey("dsurround.cfg.asm.EnableSMSync")
+		@Comment("Enable synchronized attribute on SoundManager public methods")
+		@RestartRequired(server = true)
+		public static boolean enableSoundManagerSync = false;
+
+		@Option(CONFIG_ENABLE_SYNC_PARTICLE_MANAGER)
+		@DefaultValue("false")
+		@LangKey("dsurround.cfg.asm.EnablePMSync")
+		@Comment("Enable synchronized attribute on ParticleManager public methods")
+		@RestartRequired(server = true)
+		public static boolean enableParticleManagerSync = false;
+}
 
 	public static final String CATEGORY_LOGGING_CONTROL = "logging";
 	public static final String CONFIG_ENABLE_ONLINE_VERSION_CHECK = "Enable Online Version Check";
