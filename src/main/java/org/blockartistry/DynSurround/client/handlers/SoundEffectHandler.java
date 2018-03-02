@@ -60,7 +60,6 @@ import gnu.trove.map.hash.TObjectFloatHashMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -139,7 +138,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		this.soundsToBlock.clear();
 		this.soundCull.clear();
 		this.replacements.clear();
-		final Set<ResourceLocation> reg = Minecraft.getMinecraft().getSoundHandler().soundRegistry.getKeys();
+		final Set<ResourceLocation> reg = SoundEngine.instance().getSoundRegistry().getKeys();
 		reg.forEach(resource -> {
 			final String rs = resource.toString();
 			if (ClientRegistry.SOUND.isSoundBlockedLogical(rs)) {

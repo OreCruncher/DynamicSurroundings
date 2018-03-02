@@ -59,7 +59,9 @@ import gnu.trove.iterator.TObjectIntIterator;
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
+import net.minecraft.client.audio.SoundRegistry;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -92,6 +94,10 @@ public final class SoundEngine {
 		}
 	}
 
+	private static final Field getSoundManager = ReflectionHelper.findField(SoundHandler.class, "sndManager",
+			"field_147694_f");
+	private static final Field getSoundRegistry = ReflectionHelper.findField(SoundHandler.class, "soundRegistry",
+			"field_147697_e");
 	private static final Field getSoundSystem = ReflectionHelper.findField(SoundManager.class, "sndSystem",
 			"field_148620_e");
 	private static final Field getPlayingSounds = ReflectionHelper.findField(SoundManager.class, "playingSounds",
@@ -122,6 +128,7 @@ public final class SoundEngine {
 	private final Set<ITrackedSound> queuedSounds = new IdentityHashSet<>();
 
 	private SoundManager manager;
+	private SoundRegistry soundRegistry;
 	private SoundSystem sndSystem;
 	private Library sndLibrary;
 	private Map<String, ISound> playingSounds;
@@ -135,7 +142,8 @@ public final class SoundEngine {
 	@SuppressWarnings("unchecked")
 	private void setup() {
 		try {
-			this.manager = Minecraft.getMinecraft().getSoundHandler().sndManager;
+			this.manager = (SoundManager) getSoundManager.get(Minecraft.getMinecraft().getSoundHandler());
+			this.soundRegistry = (SoundRegistry) getSoundRegistry.get(Minecraft.getMinecraft().getSoundHandler());
 			this.sndSystem = (SoundSystem) getSoundSystem.get(this.manager);
 			this.playingSounds = (Map<String, ISound>) getPlayingSounds.get(this.manager);
 			this.delayedSounds = (Map<ISound, Integer>) getDelayedSounds.get(this.manager);
@@ -157,6 +165,26 @@ public final class SoundEngine {
 
 	private void flushSoundQueue() {
 		this.sndSystem.CommandQueue(null);
+	}
+
+	/**
+	 * Obtains the SoundRegistry from the SoundHandler
+	 *
+	 * @return Reference to the SoundRegistry
+	 */
+	@Nonnull
+	public SoundRegistry getSoundRegistry() {
+		return this.soundRegistry;
+	}
+
+	/**
+	 * Obtains the reference to the SoundManager from SoundHandler
+	 * 
+	 * @return Reference to the SoundManager
+	 */
+	@Nonnull
+	public SoundManager getSoundManager() {
+		return this.manager;
 	}
 
 	/**

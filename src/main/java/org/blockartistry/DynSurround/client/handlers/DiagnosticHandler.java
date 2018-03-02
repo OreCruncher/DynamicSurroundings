@@ -34,6 +34,7 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.handlers.trace.TraceParticleManager;
+import org.blockartistry.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.DynSurround.client.swing.DiagnosticPanel;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.event.ServerDataEvent;
@@ -163,7 +164,7 @@ public class DiagnosticHandler extends EffectHandlerBase {
 			DSurround.log().debug("Music Ticker    : %s",
 					Minecraft.getMinecraft().getMusicTicker().getClass().getName());
 			DSurround.log().debug("Sound Manager   : %s",
-					Minecraft.getMinecraft().getSoundHandler().sndManager.getClass().getName());
+					SoundEngine.instance().getSoundManager().getClass().getName());
 		}
 	}
 
