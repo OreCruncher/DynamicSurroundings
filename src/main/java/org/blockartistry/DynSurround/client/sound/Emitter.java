@@ -37,6 +37,7 @@ import org.blockartistry.DynSurround.registry.SoundMetadata;
 import org.blockartistry.lib.gui.RecordTitleEmitter;
 import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.lib.sound.BasicSound;
+import org.blockartistry.lib.sound.SoundState;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -94,7 +95,8 @@ public abstract class Emitter {
 		if (this.activeSound == null) {
 			this.activeSound = createSound();
 		} else if (this.activeSound.getState().isActive()) {
-			if (!this.activeSound.canSoundBeHeard(EnvironState.getPlayerPosition())) {
+			if (!this.activeSound.canSoundBeHeard(EnvironState.getPlayerPosition())
+					|| (isFading() && this.activeSound.getState() == SoundState.DELAYED)) {
 				SoundEffectHandler.INSTANCE.stopSound(this.activeSound);
 			}
 			return;
@@ -170,7 +172,7 @@ public abstract class Emitter {
 	public void stop() {
 		if (this.activeSound != null) {
 			this.activeSound.setRepeat(false);
-			SoundEngine.INSTANCE.stopSound(this.activeSound);
+			SoundEngine.instance().stopSound(this.activeSound);
 		}
 	}
 

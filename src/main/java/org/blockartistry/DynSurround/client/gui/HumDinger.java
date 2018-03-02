@@ -58,7 +58,7 @@ public final class HumDinger {
 			if (!StringUtils.isEmpty(res)) {
 				final SoundEvent se = SoundEvent.REGISTRY.getObject(new ResourceLocation(res));
 				if (se != null)
-					SoundEngine.INSTANCE.playSound(new AdhocSound(se, SoundCategory.MASTER));
+					SoundEngine.instance().playSound(new AdhocSound(se, SoundCategory.MASTER));
 				else
 					DSurround.log().warn("Unable to locate startup sound [%s]", res);
 			} else {

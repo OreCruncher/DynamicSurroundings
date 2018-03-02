@@ -26,93 +26,278 @@ package org.blockartistry.DynSurround.client.sound;
 
 import java.lang.reflect.Field;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientRegistry;
+import org.blockartistry.DynSurround.event.DiagnosticEvent;
+import org.blockartistry.lib.ThreadGuard;
+import org.blockartistry.lib.ThreadGuard.Action;
+import org.blockartistry.lib.collections.IdentityHashSet;
+import org.blockartistry.lib.compat.ModEnvironment;
+import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.sound.ITrackedSound;
+import org.blockartistry.lib.sound.SoundState;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALC11;
 
+import gnu.trove.iterator.TObjectIntIterator;
+import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraftforge.client.event.sound.SoundSetupEvent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
+import net.minecraftforge.client.event.sound.SoundSetupEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
+import paulscode.sound.Library;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
 public final class SoundEngine {
 
-	private static final Field soundSystem = ReflectionHelper.findField(SoundManager.class, "sndSystem",
+	private static Field soundPhysicsGlobalVolume;
+
+	static {
+		try {
+			final Class<?> soundPhysics = Class.forName("com.sonicether.soundphysics.SoundPhysics");
+			soundPhysicsGlobalVolume = ReflectionHelper.findField(soundPhysics, "globalVolumeMultiplier");
+		} catch (final Exception ex) {
+			soundPhysicsGlobalVolume = null;
+		}
+	}
+
+	private static final Field getSoundSystem = ReflectionHelper.findField(SoundManager.class, "sndSystem",
 			"field_148620_e");
+	private static final Field getPlayingSounds = ReflectionHelper.findField(SoundManager.class, "playingSounds",
+			"field_148629_h");
+	private static final Field getDelayedSounds = ReflectionHelper.findField(SoundManager.class, "delayedSounds",
+			"field_148626_m");
+	private static final Field getSoundLibrary = ReflectionHelper.findField(SoundSystem.class, "soundLibrary");
 
-	private final static float MUTE_VOLUME = 0.00001F;
-	private final static int MAX_STREAM_CHANNELS = 16;
+	private static final float MUTE_VOLUME = 0.00001F;
+	private static final int MAX_STREAM_CHANNELS = 16;
+	private static final int SOUND_QUEUE_SLACK = 6;
 
-	public static final SoundEngine INSTANCE = new SoundEngine();
+	// Maximum number of sound channels configured in the sound system
+	private static int maxSounds = 0;
+	private static SoundEngine instance_;
+
+	public static SoundEngine instance() {
+		if (instance_ == null)
+			instance_ = new SoundEngine();
+		return instance_;
+	}
+
+	// Protection for bad behaved mods...
+	private final ThreadGuard guard = new ThreadGuard(DSurround.log(), Side.CLIENT, "SoundManager")
+			.setAction(DSurround.isDeveloperMode() ? Action.EXCEPTION
+					: ModOptions.logging.enableDebugLogging ? Action.LOG : Action.NONE);
+
+	private final Set<ITrackedSound> queuedSounds = new IdentityHashSet<>();
+
+	private SoundManager manager;
+	private SoundSystem sndSystem;
+	private Library sndLibrary;
+	private Map<String, ISound> playingSounds;
+	private Map<ISound, Integer> delayedSounds;
 
 	private SoundEngine() {
+		setup();
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
-	private static SoundManager getManager() {
-		return (SoundManagerReplacement) Minecraft.getMinecraft().getSoundHandler().sndManager;
-	}
-
-	private static SoundSystem getSoundSystem() {
+	@SuppressWarnings("unchecked")
+	private void setup() {
 		try {
-			return (SoundSystem) soundSystem.get(getManager());
+			this.manager = Minecraft.getMinecraft().getSoundHandler().sndManager;
+			this.sndSystem = (SoundSystem) getSoundSystem.get(this.manager);
+			this.playingSounds = (Map<String, ISound>) getPlayingSounds.get(this.manager);
+			this.delayedSounds = (Map<ISound, Integer>) getDelayedSounds.get(this.manager);
+			this.sndLibrary = (Library) getSoundLibrary.get(this.sndSystem);
 		} catch (final Throwable t) {
 			t.printStackTrace();
 		}
-		return null;
 	}
 
+	private int currentSoundCount() {
+		synchronized (SoundSystemConfig.THREAD_SYNC) {
+			return this.sndLibrary.getSources().size();
+		}
+	}
+
+	private boolean canFitSound() {
+		return currentSoundCount() < (maxSounds - SOUND_QUEUE_SLACK);
+	}
+
+	private void flushSoundQueue() {
+		this.sndSystem.CommandQueue(null);
+	}
+
+	/**
+	 * Determines if the sound is currently playing within the sound system
+	 *
+	 * @param sound
+	 *            The sound to check
+	 * @return true if the sound is currently playing, false otherwise
+	 */
 	public boolean isSoundPlaying(@Nonnull final ITrackedSound sound) {
-		return getManager().isSoundPlaying(sound);
+		return sound.getState().isActive() && this.queuedSounds.contains(sound);
 	}
 
+	/**
+	 * Stops the specified sound if it is playing.
+	 *
+	 * @param sound
+	 *            The sound to stop
+	 */
 	public void stopSound(@Nonnull final ITrackedSound sound) {
-		getManager().stopSound(sound);
+		if (sound.getState().isActive()) {
+			this.sndSystem.stop(sound.getId());
+			this.delayedSounds.remove(sound);
+		}
 	}
 
+	/**
+	 * Stops all playing and pending sounds. All lists and queues are dumped.
+	 */
 	public void stopAllSounds() {
-		getManager().stopAllSounds();
+		this.manager.stopAllSounds();
 	}
 
+	/**
+	 * Submits the sound to the sound system to be played.
+	 *
+	 * @param sound
+	 *            Sound to play
+	 * @return ID assigned to the sound by the sound system. A null or empty return
+	 *         indicates that the sound was not submitted
+	 */
 	@Nullable
 	public String playSound(@Nonnull final ITrackedSound sound) {
-		getManager().playSound(sound);
+		// If the sound has an ID assume it is playing and needs
+		// to be stopped.
+		if (!StringUtils.isEmpty(sound.getId())) {
+			stopSound(sound);
+		}
+
+		// Wipe the existing ID
+		sound.setId(StringUtils.EMPTY);
+		sound.setState(SoundState.NONE);
+
+		// If the sound cannot fit then log and set the error state
+		if (!canFitSound()) {
+			DSurround.log().debug("> NO ROOM: [%s]", sound.toString());
+			sound.setState(SoundState.ERROR);
+		} else {
+			// Play the sound if actual music is not installed or the sound is not music
+			if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC) {
+				this.manager.playSound(sound);
+				flushSoundQueue();
+			}
+
+			// If no ID was set there was an error. Else assume it is in a play state.
+			if (StringUtils.isEmpty(sound.getId()))
+				sound.setState(SoundState.ERROR);
+			else
+				sound.setState(SoundState.PLAYING);
+
+			// Add active sounds to the list for monitoring
+			if (sound.getState().isActive()) {
+				DSurround.log().debug("> QUEUED: [%s]", sound.toString());
+				this.queuedSounds.add(sound);
+			} else if (ModOptions.logging.enableDebugLogging)
+				DSurround.log().debug("> NOT QUEUED: [%s]", sound.toString());
+		}
+
 		return sound.getId();
 	}
 
-	public boolean isMuted() {
-		return getSoundSystem().getMasterVolume() == MUTE_VOLUME;
+	/**
+	 * Run down our active sound list checking that they are still active. If they
+	 * aren't update the state accordingly.
+	 *
+	 * @param event
+	 *            Event that was raised
+	 */
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public void clientTick(@Nonnull TickEvent.ClientTickEvent event) {
+		if (event.side == Side.CLIENT && event.phase == Phase.END) {
+			this.queuedSounds.removeIf(sound -> {
+				switch (sound.getState()) {
+				case DELAYED:
+					if (!this.delayedSounds.containsKey(sound)) {
+						if (this.manager.isSoundPlaying(sound))
+							sound.setState(SoundState.PLAYING);
+						else
+							sound.setState(SoundState.DONE);
+					}
+					break;
+				case PLAYING:
+					if (!this.manager.isSoundPlaying(sound)) {
+						if (this.delayedSounds.containsKey(sound))
+							sound.setState(SoundState.DELAYED);
+						else
+							sound.setState(SoundState.DONE);
+					}
+					break;
+				default:
+					break;
+				}
+				return !sound.getState().isActive();
+			});
+		}
 	}
 
+	/**
+	 * Checks to see if the sound system has been muted.
+	 *
+	 * @return true if it has been muted, false otherwise
+	 */
+	public boolean isMuted() {
+		return this.sndSystem.getMasterVolume() == MUTE_VOLUME;
+	}
+
+	/**
+	 * Sets the mute state of the sound system based on the flag provided.
+	 *
+	 * @param flag
+	 *            true to mute the sound system, false to unmute
+	 */
 	public void setMuted(final boolean flag) {
 		// OpenEye: Looks like the command thread is dead or not initialized.
 		try {
 			if (flag) {
-				getSoundSystem().setMasterVolume(MUTE_VOLUME);
+				this.sndSystem.setMasterVolume(MUTE_VOLUME);
 			} else {
 				final GameSettings options = Minecraft.getMinecraft().gameSettings;
-				getSoundSystem().setMasterVolume(options.getSoundLevel(SoundCategory.MASTER));
+				if (options != null)
+					this.sndSystem.setMasterVolume(options.getSoundLevel(SoundCategory.MASTER));
 			}
 		} catch (final Throwable t) {
 			// Silent - at some point the thread will come back and can be
@@ -121,12 +306,81 @@ public final class SoundEngine {
 		}
 	}
 
+	/**
+	 * Event raised when a sound is going to be played. Use this time to set the ID
+	 * of an ITrackedSound as well as check whether the current thread is the client
+	 * thread.
+	 *
+	 * @param event
+	 *            Incoming event that has been raised
+	 */
 	@SubscribeEvent
-	public static void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
+	public void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
+		this.guard.check("playSound");
 		final ISound sound = event.getSound();
 		if (sound instanceof ITrackedSound) {
 			((ITrackedSound) sound).setId(event.getUuid());
 		}
+	}
+
+	/**
+	 * Event handler for the diagnostic event.
+	 *
+	 * @param event
+	 *            Event that has been raised.
+	 */
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public void diagnostics(final DiagnosticEvent.Gather event) {
+		final int soundCount = currentSoundCount();
+		final int maxCount = maxSounds;
+		event.output.add("SoundSystem: " + soundCount + "/" + maxCount);
+
+		final TObjectIntHashMap<ResourceLocation> counts = new TObjectIntHashMap<>();
+
+		final Iterator<Entry<String, ISound>> iterator = this.playingSounds.entrySet().iterator();
+		while (iterator.hasNext()) {
+			final Entry<String, ISound> entry = iterator.next();
+			final ISound isound = entry.getValue();
+			counts.adjustOrPutValue(isound.getSound().getSoundLocation(), 1, 1);
+		}
+
+		final List<String> results = new ArrayList<>();
+		final TObjectIntIterator<ResourceLocation> itr = counts.iterator();
+		while (itr.hasNext()) {
+			itr.advance();
+			results.add(String.format(TextFormatting.GOLD + "%s: %d", itr.key().toString(), itr.value()));
+		}
+		Collections.sort(results);
+		event.output.addAll(results);
+	}
+
+	private static float getVolume(@Nonnull final SoundCategory category) {
+		final GameSettings settings = Minecraft.getMinecraft().gameSettings;
+		return settings != null && category != null && category != SoundCategory.MASTER
+				? settings.getSoundLevel(category)
+				: 1.0F;
+	}
+
+	/**
+	 * ASM redirects the SoundManager code to this method. Purpose is that the
+	 * volume is scaled by additional configuration information.
+	 *
+	 * @param sound
+	 *            The sound object where volume is being calculated
+	 * @return Clamped volume for playing the sound
+	 */
+	public static float getClampedVolume(@Nonnull final ISound sound) {
+		final float volumeScale = ClientRegistry.SOUND.getVolumeScale(sound);
+		final float volume = sound.getVolume() * getVolume(sound.getCategory()) * volumeScale;
+		final float result = MathStuff.clamp(volume, 0.0F, 1.0F);
+
+		try {
+			if (soundPhysicsGlobalVolume != null)
+				return result * soundPhysicsGlobalVolume.getFloat(null);
+		} catch (final Exception ex) {
+			;
+		}
+		return result;
 	}
 
 	private static void alErrorCheck() {
@@ -135,6 +389,12 @@ public final class SoundEngine {
 			DSurround.log().warn("OpenAL error: %d", error);
 	}
 
+	/**
+	 * Event handler for configuring the sound channels of the sound engine.
+	 *
+	 * @param event
+	 *            Event that has been raised
+	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void configureSound(@Nonnull final SoundSetupEvent event) {
 		int totalChannels = -1;
@@ -172,6 +432,8 @@ public final class SoundEngine {
 				streamChannelCount, totalChannels == -1 ? "UNKNOWN" : Integer.toString(totalChannels));
 		SoundSystemConfig.setNumberNormalChannels(normalChannelCount);
 		SoundSystemConfig.setNumberStreamingChannels(streamChannelCount);
+
+		maxSounds = SoundSystemConfig.getNumberNormalChannels() + SoundSystemConfig.getNumberStreamingChannels();
 
 		// Setup sound buffering
 		if (ModOptions.sound.streamBufferCount != 0)
