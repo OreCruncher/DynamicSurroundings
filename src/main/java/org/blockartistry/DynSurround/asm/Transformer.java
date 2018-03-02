@@ -44,8 +44,9 @@ public class Transformer extends MyTransformer {
 	protected void initTransmorgrifiers() {
 		addTransmorgrifier(new PatchEntityRenderer());
 		addTransmorgrifier(new PatchWorldServer());
-		addTransmorgrifier(new PatchSoundHandler());
 		addTransmorgrifier(new PatchSoundManager());
+		addTransmorgrifier(new PatchSoundManagerPlayTime());
+		addTransmorgrifier(new PatchSoundManagerClampVolume());
 		addTransmorgrifier(new PatchEntityArrow());
 
 		// Sound engine crash patches

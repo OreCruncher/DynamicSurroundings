@@ -27,8 +27,6 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.lwjgl.opengl.Display;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundManager;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,18 +39,14 @@ public class BackgroundMute {
 	public static void clientTick(final TickEvent.ClientTickEvent event) {
 		// Make sure that the display is created. OpenEye says that sometimes it isn't.
 		if (ModOptions.sound.muteWhenBackground && Display.isCreated()) {
-			final SoundManager mgr = Minecraft.getMinecraft().getSoundHandler().sndManager;
-			if (mgr instanceof SoundManagerReplacement) {
-				final boolean active = Display.isActive();
-				final boolean muted = SoundEngine.INSTANCE.isMuted();
-
-				if (active && muted) {
-					SoundEngine.INSTANCE.setMuted(false);
-					DSurround.log().debug("Unmuting sounds");
-				} else if (!active && !muted) {
-					SoundEngine.INSTANCE.setMuted(true);
-					DSurround.log().debug("Muting sounds");
-				}
+			final boolean active = Display.isActive();
+			final boolean muted = SoundEngine.instance().isMuted();
+			if (active && muted) {
+				SoundEngine.instance().setMuted(false);
+				DSurround.log().debug("Unmuting sounds");
+			} else if (!active && !muted) {
+				SoundEngine.instance().setMuted(true);
+				DSurround.log().debug("Muting sounds");
 			}
 		}
 	}

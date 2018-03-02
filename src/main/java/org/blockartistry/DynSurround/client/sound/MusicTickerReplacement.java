@@ -78,7 +78,7 @@ public class MusicTickerReplacement extends MusicTicker {
 		this.currentScale = MathStuff.clamp(this.currentScale, MIN_VOLUME_SCALE, 1.0F);
 
 		if (this.currentMusic instanceof ConfigSound) {
-			if (!SoundEngine.INSTANCE.isSoundPlaying((ITrackedSound) this.currentMusic)) {
+			if (!SoundEngine.instance().isSoundPlaying((ITrackedSound) this.currentMusic)) {
 				this.currentMusic = null;
 				this.timeUntilNextMusic = 60;
 				super.update();
@@ -91,19 +91,19 @@ public class MusicTickerReplacement extends MusicTicker {
 	public void setPlaying(@Nonnull final ConfigSound sound) {
 		stopMusic();
 		this.currentMusic = sound;
-		SoundEngine.INSTANCE.playSound((ITrackedSound) this.currentMusic);
+		SoundEngine.instance().playSound((ITrackedSound) this.currentMusic);
 	}
 
 	@Override
 	public void playMusic(@Nonnull final MusicTicker.MusicType requestedMusicType) {
 		this.currentMusic = new MusicSound(requestedMusicType.getMusicLocation()).setVolumeScale(this.MUSIC_SCALER);
-		SoundEngine.INSTANCE.playSound((ITrackedSound) this.currentMusic);
+		SoundEngine.instance().playSound((ITrackedSound) this.currentMusic);
 		this.timeUntilNextMusic = Integer.MAX_VALUE;
 	}
 
 	public void stopMusic() {
 		if (this.currentMusic != null) {
-			SoundEngine.INSTANCE.stopSound((ITrackedSound) this.currentMusic);
+			SoundEngine.instance().stopSound((ITrackedSound) this.currentMusic);
 			this.currentMusic = null;
 			this.timeUntilNextMusic = 0;
 		}

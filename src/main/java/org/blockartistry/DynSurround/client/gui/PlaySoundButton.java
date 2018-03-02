@@ -61,7 +61,7 @@ public class PlaySoundButton extends GuiButtonExt {
 		super.drawButton(mc, x, y);
 
 		if (this.playingSound != null) {
-			if (!SoundEngine.INSTANCE.isSoundPlaying(this.playingSound)) {
+			if (!SoundEngine.instance().isSoundPlaying(this.playingSound)) {
 				this.playingSound = null;
 				updateDisplayText();
 			}
@@ -76,16 +76,16 @@ public class PlaySoundButton extends GuiButtonExt {
 			final MusicTickerReplacement mtr = (MusicTickerReplacement) ticker;
 			mtr.setPlaying(sound);
 		} else {
-			SoundEngine.INSTANCE.playSound(sound);
+			SoundEngine.instance().playSound(sound);
 		}
 	}
 
 	public void playSound(@Nonnull final Minecraft mc, final float volume) {
 		if (this.playingSound != null) {
-			SoundEngine.INSTANCE.stopSound(this.playingSound);
+			SoundEngine.instance().stopSound(this.playingSound);
 			this.playingSound = null;
 		} else {
-			SoundEngine.INSTANCE.stopAllSounds();
+			SoundEngine.instance().stopAllSounds();
 			doPlay(new ConfigSound(this.soundResource, volume));
 		}
 
