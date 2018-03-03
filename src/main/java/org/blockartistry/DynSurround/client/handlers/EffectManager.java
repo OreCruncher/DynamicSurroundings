@@ -24,6 +24,9 @@
 
 package org.blockartistry.DynSurround.client.handlers;
 
+import java.util.IdentityHashMap;
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
@@ -44,39 +47,49 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EffectManager {
 
-	private static EffectManager INSTANCE = null;
+	private static EffectManager instance_ = null;
+
+	public static EffectManager instance() {
+		return instance_;
+	}
 
 	private final ObjectArray<EffectHandlerBase> effectHandlers = new ObjectArray<>();
+	private final Map<Class<? extends EffectHandlerBase>, EffectHandlerBase> services = new IdentityHashMap<>();
 	private TimerEMA computeTime;
 
 	private EffectManager() {
 	}
 
+	private void register(@Nonnull final EffectHandlerBase handler) {
+		this.effectHandlers.add(handler);
+		this.services.put(handler.getClass(), handler);
+	}
+
 	private void init() {
 		// This one goes first since it sets up the state
 		// for the remainder during this tick.
-		this.effectHandlers.add(new EnvironStateHandler());
+		register(new EnvironStateHandler());
 
-		this.effectHandlers.add(new AreaBlockEffectsHandler());
-		this.effectHandlers.add(new EnvironmentEffectHandler());
-		this.effectHandlers.add(new ParticleSystemHandler());
-		this.effectHandlers.add(new BiomeSoundEffectsHandler());
-		this.effectHandlers.add(new EntityEmojiHandler());
-		this.effectHandlers.add(new AuroraEffectHandler());
-		this.effectHandlers.add(new SpeechBubbleHandler());
-		this.effectHandlers.add(new WeatherHandler());
+		register(new AreaBlockEffectsHandler());
+		register(new EnvironmentEffectHandler());
+		register(new ParticleSystemHandler());
+		register(new BiomeSoundEffectsHandler());
+		register(new EntityEmojiHandler());
+		register(new AuroraEffectHandler());
+		register(new SpeechBubbleHandler());
+		register(new WeatherHandler());
 
-		this.effectHandlers.add(new FxHandler());
+		register(new FxHandler());
 
 		// These two go last in order
-		this.effectHandlers.add(SoundEffectHandler.INSTANCE);
-		this.effectHandlers.add(new DiagnosticHandler());
+		register(SoundEffectHandler.INSTANCE);
+		register(new DiagnosticHandler());
 
 		for (final EffectHandlerBase h : this.effectHandlers)
 			h.connect0();
 
 		this.computeTime = new TimerEMA("Processing");
-		DiagnosticHandler.INSTANCE.addTimer(this.computeTime);
+		((DiagnosticHandler) lookupService(DiagnosticHandler.class)).addTimer(this.computeTime);
 	}
 
 	private void fini() {
@@ -84,20 +97,27 @@ public class EffectManager {
 			h.disconnect0();
 
 		this.effectHandlers.clear();
+		this.services.clear();
+		
 		this.computeTime = null;
 	}
 
+	@SuppressWarnings("unchecked")
+	public <T> T lookupService(@Nonnull final Class<? extends EffectHandlerBase> service) {
+		return (T) this.services.get(service);
+	}
+
 	public static void register() {
-		INSTANCE = new EffectManager();
-		INSTANCE.init();
-		MinecraftForge.EVENT_BUS.register(INSTANCE);
+		instance_ = new EffectManager();
+		instance_.init();
+		MinecraftForge.EVENT_BUS.register(instance_);
 	}
 
 	public static void unregister() {
-		if (INSTANCE != null) {
-			MinecraftForge.EVENT_BUS.unregister(INSTANCE);
-			INSTANCE.fini();
-			INSTANCE = null;
+		if (instance_ != null) {
+			MinecraftForge.EVENT_BUS.unregister(instance_);
+			instance_.fini();
+			instance_ = null;
 		}
 	}
 

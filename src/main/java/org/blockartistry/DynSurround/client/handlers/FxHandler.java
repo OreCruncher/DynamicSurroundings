@@ -89,8 +89,6 @@ public class FxHandler extends EffectHandlerBase {
 
 	private static final EntityEffectLibrary library = new EntityEffectLibrary(PARTICLE_HELPER, SOUND_HELPER);
 
-	public static FxHandler INSTANCE;
-
 	static {
 		library.register(FrostBreathEffect.DEFAULT_FILTER, new FrostBreathEffect.Factory());
 		library.register(EntityChatEffect.DEFAULT_FILTER, new EntityChatEffect.Factory());
@@ -196,14 +194,12 @@ public class FxHandler extends EffectHandlerBase {
 	public void onConnect() {
 		clearHandlers();
 		this.eventLibrary.register(new CraftingSoundEffect());
-		INSTANCE = this;
-		DiagnosticHandler.INSTANCE.addTimer(this.compute);
+		((DiagnosticHandler) EffectManager.instance().lookupService(DiagnosticHandler.class)).addTimer(this.compute);
 	}
 
 	@Override
 	public void onDisconnect() {
 		clearHandlers();
 		this.eventLibrary.cleanup();
-		INSTANCE = null;
 	}
 }

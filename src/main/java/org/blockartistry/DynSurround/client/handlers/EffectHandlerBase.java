@@ -104,7 +104,7 @@ public abstract class EffectHandlerBase {
 	}
 
 	final void connect0() {
-		DiagnosticHandler.INSTANCE.addTimer(this.timer);
+		((DiagnosticHandler) EffectManager.instance().lookupService(DiagnosticHandler.class)).addTimer(this.timer);
 		onConnect();
 		MinecraftForge.EVENT_BUS.register(this);
 	}

@@ -151,7 +151,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.dimensionId = world.provider.getDimension();
 			EnvironState.dimensionName = world.provider.getDimensionType().getName();
 			EnvironState.playerPosition = getPlayerPos();
-			EnvironState.inside = EnvironStateHandler.ceiling.isReallyInside();
+			EnvironState.inside = ((EnvironStateHandler) EffectManager.instance()
+					.lookupService(EnvironStateHandler.class)).isReallyInside();
 
 			EnvironState.truePlayerBiome = ClientRegistry.BIOME.getPlayerBiome(player, true);
 			EnvironState.freezing = EnvironState.truePlayerBiome
@@ -374,18 +375,22 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 	}
 
+	protected final CeilingCoverage ceiling = new CeilingCoverage();
+
 	public EnvironStateHandler() {
 		super("State Handler");
 	}
-
-	protected static CeilingCoverage ceiling;
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 		EnvironState.tick(player.getEntityWorld(), player);
 		Weather.update();
 		ExpressionEngine.instance().update();
-		ceiling.update();
+		this.ceiling.update();
+	}
+
+	public boolean isReallyInside() {
+		return this.ceiling.isReallyInside();
 	}
 
 	/**
@@ -406,7 +411,6 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 	@Override
 	public void onConnect() {
-		EnvironStateHandler.ceiling = new CeilingCoverage();
 		EnvironState.reset();
 		ExpressionEngine.instance();
 	}
@@ -414,7 +418,6 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	@Override
 	public void onDisconnect() {
 		EnvironState.reset();
-		EnvironStateHandler.ceiling = null;
 	}
 
 	// Use the new scripting system to pull out data to display
