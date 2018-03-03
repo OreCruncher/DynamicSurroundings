@@ -34,6 +34,7 @@ import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.implem.BlockMap;
 import org.blockartistry.DynSurround.client.fx.BlockEffect;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.handlers.EffectManager;
 import org.blockartistry.DynSurround.client.handlers.FxHandler;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.BlockInfo;
@@ -192,7 +193,7 @@ public class InspectionHUD extends GuiOverlay {
 			text.add(keyName);
 			text.add(entity.getClass().getName());
 			text.add(TextFormatting.GOLD + "Effects");
-			text.addAll(FxHandler.INSTANCE.getEffects(entity));
+			text.addAll(((FxHandler) EffectManager.instance().lookupService(FxHandler.class)).getEffects(entity));
 		} catch (@Nonnull final Exception ex) {
 			text.add(TextFormatting.RED + "!! ERROR !!");
 		}

@@ -29,6 +29,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
+import org.blockartistry.DynSurround.client.handlers.EffectManager;
 import org.blockartistry.DynSurround.client.handlers.ParticleSystemHandler;
 import org.blockartistry.DynSurround.expression.ExpressionEngine;
 import org.blockartistry.lib.chunk.IBlockAccessEx;
@@ -72,12 +73,16 @@ public abstract class JetEffect extends BlockEffect {
 	@Override
 	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
-		return (alwaysExecute() || random.nextInt(getChance()) == 0) && ParticleSystemHandler.INSTANCE.okToSpawn(pos)
-				&& ExpressionEngine.instance().check(getConditions());
+		if (alwaysExecute() || random.nextInt(getChance()) == 0) {
+			final ParticleSystemHandler ps = EffectManager.instance().lookupService(ParticleSystemHandler.class);
+			return ps.okToSpawn(pos) && ExpressionEngine.instance().check(getConditions());
+		}
+		return false;
 	}
 
 	protected void addEffect(final ParticleJet fx) {
-		ParticleSystemHandler.INSTANCE.addSystem(fx);
+		final ParticleSystemHandler ps = EffectManager.instance().lookupService(ParticleSystemHandler.class);
+		ps.addSystem(fx);
 	}
 
 }

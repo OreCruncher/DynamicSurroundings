@@ -71,7 +71,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	@Override
 	public void onConnect() {
 		this.current = null;
-		DiagnosticHandler.INSTANCE.addTimer(this.timer);
+		((DiagnosticHandler) EffectManager.instance().lookupService(DiagnosticHandler.class)).addTimer(this.timer);
 	}
 
 	@Override
