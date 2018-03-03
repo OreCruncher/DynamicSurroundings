@@ -1,3 +1,20 @@
+###DynamicSurroundings-1.12.2-3.4.9.6
+**What's New**
+* Mod support for PrimalCore, Kitsu's ForgeCraft, Geolosys
+
+**Fixes**
+* Classic aurora will now hover between cloud and sky height like the shader variant.
+* No more fogginess with classic aurora rendering.
+* Timing related NPEs.
+
+**Changes**
+* Area block scan routine has changed!  This is the logic that randomly selects blocks around the player to generate effects, such as ice crack sounds, fireflies, hiss, etc.  The changes mimic doVoidFogParticles() of 1.10.x+.  The experience impact:
+    * Some sound effects will not play as often.  This includes ice crack sounds for ice blocks and frog sounds from lily pads.  (I have been receiving comments on the frequency of some of these effects especially as it relates to DS 1.7.10.)
+    * Effects will generate out to a fixed range of 32 blocks and ignore the config setting.  (The Minecraft doVoidFogParticles() does this.)
+    * Overall this will reduce the number of random block selections as compared to the previous implementation which in turn decreases the amount of time taken during the client tick to calculate (about 30% decrease in time on my system).
+    * I would like feedback on this change!
+* Miscellaneous internal refactors and performance enhancements
+
 ###DynamicSurroundings-1.12.2-3.4.9.5
 **What's New**
 * Added a command line option "dsurround.devMode".  It helps modpack developers by identifying mods that attempt to access the SoundManager or ParticleManager from a thread other than the client thread.
