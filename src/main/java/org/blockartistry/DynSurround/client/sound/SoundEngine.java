@@ -130,22 +130,28 @@ public final class SoundEngine {
 
 	private final Set<ITrackedSound> queuedSounds = new IdentityHashSet<>();
 
-	private final SoundManager manager;
-	private final SoundRegistry soundRegistry;
-	private final SoundSystem sndSystem;
-	private final Library sndLibrary;
-	private final Map<String, ISound> playingSounds;
-	private final Map<ISound, Integer> delayedSounds;
-
 	private SoundEngine() {
-		this.manager = resolve(getSoundManager, Minecraft.getMinecraft().getSoundHandler());
-		this.soundRegistry = resolve(getSoundRegistry, Minecraft.getMinecraft().getSoundHandler());
-		this.sndSystem = resolve(getSoundSystem, this.manager);
-		this.playingSounds = resolve(getPlayingSounds, this.manager);
-		this.delayedSounds = resolve(getDelayedSounds, this.manager);
-		this.sndLibrary = resolve(getSoundLibrary, this.sndSystem);
-
 		MinecraftForge.EVENT_BUS.register(this);
+	}
+
+	/**
+	 * Obtains the SoundRegistry from the SoundHandler
+	 *
+	 * @return Reference to the SoundRegistry
+	 */
+	@Nonnull
+	public SoundRegistry getSoundRegistry() {
+		return resolve(getSoundRegistry, Minecraft.getMinecraft().getSoundHandler());
+	}
+
+	/**
+	 * Obtains the reference to the SoundManager from SoundHandler
+	 *
+	 * @return Reference to the SoundManager
+	 */
+	@Nonnull
+	public SoundManager getSoundManager() {
+		return resolve(getSoundManager, Minecraft.getMinecraft().getSoundHandler());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -160,7 +166,7 @@ public final class SoundEngine {
 
 	private int currentSoundCount() {
 		synchronized (SoundSystemConfig.THREAD_SYNC) {
-			return this.sndLibrary.getSources().size();
+			return getSoundLibrary().getSources().size();
 		}
 	}
 
@@ -169,27 +175,23 @@ public final class SoundEngine {
 	}
 
 	private void flushSoundQueue() {
-		this.sndSystem.CommandQueue(null);
+		getSoundSystem().CommandQueue(null);
 	}
 
-	/**
-	 * Obtains the SoundRegistry from the SoundHandler
-	 *
-	 * @return Reference to the SoundRegistry
-	 */
-	@Nonnull
-	public SoundRegistry getSoundRegistry() {
-		return this.soundRegistry;
+	protected SoundSystem getSoundSystem() {
+		return resolve(getSoundSystem, getSoundManager());
 	}
 
-	/**
-	 * Obtains the reference to the SoundManager from SoundHandler
-	 *
-	 * @return Reference to the SoundManager
-	 */
-	@Nonnull
-	public SoundManager getSoundManager() {
-		return this.manager;
+	protected Library getSoundLibrary() {
+		return resolve(getSoundLibrary, getSoundSystem());
+	}
+
+	protected Map<String, ISound> getPlayingSounds() {
+		return resolve(getPlayingSounds, getSoundManager());
+	}
+
+	protected Map<ISound, Integer> getDelayedSounds() {
+		return resolve(getDelayedSounds, getSoundManager());
 	}
 
 	/**
@@ -211,8 +213,8 @@ public final class SoundEngine {
 	 */
 	public void stopSound(@Nonnull final ITrackedSound sound) {
 		if (sound.getState().isActive()) {
-			this.sndSystem.stop(sound.getId());
-			this.delayedSounds.remove(sound);
+			getSoundSystem().stop(sound.getId());
+			getDelayedSounds().remove(sound);
 			flushSoundQueue();
 		}
 	}
@@ -221,7 +223,7 @@ public final class SoundEngine {
 	 * Stops all playing and pending sounds. All lists and queues are dumped.
 	 */
 	public void stopAllSounds() {
-		this.manager.stopAllSounds();
+		getSoundManager().stopAllSounds();
 		flushSoundQueue();
 		clearOrphans();
 	}
@@ -253,7 +255,7 @@ public final class SoundEngine {
 		} else {
 			// Play the sound if actual music is not installed or the sound is not music
 			if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC) {
-				this.manager.playSound(sound);
+				getSoundManager().playSound(sound);
 				flushSoundQueue();
 			}
 
@@ -277,17 +279,19 @@ public final class SoundEngine {
 	// Wipe out any orphans. Not sure exactly how this happens but it wouldn't
 	// surprise me if there is a gap in thread processing in the sound engine.
 	private void clearOrphans() {
+		final Map<String, ISound> playingSounds = getPlayingSounds();
+		final SoundSystem sndSystem = getSoundSystem();
 		synchronized (SoundSystemConfig.THREAD_SYNC) {
-			final Map<String, Source> sounds = this.sndLibrary.getSources();
-			final List<String> remove = sounds.entrySet().stream()
-					.filter(e -> !this.playingSounds.containsKey(e.getKey())).map(e -> {
+			final Map<String, Source> sounds = getSoundLibrary().getSources();
+			final List<String> remove = sounds.entrySet().stream().filter(e -> !playingSounds.containsKey(e.getKey()))
+					.map(e -> {
 						final Source src = e.getValue();
 						DSurround.log().debug("Killing orphaned sound [%s]",
 								src.filenameURL != null ? src.filenameURL.getFilename() : "UNKNOWN");
 						SoundFixMethods.cleanupSource(src);
 						return e.getKey();
 					}).collect(Collectors.toList());
-			remove.forEach(id -> this.sndSystem.removeSource(id));
+			remove.forEach(id -> sndSystem.removeSource(id));
 		}
 	}
 
@@ -301,22 +305,24 @@ public final class SoundEngine {
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void clientTick(@Nonnull TickEvent.ClientTickEvent event) {
 		if (event.side == Side.CLIENT && event.phase == Phase.END) {
+			final Map<ISound, Integer> delayedSounds = getDelayedSounds();
+			final SoundManager manager = getSoundManager();
 			// Process our queued sounds to make sure the state is appropriate. A sound can
 			// move between the playing sound list and the delayed sound list based on its
 			// attributes so we need to make sure we detect that.
 			this.queuedSounds.removeIf(sound -> {
 				switch (sound.getState()) {
 				case DELAYED:
-					if (!this.delayedSounds.containsKey(sound)) {
-						if (this.manager.isSoundPlaying(sound))
+					if (!delayedSounds.containsKey(sound)) {
+						if (manager.isSoundPlaying(sound))
 							sound.setState(SoundState.PLAYING);
 						else
 							sound.setState(SoundState.DONE);
 					}
 					break;
 				case PLAYING:
-					if (!this.manager.isSoundPlaying(sound)) {
-						if (this.delayedSounds.containsKey(sound))
+					if (!manager.isSoundPlaying(sound)) {
+						if (delayedSounds.containsKey(sound))
 							sound.setState(SoundState.DELAYED);
 						else
 							sound.setState(SoundState.DONE);
@@ -336,7 +342,7 @@ public final class SoundEngine {
 	 * @return true if it has been muted, false otherwise
 	 */
 	public boolean isMuted() {
-		return this.sndSystem.getMasterVolume() == MUTE_VOLUME;
+		return getSoundSystem().getMasterVolume() == MUTE_VOLUME;
 	}
 
 	/**
@@ -349,11 +355,11 @@ public final class SoundEngine {
 		// OpenEye: Looks like the command thread is dead or not initialized.
 		try {
 			if (flag) {
-				this.sndSystem.setMasterVolume(MUTE_VOLUME);
+				getSoundSystem().setMasterVolume(MUTE_VOLUME);
 			} else {
 				final GameSettings options = Minecraft.getMinecraft().gameSettings;
 				if (options != null)
-					this.sndSystem.setMasterVolume(options.getSoundLevel(SoundCategory.MASTER));
+					getSoundSystem().setMasterVolume(options.getSoundLevel(SoundCategory.MASTER));
 			}
 		} catch (final Throwable t) {
 			// Silent - at some point the thread will come back and can be
@@ -393,7 +399,7 @@ public final class SoundEngine {
 
 		final TObjectIntHashMap<ResourceLocation> counts = new TObjectIntHashMap<>();
 
-		final Iterator<Entry<String, ISound>> iterator = this.playingSounds.entrySet().iterator();
+		final Iterator<Entry<String, ISound>> iterator = getPlayingSounds().entrySet().iterator();
 		while (iterator.hasNext()) {
 			final Entry<String, ISound> entry = iterator.next();
 			final ISound isound = entry.getValue();
