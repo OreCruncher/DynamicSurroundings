@@ -133,7 +133,7 @@ public class EnvironmentEffectHandler extends EffectHandlerBase {
 
 	@Override
 	public void onConnect() {
-		DiagnosticHandler.INSTANCE.addTimer(this.timer);
+		((DiagnosticHandler) EffectManager.instance().lookupService(DiagnosticHandler.class)).addTimer(this.timer);
 	}
 
 	@SubscribeEvent(receiveCanceled = false, priority = EventPriority.LOWEST)

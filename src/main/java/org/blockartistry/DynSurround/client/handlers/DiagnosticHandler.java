@@ -67,8 +67,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class DiagnosticHandler extends EffectHandlerBase {
 
-	public static DiagnosticHandler INSTANCE;
-
 	// Diagnostic strings to display in the debug HUD
 	private List<String> diagnostics = ImmutableList.of();
 
@@ -84,8 +82,6 @@ public class DiagnosticHandler extends EffectHandlerBase {
 
 	public DiagnosticHandler() {
 		super("Diagnostics");
-
-		INSTANCE = this;
 	}
 
 	public void addTimer(@Nonnull final TimerEMA timer) {
@@ -134,7 +130,6 @@ public class DiagnosticHandler extends EffectHandlerBase {
 	public void onDisconnect() {
 		this.diagnostics = null;
 		this.serverDataReport = null;
-		INSTANCE = null;
 
 		if (ModOptions.logging.showDebugDialog)
 			DiagnosticPanel.destroy();

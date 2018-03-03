@@ -40,13 +40,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleSystemHandler extends EffectHandlerBase {
 
-	public static ParticleSystemHandler INSTANCE;
-
 	private final TLongObjectHashMap<ParticleSystem> systems = new TLongObjectHashMap<>();
 
 	public ParticleSystemHandler() {
 		super("Particle Systems");
-		INSTANCE = this;
 	}
 
 	@Override

@@ -31,6 +31,7 @@ import org.blockartistry.DynSurround.client.handlers.scanners.AlwaysOnBlockEffec
 import org.blockartistry.DynSurround.client.handlers.scanners.BiomeScanner;
 import org.blockartistry.DynSurround.client.handlers.scanners.ClientPlayerLocus;
 import org.blockartistry.DynSurround.client.handlers.scanners.RandomBlockEffectScanner;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,12 +39,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public final class AreaBlockEffectsHandler extends EffectHandlerBase {
-
-	protected static AreaBlockEffectsHandler instance;
-
-	public static AreaBlockEffectsHandler instance() {
-		return instance;
-	}
 
 	protected final ClientPlayerLocus locus = new ClientPlayerLocus();
 	protected final RandomBlockEffectScanner nearEffects = new RandomBlockEffectScanner(this.locus,

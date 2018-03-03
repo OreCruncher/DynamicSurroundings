@@ -43,9 +43,9 @@ import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.DynSurround.registry.BiomeRegistry;
 import org.blockartistry.DynSurround.registry.DimensionInfo;
 import org.blockartistry.DynSurround.registry.DimensionRegistry;
-import org.blockartistry.DynSurround.registry.SeasonRegistry;
 import org.blockartistry.DynSurround.registry.SeasonType;
 import org.blockartistry.DynSurround.registry.TemperatureRating;
+import org.blockartistry.DynSurround.registry.season.SeasonInfo;
 import org.blockartistry.lib.MinecraftClock;
 
 import net.minecraft.client.Minecraft;
@@ -136,27 +136,29 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		private static void tick(final World world, final EntityPlayer player) {
 
-			final BiomeRegistry biomes = ClientRegistry.BIOME;
-			final SeasonRegistry seasons = ClientRegistry.SEASON;
-			final DimensionRegistry dimensions = ClientRegistry.DIMENSION;
-
 			EnvironState.player = player;
 			EnvironState.world = player.getEntityWorld();
+
+			final BiomeRegistry biomes = ClientRegistry.BIOME;
+			final SeasonInfo season = ClientRegistry.SEASON.getData(EnvironState.world);
+			final DimensionRegistry dimensions = ClientRegistry.DIMENSION;
+
 			EnvironState.dimInfo = dimensions.getData(player.getEntityWorld());
 			EnvironState.clock.update(EnvironState.world);
 			EnvironState.playerBiome = ClientRegistry.BIOME.getPlayerBiome(player, false);
 			EnvironState.biomeName = EnvironState.playerBiome.getBiomeName();
-			EnvironState.season = seasons.getSeasonType(world);
+			EnvironState.season = season.getSeasonType(world);
 			EnvironState.dimensionId = world.provider.getDimension();
 			EnvironState.dimensionName = world.provider.getDimensionType().getName();
 			EnvironState.playerPosition = getPlayerPos();
-			EnvironState.inside = EnvironStateHandler.ceiling.isReallyInside();
+			EnvironState.inside = ((EnvironStateHandler) EffectManager.instance()
+					.lookupService(EnvironStateHandler.class)).isReallyInside();
 
 			EnvironState.truePlayerBiome = ClientRegistry.BIOME.getPlayerBiome(player, true);
 			EnvironState.freezing = EnvironState.truePlayerBiome
 					.getFloatTemperature(EnvironState.playerPosition) < 0.15F;
-			EnvironState.playerTemperature = seasons.getPlayerTemperature(world);
-			EnvironState.biomeTemperature = seasons.getBiomeTemperature(world, getPlayerPosition());
+			EnvironState.playerTemperature = season.getPlayerTemperature(world);
+			EnvironState.biomeTemperature = season.getBiomeTemperature(world, getPlayerPosition());
 			EnvironState.humid = EnvironState.truePlayerBiome.isHighHumidity();
 			EnvironState.dry = EnvironState.truePlayerBiome.getRainfall() < 0.2F;
 
@@ -373,18 +375,22 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 	}
 
+	protected final CeilingCoverage ceiling = new CeilingCoverage();
+
 	public EnvironStateHandler() {
 		super("State Handler");
 	}
-
-	protected static CeilingCoverage ceiling;
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 		EnvironState.tick(player.getEntityWorld(), player);
 		Weather.update();
 		ExpressionEngine.instance().update();
-		ceiling.update();
+		this.ceiling.update();
+	}
+
+	public boolean isReallyInside() {
+		return this.ceiling.isReallyInside();
 	}
 
 	/**
@@ -405,7 +411,6 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 	@Override
 	public void onConnect() {
-		EnvironStateHandler.ceiling = new CeilingCoverage();
 		EnvironState.reset();
 		ExpressionEngine.instance();
 	}
@@ -413,7 +418,6 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	@Override
 	public void onDisconnect() {
 		EnvironState.reset();
-		EnvironStateHandler.ceiling = null;
 	}
 
 	// Use the new scripting system to pull out data to display
