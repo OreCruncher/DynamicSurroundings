@@ -222,24 +222,23 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		// Don't mess with our ConfigSound instances from the config
 		// menu
 		final ISound theSound = e.getSound();
-		if (theSound instanceof ConfigSound)
+		if (theSound == null || theSound instanceof ConfigSound)
 			return;
 
-		final ResourceLocation soundResource = theSound != null ? theSound.getSoundLocation() : null;
+		final String soundName = theSound.getSoundLocation() != null ? theSound.getSoundLocation().toString() : null;
+		if (soundName == null)
+			return;
 
 		// Check to see if the sound is blocked
-		if (theSound != null && soundResource != null) {
-			final String resource = soundResource.toString();
-			if (this.soundsToBlock.contains(resource)) {
-				e.setResultSound(null);
-				return;
-			}
+		if (this.soundsToBlock.contains(soundName)) {
+			e.setResultSound(null);
+			return;
 		}
 
 		// Check to see if it needs to be culled
-		if (ModOptions.sound.soundCullingThreshold > 0 && soundResource != null) {
+		if (ModOptions.sound.soundCullingThreshold > 0) {
 			// Get the last time the sound was seen
-			final int lastOccurance = this.soundCull.get(soundResource);
+			final int lastOccurance = this.soundCull.get(soundName);
 			if (lastOccurance != 0) {
 				final int currentTick = EnvironState.getTickCounter();
 				if ((currentTick - lastOccurance) < ModOptions.sound.soundCullingThreshold) {
@@ -248,7 +247,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 					return;
 				} else {
 					// Set when it happened and fall through for remapping and stuff
-					this.soundCull.put(soundResource.toString(), currentTick);
+					this.soundCull.put(soundName, currentTick);
 				}
 			}
 		}
@@ -270,8 +269,8 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		}
 
 		// Check to see if the sound is going to be replaced with another sound
-		if (theSound instanceof PositionedSound && soundResource != null) {
-			final SoundEvent rep = this.replacements.get(soundResource.toString());
+		if (theSound instanceof PositionedSound) {
+			final SoundEvent rep = this.replacements.get(soundName);
 			if (rep != null) {
 				e.setResultSound(new AdhocSound(rep, (PositionedSound) theSound));
 			}

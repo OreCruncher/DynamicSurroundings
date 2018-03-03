@@ -129,7 +129,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			isInSpace = false;
 			isInClouds = false;
 			lightLevel = 0;
-			tickCounter = 0;
+			tickCounter = 1;
 			clock = new MinecraftClock();
 			battle = new BattleScanner();
 		}
