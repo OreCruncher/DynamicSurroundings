@@ -41,7 +41,6 @@ import org.blockartistry.DynSurround.facade.FacadeHelper;
 import org.blockartistry.DynSurround.registry.BlockInfo;
 import org.blockartistry.lib.BlockNameUtil;
 import org.blockartistry.lib.BlockNameUtil.NameResult;
-import org.blockartistry.lib.chunk.DynamicChunkCache;
 import org.blockartistry.lib.MCHelper;
 
 import gnu.trove.map.hash.THashMap;
@@ -173,7 +172,7 @@ public class BlockMap {
 	public IAcoustic[] getBlockAcoustics(@Nonnull final World world, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nullable final Substrate substrate) {
 		// Walking an edge of a block can produce this
-		if (state == DynamicChunkCache.AIR_STATE)
+		if (state == Blocks.AIR.getDefaultState())
 			return AcousticsManager.NOT_EMITTER;
 		final IBlockState trueState = FacadeHelper.resolveState(state, world, pos, EnumFacing.UP);
 		if (substrate != null) {

@@ -54,8 +54,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class DynamicChunkCache implements IBlockAccessEx {
 
-	public static final IBlockState AIR_STATE = Blocks.AIR.getDefaultState();
-
 	protected final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
 	protected int minCX;
@@ -187,17 +185,15 @@ public class DynamicChunkCache implements IBlockAccessEx {
 				return extendedblockstorage.get(x & 15, y & 15, z & 15);
 			}
 		}
-		return AIR_STATE;
+		return Blocks.AIR.getDefaultState();
 	}
 
 	@Override
 	@Nonnull
 	public IBlockState getBlockState(@Nonnull final BlockPos pos) {
-		if (pos.getY() >= 0 && pos.getY() < 256) {
+		if (pos.getY() >= 0 && pos.getY() < 256)
 			return getBlockState0(resolveChunk(pos), pos.getX(), pos.getY(), pos.getZ());
-		}
-
-		return AIR_STATE;
+		return Blocks.AIR.getDefaultState();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -241,9 +237,8 @@ public class DynamicChunkCache implements IBlockAccessEx {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getLightFor(@Nonnull final EnumSkyBlock type, @Nonnull final BlockPos pos) {
-		if (pos.getY() >= 0 && pos.getY() < 256) {
+		if (pos.getY() >= 0 && pos.getY() < 256)
 			return resolveChunk(pos).getLightFor(type, pos);
-		}
 		return type.defaultLightValue;
 	}
 
@@ -275,8 +270,10 @@ public class DynamicChunkCache implements IBlockAccessEx {
 
 	@Override
 	@Nonnull
-	public IBlockState getBlockState(int x, int y, int z) {
-		return getBlockState0(resolveChunk(x, z), x, y, z);
+	public IBlockState getBlockState(final int x, final int y, final int z) {
+		if (y >= 0 && y < 256)
+			return getBlockState0(resolveChunk(x, z), x, y, z);
+		return Blocks.AIR.getDefaultState();
 	}
 
 	@Override

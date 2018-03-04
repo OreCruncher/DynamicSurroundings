@@ -41,7 +41,6 @@ import net.minecraft.util.math.BlockPos;
 public abstract class Scanner implements ITickable, Callable<Void> {
 
 	private final static int MAX_BLOCKS_TICK = 3000;
-	protected static final IBlockState AIR_BLOCK = Blocks.AIR.getDefaultState();
 
 	protected final String name;
 
@@ -120,7 +119,7 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 	 * logic beyond the basics.
 	 */
 	protected boolean interestingBlock(final IBlockState state) {
-		return state != AIR_BLOCK;
+		return state != Blocks.AIR.getDefaultState();
 	}
 
 	@Override

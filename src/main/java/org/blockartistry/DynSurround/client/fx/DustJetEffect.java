@@ -30,10 +30,10 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleDustJet;
 import org.blockartistry.DynSurround.client.fx.particle.system.ParticleJet;
-import org.blockartistry.lib.chunk.DynamicChunkCache;
 import org.blockartistry.lib.chunk.IBlockAccessEx;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -54,7 +54,7 @@ public class DustJetEffect extends JetEffect {
 	@Override
 	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
-		return provider.getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()) == DynamicChunkCache.AIR_STATE
+		return provider.getBlockState(pos.getX(), pos.getY() - 1, pos.getZ()) == Blocks.AIR.getDefaultState()
 				&& super.canTrigger(provider, state, pos, random);
 	}
 

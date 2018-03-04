@@ -37,6 +37,7 @@ import org.blockartistry.lib.scanner.CuboidScanner;
 import org.blockartistry.lib.scanner.ScanLocus;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -62,7 +63,7 @@ public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 
 	@Override
 	protected boolean interestingBlock(final IBlockState state) {
-		if (state == AIR_BLOCK)
+		if (state == Blocks.AIR.getDefaultState())
 			return false;
 		if (this.lastState != state) {
 			this.lastState = state;
