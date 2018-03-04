@@ -1,0 +1,26 @@
+{
+	"itemConfig": {
+		"lightArmor": [
+			"botania:manaweavehelm",
+			"botania:manaweavechest",
+			"botania:manaweavelegs",
+			"botania:manaweaveboots"
+		],
+		"heavyArmor": [
+			"botania:elementiumhelm",
+			"botania:elementiumchest",
+			"botania:elementiumlegs",
+			"botania:elementiumboots",
+			"botania:terrasteelhelm",
+			"botania:terrasteelhelmreveal",
+			"botania:terrasteelchest",
+			"botania:terrasteelhelm",
+			"botania:terrasteellegs",
+			"botania:terrasteelboots",
+			"botania:manasteelhelm",
+			"botania:manasteelchest",
+			"botania:manasteellegs",
+			"botania:manasteelboots"
+		]
+	}
+}

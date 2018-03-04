@@ -1,0 +1,20 @@
+{
+	"itemConfig": {
+		"toolSound": [
+			"blusunrize.immersiveengineering.common.items.ItemDrill",
+			"blusunrize.immersiveengineering.common.items.ItemRailgun",
+			"blusunrize.immersiveengineering.common.items.ItemSkyhook",
+			"blusunrize.immersiveengineering.common.items.ItemChemthrower",
+			"blusunrize.immersiveengineering.common.items.ItemRevolver"
+		],
+		"shieldSound": [
+			"blusunrize.immersiveengineering.common.items.ItemIEShield"
+		],
+		"mediumArmor": [
+			"immersiveengineering:faraday_suit_head",
+			"immersiveengineering:faraday_suit_chest",
+			"immersiveengineering:faraday_suit_legs",
+			"immersiveengineering:faraday_suit_feet"
+		]
+	}
+}

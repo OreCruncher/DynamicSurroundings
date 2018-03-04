@@ -1,0 +1,10 @@
+{
+	"itemConfig": {
+		"heavyArmor": [
+			"betterwithaddons:helmet_samurai",
+			"betterwithaddons:chest_samurai",
+			"betterwithaddons:legs_samurai",
+			"betterwithaddons:boots_samurai"
+		]
+	}
+}

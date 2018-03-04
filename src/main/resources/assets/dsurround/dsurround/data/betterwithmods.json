@@ -1,0 +1,13 @@
+{
+	"itemConfig": {
+		"axeSound": [
+			"betterwithmods.common.items.tools.ItemSoulForgedMattock"
+		],
+		"heavyArmor": [
+			"betterwithmods:steel_helmet",
+			"betterwithmods:steel_chest",
+			"betterwithmods:steel_pants",
+			"betterwithmods:steel_boots"
+		]
+	}
+}

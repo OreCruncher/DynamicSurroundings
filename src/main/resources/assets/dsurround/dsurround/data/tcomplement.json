@@ -1,0 +1,10 @@
+{
+	"itemConfig": {
+		"heavyArmor": [
+			"tcomplement:manyullyn_helmet",
+			"tcomplement:manyullyn_chestplate",
+			"tcomplement:manyullyn_leggings",
+			"tcomplement:manyullyn_boots"
+		]
+	}
+}

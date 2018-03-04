@@ -1,4 +1,12 @@
 {
+	"itemConfig": {
+		"crystalArmor": [
+			"ceramics:clay_boots",
+			"ceramics:clay_chestplate",
+			"ceramics:clay_leggings",
+			"ceramics:clay_helmet"
+		]
+	},
 	"footsteps": {
 		"ceramics:clay_hard": "sandstone",
 		"ceramics:clay_slab": "sandstone",

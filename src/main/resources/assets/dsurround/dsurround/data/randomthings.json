@@ -1,0 +1,12 @@
+{
+	"itemConfig": {
+		"lightArmor": [
+			"randomthings:waterwalkingboots",
+			"randomthings:obsidianwaterwalkingboots",
+			"randomthings:magichood"
+		],
+		"heavyArmor": [
+			"randomthings:superlubricentboots"
+		]
+	}
+}
