@@ -38,6 +38,7 @@ import org.blockartistry.lib.scanner.RandomScanner;
 import org.blockartistry.lib.scanner.ScanLocus;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -70,7 +71,7 @@ public class RandomBlockEffectScanner extends RandomScanner {
 
 	@Override
 	protected boolean interestingBlock(@Nonnull final IBlockState state) {
-		if (state == AIR_BLOCK)
+		if (state == Blocks.AIR.getDefaultState())
 			return false;
 		if (this.lastState != state) {
 			this.lastState = state;
