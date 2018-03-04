@@ -62,7 +62,6 @@ import org.blockartistry.DynSurround.packs.ResourcePacks;
 import org.blockartistry.DynSurround.packs.ResourcePacks.Pack;
 import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.MCHelper;
-import org.blockartistry.lib.chunk.DynamicChunkCache;
 import org.blockartistry.lib.collections.IdentityHashSet;
 
 import net.minecraft.block.Block;
@@ -83,6 +82,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemBlockSpecial;
@@ -358,7 +358,7 @@ public final class FootstepsRegistry extends Registry {
 	@Nullable
 	public IAcoustic[] resolvePrimitive(@Nonnull final IBlockState state) {
 
-		if (state == DynamicChunkCache.AIR_STATE)
+		if (state == Blocks.AIR.getDefaultState())
 			return AcousticsManager.NOT_EMITTER;
 
 		final SoundType type = MCHelper.getSoundType(state);

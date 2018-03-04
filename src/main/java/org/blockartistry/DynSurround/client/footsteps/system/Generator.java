@@ -69,7 +69,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class Generator {
 
 	protected static final Random RANDOM = XorShiftRandom.current();
-	protected static final IBlockState AIR_STATE = Blocks.AIR.getDefaultState();
 	protected static final int BRUSH_INTERVAL = 100;
 
 	protected static final Consumer<Footprint> GENERATE_PRINT = print -> {
@@ -562,13 +561,14 @@ public class Generator {
 	 */
 	@Nonnull
 	protected Association findAssociationForBlock(@Nonnull final World world, @Nonnull BlockPos pos) {
+		final IBlockState airState = Blocks.AIR.getDefaultState();
 		IBlockState in = WorldUtils.getBlockState(world, pos);
 		BlockPos tPos = pos.up();
 		final IBlockState above = WorldUtils.getBlockState(world, tPos);
 
 		IAcoustic[] association = null;
 
-		if (above != AIR_STATE)
+		if (above != airState)
 			association = this.blockMap.getBlockAcoustics(world, above, tPos, Substrate.CARPET);
 
 		if (association == null || association == AcousticsManager.NOT_EMITTER) {
@@ -576,7 +576,7 @@ public class Generator {
 			// will CONTINUE with the actual block surface the player is walking
 			// on NOT_EMITTER carpets will not cause solving to skip
 
-			if (in == AIR_STATE) {
+			if (in == airState) {
 				tPos = pos.down();
 				final IBlockState below = WorldUtils.getBlockState(world, tPos);
 				association = this.blockMap.getBlockAcoustics(world, below, tPos, Substrate.FENCE);
@@ -596,7 +596,7 @@ public class Generator {
 				// is a carpet => this block of code is here, not outside this
 				// if else group.
 
-				if (above != AIR_STATE) {
+				if (above != airState) {
 					final IAcoustic[] foliage = this.blockMap.getBlockAcoustics(world, above, pos.up(),
 							Substrate.FOLIAGE);
 					if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
@@ -658,7 +658,7 @@ public class Generator {
 		final BlockPos up = pos.up();
 		final IBlockState above = WorldUtils.getBlockState(world, up);
 
-		if (above != AIR_STATE) {
+		if (above != Blocks.AIR.getDefaultState()) {
 			IAcoustic[] acoustics = this.blockMap.getBlockAcoustics(world, above, up, Substrate.MESSY);
 			if (acoustics == AcousticsManager.MESSY_GROUND) {
 				acoustics = this.blockMap.getBlockAcoustics(world, above, up, Substrate.FOLIAGE);
