@@ -423,6 +423,18 @@ public final class SoundEngine {
 				: 1.0F;
 	}
 
+	// SOUND may not be initialized if Forge did not initialized Minecraft fully.
+	// That can happen if the environment does not meet it's dependency
+	// requirements.
+	private static float getVolumeScale(@Nonnull final ISound sound) {
+		try {
+			return ClientRegistry.SOUND.getVolumeScale(sound);
+		} catch (final Throwable t) {
+			;
+		}
+		return 1F;
+	}
+
 	/**
 	 * ASM redirects the SoundManager code to this method. Purpose is that the
 	 * volume is scaled by additional configuration information.
@@ -432,7 +444,7 @@ public final class SoundEngine {
 	 * @return Clamped volume for playing the sound
 	 */
 	public static float getClampedVolume(@Nonnull final ISound sound) {
-		final float volumeScale = ClientRegistry.SOUND.getVolumeScale(sound);
+		final float volumeScale = getVolumeScale(sound);
 		final float volume = sound.getVolume() * getVolume(sound.getCategory()) * volumeScale;
 		final float result = MathStuff.clamp(volume, 0.0F, 1.0F);
 
