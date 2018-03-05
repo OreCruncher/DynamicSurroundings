@@ -42,6 +42,7 @@ import org.blockartistry.DynSurround.client.handlers.effects.EntitySwingEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.FrostBreathEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.PlayerToolBarSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.VillagerChatEffect;
+import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.effects.EntityEffectHandler;
@@ -51,7 +52,6 @@ import org.blockartistry.lib.effects.IParticleHelper;
 import org.blockartistry.lib.effects.ISoundHelper;
 import org.blockartistry.lib.gfx.ParticleHelper;
 import org.blockartistry.lib.math.TimerEMA;
-import org.blockartistry.lib.sound.BasicSound;
 
 import com.google.common.collect.ImmutableList;
 
