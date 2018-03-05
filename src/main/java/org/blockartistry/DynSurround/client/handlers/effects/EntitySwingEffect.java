@@ -28,13 +28,13 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.ClientRegistry;
-import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.EntityEffectInfo;
 import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
 import org.blockartistry.lib.math.RayTrace;
+import org.blockartistry.lib.sound.ITrackedSound;
 
 import com.google.common.collect.ImmutableList;
 
@@ -74,7 +74,7 @@ public class EntitySwingEffect extends EntityEffect {
 				if (soundEffect != null) {
 					final RayTraceResult whatImHitting = RayTrace.trace(entity);
 					if (whatImHitting == null || whatImHitting.typeOfHit != Type.BLOCK) {
-						final BasicSound<?> snd = getState().createSound(soundEffect, entity);
+						final ITrackedSound snd = getState().createSound(soundEffect, entity);
 						getState().playSound(snd);
 					}
 				}

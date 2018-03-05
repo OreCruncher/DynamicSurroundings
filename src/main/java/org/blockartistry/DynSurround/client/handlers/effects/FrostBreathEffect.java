@@ -69,7 +69,7 @@ public class FrostBreathEffect extends EntityEffect {
 
 		final int interval = (int) (((getState().getWorldTime() + this.seed) / 10) % 8);
 		if (interval < 3 && isPossibleToShow(subject)) {
-			final EntityPlayer player = getState().thePlayer().get();
+			final EntityPlayer player = getState().thePlayer();
 			if ((subject == player) || (!subject.isInvisibleToPlayer(player) && player.canEntityBeSeen(subject))) {
 				getState().addParticle(new ParticleBreath(subject));
 			}

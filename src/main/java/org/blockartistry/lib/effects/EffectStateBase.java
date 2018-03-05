@@ -23,13 +23,12 @@
  */
 package org.blockartistry.lib.effects;
 
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.lib.sound.ITrackedSound;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -69,7 +68,7 @@ public class EffectStateBase implements IEffectState {
 	 */
 	@Override
 	@Nullable
-	public String playSound(@Nonnull final BasicSound<?> sound) {
+	public String playSound(@Nonnull final ITrackedSound sound) {
 		return this.soundHelper.playSound(sound);
 	}
 
@@ -79,7 +78,7 @@ public class EffectStateBase implements IEffectState {
 	 * @param soundId
 	 */
 	@Override
-	public void stopSound(@Nonnull final BasicSound<?> sound) {
+	public void stopSound(@Nonnull final ITrackedSound sound) {
 		this.soundHelper.stopSound(sound);
 	}
 
@@ -122,8 +121,8 @@ public class EffectStateBase implements IEffectState {
 	 */
 	@Override
 	@Nonnull
-	public Optional<EntityPlayer> thePlayer() {
-		return Optional.of(Minecraft.getMinecraft().thePlayer);
+	public EntityPlayer thePlayer() {
+		return Minecraft.getMinecraft().thePlayer;
 	}
 
 }

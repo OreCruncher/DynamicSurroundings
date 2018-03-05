@@ -23,13 +23,11 @@
  */
 package org.blockartistry.lib.effects;
 
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
+import org.blockartistry.lib.sound.ITrackedSound;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
@@ -59,7 +57,7 @@ public interface IEffectState {
 	 * @return Unique ID identifying the sound in the sound system
 	 */
 	@Nullable
-	String playSound(@Nonnull final BasicSound<?> sound);
+	String playSound(@Nonnull final ITrackedSound sound);
 
 	/**
 	 * Stops the specified sound in the sound system from playing.
@@ -67,7 +65,7 @@ public interface IEffectState {
 	 * @param sound
 	 *            The sound to stop playing
 	 */
-	void stopSound(@Nonnull final BasicSound<?> sound);
+	void stopSound(@Nonnull final ITrackedSound sound);
 
 	/**
 	 * Creates a BasicSound<> object for the specified SoundEffect centered at the
@@ -81,7 +79,7 @@ public interface IEffectState {
 	 * @return A BasicSound<?> with applicable properties set
 	 */
 	@Nonnull
-	BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player);
+	ITrackedSound createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player);
 
 	/**
 	 * Indicates if the specified player is the one sitting behind the screen.
@@ -98,6 +96,6 @@ public interface IEffectState {
 	 * @return Reference to the EntityPlayer. Will not be null.
 	 */
 	@Nonnull
-	Optional<EntityPlayer> thePlayer();
+	EntityPlayer thePlayer();
 
 }
