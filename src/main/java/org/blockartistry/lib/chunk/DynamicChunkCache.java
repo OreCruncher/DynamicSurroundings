@@ -55,6 +55,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class DynamicChunkCache implements IBlockAccessEx {
 
 	protected final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+	protected final Chunk NULL_CHUNK = new NullChunk();
 
 	protected int minCX;
 	protected int minCZ;
@@ -102,7 +103,7 @@ public class DynamicChunkCache implements IBlockAccessEx {
 			this.sizeX = this.maxCX - this.minCX + 1;
 			this.sizeZ = this.maxCZ - this.minCZ + 1;
 			this.chunkArray = new Chunk[this.sizeX * this.sizeZ];
-			Arrays.fill(this.chunkArray, NullChunk.NULL_CHUNK);
+			Arrays.fill(this.chunkArray, this.NULL_CHUNK);
 			this.anyEmpty = true;
 		}
 
@@ -114,7 +115,7 @@ public class DynamicChunkCache implements IBlockAccessEx {
 					if (this.chunkArray[idx].isEmpty()) {
 						Chunk c = world.getChunkFromChunkCoords(k, l);
 						if (c == null)
-							c = NullChunk.NULL_CHUNK;
+							c = this.NULL_CHUNK;
 						this.chunkArray[idx] = c;
 						this.anyEmpty |= c.isEmpty();
 					}
@@ -132,7 +133,7 @@ public class DynamicChunkCache implements IBlockAccessEx {
 			if (withinBounds(i, j))
 				return this.chunkArray[i * this.sizeZ + j];
 		}
-		return NullChunk.NULL_CHUNK;
+		return this.NULL_CHUNK;
 	}
 
 	@Nonnull
