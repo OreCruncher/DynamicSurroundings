@@ -30,6 +30,7 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.lib.effects.EventEffect;
+import org.blockartistry.lib.sound.ITrackedSound;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
@@ -50,8 +51,8 @@ public class CraftingSoundEffect extends EventEffect {
 			return;
 
 		this.craftSoundThrottle = EnvironState.getTickCounter();
-		final BasicSound<?> fx = getState().createSound(Sounds.CRAFTING, event.player);
-		fx.setRoutable(true);
+		final ITrackedSound fx = getState().createSound(Sounds.CRAFTING, event.player);
+		((BasicSound<?>) fx).setRoutable(true);
 		getState().playSound(fx);
 	}
 

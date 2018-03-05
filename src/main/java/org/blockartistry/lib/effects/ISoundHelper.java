@@ -25,14 +25,14 @@ package org.blockartistry.lib.effects;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.client.sound.BasicSound;
+import org.blockartistry.lib.sound.ITrackedSound;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public interface ISoundHelper {
-	String playSound(@Nonnull final BasicSound<?> sound);
+	String playSound(@Nonnull final ITrackedSound sound);
 
-	void stopSound(@Nonnull final BasicSound<?> sound);
+	void stopSound(@Nonnull final ITrackedSound sound);
 }
