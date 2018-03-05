@@ -43,13 +43,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
-public class NullChunk extends Chunk {
-
-	public static final NullChunk NULL_CHUNK = new NullChunk();
+class NullChunk extends Chunk {
 
 	private static final ExtendedBlockStorage[] NO_STORAGE = {};
 
