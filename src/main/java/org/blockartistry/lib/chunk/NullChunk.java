@@ -44,7 +44,7 @@ import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
-public class NullChunk extends Chunk {
+class NullChunk extends Chunk {
 
 	private static final ExtendedBlockStorage[] NO_STORAGE = {};
 
