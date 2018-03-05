@@ -26,7 +26,6 @@ package org.blockartistry.DynSurround.client.sound;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.lib.compat.PositionedSoundUtil;
-import org.blockartistry.lib.sound.BasicSound;
 
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.nbt.NBTTagCompound;

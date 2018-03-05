@@ -26,7 +26,6 @@ package org.blockartistry.DynSurround.client.sound;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.lib.sound.BasicSound;
 
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.entity.Entity;
