@@ -26,10 +26,7 @@ package org.blockartistry.DynSurround.client.sound;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModOptions;
-
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,14 +36,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class SpotSound extends BasicSound<SpotSound> {
 
 	private static final int SPOT_SOUND_RANGE = 8;
-	public static final ISoundScale BIOME_EFFECT = () -> {
-		return ModOptions.sound.masterSoundScaleFactor;
-	};
-
-	public SpotSound() {
-		super((ResourceLocation) null, SoundCategory.PLAYERS);
-		setVolumeScale(BIOME_EFFECT);
-	}
 
 	SpotSound(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound) {
 		super(sound.getSound(), sound.getCategory());
@@ -57,7 +46,7 @@ public class SpotSound extends BasicSound<SpotSound> {
 		this.repeatDelay = 0;
 
 		this.setPosition(pos);
-		setVolumeScale(BIOME_EFFECT);
+		setVolumeScale(BasicSound.BIOME_EFFECT_SCALE);
 	}
 
 	private float randomRange(final int range) {
@@ -81,7 +70,7 @@ public class SpotSound extends BasicSound<SpotSound> {
 			this.zPosF += randomRange(SPOT_SOUND_RANGE);
 		}
 
-		setVolumeScale(BIOME_EFFECT);
+		setVolumeScale(BasicSound.BIOME_EFFECT_SCALE);
 	}
 
 }
