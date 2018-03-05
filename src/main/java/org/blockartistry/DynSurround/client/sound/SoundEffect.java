@@ -180,17 +180,17 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	}
 
 	@SideOnly(Side.CLIENT)
-	public BasicSound<?> createSound(@Nonnull final BlockPos pos) {
+	public BasicSound<?> createSoundAt(@Nonnull final BlockPos pos) {
 		return new SpotSound(pos, this);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public BasicSound<?> createSound(@Nonnull final Entity player) {
+	public BasicSound<?> createSoundNear(@Nonnull final Entity player) {
 		return new SpotSound(player, this);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public BasicSound<?> createSound(@Nonnull final Entity player, final boolean fadeIn) {
+	public BasicSound<?> createTrackingSound(@Nonnull final Entity player, final boolean fadeIn) {
 		if (player instanceof EntityPlayer)
 			return new PlayerTrackingSound(this, fadeIn);
 		return new TrackingSound(player, this, fadeIn);

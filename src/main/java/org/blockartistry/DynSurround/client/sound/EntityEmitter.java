@@ -44,7 +44,7 @@ public class EntityEmitter extends Emitter {
 
 	@Override
 	protected BasicSound<?> createSound() {
-		return this.effect.createSound(this.entity, true);
+		return this.effect.createTrackingSound(this.entity, true);
 	}
 
 }

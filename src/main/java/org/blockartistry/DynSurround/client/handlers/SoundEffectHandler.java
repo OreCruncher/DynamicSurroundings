@@ -261,7 +261,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 				final PositionedSound sound = (PositionedSound) theSound;
 				if (sound != null && PositionedSoundUtil.getVolume(sound) > 16) {
 					final BlockPos pos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
-					final ISound newSound = Sounds.THUNDER.createSound(pos).setVolume(ModOptions.sound.thunderVolume);
+					final ISound newSound = Sounds.THUNDER.createSoundAt(pos).setVolume(ModOptions.sound.thunderVolume);
 					e.setResultSound(newSound);
 				}
 				return;
@@ -283,14 +283,14 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		if (player == null)
 			player = EnvironState.getPlayer();
 
-		final BasicSound<?> s = sound.createSound(player);
+		final BasicSound<?> s = sound.createSoundNear(player);
 		return playSound(s);
 	}
 
 	@Nullable
 	public String playSoundAt(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int tickDelay) {
 
-		final BasicSound<?> s = sound.createSound(pos);
+		final BasicSound<?> s = sound.createSoundAt(pos);
 		if (tickDelay == 0)
 			return playSound(s);
 
@@ -348,7 +348,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 					if (iblockstate.getMaterial() == Material.AIR)
 						if (wc.getLightFor(EnumSkyBlock.SKY, blockpos) <= 0)
 							if (wc.getLight(blockpos) <= this.RANDOM.nextInt(8)) {
-								final BasicSound<?> fx = Sounds.AMBIENT_CAVE.createSound(blockpos).setVolume(0.9F)
+								final BasicSound<?> fx = Sounds.AMBIENT_CAVE.createSoundAt(blockpos).setVolume(0.9F)
 										.setPitch(0.8F + this.RANDOM.nextFloat() * 0.2F);
 								playSound(fx);
 								wc.ambienceTicks = this.RANDOM.nextInt(12000) + 6000;
