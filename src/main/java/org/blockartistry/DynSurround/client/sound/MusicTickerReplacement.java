@@ -33,7 +33,6 @@ import org.blockartistry.DynSurround.client.gui.ConfigSound;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.compat.ModEnvironment;
 import org.blockartistry.lib.math.MathStuff;
-import org.blockartistry.lib.sound.BasicSound;
 import org.blockartistry.lib.sound.ITrackedSound;
 
 import net.minecraft.client.Minecraft;

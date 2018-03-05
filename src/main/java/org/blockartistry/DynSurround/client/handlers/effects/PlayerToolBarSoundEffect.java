@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
+import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.EntityEffectInfo;
 import org.blockartistry.lib.ItemStackUtil;
@@ -36,7 +37,6 @@ import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
 import org.blockartistry.lib.effects.IEntityEffectHandlerState;
-import org.blockartistry.lib.sound.BasicSound;
 
 import com.google.common.collect.ImmutableList;
 

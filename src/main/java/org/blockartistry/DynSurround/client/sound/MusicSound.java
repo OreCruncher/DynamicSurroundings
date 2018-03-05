@@ -26,8 +26,6 @@ package org.blockartistry.DynSurround.client.sound;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.lib.sound.BasicSound;
-
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.util.SoundCategory;

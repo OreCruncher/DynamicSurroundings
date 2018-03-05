@@ -37,6 +37,7 @@ import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.gui.ConfigSound;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.AdhocSound;
+import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.Emitter;
 import org.blockartistry.DynSurround.client.sound.PlayerEmitter;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
@@ -50,7 +51,6 @@ import org.blockartistry.DynSurround.network.Network;
 import org.blockartistry.DynSurround.network.PacketPlaySound;
 import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.compat.PositionedSoundUtil;
-import org.blockartistry.lib.sound.BasicSound;
 import org.blockartistry.lib.sound.SoundState;
 
 import com.google.common.collect.Sets;

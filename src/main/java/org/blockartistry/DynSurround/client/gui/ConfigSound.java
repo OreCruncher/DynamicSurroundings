@@ -27,8 +27,8 @@ package org.blockartistry.DynSurround.client.gui;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.ClientRegistry;
+import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.registry.SoundMetadata;
-import org.blockartistry.lib.sound.BasicSound;
 
 import com.google.common.base.MoreObjects;
 
