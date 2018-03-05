@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.sound;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
+
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.ClientRegistry;
@@ -39,8 +40,10 @@ import org.blockartistry.lib.WeightTable;
 import org.blockartistry.lib.WeightTable.IEntrySource;
 import org.blockartistry.lib.WeightTable.IItem;
 import org.blockartistry.lib.chunk.IBlockAccessEx;
+import org.blockartistry.lib.random.XorShiftRandom;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.audio.ISound.AttenuationType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -53,11 +56,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffect>, WeightTable.IItem<SoundEffect> {
 
+	private static final int SPOT_SOUND_RANGE = 8;
 	private static final float[] pitchDelta = { -0.2F, 0.0F, 0.0F, 0.2F, 0.2F, 0.2F };
+	private static final Random RANDOM = XorShiftRandom.current();
 
 	private final SoundEvent sound;
 	private final String soundName;
-	
+
 	private SoundType type;
 	private String conditions;
 	private SoundCategory category;
@@ -178,21 +183,30 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 		return this.type == SoundType.PERIODIC || this.type == SoundType.BACKGROUND;
 	}
 
+	private float randomRange(final int range) {
+		return RANDOM.nextInt(range) - RANDOM.nextInt(range);
+	}
+
 	@SideOnly(Side.CLIENT)
 	public BasicSound<?> createSoundAt(@Nonnull final BlockPos pos) {
-		return new SpotSound(pos, this);
+		return new AdhocSound(this.sound, this.category).setPosition(pos).setVolumeScale(BasicSound.BIOME_EFFECT_SCALE);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public BasicSound<?> createSoundNear(@Nonnull final Entity player) {
-		return new SpotSound(player, this);
+		final float posX = (float) (player.posX + randomRange(SPOT_SOUND_RANGE));
+		final float posY = player.getEyeHeight() + randomRange(SPOT_SOUND_RANGE);
+		final float posZ = (float) (player.posZ + randomRange(SPOT_SOUND_RANGE));
+		return new AdhocSound(this.sound, this.category).setPosition(posX, posY, posZ)
+				.setVolumeScale(BasicSound.BIOME_EFFECT_SCALE);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public BasicSound<?> createTrackingSound(@Nonnull final Entity player, final boolean fadeIn) {
+		final TrackingSound sound = new TrackingSound(player, this, fadeIn);
 		if (player instanceof EntityPlayer)
-			return new PlayerTrackingSound(this, fadeIn);
-		return new TrackingSound(player, this, fadeIn);
+			sound.setAttenuationType(AttenuationType.NONE);
+		return sound;
 	}
 
 	@Override
