@@ -1,5 +1,8 @@
 {
 	"itemConfig": {
+		"axeSound": [
+			"knightminer.tcomplement.plugin.exnihilo.items.ItemSledgeHammer"
+		],
 		"heavyArmor": [
 			"tcomplement:manyullyn_helmet",
 			"tcomplement:manyullyn_chestplate",

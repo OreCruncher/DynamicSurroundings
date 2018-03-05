@@ -1,4 +1,31 @@
 {
+	"itemConfig": {
+		"axeSound": [
+			"WayofTime.bloodmagic.item.ItemBoundAxe",
+			"WayofTime.bloodmagic.item.ItemBoundPickaxe"
+		],
+		"swordSound": [
+			"WayofTime.bloodmagic.item.ItemBoundSword",
+			"WayofTime.bloodmagic.item.ItemDaggerOfSacrifice"
+		],
+		"toolSound": [
+			"WayofTime.bloodmagic.item.ItemBoundShovel"
+		],
+		"lightArmor": [
+			"bloodmagic:pack_sacrifice",
+			"bloodmagic:pack_self_sacrifice"
+		],
+		"heavyArmor": [
+			"bloodmagic:living_armour_helmet",
+			"bloodmagic:living_armour_chest",
+			"bloodmagic:living_armour_leggings",
+			"bloodmagic:living_armour_boots",
+			"bloodmagic:sentient_armour_helmet",
+			"bloodmagic:sentient_armour_chest",
+			"bloodmagic:sentient_armour_leggings",
+			"bloodmagic:sentient_armour_boots"
+		]
+	},
 	"footsteps": {
 		"bloodmagic:BlockAlchemyArray": "stoneutility",
 		"bloodmagic:BlockAlchemyTable": "stoneutility",

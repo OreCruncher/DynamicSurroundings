@@ -1,4 +1,23 @@
 {
+	"itemConfig": {
+		"axeSound": [
+			"hellfirepvp.astralsorcery.common.item.tool.ItemChargedCrystalAxe",
+			"hellfirepvp.astralsorcery.common.item.tool.ItemChargedCrystalPickaxe",
+			"hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe",
+			"hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe"
+		],
+		"swordSound": [
+			"hellfirepvp.astralsorcery.common.item.tool.ItemChargedCrystalSword",
+			"hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword"
+		],
+		"toolSound": [
+			"hellfirepvp.astralsorcery.common.item.tool.ItemChargedCrystalShovel",
+			"hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel"
+		],
+		"lightArmor": [
+			"astralsorcery:itemcape"
+		]
+	},
 	"footsteps": {
 		"astralsorcery:blockaltar": "marble",
 		"astralsorcery:blockattunementaltar": "marble",
