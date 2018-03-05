@@ -39,7 +39,7 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.client.sound.AdhocSound;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.Emitter;
-import org.blockartistry.DynSurround.client.sound.PlayerEmitter;
+import org.blockartistry.DynSurround.client.sound.EntityEmitter;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.DynSurround.client.sound.SoundLoader;
@@ -192,7 +192,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		// Any sounds left in the list are new and need
 		// an emitter created.
 		sounds.forEachEntry((fx, volume) -> {
-			this.emitters.put(fx, new PlayerEmitter(fx));
+			this.emitters.put(fx, new EntityEmitter(EnvironState.getPlayer(), fx));
 			return true;
 		});
 	}
