@@ -29,7 +29,6 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
-import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.EntityEffectInfo;
 import org.blockartistry.lib.ItemStackUtil;
@@ -37,6 +36,7 @@ import org.blockartistry.lib.effects.EntityEffect;
 import org.blockartistry.lib.effects.IEntityEffectFactory;
 import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
 import org.blockartistry.lib.effects.IEntityEffectHandlerState;
+import org.blockartistry.lib.sound.ITrackedSound;
 
 import com.google.common.collect.ImmutableList;
 
@@ -86,7 +86,7 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 				final ItemStack currentStack = player.getHeldItem(this.hand);
 				final SoundEffect soundEffect = ClientRegistry.ITEMS.getEquipSound(currentStack);
 				if (soundEffect != null) {
-					final BasicSound<?> snd = state.createSound(soundEffect, player);
+					final ITrackedSound snd = state.createSound(soundEffect, player);
 					state.playSound(snd);
 					this.lastHeld = currentStack.getItem();
 				}

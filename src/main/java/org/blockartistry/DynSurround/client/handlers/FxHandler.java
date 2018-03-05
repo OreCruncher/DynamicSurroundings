@@ -52,6 +52,7 @@ import org.blockartistry.lib.effects.IParticleHelper;
 import org.blockartistry.lib.effects.ISoundHelper;
 import org.blockartistry.lib.gfx.ParticleHelper;
 import org.blockartistry.lib.math.TimerEMA;
+import org.blockartistry.lib.sound.ITrackedSound;
 
 import com.google.common.collect.ImmutableList;
 
@@ -71,13 +72,13 @@ public class FxHandler extends EffectHandlerBase {
 	private static final IParticleHelper PARTICLE_HELPER = (p) -> ParticleHelper.addParticle(p);
 	private static final ISoundHelper SOUND_HELPER = new ISoundHelper() {
 		@Override
-		public String playSound(@Nonnull final BasicSound<?> sound) {
-			return SoundEffectHandler.INSTANCE.playSound(sound);
+		public String playSound(@Nonnull final ITrackedSound sound) {
+			return SoundEffectHandler.INSTANCE.playSound((BasicSound<?>) sound);
 		}
 
 		@Override
-		public void stopSound(@Nonnull final BasicSound<?> sound) {
-			SoundEffectHandler.INSTANCE.stopSound(sound);
+		public void stopSound(@Nonnull final ITrackedSound sound) {
+			SoundEffectHandler.INSTANCE.stopSound((BasicSound<?>) sound);
 		}
 	};
 
