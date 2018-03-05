@@ -60,7 +60,7 @@ public class Proxy {
 	}
 
 	protected static void register(final Class<?> clazz) {
-		DSurround.log().info("Registering for Forge events: %s", clazz.getName());
+		DSurround.log().debug("Registering for Forge events: %s", clazz.getName());
 		MinecraftForge.EVENT_BUS.register(clazz);
 	}
 
