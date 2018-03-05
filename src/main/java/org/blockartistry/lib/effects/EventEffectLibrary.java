@@ -102,8 +102,8 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	@Nonnull
 	public BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player) {
 		if (isActivePlayer(player))
-			return se.createSound(player, false);
-		return se.createSound(player);
+			return se.createTrackingSound(player, false);
+		return se.createSoundNear(player);
 	}
 
 }
