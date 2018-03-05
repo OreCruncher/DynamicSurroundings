@@ -26,7 +26,6 @@ package org.blockartistry.DynSurround.client.sound;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.entity.Entity;
@@ -38,15 +37,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class FootstepSound extends BasicSound<FootstepSound> {
 
-	public static final ISoundScale FOOTSTEP = () -> {
-		return ModOptions.sound.footstepsSoundFactor;
-	};
-
 	public FootstepSound(@Nonnull final Entity player, @Nonnull final SoundEvent event) {
 		super(event, SoundCategory.PLAYERS);
 
 		this.setPosition(player);
-		setVolumeScale(FOOTSTEP);
+		setVolumeScale(BasicSound.FOOTSTEP_SCALE);
 		if (EnvironState.isPlayer(player))
 			setAttenuationType(noAttenuation());
 	}

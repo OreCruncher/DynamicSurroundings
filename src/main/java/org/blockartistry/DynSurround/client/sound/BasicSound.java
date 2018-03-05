@@ -29,6 +29,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.lib.compat.ModEnvironment;
 import org.blockartistry.lib.random.XorShiftRandom;
 import org.blockartistry.lib.sound.ITrackedSound;
@@ -63,9 +64,9 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound
 		float getScale();
 	}
 
-	public static final ISoundScale DEFAULT_SCALE = () -> {
-		return 1.0F;
-	};
+	public static final ISoundScale DEFAULT_SCALE = () -> 1.0F;
+	public static final ISoundScale FOOTSTEP_SCALE = () -> ModOptions.sound.footstepsSoundFactor;
+	public static final ISoundScale BIOME_EFFECT_SCALE = () -> ModOptions.sound.masterSoundScaleFactor;
 
 	public static class NBT {
 		public static final String SOUND_EVENT = "s";

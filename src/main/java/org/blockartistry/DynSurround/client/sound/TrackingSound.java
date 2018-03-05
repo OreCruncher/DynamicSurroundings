@@ -64,7 +64,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 		this.lastTick = EnvironState.getTickCounter() - 1;
 
 		updateLocation();
-		setVolumeScale(SpotSound.BIOME_EFFECT);
+		setVolumeScale(BasicSound.BIOME_EFFECT_SCALE);
 	}
 
 	@Override
