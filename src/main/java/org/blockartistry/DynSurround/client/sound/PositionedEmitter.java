@@ -46,7 +46,7 @@ public class PositionedEmitter extends Emitter {
 	@Override
 	protected BasicSound<?> createSound() {
 		// TODO: The setRepeat() is a hack - should make more formal
-		return this.effect.createSound(this.position).setRepeat(true);
+		return this.effect.createSoundAt(this.position).setRepeat(true);
 	}
 
 }
