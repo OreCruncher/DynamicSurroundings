@@ -1,15 +1,15 @@
 {
 	"itemConfig": {
 		"axeSound": [
-			"new.item.ItemNetherExAxe",
-			"new.item.ItemNetherExPickaxe"
+			"nex.item.ItemNetherExAxe",
+			"nex.item.ItemNetherExPickaxe"
 		],
 		"swordSound": [
-			"new.item.ItemNetherExSword"
+			"nex.item.ItemNetherExSword"
 		],
 		"toolSound": [
-			"new.item.ItemNetherExHoe",
-			"new.item.ItemNetherExShovel"
+			"nex.item.ItemNetherExHoe",
+			"nex.item.ItemNetherExShovel"
 		],
 		"lightArmor": [
 			"nex:armor_helmet_bone",

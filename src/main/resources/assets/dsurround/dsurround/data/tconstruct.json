@@ -19,7 +19,7 @@
 		"bowSound": [
 			"slimeknights.tconstruct.tools.ranged.item.LongBow",
 			"slimeknights.tconstruct.tools.ranged.item.ShortBow",
-			"slimeknights.tconstruct.tools.ranged.item.Crossbow"
+			"slimeknights.tconstruct.tools.ranged.item.CrossBow"
 		],
 		"swordSound": [
 			"slimeknights.tconstruct.tools.melee.item.BroadSword",
