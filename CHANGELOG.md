@@ -1,3 +1,10 @@
+###DynamicSurroundings-1.11.2-3.4.9.7
+**Fixes**
+* Sound culling should function again
+* Don't crash playing sound if Forge fails a mods dependency check
+* [OpenEye] NPE while ticking EnvironStateHandler
+* [OpenEye] No class definition: NullChunk.
+
 ###DynamicSurroundings-1.11.2-3.4.9.6
 **Fixes**
 * Classic aurora will now hover between cloud and sky height like the shader variant.
