@@ -1,3 +1,15 @@
+###DynamicSurroundings-1.12.2-3.4.9.7
+**What's New**
+* **Minimum** required Forge version is now 14.2.1.2555, meaning only 1.12.2 is supported.  Enforcement has been added to the mod so Forge can post a nice pretty dialog if the wrong version of Forge is being used.  There is still a lot of development occurring for Forge 1.12.2 so it may be worthwhile keeping up with the latest recommended Forge builds.
+* New/Updated mod support (thanks TechnoMysterio!): Astral Sorcery, Better with Addons, Better with Mods, Blood Magic, Botania, Ceramics, Embers, Immersive Engineering, Ice and Fire, NetherEx, Random Things, Roots, Tinkers' Construct, Tinkers' Complement
+
+**Fixes**
+* Sound culling should function again
+* Don't crash playing sound if Forge fails a mods dependency check
+* [OpenEye] NPE while ticking EnvironStateHandler
+* [OpenEye] NoSuchFieldError: REACH_DISTANCE.  This is fixed by putting in the minimum version restriction.
+* [OpenEye] No class definition: NullChunk.
+
 ###DynamicSurroundings-1.12.2-3.4.9.6
 **What's New**
 * Mod support for PrimalCore, Kitsu's ForgeCraft, Geolosys
