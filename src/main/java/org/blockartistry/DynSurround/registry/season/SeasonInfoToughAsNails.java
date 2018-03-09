@@ -36,6 +36,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import toughasnails.api.config.SeasonsOption;
+import toughasnails.api.config.SyncedConfig;
 import toughasnails.api.season.Season;
 import toughasnails.api.season.SeasonHelper;
 import toughasnails.api.stat.capability.ITemperature;
@@ -78,12 +80,21 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 		return SeasonHelper.getSeasonData(world).getSubSeason().getSeason();
 	}
 
+	private boolean isSeasonsEnabled() {
+		return SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_SEASONS);
+	}
+
 	@Override
 	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		final Biome biome = ClientChunkCache.INSTANCE.getBiome(pos);
-		if (biome.getTemperature() <= 0.7F && getSeasonData(world) == Season.WINTER)
+		if (biome.getTemperature() <= 0.8F && getSeasonData(world) == Season.WINTER && isSeasonsEnabled())
 			return 0.0F;
 		return biome.getFloatTemperature(pos);
+	}
+
+	@Override
+	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return getTemperature(world, pos) < 0.15;
 	}
 
 	@Nonnull
