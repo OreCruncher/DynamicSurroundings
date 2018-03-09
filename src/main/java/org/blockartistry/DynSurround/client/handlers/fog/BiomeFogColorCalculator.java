@@ -85,16 +85,13 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 			this.biomeFogColor = new Color(0, 0, 0);
 			this.weightBiomeFog = 0;
 
-			breakOut: for (int x = -distance; x <= distance; ++x) {
+			for (int x = -distance; x <= distance; ++x) {
 				for (int z = -distance; z <= distance; ++z) {
 					pos.setPos(playerX + x, 0, playerZ + z);
 
-					// If the chunk is not available doScan will be
-					// set true
-					this.doScan |= !provider.isAvailable(pos);
-					if (this.doScan)
-						break breakOut;
-
+					// If the chunk is not available doScan will be set true. This will force
+					// another scan on the next tick.
+					this.doScan = this.doScan | !provider.isAvailable(pos);
 					final BiomeInfo biome = ClientRegistry.BIOME.get(provider.getBiome(pos));
 					final Color color;
 
