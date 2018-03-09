@@ -101,13 +101,25 @@ public final class SeasonRegistry extends Registry {
 		return getData(world).getPrecipitationHeight(world, pos);
 	}
 
-	/*
+	/**
 	 * Indicates if it is cold enough that water can freeze. Could result in snow or
 	 * frozen ice. Does not take into account any other environmental factors - just
-	 * whether its cold enough.
+	 * whether its cold enough. If environmental sensitive versions are needed look
+	 * at canBlockFreeze() and canSnowAt().
+	 *
+	 * @return true if water can freeze, false otherwise
 	 */
 	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getData(world).canWaterFreeze(world, pos);
+	}
+
+	/**
+	 * Indicates if frost breath is possible at the specified location.
+	 *
+	 * @return true if it is possible, false otherwise
+	 */
+	public boolean showFrostBreath(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return getData(world).showFrostBreath(world, pos);
 	}
 
 }
