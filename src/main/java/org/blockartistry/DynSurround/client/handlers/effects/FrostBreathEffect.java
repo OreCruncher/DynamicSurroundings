@@ -28,6 +28,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleBreath;
 import org.blockartistry.DynSurround.registry.EntityEffectInfo;
 import org.blockartistry.lib.effects.EntityEffect;
@@ -79,8 +80,7 @@ public class FrostBreathEffect extends EntityEffect {
 	protected boolean isPossibleToShow(final Entity entity) {
 		if (entity.isInsideOfMaterial(Material.AIR)) {
 			final BlockPos entityPos = entity.getPosition();
-			final float temp = entity.getEntityWorld().getBiome(entityPos).getTemperature(entityPos);
-			return temp < 0.2F;
+			return ClientRegistry.SEASON.showFrostBreath(entity.getEntityWorld(), entityPos);
 		}
 		return false;
 	}

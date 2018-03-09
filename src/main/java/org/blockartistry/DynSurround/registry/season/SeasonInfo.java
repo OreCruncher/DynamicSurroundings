@@ -31,6 +31,7 @@ import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.SeasonType;
 import org.blockartistry.DynSurround.registry.TemperatureRating;
+
 import com.google.common.base.MoreObjects;
 
 import net.minecraft.util.math.BlockPos;
@@ -76,14 +77,25 @@ public class SeasonInfo {
 		return heightTemp;
 	}
 
-	/*
+	/**
 	 * Indicates if it is cold enough that water can freeze. Could result in snow or
 	 * frozen ice. Does not take into account any other environmental factors - just
 	 * whether its cold enough. If environmental sensitive versions are needed look
 	 * at canBlockFreeze() and canSnowAt().
+	 * 
+	 * @return true if water can freeze, false otherwise
 	 */
 	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getTemperature(world, pos) < 0.15F;
+	}
+
+	/**
+	 * Indicates if frost breath is possible at the specified location.
+	 *
+	 * @return true if it is possible, false otherwise
+	 */
+	public boolean showFrostBreath(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return getTemperature(world, pos) < 0.2F;
 	}
 
 	@Override
