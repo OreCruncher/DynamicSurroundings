@@ -255,8 +255,10 @@ public final class SoundEngine {
 		} else {
 			// Play the sound if actual music is not installed or the sound is not music
 			if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC) {
-				getSoundManager().playSound(sound);
-				flushSoundQueue();
+				synchronized (SoundSystemConfig.THREAD_SYNC) {
+					getSoundManager().playSound(sound);
+					flushSoundQueue();
+				}
 			}
 
 			// If no ID was set there was an error. Else assume it is in a play state.

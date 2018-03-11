@@ -37,6 +37,7 @@ import org.blockartistry.lib.sound.SoundState;
 import org.blockartistry.lib.sound.SoundUtils;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSound;
@@ -275,10 +276,12 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).addValue(this.positionedSoundLocation.toString())
+		final ToStringHelper helper = MoreObjects.toStringHelper(this).addValue(this.positionedSoundLocation.toString())
 				.addValue(this.category.toString()).add("state", this.getState()).add("v", this.getVolume())
-				.add("p", getPitch()).add("s", this.volumeScale.getScale()).addValue(getAttenuationType())
-				.add("x", getXPosF()).add("y", this.getYPosF()).add("z", getZPosF()).toString();
+				.add("p", getPitch()).add("s", this.volumeScale.getScale()).addValue(getAttenuationType());
+		if (!StringUtils.isEmpty(this.getId()))
+			helper.add("id", getId().toString());
+		return helper.toString();
 	}
 
 	public static AttenuationType noAttenuation() {

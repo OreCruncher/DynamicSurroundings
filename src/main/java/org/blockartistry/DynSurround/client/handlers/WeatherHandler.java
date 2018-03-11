@@ -52,6 +52,11 @@ public class WeatherHandler extends EffectHandlerBase {
 	public boolean doTick(final int tick) {
 		return this.timer > 0;
 	}
+	
+	@Override
+	public void onConnect() {
+		this.timer = 0;
+	}
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
