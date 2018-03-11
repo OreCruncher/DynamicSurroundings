@@ -29,6 +29,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.lib.collections.ObjectArray;
@@ -38,16 +39,17 @@ import org.blockartistry.lib.math.TimerEMA;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
 public class EffectManager {
 
-	private static EffectManager instance_ = null;
+	private static final EffectManager instance_ = new EffectManager();
+	private static boolean isConnected = false;
 
 	public static EffectManager instance() {
 		return instance_;
@@ -55,14 +57,16 @@ public class EffectManager {
 
 	private final ObjectArray<EffectHandlerBase> effectHandlers = new ObjectArray<>();
 	private final Map<Class<? extends EffectHandlerBase>, EffectHandlerBase> services = new IdentityHashMap<>();
-	private TimerEMA computeTime;
+	private final TimerEMA computeTime = new TimerEMA("Processing");
 
 	private EffectManager() {
+		init();
 	}
 
 	private void register(@Nonnull final EffectHandlerBase handler) {
 		this.effectHandlers.add(handler);
 		this.services.put(handler.getClass(), handler);
+		DSurround.log().debug("Registered handler [%s]", handler.getClass().getName());
 	}
 
 	private void init() {
@@ -84,49 +88,58 @@ public class EffectManager {
 		// These two go last in order
 		register(SoundEffectHandler.INSTANCE);
 		register(new DiagnosticHandler());
+	}
 
+	private void onConnect() {
 		for (final EffectHandlerBase h : this.effectHandlers)
 			h.connect0();
-
-		this.computeTime = new TimerEMA("Processing");
+		MinecraftForge.EVENT_BUS.register(this);
 		((DiagnosticHandler) lookupService(DiagnosticHandler.class)).addTimer(this.computeTime);
 	}
 
-	private void fini() {
+	private void onDisconnect() {
+		MinecraftForge.EVENT_BUS.unregister(this);
 		for (final EffectHandlerBase h : this.effectHandlers)
 			h.disconnect0();
-
-		this.effectHandlers.clear();
-		this.services.clear();
-		
-		this.computeTime = null;
 	}
 
 	@SuppressWarnings("unchecked")
 	public <T> T lookupService(@Nonnull final Class<? extends EffectHandlerBase> service) {
-		return (T) this.services.get(service);
+		final EffectHandlerBase eh = this.services.get(service);
+		if (eh == null)
+			DSurround.log().warn("Unable to locate handler service [%s]", service.getName());
+		return (T) eh;
+	}
+	
+	public boolean isConnected() {
+		return isConnected;
 	}
 
-	public static void register() {
-		instance_ = new EffectManager();
-		instance_.init();
-		MinecraftForge.EVENT_BUS.register(instance_);
+	public static void connect() {
+		if (isConnected) {
+			DSurround.log().warn("Attempt to initialize EffectManager when it is already initialized");
+			disconnect();
+		}
+		instance_.onConnect();
+		isConnected = true;
 	}
 
-	public static void unregister() {
-		if (instance_ != null) {
-			MinecraftForge.EVENT_BUS.unregister(instance_);
-			instance_.fini();
-			instance_ = null;
+	public static void disconnect() {
+		if (isConnected) {
+			instance_.onDisconnect();
+			isConnected = false;
 		}
 	}
 
-	protected EntityPlayer getPlayer() {
+	protected static EntityPlayer getPlayer() {
 		return Minecraft.getMinecraft().player;
 	}
 
 	// All the strange crap I have seen...
 	protected boolean checkReady(@Nonnull final TickEvent.ClientTickEvent event) {
+		if (event.side == Side.SERVER || event.phase == Phase.END || Minecraft.getMinecraft().isGamePaused())
+			return false;
+
 		if (Minecraft.getMinecraft().gameSettings == null)
 			return false;
 
@@ -141,11 +154,7 @@ public class EffectManager {
 		return true;
 	}
 
-	@SubscribeEvent
 	public void onTick(@Nonnull final TickEvent.ClientTickEvent event) {
-
-		if (event.side == Side.SERVER || event.phase == Phase.END || Minecraft.getMinecraft().isGamePaused())
-			return;
 
 		if (!checkReady(event))
 			return;
@@ -168,4 +177,9 @@ public class EffectManager {
 		this.computeTime.update(System.nanoTime() - start);
 	}
 
+	@SubscribeEvent
+	public static void clientTick(@Nonnull final TickEvent.ClientTickEvent event) {
+		if (isConnected)
+			instance_.onTick(event);
+	}
 }

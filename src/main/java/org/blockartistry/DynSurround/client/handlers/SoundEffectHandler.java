@@ -72,8 +72,6 @@ import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -130,6 +128,8 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		this.pending.removeIf(PENDING_SOUNDS);
 		this.sendToServer.forEach(sound -> Network.sendToServer(new PacketPlaySound(player, sound)));
 		this.sendToServer.clear();
+
+		doMoodProcessing();
 	}
 
 	@Override
@@ -329,39 +329,36 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	}
 
 	// Going to hijack the mood processing logic in MC since it is kinda busted.
-	@SubscribeEvent
-	public void doMoodProcessing(@Nonnull final TickEvent.ClientTickEvent event) {
-		if (event.phase == Phase.END && EnvironState.getWorld() != null) {
-			final WorldClient wc = (WorldClient) EnvironState.getWorld();
-			// If we are at 1 it means we need to see if we can come up with a point
-			// around the player that matches the ambient requirement (an air block
-			// in the dark or something).
-			if (wc.ambienceTicks == 1) {
-				// Calculate a point around the player. +/- 15 blocks.
-				final int deltaX = this.RANDOM.nextInt(30) - 15;
-				final int deltaY = this.RANDOM.nextInt(30) - 15;
-				final int deltaZ = this.RANDOM.nextInt(30) - 15;
-				final int distance = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
-				if (distance > 4 && distance <= 255) {
-					final BlockPos blockpos = EnvironState.getPlayerPosition().add(deltaX, deltaY, deltaZ);
-					final IBlockState iblockstate = wc.getBlockState(blockpos);
-					if (iblockstate.getMaterial() == Material.AIR)
-						if (wc.getLightFor(EnumSkyBlock.SKY, blockpos) <= 0)
-							if (wc.getLight(blockpos) <= this.RANDOM.nextInt(8)) {
-								final BasicSound<?> fx = Sounds.AMBIENT_CAVE.createSoundAt(blockpos).setVolume(0.9F)
-										.setPitch(0.8F + this.RANDOM.nextFloat() * 0.2F);
-								playSound(fx);
-								wc.ambienceTicks = this.RANDOM.nextInt(12000) + 6000;
-								DSurround.log().debug("Next ambient event: %d ticks", wc.ambienceTicks);
-							}
-				}
+	public void doMoodProcessing() {
+		final WorldClient wc = (WorldClient) EnvironState.getWorld();
+		// If we are at 1 it means we need to see if we can come up with a point
+		// around the player that matches the ambient requirement (an air block
+		// in the dark or something).
+		if (wc.ambienceTicks == 1) {
+			// Calculate a point around the player. +/- 15 blocks.
+			final int deltaX = this.RANDOM.nextInt(30) - 15;
+			final int deltaY = this.RANDOM.nextInt(30) - 15;
+			final int deltaZ = this.RANDOM.nextInt(30) - 15;
+			final int distance = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
+			if (distance > 4 && distance <= 255) {
+				final BlockPos blockpos = EnvironState.getPlayerPosition().add(deltaX, deltaY, deltaZ);
+				final IBlockState iblockstate = wc.getBlockState(blockpos);
+				if (iblockstate.getMaterial() == Material.AIR)
+					if (wc.getLightFor(EnumSkyBlock.SKY, blockpos) <= 0)
+						if (wc.getLight(blockpos) <= this.RANDOM.nextInt(8)) {
+							final BasicSound<?> fx = Sounds.AMBIENT_CAVE.createSoundAt(blockpos).setVolume(0.9F)
+									.setPitch(0.8F + this.RANDOM.nextFloat() * 0.2F);
+							playSound(fx);
+							wc.ambienceTicks = this.RANDOM.nextInt(12000) + 6000;
+							DSurround.log().debug("Next ambient event: %d ticks", wc.ambienceTicks);
+						}
 			}
-
-			// If it didn't process push it back a tick to avoid MC from
-			// triggering.
-			if (wc.ambienceTicks == 1)
-				wc.ambienceTicks = 2;
 		}
+
+		// If it didn't process push it back a tick to avoid MC from
+		// triggering.
+		if (wc.ambienceTicks == 1)
+			wc.ambienceTicks = 2;
 	}
 
 	@SubscribeEvent

@@ -133,6 +133,8 @@ public class DiagnosticHandler extends EffectHandlerBase {
 
 		if (ModOptions.logging.showDebugDialog)
 			DiagnosticPanel.destroy();
+
+		this.timers.clear();
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
