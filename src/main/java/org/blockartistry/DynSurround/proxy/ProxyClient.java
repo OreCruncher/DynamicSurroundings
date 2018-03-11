@@ -32,7 +32,6 @@ import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleDripOverride;
 import org.blockartistry.DynSurround.client.gui.HumDinger;
 import org.blockartistry.DynSurround.client.handlers.EffectManager;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler;
 import org.blockartistry.DynSurround.client.hud.GuiHUDHandler;
 import org.blockartistry.DynSurround.client.hud.InspectionHUD;
 import org.blockartistry.DynSurround.client.hud.LightLevelHUD;
@@ -81,7 +80,6 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 		super.eventBusRegistrations();
 
 		register(HumDinger.class);
-		register(EnvironStateHandler.class);
 		register(InspectionHUD.class);
 		register(LightLevelHUD.class);
 		register(KeyHandler.class);
@@ -114,6 +112,7 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 	@Override
 	public void init(@Nonnull final FMLInitializationEvent event) {
 		super.init(event);
+
 		KeyHandler.init();
 		ParticleDripOverride.register();
 
@@ -138,7 +137,7 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 	@Override
 	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
 		Scheduler.schedule(Side.CLIENT, () -> {
-			EffectManager.register();
+			EffectManager.connect();
 			GuiHUDHandler.register();
 			Weather.register(DSurround.isInstalledOnServer());
 			ProxyClient.this.connectionTime = System.currentTimeMillis();
@@ -148,7 +147,7 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 	@Override
 	public void clientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
 		Scheduler.schedule(Side.CLIENT, () -> {
-			EffectManager.unregister();
+			EffectManager.disconnect();
 			GuiHUDHandler.unregister();
 			Weather.unregister();
 			ProxyClient.this.connectionTime = 0;
@@ -156,7 +155,7 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 	}
 
 	@Override
-	public void onResourceManagerReload(final IResourceManager resourceManager) {
+	public void onResourceManagerReload(@Nonnull final IResourceManager resourceManager) {
 		MinecraftForge.EVENT_BUS.post(new ReloadEvent.Resources(resourceManager));
 	}
 
