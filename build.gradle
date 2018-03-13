@@ -92,7 +92,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
     compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.12.2-7.0.1.2315:deobf"
-    compile "com.github.glitchfiend.biomesoplenty:ToughAsNails:1.12.2-3.1.0.75:deobf"
+    compile "com.github.glitchfiend.biomesoplenty:ToughAsNails:1.12.2-3.1.0.84:deobf"
     
 	// http://dvs1.progwml6.com/files/maven/mezz/jei/
     deobfCompile "mezz.jei:jei_1.12.2:4.8.5.147:api"
