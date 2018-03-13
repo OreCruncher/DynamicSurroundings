@@ -1,3 +1,10 @@
+###DynamicSurroundings-1.10.2-3.4.9.8
+**Fixes**
+* Weather rendering with Tough as Nails should work again
+* Use seasonal data to determine if frost breath effect should generate
+* "Flashing" fog color when moving
+* More startup sequence related NPEs centered on trouble connecting to remote servers
+
 ###DynamicSurroundings-1.10.2-3.4.9.7
 **Fixes**
 * Sound culling should function again
