@@ -1,9 +1,13 @@
 {
 	"itemConfig": {
+		"axeSound": [
+			"lumien.randomthings.item.spectretools.ItemSpectreAxe"
+		],
 		"lightArmor": [
 			"randomthings:waterwalkingboots",
 			"randomthings:obsidianwaterwalkingboots",
-			"randomthings:magichood"
+			"randomthings:magichood",
+			"randomthings:lavawader"
 		],
 		"heavyArmor": [
 			"randomthings:superlubricentboots"
