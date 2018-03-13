@@ -1,3 +1,14 @@
+###DynamicSurroundings-1.12.2-3.4.9.8
+**Fixes**
+* Ice and Fire config is sane again
+* Weather rendering with Tough as Nails should work again
+* Use seasonal data to determine if frost breath effect should generate
+* "Flashing" fog color when moving
+* More startup sequence related NPEs centered on trouble connecting to remote servers
+
+**Changes**
+* Updated some armor settings for Random Things
+
 ###DynamicSurroundings-1.12.2-3.4.9.7
 **What's New**
 * **Minimum** required Forge version is now 14.2.1.2555, meaning only 1.12.2 is supported.  Enforcement has been added to the mod so Forge can post a nice pretty dialog if the wrong version of Forge is being used.  There is still a lot of development occurring for Forge 1.12.2 so it may be worthwhile keeping up with the latest recommended Forge builds.
