@@ -31,6 +31,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.handlers.effects.CraftingSoundEffect;
@@ -45,6 +46,8 @@ import org.blockartistry.DynSurround.client.handlers.effects.VillagerChatEffect;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.event.ReloadEvent;
+import org.blockartistry.lib.ThreadGuard;
+import org.blockartistry.lib.ThreadGuard.Action;
 import org.blockartistry.lib.effects.EntityEffectHandler;
 import org.blockartistry.lib.effects.EntityEffectLibrary;
 import org.blockartistry.lib.effects.EventEffectLibrary;
@@ -107,6 +110,8 @@ public class FxHandler extends EffectHandlerBase {
 	private final TimerEMA compute = new TimerEMA("FxHandler Updates");
 	private long nanos;
 
+	//private final ThreadGuard guard = new ThreadGuard(DSurround.log(), Side.CLIENT, "FxHandler").setAction(Action.EXCEPTION);
+	
 	public FxHandler() {
 		super("Special Effects");
 	}
@@ -150,6 +155,8 @@ public class FxHandler extends EffectHandlerBase {
 		if (entity == null || !entity.getEntityWorld().isRemote)
 			return;
 
+		//this.guard.check("onLivingUpdate");
+		
 		final long start = System.nanoTime();
 
 		final double distanceThreshold = ModOptions.general.specialEffectRange * ModOptions.general.specialEffectRange;
