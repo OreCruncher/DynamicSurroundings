@@ -195,7 +195,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	@SideOnly(Side.CLIENT)
 	public BasicSound<?> createSoundNear(@Nonnull final Entity player) {
 		final float posX = (float) (player.posX + randomRange(SPOT_SOUND_RANGE));
-		final float posY = player.getEyeHeight() + randomRange(SPOT_SOUND_RANGE);
+		final float posY = (float) (player.posY + player.getEyeHeight() + randomRange(SPOT_SOUND_RANGE));
 		final float posZ = (float) (player.posZ + randomRange(SPOT_SOUND_RANGE));
 		return new AdhocSound(this.sound, this.category).setPosition(posX, posY, posZ)
 				.setVolumeScale(BasicSound.BIOME_EFFECT_SCALE);
