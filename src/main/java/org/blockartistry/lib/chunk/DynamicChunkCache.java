@@ -52,7 +52,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * NOTE: Logic should not hold onto a DynamicChunkCache reference beyond the
  * scope of a session as it holds concrete references to World and Chunk!
  */
-public class DynamicChunkCache implements IBlockAccessEx {
+public class DynamicChunkCache implements IChunkCache, IBlockAccessEx {
 
 	protected final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 	protected final Chunk NULL_CHUNK = new NullChunk();
@@ -79,11 +79,13 @@ public class DynamicChunkCache implements IBlockAccessEx {
 		update(world, min, max);
 	}
 
+	@Override
 	public void clear() {
 		this.world = null;
 		this.chunkArray = null;
 	}
 
+	@Override
 	public void update(@Nonnull final World world, @Nonnull final BlockPos min, @Nonnull final BlockPos max) {
 
 		final ChunkPos from = new ChunkPos(min);

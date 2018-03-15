@@ -27,8 +27,9 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.lib.chunk.DynamicChunkCache;
 import org.blockartistry.lib.chunk.IBlockAccessEx;
+import org.blockartistry.lib.chunk.IChunkCache;
+import org.blockartistry.lib.chunk.PassThroughChunkCache;
 import org.blockartistry.lib.math.TimerEMA;
 
 import net.minecraft.client.Minecraft;
@@ -53,7 +54,8 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
 public final class ClientChunkCache {
 
-	public static final IBlockAccessEx INSTANCE = new DynamicChunkCache();
+	//public static final IBlockAccessEx INSTANCE = new DynamicChunkCache();
+	public static final IBlockAccessEx INSTANCE = new PassThroughChunkCache();
 	public static final TimerEMA timing = new TimerEMA("Chunk Cache");
 
 	// Figure the block range from the player. The area scanners are up to 32
@@ -76,12 +78,12 @@ public final class ClientChunkCache {
 				final BlockPos pos = new BlockPos(player.getPosition());
 				final BlockPos min = pos.add(-range, -range, -range);
 				final BlockPos max = pos.add(range, range, range);
-				((DynamicChunkCache) INSTANCE).update(player.getEntityWorld(), min, max);
+				((IChunkCache) INSTANCE).update(player.getEntityWorld(), min, max);
 				timing.update(System.nanoTime() - start);
 			} else {
 				// If there is no player reference wipe the cache to ensure resources
 				// are freed.
-				((DynamicChunkCache) ClientChunkCache.INSTANCE).clear();
+				((IChunkCache) ClientChunkCache.INSTANCE).clear();
 			}
 		}
 
