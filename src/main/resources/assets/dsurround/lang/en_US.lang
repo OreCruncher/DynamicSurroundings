@@ -168,6 +168,8 @@ dsurround.cfg.biomes.Sealevel=Overworld Sealevel Override
 dsurround.cfg.biomes.Sealevel.tooltip=Sealevel to set for Overworld (0 use default for World)
 dsurround.cfg.biomes.Aliases=Biomes Alias
 dsurround.cfg.biomes.Aliases.tooltip=Biomes alias list
+dsurround.cfg.biomes.DimBlacklist=Dimension Blacklist
+dsurround.cfg.biomes.DimBlacklist.tooltip=Dimension IDs where biome sounds will not be played
 
 dsurround.cfg.block.cat.Blocks=Block Options
 dsurround.cfg.block.cat.Blocks.tooltip=Options for defining block specific sounds/effects

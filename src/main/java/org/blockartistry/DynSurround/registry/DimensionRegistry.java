@@ -161,5 +161,9 @@ public final class DimensionRegistry extends Registry {
 	public boolean hasFog(@Nonnull final World world) {
 		return getData(world).getHasFog();
 	}
+	
+	public boolean getPlayBiomeSounds(@Nonnull final World world) {
+		return getData(world).getPlayBiomeSounds();
+	}
 
 }
