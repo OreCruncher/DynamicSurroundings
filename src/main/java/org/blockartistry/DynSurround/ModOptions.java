@@ -465,6 +465,7 @@ public final class ModOptions {
 	public static final String CATEGORY_BIOMES = "biomes";
 	public static final String CONFIG_BIOME_SEALEVEL = "Overworld Sealevel Override";
 	public static final String CONFIG_BIOME_ALIASES = "Biomes Alias";
+	public static final String CONFIG_BIOME_DIM_BLACKLIST = "Dimension Blacklist";
 
 	@Category(CATEGORY_BIOMES)
 	@LangKey("dsurround.cfg.biomes.cat.Biomes")
@@ -472,7 +473,7 @@ public final class ModOptions {
 	public static class biomes {
 
 		public static String PATH = null;
-		public static final List<String> SORT = Arrays.asList(CONFIG_BIOME_SEALEVEL, CONFIG_BIOME_ALIASES);
+		public static final List<String> SORT = Arrays.asList(CONFIG_BIOME_SEALEVEL, CONFIG_BIOME_ALIASES, CONFIG_BIOME_DIM_BLACKLIST);
 
 		@Option(CONFIG_BIOME_SEALEVEL)
 		@DefaultValue("0")
@@ -486,6 +487,12 @@ public final class ModOptions {
 		@LangKey("dsurround.cfg.biomes.Aliases")
 		@Comment("Biomes alias list")
 		public static String[] biomeAliases = {};
+		
+		@Option(CONFIG_BIOME_DIM_BLACKLIST)
+		@DefaultValue("")
+		@LangKey("dsurround.cfg.biomes.DimBlacklist")
+		@Comment("Dimension IDs where biome sounds will not be played")
+		public static String[] dimensionBlacklist = {};
 	}
 
 	public static final String CATEGORY_BLOCK = "block";
