@@ -228,7 +228,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static World getWorld() {
-			return getPlayer().getEntityWorld();
+			final EntityPlayer player = getPlayer();
+			return player != null ? player.getEntityWorld() : null;
 		}
 
 		public static BlockPos getPlayerPosition() {
