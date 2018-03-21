@@ -32,6 +32,7 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.fx.ISpecialEffect;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.data.xface.SoundConfig;
 import org.blockartistry.DynSurround.data.xface.SoundType;
 import org.blockartistry.DynSurround.expression.ExpressionEngine;
@@ -45,7 +46,6 @@ import org.blockartistry.lib.random.XorShiftRandom;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.audio.ISound.AttenuationType;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -204,7 +204,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	@SideOnly(Side.CLIENT)
 	public BasicSound<?> createTrackingSound(@Nonnull final Entity player, final boolean fadeIn) {
 		final TrackingSound sound = new TrackingSound(player, this, fadeIn);
-		if (player instanceof EntityPlayer)
+		if (EnvironState.isPlayer(player))
 			sound.setAttenuationType(AttenuationType.NONE);
 		return sound;
 	}
