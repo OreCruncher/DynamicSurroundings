@@ -27,7 +27,6 @@ package org.blockartistry.DynSurround.event;
 import javax.annotation.Nonnull;
 
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
@@ -41,9 +40,9 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 public class ThunderEvent extends Event {
 
 	/**
-	 * The world in which the event is occuring.
+	 * The dimension in which the event is occuring.
 	 */
-	public final World world;
+	public final int dimId;
 
 	/**
 	 * Whether a flash will be played.
@@ -55,8 +54,8 @@ public class ThunderEvent extends Event {
 	 */
 	public final BlockPos location;
 
-	public ThunderEvent(@Nonnull final World world, final boolean doFlash, @Nonnull final BlockPos pos) {
-		this.world = world;
+	public ThunderEvent(final int dim, final boolean doFlash, @Nonnull final BlockPos pos) {
+		this.dimId = dim;
 		this.doFlash = doFlash;
 		this.location = pos;
 	}

@@ -215,7 +215,7 @@ public class Weather {
 		if (world == null || world.provider == null)
 			return;
 
-		if (world.provider.getDimension() != event.world.provider.getDimension())
+		if (world.provider.getDimension() != event.dimId)
 			return;
 
 		if (tracker instanceof ServerDrivenTracker)

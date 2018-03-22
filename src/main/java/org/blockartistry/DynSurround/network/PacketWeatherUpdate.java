@@ -27,11 +27,9 @@ package org.blockartistry.DynSurround.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.event.WeatherUpdateEvent;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -42,10 +40,8 @@ public final class PacketWeatherUpdate implements IMessage {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketWeatherUpdate message, @Nullable final MessageContext ctx) {
-			final World world = EnvironState.getWorld();
-			if (world != null && world.provider != null && world.provider.getDimension() == message.dimension)
-				Network.postEvent(new WeatherUpdateEvent(world, message.intensity, message.maxIntensity,
-						message.nextRainChange, message.thunderStrength, message.thunderChange, message.thunderEvent));
+			Network.postEvent(new WeatherUpdateEvent(message.dimension, message.intensity, message.maxIntensity,
+					message.nextRainChange, message.thunderStrength, message.thunderChange, message.thunderEvent));
 			return null;
 		}
 	}

@@ -24,10 +24,7 @@
 
 package org.blockartistry.DynSurround.event;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
@@ -37,9 +34,9 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 public class WeatherUpdateEvent extends Event {
 
 	/**
-	 * The world for which this event is intended.
+	 * The dimension for which this event is intended.
 	 */
-	public final World world;
+	public final int dimId;
 
 	/**
 	 * The current rain intensity that is being set. 0 means no intensity, and 1.0F
@@ -72,10 +69,10 @@ public class WeatherUpdateEvent extends Event {
 	 */
 	public final int nextThunderEvent;
 
-	public WeatherUpdateEvent(@Nonnull final World world, final float rainIntensity, final float maxRainIntensity,
+	public WeatherUpdateEvent(final int dim, final float rainIntensity, final float maxRainIntensity,
 			final int nextRainChange, final float thunderStrength, final int nextThunderChange,
 			final int nextThunderEvent) {
-		this.world = world;
+		this.dimId = dim;
 		this.maxRainIntensity = MathHelper.clamp(maxRainIntensity, 0, 1.0F);
 		this.rainIntensity = MathHelper.clamp(rainIntensity, 0.0F, this.maxRainIntensity);
 		this.nextRainChange = nextRainChange;
