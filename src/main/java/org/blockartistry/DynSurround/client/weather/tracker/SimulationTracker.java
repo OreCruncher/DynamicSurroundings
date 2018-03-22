@@ -173,8 +173,8 @@ public class SimulationTracker extends Tracker {
 					if (player != null) {
 						final float theY = EnvironState.getDimensionInfo().getSkyHeight();
 						final BlockPos pos = new BlockPos(player.posX, theY, player.posZ);
-						MinecraftForge.EVENT_BUS
-								.post(new ThunderEvent(player.getEntityWorld(), doFlash(intensity), pos));
+						MinecraftForge.EVENT_BUS.post(new ThunderEvent(player.getEntityWorld().provider.getDimension(),
+								doFlash(intensity), pos));
 					}
 				}
 

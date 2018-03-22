@@ -27,12 +27,10 @@ package org.blockartistry.DynSurround.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.event.ThunderEvent;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -43,9 +41,7 @@ public class PacketThunder implements IMessage {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketThunder message, @Nullable final MessageContext ctx) {
-			final World world = EnvironState.getWorld();
-			if (world != null && world.provider.getDimension() == message.dimension)
-				Network.postEvent(new ThunderEvent(world, message.doFlash, message.pos));
+			Network.postEvent(new ThunderEvent(message.dimension, message.doFlash, message.pos));
 			return null;
 		}
 	}

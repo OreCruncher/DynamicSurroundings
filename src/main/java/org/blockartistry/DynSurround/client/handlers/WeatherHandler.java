@@ -27,6 +27,7 @@ package org.blockartistry.DynSurround.client.handlers;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.Sounds;
 import org.blockartistry.DynSurround.client.weather.Weather;
@@ -52,7 +53,7 @@ public class WeatherHandler extends EffectHandlerBase {
 	public boolean doTick(final int tick) {
 		return this.timer > 0;
 	}
-	
+
 	@Override
 	public void onConnect() {
 		this.timer = 0;
@@ -66,7 +67,7 @@ public class WeatherHandler extends EffectHandlerBase {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onThunderEvent(@Nonnull final ThunderEvent event) {
-		if (!ModOptions.rain.allowBackgroundThunder)
+		if (!ModOptions.rain.allowBackgroundThunder || EnvironState.getDimensionId() != event.dimId)
 			return;
 
 		final BasicSound<?> thunder = Sounds.THUNDER.createSoundAt(event.location)
