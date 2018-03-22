@@ -26,6 +26,8 @@ package org.blockartistry.lib.chunk;
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Biomes;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -98,42 +100,42 @@ public class PassThroughChunkCache implements IChunkCache, IBlockAccessEx {
 
 	@Override
 	public TileEntity getTileEntity(@Nonnull final BlockPos pos) {
-		return this.cache.getTileEntity(pos);
+		return this.cache == null ? null : this.cache.getTileEntity(pos);
 	}
 
 	@Override
 	public int getCombinedLight(@Nonnull final BlockPos pos, final int lightValue) {
-		return this.cache.getCombinedLight(pos, lightValue);
+		return this.cache == null ? lightValue : this.cache.getCombinedLight(pos, lightValue);
 	}
 
 	@Override
 	public IBlockState getBlockState(@Nonnull final BlockPos pos) {
-		return this.cache.getBlockState(pos);
+		return this.cache == null ? Blocks.AIR.getDefaultState() : this.cache.getBlockState(pos);
 	}
 
 	@Override
 	public boolean isAirBlock(@Nonnull final BlockPos pos) {
-		return this.cache.isAirBlock(pos);
+		return this.cache != null && this.cache.isAirBlock(pos);
 	}
 
 	@Override
 	public Biome getBiome(@Nonnull final BlockPos pos) {
-		return this.cache.getBiome(pos);
+		return this.cache == null ? Biomes.PLAINS : this.cache.getBiome(pos);
 	}
 
 	@Override
 	public int getStrongPower(@Nonnull final BlockPos pos, @Nonnull final EnumFacing direction) {
-		return this.cache.getStrongPower(pos, direction);
+		return this.cache == null ? 0 : this.cache.getStrongPower(pos, direction);
 	}
 
 	@Override
 	public WorldType getWorldType() {
-		return this.cache.getWorldType();
+		return this.cache == null ? WorldType.DEFAULT : this.cache.getWorldType();
 	}
 
 	@Override
 	public boolean isSideSolid(@Nonnull final BlockPos pos, @Nonnull final EnumFacing side, final boolean _default) {
-		return this.cache.isSideSolid(pos, side, _default);
+		return this.cache != null && this.cache.isSideSolid(pos, side, _default);
 	}
 
 	@Override
@@ -153,26 +155,26 @@ public class PassThroughChunkCache implements IChunkCache, IBlockAccessEx {
 
 	@Override
 	public IBlockState getBlockState(final int x, final int y, final int z) {
-		return this.cache.getBlockState(this.pos.setPos(x, y, z));
+		return this.cache == null ? Blocks.AIR.getDefaultState() : this.cache.getBlockState(this.pos.setPos(x, y, z));
 	}
 
 	@Override
 	public int getLightFor(@Nonnull final EnumSkyBlock type, @Nonnull final BlockPos pos) {
-		return this.cache.getLightFor(type, pos);
+		return this.cache == null ? 0 : this.cache.getLightFor(type, pos);
 	}
 
 	@Override
 	public BlockPos getTopSolidOrLiquidBlock(@Nonnull final BlockPos pos) {
-		return this.world.getTopSolidOrLiquidBlock(pos);
+		return this.world == null ? pos : this.world.getTopSolidOrLiquidBlock(pos);
 	}
 
 	@Override
 	public boolean isAvailable(final int x, final int z) {
-		return this.world.getChunkProvider().provideChunk(x >> 4, z >> 4) != null;
+		return this.world != null && this.world.getChunkProvider().provideChunk(x >> 4, z >> 4) != null;
 	}
 
 	@Override
 	public BlockPos getPrecipitationHeight(@Nonnull final BlockPos pos) {
-		return this.world.getPrecipitationHeight(pos);
+		return this.world == null ? pos : this.world.getPrecipitationHeight(pos);
 	}
 }
