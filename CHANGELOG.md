@@ -1,3 +1,15 @@
+###DynamicSurroundings-1.12.2-3.4.9.9
+**What's New**
+* Biomes option to blacklist dimensions so that biome sounds do not play.  Useful for dimensions created by mods where biome sounds may not make sense, such as Advanced Rocketry space stations and the like.
+
+**Fixes**
+* Random biome spot sounds will now play at the correct Y.  As a result you will hear them again. :)
+* ASM will only compute stack frames if really necessary.  This change should make the mod compatible with Vivecraft again.
+* Several timing related NPEs when connecting to servers.
+
+**Changes**
+* Altered internal chunk cache mechanism to be more compatible with other mods
+
 ###DynamicSurroundings-1.12.2-3.4.9.8
 **Fixes**
 * Ice and Fire config is sane again
