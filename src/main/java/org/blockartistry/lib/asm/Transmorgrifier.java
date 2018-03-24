@@ -50,7 +50,7 @@ public abstract class Transmorgrifier {
 	 * @return Set of flags to use
 	 */
 	public int classWriterFlags() {
-		return ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES;
+		return ClassWriter.COMPUTE_MAXS;
 	}
 
 	/**
