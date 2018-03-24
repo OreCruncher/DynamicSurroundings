@@ -30,6 +30,7 @@ import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.lib.asm.Transmorgrifier;
+import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
@@ -51,6 +52,11 @@ public class PatchSoundManager extends Transmorgrifier {
 	@Override
 	public boolean isEnabled() {
 		return ModOptions.asm.enableSoundCache;
+	}
+
+	@Override
+	public int classWriterFlags() {
+		return ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES;
 	}
 
 	@Override
