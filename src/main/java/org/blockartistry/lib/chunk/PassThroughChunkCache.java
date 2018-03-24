@@ -85,7 +85,7 @@ public class PassThroughChunkCache implements IChunkCache, IBlockAccessEx {
 			this.anyEmpty = false;
 			for (int cX = this.minCX; cX <= this.maxCX; cX++)
 				for (int cZ = this.minCZ; cZ <= this.maxCZ; cZ++)
-					if (this.world.getChunkProvider().provideChunk(cX, cZ) == null) {
+					if (this.world.getChunkProvider().getLoadedChunk(cX, cZ) == null) {
 						this.anyEmpty = true;
 						break;
 					}
@@ -120,7 +120,13 @@ public class PassThroughChunkCache implements IChunkCache, IBlockAccessEx {
 
 	@Override
 	public Biome getBiome(@Nonnull final BlockPos pos) {
-		return this.cache == null ? Biomes.PLAINS : this.cache.getBiome(pos);
+		if (this.cache != null)
+			try {
+				return this.cache.getBiome(pos);
+			} catch (@Nonnull final Throwable t) {
+
+			}
+		return Biomes.PLAINS;
 	}
 
 	@Override
@@ -170,7 +176,7 @@ public class PassThroughChunkCache implements IChunkCache, IBlockAccessEx {
 
 	@Override
 	public boolean isAvailable(final int x, final int z) {
-		return this.world != null && this.world.getChunkProvider().provideChunk(x >> 4, z >> 4) != null;
+		return this.world != null && this.world.getChunkProvider().getLoadedChunk(x >> 4, z >> 4) != null;
 	}
 
 	@Override
