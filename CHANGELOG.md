@@ -1,3 +1,15 @@
+###DynamicSurroundings-1.11.2-3.4.9.9
+**What's New**
+* Biomes option to blacklist dimensions so that biome sounds do not play.  Useful for dimensions created by mods where biome sounds may not make sense, such as Advanced Rocketry space stations and the like.
+
+**Fixes**
+* Random biome spot sounds will now play at the correct Y.  As a result you will hear them again. :)
+* ASM will only compute stack frames if really necessary.
+* Several timing related NPEs when connecting to servers.
+
+**Changes**
+* Altered internal chunk cache mechanism to be more compatible with other mods
+
 ###DynamicSurroundings-1.11.2-3.4.9.8
 **Fixes**
 * Weather rendering with Tough as Nails should work again
