@@ -120,7 +120,13 @@ public class PassThroughChunkCache implements IChunkCache, IBlockAccessEx {
 
 	@Override
 	public Biome getBiome(@Nonnull final BlockPos pos) {
-		return this.cache == null ? Biomes.PLAINS : this.cache.getBiome(pos);
+		if (this.cache != null)
+			try {
+				return this.cache.getBiome(pos);
+			} catch (@Nonnull final Throwable t) {
+
+			}
+		return Biomes.PLAINS;
 	}
 
 	@Override
