@@ -67,4 +67,10 @@ public final class ForgeUtils {
 	public static String getModName(@Nonnull final ResourceLocation resource) {
 		return getModName(resource.getResourceDomain());
 	}
+	
+	@Nonnull
+	public static String getForgeVersion() {
+		final ModContainer mod = findModContainer("forge");
+		return mod != null ? mod.getVersion() : StringUtils.EMPTY;
+	}
 }
