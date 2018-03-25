@@ -28,6 +28,8 @@ import java.io.File;
 import java.util.Map;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.lib.ForgeUtils;
+import org.blockartistry.lib.VersionHelper;
 
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
@@ -65,5 +67,12 @@ public class TransformLoader implements IFMLLoadingPlugin {
 	@Override
 	public String getModContainerClass() {
 		return null;
+	}
+	
+	public static boolean applySoundFix() {
+		// Target version that has the sound fix
+		final String fixVersion = "14.23.2.2635";
+		final String forgeVersion = ForgeUtils.getForgeVersion();
+		return VersionHelper.compareVersions(forgeVersion, fixVersion) < 0;
 	}
 }

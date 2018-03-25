@@ -40,7 +40,7 @@ public class SoundCrashFixSource extends Transmorgrifier {
 
 	@Override
 	public boolean isEnabled() {
-		return !Loader.isModLoaded("ambientsounds");
+		return TransformLoader.applySoundFix() && !Loader.isModLoaded("ambientsounds");
 	}
 
 	@Override
