@@ -1,3 +1,10 @@
+###DynamicSurroundings-1.10.2-3.4.9.10
+**Fixes**
+* Fog blending between BoP and Dynamic Surroundings should work again.
+
+**Changes**
+* Internal library update
+
 ###DynamicSurroundings-1.10.2-3.4.9.9
 **What's New**
 * Biomes option to blacklist dimensions so that biome sounds do not play.  Useful for dimensions created by mods where biome sounds may not make sense, such as Advanced Rocketry space stations and the like.
