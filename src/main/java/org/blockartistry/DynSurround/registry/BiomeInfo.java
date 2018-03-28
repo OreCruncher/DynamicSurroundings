@@ -112,19 +112,22 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 		// If it is a BOP biome initialize from the BoP Biome
 		// instance. May be overwritten by DS config.
-		if (bopBiome != null && bopBiome.isInstance(biome)) {
-			try {
-				final int color = bopBiomeFogColor.getInt(biome);
-				if (color > 0) {
-					this.hasFog = true;
-					this.fogColor = new Color(color);
-					this.fogDensity = bopBiomeFogDensity.getFloat(biome);
-				}
-			} catch (final Exception ex) {
+		if (bopBiome != null && !biome.isFake()) {
+			final Biome b = biome.getBiome();
+			if (bopBiome.isInstance(b)) {
+				try {
+					final int color = bopBiomeFogColor.getInt(b);
+					if (color > 0) {
+						this.hasFog = true;
+						this.fogColor = new Color(color);
+						this.fogDensity = bopBiomeFogDensity.getFloat(b);
+					}
+				} catch (final Exception ex) {
 
+				}
 			}
 		}
-
+		
 		this.isRiver = this.biome.getTypes().contains(Type.RIVER);
 		this.isOcean = this.biome.getTypes().contains(Type.OCEAN);
 		this.isDeepOcean = this.isOcean && getBiomeName().matches("(?i).*deep.*ocean.*|.*abyss.*");
