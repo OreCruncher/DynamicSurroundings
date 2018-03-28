@@ -3,6 +3,12 @@
 		"axeSound": [
 			"betterwithmods.common.items.tools.ItemSoulForgedMattock"
 		],
+		"lightArmor": [
+			"betterwithmods:leather_tanned_helmet",
+			"betterwithmods:leather_tanned_chest",
+			"betterwithmods:leather_tanned_pants",
+			"betterwithmods:leather_tanned_boots"
+		],
 		"heavyArmor": [
 			"betterwithmods:steel_helmet",
 			"betterwithmods:steel_chest",
