@@ -1,3 +1,8 @@
+###DynamicSurroundings-1.12.2-3.4.9.10
+**Fixes**
+* The sound engine crash patch is now included in Forge starting with version 14.23.2.2635.  Dynamic Surroundings detects the Forge version and applies the patch as needed.
+* Fog blending between BoP and Dynamic Surroundings should work again.
+
 ###DynamicSurroundings-1.12.2-3.4.9.9
 **What's New**
 * Biomes option to blacklist dimensions so that biome sounds do not play.  Useful for dimensions created by mods where biome sounds may not make sense, such as Advanced Rocketry space stations and the like.
