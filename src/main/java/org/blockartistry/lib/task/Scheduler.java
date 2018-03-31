@@ -61,4 +61,24 @@ public final class Scheduler {
 				: Minecraft.getMinecraft();
 		return tl == null ? null : tl.addScheduledTask(task);
 	}
+
+	/**
+	 * Schedules the specified task for execution on the appropriate side. The task
+	 * will not execute immediately. It is deferred until the next time the side
+	 * thread checks the scheduled task queue.
+	 * 
+	 * @param side
+	 *            The side on which the task is to execute
+	 * @param task
+	 *            The task to execute
+	 */
+	public static void scheduleDeferred(@Nonnull final Side side, @Nonnull final Runnable task) {
+		try {
+			final Thread t = new Thread(() -> schedule(side, task));
+			t.start();
+			t.join();
+		} catch (@Nonnull final Throwable t) {
+
+		}
+	}
 }
