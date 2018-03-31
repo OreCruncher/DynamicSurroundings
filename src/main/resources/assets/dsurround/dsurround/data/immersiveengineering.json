@@ -16,5 +16,11 @@
 			"immersiveengineering:faraday_suit_legs",
 			"immersiveengineering:faraday_suit_feet"
 		]
+	},
+	"footsteps": {
+		"immersiveengineering:metal_decoration1:0": "hardmetal",
+		"immersiveengineering:metal_decoration1:0+bigger": "hardmetal",
+		"immersiveengineering:metal_decoration1:4": "hardmetal",
+		"immersiveengineering:metal_decoration1:4+bigger": "hardmetal"
 	}
 }
