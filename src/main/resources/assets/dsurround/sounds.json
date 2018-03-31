@@ -60,21 +60,30 @@
 		"sounds": [
 			"dsurround:footsteps/armor/crystal_walk1",
 			"dsurround:footsteps/armor/crystal_walk2",
-			"dsurround:footsteps/armor/crystal_walk3"
+			"dsurround:footsteps/armor/crystal_walk3",
+			"dsurround:footsteps/armor/crystal_walk4",
+			"dsurround:footsteps/armor/crystal_walk5",
+			"dsurround:footsteps/armor/crystal_walk6"
 		]
 	},
 	"fs.armor.crystal_run": {
 		"category": "player",
 		"sounds": [
-			"dsurround:footsteps/armor/crystal_walk1",
-			"dsurround:footsteps/armor/crystal_walk2",
-			"dsurround:footsteps/armor/crystal_walk3"
+			"dsurround:footsteps/armor/crystal_run1",
+			"dsurround:footsteps/armor/crystal_run2",
+			"dsurround:footsteps/armor/crystal_run3",
+			"dsurround:footsteps/armor/crystal_run4",
+			"dsurround:footsteps/armor/crystal_run5",
+			"dsurround:footsteps/armor/crystal_run6"
 		]
 	},
 	"fs.armor.crystal_foot": {
 		"category": "player",
 		"sounds": [
-			"dsurround:footsteps/armor/crystal_foot1"
+			"dsurround:footsteps/armor/crystal_foot1",
+			"dsurround:footsteps/armor/crystal_foot2",
+			"dsurround:footsteps/armor/crystal_foot3",
+			"dsurround:footsteps/armor/crystal_foot4"
 		]
 	},
 	"fs.armor.heavy_walk": {
