@@ -32,6 +32,7 @@ import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.sound.AdhocSound;
 import org.blockartistry.DynSurround.client.sound.SoundEngine;
 import org.blockartistry.lib.random.XorShiftRandom;
+import org.blockartistry.lib.task.Scheduler;
 
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.util.ResourceLocation;
@@ -57,10 +58,17 @@ public final class HumDinger {
 			final String res = possibles[XorShiftRandom.current().nextInt(possibles.length)];
 			if (!StringUtils.isEmpty(res)) {
 				final SoundEvent se = SoundEvent.REGISTRY.getObject(new ResourceLocation(res));
-				if (se != null)
-					SoundEngine.instance().playSound(new AdhocSound(se, SoundCategory.MASTER));
-				else
+				if (se != null) {
+					Scheduler.scheduleDeferred(Side.CLIENT, () -> {
+						try {
+							SoundEngine.instance().playSound(new AdhocSound(se, SoundCategory.MASTER));
+						} catch (@Nonnull final Throwable t) {
+							;
+						}
+					});
+				} else {
 					DSurround.log().warn("Unable to locate startup sound [%s]", res);
+				}
 			} else {
 				DSurround.log().warn("Improperly formatted startup sound list!");
 			}
