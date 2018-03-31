@@ -1,0 +1,100 @@
+{
+	"biomes": [
+		{
+			"conditions": "biome.name == 'Badlands'",
+			"_comment": "Makes Badlands sound like somewhat like a savanna.",
+			"soundReset": true,
+			"sounds": [
+				{
+					"sound": "dsurround:savanna.day",
+					"conditions": "isDay"
+				},
+				{
+					"sound": "dsurround:savanna.night",
+					"conditions": "isNight"
+				}
+			]
+		},
+		{
+			"conditions": "biome.name == 'Canyon'",
+			"_comment": "More wind for the Canyon, along with Mesa-esque noises.",
+			"soundReset": true,
+			"sounds": [
+				{
+					"sound": "dsurround:wind"
+				},
+				{
+					"sound": "dsurround:rattlesnake",
+					"conditions": "weather.isNotRaining && isDay",
+					"soundType": "spot"
+				},
+				{
+					"sound": "dsurround:coyote",
+					"conditions": "weather.isNotRaining && isNight",
+					"soundType": "spot"
+				}
+			]
+		},
+		{
+			"conditions": "biome.name == 'Cliffs'",
+			"_comment": "More wind for Cliffs.",
+			"soundReset": true,
+			"sounds": [
+				{
+					"sound": "dsurround:wind"
+				}
+			]
+		},
+		{
+			"conditions": "biome.name == 'Crag Cliffs'",
+			"_comment": "More wind for Crag Cliffs.",
+			"soundReset": true,
+			"sounds": [
+				{
+					"sound": "dsurround:wind"
+				}
+			]
+		},
+		{
+			"conditions": "biome.name == 'Lush Hills'",
+			"_comment": "Makes Lush Hills sound more like a Forest/Plains.",
+			"soundReset": true,
+			"sounds": [
+				{
+					"sound": "dsurround:plains",
+					"conditions": "weather.isNotRaining && isDay"
+				},
+				{
+					"sound": "dsurround:crickets",
+					"conditions": "weather.isNotRaining && isNight"
+				},
+				{
+					"sound": "dsurround:bird",
+					"conditions": "weather.isNotRaining && isDay",
+					"soundType": "spot"
+				},
+				{
+					"sound": "dsurround:owl",
+					"conditions": "weather.isNotRaining && isNight",
+					"soundType": "spot"
+				},
+				{
+					"sound": "dsurround:woodpecker",
+					"conditions": "weather.isNotRaining && isDay",
+					"soundType": "spot"
+				}
+			]
+		}
+	],
+	"footsteps": {
+		"traverse:blue_rock_cobblestone_slab": "stone",
+		"traverse:blue_rock_cobblestone_stairs": "stone",
+		"traverse:blue_rock_cobblestone_wall": "stone",
+		"traverse:cold_grass+foliage": "brush",
+		"traverse:dead_grass+foliage": "straw",
+		"traverse:fir_fence_gate": "#fence",
+		"traverse:red_rock_cobblestone_slab": "stone",
+		"traverse:red_rock_cobblestone_stairs": "stone",
+		"traverse:red_rock_cobblestone_wall": "stone"
+	}
+}
