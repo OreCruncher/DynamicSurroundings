@@ -1,0 +1,26 @@
+{
+	"biomes": [
+		{
+			"conditions": "biome.name == 'Mining Biome'",
+			"_comment": "Aroma1997's Mining Biome",
+			"aurora": true,
+			"dust": false,
+			"fog": false,
+			"soundReset": "true",
+			"sounds": [
+				{
+					"sound": "dsurround:wind",
+					"volume": 0.2
+				}
+			]
+		}
+	],
+	"dimensions": [
+		{
+			"name": "MiningWorld",
+			"aurora": true,
+			"haze": false,
+			"seaLevel": 70
+		}
+	]
+}
