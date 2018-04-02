@@ -68,8 +68,12 @@ public final class VersionChecker {
 		if (event.player instanceof EntityPlayer) {
 			final String updateMessage = getUpdateMessage(this.modId);
 			if (updateMessage != null) {
-				final ITextComponent component = ITextComponent.Serializer.jsonToComponent(updateMessage);
-				event.player.sendMessage(component);
+				try {
+					final ITextComponent component = ITextComponent.Serializer.jsonToComponent(updateMessage);
+					event.player.sendMessage(component);
+				} catch(@Nonnull final Throwable t) {
+					t.printStackTrace();
+				}
 			}
 		}
 	}
