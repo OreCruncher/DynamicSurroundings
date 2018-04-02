@@ -2,6 +2,9 @@
 **Fixes**
 * NPE when playing startup sound
 
+**Changes**
+* Updated crystal armor sound (thanks TechnoMysterio!)
+
 ###DynamicSurroundings-1.11.2-3.4.9.10
 **Fixes**
 * Fog blending between BoP and Dynamic Surroundings should work again.
