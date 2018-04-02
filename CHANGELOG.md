@@ -1,3 +1,7 @@
+###DynamicSurroundings-1.12.2-3.4.9.11
+**Fixes**
+* NPE when playing startup sound
+
 ###DynamicSurroundings-1.12.2-3.4.9.10
 **Fixes**
 * The sound engine crash patch is now included in Forge starting with version 14.23.2.2635.  Dynamic Surroundings detects the Forge version and applies the patch as needed.
