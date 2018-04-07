@@ -1,0 +1,16 @@
+{
+	"biomes": [
+		{
+			"conditions": "biome.name == 'Degraded'",
+			"_comment": "Gives Evilcraft's Degraded biome high pitched wind sounds.",
+			"soundReset": true,
+			"sounds": [
+				{
+					"sound": "dsurround:wind",
+					"volume": 1.0,
+					"pitch": 2.3
+				}
+			]
+		}
+	]
+}
