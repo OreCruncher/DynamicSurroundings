@@ -7,11 +7,11 @@
 			"sounds": [
 				{
 					"sound": "dsurround:savanna.day",
-					"conditions": "isDay"
+					"conditions": "weather.isNotRaining && isDay"
 				},
 				{
 					"sound": "dsurround:savanna.night",
-					"conditions": "isNight"
+					"conditions": "weather.isNotRaining && isNight"
 				}
 			]
 		},
@@ -52,6 +52,30 @@
 			"sounds": [
 				{
 					"sound": "dsurround:wind"
+				}
+			]
+		},
+		{
+			"conditions": "biome.name == 'Desert Shrubland'",
+			"_comment": "Make Desert Shrubland sound a little more lively.",
+			"soundReset": true,
+			"sounds": [
+				{
+					"sound": "dsurround:desert.wind",
+					"volume": 0.15
+				},
+				{
+					"sound": "dsurround:savanna.day",
+					"conditions": "weather.isNotRaining && isDay"
+				},
+				{
+					"sound": "dsurround:savanna.night",
+					"conditions": "weather.isNotRaining && isNight"
+				},
+				{
+					"sound": "dsurround:rattlesnake",
+					"conditions": "weather.isNotRaining && isDay",
+					"soundType": "spot"
 				}
 			]
 		},
