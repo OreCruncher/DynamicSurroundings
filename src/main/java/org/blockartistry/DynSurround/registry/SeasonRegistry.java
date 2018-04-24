@@ -30,7 +30,6 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
 import org.blockartistry.DynSurround.registry.season.SeasonInfo;
 import org.blockartistry.DynSurround.registry.season.SeasonInfoNether;
-import org.blockartistry.DynSurround.registry.season.SeasonInfoToughAsNails;
 import org.blockartistry.lib.compat.ModEnvironment;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -58,12 +57,6 @@ public final class SeasonRegistry extends Registry {
 		if (world.provider.getDimension() == -1) {
 			DSurround.log().info("Creating Nether SeasonInfo");
 			return new SeasonInfoNether(world);
-		}
-
-		if (ModEnvironment.ToughAsNails.isLoaded()) {
-			DSurround.log().info("Creating Tough as Nails SeasonInfo for dimension %s",
-					world.provider.getDimensionType().getName());
-			return new SeasonInfoToughAsNails(world);
 		}
 
 		DSurround.log().info("Creating default SeasonInfo for dimension %s",
