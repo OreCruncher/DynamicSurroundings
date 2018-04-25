@@ -36,6 +36,8 @@ public enum ModEnvironment {
 	//
 	ToughAsNails("ToughAsNails"),
 	//
+	SereneSeasons("sereneseasons"),
+	//
 	CalendarAPI("CalendarAPI"),
 	//
 	Weather2("weather2"),

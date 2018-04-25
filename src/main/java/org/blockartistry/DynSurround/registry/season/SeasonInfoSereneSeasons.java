@@ -27,33 +27,26 @@ package org.blockartistry.DynSurround.registry.season;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.client.ClientChunkCache;
-import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.SeasonType;
-import org.blockartistry.DynSurround.registry.TemperatureRating;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import toughasnails.api.config.SeasonsOption;
-import toughasnails.api.config.SyncedConfig;
-import toughasnails.api.season.Season;
-import toughasnails.api.season.SeasonHelper;
-import toughasnails.api.stat.capability.ITemperature;
-import toughasnails.api.temperature.TemperatureHelper;
+import sereneseasons.api.season.Season;
+import sereneseasons.api.season.SeasonHelper;
 
 @SideOnly(Side.CLIENT)
-public class SeasonInfoToughAsNails extends SeasonInfo {
+public class SeasonInfoSereneSeasons extends SeasonInfo {
 
-	public SeasonInfoToughAsNails(@Nonnull final World world) {
+	public SeasonInfoSereneSeasons(@Nonnull final World world) {
 		super(world);
 	}
 
 	@Override
 	@Nonnull
 	public SeasonType getSeasonType(@Nonnull final World world) {
-		final Season.SubSeason season = SeasonHelper.getSeasonData(world).getSubSeason();
+		final Season.SubSeason season = SeasonHelper.getSeasonState(world).getSubSeason();
 		switch (season) {
 		case EARLY_SUMMER:
 		case MID_SUMMER:
@@ -77,17 +70,13 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 	}
 
 	private Season getSeasonData(@Nonnull final World world) {
-		return SeasonHelper.getSeasonData(world).getSubSeason().getSeason();
-	}
-
-	private boolean isSeasonsEnabled() {
-		return SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_SEASONS);
+		return SeasonHelper.getSeasonState(world).getSeason();
 	}
 
 	@Override
 	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		final Biome biome = ClientChunkCache.INSTANCE.getBiome(pos);
-		if (biome.getDefaultTemperature() <= 0.8F && getSeasonData(world) == Season.WINTER && isSeasonsEnabled())
+		if (biome.getDefaultTemperature() <= 0.8F && getSeasonData(world) == Season.WINTER)
 			return 0.0F;
 		return biome.getTemperature(pos);
 	}
@@ -95,29 +84,6 @@ public class SeasonInfoToughAsNails extends SeasonInfo {
 	@Override
 	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getTemperature(world, pos) < 0.15;
-	}
-
-	@Nonnull
-	@Override
-	public TemperatureRating getPlayerTemperature(@Nonnull final World world) {
-		final ITemperature data = TemperatureHelper.getTemperatureData(EnvironState.getPlayer());
-		if (data == null)
-			return super.getPlayerTemperature(world);
-
-		switch (data.getTemperature().getRange()) {
-		case ICY:
-			return TemperatureRating.ICY;
-		case COOL:
-			return TemperatureRating.COOL;
-		case MILD:
-			return TemperatureRating.MILD;
-		case WARM:
-			return TemperatureRating.WARM;
-		case HOT:
-			return TemperatureRating.HOT;
-		default:
-			return TemperatureRating.MILD;
-		}
 	}
 
 }

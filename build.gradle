@@ -91,8 +91,8 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.12.2-7.0.1.2325:deobf"
-    compile "com.github.glitchfiend.biomesoplenty:ToughAsNails:1.12.2-3.1.0.84:deobf"
+    compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.12.2-7.0.1.2382:deobf"
+    //compile "com.github.glitchfiend.biomesoplenty:ToughAsNails:1.12.2-3.1.0.115:deobf"
     
 	// http://dvs1.progwml6.com/files/maven/mezz/jei/
     deobfCompile "mezz.jei:jei_1.12.2:4.8.5.147:api"
