@@ -1,0 +1,75 @@
+{
+	"biomes" : [
+		{
+			"conditions": "biome.name == 'Eerie'",
+			"_comment": "Similar to EvilCraft's Degraded biome, this gives Thaumcraft's Eerie biome wind sounds.",
+			"soundReset": true,
+			"sounds": [
+				{
+					"sound": "dsurround:wind",
+					"volume": 0.8,
+					"pitch": 2.5
+				}
+			]
+		}
+	],
+	"itemConfig":{
+		"axeSound":[
+			"thaumcraft.common.items.tools.ItemElementalAxe",
+			"thaumcraft.common.items.tools.ItemElementalPickaxe",
+			"thaumcraft.common.items.tools.ItemThaumiumAxe",
+			"thaumcraft.common.items.tools.ItemThaumiumPickaxe",
+			"thaumcraft.common.items.tools.ItemVoidAxe",
+			"thaumcraft.common.items.tools.ItemVoidPickaxe"
+		],
+		"swordSound":[
+			"thaumcraft.common.items.tools.ItemCrimsonBlade",
+			"thaumcraft.common.items.tools.ItemElementalSword",
+			"thaumcraft.common.items.tools.ItemThaumiumSword",
+			"thaumcraft.common.items.tools.ItemVoidSword"
+		],
+		"toolSound": [
+			"thaumcraft.common.items.tools.ItemElementalHoe",
+			"thaumcraft.common.items.tools.ItemElementalShovel",
+			"thaumcraft.common.items.tools.ItemThaumiumHoe",
+			"thaumcraft.common.items.tools.ItemThaumiumShovel",
+			"thaumcraft.common.items.tools.ItemVoidHoe",
+			"thaumcraft.common.items.tools.ItemVoidShovel"
+		],
+		"lightArmor": [
+			"thaumcraft:goggles",
+			"thaumcraft:cloth_chest",
+			"thaumcraft:cloth_legs",
+			"thaumcraft:cloth_boots",
+			"thaumcraft:traveller_boots",
+			"thaumcraft:void_robe_helm",
+			"thaumcraft:void_robe_chest",
+			"thaumcraft:void_robe_legs"
+		],
+		"mediumArmor":[
+			"thaumcraft:crimson_robe_helm",
+			"thaumcraft:crimson_robe_chest",
+			"thaumcraft:crimson_robe_legs"
+		],
+		"heavyArmor":[
+			"thaumcraft:thaumium_helm",
+			"thaumcraft:thaumium_chest",
+			"thaumcraft:thaumium_legs",
+			"thaumcraft:thaumium_boots",
+			"thaumcraft:fortress_helm",
+			"thaumcraft:fortress_chest",
+			"thaumcraft:fortress_legs",
+			"thaumcraft:void_helm",
+			"thaumcraft:void_chest",
+			"thaumcraft:void_legs",
+			"thaumcraft:void_boots",
+			"thaumcraft:crimson_plate_helm",
+			"thaumcraft:crimson_plate_chest",
+			"thaumcraft:crimson_plate_legs",
+			"thaumcraft:crimson_boots",
+			"thaumcraft:crimson_praetor_helm",
+			"thaumcraft:crimson_praetor_chest",
+			"thaumcraft:crimson_praetor_legs"
+		]
+	}
+}
