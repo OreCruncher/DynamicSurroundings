@@ -165,9 +165,14 @@ public final class SoundEngine {
 	}
 
 	private int currentSoundCount() {
-		synchronized (SoundSystemConfig.THREAD_SYNC) {
-			return getSoundLibrary().getSources().size();
+		try {
+			synchronized (SoundSystemConfig.THREAD_SYNC) {
+				return getSoundLibrary().getSources().size();
+			}
+		} catch (final Throwable t) {
+			;
 		}
+		return 0;
 	}
 
 	private boolean canFitSound() {
