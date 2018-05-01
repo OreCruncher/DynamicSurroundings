@@ -83,30 +83,35 @@ public class BiomeSoundEffectsHandler extends EffectHandlerBase {
 		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<>(Constants.DEFAULT_CAPACITY,
 				Constants.DEFAULT_LOAD_FACTOR, -1F);
 
-		if (doBiomeSounds())
-			getBiomeSounds(sounds);
+		// Only gather data if the player is alive.  If the player is dead the biome sounds will
+		// cease playing.
+		if (player.isEntityAlive()) {
+			
+			if (doBiomeSounds())
+				getBiomeSounds(sounds);
 
-		final ObjectArray<SoundEffect> playerSounds = new ObjectArray<>();
-		ClientRegistry.BIOME.PLAYER_INFO.findSoundMatches(playerSounds);
-		if (ModOptions.sound.enableBattleMusic)
-			ClientRegistry.BIOME.BATTLE_MUSIC_INFO.findSoundMatches(playerSounds);
-		if (EnvironState.inVillage())
-			ClientRegistry.BIOME.VILLAGE_INFO.findSoundMatches(playerSounds);
+			final ObjectArray<SoundEffect> playerSounds = new ObjectArray<>();
+			ClientRegistry.BIOME.PLAYER_INFO.findSoundMatches(playerSounds);
+			if (ModOptions.sound.enableBattleMusic)
+				ClientRegistry.BIOME.BATTLE_MUSIC_INFO.findSoundMatches(playerSounds);
+			if (EnvironState.inVillage())
+				ClientRegistry.BIOME.VILLAGE_INFO.findSoundMatches(playerSounds);
 
-		playerSounds.forEach(fx -> sounds.put(fx, 1.0F));
+			playerSounds.forEach(fx -> sounds.put(fx, 1.0F));
 
-		SoundEffectHandler.INSTANCE.queueAmbientSounds(sounds);
+			if (doBiomeSounds()) {
+				final BiomeInfo playerBiome = EnvironState.getPlayerBiome();
+				final SoundEffect sound = playerBiome.getSpotSound(this.RANDOM);
+				if (sound != null)
+					SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound);
+			}
 
-		if (doBiomeSounds()) {
-			final BiomeInfo playerBiome = EnvironState.getPlayerBiome();
-			final SoundEffect sound = playerBiome.getSpotSound(this.RANDOM);
+			final SoundEffect sound = ClientRegistry.BIOME.PLAYER_INFO.getSpotSound(this.RANDOM);
 			if (sound != null)
 				SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound);
 		}
 
-		final SoundEffect sound = ClientRegistry.BIOME.PLAYER_INFO.getSpotSound(this.RANDOM);
-		if (sound != null)
-			SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound);
+		SoundEffectHandler.INSTANCE.queueAmbientSounds(sounds);
 	}
 
 }
