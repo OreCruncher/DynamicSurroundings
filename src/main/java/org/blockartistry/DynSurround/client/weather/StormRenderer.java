@@ -33,6 +33,7 @@ import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.compat.RandomThings;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
+import org.blockartistry.DynSurround.registry.PrecipitationType;
 import org.blockartistry.DynSurround.registry.season.SeasonInfo;
 import org.blockartistry.lib.Color;
 import org.blockartistry.lib.random.XorShiftRandom;
@@ -173,7 +174,10 @@ public class StormRenderer {
 
 				this.random.setSeed(gridX * gridX * 3121 + gridX * 45238971 ^ gridZ * gridZ * 418711 + gridZ * 13761);
 				this.mutable.setPos(gridX, k2, gridZ);
-				final boolean canSnow = season.canWaterFreeze(world, this.mutable);
+
+				final PrecipitationType pt = season.getPrecipitationType(world, this.mutable, biome);
+				if (pt == PrecipitationType.NONE)
+					continue;
 
 				final double d6 = gridX + 0.5F - entity.posX;
 				final double d7 = gridZ + 0.5F - entity.posZ;
@@ -182,7 +186,7 @@ public class StormRenderer {
 
 				final int combinedLight = ClientChunkCache.INSTANCE.getCombinedLight(this.mutable, 0);
 
-				if (!biome.getHasDust() && !canSnow) {
+				if (pt == PrecipitationType.RAIN) {
 
 					setupForRender(props.getRainTexture());
 
@@ -205,17 +209,18 @@ public class StormRenderer {
 							.color(1.0F, 1.0F, 1.0F, alpha).lightmap(slX16, blX16).endVertex();
 				} else {
 
-					ResourceLocation texture = props.getSnowTexture();
-					if (biome.getHasDust() && !canSnow)
+					final Color color;
+					final ResourceLocation texture;
+
+					if (pt == PrecipitationType.DUST) {
+						color = biome.getDustColor();
 						texture = props.getDustTexture();
+					} else {
+						color = Color.WHITE;
+						texture = props.getSnowTexture();
+					}
 
 					setupForRender(texture);
-
-					final Color color;
-					if (biome.getHasDust())
-						color = biome.getDustColor();
-					else
-						color = Color.WHITE;
 
 					// d8 makes the snow fall down. Assumes texture height of 512 pixels.
 					final double d8 = ((RenderWeather.rendererUpdateCount & 511) + partialTicks) / 512.0F;

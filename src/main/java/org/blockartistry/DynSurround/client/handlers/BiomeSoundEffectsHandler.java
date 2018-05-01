@@ -82,6 +82,7 @@ public class BiomeSoundEffectsHandler extends EffectHandlerBase {
 
 		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<>(Constants.DEFAULT_CAPACITY,
 				Constants.DEFAULT_LOAD_FACTOR, -1F);
+
 		if (doBiomeSounds())
 			getBiomeSounds(sounds);
 

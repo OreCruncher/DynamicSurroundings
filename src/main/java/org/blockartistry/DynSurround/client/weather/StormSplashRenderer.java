@@ -34,6 +34,7 @@ import org.blockartistry.DynSurround.client.sound.AdhocSound;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.weather.compat.RandomThings;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
+import org.blockartistry.DynSurround.registry.PrecipitationType;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.gfx.ParticleHelper;
 import org.blockartistry.lib.random.XorShiftRandom;
@@ -200,11 +201,11 @@ public class StormSplashRenderer {
 
 			final BlockPos precipHeight = getPrecipitationHeight(world, RANGE / 2, this.pos);
 			final BiomeInfo biome = ClientRegistry.BIOME.get(world.getBiome(this.pos));
-			final boolean hasDust = biome.getHasDust();
-			final boolean canSnow = ClientRegistry.SEASON.canWaterFreeze(world, precipHeight);
+			final PrecipitationType pt = ClientRegistry.SEASON.getPrecipitationType(world, precipHeight, biome);
+			final boolean hasDust = pt == PrecipitationType.DUST;
 
 			if (precipHeight.getY() <= playerY + RANGE && precipHeight.getY() >= playerY - RANGE
-					&& (hasDust || (biome.getHasPrecipitation() && !canSnow))) {
+					&& (hasDust || pt == PrecipitationType.RAIN)) {
 
 				final BlockPos blockPos = precipHeight.down();
 				final IBlockState state = WorldUtils.getBlockState(world, blockPos);

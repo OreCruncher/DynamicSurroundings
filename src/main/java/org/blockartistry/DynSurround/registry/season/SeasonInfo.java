@@ -25,10 +25,13 @@
 package org.blockartistry.DynSurround.registry.season;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.registry.BiomeInfo;
+import org.blockartistry.DynSurround.registry.PrecipitationType;
 import org.blockartistry.DynSurround.registry.SeasonType;
 import org.blockartistry.DynSurround.registry.TemperatureRating;
 
@@ -82,7 +85,7 @@ public class SeasonInfo {
 	 * frozen ice. Does not take into account any other environmental factors - just
 	 * whether its cold enough. If environmental sensitive versions are needed look
 	 * at canBlockFreeze() and canSnowAt().
-	 * 
+	 *
 	 * @return true if water can freeze, false otherwise
 	 */
 	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
@@ -96,6 +99,33 @@ public class SeasonInfo {
 	 */
 	public boolean showFrostBreath(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getTemperature(world, pos) < 0.2F;
+	}
+
+	/**
+	 * Determines the type of precipitation to render for the specified world
+	 * location/biome
+	 *
+	 * @param world
+	 *            The current client world
+	 * @param pos
+	 *            Position in the world for which the determination is being made
+	 * @param biome
+	 *            BiomeInfo reference for the biome in question
+	 * @return The precipitation type to render when raining
+	 */
+	public PrecipitationType getPrecipitationType(@Nonnull final World world, @Nonnull final BlockPos pos,
+			@Nullable BiomeInfo biome) {
+
+		if (biome == null)
+			biome = ClientRegistry.BIOME.get(ClientChunkCache.INSTANCE.getBiome(pos));
+
+		if (!biome.hasWeatherEffect())
+			return PrecipitationType.NONE;
+
+		if (biome.getHasDust())
+			return PrecipitationType.DUST;
+
+		return canWaterFreeze(world, pos) ? PrecipitationType.SNOW : PrecipitationType.RAIN;
 	}
 
 	@Override

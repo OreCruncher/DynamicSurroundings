@@ -152,6 +152,10 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	public int getBiomeId() {
 		return this.biome.getId();
 	}
+	
+	public Biome getBiome() {
+		return this.biome.getBiome();
+	}
 
 	public Set<Type> getBiomeTypes() {
 		return this.biome.getTypes();

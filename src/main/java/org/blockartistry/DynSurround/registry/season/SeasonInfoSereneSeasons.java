@@ -25,9 +25,14 @@
 package org.blockartistry.DynSurround.registry.season;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.client.ClientChunkCache;
+import org.blockartistry.DynSurround.client.ClientRegistry;
+import org.blockartistry.DynSurround.registry.BiomeInfo;
+import org.blockartistry.DynSurround.registry.PrecipitationType;
 import org.blockartistry.DynSurround.registry.SeasonType;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -35,6 +40,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
+import sereneseasons.config.BiomeConfig;
 
 @SideOnly(Side.CLIENT)
 public class SeasonInfoSereneSeasons extends SeasonInfo {
@@ -74,16 +80,46 @@ public class SeasonInfoSereneSeasons extends SeasonInfo {
 	}
 
 	@Override
-	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		final Biome biome = ClientChunkCache.INSTANCE.getBiome(pos);
-		if (biome.getDefaultTemperature() <= 0.8F && getSeasonData(world) == Season.WINTER)
-			return 0.0F;
-		return biome.getTemperature(pos);
+	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return SeasonHelper.canSnowAtTempInSeason(getSeasonData(world), getTemperature(world, pos));
 	}
 
 	@Override
-	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getTemperature(world, pos) < 0.15;
+	public boolean showFrostBreath(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		final float temp = getTemperature(world, pos);
+		return temp < 0.2F || SeasonHelper.canSnowAtTempInSeason(getSeasonData(world), temp);
+	}
+
+	@Override
+	public PrecipitationType getPrecipitationType(@Nonnull final World world, @Nonnull final BlockPos pos,
+			@Nullable BiomeInfo biome) {
+
+		if (biome == null)
+			biome = ClientRegistry.BIOME.get(ClientChunkCache.INSTANCE.getBiome(pos));
+
+		if (!biome.hasWeatherEffect())
+			return PrecipitationType.NONE;
+
+		final Biome trueBiome = biome.getBiome();
+		if (trueBiome != null && BiomeConfig.usesTropicalSeasons(trueBiome)) {
+			final Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
+
+			switch (tropicalSeason) {
+			case MID_DRY:
+				return PrecipitationType.NONE;
+
+			case MID_WET:
+				return PrecipitationType.RAIN;
+
+			default:
+				// Fall through
+			}
+		}
+
+		if (biome.getHasDust())
+			return PrecipitationType.DUST;
+
+		return canWaterFreeze(world, pos) ? PrecipitationType.SNOW : PrecipitationType.RAIN;
 	}
 
 }

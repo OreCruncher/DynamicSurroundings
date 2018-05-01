@@ -25,6 +25,7 @@
 package org.blockartistry.DynSurround.registry;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.data.xface.ModConfigurationFile;
@@ -106,6 +107,23 @@ public final class SeasonRegistry extends Registry {
 	 */
 	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getData(world).canWaterFreeze(world, pos);
+	}
+
+	/**
+	 * Determines the type of precipitation to render for the specified world
+	 * location/biome
+	 *
+	 * @param world
+	 *            The current client world
+	 * @param pos
+	 *            Position in the world for which the determination is being made
+	 * @param biome
+	 *            BiomeInfo reference for the biome in question
+	 * @return The precipitation type to render when raining
+	 */
+	public PrecipitationType getPrecipitationType(@Nonnull final World world, @Nonnull final BlockPos pos,
+			@Nullable BiomeInfo biome) {
+		return getData(world).getPrecipitationType(world, pos, biome);
 	}
 
 	/**

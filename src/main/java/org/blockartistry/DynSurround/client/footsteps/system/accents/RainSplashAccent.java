@@ -27,14 +27,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.footsteps.implem.AcousticsManager;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IAcoustic;
 import org.blockartistry.DynSurround.client.footsteps.interfaces.IFootstepAccentProvider;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.client.weather.Weather;
-import org.blockartistry.DynSurround.registry.BiomeInfo;
+import org.blockartistry.DynSurround.registry.PrecipitationType;
 import org.blockartistry.DynSurround.registry.season.SeasonInfo;
 import org.blockartistry.lib.collections.ObjectArray;
 
@@ -69,12 +68,9 @@ public class RainSplashAccent implements IFootstepAccentProvider {
 			final SeasonInfo season = ClientRegistry.SEASON.getData(world);
 			final int precipHeight = season.getPrecipitationHeight(world, this.mutable).getY();
 			if (precipHeight == this.mutable.getY()) {
-				final BiomeInfo biome = ClientRegistry.BIOME.get(ClientChunkCache.INSTANCE.getBiome(this.mutable));
-				if (biome.hasWeatherEffect() && !biome.getHasDust()) {
-					this.mutable.setY(precipHeight);
-					if (!season.canWaterFreeze(world, this.mutable))
-						in.addAll(AcousticsManager.SPLASH);
-				}
+				final PrecipitationType pt = season.getPrecipitationType(world, this.mutable, null);
+				if (pt == PrecipitationType.RAIN)
+					in.addAll(AcousticsManager.SPLASH);
 			}
 		}
 		return in;
