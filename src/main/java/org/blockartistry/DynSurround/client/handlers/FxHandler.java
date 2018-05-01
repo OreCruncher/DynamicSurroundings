@@ -110,7 +110,7 @@ public class FxHandler extends EffectHandlerBase {
 	private final TimerEMA compute = new TimerEMA("FxHandler Updates");
 	private long nanos;
 
-	//private final ThreadGuard guard = new ThreadGuard(DSurround.log(), Side.CLIENT, "FxHandler").setAction(Action.EXCEPTION);
+	private final ThreadGuard guard = new ThreadGuard(DSurround.log(), Side.CLIENT, "FxHandler").setAction(Action.EXCEPTION);
 	
 	public FxHandler() {
 		super("Special Effects");
@@ -155,7 +155,7 @@ public class FxHandler extends EffectHandlerBase {
 		if (entity == null || !entity.getEntityWorld().isRemote)
 			return;
 
-		//this.guard.check("onLivingUpdate");
+		this.guard.check("onLivingUpdate");
 		
 		final long start = System.nanoTime();
 
