@@ -1,3 +1,12 @@
+### DynamicSurroundings-1.12.2-3.4.9.13
+**Changes**
+* Miscellaneous tweaks to Biomes O'Plenty support (thanks Sunconure11!)
+
+**Fixes**
+* Added check to entity effect living update event handler to ensure the current thread is the client thread.  If it is not the client will crash generating information into the log.
+* Fixed slow memory leak while trying to play biome sounds while a player is dead.
+* Rain/snow/dust effect handling now takes into account Tropical wet/dry seasons with Serene Seasons.
+
 ### DynamicSurroundings-1.12.2-3.4.9.12
 **What's New**
 * Support for Serene Seasons.  The season functionality was split from Tough as Nails into a standalone mod which broke compatibility with Dynamic Surrounding.  Changes were made to take this into account.
