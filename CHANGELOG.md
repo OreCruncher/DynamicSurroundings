@@ -1,3 +1,8 @@
+### DynamicSurroundings-1.11.2-3.4.9.13
+**Fixes**
+* Added check to entity effect living update event handler to ensure the current thread is the client thread.  If it is not the client will crash generating information into the log.
+* Fixed slow memory leak while trying to play biome sounds while a player is dead.
+
 ### DynamicSurroundings-1.11.2-3.4.9.12
 **Changes**
 * Crystal Armor sounds are a bit louder.
