@@ -64,7 +64,7 @@ public final class DimensionInfo {
 		this.dimensionId = world.provider.getDimension();
 		this.name = world.provider.getDimensionType().getName();
 		this.seaLevel = world.getSeaLevel();
-		this.skyHeight = world.getHeight();
+		this.skyHeight = world.getActualHeight();
 		this.cloudHeight = this.skyHeight;
 		this.spaceHeight = this.skyHeight + SPACE_HEIGHT_OFFSET;
 
