@@ -349,7 +349,12 @@ public final class SoundEngine {
 	 * @return true if it has been muted, false otherwise
 	 */
 	public boolean isMuted() {
-		return getSoundSystem().getMasterVolume() == MUTE_VOLUME;
+		try {
+			return getSoundSystem().getMasterVolume() == MUTE_VOLUME;
+		} catch (final Throwable t) {
+			;
+		}
+		return false;
 	}
 
 	/**
