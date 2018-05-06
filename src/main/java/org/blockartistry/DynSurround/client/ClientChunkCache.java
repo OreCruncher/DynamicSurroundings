@@ -27,9 +27,11 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.lib.chunk.DirectChunkCache;
 import org.blockartistry.lib.chunk.IBlockAccessEx;
 import org.blockartistry.lib.chunk.IChunkCache;
 import org.blockartistry.lib.chunk.PassThroughChunkCache;
+import org.blockartistry.lib.compat.ModEnvironment;
 import org.blockartistry.lib.math.TimerEMA;
 
 import net.minecraft.client.Minecraft;
@@ -54,9 +56,13 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = DSurround.MOD_ID)
 public final class ClientChunkCache {
 
-	//public static final IBlockAccessEx INSTANCE = new DynamicChunkCache();
-	public static final IBlockAccessEx INSTANCE = new PassThroughChunkCache();
+	public static final IBlockAccessEx INSTANCE = useDirectChunkCache() ? new DirectChunkCache()
+			: new PassThroughChunkCache();
 	public static final TimerEMA timing = new TimerEMA("Chunk Cache");
+
+	private static boolean useDirectChunkCache() {
+		return ModEnvironment.CubicChunks.isLoaded();
+	}
 
 	// Figure the block range from the player. The area scanners are up to 32
 	// blocks, but the player may have a configured effect range that is
