@@ -36,6 +36,8 @@ public enum ModEnvironment {
 	//
 	ToughAsNails("ToughAsNails"),
 	//
+	SereneSeasons("sereneseasons"),
+	//
 	CalendarAPI("CalendarAPI"),
 	//
 	Weather2("weather2"),
@@ -56,11 +58,15 @@ public enum ModEnvironment {
 	//
 	CoFHCore("cofhcore"),
 	//
+	Albedo("albedo"),
+	//
 	AmbientSounds("ambientsounds"),
 	//
 	SoundPhysics("soundphysics"),
 	//
-	BiomesOPlenty("biomesoplenty");
+	BiomesOPlenty("biomesoplenty"),
+	//
+	CubicChunks("cubicchunks");
 
 	protected final String modId;
 	protected boolean isLoaded;
@@ -75,7 +81,7 @@ public enum ModEnvironment {
 
 	public static void initialize() {
 		for (final ModEnvironment me : ModEnvironment.values())
-			me.isLoaded = Loader.isModLoaded(me.modId);
+			me.isLoaded = Loader.isModLoaded(me.modId.toLowerCase());
 	}
 
 }
