@@ -24,8 +24,9 @@
 
 package org.blockartistry.DynSurround.client.weather;
 
+import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.lib.WorldUtils;
+import org.blockartistry.DynSurround.registry.PrecipitationType;
 import org.blockartistry.lib.gfx.ParticleHelper;
 
 import net.minecraft.block.Block;
@@ -42,8 +43,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class NetherSplashRenderer extends StormSplashRenderer {
 
 	@Override
-	protected SoundEvent getBlockSoundFX(final Block block, final boolean hasDust, final World world) {
-		return hasDust ? Weather.getWeatherProperties().getDustSound() : null;
+	protected SoundEvent getBlockSoundFX(final Block block, final PrecipitationType pt, final World world) {
+		return pt == PrecipitationType.DUST ? Weather.getWeatherProperties().getDustSound() : null;
 	}
 
 	@Override
@@ -57,9 +58,11 @@ public class NetherSplashRenderer extends StormSplashRenderer {
 	@Override
 	protected BlockPos getPrecipitationHeight(final World world, final int range, final BlockPos pos) {
 		final int y = EnvironState.getPlayerPosition().getY();
+		final BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos(pos);
 		boolean airBlockFound = false;
 		for (int i = range; i >= -range; i--) {
-			final IBlockState state = WorldUtils.getBlockState(world, pos.getX(), y + i, pos.getZ());
+			p.setY(y + i);
+			final IBlockState state = ClientChunkCache.INSTANCE.getBlockState(p);
 			final Material material = state.getMaterial();
 			if (airBlockFound && material != Material.AIR && material.isSolid())
 				return new BlockPos(pos.getX(), y + i + 1, pos.getZ());

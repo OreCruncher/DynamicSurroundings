@@ -162,22 +162,20 @@ public class StormRenderer {
 
 				final BiomeInfo biome = ClientRegistry.BIOME.get(ClientChunkCache.INSTANCE.getBiome(this.mutable));
 
-				if (!biome.hasWeatherEffect())
-					continue;
-
 				final int precipHeight = season.getPrecipitationHeight(world, this.mutable).getY();
 				final int k2 = Math.max(playerY - range, precipHeight);
 				final int l2 = Math.max(playerY + range, precipHeight);
 				if (k2 == l2)
 					continue;
-				final int i3 = Math.max(precipHeight, locY);
 
-				this.random.setSeed(gridX * gridX * 3121 + gridX * 45238971 ^ gridZ * gridZ * 418711 + gridZ * 13761);
 				this.mutable.setPos(gridX, k2, gridZ);
 
 				final PrecipitationType pt = season.getPrecipitationType(world, this.mutable, biome);
 				if (pt == PrecipitationType.NONE)
 					continue;
+
+				this.random.setSeed(gridX * gridX * 3121 + gridX * 45238971 ^ gridZ * gridZ * 418711 + gridZ * 13761);
+				final int i3 = Math.max(precipHeight, locY);
 
 				final double d6 = gridX + 0.5F - entity.posX;
 				final double d7 = gridZ + 0.5F - entity.posZ;

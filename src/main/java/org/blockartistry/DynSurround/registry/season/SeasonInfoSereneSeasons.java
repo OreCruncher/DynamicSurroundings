@@ -97,9 +97,6 @@ public class SeasonInfoSereneSeasons extends SeasonInfo {
 		if (biome == null)
 			biome = ClientRegistry.BIOME.get(ClientChunkCache.INSTANCE.getBiome(pos));
 
-		if (!biome.hasWeatherEffect())
-			return PrecipitationType.NONE;
-
 		final Biome trueBiome = biome.getBiome();
 		if (trueBiome != null && BiomeConfig.usesTropicalSeasons(trueBiome)) {
 			final Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
@@ -116,10 +113,7 @@ public class SeasonInfoSereneSeasons extends SeasonInfo {
 			}
 		}
 
-		if (biome.getHasDust())
-			return PrecipitationType.DUST;
-
-		return canWaterFreeze(world, pos) ? PrecipitationType.SNOW : PrecipitationType.RAIN;
+		return super.getPrecipitationType(world, pos, biome);
 	}
 
 }

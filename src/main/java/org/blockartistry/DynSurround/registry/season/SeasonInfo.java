@@ -27,9 +27,11 @@ package org.blockartistry.DynSurround.registry.season;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.client.weather.Weather;
 import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.DynSurround.registry.PrecipitationType;
 import org.blockartistry.DynSurround.registry.SeasonType;
@@ -101,6 +103,10 @@ public class SeasonInfo {
 		return getTemperature(world, pos) < 0.2F;
 	}
 
+	protected boolean doDust(@Nonnull final BiomeInfo biome) {
+		return ModOptions.fog.allowDesertFog && !Weather.doVanilla() && biome.getHasDust();
+	}
+	
 	/**
 	 * Determines the type of precipitation to render for the specified world
 	 * location/biome
@@ -122,7 +128,7 @@ public class SeasonInfo {
 		if (!biome.hasWeatherEffect())
 			return PrecipitationType.NONE;
 
-		if (biome.getHasDust())
+		if (doDust(biome))
 			return PrecipitationType.DUST;
 
 		return canWaterFreeze(world, pos) ? PrecipitationType.SNOW : PrecipitationType.RAIN;

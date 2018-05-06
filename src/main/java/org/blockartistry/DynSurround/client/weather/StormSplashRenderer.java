@@ -27,14 +27,15 @@ package org.blockartistry.DynSurround.client.weather;
 import java.util.Random;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientChunkCache;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.fx.ParticleCollections;
 import org.blockartistry.DynSurround.client.handlers.SoundEffectHandler;
 import org.blockartistry.DynSurround.client.sound.AdhocSound;
 import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.weather.compat.RandomThings;
-import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.DynSurround.registry.PrecipitationType;
+import org.blockartistry.DynSurround.registry.season.SeasonInfo;
 import org.blockartistry.lib.WorldUtils;
 import org.blockartistry.lib.gfx.ParticleHelper;
 import org.blockartistry.lib.random.XorShiftRandom;
@@ -118,8 +119,8 @@ public class StormSplashRenderer {
 			ParticleHelper.spawnParticle(particleType, x, y, z);
 	}
 
-	protected SoundEvent getBlockSoundFX(final Block block, final boolean hasDust, final World world) {
-		if (hasDust)
+	protected SoundEvent getBlockSoundFX(final Block block, final PrecipitationType pt, final World world) {
+		if (pt == PrecipitationType.DUST)
 			return Weather.getWeatherProperties().getDustSound();
 		if (block == Blocks.NETHERRACK)
 			return SoundEvents.BLOCK_LAVA_POP;
@@ -137,16 +138,18 @@ public class StormSplashRenderer {
 	protected void playSplashSound(final EntityRenderer renderer, final World world, final Entity player, double x,
 			double y, double z) {
 
+		final SeasonInfo si = ClientRegistry.SEASON.getData(world);
+
 		this.pos.setPos(x, y - 1, z);
-		final boolean hasDust = biomeHasDust(world.getBiome(this.pos));
-		final Block block = WorldUtils.getBlockState(world, this.pos).getBlock();
-		final SoundEvent sound = getBlockSoundFX(block, hasDust, world);
+		final PrecipitationType pt = si.getPrecipitationType(world, this.pos, null);
+		final Block block = ClientChunkCache.INSTANCE.getBlockState(this.pos).getBlock();
+		final SoundEvent sound = getBlockSoundFX(block, pt, world);
 		if (sound != null) {
 			final float volume = calculateRainSoundVolume(world);
 			float pitch = 1.0F;
 			final int playerY = MathHelper.floor(player.posY);
 			this.pos.setPos(player.posX, 0, player.posZ);
-			if (y > player.posY + 1.0D && getPrecipitationHeight(world, 0, this.pos).getY() > playerY)
+			if (y > player.posY + 1.0D && si.getPrecipitationHeight(world, this.pos).getY() > playerY)
 				pitch = 0.5F;
 			pitch -= (this.RANDOM.nextFloat() - this.RANDOM.nextFloat()) * 0.1F;
 			this.pos.setPos(x, y, z);
@@ -200,15 +203,14 @@ public class StormSplashRenderer {
 				continue;
 
 			final BlockPos precipHeight = getPrecipitationHeight(world, RANGE / 2, this.pos);
-			final BiomeInfo biome = ClientRegistry.BIOME.get(world.getBiome(this.pos));
-			final PrecipitationType pt = ClientRegistry.SEASON.getPrecipitationType(world, precipHeight, biome);
+			final PrecipitationType pt = ClientRegistry.SEASON.getPrecipitationType(world, precipHeight, null);
 			final boolean hasDust = pt == PrecipitationType.DUST;
 
-			if (precipHeight.getY() <= playerY + RANGE && precipHeight.getY() >= playerY - RANGE
-					&& (hasDust || pt == PrecipitationType.RAIN)) {
+			if ((hasDust || pt == PrecipitationType.RAIN) && precipHeight.getY() <= playerY + RANGE
+					&& precipHeight.getY() >= playerY - RANGE) {
 
 				final BlockPos blockPos = precipHeight.down();
-				final IBlockState state = WorldUtils.getBlockState(world, blockPos);
+				final IBlockState state = ClientChunkCache.INSTANCE.getBlockState(blockPos);
 				final double posX = locX + this.RANDOM.nextFloat();
 				final double posY = precipHeight.getY() + 0.1F - state.getBoundingBox(world, blockPos).minY;
 				final double posZ = locZ + this.RANDOM.nextFloat();
