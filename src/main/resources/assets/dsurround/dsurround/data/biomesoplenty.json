@@ -50,6 +50,17 @@
 		},
 		{
 			"blocks": [
+				"biomesoplenty:hot_spring_water"
+			],
+			"effects": [
+				{
+					"effect": "bubble",
+					"chance": 1800
+				}
+			]
+		},
+		{
+			"blocks": [
 				"biomesoplenty:waterlily:3"
 			],
 			"chance": 25,
@@ -148,8 +159,6 @@
 		"biomesoplenty:flesh": "organic",
 		"biomesoplenty:flower_0": "NOT_EMITTER",
 		"biomesoplenty:flower_1": "NOT_EMITTER",
-		"biomesoplenty:flower_vine": "leaves",
-		"biomesoplenty:flower_vine+foliage": "leaves",
 		"biomesoplenty:gem_block": "ice",
 		"biomesoplenty:gem_ore": "ore",
 		"biomesoplenty:grass": "grass",
@@ -163,13 +172,10 @@
 		"biomesoplenty:honey": "NOT_EMITTER",
 		"biomesoplenty:honey_block": "glass",
 		"biomesoplenty:hot_spring_water": "NOT_EMITTER",
-		"biomesoplenty:ivy": "leaves",
-		"biomesoplenty:ivy+foliage": "leaves",
 		"biomesoplenty:jacaranda_door_block": "bluntwood",
 		"biomesoplenty:jacaranda_fence": "#fence",
 		"biomesoplenty:jacaranda_fence_gate": "#fence",
 		"biomesoplenty:jacaranda_stairs": "planks",
-		"biomesoplenty:jelled_poison": "mud",
 		"biomesoplenty:leaves_0": "leaves",
 		"biomesoplenty:leaves_1": "leaves",
 		"biomesoplenty:leaves_2": "leaves",
@@ -264,18 +270,24 @@
 		"biomesoplenty:plant_1^7+foliage": "organic",
 		"biomesoplenty:plant_1^8+foliage": "straw",
 		"biomesoplenty:plant_1^9+foliage": "leaves",
-		"biomesoplenty:plant_1^11": "#wheat",
+		"biomesoplenty:plant_1^11+foliage": "straw",
 		"biomesoplenty:double_plant": "NOT_EMITTER",
 		"biomesoplenty:double_plant+messy": "MESSY_GROUND",
 		"biomesoplenty:double_plant^0+foliage": "brush_straw_transition",
 		"biomesoplenty:double_plant^1+foliage": "brush_straw_transition",
 		"biomesoplenty:double_plant^2+foliage": "organic",
-		"biomesoplenty:double_plant^3": "#wheat",
-		"biomesoplenty:double_plant^8+foliage": "brush",
+		"biomesoplenty:double_plant^3+foliage": "straw",
+		"biomesoplenty:double_plant^8+foliage": "brush_straw_transition",
 		"biomesoplenty:double_plant^9+foliage": "brush",
+		"biomesoplenty:double_plant^11+foliage": "straw",
 		"biomesoplenty:white_sandstone": "sandstone",
 		"biomesoplenty:white_sandstone_stairs": "sandstone",
-		"biomesoplenty:willow_vine": "leaves",
-		"biomesoplenty:willow_vine+foliage": "leaves"
-	}
+		"biomesoplenty:ivy": "#vine",
+		"biomesoplenty:flower_vine": "#vine",
+		"biomesoplenty:willow_vine": "#vine"
+	},
+	"footprints": [
+		"biomesoplenty:grass:1"
+	]
+	
 }
