@@ -31,7 +31,6 @@ import org.blockartistry.lib.chunk.DirectChunkCache;
 import org.blockartistry.lib.chunk.IBlockAccessEx;
 import org.blockartistry.lib.chunk.IChunkCache;
 import org.blockartistry.lib.chunk.PassThroughChunkCache;
-import org.blockartistry.lib.compat.ModEnvironment;
 import org.blockartistry.lib.math.TimerEMA;
 
 import net.minecraft.client.Minecraft;
@@ -61,7 +60,7 @@ public final class ClientChunkCache {
 	public static final TimerEMA timing = new TimerEMA("Chunk Cache");
 
 	private static boolean useDirectChunkCache() {
-		return ModEnvironment.CubicChunks.isLoaded();
+		return !ModOptions.general.enableClientChunkCaching;
 	}
 
 	// Figure the block range from the player. The area scanners are up to 32

@@ -118,7 +118,7 @@ public final class ModOptions {
 		@Comment("Enable synchronized attribute on ParticleManager public methods")
 		@RestartRequired(server = true)
 		public static boolean enableParticleManagerSync = false;
-}
+	}
 
 	public static final String CATEGORY_LOGGING_CONTROL = "logging";
 	public static final String CONFIG_ENABLE_ONLINE_VERSION_CHECK = "Enable Online Version Check";
@@ -377,6 +377,7 @@ public final class ModOptions {
 	public static final String CONFIG_DISABLE_SUSPEND = "Disable Water Suspend Particles";
 	public static final String CONFIG_STARTUP_SOUND_LIST = "Startup Sound List";
 	public static final String CONFIG_HIDE_CHAT_NOTICES = "Hide Chat Notices";
+	public static final String CONFIG_ENABLE_CLIENT_CHUNK_CACHING = "Enable Client Chunk Caching";
 
 	@Category(CATEGORY_GENERAL)
 	@LangKey("dsurround.cfg.general.cat.General")
@@ -386,7 +387,7 @@ public final class ModOptions {
 		public static String PATH = null;
 		public static final List<String> SORT = Arrays.asList(CONFIG_HIDE_CHAT_NOTICES, CONFIG_DISABLE_SUSPEND,
 				CONFIG_FX_RANGE, CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH, CONFIG_EXTERNAL_SCRIPTS,
-				CONFIG_STARTUP_SOUND_LIST);
+				CONFIG_STARTUP_SOUND_LIST, CONFIG_ENABLE_CLIENT_CHUNK_CACHING);
 
 		@Option(CONFIG_HIDE_CHAT_NOTICES)
 		@DefaultValue("false")
@@ -434,6 +435,12 @@ public final class ModOptions {
 		@Comment("Possible sounds to play when client reaches main game menu")
 		public static String[] startupSoundList = { "minecraft:entity.experience_orb.pickup",
 				"minecraft:entity.chicken.egg" };
+
+		@Option(CONFIG_ENABLE_CLIENT_CHUNK_CACHING)
+		@DefaultValue("true")
+		@Comment("Enable/disable client side chunk caching for performance")
+		@LangKey("dsurround.cfg.general.ChunkCaching")
+		public static boolean enableClientChunkCaching = true;
 	}
 
 	public static final String CATEGORY_AURORA = "aurora";
@@ -473,7 +480,8 @@ public final class ModOptions {
 	public static class biomes {
 
 		public static String PATH = null;
-		public static final List<String> SORT = Arrays.asList(CONFIG_BIOME_SEALEVEL, CONFIG_BIOME_ALIASES, CONFIG_BIOME_DIM_BLACKLIST);
+		public static final List<String> SORT = Arrays.asList(CONFIG_BIOME_SEALEVEL, CONFIG_BIOME_ALIASES,
+				CONFIG_BIOME_DIM_BLACKLIST);
 
 		@Option(CONFIG_BIOME_SEALEVEL)
 		@DefaultValue("0")
@@ -487,7 +495,7 @@ public final class ModOptions {
 		@LangKey("dsurround.cfg.biomes.Aliases")
 		@Comment("Biomes alias list")
 		public static String[] biomeAliases = {};
-		
+
 		@Option(CONFIG_BIOME_DIM_BLACKLIST)
 		@DefaultValue("")
 		@LangKey("dsurround.cfg.biomes.DimBlacklist")
