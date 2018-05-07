@@ -434,8 +434,7 @@ public final class FootstepsRegistry extends Registry {
 				final IBlockState state = bi.getBlock().getDefaultState();
 				this.FOOTPRINT_MATERIAL.add(state.getMaterial());
 			} else if (!bi.isGeneric()) {
-				final IBlockState state = bi.getBlock().getDefaultState();
-				this.FOOTPRINT_STATES.add(state);
+				this.FOOTPRINT_STATES.addAll(bi.asBlockStates());
 			} else {
 				DSurround.log().warn("Generic matching is not supported for footprints: %s", b);
 			}
