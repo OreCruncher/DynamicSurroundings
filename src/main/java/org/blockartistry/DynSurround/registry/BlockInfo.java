@@ -24,6 +24,9 @@
 
 package org.blockartistry.DynSurround.registry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -31,6 +34,8 @@ import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.lib.BlockNameUtil;
 import org.blockartistry.lib.BlockNameUtil.NameResult;
 import org.blockartistry.lib.MCHelper;
+
+import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -67,6 +72,19 @@ public class BlockInfo {
 
 	public int getMeta() {
 		return this.meta;
+	}
+
+	@Nullable
+	public List<IBlockState> asBlockStates() {
+		final List<IBlockState> states = new ArrayList<>();
+		final ImmutableList<IBlockState> valid = this.block.getBlockState().getValidStates();
+		if (valid != null) {
+			for (final IBlockState bs : valid) {
+				if (this.block.getMetaFromState(bs) == this.meta)
+					states.add(bs);
+			}
+		}
+		return states;
 	}
 
 	public int getSpecialMeta() {
