@@ -154,6 +154,8 @@ dsurround.cfg.general.ExternalScripts=External Configuration Files
 dsurround.cfg.general.ExternalScripts.tooltip=Configuration files for customization
 dsurround.cfg.general.StartupSounds=Startup Sound List
 dsurround.cfg.general.StartupSounds.tooltip=Possible sounds to play when client reaches main game menu
+dsurround.cfg.general.ChunkCaching=Enable Client Chunk Caching
+dsurround.cfg.general.ChunkCaching.tooltip=Enable/disable client side chunk caching for performance
 
 dsurround.cfg.aurora.cat.Aurora=Aurora Options
 dsurround.cfg.aurora.cat.Aurora.tooltip=Options that control Aurora behavior and rendering
