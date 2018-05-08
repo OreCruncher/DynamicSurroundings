@@ -182,13 +182,15 @@ public class DiagnosticHandler extends EffectHandlerBase {
 		}
 
 		if (Minecraft.getMinecraft().gameSettings.showDebugInfo) {
-			event.getRight().add(" ");
-			event.getRight().add(TextFormatting.LIGHT_PURPLE + this.clientTick.toString());
-			event.getRight().add(TextFormatting.LIGHT_PURPLE + this.lastTick.toString());
-			event.getRight().add(TextFormatting.LIGHT_PURPLE + String.format("TPS:%7.3fms", this.tps));
-			event.getRight().add(TextFormatting.GREEN + ClientChunkCache.timing.toString());
-			for (final TimerEMA timer : this.timers)
-				event.getRight().add(TextFormatting.AQUA + timer.toString());
+			if (ModOptions.logging.enableDebugLogging) {
+				event.getRight().add(" ");
+				event.getRight().add(TextFormatting.LIGHT_PURPLE + this.clientTick.toString());
+				event.getRight().add(TextFormatting.LIGHT_PURPLE + this.lastTick.toString());
+				event.getRight().add(TextFormatting.LIGHT_PURPLE + String.format("TPS:%7.3fms", this.tps));
+				event.getRight().add(TextFormatting.GREEN + ClientChunkCache.timing.toString());
+				for (final TimerEMA timer : this.timers)
+					event.getRight().add(TextFormatting.AQUA + timer.toString());
+			}
 
 			if (this.serverDataReport != null) {
 				event.getRight().add(" ");
