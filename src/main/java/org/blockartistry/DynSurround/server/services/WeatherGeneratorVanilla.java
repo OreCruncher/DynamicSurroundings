@@ -34,6 +34,11 @@ public class WeatherGeneratorVanilla extends WeatherGenerator {
 		super(world);
 	}
 
+	@Nonnull
+	public String name() {
+		return "VANILLA";
+	}
+
 	@Override
 	protected void doRain() {
 		// For vanilla just transcribe what vanilla is doing
