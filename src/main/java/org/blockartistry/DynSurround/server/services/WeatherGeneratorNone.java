@@ -34,6 +34,11 @@ public class WeatherGeneratorNone extends WeatherGenerator {
 		super(world);
 	}
 
+	@Nonnull
+	public String name() {
+		return "NULL";
+	}
+
 	@Override
 	protected void process() {
 		// Force the settings to 0 because there isn't any rain/thunder

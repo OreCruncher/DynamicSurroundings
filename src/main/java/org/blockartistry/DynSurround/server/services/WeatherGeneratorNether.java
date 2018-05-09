@@ -34,19 +34,22 @@ public class WeatherGeneratorNether extends WeatherGenerator {
 		super(world);
 	}
 
+	@Nonnull
+	public String name() {
+		return "NETHER";
+	}
+
 	// Need to manually turn the crank on the Nether since
 	// it has no sky
 	@Override
 	protected void preProcess() {
 
-		this.world.provider.hasNoSky = false;
 		this.world.provider.hasSkyLight = true;
 		try {
 			this.world.updateWeatherBody();
 		} catch (final Throwable t) {
 			;
 		}
-		this.world.provider.hasNoSky = true;
 		this.world.provider.hasSkyLight = false;
 
 	}
