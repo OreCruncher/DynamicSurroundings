@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.server.services;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.lib.compat.ModEnvironment;
 
@@ -89,8 +90,9 @@ public final class AtmosphereService extends Service {
 		if (ServerRegistry.DIMENSION.hasWeather(world)) {
 			final int dimId = world.provider.getDimension();
 			if (doVanillaRain(world)) {
-				if (dimId != -1)
+				if (dimId != -1) {
 					result = new WeatherGeneratorVanilla(world);
+				}
 			} else if (dimId == -1) {
 				result = new WeatherGeneratorNether(world);
 			} else {
@@ -98,8 +100,12 @@ public final class AtmosphereService extends Service {
 			}
 		}
 
-		if (result == null)
+		if (result == null) {
 			result = new WeatherGeneratorNone(world);
+		}
+
+		DSurround.log().info("Creating %s weather generator for dimension [%s]", result.name(),
+				world.provider.getDimensionType().getName());
 
 		return result;
 	}

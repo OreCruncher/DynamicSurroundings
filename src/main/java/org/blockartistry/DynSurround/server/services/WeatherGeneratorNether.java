@@ -34,6 +34,11 @@ public class WeatherGeneratorNether extends WeatherGenerator {
 		super(world);
 	}
 
+	@Nonnull
+	public String name() {
+		return "NETHER";
+	}
+
 	// Need to manually turn the crank on the Nether since
 	// it has no sky
 	@Override

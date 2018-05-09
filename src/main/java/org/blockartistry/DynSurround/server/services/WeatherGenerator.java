@@ -57,6 +57,11 @@ public class WeatherGenerator {
 		this.data = DimensionEffectData.get(world);
 		this.dimension = ServerRegistry.DIMENSION.getData(world);
 	}
+	
+	@Nonnull
+	public String name() {
+		return "STANDARD";
+	}
 
 	protected int nextRainInterval(final boolean isRaining) {
 		final int base = isRaining ? ModOptions.rain.rainActiveTimeConst : ModOptions.rain.rainInactiveTimeConst;
