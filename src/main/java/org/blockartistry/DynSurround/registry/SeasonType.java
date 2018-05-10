@@ -34,6 +34,22 @@ public enum SeasonType {
 
 	NONE("noseason"), SPRING("spring"), SUMMER("summer"), AUTUMN("autumn"), WINTER("winter");
 
+	public static enum SubType {
+		
+		NONE("nosubtype"), EARLY("early"), MID("mid"), LATE("late");
+
+		private final String val;
+
+		SubType(@Nonnull final String val) {
+			this.val = val;
+		}
+
+		@Nonnull
+		public String getValue() {
+			return this.val;
+		}
+	}
+
 	private final String val;
 
 	SeasonType(@Nonnull final String val) {

@@ -52,26 +52,43 @@ public class SeasonInfoSereneSeasons extends SeasonInfo {
 	@Override
 	@Nonnull
 	public SeasonType getSeasonType(@Nonnull final World world) {
-		final Season.SubSeason season = SeasonHelper.getSeasonState(world).getSubSeason();
+		final Season season = SeasonHelper.getSeasonState(world).getSeason();
 		switch (season) {
-		case EARLY_SUMMER:
-		case MID_SUMMER:
-		case LATE_SUMMER:
+		case SUMMER:
 			return SeasonType.SUMMER;
-		case EARLY_AUTUMN:
-		case MID_AUTUMN:
-		case LATE_AUTUMN:
+		case AUTUMN:
 			return SeasonType.AUTUMN;
-		case EARLY_WINTER:
-		case MID_WINTER:
-		case LATE_WINTER:
+		case WINTER:
 			return SeasonType.WINTER;
-		case EARLY_SPRING:
-		case MID_SPRING:
-		case LATE_SPRING:
+		case SPRING:
 			return SeasonType.SPRING;
 		default:
 			return SeasonType.NONE;
+		}
+	}
+
+	@Override
+	@Nonnull
+	public SeasonType.SubType getSeasonSubType(@Nonnull final World world) {
+		final Season.SubSeason sub = SeasonHelper.getSeasonState(world).getSubSeason();
+		switch (sub) {
+		case EARLY_SUMMER:
+		case EARLY_AUTUMN:
+		case EARLY_WINTER:
+		case EARLY_SPRING:
+			return SeasonType.SubType.EARLY;
+		case MID_SUMMER:
+		case MID_AUTUMN:
+		case MID_WINTER:
+		case MID_SPRING:
+			return SeasonType.SubType.MID;
+		case LATE_SUMMER:
+		case LATE_AUTUMN:
+		case LATE_WINTER:
+		case LATE_SPRING:
+			return SeasonType.SubType.LATE;
+		default:
+			return SeasonType.SubType.NONE;
 		}
 	}
 

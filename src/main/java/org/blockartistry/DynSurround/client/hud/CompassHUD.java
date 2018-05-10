@@ -32,7 +32,10 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.DynSurround.registry.SeasonType;
+import org.blockartistry.DynSurround.registry.season.SeasonInfo;
 import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.Localization;
 import org.blockartistry.lib.MinecraftClock;
@@ -52,6 +55,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.relauncher.Side;
@@ -180,6 +184,12 @@ public class CompassHUD extends GuiOverlay {
 				final MinecraftClock clock = EnvironState.getClock();
 				text.add(clock.getFormattedTime());
 				text.add(clock.getTimeOfDay());
+
+				final World world = EnvironState.getWorld();
+				final SeasonInfo info = ClientRegistry.SEASON.getData(world);
+				if (info.getSeasonType(world) != SeasonType.NONE)
+					text.add(info.getSeasonString(world));
+
 				text.add(Localization.format("dsurround.format.SessionTime", elapsedHours, elapsedMinutes,
 						elapsedSeconds));
 			}

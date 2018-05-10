@@ -36,6 +36,7 @@ import org.blockartistry.DynSurround.registry.BiomeInfo;
 import org.blockartistry.DynSurround.registry.PrecipitationType;
 import org.blockartistry.DynSurround.registry.SeasonType;
 import org.blockartistry.DynSurround.registry.TemperatureRating;
+import org.blockartistry.lib.Localization;
 
 import com.google.common.base.MoreObjects;
 
@@ -48,6 +49,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SeasonInfo {
 
+	protected static final String noSeason = Localization.loadString("dsurround.season.noseason");
+
 	protected final String dimensionName;
 
 	public SeasonInfo(@Nonnull final World world) {
@@ -57,6 +60,23 @@ public class SeasonInfo {
 	@Nonnull
 	public SeasonType getSeasonType(@Nonnull final World world) {
 		return SeasonType.NONE;
+	}
+
+	@Nonnull
+	public SeasonType.SubType getSeasonSubType(@Nonnull final World world) {
+		return SeasonType.SubType.NONE;
+	}
+
+	@Nonnull
+	public String getSeasonString(@Nonnull final World world) {
+		final SeasonType season = getSeasonType(world);
+		if (season == SeasonType.NONE)
+			return noSeason;
+
+		final SeasonType.SubType sub = getSeasonSubType(world);
+		final String seasonStr = Localization.loadString("dsurround.season." + season.getValue());
+		final String subSeasonStr = Localization.loadString("dsurround.season." + sub.getValue());
+		return Localization.format("dsurround.season.format", subSeasonStr, seasonStr);
 	}
 
 	@Nonnull
@@ -106,7 +126,7 @@ public class SeasonInfo {
 	protected boolean doDust(@Nonnull final BiomeInfo biome) {
 		return ModOptions.fog.allowDesertFog && !Weather.doVanilla() && biome.getHasDust();
 	}
-	
+
 	/**
 	 * Determines the type of precipitation to render for the specified world
 	 * location/biome

@@ -350,3 +350,13 @@ dsurround.cfg.profiles.noNetherWeather=No Nether Weather
 dsurround.cfg.profiles.noNetherWeather.tooltip=Enable/disable Nether weather effects
 dsurround.cfg.profiles.noDustEffects=No Dust Effects
 dsurround.cfg.profiles.noDustEffects.tooltip=Turns off dust effects for all biomes
+
+dsurround.season.format=%1$s %2$s
+dsurround.season.noseason=No Season
+dsurround.season.spring=Spring
+dsurround.season.summer=Summer
+dsurround.season.fall=Fall
+dsurround.season.winter=Winter
+dsurround.season.early=Early
+dsurround.season.mid=Mid
+dsurround.season.late=Late
