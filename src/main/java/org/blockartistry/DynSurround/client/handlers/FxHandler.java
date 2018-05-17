@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Map.Entry;
 import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
@@ -48,6 +49,7 @@ import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.ThreadGuard;
 import org.blockartistry.lib.ThreadGuard.Action;
+import org.blockartistry.lib.collections.CollectionUtils;
 import org.blockartistry.lib.effects.EntityEffectHandler;
 import org.blockartistry.lib.effects.EntityEffectLibrary;
 import org.blockartistry.lib.effects.EventEffectLibrary;
@@ -86,7 +88,8 @@ public class FxHandler extends EffectHandlerBase {
 	};
 
 	// Used to process handler entries during the client tick
-	private static final Predicate<EntityEffectHandler> HANDLER_UPDATE_REMOVE = handler -> {
+	private static final Predicate<? super Entry<UUID, EntityEffectHandler>> HANDLER_UPDATE_REMOVE = e -> {
+		final EntityEffectHandler handler = e.getValue();
 		handler.update();
 		return !handler.isAlive();
 	};
@@ -118,7 +121,7 @@ public class FxHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-		this.handlers.values().removeIf(HANDLER_UPDATE_REMOVE);
+		CollectionUtils.removeIf(this.handlers, HANDLER_UPDATE_REMOVE);
 		this.compute.update(this.nanos);
 		this.nanos = 0;
 	}
