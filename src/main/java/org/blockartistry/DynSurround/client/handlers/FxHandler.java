@@ -26,6 +26,7 @@ package org.blockartistry.DynSurround.client.handlers;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -48,6 +49,7 @@ import org.blockartistry.DynSurround.event.DiagnosticEvent;
 import org.blockartistry.DynSurround.event.ReloadEvent;
 import org.blockartistry.lib.ThreadGuard;
 import org.blockartistry.lib.ThreadGuard.Action;
+import org.blockartistry.lib.collections.CollectionUtils;
 import org.blockartistry.lib.effects.EntityEffectHandler;
 import org.blockartistry.lib.effects.EntityEffectLibrary;
 import org.blockartistry.lib.effects.EventEffectLibrary;
@@ -86,7 +88,8 @@ public class FxHandler extends EffectHandlerBase {
 	};
 
 	// Used to process handler entries during the client tick
-	private static final Predicate<EntityEffectHandler> HANDLER_UPDATE_REMOVE = handler -> {
+	private static final Predicate<? super Entry<UUID, EntityEffectHandler>> HANDLER_UPDATE_REMOVE = e -> {
+		final EntityEffectHandler handler = e.getValue();
 		handler.update();
 		return !handler.isAlive();
 	};
@@ -110,15 +113,16 @@ public class FxHandler extends EffectHandlerBase {
 	private final TimerEMA compute = new TimerEMA("FxHandler Updates");
 	private long nanos;
 
-	private final ThreadGuard guard = new ThreadGuard(DSurround.log(), Side.CLIENT, "FxHandler").setAction(Action.EXCEPTION);
-	
+	private final ThreadGuard guard = new ThreadGuard(DSurround.log(), Side.CLIENT, "FxHandler")
+			.setAction(Action.EXCEPTION);
+
 	public FxHandler() {
 		super("Special Effects");
 	}
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-		this.handlers.values().removeIf(HANDLER_UPDATE_REMOVE);
+		CollectionUtils.removeIf(this.handlers, HANDLER_UPDATE_REMOVE);
 		this.compute.update(this.nanos);
 		this.nanos = 0;
 	}
@@ -156,7 +160,7 @@ public class FxHandler extends EffectHandlerBase {
 			return;
 
 		this.guard.check("onLivingUpdate");
-		
+
 		final long start = System.nanoTime();
 
 		final double distanceThreshold = ModOptions.general.specialEffectRange * ModOptions.general.specialEffectRange;
