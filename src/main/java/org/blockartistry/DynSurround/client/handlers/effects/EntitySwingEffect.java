@@ -27,6 +27,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.DynSurround.registry.EntityEffectInfo;
@@ -60,6 +61,10 @@ public class EntitySwingEffect extends EntityEffect {
 
 	@Override
 	public void update(@Nonnull final Entity subject) {
+
+		if (!ModOptions.sound.enableSwingSounds)
+			return;
+
 		final EntityLivingBase entity = (EntityLivingBase) subject;
 
 		// Boats are strange - ignore them for now
