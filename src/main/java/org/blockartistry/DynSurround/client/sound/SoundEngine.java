@@ -130,6 +130,8 @@ public final class SoundEngine {
 
 	private final Set<ITrackedSound> queuedSounds = new IdentityHashSet<>();
 
+	private String playedSoundId = null;
+
 	private SoundEngine() {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
@@ -261,8 +263,11 @@ public final class SoundEngine {
 			// Play the sound if actual music is not installed or the sound is not music
 			if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC) {
 				synchronized (SoundSystemConfig.THREAD_SYNC) {
+					this.playedSoundId = null;
 					getSoundManager().playSound(sound);
 					flushSoundQueue();
+					if (this.playedSoundId != null)
+						sound.setId(this.playedSoundId);
 				}
 			}
 
@@ -391,10 +396,7 @@ public final class SoundEngine {
 	@SubscribeEvent
 	public void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
 		this.guard.check("playSound");
-		final ISound sound = event.getSound();
-		if (sound instanceof ITrackedSound) {
-			((ITrackedSound) sound).setId(event.getUuid());
-		}
+		this.playedSoundId = event.getUuid();
 	}
 
 	/**
