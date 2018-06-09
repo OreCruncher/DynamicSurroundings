@@ -220,6 +220,10 @@ public class MathStuff {
 		return value < i ? i - 1 : i;
 	}
 
+	public static double log(final double value) {
+		return value < 0.03D ? Math.log(value) : 6 * (value - 1) / (value + 1 + 4 * (Math.sqrt(value)));
+	}
+
 	public static float clamp(final float num, final float min, final float max) {
 		return num < min ? min : (num > max ? max : num);
 	}

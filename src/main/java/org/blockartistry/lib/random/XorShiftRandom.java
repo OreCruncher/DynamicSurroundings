@@ -24,6 +24,8 @@ package org.blockartistry.lib.random;
 
 import java.util.Random;
 
+import org.blockartistry.lib.math.MathStuff;
+
 /**
  * @see "http://xoroshiro.di.unimi.it/xoroshiro128plus.c"
  */
@@ -32,6 +34,11 @@ public final class XorShiftRandom extends Random {
 
 	private static final double DOUBLE_UNIT = 0x1.0p-53; // 1.0 / (1L << 53);
 	private static final float FLOAT_UNIT = 0x1.0p-24f; // 1.0 / (1L << 24);
+
+	// Parameters for random generation
+	private static final int A = 24;
+	private static final int B = 16;
+	private static final int C = 37;
 
 	private long s0;
 	private long s1;
@@ -93,6 +100,7 @@ public final class XorShiftRandom extends Random {
 		return (int) nextLong();
 	}
 
+	// https://en.wikipedia.org/wiki/Marsaglia_polar_method
 	protected double genGaussian() {
 		double v1, v2, s;
 		do {
@@ -101,7 +109,7 @@ public final class XorShiftRandom extends Random {
 			s = v1 * v1 + v2 * v2;
 		} while (s >= 1 || s == 0);
 
-		final double multiplier = StrictMath.sqrt(-2 * StrictMath.log(s) / s);
+		final double multiplier = Math.sqrt(-2 * MathStuff.log(s) / s);
 		this.nextGaussian = v2 * multiplier;
 		this.hasGaussian = true;
 		return v1 * multiplier;
@@ -120,8 +128,8 @@ public final class XorShiftRandom extends Random {
 	public long nextLong() {
 		final long result = this.s0 + this.s1;
 		final long s1 = this.s1 ^ this.s0;
-		this.s0 = Long.rotateLeft(this.s0, 55) ^ s1 ^ (s1 << 14);
-		this.s1 = Long.rotateLeft(s1, 36);
+		this.s0 = Long.rotateLeft(this.s0, A) ^ s1 ^ (s1 << B);
+		this.s1 = Long.rotateLeft(s1, C);
 		return result;
 	}
 
