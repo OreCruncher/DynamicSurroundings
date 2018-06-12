@@ -1,3 +1,16 @@
+### DynamicSurroundings-1.10.2-3.4.9.14
+**What's New**
+* Added option to disable client side chunk caching by Dynamic Surroundings.  By default caching is enabled.  Reason to disable caching would be to improve compatibility with other mods that modify some of Minecraft's underpinnings via ASM.  You can tell when there may be compatibility problems when the client crashes and it involves Dynamic Surroundings PassThroughChunkCache.
+* Added option to disable item swing sounds. Can be found under "Sound Options".
+
+**Fixes**
+* OpenEye: Sound engine unavailable during isMuted() check.
+
+**Changes**
+* Updated fog calculators to take into account much larger chunk render distances that are possible with mods such as OptiFine.
+* Tweaks to RNG for genGaussian performance.
+* Display mod timing info in debug screen (F3) only if DS debug logging enabled.
+
 ### DynamicSurroundings-1.10.2-3.4.9.13
 **Fixes**
 * Added check to entity effect living update event handler to ensure the current thread is the client thread.  If it is not the client will crash generating information into the log.
