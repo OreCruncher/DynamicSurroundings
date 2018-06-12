@@ -1,3 +1,21 @@
+### DynamicSurroundings-1.12.2-3.4.9.14
+**What's New**
+* Added option to disable client side chunk caching by Dynamic Surroundings.  By default caching is enabled.  Reason to disable caching would be to improve compatibility with other mods that modify some of Minecraft's underpinnings via ASM, such as some Cubic Chunks versions.  You can tell when there may be compatibility problems when the client crashes and it involves Dynamic Surroundings PassThroughChunkCache.
+* Added option to disable item swing sounds. Can be found under "Sound Options".
+* Added season info to the clock HUD if Serene Seasons is installed.
+
+**Fixes**
+* More Biomes O'Plenty compatibility updates.  Footsteps on grass covered stone should now properly render.
+* More Serene Seasons compatibility changes:
+    * Rainfall rendering occurs in Savanna during wet seasons.
+    * Rainfall rendering occurs in Deserts during wet seasons.  Dust storms will not render during the dry season.  Dust storms will render in other seasons.
+* OpenEye: Sound engine unavailable during isMuted() check.
+
+**Changes**
+* Updated fog calculators to take into account much larger chunk render distances that are possible with mods such as OptiFine.
+* Tweaks to RNG for genGaussian performance.
+* Display mod timing info in debug screen (F3) only if DS debug logging enabled.
+
 ### DynamicSurroundings-1.12.2-3.4.9.13
 **Changes**
 * Miscellaneous tweaks to Biomes O'Plenty support (thanks Sunconure11!)
