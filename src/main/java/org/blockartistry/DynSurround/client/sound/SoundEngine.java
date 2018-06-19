@@ -181,6 +181,10 @@ public final class SoundEngine {
 		return currentSoundCount() < (maxSounds - SOUND_QUEUE_SLACK);
 	}
 
+	public static void flushSound() {
+		instance().flushSoundQueue();
+	}
+
 	private void flushSoundQueue() {
 		getSoundSystem().CommandQueue(null);
 	}
@@ -265,7 +269,6 @@ public final class SoundEngine {
 				synchronized (SoundSystemConfig.THREAD_SYNC) {
 					this.playedSoundId = null;
 					getSoundManager().playSound(sound);
-					flushSoundQueue();
 					if (this.playedSoundId != null)
 						sound.setId(this.playedSoundId);
 				}
