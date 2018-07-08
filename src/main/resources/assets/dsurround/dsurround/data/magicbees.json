@@ -1,0 +1,17 @@
+{
+	"blocks": [
+		{
+			"blocks": [
+				"magicbees:hiveblock:*"
+			],
+			"chance": 5,
+			"sounds": [
+				{
+					"sound": "dsurround:bees",
+					"conditions": "isDay && weather.isNotRaining",
+					"variable": true
+				}
+			]
+		}
+	]
+}
