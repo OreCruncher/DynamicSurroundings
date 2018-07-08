@@ -49,7 +49,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -200,11 +199,9 @@ public class InspectionHUD extends GuiOverlay {
 		return text;
 	}
 
-	private static final ItemStack tool = new ItemStack(Items.CARROT_ON_A_STICK);
-
 	private static boolean isHolding() {
-		final EntityPlayer player = EnvironState.getPlayer();
-		return ItemStack.areItemStacksEqual(tool, player.getHeldItem(EnumHand.MAIN_HAND));
+		final ItemStack held = EnvironState.getPlayer().getHeldItem(EnumHand.MAIN_HAND);
+		return !held.isEmpty() && held.getItem() == Items.CARROT_ON_A_STICK;
 	}
 
 	private final TextPanel textPanel;
