@@ -51,6 +51,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -58,6 +59,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -121,6 +123,9 @@ public class CompassHUD extends GuiOverlay {
 		}
 	}
 
+	@ObjectHolder("sereneseasons:season_clock")
+	private static final Item SEASON_CLOCK = null;
+
 	private final TextPanel textPanel;
 	private boolean showCompass = false;
 
@@ -144,17 +149,25 @@ public class CompassHUD extends GuiOverlay {
 		return ModOptions.compass.enableCompass && PlayerUtils.isHolding(EnvironState.getPlayer(), Items.COMPASS);
 	}
 
-	protected boolean showClock() {
-		if (ModOptions.compass.enableClock) {
-			if (PlayerUtils.isHolding(EnvironState.getPlayer(), Items.CLOCK))
-				return true;
-			final Entity e = PlayerUtils.entityImLookingAt(EnvironState.getPlayer());
-			if (e instanceof EntityItemFrame) {
-				final ItemStack stack = ((EntityItemFrame) e).getDisplayedItem();
-				return ItemStackUtil.isValidItemStack(stack) && stack.getItem() == Items.CLOCK;
-			}
+	protected static boolean holdingOrItemFrameItem(final Item item) {
+		if (item == null)
+			return false;
+		if (PlayerUtils.isHolding(EnvironState.getPlayer(), item))
+			return true;
+		final Entity e = PlayerUtils.entityImLookingAt(EnvironState.getPlayer());
+		if (e instanceof EntityItemFrame) {
+			final ItemStack stack = ((EntityItemFrame) e).getDisplayedItem();
+			return ItemStackUtil.isValidItemStack(stack) && stack.getItem() == item;
 		}
 		return false;
+	}
+
+	protected boolean showClock() {
+		return ModOptions.compass.enableClock ? holdingOrItemFrameItem(Items.CLOCK) : false;
+	}
+
+	protected boolean showSeason() {
+		return ModOptions.compass.enableClock ? holdingOrItemFrameItem(SEASON_CLOCK) : false;
 	}
 
 	@Override
@@ -168,6 +181,13 @@ public class CompassHUD extends GuiOverlay {
 			if (this.showCompass = showCompass()) {
 				text.add(getLocationString());
 				text.add(getBiomeName());
+			}
+
+			if (showSeason()) {
+				final World world = EnvironState.getWorld();
+				final SeasonInfo info = ClientRegistry.SEASON.getData(world);
+				if (info.getSeasonType(world) != SeasonType.NONE)
+					text.add(info.getSeasonString(world));
 			}
 
 			if (showClock()) {
@@ -184,11 +204,6 @@ public class CompassHUD extends GuiOverlay {
 				final MinecraftClock clock = EnvironState.getClock();
 				text.add(clock.getFormattedTime());
 				text.add(clock.getTimeOfDay());
-
-				final World world = EnvironState.getWorld();
-				final SeasonInfo info = ClientRegistry.SEASON.getData(world);
-				if (info.getSeasonType(world) != SeasonType.NONE)
-					text.add(info.getSeasonString(world));
 
 				text.add(Localization.format("dsurround.format.SessionTime", elapsedHours, elapsedMinutes,
 						elapsedSeconds));
