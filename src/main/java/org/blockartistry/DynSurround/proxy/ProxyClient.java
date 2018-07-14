@@ -35,7 +35,6 @@ import org.blockartistry.DynSurround.client.handlers.EffectManager;
 import org.blockartistry.DynSurround.client.hud.GuiHUDHandler;
 import org.blockartistry.DynSurround.client.hud.InspectionHUD;
 import org.blockartistry.DynSurround.client.hud.LightLevelHUD;
-import org.blockartistry.DynSurround.client.hud.LightingEffectHUD;
 import org.blockartistry.DynSurround.client.keyboard.KeyHandler;
 import org.blockartistry.DynSurround.client.sound.BackgroundMute;
 import org.blockartistry.DynSurround.client.sound.MusicTickerReplacement;
@@ -82,7 +81,6 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 
 		register(HumDinger.class);
 		register(InspectionHUD.class);
-		register(LightingEffectHUD.class);
 		register(LightLevelHUD.class);
 		register(KeyHandler.class);
 		register(BackgroundMute.class);

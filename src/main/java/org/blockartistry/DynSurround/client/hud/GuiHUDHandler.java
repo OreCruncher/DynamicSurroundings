@@ -29,8 +29,6 @@ import java.util.List;
 
 import org.blockartistry.DynSurround.Permissions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.blockartistry.lib.compat.ModEnvironment;
-
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -49,9 +47,6 @@ public final class GuiHUDHandler {
 	private GuiHUDHandler() {
 		register(new PotionHUD());
 		register(new InspectionHUD());
-
-		if (ModEnvironment.Albedo.isLoaded())
-			register(new LightingEffectHUD());
 
 		if (Permissions.instance().allowCompassAndClockHUD())
 			register(new CompassHUD());
