@@ -1180,7 +1180,6 @@ public final class ModOptions {
 	public static final String CATEGORY_LIGHTING = "lighting";
 	public static final String CONFIG_LIGHTING_ENABLE = "Enable Albedo Support";
 	public static final String CONFIG_FIREFLY_ENABLE = "Enable Firefly Lighting Effects";
-	public static final String CONFIG_PLAYER_LIGHT_ENABLE = "Enable Player Lighting Effects";
 
 	@Category(CATEGORY_LIGHTING)
 	public static class lighting {
@@ -1199,11 +1198,6 @@ public final class ModOptions {
 		@Comment("Enable/disable Fire Fly lighting effects")
 		public static boolean enableFireFlyLighting = true;
 
-		@Option(CONFIG_PLAYER_LIGHT_ENABLE)
-		@DefaultValue("true")
-		@LangKey("dsurround.cfg.lighting.PlayerEnable")
-		@Comment("Enable/disable Player lighting effects")
-		public static boolean enablePlayerLighting = true;
 	}
 
 	public static final String CATEGORY_PROFILES = "profiles";
