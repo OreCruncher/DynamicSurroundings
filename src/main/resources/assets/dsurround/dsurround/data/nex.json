@@ -1,0 +1,68 @@
+{
+	"itemConfig": {
+		"axeSound": [
+			"nex.item.ItemGoldenWitherBoneAxe",
+			"nex.item.ItemGoldenWitherBonePickaxe"
+		],
+		"swordSound": [
+			"nex.item.ItemGoldenWitherBoneSword"
+		],
+		"toolSound": [
+			"nex.item.ItemGoldenWitherBoneHoe",
+			"nex.item.ItemGoldenWitherBoneShovel"
+		],
+		"lightArmor": [
+			"nex:wither_bone_helmet",
+			"nex:wither_bone_chestplate",
+			"nex:wither_bone_leggings",
+			"nex:wither_bone_boots",
+			"nex:salamander_hide_helmet",
+			"nex:salamander_hide_chestplate",
+			"nex:salamander_hide_leggings",
+			"nex:salamander_hide_boots"
+		]
+	},
+	"footsteps": {
+		"nex:netherrack_path": "stone",
+		"nex:netherrack": "stone",
+		"nex:hyphae": "stone,grass",
+		"nex:elder_mushroom_cap": "organic",
+		"nex:elder_mushroom_stem": "organic",
+		"nex:enoki_mushroom_stem": "organic",
+		"nex:enoki_mushroom_cap": "organic",
+		"nex:rime_block": "composite",
+		"nex:frostburn_ice": "ice",
+		"nex:nether_brick_slab": "brickstone",
+		"nex:vanilla_slab": "brickstone",
+		"nex:red_nether_brick_stairs": "brickstone",
+		"nex:fiery_nether_brick_stairs": "brickstone",
+		"nex:icy_nether_brick_stairs": "brickstone",
+		"nex:lively_nether_brick_stairs": "brickstone",
+		"nex:gloomy_nether_brick_stairs": "brickstone",
+		"nex:basalt_stairs": "obsidian",
+		"nex:basalt_smooth_stairs": "obsidian",
+		"nex:basalt_brick_stairs": "obsidian",
+		"nex:basalt_pillar_stairs": "obsidian",
+		"nex:nether_brick": "brickstone",
+		"nex:basalt_slab": "obsidian",
+		"nex:vanilla_fence": "marble",
+		"nex:vanilla_fence^1": "brickstone",
+		"nex:nether_brick_fence": "stone",
+		"nex:basalt_fence": "brickstone",
+		"nex:vanilla_wall": "marble",
+		"nex:vanilla_wall^1": "brickstone",
+		"nex:vanilla_wall^2": "brickstone",
+		"nex:basalt_wall": "obsidian",
+		"nex:quartz_fence_gate": "marble",
+		"nex:nether_brick_fence_gate": "brickstone",
+		"nex:red_nether_brick_fence_gate": "brickstone",
+		"nex:basalt_fence_gate": "obsidian",
+		"nex:basalt_smooth_fence_gate": "obsidian",
+		"nex:basalt_brick_fence_gate": "obsidian",
+		"nex:basalt_pillar_fence_gate": "obsidian",
+		"nex:fiery_nether_brick_fence_gate": "brickstone",
+		"nex:icy_nether_brick_fence_gate": "brickstone",
+		"nex:lively_nether_brick_fence_gate": "brickstone",
+		"nex:gloomy_nether_brick_fence_gate": "brickstone"
+	}
+}
