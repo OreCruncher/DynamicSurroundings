@@ -58,7 +58,7 @@ public final class BlockNameUtil {
 	private static final char NO_CONTROL_CODE = '\0';
 
 	// https://www.regexplanet.com/advanced/java/index.html
-	private static final Pattern pattern = Pattern.compile("(\\W)?(\\w+:[\\w\\.\\-/]+)[\\^|:]?(\\d+|\\*)?\\+?(\\w+)?");
+	private static final Pattern pattern = Pattern.compile("(\\W)?([\\w\\-]+:[\\w\\.\\-/]+)[\\^|:]?(\\d+|\\*)?\\+?(\\w+)?");
 
 	public final static class NameResult {
 
