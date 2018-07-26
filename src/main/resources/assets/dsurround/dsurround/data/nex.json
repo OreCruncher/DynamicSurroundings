@@ -63,6 +63,9 @@
 		"nex:fiery_nether_brick_fence_gate": "brickstone",
 		"nex:icy_nether_brick_fence_gate": "brickstone",
 		"nex:lively_nether_brick_fence_gate": "brickstone",
-		"nex:gloomy_nether_brick_fence_gate": "brickstone"
+		"nex:gloomy_nether_brick_fence_gate": "brickstone",
+		"nex:thornstalk": "NOT_EMITTER",
+		"nex:thornstalk+foliage": "straw",
+		"nex:tilled_soul_sand": "quicksand"
 	}
 }
