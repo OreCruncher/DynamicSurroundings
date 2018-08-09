@@ -198,7 +198,8 @@ public class FxHandler extends EffectHandlerBase {
 	 */
 	@SubscribeEvent
 	public void registryReload(@Nonnull final ReloadEvent.Registry event) {
-		clearHandlers();
+		if (event.side == Side.CLIENT)
+			clearHandlers();
 	}
 
 	@Override
