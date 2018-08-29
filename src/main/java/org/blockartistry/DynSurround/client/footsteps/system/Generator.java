@@ -124,8 +124,8 @@ public class Generator {
 
 	public void generateFootsteps(@Nonnull final EntityLivingBase entity) {
 
-		// If an entity is a passenger then no footsteps to process
-		if (entity.isRiding())
+		// If an entity is a passenger or is sleeping then no footsteps to process
+		if (entity.isRiding() || entity.isPlayerSleeping())
 			return;
 
 		// Clear starting state
