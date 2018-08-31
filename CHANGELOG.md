@@ -1,3 +1,10 @@
+### DynamicSurroundings-1.11.2-3.4.9.15
+**Fixes**
+* Sounds sporadically do not play.  Added ASM to patch up Minecraft's SoundManager to flush the sound engine command queue to mitigate potential concurrency issues.
+* Allow dash '-' as part of mod ID within config files.
+* Fixed sporadic client concurrency issue when starting a world.
+* Don't play footstep sounds for a player sleeping nearby.
+
 ### DynamicSurroundings-1.11.2-3.4.9.14
 **What's New**
 * Added option to disable client side chunk caching by Dynamic Surroundings.  By default caching is enabled.  Reason to disable caching would be to improve compatibility with other mods that modify some of Minecraft's underpinnings via ASM.  You can tell when there may be compatibility problems when the client crashes and it involves Dynamic Surroundings PassThroughChunkCache.
