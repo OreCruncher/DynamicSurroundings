@@ -36,6 +36,7 @@ import org.blockartistry.DynSurround.client.ClientRegistry;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.SeasonType;
 import org.blockartistry.DynSurround.registry.season.SeasonInfo;
+import org.blockartistry.lib.ForgeUtils;
 import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.Localization;
 import org.blockartistry.lib.MinecraftClock;
@@ -50,7 +51,6 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -59,7 +59,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -123,8 +122,9 @@ public class CompassHUD extends GuiOverlay {
 		}
 	}
 
-	@ObjectHolder("sereneseasons:season_clock")
-	private static final Item SEASON_CLOCK = null;
+	private static final Item COMPASS = ForgeUtils.getItem("minecraft:compass");
+	private static final Item CLOCK = ForgeUtils.getItem("minecraft:clock");
+	private static final Item SEASON_CLOCK = ForgeUtils.getItem("sereneseasons:season_clock");
 
 	private final TextPanel textPanel;
 	private boolean showCompass = false;
@@ -146,7 +146,7 @@ public class CompassHUD extends GuiOverlay {
 	}
 
 	protected boolean showCompass() {
-		return ModOptions.compass.enableCompass && PlayerUtils.isHolding(EnvironState.getPlayer(), Items.COMPASS);
+		return ModOptions.compass.enableCompass && PlayerUtils.isHolding(EnvironState.getPlayer(), COMPASS);
 	}
 
 	protected static boolean holdingOrItemFrameItem(final Item item) {
@@ -163,7 +163,7 @@ public class CompassHUD extends GuiOverlay {
 	}
 
 	protected boolean showClock() {
-		return ModOptions.compass.enableClock ? holdingOrItemFrameItem(Items.CLOCK) : false;
+		return ModOptions.compass.enableClock ? holdingOrItemFrameItem(CLOCK) : false;
 	}
 
 	protected boolean showSeason() {
