@@ -28,10 +28,12 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 
+import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.ModMetadata;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public final class ForgeUtils {
 
@@ -72,5 +74,10 @@ public final class ForgeUtils {
 	public static String getForgeVersion() {
 		final ModContainer mod = findModContainer("forge");
 		return mod != null ? mod.getVersion() : StringUtils.EMPTY;
+	}
+
+	@Nullable
+	public static Item getItem(@Nonnull final String resourceName) {
+		return ForgeRegistries.ITEMS.getValue(new ResourceLocation(resourceName));
 	}
 }

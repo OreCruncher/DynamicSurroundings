@@ -33,6 +33,7 @@ import javax.annotation.Nonnull;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.blockartistry.lib.ForgeUtils;
 import org.blockartistry.lib.ItemStackUtil;
 import org.blockartistry.lib.Localization;
 import org.blockartistry.lib.MinecraftClock;
@@ -47,7 +48,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -117,6 +118,9 @@ public class CompassHUD extends GuiOverlay {
 		}
 	}
 
+	private static final Item COMPASS = ForgeUtils.getItem("minecraft:compass");
+	private static final Item CLOCK = ForgeUtils.getItem("minecraft:clock");
+
 	private final TextPanel textPanel;
 	private boolean showCompass = false;
 
@@ -137,17 +141,17 @@ public class CompassHUD extends GuiOverlay {
 	}
 
 	protected boolean showCompass() {
-		return ModOptions.compass.enableCompass && PlayerUtils.isHolding(EnvironState.getPlayer(), Items.COMPASS);
+		return ModOptions.compass.enableCompass && PlayerUtils.isHolding(EnvironState.getPlayer(), COMPASS);
 	}
 
 	protected boolean showClock() {
 		if (ModOptions.compass.enableClock) {
-			if (PlayerUtils.isHolding(EnvironState.getPlayer(), Items.CLOCK))
+			if (PlayerUtils.isHolding(EnvironState.getPlayer(), CLOCK))
 				return true;
 			final Entity e = PlayerUtils.entityImLookingAt(EnvironState.getPlayer());
 			if (e instanceof EntityItemFrame) {
 				final ItemStack stack = ((EntityItemFrame) e).getDisplayedItem();
-				return ItemStackUtil.isValidItemStack(stack) && stack.getItem() == Items.CLOCK;
+				return ItemStackUtil.isValidItemStack(stack) && stack.getItem() == CLOCK;
 			}
 		}
 		return false;
