@@ -1,3 +1,17 @@
+### DynamicSurroundings-1.12.2-3.4.9.15
+**What's New**
+* Display season text info HUD when holding Serene Seasons season compass.  HUD will also be displayed when the player is looking at a season compass in an item frame.  Season info will no longer be displayed when holding/looking at a Minecraft clock item.
+
+**Fixes**
+* Sounds sporadically do not play.  Added ASM to patch up Minecraft's SoundManager to flush the sound engine command queue to mitigate potential concurrency issues.
+* Updated support for NetherEx.
+* Allow dash '-' as part of mod ID within config files.
+* Fixed sporadic client concurrency issue when starting a world.
+* Don't play footstep sounds for a player sleeping nearby.
+
+**Changes**
+* Removed Albedo support for items (like torches).  If you want these types of lighting effects I refer you to the mod [WeissAlbedo](https://minecraft.curseforge.com/projects/weissalbedo).  Note that lighting effects for firefly particles will still occur.
+
 ### DynamicSurroundings-1.12.2-3.4.9.14
 **What's New**
 * Added option to disable client side chunk caching by Dynamic Surroundings.  By default caching is enabled.  Reason to disable caching would be to improve compatibility with other mods that modify some of Minecraft's underpinnings via ASM, such as some Cubic Chunks versions.  You can tell when there may be compatibility problems when the client crashes and it involves Dynamic Surroundings PassThroughChunkCache.
