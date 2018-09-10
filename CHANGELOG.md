@@ -1,3 +1,7 @@
+### DynamicSurroundings-1.12.2-3.4.9.16
+**Fixes**
+* Crash on dedicated server due to Forge annotation processing.
+
 ### DynamicSurroundings-1.12.2-3.4.9.15
 **What's New**
 * Display season text info HUD when holding Serene Seasons season compass.  HUD will also be displayed when the player is looking at a season compass in an item frame.  Season info will no longer be displayed when holding/looking at a Minecraft clock item.
