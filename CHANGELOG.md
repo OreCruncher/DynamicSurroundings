@@ -1,3 +1,7 @@
+### DynamicSurroundings-1.11.2-3.4.9.16
+**Fixes**
+* Backport: Crash on dedicated server due to Forge annotation processing.
+
 ### DynamicSurroundings-1.11.2-3.4.9.15
 **Fixes**
 * Sounds sporadically do not play.  Added ASM to patch up Minecraft's SoundManager to flush the sound engine command queue to mitigate potential concurrency issues.
