@@ -79,6 +79,10 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 			}
 	}
 
+	private final static float DEFAULT_FOG_DENSITY = 0.4F;
+	private final static Color DEFAULT_FOG_COLOR = new Color(64, 96, 64).asImmutable();
+	private final static Color DEFAULT_DUST_COLOR = new Color(255, 234, 151).asImmutable();
+
 	public final static int DEFAULT_SPOT_CHANCE = 1000 / BiomeSoundEffectsHandler.SCAN_INTERVAL;
 	public final static SoundEffect[] NO_SOUNDS = {};
 
@@ -89,9 +93,9 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	protected boolean hasAurora;
 	protected boolean hasFog;
 
-	private Color dustColor;
-	private Color fogColor;
-	private float fogDensity;
+	private Color dustColor = DEFAULT_DUST_COLOR;
+	private Color fogColor = DEFAULT_FOG_COLOR;
+	private float fogDensity = DEFAULT_FOG_DENSITY;
 
 	protected SoundEffect[] sounds = NO_SOUNDS;
 	protected SoundEffect[] spotSounds = NO_SOUNDS;
