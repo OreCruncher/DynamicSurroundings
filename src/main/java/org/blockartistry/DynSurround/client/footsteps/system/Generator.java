@@ -316,7 +316,7 @@ public class Generator {
 					}
 				}
 			}
-		} else if (!this.isFlying) {
+		} else if (!this.isFlying && this.fallDistance > 0) {
 			if (this.fallDistance > this.VAR.LAND_HARD_DISTANCE_MIN) {
 				playMultifoot(entity, 0d, EventType.LAND);
 			} else if (!this.stepThisFrame && !entity.isSneaking()) {
