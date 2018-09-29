@@ -486,6 +486,12 @@
 					"conditions": "battle.isDragon"
 				}
 			]
+		},
+		{
+			"conditions": "oneof(biome.id, 'minecraft:mesa', 'minecraft:mesa_clear_rock', 'minecraft:mesa_rock')",
+			"_comment": "Mesa dust color specific override",
+			"dust": true,
+			"dustColor": "215,125,47"
 		}
 	],
 	"blocks": [
