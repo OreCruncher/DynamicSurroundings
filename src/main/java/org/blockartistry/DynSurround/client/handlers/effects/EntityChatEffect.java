@@ -65,7 +65,7 @@ public class EntityChatEffect extends EntityEffect {
 
 	static {
 		final Translations xlate = new Translations();
-		xlate.load("/assets/dsurround/data/chat/", Translations.DEFAULT_LANGUAGE);
+		xlate.load("/assets/dsurround/dsurround/data/chat/", Translations.DEFAULT_LANGUAGE);
 		xlate.forAll(new WeightTableBuilder());
 
 		setTimers(EntitySquid.class, 600, EntityChatData.DEFAULT_RANDOM);
@@ -100,7 +100,7 @@ public class EntityChatEffect extends EntityEffect {
 					if (data == null)
 						messages.put(key, data = new EntityChatData());
 					final int weight = Integer.parseInt(matcher2.group(1));
-					final String item = input.getKey();
+					final String item = matcher2.group(2);
 					data.table.add(new WeightTable.IItem<String>() {
 						@Override
 						public int getWeight() {
