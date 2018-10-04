@@ -1,0 +1,10 @@
+{
+	"itemConfig":{
+		"heavyArmor":[
+			"conarm:helmet",
+			"conarm:chestplate",
+			"conarm:leggings",
+			"conarm:boots"
+		]
+	}
+}
