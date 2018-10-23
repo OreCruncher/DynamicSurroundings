@@ -1,0 +1,61 @@
+{
+	"entities": {
+		"ancientwarfarenpc:aw_npc_combat": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:aw_npc_worker": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:aw_npc_courier": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:aw_npc_trader": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:aw_npc_priest": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:aw_npc_bard": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:aw_npc_siege_engineer": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:faction.archer": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:faction.soldier": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:faction.leader": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:faction.priest": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:faction.trader": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:faction.civilian.male": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:faction.civilian.female": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:faction.archer.elite": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:faction.soldier.elite": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:faction.leader.elite": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:faction.bard": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"ancientwarfarenpc:faction.siege_engineer": {
+			"effects": "bow,swing,footprint,breath"
+		}
+	}
+}

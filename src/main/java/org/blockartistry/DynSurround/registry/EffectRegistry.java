@@ -117,18 +117,30 @@ public class EffectRegistry extends Registry {
 				DSurround.log().debug("Forge reported entity %s but not found in it's own registry!", r.toString());
 			}
 		}
-
-		DSurround.log().debug("Entity Effect Entries");
-		DSurround.log().debug("=====================");
-		for (final Entry<Class<? extends Entity>, EntityEffectInfo> e : this.effects.entrySet()) {
-			final ResourceLocation r = EntityList.getKey(e.getKey());
-			final String keyName;
-			if (r != null)
-				keyName = r.toString();
-			else
-				keyName = "No ID Found";
-			DSurround.log().debug("%s = %s (%s)", keyName, e.getValue().toString(), e.getKey().getName());
+		
+		// Iterate through the registered entities to see how they match up against
+		// the config.
+		DSurround.log().debug("Entity Effect Configuration");
+		DSurround.log().debug("===========================");
+		for (final ResourceLocation r : EntityList.getEntityNameList()) {
+			final Class<?> clazz = EntityList.getClass(r);
+			if (clazz != null) {
+				final EntityEffectInfo info = this.effects.getOrDefault(clazz, DEFAULT);
+				DSurround.log().debug("%s = %s", r.toString(), info.toString());
+			}
 		}
+
+//		DSurround.log().debug("Entity Effect Entries");
+//		DSurround.log().debug("=====================");
+//		for (final Entry<Class<? extends Entity>, EntityEffectInfo> e : this.effects.entrySet()) {
+//			final ResourceLocation r = EntityList.getKey(e.getKey());
+//			final String keyName;
+//			if (r != null)
+//				keyName = r.toString();
+//			else
+//				keyName = "No ID Found";
+//			DSurround.log().debug("%s = %s (%s)", keyName, e.getValue().toString(), e.getKey().getName());
+//		}
 	}
 
 	@Override
