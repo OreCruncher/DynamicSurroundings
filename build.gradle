@@ -71,11 +71,11 @@ repositories {
 
 dependencies {
 
-    compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.12.2-7.0.1.2384:deobf"
+    compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.12.2-7.0.1.2399:deobf"
     
 	// http://dvs1.progwml6.com/files/maven/mezz/jei/
-    deobfCompile "mezz.jei:jei_1.12.2:4.9.1.168:api"
-    runtime "mezz.jei:jei_1.12.2:4.9.1.168"
+    deobfCompile "mezz.jei:jei_1.12.2:4.11.0.212:api"
+    runtime "mezz.jei:jei_1.12.2:4.11.0.212"
 }
 
 processResources

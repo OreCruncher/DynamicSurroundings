@@ -1,3 +1,17 @@
+### DynamicSurroundings-1.12.2-3.4.9.17
+**What's New**
+* Support for AncientWarfare 2 NPC sounds.  They will have footsteps, breath, weapon sounds, armor sounds, etc. like vanilla mobs.  (Depending on your sound tolerance you may need to tweak down the volume for the blunt and tool swing sounds.)
+
+**Fixes**
+* Resource string describing Autumn when Serene Seasons is installed.
+* Entities weren't chatting if enabled. 
+* Set default fog/dust color to prevent NPE when config enables dust/fog but does not specify a color.
+* Work around vanilla bouncing on slime blocks when walking onto a slime block from solid block (like stone).
+
+**Changes**
+* Tweaked dust color for Mesa like biomes to better match the biome block colors.  (Thanks ArcticKnight!)
+* Added basic config to give heavy armor sounds to Construct Armory armors.  A future release will have better support for different materials.
+
 ### DynamicSurroundings-1.12.2-3.4.9.16
 **Fixes**
 * Crash on dedicated server due to Forge annotation processing.
