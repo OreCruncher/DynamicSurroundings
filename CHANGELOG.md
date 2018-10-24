@@ -1,3 +1,12 @@
+### DynamicSurroundings-1.11.2-3.4.9.17
+**Fixes**
+* Entities weren't chatting if enabled. 
+* Set default fog/dust color to prevent NPE when config enables dust/fog but does not specify a color.
+* Work around vanilla bouncing on slime blocks when walking onto a slime block from solid block (like stone).
+
+**Changes**
+* Tweaked dust color for Mesa like biomes to better match the biome block colors.  (Thanks ArcticKnight!)
+
 ### DynamicSurroundings-1.11.2-3.4.9.16
 **Fixes**
 * Backport: Crash on dedicated server due to Forge annotation processing.
