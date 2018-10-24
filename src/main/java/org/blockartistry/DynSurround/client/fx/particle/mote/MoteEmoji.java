@@ -52,15 +52,10 @@ public class MoteEmoji extends MoteMotionBase {
 	// single tick.
 	private static final float ORBITAL_TICK = 360.0F / (ORBITAL_PERIOD * 20.0F);
 
-	// Number of ticks to keep the icon around until
-	// the particle is dismissed.
-	private static final int HOLD_TICK_COUNT = 40;
-
 	private final WeakReference<Entity> subject;
 	private final IEmojiData emoji;
 
 	private boolean shouldRender;
-	private int holdTicks;
 	private float period;
 	private final float radius;
 
@@ -138,10 +133,6 @@ public class MoteEmoji extends MoteMotionBase {
 		// If there is no emoji we want to keep the current one
 		// around for a period of time to give a better feel.
 		if (this.emoji.getEmojiType() == EmojiType.NONE) {
-			this.holdTicks++;
-			if (this.holdTicks >= HOLD_TICK_COUNT) {
-				this.isAlive = false;
-			}
 			return;
 		}
 
@@ -153,9 +144,6 @@ public class MoteEmoji extends MoteMotionBase {
 		this.texU2 = this.texU1 + 0.25F;
 		this.texV1 = texY * 0.25F;
 		this.texV2 = this.texV1 + 0.25F;
-
-		// Reset the hold counter
-		this.holdTicks = 0;
 
 		this.shouldRender = shouldRender();
 

@@ -38,6 +38,7 @@ import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.Environ
 import org.blockartistry.DynSurround.client.handlers.effects.CraftingSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.EntityBowSoundEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.EntityChatEffect;
+import org.blockartistry.DynSurround.client.handlers.effects.EntityEmojiEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.EntityFootprintEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.EntityHealthPopoffEffect;
 import org.blockartistry.DynSurround.client.handlers.effects.EntitySwingEffect;
@@ -105,6 +106,7 @@ public class FxHandler extends EffectHandlerBase {
 		library.register(EntitySwingEffect.DEFAULT_FILTER, new EntitySwingEffect.Factory());
 		library.register(EntityBowSoundEffect.DEFAULT_FILTER, new EntityBowSoundEffect.Factory());
 		library.register(EntityHealthPopoffEffect.DEFAULT_FILTER, new EntityHealthPopoffEffect.Factory());
+		library.register(EntityEmojiEffect.DEFAULT_FILTER, new EntityEmojiEffect.Factory());
 	}
 
 	private final Map<UUID, EntityEffectHandler> handlers = new HashMap<>(256);

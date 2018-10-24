@@ -26,19 +26,13 @@ package org.blockartistry.DynSurround.client.handlers;
 
 import javax.annotation.Nonnull;
 
-import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.fx.ParticleCollections;
-import org.blockartistry.DynSurround.client.fx.particle.mote.IParticleMote;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.entity.CapabilityEmojiData;
-import org.blockartistry.DynSurround.entity.EmojiType;
 import org.blockartistry.DynSurround.entity.IEmojiDataSettable;
 import org.blockartistry.DynSurround.event.EntityEmojiEvent;
 import org.blockartistry.lib.WorldUtils;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -46,22 +40,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityEmojiHandler extends EffectHandlerBase {
 
-	private final TIntObjectHashMap<IParticleMote> emojiParticles = new TIntObjectHashMap<>();
-
 	public EntityEmojiHandler() {
 		super("Entity Emojis");
-	}
-
-	@Override
-	public boolean doTick(final int tick) {
-		return this.emojiParticles.size() > 0;
-	}
-
-	@Override
-	public void process(@Nonnull final EntityPlayer player) {
-		this.emojiParticles.retainEntries((idx, emoji) -> {
-			return emoji.isAlive();
-		});
 	}
 
 	@SubscribeEvent
@@ -72,23 +52,7 @@ public class EntityEmojiHandler extends EffectHandlerBase {
 			data.setActionState(event.actionState);
 			data.setEmotionalState(event.emotionalState);
 			data.setEmojiType(event.emojiType);
-
-			if (ModOptions.speechbubbles.enableEntityEmojis && entity.isEntityAlive()
-					&& data.getEmojiType() != EmojiType.NONE && !this.emojiParticles.contains(event.entityId)) {
-				final IParticleMote mote = ParticleCollections.addEmoji(entity);
-				if (mote != null)
-					this.emojiParticles.put(event.entityId, mote);
-			}
 		}
 	}
 
-	@Override
-	public void onConnect() {
-		this.emojiParticles.clear();
-	}
-
-	@Override
-	public void onDisconnect() {
-		this.emojiParticles.clear();
-	}
 }

@@ -51,6 +51,11 @@ public final class ParticleMoteAdapter implements IParticleMote {
 	public boolean isAlive() {
 		return this.particle.isAlive();
 	}
+	
+	@Override
+	public void kill() {
+		this.particle.setExpired();
+	}
 
 	@Override
 	public void onUpdate() {

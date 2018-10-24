@@ -86,7 +86,8 @@ public abstract class MoteParticle implements IParticleMote {
 		return this.isAlive;
 	}
 
-	protected void kill() {
+	@Override
+	public void kill() {
 		this.isAlive = false;
 	}
 
