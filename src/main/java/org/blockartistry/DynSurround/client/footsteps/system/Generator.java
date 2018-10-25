@@ -437,7 +437,7 @@ public class Generator {
 	 * (or which block is likely to be below their feet if the player is walking on
 	 * the edge of a block when walking over non-emitting blocks like air or water).
 	 */
-	@Nonnull
+	@Nullable
 	protected Association findAssociationForPlayer(@Nonnull final EntityLivingBase entity,
 			final double verticalOffsetAsMinus, final boolean isRightFoot) {
 
@@ -479,7 +479,7 @@ public class Generator {
 	 * begins with "_NO_ASSOCIATION" if a matching block was found, but has no
 	 * association in the blockmap.
 	 */
-	@Nonnull
+	@Nullable
 	protected Association findAssociationForLocation(@Nonnull final EntityLivingBase entity,
 			@Nonnull final BlockPos pos) {
 
@@ -559,7 +559,7 @@ public class Generator {
 	 * but has no association in the blockmap. If the carpet was selected, this
 	 * solves to the carpet.
 	 */
-	@Nonnull
+	@Nullable
 	protected Association findAssociationForBlock(@Nonnull final World world, @Nonnull BlockPos pos) {
 		final IBlockState airState = Blocks.AIR.getDefaultState();
 		IBlockState in = WorldUtils.getBlockState(world, pos);

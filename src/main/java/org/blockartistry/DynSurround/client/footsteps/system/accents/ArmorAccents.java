@@ -65,14 +65,15 @@ public class ArmorAccents implements IFootstepAccentProvider {
 		final IAcoustic armorAddon = ClientRegistry.FOOTSTEPS.getArmorAcoustic(armor);
 		IAcoustic footAddon = ClientRegistry.FOOTSTEPS.getFootArmorAcoustic(foot);
 
-		if (armorAddon != null || footAddon != null) {
-			// Eliminate duplicates
+		if (armorAddon != null) {
+			in.add(armorAddon);
 			if (armorAddon == footAddon)
 				footAddon = null;
-
-			in.add(armorAddon);
-			in.add(footAddon);
 		}
+
+		if (footAddon != null)
+			in.add(footAddon);
+
 		return in;
 	}
 

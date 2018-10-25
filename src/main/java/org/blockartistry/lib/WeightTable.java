@@ -26,6 +26,7 @@ package org.blockartistry.lib;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.blockartistry.lib.collections.ObjectArray;
 import org.blockartistry.lib.random.XorShiftRandom;
@@ -72,7 +73,7 @@ public class WeightTable<T> extends ObjectArray<WeightTable.IItem<? extends T>> 
 	}
 
 	@SuppressWarnings("unchecked")
-	@Nonnull
+	@Nullable
 	public T next() {
 		if (this.totalWeight <= 0)
 			return null;

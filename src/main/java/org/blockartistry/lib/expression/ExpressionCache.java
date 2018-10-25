@@ -29,6 +29,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.lib.logging.ModLog;
@@ -129,7 +130,7 @@ public class ExpressionCache implements ITickable {
 			}
 		} catch (final Throwable t) {
 			this.naughtyList.add(expression);
-			this.cache.put(expression, new StringValue(t.getMessage()));
+			this.cache.put(expression, exp = new StringValue(t.getMessage()));
 			this.logger.warn("Unable to compile [%s]: %s", expression, t.getMessage());
 		}
 		return exp;

@@ -114,8 +114,7 @@ public class Color {
 	public static final Color AURORA_GREEN = new ImmutableColor(0.5F, 1.0F, 0.0F);
 	public static final Color AURORA_BLUE = new ImmutableColor(0F, 0.8F, 1.0F);
 
-	private static final Map<TextFormatting, Color> colorLookup = new EnumMap<>(
-			TextFormatting.class);
+	private static final Map<TextFormatting, Color> colorLookup = new EnumMap<>(TextFormatting.class);
 	static {
 		colorLookup.put(TextFormatting.BLACK, MC_BLACK);
 		colorLookup.put(TextFormatting.DARK_BLUE, MC_DARKBLUE);
@@ -284,6 +283,14 @@ public class Color {
 	public int rgbWithAlpha(final float alpha) {
 		final int iAlpha = (int) (alpha * 255);
 		return rgb() | (iAlpha << 24);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = Float.hashCode(this.red);
+		result = 31 * result + Float.hashCode(this.green);
+		result = 31 * result + Float.hashCode(this.blue);
+		return result;
 	}
 
 	@Override

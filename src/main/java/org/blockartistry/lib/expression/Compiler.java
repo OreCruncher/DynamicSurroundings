@@ -226,20 +226,6 @@ public final class Compiler {
 		return outputQueue;
 	}
 
-	private LazyVariant exp;
-
-	/**
-	 * Evaluates the expression.
-	 *
-	 * @return The result of the expression.
-	 */
-	public Variant eval() {
-
-		if (this.exp == null) {
-		}
-		return this.exp.eval();
-	}
-
 	/**
 	 * Cached access to the RPN notation of this expression, ensures only one
 	 * calculation of the RPN per expression instance. If no cached instance exists,

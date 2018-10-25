@@ -87,16 +87,14 @@ public class BattleScanner implements ITickable {
 	}
 
 	private boolean isApplicableType(final Entity e) {
-		if (e instanceof EntityLiving) {
-			if (e instanceof IMob)
-				return true;
-			if (e instanceof EntityPlayer)
-				return true;
-			if (e instanceof EntityGolem)
-				return true;
-			if (e instanceof EntityPolarBear)
-				return true;
-		}
+		if (e instanceof IMob)
+			return true;
+		if (e instanceof EntityPlayer)
+			return true;
+		if (e instanceof EntityGolem)
+			return true;
+		if (e instanceof EntityPolarBear)
+			return true;
 		return false;
 	}
 
