@@ -91,9 +91,10 @@ public class AnimaniaBadge implements LayerRenderer<EntityLivingBase> {
 		public ItemStack getBadgeToDisplay(final Entity e) {
 			if (!getWatered(e))
 				return WATER_BUCKET;
-			if (!getFed(e))
+			else if (!getFed(e))
 				return this.foodItem;
-			return ItemStack.EMPTY;
+			else
+				return ItemStack.EMPTY;
 		}
 
 		public boolean getFed(final Entity e) {
@@ -127,6 +128,8 @@ public class AnimaniaBadge implements LayerRenderer<EntityLivingBase> {
 		return KeyHandler.ANIMANIA_BADGES.isKeyDown() || KeyHandler.ANIMANIA_BADGES.getKeyCode() == Keyboard.KEY_NONE;
 	}
 
+	private final static float CONST = (180F / MathStuff.PI_F) / 20.0F;
+
 	// Thank you Darkhax!
 	@Override
 	public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks,
@@ -139,14 +142,14 @@ public class AnimaniaBadge implements LayerRenderer<EntityLivingBase> {
 		if (stackToRender.isEmpty())
 			return;
 
-		final float age = entity.ticksExisted + partialTicks;
-		final double height = entity.height - 0.15 + (MathStuff.sin(age / 20D)) / 3D;
+		final float age = (float) entity.ticksExisted + partialTicks;
+		final float height = entity.height - 0.15F + (MathStuff.sin(age / 20F)) / 3F;
 		final float s = 0.6F;
 
 		GlStateManager.pushMatrix();
 		GlStateManager.rotate(180, 0, 0, 1);
 		GlStateManager.scale(s, s, s);
-		GlStateManager.rotate((age) / 20.0F * (180F / MathStuff.PI_F), 0F, 1F, 0F);
+		GlStateManager.rotate(age * CONST, 0F, 1F, 0F);
 		GlStateManager.translate(0, height, 0);
 		Minecraft.getMinecraft().getRenderItem().renderItem(stackToRender, ItemCameraTransforms.TransformType.FIXED);
 		GlStateManager.popMatrix();
