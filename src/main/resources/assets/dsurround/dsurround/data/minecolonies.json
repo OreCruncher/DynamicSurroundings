@@ -1,0 +1,16 @@
+{
+	"entities": {
+		"minecolonies:citizen": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"minecolonies:barbarian": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"minecolonies:archerbarbarian": {
+			"effects": "bow,swing,footprint,breath"
+		},
+		"minecolonies:chiefbarbarian": {
+			"effects": "bow,swing,footprint,breath"
+		}
+	}
+}
