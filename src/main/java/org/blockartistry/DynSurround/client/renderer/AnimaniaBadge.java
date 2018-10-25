@@ -26,22 +26,21 @@ package org.blockartistry.DynSurround.client.renderer;
 
 import java.lang.reflect.Method;
 import java.util.IdentityHashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.keyboard.KeyHandler;
+import org.blockartistry.DynSurround.client.renderer.BadgeRenderLayer.IItemStackProvider;
+import org.blockartistry.DynSurround.client.renderer.BadgeRenderLayer.IShowBadge;
 import org.blockartistry.lib.ForgeUtils;
-import org.blockartistry.lib.math.MathStuff;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -53,111 +52,70 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class AnimaniaBadge implements LayerRenderer<EntityLivingBase> {
+public final class AnimaniaBadge implements IItemStackProvider {
 
-	protected final static ItemStack WATER_BUCKET = new ItemStack(Items.WATER_BUCKET);
-	protected final static ItemStack WATER = new ItemStack(Items.WATER_BUCKET);
-	protected final static ItemStack SEEDS = new ItemStack(Items.WHEAT_SEEDS);
-	protected final static ItemStack WHEAT = new ItemStack(Items.WHEAT);
-	protected final static ItemStack APPLE = new ItemStack(Items.APPLE);
-	protected final static ItemStack CARROT = new ItemStack(Items.CARROT);
-	protected final static ItemStack EGG = new ItemStack(Items.EGG);
-	protected final static ItemStack RABBIT_FOOD = CARROT;
+	// Possible food/water items for badging.
+	private final static ItemStack WATER_BUCKET = new ItemStack(Items.WATER_BUCKET);
+	private final static ItemStack SEEDS = new ItemStack(Items.WHEAT_SEEDS);
+	private final static ItemStack WHEAT = new ItemStack(Items.WHEAT);
+	private final static ItemStack APPLE = new ItemStack(Items.APPLE);
+	private final static ItemStack CARROT = new ItemStack(Items.CARROT);
+	private final static ItemStack EGG = new ItemStack(Items.EGG);
+	private final static ItemStack RABBIT_FOOD = CARROT;
+	private final static ItemStack HAMSTER_FOOD;
 
-	protected final static ItemStack HAMSTER_FOOD;
+	private static final IShowBadge BADGE_DISPLAY_CHECK = () -> {
+		return KeyHandler.ANIMANIA_BADGES.isKeyDown() || KeyHandler.ANIMANIA_BADGES.getKeyCode() == Keyboard.KEY_NONE;
+	};
 
 	static {
 		final Item item = ForgeUtils.getItem("animania:hamster_food");
 		HAMSTER_FOOD = item != null ? new ItemStack(item) : ItemStack.EMPTY;
 	}
 
-	private static class Accessor {
+	private Method food;
+	private Method water;
+	private ItemStack foodItem;
 
-		protected Method food;
-		protected Method water;
-		protected ItemStack foodItem;
-
-		public Accessor(final Class<?> clazz, final ItemStack food) {
-			try {
-				this.food = clazz.getMethod("getFed");
-				this.water = clazz.getMethod("getWatered");
-				this.foodItem = food;
-			} catch (final Throwable t) {
-				this.food = null;
-				this.water = null;
-			}
+	private AnimaniaBadge(final Class<?> clazz, final ItemStack food) {
+		try {
+			this.food = clazz.getMethod("getFed");
+			this.water = clazz.getMethod("getWatered");
+			this.foodItem = food;
+		} catch (final Throwable t) {
+			this.food = null;
+			this.water = null;
 		}
-
-		public ItemStack getBadgeToDisplay(final Entity e) {
-			if (!getWatered(e))
-				return WATER_BUCKET;
-			else if (!getFed(e))
-				return this.foodItem;
-			else
-				return ItemStack.EMPTY;
-		}
-
-		public boolean getFed(final Entity e) {
-			try {
-				return (boolean) this.food.invoke(e);
-			} catch (final Throwable t) {
-				return true;
-			}
-		}
-
-		public boolean getWatered(final Entity e) {
-			try {
-				return (boolean) this.water.invoke(e);
-			} catch (final Throwable t) {
-				return true;
-			}
-		}
-
-		public boolean isValid() {
-			return this.food != null && this.water != null;
-		}
-	}
-
-	protected final Accessor accessor;
-
-	public AnimaniaBadge(final Accessor a) {
-		this.accessor = a;
-	}
-
-	private boolean doShowBadges() {
-		return KeyHandler.ANIMANIA_BADGES.isKeyDown() || KeyHandler.ANIMANIA_BADGES.getKeyCode() == Keyboard.KEY_NONE;
-	}
-
-	private final static float CONST = (180F / MathStuff.PI_F) / 20.0F;
-
-	// Thank you Darkhax!
-	@Override
-	public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks,
-			float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-
-		if (!doShowBadges())
-			return;
-
-		final ItemStack stackToRender = this.accessor.getBadgeToDisplay(entity);
-		if (stackToRender.isEmpty())
-			return;
-
-		final float age = (float) entity.ticksExisted + partialTicks;
-		final float height = entity.height - 0.15F + (MathStuff.sin(age / 20F)) / 3F;
-		final float s = 0.6F;
-
-		GlStateManager.pushMatrix();
-		GlStateManager.rotate(180, 0, 0, 1);
-		GlStateManager.scale(s, s, s);
-		GlStateManager.rotate(age * CONST, 0F, 1F, 0F);
-		GlStateManager.translate(0, height, 0);
-		Minecraft.getMinecraft().getRenderItem().renderItem(stackToRender, ItemCameraTransforms.TransformType.FIXED);
-		GlStateManager.popMatrix();
 	}
 
 	@Override
-	public boolean shouldCombineTextures() {
-		return false;
+	public ItemStack getStackToDisplay(final EntityLivingBase e) {
+		if (!getWatered(e))
+			return WATER_BUCKET;
+		else if (!getFed(e))
+			return this.foodItem;
+		else
+			return ItemStack.EMPTY;
+	}
+
+	private boolean getFed(final Entity e) {
+		try {
+			return (boolean) this.food.invoke(e);
+		} catch (final Throwable t) {
+			return true;
+		}
+	}
+
+	private boolean getWatered(final Entity e) {
+		try {
+			return (boolean) this.water.invoke(e);
+		} catch (final Throwable t) {
+			return true;
+		}
+	}
+
+	private boolean isValid() {
+		return this.food != null && this.water != null;
 	}
 
 	// ====================================================================
@@ -166,10 +124,10 @@ public class AnimaniaBadge implements LayerRenderer<EntityLivingBase> {
 	//
 	// ====================================================================
 
-	private static void add(final Map<Class<?>, Accessor> theMap, final String className, final ItemStack food) {
+	private static void add(final Map<Class<?>, AnimaniaBadge> theMap, final String className, final ItemStack food) {
 		try {
 			final Class<?> clazz = Class.forName(className);
-			final Accessor a = new Accessor(clazz, food);
+			final AnimaniaBadge a = new AnimaniaBadge(clazz, food);
 			if (a.isValid())
 				theMap.put(clazz, a);
 		} catch (final Throwable t) {
@@ -181,7 +139,7 @@ public class AnimaniaBadge implements LayerRenderer<EntityLivingBase> {
 		if (!ModOptions.speechbubbles.enableAnimaniaBadges)
 			return;
 
-		final Map<Class<?>, Accessor> classMap = new IdentityHashMap<>();
+		final Map<Class<?>, AnimaniaBadge> classMap = new IdentityHashMap<>();
 		add(classMap, "com.animania.common.entities.chickens.EntityAnimaniaChicken", SEEDS);
 		add(classMap, "com.animania.common.entities.cows.EntityAnimaniaCow", WHEAT);
 		add(classMap, "com.animania.common.entities.goats.EntityAnimaniaGoat", WHEAT);
@@ -196,19 +154,17 @@ public class AnimaniaBadge implements LayerRenderer<EntityLivingBase> {
 
 		// Iterate our entity class hierarchy looking for matches and make sure
 		// they are in the map directly - avoid repeated lookups at run time.
+		final RenderManager rm = Minecraft.getMinecraft().getRenderManager();
 		for (final ResourceLocation r : EntityList.getEntityNameList()) {
 			final Class<? extends Entity> clazz = EntityList.getClass(r);
 			if (clazz != null) {
-				final Iterator<Entry<Class<?>, Accessor>> itr = classMap.entrySet().iterator();
-				while (itr.hasNext()) {
-					final Entry<Class<?>, Accessor> e = itr.next();
-					if (e.getKey().isAssignableFrom(clazz)) {
-						final Render<Entity> renderer = Minecraft.getMinecraft().getRenderManager()
-								.getEntityClassRenderObject(clazz);
-						if (renderer instanceof RenderLivingBase) {
-							((RenderLivingBase<?>) renderer).addLayer(new AnimaniaBadge(e.getValue()));
-						}
-						break;
+				final Optional<Entry<Class<?>, AnimaniaBadge>> result = classMap.entrySet().stream()
+						.filter(e -> e.getKey().isAssignableFrom(clazz)).findFirst();
+				if (result.isPresent()) {
+					final Render<Entity> renderer = rm.getEntityClassRenderObject(clazz);
+					if (renderer instanceof RenderLivingBase) {
+						((RenderLivingBase<?>) renderer)
+								.addLayer(new BadgeRenderLayer(BADGE_DISPLAY_CHECK, result.get().getValue()));
 					}
 				}
 			}
