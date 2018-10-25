@@ -920,6 +920,7 @@ public final class ModOptions {
 	public static final String CONFIG_OPTION_ENABLE_EMOJIS = "Enable Entity Emojis";
 	public static final String CONFIG_OPTION_SPEECHBUBBLE_DURATION = "Display Duration";
 	public static final String CONFIG_OPTION_SPEECHBUBBLE_RANGE = "Visibility Range";
+	public static final String CONFIG_OPTION_ANIMANIA_BADGES = "Animania Badges";
 
 	@Category(CATEGORY_SPEECHBUBBLES)
 	@LangKey("dsurround.cfg.speech.cat.Speech")
@@ -929,7 +930,7 @@ public final class ModOptions {
 		public static String PATH = null;
 		public static final List<String> SORT = Arrays.asList(CONFIG_OPTION_ENABLE_SPEECHBUBBLES,
 				CONFIG_OPTION_ENABLE_ENTITY_CHAT, CONFIG_OPTION_ENABLE_EMOJIS, CONFIG_OPTION_SPEECHBUBBLE_DURATION,
-				CONFIG_OPTION_SPEECHBUBBLE_RANGE);
+				CONFIG_OPTION_SPEECHBUBBLE_RANGE, CONFIG_OPTION_ANIMANIA_BADGES);
 
 		@Option(CONFIG_OPTION_ENABLE_SPEECHBUBBLES)
 		@DefaultValue("false")
@@ -962,6 +963,13 @@ public final class ModOptions {
 		@RangeInt(min = 16, max = 32)
 		@Comment("Range at which a SpeechBubble is visible.  Filtering occurs server side.")
 		public static float speechBubbleRange = 16;
+		
+		@Option(CONFIG_OPTION_ANIMANIA_BADGES)
+		@DefaultValue("true")
+		@LangKey("dsurround.cfg.speech.AnimaniaBadges")
+		@Comment("Enable/disable display of food/water badges over Animania mobs")
+		@RestartRequired(world = true, server = true)
+		public static boolean enableAnimaniaBadges = true;
 	}
 
 	public static final String CATEGORY_EXPLOSIONS = "explosions";
@@ -1176,7 +1184,7 @@ public final class ModOptions {
 		@Hidden
 		public static boolean allowCompassClockHUD = true;
 	}
-
+	
 	public static final String CATEGORY_LIGHTING = "lighting";
 	public static final String CONFIG_LIGHTING_ENABLE = "Enable Albedo Support";
 	public static final String CONFIG_FIREFLY_ENABLE = "Enable Firefly Lighting Effects";

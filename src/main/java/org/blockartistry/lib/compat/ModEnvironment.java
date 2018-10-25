@@ -66,7 +66,9 @@ public enum ModEnvironment {
 	//
 	BiomesOPlenty("biomesoplenty"),
 	//
-	CubicChunks("cubicchunks");
+	CubicChunks("cubicchunks"),
+	//
+	Animania("animania");
 
 	protected final String modId;
 	protected boolean isLoaded;

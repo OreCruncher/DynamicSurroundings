@@ -36,6 +36,7 @@ import org.blockartistry.DynSurround.client.hud.GuiHUDHandler;
 import org.blockartistry.DynSurround.client.hud.InspectionHUD;
 import org.blockartistry.DynSurround.client.hud.LightLevelHUD;
 import org.blockartistry.DynSurround.client.keyboard.KeyHandler;
+import org.blockartistry.DynSurround.client.renderer.AnimaniaBadge;
 import org.blockartistry.DynSurround.client.sound.BackgroundMute;
 import org.blockartistry.DynSurround.client.sound.MusicTickerReplacement;
 import org.blockartistry.DynSurround.client.sound.SoundEngine;
@@ -67,6 +68,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnection
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SuppressWarnings("deprecation")
 @SideOnly(Side.CLIENT)
 public class ProxyClient extends Proxy implements IResourceManagerReloadListener {
 
@@ -132,6 +134,9 @@ public class ProxyClient extends Proxy implements IResourceManagerReloadListener
 		// Register for resource load events
 		final IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
 		((IReloadableResourceManager) resourceManager).registerReloadListener(this);
+
+		if (ModEnvironment.Animania.isLoaded())
+			AnimaniaBadge.intitialize();
 	}
 
 	@Override

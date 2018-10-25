@@ -125,6 +125,9 @@ public class ParticleCollection extends ParticleBase {
 	public void renderParticle(final BufferBuilder buffer, final Entity entityIn, final float partialTicks,
 			final float rotX, final float rotZ, final float rotYZ, final float rotXY, final float rotXZ) {
 
+		if (this.myParticles.size() == 0)
+			return;
+
 		bindTexture(this.texture);
 		preRender();
 

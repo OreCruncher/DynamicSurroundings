@@ -24,8 +24,6 @@
 
 package org.blockartistry.DynSurround.client.fx.particle.mote;
 
-import java.lang.ref.WeakReference;
-
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
@@ -42,7 +40,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class MoteEmoji extends MoteMotionBase {
+public class MoteEmoji extends MoteEntityTied {
 
 	// Number of seconds for the particle to complete an
 	// orbit around a mob.
@@ -52,7 +50,6 @@ public class MoteEmoji extends MoteMotionBase {
 	// single tick.
 	private static final float ORBITAL_TICK = 360.0F / (ORBITAL_PERIOD * 20.0F);
 
-	private final WeakReference<Entity> subject;
 	private final IEmojiData emoji;
 
 	private boolean shouldRender;
@@ -64,19 +61,7 @@ public class MoteEmoji extends MoteMotionBase {
 	protected float texV1, texV2;
 
 	public MoteEmoji(@Nonnull final Entity entity) {
-		super(entity.getEntityWorld(), 0, 0, 0, 0, 0, 0);
-
-		final double newY = entity.posY + entity.height - (entity.isSneaking() ? 0.25D : 0);
-		this.prevX = this.posX = entity.posX;
-		this.prevY = this.posY = newY;
-		this.prevZ = this.posZ = entity.posZ;
-		this.position.setPos(this.posX, this.posY, this.posZ);
-
-		this.motionX = 0.0D;
-		this.motionY = 0.0D;
-		this.motionZ = 0.0D;
-		this.gravity = 0.0D;
-		this.subject = new WeakReference<>(entity);
+		super(entity);
 
 		this.scale = 1.0F;
 		this.alpha = 0.99F;
@@ -92,16 +77,8 @@ public class MoteEmoji extends MoteMotionBase {
 		this.emoji = entity.getCapability(CapabilityEmojiData.EMOJI, null);
 	}
 
-	protected boolean shouldExpire() {
-		if (!isAlive() || this.subject.isEnqueued())
-			return true;
-
-		final Entity entity = this.subject.get();
-		return !entity.isEntityAlive() || entity.isInvisibleToPlayer(EnvironState.getPlayer());
-	}
-
 	protected boolean shouldRender() {
-		if (!this.isAlive)
+		if (!this.isAlive())
 			return false;
 
 		final EntityPlayer player = EnvironState.getPlayer();
@@ -111,21 +88,11 @@ public class MoteEmoji extends MoteMotionBase {
 
 	@Override
 	public void update() {
-
-		if (shouldExpire()) {
-			this.isAlive = false;
+		
+		super.update();
+		
+		if(!this.isAlive())
 			return;
-		}
-
-		this.prevX = this.posX;
-		this.prevY = this.posY;
-		this.prevZ = this.posZ;
-
-		final Entity entity = this.subject.get();
-		this.posX = entity.posX;
-		this.posY = entity.posY + entity.height - (entity.isSneaking() ? 0.25D : 0);
-		this.posZ = entity.posZ;
-		this.position.setPos(this.posX, this.posY, this.posZ);
 
 		// Calculate the current period values
 		this.period = MathStuff.wrapDegrees(this.period + ORBITAL_TICK);

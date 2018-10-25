@@ -290,6 +290,8 @@ dsurround.cfg.speech.Duration=Display Duration
 dsurround.cfg.speech.Duration.tooltip=Number of seconds to display speech before removing
 dsurround.cfg.speech.Range=Visibility Range
 dsurround.cfg.speech.Range.tooltip=Range at which a SpeechBubble is visible.  Filtering occurs server side.
+dsurround.cfg.speech.AnimaniaBadges=Animania Badges
+dsurround.cfg.speech.AnimaniaBadges.tooltip=Enable/disable display of food/water badges over Animania mobs
 
 dsurround.cfg.explosions.cat.Explosions=Explosion Enhancement Options
 dsurround.cfg.explosions.cat.Explosions.tooltip=Options for configuring Explosion Enhancement
