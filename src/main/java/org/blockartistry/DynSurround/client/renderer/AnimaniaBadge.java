@@ -31,8 +31,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.keyboard.KeyHandler;
 import org.blockartistry.lib.ForgeUtils;
 import org.blockartistry.lib.math.MathStuff;
+import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -121,10 +123,17 @@ public class AnimaniaBadge implements LayerRenderer<EntityLivingBase> {
 		this.accessor = a;
 	}
 
+	private boolean doShowBadges() {
+		return KeyHandler.ANIMANIA_BADGES.isKeyDown() || KeyHandler.ANIMANIA_BADGES.getKeyCode() == Keyboard.KEY_NONE;
+	}
+
 	// Thank you Darkhax!
 	@Override
 	public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks,
 			float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+
+		if (!doShowBadges())
+			return;
 
 		final ItemStack stackToRender = this.accessor.getBadgeToDisplay(entity);
 		if (stackToRender.isEmpty())
@@ -132,11 +141,10 @@ public class AnimaniaBadge implements LayerRenderer<EntityLivingBase> {
 
 		final float age = entity.ticksExisted + partialTicks;
 		final double height = entity.height - 0.15 + (MathStuff.sin(age / 20D)) / 3D;
-		final float s = scale * 10F;
+		final float s = 0.6F;
 
 		GlStateManager.pushMatrix();
 		GlStateManager.rotate(180, 0, 0, 1);
-		// GlStateManager.scale(0.6, 0.6, 0.6);
 		GlStateManager.scale(s, s, s);
 		GlStateManager.rotate((age) / 20.0F * (180F / MathStuff.PI_F), 0F, 1F, 0F);
 		GlStateManager.translate(0, height, 0);

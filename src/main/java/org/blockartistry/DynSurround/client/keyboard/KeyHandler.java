@@ -58,6 +58,7 @@ public class KeyHandler {
 	private static KeyBinding LIGHTLEVEL_KEY;
 	private static KeyBinding CHUNKBORDER_KEY;
 	private static KeyBinding VOLUME_KEY;
+	public static KeyBinding ANIMANIA_BADGES;
 
 	public static void init() {
 		SELECTIONBOX_KEY = new KeyBinding("dsurround.cfg.keybind.SelectionBox", Keyboard.KEY_B, SECTION_NAME);
@@ -65,6 +66,9 @@ public class KeyHandler {
 
 		VOLUME_KEY = new KeyBinding("dsurround.cfg.keybind.Volume", Keyboard.KEY_V, SECTION_NAME);
 		ClientRegistry.registerKeyBinding(VOLUME_KEY);
+		
+		ANIMANIA_BADGES = new KeyBinding("dsurround.cfg.keybind.AnimaniaBadges", Keyboard.KEY_NONE, SECTION_NAME);
+		ClientRegistry.registerKeyBinding(ANIMANIA_BADGES);
 
 		if (Permissions.instance().allowLightLevelHUD()) {
 			LIGHTLEVEL_KEY = new KeyBinding("dsurround.cfg.keybind.LightLevel", Keyboard.KEY_L, SECTION_NAME);

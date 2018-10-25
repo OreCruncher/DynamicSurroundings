@@ -36,6 +36,7 @@ dsurround.cfg.keybind.SelectionBox=Toggle SelectionBox
 dsurround.cfg.keybind.LightLevel=Toggle Light Level
 dsurround.cfg.keybind.ChunkBorders=Toggle Chunk Borders
 dsurround.cfg.keybind.Volume=Volume Quick Set
+dsurround.cfg.keybind.AnimaniaBadges=Show Animania Mob Badges
 dsurround.cfg.keybind.msg.ON=§aON
 dsurround.cfg.keybind.msg.OFF=§cOFF
 dsurround.cfg.keybind.msg.Fencing=Block fencing %s
