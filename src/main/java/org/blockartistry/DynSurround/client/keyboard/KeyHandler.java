@@ -34,6 +34,7 @@ import org.blockartistry.DynSurround.client.hud.LightLevelHUD;
 import org.blockartistry.DynSurround.client.hud.LightLevelHUD.Mode;
 import org.blockartistry.lib.Localization;
 import org.blockartistry.lib.compat.EntityRendererUtil;
+import org.blockartistry.lib.compat.ModEnvironment;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
@@ -66,9 +67,11 @@ public class KeyHandler {
 
 		VOLUME_KEY = new KeyBinding("dsurround.cfg.keybind.Volume", Keyboard.KEY_V, SECTION_NAME);
 		ClientRegistry.registerKeyBinding(VOLUME_KEY);
-		
-		ANIMANIA_BADGES = new KeyBinding("dsurround.cfg.keybind.AnimaniaBadges", Keyboard.KEY_NONE, SECTION_NAME);
-		ClientRegistry.registerKeyBinding(ANIMANIA_BADGES);
+
+		if (ModEnvironment.Animania.isLoaded()) {
+			ANIMANIA_BADGES = new KeyBinding("dsurround.cfg.keybind.AnimaniaBadges", Keyboard.KEY_NONE, SECTION_NAME);
+			ClientRegistry.registerKeyBinding(ANIMANIA_BADGES);
+		}
 
 		if (Permissions.instance().allowLightLevelHUD()) {
 			LIGHTLEVEL_KEY = new KeyBinding("dsurround.cfg.keybind.LightLevel", Keyboard.KEY_L, SECTION_NAME);

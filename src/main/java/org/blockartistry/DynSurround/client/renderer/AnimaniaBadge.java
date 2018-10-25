@@ -65,7 +65,8 @@ public final class AnimaniaBadge implements IItemStackProvider {
 	private final static ItemStack HAMSTER_FOOD;
 
 	private static final IShowBadge BADGE_DISPLAY_CHECK = () -> {
-		return KeyHandler.ANIMANIA_BADGES.isKeyDown() || KeyHandler.ANIMANIA_BADGES.getKeyCode() == Keyboard.KEY_NONE;
+		return KeyHandler.ANIMANIA_BADGES == null || KeyHandler.ANIMANIA_BADGES.isKeyDown()
+				|| KeyHandler.ANIMANIA_BADGES.getKeyCode() == Keyboard.KEY_NONE;
 	};
 
 	static {
