@@ -99,9 +99,9 @@ public final class AnimaniaBadge implements IItemStackProvider {
 
 	@Override
 	public ItemStack getStackToDisplay(final EntityLivingBase e) {
-		if (getWatered(e))
+		if (!getWatered(e))
 			return WATER_BUCKET;
-		else if (getFed(e))
+		else if (!getFed(e))
 			return this.foodItem;
 		else
 			return ItemStack.EMPTY;
