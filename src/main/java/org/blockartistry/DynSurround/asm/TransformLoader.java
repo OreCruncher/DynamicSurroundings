@@ -27,6 +27,9 @@ package org.blockartistry.DynSurround.asm;
 import java.io.File;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
@@ -43,6 +46,7 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 @IFMLLoadingPlugin.Name("DynamicSurroundingsCore")
 public class TransformLoader implements IFMLLoadingPlugin {
 
+	public static final Logger logger = LogManager.getLogger("dsurroundcore");
 	public static Configuration config = null;
 	
 	@Override
@@ -89,7 +93,6 @@ public class TransformLoader implements IFMLLoadingPlugin {
 
 		@Subscribe
 		public void preInit(final FMLPreInitializationEvent event) {
-			System.out.println("hello from DynSurround coremod!");
 			TransformLoader.config = null;
 		}
 	}

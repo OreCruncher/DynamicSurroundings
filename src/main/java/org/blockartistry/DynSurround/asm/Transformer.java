@@ -24,12 +24,11 @@
 
 package org.blockartistry.DynSurround.asm;
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Transformer extends MyTransformer {
 
-	private static final Logger logger = LogManager.getLogger("dsurround Transform");
+	private static final Logger logger = TransformLoader.logger;
 
 	public static Logger log() {
 		return logger;
