@@ -43,7 +43,9 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer.EnumChatVisibility;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.SoundCategory;
+import net.minecraftforge.client.resource.VanillaResourceType;
 import net.minecraftforge.client.settings.KeyModifier;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -210,8 +212,8 @@ public class MinecraftConfigHandler {
 			boolean refreshRenderDistance = false;
 			boolean refreshRenderers = false;
 			boolean refreshUnicodeFlag = false;
-			boolean refreshResources = false;
 			boolean refreshVsync = false;
+			boolean refreshTextures = false;
 
 			for (final Entry<String, String> e : data.getEntries()) {
 				if (e.getKey().startsWith(SOUND_PREFIX)) {
@@ -277,7 +279,7 @@ public class MinecraftConfigHandler {
 							final boolean anal = data.getBoolean(theName, settings.anaglyph);
 							if (settings.anaglyph != anal) {
 								settings.anaglyph = anal;
-								refreshResources = true;
+								refreshTextures = true;
 							}
 							break;
 						case FRAMERATE_LIMIT:
@@ -423,11 +425,14 @@ public class MinecraftConfigHandler {
 			if (refreshChat)
 				mc.ingameGUI.getChatGUI().refreshChat();
 
+			if (refreshTextures)
+				FMLClientHandler.instance().refreshResources(VanillaResourceType.TEXTURES);
+			
 			if (refreshMipmaps) {
 				mc.getTextureMapBlocks().setMipmapLevels(settings.mipmapLevels);
 				mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				mc.getTextureMapBlocks().setBlurMipmapDirect(false, settings.mipmapLevels > 0);
-				refreshResources = true;
+	            FMLClientHandler.instance().scheduleResourcesRefresh(VanillaResourceType.MODELS);
 			}
 
 			if (refreshRenderDistance)
@@ -439,9 +444,6 @@ public class MinecraftConfigHandler {
 			if (refreshUnicodeFlag)
 				mc.fontRenderer
 						.setUnicodeFlag(mc.getLanguageManager().isCurrentLocaleUnicode() || settings.forceUnicodeFont);
-
-			if (refreshResources)
-				mc.refreshResources();
 
 			if (refreshVsync)
 				Display.setVSyncEnabled(settings.enableVsync);
