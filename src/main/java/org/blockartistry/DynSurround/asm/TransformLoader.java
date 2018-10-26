@@ -91,9 +91,9 @@ public class TransformLoader implements IFMLLoadingPlugin {
 			return true;
 		}
 
-		@Subscribe
-		public void preInit(final FMLPreInitializationEvent event) {
-			TransformLoader.config = null;
-		}
+//		@Subscribe
+		//public void postInit(final FMLPostInitializationEvent event) {
+//			TransformLoader.config = null;
+		//}
 	}
 }

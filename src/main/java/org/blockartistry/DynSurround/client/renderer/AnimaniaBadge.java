@@ -78,11 +78,14 @@ public final class AnimaniaBadge implements IItemStackProvider {
 	private Method water;
 	private ItemStack foodItem;
 
-	private AnimaniaBadge(final Class<?> clazz, final ItemStack food) {
+	private float dY;
+
+	private AnimaniaBadge(final Class<?> clazz, final ItemStack food, final float dY) {
 		try {
 			this.food = clazz.getMethod("getFed");
 			this.water = clazz.getMethod("getWatered");
 			this.foodItem = food;
+			this.dY = dY;
 		} catch (final Throwable t) {
 			this.food = null;
 			this.water = null;
@@ -90,10 +93,15 @@ public final class AnimaniaBadge implements IItemStackProvider {
 	}
 
 	@Override
+	public float adjustY() {
+		return this.dY;
+	}
+
+	@Override
 	public ItemStack getStackToDisplay(final EntityLivingBase e) {
-		if (!getWatered(e))
+		if (getWatered(e))
 			return WATER_BUCKET;
-		else if (!getFed(e))
+		else if (getFed(e))
 			return this.foodItem;
 		else
 			return ItemStack.EMPTY;
@@ -126,11 +134,17 @@ public final class AnimaniaBadge implements IItemStackProvider {
 	// ====================================================================
 
 	private static void add(final Map<Class<?>, AnimaniaBadge> theMap, final String className, final ItemStack food) {
+		add(theMap, className, food, 0F);
+	}
+
+	private static void add(final Map<Class<?>, AnimaniaBadge> theMap, final String className, final ItemStack food,
+			final float dY) {
 		try {
 			final Class<?> clazz = Class.forName(className);
-			final AnimaniaBadge a = new AnimaniaBadge(clazz, food);
-			if (a.isValid())
+			final AnimaniaBadge a = new AnimaniaBadge(clazz, food, dY);
+			if (a.isValid()) {
 				theMap.put(clazz, a);
+			}
 		} catch (final Throwable t) {
 			;
 		}

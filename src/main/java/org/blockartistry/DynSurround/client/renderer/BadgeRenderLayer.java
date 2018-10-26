@@ -43,23 +43,26 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 	private final static float CONST = (180F / MathStuff.PI_F) / 20.0F;
 
 	/**
-	 * Used to provide logic for when a badges should be displayed or not.
-	 * It is intended to provide a hook for things like configuration or
-	 * keybind.  Per entity suppression should be handled using the
-	 * IItemStackProvider.
+	 * Used to provide logic for when a badges should be displayed or not. It is
+	 * intended to provide a hook for things like configuration or keybind. Per
+	 * entity suppression should be handled using the IItemStackProvider.
 	 */
 	public static interface IShowBadge {
 		boolean showBadge();
 	}
 
 	/**
-	 * Method for the layer renderer to figure out what ItemStack to render
-	 * as a badge.  If there is no stack to render then it should return
-	 * ItemStack.EMPTY.
+	 * Method for the layer renderer to figure out what ItemStack to render as a
+	 * badge. If there is no stack to render then it should return ItemStack.EMPTY.
 	 */
 	public static interface IItemStackProvider {
 		@Nonnull
 		ItemStack getStackToDisplay(@Nonnull final EntityLivingBase e);
+
+		// Up/Down micro adjustment for the badge render location.
+		default float adjustY() {
+			return 0F;
+		}
 	}
 
 	protected final IShowBadge displayCheck;
@@ -82,17 +85,17 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 			return;
 
 		final float age = entity.ticksExisted + partialTicks;
-		final float height = entity.height - 0.15F + (MathStuff.sin(age / 20F)) / 3F;
 		final float s = 0.6F;
 
+		final float dY = this.stackProvider.adjustY() + entity.height - 0.15F + (MathStuff.sin(age / 20F)) / 3F;
+		
 		GlStateManager.pushMatrix();
 		GlStateManager.rotate(180, 0, 0, 1);
 		GlStateManager.scale(s, s, s);
 		GlStateManager.rotate(age * CONST, 0F, 1F, 0F);
-		GlStateManager.translate(0, height, 0);
+		GlStateManager.translate(0, dY, 0);
 		Minecraft.getMinecraft().getRenderItem().renderItem(stackToRender, ItemCameraTransforms.TransformType.FIXED);
-		GlStateManager.popMatrix();
-	}
+		GlStateManager.popMatrix();	}
 
 	@Override
 	public boolean shouldCombineTextures() {
