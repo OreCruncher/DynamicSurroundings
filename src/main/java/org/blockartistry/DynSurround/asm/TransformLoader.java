@@ -27,19 +27,28 @@ package org.blockartistry.DynSurround.asm;
 import java.io.File;
 import java.util.Map;
 
-import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.lib.ForgeUtils;
-import org.blockartistry.lib.VersionHelper;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.DummyModContainer;
+import net.minecraftforge.fml.common.LoadController;
+import net.minecraftforge.fml.common.ModMetadata;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
-//@IFMLLoadingPlugin.MCVersion("1.12")
-@IFMLLoadingPlugin.TransformerExclusions({ "org.blockartistry.DynSurround.asm.",
-		"org.blockartistry.DynSurround.ModOptions" })
+@IFMLLoadingPlugin.MCVersion("1.12.2")
+@IFMLLoadingPlugin.TransformerExclusions({ "org.blockartistry.DynSurround.asm."})
 @IFMLLoadingPlugin.SortingIndex(10001)
 @IFMLLoadingPlugin.Name("DynamicSurroundingsCore")
 public class TransformLoader implements IFMLLoadingPlugin {
+
+	public static Configuration config = null;
+	
+	@Override
+	public String getModContainerClass() {
+		return "org.blockartistry.DynSurround.asm.TransformLoader$Container";
+	}
 
 	@Override
 	public String[] getASMTransformerClass() {
@@ -60,19 +69,28 @@ public class TransformLoader implements IFMLLoadingPlugin {
 	public void injectData(final Map<String, Object> map) {
 		// Tickle the configuration so we can get some options initialized
 		final File configFile = new File((File) map.get("mcLocation"), "/config/dsurround/dsurround.cfg");
-		final Configuration config = new Configuration(configFile);
-		ModOptions.load(config);
+		config = new Configuration(configFile);
 	}
 
-	@Override
-	public String getModContainerClass() {
-		return null;
-	}
-	
-	public static boolean applySoundFix() {
-		// Target version that has the sound fix
-		final String fixVersion = "14.23.2.2635";
-		final String forgeVersion = ForgeUtils.getForgeVersion();
-		return VersionHelper.compareVersions(forgeVersion, fixVersion) < 0;
+	public static class Container extends DummyModContainer {
+		
+		public Container() {
+			super(new ModMetadata());
+			ModMetadata meta = getMetadata();
+			meta.modId = "dsurroundcore";
+			meta.name = "DynamicSurroundingsCore";
+		}
+
+		@Override
+		public boolean registerBus(final EventBus bus, final LoadController controller) {
+			bus.register(this);
+			return true;
+		}
+
+		@Subscribe
+		public void preInit(final FMLPreInitializationEvent event) {
+			System.out.println("hello from DynSurround coremod!");
+			TransformLoader.config = null;
+		}
 	}
 }

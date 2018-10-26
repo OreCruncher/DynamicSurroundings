@@ -1,7 +1,10 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
+        maven {
+        	name = "Forge"
+        	url = "http://files.minecraftforge.net/maven"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
@@ -98,11 +101,69 @@ processResources
     }
 }
 
+// Define a new task for the contained JAR
+// If you want to, you can distribute this as a separate artifact to a Maven
+task coreJar(type: Jar) {
+    // Copy all compiled files and resources from the source set to the JAR
+    // If you have additional source sets, add the same logic here
+    from(sourceSets.main.output) {
+        // Include the coremod package
+        // If you need additional files, add some more includes
+        include 'org/blockartistry/DynSurround/asm/**'
+    }
+    
+    // Standard coremod manifest definitions
+    manifest {
+        // Added benefit of separating mod and coremod: No need for FMLCorePluginContainsFMLMod
+        attributes 'FMLCorePlugin': "org.blockartistry.DynSurround.asm.TransformLoader"
+        
+        // Strictly speaking not required (right now)
+        // Allows Forge to extract the dependency to a local repository (Given that the corresponding PR is merged)
+        // If another mod ships the same dependency, it doesn't have to be extracted twice
+        attributes 'Maven-Version': "${project.group}:${project.archivesBaseName}:${project.version}:core"
+    }
+    // Add a classifier to the JAR ('-core' at the end of the file name)
+    // Distinguishes the mod JAR from the shipped one
+    classifier 'core'
+}
+
+// Reobfuscate the output of the mod JAR task with SRG names, otherwise the mod won't be able to reference MC classes
+reobf {
+    coreJar { mappingType = 'SEARGE' }
+}
+
+task signCoreJar(type: SignJar, dependsOn: reobfCoreJar) {
+
+    onlyIf { // Skip the task if our secret data isn't available
+        project.hasProperty('keyStore')
+    }
+
+    keyStore = project.keyStore // This needs to be a path to the keystore file
+    alias = project.keyStoreAlias
+    storePass = project.keyStorePass
+    keyPass = project.keyStoreKeyPass
+    inputFile = coreJar.archivePath.absolutePath
+    outputFile = coreJar.archivePath.absolutePath
+}
+
 jar {
+        // Don't include the coremod in the main JAR
+    // If you have more coremod-related packages that aren't nested in the main one, add inclusions for them
+    exclude 'org/blockartistry/DynSurround/asm/**'
+    
+    // Add the output of the coremod JAR task to the main JAR for later extraction
+    from(coreJar.archivePath.absolutePath) {
+        include '*' // Due to the way Gradle's copy tasks work, we need this line for the JAR to get added
+    }
     
     manifest {
-        	attributes('FMLCorePlugin': 'org.blockartistry.DynSurround.asm.TransformLoader', 'FMLCorePluginContainsFMLMod': 'true', 'FMLAT': 'dsurround_at.cfg')
+        // The crucial manifest attribute: Make Forge extract the contained JAR
+        attributes 'ContainedDeps': coreJar.archivePath.name
+        attributes 'FMLAT': 'dsurround_at.cfg'
     }
+    
+    // Only run the main jar task after the coremod JAR was completely built
+    dependsOn signCoreJar
 }
 
 def parseConfig(File config) {
@@ -118,7 +179,9 @@ task deobfJar(type: Jar) {
     classifier = 'dev'
     
     manifest {
-        	attributes('FMLCorePlugin': 'org.blockartistry.DynSurround.asm.TransformLoader', 'FMLCorePluginContainsFMLMod': 'true', 'FMLAT': 'dsurround_at.cfg')
+        // The crucial manifest attribute: Make Forge extract the contained JAR
+        attributes 'ContainedDeps': coreJar.archivePath.name
+        attributes 'FMLAT': 'dsurround_at.cfg'
     }
 }
 
@@ -137,6 +200,7 @@ task signJar(type: SignJar, dependsOn: reobfJar) {
 }
 
 signJar.dependsOn build
+signJar.dependsOn signCoreJar
 
 artifacts {
     archives deobfJar

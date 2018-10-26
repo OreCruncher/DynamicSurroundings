@@ -23,7 +23,6 @@
  */
 package org.blockartistry.DynSurround.asm;
 
-import org.blockartistry.lib.asm.Transmorgrifier;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;

@@ -26,7 +26,6 @@ package org.blockartistry.DynSurround.asm;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.blockartistry.lib.asm.MyTransformer;
 
 public class Transformer extends MyTransformer {
 
@@ -51,11 +50,6 @@ public class Transformer extends MyTransformer {
 		addTransmorgrifier(new PatchSoundManagerSync());
 		addTransmorgrifier(new PatchParticleManagerSync());
 		addTransmorgrifier(new PatchEntityArrow());
-
-		// Sound engine crash patches
-		addTransmorgrifier(new SoundCrashFixSource());
-		addTransmorgrifier(new SoundCrashFixLibrary());
-		addTransmorgrifier(new SoundCrashFixStreamThread());
 	}
 
 }

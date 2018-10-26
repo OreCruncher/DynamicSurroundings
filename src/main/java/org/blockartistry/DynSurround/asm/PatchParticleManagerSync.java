@@ -23,8 +23,7 @@
  */
 package org.blockartistry.DynSurround.asm;
 
-import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.lib.asm.Transmorgrifier;
+import org.apache.commons.lang3.StringUtils;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -42,7 +41,8 @@ public class PatchParticleManagerSync extends Transmorgrifier {
 
 	@Override
 	public boolean isEnabled() {
-		return ModOptions.asm.enableParticleManagerSync;
+		return TransformLoader.config.getBoolean("Enable synchronized for ParticleManager", "asm", true,
+				StringUtils.EMPTY);
 	}
 
 	@Override

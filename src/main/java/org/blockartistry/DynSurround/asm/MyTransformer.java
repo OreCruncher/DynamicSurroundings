@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.lib.asm;
+package org.blockartistry.DynSurround.asm;
 
 import static org.objectweb.asm.Opcodes.ASM5;
 

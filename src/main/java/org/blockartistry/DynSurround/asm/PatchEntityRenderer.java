@@ -28,8 +28,7 @@ import static org.objectweb.asm.Opcodes.ALOAD;
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import static org.objectweb.asm.Opcodes.RETURN;
 
-import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.lib.asm.Transmorgrifier;
+import org.apache.commons.lang3.StringUtils;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
@@ -50,7 +49,7 @@ public class PatchEntityRenderer extends Transmorgrifier {
 
 	@Override
 	public boolean isEnabled() {
-		return ModOptions.asm.enableWeatherASM;
+		return TransformLoader.config.getBoolean("Enable Weather Control", "asm", true, StringUtils.EMPTY);
 	}
 
 	@Override

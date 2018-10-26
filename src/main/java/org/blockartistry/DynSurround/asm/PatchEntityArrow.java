@@ -23,8 +23,7 @@
  */
 package org.blockartistry.DynSurround.asm;
 
-import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.lib.asm.Transmorgrifier;
+import org.apache.commons.lang3.StringUtils;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -45,7 +44,8 @@ public class PatchEntityArrow extends Transmorgrifier {
 
 	@Override
 	public boolean isEnabled() {
-		return ModOptions.asm.disableArrowParticleTrail;
+		return TransformLoader.config.getBoolean("Disable Arrow Critical Particle Trail", "asm", true,
+				StringUtils.EMPTY);
 	}
 
 	@Override

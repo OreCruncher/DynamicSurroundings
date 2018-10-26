@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.lib.asm;
+package org.blockartistry.DynSurround.asm;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

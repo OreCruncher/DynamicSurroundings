@@ -25,7 +25,6 @@ package org.blockartistry.DynSurround.asm;
 
 import static org.objectweb.asm.Opcodes.ALOAD;
 
-import org.blockartistry.lib.asm.Transmorgrifier;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;

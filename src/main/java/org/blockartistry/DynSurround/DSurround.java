@@ -72,7 +72,7 @@ public class DSurround {
 	public static final String MOD_NAME = "Dynamic Surroundings";
 	public static final String VERSION = "@VERSION@";
 	public static final String MINECRAFT_VERSIONS = "[1.12.2,)";
-	public static final String DEPENDENCIES = "required-after:forge@[14.23.1.2555,); after:galacticraftcore; after:ambientsounds";
+	public static final String DEPENDENCIES = "required-after:forge@[14.23.2.2635,); after:galacticraftcore; after:ambientsounds";
 	public static final String GUI_FACTORY = "org.blockartistry.DynSurround.client.gui.ConfigGuiFactory";
 	public static final String UPDATE_URL = "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json";
 	public static final String FINGERPRINT = "7a2128d395ad96ceb9d9030fbd41d035b435753a";

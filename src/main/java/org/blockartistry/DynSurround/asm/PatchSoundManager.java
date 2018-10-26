@@ -28,8 +28,7 @@ import static org.objectweb.asm.Opcodes.ALOAD;
 import static org.objectweb.asm.Opcodes.ARETURN;
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 
-import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.lib.asm.Transmorgrifier;
+import org.apache.commons.lang3.StringUtils;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
@@ -51,7 +50,7 @@ public class PatchSoundManager extends Transmorgrifier {
 
 	@Override
 	public boolean isEnabled() {
-		return ModOptions.asm.enableSoundCache;
+		return TransformLoader.config.getBoolean("Enable Sound Caching", "asm", true, StringUtils.EMPTY);
 	}
 
 	@Override
