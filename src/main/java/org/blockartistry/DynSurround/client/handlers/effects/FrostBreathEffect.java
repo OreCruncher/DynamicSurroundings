@@ -29,12 +29,12 @@ import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.DynSurround.client.ClientRegistry;
+import org.blockartistry.DynSurround.client.effects.EntityEffect;
+import org.blockartistry.DynSurround.client.effects.IEntityEffectFactory;
+import org.blockartistry.DynSurround.client.effects.IEntityEffectFactoryFilter;
+import org.blockartistry.DynSurround.client.effects.IEntityEffectHandlerState;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleBreath;
 import org.blockartistry.DynSurround.registry.EntityEffectInfo;
-import org.blockartistry.lib.effects.EntityEffect;
-import org.blockartistry.lib.effects.IEntityEffectFactory;
-import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
-import org.blockartistry.lib.effects.IEntityEffectHandlerState;
 
 import com.google.common.collect.ImmutableList;
 

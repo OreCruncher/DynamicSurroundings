@@ -21,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.blockartistry.lib.effects;
+package org.blockartistry.DynSurround.client.effects;
+
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
@@ -32,23 +34,24 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * An IEntityEffectFactoryFilter is used by the EntityEffectLibrary to determine
- * if a particular EntityEffect would be applied to an Entity.
- *
+ * An IEntityEffectFactory creates an EntityEffect when it gets attached to an
+ * EntityEffectHandler.
  */
 @SideOnly(Side.CLIENT)
 @FunctionalInterface
-public interface IEntityEffectFactoryFilter {
+public interface IEntityEffectFactory {
 
 	/**
-	 * Evaluates the Entity to determine if an EntityEffect will apply.
+	 * Creates 0 or more IEffects for the specified Entity. It is possible that some
+	 * condition on the Entity may prevent creation.
 	 *
 	 * @param entity
-	 *            The subject of the evaluation
+	 *            The subject of the EntityEffect
 	 * @param eei
-	 *            An object containing the Entities effect parameters
-	 * @return true if the EntityEffect applies, false otherwise
+	 *            An object containing the Entities configuration parameters
+	 * @return A list of 0 or more IEffects to attach
 	 */
-	boolean applies(@Nonnull final Entity entity, @Nonnull final EntityEffectInfo eei);
+	@Nonnull
+	List<EntityEffect> create(@Nonnull final Entity entity, @Nonnull final EntityEffectInfo eei);
 
 }

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.blockartistry.lib.effects;
+package org.blockartistry.DynSurround.client.effects;
 
 import javax.annotation.Nonnull;
 

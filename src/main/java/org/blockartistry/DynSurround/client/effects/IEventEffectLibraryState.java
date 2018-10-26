@@ -21,30 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.blockartistry.lib.effects;
+package org.blockartistry.DynSurround.client.effects;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * State from the EntityEffectHandler that is being provided to an EntityEffect
- * during processing.
- */
 @SideOnly(Side.CLIENT)
-public interface IEntityEffectHandlerState extends IEntityEffectState {
+public interface IEventEffectLibraryState extends IEffectState {
 
 	/**
-	 * Whether the EntityEffectHandler is alive or dead.
+	 * Indicates if the specified player is the one sitting behind the screen.
 	 *
-	 * @return true if the EntityEffectHandler is active, false otherwise.
+	 * @param player
+	 *            The EntityPlayer to check
+	 * @return true if it is the local player, false otherwise
 	 */
-	boolean isAlive();
-
-	/**
-	 * Provides the distance, squared, to the player entity behind the keyboard.
-	 *
-	 * @return Range to client player, squared.
-	 */
-	double rangeToPlayerSq();
+	@Override
+	boolean isActivePlayer(@Nonnull final Entity player);
 
 }

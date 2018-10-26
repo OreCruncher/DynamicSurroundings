@@ -21,66 +21,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.blockartistry.lib.effects;
+package org.blockartistry.DynSurround.client.effects;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
 import org.blockartistry.lib.sound.ITrackedSound;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * Interface common to all states within the effect framework.
+ */
 @SideOnly(Side.CLIENT)
-public class EffectStateBase implements IEffectState {
-
-	protected final IParticleHelper particleHelper;
-	protected final ISoundHelper soundHelper;
-
-	public EffectStateBase(@Nonnull final IParticleHelper ph, @Nonnull final ISoundHelper sh) {
-		this.particleHelper = ph;
-		this.soundHelper = sh;
-	}
+public interface IEffectState {
 
 	/**
-	 * Used by an EntityEffect to add a Particle to the system.
+	 * Used to add a Particle to the system.
 	 *
 	 * @param particle
 	 *            The Particle instance to add to the particle system.
 	 */
-	@Override
-	public void addParticle(final Particle particle) {
-		this.particleHelper.addParticle(particle);
-	}
+	void addParticle(@Nonnull final Particle particle);
 
 	/**
-	 * Used by an EntityEffect to play a sound.
+	 * Used to play a sound.
 	 *
-	 * @param The
-	 *            sound to play
+	 * @param sound
+	 *            The sound to play
 	 * @return Unique ID identifying the sound in the sound system
 	 */
-	@Override
 	@Nullable
-	public String playSound(@Nonnull final ITrackedSound sound) {
-		return this.soundHelper.playSound(sound);
-	}
+	String playSound(@Nonnull final ITrackedSound sound);
 
 	/**
 	 * Stops the specified sound in the sound system from playing.
 	 *
-	 * @param soundId
+	 * @param sound
+	 *            The sound to stop playing
 	 */
-	@Override
-	public void stopSound(@Nonnull final ITrackedSound sound) {
-		this.soundHelper.stopSound(sound);
-	}
+	void stopSound(@Nonnull final ITrackedSound sound);
 
 	/**
 	 * Creates a BasicSound<> object for the specified SoundEffect centered at the
@@ -93,34 +78,24 @@ public class EffectStateBase implements IEffectState {
 	 *            The player location of where the sound will be generated
 	 * @return A BasicSound<?> with applicable properties set
 	 */
-	@Override
 	@Nonnull
-	public BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player) {
-		return se.createTrackingSound(player, false);
-	}
+	ITrackedSound createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player);
 
 	/**
-	 * Determines if the specified Entity is the current active player.
+	 * Indicates if the specified player is the one sitting behind the screen.
 	 *
 	 * @param player
-	 *            The Entity to evaluate
-	 * @return true if the Entity is the current player, false otherwise
+	 *            The EntityPlayer to check
+	 * @return true if it is the local player, false otherwise
 	 */
-	@Override
-	public boolean isActivePlayer(@Nonnull final Entity player) {
-		final EntityPlayer ep = Minecraft.getMinecraft().player;
-		return ep != null && ep.getEntityId() == player.getEntityId();
-	}
+	boolean isActivePlayer(@Nonnull final Entity player);
 
 	/**
 	 * Obtain a reference to the client's player
 	 *
 	 * @return Reference to the EntityPlayer. Will not be null.
 	 */
-	@Override
 	@Nonnull
-	public EntityPlayer thePlayer() {
-		return Minecraft.getMinecraft().player;
-	}
+	EntityPlayer thePlayer();
 
 }

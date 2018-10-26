@@ -21,25 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.blockartistry.lib.effects;
+package org.blockartistry.DynSurround.client.effects;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.client.particle.Particle;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public interface IEventEffectLibraryState extends IEffectState {
-
-	/**
-	 * Indicates if the specified player is the one sitting behind the screen.
-	 *
-	 * @param player
-	 *            The EntityPlayer to check
-	 * @return true if it is the local player, false otherwise
-	 */
-	@Override
-	boolean isActivePlayer(@Nonnull final Entity player);
-
+@FunctionalInterface
+public interface IParticleHelper {
+	void addParticle(@Nonnull final Particle particle);
 }

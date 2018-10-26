@@ -21,16 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.blockartistry.lib.effects;
+package org.blockartistry.DynSurround.client.effects;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.client.particle.Particle;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * State from the EntityEffectHandler that is being provided to an EntityEffect
+ * during processing.
+ */
 @SideOnly(Side.CLIENT)
-@FunctionalInterface
-public interface IParticleHelper {
-	void addParticle(@Nonnull final Particle particle);
+public interface IEntityEffectHandlerState extends IEntityEffectState {
+
+	/**
+	 * Whether the EntityEffectHandler is alive or dead.
+	 *
+	 * @return true if the EntityEffectHandler is active, false otherwise.
+	 */
+	boolean isAlive();
+
+	/**
+	 * Provides the distance, squared, to the player entity behind the keyboard.
+	 *
+	 * @return Range to client player, squared.
+	 */
+	double rangeToPlayerSq();
+
 }

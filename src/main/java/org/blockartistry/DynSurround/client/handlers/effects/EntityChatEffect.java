@@ -37,14 +37,14 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.DynSurround.DSurround;
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.effects.EntityEffect;
+import org.blockartistry.DynSurround.client.effects.IEntityEffectFactory;
+import org.blockartistry.DynSurround.client.effects.IEntityEffectFactoryFilter;
 import org.blockartistry.DynSurround.event.SpeechTextEvent;
 import org.blockartistry.DynSurround.registry.EntityEffectInfo;
 import org.blockartistry.lib.Translations;
 import org.blockartistry.lib.WeightTable;
 import org.blockartistry.lib.compat.EntityUtil;
-import org.blockartistry.lib.effects.EntityEffect;
-import org.blockartistry.lib.effects.IEntityEffectFactory;
-import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
 import org.blockartistry.lib.random.XorShiftRandom;
 
 import com.google.common.base.Predicate;

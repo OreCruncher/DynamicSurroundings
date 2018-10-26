@@ -21,51 +21,71 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.blockartistry.lib.effects;
+package org.blockartistry.DynSurround.client.effects;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
+import org.blockartistry.DynSurround.client.sound.BasicSound;
 import org.blockartistry.DynSurround.client.sound.SoundEffect;
-import org.blockartistry.lib.sound.ITrackedSound;
 
-import net.minecraft.client.particle.Particle;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * Interface common to all states within the effect framework.
+ * The EventEffectLibrary is the focal point of EventEffect management. It is
+ * responsible for registration and tear down of associated events as needed.
+ *
  */
 @SideOnly(Side.CLIENT)
-public interface IEffectState {
+public class EventEffectLibrary extends EffectStateBase implements IEventEffectLibraryState {
+
+	protected final List<EventEffect> effects = new ArrayList<>();
+
+	public EventEffectLibrary(@Nonnull final IParticleHelper ph, @Nonnull final ISoundHelper sh) {
+		super(ph, sh);
+	}
 
 	/**
-	 * Used to add a Particle to the system.
+	 * Registers the EventEffect with the EventEffectLibrary. The reference will
+	 * automatically be registered with Forge, and will be tracked.
 	 *
-	 * @param particle
-	 *            The Particle instance to add to the particle system.
+	 * @param effect
+	 *            EventEffect instance to register
 	 */
-	void addParticle(@Nonnull final Particle particle);
+	public void register(@Nonnull final EventEffect effect) {
+		effect.setState(this);
+		this.effects.add(effect);
+		MinecraftForge.EVENT_BUS.register(effect);
+	}
 
 	/**
-	 * Used to play a sound.
-	 *
-	 * @param sound
-	 *            The sound to play
-	 * @return Unique ID identifying the sound in the sound system
+	 * Unregisters all EventEffects that have been registered prior to going out of
+	 * scope.
 	 */
-	@Nullable
-	String playSound(@Nonnull final ITrackedSound sound);
+	public void cleanup() {
+		this.effects.forEach(MinecraftForge.EVENT_BUS::unregister);
+		this.effects.clear();
+	}
 
 	/**
-	 * Stops the specified sound in the sound system from playing.
+	 * Indicates if the specified player is the one sitting behind the screen.
 	 *
-	 * @param sound
-	 *            The sound to stop playing
+	 * @param player
+	 *            The EntityPlayer to check
+	 * @return true if it is the local player, false otherwise
 	 */
-	void stopSound(@Nonnull final ITrackedSound sound);
+	@Override
+	public boolean isActivePlayer(@Nonnull final Entity player) {
+		final EntityPlayer ep = Minecraft.getMinecraft().player;
+		return ep != null && ep.getEntityId() == player.getEntityId();
+	}
 
 	/**
 	 * Creates a BasicSound<> object for the specified SoundEffect centered at the
@@ -78,24 +98,12 @@ public interface IEffectState {
 	 *            The player location of where the sound will be generated
 	 * @return A BasicSound<?> with applicable properties set
 	 */
+	@Override
 	@Nonnull
-	ITrackedSound createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player);
-
-	/**
-	 * Indicates if the specified player is the one sitting behind the screen.
-	 *
-	 * @param player
-	 *            The EntityPlayer to check
-	 * @return true if it is the local player, false otherwise
-	 */
-	boolean isActivePlayer(@Nonnull final Entity player);
-
-	/**
-	 * Obtain a reference to the client's player
-	 *
-	 * @return Reference to the EntityPlayer. Will not be null.
-	 */
-	@Nonnull
-	EntityPlayer thePlayer();
+	public BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player) {
+		if (isActivePlayer(player))
+			return se.createTrackingSound(player, false);
+		return se.createSoundNear(player);
+	}
 
 }

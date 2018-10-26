@@ -28,14 +28,14 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
+import org.blockartistry.DynSurround.client.effects.EntityEffect;
+import org.blockartistry.DynSurround.client.effects.IEntityEffectFactory;
+import org.blockartistry.DynSurround.client.effects.IEntityEffectFactoryFilter;
+import org.blockartistry.DynSurround.client.effects.IEntityEffectHandlerState;
 import org.blockartistry.DynSurround.client.fx.particle.ParticleTextPopOff;
 import org.blockartistry.DynSurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.blockartistry.DynSurround.registry.EntityEffectInfo;
 import org.blockartistry.lib.Color;
-import org.blockartistry.lib.effects.EntityEffect;
-import org.blockartistry.lib.effects.IEntityEffectFactory;
-import org.blockartistry.lib.effects.IEntityEffectFactoryFilter;
-import org.blockartistry.lib.effects.IEntityEffectHandlerState;
 import org.blockartistry.lib.math.MathStuff;
 import org.blockartistry.lib.random.XorShiftRandom;
 

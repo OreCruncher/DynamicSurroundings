@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.lib.effects;
+package org.blockartistry.DynSurround.client.effects;
 
 import java.util.ArrayList;
 import java.util.List;
