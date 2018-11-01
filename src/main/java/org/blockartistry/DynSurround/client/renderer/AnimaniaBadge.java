@@ -24,165 +24,41 @@
 
 package org.blockartistry.DynSurround.client.renderer;
 
-import java.lang.reflect.Method;
-import java.util.IdentityHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
+import javax.annotation.Nonnull;
 
 import org.blockartistry.DynSurround.ModOptions;
-import org.blockartistry.DynSurround.client.keyboard.KeyHandler;
-import org.blockartistry.DynSurround.client.renderer.BadgeRenderLayer.IItemStackProvider;
-import org.blockartistry.DynSurround.client.renderer.BadgeRenderLayer.IShowBadge;
-import org.blockartistry.lib.ForgeUtils;
-import org.lwjgl.input.Keyboard;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderLivingBase;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// There are two styles of interface available with Animania.  The classic one
+// depends on crawling the entity lists matching various critters.  The other
+// uses a standard interface.
+
 @SideOnly(Side.CLIENT)
-public final class AnimaniaBadge implements IItemStackProvider {
-
-	// Possible food/water items for badging.
-	private final static ItemStack WATER_BUCKET = new ItemStack(Items.WATER_BUCKET);
-	private final static ItemStack SEEDS = new ItemStack(Items.WHEAT_SEEDS);
-	private final static ItemStack WHEAT = new ItemStack(Items.WHEAT);
-	private final static ItemStack APPLE = new ItemStack(Items.APPLE);
-	private final static ItemStack CARROT = new ItemStack(Items.CARROT);
-	private final static ItemStack EGG = new ItemStack(Items.EGG);
-	private final static ItemStack RABBIT_FOOD = CARROT;
-	private final static ItemStack HAMSTER_FOOD;
-
-	private static final IShowBadge BADGE_DISPLAY_CHECK = () -> {
-		return KeyHandler.ANIMANIA_BADGES == null || KeyHandler.ANIMANIA_BADGES.isKeyDown()
-				|| KeyHandler.ANIMANIA_BADGES.getKeyCode() == Keyboard.KEY_NONE;
-	};
-
-	static {
-		final Item item = ForgeUtils.getItem("animania:hamster_food");
-		HAMSTER_FOOD = item != null ? new ItemStack(item) : ItemStack.EMPTY;
+public final class AnimaniaBadge {
+	
+	private AnimaniaBadge() {
+		
 	}
-
-	private Method food;
-	private Method water;
-	private ItemStack foodItem;
-
-	private float dY;
-
-	private AnimaniaBadge(final Class<?> clazz, final ItemStack food, final float dY) {
-		try {
-			this.food = clazz.getMethod("getFed");
-			this.water = clazz.getMethod("getWatered");
-			this.foodItem = food;
-			this.dY = dY;
-		} catch (final Throwable t) {
-			this.food = null;
-			this.water = null;
-		}
-	}
-
-	@Override
-	public float adjustY() {
-		return this.dY;
-	}
-
-	@Override
-	public ItemStack getStackToDisplay(final EntityLivingBase e) {
-		if (!getWatered(e))
-			return WATER_BUCKET;
-		else if (!getFed(e))
-			return this.foodItem;
-		else
-			return ItemStack.EMPTY;
-	}
-
-	private boolean getFed(final Entity e) {
-		try {
-			return (boolean) this.food.invoke(e);
-		} catch (final Throwable t) {
-			return true;
-		}
-	}
-
-	private boolean getWatered(final Entity e) {
-		try {
-			return (boolean) this.water.invoke(e);
-		} catch (final Throwable t) {
-			return true;
-		}
-	}
-
-	private boolean isValid() {
-		return this.food != null && this.water != null;
-	}
-
-	// ====================================================================
-	//
-	// Initialization for the entity models and what not
-	//
-	// ====================================================================
-
-	private static void add(final Map<Class<?>, AnimaniaBadge> theMap, final String className, final ItemStack food) {
-		add(theMap, className, food, 0F);
-	}
-
-	private static void add(final Map<Class<?>, AnimaniaBadge> theMap, final String className, final ItemStack food,
-			final float dY) {
-		try {
-			final Class<?> clazz = Class.forName(className);
-			final AnimaniaBadge a = new AnimaniaBadge(clazz, food, dY);
-			if (a.isValid()) {
-				theMap.put(clazz, a);
-			}
-		} catch (final Throwable t) {
-			;
-		}
-	}
-
+	
+	
 	public static void intitialize() {
 		if (!ModOptions.speechbubbles.enableAnimaniaBadges)
 			return;
-
-		final Map<Class<?>, AnimaniaBadge> classMap = new IdentityHashMap<>();
-		add(classMap, "com.animania.common.entities.chickens.EntityAnimaniaChicken", SEEDS);
-		add(classMap, "com.animania.common.entities.cows.EntityAnimaniaCow", WHEAT);
-		add(classMap, "com.animania.common.entities.goats.EntityAnimaniaGoat", WHEAT);
-		add(classMap, "com.animania.common.entities.horses.EntityAnimaniaHorse", APPLE);
-		add(classMap, "com.animania.common.entities.peacocks.EntityAnimaniaPeacock", SEEDS);
-		add(classMap, "com.animania.common.entities.pigs.EntityAnimaniaPig", CARROT);
-		add(classMap, "com.animania.common.entities.sheep.EntityAnimaniaSheep", WHEAT);
-		add(classMap, "com.animania.common.entities.rodents.EntityFerretBase", EGG);
-		add(classMap, "com.animania.common.entities.rodents.EntityHedgehogBase", CARROT);
-		add(classMap, "com.animania.common.entities.rodents.EntityHamster", HAMSTER_FOOD);
-		add(classMap, "com.animania.common.entities.rodents.rabbits.EntityAnimaniaRabbit", RABBIT_FOOD);
-
-		// Iterate our entity class hierarchy looking for matches and make sure
-		// they are in the map directly - avoid repeated lookups at run time.
-		final RenderManager rm = Minecraft.getMinecraft().getRenderManager();
-		for (final ResourceLocation r : EntityList.getEntityNameList()) {
-			final Class<? extends Entity> clazz = EntityList.getClass(r);
-			if (clazz != null) {
-				final Optional<Entry<Class<?>, AnimaniaBadge>> result = classMap.entrySet().stream()
-						.filter(e -> e.getKey().isAssignableFrom(clazz)).findFirst();
-				if (result.isPresent()) {
-					final Render<Entity> renderer = rm.getEntityClassRenderObject(clazz);
-					if (renderer instanceof RenderLivingBase) {
-						((RenderLivingBase<?>) renderer)
-								.addLayer(new BadgeRenderLayer(BADGE_DISPLAY_CHECK, result.get().getValue()));
-					}
-				}
-			}
+		
+		boolean useNew = false;
+		
+		try {
+			// Will throw exception if the interface is not present
+			Class.forName("com.animania.common.entities.interfaces.IFoodEating");
+			useNew = true;
+		} catch(@Nonnull final Throwable t) {
+			;
 		}
+		
+		if (useNew)
+			AnimaniaBadge2.intitialize();
+		else
+			AnimaniaBadge1.intitialize();
 	}
 }
