@@ -1,3 +1,11 @@
+### DynamicSurroundings-1.12.2-3.4.10.0
+**What's New**
+* Display hunger/thirst indicators above Animania mobs when they are hungry/thirsty.  Option to disable can be found under Speech Bubble options.  Note that this feature has no effect if you do not have Animania installed.
+    * You can make a keybind that when pressed will show the badging.  By default, there is no keybind so that badging will always display.
+* Support for MineColonies NPCs.  They will have footsteps, breath, weapon sounds, armor sounds, etc. like vanilla mobs.  (Depending on your sound tolerance you may need to tweak down the volume for the blunt and tool swing sounds.)
+* ASM logic was moved into a separate JAR and embedded in the main mod JAR as per Forge's guidelines.  You should not seen any differences.
+* Minimum required Forge version is now 14.23.2.2635.  Starting with this version of Forge, Minecraft's sound engine is patched so the ASM patching that Dynamic Surroundings was doing is no longer needed.
+
 ### DynamicSurroundings-1.12.2-3.4.9.17
 **What's New**
 * Support for AncientWarfare 2 NPC sounds.  They will have footsteps, breath, weapon sounds, armor sounds, etc. like vanilla mobs.  (Depending on your sound tolerance you may need to tweak down the volume for the blunt and tool swing sounds.)
