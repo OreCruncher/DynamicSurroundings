@@ -44,7 +44,7 @@ public class BiomeVariables extends DynamicVariantList {
 		add(new Dynamic.DynamicString("biome.modid") {
 			@Override
 			public void update() {
-				this.value = EnvironState.getPlayerBiome().getKey().getResourceDomain();
+				this.value = EnvironState.getPlayerBiome().getKey().getNamespace();
 			}
 		});
 		add(new Dynamic.DynamicString("biome.temperature") {

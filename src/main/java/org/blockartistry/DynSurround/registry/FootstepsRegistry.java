@@ -369,7 +369,7 @@ public final class FootstepsRegistry extends Registry {
 		final String soundName;
 		boolean flag = false;
 
-		if (type.getStepSound() == null || type.getStepSound().getSoundName().getResourcePath().isEmpty()) {
+		if (type.getStepSound() == null || type.getStepSound().getSoundName().getNamespace().isEmpty()) {
 			soundName = "UNDEFINED";
 			flag = true;
 		} else

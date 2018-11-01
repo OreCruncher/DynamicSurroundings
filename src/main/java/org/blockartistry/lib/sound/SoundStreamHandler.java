@@ -57,7 +57,7 @@ public class SoundStreamHandler extends URLStreamHandler {
 
 	public String getSpec() {
 		return String.format("%s:%s:%s",
-				new Object[] { "mcsounddomain", this.resource.getResourceDomain(), this.resource.getResourcePath() });
+				new Object[] { "mcsounddomain", this.resource.getNamespace(), this.resource.getPath() });
 	}
 
 }

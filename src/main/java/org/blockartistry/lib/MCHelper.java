@@ -65,7 +65,7 @@ public final class MCHelper {
 
 		final NonNullList<ItemStack> stacks = NonNullList.create();
 		try {
-			block.getSubBlocks(block.getCreativeTabToDisplayOn(), stacks);
+			block.getSubBlocks(block.getCreativeTab(), stacks);
 		} catch (final Throwable t) {
 			return false;
 		}

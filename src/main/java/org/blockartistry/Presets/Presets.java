@@ -82,7 +82,7 @@ public class Presets {
 	@Nonnull
 	@SideOnly(Side.CLIENT)
 	public static Profiler getProfiler() {
-		return Minecraft.getMinecraft().mcProfiler;
+		return Minecraft.getMinecraft().profiler;
 	}
 
 	public Presets() {

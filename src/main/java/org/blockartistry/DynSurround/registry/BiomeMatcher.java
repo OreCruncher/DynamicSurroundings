@@ -171,7 +171,7 @@ public abstract class BiomeMatcher {
 
 				@Override
 				public String asString() {
-					return ConditionsImpl.this.current.getKey().getResourceDomain();
+					return ConditionsImpl.this.current.getKey().getNamespace();
 				}
 
 				@Override
@@ -251,8 +251,8 @@ public abstract class BiomeMatcher {
 
 			// Add the biomes in the biome list
 			for (final ResourceLocation b : Biome.REGISTRY.getKeys())
-				if ("minecraft".equals(b.getResourceDomain()))
-					this.exp.addVariable(new StringValue("biomeType." + b.getResourcePath(), b.toString()));
+				if ("minecraft".equals(b.getNamespace()))
+					this.exp.addVariable(new StringValue("biomeType." + b.getPath(), b.toString()));
 
 			// Add a function to do some biome comparisons
 			this.exp.addFunction(new Function("biome.isLike", 1) {

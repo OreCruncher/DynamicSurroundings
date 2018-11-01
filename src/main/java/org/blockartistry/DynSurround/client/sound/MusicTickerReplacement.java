@@ -113,7 +113,7 @@ public class MusicTickerReplacement extends MusicTicker {
 			DSurround.log().info("ActualMusic is installed; MusicTicker is NOT being replaced!");
 		} else {
 			try {
-				final Field ticker = ReflectionHelper.findField(Minecraft.class, "mcMusicTicker", "field_147126_aw");
+				final Field ticker = ReflectionHelper.findField(Minecraft.class, "musicTicker", "field_147126_aw");
 				if (ticker != null) {
 					final Minecraft mc = Minecraft.getMinecraft();
 					ticker.set(mc, new MusicTickerReplacement(mc));

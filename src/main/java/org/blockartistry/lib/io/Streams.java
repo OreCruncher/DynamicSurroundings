@@ -57,8 +57,8 @@ public class Streams {
 	}
 
 	public static String readResourceAsString(final ResourceLocation resource) throws Exception {
-		final String assetPath = String.format("/assets/%s/%s", resource.getResourceDomain(),
-				resource.getResourcePath());
+		final String assetPath = String.format("/assets/%s/%s", resource.getNamespace(),
+				resource.getPath());
 		try (final InputStream stream = Streams.class.getResourceAsStream(assetPath)) {
 			if (stream != null) {
 				try (final BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"))) {

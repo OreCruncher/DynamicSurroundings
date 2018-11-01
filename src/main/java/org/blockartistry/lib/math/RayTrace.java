@@ -71,7 +71,7 @@ public final class RayTrace {
 		final World world = entity.getEntityWorld();
 		final Vec3d eyes = entity.getPositionEyes(1F);
 		final Vec3d look = entity.getLook(1F); // 1.0F?
-		final Vec3d rangedLook = eyes.addVector(look.x * range, look.y * range, look.z * range);
+		final Vec3d rangedLook = eyes.add(look.x * range, look.y * range, look.z * range);
 
 		RayTraceResult traceResult = rayTraceBlocks(world, eyes, rangedLook, false, false, true);
 

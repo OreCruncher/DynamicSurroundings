@@ -61,7 +61,7 @@ public final class EntityUtil {
 	public static String getClassName(@Nonnull final Class<? extends Entity> entityClass) {
 		final ResourceLocation key = EntityList.getKey(entityClass);
 		if (key != null)
-			return key.getResourcePath();
+			return key.getPath();
 		return "EntityHasNoClass";
 	}
 }

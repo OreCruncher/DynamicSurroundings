@@ -24,24 +24,16 @@
 
 package org.blockartistry.DynSurround.client.fx.particle.mote;
 
-import javax.annotation.Nullable;
-
-import org.blockartistry.DynSurround.ModOptions;
 import org.blockartistry.lib.Color;
 
-import elucent.albedo.lighting.ILightProvider;
-import elucent.albedo.lighting.Light;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-@Optional.Interface(iface = "elucent.albedo.lighting.ILightProvider", modid = "albedo")
-public class MoteFireFly extends MoteAnimatedBase implements ILightProvider {
+public class MoteFireFly extends MoteAnimatedBase {
 
 	private static final int startColorRGB = Color.YELLOW.rgb();
 	private static final int fadeColorRGB = Color.LGREEN.rgb();
@@ -85,35 +77,4 @@ public class MoteFireFly extends MoteAnimatedBase implements ILightProvider {
 			super.renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
 
 	}
-
-	@Optional.Method(modid = "albedo")
-	protected double lightedX(final float partialTicks) {
-		return (float) (this.prevX + (this.posX - this.prevX) * partialTicks);
-	}
-
-	@Optional.Method(modid = "albedo")
-	protected double lightedY(final float partialTicks) {
-		return (float) (this.prevY + (this.posY - this.prevY) * partialTicks);
-	}
-
-	@Optional.Method(modid = "albedo")
-	protected double lightedZ(final float partialTicks) {
-		return (float) (this.prevZ + (this.posZ - this.prevZ) * partialTicks);
-	}
-
-	@Optional.Method(modid = "albedo")
-	@Override
-	@Nullable
-	public Light provideLight() {
-		if (ModOptions.lighting.enableAlbedoSupport && ModOptions.lighting.enableFireFlyLighting) {
-			final float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
-			final double x = lightedX(partialTicks);
-			final double y = lightedY(partialTicks);
-			final double z = lightedZ(partialTicks);
-			final float alpha = 0.5F * this.alpha;
-			return Light.builder().pos(x, y, z).color(this.red, this.green, this.blue, alpha).radius(1.0F).build();
-		}
-		return null;
-	}
-
 }
