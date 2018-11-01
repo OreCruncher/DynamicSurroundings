@@ -1,3 +1,8 @@
+### DynamicSurroundings-1.12.2-3.5.0.0
+**Changes**
+* Removed reset rain on sleep configuration option.  It was little used and broadly improves compatibility because it eliminates some ASM.
+* Removed rain control parameters.  These options were seldom used.
+
 ### DynamicSurroundings-1.12.2-3.4.10.0
 **What's New**
 * Display hunger/thirst indicators above Animania mobs when they are hungry/thirsty.  Option to disable can be found under Speech Bubble options.  Note that this feature has no effect if you do not have Animania installed.

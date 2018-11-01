@@ -1,6 +1,6 @@
 {
 	"pack": {
-		"pack_format": 2,
-		"description": "Dynamic Surroundings Assets"
+		"description": "Dynamic Surroundings Assets",
+		"pack_format": 3
 	}
 }

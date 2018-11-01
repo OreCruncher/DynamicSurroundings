@@ -109,13 +109,13 @@ task coreJar(type: Jar) {
     from(sourceSets.main.output) {
         // Include the coremod package
         // If you need additional files, add some more includes
-        include 'org/blockartistry/DynSurround/asm/**'
+        include 'org/orecruncher/dsurround/asm/**'
     }
     
     // Standard coremod manifest definitions
     manifest {
         // Added benefit of separating mod and coremod: No need for FMLCorePluginContainsFMLMod
-        attributes 'FMLCorePlugin': "org.blockartistry.DynSurround.asm.TransformLoader"
+        attributes 'FMLCorePlugin': "org.orecruncher.dsurround.asm.TransformLoader"
         
         // Strictly speaking not required (right now)
         // Allows Forge to extract the dependency to a local repository (Given that the corresponding PR is merged)
@@ -149,7 +149,7 @@ task signCoreJar(type: SignJar, dependsOn: reobfCoreJar) {
 jar {
         // Don't include the coremod in the main JAR
     // If you have more coremod-related packages that aren't nested in the main one, add inclusions for them
-    exclude 'org/blockartistry/DynSurround/asm/**'
+    exclude 'org/orecruncher/dsurround/asm/**'
     
     // Add the output of the coremod JAR task to the main JAR for later extraction
     from(coreJar.archivePath.absolutePath) {

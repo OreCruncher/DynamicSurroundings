@@ -1,0 +1,91 @@
+/*
+ * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+ *
+ * Copyright (c) OreCruncher
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.orecruncher.dsurround.client.handlers.effects;
+
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import org.orecruncher.dsurround.client.ClientRegistry;
+import org.orecruncher.dsurround.client.effects.EntityEffect;
+import org.orecruncher.dsurround.client.effects.IEntityEffectFactory;
+import org.orecruncher.dsurround.client.effects.IEntityEffectFactoryFilter;
+import org.orecruncher.dsurround.client.sound.SoundEffect;
+import org.orecruncher.dsurround.registry.EntityEffectInfo;
+import org.orecruncher.lib.ItemStackUtil;
+import org.orecruncher.lib.sound.ITrackedSound;
+
+import com.google.common.collect.ImmutableList;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
+public class EntityBowSoundEffect extends EntityEffect {
+
+	protected ItemStack lastActiveStack;
+
+	@Override
+	public String name() {
+		return "Bow Sound";
+	}
+
+	@Override
+	public void update(@Nonnull final Entity subject) {
+		final EntityLivingBase entity = (EntityLivingBase) subject;
+		final ItemStack currentStack = entity.getActiveItemStack();
+		if (ItemStackUtil.isValidItemStack(currentStack)) {
+
+			if (this.lastActiveStack == null || !ItemStack.areItemStacksEqual(currentStack, this.lastActiveStack)) {
+				if (ClientRegistry.ITEMS.isBow(currentStack) || ClientRegistry.ITEMS.isShield(currentStack)) {
+					final SoundEffect soundEffect = ClientRegistry.ITEMS.getUseSound(currentStack);
+					if (soundEffect != null) {
+						final ITrackedSound fx = getState().createSound(soundEffect, entity);
+						getState().playSound(fx);
+					}
+				}
+
+				this.lastActiveStack = currentStack;
+			}
+
+		} else {
+			this.lastActiveStack = null;
+		}
+	}
+
+	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = (@Nonnull final Entity e,
+			@Nonnull final EntityEffectInfo eei) -> eei.effects.contains("bow");
+
+	public static class Factory implements IEntityEffectFactory {
+
+		@Override
+		public List<EntityEffect> create(@Nonnull final Entity entity, @Nonnull final EntityEffectInfo eei) {
+			return ImmutableList.of(new EntityBowSoundEffect());
+		}
+	}
+
+}
