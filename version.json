@@ -2,11 +2,11 @@
 	"homepage": "https://minecraft.curseforge.com/projects/dynamic-surroundings/files",
 	"1.10.2": {
 		"3.4.7.2": "See https://github.com/OreCruncher/DynamicSurroundings/blob/1.10.2/CHANGELOG.md",
-		"3.4.9.15": "See https://github.com/OreCruncher/DynamicSurroundings/blob/1.10.2/CHANGELOG.md"
+		"3.4.9.17": "See https://github.com/OreCruncher/DynamicSurroundings/blob/1.10.2/CHANGELOG.md"
 	},
 	"1.11.2": {
 		"3.4.7.2": "See https://github.com/OreCruncher/DynamicSurroundings/blob/1.11.2/CHANGELOG.md",
-		"3.4.9.15": "See https://github.com/OreCruncher/DynamicSurroundings/blob/1.11.2/CHANGELOG.md"
+		"3.4.9.17": "See https://github.com/OreCruncher/DynamicSurroundings/blob/1.11.2/CHANGELOG.md"
 	},
 	"1.12": {
 		"3.4.7.2": "See https://github.com/OreCruncher/DynamicSurroundings/blob/master/CHANGELOG.md",
@@ -18,18 +18,18 @@
 	},
 	"1.12.2": {
 		"3.4.7.2": "See https://github.com/OreCruncher/DynamicSurroundings/blob/master/CHANGELOG.md",
-		"3.4.9.16": "See https://github.com/OreCruncher/DynamicSurroundings/blob/master/CHANGELOG.md"
+		"3.4.10.0": "See https://github.com/OreCruncher/DynamicSurroundings/blob/master/CHANGELOG.md"
 	},
 	"promos": {
-		"1.10.2-latest": "3.4.9.15",
-		"1.10.2-recommended": "3.4.9.15",
-		"1.11.2-latest": "3.4.9.15",
-		"1.11.2-recommended": "3.4.9.15",
+		"1.10.2-latest": "3.4.9.17",
+		"1.10.2-recommended": "3.4.9.17",
+		"1.11.2-latest": "3.4.9.17",
+		"1.11.2-recommended": "3.4.9.17",
 		"1.12-latest": "3.4.9.15",
 		"1.12-recommended": "3.4.9.15",
 		"1.12.1-latest": "3.4.9.15",
 		"1.12.1-recommended": "3.4.9.15",
-		"1.12.2-latest": "3.4.9.16",
+		"1.12.2-latest": "3.4.10.0",
 		"1.12.2-recommended": "3.4.9.16"
 	}
 }
