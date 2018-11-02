@@ -35,7 +35,7 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.ThemeInfo;
 import org.orecruncher.dsurround.registry.config.EntityConfig;
-import org.orecruncher.dsurround.registry.config.ModConfigurationFile;
+import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.themes.GloamwoodTheme;
 
 import net.minecraft.entity.Entity;
@@ -73,7 +73,7 @@ public class EffectRegistry extends Registry {
 	}
 
 	@Override
-	public void configure(@Nonnull final ModConfigurationFile cfg) {
+	public void configure(@Nonnull final ModConfiguration cfg) {
 		for (final Entry<String, EntityConfig> e : cfg.entities.entrySet()) {
 
 			final String entityName = e.getKey();

@@ -24,6 +24,8 @@ package org.orecruncher.lib.task;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.ModBase;
+
 import com.google.common.util.concurrent.ListenableFuture;
 
 import net.minecraft.client.Minecraft;
@@ -78,7 +80,7 @@ public final class Scheduler {
 			t.start();
 			t.join();
 		} catch (@Nonnull final Throwable t) {
-
+			ModBase.log().error("Error executing deferred task", t);
 		}
 	}
 }

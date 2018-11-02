@@ -26,7 +26,6 @@ package org.orecruncher.dsurround.registry.config;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -37,6 +36,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -50,12 +51,10 @@ import org.orecruncher.dsurround.data.Profiles;
 import org.orecruncher.dsurround.data.Profiles.ProfileScript;
 import org.orecruncher.dsurround.registry.config.packs.ResourcePacks;
 import org.orecruncher.dsurround.registry.config.packs.ResourcePacks.Pack;
-
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.MalformedJsonException;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
@@ -68,13 +67,23 @@ import net.minecraftforge.fml.common.ModContainer;
  * allow quick resets of the Registries due to external events (like biome
  * changes on world load).
  */
-public final class ConfigData implements Iterable<ModConfigurationFile> {
+public final class ConfigData implements Iterable<ModConfiguration> {
 
 	// Holder of the compressed bytes containing our configuration
 	private final byte[] crunchyBits;
 
 	private ConfigData(@Nonnull final byte[] theBits) {
 		this.crunchyBits = theBits;
+	}
+	
+	/**
+	 * Returns a stream reference for the ModConfiguration elements stored
+	 * internally.
+	 * 
+	 * @return
+	 */
+	public Stream<ModConfiguration> stream() {
+		return StreamSupport.stream(this.spliterator(), false);
 	}
 
 	// Injects a string into the array list. Used to put a marker that conveys
@@ -100,10 +109,8 @@ public final class ConfigData implements Iterable<ModConfigurationFile> {
 	}
 
 	// Reads strings from the buffered reader, trims them, and outputs to the output
-	// writer
-	// if the length of the trimmed string is > 0. Used to compress a lot of the
-	// whitespace
-	// that can be found in a hand edited Json file.
+	// writer if the length of the trimmed string is > 0. Used to compress a lot of
+	// the whitespace that can be found in a hand edited Json file.
 	protected static void copy(@Nonnull final BufferedReader reader, @Nonnull final OutputStreamWriter out) {
 		String line = null;
 		try {
@@ -118,12 +125,25 @@ public final class ConfigData implements Iterable<ModConfigurationFile> {
 	}
 
 	// Copies the data from the input stream to the output stream. The text is
-	// injected before the write,
-	// and a comma is prepended if the flag indicates to do so.
+	// injected before the write, and a comma is prepended if the flag
+	// indicates to do so.
 	protected static boolean copy(@Nonnull final InputStreamReader in, @Nonnull final OutputStreamWriter out,
 			@Nonnull final String text, final boolean comma) {
 		try {
 			try (final BufferedReader reader = new BufferedReader(in)) {
+				// This bit o crap will force the validation of the object
+				// in the stream.
+				try {
+					reader.mark(64 * 1024);
+					@SuppressWarnings({ "unused", "resource" })
+					JsonReader r = new JsonReader(reader);
+					@SuppressWarnings("unused")
+					final ModConfiguration ref = new Gson().fromJson(reader, ModConfiguration.class);
+				} finally {
+					reader.reset();
+				}
+
+				// Where the rubber meets the road
 				if (comma)
 					appendComma(out);
 				injectString(text, out);
@@ -131,6 +151,8 @@ public final class ConfigData implements Iterable<ModConfigurationFile> {
 				ModBase.log().debug("Loaded %s", text);
 				return true;
 			}
+		} catch(@Nonnull final JsonSyntaxException | MalformedJsonException vf) {
+			ModBase.log().warn("Json validation failed for %s: %s", text, vf.getMessage());
 		} catch (@Nonnull final Throwable t) {
 			ModBase.log().error(text, t);
 		}
@@ -138,8 +160,8 @@ public final class ConfigData implements Iterable<ModConfigurationFile> {
 	}
 
 	// Copies the specified resource from the given pack to the output location.
-	// Essentially it will
-	// be reading config Json information from resource packs and jars.
+	// Essentially it will be reading config Json information from resource
+	// packs and jars.
 	protected static boolean copy(@Nonnull final Pack p, @Nonnull ResourceLocation rl,
 			@Nonnull final OutputStreamWriter output, @Nullable String text, final boolean comma) {
 		try (final InputStream is = p.getInputStream(rl)) {
@@ -236,6 +258,27 @@ public final class ConfigData implements Iterable<ModConfigurationFile> {
 		return new ConfigData(bits.toByteArray());
 	}
 
+	@Override
+	@Nonnull
+	public Iterator<ModConfiguration> iterator() {
+		try {
+			return new MCFIterator(this.crunchyBits);
+		} catch (@Nonnull final Throwable t) {
+			ModBase.log().error("Unable to create ModConfiguration iterator", t);
+			return new Iterator<ModConfiguration>() {
+				@Override
+				public boolean hasNext() {
+					return false;
+				}
+
+				@Override
+				public ModConfiguration next() {
+					throw new IllegalStateException("Huh?");
+				}
+			};
+		}
+	}
+
 	protected static void dump(@Nonnull final byte[] demBytes) {
 
 		try {
@@ -250,71 +293,6 @@ public final class ConfigData implements Iterable<ModConfigurationFile> {
 
 		} catch (@Nonnull final Throwable t) {
 			ModBase.log().error("Error dumping bytes!", t);
-		}
-
-	}
-
-	@Override
-	@Nonnull
-	public Iterator<ModConfigurationFile> iterator() {
-		try {
-			return new MCFIterator(this.crunchyBits);
-		} catch (@Nonnull final Throwable t) {
-			ModBase.log().error("Unable to create ModConfigurationFile iterator", t);
-			return new Iterator<ModConfigurationFile>() {
-				@Override
-				public boolean hasNext() {
-					return false;
-				}
-
-				@Override
-				public ModConfigurationFile next() {
-					throw new IllegalStateException("Huh?");
-				}
-			};
-		}
-	}
-
-	class MCFIterator implements Iterator<ModConfigurationFile>, Closeable {
-
-		private final Gson gson;
-		private final JsonReader reader;
-
-		protected MCFIterator(@Nonnull final byte[] bits) throws IOException {
-			this.gson = new GsonBuilder().create();
-			this.reader = new JsonReader(new InputStreamReader(new GZIPInputStream(new ByteArrayInputStream(bits))));
-			this.reader.beginArray();
-		}
-
-		@Override
-		public boolean hasNext() {
-			try {
-				return this.reader.hasNext();
-			} catch (@Nonnull final IOException ex) {
-				ModBase.log().error("Unable to read from memory!", ex);
-			}
-			return false;
-		}
-
-		@Override
-		@Nullable
-		public ModConfigurationFile next() {
-			String source = null;
-			try {
-				// Should be a string followed by our Json object
-				source = this.gson.fromJson(this.reader, String.class);
-				final ModConfigurationFile mcf = this.gson.fromJson(this.reader, ModConfigurationFile.class);
-				mcf.source = source;
-				return mcf;
-			} catch (@Nonnull final JsonSyntaxException | JsonIOException ex) {
-				ModBase.log().error(source != null ? source : "Unable to parse Json from memory!", ex);
-				return null;
-			}
-		}
-
-		@Override
-		public void close() throws IOException {
-			this.reader.close();
 		}
 
 	}

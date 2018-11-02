@@ -29,7 +29,6 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,10 +37,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class FootstepSound extends BasicSound<FootstepSound> {
 
 	public FootstepSound(@Nonnull final Entity player, @Nonnull final SoundEvent event) {
-		super(event, SoundCategory.PLAYERS);
+		super(event, Sounds.FOOTSTEPS);
 
 		this.setPosition(player);
-		setVolumeScale(BasicSound.FOOTSTEP_SCALE);
 		if (EnvironState.isPlayer(player))
 			setAttenuationType(noAttenuation());
 	}

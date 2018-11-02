@@ -8,6 +8,10 @@ dsurround.metadata.Credits=\n\n§6Wirsbo§r for §2BetterRain§r\n§6MrRube§r f
 dsurround.metadata.Authors=§6OreCruncher§r,§6Abastro§r
 dsurround.metadata.Description=Adds a variety of §6sound§r and §6visual§r effects to improve your Minecraft experience
 
+# Minecraft dialog related things
+soundCategory.ds_footsteps=Footsteps
+soundCategory.ds_biome=Biomes
+
 # String formatting
 dsurround.format.TimeOfDay=Day %1$d, %2$d:%3$02d %4$s
 dsurround.format.AM=AM

@@ -71,7 +71,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
 import net.minecraftforge.client.event.sound.SoundSetupEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -83,19 +83,10 @@ import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.Source;
 
-@Mod.EventBusSubscriber(value = Side.CLIENT, modid = ModBase.MOD_ID)
+@EventBusSubscriber(value = Side.CLIENT, modid = ModBase.MOD_ID)
 public final class SoundEngine {
 
 	private static Field soundPhysicsGlobalVolume;
-
-	static {
-		try {
-			final Class<?> soundPhysics = Class.forName("com.sonicether.soundphysics.SoundPhysics");
-			soundPhysicsGlobalVolume = ReflectionHelper.findField(soundPhysics, "globalVolumeMultiplier");
-		} catch (final Exception ex) {
-			soundPhysicsGlobalVolume = null;
-		}
-	}
 
 	private static final Field getSoundManager = ReflectionHelper.findField(SoundHandler.class, "sndManager",
 			"field_147694_f");
@@ -116,6 +107,15 @@ public final class SoundEngine {
 	// Maximum number of sound channels configured in the sound system
 	private static int maxSounds = 0;
 	private static SoundEngine instance_;
+
+	static {
+		try {
+			final Class<?> soundPhysics = Class.forName("com.sonicether.soundphysics.SoundPhysics");
+			soundPhysicsGlobalVolume = ReflectionHelper.findField(soundPhysics, "globalVolumeMultiplier");
+		} catch (final Exception ex) {
+			soundPhysicsGlobalVolume = null;
+		}
+	}
 
 	public static SoundEngine instance() {
 		if (instance_ == null)
@@ -184,7 +184,7 @@ public final class SoundEngine {
 	public static void flushSound() {
 		instance().flushSoundQueue();
 	}
-	
+
 	private void flushSoundQueue() {
 		getSoundSystem().CommandQueue(null);
 	}
@@ -209,7 +209,7 @@ public final class SoundEngine {
 	 * Determines if the sound is currently playing within the sound system
 	 *
 	 * @param sound
-	 *            The sound to check
+	 *                  The sound to check
 	 * @return true if the sound is currently playing, false otherwise
 	 */
 	public boolean isSoundPlaying(@Nonnull final ITrackedSound sound) {
@@ -220,7 +220,7 @@ public final class SoundEngine {
 	 * Stops the specified sound if it is playing.
 	 *
 	 * @param sound
-	 *            The sound to stop
+	 *                  The sound to stop
 	 */
 	public void stopSound(@Nonnull final ITrackedSound sound) {
 		if (sound.getState().isActive()) {
@@ -243,7 +243,7 @@ public final class SoundEngine {
 	 * Submits the sound to the sound system to be played.
 	 *
 	 * @param sound
-	 *            Sound to play
+	 *                  Sound to play
 	 * @return ID assigned to the sound by the sound system. A null or empty return
 	 *         indicates that the sound was not submitted
 	 */
@@ -315,7 +315,7 @@ public final class SoundEngine {
 	 * aren't update the state accordingly.
 	 *
 	 * @param event
-	 *            Event that was raised
+	 *                  Event that was raised
 	 */
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void clientTick(@Nonnull TickEvent.ClientTickEvent event) {
@@ -369,7 +369,7 @@ public final class SoundEngine {
 	 * Sets the mute state of the sound system based on the flag provided.
 	 *
 	 * @param flag
-	 *            true to mute the sound system, false to unmute
+	 *                 true to mute the sound system, false to unmute
 	 */
 	public void setMuted(final boolean flag) {
 		// OpenEye: Looks like the command thread is dead or not initialized.
@@ -394,7 +394,7 @@ public final class SoundEngine {
 	 * thread.
 	 *
 	 * @param event
-	 *            Incoming event that has been raised
+	 *                  Incoming event that has been raised
 	 */
 	@SubscribeEvent
 	public void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
@@ -406,7 +406,7 @@ public final class SoundEngine {
 	 * Event handler for the diagnostic event.
 	 *
 	 * @param event
-	 *            Event that has been raised.
+	 *                  Event that has been raised.
 	 */
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void diagnostics(final DiagnosticEvent.Gather event) {
@@ -433,7 +433,7 @@ public final class SoundEngine {
 		event.output.addAll(results);
 	}
 
-	private static float getVolume(@Nonnull final SoundCategory category) {
+	public static float getVolume(@Nonnull final SoundCategory category) {
 		final GameSettings settings = Minecraft.getMinecraft().gameSettings;
 		return settings != null && category != null && category != SoundCategory.MASTER
 				? settings.getSoundLevel(category)
@@ -457,7 +457,7 @@ public final class SoundEngine {
 	 * volume is scaled by additional configuration information.
 	 *
 	 * @param sound
-	 *            The sound object where volume is being calculated
+	 *                  The sound object where volume is being calculated
 	 * @return Clamped volume for playing the sound
 	 */
 	public static float getClampedVolume(@Nonnull final ISound sound) {
@@ -484,7 +484,7 @@ public final class SoundEngine {
 	 * Event handler for configuring the sound channels of the sound engine.
 	 *
 	 * @param event
-	 *            Event that has been raised
+	 *                  Event that has been raised
 	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void configureSound(@Nonnull final SoundSetupEvent event) {

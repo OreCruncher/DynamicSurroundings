@@ -63,7 +63,7 @@ public final class HumDinger {
 						try {
 							SoundEngine.instance().playSound(new AdhocSound(se, SoundCategory.MASTER));
 						} catch (@Nonnull final Throwable t) {
-							;
+							ModBase.log().error("Error executing ding", t);
 						}
 					});
 				} else {

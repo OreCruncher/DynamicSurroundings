@@ -49,7 +49,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 	private long lastTick;
 
 	TrackingSound(@Nonnull final Entity attachedTo, @Nonnull final SoundEffect sound, final boolean fadeIn) {
-		super(sound.getSound(), sound.getCategory());
+		super(sound.getSound(), Sounds.BIOME);
 
 		this.attachedTo = attachedTo;
 
@@ -64,7 +64,6 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 		this.lastTick = EnvironState.getTickCounter() - 1;
 
 		updateLocation();
-		setVolumeScale(BasicSound.BIOME_EFFECT_SCALE);
 	}
 
 	@Override

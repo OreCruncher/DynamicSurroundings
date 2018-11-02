@@ -24,31 +24,30 @@
 
 package org.orecruncher.dsurround.asm;
 
-import org.apache.logging.log4j.Logger;
+import org.objectweb.asm.tree.ClassNode;
 
-public class Transformer extends MyTransformer {
+import net.minecraft.util.SoundCategory;
+import net.minecraftforge.common.util.EnumHelper;
 
-	private static final Logger logger = TransformLoader.logger;
+public class SoundCategoryAdditions extends Transmorgrifier {
 
-	public static Logger log() {
-		return logger;
-	}
-
-	public Transformer() {
-		super(logger);
+	public SoundCategoryAdditions() {
+		super("net.minecraft.client.settings.GameSettings");
 	}
 
 	@Override
-	protected void initTransmorgrifiers() {
-		addTransmorgrifier(new PatchEntityRenderer());
-		addTransmorgrifier(new PatchSoundManager());
-		addTransmorgrifier(new PatchSoundManagerPlayTime());
-		addTransmorgrifier(new PatchSoundManagerClampVolume());
-		addTransmorgrifier(new SoundPlayFlush());
-		addTransmorgrifier(new PatchSoundManagerSync());
-		addTransmorgrifier(new PatchParticleManagerSync());
-		addTransmorgrifier(new PatchEntityArrow());
-		addTransmorgrifier(new SoundCategoryAdditions());
+	public String name() {
+		return "SoundCategory Additions";
+	}
+
+	@Override
+	public boolean transmorgrify(final ClassNode cn) {
+
+		// Add our new sound categories
+		EnumHelper.addEnum(SoundCategory.class, "DS_FOOTSTEPS", new Class<?>[] { String.class }, "ds_footsteps");
+		EnumHelper.addEnum(SoundCategory.class, "DS_BIOME", new Class<?>[] { String.class }, "ds_biome");
+
+		return true;
 	}
 
 }

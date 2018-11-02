@@ -29,7 +29,6 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.lib.compat.ModEnvironment;
 import org.orecruncher.lib.random.XorShiftRandom;
 import org.orecruncher.lib.sound.ITrackedSound;
@@ -65,9 +64,8 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound
 		float getScale();
 	}
 
+	// TODO: Do we need?
 	public static final ISoundScale DEFAULT_SCALE = () -> 1.0F;
-	public static final ISoundScale FOOTSTEP_SCALE = () -> ModOptions.sound.footstepsSoundFactor;
-	public static final ISoundScale BIOME_EFFECT_SCALE = () -> ModOptions.sound.masterSoundScaleFactor;
 
 	public static class NBT {
 		public static final String SOUND_EVENT = "s";

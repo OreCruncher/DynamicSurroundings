@@ -189,7 +189,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 
 	@SideOnly(Side.CLIENT)
 	public BasicSound<?> createSoundAt(@Nonnull final BlockPos pos) {
-		return new AdhocSound(this.sound, this.category).setPosition(pos).setVolumeScale(BasicSound.BIOME_EFFECT_SCALE);
+		return new AdhocSound(this.sound, Sounds.BIOME).setPosition(pos);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -197,8 +197,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 		final float posX = (float) (player.posX + randomRange(SPOT_SOUND_RANGE));
 		final float posY = (float) (player.posY + player.getEyeHeight() + randomRange(SPOT_SOUND_RANGE));
 		final float posZ = (float) (player.posZ + randomRange(SPOT_SOUND_RANGE));
-		return new AdhocSound(this.sound, this.category).setPosition(posX, posY, posZ)
-				.setVolumeScale(BasicSound.BIOME_EFFECT_SCALE);
+		return new AdhocSound(this.sound, Sounds.BIOME).setPosition(posX, posY, posZ);
 	}
 
 	@SideOnly(Side.CLIENT)

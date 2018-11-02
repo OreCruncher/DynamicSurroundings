@@ -41,7 +41,7 @@ import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironStat
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.config.BiomeConfig;
-import org.orecruncher.dsurround.registry.config.ModConfigurationFile;
+import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.dimension.DimensionInfo;
 import org.orecruncher.lib.math.MathStuff;
 
@@ -104,7 +104,7 @@ public final class BiomeRegistry extends Registry {
 		if (evt.getWorld().isRemote) {
 			ModBase.log().info("Reloading biome registry due to world load...");
 			init();
-			for (final ModConfigurationFile mcf : RegistryManager.DATA.get())
+			for (final ModConfiguration mcf : RegistryManager.DATA.get())
 				configure(mcf);
 			initComplete();
 		}
@@ -162,7 +162,7 @@ public final class BiomeRegistry extends Registry {
 	}
 
 	@Override
-	public void configure(@Nonnull final ModConfigurationFile cfg) {
+	public void configure(@Nonnull final ModConfiguration cfg) {
 		cfg.biomeAlias.forEach((alias, biome) -> registerBiomeAlias(alias, biome));
 		cfg.biomes.forEach(biome -> register(biome));
 	}

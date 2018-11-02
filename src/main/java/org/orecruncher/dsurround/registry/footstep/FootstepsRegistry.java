@@ -57,9 +57,9 @@ import org.orecruncher.dsurround.client.footsteps.system.GeneratorQP;
 import org.orecruncher.dsurround.client.footsteps.util.ConfigProperty;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.block.BlockInfo;
-import org.orecruncher.dsurround.registry.config.ModConfigurationFile;
+import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.config.VariatorConfig;
-import org.orecruncher.dsurround.registry.config.ModConfigurationFile.ForgeEntry;
+import org.orecruncher.dsurround.registry.config.ModConfiguration.ForgeEntry;
 import org.orecruncher.dsurround.registry.config.packs.ResourcePacks;
 import org.orecruncher.dsurround.registry.config.packs.ResourcePacks.Pack;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
@@ -159,7 +159,7 @@ public final class FootstepsRegistry extends Registry {
 	}
 
 	@Override
-	public void configure(@Nonnull final ModConfigurationFile cfg) {
+	public void configure(@Nonnull final ModConfiguration cfg) {
 		for (final ForgeEntry entry : cfg.forgeMappings) {
 			for (final String name : entry.dictionaryEntries)
 				registerForgeEntries(entry.acousticProfile, name);

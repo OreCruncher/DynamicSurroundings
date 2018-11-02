@@ -33,7 +33,7 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.event.ReloadEvent;
 import org.orecruncher.dsurround.registry.config.ConfigData;
-import org.orecruncher.dsurround.registry.config.ModConfigurationFile;
+import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.lib.SideLocal;
 import org.orecruncher.lib.Singleton;
 import org.orecruncher.lib.task.Scheduler;
@@ -137,7 +137,7 @@ public final class RegistryManager {
 
 		// Process the configuration data
 		ModBase.log().info("Loading configuration Json from sources");
-		for (final ModConfigurationFile mcf : DATA.get()) {
+		for (final ModConfiguration mcf : DATA.get()) {
 			ModBase.log().info("Processing %s", mcf.source);
 			this.initOrder.forEach(reg -> reg.configure(mcf));
 		}

@@ -486,7 +486,6 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_EQUIP_SOUND = "Equip Sound";
 	public static final String CONFIG_SWORD_AS_TOOL_EQUIP_SOUND = "Sword Equip as Tool";
 	public static final String CONFIG_ENABLE_CRAFTING_SOUND = "Crafting Sound";
-	public static final String CONFIG_FOOTSTEPS_SOUND_FACTOR = "Footsteps Sound Factor";
 	public static final String CONFIG_FOOTSTEPS_QUAD = "Footsteps as Quadruped";
 	public static final String CONFIG_FOOTSTEPS_CADENCE = "First Person Footstep Cadence";
 	public static final String CONFIG_ENABLE_ARMOR_SOUND = "Armor Sound";
@@ -505,27 +504,19 @@ public final class ModOptions {
 	public static class sound {
 
 		public static String PATH = null;
-		public static final List<String> SORT = Arrays.asList(CONFIG_ENABLE_BIOME_SOUNDS, CONFIG_MASTER_SOUND_FACTOR,
-				CONFIG_FOOTSTEPS_SOUND_FACTOR, CONFIG_FOOTSTEPS_QUAD, CONFIG_FOOTSTEPS_CADENCE,
-				CONFIG_ENABLE_ARMOR_SOUND, CONFIG_ENABLE_SWING_SOUND, CONFIG_ENABLE_PUDDLE_SOUND,
-				CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_EQUIP_SOUND, CONFIG_SWORD_AS_TOOL_EQUIP_SOUND,
-				CONFIG_ENABLE_CRAFTING_SOUND, CONFIG_AUTO_CONFIG_CHANNELS, CONFIG_NORMAL_CHANNEL_COUNT,
-				CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_STREAM_BUFFER_SIZE, CONFIG_STREAM_BUFFER_COUNT,
-				CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS, CONFIG_SOUND_CULL_THRESHOLD,
-				CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES, CONFIG_ENABLE_BATTLEMUSIC);
+		public static final List<String> SORT = Arrays.asList(CONFIG_ENABLE_BIOME_SOUNDS, CONFIG_FOOTSTEPS_QUAD,
+				CONFIG_FOOTSTEPS_CADENCE, CONFIG_ENABLE_ARMOR_SOUND, CONFIG_ENABLE_SWING_SOUND,
+				CONFIG_ENABLE_PUDDLE_SOUND, CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_EQUIP_SOUND,
+				CONFIG_SWORD_AS_TOOL_EQUIP_SOUND, CONFIG_ENABLE_CRAFTING_SOUND, CONFIG_AUTO_CONFIG_CHANNELS,
+				CONFIG_NORMAL_CHANNEL_COUNT, CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_STREAM_BUFFER_SIZE,
+				CONFIG_STREAM_BUFFER_COUNT, CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS,
+				CONFIG_SOUND_CULL_THRESHOLD, CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES, CONFIG_ENABLE_BATTLEMUSIC);
 
 		@Option(CONFIG_ENABLE_BIOME_SOUNDS)
 		@DefaultValue("true")
 		@LangKey("dsurround.cfg.sound.BiomeSounds")
 		@Comment("Enable biome background and spot sounds")
 		public static boolean enableBiomeSounds = true;
-
-		@Option(CONFIG_MASTER_SOUND_FACTOR)
-		@DefaultValue("1.0")
-		@LangKey("dsurround.cfg.sound.MasterScale")
-		@RangeFloat(min = 0.0F, max = 1.0F)
-		@Comment("Master volume scale factor for biome and block sounds")
-		public static float masterSoundScaleFactor = 1.0F;
 
 		@Option(CONFIG_AUTO_CONFIG_CHANNELS)
 		@DefaultValue("true")
@@ -602,13 +593,6 @@ public final class ModOptions {
 		@LangKey("dsurround.cfg.sound.Craft")
 		@Comment("Enable Item Crafted sound effect")
 		public static boolean enableCraftingSound = true;
-
-		@Option(CONFIG_FOOTSTEPS_SOUND_FACTOR)
-		@DefaultValue("0.35")
-		@LangKey("dsurround.cfg.sound.FootstepScale")
-		@RangeFloat(min = 0.0F, max = 1.0F)
-		@Comment("Volume scale factor for footstep sounds")
-		public static float footstepsSoundFactor = 0.35F;
 
 		@Option(CONFIG_FOOTSTEPS_QUAD)
 		@DefaultValue("false")

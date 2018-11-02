@@ -42,7 +42,7 @@ import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.block.BlockInfo.BlockInfoMutable;
 import org.orecruncher.dsurround.registry.config.BlockConfig;
 import org.orecruncher.dsurround.registry.config.EffectConfig;
-import org.orecruncher.dsurround.registry.config.ModConfigurationFile;
+import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.config.SoundConfig;
 import org.orecruncher.dsurround.registry.config.SoundType;
 import org.orecruncher.dsurround.registry.sound.SoundRegistry;
@@ -76,7 +76,7 @@ public final class BlockRegistry extends Registry {
 	}
 
 	@Override
-	public void configure(@Nonnull final ModConfigurationFile cfg) {
+	public void configure(@Nonnull final ModConfiguration cfg) {
 		for (final BlockConfig block : cfg.blocks)
 			register(block);
 	}

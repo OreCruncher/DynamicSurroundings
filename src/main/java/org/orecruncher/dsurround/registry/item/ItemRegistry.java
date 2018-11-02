@@ -39,7 +39,7 @@ import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.config.ItemConfig;
-import org.orecruncher.dsurround.registry.config.ModConfigurationFile;
+import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
 import org.orecruncher.lib.collections.IdentityHashSet;
@@ -100,7 +100,7 @@ public final class ItemRegistry extends Registry {
 	}
 
 	@Override
-	public void configure(@Nonnull final ModConfigurationFile cfg) {
+	public void configure(@Nonnull final ModConfiguration cfg) {
 		final ItemConfig config = cfg.itemConfig;
 		process(config.axeSound, this.axeItems, ItemType.AXE, null);
 		process(config.bowSound, this.bowItems, ItemType.BOW, null);

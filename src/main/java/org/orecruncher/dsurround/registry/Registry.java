@@ -28,7 +28,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.registry.config.ModConfigurationFile;
+import org.orecruncher.dsurround.registry.config.ModConfiguration;
 
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -44,12 +44,12 @@ public abstract class Registry {
 		// Override to provide initialization prior to configure
 	}
 
-	public final void handleConfigure(@Nonnull final List<ModConfigurationFile> theList) {
-		for (final ModConfigurationFile mcf : theList)
+	public final void handleConfigure(@Nonnull final List<ModConfiguration> theList) {
+		for (final ModConfiguration mcf : theList)
 			configure(mcf);
 	}
 
-	public abstract void configure(@Nonnull final ModConfigurationFile cfg);
+	public abstract void configure(@Nonnull final ModConfiguration cfg);
 
 	public void initComplete() {
 		// Override to provide post processing after configure

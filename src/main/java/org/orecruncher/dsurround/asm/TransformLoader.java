@@ -87,10 +87,5 @@ public class TransformLoader implements IFMLLoadingPlugin {
 			bus.register(this);
 			return true;
 		}
-
-//		@Subscribe
-		//public void postInit(final FMLPostInitializationEvent event) {
-//			TransformLoader.config = null;
-		//}
 	}
 }

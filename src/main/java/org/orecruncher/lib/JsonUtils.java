@@ -24,11 +24,8 @@
 
 package org.orecruncher.lib;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,35 +38,14 @@ public final class JsonUtils {
 
 	}
 
-	@SuppressWarnings("unused")
-	@Nonnull
-	public static <T> T load(@Nonnull final File file, @Nonnull final Class<T> clazz) throws Exception {
-		try (final InputStream stream = new FileInputStream(file)) {
-			if (stream != null)
-				return load(stream, clazz);
-		}
-		return clazz.newInstance();
-	}
+	public static class JsonValidationFailed extends RuntimeException {
 
-	@Nonnull
-	public static <T> T load(@Nonnull final String modId, @Nonnull final Class<T> clazz) throws Exception {
-		final String fileName = modId.replaceAll("[^a-zA-Z0-9.-]", "_");
-		try (final InputStream stream = clazz.getResourceAsStream("/assets/dsurround/data/" + fileName + ".json")) {
-			if (stream != null)
-				return load(stream, clazz);
-		}
-		return clazz.newInstance();
-	}
+		private static final long serialVersionUID = 1L;
 
-	@Nullable
-	public static <T> T load(@Nonnull final Reader stream, @Nonnull final Class<T> clazz) throws Exception {
-		try {
-			return new Gson().fromJson(stream, clazz);
-		} catch (final Throwable t) {
-			LibLog.log().error("Unable to process Json from stream", t);
-			;
+		public JsonValidationFailed(@Nonnull final String cause, @Nonnull final Throwable t) {
+			super(cause, t);
 		}
-		return clazz.newInstance();
+
 	}
 
 	@Nullable

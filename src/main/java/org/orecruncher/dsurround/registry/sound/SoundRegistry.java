@@ -35,7 +35,7 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.gui.ConfigSound;
 import org.orecruncher.dsurround.client.sound.SoundLoader;
 import org.orecruncher.dsurround.registry.Registry;
-import org.orecruncher.dsurround.registry.config.ModConfigurationFile;
+import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.lib.MyUtils;
 import org.orecruncher.lib.math.MathStuff;
 
@@ -88,7 +88,7 @@ public final class SoundRegistry extends Registry {
 	}
 
 	@Override
-	public void configure(@Nonnull final ModConfigurationFile cfg) {
+	public void configure(@Nonnull final ModConfiguration cfg) {
 		// Nothing to configure
 	}
 

@@ -30,7 +30,6 @@ import org.lwjgl.input.Keyboard;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.Permissions;
-import org.orecruncher.dsurround.client.gui.VolumeControlGui;
 import org.orecruncher.dsurround.client.hud.LightLevelHUD;
 import org.orecruncher.dsurround.client.hud.LightLevelHUD.Mode;
 import org.orecruncher.lib.Localization;
@@ -58,15 +57,11 @@ public class KeyHandler {
 	private static KeyBinding SELECTIONBOX_KEY;
 	private static KeyBinding LIGHTLEVEL_KEY;
 	private static KeyBinding CHUNKBORDER_KEY;
-	private static KeyBinding VOLUME_KEY;
 	public static KeyBinding ANIMANIA_BADGES;
 
 	public static void init() {
 		SELECTIONBOX_KEY = new KeyBinding("dsurround.cfg.keybind.SelectionBox", Keyboard.KEY_B, SECTION_NAME);
 		ClientRegistry.registerKeyBinding(SELECTIONBOX_KEY);
-
-		VOLUME_KEY = new KeyBinding("dsurround.cfg.keybind.Volume", Keyboard.KEY_V, SECTION_NAME);
-		ClientRegistry.registerKeyBinding(VOLUME_KEY);
 
 		if (ModEnvironment.Animania.isLoaded()) {
 			ANIMANIA_BADGES = new KeyBinding("dsurround.cfg.keybind.AnimaniaBadges", Keyboard.KEY_NONE, SECTION_NAME);
@@ -74,7 +69,7 @@ public class KeyHandler {
 		}
 
 		if (Permissions.instance().allowLightLevelHUD()) {
-			LIGHTLEVEL_KEY = new KeyBinding("dsurround.cfg.keybind.LightLevel", Keyboard.KEY_L, SECTION_NAME);
+			LIGHTLEVEL_KEY = new KeyBinding("dsurround.cfg.keybind.LightLevel", Keyboard.KEY_F7, SECTION_NAME);
 			ClientRegistry.registerKeyBinding(LIGHTLEVEL_KEY);
 		} else {
 			LIGHTLEVEL_KEY = null;
@@ -118,11 +113,6 @@ public class KeyHandler {
 			final boolean result = !EntityRendererUtil.getDrawBlockOutline(renderer);
 			EntityRendererUtil.setDrawBlockOutline(renderer, result);
 			sendPlayerMessage("dsurround.cfg.keybind.msg.Fencing", getOnOff(result));
-		}
-
-		if (shouldHandle(VOLUME_KEY) && Minecraft.getMinecraft().currentScreen == null) {
-			final VolumeControlGui gui = new VolumeControlGui();
-			Minecraft.getMinecraft().displayGuiScreen(gui);
 		}
 
 		if (shouldHandle(CHUNKBORDER_KEY)) {

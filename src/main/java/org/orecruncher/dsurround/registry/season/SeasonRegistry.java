@@ -32,7 +32,7 @@ import org.orecruncher.dsurround.registry.PrecipitationType;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.TemperatureRating;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
-import org.orecruncher.dsurround.registry.config.ModConfigurationFile;
+import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.lib.compat.ModEnvironment;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -51,7 +51,7 @@ public final class SeasonRegistry extends Registry {
 	}
 
 	@Override
-	public void configure(@Nonnull final ModConfigurationFile cfg) {
+	public void configure(@Nonnull final ModConfiguration cfg) {
 		// Nothing to configure
 	}
 

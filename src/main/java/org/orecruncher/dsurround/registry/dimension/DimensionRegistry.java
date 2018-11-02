@@ -32,7 +32,7 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.config.DimensionConfig;
-import org.orecruncher.dsurround.registry.config.ModConfigurationFile;
+import org.orecruncher.dsurround.registry.config.ModConfiguration;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.world.World;
@@ -51,7 +51,7 @@ public final class DimensionRegistry extends Registry {
 	}
 
 	@Override
-	public void configure(@Nonnull final ModConfigurationFile cfg) {
+	public void configure(@Nonnull final ModConfiguration cfg) {
 		cfg.dimensions.forEach(dim -> register(dim));
 	}
 

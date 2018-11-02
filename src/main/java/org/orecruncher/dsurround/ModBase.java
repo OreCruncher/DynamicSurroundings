@@ -165,6 +165,7 @@ public class ModBase {
 
 	@EventHandler
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
+
 		proxy.postInit(event);
 		config.save();
 

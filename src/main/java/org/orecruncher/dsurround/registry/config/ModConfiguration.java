@@ -31,8 +31,11 @@ import java.util.Map;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
 
-public final class ModConfigurationFile {
+public final class ModConfiguration {
 	
+	// This field will be filled out when it is loaded.  Intended
+	// to record the original source of the configuration because
+	// once it is cached that info would have been lost.
 	public String source = "<UNKNOWN>";
 
 	@SerializedName("biomes")

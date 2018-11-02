@@ -42,6 +42,8 @@ import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.client.footsteps.system.accents.FootstepAccents;
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.dsurround.client.sound.SoundEngine;
+import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.facade.FacadeHelper;
 import org.orecruncher.dsurround.registry.footstep.Variator;
 import org.orecruncher.lib.MyUtils;
@@ -154,7 +156,7 @@ public class Generator {
 			this.soundPlayer.playAcoustic(entity, AcousticsManager.JUMP, EventType.JUMP, null);
 		}
 
-		if (ModOptions.sound.footstepsSoundFactor > 0) {
+		if (SoundEngine.getVolume(Sounds.FOOTSTEPS) > 0) {
 			EntityUtil.setNextStepDistance(entity, Integer.MAX_VALUE);
 		} else {
 			final int dist = EntityUtil.getNextStepDistance(entity);

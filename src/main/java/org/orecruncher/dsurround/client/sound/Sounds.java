@@ -39,6 +39,10 @@ public final class Sounds {
 
 	}
 
+	// Mod added categories
+	public static final SoundCategory FOOTSTEPS = SoundCategory.valueOf("DS_FOOTSTEPS");
+	public static final SoundCategory BIOME = SoundCategory.valueOf("DS_BIOME");
+
 	public final static SoundEffect CRAFTING;
 	public final static SoundEffect SWORD_EQUIP;
 	public final static SoundEffect SWORD_SWING;
