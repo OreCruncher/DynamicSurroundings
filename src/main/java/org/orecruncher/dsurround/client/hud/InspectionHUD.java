@@ -37,7 +37,7 @@ import org.orecruncher.dsurround.client.handlers.EffectManager;
 import org.orecruncher.dsurround.client.handlers.FxHandler;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.dsurround.registry.BlockInfo;
+import org.orecruncher.dsurround.registry.block.BlockInfo;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
 import org.orecruncher.lib.WorldUtils;

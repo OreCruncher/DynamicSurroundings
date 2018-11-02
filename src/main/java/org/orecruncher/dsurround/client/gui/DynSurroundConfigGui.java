@@ -37,7 +37,7 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.Permissions;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
-import org.orecruncher.dsurround.registry.SoundRegistry;
+import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 import org.orecruncher.lib.ConfigProcessor;
 import org.orecruncher.lib.gui.GuiConfigBase;
 

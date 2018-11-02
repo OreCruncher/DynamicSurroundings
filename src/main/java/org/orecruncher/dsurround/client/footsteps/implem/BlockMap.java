@@ -38,7 +38,7 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.facade.FacadeHelper;
-import org.orecruncher.dsurround.registry.BlockInfo;
+import org.orecruncher.dsurround.registry.block.BlockInfo;
 import org.orecruncher.lib.BlockNameUtil;
 import org.orecruncher.lib.MCHelper;
 import org.orecruncher.lib.BlockNameUtil.NameResult;

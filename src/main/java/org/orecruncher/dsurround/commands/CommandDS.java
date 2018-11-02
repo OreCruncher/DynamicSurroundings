@@ -28,8 +28,8 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.data.DimensionEffectData;
 import org.orecruncher.dsurround.event.ReloadEvent;
+import org.orecruncher.dsurround.world.data.DimensionEffectData;
 import org.orecruncher.lib.Localization;
 
 import com.google.common.collect.ImmutableList;

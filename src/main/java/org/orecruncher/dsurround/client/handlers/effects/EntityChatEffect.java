@@ -41,7 +41,7 @@ import org.orecruncher.dsurround.client.effects.EntityEffect;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactory;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactoryFilter;
 import org.orecruncher.dsurround.event.SpeechTextEvent;
-import org.orecruncher.dsurround.registry.EntityEffectInfo;
+import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.lib.Translations;
 import org.orecruncher.lib.WeightTable;
 import org.orecruncher.lib.compat.EntityUtil;

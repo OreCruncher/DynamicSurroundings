@@ -38,7 +38,7 @@ import org.orecruncher.dsurround.client.footsteps.interfaces.ISoundPlayer;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.client.sound.BasicSound;
 import org.orecruncher.dsurround.client.sound.FootstepSound;
-import org.orecruncher.dsurround.registry.Variator;
+import org.orecruncher.dsurround.registry.footstep.Variator;
 import org.orecruncher.lib.MCHelper;
 import org.orecruncher.lib.TimeUtils;
 import org.orecruncher.lib.WorldUtils;

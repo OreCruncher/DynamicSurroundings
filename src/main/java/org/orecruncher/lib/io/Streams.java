@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 import javax.annotation.Nonnull;
 
@@ -48,6 +49,15 @@ public class Streams {
 		ByteStreams.copy(iStream, oStream);
 	}
 
+	public static void copy(@Nonnull final InputStreamReader iStream, @Nonnull final OutputStreamWriter oStream)
+			throws IOException {
+		final char[] buffer = new char[4096];
+		int len;
+		while ((len = iStream.read(buffer)) != -1) {
+			oStream.write(buffer, 0, len);
+		}
+	}
+
 	public static void copy(@Nonnull final InputStream stream, @Nonnull final File outFile) {
 		try (final FileOutputStream oFile = new FileOutputStream(outFile, false)) {
 			copy(stream, oFile);
@@ -57,8 +67,7 @@ public class Streams {
 	}
 
 	public static String readResourceAsString(final ResourceLocation resource) throws Exception {
-		final String assetPath = String.format("/assets/%s/%s", resource.getNamespace(),
-				resource.getPath());
+		final String assetPath = String.format("/assets/%s/%s", resource.getNamespace(), resource.getPath());
 		try (final InputStream stream = Streams.class.getResourceAsStream(assetPath)) {
 			if (stream != null) {
 				try (final BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"))) {

@@ -26,7 +26,7 @@ package org.orecruncher.dsurround.client.handlers.fog;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.registry.DimensionInfo;
+import org.orecruncher.dsurround.registry.dimension.DimensionInfo;
 
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.EntityViewRenderEvent;

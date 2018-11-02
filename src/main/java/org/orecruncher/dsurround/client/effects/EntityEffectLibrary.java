@@ -31,7 +31,7 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.client.ClientRegistry;
-import org.orecruncher.dsurround.registry.EntityEffectInfo;
+import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.lib.collections.ObjectArray;
 
 import net.minecraft.entity.Entity;

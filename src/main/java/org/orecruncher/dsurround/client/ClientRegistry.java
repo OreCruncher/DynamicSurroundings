@@ -23,15 +23,15 @@
  */
 package org.orecruncher.dsurround.client;
 
-import org.orecruncher.dsurround.registry.BiomeRegistry;
-import org.orecruncher.dsurround.registry.BlockRegistry;
-import org.orecruncher.dsurround.registry.DimensionRegistry;
-import org.orecruncher.dsurround.registry.EffectRegistry;
-import org.orecruncher.dsurround.registry.FootstepsRegistry;
-import org.orecruncher.dsurround.registry.ItemRegistry;
 import org.orecruncher.dsurround.registry.RegistryManager;
-import org.orecruncher.dsurround.registry.SeasonRegistry;
-import org.orecruncher.dsurround.registry.SoundRegistry;
+import org.orecruncher.dsurround.registry.biome.BiomeRegistry;
+import org.orecruncher.dsurround.registry.block.BlockRegistry;
+import org.orecruncher.dsurround.registry.dimension.DimensionRegistry;
+import org.orecruncher.dsurround.registry.effect.EffectRegistry;
+import org.orecruncher.dsurround.registry.footstep.FootstepsRegistry;
+import org.orecruncher.dsurround.registry.item.ItemRegistry;
+import org.orecruncher.dsurround.registry.season.SeasonRegistry;
+import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

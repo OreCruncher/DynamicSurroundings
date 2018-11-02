@@ -29,7 +29,7 @@ import org.orecruncher.dsurround.client.ClientChunkCache;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.Weather;
-import org.orecruncher.dsurround.registry.BiomeInfo;
+import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 import org.orecruncher.lib.math.MathStuff;
 

@@ -41,8 +41,8 @@ import org.orecruncher.dsurround.client.handlers.fog.MorningFogRangeCalculator;
 import org.orecruncher.dsurround.client.handlers.fog.WeatherFogRangeCalculator;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.event.ReloadEvent;
-import org.orecruncher.dsurround.registry.EffectRegistry;
 import org.orecruncher.dsurround.registry.ThemeInfo;
+import org.orecruncher.dsurround.registry.effect.EffectRegistry;
 import org.orecruncher.lib.Color;
 import org.orecruncher.lib.math.TimerEMA;
 

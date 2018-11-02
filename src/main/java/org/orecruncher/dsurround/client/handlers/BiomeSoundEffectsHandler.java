@@ -31,7 +31,7 @@ import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.handlers.scanners.BiomeScanner;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.dsurround.registry.BiomeInfo;
+import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.lib.collections.ObjectArray;
 
 import gnu.trove.impl.Constants;

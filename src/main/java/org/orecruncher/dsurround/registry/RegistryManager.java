@@ -24,37 +24,39 @@
 
 package org.orecruncher.dsurround.registry;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.data.Profiles;
-import org.orecruncher.dsurround.data.Profiles.ProfileScript;
-import org.orecruncher.dsurround.data.xface.DataScripts;
-import org.orecruncher.dsurround.data.xface.ModConfigurationFile;
 import org.orecruncher.dsurround.event.ReloadEvent;
-import org.orecruncher.dsurround.packs.ResourcePacks;
-import org.orecruncher.dsurround.packs.ResourcePacks.Pack;
+import org.orecruncher.dsurround.registry.config.ConfigData;
+import org.orecruncher.dsurround.registry.config.ModConfigurationFile;
 import org.orecruncher.lib.SideLocal;
+import org.orecruncher.lib.Singleton;
 import org.orecruncher.lib.task.Scheduler;
 
-import net.minecraft.util.ResourceLocation;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public final class RegistryManager {
+
+	// The cached configuration data is shared by both the server
+	// and the client. Once loaded it is read-only so concurrent
+	// access is safe. The instance reference itself is guarded
+	// by the Singleton class.
+	public static final Singleton<ConfigData> DATA = new Singleton<ConfigData>() {
+		@Override
+		@Nonnull
+		protected ConfigData initialValue() {
+			return ConfigData.load();
+		}
+	};
 
 	private static final SideLocal<RegistryManager> managers = new SideLocal<RegistryManager>() {
 		@Override
@@ -74,8 +76,23 @@ public final class RegistryManager {
 		reloadResources(Side.CLIENT);
 	}
 
+	/**
+	 * This event gets triggered when someone executes the /ds reload command. This
+	 * is usually because a configuration file has changed and it needs to be
+	 * reloaded. Helpful during pack development. Any cached data is released and
+	 * the registries reinitialized with the appropriate info.
+	 *
+	 * @param event
+	 */
 	@SubscribeEvent
 	public static void onReload(@Nonnull final ReloadEvent.Configuration event) {
+		// Only reset the data if no side is specified. This is a from scratch
+		// situation. If side is set it is assumed that the intent is to re-baseline
+		// registries because the operational environment has changed.
+		if (event.side == null) {
+			DATA.clear();
+		}
+
 		if (event.side == null || event.side == Side.CLIENT)
 			reloadResources(Side.CLIENT);
 		if (event.side == null || event.side == Side.SERVER)
@@ -91,7 +108,7 @@ public final class RegistryManager {
 	}
 
 	protected final Side side;
-	protected final Map<Class<? extends Registry>, Registry> registries = new IdentityHashMap<>();
+	protected final Map<Class<? extends Registry>, Registry> registries = new Object2ObjectOpenHashMap<>();
 	protected final List<Registry> initOrder = new ArrayList<>();
 	protected boolean initialized;
 
@@ -113,79 +130,19 @@ public final class RegistryManager {
 		this.initOrder.add(reg);
 	}
 
-	protected void configRegistries(@Nonnull final ModConfigurationFile cfg, @Nonnull final String txt) {
-		if (cfg != null) {
-			ModBase.log().info("Loading %s", txt);
-			this.initOrder.forEach(reg -> {
-				try {
-					reg.configure(cfg);
-				} catch (@Nonnull final Throwable t) {
-					final String temp = String.format("[%s] had issues loading %s!", reg.getClass().getSimpleName(),
-							txt);
-					ModBase.log().error(temp, t);
-				}
-			});
-		}
-	}
-
-	protected void process(@Nonnull final Pack p, @Nonnull ResourceLocation rl, @Nonnull final String txt) {
-		try (final InputStream stream = p.getInputStream(rl)) {
-			if (stream != null) {
-				try (final InputStreamReader reader = new InputStreamReader(stream)) {
-					final ModConfigurationFile cfg = DataScripts.loadFromStream(reader);
-					configRegistries(cfg, txt);
-				}
-			}
-		} catch (@Nonnull final Throwable t) {
-			final String temp = String.format("Error loading %s", txt);
-			ModBase.log().error(temp, t);
-		}
-	}
-
 	public void reload() {
 
-		// Collect the locations where DS data is configured
-		final List<Pack> packs = ResourcePacks.findResourcePacks();
-		final List<ModContainer> activeMods = Loader.instance().getActiveModList();
-
-		ModBase.log().info("Identified the following resource pack locations");
-		packs.stream().map(Pack::toString).forEach(ModBase.log()::info);
-
-		// Do the preinit
+		// Initialize the registries
 		this.initOrder.forEach(Registry::init);
 
-		// Process the mod config from each of our packs
-		activeMods.stream().map(mod -> {
-			return new ResourceLocation(ModBase.MOD_ID, "data/" + mod.getModId().toLowerCase() + ".json");
-		}).forEach(rl -> {
-			packs.forEach(p -> {
-				final String loadingText = "[" + rl.toString() + "] <- [" + p.getModName() + "]";
-				process(p, rl, loadingText);
-			});
-		});
-
-		// Process general config files from our packs
-		final ResourceLocation rl = ResourcePacks.CONFIGURE_RESOURCE;
-		packs.stream().forEach(p -> process(p, rl, "[" + rl.toString() + "] <- [" + p.getModName() + "]"));
-
-		// Apply built-in profiles
-		final List<ProfileScript> resources = Profiles.getProfileStreams();
-		for (final ProfileScript script : resources) {
-			try (final InputStreamReader reader = new InputStreamReader(script.stream)) {
-				final ModConfigurationFile cfg = DataScripts.loadFromStream(reader);
-				final String loadingText = "[" + ModBase.MOD_ID + "] <- [" + script.packName + "]";
-				configRegistries(cfg, loadingText);
-			} catch (@Nonnull final Throwable ex) {
-				final String temp = String.format("Unable to load profile [%s]", script.packName);
-				ModBase.log().error(temp, ex);
-			}
+		// Process the configuration data
+		ModBase.log().info("Loading configuration Json from sources");
+		for (final ModConfigurationFile mcf : DATA.get()) {
+			ModBase.log().info("Processing %s", mcf.source);
+			this.initOrder.forEach(reg -> reg.configure(mcf));
 		}
 
-		// Load scripts specified in the configuration
-		Arrays.stream(ModOptions.general.externalScriptFiles)
-				.forEach(cfg -> configRegistries(DataScripts.loadFromDirectory(cfg), "[" + cfg + "]"));
-
-		// Have the registries finalize their settings
+		// Complete the initialization
 		this.initOrder.forEach(Registry::initComplete);
 
 		// Let everyone know a reload happened

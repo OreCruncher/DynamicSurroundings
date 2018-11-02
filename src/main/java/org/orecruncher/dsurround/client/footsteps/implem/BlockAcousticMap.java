@@ -32,8 +32,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
-import org.orecruncher.dsurround.registry.BlockInfo;
-import org.orecruncher.dsurround.registry.BlockInfo.BlockInfoMutable;
+import org.orecruncher.dsurround.registry.block.BlockInfo;
+import org.orecruncher.dsurround.registry.block.BlockInfo.BlockInfoMutable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.fml.relauncher.Side;

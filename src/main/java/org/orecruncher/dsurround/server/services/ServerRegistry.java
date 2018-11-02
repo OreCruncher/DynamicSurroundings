@@ -23,8 +23,8 @@
  */
 package org.orecruncher.dsurround.server.services;
 
-import org.orecruncher.dsurround.registry.DimensionRegistry;
 import org.orecruncher.dsurround.registry.RegistryManager;
+import org.orecruncher.dsurround.registry.dimension.DimensionRegistry;
 
 import net.minecraftforge.fml.relauncher.Side;
 

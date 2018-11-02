@@ -34,7 +34,7 @@ import org.orecruncher.dsurround.client.effects.IEntityEffectFactory;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactoryFilter;
 import org.orecruncher.dsurround.client.effects.IEntityEffectHandlerState;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.dsurround.registry.EntityEffectInfo;
+import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.sound.ITrackedSound;
 

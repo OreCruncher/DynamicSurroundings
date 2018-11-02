@@ -31,8 +31,8 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.client.ClientRegistry;
-import org.orecruncher.dsurround.registry.SoundMetadata;
-import org.orecruncher.dsurround.registry.SoundRegistry;
+import org.orecruncher.dsurround.registry.sound.SoundMetadata;
+import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 import org.orecruncher.lib.ForgeUtils;
 
 import com.google.common.collect.ImmutableList;

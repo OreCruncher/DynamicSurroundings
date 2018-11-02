@@ -27,7 +27,7 @@ package org.orecruncher.dsurround.client.footsteps.system;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.client.footsteps.interfaces.EventType;
-import org.orecruncher.dsurround.registry.Variator;
+import org.orecruncher.dsurround.registry.footstep.Variator;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;

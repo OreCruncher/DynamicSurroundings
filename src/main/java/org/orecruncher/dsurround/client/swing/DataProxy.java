@@ -35,7 +35,7 @@ import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironStat
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.expression.ExpressionEngine;
-import org.orecruncher.dsurround.registry.BlockInfo.BlockInfoMutable;
+import org.orecruncher.dsurround.registry.block.BlockInfo.BlockInfoMutable;
 import org.orecruncher.lib.MCHelper;
 import org.orecruncher.lib.expression.IDynamicVariant;
 

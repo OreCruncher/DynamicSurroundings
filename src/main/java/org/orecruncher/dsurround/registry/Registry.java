@@ -24,9 +24,11 @@
 
 package org.orecruncher.dsurround.registry;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.data.xface.ModConfigurationFile;
+import org.orecruncher.dsurround.registry.config.ModConfigurationFile;
 
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -34,21 +36,26 @@ public abstract class Registry {
 
 	public final Side side;
 
-	Registry(@Nonnull final Side side) {
+	public Registry(@Nonnull final Side side) {
 		this.side = side;
 	}
 
 	public void init() {
+		// Override to provide initialization prior to configure
+	}
 
+	public final void handleConfigure(@Nonnull final List<ModConfigurationFile> theList) {
+		for (final ModConfigurationFile mcf : theList)
+			configure(mcf);
 	}
 
 	public abstract void configure(@Nonnull final ModConfigurationFile cfg);
 
 	public void initComplete() {
-
+		// Override to provide post processing after configure
 	}
 
 	public void fini() {
-
+		// Tear down anything that needs it because the registry is going away
 	}
 }

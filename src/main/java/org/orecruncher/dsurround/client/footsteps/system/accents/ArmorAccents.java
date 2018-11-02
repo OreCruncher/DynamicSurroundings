@@ -30,7 +30,7 @@ import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IFootstepAccentProvider;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.registry.ArmorClass;
+import org.orecruncher.dsurround.registry.item.ArmorClass;
 import org.orecruncher.lib.collections.ObjectArray;
 
 import net.minecraft.entity.EntityLivingBase;

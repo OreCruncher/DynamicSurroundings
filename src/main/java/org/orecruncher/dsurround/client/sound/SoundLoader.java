@@ -30,7 +30,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.registry.SoundMetadata;
+import org.orecruncher.dsurround.registry.sound.SoundMetadata;
 import org.orecruncher.lib.sound.SoundConfigProcessor;
 import org.orecruncher.lib.streams.StreamUtil;
 

@@ -43,7 +43,7 @@ import org.orecruncher.dsurround.client.footsteps.system.accents.FootstepAccents
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.facade.FacadeHelper;
-import org.orecruncher.dsurround.registry.Variator;
+import org.orecruncher.dsurround.registry.footstep.Variator;
 import org.orecruncher.lib.MyUtils;
 import org.orecruncher.lib.TimeUtils;
 import org.orecruncher.lib.WorldUtils;

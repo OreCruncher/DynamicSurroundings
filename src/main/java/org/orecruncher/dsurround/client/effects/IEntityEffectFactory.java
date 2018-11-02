@@ -27,7 +27,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.registry.EntityEffectInfo;
+import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;

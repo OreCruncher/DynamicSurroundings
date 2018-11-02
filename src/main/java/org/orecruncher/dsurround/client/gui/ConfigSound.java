@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.sound.BasicSound;
-import org.orecruncher.dsurround.registry.SoundMetadata;
+import org.orecruncher.dsurround.registry.sound.SoundMetadata;
 
 import com.google.common.base.MoreObjects;
 

@@ -30,11 +30,11 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.data.DimensionEffectData;
 import org.orecruncher.dsurround.network.Network;
 import org.orecruncher.dsurround.network.PacketThunder;
 import org.orecruncher.dsurround.network.PacketWeatherUpdate;
-import org.orecruncher.dsurround.registry.DimensionInfo;
+import org.orecruncher.dsurround.registry.dimension.DimensionInfo;
+import org.orecruncher.dsurround.world.data.DimensionEffectData;
 import org.orecruncher.lib.PlayerUtils;
 import org.orecruncher.lib.random.XorShiftRandom;
 

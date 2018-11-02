@@ -31,8 +31,8 @@ import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.client.weather.tracker.ServerDrivenTracker;
 import org.orecruncher.dsurround.client.weather.tracker.SimulationTracker;
 import org.orecruncher.dsurround.client.weather.tracker.Tracker;
-import org.orecruncher.dsurround.data.DimensionEffectData;
 import org.orecruncher.dsurround.event.WeatherUpdateEvent;
+import org.orecruncher.dsurround.world.data.DimensionEffectData;
 import org.orecruncher.lib.math.MathStuff;
 
 import net.minecraft.client.Minecraft;

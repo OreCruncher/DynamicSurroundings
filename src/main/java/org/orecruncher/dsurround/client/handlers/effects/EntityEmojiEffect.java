@@ -37,7 +37,7 @@ import org.orecruncher.dsurround.client.fx.particle.mote.IParticleMote;
 import org.orecruncher.dsurround.entity.CapabilityEmojiData;
 import org.orecruncher.dsurround.entity.EmojiType;
 import org.orecruncher.dsurround.entity.IEmojiData;
-import org.orecruncher.dsurround.registry.EntityEffectInfo;
+import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 
 import com.google.common.collect.ImmutableList;
 

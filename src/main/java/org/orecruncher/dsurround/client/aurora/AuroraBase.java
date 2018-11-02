@@ -28,7 +28,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.registry.DimensionInfo;
+import org.orecruncher.dsurround.registry.dimension.DimensionInfo;
 import org.orecruncher.lib.Color;
 import org.orecruncher.lib.random.XorShiftRandom;
 

@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.fx.BlockEffect;
-import org.orecruncher.dsurround.registry.BlockProfile;
+import org.orecruncher.dsurround.registry.block.BlockProfile;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 import org.orecruncher.lib.scanner.CuboidScanner;
 import org.orecruncher.lib.scanner.ScanLocus;
