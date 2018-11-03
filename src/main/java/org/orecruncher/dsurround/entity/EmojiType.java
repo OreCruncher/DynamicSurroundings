@@ -26,7 +26,7 @@ package org.orecruncher.dsurround.entity;
 
 import javax.annotation.Nonnull;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 public enum EmojiType {
 
@@ -57,7 +57,7 @@ public enum EmojiType {
 	/** The eat emoji will be displayed */
 	EAT(12);
 
-	private static final TIntObjectHashMap<EmojiType> lookup = new TIntObjectHashMap<>();
+	private static final Int2ObjectOpenHashMap<EmojiType> lookup = new Int2ObjectOpenHashMap<>();
 	static {
 		for (final EmojiType state : EmojiType.values()) {
 			lookup.put(state.getId(), state);

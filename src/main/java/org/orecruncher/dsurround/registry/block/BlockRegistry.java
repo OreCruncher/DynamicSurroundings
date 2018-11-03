@@ -24,8 +24,6 @@
 
 package org.orecruncher.dsurround.registry.block;
 
-import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -49,6 +47,8 @@ import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 
 import com.google.common.collect.ImmutableMap;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.SoundCategory;
@@ -71,8 +71,8 @@ public final class BlockRegistry extends Registry {
 
 	@Override
 	public void init() {
-		this.registry = new HashMap<>();
-		this.cache = new IdentityHashMap<>();
+		this.registry = new Object2ObjectOpenHashMap<>();
+		this.cache = new Reference2ObjectOpenHashMap<>();
 	}
 
 	@Override

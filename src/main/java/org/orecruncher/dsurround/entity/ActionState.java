@@ -26,7 +26,7 @@ package org.orecruncher.dsurround.entity;
 
 import javax.annotation.Nonnull;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 /**
  * Describes the current action that the entity is taking.
@@ -78,7 +78,7 @@ public enum ActionState {
 	/** The entity is on the move. */
 	MOVING(17, 15, EmotionalState.NEUTRAL);
 
-	private static final TIntObjectHashMap<ActionState> lookup = new TIntObjectHashMap<>();
+	private static final Int2ObjectOpenHashMap<ActionState> lookup = new Int2ObjectOpenHashMap<>();
 	static {
 		for (final ActionState state : ActionState.values()) {
 			lookup.put(state.getId(), state);

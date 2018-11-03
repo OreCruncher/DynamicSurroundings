@@ -31,7 +31,7 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.lib.ThreadGuard;
 import org.orecruncher.lib.ThreadGuard.Action;
 
-import gnu.trove.map.hash.TObjectIntHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
@@ -47,7 +47,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class TraceParticleManager extends ParticleManager {
 
 	protected final ParticleManager manager;
-	protected TObjectIntHashMap<Class<?>> counts = new TObjectIntHashMap<>();
+	protected Object2IntOpenHashMap<Class<?>> counts;
 
 	protected final ThreadGuard guard = new ThreadGuard(ModBase.log(), Side.CLIENT, "ParticleManager")
 			.setAction(ModBase.isDeveloperMode() ? Action.EXCEPTION
@@ -57,15 +57,18 @@ public class TraceParticleManager extends ParticleManager {
 		super(null, null);
 
 		this.manager = manager;
+		this.counts = new Object2IntOpenHashMap<>();
+		this.counts.defaultReturnValue(-1);
 	}
 
 	private void checkForClientThread(final String method) {
 		this.guard.check(method);
 	}
 
-	public TObjectIntHashMap<Class<?>> getSnaptshot() {
-		final TObjectIntHashMap<Class<?>> result = this.counts;
-		this.counts = new TObjectIntHashMap<>();
+	public Object2IntOpenHashMap<Class<?>> getSnaptshot() {
+		final Object2IntOpenHashMap<Class<?>> result = this.counts;
+		this.counts = new Object2IntOpenHashMap<>();
+		this.counts.defaultReturnValue(-1);
 		return result;
 	}
 
@@ -91,8 +94,14 @@ public class TraceParticleManager extends ParticleManager {
 	@Override
 	public void addEffect(Particle effect) {
 		checkForClientThread("addEffect");
-		if (effect != null)
-			this.counts.adjustOrPutValue(effect.getClass(), 1, 1);
+		if (effect != null) {
+			final Class<?> clazz = effect.getClass();
+			final int c = this.counts.getInt(clazz);
+			if (c == -1)
+				this.counts.put(clazz, 1);
+			else
+				this.counts.put(clazz, c + 1);
+		}
 		this.manager.addEffect(effect);
 	}
 

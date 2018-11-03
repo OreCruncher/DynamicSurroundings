@@ -31,7 +31,7 @@ import org.orecruncher.dsurround.client.fx.particle.system.ParticleSystem;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.lib.BlockPosHelper;
 
-import gnu.trove.map.hash.TLongObjectHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,7 +40,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleSystemHandler extends EffectHandlerBase {
 
-	private final TLongObjectHashMap<ParticleSystem> systems = new TLongObjectHashMap<>();
+	private final Long2ObjectOpenHashMap<ParticleSystem> systems = new Long2ObjectOpenHashMap<>();
 
 	public ParticleSystemHandler() {
 		super("Particle Systems");
@@ -57,13 +57,14 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 		final BlockPos min = EnvironState.getPlayerPosition().add(-range, -range, -range);
 		final BlockPos max = EnvironState.getPlayerPosition().add(range, range, range);
 
-		this.systems.retainEntries((idx, system) -> {
+		this.systems.long2ObjectEntrySet().removeIf(entry -> {
+			final ParticleSystem system = entry.getValue();
 			if (BlockPosHelper.notContains(system.getPos(), min, max)) {
 				system.setExpired();
 			} else {
 				system.onUpdate();
 			}
-			return system.isAlive();
+			return !system.isAlive();
 		});
 	}
 

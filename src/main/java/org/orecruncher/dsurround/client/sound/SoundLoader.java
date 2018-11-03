@@ -23,7 +23,6 @@
  */
 package org.orecruncher.dsurround.client.sound;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -34,19 +33,20 @@ import org.orecruncher.dsurround.registry.sound.SoundMetadata;
 import org.orecruncher.lib.sound.SoundConfigProcessor;
 import org.orecruncher.lib.streams.StreamUtil;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
-@Mod.EventBusSubscriber(modid = ModBase.MOD_ID)
+@EventBusSubscriber(modid = ModBase.MOD_ID)
 public class SoundLoader {
 
-	private final static Map<ResourceLocation, SoundMetadata> soundMetadata = new HashMap<>();
-	private final static Map<ResourceLocation, SoundEvent> myRegistry = new HashMap<>();
+	private final static Map<ResourceLocation, SoundMetadata> soundMetadata = new Object2ObjectOpenHashMap<>();
+	private final static Map<ResourceLocation, SoundEvent> myRegistry = new Object2ObjectOpenHashMap<>();
 	private static SoundEvent SILENCE;
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)

@@ -26,7 +26,6 @@ package org.orecruncher.dsurround.registry.biome;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -45,6 +44,7 @@ import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.dimension.DimensionInfo;
 import org.orecruncher.lib.math.MathStuff;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -91,8 +91,8 @@ public final class BiomeRegistry extends Registry {
 	// and should default to something to avoid crap.
 	private static final FakeBiome WTF = new WTFFakeBiome();
 
-	private final Map<ResourceLocation, BiomeInfo> registry = new HashMap<>();
-	private final Map<String, String> biomeAliases = new HashMap<>();
+	private final Map<ResourceLocation, BiomeInfo> registry = new Object2ObjectOpenHashMap<>();
+	private final Map<String, String> biomeAliases = new Object2ObjectOpenHashMap<>();
 
 	public BiomeRegistry(@Nonnull final Side side) {
 		super(side);

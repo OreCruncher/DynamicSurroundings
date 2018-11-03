@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -66,8 +65,9 @@ import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.dsurround.registry.item.ArmorClass;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
-import org.orecruncher.lib.collections.IdentityHashSet;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockDoor;
@@ -129,11 +129,11 @@ public final class FootstepsRegistry extends Registry {
 		this.acousticsManager = new AcousticsManager();
 		this.primitiveMap = new PrimitiveMap(this.acousticsManager);
 		this.blockMap = new BlockMap(this.acousticsManager);
-		this.FOOTPRINT_MATERIAL = new IdentityHashSet<>();
-		this.FOOTPRINT_STATES = new IdentityHashSet<>();
+		this.FOOTPRINT_MATERIAL = new ReferenceOpenHashSet<>();
+		this.FOOTPRINT_STATES = new ReferenceOpenHashSet<>();
 		this.ARMOR_SOUND = new EnumMap<>(ArmorClass.class);
 		this.ARMOR_SOUND_FOOT = new EnumMap<>(ArmorClass.class);
-		this.variators = new HashMap<>();
+		this.variators = new Object2ObjectOpenHashMap<>();
 
 		// Initialize the known materials that leave footprints
 		this.FOOTPRINT_MATERIAL.add(Material.CLAY);

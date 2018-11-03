@@ -33,7 +33,7 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.network.Network;
 import org.orecruncher.dsurround.network.PacketServerData;
 
-import gnu.trove.map.hash.TIntDoubleHashMap;
+import it.unimi.dsi.fastutil.ints.Int2DoubleOpenHashMap;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -123,7 +123,7 @@ public final class ServiceManager extends Service {
 
 		final MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
-		final TIntDoubleHashMap map = new TIntDoubleHashMap();
+		final Int2DoubleOpenHashMap map = new Int2DoubleOpenHashMap();
 		for (final Integer dim : DimensionManager.getIDs()) {
 			map.put(dim.intValue(), mean(server.worldTickTimes.get(dim)) / 1000000D);
 		}

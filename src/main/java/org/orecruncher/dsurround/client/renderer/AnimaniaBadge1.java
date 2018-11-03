@@ -25,7 +25,6 @@
 package org.orecruncher.dsurround.client.renderer;
 
 import java.lang.reflect.Method;
-import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -36,6 +35,7 @@ import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IItemStackProv
 import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IShowBadge;
 import org.orecruncher.lib.ForgeUtils;
 
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
@@ -150,7 +150,7 @@ public final class AnimaniaBadge1 implements IItemStackProvider {
 	}
 
 	static void intitialize() {
-		final Map<Class<?>, AnimaniaBadge1> classMap = new IdentityHashMap<>();
+		final Map<Class<?>, AnimaniaBadge1> classMap = new Reference2ObjectOpenHashMap<>();
 		add(classMap, "com.animania.common.entities.chickens.EntityAnimaniaChicken", SEEDS);
 		add(classMap, "com.animania.common.entities.cows.EntityAnimaniaCow", WHEAT);
 		add(classMap, "com.animania.common.entities.goats.EntityAnimaniaGoat", WHEAT);

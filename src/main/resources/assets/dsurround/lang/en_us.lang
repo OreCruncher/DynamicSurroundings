@@ -27,19 +27,10 @@ dsurround.format.Stop=STOP
 dsurround.format.Block=Block
 dsurround.format.Cull=Cull
 
-# Volume Quickset Dialog
-dsurround.dlg.format.Display=%s %d%%
-dsurround.dlg.name.MasterSound=Master Volume
-dsurround.dlg.name.BiomeSound=Biome Sound Scale
-dsurround.dlg.name.FootstepSound=Footstep Sound Scale
-dsurround.dlg.name.RainSound=Rain Sound Scale
-dsurround.dlg.name.Close=ESC to Save and Close
-
 # Keybindings
 dsurround.cfg.keybind.SelectionBox=Toggle SelectionBox
 dsurround.cfg.keybind.LightLevel=Toggle Light Level
 dsurround.cfg.keybind.ChunkBorders=Toggle Chunk Borders
-dsurround.cfg.keybind.Volume=Volume Quick Set
 dsurround.cfg.keybind.AnimaniaBadges=Show Animania Mob Badges
 dsurround.cfg.keybind.msg.ON=§aON
 dsurround.cfg.keybind.msg.OFF=§cOFF
@@ -53,7 +44,7 @@ dsurround.msg.RainIntensitySet=§9Rain intensity set to %1$s
 dsurround.msg.MinRainIntensitySet=§9Minimum rain intensity set to %1$s
 dsurround.msg.MaxRainIntensitySet=§9Maximum rain intensity set to %1$s
 dsurround.msg.RainReset=§9World rain parameters have been reset
-dsurround.msg.BiomeReload=§9Biome configuration has been reloaded
+dsurround.msg.BiomeReload=§9Json configurations have been reloaded
 
 dsurround.msg.RainTimeSet=§9Rain time set to %1$s
 dsurround.msg.ThunderTimeSet=§9Thunder time set to %1$s
@@ -69,8 +60,6 @@ dsurround.cfg.asm.EnableSoundCache=Sound Caching
 dsurround.cfg.asm.EnableSoundCache.tooltip=Enable/disable ASM transformations to permit sound caching
 dsurround.cfg.asm.EnableWeather=Weather Control
 dsurround.cfg.asm.EnableWeather.tooltip=Enable/disable ASM transformations to permit weather (rain, snow, splash, dust storms, auroras)
-dsurround.cfg.asm.EnableSleepReset=Weather Reset on Sleep Control
-dsurround.cfg.asm.EnableSleepReset.tooltip=Enable/disable ASM transformations to allow control of player sleep impact on weather reset
 dsurround.cfg.asm.DisableArrow=Arrow Particle Trail
 dsurround.cfg.asm.DisableArrow.tooltip=Disable particle trail left by an arrow when it flies
 dsurround.cfg.asm.EnableSMSync=Enable SoundManager synchronization
@@ -180,12 +169,8 @@ dsurround.cfg.block.effects.Splash.tooltip=Enable/disable Water Splash effects w
 
 dsurround.cfg.sound.cat.Sound=Sound Options
 dsurround.cfg.sound.cat.Sound.tooltip=General options for defining sound effects
-dsurround.cfg.sound.Autorestart=Auto-restart Sound System
-dsurround.cfg.sound.Autorestart.tooltip=Enable auto-restart of crashed sound system
 dsurround.cfg.sound.BiomeSounds=Biome Sounds
 dsurround.cfg.sound.BiomeSounds.tooltip=Enable/disable biome background and spot sounds
-dsurround.cfg.sound.MasterScale=Master Sound Scale Factor
-dsurround.cfg.sound.MasterScale.tooltip=Master volume scale factor for biome and block sounds
 dsurround.cfg.sound.AutoConfig=Auto-configure Sound Channels
 dsurround.cfg.sound.AutoConfig.tooltip=Automatically configure sound channels
 dsurround.cfg.sound.NormalChannels=Number of Normal Channels
@@ -208,8 +193,6 @@ dsurround.cfg.sound.SwordEquipAsTool=Sword Equip as Tool
 dsurround.cfg.sound.SwordEquipAsTool.tooltip=Enable Sword Equip sound as Tool
 dsurround.cfg.sound.Craft=Crafting Sound
 dsurround.cfg.sound.Craft.tooltip=Enable/disable Item Crafted sound effect
-dsurround.cfg.sound.FootstepScale=Footsteps Sound Factor
-dsurround.cfg.sound.FootstepScale.tooltip=Volume scale factor for footstep sounds
 dsurround.cfg.sound.FootstepQuad=Footsteps as Quadruped
 dsurround.cfg.sound.FootstepQuad.tooltip=Simulate quadruped with Footstep effects (horse)
 dsurround.cfg.sound.FootstepCadence=First Person Footstep Cadence
@@ -323,13 +306,6 @@ dsurround.cfg.commands.Calc.Name=/calc Command Name
 dsurround.cfg.commands.Calc.Name.tooltip=Name to give the /calc command
 dsurround.cfg.commands.Calc.Alias=Alias to give the /calc command
 dsurround.cfg.commands.Calc.Alias.tooltip=One or more alias names to give the /calc command (space separated)
-
-dsurround.cfg.lighting.cat.Lighting=Lighting Options
-dsurround.cfg.lighting.cat.Lighting.tooltip=Options for configuring Lighting effects
-dsurround.cfg.lighting.Enable=Enable Albedo lighting support
-dsurround.cfg.lighting.Enable.tooltip=Enable/disable Albedo lighting support
-dsurround.cfg.lighting.FireFlyEnable=Enable Fire Fly lighting effects
-dsurround.cfg.lighting.FireFlyEnable.tooltip=Enable/disable Fire Fly lighting effects using Albedo
 
 dsurround.cfg.profiles.cat.Profiles=Built-in Profiles
 dsurround.cfg.profiles.cat.Profiles.tooltip=Enable/disable built-in configuration profiles

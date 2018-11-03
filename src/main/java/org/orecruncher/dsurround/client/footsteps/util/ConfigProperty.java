@@ -25,12 +25,12 @@
 package org.orecruncher.dsurround.client.footsteps.util;
 
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.lib.JsonUtils;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -39,7 +39,7 @@ public class ConfigProperty {
 	private Map<String, String> properties;
 
 	public ConfigProperty() {
-		this.properties = new HashMap<>();
+		this.properties = new Object2ObjectOpenHashMap<>();
 	}
 
 	public String getString(final String name) {

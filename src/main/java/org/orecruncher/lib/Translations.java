@@ -26,7 +26,6 @@ package org.orecruncher.lib;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -38,11 +37,13 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+
 public class Translations {
 
-	public static final String DEFAULT_LANGUAGE = "en_US";
+	public static final String DEFAULT_LANGUAGE = "en_us";
 
-	private Map<String, String> lookup = new HashMap<>();
+	private Map<String, String> lookup = new Object2ObjectOpenHashMap<>();
 
 	public Translations() {
 
@@ -87,7 +88,7 @@ public class Translations {
 
 	public void transform(@Nonnull final Function<Entry<String, String>, String> func) {
 		final Map<String, String> old = this.lookup;
-		this.lookup = new HashMap<>();
+		this.lookup = new Object2ObjectOpenHashMap<>();
 		for (final Entry<String, String> e : old.entrySet()) {
 			this.lookup.put(e.getKey(), func.apply(e));
 		}

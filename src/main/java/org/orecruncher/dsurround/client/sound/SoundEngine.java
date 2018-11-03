@@ -51,14 +51,13 @@ import org.orecruncher.dsurround.client.sound.fix.SoundFixMethods;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.lib.ThreadGuard;
 import org.orecruncher.lib.ThreadGuard.Action;
-import org.orecruncher.lib.collections.IdentityHashSet;
 import org.orecruncher.lib.compat.ModEnvironment;
 import org.orecruncher.lib.math.MathStuff;
 import org.orecruncher.lib.sound.ITrackedSound;
 import org.orecruncher.lib.sound.SoundState;
 
-import gnu.trove.iterator.TObjectIntIterator;
-import gnu.trove.map.hash.TObjectIntHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SoundHandler;
@@ -128,7 +127,7 @@ public final class SoundEngine {
 			.setAction(ModBase.isDeveloperMode() ? Action.EXCEPTION
 					: ModOptions.logging.enableDebugLogging ? Action.LOG : Action.NONE);
 
-	private final Set<ITrackedSound> queuedSounds = new IdentityHashSet<>();
+	private final Set<ITrackedSound> queuedSounds = new ReferenceOpenHashSet<>();
 
 	private String playedSoundId = null;
 
@@ -414,21 +413,26 @@ public final class SoundEngine {
 		final int maxCount = maxSounds;
 		event.output.add("SoundSystem: " + soundCount + "/" + maxCount);
 
-		final TObjectIntHashMap<ResourceLocation> counts = new TObjectIntHashMap<>();
+		final Object2IntOpenHashMap<ResourceLocation> counts = new Object2IntOpenHashMap<>();
+		counts.defaultReturnValue(-1);
 
 		final Iterator<Entry<String, ISound>> iterator = getPlayingSounds().entrySet().iterator();
 		while (iterator.hasNext()) {
 			final Entry<String, ISound> entry = iterator.next();
 			final ISound isound = entry.getValue();
-			counts.adjustOrPutValue(isound.getSound().getSoundLocation(), 1, 1);
+			final ResourceLocation rl = isound.getSound().getSoundLocation();
+			final int count = counts.getInt(rl);
+			if (count == -1)
+				counts.put(rl, 1);
+			else
+				counts.put(rl, count + 1);
 		}
 
 		final List<String> results = new ArrayList<>();
-		final TObjectIntIterator<ResourceLocation> itr = counts.iterator();
-		while (itr.hasNext()) {
-			itr.advance();
-			results.add(String.format(TextFormatting.GOLD + "%s: %d", itr.key().toString(), itr.value()));
-		}
+		counts.object2IntEntrySet().forEach(entry -> {
+			results.add(String.format(TextFormatting.GOLD + "%s: %d", entry.getKey().toString(), entry.getIntValue()));
+		});
+
 		Collections.sort(results);
 		event.output.addAll(results);
 	}

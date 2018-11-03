@@ -34,8 +34,8 @@ import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.lib.collections.ObjectArray;
 
-import gnu.trove.impl.Constants;
-import gnu.trove.map.hash.TObjectFloatHashMap;
+import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Reference2FloatMap.Entry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -62,17 +62,23 @@ public class BiomeSoundEffectsHandler extends EffectHandlerBase {
 		return EnvironState.isPlayerUnderground() || !EnvironState.isPlayerInside();
 	}
 
-	private void getBiomeSounds(@Nonnull final TObjectFloatHashMap<SoundEffect> result) {
+	private void getBiomeSounds(@Nonnull final Object2FloatOpenHashMap<SoundEffect> result) {
+
 		// Need to collect sounds from all the applicable biomes
 		// along with their weights.
-		this.biomes.getBiomes().forEachEntry((biome, w) -> {
-			biome.findSoundMatches().forEach(fx -> result.adjustOrPutValue(fx, w, w));
-			return true;
-		});
+		for (final Entry<BiomeInfo> e : this.biomes.getBiomes().reference2FloatEntrySet()) {
+			e.getKey().findSoundMatches().forEach(fx -> {
+				final float f = result.getFloat(fx);
+				if (f == -1)
+					result.put(fx, e.getFloatValue());
+				else
+					result.put(fx, f + e.getFloatValue());
+			});
+		}
 
 		// Scale the volumes in the resulting list based on the weights
 		final float area = this.biomes.getBiomeArea();
-		result.transformValues(v -> 0.1F + 0.9F * (v / area));
+		result.replaceAll((fx, v) -> 0.1F + 0.9F * (v / area));
 	}
 
 	@Override
@@ -80,13 +86,14 @@ public class BiomeSoundEffectsHandler extends EffectHandlerBase {
 
 		this.biomes.update();
 
-		final TObjectFloatHashMap<SoundEffect> sounds = new TObjectFloatHashMap<>(Constants.DEFAULT_CAPACITY,
-				Constants.DEFAULT_LOAD_FACTOR, -1F);
+		final Object2FloatOpenHashMap<SoundEffect> sounds = new Object2FloatOpenHashMap<>();
+		sounds.defaultReturnValue(-1F);
 
-		// Only gather data if the player is alive.  If the player is dead the biome sounds will
+		// Only gather data if the player is alive. If the player is dead the biome
+		// sounds will
 		// cease playing.
 		if (player.isEntityAlive()) {
-			
+
 			if (doBiomeSounds())
 				getBiomeSounds(sounds);
 

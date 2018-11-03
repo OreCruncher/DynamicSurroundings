@@ -26,7 +26,7 @@ package org.orecruncher.dsurround.entity;
 
 import javax.annotation.Nonnull;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 /**
  * Describes how an Entity "feels". Though an ActionState has a default
@@ -52,7 +52,7 @@ public enum EmotionalState {
 	/** The Entity feels hurt because it's health has been reduced. */
 	HURT(7);
 
-	private static final TIntObjectHashMap<EmotionalState> lookup = new TIntObjectHashMap<>();
+	private static final Int2ObjectOpenHashMap<EmotionalState> lookup = new Int2ObjectOpenHashMap<>();
 	static {
 		for (final EmotionalState state : EmotionalState.values()) {
 			lookup.put(state.getId(), state);

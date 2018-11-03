@@ -40,7 +40,7 @@ import org.orecruncher.lib.WorldUtils;
 import org.orecruncher.lib.gfx.ParticleHelper;
 import org.orecruncher.lib.random.XorShiftRandom;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -64,7 +64,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class StormSplashRenderer {
 
 	protected static final int PARTICLE_SOUND_CHANCE = 3;
-	private static final TIntObjectHashMap<StormSplashRenderer> splashRenderers = new TIntObjectHashMap<>();
+	private static final Int2ObjectOpenHashMap<StormSplashRenderer> splashRenderers = new Int2ObjectOpenHashMap<>();
 	private static final StormSplashRenderer DEFAULT = new StormSplashRenderer();
 
 	static {

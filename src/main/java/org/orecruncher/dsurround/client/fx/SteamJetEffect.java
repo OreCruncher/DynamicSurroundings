@@ -32,8 +32,8 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.client.fx.particle.system.ParticleJet;
 import org.orecruncher.dsurround.client.fx.particle.system.ParticleSteamJet;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
-import org.orecruncher.lib.collections.IdentityHashSet;
 
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -45,7 +45,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SteamJetEffect extends JetEffect {
 
-	private static final Set<Block> hotBlocks = new IdentityHashSet<>();
+	private static final Set<Block> hotBlocks = new ReferenceOpenHashSet<>();
 
 	static {
 		hotBlocks.add(Blocks.LAVA);

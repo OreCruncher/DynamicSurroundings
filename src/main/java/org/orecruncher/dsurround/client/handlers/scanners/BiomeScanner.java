@@ -29,8 +29,8 @@ import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironStat
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 
-import gnu.trove.map.custom_hash.TObjectIntCustomHashMap;
-import gnu.trove.strategy.IdentityHashingStrategy;
+import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
@@ -48,8 +48,7 @@ public final class BiomeScanner implements ITickable {
 	private static final int MAX_BIOME_AREA = (int) Math.pow(BIOME_SURVEY_RANGE * 2 + 1, 2);
 
 	private int biomeArea;
-	private final TObjectIntCustomHashMap<BiomeInfo> weights = new TObjectIntCustomHashMap<>(
-			IdentityHashingStrategy.INSTANCE);
+	private final Reference2FloatOpenHashMap<BiomeInfo> weights = new Reference2FloatOpenHashMap<>();
 	private final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
 	// "Finger print" of the last area survey.
@@ -79,20 +78,23 @@ public final class BiomeScanner implements ITickable {
 				final IBlockAccessEx provider = ClientChunkCache.INSTANCE;
 
 				// Collect raw biome data before mapping to BiomeInfo - saves lookups
-				final TObjectIntCustomHashMap<Biome> scratch = new TObjectIntCustomHashMap<>(
-						IdentityHashingStrategy.INSTANCE);
+				final Reference2IntOpenHashMap<Biome> scratch = new Reference2IntOpenHashMap<>();
+				scratch.defaultReturnValue(-1);
 
 				for (int dX = -BIOME_SURVEY_RANGE; dX <= BIOME_SURVEY_RANGE; dX++)
 					for (int dZ = -BIOME_SURVEY_RANGE; dZ <= BIOME_SURVEY_RANGE; dZ++) {
 						this.mutable.setPos(this.surveyedPosition.getX() + dX, 0, this.surveyedPosition.getZ() + dZ);
-						scratch.adjustOrPutValue(provider.getBiome(this.mutable), 1, 1);
+						final Biome biome = provider.getBiome(this.mutable);
+						final int v = scratch.getInt(biome);
+						if (v == -1)
+							scratch.put(biome, 1);
+						else
+							scratch.put(biome, v + 1);
 					}
 
 				this.biomeArea = MAX_BIOME_AREA;
-				scratch.forEachEntry((biome, w) -> {
-					this.weights.put(ClientRegistry.BIOME.get(biome), w);
-					return true;
-				});
+				scratch.reference2IntEntrySet().forEach(
+						entry -> this.weights.put(ClientRegistry.BIOME.get(entry.getKey()), entry.getIntValue()));
 			}
 		}
 	}
@@ -101,7 +103,7 @@ public final class BiomeScanner implements ITickable {
 		return this.biomeArea;
 	}
 
-	public TObjectIntCustomHashMap<BiomeInfo> getBiomes() {
+	public Reference2FloatOpenHashMap<BiomeInfo> getBiomes() {
 		return this.weights;
 	}
 

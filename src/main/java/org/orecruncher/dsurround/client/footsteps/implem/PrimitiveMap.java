@@ -24,7 +24,6 @@
 
 package org.orecruncher.dsurround.client.footsteps.implem;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -35,6 +34,7 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.client.footsteps.util.ConfigProperty;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -42,7 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class PrimitiveMap {
 
 	private final AcousticsManager acousticsManager;
-	private final HashMap<String, IAcoustic[]> primitiveMap = new HashMap<>();
+	private final Map<String, IAcoustic[]> primitiveMap = new Object2ObjectOpenHashMap<>();
 
 	public PrimitiveMap(@Nonnull final AcousticsManager manager) {
 		this.acousticsManager = manager;

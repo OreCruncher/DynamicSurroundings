@@ -24,8 +24,6 @@
 
 package org.orecruncher.dsurround.client.footsteps.implem;
 
-import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -35,6 +33,8 @@ import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.registry.block.BlockInfo;
 import org.orecruncher.dsurround.registry.block.BlockInfo.BlockInfoMutable;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -58,8 +58,8 @@ public final class BlockAcousticMap {
 	protected static final BlockInfoMutable key = new BlockInfoMutable();
 
 	protected final IAcousticResolver resolver;
-	protected Map<BlockInfo, AcousticProfile> data = new HashMap<>();
-	protected Map<IBlockState, AcousticProfile> cache = new IdentityHashMap<>();
+	protected Map<BlockInfo, AcousticProfile> data = new Object2ObjectOpenHashMap<>();
+	protected Map<IBlockState, AcousticProfile> cache = new Reference2ObjectOpenHashMap<>();
 
 	/**
 	 * CTOR for building a map that has no resolver and performs special lookups
@@ -111,7 +111,7 @@ public final class BlockAcousticMap {
 	}
 
 	public void clear() {
-		this.data = new HashMap<>(this.data.size());
-		this.cache = new IdentityHashMap<>(this.cache.size());
+		this.data = new Object2ObjectOpenHashMap<>(this.data.size());
+		this.cache = new Reference2ObjectOpenHashMap<>(this.cache.size());
 	}
 }

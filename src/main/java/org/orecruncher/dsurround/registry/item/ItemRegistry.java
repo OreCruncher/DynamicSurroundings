@@ -42,8 +42,8 @@ import org.orecruncher.dsurround.registry.config.ItemConfig;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
-import org.orecruncher.lib.collections.IdentityHashSet;
 
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -60,15 +60,15 @@ public final class ItemRegistry extends Registry {
 		SWORD, AXE, BOW, TOOL, SHIELD, ARMOR, FOOD
 	}
 
-	private Set<Class<?>> swordItems = new IdentityHashSet<>(SET_CAPACITY);
-	private Set<Class<?>> axeItems = new IdentityHashSet<>(SET_CAPACITY);
-	private Set<Class<?>> bowItems = new IdentityHashSet<>(SET_CAPACITY);
-	private Set<Class<?>> toolItems = new IdentityHashSet<>(SET_CAPACITY);
-	private Set<Class<?>> shieldItems = new IdentityHashSet<>(SET_CAPACITY);
-	private Set<Class<?>> crystalItems = new IdentityHashSet<>(SET_CAPACITY);
-	private Set<Class<?>> heavyItems = new IdentityHashSet<>(SET_CAPACITY);
-	private Set<Class<?>> mediumItems = new IdentityHashSet<>(SET_CAPACITY);
-	private Set<Class<?>> lightItems = new IdentityHashSet<>(SET_CAPACITY);
+	private Set<Class<?>> swordItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
+	private Set<Class<?>> axeItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
+	private Set<Class<?>> bowItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
+	private Set<Class<?>> toolItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
+	private Set<Class<?>> shieldItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
+	private Set<Class<?>> crystalItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
+	private Set<Class<?>> heavyItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
+	private Set<Class<?>> mediumItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
+	private Set<Class<?>> lightItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
 
 	private final Map<Item, ItemType> items = new IdentityHashMap<>(MAP_CAPACITY);
 	private final Map<Item, ArmorClass> armorMap = new IdentityHashMap<>(SET_CAPACITY);
@@ -82,15 +82,15 @@ public final class ItemRegistry extends Registry {
 
 	@Override
 	public void init() {
-		this.swordItems = new IdentityHashSet<>(SET_CAPACITY);
-		this.axeItems = new IdentityHashSet<>(SET_CAPACITY);
-		this.bowItems = new IdentityHashSet<>(SET_CAPACITY);
-		this.toolItems = new IdentityHashSet<>(SET_CAPACITY);
-		this.shieldItems = new IdentityHashSet<>(SET_CAPACITY);
-		this.crystalItems = new IdentityHashSet<>(SET_CAPACITY);
-		this.heavyItems = new IdentityHashSet<>(SET_CAPACITY);
-		this.mediumItems = new IdentityHashSet<>(SET_CAPACITY);
-		this.lightItems = new IdentityHashSet<>(SET_CAPACITY);
+		this.swordItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
+		this.axeItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
+		this.bowItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
+		this.toolItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
+		this.shieldItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
+		this.crystalItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
+		this.heavyItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
+		this.mediumItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
+		this.lightItems = new ReferenceOpenHashSet<>(SET_CAPACITY);
 
 		this.items.clear();
 		this.armorMap.clear();

@@ -24,7 +24,6 @@
 
 package org.orecruncher.dsurround.client.handlers;
 
-import java.util.IdentityHashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -36,6 +35,7 @@ import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.compat.EntityLivingBaseUtil;
 import org.orecruncher.lib.math.TimerEMA;
 
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -56,7 +56,7 @@ public class EffectManager {
 	}
 
 	private final ObjectArray<EffectHandlerBase> effectHandlers = new ObjectArray<>();
-	private final Map<Class<? extends EffectHandlerBase>, EffectHandlerBase> services = new IdentityHashMap<>();
+	private final Map<Class<? extends EffectHandlerBase>, EffectHandlerBase> services = new Reference2ObjectOpenHashMap<>();
 	private final TimerEMA computeTime = new TimerEMA("Processing");
 
 	private EffectManager() {

@@ -23,8 +23,6 @@
  */
 package org.orecruncher.dsurround.registry.effect;
 
-import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -38,6 +36,8 @@ import org.orecruncher.dsurround.registry.config.EntityConfig;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.themes.GloamwoodTheme;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -52,10 +52,10 @@ public class EffectRegistry extends Registry {
 	public static final ResourceLocation DEFAULT_THEME = new ResourceLocation(ModBase.MOD_ID, "default");
 	private static final ThemeInfo DEFAULT_THEME_INFO = new ThemeInfo();
 
-	protected final Map<Class<? extends Entity>, EntityEffectInfo> effects = new IdentityHashMap<>();
+	protected final Map<Class<? extends Entity>, EntityEffectInfo> effects = new Reference2ObjectOpenHashMap<>();
 	protected EntityEffectInfo playerEffects = DEFAULT;
 
-	protected final Map<ResourceLocation, ThemeInfo> themes = new HashMap<>();
+	protected final Map<ResourceLocation, ThemeInfo> themes = new Object2ObjectOpenHashMap<>();
 	protected ThemeInfo activeTheme = DEFAULT_THEME_INFO;
 
 	public EffectRegistry(@Nonnull final Side side) {

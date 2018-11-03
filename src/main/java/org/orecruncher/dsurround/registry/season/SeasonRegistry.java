@@ -35,7 +35,7 @@ import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.lib.compat.ModEnvironment;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -44,7 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class SeasonRegistry extends Registry {
 
-	private final TIntObjectHashMap<SeasonInfo> seasonData = new TIntObjectHashMap<>();
+	private final Int2ObjectOpenHashMap<SeasonInfo> seasonData = new Int2ObjectOpenHashMap<>();
 
 	public SeasonRegistry(@Nonnull final Side side) {
 		super(side);

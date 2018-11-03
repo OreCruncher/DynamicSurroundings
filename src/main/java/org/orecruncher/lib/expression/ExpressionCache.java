@@ -25,20 +25,21 @@ package org.orecruncher.lib.expression;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.lib.logging.ModLog;
 
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.util.ITickable;
 
 public class ExpressionCache implements ITickable {
 
 	protected final ModLog logger;
 	protected final List<DynamicVariantList> variants = new ArrayList<>();
-	protected final IdentityHashMap<String, LazyVariant> cache = new IdentityHashMap<>();
+	protected final Map<String, LazyVariant> cache = new Reference2ObjectOpenHashMap<>();
 	protected final List<String> naughtyList = new ArrayList<>();
 
 	protected List<IDynamicVariant<?>> cachedList;

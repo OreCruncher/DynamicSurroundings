@@ -43,7 +43,7 @@ import org.orecruncher.lib.BlockNameUtil;
 import org.orecruncher.lib.MCHelper;
 import org.orecruncher.lib.BlockNameUtil.NameResult;
 
-import gnu.trove.map.hash.THashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -76,7 +76,7 @@ public class BlockMap {
 		}
 	}
 
-	private static final THashMap<String, List<MacroEntry>> macros = new THashMap<>();
+	private static final Map<String, List<MacroEntry>> macros = new Object2ObjectOpenHashMap<>();
 
 	static {
 

@@ -39,8 +39,7 @@ import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.lib.MyUtils;
 import org.orecruncher.lib.math.MathStuff;
 
-import gnu.trove.impl.Constants;
-import gnu.trove.map.hash.TObjectFloatHashMap;
+import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -57,12 +56,12 @@ public final class SoundRegistry extends Registry {
 
 	private final List<String> cullSoundNames = new ArrayList<>();
 	private final List<String> blockSoundNames = new ArrayList<>();
-	private final TObjectFloatHashMap<String> volumeControl = new TObjectFloatHashMap<>(
-			Constants.DEFAULT_CAPACITY, Constants.DEFAULT_LOAD_FACTOR, DEFAULT_SOUNDFACTOR);
+	private final Object2FloatOpenHashMap<String> volumeControl;
 
 	public SoundRegistry(@Nonnull final Side side) {
 		super(side);
-
+		this.volumeControl = new Object2FloatOpenHashMap<>();
+		this.volumeControl.defaultReturnValue(DEFAULT_SOUNDFACTOR);
 	}
 
 	@Override
@@ -110,12 +109,12 @@ public final class SoundRegistry extends Registry {
 	}
 
 	public float getVolumeScale(@Nonnull final String soundName) {
-		return this.volumeControl.get(soundName);
+		return this.volumeControl.getFloat(soundName);
 	}
 
 	public float getVolumeScale(@Nonnull final ISound sound) {
 		return (sound.getSoundLocation() == null || sound instanceof ConfigSound) ? 1F
-				: this.volumeControl.get(sound.getSoundLocation().toString());
+				: this.volumeControl.getFloat(sound.getSoundLocation().toString());
 	}
 
 	@Nullable

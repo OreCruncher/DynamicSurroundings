@@ -158,10 +158,8 @@ public class DiagnosticHandler extends EffectHandlerBase {
 					event.getWorld().provider.getWeatherRenderer().getClass().getName());
 			ModBase.log().debug("Entity Renderer : %s", Minecraft.getMinecraft().entityRenderer.getClass().getName());
 			ModBase.log().debug("Particle Manager: %s", Minecraft.getMinecraft().effectRenderer.getClass().getName());
-			ModBase.log().debug("Music Ticker    : %s",
-					Minecraft.getMinecraft().getMusicTicker().getClass().getName());
-			ModBase.log().debug("Sound Manager   : %s",
-					SoundEngine.instance().getSoundManager().getClass().getName());
+			ModBase.log().debug("Music Ticker    : %s", Minecraft.getMinecraft().getMusicTicker().getClass().getName());
+			ModBase.log().debug("Sound Manager   : %s", SoundEngine.instance().getSoundManager().getClass().getName());
 		}
 	}
 
@@ -220,11 +218,11 @@ public class DiagnosticHandler extends EffectHandlerBase {
 		final int tps = (int) Math.min(1000.0D / event.meanTickTime, 20.0D);
 		data.add(String.format("Ticktime Overall:%s %5.3fms (%d TPS)", getTpsFormatPrefix(tps), event.meanTickTime,
 				tps));
-		event.dimTps.forEachEntry((a, b) -> {
-			final String dimName = DimensionManager.getProviderType(a).getName();
-			final int tps1 = (int) Math.min(1000.0D / b, 20.0D);
-			data.add(String.format("%s (%d):%s %7.3fms (%d TPS)", dimName, a, getTpsFormatPrefix(tps1), b, tps1));
-			return true;
+		event.dimTps.int2DoubleEntrySet().forEach(entry -> {
+			final String dimName = DimensionManager.getProviderType(entry.getIntKey()).getName();
+			final int tps1 = (int) Math.min(1000.0D / entry.getDoubleValue(), 20.0D);
+			data.add(String.format("%s (%d):%s %7.3fms (%d TPS)", dimName, entry.getIntKey(), getTpsFormatPrefix(tps1),
+					entry.getDoubleValue(), tps1));
 		});
 
 		Collections.sort(data.subList(4, data.size()));

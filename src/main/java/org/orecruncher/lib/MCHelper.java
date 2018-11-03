@@ -24,7 +24,6 @@
 
 package org.orecruncher.lib;
 
-import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,8 +32,8 @@ import java.util.stream.StreamSupport;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.lib.collections.IdentityHashSet;
-
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.SoundType;
@@ -52,8 +51,8 @@ public final class MCHelper {
 
 	private static final String MATERIAL_CUSTOM = "Custom";
 	private static final String MATERIAL_NONE = "None";
-	private static final Map<Material, String> materialMap = new IdentityHashMap<>();
-	private static final Set<Block> hasVariants = new IdentityHashSet<>();
+	private static final Map<Material, String> materialMap = new Reference2ObjectOpenHashMap<>();
+	private static final Set<Block> hasVariants = new ReferenceOpenHashSet<>();
 
 	private static boolean variantCheck(@Nonnull final Block block) {
 		final Item item = Item.getItemFromBlock(block);

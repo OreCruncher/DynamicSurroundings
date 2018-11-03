@@ -29,9 +29,8 @@ import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.event.ServerDataEvent;
 
-import gnu.trove.iterator.TIntDoubleIterator;
-import gnu.trove.map.hash.TIntDoubleHashMap;
 import io.netty.buffer.ByteBuf;
+import it.unimi.dsi.fastutil.ints.Int2DoubleOpenHashMap;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -49,7 +48,7 @@ public class PacketServerData implements IMessage {
 	}
 
 	private double meanTickTime;
-	private TIntDoubleHashMap tMap;
+	private Int2DoubleOpenHashMap tMap;
 	private int free;
 	private int total;
 	private int max;
@@ -58,7 +57,7 @@ public class PacketServerData implements IMessage {
 
 	}
 
-	public PacketServerData(@Nonnull final TIntDoubleHashMap tps, final double meanTickTime, final int memFree,
+	public PacketServerData(@Nonnull final Int2DoubleOpenHashMap tps, final double meanTickTime, final int memFree,
 			int memTotal, int memMax) {
 		this.meanTickTime = meanTickTime;
 		this.tMap = tps;
@@ -71,7 +70,7 @@ public class PacketServerData implements IMessage {
 	public void fromBytes(@Nonnull final ByteBuf buf) {
 		this.meanTickTime = buf.readDouble();
 		int len = buf.readInt();
-		this.tMap = new TIntDoubleHashMap(len);
+		this.tMap = new Int2DoubleOpenHashMap(len);
 		while (len-- != 0) {
 			this.tMap.put(buf.readInt(), buf.readDouble());
 		}
@@ -84,12 +83,10 @@ public class PacketServerData implements IMessage {
 	public void toBytes(@Nonnull final ByteBuf buf) {
 		buf.writeDouble(this.meanTickTime);
 		buf.writeInt(this.tMap.size());
-		final TIntDoubleIterator i = this.tMap.iterator();
-		while (i.hasNext()) {
-			i.advance();
-			buf.writeInt(i.key());
-			buf.writeDouble(i.value());
-		}
+		this.tMap.int2DoubleEntrySet().forEach(entry -> {
+			buf.writeInt(entry.getIntKey());
+			buf.writeDouble(entry.getDoubleValue());
+		});
 		buf.writeInt(this.free);
 		buf.writeInt(this.total);
 		buf.writeInt(this.max);

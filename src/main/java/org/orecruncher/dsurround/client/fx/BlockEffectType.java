@@ -25,13 +25,14 @@
 package org.orecruncher.dsurround.client.fx;
 
 import java.lang.reflect.Constructor;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModOptions;
+
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 /**
  * Describes the various types of block effects that can be generated.
@@ -108,7 +109,7 @@ public enum BlockEffectType {
 		}
 	};
 
-	private static final Map<String, BlockEffectType> typeMap = new HashMap<>();
+	private static final Map<String, BlockEffectType> typeMap = new Object2ObjectOpenHashMap<>();
 	static {
 		for (final BlockEffectType effect : BlockEffectType.values())
 			typeMap.put(effect.getName(), effect);

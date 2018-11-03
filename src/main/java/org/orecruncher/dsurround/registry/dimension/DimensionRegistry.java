@@ -34,7 +34,7 @@ import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.config.DimensionConfig;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -69,7 +69,7 @@ public final class DimensionRegistry extends Registry {
 	}
 
 	private final List<DimensionConfig> cache = new ArrayList<>();
-	private final TIntObjectHashMap<DimensionInfo> dimensionData = new TIntObjectHashMap<>();
+	private final Int2ObjectOpenHashMap<DimensionInfo> dimensionData = new Int2ObjectOpenHashMap<>();
 
 	public void loading(@Nonnull final World world) {
 		getData(world);

@@ -23,7 +23,6 @@
  */
 package org.orecruncher.dsurround.client.handlers.effects;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -50,6 +49,7 @@ import org.orecruncher.lib.random.XorShiftRandom;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityVillager;
@@ -61,7 +61,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityChatEffect extends EntityEffect {
 
-	private static final Map<String, EntityChatData> messages = new HashMap<>();
+	private static final Map<String, EntityChatData> messages = new Object2ObjectOpenHashMap<>();
 
 	static {
 		final Translations xlate = new Translations();

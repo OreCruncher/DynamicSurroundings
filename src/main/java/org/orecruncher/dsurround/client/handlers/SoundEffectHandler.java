@@ -55,9 +55,9 @@ import org.orecruncher.lib.sound.SoundState;
 
 import com.google.common.collect.Sets;
 
-import gnu.trove.map.hash.THashMap;
-import gnu.trove.map.hash.TObjectFloatHashMap;
-import gnu.trove.map.hash.TObjectIntHashMap;
+import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.audio.ISound;
@@ -111,12 +111,12 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		}
 	}
 
-	private final THashMap<SoundEffect, Emitter> emitters = new THashMap<>();
-	private final THashMap<String, SoundEvent> replacements = new THashMap<>();
+	private final Object2ObjectOpenHashMap<SoundEffect, Emitter> emitters = new Object2ObjectOpenHashMap<>();
+	private final Object2ObjectOpenHashMap<String, SoundEvent> replacements = new Object2ObjectOpenHashMap<>();
 	private final ObjectArray<PendingSound> pending = new ObjectArray<>();
 	private final ObjectArray<BasicSound<?>> sendToServer = new ObjectArray<>();
 	private final Set<String> soundsToBlock = Sets.newHashSet();
-	private final TObjectIntHashMap<String> soundCull = new TObjectIntHashMap<>();
+	private final Object2IntOpenHashMap<String> soundCull = new Object2IntOpenHashMap<>();
 
 	private SoundEffectHandler() {
 		super("Sound Effects");
@@ -168,33 +168,31 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		SoundEngine.instance().stopAllSounds();
 	}
 
-	public void queueAmbientSounds(@Nonnull final TObjectFloatHashMap<SoundEffect> sounds) {
+	public void queueAmbientSounds(@Nonnull final Object2FloatOpenHashMap<SoundEffect> sounds) {
 		// Iterate through the existing emitters:
 		// * If done, remove
 		// * If not in the incoming list, fade
 		// * If it does exist, update volume throttle and unfade if needed
-		this.emitters.retainEntries((fx, emitter) -> {
+		this.emitters.object2ObjectEntrySet().removeIf(entry -> {
+			final Emitter emitter = entry.getValue();
 			if (emitter.isDonePlaying()) {
-				return false;
+				return true;
 			}
-			final float volume = sounds.get(fx);
+			final float volume = sounds.getFloat(entry.getKey());
 			if (volume >= 0) {
 				emitter.setVolumeThrottle(volume);
 				if (emitter.isFading())
 					emitter.unfade();
-				sounds.remove(fx);
+				sounds.removeFloat(entry.getKey());
 			} else if (!emitter.isFading()) {
 				emitter.fade();
 			}
-			return true;
+			return false;
 		});
 
 		// Any sounds left in the list are new and need
 		// an emitter created.
-		sounds.forEachEntry((fx, volume) -> {
-			this.emitters.put(fx, new EntityEmitter(EnvironState.getPlayer(), fx));
-			return true;
-		});
+		sounds.forEach((fx, volume) -> this.emitters.put(fx, new EntityEmitter(EnvironState.getPlayer(), fx)));
 	}
 
 	public boolean isSoundPlaying(@Nonnull final BasicSound<?> sound) {
@@ -238,7 +236,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		// Check to see if it needs to be culled
 		if (ModOptions.sound.soundCullingThreshold > 0) {
 			// Get the last time the sound was seen
-			final int lastOccurance = this.soundCull.get(soundName);
+			final int lastOccurance = this.soundCull.getInt(soundName);
 			if (lastOccurance != 0) {
 				final int currentTick = EnvironState.getTickCounter();
 				if ((currentTick - lastOccurance) < ModOptions.sound.soundCullingThreshold) {

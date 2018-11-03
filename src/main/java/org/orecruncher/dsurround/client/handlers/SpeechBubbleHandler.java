@@ -46,7 +46,7 @@ import org.orecruncher.lib.WorldUtils;
 
 import com.google.common.base.Function;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.entity.Entity;
@@ -63,7 +63,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 	private static final String SPLASH_TOKEN = "$MINECRAFT$";
 	private static final ResourceLocation SPLASH_TEXT = new ResourceLocation("texts/splashes.txt");
 
-	private final TIntObjectHashMap<EntityBubbleContext> messages = new TIntObjectHashMap<>();
+	private final Int2ObjectOpenHashMap<EntityBubbleContext> messages = new Int2ObjectOpenHashMap<>();
 	private final Translations xlate = new Translations();
 	private final List<String> minecraftSplashText = new ArrayList<>();
 
@@ -144,8 +144,8 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 		final int currentTick = EnvironState.getTickCounter();
-		this.messages.retainEntries((idx, ctx) -> {
-			return !ctx.clean(currentTick);
+		this.messages.int2ObjectEntrySet().removeIf(entry -> {
+			return entry.getValue().clean(currentTick);
 		});
 	}
 

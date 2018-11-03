@@ -24,12 +24,12 @@
 
 package org.orecruncher.dsurround.client.footsteps.implem;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -45,7 +45,7 @@ public enum Substrate {
 	//
 	FENCE("bigger");
 
-	private static final Map<String, Substrate> lookup = new HashMap<>();
+	private static final Map<String, Substrate> lookup = new Object2ObjectOpenHashMap<>();
 	static {
 		for (final Substrate s : Substrate.values())
 			lookup.put(s.name, s);

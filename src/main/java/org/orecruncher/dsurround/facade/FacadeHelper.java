@@ -24,7 +24,6 @@
 package org.orecruncher.dsurround.facade;
 
 import java.util.ArrayList;
-import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +33,7 @@ import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -42,7 +42,7 @@ import net.minecraft.world.World;
 
 public final class FacadeHelper {
 
-	private static final Map<Block, FacadeAccessor> crackers = new IdentityHashMap<>();
+	private static final Map<Block, FacadeAccessor> crackers = new Reference2ObjectOpenHashMap<>();
 
 	private static void addAccessor(@Nonnull final List<FacadeAccessor> accessors,
 			@Nonnull final FacadeAccessor accessor) {

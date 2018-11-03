@@ -26,18 +26,18 @@ package org.orecruncher.dsurround.event;
 
 import javax.annotation.Nonnull;
 
-import gnu.trove.map.hash.TIntDoubleHashMap;
+import it.unimi.dsi.fastutil.ints.Int2DoubleOpenHashMap;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class ServerDataEvent extends Event {
 
 	public final double meanTickTime;
-	public final TIntDoubleHashMap dimTps;
+	public final Int2DoubleOpenHashMap dimTps;
 	public final int free;
 	public final int total;
 	public final int max;
 
-	public ServerDataEvent(@Nonnull final TIntDoubleHashMap dimensionTps, final double meanTickTime,
+	public ServerDataEvent(@Nonnull final Int2DoubleOpenHashMap dimensionTps, final double meanTickTime,
 			final int freeMemory, final int totalMemory, final int maxMemory) {
 		this.dimTps = dimensionTps;
 		this.meanTickTime = meanTickTime;

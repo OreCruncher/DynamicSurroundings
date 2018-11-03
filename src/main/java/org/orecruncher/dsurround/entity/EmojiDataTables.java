@@ -24,7 +24,6 @@
 
 package org.orecruncher.dsurround.entity;
 
-import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,7 +33,8 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.lib.compat.EntityLivingUtil;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
@@ -110,8 +110,8 @@ public final class EmojiDataTables {
 		return (aIdx << 8) | eIdx;
 	}
 
-	private final static Map<Class<? extends EntityAIBase>, ActionState> actions = new IdentityHashMap<>();
-	private final static TIntObjectHashMap<EmojiType> emojiMap = new TIntObjectHashMap<>();
+	private final static Map<Class<? extends EntityAIBase>, ActionState> actions = new Reference2ObjectOpenHashMap<>();
+	private final static Int2ObjectOpenHashMap<EmojiType> emojiMap = new Int2ObjectOpenHashMap<>();
 
 	public static void add(@Nonnull final Class<? extends EntityAIBase> clazz, @Nonnull final ActionState state) {
 		if (!actions.containsKey(clazz))

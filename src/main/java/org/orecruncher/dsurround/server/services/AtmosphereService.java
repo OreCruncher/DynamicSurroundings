@@ -30,7 +30,7 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.lib.compat.ModEnvironment;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -70,7 +70,7 @@ public final class AtmosphereService extends Service {
 		this.generators.remove(dimId);
 	}
 
-	private final TIntObjectHashMap<WeatherGenerator> generators = new TIntObjectHashMap<>();
+	private final Int2ObjectOpenHashMap<WeatherGenerator> generators = new Int2ObjectOpenHashMap<>();
 
 	private WeatherGenerator getGenerator(@Nonnull final World world) {
 		final int dimId = world.provider.getDimension();
