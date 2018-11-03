@@ -55,7 +55,7 @@ import org.orecruncher.dsurround.client.footsteps.system.Generator;
 import org.orecruncher.dsurround.client.footsteps.system.GeneratorQP;
 import org.orecruncher.dsurround.client.footsteps.util.ConfigProperty;
 import org.orecruncher.dsurround.registry.Registry;
-import org.orecruncher.dsurround.registry.block.BlockInfo;
+import org.orecruncher.dsurround.registry.block.BlockMatcher;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.config.VariatorConfig;
 import org.orecruncher.dsurround.registry.config.ModConfiguration.ForgeEntry;
@@ -433,7 +433,7 @@ public final class FootstepsRegistry extends Registry {
 				b = b.substring(1);
 			}
 
-			final BlockInfo bi = BlockInfo.create(b);
+			final BlockMatcher bi = BlockMatcher.create(b);
 			if (materialMatch) {
 				final IBlockState state = bi.getBlock().getDefaultState();
 				this.FOOTPRINT_MATERIAL.add(state.getMaterial());
@@ -453,7 +453,7 @@ public final class FootstepsRegistry extends Registry {
 				if (block != null) {
 					String blockName = MCHelper.nameOf(block);
 					if (stack.getHasSubtypes() && stack.getItemDamage() != OreDictionary.WILDCARD_VALUE)
-						blockName += "^" + stack.getItemDamage();
+						blockName += "{_meta_: \"" + stack.getItemDamage() + "\"}";
 					getBlockMap().register(blockName, blockClass);
 				}
 			}

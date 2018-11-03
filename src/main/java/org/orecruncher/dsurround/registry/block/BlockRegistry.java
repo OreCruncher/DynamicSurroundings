@@ -37,7 +37,6 @@ import org.orecruncher.dsurround.client.fx.BlockEffect;
 import org.orecruncher.dsurround.client.fx.BlockEffectType;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.registry.Registry;
-import org.orecruncher.dsurround.registry.block.BlockInfo.BlockInfoMutable;
 import org.orecruncher.dsurround.registry.config.BlockConfig;
 import org.orecruncher.dsurround.registry.config.EffectConfig;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
@@ -58,11 +57,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class BlockRegistry extends Registry {
 
-	private static final BlockProfile NO_PROFILE = BlockProfile.createProfile(BlockInfo.AIR).setChance(0)
+	private static final BlockProfile NO_PROFILE = BlockProfile.createProfile(BlockMatcher.AIR).setChance(0)
 			.setStepChance(0);
 
-	private final BlockInfoMutable key = new BlockInfoMutable();
-	private Map<BlockInfo, BlockProfile> registry;
+	private Map<BlockMatcher, BlockProfile> registry;
 	private Map<IBlockState, BlockProfile> cache;
 
 	public BlockRegistry(@Nonnull final Side side) {
@@ -95,10 +93,7 @@ public final class BlockRegistry extends Registry {
 	public BlockProfile findProfile(@Nonnull final IBlockState state) {
 		BlockProfile profile = this.cache.get(state);
 		if (profile == null) {
-			profile = this.registry.get(this.key.set(state));
-			if (profile == null && this.key.hasSubTypes()) {
-				profile = this.registry.get(this.key.asGeneric());
-			}
+			profile = this.registry.get(BlockMatcher.asGeneric(state));
 			if (profile == null)
 				profile = NO_PROFILE;
 			this.cache.put(state, profile);
@@ -145,15 +140,21 @@ public final class BlockRegistry extends Registry {
 	}
 
 	@Nullable
-	protected BlockProfile getOrCreateProfile(@Nonnull final BlockInfo info) {
+	protected BlockProfile getOrCreateProfile(@Nonnull final BlockMatcher info) {
 		if (info.getBlock() == Blocks.AIR)
 			return null;
 
-		BlockProfile profile = this.registry.get(info);
+		// If the BlockMatch is a generic it will be found in the registry, else
+		// it will be found in the cache.
+		BlockProfile profile = info.isGeneric() ? this.registry.get(info) : this.cache.get(info.getBlockstate());
 		if (profile == null) {
 			profile = BlockProfile.createProfile(info);
-			this.registry.put(info, profile);
+			if (info.isGeneric())
+				this.registry.put(info, profile);
+			else
+				this.cache.put(info.getBlockstate(), profile);
 		}
+
 		return profile;
 	}
 
@@ -164,7 +165,7 @@ public final class BlockRegistry extends Registry {
 		final SoundRegistry soundRegistry = ClientRegistry.SOUND;
 
 		for (final String blockName : entry.blocks) {
-			final BlockInfo blockInfo = BlockInfo.create(blockName);
+			final BlockMatcher blockInfo = BlockMatcher.create(blockName);
 			if (blockInfo == null) {
 				ModBase.log().warn("Unknown block [%s] in block config file", blockName);
 				continue;

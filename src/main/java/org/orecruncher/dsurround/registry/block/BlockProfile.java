@@ -43,11 +43,11 @@ public class BlockProfile {
 	public final static BlockEffect[] NO_EFFECTS = {};
 	public final static SoundEffect[] NO_SOUNDS = {};
 
-	public static BlockProfile createProfile(@Nonnull final BlockInfo blockInfo) {
+	public static BlockProfile createProfile(@Nonnull final BlockMatcher blockInfo) {
 		return new BlockProfile(blockInfo);
 	}
 
-	protected final BlockInfo info;
+	protected final BlockMatcher info;
 	protected int chance = 100;
 	protected int stepChance = 100;
 	protected SoundEffect[] sounds = NO_SOUNDS;
@@ -55,7 +55,7 @@ public class BlockProfile {
 	protected BlockEffect[] effects = NO_EFFECTS;
 	protected BlockEffect[] alwaysOn = NO_EFFECTS;
 
-	public BlockProfile(@Nonnull final BlockInfo blockInfo) {
+	public BlockProfile(@Nonnull final BlockMatcher blockInfo) {
 		this.info = blockInfo;
 	}
 

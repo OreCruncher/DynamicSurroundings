@@ -23,6 +23,9 @@
  */
 package org.orecruncher.dsurround.client;
 
+import javax.annotation.Nonnull;
+
+import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.biome.BiomeRegistry;
 import org.orecruncher.dsurround.registry.block.BlockRegistry;
@@ -48,36 +51,40 @@ public final class ClientRegistry {
 
 	}
 
-	public static final SoundRegistry SOUND;
-	public static final BiomeRegistry BIOME;
-	public static final BlockRegistry BLOCK;
-	public static final DimensionRegistry DIMENSION;
-	public static final SeasonRegistry SEASON;
-	public static final ItemRegistry ITEMS;
-	public static final FootstepsRegistry FOOTSTEPS;
-	public static final EffectRegistry EFFECTS;
+	public static SoundRegistry SOUND;
+	public static BiomeRegistry BIOME;
+	public static BlockRegistry BLOCK;
+	public static DimensionRegistry DIMENSION;
+	public static SeasonRegistry SEASON;
+	public static ItemRegistry ITEMS;
+	public static FootstepsRegistry FOOTSTEPS;
+	public static EffectRegistry EFFECTS;
 
 	static {
 
-		DIMENSION = new DimensionRegistry(Side.CLIENT);
-		SOUND = new SoundRegistry(Side.CLIENT);
-		BIOME = new BiomeRegistry(Side.CLIENT);
-		BLOCK = new BlockRegistry(Side.CLIENT);
-		SEASON = new SeasonRegistry(Side.CLIENT);
-		ITEMS = new ItemRegistry(Side.CLIENT);
-		FOOTSTEPS = new FootstepsRegistry(Side.CLIENT);
-		EFFECTS = new EffectRegistry(Side.CLIENT);
+		try {
+			DIMENSION = new DimensionRegistry(Side.CLIENT);
+			SOUND = new SoundRegistry(Side.CLIENT);
+			BIOME = new BiomeRegistry(Side.CLIENT);
+			BLOCK = new BlockRegistry(Side.CLIENT);
+			SEASON = new SeasonRegistry(Side.CLIENT);
+			ITEMS = new ItemRegistry(Side.CLIENT);
+			FOOTSTEPS = new FootstepsRegistry(Side.CLIENT);
+			EFFECTS = new EffectRegistry(Side.CLIENT);
 
-		final RegistryManager rm = RegistryManager.get();
-		rm.register(DIMENSION);
-		rm.register(SOUND);
-		rm.register(BIOME);
-		rm.register(BLOCK);
-		rm.register(SEASON);
-		rm.register(ITEMS);
-		rm.register(FOOTSTEPS);
-		rm.register(EFFECTS);
+			final RegistryManager rm = RegistryManager.get();
+			rm.register(DIMENSION);
+			rm.register(SOUND);
+			rm.register(BIOME);
+			rm.register(BLOCK);
+			rm.register(SEASON);
+			rm.register(ITEMS);
+			rm.register(FOOTSTEPS);
+			rm.register(EFFECTS);
 
-		rm.reload();
+			rm.reload();
+		} catch (@Nonnull final Throwable t) {
+			ModBase.log().error("Unable to initialize client registry!", t);
+		}
 	}
 }

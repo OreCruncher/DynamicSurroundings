@@ -30,8 +30,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
-import org.orecruncher.dsurround.registry.block.BlockInfo;
-import org.orecruncher.dsurround.registry.block.BlockInfo.BlockInfoMutable;
+import org.orecruncher.dsurround.registry.block.BlockMatcher;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
@@ -51,14 +50,8 @@ public final class BlockAcousticMap {
 		AcousticProfile resolve(@Nonnull final IBlockState state);
 	}
 
-	// Shared mutable. Does some minor caching when processing
-	// the same IBlockState across multiple substrate map lookups.
-	// Not thread safe, but since it is running on the client thread
-	// it should be OK.
-	protected static final BlockInfoMutable key = new BlockInfoMutable();
-
 	protected final IAcousticResolver resolver;
-	protected Map<BlockInfo, AcousticProfile> data = new Object2ObjectOpenHashMap<>();
+	protected Map<BlockMatcher, AcousticProfile> data = new Object2ObjectOpenHashMap<>();
 	protected Map<IBlockState, AcousticProfile> cache = new Reference2ObjectOpenHashMap<>();
 
 	/**
@@ -73,22 +66,21 @@ public final class BlockAcousticMap {
 		this.resolver = resolver;
 
 		// Air is a very known quantity
-		this.data.put(BlockInfo.AIR, AcousticProfile.Static.NOT_EMITTER);
+		this.data.put(BlockMatcher.AIR, AcousticProfile.Static.NOT_EMITTER);
 	}
 
 	@Nonnull
 	protected AcousticProfile cacheMiss(@Nonnull final IBlockState state) {
-		AcousticProfile result = this.data.get(key.set(state));
+		final BlockMatcher matcher = BlockMatcher.create(state);
+		AcousticProfile result = this.data.get(matcher);
 		if (result != null)
 			return result;
-		if (key.hasSubTypes())
-			result = this.data.get(key.asGeneric());
+		if (matcher.hasSubtypes())
+			result = this.data.get(BlockMatcher.asGeneric(state));
 		if (result != null)
 			return result;
 		if (this.resolver != null)
 			result = this.resolver.resolve(state);
-		else if (key.hasSpecialMeta())
-			result = this.data.get(key.asSpecial());
 		return result != null ? result : AcousticProfile.NO_PROFILE;
 	}
 
@@ -106,7 +98,7 @@ public final class BlockAcousticMap {
 		return result.get();
 	}
 
-	public void put(@Nonnull final BlockInfo info, @Nonnull final IAcoustic[] acoustics) {
+	public void put(@Nonnull final BlockMatcher info, @Nonnull final IAcoustic[] acoustics) {
 		this.data.put(info, new AcousticProfile.Static(acoustics));
 	}
 

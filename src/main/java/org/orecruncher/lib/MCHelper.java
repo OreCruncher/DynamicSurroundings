@@ -40,8 +40,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -55,20 +53,7 @@ public final class MCHelper {
 	private static final Set<Block> hasVariants = new ReferenceOpenHashSet<>();
 
 	private static boolean variantCheck(@Nonnull final Block block) {
-		final Item item = Item.getItemFromBlock(block);
-		if (item == null)
-			return false;
-
-		if (item.getHasSubtypes())
-			return true;
-
-		final NonNullList<ItemStack> stacks = NonNullList.create();
-		try {
-			block.getSubBlocks(block.getCreativeTab(), stacks);
-		} catch (final Throwable t) {
-			return false;
-		}
-		return stacks.size() > 1;
+		return block.getBlockState().getValidStates().size() > 1;
 	}
 
 	static {

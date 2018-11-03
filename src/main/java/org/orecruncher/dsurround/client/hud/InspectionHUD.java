@@ -26,7 +26,6 @@ package org.orecruncher.dsurround.client.hud;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModOptions;
@@ -34,15 +33,15 @@ import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.footsteps.implem.BlockMap;
 import org.orecruncher.dsurround.client.fx.BlockEffect;
 import org.orecruncher.dsurround.client.handlers.EffectManager;
-import org.orecruncher.dsurround.client.handlers.FxHandler;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.dsurround.client.handlers.FxHandler;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.dsurround.registry.block.BlockInfo;
+import org.orecruncher.dsurround.registry.block.BlockMatcher;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
 import org.orecruncher.lib.WorldUtils;
-import org.orecruncher.lib.gui.TextPanel;
 import org.orecruncher.lib.gui.Panel.Reference;
+import org.orecruncher.lib.gui.TextPanel;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -61,8 +60,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -77,8 +74,6 @@ public class InspectionHUD extends GuiOverlay {
 	private static final String TEXT_STEP_SOUNDS = TextFormatting.DARK_PURPLE + "<Step Sounds>";
 	private static final String TEXT_BLOCK_SOUNDS = TextFormatting.DARK_PURPLE + "<Block Sounds>";
 	private static final String TEXT_DICTIONARY_NAMES = TextFormatting.DARK_PURPLE + "<Dictionary Names>";
-
-	private final BlockInfo.BlockInfoMutable block = new BlockInfo.BlockInfoMutable();
 
 	private static List<String> gatherOreNames(final ItemStack stack) {
 		final List<String> result = new ArrayList<>();
@@ -116,9 +111,9 @@ public class InspectionHUD extends GuiOverlay {
 		}
 
 		if (state != null) {
-			this.block.set(state);
-			text.add("BLOCK: " + this.block.toString());
-			text.add(TextFormatting.DARK_AQUA + this.block.getBlock().getClass().getName());
+			final BlockMatcher info = BlockMatcher.create(state);
+			text.add("BLOCK: " + info.toString());
+			text.add(TextFormatting.DARK_AQUA + info.getBlock().getClass().getName());
 			text.add("Material: " + MCHelper.getMaterialName(state.getMaterial()));
 			final SoundType st = state.getBlock().getSoundType(state, EnvironState.getWorld(), pos,
 					EnvironState.getPlayer());
@@ -133,7 +128,7 @@ public class InspectionHUD extends GuiOverlay {
 			final NBTTagCompound nbt = new NBTTagCompound();
 			NBTUtil.writeBlockState(nbt, state);
 			text.add(nbt.toString());
-			
+
 			final BlockMap bm = ClientRegistry.FOOTSTEPS.getBlockMap();
 			if (bm != null) {
 				final List<String> data = new ArrayList<>();
@@ -262,18 +257,6 @@ public class InspectionHUD extends GuiOverlay {
 			final int centerX = event.getResolution().getScaledWidth() / 2;
 			final int centerY = 80;
 			this.textPanel.render(centerX, centerY, Reference.TOP_CENTER);
-		}
-	}
-
-	@SubscribeEvent
-	public static void tooltipEvent(@Nonnull final ItemTooltipEvent event) {
-		if (ModOptions.logging.enableDebugLogging) {
-			final ItemStack stack = event.getItemStack();
-			if (stack != null) {
-				final String itemName = getItemName(stack);
-				event.getToolTip().add(TextFormatting.GOLD + itemName);
-				event.getToolTip().add(TextFormatting.GOLD + stack.getItem().getClass().getName());
-			}
 		}
 	}
 }

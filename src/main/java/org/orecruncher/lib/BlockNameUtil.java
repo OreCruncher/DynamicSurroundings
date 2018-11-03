@@ -31,8 +31,15 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTException;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+
 /*
- * Utility functions for manipulating block names.
+ * Utility functions for manipulating blockName names.
  */
 public final class BlockNameUtil {
 
@@ -40,104 +47,69 @@ public final class BlockNameUtil {
 
 	}
 
-	/*
-	 * Sentinal value for metaData that indicates the name contained a wildcard
-	 * token for the metadata slot ('*').
-	 */
-	private static final int GENERIC = -1;
-
-	/*
-	 * Sentinal value for metaData that indicates that the name did not contain any
-	 * metaData specification.
-	 */
-	private static final int META_NOT_SPECIFIED = -100;
-
-	/*
-	 * Value for the control field that indicates no control code was specified.
-	 */
-	private static final char NO_CONTROL_CODE = '\0';
-
 	// https://www.regexplanet.com/advanced/java/index.html
-	private static final Pattern pattern = Pattern.compile("(\\W)?([\\w\\-]+:[\\w\\.\\-/]+)[\\^|:]?(\\d+|\\*)?\\+?(\\w+)?");
+	private static final Pattern pattern = Pattern.compile("([\\w\\-]+:[\\w\\.\\-/]+)(\\{.*\\})?\\+?(\\w+)?");
 
 	public final static class NameResult {
 
 		/*
-		 * Control code at the beginning of the string, if any. A control code is a
-		 * character that matches a regex \W. It is up to the calling code to decide
-		 * what to do if anything about the code.
+		 * Name of the blockName in standard domain:path form.
 		 */
-		private final char control;
+		protected String blockName;
 
 		/*
-		 * Name of the block in standard domain:path form.
+		 * The block from the registries
 		 */
-		private final String block;
+		protected Block block;
 
 		/*
-		 * Metadata specified in the name. If no metadata was specified it will be set
-		 * to META_NOT_SPECIFIED. If a wildcard generic was specified it will be
-		 * GENERIC. Otherwise it will be the integer value specified. It is up to the
-		 * calling routine to ensure that the information is valid.
+		 * The parsed NBTTagCompound after the blockName name, if present
 		 */
-		private final int metaData;
+		protected NBTTagCompound nbt;
 
 		/*
-		 * Extra tokens tacked onto the end of the string. It is up to the calling
-		 * routine to make sense of the data.
+		 * Extra information that may have been appended at the end
 		 */
-		private final String extras;
+		private String extras;
 
-		NameResult(final Matcher matcher) {
-			String temp = matcher.group(1);
-			if (!StringUtils.isEmpty(temp))
-				this.control = temp.charAt(0);
-			else
-				this.control = NO_CONTROL_CODE;
+		NameResult() {
+			
+		}
+		
+		NameResult(final Matcher matcher) throws NBTException {
+			this.blockName = matcher.group(1);
+			final Block proposed = Block.REGISTRY.getObject(new ResourceLocation(this.blockName));
+			this.block = proposed == Blocks.AIR ? null : proposed;
 
-			this.block = matcher.group(2);
-
-			temp = matcher.group(3);
-			if (StringUtils.isEmpty(temp))
-				this.metaData = META_NOT_SPECIFIED;
-			else if ("*".equals(temp))
-				this.metaData = GENERIC;
-			else {
-				this.metaData = Integer.parseInt(temp);
-				if (this.metaData < 0 || this.metaData > 15)
-					LibLog.log().warn("Metadata is not in the normal range: %d", this.metaData);
+			String temp = matcher.group(2);
+			if (!StringUtils.isEmpty(temp)) {
+				this.nbt = JsonToNBT.getTagFromJson(matcher.group(2));
 			}
 
-			this.extras = matcher.group(4);
-		}
-
-		public boolean hasControlCode() {
-			return this.control != NO_CONTROL_CODE;
-		}
-
-		public boolean isGeneric() {
-			return this.metaData == GENERIC;
-		}
-
-		public boolean noMetadataSpecified() {
-			return this.metaData == META_NOT_SPECIFIED;
-		}
-
-		public boolean hasExtras() {
-			return !StringUtils.isEmpty(this.extras);
-		}
-
-		public char getControlCode() {
-			return this.control;
+			this.extras = matcher.group(3);
 		}
 
 		@Nonnull
 		public String getBlockName() {
+			return this.blockName;
+		}
+
+		@Nullable
+		public Block getBlock() {
 			return this.block;
 		}
 
-		public int getMetadata() {
-			return this.metaData;
+		public boolean hasNBT() {
+			return this.nbt != null;
+		}
+
+		@Nullable
+		public NBTTagCompound getNBT() {
+			return this.nbt;
+		}
+
+		public boolean hasExtras() {
+			return this.extras != null;
 		}
 
 		@Nullable
@@ -148,21 +120,21 @@ public final class BlockNameUtil {
 		@Override
 		@Nonnull
 		public String toString() {
-			final String t;
-			if (this.metaData == GENERIC)
-				t = "GENERIC";
-			else if (this.metaData == META_NOT_SPECIFIED)
-				t = "META_NOT_SPECIFIED";
-			else
-				t = Integer.toString(this.metaData);
-
-			return String.format("['%c', %s, %s, '%s']", this.control, this.block, t, this.extras);
+			final StringBuilder builder = new StringBuilder();
+			builder.append('[');
+			if (getBlock() == null)
+				builder.append("*INVALID* ");
+			builder.append(getBlockName());
+			if (hasNBT())
+				builder.append(getNBT().toString());
+			builder.append(']');
+			return builder.toString();
 		}
 	}
 
 	/*
-	 * Parses the block name passed in and returns the result of that parsing. If
-	 * null is returned it means there was some sort of error.
+	 * Parses the blockName name passed in and returns the result of that parsing.
+	 * If null is returned it means there was some sort of error.
 	 */
 	@Nullable
 	public static NameResult parseBlockName(@Nonnull final String blockName) {

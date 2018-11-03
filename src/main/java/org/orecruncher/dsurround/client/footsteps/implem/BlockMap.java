@@ -38,9 +38,8 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.facade.FacadeHelper;
-import org.orecruncher.dsurround.registry.block.BlockInfo;
+import org.orecruncher.dsurround.registry.block.BlockMatcher;
 import org.orecruncher.lib.BlockNameUtil;
-import org.orecruncher.lib.MCHelper;
 import org.orecruncher.lib.BlockNameUtil.NameResult;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -61,16 +60,10 @@ public class BlockMap {
 	private final Map<Substrate, BlockAcousticMap> substrateMap = new EnumMap<>(Substrate.class);
 
 	private static class MacroEntry {
-		public final int meta;
 		public final String substrate;
 		public final String value;
 
-		public MacroEntry(@Nonnull final String substrate, final @Nonnull String value) {
-			this(-1, substrate, value);
-		}
-
-		public MacroEntry(final int meta, @Nonnull final String substrate, @Nonnull final String value) {
-			this.meta = meta;
+		public MacroEntry(@Nonnull final String substrate, @Nonnull final String value) {
 			this.substrate = substrate;
 			this.value = value;
 		}
@@ -100,41 +93,6 @@ public class BlockMap {
 		entries.add(MESSY);
 		entries.add(new MacroEntry("foliage", "brush_straw_transition"));
 		macros.put("#bush", entries);
-
-		entries = new ArrayList<>();
-		entries.add(new MacroEntry(null, "NOT_EMITTER"));
-		entries.add(MESSY);
-		entries.add(new MacroEntry(0, "foliage", "NOT_EMITTER"));
-		entries.add(new MacroEntry(1, "foliage", "NOT_EMITTER"));
-		entries.add(new MacroEntry(2, "foliage", "brush"));
-		entries.add(new MacroEntry(3, "foliage", "brush"));
-		entries.add(new MacroEntry(4, "foliage", "brush_straw_transition"));
-		entries.add(new MacroEntry(5, "foliage", "brush_straw_transition"));
-		entries.add(new MacroEntry(6, "foliage", "straw"));
-		entries.add(new MacroEntry(7, "foliage", "straw"));
-		macros.put("#wheat", entries);
-
-		entries = new ArrayList<>();
-		entries.add(new MacroEntry(null, "NOT_EMITTER"));
-		entries.add(MESSY);
-		entries.add(new MacroEntry(0, "foliage", "NOT_EMITTER"));
-		entries.add(new MacroEntry(1, "foliage", "NOT_EMITTER"));
-		entries.add(new MacroEntry(2, "foliage", "NOT_EMITTER"));
-		entries.add(new MacroEntry(3, "foliage", "NOT_EMITTER"));
-		entries.add(new MacroEntry(4, "foliage", "brush"));
-		entries.add(new MacroEntry(5, "foliage", "brush"));
-		entries.add(new MacroEntry(6, "foliage", "brush"));
-		entries.add(new MacroEntry(7, "foliage", "brush"));
-		macros.put("#crop", entries);
-
-		entries = new ArrayList<>();
-		entries.add(new MacroEntry(null, "NOT_EMITTER"));
-		entries.add(MESSY);
-		entries.add(new MacroEntry(0, "foliage", "NOT_EMITTER"));
-		entries.add(new MacroEntry(1, "foliage", "NOT_EMITTER"));
-		entries.add(new MacroEntry(2, "foliage", "brush"));
-		entries.add(new MacroEntry(3, "foliage", "brush"));
-		macros.put("#beets", entries);
 
 		entries = new ArrayList<>();
 		entries.add(new MacroEntry(null, "NOT_EMITTER"));
@@ -182,12 +140,10 @@ public class BlockMap {
 		return this.metaMap.getBlockAcoustics(trueState);
 	}
 
-	private void put(@Nonnull final Block block, final int meta, @Nonnull final String substrate,
-			@Nonnull final String value) {
+	private void put(@Nonnull final BlockMatcher info, @Nonnull final String substrate, @Nonnull final String value) {
 
 		final Substrate s = Substrate.get(substrate);
 		final IAcoustic[] acoustics = this.acousticsManager.compileAcoustics(value);
-		final BlockInfo info = new BlockInfo(block, meta);
 
 		if (s == null) {
 			this.metaMap.put(info, acoustics);
@@ -199,12 +155,11 @@ public class BlockMap {
 		}
 	}
 
-	private void expand(@Nonnull final Block block, @Nonnull final String value) {
+	private void expand(@Nonnull final BlockMatcher info, @Nonnull final String value) {
 		final List<MacroEntry> macro = macros.get(value);
 		if (macro != null) {
 			for (final MacroEntry entry : macro) {
-				final int trueMeta = MCHelper.hasVariants(block) ? entry.meta : BlockInfo.NO_SUBTYPE;
-				put(block, trueMeta, entry.substrate, entry.value);
+				put(info, entry.substrate, entry.value);
 			}
 		} else {
 			ModBase.log().debug("Unknown macro '%s'", value);
@@ -212,26 +167,20 @@ public class BlockMap {
 	}
 
 	public void register(@Nonnull final String key, @Nonnull final String value) {
-		final NameResult result = BlockNameUtil.parseBlockName(key);
-		if (result != null) {
-			final String blockName = result.getBlockName();
-			final Block block = MCHelper.getBlockByName(blockName);
+		final NameResult name = BlockNameUtil.parseBlockName(key);
+		if (name != null) {
+			final String blockName = name.getBlockName();
+			final Block block = name.getBlock();
 			if (block == null) {
 				ModBase.log().debug("Unable to locate block for blockMap '%s'", blockName);
-			} else if (block == Blocks.AIR) {
-				ModBase.log().warn("Attempt to insert AIR into blockMap '%s'", blockName);
-			} else if (value.startsWith("#")) {
-				expand(block, value);
 			} else {
-				final int meta;
-				if (result.isGeneric())
-					meta = BlockInfo.GENERIC;
-				else if (result.noMetadataSpecified())
-					meta = MCHelper.hasVariants(block) ? BlockInfo.GENERIC : BlockInfo.NO_SUBTYPE;
-				else
-					meta = result.getMetadata();
-				final String substrate = result.getExtras();
-				put(block, meta, substrate, value);
+				final BlockMatcher matcher = BlockMatcher.create(name);
+				if (value.startsWith("#")) {
+					expand(matcher, value);
+				} else {
+					final String substrate = name.getExtras();
+					put(matcher, substrate, value);
+				}
 			}
 		} else {
 			ModBase.log().warn("Malformed key in blockMap '%s'", key);
