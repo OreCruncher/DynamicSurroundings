@@ -26,7 +26,6 @@ package org.orecruncher.lib.sound;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -36,6 +35,7 @@ import org.orecruncher.lib.LibLog;
 
 import com.google.common.io.ByteStreams;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -48,7 +48,7 @@ public final class SoundCache {
 	private static final int BUFFER_SIZE = 64 * 1024;
 	private static final byte[] BUFFER = new byte[BUFFER_SIZE];
 	private static final IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
-	private static final Map<ResourceLocation, URL> cache = new HashMap<>(256);
+	private static final Map<ResourceLocation, URL> cache = new Object2ObjectOpenHashMap<>(256);
 
 	private static final ResourceLocation SILENCE_RESOURCE = new ResourceLocation(ModBase.RESOURCE_ID,
 			"sounds/ambient/silence.ogg");

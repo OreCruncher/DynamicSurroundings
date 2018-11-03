@@ -24,11 +24,11 @@
 
 package org.orecruncher.dsurround.registry.config;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.annotations.SerializedName;
 
 public final class ModConfiguration {
@@ -42,7 +42,7 @@ public final class ModConfiguration {
 	public List<BiomeConfig> biomes = ImmutableList.of();
 
 	@SerializedName("biomeAlias")
-	public Map<String, String> biomeAlias = new HashMap<>();
+	public Map<String, String> biomeAlias = ImmutableMap.of();
 
 	@SerializedName("blocks")
 	public List<BlockConfig> blocks = ImmutableList.of();
@@ -51,7 +51,7 @@ public final class ModConfiguration {
 	public List<DimensionConfig> dimensions = ImmutableList.of();
 
 	@SerializedName("footsteps")
-	public Map<String, String> footsteps = new HashMap<>();
+	public Map<String, String> footsteps = ImmutableMap.of();
 
 	@SerializedName("footprints")
 	public List<String> footprints = ImmutableList.of();
@@ -63,10 +63,10 @@ public final class ModConfiguration {
 	public ItemConfig itemConfig = new ItemConfig();
 
 	@SerializedName("variators")
-	public Map<String, VariatorConfig> variators = new HashMap<>();
+	public Map<String, VariatorConfig> variators = ImmutableMap.of();
 
 	@SerializedName("entities")
-	public Map<String, EntityConfig> entities = new HashMap<>();
+	public Map<String, EntityConfig> entities = ImmutableMap.of();
 
 	public static class ForgeEntry {
 		@SerializedName("acousticProfile")

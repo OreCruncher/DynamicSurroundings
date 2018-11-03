@@ -23,7 +23,6 @@
  */
 package org.orecruncher.dsurround.client.handlers;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -62,6 +61,7 @@ import org.orecruncher.lib.sound.ITrackedSound;
 
 import com.google.common.collect.ImmutableList;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -109,7 +109,7 @@ public class FxHandler extends EffectHandlerBase {
 		library.register(EntityEmojiEffect.DEFAULT_FILTER, new EntityEmojiEffect.Factory());
 	}
 
-	private final Map<UUID, EntityEffectHandler> handlers = new HashMap<>(256);
+	private final Map<UUID, EntityEffectHandler> handlers = new Object2ObjectOpenHashMap<>(256);
 	private final EventEffectLibrary eventLibrary = new EventEffectLibrary(PARTICLE_HELPER, SOUND_HELPER);
 
 	private final TimerEMA compute = new TimerEMA("FxHandler Updates");
