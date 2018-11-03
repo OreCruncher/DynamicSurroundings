@@ -52,6 +52,8 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -68,6 +70,7 @@ import net.minecraftforge.oredict.OreDictionary;
 @SideOnly(Side.CLIENT)
 public class InspectionHUD extends GuiOverlay {
 
+	private static final String TEXT_BLOCKSTATE = TextFormatting.DARK_PURPLE + "<BlockState>";
 	private static final String TEXT_FOOTSTEP_ACOUSTICS = TextFormatting.DARK_PURPLE + "<Footstep Accoustics>";
 	private static final String TEXT_BLOCK_EFFECTS = TextFormatting.DARK_PURPLE + "<Block Effects>";
 	private static final String TEXT_ALWAYS_ON_EFFECTS = TextFormatting.DARK_PURPLE + "<Always On Effects>";
@@ -126,6 +129,11 @@ public class InspectionHUD extends GuiOverlay {
 			if (ClientRegistry.FOOTSTEPS.hasFootprint(state))
 				text.add("Footprints Generated");
 
+			text.add(TEXT_BLOCKSTATE);
+			final NBTTagCompound nbt = new NBTTagCompound();
+			NBTUtil.writeBlockState(nbt, state);
+			text.add(nbt.toString());
+			
 			final BlockMap bm = ClientRegistry.FOOTSTEPS.getBlockMap();
 			if (bm != null) {
 				final List<String> data = new ArrayList<>();
