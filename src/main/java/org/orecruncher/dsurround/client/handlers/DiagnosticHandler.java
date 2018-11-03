@@ -35,7 +35,6 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.ClientChunkCache;
 import org.orecruncher.dsurround.client.handlers.trace.TraceParticleManager;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
-import org.orecruncher.dsurround.client.swing.DiagnosticPanel;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.event.ServerDataEvent;
 import org.orecruncher.lib.math.MathStuff;
@@ -104,9 +103,6 @@ public class DiagnosticHandler extends EffectHandlerBase {
 			this.diagnostics = null;
 		}
 
-		if (ModOptions.logging.showDebugDialog)
-			DiagnosticPanel.refresh();
-
 		if (ModBase.isDeveloperMode()) {
 			final ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
 			if (!(pm instanceof TraceParticleManager)) {
@@ -121,19 +117,12 @@ public class DiagnosticHandler extends EffectHandlerBase {
 	public void onConnect() {
 		this.diagnostics = null;
 		this.serverDataReport = null;
-
-		if (ModOptions.logging.showDebugDialog)
-			DiagnosticPanel.create();
 	}
 
 	@Override
 	public void onDisconnect() {
 		this.diagnostics = null;
 		this.serverDataReport = null;
-
-		if (ModOptions.logging.showDebugDialog)
-			DiagnosticPanel.destroy();
-
 		this.timers.clear();
 	}
 
