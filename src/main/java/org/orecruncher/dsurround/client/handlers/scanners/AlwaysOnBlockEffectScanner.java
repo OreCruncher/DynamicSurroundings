@@ -31,10 +31,10 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.fx.BlockEffect;
-import org.orecruncher.dsurround.registry.block.BlockProfile;
+import org.orecruncher.dsurround.lib.scanner.CuboidScanner;
+import org.orecruncher.dsurround.lib.scanner.ScanLocus;
+import org.orecruncher.dsurround.registry.blockstate.BlockStateProfile;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
-import org.orecruncher.lib.scanner.CuboidScanner;
-import org.orecruncher.lib.scanner.ScanLocus;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -53,8 +53,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 
-	protected BlockProfile profile = null;
-	protected IBlockState lastState = null;
+	protected BlockStateProfile profile = null;
 
 	public AlwaysOnBlockEffectScanner(@Nonnull final ScanLocus locus, final int range) {
 		super(locus, "AlwaysOnBlockEffectScanner", range, 0);
@@ -65,10 +64,7 @@ public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 	protected boolean interestingBlock(final IBlockState state) {
 		if (state == Blocks.AIR.getDefaultState())
 			return false;
-		if (this.lastState != state) {
-			this.lastState = state;
-			this.profile = ClientRegistry.BLOCK.findProfile(state);
-		}
+		this.profile = ClientRegistry.BLOCK.get(state);
 		return this.profile.hasAlwaysOnEffects();
 	}
 

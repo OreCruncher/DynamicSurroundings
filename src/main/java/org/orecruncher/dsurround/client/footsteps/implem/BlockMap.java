@@ -38,7 +38,7 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.facade.FacadeHelper;
-import org.orecruncher.dsurround.registry.block.BlockMatcher;
+import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 import org.orecruncher.lib.BlockNameUtil;
 import org.orecruncher.lib.BlockNameUtil.NameResult;
 
@@ -206,7 +206,7 @@ public class BlockMap {
 		return this.metaMap.getBlockAcoustics(trueState);
 	}
 
-	private void put(@Nonnull final BlockMatcher info, @Nonnull final String substrate, @Nonnull final String value) {
+	private void put(@Nonnull final BlockStateMatcher info, @Nonnull final String substrate, @Nonnull final String value) {
 
 		final Substrate s = Substrate.get(substrate);
 		final IAcoustic[] acoustics = this.acousticsManager.compileAcoustics(value);
@@ -221,11 +221,12 @@ public class BlockMap {
 		}
 	}
 
-	private void expand(@Nonnull final BlockMatcher info, @Nonnull final String value) {
+	private void expand(@Nonnull final BlockStateMatcher info, @Nonnull final String value) {
 		final List<MacroEntry> macro = macros.get(value);
 		if (macro != null) {
 			for (final MacroEntry entry : macro) {
-				put(info, entry.substrate, entry.value);
+				final IBlockState state = entry.withProperty(info.getBlock().getDefaultState());
+				put(new BlockStateMatcher(state), entry.substrate, entry.value);
 			}
 		} else {
 			ModBase.log().debug("Unknown macro '%s'", value);
@@ -240,7 +241,7 @@ public class BlockMap {
 			if (block == null) {
 				ModBase.log().debug("Unable to locate block for blockMap '%s'", blockName);
 			} else {
-				final BlockMatcher matcher = BlockMatcher.create(name);
+				final BlockStateMatcher matcher = BlockStateMatcher.create(name);
 				if (value.startsWith("#")) {
 					expand(matcher, value);
 				} else {

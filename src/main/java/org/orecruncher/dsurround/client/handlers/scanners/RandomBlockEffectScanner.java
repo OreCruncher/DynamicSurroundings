@@ -32,10 +32,10 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.fx.BlockEffect;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.dsurround.registry.block.BlockProfile;
+import org.orecruncher.dsurround.lib.scanner.RandomScanner;
+import org.orecruncher.dsurround.lib.scanner.ScanLocus;
+import org.orecruncher.dsurround.registry.blockstate.BlockStateProfile;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
-import org.orecruncher.lib.scanner.RandomScanner;
-import org.orecruncher.lib.scanner.ScanLocus;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -61,8 +61,7 @@ public class RandomBlockEffectScanner extends RandomScanner {
 	public static final int NEAR_RANGE = 16;
 	public static final int FAR_RANGE = 32;
 
-	protected BlockProfile profile = null;
-	protected IBlockState lastState = null;
+	protected BlockStateProfile profile = null;
 
 	public RandomBlockEffectScanner(@Nonnull final ScanLocus locus, final int range) {
 		super(locus, "RandomBlockScanner: " + range, range, ITERATION_COUNT);
@@ -73,10 +72,7 @@ public class RandomBlockEffectScanner extends RandomScanner {
 	protected boolean interestingBlock(@Nonnull final IBlockState state) {
 		if (state == Blocks.AIR.getDefaultState())
 			return false;
-		if (this.lastState != state) {
-			this.lastState = state;
-			this.profile = ClientRegistry.BLOCK.findProfile(state);
-		}
+		this.profile = ClientRegistry.BLOCK.get(state);
 		return this.profile.hasSoundsOrEffects();
 	}
 

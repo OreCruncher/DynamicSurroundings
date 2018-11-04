@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.lib.scanner;
+package org.orecruncher.dsurround.lib.scanner;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

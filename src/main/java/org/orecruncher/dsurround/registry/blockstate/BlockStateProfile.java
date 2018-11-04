@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.registry.block;
+package org.orecruncher.dsurround.registry.blockstate;
 
 import java.util.Random;
 
@@ -34,32 +34,24 @@ import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.lib.MyUtils;
 import org.orecruncher.lib.WeightTable;
 
+import com.google.common.base.Joiner;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class BlockProfile {
+public class BlockStateProfile extends BlockStateData {
 
 	public final static BlockEffect[] NO_EFFECTS = {};
 	public final static SoundEffect[] NO_SOUNDS = {};
 
-	public static BlockProfile createProfile(@Nonnull final BlockMatcher blockInfo) {
-		return new BlockProfile(blockInfo);
-	}
-
-	protected final BlockMatcher info;
 	protected int chance = 100;
-	protected int stepChance = 100;
 	protected SoundEffect[] sounds = NO_SOUNDS;
-	protected SoundEffect[] stepSounds = NO_SOUNDS;
 	protected BlockEffect[] effects = NO_EFFECTS;
 	protected BlockEffect[] alwaysOn = NO_EFFECTS;
 
-	public BlockProfile(@Nonnull final BlockMatcher blockInfo) {
-		this.info = blockInfo;
-	}
-
-	public BlockProfile setChance(final int chance) {
+	@Nonnull
+	public BlockStateProfile setChance(final int chance) {
 		this.chance = chance;
 		return this;
 	}
@@ -68,21 +60,14 @@ public class BlockProfile {
 		return this.chance;
 	}
 
-	public BlockProfile setStepChance(final int chance) {
-		this.stepChance = chance;
-		return this;
-	}
-
-	public int getStepChance() {
-		return this.stepChance;
-	}
-
-	public BlockProfile addSound(@Nonnull final SoundEffect sound) {
+	@Nonnull
+	public BlockStateProfile addSound(@Nonnull final SoundEffect sound) {
 		this.sounds = MyUtils.append(this.sounds, sound);
 		return this;
 	}
 
-	public BlockProfile clearSounds() {
+	@Nonnull
+	public BlockStateProfile clearSounds() {
 		this.sounds = NO_SOUNDS;
 		return this;
 	}
@@ -92,22 +77,8 @@ public class BlockProfile {
 		return this.sounds;
 	}
 
-	public BlockProfile addStepSound(@Nonnull final SoundEffect sound) {
-		this.stepSounds = MyUtils.append(this.stepSounds, sound);
-		return this;
-	}
-
-	public BlockProfile clearStepSounds() {
-		this.stepSounds = NO_SOUNDS;
-		return this;
-	}
-
 	@Nonnull
-	public SoundEffect[] getStepSounds() {
-		return this.stepSounds;
-	}
-
-	public BlockProfile addEffect(@Nonnull final BlockEffect effect) {
+	public BlockStateProfile addEffect(@Nonnull final BlockEffect effect) {
 		if (effect.getChance() > 0)
 			this.effects = MyUtils.append(this.effects, effect);
 		else
@@ -115,7 +86,8 @@ public class BlockProfile {
 		return this;
 	}
 
-	public BlockProfile clearEffects() {
+	@Nonnull
+	public BlockStateProfile clearEffects() {
 		this.effects = NO_EFFECTS;
 		this.alwaysOn = NO_EFFECTS;
 		return this;
@@ -133,15 +105,7 @@ public class BlockProfile {
 
 	@Nullable
 	public SoundEffect getSoundToPlay(@Nonnull final Random random) {
-		return this.sounds != NO_SOUNDS && random.nextInt(getChance()) == 0
-				? new WeightTable<>(this.sounds).next()
-				: null;
-	}
-
-	@Nullable
-	public SoundEffect getStepSoundToPlay(@Nonnull final Random random) {
-		return this.stepSounds != NO_SOUNDS && random.nextInt(getStepChance()) == 0
-				? new WeightTable<>(this.stepSounds).next()
+		return this.sounds != NO_SOUNDS && random.nextInt(getChance()) == 0 ? new WeightTable<>(this.sounds).next()
 				: null;
 	}
 
@@ -157,57 +121,20 @@ public class BlockProfile {
 	@Nonnull
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append("Block [").append(this.info.toString()).append("]");
-
 		if (this.sounds != NO_SOUNDS) {
-			boolean commaFlag = false;
 			builder.append(" chance:").append(this.chance);
 			builder.append("; sounds [");
-			for (final SoundEffect sound : this.sounds) {
-				if (commaFlag)
-					builder.append(",");
-				else
-					commaFlag = true;
-				builder.append(sound.toString());
-			}
+			builder.append(Joiner.on(',').join(this.sounds));
 			builder.append(']');
 		} else {
 			builder.append("NO SOUNDS");
 		}
 
-		if (this.stepSounds != NO_SOUNDS) {
-			boolean commaFlag = false;
-			builder.append(" chance:").append(this.stepChance);
-			builder.append("; step sounds [");
-			for (final SoundEffect sound : this.stepSounds) {
-				if (commaFlag)
-					builder.append(",");
-				else
-					commaFlag = true;
-				builder.append(sound.toString());
-			}
-			builder.append(']');
-		} else {
-			builder.append("; NO STEP SOUNDS");
-		}
-
 		if (this.effects != this.alwaysOn) {
-			boolean commaFlag = false;
 			builder.append("; effects [");
-			for (final BlockEffect effect : this.effects) {
-				if (commaFlag)
-					builder.append(",");
-				else
-					commaFlag = true;
-				builder.append(effect.toString());
-			}
-			for (final BlockEffect effect : this.alwaysOn) {
-				if (commaFlag)
-					builder.append(",");
-				else
-					commaFlag = true;
-				builder.append(effect.toString());
-			}
+			builder.append(Joiner.on(',').join(this.effects));
+			builder.append(',');
+			builder.append(Joiner.on(',').join(this.alwaysOn));
 			builder.append(']');
 		} else {
 			builder.append("; NO EFFECTS");

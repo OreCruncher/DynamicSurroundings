@@ -55,7 +55,7 @@ import org.orecruncher.dsurround.client.footsteps.system.Generator;
 import org.orecruncher.dsurround.client.footsteps.system.GeneratorQP;
 import org.orecruncher.dsurround.client.footsteps.util.ConfigProperty;
 import org.orecruncher.dsurround.registry.Registry;
-import org.orecruncher.dsurround.registry.block.BlockMatcher;
+import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.config.VariatorConfig;
 import org.orecruncher.dsurround.registry.config.ModConfiguration.ForgeEntry;
@@ -243,11 +243,6 @@ public final class FootstepsRegistry extends Registry {
 				}).forEach(bs -> this.FOOTPRINT_STATES.add(bs));
 	}
 
-	@Override
-	public void fini() {
-
-	}
-
 	private void reloadPrimitiveMap(@Nonnull final List<Pack> repo) {
 		for (final Pack pack : repo) {
 			try (final InputStream stream = pack.getInputStream(ResourcePacks.PRIMITIVEMAP_RESOURCE)) {
@@ -433,11 +428,11 @@ public final class FootstepsRegistry extends Registry {
 				b = b.substring(1);
 			}
 
-			final BlockMatcher bi = BlockMatcher.create(b);
+			final BlockStateMatcher bi = BlockStateMatcher.create(b);
 			if (materialMatch) {
 				final IBlockState state = bi.getBlock().getDefaultState();
 				this.FOOTPRINT_MATERIAL.add(state.getMaterial());
-			} else if (!bi.isGeneric()) {
+			} else if (!bi.hasSubtypes()) {
 				this.FOOTPRINT_STATES.addAll(bi.asBlockStates());
 			} else {
 				ModBase.log().warn("Generic matching is not supported for footprints: %s", b);

@@ -26,6 +26,7 @@ package org.orecruncher.dsurround.client.hud;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModOptions;
@@ -36,7 +37,8 @@ import org.orecruncher.dsurround.client.handlers.EffectManager;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.handlers.FxHandler;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.dsurround.registry.block.BlockMatcher;
+import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
+import org.orecruncher.dsurround.registry.blockstate.BlockStateProfile;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
 import org.orecruncher.lib.WorldUtils;
@@ -71,7 +73,6 @@ public class InspectionHUD extends GuiOverlay {
 	private static final String TEXT_FOOTSTEP_ACOUSTICS = TextFormatting.DARK_PURPLE + "<Footstep Accoustics>";
 	private static final String TEXT_BLOCK_EFFECTS = TextFormatting.DARK_PURPLE + "<Block Effects>";
 	private static final String TEXT_ALWAYS_ON_EFFECTS = TextFormatting.DARK_PURPLE + "<Always On Effects>";
-	private static final String TEXT_STEP_SOUNDS = TextFormatting.DARK_PURPLE + "<Step Sounds>";
 	private static final String TEXT_BLOCK_SOUNDS = TextFormatting.DARK_PURPLE + "<Block Sounds>";
 	private static final String TEXT_DICTIONARY_NAMES = TextFormatting.DARK_PURPLE + "<Dictionary Names>";
 
@@ -111,7 +112,7 @@ public class InspectionHUD extends GuiOverlay {
 		}
 
 		if (state != null) {
-			final BlockMatcher info = BlockMatcher.create(state);
+			final BlockStateMatcher info = BlockStateMatcher.create(state);
 			text.add("BLOCK: " + info.toString());
 			text.add(TextFormatting.DARK_AQUA + info.getBlock().getClass().getName());
 			text.add("Material: " + MCHelper.getMaterialName(state.getMaterial()));
@@ -140,7 +141,8 @@ public class InspectionHUD extends GuiOverlay {
 				}
 			}
 
-			BlockEffect[] effects = ClientRegistry.BLOCK.getEffects(state);
+			final BlockStateProfile data = ClientRegistry.BLOCK.get(state);
+			BlockEffect[] effects = data.getEffects();
 			if (effects.length > 0) {
 				text.add(TEXT_BLOCK_EFFECTS);
 				for (final BlockEffect e : effects) {
@@ -148,7 +150,7 @@ public class InspectionHUD extends GuiOverlay {
 				}
 			}
 
-			effects = ClientRegistry.BLOCK.getAlwaysOnEffects(state);
+			effects = data.getAlwaysOnEffects();
 			if (effects.length > 0) {
 				text.add(TEXT_ALWAYS_ON_EFFECTS);
 				for (final BlockEffect e : effects) {
@@ -156,18 +158,10 @@ public class InspectionHUD extends GuiOverlay {
 				}
 			}
 
-			SoundEffect[] sounds = ClientRegistry.BLOCK.getAllStepSounds(state);
-			if (sounds.length > 0) {
-				text.add(TEXT_STEP_SOUNDS);
-				text.add(TextFormatting.DARK_GREEN + "Chance: 1 in " + ClientRegistry.BLOCK.getStepSoundChance(state));
-				for (final SoundEffect s : sounds)
-					text.add(TextFormatting.GOLD + s.toString());
-			}
-
-			sounds = ClientRegistry.BLOCK.getAllSounds(state);
+			final SoundEffect[] sounds = data.getSounds();
 			if (sounds.length > 0) {
 				text.add(TEXT_BLOCK_SOUNDS);
-				text.add(TextFormatting.DARK_GREEN + "Chance: 1 in " + ClientRegistry.BLOCK.getSoundChance(state));
+				text.add(TextFormatting.DARK_GREEN + "Chance: 1 in " + data.getChance());
 				for (final SoundEffect s : sounds)
 					text.add(TextFormatting.GOLD + s.toString());
 			}

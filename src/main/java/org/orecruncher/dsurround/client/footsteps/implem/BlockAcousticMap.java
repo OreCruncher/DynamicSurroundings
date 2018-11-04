@@ -30,7 +30,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
-import org.orecruncher.dsurround.registry.block.BlockMatcher;
+import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
@@ -51,7 +51,7 @@ public final class BlockAcousticMap {
 	}
 
 	protected final IAcousticResolver resolver;
-	protected Map<BlockMatcher, AcousticProfile> data = new Object2ObjectOpenHashMap<>();
+	protected Map<BlockStateMatcher, AcousticProfile> data = new Object2ObjectOpenHashMap<>();
 	protected Map<IBlockState, AcousticProfile> cache = new Reference2ObjectOpenHashMap<>();
 
 	/**
@@ -66,17 +66,17 @@ public final class BlockAcousticMap {
 		this.resolver = resolver;
 
 		// Air is a very known quantity
-		this.data.put(BlockMatcher.AIR, AcousticProfile.Static.NOT_EMITTER);
+		this.data.put(BlockStateMatcher.AIR, AcousticProfile.Static.NOT_EMITTER);
 	}
 
 	@Nonnull
 	protected AcousticProfile cacheMiss(@Nonnull final IBlockState state) {
-		final BlockMatcher matcher = BlockMatcher.create(state);
+		final BlockStateMatcher matcher = BlockStateMatcher.create(state);
 		AcousticProfile result = this.data.get(matcher);
 		if (result != null)
 			return result;
 		if (matcher.hasSubtypes())
-			result = this.data.get(BlockMatcher.asGeneric(state));
+			result = this.data.get(BlockStateMatcher.asGeneric(state));
 		if (result != null)
 			return result;
 		if (this.resolver != null)
@@ -98,7 +98,7 @@ public final class BlockAcousticMap {
 		return result.get();
 	}
 
-	public void put(@Nonnull final BlockMatcher info, @Nonnull final IAcoustic[] acoustics) {
+	public void put(@Nonnull final BlockStateMatcher info, @Nonnull final IAcoustic[] acoustics) {
 		this.data.put(info, new AcousticProfile.Static(acoustics));
 	}
 

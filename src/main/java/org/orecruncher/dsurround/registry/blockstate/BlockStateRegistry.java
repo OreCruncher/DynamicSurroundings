@@ -22,10 +22,10 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.registry.block;
+package org.orecruncher.dsurround.registry.blockstate;
 
 import java.util.Map;
-import java.util.Random;
+import java.util.stream.StreamSupport;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,36 +41,35 @@ import org.orecruncher.dsurround.registry.config.BlockConfig;
 import org.orecruncher.dsurround.registry.config.EffectConfig;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.config.SoundConfig;
-import org.orecruncher.dsurround.registry.config.SoundType;
 import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 
-import com.google.common.collect.ImmutableMap;
-
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.SoundCategory;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public final class BlockRegistry extends Registry {
+public final class BlockStateRegistry extends Registry {
 
-	private static final BlockProfile NO_PROFILE = BlockProfile.createProfile(BlockMatcher.AIR).setChance(0)
-			.setStepChance(0);
+	private static final BlockStateProfile NO_PROFILE = new BlockStateProfile().setChance(0);
 
-	private Map<BlockMatcher, BlockProfile> registry;
-	private Map<IBlockState, BlockProfile> cache;
+	private Map<BlockStateMatcher, BlockStateProfile> registry;
 
-	public BlockRegistry(@Nonnull final Side side) {
+	public BlockStateRegistry(@Nonnull final Side side) {
 		super(side);
 	}
 
 	@Override
 	public void init() {
 		this.registry = new Object2ObjectOpenHashMap<>();
-		this.cache = new Reference2ObjectOpenHashMap<>();
+
+		// Wipe out any cached data
+		StreamSupport.stream(ForgeRegistries.BLOCKS.spliterator(), false)
+				.map(block -> block.getBlockState().getValidStates()).flatMap(l -> l.stream())
+				.forEach(state -> BlockStateUtil.setStateData(state, null));
 	}
 
 	@Override
@@ -79,99 +78,46 @@ public final class BlockRegistry extends Registry {
 			register(block);
 	}
 
-	@Override
-	public void initComplete() {
-		this.registry = ImmutableMap.copyOf(this.registry);
-	}
-
-	@Override
-	public void fini() {
-
-	}
-
 	@Nonnull
-	public BlockProfile findProfile(@Nonnull final IBlockState state) {
-		BlockProfile profile = this.cache.get(state);
+	public BlockStateProfile get(@Nonnull final IBlockState state) {
+		BlockStateProfile profile = BlockStateUtil.getStateData(state);
 		if (profile == null) {
-			profile = this.registry.get(BlockMatcher.asGeneric(state));
+			profile = this.registry.get(BlockStateMatcher.asGeneric(state));
 			if (profile == null)
 				profile = NO_PROFILE;
-			this.cache.put(state, profile);
+			BlockStateUtil.setStateData(state, profile);
 		}
 		return profile;
 	}
 
-	@Nonnull
-	public BlockEffect[] getEffects(@Nonnull final IBlockState state) {
-		return findProfile(state).getEffects();
-	}
-
-	@Nonnull
-	public BlockEffect[] getAlwaysOnEffects(@Nonnull final IBlockState state) {
-		return findProfile(state).getAlwaysOnEffects();
-	}
-
-	@Nonnull
-	public SoundEffect[] getAllSounds(@Nonnull final IBlockState state) {
-		return findProfile(state).getSounds();
-	}
-
-	@Nonnull
-	public SoundEffect[] getAllStepSounds(@Nonnull final IBlockState state) {
-		return findProfile(state).getStepSounds();
-	}
-
-	public int getStepSoundChance(@Nonnull final IBlockState state) {
-		return findProfile(state).getStepChance();
-	}
-
-	public int getSoundChance(@Nonnull final IBlockState state) {
-		return findProfile(state).getChance();
-	}
-
 	@Nullable
-	public SoundEffect getStepSoundToPlay(@Nonnull final IBlockState state, @Nonnull final Random rand) {
-		return findProfile(state).getStepSoundToPlay(rand);
-	}
-
-	@Nullable
-	public SoundEffect getSoundToPlay(@Nonnull final IBlockState state, @Nonnull final Random rand) {
-		return findProfile(state).getSoundToPlay(rand);
-	}
-
-	@Nullable
-	protected BlockProfile getOrCreateProfile(@Nonnull final BlockMatcher info) {
+	protected BlockStateProfile getOrCreateProfile(@Nonnull final BlockStateMatcher info) {
 		if (info.getBlock() == Blocks.AIR)
 			return null;
 
-		// If the BlockMatch is a generic it will be found in the registry, else
-		// it will be found in the cache.
-		BlockProfile profile = info.isGeneric() ? this.registry.get(info) : this.cache.get(info.getBlockstate());
+		BlockStateProfile profile = this.registry.get(info);
 		if (profile == null) {
-			profile = BlockProfile.createProfile(info);
-			if (info.isGeneric())
-				this.registry.put(info, profile);
-			else
-				this.cache.put(info.getBlockstate(), profile);
+			profile = new BlockStateProfile();
+			this.registry.put(info, profile);
 		}
 
 		return profile;
 	}
 
-	public void register(@Nonnull final BlockConfig entry) {
+	protected void register(@Nonnull final BlockConfig entry) {
 		if (entry.blocks.isEmpty())
 			return;
 
 		final SoundRegistry soundRegistry = ClientRegistry.SOUND;
 
 		for (final String blockName : entry.blocks) {
-			final BlockMatcher blockInfo = BlockMatcher.create(blockName);
+			final BlockStateMatcher blockInfo = BlockStateMatcher.create(blockName);
 			if (blockInfo == null) {
 				ModBase.log().warn("Unknown block [%s] in block config file", blockName);
 				continue;
 			}
 
-			final BlockProfile blockData = getOrCreateProfile(blockInfo);
+			final BlockStateProfile blockData = getOrCreateProfile(blockInfo);
 			if (blockData == null) {
 				ModBase.log().warn("Unknown block [%s] in block config file", blockName);
 				continue;
@@ -180,15 +126,11 @@ public final class BlockRegistry extends Registry {
 			// Reset of a block clears all registry
 			if (entry.soundReset != null && entry.soundReset.booleanValue())
 				blockData.clearSounds();
-			if (entry.stepSoundReset != null && entry.stepSoundReset.booleanValue())
-				blockData.clearStepSounds();
 			if (entry.effectReset != null && entry.effectReset.booleanValue())
 				blockData.clearEffects();
 
 			if (entry.chance != null)
 				blockData.setChance(entry.chance.intValue());
-			if (entry.stepChance != null)
-				blockData.setStepChance(entry.stepChance.intValue());
 
 			for (final SoundConfig sr : entry.sounds) {
 				if (sr.sound != null && !soundRegistry.isSoundBlocked(sr.sound)) {
@@ -196,10 +138,7 @@ public final class BlockRegistry extends Registry {
 					if (sr.soundCategory == null)
 						b.setSoundCategory(SoundCategory.BLOCKS);
 					final SoundEffect eff = b.build();
-					if (eff.getSoundType() == SoundType.STEP)
-						blockData.addStepSound(eff);
-					else
-						blockData.addSound(eff);
+					blockData.addSound(eff);
 				}
 			}
 

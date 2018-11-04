@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.lib.scanner;
+package org.orecruncher.dsurround.lib.scanner;
 
 import java.util.Random;
 import java.util.concurrent.Callable;

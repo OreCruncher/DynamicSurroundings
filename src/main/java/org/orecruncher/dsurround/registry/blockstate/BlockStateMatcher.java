@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.registry.block;
+package org.orecruncher.dsurround.registry.blockstate;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,14 +48,15 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class BlockMatcher {
+public class BlockStateMatcher {
 
 	// We all know about air...
-	public static final BlockMatcher AIR = new BlockMatcher(Blocks.AIR.getDefaultState());
+	public static final BlockStateMatcher AIR = new BlockStateMatcher(Blocks.AIR.getDefaultState());
 
 	public static final String META_NAME = "_meta_";
 
@@ -97,29 +98,28 @@ public class BlockMatcher {
 	// All instances will have this defined
 	protected final Block block;
 
-	// If it is a generic match this will be null, otherwise the state will be set
-	protected final IBlockState state;
+	// Item represenation of the block
+	protected final Item item;
 
 	// Sometimes an exact match of state is needed. The state being compared
 	// would have to match all these properties.
 	protected Reference2ObjectOpenHashMap<IProperty<?>, Object> props;
 
-	protected BlockMatcher(@Nonnull final IBlockState state) {
+	public BlockStateMatcher(@Nonnull final IBlockState state) {
 		this.block = state.getBlock();
-		this.state = state;
-		this.props = null;
+		this.props = getPropsFromState(state);
+		this.item = Item.getItemFromBlock(this.block);
 	}
 
-	protected BlockMatcher(@Nonnull final Block block) {
+	protected BlockStateMatcher(@Nonnull final Block block) {
+		this(block, null);
+	}
+
+	protected BlockStateMatcher(@Nonnull final Block block,
+			@Nullable final Reference2ObjectOpenHashMap<IProperty<?>, Object> props) {
 		this.block = block;
-		this.state = null;
-		this.props = null;
-	}
-
-	protected BlockMatcher(@Nonnull final Block block,
-			@Nonnull final Reference2ObjectOpenHashMap<IProperty<?>, Object> props) {
-		this(block);
 		this.props = props;
+		this.item = Item.getItemFromBlock(this.block);
 	}
 
 	@Nonnull
@@ -130,14 +130,10 @@ public class BlockMatcher {
 	@Nullable
 	public List<IBlockState> asBlockStates() {
 		final List<IBlockState> states = new ArrayList<>();
-		if (this.state != null) {
-			states.add(this.state);
-		} else {
-			final ImmutableList<IBlockState> valid = this.block.getBlockState().getValidStates();
-			for (final IBlockState bs : valid) {
-				if (matchProps(bs))
-					states.add(bs);
-			}
+		final ImmutableList<IBlockState> valid = this.block.getBlockState().getValidStates();
+		for (final IBlockState bs : valid) {
+			if (matchProps(bs))
+				states.add(bs);
 		}
 		return states;
 	}
@@ -163,59 +159,32 @@ public class BlockMatcher {
 		return this.block.getBlockState().getValidStates().size() > 1;
 	}
 
-	public boolean isGeneric() {
-		return this.state == null;
-	}
-
 	@Nonnull
 	public String getBlockName() {
 		return Block.REGISTRY.getNameForObject(this.block).toString();
-	}
-
-	@Nullable
-	public IBlockState getBlockstate() {
-		return this.state;
 	}
 
 	// private final static int TERM = 769;
 
 	@Override
 	public int hashCode() {
-		if (this.state == null)
-			return this.block.hashCode();
-		return this.state.hashCode();
+		return this.block.hashCode();
 	}
 
 	@Override
 	public boolean equals(final Object obj) {
-		final BlockMatcher m = (BlockMatcher) obj;
+		final BlockStateMatcher m = (BlockStateMatcher) obj;
 		// If the block types don't match, there will be no match
 		if (this.block != m.block)
 			return false;
-		// An exact state means its the same identical block state
-		if (this.state == m.state && this.state != null)
-			return true;
-		// Both have block states set but they do not match
-		if ((this.state != null && m.state != null) && (this.state != m.state))
-			return false;
-		// If one has no props and the other has state specified
-		// it's a match. (The block type has already been determined
-		// to match.)
-		if ((this.props == null && m.state != null) || (this.state != null && m.props == null))
-			return true;
-		// If both of the props are not assigned its an identical
-		// match
+		// If they both are null then they are equal
 		if (this.props == null && m.props == null)
 			return true;
-
-		// Not sure what we have left - going by feel :)
-		// TODO: Make sure this is complete
-		if (this.state != null && m.matchProps(this.state) || m.state != null && matchProps(m.state))
+		// If there are no props in this one then it is a real generic match
+		if (this.props == null || this.props.size() == 0)
 			return true;
-
-		// At this point I think all that is left is both having properties and needing
-		// to make sure both sets are equal.
-		if (this.props == null || m.props == null)
+		// This one has props. If the other doesn't then they don't match
+		if (m.props == null || m.props.size() == 0)
 			return false;
 
 		// Should this should have the same or less properties than the other
@@ -232,49 +201,64 @@ public class BlockMatcher {
 		return true;
 	}
 
+	@Nonnull
+	protected Reference2ObjectOpenHashMap<IProperty<?>, Object> getPropsFromState(@Nonnull final IBlockState state) {
+		final Reference2ObjectOpenHashMap<IProperty<?>, Object> result = new Reference2ObjectOpenHashMap<>();
+
+		if (state.getBlock().getBlockState().getValidStates().size() > 1) {
+			final int m = state.getBlock().getMetaFromState(state);
+			result.put(META_PROP, Integer.valueOf(m));
+		}
+
+		for (final IProperty<?> prop : state.getPropertyKeys()) {
+			final Object o = state.getValue(prop);
+			if (o != null) {
+				result.put(prop, o);
+			}
+		}
+
+		return result.size() > 0 ? result : null;
+	}
+
 	@Override
 	@Nonnull
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 
-		if (this.state != null) {
-			builder.append(this.state.toString());
-		} else {
-			builder.append(Block.REGISTRY.getNameForObject(this.block));
-			if (this.props != null) {
-				boolean doComma = false;
-				builder.append('{');
-				for (final Entry<IProperty<?>, Object> entry : this.props.reference2ObjectEntrySet()) {
-					if (doComma)
-						builder.append(',');
-					else
-						doComma = true;
-					builder.append(entry.getKey().getName()).append('=').append(entry.getValue().toString());
-				}
-				builder.append('}');
+		builder.append(Block.REGISTRY.getNameForObject(this.block));
+		if (this.props != null) {
+			boolean doComma = false;
+			builder.append('{');
+			for (final Entry<IProperty<?>, Object> entry : this.props.reference2ObjectEntrySet()) {
+				if (doComma)
+					builder.append(',');
+				else
+					doComma = true;
+				builder.append(entry.getKey().getName()).append('=').append(entry.getValue().toString());
 			}
+			builder.append('}');
 		}
 
 		return builder.toString();
 	}
 
 	@Nonnull
-	public static BlockMatcher asGeneric(@Nonnull final IBlockState state) {
-		return new BlockMatcher(state.getBlock());
+	public static BlockStateMatcher asGeneric(@Nonnull final IBlockState state) {
+		return new BlockStateMatcher(state.getBlock());
 	}
 
 	@Nonnull
-	public static BlockMatcher create(@Nonnull final IBlockState state) {
-		return new BlockMatcher(state);
+	public static BlockStateMatcher create(@Nonnull final IBlockState state) {
+		return new BlockStateMatcher(state);
 	}
 
 	@Nullable
-	public static BlockMatcher create(@Nonnull final String blockId) {
+	public static BlockStateMatcher create(@Nonnull final String blockId) {
 		return create(BlockNameUtil.parseBlockName(blockId));
 	}
 
 	@Nullable
-	public static BlockMatcher create(@Nonnull final NameResult result) {
+	public static BlockStateMatcher create(@Nonnull final NameResult result) {
 		if (result != null) {
 			final Block block = result.getBlock();
 			if (block != null) {
@@ -283,12 +267,12 @@ public class BlockMatcher {
 				if (container.getValidStates().size() == 1) {
 					// Easy case - it's always an identical match because there are no other
 					// properties
-					return new BlockMatcher(defaultState);
+					return new BlockStateMatcher(defaultState);
 				}
 
 				if (!result.hasNBT()) {
 					// No NBT specification so this is a generic
-					return new BlockMatcher(block);
+					return new BlockStateMatcher(block);
 				}
 
 				final Reference2ObjectOpenHashMap<IProperty<?>, Object> props = new Reference2ObjectOpenHashMap<>();
@@ -313,9 +297,9 @@ public class BlockMatcher {
 				// match. Otherwise it will be an exact match on the default
 				// state.
 				if (props.size() > 0) {
-					return new BlockMatcher(defaultState.getBlock(), props);
+					return new BlockStateMatcher(defaultState.getBlock(), props);
 				} else {
-					return new BlockMatcher(defaultState);
+					return new BlockStateMatcher(defaultState);
 				}
 
 			} else {

@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.biome.BiomeRegistry;
-import org.orecruncher.dsurround.registry.block.BlockRegistry;
+import org.orecruncher.dsurround.registry.blockstate.BlockStateRegistry;
 import org.orecruncher.dsurround.registry.dimension.DimensionRegistry;
 import org.orecruncher.dsurround.registry.effect.EffectRegistry;
 import org.orecruncher.dsurround.registry.footstep.FootstepsRegistry;
@@ -53,7 +53,7 @@ public final class ClientRegistry {
 
 	public static SoundRegistry SOUND;
 	public static BiomeRegistry BIOME;
-	public static BlockRegistry BLOCK;
+	public static BlockStateRegistry BLOCK;
 	public static DimensionRegistry DIMENSION;
 	public static SeasonRegistry SEASON;
 	public static ItemRegistry ITEMS;
@@ -66,7 +66,7 @@ public final class ClientRegistry {
 			DIMENSION = new DimensionRegistry(Side.CLIENT);
 			SOUND = new SoundRegistry(Side.CLIENT);
 			BIOME = new BiomeRegistry(Side.CLIENT);
-			BLOCK = new BlockRegistry(Side.CLIENT);
+			BLOCK = new BlockStateRegistry(Side.CLIENT);
 			SEASON = new SeasonRegistry(Side.CLIENT);
 			ITEMS = new ItemRegistry(Side.CLIENT);
 			FOOTSTEPS = new FootstepsRegistry(Side.CLIENT);

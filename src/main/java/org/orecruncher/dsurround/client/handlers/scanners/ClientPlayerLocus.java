@@ -26,8 +26,8 @@ package org.orecruncher.dsurround.client.handlers.scanners;
 
 import org.orecruncher.dsurround.client.ClientChunkCache;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.dsurround.lib.scanner.ScanLocus;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
-import org.orecruncher.lib.scanner.ScanLocus;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
