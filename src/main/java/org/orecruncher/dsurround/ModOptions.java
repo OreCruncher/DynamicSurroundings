@@ -52,9 +52,6 @@ public final class ModOptions {
 		// Trace bits for debugging
 	};
 
-	private ModOptions() {
-	}
-
 	public static final String CATEGORY_ASM = "asm";
 	public static final String CONFIG_ENABLE_SOUND_CACHING = "Enable Sound Caching";
 	public static final String CONFIG_ENABLE_WEATHER = "Enable Weather Control";
@@ -163,6 +160,8 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_BACKGROUND_THUNDER = "Enable Background Thunder";
 	public static final String CONFIG_THUNDER_THRESHOLD = "Rain Intensity for Background Thunder";
 	public static final String CONFIG_RAIN_RIPPLE_STYLE = "Style of rain water ripple";
+	public static final String CONFIG_MIN_RAIN_STRENGTH = "Default Minimum Rain Strength";
+	public static final String CONFIG_MAX_RAIN_STRENGTH = "Default Maximum Rain Strength";
 
 	@Category(CATEGORY_RAIN)
 	@LangKey("dsurround.cfg.rain.cat.Rain")
@@ -171,7 +170,8 @@ public final class ModOptions {
 
 		public static String PATH = null;
 		public static final List<String> SORT = Arrays.asList(CONFIG_VANILLA_RAIN, CONFIG_RAIN_RIPPLE_STYLE,
-				CONFIG_ENABLE_BACKGROUND_THUNDER, CONFIG_THUNDER_THRESHOLD);
+				CONFIG_ENABLE_BACKGROUND_THUNDER, CONFIG_THUNDER_THRESHOLD, CONFIG_MIN_RAIN_STRENGTH,
+				CONFIG_MAX_RAIN_STRENGTH);
 
 		@Option(CONFIG_VANILLA_RAIN)
 		@DefaultValue("false")
@@ -199,6 +199,21 @@ public final class ModOptions {
 		@RangeFloat(min = 0)
 		@Comment("Minimum rain intensity level for background thunder to occur")
 		public static float stormThunderThreshold = 0.75F;
+
+		@Option(CONFIG_MIN_RAIN_STRENGTH)
+		@DefaultValue("0.0")
+		@LangKey("dsurround.cfg.general.MinRainStrength")
+		@RangeFloat(min = 0.0F, max = 1.0F)
+		@Comment("Default minimum rain strength for a dimension")
+		public static float defaultMinRainStrength = 0.0F;
+
+		@Option(CONFIG_MAX_RAIN_STRENGTH)
+		@DefaultValue("1.0")
+		@LangKey("dsurround.cfg.general.MaxRainStrength")
+		@RangeFloat(min = 0.0F, max = 1.0F)
+		@Comment("Default maximum rain strength for a dimension")
+		public static float defaultMaxRainStrength = 1.0F;
+
 	}
 
 	public static final String CATEGORY_FOG = "fog";
@@ -273,9 +288,6 @@ public final class ModOptions {
 
 	public static final String CATEGORY_GENERAL = "general";
 	public static final String CONFIG_EXTERNAL_SCRIPTS = "External Configuration Files";
-	public static final String CONFIG_MIN_RAIN_STRENGTH = "Default Minimum Rain Strength";
-	public static final String CONFIG_MAX_RAIN_STRENGTH = "Default Maximum Rain Strength";
-	public static final String CONFIG_FX_RANGE = "Special Effect Range";
 	public static final String CONFIG_DISABLE_SUSPEND = "Disable Water Suspend Particles";
 	public static final String CONFIG_STARTUP_SOUND_LIST = "Startup Sound List";
 	public static final String CONFIG_HIDE_CHAT_NOTICES = "Hide Chat Notices";
@@ -288,8 +300,7 @@ public final class ModOptions {
 
 		public static String PATH = null;
 		public static final List<String> SORT = Arrays.asList(CONFIG_HIDE_CHAT_NOTICES, CONFIG_DISABLE_SUSPEND,
-				CONFIG_FX_RANGE, CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH, CONFIG_EXTERNAL_SCRIPTS,
-				CONFIG_STARTUP_SOUND_LIST, CONFIG_ENABLE_CLIENT_CHUNK_CACHING);
+				CONFIG_EXTERNAL_SCRIPTS, CONFIG_STARTUP_SOUND_LIST, CONFIG_ENABLE_CLIENT_CHUNK_CACHING);
 
 		@Option(CONFIG_HIDE_CHAT_NOTICES)
 		@DefaultValue("false")
@@ -303,27 +314,6 @@ public final class ModOptions {
 		@Comment("Enable/disable water depth particle effect")
 		@RestartRequired(server = true)
 		public static boolean disableWaterSuspendParticle = false;
-
-		@Option(CONFIG_MIN_RAIN_STRENGTH)
-		@DefaultValue("0.0")
-		@LangKey("dsurround.cfg.general.MinRainStrength")
-		@RangeFloat(min = 0.0F, max = 1.0F)
-		@Comment("Default minimum rain strength for a dimension")
-		public static float defaultMinRainStrength = 0.0F;
-
-		@Option(CONFIG_MAX_RAIN_STRENGTH)
-		@DefaultValue("1.0")
-		@LangKey("dsurround.cfg.general.MaxRainStrength")
-		@RangeFloat(min = 0.0F, max = 1.0F)
-		@Comment("Default maximum rain strength for a dimension")
-		public static float defaultMaxRainStrength = 1.0F;
-
-		@Option(CONFIG_FX_RANGE)
-		@DefaultValue("24")
-		@LangKey("dsurround.cfg.general.FXRange")
-		@RangeInt(min = 16, max = 64)
-		@Comment("Block radius/range around player for special effect application")
-		public static int specialEffectRange = 24;
 
 		@Option(CONFIG_EXTERNAL_SCRIPTS)
 		@DefaultValue("")
@@ -405,8 +395,8 @@ public final class ModOptions {
 		public static String[] dimensionBlacklist = {};
 	}
 
-	public static final String CATEGORY_BLOCK = "block";
-	public static final String CATEGORY_BLOCK_EFFECTS = "effects";
+	public static final String CATEGORY_EFFECTS = "effects";
+	public static final String CONFIG_FX_RANGE = "Special Effect Range";
 	public static final String CONFIG_BLOCK_EFFECT_STEAM = "Enable Steam";
 	public static final String CONFIG_BLOCK_EFFECT_FIRE = "Enable FireJetEffect Jets";
 	public static final String CONFIG_BLOCK_EFFECT_BUBBLE = "Enable Bubbles";
@@ -414,63 +404,98 @@ public final class ModOptions {
 	public static final String CONFIG_BLOCK_EFFECT_FOUNTAIN = "Enable FountainJetEffect";
 	public static final String CONFIG_BLOCK_EFFECT_FIREFLY = "Enable Fireflies";
 	public static final String CONFIG_BLOCK_EFFECT_SPLASH = "Enable Water Splash";
+	public static final String CONFIG_ENABLE_POPOFFS = "Damage Popoffs";
+	public static final String CONFIG_SHOW_CRIT_WORDS = "Show Crit Words";
+	public static final String CONFIG_ENABLE_FOOTPRINTS = "Footprints";
+	public static final String CONFIG_FOOTPRINT_STYLE = "Footprint Style";
+	public static final String CONFIG_SHOW_BREATH = "Show Frost Breath";
 
-	@Category(CATEGORY_BLOCK)
-	@LangKey("dsurround.cfg.block.cat.Blocks")
-	@Comment("Options for defining block specific sounds/effects")
-	public static class block {
+	@Category(CATEGORY_EFFECTS)
+	@LangKey("dsurround.cfg.effects.cat.Effects")
+	@Comment("Options for controlling various effects")
+	public static class effects {
 
 		public static String PATH = null;
 
-		@Category(CATEGORY_BLOCK_EFFECTS)
-		@LangKey("dsurround.cfg.block.effects.cat.BlockEffects")
-		@Comment("Options for disabling various block effects")
-		public static class effects {
+		@Option(CONFIG_FX_RANGE)
+		@DefaultValue("24")
+		@LangKey("dsurround.cfg.general.FXRange")
+		@RangeInt(min = 16, max = 64)
+		@Comment("Block radius/range around player for special effect application")
+		public static int specialEffectRange = 24;
 
-			public static String PATH = null;
+		@Option(CONFIG_BLOCK_EFFECT_STEAM)
+		@DefaultValue("true")
+		@LangKey("dsurround.cfg.effects.Steam")
+		@Comment("Enable Steam Jets where lava meets water")
+		public static boolean enableSteamJets = true;
 
-			@Option(CONFIG_BLOCK_EFFECT_STEAM)
-			@DefaultValue("true")
-			@LangKey("dsurround.cfg.block.effects.Steam")
-			@Comment("Enable Steam Jets where lava meets water")
-			public static boolean enableSteamJets = true;
+		@Option(CONFIG_BLOCK_EFFECT_FIRE)
+		@DefaultValue("true")
+		@LangKey("dsurround.cfg.effects.Fire")
+		@Comment("Enable FireJetEffect Jets in lava")
+		public static boolean enableFireJets = true;
 
-			@Option(CONFIG_BLOCK_EFFECT_FIRE)
-			@DefaultValue("true")
-			@LangKey("dsurround.cfg.block.effects.Fire")
-			@Comment("Enable FireJetEffect Jets in lava")
-			public static boolean enableFireJets = true;
+		@Option(CONFIG_BLOCK_EFFECT_BUBBLE)
+		@DefaultValue("true")
+		@LangKey("dsurround.cfg.effects.Bubble")
+		@Comment("Enable BubbleJetEffect Jets under water")
+		public static boolean enableBubbleJets = true;
 
-			@Option(CONFIG_BLOCK_EFFECT_BUBBLE)
-			@DefaultValue("true")
-			@LangKey("dsurround.cfg.block.effects.Bubble")
-			@Comment("Enable BubbleJetEffect Jets under water")
-			public static boolean enableBubbleJets = true;
+		@Option(CONFIG_BLOCK_EFFECT_DUST)
+		@DefaultValue("true")
+		@LangKey("dsurround.cfg.effects.Dust")
+		@Comment("Enable DustJetEffect motes dropping from blocks")
+		public static boolean enableDustJets = true;
 
-			@Option(CONFIG_BLOCK_EFFECT_DUST)
-			@DefaultValue("true")
-			@LangKey("dsurround.cfg.block.effects.Dust")
-			@Comment("Enable DustJetEffect motes dropping from blocks")
-			public static boolean enableDustJets = true;
+		@Option(CONFIG_BLOCK_EFFECT_FOUNTAIN)
+		@DefaultValue("true")
+		@LangKey("dsurround.cfg.effects.Fountain")
+		@Comment("Enable FountainJetEffect jets")
+		public static boolean enableFountainJets = true;
 
-			@Option(CONFIG_BLOCK_EFFECT_FOUNTAIN)
-			@DefaultValue("true")
-			@LangKey("dsurround.cfg.block.effects.Fountain")
-			@Comment("Enable FountainJetEffect jets")
-			public static boolean enableFountainJets = true;
+		@Option(CONFIG_BLOCK_EFFECT_FIREFLY)
+		@DefaultValue("true")
+		@LangKey("dsurround.cfg.effects.Fireflies")
+		@Comment("Enable Firefly effect around plants")
+		public static boolean enableFireflies = true;
 
-			@Option(CONFIG_BLOCK_EFFECT_FIREFLY)
-			@DefaultValue("true")
-			@LangKey("dsurround.cfg.block.effects.Fireflies")
-			@Comment("Enable Firefly effect around plants")
-			public static boolean enableFireflies = true;
+		@Option(CONFIG_BLOCK_EFFECT_SPLASH)
+		@DefaultValue("true")
+		@LangKey("dsurround.cfg.effects.Splash")
+		@Comment("Enable Water Splash effects when water spills down")
+		public static boolean enableWaterSplash = true;
 
-			@Option(CONFIG_BLOCK_EFFECT_SPLASH)
-			@DefaultValue("true")
-			@LangKey("dsurround.cfg.block.effects.Splash")
-			@Comment("Enable Water Splash effects when water spills down")
-			public static boolean enableWaterSplash = true;
-		}
+		@Option(CONFIG_ENABLE_POPOFFS)
+		@DefaultValue("true")
+		@LangKey("dsurround.cfg.player.Popoffs")
+		@Comment("Controls display of damage pop-offs when an entity is damaged")
+		public static boolean enableDamagePopoffs = true;
+
+		@Option(CONFIG_SHOW_CRIT_WORDS)
+		@DefaultValue("true")
+		@LangKey("dsurround.cfg.player.CritWords")
+		@Comment("Display random power word on critical hit")
+		public static boolean showCritWords = true;
+
+		@Option(CONFIG_ENABLE_FOOTPRINTS)
+		@DefaultValue("true")
+		@LangKey("dsurround.cfg.player.Footprints")
+		@Comment("Enable player footprints")
+		public static boolean enableFootprints = true;
+
+		@Option(CONFIG_FOOTPRINT_STYLE)
+		@DefaultValue("6")
+		@LangKey("dsurround.cfg.player.FootprintStyle")
+		@Comment("0: shoe print, 1: square print, 2: horse hoof, 3: bird, 4: paw, 5: solid square, 6: lowres square")
+		@RangeInt(min = 0, max = 6)
+		public static int footprintStyle = 6;
+
+		@Option(CONFIG_SHOW_BREATH)
+		@DefaultValue("true")
+		@LangKey("dsurround.cfg.player.ShowBreath")
+		@Comment("Show player frost breath in cold weather")
+		public static boolean showBreath = true;
 	}
 
 	public static final String CATEGORY_SOUND = "sound";
@@ -492,11 +517,9 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_SWING_SOUND = "Swing Sound";
 	public static final String CONFIG_ENABLE_PUDDLE_SOUND = "Rain Puddle Sound";
 	public static final String CONFIG_SOUND_CULL_THRESHOLD = "Sound Culling Threshold";
-	public static final String CONFIG_CULLED_SOUNDS = "Culled Sounds";
-	public static final String CONFIG_BLOCKED_SOUNDS = "Blocked Sounds";
-	public static final String CONFIG_SOUND_VOLUMES = "Sound Volume";
 	public static final String CONFIG_THUNDER_VOLUME = "Thunder Volume";
 	public static final String CONFIG_ENABLE_BATTLEMUSIC = "Battle Music";
+	public static final String CONFIG_SOUND_SETTINGS = "Sound Settings";
 
 	@Category(CATEGORY_SOUND)
 	@LangKey("dsurround.cfg.sound.cat.Sound")
@@ -509,8 +532,8 @@ public final class ModOptions {
 				CONFIG_ENABLE_PUDDLE_SOUND, CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_EQUIP_SOUND,
 				CONFIG_SWORD_AS_TOOL_EQUIP_SOUND, CONFIG_ENABLE_CRAFTING_SOUND, CONFIG_AUTO_CONFIG_CHANNELS,
 				CONFIG_NORMAL_CHANNEL_COUNT, CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_STREAM_BUFFER_SIZE,
-				CONFIG_STREAM_BUFFER_COUNT, CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME, CONFIG_BLOCKED_SOUNDS,
-				CONFIG_SOUND_CULL_THRESHOLD, CONFIG_CULLED_SOUNDS, CONFIG_SOUND_VOLUMES, CONFIG_ENABLE_BATTLEMUSIC);
+				CONFIG_STREAM_BUFFER_COUNT, CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME,
+				CONFIG_SOUND_CULL_THRESHOLD, CONFIG_ENABLE_BATTLEMUSIC, CONFIG_SOUND_SETTINGS);
 
 		@Option(CONFIG_ENABLE_BIOME_SOUNDS)
 		@DefaultValue("true")
@@ -637,48 +660,21 @@ public final class ModOptions {
 		@Comment("Enable/disable Battle Music")
 		public static boolean enableBattleMusic = false;
 
-		@Option(CONFIG_CULLED_SOUNDS)
-		@DefaultValue("minecraft:block.water.ambient,minecraft:block.lava.ambient,minecraft:entity.sheep.ambient,minecraft:entity.chicken.ambient,minecraft:entity.cow.ambient,minecraft:entity.pig.ambient")
-		@LangKey("dsurround.cfg.sound.CulledSounds")
-		@Comment("Sounds to cull from frequent playing")
+		@Option(CONFIG_SOUND_SETTINGS)
 		@Hidden
-		public static String[] culledSounds = { "minecraft:block.water.ambient", "minecraft:block.lava.ambient",
-				"minecraft:entity.sheep.ambient", "minecraft:entity.chicken.ambient", "minecraft:entity.cow.ambient",
-				"minecraft:entity.pig.ambient" };
-
-		@Option(CONFIG_BLOCKED_SOUNDS)
-		@DefaultValue("dsurround:bison")
-		@LangKey("dsurround.cfg.sound.BlockedSounds")
-		@Comment("Sounds to block from playing")
-		@Hidden
-		public static String[] blockedSounds = { "dsurround:bison" };
-
-		@Option(CONFIG_SOUND_VOLUMES)
-		@DefaultValue("")
-		@LangKey("dsurround.cfg.sound.SoundVolumes")
-		@Comment("Individual sound volume scaling factors")
-		@Hidden
-		public static String[] soundVolumes = {};
+		@DefaultValue("minecraft:block.water.ambient cull,minecraft:block.lava.ambient cull,minecraft:entity.sheep.ambient cull,minecraft:entity.chicken.ambient cull,minecraft:entity.cow.ambient cull,minecraft:entity.pig.ambient cull,dsurround:bison block")
+		@LangKey("CONFIG_SOUND_SETTINGS")
+		@Comment("Configure how each individual sound will be handled")
+		public static String[] soundSettings = { "minecraft:block.water.ambient cull",
+				"minecraft:block.lava.ambient cull", "minecraft:entity.sheep.ambient cull",
+				"minecraft:entity.chicken.ambient cull", "minecraft:entity.cow.ambient cull",
+				"minecraft:entity.pig.ambient cull", "dsurround:bison block" };
 	}
 
 	public static final String CATEGORY_PLAYER = "player";
 	public static final String CONFIG_SUPPRESS_POTION_PARTICLES = "Suppress Potion Particles";
-	public static final String CONFIG_ENABLE_POPOFFS = "Damage Popoffs";
-	public static final String CONFIG_SHOW_CRIT_WORDS = "Show Crit Words";
 	public static final String CONFIG_HURT_THRESHOLD = "Hurt Threshold";
 	public static final String CONFIG_HUNGER_THRESHOLD = "Hunger Threshold";
-	public static final String CONFIG_ENABLE_FOOTPRINTS = "Footprints";
-	public static final String CONFIG_FOOTPRINT_STYLE = "Footprint Style";
-	public static final String CONFIG_SHOW_BREATH = "Show Frost Breath";
-
-	public static final String CATEGORY_POTION_HUD = "potion hud";
-	public static final String CONFIG_POTION_HUD_NONE = "No Potion HUD";
-	public static final String CONFIG_POTION_HUD_ENABLE = "Enable";
-	public static final String CONFIG_POTION_HUD_TRANSPARENCY = "Transparency";
-	public static final String CONFIG_POTION_HUD_LEFT_OFFSET = "Horizontal Offset";
-	public static final String CONFIG_POTION_HUD_TOP_OFFSET = "Vertical Offset";
-	public static final String CONFIG_POTION_HUD_SCALE = "Display Scale";
-	public static final String CONFIG_POTION_HUD_ANCHOR = "HUD Location";
 
 	@Category(CATEGORY_PLAYER)
 	@LangKey("dsurround.cfg.player.cat.Player")
@@ -686,40 +682,14 @@ public final class ModOptions {
 	public static class player {
 
 		public static String PATH = null;
-		public static final List<String> SORT = Arrays.asList(CONFIG_SUPPRESS_POTION_PARTICLES, CONFIG_ENABLE_POPOFFS,
-				CONFIG_SHOW_CRIT_WORDS, CONFIG_ENABLE_FOOTPRINTS, CONFIG_FOOTPRINT_STYLE, CONFIG_HURT_THRESHOLD,
-				CONFIG_HUNGER_THRESHOLD, CONFIG_SHOW_BREATH);
+		public static final List<String> SORT = Arrays.asList(CONFIG_SUPPRESS_POTION_PARTICLES, CONFIG_HURT_THRESHOLD,
+				CONFIG_HUNGER_THRESHOLD);
 
 		@Option(CONFIG_SUPPRESS_POTION_PARTICLES)
 		@DefaultValue("false")
 		@LangKey("dsurround.cfg.player.PotionParticles")
 		@Comment("Suppress player's potion particles from rendering")
 		public static boolean suppressPotionParticles = false;
-
-		@Option(CONFIG_ENABLE_POPOFFS)
-		@DefaultValue("true")
-		@LangKey("dsurround.cfg.player.Popoffs")
-		@Comment("Controls display of damage pop-offs when an entity is damaged")
-		public static boolean enableDamagePopoffs = true;
-
-		@Option(CONFIG_SHOW_CRIT_WORDS)
-		@DefaultValue("true")
-		@LangKey("dsurround.cfg.player.CritWords")
-		@Comment("Display random power word on critical hit")
-		public static boolean showCritWords = true;
-
-		@Option(CONFIG_ENABLE_FOOTPRINTS)
-		@DefaultValue("true")
-		@LangKey("dsurround.cfg.player.Footprints")
-		@Comment("Enable player footprints")
-		public static boolean enableFootprints = true;
-
-		@Option(CONFIG_FOOTPRINT_STYLE)
-		@DefaultValue("6")
-		@LangKey("dsurround.cfg.player.FootprintStyle")
-		@Comment("0: shoe print, 1: square print, 2: horse hoof, 3: bird, 4: paw, 5: solid square, 6: lowres square")
-		@RangeInt(min = 0, max = 6)
-		public static int footprintStyle = 6;
 
 		@Option(CONFIG_HURT_THRESHOLD)
 		@DefaultValue("8")
@@ -734,70 +704,6 @@ public final class ModOptions {
 		@Comment("Amount of food bar remaining to trigger player hunger sound (0 disable)")
 		@RangeInt(min = 0, max = 10)
 		public static int playerHungerThreshold = 8;
-
-		@Option(CONFIG_SHOW_BREATH)
-		@DefaultValue("true")
-		@LangKey("dsurround.cfg.player.ShowBreath")
-		@Comment("Show player frost breath in cold weather")
-		public static boolean showBreath = true;
-
-		@Category(CATEGORY_POTION_HUD)
-		@LangKey("dsurround.cfg.player.potionHud.cat.PotionHud")
-		@Comment("Options for the Potion HUD overlay")
-		public static class potionHUD {
-
-			public static String PATH = null;
-			public static final List<String> SORT = Arrays.asList(CONFIG_POTION_HUD_NONE, CONFIG_POTION_HUD_ENABLE,
-					CONFIG_POTION_HUD_TRANSPARENCY, CONFIG_POTION_HUD_SCALE, CONFIG_POTION_HUD_ANCHOR,
-					CONFIG_POTION_HUD_TOP_OFFSET, CONFIG_POTION_HUD_LEFT_OFFSET);
-
-			@Option(CONFIG_POTION_HUD_NONE)
-			@DefaultValue("false")
-			@LangKey("dsurround.cfg.player.potionHud.NoHUD")
-			@Comment("Disables Vanilla and Dynamic Surroundings potion HUD")
-			public static boolean potionHudNone = false;
-
-			@Option(CONFIG_POTION_HUD_ENABLE)
-			@DefaultValue("true")
-			@LangKey("dsurround.cfg.player.potionHud.Enable")
-			@Comment("Enable display of potion icons in display")
-			public static boolean potionHudEnabled = true;
-
-			@Option(CONFIG_POTION_HUD_TRANSPARENCY)
-			@DefaultValue("0.75")
-			@LangKey("dsurround.cfg.player.potionHud.Transparency")
-			@RangeFloat(min = 0.0F, max = 1.0F)
-			@Comment("Transparency factor for icons (higher more solid)")
-			public static float potionHudTransparency = 0.75F;
-
-			@Option(CONFIG_POTION_HUD_LEFT_OFFSET)
-			@DefaultValue("5")
-			@LangKey("dsurround.cfg.player.potionHud.LeftOffset")
-			@RangeInt(min = 0)
-			@Comment("Offset from left side of screen")
-			public static int potionHudLeftOffset = 5;
-
-			@Option(CONFIG_POTION_HUD_TOP_OFFSET)
-			@DefaultValue("5")
-			@LangKey("dsurround.cfg.player.potionHud.TopOffset")
-			@RangeInt(min = 0)
-			@Comment("Offset from top of screen")
-			public static int potionHudTopOffset = 5;
-
-			@Option(CONFIG_POTION_HUD_SCALE)
-			@DefaultValue("0.75")
-			@LangKey("dsurround.cfg.player.potionHud.Scale")
-			@RangeFloat(min = 0.0F, max = 1.0F)
-			@Comment("Size scale of icons (lower is smaller)")
-			public static float potionHudScale = 0.75F;
-
-			@Option(CONFIG_POTION_HUD_ANCHOR)
-			@DefaultValue("0")
-			@LangKey("dsurround.cfg.player.potionHud.Location")
-			@RangeInt(min = 0, max = 1)
-			@Comment("Area of the display the Potion HUD is displayed (0 upper left, 1 upper right)")
-			public static int potionHudAnchor = 0;
-		}
 	}
 
 	public static final String CATEGORY_SPEECHBUBBLES = "speechbubbles";
@@ -814,8 +720,8 @@ public final class ModOptions {
 
 		public static String PATH = null;
 		public static final List<String> SORT = Arrays.asList(CONFIG_OPTION_ENABLE_SPEECHBUBBLES,
-				CONFIG_OPTION_ENABLE_ENTITY_CHAT, CONFIG_OPTION_SPEECHBUBBLE_DURATION,
-				CONFIG_OPTION_SPEECHBUBBLE_RANGE, CONFIG_OPTION_ANIMANIA_BADGES);
+				CONFIG_OPTION_ENABLE_ENTITY_CHAT, CONFIG_OPTION_SPEECHBUBBLE_DURATION, CONFIG_OPTION_SPEECHBUBBLE_RANGE,
+				CONFIG_OPTION_ANIMANIA_BADGES);
 
 		@Option(CONFIG_OPTION_ENABLE_SPEECHBUBBLES)
 		@DefaultValue("false")
@@ -875,113 +781,6 @@ public final class ModOptions {
 		public static boolean addMobParticles = false;
 	}
 
-	public static final String CATEGORY_LIGHT_LEVEL = "lightlevel";
-	public static final String CONFIG_LL_RANGE = "Block Range";
-	public static final String CONFIG_LL_MOB_SPAWN_THRESHOLD = "Mob Spawn Threshold";
-	public static final String CONFIG_LL_DISPLAY_MODE = "Display Mode";
-	public static final String CONFIG_LL_HIDE_SAFE = "Hide Safe";
-	public static final String CONFIG_LL_INDICATE_CAUTION = "Indicate Caution";
-	public static final String CONFIG_LL_COLORS = "Color Set";
-
-	@Category(CATEGORY_LIGHT_LEVEL)
-	@LangKey("dsurround.cfg.lightlevel.cat.LightLevel")
-	@Comment("Options for configuring Light Level HUD")
-	public static class lightlevel {
-
-		public static String PATH = null;
-		public static final List<String> SORT = Arrays.asList(CONFIG_LL_RANGE, CONFIG_LL_MOB_SPAWN_THRESHOLD,
-				CONFIG_LL_DISPLAY_MODE, CONFIG_LL_HIDE_SAFE, CONFIG_LL_INDICATE_CAUTION, CONFIG_LL_COLORS);
-
-		@Option(CONFIG_LL_RANGE)
-		@DefaultValue("24")
-		@LangKey("dsurround.cfg.lightlevel.Range")
-		@Comment("Range from player to analyze light levels")
-		@RangeInt(min = 16, max = 32)
-		public static int llBlockRange = 24;
-
-		@Option(CONFIG_LL_MOB_SPAWN_THRESHOLD)
-		@DefaultValue("7")
-		@LangKey("dsurround.cfg.lightlevel.MobSpawnThreshold")
-		@Comment("Light level at which mobs can spawn")
-		@RangeInt(min = 0, max = 15)
-		public static int llSpawnThreshold = 7;
-
-		@Option(CONFIG_LL_DISPLAY_MODE)
-		@DefaultValue("0")
-		@LangKey("dsurround.cfg.lightlevel.DisplayMode")
-		@Comment("0: Block Light, 1: Block Light + Sky Light")
-		@RangeInt(min = 0, max = 1)
-		public static int llDisplayMode = 0;
-
-		@Option(CONFIG_LL_HIDE_SAFE)
-		@DefaultValue("false")
-		@LangKey("dsurround.cfg.lightlevel.HideSafe")
-		@Comment("Hide light level information for blocks that are considered safe")
-		public static boolean llHideSafe = false;
-
-		@Option(CONFIG_LL_INDICATE_CAUTION)
-		@DefaultValue("true")
-		@LangKey("dsurround.cfg.lightlevel.IndicateCaution")
-		@Comment("Indicate current light levels that will change at night which could result in mob spawns")
-		public static boolean llIndicateCaution = true;
-
-		@Option(CONFIG_LL_COLORS)
-		@DefaultValue("1")
-		@LangKey("dsurround.cfg.lightlevel.Colors")
-		@Comment("Color set: 0 bright, 1 dark")
-		@RangeInt(min = 0, max = 1)
-		public static int llColors = 1;
-	}
-
-	public static final String CATEGORY_COMPASS = "compass";
-	public static final String CONFIG_COMPASS_ENABLE = "Enable Compass";
-	public static final String CONFIG_CLOCK_ENABLE = "Enable Clock";
-	public static final String CONFIG_COMPASS_STYLE = "Compass Style";
-	public static final String CONFIG_COMPASS_TRANSPARENCY = "Transparency";
-	public static final String CONFIG_COMPASS_COORD_FORMAT = "Coord Format";
-
-	@Category(CATEGORY_COMPASS)
-	@LangKey("dsurround.cfg.compass.cat.Compass")
-	@Comment("Options for configuring compass HUD")
-	public static class compass {
-
-		public static String PATH = null;
-		public static final List<String> SORT = Arrays.asList(CONFIG_COMPASS_ENABLE, CONFIG_COMPASS_STYLE,
-				CONFIG_COMPASS_TRANSPARENCY, CONFIG_COMPASS_COORD_FORMAT, CONFIG_CLOCK_ENABLE);
-
-		@Option(CONFIG_COMPASS_ENABLE)
-		@DefaultValue("true")
-		@LangKey("dsurround.cfg.compass.Enable")
-		@Comment("Enable/disable compass HUD when compass is held")
-		public static boolean enableCompass = true;
-
-		@Option(CONFIG_CLOCK_ENABLE)
-		@DefaultValue("true")
-		@LangKey("dsurround.cfg.compass.ClockEnable")
-		@Comment("Enable/disable clock HUD when clock is held")
-		public static boolean enableClock = true;
-
-		@Option(CONFIG_COMPASS_STYLE)
-		@DefaultValue("0")
-		@LangKey("dsurround.cfg.compass.Style")
-		@Comment("Style of compass bar")
-		@RangeInt(min = 0, max = 6)
-		public static int compassStyle = 0;
-
-		@Option(CONFIG_COMPASS_TRANSPARENCY)
-		@DefaultValue("0.4")
-		@LangKey("dsurround.cfg.compass.Transparency")
-		@Comment("Compass transparency")
-		@RangeFloat(min = 0F, max = 1.0F)
-		public static float compassTransparency = 0.4F;
-
-		@Option(CONFIG_COMPASS_COORD_FORMAT)
-		@DefaultValue("x: %1$d, z: %3$d")
-		@LangKey("dsurround.cfg.compass.Format")
-		@Comment("Format string for location coordinates")
-		public static String compassCoordFormat = "x: %1$d, z: %3$d";
-	}
-
 	public static final String CATEGORY_COMMANDS = "commands";
 	public static final String CONFIG_COMMANDS_DS = "/ds";
 	public static final String CONFIG_COMMANDS_CALC = "/calc";
@@ -1031,6 +830,191 @@ public final class ModOptions {
 			@Comment("Alias for the command")
 			public static String commandAliasCalc = "c math";
 		}
+	}
+
+	public static final String CATEGORY_HUDS = "huds";
+
+	public static final String CATEGORY_POTION_HUD = "potion hud";
+	public static final String CONFIG_POTION_HUD_NONE = "No Potion HUD";
+	public static final String CONFIG_POTION_HUD_ENABLE = "Enable";
+	public static final String CONFIG_POTION_HUD_TRANSPARENCY = "Transparency";
+	public static final String CONFIG_POTION_HUD_LEFT_OFFSET = "Horizontal Offset";
+	public static final String CONFIG_POTION_HUD_TOP_OFFSET = "Vertical Offset";
+	public static final String CONFIG_POTION_HUD_SCALE = "Display Scale";
+	public static final String CONFIG_POTION_HUD_ANCHOR = "HUD Location";
+
+	public static final String CATEGORY_LIGHT_LEVEL = "lightlevel";
+	public static final String CONFIG_LL_RANGE = "Block Range";
+	public static final String CONFIG_LL_MOB_SPAWN_THRESHOLD = "Mob Spawn Threshold";
+	public static final String CONFIG_LL_DISPLAY_MODE = "Display Mode";
+	public static final String CONFIG_LL_HIDE_SAFE = "Hide Safe";
+	public static final String CONFIG_LL_INDICATE_CAUTION = "Indicate Caution";
+	public static final String CONFIG_LL_COLORS = "Color Set";
+
+	public static final String CATEGORY_COMPASS = "compass";
+	public static final String CONFIG_COMPASS_ENABLE = "Enable Compass";
+	public static final String CONFIG_CLOCK_ENABLE = "Enable Clock";
+	public static final String CONFIG_COMPASS_STYLE = "Compass Style";
+	public static final String CONFIG_COMPASS_TRANSPARENCY = "Transparency";
+	public static final String CONFIG_COMPASS_COORD_FORMAT = "Coord Format";
+
+	@Category(CATEGORY_HUDS)
+	@LangKey("dsurround.cfg.huds.cat.Huds")
+	@Comment("Options to control various heads up displays and overlays")
+	public static class huds {
+
+		public static String PATH = null;
+
+		@Category(CATEGORY_POTION_HUD)
+		@LangKey("dsurround.cfg.player.potionHud.cat.PotionHud")
+		@Comment("Options for the Potion HUD overlay")
+		public static class potionHUD {
+
+			public static String PATH = null;
+			public static final List<String> SORT = Arrays.asList(CONFIG_POTION_HUD_NONE, CONFIG_POTION_HUD_ENABLE,
+					CONFIG_POTION_HUD_TRANSPARENCY, CONFIG_POTION_HUD_SCALE, CONFIG_POTION_HUD_ANCHOR,
+					CONFIG_POTION_HUD_TOP_OFFSET, CONFIG_POTION_HUD_LEFT_OFFSET);
+
+			@Option(CONFIG_POTION_HUD_NONE)
+			@DefaultValue("false")
+			@LangKey("dsurround.cfg.player.potionHud.NoHUD")
+			@Comment("Disables Vanilla and Dynamic Surroundings potion HUD")
+			public static boolean potionHudNone = false;
+
+			@Option(CONFIG_POTION_HUD_ENABLE)
+			@DefaultValue("true")
+			@LangKey("dsurround.cfg.player.potionHud.Enable")
+			@Comment("Enable display of potion icons in display")
+			public static boolean potionHudEnabled = true;
+
+			@Option(CONFIG_POTION_HUD_TRANSPARENCY)
+			@DefaultValue("0.75")
+			@LangKey("dsurround.cfg.player.potionHud.Transparency")
+			@RangeFloat(min = 0.0F, max = 1.0F)
+			@Comment("Transparency factor for icons (higher more solid)")
+			public static float potionHudTransparency = 0.75F;
+
+			@Option(CONFIG_POTION_HUD_LEFT_OFFSET)
+			@DefaultValue("5")
+			@LangKey("dsurround.cfg.player.potionHud.LeftOffset")
+			@RangeInt(min = 0)
+			@Comment("Offset from left side of screen")
+			public static int potionHudLeftOffset = 5;
+
+			@Option(CONFIG_POTION_HUD_TOP_OFFSET)
+			@DefaultValue("5")
+			@LangKey("dsurround.cfg.player.potionHud.TopOffset")
+			@RangeInt(min = 0)
+			@Comment("Offset from top of screen")
+			public static int potionHudTopOffset = 5;
+
+			@Option(CONFIG_POTION_HUD_SCALE)
+			@DefaultValue("0.75")
+			@LangKey("dsurround.cfg.player.potionHud.Scale")
+			@RangeFloat(min = 0.0F, max = 1.0F)
+			@Comment("Size scale of icons (lower is smaller)")
+			public static float potionHudScale = 0.75F;
+
+			@Option(CONFIG_POTION_HUD_ANCHOR)
+			@DefaultValue("0")
+			@LangKey("dsurround.cfg.player.potionHud.Location")
+			@RangeInt(min = 0, max = 1)
+			@Comment("Area of the display the Potion HUD is displayed (0 upper left, 1 upper right)")
+			public static int potionHudAnchor = 0;
+		}
+
+		@Category(CATEGORY_LIGHT_LEVEL)
+		@LangKey("dsurround.cfg.lightlevel.cat.LightLevel")
+		@Comment("Options for configuring Light Level HUD")
+		public static class lightlevel {
+
+			public static String PATH = null;
+			public static final List<String> SORT = Arrays.asList(CONFIG_LL_RANGE, CONFIG_LL_MOB_SPAWN_THRESHOLD,
+					CONFIG_LL_DISPLAY_MODE, CONFIG_LL_HIDE_SAFE, CONFIG_LL_INDICATE_CAUTION, CONFIG_LL_COLORS);
+
+			@Option(CONFIG_LL_RANGE)
+			@DefaultValue("24")
+			@LangKey("dsurround.cfg.lightlevel.Range")
+			@Comment("Range from player to analyze light levels")
+			@RangeInt(min = 16, max = 32)
+			public static int llBlockRange = 24;
+
+			@Option(CONFIG_LL_MOB_SPAWN_THRESHOLD)
+			@DefaultValue("7")
+			@LangKey("dsurround.cfg.lightlevel.MobSpawnThreshold")
+			@Comment("Light level at which mobs can spawn")
+			@RangeInt(min = 0, max = 15)
+			public static int llSpawnThreshold = 7;
+
+			@Option(CONFIG_LL_DISPLAY_MODE)
+			@DefaultValue("0")
+			@LangKey("dsurround.cfg.lightlevel.DisplayMode")
+			@Comment("0: Block Light, 1: Block Light + Sky Light")
+			@RangeInt(min = 0, max = 1)
+			public static int llDisplayMode = 0;
+
+			@Option(CONFIG_LL_HIDE_SAFE)
+			@DefaultValue("false")
+			@LangKey("dsurround.cfg.lightlevel.HideSafe")
+			@Comment("Hide light level information for blocks that are considered safe")
+			public static boolean llHideSafe = false;
+
+			@Option(CONFIG_LL_INDICATE_CAUTION)
+			@DefaultValue("true")
+			@LangKey("dsurround.cfg.lightlevel.IndicateCaution")
+			@Comment("Indicate current light levels that will change at night which could result in mob spawns")
+			public static boolean llIndicateCaution = true;
+
+			@Option(CONFIG_LL_COLORS)
+			@DefaultValue("1")
+			@LangKey("dsurround.cfg.lightlevel.Colors")
+			@Comment("Color set: 0 bright, 1 dark")
+			@RangeInt(min = 0, max = 1)
+			public static int llColors = 1;
+		}
+
+		@Category(CATEGORY_COMPASS)
+		@LangKey("dsurround.cfg.compass.cat.Compass")
+		@Comment("Options for configuring compass HUD")
+		public static class compass {
+
+			public static String PATH = null;
+			public static final List<String> SORT = Arrays.asList(CONFIG_COMPASS_ENABLE, CONFIG_COMPASS_STYLE,
+					CONFIG_COMPASS_TRANSPARENCY, CONFIG_COMPASS_COORD_FORMAT, CONFIG_CLOCK_ENABLE);
+
+			@Option(CONFIG_COMPASS_ENABLE)
+			@DefaultValue("true")
+			@LangKey("dsurround.cfg.compass.Enable")
+			@Comment("Enable/disable compass HUD when compass is held")
+			public static boolean enableCompass = true;
+
+			@Option(CONFIG_CLOCK_ENABLE)
+			@DefaultValue("true")
+			@LangKey("dsurround.cfg.compass.ClockEnable")
+			@Comment("Enable/disable clock HUD when clock is held")
+			public static boolean enableClock = true;
+
+			@Option(CONFIG_COMPASS_STYLE)
+			@DefaultValue("0")
+			@LangKey("dsurround.cfg.compass.Style")
+			@Comment("Style of compass bar")
+			@RangeInt(min = 0, max = 6)
+			public static int compassStyle = 0;
+
+			@Option(CONFIG_COMPASS_TRANSPARENCY)
+			@DefaultValue("0.4")
+			@LangKey("dsurround.cfg.compass.Transparency")
+			@Comment("Compass transparency")
+			@RangeFloat(min = 0F, max = 1.0F)
+			public static float compassTransparency = 0.4F;
+
+			@Option(CONFIG_COMPASS_COORD_FORMAT)
+			@DefaultValue("x: %1$d, z: %3$d")
+			@LangKey("dsurround.cfg.compass.Format")
+			@Comment("Format string for location coordinates")
+			public static String compassCoordFormat = "x: %1$d, z: %3$d";
+		}
+
 	}
 
 	public static final String CATEGORY_FEATURES = "features";

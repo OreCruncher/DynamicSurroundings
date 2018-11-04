@@ -68,8 +68,8 @@ public final class ClientChunkCache {
 	// greater. Add a couple blocks because some of the effects look at
 	// neighbor blocks.
 	private static int range() {
-		int r = Math.max(32, ModOptions.general.specialEffectRange);
-		r = Math.max(r, ModOptions.lightlevel.llBlockRange);
+		int r = Math.max(32, ModOptions.effects.specialEffectRange);
+		r = Math.max(r, ModOptions.huds.lightlevel.llBlockRange);
 		return r + 2;
 	}
 

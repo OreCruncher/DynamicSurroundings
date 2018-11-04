@@ -428,7 +428,7 @@ public class Generator {
 	}
 
 	protected boolean shouldProducePrint(@Nonnull final EntityLivingBase entity) {
-		return ModOptions.player.enableFootprints && this.VAR.HAS_FOOTPRINT
+		return ModOptions.effects.enableFootprints && this.VAR.HAS_FOOTPRINT
 				&& (entity.onGround || !(EntityLivingBaseUtil.isJumping(entity) || entity.isAirBorne))
 				&& !entity.isInvisibleToPlayer(EnvironState.getPlayer());
 	}
@@ -461,7 +461,7 @@ public class Generator {
 			if (printPos != null) {
 				FootprintStyle style = this.VAR.FOOTPRINT_STYLE;
 				if (entity instanceof EntityPlayer) {
-					style = FootprintStyle.getStyle(ModOptions.player.footprintStyle);
+					style = FootprintStyle.getStyle(ModOptions.effects.footprintStyle);
 				}
 				final Footprint print = Footprint.produce(style, entity, printPos, rotDegrees, this.VAR.FOOTPRINT_SCALE,
 						isRightFoot);

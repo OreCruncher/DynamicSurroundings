@@ -74,7 +74,7 @@ public class EntityFootprintEffect extends EntityEffect {
 
 		final EntityLivingBase entity = (EntityLivingBase) getState().subject().get();
 		this.generator = ClientRegistry.FOOTSTEPS.createGenerator(entity);
-		this.lastStyle = ModOptions.player.footprintStyle;
+		this.lastStyle = ModOptions.effects.footprintStyle;
 
 		if (entity instanceof EntityPlayerSP) {
 			this.eventRegistered = true;
@@ -85,9 +85,9 @@ public class EntityFootprintEffect extends EntityEffect {
 	@Override
 	public void update(@Nonnull final Entity subject) {
 		final EntityLivingBase entity = (EntityLivingBase) subject;
-		if (getState().isActivePlayer(entity) && this.lastStyle != ModOptions.player.footprintStyle) {
+		if (getState().isActivePlayer(entity) && this.lastStyle != ModOptions.effects.footprintStyle) {
 			this.generator = ClientRegistry.FOOTSTEPS.createGenerator(entity);
-			this.lastStyle = ModOptions.player.footprintStyle;
+			this.lastStyle = ModOptions.effects.footprintStyle;
 		}
 
 		this.generator.generateFootsteps(entity);

@@ -65,7 +65,7 @@ public enum BlockEffectType {
 	FIREFLY("firefly", FireFlyEffect.class) {
 		@Override
 		public boolean isEnabled() {
-			return ModOptions.block.effects.enableFireflies;
+			return ModOptions.effects.enableFireflies;
 		}
 	},
 
@@ -75,37 +75,37 @@ public enum BlockEffectType {
 	STEAM_JET("steam", SteamJetEffect.class) {
 		@Override
 		public boolean isEnabled() {
-			return ModOptions.block.effects.enableSteamJets;
+			return ModOptions.effects.enableSteamJets;
 		}
 	},
 	FIRE_JET("fire", FireJetEffect.class) {
 		@Override
 		public boolean isEnabled() {
-			return ModOptions.block.effects.enableFireJets;
+			return ModOptions.effects.enableFireJets;
 		}
 	},
 	BUBBLE_JET("bubble", BubbleJetEffect.class) {
 		@Override
 		public boolean isEnabled() {
-			return ModOptions.block.effects.enableBubbleJets;
+			return ModOptions.effects.enableBubbleJets;
 		}
 	},
 	DUST_JET("dust", DustJetEffect.class) {
 		@Override
 		public boolean isEnabled() {
-			return ModOptions.block.effects.enableDustJets;
+			return ModOptions.effects.enableDustJets;
 		}
 	},
 	FOUNTAIN_JET("fountain", FountainJetEffect.class) {
 		@Override
 		public boolean isEnabled() {
-			return ModOptions.block.effects.enableFountainJets;
+			return ModOptions.effects.enableFountainJets;
 		}
 	},
 	SPLASH_JET("splash", WaterSplashJetEffect.class) {
 		@Override
 		public boolean isEnabled() {
-			return ModOptions.block.effects.enableWaterSplash;
+			return ModOptions.effects.enableWaterSplash;
 		}
 	};
 

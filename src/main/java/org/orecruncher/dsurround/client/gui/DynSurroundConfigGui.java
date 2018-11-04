@@ -34,7 +34,6 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.Permissions;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.registry.sound.SoundRegistry;
@@ -62,29 +61,6 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 		super(parentScreen, new ArrayList<IConfigElement>(), ModBase.MOD_ID, false, false, ModBase.MOD_NAME);
 		this.titleLine2 = this.config.getConfigFile().getAbsolutePath();
 
-		// Quick select options. Allow the player to enable/disable features
-		// easily without having to delve into the option tree.
-		addConfigElement(ModOptions.aurora.PATH, ModOptions.CONFIG_AURORA_ENABLED);
-		addConfigElement(ModOptions.rain.PATH, ModOptions.CONFIG_ENABLE_BACKGROUND_THUNDER);
-		addConfigElement(ModOptions.fog.PATH, ModOptions.CONFIG_ALLOW_DESERT_FOG);
-		addConfigElement(ModOptions.fog.PATH, ModOptions.CONFIG_ENABLE_ELEVATION_HAZE);
-		addConfigElement(ModOptions.fog.PATH, ModOptions.CONFIG_ENABLE_BIOME_FOG);
-		addConfigElement(ModOptions.sound.PATH, ModOptions.CONFIG_ENABLE_BIOME_SOUNDS);
-		addConfigElement(ModOptions.sound.PATH, ModOptions.CONFIG_ENABLE_JUMP_SOUND);
-		addConfigElement(ModOptions.sound.PATH, ModOptions.CONFIG_ENABLE_EQUIP_SOUND);
-		addConfigElement(ModOptions.sound.PATH, ModOptions.CONFIG_ENABLE_CRAFTING_SOUND);
-		addConfigElement(ModOptions.sound.PATH, ModOptions.CONFIG_ENABLE_ARMOR_SOUND);
-		addConfigElement(ModOptions.player.PATH, ModOptions.CONFIG_ENABLE_FOOTPRINTS);
-		addConfigElement(ModOptions.player.potionHUD.PATH, ModOptions.CONFIG_POTION_HUD_ENABLE);
-		addConfigElement(ModOptions.speechbubbles.PATH, ModOptions.CONFIG_OPTION_ENABLE_SPEECHBUBBLES);
-		addConfigElement(ModOptions.speechbubbles.PATH, ModOptions.CONFIG_OPTION_ENABLE_ENTITY_CHAT);
-		addConfigElement(ModOptions.explosions.PATH, ModOptions.CONFIG_ENABLE_EXPLOSIONS);
-
-		if (Permissions.instance().allowCompassAndClockHUD()) {
-			addConfigElement(ModOptions.compass.PATH, ModOptions.CONFIG_COMPASS_ENABLE);
-			addConfigElement(ModOptions.compass.PATH, ModOptions.CONFIG_CLOCK_ENABLE);
-		}
-
 		// Synthetic options for handling sound blocking and volume
 		this.soundCategory = new ConfigCategory("Individual Sound Configuration")
 				.setLanguageKey("dsurround.cfg.sound.SoundConfig");
@@ -95,27 +71,19 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 		// Tack on the rest of the categories for configuration
 		addConfigCategory(ModOptions.general.PATH);
 		addConfigCategory(ModOptions.player.PATH);
-		if (Permissions.instance().allowCompassAndClockHUD())
-			addConfigCategory(ModOptions.compass.PATH);
+		addConfigCategory(ModOptions.huds.PATH);
 		addConfigCategory(ModOptions.explosions.PATH);
 		addConfigCategory(ModOptions.rain.PATH);
 		addConfigCategory(ModOptions.fog.PATH);
 		addConfigCategory(ModOptions.aurora.PATH);
-		addConfigCategory(ModOptions.block.PATH);
+		addConfigCategory(ModOptions.effects.PATH);
 		addConfigCategory(ModOptions.biomes.PATH);
 		addConfigCategory(ModOptions.sound.PATH);
 		addConfigCategory(ModOptions.profiles.PATH);
-		if (Permissions.instance().allowLightLevelHUD())
-			addConfigCategory(ModOptions.lightlevel.PATH);
 		addConfigCategory(ModOptions.speechbubbles.PATH);
 		addConfigCategory(ModOptions.commands.PATH);
 		addConfigCategory(ModOptions.asm.PATH);
 		addConfigCategory(ModOptions.logging.PATH);
-	}
-
-	private void addConfigElement(@Nonnull final String category, @Nonnull final String prop) {
-		final Property property = this.config.getCategory(category).get(prop);
-		this.configElements.add(new ConfigElement(property));
 	}
 
 	private void addConfigCategory(@Nonnull final String category) {
@@ -131,44 +99,17 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 	}
 
 	protected void saveSoundList() {
-		final List<String> culledSounds = new ArrayList<>();
-		final List<String> blockedSounds = new ArrayList<>();
 		final List<String> soundVolumes = new ArrayList<>();
 
 		for (final Entry<String, Property> entry : this.soundCategory.entrySet()) {
-			final String sound = entry.getKey();
-			String parms = entry.getValue().getString();
+			final String parms = entry.getValue().getString();
 			if (StringUtils.isEmpty(parms))
 				continue;
-
-			if (parms.contains(GuiConstants.TOKEN_CULL)) {
-				parms = parms.replace(GuiConstants.TOKEN_CULL, "");
-				culledSounds.add(sound);
-			}
-
-			if (parms.contains(GuiConstants.TOKEN_BLOCK)) {
-				parms = parms.replace(GuiConstants.TOKEN_BLOCK, "");
-				blockedSounds.add(sound);
-			}
-
-			parms = parms.trim();
-			if (StringUtils.isEmpty(parms))
-				continue;
-
-			final int volume = Integer.parseInt(parms);
-			if (volume != 100) {
-				soundVolumes.add(sound + "=" + volume);
-			}
+			soundVolumes.add(entry.getKey() + " " + parms);
 		}
 
-		String[] results = culledSounds.toArray(new String[culledSounds.size()]);
-		this.config.getCategory(ModOptions.sound.PATH).get(ModOptions.CONFIG_CULLED_SOUNDS).set(results);
-
-		results = blockedSounds.toArray(new String[blockedSounds.size()]);
-		this.config.getCategory(ModOptions.sound.PATH).get(ModOptions.CONFIG_BLOCKED_SOUNDS).set(results);
-
-		results = soundVolumes.toArray(new String[soundVolumes.size()]);
-		this.config.getCategory(ModOptions.sound.PATH).get(ModOptions.CONFIG_SOUND_VOLUMES).set(results);
+		final String[] results = soundVolumes.toArray(new String[soundVolumes.size()]);
+		this.config.getCategory(ModOptions.sound.PATH).get(ModOptions.CONFIG_SOUND_SETTINGS).set(results);
 	}
 
 	protected void generateSoundList(final ConfigCategory cat) {

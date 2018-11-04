@@ -163,7 +163,7 @@ public class FxHandler extends EffectHandlerBase {
 
 		final long start = System.nanoTime();
 
-		final double distanceThreshold = ModOptions.general.specialEffectRange * ModOptions.general.specialEffectRange;
+		final double distanceThreshold = ModOptions.effects.specialEffectRange * ModOptions.effects.specialEffectRange;
 		final boolean inRange = entity.getDistanceSq(EnvironState.getPlayer()) <= distanceThreshold
 				&& entity.dimension == EnvironState.getDimensionId();
 

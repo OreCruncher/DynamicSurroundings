@@ -186,7 +186,7 @@ public class StormSplashRenderer {
 		double spawnZ = 0.0D;
 		int particlesSpawned = 0;
 
-		final int RANGE = Math.max((ModOptions.general.specialEffectRange + 1) / 2, 10);
+		final int RANGE = Math.max((ModOptions.effects.specialEffectRange + 1) / 2, 10);
 		final float rangeFactor = RANGE / 10.0F;
 		int particleCount = (int) (100 * rainStrengthFactor * rainStrengthFactor
 				* rangeFactor);

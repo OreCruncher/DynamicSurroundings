@@ -29,7 +29,6 @@ import javax.annotation.Nonnull;
 import org.lwjgl.input.Keyboard;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.Permissions;
 import org.orecruncher.dsurround.client.hud.LightLevelHUD;
 import org.orecruncher.dsurround.client.hud.LightLevelHUD.Mode;
 import org.orecruncher.lib.Localization;
@@ -68,19 +67,11 @@ public class KeyHandler {
 			ClientRegistry.registerKeyBinding(ANIMANIA_BADGES);
 		}
 
-		if (Permissions.instance().allowLightLevelHUD()) {
-			LIGHTLEVEL_KEY = new KeyBinding("dsurround.cfg.keybind.LightLevel", Keyboard.KEY_F7, SECTION_NAME);
-			ClientRegistry.registerKeyBinding(LIGHTLEVEL_KEY);
-		} else {
-			LIGHTLEVEL_KEY = null;
-		}
+		LIGHTLEVEL_KEY = new KeyBinding("dsurround.cfg.keybind.LightLevel", Keyboard.KEY_F7, SECTION_NAME);
+		ClientRegistry.registerKeyBinding(LIGHTLEVEL_KEY);
 
-		if (Permissions.instance().allowChunkBorderHUD()) {
-			CHUNKBORDER_KEY = new KeyBinding("dsurround.cfg.keybind.ChunkBorders", Keyboard.KEY_F9, SECTION_NAME);
-			ClientRegistry.registerKeyBinding(CHUNKBORDER_KEY);
-		} else {
-			CHUNKBORDER_KEY = null;
-		}
+		CHUNKBORDER_KEY = new KeyBinding("dsurround.cfg.keybind.ChunkBorders", Keyboard.KEY_F9, SECTION_NAME);
+		ClientRegistry.registerKeyBinding(CHUNKBORDER_KEY);
 	}
 
 	private static String getOnOff(final boolean flag) {
@@ -124,17 +115,17 @@ public class KeyHandler {
 			if (GuiScreen.isCtrlKeyDown()) {
 				// Only change mode when visible
 				if (LightLevelHUD.showHUD) {
-					ModOptions.lightlevel.llDisplayMode++;
-					if (ModOptions.lightlevel.llDisplayMode >= Mode.values().length)
-						ModOptions.lightlevel.llDisplayMode = 0;
+					ModOptions.huds.lightlevel.llDisplayMode++;
+					if (ModOptions.huds.lightlevel.llDisplayMode >= Mode.values().length)
+						ModOptions.huds.lightlevel.llDisplayMode = 0;
 					sendPlayerMessage("dsurround.cfg.keybind.msg.LLDisplayMode",
-							Mode.getMode(ModOptions.lightlevel.llDisplayMode).name());
+							Mode.getMode(ModOptions.huds.lightlevel.llDisplayMode).name());
 				}
 			} else if (GuiScreen.isShiftKeyDown()) {
 				if (LightLevelHUD.showHUD) {
-					ModOptions.lightlevel.llHideSafe = !ModOptions.lightlevel.llHideSafe;
+					ModOptions.huds.lightlevel.llHideSafe = !ModOptions.huds.lightlevel.llHideSafe;
 					sendPlayerMessage("dsurround.cfg.keybind.msg.LLSafeBlocks",
-							getOnOff(ModOptions.lightlevel.llHideSafe));
+							getOnOff(ModOptions.huds.lightlevel.llHideSafe));
 				}
 			} else {
 				LightLevelHUD.showHUD = !LightLevelHUD.showHUD;

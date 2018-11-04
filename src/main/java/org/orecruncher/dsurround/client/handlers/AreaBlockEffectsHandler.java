@@ -46,7 +46,7 @@ public final class AreaBlockEffectsHandler extends EffectHandlerBase {
 	protected final RandomBlockEffectScanner farEffects = new RandomBlockEffectScanner(this.locus,
 			RandomBlockEffectScanner.FAR_RANGE);
 	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(this.locus,
-			ModOptions.general.specialEffectRange);
+			ModOptions.effects.specialEffectRange);
 	protected final BiomeScanner biomes = new BiomeScanner();
 
 	public AreaBlockEffectsHandler() {

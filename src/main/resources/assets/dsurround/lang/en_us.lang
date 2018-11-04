@@ -147,25 +147,22 @@ dsurround.cfg.biomes.Aliases.tooltip=Biomes alias list
 dsurround.cfg.biomes.DimBlacklist=Dimension Blacklist
 dsurround.cfg.biomes.DimBlacklist.tooltip=Dimension IDs where biome sounds will not be played
 
-dsurround.cfg.block.cat.Blocks=Block Options
-dsurround.cfg.block.cat.Blocks.tooltip=Options for defining block specific sounds/effects
-
-dsurround.cfg.block.effects.cat.BlockEffects=Block Effect Options
-dsurround.cfg.block.effects.cat.BlockEffects.tooltip=Options for disabling various block effects
-dsurround.cfg.block.effects.Steam=Steam Jets
-dsurround.cfg.block.effects.Steam.tooltip=Enable/disable Steam Jets where lava meets water
-dsurround.cfg.block.effects.Fire=Fire Jets
-dsurround.cfg.block.effects.Fire.tooltip=Enable/disable Fire Jets in lava
-dsurround.cfg.block.effects.Bubble=Bubble Jets
-dsurround.cfg.block.effects.Bubble.tooltip=Enable/disable Bubble Jets under water
-dsurround.cfg.block.effects.Dust=Dust Motes
-dsurround.cfg.block.effects.Dust.tooltip=Enable/disable Dust Motes dropping from under blocks
-dsurround.cfg.block.effects.Fountain=Fountain Jets
-dsurround.cfg.block.effects.Fountain.tooltip=Enable/disable Fountain Jets spraying
-dsurround.cfg.block.effects.Fireflies=Fireflies
-dsurround.cfg.block.effects.Fireflies.tooltip=Enable/disable Firefly effect around plants
-dsurround.cfg.block.effects.Splash=Water Splash
-dsurround.cfg.block.effects.Splash.tooltip=Enable/disable Water Splash effects when water spills down
+dsurround.cfg.effects.cat.Effects=Effect Options
+dsurround.cfg.effects.cat.Effects.tooltip=Options for controlling various effects
+dsurround.cfg.effects.Steam=Steam Jets
+dsurround.cfg.effects.Steam.tooltip=Enable/disable Steam Jets where lava meets water
+dsurround.cfg.effects.Fire=Fire Jets
+dsurround.cfg.effects.Fire.tooltip=Enable/disable Fire Jets in lava
+dsurround.cfg.effects.Bubble=Bubble Jets
+dsurround.cfg.effects.Bubble.tooltip=Enable/disable Bubble Jets under water
+dsurround.cfg.effects.Dust=Dust Motes
+dsurround.cfg.effects.Dust.tooltip=Enable/disable Dust Motes dropping from under blocks
+dsurround.cfg.effects.Fountain=Fountain Jets
+dsurround.cfg.effects.Fountain.tooltip=Enable/disable Fountain Jets spraying
+dsurround.cfg.effects.Fireflies=Fireflies
+dsurround.cfg.effects.Fireflies.tooltip=Enable/disable Firefly effect around plants
+dsurround.cfg.effects.Splash=Water Splash
+dsurround.cfg.effects.Splash.tooltip=Enable/disable Water Splash effects when water spills down
 
 dsurround.cfg.sound.cat.Sound=Sound Options
 dsurround.cfg.sound.cat.Sound.tooltip=General options for defining sound effects
@@ -203,10 +200,9 @@ dsurround.cfg.sound.Swing=Swing Sounds
 dsurround.cfg.sound.Swing.tooltip=Enable/disable item swing sounds
 dsurround.cfg.sound.Puddle=Rain Puddle Sound
 dsurround.cfg.sound.Puddle.tooltip=Enable/disable rain puddle sound when moving in the rain
-dsurround.cfg.sound.CullInterval=Sound Culling Interval
-dsurround.cfg.sound.CullInterval.tooltip=Ticks between culled sound events (0 to disable culling)
-dsurround.cfg.sound.SoundConfig=Individual Sound Configuration
-dsurround.cfg.sound.SoundConfig.tooltip=Configure sound block, cull, and individual volumes
+dsurround.cfg.sound.SoundSettings=Individual Sound Configuration
+dsurround.cfg.sound.SoundSettings.tooltip=Configure how each sound will be handled
+
 dsurround.cfg.sound.BattleMusic=Battle Music
 dsurround.cfg.sound.BattleMusic.tooltip=Enable/disable playing of Battle Music when in combat
 
@@ -218,8 +214,8 @@ dsurround.cfg.player.Popoffs=Popoffs
 dsurround.cfg.player.Popoffs.tooltip=Display damage/heal pop-offs for an entity
 dsurround.cfg.player.CritWords=Show Critical Words
 dsurround.cfg.player.CritWords.tooltip=Display random power word on critical hit
-dsurround.cfg.player.Footprints=Player Footprints
-dsurround.cfg.player.Footprints.tooltip=Enable/disable player footprints
+dsurround.cfg.player.Footprints=Entity Footprints
+dsurround.cfg.player.Footprints.tooltip=Enable/disable entity footprints
 dsurround.cfg.player.FootprintStyle=Footprint Style
 dsurround.cfg.player.FootprintStyle.tooltip=0: shoe print, 1: square print, 2: horse hoof, 3: bird, 4: paw, 5: solid square, 6: lowres square
 dsurround.cfg.player.HurtThreshold=Hurt Threshold
@@ -227,7 +223,7 @@ dsurround.cfg.player.HurtThreshold.tooltip=Amount of health bar remaining to tri
 dsurround.cfg.player.HungerThreshold=Hunger Threshold
 dsurround.cfg.player.HungerThreshold.tooltip=Amount of food bar remaining to trigger player hunger sound (0 disable)
 dsurround.cfg.player.ShowBreath=Show Frost Breath
-dsurround.cfg.player.ShowBreath.tooltip=Show player frost breath in cold weather
+dsurround.cfg.player.ShowBreath.tooltip=Show entity frost breath in cold weather
 
 dsurround.cfg.player.potionHud.cat.PotionHud=Potion HUD Options
 dsurround.cfg.player.potionHud.cat.PotionHud.tooltip=Options for the Potion HUD overlay
@@ -311,6 +307,9 @@ dsurround.cfg.profiles.noNetherWeather=No Nether Weather
 dsurround.cfg.profiles.noNetherWeather.tooltip=Enable/disable Nether weather effects
 dsurround.cfg.profiles.noDustEffects=No Dust Effects
 dsurround.cfg.profiles.noDustEffects.tooltip=Turns off dust effects for all biomes
+
+dsurround.cfg.huds.cat.Huds=HUDs and Overlays
+dsurround.cfg.huds.cat.Huds.tooltip=Options to control various heads up displays and overlays
 
 dsurround.season.format=%1$s %2$s
 dsurround.season.noseason=No Season

@@ -93,7 +93,7 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 
 	@Override
 	public void update(@Nonnull final Entity subject) {
-		if (!ModOptions.player.enableDamagePopoffs)
+		if (!ModOptions.effects.enableDamagePopoffs)
 			return;
 
 		final EntityLivingBase entity = (EntityLivingBase) subject;
@@ -117,7 +117,7 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 				final Color color = adjustment > 0 ? HEAL_TEXT_COLOR : DAMAGE_TEXT_COLOR;
 
 				ParticleTextPopOff particle = null;
-				if (ModOptions.player.showCritWords && adjustment < 0 && delta >= criticalAmount) {
+				if (ModOptions.effects.showCritWords && adjustment < 0 && delta >= criticalAmount) {
 					particle = new ParticleTextPopOff(world, getPowerWord(), CRITICAL_TEXT_COLOR, posX, posY + 0.5D,
 							posZ);
 					getState().addParticle(particle);

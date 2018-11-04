@@ -27,7 +27,6 @@ package org.orecruncher.dsurround.client.hud;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.orecruncher.dsurround.Permissions;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.client.Minecraft;
@@ -48,12 +47,8 @@ public final class GuiHUDHandler {
 	private GuiHUDHandler() {
 		register(new PotionHUD());
 		register(new InspectionHUD());
-
-		if (Permissions.instance().allowCompassAndClockHUD())
-			register(new CompassHUD());
-
-		if (Permissions.instance().allowLightLevelHUD())
-			register(new LightLevelHUD());
+		register(new CompassHUD());
+		register(new LightLevelHUD());
 	}
 
 	private final List<GuiOverlay> overlays = new ArrayList<>();

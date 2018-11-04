@@ -31,7 +31,6 @@ import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.sound.ConfigSound;
@@ -39,7 +38,6 @@ import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.config.SoundMetadataConfig;
-import org.orecruncher.lib.MyUtils;
 import org.orecruncher.lib.math.MathStuff;
 import org.orecruncher.lib.sound.SoundConfigProcessor;
 
@@ -83,19 +81,26 @@ public final class SoundRegistry extends Registry {
 		this.myRegistry.clear();
 		
 		bakeSoundRegistry();
-		
-		MyUtils.addAll(this.cullSoundNames, ModOptions.sound.culledSounds);
-		MyUtils.addAll(this.blockSoundNames, ModOptions.sound.blockedSounds);
-		
 
-		for (final String volume : ModOptions.sound.soundVolumes) {
-			final String[] tokens = StringUtils.split(volume, "=");
-			if (tokens.length == 2) {
-				try {
-					final float vol = Integer.parseInt(tokens[1]) / 100.0F;
-					this.volumeControl.put(tokens[0], MathStuff.clamp(vol, MIN_SOUNDFACTOR, MAX_SOUNDFACTOR));
-				} catch (final Throwable t) {
-					ModBase.log().error("Unable to process sound volume entry: " + volume, t);
+		for(final String line: ModOptions.sound.soundSettings) {
+			final String[] parts = line.split(" ");
+			if(parts.length < 2) {
+				ModBase.log().warn("Missing tokens in sound settings? (%s)", line);
+			} else {
+				final String soundName = parts[0];
+				for(int i = 1; i < parts.length; i++) {
+					if ("cull".compareToIgnoreCase(parts[i]) == 0) {
+						this.cullSoundNames.add(soundName);
+					} else if("block".compareToIgnoreCase(parts[i]) == 0) {
+						this.blockSoundNames.add(soundName);
+					} else {
+						try {
+							final int volume = Integer.parseInt(parts[i]);
+							this.volumeControl.put(soundName, MathStuff.clamp((float)volume / 100F, MIN_SOUNDFACTOR, MAX_SOUNDFACTOR));
+						} catch(final Throwable t) {
+							ModBase.log().warn("Unrecognized token %s (%s)", parts[i], line);
+						}
+					}
 				}
 			}
 		}

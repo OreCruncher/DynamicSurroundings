@@ -136,7 +136,7 @@ public class CompassHUD extends GuiOverlay {
 	@Nonnull
 	protected String getLocationString() {
 		final BlockPos pos = EnvironState.getPlayerPosition();
-		return TextFormatting.AQUA + String.format(Locale.getDefault(), ModOptions.compass.compassCoordFormat,
+		return TextFormatting.AQUA + String.format(Locale.getDefault(), ModOptions.huds.compass.compassCoordFormat,
 				pos.getX(), pos.getY(), pos.getZ());
 	}
 
@@ -146,7 +146,7 @@ public class CompassHUD extends GuiOverlay {
 	}
 
 	protected boolean showCompass() {
-		return ModOptions.compass.enableCompass && PlayerUtils.isHolding(EnvironState.getPlayer(), COMPASS);
+		return ModOptions.huds.compass.enableCompass && PlayerUtils.isHolding(EnvironState.getPlayer(), COMPASS);
 	}
 
 	protected static boolean holdingOrItemFrameItem(final Item item) {
@@ -163,11 +163,11 @@ public class CompassHUD extends GuiOverlay {
 	}
 
 	protected boolean showClock() {
-		return ModOptions.compass.enableClock ? holdingOrItemFrameItem(CLOCK) : false;
+		return ModOptions.huds.compass.enableClock ? holdingOrItemFrameItem(CLOCK) : false;
 	}
 
 	protected boolean showSeason() {
-		return ModOptions.compass.enableClock ? holdingOrItemFrameItem(SEASON_CLOCK) : false;
+		return ModOptions.huds.compass.enableClock ? holdingOrItemFrameItem(SEASON_CLOCK) : false;
 	}
 
 	@Override
@@ -227,14 +227,14 @@ public class CompassHUD extends GuiOverlay {
 		final int centerX = (resolution.getScaledWidth() + 1) / 2;
 		final int centerY = (resolution.getScaledHeight() + 1) / 2;
 
-		this.textPanel.setAlpha(ModOptions.compass.compassTransparency);
+		this.textPanel.setAlpha(ModOptions.huds.compass.compassTransparency);
 		this.textPanel.render(centerX, centerY + (int) (font.FONT_HEIGHT * TEXT_LINE_START), Reference.TOP_CENTER);
 
-		final Style style = Style.getStyle(ModOptions.compass.compassStyle);
+		final Style style = Style.getStyle(ModOptions.huds.compass.compassStyle);
 		mc.getTextureManager().bindTexture(style.getTextureResource());
 
 		if (this.showCompass) {
-			GlStateManager.color(1F, 1F, 1F, ModOptions.compass.compassTransparency);
+			GlStateManager.color(1F, 1F, 1F, ModOptions.huds.compass.compassTransparency);
 			if (!style.isRose()) {
 
 				final int direction = MathStuff.floor(((mc.player.rotationYaw * 256F) / 360F) + 0.5D) & 255;
@@ -242,11 +242,11 @@ public class CompassHUD extends GuiOverlay {
 				final int y = (resolution.getScaledHeight() - style.getHeight() + 1) / 2 - style.getHeight();
 
 				if (direction < 128)
-					drawTexturedModalRect(x, y, direction, (ModOptions.compass.compassStyle * (style.getHeight() * 2)),
+					drawTexturedModalRect(x, y, direction, (ModOptions.huds.compass.compassStyle * (style.getHeight() * 2)),
 							style.getWidth(), style.getHeight());
 				else
 					drawTexturedModalRect(x, y, direction - 128,
-							(ModOptions.compass.compassStyle * (style.getHeight() * 2)) + style.getHeight(),
+							(ModOptions.huds.compass.compassStyle * (style.getHeight() * 2)) + style.getHeight(),
 							style.getWidth(), style.getHeight());
 			} else {
 				GlStateManager.pushMatrix();

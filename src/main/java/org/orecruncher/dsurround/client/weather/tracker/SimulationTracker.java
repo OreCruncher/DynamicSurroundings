@@ -117,12 +117,12 @@ public class SimulationTracker extends Tracker {
 			this.random = new XorShiftRandom(generateSeed());
 
 			final float result;
-			final float delta = ModOptions.general.defaultMaxRainStrength - ModOptions.general.defaultMinRainStrength;
+			final float delta = ModOptions.rain.defaultMaxRainStrength - ModOptions.rain.defaultMinRainStrength;
 			if (delta <= 0.0F) {
-				result = ModOptions.general.defaultMinRainStrength;
+				result = ModOptions.rain.defaultMinRainStrength;
 			} else {
 				final float mid = delta / 2.0F;
-				result = ModOptions.general.defaultMinRainStrength
+				result = ModOptions.rain.defaultMinRainStrength
 						+ (this.random.nextFloat() + this.random.nextFloat()) * mid;
 			}
 
