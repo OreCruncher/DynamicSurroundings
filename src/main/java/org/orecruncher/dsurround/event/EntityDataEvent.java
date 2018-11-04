@@ -22,28 +22,37 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.entity.ai;
+package org.orecruncher.dsurround.event;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.entity.ActionState;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.passive.EntityVillager;
+/**
+ * Fires when there is an update to an entities emoji state. Will only fire
+ * client side.
+ */
+public class EntityDataEvent extends Event {
 
-public class EntityAIVillagerEmoji extends EntityAIEmoji {
+	/**
+	 * Persistent ID of the entity this event is associated with.
+	 */
+	public final int entityId;
 
-	public EntityAIVillagerEmoji(@Nonnull final EntityLiving subject) {
-		super(subject);
-	}
+	/**
+	 * Indicates if the entity is attacking something
+	 */
+	public final boolean isAttacking;
+	
+	/**
+	 * Indicates if the entity is fleeing something
+	 */
+	public final boolean isFleeing;
 
-	@Override
-	protected void updateActionState() {
-		final EntityVillager villager = (EntityVillager) this.subject;
-		if (villager.isTrading())
-			this.data.setActionState(ActionState.TRADING);
-		else
-			super.updateActionState();
+	public EntityDataEvent(@Nonnull final int id, final boolean isAttacking, final boolean isFleeing) {
+		this.entityId = id;
+		this.isAttacking = isAttacking;
+		this.isFleeing = isFleeing;
 	}
 
 }

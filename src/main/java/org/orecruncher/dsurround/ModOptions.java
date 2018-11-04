@@ -803,7 +803,6 @@ public final class ModOptions {
 	public static final String CATEGORY_SPEECHBUBBLES = "speechbubbles";
 	public static final String CONFIG_OPTION_ENABLE_SPEECHBUBBLES = "Enable SpeechBubbles";
 	public static final String CONFIG_OPTION_ENABLE_ENTITY_CHAT = "Enable Entity Chat";
-	public static final String CONFIG_OPTION_ENABLE_EMOJIS = "Enable Entity Emojis";
 	public static final String CONFIG_OPTION_SPEECHBUBBLE_DURATION = "Display Duration";
 	public static final String CONFIG_OPTION_SPEECHBUBBLE_RANGE = "Visibility Range";
 	public static final String CONFIG_OPTION_ANIMANIA_BADGES = "Animania Badges";
@@ -815,7 +814,7 @@ public final class ModOptions {
 
 		public static String PATH = null;
 		public static final List<String> SORT = Arrays.asList(CONFIG_OPTION_ENABLE_SPEECHBUBBLES,
-				CONFIG_OPTION_ENABLE_ENTITY_CHAT, CONFIG_OPTION_ENABLE_EMOJIS, CONFIG_OPTION_SPEECHBUBBLE_DURATION,
+				CONFIG_OPTION_ENABLE_ENTITY_CHAT, CONFIG_OPTION_SPEECHBUBBLE_DURATION,
 				CONFIG_OPTION_SPEECHBUBBLE_RANGE, CONFIG_OPTION_ANIMANIA_BADGES);
 
 		@Option(CONFIG_OPTION_ENABLE_SPEECHBUBBLES)
@@ -829,12 +828,6 @@ public final class ModOptions {
 		@LangKey("dsurround.cfg.speech.EnableEntityChat")
 		@Comment("Enables/disables entity chat bubbles")
 		public static boolean enableEntityChat = false;
-
-		@Option(CONFIG_OPTION_ENABLE_EMOJIS)
-		@DefaultValue("false")
-		@LangKey("dsurround.cfg.speech.EnableEntityEmojis")
-		@Comment("Enables/disables entity emojis")
-		public static boolean enableEntityEmojis = false;
 
 		@Option(CONFIG_OPTION_SPEECHBUBBLE_DURATION)
 		@DefaultValue("7")

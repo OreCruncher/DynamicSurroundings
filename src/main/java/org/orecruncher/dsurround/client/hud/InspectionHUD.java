@@ -37,6 +37,8 @@ import org.orecruncher.dsurround.client.handlers.EffectManager;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.handlers.FxHandler;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
+import org.orecruncher.dsurround.entity.CapabilityEntityData;
+import org.orecruncher.dsurround.entity.IEntityData;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateProfile;
 import org.orecruncher.lib.ItemStackUtil;
@@ -188,6 +190,12 @@ public class InspectionHUD extends GuiOverlay {
 			text.add(TextFormatting.DARK_AQUA + entity.getName());
 			text.add(keyName);
 			text.add(entity.getClass().getName());
+			
+			final IEntityData data = CapabilityEntityData.getCapability(entity);
+			if (data != null) {
+				text.add(data.serializeNBT().toString());
+			}
+			
 			text.add(TextFormatting.GOLD + "Effects");
 			text.addAll(((FxHandler) EffectManager.instance().lookupService(FxHandler.class)).getEffects(entity));
 		} catch (@Nonnull final Exception ex) {

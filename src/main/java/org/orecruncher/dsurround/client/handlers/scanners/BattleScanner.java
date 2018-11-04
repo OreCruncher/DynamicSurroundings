@@ -25,9 +25,8 @@
 package org.orecruncher.dsurround.client.handlers.scanners;
 
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.entity.ActionState;
-import org.orecruncher.dsurround.entity.CapabilityEmojiData;
-import org.orecruncher.dsurround.entity.IEmojiData;
+import org.orecruncher.dsurround.entity.CapabilityEntityData;
+import org.orecruncher.dsurround.entity.IEntityData;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -139,16 +138,13 @@ public class BattleScanner implements ITickable {
 				continue;
 			} else if (isApplicableType(e)) {
 				// Use emoji data to determine if the mob is attacking
-				final IEmojiData emoji = e.getCapability(CapabilityEmojiData.EMOJI, null);
-				if (emoji != null) {
-					final ActionState state = emoji.getActionState();
-					if (state == ActionState.ATTACKING) {
-						// Only in battle if the entity sees the player, or the
-						// player sees the entity
-						final EntityLiving living = (EntityLiving) e;
-						if (living.getEntitySenses().canSee(player) || player.canEntityBeSeen(living))
-							inBattle = true;
-					}
+				final IEntityData emoji = e.getCapability(CapabilityEntityData.ENTITY_DATA, null);
+				if (emoji != null && emoji.isAttacking()) {
+					// Only in battle if the entity sees the player, or the
+					// player sees the entity
+					final EntityLiving living = (EntityLiving) e;
+					if (living.getEntitySenses().canSee(player) || player.canEntityBeSeen(living))
+						inBattle = true;
 				}
 			}
 		}

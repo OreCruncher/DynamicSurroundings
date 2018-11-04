@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.commands.CommandDS;
-import org.orecruncher.dsurround.entity.CapabilityEmojiData;
+import org.orecruncher.dsurround.entity.CapabilityEntityData;
 import org.orecruncher.dsurround.network.Network;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.server.services.ServiceManager;
@@ -65,7 +65,7 @@ public class Proxy {
 	}
 
 	protected void eventBusRegistrations() {
-		register(CapabilityEmojiData.EventHandler.class);
+		register(CapabilityEntityData.EventHandler.class);
 		register(RegistryManager.class);
 	}
 
@@ -85,7 +85,7 @@ public class Proxy {
 		registerLanguage();
 		eventBusRegistrations();
 
-		CapabilityEmojiData.register();
+		CapabilityEntityData.register();
 	}
 
 	public void init(@Nonnull final FMLInitializationEvent event) {

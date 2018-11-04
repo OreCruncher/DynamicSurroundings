@@ -246,14 +246,12 @@ dsurround.cfg.player.potionHud.Scale.tooltip=Size scale of icons (lower is small
 dsurround.cfg.player.potionHud.Location=HUD Location
 dsurround.cfg.player.potionHud.Location.tooltip=Area of the display the Potion HUD is displayed (0 upper left, 1 upper right)
 
-dsurround.cfg.speech.cat.Speech=SpeechBubble/Emoji Options
+dsurround.cfg.speech.cat.Speech=SpeechBubble Options
 dsurround.cfg.speech.cat.Speech.tooltip=Options for configuring SpeechBubbles and Emojis
 dsurround.cfg.speech.EnableSpeechBubbles=SpeechBubbles
 dsurround.cfg.speech.EnableSpeechBubbles.tooltip=Enables/disables speech bubbles above player heads
 dsurround.cfg.speech.EnableEntityChat=Entity Chat
 dsurround.cfg.speech.EnableEntityChat.tooltip=Enables/disables entity chat bubbles
-dsurround.cfg.speech.EnableEntityEmojis=Entity Emojis
-dsurround.cfg.speech.EnableEntityEmojis.tooltip=Enables/disables entity emojis
 dsurround.cfg.speech.Duration=Display Duration
 dsurround.cfg.speech.Duration.tooltip=Number of seconds to display speech before removing
 dsurround.cfg.speech.Range=Visibility Range

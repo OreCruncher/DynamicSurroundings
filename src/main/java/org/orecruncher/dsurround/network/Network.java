@@ -61,7 +61,7 @@ public final class Network {
 				Side.CLIENT);
 		NETWORK.registerMessage(PacketSpeechBubble.PacketHandler.class, PacketSpeechBubble.class, ++discriminator,
 				Side.CLIENT);
-		NETWORK.registerMessage(PacketEntityEmote.PacketHandler.class, PacketEntityEmote.class, ++discriminator,
+		NETWORK.registerMessage(PacketEntityData.PacketHandler.class, PacketEntityData.class, ++discriminator,
 				Side.CLIENT);
 		NETWORK.registerMessage(PacketThunder.PacketHandler.class, PacketThunder.class, ++discriminator, Side.CLIENT);
 		NETWORK.registerMessage(PacketEnvironment.PacketHandler.class, PacketEnvironment.class, ++discriminator,

@@ -27,59 +27,51 @@ package org.orecruncher.dsurround.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.entity.ActionState;
-import org.orecruncher.dsurround.entity.EmojiType;
-import org.orecruncher.dsurround.entity.EmotionalState;
-import org.orecruncher.dsurround.entity.IEmojiData;
-import org.orecruncher.dsurround.event.EntityEmojiEvent;
+import org.orecruncher.dsurround.entity.IEntityData;
+import org.orecruncher.dsurround.event.EntityDataEvent;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketEntityEmote implements IMessage {
+public class PacketEntityData implements IMessage {
 
-	public static class PacketHandler implements IMessageHandler<PacketEntityEmote, IMessage> {
+	public static class PacketHandler implements IMessageHandler<PacketEntityData, IMessage> {
 		@Override
 		@Nullable
-		public IMessage onMessage(@Nonnull final PacketEntityEmote message, @Nullable final MessageContext ctx) {
-			Network.postEvent(new EntityEmojiEvent(message.entityId, message.actionState, message.emotionalState,
-					message.emojiType));
+		public IMessage onMessage(@Nonnull final PacketEntityData message, @Nullable final MessageContext ctx) {
+			Network.postEvent(new EntityDataEvent(message.entityId, message.isAttacking, message.isFleeing));
 			return null;
 		}
 	}
 
 	private int entityId;
-	private ActionState actionState = ActionState.NONE;
-	private EmotionalState emotionalState = EmotionalState.NEUTRAL;
-	private EmojiType emojiType = EmojiType.NONE;
+	private boolean isAttacking;
+	private boolean isFleeing;
 
-	public PacketEntityEmote() {
+	public PacketEntityData() {
 
 	}
 
-	public PacketEntityEmote(@Nonnull final IEmojiData data) {
+	public PacketEntityData(@Nonnull final IEntityData data) {
 		this.entityId = data.getEntityId();
-		this.actionState = data.getActionState();
-		this.emotionalState = data.getEmotionalState();
-		this.emojiType = data.getEmojiType();
+		this.isAttacking = data.isAttacking();
+		this.isFleeing = data.isFleeing();
 	}
 
 	@Override
 	public void fromBytes(@Nonnull final ByteBuf buf) {
 		this.entityId = buf.readInt();
-		this.actionState = ActionState.get(buf.readByte());
-		this.emotionalState = EmotionalState.get(buf.readByte());
-		this.emojiType = EmojiType.get(buf.readByte());
+		this.isAttacking = buf.readBoolean();
+		this.isFleeing = buf.readBoolean();
 	}
 
 	@Override
 	public void toBytes(@Nonnull final ByteBuf buf) {
 		buf.writeInt(this.entityId);
-		buf.writeByte(ActionState.getId(this.actionState));
-		buf.writeByte(EmotionalState.getId(this.emotionalState));
-		buf.writeByte(EmojiType.getId(this.emojiType));
+		buf.writeBoolean(this.isAttacking);
+		buf.writeBoolean(this.isFleeing);
 	}
 
 }

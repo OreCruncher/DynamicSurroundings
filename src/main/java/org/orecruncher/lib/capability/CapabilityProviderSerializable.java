@@ -22,18 +22,18 @@ import net.minecraftforge.common.util.INBTSerializable;
  *
  * @author Choonster
  */
-public class CapabilityProviderSerializable<HANDLER> extends CapabilityProviderSimple<HANDLER>
+public class CapabilityProviderSerializable<H> extends CapabilityProviderSimple<H>
 		implements INBTSerializable<NBTBase> {
 
 	/**
 	 * Create a provider for the default handler instance.
 	 *
 	 * @param capability
-	 *            The Capability instance to provide the handler for
+	 *                       The Capability instance to provide the handler for
 	 * @param facing
-	 *            The EnumFacing to provide the handler for
+	 *                       The EnumFacing to provide the handler for
 	 */
-	public CapabilityProviderSerializable(final Capability<HANDLER> capability, @Nullable final EnumFacing facing) {
+	public CapabilityProviderSerializable(final Capability<H> capability, @Nullable final EnumFacing facing) {
 		this(capability, facing, capability.getDefaultInstance());
 	}
 
@@ -41,17 +41,18 @@ public class CapabilityProviderSerializable<HANDLER> extends CapabilityProviderS
 	 * Create a provider for the specified handler instance.
 	 *
 	 * @param capability
-	 *            The Capability instance to provide the handler for
+	 *                       The Capability instance to provide the handler for
 	 * @param facing
-	 *            The EnumFacing to provide the handler for
+	 *                       The EnumFacing to provide the handler for
 	 * @param instance
-	 *            The handler instance to provide
+	 *                       The handler instance to provide
 	 */
-	public CapabilityProviderSerializable(final Capability<HANDLER> capability, @Nullable final EnumFacing facing,
-			final HANDLER instance) {
-		super(instance, capability, facing);
+	public CapabilityProviderSerializable(final Capability<H> capability, @Nullable final EnumFacing facing,
+			@Nullable final H instance) {
+		super(capability, facing, instance);
 	}
 
+	@Nullable
 	@Override
 	public NBTBase serializeNBT() {
 		return getCapability().writeNBT(getInstance(), getFacing());

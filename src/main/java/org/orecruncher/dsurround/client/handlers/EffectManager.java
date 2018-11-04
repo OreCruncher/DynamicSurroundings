@@ -78,7 +78,7 @@ public class EffectManager {
 		register(new EnvironmentEffectHandler());
 		register(new ParticleSystemHandler());
 		register(new BiomeSoundEffectsHandler());
-		register(new EntityEmojiHandler());
+		register(new EntityDataSyncHandler());
 		register(new AuroraEffectHandler());
 		register(new SpeechBubbleHandler());
 		register(new WeatherHandler());

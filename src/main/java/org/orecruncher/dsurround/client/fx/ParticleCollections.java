@@ -30,7 +30,6 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.footsteps.interfaces.FootprintStyle;
 import org.orecruncher.dsurround.client.fx.particle.mote.IParticleMote;
-import org.orecruncher.dsurround.client.fx.particle.mote.MoteEmoji;
 import org.orecruncher.dsurround.client.fx.particle.mote.MoteFireFly;
 import org.orecruncher.dsurround.client.fx.particle.mote.MoteFootprint;
 import org.orecruncher.dsurround.client.fx.particle.mote.MoteRainSplash;
@@ -42,7 +41,6 @@ import org.orecruncher.dsurround.client.fx.particle.mote.ParticleCollectionRippl
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
@@ -59,8 +57,6 @@ public final class ParticleCollections {
 			"textures/particles/ripple.png");
 	private static final ResourceLocation SPRAY_TEXTURE = new ResourceLocation(ModBase.RESOURCE_ID,
 			"textures/particles/rainsplash.png");
-	private static final ResourceLocation EMOJI_TEXTURE = new ResourceLocation(ModBase.RESOURCE_ID,
-			"textures/particles/emojis.png");
 	private static final ResourceLocation FOOTPRINT_TEXTURE = new ResourceLocation(ModBase.RESOURCE_ID,
 			"textures/particles/footprint.png");
 	private static final ResourceLocation FIREFLY_TEXTURE = new ResourceLocation("textures/particle/particles.png");
@@ -68,7 +64,6 @@ public final class ParticleCollections {
 	private final static CollectionHelper theRipples = new CollectionHelper("Rain Ripples",
 			ParticleCollectionRipples.FACTORY, RIPPLE_TEXTURE);
 	private final static CollectionHelper theSprays = new CollectionHelper("Water Spray", SPRAY_TEXTURE);
-	private final static CollectionHelper theEmojis = new CollectionHelper("Emojis", EMOJI_TEXTURE);
 	private final static CollectionHelper thePrints = new CollectionHelper("Footprints",
 			ParticleCollectionFootprint.FACTORY, FOOTPRINT_TEXTURE);
 	private final static CollectionHelper theFireFlies = new LightedCollectionHelper("Fireflies",
@@ -112,16 +107,6 @@ public final class ParticleCollections {
 	}
 
 	@Nullable
-	public static IParticleMote addEmoji(@Nonnull final Entity entity) {
-		IParticleMote mote = null;
-		if (theEmojis.get().canFit()) {
-			mote = new MoteEmoji(entity);
-			theEmojis.get().addParticle(mote);
-		}
-		return mote;
-	}
-
-	@Nullable
 	public static IParticleMote addFootprint(@Nonnull final FootprintStyle style, @Nonnull final World world,
 			final Vec3d loc, final float rot, final float scale, final boolean isRight) {
 		IParticleMote mote = null;
@@ -149,7 +134,6 @@ public final class ParticleCollections {
 					event.getWorld().provider.getDimensionType().getName());
 			theRipples.clear();
 			theSprays.clear();
-			theEmojis.clear();
 			thePrints.clear();
 			theFireFlies.clear();
 		}
@@ -161,6 +145,5 @@ public final class ParticleCollections {
 		event.output.add(TextFormatting.AQUA + theRipples.toString());
 		event.output.add(TextFormatting.AQUA + theSprays.toString());
 		event.output.add(TextFormatting.AQUA + theFireFlies.toString());
-		event.output.add(TextFormatting.AQUA + theEmojis.toString());
 	}
 }

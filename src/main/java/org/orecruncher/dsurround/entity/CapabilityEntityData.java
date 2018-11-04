@@ -29,61 +29,62 @@ import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.network.Network;
-import org.orecruncher.dsurround.network.PacketEntityEmote;
+import org.orecruncher.dsurround.network.PacketEntityData;
 import org.orecruncher.lib.capability.CapabilityProviderSerializable;
+import org.orecruncher.lib.capability.CapabilityUtils;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class CapabilityEmojiData {
+public class CapabilityEntityData {
 
-	@CapabilityInject(IEmojiData.class)
-	public static final Capability<IEmojiData> EMOJI = null;
+	@CapabilityInject(IEntityData.class)
+	public static final Capability<IEntityData> ENTITY_DATA = null;
 	public static final EnumFacing DEFAULT_FACING = null;
-	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModBase.MOD_ID, "emojiData");
+	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModBase.MOD_ID, "data");
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IEmojiData.class, new Capability.IStorage<IEmojiData>() {
+		CapabilityManager.INSTANCE.register(IEntityData.class, new Capability.IStorage<IEntityData>() {
 			@Override
-			public NBTBase writeNBT(@Nonnull final Capability<IEmojiData> capability,
-					@Nonnull final IEmojiData instance, @Nullable final EnumFacing side) {
-				final NBTTagCompound nbt = new NBTTagCompound();
-				nbt.setInteger("as", instance.getActionState().ordinal());
-				nbt.setInteger("et", instance.getEmojiType().ordinal());
-				nbt.setInteger("es", instance.getEmotionalState().ordinal());
-				return nbt;
+			public NBTBase writeNBT(@Nonnull final Capability<IEntityData> capability,
+					@Nonnull final IEntityData instance, @Nullable final EnumFacing side) {
+				return ((INBTSerializable<NBTTagCompound>) instance).serializeNBT();
 			}
 
 			@Override
-			public void readNBT(@Nonnull final Capability<IEmojiData> capability, @Nonnull final IEmojiData instance,
+			public void readNBT(@Nonnull final Capability<IEntityData> capability, @Nonnull final IEntityData instance,
 					@Nullable final EnumFacing side, @Nonnull final NBTBase nbt) {
-				final NBTTagCompound data = (NBTTagCompound) nbt;
-				final IEmojiDataSettable settable = (IEmojiDataSettable) instance;
-				settable.setActionState(ActionState.get(data.getInteger("as")));
-				settable.setEmojiType(EmojiType.get(data.getInteger("et")));
-				settable.setEmotionalState(EmotionalState.get(data.getInteger("es")));
-				settable.clearDirty();
+				((INBTSerializable<NBTTagCompound>) instance).deserializeNBT((NBTTagCompound) nbt);
 			}
-		}, () -> new EmojiData(null));
+		}, () -> new EntityData(null));
+	}
+
+	public static IEntityData getCapability(@Nonnull final Entity entity) {
+		return CapabilityUtils.getCapability(entity, CapabilityEntityData.ENTITY_DATA, null);
 	}
 
 	@Nonnull
-	public static ICapabilityProvider createProvider(final IEmojiData data) {
-		return new CapabilityProviderSerializable<>(EMOJI, DEFAULT_FACING, data);
+	public static ICapabilityProvider createProvider(final IEntityData data) {
+		return new CapabilityProviderSerializable<>(ENTITY_DATA, DEFAULT_FACING, data);
 	}
 
+	@EventBusSubscriber(modid = ModBase.MOD_ID)
 	public static class EventHandler {
 
 		/*
@@ -91,8 +92,8 @@ public class CapabilityEmojiData {
 		 */
 		@SubscribeEvent
 		public static void attachCapabilities(final AttachCapabilitiesEvent<Entity> event) {
-			if (event.getObject() instanceof EntityLivingBase) {
-				final EmojiData emojiData = new EmojiData(event.getObject());
+			if (event.getObject() instanceof EntityLiving) {
+				final EntityData emojiData = new EntityData(event.getObject());
 				event.addCapability(CAPABILITY_ID, createProvider(emojiData));
 			}
 		}
@@ -103,11 +104,29 @@ public class CapabilityEmojiData {
 		 */
 		@SubscribeEvent
 		public static void trackingEvent(@Nonnull final PlayerEvent.StartTracking event) {
-			if (event.getTarget() instanceof EntityLivingBase) {
-				final IEmojiData data = event.getTarget().getCapability(EMOJI, DEFAULT_FACING);
+			if (event.getTarget() instanceof EntityLiving) {
+				final IEntityData data = event.getTarget().getCapability(ENTITY_DATA, DEFAULT_FACING);
 				if (data != null) {
-					Network.sendToPlayer((EntityPlayerMP) event.getEntityPlayer(), new PacketEntityEmote(data));
+					Network.sendToPlayer((EntityPlayerMP) event.getEntityPlayer(), new PacketEntityData(data));
 				}
+			}
+		}
+
+		/*
+		 * Called when an entity is being updated. Need to evaluate new states.
+		 */
+		@SubscribeEvent(receiveCanceled = false)
+		public static void livingUpdate(@Nonnull final LivingUpdateEvent event) {
+			final World world = event.getEntity().getEntityWorld();
+			// Don't tick if this is the client thread. We only check 4 times a
+			// second as if that is enough :)
+			if (world.isRemote || (world.getTotalWorldTime() % 5) != 0)
+				return;
+			final IEntityDataSettable data = (IEntityDataSettable) getCapability(event.getEntity());
+			if (data != null) {
+				EntityDataTables.assess((EntityLiving) event.getEntity());
+				if (data.isDirty())
+					data.sync();
 			}
 		}
 	}

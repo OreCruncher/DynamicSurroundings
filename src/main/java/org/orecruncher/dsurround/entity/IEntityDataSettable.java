@@ -24,38 +24,15 @@
 
 package org.orecruncher.dsurround.entity;
 
-import javax.annotation.Nonnull;
+public interface IEntityDataSettable extends IEntityData {
+	
+	void setAttacking(final boolean flag);
+	
+	void setFleeing(final boolean flag);
 
-public interface IEmojiData {
+	boolean isDirty();
 
-	/**
-	 * The unique ID of the entity this data is associated.
-	 *
-	 * @return id of the associated entity
-	 */
-	int getEntityId();
+	void clearDirty();
 
-	/**
-	 * The current ActionState of the entity
-	 *
-	 * @return Current ActionState of the entity
-	 */
-	@Nonnull
-	ActionState getActionState();
-
-	/**
-	 * The current EmotionalState of the entity
-	 *
-	 * @return Current EmotionalState of the entity
-	 */
-	@Nonnull
-	EmotionalState getEmotionalState();
-
-	/**
-	 * The current emoji associated with the entity
-	 *
-	 * @return Current EmojiType of the entity
-	 */
-	@Nonnull
-	EmojiType getEmojiType();
+	void sync();
 }

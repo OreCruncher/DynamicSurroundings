@@ -22,54 +22,29 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.event;
+package org.orecruncher.dsurround.entity;
 
-import javax.annotation.Nonnull;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.INBTSerializable;
 
-import org.orecruncher.dsurround.entity.ActionState;
-import org.orecruncher.dsurround.entity.EmojiType;
-import org.orecruncher.dsurround.entity.EmotionalState;
-
-import net.minecraftforge.fml.common.eventhandler.Event;
-
-/**
- * Fires when there is an update to an entities emoji state. Will only fire
- * client side.
- */
-public class EntityEmojiEvent extends Event {
+public interface IEntityData extends INBTSerializable<NBTTagCompound>{
 
 	/**
-	 * Persistent ID of the entity this event is associated with.
-	 */
-	public final int entityId;
-
-	/**
-	 * New ActionState of the Entity.
+	 * The unique ID of the entity this data is associated.
 	 *
-	 * @see org.orecruncher.dsurround.entity.ActionState
+	 * @return id of the associated entity
 	 */
-	public final ActionState actionState;
+	int getEntityId();
 
 	/**
-	 * New EmotionalState of the Entity.
-	 *
-	 * @see org.orecruncher.dsurround.entity.EmotionalState
+	 * Indicates if the entity is attacking something
+	 * @return true if the entity is attacking; false otherwise
 	 */
-	public final EmotionalState emotionalState;
-
+	boolean isAttacking();
+	
 	/**
-	 * New EmojiType for the Entity.
-	 *
-	 * @see org.orecruncher.dsurround.entity.EmojiType
+	 * Indicates if the entity is fleeing from something
+	 * @return true if the entity is fleeing; false otherwise
 	 */
-	public final EmojiType emojiType;
-
-	public EntityEmojiEvent(@Nonnull final int id, @Nonnull final ActionState action,
-			@Nonnull final EmotionalState emotion, @Nonnull final EmojiType emojiType) {
-		this.entityId = id;
-		this.actionState = action;
-		this.emotionalState = emotion;
-		this.emojiType = emojiType;
-	}
-
+	boolean isFleeing();
 }

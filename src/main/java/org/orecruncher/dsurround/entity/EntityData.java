@@ -27,21 +27,21 @@ package org.orecruncher.dsurround.entity;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.network.Network;
-import org.orecruncher.dsurround.network.PacketEntityEmote;
+import org.orecruncher.dsurround.network.PacketEntityData;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 
-public final class EmojiData implements IEmojiDataSettable {
+public final class EntityData implements IEntityDataSettable {
 
 	public static final int NO_ENTITY = -1;
 
 	private final Entity entity;
-	private boolean isDirty = false;
-	private ActionState actionState = ActionState.NONE;
-	private EmotionalState emotionalState = EmotionalState.NEUTRAL;
-	private EmojiType emojiType = EmojiType.NONE;
+	private boolean isAttacking;
+	private boolean isFleeing;
+	private boolean isDirty;
 
-	public EmojiData(@Nonnull final Entity entity) {
+	public EntityData(@Nonnull final Entity entity) {
 		this.entity = entity;
 	}
 
@@ -51,27 +51,25 @@ public final class EmojiData implements IEmojiDataSettable {
 	}
 
 	@Override
-	public void setActionState(@Nonnull final ActionState state) {
-		if (this.actionState != state) {
-			this.actionState = state;
-			this.isDirty = true;
-		}
+	public boolean isAttacking() {
+		return this.isAttacking;
 	}
 
 	@Override
-	public void setEmotionalState(EmotionalState state) {
-		if (this.emotionalState != state) {
-			this.emotionalState = state;
-			this.isDirty = true;
-		}
+	public void setAttacking(final boolean flag) {
+		this.isDirty = (this.isAttacking != flag) | this.isDirty;
+		this.isAttacking = flag;
 	}
 
 	@Override
-	public void setEmojiType(EmojiType type) {
-		if (this.emojiType != type) {
-			this.emojiType = type;
-			this.isDirty = true;
-		}
+	public boolean isFleeing() {
+		return this.isFleeing;
+	}
+
+	@Override
+	public void setFleeing(final boolean flag) {
+		this.isDirty = (this.isFleeing != flag) | this.isDirty;
+		this.isFleeing = flag;
 	}
 
 	@Override
@@ -85,29 +83,31 @@ public final class EmojiData implements IEmojiDataSettable {
 	}
 
 	@Override
-	@Nonnull
-	public ActionState getActionState() {
-		return this.actionState;
-	}
-
-	@Override
-	@Nonnull
-	public EmotionalState getEmotionalState() {
-		return this.emotionalState;
-	}
-
-	@Override
-	@Nonnull
-	public EmojiType getEmojiType() {
-		return this.emojiType;
-	}
-
-	@Override
 	public void sync() {
 		if (this.entity != null && !this.entity.world.isRemote) {
-			Network.sendToEntityViewers(this.entity, new PacketEntityEmote(this));
+			Network.sendToEntityViewers(this.entity, new PacketEntityData(this));
 			clearDirty();
 		}
+	}
+
+	@Override
+	@Nonnull
+	public NBTTagCompound serializeNBT() {
+		final NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setBoolean(NBT.ATTACKING, isAttacking());
+		nbt.setBoolean(NBT.FLEEING, isFleeing());
+		return nbt;
+	}
+
+	@Override
+	public void deserializeNBT(@Nonnull final NBTTagCompound nbt) {
+		setAttacking(nbt.getBoolean(NBT.ATTACKING));
+		setFleeing(nbt.getBoolean(NBT.FLEEING));
+	}
+
+	private static class NBT {
+		public static final String ATTACKING = "a";
+		public static final String FLEEING = "f";
 	}
 
 }

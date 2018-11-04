@@ -42,7 +42,6 @@ import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironStat
 import org.orecruncher.dsurround.client.handlers.effects.CraftingSoundEffect;
 import org.orecruncher.dsurround.client.handlers.effects.EntityBowSoundEffect;
 import org.orecruncher.dsurround.client.handlers.effects.EntityChatEffect;
-import org.orecruncher.dsurround.client.handlers.effects.EntityEmojiEffect;
 import org.orecruncher.dsurround.client.handlers.effects.EntityFootprintEffect;
 import org.orecruncher.dsurround.client.handlers.effects.EntityHealthPopoffEffect;
 import org.orecruncher.dsurround.client.handlers.effects.EntitySwingEffect;
@@ -106,7 +105,6 @@ public class FxHandler extends EffectHandlerBase {
 		library.register(EntitySwingEffect.DEFAULT_FILTER, new EntitySwingEffect.Factory());
 		library.register(EntityBowSoundEffect.DEFAULT_FILTER, new EntityBowSoundEffect.Factory());
 		library.register(EntityHealthPopoffEffect.DEFAULT_FILTER, new EntityHealthPopoffEffect.Factory());
-		library.register(EntityEmojiEffect.DEFAULT_FILTER, new EntityEmojiEffect.Factory());
 	}
 
 	private final Map<UUID, EntityEffectHandler> handlers = new Object2ObjectOpenHashMap<>(256);

@@ -22,20 +22,38 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.entity;
+package org.orecruncher.dsurround.client.handlers;
 
 import javax.annotation.Nonnull;
 
-public interface IEmojiDataSettable extends IEmojiData {
-	void setActionState(@Nonnull final ActionState state);
+import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.dsurround.entity.CapabilityEntityData;
+import org.orecruncher.dsurround.entity.IEntityDataSettable;
+import org.orecruncher.dsurround.event.EntityDataEvent;
+import org.orecruncher.lib.WorldUtils;
 
-	void setEmotionalState(@Nonnull final EmotionalState state);
+import net.minecraft.entity.Entity;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-	void setEmojiType(@Nonnull final EmojiType type);
+@SideOnly(Side.CLIENT)
+public class EntityDataSyncHandler extends EffectHandlerBase {
 
-	boolean isDirty();
+	public EntityDataSyncHandler() {
+		super("Entity Data Sync");
+	}
 
-	void clearDirty();
+	@SubscribeEvent
+	public void onEntityEmojiEvent(@Nonnull final EntityDataEvent event) {
+		final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), event.entityId);
+		if (entity != null) {
+			final IEntityDataSettable data = (IEntityDataSettable) CapabilityEntityData.getCapability(entity);
+			if (data != null) {
+				data.setAttacking(event.isAttacking);
+				data.setFleeing(event.isFleeing);
+			}
+		}
+	}
 
-	void sync();
 }

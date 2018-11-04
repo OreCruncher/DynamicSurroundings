@@ -16,12 +16,12 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
  *
  * @author Choonster
  */
-public class CapabilityProviderSimple<HANDLER> implements ICapabilityProvider {
+public class CapabilityProviderSimple<H> implements ICapabilityProvider {
 
 	/**
 	 * The {@link Capability} instance to provide the handler for.
 	 */
-	protected final Capability<HANDLER> capability;
+	protected final Capability<H> capability;
 
 	/**
 	 * The {@link EnumFacing} to provide the handler for.
@@ -31,13 +31,19 @@ public class CapabilityProviderSimple<HANDLER> implements ICapabilityProvider {
 	/**
 	 * The handler instance to provide.
 	 */
-	protected final HANDLER instance;
+	protected final H instance;
 
-	public CapabilityProviderSimple(final HANDLER instance, final Capability<HANDLER> capability,
-			@Nullable final EnumFacing facing) {
-		this.instance = instance;
+	public CapabilityProviderSimple(final Capability<H> capability, @Nullable final EnumFacing facing,
+			@Nullable final H instance) {
 		this.capability = capability;
 		this.facing = facing;
+		this.instance = instance;
+	}
+
+	@Deprecated
+	public CapabilityProviderSimple(@Nullable final H instance, final Capability<H> capability,
+			@Nullable final EnumFacing facing) {
+		this(capability, facing, instance);
 	}
 
 	/**
@@ -51,10 +57,10 @@ public class CapabilityProviderSimple<HANDLER> implements ICapabilityProvider {
 	 * This is a light weight version of getCapability, intended for metadata uses.
 	 *
 	 * @param capability
-	 *            The capability to check
+	 *                       The capability to check
 	 * @param facing
-	 *            The Side to check from: CAN BE NULL. Null is defined to represent
-	 *            'internal' or 'self'
+	 *                       The Side to check from: CAN BE NULL. Null is defined to
+	 *                       represent 'internal' or 'self'
 	 * @return True if this object supports the capability.
 	 */
 	@Override
@@ -68,10 +74,10 @@ public class CapabilityProviderSimple<HANDLER> implements ICapabilityProvider {
 	 * return value CAN be the same for multiple faces.
 	 *
 	 * @param capability
-	 *            The capability to check
+	 *                       The capability to check
 	 * @param facing
-	 *            The Side to check from: CAN BE NULL. Null is defined to represent
-	 *            'internal' or 'self'
+	 *                       The Side to check from: CAN BE NULL. Null is defined to
+	 *                       represent 'internal' or 'self'
 	 * @return The handler if this object supports the capability.
 	 */
 	@Override
@@ -89,7 +95,7 @@ public class CapabilityProviderSimple<HANDLER> implements ICapabilityProvider {
 	 *
 	 * @return The Capability instance
 	 */
-	public final Capability<HANDLER> getCapability() {
+	public final Capability<H> getCapability() {
 		return this.capability;
 	}
 
@@ -108,7 +114,8 @@ public class CapabilityProviderSimple<HANDLER> implements ICapabilityProvider {
 	 *
 	 * @return The handler instance
 	 */
-	public final HANDLER getInstance() {
+	@Nullable
+	public final H getInstance() {
 		return this.instance;
 	}
 }

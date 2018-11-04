@@ -77,7 +77,6 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 		addConfigElement(ModOptions.player.PATH, ModOptions.CONFIG_ENABLE_FOOTPRINTS);
 		addConfigElement(ModOptions.player.potionHUD.PATH, ModOptions.CONFIG_POTION_HUD_ENABLE);
 		addConfigElement(ModOptions.speechbubbles.PATH, ModOptions.CONFIG_OPTION_ENABLE_SPEECHBUBBLES);
-		addConfigElement(ModOptions.speechbubbles.PATH, ModOptions.CONFIG_OPTION_ENABLE_EMOJIS);
 		addConfigElement(ModOptions.speechbubbles.PATH, ModOptions.CONFIG_OPTION_ENABLE_ENTITY_CHAT);
 		addConfigElement(ModOptions.explosions.PATH, ModOptions.CONFIG_ENABLE_EXPLOSIONS);
 
