@@ -40,7 +40,6 @@ import org.orecruncher.dsurround.client.hud.LightLevelHUD;
 import org.orecruncher.dsurround.client.keyboard.KeyHandler;
 import org.orecruncher.dsurround.client.renderer.AnimaniaBadge;
 import org.orecruncher.dsurround.client.sound.BackgroundMute;
-import org.orecruncher.dsurround.client.sound.MusicTickerReplacement;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.client.weather.RenderWeather;
 import org.orecruncher.dsurround.client.weather.Weather;
@@ -132,8 +131,6 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 
 	@Override
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
-		MusicTickerReplacement.initialize();
-
 		// Register for resource load events
 		final IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
 		((IReloadableResourceManager) resourceManager).registerReloadListener(this);

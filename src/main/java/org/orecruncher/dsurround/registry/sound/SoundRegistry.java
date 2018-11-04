@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.gui.ConfigSound;
+import org.orecruncher.dsurround.client.sound.ConfigSound;
 import org.orecruncher.dsurround.client.sound.SoundLoader;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;

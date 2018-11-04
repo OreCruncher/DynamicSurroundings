@@ -26,12 +26,11 @@ package org.orecruncher.dsurround.client.gui;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.sound.BasicSound;
-import org.orecruncher.dsurround.client.sound.MusicTickerReplacement;
+import org.orecruncher.dsurround.client.sound.ConfigSound;
+import org.orecruncher.dsurround.client.sound.MusicFader;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.MusicTicker;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -40,7 +39,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class PlaySoundButton extends GuiButtonExt {
 
 	private final String soundResource;
-	private BasicSound<?> playingSound;
+	private ConfigSound playingSound;
 
 	public PlaySoundButton(final int id, @Nonnull final String sound) {
 		super(id, 0, 0, 68, 18, GuiConstants.TEXT_PLAY);
@@ -70,22 +69,15 @@ public class PlaySoundButton extends GuiButtonExt {
 	}
 
 	private void doPlay(@Nonnull final ConfigSound sound) {
-		final MusicTicker ticker = Minecraft.getMinecraft().getMusicTicker();
 		this.playingSound = sound;
-		if (ticker instanceof MusicTickerReplacement) {
-			final MusicTickerReplacement mtr = (MusicTickerReplacement) ticker;
-			mtr.setPlaying(sound);
-		} else {
-			SoundEngine.instance().playSound(sound);
-		}
+		MusicFader.playConfigSound(sound);
 	}
 
 	public void playSound(@Nonnull final Minecraft mc, final float volume) {
 		if (this.playingSound != null) {
-			SoundEngine.instance().stopSound(this.playingSound);
+			MusicFader.stopConfigSound(this.playingSound);
 			this.playingSound = null;
 		} else {
-			SoundEngine.instance().stopAllSounds();
 			doPlay(new ConfigSound(this.soundResource, volume));
 		}
 

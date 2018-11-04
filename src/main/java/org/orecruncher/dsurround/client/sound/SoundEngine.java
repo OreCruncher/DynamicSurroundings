@@ -438,10 +438,10 @@ public final class SoundEngine {
 	}
 
 	public static float getVolume(@Nonnull final SoundCategory category) {
+		if (category == null || category == SoundCategory.MASTER)
+			return 1F;
 		final GameSettings settings = Minecraft.getMinecraft().gameSettings;
-		return settings != null && category != null && category != SoundCategory.MASTER
-				? settings.getSoundLevel(category)
-				: 1.0F;
+		return settings != null ? settings.getSoundLevel(category) : 1.0F;
 	}
 
 	// SOUND may not be initialized if Forge did not initialized Minecraft fully.
@@ -449,7 +449,10 @@ public final class SoundEngine {
 	// requirements.
 	private static float getVolumeScale(@Nonnull final ISound sound) {
 		try {
-			return ClientRegistry.SOUND.getVolumeScale(sound);
+			final float fade = (sound.getCategory() == SoundCategory.MUSIC && !(sound instanceof ConfigSound))
+					? MusicFader.getMusicScaling()
+					: 1.0F;
+			return ClientRegistry.SOUND.getVolumeScale(sound) * fade;
 		} catch (final Throwable t) {
 			;
 		}

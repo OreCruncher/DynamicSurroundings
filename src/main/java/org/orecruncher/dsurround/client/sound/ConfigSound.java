@@ -22,13 +22,13 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.gui;
+package org.orecruncher.dsurround.client.sound;
 
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.client.ClientRegistry;
-import org.orecruncher.dsurround.client.sound.BasicSound;
 import org.orecruncher.dsurround.registry.sound.SoundMetadata;
+import org.orecruncher.lib.sound.SoundState;
 
 import com.google.common.base.MoreObjects;
 
@@ -61,6 +61,11 @@ public class ConfigSound extends BasicSound<ConfigSound> {
 			this.category = data.getCategory();
 	}
 
+	@Override
+	public boolean isDonePlaying() {
+		return this.getState() == SoundState.DONE;
+	}
+	
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).addValue(this.positionedSoundLocation.toString())
