@@ -93,7 +93,10 @@ public class SoundConfigEntry extends NumberSliderEntry {
 		// Replace the slider tooltip with our own version
 		final List<String> text = Lists.newArrayList();
 		final ResourceLocation soundResource = new ResourceLocation(soundName);
-		text.add(TextFormatting.GREEN + ForgeUtils.getModName(soundResource));
+		String modName = ForgeUtils.getModName(soundResource);
+		if ("UNKNOWN".equals(modName))
+			modName = soundResource.getNamespace();
+		text.add(TextFormatting.GREEN + modName);
 		text.add(TextFormatting.GOLD + soundName);
 
 		final SoundMetadata data = ClientRegistry.SOUND.getSoundMetadata(soundResource);

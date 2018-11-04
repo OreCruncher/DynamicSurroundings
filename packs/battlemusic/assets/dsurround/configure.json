@@ -1,0 +1,60 @@
+{
+	"soundMetadata": {
+		"dsurround_battlemusic:battle.normal": {
+			"category": "music",
+			"credits": [
+				"§aIntense Battle Loop.wav",
+				"furbyguy",
+				"Creative Commons 0"
+			]
+		},
+		"dsurround_battlemusic:battle.miniboss": {
+			"category": "music",
+			"credits": [
+				"§adetermined_persuit_loop.wav",
+				"Emma_MA",
+				"Creative Commons 0"
+			]
+		},
+		"dsurround_battlemusic:battle.wither": {
+			"category": "music",
+			"title": "Retribution",
+			"credits": [
+				"Tanner Helland",
+				"Creative Commons Attribution-Share Alike 3.0"
+			]
+		},
+		"dsurround_battlemusic:battle.dragon": {
+			"category": "music",
+			"title": "Defiance",
+			"credits": [
+				"Tanner Helland",
+				"Creative Commons Attribution-Share Alike 3.0"
+			]
+		}
+	},
+	"biomes": [
+		{
+			"conditions": "biome.name == 'BattleMusic'",
+			"_comment": "Dynamic Surroundings Battle Music",
+			"sounds": [
+				{
+					"sound": "dsurround_battlemusic:battle.normal",
+					"conditions": "battle.inBattle && !battle.isBoss"
+				},
+				{
+					"sound": "dsurround_battlemusic:battle.miniboss",
+					"conditions": "battle.isBoss && !(battle.isWither || battle.isDragon)"
+				},
+				{
+					"sound": "dsurround_battlemusic:battle.wither",
+					"conditions": "battle.isWither"
+				},
+				{
+					"sound": "dsurround_battlemusic:battle.dragon",
+					"conditions": "battle.isDragon"
+				}
+			]
+		}
+	]
+}

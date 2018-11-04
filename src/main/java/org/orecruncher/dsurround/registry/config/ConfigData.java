@@ -49,8 +49,9 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.data.Profiles;
 import org.orecruncher.dsurround.data.Profiles.ProfileScript;
+import org.orecruncher.dsurround.registry.config.packs.IMyResourcePack;
 import org.orecruncher.dsurround.registry.config.packs.ResourcePacks;
-import org.orecruncher.dsurround.registry.config.packs.ResourcePacks.Pack;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
@@ -75,15 +76,15 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 	private ConfigData(@Nonnull final byte[] theBits) {
 		this.crunchyBits = theBits;
 	}
-	
+
 	/**
 	 * Returns a stream reference for the ModConfiguration elements stored
 	 * internally.
-	 * 
+	 *
 	 * @return
 	 */
 	public Stream<ModConfiguration> stream() {
-		return StreamSupport.stream(this.spliterator(), false);
+		return StreamSupport.stream(spliterator(), false);
 	}
 
 	// Injects a string into the array list. Used to put a marker that conveys
@@ -136,7 +137,7 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 				try {
 					reader.mark(64 * 1024);
 					@SuppressWarnings({ "unused", "resource" })
-					JsonReader r = new JsonReader(reader);
+					final JsonReader r = new JsonReader(reader);
 					@SuppressWarnings("unused")
 					final ModConfiguration ref = new Gson().fromJson(reader, ModConfiguration.class);
 				} finally {
@@ -151,7 +152,7 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 				ModBase.log().debug("Loaded %s", text);
 				return true;
 			}
-		} catch(@Nonnull final JsonSyntaxException | MalformedJsonException vf) {
+		} catch (@Nonnull final JsonSyntaxException | MalformedJsonException vf) {
 			ModBase.log().warn("Json validation failed for %s: %s", text, vf.getMessage());
 		} catch (@Nonnull final Throwable t) {
 			ModBase.log().error(text, t);
@@ -162,7 +163,7 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 	// Copies the specified resource from the given pack to the output location.
 	// Essentially it will be reading config Json information from resource
 	// packs and jars.
-	protected static boolean copy(@Nonnull final Pack p, @Nonnull ResourceLocation rl,
+	protected static boolean copy(@Nonnull final IMyResourcePack p, @Nonnull ResourceLocation rl,
 			@Nonnull final OutputStreamWriter output, @Nullable String text, final boolean comma) {
 		try (final InputStream is = p.getInputStream(rl)) {
 			if (is != null) {
@@ -196,7 +197,7 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 			boolean prependComma = false;
 
 			// Collect the locations where DS data is configured
-			final List<Pack> packs = ResourcePacks.findResourcePacks();
+			final List<IMyResourcePack> packs = ResourcePacks.findResourcePacks();
 			final List<ModContainer> activeMods = Loader.instance().getActiveModList();
 
 			// Process the mod config from each of our packs. This includes the regular
@@ -204,17 +205,19 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 			for (final ModContainer mod : activeMods) {
 				final ResourceLocation rl = new ResourceLocation(ModBase.MOD_ID,
 						"data/" + mod.getModId().toLowerCase() + ".json");
-				for (final Pack p : packs) {
-					prependComma = copy(p, rl, output, "[" + rl.toString() + "] from [" + p.getModName() + "]",
-							prependComma);
+				for (final IMyResourcePack p : packs) {
+					if (p.resourceExists(rl))
+						prependComma = copy(p, rl, output, "[" + rl.toString() + "] from [" + p.getModName() + "]",
+								prependComma);
 				}
 			}
 
 			// Get config data from our JAR.
 			final ResourceLocation rl = ResourcePacks.CONFIGURE_RESOURCE;
-			for (final Pack p : packs) {
-				prependComma = copy(p, rl, output, "[" + rl.toString() + "] from [" + p.getModName() + "]",
-						prependComma);
+			for (final IMyResourcePack p : packs) {
+				if (p.resourceExists(rl))
+					prependComma = copy(p, rl, output, "[" + rl.toString() + "] from [" + p.getModName() + "]",
+							prependComma);
 			}
 
 			// Built in toggle profiles for turning feature sets on/off

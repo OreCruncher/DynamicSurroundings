@@ -24,10 +24,12 @@
 
 package org.orecruncher.dsurround.registry.config.packs;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,6 +40,8 @@ import org.orecruncher.lib.JsonUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.ResourcePackRepository;
+import net.minecraft.client.resources.data.IMetadataSection;
+import net.minecraft.client.resources.data.MetadataSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
@@ -57,7 +61,7 @@ public final class ResourcePacks {
 	public static final ResourceLocation CONFIGURE_RESOURCE = new ResourceLocation(ModBase.RESOURCE_ID,
 			"configure.json");
 
-	public static class Pack {
+	public static class Pack implements IMyResourcePack {
 
 		protected final String modName;
 		protected final String packPath;
@@ -68,6 +72,7 @@ public final class ResourcePacks {
 			this.packPath = "/assets/" + modName + "/";
 		}
 
+		@Override
 		public boolean hasManifest() {
 			if (this.manifest == null) {
 				try (final InputStream stream = getInputStream(MANIFEST_RESOURCE)) {
@@ -117,15 +122,35 @@ public final class ResourcePacks {
 				builder.append("No manifest");
 			return builder.toString();
 		}
+
 	}
 
-	private static class ResourcePack extends Pack {
+	private static class ResourcePack implements IMyResourcePack, IResourcePack {
 
+		protected Manifest manifest;
 		protected final IResourcePack pack;
 
 		public ResourcePack(@Nonnull IResourcePack resource) {
-			super(resource.getPackName());
 			this.pack = resource;
+		}
+
+		@Override
+		@Nonnull
+		public String getModName() {
+			return this.pack.getPackName();
+		}
+		
+		@Override
+		public boolean hasManifest() {
+			if (this.manifest == null) {
+				try (final InputStream stream = getInputStream(MANIFEST_RESOURCE)) {
+					if (stream != null)
+						this.manifest = JsonUtils.load(stream, Manifest.class);
+				} catch (final Throwable t) {
+				}
+			}
+
+			return this.manifest != null;
 		}
 
 		@Override
@@ -137,15 +162,37 @@ public final class ResourcePacks {
 		public boolean resourceExists(@Nonnull final ResourceLocation loc) {
 			return this.pack.resourceExists(loc);
 		}
+
+		@Override
+		public Set<String> getResourceDomains() {
+			return this.pack.getResourceDomains();
+		}
+
+		@Override
+		public <T extends IMetadataSection> T getPackMetadata(MetadataSerializer metadataSerializer,
+				String metadataSectionName) throws IOException {
+			return this.pack.getPackMetadata(metadataSerializer, metadataSectionName);
+		}
+
+		@Override
+		public BufferedImage getPackImage() throws IOException {
+			return this.pack.getPackImage();
+		}
+
+		@Override
+		public String getPackName() {
+			return this.pack.getPackName();
+		}
+
 	}
 
 	@Nonnull
-	public static List<Pack> findResourcePacks() {
+	public static List<IMyResourcePack> findResourcePacks() {
 
-		final List<Pack> foundEntries = new ArrayList<>();
+		final List<IMyResourcePack> foundEntries = new ArrayList<>();
 
 		// Add ourselves to the list as the first entry
-		Pack p = new Pack(ModBase.MOD_ID);
+		IMyResourcePack p = new Pack(ModBase.MOD_ID);
 		if (!p.hasManifest())
 			throw new RuntimeException("Missing configuration!");
 		foundEntries.add(p);

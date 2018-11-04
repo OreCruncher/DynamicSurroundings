@@ -466,28 +466,6 @@
 			]
 		},
 		{
-			"conditions": "biome.name == 'BattleMusic'",
-			"_comment": "Dynamic Surroundings Battle Music",
-			"sounds": [
-				{
-					"sound": "dsurround:battle.normal",
-					"conditions": "battle.inBattle && !battle.isBoss"
-				},
-				{
-					"sound": "dsurround:battle.miniboss",
-					"conditions": "battle.isBoss && !(battle.isWither || battle.isDragon)"
-				},
-				{
-					"sound": "dsurround:battle.wither",
-					"conditions": "battle.isWither"
-				},
-				{
-					"sound": "dsurround:battle.dragon",
-					"conditions": "battle.isDragon"
-				}
-			]
-		},
-		{
 			"conditions": "oneof(biome.id, 'minecraft:mesa', 'minecraft:mesa_clear_rock', 'minecraft:mesa_rock')",
 			"_comment": "Mesa dust color specific override",
 			"dust": true,

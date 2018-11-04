@@ -25,6 +25,7 @@
 package org.orecruncher.dsurround.client.sound;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.client.ClientRegistry;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -88,8 +89,8 @@ public final class Sounds {
 
 	static {
 		// Weather
-		RAIN = SoundLoader.getSound(new ResourceLocation(ModBase.RESOURCE_ID, "rain"));
-		DUST = SoundLoader.getSound(new ResourceLocation(ModBase.RESOURCE_ID, "dust"));
+		RAIN = ClientRegistry.SOUND.getSound(new ResourceLocation(ModBase.RESOURCE_ID, "rain"));
+		DUST = ClientRegistry.SOUND.getSound(new ResourceLocation(ModBase.RESOURCE_ID, "dust"));
 
 		// SoundEffects
 		CRAFTING = new SoundEffect.Builder("crafting", SoundCategory.PLAYERS).build();

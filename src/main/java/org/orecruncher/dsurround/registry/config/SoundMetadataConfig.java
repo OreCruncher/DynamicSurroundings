@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.lib.sound;
+package org.orecruncher.dsurround.registry.config;
 
 import java.util.List;
 

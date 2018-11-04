@@ -31,8 +31,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.fx.ISpecialEffect;
-import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.expression.ExpressionEngine;
 import org.orecruncher.dsurround.registry.config.SoundConfig;
 import org.orecruncher.dsurround.registry.config.SoundType;
@@ -81,7 +81,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	protected SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume,
 			final float pitch, final int repeatDelay, final boolean variable) {
 		this.soundName = resource.toString();
-		this.sound = SoundLoader.getSound(resource);
+		this.sound = ClientRegistry.SOUND.getSound(resource);
 		this.volume = volume;
 		this.pitch = pitch;
 		this.conditions = StringUtils.EMPTY;
@@ -306,8 +306,6 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 			if (t == null) {
 				if (record.repeatDelay != null && record.repeatDelay.intValue() > 0)
 					t = SoundType.PERIODIC;
-				else if (record.step != null && record.step.booleanValue())
-					t = SoundType.STEP;
 				else if (record.spotSound != null && record.spotSound.booleanValue())
 					t = SoundType.SPOT;
 				else
@@ -328,19 +326,8 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 					sc = meta.getCategory();
 
 				// No info in sounds.json - best guess.
-				if (sc == null) {
-					switch (t) {
-					case STEP:
-						sc = SoundCategory.BLOCKS;
-						break;
-					case BACKGROUND:
-					case PERIODIC:
-					case SPOT:
-					default:
-						sc = SoundCategory.AMBIENT;
-						break;
-					}
-				}
+				if (sc == null)
+					sc = SoundCategory.AMBIENT;
 			}
 
 			setSoundCategory(sc);

@@ -42,7 +42,6 @@ import org.orecruncher.dsurround.client.sound.Emitter;
 import org.orecruncher.dsurround.client.sound.EntityEmitter;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
-import org.orecruncher.dsurround.client.sound.SoundLoader;
 import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.event.PlayDistributedSoundEvent;
@@ -149,7 +148,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		});
 
 		final ResourceLocation bowLooseResource = new ResourceLocation(ModBase.MOD_ID, "bow.loose");
-		final SoundEvent bowLoose = SoundLoader.getSound(bowLooseResource);
+		final SoundEvent bowLoose = ClientRegistry.SOUND.getSound(bowLooseResource);
 		if (!this.soundsToBlock.contains(bowLooseResource.toString())) {
 			this.replacements.put("minecraft:entity.arrow.shoot", bowLoose);
 			this.replacements.put("minecraft:entity.skeleton.shoot", bowLoose);

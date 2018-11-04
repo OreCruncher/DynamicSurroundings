@@ -59,8 +59,8 @@ import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.config.VariatorConfig;
 import org.orecruncher.dsurround.registry.config.ModConfiguration.ForgeEntry;
+import org.orecruncher.dsurround.registry.config.packs.IMyResourcePack;
 import org.orecruncher.dsurround.registry.config.packs.ResourcePacks;
-import org.orecruncher.dsurround.registry.config.packs.ResourcePacks.Pack;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.dsurround.registry.item.ArmorClass;
 import org.orecruncher.lib.ItemStackUtil;
@@ -150,7 +150,7 @@ public final class FootstepsRegistry extends Registry {
 		AcousticsManager.JUMP = null;
 		AcousticsManager.SPLASH = null;
 
-		final List<Pack> repo = ResourcePacks.findResourcePacks();
+		final List<IMyResourcePack> repo = ResourcePacks.findResourcePacks();
 		reloadAcoustics(repo);
 		reloadPrimitiveMap(repo);
 
@@ -243,8 +243,8 @@ public final class FootstepsRegistry extends Registry {
 				}).forEach(bs -> this.FOOTPRINT_STATES.add(bs));
 	}
 
-	private void reloadPrimitiveMap(@Nonnull final List<Pack> repo) {
-		for (final Pack pack : repo) {
+	private void reloadPrimitiveMap(@Nonnull final List<IMyResourcePack> repo) {
+		for (final IMyResourcePack pack : repo) {
 			try (final InputStream stream = pack.getInputStream(ResourcePacks.PRIMITIVEMAP_RESOURCE)) {
 				if (stream != null)
 					this.primitiveMap.setup(ConfigProperty.fromStream(stream));
@@ -254,8 +254,8 @@ public final class FootstepsRegistry extends Registry {
 		}
 	}
 
-	private void reloadAcoustics(@Nonnull final List<Pack> repo) {
-		for (final Pack pack : repo) {
+	private void reloadAcoustics(@Nonnull final List<IMyResourcePack> repo) {
+		for (final IMyResourcePack pack : repo) {
 			try (final InputStream stream = pack.getInputStream(ResourcePacks.ACOUSTICS_RESOURCE)) {
 				if (stream != null)
 					try (final Scanner scanner = new Scanner(stream)) {

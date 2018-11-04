@@ -1,0 +1,59 @@
+{
+	"battle.normal": {
+		"category": "music",
+		"credits": [
+			"§aIntense Battle Loop.wav",
+			"furbyguy",
+			"Creative Commons 0"
+		],
+		"sounds": [
+			{
+				"name": "dsurround_battlemusic:normal_battle",
+				"volume": 0.75,
+				"stream": true
+			}
+		]
+	},
+	"battle.miniboss": {
+		"category": "music",
+		"credits": [
+			"§adetermined_persuit_loop.wav",
+			"Emma_MA",
+			"Creative Commons 0"
+		],
+		"sounds": [
+			{
+				"name": "dsurround_battlemusic:miniboss_battle",
+				"stream": true
+			}
+		]
+	},
+	"battle.dragon": {
+		"category": "music",
+		"title": "Defiance",
+		"credits": [
+			"Tanner Helland",
+			"Creative Commons Attribution-Share Alike 3.0"
+		],
+		"sounds": [
+			{
+				"name": "dsurround_battlemusic:defiance",
+				"stream": true
+			}
+		]
+	},
+	"battle.wither": {
+		"category": "music",
+		"title": "Retribution",
+		"credits": [
+			"Tanner Helland",
+			"Creative Commons Attribution-Share Alike 3.0"
+		],
+		"sounds": [
+			{
+				"name": "dsurround_battlemusic:retribution",
+				"stream": true
+			}
+		]
+	}
+}

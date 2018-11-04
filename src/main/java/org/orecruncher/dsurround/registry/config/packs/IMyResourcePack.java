@@ -1,4 +1,5 @@
-/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/*
+ * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -21,35 +22,23 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.registry.config;
+package org.orecruncher.dsurround.registry.config.packs;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-public enum SoundType {
-	BACKGROUND("BACKGROUND"), SPOT("SPOT"), PERIODIC("PERIODIC");
+import net.minecraft.util.ResourceLocation;
 
-	protected final String name;
-
-	SoundType(@Nonnull final String name) {
-		this.name = name;
-	}
-
-	@Nonnull
-	public String getName() {
-		return this.name;
-	}
-
-	@Nonnull
-	public static SoundType getType(@Nullable final String soundType) {
-		if (soundType == null)
-			return BACKGROUND;
-
-		try {
-			return SoundType.valueOf(soundType.toUpperCase());
-		} catch (final Throwable ex) {
-			ex.printStackTrace();
-		}
-		return BACKGROUND;
-	}
+public interface IMyResourcePack {
+	
+	public String getModName();
+	
+	public boolean hasManifest();
+	
+	boolean resourceExists(@Nonnull final ResourceLocation loc);
+	
+	InputStream getInputStream(@Nonnull final ResourceLocation resource) throws IOException;
+	
 }

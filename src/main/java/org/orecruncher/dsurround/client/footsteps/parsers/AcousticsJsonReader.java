@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
 import org.orecruncher.dsurround.client.footsteps.implem.BasicAcoustic;
 import org.orecruncher.dsurround.client.footsteps.implem.DelayedAcoustic;
@@ -38,8 +39,6 @@ import org.orecruncher.dsurround.client.footsteps.implem.ProbabilityWeightsAcous
 import org.orecruncher.dsurround.client.footsteps.implem.SimultaneousAcoustic;
 import org.orecruncher.dsurround.client.footsteps.interfaces.EventType;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
-import org.orecruncher.dsurround.client.sound.SoundLoader;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -244,7 +243,7 @@ public class AcousticsJsonReader {
 			if (res == null)
 				a.setSound(null);
 			else
-				a.setSound(SoundLoader.getSound(res));
+				a.setSound(ClientRegistry.SOUND.getSound(res));
 		} catch (final Throwable t) {
 			ModBase.log().warn("Unable to locate sound [%s]", soundName);
 			a.setSound(null);

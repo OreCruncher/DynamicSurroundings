@@ -38,6 +38,9 @@ public final class ModConfiguration {
 	// once it is cached that info would have been lost.
 	public String source = "<UNKNOWN>";
 
+	@SerializedName("soundMetadata")
+	public Map<String, SoundMetadataConfig> sounds = ImmutableMap.of();
+	
 	@SerializedName("biomes")
 	public List<BiomeConfig> biomes = ImmutableList.of();
 

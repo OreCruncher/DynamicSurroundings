@@ -137,6 +137,7 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 
 		if (ModEnvironment.Animania.isLoaded())
 			AnimaniaBadge.intitialize();
+		
 	}
 
 	@Override
