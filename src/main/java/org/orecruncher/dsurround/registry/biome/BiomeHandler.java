@@ -22,27 +22,22 @@
  */
 package org.orecruncher.dsurround.registry.biome;
 
-import java.lang.reflect.Field;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.lib.BiomeUtils;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class BiomeHandler implements IBiome {
-
-	private static Field biomeName = ReflectionHelper.findField(Biome.class, "biomeName", "field_76791_y");
 
 	protected final Biome biome;
 	protected final int id;
@@ -52,13 +47,8 @@ public class BiomeHandler implements IBiome {
 	public BiomeHandler(@Nonnull final Biome biome) {
 		this.biome = biome;
 		this.id = Biome.getIdForBiome(this.biome);
-		this.types = BiomeUtils.getBiomeTypes(this.biome);
-
-		try {
-			this.name = (String) biomeName.get(this.biome);
-		} catch (@Nonnull final Throwable t) {
-			this.name = "UNKNOWN";
-		}
+		this.types = BiomeUtil.getBiomeTypes(this.biome);
+		this.name = BiomeUtil.getBiomeName(this.biome);
 	}
 
 	@Override

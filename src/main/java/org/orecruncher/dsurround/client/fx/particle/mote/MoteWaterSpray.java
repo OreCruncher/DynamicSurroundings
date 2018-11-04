@@ -24,7 +24,7 @@
 
 package org.orecruncher.dsurround.client.fx.particle.mote;
 
-import org.orecruncher.lib.BiomeUtils;
+import org.orecruncher.dsurround.registry.biome.BiomeUtil;
 import org.orecruncher.lib.Color;
 
 import net.minecraft.client.renderer.BufferBuilder;
@@ -65,7 +65,7 @@ public class MoteWaterSpray extends MoteMotionBase {
 
 	@Override
 	public void configureColor() {
-		final Color waterColor = BiomeUtils.getColorForLiquid(this.world, this.position);
+		final Color waterColor = BiomeUtil.getColorForLiquid(this.world, this.position);
 		this.red = waterColor.red;
 		this.green = waterColor.green;
 		this.blue = waterColor.blue;

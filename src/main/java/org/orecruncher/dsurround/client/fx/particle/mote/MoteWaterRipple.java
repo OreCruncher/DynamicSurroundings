@@ -24,7 +24,7 @@
 
 package org.orecruncher.dsurround.client.fx.particle.mote;
 
-import org.orecruncher.lib.BiomeUtils;
+import org.orecruncher.dsurround.registry.biome.BiomeUtil;
 import org.orecruncher.lib.Color;
 
 import net.minecraft.client.renderer.BufferBuilder;
@@ -51,7 +51,7 @@ public class MoteWaterRipple extends MoteAgeable {
 		this.scaledWidth = this.scale * TEX_SIZE_HALF;
 		this.posY -= 0.2D;
 
-		final Color waterColor = BiomeUtils.getColorForLiquid(world, this.position);
+		final Color waterColor = BiomeUtil.getColorForLiquid(world, this.position);
 		this.red = waterColor.red;
 		this.green = waterColor.green;
 		this.blue = waterColor.blue;

@@ -23,7 +23,6 @@
 
 package org.orecruncher.dsurround.registry.biome;
 
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
@@ -40,12 +39,10 @@ import org.orecruncher.dsurround.registry.TemperatureRating;
 import org.orecruncher.dsurround.registry.config.BiomeConfig;
 import org.orecruncher.dsurround.registry.config.SoundConfig;
 import org.orecruncher.dsurround.registry.config.SoundType;
-import org.orecruncher.lib.BiomeUtils;
 import org.orecruncher.lib.Color;
 import org.orecruncher.lib.MyUtils;
 import org.orecruncher.lib.WeightTable;
 import org.orecruncher.lib.collections.ObjectArray;
-import org.orecruncher.lib.compat.ModEnvironment;
 
 import com.google.common.collect.Lists;
 
@@ -55,30 +52,11 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public final class BiomeInfo implements Comparable<BiomeInfo> {
-
-	private static Class<?> bopBiome = null;
-	private static Field bopBiomeFogDensity = null;
-	private static Field bopBiomeFogColor = null;
-
-	static {
-
-		if (ModEnvironment.BiomesOPlenty.isLoaded())
-			try {
-				bopBiome = Class.forName("biomesoplenty.common.biome.BOPBiome");
-				bopBiomeFogDensity = ReflectionHelper.findField(bopBiome, "fogDensity");
-				bopBiomeFogColor = ReflectionHelper.findField(bopBiome, "fogColor");
-			} catch (final Throwable t) {
-				bopBiome = null;
-				bopBiomeFogDensity = null;
-				bopBiomeFogColor = null;
-			}
-	}
+public final class BiomeInfo extends BiomeData implements Comparable<BiomeInfo> {
 
 	private final static float DEFAULT_FOG_DENSITY = 0.4F;
 	private final static Color DEFAULT_FOG_COLOR = new Color(64, 96, 64).asImmutable();
@@ -117,18 +95,14 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 		// If it is a BOP biome initialize from the BoP Biome
 		// instance. May be overwritten by DS config.
-		if (bopBiome != null && !biome.isFake()) {
+		if (!biome.isFake()) {
 			final Biome b = biome.getBiome();
-			if (bopBiome.isInstance(b)) {
-				try {
-					final int color = bopBiomeFogColor.getInt(b);
-					if (color > 0) {
-						this.hasFog = true;
-						this.fogColor = new Color(color);
-						this.fogDensity = bopBiomeFogDensity.getFloat(b);
-					}
-				} catch (final Exception ex) {
-
+			if (BiomeUtil.isBoPBiome(b)) {
+				final int color = BiomeUtil.getBoPBiomeFogColor(b);
+				if (color > 0) {
+					this.hasFog = true;
+					this.fogColor = new Color(color);
+					this.fogDensity = BiomeUtil.getBoPBiomeFogDensity(b);
 				}
 			}
 		}
@@ -320,11 +294,10 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	}
 
 	public boolean areBiomesSameClass(@Nonnull final Biome biome) {
-		return BiomeUtils.areBiomesSimilar(this.biome.getBiome(), biome);
+		return BiomeUtil.areBiomesSimilar(this.biome.getBiome(), biome);
 	}
 
-	// Internal to the package
-	void update(@Nonnull final BiomeConfig entry) {
+	public void update(@Nonnull final BiomeConfig entry) {
 		addComment(entry.comment);
 		if (entry.hasPrecipitation != null)
 			setHasPrecipitation(entry.hasPrecipitation.booleanValue());

@@ -47,7 +47,7 @@ public class Color {
 			super(red, green, blue);
 		}
 
-		ImmutableColor(final float red, final float green, final float blue) {
+		public ImmutableColor(final float red, final float green, final float blue) {
 			super(red, green, blue);
 		}
 

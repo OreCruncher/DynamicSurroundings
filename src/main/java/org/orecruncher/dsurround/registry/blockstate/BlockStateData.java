@@ -1,4 +1,5 @@
-/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/*
+ * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -20,28 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.orecruncher.dsurround.expression;
+package org.orecruncher.dsurround.registry.blockstate;
 
-import java.util.Set;
+/**
+ * Base class for the data being assigned into the IBlockState
+ * implementation.
+ */
+public abstract class BlockStateData {
 
-import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.registry.biome.BiomeUtil;
-import org.orecruncher.lib.expression.Dynamic;
-import org.orecruncher.lib.expression.DynamicVariantList;
-
-import net.minecraftforge.common.BiomeDictionary;
-
-public class BiomeTypeVariables extends DynamicVariantList {
-
-	public BiomeTypeVariables() {
-		// Scan the BiomeDictionary adding the the types
-		final Set<BiomeDictionary.Type> types = BiomeUtil.getBiomeTypes();
-		for (final BiomeDictionary.Type t : types)
-			add(new Dynamic.DynamicBoolean("biome.is" + t.getName()) {
-				@Override
-				public void update() {
-					this.value = EnvironState.getTruePlayerBiome().isBiomeType(t);
-				}
-			});
-	}
 }

@@ -28,7 +28,6 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.registry.config.BiomeConfig;
-import org.orecruncher.lib.BiomeUtils;
 import org.orecruncher.lib.expression.BooleanValue;
 import org.orecruncher.lib.expression.Expression;
 import org.orecruncher.lib.expression.Function;
@@ -245,7 +244,7 @@ public abstract class BiomeMatcher {
 			});
 
 			// Scan the BiomeDictionary adding the the types
-			final Set<BiomeDictionary.Type> stuff = BiomeUtils.getBiomeTypes();
+			final Set<BiomeDictionary.Type> stuff = BiomeUtil.getBiomeTypes();
 			for (final BiomeDictionary.Type t : stuff)
 				this.exp.addVariable(new BiomeTypeVariable(t));
 

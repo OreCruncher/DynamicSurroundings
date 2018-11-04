@@ -24,11 +24,9 @@
 
 package org.orecruncher.dsurround.registry.biome;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,15 +37,14 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.RegistryManager;
-import org.orecruncher.dsurround.registry.config.BiomeConfig;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.dimension.DimensionInfo;
 import org.orecruncher.lib.math.MathStuff;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
@@ -91,8 +88,8 @@ public final class BiomeRegistry extends Registry {
 	// and should default to something to avoid crap.
 	private static final FakeBiome WTF = new WTFFakeBiome();
 
-	private final Map<ResourceLocation, BiomeInfo> registry = new Object2ObjectOpenHashMap<>();
 	private final Map<String, String> biomeAliases = new Object2ObjectOpenHashMap<>();
+	private final ObjectOpenHashSet<FakeBiome> theFakes = new ObjectOpenHashSet<>();
 
 	public BiomeRegistry(@Nonnull final Side side) {
 		super(side);
@@ -111,17 +108,24 @@ public final class BiomeRegistry extends Registry {
 	}
 
 	private void register(@Nonnull final Biome biome) {
-		register(new BiomeHandler(biome));
+		final BiomeHandler handler = new BiomeHandler(biome);
+		final BiomeInfo info = new BiomeInfo(handler);
+		BiomeUtil.setBiomeData(biome, info);
 	}
 
 	private void register(@Nonnull final IBiome biome) {
-		this.registry.put(biome.getKey(), new BiomeInfo(biome));
+		if (biome.isFake()) {
+			final FakeBiome fb = (FakeBiome) biome;
+			final BiomeInfo info = new BiomeInfo(fb);
+			fb.setBiomeData(info);
+			this.theFakes.add(fb);
+		}
 	}
 
 	@Override
 	public void init() {
 		this.biomeAliases.clear();
-		this.registry.clear();
+		this.theFakes.clear();
 
 		for (final String entry : ModOptions.biomes.biomeAliases) {
 			final String[] parts = StringUtils.split(entry, "=");
@@ -164,16 +168,17 @@ public final class BiomeRegistry extends Registry {
 	@Override
 	public void configure(@Nonnull final ModConfiguration cfg) {
 		cfg.biomeAlias.forEach((alias, biome) -> registerBiomeAlias(alias, biome));
-		cfg.biomes.forEach(biome -> register(biome));
+		cfg.biomes.forEach(entry -> {
+			final BiomeMatcher matcher = BiomeMatcher.getMatcher(entry);
+			getCombinedStream().filter(i -> matcher.match(i)).forEach(i -> i.update(entry));
+		});
 	}
 
 	@Override
 	public void initComplete() {
 		if (ModOptions.logging.enableDebugLogging) {
 			ModBase.log().info("*** BIOME REGISTRY ***");
-			final List<BiomeInfo> info = new ArrayList<>(this.registry.values());
-			Collections.sort(info);
-			info.forEach(e -> ModBase.log().info(e.toString()));
+			getCombinedStream().sorted().forEach(e -> ModBase.log().info(e.toString()));
 		}
 
 		// Free memory because we no longer need
@@ -182,12 +187,16 @@ public final class BiomeRegistry extends Registry {
 
 	@Nullable
 	protected BiomeInfo resolve(@Nonnull final IBiome biome) {
-		return this.registry.get(biome.getKey());
+		if (biome.isFake()) {
+			final FakeBiome fb = (FakeBiome) biome;
+			return (BiomeInfo) fb.getBiomeData();
+		}
+		return null;
 	}
 
 	@Nullable
 	private BiomeInfo resolve(@Nonnull final Biome biome) {
-		return this.registry.get(BiomeHandler.getKey(biome));
+		return BiomeUtil.getBiomeData(biome);
 	}
 
 	@Nonnull
@@ -235,22 +244,14 @@ public final class BiomeRegistry extends Registry {
 		return info;
 	}
 
-	final boolean isBiomeMatch(@Nonnull final BiomeConfig entry, @Nonnull final BiomeInfo info) {
-		if (Pattern.matches(entry.biomeName, info.getBiomeName()))
-			return true;
-		final String alias = this.biomeAliases.get(info.getBiomeName());
-		return alias == null ? false : Pattern.matches(entry.biomeName, alias);
-	}
-
-	public void registerBiomeAlias(@Nonnull final String alias, @Nonnull final String biome) {
+	private void registerBiomeAlias(@Nonnull final String alias, @Nonnull final String biome) {
 		this.biomeAliases.put(alias, biome);
 	}
 
-	public void register(@Nonnull final BiomeConfig entry) {
-		final BiomeMatcher matcher = BiomeMatcher.getMatcher(entry);
-		this.registry.values().forEach(info -> {
-			if (matcher.match(info))
-				info.update(entry);
-		});
+	private Stream<BiomeInfo> getCombinedStream() {
+		final Stream<BiomeInfo> s1 = ForgeRegistries.BIOMES.getValuesCollection().stream()
+				.map(biome -> (BiomeInfo) BiomeUtil.getBiomeData(biome)).filter(Objects::nonNull);
+		final Stream<BiomeInfo> s2 = this.theFakes.stream().map(fb -> (BiomeInfo) fb.getBiomeData());
+		return Stream.of(s1, s2).flatMap(i -> i);
 	}
 }

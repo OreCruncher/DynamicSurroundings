@@ -42,8 +42,11 @@ import org.orecruncher.dsurround.registry.block.BlockMatcher;
 import org.orecruncher.lib.BlockNameUtil;
 import org.orecruncher.lib.BlockNameUtil.NameResult;
 
+import com.google.common.base.Optional;
+
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -60,13 +63,41 @@ public class BlockMap {
 	private final Map<Substrate, BlockAcousticMap> substrateMap = new EnumMap<>(Substrate.class);
 
 	private static class MacroEntry {
+		public final String propertyName;
+		public final String propertyValue;
 		public final String substrate;
 		public final String value;
 
 		public MacroEntry(@Nonnull final String substrate, @Nonnull final String value) {
+			this(null, null, substrate, value);
+		}
+
+		public MacroEntry(@Nullable final String propertyName, @Nullable final String propertyValue,
+				@Nonnull final String substrate, @Nonnull final String value) {
+			this.propertyName = propertyName;
+			this.propertyValue = propertyValue;
 			this.substrate = substrate;
 			this.value = value;
 		}
+
+		@Nonnull
+		public IBlockState withProperty(@Nonnull final IBlockState state) {
+			if (this.propertyName == null)
+				return state;
+			final IProperty<?> iProp = state.getBlock().getBlockState().getProperty(this.propertyName);
+			if (iProp != null)
+				return setValueHelper(state, iProp, this.propertyValue);
+			return state;
+		}
+
+		private static <T extends Comparable<T>> IBlockState setValueHelper(IBlockState state, IProperty<T> prop,
+				String value) {
+			final Optional<T> optional = prop.parseValue(value);
+			if (optional.isPresent())
+				return state.withProperty(prop, optional.get());
+			return state;
+		}
+
 	}
 
 	private static final Map<String, List<MacroEntry>> macros = new Object2ObjectOpenHashMap<>();
@@ -109,6 +140,41 @@ public class BlockMap {
 		entries.add(new MacroEntry(null, "NOT_EMITTER"));
 		entries.add(new MacroEntry("carpet", "rug"));
 		macros.put("#moss", entries);
+		
+		entries = new ArrayList<>();
+		entries.add(new MacroEntry(null, "NOT_EMITTER"));
+		entries.add(MESSY);
+		entries.add(new MacroEntry("age", "0", "foliage", "NOT_EMITTER"));
+		entries.add(new MacroEntry("age", "1", "foliage", "NOT_EMITTER"));
+		entries.add(new MacroEntry("age", "2", "foliage", "brush"));
+		entries.add(new MacroEntry("age", "3", "foliage", "brush"));
+		entries.add(new MacroEntry("age", "4", "foliage", "brush_straw_transition"));
+		entries.add(new MacroEntry("age", "5", "foliage", "brush_straw_transition"));
+		entries.add(new MacroEntry("age", "6", "foliage", "straw"));
+		entries.add(new MacroEntry("age", "7", "foliage", "straw"));
+		macros.put("#wheat", entries);
+
+		entries = new ArrayList<>();
+		entries.add(new MacroEntry(null, "NOT_EMITTER"));
+		entries.add(MESSY);
+		entries.add(new MacroEntry("age", "0", "foliage", "NOT_EMITTER"));
+		entries.add(new MacroEntry("age", "1", "foliage", "NOT_EMITTER"));
+		entries.add(new MacroEntry("age", "2", "foliage", "NOT_EMITTER"));
+		entries.add(new MacroEntry("age", "3", "foliage", "NOT_EMITTER"));
+		entries.add(new MacroEntry("age", "4", "foliage", "brush"));
+		entries.add(new MacroEntry("age", "5", "foliage", "brush"));
+		entries.add(new MacroEntry("age", "6", "foliage", "brush"));
+		entries.add(new MacroEntry("age", "7", "foliage", "brush"));
+		macros.put("#crop", entries);
+
+		entries = new ArrayList<>();
+		entries.add(new MacroEntry(null, "NOT_EMITTER"));
+		entries.add(MESSY);
+		entries.add(new MacroEntry("age", "0", "foliage", "NOT_EMITTER"));
+		entries.add(new MacroEntry("age", "1", "foliage", "NOT_EMITTER"));
+		entries.add(new MacroEntry("age", "2", "foliage", "brush"));
+		entries.add(new MacroEntry("age", "3", "foliage", "brush"));
+		macros.put("#beets", entries);
 	}
 
 	public BlockMap(@Nonnull final AcousticsManager manager) {
