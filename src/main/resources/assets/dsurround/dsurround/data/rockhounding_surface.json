@@ -1,0 +1,30 @@
+{
+	"blocks":[
+		{
+			"blocks": [
+				"rockhounding_surface:whiteSand"
+			],
+			"effects": [
+				{
+					"effect": "dust",
+					"chance": 500
+				}
+			]
+		}
+	],
+	"footsteps": {
+		"rockhounding_surface:gypsumCrops": "leaves",
+		"rockhounding_surface:whiteSand": "sand",
+		"rockhounding_surface:kauriFences": "#fence",
+		"rockhounding_surface:mophaneFences": "#fence",
+		"rockhounding_surface:gypsumBushLo": "NOT_EMITTER",
+		"rockhounding_surface:gypsumBushLo+messy": "MESSY_GROUND",
+		"rockhounding_surface:gypsumBushLo{_meta_:\"0\"}+foliage": "straw",
+		"rockhounding_surface:gypsumBushLo{_meta_:\"1\"}+foliage": "straw",
+		"rockhounding_surface:gypsumBushLo{_meta_:\"2\"}+foliage": "straw",
+		"rockhounding_surface:gypsumBushLo{_meta_:\"3\"}+foliage": "straw",
+		"rockhounding_surface:gypsumBushLo{_meta_:\"4\"}+foliage": "straw",
+		"rockhounding_surface:gypsumBushLo{_meta_:\"5\"}+foliage": "straw"
+	}
+	
+}

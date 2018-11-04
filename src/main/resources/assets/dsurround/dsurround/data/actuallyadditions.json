@@ -136,14 +136,14 @@
 		"actuallyadditions:block_testifi_bucks_white_stairs": "marble",
 		"actuallyadditions:block_testifi_bucks_green_wall": "marble",
 		"actuallyadditions:block_testifi_bucks_green_stairs": "marble",
-		"actuallyadditions:block_misc^0": "marble",
-		"actuallyadditions:block_misc^1": "marble",
-		"actuallyadditions:block_misc^2": "marble",
-		"actuallyadditions:block_misc^3": "wood",
-		"actuallyadditions:block_misc^4": "wood",
-		"actuallyadditions:block_misc^6": "composite",
-		"actuallyadditions:block_misc^7": "hardmetal",
-		"actuallyadditions:block_misc^8": "marble",
-		"actuallyadditions:block_misc^9": "hardmetal"
+		"actuallyadditions:block_misc{_meta_:\"0\"}": "marble",
+		"actuallyadditions:block_misc{_meta:\"1\"}": "marble",
+		"actuallyadditions:block_misc{_meta:\"2\"}": "marble",
+		"actuallyadditions:block_misc{_meta:\"3\"}": "wood",
+		"actuallyadditions:block_misc{_meta:\"4\"}": "wood",
+		"actuallyadditions:block_misc{_meta:\"6\"}": "composite",
+		"actuallyadditions:block_misc{_meta:\"7\"}": "hardmetal",
+		"actuallyadditions:block_misc{_meta:\"8\"}": "marble",
+		"actuallyadditions:block_misc{_meta:\"9\"}": "hardmetal"
 	}
 }

@@ -35,7 +35,7 @@
 		"railcraft:track_flex_strap_iron+foliage": "rails",
 		"railcraft:track_outfitted": "NOT_EMITTER",
 		"railcraft:track_outfitted+foliage": "rails",
-		"railcraft:generic^7": "gravel",
+		"railcraft:generic{_meta_:\"7\"}": "gravel",
 		"railcraft:anvil": "metalcompressed,hardmetal"
 
 	}

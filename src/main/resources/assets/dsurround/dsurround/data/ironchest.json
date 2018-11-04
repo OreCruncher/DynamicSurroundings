@@ -1,10 +1,10 @@
 {
 	"footsteps": {
 		"ironchest:iron_chest": "hardmetal",
-		"ironchest:iron_chest:2": "composite",
-		"ironchest:iron_chest:5": "ice",
-		"ironchest:iron_chest:6": "obsidian",
-		"ironchest:iron_chest:7": "dirt",
+		"ironchest:iron_chest{_meta_:\"2\"}": "composite",
+		"ironchest:iron_chest{_meta_:\"5\"}": "ice",
+		"ironchest:iron_chest{_meta_:\"6\"}": "obsidian",
+		"ironchest:iron_chest{_meta_:\"7\"}": "dirt",
 		"ironchest:iron_shulker_box_black": "composite",
 		"ironchest:iron_shulker_box_blue": "composite",
 		"ironchest:iron_shulker_box_brown": "composite",

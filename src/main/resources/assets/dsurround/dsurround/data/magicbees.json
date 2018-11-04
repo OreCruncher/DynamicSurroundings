@@ -2,7 +2,7 @@
 	"blocks": [
 		{
 			"blocks": [
-				"magicbees:hiveblock:*"
+				"magicbees:hiveblock"
 			],
 			"chance": 5,
 			"sounds": [

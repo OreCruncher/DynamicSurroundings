@@ -2,9 +2,9 @@
 	"blocks": [
 		{
 			"blocks": [
-				"forestry:beehives:*",
-				"forestry:bee_house:*",
-				"forestry:apiary:*"
+				"forestry:beehives",
+				"forestry:bee_house",
+				"forestry:apiary"
 			],
 			"chance": 5,
 			"sounds": [

@@ -3,9 +3,9 @@
 		{
 			"blocks": [
 				"twilightforest:firefly",
-				"twilightforest:twilight_plant:1",
-				"twilightforest:twilight_plant:3",
-				"twilightforest:twilight_plant:5"
+				"twilightforest:twilight_plant{_meta_:\"1\"}",
+				"twilightforest:twilight_plant{_meta_:\"3\"}",
+				"twilightforest:twilight_plant{_meta_:\"5\"}"
 			],
 			"effects": [
 				{
@@ -81,9 +81,9 @@
 		"twilightforest:twilight_plant": "NOT_EMITTER",
 		"twilightforest:twilight_plant+messy": "MESSY_GROUND",
 		"twilightforest:twilight_plant+foliage": "brush",
-		"twilightforest:twilight_plant:0+carpet": "rug",
-		"twilightforest:twilight_plant:6+foliage": "straw",
-		"twilightforest:twilight_plant:8+foliage": "straw",
+		"twilightforest:twilight_plant{_meta_:\"0\"}+carpet": "rug",
+		"twilightforest:twilight_plant{_meta_:\"6\"}+foliage": "straw",
+		"twilightforest:twilight_plant{_meta_:\"8\"}+foliage": "straw",
 		"twilightforest:huge_lilypad": "waterfine",
 		"twilightforest:huge_lilypad+carpet": "waterfine",
 		"twilightforest:huge_waterlily": "brush_straw_transition",
