@@ -24,6 +24,7 @@
 
 package org.orecruncher.dsurround.client.fx.particle.system;
 
+import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
 import org.orecruncher.dsurround.client.fx.WaterSplashJetEffect;
 import org.orecruncher.dsurround.client.fx.particle.mote.IParticleMote;
@@ -90,7 +91,7 @@ public class ParticleWaterSplash extends ParticleJet {
 	}
 
 	private boolean setupSound() {
-		return isAlive() && this.jetStrength > 2 && this.emitter == null && RANDOM.nextInt(6) == 0;
+		return isAlive() && this.jetStrength >= ModOptions.effects.waterfallCutoff && this.emitter == null && RANDOM.nextInt(6) == 0;
 	}
 
 	@Override
