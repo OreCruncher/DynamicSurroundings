@@ -68,7 +68,7 @@ public final class Localization {
 		private final Translations xlate = new Translations();
 
 		public ServerImpl() {
-			this.xlate.load("/assets/dsurround/lang/", Translations.DEFAULT_LANGUAGE);
+			this.xlate.load("/assets/dsurround/lang/");
 		}
 
 		@Override

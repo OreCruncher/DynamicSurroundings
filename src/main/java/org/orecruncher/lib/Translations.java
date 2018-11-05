@@ -26,6 +26,8 @@ package org.orecruncher.lib;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -38,24 +40,41 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.client.Minecraft;
 
 public class Translations {
 
+	/**
+	 * Default language that the mod has for translation strings. Typically American
+	 * English (en_us).
+	 */
 	public static final String DEFAULT_LANGUAGE = "en_us";
 
 	private Map<String, String> lookup = new Object2ObjectOpenHashMap<>();
-
-	public Translations() {
-
-	}
 
 	protected void merge(@Nonnull final InputStream stream) throws IOException {
 		net.minecraftforge.fml.common.FMLCommonHandler.instance().loadLanguage(this.lookup, stream);
 	}
 
-	public void load(@Nonnull final String assetRoot, @Nonnull final String... languages) {
-		for (final String lang : languages) {
-			final String assetName = StringUtils.appendIfMissing(assetRoot, "/") + lang + ".lang";
+	private static List<String> getLanguageList(@Nullable String... lang) {
+		final List<String> result = new ArrayList<>();
+		if (lang != null && lang.length > 0) {
+			for (final String s : lang)
+				if (result.contains(s))
+					result.add(s);
+		} else {
+			final String mcLang = Minecraft.getMinecraft().gameSettings.language;
+			result.add(DEFAULT_LANGUAGE);
+			if (!result.contains(mcLang))
+				result.add(mcLang);
+		}
+		return result;
+	}
+
+	public void load(@Nonnull final String assetRoot, @Nullable final String... lang) {
+		final List<String> langList = getLanguageList(lang);
+		for (final String l : langList) {
+			final String assetName = StringUtils.appendIfMissing(assetRoot, "/") + l + ".lang";
 			try (final InputStream stream = Translations.class.getResourceAsStream(assetName)) {
 				if (stream != null)
 					merge(stream);

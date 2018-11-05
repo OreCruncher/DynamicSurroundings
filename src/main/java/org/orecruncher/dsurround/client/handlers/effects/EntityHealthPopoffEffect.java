@@ -36,6 +36,7 @@ import org.orecruncher.dsurround.client.fx.particle.ParticleTextPopOff;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.lib.Color;
+import org.orecruncher.lib.Translations;
 import org.orecruncher.lib.math.MathStuff;
 import org.orecruncher.lib.random.XorShiftRandom;
 
@@ -56,23 +57,20 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 	private static final Color HEAL_TEXT_COLOR = Color.MC_GREEN;
 	private static final Color DAMAGE_TEXT_COLOR = Color.MC_RED;
 
-	// In case you want to know....
-	// http://www.66batmania.com/trivia/bat-fight-words/
-	private static final String[] POWER_WORDS = new String[] { "AIEEE", "AIIEEE", "ARRGH", "AWK", "AWKKKKKK", "BAM",
-			"BANG", "BANG-ETH", "BIFF", "BLOOP", "BLURP", "BOFF", "BONK", "CLANK", "CLANK-EST", "CLASH", "CLUNK",
-			"CLUNK-ETH", "CRRAACK", "CRASH", "CRRAACK", "CRUNCH", "CRUNCH-ETH", "EEE-YOW", "FLRBBBBB", "GLIPP",
-			"GLURPP", "KAPOW", "KAYO", "KER-SPLOOSH", "KERPLOP", "KLONK", "KLUNK", "KRUNCH", "OOOFF", "OOOOFF", "OUCH",
-			"OUCH-ETH", "OWWW", "OW-ETH", "PAM", "PLOP", "POW", "POWIE", "QUNCKKK", "RAKKK", "RIP", "SLOSH", "SOCK",
-			"SPLATS", "SPLATT", "SPLOOSH", "SWAAP", "SWISH", "SWOOSH", "THUNK", "THWACK", "THWACKE", "THWAPE", "THWAPP",
-			"UGGH", "URKKK", "VRONK", "WHACK", "WHACK-ETH", "WHAM-ETH", "WHAMM", "WHAMMM", "WHAP", "Z-ZWAP", "ZAM",
-			"ZAMM", "ZAMMM", "ZAP", "ZAP-ETH", "ZGRUPPP", "ZLONK", "ZLOPP", "ZLOTT", "ZOK", "ZOWIE", "ZWAPP", "ZZWAP",
-			"ZZZZWAP", "ZZZZZWAP" };
+	private static final Translations xlate = new Translations();
+	private static final int CRITWORD_COUNT = 85;
+	private static final String CRITWORD_PREFIX = "critword.";
 
-	private String getPowerWord() {
-		return POWER_WORDS[XorShiftRandom.current().nextInt(POWER_WORDS.length)] + "!";
+	static {
+		xlate.load("/assets/dsurround/dsurround/data/critwords/");
 	}
 
 	protected float lastHealth;
+
+	private String getPowerWord() {
+		final int id = XorShiftRandom.current().nextInt(CRITWORD_COUNT);
+		return xlate.loadString(CRITWORD_PREFIX + id) + "!";
+	}
 
 	@Override
 	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {

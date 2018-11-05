@@ -65,7 +65,7 @@ public class EntityChatEffect extends EntityEffect {
 
 	static {
 		final Translations xlate = new Translations();
-		xlate.load("/assets/dsurround/dsurround/data/chat/", Translations.DEFAULT_LANGUAGE);
+		xlate.load("/assets/dsurround/dsurround/data/chat/");
 		xlate.forAll(new WeightTableBuilder());
 
 		setTimers(EntitySquid.class, 600, EntityChatData.DEFAULT_RANDOM);

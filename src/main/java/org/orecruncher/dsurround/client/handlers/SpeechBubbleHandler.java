@@ -80,13 +80,7 @@ public class SpeechBubbleHandler extends EffectHandlerBase {
 	}
 
 	private void loadText() {
-		final String[] langs;
-		if (Minecraft.getMinecraft().gameSettings.language.equals(Translations.DEFAULT_LANGUAGE))
-			langs = new String[] { Translations.DEFAULT_LANGUAGE };
-		else
-			langs = new String[] { Translations.DEFAULT_LANGUAGE, Minecraft.getMinecraft().gameSettings.language };
-
-		this.xlate.load("/assets/dsurround/dsurround/data/chat/", langs);
+		this.xlate.load("/assets/dsurround/dsurround/data/chat/");
 		this.xlate.transform(new Stripper());
 
 		try (final IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(SPLASH_TEXT)) {
