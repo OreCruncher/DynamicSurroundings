@@ -521,8 +521,8 @@ public final class SoundEngine {
 		int streamChannelCount = ModOptions.sound.streamingSoundChannelCount;
 
 		if (ModOptions.sound.autoConfigureChannels && totalChannels > 64) {
-			totalChannels = ((totalChannels + 1) * 3) / 4;
-			streamChannelCount = Math.min(totalChannels / 5, MAX_STREAM_CHANNELS);
+			totalChannels -= 32;
+			streamChannelCount = Math.min(totalChannels / 8, MAX_STREAM_CHANNELS);
 			normalChannelCount = totalChannels - streamChannelCount;
 		}
 
