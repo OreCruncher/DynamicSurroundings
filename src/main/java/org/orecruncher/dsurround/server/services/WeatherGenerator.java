@@ -28,6 +28,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.server.services.ServerRegistry;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.network.Network;
@@ -46,14 +47,12 @@ import net.minecraft.world.storage.WorldInfo;
 public class WeatherGenerator {
 
 	protected final Random RANDOM = XorShiftRandom.current();
-	protected final DimensionInfo dimension;
 	protected final World world;
-	protected final WorldInfo info;
+	protected final DimensionInfo dimension;
 	protected final DimensionEffectData data;
 
 	public WeatherGenerator(@Nonnull final World world) {
 		this.world = world;
-		this.info = world.getWorldInfo();
 		this.data = DimensionEffectData.get(world);
 		this.dimension = ServerRegistry.DIMENSION.getData(world);
 	}
@@ -72,7 +71,11 @@ public class WeatherGenerator {
 		final int randee = (int) (rainIntensity * 100.0F);
 		return this.RANDOM.nextInt(150) <= randee;
 	}
-
+	
+	protected WorldInfo worldInfo() {
+		return this.world.getWorldInfo();
+	}
+	
 	protected void preProcess() {
 		// A hook for a sub-class to do some figuring before the main
 		// routines execute.
@@ -80,13 +83,13 @@ public class WeatherGenerator {
 
 	protected void doRain() {
 		// Track our rain intensity values
-		if (this.info.isRaining()) {
+		if (worldInfo().isRaining()) {
 			// If our intensity is 0 it means that we need to establish
 			// a strength.
 			if (this.data.getRainIntensity() == 0.0F) {
 				this.data.randomizeRain();
 				ModBase.log().debug("dim %d rain intensity set to %f, duration %d ticks", this.data.getDimensionId(),
-						this.data.getRainIntensity(), this.info.getRainTime());
+						this.data.getRainIntensity(), worldInfo().getRainTime());
 			}
 			this.data.setCurrentRainIntensity(this.world.getRainStrength(1.0F));
 		} else {
@@ -102,7 +105,7 @@ public class WeatherGenerator {
 				this.data.setRainIntensity(0);
 				this.data.setCurrentRainIntensity(0);
 				ModBase.log().debug("dim %d rain has stopped, next rain %d ticks", this.data.getDimensionId(),
-						this.info.getRainTime());
+						worldInfo().getRainTime());
 			} else if (this.data.getRainIntensity() > 0) {
 				this.data.setRainIntensity(0);
 			}
@@ -120,7 +123,7 @@ public class WeatherGenerator {
 		final float intensity = this.data.getCurrentRainIntensity();
 
 		// If it is thundering and the intensity exceeds our threshold...
-		if (this.info.isThundering() && intensity >= ModOptions.rain.stormThunderThreshold) {
+		if (worldInfo().isThundering() && intensity >= ModOptions.rain.stormThunderThreshold) {
 			int time = this.data.getThunderTimer() - 1;
 			if (time <= 0) {
 				// If it is 0 we just counted down to this. If it were
@@ -169,8 +172,8 @@ public class WeatherGenerator {
 		// Send the weather update to all players in the dimension.
 		if (this.world.playerEntities.size() > 0) {
 			final PacketWeatherUpdate packet = new PacketWeatherUpdate(this.data.getDimensionId(),
-					this.data.getCurrentRainIntensity(), this.data.getRainIntensity(), this.info.getRainTime(),
-					this.world.getThunderStrength(1.0F), this.info.getThunderTime(), this.data.getThunderTimer());
+					this.data.getCurrentRainIntensity(), this.data.getRainIntensity(), worldInfo().getRainTime(),
+					this.world.getThunderStrength(1.0F), worldInfo().getThunderTime(), this.data.getThunderTimer());
 			Network.sendToDimension(this.data.getDimensionId(), packet);
 		}
 	}

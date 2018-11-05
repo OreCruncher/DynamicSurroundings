@@ -43,7 +43,7 @@ public class WeatherGeneratorVanilla extends WeatherGenerator {
 	protected void doRain() {
 		// For vanilla just transcribe what vanilla is doing
 		final float str = this.world.getRainStrength(1.0F);
-		if (this.info.isRaining() || str > 0F) {
+		if (worldInfo().isRaining() || str > 0F) {
 			this.data.setRainIntensity(1.0F);
 			this.data.setCurrentRainIntensity(str);
 		} else {
