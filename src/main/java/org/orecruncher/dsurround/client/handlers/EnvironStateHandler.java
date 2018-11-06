@@ -170,10 +170,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.lightLevel = Math.max(blockLight, skyLight);
 
 			// Trigger the battle scanner
-			if (ModOptions.sound.enableBattleMusic)
-				EnvironState.battle.update();
-			else
-				EnvironState.battle.reset();
+			EnvironState.battle.update();
 
 			if (!Minecraft.getMinecraft().isGamePaused())
 				EnvironState.tickCounter++;
@@ -263,7 +260,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		public static boolean isPlayerHurt() {
 			final EntityPlayer player = getPlayer();
 			return player != null && ModOptions.player.playerHurtThreshold != 0 && !isCreative()
-					&& player.getHealth() <= ModOptions.player.playerHurtThreshold;
+					&& player.getHealth() <= (ModOptions.player.playerHurtThreshold * player.getMaxHealth());
 		}
 
 		public static boolean isPlayerHungry() {

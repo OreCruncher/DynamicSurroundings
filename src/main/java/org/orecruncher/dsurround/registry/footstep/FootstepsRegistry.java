@@ -335,12 +335,11 @@ public final class FootstepsRegistry extends Registry {
 	 * state to determine the correct acoustic profile.
 	 *
 	 * @param state
-	 *            The state for which an AcousticProfile needs to be resolved
+	 *                  The state for which an AcousticProfile needs to be resolved
 	 * @return AcousticProfile for the state, null otherwise
 	 */
 	@Nullable
 	public AcousticProfile resolve(@Nonnull final IBlockState state) {
-		// TODO: Change when dynamic states are put in place
 		final IAcoustic[] acoustics = resolvePrimitive(state);
 		return acoustics != null ? new AcousticProfile.Static(acoustics) : AcousticProfile.NO_PROFILE;
 	}
@@ -351,7 +350,7 @@ public final class FootstepsRegistry extends Registry {
 	 * defined acoustic profile for a block state.
 	 *
 	 * @param state
-	 *            BlockState for which the acoustic profile is being generated
+	 *                  BlockState for which the acoustic profile is being generated
 	 * @return Acoustic profile for the BlockState, if any
 	 */
 	@Nullable
@@ -386,10 +385,6 @@ public final class FootstepsRegistry extends Registry {
 			if (primitive == null) {
 				primitive = this.primitiveMap.getPrimitiveMap(soundName);
 			}
-		}
-
-		if (primitive == null) {
-			// TODO: Generate an acoustic profile on the fly and insert into the map?
 		}
 
 		return primitive;
@@ -432,10 +427,8 @@ public final class FootstepsRegistry extends Registry {
 			if (materialMatch) {
 				final IBlockState state = bi.getBlock().getDefaultState();
 				this.FOOTPRINT_MATERIAL.add(state.getMaterial());
-			} else if (!bi.hasSubtypes()) {
-				this.FOOTPRINT_STATES.addAll(bi.asBlockStates());
 			} else {
-				ModBase.log().warn("Generic matching is not supported for footprints: %s", b);
+				this.FOOTPRINT_STATES.addAll(bi.asBlockStates());
 			}
 		}
 	}

@@ -41,7 +41,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -108,10 +107,6 @@ public class SpeechDataRenderer {
 		final float scale = -1F;
 		GlStateManager.scale(scale * 0.015D, scale * 0.015F, scale * 0.015D);
 
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 0.003662109F);
-		final float saveLightX = OpenGlHelper.lastBrightnessX;
-		final float saveLightY = OpenGlHelper.lastBrightnessY;
-
 		GlStateManager.disableTexture2D();
 		GlStateManager.depthMask(false);
 		GlStateManager.enableBlend();
@@ -151,7 +146,6 @@ public class SpeechDataRenderer {
 			lines--;
 		}
 
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, saveLightX, saveLightY);
 		OpenGlState.pop(glState);
 	}
 

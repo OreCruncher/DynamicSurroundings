@@ -99,8 +99,7 @@ public class BiomeSoundEffectsHandler extends EffectHandlerBase {
 
 			final ObjectArray<SoundEffect> playerSounds = new ObjectArray<>();
 			ClientRegistry.BIOME.PLAYER_INFO.findSoundMatches(playerSounds);
-			if (ModOptions.sound.enableBattleMusic)
-				ClientRegistry.BIOME.BATTLE_MUSIC_INFO.findSoundMatches(playerSounds);
+			ClientRegistry.BIOME.BATTLE_MUSIC_INFO.findSoundMatches(playerSounds);
 			if (EnvironState.inVillage())
 				ClientRegistry.BIOME.VILLAGE_INFO.findSoundMatches(playerSounds);
 

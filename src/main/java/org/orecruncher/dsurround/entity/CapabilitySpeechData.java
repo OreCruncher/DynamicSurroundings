@@ -110,7 +110,7 @@ public final class CapabilitySpeechData {
 		@SubscribeEvent
 		public static void attachCapabilities(@Nonnull final AttachCapabilitiesEvent<Entity> event) {
 			final World world = event.getObject().getEntityWorld();
-			if (world.isRemote && isCandidate(event.getObject())) {
+			if (world != null && world.isRemote && isCandidate(event.getObject())) {
 				final SpeechData speechData = new SpeechData();
 				event.addCapability(CAPABILITY_ID, createProvider(speechData));
 			}

@@ -21,35 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.orecruncher.lib;
 
-import javax.annotation.Nullable;
+package org.orecruncher.dsurround.client.renderer;
 
-import net.minecraft.item.Item;
+import javax.annotation.Nonnull;
+
+import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.lib.ItemStackUtil;
+
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class ItemStackUtil {
-
-	private ItemStackUtil() {
-
-	}
-
-	public static boolean isValidItemStack(@Nullable final ItemStack stack) {
-		return stack != null && !stack.isEmpty();
-	}
+@EventBusSubscriber(value = Side.CLIENT, modid = ModBase.MOD_ID)
+public class ToolTipProvider {
 	
-	public static String getItemName(final ItemStack stack) {
-		final Item item = stack.getItem();
-		final String itemName = MCHelper.nameOf(item);
-
-		if (itemName != null) {
-			final StringBuilder builder = new StringBuilder();
-			builder.append(itemName);
-			if (stack.getHasSubtypes())
-				builder.append(':').append(stack.getItemDamage());
-			return builder.toString();
+	@SubscribeEvent
+	public static void tooltipEvent(@Nonnull final ItemTooltipEvent event) {
+		if (ModOptions.logging.enableDebugLogging) {
+			final ItemStack stack = event.getItemStack();
+			if (stack != null) {
+				final String itemName = ItemStackUtil.getItemName(stack);
+				event.getToolTip().add(TextFormatting.GOLD + itemName);
+				event.getToolTip().add(TextFormatting.GOLD + stack.getItem().getClass().getName());
+			}
 		}
-
-		return null;
 	}
+
 }

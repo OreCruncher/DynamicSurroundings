@@ -73,8 +73,6 @@ dsurround.cfg.logging.EnableDebug=Debug Logging
 dsurround.cfg.logging.EnableDebug.tooltip=Enables/disables debug logging of the mod
 dsurround.cfg.logging.VersionCheck=Online Version Check Result
 dsurround.cfg.logging.VersionCheck.tooltip=Enables/disables display of version check information
-dsurround.cfg.logging.DebugDialog=Debug Dialog
-dsurround.cfg.logging.DebugDialog.tooltip=Enables/disables display of debug dialog
 dsurround.cfg.logging.ServerStats=Report Server Stats
 dsurround.cfg.logging.ServerStats.tooltip=Enables/disables reporting of server stats
 dsurround.cfg.logging.FlagMask=Debug Flag Mask
@@ -222,7 +220,7 @@ dsurround.cfg.player.cat.Player.tooltip=General options for defining sound and e
 dsurround.cfg.player.PotionParticles=Suppress Potion Particles
 dsurround.cfg.player.PotionParticles.tooltip=Suppress player's potion particles from rendering
 dsurround.cfg.player.HurtThreshold=Hurt Threshold
-dsurround.cfg.player.HurtThreshold.tooltip=Amount of health bar remaining to trigger player hurt sound (0 disable)
+dsurround.cfg.player.HurtThreshold.tooltip=Percentage of player health bar remaining to trigger player hurt sound (0 disable)
 dsurround.cfg.player.HungerThreshold=Hunger Threshold
 dsurround.cfg.player.HungerThreshold.tooltip=Amount of food bar remaining to trigger player hunger sound (0 disable)
 

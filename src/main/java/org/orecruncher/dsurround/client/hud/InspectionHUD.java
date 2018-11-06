@@ -53,7 +53,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -86,27 +85,12 @@ public class InspectionHUD extends GuiOverlay {
 		return result;
 	}
 
-	private static String getItemName(final ItemStack stack) {
-		final Item item = stack.getItem();
-		final String itemName = MCHelper.nameOf(item);
-
-		if (itemName != null) {
-			final StringBuilder builder = new StringBuilder();
-			builder.append(itemName);
-			if (stack.getHasSubtypes())
-				builder.append(':').append(stack.getItemDamage());
-			return builder.toString();
-		}
-
-		return null;
-	}
-
 	private List<String> gatherBlockText(final ItemStack stack, final List<String> text, final IBlockState state,
 			final BlockPos pos) {
 
 		if (ItemStackUtil.isValidItemStack(stack)) {
 			text.add(TextFormatting.RED + stack.getDisplayName());
-			final String itemName = getItemName(stack);
+			final String itemName = ItemStackUtil.getItemName(stack);
 			if (itemName != null) {
 				text.add("ITEM: " + itemName);
 				text.add(TextFormatting.DARK_AQUA + stack.getItem().getClass().getName());
@@ -261,4 +245,5 @@ public class InspectionHUD extends GuiOverlay {
 			this.textPanel.render(centerX, centerY, Reference.TOP_CENTER);
 		}
 	}
+
 }

@@ -76,6 +76,7 @@ chat.villager.57=10,The axe forgets; the tree remembers.
 chat.villager.58=15,Never dig straight down.
 chat.villager.59=10,Don't Panic.
 chat.villager.60=5,More cow bell!
+chat.villager.61=15,Well that happened.
 
 chat.villager.flee.0=20,Run away! Run away!
 chat.villager.flee.1=20,!!! HELP !!!
@@ -113,6 +114,7 @@ chat.zombie.11=10,Come get some!
 chat.zombie.12=10,Groovy!
 chat.zombie.13=10,Hey kids you remember i'm a professional, don't try this at home!
 chat.zombie.14=10,So many villagers, so little time.
+chat.zombie.15=10,Everything's better with zombies!
 
 chat.skeleton.0=10,The short fortune teller who escaped from prison was a small medium at large…
 chat.skeleton.1=10,I don't know where I keep my arrows.  It's a mystery, like villagers having no hands.
@@ -126,6 +128,10 @@ chat.skeleton.8=10,Knowledge is realizing that the street is one-way, wisdom is 
 chat.skeleton.9=10,You keep using that word.  I don't think it means what you think it means.
 chat.skeleton.10=10,Chicken!  Fight like a skeleton!
 chat.skeleton.11=10,Oh,look. There's some lovely filth over here.
+chat.skeleton.12=5,If you cannot get rid of the family skeleton, you may as well make it dance.
+chat.skeleton.13=5,There is something about a closet that makes a skeleton terribly restless.
+chat.skeleton.14=5,I can be a super model!
+chat.skeleton.15=10,A bazooka is the skeleton key of the impatient.
 
 chat.witch.0=10,Yes, I can drive a stick.
 chat.witch.1=15,By the pricking of my thumbs, something wicked this way comes.

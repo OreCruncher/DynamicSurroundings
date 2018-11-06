@@ -106,7 +106,6 @@ public final class ModOptions {
 	public static final String CATEGORY_LOGGING_CONTROL = "logging";
 	public static final String CONFIG_ENABLE_ONLINE_VERSION_CHECK = "Enable Online Version Check";
 	public static final String CONFIG_ENABLE_DEBUG_LOGGING = "Enable Debug Logging";
-	public static final String CONFIG_ENABLE_DEBUG_DIALOG = "Enable Debug Dialog";
 	public static final String CONFIG_REPORT_SERVER_STATS = "Report Server Stats";
 	public static final String CONFIG_DEBUG_FLAG_MASK = "Debug Flag Mask";
 
@@ -117,8 +116,7 @@ public final class ModOptions {
 
 		public static String PATH = null;
 		public static final List<String> SORT = Arrays.asList(CONFIG_ENABLE_ONLINE_VERSION_CHECK,
-				CONFIG_ENABLE_DEBUG_LOGGING, CONFIG_REPORT_SERVER_STATS, CONFIG_DEBUG_FLAG_MASK,
-				CONFIG_ENABLE_DEBUG_DIALOG);
+				CONFIG_ENABLE_DEBUG_LOGGING, CONFIG_REPORT_SERVER_STATS, CONFIG_DEBUG_FLAG_MASK);
 
 		@Option(CONFIG_ENABLE_DEBUG_LOGGING)
 		@DefaultValue("false")
@@ -133,13 +131,6 @@ public final class ModOptions {
 		@Comment("Enables/disables display of version check information")
 		@RestartRequired
 		public static boolean enableVersionChecking = true;
-
-		@Option(CONFIG_ENABLE_DEBUG_DIALOG)
-		@DefaultValue("false")
-		@LangKey("dsurround.cfg.logging.DebugDialog")
-		@Comment("Enables/disables display of debug dialog")
-		@RestartRequired
-		public static boolean showDebugDialog = false;
 
 		@Option(CONFIG_REPORT_SERVER_STATS)
 		@DefaultValue("false")
@@ -526,7 +517,6 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_PUDDLE_SOUND = "Rain Puddle Sound";
 	public static final String CONFIG_SOUND_CULL_THRESHOLD = "Sound Culling Threshold";
 	public static final String CONFIG_THUNDER_VOLUME = "Thunder Volume";
-	public static final String CONFIG_ENABLE_BATTLEMUSIC = "Battle Music";
 	public static final String CONFIG_SOUND_SETTINGS = "Sound Settings";
 
 	@Category(CATEGORY_SOUND)
@@ -541,7 +531,7 @@ public final class ModOptions {
 				CONFIG_SWORD_AS_TOOL_EQUIP_SOUND, CONFIG_ENABLE_CRAFTING_SOUND, CONFIG_AUTO_CONFIG_CHANNELS,
 				CONFIG_NORMAL_CHANNEL_COUNT, CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_STREAM_BUFFER_SIZE,
 				CONFIG_STREAM_BUFFER_COUNT, CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME,
-				CONFIG_SOUND_CULL_THRESHOLD, CONFIG_ENABLE_BATTLEMUSIC, CONFIG_SOUND_SETTINGS);
+				CONFIG_SOUND_CULL_THRESHOLD, CONFIG_SOUND_SETTINGS);
 
 		@Option(CONFIG_ENABLE_BIOME_SOUNDS)
 		@DefaultValue("true")
@@ -662,12 +652,6 @@ public final class ModOptions {
 		@Comment("Ticks between culled sound events (0 to disable culling)")
 		public static int soundCullingThreshold = 20;
 
-		@Option(CONFIG_ENABLE_BATTLEMUSIC)
-		@DefaultValue("false")
-		@LangKey("dsurround.cfg.sound.BattleMusic")
-		@Comment("Enable/disable Battle Music")
-		public static boolean enableBattleMusic = false;
-
 		@Option(CONFIG_SOUND_SETTINGS)
 		@Hidden
 		@DefaultValue("minecraft:block.water.ambient cull,minecraft:block.lava.ambient cull,minecraft:entity.sheep.ambient cull,minecraft:entity.chicken.ambient cull,minecraft:entity.cow.ambient cull,minecraft:entity.pig.ambient cull,dsurround:bison block")
@@ -700,11 +684,11 @@ public final class ModOptions {
 		public static boolean suppressPotionParticles = false;
 
 		@Option(CONFIG_HURT_THRESHOLD)
-		@DefaultValue("8")
+		@DefaultValue("0.25")
 		@LangKey("dsurround.cfg.player.HurtThreshold")
-		@Comment("Amount of health bar remaining to trigger player hurt sound (0 disable)")
-		@RangeInt(min = 0, max = 10)
-		public static int playerHurtThreshold = 8;
+		@Comment("Percentage of player health bar remaining to trigger player hurt sound (0 disable)")
+		@RangeFloat(min = 0, max = 1)
+		public static float playerHurtThreshold = 0.25F;
 
 		@Option(CONFIG_HUNGER_THRESHOLD)
 		@DefaultValue("8")
