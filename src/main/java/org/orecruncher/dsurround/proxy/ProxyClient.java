@@ -44,7 +44,6 @@ import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.client.weather.RenderWeather;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.commands.CommandCalc;
-import org.orecruncher.dsurround.data.PresetHandler;
 import org.orecruncher.dsurround.entity.CapabilitySpeechData;
 import org.orecruncher.dsurround.event.ReloadEvent;
 import org.orecruncher.dsurround.event.WorldEventDetector;
@@ -92,7 +91,6 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 		register(BackgroundMute.class);
 		register(RenderWeather.class);
 		register(Weather.class);
-		register(PresetHandler.class);
 		register(WorldEventDetector.class);
 		register(LightLevelHUD.class);
 		register(ParticleCollections.class);
