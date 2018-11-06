@@ -25,7 +25,7 @@ package org.orecruncher.dsurround.client.effects;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.lib.sound.ITrackedSound;
+import org.orecruncher.dsurround.lib.sound.ITrackedSound;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

@@ -70,7 +70,7 @@ public class PatchSoundManager extends Transmorgrifier {
 			final InsnList list = new InsnList();
 			list.add(new VarInsnNode(ALOAD, 0));
 
-			final String owner = "org/orecruncher/lib/sound/SoundCache";
+			final String owner = "org/orecruncher/dsurround/lib/sound/SoundCache";
 			final String targetName = "getURLForSoundResource";
 			final String sig1 = "(Lnet/minecraft/util/ResourceLocation;)Ljava/net/URL;";
 

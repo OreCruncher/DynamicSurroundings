@@ -25,11 +25,11 @@ package org.orecruncher.dsurround.client.handlers.fog;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.ClientChunkCache;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
+import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 import org.orecruncher.lib.math.MathStuff;
 
@@ -74,7 +74,7 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 
 		final EntityLivingBase player = EnvironState.getPlayer();
-		final IBlockAccessEx provider = ClientChunkCache.INSTANCE;
+		final IBlockAccessEx provider = ClientChunkCache.instance();
 		final int playerX = MathStuff.floor(player.posX);
 		final int playerZ = MathStuff.floor(player.posZ);
 		final float rainStr = Weather.getIntensityLevel();

@@ -1,5 +1,4 @@
-/*
- * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -21,39 +20,66 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.orecruncher.dsurround.client.handlers.effects;
+
+package org.orecruncher.dsurround.lib.sound;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.effects.EventEffect;
-import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.client.sound.BasicSound;
-import org.orecruncher.dsurround.client.sound.Sounds;
-import org.orecruncher.dsurround.lib.sound.ITrackedSound;
-
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class CraftingSoundEffect extends EventEffect {
+public class SoundInputStream extends InputStream {
 
-	private int craftSoundThrottle = 0;
+	protected final InputStream stream;
 
-	@SubscribeEvent
-	public void onEvent(@Nonnull final ItemCraftedEvent event) {
-		if (!ModOptions.sound.enableCraftingSound || !isClientValid(event))
-			return;
+	public SoundInputStream(@Nonnull final InputStream stream) {
+		this.stream = stream;
+	}
 
-		if (this.craftSoundThrottle >= (EnvironState.getTickCounter() - 30))
-			return;
+	@Override
+	public int read() throws IOException {
+		try {
+			return this.stream.read();
+		} catch (@Nonnull final Throwable t) {
+			return -1;
+		}
+	}
 
-		this.craftSoundThrottle = EnvironState.getTickCounter();
-		final ITrackedSound fx = getState().createSound(Sounds.CRAFTING, event.player);
-		((BasicSound<?>) fx).setRoutable(true);
-		getState().playSound(fx);
+	@Override
+	public int available() throws IOException {
+		try {
+			return this.stream.available();
+		} catch (@Nonnull final Throwable t) {
+			return 0;
+		}
+	}
+
+	@Override
+	public void close() {
+		try {
+			this.stream.close();
+		} catch (@Nonnull final Throwable t) {
+			;
+		}
+	}
+
+	@Override
+	public void mark(final int readlimit) {
+		this.stream.mark(readlimit);
+	}
+
+	@Override
+	public boolean markSupported() {
+		return this.stream.markSupported();
+	}
+
+	@Override
+	public void reset() throws IOException {
+		this.stream.reset();
 	}
 
 }

@@ -49,12 +49,12 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.sound.fix.SoundFixMethods;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
+import org.orecruncher.dsurround.lib.sound.ITrackedSound;
+import org.orecruncher.dsurround.lib.sound.SoundState;
 import org.orecruncher.lib.ThreadGuard;
 import org.orecruncher.lib.ThreadGuard.Action;
 import org.orecruncher.lib.compat.ModEnvironment;
 import org.orecruncher.lib.math.MathStuff;
-import org.orecruncher.lib.sound.ITrackedSound;
-import org.orecruncher.lib.sound.SoundState;
 
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;

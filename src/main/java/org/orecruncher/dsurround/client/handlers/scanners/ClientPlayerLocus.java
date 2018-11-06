@@ -24,9 +24,9 @@
 
 package org.orecruncher.dsurround.client.handlers.scanners;
 
-import org.orecruncher.dsurround.client.ClientChunkCache;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.lib.scanner.ScanLocus;
+import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 
 import net.minecraft.util.math.BlockPos;
@@ -38,7 +38,7 @@ public class ClientPlayerLocus extends ScanLocus {
 
 	@Override
 	public IBlockAccessEx getWorld() {
-		return ClientChunkCache.INSTANCE;
+		return ClientChunkCache.instance();
 	}
 
 	@Override

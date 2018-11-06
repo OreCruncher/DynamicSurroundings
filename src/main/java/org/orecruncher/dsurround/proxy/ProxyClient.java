@@ -49,6 +49,7 @@ import org.orecruncher.dsurround.entity.CapabilitySpeechData;
 import org.orecruncher.dsurround.event.ReloadEvent;
 import org.orecruncher.dsurround.event.WorldEventDetector;
 import org.orecruncher.lib.Localization;
+import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.compat.ModEnvironment;
 import org.orecruncher.lib.task.Scheduler;
 
@@ -77,7 +78,7 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 
 	@Override
 	protected void registerLanguage() {
-		Localization.initialize(Side.CLIENT);
+		Localization.initialize(Side.CLIENT, ModBase.MOD_ID);
 	}
 
 	@Override
@@ -139,6 +140,11 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 
 		if (ModEnvironment.Animania.isLoaded())
 			AnimaniaBadge.intitialize();
+
+		int r = Math.max(32, ModOptions.effects.specialEffectRange);
+		r = Math.max(r, ModOptions.huds.lightlevel.llBlockRange);
+		r += 2;
+		ClientChunkCache.initialize(r, !ModOptions.general.enableClientChunkCaching);
 	}
 
 	@Override

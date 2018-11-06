@@ -35,11 +35,11 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.sound.ConfigSound;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
+import org.orecruncher.dsurround.lib.sound.SoundConfigProcessor;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.config.SoundMetadataConfig;
 import org.orecruncher.lib.math.MathStuff;
-import org.orecruncher.lib.sound.SoundConfigProcessor;
 
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;

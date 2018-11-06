@@ -55,7 +55,7 @@ public class ProxyClient extends Proxy {
 
 	@Override
 	protected void registerLanguage() {
-		Localization.initialize(Side.CLIENT);
+		Localization.initialize(Side.CLIENT, Presets.MOD_ID);
 	}
 
 	@Override

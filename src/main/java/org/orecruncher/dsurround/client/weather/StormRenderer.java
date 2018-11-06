@@ -29,7 +29,6 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.lwjgl.opengl.GL11;
-import org.orecruncher.dsurround.client.ClientChunkCache;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.compat.RandomThings;
@@ -37,6 +36,7 @@ import org.orecruncher.dsurround.registry.PrecipitationType;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.dsurround.registry.season.SeasonInfo;
 import org.orecruncher.lib.Color;
+import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.random.XorShiftRandom;
 
 import net.minecraft.client.Minecraft;
@@ -160,7 +160,7 @@ public class StormRenderer {
 				if (!RandomThings.shouldRain(world, this.mutable))
 					continue;
 
-				final BiomeInfo biome = ClientRegistry.BIOME.get(ClientChunkCache.INSTANCE.getBiome(this.mutable));
+				final BiomeInfo biome = ClientRegistry.BIOME.get(ClientChunkCache.instance().getBiome(this.mutable));
 
 				final int precipHeight = season.getPrecipitationHeight(world, this.mutable).getY();
 				final int k2 = Math.max(playerY - range, precipHeight);
@@ -182,7 +182,7 @@ public class StormRenderer {
 				final float f3 = MathHelper.sqrt(d6 * d6 + d7 * d7) / range;
 				this.mutable.setPos(gridX, i3, gridZ);
 
-				final int combinedLight = ClientChunkCache.INSTANCE.getCombinedLight(this.mutable, 0);
+				final int combinedLight = ClientChunkCache.instance().getCombinedLight(this.mutable, 0);
 
 				if (pt == PrecipitationType.RAIN) {
 

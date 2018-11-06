@@ -33,10 +33,10 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.dsurround.lib.sound.SoundState;
 import org.orecruncher.dsurround.registry.sound.SoundMetadata;
 import org.orecruncher.lib.gui.RecordTitleEmitter;
 import org.orecruncher.lib.random.XorShiftRandom;
-import org.orecruncher.lib.sound.SoundState;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

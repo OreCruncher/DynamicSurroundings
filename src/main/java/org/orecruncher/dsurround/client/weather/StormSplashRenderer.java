@@ -27,7 +27,6 @@ package org.orecruncher.dsurround.client.weather;
 import java.util.Random;
 
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientChunkCache;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
@@ -37,6 +36,7 @@ import org.orecruncher.dsurround.client.weather.compat.RandomThings;
 import org.orecruncher.dsurround.registry.PrecipitationType;
 import org.orecruncher.dsurround.registry.season.SeasonInfo;
 import org.orecruncher.lib.WorldUtils;
+import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.gfx.ParticleHelper;
 import org.orecruncher.lib.random.XorShiftRandom;
 
@@ -142,7 +142,7 @@ public class StormSplashRenderer {
 
 		this.pos.setPos(x, y - 1, z);
 		final PrecipitationType pt = si.getPrecipitationType(world, this.pos, null);
-		final Block block = ClientChunkCache.INSTANCE.getBlockState(this.pos).getBlock();
+		final Block block = ClientChunkCache.instance().getBlockState(this.pos).getBlock();
 		final SoundEvent sound = getBlockSoundFX(block, pt, world);
 		if (sound != null) {
 			final float volume = calculateRainSoundVolume(world);
@@ -210,7 +210,7 @@ public class StormSplashRenderer {
 					&& precipHeight.getY() >= playerY - RANGE) {
 
 				final BlockPos blockPos = precipHeight.down();
-				final IBlockState state = ClientChunkCache.INSTANCE.getBlockState(blockPos);
+				final IBlockState state = ClientChunkCache.instance().getBlockState(blockPos);
 				final double posX = locX + this.RANDOM.nextFloat();
 				final double posY = precipHeight.getY() + 0.1F - state.getBoundingBox(world, blockPos).minY;
 				final double posZ = locZ + this.RANDOM.nextFloat();

@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.sound.BasicSound;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.lib.sound.ITrackedSound;
+import org.orecruncher.dsurround.lib.sound.ITrackedSound;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;

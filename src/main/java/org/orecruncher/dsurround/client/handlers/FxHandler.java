@@ -51,12 +51,12 @@ import org.orecruncher.dsurround.client.handlers.effects.VillagerChatEffect;
 import org.orecruncher.dsurround.client.sound.BasicSound;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.event.ReloadEvent;
+import org.orecruncher.dsurround.lib.sound.ITrackedSound;
 import org.orecruncher.lib.ThreadGuard;
 import org.orecruncher.lib.ThreadGuard.Action;
 import org.orecruncher.lib.collections.CollectionUtils;
 import org.orecruncher.lib.gfx.ParticleHelper;
 import org.orecruncher.lib.math.TimerEMA;
-import org.orecruncher.lib.sound.ITrackedSound;
 
 import com.google.common.collect.ImmutableList;
 

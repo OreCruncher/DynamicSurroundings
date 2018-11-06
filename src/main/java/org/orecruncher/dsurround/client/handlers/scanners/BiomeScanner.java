@@ -23,10 +23,10 @@
  */
 package org.orecruncher.dsurround.client.handlers.scanners;
 
-import org.orecruncher.dsurround.client.ClientChunkCache;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
+import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 
 import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
@@ -75,7 +75,7 @@ public final class BiomeScanner implements ITickable {
 				this.biomeArea = 1;
 				this.weights.put(EnvironState.getPlayerBiome(), 1);
 			} else {
-				final IBlockAccessEx provider = ClientChunkCache.INSTANCE;
+				final IBlockAccessEx provider = ClientChunkCache.instance();
 
 				// Collect raw biome data before mapping to BiomeInfo - saves lookups
 				final Reference2IntOpenHashMap<Biome> scratch = new Reference2IntOpenHashMap<>();

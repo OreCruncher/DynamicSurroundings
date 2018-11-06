@@ -29,10 +29,10 @@ import javax.annotation.Nonnull;
 import org.lwjgl.opengl.GL11;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientChunkCache;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.event.ReloadEvent;
 import org.orecruncher.lib.Color;
+import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.gfx.OpenGlState;
@@ -215,7 +215,7 @@ public final class LightLevelHUD extends GuiOverlay {
 		final int originZ = MathStuff.floor(z) - (rangeXZ / 2);
 		final int originY = MathStuff.floor(y) - (rangeY - 3);
 
-		final IBlockAccessEx blocks = ClientChunkCache.INSTANCE;
+		final IBlockAccessEx blocks = ClientChunkCache.instance();
 
 		for (int dX = 0; dX < rangeXZ; dX++)
 			for (int dZ = 0; dZ < rangeXZ; dZ++) {

@@ -56,7 +56,7 @@ public class Proxy {
 	protected long connectionTime = 0;
 
 	protected void registerLanguage() {
-		Localization.initialize(Side.SERVER);
+		Localization.initialize(Side.SERVER, ModBase.MOD_ID);
 	}
 
 	protected static void register(final Class<?> clazz) {

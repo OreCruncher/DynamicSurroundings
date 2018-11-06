@@ -46,11 +46,11 @@ import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.event.PlayDistributedSoundEvent;
 import org.orecruncher.dsurround.event.ReloadEvent;
+import org.orecruncher.dsurround.lib.sound.SoundState;
 import org.orecruncher.dsurround.network.Network;
 import org.orecruncher.dsurround.network.PacketPlaySound;
 import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.compat.PositionedSoundUtil;
-import org.orecruncher.lib.sound.SoundState;
 
 import com.google.common.collect.Sets;
 

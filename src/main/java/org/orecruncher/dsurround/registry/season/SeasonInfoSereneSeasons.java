@@ -27,10 +27,10 @@ package org.orecruncher.dsurround.registry.season;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.client.ClientChunkCache;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.registry.PrecipitationType;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
+import org.orecruncher.lib.chunk.ClientChunkCache;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -111,7 +111,7 @@ public class SeasonInfoSereneSeasons extends SeasonInfo {
 			@Nullable BiomeInfo biome) {
 
 		if (biome == null)
-			biome = ClientRegistry.BIOME.get(ClientChunkCache.INSTANCE.getBiome(pos));
+			biome = ClientRegistry.BIOME.get(ClientChunkCache.instance().getBiome(pos));
 
 		final Biome trueBiome = biome.getBiome();
 		if (trueBiome != null && BiomeConfig.usesTropicalSeasons(trueBiome)) {

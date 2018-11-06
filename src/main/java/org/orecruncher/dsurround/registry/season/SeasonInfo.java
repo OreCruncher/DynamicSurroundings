@@ -28,7 +28,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientChunkCache;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.Weather;
@@ -36,6 +35,7 @@ import org.orecruncher.dsurround.registry.PrecipitationType;
 import org.orecruncher.dsurround.registry.TemperatureRating;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.lib.Localization;
+import org.orecruncher.lib.chunk.ClientChunkCache;
 
 import com.google.common.base.MoreObjects;
 
@@ -90,11 +90,11 @@ public class SeasonInfo {
 
 	@Nonnull
 	public BlockPos getPrecipitationHeight(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return ClientChunkCache.INSTANCE.getPrecipitationHeight(pos);
+		return ClientChunkCache.instance().getPrecipitationHeight(pos);
 	}
 
 	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		final Biome biome = ClientChunkCache.INSTANCE.getBiome(pos);
+		final Biome biome = ClientChunkCache.instance().getBiome(pos);
 		final float biomeTemp = ClientRegistry.BIOME.get(biome).getFloatTemperature(pos);
 		final float heightTemp = world.getBiomeProvider().getTemperatureAtHeight(biomeTemp,
 				getPrecipitationHeight(world, pos).getY());
@@ -142,7 +142,7 @@ public class SeasonInfo {
 			@Nullable BiomeInfo biome) {
 
 		if (biome == null)
-			biome = ClientRegistry.BIOME.get(ClientChunkCache.INSTANCE.getBiome(pos));
+			biome = ClientRegistry.BIOME.get(ClientChunkCache.instance().getBiome(pos));
 
 		if (!biome.hasWeatherEffect())
 			return PrecipitationType.NONE;

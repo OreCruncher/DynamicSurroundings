@@ -39,7 +39,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class Proxy {
 
 	protected void registerLanguage() {
-		Localization.initialize(Side.SERVER);
+		Localization.initialize(Side.SERVER, Presets.MOD_ID);
 	}
 
 	protected static void register(final Class<?> clazz) {

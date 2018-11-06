@@ -29,11 +29,11 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.orecruncher.dsurround.lib.sound.ITrackedSound;
+import org.orecruncher.dsurround.lib.sound.SoundState;
+import org.orecruncher.dsurround.lib.sound.SoundUtils;
 import org.orecruncher.lib.compat.ModEnvironment;
 import org.orecruncher.lib.random.XorShiftRandom;
-import org.orecruncher.lib.sound.ITrackedSound;
-import org.orecruncher.lib.sound.SoundState;
-import org.orecruncher.lib.sound.SoundUtils;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;

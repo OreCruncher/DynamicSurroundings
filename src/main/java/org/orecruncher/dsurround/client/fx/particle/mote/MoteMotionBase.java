@@ -26,7 +26,7 @@ package org.orecruncher.dsurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.ClientChunkCache;
+import org.orecruncher.lib.chunk.ClientChunkCache;
 
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -75,7 +75,7 @@ public abstract class MoteMotionBase extends MoteAgeable {
 	}
 
 	protected boolean hasCollided() {
-		return ClientChunkCache.INSTANCE.getBlockState(this.position).getMaterial().isSolid();
+		return ClientChunkCache.instance().getBlockState(this.position).getMaterial().isSolid();
 	}
 
 	protected void handleCollision() {

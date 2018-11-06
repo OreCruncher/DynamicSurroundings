@@ -26,12 +26,12 @@ package org.orecruncher.dsurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.ClientChunkCache;
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.lib.WorldUtils;
+import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 import org.orecruncher.lib.gfx.ParticleHelper;
 
@@ -79,7 +79,7 @@ public class ParticleDripOverride extends ParticleDrip {
 			} else if (this.firstTime) {
 
 				this.firstTime = false;
-				final IBlockAccessEx provider = ClientChunkCache.INSTANCE;
+				final IBlockAccessEx provider = ClientChunkCache.instance();
 
 				// If the particle is not positioned in an air block kill it
 				// right away. No sense wasting time with it.

@@ -1,5 +1,4 @@
-/*
- * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -21,39 +20,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.orecruncher.dsurround.client.handlers.effects;
+
+package org.orecruncher.dsurround.lib.sound;
+
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLStreamHandler;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.effects.EventEffect;
-import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.client.sound.BasicSound;
-import org.orecruncher.dsurround.client.sound.Sounds;
-import org.orecruncher.dsurround.lib.sound.ITrackedSound;
-
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class CraftingSoundEffect extends EventEffect {
+public class SoundStreamHandler extends URLStreamHandler {
 
-	private int craftSoundThrottle = 0;
+	protected final ResourceLocation resource;
+	protected URLConnection connection;
 
-	@SubscribeEvent
-	public void onEvent(@Nonnull final ItemCraftedEvent event) {
-		if (!ModOptions.sound.enableCraftingSound || !isClientValid(event))
-			return;
+	public SoundStreamHandler(@Nonnull final ResourceLocation resource) {
+		this.resource = resource;
+	}
 
-		if (this.craftSoundThrottle >= (EnvironState.getTickCounter() - 30))
-			return;
+	protected URLConnection createConnection(@Nonnull final URL url) {
+		return new ResourceURLConnection(url, this.resource);
+	}
 
-		this.craftSoundThrottle = EnvironState.getTickCounter();
-		final ITrackedSound fx = getState().createSound(Sounds.CRAFTING, event.player);
-		((BasicSound<?>) fx).setRoutable(true);
-		getState().playSound(fx);
+	@Override
+	protected URLConnection openConnection(@Nonnull final URL url) throws IOException {
+		if (this.connection == null)
+			this.connection = createConnection(url);
+		return this.connection;
+	}
+
+	public String getSpec() {
+		return String.format("%s:%s:%s",
+				new Object[] { "mcsounddomain", this.resource.getNamespace(), this.resource.getPath() });
 	}
 
 }

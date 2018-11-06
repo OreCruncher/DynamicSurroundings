@@ -1,5 +1,4 @@
-/*
- * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -21,39 +20,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.orecruncher.dsurround.client.handlers.effects;
+
+package org.orecruncher.dsurround.lib.sound;
+
+import java.net.URL;
+import java.net.URLConnection;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.effects.EventEffect;
-import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.client.sound.BasicSound;
-import org.orecruncher.dsurround.client.sound.Sounds;
-import org.orecruncher.dsurround.lib.sound.ITrackedSound;
-
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class CraftingSoundEffect extends EventEffect {
+public class MemoryStreamHandler extends SoundStreamHandler {
 
-	private int craftSoundThrottle = 0;
+	protected final byte[] buffer;
 
-	@SubscribeEvent
-	public void onEvent(@Nonnull final ItemCraftedEvent event) {
-		if (!ModOptions.sound.enableCraftingSound || !isClientValid(event))
-			return;
+	public MemoryStreamHandler(@Nonnull final ResourceLocation resource, @Nonnull final byte[] buffer) {
+		super(resource);
+		this.buffer = buffer;
+	}
 
-		if (this.craftSoundThrottle >= (EnvironState.getTickCounter() - 30))
-			return;
-
-		this.craftSoundThrottle = EnvironState.getTickCounter();
-		final ITrackedSound fx = getState().createSound(Sounds.CRAFTING, event.player);
-		((BasicSound<?>) fx).setRoutable(true);
-		getState().playSound(fx);
+	@Override
+	protected URLConnection createConnection(@Nonnull final URL url) {
+		return new MemoryURLConnection(url, this.buffer);
 	}
 
 }

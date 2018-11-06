@@ -26,10 +26,10 @@ package org.orecruncher.dsurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.ClientChunkCache;
 import org.orecruncher.dsurround.client.footsteps.interfaces.FootprintStyle;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.lib.WorldUtils;
+import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.math.MathStuff;
 
 import net.minecraft.block.state.IBlockState;
@@ -120,10 +120,10 @@ public class MoteFootprint extends MoteAgeable {
 
 	@Override
 	protected void update() {
-		if (!ClientChunkCache.INSTANCE.getBlockState(this.downPos).getMaterial().isSolid()) {
+		if (!ClientChunkCache.instance().getBlockState(this.downPos).getMaterial().isSolid()) {
 			kill();
 		} else if (this.isSnowLayer
-				&& ClientChunkCache.INSTANCE.getBlockState(this.position).getBlock() != Blocks.SNOW_LAYER) {
+				&& ClientChunkCache.instance().getBlockState(this.position).getBlock() != Blocks.SNOW_LAYER) {
 			kill();
 		}
 	}

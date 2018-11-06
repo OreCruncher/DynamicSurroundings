@@ -24,9 +24,9 @@
 
 package org.orecruncher.dsurround.client.weather;
 
-import org.orecruncher.dsurround.client.ClientChunkCache;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.registry.PrecipitationType;
+import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.gfx.ParticleHelper;
 
 import net.minecraft.block.Block;
@@ -62,7 +62,7 @@ public class NetherSplashRenderer extends StormSplashRenderer {
 		boolean airBlockFound = false;
 		for (int i = range; i >= -range; i--) {
 			p.setY(y + i);
-			final IBlockState state = ClientChunkCache.INSTANCE.getBlockState(p);
+			final IBlockState state = ClientChunkCache.instance().getBlockState(p);
 			final Material material = state.getMaterial();
 			if (airBlockFound && material != Material.AIR && material.isSolid())
 				return new BlockPos(pos.getX(), y + i + 1, pos.getZ());

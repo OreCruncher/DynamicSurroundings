@@ -21,39 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.orecruncher.dsurround.client.handlers.effects;
+package org.orecruncher.dsurround.lib.sound;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.effects.EventEffect;
-import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.client.sound.BasicSound;
-import org.orecruncher.dsurround.client.sound.Sounds;
-import org.orecruncher.dsurround.lib.sound.ITrackedSound;
-
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
+import net.minecraft.client.audio.ISound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class CraftingSoundEffect extends EventEffect {
+public interface ITrackedSound extends ISound {
 
-	private int craftSoundThrottle = 0;
+	SoundState getState();
 
-	@SubscribeEvent
-	public void onEvent(@Nonnull final ItemCraftedEvent event) {
-		if (!ModOptions.sound.enableCraftingSound || !isClientValid(event))
-			return;
+	void setState(@Nonnull final SoundState state);
 
-		if (this.craftSoundThrottle >= (EnvironState.getTickCounter() - 30))
-			return;
+	@Nullable
+	String getId();
 
-		this.craftSoundThrottle = EnvironState.getTickCounter();
-		final ITrackedSound fx = getState().createSound(Sounds.CRAFTING, event.player);
-		((BasicSound<?>) fx).setRoutable(true);
-		getState().playSound(fx);
-	}
-
+	void setId(@Nullable final String id);
 }
