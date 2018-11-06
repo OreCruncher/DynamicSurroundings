@@ -22,31 +22,37 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.server.services;
+package org.orecruncher.dsurround.entity.speech;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.network.Locus;
-import org.orecruncher.dsurround.network.Network;
-import org.orecruncher.dsurround.network.PacketSpeechBubble;
+import org.orecruncher.lib.collections.ObjectArray;
 
-import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.client.Minecraft;
 
-public final class SpeechBubbleService extends Service {
+public final class RenderContext {
 
-	SpeechBubbleService() {
-		super("SpeechBubbleService");
-	}
+	private static final int MIN_TEXT_WIDTH = 60;
+	private static final double BUBBLE_MARGIN = 4.0F;
 
-	// Received when the server is processing a regular chat
-	// message - not a command, etc.
-	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public void onChatMessageEvent(@Nonnull final ServerChatEvent event) {
-		final Locus point = new Locus(event.getPlayer(), ModOptions.speechbubbles.speechBubbleRange);
-		final PacketSpeechBubble packet = new PacketSpeechBubble(event.getPlayer(), event.getMessage());
-		Network.sendToAllAround(point, packet);
+	public final int textWidth;
+	public final int numberOfMessages;
+	public final double top;
+	public final double bottom;
+	public final double left;
+	public final double right;
+
+	RenderContext(@Nonnull final ObjectArray<String> messages) {
+		int theWidth = MIN_TEXT_WIDTH;
+
+		for (final String s : messages)
+			theWidth = Math.max(theWidth, Minecraft.getMinecraft().fontRenderer.getStringWidth(s));
+
+		this.textWidth = theWidth;
+		this.numberOfMessages = messages.size();
+		this.top = -(this.numberOfMessages) * 9 - BUBBLE_MARGIN;
+		this.bottom = BUBBLE_MARGIN;
+		this.left = -(this.textWidth / 2.0D + BUBBLE_MARGIN);
+		this.right = this.textWidth / 2.0D + BUBBLE_MARGIN;
 	}
 }

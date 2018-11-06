@@ -49,11 +49,6 @@ public class SpeechTextEvent extends Event {
 	public final String message;
 
 	/**
-	 * Indicates whether the message should be translated prior to display.
-	 */
-	public final boolean translate;
-
-	/**
 	 * Creates an event for a message to be displayed without modification.
 	 *
 	 * @param id
@@ -62,24 +57,8 @@ public class SpeechTextEvent extends Event {
 	 *            The text message to display
 	 */
 	public SpeechTextEvent(final int id, @Nonnull final String message) {
-		this(id, message, false);
-	}
-
-	/**
-	 * Creates an event that will permit translation. The message ID would be
-	 * provided in the message variable. Translation occurs client side.
-	 *
-	 * @param id
-	 *            Entity ID that the message is associated with
-	 * @param message
-	 *            The message ID/message to be displayed
-	 * @param translate
-	 *            Indicates that the message is a message ID that needs translation
-	 */
-	public SpeechTextEvent(final int id, @Nonnull final String message, final boolean translate) {
 		this.entityId = id;
 		this.message = message;
-		this.translate = translate;
 	}
 
 }

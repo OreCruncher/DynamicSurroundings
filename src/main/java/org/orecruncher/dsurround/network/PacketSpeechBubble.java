@@ -42,42 +42,33 @@ public class PacketSpeechBubble implements IMessage {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketSpeechBubble message, @Nullable final MessageContext ctx) {
-
-			// Reject mob chat messages since they are generated 100% client side.
-			if (message.translate)
-				return null;
-
-			Network.postEvent(new SpeechTextEvent(message.entityId, message.message, message.translate));
+			Network.postEvent(new SpeechTextEvent(message.entityId, message.message));
 			return null;
 		}
 	}
 
 	protected int entityId;
 	protected String message;
-	protected boolean translate;
 
 	public PacketSpeechBubble() {
 
 	}
 
-	public PacketSpeechBubble(@Nonnull final Entity player, @Nonnull final String message, final boolean translate) {
+	public PacketSpeechBubble(@Nonnull final Entity player, @Nonnull final String message) {
 		this.entityId = player.getEntityId();
 		this.message = message;
-		this.translate = translate;
 	}
 
 	@Override
 	public void fromBytes(@Nonnull final ByteBuf buf) {
 		this.entityId = buf.readInt();
 		this.message = ByteBufUtils.readUTF8String(buf);
-		this.translate = buf.readBoolean();
 	}
 
 	@Override
 	public void toBytes(@Nonnull final ByteBuf buf) {
 		buf.writeInt(this.entityId);
 		ByteBufUtils.writeUTF8String(buf, this.message);
-		buf.writeBoolean(this.translate);
 	}
 
 }

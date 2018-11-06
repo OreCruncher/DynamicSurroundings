@@ -23,6 +23,8 @@
  */
 package org.orecruncher.dsurround.client.handlers.effects;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -33,42 +35,72 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.effects.EntityEffect;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactory;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactoryFilter;
-import org.orecruncher.dsurround.event.SpeechTextEvent;
+import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.dsurround.entity.CapabilitySpeechData;
+import org.orecruncher.dsurround.entity.speech.ISpeechData;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.lib.Translations;
 import org.orecruncher.lib.WeightTable;
+import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.compat.EntityUtil;
 import org.orecruncher.lib.random.XorShiftRandom;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IResource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class EntityChatEffect extends EntityEffect {
 
+	private static final String SPLASH_TOKEN = "$MINECRAFT$";
+	private static final ResourceLocation SPLASH_TEXT = new ResourceLocation("texts/splashes.txt");
+	private static final Translations xlate = new Translations();
+	private static final ObjectArray<String> minecraftSplashText = new ObjectArray<>();
 	private static final Map<String, EntityChatData> messages = new Object2ObjectOpenHashMap<>();
 
 	static {
-		final Translations xlate = new Translations();
 		xlate.load("/assets/dsurround/dsurround/data/chat/");
 		xlate.forAll(new WeightTableBuilder());
+		xlate.transform(new Stripper());
 
 		setTimers(EntitySquid.class, 600, EntityChatData.DEFAULT_RANDOM);
+
+		try (final IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(SPLASH_TEXT)) {
+			@SuppressWarnings("deprecation")
+			final BufferedReader bufferedreader = new BufferedReader(
+					new InputStreamReader(resource.getInputStream(), Charsets.UTF_8));
+			String s;
+
+			while ((s = bufferedreader.readLine()) != null) {
+				s = s.trim();
+
+				if (!s.isEmpty()) {
+					minecraftSplashText.add(s);
+				}
+			}
+
+		} catch (final Throwable t) {
+			;
+		}
+
 	}
 
 	static class EntityChatData {
@@ -124,7 +156,19 @@ public class EntityChatEffect extends EntityEffect {
 
 	}
 
-	static void setTimers(@Nonnull final Class<? extends Entity> entity, final int base, final int random) {
+	private static class Stripper implements Function<Entry<String, String>, String> {
+
+		private final Pattern WEIGHT_PATTERN = Pattern.compile("^([0-9]*),(.*)");
+
+		@Override
+		public String apply(@Nonnull final Entry<String, String> input) {
+			final Matcher matcher = this.WEIGHT_PATTERN.matcher(input.getValue());
+			return matcher.matches() ? matcher.group(2) : input.getValue();
+		}
+
+	}
+
+	protected static void setTimers(@Nonnull final Class<? extends Entity> entity, final int base, final int random) {
 		setTimers(EntityUtil.getClassName(entity), base, random);
 	}
 
@@ -136,8 +180,16 @@ public class EntityChatEffect extends EntityEffect {
 		}
 	}
 
-	static boolean hasMessages(@Nonnull final Entity entity) {
+	protected static boolean hasMessages(@Nonnull final Entity entity) {
 		return !(entity instanceof EntityPlayer) && messages.get(EntityUtil.getClassName(entity.getClass())) != null;
+	}
+
+	private String getSpeechFormatted(@Nonnull final Entity entity, @Nonnull final String message) {
+		String xlated = xlate.loadString(message);
+		if (minecraftSplashText.size() > 0 && SPLASH_TOKEN.equals(xlated)) {
+			xlated = minecraftSplashText.get(this.random.nextInt(minecraftSplashText.size()));
+		}
+		return xlated;
 	}
 
 	protected final Random random = XorShiftRandom.current();
@@ -172,8 +224,8 @@ public class EntityChatEffect extends EntityEffect {
 		return e.getEntityWorld().getTotalWorldTime();
 	}
 
-	protected String getChatMessage() {
-		return this.data.table.next();
+	protected String getChatMessage(@Nonnull final Entity entity) {
+		return xlate.loadString(getSpeechFormatted(entity, this.data.table.next()));
 	}
 
 	protected int getNextChatTime() {
@@ -188,8 +240,12 @@ public class EntityChatEffect extends EntityEffect {
 		final long ticks = getWorldTicks(subject);
 		final long delta = this.nextChat - ticks;
 		if (delta <= 0) {
-			final SpeechTextEvent event = new SpeechTextEvent(subject.getEntityId(), getChatMessage(), true);
-			MinecraftForge.EVENT_BUS.post(event);
+			final ISpeechData data = CapabilitySpeechData.getCapability(subject);
+			if (data != null) {
+				final int expiry = EnvironState.getTickCounter()
+						+ (int) (ModOptions.speechbubbles.speechBubbleDuration * 20F);
+				data.addMessage(getChatMessage(subject), expiry);
+			}
 			genNextChatTime();
 		}
 

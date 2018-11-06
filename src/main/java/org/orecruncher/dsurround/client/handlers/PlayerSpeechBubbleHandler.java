@@ -22,50 +22,41 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.handlers.bubbles;
-
-import java.util.List;
+package org.orecruncher.dsurround.client.handlers;
 
 import javax.annotation.Nonnull;
 
-import com.google.common.collect.ImmutableList;
+import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.dsurround.entity.CapabilitySpeechData;
+import org.orecruncher.dsurround.entity.speech.ISpeechData;
+import org.orecruncher.dsurround.event.SpeechTextEvent;
+import org.orecruncher.lib.WorldUtils;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class SpeechBubbleData {
+public class PlayerSpeechBubbleHandler extends EffectHandlerBase {
 
-	private static final int MIN_TEXT_WIDTH = 60;
-	private static final int MAX_TEXT_WIDTH = MIN_TEXT_WIDTH * 3;
-
-	private final int expires;
-	private String incomingText;
-	private List<String> messages;
-
-	public SpeechBubbleData(@Nonnull final String message, final int expiry) {
-		this.incomingText = message.replaceAll("(\\xA7.)", "");
-		this.expires = expiry;
+	public PlayerSpeechBubbleHandler() {
+		super("Player Speech Bubbles");
 	}
 
-	// Need to do lazy formatting of the text. Reason is that events
-	// can be fired before the client is fully constructed meaning that
-	// the font renderer would be non-existent.
-	@Nonnull
-	public List<String> getText() {
-		if (this.messages == null) {
-			final FontRenderer font = Minecraft.getMinecraft().getRenderManager().getFontRenderer();
-			if (font == null)
-				return ImmutableList.of();
-			this.messages = font.listFormattedStringToWidth(this.incomingText, MAX_TEXT_WIDTH);
-			this.incomingText = null;
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public void onSpeechTextEvent(@Nonnull final SpeechTextEvent event) {
+		final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), event.entityId);
+		if (entity == null || !(entity instanceof EntityPlayer) || !ModOptions.speechbubbles.enableSpeechBubbles)
+			return;
+		final ISpeechData data = CapabilitySpeechData.getCapability(entity);
+		if (data != null) {
+			final int expiry = EnvironState.getTickCounter()
+					+ (int) (ModOptions.speechbubbles.speechBubbleDuration * 20F);
+			data.addMessage(event.message, expiry);
 		}
-		return this.messages;
-	}
-
-	public boolean isExpired(final int currentTick) {
-		return currentTick > this.expires;
 	}
 }

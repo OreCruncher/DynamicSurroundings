@@ -22,38 +22,50 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.handlers;
+package org.orecruncher.dsurround.entity.speech;
+
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.entity.CapabilityEntityData;
-import org.orecruncher.dsurround.entity.data.IEntityDataSettable;
-import org.orecruncher.dsurround.event.EntityDataEvent;
-import org.orecruncher.lib.WorldUtils;
+import com.google.common.collect.ImmutableList;
 
-import net.minecraft.entity.Entity;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class EntityDataSyncHandler extends EffectHandlerBase {
+class SpeechBubbleData {
 
-	public EntityDataSyncHandler() {
-		super("Entity Data Sync");
+	private static final int MIN_TEXT_WIDTH = 60;
+	private static final int MAX_TEXT_WIDTH = MIN_TEXT_WIDTH * 3;
+
+	private final int expires;
+	private String incomingText;
+	private List<String> messages;
+
+	public SpeechBubbleData(@Nonnull final String message, final int expiry) {
+		this.incomingText = message.replaceAll("(\\xA7.)", "");
+		this.expires = expiry;
 	}
 
-	@SubscribeEvent
-	public void onEntityEmojiEvent(@Nonnull final EntityDataEvent event) {
-		final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), event.entityId);
-		if (entity != null) {
-			final IEntityDataSettable data = (IEntityDataSettable) CapabilityEntityData.getCapability(entity);
-			if (data != null) {
-				data.setAttacking(event.isAttacking);
-				data.setFleeing(event.isFleeing);
-			}
+	// Need to do lazy formatting of the text. Reason is that events
+	// can be fired before the client is fully constructed meaning that
+	// the font renderer would be non-existent.
+	@Nonnull
+	public List<String> getText() {
+		if (this.messages == null) {
+			final FontRenderer font = Minecraft.getMinecraft().getRenderManager().getFontRenderer();
+			if (font == null)
+				return ImmutableList.of();
+			this.messages = font.listFormattedStringToWidth(this.incomingText, MAX_TEXT_WIDTH);
+			this.incomingText = null;
 		}
+		return this.messages;
 	}
 
+	public boolean isExpired(final int currentTick) {
+		return currentTick > this.expires;
+	}
 }

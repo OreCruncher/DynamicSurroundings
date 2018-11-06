@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.entity;
+package org.orecruncher.dsurround.entity.data;
 
 import javax.annotation.Nonnull;
 

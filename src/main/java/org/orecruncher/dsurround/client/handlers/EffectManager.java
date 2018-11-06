@@ -80,7 +80,7 @@ public class EffectManager {
 		register(new BiomeSoundEffectsHandler());
 		register(new EntityDataSyncHandler());
 		register(new AuroraEffectHandler());
-		register(new SpeechBubbleHandler());
+		register(new PlayerSpeechBubbleHandler());
 		register(new WeatherHandler());
 
 		register(new FxHandler());

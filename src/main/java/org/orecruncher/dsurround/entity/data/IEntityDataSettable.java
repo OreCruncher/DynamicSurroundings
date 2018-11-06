@@ -22,31 +22,17 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.server.services;
+package org.orecruncher.dsurround.entity.data;
 
-import javax.annotation.Nonnull;
+public interface IEntityDataSettable extends IEntityData {
+	
+	void setAttacking(final boolean flag);
+	
+	void setFleeing(final boolean flag);
 
-import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.network.Locus;
-import org.orecruncher.dsurround.network.Network;
-import org.orecruncher.dsurround.network.PacketSpeechBubble;
+	boolean isDirty();
 
-import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+	void clearDirty();
 
-public final class SpeechBubbleService extends Service {
-
-	SpeechBubbleService() {
-		super("SpeechBubbleService");
-	}
-
-	// Received when the server is processing a regular chat
-	// message - not a command, etc.
-	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public void onChatMessageEvent(@Nonnull final ServerChatEvent event) {
-		final Locus point = new Locus(event.getPlayer(), ModOptions.speechbubbles.speechBubbleRange);
-		final PacketSpeechBubble packet = new PacketSpeechBubble(event.getPlayer(), event.getMessage());
-		Network.sendToAllAround(point, packet);
-	}
+	void sync();
 }

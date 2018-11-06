@@ -22,66 +22,71 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.handlers.bubbles;
+package org.orecruncher.dsurround.entity.speech;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.client.fx.particle.ParticleBillboard;
-import org.orecruncher.lib.gfx.ParticleHelper;
+import org.orecruncher.lib.collections.ObjectArray;
 
-import com.google.common.base.Supplier;
-
-import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class EntityBubbleContext implements Supplier<List<String>> {
+public class SpeechData implements ISpeechData {
 
 	private final List<SpeechBubbleData> data = new ArrayList<>();
-	private List<String> preppedList;
-	private ParticleBillboard bubble;
+	private final ObjectArray<String> preppedList = new ObjectArray<>();
+	
+	private RenderContext ctx;
 
-	public void add(@Nonnull final SpeechBubbleData d) {
-		this.data.add(d);
-		this.preppedList = null;
-	}
-
-	public boolean clean(final int currentTick) {
-		boolean reset = false;
-		final Iterator<SpeechBubbleData> itr = this.data.iterator();
-		while (itr.hasNext()) {
-			final SpeechBubbleData d = itr.next();
-			if (d.isExpired(currentTick)) {
-				itr.remove();
-				reset = true;
-			}
-		}
-
-		if (reset)
-			this.preppedList = null;
-
-		return this.data.isEmpty();
-	}
-
-	public void handleBubble(@Nonnull final Entity entity) {
-		if (this.bubble == null || this.bubble.shouldExpire()) {
-			this.bubble = new ParticleBillboard(entity, this);
-			ParticleHelper.addParticle(this.bubble);
-		}
+	@Override
+	public void addMessage(@Nonnull final String string, final int expiry) {
+		final SpeechBubbleData data = new SpeechBubbleData(string, expiry);
+		this.data.add(data);
+		generateTextForRender();
 	}
 
 	@Override
-	public List<String> get() {
-		if (this.preppedList == null && this.data.size() > 0) {
-			this.preppedList = new ArrayList<>();
-			for (final SpeechBubbleData entry : this.data)
-				this.preppedList.addAll(entry.getText());
-		}
+	public void onUpdate(final int currentTick) {
+		final int oldSize = this.data.size();
+		this.data.removeIf(d -> d.isExpired(currentTick));
+		if (oldSize != this.data.size())
+			generateTextForRender();
+	}
+
+	@Override
+	public ObjectArray<String> getText() {
 		return this.preppedList;
 	}
+	
+	@Nullable
+	public RenderContext getRenderContext() {
+		return this.ctx;
+	}
+
+	@Override
+	public NBTTagCompound serializeNBT() {
+		// Do nothing - since this is 100% client side there is
+		// no persistence.
+		return null;
+	}
+
+	@Override
+	public void deserializeNBT(NBTTagCompound nbt) {
+		// Do nothing - since this is 100% client side there is
+		// no persistence.
+	}
+	
+	protected void generateTextForRender() {
+		this.preppedList.clear();
+		for (final SpeechBubbleData entry : this.data)
+			this.preppedList.addAll(entry.getText());
+		this.ctx = new RenderContext(this.preppedList);
+	}
+
 }

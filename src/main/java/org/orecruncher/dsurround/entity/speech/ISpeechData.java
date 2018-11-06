@@ -22,29 +22,23 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.entity;
+package org.orecruncher.dsurround.entity.speech;
+
+import javax.annotation.Nonnull;
+
+import org.orecruncher.lib.collections.ObjectArray;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public interface IEntityData extends INBTSerializable<NBTTagCompound>{
-
-	/**
-	 * The unique ID of the entity this data is associated.
-	 *
-	 * @return id of the associated entity
-	 */
-	int getEntityId();
-
-	/**
-	 * Indicates if the entity is attacking something
-	 * @return true if the entity is attacking; false otherwise
-	 */
-	boolean isAttacking();
+public interface ISpeechData  extends INBTSerializable<NBTTagCompound> {
 	
-	/**
-	 * Indicates if the entity is fleeing from something
-	 * @return true if the entity is fleeing; false otherwise
-	 */
-	boolean isFleeing();
+	void addMessage(@Nonnull final String string, final int expiryTick);
+	
+	ObjectArray<String> getText();
+	
+	RenderContext getRenderContext();
+	
+	void onUpdate(final int currentTick);
+	
 }

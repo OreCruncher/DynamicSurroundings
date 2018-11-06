@@ -22,17 +22,29 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.entity;
+package org.orecruncher.dsurround.entity.data;
 
-public interface IEntityDataSettable extends IEntityData {
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.INBTSerializable;
+
+public interface IEntityData extends INBTSerializable<NBTTagCompound>{
+
+	/**
+	 * The unique ID of the entity this data is associated.
+	 *
+	 * @return id of the associated entity
+	 */
+	int getEntityId();
+
+	/**
+	 * Indicates if the entity is attacking something
+	 * @return true if the entity is attacking; false otherwise
+	 */
+	boolean isAttacking();
 	
-	void setAttacking(final boolean flag);
-	
-	void setFleeing(final boolean flag);
-
-	boolean isDirty();
-
-	void clearDirty();
-
-	void sync();
+	/**
+	 * Indicates if the entity is fleeing from something
+	 * @return true if the entity is fleeing; false otherwise
+	 */
+	boolean isFleeing();
 }

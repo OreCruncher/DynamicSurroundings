@@ -28,18 +28,15 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.entity.data.EntityData;
-import org.orecruncher.dsurround.entity.data.EntityDataTables;
-import org.orecruncher.dsurround.entity.data.IEntityData;
-import org.orecruncher.dsurround.entity.data.IEntityDataSettable;
-import org.orecruncher.dsurround.network.Network;
-import org.orecruncher.dsurround.network.PacketEntityData;
+import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.dsurround.entity.speech.ISpeechData;
+import org.orecruncher.dsurround.entity.speech.SpeechData;
 import org.orecruncher.lib.capability.CapabilityProviderSerializable;
 import org.orecruncher.lib.capability.CapabilityUtils;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -52,87 +49,88 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public final class CapabilityEntityData {
+public final class CapabilitySpeechData {
 
-	@CapabilityInject(IEntityData.class)
-	public static final Capability<IEntityData> ENTITY_DATA = null;
+	@CapabilityInject(ISpeechData.class)
+	public static final Capability<ISpeechData> SPEECH_DATA = null;
 	public static final EnumFacing DEFAULT_FACING = null;
-	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModBase.MOD_ID, "data");
+	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModBase.MOD_ID, "speech");
 
+	@SideOnly(Side.CLIENT)
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IEntityData.class, new Capability.IStorage<IEntityData>() {
+		CapabilityManager.INSTANCE.register(ISpeechData.class, new Capability.IStorage<ISpeechData>() {
 			@Override
-			public NBTBase writeNBT(@Nonnull final Capability<IEntityData> capability,
-					@Nonnull final IEntityData instance, @Nullable final EnumFacing side) {
+			public NBTBase writeNBT(@Nonnull final Capability<ISpeechData> capability,
+					@Nonnull final ISpeechData instance, @Nullable final EnumFacing side) {
 				return ((INBTSerializable<NBTTagCompound>) instance).serializeNBT();
 			}
 
 			@Override
-			public void readNBT(@Nonnull final Capability<IEntityData> capability, @Nonnull final IEntityData instance,
+			public void readNBT(@Nonnull final Capability<ISpeechData> capability, @Nonnull final ISpeechData instance,
 					@Nullable final EnumFacing side, @Nonnull final NBTBase nbt) {
 				((INBTSerializable<NBTTagCompound>) instance).deserializeNBT((NBTTagCompound) nbt);
 			}
-		}, () -> new EntityData(null));
+		}, () -> new SpeechData());
 	}
 
-	public static IEntityData getCapability(@Nonnull final Entity entity) {
-		return CapabilityUtils.getCapability(entity, CapabilityEntityData.ENTITY_DATA, null);
+	@SideOnly(Side.CLIENT)
+	public static ISpeechData getCapability(@Nonnull final Entity entity) {
+		return CapabilityUtils.getCapability(entity, SPEECH_DATA, null);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Nonnull
-	public static ICapabilityProvider createProvider(final IEntityData data) {
-		return new CapabilityProviderSerializable<>(ENTITY_DATA, DEFAULT_FACING, data);
+	public static ICapabilityProvider createProvider(final ISpeechData data) {
+		return new CapabilityProviderSerializable<>(SPEECH_DATA, DEFAULT_FACING, data);
 	}
 
-	@EventBusSubscriber(modid = ModBase.MOD_ID)
+	@SideOnly(Side.CLIENT)
+	public static boolean isCandidate(@Nonnull final Entity entity) {
+		return entity instanceof EntityPlayer || entity instanceof EntityLiving;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static boolean isCandidate(@Nullable final Class<? extends Entity> clazz) {
+		return clazz != null && (EntityPlayer.class.isAssignableFrom(clazz) || EntityLiving.class.isAssignableFrom(clazz));
+	}
+	
+	@EventBusSubscriber(modid = ModBase.MOD_ID, value = Side.CLIENT)
 	public static class EventHandler {
 
 		/*
-		 * Attach the capability to the Entity when it is created.
+		 * Attach the capability to the Entity when it is created. This only applies
+		 * client side. We are using the capability system to attach client data to an
+		 * entity.
 		 */
 		@SubscribeEvent
-		public static void attachCapabilities(final AttachCapabilitiesEvent<Entity> event) {
-			if (event.getObject() instanceof EntityLiving) {
-				final EntityData emojiData = new EntityData(event.getObject());
-				event.addCapability(CAPABILITY_ID, createProvider(emojiData));
+		public static void attachCapabilities(@Nonnull final AttachCapabilitiesEvent<Entity> event) {
+			final World world = event.getObject().getEntityWorld();
+			if (world.isRemote && isCandidate(event.getObject())) {
+				final SpeechData speechData = new SpeechData();
+				event.addCapability(CAPABILITY_ID, createProvider(speechData));
 			}
 		}
 
 		/*
-		 * Event generated when a player starts tracking an Entity. Need to send an
-		 * initial sync to the player.
-		 */
-		@SubscribeEvent
-		public static void trackingEvent(@Nonnull final PlayerEvent.StartTracking event) {
-			if (event.getTarget() instanceof EntityLiving) {
-				final IEntityData data = event.getTarget().getCapability(ENTITY_DATA, DEFAULT_FACING);
-				if (data != null) {
-					Network.sendToPlayer((EntityPlayerMP) event.getEntityPlayer(), new PacketEntityData(data));
-				}
-			}
-		}
-
-		/*
-		 * Called when an entity is being updated. Need to evaluate new states.
+		 * Called when an entity is being updated. Need to update the state of the
+		 * speech data.
 		 */
 		@SubscribeEvent(receiveCanceled = false)
 		public static void livingUpdate(@Nonnull final LivingUpdateEvent event) {
 			final World world = event.getEntity().getEntityWorld();
 			// Don't tick if this is the client thread. We only check 4 times a
 			// second as if that is enough :)
-			if (world.isRemote || (world.getTotalWorldTime() % 5) != 0)
+			if (!world.isRemote || (world.getTotalWorldTime() % 5) != 0)
 				return;
-			final IEntityDataSettable data = (IEntityDataSettable) getCapability(event.getEntity());
+			final ISpeechData data = getCapability(event.getEntity());
 			if (data != null) {
-				EntityDataTables.assess((EntityLiving) event.getEntity());
-				if (data.isDirty())
-					data.sync();
+				data.onUpdate(EnvironState.getTickCounter());
 			}
 		}
 	}
-
 }

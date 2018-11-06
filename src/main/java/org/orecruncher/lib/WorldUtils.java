@@ -23,19 +23,26 @@
 
 package org.orecruncher.lib;
 
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.ClientChunkCache;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
+import org.orecruncher.lib.collections.ObjectArray;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -101,6 +108,29 @@ public final class WorldUtils {
 
 	public static boolean hasVoidPartiles(@Nonnull final World world) {
 		return world.getWorldType() != WorldType.FLAT && world.provider.hasSkyLight();
+	}
+
+	@Nonnull
+	public static ObjectArray<Entity> gatherEntitiesInView(@Nonnull final Entity viewer, final int rangeSq,
+			final float partialTicks) {
+		final ObjectArray<Entity> result = new ObjectArray<>();
+		if (Minecraft.isGuiEnabled()) {
+			final Frustum frustum = new Frustum();
+			final double viewX = viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * partialTicks;
+			final double viewY = viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * partialTicks;
+			final double viewZ = viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * partialTicks;
+			frustum.setPosition(viewX, viewY, viewZ);
+			final WorldClient client = (WorldClient) viewer.getEntityWorld();
+			final Set<Entity> entities = ReflectionHelper.getPrivateValue(WorldClient.class, client,
+					new String[] { "entityList", "field_73032_d", "J" });
+			for (final Entity entity : entities)
+				if (entity != null && entity.isEntityAlive() && viewer.getDistanceSq(entity) <= rangeSq
+						&& (entity.ignoreFrustumCheck
+								|| frustum.isBoundingBoxInFrustum(entity.getEntityBoundingBox()))) {
+					result.add(entity);
+				}
+		}
+		return result;
 	}
 
 }

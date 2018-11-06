@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.entity;
+package org.orecruncher.dsurround.entity.data;
 
 import java.util.Set;
 import java.util.stream.Stream;
@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.entity.CapabilityEntityData;
 
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.entity.EntityLiving;

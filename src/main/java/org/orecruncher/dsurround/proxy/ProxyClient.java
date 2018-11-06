@@ -45,6 +45,7 @@ import org.orecruncher.dsurround.client.weather.RenderWeather;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.commands.CommandCalc;
 import org.orecruncher.dsurround.data.PresetHandler;
+import org.orecruncher.dsurround.entity.CapabilitySpeechData;
 import org.orecruncher.dsurround.event.ReloadEvent;
 import org.orecruncher.dsurround.event.WorldEventDetector;
 import org.orecruncher.lib.Localization;
@@ -111,6 +112,7 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 	@Override
 	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		super.preInit(event);
+		CapabilitySpeechData.register();
 	}
 
 	@Override
@@ -137,7 +139,6 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 
 		if (ModEnvironment.Animania.isLoaded())
 			AnimaniaBadge.intitialize();
-		
 	}
 
 	@Override

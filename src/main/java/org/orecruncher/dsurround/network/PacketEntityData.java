@@ -27,7 +27,7 @@ package org.orecruncher.dsurround.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.entity.IEntityData;
+import org.orecruncher.dsurround.entity.data.IEntityData;
 import org.orecruncher.dsurround.event.EntityDataEvent;
 
 import io.netty.buffer.ByteBuf;
