@@ -148,6 +148,7 @@ public final class ModOptions {
 
 	public static final String CATEGORY_RAIN = "rain";
 	public static final String CONFIG_VANILLA_RAIN = "Use Vanilla Algorithms";
+	public static final String CONFIG_USE_VANILLA_RAIN_SOUND = "Use Vanilla Rain Sound";
 	public static final String CONFIG_ENABLE_BACKGROUND_THUNDER = "Enable Background Thunder";
 	public static final String CONFIG_THUNDER_THRESHOLD = "Rain Intensity for Background Thunder";
 	public static final String CONFIG_RAIN_RIPPLE_STYLE = "Style of rain water ripple";
@@ -160,9 +161,9 @@ public final class ModOptions {
 	public static class rain {
 
 		public static String PATH = null;
-		public static final List<String> SORT = Arrays.asList(CONFIG_VANILLA_RAIN, CONFIG_RAIN_RIPPLE_STYLE,
-				CONFIG_ENABLE_BACKGROUND_THUNDER, CONFIG_THUNDER_THRESHOLD, CONFIG_MIN_RAIN_STRENGTH,
-				CONFIG_MAX_RAIN_STRENGTH);
+		public static final List<String> SORT = Arrays.asList(CONFIG_VANILLA_RAIN, CONFIG_USE_VANILLA_RAIN_SOUND,
+				CONFIG_RAIN_RIPPLE_STYLE, CONFIG_ENABLE_BACKGROUND_THUNDER, CONFIG_THUNDER_THRESHOLD,
+				CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH);
 
 		@Option(CONFIG_VANILLA_RAIN)
 		@DefaultValue("false")
@@ -170,6 +171,13 @@ public final class ModOptions {
 		@Comment("Let Vanilla handle rain intensity and time windows")
 		@RestartRequired
 		public static boolean doVanillaRain = false;
+
+		@Option(CONFIG_USE_VANILLA_RAIN_SOUND)
+		@DefaultValue("false")
+		@LangKey("dsurround.cfg.rain.UseVanillaSound")
+		@Comment("Use the Vanilla rain sound rather than the modified one")
+		@RestartRequired(server = true, world = true)
+		public static boolean useVanillaRainSound = false;
 
 		@Option(CONFIG_RAIN_RIPPLE_STYLE)
 		@DefaultValue("0")

@@ -27,6 +27,8 @@ package org.orecruncher.dsurround.client.weather;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.client.weather.tracker.ServerDrivenTracker;
 import org.orecruncher.dsurround.client.weather.tracker.SimulationTracker;
@@ -45,6 +47,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class Weather {
+	
+	private static final SoundEvent VANILLA_RAIN = ClientRegistry.SOUND.getSound(new ResourceLocation("weather.rain"));
 
 	public enum Properties {
 		// Regular Vanilla rain - no modification
@@ -107,7 +111,7 @@ public class Weather {
 
 		@Nonnull
 		public SoundEvent getStormSound() {
-			return Sounds.RAIN;
+			return ModOptions.rain.useVanillaRainSound ? VANILLA_RAIN : Sounds.RAIN;
 		}
 
 		@Nonnull

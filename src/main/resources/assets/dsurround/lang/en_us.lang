@@ -94,6 +94,8 @@ dsurround.cfg.rain.MinRainStrength=Default Minimum Rain Strength
 dsurround.cfg.rain.MinRainStrength.tooltip=Default minimum rain strength for a dimension
 dsurround.cfg.rain.MaxRainStrength=Default Maximum Rain Strength
 dsurround.cfg.rain.MaxRainStrength.tooltip=Default maximum rain strength for a dimension
+dsurround.cfg.rain.UseVanillaSound=Use Vanilla Rain Sound
+dsurround.cfg.rain.UseVanillaSound.tooltip=Use the Vanilla rain sound rather than the modified one
 
 dsurround.cfg.fog.cat.Fog=Fog Options
 dsurround.cfg.fog.cat.Fog.tooltip=Options that control the various fog effects in the client
