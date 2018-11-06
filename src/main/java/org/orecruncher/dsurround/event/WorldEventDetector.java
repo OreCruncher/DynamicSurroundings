@@ -26,14 +26,11 @@ package org.orecruncher.dsurround.event;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.fx.particle.ExplosionHelper;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -94,12 +91,6 @@ public class WorldEventDetector implements IWorldEventListener {
 	public void spawnParticle(int particleID, boolean ignoreRange, double x, double y, double z, double xSpeed,
 			double ySpeed, double zSpeed, int... parameters) {
 
-		if (!ModOptions.explosions.enableExplosionEnhancement)
-			return;
-
-		if (EnumParticleTypes.EXPLOSION_LARGE.getParticleID() == particleID) {
-			ExplosionHelper.doExplosion(this.world, x, y, z);
-		}
 	}
 
 	@Override

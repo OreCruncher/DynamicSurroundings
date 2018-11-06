@@ -749,30 +749,6 @@ public final class ModOptions {
 		public static boolean enableAnimaniaBadges = true;
 	}
 
-	public static final String CATEGORY_EXPLOSIONS = "explosions";
-	public static final String CONFIG_ENABLE_EXPLOSIONS = "Enable Explosion Enhancement";
-	public static final String CONFIG_ADD_MOB_PARTICLES = "Add Mob Models";
-
-	@Category(CATEGORY_EXPLOSIONS)
-	@LangKey("dsurround.cfg.explosions.cat.Explosions")
-	@Comment("Options for configuring Explosion Enhancement")
-	public static class explosions {
-
-		public static String PATH = null;
-
-		@Option(CONFIG_ENABLE_EXPLOSIONS)
-		@DefaultValue("true")
-		@LangKey("dsurround.cfg.explosions.EnableExplosions")
-		@Comment("Enables/disables explosion enhancement")
-		public static boolean enableExplosionEnhancement = false;
-
-		@Option(CONFIG_ADD_MOB_PARTICLES)
-		@DefaultValue("false")
-		@LangKey("dsurround.cfg.explosions.AddMobs")
-		@Comment("Enables/disables addition of mob models in explosion debris")
-		public static boolean addMobParticles = false;
-	}
-
 	public static final String CATEGORY_COMMANDS = "commands";
 	public static final String CONFIG_COMMANDS_DS = "/ds";
 	public static final String CONFIG_COMMANDS_CALC = "/calc";
@@ -1007,37 +983,6 @@ public final class ModOptions {
 			public static String compassCoordFormat = "x: %1$d, z: %3$d";
 		}
 
-	}
-
-	public static final String CATEGORY_FEATURES = "features";
-	public static final String CONFIG_FEATURES_ALLOW_LLHUD = "Allow Light Level HUD";
-	public static final String CONFIG_FEATURES_ALLOW_CHUNKBOARDERS = "Allow Chunk Border HUD";
-	public static final String CONFIG_FEATURES_ALLOW_COMPASSCLOCK = "Allow Compass and Clock HUD";
-
-	@Category(CATEGORY_FEATURES)
-	@Comment("Controls whether features are available")
-	@RestartRequired(server = true, world = true)
-	public static class features {
-
-		public static String PATH = null;
-
-		@Option(CONFIG_FEATURES_ALLOW_LLHUD)
-		@DefaultValue("true")
-		@Comment("Allow the Light Level HUD")
-		@Hidden
-		public static boolean allowLightLevelHUD = true;
-
-		@Option(CONFIG_FEATURES_ALLOW_CHUNKBOARDERS)
-		@DefaultValue("true")
-		@Comment("Allow the Chunk Border HUD")
-		@Hidden
-		public static boolean allowChunkBorderHUD = true;
-
-		@Option(CONFIG_FEATURES_ALLOW_COMPASSCLOCK)
-		@DefaultValue("true")
-		@Comment("Allow the Compass and Clock HUD")
-		@Hidden
-		public static boolean allowCompassClockHUD = true;
 	}
 
 	public static final String CATEGORY_PROFILES = "profiles";

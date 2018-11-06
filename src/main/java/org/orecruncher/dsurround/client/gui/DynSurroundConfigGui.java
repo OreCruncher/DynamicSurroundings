@@ -72,7 +72,6 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 		addConfigCategory(ModOptions.general.PATH);
 		addConfigCategory(ModOptions.player.PATH);
 		addConfigCategory(ModOptions.huds.PATH);
-		addConfigCategory(ModOptions.explosions.PATH);
 		addConfigCategory(ModOptions.rain.PATH);
 		addConfigCategory(ModOptions.fog.PATH);
 		addConfigCategory(ModOptions.aurora.PATH);
