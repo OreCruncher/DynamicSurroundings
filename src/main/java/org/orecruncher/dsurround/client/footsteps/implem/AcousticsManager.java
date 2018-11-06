@@ -34,6 +34,7 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -63,6 +64,13 @@ public class AcousticsManager {
 	@Nullable
 	public IAcoustic getAcoustic(@Nonnull final String name) {
 		return this.acoustics.get(name);
+	}
+	
+	@Nonnull
+	public IAcoustic[] compileAcoustics(@Nonnull final SoundEvent evt) {
+		final BasicAcoustic acoustic = new BasicAcoustic(evt.getSoundName().toString());
+		acoustic.setSound(evt);
+		return new IAcoustic[] { acoustic };
 	}
 
 	@Nonnull
