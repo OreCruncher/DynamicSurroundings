@@ -1,4 +1,20 @@
 {
+	"blocks": [
+		{
+			"blocks": [
+				"animania:block_wild_hive",
+				"animania:block_hive"
+			],
+			"chance": 5,
+			"sounds": [
+				{
+					"sound": "dsurround:bees",
+					"conditions": "isDay && weather.isNotRaining",
+					"variable": true
+				}
+			]
+		}
+	],
 	"footsteps": {
 		"animania:block_hamster_wheel": "metalbar",
 		"animania:block_mud": "mud",

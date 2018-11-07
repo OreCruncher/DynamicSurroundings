@@ -46,6 +46,7 @@ import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
+// http://www.minecraftforge.net/forum/topic/67260-1122-forge-config-system-and-setconfigentryclass/
 public final class ModOptions {
 
 	public static class Trace {

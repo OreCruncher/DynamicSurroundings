@@ -52,7 +52,7 @@ public final class DimensionInfo {
 	protected boolean hasAuroras = false;
 	protected boolean hasWeather = false;
 	protected boolean hasFog = false;
-	
+
 	protected boolean playBiomeSounds = true;
 
 	private DimensionInfo() {
@@ -68,6 +68,12 @@ public final class DimensionInfo {
 		this.cloudHeight = this.skyHeight;
 		this.spaceHeight = this.skyHeight + SPACE_HEIGHT_OFFSET;
 
+		if (world.provider.isSurfaceWorld() && world.provider.hasSkyLight()) {
+			this.hasWeather = true;
+			this.hasAuroras = true;
+			this.hasFog = true;
+		}
+
 		// Force sea level based on known world types that give heartburn
 		final WorldType wt = world.getWorldType();
 
@@ -75,10 +81,10 @@ public final class DimensionInfo {
 			this.seaLevel = 0;
 		else if (this.dimensionId == 0 && ModOptions.biomes.worldSealevelOverride > 0)
 			this.seaLevel = ModOptions.biomes.worldSealevelOverride;
-		
+
 		final String dim = Integer.toString(this.dimensionId);
-		for(int i = 0; i < ModOptions.biomes.dimensionBlacklist.length; i++)
-			if(dim.equals(ModOptions.biomes.dimensionBlacklist[i])) {
+		for (int i = 0; i < ModOptions.biomes.dimensionBlacklist.length; i++)
+			if (dim.equals(ModOptions.biomes.dimensionBlacklist[i])) {
 				this.playBiomeSounds = false;
 				break;
 			}
@@ -146,7 +152,7 @@ public final class DimensionInfo {
 	public boolean getHasFog() {
 		return this.hasFog;
 	}
-	
+
 	public boolean getPlayBiomeSounds() {
 		return this.playBiomeSounds;
 	}
