@@ -31,8 +31,8 @@ import javax.annotation.Nonnull;
 import org.lwjgl.opengl.GL11;
 import org.orecruncher.dsurround.client.fx.particle.ParticleBase;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 import org.orecruncher.lib.collections.ObjectArray;
-import org.orecruncher.lib.compat.ModEnvironment;
 import org.orecruncher.lib.gfx.OpenGlState;
 
 import net.minecraft.client.renderer.BufferBuilder;

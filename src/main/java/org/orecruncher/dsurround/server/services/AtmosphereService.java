@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.lib.compat.ModEnvironment;
+import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.world.World;

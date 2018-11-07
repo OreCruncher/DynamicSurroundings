@@ -24,10 +24,12 @@
 
 package org.orecruncher.dsurround.proxy;
 
+import java.util.Arrays;
 import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
@@ -47,9 +49,10 @@ import org.orecruncher.dsurround.commands.CommandCalc;
 import org.orecruncher.dsurround.entity.CapabilitySpeechData;
 import org.orecruncher.dsurround.event.ReloadEvent;
 import org.orecruncher.dsurround.event.WorldEventDetector;
+import org.orecruncher.dsurround.lib.compat.ModEnvironment;
+import org.orecruncher.lib.ForgeUtils;
 import org.orecruncher.lib.Localization;
 import org.orecruncher.lib.chunk.ClientChunkCache;
-import org.orecruncher.lib.compat.ModEnvironment;
 import org.orecruncher.lib.task.Scheduler;
 
 import net.minecraft.client.Minecraft;
@@ -63,6 +66,7 @@ import net.minecraftforge.client.resource.VanillaResourceType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -132,6 +136,16 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 
 	@Override
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
+		// Patch up metadata
+		final ModMetadata data = ForgeUtils.getModMetadata(ModBase.MOD_ID);
+		if (data != null) {
+			data.name = Localization.format("dsurround.metadata.Name");
+			data.credits = Localization.format("dsurround.metadata.Credits");
+			data.description = Localization.format("dsurround.metadata.Description");
+			data.authorList = Arrays
+					.asList(StringUtils.split(Localization.format("dsurround.metadata.Authors"), ','));
+		}
+
 		// Register for resource load events
 		final IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
 		((IReloadableResourceManager) resourceManager).registerReloadListener(this);

@@ -26,9 +26,13 @@ package org.orecruncher.dsurround.registry.item;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.client.ClientRegistry;
+import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 
+import lain.mods.cos.api.CosArmorAPI;
+import lain.mods.cos.api.inventory.CAStacksBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -57,15 +61,26 @@ public enum ArmorClass {
 		return this.className;
 	}
 
+	@Nonnull
+	private static ItemStack resolveSlot(@Nonnull final EntityLivingBase e, @Nonnull final EntityEquipmentSlot slot) {
+		if (ModEnvironment.CosmeticArmorReworked.isLoaded()) {
+			final CAStacksBase slots = CosArmorAPI.getCAStacksClient(e.getPersistentID());
+			if (slots != null) {
+				final ItemStack stack = slots.getStackInSlot(slot.getIndex());
+				if (stack != null && !stack.isEmpty())
+					return stack;
+			}
+		}
+		return e.getItemStackFromSlot(slot);
+	}
+
 	/**
 	 * Determines the effective armor class of the Entity. Chest and legs are used
 	 * to make the determination.
 	 */
 	public static ArmorClass effectiveArmorClass(@Nonnull final EntityLivingBase entity) {
-		final ArmorClass chest = ClientRegistry.ITEMS
-				.getArmorClass(entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
-		final ArmorClass legs = ClientRegistry.ITEMS
-				.getArmorClass(entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
+		final ArmorClass chest = ClientRegistry.ITEMS.getArmorClass(resolveSlot(entity, EntityEquipmentSlot.CHEST));
+		final ArmorClass legs = ClientRegistry.ITEMS.getArmorClass(resolveSlot(entity, EntityEquipmentSlot.LEGS));
 		return chest.compareTo(legs) > 0 ? chest : legs;
 	}
 
@@ -73,7 +88,7 @@ public enum ArmorClass {
 	 * Gets the armor class of the entities feet.
 	 */
 	public static ArmorClass footArmorClass(@Nonnull final EntityLivingBase entity) {
-		return ClientRegistry.ITEMS.getArmorClass(entity.getItemStackFromSlot(EntityEquipmentSlot.FEET));
+		return ClientRegistry.ITEMS.getArmorClass(resolveSlot(entity, EntityEquipmentSlot.FEET));
 	}
 
 }

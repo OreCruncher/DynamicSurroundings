@@ -25,7 +25,6 @@
 package org.orecruncher.dsurround;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -33,8 +32,6 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.orecruncher.dsurround.proxy.Proxy;
-import org.orecruncher.lib.ForgeUtils;
-import org.orecruncher.lib.Localization;
 import org.orecruncher.lib.VersionChecker;
 import org.orecruncher.lib.VersionHelper;
 import org.orecruncher.lib.logging.ModLog;
@@ -44,7 +41,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -165,21 +161,8 @@ public class ModBase {
 
 	@EventHandler
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
-
 		proxy.postInit(event);
 		config.save();
-
-		// Patch up metadata
-		if (!proxy.isRunningAsServer()) {
-			final ModMetadata data = ForgeUtils.getModMetadata(ModBase.MOD_ID);
-			if (data != null) {
-				data.name = Localization.format("dsurround.metadata.Name");
-				data.credits = Localization.format("dsurround.metadata.Credits");
-				data.description = Localization.format("dsurround.metadata.Description");
-				data.authorList = Arrays
-						.asList(StringUtils.split(Localization.format("dsurround.metadata.Authors"), ','));
-			}
-		}
 	}
 
 	@EventHandler

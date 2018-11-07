@@ -29,11 +29,11 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.commands.CommandDS;
 import org.orecruncher.dsurround.entity.CapabilityEntityData;
+import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 import org.orecruncher.dsurround.network.Network;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.server.services.ServiceManager;
 import org.orecruncher.lib.Localization;
-import org.orecruncher.lib.compat.ModEnvironment;
 
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
@@ -95,9 +95,11 @@ public class Proxy {
 	}
 
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
+		// Intentionally left blank
 	}
 
 	public void loadCompleted(@Nonnull final FMLLoadCompleteEvent event) {
+		// Intentionally left blank
 	}
 
 	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {

@@ -32,10 +32,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 import org.orecruncher.lib.Color;
 import org.orecruncher.lib.WorldUtils;
-import org.orecruncher.lib.compat.ModEnvironment;
-
 import com.google.common.collect.ImmutableSet;
 
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;

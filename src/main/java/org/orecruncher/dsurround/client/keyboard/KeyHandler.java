@@ -31,9 +31,9 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.hud.LightLevelHUD;
 import org.orecruncher.dsurround.client.hud.LightLevelHUD.Mode;
+import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 import org.orecruncher.lib.Localization;
 import org.orecruncher.lib.compat.EntityRendererUtil;
-import org.orecruncher.lib.compat.ModEnvironment;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;

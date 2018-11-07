@@ -28,13 +28,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 import org.orecruncher.dsurround.registry.PrecipitationType;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.TemperatureRating;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
-import org.orecruncher.lib.compat.ModEnvironment;
-
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
