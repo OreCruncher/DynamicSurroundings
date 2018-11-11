@@ -1,0 +1,26 @@
+//  Basics defined up here to make life easier
+//  Tweak the defs, not the others!
+def mcVersion    = "1.12.2"
+def modVersion   = "3.5.0.0"
+def forgeVersion = "14.23.5.2772"
+def snapshot     = "stable_39"
+
+// General Mod version stuff
+project.ext.modVersion   = modVersion
+project.group            = "org.orecruncher.dsurround"
+project.archivesBaseName = "DynamicSurroundings"
+project.version          = "${mcVersion}-${modVersion}"
+
+// JAR tagging
+project.minecraft.version = "${mcVersion}-${forgeVersion}"
+
+// Build Stuff
+project.ext.snapshot = snapshot
+
+// Output to the log for posterity
+println "******************************************"
+println "JAR tag     : " + project.minecraft.version
+println "Archive     : " + project.archivesBaseName
+println "Mod Version : " + project.ext.modVersion
+println "Forge       : " + forgeVersion + " (" + project.ext.snapshot + ")"
+println "******************************************"
