@@ -24,15 +24,14 @@
 
 package org.orecruncher.dsurround.client.renderer;
 
-import java.lang.reflect.Method;
 import java.util.Set;
-
-import javax.annotation.Nonnull;
 
 import org.lwjgl.input.Keyboard;
 import org.orecruncher.dsurround.client.keyboard.KeyHandler;
 import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IItemStackProvider;
 import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IShowBadge;
+
+import com.animania.common.entities.interfaces.IFoodEating;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
@@ -54,32 +53,10 @@ public final class AnimaniaBadge2 implements IItemStackProvider {
 	// Possible food/water items for badging.
 	private final static ItemStack WATER_BUCKET = new ItemStack(Items.WATER_BUCKET);
 
-	private static Class<?> xface;
-	private static Method getFed;
-	private static Method getWatered;
-	private static Method getFoodItems;
-
-	static {
-		try {
-			xface = Class.forName("com.animania.common.entities.interfaces.IFoodEating");
-			getFed = xface.getMethod("getFed");
-			getWatered = xface.getMethod("getWatered");
-			getFoodItems = xface.getMethod("getFoodItems");
-		} catch (@Nonnull final Throwable t) {
-			xface = null;
-			getFed = null;
-			getWatered = null;
-			getFoodItems = null;
-		}
-	}
-
 	private static final IShowBadge BADGE_DISPLAY_CHECK = () -> {
 		return KeyHandler.ANIMANIA_BADGES == null || KeyHandler.ANIMANIA_BADGES.isKeyDown()
 				|| KeyHandler.ANIMANIA_BADGES.getKeyCode() == Keyboard.KEY_NONE;
 	};
-
-	private AnimaniaBadge2() {
-	}
 
 	@Override
 	public float adjustY() {
@@ -97,33 +74,20 @@ public final class AnimaniaBadge2 implements IItemStackProvider {
 	}
 
 	private boolean getFed(final Entity e) {
-		try {
-			return (boolean) AnimaniaBadge2.getFed.invoke(e);
-		} catch (final Throwable t) {
-			return true;
-		}
+		return ((IFoodEating) e).getFed();
 	}
 
 	private boolean getWatered(final Entity e) {
-		try {
-			return (boolean) AnimaniaBadge2.getWatered.invoke(e);
-		} catch (final Throwable t) {
-			return true;
-		}
+		return ((IFoodEating) e).getWatered();
 	}
 
 	private ItemStack getFoodItem(final Entity e) {
-		try {
-			@SuppressWarnings("unchecked")
-			final Set<Item> food = (Set<Item>) AnimaniaBadge2.getFoodItems.invoke(e);
-			if (food.size() > 0) {
-				final Item item = food.iterator().next();
-				return new ItemStack(item);
-			}
-			return ItemStack.EMPTY;
-		} catch (final Throwable t) {
-			return ItemStack.EMPTY;
+		final Set<Item> food = ((IFoodEating) e).getFoodItems();
+		if (food.size() > 0) {
+			final Item item = food.iterator().next();
+			return new ItemStack(item);
 		}
+		return ItemStack.EMPTY;
 	}
 
 	// ====================================================================
@@ -139,7 +103,7 @@ public final class AnimaniaBadge2 implements IItemStackProvider {
 		final RenderManager rm = Minecraft.getMinecraft().getRenderManager();
 		for (final ResourceLocation r : EntityList.getEntityNameList()) {
 			final Class<? extends Entity> clazz = EntityList.getClass(r);
-			if (clazz != null && xface.isAssignableFrom(clazz)) {
+			if (clazz != null && IFoodEating.class.isAssignableFrom(clazz)) {
 				final Render<Entity> renderer = rm.getEntityClassRenderObject(clazz);
 				if (renderer instanceof RenderLivingBase) {
 					((RenderLivingBase<?>) renderer).addLayer(new BadgeRenderLayer(BADGE_DISPLAY_CHECK, singleton));
