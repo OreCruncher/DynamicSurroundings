@@ -84,6 +84,11 @@ processResources
     }
 }
 
+// Reobfuscate the output of the mod JAR task with SRG names, otherwise the mod won't be able to reference MC classes
+reobf {
+    coreJar { mappingType = 'SEARGE' }
+}
+
 // Define a new task for the contained JAR
 // If you want to, you can distribute this as a separate artifact to a Maven
 task coreJar(type: Jar) {
@@ -103,16 +108,12 @@ task coreJar(type: Jar) {
         // Strictly speaking not required (right now)
         // Allows Forge to extract the dependency to a local repository (Given that the corresponding PR is merged)
         // If another mod ships the same dependency, it doesn't have to be extracted twice
-        attributes 'Maven-Version': "${project.group}:${project.archivesBaseName}:${project.version}:core"
+        attributes 'Maven-Artifact': "${project.group}:${project.archivesBaseName}-core:${project.version}"
     }
     // Add a classifier to the JAR ('-core' at the end of the file name)
     // Distinguishes the mod JAR from the shipped one
     classifier 'core'
-}
-
-// Reobfuscate the output of the mod JAR task with SRG names, otherwise the mod won't be able to reference MC classes
-reobf {
-    coreJar { mappingType = 'SEARGE' }
+    group = 'build'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -130,16 +131,19 @@ task deobfJar(type: Jar) {
         // The crucial manifest attribute: Make Forge extract the contained JAR
         attributes 'ContainedDeps': coreJar.archivePath.name
         attributes 'FMLAT': 'dsurround_at.cfg'
+        attributes 'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}"
     }
     
 }
 
-task signCoreJar(type: SignJar, dependsOn: reobfCoreJar) {
+task signCoreJar(type: SignJar) {
 
     onlyIf { // Skip the task if our secret data isn't available
         project.hasProperty('keyStore')
     }
 
+	dependsOn reobfCoreJar
+	
     keyStore = project.keyStore // This needs to be a path to the keystore file
     alias = project.keyStoreAlias
     storePass = project.keyStorePass
@@ -162,6 +166,7 @@ jar {
         // The crucial manifest attribute: Make Forge extract the contained JAR
         attributes 'ContainedDeps': coreJar.archivePath.name
         attributes 'FMLAT': 'dsurround_at.cfg'
+        attributes 'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}"
     }
     
     // Only run the main jar task after the coremod JAR was completely built
@@ -169,11 +174,13 @@ jar {
 }
 
 // https://gist.github.com/matthewprenger/9b2da059b89433a01c1c
-task signJar(type: SignJar, dependsOn: reobfJar) {
+task signJar(type: SignJar) {
     onlyIf { // Skip the task if our secret data isn't available
         project.hasProperty('keyStore')
     }
 
+	dependsOn reobfJar
+	
     keyStore = project.keyStore // This needs to be a path to the keystore file
     alias = project.keyStoreAlias
     storePass = project.keyStorePass
