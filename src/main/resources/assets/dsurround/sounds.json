@@ -1030,6 +1030,15 @@
 			}
 		]
 	},
+	"deep_crickets": {
+		"category": "ambient",
+		"sounds": [
+			{
+				"name": "dsurround:ambient/outside/deep_crickets",
+				"stream": true
+			}
+		]
+	},
 	"plains": {
 		"category": "ambient",
 		"credits": [
@@ -1054,6 +1063,15 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/forest",
+				"stream": true
+			}
+		]
+	},
+	"deep_forest": {
+		"category": "ambient",
+		"sounds": [
+			{
+				"name": "dsurround:ambient/outside/deep_forest",
 				"stream": true
 			}
 		]
@@ -1217,7 +1235,34 @@
 			}
 		]
 	},
-	"underground": {
+	"loon": {
+		"category": "ambient",
+		"sounds": [
+			{
+				"name": "dsurround:ambient/birds/loon1"
+			},
+			{
+				"name": "dsurround:ambient/birds/loon2"
+			}
+		]
+	},
+	"nightingale": {
+		"category": "ambient",
+		"sounds": [
+			{
+				"name": "dsurround:ambient/birds/nightingale1"
+			},
+			{
+				"name": "dsurround:ambient/birds/nightingale2"
+			},
+			{
+				"name": "dsurround:ambient/birds/nightingale3"
+			},
+			{
+				"name": "dsurround:ambient/birds/nightingale4"
+			}
+		]
+	},	"underground": {
 		"category": "ambient",
 		"sounds": [
 			{

@@ -93,7 +93,7 @@
 			]
 		},
 		{
-			"conditions": "biome.isForest && !(biome.isHot || biome.isSwamp || biome.isDead || biome.isSnowy || biome.isCold || biome.isOcean || biome.isWasteland || biome.isJungle)",
+			"conditions": "biome.isForest && !(biome.isHot || biome.isSwamp || biome.isDead || biome.isSnowy || biome.isCold || biome.isOcean || biome.isWasteland || biome.isJungle || biome.isDense)",
 			"_comment": "Basic Forest w/Crickets",
 			"sounds": [
 				{
@@ -107,7 +107,21 @@
 			]
 		},
 		{
-			"conditions": "biome.isForest && biome.isCold && !(biome.isSwamp || biome.isSnowy || biome.isDead)",
+			"conditions": "biome.isForest && biome.isDense && !(biome.isHot || biome.isSwamp || biome.isDead || biome.isSnowy || biome.isCold || biome.isOcean || biome.isWasteland || biome.isJungle)",
+			"_comment": "Deep Forest w/Crickets",
+			"sounds": [
+				{
+					"sound": "dsurround:deep_forest",
+					"conditions": "weather.isNotRaining && isDay"
+				},
+				{
+					"sound": "dsurround:deep_crickets",
+					"conditions": "weather.isNotRaining && isNight"
+				}
+			]
+		},
+		{
+			"conditions": "biome.isForest && biome.isCold && !(biome.isSwamp || biome.isSnowy || biome.isDead || biome.isDense)",
 			"_comment": "Simple Forest",
 			"sounds": [
 				{
@@ -247,6 +261,7 @@
 					"sound": "dsurround:insectbuzz",
 					"conditions": "weather.isNotRaining",
 					"soundType": "spot",
+					"weight": 7,
 					"variable": true
 				}
 			]
@@ -292,6 +307,11 @@
 					"sound": "dsurround:bird",
 					"conditions": "weather.isNotRaining && isDay",
 					"soundType": "spot"
+				},
+				{
+					"sound": "dsurround:nightingale",
+					"conditions": "weather.isNotRaining && isDay",
+					"soundType": "spot"
 				}
 			]
 		},
@@ -313,6 +333,17 @@
 				{
 					"sound": "dsurround:raptor",
 					"conditions": "weather.isNotRaining && isDay",
+					"soundType": "spot"
+				}
+			]
+		},
+		{
+			"conditions": "biome.isConiferous && !biome.isMountain",
+			"_comment": "Loon",
+			"sounds": [
+				{
+					"sound": "dsurround:loon",
+					"conditions": "weather.isNotRaining && !isNight",
 					"soundType": "spot"
 				}
 			]
