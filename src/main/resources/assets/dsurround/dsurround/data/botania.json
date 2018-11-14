@@ -1,12 +1,12 @@
 {
-	"itemConfig": {
-		"lightArmor": [
+	"items": {
+		"LEATHER": [
 			"botania:manaweavehelm",
 			"botania:manaweavechest",
 			"botania:manaweavelegs",
 			"botania:manaweaveboots"
 		],
-		"heavyArmor": [
+		"PLATE": [
 			"botania:elementiumhelm",
 			"botania:elementiumchest",
 			"botania:elementiumlegs",

@@ -1,19 +1,19 @@
 {
-	"itemConfig": {
-		"axeSound": [
-			"betterwithmods.common.items.tools.ItemSoulForgedMattock"
-		],
-		"lightArmor": [
+	"items": {
+		"LEATHER": [
 			"betterwithmods:leather_tanned_helmet",
 			"betterwithmods:leather_tanned_chest",
 			"betterwithmods:leather_tanned_pants",
 			"betterwithmods:leather_tanned_boots"
 		],
-		"heavyArmor": [
+		"PLATE": [
 			"betterwithmods:steel_helmet",
 			"betterwithmods:steel_chest",
 			"betterwithmods:steel_pants",
 			"betterwithmods:steel_boots"
+		],
+		"AXE": [
+			"betterwithmods.common.items.tools.ItemSoulForgedMattock"
 		]
 	}
 }

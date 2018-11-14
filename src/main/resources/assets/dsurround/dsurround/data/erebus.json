@@ -1,24 +1,18 @@
 {
-	"itemConfig": {
-		"axeSound": [
-			"erebus.items.ItemAxeJade",
-			"erebus.items.ItemJadePaxel",
-			"erebus.items.ItemWarHammer"
-		],
-		"shieldSound": [
-			"erebus.items.ItemErebusShield"
-		],
-		"lightArmor": [
-		],
-		"mediumArmor": [
-		],
-		"crystalArmor": [
+	"items": {
+		"CRYSTAL": [
 			"erebus:jade_boots",
 			"erebus:jade_leggings",
 			"erebus:jade_chestplate",
 			"erebus:jade_helmet"
 		],
-		"heavyArmor": [
+		"SHIELD": [
+			"erebus.items.ItemErebusShield"
+		],
+		"AXE": [
+			"erebus.items.ItemAxeJade",
+			"erebus.items.ItemJadePaxel",
+			"erebus.items.ItemWarHammer"
 		]
 	},
 	"dimensions": [

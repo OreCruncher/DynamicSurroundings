@@ -1,6 +1,6 @@
 {
-	"itemConfig": {
-		"crystalArmor": [
+	"items": {
+		"CRYSTAL": [
 			"ceramics:clay_boots",
 			"ceramics:clay_chestplate",
 			"ceramics:clay_leggings",

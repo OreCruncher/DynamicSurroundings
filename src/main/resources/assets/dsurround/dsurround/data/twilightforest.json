@@ -28,8 +28,8 @@
 			]
 		}
 	],
-	"itemConfig": {
-		"lightArmor": [
+	"items": {
+		"LEATHER": [
 			"twilightforest:yeti_helmet",
 			"twilightforest:yeti_chestplate",
 			"twilightforest:yeti_leggings",
@@ -39,7 +39,7 @@
 			"twilightforest:arctic_leggings",
 			"twilightforest:arctic_boots"
 		],
-		"mediumArmor": [
+		"CHAIN": [
 			"twilightforest:naga_chestplate",
 			"twilightforest:naga_leggings",
 			"twilightforest:steeleaf_helmet",
@@ -47,9 +47,7 @@
 			"twilightforest:steeleaf_leggings",
 			"twilightforest:steeleaf_boots"
 		],
-		"crystalArmor": [
-		],
-		"heavyArmor": [
+		"PLATE": [
 			"twilightforest:ironwood_helmet",
 			"twilightforest:ironwood_chestplate",
 			"twilightforest:ironwood_leggings",

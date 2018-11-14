@@ -1,6 +1,6 @@
 {
-	"itemConfig": {
-		"heavyArmor": [
+	"items": {
+		"PLATE": [
 			"betterwithaddons:helmet_samurai",
 			"betterwithaddons:chest_samurai",
 			"betterwithaddons:legs_samurai",

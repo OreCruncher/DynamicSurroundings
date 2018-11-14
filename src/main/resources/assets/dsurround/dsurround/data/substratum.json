@@ -1,6 +1,6 @@
 {
-	"itemConfig": {
-		"heavyArmor": [
+	"items": {
+		"PLATE": [
 			"substratum:helmetCopper",
 			"substratum:helmetBronze",
 			"substratum:helmetInvar",

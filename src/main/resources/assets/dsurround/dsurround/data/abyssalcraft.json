@@ -73,39 +73,14 @@
 			"_comment": "Dreadlands no additional overrides"
 		}
 	],
-	"blocks": [
-	],
-	"itemConfig": {
-		"axeSound": [
-			"com.shinoow.abyssalcraft.common.items.ItemACAxe",
-			"com.shinoow.abyssalcraft.common.items.ItemACPickaxe",
-			"com.shinoow.abyssalcraft.common.items.ItemCudgel"
-		],
-		"bowSound": [
-			"com.shinoow.abyssalcraft.common.items.ItemCoraliumBow"
-		],
-		"swordSound": [
-			"com.shinoow.abyssalcraft.common.items.ItemACSword",
-			"com.shinoow.abyssalcraft.common.items.ItemDreadiumKatana",
-			"com.shinoow.abyssalcraft.common.items.ItemSoulReaper"
-		],
-		"toolSound": [
-			"com.shinoow.abyssalcraft.common.items.ItemStaff",
-			"com.shinoow.abyssalcraft.common.items.ItemDrainStaff",
-			"com.shinoow.abyssalcraft.common.items.ItemACShovel",
-			"com.shinoow.abyssalcraft.common.items.ItemACHoe"
-		],
-		"lightArmor": [
-		],
-		"mediumArmor": [
+	"items": {
+		"CHAIN": [
 			"abyssalcraft:dreadiumsamuraihelmet",
 			"abyssalcraft:dreadiumsamuraiplate",
 			"abyssalcraft:dreadiumsamurailegs",
 			"abyssalcraft:dreadiumsamuraiboots"
 		],
-		"crystalArmor": [
-		],
-		"heavyArmor": [
+		"PLATE": [
 			"abyssalcraft:ahelmet",
 			"abyssalcraft:aplate",
 			"abyssalcraft:alegs",
@@ -134,6 +109,25 @@
 			"abyssalcraft:ethaxiumplate",
 			"abyssalcraft:ethaxiumlegs",
 			"abyssalcraft:ethaxiumboots"
+		],
+		"AXE": [
+			"com.shinoow.abyssalcraft.common.items.ItemACAxe",
+			"com.shinoow.abyssalcraft.common.items.ItemACPickaxe",
+			"com.shinoow.abyssalcraft.common.items.ItemCudgel"
+		],
+		"BOW": [
+			"com.shinoow.abyssalcraft.common.items.ItemCoraliumBow"
+		],
+		"SWORD": [
+			"com.shinoow.abyssalcraft.common.items.ItemACSword",
+			"com.shinoow.abyssalcraft.common.items.ItemDreadiumKatana",
+			"com.shinoow.abyssalcraft.common.items.ItemSoulReaper"
+		],
+		"TOOL": [
+			"com.shinoow.abyssalcraft.common.items.ItemStaff",
+			"com.shinoow.abyssalcraft.common.items.ItemDrainStaff",
+			"com.shinoow.abyssalcraft.common.items.ItemACShovel",
+			"com.shinoow.abyssalcraft.common.items.ItemACHoe"
 		]
 	},
 	"dimensions": [

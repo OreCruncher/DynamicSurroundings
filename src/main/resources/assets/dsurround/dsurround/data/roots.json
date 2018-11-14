@@ -1,9 +1,9 @@
 {
-	"itemConfig": {
-		"axeSound": [
+	"items": {
+		"AXE": [
 			"teamroots.roots.item.ItemHammer"
 		],
-		"swordSound": [
+		"SWORD": [
 			"teamroots.roots.item.ItemKnife"
 		]
 	},

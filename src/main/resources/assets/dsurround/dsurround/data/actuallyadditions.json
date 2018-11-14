@@ -1,15 +1,6 @@
 {
-	"itemConfig": {
-		"axeSound": [
-			"de.ellpeck.actuallyadditions.mod.items.ItemAllToolAA",
-			"de.ellpeck.actuallyadditions.mod.items.ItemAxeAA",
-			"de.ellpeck.actuallyadditions.mod.items.ItemPickaxeAA"
-		],
-		"toolSound": [
-			"de.ellpeck.actuallyadditions.mod.items.ItemDrill",
-			"de.ellpeck.actuallyadditions.mod.items.ItemShovelAA"
-		],
-		"crystalArmor": [
+	"items": {
+		"CRYSTAL": [
 			"actuallyadditions:item_helm_emerald",
 			"actuallyadditions:item_chest_emerald",
 			"actuallyadditions:item_pants_emerald",
@@ -46,6 +37,15 @@
 			"actuallyadditions:item_chest_crystal_black",
 			"actuallyadditions:item_pants_crystal_black",
 			"actuallyadditions:item_boots_crystal_black"
+		],
+		"AXE": [
+			"de.ellpeck.actuallyadditions.mod.items.ItemAllToolAA",
+			"de.ellpeck.actuallyadditions.mod.items.ItemAxeAA",
+			"de.ellpeck.actuallyadditions.mod.items.ItemPickaxeAA"
+		],
+		"TOOL": [
+			"de.ellpeck.actuallyadditions.mod.items.ItemDrill",
+			"de.ellpeck.actuallyadditions.mod.items.ItemShovelAA"
 		]
 	},
 	"footsteps": {

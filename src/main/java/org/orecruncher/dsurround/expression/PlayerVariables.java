@@ -272,7 +272,7 @@ public class PlayerVariables extends DynamicVariantList {
 		add(new Dynamic.DynamicString("player.armor") {
 			@Override
 			public void update() {
-				this.value = EnvironState.getPlayerArmorClass().getClassName();
+				this.value = EnvironState.getPlayerArmorClass().name();
 			}
 		});
 		add(new Dynamic.DynamicBoolean("player.inVillage") {

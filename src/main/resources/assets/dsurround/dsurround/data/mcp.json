@@ -681,44 +681,29 @@
 			]
 		}
 	],
-	"itemConfig": {
-		"axeSound": [
-			"net.minecraft.item.ItemAxe",
-			"net.minecraft.item.ItemPickaxe"
-		],
-		"bowSound": [
-			"net.minecraft.item.ItemBow"
-		],
-		"swordSound": [
-			"net.minecraft.item.ItemSword"
-		],
-		"toolSound": [
-			"net.minecraft.item.ItemSpade",
-			"net.minecraft.item.ItemHoe",
-			"net.minecraft.item.ItemFishingRod"
-		],
-		"shieldSound": [
+	"items": {
+		"SHIELD": [
 			"net.minecraft.item.ItemShield"
 		],
-		"lightArmor": [
+		"LEATHER": [
 			"minecraft:leather_boots",
 			"minecraft:leather_leggings",
 			"minecraft:leather_chestplate",
 			"minecraft:leather_helmet"
 		],
-		"mediumArmor": [
+		"CHAIN": [
 			"minecraft:chainmail_boots",
 			"minecraft:chainmail_leggings",
 			"minecraft:chainmail_chestplate",
 			"minecraft:chainmail_helmet"
 		],
-		"crystalArmor": [
+		"CRYSTAL": [
 			"minecraft:diamond_boots",
 			"minecraft:diamond_leggings",
 			"minecraft:diamond_chestplate",
 			"minecraft:diamond_helmet"
 		],
-		"heavyArmor": [
+		"PLATE": [
 			"minecraft:iron_boots",
 			"minecraft:iron_leggings",
 			"minecraft:iron_chestplate",
@@ -727,6 +712,21 @@
 			"minecraft:golden_leggings",
 			"minecraft:golden_chestplate",
 			"minecraft:golden_helmet"
+		],
+		"AXE": [
+			"net.minecraft.item.ItemAxe",
+			"net.minecraft.item.ItemPickaxe"
+		],
+		"BOW": [
+			"net.minecraft.item.ItemBow"
+		],
+		"SWORD": [
+			"net.minecraft.item.ItemSword"
+		],
+		"TOOL": [
+			"net.minecraft.item.ItemSpade",
+			"net.minecraft.item.ItemHoe",
+			"net.minecraft.item.ItemFishingRod"
 		]
 	},
 	"dimensions": [

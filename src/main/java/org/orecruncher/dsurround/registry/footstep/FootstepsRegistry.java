@@ -62,7 +62,7 @@ import org.orecruncher.dsurround.registry.config.ModConfiguration.ForgeEntry;
 import org.orecruncher.dsurround.registry.config.packs.IMyResourcePack;
 import org.orecruncher.dsurround.registry.config.packs.ResourcePacks;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
-import org.orecruncher.dsurround.registry.item.ArmorClass;
+import org.orecruncher.dsurround.registry.item.ItemClass;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
 
@@ -111,8 +111,8 @@ public final class FootstepsRegistry extends Registry {
 	private Set<Material> FOOTPRINT_MATERIAL;
 	private Set<IBlockState> FOOTPRINT_STATES;
 
-	private Map<ArmorClass, IAcoustic> ARMOR_SOUND;
-	private Map<ArmorClass, IAcoustic> ARMOR_SOUND_FOOT;
+	private Map<ItemClass, IAcoustic> ARMOR_SOUND;
+	private Map<ItemClass, IAcoustic> ARMOR_SOUND_FOOT;
 
 	private Map<String, Variator> variators;
 	private Variator childVariator;
@@ -131,8 +131,8 @@ public final class FootstepsRegistry extends Registry {
 		this.blockMap = new BlockMap(this.acousticsManager);
 		this.FOOTPRINT_MATERIAL = new ReferenceOpenHashSet<>();
 		this.FOOTPRINT_STATES = new ReferenceOpenHashSet<>();
-		this.ARMOR_SOUND = new EnumMap<>(ArmorClass.class);
-		this.ARMOR_SOUND_FOOT = new EnumMap<>(ArmorClass.class);
+		this.ARMOR_SOUND = new EnumMap<>(ItemClass.class);
+		this.ARMOR_SOUND_FOOT = new EnumMap<>(ItemClass.class);
 		this.variators = new Object2ObjectOpenHashMap<>();
 
 		// Initialize the known materials that leave footprints
@@ -185,16 +185,16 @@ public final class FootstepsRegistry extends Registry {
 				new RainSplashAcoustic(this.acousticsManager.compileAcoustics("waterfine")) };
 
 		final AcousticsManager am = this.acousticsManager;
-		this.ARMOR_SOUND.put(ArmorClass.NONE, am.getAcoustic("NOT_EMITTER"));
-		this.ARMOR_SOUND.put(ArmorClass.LIGHT, am.getAcoustic("armor_light"));
-		this.ARMOR_SOUND.put(ArmorClass.MEDIUM, am.getAcoustic("armor_medium"));
-		this.ARMOR_SOUND.put(ArmorClass.CRYSTAL, am.getAcoustic("armor_crystal"));
-		this.ARMOR_SOUND.put(ArmorClass.HEAVY, am.getAcoustic("armor_heavy"));
-		this.ARMOR_SOUND_FOOT.put(ArmorClass.NONE, am.getAcoustic("NOT_EMITTER"));
-		this.ARMOR_SOUND_FOOT.put(ArmorClass.LIGHT, am.getAcoustic("armor_light"));
-		this.ARMOR_SOUND_FOOT.put(ArmorClass.MEDIUM, am.getAcoustic("medium_foot"));
-		this.ARMOR_SOUND_FOOT.put(ArmorClass.CRYSTAL, am.getAcoustic("crystal_foot"));
-		this.ARMOR_SOUND_FOOT.put(ArmorClass.HEAVY, am.getAcoustic("heavy_foot"));
+		this.ARMOR_SOUND.put(ItemClass.NONE, am.getAcoustic("NOT_EMITTER"));
+		this.ARMOR_SOUND.put(ItemClass.LEATHER, am.getAcoustic("armor_light"));
+		this.ARMOR_SOUND.put(ItemClass.CHAIN, am.getAcoustic("armor_medium"));
+		this.ARMOR_SOUND.put(ItemClass.CRYSTAL, am.getAcoustic("armor_crystal"));
+		this.ARMOR_SOUND.put(ItemClass.PLATE, am.getAcoustic("armor_heavy"));
+		this.ARMOR_SOUND_FOOT.put(ItemClass.NONE, am.getAcoustic("NOT_EMITTER"));
+		this.ARMOR_SOUND_FOOT.put(ItemClass.LEATHER, am.getAcoustic("armor_light"));
+		this.ARMOR_SOUND_FOOT.put(ItemClass.CHAIN, am.getAcoustic("medium_foot"));
+		this.ARMOR_SOUND_FOOT.put(ItemClass.CRYSTAL, am.getAcoustic("crystal_foot"));
+		this.ARMOR_SOUND_FOOT.put(ItemClass.PLATE, am.getAcoustic("heavy_foot"));
 
 		this.childVariator = getVariator("child");
 		this.playerVariator = getVariator(ModOptions.sound.firstPersonFootstepCadence ? "playerSlow" : "player");
@@ -395,12 +395,12 @@ public final class FootstepsRegistry extends Registry {
 	}
 
 	@Nullable
-	public IAcoustic getArmorAcoustic(@Nonnull final ArmorClass ac) {
+	public IAcoustic getArmorAcoustic(@Nonnull final ItemClass ac) {
 		return ac != null ? this.ARMOR_SOUND.get(ac) : null;
 	}
 
 	@Nullable
-	public IAcoustic getFootArmorAcoustic(@Nonnull final ArmorClass ac) {
+	public IAcoustic getFootArmorAcoustic(@Nonnull final ItemClass ac) {
 		return ac != null ? this.ARMOR_SOUND_FOOT.get(ac) : null;
 	}
 

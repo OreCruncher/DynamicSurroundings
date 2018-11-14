@@ -40,51 +40,8 @@
 			]
 		}
 	],
-	"itemConfig": {
-		"axeSound": [
-			"thebetweenlands:weedwood_axe",
-			"thebetweenlands:weedwood_pickaxe",
-			"thebetweenlands:bone_axe",
-			"thebetweenlands:bone_pickaxe",
-			"thebetweenlands:octine_axe",
-			"thebetweenlands:octine_pickaxe",
-			"thebetweenlands:valonite_axe",
-			"thebetweenlands:valonite_pickaxe",
-			"thebetweenlands:critter_cruncher",
-			"thebetweenlands:net"
-		],
-		"bowSound": [
-			"thebetweenlands:weedwood_bow"
-		],
-		"swordSound": [
-			"thebetweenlands:weedwood_sword",
-			"thebetweenlands:bone_sword",
-			"thebetweenlands:octine_sword",
-			"thebetweenlands:valonite_sword",
-			"thebetweenlands:sickle",
-			"thebetweenlands:shockwave_sword",
-			"thebetweenlands:wights_bane",
-			"thebetweenlands:sludge_slicer"
-		],
-		"toolSound": [
-			"thebetweenlands:weedwood_shovel",
-			"thebetweenlands:bone_shovel",
-			"thebetweenlands:octine_shovel",
-			"thebetweenlands:valonite_sword"
-		],
-		"shieldSound": [
-			"thebetweenlands:octine_shield",
-			"thebetweenlands:valonite_shield",
-			"thebetweenlands:weedwood_shield",
-			"thebetweenlands:syrmorite_shield",
-			"thebetweenlands:bone_shield",
-			"thebetweenlands:dentrothyst_shield_green",
-			"thebetweenlands:dentrothyst_shield_green_polished",
-			"thebetweenlands:dentrothyst_shield_orange",
-			"thebetweenlands:dentrothyst_shield_orange_polished",
-			"thebetweenlands:lurker_skin_shield"
-		],
-		"lightArmor": [
+	"items": {
+		"LEATHER": [
 			"thebetweenlands:bone_helmet",
 			"thebetweenlands:bone_chestplate",
 			"thebetweenlands:bone_leggings",
@@ -98,11 +55,7 @@
 			"thebetweenlands:skull_mask",
 			"thebetweenlands:explorers_hat"
 		],
-		"mediumArmor": [
-		],
-		"crystalArmor": [
-		],
-		"heavyArmor": [
+		"PLATE": [
 			"thebetweenlands:syrmorite_helmet",
 			"thebetweenlands:syrmorite_chestplate",
 			"thebetweenlands:syrmorite_leggings",
@@ -111,6 +64,49 @@
 			"thebetweenlands:valonite_chestplate",
 			"thebetweenlands:valonite_leggings",
 			"thebetweenlands:valonite_boots"
+		],
+		"SHIELD": [
+			"thebetweenlands:octine_shield",
+			"thebetweenlands:valonite_shield",
+			"thebetweenlands:weedwood_shield",
+			"thebetweenlands:syrmorite_shield",
+			"thebetweenlands:bone_shield",
+			"thebetweenlands:dentrothyst_shield_green",
+			"thebetweenlands:dentrothyst_shield_green_polished",
+			"thebetweenlands:dentrothyst_shield_orange",
+			"thebetweenlands:dentrothyst_shield_orange_polished",
+			"thebetweenlands:lurker_skin_shield"
+		],
+		"AXE": [
+			"thebetweenlands:weedwood_axe",
+			"thebetweenlands:weedwood_pickaxe",
+			"thebetweenlands:bone_axe",
+			"thebetweenlands:bone_pickaxe",
+			"thebetweenlands:octine_axe",
+			"thebetweenlands:octine_pickaxe",
+			"thebetweenlands:valonite_axe",
+			"thebetweenlands:valonite_pickaxe",
+			"thebetweenlands:critter_cruncher",
+			"thebetweenlands:net"
+		],
+		"BOW": [
+			"thebetweenlands:weedwood_bow"
+		],
+		"SWORD": [
+			"thebetweenlands:weedwood_sword",
+			"thebetweenlands:bone_sword",
+			"thebetweenlands:octine_sword",
+			"thebetweenlands:valonite_sword",
+			"thebetweenlands:sickle",
+			"thebetweenlands:shockwave_sword",
+			"thebetweenlands:wights_bane",
+			"thebetweenlands:sludge_slicer"
+		],
+		"TOOL": [
+			"thebetweenlands:weedwood_shovel",
+			"thebetweenlands:bone_shovel",
+			"thebetweenlands:octine_shovel",
+			"thebetweenlands:valonite_sword"
 		]
 	},
 	"footsteps": {

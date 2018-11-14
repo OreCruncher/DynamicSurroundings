@@ -1,6 +1,6 @@
 {
-	"itemConfig": {
-		"toolSound": [
+	"items": {
+		"TOOL": [
 			"geolosys:pro_pick"
 		]
 	},

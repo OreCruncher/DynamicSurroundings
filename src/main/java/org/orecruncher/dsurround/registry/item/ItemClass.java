@@ -24,8 +24,12 @@
 package org.orecruncher.dsurround.registry.item;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.ClientRegistry;
+import org.orecruncher.dsurround.client.sound.SoundEffect;
+import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 
 import lain.mods.cos.api.CosArmorAPI;
@@ -37,30 +41,51 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public enum ArmorClass {
+public enum ItemClass {
 
-	//
-	NONE("none"),
-	//
-	LIGHT("light"),
-	//
-	MEDIUM("medium"),
-	//
-	CRYSTAL("crystal"),
-	//
-	HEAVY("heavy");
+	//@formatter:off
+	NONE(null),
+	LEATHER(Sounds.LIGHT_ARMOR_EQUIP),
+	CHAIN(Sounds.MEDIUM_ARMOR_EQUIP),
+	CRYSTAL(Sounds.CRYSTAL_ARMOR_EQUIP),
+	PLATE(Sounds.HEAVY_ARMOR_EQUIP),
+	SLIME(null),
+	SHIELD(Sounds.TOOL_SWING, Sounds.SHIELD_USE, Sounds.SHIELD_EQUIP),
+	SWORD(Sounds.SWORD_SWING, null, ModOptions.sound.swordEquipAsTool ? Sounds.TOOL_EQUIP : Sounds.SWORD_EQUIP),
+	AXE(Sounds.AXE_SWING, null, Sounds.AXE_EQUIP),
+	BOW(Sounds.TOOL_SWING, Sounds.BOW_PULL, Sounds.BOW_EQUIP),
+	TOOL(Sounds.TOOL_SWING, null, Sounds.TOOL_EQUIP),
+	FOOD(null, null, Sounds.FOOD_EQUIP);
+	//@formatter:on
 
-	private final String className;
-
-	private ArmorClass(@Nonnull final String name) {
-		this.className = name;
+	private final SoundEffect swing;
+	private final SoundEffect use;
+	private final SoundEffect equip;
+	
+	private ItemClass(@Nullable final SoundEffect sound) {
+		this(sound, sound, sound);
 	}
-
-	@Nonnull
-	public String getClassName() {
-		return this.className;
+	private ItemClass(@Nullable final SoundEffect swing, @Nullable final SoundEffect use, @Nullable final SoundEffect equip) {
+		this.swing = swing;
+		this.use = use;
+		this.equip = equip;
 	}
-
+	
+	@Nullable
+	public SoundEffect getSwingSound() {
+		return this.swing;
+	}
+	
+	@Nullable
+	public SoundEffect getUseSound() {
+		return this.use;
+	}
+	
+	@Nullable
+	public SoundEffect getEquipSound() {
+		return this.equip;
+	}
+	
 	@Nonnull
 	private static ItemStack resolveSlot(@Nonnull final EntityLivingBase e, @Nonnull final EntityEquipmentSlot slot) {
 		if (ModEnvironment.CosmeticArmorReworked.isLoaded()) {
@@ -78,17 +103,17 @@ public enum ArmorClass {
 	 * Determines the effective armor class of the Entity. Chest and legs are used
 	 * to make the determination.
 	 */
-	public static ArmorClass effectiveArmorClass(@Nonnull final EntityLivingBase entity) {
-		final ArmorClass chest = ClientRegistry.ITEMS.getArmorClass(resolveSlot(entity, EntityEquipmentSlot.CHEST));
-		final ArmorClass legs = ClientRegistry.ITEMS.getArmorClass(resolveSlot(entity, EntityEquipmentSlot.LEGS));
+	public static ItemClass effectiveArmorClass(@Nonnull final EntityLivingBase entity) {
+		final ItemClass chest = ClientRegistry.ITEMS.getItemClass(resolveSlot(entity, EntityEquipmentSlot.CHEST));
+		final ItemClass legs = ClientRegistry.ITEMS.getItemClass(resolveSlot(entity, EntityEquipmentSlot.LEGS));
 		return chest.compareTo(legs) > 0 ? chest : legs;
 	}
 
 	/**
 	 * Gets the armor class of the entities feet.
 	 */
-	public static ArmorClass footArmorClass(@Nonnull final EntityLivingBase entity) {
-		return ClientRegistry.ITEMS.getArmorClass(resolveSlot(entity, EntityEquipmentSlot.FEET));
+	public static ItemClass footArmorClass(@Nonnull final EntityLivingBase entity) {
+		return ClientRegistry.ITEMS.getItemClass(resolveSlot(entity, EntityEquipmentSlot.FEET));
 	}
 
 }

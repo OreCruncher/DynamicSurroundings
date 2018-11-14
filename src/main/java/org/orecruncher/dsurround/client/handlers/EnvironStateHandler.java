@@ -44,7 +44,7 @@ import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.dsurround.registry.biome.BiomeRegistry;
 import org.orecruncher.dsurround.registry.dimension.DimensionInfo;
 import org.orecruncher.dsurround.registry.dimension.DimensionRegistry;
-import org.orecruncher.dsurround.registry.item.ArmorClass;
+import org.orecruncher.dsurround.registry.item.ItemClass;
 import org.orecruncher.dsurround.registry.season.SeasonInfo;
 import org.orecruncher.dsurround.registry.season.SeasonType;
 import org.orecruncher.lib.MinecraftClock;
@@ -83,8 +83,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static TemperatureRating playerTemperature;
 		private static TemperatureRating biomeTemperature;
 		private static boolean inside;
-		private static ArmorClass armorClass;
-		private static ArmorClass footArmorClass;
+		private static ItemClass armorClass;
+		private static ItemClass footArmorClass;
 		private static boolean inVillage;
 
 		private static boolean isUnderground;
@@ -118,8 +118,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			playerTemperature = TemperatureRating.MILD;
 			biomeTemperature = TemperatureRating.MILD;
 			inside = false;
-			armorClass = ArmorClass.NONE;
-			footArmorClass = ArmorClass.NONE;
+			armorClass = ItemClass.NONE;
+			footArmorClass = ItemClass.NONE;
 			inVillage = false;
 			isUnderground = false;
 			isInSpace = false;
@@ -157,8 +157,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.humid = EnvironState.truePlayerBiome.isHighHumidity();
 			EnvironState.dry = EnvironState.truePlayerBiome.getRainfall() < 0.2F;
 
-			EnvironState.armorClass = ArmorClass.effectiveArmorClass(player);
-			EnvironState.footArmorClass = ArmorClass.footArmorClass(player);
+			EnvironState.armorClass = ItemClass.effectiveArmorClass(player);
+			EnvironState.footArmorClass = ItemClass.footArmorClass(player);
 
 			EnvironState.isUnderground = EnvironState.playerBiome == biomes.UNDERGROUND_INFO;
 			EnvironState.isInSpace = EnvironState.playerBiome == biomes.OUTERSPACE_INFO;
@@ -357,11 +357,11 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			return dry;
 		}
 
-		public static ArmorClass getPlayerArmorClass() {
+		public static ItemClass getPlayerArmorClass() {
 			return armorClass;
 		}
 
-		public static ArmorClass getPlayerFootArmorClass() {
+		public static ItemClass getPlayerFootArmorClass() {
 			return footArmorClass;
 		}
 

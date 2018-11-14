@@ -1,19 +1,19 @@
 {
-	"itemConfig": {
-		"axeSound": [
+	"items": {
+		"LEATHER": [
+			"embers:ashen_cloak_head",
+			"embers:ashen_cloak_chest",
+			"embers:ashen_cloak_legs",
+			"embers:ashen_cloak_boots"
+		],
+		"AXE": [
 			"teamroots.embers.item.ItemClockworkAxe",
 			"teamroots.embers.item.ItemClockworkPickaxe",
 			"teamroots.embers.item.ItemGrandhammer",
 			"teamroots.embers.item.ItemCinderStaff"
 		],
-		"toolSound": [
+		"TOOL": [
 			"teamroots.embers.item.ItemIgnitionCannon"
-		],
-		"lightArmor": [
-			"embers:ashen_cloak_head",
-			"embers:ashen_cloak_chest",
-			"embers:ashen_cloak_legs",
-			"embers:ashen_cloak_boots"
 		]
 	},
 	"footsteps": {

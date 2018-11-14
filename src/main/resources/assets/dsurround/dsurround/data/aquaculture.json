@@ -1,14 +1,14 @@
 {
-	"itemConfig": {
-		"toolSound": [
-			"com.teammetallurgy.aquaculture.items.ItemAquacultureFishingRod",
-			"com.teammetallurgy.aquaculture.items.ItemAdminFishingRod"
-		],
-		"crystalArmor": [
+	"items": {
+		"CRYSTAL": [
 			"aquaculture:neptunium_boots",
 			"aquaculture:neptunium_leggings",
 			"aquaculture:neptunium_chestplate",
 			"aquaculture:neptunium_helmet"
+		],
+		"TOOL": [
+			"com.teammetallurgy.aquaculture.items.ItemAquacultureFishingRod",
+			"com.teammetallurgy.aquaculture.items.ItemAdminFishingRod"
 		]
 	}
 }

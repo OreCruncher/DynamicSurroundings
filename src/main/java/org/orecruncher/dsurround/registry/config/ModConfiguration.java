@@ -27,20 +27,21 @@ package org.orecruncher.dsurround.registry.config;
 import java.util.List;
 import java.util.Map;
 
+import org.orecruncher.dsurround.registry.item.ItemClass;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.annotations.SerializedName;
 
 public final class ModConfiguration {
-	
-	// This field will be filled out when it is loaded.  Intended
+
+	// This field will be filled out when it is loaded. Intended
 	// to record the original source of the configuration because
 	// once it is cached that info would have been lost.
 	public String source = "<UNKNOWN>";
 
 	@SerializedName("soundMetadata")
 	public Map<String, SoundMetadataConfig> sounds = ImmutableMap.of();
-	
+
 	@SerializedName("biomes")
 	public List<BiomeConfig> biomes = ImmutableList.of();
 
@@ -62,8 +63,8 @@ public final class ModConfiguration {
 	@SerializedName("forgeMappings")
 	public List<ForgeEntry> forgeMappings = ImmutableList.of();
 
-	@SerializedName("itemConfig")
-	public ItemConfig itemConfig = new ItemConfig();
+	@SerializedName("items")
+	public Map<ItemClass, List<String>> items = ImmutableMap.of();
 
 	@SerializedName("variators")
 	public Map<String, VariatorConfig> variators = ImmutableMap.of();

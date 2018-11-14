@@ -1,6 +1,6 @@
 {
-	"itemConfig": {
-		"axeSound": [
+	"items": {
+		"AXE": [
 			"slimeknights.tconstruct.tools.tools.Hatchet",
 			"slimeknights.tconstruct.tools.tools.LumberAxe",
 			"slimeknights.tconstruct.tools.tools.Scythe",
@@ -10,18 +10,18 @@
 			"slimeknights.tconstruct.tools.melee.item.BattleSign",
 			"slimeknights.tconstruct.tools.melee.item.FryPan"
 		],
-		"toolSound": [
+		"TOOL": [
 			"slimeknights.tconstruct.tools.tools.Excavator",
 			"slimeknights.tconstruct.tools.tools.Kama",
 			"slimeknights.tconstruct.tools.tools.Shovel",
 			"slimeknights.tconstruct.gadgets.item.ItemSlimeSling"
 		],
-		"bowSound": [
+		"BOW": [
 			"slimeknights.tconstruct.tools.ranged.item.LongBow",
 			"slimeknights.tconstruct.tools.ranged.item.ShortBow",
 			"slimeknights.tconstruct.tools.ranged.item.CrossBow"
 		],
-		"swordSound": [
+		"SWORD": [
 			"slimeknights.tconstruct.tools.melee.item.BroadSword",
 			"slimeknights.tconstruct.tools.melee.item.Cleaver",
 			"slimeknights.tconstruct.tools.melee.item.LongSword",

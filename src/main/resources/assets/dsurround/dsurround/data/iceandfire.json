@@ -1,26 +1,12 @@
 {
-	"itemConfig": {
-		"axeSound": [
-			"com.github.alexthe666.iceandfire.item.ItemModPickaxe",
-			"com.github.alexthe666.iceandfire.item.ItemModAxe"
-		],
-		"bowSound": [
-			"com.github.alexthe666.iceandfire.item.ItemDragonBow"
-		],
-		"swordSound": [
-			"com.github.alexthe666.iceandfire.item.ItemModSword"
-		],
-		"toolSound": [
-			"com.github.alexthe666.iceandfire.item.ItemModHoe",
-			"com.github.alexthe666.iceandfire.item.ItemModShovel"
-		],
-		"lightArmor": [
+	"items": {
+		"LEATHER": [
 			"iceandfire:sheep_helmet",
 			"iceandfire:sheep_chestplate",
 			"iceandfire:sheep_leggings",
 			"iceandfire:sheep_boots"
 		],
-		"mediumArmor": [
+		"CHAIN": [
 			"iceandfire:armor_red_helmet",
 			"iceandfire:armor_red_chestplate",
 			"iceandfire:armor_red_leggings",
@@ -54,11 +40,25 @@
 			"iceandfire:armor_silver_leggings",
 			"iceandfire:armor_silver_boots"
 		],
-		"heavyArmor": [
+		"PLATE": [
 			"iceandfire:armor_silver_metal_helmet",
 			"iceandfire:armor_silver_metal_chestplate",
 			"iceandfire:armor_silver_metal_leggings",
 			"iceandfire:armor_silver_metal_boots"
+		],
+		"AXE": [
+			"com.github.alexthe666.iceandfire.item.ItemModPickaxe",
+			"com.github.alexthe666.iceandfire.item.ItemModAxe"
+		],
+		"BOW": [
+			"com.github.alexthe666.iceandfire.item.ItemDragonBow"
+		],
+		"SWORD": [
+			"com.github.alexthe666.iceandfire.item.ItemModSword"
+		],
+		"TOOL": [
+			"com.github.alexthe666.iceandfire.item.ItemModHoe",
+			"com.github.alexthe666.iceandfire.item.ItemModShovel"
 		]
 	},
 	"blocks": [

@@ -1,20 +1,20 @@
 {
-	"itemConfig":{
-		"axeSound":[
-			"crazypants.enderio.base.item.darksteel.ItemDarkSteelAxe",
-			"crazypants.enderio.base.item.darksteel.ItemDarkSteelPickaxe"
-		],
-		"bowSound":[
-			"crazypants.enderio.base.item.darksteel.ItemDarkSteelBow"
-		],
-		"swordSound":[
-			"crazypants.enderio.base.item.darksteel.ItemDarkSteelSword"
-		],
-		"heavyArmor":[
+	"items": {
+		"PLATE":[
 			"enderio:item_dark_steel_helmet",
 			"enderio:item_dark_steel_chestplate",
 			"enderio:item_dark_steel_leggings",
 			"enderio:item_dark_steel_boots"
+		],
+		"AXE":[
+			"crazypants.enderio.base.item.darksteel.ItemDarkSteelAxe",
+			"crazypants.enderio.base.item.darksteel.ItemDarkSteelPickaxe"
+		],
+		"BOW":[
+			"crazypants.enderio.base.item.darksteel.ItemDarkSteelBow"
+		],
+		"SWORD":[
+			"crazypants.enderio.base.item.darksteel.ItemDarkSteelSword"
 		]
 	},
 	"footsteps": {

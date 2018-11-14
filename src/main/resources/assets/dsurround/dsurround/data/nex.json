@@ -1,17 +1,6 @@
 {
-	"itemConfig": {
-		"axeSound": [
-			"nex.item.ItemGoldenWitherBoneAxe",
-			"nex.item.ItemGoldenWitherBonePickaxe"
-		],
-		"swordSound": [
-			"nex.item.ItemGoldenWitherBoneSword"
-		],
-		"toolSound": [
-			"nex.item.ItemGoldenWitherBoneHoe",
-			"nex.item.ItemGoldenWitherBoneShovel"
-		],
-		"lightArmor": [
+	"items": {
+		"LEATHER": [
 			"nex:wither_bone_helmet",
 			"nex:wither_bone_chestplate",
 			"nex:wither_bone_leggings",
@@ -20,6 +9,17 @@
 			"nex:salamander_hide_chestplate",
 			"nex:salamander_hide_leggings",
 			"nex:salamander_hide_boots"
+		],
+		"AXE": [
+			"nex.item.ItemGoldenWitherBoneAxe",
+			"nex.item.ItemGoldenWitherBonePickaxe"
+		],
+		"SWORD": [
+			"nex.item.ItemGoldenWitherBoneSword"
+		],
+		"TOOL": [
+			"nex.item.ItemGoldenWitherBoneHoe",
+			"nex.item.ItemGoldenWitherBoneShovel"
 		]
 	},
 	"footsteps": {

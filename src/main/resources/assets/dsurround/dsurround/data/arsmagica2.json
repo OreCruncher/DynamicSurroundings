@@ -1,21 +1,19 @@
 {
 	"blocks": [
 		{
-			"blocks":[
+			"blocks": [
 				"arsmagica2:liquid_essence"
 			],
-			"effects":[
+			"effects": [
 				{
-					"effect":"fountain",
-					"chance":500
+					"effect": "fountain",
+					"chance": 500
 				},
 				{
-					"effect":"bubble",
-					"chance":1800
+					"effect": "bubble",
+					"chance": 1800
 				}
-				
 			]
-			
 		},
 		{
 			"blocks": [
@@ -30,31 +28,25 @@
 			]
 		}
 	],
-	"itemConfig":{
-		"axeSound":[
+	"items": {
+		"LEATHER": [
+			"am2.armor.AMArmor"
+		],
+		"AXE": [
 			"am2.items.ItemBoundAxe",
 			"am2.items.ItemBoundPickaxe"
 		],
-		"bowSound":[
+		"BOW": [
 			"am2.items.ItemBoundBow"
 		],
-		"swordSound":[
+		"SWORD": [
 			"am2.items.ItemBoundSword"
 		],
-		"toolSound": [
+		"TOOL": [
 			"am2.items.ItemBoundHoe",
 			"am2.items.ItemBoundShovel",
 			"am2.items.ItemMagicBroom",
 			"am2.items.ItemSpellStaff"
-		],
-		"lightArmor": [
-			"am2.armor.AMArmor"
-		],
-		"mediumArmor":[
-		],
-		"crystalArmor":[
-		],
-		"heavyArmor":[
 		]
 	},
 	"footsteps": {

@@ -1,24 +1,24 @@
 {
-	"itemConfig": {
-		"lightArmor": [
+	"items": {
+		"LEATHER": [
 			"toroquest:samurai_boots",
 			"toroquest:samurai_leggings",
 			"toroquest:samurai_chestplate",
 			"toroquest:samurai_helmet"
 		],
-		"mediumArmor": [
+		"CHAIN": [
 			"toroquest:toro_armor_boots",
 			"toroquest:toro_armor_leggings",
 			"toroquest:toro_armor_chestplate",
 			"toroquest:toro_armor_helmet"
 		],
-		"crystalArmor": [
+		"CRYSTAL": [
 			"toroquest:reinforced_diamond_boots",
 			"toroquest:reinforced_diamond_leggings",
 			"toroquest:reinforced_diamond_chestplate",
 			"toroquest:reinforced_diamond_helmet"
 		],
-		"heavyArmor": [
+		"PLATE": [
 			"toroquest:royal_boots",
 			"toroquest:royal_leggings",
 			"toroquest:royal_chestplate",

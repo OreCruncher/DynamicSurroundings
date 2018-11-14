@@ -1,6 +1,6 @@
 {
-	"itemConfig":{
-		"heavyArmor":[
+	"items":{
+		"PLATE":[
 			"conarm:helmet",
 			"conarm:chestplate",
 			"conarm:leggings",

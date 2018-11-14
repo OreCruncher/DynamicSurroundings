@@ -13,30 +13,8 @@
 			]
 		}
 	],
-	"itemConfig":{
-		"axeSound":[
-			"thaumcraft.common.items.tools.ItemElementalAxe",
-			"thaumcraft.common.items.tools.ItemElementalPickaxe",
-			"thaumcraft.common.items.tools.ItemThaumiumAxe",
-			"thaumcraft.common.items.tools.ItemThaumiumPickaxe",
-			"thaumcraft.common.items.tools.ItemVoidAxe",
-			"thaumcraft.common.items.tools.ItemVoidPickaxe"
-		],
-		"swordSound":[
-			"thaumcraft.common.items.tools.ItemCrimsonBlade",
-			"thaumcraft.common.items.tools.ItemElementalSword",
-			"thaumcraft.common.items.tools.ItemThaumiumSword",
-			"thaumcraft.common.items.tools.ItemVoidSword"
-		],
-		"toolSound": [
-			"thaumcraft.common.items.tools.ItemElementalHoe",
-			"thaumcraft.common.items.tools.ItemElementalShovel",
-			"thaumcraft.common.items.tools.ItemThaumiumHoe",
-			"thaumcraft.common.items.tools.ItemThaumiumShovel",
-			"thaumcraft.common.items.tools.ItemVoidHoe",
-			"thaumcraft.common.items.tools.ItemVoidShovel"
-		],
-		"lightArmor": [
+	"items": {
+		"LEATHER": [
 			"thaumcraft:goggles",
 			"thaumcraft:cloth_chest",
 			"thaumcraft:cloth_legs",
@@ -46,12 +24,12 @@
 			"thaumcraft:void_robe_chest",
 			"thaumcraft:void_robe_legs"
 		],
-		"mediumArmor":[
+		"CHAIN":[
 			"thaumcraft:crimson_robe_helm",
 			"thaumcraft:crimson_robe_chest",
 			"thaumcraft:crimson_robe_legs"
 		],
-		"heavyArmor":[
+		"PLATE":[
 			"thaumcraft:thaumium_helm",
 			"thaumcraft:thaumium_chest",
 			"thaumcraft:thaumium_legs",
@@ -70,6 +48,28 @@
 			"thaumcraft:crimson_praetor_helm",
 			"thaumcraft:crimson_praetor_chest",
 			"thaumcraft:crimson_praetor_legs"
+		],
+		"AXE":[
+			"thaumcraft.common.items.tools.ItemElementalAxe",
+			"thaumcraft.common.items.tools.ItemElementalPickaxe",
+			"thaumcraft.common.items.tools.ItemThaumiumAxe",
+			"thaumcraft.common.items.tools.ItemThaumiumPickaxe",
+			"thaumcraft.common.items.tools.ItemVoidAxe",
+			"thaumcraft.common.items.tools.ItemVoidPickaxe"
+		],
+		"SWORD":[
+			"thaumcraft.common.items.tools.ItemCrimsonBlade",
+			"thaumcraft.common.items.tools.ItemElementalSword",
+			"thaumcraft.common.items.tools.ItemThaumiumSword",
+			"thaumcraft.common.items.tools.ItemVoidSword"
+		],
+		"TOOL": [
+			"thaumcraft.common.items.tools.ItemElementalHoe",
+			"thaumcraft.common.items.tools.ItemElementalShovel",
+			"thaumcraft.common.items.tools.ItemThaumiumHoe",
+			"thaumcraft.common.items.tools.ItemThaumiumShovel",
+			"thaumcraft.common.items.tools.ItemVoidHoe",
+			"thaumcraft.common.items.tools.ItemVoidShovel"
 		]
 	}
 }

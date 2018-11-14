@@ -30,7 +30,7 @@ import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IFootstepAccentProvider;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.registry.item.ArmorClass;
+import org.orecruncher.dsurround.registry.item.ItemClass;
 import org.orecruncher.lib.collections.ObjectArray;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -51,15 +51,15 @@ public class ArmorAccents implements IFootstepAccentProvider {
 	@Nonnull
 	public ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos pos,
 			@Nonnull final ObjectArray<IAcoustic> in) {
-		final ArmorClass armor;
-		final ArmorClass foot;
+		final ItemClass armor;
+		final ItemClass foot;
 
 		if (EnvironState.isPlayer(entity)) {
 			armor = EnvironState.getPlayerArmorClass();
 			foot = EnvironState.getPlayerFootArmorClass();
 		} else {
-			armor = ArmorClass.effectiveArmorClass(entity);
-			foot = ArmorClass.footArmorClass(entity);
+			armor = ItemClass.effectiveArmorClass(entity);
+			foot = ItemClass.footArmorClass(entity);
 		}
 
 		final IAcoustic armorAddon = ClientRegistry.FOOTSTEPS.getArmorAcoustic(armor);

@@ -118,10 +118,6 @@
 			]
 		}
 	],
-	"itemConfig": {
-		"toolSound": [
-		]
-	},
 	"footsteps": {
 		"biomesoplenty:ash_block": "sand",
 		"biomesoplenty:bamboo": "wood",

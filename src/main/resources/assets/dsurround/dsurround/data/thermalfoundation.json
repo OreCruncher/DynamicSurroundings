@@ -1,27 +1,6 @@
 {
-	"itemConfig": {
-		"axeSound": [
-			"cofh.core.item.tool.ItemSickleCore",
-			"cofh.core.item.tool.ItemPickaxeCore",
-			"cofh.core.item.tool.ItemAxeCore",
-			"cofh.core.item.tool.ItemHammerCore"
-		],
-		"bowSound": [
-		],
-		"swordSound": [
-		],
-		"toolSound": [
-			"cofh.core.item.tool.ItemShovelCore"
-		],
-		"shieldSound": [
-		],
-		"lightArmor": [
-		],
-		"mediumArmor": [
-		],
-		"crystalArmor": [
-		],
-		"heavyArmor": [
+	"items":{
+		"PLATE": [
 			"thermalfoundation:armor.helmet_copper",
 			"thermalfoundation:armor.plate_copper",
 			"thermalfoundation:armor.legs_copper",
@@ -70,6 +49,15 @@
 			"thermalfoundation:armor.plate_constantan",
 			"thermalfoundation:armor.legs_constantan",
 			"thermalfoundation:armor.boots_constantan"
+		],
+		"AXE": [
+			"cofh.core.item.tool.ItemSickleCore",
+			"cofh.core.item.tool.ItemPickaxeCore",
+			"cofh.core.item.tool.ItemAxeCore",
+			"cofh.core.item.tool.ItemHammerCore"
+		],
+		"TOOL": [
+			"cofh.core.item.tool.ItemShovelCore"
 		]
 	},
 	"footsteps": {

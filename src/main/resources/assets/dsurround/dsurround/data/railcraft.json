@@ -1,23 +1,23 @@
 {
-	"itemConfig": {
-		"axeSound": [
+	"items": {
+		"PLATE": [
+			"railcraft:armor_helmet_steel",
+			"railcraft:armor_chestplate_steel",
+			"railcraft:armor_leggings_steel",
+			"railcraft:armor_boots_steel"
+		],
+		"AXE": [
 			"mods.railcraft.common.items.ItemSteelAxe",
 			"mods.railcraft.common.items.ItemSteelPickaxe",
 			"mods.railcraft.common.items.ItemCrowbarIron",
 			"mods.railcraft.common.items.ItemCrowbarSteel"
 		],
-		"swordSound": [
+		"SWORD": [
 			"mods.railcraft.common.items.ItemSteelSword"
 		],
-		"toolSound": [
+		"TOOL": [
 			"mods.railcraft.common.items.ItemSteelHoe",
 			"mods.railcraft.common.items.ItemSteelShovel"
-		],
-		"heavyArmor": [
-			"railcraft:armor_helmet_steel",
-			"railcraft:armor_chestplate_steel",
-			"railcraft:armor_leggings_steel",
-			"railcraft:armor_boots_steel"
 		]
 	},
 	"footsteps":{
