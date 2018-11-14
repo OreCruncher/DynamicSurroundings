@@ -616,6 +616,7 @@ public final class ModOptions {
 		@DefaultValue("false")
 		@LangKey("dsurround.cfg.sound.SwordEquipAsTool")
 		@Comment("Enable Sword Equip sound as Tool")
+		@RestartRequired(world = true, server = true)
 		public static boolean swordEquipAsTool = false;
 
 		@Option(CONFIG_ENABLE_CRAFTING_SOUND)
