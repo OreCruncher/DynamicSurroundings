@@ -58,9 +58,9 @@ public final class Sounds {
 	public final static SoundEffect SHIELD_EQUIP;
 	public final static SoundEffect SHIELD_USE;
 
-	public final static SoundEffect LIGHT_ARMOR_EQUIP;
-	public final static SoundEffect MEDIUM_ARMOR_EQUIP;
-	public final static SoundEffect HEAVY_ARMOR_EQUIP;
+	public final static SoundEffect LEATHER_ARMOR_EQUIP;
+	public final static SoundEffect CHAIN_ARMOR_EQUIP;
+	public final static SoundEffect PLATE_ARMOR_EQUIP;
 	public final static SoundEffect CRYSTAL_ARMOR_EQUIP;
 
 	public final static SoundEffect THUNDER;
@@ -108,9 +108,9 @@ public final class Sounds {
 		SHIELD_EQUIP = new SoundEffect.Builder("shield.equip", SoundCategory.PLAYERS).setVolume(0.30F).build();
 		SHIELD_USE = new SoundEffect.Builder("shield.use", SoundCategory.PLAYERS).setVolume(0.30F).build();
 
-		LIGHT_ARMOR_EQUIP = new SoundEffect.Builder("fs.armor.light_walk", SoundCategory.PLAYERS).build();
-		MEDIUM_ARMOR_EQUIP = new SoundEffect.Builder("fs.armor.medium_walk", SoundCategory.PLAYERS).build();
-		HEAVY_ARMOR_EQUIP = new SoundEffect.Builder("fs.armor.heavy_walk", SoundCategory.PLAYERS).build();
+		LEATHER_ARMOR_EQUIP = new SoundEffect.Builder("fs.armor.light_walk", SoundCategory.PLAYERS).build();
+		CHAIN_ARMOR_EQUIP = new SoundEffect.Builder("fs.armor.medium_walk", SoundCategory.PLAYERS).build();
+		PLATE_ARMOR_EQUIP = new SoundEffect.Builder("fs.armor.heavy_walk", SoundCategory.PLAYERS).build();
 		CRYSTAL_ARMOR_EQUIP = new SoundEffect.Builder("fs.armor.crystal_walk", SoundCategory.PLAYERS).build();
 
 		THUNDER = new SoundEffect.Builder("thunder", SoundCategory.WEATHER).setVolume(10000F).build();

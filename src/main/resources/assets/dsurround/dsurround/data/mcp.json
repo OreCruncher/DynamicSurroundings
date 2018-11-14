@@ -727,6 +727,9 @@
 			"net.minecraft.item.ItemSpade",
 			"net.minecraft.item.ItemHoe",
 			"net.minecraft.item.ItemFishingRod"
+		],
+		"FOOD": [
+			"net.minecraft.item.ItemFood"
 		]
 	},
 	"dimensions": [

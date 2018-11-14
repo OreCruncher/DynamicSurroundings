@@ -45,10 +45,10 @@ public enum ItemClass {
 
 	//@formatter:off
 	NONE(null),
-	LEATHER(Sounds.LIGHT_ARMOR_EQUIP),
-	CHAIN(Sounds.MEDIUM_ARMOR_EQUIP),
+	LEATHER(Sounds.LEATHER_ARMOR_EQUIP),
+	CHAIN(Sounds.CHAIN_ARMOR_EQUIP),
 	CRYSTAL(Sounds.CRYSTAL_ARMOR_EQUIP),
-	PLATE(Sounds.HEAVY_ARMOR_EQUIP),
+	PLATE(Sounds.PLATE_ARMOR_EQUIP),
 	SLIME(null),
 	SHIELD(Sounds.TOOL_SWING, Sounds.SHIELD_USE, Sounds.SHIELD_EQUIP),
 	SWORD(Sounds.SWORD_SWING, null, ModOptions.sound.swordEquipAsTool ? Sounds.TOOL_EQUIP : Sounds.SWORD_EQUIP),
