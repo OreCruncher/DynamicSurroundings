@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.entity.data;
+package org.orecruncher.dsurround.capabilities.entitydata;
 
 public interface IEntityDataSettable extends IEntityData {
 	

@@ -22,29 +22,32 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.entity.data;
+package org.orecruncher.dsurround.capabilities.dimension;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public interface IEntityData extends INBTSerializable<NBTTagCompound>{
+public interface IDimensionInfo extends INBTSerializable<NBTTagCompound> {
 
-	/**
-	 * The unique ID of the entity this data is associated.
-	 *
-	 * @return id of the associated entity
-	 */
-	int getEntityId();
+	int getId();
 
-	/**
-	 * Indicates if the entity is attacking something
-	 * @return true if the entity is attacking; false otherwise
-	 */
-	boolean isAttacking();
-	
-	/**
-	 * Indicates if the entity is fleeing from something
-	 * @return true if the entity is fleeing; false otherwise
-	 */
-	boolean isFleeing();
+	String getName();
+
+	int getSeaLevel();
+
+	int getSkyHeight();
+
+	int getCloudHeight();
+
+	int getSpaceHeight();
+
+	boolean hasHaze();
+
+	boolean hasAuroras();
+
+	boolean hasWeather();
+
+	boolean hasFog();
+
+	boolean playBiomeSounds();
 }

@@ -27,8 +27,9 @@ package org.orecruncher.dsurround.proxy;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
+import org.orecruncher.dsurround.capabilities.CapabilityEntityData;
 import org.orecruncher.dsurround.commands.CommandDS;
-import org.orecruncher.dsurround.entity.CapabilityEntityData;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 import org.orecruncher.dsurround.network.Network;
 import org.orecruncher.dsurround.registry.RegistryManager;
@@ -86,6 +87,7 @@ public class Proxy {
 		eventBusRegistrations();
 
 		CapabilityEntityData.register();
+		CapabilityDimensionInfo.register();
 	}
 
 	public void init(@Nonnull final FMLInitializationEvent event) {

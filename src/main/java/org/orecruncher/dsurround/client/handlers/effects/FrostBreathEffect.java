@@ -28,7 +28,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientRegistry;
+import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
 import org.orecruncher.dsurround.client.effects.EntityEffect;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactory;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactoryFilter;
@@ -42,6 +42,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -79,8 +80,9 @@ public class FrostBreathEffect extends EntityEffect {
 
 	protected boolean isPossibleToShow(final Entity entity) {
 		if (entity.isInsideOfMaterial(Material.AIR)) {
+			final World world = entity.getEntityWorld();
 			final BlockPos entityPos = entity.getPosition();
-			return ClientRegistry.SEASON.showFrostBreath(entity.getEntityWorld(), entityPos);
+			return CapabilitySeasonInfo.getCapability(world).showFrostBreath(world, entityPos);
 		}
 		return false;
 	}

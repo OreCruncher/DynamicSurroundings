@@ -39,7 +39,6 @@ import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.lib.ItemStackUtil;
@@ -77,6 +76,8 @@ public final class ItemRegistry extends Registry {
 	public void init() {
 		this.classMap = new EnumMap<>(ItemClass.class);
 		this.items = new IdentityHashMap<>(MAP_CAPACITY);
+		
+		Item.REGISTRY.iterator().forEachRemaining(item -> ItemUtils.setItemData(item, ItemClass.NONE));
 
 		for (final ItemClass ic : ItemClass.values())
 			this.classMap.put(ic, new ReferenceOpenHashSet<>(SET_CAPACITY));
@@ -105,8 +106,12 @@ public final class ItemRegistry extends Registry {
 				}
 			}
 		}
+		
+		// Set the cached field on the Item object with the data
+		this.items.entrySet().forEach(entry -> ItemUtils.setItemData(entry.getKey(), entry.getValue()));
 
 		// Free up resources that are no longer needed
+		this.items = null;
 		this.classMap = null;
 	}
 
@@ -174,54 +179,32 @@ public final class ItemRegistry extends Registry {
 		}
 	}
 
-	@Nullable
-	public ItemClass getItemType(@Nonnull final ItemStack stack) {
-		return ItemStackUtil.isValidItemStack(stack) ? this.items.get(stack.getItem()) : null;
-	}
-
 	public boolean isBow(@Nonnull final ItemStack stack) {
-		return getItemType(stack) == ItemClass.BOW;
+		return getItemClass(stack) == ItemClass.BOW;
 	}
 
 	public boolean isShield(@Nonnull final ItemStack stack) {
-		return getItemType(stack) == ItemClass.SHIELD;
+		return getItemClass(stack) == ItemClass.SHIELD;
 	}
 
 	@Nonnull
 	public ItemClass getItemClass(@Nonnull final ItemStack stack) {
-		if (ItemStackUtil.isValidItemStack(stack)) {
-			final ItemClass result = this.items.get(stack.getItem());
-			if (result != null)
-				return result;
-		}
-		return ItemClass.NONE;
+		return ItemStackUtil.isValidItemStack(stack) ? ItemUtils.getItemData(stack.getItem()) : ItemClass.NONE;
 	}
 
 	@Nullable
 	public SoundEffect getSwingSound(@Nonnull final ItemStack stack) {
-		if (ItemStackUtil.isValidItemStack(stack)) {
-			final ItemClass result = this.items.get(stack.getItem());
-			return result != null ? result.getSwingSound() : null;
-		}
-		return null;
+		return getItemClass(stack).getSwingSound();
 	}
 
 	@Nullable
 	public SoundEffect getUseSound(@Nonnull final ItemStack stack) {
-		if (ItemStackUtil.isValidItemStack(stack)) {
-			final ItemClass result = this.items.get(stack.getItem());
-			return result != null ? result.getUseSound() : null;
-		}
-		return null;
+		return getItemClass(stack).getUseSound();
 	}
 
 	@Nullable
 	public SoundEffect getEquipSound(@Nonnull final ItemStack stack) {
-		if (ItemStackUtil.isValidItemStack(stack)) {
-			final ItemClass result = this.items.get(stack.getItem());
-			return result != null ? result.getEquipSound() : Sounds.UTILITY_EQUIP;
-		}
-		return null;
+		return getItemClass(stack).getEquipSound();
 	}
 
 }

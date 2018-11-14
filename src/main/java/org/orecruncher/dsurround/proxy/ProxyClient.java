@@ -32,6 +32,8 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
+import org.orecruncher.dsurround.capabilities.CapabilitySpeechData;
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
 import org.orecruncher.dsurround.client.fx.particle.ParticleDripOverride;
 import org.orecruncher.dsurround.client.gui.HumDinger;
@@ -46,7 +48,6 @@ import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.client.weather.RenderWeather;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.commands.CommandCalc;
-import org.orecruncher.dsurround.entity.CapabilitySpeechData;
 import org.orecruncher.dsurround.event.ReloadEvent;
 import org.orecruncher.dsurround.event.WorldEventDetector;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
@@ -116,6 +117,7 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 	public void preInit(@Nonnull final FMLPreInitializationEvent event) {
 		super.preInit(event);
 		CapabilitySpeechData.register();
+		CapabilitySeasonInfo.register();
 	}
 
 	@Override

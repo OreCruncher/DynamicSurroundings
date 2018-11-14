@@ -22,15 +22,15 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.entity;
+package org.orecruncher.dsurround.capabilities;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.capabilities.speech.ISpeechData;
+import org.orecruncher.dsurround.capabilities.speech.SpeechData;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.entity.speech.ISpeechData;
-import org.orecruncher.dsurround.entity.speech.SpeechData;
 import org.orecruncher.lib.capability.CapabilityProviderSerializable;
 import org.orecruncher.lib.capability.CapabilityUtils;
 

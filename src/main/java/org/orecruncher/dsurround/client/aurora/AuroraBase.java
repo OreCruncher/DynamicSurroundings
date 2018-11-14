@@ -28,7 +28,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.registry.dimension.DimensionInfo;
+import org.orecruncher.dsurround.registry.dimension.DimensionData;
 import org.orecruncher.lib.Color;
 import org.orecruncher.lib.random.XorShiftRandom;
 
@@ -105,7 +105,7 @@ public abstract class AuroraBase implements IAurora {
 	}
 
 	protected double getTranslationY(final float partialTick) {
-		final DimensionInfo dimInfo = EnvironState.getDimensionInfo();
+		final DimensionData dimInfo = EnvironState.getDimensionInfo();
 		final Minecraft mc = Minecraft.getMinecraft();
 		double heightScale = 1D;
 		if (mc.player.posY > dimInfo.getSeaLevel()) {

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.entity.speech;
+package org.orecruncher.dsurround.capabilities.speech;
 
 import java.util.ArrayList;
 import java.util.List;

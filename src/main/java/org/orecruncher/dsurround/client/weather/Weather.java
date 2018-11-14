@@ -28,13 +28,13 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.capabilities.dimension.DimensionInfo;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.client.weather.tracker.ServerDrivenTracker;
 import org.orecruncher.dsurround.client.weather.tracker.SimulationTracker;
 import org.orecruncher.dsurround.client.weather.tracker.Tracker;
 import org.orecruncher.dsurround.event.WeatherUpdateEvent;
-import org.orecruncher.dsurround.world.data.DimensionEffectData;
 import org.orecruncher.lib.math.MathStuff;
 
 import net.minecraft.client.Minecraft;
@@ -51,22 +51,17 @@ public class Weather {
 	private static final SoundEvent VANILLA_RAIN = ClientRegistry.SOUND.getSound(new ResourceLocation("weather.rain"));
 
 	public enum Properties {
+		//@formatter:off
 		// Regular Vanilla rain - no modification
 		VANILLA,
-		//
 		NONE(0.0F, "calm"),
-		//
 		CALM(0.165F, "calm"),
-		//
 		LIGHT(0.330F, "light"),
-		//
 		GENTLE(0.495F, "gentle"),
-		//
 		MODERATE(0.660F, "moderate"),
-		//
 		HEAVY(0.826F, "heavy"),
-		//
 		STRONG(1.0F, "strong");
+		//@formatter:on
 
 		private final float level;
 		private final ResourceLocation rainTexture;
@@ -130,7 +125,7 @@ public class Weather {
 				result = Properties.VANILLA;
 			} else {
 
-				str = MathStuff.clamp(str, DimensionEffectData.MIN_INTENSITY, DimensionEffectData.MAX_INTENSITY);
+				str = MathStuff.clamp(str, DimensionInfo.MIN_INTENSITY, DimensionInfo.MAX_INTENSITY);
 				result = Properties.NONE;
 
 				for (int i = 0; i < Properties.values().length; i++) {

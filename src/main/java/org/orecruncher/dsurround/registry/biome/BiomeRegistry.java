@@ -38,7 +38,7 @@ import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironStat
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
-import org.orecruncher.dsurround.registry.dimension.DimensionInfo;
+import org.orecruncher.dsurround.registry.dimension.DimensionData;
 import org.orecruncher.lib.math.MathStuff;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -230,7 +230,7 @@ public final class BiomeRegistry extends Registry {
 				else
 					info = this.UNDERWATER_INFO;
 			} else {
-				final DimensionInfo dimInfo = EnvironState.getDimensionInfo();
+				final DimensionData dimInfo = EnvironState.getDimensionInfo();
 				final int theY = MathStuff.floor(player.posY);
 				if ((theY + INSIDE_Y_ADJUST) <= dimInfo.getSeaLevel())
 					info = this.UNDERGROUND_INFO;

@@ -27,6 +27,9 @@ package org.orecruncher.dsurround.client.weather;
 import java.util.Random;
 
 import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
+import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
+import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
@@ -34,7 +37,6 @@ import org.orecruncher.dsurround.client.sound.AdhocSound;
 import org.orecruncher.dsurround.client.sound.BasicSound;
 import org.orecruncher.dsurround.client.weather.compat.RandomThings;
 import org.orecruncher.dsurround.registry.PrecipitationType;
-import org.orecruncher.dsurround.registry.season.SeasonInfo;
 import org.orecruncher.lib.WorldUtils;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.gfx.ParticleHelper;
@@ -128,7 +130,7 @@ public class StormSplashRenderer {
 	}
 
 	protected BlockPos getPrecipitationHeight(final World world, final int range, final BlockPos pos) {
-		return ClientRegistry.SEASON.getPrecipitationHeight(world, pos);
+		return CapabilitySeasonInfo.getCapability(world).getPrecipitationHeight(world, pos);
 	}
 
 	protected boolean biomeHasDust(final Biome biome) {
@@ -138,7 +140,7 @@ public class StormSplashRenderer {
 	protected void playSplashSound(final EntityRenderer renderer, final World world, final Entity player, double x,
 			double y, double z) {
 
-		final SeasonInfo si = ClientRegistry.SEASON.getData(world);
+		final ISeasonInfo si = CapabilitySeasonInfo.getCapability(world);
 
 		this.pos.setPos(x, y - 1, z);
 		final PrecipitationType pt = si.getPrecipitationType(world, this.pos, null);
@@ -166,7 +168,7 @@ public class StormSplashRenderer {
 			return;
 
 		final World world = mc.world;
-		if (!ClientRegistry.DIMENSION.hasWeather(world))
+		if (!CapabilityDimensionInfo.getCapability(world).hasWeather())
 			return;
 
 		float rainStrengthFactor = Weather.getIntensityLevel();
@@ -203,7 +205,7 @@ public class StormSplashRenderer {
 				continue;
 
 			final BlockPos precipHeight = getPrecipitationHeight(world, RANGE / 2, this.pos);
-			final PrecipitationType pt = ClientRegistry.SEASON.getPrecipitationType(world, precipHeight, null);
+			final PrecipitationType pt = CapabilitySeasonInfo.getCapability(world).getPrecipitationType(world, precipHeight, null);
 			final boolean hasDust = pt == PrecipitationType.DUST;
 
 			if ((hasDust || pt == PrecipitationType.RAIN) && precipHeight.getY() <= playerY + RANGE

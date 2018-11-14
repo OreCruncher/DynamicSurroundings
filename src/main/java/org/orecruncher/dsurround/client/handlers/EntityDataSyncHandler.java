@@ -26,9 +26,9 @@ package org.orecruncher.dsurround.client.handlers;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.capabilities.CapabilityEntityData;
+import org.orecruncher.dsurround.capabilities.entitydata.IEntityDataSettable;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.entity.CapabilityEntityData;
-import org.orecruncher.dsurround.entity.data.IEntityDataSettable;
 import org.orecruncher.dsurround.event.EntityDataEvent;
 import org.orecruncher.lib.WorldUtils;
 

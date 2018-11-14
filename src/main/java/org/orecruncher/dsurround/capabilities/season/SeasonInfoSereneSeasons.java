@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.registry.season;
+package org.orecruncher.dsurround.capabilities.season;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,10 +43,6 @@ import sereneseasons.config.BiomeConfig;
 
 @SideOnly(Side.CLIENT)
 public class SeasonInfoSereneSeasons extends SeasonInfo {
-
-	public SeasonInfoSereneSeasons(@Nonnull final World world) {
-		super(world);
-	}
 
 	@Override
 	@Nonnull

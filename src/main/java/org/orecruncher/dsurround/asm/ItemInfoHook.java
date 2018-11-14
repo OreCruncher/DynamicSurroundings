@@ -24,34 +24,25 @@
 
 package org.orecruncher.dsurround.asm;
 
-import org.apache.logging.log4j.Logger;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
 
-public class Transformer extends MyTransformer {
+public class ItemInfoHook  extends Transmorgrifier {
 
-	private static final Logger logger = TransformLoader.logger;
-
-	public static Logger log() {
-		return logger;
-	}
-
-	public Transformer() {
-		super(logger);
+	public ItemInfoHook() {
+		super("net.minecraft.item.Item");
 	}
 
 	@Override
-	protected void initTransmorgrifiers() {
-		addTransmorgrifier(new PatchEntityRenderer());
-		addTransmorgrifier(new PatchSoundManager());
-		addTransmorgrifier(new PatchSoundManagerPlayTime());
-		addTransmorgrifier(new PatchSoundManagerClampVolume());
-		addTransmorgrifier(new SoundPlayFlush());
-		addTransmorgrifier(new PatchSoundManagerSync());
-		addTransmorgrifier(new PatchParticleManagerSync());
-		addTransmorgrifier(new PatchEntityArrow());
-		addTransmorgrifier(new SoundCategoryAdditions());
-		addTransmorgrifier(new BiomeInfoHook());
-		addTransmorgrifier(new BlockStateInfoHook());
-		addTransmorgrifier(new ItemInfoHook());
+	public String name() {
+		return "Item Info Hook";
+	}
+
+	@Override
+	public boolean transmorgrify(final ClassNode cn) {
+		cn.fields.add(new FieldNode(Opcodes.ACC_PUBLIC, "dsurround_item_info", "Ljava/lang/Object;", null, null));
+		return true;
 	}
 
 }

@@ -22,23 +22,32 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.entity.speech;
+package org.orecruncher.dsurround.capabilities.dimension;
 
-import javax.annotation.Nonnull;
+public interface IDimensionInfoEx extends IDimensionInfo {
 
-import org.orecruncher.lib.collections.ObjectArray;
+	float getRainIntensity();
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.INBTSerializable;
+	float getCurrentRainIntensity();
 
-public interface ISpeechData  extends INBTSerializable<NBTTagCompound> {
-	
-	void addMessage(@Nonnull final String string, final int expiryTick);
-	
-	ObjectArray<String> getText();
-	
-	RenderContext getRenderContext();
-	
-	void onUpdate(final int currentTick);
-	
+	void setRainIntensity(final float intensity);
+
+	void setCurrentRainIntensity(final float intensity);
+
+	float getMinRainIntensity();
+
+	void setMinRainIntensity(final float intensity);
+
+	float getMaxRainIntensity();
+
+	void setMaxRainIntensity(final float intensity);
+
+	int getThunderTimer();
+
+	void setThunderTimer(final int time);
+
+	public void randomizeRain();
+
+	String configString();
+
 }

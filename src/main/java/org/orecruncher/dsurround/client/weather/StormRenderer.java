@@ -29,12 +29,14 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.lwjgl.opengl.GL11;
+import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
+import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
+import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.compat.RandomThings;
 import org.orecruncher.dsurround.registry.PrecipitationType;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
-import org.orecruncher.dsurround.registry.season.SeasonInfo;
 import org.orecruncher.lib.Color;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.random.XorShiftRandom;
@@ -117,7 +119,7 @@ public class StormRenderer {
 		final Minecraft mc = Minecraft.getMinecraft();
 		final World world = mc.world;
 
-		if (!ClientRegistry.DIMENSION.hasWeather(world))
+		if (!CapabilityDimensionInfo.getCapability(world).hasWeather())
 			return;
 
 		final float rainStrength = Weather.getIntensityLevel();
@@ -141,7 +143,7 @@ public class StormRenderer {
 
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
-		final SeasonInfo season = ClientRegistry.SEASON.getData(world);
+		final ISeasonInfo season = CapabilitySeasonInfo.getCapability(world);
 		final Weather.Properties props = Weather.getWeatherProperties();
 		final Entity entity = mc.getRenderViewEntity();
 

@@ -28,10 +28,10 @@ import javax.annotation.Nonnull;
 
 import org.lwjgl.opengl.GL11;
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.capabilities.CapabilitySpeechData;
+import org.orecruncher.dsurround.capabilities.speech.ISpeechData;
+import org.orecruncher.dsurround.capabilities.speech.RenderContext;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.entity.CapabilitySpeechData;
-import org.orecruncher.dsurround.entity.speech.ISpeechData;
-import org.orecruncher.dsurround.entity.speech.RenderContext;
 import org.orecruncher.lib.Color;
 import org.orecruncher.lib.WorldUtils;
 import org.orecruncher.lib.collections.ObjectArray;

@@ -28,14 +28,13 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.server.services.ServerRegistry;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
+import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfoEx;
 import org.orecruncher.dsurround.network.Network;
 import org.orecruncher.dsurround.network.PacketThunder;
 import org.orecruncher.dsurround.network.PacketWeatherUpdate;
-import org.orecruncher.dsurround.registry.dimension.DimensionInfo;
-import org.orecruncher.dsurround.world.data.DimensionEffectData;
 import org.orecruncher.lib.PlayerUtils;
 import org.orecruncher.lib.random.XorShiftRandom;
 
@@ -48,15 +47,13 @@ public class WeatherGenerator {
 
 	protected final Random RANDOM = XorShiftRandom.current();
 	protected final World world;
-	protected final DimensionInfo dimension;
-	protected final DimensionEffectData data;
+	protected final IDimensionInfoEx data;
 
 	public WeatherGenerator(@Nonnull final World world) {
 		this.world = world;
-		this.data = DimensionEffectData.get(world);
-		this.dimension = ServerRegistry.DIMENSION.getData(world);
+		this.data = (IDimensionInfoEx) CapabilityDimensionInfo.getCapability(world);
 	}
-	
+
 	@Nonnull
 	public String name() {
 		return "STANDARD";
@@ -71,11 +68,11 @@ public class WeatherGenerator {
 		final int randee = (int) (rainIntensity * 100.0F);
 		return this.RANDOM.nextInt(150) <= randee;
 	}
-	
+
 	protected WorldInfo worldInfo() {
 		return this.world.getWorldInfo();
 	}
-	
+
 	protected void preProcess() {
 		// A hook for a sub-class to do some figuring before the main
 		// routines execute.
@@ -88,7 +85,7 @@ public class WeatherGenerator {
 			// a strength.
 			if (this.data.getRainIntensity() == 0.0F) {
 				this.data.randomizeRain();
-				ModBase.log().debug("dim %d rain intensity set to %f, duration %d ticks", this.data.getDimensionId(),
+				ModBase.log().debug("dim %d rain intensity set to %f, duration %d ticks", this.data.getId(),
 						this.data.getRainIntensity(), worldInfo().getRainTime());
 			}
 			this.data.setCurrentRainIntensity(this.world.getRainStrength(1.0F));
@@ -104,7 +101,7 @@ public class WeatherGenerator {
 				// stopped.
 				this.data.setRainIntensity(0);
 				this.data.setCurrentRainIntensity(0);
-				ModBase.log().debug("dim %d rain has stopped, next rain %d ticks", this.data.getDimensionId(),
+				ModBase.log().debug("dim %d rain has stopped, next rain %d ticks", this.data.getId(),
 						worldInfo().getRainTime());
 			} else if (this.data.getRainIntensity() > 0) {
 				this.data.setRainIntensity(0);
@@ -133,11 +130,11 @@ public class WeatherGenerator {
 					// locus of the event. Center it at build height above
 					// their head.
 					final EntityPlayer player = PlayerUtils.getRandomPlayer(this.world);
-					final float theY = this.dimension.getSkyHeight();
+					final float theY = this.data.getSkyHeight();
 					if (player != null) {
-						final PacketThunder packet = new PacketThunder(this.data.getDimensionId(), doFlash(intensity),
+						final PacketThunder packet = new PacketThunder(this.data.getId(), doFlash(intensity),
 								new BlockPos(player.posX, theY, player.posZ));
-						Network.sendToDimension(this.data.getDimensionId(), packet);
+						Network.sendToDimension(this.data.getId(), packet);
 					}
 				}
 				// set new time
@@ -171,10 +168,10 @@ public class WeatherGenerator {
 	protected void sendUpdate() {
 		// Send the weather update to all players in the dimension.
 		if (this.world.playerEntities.size() > 0) {
-			final PacketWeatherUpdate packet = new PacketWeatherUpdate(this.data.getDimensionId(),
+			final PacketWeatherUpdate packet = new PacketWeatherUpdate(this.data.getId(),
 					this.data.getCurrentRainIntensity(), this.data.getRainIntensity(), worldInfo().getRainTime(),
 					this.world.getThunderStrength(1.0F), worldInfo().getThunderTime(), this.data.getThunderTimer());
-			Network.sendToDimension(this.data.getDimensionId(), packet);
+			Network.sendToDimension(this.data.getId(), packet);
 		}
 	}
 }

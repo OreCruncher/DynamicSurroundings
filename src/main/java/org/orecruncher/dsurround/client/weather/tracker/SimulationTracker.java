@@ -28,11 +28,11 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientRegistry;
+import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
+import org.orecruncher.dsurround.capabilities.dimension.DimensionInfo;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.Weather.Properties;
 import org.orecruncher.dsurround.event.ThunderEvent;
-import org.orecruncher.dsurround.world.data.DimensionEffectData;
 import org.orecruncher.lib.PlayerUtils;
 import org.orecruncher.lib.TimeUtils;
 import org.orecruncher.lib.math.MathStuff;
@@ -96,7 +96,7 @@ public class SimulationTracker extends Tracker {
 
 	@Override
 	public void update() {
-		if (ClientRegistry.DIMENSION.hasWeather(EnvironState.getWorld())) {
+		if (CapabilityDimensionInfo.getCapability(EnvironState.getWorld()).hasWeather()) {
 			updateRainState();
 			doAmbientThunder();
 		} else {
@@ -126,7 +126,7 @@ public class SimulationTracker extends Tracker {
 						+ (this.random.nextFloat() + this.random.nextFloat()) * mid;
 			}
 
-			this.maxIntensityLevel = MathStuff.clamp(result, 0.01F, DimensionEffectData.MAX_INTENSITY);
+			this.maxIntensityLevel = MathStuff.clamp(result, 0.01F, DimensionInfo.MAX_INTENSITY);
 
 		} else if (vanillaIntensity == 0F && this.intensityLevel > 0F) {
 			// Stopped raining
@@ -152,8 +152,7 @@ public class SimulationTracker extends Tracker {
 		if (this.intensity == Properties.VANILLA)
 			this.intensityLevel = 0F;
 		else
-			this.intensityLevel = MathStuff.clamp(level, DimensionEffectData.MIN_INTENSITY,
-					DimensionEffectData.MAX_INTENSITY);
+			this.intensityLevel = MathStuff.clamp(level, DimensionInfo.MIN_INTENSITY, DimensionInfo.MAX_INTENSITY);
 	}
 
 	private static long generateSeed() {

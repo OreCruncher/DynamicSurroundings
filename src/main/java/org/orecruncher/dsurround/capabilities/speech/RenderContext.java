@@ -22,31 +22,37 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.registry.season;
+package org.orecruncher.dsurround.capabilities.speech;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import org.orecruncher.lib.collections.ObjectArray;
 
-@SideOnly(Side.CLIENT)
-public class SeasonInfoNether extends SeasonInfo {
+import net.minecraft.client.Minecraft;
 
-	public SeasonInfoNether(@Nonnull final World world) {
-		super(world);
+public final class RenderContext {
+
+	private static final int MIN_TEXT_WIDTH = 60;
+	private static final double BUBBLE_MARGIN = 4.0F;
+
+	public final int textWidth;
+	public final int numberOfMessages;
+	public final double top;
+	public final double bottom;
+	public final double left;
+	public final double right;
+
+	RenderContext(@Nonnull final ObjectArray<String> messages) {
+		int theWidth = MIN_TEXT_WIDTH;
+
+		for (final String s : messages)
+			theWidth = Math.max(theWidth, Minecraft.getMinecraft().fontRenderer.getStringWidth(s));
+
+		this.textWidth = theWidth;
+		this.numberOfMessages = messages.size();
+		this.top = -(this.numberOfMessages) * 9 - BUBBLE_MARGIN;
+		this.bottom = BUBBLE_MARGIN;
+		this.left = -(this.textWidth / 2.0D + BUBBLE_MARGIN);
+		this.right = this.textWidth / 2.0D + BUBBLE_MARGIN;
 	}
-
-	@Override
-	@Nonnull
-	public BlockPos getPrecipitationHeight(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return new BlockPos(pos.getX(), 0, pos.getZ());
-	}
-
-	@Override
-	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return false;
-	}
-
 }

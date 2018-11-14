@@ -32,6 +32,9 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
+import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
+import org.orecruncher.dsurround.capabilities.season.SeasonType;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.scanners.BattleScanner;
 import org.orecruncher.dsurround.client.handlers.scanners.CeilingCoverage;
@@ -42,11 +45,9 @@ import org.orecruncher.dsurround.expression.ExpressionEngine;
 import org.orecruncher.dsurround.registry.TemperatureRating;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.dsurround.registry.biome.BiomeRegistry;
-import org.orecruncher.dsurround.registry.dimension.DimensionInfo;
+import org.orecruncher.dsurround.registry.dimension.DimensionData;
 import org.orecruncher.dsurround.registry.dimension.DimensionRegistry;
 import org.orecruncher.dsurround.registry.item.ItemClass;
-import org.orecruncher.dsurround.registry.season.SeasonInfo;
-import org.orecruncher.dsurround.registry.season.SeasonType;
 import org.orecruncher.lib.MinecraftClock;
 
 import net.minecraft.client.Minecraft;
@@ -75,7 +76,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static SeasonType season;
 		private static int dimensionId;
 		private static String dimensionName;
-		private static DimensionInfo dimInfo = DimensionInfo.NONE;
+		private static DimensionData dimInfo = DimensionData.NONE;
 		private static BlockPos playerPosition;
 		private static boolean freezing;
 		private static boolean humid;
@@ -110,7 +111,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			season = SeasonType.NONE;
 			dimensionId = 0;
 			dimensionName = StringUtils.EMPTY;
-			dimInfo = DimensionInfo.NONE;
+			dimInfo = DimensionData.NONE;
 			playerPosition = BlockPos.ORIGIN;
 			freezing = false;
 			humid = false;
@@ -133,7 +134,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static void tick(final World world, final EntityPlayer player) {
 
 			final BiomeRegistry biomes = ClientRegistry.BIOME;
-			final SeasonInfo season = ClientRegistry.SEASON.getData(getWorld());
+			final ISeasonInfo season = CapabilitySeasonInfo.getCapability(getWorld());
 			final DimensionRegistry dimensions = ClientRegistry.DIMENSION;
 			final EnvironStateHandler stateHandler = EffectManager.instance().lookupService(EnvironStateHandler.class);
 			if (stateHandler == null)
@@ -184,7 +185,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			return battle;
 		}
 
-		public static DimensionInfo getDimensionInfo() {
+		public static DimensionData getDimensionInfo() {
 			return dimInfo;
 		}
 

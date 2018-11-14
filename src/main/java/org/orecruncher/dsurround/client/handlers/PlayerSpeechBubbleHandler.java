@@ -27,9 +27,9 @@ package org.orecruncher.dsurround.client.handlers;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.capabilities.CapabilitySpeechData;
+import org.orecruncher.dsurround.capabilities.speech.ISpeechData;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.entity.CapabilitySpeechData;
-import org.orecruncher.dsurround.entity.speech.ISpeechData;
 import org.orecruncher.dsurround.event.SpeechTextEvent;
 import org.orecruncher.lib.WorldUtils;
 

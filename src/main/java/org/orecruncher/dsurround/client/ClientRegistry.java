@@ -33,7 +33,6 @@ import org.orecruncher.dsurround.registry.dimension.DimensionRegistry;
 import org.orecruncher.dsurround.registry.effect.EffectRegistry;
 import org.orecruncher.dsurround.registry.footstep.FootstepsRegistry;
 import org.orecruncher.dsurround.registry.item.ItemRegistry;
-import org.orecruncher.dsurround.registry.season.SeasonRegistry;
 import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -55,7 +54,6 @@ public final class ClientRegistry {
 	public static BiomeRegistry BIOME;
 	public static BlockStateRegistry BLOCK;
 	public static DimensionRegistry DIMENSION;
-	public static SeasonRegistry SEASON;
 	public static ItemRegistry ITEMS;
 	public static FootstepsRegistry FOOTSTEPS;
 	public static EffectRegistry EFFECTS;
@@ -67,7 +65,6 @@ public final class ClientRegistry {
 			SOUND = new SoundRegistry(Side.CLIENT);
 			BIOME = new BiomeRegistry(Side.CLIENT);
 			BLOCK = new BlockStateRegistry(Side.CLIENT);
-			SEASON = new SeasonRegistry(Side.CLIENT);
 			ITEMS = new ItemRegistry(Side.CLIENT);
 			FOOTSTEPS = new FootstepsRegistry(Side.CLIENT);
 			EFFECTS = new EffectRegistry(Side.CLIENT);
@@ -77,7 +74,6 @@ public final class ClientRegistry {
 			rm.register(SOUND);
 			rm.register(BIOME);
 			rm.register(BLOCK);
-			rm.register(SEASON);
 			rm.register(ITEMS);
 			rm.register(FOOTSTEPS);
 			rm.register(EFFECTS);

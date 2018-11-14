@@ -27,14 +27,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientRegistry;
+import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
+import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IFootstepAccentProvider;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.registry.PrecipitationType;
-import org.orecruncher.dsurround.registry.season.SeasonInfo;
 import org.orecruncher.lib.collections.ObjectArray;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -65,12 +65,14 @@ public class RainSplashAccent implements IFootstepAccentProvider {
 				this.mutable.setPos(entity);
 			}
 			final World world = entity.getEntityWorld();
-			final SeasonInfo season = ClientRegistry.SEASON.getData(world);
-			final int precipHeight = season.getPrecipitationHeight(world, this.mutable).getY();
-			if (precipHeight == this.mutable.getY()) {
-				final PrecipitationType pt = season.getPrecipitationType(world, this.mutable, null);
-				if (pt == PrecipitationType.RAIN)
-					in.addAll(AcousticsManager.SPLASH);
+			final ISeasonInfo season = CapabilitySeasonInfo.getCapability(world);
+			if (season != null) {
+				final int precipHeight = season.getPrecipitationHeight(world, this.mutable).getY();
+				if (precipHeight == this.mutable.getY()) {
+					final PrecipitationType pt = season.getPrecipitationType(world, this.mutable, null);
+					if (pt == PrecipitationType.RAIN)
+						in.addAll(AcousticsManager.SPLASH);
+				}
 			}
 		}
 		return in;

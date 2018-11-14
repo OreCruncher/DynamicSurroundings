@@ -28,8 +28,9 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
+import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfoEx;
 import org.orecruncher.dsurround.event.ReloadEvent;
-import org.orecruncher.dsurround.world.data.DimensionEffectData;
 import org.orecruncher.lib.Localization;
 
 import com.google.common.collect.ImmutableList;
@@ -73,7 +74,7 @@ public final class CommandDS extends CommandBase {
 			.add(TextFormatting.YELLOW + "/" + COMMAND + " setmin rain 0-100")
 			.add(TextFormatting.YELLOW + "/" + COMMAND + " setmax rain 0-100").build();
 
-	public static String rainStatusOutput(final World world, final DimensionEffectData data) {
+	public static String rainStatusOutput(final World world, final IDimensionInfoEx data) {
 		final StringBuilder builder = new StringBuilder();
 		final float minutes = (world.getWorldInfo().getRainTime() / 20.0F) / 60.0F;
 		builder.append(data.toString());
@@ -84,10 +85,10 @@ public final class CommandDS extends CommandBase {
 		return builder.toString();
 	}
 
-	public static String thunderStatusOutput(final World world, final DimensionEffectData data) {
+	public static String thunderStatusOutput(final World world, final IDimensionInfoEx data) {
 		final StringBuilder builder = new StringBuilder();
 		final float minutes = (world.getWorldInfo().getThunderTime() / 20.0F) / 60.0F;
-		builder.append("dim ").append(data.getDimensionId());
+		builder.append("dim ").append(data.getId());
 		builder.append("; isThundering: ").append(Boolean.toString(world.isThundering()));
 		builder.append("; isSurface: ").append(Boolean.toString(world.provider.isSurfaceWorld()));
 		builder.append("; strength: ").append(FORMATTER.format(world.getThunderStrength(1.0F) * 100));
@@ -95,7 +96,7 @@ public final class CommandDS extends CommandBase {
 		return builder.toString();
 	}
 
-	public static String config(final World world, final DimensionEffectData data) {
+	public static String config(final World world, final IDimensionInfoEx data) {
 		return data.configString();
 	}
 
@@ -126,7 +127,7 @@ public final class CommandDS extends CommandBase {
 		try {
 			final EntityPlayerMP player = getCommandSenderAsPlayer(sender);
 			final World world = player.world;
-			final DimensionEffectData data = DimensionEffectData.get(world);
+			final IDimensionInfoEx data = (IDimensionInfoEx) CapabilityDimensionInfo.getCapability(world);
 
 			boolean showHelp = false;
 			TextComponentString feedback = null;

@@ -22,23 +22,24 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.registry.season;
+package org.orecruncher.dsurround.capabilities.season;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.Weather;
+import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 import org.orecruncher.dsurround.registry.PrecipitationType;
 import org.orecruncher.dsurround.registry.TemperatureRating;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.lib.Localization;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 
-import com.google.common.base.MoreObjects;
-
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -46,26 +47,23 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class SeasonInfo {
+public class SeasonInfo implements ISeasonInfo {
 
 	protected static final String noSeason = Localization.loadString("dsurround.season.noseason");
 
-	protected final String dimensionName;
-
-	public SeasonInfo(@Nonnull final World world) {
-		this.dimensionName = world.provider.getDimensionType().getName();
-	}
-
+	@Override
 	@Nonnull
 	public SeasonType getSeasonType(@Nonnull final World world) {
 		return SeasonType.NONE;
 	}
 
+	@Override
 	@Nonnull
 	public SeasonType.SubType getSeasonSubType(@Nonnull final World world) {
 		return SeasonType.SubType.NONE;
 	}
 
+	@Override
 	@Nonnull
 	public String getSeasonString(@Nonnull final World world) {
 		final SeasonType season = getSeasonType(world);
@@ -78,21 +76,25 @@ public class SeasonInfo {
 		return Localization.format("dsurround.season.format", subSeasonStr, seasonStr);
 	}
 
+	@Override
 	@Nonnull
 	public TemperatureRating getPlayerTemperature(@Nonnull final World world) {
 		return getBiomeTemperature(world, EnvironState.getPlayerPosition());
 	}
 
+	@Override
 	@Nonnull
 	public TemperatureRating getBiomeTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return TemperatureRating.fromTemp(getTemperature(world, pos));
 	}
 
+	@Override
 	@Nonnull
 	public BlockPos getPrecipitationHeight(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return ClientChunkCache.instance().getPrecipitationHeight(pos);
 	}
 
+	@Override
 	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		final Biome biome = ClientChunkCache.instance().getBiome(pos);
 		final float biomeTemp = ClientRegistry.BIOME.get(biome).getFloatTemperature(pos);
@@ -109,6 +111,7 @@ public class SeasonInfo {
 	 *
 	 * @return true if water can freeze, false otherwise
 	 */
+	@Override
 	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getTemperature(world, pos) < 0.15F;
 	}
@@ -118,6 +121,7 @@ public class SeasonInfo {
 	 *
 	 * @return true if it is possible, false otherwise
 	 */
+	@Override
 	public boolean showFrostBreath(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getTemperature(world, pos) < 0.2F;
 	}
@@ -138,6 +142,7 @@ public class SeasonInfo {
 	 *            BiomeInfo reference for the biome in question
 	 * @return The precipitation type to render when raining
 	 */
+	@Override
 	public PrecipitationType getPrecipitationType(@Nonnull final World world, @Nonnull final BlockPos pos,
 			@Nullable BiomeInfo biome) {
 
@@ -154,8 +159,33 @@ public class SeasonInfo {
 	}
 
 	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this).add("name", this.dimensionName).toString();
+	public NBTTagCompound serializeNBT() {
+		// Do nothing - purely a client side thing
+		return null;
 	}
+
+	@Override
+	public void deserializeNBT(NBTTagCompound nbt) {
+		// Do nothing - purely a client side thing
+	}
+
+	public static SeasonInfo factory(@Nonnull final World world) {
+
+		if (world.provider.getDimension() == -1) {
+			ModBase.log().info("Creating Nether SeasonInfo");
+			return new SeasonInfoNether();
+		}
+
+		if (ModEnvironment.SereneSeasons.isLoaded()) {
+			ModBase.log().info("Creating Serene Seasons SeasonInfo for dimension %s",
+					world.provider.getDimensionType().getName());
+			return new SeasonInfoSereneSeasons();
+		}
+
+		ModBase.log().info("Creating default SeasonInfo for dimension %s",
+				world.provider.getDimensionType().getName());
+		return new SeasonInfo();
+	}
+
 
 }

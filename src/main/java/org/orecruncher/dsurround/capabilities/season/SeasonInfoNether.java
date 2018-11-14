@@ -22,42 +22,27 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.registry.season;
+package org.orecruncher.dsurround.capabilities.season;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public enum SeasonType {
+public class SeasonInfoNether extends SeasonInfo {
 
-	NONE("noseason"), SPRING("spring"), SUMMER("summer"), AUTUMN("autumn"), WINTER("winter");
-
-	public static enum SubType {
-		
-		NONE("nosubtype"), EARLY("early"), MID("mid"), LATE("late");
-
-		private final String val;
-
-		SubType(@Nonnull final String val) {
-			this.val = val;
-		}
-
-		@Nonnull
-		public String getValue() {
-			return this.val;
-		}
-	}
-
-	private final String val;
-
-	SeasonType(@Nonnull final String val) {
-		this.val = val;
-	}
-
+	@Override
 	@Nonnull
-	public String getValue() {
-		return this.val;
+	public BlockPos getPrecipitationHeight(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return new BlockPos(pos.getX(), 0, pos.getZ());
 	}
+
+	@Override
+	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
+		return false;
+	}
+
 }

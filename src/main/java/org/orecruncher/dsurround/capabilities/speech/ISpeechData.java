@@ -22,36 +22,23 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.asm;
+package org.orecruncher.dsurround.capabilities.speech;
 
-import org.apache.logging.log4j.Logger;
+import javax.annotation.Nonnull;
 
-public class Transformer extends MyTransformer {
+import org.orecruncher.lib.collections.ObjectArray;
 
-	private static final Logger logger = TransformLoader.logger;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.INBTSerializable;
 
-	public static Logger log() {
-		return logger;
-	}
-
-	public Transformer() {
-		super(logger);
-	}
-
-	@Override
-	protected void initTransmorgrifiers() {
-		addTransmorgrifier(new PatchEntityRenderer());
-		addTransmorgrifier(new PatchSoundManager());
-		addTransmorgrifier(new PatchSoundManagerPlayTime());
-		addTransmorgrifier(new PatchSoundManagerClampVolume());
-		addTransmorgrifier(new SoundPlayFlush());
-		addTransmorgrifier(new PatchSoundManagerSync());
-		addTransmorgrifier(new PatchParticleManagerSync());
-		addTransmorgrifier(new PatchEntityArrow());
-		addTransmorgrifier(new SoundCategoryAdditions());
-		addTransmorgrifier(new BiomeInfoHook());
-		addTransmorgrifier(new BlockStateInfoHook());
-		addTransmorgrifier(new ItemInfoHook());
-	}
-
+public interface ISpeechData  extends INBTSerializable<NBTTagCompound> {
+	
+	void addMessage(@Nonnull final String string, final int expiryTick);
+	
+	ObjectArray<String> getText();
+	
+	RenderContext getRenderContext();
+	
+	void onUpdate(final int currentTick);
+	
 }

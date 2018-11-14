@@ -22,37 +22,39 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.entity.speech;
+package org.orecruncher.dsurround.registry.item;
+
+import java.lang.reflect.Field;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import org.orecruncher.lib.collections.ObjectArray;
+import org.orecruncher.dsurround.ModBase;
+import net.minecraft.item.Item;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
-import net.minecraft.client.Minecraft;
+public final class ItemUtils {
+	
+	// This field was added by the core mod for our use
+	private static Field itemInfo = ReflectionHelper.findField(Item.class, "dsurround_item_info");
 
-public final class RenderContext {
-
-	private static final int MIN_TEXT_WIDTH = 60;
-	private static final double BUBBLE_MARGIN = 4.0F;
-
-	public final int textWidth;
-	public final int numberOfMessages;
-	public final double top;
-	public final double bottom;
-	public final double left;
-	public final double right;
-
-	RenderContext(@Nonnull final ObjectArray<String> messages) {
-		int theWidth = MIN_TEXT_WIDTH;
-
-		for (final String s : messages)
-			theWidth = Math.max(theWidth, Minecraft.getMinecraft().fontRenderer.getStringWidth(s));
-
-		this.textWidth = theWidth;
-		this.numberOfMessages = messages.size();
-		this.top = -(this.numberOfMessages) * 9 - BUBBLE_MARGIN;
-		this.bottom = BUBBLE_MARGIN;
-		this.left = -(this.textWidth / 2.0D + BUBBLE_MARGIN);
-		this.right = this.textWidth / 2.0D + BUBBLE_MARGIN;
+	@Nullable
+	public static ItemClass getItemData(@Nonnull final Item item) {
+		try {
+			return (ItemClass) itemInfo.get(item);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			ModBase.log().error("Unable to get hold of private field on Item!", e);
+		}
+		return null;
 	}
+
+	public static void setItemData(@Nonnull final Item item, @Nonnull final ItemClass data) {
+		try {
+			itemInfo.set(item, data);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			ModBase.log().error("Unable to set private field on Item!", e);
+		}
+	}
+
+
 }

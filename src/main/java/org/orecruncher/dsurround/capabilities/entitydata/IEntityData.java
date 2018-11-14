@@ -22,36 +22,29 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.asm;
+package org.orecruncher.dsurround.capabilities.entitydata;
 
-import org.apache.logging.log4j.Logger;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.INBTSerializable;
 
-public class Transformer extends MyTransformer {
+public interface IEntityData extends INBTSerializable<NBTTagCompound>{
 
-	private static final Logger logger = TransformLoader.logger;
+	/**
+	 * The unique ID of the entity this data is associated.
+	 *
+	 * @return id of the associated entity
+	 */
+	int getEntityId();
 
-	public static Logger log() {
-		return logger;
-	}
-
-	public Transformer() {
-		super(logger);
-	}
-
-	@Override
-	protected void initTransmorgrifiers() {
-		addTransmorgrifier(new PatchEntityRenderer());
-		addTransmorgrifier(new PatchSoundManager());
-		addTransmorgrifier(new PatchSoundManagerPlayTime());
-		addTransmorgrifier(new PatchSoundManagerClampVolume());
-		addTransmorgrifier(new SoundPlayFlush());
-		addTransmorgrifier(new PatchSoundManagerSync());
-		addTransmorgrifier(new PatchParticleManagerSync());
-		addTransmorgrifier(new PatchEntityArrow());
-		addTransmorgrifier(new SoundCategoryAdditions());
-		addTransmorgrifier(new BiomeInfoHook());
-		addTransmorgrifier(new BlockStateInfoHook());
-		addTransmorgrifier(new ItemInfoHook());
-	}
-
+	/**
+	 * Indicates if the entity is attacking something
+	 * @return true if the entity is attacking; false otherwise
+	 */
+	boolean isAttacking();
+	
+	/**
+	 * Indicates if the entity is fleeing from something
+	 * @return true if the entity is fleeing; false otherwise
+	 */
+	boolean isFleeing();
 }

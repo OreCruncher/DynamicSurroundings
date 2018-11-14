@@ -22,36 +22,42 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.asm;
+package org.orecruncher.dsurround.capabilities.season;
 
-import org.apache.logging.log4j.Logger;
+import javax.annotation.Nonnull;
 
-public class Transformer extends MyTransformer {
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-	private static final Logger logger = TransformLoader.logger;
+@SideOnly(Side.CLIENT)
+public enum SeasonType {
 
-	public static Logger log() {
-		return logger;
+	NONE("noseason"), SPRING("spring"), SUMMER("summer"), AUTUMN("autumn"), WINTER("winter");
+
+	public static enum SubType {
+		
+		NONE("nosubtype"), EARLY("early"), MID("mid"), LATE("late");
+
+		private final String val;
+
+		SubType(@Nonnull final String val) {
+			this.val = val;
+		}
+
+		@Nonnull
+		public String getValue() {
+			return this.val;
+		}
 	}
 
-	public Transformer() {
-		super(logger);
+	private final String val;
+
+	SeasonType(@Nonnull final String val) {
+		this.val = val;
 	}
 
-	@Override
-	protected void initTransmorgrifiers() {
-		addTransmorgrifier(new PatchEntityRenderer());
-		addTransmorgrifier(new PatchSoundManager());
-		addTransmorgrifier(new PatchSoundManagerPlayTime());
-		addTransmorgrifier(new PatchSoundManagerClampVolume());
-		addTransmorgrifier(new SoundPlayFlush());
-		addTransmorgrifier(new PatchSoundManagerSync());
-		addTransmorgrifier(new PatchParticleManagerSync());
-		addTransmorgrifier(new PatchEntityArrow());
-		addTransmorgrifier(new SoundCategoryAdditions());
-		addTransmorgrifier(new BiomeInfoHook());
-		addTransmorgrifier(new BlockStateInfoHook());
-		addTransmorgrifier(new ItemInfoHook());
+	@Nonnull
+	public String getValue() {
+		return this.val;
 	}
-
 }

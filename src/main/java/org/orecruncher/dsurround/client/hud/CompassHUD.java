@@ -32,10 +32,10 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientRegistry;
+import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
+import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
+import org.orecruncher.dsurround.capabilities.season.SeasonType;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.registry.season.SeasonInfo;
-import org.orecruncher.dsurround.registry.season.SeasonType;
 import org.orecruncher.lib.ForgeUtils;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.Localization;
@@ -72,20 +72,15 @@ public class CompassHUD extends GuiOverlay {
 	private static final float TEXT_LINE_START = 1.5F;
 
 	private static enum Style {
-		//
+		//@formatter:off
 		BAND_0(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT),
-		//
 		BAND_1(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT),
-		//
 		BAND_2(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT),
-		//
 		BAND_3(false, "textures/gui/compass/compass.png", BAND_WIDTH, BAND_HEIGHT),
-		//
 		ROSE_1(true, "textures/gui/compass/compassrose1.png", ROSE_DIM, ROSE_DIM),
-		//
 		ROSE_2(true, "textures/gui/compass/compassrose2.png", ROSE_DIM, ROSE_DIM),
-		//
 		ROSE_3(true, "textures/gui/compass/compassrose3.png", ROSE_DIM, ROSE_DIM);
+		//@formatter:on
 
 		private final boolean isRose;
 		private final ResourceLocation texture;
@@ -185,7 +180,7 @@ public class CompassHUD extends GuiOverlay {
 
 			if (showSeason()) {
 				final World world = EnvironState.getWorld();
-				final SeasonInfo info = ClientRegistry.SEASON.getData(world);
+				final ISeasonInfo info = CapabilitySeasonInfo.getCapability(world);
 				if (info.getSeasonType(world) != SeasonType.NONE)
 					text.add(info.getSeasonString(world));
 			}

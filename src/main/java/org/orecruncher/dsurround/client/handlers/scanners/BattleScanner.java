@@ -24,9 +24,9 @@
 
 package org.orecruncher.dsurround.client.handlers.scanners;
 
+import org.orecruncher.dsurround.capabilities.CapabilityEntityData;
+import org.orecruncher.dsurround.capabilities.entitydata.IEntityData;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.entity.CapabilityEntityData;
-import org.orecruncher.dsurround.entity.data.IEntityData;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;

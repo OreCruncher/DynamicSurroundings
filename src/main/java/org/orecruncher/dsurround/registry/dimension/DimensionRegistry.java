@@ -63,13 +63,8 @@ public final class DimensionRegistry extends Registry {
 		}
 	}
 
-	@Override
-	public void fini() {
-
-	}
-
 	private final List<DimensionConfig> cache = new ArrayList<>();
-	private final Int2ObjectOpenHashMap<DimensionInfo> dimensionData = new Int2ObjectOpenHashMap<>();
+	private final Int2ObjectOpenHashMap<DimensionData> dimensionData = new Int2ObjectOpenHashMap<>();
 
 	public void loading(@Nonnull final World world) {
 		getData(world);
@@ -109,8 +104,8 @@ public final class DimensionRegistry extends Registry {
 	}
 
 	@Nonnull
-	public DimensionInfo getData(@Nonnull final World world) {
-		DimensionInfo data = this.dimensionData.get(world.provider.getDimension());
+	public DimensionData getData(@Nonnull final World world) {
+		DimensionData data = this.dimensionData.get(world.provider.getDimension());
 		if (data == null) {
 			DimensionConfig entry = null;
 			for (final DimensionConfig e : this.cache)
@@ -120,9 +115,9 @@ public final class DimensionRegistry extends Registry {
 					break;
 				}
 			if (entry == null) {
-				data = new DimensionInfo(world);
+				data = new DimensionData(world);
 			} else {
-				data = new DimensionInfo(world, entry);
+				data = new DimensionData(world, entry);
 			}
 
 			this.dimensionData.put(world.provider.getDimension(), data);
@@ -130,41 +125,4 @@ public final class DimensionRegistry extends Registry {
 		}
 		return data;
 	}
-
-	public boolean hasHaze(@Nonnull final World world) {
-		return getData(world).getHasHaze();
-	}
-
-	public int getSeaLevel(@Nonnull final World world) {
-		return getData(world).getSeaLevel();
-	}
-
-	public int getSkyHeight(@Nonnull final World world) {
-		return getData(world).getSkyHeight();
-	}
-
-	public int getCloudHeight(@Nonnull final World world) {
-		return getData(world).getCloudHeight();
-	}
-
-	public int getSpaceHeight(@Nonnull final World world) {
-		return getData(world).getSpaceHeight();
-	}
-
-	public boolean hasAuroras(@Nonnull final World world) {
-		return getData(world).getHasAuroras();
-	}
-
-	public boolean hasWeather(@Nonnull final World world) {
-		return getData(world).getHasWeather();
-	}
-
-	public boolean hasFog(@Nonnull final World world) {
-		return getData(world).getHasFog();
-	}
-	
-	public boolean getPlayBiomeSounds(@Nonnull final World world) {
-		return getData(world).getPlayBiomeSounds();
-	}
-
 }

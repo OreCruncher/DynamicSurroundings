@@ -30,6 +30,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.capabilities.CapabilityEntityData;
+import org.orecruncher.dsurround.capabilities.entitydata.IEntityData;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.footsteps.implem.BlockMap;
 import org.orecruncher.dsurround.client.fx.BlockEffect;
@@ -37,8 +39,6 @@ import org.orecruncher.dsurround.client.handlers.EffectManager;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.handlers.FxHandler;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.dsurround.entity.CapabilityEntityData;
-import org.orecruncher.dsurround.entity.data.IEntityData;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateProfile;
 import org.orecruncher.lib.ItemStackUtil;

@@ -22,16 +22,16 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.entity;
+package org.orecruncher.dsurround.capabilities;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.entity.data.EntityData;
-import org.orecruncher.dsurround.entity.data.EntityDataTables;
-import org.orecruncher.dsurround.entity.data.IEntityData;
-import org.orecruncher.dsurround.entity.data.IEntityDataSettable;
+import org.orecruncher.dsurround.capabilities.entitydata.EntityData;
+import org.orecruncher.dsurround.capabilities.entitydata.EntityDataTables;
+import org.orecruncher.dsurround.capabilities.entitydata.IEntityData;
+import org.orecruncher.dsurround.capabilities.entitydata.IEntityDataSettable;
 import org.orecruncher.dsurround.network.Network;
 import org.orecruncher.dsurround.network.PacketEntityData;
 import org.orecruncher.lib.capability.CapabilityProviderSerializable;
