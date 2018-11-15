@@ -28,6 +28,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.lib.collections.ObjectArray;
+
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;
@@ -71,7 +73,7 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 		}
 	};
 
-	protected final List<EntityEffect> activeEffects;
+	protected final ObjectArray<EntityEffect> activeEffects;
 	protected boolean isAlive = true;
 	protected double rangeToPlayer;
 
@@ -81,7 +83,7 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 		this.activeEffects = null;
 	}
 
-	public EntityEffectHandler(@Nonnull final Entity entity, @Nonnull final List<EntityEffect> effects,
+	public EntityEffectHandler(@Nonnull final Entity entity, @Nonnull final ObjectArray<EntityEffect> effects,
 			@Nonnull final IParticleHelper ph, @Nonnull final ISoundHelper sh) {
 		super(entity, ph, sh);
 		this.activeEffects = effects;
@@ -103,9 +105,11 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 			final EntityPlayer player = Minecraft.getMinecraft().player;
 			this.rangeToPlayer = entity.getDistanceSq(player);
 
-			for (final EntityEffect e : this.activeEffects)
+			for (int i = 0; i < this.activeEffects.size(); i++) {
+				final EntityEffect e = this.activeEffects.get(i);
 				if (this.isAlive || e.receiveLastCall())
 					e.update(entity);
+			}
 		}
 	}
 

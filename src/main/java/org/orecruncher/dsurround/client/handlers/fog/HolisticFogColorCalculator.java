@@ -23,12 +23,10 @@
  */
 package org.orecruncher.dsurround.client.handlers.fog;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import org.orecruncher.lib.Color;
+import org.orecruncher.lib.collections.ObjectArray;
 
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,12 +35,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class HolisticFogColorCalculator implements IFogColorCalculator {
 
-	protected List<IFogColorCalculator> calculators = new ArrayList<>();
+	protected ObjectArray<IFogColorCalculator> calculators = new ObjectArray<>(4);
 	protected Color cached;
-
-	public HolisticFogColorCalculator() {
-
-	}
 
 	public void add(@Nonnull final IFogColorCalculator calc) {
 		this.calculators.add(calc);
@@ -51,20 +45,20 @@ public class HolisticFogColorCalculator implements IFogColorCalculator {
 	@Override
 	public Color calculate(@Nonnull final EntityViewRenderEvent.FogColors event) {
 		Color result = null;
-		for (final IFogColorCalculator calc : this.calculators) {
-			final Color color = calc.calculate(event);
+		for (int i = 0; i < this.calculators.size(); i++) {
+			final Color color = this.calculators.get(i).calculate(event);
 			if (result == null)
 				result = color;
 			else if (color != null)
 				result = result.mix(color);
+			
 		}
 		return this.cached = result;
 	}
 
 	@Override
 	public void tick() {
-		for (final IFogColorCalculator calc : this.calculators)
-			calc.tick();
+		this.calculators.forEach(IFogColorCalculator::tick);
 	}
 
 	@Override

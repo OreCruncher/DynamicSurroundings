@@ -23,10 +23,9 @@
  */
 package org.orecruncher.dsurround.client.handlers.fog;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnull;
+
+import org.orecruncher.lib.collections.ObjectArray;
 
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,11 +38,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class HolisticFogRangeCalculator implements IFogRangeCalculator {
 
-	protected final List<IFogRangeCalculator> calculators = new ArrayList<>();
+	protected final ObjectArray<IFogRangeCalculator> calculators = new ObjectArray<>(8);
 	protected final FogResult cached = new FogResult();
-
-	public HolisticFogRangeCalculator() {
-	}
 
 	public void add(@Nonnull final IFogRangeCalculator calc) {
 		this.calculators.add(calc);
@@ -54,9 +50,8 @@ public class HolisticFogRangeCalculator implements IFogRangeCalculator {
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 		float start = event.getFarPlaneDistance();
 		float end = event.getFarPlaneDistance();
-
-		for (final IFogRangeCalculator calc : this.calculators) {
-			final FogResult result = calc.calculate(event);
+		for (int i = 0; i < this.calculators.size(); i++) {
+			final FogResult result = this.calculators.get(i).calculate(event);
 			start = Math.min(start, result.getStart());
 			end = Math.min(end, result.getEnd());
 		}
@@ -66,8 +61,7 @@ public class HolisticFogRangeCalculator implements IFogRangeCalculator {
 
 	@Override
 	public void tick() {
-		for (final IFogRangeCalculator calc : this.calculators)
-			calc.tick();
+		this.calculators.forEach(IFogRangeCalculator::tick);
 	}
 
 	@Override

@@ -28,7 +28,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.effects.EntityEffect;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactory;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactoryFilter;
@@ -36,6 +35,7 @@ import org.orecruncher.dsurround.client.effects.IEntityEffectHandlerState;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.lib.sound.ITrackedSound;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
+import org.orecruncher.dsurround.registry.item.ItemUtils;
 import org.orecruncher.lib.ItemStackUtil;
 
 import com.google.common.collect.ImmutableList;
@@ -84,7 +84,7 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 			if (triggerNewEquipSound(player)) {
 				clearState(state);
 				final ItemStack currentStack = player.getHeldItem(this.hand);
-				final SoundEffect soundEffect = ClientRegistry.ITEMS.getEquipSound(currentStack);
+				final SoundEffect soundEffect = ItemUtils.getItemData(currentStack.getItem()).getEquipSound();
 				if (soundEffect != null) {
 					final ITrackedSound snd = state.createSound(soundEffect, player);
 					state.playSound(snd);

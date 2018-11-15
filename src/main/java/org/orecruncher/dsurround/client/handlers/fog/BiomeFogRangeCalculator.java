@@ -25,10 +25,10 @@ package org.orecruncher.dsurround.client.handlers.fog;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
+import org.orecruncher.dsurround.registry.biome.BiomeUtil;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 import org.orecruncher.lib.math.MathStuff;
@@ -100,7 +100,7 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 				// If the chunk is not available doScan will be set true. This will force
 				// another scan on the next tick.
 				ctx.doScan = ctx.doScan | !provider.isAvailable(pos);
-				final BiomeInfo biome = ClientRegistry.BIOME.get(provider.getBiome(pos));
+				final BiomeInfo biome = BiomeUtil.getBiomeData(provider.getBiome(pos));
 
 				float distancePart = 1F;
 				final float weightPart = 1;

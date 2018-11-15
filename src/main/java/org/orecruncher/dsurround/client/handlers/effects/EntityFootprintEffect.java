@@ -35,18 +35,13 @@ import org.orecruncher.dsurround.client.effects.IEntityEffectFactory;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactoryFilter;
 import org.orecruncher.dsurround.client.effects.IEntityEffectHandlerState;
 import org.orecruncher.dsurround.client.footsteps.system.Generator;
-import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.lib.random.XorShiftRandom;
 
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -57,7 +52,6 @@ public class EntityFootprintEffect extends EntityEffect {
 
 	protected Generator generator;
 	protected int lastStyle;
-	protected boolean eventRegistered;
 
 	public EntityFootprintEffect() {
 
@@ -75,33 +69,17 @@ public class EntityFootprintEffect extends EntityEffect {
 		final EntityLivingBase entity = (EntityLivingBase) getState().subject().get();
 		this.generator = ClientRegistry.FOOTSTEPS.createGenerator(entity);
 		this.lastStyle = ModOptions.effects.footprintStyle;
-
-		if (entity instanceof EntityPlayerSP) {
-			this.eventRegistered = true;
-			MinecraftForge.EVENT_BUS.register(this);
-		}
 	}
 
 	@Override
 	public void update(@Nonnull final Entity subject) {
 		final EntityLivingBase entity = (EntityLivingBase) subject;
-		if (getState().isActivePlayer(entity) && this.lastStyle != ModOptions.effects.footprintStyle) {
+		if (this.lastStyle != ModOptions.effects.footprintStyle && getState().isActivePlayer(entity)) {
 			this.generator = ClientRegistry.FOOTSTEPS.createGenerator(entity);
 			this.lastStyle = ModOptions.effects.footprintStyle;
 		}
 
 		this.generator.generateFootsteps(entity);
-	}
-
-	@Override
-	public void die() {
-		if (this.eventRegistered)
-			MinecraftForge.EVENT_BUS.unregister(this);
-	}
-
-	@SubscribeEvent(priority = EventPriority.HIGH)
-	public void diagnostic(@Nonnull final DiagnosticEvent.Gather event) {
-		event.output.add("Footsteps: " + this.generator.toString());
 	}
 
 	@Override

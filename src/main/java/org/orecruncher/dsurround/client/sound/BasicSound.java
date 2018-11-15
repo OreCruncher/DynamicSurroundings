@@ -42,20 +42,18 @@ import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class BasicSound<T extends BasicSound<?>> extends PositionedSound
-		implements ITrackedSound, INBTSerializable<NBTTagCompound> {
+		implements ITrackedSound {
 
 	protected static final float ATTENUATION_OFFSET = 32F;
 
@@ -66,16 +64,6 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound
 
 	// TODO: Do we need?
 	public static final ISoundScale DEFAULT_SCALE = () -> 1.0F;
-
-	public static class NBT {
-		public static final String SOUND_EVENT = "s";
-		public static final String SOUND_CATEGORY = "c";
-		public static final String VOLUME = "v";
-		public static final String PITCH = "p";
-		public static final String X_COORD = "x";
-		public static final String Y_COORD = "y";
-		public static final String Z_COORD = "z";
-	};
 
 	protected final Random RANDOM = XorShiftRandom.current();
 	protected final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
@@ -239,37 +227,6 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound
 
 	public Vec3d getLocusPosition() {
 		return new Vec3d(this.xPosF, this.yPosF, this.zPosF);
-	}
-
-	@Nonnull
-	@Override
-	public NBTTagCompound serializeNBT() {
-		final NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setString(NBT.SOUND_EVENT, this.positionedSoundLocation.toString());
-		nbt.setString(NBT.SOUND_CATEGORY, this.category.getName());
-		nbt.setFloat(NBT.VOLUME, this.volume);
-		nbt.setFloat(NBT.PITCH, this.pitch);
-		nbt.setFloat(NBT.X_COORD, this.xPosF);
-		nbt.setFloat(NBT.Y_COORD, this.yPosF);
-		nbt.setFloat(NBT.Z_COORD, this.zPosF);
-		return nbt;
-	}
-
-	@Override
-	public void deserializeNBT(@Nonnull final NBTTagCompound nbt) {
-		final String cat = nbt.getString(NBT.SOUND_CATEGORY);
-		if (StringUtils.isEmpty(cat))
-			this.category = SoundCategory.PLAYERS;
-		else
-			this.category = SoundCategory.getByName(cat);
-
-		this.positionedSoundLocation = new ResourceLocation(nbt.getString(NBT.SOUND_EVENT));
-		this.volume = nbt.getFloat(NBT.VOLUME);
-		this.pitch = nbt.getFloat(NBT.PITCH);
-		this.xPosF = nbt.getFloat(NBT.X_COORD);
-		this.yPosF = nbt.getFloat(NBT.Y_COORD);
-		this.zPosF = nbt.getFloat(NBT.Z_COORD);
-		this.pos.setPos(this.xPosF, this.yPosF, this.zPosF);
 	}
 
 	@Override

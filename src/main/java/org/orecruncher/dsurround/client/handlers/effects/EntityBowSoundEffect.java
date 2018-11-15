@@ -27,13 +27,14 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.effects.EntityEffect;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactory;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactoryFilter;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.lib.sound.ITrackedSound;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
+import org.orecruncher.dsurround.registry.item.ItemClass;
+import org.orecruncher.dsurround.registry.item.ItemUtils;
 import org.orecruncher.lib.ItemStackUtil;
 
 import com.google.common.collect.ImmutableList;
@@ -61,8 +62,9 @@ public class EntityBowSoundEffect extends EntityEffect {
 		if (ItemStackUtil.isValidItemStack(currentStack)) {
 
 			if (this.lastActiveStack == null || !ItemStack.areItemStacksEqual(currentStack, this.lastActiveStack)) {
-				if (ClientRegistry.ITEMS.isBow(currentStack) || ClientRegistry.ITEMS.isShield(currentStack)) {
-					final SoundEffect soundEffect = ClientRegistry.ITEMS.getUseSound(currentStack);
+				final ItemClass itemClass = ItemUtils.getItemData(currentStack.getItem());
+				if (itemClass == ItemClass.BOW || itemClass == ItemClass.SHIELD) {
+					final SoundEffect soundEffect = itemClass.getUseSound();
 					if (soundEffect != null) {
 						final ITrackedSound fx = getState().createSound(soundEffect, entity);
 						getState().playSound(fx);

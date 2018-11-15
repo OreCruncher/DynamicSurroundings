@@ -30,7 +30,6 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.ClientRegistry;
@@ -44,11 +43,8 @@ import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
-import org.orecruncher.dsurround.event.PlayDistributedSoundEvent;
 import org.orecruncher.dsurround.event.ReloadEvent;
 import org.orecruncher.dsurround.lib.sound.SoundState;
-import org.orecruncher.dsurround.network.Network;
-import org.orecruncher.dsurround.network.PacketPlaySound;
 import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.compat.PositionedSoundUtil;
 
@@ -113,7 +109,6 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	private final Object2ObjectOpenHashMap<SoundEffect, Emitter> emitters = new Object2ObjectOpenHashMap<>();
 	private final Object2ObjectOpenHashMap<String, SoundEvent> replacements = new Object2ObjectOpenHashMap<>();
 	private final ObjectArray<PendingSound> pending = new ObjectArray<>();
-	private final ObjectArray<BasicSound<?>> sendToServer = new ObjectArray<>();
 	private final Set<String> soundsToBlock = Sets.newHashSet();
 	private final Object2IntOpenHashMap<String> soundCull = new Object2IntOpenHashMap<>();
 
@@ -125,8 +120,6 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	public void process(@Nonnull final EntityPlayer player) {
 		this.emitters.values().forEach(Emitter::update);
 		this.pending.removeIf(PENDING_SOUNDS);
-		this.sendToServer.forEach(sound -> Network.sendToServer(new PacketPlaySound(player, sound)));
-		this.sendToServer.clear();
 
 		doMoodProcessing();
 	}
@@ -206,10 +199,6 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	public String playSound(@Nonnull final BasicSound<?> sound) {
 		if (sound == null || !sound.canSoundBeHeard(EnvironState.getPlayerPosition()))
 			return null;
-
-		// If it is a routable sound do so if possible
-		if (sound.shouldRoute() && ModBase.routePacketToServer())
-			this.sendToServer.add(sound);
 
 		return SoundEngine.instance().playSound(sound);
 	}
@@ -294,21 +283,6 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		s.setState(SoundState.DELAYED);
 		this.pending.add(new PendingSound(s, tickDelay));
 		return null;
-	}
-
-	@SubscribeEvent
-	public void onDistributedSound(@Nonnull final PlayDistributedSoundEvent event) {
-		try {
-			// Need to only permit crafting. The other sounds are dynamically
-			// produced by the client.
-			final String soundResource = event.nbt.getString(BasicSound.NBT.SOUND_EVENT);
-			if (!StringUtils.isEmpty(soundResource)) {
-				if ("dsurround:crafting".equals(soundResource))
-					playSound(new AdhocSound(event.nbt));
-			}
-		} catch (final Throwable t) {
-			;
-		}
 	}
 
 	@SubscribeEvent

@@ -28,13 +28,14 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.effects.EntityEffect;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactory;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactoryFilter;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.lib.sound.ITrackedSound;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
+import org.orecruncher.dsurround.registry.item.ItemClass;
+import org.orecruncher.dsurround.registry.item.ItemUtils;
 import org.orecruncher.lib.math.RayTrace;
 
 import com.google.common.collect.ImmutableList;
@@ -75,7 +76,8 @@ public class EntitySwingEffect extends EntityEffect {
 		if (entity.swingingHand != null && entity.swingProgressInt > this.swingProgress) {
 			if (!this.isSwinging) {
 				final ItemStack currentItem = entity.getHeldItem(entity.swingingHand);
-				final SoundEffect soundEffect = ClientRegistry.ITEMS.getSwingSound(currentItem);
+				final ItemClass itemClass = ItemUtils.getItemData(currentItem.getItem());
+				final SoundEffect soundEffect = itemClass.getSwingSound();
 				if (soundEffect != null) {
 					final RayTraceResult whatImHitting = RayTrace.trace(entity);
 					if (whatImHitting == null || whatImHitting.typeOfHit != Type.BLOCK) {

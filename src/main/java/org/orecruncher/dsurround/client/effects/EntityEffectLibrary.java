@@ -24,7 +24,6 @@
 
 package org.orecruncher.dsurround.client.effects;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,7 +85,7 @@ public class EntityEffectLibrary {
 	 */
 	@Nonnull
 	public Optional<EntityEffectHandler> create(@Nonnull final Entity entity) {
-		final List<EntityEffect> effectToApply = new ArrayList<>();
+		final ObjectArray<EntityEffect> effectToApply = new ObjectArray<>();
 
 		final EntityEffectInfo eei = ClientRegistry.EFFECTS.getEffects(entity);
 		for (int i = 0; i < this.filters.size(); i++)

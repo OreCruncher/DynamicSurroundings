@@ -25,10 +25,10 @@ package org.orecruncher.dsurround.client.handlers.fog;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
+import org.orecruncher.dsurround.registry.biome.BiomeUtil;
 import org.orecruncher.lib.Color;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
@@ -92,7 +92,7 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 					// If the chunk is not available doScan will be set true. This will force
 					// another scan on the next tick.
 					this.doScan = this.doScan | !provider.isAvailable(pos);
-					final BiomeInfo biome = ClientRegistry.BIOME.get(provider.getBiome(pos));
+					final BiomeInfo biome = BiomeUtil.getBiomeData(provider.getBiome(pos));
 					final Color color;
 
 					// Fetch the color we are dealing with.

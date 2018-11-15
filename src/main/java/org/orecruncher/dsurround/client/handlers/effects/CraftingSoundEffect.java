@@ -28,7 +28,6 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.effects.EventEffect;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.client.sound.BasicSound;
 import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.lib.sound.ITrackedSound;
 
@@ -52,7 +51,6 @@ public class CraftingSoundEffect extends EventEffect {
 
 		this.craftSoundThrottle = EnvironState.getTickCounter();
 		final ITrackedSound fx = getState().createSound(Sounds.CRAFTING, event.player);
-		((BasicSound<?>) fx).setRoutable(true);
 		getState().playSound(fx);
 	}
 

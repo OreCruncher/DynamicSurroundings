@@ -66,12 +66,8 @@ public final class Network {
 				Side.CLIENT);
 		NETWORK.registerMessage(PacketServerData.PacketHandler.class, PacketServerData.class, ++discriminator,
 				Side.CLIENT);
-		NETWORK.registerMessage(PacketPlaySound.PacketHandler.class, PacketPlaySound.class, ++discriminator,
-				Side.CLIENT);
 
 		// Client -> Server messages
-		NETWORK.registerMessage(PacketPlaySound.PacketHandlerServer.class, PacketPlaySound.class, ++discriminator,
-				Side.SERVER);
 	}
 
 	// Package level helper method to fire client side events based on incoming

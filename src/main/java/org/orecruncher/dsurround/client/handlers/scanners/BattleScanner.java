@@ -110,13 +110,25 @@ public class BattleScanner implements ITickable {
 		boolean isWither = false;
 
 		for (final Entity e : world.getLoadedEntityList()) {
-			// Invisible things do not trigger as well as the current
-			// player and team members.
-			if (e.isInvisible() || e == player || e.isOnSameTeam(player))
+
+			// The player isn't a candidate
+			if (e == player)
 				continue;
 
+			// Gotta be the right type of entity. Do this first
+			// to filter out all the animals.
+			if (!isApplicableType(e))
+				continue;
+
+			// Has to be within a snowballs chance. Boss range is
+			// the farthest range.
 			final double dist = e.getDistanceSq(playerPos);
 			if (dist > BOSS_RANGE)
+				continue;
+
+			// Invisible things do not trigger as well as the current
+			// player and team members.
+			if (e.isInvisible() || e.isOnSameTeam(player))
 				continue;
 
 			if (!e.isNonBoss()) {
@@ -133,13 +145,13 @@ public class BattleScanner implements ITickable {
 				}
 			} else if (inBattle || dist > MOB_RANGE) {
 				// If we are flagged to be in battle or if the normal
-				// mob is outside of the largest possible range it is
+				// mob is outside of the mob range range it is
 				// not a candidate.
 				continue;
-			} else if (isApplicableType(e)) {
-				// Use emoji data to determine if the mob is attacking
-				final IEntityData emoji = e.getCapability(CapabilityEntityData.ENTITY_DATA, null);
-				if (emoji != null && emoji.isAttacking()) {
+			} else {
+				// Use entity data to determine if the mob is attacking
+				final IEntityData data = e.getCapability(CapabilityEntityData.ENTITY_DATA, null);
+				if (data != null && data.isAttacking()) {
 					// Only in battle if the entity sees the player, or the
 					// player sees the entity
 					final EntityLiving living = (EntityLiving) e;

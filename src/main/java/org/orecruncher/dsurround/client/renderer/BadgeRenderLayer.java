@@ -26,6 +26,8 @@ package org.orecruncher.dsurround.client.renderer;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.lib.math.MathStuff;
 
 import net.minecraft.client.Minecraft;
@@ -80,6 +82,12 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 		if (!this.displayCheck.showBadge())
 			return;
 
+		// Only render if in range
+		final double distSq = ModOptions.effects.specialEffectRange * ModOptions.effects.specialEffectRange;
+		if (entity.getDistanceSq(EnvironState.getPlayer()) > distSq)
+			return;
+
+		// Only render if there is a stack to display
 		final ItemStack stackToRender = this.stackProvider.getStackToDisplay(entity);
 		if (stackToRender.isEmpty())
 			return;
@@ -88,14 +96,15 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 		final float s = 0.6F;
 
 		final float dY = this.stackProvider.adjustY() + entity.height - 0.15F + (MathStuff.sin(age / 20F)) / 3F;
-		
+
 		GlStateManager.pushMatrix();
 		GlStateManager.rotate(180, 0, 0, 1);
 		GlStateManager.scale(s, s, s);
 		GlStateManager.rotate(age * CONST, 0F, 1F, 0F);
 		GlStateManager.translate(0, dY, 0);
 		Minecraft.getMinecraft().getRenderItem().renderItem(stackToRender, ItemCameraTransforms.TransformType.FIXED);
-		GlStateManager.popMatrix();	}
+		GlStateManager.popMatrix();
+	}
 
 	@Override
 	public boolean shouldCombineTextures() {
