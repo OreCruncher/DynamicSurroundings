@@ -218,6 +218,13 @@ public class PotionHUD extends GuiOverlay {
 				final int l = potion.getStatusIconIndex();
 				this.drawTexturedModalRect(guiLeft + 6, guiTop + 7, 0 + l % 8 * 18, 198 + l / 8 * 18, 18, 18);
 			}
+			else {
+				try {
+					potion.getPotion().renderHUDEffect(guiLeft + 3, guiTop + 4, potion.getPotionEffect(), mc, 1.0F);
+				} catch (final Exception ex) {
+					;
+				}
+			}
 
 			try {
 				potion.getPotion().renderInventoryEffect(guiLeft, guiTop, potion.getPotionEffect(), mc);
