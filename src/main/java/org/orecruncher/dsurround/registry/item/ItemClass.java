@@ -44,12 +44,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public enum ItemClass {
 
 	//@formatter:off
-	NONE(null),
+	NONE(null, null, Sounds.UTILITY_EQUIP),
 	LEATHER(Sounds.LEATHER_ARMOR_EQUIP),
 	CHAIN(Sounds.CHAIN_ARMOR_EQUIP),
 	CRYSTAL(Sounds.CRYSTAL_ARMOR_EQUIP),
 	PLATE(Sounds.PLATE_ARMOR_EQUIP),
-	SLIME(null),
+	SLIME(null, null, Sounds.UTILITY_EQUIP),
 	SHIELD(Sounds.TOOL_SWING, Sounds.SHIELD_USE, Sounds.SHIELD_EQUIP),
 	SWORD(Sounds.SWORD_SWING, null, ModOptions.sound.swordEquipAsTool ? Sounds.TOOL_EQUIP : Sounds.SWORD_EQUIP),
 	AXE(Sounds.AXE_SWING, null, Sounds.AXE_EQUIP),

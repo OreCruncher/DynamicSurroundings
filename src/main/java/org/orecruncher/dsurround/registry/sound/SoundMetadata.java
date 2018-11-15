@@ -28,6 +28,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.registry.config.SoundMetadataConfig;
 
 import com.google.common.collect.ImmutableList;
@@ -42,11 +43,19 @@ public class SoundMetadata {
 
 	public SoundMetadata(@Nonnull final SoundMetadataConfig cfg) {
 		this.title = cfg.title;
-		final SoundCategory cat = SoundCategory.getByName(cfg.category);
+		final SoundCategory cat = translate(cfg.category);
 		this.category = cat != null ? cat : SoundCategory.NEUTRAL;
 		this.credits = ImmutableList.copyOf(cfg.credits);
 	}
 
+	protected SoundCategory translate(@Nonnull final String catName) {
+		if ("ds_biome".equals(catName))
+			return Sounds.BIOME;
+		if ("ds_footsteps".equals(catName))
+			return Sounds.FOOTSTEPS;
+		return SoundCategory.getByName(catName);
+	}
+	
 	public String getTitle() {
 		return this.title;
 	}

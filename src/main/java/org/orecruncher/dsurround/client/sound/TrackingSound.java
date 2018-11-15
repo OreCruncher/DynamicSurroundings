@@ -49,7 +49,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 	private long lastTick;
 
 	TrackingSound(@Nonnull final Entity attachedTo, @Nonnull final SoundEffect sound, final boolean fadeIn) {
-		super(sound.getSound(), Sounds.BIOME);
+		super(sound.getSound(), sound.getCategory());
 
 		this.attachedTo = attachedTo;
 

@@ -64,7 +64,6 @@ public final class SoundRegistry extends Registry {
 
 	private final Map<ResourceLocation, SoundMetadata> soundMetadata = new Object2ObjectOpenHashMap<>();
 	private final Map<ResourceLocation, SoundEvent> myRegistry = new Object2ObjectOpenHashMap<>();
-	private SoundEvent SILENCE;
 
 	public SoundRegistry(@Nonnull final Side side) {
 		super(side);
@@ -129,7 +128,6 @@ public final class SoundRegistry extends Registry {
 		}
 		
 		SoundEngine.instance().getSoundRegistry().getKeys().forEach(rl -> this.myRegistry.put(rl, new SoundEvent(rl)));
-		this.SILENCE = this.myRegistry.get(new ResourceLocation(ModBase.MOD_ID, "silence"));
 
 		ModBase.log().info("%d sound events in private registry", this.myRegistry.size());
 	}
@@ -139,7 +137,7 @@ public final class SoundRegistry extends Registry {
 		final SoundEvent evt = myRegistry.get(sound);
 		if (evt == null) {
 			ModBase.log().warn("Cannot find sound that should be registered [%s]", sound.toString());
-			return SILENCE;
+			return new SoundEvent(sound);
 		}
 		return evt;
 	}

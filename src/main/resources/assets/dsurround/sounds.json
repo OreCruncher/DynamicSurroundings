@@ -962,7 +962,7 @@
 		]
 	},
 	"wind": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"credits": [
 			"§aWind blowing into some cactus spine, on the top of the mountain, in the desert of Atacama (Chile).",
 			"felix.blume",
@@ -976,7 +976,7 @@
 		]
 	},
 	"desert.wind": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"credits": [
 			"§adesertwind1FINAL.wav",
 			"nageor",
@@ -989,7 +989,7 @@
 		]
 	},
 	"savanna.day": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"credits": [
 			"§aMerlothPark_morning_ambiance.wav",
 			"reinsamba",
@@ -1003,7 +1003,7 @@
 		]
 	},
 	"savanna.night": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"credits": [
 			"§aMerlothPark_crickets2.WAV",
 			"reinsamba",
@@ -1017,7 +1017,7 @@
 		]
 	},
 	"crickets": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"credits": [
 			"§aSoft, Chilled Crickets Field Recording",
 			"rayjensen",
@@ -1031,7 +1031,7 @@
 		]
 	},
 	"deep_crickets": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/deep_crickets",
@@ -1040,7 +1040,7 @@
 		]
 	},
 	"plains": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"credits": [
 			"§aCalm Morning Outdoor Ambience",
 			"blouhond",
@@ -1054,7 +1054,7 @@
 		]
 	},
 	"forest": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"credits": [
 			"§a001_forrest.wav",
 			"joepsporck",
@@ -1068,7 +1068,7 @@
 		]
 	},
 	"deep_forest": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/deep_forest",
@@ -1077,7 +1077,7 @@
 		]
 	},
 	"beach": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"credits": [
 			"§aFiji Beach (Stereo)128kbps.mp3",
 			"c97059890",
@@ -1091,7 +1091,7 @@
 		]
 	},
 	"river": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"credits": [
 			"§aunderwater ambience.wav",
 			"AlienXXX",
@@ -1105,7 +1105,7 @@
 		]
 	},
 	"bog": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"credits": [
 			"§arbh Mpls Bog birds.wav",
 			"RHumphries",
@@ -1119,7 +1119,7 @@
 		]
 	},
 	"jungle": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/jungle",
@@ -1147,7 +1147,7 @@
 		]
 	},
 	"theend": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"sounds": [
 			{
 				"name": "dsurround:ambient/end/end",
@@ -1262,8 +1262,9 @@
 				"name": "dsurround:ambient/birds/nightingale4"
 			}
 		]
-	},	"underground": {
-		"category": "ambient",
+	},
+	"underground": {
+		"category": "ds_biome",
 		"sounds": [
 			{
 				"name": "dsurround:ambient/underground/ambient",
@@ -1393,7 +1394,7 @@
 		]
 	},
 	"underdeepocean": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"credits": [
 			"§aunderwater ambience.wav",
 			"AlienXXX",
@@ -1407,7 +1408,7 @@
 		]
 	},
 	"underocean": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"credits": [
 			"§aunderwater ambience.wav",
 			"AlienXXX",
@@ -1421,7 +1422,7 @@
 		]
 	},
 	"underriver": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"sounds": [
 			{
 				"name": "dsurround:ambient/underwater/river",
@@ -1430,7 +1431,7 @@
 		]
 	},
 	"underwater": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"credits": [
 			"§aUnderwaterDrowning01.wav",
 			"Abolla",
@@ -1847,7 +1848,7 @@
 		]
 	},
 	"dimension.nether": {
-		"category": "ambient",
+		"category": "ds_biome",
 		"credits": [
 			"§aCreepy Dungeon Ambience",
 			"DrMinky",
