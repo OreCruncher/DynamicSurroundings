@@ -27,15 +27,16 @@ package org.orecruncher.dsurround.capabilities.season;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.registry.PrecipitationType;
-import org.orecruncher.dsurround.registry.TemperatureRating;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public interface ISeasonInfo extends INBTSerializable<NBTTagCompound>{
 
 	@Nonnull

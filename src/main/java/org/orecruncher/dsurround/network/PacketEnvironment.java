@@ -27,7 +27,8 @@ package org.orecruncher.dsurround.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.event.EnvironmentEvent;
+import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -35,15 +36,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketEnvironment implements IMessage {
-
-	public static class PacketHandler implements IMessageHandler<PacketEnvironment, IMessage> {
-		@Override
-		@Nullable
-		public IMessage onMessage(@Nonnull final PacketEnvironment message, @Nullable final MessageContext ctx) {
-			Network.postEvent(new EnvironmentEvent(message.inVillage));
-			return null;
-		}
-	}
 
 	private boolean inVillage;
 
@@ -64,5 +56,17 @@ public class PacketEnvironment implements IMessage {
 	public void toBytes(@Nonnull final ByteBuf buf) {
 		buf.writeBoolean(this.inVillage);
 	}
+
+	public static class PacketHandler implements IMessageHandler<PacketEnvironment, IMessage> {
+		@Override
+		@Nullable
+		public IMessage onMessage(@Nonnull final PacketEnvironment message, @Nullable final MessageContext ctx) {
+			ModBase.proxy().getThreadListener(ctx).addScheduledTask(() -> {
+				EnvironState.setInVillage(message.inVillage);
+			});
+			return null;
+		}
+	}
+
 
 }

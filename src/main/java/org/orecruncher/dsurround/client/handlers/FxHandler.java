@@ -24,9 +24,6 @@
 package org.orecruncher.dsurround.client.handlers;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
 import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
@@ -54,13 +51,13 @@ import org.orecruncher.dsurround.event.ReloadEvent;
 import org.orecruncher.dsurround.lib.sound.ITrackedSound;
 import org.orecruncher.lib.ThreadGuard;
 import org.orecruncher.lib.ThreadGuard.Action;
-import org.orecruncher.lib.collections.CollectionUtils;
 import org.orecruncher.lib.gfx.ParticleHelper;
 import org.orecruncher.lib.math.TimerEMA;
 
 import com.google.common.collect.ImmutableList;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -88,7 +85,7 @@ public class FxHandler extends EffectHandlerBase {
 	};
 
 	// Used to process handler entries during the client tick
-	private static final Predicate<? super Entry<UUID, EntityEffectHandler>> HANDLER_UPDATE_REMOVE = e -> {
+	private static final Predicate<? super Int2ObjectMap.Entry<EntityEffectHandler>> HANDLER_UPDATE_REMOVE = e -> {
 		final EntityEffectHandler handler = e.getValue();
 		handler.update();
 		return !handler.isAlive();
@@ -107,7 +104,7 @@ public class FxHandler extends EffectHandlerBase {
 		library.register(EntityHealthPopoffEffect.DEFAULT_FILTER, new EntityHealthPopoffEffect.Factory());
 	}
 
-	private final Map<UUID, EntityEffectHandler> handlers = new Object2ObjectOpenHashMap<>(256);
+	private final Int2ObjectOpenHashMap<EntityEffectHandler> handlers = new Int2ObjectOpenHashMap<>(256);
 	private final EventEffectLibrary eventLibrary = new EventEffectLibrary(PARTICLE_HELPER, SOUND_HELPER);
 
 	private final TimerEMA compute = new TimerEMA("FxHandler Updates");
@@ -122,7 +119,7 @@ public class FxHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-		CollectionUtils.removeIf(this.handlers, HANDLER_UPDATE_REMOVE);
+		this.handlers.int2ObjectEntrySet().removeIf(HANDLER_UPDATE_REMOVE);
 		this.compute.update(this.nanos);
 		this.nanos = 0;
 	}
@@ -142,7 +139,7 @@ public class FxHandler extends EffectHandlerBase {
 	 * @return A list of EntityEffects, if any
 	 */
 	public List<String> getEffects(@Nonnull final Entity entity) {
-		final EntityEffectHandler eh = this.handlers.get(entity.getUniqueID());
+		final EntityEffectHandler eh = this.handlers.get(entity.getEntityId());
 		if (eh != null) {
 			return eh.getAttachedEffects();
 		}
@@ -159,19 +156,20 @@ public class FxHandler extends EffectHandlerBase {
 		if (entity == null || !entity.getEntityWorld().isRemote)
 			return;
 
-		this.guard.check("onLivingUpdate");
-
 		final long start = System.nanoTime();
+
+		this.guard.check("onLivingUpdate");
 
 		final double distanceThreshold = ModOptions.effects.specialEffectRange * ModOptions.effects.specialEffectRange;
 		final boolean inRange = entity.getDistanceSq(EnvironState.getPlayer()) <= distanceThreshold
 				&& entity.dimension == EnvironState.getDimensionId();
 
-		final EntityEffectHandler handler = this.handlers.get(entity.getUniqueID());
+		
+		final EntityEffectHandler handler = this.handlers.get(entity.getEntityId());
 		if (handler != null && !inRange) {
 			handler.die();
 		} else if (handler == null && inRange && entity.isEntityAlive()) {
-			this.handlers.put(entity.getUniqueID(), library.create(entity).get());
+			this.handlers.put(entity.getEntityId(), library.create(entity).get());
 		}
 
 		this.nanos += (System.nanoTime() - start);

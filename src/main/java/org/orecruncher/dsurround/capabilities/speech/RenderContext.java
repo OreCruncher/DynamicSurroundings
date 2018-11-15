@@ -29,7 +29,10 @@ import javax.annotation.Nonnull;
 import org.orecruncher.lib.collections.ObjectArray;
 
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public final class RenderContext {
 
 	private static final int MIN_TEXT_WIDTH = 60;

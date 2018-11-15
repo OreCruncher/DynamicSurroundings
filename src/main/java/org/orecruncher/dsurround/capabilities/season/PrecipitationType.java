@@ -21,38 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.orecruncher.dsurround.capabilities.season;
 
-package org.orecruncher.dsurround.event;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
-
-import net.minecraftforge.fml.common.eventhandler.Event;
-
-/**
- * Fires when there is an update to an entities emoji state. Will only fire
- * client side.
- */
-public class EntityDataEvent extends Event {
-
-	/**
-	 * Persistent ID of the entity this event is associated with.
-	 */
-	public final int entityId;
-
-	/**
-	 * Indicates if the entity is attacking something
-	 */
-	public final boolean isAttacking;
-	
-	/**
-	 * Indicates if the entity is fleeing something
-	 */
-	public final boolean isFleeing;
-
-	public EntityDataEvent(@Nonnull final int id, final boolean isAttacking, final boolean isFleeing) {
-		this.entityId = id;
-		this.isAttacking = isAttacking;
-		this.isFleeing = isFleeing;
-	}
-
+@SideOnly(Side.CLIENT)
+public enum PrecipitationType {
+	// Precipitation of any type is not going to happen
+	NONE,
+	// Dust storm when raining
+	DUST,
+	// Standard rain fall
+	RAIN,
+	// Snow fall
+	SNOW
 }

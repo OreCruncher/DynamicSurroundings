@@ -216,7 +216,7 @@ public class ModBase {
 	@SubscribeEvent
 	public void playerLogin(final PlayerLoggedInEvent event) {
 		if (ModOptions.logging.enableVersionChecking)
-			new VersionChecker(ModBase.MOD_ID, "dsurround.msg.NewVersion.dsurround").playerLogin(event);
+			new VersionChecker(ModBase.MOD_ID, "dsurround.msg.NewVersion").playerLogin(event);
 	}
 
 	////////////////////////

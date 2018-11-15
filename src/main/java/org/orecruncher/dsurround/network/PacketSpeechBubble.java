@@ -27,25 +27,22 @@ package org.orecruncher.dsurround.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.event.SpeechTextEvent;
+import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.capabilities.CapabilitySpeechData;
+import org.orecruncher.dsurround.capabilities.speech.ISpeechData;
+import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.lib.WorldUtils;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketSpeechBubble implements IMessage {
-
-	public static class PacketHandler implements IMessageHandler<PacketSpeechBubble, IMessage> {
-		@Override
-		@Nullable
-		public IMessage onMessage(@Nonnull final PacketSpeechBubble message, @Nullable final MessageContext ctx) {
-			Network.postEvent(new SpeechTextEvent(message.entityId, message.message));
-			return null;
-		}
-	}
 
 	protected int entityId;
 	protected String message;
@@ -70,5 +67,25 @@ public class PacketSpeechBubble implements IMessage {
 		buf.writeInt(this.entityId);
 		ByteBufUtils.writeUTF8String(buf, this.message);
 	}
+
+	public static class PacketHandler implements IMessageHandler<PacketSpeechBubble, IMessage> {
+		@Override
+		@Nullable
+		public IMessage onMessage(@Nonnull final PacketSpeechBubble message, @Nullable final MessageContext ctx) {
+			ModBase.proxy().getThreadListener(ctx).addScheduledTask(() -> {
+				final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), message.entityId);
+				if (entity == null || !(entity instanceof EntityPlayer) || !ModOptions.speechbubbles.enableSpeechBubbles)
+					return;
+				final ISpeechData data = CapabilitySpeechData.getCapability(entity);
+				if (data != null) {
+					final int expiry = EnvironState.getTickCounter()
+							+ (int) (ModOptions.speechbubbles.speechBubbleDuration * 20F);
+					data.addMessage(message.message, expiry);
+				}
+			});
+			return null;
+		}
+	}
+
 
 }

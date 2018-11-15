@@ -32,10 +32,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.orecruncher.dsurround.capabilities.season.TemperatureRating;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.BiomeSoundEffectsHandler;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.dsurround.registry.TemperatureRating;
 import org.orecruncher.dsurround.registry.config.BiomeConfig;
 import org.orecruncher.dsurround.registry.config.SoundConfig;
 import org.orecruncher.dsurround.registry.config.SoundType;

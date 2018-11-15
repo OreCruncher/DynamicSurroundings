@@ -57,8 +57,6 @@ public final class Network {
 		// Server -> Client messages
 		NETWORK.registerMessage(PacketWeatherUpdate.PacketHandler.class, PacketWeatherUpdate.class, ++discriminator,
 				Side.CLIENT);
-		NETWORK.registerMessage(PacketHealthChange.PacketHandler.class, PacketHealthChange.class, ++discriminator,
-				Side.CLIENT);
 		NETWORK.registerMessage(PacketSpeechBubble.PacketHandler.class, PacketSpeechBubble.class, ++discriminator,
 				Side.CLIENT);
 		NETWORK.registerMessage(PacketEntityData.PacketHandler.class, PacketEntityData.class, ++discriminator,
@@ -68,14 +66,10 @@ public final class Network {
 				Side.CLIENT);
 		NETWORK.registerMessage(PacketServerData.PacketHandler.class, PacketServerData.class, ++discriminator,
 				Side.CLIENT);
-		NETWORK.registerMessage(PacketDisplayFootprint.PacketHandler.class, PacketDisplayFootprint.class,
-				++discriminator, Side.CLIENT);
 		NETWORK.registerMessage(PacketPlaySound.PacketHandler.class, PacketPlaySound.class, ++discriminator,
 				Side.CLIENT);
 
 		// Client -> Server messages
-		NETWORK.registerMessage(PacketDisplayFootprint.PacketHandlerServer.class, PacketDisplayFootprint.class,
-				++discriminator, Side.SERVER);
 		NETWORK.registerMessage(PacketPlaySound.PacketHandlerServer.class, PacketPlaySound.class, ++discriminator,
 				Side.SERVER);
 	}

@@ -29,12 +29,12 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
+import org.orecruncher.dsurround.capabilities.season.PrecipitationType;
 import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IFootstepAccentProvider;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.Weather;
-import org.orecruncher.dsurround.registry.PrecipitationType;
 import org.orecruncher.lib.collections.ObjectArray;
 
 import net.minecraft.entity.EntityLivingBase;

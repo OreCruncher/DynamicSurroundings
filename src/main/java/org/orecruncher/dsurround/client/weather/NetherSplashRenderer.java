@@ -24,8 +24,8 @@
 
 package org.orecruncher.dsurround.client.weather;
 
+import org.orecruncher.dsurround.capabilities.season.PrecipitationType;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.registry.PrecipitationType;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.gfx.ParticleHelper;
 

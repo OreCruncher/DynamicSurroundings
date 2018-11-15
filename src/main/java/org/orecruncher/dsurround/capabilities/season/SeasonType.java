@@ -32,11 +32,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public enum SeasonType {
 
-	NONE("noseason"), SPRING("spring"), SUMMER("summer"), AUTUMN("autumn"), WINTER("winter");
+	//@formatter:off
+	NONE("noseason"),
+	SPRING("spring"),
+	SUMMER("summer"),
+	AUTUMN("autumn"),
+	WINTER("winter");
+	//@formatter:on
 
 	public static enum SubType {
 		
-		NONE("nosubtype"), EARLY("early"), MID("mid"), LATE("late");
+		//@formatter:off
+		NONE("nosubtype"),
+		EARLY("early"),
+		MID("mid"),
+		LATE("late");
+		//@formatter:on
 
 		private final String val;
 

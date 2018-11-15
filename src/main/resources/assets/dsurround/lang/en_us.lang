@@ -51,7 +51,7 @@ dsurround.msg.ThunderTimeSet=§9Thunder time set to %1$s
 dsurround.msg.ThunderThresholdSet=§9Thunder threshold set to %1$s
 
 # Version checking strings
-dsurround.msg.NewVersion.dsurround=["§6Update Available: §9[",{"text":"§2%1$s §ev%2$s§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Click for CurseForge Project Page","color":"aqua"}},"clickEvent":{"action":"open_url","value":"%3$s"}},"§9]"]
+dsurround.msg.NewVersion=["§6Update Available: §9[",{"text":"§2%1$s §ev%2$s§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Click for CurseForge Project Page","color":"aqua"}},"clickEvent":{"action":"open_url","value":"%3$s"}},"§9]"]
 
 # Configuration option strings
 dsurround.cfg.asm.cat.ASM=ASM Transformer Options

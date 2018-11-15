@@ -75,12 +75,10 @@ public class EffectManager {
 		register(new EnvironStateHandler());
 
 		register(new AreaBlockEffectsHandler());
-		register(new EnvironmentEffectHandler());
+		register(new FogHandler());
 		register(new ParticleSystemHandler());
 		register(new BiomeSoundEffectsHandler());
-		register(new EntityDataSyncHandler());
 		register(new AuroraEffectHandler());
-		register(new PlayerSpeechBubbleHandler());
 		register(new WeatherHandler());
 
 		register(new FxHandler());

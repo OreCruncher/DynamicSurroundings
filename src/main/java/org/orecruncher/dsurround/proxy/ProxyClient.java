@@ -60,6 +60,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.IThreadListener;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.resource.IResourceType;
 import net.minecraftforge.client.resource.ISelectiveResourceReloadListener;
@@ -74,6 +75,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -198,4 +200,14 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 			MinecraftForge.EVENT_BUS.post(new ReloadEvent.Resources(resourceManager));
 		}
 	}
+	
+	@Override
+	public IThreadListener getThreadListener(@Nonnull final MessageContext context) {
+		if (context.side.isClient()) {
+			return Minecraft.getMinecraft();
+		} else {
+			return context.getServerHandler().player.getServer();
+		}
+	}
+
 }

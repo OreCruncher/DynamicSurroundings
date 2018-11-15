@@ -76,7 +76,7 @@ public final class ItemRegistry extends Registry {
 	public void init() {
 		this.classMap = new EnumMap<>(ItemClass.class);
 		this.items = new IdentityHashMap<>(MAP_CAPACITY);
-		
+
 		Item.REGISTRY.iterator().forEachRemaining(item -> ItemUtils.setItemData(item, ItemClass.NONE));
 
 		for (final ItemClass ic : ItemClass.values())
@@ -85,7 +85,7 @@ public final class ItemRegistry extends Registry {
 
 	@Override
 	public void configure(@Nonnull final ModConfiguration cfg) {
-		for (final Entry<ItemClass, List<String>> entry : cfg.items.entrySet()) {
+		for (final Entry<String, List<String>> entry : cfg.items.entrySet()) {
 			process(entry.getValue(), entry.getKey());
 		}
 	}
@@ -106,7 +106,7 @@ public final class ItemRegistry extends Registry {
 				}
 			}
 		}
-		
+
 		// Set the cached field on the Item object with the data
 		this.items.entrySet().forEach(entry -> ItemUtils.setItemData(entry.getKey(), entry.getValue()));
 
@@ -144,9 +144,15 @@ public final class ItemRegistry extends Registry {
 		return false;
 	}
 
-	private void process(@Nullable final List<String> items, @Nonnull final ItemClass it) {
+	private void process(@Nullable final List<String> items, @Nonnull final String itemClass) {
 		if (items == null || items.isEmpty())
 			return;
+
+		final ItemClass it = ItemClass.valueOf(itemClass);
+		if (it == null) {
+			ModBase.log().warn("Unknown ItemClass %s", itemClass);
+			return;
+		}
 
 		final Set<Class<?>> theList = this.classMap.get(it);
 

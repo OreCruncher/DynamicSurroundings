@@ -39,6 +39,7 @@ import org.orecruncher.lib.Localization;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.IThreadListener;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
@@ -50,6 +51,7 @@ import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class Proxy {
@@ -129,6 +131,21 @@ public class Proxy {
 
 	public void serverStopped(@Nonnull final FMLServerStoppedEvent event) {
 		ServiceManager.deinitialize();
+	}
+
+	/**
+	 * Force a proxy to pick a side in this fight
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public IThreadListener getThreadListener(@Nonnull final MessageContext context) {
+		if (context.side.isServer()) {
+			return context.getServerHandler().player.getServer();
+		} else {
+			throw new IllegalStateException(
+					"Tried to get the IThreadListener from a client-side MessageContext on the dedicated server");
+		}
 	}
 
 }

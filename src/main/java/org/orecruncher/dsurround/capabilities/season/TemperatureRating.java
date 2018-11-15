@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.registry;
+package org.orecruncher.dsurround.capabilities.season;
 
 import javax.annotation.Nonnull;
 
@@ -32,7 +32,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public enum TemperatureRating {
 
-	ICY("icy", 0.0F), COOL("cool", 0.2F), MILD("mild", 1.0F), WARM("warm", 1.8F), HOT("hot", 100.F);
+	//@formatter:off
+	ICY("icy", 0.0F),
+	COOL("cool", 0.2F),
+	MILD("mild", 1.0F),
+	WARM("warm", 1.8F),
+	HOT("hot", 100.F);
+	//@formatter:on
 
 	private final String val;
 	private final float tempRange;

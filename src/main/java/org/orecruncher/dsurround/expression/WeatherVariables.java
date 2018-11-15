@@ -22,9 +22,9 @@
  */
 package org.orecruncher.dsurround.expression;
 
+import org.orecruncher.dsurround.capabilities.season.TemperatureRating;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.Weather;
-import org.orecruncher.dsurround.registry.TemperatureRating;
 import org.orecruncher.lib.expression.Dynamic;
 import org.orecruncher.lib.expression.DynamicVariantList;
 

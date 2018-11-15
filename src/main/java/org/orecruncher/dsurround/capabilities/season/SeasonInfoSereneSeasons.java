@@ -28,7 +28,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.ClientRegistry;
-import org.orecruncher.dsurround.registry.PrecipitationType;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 

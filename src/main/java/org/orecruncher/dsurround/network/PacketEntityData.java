@@ -27,24 +27,20 @@ package org.orecruncher.dsurround.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.capabilities.CapabilityEntityData;
 import org.orecruncher.dsurround.capabilities.entitydata.IEntityData;
-import org.orecruncher.dsurround.event.EntityDataEvent;
+import org.orecruncher.dsurround.capabilities.entitydata.IEntityDataSettable;
+import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.lib.WorldUtils;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketEntityData implements IMessage {
-
-	public static class PacketHandler implements IMessageHandler<PacketEntityData, IMessage> {
-		@Override
-		@Nullable
-		public IMessage onMessage(@Nonnull final PacketEntityData message, @Nullable final MessageContext ctx) {
-			Network.postEvent(new EntityDataEvent(message.entityId, message.isAttacking, message.isFleeing));
-			return null;
-		}
-	}
 
 	private int entityId;
 	private boolean isAttacking;
@@ -73,5 +69,24 @@ public class PacketEntityData implements IMessage {
 		buf.writeBoolean(this.isAttacking);
 		buf.writeBoolean(this.isFleeing);
 	}
+
+	public static class PacketHandler implements IMessageHandler<PacketEntityData, IMessage> {
+		@Override
+		@Nullable
+		public IMessage onMessage(@Nonnull final PacketEntityData message, @Nullable final MessageContext ctx) {
+			ModBase.proxy().getThreadListener(ctx).addScheduledTask(() -> {
+				final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), message.entityId);
+				if (entity != null) {
+					final IEntityDataSettable data = (IEntityDataSettable) CapabilityEntityData.getCapability(entity);
+					if (data != null) {
+						data.setAttacking(message.isAttacking);
+						data.setFleeing(message.isFleeing);
+					}
+				}
+			});
+			return null;
+		}
+	}
+
 
 }

@@ -24,28 +24,25 @@
 
 package org.orecruncher.dsurround.network;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.event.ServerDataEvent;
+import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.client.handlers.DiagnosticHandler;
+import org.orecruncher.dsurround.client.handlers.EffectManager;
 
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.ints.Int2DoubleOpenHashMap;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketServerData implements IMessage {
-
-	public static class PacketHandler implements IMessageHandler<PacketServerData, IMessage> {
-		@Override
-		@Nullable
-		public IMessage onMessage(@Nonnull final PacketServerData message, @Nullable final MessageContext ctx) {
-			Network.postEvent(
-					new ServerDataEvent(message.tMap, message.meanTickTime, message.free, message.total, message.max));
-			return null;
-		}
-	}
 
 	private double meanTickTime;
 	private Int2DoubleOpenHashMap tMap;
@@ -90,6 +87,42 @@ public class PacketServerData implements IMessage {
 		buf.writeInt(this.free);
 		buf.writeInt(this.total);
 		buf.writeInt(this.max);
+	}
+
+	@Nonnull
+	private static TextFormatting getTpsFormatPrefix(final int tps) {
+		if (tps <= 10)
+			return TextFormatting.RED;
+		if (tps <= 15)
+			return TextFormatting.YELLOW;
+		return TextFormatting.GREEN;
+	}
+
+	public static class PacketHandler implements IMessageHandler<PacketServerData, IMessage> {
+		@Override
+		@Nullable
+		public IMessage onMessage(@Nonnull final PacketServerData message, @Nullable final MessageContext ctx) {
+			ModBase.proxy().getThreadListener(ctx).addScheduledTask(() -> {
+				final ArrayList<String> data = new ArrayList<>();
+				final int diff = message.total - message.free;
+				data.add(TextFormatting.GOLD + "Server Information");
+				data.add(String.format("Mem: %d%% %03d/%3dMB", diff * 100 / message.max, diff, message.max));
+				data.add(String.format("Allocated: %d%% %3dMB", message.total * 100 / message.max, message.total));
+				final int tps = (int) Math.min(1000.0D / message.meanTickTime, 20.0D);
+				data.add(String.format("Ticktime Overall:%s %5.3fms (%d TPS)", getTpsFormatPrefix(tps),
+						message.meanTickTime, tps));
+				message.tMap.int2DoubleEntrySet().forEach(entry -> {
+					final String dimName = DimensionManager.getProviderType(entry.getIntKey()).getName();
+					final int tps1 = (int) Math.min(1000.0D / entry.getDoubleValue(), 20.0D);
+					data.add(String.format("%s (%d):%s %7.3fms (%d TPS)", dimName, entry.getIntKey(),
+							getTpsFormatPrefix(tps1), entry.getDoubleValue(), tps1));
+				});
+				Collections.sort(data.subList(4, data.size()));
+				final DiagnosticHandler handler = EffectManager.instance().lookupService(DiagnosticHandler.class);
+				handler.setServerTPSReport(data);
+			});
+			return null;
+		}
 	}
 
 }

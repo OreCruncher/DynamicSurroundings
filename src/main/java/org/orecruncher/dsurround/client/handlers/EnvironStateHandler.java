@@ -35,14 +35,13 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.SeasonType;
+import org.orecruncher.dsurround.capabilities.season.TemperatureRating;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.scanners.BattleScanner;
 import org.orecruncher.dsurround.client.handlers.scanners.CeilingCoverage;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
-import org.orecruncher.dsurround.event.EnvironmentEvent;
 import org.orecruncher.dsurround.expression.ExpressionEngine;
-import org.orecruncher.dsurround.registry.TemperatureRating;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.dsurround.registry.biome.BiomeRegistry;
 import org.orecruncher.dsurround.registry.dimension.DimensionData;
@@ -369,6 +368,10 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		public static boolean inVillage() {
 			return inVillage;
 		}
+		
+		public static void setInVillage(final boolean f) {
+			inVillage = f;
+		}
 
 		public static int getLightLevel() {
 			return lightLevel;
@@ -404,11 +407,6 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 	public boolean isReallyInside() {
 		return this.ceiling.isReallyInside();
-	}
-
-	@SubscribeEvent
-	public void onEnvironmentEvent(@Nonnull final EnvironmentEvent event) {
-		EnvironState.inVillage = event.inVillage;
 	}
 
 	@Override

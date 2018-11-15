@@ -27,7 +27,6 @@ package org.orecruncher.dsurround.registry.config;
 import java.util.List;
 import java.util.Map;
 
-import org.orecruncher.dsurround.registry.item.ItemClass;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.annotations.SerializedName;
@@ -64,7 +63,7 @@ public final class ModConfiguration {
 	public List<ForgeEntry> forgeMappings = ImmutableList.of();
 
 	@SerializedName("items")
-	public Map<ItemClass, List<String>> items = ImmutableMap.of();
+	public Map<String, List<String>> items = ImmutableMap.of();
 
 	@SerializedName("variators")
 	public Map<String, VariatorConfig> variators = ImmutableMap.of();

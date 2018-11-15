@@ -25,7 +25,6 @@
 package org.orecruncher.dsurround.client.handlers;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -35,7 +34,6 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.trace.TraceParticleManager;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
-import org.orecruncher.dsurround.event.ServerDataEvent;
 import org.orecruncher.lib.math.MathStuff;
 import org.orecruncher.lib.math.TimerEMA;
 
@@ -47,7 +45,6 @@ import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -184,36 +181,8 @@ public class DiagnosticHandler extends EffectHandlerBase {
 		}
 	}
 
-	@Nonnull
-	private static TextFormatting getTpsFormatPrefix(final int tps) {
-		if (tps <= 10)
-			return TextFormatting.RED;
-		if (tps <= 15)
-			return TextFormatting.YELLOW;
-		return TextFormatting.GREEN;
-	}
-
-	@SubscribeEvent
-	public void serverDataEvent(final ServerDataEvent event) {
-		final ArrayList<String> data = new ArrayList<>();
-
-		final int diff = event.total - event.free;
-
-		data.add(TextFormatting.GOLD + "Server Information");
-		data.add(String.format("Mem: %d%% %03d/%3dMB", diff * 100 / event.max, diff, event.max));
-		data.add(String.format("Allocated: %d%% %3dMB", event.total * 100 / event.max, event.total));
-		final int tps = (int) Math.min(1000.0D / event.meanTickTime, 20.0D);
-		data.add(String.format("Ticktime Overall:%s %5.3fms (%d TPS)", getTpsFormatPrefix(tps), event.meanTickTime,
-				tps));
-		event.dimTps.int2DoubleEntrySet().forEach(entry -> {
-			final String dimName = DimensionManager.getProviderType(entry.getIntKey()).getName();
-			final int tps1 = (int) Math.min(1000.0D / entry.getDoubleValue(), 20.0D);
-			data.add(String.format("%s (%d):%s %7.3fms (%d TPS)", dimName, entry.getIntKey(), getTpsFormatPrefix(tps1),
-					entry.getDoubleValue(), tps1));
-		});
-
-		Collections.sort(data.subList(4, data.size()));
-		this.serverDataReport = data;
+	public void setServerTPSReport(@Nonnull final List<String> report) {
+		this.serverDataReport = report;
 	}
 
 }

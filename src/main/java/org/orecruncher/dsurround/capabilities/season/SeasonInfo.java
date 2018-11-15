@@ -33,8 +33,6 @@ import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
-import org.orecruncher.dsurround.registry.PrecipitationType;
-import org.orecruncher.dsurround.registry.TemperatureRating;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.lib.Localization;
 import org.orecruncher.lib.chunk.ClientChunkCache;
