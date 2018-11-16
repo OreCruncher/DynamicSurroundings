@@ -36,8 +36,6 @@ import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.lib.sound.ITrackedSound;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.dsurround.registry.item.ItemUtils;
-import org.orecruncher.lib.ItemStackUtil;
-
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.Entity;
@@ -67,7 +65,7 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 
 		protected Item getItemForHand(final EntityPlayer player, final EnumHand hand) {
 			final ItemStack stack = player.getHeldItem(hand);
-			return ItemStackUtil.isValidItemStack(stack) ? stack.getItem() : null;
+			return stack.getItem();
 		}
 
 		protected boolean triggerNewEquipSound(@Nonnull final EntityPlayer player) {

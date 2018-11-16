@@ -44,6 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public enum ItemClass {
 
 	//@formatter:off
+	EMPTY(null),	// For things that don't make an equip sound - like AIR
 	NONE(null, null, Sounds.UTILITY_EQUIP),
 	LEATHER(Sounds.LEATHER_ARMOR_EQUIP),
 	CHAIN(Sounds.CHAIN_ARMOR_EQUIP),

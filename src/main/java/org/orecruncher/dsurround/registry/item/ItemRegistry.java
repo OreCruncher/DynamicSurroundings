@@ -45,6 +45,7 @@ import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
 
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -78,6 +79,7 @@ public final class ItemRegistry extends Registry {
 		this.items = new IdentityHashMap<>(MAP_CAPACITY);
 
 		Item.REGISTRY.iterator().forEachRemaining(item -> ItemUtils.setItemData(item, ItemClass.NONE));
+		ItemUtils.setItemData(Items.AIR, ItemClass.EMPTY);
 
 		for (final ItemClass ic : ItemClass.values())
 			this.classMap.put(ic, new ReferenceOpenHashSet<>(SET_CAPACITY));
