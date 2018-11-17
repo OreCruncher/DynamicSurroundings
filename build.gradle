@@ -25,34 +25,10 @@ minecraft {
 }
 
 repositories {
-
-    maven {
-        name = "chickenbones"
-        url = "http://chickenbones.net/maven/"
-    }
-    
-    maven {
-        url "http://dvs1.progwml6.com/files/maven"
-    }
-    
-    maven {
-        name "Mobius Repo"
-        url "http://mobiusstrip.eu/maven"
-    }
-    
-    maven {
-        name "Foxiehost"
-        url "http://maven.foxiehost.eu"
-    }
-	
-    maven {
-    	name "Chisel"
-    	url "http://maven.tterrag.com"
-    }
-    
-    maven {
-		url 'https://repo.elytradev.com/'
-	}
+    maven { url = "http://chickenbones.net/maven/" }
+    maven { url = "http://dvs1.progwml6.com/files/maven" }	// mezz
+    maven { url = "http://maven.tterrag.com" }				// Chisel
+    maven { url = "https://repo.elytradev.com/" }
 }
 
 dependencies {
