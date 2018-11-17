@@ -138,6 +138,11 @@ jar {
         include '*' // Due to the way Gradle's copy tasks work, we need this line for the JAR to get added
     }
     
+    // Add CREDITS.md
+    into('/') {
+        from('CREDITS.md')
+    }
+    
     manifest {
         // The crucial manifest attribute: Make Forge extract the contained JAR
         attributes 'ContainedDeps': coreJar.archivePath.name
