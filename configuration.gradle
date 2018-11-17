@@ -10,6 +10,8 @@ project.ext.modVersion   = modVersion
 project.group            = "org.orecruncher.dsurround"
 project.archivesBaseName = "DynamicSurroundings"
 project.version          = "${mcVersion}-${modVersion}"
+project.ext.fingerprint  = "7a2128d395ad96ceb9d9030fbd41d035b435753a"
+project.ext.updateurl    = "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json"
 
 // JAR tagging
 project.minecraft.version = "${mcVersion}-${forgeVersion}"

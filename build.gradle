@@ -10,17 +10,29 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
+
+if (file('secrets.properties').exists()) {
+	println "Loading parameters from secrets.properties"
+	ext.secrets = new Properties()
+	file('secrets.properties').withReader {secrets.load(it)}
+}
+
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply from: 'configuration.gradle'
 
-sourceCompatibility = targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 compileJava {
-    sourceCompatibility = targetCompatibility = "1.8"
+    sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 minecraft {
+	if (project.ext.has('secrets')) {
+    	clientRunArgs = ["--uuid ${secrets.uuid}", "--username ${secrets.username}"]
+    }
     runDir = "run"
     replace '@VERSION@', project.ext.modVersion
+    replace '@FINGERPRINT@', project.ext.fingerprint
+    replace '@UPDATEURL@', project.ext.updateurl
     mappings = project.ext.snapshot
 }
 

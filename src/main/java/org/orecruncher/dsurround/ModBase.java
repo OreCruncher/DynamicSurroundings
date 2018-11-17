@@ -70,8 +70,8 @@ public class ModBase {
 	public static final String MINECRAFT_VERSIONS = "[1.12.2,)";
 	public static final String DEPENDENCIES = "required-after:forge@[14.23.2.2635,);after:galacticraftcore;after:ambientsounds;required-after:orelib@[3.5,)";
 	public static final String GUI_FACTORY = "org.orecruncher.dsurround.client.gui.ConfigGuiFactory";
-	public static final String UPDATE_URL = "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json";
-	public static final String FINGERPRINT = "7a2128d395ad96ceb9d9030fbd41d035b435753a";
+	public static final String UPDATE_URL = "@UPDATEURL@";
+	public static final String FINGERPRINT = "@FINGERPRINT@";
 
 	public static final String SERVER_VERSION = "3.4.9.0";
 
