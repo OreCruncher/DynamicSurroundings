@@ -28,6 +28,10 @@ compileJava {
 minecraft {
 	if (project.ext.has('secrets')) {
     	clientRunArgs = ["--uuid ${secrets.uuid}", "--username ${secrets.username}"]
+    	if (secrets.jvmArgs != null) {
+    		clientJvmArgs += secrets.jvmArgs
+    		serverJvmArgs += secrets.jvmArgs
+    	}
     }
     runDir = "run"
     replace '@VERSION@', project.ext.modVersion
@@ -140,32 +144,6 @@ task signCoreJar(type: SignJar) {
     outputFile = coreJar.archivePath.absolutePath
 }
 
-jar {
-        // Don't include the coremod in the main JAR
-    // If you have more coremod-related packages that aren't nested in the main one, add inclusions for them
-    exclude 'org/orecruncher/dsurround/asm/**'
-    
-    // Add the output of the coremod JAR task to the main JAR for later extraction
-    from(coreJar.archivePath.absolutePath) {
-        include '*' // Due to the way Gradle's copy tasks work, we need this line for the JAR to get added
-    }
-    
-    // Add CREDITS.md
-    into('/') {
-        from('CREDITS.md')
-    }
-    
-    manifest {
-        // The crucial manifest attribute: Make Forge extract the contained JAR
-        attributes 'ContainedDeps': coreJar.archivePath.name
-        attributes 'FMLAT': 'dsurround_at.cfg'
-        attributes 'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}"
-    }
-    
-    // Only run the main jar task after the coremod JAR was completely built
-    dependsOn signCoreJar
-}
-
 // https://gist.github.com/matthewprenger/9b2da059b89433a01c1c
 task signJar(type: SignJar) {
     onlyIf { // Skip the task if our secret data isn't available
@@ -182,11 +160,35 @@ task signJar(type: SignJar) {
     outputFile = jar.archivePath
 }
 
+build.dependsOn signJar
+jar.dependsOn signCoreJar
+def libPrefix = 'META-INF/libraries'
+jar {
+    // Don't include the coremod in the main JAR
+    // If you have more coremod-related packages that aren't nested in the main one, add inclusions for them
+    exclude 'org/orecruncher/dsurround/asm/**'
+    
+    // Add the output of the coremod JAR task to the main JAR for later extraction
+    from(coreJar.archivePath.absolutePath) {
+        include '*' // Due to the way Gradle's copy tasks work, we need this line for the JAR to get added
+        into libPrefix
+    }
+    
+    // Add CREDITS.md
+    into('/') {
+        from('CREDITS.md')
+    }
+    
+    manifest {
+        // The crucial manifest attribute: Make Forge extract the contained JAR
+        attributes 'ContainedDeps': libPrefix + '/' + coreJar.archivePath.name
+        attributes 'FMLAT': 'dsurround_at.cfg'
+        attributes 'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}"
+    }
+}
+
 //Adds the artifact types added by this script to the actual artifacts list.
 artifacts {
     archives sourcesJar
     archives deobfJar
 }
-
-signJar.dependsOn build
-signJar.dependsOn signCoreJar
