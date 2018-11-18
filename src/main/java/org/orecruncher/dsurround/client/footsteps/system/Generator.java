@@ -44,7 +44,6 @@ import org.orecruncher.dsurround.client.fx.ParticleCollections;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.client.sound.Sounds;
-import org.orecruncher.dsurround.facade.FacadeHelper;
 import org.orecruncher.dsurround.registry.footstep.Variator;
 import org.orecruncher.lib.MyUtils;
 import org.orecruncher.lib.TimeUtils;
@@ -60,7 +59,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -153,7 +151,7 @@ public class Generator {
 
 		// Player jump breath
 		if (this.didJump && ModOptions.sound.enableJumpSound && this.VAR.PLAY_JUMP && !entity.isSneaking()) {
-			this.soundPlayer.playAcoustic(entity, AcousticsManager.JUMP, EventType.JUMP, null);
+			this.soundPlayer.playAcoustic(entity.getPositionVector(), AcousticsManager.JUMP, EventType.JUMP, null);
 		}
 
 		if (SoundEngine.getVolume(Sounds.FOOTSTEPS) > 0) {
@@ -345,9 +343,9 @@ public class Generator {
 				final BlockPos pos = new BlockPos(entity.posX, yy, entity.posZ);
 				if (!this.messyPos.equals(pos)) {
 					this.messyPos = pos;
-					final Association assos = findAssociationMessyFoliage(entity.getEntityWorld(), pos);
+					final Association assos = findAssociationMessyFoliage(entity, pos);
 					if (assos != null)
-						playAssociation(entity, assos, EventType.WALK);
+						playAssociation(assos, EventType.WALK);
 				}
 			}
 		}
@@ -361,7 +359,7 @@ public class Generator {
 			@Nonnull final EventType eventType, final boolean foot) {
 		if (proceedWithStep(entity)) {
 			final Association assos = findAssociationForPlayer(entity, verticalOffsetAsMinus, foot);
-			playAssociation(entity, assos, eventType);
+			playAssociation(assos, eventType);
 		}
 	}
 
@@ -372,59 +370,18 @@ public class Generator {
 			// STILL JUMP
 			final Association leftFoot = findAssociationForPlayer(entity, verticalOffsetAsMinus, false);
 			final Association rightFoot = findAssociationForPlayer(entity, verticalOffsetAsMinus, true);
-			playAssociation(entity, leftFoot, eventType);
-			playAssociation(entity, rightFoot, eventType);
+			playAssociation(leftFoot, eventType);
+			playAssociation(rightFoot, eventType);
 		}
 	}
 
 	/**
 	 * Play an association.
 	 */
-	protected void playAssociation(@Nonnull final EntityLivingBase entity, @Nullable final Association assos,
-			@Nonnull final EventType eventType) {
+	protected void playAssociation(@Nullable final Association assos, @Nonnull final EventType eventType) {
 		if (assos != null && !assos.isNotEmitter()) {
-			this.soundPlayer.playAcoustic(entity, assos, eventType);
+			this.soundPlayer.playAcoustic(assos, eventType);
 		}
-	}
-
-	protected boolean hasFootstepImprint(@Nonnull final World world, @Nullable final IBlockState state,
-			@Nonnull final BlockPos pos) {
-		if (state != null) {
-			final IBlockState footstepState = FacadeHelper.resolveState(state, world, pos, EnumFacing.UP);
-			return ClientRegistry.FOOTSTEPS.hasFootprint(footstepState);
-		}
-
-		return false;
-	}
-
-	/**
-	 * Determines the actual footprint location based on the BlockPos provided. The
-	 * print is to ride on top of the bounding box. If the block does not have a
-	 * print a null is returned.
-	 *
-	 * @param entity
-	 *            The Entity generating the print
-	 * @param pos
-	 *            The block position where the footprint is to be placed on top
-	 * @param xx
-	 *            Calculated foot position for X
-	 * @param zz
-	 *            Calculated foot position for Z
-	 * @return Vector containing footprint coordinates or null if no footprint is to
-	 *         be generated
-	 */
-	@Nullable
-	protected Vec3d footstepPosition(@Nonnull final EntityLivingBase entity, @Nonnull final BlockPos pos,
-			final double xx, final double zz) {
-		final World world = entity.getEntityWorld();
-		final IBlockState state = WorldUtils.getBlockState(world, pos);
-		if (hasFootstepImprint(world, state, pos)) {
-			final double entityY = entity.getEntityBoundingBox().minY;
-			final double blockY = pos.getY() + state.getBoundingBox(world, pos).maxY;
-			return new Vec3d(xx, Math.max(entityY, blockY), zz);
-
-		}
-		return null;
 	}
 
 	protected boolean shouldProducePrint(@Nonnull final EntityLivingBase entity) {
@@ -450,14 +407,14 @@ public class Generator {
 		final double xx = entity.posX + MathStuff.cos(rot) * feetDistanceToCenter;
 		final double zz = entity.posZ + MathStuff.sin(rot) * feetDistanceToCenter;
 		final double minY = entity.getEntityBoundingBox().minY;
-		final BlockPos pos = new BlockPos(xx, minY - 0.1D - verticalOffsetAsMinus, zz);
+		final FootStrikeLocation loc = new FootStrikeLocation(entity, xx, minY - 0.1D - verticalOffsetAsMinus, zz);
 
-		final Association result = addSoundOverlay(entity, findAssociationForLocation(entity, pos));
+		final Association result = addSoundOverlay(entity, findAssociationForEvent(loc));
 
 		// It is possible that the association has no position, so it
 		// needs to be checked.
-		if (result != null && result.getPos() != null && shouldProducePrint(entity)) {
-			final Vec3d printPos = footstepPosition(entity, result.getPos(), xx, zz);
+		if (result != null && result.hasStrikeLocation() && shouldProducePrint(entity)) {
+			final Vec3d printPos = result.getStrikeLocation().footprintPosition();
 			if (printPos != null) {
 				FootprintStyle style = this.VAR.FOOTPRINT_STYLE;
 				if (entity instanceof EntityPlayer) {
@@ -482,12 +439,12 @@ public class Generator {
 	 * association in the blockmap.
 	 */
 	@Nullable
-	protected Association findAssociationForLocation(@Nonnull final EntityLivingBase entity,
-			@Nonnull final BlockPos pos) {
+	protected Association findAssociationForEvent(@Nonnull final FootStrikeLocation loc) {
 
-		final World world = entity.getEntityWorld();
+		final EntityLivingBase entity = loc.getEntity();
+		final BlockPos pos = loc.getStepPos();
 
-		Association worked = findAssociationForBlock(world, pos);
+		Association worked = findAssociationForBlock(loc, pos);
 
 		// If it didn't work, the player has walked over the air on the border
 		// of a block.
@@ -526,9 +483,9 @@ public class Generator {
 				if (isXdangMax) {
 					// If we are in the positive border, add 1,
 					// else subtract 1
-					worked = findAssociationForBlock(world, xdang > 0 ? pos.east() : pos.west());
+					worked = findAssociationForBlock(loc, xdang > 0 ? pos.east() : pos.west());
 				} else {
-					worked = findAssociationForBlock(world, zdang > 0 ? pos.south() : pos.north());
+					worked = findAssociationForBlock(loc, zdang > 0 ? pos.south() : pos.north());
 				}
 
 				// If that didn't work, then maybe the footstep hit in the
@@ -537,9 +494,9 @@ public class Generator {
 					// Take the maximum direction and try with
 					// the orthogonal direction of it
 					if (isXdangMax) {
-						worked = findAssociationForBlock(world, zdang > 0 ? pos.south() : pos.north());
+						worked = findAssociationForBlock(loc, zdang > 0 ? pos.south() : pos.north());
 					} else {
-						worked = findAssociationForBlock(world, xdang > 0 ? pos.east() : pos.west());
+						worked = findAssociationForBlock(loc, xdang > 0 ? pos.east() : pos.west());
 					}
 				}
 			}
@@ -562,7 +519,8 @@ public class Generator {
 	 * solves to the carpet.
 	 */
 	@Nullable
-	protected Association findAssociationForBlock(@Nonnull final World world, @Nonnull BlockPos pos) {
+	protected Association findAssociationForBlock(@Nonnull final FootStrikeLocation loc, @Nonnull BlockPos pos) {
+		final World world = loc.getEntity().getEntityWorld();
 		final IBlockState airState = Blocks.AIR.getDefaultState();
 		IBlockState in = WorldUtils.getBlockState(world, pos);
 		BlockPos tPos = pos.up();
@@ -617,12 +575,12 @@ public class Generator {
 				return null;
 			} else {
 				// Let's play the fancy acoustics we have defined for the block
-				return new Association(in, pos, association);
+				return new Association(in, loc.rebase(pos), association);
 			}
 		} else {
 			// No acoustics. Calling logic will default to playing the normal block
 			// step sound if available.
-			return new Association(in, pos);
+			return new Association(in, loc.rebase(pos));
 		}
 	}
 
@@ -638,7 +596,7 @@ public class Generator {
 				final ConfigOptions options = new ConfigOptions();
 				options.setGlidingVolume(volume > 1 ? 1 : volume);
 				// material water, see EntityLivingBase line 286
-				this.soundPlayer.playAcoustic(entity, AcousticsManager.SWIM,
+				this.soundPlayer.playAcoustic(entity.getPositionVector(), AcousticsManager.SWIM,
 						entity.isInsideOfMaterial(Material.WATER) ? EventType.SWIM : EventType.WALK, options);
 			}
 			return true;
@@ -655,17 +613,20 @@ public class Generator {
 	}
 
 	@Nullable
-	protected Association findAssociationMessyFoliage(@Nonnull final World world, @Nonnull final BlockPos pos) {
+	protected Association findAssociationMessyFoliage(@Nonnull final EntityLivingBase entity,
+			@Nonnull final BlockPos pos) {
 		Association result = null;
 		final BlockPos up = pos.up();
+		final World world = entity.getEntityWorld();
 		final IBlockState above = WorldUtils.getBlockState(world, up);
 
 		if (above != Blocks.AIR.getDefaultState()) {
 			IAcoustic[] acoustics = this.blockMap.getBlockAcoustics(world, above, up, Substrate.MESSY);
 			if (acoustics == AcousticsManager.MESSY_GROUND) {
 				acoustics = this.blockMap.getBlockAcoustics(world, above, up, Substrate.FOLIAGE);
-				if (acoustics != null && acoustics != AcousticsManager.NOT_EMITTER)
-					result = new Association(acoustics);
+				if (acoustics != null && acoustics != AcousticsManager.NOT_EMITTER) {
+					result = new Association(entity, acoustics);
+				}
 
 			}
 		}
@@ -681,12 +642,13 @@ public class Generator {
 		// Don't apply overlays if the entity is not on the ground
 		if (entity.onGround) {
 			accents.clear();
-			final BlockPos pos = assoc != null ? assoc.getPos() : null;
+			final BlockPos pos = assoc != null ? assoc.getStepPos() : null;
 			FootstepAccents.provide(entity, pos, accents);
 			if (accents.size() > 0) {
 				if (assoc == null)
-					assoc = new Association();
-				assoc.add(accents);
+					assoc = new Association(entity, accents.toArray(new IAcoustic[0]));
+				else
+					assoc.add(accents);
 			}
 		}
 

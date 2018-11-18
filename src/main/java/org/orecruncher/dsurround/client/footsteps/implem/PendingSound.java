@@ -28,8 +28,8 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.client.footsteps.interfaces.ISoundPlayer;
 
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -38,7 +38,7 @@ public class PendingSound {
 
 	private static final float LATENESS_SLACK_FACTOR = 1.2f;
 
-	private final EntityLivingBase location;
+	private final Vec3d location;
 	private final SoundEvent sound;
 	private final float volume;
 	private final float pitch;
@@ -46,7 +46,7 @@ public class PendingSound {
 	private final long maximum;
 	private final float lateTolerance;
 
-	public PendingSound(@Nonnull final EntityLivingBase location, @Nonnull final SoundEvent sound, final float volume,
+	public PendingSound(@Nonnull final Vec3d location, @Nonnull final SoundEvent sound, final float volume,
 			final float pitch, final long timeToPlay, final long maximum) {
 		this.location = location;
 		this.sound = sound;

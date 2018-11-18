@@ -27,6 +27,7 @@ package org.orecruncher.dsurround.client.footsteps.system;
 import java.util.Collection;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
@@ -35,7 +36,9 @@ import org.orecruncher.lib.collections.ObjectArray;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -43,7 +46,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class Association {
 
 	private final IBlockState state;
-	private final BlockPos pos;
+	private final FootStrikeLocation location;
 	private final ObjectArray<IAcoustic> data = new ObjectArray<>(8);
 	private final boolean isNotEmitter;
 
@@ -54,15 +57,23 @@ public class Association {
 	public Association(@Nonnull final IAcoustic[] association) {
 		this(null, null, association);
 	}
+	
+	public Association(@Nonnull final EntityLivingBase entity, @Nonnull final IAcoustic[] association) {
+		final Vec3d vec = entity.getPositionVector();
+		this.state = null;
+		this.location = new FootStrikeLocation(entity, vec.x, vec.y + 1, vec.z);;
+		this.data.addAll(association == null ? AcousticsManager.EMPTY : association);
+		this.isNotEmitter = association == AcousticsManager.NOT_EMITTER;
+	}
 
-	public Association(@Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
+	public Association(@Nonnull final IBlockState state, @Nonnull final FootStrikeLocation pos) {
 		this(state, pos, AcousticsManager.EMPTY);
 	}
 
-	public Association(@Nonnull final IBlockState state, @Nonnull final BlockPos pos,
+	public Association(@Nonnull final IBlockState state, @Nonnull final FootStrikeLocation pos,
 			@Nonnull final IAcoustic[] association) {
 		this.state = state;
-		this.pos = pos;
+		this.location = pos;
 		this.data.addAll(association == null ? AcousticsManager.EMPTY : association);
 		this.isNotEmitter = association == AcousticsManager.NOT_EMITTER;
 	}
@@ -98,8 +109,17 @@ public class Association {
 	}
 
 	@Nonnull
-	public BlockPos getPos() {
-		return this.pos;
+	public FootStrikeLocation getStrikeLocation() {
+		return this.location;
+	}
+	
+	public boolean hasStrikeLocation() {
+		return this.location != null;
+	}
+	
+	@Nullable
+	public BlockPos getStepPos() {
+		return this.location != null ? this.location.getStepPos() : null;
 	}
 
 	public boolean isNotEmitter() {

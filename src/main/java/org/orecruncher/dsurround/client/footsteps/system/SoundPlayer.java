@@ -39,17 +39,12 @@ import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.client.sound.BasicSound;
 import org.orecruncher.dsurround.client.sound.FootstepSound;
 import org.orecruncher.dsurround.registry.footstep.Variator;
-import org.orecruncher.lib.MCHelper;
 import org.orecruncher.lib.TimeUtils;
-import org.orecruncher.lib.WorldUtils;
 import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.random.XorShiftRandom;
 
-import net.minecraft.block.SoundType;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -64,13 +59,8 @@ public class SoundPlayer implements ISoundPlayer {
 		this.var = var;
 	}
 
-	public void playAcoustic(@Nonnull final EntityLivingBase entity, @Nonnull final Association assoc,
-			@Nonnull final EventType event) {
-		if (assoc.getNoAssociation()) {
-			playStep(entity, assoc, event);
-		} else {
-			playAcoustic(entity, assoc.getData(), event, null);
-		}
+	public void playAcoustic(@Nonnull final Association assoc, @Nonnull final EventType event) {
+		playAcoustic(assoc.getStrikeLocation().getSoundPos(), assoc.getData(), event, null);
 	}
 
 	private void logAcousticPlay(@Nonnull final IAcoustic[] acoustics, @Nonnull final EventType event) {
@@ -81,47 +71,30 @@ public class SoundPlayer implements ISoundPlayer {
 		}
 	}
 
-	public void playAcoustic(@Nonnull final EntityLivingBase entity, @Nonnull final IAcoustic[] acoustics,
+	public void playAcoustic(@Nonnull final Vec3d location, @Nonnull final IAcoustic[] acoustics,
 			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
-		if (acoustics != null) {
+		if (acoustics != null && acoustics.length > 0) {
 			logAcousticPlay(acoustics, event);
-			for (int i = 0; i < acoustics.length; i++) {
-				acoustics[i].playSound(this, entity, event, inputOptions);
-			}
-		}
-	}
-
-	/**
-	 * Used to play a block native sound because there is no acoustic profile
-	 * defined for the block.
-	 */
-	protected void playStep(@Nonnull final EntityLivingBase entity, @Nonnull final Association assoc,
-			@Nonnull final EventType event) {
-		SoundType soundType = assoc.getSoundType();
-		if (soundType != null && !assoc.isLiquid()) {
-			final IBlockState upState = WorldUtils.getBlockState(entity.getEntityWorld(), assoc.getPos().up());
-			if (upState.getBlock() == Blocks.SNOW_LAYER)
-				soundType = MCHelper.getSoundType(upState);
-			final SoundEvent se = event == EventType.LAND ? soundType.getFallSound() : soundType.getStepSound();
-			actuallyPlaySound(entity, se, soundType.getVolume(), soundType.getPitch(), true);
+			for (int i = 0; i < acoustics.length; i++)
+				acoustics[i].playSound(this, location, event, inputOptions);
 		}
 	}
 
 	@Override
-	public void playSound(@Nonnull final EntityLivingBase entity, @Nonnull final SoundEvent sound, final float volume,
+	public void playSound(@Nonnull final Vec3d location, @Nonnull final SoundEvent sound, final float volume,
 			final float pitch, @Nullable final IOptions options) {
 		// If it is a delayed sound queue it up. Otherwise play it.
 		if (options != null && options.isDelayedSound()) {
 			final long delay = TimeUtils.currentTimeMillis()
 					+ randAB(this.random, options.getDelayMin(), options.getDelayMax());
-			this.pending.add(new PendingSound(entity, sound, volume, pitch, delay, options.getDelayMax()));
+			this.pending.add(new PendingSound(location, sound, volume, pitch, delay, options.getDelayMax()));
 		} else {
-			actuallyPlaySound(entity, sound, volume, pitch, false);
+			actuallyPlaySound(location, sound, volume, pitch, false);
 		}
 	}
 
-	protected void actuallyPlaySound(@Nonnull final EntityLivingBase entity, @Nonnull final SoundEvent sound,
-			final float volume, final float pitch, final boolean noScale) {
+	protected void actuallyPlaySound(@Nonnull final Vec3d entity, @Nonnull final SoundEvent sound, final float volume,
+			final float pitch, final boolean noScale) {
 		try {
 			final FootstepSound s = new FootstepSound(entity, sound).setVolume(volume * this.var.VOLUME_SCALE)
 					.setPitch(pitch);

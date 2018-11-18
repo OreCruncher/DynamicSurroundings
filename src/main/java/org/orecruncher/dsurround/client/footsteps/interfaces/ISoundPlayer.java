@@ -29,8 +29,8 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -39,7 +39,7 @@ public interface ISoundPlayer {
 	/**
 	 * Plays a sound.
 	 */
-	public void playSound(@Nonnull final EntityLivingBase location, @Nonnull final SoundEvent sound, final float volume,
+	public void playSound(@Nonnull final Vec3d location, @Nonnull final SoundEvent sound, final float volume,
 			final float pitch, @Nullable final IOptions options);
 
 	/**

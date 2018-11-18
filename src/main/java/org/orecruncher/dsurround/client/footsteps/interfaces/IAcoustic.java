@@ -27,7 +27,7 @@ package org.orecruncher.dsurround.client.footsteps.interfaces;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -40,7 +40,7 @@ public interface IAcoustic {
 	/**
 	 * Plays a sound.
 	 */
-	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final EntityLivingBase location,
+	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location,
 			@Nonnull final EventType event, @Nullable final IOptions inputOptions);
 
 }

@@ -26,22 +26,18 @@ package org.orecruncher.dsurround.client.sound;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-
-import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class FootstepSound extends BasicSound<FootstepSound> {
 
-	public FootstepSound(@Nonnull final Entity player, @Nonnull final SoundEvent event) {
+	public FootstepSound(@Nonnull final Vec3d loc, @Nonnull final SoundEvent event) {
 		super(event, Sounds.FOOTSTEPS);
 
-		this.setPosition(player);
-		if (EnvironState.isPlayer(player))
-			setAttenuationType(noAttenuation());
+		this.setPosition(loc);
 	}
 
 }

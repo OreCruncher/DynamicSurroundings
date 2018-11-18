@@ -34,7 +34,7 @@ import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IOptions;
 import org.orecruncher.dsurround.client.footsteps.interfaces.ISoundPlayer;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -53,7 +53,7 @@ public class SimultaneousAcoustic implements IAcoustic {
 	}
 
 	@Override
-	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final EntityLivingBase location,
+	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location,
 			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
 		for (int i = 0; i < this.acoustics.length; i++)
 			this.acoustics[i].playSound(player, location, event, inputOptions);
