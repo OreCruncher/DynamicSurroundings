@@ -10,7 +10,7 @@
 			"sounds": [
 				{
 					"sound": "dsurround:bees",
-					"conditions": "isDay && weather.isNotRaining",
+					"conditions": "diurnal.isDay && weather.isNotRaining",
 					"variable": true
 				}
 			]

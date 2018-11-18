@@ -7,11 +7,11 @@
 			"sounds": [
 				{
 					"sound": "dsurround:savanna.day",
-					"conditions": "weather.isNotRaining && isDay"
+					"conditions": "weather.isNotRaining && diurnal.isDay"
 				},
 				{
 					"sound": "dsurround:savanna.night",
-					"conditions": "weather.isNotRaining && isNight"
+					"conditions": "weather.isNotRaining && diurnal.isNight"
 				}
 			]
 		},
@@ -25,12 +25,12 @@
 				},
 				{
 					"sound": "dsurround:rattlesnake",
-					"conditions": "weather.isNotRaining && isDay",
+					"conditions": "weather.isNotRaining && diurnal.isDay",
 					"soundType": "spot"
 				},
 				{
 					"sound": "dsurround:coyote",
-					"conditions": "weather.isNotRaining && isNight",
+					"conditions": "weather.isNotRaining && diurnal.isNight",
 					"soundType": "spot"
 				}
 			]
@@ -66,15 +66,15 @@
 				},
 				{
 					"sound": "dsurround:savanna.day",
-					"conditions": "weather.isNotRaining && isDay"
+					"conditions": "weather.isNotRaining && diurnal.isDay"
 				},
 				{
 					"sound": "dsurround:savanna.night",
-					"conditions": "weather.isNotRaining && isNight"
+					"conditions": "weather.isNotRaining && diurnal.isNight"
 				},
 				{
 					"sound": "dsurround:rattlesnake",
-					"conditions": "weather.isNotRaining && isDay",
+					"conditions": "weather.isNotRaining && diurnal.isDay",
 					"soundType": "spot"
 				}
 			]
@@ -86,25 +86,25 @@
 			"sounds": [
 				{
 					"sound": "dsurround:plains",
-					"conditions": "weather.isNotRaining && isDay"
+					"conditions": "weather.isNotRaining && diurnal.isDay"
 				},
 				{
 					"sound": "dsurround:crickets",
-					"conditions": "weather.isNotRaining && isNight"
+					"conditions": "weather.isNotRaining && diurnal.isNight"
 				},
 				{
 					"sound": "dsurround:bird",
-					"conditions": "weather.isNotRaining && isDay",
+					"conditions": "weather.isNotRaining && diurnal.isDay",
 					"soundType": "spot"
 				},
 				{
 					"sound": "dsurround:owl",
-					"conditions": "weather.isNotRaining && isNight",
+					"conditions": "weather.isNotRaining && diurnal.isNight",
 					"soundType": "spot"
 				},
 				{
 					"sound": "dsurround:woodpecker",
-					"conditions": "weather.isNotRaining && isDay",
+					"conditions": "weather.isNotRaining && diurnal.isDay",
 					"soundType": "spot"
 				}
 			]

@@ -401,7 +401,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	public void process(@Nonnull final EntityPlayer player) {
 		EnvironState.tick(player.getEntityWorld(), player);
 		Weather.update();
-		ExpressionEngine.instance().update();
+		ExpressionEngine.instance().reset();
 		this.ceiling.update();
 	}
 
@@ -422,12 +422,16 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 	// Use the new scripting system to pull out data to display
 	// for debug. Good for testing.
-	private final static String[] scripts = { "'Dim: ' + player.dimension + '/' + player.dimensionName",
-			"'Biome: ' + biome.name + ' (' + biome.id + '); Temp ' + biome.temperature + '/' + biome.temperatureValue + ' rainfall: ' + biome.rainfall",
-			"'Weather: ' + IF(weather.isRaining,'rainfall: ' + weather.rainfall,'not raining') + IF(weather.isThundering,' thundering','') + ' Temp: ' + weather.temperature + '/' + weather.temperatureValue + ' ' + IF(weather.temperatureValue < 0.2, '(breath)', '')",
-			"'Season: ' + season  + IF(isNight,' night',' day') + IF(player.isInside,' inside',' outside')",
-			"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','') + ' pos: (' + player.X + ',' + player.Y + ',' + player.Z + ') light: ' + player.lightLevel",
-			"'Village: ' + player.inVillage" };
+	private final static String[] scripts = {
+		//@formatter:off
+		"'Dim: ' + dim.id + '/' + dim.name",
+		"'Biome: ' + biome.name + ' (' + biome.id + '); Temp ' + biome.temperature + '/' + biome.temperatureValue + ' rainfall: ' + biome.rainfall",
+		"'Weather: ' + IF(weather.isRaining,'rainfall: ' + weather.rainfall,'not raining') + IF(weather.isThundering,' thundering','') + ' Temp: ' + weather.temperature + '/' + weather.temperatureValue + ' ' + IF(weather.temperatureValue < 0.2, '(breath)', '')",
+		"'Season: ' + season.season + IF(diurnal.isNight,' night',' day') + IF(player.isInside,' inside',' outside')",
+		"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','') + ' pos: (' + player.X + ',' + player.Y + ',' + player.Z + ') light: ' + player.lightLevel",
+		"'Village: ' + player.inVillage"
+		//@formatter:on
+	};
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void diagnostics(final DiagnosticEvent.Gather event) {

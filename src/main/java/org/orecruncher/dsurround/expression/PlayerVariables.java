@@ -166,18 +166,6 @@ public class PlayerVariables extends DynamicVariantList {
 				this.value = EnvironState.getPlayerTemperature().getValue();
 			}
 		});
-		add(new Dynamic.DynamicNumber("player.dimension") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getDimensionId();
-			}
-		});
-		add(new Dynamic.DynamicString("player.dimensionName") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getDimensionName();
-			}
-		});
 		add(new Dynamic.DynamicNumber("player.X") {
 			@Override
 			public void update() {

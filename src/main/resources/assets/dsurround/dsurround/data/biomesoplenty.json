@@ -7,25 +7,25 @@
 			"sounds": [
 				{
 					"sound": "dsurround:forest",
-					"conditions": "weather.isNotRaining && isDay"
+					"conditions": "weather.isNotRaining && diurnal.isDay"
 				},
 				{
 					"sound": "dsurround:crickets",
-					"conditions": "weather.isNotRaining && isNight"
+					"conditions": "weather.isNotRaining && diurnal.isNight"
 				},
 				{
 					"sound": "dsurround:owl",
-					"conditions": "weather.isNotRaining && isNight",
+					"conditions": "weather.isNotRaining && diurnal.isNight",
 					"soundType": "spot"
 				},
 				{
 					"sound": "dsurround:bird",
-					"conditions": "weather.isNotRaining && isDay",
+					"conditions": "weather.isNotRaining && diurnal.isDay",
 					"soundType": "spot"
 				},
 				{
 					"sound": "dsurround:woodpecker",
-					"conditions": "weather.isNotRaining && isDay",
+					"conditions": "weather.isNotRaining && diurnal.isDay",
 					"soundType": "spot"
 				}
 			]
@@ -112,7 +112,7 @@
 			"effects": [
 				{
 					"effect": "firefly",
-					"conditions": "weather.isNotRaining && (isNight || isSunset) && !(biome.isHot || biome.isCold || biome.isSnowy)",
+					"conditions": "weather.isNotRaining && (diurnal.isNight || diurnal.isSunset) && !(biome.isHot || biome.isCold || biome.isSnowy)",
 					"chance": 50
 				}
 			]

@@ -42,16 +42,18 @@ public final class ExpressionEngine {
 	private final ExpressionCache cache = new ExpressionCache(ModBase.log());
 
 	private ExpressionEngine() {
+		this.cache.add(new BattleVariables());
 		this.cache.add(new BiomeTypeVariables());
 		this.cache.add(new BiomeVariables());
+		this.cache.add(new DimensionVariables());
+		this.cache.add(new DiurnalVariables());
 		this.cache.add(new PlayerVariables());
+		this.cache.add(new SeasonVariables());
 		this.cache.add(new WeatherVariables());
-		this.cache.add(new BattleVariables());
-		this.cache.add(new MiscVariables());
 	}
 
-	public void update() {
-		this.cache.update();
+	public void reset() {
+		this.cache.reset();
 	}
 
 	public List<IDynamicVariant<?>> getVariables() {

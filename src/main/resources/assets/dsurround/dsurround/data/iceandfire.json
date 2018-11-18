@@ -69,7 +69,7 @@
 			"effects": [
 				{
 					"effect": "firefly",
-					"conditions": "weather.isNotRaining && (isNight || isSunset) && !(biome.isHot || biome.isCold || biome.isSnowy)",
+					"conditions": "weather.isNotRaining && (diurnal.isNight || diurnal.isSunset) && !(biome.isHot || biome.isCold || biome.isSnowy)",
 					"chance": 30
 				}
 			]

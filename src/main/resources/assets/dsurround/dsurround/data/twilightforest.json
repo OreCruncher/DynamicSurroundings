@@ -10,7 +10,7 @@
 			"effects": [
 				{
 					"effect": "firefly",
-					"conditions": "player.dimensionName == 'twilight_forest' && weather.isNotRaining && !(biome.isHot || biome.isCold || biome.isSnowy)",
+					"conditions": "dim.name == 'twilight_forest' && weather.isNotRaining && !(biome.isHot || biome.isCold || biome.isSnowy)",
 					"chance": 30
 				}
 			]
@@ -22,7 +22,7 @@
 			"effects": [
 				{
 					"effect": "firefly",
-					"conditions": "player.dimensionName == 'twilight_forest' && weather.isNotRaining && !(biome.isHot || biome.isCold || biome.isSnowy)",
+					"conditions": "dim.name == 'twilight_forest' && weather.isNotRaining && !(biome.isHot || biome.isCold || biome.isSnowy)",
 					"chance": 10
 				}
 			]
