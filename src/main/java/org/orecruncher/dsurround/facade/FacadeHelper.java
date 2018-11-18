@@ -36,16 +36,17 @@ import org.orecruncher.dsurround.ModBase;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IBlockAccess;
 
 public final class FacadeHelper {
 
-	private static final Map<Block, FacadeAccessor> crackers = new Reference2ObjectOpenHashMap<>();
+	private static final Map<Block, IFacadeAccessor> crackers = new Reference2ObjectOpenHashMap<>();
 
-	private static void addAccessor(@Nonnull final List<FacadeAccessor> accessors,
-			@Nonnull final FacadeAccessor accessor) {
+	private static void addAccessor(@Nonnull final List<IFacadeAccessor> accessors,
+			@Nonnull final IFacadeAccessor accessor) {
 		if (accessor.isValid()) {
 			ModBase.log().info("Facade Accessor: %s", accessor.getName());
 			accessors.add(accessor);
@@ -54,7 +55,7 @@ public final class FacadeHelper {
 
 	static {
 
-		final List<FacadeAccessor> accessors = new ArrayList<>();
+		final List<IFacadeAccessor> accessors = new ArrayList<>();
 
 		// Run down the list of supported accessors. The instance will
 		// tell us if it is valid or not.
@@ -62,6 +63,7 @@ public final class FacadeHelper {
 		addAccessor(accessors, new CoFHCoreCoverAccessor());
 		addAccessor(accessors, new ChiselAPIFacadeAccessor());
 		addAccessor(accessors, new ChiselFacadeAccessor());
+		addAccessor(accessors, new ForgeMultiPartCBE());
 
 		// Iterate through the block list filling out our cracker list.
 		if (accessors.size() > 0) {
@@ -69,7 +71,7 @@ public final class FacadeHelper {
 			while (itr.hasNext()) {
 				final Block b = itr.next();
 				for (int i = 0; i < accessors.size(); i++) {
-					final FacadeAccessor accessor = accessors.get(i);
+					final IFacadeAccessor accessor = accessors.get(i);
 					if (accessor.instanceOf(b)) {
 						crackers.put(b, accessor);
 						break;
@@ -85,12 +87,12 @@ public final class FacadeHelper {
 	}
 
 	@Nonnull
-	public static IBlockState resolveState(@Nonnull final IBlockState state, @Nonnull final World world,
-			@Nonnull final BlockPos pos, @Nullable final EnumFacing side) {
+	public static IBlockState resolveState(@Nonnull final EntityLivingBase entity, @Nonnull final IBlockState state,
+			@Nonnull final IBlockAccess world, @Nonnull final BlockPos pos, @Nullable final EnumFacing side) {
 		if (crackers.size() > 0) {
-			final FacadeAccessor accessor = crackers.get(state.getBlock());
-			if (accessor != null && accessor.isValid()) {
-				final IBlockState newState = accessor.getBlockState(state, world, pos, side);
+			final IFacadeAccessor accessor = crackers.get(state.getBlock());
+			if (accessor != null) {
+				final IBlockState newState = accessor.getBlockState(entity, state, world, pos, side);
 				if (newState != null)
 					return newState;
 			}

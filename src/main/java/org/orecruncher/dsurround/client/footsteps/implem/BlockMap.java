@@ -37,7 +37,6 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
-import org.orecruncher.dsurround.facade.FacadeHelper;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 import org.orecruncher.lib.BlockNameUtil;
 import org.orecruncher.lib.BlockNameUtil.NameResult;
@@ -49,7 +48,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -140,7 +138,7 @@ public class BlockMap {
 		entries.add(new MacroEntry(null, "NOT_EMITTER"));
 		entries.add(new MacroEntry("carpet", "rug"));
 		macros.put("#moss", entries);
-		
+
 		entries = new ArrayList<>();
 		entries.add(new MacroEntry(null, "NOT_EMITTER"));
 		entries.add(MESSY);
@@ -187,26 +185,24 @@ public class BlockMap {
 	}
 
 	@Nullable
-	public IAcoustic[] getBlockAcoustics(@Nonnull final World world, @Nonnull final IBlockState state,
-			@Nonnull final BlockPos pos) {
-		return this.getBlockAcoustics(world, state, pos, null);
+	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state) {
+		return this.getBlockAcoustics(state, null);
 	}
 
 	@Nullable
-	public IAcoustic[] getBlockAcoustics(@Nonnull final World world, @Nonnull final IBlockState state,
-			@Nonnull final BlockPos pos, @Nullable final Substrate substrate) {
+	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state, @Nullable final Substrate substrate) {
 		// Walking an edge of a block can produce this
 		if (state == Blocks.AIR.getDefaultState())
 			return AcousticsManager.NOT_EMITTER;
-		final IBlockState trueState = FacadeHelper.resolveState(state, world, pos, EnumFacing.UP);
 		if (substrate != null) {
 			final BlockAcousticMap sub = this.substrateMap.get(substrate);
-			return sub != null ? sub.getBlockAcoustics(trueState) : null;
+			return sub != null ? sub.getBlockAcoustics(state) : null;
 		}
-		return this.metaMap.getBlockAcoustics(trueState);
+		return this.metaMap.getBlockAcoustics(state);
 	}
 
-	private void put(@Nonnull final BlockStateMatcher info, @Nonnull final String substrate, @Nonnull final String value) {
+	private void put(@Nonnull final BlockStateMatcher info, @Nonnull final String substrate,
+			@Nonnull final String value) {
 
 		final Substrate s = Substrate.get(substrate);
 		final IAcoustic[] acoustics = this.acousticsManager.compileAcoustics(value);
@@ -262,7 +258,7 @@ public class BlockMap {
 	public void collectData(@Nonnull final World world, @Nonnull final IBlockState state, @Nonnull final BlockPos pos,
 			@Nonnull final List<String> data) {
 
-		final IAcoustic[] temp = getBlockAcoustics(world, state, pos);
+		final IAcoustic[] temp = getBlockAcoustics(state);
 		if (temp != null)
 			data.add(combine(temp));
 

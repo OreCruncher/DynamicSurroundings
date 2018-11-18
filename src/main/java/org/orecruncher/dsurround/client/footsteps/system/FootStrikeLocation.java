@@ -113,7 +113,7 @@ public final class FootStrikeLocation {
 
 	protected boolean hasFootstepImprint(@Nonnull final World world, @Nullable final IBlockState state,
 			@Nonnull final BlockPos pos) {
-		final IBlockState footstepState = FacadeHelper.resolveState(state, world, pos, EnumFacing.UP);
+		final IBlockState footstepState = FacadeHelper.resolveState(this.entity, state, world, pos, EnumFacing.UP);
 		return ClientRegistry.FOOTSTEPS.hasFootprint(footstepState);
 	}
 }

@@ -27,7 +27,12 @@ compileJava {
 
 minecraft {
 	if (project.ext.has('secrets')) {
-    	clientRunArgs = ["--uuid ${secrets.uuid}", "--username ${secrets.username}"]
+		if (secrets.uuid != null)
+    		clientRunArgs += ["--uuid ${secrets.uuid}"]
+    	if (secrets.username != null)
+    		clientRunArgs += ["--username ${secrets.username}"]
+    	if (secrets.password != null)
+    		clientRunArgs += ["--password ${secrets.password}"]
     	if (secrets.jvmArgs != null) {
     		clientJvmArgs += secrets.jvmArgs
     		serverJvmArgs += secrets.jvmArgs
@@ -48,12 +53,10 @@ repositories {
 }
 
 dependencies {
-
     //compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.12.2-7.0.1.2399:deobf"
-    
-	// http://dvs1.progwml6.com/files/maven/mezz/jei/
-    deobfCompile "mezz.jei:jei_1.12.2:4.11.0.212:api"
-    runtime "mezz.jei:jei_1.12.2:4.11.0.212"
+	deobfCompile "team.chisel:Chisel:MC1.12.2-0.2.1.35"    
+    deobfCompile "mezz.jei:jei_1.12.2:4.13.1.224:api"
+    runtime "mezz.jei:jei_1.12.2:4.13.1.224"
 }
 
 processResources

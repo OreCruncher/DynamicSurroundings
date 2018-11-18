@@ -45,9 +45,8 @@ import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironStat
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.registry.footstep.Variator;
-import org.orecruncher.lib.MyUtils;
 import org.orecruncher.lib.TimeUtils;
-import org.orecruncher.lib.WorldUtils;
+import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.compat.EntityLivingBaseUtil;
 import org.orecruncher.lib.compat.EntityUtil;
@@ -439,12 +438,12 @@ public class Generator {
 	 * association in the blockmap.
 	 */
 	@Nullable
-	protected Association findAssociationForEvent(@Nonnull final FootStrikeLocation loc) {
+	private Association findAssociationForEvent(@Nonnull final FootStrikeLocation loc) {
 
-		final EntityLivingBase entity = loc.getEntity();
+		final AcousticResolver resolver = new AcousticResolver(ClientChunkCache.instance(), this.blockMap, loc);
 		final BlockPos pos = loc.getStepPos();
 
-		Association worked = findAssociationForBlock(loc, pos);
+		Association worked = resolver.resolve(pos);
 
 		// If it didn't work, the player has walked over the air on the border
 		// of a block.
@@ -457,6 +456,7 @@ public class Generator {
 		if (worked == null) {
 			// Create a trigo. mark contained inside the block the player is
 			// over
+			final EntityLivingBase entity = loc.getEntity();
 			final double xdang = (entity.posX - pos.getX()) * 2 - 1;
 			final double zdang = (entity.posZ - pos.getZ()) * 2 - 1;
 			// -1 0 1
@@ -483,9 +483,9 @@ public class Generator {
 				if (isXdangMax) {
 					// If we are in the positive border, add 1,
 					// else subtract 1
-					worked = findAssociationForBlock(loc, xdang > 0 ? pos.east() : pos.west());
+					worked = resolver.resolve(xdang > 0 ? pos.east() : pos.west());
 				} else {
-					worked = findAssociationForBlock(loc, zdang > 0 ? pos.south() : pos.north());
+					worked = resolver.resolve(zdang > 0 ? pos.south() : pos.north());
 				}
 
 				// If that didn't work, then maybe the footstep hit in the
@@ -494,94 +494,14 @@ public class Generator {
 					// Take the maximum direction and try with
 					// the orthogonal direction of it
 					if (isXdangMax) {
-						worked = findAssociationForBlock(loc, zdang > 0 ? pos.south() : pos.north());
+						worked = resolver.resolve(zdang > 0 ? pos.south() : pos.north());
 					} else {
-						worked = findAssociationForBlock(loc, xdang > 0 ? pos.east() : pos.west());
+						worked = resolver.resolve(xdang > 0 ? pos.east() : pos.west());
 					}
 				}
 			}
 		}
 		return worked;
-	}
-
-	/**
-	 * Find an association for a certain block assuming the player is standing on
-	 * it. This will sometimes select the block above because some block act like
-	 * carpets. This also applies when the block targeted by the location is
-	 * actually not emitting, such as lilypads on water.
-	 *
-	 * Returns null if the block is not a valid emitting block (this causes the
-	 * engine to continue looking for valid blocks). This also happens if the carpet
-	 * is non-emitting.
-	 *
-	 * Returns a string that begins with "_NO_ASSOCIATION" if the block is valid,
-	 * but has no association in the blockmap. If the carpet was selected, this
-	 * solves to the carpet.
-	 */
-	@Nullable
-	protected Association findAssociationForBlock(@Nonnull final FootStrikeLocation loc, @Nonnull BlockPos pos) {
-		final World world = loc.getEntity().getEntityWorld();
-		final IBlockState airState = Blocks.AIR.getDefaultState();
-		IBlockState in = WorldUtils.getBlockState(world, pos);
-		BlockPos tPos = pos.up();
-		final IBlockState above = WorldUtils.getBlockState(world, tPos);
-
-		IAcoustic[] association = null;
-
-		if (above != airState)
-			association = this.blockMap.getBlockAcoustics(world, above, tPos, Substrate.CARPET);
-
-		if (association == null || association == AcousticsManager.NOT_EMITTER) {
-			// This condition implies that if the carpet is NOT_EMITTER, solving
-			// will CONTINUE with the actual block surface the player is walking
-			// on NOT_EMITTER carpets will not cause solving to skip
-
-			if (in == airState) {
-				tPos = pos.down();
-				final IBlockState below = WorldUtils.getBlockState(world, tPos);
-				association = this.blockMap.getBlockAcoustics(world, below, tPos, Substrate.FENCE);
-				if (association != null) {
-					pos = tPos;
-					in = below;
-				}
-			}
-
-			if (association == null) {
-				association = this.blockMap.getBlockAcoustics(world, in, pos);
-			}
-
-			if (association != null && association != AcousticsManager.NOT_EMITTER) {
-				// This condition implies that foliage over a NOT_EMITTER block
-				// CANNOT PLAY This block most not be executed if the association
-				// is a carpet => this block of code is here, not outside this
-				// if else group.
-
-				if (above != airState) {
-					final IAcoustic[] foliage = this.blockMap.getBlockAcoustics(world, above, pos.up(),
-							Substrate.FOLIAGE);
-					if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
-						association = MyUtils.concatenate(association, foliage);
-					}
-				}
-			}
-		} else {
-			pos = tPos;
-			in = above;
-		}
-
-		if (association != null) {
-			if (association == AcousticsManager.NOT_EMITTER) {
-				// Player has stepped on a non-emitter block as defined in the blockmap
-				return null;
-			} else {
-				// Let's play the fancy acoustics we have defined for the block
-				return new Association(in, loc.rebase(pos), association);
-			}
-		} else {
-			// No acoustics. Calling logic will default to playing the normal block
-			// step sound if available.
-			return new Association(in, loc.rebase(pos));
-		}
 	}
 
 	/**
@@ -617,13 +537,12 @@ public class Generator {
 			@Nonnull final BlockPos pos) {
 		Association result = null;
 		final BlockPos up = pos.up();
-		final World world = entity.getEntityWorld();
-		final IBlockState above = WorldUtils.getBlockState(world, up);
+		final IBlockState above = ClientChunkCache.instance().getBlockState(up);
 
 		if (above != Blocks.AIR.getDefaultState()) {
-			IAcoustic[] acoustics = this.blockMap.getBlockAcoustics(world, above, up, Substrate.MESSY);
+			IAcoustic[] acoustics = this.blockMap.getBlockAcoustics(above, Substrate.MESSY);
 			if (acoustics == AcousticsManager.MESSY_GROUND) {
-				acoustics = this.blockMap.getBlockAcoustics(world, above, up, Substrate.FOLIAGE);
+				acoustics = this.blockMap.getBlockAcoustics(above, Substrate.FOLIAGE);
 				if (acoustics != null && acoustics != AcousticsManager.NOT_EMITTER) {
 					result = new Association(entity, acoustics);
 				}

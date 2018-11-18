@@ -24,6 +24,7 @@
 
 package org.orecruncher.dsurround.client.handlers.scanners;
 
+import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.CapabilityEntityData;
 import org.orecruncher.dsurround.capabilities.entitydata.IEntityData;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -99,6 +100,11 @@ public class BattleScanner implements ITickable {
 
 	@Override
 	public void update() {
+
+		if (!ModOptions.sound.enableBattleMusic) {
+			this.inBattle = this.isBoss = this.isDragon = this.isWither = false;
+			return;
+		}
 
 		final EntityPlayer player = EnvironState.getPlayer();
 		final BlockPos playerPos = EnvironState.getPlayerPosition();

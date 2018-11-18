@@ -31,12 +31,12 @@ import org.orecruncher.dsurround.ModBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
-class FacadeAccessor {
+class FacadeAccessor implements IFacadeAccessor {
 
 	protected Class<?> IFacadeClass;
 	protected Method accessor;
@@ -54,30 +54,26 @@ class FacadeAccessor {
 		}
 	}
 
+	@Override
+	@Nonnull
 	public String getName() {
 		return isValid() ? this.IFacadeClass.getName() : "INVALID";
 	}
 
+	@Override
 	public boolean instanceOf(@Nonnull final Block block) {
 		return isValid() && this.IFacadeClass.isInstance(block);
 	}
 
-	protected Method getMethod(@Nonnull final String method) throws Throwable {
-		return this.IFacadeClass.getMethod(method, IBlockAccess.class, BlockPos.class, EnumFacing.class);
-	}
-
-	protected IBlockState call(@Nonnull final IBlockState state, @Nonnull final World world,
-			@Nonnull final BlockPos pos, @Nullable final EnumFacing side) throws Throwable {
-		return (IBlockState) this.accessor.invoke(state.getBlock(), world, pos, side);
-	}
-
+	@Override
 	public boolean isValid() {
 		return this.accessor != null;
 	}
 
+	@Override
 	@Nullable
-	public IBlockState getBlockState(@Nonnull final IBlockState state, @Nonnull final World world,
-			@Nonnull final BlockPos pos, @Nullable final EnumFacing side) {
+	public IBlockState getBlockState(@Nonnull final EntityLivingBase entity, @Nonnull final IBlockState state,
+			@Nonnull final IBlockAccess world, @Nonnull final BlockPos pos, @Nullable final EnumFacing side) {
 		if (isValid())
 			try {
 				if (instanceOf(state.getBlock()))
@@ -89,6 +85,15 @@ class FacadeAccessor {
 			}
 
 		return null;
+	}
+
+	protected Method getMethod(@Nonnull final String method) throws Throwable {
+		return this.IFacadeClass.getMethod(method, IBlockAccess.class, BlockPos.class, EnumFacing.class);
+	}
+
+	protected IBlockState call(@Nonnull final IBlockState state, @Nonnull final IBlockAccess world,
+			@Nonnull final BlockPos pos, @Nullable final EnumFacing side) throws Throwable {
+		return (IBlockState) this.accessor.invoke(state.getBlock(), world, pos, side);
 	}
 
 }

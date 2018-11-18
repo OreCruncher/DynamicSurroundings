@@ -207,8 +207,7 @@ public final class SoundEngine {
 	/**
 	 * Determines if the sound is currently playing within the sound system
 	 *
-	 * @param sound
-	 *                  The sound to check
+	 * @param sound The sound to check
 	 * @return true if the sound is currently playing, false otherwise
 	 */
 	public boolean isSoundPlaying(@Nonnull final ITrackedSound sound) {
@@ -218,8 +217,7 @@ public final class SoundEngine {
 	/**
 	 * Stops the specified sound if it is playing.
 	 *
-	 * @param sound
-	 *                  The sound to stop
+	 * @param sound The sound to stop
 	 */
 	public void stopSound(@Nonnull final ITrackedSound sound) {
 		if (sound.getState().isActive()) {
@@ -241,8 +239,7 @@ public final class SoundEngine {
 	/**
 	 * Submits the sound to the sound system to be played.
 	 *
-	 * @param sound
-	 *                  Sound to play
+	 * @param sound Sound to play
 	 * @return ID assigned to the sound by the sound system. A null or empty return
 	 *         indicates that the sound was not submitted
 	 */
@@ -313,8 +310,7 @@ public final class SoundEngine {
 	 * Run down our active sound list checking that they are still active. If they
 	 * aren't update the state accordingly.
 	 *
-	 * @param event
-	 *                  Event that was raised
+	 * @param event Event that was raised
 	 */
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void clientTick(@Nonnull TickEvent.ClientTickEvent event) {
@@ -367,8 +363,7 @@ public final class SoundEngine {
 	/**
 	 * Sets the mute state of the sound system based on the flag provided.
 	 *
-	 * @param flag
-	 *                 true to mute the sound system, false to unmute
+	 * @param flag true to mute the sound system, false to unmute
 	 */
 	public void setMuted(final boolean flag) {
 		// OpenEye: Looks like the command thread is dead or not initialized.
@@ -392,8 +387,7 @@ public final class SoundEngine {
 	 * of an ITrackedSound as well as check whether the current thread is the client
 	 * thread.
 	 *
-	 * @param event
-	 *                  Incoming event that has been raised
+	 * @param event Incoming event that has been raised
 	 */
 	@SubscribeEvent
 	public void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
@@ -404,8 +398,7 @@ public final class SoundEngine {
 	/**
 	 * Event handler for the diagnostic event.
 	 *
-	 * @param event
-	 *                  Event that has been raised.
+	 * @param event Event that has been raised.
 	 */
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void diagnostics(final DiagnosticEvent.Gather event) {
@@ -444,14 +437,17 @@ public final class SoundEngine {
 		return settings != null ? settings.getSoundLevel(category) : 1.0F;
 	}
 
+	private static boolean fadeMusic(@Nonnull final ISound sound) {
+		return (sound.getCategory() == SoundCategory.MUSIC && !(sound instanceof ConfigSound
+				|| (sound instanceof TrackingSound && ModOptions.sound.enableBattleMusic)));
+	}
+
 	// SOUND may not be initialized if Forge did not initialized Minecraft fully.
 	// That can happen if the environment does not meet it's dependency
 	// requirements.
 	private static float getVolumeScale(@Nonnull final ISound sound) {
 		try {
-			final float fade = (sound.getCategory() == SoundCategory.MUSIC && !(sound instanceof ConfigSound))
-					? MusicFader.getMusicScaling()
-					: 1.0F;
+			final float fade = fadeMusic(sound) ? MusicFader.getMusicScaling() : 1.0F;
 			return ClientRegistry.SOUND.getVolumeScale(sound) * fade;
 		} catch (final Throwable t) {
 			;
@@ -463,8 +459,7 @@ public final class SoundEngine {
 	 * ASM redirects the SoundManager code to this method. Purpose is that the
 	 * volume is scaled by additional configuration information.
 	 *
-	 * @param sound
-	 *                  The sound object where volume is being calculated
+	 * @param sound The sound object where volume is being calculated
 	 * @return Clamped volume for playing the sound
 	 */
 	public static float getClampedVolume(@Nonnull final ISound sound) {
@@ -490,8 +485,7 @@ public final class SoundEngine {
 	/**
 	 * Event handler for configuring the sound channels of the sound engine.
 	 *
-	 * @param event
-	 *                  Event that has been raised
+	 * @param event Event that has been raised
 	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void configureSound(@Nonnull final SoundSetupEvent event) {

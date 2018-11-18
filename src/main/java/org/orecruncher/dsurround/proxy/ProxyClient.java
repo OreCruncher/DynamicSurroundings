@@ -131,7 +131,7 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 
 		ClientCommandHandler.instance.registerCommand(new CommandCalc());
 
-		if (ModOptions.general.disableWaterSuspendParticle)
+		if (ModOptions.effects.disableWaterSuspendParticle)
 			Minecraft.getMinecraft().effectRenderer.registerParticle(EnumParticleTypes.SUSPENDED.getParticleID(), null);
 
 		if (ModEnvironment.AmbientSounds.isLoaded())

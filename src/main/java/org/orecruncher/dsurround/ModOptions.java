@@ -25,7 +25,6 @@
 package org.orecruncher.dsurround;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -116,8 +115,6 @@ public final class ModOptions {
 	public static class logging {
 
 		public static String PATH = null;
-		public static final List<String> SORT = Arrays.asList(CONFIG_ENABLE_ONLINE_VERSION_CHECK,
-				CONFIG_ENABLE_DEBUG_LOGGING, CONFIG_REPORT_SERVER_STATS, CONFIG_DEBUG_FLAG_MASK);
 
 		@Option(CONFIG_ENABLE_DEBUG_LOGGING)
 		@DefaultValue("false")
@@ -162,9 +159,6 @@ public final class ModOptions {
 	public static class rain {
 
 		public static String PATH = null;
-		public static final List<String> SORT = Arrays.asList(CONFIG_VANILLA_RAIN, CONFIG_USE_VANILLA_RAIN_SOUND,
-				CONFIG_RAIN_RIPPLE_STYLE, CONFIG_ENABLE_BACKGROUND_THUNDER, CONFIG_THUNDER_THRESHOLD,
-				CONFIG_MIN_RAIN_STRENGTH, CONFIG_MAX_RAIN_STRENGTH);
 
 		@Option(CONFIG_VANILLA_RAIN)
 		@DefaultValue("false")
@@ -232,9 +226,6 @@ public final class ModOptions {
 	public static class fog {
 
 		public static String PATH = null;
-		public static final List<String> SORT = Arrays.asList(CONFIG_ENABLE_FOG_PROCESSING, CONFIG_ENABLE_MORNING_FOG,
-				CONFIG_MORNING_FOG_CHANCE, CONFIG_ENABLE_WEATHER_FOG, CONFIG_ENABLE_BEDROCK_FOG,
-				CONFIG_ALLOW_DESERT_FOG, CONFIG_ENABLE_BIOME_FOG, CONFIG_ENABLE_ELEVATION_HAZE);
 
 		@Option(CONFIG_ENABLE_FOG_PROCESSING)
 		@DefaultValue("true")
@@ -288,7 +279,6 @@ public final class ModOptions {
 
 	public static final String CATEGORY_GENERAL = "general";
 	public static final String CONFIG_EXTERNAL_SCRIPTS = "External Configuration Files";
-	public static final String CONFIG_DISABLE_SUSPEND = "Disable Water Suspend Particles";
 	public static final String CONFIG_STARTUP_SOUND_LIST = "Startup Sound List";
 	public static final String CONFIG_HIDE_CHAT_NOTICES = "Hide Chat Notices";
 	public static final String CONFIG_ENABLE_CLIENT_CHUNK_CACHING = "Enable Client Chunk Caching";
@@ -299,21 +289,12 @@ public final class ModOptions {
 	public static class general {
 
 		public static String PATH = null;
-		public static final List<String> SORT = Arrays.asList(CONFIG_HIDE_CHAT_NOTICES, CONFIG_DISABLE_SUSPEND,
-				CONFIG_EXTERNAL_SCRIPTS, CONFIG_STARTUP_SOUND_LIST, CONFIG_ENABLE_CLIENT_CHUNK_CACHING);
 
 		@Option(CONFIG_HIDE_CHAT_NOTICES)
 		@DefaultValue("false")
 		@LangKey("dsurround.cfg.general.HideChat")
 		@Comment("Toggles display of Dynamic Surroundings chat notices")
 		public static boolean hideChatNotices = false;
-
-		@Option(CONFIG_DISABLE_SUSPEND)
-		@DefaultValue("false")
-		@LangKey("dsurround.cfg.general.Suspend")
-		@Comment("Enable/disable water depth particle effect")
-		@RestartRequired(server = true)
-		public static boolean disableWaterSuspendParticle = false;
 
 		@Option(CONFIG_EXTERNAL_SCRIPTS)
 		@DefaultValue("")
@@ -345,7 +326,6 @@ public final class ModOptions {
 	public static class aurora {
 
 		public static String PATH = null;
-		public static final List<String> SORT = Arrays.asList(CONFIG_AURORA_ENABLED, CONFIG_AURORA_SHADER);
 
 		@Option(CONFIG_AURORA_ENABLED)
 		@DefaultValue("true")
@@ -372,8 +352,6 @@ public final class ModOptions {
 	public static class biomes {
 
 		public static String PATH = null;
-		public static final List<String> SORT = Arrays.asList(CONFIG_BIOME_SEALEVEL, CONFIG_BIOME_ALIASES,
-				CONFIG_BIOME_DIM_BLACKLIST);
 
 		@Option(CONFIG_BIOME_SEALEVEL)
 		@DefaultValue("0")
@@ -397,6 +375,7 @@ public final class ModOptions {
 
 	public static final String CATEGORY_EFFECTS = "effects";
 	public static final String CONFIG_FX_RANGE = "Special Effect Range";
+	public static final String CONFIG_DISABLE_SUSPEND = "Disable Water Suspend Particles";
 	public static final String CONFIG_WATERFALL_CUTOFF = "Waterfall Cutoff";
 	public static final String CONFIG_BLOCK_EFFECT_STEAM = "Enable Steam";
 	public static final String CONFIG_BLOCK_EFFECT_FIRE = "Enable FireJetEffect Jets";
@@ -424,6 +403,13 @@ public final class ModOptions {
 		@RangeInt(min = 16, max = 64)
 		@Comment("Block radius/range around player for special effect application")
 		public static int specialEffectRange = 24;
+
+		@Option(CONFIG_DISABLE_SUSPEND)
+		@DefaultValue("false")
+		@LangKey("dsurround.cfg.effects.Suspend")
+		@Comment("Enable/disable water depth particle effect")
+		@RestartRequired(server = true)
+		public static boolean disableWaterSuspendParticle = false;
 
 		@Option(CONFIG_WATERFALL_CUTOFF)
 		@DefaultValue("0")
@@ -507,6 +493,7 @@ public final class ModOptions {
 	}
 
 	public static final String CATEGORY_SOUND = "sound";
+	public static final String CONFIG_ENABLE_BATTLEMUSIC = "Battle Music";
 	public static final String CONFIG_ENABLE_BIOME_SOUNDS = "Enable Biomes Sounds";
 	public static final String CONFIG_MASTER_SOUND_FACTOR = "Master Sound Scale Factor";
 	public static final String CONFIG_AUTO_CONFIG_CHANNELS = "Autoconfigure Channels";
@@ -534,13 +521,12 @@ public final class ModOptions {
 	public static class sound {
 
 		public static String PATH = null;
-		public static final List<String> SORT = Arrays.asList(CONFIG_ENABLE_BIOME_SOUNDS, CONFIG_FOOTSTEPS_QUAD,
-				CONFIG_FOOTSTEPS_CADENCE, CONFIG_ENABLE_ARMOR_SOUND, CONFIG_ENABLE_SWING_SOUND,
-				CONFIG_ENABLE_PUDDLE_SOUND, CONFIG_ENABLE_JUMP_SOUND, CONFIG_ENABLE_EQUIP_SOUND,
-				CONFIG_SWORD_AS_TOOL_EQUIP_SOUND, CONFIG_ENABLE_CRAFTING_SOUND, CONFIG_AUTO_CONFIG_CHANNELS,
-				CONFIG_NORMAL_CHANNEL_COUNT, CONFIG_STREAMING_CHANNEL_COUNT, CONFIG_STREAM_BUFFER_SIZE,
-				CONFIG_STREAM_BUFFER_COUNT, CONFIG_MUTE_WHEN_BACKGROUND, CONFIG_THUNDER_VOLUME,
-				CONFIG_SOUND_CULL_THRESHOLD, CONFIG_SOUND_SETTINGS);
+		
+		@Option(CONFIG_ENABLE_BATTLEMUSIC)
+		@DefaultValue("false")
+		@LangKey("dsurround.cfg.sound.BattleMusic")
+		@Comment("Enable/disable Battle Music")
+		public static boolean enableBattleMusic = false;
 
 		@Option(CONFIG_ENABLE_BIOME_SOUNDS)
 		@DefaultValue("true")
@@ -684,8 +670,6 @@ public final class ModOptions {
 	public static class player {
 
 		public static String PATH = null;
-		public static final List<String> SORT = Arrays.asList(CONFIG_SUPPRESS_POTION_PARTICLES, CONFIG_HURT_THRESHOLD,
-				CONFIG_HUNGER_THRESHOLD);
 
 		@Option(CONFIG_SUPPRESS_POTION_PARTICLES)
 		@DefaultValue("false")
@@ -721,9 +705,6 @@ public final class ModOptions {
 	public static class speechbubbles {
 
 		public static String PATH = null;
-		public static final List<String> SORT = Arrays.asList(CONFIG_OPTION_ENABLE_SPEECHBUBBLES,
-				CONFIG_OPTION_ENABLE_ENTITY_CHAT, CONFIG_OPTION_SPEECHBUBBLE_DURATION, CONFIG_OPTION_SPEECHBUBBLE_RANGE,
-				CONFIG_OPTION_ANIMANIA_BADGES);
 
 		@Option(CONFIG_OPTION_ENABLE_SPEECHBUBBLES)
 		@DefaultValue("false")
@@ -849,9 +830,6 @@ public final class ModOptions {
 		public static class potionHUD {
 
 			public static String PATH = null;
-			public static final List<String> SORT = Arrays.asList(CONFIG_POTION_HUD_NONE, CONFIG_POTION_HUD_ENABLE,
-					CONFIG_POTION_HUD_TRANSPARENCY, CONFIG_POTION_HUD_SCALE, CONFIG_POTION_HUD_ANCHOR,
-					CONFIG_POTION_HUD_TOP_OFFSET, CONFIG_POTION_HUD_LEFT_OFFSET);
 
 			@Option(CONFIG_POTION_HUD_NONE)
 			@DefaultValue("false")
@@ -907,8 +885,6 @@ public final class ModOptions {
 		public static class lightlevel {
 
 			public static String PATH = null;
-			public static final List<String> SORT = Arrays.asList(CONFIG_LL_RANGE, CONFIG_LL_MOB_SPAWN_THRESHOLD,
-					CONFIG_LL_DISPLAY_MODE, CONFIG_LL_HIDE_SAFE, CONFIG_LL_INDICATE_CAUTION, CONFIG_LL_COLORS);
 
 			@Option(CONFIG_LL_RANGE)
 			@DefaultValue("24")
@@ -957,8 +933,6 @@ public final class ModOptions {
 		public static class compass {
 
 			public static String PATH = null;
-			public static final List<String> SORT = Arrays.asList(CONFIG_COMPASS_ENABLE, CONFIG_COMPASS_STYLE,
-					CONFIG_COMPASS_TRANSPARENCY, CONFIG_COMPASS_COORD_FORMAT, CONFIG_CLOCK_ENABLE);
 
 			@Option(CONFIG_COMPASS_ENABLE)
 			@DefaultValue("true")
