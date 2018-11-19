@@ -41,6 +41,7 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
+import org.orecruncher.dsurround.registry.item.compat.ItemDataProducer;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
 
@@ -66,8 +67,10 @@ public final class ItemRegistry extends Registry {
 	private static final int SET_CAPACITY = 64;
 	private static final int MAP_CAPACITY = 256;
 
+	private static final SimpleItemData NONE_DATA = SimpleItemData.CACHE.get(ItemClass.NONE);
+
 	private EnumMap<ItemClass, Set<Class<?>>> classMap;
-	private Map<Item, ItemClass> items;
+	private Map<Item, IItemData> items;
 
 	public ItemRegistry(@Nonnull final Side side) {
 		super(side);
@@ -78,8 +81,8 @@ public final class ItemRegistry extends Registry {
 		this.classMap = new EnumMap<>(ItemClass.class);
 		this.items = new IdentityHashMap<>(MAP_CAPACITY);
 
-		Item.REGISTRY.iterator().forEachRemaining(item -> ItemUtils.setItemData(item, ItemClass.NONE));
-		ItemUtils.setItemData(Items.AIR, ItemClass.EMPTY);
+		Item.REGISTRY.iterator().forEachRemaining(item -> ItemUtils.setItemData(item, NONE_DATA));
+		ItemUtils.setItemData(Items.AIR, SimpleItemData.CACHE.get(ItemClass.EMPTY));
 
 		for (final ItemClass ic : ItemClass.values())
 			this.classMap.put(ic, new ReferenceOpenHashSet<>(SET_CAPACITY));
@@ -104,7 +107,7 @@ public final class ItemRegistry extends Registry {
 			if (!this.items.containsKey(item)) {
 				final ItemClass ic = resolveClass(item);
 				if (ic != ItemClass.NONE) {
-					this.items.put(item, ic);
+					this.items.put(item, ItemDataProducer.create(item, ic));
 				}
 			}
 		}
@@ -150,13 +153,13 @@ public final class ItemRegistry extends Registry {
 		if (items == null || items.isEmpty())
 			return;
 
-		final ItemClass it = ItemClass.valueOf(itemClass);
-		if (it == null) {
+		final ItemClass ic = ItemClass.valueOf(itemClass);
+		if (ic == null) {
 			ModBase.log().warn("Unknown ItemClass %s", itemClass);
 			return;
 		}
 
-		final Set<Class<?>> theList = this.classMap.get(it);
+		final Set<Class<?>> theList = this.classMap.get(ic);
 
 		for (final String c : items) {
 			// If its not a like match it has to be a concrete item
@@ -165,7 +168,7 @@ public final class ItemRegistry extends Registry {
 				final String itemName = match.group(1);
 				final Item item = MCHelper.getItemByName(itemName);
 				if (item != null) {
-					this.items.put(item, it);
+					this.items.put(item, ItemDataProducer.create(item, ic));
 				} else {
 					ModBase.log().warn("Cannot locate item [%s] for ItemRegistry", c);
 				}
@@ -188,31 +191,31 @@ public final class ItemRegistry extends Registry {
 	}
 
 	public boolean isBow(@Nonnull final ItemStack stack) {
-		return getItemClass(stack) == ItemClass.BOW;
+		return getItemClass(stack).getItemClass() == ItemClass.BOW;
 	}
 
 	public boolean isShield(@Nonnull final ItemStack stack) {
-		return getItemClass(stack) == ItemClass.SHIELD;
+		return getItemClass(stack).getItemClass() == ItemClass.SHIELD;
 	}
 
 	@Nonnull
-	public ItemClass getItemClass(@Nonnull final ItemStack stack) {
-		return ItemStackUtil.isValidItemStack(stack) ? ItemUtils.getItemData(stack.getItem()) : ItemClass.NONE;
+	public IItemData getItemClass(@Nonnull final ItemStack stack) {
+		return ItemStackUtil.isValidItemStack(stack) ? ItemUtils.getItemData(stack.getItem()) : NONE_DATA;
 	}
 
 	@Nullable
 	public SoundEffect getSwingSound(@Nonnull final ItemStack stack) {
-		return getItemClass(stack).getSwingSound();
+		return getItemClass(stack).getSwingSound(stack);
 	}
 
 	@Nullable
 	public SoundEffect getUseSound(@Nonnull final ItemStack stack) {
-		return getItemClass(stack).getUseSound();
+		return getItemClass(stack).getUseSound(stack);
 	}
 
 	@Nullable
 	public SoundEffect getEquipSound(@Nonnull final ItemStack stack) {
-		return getItemClass(stack).getEquipSound();
+		return getItemClass(stack).getEquipSound(stack);
 	}
 
 }

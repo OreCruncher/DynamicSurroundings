@@ -1,5 +1,9 @@
 {
 	"items":{
+		"LEATHER": [
+			"c4.conarm.common.items.ItemBase",
+			"c4.conarm.common.items.AccessoryBase"
+		],
 		"PLATE":[
 			"conarm:helmet",
 			"conarm:chestplate",

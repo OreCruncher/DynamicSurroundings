@@ -129,6 +129,28 @@
 			"dsurround:footsteps/armor/heavy_foot3"
 		]
 	},
+	"fs.armor.slimey_walk": {
+		"category": "player",
+		"sounds": [
+			"dsurround:footsteps/armor/slime_walk1",
+			"dsurround:footsteps/armor/slime_walk2",
+			"dsurround:footsteps/armor/slime_walk3",
+			"dsurround:footsteps/armor/slime_walk4",
+			"dsurround:footsteps/armor/slime_walk5",
+			"dsurround:footsteps/armor/slime_walk6"
+		]
+	},
+	"fs.armor.slimey_run": {
+		"category": "player",
+		"sounds": [
+			"dsurround:footsteps/armor/slime_run1",
+			"dsurround:footsteps/armor/slime_run2",
+			"dsurround:footsteps/armor/slime_run3",
+			"dsurround:footsteps/armor/slime_run4",
+			"dsurround:footsteps/armor/slime_run5",
+			"dsurround:footsteps/armor/slime_run6"
+		]
+	},
 	"fs.bluntwood.bluntwood_walk": {
 		"category": "player",
 		"sounds": [

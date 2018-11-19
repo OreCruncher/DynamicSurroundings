@@ -53,6 +53,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.EnumSkyBlock;
@@ -83,8 +84,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static TemperatureRating playerTemperature;
 		private static TemperatureRating biomeTemperature;
 		private static boolean inside;
-		private static ItemClass armorClass;
-		private static ItemClass footArmorClass;
+		private static ItemStack armorStack;
+		private static ItemStack footArmorStack;
 		private static boolean inVillage;
 
 		private static boolean isUnderground;
@@ -118,8 +119,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			playerTemperature = TemperatureRating.MILD;
 			biomeTemperature = TemperatureRating.MILD;
 			inside = false;
-			armorClass = ItemClass.NONE;
-			footArmorClass = ItemClass.NONE;
+			armorStack = ItemStack.EMPTY;
+			footArmorStack = ItemStack.EMPTY;
 			inVillage = false;
 			isUnderground = false;
 			isInSpace = false;
@@ -157,8 +158,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.humid = EnvironState.truePlayerBiome.isHighHumidity();
 			EnvironState.dry = EnvironState.truePlayerBiome.getRainfall() < 0.2F;
 
-			EnvironState.armorClass = ItemClass.effectiveArmorClass(player);
-			EnvironState.footArmorClass = ItemClass.footArmorClass(player);
+			EnvironState.armorStack = ItemClass.effectiveArmorStack(player);
+			EnvironState.footArmorStack = ItemClass.footArmorStack(player);
 
 			EnvironState.isUnderground = EnvironState.playerBiome == biomes.UNDERGROUND_INFO;
 			EnvironState.isInSpace = EnvironState.playerBiome == biomes.OUTERSPACE_INFO;
@@ -357,12 +358,12 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			return dry;
 		}
 
-		public static ItemClass getPlayerArmorClass() {
-			return armorClass;
+		public static ItemStack getPlayerItemStack() {
+			return armorStack;
 		}
 
-		public static ItemClass getPlayerFootArmorClass() {
-			return footArmorClass;
+		public static ItemStack getPlayerFootArmorStack() {
+			return footArmorStack;
 		}
 
 		public static boolean inVillage() {

@@ -34,7 +34,7 @@ import org.orecruncher.dsurround.client.effects.IEntityEffectFactoryFilter;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.lib.sound.ITrackedSound;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
-import org.orecruncher.dsurround.registry.item.ItemClass;
+import org.orecruncher.dsurround.registry.item.IItemData;
 import org.orecruncher.dsurround.registry.item.ItemUtils;
 import org.orecruncher.lib.math.RayTrace;
 
@@ -76,8 +76,8 @@ public class EntitySwingEffect extends EntityEffect {
 		if (entity.swingingHand != null && entity.swingProgressInt > this.swingProgress) {
 			if (!this.isSwinging) {
 				final ItemStack currentItem = entity.getHeldItem(entity.swingingHand);
-				final ItemClass itemClass = ItemUtils.getItemData(currentItem.getItem());
-				final SoundEffect soundEffect = itemClass.getSwingSound();
+				final IItemData data = ItemUtils.getItemData(currentItem.getItem());
+				final SoundEffect soundEffect = data.getSwingSound(currentItem);
 				if (soundEffect != null) {
 					final RayTraceResult whatImHitting = RayTrace.trace(entity);
 					if (whatImHitting == null || whatImHitting.typeOfHit != Type.BLOCK) {

@@ -35,7 +35,9 @@ import org.orecruncher.dsurround.client.effects.IEntityEffectHandlerState;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.lib.sound.ITrackedSound;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
+import org.orecruncher.dsurround.registry.item.IItemData;
 import org.orecruncher.dsurround.registry.item.ItemUtils;
+
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.Entity;
@@ -82,7 +84,8 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 			if (triggerNewEquipSound(player)) {
 				clearState(state);
 				final ItemStack currentStack = player.getHeldItem(this.hand);
-				final SoundEffect soundEffect = ItemUtils.getItemData(currentStack.getItem()).getEquipSound();
+				final IItemData data = ItemUtils.getItemData(currentStack.getItem());
+				final SoundEffect soundEffect = data.getEquipSound(currentStack);
 				if (soundEffect != null) {
 					final ITrackedSound snd = state.createSound(soundEffect, player);
 					state.playSound(snd);

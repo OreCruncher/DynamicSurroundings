@@ -55,7 +55,8 @@ public enum ModEnvironment {
 	CosmeticArmorReworked("cosmeticarmorreworked"),
 	ForgeMultipartCBE("forgemultipartcbe"),
 	ConnectedTextures("ctm"),
-	LittleTiles("littletiles");
+	LittleTiles("littletiles"),
+	ConstructArmory("conarm");
 	//@formatter:on
 
 	protected final String modId;

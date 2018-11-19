@@ -245,6 +245,36 @@
 				]
 			}
 		},
+		"armor_slimey": {
+			"walk": {
+				"name": "armor.slimey_walk"
+			},
+			"jump": {
+				"name": "armor.slimey_walk"
+			},
+			"run": {
+				"name": "armor.slimey_run"
+			},
+			"wander": {
+				"name": "armor.slimey_walk"
+			},
+			"land": {
+				"type": "simultaneous",
+				"array": [
+					"armor.slimey_walk",
+					{
+						"name": "armor.slimey_walk",
+						"vol_min": 50,
+						"vol_max": 50
+					},
+					{
+						"type": "delayed",
+						"delay": 50,
+						"name": "armor.slimey_run"
+					}
+				]
+			}
+		},
 		"straw": {
 			"walk": "leaves.leaves_through",
 			"jump": "leaves.leaves_through",

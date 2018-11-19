@@ -1,5 +1,4 @@
-/*
- * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -22,39 +21,22 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.registry.item;
-
-import java.lang.reflect.Field;
+package org.orecruncher.dsurround.registry.item.compat;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.registry.item.IItemData;
+import org.orecruncher.dsurround.registry.item.ItemClass;
+
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public final class ItemUtils {
+@SideOnly(Side.CLIENT)
+public interface IItemDataProducer {
 	
-	// This field was added by the core mod for our use
-	private static Field itemInfo = ReflectionHelper.findField(Item.class, "dsurround_item_info");
-
 	@Nullable
-	public static IItemData getItemData(@Nonnull final Item item) {
-		try {
-			return (IItemData) itemInfo.get(item);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			ModBase.log().error("Unable to get hold of private field on Item!", e);
-		}
-		return null;
-	}
-
-	public static void setItemData(@Nonnull final Item item, @Nonnull final IItemData data) {
-		try {
-			itemInfo.set(item, data);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			ModBase.log().error("Unable to set private field on Item!", e);
-		}
-	}
-
+	IItemData create(@Nonnull final Item item, @Nonnull final ItemClass ic);
 
 }

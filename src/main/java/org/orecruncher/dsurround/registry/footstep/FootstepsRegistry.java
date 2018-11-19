@@ -308,6 +308,10 @@ public final class FootstepsRegistry extends Registry {
 		}
 	}
 
+	public AcousticsManager getAcousticManager() {
+		return this.acousticsManager;
+	}
+	
 	public Generator createGenerator(@Nonnull final EntityLivingBase entity) {
 		final EntityEffectInfo info = ClientRegistry.EFFECTS.getEffects(entity);
 		Variator var = getVariator(info.variator);

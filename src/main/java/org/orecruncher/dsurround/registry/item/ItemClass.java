@@ -45,48 +45,62 @@ public enum ItemClass {
 
 	//@formatter:off
 	EMPTY(null),	// For things that don't make an equip sound - like AIR
-	NONE(null, null, Sounds.UTILITY_EQUIP),
-	LEATHER(Sounds.LEATHER_ARMOR_EQUIP),
-	CHAIN(Sounds.CHAIN_ARMOR_EQUIP),
-	CRYSTAL(Sounds.CRYSTAL_ARMOR_EQUIP),
-	PLATE(Sounds.PLATE_ARMOR_EQUIP),
-	SLIME(null, null, Sounds.UTILITY_EQUIP),
-	SHIELD(Sounds.TOOL_SWING, Sounds.SHIELD_USE, Sounds.SHIELD_EQUIP),
-	SWORD(Sounds.SWORD_SWING, null, ModOptions.sound.swordEquipAsTool ? Sounds.TOOL_EQUIP : Sounds.SWORD_EQUIP),
-	AXE(Sounds.AXE_SWING, null, Sounds.AXE_EQUIP),
-	BOW(Sounds.TOOL_SWING, Sounds.BOW_PULL, Sounds.BOW_EQUIP),
-	TOOL(Sounds.TOOL_SWING, null, Sounds.TOOL_EQUIP),
-	FOOD(null, null, Sounds.FOOD_EQUIP);
+	NONE(null, null, Sounds.UTILITY_EQUIP, false),
+	LEATHER(Sounds.LEATHER_ARMOR_EQUIP, true),
+	CHAIN(Sounds.CHAIN_ARMOR_EQUIP, true),
+	CRYSTAL(Sounds.CRYSTAL_ARMOR_EQUIP, true),
+	PLATE(Sounds.PLATE_ARMOR_EQUIP, true),
+	SHIELD(Sounds.TOOL_SWING, Sounds.SHIELD_USE, Sounds.SHIELD_EQUIP, false),
+	SWORD(Sounds.SWORD_SWING, null, ModOptions.sound.swordEquipAsTool ? Sounds.TOOL_EQUIP : Sounds.SWORD_EQUIP, false),
+	AXE(Sounds.AXE_SWING, null, Sounds.AXE_EQUIP, false),
+	BOW(Sounds.TOOL_SWING, Sounds.BOW_PULL, Sounds.BOW_EQUIP, false),
+	TOOL(Sounds.TOOL_SWING, null, Sounds.TOOL_EQUIP, false),
+	FOOD(null, null, Sounds.FOOD_EQUIP, false);
 	//@formatter:on
 
 	private final SoundEffect swing;
 	private final SoundEffect use;
 	private final SoundEffect equip;
-	
+	private final boolean isArmor;
+
 	private ItemClass(@Nullable final SoundEffect sound) {
-		this(sound, sound, sound);
+		this(sound, sound, sound, false);
 	}
-	private ItemClass(@Nullable final SoundEffect swing, @Nullable final SoundEffect use, @Nullable final SoundEffect equip) {
+
+	private ItemClass(@Nullable final SoundEffect sound, final boolean isArmor) {
+		this(sound, sound, sound, isArmor);
+	}
+
+	private ItemClass(@Nullable final SoundEffect swing, @Nullable final SoundEffect use,
+			@Nullable final SoundEffect equip, final boolean isArmor) {
 		this.swing = swing;
 		this.use = use;
 		this.equip = equip;
+		this.isArmor = isArmor;
 	}
-	
+
+	// Package internal
 	@Nullable
-	public SoundEffect getSwingSound() {
+	SoundEffect getSwingSound() {
 		return this.swing;
 	}
-	
+
+	// Package internal
 	@Nullable
-	public SoundEffect getUseSound() {
+	SoundEffect getUseSound() {
 		return this.use;
 	}
-	
+
+	// Package internal
 	@Nullable
-	public SoundEffect getEquipSound() {
+	SoundEffect getEquipSound() {
 		return this.equip;
 	}
-	
+
+	public boolean isArmor() {
+		return this.isArmor;
+	}
+
 	@Nonnull
 	private static ItemStack resolveSlot(@Nonnull final EntityLivingBase e, @Nonnull final EntityEquipmentSlot slot) {
 		if (ModEnvironment.CosmeticArmorReworked.isLoaded()) {
@@ -104,17 +118,19 @@ public enum ItemClass {
 	 * Determines the effective armor class of the Entity. Chest and legs are used
 	 * to make the determination.
 	 */
-	public static ItemClass effectiveArmorClass(@Nonnull final EntityLivingBase entity) {
-		final ItemClass chest = ClientRegistry.ITEMS.getItemClass(resolveSlot(entity, EntityEquipmentSlot.CHEST));
-		final ItemClass legs = ClientRegistry.ITEMS.getItemClass(resolveSlot(entity, EntityEquipmentSlot.LEGS));
-		return chest.compareTo(legs) > 0 ? chest : legs;
+	public static ItemStack effectiveArmorStack(@Nonnull final EntityLivingBase entity) {
+		final ItemStack chest = resolveSlot(entity, EntityEquipmentSlot.CHEST);
+		final ItemStack legs = resolveSlot(entity, EntityEquipmentSlot.LEGS);
+		final ItemClass chestic = ClientRegistry.ITEMS.getItemClass(chest).getItemClass();
+		final ItemClass legsic = ClientRegistry.ITEMS.getItemClass(legs).getItemClass();
+		return chestic.compareTo(legsic) > 0 ? chest.copy() : legs.copy();
 	}
 
 	/**
 	 * Gets the armor class of the entities feet.
 	 */
-	public static ItemClass footArmorClass(@Nonnull final EntityLivingBase entity) {
-		return ClientRegistry.ITEMS.getItemClass(resolveSlot(entity, EntityEquipmentSlot.FEET));
+	public static ItemStack footArmorStack(@Nonnull final EntityLivingBase entity) {
+		return resolveSlot(entity, EntityEquipmentSlot.FEET);
 	}
 
 }
