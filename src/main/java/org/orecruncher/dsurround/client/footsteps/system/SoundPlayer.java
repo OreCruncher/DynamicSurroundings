@@ -60,7 +60,7 @@ public class SoundPlayer implements ISoundPlayer {
 	}
 
 	public void playAcoustic(@Nonnull final Association assoc, @Nonnull final EventType event) {
-		playAcoustic(assoc.getStrikeLocation().getSoundPos(), assoc.getData(), event, null);
+		playAcoustic(assoc.getStrikeLocation().getStrikePosition(), assoc.getData(), event, null);
 	}
 
 	private void logAcousticPlay(@Nonnull final IAcoustic[] acoustics, @Nonnull final EventType event) {

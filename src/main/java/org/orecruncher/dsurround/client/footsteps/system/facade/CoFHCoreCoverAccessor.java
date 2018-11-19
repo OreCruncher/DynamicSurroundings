@@ -21,8 +21,12 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.facade;
+package org.orecruncher.dsurround.client.footsteps.system.facade;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
 final class CoFHCoreCoverAccessor extends FacadeAccessor {
 
 	private static final String CLASS = "cofh.core.render.IBlockAppearance";

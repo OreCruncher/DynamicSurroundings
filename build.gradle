@@ -46,7 +46,7 @@ minecraft {
 }
 
 repositories {
-    maven { url = "http://chickenbones.net/maven/" }
+    maven { url = "http://chickenbones.net/maven/" }        // dem bones!
     maven { url = "http://dvs1.progwml6.com/files/maven" }	// mezz
     maven { url = "http://maven.tterrag.com" }				// Chisel
     maven { url = "https://repo.elytradev.com/" }
@@ -54,9 +54,9 @@ repositories {
 
 dependencies {
     //compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.12.2-7.0.1.2399:deobf"
-	deobfCompile "team.chisel:Chisel:MC1.12.2-0.2.1.35"    
-    deobfCompile "mezz.jei:jei_1.12.2:4.13.1.224:api"
-    runtime "mezz.jei:jei_1.12.2:4.13.1.224"
+    deobfCompile "mezz.jei:jei_${project.mcVersion}:${project.jeiVersion}:api"
+    runtime "mezz.jei:jei_${project.mcVersion}:${project.jeiVersion}"
+    deobfCompile "team.chisel:Chisel:MC${project.mcVersion}-${project.chiselVersion}"    
 }
 
 processResources

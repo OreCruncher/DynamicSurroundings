@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.facade;
+package org.orecruncher.dsurround.client.footsteps.system.facade;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,15 +32,20 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public final class FacadeHelper {
 
 	private static final Map<Block, IFacadeAccessor> crackers = new Reference2ObjectOpenHashMap<>();
@@ -58,12 +63,20 @@ public final class FacadeHelper {
 		final List<IFacadeAccessor> accessors = new ArrayList<>();
 
 		// Run down the list of supported accessors. The instance will
-		// tell us if it is valid or not.
+		// tell us if it is valid or not.  Order is important - want to
+		// use a mod specific interface before general ones.
+		if (ModEnvironment.LittleTiles.isLoaded())
+			addAccessor(accessors, new LittleTilesAccessor());
+		if (ModEnvironment.ForgeMultipartCBE.isLoaded())
+			addAccessor(accessors, new ForgeMultiPartCBE());
+		if (ModEnvironment.ConnectedTextures.isLoaded())
+			addAccessor(accessors, new ConnectedTexturesAccessor());
+
 		addAccessor(accessors, new EnderIOFacadeAccessor());
 		addAccessor(accessors, new CoFHCoreCoverAccessor());
-		addAccessor(accessors, new ChiselAPIFacadeAccessor());
+
+		// Last hail mary - is this even supported anymore?
 		addAccessor(accessors, new ChiselFacadeAccessor());
-		addAccessor(accessors, new ForgeMultiPartCBE());
 
 		// Iterate through the block list filling out our cracker list.
 		if (accessors.size() > 0) {
@@ -88,8 +101,8 @@ public final class FacadeHelper {
 
 	@Nonnull
 	public static IBlockState resolveState(@Nonnull final EntityLivingBase entity, @Nonnull final IBlockState state,
-			@Nonnull final IBlockAccess world, @Nonnull final BlockPos pos, @Nullable final EnumFacing side) {
-		if (crackers.size() > 0) {
+			@Nonnull final IBlockAccess world, @Nonnull final Vec3d pos, @Nullable final EnumFacing side) {
+		if (crackers.size() > 0 && state != Blocks.AIR.getDefaultState()) {
 			final IFacadeAccessor accessor = crackers.get(state.getBlock());
 			if (accessor != null) {
 				final IBlockState newState = accessor.getBlockState(entity, state, world, pos, side);

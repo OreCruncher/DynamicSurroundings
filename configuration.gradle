@@ -5,7 +5,12 @@ def modVersion   = "3.5.0.0"
 def forgeVersion = "14.23.5.2772"
 def snapshot     = "stable_39"
 
+project.ext.jeiVersion    = "4.13.1.224"
+project.ext.chiselVersion = "0.2.1.35"
+project.ext.ctmVersion    = "0.3.2.17"
+
 // General Mod version stuff
+project.ext.mcVersion    = mcVersion
 project.ext.modVersion   = modVersion
 project.group            = "org.orecruncher.dsurround"
 project.archivesBaseName = "DynamicSurroundings"

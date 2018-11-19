@@ -408,7 +408,9 @@ public class Generator {
 		final double minY = entity.getEntityBoundingBox().minY;
 		final FootStrikeLocation loc = new FootStrikeLocation(entity, xx, minY - 0.1D - verticalOffsetAsMinus, zz);
 
-		final Association result = addSoundOverlay(entity, findAssociationForEvent(loc));
+		final AcousticResolver resolver = new AcousticResolver(ClientChunkCache.instance(), this.blockMap, loc, this.VAR.DISTANCE_TO_CENTER);
+
+		final Association result = addSoundOverlay(entity, resolver.findAssociationForEvent());
 
 		// It is possible that the association has no position, so it
 		// needs to be checked.
@@ -425,83 +427,6 @@ public class Generator {
 			}
 		}
 		return result;
-	}
-
-	/**
-	 * Find an association for an entity, and a location. This will try to find the
-	 * best matching block on that location, or near that location, for instance if
-	 * the player is walking on the edge of a block when walking over non-emitting
-	 * blocks like air or water)
-	 *
-	 * Returns null if no blocks are valid emitting blocks. Returns a string that
-	 * begins with "_NO_ASSOCIATION" if a matching block was found, but has no
-	 * association in the blockmap.
-	 */
-	@Nullable
-	private Association findAssociationForEvent(@Nonnull final FootStrikeLocation loc) {
-
-		final AcousticResolver resolver = new AcousticResolver(ClientChunkCache.instance(), this.blockMap, loc);
-		final BlockPos pos = loc.getStepPos();
-
-		Association worked = resolver.resolve(pos);
-
-		// If it didn't work, the player has walked over the air on the border
-		// of a block.
-		// ------ ------ --> z
-		// | o | < player is here
-		// wool | air |
-		// ------ ------
-		// |
-		// V z
-		if (worked == null) {
-			// Create a trigo. mark contained inside the block the player is
-			// over
-			final EntityLivingBase entity = loc.getEntity();
-			final double xdang = (entity.posX - pos.getX()) * 2 - 1;
-			final double zdang = (entity.posZ - pos.getZ()) * 2 - 1;
-			// -1 0 1
-			// ------- -1
-			// | o |
-			// | + | 0 --> x
-			// | |
-			// ------- 1
-			// |
-			// V z
-
-			// If the player is at the edge of that
-			if (Math.max(MathStuff.abs(xdang), MathStuff.abs(zdang)) > this.VAR.DISTANCE_TO_CENTER) {
-				// Find the maximum absolute value of X or Z
-				final boolean isXdangMax = MathStuff.abs(xdang) > MathStuff.abs(zdang);
-				// --------------------- ^ maxofZ-
-				// | . . |
-				// | . . |
-				// | o . . |
-				// | . . |
-				// | . |
-				// < maxofX- maxofX+ >
-				// Take the maximum border to produce the sound
-				if (isXdangMax) {
-					// If we are in the positive border, add 1,
-					// else subtract 1
-					worked = resolver.resolve(xdang > 0 ? pos.east() : pos.west());
-				} else {
-					worked = resolver.resolve(zdang > 0 ? pos.south() : pos.north());
-				}
-
-				// If that didn't work, then maybe the footstep hit in the
-				// direction of walking. Try with the other closest block
-				if (worked == null) {
-					// Take the maximum direction and try with
-					// the orthogonal direction of it
-					if (isXdangMax) {
-						worked = resolver.resolve(zdang > 0 ? pos.south() : pos.north());
-					} else {
-						worked = resolver.resolve(xdang > 0 ? pos.east() : pos.west());
-					}
-				}
-			}
-		}
-		return worked;
 	}
 
 	/**

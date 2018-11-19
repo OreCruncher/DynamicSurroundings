@@ -33,44 +33,30 @@ import net.minecraftforge.fml.common.Loader;
  */
 public enum ModEnvironment {
 
-	//
+	//@formatter:off
 	ToughAsNails("ToughAsNails"),
-	//
 	SereneSeasons("sereneseasons"),
-	//
 	CalendarAPI("CalendarAPI"),
-	//
 	Weather2("weather2"),
-	//
 	EnderIO("EnderIO"),
-	//
 	Chisel("chisel"),
-	//
 	ChiselAPI("ctm-api"),
-	//
 	OpenTerrainGenerator("openterraingenerator"),
-	//
 	ActualMusic("actualmusic"),
-	//
 	GalacticraftCore("galacticraftcore"),
-	//
 	GalacticraftPlanets("galacticraftplanets"),
-	//
 	CoFHCore("cofhcore"),
-	//
 	Albedo("albedo"),
-	//
 	AmbientSounds("ambientsounds"),
-	//
 	SoundPhysics("soundphysics"),
-	//
 	BiomesOPlenty("biomesoplenty"),
-	//
 	CubicChunks("cubicchunks"),
-	//
 	Animania("animania"),
-	//
-	CosmeticArmorReworked("cosmeticarmorreworked");
+	CosmeticArmorReworked("cosmeticarmorreworked"),
+	ForgeMultipartCBE("forgemultipartcbe"),
+	ConnectedTextures("ctm"),
+	LittleTiles("littletiles");
+	//@formatter:on
 
 	protected final String modId;
 	protected boolean isLoaded;

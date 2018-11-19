@@ -21,35 +21,45 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.facade;
-
-import java.lang.reflect.Method;
+package org.orecruncher.dsurround.client.footsteps.system.facade;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-final class EnderIOFacadeAccessor extends FacadeAccessor {
+@SideOnly(Side.CLIENT)
+interface IFacadeAccessor {
 
-	private static final String CLASS = "crazypants.enderio.paint.IPaintable";
-	private static final String METHOD = "getPaintSource";
+	/*
+	 * Name of the facade accessor for logging and identification purposes.
+	 */
+	@Nonnull
+	String getName();
 
-	public EnderIOFacadeAccessor() {
-		super(CLASS, METHOD);
-	}
+	/*
+	 * Determines if the block can be handled by the accessor
+	 */
+	boolean instanceOf(@Nonnull final Block block);
 
-	@Override
-	protected Method getMethod(@Nonnull final String method) throws Throwable {
-		return this.IFacadeClass.getMethod(method, IBlockState.class, IBlockAccess.class, BlockPos.class);
-	}
+	/*
+	 * Indicates if the accessor is valid.  It could be invalid if the associated
+	 * mod is not installed.
+	 */
+	boolean isValid();
 
-	@Override
-	protected IBlockState call(@Nonnull final IBlockState state, @Nonnull final IBlockAccess world,
-			@Nonnull final BlockPos pos, @Nullable final EnumFacing side) throws Throwable {
-		return (IBlockState) this.accessor.invoke(state.getBlock(), state, world, pos);
-	}
+	/*
+	 * Requests the underlying IBlockState for the block.  The underlying IBlockState is
+	 * what should be used when generating sound effects.
+	 */
+	@Nullable
+	IBlockState getBlockState(@Nonnull final EntityLivingBase entity, @Nonnull final IBlockState state, @Nonnull final IBlockAccess world,
+			@Nonnull final Vec3d pos, @Nullable final EnumFacing side);
 }

@@ -21,15 +21,38 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.facade;
+package org.orecruncher.dsurround.client.footsteps.system.facade;
 
-final class ChiselAPIFacadeAccessor extends FacadeAccessor {
+import java.lang.reflect.Method;
 
-	private static final String CLASS = "team.chisel.ctm.api.IFacade";
-	private static final String METHOD = "getFacade";
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-	public ChiselAPIFacadeAccessor() {
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
+final class EnderIOFacadeAccessor extends FacadeAccessor {
+
+	private static final String CLASS = "crazypants.enderio.paint.IPaintable";
+	private static final String METHOD = "getPaintSource";
+
+	public EnderIOFacadeAccessor() {
 		super(CLASS, METHOD);
 	}
 
+	@Override
+	protected Method getMethod(@Nonnull final String method) throws Throwable {
+		return this.IFacadeClass.getMethod(method, IBlockState.class, IBlockAccess.class, BlockPos.class);
+	}
+
+	@Override
+	protected IBlockState call(@Nonnull final IBlockState state, @Nonnull final IBlockAccess world,
+			@Nonnull final BlockPos pos, @Nullable final EnumFacing side) throws Throwable {
+		return (IBlockState) this.accessor.invoke(state.getBlock(), state, world, pos);
+	}
 }
