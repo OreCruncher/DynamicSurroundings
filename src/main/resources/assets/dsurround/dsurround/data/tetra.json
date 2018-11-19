@@ -1,0 +1,16 @@
+{
+	"items": {
+		"LEATHER": [
+			"se.mickelus.tetra.items.toolbelt.ItemToolbeltModular"
+		],
+		"SWORD": [
+			"se.mickelus.tetra.items.sword.ItemSwordModular"
+		],
+		"TOOL": [
+			"se.mickelus.tetra.items.duplex_tool.ItemDuplexToolModular"
+		]
+	},
+	"footsteps": {
+		"tetra:workbench": "wood"
+	}
+}
