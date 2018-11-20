@@ -26,6 +26,7 @@ package org.orecruncher.dsurround.client.hud;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 
@@ -174,12 +175,18 @@ public class InspectionHUD extends GuiOverlay {
 			text.add(TextFormatting.DARK_AQUA + entity.getName());
 			text.add(keyName);
 			text.add(entity.getClass().getName());
-			
+
+			final Set<String> tags = entity.getTags();
+			if (tags != null && tags.size() > 0) {
+				text.add(TextFormatting.GOLD + "Entity Tags");
+				text.addAll(tags);
+			}
+
 			final IEntityData data = CapabilityEntityData.getCapability(entity);
 			if (data != null) {
 				text.add(data.serializeNBT().toString());
 			}
-			
+
 			text.add(TextFormatting.GOLD + "Effects");
 			text.addAll(((FxHandler) EffectManager.instance().lookupService(FxHandler.class)).getEffects(entity));
 		} catch (@Nonnull final Exception ex) {
