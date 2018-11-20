@@ -26,10 +26,8 @@ package org.orecruncher.dsurround.client.footsteps.implem;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -40,10 +38,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class AcousticProfile {
 
 	public static final AcousticProfile NO_PROFILE = new AcousticProfile();
-
-	protected AcousticProfile() {
-
-	}
 
 	@Nullable
 	public IAcoustic[] get() {
@@ -71,22 +65,4 @@ public class AcousticProfile {
 		}
 	}
 
-	/**
-	 * A Dynamic acoustic profile can change over time based on the world
-	 * environment at the time of query.
-	 */
-	public static class Dynamic extends AcousticProfile {
-
-		protected final IBlockState state;
-
-		public Dynamic(@Nonnull final IBlockState state) {
-			this.state = state;
-		}
-
-		@Override
-		@Nonnull
-		public IAcoustic[] get() {
-			return ClientRegistry.FOOTSTEPS.resolvePrimitive(this.state);
-		}
-	}
 }

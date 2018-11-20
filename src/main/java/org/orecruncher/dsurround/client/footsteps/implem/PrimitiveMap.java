@@ -31,9 +31,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.client.footsteps.util.ConfigProperty;
+import org.orecruncher.dsurround.registry.RegistryManager;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.util.ResourceLocation;
@@ -55,7 +55,7 @@ public class PrimitiveMap {
 	public IAcoustic[] getPrimitiveMap(@Nonnull final String primitive) {
 		IAcoustic[] result = this.primitiveMap.get(primitive);
 		if (result == null) {
-			final SoundEvent evt = ClientRegistry.SOUND.getSound(new ResourceLocation(primitive));
+			final SoundEvent evt = RegistryManager.SOUND.getSound(new ResourceLocation(primitive));
 			if(evt != null) {
 				result = this.acousticsManager.compileAcoustics(evt);
 				this.primitiveMap.put(primitive, result);

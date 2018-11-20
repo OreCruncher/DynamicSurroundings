@@ -33,9 +33,9 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.capabilities.season.TemperatureRating;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.BiomeSoundEffectsHandler;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.config.BiomeConfig;
 import org.orecruncher.dsurround.registry.config.SoundConfig;
 import org.orecruncher.dsurround.registry.config.SoundType;
@@ -328,7 +328,7 @@ public final class BiomeInfo extends BiomeData implements Comparable<BiomeInfo> 
 			setSpotSoundChance(entry.spotSoundChance.intValue());
 
 		for (final SoundConfig sr : entry.sounds) {
-			if (ClientRegistry.SOUND.isSoundBlocked(sr.sound))
+			if (RegistryManager.SOUND.isSoundBlocked(sr.sound))
 				continue;
 			final SoundEffect.Builder b = new SoundEffect.Builder(sr);
 			final SoundEffect s = b.build();

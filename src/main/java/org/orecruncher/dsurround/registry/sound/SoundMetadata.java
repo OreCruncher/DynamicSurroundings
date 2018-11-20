@@ -28,7 +28,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.registry.config.SoundMetadataConfig;
 
 import com.google.common.collect.ImmutableList;
@@ -50,9 +49,9 @@ public class SoundMetadata {
 
 	protected SoundCategory translate(@Nonnull final String catName) {
 		if ("ds_biome".equals(catName))
-			return Sounds.BIOME;
+			return SoundRegistry.BIOME;
 		if ("ds_footsteps".equals(catName))
-			return Sounds.FOOTSTEPS;
+			return SoundRegistry.FOOTSTEPS;
 		return SoundCategory.getByName(catName);
 	}
 	

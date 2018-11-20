@@ -31,7 +31,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
 import org.orecruncher.dsurround.client.footsteps.implem.BlockMap;
 import org.orecruncher.dsurround.client.footsteps.implem.ConfigOptions;
@@ -43,8 +42,9 @@ import org.orecruncher.dsurround.client.footsteps.system.accents.FootstepAccents
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
-import org.orecruncher.dsurround.client.sound.Sounds;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.footstep.Variator;
+import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 import org.orecruncher.lib.TimeUtils;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.collections.ObjectArray;
@@ -113,7 +113,7 @@ public class Generator {
 
 	public Generator(@Nonnull final Variator var) {
 		this.VAR = var;
-		this.blockMap = ClientRegistry.FOOTSTEPS.getBlockMap();
+		this.blockMap = RegistryManager.FOOTSTEPS.getBlockMap();
 		this.soundPlayer = new SoundPlayer(this.VAR);
 	}
 
@@ -153,7 +153,7 @@ public class Generator {
 			this.soundPlayer.playAcoustic(entity.getPositionVector(), AcousticsManager.JUMP, EventType.JUMP, null);
 		}
 
-		if (SoundEngine.getVolume(Sounds.FOOTSTEPS) > 0) {
+		if (SoundEngine.getVolume(SoundRegistry.FOOTSTEPS) > 0) {
 			EntityUtil.setNextStepDistance(entity, Integer.MAX_VALUE);
 		} else {
 			final int dist = EntityUtil.getNextStepDistance(entity);
@@ -408,7 +408,8 @@ public class Generator {
 		final double minY = entity.getEntityBoundingBox().minY;
 		final FootStrikeLocation loc = new FootStrikeLocation(entity, xx, minY - 0.1D - verticalOffsetAsMinus, zz);
 
-		final AcousticResolver resolver = new AcousticResolver(ClientChunkCache.instance(), this.blockMap, loc, this.VAR.DISTANCE_TO_CENTER);
+		final AcousticResolver resolver = new AcousticResolver(ClientChunkCache.instance(), this.blockMap, loc,
+				this.VAR.DISTANCE_TO_CENTER);
 
 		final Association result = addSoundOverlay(entity, resolver.findAssociationForEvent());
 

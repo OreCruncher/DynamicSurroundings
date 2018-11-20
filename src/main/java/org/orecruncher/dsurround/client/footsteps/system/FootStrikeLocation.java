@@ -26,8 +26,8 @@ package org.orecruncher.dsurround.client.footsteps.system;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.footsteps.system.facade.FacadeHelper;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.lib.WorldUtils;
 
 import net.minecraft.block.state.IBlockState;
@@ -157,6 +157,6 @@ public final class FootStrikeLocation {
 	protected boolean hasFootstepImprint(@Nonnull final World world, @Nullable final IBlockState state,
 			@Nonnull final Vec3d pos) {
 		final IBlockState footstepState = FacadeHelper.resolveState(this.entity, state, world, pos, EnumFacing.UP);
-		return ClientRegistry.FOOTSTEPS.hasFootprint(footstepState);
+		return RegistryManager.FOOTSTEPS.hasFootprint(footstepState);
 	}
 }

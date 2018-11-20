@@ -32,6 +32,7 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.network.Network;
 import org.orecruncher.dsurround.network.PacketServerData;
+import org.orecruncher.dsurround.registry.RegistryManager;
 
 import it.unimi.dsi.fastutil.ints.Int2DoubleOpenHashMap;
 import net.minecraft.server.MinecraftServer;
@@ -91,9 +92,9 @@ public final class ServiceManager extends Service {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onWorldLoad(final WorldEvent.Load e) {
-		// Tickle the Dimension Registry so it has the
+		// Tickle the Dimension Initialize so it has the
 		// latest info.
-		ServerRegistry.DIMENSION.loading(e.getWorld());
+		RegistryManager.DIMENSION.loading(e.getWorld());
 	}
 
 	private static long tpsCount = 0;

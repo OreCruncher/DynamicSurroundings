@@ -32,11 +32,11 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.fx.BlockEffect;
 import org.orecruncher.dsurround.client.fx.BlockEffectType;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.registry.Registry;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.config.BlockConfig;
 import org.orecruncher.dsurround.registry.config.EffectConfig;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
@@ -58,8 +58,8 @@ public final class BlockStateRegistry extends Registry {
 
 	private Map<BlockStateMatcher, BlockStateProfile> registry;
 
-	public BlockStateRegistry(@Nonnull final Side side) {
-		super(side);
+	public BlockStateRegistry() {
+		super("BlockState Data");
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public final class BlockStateRegistry extends Registry {
 	}
 
 	@Nullable
-	protected BlockStateProfile getOrCreateProfile(@Nonnull final BlockStateMatcher info) {
+	private BlockStateProfile getOrCreateProfile(@Nonnull final BlockStateMatcher info) {
 		if (info.getBlock() == Blocks.AIR)
 			return null;
 
@@ -104,11 +104,11 @@ public final class BlockStateRegistry extends Registry {
 		return profile;
 	}
 
-	protected void register(@Nonnull final BlockConfig entry) {
+	private void register(@Nonnull final BlockConfig entry) {
 		if (entry.blocks.isEmpty())
 			return;
 
-		final SoundRegistry soundRegistry = ClientRegistry.SOUND;
+		final SoundRegistry soundRegistry = RegistryManager.SOUND;
 
 		for (final String blockName : entry.blocks) {
 			final BlockStateMatcher blockInfo = BlockStateMatcher.create(blockName);

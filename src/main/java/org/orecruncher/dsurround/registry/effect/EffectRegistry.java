@@ -31,10 +31,10 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.registry.Registry;
-import org.orecruncher.dsurround.registry.ThemeInfo;
 import org.orecruncher.dsurround.registry.config.EntityConfig;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.themes.GloamwoodTheme;
+import org.orecruncher.dsurround.registry.themes.ThemeInfo;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
@@ -58,8 +58,8 @@ public class EffectRegistry extends Registry {
 	protected final Map<ResourceLocation, ThemeInfo> themes = new Object2ObjectOpenHashMap<>();
 	protected ThemeInfo activeTheme = DEFAULT_THEME_INFO;
 
-	public EffectRegistry(@Nonnull final Side side) {
-		super(side);
+	public EffectRegistry() {
+		super("Special Effects");
 	}
 
 	@Override
@@ -145,11 +145,6 @@ public class EffectRegistry extends Registry {
 //		}
 	}
 
-	@Override
-	public void fini() {
-
-	}
-
 	@Nonnull
 	public EntityEffectInfo getEffects(@Nonnull final Entity entity) {
 		if (entity instanceof EntityPlayer)
@@ -163,8 +158,4 @@ public class EffectRegistry extends Registry {
 		return this.activeTheme;
 	}
 
-	@Nonnull
-	public ThemeInfo getTheme() {
-		return this.activeTheme;
-	}
 }

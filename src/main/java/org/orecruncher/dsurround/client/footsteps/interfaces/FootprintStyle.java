@@ -30,21 +30,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public enum FootprintStyle {
-
-	// Regular shoe print style
+	//@formatter:off
 	SHOE,
-	// Print that looks like a square and matches Minecraft blockiness
 	SQUARE,
-	// Horseshoe shaped print. Good with Quadruped feature enabled
 	HORSESHOE,
-	// Bird 3 toed prints.
 	BIRD,
-	// Animal paw
 	PAW,
-	// Solid Square
 	SQUARE_SOLID,
-	// Low resolution 4x4 square
 	LOWRES_SQUARE;
+	//@formatter:on
 
 	@Nonnull
 	public static FootprintStyle getStyle(final int v) {

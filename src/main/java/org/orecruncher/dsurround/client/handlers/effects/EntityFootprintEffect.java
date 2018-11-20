@@ -29,12 +29,12 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.effects.EntityEffect;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactory;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactoryFilter;
 import org.orecruncher.dsurround.client.effects.IEntityEffectHandlerState;
 import org.orecruncher.dsurround.client.footsteps.system.Generator;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.lib.random.XorShiftRandom;
 
@@ -67,7 +67,7 @@ public class EntityFootprintEffect extends EntityEffect {
 		super.intitialize(state);
 
 		final EntityLivingBase entity = (EntityLivingBase) getState().subject().get();
-		this.generator = ClientRegistry.FOOTSTEPS.createGenerator(entity);
+		this.generator = RegistryManager.FOOTSTEPS.createGenerator(entity);
 		this.lastStyle = ModOptions.effects.footprintStyle;
 	}
 
@@ -75,7 +75,7 @@ public class EntityFootprintEffect extends EntityEffect {
 	public void update(@Nonnull final Entity subject) {
 		final EntityLivingBase entity = (EntityLivingBase) subject;
 		if (this.lastStyle != ModOptions.effects.footprintStyle && getState().isActivePlayer(entity)) {
-			this.generator = ClientRegistry.FOOTSTEPS.createGenerator(entity);
+			this.generator = RegistryManager.FOOTSTEPS.createGenerator(entity);
 			this.lastStyle = ModOptions.effects.footprintStyle;
 		}
 

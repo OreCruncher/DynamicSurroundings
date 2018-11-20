@@ -24,27 +24,38 @@
 
 package org.orecruncher.dsurround.registry;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.event.ReloadEvent;
+import org.orecruncher.dsurround.registry.biome.BiomeRegistry;
+import org.orecruncher.dsurround.registry.blockstate.BlockStateRegistry;
 import org.orecruncher.dsurround.registry.config.ConfigData;
-import org.orecruncher.dsurround.registry.config.ModConfiguration;
-import org.orecruncher.lib.SideLocal;
+import org.orecruncher.dsurround.registry.dimension.DimensionRegistry;
+import org.orecruncher.dsurround.registry.effect.EffectRegistry;
+import org.orecruncher.dsurround.registry.footstep.FootstepsRegistry;
+import org.orecruncher.dsurround.registry.item.ItemRegistry;
+import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 import org.orecruncher.lib.Singleton;
+import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.task.Scheduler;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
+@EventBusSubscriber(modid = ModBase.MOD_ID)
 public final class RegistryManager {
+
+	public static SoundRegistry SOUND;
+	public static BiomeRegistry BIOME;
+	public static BlockStateRegistry BLOCK;
+	public static ItemRegistry ITEMS;
+	public static FootstepsRegistry FOOTSTEPS;
+	public static EffectRegistry EFFECTS;
+
+	// This guy is the only one shared between client and server
+	public static DimensionRegistry DIMENSION;
 
 	// The cached configuration data is shared by both the server
 	// and the client. Once loaded it is read-only so concurrent
@@ -58,95 +69,65 @@ public final class RegistryManager {
 		}
 	};
 
-	private static final SideLocal<RegistryManager> managers = new SideLocal<RegistryManager>() {
-		@Override
-		protected RegistryManager initialValue(@Nonnull final Side side) {
-			return new RegistryManager(side);
-		}
-	};
+	final static ObjectArray<Registry> REGISTRIES = new ObjectArray<>(8);
 
-	@Nonnull
-	public static RegistryManager get() {
-		return managers.get();
-	}
-
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public static void onReload(@Nonnull final ReloadEvent.Resources event) {
-		reloadResources(Side.CLIENT);
+	/**
+	 * Generally speaking the reload of the registry is handled by the client thread
+	 * if running as a client. If on a dedicated server, though, it will be handled
+	 * by the server thread.
+	 *
+	 * @return true if the thread is to handle the reload; false otherwise.
+	 */
+	private static boolean handleReload() {
+		return ModBase.proxy().isRunningAsServer() || ModBase.proxy().effectiveSide() == Side.CLIENT;
 	}
 
 	/**
-	 * This event gets triggered when someone executes the /ds reload command. This
-	 * is usually because a configuration file has changed and it needs to be
-	 * reloaded. Helpful during pack development. Any cached data is released and
-	 * the registries reinitialized with the appropriate info.
+	 * Should be called during postInit
+	 */
+	public static void initialize() {
+
+		if (!ModBase.proxy().isRunningAsServer()) {
+			// Sound is first because other registries depend on it
+			SOUND = new SoundRegistry();
+			BIOME = new BiomeRegistry();
+			BLOCK = new BlockStateRegistry();
+			FOOTSTEPS = new FootstepsRegistry();
+			ITEMS = new ItemRegistry();
+			EFFECTS = new EffectRegistry();
+		}
+
+		DIMENSION = new DimensionRegistry();
+
+		load();
+	}
+
+	/**
+	 * Called by the command routines to reload the configuration
+	 */
+	public static void doReload() {
+		if (ModBase.proxy().isRunningAsServer()) {
+			load();
+		} else {
+			Scheduler.schedule(Side.CLIENT, () -> load());
+		}
+	}
+
+	/**
+	 * The mod configuration file may have changed. If it did then we need to reload
+	 * the registries.
 	 *
 	 * @param event
 	 */
 	@SubscribeEvent
-	public static void onReload(@Nonnull final ReloadEvent.Configuration event) {
-		// Only reset the data if no side is specified. This is a from scratch
-		// situation. If side is set it is assumed that the intent is to re-baseline
-		// registries because the operational environment has changed.
-		if (event.side == null) {
-			DATA.clear();
-		}
-
-		if (event.side == null || event.side == Side.CLIENT)
-			reloadResources(Side.CLIENT);
-		if (event.side == null || event.side == Side.SERVER)
-			reloadResources(Side.SERVER);
-	}
-
-	public static void reloadResources(@Nonnull final Side side) {
-		// Reload can be called on either side so make sure we queue
-		// up a scheduled task appropriately.
-		if (managers.hasValue(side)) {
-			Scheduler.schedule(side, () -> managers.get().reload());
+	public static void onReload(@Nonnull final OnConfigChangedEvent event) {
+		if (event.getModID().equals(ModBase.MOD_ID) && handleReload()) {
+			load();
 		}
 	}
 
-	protected final Side side;
-	protected final Map<Class<? extends Registry>, Registry> registries = new Object2ObjectOpenHashMap<>();
-	protected final List<Registry> initOrder = new ArrayList<>();
-	protected boolean initialized;
-
-	RegistryManager(final Side side) {
-		this.side = side;
+	private static void load() {
+		DATA.clear();
+		REGISTRIES.forEach(r -> r.initialize(DATA.get()));
 	}
-
-	@SuppressWarnings("unchecked")
-	public <T> T get(@Nonnull final Class<? extends Registry> reg) {
-		final Registry o = this.registries.get(reg);
-		if (o == null)
-			throw new RuntimeException(
-					"Attempt to get a registry that has not been configured [" + reg.getName() + "]");
-		return (T) this.registries.get(reg);
-	}
-
-	public void register(@Nonnull final Registry reg) {
-		this.registries.put(reg.getClass(), reg);
-		this.initOrder.add(reg);
-	}
-
-	public void reload() {
-
-		// Initialize the registries
-		this.initOrder.forEach(Registry::init);
-
-		// Process the configuration data
-		ModBase.log().info("Loading configuration Json from sources");
-		for (final ModConfiguration mcf : DATA.get()) {
-			ModBase.log().info("Processing %s", mcf.source);
-			this.initOrder.forEach(reg -> reg.configure(mcf));
-		}
-
-		// Complete the initialization
-		this.initOrder.forEach(Registry::initComplete);
-
-		// Let everyone know a reload happened
-		MinecraftForge.EVENT_BUS.post(new ReloadEvent.Registry(this.side));
-	}
-
 }

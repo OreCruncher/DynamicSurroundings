@@ -31,6 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public enum EventType {
+	//@formatter:off
 	WALK(null), // final form
 	WANDER(null), // final form
 	SWIM(null), // final form
@@ -43,6 +44,7 @@ public enum EventType {
 	DOWN_RUN(RUN), // -> run
 	UP(WALK), // -> walk
 	UP_RUN(RUN);// -> run
+	//@formatter:on
 
 	private final EventType destination;
 	private final String jsonName;

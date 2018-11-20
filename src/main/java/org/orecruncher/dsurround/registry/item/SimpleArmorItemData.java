@@ -28,10 +28,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
-import org.orecruncher.dsurround.event.ReloadEvent;
+import org.orecruncher.dsurround.registry.DataRegistryEvent;
+import org.orecruncher.dsurround.registry.RegistryManager;
+import org.orecruncher.dsurround.registry.footstep.FootstepsRegistry;
+
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -43,25 +45,24 @@ public class SimpleArmorItemData extends SimpleItemData implements IArmorItemDat
 
 	private static final Map<ItemClass, IAcoustic> ARMOR = new Reference2ObjectOpenHashMap<>();
 	private static final Map<ItemClass, IAcoustic> FOOT = new Reference2ObjectOpenHashMap<>();
-	
-	@SubscribeEvent
-	public static void registryReload(@Nonnull final ReloadEvent.Registry event) {
-		if (event.side == Side.SERVER)
-			return;
-		
-		ARMOR.clear();
-		FOOT.clear();
-		
-		final AcousticsManager reg = ClientRegistry.FOOTSTEPS.getAcousticManager();
-		ARMOR.put(ItemClass.LEATHER, reg.getAcoustic("armor_light"));
-		ARMOR.put(ItemClass.CHAIN, reg.getAcoustic("armor_medium"));
-		ARMOR.put(ItemClass.CRYSTAL, reg.getAcoustic("armor_crystal"));
-		ARMOR.put(ItemClass.PLATE, reg.getAcoustic("armor_heavy"));
 
-		FOOT.put(ItemClass.LEATHER, reg.getAcoustic("armor_light"));
-		FOOT.put(ItemClass.CHAIN, reg.getAcoustic("medium_foot"));
-		FOOT.put(ItemClass.CRYSTAL, reg.getAcoustic("crystal_foot"));
-		FOOT.put(ItemClass.PLATE, reg.getAcoustic("heavy_foot"));
+	@SubscribeEvent
+	public static void registryReload(@Nonnull final DataRegistryEvent.Reload event) {
+		if (event.reg instanceof FootstepsRegistry) {
+			ARMOR.clear();
+			FOOT.clear();
+
+			final AcousticsManager reg = RegistryManager.FOOTSTEPS.getAcousticManager();
+			ARMOR.put(ItemClass.LEATHER, reg.getAcoustic("armor_light"));
+			ARMOR.put(ItemClass.CHAIN, reg.getAcoustic("armor_medium"));
+			ARMOR.put(ItemClass.CRYSTAL, reg.getAcoustic("armor_crystal"));
+			ARMOR.put(ItemClass.PLATE, reg.getAcoustic("armor_heavy"));
+
+			FOOT.put(ItemClass.LEATHER, reg.getAcoustic("armor_light"));
+			FOOT.put(ItemClass.CHAIN, reg.getAcoustic("medium_foot"));
+			FOOT.put(ItemClass.CRYSTAL, reg.getAcoustic("crystal_foot"));
+			FOOT.put(ItemClass.PLATE, reg.getAcoustic("heavy_foot"));
+		}
 	}
 
 	public SimpleArmorItemData(@Nonnull final ItemClass ic) {

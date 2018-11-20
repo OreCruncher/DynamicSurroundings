@@ -47,8 +47,9 @@ import org.orecruncher.dsurround.client.handlers.effects.PlayerToolBarSoundEffec
 import org.orecruncher.dsurround.client.handlers.effects.VillagerChatEffect;
 import org.orecruncher.dsurround.client.sound.BasicSound;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
-import org.orecruncher.dsurround.event.ReloadEvent;
 import org.orecruncher.dsurround.lib.sound.ITrackedSound;
+import org.orecruncher.dsurround.registry.DataRegistryEvent;
+import org.orecruncher.dsurround.registry.effect.EffectRegistry;
 import org.orecruncher.lib.ThreadGuard;
 import org.orecruncher.lib.ThreadGuard.Action;
 import org.orecruncher.lib.gfx.ParticleHelper;
@@ -196,8 +197,8 @@ public class FxHandler extends EffectHandlerBase {
 	 * in the effect configuration.
 	 */
 	@SubscribeEvent
-	public void registryReload(@Nonnull final ReloadEvent.Registry event) {
-		if (event.side == Side.CLIENT)
+	public void registryReload(@Nonnull final DataRegistryEvent.Reload event) {
+		if (event.reg instanceof EffectRegistry)
 			clearHandlers();
 	}
 

@@ -29,7 +29,7 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.ClientRegistry;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.lib.collections.ObjectArray;
 
@@ -87,7 +87,7 @@ public class EntityEffectLibrary {
 	public Optional<EntityEffectHandler> create(@Nonnull final Entity entity) {
 		final ObjectArray<EntityEffect> effectToApply = new ObjectArray<>();
 
-		final EntityEffectInfo eei = ClientRegistry.EFFECTS.getEffects(entity);
+		final EntityEffectInfo eei = RegistryManager.EFFECTS.getEffects(entity);
 		for (int i = 0; i < this.filters.size(); i++)
 			if (this.filters.get(i).applies(entity, eei)) {
 				final List<EntityEffect> r = this.factories.get(i).create(entity, eei);

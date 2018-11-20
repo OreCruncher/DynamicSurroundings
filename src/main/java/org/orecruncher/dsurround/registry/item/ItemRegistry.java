@@ -38,13 +38,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.item.compat.ItemDataProducer;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
-
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -67,20 +65,21 @@ public final class ItemRegistry extends Registry {
 	private static final int SET_CAPACITY = 64;
 	private static final int MAP_CAPACITY = 256;
 
-	private static final SimpleItemData NONE_DATA = SimpleItemData.CACHE.get(ItemClass.NONE);
+	private SimpleItemData NONE_DATA;
 
 	private EnumMap<ItemClass, Set<Class<?>>> classMap;
 	private Map<Item, IItemData> items;
 
-	public ItemRegistry(@Nonnull final Side side) {
-		super(side);
+	public ItemRegistry() {
+		super("Item Data");
 	}
 
 	@Override
 	public void init() {
 		this.classMap = new EnumMap<>(ItemClass.class);
 		this.items = new IdentityHashMap<>(MAP_CAPACITY);
-
+		this.NONE_DATA = SimpleItemData.CACHE.get(ItemClass.NONE);
+		
 		Item.REGISTRY.iterator().forEachRemaining(item -> ItemUtils.setItemData(item, NONE_DATA));
 		ItemUtils.setItemData(Items.AIR, SimpleItemData.CACHE.get(ItemClass.EMPTY));
 
@@ -190,32 +189,9 @@ public final class ItemRegistry extends Registry {
 		}
 	}
 
-	public boolean isBow(@Nonnull final ItemStack stack) {
-		return getItemClass(stack).getItemClass() == ItemClass.BOW;
-	}
-
-	public boolean isShield(@Nonnull final ItemStack stack) {
-		return getItemClass(stack).getItemClass() == ItemClass.SHIELD;
-	}
-
 	@Nonnull
 	public IItemData getItemClass(@Nonnull final ItemStack stack) {
 		return ItemStackUtil.isValidItemStack(stack) ? ItemUtils.getItemData(stack.getItem()) : NONE_DATA;
-	}
-
-	@Nullable
-	public SoundEffect getSwingSound(@Nonnull final ItemStack stack) {
-		return getItemClass(stack).getSwingSound(stack);
-	}
-
-	@Nullable
-	public SoundEffect getUseSound(@Nonnull final ItemStack stack) {
-		return getItemClass(stack).getUseSound(stack);
-	}
-
-	@Nullable
-	public SoundEffect getEquipSound(@Nonnull final ItemStack stack) {
-		return getItemClass(stack).getEquipSound(stack);
 	}
 
 }

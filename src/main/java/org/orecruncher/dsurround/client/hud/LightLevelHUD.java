@@ -30,7 +30,7 @@ import org.lwjgl.opengl.GL11;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.event.ReloadEvent;
+import org.orecruncher.dsurround.registry.DataRegistryEvent;
 import org.orecruncher.lib.Color;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
@@ -397,7 +397,7 @@ public final class LightLevelHUD extends GuiOverlay {
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void resourceReloadEvent(final ReloadEvent.Resources event) {
+	public static void resourceReloadEvent(final DataRegistryEvent.Resources event) {
 		if (useOldRenderMethod()) {
 			ModBase.log().info("Either OptiFine is installed or Framebuffers are disabled");
 			ModBase.log().info("Using drawString method for light level HUD render");

@@ -23,50 +23,23 @@
 
 package org.orecruncher.dsurround.registry.item.compat;
 
-import java.util.Map;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
-import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.client.ClientRegistry;
-import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.dsurround.event.ReloadEvent;
 import org.orecruncher.dsurround.registry.item.ItemClass;
 import org.orecruncher.dsurround.registry.item.SimpleArmorItemData;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-@EventBusSubscriber(modid = ModBase.MOD_ID, value = Side.CLIENT)
+@SideOnly(Side.CLIENT)
 public class ConstructArmoryItemData extends SimpleArmorItemData {
-
-	private static final Map<String, IAcoustic> ARMOR = new Object2ObjectOpenHashMap<>();
-	private static final Map<String, IAcoustic> FOOT = new Object2ObjectOpenHashMap<>();
-
-	@SubscribeEvent
-	public static void registryReload(@Nonnull final ReloadEvent.Registry event) {
-		if (event.side == Side.SERVER)
-			return;
-
-		ARMOR.clear();
-		FOOT.clear();
-
-		final AcousticsManager reg = ClientRegistry.FOOTSTEPS.getAcousticManager();
-		final IAcoustic a = reg.getAcoustic("armor_slimey");
-		ARMOR.put("slimey_green_armor", a);
-		FOOT.put("slimey_green_armor", a);
-		ARMOR.put("slimey_blue_armor", a);
-		FOOT.put("slimey_blue_armor", a);
-	}
 
 	public ConstructArmoryItemData(@Nonnull final ItemClass ic) {
 		super(ic);
@@ -111,7 +84,7 @@ public class ConstructArmoryItemData extends SimpleArmorItemData {
 	public IAcoustic getArmorSound(@Nonnull final ItemStack stack) {
 		final String id = getIdentifier(stack);
 		if (id != null) {
-			final IAcoustic a = ARMOR.get(id);
+			final IAcoustic a = ConstructArmoryProducer.ARMOR.get(id);
 			if (a != null)
 				return a;
 		}
@@ -123,7 +96,7 @@ public class ConstructArmoryItemData extends SimpleArmorItemData {
 	public IAcoustic getFootArmorSound(@Nonnull final ItemStack stack) {
 		final String id = getIdentifier(stack);
 		if (id != null) {
-			final IAcoustic a = FOOT.get(id);
+			final IAcoustic a = ConstructArmoryProducer.FOOT.get(id);
 			if (a != null)
 				return a;
 		}

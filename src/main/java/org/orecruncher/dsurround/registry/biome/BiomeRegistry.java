@@ -91,8 +91,8 @@ public final class BiomeRegistry extends Registry {
 	private final Map<String, String> biomeAliases = new Object2ObjectOpenHashMap<>();
 	private final ObjectOpenHashSet<FakeBiome> theFakes = new ObjectOpenHashSet<>();
 
-	public BiomeRegistry(@Nonnull final Side side) {
-		super(side);
+	public BiomeRegistry() {
+		super("Biome Data");
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 

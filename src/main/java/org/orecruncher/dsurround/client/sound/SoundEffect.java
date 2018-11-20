@@ -29,14 +29,15 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.fx.ISpecialEffect;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.expression.ExpressionEngine;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.config.SoundConfig;
 import org.orecruncher.dsurround.registry.config.SoundType;
 import org.orecruncher.dsurround.registry.sound.SoundMetadata;
+import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 import org.orecruncher.lib.WeightTable;
 import org.orecruncher.lib.WeightTable.IEntrySource;
 import org.orecruncher.lib.WeightTable.IItem;
@@ -81,7 +82,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	protected SoundEffect(final ResourceLocation resource, final SoundCategory category, final float volume,
 			final float pitch, final int repeatDelay, final boolean variable) {
 		this.soundName = resource.toString();
-		this.sound = ClientRegistry.SOUND.getSound(resource);
+		this.sound = RegistryManager.SOUND.getSound(resource);
 		this.volume = volume;
 		this.pitch = pitch;
 		this.conditions = StringUtils.EMPTY;
@@ -189,7 +190,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 
 	@SideOnly(Side.CLIENT)
 	public BasicSound<?> createSoundAt(@Nonnull final BlockPos pos) {
-		return new AdhocSound(this.sound, Sounds.BIOME).setPosition(pos);
+		return new AdhocSound(this.sound, SoundRegistry.BIOME).setPosition(pos);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -197,7 +198,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 		final float posX = (float) (player.posX + randomRange(SPOT_SOUND_RANGE));
 		final float posY = (float) (player.posY + player.getEyeHeight() + randomRange(SPOT_SOUND_RANGE));
 		final float posZ = (float) (player.posZ + randomRange(SPOT_SOUND_RANGE));
-		return new AdhocSound(this.sound, Sounds.BIOME).setPosition(posX, posY, posZ);
+		return new AdhocSound(this.sound, SoundRegistry.BIOME).setPosition(posX, posY, posZ);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -321,7 +322,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 			if (sc == null) {
 				// There isn't an override - defer to the category info in
 				// the sounds.json.
-				final SoundMetadata meta = ClientRegistry.SOUND.getSoundMetadata(resource);
+				final SoundMetadata meta = RegistryManager.SOUND.getSoundMetadata(resource);
 				if (meta != null)
 					sc = meta.getCategory();
 

@@ -26,6 +26,8 @@ package org.orecruncher.dsurround.client.sound;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.registry.sound.SoundRegistry;
+
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
@@ -35,7 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class FootstepSound extends BasicSound<FootstepSound> {
 
 	public FootstepSound(@Nonnull final Vec3d loc, @Nonnull final SoundEvent event) {
-		super(event, Sounds.FOOTSTEPS);
+		super(event, SoundRegistry.FOOTSTEPS);
 
 		this.setPosition(loc);
 	}

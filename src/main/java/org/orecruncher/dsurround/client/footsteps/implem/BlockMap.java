@@ -35,8 +35,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 import org.orecruncher.lib.BlockNameUtil;
 import org.orecruncher.lib.BlockNameUtil.NameResult;
@@ -177,7 +177,7 @@ public class BlockMap {
 
 	public BlockMap(@Nonnull final AcousticsManager manager) {
 		this.acousticsManager = manager;
-		this.metaMap = new BlockAcousticMap(bs -> ClientRegistry.FOOTSTEPS.resolve(bs));
+		this.metaMap = new BlockAcousticMap(bs -> RegistryManager.FOOTSTEPS.resolve(bs));
 	}
 
 	public boolean hasAcoustics(@Nonnull final IBlockState state) {

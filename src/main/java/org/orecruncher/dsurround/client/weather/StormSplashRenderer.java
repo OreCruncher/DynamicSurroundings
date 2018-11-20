@@ -31,12 +31,12 @@ import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
 import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.PrecipitationType;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.client.sound.AdhocSound;
 import org.orecruncher.dsurround.client.sound.BasicSound;
 import org.orecruncher.dsurround.client.weather.compat.RandomThings;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.lib.WorldUtils;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.gfx.ParticleHelper;
@@ -134,7 +134,7 @@ public class StormSplashRenderer {
 	}
 
 	protected boolean biomeHasDust(final Biome biome) {
-		return ModOptions.fog.allowDesertFog && !Weather.doVanilla() && ClientRegistry.BIOME.get(biome).getHasDust();
+		return ModOptions.fog.allowDesertFog && !Weather.doVanilla() && RegistryManager.BIOME.get(biome).getHasDust();
 	}
 
 	protected void playSplashSound(final EntityRenderer renderer, final World world, final Entity player, double x,

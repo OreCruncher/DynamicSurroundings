@@ -27,10 +27,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
+import org.orecruncher.dsurround.registry.RegistryManager;
 
 import lain.mods.cos.api.CosArmorAPI;
 import lain.mods.cos.api.inventory.CAStacksBase;
@@ -121,8 +121,8 @@ public enum ItemClass {
 	public static ItemStack effectiveArmorStack(@Nonnull final EntityLivingBase entity) {
 		final ItemStack chest = resolveSlot(entity, EntityEquipmentSlot.CHEST);
 		final ItemStack legs = resolveSlot(entity, EntityEquipmentSlot.LEGS);
-		final ItemClass chestic = ClientRegistry.ITEMS.getItemClass(chest).getItemClass();
-		final ItemClass legsic = ClientRegistry.ITEMS.getItemClass(legs).getItemClass();
+		final ItemClass chestic = RegistryManager.ITEMS.getItemClass(chest).getItemClass();
+		final ItemClass legsic = RegistryManager.ITEMS.getItemClass(legs).getItemClass();
 		return chestic.compareTo(legsic) > 0 ? chest.copy() : legs.copy();
 	}
 

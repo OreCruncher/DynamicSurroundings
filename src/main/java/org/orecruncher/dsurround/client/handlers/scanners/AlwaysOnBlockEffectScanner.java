@@ -29,10 +29,10 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.fx.BlockEffect;
 import org.orecruncher.dsurround.lib.scanner.CuboidScanner;
 import org.orecruncher.dsurround.lib.scanner.ScanLocus;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateProfile;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 
@@ -64,7 +64,7 @@ public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 	protected boolean interestingBlock(final IBlockState state) {
 		if (state == Blocks.AIR.getDefaultState())
 			return false;
-		this.profile = ClientRegistry.BLOCK.get(state);
+		this.profile = RegistryManager.BLOCK.get(state);
 		return this.profile.hasAlwaysOnEffects();
 	}
 

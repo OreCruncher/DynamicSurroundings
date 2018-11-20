@@ -99,7 +99,7 @@ public class Proxy {
 	}
 
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
-		// Intentionally left blank
+		RegistryManager.initialize();
 	}
 
 	public void loadCompleted(@Nonnull final FMLLoadCompleteEvent event) {

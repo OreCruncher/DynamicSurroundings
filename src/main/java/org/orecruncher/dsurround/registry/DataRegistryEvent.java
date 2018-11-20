@@ -22,22 +22,23 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.event;
+package org.orecruncher.dsurround.registry;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.registry.config.ConfigData;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ReloadEvent extends Event {
+public class DataRegistryEvent extends Event {
 
 	/**
 	 * Event fired when resource packs have changed.
 	 */
 	@SideOnly(Side.CLIENT)
-	public static class Resources extends ReloadEvent {
+	public static class Resources extends DataRegistryEvent {
 
 		public final IResourceManager manager;
 
@@ -47,32 +48,31 @@ public class ReloadEvent extends Event {
 	}
 
 	/**
-	 * Event fired when the mod configuration file changed.
+	 * Fired by the RegistryManager after the internal data cache
+	 * has been initialized.  Intent is to have any registries
+	 * initialize their content based on the cached data.
 	 */
-	public static class Configuration extends ReloadEvent {
+	public static class Initialize extends DataRegistryEvent {
 
-		public final Side side;
-
-		public Configuration() {
-			this.side = null;
-		}
-
-		public Configuration(@Nonnull final Side side) {
-			this.side = side;
+		public final ConfigData config;
+		
+		public Initialize(@Nonnull final ConfigData configData) {
+			this.config = configData;
 		}
 	}
-
+	
 	/**
-	 * Event fired when the RegistryManager finished reloading registries and is
-	 * notifying listeners of the fact.
+	 * Event fired when the registry has reloaded and any dependents
+	 * should update it's references or take appropriate action.
 	 */
-	public static class Registry extends ReloadEvent {
-
-		public final Side side;
-
-		public Registry(@Nonnull final Side side) {
-			this.side = side;
+	public static class Reload extends DataRegistryEvent {
+		
+		public final Registry reg;
+		
+		public Reload(@Nonnull final Registry reg) {
+			this.reg = reg;
 		}
+		
 	}
 
 }

@@ -30,7 +30,7 @@ import java.util.List;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
 import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfoEx;
-import org.orecruncher.dsurround.event.ReloadEvent;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.lib.Localization;
 
 import com.google.common.collect.ImmutableList;
@@ -43,7 +43,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 
 public final class CommandDS extends CommandBase {
 
@@ -138,7 +137,7 @@ public final class CommandDS extends CommandBase {
 				world.provider.resetRainAndThunder();
 				feedback = new TextComponentString(Localization.format("dsurround.msg.RainReset"));
 			} else if (COMMAND_OPTION_RELOAD.compareToIgnoreCase(parms[0]) == 0) {
-				MinecraftForge.EVENT_BUS.post(new ReloadEvent.Configuration());
+				RegistryManager.doReload();
 				feedback = new TextComponentString(Localization.format("dsurround.msg.BiomeReload"));
 			} else if (COMMAND_OPTION_CONFIG.compareToIgnoreCase(parms[0]) == 0) {
 				feedback = new TextComponentString(config(world, data));

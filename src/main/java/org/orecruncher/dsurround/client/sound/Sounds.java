@@ -25,7 +25,7 @@
 package org.orecruncher.dsurround.client.sound;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.client.ClientRegistry;
+import org.orecruncher.dsurround.registry.RegistryManager;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -39,10 +39,6 @@ public final class Sounds {
 	private Sounds() {
 
 	}
-
-	// Mod added categories
-	public static final SoundCategory FOOTSTEPS = SoundCategory.valueOf("DS_FOOTSTEPS");
-	public static final SoundCategory BIOME = SoundCategory.valueOf("DS_BIOME");
 
 	public final static SoundEffect CRAFTING;
 	public final static SoundEffect SWORD_EQUIP;
@@ -89,8 +85,8 @@ public final class Sounds {
 
 	static {
 		// Weather
-		RAIN = ClientRegistry.SOUND.getSound(new ResourceLocation(ModBase.RESOURCE_ID, "rain"));
-		DUST = ClientRegistry.SOUND.getSound(new ResourceLocation(ModBase.RESOURCE_ID, "dust"));
+		RAIN = RegistryManager.SOUND.getSound(new ResourceLocation(ModBase.RESOURCE_ID, "rain"));
+		DUST = RegistryManager.SOUND.getSound(new ResourceLocation(ModBase.RESOURCE_ID, "dust"));
 
 		// SoundEffects
 		CRAFTING = new SoundEffect.Builder("crafting", SoundCategory.PLAYERS).build();

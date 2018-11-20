@@ -36,12 +36,11 @@ import org.orecruncher.dsurround.registry.config.ModConfiguration;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
 
 public final class DimensionRegistry extends Registry {
 
-	public DimensionRegistry(@Nonnull final Side side) {
-		super(side);
+	public DimensionRegistry() {
+		super("Dimension Data");
 	}
 
 	@Override
@@ -105,24 +104,26 @@ public final class DimensionRegistry extends Registry {
 
 	@Nonnull
 	public DimensionData getData(@Nonnull final World world) {
-		DimensionData data = this.dimensionData.get(world.provider.getDimension());
-		if (data == null) {
-			DimensionConfig entry = null;
-			for (final DimensionConfig e : this.cache)
-				if ((e.dimensionId != null && e.dimensionId == world.provider.getDimension())
-						|| (e.name != null && e.name.equals(world.provider.getDimensionType().getName()))) {
-					entry = e;
-					break;
+		synchronized (this) {
+			DimensionData data = this.dimensionData.get(world.provider.getDimension());
+			if (data == null) {
+				DimensionConfig entry = null;
+				for (final DimensionConfig e : this.cache)
+					if ((e.dimensionId != null && e.dimensionId == world.provider.getDimension())
+							|| (e.name != null && e.name.equals(world.provider.getDimensionType().getName()))) {
+						entry = e;
+						break;
+					}
+				if (entry == null) {
+					data = new DimensionData(world);
+				} else {
+					data = new DimensionData(world, entry);
 				}
-			if (entry == null) {
-				data = new DimensionData(world);
-			} else {
-				data = new DimensionData(world, entry);
-			}
 
-			this.dimensionData.put(world.provider.getDimension(), data);
-			ModBase.log().info(data.toString());
+				this.dimensionData.put(world.provider.getDimension(), data);
+				ModBase.log().info(data.toString());
+			}
+			return data;
 		}
-		return data;
 	}
 }

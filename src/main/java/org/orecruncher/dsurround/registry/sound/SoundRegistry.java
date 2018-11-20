@@ -45,12 +45,17 @@ import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public final class SoundRegistry extends Registry {
+
+	// Mod added categories
+	public static final SoundCategory FOOTSTEPS = SoundCategory.valueOf("DS_FOOTSTEPS");
+	public static final SoundCategory BIOME = SoundCategory.valueOf("DS_BIOME");
 
 	public static final float MIN_SOUNDFACTOR = 0F;
 	public static final float MAX_SOUNDFACTOR = 4F;
@@ -65,8 +70,8 @@ public final class SoundRegistry extends Registry {
 	private final Map<ResourceLocation, SoundMetadata> soundMetadata = new Object2ObjectOpenHashMap<>();
 	private final Map<ResourceLocation, SoundEvent> myRegistry = new Object2ObjectOpenHashMap<>();
 
-	public SoundRegistry(@Nonnull final Side side) {
-		super(side);
+	public SoundRegistry() {
+		super("Sounds");
 		this.volumeControl = new Object2FloatOpenHashMap<>();
 		this.volumeControl.defaultReturnValue(DEFAULT_SOUNDFACTOR);
 	}
@@ -114,7 +119,7 @@ public final class SoundRegistry extends Registry {
 		}
 	}
 	
-	protected void bakeSoundRegistry() {
+	private void bakeSoundRegistry() {
 		
 		final ResourceLocation soundFile = new ResourceLocation(ModBase.MOD_ID, "sounds.json");
 		try (final SoundConfigProcessor proc = new SoundConfigProcessor(soundFile)) {

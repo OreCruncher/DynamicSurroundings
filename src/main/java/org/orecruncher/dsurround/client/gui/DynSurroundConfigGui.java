@@ -34,8 +34,8 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 import org.orecruncher.lib.ConfigProcessor;
 import org.orecruncher.lib.gui.GuiConfigBase;
@@ -120,7 +120,7 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 			sounds.add(resource.toString());
 		Collections.sort(sounds);
 
-		final SoundRegistry registry = ClientRegistry.SOUND;
+		final SoundRegistry registry = RegistryManager.SOUND;
 		for (final String sound : sounds) {
 			final Property prop = new Property(sound, "", Property.Type.STRING);
 			prop.setDefaultValue("");

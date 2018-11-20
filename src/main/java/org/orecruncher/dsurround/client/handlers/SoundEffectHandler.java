@@ -32,7 +32,6 @@ import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.sound.AdhocSound;
 import org.orecruncher.dsurround.client.sound.BasicSound;
@@ -43,8 +42,10 @@ import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
-import org.orecruncher.dsurround.event.ReloadEvent;
 import org.orecruncher.dsurround.lib.sound.SoundState;
+import org.orecruncher.dsurround.registry.DataRegistryEvent;
+import org.orecruncher.dsurround.registry.RegistryManager;
+import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.compat.PositionedSoundUtil;
 
@@ -133,15 +134,15 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		final Set<ResourceLocation> reg = SoundEngine.instance().getSoundRegistry().getKeys();
 		reg.forEach(resource -> {
 			final String rs = resource.toString();
-			if (ClientRegistry.SOUND.isSoundBlockedLogical(rs)) {
+			if (RegistryManager.SOUND.isSoundBlockedLogical(rs)) {
 				this.soundsToBlock.add(rs);
-			} else if (ClientRegistry.SOUND.isSoundCulled(rs)) {
+			} else if (RegistryManager.SOUND.isSoundCulled(rs)) {
 				this.soundCull.put(rs, -ModOptions.sound.soundCullingThreshold);
 			}
 		});
 
 		final ResourceLocation bowLooseResource = new ResourceLocation(ModBase.MOD_ID, "bow.loose");
-		final SoundEvent bowLoose = ClientRegistry.SOUND.getSound(bowLooseResource);
+		final SoundEvent bowLoose = RegistryManager.SOUND.getSound(bowLooseResource);
 		if (!this.soundsToBlock.contains(bowLooseResource.toString())) {
 			this.replacements.put("minecraft:entity.arrow.shoot", bowLoose);
 			this.replacements.put("minecraft:entity.skeleton.shoot", bowLoose);
@@ -286,8 +287,8 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	}
 
 	@SubscribeEvent
-	public void registryReloadEvent(@Nonnull final ReloadEvent.Registry event) {
-		if (event.side == Side.CLIENT) {
+	public void registryReloadEvent(@Nonnull final DataRegistryEvent.Reload event) {
+		if (event.reg instanceof SoundRegistry) {
 			onConnect();
 		}
 	}

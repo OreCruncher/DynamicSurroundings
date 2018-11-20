@@ -35,15 +35,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public enum Substrate {
-
-	//
+	//@formatter:off
 	CARPET("carpet"),
-	//
 	FOLIAGE("foliage"),
-	//
 	MESSY("messy"),
-	//
 	FENCE("bigger");
+	//@formatter:on
 
 	private static final Map<String, Substrate> lookup = new Object2ObjectOpenHashMap<>();
 	static {

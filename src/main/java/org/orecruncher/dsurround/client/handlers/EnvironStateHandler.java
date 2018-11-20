@@ -36,12 +36,12 @@ import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.SeasonType;
 import org.orecruncher.dsurround.capabilities.season.TemperatureRating;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.scanners.BattleScanner;
 import org.orecruncher.dsurround.client.handlers.scanners.CeilingCoverage;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.expression.ExpressionEngine;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.dsurround.registry.biome.BiomeRegistry;
 import org.orecruncher.dsurround.registry.dimension.DimensionData;
@@ -104,7 +104,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		private static void reset() {
-			final BiomeInfo WTF = ClientRegistry.BIOME.WTF_INFO;
+			final BiomeInfo WTF = RegistryManager.BIOME.WTF_INFO;
 			biomeName = StringUtils.EMPTY;
 			playerBiome = WTF;
 			truePlayerBiome = WTF;
@@ -133,9 +133,9 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		private static void tick(final World world, final EntityPlayer player) {
 
-			final BiomeRegistry biomes = ClientRegistry.BIOME;
+			final BiomeRegistry biomes = RegistryManager.BIOME;
 			final ISeasonInfo season = CapabilitySeasonInfo.getCapability(getWorld());
-			final DimensionRegistry dimensions = ClientRegistry.DIMENSION;
+			final DimensionRegistry dimensions = RegistryManager.DIMENSION;
 			final EnvironStateHandler stateHandler = EffectManager.instance().lookupService(EnvironStateHandler.class);
 			if (stateHandler == null)
 				ModBase.log().warn("Null EnvironStateHandler in EnvironState.tick()");

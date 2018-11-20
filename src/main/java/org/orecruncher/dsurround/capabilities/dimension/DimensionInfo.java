@@ -33,7 +33,6 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.dimension.DimensionData;
-import org.orecruncher.dsurround.registry.dimension.DimensionRegistry;
 import org.orecruncher.lib.math.MathStuff;
 import org.orecruncher.lib.random.XorShiftRandom;
 
@@ -71,8 +70,7 @@ public class DimensionInfo implements IDimensionInfoEx {
 	protected DimensionData data() {
 		DimensionData result = this.ref.get();
 		if (result == null) {
-			final DimensionRegistry reg = RegistryManager.get().get(DimensionRegistry.class);
-			result = reg.getData(this.world);
+			result = RegistryManager.DIMENSION.getData(this.world);
 			this.ref = new WeakReference<>(result);
 		}
 		return result;

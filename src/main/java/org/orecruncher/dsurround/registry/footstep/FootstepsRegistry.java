@@ -27,7 +27,6 @@ package org.orecruncher.dsurround.registry.footstep;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -43,7 +42,6 @@ import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.footsteps.implem.AcousticProfile;
 import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
 import org.orecruncher.dsurround.client.footsteps.implem.BlockMap;
@@ -55,6 +53,7 @@ import org.orecruncher.dsurround.client.footsteps.system.Generator;
 import org.orecruncher.dsurround.client.footsteps.system.GeneratorQP;
 import org.orecruncher.dsurround.client.footsteps.util.ConfigProperty;
 import org.orecruncher.dsurround.registry.Registry;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.config.VariatorConfig;
@@ -62,7 +61,6 @@ import org.orecruncher.dsurround.registry.config.ModConfiguration.ForgeEntry;
 import org.orecruncher.dsurround.registry.config.packs.IMyResourcePack;
 import org.orecruncher.dsurround.registry.config.packs.ResourcePacks;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
-import org.orecruncher.dsurround.registry.item.ItemClass;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
 
@@ -111,16 +109,13 @@ public final class FootstepsRegistry extends Registry {
 	private Set<Material> FOOTPRINT_MATERIAL;
 	private Set<IBlockState> FOOTPRINT_STATES;
 
-	private Map<ItemClass, IAcoustic> ARMOR_SOUND;
-	private Map<ItemClass, IAcoustic> ARMOR_SOUND_FOOT;
-
 	private Map<String, Variator> variators;
 	private Variator childVariator;
 	private Variator playerVariator;
 	private Variator playerQuadrupedVariator;
 
-	public FootstepsRegistry(@Nonnull final Side side) {
-		super(side);
+	public FootstepsRegistry() {
+		super("Footstep Sounds");
 	}
 
 	@Override
@@ -131,8 +126,6 @@ public final class FootstepsRegistry extends Registry {
 		this.blockMap = new BlockMap(this.acousticsManager);
 		this.FOOTPRINT_MATERIAL = new ReferenceOpenHashSet<>();
 		this.FOOTPRINT_STATES = new ReferenceOpenHashSet<>();
-		this.ARMOR_SOUND = new EnumMap<>(ItemClass.class);
-		this.ARMOR_SOUND_FOOT = new EnumMap<>(ItemClass.class);
 		this.variators = new Object2ObjectOpenHashMap<>();
 
 		// Initialize the known materials that leave footprints
@@ -183,18 +176,6 @@ public final class FootstepsRegistry extends Registry {
 		AcousticsManager.JUMP = this.acousticsManager.compileAcoustics("_JUMP");
 		AcousticsManager.SPLASH = new IAcoustic[] {
 				new RainSplashAcoustic(this.acousticsManager.compileAcoustics("waterfine")) };
-
-		final AcousticsManager am = this.acousticsManager;
-		this.ARMOR_SOUND.put(ItemClass.NONE, am.getAcoustic("NOT_EMITTER"));
-		this.ARMOR_SOUND.put(ItemClass.LEATHER, am.getAcoustic("armor_light"));
-		this.ARMOR_SOUND.put(ItemClass.CHAIN, am.getAcoustic("armor_medium"));
-		this.ARMOR_SOUND.put(ItemClass.CRYSTAL, am.getAcoustic("armor_crystal"));
-		this.ARMOR_SOUND.put(ItemClass.PLATE, am.getAcoustic("armor_heavy"));
-		this.ARMOR_SOUND_FOOT.put(ItemClass.NONE, am.getAcoustic("NOT_EMITTER"));
-		this.ARMOR_SOUND_FOOT.put(ItemClass.LEATHER, am.getAcoustic("armor_light"));
-		this.ARMOR_SOUND_FOOT.put(ItemClass.CHAIN, am.getAcoustic("medium_foot"));
-		this.ARMOR_SOUND_FOOT.put(ItemClass.CRYSTAL, am.getAcoustic("crystal_foot"));
-		this.ARMOR_SOUND_FOOT.put(ItemClass.PLATE, am.getAcoustic("heavy_foot"));
 
 		this.childVariator = getVariator("child");
 		this.playerVariator = getVariator(ModOptions.sound.firstPersonFootstepCadence ? "playerSlow" : "player");
@@ -313,7 +294,7 @@ public final class FootstepsRegistry extends Registry {
 	}
 	
 	public Generator createGenerator(@Nonnull final EntityLivingBase entity) {
-		final EntityEffectInfo info = ClientRegistry.EFFECTS.getEffects(entity);
+		final EntityEffectInfo info = RegistryManager.EFFECTS.getEffects(entity);
 		Variator var = getVariator(info.variator);
 		if (entity.isChild()) {
 			var = this.childVariator;
@@ -324,7 +305,7 @@ public final class FootstepsRegistry extends Registry {
 	}
 
 	@Nonnull
-	public Variator getVariator(@Nonnull final String varName) {
+	private Variator getVariator(@Nonnull final String varName) {
 		return this.variators.getOrDefault(varName, Variator.DEFAULT);
 	}
 
@@ -358,7 +339,7 @@ public final class FootstepsRegistry extends Registry {
 	 * @return Acoustic profile for the BlockState, if any
 	 */
 	@Nullable
-	public IAcoustic[] resolvePrimitive(@Nonnull final IBlockState state) {
+	private IAcoustic[] resolvePrimitive(@Nonnull final IBlockState state) {
 
 		if (state == Blocks.AIR.getDefaultState())
 			return AcousticsManager.NOT_EMITTER;
@@ -398,16 +379,6 @@ public final class FootstepsRegistry extends Registry {
 		return this.FOOTPRINT_MATERIAL.contains(state.getMaterial()) || this.FOOTPRINT_STATES.contains(state);
 	}
 
-	@Nullable
-	public IAcoustic getArmorAcoustic(@Nonnull final ItemClass ac) {
-		return ac != null ? this.ARMOR_SOUND.get(ac) : null;
-	}
-
-	@Nullable
-	public IAcoustic getFootArmorAcoustic(@Nonnull final ItemClass ac) {
-		return ac != null ? this.ARMOR_SOUND_FOOT.get(ac) : null;
-	}
-
 	private static Block resolveToBlock(@Nonnull final ItemStack stack) {
 		if (!ItemStackUtil.isValidItemStack(stack))
 			return null;
@@ -419,7 +390,7 @@ public final class FootstepsRegistry extends Registry {
 		return null;
 	}
 
-	public void registerFootrint(@Nonnull final String... blocks) {
+	private void registerFootrint(@Nonnull final String... blocks) {
 		for (String b : blocks) {
 			boolean materialMatch = false;
 			if (b.startsWith("@")) {
@@ -437,7 +408,7 @@ public final class FootstepsRegistry extends Registry {
 		}
 	}
 
-	public void registerForgeEntries(@Nonnull final String blockClass, @Nonnull final String... entries) {
+	private void registerForgeEntries(@Nonnull final String blockClass, @Nonnull final String... entries) {
 		for (final String dictionaryName : entries) {
 			final List<ItemStack> stacks = OreDictionary.getOres(dictionaryName, false);
 			for (final ItemStack stack : stacks) {
@@ -452,7 +423,7 @@ public final class FootstepsRegistry extends Registry {
 		}
 	}
 
-	public void registerBlocks(@Nonnull final String blockClass, @Nonnull final String... blocks) {
+	private void registerBlocks(@Nonnull final String blockClass, @Nonnull final String... blocks) {
 		for (final String s : blocks)
 			getBlockMap().register(s, blockClass);
 	}

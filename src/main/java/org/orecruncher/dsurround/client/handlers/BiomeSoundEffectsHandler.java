@@ -27,10 +27,10 @@ package org.orecruncher.dsurround.client.handlers;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.handlers.scanners.BiomeScanner;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.lib.collections.ObjectArray;
 
@@ -98,10 +98,10 @@ public class BiomeSoundEffectsHandler extends EffectHandlerBase {
 				getBiomeSounds(sounds);
 
 			final ObjectArray<SoundEffect> playerSounds = new ObjectArray<>();
-			ClientRegistry.BIOME.PLAYER_INFO.findSoundMatches(playerSounds);
-			ClientRegistry.BIOME.BATTLE_MUSIC_INFO.findSoundMatches(playerSounds);
+			RegistryManager.BIOME.PLAYER_INFO.findSoundMatches(playerSounds);
+			RegistryManager.BIOME.BATTLE_MUSIC_INFO.findSoundMatches(playerSounds);
 			if (EnvironState.inVillage())
-				ClientRegistry.BIOME.VILLAGE_INFO.findSoundMatches(playerSounds);
+				RegistryManager.BIOME.VILLAGE_INFO.findSoundMatches(playerSounds);
 
 			playerSounds.forEach(fx -> sounds.put(fx, 1.0F));
 
@@ -112,7 +112,7 @@ public class BiomeSoundEffectsHandler extends EffectHandlerBase {
 					SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound);
 			}
 
-			final SoundEffect sound = ClientRegistry.BIOME.PLAYER_INFO.getSpotSound(this.RANDOM);
+			final SoundEffect sound = RegistryManager.BIOME.PLAYER_INFO.getSpotSound(this.RANDOM);
 			if (sound != null)
 				SoundEffectHandler.INSTANCE.playSoundAtPlayer(player, sound);
 		}

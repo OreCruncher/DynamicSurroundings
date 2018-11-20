@@ -27,7 +27,7 @@ package org.orecruncher.dsurround.capabilities.season;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.client.ClientRegistry;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 
@@ -106,7 +106,7 @@ public class SeasonInfoSereneSeasons extends SeasonInfo {
 			@Nullable BiomeInfo biome) {
 
 		if (biome == null)
-			biome = ClientRegistry.BIOME.get(ClientChunkCache.instance().getBiome(pos));
+			biome = RegistryManager.BIOME.get(ClientChunkCache.instance().getBiome(pos));
 
 		final Biome trueBiome = biome.getBiome();
 		if (trueBiome != null && BiomeConfig.usesTropicalSeasons(trueBiome)) {

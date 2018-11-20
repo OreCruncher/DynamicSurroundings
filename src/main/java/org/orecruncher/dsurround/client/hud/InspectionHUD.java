@@ -32,13 +32,13 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.CapabilityEntityData;
 import org.orecruncher.dsurround.capabilities.entitydata.IEntityData;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.footsteps.implem.BlockMap;
 import org.orecruncher.dsurround.client.fx.BlockEffect;
 import org.orecruncher.dsurround.client.handlers.EffectManager;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.handlers.FxHandler;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateProfile;
 import org.orecruncher.lib.ItemStackUtil;
@@ -108,7 +108,7 @@ public class InspectionHUD extends GuiOverlay {
 				text.add("Step Sound: " + st.getStepSound().getSoundName().toString());
 			}
 
-			if (ClientRegistry.FOOTSTEPS.hasFootprint(state))
+			if (RegistryManager.FOOTSTEPS.hasFootprint(state))
 				text.add("Footprints Generated");
 
 			text.add(TEXT_BLOCKSTATE);
@@ -116,7 +116,7 @@ public class InspectionHUD extends GuiOverlay {
 			NBTUtil.writeBlockState(nbt, state);
 			text.add(nbt.toString());
 
-			final BlockMap bm = ClientRegistry.FOOTSTEPS.getBlockMap();
+			final BlockMap bm = RegistryManager.FOOTSTEPS.getBlockMap();
 			if (bm != null) {
 				final List<String> data = new ArrayList<>();
 				bm.collectData(EnvironState.getWorld(), state, pos, data);
@@ -127,7 +127,7 @@ public class InspectionHUD extends GuiOverlay {
 				}
 			}
 
-			final BlockStateProfile data = ClientRegistry.BLOCK.get(state);
+			final BlockStateProfile data = RegistryManager.BLOCK.get(state);
 			BlockEffect[] effects = data.getEffects();
 			if (effects.length > 0) {
 				text.add(TEXT_BLOCK_EFFECTS);

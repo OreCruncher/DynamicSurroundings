@@ -46,12 +46,12 @@ import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALC11;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.sound.fix.SoundFixMethods;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 import org.orecruncher.dsurround.lib.sound.ITrackedSound;
 import org.orecruncher.dsurround.lib.sound.SoundState;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.lib.ThreadGuard;
 import org.orecruncher.lib.ThreadGuard.Action;
 import org.orecruncher.lib.math.MathStuff;
@@ -448,7 +448,7 @@ public final class SoundEngine {
 	private static float getVolumeScale(@Nonnull final ISound sound) {
 		try {
 			final float fade = fadeMusic(sound) ? MusicFader.getMusicScaling() : 1.0F;
-			return ClientRegistry.SOUND.getVolumeScale(sound) * fade;
+			return RegistryManager.SOUND.getVolumeScale(sound) * fade;
 		} catch (final Throwable t) {
 			;
 		}

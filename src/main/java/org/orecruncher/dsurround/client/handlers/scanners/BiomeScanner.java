@@ -23,11 +23,11 @@
  */
 package org.orecruncher.dsurround.client.handlers.scanners;
 
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
+import org.orecruncher.dsurround.registry.RegistryManager;
 
 import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
@@ -94,7 +94,7 @@ public final class BiomeScanner implements ITickable {
 
 				this.biomeArea = MAX_BIOME_AREA;
 				scratch.reference2IntEntrySet().forEach(
-						entry -> this.weights.put(ClientRegistry.BIOME.get(entry.getKey()), entry.getIntValue()));
+						entry -> this.weights.put(RegistryManager.BIOME.get(entry.getKey()), entry.getIntValue()));
 			}
 		}
 	}

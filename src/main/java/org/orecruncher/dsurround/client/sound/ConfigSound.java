@@ -26,8 +26,8 @@ package org.orecruncher.dsurround.client.sound;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.lib.sound.SoundState;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.sound.SoundMetadata;
 
 import com.google.common.base.MoreObjects;
@@ -56,7 +56,7 @@ public class ConfigSound extends BasicSound<ConfigSound> {
 		this.repeatDelay = 0;
 		this.attenuationType = ISound.AttenuationType.NONE;
 
-		final SoundMetadata data = ClientRegistry.SOUND.getSoundMetadata(this.positionedSoundLocation);
+		final SoundMetadata data = RegistryManager.SOUND.getSoundMetadata(this.positionedSoundLocation);
 		if (data != null)
 			this.category = data.getCategory();
 	}

@@ -48,9 +48,9 @@ import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.client.weather.RenderWeather;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.commands.CommandCalc;
-import org.orecruncher.dsurround.event.ReloadEvent;
 import org.orecruncher.dsurround.event.WorldEventDetector;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
+import org.orecruncher.dsurround.registry.DataRegistryEvent;
 import org.orecruncher.lib.ForgeUtils;
 import org.orecruncher.lib.Localization;
 import org.orecruncher.lib.chunk.ClientChunkCache;
@@ -66,13 +66,11 @@ import net.minecraftforge.client.resource.IResourceType;
 import net.minecraftforge.client.resource.ISelectiveResourceReloadListener;
 import net.minecraftforge.client.resource.VanillaResourceType;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -140,6 +138,8 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 
 	@Override
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
+		super.postInit(event);
+		
 		// Patch up metadata
 		final ModMetadata data = ForgeUtils.getModMetadata(ModBase.MOD_ID);
 		if (data != null) {
@@ -183,21 +183,11 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 		});
 	}
 
-	@SubscribeEvent
-	public void onConfigChanged(@Nonnull final OnConfigChangedEvent event) {
-		if (event.getModID().equals(ModBase.MOD_ID)) {
-			// The configuration file changed. Fire an appropriate
-			// event so that various parts of the mod can reinitialize.
-			MinecraftForge.EVENT_BUS.post(new ReloadEvent.Configuration());
-		}
-
-	}
-
 	@Override
 	public void onResourceManagerReload(@Nonnull final IResourceManager resourceManager,
 			@Nonnull final Predicate<IResourceType> resourcePredicate) {
 		if (resourcePredicate.test(VanillaResourceType.SOUNDS)) {
-			MinecraftForge.EVENT_BUS.post(new ReloadEvent.Resources(resourceManager));
+			MinecraftForge.EVENT_BUS.post(new DataRegistryEvent.Resources(resourceManager));
 		}
 	}
 	

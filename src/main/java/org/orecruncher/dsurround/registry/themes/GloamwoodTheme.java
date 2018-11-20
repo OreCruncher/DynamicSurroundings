@@ -23,8 +23,6 @@
  */
 package org.orecruncher.dsurround.registry.themes;
 
-import org.orecruncher.dsurround.registry.ThemeInfo;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

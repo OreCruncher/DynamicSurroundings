@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.orecruncher.dsurround.client.ClientRegistry;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.sound.SoundMetadata;
 import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 import org.orecruncher.lib.ForgeUtils;
@@ -99,7 +99,7 @@ public class SoundConfigEntry extends NumberSliderEntry {
 		text.add(TextFormatting.GREEN + modName);
 		text.add(TextFormatting.GOLD + soundName);
 
-		final SoundMetadata data = ClientRegistry.SOUND.getSoundMetadata(soundResource);
+		final SoundMetadata data = RegistryManager.SOUND.getSoundMetadata(soundResource);
 		if (data != null) {
 			boolean spaceAdded = false;
 			final String title = data.getTitle();

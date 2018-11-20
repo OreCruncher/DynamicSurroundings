@@ -24,38 +24,55 @@
 
 package org.orecruncher.dsurround.registry;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.registry.config.ConfigData;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.common.MinecraftForge;
 
 public abstract class Registry {
 
-	public final Side side;
+	private final String name;
 
-	public Registry(@Nonnull final Side side) {
-		this.side = side;
+	public Registry(@Nonnull final String name) {
+		this.name = name;
+		RegistryManager.REGISTRIES.add(this);
+	}
+
+	@Nonnull
+	public String getName() {
+		return this.name;
 	}
 
 	public void init() {
 		// Override to provide initialization prior to configure
 	}
 
-	public final void handleConfigure(@Nonnull final List<ModConfiguration> theList) {
-		for (final ModConfiguration mcf : theList)
+	final void _configure(@Nonnull final ConfigData cfg) {
+		for (final ModConfiguration mcf : cfg) {
 			configure(mcf);
+		}
 	}
 
 	public abstract void configure(@Nonnull final ModConfiguration cfg);
 
 	public void initComplete() {
-		// Override to provide post processing after configure
+		// Override to provide completion routine prior to notifying
+		// registry listeners.
 	}
 
-	public void fini() {
-		// Tear down anything that needs it because the registry is going away
+	/*
+	 * Called by the RegistryManager when the registry is to initialize
+	 * its state from config data.
+	 */
+	void initialize(@Nonnull final ConfigData data) {
+		ModBase.log().info("Initializing registry [%s]", getName());
+		init();
+		_configure(data);
+		initComplete();
+		MinecraftForge.EVENT_BUS.post(new DataRegistryEvent.Reload(this));
 	}
+
 }

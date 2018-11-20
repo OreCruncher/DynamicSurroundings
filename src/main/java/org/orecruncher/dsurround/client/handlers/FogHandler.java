@@ -27,7 +27,6 @@ package org.orecruncher.dsurround.client.handlers;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.ClientRegistry;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.handlers.fog.BedrockFogRangeCalculator;
 import org.orecruncher.dsurround.client.handlers.fog.BiomeFogColorCalculator;
@@ -40,9 +39,10 @@ import org.orecruncher.dsurround.client.handlers.fog.HolisticFogRangeCalculator;
 import org.orecruncher.dsurround.client.handlers.fog.MorningFogRangeCalculator;
 import org.orecruncher.dsurround.client.handlers.fog.WeatherFogRangeCalculator;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
-import org.orecruncher.dsurround.event.ReloadEvent;
-import org.orecruncher.dsurround.registry.ThemeInfo;
+import org.orecruncher.dsurround.registry.DataRegistryEvent;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.effect.EffectRegistry;
+import org.orecruncher.dsurround.registry.themes.ThemeInfo;
 import org.orecruncher.lib.Color;
 import org.orecruncher.lib.math.TimerEMA;
 
@@ -142,17 +142,18 @@ public class FogHandler extends EffectHandlerBase {
 		if (!event.getWorld().isRemote)
 			return;
 
-		setupTheme(event.getWorld());
+		setupTheme(event.getWorld(), RegistryManager.EFFECTS);
 	}
 
 	@SubscribeEvent
-	public void onConfigurationChanged(@Nonnull final ReloadEvent.Configuration event) {
-		setupTheme(EnvironState.getWorld());
+	public void onConfigurationChanged(@Nonnull final DataRegistryEvent.Reload event) {
+		if (event.reg instanceof EffectRegistry)
+			setupTheme(EnvironState.getWorld(), (EffectRegistry) event.reg);
 	}
 
-	protected void setupTheme(@Nonnull final World world) {
+	protected void setupTheme(@Nonnull final World world, @Nonnull final EffectRegistry reg) {
 
-		this.theme = ClientRegistry.EFFECTS.setTheme(EffectRegistry.DEFAULT_THEME);
+		this.theme = reg.setTheme(EffectRegistry.DEFAULT_THEME);
 		// this.theme = ClientRegistry.EFFECTS.setTheme(new
 		// ResourceLocation("dsurround:gloamwood"));
 
