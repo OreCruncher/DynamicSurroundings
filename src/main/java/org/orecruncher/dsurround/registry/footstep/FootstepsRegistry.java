@@ -119,7 +119,7 @@ public final class FootstepsRegistry extends Registry {
 	}
 
 	@Override
-	public void init() {
+	protected void init() {
 
 		this.acousticsManager = new AcousticsManager();
 		this.primitiveMap = new PrimitiveMap(this.acousticsManager);
@@ -152,7 +152,7 @@ public final class FootstepsRegistry extends Registry {
 	}
 
 	@Override
-	public void configure(@Nonnull final ModConfiguration cfg) {
+	protected void configure(@Nonnull final ModConfiguration cfg) {
 		for (final ForgeEntry entry : cfg.forgeMappings) {
 			for (final String name : entry.dictionaryEntries)
 				registerForgeEntries(entry.acousticProfile, name);
@@ -171,7 +171,7 @@ public final class FootstepsRegistry extends Registry {
 	}
 
 	@Override
-	public void initComplete() {
+	protected void initComplete() {
 		AcousticsManager.SWIM = this.acousticsManager.compileAcoustics("_SWIM");
 		AcousticsManager.JUMP = this.acousticsManager.compileAcoustics("_JUMP");
 		AcousticsManager.SPLASH = new IAcoustic[] {

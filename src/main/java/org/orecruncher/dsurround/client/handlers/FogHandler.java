@@ -39,7 +39,7 @@ import org.orecruncher.dsurround.client.handlers.fog.HolisticFogRangeCalculator;
 import org.orecruncher.dsurround.client.handlers.fog.MorningFogRangeCalculator;
 import org.orecruncher.dsurround.client.handlers.fog.WeatherFogRangeCalculator;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
-import org.orecruncher.dsurround.registry.DataRegistryEvent;
+import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.effect.EffectRegistry;
 import org.orecruncher.dsurround.registry.themes.ThemeInfo;
@@ -146,7 +146,7 @@ public class FogHandler extends EffectHandlerBase {
 	}
 
 	@SubscribeEvent
-	public void onConfigurationChanged(@Nonnull final DataRegistryEvent.Reload event) {
+	public void onConfigurationChanged(@Nonnull final RegistryDataEvent.Reload event) {
 		if (event.reg instanceof EffectRegistry)
 			setupTheme(EnvironState.getWorld(), (EffectRegistry) event.reg);
 	}

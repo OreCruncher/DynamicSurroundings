@@ -46,7 +46,7 @@ public abstract class Registry {
 		return this.name;
 	}
 
-	public void init() {
+	protected void init() {
 		// Override to provide initialization prior to configure
 	}
 
@@ -56,9 +56,9 @@ public abstract class Registry {
 		}
 	}
 
-	public abstract void configure(@Nonnull final ModConfiguration cfg);
+	protected abstract void configure(@Nonnull final ModConfiguration cfg);
 
-	public void initComplete() {
+	protected void initComplete() {
 		// Override to provide completion routine prior to notifying
 		// registry listeners.
 	}
@@ -72,7 +72,7 @@ public abstract class Registry {
 		init();
 		_configure(data);
 		initComplete();
-		MinecraftForge.EVENT_BUS.post(new DataRegistryEvent.Reload(this));
+		MinecraftForge.EVENT_BUS.post(new RegistryDataEvent.Reload(this));
 	}
 
 }

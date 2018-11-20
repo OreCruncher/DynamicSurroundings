@@ -26,19 +26,20 @@ package org.orecruncher.dsurround.registry;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.registry.config.ConfigData;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class DataRegistryEvent extends Event {
+public class RegistryDataEvent extends Event {
 
 	/**
 	 * Event fired when resource packs have changed.
+	 *
+	 * (Used by Light Level HUD to reload textures)
 	 */
 	@SideOnly(Side.CLIENT)
-	public static class Resources extends DataRegistryEvent {
+	public static class Resources extends RegistryDataEvent {
 
 		public final IResourceManager manager;
 
@@ -48,31 +49,17 @@ public class DataRegistryEvent extends Event {
 	}
 
 	/**
-	 * Fired by the RegistryManager after the internal data cache
-	 * has been initialized.  Intent is to have any registries
-	 * initialize their content based on the cached data.
+	 * Event fired when a registry has reloaded and any dependents should update
+	 * it's references or take appropriate action.
 	 */
-	public static class Initialize extends DataRegistryEvent {
+	public static class Reload extends RegistryDataEvent {
 
-		public final ConfigData config;
-		
-		public Initialize(@Nonnull final ConfigData configData) {
-			this.config = configData;
-		}
-	}
-	
-	/**
-	 * Event fired when the registry has reloaded and any dependents
-	 * should update it's references or take appropriate action.
-	 */
-	public static class Reload extends DataRegistryEvent {
-		
 		public final Registry reg;
-		
+
 		public Reload(@Nonnull final Registry reg) {
 			this.reg = reg;
 		}
-		
+
 	}
 
 }

@@ -43,7 +43,7 @@ import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.lib.sound.SoundState;
-import org.orecruncher.dsurround.registry.DataRegistryEvent;
+import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 import org.orecruncher.lib.collections.ObjectArray;
@@ -287,7 +287,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	}
 
 	@SubscribeEvent
-	public void registryReloadEvent(@Nonnull final DataRegistryEvent.Reload event) {
+	public void registryReloadEvent(@Nonnull final RegistryDataEvent.Reload event) {
 		if (event.reg instanceof SoundRegistry) {
 			onConnect();
 		}

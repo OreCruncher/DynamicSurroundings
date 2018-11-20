@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
-import org.orecruncher.dsurround.registry.DataRegistryEvent;
+import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.footstep.FootstepsRegistry;
 import org.orecruncher.dsurround.registry.item.IItemData;
@@ -57,7 +57,7 @@ public class ConstructArmoryProducer implements IItemDataProducer {
 	private Class<?> boots;
 
 	@SubscribeEvent
-	public static void registryReload(@Nonnull final DataRegistryEvent.Reload event) {
+	public static void registryReload(@Nonnull final RegistryDataEvent.Reload event) {
 		if (event.reg instanceof FootstepsRegistry) {
 			ARMOR.clear();
 			FOOT.clear();

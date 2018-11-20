@@ -44,18 +44,18 @@ public final class DimensionRegistry extends Registry {
 	}
 
 	@Override
-	public void init() {
+	protected void init() {
 		this.cache.clear();
 		this.dimensionData.clear();
 	}
 
 	@Override
-	public void configure(@Nonnull final ModConfiguration cfg) {
+	protected void configure(@Nonnull final ModConfiguration cfg) {
 		cfg.dimensions.forEach(dim -> register(dim));
 	}
 
 	@Override
-	public void initComplete() {
+	protected void initComplete() {
 		if (ModOptions.logging.enableDebugLogging) {
 			ModBase.log().info("*** DIMENSION REGISTRY (cache) ***");
 			this.cache.forEach(dim -> ModBase.log().info(dim.toString()));

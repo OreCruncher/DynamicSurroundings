@@ -123,7 +123,7 @@ public final class BiomeRegistry extends Registry {
 	}
 
 	@Override
-	public void init() {
+	protected void init() {
 		this.biomeAliases.clear();
 		this.theFakes.clear();
 
@@ -166,7 +166,7 @@ public final class BiomeRegistry extends Registry {
 	}
 
 	@Override
-	public void configure(@Nonnull final ModConfiguration cfg) {
+	protected void configure(@Nonnull final ModConfiguration cfg) {
 		cfg.biomeAlias.forEach((alias, biome) -> registerBiomeAlias(alias, biome));
 		cfg.biomes.forEach(entry -> {
 			final BiomeMatcher matcher = BiomeMatcher.getMatcher(entry);
@@ -175,7 +175,7 @@ public final class BiomeRegistry extends Registry {
 	}
 
 	@Override
-	public void initComplete() {
+	protected void initComplete() {
 		if (ModOptions.logging.enableDebugLogging) {
 			ModBase.log().info("*** BIOME REGISTRY ***");
 			getCombinedStream().sorted().forEach(e -> ModBase.log().info(e.toString()));

@@ -63,7 +63,7 @@ public final class BlockStateRegistry extends Registry {
 	}
 
 	@Override
-	public void init() {
+	protected void init() {
 		this.registry = new Object2ObjectOpenHashMap<>();
 
 		// Wipe out any cached data
@@ -73,7 +73,7 @@ public final class BlockStateRegistry extends Registry {
 	}
 
 	@Override
-	public void configure(@Nonnull final ModConfiguration cfg) {
+	protected void configure(@Nonnull final ModConfiguration cfg) {
 		for (final BlockConfig block : cfg.blocks)
 			register(block);
 	}

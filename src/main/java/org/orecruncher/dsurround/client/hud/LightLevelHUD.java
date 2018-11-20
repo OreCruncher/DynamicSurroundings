@@ -30,7 +30,7 @@ import org.lwjgl.opengl.GL11;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.registry.DataRegistryEvent;
+import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.lib.Color;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
@@ -91,10 +91,10 @@ public final class LightLevelHUD extends GuiOverlay {
 
 	private static enum ColorSet {
 
-		//
+		//@formatter:off
 		BRIGHT(Color.MC_GREEN, Color.MC_YELLOW, Color.MC_RED, Color.MC_DARKAQUA),
-		//
 		DARK(Color.MC_DARKGREEN, Color.MC_GOLD, Color.MC_DARKRED, Color.MC_DARKBLUE);
+		//@formatter:on
 
 		public static final float ALPHA = 1F; // 0.75F;
 
@@ -397,7 +397,7 @@ public final class LightLevelHUD extends GuiOverlay {
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void resourceReloadEvent(final DataRegistryEvent.Resources event) {
+	public static void resourceReloadEvent(final RegistryDataEvent.Resources event) {
 		if (useOldRenderMethod()) {
 			ModBase.log().info("Either OptiFine is installed or Framebuffers are disabled");
 			ModBase.log().info("Using drawString method for light level HUD render");

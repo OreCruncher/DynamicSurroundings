@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
-import org.orecruncher.dsurround.registry.DataRegistryEvent;
+import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.footstep.FootstepsRegistry;
 
@@ -47,7 +47,7 @@ public class SimpleArmorItemData extends SimpleItemData implements IArmorItemDat
 	private static final Map<ItemClass, IAcoustic> FOOT = new Reference2ObjectOpenHashMap<>();
 
 	@SubscribeEvent
-	public static void registryReload(@Nonnull final DataRegistryEvent.Reload event) {
+	public static void registryReload(@Nonnull final RegistryDataEvent.Reload event) {
 		if (event.reg instanceof FootstepsRegistry) {
 			ARMOR.clear();
 			FOOT.clear();

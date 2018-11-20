@@ -50,7 +50,7 @@ import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.commands.CommandCalc;
 import org.orecruncher.dsurround.event.WorldEventDetector;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
-import org.orecruncher.dsurround.registry.DataRegistryEvent;
+import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.lib.ForgeUtils;
 import org.orecruncher.lib.Localization;
 import org.orecruncher.lib.chunk.ClientChunkCache;
@@ -187,7 +187,7 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 	public void onResourceManagerReload(@Nonnull final IResourceManager resourceManager,
 			@Nonnull final Predicate<IResourceType> resourcePredicate) {
 		if (resourcePredicate.test(VanillaResourceType.SOUNDS)) {
-			MinecraftForge.EVENT_BUS.post(new DataRegistryEvent.Resources(resourceManager));
+			MinecraftForge.EVENT_BUS.post(new RegistryDataEvent.Resources(resourceManager));
 		}
 	}
 	

@@ -43,15 +43,22 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEve
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @EventBusSubscriber(modid = ModBase.MOD_ID)
 public final class RegistryManager {
 
+	@SideOnly(Side.CLIENT)
 	public static SoundRegistry SOUND;
+	@SideOnly(Side.CLIENT)
 	public static BiomeRegistry BIOME;
+	@SideOnly(Side.CLIENT)
 	public static BlockStateRegistry BLOCK;
+	@SideOnly(Side.CLIENT)
 	public static ItemRegistry ITEMS;
+	@SideOnly(Side.CLIENT)
 	public static FootstepsRegistry FOOTSTEPS;
+	@SideOnly(Side.CLIENT)
 	public static EffectRegistry EFFECTS;
 
 	// This guy is the only one shared between client and server

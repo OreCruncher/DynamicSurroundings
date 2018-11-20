@@ -77,7 +77,7 @@ public final class SoundRegistry extends Registry {
 	}
 
 	@Override
-	public void init() {
+	protected void init() {
 		this.cullSoundNames.clear();
 		this.blockSoundNames.clear();
 		this.volumeControl.clear();
@@ -111,12 +111,17 @@ public final class SoundRegistry extends Registry {
 	}
 
 	@Override
-	public void configure(@Nonnull final ModConfiguration cfg) {
+	protected void configure(@Nonnull final ModConfiguration cfg) {
 		for (final Entry<String, SoundMetadataConfig> entry : cfg.sounds.entrySet()) {
 			final SoundMetadata data = new SoundMetadata(entry.getValue());
 			final ResourceLocation resource = new ResourceLocation(entry.getKey());
 			this.soundMetadata.put(resource, data);
 		}
+	}
+	
+	@Override
+	protected void initComplete() {
+		ModBase.log().info("%d sound events in private registry", this.myRegistry.size());
 	}
 	
 	private void bakeSoundRegistry() {
@@ -133,8 +138,6 @@ public final class SoundRegistry extends Registry {
 		}
 		
 		SoundEngine.instance().getSoundRegistry().getKeys().forEach(rl -> this.myRegistry.put(rl, new SoundEvent(rl)));
-
-		ModBase.log().info("%d sound events in private registry", this.myRegistry.size());
 	}
 
 	@Nonnull

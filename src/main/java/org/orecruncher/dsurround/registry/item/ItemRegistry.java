@@ -75,7 +75,7 @@ public final class ItemRegistry extends Registry {
 	}
 
 	@Override
-	public void init() {
+	protected void init() {
 		this.classMap = new EnumMap<>(ItemClass.class);
 		this.items = new IdentityHashMap<>(MAP_CAPACITY);
 		this.NONE_DATA = SimpleItemData.CACHE.get(ItemClass.NONE);
@@ -88,14 +88,14 @@ public final class ItemRegistry extends Registry {
 	}
 
 	@Override
-	public void configure(@Nonnull final ModConfiguration cfg) {
+	protected void configure(@Nonnull final ModConfiguration cfg) {
 		for (final Entry<String, List<String>> entry : cfg.items.entrySet()) {
 			process(entry.getValue(), entry.getKey());
 		}
 	}
 
 	@Override
-	public void initComplete() {
+	protected void initComplete() {
 
 		// Iterate through the list of registered Items to see
 		// if we know about them, or can infer based on class

@@ -57,15 +57,13 @@ public class PlaySoundButton extends GuiButtonExt {
 
 	@Override
 	public void drawButton(@Nonnull final Minecraft mc, final int x, final int y, final float partial) {
-		super.drawButton(mc, x, y, partial);
-
 		if (this.playingSound != null) {
 			if (!SoundEngine.instance().isSoundPlaying(this.playingSound)) {
 				this.playingSound = null;
 				updateDisplayText();
 			}
 		}
-
+		super.drawButton(mc, x, y, partial);
 	}
 
 	private void doPlay(@Nonnull final ConfigSound sound) {
