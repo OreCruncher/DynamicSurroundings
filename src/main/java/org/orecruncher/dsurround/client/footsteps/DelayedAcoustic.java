@@ -1,4 +1,5 @@
-/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/*
+ * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -21,19 +22,49 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.footsteps.system.facade;
+package org.orecruncher.dsurround.client.footsteps;
+
+import org.orecruncher.dsurround.registry.acoustics.SimpleAcoustic;
+import org.orecruncher.dsurround.registry.acoustics.IOptions;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-final class ChiselFacadeAccessor extends FacadeAccessor {
+public class DelayedAcoustic extends SimpleAcoustic implements IOptions {
 
-	private static final String CLASS = "team.chisel.api.IFacade";
-	private static final String METHOD = "getFacade";
+	protected long delayMin = 0;
+	protected long delayMax = 0;
 
-	public ChiselFacadeAccessor() {
-		super(CLASS, METHOD);
+	public DelayedAcoustic() {
+		super();
+
+		this.outputOptions = this;
 	}
 
+	@Override
+	public long getDelayMin() {
+		return this.delayMin;
+	}
+
+	@Override
+	public long getDelayMax() {
+		return this.delayMax;
+	}
+
+	public void setDelayMin(final long delay) {
+		this.delayMin = delay;
+	}
+
+	public void setDelayMax(final long delay) {
+		this.delayMax = delay;
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder builder = new StringBuilder();
+		builder.append(super.toString()).append(" (DELAYED min:").append(this.delayMin).append("/max:")
+				.append(this.delayMax).append(')');
+		return builder.toString();
+	}
 }

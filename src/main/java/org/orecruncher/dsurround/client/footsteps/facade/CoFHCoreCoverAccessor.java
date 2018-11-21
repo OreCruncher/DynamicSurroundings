@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.footsteps.system.facade;
+package org.orecruncher.dsurround.client.footsteps.facade;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

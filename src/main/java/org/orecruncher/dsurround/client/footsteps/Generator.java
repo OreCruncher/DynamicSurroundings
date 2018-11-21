@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.footsteps.system;
+package org.orecruncher.dsurround.client.footsteps;
 
 import java.util.Random;
 import java.util.function.Consumer;
@@ -31,11 +31,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.footsteps.implem.BlockMap;
-import org.orecruncher.dsurround.client.footsteps.implem.ConfigOptions;
-import org.orecruncher.dsurround.client.footsteps.implem.Substrate;
-import org.orecruncher.dsurround.client.footsteps.interfaces.FootprintStyle;
-import org.orecruncher.dsurround.client.footsteps.system.accents.FootstepAccents;
+import org.orecruncher.dsurround.client.footsteps.accents.FootstepAccents;
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.sound.SoundEngine;

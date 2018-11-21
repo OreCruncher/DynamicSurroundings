@@ -1,5 +1,4 @@
-/*
- * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -21,41 +20,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.orecruncher.dsurround.client.footsteps.system.accents;
 
-import java.util.ArrayList;
-import java.util.List;
+package org.orecruncher.dsurround.client.footsteps.facade;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.orecruncher.dsurround.client.footsteps.interfaces.IFootstepAccentProvider;
-import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
-import org.orecruncher.lib.collections.ObjectArray;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class FootstepAccents {
+final class ChiselFacadeAccessor extends FacadeAccessor {
 
-	private FootstepAccents() {
+	private static final String CLASS = "team.chisel.api.IFacade";
+	private static final String METHOD = "getFacade";
 
+	public ChiselFacadeAccessor() {
+		super(CLASS, METHOD);
 	}
 
-	private static final List<IFootstepAccentProvider> providers = new ArrayList<>();
-
-	static {
-		providers.add(new ArmorAccents());
-		providers.add(new RainSplashAccent());
-	}
-
-	@Nonnull
-	public static ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos pos,
-			@Nonnull final ObjectArray<IAcoustic> in) {
-		providers.forEach(provider -> provider.provide(entity, pos, in));
-		return in;
-	}
 }

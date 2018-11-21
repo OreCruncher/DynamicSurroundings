@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.client.footsteps.interfaces.FootprintStyle;
+import org.orecruncher.dsurround.client.footsteps.FootprintStyle;
 import org.orecruncher.dsurround.client.fx.particle.mote.IParticleMote;
 import org.orecruncher.dsurround.client.fx.particle.mote.MoteFireFly;
 import org.orecruncher.dsurround.client.fx.particle.mote.MoteFootprint;

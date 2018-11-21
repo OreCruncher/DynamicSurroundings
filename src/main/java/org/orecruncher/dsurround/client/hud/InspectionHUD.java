@@ -33,7 +33,7 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.CapabilityEntityData;
 import org.orecruncher.dsurround.capabilities.entitydata.IEntityData;
-import org.orecruncher.dsurround.client.footsteps.implem.BlockMap;
+import org.orecruncher.dsurround.client.footsteps.BlockMap;
 import org.orecruncher.dsurround.client.fx.BlockEffect;
 import org.orecruncher.dsurround.client.handlers.EffectManager;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;

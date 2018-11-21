@@ -20,14 +20,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.orecruncher.dsurround.client.footsteps.system.facade;
-
-import java.lang.reflect.Method;
+package org.orecruncher.dsurround.client.footsteps.facade;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.orecruncher.dsurround.ModBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -38,66 +33,38 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import team.chisel.ctm.api.IFacade;
 
 @SideOnly(Side.CLIENT)
-class FacadeAccessor implements IFacadeAccessor {
-
-	protected Class<?> IFacadeClass;
-	protected Method accessor;
-
-	public FacadeAccessor(@Nonnull final String clazz, @Nonnull final String method) {
-		try {
-			this.IFacadeClass = Class.forName(clazz);
-			if (this.IFacadeClass != null)
-				this.accessor = getMethod(method);
-			else
-				this.accessor = null;
-		} catch (@Nonnull final Throwable t) {
-			this.IFacadeClass = null;
-			this.accessor = null;
-		}
-	}
+final class ConnectedTexturesAccessor implements IFacadeAccessor {
 
 	@Override
-	@Nonnull
 	public String getName() {
-		return isValid() ? this.IFacadeClass.getName() : "INVALID";
+		return "ConnectedTexturesAccessor";
 	}
 
 	@Override
-	public boolean instanceOf(@Nonnull final Block block) {
-		return isValid() && this.IFacadeClass.isInstance(block);
+	public boolean instanceOf(Block block) {
+		return isValid() && block instanceof IFacade;
 	}
 
 	@Override
 	public boolean isValid() {
-		return this.accessor != null;
+		return true;
 	}
 
 	@Override
-	@Nullable
+	@Nonnull
 	public IBlockState getBlockState(@Nonnull final EntityLivingBase entity, @Nonnull final IBlockState state,
-			@Nonnull final IBlockAccess world, @Nonnull final Vec3d pos, @Nullable final EnumFacing side) {
-		if (isValid())
-			try {
-				if (instanceOf(state.getBlock()))
-					return call(state, world, new BlockPos(pos), side);
-			} catch (@Nonnull final Throwable ex) {
-				ModBase.log().catching(ex);
-				this.IFacadeClass = null;
-				this.accessor = null;
-			}
-
-		return null;
-	}
-
-	protected Method getMethod(@Nonnull final String method) throws Throwable {
-		return this.IFacadeClass.getMethod(method, IBlockAccess.class, BlockPos.class, EnumFacing.class);
-	}
-
-	protected IBlockState call(@Nonnull final IBlockState state, @Nonnull final IBlockAccess world,
-			@Nonnull final BlockPos pos, @Nullable final EnumFacing side) throws Throwable {
-		return (IBlockState) this.accessor.invoke(state.getBlock(), world, pos, side);
+			@Nonnull final IBlockAccess world, @Nonnull final Vec3d pos, @Nonnull final EnumFacing side) {
+		if (state.getBlock() instanceof IFacade) {
+			final IFacade facade = (IFacade) state.getBlock();
+			final BlockPos blockPos = new BlockPos(pos);
+			final IBlockState result = facade.getFacade(entity.getEntityWorld(), blockPos, side, blockPos);
+			if (result != null)
+				return result;
+		}
+		return state;
 	}
 
 }

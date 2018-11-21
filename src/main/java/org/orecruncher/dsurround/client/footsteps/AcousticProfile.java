@@ -21,80 +21,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.orecruncher.dsurround.client.footsteps;
 
-package org.orecruncher.dsurround.client.footsteps.implem;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.registry.acoustics.IOptions;
+import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * An acoustic profile is associated with a given IBlockState.
+ */
 @SideOnly(Side.CLIENT)
-public class ConfigOptions implements IOptions {
+public class AcousticProfile {
 
-	protected long delayMin = 0;
-	protected long delayMax = 0;
-	protected float glidingVolume = 0;
-	protected float glidingPitch = 0;
-	protected float volumeScale = 1F;
-	protected float pitchScale = 1F;
-
-	public ConfigOptions() {
-
+	public static final AcousticProfile NO_PROFILE = new AcousticProfile();
+	
+	private AcousticProfile() {
+		// Strictly internal
 	}
 
-	@Override
-	public long getDelayMin() {
-		return this.delayMin;
+	@Nullable
+	public IAcoustic[] get() {
+		return AcousticRegistry.EMPTY;
 	}
 
-	public void setDelayMin(final long v) {
-		this.delayMin = v;
-	}
+	/**
+	 * A Static acoustic profile is computed and stored for reuse. The profile does
+	 * not change over time.
+	 */
+	public static class Static extends AcousticProfile {
 
-	@Override
-	public long getDelayMax() {
-		return this.delayMax;
-	}
+		public static final Static NOT_EMITTER = new AcousticProfile.Static(AcousticRegistry.NOT_EMITTER);
 
-	public void setDelayMax(final long v) {
-		this.delayMax = v;
-	}
+		protected final IAcoustic[] acoustics;
 
-	@Override
-	public float getGlidingVolume() {
-		return this.glidingVolume;
-	}
+		public Static(@Nonnull final IAcoustic[] acoustics) {
+			this.acoustics = acoustics;
+		}
 
-	public void setGlidingVolume(final float v) {
-		this.glidingVolume = v;
-	}
-
-	@Override
-	public float getGlidingPitch() {
-		return this.glidingPitch;
-	}
-
-	public void setGlidingPitch(final float v) {
-		this.glidingPitch = v;
-	}
-
-	@Override
-	public float getVolumeScale() {
-		return this.volumeScale;
-	}
-
-	public void setVolumeScale(final float s) {
-		this.volumeScale = s;
-	}
-
-	@Override
-	public float getPitchScale() {
-		return this.pitchScale;
-	}
-
-	public void setPitchScale(final float p) {
-		this.pitchScale = p;
+		@Override
+		@Nonnull
+		public IAcoustic[] get() {
+			return this.acoustics;
+		}
 	}
 
 }

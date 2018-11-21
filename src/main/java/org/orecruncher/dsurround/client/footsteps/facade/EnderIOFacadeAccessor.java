@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.footsteps.system.facade;
+package org.orecruncher.dsurround.client.footsteps.facade;
 
 import java.lang.reflect.Method;
 

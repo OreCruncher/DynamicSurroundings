@@ -21,50 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.orecruncher.dsurround.client.footsteps.accents;
 
-package org.orecruncher.dsurround.client.footsteps.implem;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.orecruncher.dsurround.registry.acoustics.SimpleAcoustic;
-import org.orecruncher.dsurround.registry.acoustics.IOptions;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import org.orecruncher.dsurround.client.footsteps.IFootstepAccentProvider;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
+import org.orecruncher.lib.collections.ObjectArray;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class DelayedAcoustic extends SimpleAcoustic implements IOptions {
+public class FootstepAccents {
 
-	protected long delayMin = 0;
-	protected long delayMax = 0;
+	private FootstepAccents() {
 
-	public DelayedAcoustic() {
-		super();
-
-		this.outputOptions = this;
 	}
 
-	@Override
-	public long getDelayMin() {
-		return this.delayMin;
+	private static final List<IFootstepAccentProvider> providers = new ArrayList<>();
+
+	static {
+		providers.add(new ArmorAccents());
+		providers.add(new RainSplashAccent());
 	}
 
-	@Override
-	public long getDelayMax() {
-		return this.delayMax;
-	}
-
-	public void setDelayMin(final long delay) {
-		this.delayMin = delay;
-	}
-
-	public void setDelayMax(final long delay) {
-		this.delayMax = delay;
-	}
-
-	@Override
-	public String toString() {
-		final StringBuilder builder = new StringBuilder();
-		builder.append(super.toString()).append(" (DELAYED min:").append(this.delayMin).append("/max:")
-				.append(this.delayMax).append(')');
-		return builder.toString();
+	@Nonnull
+	public static ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos pos,
+			@Nonnull final ObjectArray<IAcoustic> in) {
+		providers.forEach(provider -> provider.provide(entity, pos, in));
+		return in;
 	}
 }

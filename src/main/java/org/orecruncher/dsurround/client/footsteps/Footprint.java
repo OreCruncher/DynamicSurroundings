@@ -1,4 +1,5 @@
-/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/*
+ * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -21,45 +22,61 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.footsteps.system.facade;
+package org.orecruncher.dsurround.client.footsteps;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-interface IFacadeAccessor {
+public class Footprint {
 
-	/*
-	 * Name of the facade accessor for logging and identification purposes.
-	 */
-	@Nonnull
-	String getName();
+	private FootprintStyle style;
+	private EntityLivingBase entity;
+	private Vec3d stepLoc;
+	private boolean isRightFoot;
+	private float rotation;
+	private float scale;
 
-	/*
-	 * Determines if the block can be handled by the accessor
-	 */
-	boolean instanceOf(@Nonnull final Block block);
+	public static Footprint produce(@Nonnull final FootprintStyle style, @Nonnull final EntityLivingBase entity,
+			@Nonnull final Vec3d stepLoc, final float rotation, final float scale, final boolean rightFoot) {
+		final Footprint print = new Footprint();
+		print.style = style;
+		print.entity = entity;
+		print.stepLoc = stepLoc;
+		print.rotation = rotation;
+		print.isRightFoot = rightFoot;
+		print.scale = scale;
+		return print;
+	}
 
-	/*
-	 * Indicates if the accessor is valid.  It could be invalid if the associated
-	 * mod is not installed.
-	 */
-	boolean isValid();
+	public FootprintStyle getStyle() {
+		return this.style;
+	}
 
-	/*
-	 * Requests the underlying IBlockState for the block.  The underlying IBlockState is
-	 * what should be used when generating sound effects.
-	 */
+	public EntityLivingBase getEntity() {
+		return this.entity;
+	}
+
 	@Nullable
-	IBlockState getBlockState(@Nonnull final EntityLivingBase entity, @Nonnull final IBlockState state, @Nonnull final IBlockAccess world,
-			@Nonnull final Vec3d pos, @Nullable final EnumFacing side);
+	public Vec3d getStepLocation() {
+		return this.stepLoc;
+	}
+
+	public boolean isRightFoot() {
+		return this.isRightFoot;
+	}
+
+	public float getRotation() {
+		return this.rotation;
+	}
+
+	public float getScale() {
+		return this.scale;
+	}
+
 }

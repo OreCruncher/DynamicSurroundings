@@ -26,7 +26,7 @@ package org.orecruncher.dsurround.registry.acoustics;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.client.footsteps.implem.ConfigOptions;
+import org.orecruncher.dsurround.client.footsteps.ConfigOptions;
 import org.orecruncher.dsurround.client.weather.Weather;
 
 import net.minecraft.util.math.Vec3d;

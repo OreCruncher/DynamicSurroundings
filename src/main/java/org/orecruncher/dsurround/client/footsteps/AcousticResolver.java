@@ -21,14 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.orecruncher.dsurround.client.footsteps.system;
+package org.orecruncher.dsurround.client.footsteps;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.client.footsteps.implem.BlockMap;
-import org.orecruncher.dsurround.client.footsteps.implem.Substrate;
-import org.orecruncher.dsurround.client.footsteps.system.facade.FacadeHelper;
+import org.orecruncher.dsurround.client.footsteps.facade.FacadeHelper;
 import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
 import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.lib.MyUtils;

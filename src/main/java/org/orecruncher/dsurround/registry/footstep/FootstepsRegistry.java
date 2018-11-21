@@ -39,10 +39,10 @@ import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.footsteps.implem.AcousticProfile;
-import org.orecruncher.dsurround.client.footsteps.implem.BlockMap;
-import org.orecruncher.dsurround.client.footsteps.system.Generator;
-import org.orecruncher.dsurround.client.footsteps.system.GeneratorQP;
+import org.orecruncher.dsurround.client.footsteps.AcousticProfile;
+import org.orecruncher.dsurround.client.footsteps.BlockMap;
+import org.orecruncher.dsurround.client.footsteps.Generator;
+import org.orecruncher.dsurround.client.footsteps.GeneratorQP;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;

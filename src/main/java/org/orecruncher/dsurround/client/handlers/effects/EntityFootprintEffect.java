@@ -33,7 +33,7 @@ import org.orecruncher.dsurround.client.effects.EntityEffect;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactory;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactoryFilter;
 import org.orecruncher.dsurround.client.effects.IEntityEffectHandlerState;
-import org.orecruncher.dsurround.client.footsteps.system.Generator;
+import org.orecruncher.dsurround.client.footsteps.Generator;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.lib.random.XorShiftRandom;

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.footsteps.system;
+package org.orecruncher.dsurround.client.footsteps;
 
 import java.util.Collection;
 

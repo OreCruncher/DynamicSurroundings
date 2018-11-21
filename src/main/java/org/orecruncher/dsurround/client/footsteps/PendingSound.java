@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.footsteps.implem;
+package org.orecruncher.dsurround.client.footsteps;
 
 import javax.annotation.Nonnull;
 

@@ -21,29 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.orecruncher.dsurround.client.footsteps.interfaces;
+package org.orecruncher.dsurround.client.footsteps;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
+import org.orecruncher.lib.collections.ObjectArray;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * Interface for objects that provide additional accents to acoustics when
+ * producing step sounds.
+ */
 @SideOnly(Side.CLIENT)
-public enum FootprintStyle {
-	//@formatter:off
-	SHOE,
-	SQUARE,
-	HORSESHOE,
-	BIRD,
-	PAW,
-	SQUARE_SOLID,
-	LOWRES_SQUARE;
-	//@formatter:on
+public interface IFootstepAccentProvider {
 
-	@Nonnull
-	public static FootprintStyle getStyle(final int v) {
-		if (v >= values().length)
-			return LOWRES_SQUARE;
-		return values()[v];
-	}
+	String getName();
+
+	ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos pos,
+			@Nonnull final ObjectArray<IAcoustic> in);
+
 }

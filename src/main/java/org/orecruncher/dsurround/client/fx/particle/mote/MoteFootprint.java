@@ -26,7 +26,7 @@ package org.orecruncher.dsurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.footsteps.interfaces.FootprintStyle;
+import org.orecruncher.dsurround.client.footsteps.FootprintStyle;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.lib.WorldUtils;
 import org.orecruncher.lib.chunk.ClientChunkCache;
