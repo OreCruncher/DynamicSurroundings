@@ -24,15 +24,12 @@
 
 package org.orecruncher.dsurround.registry.footstep;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -44,11 +41,8 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.footsteps.implem.AcousticProfile;
 import org.orecruncher.dsurround.client.footsteps.implem.BlockMap;
-import org.orecruncher.dsurround.client.footsteps.implem.PrimitiveMap;
-import org.orecruncher.dsurround.client.footsteps.parsers.AcousticsJsonReader;
 import org.orecruncher.dsurround.client.footsteps.system.Generator;
 import org.orecruncher.dsurround.client.footsteps.system.GeneratorQP;
-import org.orecruncher.dsurround.client.footsteps.util.ConfigProperty;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
@@ -58,8 +52,6 @@ import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.config.ModConfiguration.ForgeEntry;
 import org.orecruncher.dsurround.registry.config.VariatorConfig;
-import org.orecruncher.dsurround.registry.config.packs.IMyResourcePack;
-import org.orecruncher.dsurround.registry.config.packs.ResourcePacks;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
@@ -102,7 +94,6 @@ public final class FootstepsRegistry extends Registry {
 	private static final List<String> FOOTPRINT_SOUND_PROFILE = Arrays.asList("minecraft:block.sand.step",
 			"minecraft:block.gravel.step", "minecraft:block.snow.step");
 
-	private PrimitiveMap primitiveMap;
 	private BlockMap blockMap;
 
 	private Set<Material> FOOTPRINT_MATERIAL;
@@ -127,7 +118,6 @@ public final class FootstepsRegistry extends Registry {
 	protected void preInit() {
 
 		final AcousticRegistry acoustics = RegistryManager.ACOUSTICS;
-		this.primitiveMap = new PrimitiveMap(acoustics);
 		this.blockMap = new BlockMap(acoustics);
 		this.FOOTPRINT_MATERIAL = new ReferenceOpenHashSet<>();
 		this.FOOTPRINT_STATES = new ReferenceOpenHashSet<>();
@@ -148,12 +138,7 @@ public final class FootstepsRegistry extends Registry {
 		this.JUMP = null;
 		this.SPLASH = null;
 
-		final List<IMyResourcePack> repo = ResourcePacks.findResourcePacks();
-		reloadAcoustics(repo);
-		reloadPrimitiveMap(repo);
-
 		seedMap();
-
 	}
 
 	@Override
@@ -231,32 +216,6 @@ public final class FootstepsRegistry extends Registry {
 			}
 		}
 		this.missingAcoustics = null;
-	}
-
-	private void reloadPrimitiveMap(@Nonnull final List<IMyResourcePack> repo) {
-		for (final IMyResourcePack pack : repo) {
-			try (final InputStream stream = pack.getInputStream(ResourcePacks.PRIMITIVEMAP_RESOURCE)) {
-				if (stream != null)
-					this.primitiveMap.setup(ConfigProperty.fromStream(stream));
-			} catch (final IOException e) {
-				ModBase.log().debug("Unable to load primitive map data from pack %s", pack.getModName());
-			}
-		}
-	}
-
-	private void reloadAcoustics(@Nonnull final List<IMyResourcePack> repo) {
-		for (final IMyResourcePack pack : repo) {
-			try (final InputStream stream = pack.getInputStream(ResourcePacks.ACOUSTICS_RESOURCE)) {
-				if (stream != null)
-					try (final Scanner scanner = new Scanner(stream)) {
-						final String jasonString = scanner.useDelimiter("\\Z").next();
-
-						new AcousticsJsonReader().parseJSON(jasonString, RegistryManager.ACOUSTICS);
-					}
-			} catch (final IOException e) {
-				ModBase.log().debug("Unable to load acoustic data from pack %s", pack.getModName());
-			}
-		}
 	}
 
 	private void seedMap() {
@@ -364,14 +323,14 @@ public final class FootstepsRegistry extends Registry {
 		final String substrate = String.format(Locale.ENGLISH, "%.2f_%.2f", type.getVolume(), type.getPitch());
 
 		// Check for primitive in register
-		IAcoustic[] primitive = this.primitiveMap.getPrimitiveMapSubstrate(soundName, substrate);
+		IAcoustic[] primitive = RegistryManager.ACOUSTICS.getPrimitiveSubstrate(soundName, substrate);
 		if (primitive == null) {
 			if (flag) {
 				// Check sound
-				primitive = this.primitiveMap.getPrimitiveMapSubstrate(soundName, "break_" + soundName);
+				primitive = RegistryManager.ACOUSTICS.getPrimitiveSubstrate(soundName, "break_" + soundName);
 			}
 			if (primitive == null) {
-				primitive = this.primitiveMap.getPrimitiveMap(soundName);
+				primitive = RegistryManager.ACOUSTICS.getPrimitive(soundName);
 			}
 		}
 

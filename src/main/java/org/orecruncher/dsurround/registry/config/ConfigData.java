@@ -135,7 +135,7 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 				// This bit o crap will force the validation of the object
 				// in the stream.
 				try {
-					reader.mark(64 * 1024);
+					reader.mark(128 * 1024);
 					@SuppressWarnings({ "unused", "resource" })
 					final JsonReader r = new JsonReader(reader);
 					@SuppressWarnings("unused")

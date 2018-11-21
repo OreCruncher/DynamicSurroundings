@@ -54,10 +54,6 @@ public final class ResourcePacks {
 
 	public static final ResourceLocation MANIFEST_RESOURCE = new ResourceLocation(ModBase.RESOURCE_ID,
 			"manifest.json");
-	public static final ResourceLocation ACOUSTICS_RESOURCE = new ResourceLocation(ModBase.RESOURCE_ID,
-			"acoustics.json");
-	public static final ResourceLocation PRIMITIVEMAP_RESOURCE = new ResourceLocation(ModBase.RESOURCE_ID,
-			"primitivemap.json");
 	public static final ResourceLocation CONFIGURE_RESOURCE = new ResourceLocation(ModBase.RESOURCE_ID,
 			"configure.json");
 
