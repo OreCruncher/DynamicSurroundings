@@ -33,7 +33,6 @@ import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
 import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
-import org.orecruncher.dsurround.registry.footstep.FootstepsRegistry;
 import org.orecruncher.dsurround.registry.item.IItemData;
 import org.orecruncher.dsurround.registry.item.ItemClass;
 import org.orecruncher.dsurround.registry.item.SimpleItemData;
@@ -41,11 +40,11 @@ import org.orecruncher.dsurround.registry.item.SimpleItemData;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@EventBusSubscriber(modid = ModBase.MOD_ID, value = Side.CLIENT)
 public class ConstructArmoryProducer implements IItemDataProducer {
 
 	static final Map<String, IAcoustic> ARMOR = new Object2ObjectOpenHashMap<>();
@@ -58,7 +57,7 @@ public class ConstructArmoryProducer implements IItemDataProducer {
 
 	@SubscribeEvent
 	public static void registryReload(@Nonnull final RegistryDataEvent.Reload event) {
-		if (event.reg instanceof FootstepsRegistry) {
+		if (event.reg instanceof AcousticRegistry) {
 			ARMOR.clear();
 			FOOT.clear();
 

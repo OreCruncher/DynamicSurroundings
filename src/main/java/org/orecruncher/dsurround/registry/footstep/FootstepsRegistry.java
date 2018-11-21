@@ -39,7 +39,6 @@ import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.footsteps.AcousticProfile;
 import org.orecruncher.dsurround.client.footsteps.BlockMap;
 import org.orecruncher.dsurround.client.footsteps.Generator;
 import org.orecruncher.dsurround.client.footsteps.GeneratorQP;
@@ -287,9 +286,9 @@ public final class FootstepsRegistry extends Registry {
 	 * @return AcousticProfile for the state, null otherwise
 	 */
 	@Nonnull
-	public AcousticProfile resolve(@Nonnull final IBlockState state) {
+	public IAcoustic[] resolve(@Nonnull final IBlockState state) {
 		final IAcoustic[] acoustics = resolvePrimitive(state);
-		return acoustics != null ? new AcousticProfile(acoustics) : AcousticProfile.NO_PROFILE;
+		return acoustics != null ? acoustics : AcousticRegistry.EMPTY;
 	}
 
 	/**

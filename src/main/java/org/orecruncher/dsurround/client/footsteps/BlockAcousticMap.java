@@ -29,6 +29,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
 import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 
@@ -47,12 +48,12 @@ public final class BlockAcousticMap {
 	 * the cache for future lookups.
 	 */
 	public static interface IAcousticResolver {
-		AcousticProfile resolve(@Nonnull final IBlockState state);
+		IAcoustic[] resolve(@Nonnull final IBlockState state);
 	}
 
 	protected final IAcousticResolver resolver;
-	protected Map<BlockStateMatcher, AcousticProfile> data = new Object2ObjectOpenHashMap<>();
-	protected Map<IBlockState, AcousticProfile> cache = new Reference2ObjectOpenHashMap<>();
+	protected Map<BlockStateMatcher, IAcoustic[]> data = new Object2ObjectOpenHashMap<>();
+	protected Map<IBlockState, IAcoustic[]> cache = new Reference2ObjectOpenHashMap<>();
 
 	/**
 	 * CTOR for building a map that has no resolver and performs special lookups
@@ -66,13 +67,13 @@ public final class BlockAcousticMap {
 		this.resolver = resolver;
 
 		// Air is a very known quantity
-		this.data.put(BlockStateMatcher.AIR, AcousticProfile.NOT_EMITTER);
+		this.data.put(BlockStateMatcher.AIR, AcousticRegistry.NOT_EMITTER);
 	}
 
 	@Nonnull
-	protected AcousticProfile cacheMiss(@Nonnull final IBlockState state) {
+	protected IAcoustic[] cacheMiss(@Nonnull final IBlockState state) {
 		final BlockStateMatcher matcher = BlockStateMatcher.create(state);
-		AcousticProfile result = this.data.get(matcher);
+		IAcoustic[] result = this.data.get(matcher);
 		if (result != null)
 			return result;
 		if (matcher.hasSubtypes())
@@ -81,7 +82,7 @@ public final class BlockAcousticMap {
 			return result;
 		if (this.resolver != null)
 			result = this.resolver.resolve(state);
-		return result != null ? result : AcousticProfile.NO_PROFILE;
+		return result != null ? result : AcousticRegistry.EMPTY;
 	}
 
 	/**
@@ -90,16 +91,16 @@ public final class BlockAcousticMap {
 	 */
 	@Nullable
 	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state) {
-		AcousticProfile result = this.cache.get(state);
+		IAcoustic[] result = this.cache.get(state);
 		if (result == null) {
 			result = cacheMiss(state);
 			this.cache.put(state, result);
 		}
-		return result.get();
+		return result;
 	}
 
 	public void put(@Nonnull final BlockStateMatcher info, @Nonnull final IAcoustic[] acoustics) {
-		this.data.put(info, new AcousticProfile(acoustics));
+		this.data.put(info, acoustics);
 	}
 
 	public void clear() {
