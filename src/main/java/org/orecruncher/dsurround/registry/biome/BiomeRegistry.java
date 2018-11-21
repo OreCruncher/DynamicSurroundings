@@ -92,7 +92,7 @@ public final class BiomeRegistry extends Registry {
 	private final ObjectOpenHashSet<FakeBiome> theFakes = new ObjectOpenHashSet<>();
 
 	public BiomeRegistry() {
-		super("Biome Data");
+		super("Biome Registry");
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 

@@ -25,6 +25,7 @@
 package org.orecruncher.dsurround.registry.blockstate;
 
 import java.util.Map;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import javax.annotation.Nonnull;
@@ -57,9 +58,10 @@ public final class BlockStateRegistry extends Registry {
 	private static final BlockStateProfile NO_PROFILE = new BlockStateProfile().setChance(0);
 
 	private Map<BlockStateMatcher, BlockStateProfile> registry;
+	private int blockStates;
 
 	public BlockStateRegistry() {
-		super("BlockState Data");
+		super("BlockState Registry");
 	}
 
 	@Override
@@ -67,15 +69,39 @@ public final class BlockStateRegistry extends Registry {
 		this.registry = new Object2ObjectOpenHashMap<>();
 
 		// Wipe out any cached data
-		StreamSupport.stream(ForgeRegistries.BLOCKS.spliterator(), false)
-				.map(block -> block.getBlockState().getValidStates()).flatMap(l -> l.stream())
-				.forEach(state -> BlockStateUtil.setStateData(state, null));
+		getBlockStates().forEach(state -> BlockStateUtil.setStateData(state, null));
 	}
 
 	@Override
 	protected void init(@Nonnull final ModConfiguration cfg) {
 		for (final BlockConfig block : cfg.blocks)
 			register(block);
+	}
+
+	@Override
+	protected void postInit() {
+		// Since we now have a reference in the BlockState entity may
+		// as well set it so we can dump our registry.
+		this.blockStates = 0;
+		getBlockStates().forEach(state -> {
+			get(state);
+			this.blockStates++;
+		});
+	}
+
+	@Override
+	protected void complete() {
+		ModBase.log().info("[%s] %d block states processed, %d registry entries", getName(), this.blockStates,
+				this.registry.size());
+		this.registry = null;
+	}
+
+	private Stream<IBlockState> getBlockStates() {
+		//@formatter:off
+		return StreamSupport.stream(ForgeRegistries.BLOCKS.spliterator(), false)
+			.map(block -> block.getBlockState().getValidStates())
+			.flatMap(l -> l.stream());
+		//@formatter:on
 	}
 
 	@Nonnull

@@ -33,8 +33,8 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.config.EntityConfig;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
-import org.orecruncher.dsurround.registry.themes.GloamwoodTheme;
-import org.orecruncher.dsurround.registry.themes.ThemeInfo;
+import org.orecruncher.dsurround.registry.effect.theme.GloamwoodTheme;
+import org.orecruncher.dsurround.registry.effect.theme.ThemeInfo;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
@@ -59,7 +59,7 @@ public class EffectRegistry extends Registry {
 	protected ThemeInfo activeTheme = DEFAULT_THEME_INFO;
 
 	public EffectRegistry() {
-		super("Special Effects");
+		super("Effects Registry");
 	}
 
 	@Override
@@ -120,6 +120,10 @@ public class EffectRegistry extends Registry {
 			}
 		}
 		
+	}
+	
+	@Override
+	protected void complete() {
 		// Iterate through the registered entities to see how they match up against
 		// the config.
 		ModBase.log().debug("Entity Effect Configuration");
@@ -131,18 +135,6 @@ public class EffectRegistry extends Registry {
 				ModBase.log().debug("%s = %s", r.toString(), info.toString());
 			}
 		}
-
-//		ModBase.log().debug("Entity Effect Entries");
-//		ModBase.log().debug("=====================");
-//		for (final Entry<Class<? extends Entity>, EntityEffectInfo> e : this.effects.entrySet()) {
-//			final ResourceLocation r = EntityList.getKey(e.getKey());
-//			final String keyName;
-//			if (r != null)
-//				keyName = r.toString();
-//			else
-//				keyName = "No ID Found";
-//			ModBase.log().debug("%s = %s (%s)", keyName, e.getValue().toString(), e.getKey().getName());
-//		}
 	}
 
 	@Nonnull

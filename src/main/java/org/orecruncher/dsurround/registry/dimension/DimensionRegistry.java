@@ -40,7 +40,7 @@ import net.minecraft.world.World;
 public final class DimensionRegistry extends Registry {
 
 	public DimensionRegistry() {
-		super("Dimension Data");
+		super("Dimension Registry");
 	}
 
 	@Override

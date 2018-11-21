@@ -120,7 +120,7 @@ public final class FootstepsRegistry extends Registry {
 	public IAcoustic[] SPLASH;
 
 	public FootstepsRegistry() {
-		super("Footstep Sounds");
+		super("Footsteps Registry");
 	}
 
 	@Override

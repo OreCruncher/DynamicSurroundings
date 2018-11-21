@@ -71,7 +71,7 @@ public final class SoundRegistry extends Registry {
 	private final Map<ResourceLocation, SoundEvent> myRegistry = new Object2ObjectOpenHashMap<>();
 
 	public SoundRegistry() {
-		super("Sounds");
+		super("Sound Registry");
 		this.volumeControl = new Object2FloatOpenHashMap<>();
 		this.volumeControl.defaultReturnValue(DEFAULT_SOUNDFACTOR);
 	}

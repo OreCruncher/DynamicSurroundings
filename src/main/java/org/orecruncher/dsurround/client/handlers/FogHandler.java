@@ -42,7 +42,7 @@ import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.effect.EffectRegistry;
-import org.orecruncher.dsurround.registry.themes.ThemeInfo;
+import org.orecruncher.dsurround.registry.effect.theme.ThemeInfo;
 import org.orecruncher.lib.Color;
 import org.orecruncher.lib.math.TimerEMA;
 

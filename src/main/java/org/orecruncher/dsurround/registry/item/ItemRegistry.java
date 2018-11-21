@@ -71,7 +71,7 @@ public final class ItemRegistry extends Registry {
 	private Map<Item, IItemData> items;
 
 	public ItemRegistry() {
-		super("Item Data");
+		super("Item Registry");
 	}
 
 	@Override
