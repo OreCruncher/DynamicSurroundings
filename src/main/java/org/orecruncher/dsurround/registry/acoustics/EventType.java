@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.footsteps.interfaces;
+package org.orecruncher.dsurround.registry.acoustics;
 
 import javax.annotation.Nonnull;
 

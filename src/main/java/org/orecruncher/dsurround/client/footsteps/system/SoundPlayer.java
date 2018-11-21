@@ -31,10 +31,10 @@ import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.footsteps.implem.PendingSound;
-import org.orecruncher.dsurround.client.footsteps.interfaces.EventType;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.client.sound.BasicSound;
 import org.orecruncher.dsurround.client.sound.FootstepSound;
+import org.orecruncher.dsurround.registry.acoustics.EventType;
 import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.dsurround.registry.acoustics.IOptions;
 import org.orecruncher.dsurround.registry.acoustics.ISoundPlayer;

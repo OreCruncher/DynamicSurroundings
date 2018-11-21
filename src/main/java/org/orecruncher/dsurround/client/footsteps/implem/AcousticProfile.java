@@ -39,10 +39,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class AcousticProfile {
 
 	public static final AcousticProfile NO_PROFILE = new AcousticProfile();
+	
+	private AcousticProfile() {
+		// Strictly internal
+	}
 
 	@Nullable
 	public IAcoustic[] get() {
-		return null;
+		return AcousticRegistry.EMPTY;
 	}
 
 	/**

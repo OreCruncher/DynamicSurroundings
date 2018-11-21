@@ -37,7 +37,6 @@ import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.footsteps.implem.DelayedAcoustic;
-import org.orecruncher.dsurround.client.footsteps.interfaces.EventType;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;

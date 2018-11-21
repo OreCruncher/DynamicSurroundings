@@ -34,7 +34,6 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.footsteps.implem.BlockMap;
 import org.orecruncher.dsurround.client.footsteps.implem.ConfigOptions;
 import org.orecruncher.dsurround.client.footsteps.implem.Substrate;
-import org.orecruncher.dsurround.client.footsteps.interfaces.EventType;
 import org.orecruncher.dsurround.client.footsteps.interfaces.FootprintStyle;
 import org.orecruncher.dsurround.client.footsteps.system.accents.FootstepAccents;
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
@@ -42,6 +41,7 @@ import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironStat
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
+import org.orecruncher.dsurround.registry.acoustics.EventType;
 import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.dsurround.registry.footstep.Variator;
 import org.orecruncher.dsurround.registry.sound.SoundRegistry;
