@@ -26,6 +26,7 @@ package org.orecruncher.dsurround.client.footsteps.interfaces;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.lib.collections.ObjectArray;
 
 import net.minecraft.entity.EntityLivingBase;

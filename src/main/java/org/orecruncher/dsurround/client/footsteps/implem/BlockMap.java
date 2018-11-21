@@ -35,8 +35,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.registry.RegistryManager;
+import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 import org.orecruncher.lib.BlockNameUtil;
 import org.orecruncher.lib.BlockNameUtil.NameResult;
@@ -56,7 +57,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class BlockMap {
 
-	private final AcousticsManager acousticsManager;
+	private final AcousticRegistry acousticsManager;
 	private final BlockAcousticMap metaMap;
 	private final Map<Substrate, BlockAcousticMap> substrateMap = new EnumMap<>(Substrate.class);
 
@@ -175,7 +176,7 @@ public class BlockMap {
 		macros.put("#beets", entries);
 	}
 
-	public BlockMap(@Nonnull final AcousticsManager manager) {
+	public BlockMap(@Nonnull final AcousticRegistry manager) {
 		this.acousticsManager = manager;
 		this.metaMap = new BlockAcousticMap(bs -> RegistryManager.FOOTSTEPS.resolve(bs));
 	}
@@ -193,7 +194,7 @@ public class BlockMap {
 	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state, @Nullable final Substrate substrate) {
 		// Walking an edge of a block can produce this
 		if (state == Blocks.AIR.getDefaultState())
-			return AcousticsManager.NOT_EMITTER;
+			return AcousticRegistry.NOT_EMITTER;
 		if (substrate != null) {
 			final BlockAcousticMap sub = this.substrateMap.get(substrate);
 			return sub != null ? sub.getBlockAcoustics(state) : null;
@@ -252,7 +253,7 @@ public class BlockMap {
 
 	@Nonnull
 	private static String combine(@Nonnull final IAcoustic[] acoustics) {
-		return String.join(",", Arrays.stream(acoustics).map(IAcoustic::getAcousticName).toArray(String[]::new));
+		return String.join(",", Arrays.stream(acoustics).map(IAcoustic::getName).toArray(String[]::new));
 	}
 
 	public void collectData(@Nonnull final World world, @Nonnull final IBlockState state, @Nonnull final BlockPos pos,

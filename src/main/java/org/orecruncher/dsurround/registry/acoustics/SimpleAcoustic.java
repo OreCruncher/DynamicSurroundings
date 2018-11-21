@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.footsteps.implem;
+package org.orecruncher.dsurround.registry.acoustics;
 
 import java.util.Random;
 
@@ -30,19 +30,19 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.footsteps.interfaces.EventType;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IOptions;
-import org.orecruncher.dsurround.client.footsteps.interfaces.ISoundPlayer;
 
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/*
+ * A simple acoustic is one that is backed by a singular sound event.  Most sounds
+ * that are played in Minecraft can be considered a simple acoustic.
+ */
 @SideOnly(Side.CLIENT)
-public class BasicAcoustic implements IAcoustic {
+public class SimpleAcoustic implements IAcoustic {
 
-	protected String acousticName;
 	protected SoundEvent sound;
 	protected float volMin = 1f;
 	protected float volMax = 1f;
@@ -51,18 +51,18 @@ public class BasicAcoustic implements IAcoustic {
 
 	protected IOptions outputOptions;
 
-	public BasicAcoustic() {
-		this("Unnamed");
+	public SimpleAcoustic() {
+		// Used in various builders
 	}
 
-	public BasicAcoustic(@Nonnull final String name) {
-		this.acousticName = name;
+	public SimpleAcoustic(@Nonnull final SoundEvent evt) {
+		this.sound = evt;
 	}
 
 	@Override
 	@Nonnull
-	public String getAcousticName() {
-		return this.acousticName;
+	public String getName() {
+		return this.sound.getSoundName().toString();
 	}
 
 	@Override
@@ -127,11 +127,11 @@ public class BasicAcoustic implements IAcoustic {
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append(getAcousticName()).append('[');
-		if (this.sound != null)
-			builder.append(this.sound.getSoundName());
-		else
-			builder.append("<NO SOUND>");
+		builder.append(getName()).append('[');
+		builder.append("vMin:").append(this.volMin).append(',');
+		builder.append("vMax:").append(this.volMax).append(',');
+		builder.append("pMin:").append(this.pitchMax).append(',');
+		builder.append("pMax:").append(this.pitchMax);
 		builder.append(']');
 		return builder.toString();
 	}

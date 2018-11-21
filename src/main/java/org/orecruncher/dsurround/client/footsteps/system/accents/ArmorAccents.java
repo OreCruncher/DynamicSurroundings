@@ -26,9 +26,9 @@ package org.orecruncher.dsurround.client.footsteps.system.accents;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IFootstepAccentProvider;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.dsurround.registry.item.IArmorItemData;
 import org.orecruncher.dsurround.registry.item.IItemData;
 import org.orecruncher.dsurround.registry.item.ItemClass;

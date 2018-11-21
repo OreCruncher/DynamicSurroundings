@@ -22,25 +22,57 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.footsteps.interfaces;
+package org.orecruncher.dsurround.registry.acoustics;
+
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.orecruncher.dsurround.client.footsteps.interfaces.EventType;
 
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public interface IAcoustic {
+public class ProbabilityWeightsAcoustic implements IAcoustic {
 
+	protected final IAcoustic[] acoustics;
+	protected final int[] weights;
+	protected final int totalWeight;
+
+	public ProbabilityWeightsAcoustic(@Nonnull final List<IAcoustic> acoustics, @Nonnull final List<Integer> weights) {
+		this.acoustics = acoustics.toArray(new IAcoustic[acoustics.size()]);
+		this.weights = new int[weights.size()];
+
+		int tWeight = 0;
+		for (int i = 0; i < weights.size(); i++) {
+			this.weights[i] = weights.get(i).intValue();
+			tWeight += this.weights[i];
+		}
+
+		this.totalWeight = tWeight;
+	}
+
+	@Override
 	@Nonnull
-	public String getAcousticName();
+	public String getName() {
+		return "Probability Weights Acoustic";
+	}
 
-	/**
-	 * Plays a sound.
-	 */
+	@Override
 	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location,
-			@Nonnull final EventType event, @Nullable final IOptions inputOptions);
+			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
+		if (this.totalWeight <= 0)
+			return;
 
+		int targetWeight = player.getRNG().nextInt(this.totalWeight);
+
+		int i = 0;
+		for (i = this.weights.length; (targetWeight -= this.weights[i - 1]) >= 0; i--)
+			;
+
+		this.acoustics[i - 1].playSound(player, location, event, inputOptions);
+	}
 }

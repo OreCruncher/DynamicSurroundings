@@ -25,7 +25,7 @@ package org.orecruncher.dsurround.registry.item;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;

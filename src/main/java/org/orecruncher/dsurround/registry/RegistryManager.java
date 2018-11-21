@@ -27,6 +27,7 @@ package org.orecruncher.dsurround.registry;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
 import org.orecruncher.dsurround.registry.biome.BiomeRegistry;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateRegistry;
 import org.orecruncher.dsurround.registry.config.ConfigData;
@@ -50,6 +51,8 @@ public final class RegistryManager {
 
 	@SideOnly(Side.CLIENT)
 	public static SoundRegistry SOUND;
+	@SideOnly(Side.CLIENT)
+	public static AcousticRegistry ACOUSTICS;
 	@SideOnly(Side.CLIENT)
 	public static BiomeRegistry BIOME;
 	@SideOnly(Side.CLIENT)
@@ -97,6 +100,7 @@ public final class RegistryManager {
 		if (!ModBase.proxy().isRunningAsServer()) {
 			// Sound is first because other registries depend on it
 			SOUND = new SoundRegistry();
+			ACOUSTICS = new AcousticRegistry();
 			BIOME = new BiomeRegistry();
 			BLOCK = new BlockStateRegistry();
 			FOOTSTEPS = new FootstepsRegistry();
@@ -136,5 +140,6 @@ public final class RegistryManager {
 	private static void load() {
 		DATA.clear();
 		REGISTRIES.forEach(r -> r.initialize(DATA.get()));
+		REGISTRIES.forEach(Registry::complete);
 	}
 }

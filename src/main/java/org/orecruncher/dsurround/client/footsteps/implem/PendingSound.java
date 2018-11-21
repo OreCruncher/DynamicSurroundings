@@ -26,7 +26,7 @@ package org.orecruncher.dsurround.client.footsteps.implem;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.footsteps.interfaces.ISoundPlayer;
+import org.orecruncher.dsurround.registry.acoustics.ISoundPlayer;
 
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;

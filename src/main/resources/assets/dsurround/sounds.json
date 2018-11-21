@@ -1,5 +1,5 @@
 {
-	"fs.armor.light_walk": {
+	"armor.light_walk": {
 		"category": "player",
 		"credits": [
 			"§aFoley",
@@ -11,7 +11,7 @@
 			"dsurround:footsteps/armor/light_3"
 		]
 	},
-	"fs.armor.light_run": {
+	"armor.light_run": {
 		"category": "player",
 		"credits": [
 			"§aFoley",
@@ -23,7 +23,7 @@
 			"dsurround:footsteps/armor/light_3"
 		]
 	},
-	"fs.armor.medium_walk": {
+	"armor.medium_walk": {
 		"category": "player",
 		"credits": [
 			"§aFoley",
@@ -39,7 +39,7 @@
 			"dsurround:footsteps/armor/medium_walk3"
 		]
 	},
-	"fs.armor.medium_run": {
+	"armor.medium_run": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/armor/medium_walk1",
@@ -47,7 +47,7 @@
 			"dsurround:footsteps/armor/medium_walk3"
 		]
 	},
-	"fs.armor.medium_foot": {
+	"armor.medium_foot": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/armor/medium_walk1",
@@ -55,7 +55,7 @@
 			"dsurround:footsteps/armor/medium_walk3"
 		]
 	},
-	"fs.armor.crystal_walk": {
+	"armor.crystal_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/armor/crystal_walk1",
@@ -66,7 +66,7 @@
 			"dsurround:footsteps/armor/crystal_walk6"
 		]
 	},
-	"fs.armor.crystal_run": {
+	"armor.crystal_run": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/armor/crystal_run1",
@@ -77,7 +77,7 @@
 			"dsurround:footsteps/armor/crystal_run6"
 		]
 	},
-	"fs.armor.crystal_foot": {
+	"armor.crystal_foot": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/armor/crystal_foot1",
@@ -86,7 +86,7 @@
 			"dsurround:footsteps/armor/crystal_foot4"
 		]
 	},
-	"fs.armor.heavy_walk": {
+	"armor.heavy_walk": {
 		"category": "player",
 		"credits": [
 			"§aClanking Armor",
@@ -102,7 +102,7 @@
 			"dsurround:footsteps/armor/heavy_walk6"
 		]
 	},
-	"fs.armor.heavy_run": {
+	"armor.heavy_run": {
 		"category": "player",
 		"credits": [
 			"§aClanking Armor",
@@ -121,7 +121,7 @@
 			"dsurround:footsteps/armor/heavy_run9"
 		]
 	},
-	"fs.armor.heavy_foot": {
+	"armor.heavy_foot": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/armor/heavy_foot1",
@@ -129,7 +129,7 @@
 			"dsurround:footsteps/armor/heavy_foot3"
 		]
 	},
-	"fs.armor.slimey_walk": {
+	"armor.slimey_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/armor/slime_walk1",
@@ -140,7 +140,7 @@
 			"dsurround:footsteps/armor/slime_walk6"
 		]
 	},
-	"fs.armor.slimey_run": {
+	"armor.slimey_run": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/armor/slime_run1",
@@ -151,7 +151,7 @@
 			"dsurround:footsteps/armor/slime_run6"
 		]
 	},
-	"fs.bluntwood.bluntwood_walk": {
+	"bluntwood.bluntwood_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/bluntwood/bluntwood_walk1",
@@ -167,7 +167,7 @@
 			"dsurround:footsteps/bluntwood/bluntwood_walk9"
 		]
 	},
-	"fs.bluntwood.bluntwood_wander": {
+	"bluntwood.bluntwood_wander": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/bluntwood/bluntwood_wander1",
@@ -177,7 +177,7 @@
 			"dsurround:footsteps/bluntwood/bluntwood_wander5"
 		]
 	},
-	"fs.brush.brush_through": {
+	"brush.brush_through": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/brush/brush_through1",
@@ -193,7 +193,7 @@
 			"dsurround:footsteps/brush/brush_through9"
 		]
 	},
-	"fs.concrete.concrete_run": {
+	"concrete.concrete_run": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/concrete/concrete_run1",
@@ -209,7 +209,7 @@
 			"dsurround:footsteps/concrete/concrete_run9"
 		]
 	},
-	"fs.concrete.concrete_walk": {
+	"concrete.concrete_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/concrete/concrete_walk1",
@@ -225,7 +225,7 @@
 			"dsurround:footsteps/concrete/concrete_walk9"
 		]
 	},
-	"fs.concrete.concrete_wander": {
+	"concrete.concrete_wander": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/concrete/concrete_wander1",
@@ -235,7 +235,7 @@
 			"dsurround:footsteps/concrete/concrete_wander5"
 		]
 	},
-	"fs.deckwood.deckwood_run": {
+	"deckwood.deckwood_run": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/deckwood/deckwood_run1",
@@ -251,7 +251,7 @@
 			"dsurround:footsteps/deckwood/deckwood_run9"
 		]
 	},
-	"fs.dirt.dirt_land": {
+	"dirt.dirt_land": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/dirt/dirt_land1",
@@ -260,7 +260,7 @@
 			"dsurround:footsteps/dirt/dirt_land4"
 		]
 	},
-	"fs.dirt.dirt_run": {
+	"dirt.dirt_run": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/dirt/dirt_run1",
@@ -276,7 +276,7 @@
 			"dsurround:footsteps/dirt/dirt_run9"
 		]
 	},
-	"fs.dirt.dirt_walk": {
+	"dirt.dirt_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/dirt/dirt_walk1",
@@ -292,7 +292,7 @@
 			"dsurround:footsteps/dirt/dirt_walk9"
 		]
 	},
-	"fs.dirt.dirt_wander": {
+	"dirt.dirt_wander": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/dirt/dirt_wander1",
@@ -302,20 +302,20 @@
 			"dsurround:footsteps/dirt/dirt_wander5"
 		]
 	},
-	"fs.glass.glass_hard": {
+	"glass.glass_hard": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/glass/glass_hard1"
 		]
 	},
-	"fs.glass.glass_hit": {
+	"glass.glass_hit": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/glass/glass_hit1",
 			"dsurround:footsteps/glass/glass_hit2"
 		]
 	},
-	"fs.grass.grass_run": {
+	"grass.grass_run": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/grass/grass_run1",
@@ -324,7 +324,7 @@
 			"dsurround:footsteps/grass/grass_run4"
 		]
 	},
-	"fs.grass.grass_walk": {
+	"grass.grass_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/grass/grass_walk1",
@@ -339,7 +339,7 @@
 			"dsurround:footsteps/grass/grass_walk9"
 		]
 	},
-	"fs.grass.grass_wander": {
+	"grass.grass_wander": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/grass/grass_wander1",
@@ -350,14 +350,14 @@
 			"dsurround:footsteps/grass/grass_wander6"
 		]
 	},
-	"fs.gravel.gravel_land": {
+	"gravel.gravel_land": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/gravel/gravel_land1",
 			"dsurround:footsteps/gravel/gravel_land2"
 		]
 	},
-	"fs.gravel.gravel_run": {
+	"gravel.gravel_run": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/gravel/gravel_run1",
@@ -373,7 +373,7 @@
 			"dsurround:footsteps/gravel/gravel_run9"
 		]
 	},
-	"fs.gravel.gravel_walk": {
+	"gravel.gravel_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/gravel/gravel_walk1",
@@ -389,7 +389,7 @@
 			"dsurround:footsteps/gravel/gravel_walk9"
 		]
 	},
-	"fs.gravel.gravel_wander": {
+	"gravel.gravel_wander": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/gravel/gravel_wander1",
@@ -397,7 +397,7 @@
 			"dsurround:footsteps/gravel/gravel_wander3"
 		]
 	},
-	"fs.leaves.leaves_through": {
+	"leaves.leaves_through": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/leaves/leaves_through1",
@@ -409,7 +409,7 @@
 			"dsurround:footsteps/leaves/leaves_through7"
 		]
 	},
-	"fs.lino.lino_run": {
+	"lino.lino_run": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/lino/lino_run1",
@@ -420,7 +420,7 @@
 			"dsurround:footsteps/lino/lino_run6"
 		]
 	},
-	"fs.lino.lino_walk": {
+	"lino.lino_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/lino/lino_walk1",
@@ -433,7 +433,7 @@
 			"dsurround:footsteps/lino/lino_walk8"
 		]
 	},
-	"fs.marble.marble_run": {
+	"marble.marble_run": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/marble/marble_run1",
@@ -449,7 +449,7 @@
 			"dsurround:footsteps/marble/marble_run9"
 		]
 	},
-	"fs.marble.marble_walk": {
+	"marble.marble_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/marble/marble_walk1",
@@ -465,7 +465,7 @@
 			"dsurround:footsteps/marble/marble_walk9"
 		]
 	},
-	"fs.marble.marble_wander": {
+	"marble.marble_wander": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/marble/marble_wander1",
@@ -477,13 +477,13 @@
 			"dsurround:footsteps/marble/marble_wander7"
 		]
 	},
-	"fs.metalbar.metalbar_land": {
+	"metalbar.metalbar_land": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/metalbar/metalbar_land1"
 		]
 	},
-	"fs.metalbar.metalbar_run": {
+	"metalbar.metalbar_run": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/metalbar/metalbar_run1",
@@ -499,7 +499,7 @@
 			"dsurround:footsteps/metalbar/metalbar_run9"
 		]
 	},
-	"fs.metalbar.metalbar_walk": {
+	"metalbar.metalbar_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/metalbar/metalbar_walk1",
@@ -515,7 +515,7 @@
 			"dsurround:footsteps/metalbar/metalbar_walk9"
 		]
 	},
-	"fs.metalbar.metalbar_wander": {
+	"metalbar.metalbar_wander": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/metalbar/metalbar_wander1",
@@ -526,7 +526,7 @@
 			"dsurround:footsteps/metalbar/metalbar_wander6"
 		]
 	},
-	"fs.metalbox.metalbox_run": {
+	"metalbox.metalbox_run": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/metalbox/metalbox_run1",
@@ -541,7 +541,7 @@
 			"dsurround:footsteps/metalbox/metalbox_run9"
 		]
 	},
-	"fs.metalbox.metalbox_walk": {
+	"metalbox.metalbox_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/metalbox/metalbox_walk1",
@@ -555,7 +555,7 @@
 			"dsurround:footsteps/metalbox/metalbox_walk9"
 		]
 	},
-	"fs.metalbox.metalbox_wander": {
+	"metalbox.metalbox_wander": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/metalbox/metalbox_wander1",
@@ -564,7 +564,7 @@
 			"dsurround:footsteps/metalbox/metalbox_wander4"
 		]
 	},
-	"fs.mud.mud_walk": {
+	"mud.mud_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/mud/mud_walk1",
@@ -575,7 +575,7 @@
 			"dsurround:footsteps/mud/mud_walk6"
 		]
 	},
-	"fs.mud.mud_wander": {
+	"mud.mud_wander": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/mud/mud_wander1",
@@ -584,7 +584,7 @@
 			"dsurround:footsteps/mud/mud_wander4"
 		]
 	},
-	"fs.muffledice.muffledice_walk": {
+	"muffledice.muffledice_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/muffledice/muffledice_walk1",
@@ -599,7 +599,7 @@
 			"dsurround:footsteps/muffledice/muffledice_walk9"
 		]
 	},
-	"fs.quicksand.quicksand_walk": {
+	"quicksand.quicksand_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/quicksand/quicksand_walk1",
@@ -615,7 +615,7 @@
 			"dsurround:footsteps/quicksand/quicksand_walk9"
 		]
 	},
-	"fs.rug.rug_walk": {
+	"rug.rug_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/rug/rug_walk1",
@@ -631,7 +631,7 @@
 			"dsurround:footsteps/rug/rug_walk9"
 		]
 	},
-	"fs.sand.sand_run": {
+	"sand.sand_run": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/sand/sand_run1",
@@ -647,7 +647,7 @@
 			"dsurround:footsteps/sand/sand_run9"
 		]
 	},
-	"fs.sand.sand_walk": {
+	"sand.sand_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/sand/sand_walk1",
@@ -663,7 +663,7 @@
 			"dsurround:footsteps/sand/sand_walk9"
 		]
 	},
-	"fs.snow.snow_run": {
+	"snow.snow_run": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/snow/snow_run1",
@@ -679,7 +679,7 @@
 			"dsurround:footsteps/snow/snow_run9"
 		]
 	},
-	"fs.snow.snow_walk": {
+	"snow.snow_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/snow/snow_walk1",
@@ -695,7 +695,7 @@
 			"dsurround:footsteps/snow/snow_walk9"
 		]
 	},
-	"fs.snow.snow_wander": {
+	"snow.snow_wander": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/snow/snow_wander1",
@@ -705,7 +705,7 @@
 			"dsurround:footsteps/snow/snow_wander5"
 		]
 	},
-	"fs.squeakywood.squeakywood_walk": {
+	"squeakywood.squeakywood_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/squeakywood/squeakywood_walk1",
@@ -721,7 +721,7 @@
 			"dsurround:footsteps/squeakywood/squeakywood_walk9"
 		]
 	},
-	"fs.squeakywood.squeakywood_wander": {
+	"squeakywood.squeakywood_wander": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/squeakywood/squeakywood_wander1",
@@ -733,7 +733,7 @@
 			"dsurround:footsteps/squeakywood/squeakywood_wander7"
 		]
 	},
-	"fs.stone.stone_run": {
+	"stone.stone_run": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/stone/stone_run1",
@@ -749,7 +749,7 @@
 			"dsurround:footsteps/stone/stone_run9"
 		]
 	},
-	"fs.stone.stone_walk": {
+	"stone.stone_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/stone/stone_walk1",
@@ -765,7 +765,7 @@
 			"dsurround:footsteps/stone/stone_walk9"
 		]
 	},
-	"fs.stone.stone_wander": {
+	"stone.stone_wander": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/stone/stone_wander1",
@@ -775,7 +775,7 @@
 			"dsurround:footsteps/stone/stone_wander5"
 		]
 	},
-	"fs.water.water_through": {
+	"water.water_through": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/water/water_through1",
@@ -791,7 +791,7 @@
 			"dsurround:footsteps/water/water_through9"
 		]
 	},
-	"fs.water.water_wander": {
+	"water.water_wander": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/water/water_wander1",
@@ -801,7 +801,7 @@
 			"dsurround:footsteps/water/water_wander5"
 		]
 	},
-	"fs.water_stereofix.water_through": {
+	"water_stereofix.water_through": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/water_stereofix/water_through1",
@@ -817,7 +817,7 @@
 			"dsurround:footsteps/water_stereofix/water_through9"
 		]
 	},
-	"fs.water_stereofix.water_wander": {
+	"water_stereofix.water_wander": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/water_stereofix/water_wander1",
@@ -827,7 +827,7 @@
 			"dsurround:footsteps/water_stereofix/water_wander5"
 		]
 	},
-	"fs.weakice.weakice_walk": {
+	"weakice.weakice_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/weakice/weakice_walk1",
@@ -842,7 +842,7 @@
 			"dsurround:footsteps/weakice/weakice_walk9"
 		]
 	},
-	"fs.wood.wood_walk": {
+	"wood.wood_walk": {
 		"category": "player",
 		"sounds": [
 			"dsurround:footsteps/wood/wood_walk1",

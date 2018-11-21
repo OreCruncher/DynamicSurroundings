@@ -29,8 +29,8 @@ import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
+import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.lib.MCHelper;
 import org.orecruncher.lib.collections.ObjectArray;
 
@@ -51,7 +51,7 @@ public class Association {
 	private final boolean isNotEmitter;
 
 	public Association() {
-		this(AcousticsManager.EMPTY);
+		this(AcousticRegistry.EMPTY);
 	}
 
 	public Association(@Nonnull final IAcoustic[] association) {
@@ -62,20 +62,20 @@ public class Association {
 		final Vec3d vec = entity.getPositionVector();
 		this.state = null;
 		this.location = new FootStrikeLocation(entity, vec.x, vec.y + 1, vec.z);;
-		this.data.addAll(association == null ? AcousticsManager.EMPTY : association);
-		this.isNotEmitter = association == AcousticsManager.NOT_EMITTER;
+		this.data.addAll(association == null ? AcousticRegistry.EMPTY : association);
+		this.isNotEmitter = association == AcousticRegistry.NOT_EMITTER;
 	}
 
 	public Association(@Nonnull final IBlockState state, @Nonnull final FootStrikeLocation pos) {
-		this(state, pos, AcousticsManager.EMPTY);
+		this(state, pos, AcousticRegistry.EMPTY);
 	}
 
 	public Association(@Nonnull final IBlockState state, @Nonnull final FootStrikeLocation pos,
 			@Nonnull final IAcoustic[] association) {
 		this.state = state;
 		this.location = pos;
-		this.data.addAll(association == null ? AcousticsManager.EMPTY : association);
-		this.isNotEmitter = association == AcousticsManager.NOT_EMITTER;
+		this.data.addAll(association == null ? AcousticRegistry.EMPTY : association);
+		this.isNotEmitter = association == AcousticRegistry.NOT_EMITTER;
 	}
 
 	@Nonnull

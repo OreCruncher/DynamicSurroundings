@@ -26,11 +26,11 @@ package org.orecruncher.dsurround.client.footsteps.system;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
 import org.orecruncher.dsurround.client.footsteps.implem.BlockMap;
 import org.orecruncher.dsurround.client.footsteps.implem.Substrate;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.client.footsteps.system.facade.FacadeHelper;
+import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.lib.MyUtils;
 import org.orecruncher.lib.math.MathStuff;
 
@@ -159,7 +159,7 @@ public class AcousticResolver {
 		if (above != this.airState)
 			acoustics = this.blockMap.getBlockAcoustics(above, Substrate.CARPET);
 
-		if (acoustics == null || acoustics == AcousticsManager.NOT_EMITTER) {
+		if (acoustics == null || acoustics == AcousticRegistry.NOT_EMITTER) {
 			// This condition implies that if the carpet is NOT_EMITTER, solving
 			// will CONTINUE with the actual block surface the player is walking
 			// on NOT_EMITTER carpets will not cause solving to skip
@@ -179,7 +179,7 @@ public class AcousticResolver {
 				acoustics = this.blockMap.getBlockAcoustics(in);
 			}
 
-			if (acoustics != null && acoustics != AcousticsManager.NOT_EMITTER) {
+			if (acoustics != null && acoustics != AcousticRegistry.NOT_EMITTER) {
 				// This condition implies that foliage over a NOT_EMITTER block
 				// CANNOT PLAY This block most not be executed if the association
 				// is a carpet => this block of code is here, not outside this
@@ -187,7 +187,7 @@ public class AcousticResolver {
 
 				if (above != this.airState) {
 					final IAcoustic[] foliage = this.blockMap.getBlockAcoustics(above, Substrate.FOLIAGE);
-					if (foliage != null && foliage != AcousticsManager.NOT_EMITTER) {
+					if (foliage != null && foliage != AcousticRegistry.NOT_EMITTER) {
 						acoustics = MyUtils.concatenate(acoustics, foliage);
 					}
 				}
@@ -198,7 +198,7 @@ public class AcousticResolver {
 		}
 
 		if (acoustics != null) {
-			if (acoustics == AcousticsManager.NOT_EMITTER) {
+			if (acoustics == AcousticRegistry.NOT_EMITTER) {
 				// Player has stepped on a non-emitter block as defined in the blockmap
 				return null;
 			} else {

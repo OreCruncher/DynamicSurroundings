@@ -30,15 +30,15 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
-import org.orecruncher.dsurround.client.footsteps.implem.BasicAcoustic;
 import org.orecruncher.dsurround.client.footsteps.implem.DelayedAcoustic;
-import org.orecruncher.dsurround.client.footsteps.implem.EventSelectorAcoustics;
-import org.orecruncher.dsurround.client.footsteps.implem.ProbabilityWeightsAcoustic;
-import org.orecruncher.dsurround.client.footsteps.implem.SimultaneousAcoustic;
 import org.orecruncher.dsurround.client.footsteps.interfaces.EventType;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.registry.RegistryManager;
+import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
+import org.orecruncher.dsurround.registry.acoustics.SimpleAcoustic;
+import org.orecruncher.dsurround.registry.acoustics.EventSelectorAcoustics;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
+import org.orecruncher.dsurround.registry.acoustics.ProbabilityWeightsAcoustic;
+import org.orecruncher.dsurround.registry.acoustics.SimultaneousAcoustic;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -50,19 +50,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * JASON? JAAAASOOON?<br>
- * <a href="http://youtu.be/i7IE9gLwLUU?t=1m28s">http://youtu.
- * be/i7IE9gLwLUU?t=1m28s</a><br>
- * <br>
  * A JSON parser that creates a ILibrary of Acoustics.
  *
- * @author Hurry
  */
 @SideOnly(Side.CLIENT)
 public class AcousticsJsonReader {
-	private final int ENGINEVERSION = 0;
-
-	private String soundRoot;
 
 	private float default_volMin;
 	private float default_volMax;
@@ -71,11 +63,7 @@ public class AcousticsJsonReader {
 
 	private final float DIVIDE = 100f;
 
-	public AcousticsJsonReader(String root) {
-		this.soundRoot = root;
-	}
-
-	public void parseJSON(final String jasonString, final AcousticsManager lib) {
+	public void parseJSON(final String jasonString, final AcousticRegistry lib) {
 		try {
 			parseJSONUnsafe(jasonString, lib);
 		} catch (final Exception e) {
@@ -83,20 +71,11 @@ public class AcousticsJsonReader {
 		}
 	}
 
-	private void parseJSONUnsafe(final String jsonString, final AcousticsManager lib) throws JsonParseException {
+	private void parseJSONUnsafe(final String jsonString, final AcousticRegistry lib) throws JsonParseException {
 		final JsonObject json = new JsonParser().parse(jsonString).getAsJsonObject();
 
-		if (!json.get("type").getAsString().equals("library"))
-			throw new JsonParseException("Invalid type: \"library\"");
-		if (json.get("engineversion").getAsInt() != this.ENGINEVERSION)
-			throw new JsonParseException("Unrecognised Engine version: " + this.ENGINEVERSION + " expected, got "
-					+ json.get("engineversion").getAsInt());
 		if (!json.has("contents"))
 			throw new JsonParseException("Empty contents");
-
-		if (json.has("soundroot")) {
-			this.soundRoot += json.get("soundroot").getAsString();
-		}
 
 		this.default_volMin = 1f;
 		this.default_volMax = 1f;
@@ -150,7 +129,7 @@ public class AcousticsJsonReader {
 																								// a
 																								// sound
 																								// name
-			final BasicAcoustic a = new BasicAcoustic();
+			final SimpleAcoustic a = new SimpleAcoustic();
 			prepareDefaults(a);
 			setupSoundName(a, unsolved.getAsString());
 			ret = a;
@@ -165,7 +144,7 @@ public class AcousticsJsonReader {
 		IAcoustic ret = null;
 
 		if (!unsolved.has("type") || unsolved.get("type").getAsString().equals("basic")) {
-			final BasicAcoustic a = new BasicAcoustic();
+			final SimpleAcoustic a = new SimpleAcoustic();
 			prepareDefaults(a);
 			setupClassics(a, unsolved);
 			ret = a;
@@ -222,14 +201,14 @@ public class AcousticsJsonReader {
 		return ret;
 	}
 
-	private void prepareDefaults(final BasicAcoustic a) {
+	private void prepareDefaults(final SimpleAcoustic a) {
 		a.setVolMin(this.default_volMin);
 		a.setVolMax(this.default_volMax);
 		a.setPitchMin(this.default_pitchMin);
 		a.setPitchMax(this.default_pitchMax);
 	}
 
-	private void setupSoundName(final BasicAcoustic a, final String soundName) {
+	private void setupSoundName(final SimpleAcoustic a, final String soundName) {
 		try {
 			final ResourceLocation res;
 			if ("@".equals(soundName)) {
@@ -237,7 +216,7 @@ public class AcousticsJsonReader {
 			} else if (soundName.contains(":")) {
 				res = new ResourceLocation(soundName);
 			} else if (soundName.charAt(0) != '@') {
-				res = new ResourceLocation(ModBase.RESOURCE_ID, this.soundRoot + soundName);
+				res = new ResourceLocation(ModBase.RESOURCE_ID, soundName);
 			} else {
 				res = new ResourceLocation("minecraft", soundName.substring(1));
 			}
@@ -251,7 +230,7 @@ public class AcousticsJsonReader {
 		}
 	}
 
-	private void setupClassics(final BasicAcoustic a, final JsonObject solved) {
+	private void setupClassics(final SimpleAcoustic a, final JsonObject solved) {
 		setupSoundName(a, solved.get("name").getAsString());
 		if (solved.has("vol_min")) {
 			a.setVolMin(processPitchOrVolume(solved, "vol_min"));

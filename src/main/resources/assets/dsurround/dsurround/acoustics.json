@@ -1,13 +1,10 @@
 {
-	"type": "library",
-	"engineversion": 0,
 	"defaults": {
 		"vol_min": 90,
 		"vol_max": 100,
 		"pitch_min": 95,
 		"pitch_max": 105
 	},
-	"soundroot": "fs.",
 	"contents": {
 		"none": {
 		},

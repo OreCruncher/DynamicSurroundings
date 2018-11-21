@@ -26,7 +26,8 @@ package org.orecruncher.dsurround.client.footsteps.implem;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
+import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -50,7 +51,7 @@ public class AcousticProfile {
 	 */
 	public static class Static extends AcousticProfile {
 
-		public static final Static NOT_EMITTER = new AcousticProfile.Static(AcousticsManager.NOT_EMITTER);
+		public static final Static NOT_EMITTER = new AcousticProfile.Static(AcousticRegistry.NOT_EMITTER);
 
 		protected final IAcoustic[] acoustics;
 

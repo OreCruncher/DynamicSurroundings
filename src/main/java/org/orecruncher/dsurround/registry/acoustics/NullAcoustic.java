@@ -22,39 +22,40 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.footsteps.interfaces;
+package org.orecruncher.dsurround.registry.acoustics;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.orecruncher.dsurround.client.footsteps.interfaces.EventType;
+
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public interface IOptions {
+class NullAcoustic implements IAcoustic {
 
-	default long getDelayMin() {
-		return 0;
+	protected String name;
+
+	public NullAcoustic(@Nonnull final String name) {
+		this.name = name;
 	}
 
-	default long getDelayMax() {
-		return 0;
+	@Override
+	public String getName() {
+		return this.name;
 	}
 
-	default boolean isDelayedSound() {
-		return getDelayMin() > 0 && getDelayMax() > 0;
+	@Override
+	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location,
+			@Nullable final EventType event, @Nullable final IOptions inputOptions) {
+		// Does nothing
 	}
 
-	default float getGlidingVolume() {
-		return 0;
+	@Override
+	public String toString() {
+		return "<< " + getName() + " >>";
 	}
 
-	default float getGlidingPitch() {
-		return 0;
-	}
-
-	default float getVolumeScale() {
-		return 1F;
-	}
-
-	default float getPitchScale() {
-		return 1F;
-	}
 }

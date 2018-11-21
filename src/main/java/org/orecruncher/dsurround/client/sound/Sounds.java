@@ -104,10 +104,10 @@ public final class Sounds {
 		SHIELD_EQUIP = new SoundEffect.Builder("shield.equip", SoundCategory.PLAYERS).setVolume(0.30F).build();
 		SHIELD_USE = new SoundEffect.Builder("shield.use", SoundCategory.PLAYERS).setVolume(0.30F).build();
 
-		LEATHER_ARMOR_EQUIP = new SoundEffect.Builder("fs.armor.light_walk", SoundCategory.PLAYERS).build();
-		CHAIN_ARMOR_EQUIP = new SoundEffect.Builder("fs.armor.medium_walk", SoundCategory.PLAYERS).build();
-		PLATE_ARMOR_EQUIP = new SoundEffect.Builder("fs.armor.heavy_walk", SoundCategory.PLAYERS).build();
-		CRYSTAL_ARMOR_EQUIP = new SoundEffect.Builder("fs.armor.crystal_walk", SoundCategory.PLAYERS).build();
+		LEATHER_ARMOR_EQUIP = new SoundEffect.Builder("armor.light_walk", SoundCategory.PLAYERS).build();
+		CHAIN_ARMOR_EQUIP = new SoundEffect.Builder("armor.medium_walk", SoundCategory.PLAYERS).build();
+		PLATE_ARMOR_EQUIP = new SoundEffect.Builder("armor.heavy_walk", SoundCategory.PLAYERS).build();
+		CRYSTAL_ARMOR_EQUIP = new SoundEffect.Builder("armor.crystal_walk", SoundCategory.PLAYERS).build();
 
 		THUNDER = new SoundEffect.Builder("thunder", SoundCategory.WEATHER).setVolume(10000F).build();
 		RAINFALL = new SoundEffect.Builder("rain", SoundCategory.WEATHER).build();

@@ -22,21 +22,28 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.event;
+package org.orecruncher.dsurround.registry.acoustics;
+
+import java.util.Random;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PlayDistributedSoundEvent extends Event {
+@SideOnly(Side.CLIENT)
+public interface ISoundPlayer {
+	/**
+	 * Plays a sound.
+	 */
+	public void playSound(@Nonnull final Vec3d location, @Nonnull final SoundEvent sound, final float volume,
+			final float pitch, @Nullable final IOptions options);
 
-	public final String soundClass;
-	public final NBTTagCompound nbt;
-
-	public PlayDistributedSoundEvent(@Nonnull final String soundClass, @Nonnull final NBTTagCompound nbt) {
-		this.soundClass = soundClass;
-		this.nbt = nbt;
-	}
-
+	/**
+	 * Returns a RANDOM number generator.
+	 */
+	public Random getRNG();
 }

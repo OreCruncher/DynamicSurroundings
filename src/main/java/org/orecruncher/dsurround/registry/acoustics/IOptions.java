@@ -21,42 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.orecruncher.dsurround.client.footsteps.implem;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+package org.orecruncher.dsurround.registry.acoustics;
 
-import org.orecruncher.dsurround.client.footsteps.interfaces.EventType;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IOptions;
-import org.orecruncher.dsurround.client.footsteps.interfaces.ISoundPlayer;
-import org.orecruncher.dsurround.client.weather.Weather;
-
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class RainSplashAcoustic implements IAcoustic {
+public interface IOptions {
 
-	protected final IAcoustic[] acoustics;
-
-	public RainSplashAcoustic(@Nonnull final IAcoustic[] acoustics) {
-		this.acoustics = acoustics;
+	default long getDelayMin() {
+		return 0;
 	}
 
-	@Override
-	public String getAcousticName() {
-		return "RainSplash";
+	default long getDelayMax() {
+		return 0;
 	}
 
-	@Override
-	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location,
-			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
-		final ConfigOptions ops = new ConfigOptions();
-		ops.setVolumeScale(Weather.getIntensityLevel() * 0.8F);
-		ops.setPitchScale(1.75F);
-		for (int i = 0; i < this.acoustics.length; i++)
-			this.acoustics[i].playSound(player, location, event, ops);
+	default boolean isDelayedSound() {
+		return getDelayMin() > 0 && getDelayMax() > 0;
+	}
+
+	default float getGlidingVolume() {
+		return 0;
+	}
+
+	default float getGlidingPitch() {
+		return 0;
+	}
+
+	default float getVolumeScale() {
+		return 1F;
+	}
+
+	default float getPitchScale() {
+		return 1F;
 	}
 }

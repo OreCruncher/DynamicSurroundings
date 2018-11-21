@@ -22,55 +22,28 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.footsteps.implem;
-
-import java.util.EnumMap;
-import java.util.Map;
+package org.orecruncher.dsurround.registry.acoustics;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.footsteps.interfaces.EventType;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IOptions;
-import org.orecruncher.dsurround.client.footsteps.interfaces.ISoundPlayer;
 
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class EventSelectorAcoustics implements IAcoustic {
-	private final String name;
+public interface IAcoustic {
 
-	private final Map<EventType, IAcoustic> pairs = new EnumMap<>(EventType.class);
+	@Nonnull
+	 String getName();
 
-	public EventSelectorAcoustics(@Nonnull final String acousticName) {
-		this.name = acousticName;
+	default void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location) {
+		playSound(player, location, null, null);
 	}
-
-	@Override
-	public String getAcousticName() {
-		return this.name;
-	}
-
-	@Override
-	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location,
-			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
-		final IAcoustic acoustic = this.pairs.get(event);
-		if (acoustic != null)
-			acoustic.playSound(player, location, event, inputOptions);
-		else if (event.canTransition())
-			playSound(player, location, event.getTransitionDestination(), inputOptions);
-	}
-
-	public void setAcousticPair(@Nonnull final EventType type, @Nonnull final IAcoustic acoustic) {
-		this.pairs.put(type, acoustic);
-	}
-
-	@Override
-	public String toString() {
-		return getAcousticName();
-	}
+	
+	void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location,
+			@Nullable final EventType event, @Nullable final IOptions inputOptions);
 
 }

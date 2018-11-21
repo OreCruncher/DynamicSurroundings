@@ -61,7 +61,7 @@ public final class SoundRegistry extends Registry {
 	public static final float MAX_SOUNDFACTOR = 4F;
 	public static final float DEFAULT_SOUNDFACTOR = 1F;
 
-	private static final String ARMOR_SOUND_PREFIX = ModBase.MOD_ID + ":fs.armor.";
+	private static final String ARMOR_SOUND_PREFIX = ModBase.MOD_ID + ":armor.";
 
 	private final List<String> cullSoundNames = new ArrayList<>();
 	private final List<String> blockSoundNames = new ArrayList<>();
@@ -77,7 +77,7 @@ public final class SoundRegistry extends Registry {
 	}
 
 	@Override
-	protected void init() {
+	protected void preInit() {
 		this.cullSoundNames.clear();
 		this.blockSoundNames.clear();
 		this.volumeControl.clear();
@@ -111,7 +111,7 @@ public final class SoundRegistry extends Registry {
 	}
 
 	@Override
-	protected void configure(@Nonnull final ModConfiguration cfg) {
+	protected void init(@Nonnull final ModConfiguration cfg) {
 		for (final Entry<String, SoundMetadataConfig> entry : cfg.sounds.entrySet()) {
 			final SoundMetadata data = new SoundMetadata(entry.getValue());
 			final ResourceLocation resource = new ResourceLocation(entry.getKey());
@@ -120,8 +120,8 @@ public final class SoundRegistry extends Registry {
 	}
 	
 	@Override
-	protected void initComplete() {
-		ModBase.log().info("%d sound events in private registry", this.myRegistry.size());
+	protected void complete() {
+		ModBase.log().info("[%s] %d sound events in private registry", getName(), this.myRegistry.size());
 	}
 	
 	private void bakeSoundRegistry() {

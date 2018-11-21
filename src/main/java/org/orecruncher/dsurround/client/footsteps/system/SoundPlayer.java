@@ -32,12 +32,12 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.footsteps.implem.PendingSound;
 import org.orecruncher.dsurround.client.footsteps.interfaces.EventType;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IOptions;
-import org.orecruncher.dsurround.client.footsteps.interfaces.ISoundPlayer;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.client.sound.BasicSound;
 import org.orecruncher.dsurround.client.sound.FootstepSound;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
+import org.orecruncher.dsurround.registry.acoustics.IOptions;
+import org.orecruncher.dsurround.registry.acoustics.ISoundPlayer;
 import org.orecruncher.dsurround.registry.footstep.Variator;
 import org.orecruncher.lib.TimeUtils;
 import org.orecruncher.lib.collections.ObjectArray;
@@ -66,7 +66,7 @@ public class SoundPlayer implements ISoundPlayer {
 	private void logAcousticPlay(@Nonnull final IAcoustic[] acoustics, @Nonnull final EventType event) {
 		if (ModBase.log().isDebugging()) {
 			final String txt = String.join(",",
-					Arrays.stream(acoustics).map(IAcoustic::getAcousticName).toArray(String[]::new));
+					Arrays.stream(acoustics).map(IAcoustic::getName).toArray(String[]::new));
 			ModBase.log().debug("Playing acoustic %s for event %s", txt, event.toString().toUpperCase());
 		}
 	}

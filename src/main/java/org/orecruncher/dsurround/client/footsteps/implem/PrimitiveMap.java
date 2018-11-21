@@ -31,9 +31,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.client.footsteps.util.ConfigProperty;
 import org.orecruncher.dsurround.registry.RegistryManager;
+import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.util.ResourceLocation;
@@ -44,10 +45,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class PrimitiveMap {
 
-	private final AcousticsManager acousticsManager;
+	private final AcousticRegistry acousticsManager;
 	private final Map<String, IAcoustic[]> primitiveMap = new Object2ObjectOpenHashMap<>();
 
-	public PrimitiveMap(@Nonnull final AcousticsManager manager) {
+	public PrimitiveMap(@Nonnull final AcousticRegistry manager) {
 		this.acousticsManager = manager;
 	}
 

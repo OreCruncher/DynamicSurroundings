@@ -31,18 +31,18 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
 import org.orecruncher.dsurround.client.footsteps.implem.BlockMap;
 import org.orecruncher.dsurround.client.footsteps.implem.ConfigOptions;
 import org.orecruncher.dsurround.client.footsteps.implem.Substrate;
 import org.orecruncher.dsurround.client.footsteps.interfaces.EventType;
 import org.orecruncher.dsurround.client.footsteps.interfaces.FootprintStyle;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.client.footsteps.system.accents.FootstepAccents;
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.registry.RegistryManager;
+import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.dsurround.registry.footstep.Variator;
 import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 import org.orecruncher.lib.TimeUtils;
@@ -150,7 +150,7 @@ public class Generator {
 
 		// Player jump breath
 		if (this.didJump && ModOptions.sound.enableJumpSound && this.VAR.PLAY_JUMP && !entity.isSneaking()) {
-			this.soundPlayer.playAcoustic(entity.getPositionVector(), AcousticsManager.JUMP, EventType.JUMP, null);
+			this.soundPlayer.playAcoustic(entity.getPositionVector(), RegistryManager.FOOTSTEPS.JUMP, EventType.JUMP, null);
 		}
 
 		if (SoundEngine.getVolume(SoundRegistry.FOOTSTEPS) > 0) {
@@ -442,7 +442,7 @@ public class Generator {
 				final ConfigOptions options = new ConfigOptions();
 				options.setGlidingVolume(volume > 1 ? 1 : volume);
 				// material water, see EntityLivingBase line 286
-				this.soundPlayer.playAcoustic(entity.getPositionVector(), AcousticsManager.SWIM,
+				this.soundPlayer.playAcoustic(entity.getPositionVector(), RegistryManager.FOOTSTEPS.SWIM,
 						entity.isInsideOfMaterial(Material.WATER) ? EventType.SWIM : EventType.WALK, options);
 			}
 			return true;
@@ -467,9 +467,9 @@ public class Generator {
 
 		if (above != Blocks.AIR.getDefaultState()) {
 			IAcoustic[] acoustics = this.blockMap.getBlockAcoustics(above, Substrate.MESSY);
-			if (acoustics == AcousticsManager.MESSY_GROUND) {
+			if (acoustics == AcousticRegistry.MESSY_GROUND) {
 				acoustics = this.blockMap.getBlockAcoustics(above, Substrate.FOLIAGE);
-				if (acoustics != null && acoustics != AcousticsManager.NOT_EMITTER) {
+				if (acoustics != null && acoustics != AcousticRegistry.NOT_EMITTER) {
 					result = new Association(entity, acoustics);
 				}
 

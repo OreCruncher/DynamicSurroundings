@@ -29,10 +29,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.RegistryManager;
+import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.dsurround.registry.footstep.FootstepsRegistry;
 import org.orecruncher.dsurround.registry.item.IItemData;
 import org.orecruncher.dsurround.registry.item.ItemClass;
@@ -62,7 +62,7 @@ public class ConstructArmoryProducer implements IItemDataProducer {
 			ARMOR.clear();
 			FOOT.clear();
 
-			final AcousticsManager reg = RegistryManager.FOOTSTEPS.getAcousticManager();
+			final AcousticRegistry reg = RegistryManager.ACOUSTICS;
 			final IAcoustic a = reg.getAcoustic("armor_slimey");
 			ARMOR.put("slimey_green_armor", a);
 			FOOT.put("slimey_green_armor", a);

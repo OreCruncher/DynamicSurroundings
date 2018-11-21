@@ -21,42 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package org.orecruncher.dsurround.client.footsteps.implem;
-
-import java.util.Collection;
+package org.orecruncher.dsurround.registry.acoustics;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.orecruncher.dsurround.client.footsteps.implem.ConfigOptions;
 import org.orecruncher.dsurround.client.footsteps.interfaces.EventType;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IOptions;
-import org.orecruncher.dsurround.client.footsteps.interfaces.ISoundPlayer;
+import org.orecruncher.dsurround.client.weather.Weather;
 
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class SimultaneousAcoustic implements IAcoustic {
+public class RainSplashAcoustic implements IAcoustic {
+
 	protected final IAcoustic[] acoustics;
 
-	public SimultaneousAcoustic(@Nonnull final Collection<IAcoustic> acoustics) {
-		this.acoustics = acoustics.toArray(new IAcoustic[acoustics.size()]);
+	public RainSplashAcoustic(@Nonnull final IAcoustic[] acoustics) {
+		this.acoustics = acoustics;
 	}
 
 	@Override
-	@Nonnull
-	public String getAcousticName() {
-		return "Simultaneous Acoustic";
+	public String getName() {
+		return "RainSplash";
 	}
 
 	@Override
 	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location,
 			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
+		final ConfigOptions ops = new ConfigOptions();
+		ops.setVolumeScale(Weather.getIntensityLevel() * 0.8F);
+		ops.setPitchScale(1.75F);
 		for (int i = 0; i < this.acoustics.length; i++)
-			this.acoustics[i].playSound(player, location, event, inputOptions);
+			this.acoustics[i].playSound(player, location, event, ops);
 	}
-
+	
+	@Override
+	public String toString() {
+		return "<< RainSplash >>";
+	}
 }

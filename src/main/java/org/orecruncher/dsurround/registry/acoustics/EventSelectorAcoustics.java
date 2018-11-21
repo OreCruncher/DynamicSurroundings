@@ -22,28 +22,52 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.footsteps.interfaces;
+package org.orecruncher.dsurround.registry.acoustics;
 
-import java.util.Random;
+import java.util.EnumMap;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.util.SoundEvent;
+import org.orecruncher.dsurround.client.footsteps.interfaces.EventType;
+
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public interface ISoundPlayer {
-	/**
-	 * Plays a sound.
-	 */
-	public void playSound(@Nonnull final Vec3d location, @Nonnull final SoundEvent sound, final float volume,
-			final float pitch, @Nullable final IOptions options);
+public class EventSelectorAcoustics implements IAcoustic {
+	private final String name;
 
-	/**
-	 * Returns a RANDOM number generator.
-	 */
-	public Random getRNG();
+	private final Map<EventType, IAcoustic> pairs = new EnumMap<>(EventType.class);
+
+	public EventSelectorAcoustics(@Nonnull final String acousticName) {
+		this.name = acousticName;
+	}
+
+	@Override
+	public String getName() {
+		return this.name;
+	}
+
+	@Override
+	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location,
+			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
+		final IAcoustic acoustic = this.pairs.get(event);
+		if (acoustic != null)
+			acoustic.playSound(player, location, event, inputOptions);
+		else if (event.canTransition())
+			playSound(player, location, event.getTransitionDestination(), inputOptions);
+	}
+
+	public void setAcousticPair(@Nonnull final EventType type, @Nonnull final IAcoustic acoustic) {
+		this.pairs.put(type, acoustic);
+	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
+
 }

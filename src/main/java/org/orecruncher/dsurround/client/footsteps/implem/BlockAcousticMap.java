@@ -29,7 +29,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;

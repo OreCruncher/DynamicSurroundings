@@ -24,13 +24,14 @@
 
 package org.orecruncher.dsurround.client.footsteps.implem;
 
-import org.orecruncher.dsurround.client.footsteps.interfaces.IOptions;
+import org.orecruncher.dsurround.registry.acoustics.SimpleAcoustic;
+import org.orecruncher.dsurround.registry.acoustics.IOptions;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class DelayedAcoustic extends BasicAcoustic implements IOptions {
+public class DelayedAcoustic extends SimpleAcoustic implements IOptions {
 
 	protected long delayMin = 0;
 	protected long delayMax = 0;

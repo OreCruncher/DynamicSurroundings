@@ -43,21 +43,21 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.footsteps.implem.AcousticProfile;
-import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
 import org.orecruncher.dsurround.client.footsteps.implem.BlockMap;
 import org.orecruncher.dsurround.client.footsteps.implem.PrimitiveMap;
-import org.orecruncher.dsurround.client.footsteps.implem.RainSplashAcoustic;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.client.footsteps.parsers.AcousticsJsonReader;
 import org.orecruncher.dsurround.client.footsteps.system.Generator;
 import org.orecruncher.dsurround.client.footsteps.system.GeneratorQP;
 import org.orecruncher.dsurround.client.footsteps.util.ConfigProperty;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.RegistryManager;
+import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
+import org.orecruncher.dsurround.registry.acoustics.RainSplashAcoustic;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
-import org.orecruncher.dsurround.registry.config.VariatorConfig;
 import org.orecruncher.dsurround.registry.config.ModConfiguration.ForgeEntry;
+import org.orecruncher.dsurround.registry.config.VariatorConfig;
 import org.orecruncher.dsurround.registry.config.packs.IMyResourcePack;
 import org.orecruncher.dsurround.registry.config.packs.ResourcePacks;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
@@ -102,7 +102,6 @@ public final class FootstepsRegistry extends Registry {
 	private static final List<String> FOOTPRINT_SOUND_PROFILE = Arrays.asList("minecraft:block.sand.step",
 			"minecraft:block.gravel.step", "minecraft:block.snow.step");
 
-	private AcousticsManager acousticsManager;
 	private PrimitiveMap primitiveMap;
 	private BlockMap blockMap;
 
@@ -114,16 +113,22 @@ public final class FootstepsRegistry extends Registry {
 	private Variator playerVariator;
 	private Variator playerQuadrupedVariator;
 
+	private Set<IBlockState> missingAcoustics;
+
+	public IAcoustic[] SWIM;
+	public IAcoustic[] JUMP;
+	public IAcoustic[] SPLASH;
+
 	public FootstepsRegistry() {
 		super("Footstep Sounds");
 	}
 
 	@Override
-	protected void init() {
+	protected void preInit() {
 
-		this.acousticsManager = new AcousticsManager();
-		this.primitiveMap = new PrimitiveMap(this.acousticsManager);
-		this.blockMap = new BlockMap(this.acousticsManager);
+		final AcousticRegistry acoustics = RegistryManager.ACOUSTICS;
+		this.primitiveMap = new PrimitiveMap(acoustics);
+		this.blockMap = new BlockMap(acoustics);
 		this.FOOTPRINT_MATERIAL = new ReferenceOpenHashSet<>();
 		this.FOOTPRINT_STATES = new ReferenceOpenHashSet<>();
 		this.variators = new Object2ObjectOpenHashMap<>();
@@ -139,9 +144,9 @@ public final class FootstepsRegistry extends Registry {
 		this.FOOTPRINT_MATERIAL.add(Material.SNOW);
 
 		// It's a hack - needs refactor
-		AcousticsManager.SWIM = null;
-		AcousticsManager.JUMP = null;
-		AcousticsManager.SPLASH = null;
+		this.SWIM = null;
+		this.JUMP = null;
+		this.SPLASH = null;
 
 		final List<IMyResourcePack> repo = ResourcePacks.findResourcePacks();
 		reloadAcoustics(repo);
@@ -152,7 +157,7 @@ public final class FootstepsRegistry extends Registry {
 	}
 
 	@Override
-	protected void configure(@Nonnull final ModConfiguration cfg) {
+	protected void init(@Nonnull final ModConfiguration cfg) {
 		for (final ForgeEntry entry : cfg.forgeMappings) {
 			for (final String name : entry.dictionaryEntries)
 				registerForgeEntries(entry.acousticProfile, name);
@@ -171,11 +176,11 @@ public final class FootstepsRegistry extends Registry {
 	}
 
 	@Override
-	protected void initComplete() {
-		AcousticsManager.SWIM = this.acousticsManager.compileAcoustics("_SWIM");
-		AcousticsManager.JUMP = this.acousticsManager.compileAcoustics("_JUMP");
-		AcousticsManager.SPLASH = new IAcoustic[] {
-				new RainSplashAcoustic(this.acousticsManager.compileAcoustics("waterfine")) };
+	protected void postInit() {
+		this.SWIM = RegistryManager.ACOUSTICS.compileAcoustics("_SWIM");
+		this.JUMP = RegistryManager.ACOUSTICS.compileAcoustics("_JUMP");
+		this.SPLASH = new IAcoustic[] {
+				new RainSplashAcoustic(RegistryManager.ACOUSTICS.compileAcoustics("waterfine")) };
 
 		this.childVariator = getVariator("child");
 		this.playerVariator = getVariator(ModOptions.sound.firstPersonFootstepCadence ? "playerSlow" : "player");
@@ -191,17 +196,8 @@ public final class FootstepsRegistry extends Registry {
 		// Scan the block list looking for any block states that do not have sounds
 		// definitions supplied by configuration files or by primitives. This scan
 		// has the side effect of priming the caches.
-		final Set<IBlockState> missingAcoustics = blockStates.stream()
+		this.missingAcoustics = blockStates.stream()
 				.filter(bs -> !FootstepsRegistry.this.getBlockMap().hasAcoustics(bs)).collect(Collectors.toSet());
-
-		if (ModOptions.logging.enableDebugLogging) {
-			if (missingAcoustics.size() > 0) {
-				ModBase.log().info("          >>>> MISSING ACOUSTIC ENTRIES <<<< ");
-				ModBase.log().info("Sounds for these states will default to their step sound");
-				ModBase.log().info("========================================================");
-				missingAcoustics.stream().map(IBlockState::toString).sorted().forEach(ModBase.log()::info);
-			}
-		}
 
 		// Identify any IBlockStates that could have footprints associated and
 		// register them if necessary.
@@ -224,6 +220,19 @@ public final class FootstepsRegistry extends Registry {
 				}).forEach(bs -> this.FOOTPRINT_STATES.add(bs));
 	}
 
+	@Override
+	protected void complete() {
+		if (ModOptions.logging.enableDebugLogging) {
+			if (this.missingAcoustics.size() > 0) {
+				ModBase.log().info("          >>>> MISSING ACOUSTIC ENTRIES <<<< ");
+				ModBase.log().info("Sounds for these states will default to their step sound");
+				ModBase.log().info("========================================================");
+				this.missingAcoustics.stream().map(IBlockState::toString).sorted().forEach(ModBase.log()::info);
+			}
+		}
+		this.missingAcoustics = null;
+	}
+
 	private void reloadPrimitiveMap(@Nonnull final List<IMyResourcePack> repo) {
 		for (final IMyResourcePack pack : repo) {
 			try (final InputStream stream = pack.getInputStream(ResourcePacks.PRIMITIVEMAP_RESOURCE)) {
@@ -242,7 +251,7 @@ public final class FootstepsRegistry extends Registry {
 					try (final Scanner scanner = new Scanner(stream)) {
 						final String jasonString = scanner.useDelimiter("\\Z").next();
 
-						new AcousticsJsonReader("").parseJSON(jasonString, this.acousticsManager);
+						new AcousticsJsonReader().parseJSON(jasonString, RegistryManager.ACOUSTICS);
 					}
 			} catch (final IOException e) {
 				ModBase.log().debug("Unable to load acoustic data from pack %s", pack.getModName());
@@ -289,10 +298,6 @@ public final class FootstepsRegistry extends Registry {
 		}
 	}
 
-	public AcousticsManager getAcousticManager() {
-		return this.acousticsManager;
-	}
-	
 	public Generator createGenerator(@Nonnull final EntityLivingBase entity) {
 		final EntityEffectInfo info = RegistryManager.EFFECTS.getEffects(entity);
 		Variator var = getVariator(info.variator);
@@ -319,8 +324,7 @@ public final class FootstepsRegistry extends Registry {
 	 * using configuration data. Typically it involves deeper analysis of a block
 	 * state to determine the correct acoustic profile.
 	 *
-	 * @param state
-	 *                  The state for which an AcousticProfile needs to be resolved
+	 * @param state The state for which an AcousticProfile needs to be resolved
 	 * @return AcousticProfile for the state, null otherwise
 	 */
 	@Nullable
@@ -334,20 +338,19 @@ public final class FootstepsRegistry extends Registry {
 	 * attributes. It's a fallback method in case there isn't a configuration
 	 * defined acoustic profile for a block state.
 	 *
-	 * @param state
-	 *                  BlockState for which the acoustic profile is being generated
+	 * @param state BlockState for which the acoustic profile is being generated
 	 * @return Acoustic profile for the BlockState, if any
 	 */
 	@Nullable
 	private IAcoustic[] resolvePrimitive(@Nonnull final IBlockState state) {
 
 		if (state == Blocks.AIR.getDefaultState())
-			return AcousticsManager.NOT_EMITTER;
+			return AcousticRegistry.NOT_EMITTER;
 
 		final SoundType type = MCHelper.getSoundType(state);
 
 		if (type == null)
-			return AcousticsManager.NOT_EMITTER;
+			return AcousticRegistry.NOT_EMITTER;
 
 		final String soundName;
 		boolean flag = false;

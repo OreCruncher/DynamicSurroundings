@@ -22,60 +22,48 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.footsteps.implem;
+package org.orecruncher.dsurround.registry.acoustics;
 
-import java.util.List;
+import java.util.Collection;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.footsteps.interfaces.EventType;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IOptions;
-import org.orecruncher.dsurround.client.footsteps.interfaces.ISoundPlayer;
 
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ProbabilityWeightsAcoustic implements IAcoustic {
-
+public class SimultaneousAcoustic implements IAcoustic {
 	protected final IAcoustic[] acoustics;
-	protected final int[] weights;
-	protected final int totalWeight;
 
-	public ProbabilityWeightsAcoustic(@Nonnull final List<IAcoustic> acoustics, @Nonnull final List<Integer> weights) {
+	public SimultaneousAcoustic(@Nonnull final Collection<IAcoustic> acoustics) {
 		this.acoustics = acoustics.toArray(new IAcoustic[acoustics.size()]);
-		this.weights = new int[weights.size()];
-
-		int tWeight = 0;
-		for (int i = 0; i < weights.size(); i++) {
-			this.weights[i] = weights.get(i).intValue();
-			tWeight += this.weights[i];
-		}
-
-		this.totalWeight = tWeight;
 	}
 
 	@Override
 	@Nonnull
-	public String getAcousticName() {
-		return "Probability Weights Acoustic";
+	public String getName() {
+		return "Simultaneous Acoustic";
 	}
 
 	@Override
 	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location,
 			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
-		if (this.totalWeight <= 0)
-			return;
+		for (int i = 0; i < this.acoustics.length; i++)
+			this.acoustics[i].playSound(player, location, event, inputOptions);
+	}
 
-		int targetWeight = player.getRNG().nextInt(this.totalWeight);
-
-		int i = 0;
-		for (i = this.weights.length; (targetWeight -= this.weights[i - 1]) >= 0; i--)
-			;
-
-		this.acoustics[i - 1].playSound(player, location, event, inputOptions);
+	@Override
+	public String toString() {
+		final StringBuilder builder = new StringBuilder();
+		builder.append(getName()).append('[');
+		for (final IAcoustic a : this.acoustics) {
+			builder.append(a.toString()).append(',');
+		}
+		builder.append(']');
+		return builder.toString();
 	}
 }

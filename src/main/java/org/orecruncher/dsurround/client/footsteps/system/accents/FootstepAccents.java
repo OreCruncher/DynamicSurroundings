@@ -29,8 +29,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IFootstepAccentProvider;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.lib.collections.ObjectArray;
 
 import net.minecraft.entity.EntityLivingBase;

@@ -24,7 +24,7 @@
 
 package org.orecruncher.dsurround.client.footsteps.implem;
 
-import org.orecruncher.dsurround.client.footsteps.interfaces.IOptions;
+import org.orecruncher.dsurround.registry.acoustics.IOptions;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

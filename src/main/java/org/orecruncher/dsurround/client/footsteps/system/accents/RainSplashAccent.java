@@ -30,11 +30,11 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.PrecipitationType;
-import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.client.footsteps.interfaces.IFootstepAccentProvider;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.Weather;
+import org.orecruncher.dsurround.registry.RegistryManager;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.lib.collections.ObjectArray;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -71,7 +71,7 @@ public class RainSplashAccent implements IFootstepAccentProvider {
 				if (precipHeight == this.mutable.getY()) {
 					final PrecipitationType pt = season.getPrecipitationType(world, this.mutable, null);
 					if (pt == PrecipitationType.RAIN)
-						in.addAll(AcousticsManager.SPLASH);
+						in.addAll(RegistryManager.FOOTSTEPS.SPLASH);
 				}
 			}
 		}

@@ -28,10 +28,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.client.footsteps.implem.AcousticsManager;
-import org.orecruncher.dsurround.client.footsteps.interfaces.IAcoustic;
 import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.RegistryManager;
+import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.dsurround.registry.footstep.FootstepsRegistry;
 
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
@@ -52,7 +52,7 @@ public class SimpleArmorItemData extends SimpleItemData implements IArmorItemDat
 			ARMOR.clear();
 			FOOT.clear();
 
-			final AcousticsManager reg = RegistryManager.FOOTSTEPS.getAcousticManager();
+			final AcousticRegistry reg = RegistryManager.ACOUSTICS;
 			ARMOR.put(ItemClass.LEATHER, reg.getAcoustic("armor_light"));
 			ARMOR.put(ItemClass.CHAIN, reg.getAcoustic("armor_medium"));
 			ARMOR.put(ItemClass.CRYSTAL, reg.getAcoustic("armor_crystal"));

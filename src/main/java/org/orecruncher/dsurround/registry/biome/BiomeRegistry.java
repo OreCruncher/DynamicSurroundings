@@ -100,10 +100,10 @@ public final class BiomeRegistry extends Registry {
 	public void worldLoad(@Nonnull final WorldEvent.Load evt) {
 		if (evt.getWorld().isRemote) {
 			ModBase.log().info("Reloading biome registry due to world load...");
-			init();
+			preInit();
 			for (final ModConfiguration mcf : RegistryManager.DATA.get())
-				configure(mcf);
-			initComplete();
+				init(mcf);
+			postInit();
 		}
 	}
 
@@ -123,7 +123,7 @@ public final class BiomeRegistry extends Registry {
 	}
 
 	@Override
-	protected void init() {
+	protected void preInit() {
 		this.biomeAliases.clear();
 		this.theFakes.clear();
 
@@ -166,7 +166,7 @@ public final class BiomeRegistry extends Registry {
 	}
 
 	@Override
-	protected void configure(@Nonnull final ModConfiguration cfg) {
+	protected void init(@Nonnull final ModConfiguration cfg) {
 		cfg.biomeAlias.forEach((alias, biome) -> registerBiomeAlias(alias, biome));
 		cfg.biomes.forEach(entry -> {
 			final BiomeMatcher matcher = BiomeMatcher.getMatcher(entry);
@@ -175,7 +175,7 @@ public final class BiomeRegistry extends Registry {
 	}
 
 	@Override
-	protected void initComplete() {
+	protected void complete() {
 		if (ModOptions.logging.enableDebugLogging) {
 			ModBase.log().info("*** BIOME REGISTRY ***");
 			getCombinedStream().sorted().forEach(e -> ModBase.log().info(e.toString()));

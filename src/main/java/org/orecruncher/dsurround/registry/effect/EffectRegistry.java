@@ -63,7 +63,7 @@ public class EffectRegistry extends Registry {
 	}
 
 	@Override
-	protected void init() {
+	protected void preInit() {
 		this.playerEffects = DEFAULT;
 		this.effects.clear();
 		this.themes.clear();
@@ -73,7 +73,7 @@ public class EffectRegistry extends Registry {
 	}
 
 	@Override
-	protected void configure(@Nonnull final ModConfiguration cfg) {
+	protected void init(@Nonnull final ModConfiguration cfg) {
 		for (final Entry<String, EntityConfig> e : cfg.entities.entrySet()) {
 
 			final String entityName = e.getKey();
@@ -94,7 +94,7 @@ public class EffectRegistry extends Registry {
 	}
 
 	@Override
-	protected void initComplete() {
+	protected void postInit() {
 		// Need to process all the entities registered with Forge to see if they
 		// are in our list. If they aren't the list is scanned looking for
 		// hereditary matches.
