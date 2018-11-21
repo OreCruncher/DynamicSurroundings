@@ -82,11 +82,6 @@ public class ArmorAccents implements IFootstepAccentProvider {
 			foot = ItemClass.footArmorStack(entity);
 		}
 		
-		IItemData id = ItemUtils.getItemData(armor.getItem());
-		if (id instanceof IArmorItemData) {
-			
-		}
-
 		final IAcoustic armorAddon = resolveArmor(armor);
 		IAcoustic footAddon = resolveFootArmor(foot);
 
