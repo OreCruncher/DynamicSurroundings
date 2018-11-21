@@ -24,8 +24,6 @@
 package org.orecruncher.dsurround.client.footsteps;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
 import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 
@@ -36,38 +34,23 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * An acoustic profile is associated with a given IBlockState.
  */
 @SideOnly(Side.CLIENT)
-public class AcousticProfile {
+public final class AcousticProfile {
 
 	public static final AcousticProfile NO_PROFILE = new AcousticProfile();
+	public static final AcousticProfile NOT_EMITTER = new AcousticProfile(AcousticRegistry.NOT_EMITTER);
+	
+	private final IAcoustic[] acoustics;
 	
 	private AcousticProfile() {
-		// Strictly internal
+		this.acoustics = AcousticRegistry.EMPTY;
 	}
 
-	@Nullable
+	public AcousticProfile(@Nonnull final IAcoustic[] acoustics) {
+		this.acoustics = acoustics != null && acoustics.length > 0 ? acoustics : AcousticRegistry.EMPTY;
+	}
+	
+	@Nonnull
 	public IAcoustic[] get() {
-		return AcousticRegistry.EMPTY;
+		return this.acoustics;
 	}
-
-	/**
-	 * A Static acoustic profile is computed and stored for reuse. The profile does
-	 * not change over time.
-	 */
-	public static class Static extends AcousticProfile {
-
-		public static final Static NOT_EMITTER = new AcousticProfile.Static(AcousticRegistry.NOT_EMITTER);
-
-		protected final IAcoustic[] acoustics;
-
-		public Static(@Nonnull final IAcoustic[] acoustics) {
-			this.acoustics = acoustics;
-		}
-
-		@Override
-		@Nonnull
-		public IAcoustic[] get() {
-			return this.acoustics;
-		}
-	}
-
 }

@@ -286,10 +286,10 @@ public final class FootstepsRegistry extends Registry {
 	 * @param state The state for which an AcousticProfile needs to be resolved
 	 * @return AcousticProfile for the state, null otherwise
 	 */
-	@Nullable
+	@Nonnull
 	public AcousticProfile resolve(@Nonnull final IBlockState state) {
 		final IAcoustic[] acoustics = resolvePrimitive(state);
-		return acoustics != null ? new AcousticProfile.Static(acoustics) : AcousticProfile.NO_PROFILE;
+		return acoustics != null ? new AcousticProfile(acoustics) : AcousticProfile.NO_PROFILE;
 	}
 
 	/**

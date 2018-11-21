@@ -66,7 +66,7 @@ public final class BlockAcousticMap {
 		this.resolver = resolver;
 
 		// Air is a very known quantity
-		this.data.put(BlockStateMatcher.AIR, AcousticProfile.Static.NOT_EMITTER);
+		this.data.put(BlockStateMatcher.AIR, AcousticProfile.NOT_EMITTER);
 	}
 
 	@Nonnull
@@ -99,7 +99,7 @@ public final class BlockAcousticMap {
 	}
 
 	public void put(@Nonnull final BlockStateMatcher info, @Nonnull final IAcoustic[] acoustics) {
-		this.data.put(info, new AcousticProfile.Static(acoustics));
+		this.data.put(info, new AcousticProfile(acoustics));
 	}
 
 	public void clear() {
