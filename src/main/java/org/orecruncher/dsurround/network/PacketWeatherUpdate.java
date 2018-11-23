@@ -36,19 +36,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public final class PacketWeatherUpdate implements IMessage {
 
-	public static class PacketHandler implements IMessageHandler<PacketWeatherUpdate, IMessage> {
-		@Override
-		@Nullable
-		public IMessage onMessage(@Nonnull final PacketWeatherUpdate message, @Nullable final MessageContext ctx) {
-			Network.postEvent(new WeatherUpdateEvent(message.dimension, message.intensity, message.maxIntensity,
-					message.nextRainChange, message.thunderStrength, message.thunderChange, message.thunderEvent));
-			return null;
-		}
-	}
-
-	/**
-	 * Strength of rainfall
-	 */
+	private int dimension;
 	private float intensity;
 	private float maxIntensity;
 	private int nextRainChange;
@@ -56,12 +44,8 @@ public final class PacketWeatherUpdate implements IMessage {
 	private int thunderChange;
 	private int thunderEvent;
 
-	/**
-	 * Dimension where the rainfall is occurring
-	 */
-	private int dimension;
-
 	public PacketWeatherUpdate() {
+		// Needed for client side creation
 	}
 
 	public PacketWeatherUpdate(final int dimension, final float intensity, final float maxIntensity,
@@ -77,7 +61,7 @@ public final class PacketWeatherUpdate implements IMessage {
 
 	@Override
 	public void fromBytes(@Nonnull final ByteBuf buf) {
-		this.dimension = buf.readShort();
+		this.dimension = buf.readInt();
 		this.intensity = buf.readFloat();
 		this.maxIntensity = buf.readFloat();
 		this.nextRainChange = buf.readInt();
@@ -88,13 +72,25 @@ public final class PacketWeatherUpdate implements IMessage {
 
 	@Override
 	public void toBytes(@Nonnull final ByteBuf buf) {
-		buf.writeShort(this.dimension);
+		buf.writeInt(this.dimension);
 		buf.writeFloat(this.intensity);
 		buf.writeFloat(this.maxIntensity);
 		buf.writeInt(this.nextRainChange);
 		buf.writeFloat(this.thunderStrength);
 		buf.writeInt(this.thunderChange);
 		buf.writeInt(this.thunderEvent);
+	}
+
+	public static class PacketHandler implements IMessageHandler<PacketWeatherUpdate, IMessage> {
+		@Override
+		@Nullable
+		public IMessage onMessage(@Nonnull final PacketWeatherUpdate message, @Nullable final MessageContext ctx) {
+			if (ctx != null) {
+				Network.postEvent(new WeatherUpdateEvent(message.dimension, message.intensity, message.maxIntensity,
+						message.nextRainChange, message.thunderStrength, message.thunderChange, message.thunderEvent));
+			}
+			return null;
+		}
 	}
 
 }

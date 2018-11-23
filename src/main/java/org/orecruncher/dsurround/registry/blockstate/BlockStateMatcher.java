@@ -173,35 +173,38 @@ public class BlockStateMatcher {
 
 	@Override
 	public boolean equals(final Object obj) {
-		final BlockStateMatcher m = (BlockStateMatcher) obj;
-		// If the block types don't match, there will be no match
-		if (this.block != m.block)
-			return false;
-		// If they both are null then they are equal
-		if (this.props == null && m.props == null)
-			return true;
-		// If there are no props in this one then it is a real generic match
-		if (this.props == null || this.props.size() == 0)
-			return true;
-		// This one has props. If the other doesn't then they don't match
-		if (m.props == null || m.props.size() == 0)
-			return false;
-
-		// Should this should have the same or less properties than the other
-		if (this.props.size() > m.props.size())
-			return false;
-
-		// Run em down doing compares
-		for (final Entry<IProperty<?>, Object> entry : m.props.reference2ObjectEntrySet()) {
-			final Object v = this.props.get(entry.getKey());
-			if (v == null || !v.equals(entry.getValue()))
+		if (obj instanceof BlockStateMatcher) {
+			final BlockStateMatcher m = (BlockStateMatcher) obj;
+			// If the block types don't match, there will be no match
+			if (this.block != m.block)
 				return false;
-		}
+			// If they both are null then they are equal
+			if (this.props == null && m.props == null)
+				return true;
+			// If there are no props in this one then it is a real generic match
+			if (this.props == null || this.props.size() == 0)
+				return true;
+			// This one has props. If the other doesn't then they don't match
+			if (m.props == null || m.props.size() == 0)
+				return false;
 
-		return true;
+			// Should this should have the same or less properties than the other
+			if (this.props.size() > m.props.size())
+				return false;
+
+			// Run 'em down doing compares
+			for (final Entry<IProperty<?>, Object> entry : m.props.reference2ObjectEntrySet()) {
+				final Object v = this.props.get(entry.getKey());
+				if (v == null || !v.equals(entry.getValue()))
+					return false;
+			}
+
+			return true;
+		}
+		return false;
 	}
 
-	@Nonnull
+	@Nullable
 	protected Reference2ObjectOpenHashMap<IProperty<?>, Object> getPropsFromState(@Nonnull final IBlockState state) {
 		final Reference2ObjectOpenHashMap<IProperty<?>, Object> result = new Reference2ObjectOpenHashMap<>();
 

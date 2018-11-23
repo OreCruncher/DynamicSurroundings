@@ -149,7 +149,7 @@ public class AcousticResolver {
 	@Nullable
 	protected Association resolve(@Nonnull Vec3d vec) {
 		IBlockState in = null;
-		IAcoustic[] acoustics = null;
+		IAcoustic[] acoustics = AcousticRegistry.EMPTY;
 
 		Vec3d tPos = vec.add(0, 1, 0);
 		final IBlockState above = getBlockState(tPos);
@@ -157,7 +157,7 @@ public class AcousticResolver {
 		if (above != this.airState)
 			acoustics = this.blockMap.getBlockAcoustics(above, Substrate.CARPET);
 
-		if (acoustics == null || acoustics == AcousticRegistry.NOT_EMITTER) {
+		if (acoustics == AcousticRegistry.NOT_EMITTER || acoustics == AcousticRegistry.EMPTY) {
 			// This condition implies that if the carpet is NOT_EMITTER, solving
 			// will CONTINUE with the actual block surface the player is walking
 			// on NOT_EMITTER carpets will not cause solving to skip
@@ -167,17 +167,17 @@ public class AcousticResolver {
 				tPos = vec.add(0, -1, 0);
 				final IBlockState below = getBlockState(tPos);
 				acoustics = this.blockMap.getBlockAcoustics(below, Substrate.FENCE);
-				if (acoustics != null) {
+				if (acoustics != AcousticRegistry.EMPTY) {
 					vec = tPos;
 					in = below;
 				}
 			}
 
-			if (acoustics == null) {
+			if (acoustics == AcousticRegistry.EMPTY) {
 				acoustics = this.blockMap.getBlockAcoustics(in);
 			}
 
-			if (acoustics != null && acoustics != AcousticRegistry.NOT_EMITTER) {
+			if (acoustics != AcousticRegistry.NOT_EMITTER) {
 				// This condition implies that foliage over a NOT_EMITTER block
 				// CANNOT PLAY This block most not be executed if the association
 				// is a carpet => this block of code is here, not outside this
@@ -195,20 +195,13 @@ public class AcousticResolver {
 			in = above;
 		}
 
-		if (acoustics != null) {
-			if (acoustics == AcousticRegistry.NOT_EMITTER) {
-				// Player has stepped on a non-emitter block as defined in the blockmap
-				return null;
-			} else {
-				// Let's play the fancy acoustics we have defined for the block
-				return new Association(in, this.loc.rebase(new BlockPos(vec)), acoustics);
-			}
+		if (acoustics == AcousticRegistry.NOT_EMITTER) {
+			// Player has stepped on a non-emitter block as defined in the blockmap
+			return null;
 		} else {
-			// No acoustics. Calling logic will default to playing the normal block
-			// step sound if available.
-			return new Association(in, this.loc.rebase(new BlockPos(vec)));
+			// Let's play the fancy acoustics we have defined for the block
+			return new Association(in, this.loc.rebase(new BlockPos(vec)), acoustics);
 		}
-
 	}
 
 }

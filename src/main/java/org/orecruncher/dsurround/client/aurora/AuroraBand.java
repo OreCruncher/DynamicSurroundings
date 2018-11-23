@@ -28,6 +28,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.client.aurora.AuroraFactory.AuroraGeometry;
 import org.orecruncher.lib.math.MathStuff;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -44,14 +45,14 @@ public class AuroraBand {
 
 	protected final Random random;
 
-	protected Node[] nodes;
+	protected Panel[] nodes;
 	protected float cycle = 0.0F;
 	protected int alphaLimit = 128;
 	protected int length;
 	protected float nodeLength;
 	protected float nodeWidth;
 
-	public AuroraBand(final Random random, final AuroraGeometry geo, final boolean noTaper, final boolean fixedHeight) {
+	public AuroraBand(final Random random, final org.orecruncher.dsurround.client.aurora.AuroraFactory.AuroraGeometry geo, final boolean noTaper, final boolean fixedHeight) {
 		this.random = random;
 		preset(geo);
 		generateBands(noTaper, fixedHeight);
@@ -62,7 +63,7 @@ public class AuroraBand {
 		this(random, geo, false, false);
 	}
 
-	protected AuroraBand(final Node[] nodes, final AuroraBand band) {
+	protected AuroraBand(final Panel[] nodes, final AuroraBand band) {
 		this.random = band.random;
 		this.nodes = nodes;
 		this.cycle = band.cycle;
@@ -78,7 +79,7 @@ public class AuroraBand {
 	}
 
 	@Nonnull
-	public Node[] getNodeList() {
+	public Panel[] getNodeList() {
 		return this.nodes;
 	}
 
@@ -92,9 +93,9 @@ public class AuroraBand {
 	}
 
 	public AuroraBand copy(final int offset) {
-		final Node[] newNodes = new Node[this.nodes.length];
+		final Panel[] newNodes = new Panel[this.nodes.length];
 		for (int i = 0; i < this.nodes.length; i++)
-			newNodes[i] = new Node(this.nodes[i], offset);
+			newNodes[i] = new Panel(this.nodes[i], offset);
 		return new AuroraBand(newNodes, this);
 	}
 
@@ -108,7 +109,7 @@ public class AuroraBand {
 			// final float f = MathStuff.cos(MathStuff.toRadians(AURORA_WAVELENGTH * i +
 			// c));
 			final float f = MathStuff.cos(MathStuff.toRadians((i << 3) + c));
-			final Node node = this.nodes[i];
+			final Panel node = this.nodes[i];
 			node.dZ = f * AURORA_AMPLITUDE;
 			node.dY = f * 3.0F;
 
@@ -153,8 +154,8 @@ public class AuroraBand {
 	}
 
 	@Nonnull
-	protected Node[] populate(final boolean noTaper, final boolean fixedHeight) {
-		final Node[] nodeList = new Node[this.length];
+	protected Panel[] populate(final boolean noTaper, final boolean fixedHeight) {
+		final Panel[] nodeList = new Panel[this.length];
 		final int bound = this.length / 2 - 1;
 
 		float angleTotal = 0.0F;
@@ -170,7 +171,7 @@ public class AuroraBand {
 				final int idx = i * 8 + k;
 				if (idx == bound) {
 					final float amplitude = fixedHeight ? AURORA_AMPLITUDE : (7.0F + this.random.nextFloat());
-					nodeList[idx] = new Node(0.0F, amplitude, 0.0F, angle);
+					nodeList[idx] = new Panel(0.0F, amplitude, 0.0F, angle);
 				} else {
 					float y;
 					if (fixedHeight)
@@ -180,13 +181,13 @@ public class AuroraBand {
 					else
 						y = 10.0F + this.random.nextFloat() * 5.0F;
 
-					final Node node = nodeList[idx + 1];
+					final Panel node = nodeList[idx + 1];
 					final float subAngle = node.angle + angle;
 					final float subAngleRads = MathStuff.toRadians(subAngle);
 					final float z = node.posZ - (MathStuff.sin(subAngleRads) * this.nodeLength);
 					final float x = node.posX - (MathStuff.cos(subAngleRads) * this.nodeLength);
 
-					nodeList[idx] = new Node(x, y, z, subAngle);
+					nodeList[idx] = new Panel(x, y, z, subAngle);
 				}
 			}
 		}
@@ -208,13 +209,13 @@ public class AuroraBand {
 				else
 					y = 10.0F + this.random.nextFloat() * 5.0F;
 
-				final Node node = nodeList[j * 8 + h - 1];
+				final Panel node = nodeList[j * 8 + h - 1];
 				final float subAngle = node.angle + angle;
 				final float subAngleRads = MathStuff.toRadians(subAngle);
 				final float z = node.posZ + (MathStuff.sin(subAngleRads) * this.nodeLength);
 				final float x = node.posX + (MathStuff.cos(subAngleRads) * this.nodeLength);
 
-				nodeList[j * 8 + h] = new Node(x, y, z, subAngle);
+				nodeList[j * 8 + h] = new Panel(x, y, z, subAngle);
 			}
 		}
 

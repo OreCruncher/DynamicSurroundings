@@ -37,45 +37,43 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketThunder implements IMessage {
 
-	public static class PacketHandler implements IMessageHandler<PacketThunder, IMessage> {
-		@Override
-		@Nullable
-		public IMessage onMessage(@Nonnull final PacketThunder message, @Nullable final MessageContext ctx) {
-			Network.postEvent(new ThunderEvent(message.dimension, message.doFlash, message.pos));
-			return null;
-		}
-	}
-
 	private int dimension;
 	private boolean doFlash;
 	private BlockPos pos;
 
 	public PacketThunder() {
+		// Needed for client side creation
 	}
 
-	public PacketThunder(final int dimensionId, final boolean doFlash, final BlockPos pos) {
+	public PacketThunder(final int dimensionId, final boolean doFlash, @Nonnull final BlockPos pos) {
 		this.dimension = dimensionId;
 		this.doFlash = doFlash;
-		this.pos = pos;
+		this.pos = pos.toImmutable();
 	}
 
 	@Override
 	public void fromBytes(@Nonnull final ByteBuf buf) {
-		this.dimension = buf.readShort();
+		this.dimension = buf.readInt();
 		this.doFlash = buf.readBoolean();
-		final int x = buf.readInt();
-		final int y = buf.readInt();
-		final int z = buf.readInt();
-		this.pos = new BlockPos(x, y, z);
+		this.pos = BlockPos.fromLong(buf.readLong());
 	}
 
 	@Override
 	public void toBytes(@Nonnull final ByteBuf buf) {
-		buf.writeShort(this.dimension);
+		buf.writeInt(this.dimension);
 		buf.writeBoolean(this.doFlash);
-		buf.writeInt(this.pos.getX());
-		buf.writeInt(this.pos.getY());
-		buf.writeInt(this.pos.getZ());
+		buf.writeLong(this.pos.toLong());
+	}
+
+	public static class PacketHandler implements IMessageHandler<PacketThunder, IMessage> {
+		@Override
+		@Nullable
+		public IMessage onMessage(@Nonnull final PacketThunder message, @Nullable final MessageContext ctx) {
+			if (ctx != null) {
+				Network.postEvent(new ThunderEvent(message.dimension, message.doFlash, message.pos));
+			}
+			return null;
+		}
 	}
 
 }

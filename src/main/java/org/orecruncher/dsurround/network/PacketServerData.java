@@ -51,7 +51,7 @@ public class PacketServerData implements IMessage {
 	private int max;
 
 	public PacketServerData() {
-
+		// Needed for client side creation
 	}
 
 	public PacketServerData(@Nonnull final Int2DoubleOpenHashMap tps, final double meanTickTime, final int memFree,
@@ -102,25 +102,27 @@ public class PacketServerData implements IMessage {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketServerData message, @Nullable final MessageContext ctx) {
-			ModBase.proxy().getThreadListener(ctx).addScheduledTask(() -> {
-				final ArrayList<String> data = new ArrayList<>();
-				final int diff = message.total - message.free;
-				data.add(TextFormatting.GOLD + "Server Information");
-				data.add(String.format("Mem: %d%% %03d/%3dMB", diff * 100 / message.max, diff, message.max));
-				data.add(String.format("Allocated: %d%% %3dMB", message.total * 100 / message.max, message.total));
-				final int tps = (int) Math.min(1000.0D / message.meanTickTime, 20.0D);
-				data.add(String.format("Ticktime Overall:%s %5.3fms (%d TPS)", getTpsFormatPrefix(tps),
-						message.meanTickTime, tps));
-				message.tMap.int2DoubleEntrySet().forEach(entry -> {
-					final String dimName = DimensionManager.getProviderType(entry.getIntKey()).getName();
-					final int tps1 = (int) Math.min(1000.0D / entry.getDoubleValue(), 20.0D);
-					data.add(String.format("%s (%d):%s %7.3fms (%d TPS)", dimName, entry.getIntKey(),
-							getTpsFormatPrefix(tps1), entry.getDoubleValue(), tps1));
+			if (ctx != null) {
+				ModBase.proxy().getThreadListener(ctx).addScheduledTask(() -> {
+					final ArrayList<String> data = new ArrayList<>();
+					final int diff = message.total - message.free;
+					data.add(TextFormatting.GOLD + "Server Information");
+					data.add(String.format("Mem: %d%% %03d/%3dMB", diff * 100 / message.max, diff, message.max));
+					data.add(String.format("Allocated: %d%% %3dMB", message.total * 100 / message.max, message.total));
+					final int tps = (int) Math.min(1000.0D / message.meanTickTime, 20.0D);
+					data.add(String.format("Ticktime Overall:%s %5.3fms (%d TPS)", getTpsFormatPrefix(tps),
+							message.meanTickTime, tps));
+					message.tMap.int2DoubleEntrySet().forEach(entry -> {
+						final String dimName = DimensionManager.getProviderType(entry.getIntKey()).getName();
+						final int tps1 = (int) Math.min(1000.0D / entry.getDoubleValue(), 20.0D);
+						data.add(String.format("%s (%d):%s %7.3fms (%d TPS)", dimName, entry.getIntKey(),
+								getTpsFormatPrefix(tps1), entry.getDoubleValue(), tps1));
+					});
+					Collections.sort(data.subList(4, data.size()));
+					final DiagnosticHandler handler = EffectManager.instance().lookupService(DiagnosticHandler.class);
+					handler.setServerTPSReport(data);
 				});
-				Collections.sort(data.subList(4, data.size()));
-				final DiagnosticHandler handler = EffectManager.instance().lookupService(DiagnosticHandler.class);
-				handler.setServerTPSReport(data);
-			});
+			}
 			return null;
 		}
 	}

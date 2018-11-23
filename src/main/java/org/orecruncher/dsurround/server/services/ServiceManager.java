@@ -97,7 +97,7 @@ public final class ServiceManager extends Service {
 		RegistryManager.DIMENSION.loading(e.getWorld());
 	}
 
-	private static long tpsCount = 0;
+	private long tpsCount = 0;
 
 	private static long mean(@Nonnull final long[] values) {
 		long sum = 0L;
@@ -118,7 +118,7 @@ public final class ServiceManager extends Service {
 			return;
 
 		// Spam once a second
-		if ((++tpsCount % 20) != 0)
+		if ((++this.tpsCount % 20) != 0)
 			return;
 
 		final MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();

@@ -154,7 +154,7 @@ public final class FootStrikeLocation {
 		return Math.max(baseY, pos.getY() + Math.max(bounding.maxY, collision.maxY));
 	}
 
-	protected boolean hasFootstepImprint(@Nonnull final World world, @Nullable final IBlockState state,
+	protected boolean hasFootstepImprint(@Nonnull final World world, @Nonnull final IBlockState state,
 			@Nonnull final Vec3d pos) {
 		final IBlockState footstepState = FacadeHelper.resolveState(this.entity, state, world, pos, EnumFacing.UP);
 		return RegistryManager.FOOTSTEPS.hasFootprint(footstepState);

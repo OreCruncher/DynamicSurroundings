@@ -30,6 +30,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.lib.collections.ObjectArray;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -45,8 +46,8 @@ public class SpeechData implements ISpeechData {
 	private RenderContext ctx;
 
 	@Override
-	public void addMessage(@Nonnull final String string, final int expiry) {
-		final SpeechBubbleData data = new SpeechBubbleData(string, expiry);
+	public void addMessage(@Nonnull final String string, final int ticksTTL) {
+		final SpeechBubbleData data = new SpeechBubbleData(string, EnvironState.getTickCounter() + ticksTTL);
 		this.data.add(data);
 		generateTextForRender();
 	}

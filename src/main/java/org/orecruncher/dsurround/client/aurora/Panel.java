@@ -32,7 +32,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-final class Node {
+final class Panel {
 
 	private static final float COS_DEG90_FACTOR = MathStuff.cos(MathStuff.PI_F / 2.0F);
 	private static final float COS_DEG270_FACTOR = MathStuff.cos(MathStuff.PI_F / 2.0F + MathStuff.PI_F);
@@ -57,7 +57,7 @@ final class Node {
 	public float tetZ = 0.0F;
 	public float tetZ2 = 0.0F;
 
-	public Node(@Nonnull final Node template, final int offset) {
+	public Panel(@Nonnull final Panel template, final int offset) {
 		final float rads = MathStuff.toRadians(90.0F + template.angle);
 		this.posX = template.posX + MathStuff.cos(rads) * offset;
 		this.posY = template.posY - 2.0F;
@@ -65,7 +65,7 @@ final class Node {
 		this.angle = template.angle;
 	}
 
-	public Node(final float x, final float y, final float z, final float theta) {
+	public Panel(final float x, final float y, final float z, final float theta) {
 		this.posX = x;
 		this.posY = y;
 		this.posZ = z;

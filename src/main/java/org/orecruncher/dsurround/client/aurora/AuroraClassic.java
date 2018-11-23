@@ -45,8 +45,7 @@ public final class AuroraClassic extends AuroraBase {
 	@Override
 	public void update() {
 		super.update();
-		for (int i = 0; i < this.bands.length; i++)
-			this.bands[i].update();
+		this.band.update();
 	}
 
 	@Override
@@ -66,8 +65,6 @@ public final class AuroraClassic extends AuroraBase {
 
 		final OpenGlState glState = OpenGlState.push();
 		
-		GlStateManager.translate(tranX, tranY, tranZ);
-		GlStateManager.scale(0.5D, 8.0D, 0.5D);
 		GlStateManager.disableLighting();
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
@@ -78,15 +75,19 @@ public final class AuroraClassic extends AuroraBase {
 		GlStateManager.disableCull();
 		GlStateManager.depthMask(false);
 
-		renderer.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
+		this.band.translate(partialTick);
+		final Panel[] array = this.band.getNodeList();
 
-		for (int b = 0; b < this.bands.length; b++) {
-			this.bands[b].translate(partialTick);
+		for (int b = 0; b < this.bandCount; b++) {
 
-			final Node[] array = this.bands[b].getNodeList();
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(tranX, tranY, tranZ + this.offset * b);
+			GlStateManager.scale(0.5D, 8.0D, 0.5D);
+
+			renderer.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
 			for (int i = 0; i < array.length - 1; i++) {
 
-				final Node node = array[i];
+				final Panel node = array[i];
 
 				final double posY = node.getModdedY();
 				final double posX = node.tetX;
@@ -101,7 +102,7 @@ public final class AuroraClassic extends AuroraBase {
 				final double posY2;
 
 				if (i < array.length - 2) {
-					final Node nodePlus = array[i + 1];
+					final Panel nodePlus = array[i + 1];
 					posX2 = nodePlus.tetX;
 					posZ2 = nodePlus.tetZ;
 					tetX2 = nodePlus.tetX2;
@@ -137,9 +138,10 @@ public final class AuroraClassic extends AuroraBase {
 				renderer.pos(tetX2, zero, tetZ2).color(base.red, base.green, base.blue, alpha).endVertex();
 				renderer.pos(tetX, zero, tetZ).color(base.red, base.green, base.blue, alpha).endVertex();
 			}
+			tess.draw();
+			GlStateManager.popMatrix();
 		}
 
-		tess.draw();
 
 		OpenGlState.pop(glState);
 	}

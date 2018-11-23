@@ -32,9 +32,10 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.lib.Color;
 
-/**
- * Preset color pairs for generating aurora colors.
- */
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
 public final class AuroraColor {
 
 	/**

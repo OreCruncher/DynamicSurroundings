@@ -47,7 +47,7 @@ public class PacketEntityData implements IMessage {
 	private boolean isFleeing;
 
 	public PacketEntityData() {
-
+		// Needed for client side creation
 	}
 
 	public PacketEntityData(@Nonnull final IEntityData data) {
@@ -74,19 +74,20 @@ public class PacketEntityData implements IMessage {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketEntityData message, @Nullable final MessageContext ctx) {
-			ModBase.proxy().getThreadListener(ctx).addScheduledTask(() -> {
-				final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), message.entityId);
-				if (entity != null) {
-					final IEntityDataSettable data = (IEntityDataSettable) CapabilityEntityData.getCapability(entity);
-					if (data != null) {
-						data.setAttacking(message.isAttacking);
-						data.setFleeing(message.isFleeing);
+			if (ctx != null) {
+				ModBase.proxy().getThreadListener(ctx).addScheduledTask(() -> {
+					final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), message.entityId);
+					if (entity != null) {
+						final IEntityDataSettable data = (IEntityDataSettable) CapabilityEntityData
+								.getCapability(entity);
+						if (data != null) {
+							data.setAttacking(message.isAttacking);
+							data.setFleeing(message.isFleeing);
+						}
 					}
-				}
-			});
+				});
+			}
 			return null;
 		}
 	}
-
-
 }

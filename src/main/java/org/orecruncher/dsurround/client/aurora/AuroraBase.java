@@ -27,6 +27,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.client.aurora.AuroraFactory.AuroraGeometry;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.registry.dimension.DimensionData;
 import org.orecruncher.lib.Color;
@@ -40,8 +41,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class AuroraBase implements IAurora {
 
 	protected final Random random;
-	protected final long seed;
-	protected final AuroraBand[] bands;
+	protected final AuroraBand band;
+	protected final int bandCount;
+	protected final float offset;
 	protected final AuroraLifeTracker tracker;
 	protected final AuroraColor colors;
 
@@ -50,18 +52,18 @@ public abstract class AuroraBase implements IAurora {
 	}
 
 	public AuroraBase(final long seed, final boolean flag) {
-		this.seed = seed;
-		this.tracker = new AuroraLifeTracker(AuroraUtils.AURORA_PEAK_AGE, AuroraUtils.AURORA_AGE_RATE);
-		this.random = new XorShiftRandom(seed);
-		this.bands = new AuroraBand[this.random.nextInt(3) + 1];
+		this(new XorShiftRandom(seed), flag);
+	}
+
+	public AuroraBase(final Random rand, final boolean flag) {
+		this.random = rand;
+		this.bandCount = this.random.nextInt(3) + 1;
+		this.offset = this.random.nextInt(20) + 20;
 		this.colors = AuroraColor.get(this.random);
 
 		final AuroraGeometry geo = AuroraGeometry.get(this.random);
-		this.bands[0] = new AuroraBand(this.random, geo, flag, flag);
-		if (this.bands.length > 1) {
-			for (int i = 1; i < this.bands.length; i++)
-				this.bands[i] = this.bands[0].copy(geo.bandOffset * i);
-		}
+		this.band = new AuroraBand(this.random, geo, flag, flag);
+		this.tracker = new AuroraLifeTracker(AuroraUtils.AURORA_PEAK_AGE, AuroraUtils.AURORA_AGE_RATE);
 	}
 
 	@Override
@@ -90,7 +92,7 @@ public abstract class AuroraBase implements IAurora {
 	}
 
 	protected float getAlpha() {
-		return (this.tracker.ageRatio() * this.bands[0].getAlphaLimit()) / 255;
+		return (this.tracker.ageRatio() * this.band.getAlphaLimit()) / 255;
 	}
 
 	protected double getTranslationX(final float partialTick) {
@@ -139,8 +141,9 @@ public abstract class AuroraBase implements IAurora {
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append("seed: ").append(this.seed);
-		builder.append(", bands: ").append(this.bands.length);
+		builder.append("bands: ").append(this.bandCount);
+		builder.append(", off: ").append(this.offset);
+		builder.append(", len: ").append(this.band.length);
 		builder.append(", base: ").append(getBaseColor().toString());
 		builder.append(", fade: ").append(getFadeColor().toString());
 		builder.append(", alpha: ").append((int) (getAlpha() * 255));

@@ -76,9 +76,10 @@ public abstract class MoteEntityTied extends MoteMotionBase {
 
 	// Adjust the Y of the particle based on what is needed
 	protected double heightAdjust() {
-		return (this.subject.get().isSneaking() ? -0.25D : 0);
+		final Entity entity = getEntity();
+		return entity != null && entity.isSneaking() ? -0.25D : 0;
 	}
-	
+
 	@Override
 	public void update() {
 		if (shouldExpire()) {
@@ -90,10 +91,12 @@ public abstract class MoteEntityTied extends MoteMotionBase {
 		this.prevY = this.posY;
 		this.prevZ = this.posZ;
 
-		final Entity entity = this.subject.get();
-		this.posX = entity.posX;
-		this.posY = entity.posY + entity.height + heightAdjust();
-		this.posZ = entity.posZ;
-		this.position.setPos(this.posX, this.posY, this.posZ);
+		final Entity entity = getEntity();
+		if (entity != null) {
+			this.posX = entity.posX;
+			this.posY = entity.posY + entity.height + heightAdjust();
+			this.posZ = entity.posZ;
+			this.position.setPos(this.posX, this.posY, this.posZ);
+		}
 	}
 }

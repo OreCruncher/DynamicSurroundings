@@ -84,7 +84,7 @@ public final class MusicFader {
 		currentScale = MathStuff.clamp(currentScale, MIN_VOLUME_SCALE, 1.0F);
 
 		// If there is a change in scale tell the SoundManager
-		if (oldScale != currentScale) {
+		if (Float.compare(oldScale, currentScale) != 0) {
 			// Have to tickle the sound engine because the scaling changed. Just set it to
 			// the current value which causes the SoundManager to reevaluate the volume
 			// settings. Since we hooked the volume routine with ASM we can apply the

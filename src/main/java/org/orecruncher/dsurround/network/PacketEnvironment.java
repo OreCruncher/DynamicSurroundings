@@ -40,7 +40,7 @@ public class PacketEnvironment implements IMessage {
 	private boolean inVillage;
 
 	public PacketEnvironment() {
-
+		// Needed for client side creation
 	}
 
 	public PacketEnvironment(final boolean inVillage) {
@@ -61,12 +61,12 @@ public class PacketEnvironment implements IMessage {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketEnvironment message, @Nullable final MessageContext ctx) {
-			ModBase.proxy().getThreadListener(ctx).addScheduledTask(() -> {
-				EnvironState.setInVillage(message.inVillage);
-			});
+			if (ctx != null) {
+				ModBase.proxy().getThreadListener(ctx)
+						.addScheduledTask(() -> EnvironState.setInVillage(message.inVillage));
+			}
 			return null;
 		}
 	}
-
 
 }

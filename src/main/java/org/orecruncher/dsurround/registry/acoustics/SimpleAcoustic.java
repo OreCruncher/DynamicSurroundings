@@ -41,12 +41,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SimpleAcoustic implements IAcoustic {
 
+	@Nullable
 	protected SoundEvent sound;
 	protected float volMin = 1f;
 	protected float volMax = 1f;
 	protected float pitchMin = 1f;
 	protected float pitchMax = 1f;
 
+	@Nullable
 	protected IOptions outputOptions;
 
 	public SimpleAcoustic() {
@@ -60,7 +62,7 @@ public class SimpleAcoustic implements IAcoustic {
 	@Override
 	@Nonnull
 	public String getName() {
-		return this.sound.getSoundName().toString();
+		return this.sound != null ? this.sound.getSoundName().toString() : "<UNKNOWN>";
 	}
 
 	@Override
@@ -102,7 +104,7 @@ public class SimpleAcoustic implements IAcoustic {
 		return a + rng.nextFloat() * (b - a);
 	}
 
-	public void setSound(@Nonnull final SoundEvent sound) {
+	public void setSound(@Nullable final SoundEvent sound) {
 		this.sound = sound;
 	}
 

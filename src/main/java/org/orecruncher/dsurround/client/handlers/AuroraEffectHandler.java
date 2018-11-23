@@ -28,13 +28,10 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.aurora.AuroraClassic;
-import org.orecruncher.dsurround.client.aurora.AuroraShaderBand;
+import org.orecruncher.dsurround.client.aurora.AuroraFactory;
 import org.orecruncher.dsurround.client.aurora.AuroraUtils;
 import org.orecruncher.dsurround.client.aurora.IAurora;
-import org.orecruncher.dsurround.client.aurora.IAuroraEngine;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.client.shader.Shaders;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.lib.DiurnalUtils;
 import org.orecruncher.lib.math.TimerEMA;
@@ -51,8 +48,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class AuroraEffectHandler extends EffectHandlerBase {
 
-	private final IAuroraEngine auroraEngine;
-
 	private IAurora current;
 	private int dimensionId;
 
@@ -61,11 +56,6 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 
 	public AuroraEffectHandler() {
 		super("Aurora Effect");
-
-		if (ModOptions.aurora.auroraUseShader && Shaders.areShadersSupported())
-			this.auroraEngine = (seed) -> new AuroraShaderBand(seed);
-		else
-			this.auroraEngine = (seed) -> new AuroraClassic(seed);
 	}
 
 	@Override
@@ -123,7 +113,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 
 		// If there isn't a current aurora see if it needs to spawn
 		if (spawnAurora(player.getEntityWorld())) {
-			this.current = this.auroraEngine.produce(AuroraUtils.getSeed());
+			this.current = AuroraFactory.produce(AuroraUtils.getSeed());
 			ModBase.log().debug("New aurora [%s]", this.current.toString());
 		}
 

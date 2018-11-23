@@ -48,6 +48,7 @@ public final class BlockAcousticMap {
 	 * the cache for future lookups.
 	 */
 	public static interface IAcousticResolver {
+		@Nullable
 		IAcoustic[] resolve(@Nonnull final IBlockState state);
 	}
 
@@ -60,13 +61,11 @@ public final class BlockAcousticMap {
 	 * based on block properties (i.e. used for substrate maps).
 	 */
 	public BlockAcousticMap() {
-		this(null);
+		this((state) -> AcousticRegistry.EMPTY);
 	}
 
 	public BlockAcousticMap(@Nonnull final IAcousticResolver resolver) {
 		this.resolver = resolver;
-
-		// Air is a very known quantity
 		this.data.put(BlockStateMatcher.AIR, AcousticRegistry.NOT_EMITTER);
 	}
 
@@ -89,7 +88,7 @@ public final class BlockAcousticMap {
 	 * Obtain acoustic information for a block. If the block has variants (subtypes)
 	 * it will fall back to searching for a generic if a specific one is not found.
 	 */
-	@Nullable
+	@Nonnull
 	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state) {
 		IAcoustic[] result = this.cache.get(state);
 		if (result == null) {

@@ -48,7 +48,7 @@ public class PacketSpeechBubble implements IMessage {
 	protected String message;
 
 	public PacketSpeechBubble() {
-
+		// Needed for client side creation
 	}
 
 	public PacketSpeechBubble(@Nonnull final Entity player, @Nonnull final String message) {
@@ -72,20 +72,18 @@ public class PacketSpeechBubble implements IMessage {
 		@Override
 		@Nullable
 		public IMessage onMessage(@Nonnull final PacketSpeechBubble message, @Nullable final MessageContext ctx) {
-			ModBase.proxy().getThreadListener(ctx).addScheduledTask(() -> {
-				final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), message.entityId);
-				if (entity == null || !(entity instanceof EntityPlayer) || !ModOptions.speechbubbles.enableSpeechBubbles)
-					return;
-				final ISpeechData data = CapabilitySpeechData.getCapability(entity);
-				if (data != null) {
-					final int expiry = EnvironState.getTickCounter()
-							+ (int) (ModOptions.speechbubbles.speechBubbleDuration * 20F);
-					data.addMessage(message.message, expiry);
-				}
-			});
+			if (ctx != null && ModOptions.speechbubbles.enableSpeechBubbles) {
+				ModBase.proxy().getThreadListener(ctx).addScheduledTask(() -> {
+					final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), message.entityId);
+					if (entity == null || !(entity instanceof EntityPlayer))
+						return;
+					final ISpeechData data = CapabilitySpeechData.getCapability(entity);
+					if (data != null)
+						data.addMessage(message.message, (int) (ModOptions.speechbubbles.speechBubbleDuration * 20F));
+				});
+			}
 			return null;
 		}
 	}
-
 
 }

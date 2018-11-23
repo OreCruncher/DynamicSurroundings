@@ -73,12 +73,18 @@ public class DimensionConfig {
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
-		if (this == obj)
-			return true;
+	public int hashCode() {
+		return this.dimensionId != null ? this.dimensionId.hashCode()
+				: this.name != null ? this.name.hashCode() : super.hashCode();
+	}
 
-		final DimensionConfig dc = (DimensionConfig) obj;
-		return (this.dimensionId != null && this.dimensionId.equals(dc.dimensionId))
-				|| (this.name != null && this.name.equals(dc.name));
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj instanceof DimensionConfig) {
+			final DimensionConfig dc = (DimensionConfig) obj;
+			return (this.dimensionId != null && this.dimensionId.equals(dc.dimensionId))
+					|| (this.name != null && this.name.equals(dc.name));
+		}
+		return false;
 	}
 }

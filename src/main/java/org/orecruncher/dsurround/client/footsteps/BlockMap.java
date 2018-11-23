@@ -182,22 +182,22 @@ public class BlockMap {
 	}
 
 	public boolean hasAcoustics(@Nonnull final IBlockState state) {
-		return this.metaMap.getBlockAcoustics(state) != null;
+		return this.metaMap.getBlockAcoustics(state) != AcousticRegistry.EMPTY;
 	}
 
-	@Nullable
+	@Nonnull
 	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state) {
 		return this.getBlockAcoustics(state, null);
 	}
 
-	@Nullable
+	@Nonnull
 	public IAcoustic[] getBlockAcoustics(@Nonnull final IBlockState state, @Nullable final Substrate substrate) {
 		// Walking an edge of a block can produce this
 		if (state == Blocks.AIR.getDefaultState())
 			return AcousticRegistry.NOT_EMITTER;
 		if (substrate != null) {
 			final BlockAcousticMap sub = this.substrateMap.get(substrate);
-			return sub != null ? sub.getBlockAcoustics(state) : null;
+			return sub != null ? sub.getBlockAcoustics(state) : AcousticRegistry.EMPTY;
 		}
 		return this.metaMap.getBlockAcoustics(state);
 	}
