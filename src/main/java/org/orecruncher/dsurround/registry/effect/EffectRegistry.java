@@ -30,6 +30,7 @@ import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.config.EntityConfig;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
@@ -119,20 +120,22 @@ public class EffectRegistry extends Registry {
 				ModBase.log().debug("Forge reported entity %s but not found in it's own registry!", r.toString());
 			}
 		}
-		
+
 	}
-	
+
 	@Override
 	protected void complete() {
-		// Iterate through the registered entities to see how they match up against
-		// the config.
-		ModBase.log().debug("Entity Effect Configuration");
-		ModBase.log().debug("===========================");
-		for (final ResourceLocation r : EntityList.getEntityNameList()) {
-			final Class<?> clazz = EntityList.getClass(r);
-			if (clazz != null) {
-				final EntityEffectInfo info = this.effects.getOrDefault(clazz, DEFAULT);
-				ModBase.log().debug("%s = %s", r.toString(), info.toString());
+		if (ModOptions.logging.enableDebugLogging) {
+			// Iterate through the registered entities to see how they match up against
+			// the config.
+			ModBase.log().info("Entity Effect Configuration");
+			ModBase.log().info("===========================");
+			for (final ResourceLocation r : EntityList.getEntityNameList()) {
+				final Class<?> clazz = EntityList.getClass(r);
+				if (clazz != null) {
+					final EntityEffectInfo info = this.effects.getOrDefault(clazz, DEFAULT);
+					ModBase.log().info("%s = %s", r.toString(), info.toString());
+				}
 			}
 		}
 	}
