@@ -40,10 +40,13 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 @IFMLLoadingPlugin.MCVersion("1.12.2")
 @IFMLLoadingPlugin.TransformerExclusions({ "org.orecruncher.dsurround.asm."})
 @IFMLLoadingPlugin.SortingIndex(10001)
-@IFMLLoadingPlugin.Name("DynamicSurroundingsCore")
+@IFMLLoadingPlugin.Name(TransformLoader.MOD_NAME)
 public class TransformLoader implements IFMLLoadingPlugin {
 
-	public static final Logger logger = LogManager.getLogger("dsurroundcore");
+	public static final String MOD_ID = "dsurroundcore";
+	public static final String MOD_NAME = "DynamicSurroundingsCore";
+	
+	public static final Logger logger = LogManager.getLogger(MOD_ID);
 	public static Configuration config = null;
 	
 	@Override
@@ -78,8 +81,12 @@ public class TransformLoader implements IFMLLoadingPlugin {
 		public Container() {
 			super(new ModMetadata());
 			ModMetadata meta = getMetadata();
-			meta.modId = "dsurroundcore";
-			meta.name = "DynamicSurroundingsCore";
+			meta.modId = MOD_ID;
+			meta.name = TransformLoader.MOD_NAME;
+			meta.authorList.add("OreCruncher");
+			meta.version = "@VERSION@";
+			meta.description = "CoreMod for Dynamic Surroundings";
+			meta.url = "https://github.com/OreCruncher/DynamicSurroundings/wiki";
 		}
 
 		@Override

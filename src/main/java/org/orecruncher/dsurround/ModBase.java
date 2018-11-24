@@ -68,12 +68,12 @@ public class ModBase {
 	public static final String MOD_NAME = "Dynamic Surroundings";
 	public static final String VERSION = "@VERSION@";
 	public static final String MINECRAFT_VERSIONS = "[1.12.2,)";
-	public static final String DEPENDENCIES = "required-after:forge@[14.23.2.2635,);after:galacticraftcore;after:ambientsounds;required-after:orelib@[3.5,)";
+	public static final String DEPENDENCIES = "required-after:forge@[14.23.2.2635,);required-after:dsurroundcore;after:galacticraftcore;after:ambientsounds;required-after:orelib@[3.5,)";
 	public static final String GUI_FACTORY = "org.orecruncher.dsurround.client.gui.ConfigGuiFactory";
 	public static final String UPDATE_URL = "@UPDATEURL@";
 	public static final String FINGERPRINT = "@FINGERPRINT@";
 
-	public static final String SERVER_VERSION = "3.4.9.0";
+	public static final String SERVER_VERSION = "3.5.0.0";
 
 	@Instance(MOD_ID)
 	protected static ModBase instance;
