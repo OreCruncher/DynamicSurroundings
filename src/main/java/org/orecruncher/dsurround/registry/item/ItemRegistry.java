@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,6 +44,7 @@ import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.item.compat.ItemDataProducer;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
+
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -79,8 +81,8 @@ public final class ItemRegistry extends Registry {
 		this.classMap = new EnumMap<>(ItemClass.class);
 		this.items = new IdentityHashMap<>(MAP_CAPACITY);
 		this.NONE_DATA = SimpleItemData.CACHE.get(ItemClass.NONE);
-		
-		Item.REGISTRY.iterator().forEachRemaining(item -> ItemUtils.setItemData(item, NONE_DATA));
+
+		Item.REGISTRY.iterator().forEachRemaining(item -> ItemUtils.setItemData(item, this.NONE_DATA));
 		ItemUtils.setItemData(Items.AIR, SimpleItemData.CACHE.get(ItemClass.EMPTY));
 
 		for (final ItemClass ic : ItemClass.values())
@@ -138,13 +140,11 @@ public final class ItemRegistry extends Registry {
 
 		// Need to iterate to see if an item is a sub-class of an existing
 		// item in the list.
-		for (final Class<?> clazz : itemSet) {
-			if (clazz.isAssignableFrom(itemClass)) {
-				itemSet.add(itemClass);
-				return true;
-			}
+		final Optional<Class<?>> result = itemSet.stream().filter(c -> c.isAssignableFrom(itemClass)).findFirst();
+		if (result.isPresent()) {
+			itemSet.add(itemClass);
+			return true;
 		}
-
 		return false;
 	}
 
@@ -191,7 +191,7 @@ public final class ItemRegistry extends Registry {
 
 	@Nonnull
 	public IItemData getItemClass(@Nonnull final ItemStack stack) {
-		return ItemStackUtil.isValidItemStack(stack) ? ItemUtils.getItemData(stack.getItem()) : NONE_DATA;
+		return ItemStackUtil.isValidItemStack(stack) ? ItemUtils.getItemData(stack.getItem()) : this.NONE_DATA;
 	}
 
 }

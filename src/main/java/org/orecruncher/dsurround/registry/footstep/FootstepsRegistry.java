@@ -29,7 +29,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -50,7 +49,6 @@ import org.orecruncher.dsurround.registry.acoustics.RainSplashAcoustic;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.config.ModConfiguration.ForgeEntry;
-import org.orecruncher.dsurround.registry.config.VariatorConfig;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
@@ -147,16 +145,16 @@ public final class FootstepsRegistry extends Registry {
 				registerForgeEntries(entry.acousticProfile, name);
 		}
 
-		for (final Entry<String, String> entry : cfg.footsteps.entrySet()) {
-			registerBlocks(entry.getValue(), entry.getKey());
-		}
-
-		for (final String fp : cfg.footprints) {
-			registerFootrint(fp);
-		}
-
-		for (final Entry<String, VariatorConfig> entry : cfg.variators.entrySet())
-			this.variators.put(entry.getKey(), new Variator(entry.getValue()));
+		//@formatter:off
+		cfg.footsteps.forEach((k, v) -> registerBlocks(v, k));
+		cfg.footprints.forEach(f -> registerFootprint(f));
+		this.variators.putAll(
+			cfg.variators.entrySet().stream()
+				.collect(
+					Collectors.toMap(Map.Entry::getKey, e -> new Variator(e.getValue()))
+				)
+		);
+		//@formatter:on
 	}
 
 	@Override
@@ -351,7 +349,7 @@ public final class FootstepsRegistry extends Registry {
 		return null;
 	}
 
-	private void registerFootrint(@Nonnull final String... blocks) {
+	private void registerFootprint(@Nonnull final String... blocks) {
 		for (String b : blocks) {
 			boolean materialMatch = false;
 			if (b.startsWith("@")) {

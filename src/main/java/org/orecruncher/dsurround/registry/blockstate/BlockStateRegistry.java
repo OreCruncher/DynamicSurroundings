@@ -74,8 +74,7 @@ public final class BlockStateRegistry extends Registry {
 
 	@Override
 	protected void init(@Nonnull final ModConfiguration cfg) {
-		for (final BlockConfig block : cfg.blocks)
-			register(block);
+		cfg.blocks.forEach(b -> register(b));
 	}
 
 	@Override

@@ -26,7 +26,7 @@ package org.orecruncher.dsurround.registry.sound;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,9 +38,7 @@ import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.lib.sound.SoundConfigProcessor;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
-import org.orecruncher.dsurround.registry.config.SoundMetadataConfig;
 import org.orecruncher.lib.math.MathStuff;
-
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.audio.ISound;
@@ -83,25 +81,26 @@ public final class SoundRegistry extends Registry {
 		this.volumeControl.clear();
 		this.soundMetadata.clear();
 		this.myRegistry.clear();
-		
+
 		bakeSoundRegistry();
 
-		for(final String line: ModOptions.sound.soundSettings) {
+		for (final String line : ModOptions.sound.soundSettings) {
 			final String[] parts = line.split(" ");
-			if(parts.length < 2) {
+			if (parts.length < 2) {
 				ModBase.log().warn("Missing tokens in sound settings? (%s)", line);
 			} else {
 				final String soundName = parts[0];
-				for(int i = 1; i < parts.length; i++) {
+				for (int i = 1; i < parts.length; i++) {
 					if ("cull".compareToIgnoreCase(parts[i]) == 0) {
 						this.cullSoundNames.add(soundName);
-					} else if("block".compareToIgnoreCase(parts[i]) == 0) {
+					} else if ("block".compareToIgnoreCase(parts[i]) == 0) {
 						this.blockSoundNames.add(soundName);
 					} else {
 						try {
 							final int volume = Integer.parseInt(parts[i]);
-							this.volumeControl.put(soundName, MathStuff.clamp((float)volume / 100F, MIN_SOUNDFACTOR, MAX_SOUNDFACTOR));
-						} catch(final Throwable t) {
+							this.volumeControl.put(soundName,
+									MathStuff.clamp(volume / 100F, MIN_SOUNDFACTOR, MAX_SOUNDFACTOR));
+						} catch (final Throwable t) {
 							ModBase.log().warn("Unrecognized token %s (%s)", parts[i], line);
 						}
 					}
@@ -112,20 +111,23 @@ public final class SoundRegistry extends Registry {
 
 	@Override
 	protected void init(@Nonnull final ModConfiguration cfg) {
-		for (final Entry<String, SoundMetadataConfig> entry : cfg.sounds.entrySet()) {
-			final SoundMetadata data = new SoundMetadata(entry.getValue());
-			final ResourceLocation resource = new ResourceLocation(entry.getKey());
-			this.soundMetadata.put(resource, data);
-		}
+		//@formatter:off
+		this.soundMetadata.putAll(
+			cfg.sounds.entrySet().stream()
+				.collect(
+					Collectors.toMap(e -> new ResourceLocation(e.getKey()), e -> new SoundMetadata(e.getValue()))
+				)
+		);
+		//@formatter:on
 	}
-	
+
 	@Override
 	protected void complete() {
 		ModBase.log().info("[%s] %d sound events in private registry", getName(), this.myRegistry.size());
 	}
-	
+
 	private void bakeSoundRegistry() {
-		
+
 		final ResourceLocation soundFile = new ResourceLocation(ModBase.MOD_ID, "sounds.json");
 		try (final SoundConfigProcessor proc = new SoundConfigProcessor(soundFile)) {
 			proc.forEach((sound, meta) -> {
@@ -133,16 +135,16 @@ public final class SoundRegistry extends Registry {
 				final ResourceLocation resource = new ResourceLocation(ModBase.RESOURCE_ID, sound);
 				this.soundMetadata.put(resource, data);
 			});
-		} catch( @Nonnull final Exception ex) {
+		} catch (@Nonnull final Exception ex) {
 			ex.printStackTrace();
 		}
-		
+
 		SoundEngine.instance().getSoundRegistry().getKeys().forEach(rl -> this.myRegistry.put(rl, new SoundEvent(rl)));
 	}
 
 	@Nonnull
 	public SoundEvent getSound(final ResourceLocation sound) {
-		final SoundEvent evt = myRegistry.get(sound);
+		final SoundEvent evt = this.myRegistry.get(sound);
 		if (evt == null) {
 			ModBase.log().warn("Cannot find sound that should be registered [%s]", sound.toString());
 			return new SoundEvent(sound);
@@ -170,7 +172,7 @@ public final class SoundRegistry extends Registry {
 		return (sound.getSoundLocation() == null || sound instanceof ConfigSound) ? 1F
 				: this.volumeControl.getFloat(sound.getSoundLocation().toString());
 	}
-	
+
 	@Nullable
 	public SoundMetadata getSoundMetadata(@Nonnull final ResourceLocation resource) {
 		return this.soundMetadata.get(resource);

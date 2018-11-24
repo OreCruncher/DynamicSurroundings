@@ -25,6 +25,7 @@ package org.orecruncher.dsurround.registry.dimension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
@@ -58,7 +59,7 @@ public final class DimensionRegistry extends Registry {
 	protected void complete() {
 		if (ModOptions.logging.enableDebugLogging) {
 			ModBase.log().info("*** DIMENSION REGISTRY (cache) ***");
-			this.cache.forEach(dim -> ModBase.log().info(dim.toString()));
+			this.cache.stream().map(Object::toString).forEach(ModBase.log()::info);
 		}
 	}
 
@@ -71,9 +72,9 @@ public final class DimensionRegistry extends Registry {
 
 	@Nonnull
 	private DimensionConfig getData(@Nonnull final DimensionConfig entry) {
-		for (final DimensionConfig e : this.cache)
-			if (e.equals(entry))
-				return e;
+		final Optional<DimensionConfig> result = this.cache.stream().filter(e -> e.equals(entry)).findFirst();
+		if (result.isPresent())
+			return result.get();
 		this.cache.add(entry);
 		return entry;
 	}

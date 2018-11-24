@@ -178,7 +178,7 @@ public final class BiomeRegistry extends Registry {
 	protected void complete() {
 		if (ModOptions.logging.enableDebugLogging) {
 			ModBase.log().info("*** BIOME REGISTRY ***");
-			getCombinedStream().sorted().forEach(e -> ModBase.log().info(e.toString()));
+			getCombinedStream().sorted().map(Object::toString).forEach(ModBase.log()::info);
 		}
 
 		// Free memory because we no longer need
