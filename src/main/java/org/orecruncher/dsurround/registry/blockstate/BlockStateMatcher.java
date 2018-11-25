@@ -56,7 +56,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockStateMatcher {
 
 	// We all know about air...
-	public static final BlockStateMatcher AIR = new BlockStateMatcher(Blocks.AIR.getDefaultState());
+	public static final BlockStateMatcher AIR = BlockStateMatcher.create(Blocks.AIR.getDefaultState());
 
 	public static final String META_NAME = "_meta_";
 
@@ -105,7 +105,7 @@ public class BlockStateMatcher {
 	// would have to match all these properties.
 	protected Reference2ObjectOpenHashMap<IProperty<?>, Object> props;
 
-	public BlockStateMatcher(@Nonnull final IBlockState state) {
+	protected BlockStateMatcher(@Nonnull final IBlockState state) {
 		this.block = state.getBlock();
 		this.props = getPropsFromState(state);
 		this.item = Item.getItemFromBlock(this.block);
@@ -181,24 +181,15 @@ public class BlockStateMatcher {
 			// If they both are null then they are equal
 			if (this.props == null && m.props == null)
 				return true;
-			// If there are no props in this one then it is a real generic match
-			if (this.props == null || this.props.size() == 0)
-				return true;
-			// This one has props. If the other doesn't then they don't match
-			if (m.props == null || m.props.size() == 0)
+			// If one has props and the other doesn't no match
+			if (this.props == null && m.props != null || this.props != null && m.props == null)
 				return false;
-
-			// Should this should have the same or less properties than the other
-			if (this.props.size() > m.props.size())
-				return false;
-
 			// Run 'em down doing compares
 			for (final Entry<IProperty<?>, Object> entry : m.props.reference2ObjectEntrySet()) {
 				final Object v = this.props.get(entry.getKey());
 				if (v == null || !v.equals(entry.getValue()))
 					return false;
 			}
-
 			return true;
 		}
 		return false;
@@ -230,16 +221,9 @@ public class BlockStateMatcher {
 
 		builder.append(Block.REGISTRY.getNameForObject(this.block));
 		if (this.props != null) {
-			boolean doComma = false;
-			builder.append('{');
-			for (final Entry<IProperty<?>, Object> entry : this.props.reference2ObjectEntrySet()) {
-				if (doComma)
-					builder.append(',');
-				else
-					doComma = true;
-				builder.append(entry.getKey().getName()).append('=').append(entry.getValue().toString());
-			}
-			builder.append('}');
+			final String txt = this.props.reference2ObjectEntrySet().stream()
+					.map(e -> e.getKey().getName() + "=" + e.getValue().toString()).collect(Collectors.joining(","));
+			builder.append('[').append(txt).append(']');
 		}
 
 		return builder.toString();
@@ -273,7 +257,7 @@ public class BlockStateMatcher {
 					return new BlockStateMatcher(defaultState);
 				}
 
-				if (!result.hasNBT()) {
+				if (!result.hasProperties()) {
 					// No NBT specification so this is a generic
 					return new BlockStateMatcher(block);
 				}
@@ -281,11 +265,12 @@ public class BlockStateMatcher {
 				final Reference2ObjectOpenHashMap<IProperty<?>, Object> props = new Reference2ObjectOpenHashMap<>();
 
 				// Blow out the property list
-				for (final String s : result.getNBT().getKeySet()) {
+				for (final java.util.Map.Entry<String, String> entry : result.getProperties().entrySet()) {
 					// Stuff in our meta property if requested
+					final String s = entry.getKey();
 					final IProperty<?> prop = s.equals(META_NAME) ? META_PROP : container.getProperty(s);
 					if (prop != null) {
-						final Optional<?> optional = prop.parseValue(result.getNBT().getString(s));
+						final Optional<?> optional = prop.parseValue(entry.getValue());
 						if (optional.isPresent()) {
 							props.put(prop, optional.get());
 						} else {

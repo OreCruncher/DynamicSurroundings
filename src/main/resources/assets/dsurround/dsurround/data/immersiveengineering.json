@@ -18,9 +18,9 @@
 		]
 	},
 	"footsteps": {
-		"immersiveengineering:metal_decoration1{_meta_:\"0\"}": "hardmetal",
-		"immersiveengineering:metal_decoration1{_meta_:\"0\"}+bigger": "hardmetal",
-		"immersiveengineering:metal_decoration1{_meta_:\"4\"}": "hardmetal",
-		"immersiveengineering:metal_decoration1{_meta_:\"4\"}+bigger": "hardmetal"
+		"immersiveengineering:metal_decoration1[_meta_=0]": "hardmetal",
+		"immersiveengineering:metal_decoration1[_meta_=0]+bigger": "hardmetal",
+		"immersiveengineering:metal_decoration1[_meta_=4]": "hardmetal",
+		"immersiveengineering:metal_decoration1[_meta_=4]+bigger": "hardmetal"
 	}
 }

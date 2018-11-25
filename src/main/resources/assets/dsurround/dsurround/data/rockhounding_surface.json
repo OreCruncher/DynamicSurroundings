@@ -16,14 +16,11 @@
 		"rockhounding_surface:gypsum_crops": "NOT_EMITTER",
 		"rockhounding_surface:gypsum_crops+messy": "MESSY_GROUND",
 		"rockhounding_surface:gypsum_crops+foliage": "leaves",
+		"rockhounding_surface:gypsum_crops[variant=skunkbush]": "leaves",
 		"rockhounding_surface:gypsum_bush_lo": "NOT_EMITTER",
 		"rockhounding_surface:gypsum_bush_lo+messy": "MESSY_GROUND",
-		"rockhounding_surface:gypsum_bush_lo{_meta_:\"0\"}+foliage": "straw",
-		"rockhounding_surface:gypsum_bush_lo{_meta_:\"1\"}+foliage": "straw",
-		"rockhounding_surface:gypsum_bush_lo{_meta_:\"2\"}+foliage": "straw",
-		"rockhounding_surface:gypsum_bush_lo{_meta_:\"3\"}+foliage": "straw",
-		"rockhounding_surface:gypsum_bush_lo{_meta_:\"4\"}+foliage": "straw",
-		"rockhounding_surface:gypsum_bush_lo{_meta_:\"5\"}+foliage": "straw"
+		"rockhounding_surface:gypsum_bush_lo+foliage": "straw",
+		"rockhounding_surface:gypsum_bush_hi+foliage": "straw"
 	}
 	
 }

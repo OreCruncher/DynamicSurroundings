@@ -2,17 +2,17 @@
 	"footsteps": {
 		"simplecorn:corn": "NOT_EMITTER",
 		"simplecorn:corn+messy": "MESSY_GROUND",
-		"simplecorn:corn{_meta_:\"0\"}+foliage": "brush",
-		"simplecorn:corn{_meta_:\"1\"}+foliage": "brush",
-		"simplecorn:corn{_meta_:\"2\"}+foliage": "brush_straw_transition",
-		"simplecorn:corn{_meta_:\"3\"}+foliage": "brush_straw_transition",
-		"simplecorn:corn{_meta_:\"4\"}+foliage": "straw",
-		"simplecorn:corn{_meta_:\"5\"}+foliage": "straw",
-		"simplecorn:corn{_meta_:\"6\"}+foliage": "straw",
-		"simplecorn:corn{_meta_:\"7\"}+foliage": "straw",
-		"simplecorn:corn{_meta_:\"8\"}+foliage": "straw",
-		"simplecorn:corn{_meta_:\"9\"}+foliage": "straw",
-		"simplecorn:corn{_meta_:\"10\"}+foliage": "straw",
-		"simplecorn:corn{_meta_:\"11\"}+foliage": "straw"
+		"simplecorn:corn[_meta_=0]+foliage": "brush",
+		"simplecorn:corn[_meta_=1]+foliage": "brush",
+		"simplecorn:corn[_meta_=2]+foliage": "brush_straw_transition",
+		"simplecorn:corn[_meta_=3]+foliage": "brush_straw_transition",
+		"simplecorn:corn[_meta_=4]+foliage": "straw",
+		"simplecorn:corn[_meta_=5]+foliage": "straw",
+		"simplecorn:corn[_meta_=6]+foliage": "straw",
+		"simplecorn:corn[_meta_=7]+foliage": "straw",
+		"simplecorn:corn[_meta_=8]+foliage": "straw",
+		"simplecorn:corn[_meta_=9]+foliage": "straw",
+		"simplecorn:corn[_meta_=10]+foliage": "straw",
+		"simplecorn:corn[_meta_=11]+foliage": "straw"
 	}
 }

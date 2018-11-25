@@ -223,7 +223,7 @@ public class BlockMap {
 		if (macro != null) {
 			for (final MacroEntry entry : macro) {
 				final IBlockState state = entry.withProperty(info.getBlock().getDefaultState());
-				put(new BlockStateMatcher(state), entry.substrate, entry.value);
+				put(BlockStateMatcher.create(state), entry.substrate, entry.value);
 			}
 		} else {
 			ModBase.log().debug("Unknown macro '%s'", value);
@@ -260,12 +260,12 @@ public class BlockMap {
 			@Nonnull final List<String> data) {
 
 		final IAcoustic[] temp = getBlockAcoustics(state);
-		if (temp != null)
+		if (temp != AcousticRegistry.EMPTY)
 			data.add(combine(temp));
 
 		for (final Entry<Substrate, BlockAcousticMap> e : this.substrateMap.entrySet()) {
 			final IAcoustic[] acoustics = e.getValue().getBlockAcoustics(state);
-			if (acoustics != null)
+			if (acoustics != AcousticRegistry.EMPTY)
 				data.add(e.getKey() + ":" + combine(acoustics));
 		}
 	}

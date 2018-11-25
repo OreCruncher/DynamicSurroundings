@@ -374,8 +374,12 @@ public final class FootstepsRegistry extends Registry {
 				final Block block = resolveToBlock(stack);
 				if (block != null) {
 					String blockName = MCHelper.nameOf(block);
-					if (stack.getHasSubtypes() && stack.getItemDamage() != OreDictionary.WILDCARD_VALUE)
-						blockName += "{_meta_: \"" + stack.getItemDamage() + "\"}";
+					if (stack.getHasSubtypes() && stack.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
+						// TODO: Need to sort out with tagging in 1.13
+						@SuppressWarnings("deprecation")
+						final IBlockState state = block.getStateFromMeta(stack.getItemDamage());
+						blockName = state.toString();
+					}
 					getBlockMap().register(blockName, blockClass);
 				}
 			}
