@@ -26,12 +26,15 @@ package org.orecruncher.dsurround.asm;
 
 import java.util.Iterator;
 
+import javax.annotation.Nonnull;
+
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.orecruncher.dsurround.client.sound.SoundEngine;
 
 /**
  * ASM patch to force the flush of the sound queue when playing a sound.
@@ -56,12 +59,9 @@ public class SoundPlayFlush extends Transmorgrifier {
 		if (m != null) {
 			logMethod(Transformer.log(), m, "Found!");
 
-			final String owner = "org/orecruncher/dsurround/client/sound/SoundEngine";
-			final String targetName = "flushSound";
+			final String owner = "org/orecruncher/dsurround/asm/SoundPlayFlush";
+			final String targetName = "flush";
 			final String sig1 = "()V";
-
-			final InsnList list = new InsnList();
-			list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, owner, targetName, sig1, false));
 
 			for (final Iterator<?> iterator = m.instructions.iterator(); iterator.hasNext();) {
 				final AbstractInsnNode insn = (AbstractInsnNode) iterator.next();
@@ -69,6 +69,10 @@ public class SoundPlayFlush extends Transmorgrifier {
 					final MethodInsnNode mn = (MethodInsnNode) insn;
 					if (mn.owner.equals("net/minecraft/client/audio/SoundManager$SoundSystemStarterThread")
 							&& mn.name.equals("play")) {
+						
+						final InsnList list = new InsnList();
+						list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, owner, targetName, sig1, false));
+
 						m.instructions.insert(insn, list);
 						return true;
 					}
@@ -83,6 +87,14 @@ public class SoundPlayFlush extends Transmorgrifier {
 		Transformer.log().info("Unable to patch [{}]!", getClassName());
 
 		return false;
+	}
+	
+	public static void flush() {
+		try {
+			SoundEngine.flushSound();
+		} catch(@Nonnull final Throwable t) {
+			
+		}
 	}
 
 }

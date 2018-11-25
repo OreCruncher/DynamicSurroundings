@@ -33,8 +33,10 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
 public class PatchSoundManager extends Transmorgrifier {
@@ -67,16 +69,26 @@ public class PatchSoundManager extends Transmorgrifier {
 		if (m != null) {
 			logMethod(Transformer.log(), m, "Found!");
 
-			final InsnList list = new InsnList();
-			list.add(new VarInsnNode(ALOAD, 0));
+			// Need to wrap in try catch in case of stillborn client startup
+			final LabelNode tryStart = new LabelNode();
+			final LabelNode tryEnd = new LabelNode();
+			final LabelNode tryHandler = new LabelNode();
+			final TryCatchBlockNode tryCatch = new TryCatchBlockNode(tryStart, tryEnd, tryHandler, "java/lang/Throwable"); 
+			m.tryCatchBlocks.add(tryCatch);
 
 			final String owner = "org/orecruncher/dsurround/lib/sound/SoundCache";
 			final String targetName = "getURLForSoundResource";
 			final String sig1 = "(Lnet/minecraft/util/ResourceLocation;)Ljava/net/URL;";
 
+			final InsnList list = new InsnList();
+			list.add(tryStart);
+			list.add(new VarInsnNode(ALOAD, 0));
 			list.add(new MethodInsnNode(INVOKESTATIC, owner, targetName, sig1, false));
 			list.add(new InsnNode(ARETURN));
+			list.add(tryEnd);
+			list.add(tryHandler);
 			m.instructions.insert(m.instructions.getFirst(), list);
+			
 			return true;
 		} else {
 			Transformer.log().error("Unable to locate method {}{}", names[0], sig);

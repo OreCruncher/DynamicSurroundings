@@ -455,6 +455,13 @@ public final class SoundEngine {
 		return 1F;
 	}
 
+	public static void getClampedVolumeT(@Nonnull final ISound sound) {
+		try {
+			SoundEngine.flushSound();
+		} catch(@Nonnull final Throwable t) {
+			
+		}
+	}
 	/**
 	 * ASM redirects the SoundManager code to this method. Purpose is that the
 	 * volume is scaled by additional configuration information.
