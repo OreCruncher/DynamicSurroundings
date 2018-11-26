@@ -25,12 +25,9 @@
 package org.orecruncher.dsurround.registry.blockstate;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -48,58 +45,19 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class BlockStateMatcher {
 
+	private static final String META_NAME = "_meta_";
+	
 	// We all know about air...
 	public static final BlockStateMatcher AIR = BlockStateMatcher.create(Blocks.AIR.getDefaultState());
 
-	public static final String META_NAME = "_meta_";
-
-	// Our contrived metadata property to make things go...
-	private static final IProperty<Integer> META_PROP = new IProperty<Integer>() {
-		@Override
-		public String getName() {
-			return META_NAME;
-		}
-
-		@Override
-		public Collection<Integer> getAllowedValues() {
-			return IntStream.rangeClosed(0, 15).boxed().collect(Collectors.toCollection(HashSet::new));
-		}
-
-		@Override
-		public Class<Integer> getValueClass() {
-			return Integer.class;
-		}
-
-		@Override
-		public Optional<Integer> parseValue(String value) {
-			try {
-				final Integer i = Integer.parseInt(value);
-				return Optional.of(i);
-			} catch (@Nonnull final Throwable t) {
-				// Can't parse
-			}
-			return Optional.absent();
-		}
-
-		@Override
-		public String getName(Integer value) {
-			return value.toString();
-		}
-
-	};
-
 	// All instances will have this defined
 	protected final Block block;
-
-	// Item represenation of the block
-	protected final Item item;
 
 	// Sometimes an exact match of state is needed. The state being compared
 	// would have to match all these properties.
@@ -108,7 +66,6 @@ public class BlockStateMatcher {
 	protected BlockStateMatcher(@Nonnull final IBlockState state) {
 		this.block = state.getBlock();
 		this.props = getPropsFromState(state);
-		this.item = Item.getItemFromBlock(this.block);
 	}
 
 	protected BlockStateMatcher(@Nonnull final Block block) {
@@ -119,7 +76,6 @@ public class BlockStateMatcher {
 			@Nullable final Reference2ObjectOpenHashMap<IProperty<?>, Object> props) {
 		this.block = block;
 		this.props = props;
-		this.item = Item.getItemFromBlock(this.block);
 	}
 
 	@Nonnull
@@ -143,11 +99,7 @@ public class BlockStateMatcher {
 			return true;
 		for (final Entry<IProperty<?>, Object> entry : this.props.reference2ObjectEntrySet()) {
 			final Object result;
-			if (entry.getKey() == META_PROP) {
-				result = state.getBlock().getMetaFromState(state);
-			} else {
-				result = state.getValue(entry.getKey());
-			}
+			result = state.getValue(entry.getKey());
 			if (!entry.getValue().equals(result))
 				return false;
 		}
@@ -199,11 +151,6 @@ public class BlockStateMatcher {
 	protected Reference2ObjectOpenHashMap<IProperty<?>, Object> getPropsFromState(@Nonnull final IBlockState state) {
 		final Reference2ObjectOpenHashMap<IProperty<?>, Object> result = new Reference2ObjectOpenHashMap<>();
 
-		if (state.getBlock().getBlockState().getValidStates().size() > 1) {
-			final int m = state.getBlock().getMetaFromState(state);
-			result.put(META_PROP, Integer.valueOf(m));
-		}
-
 		for (final IProperty<?> prop : state.getPropertyKeys()) {
 			final Object o = state.getValue(prop);
 			if (o != null) {
@@ -226,7 +173,7 @@ public class BlockStateMatcher {
 			builder.append('[').append(txt).append(']');
 		}
 
-		return builder.toString();
+		return builder.toString().toLowerCase();
 	}
 
 	@Nonnull
@@ -244,6 +191,7 @@ public class BlockStateMatcher {
 		return create(BlockNameUtil.parseBlockName(blockId));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Nullable
 	public static BlockStateMatcher create(@Nonnull final NameResult result) {
 		if (result != null) {
@@ -262,13 +210,24 @@ public class BlockStateMatcher {
 					return new BlockStateMatcher(block);
 				}
 
+				final Map<String, String> properties = result.getProperties();
+
+				// If the property list only contains a meta property convert it to
+				// the corresponding IBlockState.
+				if (result.getProperties().size() == 1 && properties.containsKey(META_NAME)) {
+					final int meta = Integer.parseInt(properties.get(META_NAME));
+					final IBlockState state = block.getStateFromMeta(meta);
+					final BlockStateMatcher matcher = create(state);
+					ModBase.log().warn("_meta_ tag deprecated; replace '%s' with '%s'", result.toString(), matcher.toString());
+					return matcher;
+				}
 				final Reference2ObjectOpenHashMap<IProperty<?>, Object> props = new Reference2ObjectOpenHashMap<>();
 
 				// Blow out the property list
-				for (final java.util.Map.Entry<String, String> entry : result.getProperties().entrySet()) {
+				for (final java.util.Map.Entry<String, String> entry : properties.entrySet()) {
 					// Stuff in our meta property if requested
 					final String s = entry.getKey();
-					final IProperty<?> prop = s.equals(META_NAME) ? META_PROP : container.getProperty(s);
+					final IProperty<?> prop = container.getProperty(s);
 					if (prop != null) {
 						final Optional<?> optional = prop.parseValue(entry.getValue());
 						if (optional.isPresent()) {
