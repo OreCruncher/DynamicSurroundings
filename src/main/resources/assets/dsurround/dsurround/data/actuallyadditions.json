@@ -102,7 +102,6 @@
 		"actuallyadditions:block_lava_factory_controller": "stonemachine",
 		"actuallyadditions:block_leaf_generator": "stonemachine",
 		"actuallyadditions:block_miner": "stonemachine",
-		"actuallyadditions:block_oil": "NOT_EMITTER",
 		"actuallyadditions:block_oil_generator": "stonemachine",
 		"actuallyadditions:block_phantom_booster": "stonemachine",
 		"actuallyadditions:block_phantom_breaker": "stonemachine",
@@ -136,14 +135,15 @@
 		"actuallyadditions:block_testifi_bucks_white_stairs": "marble",
 		"actuallyadditions:block_testifi_bucks_green_wall": "marble",
 		"actuallyadditions:block_testifi_bucks_green_stairs": "marble",
-		"actuallyadditions:block_misc[_meta_=0]": "marble",
-		"actuallyadditions:block_misc[_meta_=1]": "marble",
-		"actuallyadditions:block_misc[_meta_=2]": "marble",
-		"actuallyadditions:block_misc[_meta_=3]": "wood",
-		"actuallyadditions:block_misc[_meta_=4]": "wood",
-		"actuallyadditions:block_misc[_meta_=6]": "composite",
-		"actuallyadditions:block_misc[_meta_=7]": "hardmetal",
-		"actuallyadditions:block_misc[_meta_=8]": "marble",
-		"actuallyadditions:block_misc[_meta_=9]": "hardmetal"
+		"actuallyadditions:block_misc[type=charcoal]": "sandstone",
+		"actuallyadditions:block_misc[type=black_quartz_pillar]": "marble",
+		"actuallyadditions:block_misc[type=black_quartz_chiseled]": "marble",
+		"actuallyadditions:block_misc[type=black_quartz]": "marble",
+		"actuallyadditions:block_misc[type=ore_black_quartz]": "ore",
+		"actuallyadditions:block_misc[type=wood_casing]": "wood",
+		"actuallyadditions:block_misc[type=enderpearl]": "composite",
+		"actuallyadditions:block_misc[type=lava_factory_case]": "hardmetal",
+		"actuallyadditions:block_misc[type=ender_casing]": "marble",
+		"actuallyadditions:block_misc[type=iron_casing]": "hardmetal"
 	}
 }

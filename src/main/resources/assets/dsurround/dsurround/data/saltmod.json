@@ -1,0 +1,18 @@
+{
+	"footsteps": {
+		"saltmod:salt_ore": "ore",
+		"saltmod:salt_lake[variant=clear]": "sand,ore",
+		"saltmod:salt_brick_stairs": "sandstone",
+		"saltmod:salt_slab": "sand,sandstone",
+		"saltmod:salt_block": "sand,sandstone",
+		"saltmod:salt_block[variant=default]": "sand",
+		"saltmod:salt_lamp": "sand,stoneutility",
+		"saltmod:salt_dirt": "sand,dirt",
+		"saltmod:salt_dirt_lite": "sand,dirt",
+		"saltmod:salt_grass": "sand,grass",
+		"saltmod:mud_block": "sand,gravel,mud"
+	},
+	"footprints": [
+		"saltmod:salt_block[variant=default]"
+	]
+}

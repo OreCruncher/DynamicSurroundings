@@ -90,12 +90,8 @@
 		"iceandfire:chared_dirt": "dirt,sand",
 		"iceandfire:chared_grass": "grass,sand",
 		"iceandfire:nest": "obsidian,gravel",
-		"iceandfire:jar": "glass",
-		"iceandfire:jar[_meta_=1]": "glass",
-		"iceandfire:jar[_meta_=2]": "glass",
-		"iceandfire:jar[_meta_=3]": "glass",
-		"iceandfire:jar[_meta_=4]": "glass",
-		"iceandfire:jar[_meta_=5]": "glass",
+		"iceandfire:jar_empty": "glass",
+		"iceandfire:jar_pixie": "glass",
 		"iceandfire:frozen_gravel": "ice,gravel"
 	}
 }

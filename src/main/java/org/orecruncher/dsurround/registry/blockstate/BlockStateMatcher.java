@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -52,7 +53,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockStateMatcher {
 
 	private static final String META_NAME = "_meta_";
-	
+
 	// We all know about air...
 	public static final BlockStateMatcher AIR = BlockStateMatcher.create(Blocks.AIR.getDefaultState());
 
@@ -161,21 +162,6 @@ public class BlockStateMatcher {
 		return result.size() > 0 ? result : null;
 	}
 
-	@Override
-	@Nonnull
-	public String toString() {
-		final StringBuilder builder = new StringBuilder();
-
-		builder.append(Block.REGISTRY.getNameForObject(this.block));
-		if (this.props != null) {
-			final String txt = this.props.reference2ObjectEntrySet().stream()
-					.map(e -> e.getKey().getName() + "=" + e.getValue().toString()).collect(Collectors.joining(","));
-			builder.append('[').append(txt).append(']');
-		}
-
-		return builder.toString().toLowerCase();
-	}
-
 	@Nonnull
 	public static BlockStateMatcher asGeneric(@Nonnull final IBlockState state) {
 		return new BlockStateMatcher(state.getBlock());
@@ -218,7 +204,8 @@ public class BlockStateMatcher {
 					final int meta = Integer.parseInt(properties.get(META_NAME));
 					final IBlockState state = block.getStateFromMeta(meta);
 					final BlockStateMatcher matcher = create(state);
-					ModBase.log().warn("_meta_ tag deprecated; replace '%s' with '%s'", result.toString(), matcher.toString());
+					ModBase.log().warn("_meta_ tag deprecated; replace '%s' with '%s'?", result.toString(),
+							matcher.toString());
 					return matcher;
 				}
 				final Reference2ObjectOpenHashMap<IProperty<?>, Object> props = new Reference2ObjectOpenHashMap<>();
@@ -233,7 +220,10 @@ public class BlockStateMatcher {
 						if (optional.isPresent()) {
 							props.put(prop, optional.get());
 						} else {
-							ModBase.log().warn("Property value %s not found for block %s", s, result.getBlockName());
+							final String allowed = getAllowedValues(block, s);
+							ModBase.log().warn("Property value '%s' for property '%s' not found for block '%s'",
+									entry.getValue(), s, result.getBlockName());
+							ModBase.log().warn("Allowed values: %s", allowed);
 						}
 					} else {
 						ModBase.log().warn("Property %s not found for block %s", s, result.getBlockName());
@@ -257,4 +247,39 @@ public class BlockStateMatcher {
 
 		return null;
 	}
+
+	@Override
+	@Nonnull
+	public String toString() {
+		final StringBuilder builder = new StringBuilder();
+		builder.append(Block.REGISTRY.getNameForObject(this.block));
+		if (this.props != null) {
+			final String txt = this.props.reference2ObjectEntrySet().stream()
+					.map(e -> e.getKey().getName() + "=" + getValue(this.block, e.getKey().getName(), e.getValue()))
+					.collect(Collectors.joining(","));
+			builder.append('[').append(txt).append(']');
+		}
+
+		return builder.toString();
+	}
+
+	@SuppressWarnings("unchecked")
+	protected static <T extends Comparable<T>> String getValue(@Nonnull final Block block,
+			@Nonnull final String propName, @Nonnull final Object val) {
+		final BlockStateContainer container = block.getBlockState();
+		final IProperty<T> prop = (IProperty<T>) container.getProperty(propName);
+		return prop.getName((T) val);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected static <T extends Comparable<T>> String getAllowedValues(final Block block, final String propName) {
+		final BlockStateContainer container = block.getBlockState();
+		final IProperty<T> prop = (IProperty<T>) container.getProperty(propName);
+		final List<String> result = new ArrayList<>();
+		for (final T v : prop.getAllowedValues()) {
+			result.add(prop.getName(v));
+		}
+		return result.stream().collect(Collectors.joining(","));
+	}
+
 }
