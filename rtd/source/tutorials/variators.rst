@@ -1,2 +1,2 @@
-Variator Definition
-===================
+Tutorial: Variator Definition
+=============================

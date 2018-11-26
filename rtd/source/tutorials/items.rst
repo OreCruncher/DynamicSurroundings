@@ -1,2 +1,2 @@
-Item Configuration
-==================
+Tutorial: Item Configuration
+============================

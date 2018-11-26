@@ -1,2 +1,2 @@
-Acoustics
-=========
+Tutorial: Acoustics
+===================

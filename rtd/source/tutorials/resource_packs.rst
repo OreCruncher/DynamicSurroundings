@@ -1,2 +1,2 @@
-Resource Packs
-==============
+Tutorial: Resource Packs
+========================

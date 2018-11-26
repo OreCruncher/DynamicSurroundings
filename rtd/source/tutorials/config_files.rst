@@ -1,5 +1,5 @@
-Configuration Files
-===================
+Tutorial: Configuration Files
+=============================
 It is assumed that you are familiar with Json.  If you wish to learn some internet searching on
 "json tutorials" will give a wealth of information.
 

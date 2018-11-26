@@ -1,5 +1,5 @@
-Condition Strings
-=================
+Tutorial: Condition Strings
+===========================
 When creating a configuration file some of the elements have a condition string option.  The
 condition string tells Dynamic Surroundings the circumstances under which a sound or effect can
 occur.  For example, attached the the PLAYER biome is the heartbeat sound that will play when

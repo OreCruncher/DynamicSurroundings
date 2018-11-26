@@ -1,2 +1,2 @@
-Primitive Acoustics
-===================
+Tutorial: Primitive Acoustics
+=============================

@@ -1,2 +1,2 @@
-Entity Configuration
-====================
+Tutorial: Entity Configuration
+==============================
