@@ -1,5 +1,5 @@
-Command: /calc
-==============
+Command: calc
+=============
 Dynamic Surroundings has a client side command line calculator that can be used to evaluate
 expressions.  The main purpose for me is to test out the internal expression engine, but it can be
 useful for players just because it can handle math.

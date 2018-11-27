@@ -1,5 +1,5 @@
-Command: /ds
-============
+Command: ds
+===========
 Dynamic Surroundings has a single command, ``/ds``.  It is usable by an OP and can do several things:
 
 **/ds help**
