@@ -17,6 +17,17 @@ if (file('secrets.properties').exists()) {
 	file('secrets.properties').withReader {secrets.load(it)}
 }
 
+repositories {
+    maven { url = "http://chickenbones.net/maven/" }        // dem bones!
+    maven { url = "http://dvs1.progwml6.com/files/maven" }	// mezz
+    maven { url = "http://maven.tterrag.com" }				// Chisel
+    maven { url = "https://repo.elytradev.com/" }
+    maven {
+        name = "CurseForge"
+        url = "https://minecraft.curseforge.com/api/maven/"
+    }
+}
+
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply from: 'configuration.gradle'
 
@@ -45,14 +56,19 @@ minecraft {
     mappings = project.ext.snapshot
 }
 
-repositories {
-    maven { url = "http://chickenbones.net/maven/" }        // dem bones!
-    maven { url = "http://dvs1.progwml6.com/files/maven" }	// mezz
-    maven { url = "http://maven.tterrag.com" }				// Chisel
-    maven { url = "https://repo.elytradev.com/" }
-}
-
 dependencies {
+
+	compile "craftstudio-api:CraftStudio-1.0.0.93:mc1.12:alpha"
+	compile "animania:animania:1.12.2:1.6.2"
+	compile "serene-seasons:SereneSeasons-1.12.2:1.2.7:universal"
+	compile "codechicken-lib-1-8:CodeChickenLib-1.12.2:3.2.2.353:universal"
+	compile "forge-multipart-cbe:ForgeMultipart-1.12.2:2.6.0.79:universal"
+	compile "ctm:CTM:MC1.12.2:0.3.2.20"
+	compile "cosmetic-armor-reworked:CosmeticArmorReworked:1.12.2:v3"
+	compile "littletiles:LittleTiles_v1.5.0:pre122_mc1.12.2"
+
+	//compile "creativecore:CreativeCore_v1.9.35_mc1.12.2"
+	
     //compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.12.2-7.0.1.2399:deobf"
     deobfCompile "mezz.jei:jei_${project.mcVersion}:${project.jeiVersion}:api"
     runtime "mezz.jei:jei_${project.mcVersion}:${project.jeiVersion}"
