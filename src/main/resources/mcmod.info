@@ -5,7 +5,7 @@
 		"description": "Adds a variety of sound and visual effects to improve your Minecraft experience",
 		"version": "$version",
 		"mcversion": "$mcversion",
-		"url": "https://github.com/OreCruncher/DynamicSurroundings/wiki",
+		"url": "https://dynamicsurroundings.readthedocs.io",
 		"updateUrl": "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json",
 		"updateJSON": "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json",
 		"authorList": [
