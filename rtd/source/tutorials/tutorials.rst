@@ -14,6 +14,7 @@ configuration system it is recommended that you review each tutorial in order.
 	biomes
 	blockstate
 	block
+	acoustic_profiles
 	footstep
 	forge_mappings
    

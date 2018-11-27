@@ -26,7 +26,7 @@ author = 'OreCruncher'
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = '3.5.0.0'
+release = '3.5BETA'
 
 
 # -- General configuration ---------------------------------------------------
@@ -101,6 +101,8 @@ html_static_path = ['nstatic']
 # Don't want source attached to HTML
 html_copy_source = False
 html_show_sourcelink = False
+
+html_logo = "images/logo.png"
 
 # -- Options for HTMLHelp output ---------------------------------------------
 

@@ -16,7 +16,7 @@ is walking on or through a block::
 		"minecraft:grass_path": "grass"
 	}
 
-The list is comprised of value pairs.  The value on the right is the `acoustic <../acoustic_profile.html>`_
+The list is comprised of value pairs.  The value on the right is the `acoustic <acoustic_profile.html>`_
 to apply to the block that is specified on the left side.  Above, ``minecraft:barrier`` is not an
 emitter (doesn't produce sound) so it is set to ``NOT_EMITTER``.  The block ``minecraft:stone`` is
 set to have the acoustic profile of ``stone``.

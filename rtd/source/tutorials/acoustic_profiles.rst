@@ -1,5 +1,5 @@
-Acoustic Profiles
------------------
+Tutorial: Acoustic Profiles
+===========================
 An acoustic profile is a collection of footstep sound effect data that can be applied when an entity
 foot strike hits a block.  These are built-in and can be tagged to any block. The table below lists
 the block classes available and as well as a Vanilla block that can be used to check out the sound
@@ -9,12 +9,6 @@ You will noticed that some of the entries have comma separated values. These are
 that multiple acoustic profiles will be combined to give a synthetic effect.  For example, Anvils
 have a class of "metalcompressed,hardmetal" which causes Dynamic Surroundings to combine the acoustic
 profiles of "metalcompressed" and "hardmetal".
-
-Entries that are prefixed with a "#" indicate a complex sound profile. For example, "#crop" is a
-sound profile for crops like Carrots and Potatoes. Each of these crops have various growth stages,
-and each stage has it's own unique sound. From a configuration file perspective it is easier to
-indicate it's a "#crop" rather than creating 7 different entries for each crop.
-
 
 ..	list-table:: Builtin Acoustic Profiles
    	:header-rows: 1

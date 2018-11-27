@@ -3,7 +3,7 @@ Tutorial: Forge Mappings
 This tutorial assumes that you have already created a Json configuration file.  If you haven't please
 read `Tutorial: External Configuration Files <config_files.html>`__.
 
-Forge mappings is a way to apply an `acoustic <../acoustic_profiles.html>`__ to all blocks that are
+Forge mappings is a way to apply an `acoustic <acoustic_profiles.html>`__ to all blocks that are
 contained in a specified Forge Ore Dictionary group.  Configuration is pretty straight forward.
 Here is an example from the internal Minecraft configuration_ file::
 
