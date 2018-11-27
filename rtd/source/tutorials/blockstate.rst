@@ -1,3 +1,5 @@
+..	_tutorial-blockstate:
+
 Tutorial: BlockState Specification
 ==================================
 Unlike prior versions of Dynamic Surroundings, the 3.5+ versions do not make use of block metadata
@@ -21,7 +23,7 @@ So what makes a definition a generic match?  Essentially if the described block 
 has more than one IBlockState associated with it, and there are no properties defined (e.g. brackets [ ] with properties),
 it will match all IBlockStates for the specified block.
 
-In the vast majority of cases blocks will have a property defined called ``variant`` or ``type``
+In a lot of cases blocks with variants will have a property defined called ``variant`` or ``type``
 (though there is no strict requirement for this to be).  This property is enough to identify a block
 the purposes of Dynamic Surroundings configuration.  The system is flexible enough, however, to allow
 specification of more than one property if it is desired.

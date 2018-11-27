@@ -29,7 +29,7 @@ The two folders are covered below.
 Within ``dsurround`` are two Json files.  The names of these files are standard and must be present
 for Dynamic Surroundings to use the pack.
 
-- ``configure.json``  This Json file is just like the standard configuration Json files covered in `Tutorial: External Configuration Files <config_files.html>`__.  Whatever you can do in the standard configuration files you can do in ``configure.json``.
+- ``configure.json``  This Json file is just like the standard configuration Json files covered in :ref:`tutorial-config-files`.  Whatever you can do in the standard configuration files you can do in ``configure.json``.
 - ``manifest.json``  The manifest file serves as a identification and credit mechanism for Dynamic Surroundings.
 
 The content of ``manifest.json`` is as follows::
@@ -57,13 +57,6 @@ Keep in mind that a resource pack can do other thing than battle music.  It is e
 add additional biome sound tracks via a resource pack and configure biomes using the ``configure.json``.
 Another possibility is to package up the external Json configuration files into a single resource
 pack and distributed it via CurseForge.
-
-
-
-
-
-
-
 
 ..	_packs: https://github.com/OreCruncher/DynamicSurroundings/tree/master/packs
 ..	_here: https://github.com/OreCruncher/DynamicSurroundings/blob/master/packs/battlemusic/assets/dsurround/configure.json

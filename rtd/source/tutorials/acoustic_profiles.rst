@@ -1,3 +1,5 @@
+..	_tutorial-acoustic-profiles:
+
 Tutorial: Acoustic Profiles
 ===========================
 An acoustic profile is a collection of footstep sound effect data that can be applied when an entity

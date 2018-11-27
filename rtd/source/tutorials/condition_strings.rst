@@ -1,3 +1,5 @@
+..	_tutorial-condition-strings:
+
 Tutorial: Condition Strings
 ===========================
 When creating a configuration file some of the elements have a condition string option.  The
@@ -120,6 +122,9 @@ A few constant variables are provided if they are needed.
 	*	- FALSE
 		- boolean
 		- Indicates false.  Has a value of 0.
+	*	- PI
+		- Float
+		- 3.1415927
 
 Dimension variables describe the dimension that the player is in.
 

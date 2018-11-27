@@ -1,10 +1,10 @@
 Tutorial: Footsteps
 ===================
-This tutorial assumes that you have already created a Json configuration file.  If you haven't please
-read `Tutorial: External Configuration Files <config_files.html>`__.
+This tutorial assumes that you have already created a Json configuration file.  If you haven't
+please read :ref:`tutorial-config-files`.
 
 If you are not familiar with Dynamic Surroundings block state specification methods please read
-`Tutorial: BlockState Specification <blockstate.html>`_.  It will save you a lot of heartache.
+:ref:`tutorial-blockstate`.  It will save you a lot of heartache.
 
 The "footsteps" entry in the configuration file is used to specify what sounds to play when a player
 is walking on or through a block::
@@ -16,7 +16,7 @@ is walking on or through a block::
 		"minecraft:grass_path": "grass"
 	}
 
-The list is comprised of value pairs.  The value on the right is the `acoustic <acoustic_profile.html>`_
+The list is comprised of value pairs.  The value on the right is the :ref:`acoustic <tutorial-acoustic-profiles>`
 to apply to the block that is specified on the left side.  Above, ``minecraft:barrier`` is not an
 emitter (doesn't produce sound) so it is set to ``NOT_EMITTER``.  The block ``minecraft:stone`` is
 set to have the acoustic profile of ``stone``.

@@ -1,15 +1,16 @@
 Tutorial: Biomes
 ================
 This tutorial assumes that you have already created a Json configuration file.  If you haven't
-please read  `Tutorial: External Configuration Files <config_files.html>`__.
+please read :ref:`tutorial-config-files`.
 
 Internally Dynamic Surroundings has a Biome Registry where it finds information related to
 background fog and density, fog color, whether the biome can spawn auroras, etc.  A modpack author
 can override what Dynamic Surroundings uses in order to provide specific biome effects.
 
-**NOTE:** The ``/ds`` command has an option ``reload``.  This allows you to reload biome config
-files without having to exit Minecraft.  However, if you create a new one and add it to the
-``dsurround.cfg`` file you will still need to restart Minecraft.
+..	note::
+	The ``/ds`` command has an option ``reload``.  This allows you to reload biome config
+	files without having to exit Minecraft.  However, if you create a new one and add it to the
+	``dsurround.cfg`` file you will still need to restart Minecraft.
 
 The table below describes the various parameters that can be defined:
 
@@ -23,7 +24,7 @@ The table below describes the various parameters that can be defined:
 		- Comment
 	*	- conditions
 		- String
-		- The biome for which these options apply.  See `Tutorial: Condition Strings <condition_strings.html>`_ for more information.
+		- The biome for which these options apply.  See :ref:`tutorial-condition-strings` for more information.
 	*	- _comment
 		- String
 		- Just a string of text used for making a comment in Json.  Does not affect processing of the configuration file.
@@ -198,7 +199,7 @@ possible to have 1 or more selections made (example: playing wind in a forest if
    		- The name of the sound resource to play.
    	*	- conditions
    		- String
-   		- A `condition string <condition_strings.html>`_  that match the condition for playing.
+   		- A :ref:`condition string <tutorial-condition-strings>`  that match the condition for playing.
    	*	- volume
    		- Float
    		- The volume level at which to play the sound.
@@ -289,7 +290,7 @@ can be any valid sound reference, whether it is from Minecraft, Dynamic Surround
 
 Conditions
 ^^^^^^^^^^
-See `Tutorial: Condition Strings <condition_strings.html>`_.
+See :ref:`tutorial-condition-strings`.
 
 Volume
 ^^^^^^

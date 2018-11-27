@@ -1,7 +1,7 @@
 Tutorial: Blocks
 ================
 This tutorial assumes that you have already created a Json configuration file.  If you haven't
-please read `Tutorial: External Configuration Files <config_files.html>`__.
+please read :ref:`tutorial-config-files`.
 
 Internally Dynamic Surroundings has a Block Registry where it finds information related to spot
 sounds that can be played at a block as well as special particle effects such as dropping dust
@@ -20,10 +20,10 @@ The table below describes the various parameters that can be defined in the Json
 		- Comment
 	*	- blocks
 		- String List
-		- The block states for which the configuration options apply. See `Tutorial: BlockState Specification <blockstate.html>`_ for more information.
+		- The block states for which the configuration options apply. See :ref:`tutorial-blockstate` for more information.
 	*	- conditions
 		- String
-		- `Tutorial: Condition Strings <condition_strings.html>`_.
+		- See :ref:`tutorial-condition-strings`.
 	*	- soundReset
 		- Boolean
 		- Clears existing sound configuration for the blocks.
@@ -125,7 +125,7 @@ will be different, such as "variable".
 		- The name of the sound resource to play.
 	*	- conditions
 		- String
-		- See `Tutorial: Condition Strings <condition_strings.html>`_
+		- See :ref:`tutorial-condition-strings`
 	*	- volume
 		- Float
 		- The volume level at which to play the sound.
@@ -149,7 +149,7 @@ another mod.  For example, if you want to play the Minecart movement sound you c
 
 Conditions
 ^^^^^^^^^^
-See `Tutorial: Condition Strings <condition_strings.html>`_.
+See :ref:`tutorial-condition-strings`.
 
 Volume
 ^^^^^^

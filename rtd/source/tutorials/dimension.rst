@@ -1,7 +1,7 @@
 Tutorial: Dimensions
 ====================
-This tutorial assumes that you have already created a Json configuration file.  If you haven't please
-read `Tutorial: External Configuration Files <config_files.html>`__.
+This tutorial assumes that you have already created a Json configuration file.  If you haven't
+please read :ref:`tutorial-config-files`.
 
 Internally Dynamic Surroundings has a Dimension Registry where it keeps information related to how it
 should operate for a dimension. A modpack author can override what Dynamic Surroundings uses in order
@@ -45,8 +45,9 @@ The table below describes the various parameters that can be defined:
 		- Boolean
 		- Whether the dimension has fog effects.
 
-NOTE: Either dimId or name must be specified so that Dynamic Surroundings can match up the configuration
-to the right dimension.  If neither are specified it will be ignored.
+..	note::
+	Either dimId or name must be specified so that Dynamic Surroundings can match up the configuration
+	to the right dimension.  If neither are specified it will be ignored.
 
 In order to define dimension options the first thing that needs to be done is to create a Json file
 in the ``./minecraft/config/dsurround/`` configuration directory.  It is a normal text file but has
