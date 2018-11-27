@@ -15,8 +15,10 @@ Documentation for prior versions can be found here_.
    
    license
    credits
+   features/features
    tutorials/tutorials
    howdoi
+   performance
 
 .. _here: https://github.com/OreCruncher/DynamicSurroundings/wiki
 .. _CurseForge: http://minecraft.curseforge.com/projects/dynamic-surroundings
