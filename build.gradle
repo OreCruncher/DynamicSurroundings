@@ -66,6 +66,8 @@ dependencies {
 	compile "ctm:CTM:MC1.12.2:0.3.2.20"
 	compile "cosmetic-armor-reworked:CosmeticArmorReworked:1.12.2:v3"
 	compile "littletiles:LittleTiles_v1.5.0:pre122_mc1.12.2"
+	
+	compile "orelib:OreLib-1.12.2:3.5.0.0BETA:deobf"
 
 	//compile "creativecore:CreativeCore_v1.9.35_mc1.12.2"
 	
