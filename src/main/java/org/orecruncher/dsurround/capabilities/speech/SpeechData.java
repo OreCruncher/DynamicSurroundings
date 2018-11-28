@@ -71,14 +71,14 @@ public class SpeechData implements ISpeechData {
 	}
 
 	@Override
+	@Nonnull
 	public NBTTagCompound serializeNBT() {
-		// Do nothing - since this is 100% client side there is
-		// no persistence.
-		return null;
+		// This shouldn't be needed, but just in case....
+		return new NBTTagCompound();
 	}
 
 	@Override
-	public void deserializeNBT(NBTTagCompound nbt) {
+	public void deserializeNBT(@Nonnull final NBTTagCompound nbt) {
 		// Do nothing - since this is 100% client side there is
 		// no persistence.
 	}
