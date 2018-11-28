@@ -70,6 +70,7 @@ public final class BlockStateRegistry extends Registry {
 
 		// Wipe out any cached data
 		getBlockStates().forEach(state -> BlockStateUtil.setStateData(state, null));
+		BlockStateUtil.setStateData(Blocks.AIR.getDefaultState(), NO_PROFILE);
 	}
 
 	@Override
@@ -107,7 +108,13 @@ public final class BlockStateRegistry extends Registry {
 	public BlockStateProfile get(@Nonnull final IBlockState state) {
 		BlockStateProfile profile = BlockStateUtil.getStateData(state);
 		if (profile == null) {
-			profile = this.registry.get(BlockStateMatcher.asGeneric(state));
+			if (this.registry == null) {
+				ModBase.log().warn("Unknown blockstate encountered '%s'", state.toString());
+			} else {
+				profile = this.registry.get(BlockStateMatcher.create(state));
+				if (profile == null)
+					profile = this.registry.get(BlockStateMatcher.asGeneric(state));
+			}
 			if (profile == null)
 				profile = NO_PROFILE;
 			BlockStateUtil.setStateData(state, profile);
