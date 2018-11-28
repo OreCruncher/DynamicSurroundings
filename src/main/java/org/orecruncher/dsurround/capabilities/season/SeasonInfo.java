@@ -92,10 +92,13 @@ public class SeasonInfo implements ISeasonInfo {
 		return ClientChunkCache.instance().getPrecipitationHeight(pos);
 	}
 
-	@Override
+	public float getFloatTemperature(@Nonnull final Biome biome, @Nonnull final BlockPos pos) {
+		return RegistryManager.BIOME.get(biome).getFloatTemperature(pos);
+	}
+	
 	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		final Biome biome = ClientChunkCache.instance().getBiome(pos);
-		final float biomeTemp = RegistryManager.BIOME.get(biome).getFloatTemperature(pos);
+		final float biomeTemp = getFloatTemperature(biome, pos);
 		final float heightTemp = world.getBiomeProvider().getTemperatureAtHeight(biomeTemp,
 				getPrecipitationHeight(world, pos).getY());
 		return heightTemp;

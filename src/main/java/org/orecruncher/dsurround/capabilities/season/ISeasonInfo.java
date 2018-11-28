@@ -32,6 +32,7 @@ import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -56,6 +57,8 @@ public interface ISeasonInfo extends INBTSerializable<NBTTagCompound>{
 
 	@Nonnull
 	BlockPos getPrecipitationHeight(@Nonnull final World world, @Nonnull final BlockPos pos);
+
+	float getFloatTemperature(@Nonnull final Biome biome, @Nonnull final BlockPos pos);
 
 	float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos);
 
