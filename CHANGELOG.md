@@ -1,3 +1,10 @@
+### DynamicSurroundings-1.12.2-3.5.0.1
+**Fixes**
+* Fixed NPE processing blockstate bounding box
+* Fixed compatbility issue with World Downloader mod that caused it to crash
+* Fixed NPE getting data from BlockStateRegistry 
+* Compatibility with latest Serene Seasons.  If you use Serene Seasons it must be at least version 1.2.10!
+
 ### DynamicSurroundings-1.12.2-3.5.0.0
 This release is a major update to Dynamic Surroundings.  Make sure you make backups of your Minecraft
 instance.  You will need to reset your Dynamic Surroundings config file and re-apply your changes.
