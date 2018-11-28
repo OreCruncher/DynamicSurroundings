@@ -90,27 +90,27 @@ public final class FootStrikeLocation {
 	public Vec3d north() {
 		return offset(EnumFacing.NORTH, 1);
 	}
-	
+
 	public Vec3d south() {
 		return offset(EnumFacing.SOUTH, 1);
 	}
-	
+
 	public Vec3d east() {
 		return offset(EnumFacing.EAST, 1);
 	}
-	
+
 	public Vec3d west() {
 		return offset(EnumFacing.WEST, 1);
 	}
-	
+
 	public Vec3d up() {
 		return offset(EnumFacing.UP, 1);
 	}
-	
+
 	public Vec3d down() {
 		return offset(EnumFacing.DOWN, 1);
 	}
-	
+
 	/**
 	 * Offsets this strike position n blocks in the given direction
 	 */
@@ -145,13 +145,16 @@ public final class FootStrikeLocation {
 		}
 		return null;
 	}
-	
-	protected double getBoundingBoxY(final double baseY, @Nonnull final IBlockAccess world, @Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
+
+	protected double getBoundingBoxY(final double baseY, @Nonnull final IBlockAccess world,
+			@Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
 		final AxisAlignedBB bounding = state.getBoundingBox(world, pos);
 		final AxisAlignedBB collision = state.getCollisionBoundingBox(world, pos);
-		if (bounding.maxY == collision.maxY)
+		final double boundingY = bounding == null ? baseY : bounding.maxY;
+		final double collisionY = collision == null ? baseY : collision.maxY;
+		if (boundingY == collisionY)
 			return baseY;
-		return Math.max(baseY, pos.getY() + Math.max(bounding.maxY, collision.maxY));
+		return Math.max(baseY, pos.getY() + Math.max(boundingY, collisionY));
 	}
 
 	protected boolean hasFootstepImprint(@Nonnull final World world, @Nonnull final IBlockState state,
