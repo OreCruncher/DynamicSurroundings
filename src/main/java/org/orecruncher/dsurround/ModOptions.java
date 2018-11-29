@@ -681,7 +681,7 @@ public final class ModOptions {
 		@DefaultValue("0.25")
 		@LangKey("dsurround.cfg.player.HurtThreshold")
 		@Comment("Percentage of player health bar remaining to trigger player hurt sound (0 disable)")
-		@RangeFloat(min = 0, max = 1)
+		@RangeFloat(min = 0, max = 0.5F)
 		public static float playerHurtThreshold = 0.25F;
 
 		@Option(CONFIG_HUNGER_THRESHOLD)
