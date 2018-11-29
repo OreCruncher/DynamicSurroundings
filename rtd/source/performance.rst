@@ -44,3 +44,38 @@ For clarity here are some additional points to consider:
 If you suspect that Dynamic Surroundings is having a performance issue enable debug tracing
 and hit F3.  I would like to see the timing results and any information you have related to the issue
 you are experiencing.
+
+-----
+
+If you are stuck with a potato, or even a squash, for a computer there are several things you can
+tweak to try and improve the situation.
+
+**Disable the shader version of Auroras**
+
+This really only applies if you hang around areas where they render.  As mentioned above they can be
+rather intensive in terms of processing *when rendering*.
+
+**Disable water suspend particle effect**
+
+Suspend particles are those little black square like particles that generate in the water.  If you
+spend time out by large bodies of water this can reduce your particle load quite a bit.
+
+**Reduce the Special Effect rendering range**
+
+By default the special effects rendering of Dynamic Surroundings will be out to 24 blocks (about
+45x45x45 blocks centered on the player).  Lowering this value will reduce the amount of blocks
+that Dynamic Surroundings will have to scan as well as reduce the number of entity effects that
+have to be handled.  Conversely, increasing this value will increase workload so be careful.
+
+**Change Minecraft's Particle Setting**
+
+Changing the particle setting to decreased or minimum will reduce the number of particles being
+rendered.  This change could have other side effects, such as a change in the sound sense with
+falling rain.  (Minecraft sound generation for rain is tied to particle generation - go figure.)
+
+**Increase the Waterfall Cutoff**
+
+If you stay around large waterfalls you could experience sound lag.  Increasing the cutoff value
+will reduce the overall amount of sounds that are played by the waterfall effects.  By default
+the value is 0 meaning that all sound points will play.  Increasing to 1 or 2 can significantly
+cut back on the number of sound points.
