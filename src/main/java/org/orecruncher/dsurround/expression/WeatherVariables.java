@@ -22,11 +22,14 @@
  */
 package org.orecruncher.dsurround.expression;
 
-import org.orecruncher.dsurround.capabilities.season.TemperatureRating;
+import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
+import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.lib.expression.Dynamic;
 import org.orecruncher.lib.expression.DynamicVariantList;
+
+import net.minecraft.world.World;
 
 public class WeatherVariables extends DynamicVariantList {
 
@@ -64,15 +67,15 @@ public class WeatherVariables extends DynamicVariantList {
 		add(new Dynamic.DynamicNumber("weather.temperatureValue") {
 			@Override
 			public void update() {
-				this.value = EnvironState.getPlayerBiome().getFloatTemperature(EnvironState.getPlayerPosition());
+				final World world = EnvironState.getWorld();
+				final ISeasonInfo season = CapabilitySeasonInfo.getCapability(world);
+				this.value = season.getTemperature(world, EnvironState.getPlayerPosition());
 			}
 		});
 		add(new Dynamic.DynamicString("weather.temperature") {
 			@Override
 			public void update() {
-				this.value = TemperatureRating
-						.fromTemp(EnvironState.getPlayerBiome().getFloatTemperature(EnvironState.getPlayerPosition()))
-						.getValue();
+				this.value = EnvironState.getBiomeTemperature().getValue();
 			}
 		});
 
