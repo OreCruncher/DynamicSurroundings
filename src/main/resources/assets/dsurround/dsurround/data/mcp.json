@@ -73,11 +73,11 @@
 			"sounds": [
 				{
 					"sound": "dsurround:plains",
-					"conditions": "weather.isNotRaining && diurnal.isDay"
+					"conditions": "weather.isNotRaining && !weather.canWaterFreeze && diurnal.isDay"
 				},
 				{
 					"sound": "dsurround:crickets",
-					"conditions": "weather.isNotRaining && diurnal.isNight"
+					"conditions": "weather.isNotRaining && !weather.canWaterFreeze && diurnal.isNight"
 				}
 			]
 		},
@@ -98,11 +98,11 @@
 			"sounds": [
 				{
 					"sound": "dsurround:forest",
-					"conditions": "weather.isNotRaining && diurnal.isDay"
+					"conditions": "weather.isNotRaining && !weather.canWaterFreeze && diurnal.isDay"
 				},
 				{
 					"sound": "dsurround:crickets",
-					"conditions": "weather.isNotRaining && diurnal.isNight"
+					"conditions": "weather.isNotRaining && !weather.canWaterFreeze && diurnal.isNight"
 				}
 			]
 		},
@@ -112,11 +112,11 @@
 			"sounds": [
 				{
 					"sound": "dsurround:deep_forest",
-					"conditions": "weather.isNotRaining && diurnal.isDay"
+					"conditions": "weather.isNotRaining && !weather.canWaterFreeze && diurnal.isDay"
 				},
 				{
 					"sound": "dsurround:deep_crickets",
-					"conditions": "weather.isNotRaining && diurnal.isNight"
+					"conditions": "weather.isNotRaining && !weather.canWaterFreeze && diurnal.isNight"
 				}
 			]
 		},
@@ -126,7 +126,7 @@
 			"sounds": [
 				{
 					"sound": "dsurround:forest",
-					"conditions": "weather.isNotRaining && diurnal.isDay"
+					"conditions": "weather.isNotRaining && !weather.canWaterFreeze && diurnal.isDay"
 				}
 			]
 		},
@@ -198,11 +198,11 @@
 			"sounds": [
 				{
 					"sound": "dsurround:bog",
-					"conditions": "weather.isNotRaining && diurnal.isDay"
+					"conditions": "weather.isNotRaining && !weather.canWaterFreeze && diurnal.isDay"
 				},
 				{
 					"sound": "dsurround:crickets",
-					"conditions": "diurnal.isNight"
+					"conditions": "!weather.canWaterFreeze && diurnal.isNight"
 				}
 			],
 			"fog": true,
@@ -248,7 +248,7 @@
 			"sounds": [
 				{
 					"sound": "dsurround:elephant",
-					"conditions": "diurnal.isDay",
+					"conditions": "!weather.canWaterFreeze && diurnal.isDay",
 					"soundType": "spot"
 				}
 			]
@@ -259,7 +259,7 @@
 			"sounds": [
 				{
 					"sound": "dsurround:insectbuzz",
-					"conditions": "weather.isNotRaining",
+					"conditions": "!weather.canWaterFreeze && weather.isNotRaining",
 					"soundType": "spot",
 					"weight": 7,
 					"variable": true
