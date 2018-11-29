@@ -63,6 +63,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class Generator {
 
+	public static final double PROBE_DEPTH = 1F / 16F;
+
 	protected static final Random RANDOM = XorShiftRandom.current();
 	protected static final int BRUSH_INTERVAL = 100;
 
@@ -146,7 +148,8 @@ public class Generator {
 
 		// Player jump breath
 		if (this.didJump && ModOptions.sound.enableJumpSound && this.VAR.PLAY_JUMP && !entity.isSneaking()) {
-			this.soundPlayer.playAcoustic(entity.getPositionVector(), RegistryManager.FOOTSTEPS.JUMP, EventType.JUMP, null);
+			this.soundPlayer.playAcoustic(entity.getPositionVector(), RegistryManager.FOOTSTEPS.JUMP, EventType.JUMP,
+					null);
 		}
 
 		if (SoundEngine.getVolume(SoundRegistry.FOOTSTEPS) > 0) {
@@ -334,7 +337,7 @@ public class Generator {
 			this.brushesTime = current + BRUSH_INTERVAL;
 			if (proceedWithStep(entity) && (entity.motionX != 0d || entity.motionZ != 0d)) {
 				final int yy = MathStuff
-						.floor(entity.posY - 0.1d - entity.getYOffset() - (entity.onGround ? 0d : 0.25d));
+						.floor(entity.posY - PROBE_DEPTH - entity.getYOffset() - (entity.onGround ? 0d : 0.25d));
 				final BlockPos pos = new BlockPos(entity.posX, yy, entity.posZ);
 				if (!this.messyPos.equals(pos)) {
 					this.messyPos = pos;
@@ -402,7 +405,8 @@ public class Generator {
 		final double xx = entity.posX + MathStuff.cos(rot) * feetDistanceToCenter;
 		final double zz = entity.posZ + MathStuff.sin(rot) * feetDistanceToCenter;
 		final double minY = entity.getEntityBoundingBox().minY;
-		final FootStrikeLocation loc = new FootStrikeLocation(entity, xx, minY - 0.1D - verticalOffsetAsMinus, zz);
+		final FootStrikeLocation loc = new FootStrikeLocation(entity, xx, minY - PROBE_DEPTH - verticalOffsetAsMinus,
+				zz);
 
 		final AcousticResolver resolver = new AcousticResolver(ClientChunkCache.instance(), this.blockMap, loc,
 				this.VAR.DISTANCE_TO_CENTER);

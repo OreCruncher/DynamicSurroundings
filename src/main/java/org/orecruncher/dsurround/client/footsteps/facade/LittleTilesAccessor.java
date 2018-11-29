@@ -24,6 +24,8 @@ package org.orecruncher.dsurround.client.footsteps.facade;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.client.footsteps.Generator;
+
 import com.creativemd.littletiles.common.api.te.ILittleTileTE;
 import com.creativemd.littletiles.common.blocks.BlockTile;
 
@@ -41,6 +43,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 final class LittleTilesAccessor implements IFacadeAccessor {
+
+	private static final float RANGE = 0.25F / 2F;
 
 	@Override
 	public String getName() {
@@ -64,8 +68,8 @@ final class LittleTilesAccessor implements IFacadeAccessor {
 		final TileEntity te = world.getTileEntity(blockPos);
 		if (te instanceof ILittleTileTE) {
 			final ILittleTileTE ltte = (ILittleTileTE) te;
-			final Vec3d anchor1 = pos.add(-0.25, 0, -0.25);
-			final Vec3d anchor2 = pos.add(0.25, 0, 0.25);
+			final Vec3d anchor1 = pos.add(-RANGE, Generator.PROBE_DEPTH, -RANGE);
+			final Vec3d anchor2 = pos.add(RANGE, Generator.PROBE_DEPTH + 0.125D, RANGE);
 			final AxisAlignedBB box = new AxisAlignedBB(anchor1, anchor2);
 			final IBlockState result = ltte.getState(box, false);
 			if (result != null)
