@@ -3,13 +3,13 @@ Aurora Borealis
 .. image:: images/aurora.png
    :align: center
 
-Auroras are special nighttime features that display north of the player when they are standing in
-a biome that is considered a polar type biome such as Taiga and Ice Plains.  These effects are
-purely visual and do not affect game play mechanics.
+Auroras are special nighttime features that display north of the player when they are standing 
+a polar type biome such as Taiga and Ice Plains.  These effects are purely visual and do not affect
+game play mechanics.
 
-When auroras can occur they will start fading in about sunset, and will fade out around sunrise.
-The coloring, size, and number of bands will differ every night.  The seed for the random generator
-is based on the Minecraft day.
+When auroras occur they will start fading in about sunset, and will fade out around sunrise.
+The coloring, size, and number of bands will differ every night.  The seed for the random
+generator is based on the Minecraft day.
 
 The shader version of the aurora can be disabled if your computer system struggles to keep up
 with it.  The options can be found under Aurora Options in Dynamic Surroundings configuration page.
