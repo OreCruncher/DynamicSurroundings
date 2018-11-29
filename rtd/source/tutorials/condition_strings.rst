@@ -206,6 +206,9 @@ Weather variables describe the current state of weather in the player's dimensio
 	*	- weather.temperature
 		- string
 		- String indicating the general temperature of the player location ('icy', 'cool', 'mild', 'warm, 'hot').
+	*	- weather.canWaterFreeze
+		- boolean
+		- Indicates if it is cold enough for water to freeze
 
 If Serene Seasons is installed, the season variables will provide information about the current
 season.  If Serene Seasons is not installed "noseason" will be reported.

@@ -78,6 +78,13 @@ public class WeatherVariables extends DynamicVariantList {
 				this.value = EnvironState.getBiomeTemperature().getValue();
 			}
 		});
-
+		add(new Dynamic.DynamicBoolean("weather.canWaterFreeze") {
+			@Override
+			public void update() {
+				final World world = EnvironState.getWorld();
+				final ISeasonInfo season = CapabilitySeasonInfo.getCapability(world);
+				this.value = season.canWaterFreeze(world, EnvironState.getPlayerPosition());
+			}
+		});
 	}
 }

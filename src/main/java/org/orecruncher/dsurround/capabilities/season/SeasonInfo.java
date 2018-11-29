@@ -161,12 +161,12 @@ public class SeasonInfo implements ISeasonInfo {
 
 	@Override
 	public NBTTagCompound serializeNBT() {
-		// Do nothing - purely a client side thing
-		return null;
+		// Shouldn't happen but just in case
+		return new NBTTagCompound();
 	}
 
 	@Override
-	public void deserializeNBT(NBTTagCompound nbt) {
+	public void deserializeNBT(@Nonnull final NBTTagCompound nbt) {
 		// Do nothing - purely a client side thing
 	}
 

@@ -427,7 +427,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		//@formatter:off
 		"'Dim: ' + dim.id + '/' + dim.name",
 		"'Biome: ' + biome.name + ' (' + biome.id + '); Temp ' + biome.temperature + '/' + biome.temperatureValue + ' rainfall: ' + biome.rainfall",
-		"'Weather: ' + IF(weather.isRaining,'rainfall: ' + weather.rainfall,'not raining') + IF(weather.isThundering,' thundering','') + ' Temp: ' + weather.temperature + '/' + weather.temperatureValue + ' ' + IF(weather.temperatureValue < 0.2, '(breath)', '')",
+		"'Weather: ' + IF(weather.isRaining,'rainfall: ' + weather.rainfall,'not raining') + IF(weather.isThundering,' thundering','') + ' Temp: ' + weather.temperature + '/' + weather.temperatureValue + ' ice: ' + IF(weather.canWaterFreeze, 'true', 'false') + ' ' + IF(weather.temperatureValue < 0.2, '(breath)', '')",
 		"'Season: ' + season.season + IF(diurnal.isNight,' night',' day') + IF(player.isInside,' inside',' outside')",
 		"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','') + ' pos: (' + player.X + ',' + player.Y + ',' + player.Z + ') light: ' + player.lightLevel",
 		"'Village: ' + player.inVillage"
