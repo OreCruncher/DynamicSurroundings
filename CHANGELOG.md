@@ -1,3 +1,16 @@
+### DynamicSurroundings-1.12.2-3.5.0.2
+**What's New**
+* Added weather.canWaterFreeze script variable
+* The various Forest and Plains background biome sound track will not play if water is capable of freezing.  For example, with Serene Seasons installed and it being in the middle of winter things will be fairly quiet in Forests and Plains.
+    * This shouldn't affect things if you do not use Serene Seasons
+    * It also affects things like frog croaks and fireflies
+
+**Fixes**
+* Footstep sound on thin LittleTile block was incorrect.
+
+**Changes**
+* Cap hurt threshold percentage at 50% of max health 
+
 ### DynamicSurroundings-1.12.2-3.5.0.1
 **Fixes**
 * Fixed NPE processing blockstate bounding box
@@ -9,7 +22,7 @@
 This release is a major update to Dynamic Surroundings.  Make sure you make backups of your Minecraft
 instance.  You will need to reset your Dynamic Surroundings config file and re-apply your changes.
 
-The format of the external Json configuration file has changed enought where you will need to rework
+The format of the external Json configuration file has changed enough where you will need to rework
 it to be compatible.  Tutorials on the changes can be found on the wiki.
 
 With this release there is a dependency on an external library JAR.  Make sure that is installed
