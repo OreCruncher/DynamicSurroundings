@@ -31,6 +31,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
@@ -41,8 +42,8 @@ import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.Localization;
 import org.orecruncher.lib.MinecraftClock;
 import org.orecruncher.lib.PlayerUtils;
-import org.orecruncher.lib.gui.TextPanel;
 import org.orecruncher.lib.gui.Panel.Reference;
+import org.orecruncher.lib.gui.TextPanel;
 import org.orecruncher.lib.math.MathStuff;
 
 import net.minecraft.client.Minecraft;
@@ -89,7 +90,7 @@ public class CompassHUD extends GuiOverlay {
 
 		private Style(final boolean isRose, @Nonnull final String texture, final int w, final int h) {
 			this.isRose = isRose;
-			this.texture = new ResourceLocation(ModBase.RESOURCE_ID, texture);
+			this.texture = new ResourceLocation(ModInfo.RESOURCE_ID, texture);
 			this.width = w;
 			this.height = h;
 		}
@@ -237,8 +238,9 @@ public class CompassHUD extends GuiOverlay {
 				final int y = (resolution.getScaledHeight() - style.getHeight() + 1) / 2 - style.getHeight();
 
 				if (direction < 128)
-					drawTexturedModalRect(x, y, direction, (ModOptions.huds.compass.compassStyle * (style.getHeight() * 2)),
-							style.getWidth(), style.getHeight());
+					drawTexturedModalRect(x, y, direction,
+							(ModOptions.huds.compass.compassStyle * (style.getHeight() * 2)), style.getWidth(),
+							style.getHeight());
 				else
 					drawTexturedModalRect(x, y, direction - 128,
 							(ModOptions.huds.compass.compassStyle * (style.getHeight() * 2)) + style.getHeight(),

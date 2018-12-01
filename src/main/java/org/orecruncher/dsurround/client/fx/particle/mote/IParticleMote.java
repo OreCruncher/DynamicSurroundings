@@ -38,10 +38,10 @@ public interface IParticleMote {
 	 * @return true if the mote is active; false otherwise
 	 */
 	boolean isAlive();
-	
+
 	/**
-	 * Kills a mote.  It will stop displaying and be released
-	 * from collections.
+	 * Kills a mote. It will stop displaying and be released from collections.
+	 * 
 	 * @return
 	 */
 	void kill();

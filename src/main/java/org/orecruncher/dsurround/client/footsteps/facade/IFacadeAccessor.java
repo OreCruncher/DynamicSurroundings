@@ -50,16 +50,16 @@ interface IFacadeAccessor {
 	boolean instanceOf(@Nonnull final Block block);
 
 	/*
-	 * Indicates if the accessor is valid.  It could be invalid if the associated
-	 * mod is not installed.
+	 * Indicates if the accessor is valid. It could be invalid if the associated mod
+	 * is not installed.
 	 */
 	boolean isValid();
 
 	/*
-	 * Requests the underlying IBlockState for the block.  The underlying IBlockState is
-	 * what should be used when generating sound effects.
+	 * Requests the underlying IBlockState for the block. The underlying IBlockState
+	 * is what should be used when generating sound effects.
 	 */
 	@Nullable
-	IBlockState getBlockState(@Nonnull final EntityLivingBase entity, @Nonnull final IBlockState state, @Nonnull final IBlockAccess world,
-			@Nonnull final Vec3d pos, @Nullable final EnumFacing side);
+	IBlockState getBlockState(@Nonnull final EntityLivingBase entity, @Nonnull final IBlockState state,
+			@Nonnull final IBlockAccess world, @Nonnull final Vec3d pos, @Nullable final EnumFacing side);
 }

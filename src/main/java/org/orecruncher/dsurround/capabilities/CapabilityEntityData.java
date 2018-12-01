@@ -27,7 +27,7 @@ package org.orecruncher.dsurround.capabilities;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.capabilities.entitydata.EntityData;
 import org.orecruncher.dsurround.capabilities.entitydata.EntityDataTables;
 import org.orecruncher.dsurround.capabilities.entitydata.IEntityData;
@@ -61,7 +61,7 @@ public final class CapabilityEntityData {
 	@CapabilityInject(IEntityData.class)
 	public static final Capability<IEntityData> ENTITY_DATA = null;
 	public static final EnumFacing DEFAULT_FACING = null;
-	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModBase.MOD_ID, "data");
+	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModInfo.MOD_ID, "data");
 
 	public static void register() {
 		CapabilityManager.INSTANCE.register(IEntityData.class, new Capability.IStorage<IEntityData>() {
@@ -88,7 +88,7 @@ public final class CapabilityEntityData {
 		return new CapabilityProviderSerializable<>(ENTITY_DATA, DEFAULT_FACING, data);
 	}
 
-	@EventBusSubscriber(modid = ModBase.MOD_ID)
+	@EventBusSubscriber(modid = ModInfo.MOD_ID)
 	public static class EventHandler {
 
 		/*

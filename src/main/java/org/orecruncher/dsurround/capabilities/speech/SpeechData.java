@@ -42,7 +42,7 @@ public class SpeechData implements ISpeechData {
 
 	private final List<SpeechBubbleData> data = new ArrayList<>();
 	private final ObjectArray<String> preppedList = new ObjectArray<>();
-	
+
 	private RenderContext ctx;
 
 	@Override
@@ -64,7 +64,8 @@ public class SpeechData implements ISpeechData {
 	public ObjectArray<String> getText() {
 		return this.preppedList;
 	}
-	
+
+	@Override
 	@Nullable
 	public RenderContext getRenderContext() {
 		return this.ctx;
@@ -82,7 +83,7 @@ public class SpeechData implements ISpeechData {
 		// Do nothing - since this is 100% client side there is
 		// no persistence.
 	}
-	
+
 	protected void generateTextForRender() {
 		this.preppedList.clear();
 		for (final SpeechBubbleData entry : this.data)

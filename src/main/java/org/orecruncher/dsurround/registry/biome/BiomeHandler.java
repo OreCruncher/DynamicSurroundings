@@ -26,7 +26,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -116,7 +116,7 @@ public class BiomeHandler implements IBiome {
 		ResourceLocation res = biome.getRegistryName();
 		if (res == null) {
 			final String name = biome.getClass().getName() + "_" + biome.getBiomeName().replace(' ', '_').toLowerCase();
-			res = new ResourceLocation(ModBase.RESOURCE_ID, name);
+			res = new ResourceLocation(ModInfo.RESOURCE_ID, name);
 		}
 		return res;
 	}

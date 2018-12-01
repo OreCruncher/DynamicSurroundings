@@ -30,11 +30,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
+
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public final class ItemUtils {
-	
+
 	// This field was added by the core mod for our use
 	private static Field itemInfo = ReflectionHelper.findField(Item.class, "dsurround_item_info");
 
@@ -55,6 +56,5 @@ public final class ItemUtils {
 			ModBase.log().error("Unable to set private field on Item!", e);
 		}
 	}
-
 
 }

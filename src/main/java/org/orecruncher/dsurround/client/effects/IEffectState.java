@@ -44,16 +44,14 @@ public interface IEffectState {
 	/**
 	 * Used to add a Particle to the system.
 	 *
-	 * @param particle
-	 *            The Particle instance to add to the particle system.
+	 * @param particle The Particle instance to add to the particle system.
 	 */
 	void addParticle(@Nonnull final Particle particle);
 
 	/**
 	 * Used to play a sound.
 	 *
-	 * @param sound
-	 *            The sound to play
+	 * @param sound The sound to play
 	 * @return Unique ID identifying the sound in the sound system
 	 */
 	@Nullable
@@ -62,8 +60,7 @@ public interface IEffectState {
 	/**
 	 * Stops the specified sound in the sound system from playing.
 	 *
-	 * @param sound
-	 *            The sound to stop playing
+	 * @param sound The sound to stop playing
 	 */
 	void stopSound(@Nonnull final ITrackedSound sound);
 
@@ -72,10 +69,8 @@ public interface IEffectState {
 	 * Entity. If the Entity is the current active player the sound will be
 	 * non-attenuated.
 	 *
-	 * @param se
-	 *            SoundEffect to use as the basis of the sound
-	 * @param player
-	 *            The player location of where the sound will be generated
+	 * @param se     SoundEffect to use as the basis of the sound
+	 * @param player The player location of where the sound will be generated
 	 * @return A BasicSound<?> with applicable properties set
 	 */
 	@Nonnull
@@ -84,8 +79,7 @@ public interface IEffectState {
 	/**
 	 * Indicates if the specified player is the one sitting behind the screen.
 	 *
-	 * @param player
-	 *            The EntityPlayer to check
+	 * @param player The EntityPlayer to check
 	 * @return true if it is the local player, false otherwise
 	 */
 	boolean isActivePlayer(@Nonnull final Entity player);

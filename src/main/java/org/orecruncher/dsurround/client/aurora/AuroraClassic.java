@@ -64,7 +64,7 @@ public final class AuroraClassic extends AuroraBase {
 		final double zero = 0.0D;
 
 		final OpenGlState glState = OpenGlState.push();
-		
+
 		GlStateManager.disableLighting();
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
@@ -141,7 +141,6 @@ public final class AuroraClassic extends AuroraBase {
 			tess.draw();
 			GlStateManager.popMatrix();
 		}
-
 
 		OpenGlState.pop(glState);
 	}

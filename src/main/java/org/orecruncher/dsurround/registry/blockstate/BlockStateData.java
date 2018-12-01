@@ -24,8 +24,7 @@
 package org.orecruncher.dsurround.registry.blockstate;
 
 /**
- * Base class for the data being assigned into the IBlockState
- * implementation.
+ * Base class for the data being assigned into the IBlockState implementation.
  */
 public abstract class BlockStateData {
 

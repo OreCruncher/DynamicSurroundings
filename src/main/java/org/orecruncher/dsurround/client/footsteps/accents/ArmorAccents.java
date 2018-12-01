@@ -54,19 +54,19 @@ public class ArmorAccents implements IFootstepAccentProvider {
 	protected IAcoustic resolveArmor(@Nonnull final ItemStack stack) {
 		final IItemData id = ItemUtils.getItemData(stack.getItem());
 		if (id instanceof IArmorItemData) {
-			return ((IArmorItemData)id).getArmorSound(stack);
+			return ((IArmorItemData) id).getArmorSound(stack);
 		}
 		return null;
 	}
-	
+
 	protected IAcoustic resolveFootArmor(@Nonnull final ItemStack stack) {
 		final IItemData id = ItemUtils.getItemData(stack.getItem());
 		if (id instanceof IArmorItemData) {
-			return ((IArmorItemData)id).getFootArmorSound(stack);
+			return ((IArmorItemData) id).getFootArmorSound(stack);
 		}
 		return null;
 	}
-	
+
 	@Override
 	@Nonnull
 	public ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos pos,
@@ -81,7 +81,7 @@ public class ArmorAccents implements IFootstepAccentProvider {
 			armor = ItemClass.effectiveArmorStack(entity);
 			foot = ItemClass.footArmorStack(entity);
 		}
-		
+
 		final IAcoustic armorAddon = resolveArmor(armor);
 		IAcoustic footAddon = resolveFootArmor(foot);
 

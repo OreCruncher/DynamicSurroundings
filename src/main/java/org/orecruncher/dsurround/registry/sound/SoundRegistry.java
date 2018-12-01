@@ -32,6 +32,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.sound.ConfigSound;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
@@ -39,6 +40,7 @@ import org.orecruncher.dsurround.lib.sound.SoundConfigProcessor;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.lib.math.MathStuff;
+
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.audio.ISound;
@@ -59,7 +61,7 @@ public final class SoundRegistry extends Registry {
 	public static final float MAX_SOUNDFACTOR = 4F;
 	public static final float DEFAULT_SOUNDFACTOR = 1F;
 
-	private static final String ARMOR_SOUND_PREFIX = ModBase.MOD_ID + ":armor.";
+	private static final String ARMOR_SOUND_PREFIX = ModInfo.MOD_ID + ":armor.";
 
 	private final List<String> cullSoundNames = new ArrayList<>();
 	private final List<String> blockSoundNames = new ArrayList<>();
@@ -128,11 +130,11 @@ public final class SoundRegistry extends Registry {
 
 	private void bakeSoundRegistry() {
 
-		final ResourceLocation soundFile = new ResourceLocation(ModBase.MOD_ID, "sounds.json");
+		final ResourceLocation soundFile = new ResourceLocation(ModInfo.MOD_ID, "sounds.json");
 		try (final SoundConfigProcessor proc = new SoundConfigProcessor(soundFile)) {
 			proc.forEach((sound, meta) -> {
 				final SoundMetadata data = new SoundMetadata(meta);
-				final ResourceLocation resource = new ResourceLocation(ModBase.RESOURCE_ID, sound);
+				final ResourceLocation resource = new ResourceLocation(ModInfo.RESOURCE_ID, sound);
 				this.soundMetadata.put(resource, data);
 			});
 		} catch (@Nonnull final Exception ex) {

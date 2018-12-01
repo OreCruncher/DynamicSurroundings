@@ -26,7 +26,7 @@ package org.orecruncher.dsurround.client.weather;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.dimension.DimensionInfo;
 import org.orecruncher.dsurround.client.sound.Sounds;
@@ -47,7 +47,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class Weather {
-	
+
 	private static final SoundEvent VANILLA_RAIN = RegistryManager.SOUND.getSound(new ResourceLocation("weather.rain"));
 
 	public enum Properties {
@@ -72,16 +72,16 @@ public class Weather {
 			this.level = -10.0F;
 			this.rainTexture = new ResourceLocation("textures/environment/rain.png");
 			this.snowTexture = new ResourceLocation("textures/environment/snow.png");
-			this.dustTexture = new ResourceLocation(ModBase.RESOURCE_ID, "textures/environment/dust_calm.png");
+			this.dustTexture = new ResourceLocation(ModInfo.RESOURCE_ID, "textures/environment/dust_calm.png");
 		}
 
 		private Properties(final float level, @Nonnull final String intensity) {
 			this.level = level;
-			this.rainTexture = new ResourceLocation(ModBase.RESOURCE_ID,
+			this.rainTexture = new ResourceLocation(ModInfo.RESOURCE_ID,
 					String.format("textures/environment/rain_%s.png", intensity));
-			this.snowTexture = new ResourceLocation(ModBase.RESOURCE_ID,
+			this.snowTexture = new ResourceLocation(ModInfo.RESOURCE_ID,
 					String.format("textures/environment/snow_%s.png", intensity));
-			this.dustTexture = new ResourceLocation(ModBase.RESOURCE_ID,
+			this.dustTexture = new ResourceLocation(ModInfo.RESOURCE_ID,
 					String.format("textures/environment/dust_%s.png", intensity));
 		}
 

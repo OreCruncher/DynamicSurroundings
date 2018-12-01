@@ -52,8 +52,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class BasicSound<T extends BasicSound<?>> extends PositionedSound
-		implements ITrackedSound {
+public class BasicSound<T extends BasicSound<?>> extends PositionedSound implements ITrackedSound {
 
 	protected static final float ATTENUATION_OFFSET = 32F;
 

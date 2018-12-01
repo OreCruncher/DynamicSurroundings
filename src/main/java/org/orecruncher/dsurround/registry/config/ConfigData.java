@@ -46,6 +46,7 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.data.Profiles;
 import org.orecruncher.dsurround.data.Profiles.ProfileScript;
@@ -203,7 +204,7 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 			// Process the mod config from each of our packs. This includes the regular
 			// files from the dsurround jar.
 			for (final ModContainer mod : activeMods) {
-				final ResourceLocation rl = new ResourceLocation(ModBase.MOD_ID,
+				final ResourceLocation rl = new ResourceLocation(ModInfo.MOD_ID,
 						"data/" + mod.getModId().toLowerCase() + ".json");
 				for (final IMyResourcePack p : packs) {
 					if (p.resourceExists(rl))

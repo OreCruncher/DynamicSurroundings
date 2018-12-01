@@ -56,7 +56,7 @@ public class RainSplashAcoustic implements IAcoustic {
 		for (int i = 0; i < this.acoustics.length; i++)
 			this.acoustics[i].playSound(player, location, event, ops);
 	}
-	
+
 	@Override
 	public String toString() {
 		return "<< RainSplash >>";

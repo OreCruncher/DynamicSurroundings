@@ -34,6 +34,7 @@ public class WeatherGeneratorNone extends WeatherGenerator {
 		super(world);
 	}
 
+	@Override
 	@Nonnull
 	public String name() {
 		return "NULL";

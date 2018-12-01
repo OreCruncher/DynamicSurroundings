@@ -35,6 +35,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.lib.JsonUtils;
 
 import net.minecraft.client.Minecraft;
@@ -52,9 +53,8 @@ public final class ResourcePacks {
 
 	}
 
-	public static final ResourceLocation MANIFEST_RESOURCE = new ResourceLocation(ModBase.RESOURCE_ID,
-			"manifest.json");
-	public static final ResourceLocation CONFIGURE_RESOURCE = new ResourceLocation(ModBase.RESOURCE_ID,
+	public static final ResourceLocation MANIFEST_RESOURCE = new ResourceLocation(ModInfo.RESOURCE_ID, "manifest.json");
+	public static final ResourceLocation CONFIGURE_RESOURCE = new ResourceLocation(ModInfo.RESOURCE_ID,
 			"configure.json");
 
 	public static class Pack implements IMyResourcePack {
@@ -81,6 +81,7 @@ public final class ResourcePacks {
 			return this.manifest != null;
 		}
 
+		@Override
 		@Nonnull
 		public String getModName() {
 			return this.modName;
@@ -91,6 +92,7 @@ public final class ResourcePacks {
 			return this.manifest;
 		}
 
+		@Override
 		public InputStream getInputStream(@Nonnull final ResourceLocation loc) throws IOException {
 			final StringBuilder builder = new StringBuilder();
 			builder.append(this.packPath);
@@ -98,6 +100,7 @@ public final class ResourcePacks {
 			return ModBase.class.getResourceAsStream(builder.toString());
 		}
 
+		@Override
 		public boolean resourceExists(@Nonnull final ResourceLocation loc) {
 			try (final InputStream stream = getInputStream(loc)) {
 				return stream != null;
@@ -135,7 +138,7 @@ public final class ResourcePacks {
 		public String getModName() {
 			return this.pack.getPackName();
 		}
-		
+
 		@Override
 		public boolean hasManifest() {
 			if (this.manifest == null) {
@@ -188,7 +191,7 @@ public final class ResourcePacks {
 		final List<IMyResourcePack> foundEntries = new ArrayList<>();
 
 		// Add ourselves to the list as the first entry
-		IMyResourcePack p = new Pack(ModBase.MOD_ID);
+		IMyResourcePack p = new Pack(ModInfo.MOD_ID);
 		if (!p.hasManifest())
 			throw new RuntimeException("Missing configuration!");
 		foundEntries.add(p);
@@ -197,7 +200,7 @@ public final class ResourcePacks {
 		// configuration we are interested in.
 		for (final ModContainer mod : Loader.instance().getActiveModList()) {
 			// DS is already added so we have to skip
-			if (!mod.getModId().equals(ModBase.MOD_ID)) {
+			if (!mod.getModId().equals(ModInfo.MOD_ID)) {
 				p = new Pack(mod.getModId());
 				if (p.hasManifest())
 					foundEntries.add(p);

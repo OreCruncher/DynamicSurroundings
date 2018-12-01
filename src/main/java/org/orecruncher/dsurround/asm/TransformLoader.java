@@ -31,6 +31,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.common.eventbus.EventBus;
+
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.DummyModContainer;
 import net.minecraftforge.fml.common.LoadController;
@@ -38,17 +39,17 @@ import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 @IFMLLoadingPlugin.MCVersion("1.12.2")
-@IFMLLoadingPlugin.TransformerExclusions({ "org.orecruncher.dsurround.asm."})
+@IFMLLoadingPlugin.TransformerExclusions({ "org.orecruncher.dsurround.asm." })
 @IFMLLoadingPlugin.SortingIndex(10001)
 @IFMLLoadingPlugin.Name(TransformLoader.MOD_NAME)
 public class TransformLoader implements IFMLLoadingPlugin {
 
 	public static final String MOD_ID = "dsurroundcore";
 	public static final String MOD_NAME = "DynamicSurroundingsCore";
-	
+
 	public static final Logger logger = LogManager.getLogger(MOD_ID);
 	public static Configuration config = null;
-	
+
 	@Override
 	public String getModContainerClass() {
 		return "org.orecruncher.dsurround.asm.TransformLoader$Container";
@@ -77,10 +78,10 @@ public class TransformLoader implements IFMLLoadingPlugin {
 	}
 
 	public static class Container extends DummyModContainer {
-		
+
 		public Container() {
 			super(new ModMetadata());
-			ModMetadata meta = getMetadata();
+			final ModMetadata meta = getMetadata();
 			meta.modId = MOD_ID;
 			meta.name = TransformLoader.MOD_NAME;
 			meta.authorList.add("OreCruncher");

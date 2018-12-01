@@ -199,7 +199,7 @@ public abstract class CuboidScanner extends Scanner {
 			return null;
 
 		final IBlockAccessEx provider = this.locus.getWorld();
-		
+
 		int checked = 0;
 
 		BlockPos point = null;

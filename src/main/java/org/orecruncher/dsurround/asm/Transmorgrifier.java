@@ -82,8 +82,7 @@ public abstract class Transmorgrifier {
 	 * Used by the Transformer to determine if a class that is being processed
 	 * matches what the Transmorgifier is looking for.
 	 *
-	 * @param name
-	 *            Name of the class being processed
+	 * @param name Name of the class being processed
 	 * @return true if the Transmorgrifier is interested, false otherwise
 	 */
 	public boolean matches(@Nonnull final String name) {
@@ -98,12 +97,9 @@ public abstract class Transmorgrifier {
 	/**
 	 * Locates a MethodNode within the specified ClassNode.
 	 *
-	 * @param cn
-	 *            ClassNode to search
-	 * @param signature
-	 *            Signature of the method
-	 * @param name
-	 *            Name of the method
+	 * @param cn        ClassNode to search
+	 * @param signature Signature of the method
+	 * @param name      Name of the method
 	 * @return MethodNode that matches the search criteria, null otherwise
 	 */
 	@Nullable
@@ -120,12 +116,9 @@ public abstract class Transmorgrifier {
 	 * or more method names and will return the first one discovered. Useful for
 	 * handling obfuscation.
 	 *
-	 * @param cn
-	 *            ClassNode to search
-	 * @param signature
-	 *            Signature of the method
-	 * @param names
-	 *            One or more names to search for
+	 * @param cn        ClassNode to search
+	 * @param signature Signature of the method
+	 * @param names     One or more names to search for
 	 * @return MethodNode that matches the search criteria, null otherwise
 	 */
 	@Nullable
@@ -143,10 +136,8 @@ public abstract class Transmorgrifier {
 	 * Locates a CTOR within the provided ClassNode that has the specified
 	 * signature.
 	 *
-	 * @param cn
-	 *            ClassNode to search
-	 * @param signature
-	 *            Signature to match
+	 * @param cn        ClassNode to search
+	 * @param signature Signature to match
 	 * @return MethodeNode that matches the search criteria, null otherwise
 	 */
 	@Nullable
@@ -158,10 +149,8 @@ public abstract class Transmorgrifier {
 	 * Locates a local variable within the MethodNode that matches the specified
 	 * name.
 	 *
-	 * @param m
-	 *            MethodNode to search
-	 * @param name
-	 *            Local variable to search for
+	 * @param m    MethodNode to search
+	 * @param name Local variable to search for
 	 * @return LocalVariableNode that matches the search criteria, null otherwise
 	 */
 	@Nullable

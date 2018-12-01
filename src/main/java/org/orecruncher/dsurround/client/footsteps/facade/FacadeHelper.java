@@ -63,7 +63,7 @@ public final class FacadeHelper {
 		final List<IFacadeAccessor> accessors = new ArrayList<>();
 
 		// Run down the list of supported accessors. The instance will
-		// tell us if it is valid or not.  Order is important - want to
+		// tell us if it is valid or not. Order is important - want to
 		// use a mod specific interface before general ones.
 		if (ModEnvironment.LittleTiles.isLoaded())
 			addAccessor(accessors, new LittleTilesAccessor());

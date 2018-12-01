@@ -27,7 +27,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
@@ -40,7 +40,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@EventBusSubscriber(modid = ModBase.MOD_ID, value = Side.CLIENT)
+@EventBusSubscriber(modid = ModInfo.MOD_ID, value = Side.CLIENT)
 public class SimpleArmorItemData extends SimpleItemData implements IArmorItemData {
 
 	private static final Map<ItemClass, IAcoustic> ARMOR = new Reference2ObjectOpenHashMap<>();

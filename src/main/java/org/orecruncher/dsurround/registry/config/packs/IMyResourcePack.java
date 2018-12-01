@@ -32,13 +32,13 @@ import javax.annotation.Nonnull;
 import net.minecraft.util.ResourceLocation;
 
 public interface IMyResourcePack {
-	
+
 	public String getModName();
-	
+
 	public boolean hasManifest();
-	
+
 	boolean resourceExists(@Nonnull final ResourceLocation loc);
-	
+
 	InputStream getInputStream(@Nonnull final ResourceLocation resource) throws IOException;
-	
+
 }

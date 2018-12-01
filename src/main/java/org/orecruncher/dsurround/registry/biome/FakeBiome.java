@@ -28,7 +28,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import com.google.common.collect.ImmutableSet;
@@ -49,23 +49,23 @@ public class FakeBiome implements IBiome {
 	protected final int biomeId = --biomeIdCounter;
 	protected final String name;
 	protected final ResourceLocation key;
-	
+
 	protected BiomeData biomeData;
 
 	public FakeBiome(@Nonnull final String name) {
 		this.name = name;
-		this.key = new ResourceLocation(ModBase.RESOURCE_ID, ("fake_" + name).replace(' ', '_'));
+		this.key = new ResourceLocation(ModInfo.RESOURCE_ID, ("fake_" + name).replace(' ', '_'));
 	}
 
 	@Nullable
 	public BiomeData getBiomeData() {
 		return this.biomeData;
 	}
-	
+
 	public void setBiomeData(@Nullable BiomeData data) {
 		this.biomeData = data;
 	}
-	
+
 	@Override
 	public int getId() {
 		return this.biomeId;
@@ -126,7 +126,7 @@ public class FakeBiome implements IBiome {
 	public Set<Type> getTypes() {
 		return ImmutableSet.of();
 	}
-	
+
 	@Override
 	public boolean isFake() {
 		return true;

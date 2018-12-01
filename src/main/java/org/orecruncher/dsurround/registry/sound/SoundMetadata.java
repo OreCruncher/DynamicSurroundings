@@ -54,7 +54,7 @@ public class SoundMetadata {
 			return SoundRegistry.FOOTSTEPS;
 		return SoundCategory.getByName(catName);
 	}
-	
+
 	public String getTitle() {
 		return this.title;
 	}

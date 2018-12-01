@@ -71,10 +71,10 @@ public final class ModConfiguration {
 
 	@SerializedName("entities")
 	public Map<String, EntityConfig> entities = ImmutableMap.of();
-	
+
 	@SerializedName("acoustics")
 	public Map<String, JsonElement> acoustics = ImmutableMap.of();
-	
+
 	@SerializedName("primitiveAcoustics")
 	public Map<String, String> primitiveAcoustics = ImmutableMap.of();
 

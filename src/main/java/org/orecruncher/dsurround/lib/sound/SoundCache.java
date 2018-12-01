@@ -30,7 +30,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.lib.LibLog;
 
 import com.google.common.io.ByteStreams;
@@ -50,7 +50,7 @@ public final class SoundCache {
 	private static final IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
 	private static final Map<ResourceLocation, URL> cache = new Object2ObjectOpenHashMap<>(256);
 
-	private static final ResourceLocation SILENCE_RESOURCE = new ResourceLocation(ModBase.RESOURCE_ID,
+	private static final ResourceLocation SILENCE_RESOURCE = new ResourceLocation(ModInfo.RESOURCE_ID,
 			"sounds/ambient/silence.ogg");
 	private static final byte[] SILENCE = getBuffer(SILENCE_RESOURCE);
 	private static URL SILENCE_URL;

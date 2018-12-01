@@ -26,20 +26,20 @@ package org.orecruncher.dsurround.client.renderer;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.lib.ItemStackUtil;
 
-import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
-@EventBusSubscriber(value = Side.CLIENT, modid = ModBase.MOD_ID)
+@EventBusSubscriber(value = Side.CLIENT, modid = ModInfo.MOD_ID)
 public class ToolTipProvider {
-	
+
 	@SubscribeEvent
 	public static void tooltipEvent(@Nonnull final ItemTooltipEvent event) {
 		if (ModOptions.logging.enableDebugLogging) {

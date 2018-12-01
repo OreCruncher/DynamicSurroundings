@@ -26,9 +26,11 @@ package org.orecruncher.dsurround.registry.effect;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.config.EntityConfig;
@@ -49,7 +51,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EffectRegistry extends Registry {
 
 	public static final EntityEffectInfo DEFAULT = new EntityEffectInfo();
-	public static final ResourceLocation DEFAULT_THEME = new ResourceLocation(ModBase.MOD_ID, "default");
+	public static final ResourceLocation DEFAULT_THEME = new ResourceLocation(ModInfo.MOD_ID, "default");
 	private static final ThemeInfo DEFAULT_THEME_INFO = new ThemeInfo();
 
 	protected final Map<Class<? extends Entity>, EntityEffectInfo> effects = new Reference2ObjectOpenHashMap<>();
@@ -69,7 +71,7 @@ public class EffectRegistry extends Registry {
 		this.themes.clear();
 		this.activeTheme = DEFAULT_THEME_INFO;
 		this.themes.put(DEFAULT_THEME, DEFAULT_THEME_INFO);
-		this.themes.put(new ResourceLocation(ModBase.MOD_ID, "gloamwood"), new GloamwoodTheme());
+		this.themes.put(new ResourceLocation(ModInfo.MOD_ID, "gloamwood"), new GloamwoodTheme());
 	}
 
 	@Override

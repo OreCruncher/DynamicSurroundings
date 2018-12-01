@@ -73,8 +73,7 @@ public abstract class EffectHandlerBase {
 	 * Meat of the handlers processing logic. Will be invoked if doTick() returns
 	 * true.
 	 *
-	 * @param player
-	 *            The player currently behind the keyboard.
+	 * @param player The player currently behind the keyboard.
 	 */
 	public void process(@Nonnull final EntityPlayer player) {
 

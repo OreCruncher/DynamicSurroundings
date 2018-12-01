@@ -27,7 +27,7 @@ package org.orecruncher.dsurround.capabilities.entitydata;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public interface IEntityData extends INBTSerializable<NBTTagCompound>{
+public interface IEntityData extends INBTSerializable<NBTTagCompound> {
 
 	/**
 	 * The unique ID of the entity this data is associated.
@@ -38,12 +38,14 @@ public interface IEntityData extends INBTSerializable<NBTTagCompound>{
 
 	/**
 	 * Indicates if the entity is attacking something
+	 * 
 	 * @return true if the entity is attacking; false otherwise
 	 */
 	boolean isAttacking();
-	
+
 	/**
 	 * Indicates if the entity is fleeing from something
+	 * 
 	 * @return true if the entity is fleeing; false otherwise
 	 */
 	boolean isFleeing();

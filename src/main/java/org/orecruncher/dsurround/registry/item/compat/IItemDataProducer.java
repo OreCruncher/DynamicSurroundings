@@ -35,7 +35,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public interface IItemDataProducer {
-	
+
 	@Nullable
 	IItemData create(@Nonnull final Item item, @Nonnull final ItemClass ic);
 

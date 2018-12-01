@@ -28,7 +28,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 
-public class ItemInfoHook  extends Transmorgrifier {
+public class ItemInfoHook extends Transmorgrifier {
 
 	public ItemInfoHook() {
 		super("net.minecraft.item.Item");

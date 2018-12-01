@@ -38,17 +38,17 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public interface ISeasonInfo extends INBTSerializable<NBTTagCompound>{
+public interface ISeasonInfo extends INBTSerializable<NBTTagCompound> {
 
 	@Nonnull
 	SeasonType getSeasonType(@Nonnull final World world);
-	
+
 	@Nonnull
 	SeasonType.SubType getSeasonSubType(@Nonnull final World world);
 
 	@Nonnull
 	String getSeasonString(@Nonnull final World world);
-	
+
 	@Nonnull
 	TemperatureRating getPlayerTemperature(@Nonnull final World world);
 

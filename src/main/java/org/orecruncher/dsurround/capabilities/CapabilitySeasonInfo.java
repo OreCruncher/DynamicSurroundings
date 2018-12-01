@@ -27,7 +27,7 @@ package org.orecruncher.dsurround.capabilities;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.SeasonInfo;
 import org.orecruncher.lib.capability.CapabilityProviderSerializable;
@@ -54,7 +54,7 @@ public class CapabilitySeasonInfo {
 	@CapabilityInject(ISeasonInfo.class)
 	public static final Capability<ISeasonInfo> SEASON_INFO = null;
 	public static final EnumFacing DEFAULT_FACING = null;
-	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModBase.MOD_ID, "seasoninfo");
+	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModInfo.MOD_ID, "seasoninfo");
 
 	@SideOnly(Side.CLIENT)
 	public static void register() {
@@ -84,7 +84,7 @@ public class CapabilitySeasonInfo {
 		return new CapabilityProviderSerializable<>(SEASON_INFO, DEFAULT_FACING, data);
 	}
 
-	@EventBusSubscriber(modid = ModBase.MOD_ID, value = Side.CLIENT)
+	@EventBusSubscriber(modid = ModInfo.MOD_ID, value = Side.CLIENT)
 	public static class EventHandler {
 		@SubscribeEvent
 		public static void attachCapabilities(@Nonnull final AttachCapabilitiesEvent<World> event) {

@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.sound.AdhocSound;
@@ -141,7 +142,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 			}
 		});
 
-		final ResourceLocation bowLooseResource = new ResourceLocation(ModBase.MOD_ID, "bow.loose");
+		final ResourceLocation bowLooseResource = new ResourceLocation(ModInfo.MOD_ID, "bow.loose");
 		final SoundEvent bowLoose = RegistryManager.SOUND.getSound(bowLooseResource);
 		if (!this.soundsToBlock.contains(bowLooseResource.toString())) {
 			this.replacements.put("minecraft:entity.arrow.shoot", bowLoose);

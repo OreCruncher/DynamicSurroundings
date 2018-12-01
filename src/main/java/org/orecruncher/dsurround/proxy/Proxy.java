@@ -27,6 +27,7 @@ package org.orecruncher.dsurround.proxy;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
 import org.orecruncher.dsurround.capabilities.CapabilityEntityData;
 import org.orecruncher.dsurround.commands.CommandDS;
@@ -59,7 +60,7 @@ public class Proxy {
 	protected long connectionTime = 0;
 
 	protected void registerLanguage() {
-		Localization.initialize(Side.SERVER, ModBase.MOD_ID);
+		Localization.initialize(Side.SERVER, ModInfo.MOD_ID);
 	}
 
 	protected static void register(final Class<?> clazz) {
@@ -135,7 +136,7 @@ public class Proxy {
 
 	/**
 	 * Force a proxy to pick a side in this fight
-	 * 
+	 *
 	 * @param context
 	 * @return
 	 */

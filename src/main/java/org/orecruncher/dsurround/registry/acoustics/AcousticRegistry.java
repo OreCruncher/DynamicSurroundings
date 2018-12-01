@@ -36,6 +36,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.client.footsteps.DelayedAcoustic;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.RegistryManager;
@@ -311,7 +312,7 @@ public class AcousticRegistry extends Registry {
 			} else if (soundName.contains(":")) {
 				res = new ResourceLocation(soundName);
 			} else if (soundName.charAt(0) != '@') {
-				res = new ResourceLocation(ModBase.RESOURCE_ID, soundName);
+				res = new ResourceLocation(ModInfo.RESOURCE_ID, soundName);
 			} else {
 				res = new ResourceLocation("minecraft", soundName.substring(1));
 			}

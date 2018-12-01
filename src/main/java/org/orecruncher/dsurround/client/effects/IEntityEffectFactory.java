@@ -45,10 +45,8 @@ public interface IEntityEffectFactory {
 	 * Creates 0 or more IEffects for the specified Entity. It is possible that some
 	 * condition on the Entity may prevent creation.
 	 *
-	 * @param entity
-	 *            The subject of the EntityEffect
-	 * @param eei
-	 *            An object containing the Entities configuration parameters
+	 * @param entity The subject of the EntityEffect
+	 * @param eei    An object containing the Entities configuration parameters
 	 * @return A list of 0 or more IEffects to attach
 	 */
 	@Nonnull

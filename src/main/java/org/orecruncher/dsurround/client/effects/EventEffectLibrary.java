@@ -56,8 +56,7 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	 * Registers the EventEffect with the EventEffectLibrary. The reference will
 	 * automatically be registered with Forge, and will be tracked.
 	 *
-	 * @param effect
-	 *            EventEffect instance to register
+	 * @param effect EventEffect instance to register
 	 */
 	public void register(@Nonnull final EventEffect effect) {
 		effect.setState(this);
@@ -77,8 +76,7 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	/**
 	 * Indicates if the specified player is the one sitting behind the screen.
 	 *
-	 * @param player
-	 *            The EntityPlayer to check
+	 * @param player The EntityPlayer to check
 	 * @return true if it is the local player, false otherwise
 	 */
 	@Override
@@ -92,10 +90,8 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	 * Entity. If the Entity is the current active player the sound will be
 	 * non-attenuated.
 	 *
-	 * @param se
-	 *            SoundEffect to use as the basis of the sound
-	 * @param player
-	 *            The player location of where the sound will be generated
+	 * @param se     SoundEffect to use as the basis of the sound
+	 * @param player The player location of where the sound will be generated
 	 * @return A BasicSound<?> with applicable properties set
 	 */
 	@Override

@@ -33,10 +33,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public interface IArmorItemData {
-	
+
 	@Nullable
 	IAcoustic getArmorSound(@Nonnull final ItemStack stack);
-	
+
 	@Nullable
 	IAcoustic getFootArmorSound(@Nonnull final ItemStack stack);
 

@@ -28,7 +28,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.lib.task.Scheduler;
 
 import net.minecraft.entity.Entity;
@@ -48,7 +48,7 @@ public final class Network {
 	private Network() {
 	}
 
-	private static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(ModBase.MOD_ID);
+	private static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.MOD_ID);
 
 	public static void initialize() {
 

@@ -33,6 +33,7 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.registry.RegistryManager;
@@ -58,7 +59,7 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 	private final ConfigCategory soundCategory;
 
 	public DynSurroundConfigGui(final GuiScreen parentScreen) {
-		super(parentScreen, new ArrayList<IConfigElement>(), ModBase.MOD_ID, false, false, ModBase.MOD_NAME);
+		super(parentScreen, new ArrayList<IConfigElement>(), ModInfo.MOD_ID, false, false, ModInfo.MOD_NAME);
 		this.titleLine2 = this.config.getConfigFile().getAbsolutePath();
 
 		// Synthetic options for handling sound blocking and volume

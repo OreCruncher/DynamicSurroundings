@@ -28,7 +28,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.client.fx.ISpecialEffect;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
@@ -276,7 +276,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 		private final SoundEffect effect;
 
 		public Builder(@Nonnull final String sound, @Nonnull final SoundCategory cat) {
-			this(new ResourceLocation(ModBase.RESOURCE_ID, sound), cat);
+			this(new ResourceLocation(ModInfo.RESOURCE_ID, sound), cat);
 		}
 
 		public Builder(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {

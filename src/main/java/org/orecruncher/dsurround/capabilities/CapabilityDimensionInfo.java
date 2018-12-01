@@ -27,7 +27,7 @@ package org.orecruncher.dsurround.capabilities;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.capabilities.dimension.DimensionInfo;
 import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfo;
 import org.orecruncher.lib.capability.CapabilityProviderSerializable;
@@ -52,7 +52,7 @@ public class CapabilityDimensionInfo {
 	@CapabilityInject(IDimensionInfo.class)
 	public static final Capability<IDimensionInfo> DIMENSION_INFO = null;
 	public static final EnumFacing DEFAULT_FACING = null;
-	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModBase.MOD_ID, "dimensioninfo");
+	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModInfo.MOD_ID, "dimensioninfo");
 
 	public static void register() {
 		CapabilityManager.INSTANCE.register(IDimensionInfo.class, new Capability.IStorage<IDimensionInfo>() {
@@ -63,8 +63,9 @@ public class CapabilityDimensionInfo {
 			}
 
 			@Override
-			public void readNBT(@Nonnull final Capability<IDimensionInfo> capability, @Nonnull final IDimensionInfo instance,
-					@Nullable final EnumFacing side, @Nonnull final NBTBase nbt) {
+			public void readNBT(@Nonnull final Capability<IDimensionInfo> capability,
+					@Nonnull final IDimensionInfo instance, @Nullable final EnumFacing side,
+					@Nonnull final NBTBase nbt) {
 				((INBTSerializable<NBTTagCompound>) instance).deserializeNBT((NBTTagCompound) nbt);
 			}
 		}, DimensionInfo::new);
@@ -79,7 +80,7 @@ public class CapabilityDimensionInfo {
 		return new CapabilityProviderSerializable<>(DIMENSION_INFO, DEFAULT_FACING, data);
 	}
 
-	@EventBusSubscriber(modid = ModBase.MOD_ID)
+	@EventBusSubscriber(modid = ModInfo.MOD_ID)
 	public static class EventHandler {
 		@SubscribeEvent
 		public static void attachCapabilities(@Nonnull final AttachCapabilitiesEvent<World> event) {

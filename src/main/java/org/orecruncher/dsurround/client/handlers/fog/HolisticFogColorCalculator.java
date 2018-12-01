@@ -51,7 +51,7 @@ public class HolisticFogColorCalculator implements IFogColorCalculator {
 				result = color;
 			else if (color != null)
 				result = result.mix(color);
-			
+
 		}
 		return this.cached = result;
 	}

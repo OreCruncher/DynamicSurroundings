@@ -25,9 +25,9 @@
 package org.orecruncher.dsurround.capabilities.entitydata;
 
 public interface IEntityDataSettable extends IEntityData {
-	
+
 	void setAttacking(final boolean flag);
-	
+
 	void setFleeing(final boolean flag);
 
 	boolean isDirty();

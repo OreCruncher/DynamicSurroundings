@@ -51,8 +51,7 @@ public class EffectStateBase implements IEffectState {
 	/**
 	 * Used by an EntityEffect to add a Particle to the system.
 	 *
-	 * @param particle
-	 *            The Particle instance to add to the particle system.
+	 * @param particle The Particle instance to add to the particle system.
 	 */
 	@Override
 	public void addParticle(final Particle particle) {
@@ -62,8 +61,7 @@ public class EffectStateBase implements IEffectState {
 	/**
 	 * Used by an EntityEffect to play a sound.
 	 *
-	 * @param The
-	 *            sound to play
+	 * @param The sound to play
 	 * @return Unique ID identifying the sound in the sound system
 	 */
 	@Override
@@ -87,10 +85,8 @@ public class EffectStateBase implements IEffectState {
 	 * Entity. If the Entity is the current active player the sound will be
 	 * non-attenuated.
 	 *
-	 * @param se
-	 *            SoundEffect to use as the basis of the sound
-	 * @param player
-	 *            The player location of where the sound will be generated
+	 * @param se     SoundEffect to use as the basis of the sound
+	 * @param player The player location of where the sound will be generated
 	 * @return A BasicSound<?> with applicable properties set
 	 */
 	@Override
@@ -102,8 +98,7 @@ public class EffectStateBase implements IEffectState {
 	/**
 	 * Determines if the specified Entity is the current active player.
 	 *
-	 * @param player
-	 *            The Entity to evaluate
+	 * @param player The Entity to evaluate
 	 * @return true if the Entity is the current player, false otherwise
 	 */
 	@Override

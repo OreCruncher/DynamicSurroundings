@@ -34,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public interface IItemData {
 	ItemClass getItemClass();
-	
+
 	SoundEffect getEquipSound(@Nonnull final ItemStack stack);
 
 	SoundEffect getSwingSound(@Nonnull final ItemStack stack);

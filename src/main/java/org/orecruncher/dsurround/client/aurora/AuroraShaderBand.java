@@ -52,7 +52,7 @@ public class AuroraShaderBand extends AuroraBase {
 
 	public AuroraShaderBand(final long seed) {
 		super(seed, true);
-		
+
 		this.program = Shaders.AURORA;
 
 		this.callback = shader -> {
@@ -68,6 +68,7 @@ public class AuroraShaderBand extends AuroraBase {
 		this.panelTexWidth = this.band.getNodeWidth() / this.auroraWidth;
 	}
 
+	@Override
 	protected float getAlpha() {
 		return MathStuff.clamp((this.band.getAlphaLimit() / 255F) * this.tracker.ageRatio() * 2.0F, 0F, 1F);
 	}
@@ -102,16 +103,16 @@ public class AuroraShaderBand extends AuroraBase {
 
 		this.band.translate(partialTick);
 		final Panel[] array = this.band.getNodeList();
-		
+
 		try {
-			
+
 			this.program.use(this.callback);
-			
+
 			for (int b = 0; b < this.bandCount; b++) {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(tranX, tranY, tranZ + this.offset * b);
 				GlStateManager.scale(0.5D, 10.0D, 0.5D);
-				
+
 				renderer.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_TEX);
 				for (int i = 0; i < array.length - 1; i++) {
 
@@ -148,7 +149,7 @@ public class AuroraShaderBand extends AuroraBase {
 					renderer.pos(posX2, posY2, posZ2).tex(u2, v2).endVertex();
 				}
 				tess.draw();
-				
+
 				GlStateManager.popMatrix();
 			}
 
@@ -167,7 +168,6 @@ public class AuroraShaderBand extends AuroraBase {
 		GL11.glFrontFace(GL11.GL_CCW);
 		OpenGlState.pop(glState);
 	}
-
 
 	@Override
 	public String toString() {

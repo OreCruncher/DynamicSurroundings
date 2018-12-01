@@ -22,11 +22,27 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.registry.biome;
+package org.orecruncher.dsurround;
 
-/**
- * Base class for the data being assigned into the Biome implementation.
- */
-public abstract class BiomeData {
+public final class ModInfo {
 
+	public static final String MOD_ID = "dsurround";
+	public static final String API_ID = MOD_ID + "API";
+	public static final String RESOURCE_ID = "dsurround";
+	public static final String MOD_NAME = "Dynamic Surroundings";
+	public static final String VERSION = "@VERSION@";
+	public static final String MINECRAFT_VERSIONS = "[1.12.2,)";
+	public static final String GUI_FACTORY = "org.orecruncher.dsurround.client.gui.ConfigGuiFactory";
+	public static final String UPDATE_URL = "@UPDATEURL@";
+	public static final String FINGERPRINT = "@FINGERPRINT@";
+
+	//@formatter:off
+	public static final String DEPENDENCIES =
+		"required-after:forge@[14.23.5.2768,);" +
+		"required-after:dsurroundcore;" +
+		"required-after:orelib@[3.5.0.1,);" +
+		"after:sereneseasons@[1.2.10,);" +
+		"after:galacticraftcore;" +
+		"after:ambientsounds;";
+	//@formatter:on
 }

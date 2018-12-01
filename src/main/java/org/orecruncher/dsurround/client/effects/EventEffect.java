@@ -47,8 +47,7 @@ public abstract class EventEffect {
 	 * Used by the framework to configure the EffectLibrary to which it is
 	 * associated. It is set during registration.
 	 *
-	 * @param state
-	 *            The library set to configure for the EventEffect
+	 * @param state The library set to configure for the EventEffect
 	 */
 	void setState(@Nonnull final IEventEffectLibraryState state) {
 		this.library = state;
@@ -68,8 +67,7 @@ public abstract class EventEffect {
 	 * Determines if the EntityEvent is valid in terms of a proper Entity being
 	 * configured and that the event is fired on Side.CLIENT.
 	 *
-	 * @param event
-	 *            The event to evaluate
+	 * @param event The event to evaluate
 	 * @return true if valid, false otherwise
 	 */
 	protected boolean isClientValid(@Nonnull final EntityEvent event) {
@@ -88,8 +86,7 @@ public abstract class EventEffect {
 	 * Determines if the PlayerEvent is valid in terms of a proper Entity being
 	 * configured and that the event is fired on Side.CLIENT.
 	 *
-	 * @param event
-	 *            The event to evaluate
+	 * @param event The event to evaluate
 	 * @return true if valid, false otherwise
 	 */
 	protected boolean isClientValid(@Nonnull final PlayerEvent event) {

@@ -52,7 +52,9 @@ public class AuroraBand {
 	protected float nodeLength;
 	protected float nodeWidth;
 
-	public AuroraBand(final Random random, final org.orecruncher.dsurround.client.aurora.AuroraFactory.AuroraGeometry geo, final boolean noTaper, final boolean fixedHeight) {
+	public AuroraBand(final Random random,
+			final org.orecruncher.dsurround.client.aurora.AuroraFactory.AuroraGeometry geo, final boolean noTaper,
+			final boolean fixedHeight) {
 		this.random = random;
 		preset(geo);
 		generateBands(noTaper, fixedHeight);

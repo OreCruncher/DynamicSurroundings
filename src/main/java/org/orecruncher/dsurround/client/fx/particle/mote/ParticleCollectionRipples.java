@@ -26,7 +26,7 @@ package org.orecruncher.dsurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.lib.gfx.OpenGlUtil;
 
@@ -41,19 +41,16 @@ public class ParticleCollectionRipples extends ParticleCollection {
 
 	public static enum Style {
 
-		// Original texture
+		//@formatter:off
 		ORIGINAL("textures/particles/ripple.png"),
-
-		// Circle, a bit darker
 		CIRCLE("textures/particles/ripple1.png"),
-
-		// Square that matches Minecraft's blockiness
 		SQUARE("textures/particles/ripple2.png");
+		//@formatter:on
 
 		private final ResourceLocation resource;
 
 		private Style(@Nonnull final String texture) {
-			this.resource = new ResourceLocation(ModBase.RESOURCE_ID, texture);
+			this.resource = new ResourceLocation(ModInfo.RESOURCE_ID, texture);
 		}
 
 		@Nonnull

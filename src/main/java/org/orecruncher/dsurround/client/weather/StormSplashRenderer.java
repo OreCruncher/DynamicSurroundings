@@ -190,8 +190,7 @@ public class StormSplashRenderer {
 
 		final int RANGE = Math.max((ModOptions.effects.specialEffectRange + 1) / 2, 10);
 		final float rangeFactor = RANGE / 10.0F;
-		int particleCount = (int) (100 * rainStrengthFactor * rainStrengthFactor
-				* rangeFactor);
+		int particleCount = (int) (100 * rainStrengthFactor * rainStrengthFactor * rangeFactor);
 
 		if (mc.gameSettings.particleSetting == 1)
 			particleCount >>= 1;
@@ -205,7 +204,8 @@ public class StormSplashRenderer {
 				continue;
 
 			final BlockPos precipHeight = getPrecipitationHeight(world, RANGE / 2, this.pos);
-			final PrecipitationType pt = CapabilitySeasonInfo.getCapability(world).getPrecipitationType(world, precipHeight, null);
+			final PrecipitationType pt = CapabilitySeasonInfo.getCapability(world).getPrecipitationType(world,
+					precipHeight, null);
 			final boolean hasDust = pt == PrecipitationType.DUST;
 
 			if ((hasDust || pt == PrecipitationType.RAIN) && precipHeight.getY() <= playerY + RANGE

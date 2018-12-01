@@ -27,7 +27,7 @@ package org.orecruncher.dsurround.client.keyboard;
 import javax.annotation.Nonnull;
 
 import org.lwjgl.input.Keyboard;
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.hud.LightLevelHUD;
 import org.orecruncher.dsurround.client.hud.LightLevelHUD.Mode;
@@ -51,7 +51,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class KeyHandler {
 
-	private static final String SECTION_NAME = ModBase.MOD_NAME;
+	private static final String SECTION_NAME = ModInfo.MOD_NAME;
 
 	private static KeyBinding SELECTIONBOX_KEY;
 	private static KeyBinding LIGHTLEVEL_KEY;
@@ -78,7 +78,7 @@ public class KeyHandler {
 		return Localization.format(flag ? "dsurround.cfg.keybind.msg.ON" : "dsurround.cfg.keybind.msg.OFF");
 	}
 
-	private static final String chatPrefix = TextFormatting.BLUE + "[" + TextFormatting.GREEN + ModBase.MOD_NAME
+	private static final String chatPrefix = TextFormatting.BLUE + "[" + TextFormatting.GREEN + ModInfo.MOD_NAME
 			+ TextFormatting.BLUE + "] " + TextFormatting.RESET;
 
 	private static void sendPlayerMessage(final String fmt, final Object... parms) {

@@ -62,7 +62,7 @@ public class EntitySwingEffect extends EntityEffect {
 
 	@Override
 	public void update(@Nonnull final Entity subject) {
-		
+
 		if (!ModOptions.sound.enableSwingSounds)
 			return;
 

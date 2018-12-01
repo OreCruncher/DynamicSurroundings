@@ -70,8 +70,7 @@ public class EntityEffectStateBase extends EffectStateBase implements IEntityEff
 	/**
 	 * Determines the distance between the Entity subject and the specified Entity.
 	 *
-	 * @param entity
-	 *            The Entity to which the distance is measured.
+	 * @param entity The Entity to which the distance is measured.
 	 * @return The distance between the two Entities in blocks, squared.
 	 */
 	@Override

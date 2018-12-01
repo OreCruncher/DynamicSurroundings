@@ -60,8 +60,7 @@ public abstract class EntityEffect {
 	 * EntityEffectHandler. Override this method to perform any initialization
 	 * specific to the EntityEffect. Remember to call the super class!
 	 *
-	 * @param state
-	 *            The state provided by the EntityEffectLibrary
+	 * @param state The state provided by the EntityEffectLibrary
 	 */
 	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
 		this.state = state;

@@ -369,7 +369,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		public static boolean inVillage() {
 			return inVillage;
 		}
-		
+
 		public static void setInVillage(final boolean f) {
 			inVillage = f;
 		}

@@ -36,7 +36,7 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
-public class PatchSoundManagerClampVolume  extends Transmorgrifier {
+public class PatchSoundManagerClampVolume extends Transmorgrifier {
 
 	public PatchSoundManagerClampVolume() {
 		super("net.minecraft.client.audio.SoundManager");
@@ -64,14 +64,15 @@ public class PatchSoundManagerClampVolume  extends Transmorgrifier {
 			final String owner = "org/orecruncher/dsurround/client/sound/SoundEngine";
 			final String targetName = "getClampedVolume";
 			final String sig1 = "(Lnet/minecraft/client/audio/ISound;)F";
-			
+
 			// Need to wrap in try catch in case of stillborn client startup
 			final LabelNode tryStart = new LabelNode();
 			final LabelNode tryEnd = new LabelNode();
 			final LabelNode tryHandler = new LabelNode();
-			final TryCatchBlockNode tryCatch = new TryCatchBlockNode(tryStart, tryEnd, tryHandler, "java/lang/Throwable"); 
+			final TryCatchBlockNode tryCatch = new TryCatchBlockNode(tryStart, tryEnd, tryHandler,
+					"java/lang/Throwable");
 			m.tryCatchBlocks.add(tryCatch);
-			
+
 			final InsnList list = new InsnList();
 			list.add(tryStart);
 			list.add(new VarInsnNode(ALOAD, 1));
@@ -80,7 +81,7 @@ public class PatchSoundManagerClampVolume  extends Transmorgrifier {
 			list.add(tryEnd);
 			list.add(tryHandler);
 			m.instructions.insert(m.instructions.getFirst(), list);
-			
+
 			return true;
 		} else {
 			Transformer.log().error("Unable to locate method {}{}", names[0], sig);

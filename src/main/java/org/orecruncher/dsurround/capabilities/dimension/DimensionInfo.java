@@ -76,11 +76,11 @@ public class DimensionInfo implements IDimensionInfoEx {
 		return result;
 	}
 
-	//===================================
+	// ===================================
 	//
-	//  IDimensionInfo
+	// IDimensionInfo
 	//
-	//===================================
+	// ===================================
 	@Override
 	public int getId() {
 		return this.world.provider.getDimension();
@@ -137,11 +137,11 @@ public class DimensionInfo implements IDimensionInfoEx {
 		return data().getPlayBiomeSounds();
 	}
 
-	//===================================
+	// ===================================
 	//
-	//  IDimensionInfoEx
+	// IDimensionInfoEx
 	//
-	//===================================
+	// ===================================
 	@Override
 	public float getRainIntensity() {
 		return this.intensity;

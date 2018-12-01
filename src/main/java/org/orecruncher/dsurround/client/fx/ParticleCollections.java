@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.client.footsteps.FootprintStyle;
 import org.orecruncher.dsurround.client.fx.particle.mote.IParticleMote;
 import org.orecruncher.dsurround.client.fx.particle.mote.MoteFireFly;
@@ -53,11 +54,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class ParticleCollections {
 
-	private static final ResourceLocation RIPPLE_TEXTURE = new ResourceLocation(ModBase.RESOURCE_ID,
+	private static final ResourceLocation RIPPLE_TEXTURE = new ResourceLocation(ModInfo.RESOURCE_ID,
 			"textures/particles/ripple.png");
-	private static final ResourceLocation SPRAY_TEXTURE = new ResourceLocation(ModBase.RESOURCE_ID,
+	private static final ResourceLocation SPRAY_TEXTURE = new ResourceLocation(ModInfo.RESOURCE_ID,
 			"textures/particles/rainsplash.png");
-	private static final ResourceLocation FOOTPRINT_TEXTURE = new ResourceLocation(ModBase.RESOURCE_ID,
+	private static final ResourceLocation FOOTPRINT_TEXTURE = new ResourceLocation(ModInfo.RESOURCE_ID,
 			"textures/particles/footprint.png");
 	private static final ResourceLocation FIREFLY_TEXTURE = new ResourceLocation("textures/particle/particles.png");
 

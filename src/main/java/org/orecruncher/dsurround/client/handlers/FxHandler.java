@@ -135,8 +135,7 @@ public class FxHandler extends EffectHandlerBase {
 	/**
 	 * Used for diagnostics to get data about an Entity.
 	 *
-	 * @param entity
-	 *            Entity to get information on
+	 * @param entity Entity to get information on
 	 * @return A list of EntityEffects, if any
 	 */
 	public List<String> getEffects(@Nonnull final Entity entity) {
@@ -165,7 +164,6 @@ public class FxHandler extends EffectHandlerBase {
 		final boolean inRange = entity.getDistanceSq(EnvironState.getPlayer()) <= distanceThreshold
 				&& entity.dimension == EnvironState.getDimensionId();
 
-		
 		final EntityEffectHandler handler = this.handlers.get(entity.getEntityId());
 		if (handler != null && !inRange) {
 			handler.die();

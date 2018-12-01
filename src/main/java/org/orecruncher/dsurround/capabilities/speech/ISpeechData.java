@@ -34,14 +34,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public interface ISpeechData  extends INBTSerializable<NBTTagCompound> {
-	
+public interface ISpeechData extends INBTSerializable<NBTTagCompound> {
+
 	void addMessage(@Nonnull final String string, final int expiryTick);
-	
+
 	ObjectArray<String> getText();
-	
+
 	RenderContext getRenderContext();
-	
+
 	void onUpdate(final int currentTick);
-	
+
 }

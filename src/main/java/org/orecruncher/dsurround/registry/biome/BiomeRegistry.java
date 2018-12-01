@@ -153,7 +153,7 @@ public final class BiomeRegistry extends Registry {
 		// Free memory because we no longer need
 		this.biomeAliases.clear();
 	}
-	
+
 	public void reload() {
 		ModBase.log().info("Reloading biome registry...");
 		preInit();

@@ -47,8 +47,8 @@ public abstract class Registry {
 	}
 
 	/**
-	 * Initializes the registry to base known state.  Internal data structures
-	 * are initialized and made ready to recieve information.
+	 * Initializes the registry to base known state. Internal data structures are
+	 * initialized and made ready to recieve information.
 	 */
 	protected void preInit() {
 		// Override to provide initialization prior to configure
@@ -56,27 +56,27 @@ public abstract class Registry {
 
 	/**
 	 * Configure the registry based on the data provided in the ModConfiguration
-	 * object.  The registry may be called one or more times, each time with a
+	 * object. The registry may be called one or more times, each time with a
 	 * different configuration.
-	 * 
+	 *
 	 * @param cfg
 	 */
 	protected abstract void init(@Nonnull final ModConfiguration cfg);
 
 	/**
 	 * Post process any additional information based on the content of other
-	 * state/registries.  The available of information in other registeries
-	 * is determined by the registry implementation.
+	 * state/registries. The available of information in other registeries is
+	 * determined by the registry implementation.
 	 */
 	protected void postInit() {
 		// Override to provide completion routine prior to notifying
 		// registry listeners.
 	}
-	
+
 	/**
-	 * Hook provided to allow for additional functionality.  It is invoked after
-	 * all registries have fully initialized and event listeners notified.  Typically
-	 * logging and additional state cleanup is done here.  (State cleanup as in
+	 * Hook provided to allow for additional functionality. It is invoked after all
+	 * registries have fully initialized and event listeners notified. Typically
+	 * logging and additional state cleanup is done here. (State cleanup as in
 	 * releasing memory that is no longer needed, etc.)
 	 */
 	protected void complete() {
@@ -84,9 +84,8 @@ public abstract class Registry {
 	}
 
 	/**
-	 * Called by the RegistryManager when the registry is to initialize
-	 * its state from config data.  It is of no interest to derived
-	 * classes.
+	 * Called by the RegistryManager when the registry is to initialize its state
+	 * from config data. It is of no interest to derived classes.
 	 */
 	final void initialize(@Nonnull final ConfigData data) {
 		ModBase.log().info("Initializing registry [%s]", getName());

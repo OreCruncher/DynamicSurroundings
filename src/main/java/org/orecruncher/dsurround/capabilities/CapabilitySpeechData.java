@@ -27,7 +27,7 @@ package org.orecruncher.dsurround.capabilities;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.capabilities.speech.ISpeechData;
 import org.orecruncher.dsurround.capabilities.speech.SpeechData;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -59,7 +59,7 @@ public final class CapabilitySpeechData {
 	@CapabilityInject(ISpeechData.class)
 	public static final Capability<ISpeechData> SPEECH_DATA = null;
 	public static final EnumFacing DEFAULT_FACING = null;
-	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModBase.MOD_ID, "speech");
+	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModInfo.MOD_ID, "speech");
 
 	@SideOnly(Side.CLIENT)
 	public static void register() {
@@ -93,13 +93,14 @@ public final class CapabilitySpeechData {
 	public static boolean isCandidate(@Nonnull final Entity entity) {
 		return entity instanceof EntityPlayer || entity instanceof EntityLiving;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public static boolean isCandidate(@Nullable final Class<? extends Entity> clazz) {
-		return clazz != null && (EntityPlayer.class.isAssignableFrom(clazz) || EntityLiving.class.isAssignableFrom(clazz));
+		return clazz != null
+				&& (EntityPlayer.class.isAssignableFrom(clazz) || EntityLiving.class.isAssignableFrom(clazz));
 	}
-	
-	@EventBusSubscriber(modid = ModBase.MOD_ID, value = Side.CLIENT)
+
+	@EventBusSubscriber(modid = ModInfo.MOD_ID, value = Side.CLIENT)
 	public static class EventHandler {
 
 		/*

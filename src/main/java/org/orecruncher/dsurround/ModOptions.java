@@ -521,7 +521,7 @@ public final class ModOptions {
 	public static class sound {
 
 		public static String PATH = null;
-		
+
 		@Option(CONFIG_ENABLE_BATTLEMUSIC)
 		@DefaultValue("false")
 		@LangKey("dsurround.cfg.sound.BattleMusic")

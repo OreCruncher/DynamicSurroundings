@@ -27,6 +27,7 @@ package org.orecruncher.dsurround.registry;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
 import org.orecruncher.dsurround.registry.biome.BiomeRegistry;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateRegistry;
@@ -46,7 +47,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@EventBusSubscriber(modid = ModBase.MOD_ID)
+@EventBusSubscriber(modid = ModInfo.MOD_ID)
 public final class RegistryManager {
 
 	@SideOnly(Side.CLIENT)
@@ -132,7 +133,7 @@ public final class RegistryManager {
 	 */
 	@SubscribeEvent
 	public static void onReload(@Nonnull final OnConfigChangedEvent event) {
-		if (event.getModID().equals(ModBase.MOD_ID) && handleReload()) {
+		if (event.getModID().equals(ModInfo.MOD_ID) && handleReload()) {
 			load();
 		}
 	}

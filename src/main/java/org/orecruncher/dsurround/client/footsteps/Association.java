@@ -57,11 +57,12 @@ public class Association {
 	public Association(@Nonnull final IAcoustic[] association) {
 		this(null, null, association);
 	}
-	
+
 	public Association(@Nonnull final EntityLivingBase entity, @Nonnull final IAcoustic[] association) {
 		final Vec3d vec = entity.getPositionVector();
 		this.state = null;
-		this.location = new FootStrikeLocation(entity, vec.x, vec.y + 1, vec.z);;
+		this.location = new FootStrikeLocation(entity, vec.x, vec.y + 1, vec.z);
+		;
 		this.data.addAll(association == null ? AcousticRegistry.EMPTY : association);
 		this.isNotEmitter = association == AcousticRegistry.NOT_EMITTER;
 	}
@@ -112,11 +113,11 @@ public class Association {
 	public FootStrikeLocation getStrikeLocation() {
 		return this.location;
 	}
-	
+
 	public boolean hasStrikeLocation() {
 		return this.location != null;
 	}
-	
+
 	@Nullable
 	public BlockPos getStepPos() {
 		return this.location != null ? this.location.getStepPos() : null;

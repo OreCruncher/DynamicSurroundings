@@ -27,7 +27,7 @@ package org.orecruncher.dsurround.client.renderer;
 import javax.annotation.Nonnull;
 
 import org.lwjgl.opengl.GL11;
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.capabilities.CapabilitySpeechData;
 import org.orecruncher.dsurround.capabilities.speech.ISpeechData;
 import org.orecruncher.dsurround.capabilities.speech.RenderContext;
@@ -53,7 +53,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@EventBusSubscriber(value = Side.CLIENT, modid = ModBase.MOD_ID)
+@EventBusSubscriber(value = Side.CLIENT, modid = ModInfo.MOD_ID)
 public class SpeechDataRenderer {
 
 	private static final Color B_COLOR = Color.getColor(TextFormatting.BLACK);

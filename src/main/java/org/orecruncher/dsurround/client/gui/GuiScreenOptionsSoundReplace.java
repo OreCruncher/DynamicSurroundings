@@ -29,6 +29,7 @@ import java.lang.reflect.Field;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -52,10 +53,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * Bulk of the class is taken from Vanilla and tweaked.  I could have made this cleaner by
- * using the AT file but I am trying to avoid doing that.
+ * Bulk of the class is taken from Vanilla and tweaked. I could have made this
+ * cleaner by using the AT file but I am trying to avoid doing that.
  */
-@EventBusSubscriber(value = Side.CLIENT, modid = ModBase.MOD_ID)
+@EventBusSubscriber(value = Side.CLIENT, modid = ModInfo.MOD_ID)
 public class GuiScreenOptionsSoundReplace extends GuiScreenOptionsSounds {
 
 	private static final int SLIDER_HEIGHT = 22; // 24

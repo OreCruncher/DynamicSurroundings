@@ -37,8 +37,8 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 /**
  * Helper class used to access and manipulate the reference to our data we have
- * referenced in the IBlockState implementation class.  Goal is to avoid all
- * the dictionary lookups and things.
+ * referenced in the IBlockState implementation class. Goal is to avoid all the
+ * dictionary lookups and things.
  */
 public final class BlockStateUtil {
 
@@ -56,7 +56,8 @@ public final class BlockStateUtil {
 		return null;
 	}
 
-	public static <T extends BlockStateData> void setStateData(@Nonnull final IBlockState state, @Nonnull final T data) {
+	public static <T extends BlockStateData> void setStateData(@Nonnull final IBlockState state,
+			@Nonnull final T data) {
 		try {
 			blockStateInfo.set(state, data);
 		} catch (IllegalArgumentException | IllegalAccessException e) {

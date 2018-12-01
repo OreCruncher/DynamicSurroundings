@@ -37,26 +37,25 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public final class AnimaniaBadge {
-	
+
 	private AnimaniaBadge() {
-		
+
 	}
-	
-	
+
 	public static void intitialize() {
 		if (!ModOptions.speechbubbles.enableAnimaniaBadges)
 			return;
-		
+
 		boolean useNew = false;
-		
+
 		try {
 			// Will throw exception if the interface is not present
 			Class.forName("com.animania.common.entities.interfaces.IFoodEating");
 			useNew = true;
-		} catch(@Nonnull final Throwable t) {
+		} catch (@Nonnull final Throwable t) {
 			;
 		}
-		
+
 		if (useNew)
 			AnimaniaBadge2.intitialize();
 		else

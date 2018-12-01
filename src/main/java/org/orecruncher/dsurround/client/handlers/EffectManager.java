@@ -29,6 +29,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.lib.collections.ObjectArray;
@@ -45,7 +46,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod.EventBusSubscriber(value = Side.CLIENT, modid = ModBase.MOD_ID)
+@Mod.EventBusSubscriber(value = Side.CLIENT, modid = ModInfo.MOD_ID)
 public class EffectManager {
 
 	private static final EffectManager instance_ = new EffectManager();
@@ -108,7 +109,7 @@ public class EffectManager {
 			ModBase.log().warn("Unable to locate handler service [%s]", service.getName());
 		return (T) eh;
 	}
-	
+
 	public boolean isConnected() {
 		return isConnected;
 	}

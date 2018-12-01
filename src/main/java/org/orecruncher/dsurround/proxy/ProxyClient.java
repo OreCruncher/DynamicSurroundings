@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
 import org.orecruncher.dsurround.capabilities.CapabilitySpeechData;
@@ -82,7 +83,7 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 
 	@Override
 	protected void registerLanguage() {
-		Localization.initialize(Side.CLIENT, ModBase.MOD_ID);
+		Localization.initialize(Side.CLIENT, ModInfo.MOD_ID);
 	}
 
 	@Override
@@ -139,15 +140,14 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 	@Override
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
 		super.postInit(event);
-		
+
 		// Patch up metadata
-		final ModMetadata data = ForgeUtils.getModMetadata(ModBase.MOD_ID);
+		final ModMetadata data = ForgeUtils.getModMetadata(ModInfo.MOD_ID);
 		if (data != null) {
 			data.name = Localization.format("dsurround.metadata.Name");
 			data.credits = Localization.format("dsurround.metadata.Credits");
 			data.description = Localization.format("dsurround.metadata.Description");
-			data.authorList = Arrays
-					.asList(StringUtils.split(Localization.format("dsurround.metadata.Authors"), ','));
+			data.authorList = Arrays.asList(StringUtils.split(Localization.format("dsurround.metadata.Authors"), ','));
 		}
 
 		// Register for resource load events
@@ -190,7 +190,7 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 			MinecraftForge.EVENT_BUS.post(new RegistryDataEvent.Resources(resourceManager));
 		}
 	}
-	
+
 	@Override
 	public IThreadListener getThreadListener(@Nonnull final MessageContext context) {
 		if (context.side.isClient()) {

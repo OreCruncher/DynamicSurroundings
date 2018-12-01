@@ -45,6 +45,7 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALC11;
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.sound.fix.SoundFixMethods;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
@@ -82,7 +83,7 @@ import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.Source;
 
-@EventBusSubscriber(value = Side.CLIENT, modid = ModBase.MOD_ID)
+@EventBusSubscriber(value = Side.CLIENT, modid = ModInfo.MOD_ID)
 public final class SoundEngine {
 
 	private static Field soundPhysicsGlobalVolume;

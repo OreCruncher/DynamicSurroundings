@@ -27,6 +27,7 @@ package org.orecruncher.dsurround.client.sound;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.lib.math.MathStuff;
 
@@ -44,7 +45,7 @@ import net.minecraftforge.fml.relauncher.Side;
  * BattleMusic is being played, or when a player hits the "play" button in the
  * sound configuration.
  */
-@EventBusSubscriber(value = Side.CLIENT, modid = ModBase.MOD_ID)
+@EventBusSubscriber(value = Side.CLIENT, modid = ModInfo.MOD_ID)
 public final class MusicFader {
 
 	private static final float MIN_VOLUME_SCALE = 0.001F;

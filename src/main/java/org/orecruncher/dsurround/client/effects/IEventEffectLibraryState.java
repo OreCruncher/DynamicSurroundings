@@ -35,8 +35,7 @@ public interface IEventEffectLibraryState extends IEffectState {
 	/**
 	 * Indicates if the specified player is the one sitting behind the screen.
 	 *
-	 * @param player
-	 *            The EntityPlayer to check
+	 * @param player The EntityPlayer to check
 	 * @return true if it is the local player, false otherwise
 	 */
 	@Override

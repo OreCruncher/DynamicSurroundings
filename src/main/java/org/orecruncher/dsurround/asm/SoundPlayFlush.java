@@ -69,7 +69,7 @@ public class SoundPlayFlush extends Transmorgrifier {
 					final MethodInsnNode mn = (MethodInsnNode) insn;
 					if (mn.owner.equals("net/minecraft/client/audio/SoundManager$SoundSystemStarterThread")
 							&& mn.name.equals("play")) {
-						
+
 						final InsnList list = new InsnList();
 						list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, owner, targetName, sig1, false));
 
@@ -88,12 +88,12 @@ public class SoundPlayFlush extends Transmorgrifier {
 
 		return false;
 	}
-	
+
 	public static void flush() {
 		try {
 			SoundEngine.flushSound();
-		} catch(@Nonnull final Throwable t) {
-			
+		} catch (@Nonnull final Throwable t) {
+
 		}
 	}
 

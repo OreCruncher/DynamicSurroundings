@@ -41,7 +41,7 @@ public enum SeasonType {
 	//@formatter:on
 
 	public static enum SubType {
-		
+
 		//@formatter:off
 		NONE("nosubtype"),
 		EARLY("early"),

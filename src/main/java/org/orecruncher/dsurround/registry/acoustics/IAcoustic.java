@@ -35,13 +35,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface IAcoustic {
 
 	@Nonnull
-	 String getName();
+	String getName();
 
 	default void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location) {
 		playSound(player, location, null, null);
 	}
-	
-	void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location,
-			@Nullable final EventType event, @Nullable final IOptions inputOptions);
+
+	void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location, @Nullable final EventType event,
+			@Nullable final IOptions inputOptions);
 
 }

@@ -45,7 +45,7 @@ public interface IEntityEffectState extends IEffectState {
 
 	/**
 	 * Indicates if the subject is alive.
-	 * 
+	 *
 	 * @return true if the subject is alive, false otherwise
 	 */
 	boolean isSubjectAlive();
@@ -53,8 +53,7 @@ public interface IEntityEffectState extends IEffectState {
 	/**
 	 * Determines the distance between the Entity subject and the specified Entity.
 	 *
-	 * @param entity
-	 *            The Entity to which the distance is measured.
+	 * @param entity The Entity to which the distance is measured.
 	 * @return The distance between the two Entities in blocks, squared.
 	 */
 	double distanceSq(@Nonnull final Entity entity);

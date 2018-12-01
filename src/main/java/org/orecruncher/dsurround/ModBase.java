@@ -60,22 +60,12 @@ import net.minecraftforge.fml.common.network.NetworkCheckHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@net.minecraftforge.fml.common.Mod(modid = ModBase.MOD_ID, useMetadata = true, dependencies = ModBase.DEPENDENCIES, version = ModBase.VERSION, acceptedMinecraftVersions = ModBase.MINECRAFT_VERSIONS, guiFactory = ModBase.GUI_FACTORY, updateJSON = ModBase.UPDATE_URL, certificateFingerprint = ModBase.FINGERPRINT)
+@net.minecraftforge.fml.common.Mod(modid = ModInfo.MOD_ID, useMetadata = true, dependencies = ModInfo.DEPENDENCIES, version = ModInfo.VERSION, acceptedMinecraftVersions = ModInfo.MINECRAFT_VERSIONS, guiFactory = ModInfo.GUI_FACTORY, updateJSON = ModInfo.UPDATE_URL, certificateFingerprint = ModInfo.FINGERPRINT)
 public class ModBase {
-	public static final String MOD_ID = "dsurround";
-	public static final String API_ID = MOD_ID + "API";
-	public static final String RESOURCE_ID = "dsurround";
-	public static final String MOD_NAME = "Dynamic Surroundings";
-	public static final String VERSION = "@VERSION@";
-	public static final String MINECRAFT_VERSIONS = "[1.12.2,)";
-	public static final String DEPENDENCIES = "required-after:forge@[14.23.2.2635,);required-after:dsurroundcore;after:galacticraftcore;after:ambientsounds;required-after:orelib@[3.5,)";
-	public static final String GUI_FACTORY = "org.orecruncher.dsurround.client.gui.ConfigGuiFactory";
-	public static final String UPDATE_URL = "@UPDATEURL@";
-	public static final String FINGERPRINT = "@FINGERPRINT@";
 
 	public static final String SERVER_VERSION = "3.5.0.0";
 
-	@Instance(MOD_ID)
+	@Instance(ModInfo.MOD_ID)
 	protected static ModBase instance;
 
 	@Nonnull
@@ -125,7 +115,7 @@ public class ModBase {
 	}
 
 	public ModBase() {
-		logger = ModLog.setLogger(ModBase.MOD_ID, LogManager.getLogger(MOD_ID));
+		logger = ModLog.setLogger(ModInfo.MOD_ID, LogManager.getLogger(ModInfo.MOD_ID));
 
 		final String cmdText = System.getProperty("dsurround.devMode");
 		if (!StringUtils.isEmpty(cmdText) && "true".equals(cmdText)) {
@@ -140,9 +130,9 @@ public class ModBase {
 		MinecraftForge.EVENT_BUS.register(this);
 
 		// Load up our configuration
-		dataDirectory = new File(event.getModConfigurationDirectory(), ModBase.MOD_ID);
+		dataDirectory = new File(event.getModConfigurationDirectory(), ModInfo.MOD_ID);
 		dataDirectory.mkdirs();
-		config = new Configuration(new File(dataDirectory, ModBase.MOD_ID + ".cfg"), ModBase.VERSION);
+		config = new Configuration(new File(dataDirectory, ModInfo.MOD_ID + ".cfg"), ModInfo.VERSION);
 
 		config.load();
 		ModOptions.load(config);
@@ -183,12 +173,12 @@ public class ModBase {
 
 	@NetworkCheckHandler
 	public boolean checkModLists(@Nonnull final Map<String, String> modList, @Nonnull final Side side) {
-		final String modVersion = modList.get(ModBase.MOD_ID);
+		final String modVersion = modList.get(ModInfo.MOD_ID);
 
 		if (side == Side.SERVER) {
 			installedOnServer = !StringUtils.isEmpty(modVersion);
 			if (installedOnServer) {
-				log().info("%s version %s is installed on the server", MOD_NAME, modVersion);
+				log().info("%s version %s is installed on the server", ModInfo.MOD_NAME, modVersion);
 				if (VersionHelper.compareVersions(modVersion, SERVER_VERSION) < 0) {
 					log().info("For the best experience the server should be running at least version %s",
 							SERVER_VERSION);
@@ -216,7 +206,7 @@ public class ModBase {
 	@SubscribeEvent
 	public void playerLogin(final PlayerLoggedInEvent event) {
 		if (ModOptions.logging.enableVersionChecking)
-			new VersionChecker(ModBase.MOD_ID, "dsurround.msg.NewVersion").playerLogin(event);
+			new VersionChecker(ModInfo.MOD_ID, "dsurround.msg.NewVersion").playerLogin(event);
 	}
 
 	////////////////////////

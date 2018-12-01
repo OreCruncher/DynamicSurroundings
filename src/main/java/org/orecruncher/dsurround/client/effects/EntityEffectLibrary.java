@@ -61,12 +61,10 @@ public class EntityEffectLibrary {
 	 * is used by the EntityEffectLibrary to determine if an EntityEffect applies to
 	 * a target entity.
 	 *
-	 * @param filter
-	 *            IEntityEffectFactoryFilter used to determine if the
-	 *            IEntityEffectFactory should be used to create an EntityEffect.
-	 * @param factory
-	 *            IEntityEffectFactory used to create an EntityEffect if the
-	 *            IEntityEffectFactoryFilter returns true.
+	 * @param filter  IEntityEffectFactoryFilter used to determine if the
+	 *                IEntityEffectFactory should be used to create an EntityEffect.
+	 * @param factory IEntityEffectFactory used to create an EntityEffect if the
+	 *                IEntityEffectFactoryFilter returns true.
 	 */
 	public void register(@Nonnull final IEntityEffectFactoryFilter filter,
 			@Nonnull final IEntityEffectFactory factory) {
@@ -79,8 +77,7 @@ public class EntityEffectLibrary {
 	 * attached to the EntityEffectHandler is determined by an IFactoryFitler. An
 	 * EntityEffectHandler will always be created.
 	 *
-	 * @param entity
-	 *            The subject Entity for which an EntityEffectHandler is created
+	 * @param entity The subject Entity for which an EntityEffectHandler is created
 	 * @return An EntityEffectHandler for the Entity
 	 */
 	@Nonnull

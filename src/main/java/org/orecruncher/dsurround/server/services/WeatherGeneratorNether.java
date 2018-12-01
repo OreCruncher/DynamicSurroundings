@@ -34,6 +34,7 @@ public class WeatherGeneratorNether extends WeatherGenerator {
 		super(world);
 	}
 
+	@Override
 	@Nonnull
 	public String name() {
 		return "NETHER";

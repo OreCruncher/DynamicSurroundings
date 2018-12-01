@@ -23,7 +23,7 @@
  */
 package org.orecruncher.dsurround.client.shader;
 
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.lib.gfx.shaders.ShaderProgram;
 
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -35,8 +35,8 @@ public final class Shaders {
 
 	static {
 
-		AURORA = register("Aurora", new ResourceLocation(ModBase.MOD_ID, "shaders/aurora.vert"),
-				new ResourceLocation(ModBase.MOD_ID, "shaders/aurora.frag"));
+		AURORA = register("Aurora", new ResourceLocation(ModInfo.MOD_ID, "shaders/aurora.vert"),
+				new ResourceLocation(ModInfo.MOD_ID, "shaders/aurora.frag"));
 	}
 
 	public static boolean areShadersSupported() {

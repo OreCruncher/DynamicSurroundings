@@ -92,10 +92,12 @@ public class SeasonInfo implements ISeasonInfo {
 		return ClientChunkCache.instance().getPrecipitationHeight(pos);
 	}
 
+	@Override
 	public float getFloatTemperature(@Nonnull final Biome biome, @Nonnull final BlockPos pos) {
 		return RegistryManager.BIOME.get(biome).getFloatTemperature(pos);
 	}
-	
+
+	@Override
 	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		final Biome biome = ClientChunkCache.instance().getBiome(pos);
 		final float biomeTemp = getFloatTemperature(biome, pos);
@@ -135,12 +137,9 @@ public class SeasonInfo implements ISeasonInfo {
 	 * Determines the type of precipitation to render for the specified world
 	 * location/biome
 	 *
-	 * @param world
-	 *            The current client world
-	 * @param pos
-	 *            Position in the world for which the determination is being made
-	 * @param biome
-	 *            BiomeInfo reference for the biome in question
+	 * @param world The current client world
+	 * @param pos   Position in the world for which the determination is being made
+	 * @param biome BiomeInfo reference for the biome in question
 	 * @return The precipitation type to render when raining
 	 */
 	@Override
@@ -183,10 +182,8 @@ public class SeasonInfo implements ISeasonInfo {
 			return new SeasonInfoSereneSeasons();
 		}
 
-		ModBase.log().info("Creating default SeasonInfo for dimension %s",
-				world.provider.getDimensionType().getName());
+		ModBase.log().info("Creating default SeasonInfo for dimension %s", world.provider.getDimensionType().getName());
 		return new SeasonInfo();
 	}
-
 
 }

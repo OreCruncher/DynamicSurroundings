@@ -88,7 +88,7 @@ public class MoteFootprint extends MoteAgeable {
 		this.posY += zFighter * 0.001F;
 
 		// Make sure that the down position is calculated from the display position!
-		final float fraction = (float)(y - (int) y);
+		final float fraction = (float) (y - (int) y);
 		if (this.isSnowLayer || fraction <= 0.0625F) {
 			this.downPos = new BlockPos(this.posX, this.posY, this.posZ).down();
 		} else {

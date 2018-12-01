@@ -35,8 +35,7 @@ public interface IFogRangeCalculator {
 	/**
 	 * Called during the render pass to obtain parameters for fog rendering.
 	 *
-	 * @param event
-	 *            The event that is being fired
+	 * @param event The event that is being fired
 	 * @return FogResult containing the fog information the calculator is interested
 	 *         in reporting
 	 */

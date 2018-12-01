@@ -63,9 +63,9 @@ public class ConfigSound extends BasicSound<ConfigSound> {
 
 	@Override
 	public boolean isDonePlaying() {
-		return this.getState() == SoundState.DONE;
+		return getState() == SoundState.DONE;
 	}
-	
+
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).addValue(this.positionedSoundLocation.toString())
