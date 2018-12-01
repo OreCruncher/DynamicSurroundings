@@ -33,8 +33,10 @@ import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.lib.Color;
 import org.orecruncher.lib.WorldUtils;
+
 import com.google.common.collect.ImmutableSet;
 
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
@@ -88,12 +90,17 @@ public final class BiomeUtil {
 	@SuppressWarnings("unchecked")
 	@Nullable
 	public static <T extends BiomeData> T getBiomeData(@Nonnull final Biome biome) {
+		T result = null;
 		try {
-			return (T) biomeInfo.get(biome);
+			result = (T) biomeInfo.get(biome);
+			if (result == null) {
+				RegistryManager.BIOME.reload();
+				result = (T) biomeInfo.get(biome);
+			}
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			ModBase.log().error("Unable to get hold of private field on Biome!", e);
 		}
-		return null;
+		return result == null ? (T) RegistryManager.BIOME.WTF_INFO : result;
 	}
 
 	public static <T extends BiomeData> void setBiomeData(@Nonnull final Biome biome, @Nullable final T data) {
@@ -103,7 +110,7 @@ public final class BiomeUtil {
 			ModBase.log().error("Unable to set private field on Biome!", e);
 		}
 	}
-	
+
 	@Nonnull
 	public static String getBiomeName(@Nonnull final Biome biome) {
 		try {
@@ -113,13 +120,13 @@ public final class BiomeUtil {
 		}
 		return "UNKNOWN";
 	}
-	
-	//==================
+
+	// ==================
 	//
-	//  BoP Support
+	// BoP Support
 	//
-	//==================
-	
+	// ==================
+
 	public static boolean isBoPBiome(@Nonnull final Biome biome) {
 		return bopBiome != null && bopBiome.isInstance(biome);
 	}
@@ -132,7 +139,7 @@ public final class BiomeUtil {
 		}
 		return 0;
 	}
-	
+
 	public static float getBoPBiomeFogDensity(@Nonnull final Biome biome) {
 		try {
 			return bopBiomeFogDensity != null ? bopBiomeFogDensity.getFloat(biome) : 0F;
@@ -141,12 +148,12 @@ public final class BiomeUtil {
 		}
 		return 0;
 	}
-	
-	//===================================
+
+	// ===================================
 	//
-	//  Miscellaneous Support Functions
+	// Miscellaneous Support Functions
 	//
-	//===================================
+	// ===================================
 	public static Set<Type> getBiomeTypes() {
 		try {
 			final Field accessor = ReflectionHelper.findField(BiomeDictionary.Type.class, "byName");
@@ -198,6 +205,5 @@ public final class BiomeUtil {
 	public static boolean areBiomesSimilar(@Nonnull final Biome b1, @Nonnull final Biome b2) {
 		return BiomeDictionary.areSimilar(b1, b2);
 	}
-
 
 }

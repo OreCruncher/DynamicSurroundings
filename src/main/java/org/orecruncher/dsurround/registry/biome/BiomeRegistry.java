@@ -47,10 +47,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -93,33 +89,6 @@ public final class BiomeRegistry extends Registry {
 
 	public BiomeRegistry() {
 		super("Biome Registry");
-		MinecraftForge.EVENT_BUS.register(this);
-	}
-
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void worldLoad(@Nonnull final WorldEvent.Load evt) {
-		if (evt.getWorld().isRemote) {
-			ModBase.log().info("Reloading biome registry due to world load...");
-			preInit();
-			for (final ModConfiguration mcf : RegistryManager.DATA.get())
-				init(mcf);
-			postInit();
-		}
-	}
-
-	private void register(@Nonnull final Biome biome) {
-		final BiomeHandler handler = new BiomeHandler(biome);
-		final BiomeInfo info = new BiomeInfo(handler);
-		BiomeUtil.setBiomeData(biome, info);
-	}
-
-	private void register(@Nonnull final IBiome biome) {
-		if (biome.isFake()) {
-			final FakeBiome fb = (FakeBiome) biome;
-			final BiomeInfo info = new BiomeInfo(fb);
-			fb.setBiomeData(info);
-			this.theFakes.add(fb);
-		}
 	}
 
 	@Override
@@ -183,6 +152,30 @@ public final class BiomeRegistry extends Registry {
 
 		// Free memory because we no longer need
 		this.biomeAliases.clear();
+	}
+	
+	public void reload() {
+		ModBase.log().info("Reloading biome registry...");
+		preInit();
+		for (final ModConfiguration mcf : RegistryManager.DATA.get())
+			init(mcf);
+		postInit();
+		complete();
+	}
+
+	protected void register(@Nonnull final Biome biome) {
+		final BiomeHandler handler = new BiomeHandler(biome);
+		final BiomeInfo info = new BiomeInfo(handler);
+		BiomeUtil.setBiomeData(biome, info);
+	}
+
+	protected void register(@Nonnull final IBiome biome) {
+		if (biome.isFake()) {
+			final FakeBiome fb = (FakeBiome) biome;
+			final BiomeInfo info = new BiomeInfo(fb);
+			fb.setBiomeData(info);
+			this.theFakes.add(fb);
+		}
 	}
 
 	@Nullable
