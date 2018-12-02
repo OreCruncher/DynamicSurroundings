@@ -88,19 +88,25 @@ public final class BiomeUtil {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Nullable
+	@Nonnull
 	public static <T extends BiomeData> T getBiomeData(@Nonnull final Biome biome) {
 		T result = null;
 		try {
-			result = (T) biomeInfo.get(biome);
-			if (result == null) {
-				RegistryManager.BIOME.reload();
+			if (biome != null) {
 				result = (T) biomeInfo.get(biome);
+				if (result == null) {
+					RegistryManager.BIOME.reload();
+					result = (T) biomeInfo.get(biome);
+				}
 			}
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			ModBase.log().error("Unable to get hold of private field on Biome!", e);
 		}
-		return result == null ? (T) RegistryManager.BIOME.WTF_INFO : result;
+		if (result == null) {
+			ModBase.log().warn("Unable to find configuration for biome [%s] (hc=%d)", biome.getRegistryName(), System.identityHashCode(biome));
+			return (T) RegistryManager.BIOME.WTF_INFO;
+		}
+		return result;
 	}
 
 	public static <T extends BiomeData> void setBiomeData(@Nonnull final Biome biome, @Nullable final T data) {

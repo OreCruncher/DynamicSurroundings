@@ -45,6 +45,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Biomes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -141,6 +143,12 @@ public final class BiomeRegistry extends Registry {
 			final BiomeMatcher matcher = BiomeMatcher.getMatcher(entry);
 			getCombinedStream().filter(i -> matcher.match(i)).forEach(i -> i.update(entry));
 		});
+
+		// Make sure the default PLAINS biome is set.  OTG can do some squirrelly things
+		final ResourceLocation plainsLoc = new ResourceLocation("plains");
+		final Biome plains = ForgeRegistries.BIOMES.getValue(plainsLoc);
+		final BiomeInfo info = BiomeUtil.getBiomeData(plains);
+		BiomeUtil.setBiomeData(Biomes.PLAINS, info);
 	}
 
 	@Override
@@ -187,24 +195,9 @@ public final class BiomeRegistry extends Registry {
 		return null;
 	}
 
-	@Nullable
-	private BiomeInfo resolve(@Nonnull final Biome biome) {
-		return BiomeUtil.getBiomeData(biome);
-	}
-
 	@Nonnull
 	public BiomeInfo get(@Nonnull final Biome biome) {
-		// This shouldn't happen, but...
-		if (biome == null)
-			return this.WTF_INFO;
-
-		BiomeInfo result = resolve(biome);
-		if (result == null) {
-			// Biome information should have been loaded/detected with the world load
-			ModBase.log().warn("Unable to locate biome [%s] (%s)!", biome.getBiomeName(), biome.getClass().getName());
-			result = this.WTF_INFO;
-		}
-		return result;
+		return BiomeUtil.getBiomeData(biome);
 	}
 
 	@Nonnull
