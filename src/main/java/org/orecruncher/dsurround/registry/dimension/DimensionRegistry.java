@@ -37,6 +37,7 @@ import org.orecruncher.dsurround.registry.config.ModConfiguration;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.world.World;
+import net.minecraft.world.border.WorldBorder;
 
 public final class DimensionRegistry extends Registry {
 
@@ -123,6 +124,17 @@ public final class DimensionRegistry extends Registry {
 
 				this.dimensionData.put(world.provider.getDimension(), data);
 				ModBase.log().info(data.toString());
+				final WorldBorder border = world.getWorldBorder();
+				if (border != null) {
+					final StringBuilder builder = new StringBuilder();
+					builder.append("x: ").append((long) border.minX()).append('/').append((long) border.maxX())
+							.append(", ");
+					builder.append("z: ").append((long) border.minZ()).append('/').append((long) border.maxZ())
+							.append(", ");
+					builder.append("center: (").append((long) border.getCenterX()).append(',')
+							.append((long) border.getCenterZ()).append(')');
+					ModBase.log().info(builder.toString());
+				}
 			}
 			return data;
 		}
