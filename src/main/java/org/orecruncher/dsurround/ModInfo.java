@@ -41,7 +41,7 @@ public final class ModInfo {
 		"required-after:forge@[14.23.5.2768,);" +
 		"required-after:dsurroundcore;" +
 		"required-after:orelib@[3.5.0.1,);" +
-		"after:sereneseasons@[1.2.10,);" +
+		"after:sereneseasons@[1.2.12,);" +
 		"after:galacticraftcore;" +
 		"after:ambientsounds;";
 	//@formatter:on

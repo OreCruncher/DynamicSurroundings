@@ -1,3 +1,11 @@
+### DynamicSurroundings-1.12.2-3.5.0.3
+**Fixes**
+* NPE when encountering an OTG Biome
+* Compatibility with Serene Seasons 1.2.12+.  Dependency enforcement is in place and you will get a Forge notification if you are using an older version of Serene Seasons.
+
+**Changes**
+* Stained hardened clay now has the same step sound as regular hardened clay (sandstone)
+
 ### DynamicSurroundings-1.12.2-3.5.0.2
 **What's New**
 * Added weather.canWaterFreeze script variable

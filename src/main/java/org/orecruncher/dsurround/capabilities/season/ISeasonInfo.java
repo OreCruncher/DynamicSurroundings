@@ -58,7 +58,7 @@ public interface ISeasonInfo extends INBTSerializable<NBTTagCompound> {
 	@Nonnull
 	BlockPos getPrecipitationHeight(@Nonnull final World world, @Nonnull final BlockPos pos);
 
-	float getFloatTemperature(@Nonnull final Biome biome, @Nonnull final BlockPos pos);
+	float getFloatTemperature(@Nonnull final World world, @Nonnull final Biome biome, @Nonnull final BlockPos pos);
 
 	float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos);
 
