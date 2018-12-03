@@ -46,6 +46,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SeasonInfo implements ISeasonInfo {
 
+	protected static final float FREEZE_TEMP = 0.15F;
+	protected static final float BREATH_TEMP = 0.2F;
 	protected static final String noSeason = Localization.loadString("dsurround.season.noseason");
 
 	@Override
@@ -92,30 +94,26 @@ public class SeasonInfo implements ISeasonInfo {
 	}
 
 	@Override
-	public float getFloatTemperature(@Nonnull final World world, @Nonnull final Biome biome, @Nonnull final BlockPos pos) {
+	public float getFloatTemperature(@Nonnull final World world, @Nonnull final Biome biome,
+			@Nonnull final BlockPos pos) {
 		return RegistryManager.BIOME.get(biome).getFloatTemperature(pos);
 	}
 
 	@Override
 	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		final Biome biome = ClientChunkCache.instance().getBiome(pos);
-		final float biomeTemp = getFloatTemperature(world, biome, pos);
-		final float heightTemp = world.getBiomeProvider().getTemperatureAtHeight(biomeTemp,
-				getPrecipitationHeight(world, pos).getY());
-		return heightTemp;
+		return getFloatTemperature(world, biome, pos);
 	}
 
 	/**
-	 * Indicates if it is cold enough that water can freeze. Could result in snow or
-	 * frozen ice. Does not take into account any other environmental factors - just
-	 * whether its cold enough. If environmental sensitive versions are needed look
-	 * at canBlockFreeze() and canSnowAt().
+	 * Indicates if it is cold enough that water can freeze at the specified
+	 * location.
 	 *
 	 * @return true if water can freeze, false otherwise
 	 */
 	@Override
 	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getTemperature(world, pos) < 0.15F;
+		return getTemperature(world, pos) < FREEZE_TEMP;
 	}
 
 	/**
@@ -125,7 +123,7 @@ public class SeasonInfo implements ISeasonInfo {
 	 */
 	@Override
 	public boolean showFrostBreath(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getTemperature(world, pos) < 0.2F;
+		return getTemperature(world, pos) < BREATH_TEMP;
 	}
 
 	protected boolean doDust(@Nonnull final BiomeInfo biome) {
@@ -134,7 +132,8 @@ public class SeasonInfo implements ISeasonInfo {
 
 	/**
 	 * Determines the type of precipitation to render for the specified world
-	 * location/biome
+	 * location/biome. The type is based on the heights block that precipipation can
+	 * hit in the block column defined by the BlockPos.
 	 *
 	 * @param world The current client world
 	 * @param pos   Position in the world for which the determination is being made
@@ -154,7 +153,8 @@ public class SeasonInfo implements ISeasonInfo {
 		if (doDust(biome))
 			return PrecipitationType.DUST;
 
-		return canWaterFreeze(world, pos) ? PrecipitationType.SNOW : PrecipitationType.RAIN;
+		return getFloatTemperature(world, biome.getBiome(), pos) < FREEZE_TEMP ? PrecipitationType.SNOW
+				: PrecipitationType.RAIN;
 	}
 
 	public static SeasonInfo factory(@Nonnull final World world) {
