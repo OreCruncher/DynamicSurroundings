@@ -44,7 +44,6 @@ import org.orecruncher.dsurround.capabilities.speech.ISpeechData;
 import org.orecruncher.dsurround.client.effects.EntityEffect;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactory;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactoryFilter;
-import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.lib.Translations;
 import org.orecruncher.lib.WeightTable;
@@ -242,8 +241,7 @@ public class EntityChatEffect extends EntityEffect {
 		if (delta <= 0) {
 			final ISpeechData data = CapabilitySpeechData.getCapability(subject);
 			if (data != null) {
-				final int expiry = EnvironState.getTickCounter()
-						+ (int) (ModOptions.speechbubbles.speechBubbleDuration * 20F);
+				final int expiry = (int) (ModOptions.speechbubbles.speechBubbleDuration * 20F);
 				data.addMessage(getChatMessage(subject), expiry);
 			}
 			genNextChatTime();

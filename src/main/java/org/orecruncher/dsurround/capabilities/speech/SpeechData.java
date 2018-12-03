@@ -55,9 +55,11 @@ public class SpeechData implements ISpeechData {
 	@Override
 	public void onUpdate(final int currentTick) {
 		final int oldSize = this.data.size();
-		this.data.removeIf(d -> d.isExpired(currentTick));
-		if (oldSize != this.data.size())
-			generateTextForRender();
+		if (oldSize > 0) {
+			this.data.removeIf(d -> d.isExpired(currentTick));
+			if (oldSize != this.data.size())
+				generateTextForRender();
+		}
 	}
 
 	@Override
