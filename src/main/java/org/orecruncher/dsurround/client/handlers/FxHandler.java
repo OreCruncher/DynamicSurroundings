@@ -24,12 +24,13 @@
 package org.orecruncher.dsurround.client.handlers;
 
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.capabilities.CapabilityEntityFXData;
+import org.orecruncher.dsurround.capabilities.entityfx.IEntityFX;
 import org.orecruncher.dsurround.client.effects.EntityEffectHandler;
 import org.orecruncher.dsurround.client.effects.EntityEffectLibrary;
 import org.orecruncher.dsurround.client.effects.EventEffectLibrary;
@@ -46,22 +47,18 @@ import org.orecruncher.dsurround.client.handlers.effects.FrostBreathEffect;
 import org.orecruncher.dsurround.client.handlers.effects.PlayerToolBarSoundEffect;
 import org.orecruncher.dsurround.client.handlers.effects.VillagerChatEffect;
 import org.orecruncher.dsurround.client.sound.BasicSound;
-import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.lib.sound.ITrackedSound;
 import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.effect.EffectRegistry;
-import org.orecruncher.lib.ThreadGuard;
-import org.orecruncher.lib.ThreadGuard.Action;
 import org.orecruncher.lib.gfx.ParticleHelper;
 import org.orecruncher.lib.math.TimerEMA;
 
 import com.google.common.collect.ImmutableList;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -85,13 +82,6 @@ public class FxHandler extends EffectHandlerBase {
 		}
 	};
 
-	// Used to process handler entries during the client tick
-	private static final Predicate<? super Int2ObjectMap.Entry<EntityEffectHandler>> HANDLER_UPDATE_REMOVE = e -> {
-		final EntityEffectHandler handler = e.getValue();
-		handler.update();
-		return !handler.isAlive();
-	};
-
 	private static final EntityEffectLibrary library = new EntityEffectLibrary(PARTICLE_HELPER, SOUND_HELPER);
 
 	static {
@@ -105,14 +95,10 @@ public class FxHandler extends EffectHandlerBase {
 		library.register(EntityHealthPopoffEffect.DEFAULT_FILTER, new EntityHealthPopoffEffect.Factory());
 	}
 
-	private final Int2ObjectOpenHashMap<EntityEffectHandler> handlers = new Int2ObjectOpenHashMap<>(256);
 	private final EventEffectLibrary eventLibrary = new EventEffectLibrary(PARTICLE_HELPER, SOUND_HELPER);
 
-	private final TimerEMA compute = new TimerEMA("FxHandler Updates");
+	private final TimerEMA compute = new TimerEMA("Entity Effect Updates");
 	private long nanos;
-
-	private final ThreadGuard guard = new ThreadGuard(ModBase.log(), Side.CLIENT, "FxHandler")
-			.setAction(Action.EXCEPTION);
 
 	public FxHandler() {
 		super("Special Effects");
@@ -120,16 +106,8 @@ public class FxHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-		this.handlers.int2ObjectEntrySet().removeIf(HANDLER_UPDATE_REMOVE);
 		this.compute.update(this.nanos);
 		this.nanos = 0;
-	}
-
-	@SubscribeEvent(priority = EventPriority.HIGH)
-	public void diagnostics(@Nonnull final DiagnosticEvent.Gather event) {
-		final StringBuilder builder = new StringBuilder();
-		builder.append("EffectHandlers: ").append(this.handlers.size());
-		event.output.add(builder.toString());
 	}
 
 	/**
@@ -139,9 +117,11 @@ public class FxHandler extends EffectHandlerBase {
 	 * @return A list of EntityEffects, if any
 	 */
 	public List<String> getEffects(@Nonnull final Entity entity) {
-		final EntityEffectHandler eh = this.handlers.get(entity.getEntityId());
-		if (eh != null) {
-			return eh.getAttachedEffects();
+		final IEntityFX caps = CapabilityEntityFXData.getCapability(entity);
+		if (caps != null) {
+			final EntityEffectHandler eh = caps.get();
+			if (eh != null)
+				return eh.getAttachedEffects();
 		}
 		return ImmutableList.of();
 	}
@@ -157,26 +137,34 @@ public class FxHandler extends EffectHandlerBase {
 			return;
 
 		final long start = System.nanoTime();
-
-		this.guard.check("onLivingUpdate");
-
-		final double distanceThreshold = ModOptions.effects.specialEffectRange * ModOptions.effects.specialEffectRange;
-		final boolean inRange = entity.getDistanceSq(EnvironState.getPlayer()) <= distanceThreshold
-				&& entity.dimension == EnvironState.getDimensionId();
-
-		final EntityEffectHandler handler = this.handlers.get(entity.getEntityId());
-		if (handler != null && !inRange) {
-			handler.die();
-		} else if (handler == null && inRange && entity.isEntityAlive()) {
-			this.handlers.put(entity.getEntityId(), library.create(entity).get());
+		final IEntityFX cap = CapabilityEntityFXData.getCapability(entity);
+		if (cap != null) {
+			final double distanceThreshold = ModOptions.effects.specialEffectRange
+					* ModOptions.effects.specialEffectRange;
+			final boolean inRange = entity.getDistanceSq(EnvironState.getPlayer()) <= distanceThreshold;
+			final EntityEffectHandler handler = cap.get();
+			if (handler != null && !inRange) {
+				cap.clear();
+			} else if (handler == null && inRange && entity.isEntityAlive()) {
+				cap.set(library.create(entity).get());
+			} else if (handler != null) {
+				handler.update();
+			}
 		}
 
 		this.nanos += (System.nanoTime() - start);
 	}
 
 	protected void clearHandlers() {
-		this.handlers.values().forEach(EntityEffectHandler::die);
-		this.handlers.clear();
+		final World world = EnvironState.getWorld();
+		if (world != null) {
+			//@formatter:off
+			EnvironState.getWorld().getLoadedEntityList().stream()
+				.map(e -> CapabilityEntityFXData.getCapability(e))
+				.filter(Objects::nonNull)
+				.forEach(c -> c.clear());
+			//@formatter:on
+		}
 	}
 
 	/**

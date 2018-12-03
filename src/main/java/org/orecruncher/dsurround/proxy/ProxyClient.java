@@ -33,6 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.capabilities.CapabilityEntityFXData;
 import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
 import org.orecruncher.dsurround.capabilities.CapabilitySpeechData;
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
@@ -119,6 +120,7 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 		super.preInit(event);
 		CapabilitySpeechData.register();
 		CapabilitySeasonInfo.register();
+		CapabilityEntityFXData.register();
 	}
 
 	@Override
