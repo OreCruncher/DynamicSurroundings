@@ -59,8 +59,7 @@ public final class CapabilityEntityData {
 	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModInfo.MOD_ID, "data");
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IEntityData.class, new SimpleStorage<IEntityData>(),
-				() -> new EntityData(null));
+		CapabilityManager.INSTANCE.register(IEntityData.class, new SimpleStorage<IEntityData>(), EntityData::new);
 	}
 
 	public static IEntityData getCapability(@Nonnull final Entity entity) {

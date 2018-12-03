@@ -41,6 +41,10 @@ public final class EntityData implements IEntityDataSettable {
 	private boolean isFleeing;
 	private boolean isDirty;
 
+	public EntityData() {
+		this.entity = null;
+	}
+	
 	public EntityData(@Nonnull final Entity entity) {
 		this.entity = entity;
 	}
