@@ -7,7 +7,9 @@
 		"dynamictrees:birchbranch": "wood",
 		"dynamictrees:junglebranch": "wood",
 		"dynamictrees:acaciabranch": "wood",
-		"dynamictrees:sprucebranch": "wood"
+		"dynamictrees:sprucebranch": "wood",
+		"dynamictrees:trunkshell": "wood",
+		"dynamictrees:darkoakroot": "wood"
 	},
 	"footprints": [
 		"dynamictrees:rootydirt"
