@@ -33,20 +33,17 @@ import org.orecruncher.dsurround.capabilities.speech.SpeechData;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.lib.capability.CapabilityProviderSerializable;
 import org.orecruncher.lib.capability.CapabilityUtils;
+import org.orecruncher.lib.capability.NullStorage;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -58,24 +55,11 @@ public final class CapabilitySpeechData {
 
 	@CapabilityInject(ISpeechData.class)
 	public static final Capability<ISpeechData> SPEECH_DATA = null;
-	public static final EnumFacing DEFAULT_FACING = null;
 	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModInfo.MOD_ID, "speech");
 
 	@SideOnly(Side.CLIENT)
 	public static void register() {
-		CapabilityManager.INSTANCE.register(ISpeechData.class, new Capability.IStorage<ISpeechData>() {
-			@Override
-			public NBTBase writeNBT(@Nonnull final Capability<ISpeechData> capability,
-					@Nonnull final ISpeechData instance, @Nullable final EnumFacing side) {
-				return ((INBTSerializable<NBTTagCompound>) instance).serializeNBT();
-			}
-
-			@Override
-			public void readNBT(@Nonnull final Capability<ISpeechData> capability, @Nonnull final ISpeechData instance,
-					@Nullable final EnumFacing side, @Nonnull final NBTBase nbt) {
-				((INBTSerializable<NBTTagCompound>) instance).deserializeNBT((NBTTagCompound) nbt);
-			}
-		}, () -> new SpeechData());
+		CapabilityManager.INSTANCE.register(ISpeechData.class, new NullStorage<ISpeechData>(), () -> new SpeechData());
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -86,7 +70,7 @@ public final class CapabilitySpeechData {
 	@SideOnly(Side.CLIENT)
 	@Nonnull
 	public static ICapabilityProvider createProvider(final ISpeechData data) {
-		return new CapabilityProviderSerializable<>(SPEECH_DATA, DEFAULT_FACING, data);
+		return new CapabilityProviderSerializable<>(SPEECH_DATA, null, data);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -123,10 +107,11 @@ public final class CapabilitySpeechData {
 		 */
 		@SubscribeEvent(receiveCanceled = false)
 		public static void livingUpdate(@Nonnull final LivingUpdateEvent event) {
-			final World world = event.getEntity().getEntityWorld();
+			final Entity entity = event.getEntity();
+			final World world = entity.getEntityWorld();
 			// Don't tick if this is the client thread. We only check 4 times a
 			// second as if that is enough :)
-			if (!world.isRemote || (world.getTotalWorldTime() % 5) != 0)
+			if (!world.isRemote || (entity.ticksExisted % 5) != 0)
 				return;
 			final ISpeechData data = getCapability(event.getEntity());
 			if (data != null) {

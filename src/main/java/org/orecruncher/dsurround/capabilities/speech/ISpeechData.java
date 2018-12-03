@@ -28,13 +28,11 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.lib.collections.ObjectArray;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public interface ISpeechData extends INBTSerializable<NBTTagCompound> {
+public interface ISpeechData {
 
 	void addMessage(@Nonnull final String string, final int expiryTick);
 

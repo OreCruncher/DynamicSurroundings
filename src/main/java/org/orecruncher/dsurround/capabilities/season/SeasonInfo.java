@@ -37,7 +37,6 @@ import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.lib.Localization;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -156,17 +155,6 @@ public class SeasonInfo implements ISeasonInfo {
 			return PrecipitationType.DUST;
 
 		return canWaterFreeze(world, pos) ? PrecipitationType.SNOW : PrecipitationType.RAIN;
-	}
-
-	@Override
-	public NBTTagCompound serializeNBT() {
-		// Shouldn't happen but just in case
-		return new NBTTagCompound();
-	}
-
-	@Override
-	public void deserializeNBT(@Nonnull final NBTTagCompound nbt) {
-		// Do nothing - purely a client side thing
 	}
 
 	public static SeasonInfo factory(@Nonnull final World world) {

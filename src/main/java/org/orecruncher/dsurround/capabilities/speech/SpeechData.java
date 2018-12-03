@@ -33,7 +33,6 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.lib.collections.ObjectArray;
 
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -71,19 +70,6 @@ public class SpeechData implements ISpeechData {
 	@Nullable
 	public RenderContext getRenderContext() {
 		return this.ctx;
-	}
-
-	@Override
-	@Nonnull
-	public NBTTagCompound serializeNBT() {
-		// This shouldn't be needed, but just in case....
-		return new NBTTagCompound();
-	}
-
-	@Override
-	public void deserializeNBT(@Nonnull final NBTTagCompound nbt) {
-		// Do nothing - since this is 100% client side there is
-		// no persistence.
 	}
 
 	protected void generateTextForRender() {

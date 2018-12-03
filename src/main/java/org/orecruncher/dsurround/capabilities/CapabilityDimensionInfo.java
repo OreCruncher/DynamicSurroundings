@@ -25,24 +25,20 @@
 package org.orecruncher.dsurround.capabilities;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.capabilities.dimension.DimensionInfo;
 import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfo;
 import org.orecruncher.lib.capability.CapabilityProviderSerializable;
 import org.orecruncher.lib.capability.CapabilityUtils;
+import org.orecruncher.lib.capability.SimpleStorage;
 
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -51,24 +47,11 @@ public class CapabilityDimensionInfo {
 
 	@CapabilityInject(IDimensionInfo.class)
 	public static final Capability<IDimensionInfo> DIMENSION_INFO = null;
-	public static final EnumFacing DEFAULT_FACING = null;
 	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModInfo.MOD_ID, "dimensioninfo");
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IDimensionInfo.class, new Capability.IStorage<IDimensionInfo>() {
-			@Override
-			public NBTBase writeNBT(@Nonnull final Capability<IDimensionInfo> capability,
-					@Nonnull final IDimensionInfo instance, @Nullable final EnumFacing side) {
-				return ((INBTSerializable<NBTTagCompound>) instance).serializeNBT();
-			}
-
-			@Override
-			public void readNBT(@Nonnull final Capability<IDimensionInfo> capability,
-					@Nonnull final IDimensionInfo instance, @Nullable final EnumFacing side,
-					@Nonnull final NBTBase nbt) {
-				((INBTSerializable<NBTTagCompound>) instance).deserializeNBT((NBTTagCompound) nbt);
-			}
-		}, DimensionInfo::new);
+		CapabilityManager.INSTANCE.register(IDimensionInfo.class, new SimpleStorage<IDimensionInfo>(),
+				DimensionInfo::new);
 	}
 
 	public static IDimensionInfo getCapability(@Nonnull final World world) {
@@ -77,7 +60,7 @@ public class CapabilityDimensionInfo {
 
 	@Nonnull
 	public static ICapabilityProvider createProvider(final IDimensionInfo data) {
-		return new CapabilityProviderSerializable<>(DIMENSION_INFO, DEFAULT_FACING, data);
+		return new CapabilityProviderSerializable<>(DIMENSION_INFO, null, data);
 	}
 
 	@EventBusSubscriber(modid = ModInfo.MOD_ID)

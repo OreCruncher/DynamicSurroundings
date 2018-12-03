@@ -25,7 +25,6 @@
 package org.orecruncher.dsurround.capabilities;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.capabilities.entitydata.EntityData;
@@ -36,20 +35,17 @@ import org.orecruncher.dsurround.network.Network;
 import org.orecruncher.dsurround.network.PacketEntityData;
 import org.orecruncher.lib.capability.CapabilityProviderSerializable;
 import org.orecruncher.lib.capability.CapabilityUtils;
+import org.orecruncher.lib.capability.SimpleStorage;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -60,23 +56,11 @@ public final class CapabilityEntityData {
 
 	@CapabilityInject(IEntityData.class)
 	public static final Capability<IEntityData> ENTITY_DATA = null;
-	public static final EnumFacing DEFAULT_FACING = null;
 	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModInfo.MOD_ID, "data");
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IEntityData.class, new Capability.IStorage<IEntityData>() {
-			@Override
-			public NBTBase writeNBT(@Nonnull final Capability<IEntityData> capability,
-					@Nonnull final IEntityData instance, @Nullable final EnumFacing side) {
-				return ((INBTSerializable<NBTTagCompound>) instance).serializeNBT();
-			}
-
-			@Override
-			public void readNBT(@Nonnull final Capability<IEntityData> capability, @Nonnull final IEntityData instance,
-					@Nullable final EnumFacing side, @Nonnull final NBTBase nbt) {
-				((INBTSerializable<NBTTagCompound>) instance).deserializeNBT((NBTTagCompound) nbt);
-			}
-		}, () -> new EntityData(null));
+		CapabilityManager.INSTANCE.register(IEntityData.class, new SimpleStorage<IEntityData>(),
+				() -> new EntityData(null));
 	}
 
 	public static IEntityData getCapability(@Nonnull final Entity entity) {
@@ -85,7 +69,7 @@ public final class CapabilityEntityData {
 
 	@Nonnull
 	public static ICapabilityProvider createProvider(final IEntityData data) {
-		return new CapabilityProviderSerializable<>(ENTITY_DATA, DEFAULT_FACING, data);
+		return new CapabilityProviderSerializable<>(ENTITY_DATA, null, data);
 	}
 
 	@EventBusSubscriber(modid = ModInfo.MOD_ID)
@@ -109,7 +93,7 @@ public final class CapabilityEntityData {
 		@SubscribeEvent
 		public static void trackingEvent(@Nonnull final PlayerEvent.StartTracking event) {
 			if (event.getTarget() instanceof EntityLiving) {
-				final IEntityData data = event.getTarget().getCapability(ENTITY_DATA, DEFAULT_FACING);
+				final IEntityData data = event.getTarget().getCapability(ENTITY_DATA, null);
 				if (data != null) {
 					Network.sendToPlayer((EntityPlayerMP) event.getEntityPlayer(), new PacketEntityData(data));
 				}
@@ -121,10 +105,11 @@ public final class CapabilityEntityData {
 		 */
 		@SubscribeEvent(receiveCanceled = false)
 		public static void livingUpdate(@Nonnull final LivingUpdateEvent event) {
-			final World world = event.getEntity().getEntityWorld();
+			final Entity entity = event.getEntity();
+			final World world = entity.getEntityWorld();
 			// Don't tick if this is the client thread. We only check 4 times a
 			// second as if that is enough :)
-			if (world.isRemote || (world.getTotalWorldTime() % 5) != 0)
+			if (world.isRemote || (entity.ticksExisted % 5) != 0)
 				return;
 			final IEntityDataSettable data = (IEntityDataSettable) getCapability(event.getEntity());
 			if (data != null) {

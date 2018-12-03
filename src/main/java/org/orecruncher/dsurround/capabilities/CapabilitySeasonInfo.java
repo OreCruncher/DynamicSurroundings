@@ -25,24 +25,20 @@
 package org.orecruncher.dsurround.capabilities;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.SeasonInfo;
 import org.orecruncher.lib.capability.CapabilityProviderSerializable;
 import org.orecruncher.lib.capability.CapabilityUtils;
+import org.orecruncher.lib.capability.NullStorage;
 
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -53,24 +49,11 @@ public class CapabilitySeasonInfo {
 
 	@CapabilityInject(ISeasonInfo.class)
 	public static final Capability<ISeasonInfo> SEASON_INFO = null;
-	public static final EnumFacing DEFAULT_FACING = null;
 	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModInfo.MOD_ID, "seasoninfo");
 
 	@SideOnly(Side.CLIENT)
 	public static void register() {
-		CapabilityManager.INSTANCE.register(ISeasonInfo.class, new Capability.IStorage<ISeasonInfo>() {
-			@Override
-			public NBTBase writeNBT(@Nonnull final Capability<ISeasonInfo> capability,
-					@Nonnull final ISeasonInfo instance, @Nullable final EnumFacing side) {
-				return ((INBTSerializable<NBTTagCompound>) instance).serializeNBT();
-			}
-
-			@Override
-			public void readNBT(@Nonnull final Capability<ISeasonInfo> capability, @Nonnull final ISeasonInfo instance,
-					@Nullable final EnumFacing side, @Nonnull final NBTBase nbt) {
-				((INBTSerializable<NBTTagCompound>) instance).deserializeNBT((NBTTagCompound) nbt);
-			}
-		}, SeasonInfo::new);
+		CapabilityManager.INSTANCE.register(ISeasonInfo.class, new NullStorage<ISeasonInfo>(), SeasonInfo::new);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -81,7 +64,7 @@ public class CapabilitySeasonInfo {
 	@SideOnly(Side.CLIENT)
 	@Nonnull
 	public static ICapabilityProvider createProvider(final ISeasonInfo data) {
-		return new CapabilityProviderSerializable<>(SEASON_INFO, DEFAULT_FACING, data);
+		return new CapabilityProviderSerializable<>(SEASON_INFO, null, data);
 	}
 
 	@EventBusSubscriber(modid = ModInfo.MOD_ID, value = Side.CLIENT)
