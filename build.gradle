@@ -68,7 +68,7 @@ dependencies {
 	compile "littletiles:LittleTiles_v1.5.0:pre122_mc1.12.2"
 	
 	if (fileTree(dir: 'libs').filter { it.name.startsWith('OreLib') }.getFiles().size() == 0)
-		compile "orelib:OreLib-1.12.2:3.5.0.1BETA:deobf"
+		compile "orelib:OreLib-1.12.2:3.5.1.0BETA:deobf"
 
 	//compile "creativecore:CreativeCore_v1.9.35_mc1.12.2"
 	

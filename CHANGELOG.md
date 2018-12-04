@@ -1,3 +1,11 @@
+### DynamicSurroundings-1.12.2-3.5.0.4
+**Fixes**
+* Yet another OTG related NPE fix for when a player randomly teleports.
+* Entity chat was staying around too long.
+
+**Changes**
+* Improve season processing related to temperature
+
 ### DynamicSurroundings-1.12.2-3.5.0.3
 **Fixes**
 * NPE when encountering an OTG Biome
