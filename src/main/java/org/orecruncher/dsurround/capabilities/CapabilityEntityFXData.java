@@ -36,6 +36,7 @@ import org.orecruncher.lib.capability.NullStorage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -72,8 +73,8 @@ public class CapabilityEntityFXData {
 	public static class EventHandler {
 		@SubscribeEvent
 		public static void attachCapabilities(@Nonnull final AttachCapabilitiesEvent<Entity> event) {
-			final Entity entity = event.getObject();
-			if (entity.getEntityWorld().isRemote && entity instanceof EntityLivingBase) {
+			final World world = event.getObject().getEntityWorld();
+			if (world != null && world.isRemote && event.getObject() instanceof EntityLivingBase) {
 				final EntityFXData info = new EntityFXData();
 				event.addCapability(CAPABILITY_ID, createProvider(info));
 			}

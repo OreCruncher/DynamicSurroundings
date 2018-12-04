@@ -1,3 +1,6 @@
+### DynamicSurroundings-1.12.2-3.5.0.5
+* Quick hotfix to address mock EntityItems.
+
 ### DynamicSurroundings-1.12.2-3.5.0.4
 **Fixes**
 * Yet another OTG related NPE fix for when a player randomly teleports.
