@@ -37,8 +37,10 @@ import org.orecruncher.dsurround.client.handlers.fog.HazeFogRangeCalculator;
 import org.orecruncher.dsurround.client.handlers.fog.HolisticFogColorCalculator;
 import org.orecruncher.dsurround.client.handlers.fog.HolisticFogRangeCalculator;
 import org.orecruncher.dsurround.client.handlers.fog.MorningFogRangeCalculator;
+import org.orecruncher.dsurround.client.handlers.fog.SeasonFogRangeCalculator;
 import org.orecruncher.dsurround.client.handlers.fog.WeatherFogRangeCalculator;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
+import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.effect.EffectRegistry;
@@ -168,8 +170,12 @@ public class FogHandler extends EffectHandlerBase {
 		if (this.theme.doElevationHaze())
 			this.fogRange.add(new HazeFogRangeCalculator());
 
-		if (this.theme.doMorningFog())
-			this.fogRange.add(new MorningFogRangeCalculator());
+		if (this.theme.doMorningFog()) {
+			if (ModEnvironment.SereneSeasons.isLoaded())
+				this.fogRange.add(new SeasonFogRangeCalculator());
+			else
+				this.fogRange.add(new MorningFogRangeCalculator());
+		}
 
 		if (this.theme.doBedrockFog())
 			this.fogRange.add(new BedrockFogRangeCalculator());

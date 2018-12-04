@@ -66,5 +66,11 @@ public class DiurnalVariables extends DynamicVariantList {
 				this.value = DiurnalUtils.getMoonPhaseFactor(EnvironState.getWorld());
 			}
 		});
+		add(new Dynamic.DynamicNumber("diurnal.celestialAngle") {
+			@Override
+			public void update() {
+				this.value = EnvironState.getWorld().getCelestialAngle(0);
+			}
+		});
 	}
 }

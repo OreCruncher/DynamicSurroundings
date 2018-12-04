@@ -174,6 +174,9 @@ Diurnal variables describe the characteristics of the day/night cycle.
 	*	- diurnal.moonPhaseFactor
 		- float
 		- Indicates the current phase of the moon.
+	*	- diurnal.celestialAngle
+		- float
+		- The World's calculated celestial angle
 
 Weather variables describe the current state of weather in the player's dimension.
 
