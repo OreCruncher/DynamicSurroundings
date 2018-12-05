@@ -26,8 +26,6 @@ package org.orecruncher.dsurround.client.fx.particle.mote;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.ModInfo;
-import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.lib.gfx.OpenGlUtil;
 
 import net.minecraft.client.renderer.GlStateManager;
@@ -39,40 +37,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleCollectionRipples extends ParticleCollection {
 
-	public static enum Style {
-
-		//@formatter:off
-		ORIGINAL("textures/particles/ripple.png"),
-		CIRCLE("textures/particles/ripple1.png"),
-		SQUARE("textures/particles/ripple2.png");
-		//@formatter:on
-
-		private final ResourceLocation resource;
-
-		private Style(@Nonnull final String texture) {
-			this.resource = new ResourceLocation(ModInfo.RESOURCE_ID, texture);
-		}
-
-		@Nonnull
-		public ResourceLocation getTexture() {
-			return this.resource;
-		}
-
-		@Nonnull
-		public static Style getStyle(final int v) {
-			if (v >= values().length)
-				return CIRCLE;
-			return values()[v];
-		}
-	}
-
 	public ParticleCollectionRipples(@Nonnull final World world, @Nonnull final ResourceLocation tex) {
 		super(world, tex);
 	}
 
 	@Override
 	protected void bindTexture(@Nonnull final ResourceLocation resource) {
-		final ResourceLocation res = Style.getStyle(ModOptions.rain.rainRippleStyle).getTexture();
+		final ResourceLocation res = RippleStyle.get().getTexture();
 		super.bindTexture(res);
 	}
 

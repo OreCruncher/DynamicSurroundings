@@ -42,26 +42,55 @@ public class MoteWaterRipple extends MoteAgeable {
 	protected float scale;
 	protected float scaledWidth;
 
+	protected float texU1, texU2;
+	protected float texV1, texV2;
+
 	public MoteWaterRipple(final World world, final double x, final double y, final double z) {
 		super(world, x, y, z);
 
-		this.maxAge = 12 + RANDOM.nextInt(8);
-		this.growthRate = this.maxAge / 500F;
-		this.scale = this.growthRate;
-		this.scaledWidth = this.scale * TEX_SIZE_HALF;
+		final RippleStyle style = RippleStyle.get();
+
+		this.maxAge = style.getMaxAge();
+
+		if (style.doScaling()) {
+			this.growthRate = this.maxAge / 500F;
+			this.scale = this.growthRate;
+			this.scaledWidth = this.scale * TEX_SIZE_HALF;
+		} else {
+			this.growthRate = 0F;
+			this.scale = 0F;
+			this.scaledWidth = 0.25F / 1.5F;
+		}
+
 		this.posY -= 0.2D;
 
 		final Color waterColor = BiomeUtil.getColorForLiquid(world, this.position);
 		this.red = waterColor.red;
 		this.green = waterColor.green;
 		this.blue = waterColor.blue;
+
+		this.texU1 = style.getU1(this.age);
+		this.texU2 = style.getU2(this.age);
+		this.texV1 = style.getV1(this.age);
+		this.texV2 = style.getV2(this.age);
 	}
 
 	@Override
 	public void update() {
-		this.scale += this.growthRate;
-		this.scaledWidth = this.scale * TEX_SIZE_HALF;
-		this.alpha = (float) (this.maxAge - this.age) / (float) (this.maxAge + 3);
+		final RippleStyle style = RippleStyle.get();
+		if (style.doScaling()) {
+			this.scale += this.growthRate;
+			this.scaledWidth = this.scale * TEX_SIZE_HALF;
+		}
+
+		if (style.doAlpha()) {
+			this.alpha = (float) (this.maxAge - this.age) / (float) (this.maxAge + 3);
+		}
+
+		this.texU1 = style.getU1(this.age);
+		this.texU2 = style.getU2(this.age);
+		this.texV1 = style.getV1(this.age);
+		this.texV2 = style.getV2(this.age);
 	}
 
 	@Override
@@ -72,10 +101,10 @@ public class MoteWaterRipple extends MoteAgeable {
 		final float y = renderY(partialTicks);
 		final float z = renderZ(partialTicks);
 
-		drawVertex(buffer, -this.scaledWidth + x, y, this.scaledWidth + z, 0, 1);
-		drawVertex(buffer, this.scaledWidth + x, y, this.scaledWidth + z, 1, 1);
-		drawVertex(buffer, this.scaledWidth + x, y, -this.scaledWidth + z, 1, 0);
-		drawVertex(buffer, -this.scaledWidth + x, y, -this.scaledWidth + z, 0, 0);
+		drawVertex(buffer, -this.scaledWidth + x, y, this.scaledWidth + z, this.texU2, this.texV2);
+		drawVertex(buffer, this.scaledWidth + x, y, this.scaledWidth + z, this.texU2, this.texV1);
+		drawVertex(buffer, this.scaledWidth + x, y, -this.scaledWidth + z, this.texU1, this.texV1);
+		drawVertex(buffer, -this.scaledWidth + x, y, -this.scaledWidth + z, this.texU1, this.texV2);
 	}
 
 }
