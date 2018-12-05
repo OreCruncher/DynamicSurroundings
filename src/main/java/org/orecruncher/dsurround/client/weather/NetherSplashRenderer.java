@@ -44,21 +44,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class NetherSplashRenderer extends StormSplashRenderer {
 
 	@Override
-	protected SoundEvent getBlockSoundFX(final Block block, final PrecipitationType pt, final World world) {
+	protected SoundEvent getBlockSoundFX(final Block block, final PrecipitationType pt) {
 		return pt == PrecipitationType.DUST ? Weather.getWeatherProperties().getDustSound() : null;
 	}
 
 	@Override
 	protected void spawnBlockParticle(final IBlockState state, final boolean dust, final World world, final double x,
 			final double y, final double z) {
-
 		if (dust)
 			ParticleHelper.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z);
 	}
 
 	@Override
-	protected BlockPos getPrecipitationHeight(final ISeasonInfo season, final World world, final int range,
-			final BlockPos pos) {
+	protected BlockPos getPrecipitationHeight(final ISeasonInfo season, final int range, final BlockPos pos) {
 		final int y = EnvironState.getPlayerPosition().getY();
 		final BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos(pos);
 		boolean airBlockFound = false;

@@ -71,16 +71,13 @@ public class StormSplashRenderer {
 	private static final StormSplashRenderer DEFAULT = new StormSplashRenderer();
 
 	static {
-		splashRenderers.put(0, DEFAULT);
+		splashRenderers.defaultReturnValue(DEFAULT);
 		splashRenderers.put(-1, new NetherSplashRenderer());
 		splashRenderers.put(1, new NullSplashRenderer());
 	}
 
 	public static void renderStormSplashes(final int dimensionId, final EntityRenderer renderer) {
-		StormSplashRenderer splash = splashRenderers.get(dimensionId);
-		if (splash == null)
-			splash = DEFAULT;
-		splash.addRainParticles(renderer);
+		splashRenderers.get(dimensionId).addRainParticles(renderer);
 	}
 
 	protected final Random RANDOM = new XorShiftRandom();
@@ -88,10 +85,6 @@ public class StormSplashRenderer {
 	protected final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
 	protected int rainSoundCounter = 0;
-
-	protected StormSplashRenderer() {
-
-	}
 
 	protected float calculateRainSoundVolume(final World world) {
 		final float currentVolume = Weather.getCurrentVolume();
@@ -122,7 +115,7 @@ public class StormSplashRenderer {
 			ParticleHelper.spawnParticle(particleType, x, y, z);
 	}
 
-	protected SoundEvent getBlockSoundFX(final Block block, final PrecipitationType pt, final World world) {
+	protected SoundEvent getBlockSoundFX(final Block block, final PrecipitationType pt) {
 		if (pt == PrecipitationType.DUST)
 			return Weather.getWeatherProperties().getDustSound();
 		if (block == Blocks.NETHERRACK)
@@ -130,8 +123,7 @@ public class StormSplashRenderer {
 		return Weather.getWeatherProperties().getStormSound();
 	}
 
-	protected BlockPos getPrecipitationHeight(final ISeasonInfo season, final World world, final int range,
-			final BlockPos pos) {
+	protected BlockPos getPrecipitationHeight(final ISeasonInfo season, final int range, final BlockPos pos) {
 		return season.getPrecipitationHeight(pos);
 	}
 
@@ -140,13 +132,13 @@ public class StormSplashRenderer {
 				&& BiomeUtil.<BiomeInfo>getBiomeData(biome).getHasDust();
 	}
 
-	protected void playSplashSound(final EntityRenderer renderer, final ISeasonInfo season, final World world,
-			final Entity player, double x, double y, double z) {
+	protected void playSplashSound(final ISeasonInfo season, final World world, final Entity player, double x, double y,
+			double z) {
 
 		this.pos.setPos(x, y - 1, z);
 		final PrecipitationType pt = season.getPrecipitationType(this.pos, null);
 		final Block block = ClientChunkCache.instance().getBlockState(this.pos).getBlock();
-		final SoundEvent sound = getBlockSoundFX(block, pt, world);
+		final SoundEvent sound = getBlockSoundFX(block, pt);
 		if (sound != null) {
 			final float volume = calculateRainSoundVolume(world);
 			float pitch = 1.0F;
@@ -206,7 +198,7 @@ public class StormSplashRenderer {
 			if (!RandomThings.shouldRain(world, this.pos))
 				continue;
 
-			final BlockPos precipHeight = getPrecipitationHeight(season, world, RANGE / 2, this.pos);
+			final BlockPos precipHeight = getPrecipitationHeight(season, RANGE / 2, this.pos);
 			final PrecipitationType pt = season.getPrecipitationType(precipHeight, null);
 			final boolean hasDust = pt == PrecipitationType.DUST;
 
@@ -231,7 +223,7 @@ public class StormSplashRenderer {
 
 		if (particlesSpawned > 0 && this.RANDOM.nextInt(PARTICLE_SOUND_CHANCE) < this.rainSoundCounter++) {
 			this.rainSoundCounter = 0;
-			playSplashSound(theThis, season, world, entity, spawnX, spawnY, spawnZ);
+			playSplashSound(season, world, entity, spawnX, spawnY, spawnZ);
 		}
 	}
 }
