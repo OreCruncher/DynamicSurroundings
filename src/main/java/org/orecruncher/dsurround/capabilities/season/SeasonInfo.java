@@ -50,26 +50,42 @@ public class SeasonInfo implements ISeasonInfo {
 	protected static final float BREATH_TEMP = 0.2F;
 	protected static final String noSeason = Localization.loadString("dsurround.season.noseason");
 
+	protected final World world;
+
+	public SeasonInfo() {
+		this.world = null;
+	}
+
+	public SeasonInfo(@Nonnull final World world) {
+		this.world = world;
+	}
+
 	@Override
 	@Nonnull
-	public SeasonType getSeasonType(@Nonnull final World world) {
+	public World getWorld() {
+		return this.world;
+	}
+	
+	@Override
+	@Nonnull
+	public SeasonType getSeasonType() {
 		return SeasonType.NONE;
 	}
 
 	@Override
 	@Nonnull
-	public SeasonType.SubType getSeasonSubType(@Nonnull final World world) {
+	public SeasonType.SubType getSeasonSubType() {
 		return SeasonType.SubType.NONE;
 	}
 
 	@Override
 	@Nonnull
-	public String getSeasonString(@Nonnull final World world) {
-		final SeasonType season = getSeasonType(world);
+	public String getSeasonString() {
+		final SeasonType season = getSeasonType();
 		if (season == SeasonType.NONE)
 			return noSeason;
 
-		final SeasonType.SubType sub = getSeasonSubType(world);
+		final SeasonType.SubType sub = getSeasonSubType();
 		final String seasonStr = Localization.loadString("dsurround.season." + season.getValue());
 		final String subSeasonStr = Localization.loadString("dsurround.season." + sub.getValue());
 		return Localization.format("dsurround.season.format", subSeasonStr, seasonStr);
@@ -77,32 +93,31 @@ public class SeasonInfo implements ISeasonInfo {
 
 	@Override
 	@Nonnull
-	public TemperatureRating getPlayerTemperature(@Nonnull final World world) {
-		return getBiomeTemperature(world, EnvironState.getPlayerPosition());
+	public TemperatureRating getPlayerTemperature() {
+		return getBiomeTemperature(EnvironState.getPlayerPosition());
 	}
 
 	@Override
 	@Nonnull
-	public TemperatureRating getBiomeTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return TemperatureRating.fromTemp(getTemperature(world, pos));
+	public TemperatureRating getBiomeTemperature(@Nonnull final BlockPos pos) {
+		return TemperatureRating.fromTemp(getTemperature(pos));
 	}
 
 	@Override
 	@Nonnull
-	public BlockPos getPrecipitationHeight(@Nonnull final World world, @Nonnull final BlockPos pos) {
+	public BlockPos getPrecipitationHeight(@Nonnull final BlockPos pos) {
 		return ClientChunkCache.instance().getPrecipitationHeight(pos);
 	}
 
 	@Override
-	public float getFloatTemperature(@Nonnull final World world, @Nonnull final Biome biome,
-			@Nonnull final BlockPos pos) {
+	public float getFloatTemperature(@Nonnull final Biome biome, @Nonnull final BlockPos pos) {
 		return RegistryManager.BIOME.get(biome).getFloatTemperature(pos);
 	}
 
 	@Override
-	public float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos) {
+	public float getTemperature(@Nonnull final BlockPos pos) {
 		final Biome biome = ClientChunkCache.instance().getBiome(pos);
-		return getFloatTemperature(world, biome, pos);
+		return getFloatTemperature(biome, pos);
 	}
 
 	/**
@@ -112,8 +127,8 @@ public class SeasonInfo implements ISeasonInfo {
 	 * @return true if water can freeze, false otherwise
 	 */
 	@Override
-	public boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getTemperature(world, pos) < FREEZE_TEMP;
+	public boolean canWaterFreeze(@Nonnull final BlockPos pos) {
+		return getTemperature(pos) < FREEZE_TEMP;
 	}
 
 	/**
@@ -122,8 +137,8 @@ public class SeasonInfo implements ISeasonInfo {
 	 * @return true if it is possible, false otherwise
 	 */
 	@Override
-	public boolean showFrostBreath(@Nonnull final World world, @Nonnull final BlockPos pos) {
-		return getTemperature(world, pos) < BREATH_TEMP;
+	public boolean showFrostBreath(@Nonnull final BlockPos pos) {
+		return getTemperature(pos) < BREATH_TEMP;
 	}
 
 	protected boolean doDust(@Nonnull final BiomeInfo biome) {
@@ -141,8 +156,7 @@ public class SeasonInfo implements ISeasonInfo {
 	 * @return The precipitation type to render when raining
 	 */
 	@Override
-	public PrecipitationType getPrecipitationType(@Nonnull final World world, @Nonnull final BlockPos pos,
-			@Nullable BiomeInfo biome) {
+	public PrecipitationType getPrecipitationType(@Nonnull final BlockPos pos, @Nullable BiomeInfo biome) {
 
 		if (biome == null)
 			biome = RegistryManager.BIOME.get(ClientChunkCache.instance().getBiome(pos));
@@ -153,7 +167,7 @@ public class SeasonInfo implements ISeasonInfo {
 		if (doDust(biome))
 			return PrecipitationType.DUST;
 
-		return getFloatTemperature(world, biome.getBiome(), pos) < FREEZE_TEMP ? PrecipitationType.SNOW
+		return getFloatTemperature(biome.getBiome(), pos) < FREEZE_TEMP ? PrecipitationType.SNOW
 				: PrecipitationType.RAIN;
 	}
 
@@ -161,17 +175,17 @@ public class SeasonInfo implements ISeasonInfo {
 
 		if (world.provider.getDimension() == -1) {
 			ModBase.log().info("Creating Nether SeasonInfo");
-			return new SeasonInfoNether();
+			return new SeasonInfoNether(world);
 		}
 
 		if (ModEnvironment.SereneSeasons.isLoaded()) {
 			ModBase.log().info("Creating Serene Seasons SeasonInfo for dimension %s",
 					world.provider.getDimensionType().getName());
-			return new SeasonInfoSereneSeasons();
+			return new SeasonInfoSereneSeasons(world);
 		}
 
 		ModBase.log().info("Creating default SeasonInfo for dimension %s", world.provider.getDimensionType().getName());
-		return new SeasonInfo();
+		return new SeasonInfo(world);
 	}
 
 }

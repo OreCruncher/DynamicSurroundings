@@ -39,31 +39,33 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface ISeasonInfo {
 
 	@Nonnull
-	SeasonType getSeasonType(@Nonnull final World world);
+	World getWorld();
+	
+	@Nonnull
+	SeasonType getSeasonType();
 
 	@Nonnull
-	SeasonType.SubType getSeasonSubType(@Nonnull final World world);
+	SeasonType.SubType getSeasonSubType();
 
 	@Nonnull
-	String getSeasonString(@Nonnull final World world);
+	String getSeasonString();
 
 	@Nonnull
-	TemperatureRating getPlayerTemperature(@Nonnull final World world);
+	TemperatureRating getPlayerTemperature();
 
 	@Nonnull
-	TemperatureRating getBiomeTemperature(@Nonnull final World world, @Nonnull final BlockPos pos);
+	TemperatureRating getBiomeTemperature(@Nonnull final BlockPos pos);
 
 	@Nonnull
-	BlockPos getPrecipitationHeight(@Nonnull final World world, @Nonnull final BlockPos pos);
+	BlockPos getPrecipitationHeight(@Nonnull final BlockPos pos);
 
-	float getFloatTemperature(@Nonnull final World world, @Nonnull final Biome biome, @Nonnull final BlockPos pos);
+	float getFloatTemperature(@Nonnull final Biome biome, @Nonnull final BlockPos pos);
 
-	float getTemperature(@Nonnull final World world, @Nonnull final BlockPos pos);
+	float getTemperature(@Nonnull final BlockPos pos);
 
-	boolean canWaterFreeze(@Nonnull final World world, @Nonnull final BlockPos pos);
+	boolean canWaterFreeze(@Nonnull final BlockPos pos);
 
-	boolean showFrostBreath(@Nonnull final World world, @Nonnull final BlockPos pos);
+	boolean showFrostBreath(@Nonnull final BlockPos pos);
 
-	PrecipitationType getPrecipitationType(@Nonnull final World world, @Nonnull final BlockPos pos,
-			@Nullable BiomeInfo biome);
+	PrecipitationType getPrecipitationType(@Nonnull final BlockPos pos, @Nullable BiomeInfo biome);
 }

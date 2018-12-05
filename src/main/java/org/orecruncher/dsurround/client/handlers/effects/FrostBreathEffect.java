@@ -82,7 +82,7 @@ public class FrostBreathEffect extends EntityEffect {
 		if (entity.isInsideOfMaterial(Material.AIR)) {
 			final World world = entity.getEntityWorld();
 			final BlockPos entityPos = entity.getPosition();
-			return CapabilitySeasonInfo.getCapability(world).showFrostBreath(world, entityPos);
+			return CapabilitySeasonInfo.getCapability(world).showFrostBreath(entityPos);
 		}
 		return false;
 	}

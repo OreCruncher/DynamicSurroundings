@@ -36,21 +36,21 @@ public class SeasonVariables extends DynamicVariantList {
 			@Override
 			public void update() {
 				final World world = EnvironState.getWorld();
-				this.value = CapabilitySeasonInfo.getCapability(world).getSeasonString(world);
+				this.value = CapabilitySeasonInfo.getCapability(world).getSeasonString();
 			}
 		});
 		add(new Dynamic.DynamicString("season.type") {
 			@Override
 			public void update() {
 				final World world = EnvironState.getWorld();
-				this.value = CapabilitySeasonInfo.getCapability(world).getSeasonType(world).getValue();
+				this.value = CapabilitySeasonInfo.getCapability(world).getSeasonType().getValue();
 			}
 		});
 		add(new Dynamic.DynamicString("season.subtype") {
 			@Override
 			public void update() {
 				final World world = EnvironState.getWorld();
-				this.value = CapabilitySeasonInfo.getCapability(world).getSeasonSubType(world).getValue();
+				this.value = CapabilitySeasonInfo.getCapability(world).getSeasonSubType().getValue();
 			}
 		});
 

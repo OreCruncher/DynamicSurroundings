@@ -143,8 +143,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.inside = stateHandler == null ? false : stateHandler.isReallyInside();
 
 			EnvironState.truePlayerBiome = biomes.getPlayerBiome(player, true);
-			EnvironState.playerTemperature = season.getPlayerTemperature(world);
-			EnvironState.biomeTemperature = season.getBiomeTemperature(world, getPlayerPosition());
+			EnvironState.playerTemperature = season.getPlayerTemperature();
+			EnvironState.biomeTemperature = season.getBiomeTemperature(getPlayerPosition());
 
 			EnvironState.armorStack = ItemClass.effectiveArmorStack(player);
 			EnvironState.footArmorStack = ItemClass.footArmorStack(player);

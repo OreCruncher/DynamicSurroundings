@@ -24,6 +24,7 @@
 
 package org.orecruncher.dsurround.client.weather;
 
+import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.PrecipitationType;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.lib.chunk.ClientChunkCache;
@@ -56,7 +57,8 @@ public class NetherSplashRenderer extends StormSplashRenderer {
 	}
 
 	@Override
-	protected BlockPos getPrecipitationHeight(final World world, final int range, final BlockPos pos) {
+	protected BlockPos getPrecipitationHeight(final ISeasonInfo season, final World world, final int range,
+			final BlockPos pos) {
 		final int y = EnvironState.getPlayerPosition().getY();
 		final BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos(pos);
 		boolean airBlockFound = false;

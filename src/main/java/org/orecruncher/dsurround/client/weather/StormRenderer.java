@@ -164,7 +164,7 @@ public class StormRenderer {
 
 				final BiomeInfo biome = RegistryManager.BIOME.get(ClientChunkCache.instance().getBiome(this.mutable));
 
-				final int precipHeight = season.getPrecipitationHeight(world, this.mutable).getY();
+				final int precipHeight = season.getPrecipitationHeight(this.mutable).getY();
 				final int k2 = Math.max(playerY - range, precipHeight);
 				final int l2 = Math.max(playerY + range, precipHeight);
 				if (k2 == l2)
@@ -172,7 +172,7 @@ public class StormRenderer {
 
 				this.mutable.setPos(gridX, k2, gridZ);
 
-				final PrecipitationType pt = season.getPrecipitationType(world, this.mutable, biome);
+				final PrecipitationType pt = season.getPrecipitationType(this.mutable, biome);
 				if (pt == PrecipitationType.NONE)
 					continue;
 

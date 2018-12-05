@@ -67,9 +67,9 @@ public class RainSplashAccent implements IFootstepAccentProvider {
 			final World world = entity.getEntityWorld();
 			final ISeasonInfo season = CapabilitySeasonInfo.getCapability(world);
 			if (season != null) {
-				final int precipHeight = season.getPrecipitationHeight(world, this.mutable).getY();
+				final int precipHeight = season.getPrecipitationHeight(this.mutable).getY();
 				if (precipHeight == this.mutable.getY()) {
-					final PrecipitationType pt = season.getPrecipitationType(world, this.mutable, null);
+					final PrecipitationType pt = season.getPrecipitationType(this.mutable, null);
 					if (pt == PrecipitationType.RAIN)
 						in.addAll(RegistryManager.FOOTSTEPS.SPLASH);
 				}

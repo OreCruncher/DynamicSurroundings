@@ -36,7 +36,8 @@ import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.client.sound.AdhocSound;
 import org.orecruncher.dsurround.client.sound.BasicSound;
 import org.orecruncher.dsurround.client.weather.compat.RandomThings;
-import org.orecruncher.dsurround.registry.RegistryManager;
+import org.orecruncher.dsurround.registry.biome.BiomeInfo;
+import org.orecruncher.dsurround.registry.biome.BiomeUtil;
 import org.orecruncher.lib.WorldUtils;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.gfx.ParticleHelper;
@@ -129,21 +130,21 @@ public class StormSplashRenderer {
 		return Weather.getWeatherProperties().getStormSound();
 	}
 
-	protected BlockPos getPrecipitationHeight(final World world, final int range, final BlockPos pos) {
-		return CapabilitySeasonInfo.getCapability(world).getPrecipitationHeight(world, pos);
+	protected BlockPos getPrecipitationHeight(final ISeasonInfo season, final World world, final int range,
+			final BlockPos pos) {
+		return season.getPrecipitationHeight(pos);
 	}
 
 	protected boolean biomeHasDust(final Biome biome) {
-		return ModOptions.fog.allowDesertFog && !Weather.doVanilla() && RegistryManager.BIOME.get(biome).getHasDust();
+		return ModOptions.fog.allowDesertFog && !Weather.doVanilla()
+				&& BiomeUtil.<BiomeInfo>getBiomeData(biome).getHasDust();
 	}
 
-	protected void playSplashSound(final EntityRenderer renderer, final World world, final Entity player, double x,
-			double y, double z) {
-
-		final ISeasonInfo si = CapabilitySeasonInfo.getCapability(world);
+	protected void playSplashSound(final EntityRenderer renderer, final ISeasonInfo season, final World world,
+			final Entity player, double x, double y, double z) {
 
 		this.pos.setPos(x, y - 1, z);
-		final PrecipitationType pt = si.getPrecipitationType(world, this.pos, null);
+		final PrecipitationType pt = season.getPrecipitationType(this.pos, null);
 		final Block block = ClientChunkCache.instance().getBlockState(this.pos).getBlock();
 		final SoundEvent sound = getBlockSoundFX(block, pt, world);
 		if (sound != null) {
@@ -151,7 +152,7 @@ public class StormSplashRenderer {
 			float pitch = 1.0F;
 			final int playerY = MathHelper.floor(player.posY);
 			this.pos.setPos(player.posX, 0, player.posZ);
-			if (y > player.posY + 1.0D && si.getPrecipitationHeight(world, this.pos).getY() > playerY)
+			if (y > player.posY + 1.0D && season.getPrecipitationHeight(this.pos).getY() > playerY)
 				pitch = 0.5F;
 			pitch -= (this.RANDOM.nextFloat() - this.RANDOM.nextFloat()) * 0.1F;
 			this.pos.setPos(x, y, z);
@@ -195,6 +196,8 @@ public class StormSplashRenderer {
 		if (mc.gameSettings.particleSetting == 1)
 			particleCount >>= 1;
 
+		final ISeasonInfo season = CapabilitySeasonInfo.getCapability(world);
+
 		for (int j1 = 0; j1 < particleCount; ++j1) {
 			final int locX = playerX + this.RANDOM.nextInt(RANGE) - this.RANDOM.nextInt(RANGE);
 			final int locZ = playerZ + this.RANDOM.nextInt(RANGE) - this.RANDOM.nextInt(RANGE);
@@ -203,9 +206,8 @@ public class StormSplashRenderer {
 			if (!RandomThings.shouldRain(world, this.pos))
 				continue;
 
-			final BlockPos precipHeight = getPrecipitationHeight(world, RANGE / 2, this.pos);
-			final PrecipitationType pt = CapabilitySeasonInfo.getCapability(world).getPrecipitationType(world,
-					precipHeight, null);
+			final BlockPos precipHeight = getPrecipitationHeight(season, world, RANGE / 2, this.pos);
+			final PrecipitationType pt = season.getPrecipitationType(precipHeight, null);
 			final boolean hasDust = pt == PrecipitationType.DUST;
 
 			if ((hasDust || pt == PrecipitationType.RAIN) && precipHeight.getY() <= playerY + RANGE
@@ -229,7 +231,7 @@ public class StormSplashRenderer {
 
 		if (particlesSpawned > 0 && this.RANDOM.nextInt(PARTICLE_SOUND_CHANCE) < this.rainSoundCounter++) {
 			this.rainSoundCounter = 0;
-			playSplashSound(theThis, world, entity, spawnX, spawnY, spawnZ);
+			playSplashSound(theThis, season, world, entity, spawnX, spawnY, spawnZ);
 		}
 	}
 }

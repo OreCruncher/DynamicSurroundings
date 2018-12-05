@@ -182,8 +182,8 @@ public class CompassHUD extends GuiOverlay {
 			if (showSeason()) {
 				final World world = EnvironState.getWorld();
 				final ISeasonInfo info = CapabilitySeasonInfo.getCapability(world);
-				if (info.getSeasonType(world) != SeasonType.NONE)
-					text.add(info.getSeasonString(world));
+				if (info.getSeasonType() != SeasonType.NONE)
+					text.add(info.getSeasonString());
 			}
 
 			if (showClock()) {

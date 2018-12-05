@@ -69,7 +69,7 @@ public class WeatherVariables extends DynamicVariantList {
 			public void update() {
 				final World world = EnvironState.getWorld();
 				final ISeasonInfo season = CapabilitySeasonInfo.getCapability(world);
-				this.value = season.getTemperature(world, EnvironState.getPlayerPosition());
+				this.value = season.getTemperature(EnvironState.getPlayerPosition());
 			}
 		});
 		add(new Dynamic.DynamicString("weather.temperature") {
@@ -83,7 +83,7 @@ public class WeatherVariables extends DynamicVariantList {
 			public void update() {
 				final World world = EnvironState.getWorld();
 				final ISeasonInfo season = CapabilitySeasonInfo.getCapability(world);
-				this.value = season.canWaterFreeze(world, EnvironState.getPlayerPosition());
+				this.value = season.canWaterFreeze(EnvironState.getPlayerPosition());
 			}
 		});
 	}

@@ -65,8 +65,8 @@ public class SeasonFogRangeCalculator extends MorningFogRangeCalculator {
 		final World world = EnvironState.getWorld();
 		final ISeasonInfo cap = CapabilitySeasonInfo.getCapability(world);
 		if (cap != null) {
-			final SeasonType t = cap.getSeasonType(world);
-			final SeasonType.SubType st = cap.getSeasonSubType(world);
+			final SeasonType t = cap.getSeasonType();
+			final SeasonType.SubType st = cap.getSeasonSubType();
 			final FogType type = MAPPING.get(new SeasonKey(t, st));
 			if (type != null)
 				return type;

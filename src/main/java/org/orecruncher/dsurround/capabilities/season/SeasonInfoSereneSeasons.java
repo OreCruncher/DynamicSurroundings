@@ -44,10 +44,14 @@ import sereneseasons.config.BiomeConfig;
 @SideOnly(Side.CLIENT)
 public class SeasonInfoSereneSeasons extends SeasonInfo {
 
+	public SeasonInfoSereneSeasons(@Nonnull final World world) {
+		super(world);
+	}
+	
 	@Override
 	@Nonnull
-	public SeasonType getSeasonType(@Nonnull final World world) {
-		final Season season = SeasonHelper.getSeasonState(world).getSeason();
+	public SeasonType getSeasonType() {
+		final Season season = SeasonHelper.getSeasonState(this.world).getSeason();
 		switch (season) {
 		case SUMMER:
 			return SeasonType.SUMMER;
@@ -64,8 +68,8 @@ public class SeasonInfoSereneSeasons extends SeasonInfo {
 
 	@Override
 	@Nonnull
-	public SeasonType.SubType getSeasonSubType(@Nonnull final World world) {
-		final Season.SubSeason sub = SeasonHelper.getSeasonState(world).getSubSeason();
+	public SeasonType.SubType getSeasonSubType() {
+		final Season.SubSeason sub = SeasonHelper.getSeasonState(this.world).getSubSeason();
 		switch (sub) {
 		case EARLY_SUMMER:
 		case EARLY_AUTUMN:
@@ -88,20 +92,19 @@ public class SeasonInfoSereneSeasons extends SeasonInfo {
 	}
 
 	@Override
-	public float getFloatTemperature(@Nonnull final World world, @Nonnull final Biome biome, @Nonnull final BlockPos pos) {
-		return BiomeHooks.getFloatTemperature(world, biome, pos);
+	public float getFloatTemperature(@Nonnull final Biome biome, @Nonnull final BlockPos pos) {
+		return BiomeHooks.getFloatTemperature(this.world, biome, pos);
 	}
-	
+
 	@Override
-	public PrecipitationType getPrecipitationType(@Nonnull final World world, @Nonnull final BlockPos pos,
-			@Nullable BiomeInfo biome) {
+	public PrecipitationType getPrecipitationType(@Nonnull final BlockPos pos, @Nullable BiomeInfo biome) {
 
 		if (biome == null)
 			biome = RegistryManager.BIOME.get(ClientChunkCache.instance().getBiome(pos));
 
 		final Biome trueBiome = biome.getBiome();
 		if (trueBiome != null && BiomeConfig.usesTropicalSeasons(trueBiome)) {
-			final Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
+			final Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(this.world).getTropicalSeason();
 
 			switch (tropicalSeason) {
 			case MID_DRY:
@@ -115,7 +118,7 @@ public class SeasonInfoSereneSeasons extends SeasonInfo {
 			}
 		}
 
-		return super.getPrecipitationType(world, pos, biome);
+		return super.getPrecipitationType(pos, biome);
 	}
 
 }
