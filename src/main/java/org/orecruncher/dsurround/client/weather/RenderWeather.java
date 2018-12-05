@@ -33,6 +33,7 @@ import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironStat
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.event.world.WorldEvent;
@@ -44,27 +45,31 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class RenderWeather extends IRenderHandler {
 
-	private final StormRenderer renderer;
+	private final StormRenderer stormRenderer;
 
 	public static int rendererUpdateCount = 0;
 
 	protected RenderWeather() {
-		this.renderer = new StormRenderer();
+		this.stormRenderer = new StormRenderer();
 	}
 
 	/**
 	 * Render rain particles. Redirect from EntityRenderer. Why can't there be a
 	 * hook like that for rain/snow rendering?
 	 */
-	public static void addRainParticles(@Nonnull final EntityRenderer theThis) {
-		rendererUpdateCount++;
-		if (EnvironState.getWorld() != null)
+	public static boolean addRainParticles(@Nonnull final EntityRenderer theThis) {
+		final World world = EnvironState.getWorld();
+		if (world != null && world.provider.getWeatherRenderer() instanceof RenderWeather) {
+			rendererUpdateCount++;
 			StormSplashRenderer.renderStormSplashes(EnvironState.getDimensionId(), theThis);
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public void render(final float partialTicks, @Nonnull final WorldClient world, @Nonnull final Minecraft mc) {
-		this.renderer.render(mc.entityRenderer, partialTicks);
+		this.stormRenderer.render(mc.entityRenderer, partialTicks);
 	}
 
 	/**
@@ -73,7 +78,7 @@ public final class RenderWeather extends IRenderHandler {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onWorldLoad(@Nonnull final WorldEvent.Load e) {
 
-		if (ModBase.proxy().effectiveSide() == Side.SERVER || !ModOptions.asm.enableWeatherASM)
+		if (!ModOptions.asm.enableWeatherASM || !e.getWorld().isRemote)
 			return;
 
 		// Only want to hook if the provider doesn't have special

@@ -29,9 +29,13 @@ import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import static org.objectweb.asm.Opcodes.RETURN;
 
 import org.apache.commons.lang3.StringUtils;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
@@ -53,6 +57,11 @@ public class PatchEntityRenderer extends Transmorgrifier {
 	}
 
 	@Override
+	public int classWriterFlags() {
+		return ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES;
+	}
+
+	@Override
 	public boolean transmorgrify(final ClassNode cn) {
 
 		final String names[] = { "addRainParticles", "func_78484_h" };
@@ -62,17 +71,18 @@ public class PatchEntityRenderer extends Transmorgrifier {
 		if (m != null) {
 			logMethod(Transformer.log(), m, "Found!");
 
-			m.localVariables = null;
-			final InsnList list = new InsnList();
-			list.add(new VarInsnNode(ALOAD, 0));
-
 			final String owner = "org/orecruncher/dsurround/client/weather/RenderWeather";
 			final String targetName = "addRainParticles";
-			final String sig1 = "(Lnet/minecraft/client/renderer/EntityRenderer;)V";
+			final String sig1 = "(Lnet/minecraft/client/renderer/EntityRenderer;)Z";
 
+			final InsnList list = new InsnList();
+			final LabelNode label = new LabelNode();
+			list.add(new VarInsnNode(ALOAD, 0));
 			list.add(new MethodInsnNode(INVOKESTATIC, owner, targetName, sig1, false));
+			list.add(new JumpInsnNode(Opcodes.IFEQ, label));
 			list.add(new InsnNode(RETURN));
-			m.instructions = list;
+			list.add(label);
+			m.instructions.insert(list);
 			return true;
 		} else {
 			Transformer.log().error("Unable to locate method {}{}", names[0], sig);
@@ -82,5 +92,4 @@ public class PatchEntityRenderer extends Transmorgrifier {
 
 		return false;
 	}
-
 }

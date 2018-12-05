@@ -44,6 +44,7 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
@@ -137,10 +138,10 @@ public class DiagnosticHandler extends EffectHandlerBase {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void worldLoad(@Nonnull final WorldEvent.Load event) {
 		if (ModOptions.logging.enableDebugLogging && event.getWorld() instanceof WorldClient) {
+			final IRenderHandler handler = event.getWorld().provider.getWeatherRenderer();
 			ModBase.log().debug("World class     : %s", event.getWorld().getClass().getName());
 			ModBase.log().debug("World Provider  : %s", event.getWorld().provider.getClass().getName());
-			ModBase.log().debug("Weather Renderer: %s",
-					event.getWorld().provider.getWeatherRenderer().getClass().getName());
+			ModBase.log().debug("Weather Renderer: %s", handler != null ? handler.getClass().getName() : "VANILLA");
 			ModBase.log().debug("Entity Renderer : %s", Minecraft.getMinecraft().entityRenderer.getClass().getName());
 			ModBase.log().debug("Particle Manager: %s", Minecraft.getMinecraft().effectRenderer.getClass().getName());
 			ModBase.log().debug("Music Ticker    : %s", Minecraft.getMinecraft().getMusicTicker().getClass().getName());
