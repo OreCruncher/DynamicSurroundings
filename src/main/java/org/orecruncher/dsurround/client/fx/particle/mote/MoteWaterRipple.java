@@ -59,7 +59,7 @@ public class MoteWaterRipple extends MoteAgeable {
 		} else {
 			this.growthRate = 0F;
 			this.scale = 0F;
-			this.scaledWidth = 0.25F / 1.5F;
+			this.scaledWidth = 0.5F;
 		}
 
 		this.posY -= 0.2D;
