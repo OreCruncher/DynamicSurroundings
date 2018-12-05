@@ -33,7 +33,7 @@ import org.orecruncher.dsurround.client.aurora.AuroraUtils;
 import org.orecruncher.dsurround.client.aurora.IAurora;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
-import org.orecruncher.lib.DiurnalUtils;
+import org.orecruncher.lib.DiurnalUtils.DayCycle;
 import org.orecruncher.lib.math.TimerEMA;
 
 import net.minecraft.client.Minecraft;
@@ -69,12 +69,17 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		this.current = null;
 	}
 
+	private boolean isAuroraVisible() {
+		final DayCycle dc = EnvironState.getDayCycle();
+		return dc == DayCycle.SUNSET || dc == DayCycle.NIGHTTIME;
+	}
+	
 	private boolean spawnAurora(@Nonnull final World world) {
 		if (!ModOptions.aurora.auroraEnable)
 			return false;
 
 		if (this.current != null || Minecraft.getMinecraft().gameSettings.renderDistanceChunks < 6
-				|| DiurnalUtils.isAuroraInvisible(world))
+				|| !isAuroraVisible())
 			return false;
 		return AuroraUtils.hasAuroras() && EnvironState.getTruePlayerBiome().getHasAurora();
 	}
@@ -84,7 +89,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 			return false;
 
 		return Minecraft.getMinecraft().gameSettings.renderDistanceChunks < 6
-				|| DiurnalUtils.isAuroraVisible(world) && EnvironState.getTruePlayerBiome().getHasAurora();
+				|| isAuroraVisible() && EnvironState.getTruePlayerBiome().getHasAurora();
 	}
 
 	@Override
@@ -126,13 +131,11 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void doRender(@Nonnull final RenderWorldLastEvent event) {
-
-		final long start = System.nanoTime();
-
-		if (this.current != null)
+		if (this.current != null) {
+			final long start = System.nanoTime();
 			this.current.render(event.getPartialTicks());
-
-		this.nanos += System.nanoTime() - start;
+			this.nanos += System.nanoTime() - start;
+		}
 	}
 
 	@SubscribeEvent

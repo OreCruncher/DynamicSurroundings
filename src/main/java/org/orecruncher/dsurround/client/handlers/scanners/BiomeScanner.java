@@ -24,13 +24,12 @@
 package org.orecruncher.dsurround.client.handlers.scanners;
 
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
+import org.orecruncher.dsurround.registry.biome.BiomeUtil;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 
 import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
@@ -47,9 +46,10 @@ public final class BiomeScanner implements ITickable {
 	private static final int BIOME_SURVEY_RANGE = 20;
 	private static final int MAX_BIOME_AREA = (int) Math.pow(BIOME_SURVEY_RANGE * 2 + 1, 2);
 
-	private int biomeArea;
-	private final Reference2FloatOpenHashMap<BiomeInfo> weights = new Reference2FloatOpenHashMap<>();
 	private final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+
+	private int biomeArea;
+	private Reference2FloatOpenHashMap<BiomeInfo> weights = new Reference2FloatOpenHashMap<>();
 
 	// "Finger print" of the last area survey.
 	private BiomeInfo surveyedBiome = null;
@@ -69,32 +69,22 @@ public final class BiomeScanner implements ITickable {
 			this.surveyedPosition = position;
 
 			this.biomeArea = 0;
-			this.weights.clear();
+			this.weights = new Reference2FloatOpenHashMap<>();
 
 			if (EnvironState.getPlayerBiome().isFake()) {
 				this.biomeArea = 1;
 				this.weights.put(EnvironState.getPlayerBiome(), 1);
 			} else {
 				final IBlockAccessEx provider = ClientChunkCache.instance();
-
-				// Collect raw biome data before mapping to BiomeInfo - saves lookups
-				final Reference2IntOpenHashMap<Biome> scratch = new Reference2IntOpenHashMap<>();
-				scratch.defaultReturnValue(-1);
-
 				for (int dX = -BIOME_SURVEY_RANGE; dX <= BIOME_SURVEY_RANGE; dX++)
 					for (int dZ = -BIOME_SURVEY_RANGE; dZ <= BIOME_SURVEY_RANGE; dZ++) {
 						this.mutable.setPos(this.surveyedPosition.getX() + dX, 0, this.surveyedPosition.getZ() + dZ);
 						final Biome biome = provider.getBiome(this.mutable);
-						final int v = scratch.getInt(biome);
-						if (v == -1)
-							scratch.put(biome, 1);
-						else
-							scratch.put(biome, v + 1);
+						final BiomeInfo info = BiomeUtil.getBiomeData(biome);
+						this.weights.addTo(info, 1F);
 					}
 
 				this.biomeArea = MAX_BIOME_AREA;
-				scratch.reference2IntEntrySet().forEach(
-						entry -> this.weights.put(RegistryManager.BIOME.get(entry.getKey()), entry.getIntValue()));
 			}
 		}
 	}

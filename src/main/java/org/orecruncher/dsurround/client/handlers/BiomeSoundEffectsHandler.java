@@ -35,7 +35,6 @@ import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.lib.collections.ObjectArray;
 
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Reference2FloatMap.Entry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -63,18 +62,10 @@ public class BiomeSoundEffectsHandler extends EffectHandlerBase {
 	}
 
 	private void getBiomeSounds(@Nonnull final Object2FloatOpenHashMap<SoundEffect> result) {
-
 		// Need to collect sounds from all the applicable biomes
 		// along with their weights.
-		for (final Entry<BiomeInfo> e : this.biomes.getBiomes().reference2FloatEntrySet()) {
-			e.getKey().findSoundMatches().forEach(fx -> {
-				final float f = result.getFloat(fx);
-				if (f == -1)
-					result.put(fx, e.getFloatValue());
-				else
-					result.put(fx, f + e.getFloatValue());
-			});
-		}
+		this.biomes.getBiomes().reference2FloatEntrySet().stream()
+			.forEach(e -> e.getKey().findSoundMatches().forEach(fx -> result.addTo(fx, e.getFloatValue())));
 
 		// Scale the volumes in the resulting list based on the weights
 		final float area = this.biomes.getBiomeArea();
@@ -87,11 +78,10 @@ public class BiomeSoundEffectsHandler extends EffectHandlerBase {
 		this.biomes.update();
 
 		final Object2FloatOpenHashMap<SoundEffect> sounds = new Object2FloatOpenHashMap<>();
-		sounds.defaultReturnValue(-1F);
+		sounds.defaultReturnValue(0);
 
 		// Only gather data if the player is alive. If the player is dead the biome
-		// sounds will
-		// cease playing.
+		// sounds will cease playing.
 		if (player.isEntityAlive()) {
 
 			if (doBiomeSounds())

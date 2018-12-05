@@ -24,6 +24,7 @@ package org.orecruncher.dsurround.expression;
 
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.lib.DiurnalUtils;
+import org.orecruncher.lib.DiurnalUtils.DayCycle;
 import org.orecruncher.lib.expression.Dynamic;
 import org.orecruncher.lib.expression.DynamicVariantList;
 
@@ -33,31 +34,32 @@ public class DiurnalVariables extends DynamicVariantList {
 		add(new Dynamic.DynamicBoolean("diurnal.isDay") {
 			@Override
 			public void update() {
-				this.value = DiurnalUtils.isDaytime(EnvironState.getWorld());
+				this.value = EnvironState.getDayCycle() == DayCycle.DAYTIME;
 			}
 		});
 		add(new Dynamic.DynamicBoolean("diurnal.isNight") {
 			@Override
 			public void update() {
-				this.value = DiurnalUtils.isNighttime(EnvironState.getWorld());
+				this.value = EnvironState.getDayCycle() == DayCycle.NIGHTTIME;
 			}
 		});
 		add(new Dynamic.DynamicBoolean("diurnal.isSunrise") {
 			@Override
 			public void update() {
-				this.value = DiurnalUtils.isSunrise(EnvironState.getWorld());
+				this.value = EnvironState.getDayCycle() == DayCycle.SUNRISE;
 			}
 		});
 		add(new Dynamic.DynamicBoolean("diurnal.isSunset") {
 			@Override
 			public void update() {
-				this.value = DiurnalUtils.isSunset(EnvironState.getWorld());
+				this.value = EnvironState.getDayCycle() == DayCycle.SUNSET;
 			}
 		});
 		add(new Dynamic.DynamicBoolean("diurnal.isAuroraVisible") {
 			@Override
 			public void update() {
-				this.value = DiurnalUtils.isAuroraVisible(EnvironState.getWorld());
+				this.value = EnvironState.getDayCycle() == DayCycle.SUNRISE
+						|| EnvironState.getDayCycle() == DayCycle.DAYTIME;
 			}
 		});
 		add(new Dynamic.DynamicNumber("diurnal.moonPhaseFactor") {

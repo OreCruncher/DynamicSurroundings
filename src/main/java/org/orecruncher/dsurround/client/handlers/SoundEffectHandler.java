@@ -173,7 +173,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 				return true;
 			}
 			final float volume = sounds.getFloat(entry.getKey());
-			if (volume >= 0) {
+			if (volume > 0) {
 				emitter.setVolumeThrottle(volume);
 				if (emitter.isFading())
 					emitter.unfade();

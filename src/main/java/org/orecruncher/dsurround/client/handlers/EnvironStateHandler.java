@@ -34,7 +34,6 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
-import org.orecruncher.dsurround.capabilities.season.SeasonType;
 import org.orecruncher.dsurround.capabilities.season.TemperatureRating;
 import org.orecruncher.dsurround.client.handlers.scanners.BattleScanner;
 import org.orecruncher.dsurround.client.handlers.scanners.CeilingCoverage;
@@ -47,6 +46,8 @@ import org.orecruncher.dsurround.registry.biome.BiomeRegistry;
 import org.orecruncher.dsurround.registry.dimension.DimensionData;
 import org.orecruncher.dsurround.registry.dimension.DimensionRegistry;
 import org.orecruncher.dsurround.registry.item.ItemClass;
+import org.orecruncher.lib.DiurnalUtils;
+import org.orecruncher.lib.DiurnalUtils.DayCycle;
 import org.orecruncher.lib.MinecraftClock;
 
 import net.minecraft.client.Minecraft;
@@ -70,17 +71,12 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		// State that is gathered from the various sources
 		// to avoid requery. Used during the tick.
-		private static String biomeName;
 		private static BiomeInfo playerBiome = null;
 		private static BiomeInfo truePlayerBiome = null;
-		private static SeasonType season;
 		private static int dimensionId;
 		private static String dimensionName;
 		private static DimensionData dimInfo = DimensionData.NONE;
 		private static BlockPos playerPosition;
-		private static boolean freezing;
-		private static boolean humid;
-		private static boolean dry;
 		private static TemperatureRating playerTemperature;
 		private static TemperatureRating biomeTemperature;
 		private static boolean inside;
@@ -95,6 +91,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static int lightLevel;
 		private static int tickCounter;
 
+		private static DayCycle dayCycle;
+
 		private static MinecraftClock clock = new MinecraftClock();
 		private static BattleScanner battle = new BattleScanner();
 
@@ -105,17 +103,12 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		private static void reset() {
 			final BiomeInfo WTF = RegistryManager.BIOME.WTF_INFO;
-			biomeName = StringUtils.EMPTY;
 			playerBiome = WTF;
 			truePlayerBiome = WTF;
-			season = SeasonType.NONE;
 			dimensionId = 0;
 			dimensionName = StringUtils.EMPTY;
 			dimInfo = DimensionData.NONE;
 			playerPosition = BlockPos.ORIGIN;
-			freezing = false;
-			humid = false;
-			dry = false;
 			playerTemperature = TemperatureRating.MILD;
 			biomeTemperature = TemperatureRating.MILD;
 			inside = false;
@@ -127,6 +120,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			isInClouds = false;
 			lightLevel = 0;
 			tickCounter = 1;
+			dayCycle = DayCycle.NO_SKY;
 			clock = new MinecraftClock();
 			battle = new BattleScanner();
 		}
@@ -143,20 +137,14 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.dimInfo = dimensions.getData(player.getEntityWorld());
 			EnvironState.clock.update(getWorld());
 			EnvironState.playerBiome = biomes.getPlayerBiome(player, false);
-			EnvironState.biomeName = EnvironState.playerBiome.getBiomeName();
-			EnvironState.season = season.getSeasonType(world);
 			EnvironState.dimensionId = world.provider.getDimension();
 			EnvironState.dimensionName = world.provider.getDimensionType().getName();
 			EnvironState.playerPosition = getPlayerPos();
 			EnvironState.inside = stateHandler == null ? false : stateHandler.isReallyInside();
 
 			EnvironState.truePlayerBiome = biomes.getPlayerBiome(player, true);
-			EnvironState.freezing = EnvironState.truePlayerBiome
-					.getFloatTemperature(EnvironState.playerPosition) < 0.15F;
 			EnvironState.playerTemperature = season.getPlayerTemperature(world);
 			EnvironState.biomeTemperature = season.getBiomeTemperature(world, getPlayerPosition());
-			EnvironState.humid = EnvironState.truePlayerBiome.isHighHumidity();
-			EnvironState.dry = EnvironState.truePlayerBiome.getRainfall() < 0.2F;
 
 			EnvironState.armorStack = ItemClass.effectiveArmorStack(player);
 			EnvironState.footArmorStack = ItemClass.footArmorStack(player);
@@ -170,6 +158,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			final int skyLight = world.getLightFor(EnumSkyBlock.SKY, pos) - world.calculateSkylightSubtracted(1.0F);
 			EnvironState.lightLevel = Math.max(blockLight, skyLight);
 
+			EnvironState.dayCycle = DiurnalUtils.getCycle(world);
+			
 			// Trigger the battle scanner
 			EnvironState.battle.update();
 
@@ -198,11 +188,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static String getBiomeName() {
-			return biomeName;
-		}
-
-		public static SeasonType getSeason() {
-			return season;
+			return EnvironState.playerBiome.getBiomeName();
 		}
 
 		public static TemperatureRating getPlayerTemperature() {
@@ -346,18 +332,6 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			return isInClouds;
 		}
 
-		public static boolean isFreezing() {
-			return freezing;
-		}
-
-		public static boolean isHumid() {
-			return humid;
-		}
-
-		public static boolean isDry() {
-			return dry;
-		}
-
 		public static ItemStack getPlayerItemStack() {
 			return armorStack;
 		}
@@ -381,15 +355,15 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		public static int getTickCounter() {
 			return tickCounter;
 		}
+		
+		public static DayCycle getDayCycle() {
+			return dayCycle;
+		}
 
 		public static float getPartialTick() {
 			return Minecraft.getMinecraft().getRenderPartialTicks();
 		}
 
-		public static double distanceToPlayer(final double x, final double y, final double z) {
-			final EntityPlayer player = getPlayer();
-			return player != null ? player.getDistanceSq(x, y, z) : 0D;
-		}
 	}
 
 	protected final CeilingCoverage ceiling = new CeilingCoverage();

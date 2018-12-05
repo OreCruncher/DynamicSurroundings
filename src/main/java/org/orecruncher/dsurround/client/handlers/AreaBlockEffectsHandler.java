@@ -28,7 +28,6 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.scanners.AlwaysOnBlockEffectScanner;
-import org.orecruncher.dsurround.client.handlers.scanners.BiomeScanner;
 import org.orecruncher.dsurround.client.handlers.scanners.ClientPlayerLocus;
 import org.orecruncher.dsurround.client.handlers.scanners.RandomBlockEffectScanner;
 
@@ -47,7 +46,6 @@ public final class AreaBlockEffectsHandler extends EffectHandlerBase {
 			RandomBlockEffectScanner.FAR_RANGE);
 	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(this.locus,
 			ModOptions.effects.specialEffectRange);
-	protected final BiomeScanner biomes = new BiomeScanner();
 
 	public AreaBlockEffectsHandler() {
 		super("Area Block Effects");

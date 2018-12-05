@@ -46,7 +46,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class CeilingCoverage implements ITickable {
 
-	private static final int SURVEY_INTERVAL = 2;
+	private static final int SURVEY_INTERVAL = 4;
 	private static final int INSIDE_SURVEY_RANGE = 3;
 	private static final float INSIDE_THRESHOLD = 1.0F - 65.0F / 176.0F;
 	private static final Cell[] cells;
