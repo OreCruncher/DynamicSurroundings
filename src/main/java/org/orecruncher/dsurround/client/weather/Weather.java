@@ -52,15 +52,16 @@ public class Weather {
 
 	public enum Properties {
 		//@formatter:off
-		// Regular Vanilla rain - no modification
 		VANILLA,
 		NONE(0.0F, "calm"),
-		CALM(0.165F, "calm"),
-		LIGHT(0.330F, "light"),
-		GENTLE(0.495F, "gentle"),
-		MODERATE(0.660F, "moderate"),
-		HEAVY(0.826F, "heavy"),
-		STRONG(1.0F, "strong");
+		CALM(0.125F, "calm"),
+		LIGHT(0.25F, "light"),
+		GENTLE(0.365F, "gentle"),
+		MODERATE(0.5F, "moderate"),
+		HEAVY(0.625F, "heavy"),
+		STRONG(0.75F, "strong"),
+		INTENSE(0.875F, "intense"),
+		TORRENTIAL(1.0F, "torrential");
 		//@formatter:on
 
 		private final float level;
