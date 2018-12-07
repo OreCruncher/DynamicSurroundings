@@ -31,7 +31,6 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.handlers.trace.TraceParticleManager;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.lib.math.MathStuff;
@@ -41,7 +40,6 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.IRenderHandler;
@@ -98,14 +96,6 @@ public class DiagnosticHandler extends EffectHandlerBase {
 			}
 		} else {
 			this.diagnostics = null;
-		}
-
-		if (ModBase.isDeveloperMode()) {
-			final ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
-			if (!(pm instanceof TraceParticleManager)) {
-				ModBase.log().info("Wrapping particle manager [%s]", pm.getClass().getName());
-				Minecraft.getMinecraft().effectRenderer = new TraceParticleManager(pm);
-			}
 		}
 
 	}
