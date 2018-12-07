@@ -112,7 +112,7 @@ public class Generator {
 	public Generator(@Nonnull final Variator var) {
 		this.VAR = var;
 		this.blockMap = RegistryManager.FOOTSTEPS.getBlockMap();
-		this.soundPlayer = new SoundPlayer(this.VAR);
+		this.soundPlayer = new SoundPlayer(this.VAR.VOLUME_SCALE);
 	}
 
 	public int getPedometer() {

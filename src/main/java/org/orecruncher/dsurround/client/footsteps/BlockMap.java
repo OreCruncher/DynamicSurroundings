@@ -30,6 +30,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -253,7 +254,7 @@ public class BlockMap {
 
 	@Nonnull
 	private static String combine(@Nonnull final IAcoustic[] acoustics) {
-		return String.join(",", Arrays.stream(acoustics).map(IAcoustic::getName).toArray(String[]::new));
+		return Arrays.stream(acoustics).map(IAcoustic::getName).collect(Collectors.joining(","));
 	}
 
 	public void collectData(@Nonnull final World world, @Nonnull final IBlockState state, @Nonnull final BlockPos pos,

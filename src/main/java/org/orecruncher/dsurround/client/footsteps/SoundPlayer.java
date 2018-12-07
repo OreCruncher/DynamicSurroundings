@@ -25,19 +25,18 @@ package org.orecruncher.dsurround.client.footsteps;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
-import org.orecruncher.dsurround.client.sound.BasicSound;
 import org.orecruncher.dsurround.client.sound.FootstepSound;
 import org.orecruncher.dsurround.registry.acoustics.EventType;
 import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.dsurround.registry.acoustics.IOptions;
 import org.orecruncher.dsurround.registry.acoustics.ISoundPlayer;
-import org.orecruncher.dsurround.registry.footstep.Variator;
 import org.orecruncher.lib.TimeUtils;
 import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.random.XorShiftRandom;
@@ -52,10 +51,14 @@ public class SoundPlayer implements ISoundPlayer {
 
 	protected final Random random = XorShiftRandom.current();
 	protected final ObjectArray<PendingSound> pending = new ObjectArray<>();
-	protected final Variator var;
+	protected final float scale;
 
-	public SoundPlayer(@Nonnull final Variator var) {
-		this.var = var;
+	public SoundPlayer() {
+		this(1F);
+	}
+
+	public SoundPlayer(final float volumeScale) {
+		this.scale = volumeScale;
 	}
 
 	public void playAcoustic(@Nonnull final Association assoc, @Nonnull final EventType event) {
@@ -64,8 +67,7 @@ public class SoundPlayer implements ISoundPlayer {
 
 	private void logAcousticPlay(@Nonnull final IAcoustic[] acoustics, @Nonnull final EventType event) {
 		if (ModBase.log().isDebugging()) {
-			final String txt = String.join(",",
-					Arrays.stream(acoustics).map(IAcoustic::getName).toArray(String[]::new));
+			final String txt = Arrays.stream(acoustics).map(IAcoustic::getName).collect(Collectors.joining(","));
 			ModBase.log().debug("Playing acoustic %s for event %s", txt, event.toString().toUpperCase());
 		}
 	}
@@ -88,17 +90,14 @@ public class SoundPlayer implements ISoundPlayer {
 					+ randAB(this.random, options.getDelayMin(), options.getDelayMax());
 			this.pending.add(new PendingSound(location, sound, volume, pitch, delay, options.getDelayMax()));
 		} else {
-			actuallyPlaySound(location, sound, volume, pitch, false);
+			actuallyPlaySound(location, sound, volume, pitch);
 		}
 	}
 
 	protected void actuallyPlaySound(@Nonnull final Vec3d entity, @Nonnull final SoundEvent sound, final float volume,
-			final float pitch, final boolean noScale) {
+			final float pitch) {
 		try {
-			final FootstepSound s = new FootstepSound(entity, sound).setVolume(volume * this.var.VOLUME_SCALE)
-					.setPitch(pitch);
-			if (noScale)
-				s.setVolumeScale(BasicSound.DEFAULT_SCALE);
+			final FootstepSound s = new FootstepSound(entity, sound).setVolume(volume * this.scale).setPitch(pitch);
 			SoundEffectHandler.INSTANCE.playSound(s);
 		} catch (final Throwable t) {
 			ModBase.log().error("Unable to play sound", t);
