@@ -60,7 +60,7 @@ dependencies {
 
 	compile "craftstudio-api:CraftStudio-1.0.0.93:mc1.12:alpha"
 	compile "animania:animania:1.12.2:1.6.2"
-	compile "serene-seasons:SereneSeasons-1.12.2:1.2.12:universal"
+	compile "serene-seasons:SereneSeasons-1.12.2:1.2.13:universal"
 	compile "codechicken-lib-1-8:CodeChickenLib-1.12.2:3.2.2.353:universal"
 	compile "forge-multipart-cbe:ForgeMultipart-1.12.2:2.6.0.79:universal"
 	compile "ctm:CTM:MC1.12.2:0.3.2.20"

@@ -1,3 +1,18 @@
+### DynamicSurroundings-1.12.2-3.5.1.0
+**What's New**
+* Added script variable diurnal.celestialAngle
+* [WIP] Added pixelated water ripple rain effect.  You will need to set the config to see it.  (Thank you Forstride for the textures!)
+    * Goal is to make the ripple more Minecraft like
+* If Serene Seasons is installed morning fog may be more/less foggier during certain seasons.
+
+**Changes**
+* Only render rain splash particles if world weather renderer is hooked by Dynamic Surroundings
+    * Otherwise vanilla will render the splash particles
+    * Should improve compatibility with other mods that replace the weather renderer
+* Added additional transitions to precipitation textures to make it a bit smoother
+* Recolor rain/splash textures to use vanilla rain pixel colors
+* Rework drip effect to generate steam when hitting hot blocks, like magma.
+
 ### DynamicSurroundings-1.12.2-3.5.0.5
 * Quick hotfix to address mock EntityItems.
 
