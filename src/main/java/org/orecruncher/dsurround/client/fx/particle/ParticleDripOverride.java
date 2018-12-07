@@ -41,6 +41,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleDrip;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -54,6 +55,7 @@ public class ParticleDripOverride extends ParticleDrip {
 	private boolean firstTime = true;
 	private final Material materialType;
 	private final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+	private int bobTimer = 40;
 
 	protected ParticleDripOverride(final World worldIn, final double xCoordIn, final double yCoordIn,
 			final double zCoordIn, final Material materialType) {
@@ -63,78 +65,133 @@ public class ParticleDripOverride extends ParticleDrip {
 	}
 
 	private boolean doSteamHiss(@Nonnull final IBlockState state) {
-		final Material blockMaterial = state.getMaterial();
-		if (this.materialType == Material.LAVA && blockMaterial == Material.WATER)
+		if (this.materialType == Material.LAVA && state.getMaterial() == Material.WATER)
 			return true;
-		return this.materialType == Material.WATER && blockMaterial == Material.LAVA;
+		return this.materialType == Material.WATER && ParticleSteamCloud.isHotBlock(state.getBlock());
 	}
 
 	@Override
 	public void onUpdate() {
-		super.onUpdate();
 
-		if (isAlive()) {
-			if (this.posY < 1) {
-				setExpired();
-			} else if (this.firstTime) {
+		this.prevPosX = this.posX;
+		this.prevPosY = this.posY;
+		this.prevPosZ = this.posZ;
 
-				this.firstTime = false;
-				final IBlockAccessEx provider = ClientChunkCache.instance();
-
-				// If the particle is not positioned in an air block kill it
-				// right away. No sense wasting time with it.
-				this.pos.setPos(this.posX, this.posY, this.posZ);
-				IBlockState state = provider.getBlockState(this.pos);
-				if (!WorldUtils.isAirBlock(state)) {
-					setExpired();
-				} else {
-					this.pos.setPos(this.posX, this.posY + 0.3D, this.posZ);
-					final int y = this.pos.getY();
-
-					state = provider.getBlockState(this.pos);
-					if (!WorldUtils.isAirBlock(state) && !WorldUtils.isLeaves(state)) {
-						// Find out where it is going to hit
-						do {
-							this.pos.move(EnumFacing.DOWN, 1);
-							state = provider.getBlockState(this.pos);
-						} while (this.pos.getY() > 0 && WorldUtils.isAirBlock(state));
-
-						if (this.pos.getY() < 1)
-							return;
-
-						final int delay = 40 + (y - this.pos.getY()) * 2;
-						this.pos.move(EnumFacing.UP, 1);
-
-						final SoundEffect effect;
-
-						// Hitting solid surface
-						if (state.getMaterial().isSolid()) {
-							effect = Sounds.WATER_DROP;
-							// Lava into water/water into lava
-						} else if (doSteamHiss(state)) {
-							effect = Sounds.STEAM_HISS;
-							// Water into water
-						} else if (this.materialType == Material.WATER) {
-							effect = Sounds.WATER_DRIP;
-							// Lava into lava
-						} else {
-							effect = Sounds.WATER_DROP;
-						}
-
-						SoundEffectHandler.INSTANCE.playSoundAt(this.pos, effect, delay);
-					}
-				}
-			}
+		if (this.materialType == Material.WATER) {
+			this.particleRed = 0.2F;
+			this.particleGreen = 0.3F;
+			this.particleBlue = 1.0F;
+		} else {
+			this.particleRed = 1.0F;
+			this.particleGreen = 16.0F / (40 - this.bobTimer + 16);
+			this.particleBlue = 4.0F / (40 - this.bobTimer + 8);
 		}
 
-		this.pos.setPos(this.posX, this.posY, this.posZ);
-		if (WorldUtils.isFullWaterBlock(this.world, this.pos)) {
-			if (ParticleCollections.addWaterRipple(this.world, this.posX, this.pos.getY() + 1, this.posZ) != null
-					&& this.materialType == Material.LAVA)
+		this.motionY -= this.particleGravity;
+
+		if (this.bobTimer-- > 0) {
+			this.motionX *= 0.02D;
+			this.motionY *= 0.02D;
+			this.motionZ *= 0.02D;
+			setParticleTextureIndex(113);
+		} else {
+			setParticleTextureIndex(112);
+		}
+
+		move(this.motionX, this.motionY, this.motionZ);
+		this.motionX *= 0.9800000190734863D;
+		this.motionY *= 0.9800000190734863D;
+		this.motionZ *= 0.9800000190734863D;
+
+		if (this.particleMaxAge-- <= 0) {
+			setExpired();
+		}
+
+		// Did we hit the ground?
+		if (this.onGround) {
+			this.pos.setPos(this.posX, this.posY, this.posZ);
+			boolean doSteam = false;
+			IBlockState state = ClientChunkCache.instance().getBlockState(this.pos);
+			if (state.getBlock() == Blocks.LAVA) {
+				doSteam  = true;
+			} else if (state.getMaterial().isLiquid()) {
+				doSteam = ParticleCollections.addWaterRipple(this.world, this.posX, this.pos.getY() + 1,
+						this.posZ) != null && this.materialType == Material.LAVA;
+			} else {
+				this.pos.move(EnumFacing.DOWN);
+				state = ClientChunkCache.instance().getBlockState(this.pos);
+				doSteam = ParticleSteamCloud.isHotBlock(state.getBlock());
+			}
+
+			if (doSteam) {
 				ParticleHelper.addParticle(
 						new ParticleSteamCloud(this.world, this.posX, this.pos.getY() + 1, this.posZ, 0.01D));
+			} else if (this.materialType != Material.LAVA) {
+				this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX, this.posY, this.posZ, 0.0D, 0.0D,
+						0.0D);
+			}
+
+			setExpired();
 		}
 
+		// Kill particles below 1. Drips on flat bedrock is a waste of ticks.
+		if (this.posY < 1)
+			setExpired();
+
+		if (isAlive() && this.firstTime) {
+			firstTime();
+		}
+
+	}
+
+	protected void firstTime() {
+
+		this.firstTime = false;
+		final IBlockAccessEx provider = ClientChunkCache.instance();
+
+		// If the particle is not positioned in an air block kill it
+		// right away. No sense wasting time with it.
+		this.pos.setPos(this.posX, this.posY, this.posZ);
+		IBlockState state = provider.getBlockState(this.pos);
+		if (!WorldUtils.isAirBlock(state)) {
+			setExpired();
+		} else {
+			this.pos.setPos(this.posX, this.posY + 0.3D, this.posZ);
+			final int y = this.pos.getY();
+
+			state = provider.getBlockState(this.pos);
+			if (!WorldUtils.isAirBlock(state) && !WorldUtils.isLeaves(state)) {
+				// Find out where it is going to hit
+				do {
+					this.pos.move(EnumFacing.DOWN, 1);
+					state = provider.getBlockState(this.pos);
+				} while (this.pos.getY() > 0 && WorldUtils.isAirBlock(state));
+
+				if (this.pos.getY() < 1)
+					return;
+
+				final int delay = 40 + (y - this.pos.getY()) * 2;
+				this.pos.move(EnumFacing.UP, 1);
+
+				final SoundEffect effect;
+
+				// Lava into water/water into lava
+				if (doSteamHiss(state)) {
+					effect = Sounds.STEAM_HISS;
+					// Hitting solid surface
+				} else if (state.getMaterial().isSolid()) {
+					effect = Sounds.WATER_DROP;
+					// Water into water
+				} else if (this.materialType == Material.WATER) {
+					effect = Sounds.WATER_DRIP;
+					// Lava into lava
+				} else {
+					effect = Sounds.WATER_DROP;
+				}
+
+				SoundEffectHandler.INSTANCE.playSoundAt(this.pos, effect, delay);
+			}
+		}
 	}
 
 	public static class LavaFactory implements IParticleFactory {

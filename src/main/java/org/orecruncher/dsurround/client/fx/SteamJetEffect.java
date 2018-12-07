@@ -25,32 +25,22 @@
 package org.orecruncher.dsurround.client.fx;
 
 import java.util.Random;
-import java.util.Set;
-
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.client.fx.particle.ParticleSteamCloud;
 import org.orecruncher.dsurround.client.fx.particle.system.ParticleJet;
 import org.orecruncher.dsurround.client.fx.particle.system.ParticleSteamJet;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 
-import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class SteamJetEffect extends JetEffect {
-
-	private static final Set<Block> hotBlocks = new ReferenceOpenHashSet<>();
-
-	static {
-		hotBlocks.add(Blocks.LAVA);
-		hotBlocks.add(Blocks.MAGMA);
-	}
 
 	public SteamJetEffect(final int chance) {
 		super(chance);
@@ -63,7 +53,7 @@ public class SteamJetEffect extends JetEffect {
 				for (int k = -1; k <= 1; k++) {
 					final Block theBlock = provider.getBlockState(pos.getX() + i, pos.getY() + j, pos.getZ() + k)
 							.getBlock();
-					if (hotBlocks.contains(theBlock))
+					if (ParticleSteamCloud.isHotBlock(theBlock))
 						blockCount++;
 				}
 		return blockCount;
