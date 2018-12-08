@@ -102,9 +102,11 @@ public final class BiomeUtil {
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			ModBase.log().error("Unable to get hold of private field on Biome!", e);
 		}
+		
 		if (result == null) {
 			ModBase.log().warn("Unable to find configuration for biome [%s] (hc=%d)", biome.getRegistryName(), System.identityHashCode(biome));
-			return (T) RegistryManager.BIOME.WTF_INFO;
+			result = (T) RegistryManager.BIOME.WTF_INFO;
+			setBiomeData(biome, result);
 		}
 		return result;
 	}

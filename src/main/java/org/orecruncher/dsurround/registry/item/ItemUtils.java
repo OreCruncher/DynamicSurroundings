@@ -30,7 +30,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
-
+import org.orecruncher.dsurround.registry.RegistryManager;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
@@ -41,12 +41,25 @@ public final class ItemUtils {
 
 	@Nullable
 	public static IItemData getItemData(@Nonnull final Item item) {
+		IItemData result = null;
+		
 		try {
-			return (IItemData) itemInfo.get(item);
+			result = (IItemData) itemInfo.get(item);
+			if (result == null) {
+				RegistryManager.ITEMS.reload();
+				result = (IItemData) itemInfo.get(item);
+			}
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			ModBase.log().error("Unable to get hold of private field on Item!", e);
 		}
-		return null;
+		
+		if (result == null) {
+			ModBase.log().warn("Unable to find IItemData for item [%s]", item.toString());
+			result = SimpleItemData.CACHE.get(ItemClass.NONE);
+			setItemData(item, result);
+		}
+		
+		return result; 
 	}
 
 	public static void setItemData(@Nonnull final Item item, @Nonnull final IItemData data) {

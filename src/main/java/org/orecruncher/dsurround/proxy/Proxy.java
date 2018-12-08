@@ -95,16 +95,15 @@ public class Proxy {
 
 	public void init(@Nonnull final FMLInitializationEvent event) {
 		ModEnvironment.initialize();
-
 		Network.initialize();
 	}
 
 	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
-		RegistryManager.initialize();
+		// Intentionally left blank
 	}
 
 	public void loadCompleted(@Nonnull final FMLLoadCompleteEvent event) {
-		// Intentionally left blank
+		RegistryManager.initialize();
 	}
 
 	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
@@ -127,7 +126,7 @@ public class Proxy {
 	}
 
 	public void serverStopping(@Nonnull final FMLServerStoppingEvent event) {
-
+		// Intentionally left blank
 	}
 
 	public void serverStopped(@Nonnull final FMLServerStoppedEvent event) {
