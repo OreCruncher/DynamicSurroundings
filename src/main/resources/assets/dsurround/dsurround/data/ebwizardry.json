@@ -2,6 +2,12 @@
 	"items": {
 		"TOOL": [
 			"electroblob.wizardry.item.ItemWand"
+		],
+		"BOOK": [
+			"electroblob.wizardry.item.ItemSpellBook",
+			"electroblob.wizardry.item.ItemArcaneTome",
+			"electroblob.wizardry.item.ItemWizardHandbook",
+			"electroblob.wizardry.item.ItemScroll"
 		]
 	},
 	"entities": {
