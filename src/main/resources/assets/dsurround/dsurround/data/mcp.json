@@ -730,6 +730,11 @@
 		],
 		"FOOD": [
 			"net.minecraft.item.ItemFood"
+		],
+		"BOOK": [
+			"net.minecraft.item.ItemBook",
+			"net.minecraft.item.ItemWritableBook",
+			"net.minecraft.item.ItemEnchantedBook"
 		]
 	},
 	"dimensions": [

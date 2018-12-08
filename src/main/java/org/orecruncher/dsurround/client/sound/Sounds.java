@@ -59,6 +59,8 @@ public final class Sounds {
 	public final static SoundEffect PLATE_ARMOR_EQUIP;
 	public final static SoundEffect CRYSTAL_ARMOR_EQUIP;
 
+	public final static SoundEffect BOOK_EQUIP;
+
 	public final static SoundEffect THUNDER;
 	public final static SoundEffect RAINFALL;
 
@@ -109,6 +111,8 @@ public final class Sounds {
 		PLATE_ARMOR_EQUIP = new SoundEffect.Builder("armor.heavy_walk", SoundCategory.PLAYERS).build();
 		CRYSTAL_ARMOR_EQUIP = new SoundEffect.Builder("armor.crystal_walk", SoundCategory.PLAYERS).build();
 
+		BOOK_EQUIP = new SoundEffect.Builder("pageflip", SoundCategory.PLAYERS).build();
+		
 		THUNDER = new SoundEffect.Builder("thunder", SoundCategory.WEATHER).setVolume(10000F).build();
 		RAINFALL = new SoundEffect.Builder("rain", SoundCategory.WEATHER).build();
 

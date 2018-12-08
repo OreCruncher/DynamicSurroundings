@@ -1,0 +1,12 @@
+{
+	"items": {
+		"TOOL": [
+			"electroblob.wizardry.item.ItemWand"
+		]
+	},
+	"entities": {
+		"ebwizardry:wizard": {
+			"effects": "bow,swing,footprint,breath"
+		}
+	}
+}
