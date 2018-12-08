@@ -9,12 +9,17 @@
 			"immersiveengineering:faraday_suit_legs",
 			"immersiveengineering:faraday_suit_feet"
 		],
+		"AXE": [
+			"immersiveengineering:axe_steel",
+			"immersiveengineering:pickaxe_steel"
+		],
 		"TOOL": [
 			"blusunrize.immersiveengineering.common.items.ItemDrill",
 			"blusunrize.immersiveengineering.common.items.ItemRailgun",
 			"blusunrize.immersiveengineering.common.items.ItemSkyhook",
 			"blusunrize.immersiveengineering.common.items.ItemChemthrower",
-			"blusunrize.immersiveengineering.common.items.ItemRevolver"
+			"blusunrize.immersiveengineering.common.items.ItemRevolver",
+			"immersiveengineering:shovel_steel"
 		]
 	},
 	"footsteps": {
