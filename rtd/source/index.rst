@@ -13,6 +13,7 @@ the server.  However, there will be limitations:
 - Player speech bubbles will not be displayed.
 - Village biome sounds will not play.
 - Weather render effects will not be coordinated across clients.
+- Battle Music will be limited (if configured)
 
 Downloads can be found on CurseForge_.
 

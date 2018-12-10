@@ -1,3 +1,5 @@
+..	_tutorial-resource-packs:
+
 Tutorial: Resource Packs
 ========================
 The example discussed below is based on the Battle Music resource pack created for Dynamic
