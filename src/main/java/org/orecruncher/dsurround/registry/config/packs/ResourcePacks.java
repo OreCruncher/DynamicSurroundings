@@ -24,13 +24,10 @@
 
 package org.orecruncher.dsurround.registry.config.packs;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -41,8 +38,6 @@ import org.orecruncher.lib.JsonUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.ResourcePackRepository;
-import net.minecraft.client.resources.data.IMetadataSection;
-import net.minecraft.client.resources.data.MetadataSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
@@ -124,7 +119,7 @@ public final class ResourcePacks {
 
 	}
 
-	private static class ResourcePack implements IMyResourcePack, IResourcePack {
+	private static class ResourcePack implements IMyResourcePack {
 
 		protected Manifest manifest;
 		protected final IResourcePack pack;
@@ -160,27 +155,6 @@ public final class ResourcePacks {
 		@Override
 		public boolean resourceExists(@Nonnull final ResourceLocation loc) {
 			return this.pack.resourceExists(loc);
-		}
-
-		@Override
-		public Set<String> getResourceDomains() {
-			return this.pack.getResourceDomains();
-		}
-
-		@Override
-		public <T extends IMetadataSection> T getPackMetadata(MetadataSerializer metadataSerializer,
-				String metadataSectionName) throws IOException {
-			return this.pack.getPackMetadata(metadataSerializer, metadataSectionName);
-		}
-
-		@Override
-		public BufferedImage getPackImage() throws IOException {
-			return this.pack.getPackImage();
-		}
-
-		@Override
-		public String getPackName() {
-			return this.pack.getPackName();
 		}
 
 	}
