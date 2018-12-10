@@ -48,8 +48,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.data.Profiles;
-import org.orecruncher.dsurround.data.Profiles.ProfileScript;
+import org.orecruncher.dsurround.registry.config.Profiles.ProfileScript;
 import org.orecruncher.dsurround.registry.config.packs.IMyResourcePack;
 import org.orecruncher.dsurround.registry.config.packs.ResourcePacks;
 

@@ -1,0 +1,9 @@
+{
+	"biomes": [
+		{
+			"conditions": "TRUE",
+			"_comment": "Always display aurora",
+			"aurora": true
+		}
+	]
+}

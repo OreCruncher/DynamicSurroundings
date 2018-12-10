@@ -1,0 +1,19 @@
+{
+	"entries": [
+		{
+			"profileName": "noNetherWeather",
+			"optionName": "No Nether Weather",
+			"optionDescription": "Disable weather effects in the Nether"
+		},
+		{
+			"profileName": "noDustEffects",
+			"optionName": "No Dust Effects",
+			"optionDescription": "Turns off dust effects for all biomes"
+		},
+		{
+			"profileName": "aurorasEverywhere",
+			"optionName": "Auroras in all Biomes",
+			"optionDescription": "Enables auroras for all biomes"
+		}
+	]
+}

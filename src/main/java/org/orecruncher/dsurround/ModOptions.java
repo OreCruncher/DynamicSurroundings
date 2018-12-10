@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
-import org.orecruncher.dsurround.data.Profiles;
+import org.orecruncher.dsurround.registry.config.Profiles;
 import org.orecruncher.lib.ConfigProcessor;
 import org.orecruncher.lib.ConfigProcessor.Category;
 import org.orecruncher.lib.ConfigProcessor.Comment;
