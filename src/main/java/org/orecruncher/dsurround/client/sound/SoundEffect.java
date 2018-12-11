@@ -258,7 +258,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append('[').append(this.soundName);
+		builder.append(this.soundName);
 		builder.append('(').append(this.conditions).append(')');
 		builder.append(", v:").append(this.volume);
 		builder.append(", p:").append(this.pitch);
@@ -267,7 +267,6 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 			builder.append(", w:").append(this.weight);
 		if (this.repeatDelay != 0 || this.repeatDelayRandom != 0)
 			builder.append(", d:").append(this.repeatDelay).append('+').append(this.repeatDelayRandom);
-		builder.append(']');
 		return builder.toString();
 	}
 

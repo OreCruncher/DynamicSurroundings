@@ -23,10 +23,12 @@
 
 package org.orecruncher.dsurround.registry.biome;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -351,14 +353,8 @@ public final class BiomeInfo extends BiomeData implements Comparable<BiomeInfo> 
 				.append(getBiomeId()).append("):");
 		if (!isFake()) {
 			builder.append("\n+ ").append('<');
-			boolean comma = false;
-			for (final BiomeDictionary.Type t : getBiomeTypes()) {
-				if (comma)
-					builder.append(',');
-				else
-					comma = true;
-				builder.append(t.getName());
-			}
+			builder.append(
+					getBiomeTypes().stream().map(BiomeDictionary.Type::getName).collect(Collectors.joining(",")));
 			builder.append('>').append('\n');
 			builder.append("+ temp: ").append(getTemperature()).append(" (").append(getTemperatureRating().getValue())
 					.append(")");
@@ -373,32 +369,32 @@ public final class BiomeInfo extends BiomeData implements Comparable<BiomeInfo> 
 			builder.append(" AURORA");
 		if (this.hasFog)
 			builder.append(" FOG");
-		if (this.dustColor != null)
+		if (this.hasDust && this.dustColor != null)
 			builder.append(" dustColor:").append(this.dustColor.toString());
-		if (this.fogColor != null) {
+		if (this.hasFog && this.fogColor != null) {
 			builder.append(" fogColor:").append(this.fogColor.toString());
 			builder.append(" fogDensity:").append(this.fogDensity);
 		}
 
 		if (this.sounds.length > 0) {
 			builder.append("\n+ sounds [\n");
-			for (final SoundEffect sound : this.sounds)
-				builder.append("+   ").append(sound.toString()).append('\n');
-			builder.append("+ ]");
+			builder.append(
+					Arrays.stream(this.sounds).map(c -> "+   " + c.toString()).collect(Collectors.joining("\n")));
+			builder.append("\n+ ]");
 		}
 
 		if (this.spotSounds.length > 0) {
 			builder.append("\n+ spot sound chance:").append(this.spotSoundChance);
 			builder.append("\n+ spot sounds [\n");
-			for (final SoundEffect sound : this.spotSounds)
-				builder.append("+   ").append(sound.toString()).append('\n');
-			builder.append("+ ]");
+			builder.append(
+					Arrays.stream(this.spotSounds).map(c -> "+   " + c.toString()).collect(Collectors.joining("\n")));
+			builder.append("\n+ ]");
 		}
 
 		if (this.comments.size() > 0) {
 			builder.append("\n+ comments:\n");
-			for (final String c : this.comments)
-				builder.append("+   ").append(c).append('\n');
+			builder.append(this.comments.stream().map(c -> "+   " + c).collect(Collectors.joining("\n")));
+			builder.append('\n');
 		}
 
 		return builder.toString();
