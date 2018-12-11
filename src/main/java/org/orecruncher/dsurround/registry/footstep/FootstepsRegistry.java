@@ -171,35 +171,46 @@ public final class FootstepsRegistry extends Registry {
 
 		// Generate a list of IBlockState objects for all blocks registered
 		// with Forge.
-		final Set<IBlockState> blockStates = StreamSupport.stream(ForgeRegistries.BLOCKS.spliterator(), false)
-				.map(block -> block.getBlockState().getValidStates()).flatMap(l -> l.stream())
+		//@formatter:off
+		final Set<IBlockState> blockStates =
+			StreamSupport.stream(ForgeRegistries.BLOCKS.spliterator(), false)
+				.map(block -> block.getBlockState().getValidStates())
+				.flatMap(l -> l.stream())
 				.collect(Collectors.toSet());
+		//@formatter:on
 
 		// Scan the block list looking for any block states that do not have sounds
 		// definitions supplied by configuration files or by primitives. This scan
 		// has the side effect of priming the caches.
-		this.missingAcoustics = blockStates.stream()
-				.filter(bs -> !FootstepsRegistry.this.getBlockMap().hasAcoustics(bs)).collect(Collectors.toSet());
+		//@formatter:off
+		this.missingAcoustics =
+			blockStates.stream()
+				.filter(bs -> !getBlockMap().hasAcoustics(bs))
+				.collect(Collectors.toSet());
+		//@formatter:on
 
 		// Identify any IBlockStates that could have footprints associated and
 		// register them if necessary.
+		//@formatter:off
 		blockStates
-				.stream().filter(bs -> bs.getMaterial().blocksMovement()
-						&& !this.FOOTPRINT_MATERIAL.contains(bs.getMaterial()) && !this.FOOTPRINT_STATES.contains(bs))
-				.filter(bs -> {
-					final SoundType sound = MCHelper.getSoundType(bs);
-					if (sound != null) {
-						final SoundEvent event = sound.getStepSound();
-						if (event != null) {
-							final ResourceLocation resource = event.getSoundName();
-							if (resource != null) {
-								final String soundName = resource.toString();
-								return FOOTPRINT_SOUND_PROFILE.contains(soundName);
-							}
+			.stream()
+			.filter(bs -> bs.getMaterial().blocksMovement()	&& !hasFootprint(bs))
+			.filter(bs -> {
+				final SoundType sound = MCHelper.getSoundType(bs);
+				if (sound != null) {
+					final SoundEvent event = sound.getStepSound();
+					if (event != null) {
+						final ResourceLocation resource = event.getSoundName();
+						if (resource != null) {
+							final String soundName = resource.toString();
+							return FOOTPRINT_SOUND_PROFILE.contains(soundName);
 						}
 					}
-					return false;
-				}).forEach(bs -> this.FOOTPRINT_STATES.add(bs));
+				}
+				return false;
+			})
+			.forEach(bs -> this.FOOTPRINT_STATES.add(bs));
+		//@formatter:on
 	}
 
 	@Override
@@ -223,33 +234,35 @@ public final class FootstepsRegistry extends Registry {
 		while (itr.hasNext()) {
 			final Block block = itr.next();
 			final String blockName = MCHelper.nameOf(block);
-			if (block instanceof BlockCrops) {
-				final BlockCrops crop = (BlockCrops) block;
-				if (crop.getMaxAge() == 3) {
-					registerBlocks("#beets", blockName);
-				} else if (blockName.equals("minecraft:wheat")) {
-					registerBlocks("#wheat", blockName);
-				} else if (crop.getMaxAge() == 7) {
-					registerBlocks("#crop", blockName);
+			if (blockName != null) {
+				if (block instanceof BlockCrops) {
+					final BlockCrops crop = (BlockCrops) block;
+					if (crop.getMaxAge() == 3) {
+						registerBlocks("#beets", blockName);
+					} else if (blockName.equals("minecraft:wheat")) {
+						registerBlocks("#wheat", blockName);
+					} else if (crop.getMaxAge() == 7) {
+						registerBlocks("#crop", blockName);
+					}
+				} else if (block instanceof BlockSapling) {
+					registerBlocks("#sapling", blockName);
+				} else if (block instanceof BlockReed) {
+					registerBlocks("#reed", blockName);
+				} else if (block instanceof BlockFence) {
+					registerBlocks("#fence", blockName);
+				} else if (block instanceof BlockFlower || block instanceof BlockMushroom) {
+					registerBlocks("NOT_EMITTER", blockName);
+				} else if (block instanceof BlockLog || block instanceof BlockPlanks) {
+					registerBlocks("wood", blockName);
+				} else if (block instanceof BlockDoor) {
+					registerBlocks("bluntwood", blockName);
+				} else if (block instanceof BlockLeaves) {
+					registerBlocks("leaves", blockName);
+				} else if (block instanceof BlockOre) {
+					registerBlocks("ore", blockName);
+				} else if (block instanceof BlockIce) {
+					registerBlocks("ice", blockName);
 				}
-			} else if (block instanceof BlockSapling) {
-				registerBlocks("#sapling", blockName);
-			} else if (block instanceof BlockReed) {
-				registerBlocks("#reed", blockName);
-			} else if (block instanceof BlockFence) {
-				registerBlocks("#fence", blockName);
-			} else if (block instanceof BlockFlower || block instanceof BlockMushroom) {
-				registerBlocks("NOT_EMITTER", blockName);
-			} else if (block instanceof BlockLog || block instanceof BlockPlanks) {
-				registerBlocks("wood", blockName);
-			} else if (block instanceof BlockDoor) {
-				registerBlocks("bluntwood", blockName);
-			} else if (block instanceof BlockLeaves) {
-				registerBlocks("leaves", blockName);
-			} else if (block instanceof BlockOre) {
-				registerBlocks("ore", blockName);
-			} else if (block instanceof BlockIce) {
-				registerBlocks("ice", blockName);
 			}
 		}
 	}
@@ -373,14 +386,19 @@ public final class FootstepsRegistry extends Registry {
 			for (final ItemStack stack : stacks) {
 				final Block block = resolveToBlock(stack);
 				if (block != null) {
-					String blockName = MCHelper.nameOf(block);
+					final String blockName;
 					if (stack.getHasSubtypes() && stack.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
 						// TODO: Need to sort out with tagging in 1.13
 						@SuppressWarnings("deprecation")
 						final IBlockState state = block.getStateFromMeta(stack.getItemDamage());
 						blockName = state.toString();
+					} else {
+						blockName = MCHelper.nameOf(block);
 					}
-					getBlockMap().register(blockName, blockClass);
+					if (blockName != null)
+						getBlockMap().register(blockName, blockClass);
+					else
+						ModBase.log().warn("Unable to obtain registry name for ItemStack [%s]", stack.toString());
 				}
 			}
 		}

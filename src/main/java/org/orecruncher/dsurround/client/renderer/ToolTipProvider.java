@@ -46,8 +46,10 @@ public class ToolTipProvider {
 			final ItemStack stack = event.getItemStack();
 			if (stack != null) {
 				final String itemName = ItemStackUtil.getItemName(stack);
-				event.getToolTip().add(TextFormatting.GOLD + itemName);
-				event.getToolTip().add(TextFormatting.GOLD + stack.getItem().getClass().getName());
+				if (itemName != null) {
+					event.getToolTip().add(TextFormatting.GOLD + itemName);
+					event.getToolTip().add(TextFormatting.GOLD + stack.getItem().getClass().getName());
+				}
 			}
 		}
 	}
