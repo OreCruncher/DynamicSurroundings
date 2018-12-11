@@ -124,6 +124,7 @@
 		"rustic:painted_wood_brown": "planks",
 		"rustic:painted_wood_green": "planks",
 		"rustic:painted_wood_red": "planks",
-		"rustic:painted_wood_black": "planks"
+		"rustic:painted_wood_black": "planks",
+		"rustic:ironwoodroot": "wood"
 	}
 }
