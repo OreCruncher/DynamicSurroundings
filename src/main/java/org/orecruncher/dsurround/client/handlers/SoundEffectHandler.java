@@ -303,6 +303,10 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	// Going to hijack the mood processing logic in MC since it is kinda busted.
 	public void doMoodProcessing() {
+
+		if (!(EnvironState.getWorld() instanceof WorldClient))
+			return;
+
 		final WorldClient wc = (WorldClient) EnvironState.getWorld();
 		// If we are at 1 it means we need to see if we can come up with a point
 		// around the player that matches the ambient requirement (an air block
