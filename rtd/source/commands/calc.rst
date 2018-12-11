@@ -25,10 +25,10 @@ These features are summarized below.
 		- 5 + 6
 	*	- \-
 		- Minus
-		- 6 - 5
+		- 6 \- 5
 	*	- \*
 		- Multiply
-		- 4 * 5
+		- 4 \* 5
 	*	- /
 		- Divide
 		- 9 / 4
