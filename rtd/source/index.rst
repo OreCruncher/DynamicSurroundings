@@ -18,8 +18,10 @@ the server.  However, there will be limitations:
 Downloads can be found on CurseForge_.
 
 ..	list-table::
+	:widths: auto
+	:align: center
    	:header-rows: 0
-   
+
 	*	-	..	toctree::
 				:titlesonly:
 				:maxdepth: 1
@@ -32,15 +34,15 @@ Downloads can be found on CurseForge_.
 				commands/calc
 				commands/ds
 		-	..	toctree::
+				:titlesonly:
 				:maxdepth: 1
 				:glob:
-				:titlesonly:
 				
 				features/*
 		-	.. 	toctree::
+				:titlesonly:
 				:maxdepth: 1
 				:glob:
-				:titlesonly:
 		
 				tutorials/*
 

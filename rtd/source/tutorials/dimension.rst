@@ -11,8 +11,7 @@ The table below describes the various parameters that can be defined:
 
 ..	list-table:: Dimension Configuration
    	:header-rows: 1
-   	:widths: 20 20 60
-   	:stub-columns: 1
+   	:widths: auto
 
    	*	- Parameter
 		- Value Type

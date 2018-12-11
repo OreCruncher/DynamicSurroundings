@@ -11,9 +11,9 @@ the system.
 The table below describes the various parameters that can be defined in the Json configuration file:
 
 ..	list-table:: Biome Configuration
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 30 60
-   	:stub-columns: 1
 
 	*	- Parameter
 		- Value Type
@@ -113,9 +113,9 @@ The sound configuration for blocks is similar to that of biomes.  There are some
 will be different, such as "variable".
 
 ..	list-table:: Sound Configuration
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 30 60
-   	:stub-columns: 1
 
 	*	- Parameter
 		- Value Type
@@ -182,9 +182,9 @@ Effects
 ^^^^^^^
 
 ..	list-table:: Effect Configuration
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 30 60
-   	:stub-columns: 1
 
 	*	- Parameter
 		- Value Type
@@ -199,9 +199,9 @@ Effects
 The possible effects are:
 
 ..	list-table:: Effect Types
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 60
-   	:stub-columns: 1
 
 	*	- Effect
 		- Comment

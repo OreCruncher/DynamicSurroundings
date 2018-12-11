@@ -89,8 +89,8 @@ The following table lists the built in macros available.
 
 ..	list-table:: Block Macros
    	:header-rows: 1
-   	:widths: 20 30 60
-   	:stub-columns: 1
+   	:widths: auto
+   	:align: center
 
    	*	- Macro Name
    		- Example Block

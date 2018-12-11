@@ -15,9 +15,9 @@ can override what Dynamic Surroundings uses in order to provide specific biome e
 The table below describes the various parameters that can be defined:
 
 ..	list-table:: Biome Configuration
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 30 60
-   	:stub-columns: 1
 
    	*	- Parameter
 		- Value Type
@@ -187,9 +187,9 @@ play until the player changes biomes or the conditions for the sound no longer a
 possible to have 1 or more selections made (example: playing wind in a forest if it is mountainous).
 
 ..	list-table:: Sound Configuration
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 30 60
-   	:stub-columns: 1
    	
    	*	- Parameter
    		- Value Type
@@ -335,9 +335,9 @@ SoundType
 Indicates the type of sound this entry represents.  The following are the possible sound types:
 
 ..	list-table:: Sound Types
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 60
-   	:stub-columns: 1
    	
    	*	- Sound Type
    		- Comment
@@ -385,9 +385,9 @@ up in the regular Minecraft/Forge biome listings - they are strictly internal to
 Surroundings.
 
 ..	list-table:: Fake Biomes
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 60
-   	:stub-columns: 1
 
 	*	- Name
 		- Comment

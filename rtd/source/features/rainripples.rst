@@ -9,5 +9,6 @@ the rain ripple is configurable:
 - Original.  The texture as seen in the capture above.
 - Circle.  Similar to Original but darker in color.
 - Square.  Takes on a blocky form that fits within the Minecraft square paradigm.
+- Pixelated.  Even more Minecraft like with squarish elements.
 
 As you can see above a squid decided to photobomb the screen capture.

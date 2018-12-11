@@ -16,9 +16,9 @@ The expression evaluation engine understands the basic set of operators found in
 summary of the operators can be found in the following table.
 
 ..	list-table:: Built-in Operators
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 30 60
-   	:stub-columns: 1
 
    	*	- Operator
 		- Name
@@ -75,9 +75,9 @@ summary of the operators can be found in the following table.
 The expression engine has a set of built-in functions that can be used to simplify expressions.
 
 ..	list-table:: Built-in Functions
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 40 80
-   	:stub-columns: 1
 
    	*	- Function
 		- Description
@@ -109,9 +109,9 @@ The expression engine has a set of built-in functions that can be used to simpli
 A few constant variables are provided if they are needed.
 
 ..	list-table:: Constant Variables
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 20 60
-   	:stub-columns: 1
    	
    	*	- Variable
    		- Type
@@ -129,9 +129,9 @@ A few constant variables are provided if they are needed.
 Dimension variables describe the dimension that the player is in.
 
 ..	list-table:: Dimension Variables
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 20 60
-   	:stub-columns: 1
 
    	*	- Variable
    		- Type
@@ -149,9 +149,9 @@ Dimension variables describe the dimension that the player is in.
 Diurnal variables describe the characteristics of the day/night cycle.
 
 ..	list-table:: Diurnal Variables
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 20 60
-   	:stub-columns: 1
 
    	*	- Variable
    		- Type
@@ -181,9 +181,9 @@ Diurnal variables describe the characteristics of the day/night cycle.
 Weather variables describe the current state of weather in the player's dimension.
 
 ..	list-table:: Weather Variables
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 20 60
-   	:stub-columns: 1
 
    	*	- Variable
    		- Type
@@ -217,9 +217,9 @@ If Serene Seasons is installed, the season variables will provide information ab
 season.  If Serene Seasons is not installed "noseason" will be reported.
 
 ..	list-table:: Season Variables
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 20 60
-   	:stub-columns: 1
 
    	*	- Variable
    		- Type
@@ -237,9 +237,9 @@ season.  If Serene Seasons is not installed "noseason" will be reported.
 Player variables describe some of the attributes of the player at the given point in time.
 
 ..	list-table:: Player Variables
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 20 60
-   	:stub-columns: 1
 
    	*	- Variable
    		- Type
@@ -351,9 +351,9 @@ Biome Type variables describe the player's biome in terms of traits.  These trai
 Forge.
 
 ..	list-table:: Biome Type Variables
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 20 60
-   	:stub-columns: 1
 
    	*	- Variable
    		- Type
@@ -455,9 +455,9 @@ Forge.
 Biome variables provide meta information about the player biome.
 
 ..	list-table:: Biome Variables
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 20 60
-   	:stub-columns: 1
 
    	*	- Variable
    		- Type
@@ -485,9 +485,9 @@ Battle variables provide information related to battles taking place around the 
 must be enabled to have these variables populated.
 
 ..	list-table:: Battle Variables
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 20 60
-   	:stub-columns: 1
 
    	*	- Variable
    		- Type

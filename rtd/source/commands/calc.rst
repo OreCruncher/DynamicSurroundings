@@ -13,9 +13,9 @@ The calculator uses a subset of the features found in :ref:`condition strings <t
 These features are summarized below.
 
 ..	list-table:: Built-in Operators
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 30 60
-   	:stub-columns: 1
 
    	*	- Operator
 		- Name
@@ -72,9 +72,9 @@ These features are summarized below.
 The expression engine has a set of built-in functions that can be used to simplify expressions.
 
 ..	list-table:: Built-in Functions
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 40 80
-   	:stub-columns: 1
 
    	*	- Function
 		- Description
@@ -106,9 +106,9 @@ The expression engine has a set of built-in functions that can be used to simpli
 A few constant variables are provided if they are needed.
 
 ..	list-table:: Constant Variables
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 20 60
-   	:stub-columns: 1
    	
    	*	- Variable
    		- Type

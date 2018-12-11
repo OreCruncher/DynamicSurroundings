@@ -13,9 +13,9 @@ have a class of "metalcompressed,hardmetal" which causes Dynamic Surroundings to
 profiles of "metalcompressed" and "hardmetal".
 
 ..	list-table:: Builtin Acoustic Profiles
+   	:widths: auto
+   	:align: center
    	:header-rows: 1
-   	:widths: 20 30 60
-   	:stub-columns: 1
 
    	*	- Acoustic
 		- Example Block
