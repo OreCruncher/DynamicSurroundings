@@ -1,3 +1,19 @@
+### DynamicSurroundings-1.12.2-3.5.1.1
+**What's New**
+* ElectroBlob's Wizardry config support
+* Books now have page flip sounds when equipped, etc.
+
+**Fixes**
+* Immersive Engineering item equip sounds.
+* Reinitialize the DS ItemRegistry on the fly because some mod modified the Forge item registry after Dynamic Surroundings scanned them.
+* Abstract method error loading resources from resource pack.
+* Defensive code when processing ore dictionary entries where it encounters a block that has not been registered.
+
+**Changes**
+* Move DS registry initialization to load complete rather than post init.
+* Reworked built-in profiles a bit.  You will need to reconfigure if you used them prior.
+* Added "Auroras in all Biomes" built-in profile.
+
 ### DynamicSurroundings-1.12.2-3.5.1.0
 **What's New**
 * Added script variable diurnal.celestialAngle

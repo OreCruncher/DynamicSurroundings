@@ -69,7 +69,7 @@ dependencies {
 	compile "iron-chests:ironchest:1.12.2:7.0.54.838"
 	
 	if (fileTree(dir: 'libs').filter { it.name.startsWith('OreLib') }.getFiles().size() == 0)
-		compile "orelib:OreLib-1.12.2:3.5.1.0BETA:deobf"
+		compile "orelib:OreLib-1.12.2:3.5.1.1BETA:deobf"
 
 	//compile "creativecore:CreativeCore_v1.9.35_mc1.12.2"
 	
