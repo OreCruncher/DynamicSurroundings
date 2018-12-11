@@ -26,6 +26,7 @@ package org.orecruncher.dsurround.event;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.block.state.IBlockState;
@@ -130,7 +131,12 @@ public class WorldEventDetector implements IWorldEventListener {
 		// Only want client side world things
 		if (!event.getWorld().isRemote)
 			return;
-		event.getWorld().addEventListener(new WorldEventDetector(event.getWorld()));
+
+		try {
+			event.getWorld().addEventListener(new WorldEventDetector(event.getWorld()));
+		} catch (@Nonnull final Throwable t) {
+			ModBase.log().warn("Unable to add world listener - is world fake? [%s]", event.getWorld().getClass().getName());
+		}
 	}
 
 }
