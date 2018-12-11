@@ -31,6 +31,7 @@ Downloads can be found on CurseForge_.
 				compatibility
 				howdoi
 				performance
+				commands/calc
 				commands/ds
 		-	..	toctree::
 				:titlesonly:
