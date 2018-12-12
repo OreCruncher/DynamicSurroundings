@@ -49,7 +49,8 @@ import net.minecraftforge.common.config.Property;
 public final class ModOptions {
 
 	public static class Trace {
-		// Trace bits for debugging
+		public static final int SOUND_PLAY = 0x1;
+		public static final int FOOTSTEP_ACOUSTIC = 0x2;
 	};
 
 	public static final String CATEGORY_ASM = "asm";

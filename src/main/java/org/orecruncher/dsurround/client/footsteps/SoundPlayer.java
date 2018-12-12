@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.ModOptions.Trace;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.client.sound.FootstepSound;
 import org.orecruncher.dsurround.registry.acoustics.EventType;
@@ -68,7 +69,8 @@ public class SoundPlayer implements ISoundPlayer {
 	private void logAcousticPlay(@Nonnull final IAcoustic[] acoustics, @Nonnull final EventType event) {
 		if (ModBase.log().isDebugging()) {
 			final String txt = Arrays.stream(acoustics).map(IAcoustic::getName).collect(Collectors.joining(","));
-			ModBase.log().debug("Playing acoustic %s for event %s", txt, event.toString().toUpperCase());
+			ModBase.log().debug(Trace.FOOTSTEP_ACOUSTIC, "Playing acoustic %s for event %s", txt,
+					event.toString().toUpperCase());
 		}
 	}
 

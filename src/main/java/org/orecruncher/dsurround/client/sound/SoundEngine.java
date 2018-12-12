@@ -47,6 +47,7 @@ import org.lwjgl.openal.ALC11;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.ModOptions.Trace;
 import org.orecruncher.dsurround.client.sound.fix.SoundFixMethods;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
@@ -279,10 +280,11 @@ public final class SoundEngine {
 
 			// Add active sounds to the list for monitoring
 			if (sound.getState().isActive()) {
-				ModBase.log().debug("> QUEUED: [%s]", sound.toString());
+				ModBase.log().debug(Trace.SOUND_PLAY, "> QUEUED: [%s]", sound.toString());
 				this.queuedSounds.add(sound);
-			} else if (ModOptions.logging.enableDebugLogging)
-				ModBase.log().debug("> NOT QUEUED: [%s]", sound.toString());
+			} else {
+				ModBase.log().debug(Trace.SOUND_PLAY, "> NOT QUEUED: [%s]", sound.toString());
+			}
 		}
 
 		return sound.getId();
