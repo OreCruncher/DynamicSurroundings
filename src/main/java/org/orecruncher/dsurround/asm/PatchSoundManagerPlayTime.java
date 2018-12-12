@@ -54,7 +54,7 @@ public class PatchSoundManagerPlayTime extends Transmorgrifier {
 				if (node instanceof IntInsnNode) {
 					final IntInsnNode intNode = (IntInsnNode) node;
 					if (intNode.operand == 20) {
-						m.instructions.set(node, new IntInsnNode(Opcodes.BIPUSH, 0));
+						m.instructions.set(node, new IntInsnNode(Opcodes.BIPUSH, 3));
 						return true;
 					}
 				}
