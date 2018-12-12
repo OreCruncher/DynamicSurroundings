@@ -212,6 +212,8 @@ dsurround.cfg.sound.Swing=Swing Sounds
 dsurround.cfg.sound.Swing.tooltip=Enable/disable item swing sounds
 dsurround.cfg.sound.Puddle=Rain Puddle Sound
 dsurround.cfg.sound.Puddle.tooltip=Enable/disable rain puddle sound when moving in the rain
+dsurround.cfg.sound.CullInterval=Sound Culling Interval
+dsurround.cfg.sound.CullInterval.tooltip=Ticks between culled sound events (0 to disable culling)
 dsurround.cfg.sound.SoundSettings=Individual Sound Configuration
 dsurround.cfg.sound.SoundSettings.tooltip=Configure how each sound will be handled
 dsurround.cfg.sound.BattleMusic=Battle Music
@@ -300,10 +302,6 @@ dsurround.cfg.commands.Calc.Alias.tooltip=One or more alias names to give the /c
 
 dsurround.cfg.profiles.cat.Profiles=Built-in Profiles
 dsurround.cfg.profiles.cat.Profiles.tooltip=Enable/disable built-in configuration profiles
-dsurround.cfg.profiles.noNetherWeather=No Nether Weather
-dsurround.cfg.profiles.noNetherWeather.tooltip=Enable/disable Nether weather effects
-dsurround.cfg.profiles.noDustEffects=No Dust Effects
-dsurround.cfg.profiles.noDustEffects.tooltip=Turns off dust effects for all biomes
 
 dsurround.season.format=%1$s %2$s
 dsurround.season.noseason=No Season
