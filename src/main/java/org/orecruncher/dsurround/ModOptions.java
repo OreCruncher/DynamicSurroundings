@@ -180,7 +180,7 @@ public final class ModOptions {
 		@LangKey("dsurround.cfg.rain.RippleStyle")
 		@RangeInt(min = 0, max = 3)
 		@Comment("0: original round, 1: darker round, 2: square, 3: pixelated")
-		public static int rainRippleStyle = 0;
+		public static int rainRippleStyle = 3;
 
 		@Option(CONFIG_ENABLE_BACKGROUND_THUNDER)
 		@DefaultValue("true")
