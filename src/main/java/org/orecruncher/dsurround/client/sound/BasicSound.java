@@ -41,7 +41,6 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -55,22 +54,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BasicSound<T extends BasicSound<?>> extends PositionedSound implements ITrackedSound {
 
 	protected static final float ATTENUATION_OFFSET = 32F;
+	protected static final Random RANDOM = XorShiftRandom.current();
 
-	@FunctionalInterface
-	public static interface ISoundScale {
-		float getScale();
-	}
-
-	// TODO: Do we need?
-	public static final ISoundScale DEFAULT_SCALE = () -> 1.0F;
-
-	protected final Random RANDOM = XorShiftRandom.current();
 	protected final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
 	protected String id = StringUtils.EMPTY;
 	protected float volumeThrottle = 1.0F;
-	protected ISoundScale volumeScale;
-	protected boolean route;
 	protected SoundState state = SoundState.NONE;
 
 	public BasicSound(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
@@ -80,8 +69,6 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 	public BasicSound(@Nonnull final ResourceLocation soundResource, @Nonnull final SoundCategory cat) {
 		super(soundResource, cat);
 
-		this.volumeScale = DEFAULT_SCALE;
-
 		this.volume = 1F;
 		this.pitch = 1F;
 		this.setPosition(0, 0, 0);
@@ -89,12 +76,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 		this.repeatDelay = 0;
 		this.attenuationType = ISound.AttenuationType.LINEAR;
 
-		// Sounds are not routed by default. Need to be turned on
-		// in a derived class or set via setter.
-		this.route = false;
-
 		super.sound = SoundHandler.MISSING_SOUND;
-
 	}
 
 	@Override
@@ -105,16 +87,6 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 	@Override
 	public void setState(@Nonnull final SoundState state) {
 		this.state = state;
-	}
-
-	public boolean shouldRoute() {
-		return this.route;
-	}
-
-	@SuppressWarnings("unchecked")
-	public T setRoutable(final boolean flag) {
-		this.route = flag;
-		return (T) this;
 	}
 
 	@Override
@@ -147,11 +119,6 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 		this.zPosF = z;
 		this.pos.setPos(x, y, z);
 		return (T) this;
-	}
-
-	public T setPosition(@Nonnull final Entity entity) {
-		final Vec3d point = entity.getEntityBoundingBox().getCenter();
-		return this.setPosition(point);
 	}
 
 	public T setPosition(@Nonnull final Vec3i pos) {
@@ -187,12 +154,6 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 	}
 
 	@SuppressWarnings("unchecked")
-	public T setVolumeScale(@Nonnull final ISoundScale scale) {
-		this.volumeScale = scale;
-		return (T) this;
-	}
-
-	@SuppressWarnings("unchecked")
 	public T setVolumeThrottle(final float throttle) {
 		this.volumeThrottle = throttle;
 		return (T) this;
@@ -200,7 +161,7 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 
 	@Override
 	public float getVolume() {
-		return super.getVolume() * this.volumeScale.getScale() * this.volumeThrottle;
+		return super.getVolume() * this.volumeThrottle;
 	}
 
 	public void fade() {
@@ -224,15 +185,11 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 				: SoundUtils.canBeHeard(this.pos, soundPos, this.getVolume());
 	}
 
-	public Vec3d getLocusPosition() {
-		return new Vec3d(this.xPosF, this.yPosF, this.zPosF);
-	}
-
 	@Override
 	public String toString() {
 		final ToStringHelper helper = MoreObjects.toStringHelper(this).addValue(this.positionedSoundLocation.toString())
 				.addValue(this.category.toString()).add("state", this.getState()).add("v", this.getVolume())
-				.add("p", getPitch()).add("s", this.volumeScale.getScale()).addValue(getAttenuationType());
+				.add("p", getPitch()).addValue(getAttenuationType());
 		if (!StringUtils.isEmpty(this.getId()))
 			helper.add("id", getId().toString());
 		return helper.toString();
@@ -241,4 +198,5 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 	public static AttenuationType noAttenuation() {
 		return ModEnvironment.SoundPhysics.isLoaded() ? AttenuationType.LINEAR : AttenuationType.NONE;
 	}
+
 }

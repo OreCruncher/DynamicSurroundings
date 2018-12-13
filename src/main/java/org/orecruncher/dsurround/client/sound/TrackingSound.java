@@ -59,7 +59,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 		this.sound = sound;
 		this.maxVolume = sound.getVolume();
 		this.volume = fadeIn ? DONE_VOLUME_THRESHOLD * 2 : this.maxVolume;
-		this.pitch = sound.getPitch(this.RANDOM);
+		this.pitch = sound.getPitch(RANDOM);
 
 		this.lastTick = EnvironState.getTickCounter() - 1;
 
@@ -73,7 +73,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 
 	@Override
 	public int getRepeatDelay() {
-		return this.sound.getRepeat(this.RANDOM);
+		return this.sound.getRepeat(RANDOM);
 	}
 
 	@Override
