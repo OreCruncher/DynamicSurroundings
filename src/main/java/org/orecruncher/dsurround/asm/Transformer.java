@@ -41,7 +41,7 @@ public class Transformer extends MyTransformer {
 	@Override
 	protected void initTransmorgrifiers() {
 		addTransmorgrifier(new PatchEntityRenderer());
-		addTransmorgrifier(new PatchSoundManager());
+		//addTransmorgrifier(new PatchSoundManager());
 		addTransmorgrifier(new PatchSoundManagerPlayTime());
 		addTransmorgrifier(new PatchSoundManagerClampVolume());
 		addTransmorgrifier(new PatchSoundManagerSync());
