@@ -52,8 +52,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class BlockStateMatcher {
 
-	private static final String META_NAME = "_meta_";
-
 	// We all know about air...
 	public static final BlockStateMatcher AIR = BlockStateMatcher.create(Blocks.AIR.getDefaultState());
 
@@ -177,7 +175,6 @@ public class BlockStateMatcher {
 		return create(BlockNameUtil.parseBlockName(blockId));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Nullable
 	public static BlockStateMatcher create(@Nonnull final NameResult result) {
 		if (result != null) {
@@ -197,17 +194,6 @@ public class BlockStateMatcher {
 				}
 
 				final Map<String, String> properties = result.getProperties();
-
-				// If the property list only contains a meta property convert it to
-				// the corresponding IBlockState.
-				if (result.getProperties().size() == 1 && properties.containsKey(META_NAME)) {
-					final int meta = Integer.parseInt(properties.get(META_NAME));
-					final IBlockState state = block.getStateFromMeta(meta);
-					final BlockStateMatcher matcher = create(state);
-					ModBase.log().warn("_meta_ tag deprecated; replace '%s' with '%s'?", result.toString(),
-							matcher.toString());
-					return matcher;
-				}
 				final Reference2ObjectOpenHashMap<IProperty<?>, Object> props = new Reference2ObjectOpenHashMap<>();
 
 				// Blow out the property list

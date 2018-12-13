@@ -956,7 +956,7 @@ public final class ModOptions {
 
 			@Option(CONFIG_COMPASS_TRANSPARENCY)
 			@DefaultValue("0.4")
-			@LangKey("dsurround.cfg.compass.Transparency")
+			@LangKey("dsurround.cfg.huds.compass.Transparency")
 			@Comment("Compass transparency")
 			@RangeFloat(min = 0F, max = 1.0F)
 			public static float compassTransparency = 0.4F;
