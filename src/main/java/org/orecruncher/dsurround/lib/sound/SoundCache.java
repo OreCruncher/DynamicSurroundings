@@ -45,7 +45,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class SoundCache {
 
-	private static final int BUFFER_SIZE = 64 * 1024;
+	private static final int BUFFER_SIZE = 16 * 1024;
 	private static final byte[] BUFFER = new byte[BUFFER_SIZE];
 	private static final IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
 	private static final Map<ResourceLocation, URL> cache = new Object2ObjectOpenHashMap<>(256);
