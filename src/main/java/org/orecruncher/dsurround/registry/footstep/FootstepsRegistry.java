@@ -88,8 +88,14 @@ import net.minecraftforge.oredict.OreDictionary;
 @SideOnly(Side.CLIENT)
 public final class FootstepsRegistry extends Registry {
 
-	private static final List<String> FOOTPRINT_SOUND_PROFILE = Arrays.asList("minecraft:block.sand.step",
-			"minecraft:block.gravel.step", "minecraft:block.snow.step");
+	//@formatter:off
+	private static final List<String> FOOTPRINT_SOUND_PROFILE =
+		Arrays.asList(
+			"minecraft:block.sand.step",
+			"minecraft:block.gravel.step",
+			"minecraft:block.snow.step"
+		);
+	//@formatter:on
 
 	private BlockMap blockMap;
 

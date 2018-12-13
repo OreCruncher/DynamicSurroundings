@@ -25,9 +25,10 @@
 package org.orecruncher.dsurround.registry.acoustics;
 
 import java.util.Collection;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.google.common.base.Joiner;
 
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
@@ -58,9 +59,7 @@ public class SimultaneousAcoustic implements IAcoustic {
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append(getName()).append('[');
-		for (final IAcoustic a : this.acoustics) {
-			builder.append(a.toString()).append(',');
-		}
+		builder.append(Joiner.on(',').join(this.acoustics));
 		builder.append(']');
 		return builder.toString();
 	}

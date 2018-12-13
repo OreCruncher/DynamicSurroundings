@@ -90,6 +90,7 @@ public class AcousticRegistry extends Registry {
 	protected void preInit() {
 		this.hits = 0;
 		this.acoustics.clear();
+		this.compiled.clear();
 		this.compiled.put("EMPTY", EMPTY);
 		this.compiled.put("NOT_EMITTER", NOT_EMITTER);
 		this.compiled.put("MESSY_GROUND", MESSY_GROUND);
@@ -221,10 +222,7 @@ public class AcousticRegistry extends Registry {
 
 		if (unsolved.isJsonObject()) {
 			ret = solveAcousticsCompound(unsolved.getAsJsonObject());
-		} else if (unsolved.isJsonPrimitive() && unsolved.getAsJsonPrimitive().isString()) { // Is
-																								// a
-																								// sound
-																								// name
+		} else if (unsolved.isJsonPrimitive() && unsolved.getAsJsonPrimitive().isString()) {
 			final SimpleAcoustic a = new SimpleAcoustic();
 			prepareDefaults(a);
 			setupSoundName(a, unsolved.getAsString());

@@ -48,7 +48,6 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.ModOptions.Trace;
-import org.orecruncher.dsurround.client.sound.fix.SoundFixMethods;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 import org.orecruncher.dsurround.lib.sound.ITrackedSound;
@@ -100,6 +99,7 @@ public final class SoundEngine {
 	private static final Field getDelayedSounds = ReflectionHelper.findField(SoundManager.class, "delayedSounds",
 			"field_148626_m");
 	private static final Field getSoundLibrary = ReflectionHelper.findField(SoundSystem.class, "soundLibrary");
+	private static final Field removed = ReflectionHelper.findField(Source.class, "removed");
 
 	private static final float MUTE_VOLUME = 0.00001F;
 	private static final int MAX_STREAM_CHANNELS = 16;
@@ -302,10 +302,22 @@ public final class SoundEngine {
 						final Source src = e.getValue();
 						ModBase.log().debug("Killing orphaned sound [%s]",
 								src.filenameURL != null ? src.filenameURL.getFilename() : "UNKNOWN");
-						SoundFixMethods.cleanupSource(src);
+						cleanupSource(src);
 						return e.getKey();
 					}).collect(Collectors.toList());
 			remove.forEach(id -> sndSystem.removeSource(id));
+		}
+	}
+
+	private static void cleanupSource(final Source source) {
+		if (source.toStream) {
+			try {
+				removed.setBoolean(source, true);
+			} catch (final IllegalArgumentException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		} else {
+			source.cleanup();
 		}
 	}
 
