@@ -1,3 +1,21 @@
+### DynamicSurroundings-1.12.2-3.5.2.0
+**What's New**
+* Added "alwaysOutside" dimension config attribute.  This tells Dynamic Surroundings to always consider the player outside while in that dimension.  Affects biome sound selection.
+* Improved Erebus support.  Biome sounds while in the Erebus.  (See first bullet.)
+* ru_ru translations for Entity Chat.  (Thanks VoltoREv!)
+
+**Fixes**
+* OpenEye: Guard against non WorldClient world in mood processing.
+* OpenEye: Guard against modded client side worlds crashing when registering world listener.
+* Fixed corrupted ru_ru translations.
+
+**Changes**
+* Rustic Ironwood tree root footstep sound as wood.
+* Removed ASM for flushing sounds in Minecraft's sound engine.  Let me know if anything weird is encountered.
+* Removed ASM for sound caching.  With other changes this feature appears to be marginal.
+* Updated ru_ru translations.  (Thanks VoltoREv!)
+* Default rain ripple is the pixelated version
+
 ### DynamicSurroundings-1.12.2-3.5.1.1
 **What's New**
 * ElectroBlob's Wizardry config support
@@ -7,7 +25,7 @@
 * Immersive Engineering item equip sounds.
 * Reinitialize the DS ItemRegistry on the fly because some mod modified the Forge item registry after Dynamic Surroundings scanned them.
 * Abstract method error loading resources from resource pack.
-* Defensive code when processing ore dictionary entries where it encounters a block that has not been registered.
+* Defensive code when processing ore dictionary entries where it encounters a block that is not registered.
 
 **Changes**
 * Move DS registry initialization to load complete rather than post init.
