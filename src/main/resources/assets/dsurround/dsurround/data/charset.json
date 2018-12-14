@@ -1,10 +1,6 @@
 {
 	"footsteps": {
-		"charset:barrel": "wood",
-		"charset:fluidtank": "glass",
 		"charset:rail_charset": "NOT_EMITTER",
-		"charset:rail_charset+foliage": "rails",
-		"charset:scaffold": "bigger",
-		"charset:wire": "NOT_EMITTER"
+		"charset:rail_charset+foliage": "rails"
 	}
 }

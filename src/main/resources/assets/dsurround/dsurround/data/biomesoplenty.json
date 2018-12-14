@@ -226,8 +226,6 @@
 		"biomesoplenty:sapling_2": "#sapling",
 		"biomesoplenty:seaweed": "NOT_EMITTER",
 		"biomesoplenty:terrarium": "glass",
-		"biomesoplenty:tree_moss": "leaves",
-		"biomesoplenty:tree_moss+foliage": "leaves",
 		"biomesoplenty:umbran_door_block": "bluntwood",
 		"biomesoplenty:umbran_fence": "#fence",
 		"biomesoplenty:umbran_fence_gate": "#fence",
@@ -273,7 +271,6 @@
 		"biomesoplenty:white_sandstone": "sandstone",
 		"biomesoplenty:white_sandstone_stairs": "sandstone",
 		"biomesoplenty:ivy": "#vine",
-		"biomesoplenty:flower_vine": "#vine",
 		"biomesoplenty:willow_vine": "#vine"
 	},
 	"footprints": [
