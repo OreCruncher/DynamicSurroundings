@@ -46,6 +46,8 @@ public class DimensionConfig {
 	public Boolean hasWeather = null;
 	@SerializedName("fog")
 	public Boolean hasFog = null;
+	@SerializedName("alwaysOutside")
+	public Boolean alwaysOutside = null;
 
 	@Override
 	@Nonnull
@@ -69,6 +71,8 @@ public class DimensionConfig {
 			builder.append("hasWeather: ").append(Boolean.toString(this.hasWeather.booleanValue())).append(" ");
 		if (this.hasFog != null)
 			builder.append("hasFog: ").append(Boolean.toString(this.hasFog.booleanValue())).append(" ");
+		if (this.alwaysOutside != null)
+			builder.append("alwaysOutside: ").append(Boolean.toString(this.alwaysOutside.booleanValue())).append(" ");
 		return builder.toString();
 	}
 

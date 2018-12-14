@@ -15,6 +15,95 @@
 			"erebus.items.ItemWarHammer"
 		]
 	},
+	"biomes": [
+		{
+			"conditions": "biome.modid == 'erebus'",
+			"_comment": "All Erebus biomes",
+			"soundReset": true,
+			"sounds": [
+				{
+					"sound": "dsurround:insectbuzz",
+					"soundType": "spot",
+					"weight": 7,
+					"variable": true
+				},
+				{
+					"sound": "dsurround:insectcrawl",
+					"soundType": "spot",
+					"variable": true
+				}
+			]
+		},
+		{ 
+			"conditions": "biome.id = 'erebus:elysian_fields'",
+			"_comment": "<PLAINS,LUSH>",
+			"sounds": [
+				{
+					"sound": "dsurround:crickets"
+				}
+			]
+		},
+		{ 
+			"conditions": "biome.id = 'erebus:fields_sub_forest'",
+			"_comment": "<MAGICAL,LUSH,FOREST>",
+			"sounds": [
+				{
+					"sound": "dsurround:deep_crickets"
+				}
+			]
+		},
+		{ 
+			"conditions": "biome.id = 'erebus:fungal_forest'",
+			"_comment": "<MUSHROOM,DENSE,SPOOKY>",
+			"sounds": [
+			]
+		},
+		{ 
+			"conditions": "biome.id = 'erebus:petrified_forest'",
+			"_comment": "<DRY,HOT,DEAD>",
+			"sounds": [
+			]
+		},
+		{ 
+			"conditions": "biome.id = 'erebus:submerged_swamp'",
+			"_comment": "<WATER,HOT,SWAMP,WET>",
+			"sounds": [
+				{
+					"sound": "dsurround:crickets"
+				}
+			]
+		},
+		{ 
+			"conditions": "biome.id = 'erebus:subterranean_savannah'",
+			"_comment": "<SAVANNA>",
+			"sounds": [
+				{
+					"sound": "dsurround:savanna.night"
+				}
+			]
+		},
+		{ 
+			"conditions": "biome.id = 'erebus:ulterior_outback'",
+			"_comment": "<DRY,HOT,SANDY>",
+			"sounds": [
+			]
+		},
+		{ 
+			"conditions": "biome.id = 'erebus:underground_jungle'",
+			"_comment": "<JUNGLE,DENSE,HOT,LUSH>",
+			"sounds": [
+				{
+					"sound": "dsurround:savanna.night"
+				}
+			]
+		},
+		{ 
+			"conditions": "biome.id = 'erebus:volcanic_desert'",
+			"_comment": "<DRY,HOT,SANDY>",
+			"sounds": [
+			]
+		}
+	],
 	"dimensions": [
 		{
 			"name": "EREBUS",
@@ -22,7 +111,8 @@
 			"weather": false,
 			"fog": false,
 			"haze": false,
-			"aurora": false
+			"aurora": false,
+			"alwaysOutside": true
 		}
 	],
 	"footsteps": {

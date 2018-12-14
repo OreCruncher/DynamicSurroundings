@@ -52,6 +52,7 @@ public final class DimensionData {
 	protected boolean hasAuroras = false;
 	protected boolean hasWeather = false;
 	protected boolean hasFog = false;
+	protected boolean alwaysOutside = false;
 
 	protected boolean playBiomeSounds = true;
 
@@ -109,6 +110,8 @@ public final class DimensionData {
 			this.cloudHeight = this.hasHaze ? this.skyHeight / 2 : this.skyHeight;
 		if (entry.hasFog != null)
 			this.hasFog = entry.hasFog;
+		if (entry.alwaysOutside != null)
+			this.alwaysOutside = entry.alwaysOutside;
 
 		this.spaceHeight = this.skyHeight + SPACE_HEIGHT_OFFSET;
 	}
@@ -151,6 +154,10 @@ public final class DimensionData {
 
 	public boolean getHasFog() {
 		return this.hasFog;
+	}
+
+	public boolean getAlwaysOutside() {
+		return this.alwaysOutside;
 	}
 
 	public boolean getPlayBiomeSounds() {

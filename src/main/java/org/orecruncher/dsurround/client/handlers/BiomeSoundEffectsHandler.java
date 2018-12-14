@@ -58,7 +58,7 @@ public class BiomeSoundEffectsHandler extends EffectHandlerBase {
 	}
 
 	private boolean doBiomeSounds() {
-		return EnvironState.isPlayerUnderground() || !EnvironState.isPlayerInside();
+		return EnvironState.isPlayerUnderground() || EnvironState.getDimensionInfo().getAlwaysOutside() || !EnvironState.isPlayerInside();
 	}
 
 	private void getBiomeSounds(@Nonnull final Object2FloatOpenHashMap<SoundEffect> result) {
