@@ -43,6 +43,9 @@ The table below describes the various parameters that can be defined:
 	*	- fog
 		- Boolean
 		- Whether the dimension has fog effects.
+	*	- alwaysOutside
+		- boolean
+		- Always consider the player outide while in the dimension.  This affects biome sound selection.
 
 ..	note::
 	Either dimId or name must be specified so that Dynamic Surroundings can match up the configuration
