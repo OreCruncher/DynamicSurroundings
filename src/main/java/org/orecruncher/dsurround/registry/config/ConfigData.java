@@ -24,8 +24,6 @@
 package org.orecruncher.dsurround.registry.config;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -57,6 +55,8 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.MalformedJsonException;
 
+import it.unimi.dsi.fastutil.io.FastByteArrayInputStream;
+import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
@@ -187,7 +187,7 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 
 	public static ConfigData load() {
 
-		final ByteArrayOutputStream bits = new ByteArrayOutputStream();
+		final FastByteArrayOutputStream  bits = new FastByteArrayOutputStream(16 * 1024);
 
 		try (final OutputStreamWriter output = new OutputStreamWriter(new GZIPOutputStream(bits))) {
 
@@ -258,7 +258,8 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 
 		// dump(bits.toByteArray());
 
-		return new ConfigData(bits.toByteArray());
+		bits.trim();
+		return new ConfigData(bits.array);
 	}
 
 	@Override
@@ -288,7 +289,7 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 			String line = null;
 
 			try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
-					new GZIPInputStream(new ByteArrayInputStream(demBytes)), StandardCharsets.UTF_8))) {
+					new GZIPInputStream(new FastByteArrayInputStream (demBytes)), StandardCharsets.UTF_8))) {
 				while ((line = bufferedReader.readLine()) != null) {
 					ModBase.log().info(line);
 				}
