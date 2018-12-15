@@ -44,9 +44,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * regardless of how the config is set up.
  */
 @SideOnly(Side.CLIENT)
-public class ConfigSound extends BasicSound<ConfigSound> {
+public class ConfigSoundInstance extends SoundInstance {
 
-	public ConfigSound(@Nonnull final String soundResource, final float volume) {
+	public ConfigSoundInstance(@Nonnull final String soundResource, final float volume) {
 		super(new ResourceLocation(soundResource), SoundCategory.MASTER);
 
 		this.volume = volume;

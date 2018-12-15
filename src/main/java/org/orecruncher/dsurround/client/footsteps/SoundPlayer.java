@@ -33,11 +33,13 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions.Trace;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
-import org.orecruncher.dsurround.client.sound.FootstepSound;
+import org.orecruncher.dsurround.client.sound.SoundInstance;
+import org.orecruncher.dsurround.client.sound.SoundBuilder;
 import org.orecruncher.dsurround.registry.acoustics.EventType;
 import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.dsurround.registry.acoustics.IOptions;
 import org.orecruncher.dsurround.registry.acoustics.ISoundPlayer;
+import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 import org.orecruncher.lib.TimeUtils;
 import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.random.XorShiftRandom;
@@ -99,7 +101,8 @@ public class SoundPlayer implements ISoundPlayer {
 	protected void actuallyPlaySound(@Nonnull final Vec3d entity, @Nonnull final SoundEvent sound, final float volume,
 			final float pitch) {
 		try {
-			final FootstepSound s = new FootstepSound(entity, sound).setVolume(volume * this.scale).setPitch(pitch);
+			final SoundInstance s = SoundBuilder.builder(sound, SoundRegistry.FOOTSTEPS).setPosition(entity)
+					.setVolume(volume * this.scale).setPitch(pitch).build();
 			SoundEffectHandler.INSTANCE.playSound(s);
 		} catch (final Throwable t) {
 			ModBase.log().error("Unable to play sound", t);

@@ -28,7 +28,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.sound.BasicSound;
+import org.orecruncher.dsurround.client.sound.SoundInstance;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 
 import net.minecraft.client.Minecraft;
@@ -86,17 +86,17 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	}
 
 	/**
-	 * Creates a BasicSound<> object for the specified SoundEffect centered at the
+	 * Creates a SoundInstance<> object for the specified SoundEffect centered at the
 	 * Entity. If the Entity is the current active player the sound will be
 	 * non-attenuated.
 	 *
 	 * @param se     SoundEffect to use as the basis of the sound
 	 * @param player The player location of where the sound will be generated
-	 * @return A BasicSound<?> with applicable properties set
+	 * @return A SoundInstance<?> with applicable properties set
 	 */
 	@Override
 	@Nonnull
-	public BasicSound<?> createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player) {
+	public SoundInstance createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player) {
 		if (isActivePlayer(player))
 			return se.createTrackingSound(player, false);
 		return se.createSoundNear(player);

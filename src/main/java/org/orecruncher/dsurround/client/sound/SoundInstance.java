@@ -51,7 +51,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class BasicSound<T extends BasicSound<?>> extends PositionedSound implements ITrackedSound {
+public class SoundInstance extends PositionedSound implements ITrackedSound {
 
 	protected static final float ATTENUATION_OFFSET = 32F;
 	protected static final Random RANDOM = XorShiftRandom.current();
@@ -62,11 +62,11 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 	protected float volumeThrottle = 1.0F;
 	protected SoundState state = SoundState.NONE;
 
-	public BasicSound(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
+	SoundInstance(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
 		this(event.getSoundName(), cat);
 	}
 
-	public BasicSound(@Nonnull final ResourceLocation soundResource, @Nonnull final SoundCategory cat) {
+	SoundInstance(@Nonnull final ResourceLocation soundResource, @Nonnull final SoundCategory cat) {
 		super(soundResource, cat);
 
 		this.volume = 1F;
@@ -100,32 +100,34 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 		return this.id;
 	}
 
-	@SuppressWarnings("unchecked")
-	public T setVolume(final float v) {
+	public SoundInstance setCategory(@Nonnull final SoundCategory cat) {
+		this.category = cat;
+		return this;
+	}
+	
+	public SoundInstance setVolume(final float v) {
 		this.volume = v;
-		return (T) this;
+		return this;
 	}
 
-	@SuppressWarnings("unchecked")
-	public T setPitch(final float p) {
+	public SoundInstance setPitch(final float p) {
 		this.pitch = p;
-		return (T) this;
+		return this;
 	}
 
-	@SuppressWarnings("unchecked")
-	public T setPosition(final float x, final float y, final float z) {
+	public SoundInstance setPosition(final float x, final float y, final float z) {
 		this.xPosF = x;
 		this.yPosF = y;
 		this.zPosF = z;
 		this.pos.setPos(x, y, z);
-		return (T) this;
+		return this;
 	}
 
-	public T setPosition(@Nonnull final Vec3i pos) {
+	public SoundInstance setPosition(@Nonnull final Vec3i pos) {
 		return this.setPosition(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
 	}
 
-	public T setPosition(@Nonnull final Vec3d pos) {
+	public SoundInstance setPosition(@Nonnull final Vec3d pos) {
 		return this.setPosition((float) pos.x, (float) pos.y, (float) pos.z);
 	}
 
@@ -135,28 +137,24 @@ public class BasicSound<T extends BasicSound<?>> extends PositionedSound impleme
 		return getAttenuationType() == AttenuationType.NONE ? y + ATTENUATION_OFFSET : y;
 	}
 
-	@SuppressWarnings("unchecked")
-	public T setAttenuationType(@Nonnull final ISound.AttenuationType type) {
+	public SoundInstance setAttenuationType(@Nonnull final ISound.AttenuationType type) {
 		this.attenuationType = type;
-		return (T) this;
+		return this;
 	}
 
-	@SuppressWarnings("unchecked")
-	public T setRepeat(final boolean flag) {
+	public SoundInstance setRepeat(final boolean flag) {
 		this.repeat = flag;
-		return (T) this;
+		return this;
 	}
 
-	@SuppressWarnings("unchecked")
-	public T setRepeatDelay(final int delay) {
+	public SoundInstance setRepeatDelay(final int delay) {
 		this.repeatDelay = delay;
-		return (T) this;
+		return this;
 	}
 
-	@SuppressWarnings("unchecked")
-	public T setVolumeThrottle(final float throttle) {
+	public SoundInstance setVolumeThrottle(final float throttle) {
 		this.volumeThrottle = throttle;
-		return (T) this;
+		return this;
 	}
 
 	@Override

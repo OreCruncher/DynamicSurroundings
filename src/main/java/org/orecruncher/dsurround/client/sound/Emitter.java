@@ -55,7 +55,7 @@ public abstract class Emitter {
 	protected final SoundEffect effect;
 	@Nullable
 	protected final RecordTitleEmitter titleEmitter;
-	protected BasicSound<?> activeSound;
+	protected SoundInstance activeSound;
 	protected boolean done = false;
 
 	public Emitter(@Nonnull final SoundEffect sound) {
@@ -84,7 +84,7 @@ public abstract class Emitter {
 		}
 	}
 
-	protected abstract BasicSound<?> createSound();
+	protected abstract SoundInstance createSound();
 
 	public void update() {
 		if (this.titleEmitter != null)

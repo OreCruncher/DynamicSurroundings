@@ -29,7 +29,8 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.sound.AdhocSound;
+import org.orecruncher.dsurround.client.sound.SoundInstance;
+import org.orecruncher.dsurround.client.sound.SoundBuilder;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.lib.random.XorShiftRandom;
 import org.orecruncher.lib.task.Scheduler;
@@ -61,7 +62,8 @@ public final class HumDinger {
 				if (se != null) {
 					Scheduler.scheduleDeferred(Side.CLIENT, () -> {
 						try {
-							SoundEngine.instance().playSound(new AdhocSound(se, SoundCategory.MASTER));
+							final SoundInstance snd = SoundBuilder.create(se, SoundCategory.MASTER);
+							SoundEngine.instance().playSound(snd);
 						} catch (@Nonnull final Throwable t) {
 							ModBase.log().error("Error executing ding", t);
 						}

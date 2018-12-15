@@ -453,8 +453,8 @@ public final class SoundEngine {
 	}
 
 	private static boolean fadeMusic(@Nonnull final ISound sound) {
-		return (sound.getCategory() == SoundCategory.MUSIC && !(sound instanceof ConfigSound
-				|| (sound instanceof TrackingSound && ModOptions.sound.enableBattleMusic)));
+		return (sound.getCategory() == SoundCategory.MUSIC && !(sound instanceof ConfigSoundInstance
+				|| (sound instanceof TrackingSoundInstance && ModOptions.sound.enableBattleMusic)));
 	}
 
 	// SOUND may not be initialized if Forge did not initialized Minecraft fully.

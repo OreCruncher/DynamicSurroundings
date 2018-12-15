@@ -189,21 +189,21 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	}
 
 	@SideOnly(Side.CLIENT)
-	public BasicSound<?> createSoundAt(@Nonnull final BlockPos pos) {
-		return new AdhocSound(this.sound, SoundRegistry.BIOME).setPosition(pos);
+	public SoundInstance createSoundAt(@Nonnull final BlockPos pos) {
+		return SoundBuilder.builder(this.sound, SoundRegistry.BIOME).setPosition(pos).build();
 	}
 
 	@SideOnly(Side.CLIENT)
-	public BasicSound<?> createSoundNear(@Nonnull final Entity player) {
+	public SoundInstance createSoundNear(@Nonnull final Entity player) {
 		final float posX = (float) (player.posX + randomRange(SPOT_SOUND_RANGE));
 		final float posY = (float) (player.posY + player.getEyeHeight() + randomRange(SPOT_SOUND_RANGE));
 		final float posZ = (float) (player.posZ + randomRange(SPOT_SOUND_RANGE));
-		return new AdhocSound(this.sound, SoundRegistry.BIOME).setPosition(posX, posY, posZ);
+		return SoundBuilder.builder(this.sound, SoundRegistry.BIOME).setPosition(posX, posY, posZ).build();
 	}
 
 	@SideOnly(Side.CLIENT)
-	public BasicSound<?> createTrackingSound(@Nonnull final Entity player, final boolean fadeIn) {
-		final TrackingSound sound = new TrackingSound(player, this, fadeIn);
+	public SoundInstance createTrackingSound(@Nonnull final Entity player, final boolean fadeIn) {
+		final TrackingSoundInstance sound = new TrackingSoundInstance(player, this, fadeIn);
 		if (EnvironState.isPlayer(player))
 			sound.setAttenuationType(AttenuationType.NONE);
 		return sound;

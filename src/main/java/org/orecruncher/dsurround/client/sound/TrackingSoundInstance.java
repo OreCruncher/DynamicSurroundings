@@ -34,7 +34,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class TrackingSound extends BasicSound<TrackingSound> implements ITickableSound {
+public class TrackingSoundInstance extends SoundInstance implements ITickableSound {
 
 	private static final float DONE_VOLUME_THRESHOLD = 0.00001F;
 	private static final float FADE_AMOUNT = 0.02F;
@@ -48,7 +48,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 
 	private long lastTick;
 
-	TrackingSound(@Nonnull final Entity attachedTo, @Nonnull final SoundEffect sound, final boolean fadeIn) {
+	TrackingSoundInstance(@Nonnull final Entity attachedTo, @Nonnull final SoundEffect sound, final boolean fadeIn) {
 		super(sound.getSound(), sound.getCategory());
 
 		this.attachedTo = attachedTo;
@@ -147,7 +147,7 @@ public class TrackingSound extends BasicSound<TrackingSound> implements ITickabl
 	}
 
 	@Override
-	public TrackingSound setVolume(final float volume) {
+	public TrackingSoundInstance setVolume(final float volume) {
 		if (volume < this.maxVolume || !this.isFading)
 			this.maxVolume = volume;
 		return this;

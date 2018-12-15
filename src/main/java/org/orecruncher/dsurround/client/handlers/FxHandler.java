@@ -46,7 +46,7 @@ import org.orecruncher.dsurround.client.handlers.effects.EntitySwingEffect;
 import org.orecruncher.dsurround.client.handlers.effects.FrostBreathEffect;
 import org.orecruncher.dsurround.client.handlers.effects.PlayerToolBarSoundEffect;
 import org.orecruncher.dsurround.client.handlers.effects.VillagerChatEffect;
-import org.orecruncher.dsurround.client.sound.BasicSound;
+import org.orecruncher.dsurround.client.sound.SoundInstance;
 import org.orecruncher.dsurround.lib.sound.ITrackedSound;
 import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.effect.EffectRegistry;
@@ -73,12 +73,12 @@ public class FxHandler extends EffectHandlerBase {
 	private static final ISoundHelper SOUND_HELPER = new ISoundHelper() {
 		@Override
 		public String playSound(@Nonnull final ITrackedSound sound) {
-			return SoundEffectHandler.INSTANCE.playSound((BasicSound<?>) sound);
+			return SoundEffectHandler.INSTANCE.playSound((SoundInstance) sound);
 		}
 
 		@Override
 		public void stopSound(@Nonnull final ITrackedSound sound) {
-			SoundEffectHandler.INSTANCE.stopSound((BasicSound<?>) sound);
+			SoundEffectHandler.INSTANCE.stopSound((SoundInstance) sound);
 		}
 	};
 

@@ -34,11 +34,11 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.client.sound.AdhocSound;
-import org.orecruncher.dsurround.client.sound.BasicSound;
-import org.orecruncher.dsurround.client.sound.ConfigSound;
+import org.orecruncher.dsurround.client.sound.SoundInstance;
+import org.orecruncher.dsurround.client.sound.ConfigSoundInstance;
 import org.orecruncher.dsurround.client.sound.Emitter;
 import org.orecruncher.dsurround.client.sound.EntityEmitter;
+import org.orecruncher.dsurround.client.sound.SoundBuilder;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.client.sound.Sounds;
@@ -92,9 +92,9 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	private final static class PendingSound {
 
 		private final int timeMark;
-		private final BasicSound<?> sound;
+		private final SoundInstance sound;
 
-		public PendingSound(@Nonnull final BasicSound<?> sound, final int delay) {
+		public PendingSound(@Nonnull final SoundInstance sound, final int delay) {
 			this.timeMark = EnvironState.getTickCounter() + delay;
 			this.sound = sound;
 		}
@@ -103,7 +103,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 			return EnvironState.getTickCounter() - this.timeMark;
 		}
 
-		public BasicSound<?> getSound() {
+		public SoundInstance getSound() {
 			return this.sound;
 		}
 	}
@@ -189,16 +189,16 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		sounds.forEach((fx, volume) -> this.emitters.put(fx, new EntityEmitter(EnvironState.getPlayer(), fx)));
 	}
 
-	public boolean isSoundPlaying(@Nonnull final BasicSound<?> sound) {
+	public boolean isSoundPlaying(@Nonnull final SoundInstance sound) {
 		return SoundEngine.instance().isSoundPlaying(sound);
 	}
 
-	public void stopSound(@Nonnull final BasicSound<?> sound) {
+	public void stopSound(@Nonnull final SoundInstance sound) {
 		SoundEngine.instance().stopSound(sound);
 	}
 
 	@Nullable
-	public String playSound(@Nonnull final BasicSound<?> sound) {
+	public String playSound(@Nonnull final SoundInstance sound) {
 		if (sound == null || !sound.canSoundBeHeard(EnvironState.getPlayerPosition()))
 			return null;
 
@@ -207,10 +207,10 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void soundPlay(@Nonnull final PlaySoundEvent e) {
-		// Don't mess with our ConfigSound instances from the config
+		// Don't mess with our ConfigSoundInstance instances from the config
 		// menu
 		final ISound theSound = e.getSound();
-		if (theSound == null || theSound instanceof ConfigSound)
+		if (theSound == null || theSound instanceof ConfigSoundInstance)
 			return;
 
 		final String soundName = theSound.getSoundLocation() != null ? theSound.getSoundLocation().toString() : null;
@@ -260,7 +260,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		if (theSound instanceof PositionedSound) {
 			final SoundEvent rep = this.replacements.get(soundName);
 			if (rep != null) {
-				e.setResultSound(new AdhocSound(rep, (PositionedSound) theSound));
+				e.setResultSound(SoundBuilder.builder(rep).from((PositionedSound) theSound).build());
 			}
 		}
 	}
@@ -271,14 +271,14 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		if (player == null)
 			player = EnvironState.getPlayer();
 
-		final BasicSound<?> s = sound.createSoundNear(player);
+		final SoundInstance s = sound.createSoundNear(player);
 		return playSound(s);
 	}
 
 	@Nullable
 	public String playSoundAt(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int tickDelay) {
 
-		final BasicSound<?> s = sound.createSoundAt(pos);
+		final SoundInstance s = sound.createSoundAt(pos);
 		if (tickDelay == 0)
 			return playSound(s);
 
@@ -323,7 +323,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 				if (iblockstate.getMaterial() == Material.AIR)
 					if (wc.getLightFor(EnumSkyBlock.SKY, blockpos) <= 0)
 						if (wc.getLight(blockpos) <= this.RANDOM.nextInt(8)) {
-							final BasicSound<?> fx = Sounds.AMBIENT_CAVE.createSoundAt(blockpos).setVolume(0.9F)
+							final SoundInstance fx = Sounds.AMBIENT_CAVE.createSoundAt(blockpos).setVolume(0.9F)
 									.setPitch(0.8F + this.RANDOM.nextFloat() * 0.2F);
 							playSound(fx);
 							wc.ambienceTicks = this.RANDOM.nextInt(12000) + 6000;

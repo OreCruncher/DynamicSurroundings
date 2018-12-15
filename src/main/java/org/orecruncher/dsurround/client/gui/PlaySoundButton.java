@@ -26,7 +26,7 @@ package org.orecruncher.dsurround.client.gui;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.sound.ConfigSound;
+import org.orecruncher.dsurround.client.sound.ConfigSoundInstance;
 import org.orecruncher.dsurround.client.sound.MusicFader;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 
@@ -39,7 +39,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class PlaySoundButton extends GuiButtonExt {
 
 	private final String soundResource;
-	private ConfigSound playingSound;
+	private ConfigSoundInstance playingSound;
 
 	public PlaySoundButton(final int id, @Nonnull final String sound) {
 		super(id, 0, 0, 68, 18, GuiConstants.TEXT_PLAY);
@@ -66,7 +66,7 @@ public class PlaySoundButton extends GuiButtonExt {
 		super.drawButton(mc, x, y, partial);
 	}
 
-	private void doPlay(@Nonnull final ConfigSound sound) {
+	private void doPlay(@Nonnull final ConfigSoundInstance sound) {
 		this.playingSound = sound;
 		MusicFader.playConfigSound(sound);
 	}
@@ -76,7 +76,7 @@ public class PlaySoundButton extends GuiButtonExt {
 			MusicFader.stopConfigSound(this.playingSound);
 			this.playingSound = null;
 		} else {
-			doPlay(new ConfigSound(this.soundResource, volume));
+			doPlay(new ConfigSoundInstance(this.soundResource, volume));
 		}
 
 		updateDisplayText();

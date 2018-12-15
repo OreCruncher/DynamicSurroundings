@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.client.sound.BasicSound;
+import org.orecruncher.dsurround.client.sound.SoundInstance;
 import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
@@ -70,7 +70,7 @@ public class WeatherHandler extends EffectHandlerBase {
 		if (!ModOptions.rain.allowBackgroundThunder || EnvironState.getDimensionId() != event.dimId)
 			return;
 
-		final BasicSound<?> thunder = Sounds.THUNDER.createSoundAt(event.location)
+		final SoundInstance thunder = Sounds.THUNDER.createSoundAt(event.location)
 				.setVolume(ModOptions.sound.thunderVolume);
 		SoundEffectHandler.INSTANCE.playSound(thunder);
 

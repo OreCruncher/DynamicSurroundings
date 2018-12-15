@@ -33,8 +33,8 @@ import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.PrecipitationType;
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
-import org.orecruncher.dsurround.client.sound.AdhocSound;
-import org.orecruncher.dsurround.client.sound.BasicSound;
+import org.orecruncher.dsurround.client.sound.SoundBuilder;
+import org.orecruncher.dsurround.client.sound.SoundInstance;
 import org.orecruncher.dsurround.client.weather.compat.RandomThings;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.dsurround.registry.biome.BiomeUtil;
@@ -149,8 +149,8 @@ public class StormSplashRenderer {
 			pitch -= (this.RANDOM.nextFloat() - this.RANDOM.nextFloat()) * 0.1F;
 			this.pos.setPos(x, y, z);
 
-			final BasicSound<?> fx = new AdhocSound(sound, SoundCategory.WEATHER);
-			fx.setVolume(volume).setPitch(pitch).setPosition(this.pos);
+			final SoundInstance fx = SoundBuilder.builder(sound, SoundCategory.WEATHER).setVolume(volume)
+					.setPitch(pitch).setPosition(this.pos).build();
 			SoundEffectHandler.INSTANCE.playSound(fx);
 		}
 	}

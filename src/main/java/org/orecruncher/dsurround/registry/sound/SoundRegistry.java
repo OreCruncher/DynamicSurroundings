@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.sound.ConfigSound;
+import org.orecruncher.dsurround.client.sound.ConfigSoundInstance;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.lib.sound.SoundConfigProcessor;
 import org.orecruncher.dsurround.registry.Registry;
@@ -171,7 +171,7 @@ public final class SoundRegistry extends Registry {
 	}
 
 	public float getVolumeScale(@Nonnull final ISound sound) {
-		return (sound.getSoundLocation() == null || sound instanceof ConfigSound) ? 1F
+		return (sound.getSoundLocation() == null || sound instanceof ConfigSoundInstance) ? 1F
 				: this.volumeControl.getFloat(sound.getSoundLocation().toString());
 	}
 

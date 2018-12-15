@@ -53,7 +53,7 @@ public final class MusicFader {
 
 	private static float currentScale = 1.0F;
 
-	private static ConfigSound playingConfigSound;
+	private static ConfigSoundInstance playingConfigSound;
 
 	public static float getMusicScaling() {
 		return currentScale;
@@ -103,7 +103,7 @@ public final class MusicFader {
 	 *
 	 * @param sound
 	 */
-	public static void playConfigSound(@Nonnull final ConfigSound sound) {
+	public static void playConfigSound(@Nonnull final ConfigSoundInstance sound) {
 		if (sound != null) {
 			SoundEngine.instance().stopAllSounds();
 			currentScale = MIN_VOLUME_SCALE;
@@ -118,7 +118,7 @@ public final class MusicFader {
 	 *
 	 * @param sound
 	 */
-	public static void stopConfigSound(@Nonnull final ConfigSound sound) {
+	public static void stopConfigSound(@Nonnull final ConfigSoundInstance sound) {
 		if (playingConfigSound != null) {
 			if (playingConfigSound != sound)
 				ModBase.log().warn("Inconsistent sound in MusicFader");
