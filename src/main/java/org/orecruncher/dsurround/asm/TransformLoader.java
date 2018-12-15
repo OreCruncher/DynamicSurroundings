@@ -27,6 +27,7 @@ package org.orecruncher.dsurround.asm;
 import java.io.File;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,7 +41,6 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 @IFMLLoadingPlugin.MCVersion("1.12.2")
 @IFMLLoadingPlugin.TransformerExclusions({ "org.orecruncher.dsurround.asm." })
-@IFMLLoadingPlugin.SortingIndex(10001)
 @IFMLLoadingPlugin.Name(TransformLoader.MOD_NAME)
 public class TransformLoader implements IFMLLoadingPlugin {
 
@@ -48,8 +48,10 @@ public class TransformLoader implements IFMLLoadingPlugin {
 	public static final String MOD_NAME = "DynamicSurroundingsCore";
 
 	public static final Logger logger = LogManager.getLogger(MOD_ID);
-	public static Configuration config = null;
-
+	
+	public static boolean enableWeatherASM = true;
+	public static boolean enableArrowPatch = true;
+	
 	@Override
 	public String getModContainerClass() {
 		return "org.orecruncher.dsurround.asm.TransformLoader$Container";
@@ -74,7 +76,12 @@ public class TransformLoader implements IFMLLoadingPlugin {
 	public void injectData(final Map<String, Object> map) {
 		// Tickle the configuration so we can get some options initialized
 		final File configFile = new File((File) map.get("mcLocation"), "/config/dsurround/dsurround.cfg");
-		config = new Configuration(configFile);
+		if (configFile.exists()) {
+			final Configuration config = new Configuration(configFile);
+			enableArrowPatch = config.getBoolean("Disable Arrow Critical Particle Trail", "asm", true,
+					StringUtils.EMPTY);
+			enableWeatherASM = config.getBoolean("Enable Weather Control", "asm", true, StringUtils.EMPTY);
+		}
 	}
 
 	public static class Container extends DummyModContainer {

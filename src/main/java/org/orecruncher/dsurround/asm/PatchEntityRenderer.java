@@ -28,10 +28,9 @@ import static org.objectweb.asm.Opcodes.ALOAD;
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import static org.objectweb.asm.Opcodes.RETURN;
 
-import org.apache.commons.lang3.StringUtils;
-import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FrameNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
@@ -53,14 +52,9 @@ public class PatchEntityRenderer extends Transmorgrifier {
 
 	@Override
 	public boolean isEnabled() {
-		return TransformLoader.config.getBoolean("Enable Weather Control", "asm", true, StringUtils.EMPTY);
+		return TransformLoader.enableWeatherASM;
 	}
-
-	@Override
-	public int classWriterFlags() {
-		return ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES;
-	}
-
+	
 	@Override
 	public boolean transmorgrify(final ClassNode cn) {
 
@@ -82,6 +76,7 @@ public class PatchEntityRenderer extends Transmorgrifier {
 			list.add(new JumpInsnNode(Opcodes.IFEQ, label));
 			list.add(new InsnNode(RETURN));
 			list.add(label);
+			list.add(new FrameNode(Opcodes.F_SAME, 0, null, 0, null));
 			m.instructions.insert(list);
 			return true;
 		} else {

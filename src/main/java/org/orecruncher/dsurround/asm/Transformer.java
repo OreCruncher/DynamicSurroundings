@@ -41,11 +41,8 @@ public class Transformer extends MyTransformer {
 	@Override
 	protected void initTransmorgrifiers() {
 		addTransmorgrifier(new PatchEntityRenderer());
-		//addTransmorgrifier(new PatchSoundManager());
 		addTransmorgrifier(new PatchSoundManagerPlayTime());
 		addTransmorgrifier(new PatchSoundManagerClampVolume());
-		//addTransmorgrifier(new PatchSoundManagerSync());
-		//addTransmorgrifier(new PatchParticleManagerSync());
 		addTransmorgrifier(new PatchEntityArrow());
 		addTransmorgrifier(new SoundCategoryAdditions());
 		addTransmorgrifier(new BiomeInfoHook());

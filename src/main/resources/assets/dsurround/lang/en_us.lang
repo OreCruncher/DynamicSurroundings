@@ -56,16 +56,10 @@ dsurround.msg.NewVersion=["§6Update Available: §9[",{"text":"§2%1$s §ev%2$s�
 # Configuration option strings
 dsurround.cfg.asm.cat.ASM=ASM Transformer Options
 dsurround.cfg.asm.cat.ASM.tooltip=Controls ASM transforms Dynamic Surroundings performs at startup
-dsurround.cfg.asm.EnableSoundCache=Sound Caching
-dsurround.cfg.asm.EnableSoundCache.tooltip=Enable/disable ASM transformations to permit sound caching
 dsurround.cfg.asm.EnableWeather=Weather Control
 dsurround.cfg.asm.EnableWeather.tooltip=Enable/disable ASM transformations to permit weather (rain, snow, splash, dust storms, auroras)
 dsurround.cfg.asm.DisableArrow=Arrow Particle Trail
 dsurround.cfg.asm.DisableArrow.tooltip=Disable particle trail left by an arrow when it flies
-dsurround.cfg.asm.EnableSMSync=Enable SoundManager synchronization
-dsurround.cfg.asm.EnableSMSync.tooltip=Enable synchronized attribute on SoundManager public methods
-dsurround.cfg.asm.EnablePMSync=Enable ParticleManager synchronization
-dsurround.cfg.asm.EnablePMSync.tooltip=Enable synchronized attribute on ParticleManager public methods
 
 dsurround.cfg.logging.cat.Logging=Logging Options
 dsurround.cfg.logging.cat.Logging.tooltip=Defines how Dynamic Surroundings logging will behave

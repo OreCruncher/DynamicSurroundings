@@ -80,13 +80,7 @@ public final class BlockStateRegistry extends Registry {
 
 	@Override
 	protected void postInit() {
-		// Since we now have a reference in the BlockState entity may
-		// as well set it so we can dump our registry.
-		this.blockStates = 0;
-		getBlockStates().forEach(state -> {
-			get(state);
-			this.blockStates++;
-		});
+		this.blockStates = (int) getBlockStates().map(s -> get(s)).count();
 	}
 
 	@Override

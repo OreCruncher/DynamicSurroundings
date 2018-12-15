@@ -23,7 +23,6 @@
  */
 package org.orecruncher.dsurround.asm;
 
-import org.apache.commons.lang3.StringUtils;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -44,8 +43,7 @@ public class PatchEntityArrow extends Transmorgrifier {
 
 	@Override
 	public boolean isEnabled() {
-		return TransformLoader.config.getBoolean("Disable Arrow Critical Particle Trail", "asm", true,
-				StringUtils.EMPTY);
+		return TransformLoader.enableArrowPatch;
 	}
 
 	@Override
