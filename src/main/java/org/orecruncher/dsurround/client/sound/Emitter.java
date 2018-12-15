@@ -93,7 +93,7 @@ public abstract class Emitter {
 		// Allocate a new sound to send down if needed
 		if (this.activeSound == null) {
 			this.activeSound = createSound();
-		} else if (this.activeSound.getState().isActive()) {
+		} else if (SoundEffectHandler.INSTANCE.isSoundPlaying(this.activeSound)) {
 			if (!this.activeSound.canSoundBeHeard(EnvironState.getPlayerPosition())
 					|| (isFading() && this.activeSound.getState() == SoundState.DELAYED)) {
 				SoundEffectHandler.INSTANCE.stopSound(this.activeSound);
@@ -110,9 +110,7 @@ public abstract class Emitter {
 		}
 
 		try {
-			// Don't play if the player can't hear
-			if (this.activeSound.canSoundBeHeard(EnvironState.getPlayerPosition()))
-				SoundEffectHandler.INSTANCE.playSound(this.activeSound);
+			SoundEffectHandler.INSTANCE.playSound(this.activeSound);
 		} catch (final Throwable t) {
 			ModBase.log().error("Unable to play sound", t);
 		}

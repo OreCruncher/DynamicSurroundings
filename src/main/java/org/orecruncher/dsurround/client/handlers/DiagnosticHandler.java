@@ -33,6 +33,7 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
+import org.orecruncher.dsurround.lib.OutOfBandTimerEMA;
 import org.orecruncher.lib.math.MathStuff;
 import org.orecruncher.lib.math.TimerEMA;
 
@@ -62,7 +63,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class DiagnosticHandler extends EffectHandlerBase {
 
 	// Diagnostic strings to display in the debug HUD
-	private List<String> diagnostics = ImmutableList.of();
+	private List<String> diagnostics;
+	private List<String> timings;
 
 	// TPS status strings to display
 	private List<String> serverDataReport = ImmutableList.of();
@@ -74,12 +76,19 @@ public class DiagnosticHandler extends EffectHandlerBase {
 	private long lastTickMark = -1;
 	private float tps = 0;
 
+	private TimerEMA processingTimer;
+	private TimerEMA diagnosticTimer;
+
 	public DiagnosticHandler() {
 		super("Diagnostics");
 	}
 
 	public void addTimer(@Nonnull final TimerEMA timer) {
 		this.timers.add(timer);
+		if ("Processing".equals(timer.name()))
+			this.processingTimer = timer;
+		else if ("Diagnostics".equals(timer.name()))
+			this.diagnosticTimer = timer;
 	}
 
 	@Override
@@ -87,15 +96,41 @@ public class DiagnosticHandler extends EffectHandlerBase {
 		// Gather diagnostics if needed
 		if (Minecraft.getMinecraft().gameSettings.showDebugInfo) {
 			this.diagnostics = new ArrayList<>();
+			this.timings = new ArrayList<>();
 			if (ModBase.isDeveloperMode())
 				this.diagnostics.add(TextFormatting.RED + "DEVELOPER MODE ENABLED");
 			if (ModOptions.logging.enableDebugLogging) {
+				// Gather standard diagnostics
 				final DiagnosticEvent.Gather gather = new DiagnosticEvent.Gather(player.getEntityWorld(), player);
 				MinecraftForge.EVENT_BUS.post(gather);
+				this.diagnostics.add("");
 				this.diagnostics.addAll(gather.output);
+
+				double adjusted = this.processingTimer.getMSecs() - this.diagnosticTimer.getMSecs();
+
+				// Collect timing information
+				this.timings.add("");
+				this.timings.add(TextFormatting.LIGHT_PURPLE + this.clientTick.toString());
+				this.timings.add(TextFormatting.LIGHT_PURPLE + this.lastTick.toString());
+				this.timings.add(TextFormatting.LIGHT_PURPLE + String.format("TPS:%7.3fms", this.tps));
+				for (final TimerEMA timer : this.timers) {
+					final boolean oob = timer instanceof OutOfBandTimerEMA;
+					this.timings.add((oob ? TextFormatting.GRAY : TextFormatting.AQUA) + timer.toString());
+					if (oob)
+						adjusted += timer.getMSecs();
+				}
+
+				final String txt = String.format(TextFormatting.YELLOW + "%s:%7.3fms", "Impact", adjusted);
+				this.timings.add(txt);
+			}
+
+			if (this.serverDataReport != null && !this.serverDataReport.isEmpty()) {
+				this.timings.add("");
+				this.timings.addAll(this.serverDataReport);
 			}
 		} else {
 			this.diagnostics = null;
+			this.timings = null;
 		}
 
 	}
@@ -151,24 +186,11 @@ public class DiagnosticHandler extends EffectHandlerBase {
 	@SubscribeEvent
 	public void onGatherText(@Nonnull final RenderGameOverlayEvent.Text event) {
 		if (this.diagnostics != null && !this.diagnostics.isEmpty()) {
-			event.getLeft().add("");
 			event.getLeft().addAll(this.diagnostics);
 		}
 
-		if (Minecraft.getMinecraft().gameSettings.showDebugInfo) {
-			if (ModOptions.logging.enableDebugLogging) {
-				event.getRight().add(" ");
-				event.getRight().add(TextFormatting.LIGHT_PURPLE + this.clientTick.toString());
-				event.getRight().add(TextFormatting.LIGHT_PURPLE + this.lastTick.toString());
-				event.getRight().add(TextFormatting.LIGHT_PURPLE + String.format("TPS:%7.3fms", this.tps));
-				for (final TimerEMA timer : this.timers)
-					event.getRight().add(TextFormatting.AQUA + timer.toString());
-			}
-
-			if (this.serverDataReport != null) {
-				event.getRight().add(" ");
-				event.getRight().addAll(this.serverDataReport);
-			}
+		if (this.timings != null && !this.timings.isEmpty()) {
+			event.getRight().addAll(this.timings);
 		}
 	}
 

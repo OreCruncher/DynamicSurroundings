@@ -40,6 +40,7 @@ import org.orecruncher.dsurround.client.handlers.fog.MorningFogRangeCalculator;
 import org.orecruncher.dsurround.client.handlers.fog.SeasonFogRangeCalculator;
 import org.orecruncher.dsurround.client.handlers.fog.WeatherFogRangeCalculator;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
+import org.orecruncher.dsurround.lib.OutOfBandTimerEMA;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.RegistryManager;
@@ -62,7 +63,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class FogHandler extends EffectHandlerBase {
 
-	private final TimerEMA timer = new TimerEMA("Fog Render");
+	private final TimerEMA timer = new OutOfBandTimerEMA("Fog Render");
 	private long nanos;
 
 	private ThemeInfo theme;

@@ -47,6 +47,7 @@ import org.orecruncher.dsurround.client.handlers.effects.FrostBreathEffect;
 import org.orecruncher.dsurround.client.handlers.effects.PlayerToolBarSoundEffect;
 import org.orecruncher.dsurround.client.handlers.effects.VillagerChatEffect;
 import org.orecruncher.dsurround.client.sound.SoundInstance;
+import org.orecruncher.dsurround.lib.OutOfBandTimerEMA;
 import org.orecruncher.dsurround.lib.sound.ITrackedSound;
 import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.effect.EffectRegistry;
@@ -97,7 +98,7 @@ public class FxHandler extends EffectHandlerBase {
 
 	private final EventEffectLibrary eventLibrary = new EventEffectLibrary(PARTICLE_HELPER, SOUND_HELPER);
 
-	private final TimerEMA compute = new TimerEMA("Entity Effect Updates");
+	private final TimerEMA compute = new OutOfBandTimerEMA("Entity Effect Updates");
 	private long nanos;
 
 	public FxHandler() {

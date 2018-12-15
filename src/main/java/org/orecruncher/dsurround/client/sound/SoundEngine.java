@@ -26,12 +26,8 @@ package org.orecruncher.dsurround.client.sound;
 
 import java.lang.reflect.Field;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -182,27 +178,23 @@ public final class SoundEngine {
 		return currentSoundCount() < (maxSounds - SOUND_QUEUE_SLACK);
 	}
 
-	public static void flushSound() {
-		instance().flushSoundQueue();
-	}
-
 	private void flushSoundQueue() {
 		getSoundSystem().CommandQueue(null);
 	}
 
-	protected SoundSystem getSoundSystem() {
+	private SoundSystem getSoundSystem() {
 		return resolve(getSoundSystem, getSoundManager());
 	}
 
-	protected Library getSoundLibrary() {
+	private Library getSoundLibrary() {
 		return resolve(getSoundLibrary, getSoundSystem());
 	}
 
-	protected Map<String, ISound> getPlayingSounds() {
+	private Map<String, ISound> getPlayingSounds() {
 		return resolve(getPlayingSounds, getSoundManager());
 	}
 
-	protected Map<ISound, Integer> getDelayedSounds() {
+	private Map<ISound, Integer> getDelayedSounds() {
 		return resolve(getDelayedSounds, getSoundManager());
 	}
 
@@ -224,8 +216,6 @@ public final class SoundEngine {
 	public void stopSound(@Nonnull final ITrackedSound sound) {
 		if (sound.getState().isActive()) {
 			getSoundSystem().stop(sound.getId());
-			getDelayedSounds().remove(sound);
-			flushSoundQueue();
 		}
 	}
 
@@ -422,26 +412,19 @@ public final class SoundEngine {
 		event.output.add("SoundSystem: " + soundCount + "/" + maxCount);
 
 		final Object2IntOpenHashMap<ResourceLocation> counts = new Object2IntOpenHashMap<>();
-		counts.defaultReturnValue(-1);
 
-		final Iterator<Entry<String, ISound>> iterator = getPlayingSounds().entrySet().iterator();
-		while (iterator.hasNext()) {
-			final Entry<String, ISound> entry = iterator.next();
-			final ISound isound = entry.getValue();
-			final ResourceLocation rl = isound.getSound().getSoundLocation();
-			final int count = counts.getInt(rl);
-			if (count == -1)
-				counts.put(rl, 1);
-			else
-				counts.put(rl, count + 1);
-		}
+		//@formatter:off
+		getPlayingSounds().values().stream()
+			.map(s -> s.getSound().getSoundLocation())
+			.forEach(loc -> counts.addTo(loc, 1));
 
-		final List<String> results = new ArrayList<>();
-		counts.object2IntEntrySet().forEach(entry -> {
-			results.add(String.format(TextFormatting.GOLD + "%s: %d", entry.getKey().toString(), entry.getIntValue()));
-		});
+		final List<String> results =
+			counts.object2IntEntrySet().stream()
+				.map(e -> TextFormatting.GOLD + e.getKey().toString() + ": " + String.valueOf(e.getIntValue()))
+				.sorted()
+				.collect(Collectors.toList());
+		//@formatter:on
 
-		Collections.sort(results);
 		event.output.addAll(results);
 	}
 

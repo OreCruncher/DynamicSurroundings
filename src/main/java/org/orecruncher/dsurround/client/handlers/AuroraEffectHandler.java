@@ -33,6 +33,7 @@ import org.orecruncher.dsurround.client.aurora.AuroraUtils;
 import org.orecruncher.dsurround.client.aurora.IAurora;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
+import org.orecruncher.dsurround.lib.OutOfBandTimerEMA;
 import org.orecruncher.lib.DiurnalUtils.DayCycle;
 import org.orecruncher.lib.math.TimerEMA;
 
@@ -51,7 +52,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 	private IAurora current;
 	private int dimensionId;
 
-	private final TimerEMA timer = new TimerEMA("Aurora Render");
+	private final TimerEMA timer = new OutOfBandTimerEMA("Aurora Render");
 	private long nanos;
 
 	public AuroraEffectHandler() {

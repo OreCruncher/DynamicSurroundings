@@ -1,0 +1,10 @@
+/*
+ * custom.css
+ * ~~~~~~~~~~
+ *
+ * Custom css for Dynamic Surroundings documentation.
+*/
+
+span.underlined {
+    text-decoration: underline;
+}
