@@ -8,3 +8,13 @@
 span.underlined {
     text-decoration: underline;
 }
+
+span.sectiontitle {
+	font-weight: bold;
+	color: #3c3c3c;
+}
+
+span.question {
+	font-weight: bold;
+	color: #8B4513;
+}
