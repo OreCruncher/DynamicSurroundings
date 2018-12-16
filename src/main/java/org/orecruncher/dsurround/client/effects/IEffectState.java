@@ -24,8 +24,6 @@
 package org.orecruncher.dsurround.client.effects;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.client.sound.ISoundInstance;
 
@@ -52,10 +50,9 @@ public interface IEffectState {
 	 * Used to play a sound.
 	 *
 	 * @param sound The sound to play
-	 * @return Unique ID identifying the sound in the sound system
+	 * @return true if the sound is queued for play; false otherwise
 	 */
-	@Nullable
-	String playSound(@Nonnull final ISoundInstance sound);
+	boolean playSound(@Nonnull final ISoundInstance sound);
 
 	/**
 	 * Stops the specified sound in the sound system from playing.

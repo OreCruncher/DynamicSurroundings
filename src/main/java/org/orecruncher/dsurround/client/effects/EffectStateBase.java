@@ -24,7 +24,6 @@
 package org.orecruncher.dsurround.client.effects;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.sound.ISoundInstance;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
@@ -61,11 +60,9 @@ public class EffectStateBase implements IEffectState {
 	 * Used by an EntityEffect to play a sound.
 	 *
 	 * @param The sound to play
-	 * @return Unique ID identifying the sound in the sound system
 	 */
 	@Override
-	@Nullable
-	public String playSound(@Nonnull final ISoundInstance sound) {
+	public boolean playSound(@Nonnull final ISoundInstance sound) {
 		return this.soundHelper.playSound(sound);
 	}
 
@@ -80,8 +77,8 @@ public class EffectStateBase implements IEffectState {
 	}
 
 	/**
-	 * Creates a SoundInstance<> object for the specified SoundEffect centered at the
-	 * Entity. If the Entity is the current active player the sound will be
+	 * Creates a SoundInstance<> object for the specified SoundEffect centered at
+	 * the Entity. If the Entity is the current active player the sound will be
 	 * non-attenuated.
 	 *
 	 * @param se     SoundEffect to use as the basis of the sound

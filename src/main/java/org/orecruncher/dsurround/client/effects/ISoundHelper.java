@@ -32,7 +32,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public interface ISoundHelper {
-	String playSound(@Nonnull final ISoundInstance sound);
+	boolean playSound(@Nonnull final ISoundInstance sound);
 
 	void stopSound(@Nonnull final ISoundInstance sound);
 }

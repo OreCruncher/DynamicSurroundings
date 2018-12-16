@@ -28,7 +28,6 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 import org.orecruncher.lib.random.XorShiftRandom;
 
@@ -43,6 +42,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import paulscode.sound.SoundSystemConfig;
 
 @SideOnly(Side.CLIENT)
 public class SoundInstance extends PositionedSound implements ISoundInstance {
@@ -52,7 +52,6 @@ public class SoundInstance extends PositionedSound implements ISoundInstance {
 
 	protected final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
-	protected String id = StringUtils.EMPTY;
 	protected float volumeThrottle = 1.0F;
 	protected SoundState state = SoundState.NONE;
 
@@ -81,17 +80,6 @@ public class SoundInstance extends PositionedSound implements ISoundInstance {
 	@Override
 	public void setState(@Nonnull final SoundState state) {
 		this.state = state;
-	}
-
-	@Override
-	public void setId(@Nonnull final String id) {
-		this.id = id;
-	}
-
-	@Override
-	@Nonnull
-	public String getId() {
-		return this.id;
 	}
 
 	public SoundInstance setCategory(@Nonnull final SoundCategory cat) {
@@ -172,9 +160,9 @@ public class SoundInstance extends PositionedSound implements ISoundInstance {
 		return false;
 	}
 
-	public boolean canSoundBeHeard(@Nonnull final BlockPos soundPos) {
-		return getAttenuationType() == AttenuationType.NONE ? true
-				: SoundUtils.canBeHeard(this.pos, soundPos, getVolume());
+	public boolean canSoundBeHeard() {
+		return this.volume > 0
+				&& (getAttenuationType() == AttenuationType.NONE || SoundSystemConfig.getMasterGain() > 0);
 	}
 
 	@Override

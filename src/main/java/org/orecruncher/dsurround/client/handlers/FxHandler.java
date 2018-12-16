@@ -73,7 +73,7 @@ public class FxHandler extends EffectHandlerBase {
 	private static final IParticleHelper PARTICLE_HELPER = (p) -> ParticleHelper.addParticle(p);
 	private static final ISoundHelper SOUND_HELPER = new ISoundHelper() {
 		@Override
-		public String playSound(@Nonnull final ISoundInstance sound) {
+		public boolean playSound(@Nonnull final ISoundInstance sound) {
 			return SoundEffectHandler.INSTANCE.playSound((SoundInstance) sound);
 		}
 

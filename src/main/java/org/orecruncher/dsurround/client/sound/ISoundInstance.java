@@ -24,8 +24,6 @@
 package org.orecruncher.dsurround.client.sound;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.client.audio.ISound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,8 +35,4 @@ public interface ISoundInstance extends ISound {
 
 	void setState(@Nonnull final SoundState state);
 
-	@Nullable
-	String getId();
-
-	void setId(@Nullable final String id);
 }

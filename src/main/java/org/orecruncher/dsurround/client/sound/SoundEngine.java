@@ -32,9 +32,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
@@ -120,7 +118,7 @@ public final class SoundEngine {
 			.setAction(ModBase.isDeveloperMode() ? Action.EXCEPTION
 					: ModOptions.logging.enableDebugLogging ? Action.LOG : Action.NONE);
 
-	private final Set<ISoundInstance> queuedSounds = new ReferenceOpenHashSet<>();
+	private final Set<ISoundInstance> queuedSounds = new ReferenceOpenHashSet<>(256);
 
 	private String playedSoundId = null;
 
@@ -210,7 +208,7 @@ public final class SoundEngine {
 	 */
 	public void stopSound(@Nonnull final ISoundInstance sound) {
 		if (sound.getState().isActive()) {
-			getSoundSystem().stop(sound.getId());
+			getSoundManager().stopSound(sound);
 		}
 	}
 
@@ -227,36 +225,32 @@ public final class SoundEngine {
 	 * Submits the sound to the sound system to be played.
 	 *
 	 * @param sound Sound to play
-	 * @return ID assigned to the sound by the sound system. A null or empty return
-	 *         indicates that the sound was not submitted
+	 * @return true if sound successfully queued; false if there was an error
 	 */
-	@Nullable
-	public String playSound(@Nonnull final ISoundInstance sound) {
-		// If the sound has an ID assume it is playing and needs
-		// to be stopped.
-		if (!StringUtils.isEmpty(sound.getId())) {
-			stopSound(sound);
-		}
+	public boolean playSound(@Nonnull final ISoundInstance sound) {
+		// If the sound is considered active just return.
+		if (isSoundPlaying(sound))
+			return true;
 
-		// Wipe the existing ID
-		sound.setId(StringUtils.EMPTY);
-		sound.setState(SoundState.NONE);
+		// Assume error
+		sound.setState(SoundState.ERROR);
 
 		// If the sound cannot fit then log and set the error state
 		if (!canFitSound()) {
 			ModBase.log().debug("> NO ROOM: [%s]", sound);
-			sound.setState(SoundState.ERROR);
 		} else {
 
 			synchronized (SoundSystemConfig.THREAD_SYNC) {
 				this.playedSoundId = null;
-				getSoundManager().playSound(sound);
-				if (this.playedSoundId != null)
-					sound.setId(this.playedSoundId);
+				try {
+					getSoundManager().playSound(sound);
+					if (this.playedSoundId != null)
+						sound.setState(SoundState.PLAYING);
+				} catch (@Nonnull final Throwable t) {
+					final String txt = String.format("Unable to play sound [%s]", sound);
+					ModBase.log().error(txt, t);
+				}
 			}
-
-			// If no ID was set there was an error. Else assume it is in a play state.
-			sound.setState(StringUtils.isEmpty(sound.getId()) ? SoundState.ERROR : SoundState.PLAYING);
 
 			// Add active sounds to the list for monitoring
 			if (sound.getState().isActive()) {
@@ -267,7 +261,7 @@ public final class SoundEngine {
 			}
 		}
 
-		return sound.getId();
+		return !sound.getState().isTerminal();
 	}
 
 	// Wipe out any orphans. Not sure exactly how this happens but it wouldn't
@@ -379,8 +373,8 @@ public final class SoundEngine {
 
 	/**
 	 * Event raised when a sound is going to be played. Use this time to set the ID
-	 * of an ISoundInstance as well as check whether the current thread is the client
-	 * thread.
+	 * of an ISoundInstance as well as check whether the current thread is the
+	 * client thread.
 	 *
 	 * @param event Incoming event that has been raised
 	 */
