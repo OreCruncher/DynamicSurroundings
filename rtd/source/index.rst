@@ -1,3 +1,7 @@
+.. |br| raw:: html
+
+   <br />
+   
 Welcome
 -------
 Dynamic Surroundings is a Minecraft Forge mod that alters the player's **visual** and **audible**
@@ -15,7 +19,11 @@ the server.  However, there will be limitations:
 - Weather render effects will not be coordinated across clients.
 - Battle Music will be limited (if configured)
 
-Downloads can be found on CurseForge_.
+Downloads: `CurseForge <http://minecraft.curseforge.com/projects/dynamic-surroundings>`_ |br|
+Source Code: `GitHub <https://github.com/OreCruncher/DynamicSurroundings>`_ |br|
+Issue Tracker: `GitHub Issues <https://github.com/OreCruncher/DynamicSurroundings/issues>`_
+
+-----
 
 ..	list-table::
 	:widths: auto
@@ -46,7 +54,5 @@ Downloads can be found on CurseForge_.
 		
 				tutorials/*
 
-
 .. _here: https://github.com/OreCruncher/DynamicSurroundings/wiki
-.. _CurseForge: http://minecraft.curseforge.com/projects/dynamic-surroundings
 

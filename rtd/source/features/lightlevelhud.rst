@@ -1,3 +1,5 @@
+..	role:: sectiontitle
+
 Light Level HUD
 ===============
 .. image:: images/lightlevel.png
@@ -7,28 +9,28 @@ The Light Level HUD provides information related to block light levels.  This in
 to determine potential mob spawn locations as well as placing of light sources.  The HUD can be turned
 on/off using the F7 key (by default).
 
-Controls
-^^^^^^^^
+:sectiontitle:`Controls`
+
 - F7 toggles HUD on/off
 - CTRL+F7 toggles between block light and block+skylight values
 - SHIFT+F7 toggles display of light levels on "safe" blocks (mobs don't spawn on safe blocks)
 
-Styles
-^^^^^^
+:sectiontitle:`Styles`
+
 The HUD as two different display styles:
 
 - 0: The light level value renders upright and toward the player
 - 1: The light level is "printed" on top of the block oriented so the player can read them normally
 
-Color Code
-^^^^^^^^^^
+:sectiontitle:`Color Code`
+
 - Green - block that can normally spawn mobs but the light level is sufficient to block
 - Yellow - light level is currently high enough to prevent mob spawn, but when the sun sets or light is diminished mobs can spawn
 - Red - block can spawn mobs
 - Blue - the block is a "safe" block meaning mobs cannot spawn (slabs, fences, glass, etc.)
 
-Config Options
-^^^^^^^^^^^^^^
+:sectiontitle:`Config Options`
+
 Additional configuration options can be found under "Light Level HUD Options" in the configuration
 GUI:
 

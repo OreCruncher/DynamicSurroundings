@@ -37,6 +37,9 @@ follows:
 		],
 		"FOOD": [
 			"net.minecraft.item.ItemFood"
+		],
+		"BOOK": [
+			"net.minecraft.item.ItemBook"
 		]
 	}
 

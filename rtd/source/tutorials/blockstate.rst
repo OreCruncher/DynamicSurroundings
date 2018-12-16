@@ -1,3 +1,4 @@
+..	role:: sectiontitle
 ..	_tutorial-blockstate:
 
 Tutorial: BlockState Specification
@@ -43,8 +44,8 @@ Similar to ``minecraft:monster_egg``, this configuration defines a default acous
 ``minecraft:stone_slab`` instances, and then override specific variants with the acoustic that is
 desired.
 
-Obtaining Variant Information about a Block
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+:sectiontitle:`Obtaining Variant Information about a Block`
+
 So how do you get the variant information for a block?  The easiest way to do that is to use the
 debug HUD of Minecraft.  You activate the HUD by pressing F3.  Over on the right hand side of the
 display you should see something like:
@@ -87,8 +88,8 @@ acoustic so we can simplify::
 By dropping the ``half`` property this will cause it to match both the ``top`` and ``bottom`` versions
 of the red sandstone half slab.
 
-Dynamic Surroundings Perspective of a Block
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+:sectiontitle:`Dynamic Surroundings Perspective of a Block`
+
 Dynamic Surroundings maintains a lot of data related to an IBlockState that is uses to generate
 footstep sounds, block effects (like waterfall splash), etc.  Sometimes when making configuration
 changes things just don't work right or there are unintended consequences and you need to sort

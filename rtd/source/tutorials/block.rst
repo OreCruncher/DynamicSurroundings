@@ -1,3 +1,5 @@
+..	role:: sectiontitle
+
 Tutorial: Blocks
 ================
 This tutorial assumes that you have already created a Json configuration file.  If you haven't
@@ -107,8 +109,8 @@ It is possible to have multiple entries in the config file that match the same b
 in the file are processed in order, so entries further down in the list can override the effects
 of entries higher in the list.
 
-Sounds
-^^^^^^
+:sectiontitle:`Sounds`
+
 The sound configuration for blocks is similar to that of biomes.  There are some parameters that
 will be different, such as "variable".
 
@@ -139,47 +141,46 @@ will be different, such as "variable".
 		- Integer
 		- Selection weight of the spot sound if more than one can be selected.
 
-Sound
-^^^^^
+:sectiontitle:`Sound`
+
 This value determines what sound to play.  It is in a ResourceString format.  As an example,
 "dsurround:crickets" tells Minecraft to play the sound "crickets" from the mod "dsurround".
 This can be any valid sound reference, whether it is from Minecraft, Dynamic Surroundings, or
 another mod.  For example, if you want to play the Minecart movement sound you could use
 "minecraft:minecart.base", or want to use the Minecraft flame sound "minecraft:fire.fire".
 
-Conditions
-^^^^^^^^^^
+:sectiontitle:`Conditions`
+
 See :ref:`tutorial-condition-strings`.
 
-Volume
-^^^^^^
+:sectiontitle:`Volume`
+
 Normally a sound will be played at a volume of 1.0F as a default.  Sometimes the supplied sound is
 too loud so specifying a lower volume would be appropriate.  You will have to experiment to find
 the right value for the sound you are playing.
 
-Pitch
-^^^^^
+:sectiontitle:`Pitch`
+
 Pitch will raise or lower the pitch of the sound.  Typically lowering the pitch makes the sound
 "deeper", and raising will make it more "shallow".  For example, Dynamic Surroundings uses the
 regular beach wave noise for Deep Ocean by lowering the pitch to make it deeper to match the deep
 water.
 
-Variable
-^^^^^^^^
+:sectiontitle:`Variable`
+
 Sometimes you have a single source sound, but want to vary the pitch when played.  An example of
 this is the frog croak of the water lily.  The croak is a single sound within the mod, but by
 varying the pitch it can give the impression of a small frog (higher pitch), or a bigger frog
 (lower pitch).
 
-Weight
-^^^^^^
+:sectiontitle:`Weight`
+
 Specifies the relative weight of a particular sound when a random selection can be made.  The higher
 the weight the higher the likelyhood of selection.  Selection behavior of a sound is similar to
 the weighted selections from Minecraft's loot tables.  If a weight is not specified a value of 10
 is assumed.
 
-Effects
-^^^^^^^
+:sectiontitle:`Effects`
 
 ..	list-table:: Effect Configuration
    	:widths: auto

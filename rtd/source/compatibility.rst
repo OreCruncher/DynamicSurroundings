@@ -1,3 +1,4 @@
+..	role:: underlined
 ..	role:: question
 
 Compatibility
@@ -30,6 +31,6 @@ At the time of this writing Dynamic Surroundings works "out of the box" with Opt
 want the benefits of OptiFine without a shader pack you are good to go.  If you do use a shader pack
 you will more than likely experience the following:
 
-- **Can't see auroras**  The cloud renderings produced by the shader pack will wash out/replace the aurora rendering.  In some cases I could see the aurora but it would be feint and in gray scale.  You can turn off aurora processing.
-- **Can't see damage pop offs too well**  Damage popoffs are particles that are text written to the display.  The shaders I have worked with will wash them out or turn them black.  You can see the same effect by using a Minecraft name tag on a mob - the name will not render correctly.  You can turn off the damage popoffs.
-- **Can't see speech bubble text too well**  Same problem as damage pop-offs and name tag rendering in Minecraft.  You can turn off speech bubbles.
+- :underlined:`Can't see auroras`  The cloud renderings produced by the shader pack will wash out/replace the aurora rendering.  In some cases I could see the aurora but it would be feint and in gray scale.  You can turn off aurora processing.
+- :underlined:`Can't see damage pop offs too well`  Damage popoffs are particles that are text written to the display.  The shaders I have worked with will wash them out or turn them black.  You can see the same effect by using a Minecraft name tag on a mob - the name will not render correctly.  You can turn off the damage popoffs.
+- :underlined:`Can't see speech bubble text too well`  Same problem as damage pop-offs and name tag rendering in Minecraft.  You can turn off speech bubbles.

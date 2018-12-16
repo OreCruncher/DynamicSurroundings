@@ -1,3 +1,5 @@
+..	role:: sectiontitle
+
 Tutorial: Biomes
 ================
 This tutorial assumes that you have already created a Json configuration file.  If you haven't
@@ -110,8 +112,7 @@ entries higher in the list.  This makes it possible to do things like "All biome
 this have these parameters, except for this one because it is special".  It is possible to
 accomplish the same effect with regex, but sometimes it is easier to spell it out.
 
-Examples
-^^^^^^^^
+:sectiontitle:`Examples`
 
 Set a general background haze for all biomes.  Good for the wasteland type feel::
 
@@ -177,8 +178,7 @@ effects::
 		]
 	}
 
-Biome Sounds
-^^^^^^^^^^^^
+:sectiontitle:`Biome Sounds`
 
 A background sound can be played while a player is standing in a biome that is configured for sound.
 A biome can be configured with several sound entries.  Dynamic Surroundings will make a sound
@@ -282,31 +282,31 @@ one that plays ``dsurround:forest`` sound during the day if it is not raining, a
 ``dsurround:crickets`` if it is at night and not raining.  The sound entries in this list are
 processed in order, so the first sound to match the specific conditions will be selected.
 
-Sound
-^^^^^
+:sectiontitle:`Sound`
+
 This value determines what sound to play.  It is in a ResourceString format.  As an example,
 "dsurround:crickets" tells Minecraft to play the sound "crickets" from the mod "dsurround".  This
 can be any valid sound reference, whether it is from Minecraft, Dynamic Surroundings, or another mod.  For example, if you want to play the Minecart movement sound you could use "minecraft:minecart.base", or want to use the Minecraft flame sound "minecraft:fire.fire".
 
-Conditions
-^^^^^^^^^^
+:sectiontitle:`Conditions`
+
 See :ref:`tutorial-condition-strings`.
 
-Volume
-^^^^^^
+:sectiontitle:`Volume`
+
 Normally a sound will be played at a volume of 1.0F as a default.  Sometimes the supplied sound is
 too loud so specifying a lower volume would be appropriate.  You will have to experiment to find
 the right value for the sound you are playing.
 
-Pitch
-^^^^^
+:sectiontitle:`Pitch`
+
 Pitch will raise or lower the pitch of the sound.  Typically lowering the pitch makes the sound
 "deeper", and raising will make it more "shallow".  For example, Dynamic Surroundings uses the
 regular beach wave noise for Deep Ocean by lowering the pitch to make it deeper to match the deep
 water.
 
-SoundReset
-^^^^^^^^^^
+:sectiontitle:`SoundReset`
+
 Sometimes a modpack author wants to reset the sound configuration for a biome before setting up
 new ones.  To do this specified ``soundReset`` in the biome record before defining new sounds.
 For example::
@@ -330,8 +330,8 @@ This entry will cause currently configured sound information to be removed from 
 that, a new sound will be defined for each, in this case a "dsurround:wind" sound that will play at
 a low volume regardless of the current conditions.
 
-SoundType
-^^^^^^^^^
+:sectiontitle:`SoundType`
+
 Indicates the type of sound this entry represents.  The following are the possible sound types:
 
 ..	list-table:: Sound Types
@@ -348,26 +348,26 @@ Indicates the type of sound this entry represents.  The following are the possib
    	*	- spot
    		- Sound is a spot sound and will play based on appropriate conditions and randmoness.
 
-RepeatDelay
-^^^^^^^^^^^
+:sectiontitle:`RepeatDelay`
+
 The number of ticks to delay between sound plays.  Sometimes there needs to be spacing when playing
 a sound, such as the stomach rumble when a player is hungry.
 
-RepeatDelayRandom
-^^^^^^^^^^^^^^^^^
+:sectiontitle:`RepeatDelayRandom`
+
 An additional random number of ticks that will be added to repeatDelay when calculating the number
 of ticks to delay for the next play interval.  For example, if repeatDelay is 300, and
 repeatDelayRandom is 1000, the effective delay amount will be 300-1299 ticks.
 
-Weight
-^^^^^^
+:sectiontitle:`Weight`
+
 Specifies the relative weight of a particular sound when a random selection can be made.
 The higher the weight the higher the likelyhood of selection.  Selection behavior of a sound is
 similar to the weighted selections from Minecraft's loot tables.  If a weight is not
 specified a value of 10 is assumed.
 
-Spot Sounds
-^^^^^^^^^^^
+:sectiontitle:`Spot Sounds`
+
 A spot sound is a non-repeating sound that has a random chance of playing while a player is
 present in a biome.  While a biome sound can be thought of as background audible ambiance/theme
 for a biome, a spot sound is more like punctuation.  For example a Jungle could have a biome sound
@@ -376,8 +376,8 @@ within the leaf canopy.  To accent this experience jaguar growls could be introd
 The growl would randomly play while the player is present in a Jungle, but it is not part of the
 sound track.  Another example is an owl hooting in a Forest at night while the crickets chirp.
 
-Fake Biomes
-^^^^^^^^^^^
+:sectiontitle:`Fake Biomes`
+
 A fake biome is similar to a fake player in that they really don't exist, but serve as a proxy for
 getting things done.  In the case of fake biomes Dynamic Surroundings will use them to better refine
 the players locale for the purposes of configuring environmental effects.  Fake biomes do not show
