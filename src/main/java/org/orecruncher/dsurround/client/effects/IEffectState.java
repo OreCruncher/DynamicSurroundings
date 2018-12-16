@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.dsurround.lib.sound.ITrackedSound;
+import org.orecruncher.dsurround.lib.sound.ISoundInstance;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
@@ -55,14 +55,14 @@ public interface IEffectState {
 	 * @return Unique ID identifying the sound in the sound system
 	 */
 	@Nullable
-	String playSound(@Nonnull final ITrackedSound sound);
+	String playSound(@Nonnull final ISoundInstance sound);
 
 	/**
 	 * Stops the specified sound in the sound system from playing.
 	 *
 	 * @param sound The sound to stop playing
 	 */
-	void stopSound(@Nonnull final ITrackedSound sound);
+	void stopSound(@Nonnull final ISoundInstance sound);
 
 	/**
 	 * Creates a SoundInstance<> object for the specified SoundEffect centered at the
@@ -74,7 +74,7 @@ public interface IEffectState {
 	 * @return A SoundInstance<?> with applicable properties set
 	 */
 	@Nonnull
-	ITrackedSound createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player);
+	ISoundInstance createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player);
 
 	/**
 	 * Indicates if the specified player is the one sitting behind the screen.

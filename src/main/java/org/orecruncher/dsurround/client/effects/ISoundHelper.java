@@ -25,14 +25,14 @@ package org.orecruncher.dsurround.client.effects;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.lib.sound.ITrackedSound;
+import org.orecruncher.dsurround.lib.sound.ISoundInstance;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public interface ISoundHelper {
-	String playSound(@Nonnull final ITrackedSound sound);
+	String playSound(@Nonnull final ISoundInstance sound);
 
-	void stopSound(@Nonnull final ITrackedSound sound);
+	void stopSound(@Nonnull final ISoundInstance sound);
 }

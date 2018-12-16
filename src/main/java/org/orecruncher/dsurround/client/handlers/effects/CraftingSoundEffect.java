@@ -29,7 +29,7 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.effects.EventEffect;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.sound.Sounds;
-import org.orecruncher.dsurround.lib.sound.ITrackedSound;
+import org.orecruncher.dsurround.lib.sound.ISoundInstance;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
@@ -50,7 +50,7 @@ public class CraftingSoundEffect extends EventEffect {
 			return;
 
 		this.craftSoundThrottle = EnvironState.getTickCounter();
-		final ITrackedSound fx = getState().createSound(Sounds.CRAFTING, event.player);
+		final ISoundInstance fx = getState().createSound(Sounds.CRAFTING, event.player);
 		getState().playSound(fx);
 	}
 

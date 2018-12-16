@@ -30,13 +30,10 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
-import org.orecruncher.dsurround.lib.sound.ITrackedSound;
+import org.orecruncher.dsurround.lib.sound.ISoundInstance;
 import org.orecruncher.dsurround.lib.sound.SoundState;
 import org.orecruncher.dsurround.lib.sound.SoundUtils;
 import org.orecruncher.lib.random.XorShiftRandom;
-
-import com.google.common.base.MoreObjects;
-import com.google.common.base.MoreObjects.ToStringHelper;
 
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSound;
@@ -51,7 +48,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class SoundInstance extends PositionedSound implements ITrackedSound {
+public class SoundInstance extends PositionedSound implements ISoundInstance {
 
 	protected static final float ATTENUATION_OFFSET = 32F;
 	protected static final Random RANDOM = XorShiftRandom.current();
@@ -104,7 +101,7 @@ public class SoundInstance extends PositionedSound implements ITrackedSound {
 		this.category = cat;
 		return this;
 	}
-	
+
 	public SoundInstance setVolume(final float v) {
 		this.volume = v;
 		return this;
@@ -180,17 +177,20 @@ public class SoundInstance extends PositionedSound implements ITrackedSound {
 
 	public boolean canSoundBeHeard(@Nonnull final BlockPos soundPos) {
 		return getAttenuationType() == AttenuationType.NONE ? true
-				: SoundUtils.canBeHeard(this.pos, soundPos, this.getVolume());
+				: SoundUtils.canBeHeard(this.pos, soundPos, getVolume());
 	}
 
 	@Override
 	public String toString() {
-		final ToStringHelper helper = MoreObjects.toStringHelper(this).addValue(this.positionedSoundLocation.toString())
-				.addValue(this.category.toString()).add("state", this.getState()).add("v", this.getVolume())
-				.add("p", getPitch()).addValue(getAttenuationType());
-		if (!StringUtils.isEmpty(this.getId()))
-			helper.add("id", getId().toString());
-		return helper.toString();
+		final StringBuilder builder = new StringBuilder();
+		builder.append("Sound{");
+		builder.append(getSoundLocation().toString());
+		builder.append(", ").append(getCategory().toString());
+		builder.append(", ").append(getState().toString());
+		builder.append(", v:").append(getVolume());
+		builder.append(", p:").append(getPitch());
+		builder.append("}");
+		return builder.toString();
 	}
 
 	public static AttenuationType noAttenuation() {

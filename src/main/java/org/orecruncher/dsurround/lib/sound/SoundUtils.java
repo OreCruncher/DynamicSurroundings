@@ -24,30 +24,12 @@ package org.orecruncher.dsurround.lib.sound;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.BlockPos;
 import paulscode.sound.SoundSystemConfig;
 
 public final class SoundUtils {
 
 	private static final float DROPOFF = 16 * 16;
-
-	private SoundUtils() {
-
-	}
-
-	public static boolean canBeHeard(@Nonnull final BlockPos pos1, @Nonnull final BlockPos pos2) {
-		return canBeHeard(pos1, pos2, 1F);
-	}
-
-	public static boolean canBeHeard(@Nonnull final EntityLivingBase entity, @Nonnull final BlockPos pos,
-			final float volume) {
-		return canBeHeard(entity.getPosition(), pos, volume);
-	}
-
-	public static boolean canBeHeard(@Nonnull final EntityLivingBase entity, @Nonnull final BlockPos pos) {
-		return canBeHeard(entity.getPosition(), pos, 1F);
-	}
 
 	public static boolean canBeHeard(@Nonnull final BlockPos pos1, @Nonnull final BlockPos pos2, final float volume) {
 		if (volume <= 0.0F || SoundSystemConfig.getMasterGain() <= 0F)

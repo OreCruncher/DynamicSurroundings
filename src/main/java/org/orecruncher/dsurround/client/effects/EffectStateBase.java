@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.sound.SoundInstance;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.dsurround.lib.sound.ITrackedSound;
+import org.orecruncher.dsurround.lib.sound.ISoundInstance;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -66,7 +66,7 @@ public class EffectStateBase implements IEffectState {
 	 */
 	@Override
 	@Nullable
-	public String playSound(@Nonnull final ITrackedSound sound) {
+	public String playSound(@Nonnull final ISoundInstance sound) {
 		return this.soundHelper.playSound(sound);
 	}
 
@@ -76,7 +76,7 @@ public class EffectStateBase implements IEffectState {
 	 * @param soundId
 	 */
 	@Override
-	public void stopSound(@Nonnull final ITrackedSound sound) {
+	public void stopSound(@Nonnull final ISoundInstance sound) {
 		this.soundHelper.stopSound(sound);
 	}
 

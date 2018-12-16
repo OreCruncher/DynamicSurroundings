@@ -1,4 +1,5 @@
-/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/*
+ * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -20,44 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.orecruncher.dsurround.lib.sound;
 
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLStreamHandler;
-
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.audio.ISound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class SoundStreamHandler extends URLStreamHandler {
+public interface ISoundInstance extends ISound {
 
-	protected final ResourceLocation resource;
-	protected URLConnection connection;
+	SoundState getState();
 
-	public SoundStreamHandler(@Nonnull final ResourceLocation resource) {
-		this.resource = resource;
-	}
+	void setState(@Nonnull final SoundState state);
 
-	protected URLConnection createConnection(@Nonnull final URL url) {
-		return new ResourceURLConnection(url, this.resource);
-	}
+	@Nullable
+	String getId();
 
-	@Override
-	protected URLConnection openConnection(@Nonnull final URL url) throws IOException {
-		if (this.connection == null)
-			this.connection = createConnection(url);
-		return this.connection;
-	}
-
-	public String getSpec() {
-		return String.format("%s:%s:%s",
-				new Object[] { "mcsounddomain", this.resource.getNamespace(), this.resource.getPath() });
-	}
-
+	void setId(@Nullable final String id);
 }

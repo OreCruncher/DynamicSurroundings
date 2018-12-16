@@ -31,7 +31,7 @@ import org.orecruncher.dsurround.client.effects.EntityEffect;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactory;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactoryFilter;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.dsurround.lib.sound.ITrackedSound;
+import org.orecruncher.dsurround.lib.sound.ISoundInstance;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.dsurround.registry.item.IItemData;
 import org.orecruncher.dsurround.registry.item.ItemClass;
@@ -68,7 +68,7 @@ public class EntityBowSoundEffect extends EntityEffect {
 				if (itemClass == ItemClass.BOW || itemClass == ItemClass.SHIELD) {
 					final SoundEffect soundEffect = data.getUseSound(currentStack);
 					if (soundEffect != null) {
-						final ITrackedSound fx = getState().createSound(soundEffect, entity);
+						final ISoundInstance fx = getState().createSound(soundEffect, entity);
 						getState().playSound(fx);
 					}
 				}

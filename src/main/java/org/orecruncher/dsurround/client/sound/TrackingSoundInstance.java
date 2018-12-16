@@ -40,7 +40,7 @@ public class TrackingSoundInstance extends SoundInstance implements ITickableSou
 	private static final float FADE_AMOUNT = 0.02F;
 
 	private final Entity attachedTo;
-	private final SoundEffect sound;
+	private final SoundEffect effect;
 
 	private boolean isFading;
 	private float maxVolume;
@@ -48,18 +48,18 @@ public class TrackingSoundInstance extends SoundInstance implements ITickableSou
 
 	private long lastTick;
 
-	TrackingSoundInstance(@Nonnull final Entity attachedTo, @Nonnull final SoundEffect sound, final boolean fadeIn) {
-		super(sound.getSound(), sound.getCategory());
+	TrackingSoundInstance(@Nonnull final Entity attachedTo, @Nonnull final SoundEffect effect, final boolean fadeIn) {
+		super(effect.getSound(), effect.getCategory());
 
 		this.attachedTo = attachedTo;
 
-		this.repeat = sound.isRepeatable();
+		this.repeat = effect.isRepeatable();
 
 		// Don't set volume to 0; MC will optimize out
-		this.sound = sound;
-		this.maxVolume = sound.getVolume();
+		this.effect = effect;
+		this.maxVolume = effect.getVolume();
 		this.volume = fadeIn ? DONE_VOLUME_THRESHOLD * 2 : this.maxVolume;
-		this.pitch = sound.getPitch(RANDOM);
+		this.pitch = effect.getPitch(RANDOM);
 
 		this.lastTick = EnvironState.getTickCounter() - 1;
 
@@ -73,7 +73,7 @@ public class TrackingSoundInstance extends SoundInstance implements ITickableSou
 
 	@Override
 	public int getRepeatDelay() {
-		return this.sound.getRepeat(RANDOM);
+		return this.effect.getRepeat(RANDOM);
 	}
 
 	@Override
@@ -94,10 +94,6 @@ public class TrackingSoundInstance extends SoundInstance implements ITickableSou
 	@Override
 	public boolean isDonePlaying() {
 		return this.isDonePlaying;
-	}
-
-	public boolean sameSound(final SoundEffect snd) {
-		return this.sound.equals(snd);
 	}
 
 	public void updateLocation() {
@@ -137,7 +133,7 @@ public class TrackingSoundInstance extends SoundInstance implements ITickableSou
 
 		if (this.volume <= DONE_VOLUME_THRESHOLD) {
 			// Make sure the volume is 0 so a repeating
-			// sound won't make a last gasp in the sound
+			// effect won't make a last gasp in the effect
 			// engine.
 			this.isDonePlaying = true;
 			this.volume = 0.0F;

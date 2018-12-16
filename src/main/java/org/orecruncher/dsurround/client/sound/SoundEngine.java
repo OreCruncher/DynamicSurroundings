@@ -45,8 +45,7 @@ import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.ModOptions.Trace;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
-import org.orecruncher.dsurround.lib.compat.ModEnvironment;
-import org.orecruncher.dsurround.lib.sound.ITrackedSound;
+import org.orecruncher.dsurround.lib.sound.ISoundInstance;
 import org.orecruncher.dsurround.lib.sound.SoundState;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.lib.ThreadGuard;
@@ -103,7 +102,7 @@ public final class SoundEngine {
 
 	// Maximum number of sound channels configured in the sound system
 	private static int maxSounds = 0;
-	private static SoundEngine instance_;
+	private static SoundEngine instance_ = new SoundEngine();
 
 	static {
 		try {
@@ -115,8 +114,6 @@ public final class SoundEngine {
 	}
 
 	public static SoundEngine instance() {
-		if (instance_ == null)
-			instance_ = new SoundEngine();
 		return instance_;
 	}
 
@@ -125,7 +122,7 @@ public final class SoundEngine {
 			.setAction(ModBase.isDeveloperMode() ? Action.EXCEPTION
 					: ModOptions.logging.enableDebugLogging ? Action.LOG : Action.NONE);
 
-	private final Set<ITrackedSound> queuedSounds = new ReferenceOpenHashSet<>();
+	private final Set<ISoundInstance> queuedSounds = new ReferenceOpenHashSet<>();
 
 	private String playedSoundId = null;
 
@@ -204,7 +201,7 @@ public final class SoundEngine {
 	 * @param sound The sound to check
 	 * @return true if the sound is currently playing, false otherwise
 	 */
-	public boolean isSoundPlaying(@Nonnull final ITrackedSound sound) {
+	public boolean isSoundPlaying(@Nonnull final ISoundInstance sound) {
 		return sound.getState().isActive() && this.queuedSounds.contains(sound);
 	}
 
@@ -213,7 +210,7 @@ public final class SoundEngine {
 	 *
 	 * @param sound The sound to stop
 	 */
-	public void stopSound(@Nonnull final ITrackedSound sound) {
+	public void stopSound(@Nonnull final ISoundInstance sound) {
 		if (sound.getState().isActive()) {
 			getSoundSystem().stop(sound.getId());
 		}
@@ -236,7 +233,7 @@ public final class SoundEngine {
 	 *         indicates that the sound was not submitted
 	 */
 	@Nullable
-	public String playSound(@Nonnull final ITrackedSound sound) {
+	public String playSound(@Nonnull final ISoundInstance sound) {
 		// If the sound has an ID assume it is playing and needs
 		// to be stopped.
 		if (!StringUtils.isEmpty(sound.getId())) {
@@ -249,31 +246,26 @@ public final class SoundEngine {
 
 		// If the sound cannot fit then log and set the error state
 		if (!canFitSound()) {
-			ModBase.log().debug("> NO ROOM: [%s]", sound.toString());
+			ModBase.log().debug("> NO ROOM: [%s]", sound);
 			sound.setState(SoundState.ERROR);
 		} else {
-			// Play the sound if actual music is not installed or the sound is not music
-			if (!ModEnvironment.ActualMusic.isLoaded() || sound.getCategory() != SoundCategory.MUSIC) {
-				synchronized (SoundSystemConfig.THREAD_SYNC) {
-					this.playedSoundId = null;
-					getSoundManager().playSound(sound);
-					if (this.playedSoundId != null)
-						sound.setId(this.playedSoundId);
-				}
+
+			synchronized (SoundSystemConfig.THREAD_SYNC) {
+				this.playedSoundId = null;
+				getSoundManager().playSound(sound);
+				if (this.playedSoundId != null)
+					sound.setId(this.playedSoundId);
 			}
 
 			// If no ID was set there was an error. Else assume it is in a play state.
-			if (StringUtils.isEmpty(sound.getId()))
-				sound.setState(SoundState.ERROR);
-			else
-				sound.setState(SoundState.PLAYING);
+			sound.setState(StringUtils.isEmpty(sound.getId()) ? SoundState.ERROR : SoundState.PLAYING);
 
 			// Add active sounds to the list for monitoring
 			if (sound.getState().isActive()) {
-				ModBase.log().debug(Trace.SOUND_PLAY, "> QUEUED: [%s]", sound.toString());
+				ModBase.log().debug(Trace.SOUND_PLAY, "> QUEUED: [%s]", sound);
 				this.queuedSounds.add(sound);
 			} else {
-				ModBase.log().debug(Trace.SOUND_PLAY, "> NOT QUEUED: [%s]", sound.toString());
+				ModBase.log().debug(Trace.SOUND_PLAY, "> NOT QUEUED: [%s]", sound);
 			}
 		}
 
@@ -389,7 +381,7 @@ public final class SoundEngine {
 
 	/**
 	 * Event raised when a sound is going to be played. Use this time to set the ID
-	 * of an ITrackedSound as well as check whether the current thread is the client
+	 * of an ISoundInstance as well as check whether the current thread is the client
 	 * thread.
 	 *
 	 * @param event Incoming event that has been raised

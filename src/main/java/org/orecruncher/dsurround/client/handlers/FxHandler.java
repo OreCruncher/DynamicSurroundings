@@ -48,7 +48,7 @@ import org.orecruncher.dsurround.client.handlers.effects.PlayerToolBarSoundEffec
 import org.orecruncher.dsurround.client.handlers.effects.VillagerChatEffect;
 import org.orecruncher.dsurround.client.sound.SoundInstance;
 import org.orecruncher.dsurround.lib.OutOfBandTimerEMA;
-import org.orecruncher.dsurround.lib.sound.ITrackedSound;
+import org.orecruncher.dsurround.lib.sound.ISoundInstance;
 import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.effect.EffectRegistry;
 import org.orecruncher.lib.gfx.ParticleHelper;
@@ -73,12 +73,12 @@ public class FxHandler extends EffectHandlerBase {
 	private static final IParticleHelper PARTICLE_HELPER = (p) -> ParticleHelper.addParticle(p);
 	private static final ISoundHelper SOUND_HELPER = new ISoundHelper() {
 		@Override
-		public String playSound(@Nonnull final ITrackedSound sound) {
+		public String playSound(@Nonnull final ISoundInstance sound) {
 			return SoundEffectHandler.INSTANCE.playSound((SoundInstance) sound);
 		}
 
 		@Override
-		public void stopSound(@Nonnull final ITrackedSound sound) {
+		public void stopSound(@Nonnull final ISoundInstance sound) {
 			SoundEffectHandler.INSTANCE.stopSound((SoundInstance) sound);
 		}
 	};
