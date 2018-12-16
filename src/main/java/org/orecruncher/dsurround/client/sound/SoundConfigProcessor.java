@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.orecruncher.dsurround.lib.sound;
+package org.orecruncher.dsurround.client.sound;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;

@@ -30,9 +30,6 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
-import org.orecruncher.dsurround.lib.sound.ISoundInstance;
-import org.orecruncher.dsurround.lib.sound.SoundState;
-import org.orecruncher.dsurround.lib.sound.SoundUtils;
 import org.orecruncher.lib.random.XorShiftRandom;
 
 import net.minecraft.client.audio.ISound;

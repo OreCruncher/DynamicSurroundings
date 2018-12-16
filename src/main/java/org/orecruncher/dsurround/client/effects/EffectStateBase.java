@@ -26,9 +26,8 @@ package org.orecruncher.dsurround.client.effects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.client.sound.SoundInstance;
+import org.orecruncher.dsurround.client.sound.ISoundInstance;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.dsurround.lib.sound.ISoundInstance;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -91,7 +90,7 @@ public class EffectStateBase implements IEffectState {
 	 */
 	@Override
 	@Nonnull
-	public SoundInstance createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player) {
+	public ISoundInstance createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player) {
 		return se.createTrackingSound(player, false);
 	}
 

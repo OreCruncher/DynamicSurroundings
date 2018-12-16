@@ -20,13 +20,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.orecruncher.dsurround.lib.sound;
+package org.orecruncher.dsurround.client.sound;
 
 import javax.annotation.Nonnull;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import paulscode.sound.SoundSystemConfig;
 
+@SideOnly(Side.CLIENT)
 public final class SoundUtils {
 
 	private static final float DROPOFF = 16 * 16;

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.orecruncher.dsurround.lib.sound;
+package org.orecruncher.dsurround.client.sound;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

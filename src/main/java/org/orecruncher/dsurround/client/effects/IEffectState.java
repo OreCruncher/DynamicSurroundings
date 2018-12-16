@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.dsurround.lib.sound.ISoundInstance;
+import org.orecruncher.dsurround.client.sound.ISoundInstance;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;

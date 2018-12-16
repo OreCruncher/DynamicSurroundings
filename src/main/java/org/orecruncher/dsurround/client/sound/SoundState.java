@@ -22,7 +22,10 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.lib.sound;
+package org.orecruncher.dsurround.client.sound;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /*
  * Used by sounds that have long term state that gets manipulated
@@ -31,6 +34,7 @@ package org.orecruncher.dsurround.lib.sound;
  * with a sound.
  */
 
+@SideOnly(Side.CLIENT)
 public enum SoundState {
 	/*
 	 * The sound was just created

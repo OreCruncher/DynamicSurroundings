@@ -26,7 +26,6 @@ package org.orecruncher.dsurround.client.sound;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.lib.sound.SoundState;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.sound.SoundMetadata;
 

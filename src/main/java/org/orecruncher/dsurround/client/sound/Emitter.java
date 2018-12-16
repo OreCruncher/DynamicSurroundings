@@ -32,7 +32,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
-import org.orecruncher.dsurround.lib.sound.SoundState;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.sound.SoundMetadata;
 import org.orecruncher.lib.gui.RecordTitleEmitter;

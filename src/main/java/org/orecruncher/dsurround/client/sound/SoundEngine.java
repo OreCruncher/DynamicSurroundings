@@ -45,8 +45,6 @@ import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.ModOptions.Trace;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
-import org.orecruncher.dsurround.lib.sound.ISoundInstance;
-import org.orecruncher.dsurround.lib.sound.SoundState;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.lib.ThreadGuard;
 import org.orecruncher.lib.ThreadGuard.Action;
