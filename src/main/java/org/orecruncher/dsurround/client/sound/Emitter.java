@@ -49,18 +49,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public abstract class Emitter {
 
-	protected final Random RANDOM = XorShiftRandom.current();
+	protected static final Random RANDOM = XorShiftRandom.current();
+	protected static final RecordTitleEmitter.ITimeKeeper timer = () -> EnvironState.getTickCounter();
 
-	protected final SoundEffect effect;
 	@Nullable
 	protected final RecordTitleEmitter titleEmitter;
+	protected final SoundEffect effect;
 	protected SoundInstance activeSound;
 	protected boolean done = false;
 
 	public Emitter(@Nonnull final SoundEffect sound) {
 		this.effect = sound;
-
-		final RecordTitleEmitter.ITimeKeeper timer = () -> EnvironState.getTickCounter();
 
 		if (StringUtils.isEmpty(sound.getSoundTitle())) {
 			final SoundMetadata data = RegistryManager.SOUND.getSoundMetadata(this.effect.getSound().getRegistryName());
@@ -115,15 +114,6 @@ public abstract class Emitter {
 		}
 	}
 
-	public void setVolume(final float volume) {
-		if (this.activeSound != null)
-			this.activeSound.setVolume(volume);
-	}
-
-	public float getVolume() {
-		return this.activeSound != null ? this.activeSound.getVolume() : 0.0F;
-	}
-
 	public void setVolumeThrottle(final float throttle) {
 		if (this.activeSound != null)
 			this.activeSound.setVolumeThrottle(throttle);
@@ -132,10 +122,6 @@ public abstract class Emitter {
 	public void setPitch(final float pitch) {
 		if (this.activeSound != null)
 			this.activeSound.setPitch(pitch);
-	}
-
-	public float getPitch() {
-		return this.activeSound != null ? this.activeSound.getPitch() : 0.0F;
 	}
 
 	public void fade() {
