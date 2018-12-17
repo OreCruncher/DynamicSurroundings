@@ -1,3 +1,13 @@
+### DynamicSurroundings-1.12.2-3.5.3.0
+**Fixes**
+* Fixed compatiblity with Vivecraft
+* Fixed occasional waterfall sound errors
+
+**Changes**
+* Removed ASM for sound timing.
+* Reworked some of the internal sound handling.
+* Change the default sound system buffer size from 128K (system default) to 16K.  Need to reset manually in your dsurround.cfg if the file already exists.  Not overly important to do so.
+
 ### DynamicSurroundings-1.12.2-3.5.2.0
 **What's New**
 * Added "alwaysOutside" dimension config attribute.  This tells Dynamic Surroundings to always consider the player outside while in that dimension.  Affects biome sound selection.
