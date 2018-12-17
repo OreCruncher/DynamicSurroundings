@@ -29,6 +29,7 @@ import java.nio.IntBuffer;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
@@ -48,7 +49,6 @@ import org.orecruncher.lib.ThreadGuard;
 import org.orecruncher.lib.ThreadGuard.Action;
 import org.orecruncher.lib.math.MathStuff;
 
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
@@ -56,7 +56,6 @@ import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.audio.SoundRegistry;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
@@ -87,7 +86,8 @@ public final class SoundEngine {
 			"field_148620_e");
 	private static final Field getPlayingSounds = ReflectionHelper.findField(SoundManager.class, "playingSounds",
 			"field_148629_h");
-	private static final Field getPlayingSoundsInv = ReflectionHelper.findField(SoundManager.class, "invPlayingSounds", "field_148630_i");
+	private static final Field getPlayingSoundsInv = ReflectionHelper.findField(SoundManager.class, "invPlayingSounds",
+			"field_148630_i");
 	private static final Field getDelayedSounds = ReflectionHelper.findField(SoundManager.class, "delayedSounds",
 			"field_148626_m");
 	private static final Field getSoundLibrary = ReflectionHelper.findField(SoundSystem.class, "soundLibrary");
@@ -187,7 +187,7 @@ public final class SoundEngine {
 	private Map<String, ISound> getPlayingSounds() {
 		return resolve(getPlayingSounds, getSoundManager());
 	}
-	
+
 	private Map<ISound, String> getPlayingSoundsInv() {
 		return resolve(getPlayingSoundsInv, getSoundManager());
 	}
@@ -235,32 +235,28 @@ public final class SoundEngine {
 		if (this.queuedSounds.contains(sound))
 			return sound.getState().isActive();
 
-		// Looks like a new sound.  Assume an error state until otherwise.
+		// Looks like a new sound. Assume an error state until otherwise.
 		sound.setState(SoundState.ERROR);
 
-		// If the sound cannot fit then log and set the error state
-		if (!canFitSound()) {
-			ModBase.log().debug("> NO ROOM: [%s]", sound);
-		} else {
-
-			synchronized (SoundSystemConfig.THREAD_SYNC) {
-				this.playedSoundId = null;
-				try {
-					getSoundManager().playSound(sound);
-					if (this.playedSoundId != null)
-						sound.setState(SoundState.PLAYING);
-				} catch (@Nonnull final Throwable t) {
-					final String txt = String.format("Unable to play sound [%s]", sound);
-					ModBase.log().error(txt, t);
+		if (canFitSound()) {
+			this.playedSoundId = null;
+			try {
+				getSoundManager().playSound(sound);
+				if (this.playedSoundId != null) {
+					this.queuedSounds.add(sound);
+					sound.setState(SoundState.PLAYING);
 				}
+			} catch (@Nonnull final Throwable t) {
+				final String txt = String.format("Unable to play sound [%s]", sound);
+				ModBase.log().error(txt, t);
 			}
+		}
 
-			// Add active sounds to the list for monitoring
+		if (ModBase.log().testTrace(Trace.SOUND_PLAY)) {
 			if (sound.getState().isActive()) {
-				ModBase.log().debug(Trace.SOUND_PLAY, "> QUEUED: [%s]", sound);
-				this.queuedSounds.add(sound);
+				ModBase.log().debug("> QUEUED: [%s]", sound);
 			} else {
-				ModBase.log().debug(Trace.SOUND_PLAY, "> NOT QUEUED: [%s]", sound);
+				ModBase.log().debug("> NOT QUEUED: [%s]", sound);
 			}
 		}
 
@@ -309,13 +305,13 @@ public final class SoundEngine {
 		if (event.side == Side.CLIENT && event.phase == Phase.END) {
 			final Map<ISound, Integer> delayedSounds = getDelayedSounds();
 			final Map<ISound, String> playingInv = getPlayingSoundsInv();
-			
+
 			// Process our queued sounds to make sure the state is appropriate. A sound can
 			// move between the playing sound list and the delayed sound list based on its
 			// attributes so we need to make sure we detect that.
 			//
-			// Note that we cannot rely on isSoundPlaying().  It can return FALSE even
-			// though the sound is in the internal playing lists.  We only want to transition
+			// Note that we cannot rely on isSoundPlaying(). It can return FALSE even
+			// though the sound is in the internal playing lists. We only want to transition
 			// if the sound is in the playing lists or not.
 			this.queuedSounds.removeIf(sound -> {
 				switch (sound.getState()) {
@@ -399,20 +395,16 @@ public final class SoundEngine {
 	 */
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void diagnostics(final DiagnosticEvent.Gather event) {
-		final int soundCount = currentSoundCount();
-		final int maxCount = maxSounds;
-		event.output.add("SoundSystem: " + soundCount + "/" + maxCount);
 
-		final Object2IntOpenHashMap<ResourceLocation> counts = new Object2IntOpenHashMap<>();
+		event.output.add("SoundSystem: " + currentSoundCount() + "/" + maxSounds);
 
 		//@formatter:off
-		getPlayingSounds().values().stream()
-			.map(s -> s.getSound().getSoundLocation())
-			.forEach(loc -> counts.addTo(loc, 1));
-
 		final List<String> results =
-			counts.object2IntEntrySet().stream()
-				.map(e -> TextFormatting.GOLD + e.getKey().toString() + ": " + String.valueOf(e.getIntValue()))
+			getPlayingSounds().values().stream()
+				.map(s -> s.getSound().getSoundLocation())
+				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+				.entrySet().stream()
+				.map(e -> TextFormatting.GOLD + e.getKey().toString() + ": " + String.valueOf(e.getValue()))
 				.sorted()
 				.collect(Collectors.toList());
 		//@formatter:on

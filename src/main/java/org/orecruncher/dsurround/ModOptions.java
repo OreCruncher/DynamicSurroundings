@@ -535,12 +535,12 @@ public final class ModOptions {
 		public static int streamingSoundChannelCount = 4;
 
 		@Option(CONFIG_STREAM_BUFFER_SIZE)
-		@DefaultValue("0")
+		@DefaultValue("16")
 		@LangKey("dsurround.cfg.sound.StreamBufferSize")
 		@RangeInt(min = 0)
 		@Comment("Size of a stream buffer in kilobytes (0: system default - usually 128K bytes)")
 		@RestartRequired(server = true)
-		public static int streamBufferSize = 0;
+		public static int streamBufferSize = 16;
 
 		@Option(CONFIG_STREAM_BUFFER_COUNT)
 		@DefaultValue("0")
