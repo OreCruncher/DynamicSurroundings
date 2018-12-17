@@ -26,6 +26,7 @@ package org.orecruncher.dsurround.client.footsteps.accents;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.footsteps.IFootstepAccentProvider;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
@@ -71,6 +72,10 @@ public class ArmorAccents implements IFootstepAccentProvider {
 	@Nonnull
 	public ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos pos,
 			@Nonnull final ObjectArray<IAcoustic> in) {
+		
+		if(!ModOptions.sound.enableArmorSounds)
+			return in;
+		
 		final ItemStack armor;
 		final ItemStack foot;
 

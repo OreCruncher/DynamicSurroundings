@@ -71,8 +71,6 @@ public final class SoundRegistry extends Registry {
 	public static final float MAX_SOUNDFACTOR = 4F;
 	public static final float DEFAULT_SOUNDFACTOR = 1F;
 
-	private static final String ARMOR_SOUND_PREFIX = ModInfo.MOD_ID + ":armor.";
-
 	private final Set<ResourceLocation> blockedSounds = new ObjectOpenHashSet<>(32);
 	private final Object2IntOpenHashMap<ResourceLocation> soundCull = new Object2IntOpenHashMap<>(32);
 	private final Object2FloatOpenHashMap<ResourceLocation> volumeControl = new Object2FloatOpenHashMap<>(32);
@@ -147,7 +145,6 @@ public final class SoundRegistry extends Registry {
 	}
 
 	private void bakeSoundRegistry() {
-
 		final ResourceLocation soundFile = new ResourceLocation(ModInfo.MOD_ID, "sounds.json");
 		try (final SoundConfigProcessor proc = new SoundConfigProcessor(soundFile)) {
 			proc.forEach((sound, meta) -> {
@@ -175,7 +172,7 @@ public final class SoundRegistry extends Registry {
 	public boolean isSoundBlocked(@Nonnull final ResourceLocation sound) {
 		return this.blockedSounds.contains(sound);
 	}
-	
+
 	public boolean isSoundCulled(@Nonnull final ResourceLocation sound) {
 		return this.soundCull.containsKey(sound);
 	}
@@ -192,11 +189,6 @@ public final class SoundRegistry extends Registry {
 	@Nullable
 	public SoundMetadata getSoundMetadata(@Nonnull final ResourceLocation resource) {
 		return this.soundMetadata.get(resource);
-	}
-
-	private boolean isSoundBlockedLogical(@Nonnull final ResourceLocation sound) {
-		return isSoundBlocked(sound)
-				|| (!ModOptions.sound.enableArmorSounds && sound.toString().startsWith(ARMOR_SOUND_PREFIX));
 	}
 
 	private boolean isSoundCulledLogical(@Nonnull final ResourceLocation res) {
@@ -217,7 +209,7 @@ public final class SoundRegistry extends Registry {
 	}
 
 	private boolean blockSoundProcess(@Nonnull final ResourceLocation res) {
-		return res == null || isSoundBlockedLogical(res) || isSoundCulledLogical(res);
+		return res == null || isSoundBlocked(res) || isSoundCulledLogical(res);
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
