@@ -65,7 +65,7 @@ public class ParticleWaterSplash extends ParticleJet {
 
 	public ParticleWaterSplash(final int strength, final World world, final BlockPos loc, final double x,
 			final double y, final double z) {
-		super(0, strength, world, x, y, z, 2);
+		super(0, strength, world, x, y, z, 4);
 		this.location = loc.toImmutable();
 		setSpawnCount((int) (strength * 2.5F));
 	}
@@ -87,7 +87,7 @@ public class ParticleWaterSplash extends ParticleJet {
 
 	@Override
 	public boolean shouldDie() {
-		return !WaterSplashJetEffect.isValidSpawnBlock(WorldUtils.getDefaultBlockStateProvider(), this.location);
+		return (this.particleAge % 10) == 0 && !WaterSplashJetEffect.isValidSpawnBlock(WorldUtils.getDefaultBlockStateProvider(), this.location);
 	}
 
 	private boolean setupSound() {

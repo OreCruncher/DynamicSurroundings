@@ -87,6 +87,7 @@ public final class SoundEngine {
 			"field_148620_e");
 	private static final Field getPlayingSounds = ReflectionHelper.findField(SoundManager.class, "playingSounds",
 			"field_148629_h");
+	private static final Field getPlayingSoundsInv = ReflectionHelper.findField(SoundManager.class, "invPlayingSounds", "field_148630_i");
 	private static final Field getDelayedSounds = ReflectionHelper.findField(SoundManager.class, "delayedSounds",
 			"field_148626_m");
 	private static final Field getSoundLibrary = ReflectionHelper.findField(SoundSystem.class, "soundLibrary");
@@ -186,6 +187,10 @@ public final class SoundEngine {
 	private Map<String, ISound> getPlayingSounds() {
 		return resolve(getPlayingSounds, getSoundManager());
 	}
+	
+	private Map<ISound, String> getPlayingSoundsInv() {
+		return resolve(getPlayingSoundsInv, getSoundManager());
+	}
 
 	private Map<ISound, Integer> getDelayedSounds() {
 		return resolve(getDelayedSounds, getSoundManager());
@@ -207,9 +212,7 @@ public final class SoundEngine {
 	 * @param sound The sound to stop
 	 */
 	public void stopSound(@Nonnull final ISoundInstance sound) {
-		if (sound.getState().isActive()) {
-			getSoundManager().stopSound(sound);
-		}
+		getSoundManager().stopSound(sound);
 	}
 
 	/**
@@ -228,11 +231,11 @@ public final class SoundEngine {
 	 * @return true if sound successfully queued; false if there was an error
 	 */
 	public boolean playSound(@Nonnull final ISoundInstance sound) {
-		// If the sound is considered active just return.
-		if (isSoundPlaying(sound))
-			return true;
+		// If the sound is already queued return it's current active state.
+		if (this.queuedSounds.contains(sound))
+			return sound.getState().isActive();
 
-		// Assume error
+		// Looks like a new sound.  Assume an error state until otherwise.
 		sound.setState(SoundState.ERROR);
 
 		// If the sound cannot fit then log and set the error state
@@ -261,7 +264,7 @@ public final class SoundEngine {
 			}
 		}
 
-		return !sound.getState().isTerminal();
+		return sound.getState().isActive();
 	}
 
 	// Wipe out any orphans. Not sure exactly how this happens but it wouldn't
@@ -302,25 +305,30 @@ public final class SoundEngine {
 	 * @param event Event that was raised
 	 */
 	@SubscribeEvent(priority = EventPriority.LOW)
-	public void clientTick(@Nonnull TickEvent.ClientTickEvent event) {
+	public void clientTick(@Nonnull final TickEvent.ClientTickEvent event) {
 		if (event.side == Side.CLIENT && event.phase == Phase.END) {
 			final Map<ISound, Integer> delayedSounds = getDelayedSounds();
-			final SoundManager manager = getSoundManager();
+			final Map<ISound, String> playingInv = getPlayingSoundsInv();
+			
 			// Process our queued sounds to make sure the state is appropriate. A sound can
 			// move between the playing sound list and the delayed sound list based on its
 			// attributes so we need to make sure we detect that.
+			//
+			// Note that we cannot rely on isSoundPlaying().  It can return FALSE even
+			// though the sound is in the internal playing lists.  We only want to transition
+			// if the sound is in the playing lists or not.
 			this.queuedSounds.removeIf(sound -> {
 				switch (sound.getState()) {
 				case DELAYED:
 					if (!delayedSounds.containsKey(sound)) {
-						if (manager.isSoundPlaying(sound))
+						if (playingInv.containsKey(sound))
 							sound.setState(SoundState.PLAYING);
 						else
 							sound.setState(SoundState.DONE);
 					}
 					break;
 				case PLAYING:
-					if (!manager.isSoundPlaying(sound)) {
+					if (!playingInv.containsKey(sound)) {
 						if (delayedSounds.containsKey(sound))
 							sound.setState(SoundState.DELAYED);
 						else

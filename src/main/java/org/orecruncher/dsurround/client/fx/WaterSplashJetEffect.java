@@ -36,8 +36,9 @@ import org.orecruncher.lib.math.MathStuff;
 
 import net.minecraft.block.BlockDynamicLiquid;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.relauncher.Side;
@@ -46,15 +47,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class WaterSplashJetEffect extends JetEffect {
 
+	//@formatter:off
 	private final static Vec3i[] cardinal_offsets = {
-			//
-			new Vec3i(-1, 0, 0),
-			//
-			new Vec3i(1, 0, 0),
-			//
-			new Vec3i(0, 0, -1),
-			//
-			new Vec3i(0, 0, 1) };
+		new Vec3i(-1, 0, 0),
+		new Vec3i(1, 0, 0),
+		new Vec3i(0, 0, -1),
+		new Vec3i(0, 0, 1)
+	};
+	//@formatter:on
 
 	public WaterSplashJetEffect(final int chance) {
 		super(chance);
@@ -66,18 +66,16 @@ public class WaterSplashJetEffect extends JetEffect {
 		return BlockEffectType.SPLASH_JET;
 	}
 
-	private static boolean isLiquidBlock(final IBlockState state) {
-		return state.getBlock() instanceof BlockLiquid;
-	}
-
 	private static boolean isUnboundedLiquid(final IBlockAccessEx provider, final BlockPos pos) {
+		final BlockPos.MutableBlockPos tp = new BlockPos.MutableBlockPos();
 		for (int i = 0; i < cardinal_offsets.length; i++) {
-			final BlockPos tp = pos.add(cardinal_offsets[i]);
+			final Vec3i offset = cardinal_offsets[i];
+			tp.setPos(pos.getX() + offset.getX(), pos.getY(), pos.getZ() + offset.getZ());
 			final IBlockState state = provider.getBlockState(tp);
-			if (WorldUtils.isAirBlock(state))
+			if (state.getBlock() == Blocks.AIR)
 				return true;
-			if (isLiquidBlock(state) && !WorldUtils.isFullWaterBlock(state)
-					&& !provider.getBlockState(tp.up()).getMaterial().isLiquid())
+			if (state.getMaterial().isLiquid() && !WorldUtils.isFullWaterBlock(state)
+					&& !provider.getBlockState(tp.move(EnumFacing.UP)).getMaterial().isLiquid())
 				return true;
 		}
 
@@ -98,7 +96,7 @@ public class WaterSplashJetEffect extends JetEffect {
 	}
 
 	public static boolean isValidSpawnBlock(final IBlockAccessEx provider, final BlockPos pos) {
-		if (provider.getBlockState(pos).getMaterial() != Material.WATER)
+		if (!provider.getBlockState(pos).getMaterial().isLiquid())
 			return false;
 		if (isUnboundedLiquid(provider, pos)) {
 			final BlockPos down = pos.down();
