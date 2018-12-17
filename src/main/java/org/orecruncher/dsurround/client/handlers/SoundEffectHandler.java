@@ -25,6 +25,7 @@
 package org.orecruncher.dsurround.client.handlers;
 
 import javax.annotation.Nonnull;
+
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.sound.Emitter;
@@ -38,6 +39,7 @@ import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 import org.orecruncher.lib.collections.ObjectArray;
+
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.material.Material;
@@ -135,9 +137,14 @@ public class SoundEffectHandler extends EffectHandlerBase {
 			return false;
 		});
 
-		// Any sounds left in the list are new and need
-		// an emitter created.
-		sounds.forEach((fx, volume) -> this.emitters.put(fx, new EntityEmitter(EnvironState.getPlayer(), fx)));
+		// Any sounds left in the list are new and need an emitter created.
+		//@formatter:off
+		sounds.forEach((fx, volume) -> {
+			final Emitter e = new EntityEmitter(EnvironState.getPlayer(), fx);
+			e.setVolumeThrottle(volume);
+			this.emitters.put(fx, e);
+		});
+		//@formatter:on
 	}
 
 	public boolean isSoundPlaying(@Nonnull final SoundInstance sound) {
