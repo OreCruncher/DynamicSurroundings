@@ -71,7 +71,7 @@ public class ParticleWaterSplash extends ParticleJet {
 	}
 
 	public void setSpawnCount(final int limit) {
-		this.particleLimit = MathStuff.clamp(limit, 5, 15);
+		this.particleLimit = MathStuff.clamp(limit, 5, 20);
 	}
 
 	public int getSpawnCount() {
@@ -129,9 +129,10 @@ public class ParticleWaterSplash extends ParticleJet {
 						pos.setPos(this.posX + xOffset, this.posY, this.posZ + zOffset)))
 					continue;
 
-				final double motionX = xOffset * (this.jetStrength / 25.0D);
-				final double motionZ = zOffset * (this.jetStrength / 25.0D);
-				final double motionY = 0.1D + RANDOM.nextFloat() * this.jetStrength / 20.0D;
+				final int motionStr = this.jetStrength + 3;
+				final double motionX = xOffset * (motionStr / 20.0D);
+				final double motionZ = zOffset * (motionStr / 20.0D);
+				final double motionY = 0.1D + RANDOM.nextFloat() * motionStr / 20.0D;
 				final IParticleMote particle = ParticleCollections.addWaterSpray(this.world, this.posX + xOffset,
 						(this.posY), this.posZ + zOffset, motionX, motionY, motionZ);
 				// If we could not add the collection is full. No sense beating a dead horse.
