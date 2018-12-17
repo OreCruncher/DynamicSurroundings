@@ -39,6 +39,7 @@ public abstract class Registry {
 	public Registry(@Nonnull final String name) {
 		this.name = name;
 		RegistryManager.REGISTRIES.add(this);
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@Nonnull

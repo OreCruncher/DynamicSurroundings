@@ -330,7 +330,7 @@ public final class BiomeInfo extends BiomeData implements Comparable<BiomeInfo> 
 			setSpotSoundChance(entry.spotSoundChance.intValue());
 
 		for (final SoundConfig sr : entry.sounds) {
-			if (RegistryManager.SOUND.isSoundBlocked(sr.sound))
+			if (RegistryManager.SOUND.isSoundBlocked(new ResourceLocation(sr.sound)))
 				continue;
 			final SoundEffect.Builder b = new SoundEffect.Builder(sr);
 			final SoundEffect s = b.build();

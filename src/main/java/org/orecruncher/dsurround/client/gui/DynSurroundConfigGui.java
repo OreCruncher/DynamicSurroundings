@@ -42,6 +42,7 @@ import org.orecruncher.lib.ConfigProcessor;
 import org.orecruncher.lib.gui.GuiConfigBase;
 
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
@@ -129,11 +130,12 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 			prop.setRequiresWorldRestart(false);
 			prop.setConfigEntryClass(SoundConfigEntry.class);
 			final StringBuilder builder = new StringBuilder();
-			if (registry.isSoundBlocked(sound))
+			final ResourceLocation res = new ResourceLocation(sound);
+			if (registry.isSoundBlocked(res))
 				builder.append(GuiConstants.TOKEN_BLOCK).append(' ');
-			if (registry.isSoundCulled(sound))
+			if (registry.isSoundCulled(res))
 				builder.append(GuiConstants.TOKEN_CULL).append(' ');
-			final float v = registry.getVolumeScale(sound);
+			final float v = registry.getVolumeScale(res);
 			if (v != 1.0F)
 				builder.append((int) (v * 100F));
 			prop.setValue(builder.toString());

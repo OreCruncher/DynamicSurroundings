@@ -45,10 +45,10 @@ public class SoundBuilder {
 	
 	public SoundBuilder from(@Nonnull final PositionedSound ps) {
 		this.sound.setCategory(ps.getCategory());
-		this.sound.setPosition(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
-		this.sound.setAttenuationType(sound.getAttenuationType());
-		this.sound.setVolume(PositionedSoundUtil.getVolume(sound));
-		this.sound.setPitch(PositionedSoundUtil.getPitch(sound));
+		this.sound.setPosition(ps.getXPosF(), ps.getYPosF(), ps.getZPosF());
+		this.sound.setAttenuationType(ps.getAttenuationType());
+		this.sound.setVolume(PositionedSoundUtil.getVolume(ps));
+		this.sound.setPitch(PositionedSoundUtil.getPitch(ps));
 		return this;
 	}
 	

@@ -47,6 +47,7 @@ import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
@@ -159,7 +160,7 @@ public final class BlockStateRegistry extends Registry {
 				blockData.setChance(entry.chance.intValue());
 
 			for (final SoundConfig sr : entry.sounds) {
-				if (sr.sound != null && !soundRegistry.isSoundBlocked(sr.sound)) {
+				if (sr.sound != null && !soundRegistry.isSoundBlocked(new ResourceLocation(sr.sound))) {
 					final SoundEffect.Builder b = new SoundEffect.Builder(sr);
 					if (sr.soundCategory == null)
 						b.setSoundCategory(SoundCategory.BLOCKS);

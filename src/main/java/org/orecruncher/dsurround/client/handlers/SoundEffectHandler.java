@@ -24,20 +24,11 @@
 
 package org.orecruncher.dsurround.client.handlers;
 
-import java.util.Set;
-import java.util.function.Predicate;
-
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.ModInfo;
-import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.client.sound.ConfigSoundInstance;
 import org.orecruncher.dsurround.client.sound.Emitter;
 import org.orecruncher.dsurround.client.sound.EntityEmitter;
-import org.orecruncher.dsurround.client.sound.SoundBuilder;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.client.sound.SoundInstance;
@@ -45,29 +36,17 @@ import org.orecruncher.dsurround.client.sound.SoundState;
 import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.registry.RegistryDataEvent;
-import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 import org.orecruncher.lib.collections.ObjectArray;
-import org.orecruncher.lib.compat.PositionedSoundUtil;
-
-import com.google.common.collect.Sets;
-
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
-import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -75,19 +54,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SoundEffectHandler extends EffectHandlerBase {
 
-	private static final int AGE_THRESHOLD_TICKS = 10;
 	public static final SoundEffectHandler INSTANCE = new SoundEffectHandler();
-
-	private static final Predicate<PendingSound> PENDING_SOUNDS = input -> {
-		if (input.getTickAge() >= AGE_THRESHOLD_TICKS) {
-			input.getSound().setState(SoundState.ERROR);
-			return true;
-		}
-		if (input.getTickAge() >= 0) {
-			return INSTANCE.playSound(input.getSound());
-		}
-		return false;
-	};
 
 	private final static class PendingSound {
 
@@ -109,10 +76,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	}
 
 	private final Object2ObjectOpenHashMap<SoundEffect, Emitter> emitters = new Object2ObjectOpenHashMap<>();
-	private final Object2ObjectOpenHashMap<String, SoundEvent> replacements = new Object2ObjectOpenHashMap<>();
 	private final ObjectArray<PendingSound> pending = new ObjectArray<>();
-	private final Set<String> soundsToBlock = Sets.newHashSet();
-	private final Object2IntOpenHashMap<String> soundCull = new Object2IntOpenHashMap<>();
 
 	private SoundEffectHandler() {
 		super("Sound Effects");
@@ -121,7 +85,13 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
 		this.emitters.values().forEach(Emitter::update);
-		this.pending.removeIf(PENDING_SOUNDS);
+
+		//@formatter:off
+		this.pending.stream()
+			.filter(s -> s.getTickAge() >= 0)
+			.forEach(s -> INSTANCE.playSound(s.getSound()));
+		this.pending.removeIf(s -> s.getTickAge() >= 0);
+		//@formatter:on
 
 		doMoodProcessing();
 	}
@@ -129,25 +99,6 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	@Override
 	public void onConnect() {
 		clearSounds();
-		this.soundsToBlock.clear();
-		this.soundCull.clear();
-		this.replacements.clear();
-		final Set<ResourceLocation> reg = SoundEngine.instance().getSoundRegistry().getKeys();
-		reg.forEach(resource -> {
-			final String rs = resource.toString();
-			if (RegistryManager.SOUND.isSoundBlockedLogical(rs)) {
-				this.soundsToBlock.add(rs);
-			} else if (RegistryManager.SOUND.isSoundCulled(rs)) {
-				this.soundCull.put(rs, -ModOptions.sound.soundCullingThreshold);
-			}
-		});
-
-		final ResourceLocation bowLooseResource = new ResourceLocation(ModInfo.MOD_ID, "bow.loose");
-		final SoundEvent bowLoose = RegistryManager.SOUND.getSound(bowLooseResource);
-		if (!this.soundsToBlock.contains(bowLooseResource.toString())) {
-			this.replacements.put("minecraft:entity.arrow.shoot", bowLoose);
-			this.replacements.put("minecraft:entity.skeleton.shoot", bowLoose);
-		}
 	}
 
 	@Override
@@ -198,80 +149,11 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	}
 
 	public boolean playSound(@Nonnull final SoundInstance sound) {
-		if (sound == null || !sound.canSoundBeHeard())
-			return false;
-
-		return SoundEngine.instance().playSound(sound);
+		return sound != null && sound.canSoundBeHeard() ? SoundEngine.instance().playSound(sound) : false;
 	}
 
-	@SubscribeEvent(priority = EventPriority.HIGH)
-	public void soundPlay(@Nonnull final PlaySoundEvent e) {
-		// Don't mess with our ConfigSoundInstance instances from the config
-		// menu
-		final ISound theSound = e.getSound();
-		if (theSound == null || theSound instanceof ConfigSoundInstance)
-			return;
-
-		final String soundName = theSound.getSoundLocation() != null ? theSound.getSoundLocation().toString() : null;
-		if (soundName == null)
-			return;
-
-		// Check to see if the sound is blocked
-		if (this.soundsToBlock.contains(soundName)) {
-			e.setResultSound(null);
-			return;
-		}
-
-		// Check to see if it needs to be culled
-		if (ModOptions.sound.soundCullingThreshold > 0) {
-			// Get the last time the sound was seen
-			final int lastOccurance = this.soundCull.getInt(soundName);
-			if (lastOccurance != 0) {
-				final int currentTick = EnvironState.getTickCounter();
-				if ((currentTick - lastOccurance) < ModOptions.sound.soundCullingThreshold) {
-					// It's been culled!
-					e.setResultSound(null);
-					return;
-				} else {
-					// Set when it happened and fall through for remapping and stuff
-					this.soundCull.put(soundName, currentTick);
-				}
-			}
-		}
-
-		// If it is Minecraft thunder handle the sound remapping to Dynamic Surroundings
-		// thunder
-		// and set the appropriate volume.
-		if (e.getName().equals("entity.lightning.thunder")) {
-			final String thunderSound = Sounds.THUNDER.getSoundName();
-			if (!this.soundsToBlock.contains(thunderSound)) {
-				final PositionedSound sound = (PositionedSound) theSound;
-				if (sound != null && PositionedSoundUtil.getVolume(sound) > 16) {
-					final BlockPos pos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
-					final ISound newSound = Sounds.THUNDER.createSoundAt(pos).setVolume(ModOptions.sound.thunderVolume);
-					e.setResultSound(newSound);
-				}
-				return;
-			}
-		}
-
-		// Check to see if the sound is going to be replaced with another sound
-		if (theSound instanceof PositionedSound) {
-			final SoundEvent rep = this.replacements.get(soundName);
-			if (rep != null) {
-				e.setResultSound(SoundBuilder.builder(rep).from((PositionedSound) theSound).build());
-			}
-		}
-	}
-
-	@Nullable
-	public boolean playSoundAtPlayer(@Nullable EntityPlayer player, @Nonnull final SoundEffect sound) {
-
-		if (player == null)
-			player = EnvironState.getPlayer();
-
-		final SoundInstance s = sound.createSoundNear(player);
-		return playSound(s);
+	public boolean playSoundAtPlayer(@Nonnull final EntityPlayer player, @Nonnull final SoundEffect sound) {
+		return playSound(sound.createSoundNear(player));
 	}
 
 	public boolean playSoundAt(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int tickDelay) {
@@ -338,7 +220,10 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void diagnostics(@Nonnull final DiagnosticEvent.Gather event) {
-		event.output.add(String.format("Ambiance Timer: %d", ((WorldClient) EnvironState.getWorld()).ambienceTicks));
+		if (EnvironState.getWorld() instanceof WorldClient) {
+			event.output
+					.add(String.format("Ambiance Timer: %d", ((WorldClient) EnvironState.getWorld()).ambienceTicks));
+		}
 		this.emitters.values().forEach(emitter -> event.output.add("EMITTER: " + emitter.toString()));
 		this.pending.forEach(effect -> event.output
 				.add((effect.getTickAge() < 0 ? "DELAYED: " : "PENDING: ") + effect.getSound().toString()));

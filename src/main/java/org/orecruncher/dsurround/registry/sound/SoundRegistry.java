@@ -23,9 +23,8 @@
 
 package org.orecruncher.dsurround.registry.sound;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
@@ -34,19 +33,30 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.sound.ConfigSoundInstance;
+import org.orecruncher.dsurround.client.sound.SoundBuilder;
 import org.orecruncher.dsurround.client.sound.SoundConfigProcessor;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
+import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
+import org.orecruncher.lib.compat.PositionedSoundUtil;
 import org.orecruncher.lib.math.MathStuff;
 
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.event.sound.PlaySoundEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -63,26 +73,26 @@ public final class SoundRegistry extends Registry {
 
 	private static final String ARMOR_SOUND_PREFIX = ModInfo.MOD_ID + ":armor.";
 
-	private final List<String> cullSoundNames = new ArrayList<>();
-	private final List<String> blockSoundNames = new ArrayList<>();
-	private final Object2FloatOpenHashMap<String> volumeControl;
-
+	private final Set<ResourceLocation> blockedSounds = new ObjectOpenHashSet<>(32);
+	private final Object2IntOpenHashMap<ResourceLocation> soundCull = new Object2IntOpenHashMap<>(32);
+	private final Object2FloatOpenHashMap<ResourceLocation> volumeControl = new Object2FloatOpenHashMap<>(32);
 	private final Map<ResourceLocation, SoundMetadata> soundMetadata = new Object2ObjectOpenHashMap<>();
 	private final Map<ResourceLocation, SoundEvent> myRegistry = new Object2ObjectOpenHashMap<>();
+	private final Object2ObjectOpenHashMap<ResourceLocation, SoundEvent> replacements = new Object2ObjectOpenHashMap<>();
 
 	public SoundRegistry() {
 		super("Sound Registry");
-		this.volumeControl = new Object2FloatOpenHashMap<>();
 		this.volumeControl.defaultReturnValue(DEFAULT_SOUNDFACTOR);
 	}
 
 	@Override
 	protected void preInit() {
-		this.cullSoundNames.clear();
-		this.blockSoundNames.clear();
+		this.soundCull.clear();
+		this.blockedSounds.clear();
 		this.volumeControl.clear();
 		this.soundMetadata.clear();
 		this.myRegistry.clear();
+		this.replacements.clear();
 
 		bakeSoundRegistry();
 
@@ -91,16 +101,16 @@ public final class SoundRegistry extends Registry {
 			if (parts.length < 2) {
 				ModBase.log().warn("Missing tokens in sound settings? (%s)", line);
 			} else {
-				final String soundName = parts[0];
+				final ResourceLocation res = new ResourceLocation(parts[0]);
 				for (int i = 1; i < parts.length; i++) {
 					if ("cull".compareToIgnoreCase(parts[i]) == 0) {
-						this.cullSoundNames.add(soundName);
+						this.soundCull.put(res, -ModOptions.sound.soundCullingThreshold);
 					} else if ("block".compareToIgnoreCase(parts[i]) == 0) {
-						this.blockSoundNames.add(soundName);
+						this.blockedSounds.add(res);
 					} else {
 						try {
 							final int volume = Integer.parseInt(parts[i]);
-							this.volumeControl.put(soundName,
+							this.volumeControl.put(res,
 									MathStuff.clamp(volume / 100F, MIN_SOUNDFACTOR, MAX_SOUNDFACTOR));
 						} catch (final Throwable t) {
 							ModBase.log().warn("Unrecognized token %s (%s)", parts[i], line);
@@ -109,6 +119,14 @@ public final class SoundRegistry extends Registry {
 				}
 			}
 		}
+
+		final ResourceLocation bowLooseResource = new ResourceLocation(ModInfo.MOD_ID, "bow.loose");
+		if (!isSoundBlocked(bowLooseResource)) {
+			final SoundEvent bowLoose = getSound(bowLooseResource);
+			this.replacements.put(new ResourceLocation("minecraft:entity.arrow.shoot"), bowLoose);
+			this.replacements.put(new ResourceLocation("minecraft:entity.skeleton.shoot"), bowLoose);
+		}
+
 	}
 
 	@Override
@@ -154,19 +172,15 @@ public final class SoundRegistry extends Registry {
 		return evt;
 	}
 
-	public boolean isSoundCulled(@Nonnull final String sound) {
-		return this.cullSoundNames.contains(sound);
+	public boolean isSoundBlocked(@Nonnull final ResourceLocation sound) {
+		return this.blockedSounds.contains(sound);
+	}
+	
+	public boolean isSoundCulled(@Nonnull final ResourceLocation sound) {
+		return this.soundCull.containsKey(sound);
 	}
 
-	public boolean isSoundBlocked(@Nonnull final String sound) {
-		return this.blockSoundNames.contains(sound);
-	}
-
-	public boolean isSoundBlockedLogical(@Nonnull final String sound) {
-		return isSoundBlocked(sound) || (!ModOptions.sound.enableArmorSounds && sound.startsWith(ARMOR_SOUND_PREFIX));
-	}
-
-	public float getVolumeScale(@Nonnull final String soundName) {
+	public float getVolumeScale(@Nonnull final ResourceLocation soundName) {
 		return this.volumeControl.getFloat(soundName);
 	}
 
@@ -180,4 +194,68 @@ public final class SoundRegistry extends Registry {
 		return this.soundMetadata.get(resource);
 	}
 
+	private boolean isSoundBlockedLogical(@Nonnull final ResourceLocation sound) {
+		return isSoundBlocked(sound)
+				|| (!ModOptions.sound.enableArmorSounds && sound.toString().startsWith(ARMOR_SOUND_PREFIX));
+	}
+
+	private boolean isSoundCulledLogical(@Nonnull final ResourceLocation res) {
+		if (ModOptions.sound.soundCullingThreshold > 0) {
+			// Get the last time the sound was seen
+			final int lastOccurance = this.soundCull.getInt(res);
+			if (lastOccurance != 0) {
+				final int currentTick = EnvironState.getTickCounter();
+				if ((currentTick - lastOccurance) < ModOptions.sound.soundCullingThreshold) {
+					return true;
+				} else {
+					// Set when it happened and fall through for remapping and stuff
+					this.soundCull.put(res, currentTick);
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean blockSoundProcess(@Nonnull final ResourceLocation res) {
+		return res == null || isSoundBlockedLogical(res) || isSoundCulledLogical(res);
+	}
+
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void soundPlay(@Nonnull final PlaySoundEvent e) {
+		// Don't mess with our ConfigSoundInstance instances from the config
+		// menu
+		final ISound theSound = e.getSound();
+		if (theSound == null || theSound instanceof ConfigSoundInstance)
+			return;
+
+		// Check to see if we need to block sound processing
+		final ResourceLocation soundResource = theSound.getSoundLocation();
+		if (blockSoundProcess(soundResource)) {
+			e.setResultSound(null);
+			return;
+		}
+
+		// If it is Minecraft thunder handle the sound remapping to Dynamic Surroundings
+		// thunder and set the appropriate volume.
+		if ("entity.lightning.thunder".equals(e.getName())) {
+			final ResourceLocation thunderSound = Sounds.THUNDER.getSound().getSoundName();
+			if (!isSoundBlocked(thunderSound)) {
+				final PositionedSound sound = (PositionedSound) theSound;
+				if (PositionedSoundUtil.getVolume(sound) > 16) {
+					final BlockPos pos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
+					final ISound newSound = Sounds.THUNDER.createSoundAt(pos).setVolume(ModOptions.sound.thunderVolume);
+					e.setResultSound(newSound);
+				}
+				return;
+			}
+		}
+
+		// Check to see if the sound is going to be replaced with another sound
+		if (theSound instanceof PositionedSound) {
+			final SoundEvent rep = this.replacements.get(soundResource);
+			if (rep != null) {
+				e.setResultSound(SoundBuilder.builder(rep).from((PositionedSound) theSound).build());
+			}
+		}
+	}
 }
