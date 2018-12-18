@@ -25,12 +25,9 @@
 package org.orecruncher.dsurround.asm;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.MethodNode;
 
 /**
@@ -94,71 +91,19 @@ public abstract class Transmorgrifier {
 	 */
 	public abstract boolean transmorgrify(final ClassNode cn);
 
-	/**
-	 * Locates a MethodNode within the specified ClassNode.
-	 *
-	 * @param cn        ClassNode to search
-	 * @param signature Signature of the method
-	 * @param name      Name of the method
-	 * @return MethodNode that matches the search criteria, null otherwise
-	 */
-	@Nullable
-	protected MethodNode findMethod(@Nonnull final ClassNode cn, @Nonnull final String signature,
-			@Nonnull final String name) {
+	protected MethodNode findMethod(@Nonnull final ClassNode cn, @Nonnull final String[] signatures,
+			@Nonnull final String[] names) {
 		for (final MethodNode m : cn.methods)
-			if (m.name.equals(name) && m.desc.equals(signature))
+			if (isOneOf(m.name, names) && isOneOf(m.desc, signatures))
 				return m;
 		return null;
 	}
 
-	/**
-	 * Locates a MethodNode within the specified ClassNode. The method accepts one
-	 * or more method names and will return the first one discovered. Useful for
-	 * handling obfuscation.
-	 *
-	 * @param cn        ClassNode to search
-	 * @param signature Signature of the method
-	 * @param names     One or more names to search for
-	 * @return MethodNode that matches the search criteria, null otherwise
-	 */
-	@Nullable
-	protected MethodNode findMethod(@Nonnull final ClassNode cn, @Nonnull final String signature,
-			@Nonnull final String... names) {
-		for (int i = 0; i < names.length; i++) {
-			final MethodNode m = findMethod(cn, signature, names[i]);
-			if (m != null)
-				return m;
-		}
-		return null;
-	}
-
-	/**
-	 * Locates a CTOR within the provided ClassNode that has the specified
-	 * signature.
-	 *
-	 * @param cn        ClassNode to search
-	 * @param signature Signature to match
-	 * @return MethodeNode that matches the search criteria, null otherwise
-	 */
-	@Nullable
-	protected MethodNode findCTOR(@Nonnull final ClassNode cn, @Nonnull final String signature) {
-		return findMethod(cn, signature, "<init>");
-	}
-
-	/**
-	 * Locates a local variable within the MethodNode that matches the specified
-	 * name.
-	 *
-	 * @param m    MethodNode to search
-	 * @param name Local variable to search for
-	 * @return LocalVariableNode that matches the search criteria, null otherwise
-	 */
-	@Nullable
-	protected LocalVariableNode findLocalVariable(@Nonnull final MethodNode m, @Nonnull final String name) {
-		for (final LocalVariableNode v : m.localVariables)
-			if (v.name.equals(name))
-				return v;
-		return null;
+	protected boolean isOneOf(@Nonnull final String s, @Nonnull final String... possibles) {
+		for (final String p : possibles)
+			if (s.equals(p))
+				return true;
+		return false;
 	}
 
 	protected void logMethod(@Nonnull final Logger log, @Nonnull final MethodNode node, @Nonnull final String message) {

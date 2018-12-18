@@ -41,6 +41,7 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 @IFMLLoadingPlugin.MCVersion("1.12.2")
 @IFMLLoadingPlugin.TransformerExclusions({ "org.orecruncher.dsurround.asm." })
+@IFMLLoadingPlugin.SortingIndex(10001)
 @IFMLLoadingPlugin.Name(TransformLoader.MOD_NAME)
 public class TransformLoader implements IFMLLoadingPlugin {
 

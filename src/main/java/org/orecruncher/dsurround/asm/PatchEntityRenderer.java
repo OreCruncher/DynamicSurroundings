@@ -54,12 +54,12 @@ public class PatchEntityRenderer extends Transmorgrifier {
 	public boolean isEnabled() {
 		return TransformLoader.enableWeatherASM;
 	}
-	
+
 	@Override
 	public boolean transmorgrify(final ClassNode cn) {
 
-		final String names[] = { "addRainParticles", "func_78484_h" };
-		final String sig = "()V";
+		final String names[] = { "addRainParticles", "func_78484_h", "q" };
+		final String sig[] = { "()V" };
 
 		final MethodNode m = findMethod(cn, sig, names);
 		if (m != null) {
@@ -80,7 +80,7 @@ public class PatchEntityRenderer extends Transmorgrifier {
 			m.instructions.insert(list);
 			return true;
 		} else {
-			Transformer.log().error("Unable to locate method {}{}", names[0], sig);
+			Transformer.log().error("Unable to locate method {}{}", names[0], sig[0]);
 		}
 
 		Transformer.log().info("Unable to patch [{}]!", getClassName());

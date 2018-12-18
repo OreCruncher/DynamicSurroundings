@@ -48,8 +48,8 @@ public class PatchEntityArrow extends Transmorgrifier {
 
 	@Override
 	public boolean transmorgrify(final ClassNode cn) {
-		final String names[] = { "onUpdate", "func_70071_h_" };
-		final String sig = "()V";
+		final String names[] = { "onUpdate", "func_70071_h_", "B_" };
+		final String sig[] = { "()V" };
 
 		final MethodNode m = findMethod(cn, sig, names);
 		if (m != null) {
@@ -61,7 +61,7 @@ public class PatchEntityArrow extends Transmorgrifier {
 				final AbstractInsnNode node = m.instructions.get(i);
 				if (node instanceof MethodInsnNode) {
 					final MethodInsnNode mn = (MethodInsnNode) node;
-					if ("getIsCritical".equals(mn.name) || "func_70241_g".equals(mn.name)) {
+					if (isOneOf(mn.desc, "()Z") && isOneOf(mn.name, "getIsCritical", "func_70241_g", "n")) {
 						m.instructions.set(mn.getPrevious(), new InsnNode(Opcodes.NOP));
 						m.instructions.set(mn, new InsnNode(Opcodes.ICONST_0));
 						return true;
@@ -69,7 +69,7 @@ public class PatchEntityArrow extends Transmorgrifier {
 				}
 			}
 		} else {
-			Transformer.log().error("Unable to locate method {}{}", names[0], sig);
+			Transformer.log().error("Unable to locate method {}{}", names[0], sig[0]);
 		}
 
 		Transformer.log().info("Unable to patch [{}]!", getClassName());

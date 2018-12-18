@@ -54,8 +54,8 @@ public class PatchSoundManagerClampVolume extends Transmorgrifier {
 
 	@Override
 	public boolean transmorgrify(final ClassNode cn) {
-		final String names[] = { "getClampedVolume", "func_188770_e" };
-		final String sig = "(Lnet/minecraft/client/audio/ISound;)F";
+		final String names[] = { "getClampedVolume", "func_188770_e", "e" };
+		final String sig[] = { "(Lnet/minecraft/client/audio/ISound;)F", "(Lcgr;)F" };
 
 		final MethodNode m = findMethod(cn, sig, names);
 		if (m != null) {
@@ -84,7 +84,11 @@ public class PatchSoundManagerClampVolume extends Transmorgrifier {
 
 			return true;
 		} else {
-			Transformer.log().error("Unable to locate method {}{}", names[0], sig);
+			Transformer.log().error("Unable to locate method {}{}", names[0], sig[0]);
+			
+			for(final MethodNode mn: cn.methods) {
+				Transformer.log().info("Discovered method {}{}", mn.name, mn.desc);
+			}
 		}
 
 		Transformer.log().info("Unable to patch [{}]!", getClassName());
