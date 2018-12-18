@@ -43,7 +43,7 @@ import org.orecruncher.dsurround.client.handlers.effects.EntityChatEffect;
 import org.orecruncher.dsurround.client.handlers.effects.EntityFootprintEffect;
 import org.orecruncher.dsurround.client.handlers.effects.EntityHealthPopoffEffect;
 import org.orecruncher.dsurround.client.handlers.effects.EntitySwingEffect;
-import org.orecruncher.dsurround.client.handlers.effects.FrostBreathEffect;
+import org.orecruncher.dsurround.client.handlers.effects.BreathEffect;
 import org.orecruncher.dsurround.client.handlers.effects.PlayerToolBarSoundEffect;
 import org.orecruncher.dsurround.client.handlers.effects.VillagerChatEffect;
 import org.orecruncher.dsurround.client.sound.ISoundInstance;
@@ -86,7 +86,7 @@ public class FxHandler extends EffectHandlerBase {
 	private static final EntityEffectLibrary library = new EntityEffectLibrary(PARTICLE_HELPER, SOUND_HELPER);
 
 	static {
-		library.register(FrostBreathEffect.DEFAULT_FILTER, new FrostBreathEffect.Factory());
+		library.register(BreathEffect.DEFAULT_FILTER, new BreathEffect.Factory());
 		library.register(EntityChatEffect.DEFAULT_FILTER, new EntityChatEffect.Factory());
 		library.register(VillagerChatEffect.DEFAULT_FILTER, new VillagerChatEffect.Factory());
 		library.register(PlayerToolBarSoundEffect.DEFAULT_FILTER, new PlayerToolBarSoundEffect.Factory());

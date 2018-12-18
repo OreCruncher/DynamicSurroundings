@@ -24,25 +24,27 @@
 
 package org.orecruncher.dsurround.client.fx.particle;
 
-import java.lang.reflect.Field;
 import java.util.Random;
+
+import javax.annotation.Nonnull;
 
 import org.orecruncher.lib.random.XorShiftRandom;
 
-import net.minecraft.client.particle.ParticleCloud;
+import net.minecraft.client.particle.ParticleBubble;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ParticleBreath extends ParticleCloud {
+public class ParticleBubbleBreath extends ParticleBubble {
 
-	protected static final Field sizeField = ReflectionHelper.findField(ParticleCloud.class, "field_70569_a", "oSize");
+	public ParticleBubbleBreath(@Nonnull final Entity entity) {
+		this(entity, false);
+	}
 
-	public ParticleBreath(final Entity entity) {
+	public ParticleBubbleBreath(@Nonnull final Entity entity, final boolean isDrowning) {
 		super(entity.getEntityWorld(), 0, 0, 0, 0, 0, 0);
 
 		final Random random = XorShiftRandom.current();
@@ -52,7 +54,7 @@ public class ParticleBreath extends ParticleCloud {
 		// Generate breath particle vectoring from entities head in the direction
 		// they are looking. Need to offset out of the head block and down a little
 		// bit towards the mouth.
-		final Vec3d eyePosition = eyePosition(entity).subtract(0D, isChild ? 0.1D : 0.2D, 0D);
+		final Vec3d eyePosition = eyePosition(entity).subtract(0D, isChild ? 0.05D : 0.1D, 0D);
 		final Vec3d look = entity.getLook(1F); // Don't use the other look vector method!
 		final Vec3d origin = eyePosition.add(look.scale(isChild ? 0.25D : 0.5D));
 
@@ -66,20 +68,18 @@ public class ParticleBreath extends ParticleCloud {
 		// a little bit giving the impression of a slight breeze.
 		final Vec3d trajectory = look.rotateYaw(random.nextFloat() * 2F).rotatePitch(random.nextFloat() * 2F)
 				.normalize();
-		this.motionX = trajectory.x * 0.01D;
-		this.motionY = trajectory.y * 0.01D;
-		this.motionZ = trajectory.z * 0.01D;
+		final double factor = isDrowning ? 0.02D : 0.005D;
+		this.motionX = trajectory.x * factor;
+		this.motionZ = trajectory.z * factor;
+		this.motionY = 0.06D;
 
 		this.particleAlpha = 0.2F;
 
 		this.particleGravity = 0F;
 		this.particleScale *= isChild ? 0.125F : 0.25F;
 
-		try {
-			sizeField.set(this, this.particleScale);
-		} catch (final Exception ex) {
-			ex.printStackTrace();
-		}
+		if (isDrowning)
+			this.particleScale *= 2.0F;
 	}
 
 	/*
@@ -96,28 +96,6 @@ public class ParticleBreath extends ParticleCloud {
 	@Override
 	public boolean shouldDisableDepth() {
 		return true;
-	}
-
-	@Override
-	public void onUpdate() {
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
-
-		if (this.particleAge++ >= this.particleMaxAge) {
-			setExpired();
-		}
-
-		setParticleTextureIndex(7 - this.particleAge * 8 / this.particleMaxAge);
-		move(this.motionX, this.motionY, this.motionZ);
-		this.motionX *= 0.9599999785423279D;
-		this.motionY *= 0.9599999785423279D;
-		this.motionZ *= 0.9599999785423279D;
-
-		if (this.onGround) {
-			this.motionX *= 0.699999988079071D;
-			this.motionZ *= 0.699999988079071D;
-		}
 	}
 
 }
