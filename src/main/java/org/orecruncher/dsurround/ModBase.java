@@ -39,6 +39,7 @@ import org.orecruncher.lib.logging.ModLog;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -60,7 +61,19 @@ import net.minecraftforge.fml.common.network.NetworkCheckHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@net.minecraftforge.fml.common.Mod(modid = ModInfo.MOD_ID, useMetadata = true, dependencies = ModInfo.DEPENDENCIES, version = ModInfo.VERSION, acceptedMinecraftVersions = ModInfo.MINECRAFT_VERSIONS, guiFactory = ModInfo.GUI_FACTORY, updateJSON = ModInfo.UPDATE_URL, certificateFingerprint = ModInfo.FINGERPRINT)
+//@formatter:off
+@Mod(
+	modid = ModInfo.MOD_ID,
+	useMetadata = true,
+	dependencies = ModInfo.DEPENDENCIES,
+	version = ModInfo.VERSION,
+	acceptedMinecraftVersions = ModInfo.MINECRAFT_VERSIONS,
+	acceptableRemoteVersions = ModInfo.REMOTE_VERSIONS,
+	guiFactory = ModInfo.GUI_FACTORY,
+	updateJSON = ModInfo.UPDATE_URL,
+	certificateFingerprint = ModInfo.FINGERPRINT
+)
+//@formatter:on
 public class ModBase {
 
 	public static final String SERVER_VERSION = "3.5.0.0";

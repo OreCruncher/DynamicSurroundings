@@ -35,6 +35,7 @@ public final class ModInfo {
 	public static final String GUI_FACTORY = "org.orecruncher.dsurround.client.gui.ConfigGuiFactory";
 	public static final String UPDATE_URL = "@UPDATEURL@";
 	public static final String FINGERPRINT = "@FINGERPRINT@";
+	public static final String REMOTE_VERSIONS = "*";
 
 	//@formatter:off
 	public static final String DEPENDENCIES =
