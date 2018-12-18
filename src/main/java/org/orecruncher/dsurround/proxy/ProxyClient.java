@@ -42,7 +42,6 @@ import org.orecruncher.dsurround.client.gui.HumDinger;
 import org.orecruncher.dsurround.client.handlers.EffectManager;
 import org.orecruncher.dsurround.client.hud.GuiHUDHandler;
 import org.orecruncher.dsurround.client.hud.InspectionHUD;
-import org.orecruncher.dsurround.client.hud.LightLevelHUD;
 import org.orecruncher.dsurround.client.keyboard.KeyHandler;
 import org.orecruncher.dsurround.client.renderer.AnimaniaBadge;
 import org.orecruncher.dsurround.client.sound.BackgroundMute;
@@ -93,13 +92,11 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 
 		register(HumDinger.class);
 		register(InspectionHUD.class);
-		register(LightLevelHUD.class);
 		register(KeyHandler.class);
 		register(BackgroundMute.class);
 		register(RenderWeather.class);
 		register(Weather.class);
 		register(WorldEventDetector.class);
-		register(LightLevelHUD.class);
 		register(ParticleCollections.class);
 
 		MinecraftForge.EVENT_BUS.register(this);
@@ -160,7 +157,6 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 			AnimaniaBadge.intitialize();
 
 		int r = Math.max(32, ModOptions.effects.specialEffectRange);
-		r = Math.max(r, ModOptions.huds.lightlevel.llBlockRange);
 		r += 2;
 		ClientChunkCache.initialize(r, !ModOptions.general.enableClientChunkCaching);
 	}

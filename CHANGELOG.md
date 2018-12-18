@@ -1,3 +1,16 @@
+### DynamicSurroundings-1.12.2-3.5.4.0
+**Requires OreLib-1.12.2-3.5.1.2!**
+
+**What's New**
+* Allow the mod to be installed on the server but not on the client.  This allows a player to remove DS from their client in the case of having a potato for CPU/GPU.  For this to work the server would have to have v3.5.4.0 installed.
+* Bubbles breath effect when under water.  Small bubble trail leaves an entities mouth and travels upwards a short ways.  Bigger less frequent bubbles when drowning.
+* The following HUDs have been moved into a separate mod titled Dynamic Surroundings: HUDs (original, huh?)
+    * Compass
+    * Clock
+    * Season
+    * Potion
+    * Light Level
+
 ### DynamicSurroundings-1.12.2-3.5.3.1
 **Fixes**
 * Reapply sorting index to FML ASM transformer.  Depending on modmix the names may not have been deobsfuscated to a point where it could be understood by Dynamic Surroundings.

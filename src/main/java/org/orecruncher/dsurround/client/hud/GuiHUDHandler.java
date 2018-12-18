@@ -45,10 +45,7 @@ public final class GuiHUDHandler {
 	private static GuiHUDHandler INSTANCE;
 
 	private GuiHUDHandler() {
-		register(new PotionHUD());
 		register(new InspectionHUD());
-		register(new CompassHUD());
-		register(new LightLevelHUD());
 	}
 
 	private final List<GuiOverlay> overlays = new ArrayList<>();
