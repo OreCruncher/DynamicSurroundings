@@ -1,3 +1,7 @@
+### DynamicSurroundings-1.12.2-3.5.3.1
+**Fixes**
+* Reapply sorting index to FML ASM transformer.  Depending on modmix the names may not have been deobsfuscated to a point where it could be understood by Dynamic Surroundings.
+
 ### DynamicSurroundings-1.12.2-3.5.3.0
 **Fixes**
 * Fixed compatiblity with Vivecraft
