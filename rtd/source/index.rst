@@ -19,6 +19,12 @@ the server.  However, there will be limitations:
 - Weather render effects will not be coordinated across clients.
 - Battle Music will be limited (if configured)
 
+..	versionadded:: 3.5.4.0
+
+	Starting with version 3.5.4.0 it is possible to have the mod installed on a server, but not on the client.
+	This will allow pack authors to include the mod in packs, and give players the ability to remove the mod
+	based on their desires.
+
 Downloads: `CurseForge <http://minecraft.curseforge.com/projects/dynamic-surroundings>`_ |br|
 Source Code: `GitHub <https://github.com/OreCruncher/DynamicSurroundings>`_ |br|
 Issue Tracker: `GitHub Issues <https://github.com/OreCruncher/DynamicSurroundings/issues>`_
