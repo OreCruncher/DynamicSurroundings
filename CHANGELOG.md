@@ -1,5 +1,5 @@
 ### DynamicSurroundings-1.12.2-3.5.4.0
-**Requires OreLib-1.12.2-3.5.1.2!**
+**Requires OreLib-1.12.2-3.5.1.3!**
 
 **What's New**
 * Allow the mod to be installed on the server but not on the client.  This allows a player to remove DS from their client in the case of having a potato for CPU/GPU.  For this to work the server would have to have v3.5.4.0 installed.
