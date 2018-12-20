@@ -24,12 +24,11 @@
 
 package org.orecruncher.dsurround.client.gui;
 
-import java.lang.reflect.Field;
-
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
+import org.orecruncher.dsurround.lib.ReflectedField;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -48,7 +47,6 @@ import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -61,7 +59,7 @@ public class GuiScreenOptionsSoundReplace extends GuiScreenOptionsSounds {
 
 	private static final int SLIDER_HEIGHT = 22; // 24
 
-	private static final Field parent = ReflectionHelper.findField(GuiScreenOptionsSounds.class, "parent",
+	private static final ReflectedField.ObjectField<GuiScreenOptionsSounds, GuiScreen> parent = new ReflectedField.ObjectField<>(GuiScreenOptionsSounds.class, "parent",
 			"field_146505_f");
 
 	private final GameSettings settings;
@@ -192,7 +190,7 @@ public class GuiScreenOptionsSoundReplace extends GuiScreenOptionsSounds {
 	public static void guiOpenHandler(@Nonnull final GuiOpenEvent evt) {
 		if (evt.getGui() instanceof GuiScreenOptionsSounds) {
 			try {
-				final GuiScreen p = (GuiScreen) parent.get(evt.getGui());
+				final GuiScreen p = parent.get((GuiScreenOptionsSounds) evt.getGui());
 				evt.setGui(new GuiScreenOptionsSoundReplace(p, Minecraft.getMinecraft().gameSettings));
 				evt.setResult(Result.ALLOW);
 			} catch (@Nonnull final Throwable t) {

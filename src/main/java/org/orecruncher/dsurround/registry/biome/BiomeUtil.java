@@ -24,20 +24,21 @@
 
 package org.orecruncher.dsurround.registry.biome;
 
-import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.lib.compat.ModEnvironment;
+import org.orecruncher.dsurround.lib.ReflectedField;
+import org.orecruncher.dsurround.lib.ReflectedField.FloatField;
+import org.orecruncher.dsurround.lib.ReflectedField.IntegerField;
+import org.orecruncher.dsurround.lib.ReflectedField.ObjectField;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.lib.Color;
 import org.orecruncher.lib.WorldUtils;
-
-import com.google.common.collect.ImmutableSet;
 
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.block.Block;
@@ -51,60 +52,58 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Helper class used to access and manipulate the reference to our data we have
- * referenced in the Biome implementation class. Goal is to avoid all the
- * dictionary lookups and things.
- */
+@SideOnly(Side.CLIENT)
 public final class BiomeUtil {
 
 	private static final Color NO_COLOR = new Color.ImmutableColor(1F, 1F, 1F);
 
-	// This field was added by the core mod for our use
-	private static Field biomeInfo = ReflectionHelper.findField(Biome.class, "dsurround_biome_info");
+	//@formatter:off
+	private static final ObjectField<Biome, BiomeData> biomeInfo =
+		new ObjectField<>(
+			Biome.class,
+			"dsurround_biome_info",
+			""
+		);
+	private static final ObjectField<Biome, String> biomeName =
+		new ObjectField<>(
+			Biome.class,
+			"biomeName",
+			"field_76791_y"
+		);
+	private static final FloatField<Object> bopBiomeFogDensity =
+		new FloatField<>(
+			"biomesoplenty.common.biome.BOPBiome",
+			"fogDensity",
+			""
+		);
+	private static final IntegerField<Object> bopBiomeFogColor =
+		new IntegerField<>(
+			"biomesoplenty.common.biome.BOPBiome",
+			"fogColor",
+			""
+		);
+	//@formatter:on
 
-	// Regular Minecraft fields
-	private static Field biomeName = ReflectionHelper.findField(Biome.class, "biomeName", "field_76791_y");
-
-	// BoP support for fog
-	private static Class<?> bopBiome = null;
-	private static Field bopBiomeFogDensity = null;
-	private static Field bopBiomeFogColor = null;
-
-	static {
-
-		if (ModEnvironment.BiomesOPlenty.isLoaded())
-			try {
-				bopBiome = Class.forName("biomesoplenty.common.biome.BOPBiome");
-				bopBiomeFogDensity = ReflectionHelper.findField(bopBiome, "fogDensity");
-				bopBiomeFogColor = ReflectionHelper.findField(bopBiome, "fogColor");
-			} catch (final Throwable t) {
-				bopBiome = null;
-				bopBiomeFogDensity = null;
-				bopBiomeFogColor = null;
-			}
-	}
+	private static final Class<?> bopBiome = ReflectedField.resolveClass("biomesoplenty.common.biome.BOPBiome");
 
 	@SuppressWarnings("unchecked")
 	@Nonnull
 	public static <T extends BiomeData> T getBiomeData(@Nonnull final Biome biome) {
 		T result = null;
-		try {
-			if (biome != null) {
+		if (biome != null) {
+			result = (T) biomeInfo.get(biome);
+			if (result == null) {
+				RegistryManager.BIOME.reload();
 				result = (T) biomeInfo.get(biome);
-				if (result == null) {
-					RegistryManager.BIOME.reload();
-					result = (T) biomeInfo.get(biome);
-				}
 			}
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			ModBase.log().error("Unable to get hold of private field on Biome!", e);
 		}
-		
+
 		if (result == null) {
-			ModBase.log().warn("Unable to find configuration for biome [%s] (hc=%d)", biome.getRegistryName(), System.identityHashCode(biome));
+			ModBase.log().warn("Unable to find configuration for biome [%s] (hc=%d)", biome.getRegistryName(),
+					System.identityHashCode(biome));
 			result = (T) RegistryManager.BIOME.WTF_INFO;
 			setBiomeData(biome, result);
 		}
@@ -112,21 +111,13 @@ public final class BiomeUtil {
 	}
 
 	public static <T extends BiomeData> void setBiomeData(@Nonnull final Biome biome, @Nullable final T data) {
-		try {
-			biomeInfo.set(biome, data);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			ModBase.log().error("Unable to set private field on Biome!", e);
-		}
+		biomeInfo.set(biome, data);
 	}
 
 	@Nonnull
 	public static String getBiomeName(@Nonnull final Biome biome) {
-		try {
-			return (String) biomeName.get(biome);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			// Intentionally left blank
-		}
-		return "UNKNOWN";
+		final String result = biomeName.get(biome);
+		return StringUtils.isEmpty(result) ? "UNKNOWN" : result;
 	}
 
 	// ==================
@@ -140,21 +131,11 @@ public final class BiomeUtil {
 	}
 
 	public static int getBoPBiomeFogColor(@Nonnull final Biome biome) {
-		try {
-			return bopBiomeFogColor != null ? bopBiomeFogColor.getInt(biome) : 0;
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			// Intentionally left blank
-		}
-		return 0;
+		return bopBiomeFogColor.isAvailable() ? bopBiomeFogColor.get(biome) : 0;
 	}
 
 	public static float getBoPBiomeFogDensity(@Nonnull final Biome biome) {
-		try {
-			return bopBiomeFogDensity != null ? bopBiomeFogDensity.getFloat(biome) : 0F;
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			// Intentionally left blank
-		}
-		return 0;
+		return bopBiomeFogDensity.isAvailable() ? bopBiomeFogDensity.get(biome) : 0F;
 	}
 
 	// ===================================
@@ -162,21 +143,20 @@ public final class BiomeUtil {
 	// Miscellaneous Support Functions
 	//
 	// ===================================
+	@Nonnull
 	public static Set<Type> getBiomeTypes() {
-		try {
-			final Field accessor = ReflectionHelper.findField(BiomeDictionary.Type.class, "byName");
-			if (accessor != null) {
-				@SuppressWarnings("unchecked")
-				final Map<String, BiomeDictionary.Type> stuff = (Map<String, BiomeDictionary.Type>) accessor.get(null);
-				return new ReferenceOpenHashSet<>(stuff.values());
-			}
+		//@formatter:off
+		final ObjectField<BiomeDictionary.Type, Map<String, BiomeDictionary.Type>> accessor =
+			new ObjectField<>(
+				BiomeDictionary.Type.class,
+				"byName", "");
+		//@formatter:on
 
-			return ImmutableSet.of();
-
-		} catch (final Throwable t) {
-			throw new RuntimeException("Cannot locate BiomeDictionary.Type table!");
+		if (accessor.isAvailable()) {
+			return new ReferenceOpenHashSet<>(accessor.get(null).values());
 		}
 
+		throw new IllegalStateException("Cannot locate BiomeDictionary.Type table!");
 	}
 
 	@Nonnull

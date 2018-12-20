@@ -36,6 +36,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /*
  * Hook to check RandomThings in support of the Rain Shield
  */
+@SuppressWarnings("deprecation")
 @SideOnly(Side.CLIENT)
 public final class RandomThings {
 

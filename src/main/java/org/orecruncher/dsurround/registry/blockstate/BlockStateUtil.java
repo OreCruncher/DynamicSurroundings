@@ -24,16 +24,13 @@
 
 package org.orecruncher.dsurround.registry.blockstate;
 
-import java.lang.reflect.Field;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.lib.ReflectedField.ObjectField;
 
 import net.minecraft.block.state.BlockStateBase;
 import net.minecraft.block.state.IBlockState;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 /**
  * Helper class used to access and manipulate the reference to our data we have
@@ -42,27 +39,24 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
  */
 public final class BlockStateUtil {
 
-	// This field was added by the core mod for our use
-	private static Field blockStateInfo = ReflectionHelper.findField(BlockStateBase.class, "dsurround_blockstate_info");
+	//@formatter:off
+	private static final ObjectField<BlockStateBase, BlockStateData> blockStateInfo =
+		new ObjectField<>(
+			BlockStateBase.class,
+			"dsurround_blockstate_info",
+			""
+		);
+	//@formatter:on
 
 	@SuppressWarnings("unchecked")
 	@Nullable
 	public static <T extends BlockStateData> T getStateData(@Nonnull final IBlockState state) {
-		try {
-			return (T) blockStateInfo.get(state);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			ModBase.log().error("Unable to get hold of private field on BlockStateBase!", e);
-		}
-		return null;
+		return (T) blockStateInfo.get((BlockStateBase) state);
 	}
 
 	public static <T extends BlockStateData> void setStateData(@Nonnull final IBlockState state,
 			@Nonnull final T data) {
-		try {
-			blockStateInfo.set(state, data);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			ModBase.log().error("Unable to set private field on BlockStateBase!", e);
-		}
+		blockStateInfo.set((BlockStateBase) state, data);
 	}
 
 }

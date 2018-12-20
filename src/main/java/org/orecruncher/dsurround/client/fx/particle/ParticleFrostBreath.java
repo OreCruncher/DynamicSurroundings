@@ -24,23 +24,23 @@
 
 package org.orecruncher.dsurround.client.fx.particle;
 
-import java.lang.reflect.Field;
 import java.util.Random;
 
+import org.orecruncher.dsurround.lib.ReflectedField.FloatField;
 import org.orecruncher.lib.random.XorShiftRandom;
 
 import net.minecraft.client.particle.ParticleCloud;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ParticleFrostBreath extends ParticleCloud {
 
-	protected static final Field sizeField = ReflectionHelper.findField(ParticleCloud.class, "field_70569_a", "oSize");
+	protected static final FloatField<ParticleCloud> sizeField = new FloatField<>(ParticleCloud.class, "oSize",
+			"field_70569_a");
 
 	public ParticleFrostBreath(final Entity entity) {
 		super(entity.getEntityWorld(), 0, 0, 0, 0, 0, 0);
@@ -75,11 +75,7 @@ public class ParticleFrostBreath extends ParticleCloud {
 		this.particleGravity = 0F;
 		this.particleScale *= isChild ? 0.125F : 0.25F;
 
-		try {
-			sizeField.set(this, this.particleScale);
-		} catch (final Exception ex) {
-			ex.printStackTrace();
-		}
+		sizeField.set(this, this.particleScale);
 	}
 
 	/*

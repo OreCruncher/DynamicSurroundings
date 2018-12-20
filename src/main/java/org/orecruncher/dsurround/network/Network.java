@@ -24,7 +24,6 @@
 
 package org.orecruncher.dsurround.network;
 
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
@@ -35,6 +34,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
+import org.orecruncher.dsurround.lib.ReflectedField.ObjectField;
 import org.orecruncher.lib.task.Scheduler;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -56,7 +56,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.handshake.NetworkDispatcher;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -66,7 +65,7 @@ public final class Network {
 	// Need to track player/clients that have connected and do not have the
 	// mod installed. We do not want to send packets to those clients and
 	// cause Mayhem.
-	private static final Field player = ReflectionHelper.findField(NetworkDispatcher.class, "player");
+	private static final ObjectField<NetworkDispatcher, EntityPlayerMP> player = new ObjectField<>(NetworkDispatcher.class, "player", "");
 	private static final Set<UUID> blockList = new ObjectOpenHashSet<>();
 
 	private static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.MOD_ID);
@@ -96,7 +95,7 @@ public final class Network {
 		final NetworkDispatcher dispatcher = NetworkDispatcher.get(event.getManager());
 		if (dispatcher != null) {
 			try {
-				final EntityPlayerMP p = (EntityPlayerMP) player.get(dispatcher);
+				final EntityPlayerMP p = player.get(dispatcher);
 				final String version = dispatcher.getModList().get(ModInfo.MOD_ID);
 				if (StringUtils.isEmpty(version)) {
 					// Block the player from receiving network packets

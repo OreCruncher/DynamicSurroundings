@@ -24,7 +24,6 @@
 
 package org.orecruncher.dsurround.client.sound;
 
-import java.lang.reflect.Field;
 import java.nio.IntBuffer;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +43,9 @@ import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.ModOptions.Trace;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
+import org.orecruncher.dsurround.lib.ReflectedField.BooleanField;
+import org.orecruncher.dsurround.lib.ReflectedField.FloatField;
+import org.orecruncher.dsurround.lib.ReflectedField.ObjectField;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.lib.ThreadGuard;
 import org.orecruncher.lib.ThreadGuard.Action;
@@ -66,7 +68,6 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import paulscode.sound.Library;
 import paulscode.sound.SoundSystem;
@@ -76,23 +77,63 @@ import paulscode.sound.Source;
 @EventBusSubscriber(value = Side.CLIENT, modid = ModInfo.MOD_ID)
 public final class SoundEngine {
 
-	private static Field soundPhysicsGlobalVolume;
-
-	private static final Field getSoundManager = ReflectionHelper.findField(SoundHandler.class, "sndManager",
-			"field_147694_f");
-	private static final Field getSoundRegistry = ReflectionHelper.findField(SoundHandler.class, "soundRegistry",
-			"field_147697_e");
-	private static final Field getSoundSystem = ReflectionHelper.findField(SoundManager.class, "sndSystem",
-			"field_148620_e");
-	private static final Field getPlayingSounds = ReflectionHelper.findField(SoundManager.class, "playingSounds",
-			"field_148629_h");
-	private static final Field getPlayingSoundsInv = ReflectionHelper.findField(SoundManager.class, "invPlayingSounds",
-			"field_148630_i");
-	private static final Field getDelayedSounds = ReflectionHelper.findField(SoundManager.class, "delayedSounds",
-			"field_148626_m");
-	private static final Field getSoundLibrary = ReflectionHelper.findField(SoundSystem.class, "soundLibrary");
-	private static final Field removed = ReflectionHelper.findField(Source.class, "removed");
-
+	//@formatter:off
+	private static final ObjectField<SoundHandler, SoundManager> getSoundManager =
+		new ObjectField<>(
+			SoundHandler.class,
+			"sndManager",
+			"field_147694_f"
+		);
+	private static final ObjectField<SoundHandler, SoundRegistry> getSoundRegistry =
+		new ObjectField<>(
+			SoundHandler.class,
+			"soundRegistry",
+			"field_147697_e"
+		);
+	private static final ObjectField<SoundManager, SoundSystem> getSoundSystem =
+		new ObjectField<>(
+			SoundManager.class,
+			"sndSystem",
+			"field_148620_e"
+		);
+	private static final ObjectField<SoundManager, Map<String, ISound>> getPlayingSounds =
+		new ObjectField<>(
+			SoundManager.class,
+			"playingSounds",
+			"field_148629_h"
+		);
+	private static final ObjectField<SoundManager, Map<ISound, String>> getPlayingSoundsInv =
+		new ObjectField<>(
+			SoundManager.class,
+			"invPlayingSounds",
+			"field_148630_i"
+		);
+	private static final ObjectField<SoundManager, Map<ISound, Integer>> getDelayedSounds =
+		new ObjectField<>(
+			SoundManager.class,
+			"delayedSounds",
+			"field_148626_m"
+		);
+	private static final ObjectField<SoundSystem, Library> getSoundLibrary =
+		new ObjectField<>(
+			SoundSystem.class,
+			"soundLibrary",
+			""
+		);
+	private static final BooleanField<Source> removed =
+		new BooleanField<>(
+			Source.class,
+			"removed",
+			""
+		);
+	private static final FloatField<Object> soundPhysicsGlobalVolume =
+		new FloatField<>(
+			"com.sonicether.soundphysics.SoundPhysics",
+			"globalVolumeMultiplier",
+			""
+		);
+	//@formatter:on
+	
 	private static final float MUTE_VOLUME = 0.00001F;
 	private static final int MAX_STREAM_CHANNELS = 16;
 	private static final int SOUND_QUEUE_SLACK = 6;
@@ -100,15 +141,6 @@ public final class SoundEngine {
 	// Maximum number of sound channels configured in the sound system
 	private static int maxSounds = 0;
 	private static SoundEngine instance_ = new SoundEngine();
-
-	static {
-		try {
-			final Class<?> soundPhysics = Class.forName("com.sonicether.soundphysics.SoundPhysics");
-			soundPhysicsGlobalVolume = ReflectionHelper.findField(soundPhysics, "globalVolumeMultiplier");
-		} catch (final Exception ex) {
-			soundPhysicsGlobalVolume = null;
-		}
-	}
 
 	public static SoundEngine instance() {
 		return instance_;
@@ -134,7 +166,7 @@ public final class SoundEngine {
 	 */
 	@Nonnull
 	public SoundRegistry getSoundRegistry() {
-		return resolve(getSoundRegistry, Minecraft.getMinecraft().getSoundHandler());
+		return getSoundRegistry.get(Minecraft.getMinecraft().getSoundHandler());
 	}
 
 	/**
@@ -144,17 +176,7 @@ public final class SoundEngine {
 	 */
 	@Nonnull
 	public SoundManager getSoundManager() {
-		return resolve(getSoundManager, Minecraft.getMinecraft().getSoundHandler());
-	}
-
-	@SuppressWarnings("unchecked")
-	private <T> T resolve(@Nonnull final Field f, @Nonnull final Object obj) {
-		try {
-			return (T) f.get(obj);
-		} catch (final Throwable t) {
-			t.printStackTrace();
-		}
-		return null;
+		return getSoundManager.get(Minecraft.getMinecraft().getSoundHandler());
 	}
 
 	private int currentSoundCount() {
@@ -177,23 +199,23 @@ public final class SoundEngine {
 	}
 
 	private SoundSystem getSoundSystem() {
-		return resolve(getSoundSystem, getSoundManager());
+		return getSoundSystem.get(getSoundManager());
 	}
 
 	private Library getSoundLibrary() {
-		return resolve(getSoundLibrary, getSoundSystem());
+		return getSoundLibrary.get(getSoundSystem());
 	}
 
 	private Map<String, ISound> getPlayingSounds() {
-		return resolve(getPlayingSounds, getSoundManager());
+		return getPlayingSounds.get(getSoundManager());
 	}
 
 	private Map<ISound, String> getPlayingSoundsInv() {
-		return resolve(getPlayingSoundsInv, getSoundManager());
+		return getPlayingSoundsInv.get(getSoundManager());
 	}
 
 	private Map<ISound, Integer> getDelayedSounds() {
-		return resolve(getDelayedSounds, getSoundManager());
+		return getDelayedSounds.get(getSoundManager());
 	}
 
 	/**
@@ -284,11 +306,7 @@ public final class SoundEngine {
 
 	private static void cleanupSource(final Source source) {
 		if (source.toStream) {
-			try {
-				removed.setBoolean(source, true);
-			} catch (final IllegalArgumentException | IllegalAccessException e) {
-				e.printStackTrace();
-			}
+			removed.set(source, true);
 		} else {
 			source.cleanup();
 		}
@@ -450,8 +468,8 @@ public final class SoundEngine {
 		final float result = MathStuff.clamp(volume, 0.0F, 1.0F);
 
 		try {
-			if (soundPhysicsGlobalVolume != null)
-				return result * soundPhysicsGlobalVolume.getFloat(null);
+			if (soundPhysicsGlobalVolume.isAvailable())
+				return result * soundPhysicsGlobalVolume.get(null);
 		} catch (final Exception ex) {
 			;
 		}
