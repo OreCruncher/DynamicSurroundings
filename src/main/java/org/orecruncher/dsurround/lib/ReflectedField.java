@@ -28,11 +28,14 @@ import java.lang.reflect.Field;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 
-@SuppressWarnings("deprecation")
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+
 public class ReflectedField {
 
 	protected final String className;
@@ -43,23 +46,43 @@ public class ReflectedField {
 			@Nonnull final String obfName) {
 		this.className = className;
 		this.fieldName = fieldName;
-
-		Field f = null;
-		try {
-			final Class<?> clazz = Class.forName(className);
-			f = ReflectionHelper.findField(clazz, fieldName, obfName);
-		} catch (@Nonnull final Throwable t) {
-			;
-		}
-
-		this.field = f;
+		this.field = resolve(className, fieldName, obfName);
 	}
 
 	protected ReflectedField(@Nonnull final Class<?> clazz, @Nonnull final String fieldName,
-			@Nonnull final String obfName) {
+			@Nullable final String obfName) {
+		Preconditions.checkNotNull(clazz);
+		Preconditions.checkArgument(StringUtils.isNotEmpty(fieldName), "Field name cannot be empty");
 		this.className = clazz.getName();
 		this.fieldName = fieldName;
-		this.field = ReflectionHelper.findField(clazz, fieldName, obfName);
+		this.field = resolve(clazz, fieldName, obfName);
+	}
+
+	@Nullable
+	private static Field resolve(@Nonnull final String className, @Nonnull final String fieldName,
+			@Nullable final String obfName) {
+		try {
+			return resolve(Class.forName(className), fieldName, obfName);
+		} catch (@Nonnull final Throwable t) {
+			;
+		}
+		return null;
+	}
+
+	@Nullable
+	private static Field resolve(@Nonnull final Class<?> clazz, @Nonnull final String fieldName,
+			@Nullable final String obfName) {
+		final String nameToFind = FMLLaunchHandler.isDeobfuscatedEnvironment() ? fieldName
+				: MoreObjects.firstNonNull(obfName, fieldName);
+		try {
+			final Field f = clazz.getDeclaredField(nameToFind);
+			f.setAccessible(true);
+			return f;
+		} catch (final Exception e) {
+			;
+		}
+
+		return null;
 	}
 
 	public boolean isAvailable() {
@@ -77,12 +100,12 @@ public class ReflectedField {
 		final String msg = String.format("Unable to access field [%s::%s]", this.className, this.fieldName);
 		ModBase.log().error(msg, t);
 	}
-	
+
 	@Nullable
 	public static Class<?> resolveClass(@Nonnull final String className) {
 		try {
 			return Class.forName(className);
-		} catch(@Nonnull final Throwable t) {
+		} catch (@Nonnull final Throwable t) {
 			;
 		}
 		return null;
@@ -97,7 +120,7 @@ public class ReflectedField {
 			super(className, fieldName, obfName);
 			this.defaultValue = null;
 		}
-		
+
 		public ObjectField(@Nonnull final Class<T> clazz, @Nonnull final String fieldName,
 				@Nonnull final String obfName) {
 			this(clazz, fieldName, obfName, null);
