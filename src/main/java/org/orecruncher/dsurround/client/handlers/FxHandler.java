@@ -37,17 +37,18 @@ import org.orecruncher.dsurround.client.effects.EventEffectLibrary;
 import org.orecruncher.dsurround.client.effects.IParticleHelper;
 import org.orecruncher.dsurround.client.effects.ISoundHelper;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.dsurround.client.handlers.effects.BreathEffect;
 import org.orecruncher.dsurround.client.handlers.effects.CraftingSoundEffect;
 import org.orecruncher.dsurround.client.handlers.effects.EntityBowSoundEffect;
 import org.orecruncher.dsurround.client.handlers.effects.EntityChatEffect;
 import org.orecruncher.dsurround.client.handlers.effects.EntityFootprintEffect;
 import org.orecruncher.dsurround.client.handlers.effects.EntityHealthPopoffEffect;
 import org.orecruncher.dsurround.client.handlers.effects.EntitySwingEffect;
-import org.orecruncher.dsurround.client.handlers.effects.BreathEffect;
 import org.orecruncher.dsurround.client.handlers.effects.PlayerToolBarSoundEffect;
 import org.orecruncher.dsurround.client.handlers.effects.VillagerChatEffect;
 import org.orecruncher.dsurround.client.sound.ISoundInstance;
 import org.orecruncher.dsurround.client.sound.SoundInstance;
+import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.lib.OutOfBandTimerEMA;
 import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.effect.EffectRegistry;
@@ -59,6 +60,8 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
@@ -201,4 +204,17 @@ public class FxHandler extends EffectHandlerBase {
 		clearHandlers();
 		this.eventLibrary.cleanup();
 	}
+
+	@SubscribeEvent
+	public void diagnostic(@Nonnull final DiagnosticEvent.Gather event) {
+		final double range = ModOptions.effects.specialEffectRange;
+		final BlockPos min = EnvironState.getPlayerPosition().add(-range, -range, -range);
+		final BlockPos max = EnvironState.getPlayerPosition().add(range, range, range);
+		final AxisAlignedBB box = new AxisAlignedBB(min, max);
+
+		final int count = EnvironState.getWorld().getEntitiesWithinAABBExcludingEntity(EnvironState.getPlayer(), box)
+				.size() + 1;
+		event.output.add("Effected Entities: " + count);
+	}
+
 }
