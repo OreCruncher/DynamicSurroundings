@@ -52,7 +52,6 @@ import org.orecruncher.dsurround.registry.config.ModConfiguration.ForgeEntry;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
-
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.block.Block;
@@ -108,7 +107,7 @@ public final class FootstepsRegistry extends Registry {
 	private Variator playerQuadrupedVariator;
 
 	private Set<IBlockState> missingAcoustics;
-
+	
 	public IAcoustic[] SWIM;
 	public IAcoustic[] JUMP;
 	public IAcoustic[] SPLASH;
@@ -392,12 +391,17 @@ public final class FootstepsRegistry extends Registry {
 			for (final ItemStack stack : stacks) {
 				final Block block = resolveToBlock(stack);
 				if (block != null) {
-					final String blockName;
+					String blockName = null;
 					if (stack.getHasSubtypes() && stack.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
-						// TODO: Need to sort out with tagging in 1.13
-						@SuppressWarnings("deprecation")
-						final IBlockState state = block.getStateFromMeta(stack.getItemDamage());
-						blockName = state.toString();
+						try {
+							// TODO: Need to sort out with tagging in 1.13
+							final int meta = stack.getItem().getMetadata(stack);
+							@SuppressWarnings("deprecation")
+							final IBlockState state = block.getStateFromMeta(meta);
+							blockName = state.toString();
+						} catch(@Nonnull final Throwable t) {
+							ModBase.log().warn("Unable to resolve blockstate for [%s]", stack.toString());
+						}
 					} else {
 						blockName = MCHelper.nameOf(block);
 					}

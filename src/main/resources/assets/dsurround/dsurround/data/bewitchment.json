@@ -1,0 +1,18 @@
+{
+	"blocks": [
+		{
+			"blocks": [
+				"bewitchment:apiary",
+				"bewitchment:beehive"
+			],
+			"chance": 5,
+			"sounds": [
+				{
+					"sound": "dsurround:bees",
+					"conditions": "diurnal.isDay && weather.isNotRaining",
+					"variable": true
+				}
+			]
+		}
+	]
+}
