@@ -50,7 +50,7 @@ public class FakeBiome implements IBiome {
 	protected final String name;
 	protected final ResourceLocation key;
 
-	protected BiomeData biomeData;
+	protected BiomeInfo biomeData;
 
 	public FakeBiome(@Nonnull final String name) {
 		this.name = name;
@@ -58,11 +58,11 @@ public class FakeBiome implements IBiome {
 	}
 
 	@Nullable
-	public BiomeData getBiomeData() {
+	public BiomeInfo getBiomeData() {
 		return this.biomeData;
 	}
 
-	public void setBiomeData(@Nullable BiomeData data) {
+	public void setBiomeData(@Nullable BiomeInfo data) {
 		this.biomeData = data;
 	}
 

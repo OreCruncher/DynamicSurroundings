@@ -61,7 +61,7 @@ public final class BiomeUtil {
 	private static final Color NO_COLOR = new Color.ImmutableColor(1F, 1F, 1F);
 
 	//@formatter:off
-	private static final ObjectField<Biome, BiomeData> biomeInfo =
+	private static final ObjectField<Biome, BiomeInfo> biomeInfo =
 		new ObjectField<>(
 			Biome.class,
 			"dsurround_biome_info",
@@ -89,28 +89,27 @@ public final class BiomeUtil {
 
 	private static final Class<?> bopBiome = ReflectedField.resolveClass("biomesoplenty.common.biome.BOPBiome");
 
-	@SuppressWarnings("unchecked")
 	@Nonnull
-	public static <T extends BiomeData> T getBiomeData(@Nonnull final Biome biome) {
-		T result = null;
+	public static BiomeInfo getBiomeData(@Nonnull final Biome biome) {
+		BiomeInfo result = null;
 		if (biome != null) {
-			result = (T) biomeInfo.get(biome);
+			result = biomeInfo.get(biome);
 			if (result == null) {
 				RegistryManager.BIOME.reload();
-				result = (T) biomeInfo.get(biome);
+				result = biomeInfo.get(biome);
 			}
 		}
 
 		if (result == null) {
 			ModBase.log().warn("Unable to find configuration for biome [%s] (hc=%d)", biome.getRegistryName(),
 					System.identityHashCode(biome));
-			result = (T) RegistryManager.BIOME.WTF_INFO;
+			result = RegistryManager.BIOME.WTF_INFO;
 			setBiomeData(biome, result);
 		}
 		return result;
 	}
 
-	public static <T extends BiomeData> void setBiomeData(@Nonnull final Biome biome, @Nullable final T data) {
+	public static void setBiomeData(@Nonnull final Biome biome, @Nullable final BiomeInfo data) {
 		biomeInfo.set(biome, data);
 	}
 

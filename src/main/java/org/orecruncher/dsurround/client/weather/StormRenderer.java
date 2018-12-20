@@ -35,8 +35,8 @@ import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.PrecipitationType;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.compat.RandomThings;
-import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
+import org.orecruncher.dsurround.registry.biome.BiomeUtil;
 import org.orecruncher.lib.Color;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.random.XorShiftRandom;
@@ -162,7 +162,7 @@ public class StormRenderer {
 				if (!RandomThings.shouldRain(world, this.mutable))
 					continue;
 
-				final BiomeInfo biome = RegistryManager.BIOME.get(ClientChunkCache.instance().getBiome(this.mutable));
+				final BiomeInfo biome = BiomeUtil.getBiomeData(ClientChunkCache.instance().getBiome(this.mutable));
 
 				final int precipHeight = season.getPrecipitationHeight(this.mutable).getY();
 				final int k2 = Math.max(playerY - range, precipHeight);

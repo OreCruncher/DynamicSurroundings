@@ -98,7 +98,7 @@ public final class BlockStateRegistry extends Registry {
 	}
 
 	@Nonnull
-	public BlockStateData get(@Nonnull final IBlockState state) {
+	protected BlockStateData get(@Nonnull final IBlockState state) {
 		BlockStateData profile = BlockStateUtil.getStateData(state);
 		if (profile == null) {
 			if (this.registry == null) {

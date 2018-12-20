@@ -196,14 +196,9 @@ public final class BiomeRegistry extends Registry {
 	}
 
 	@Nonnull
-	public BiomeInfo get(@Nonnull final Biome biome) {
-		return BiomeUtil.getBiomeData(biome);
-	}
-
-	@Nonnull
 	public BiomeInfo getPlayerBiome(@Nonnull final EntityPlayer player, final boolean getTrue) {
 		final Biome biome = player.getEntityWorld().getBiome(new BlockPos(player.posX, 0, player.posZ));
-		BiomeInfo info = get(biome);
+		BiomeInfo info = BiomeUtil.getBiomeData(biome);
 
 		if (!getTrue) {
 			if (player.isInsideOfMaterial(Material.WATER)) {

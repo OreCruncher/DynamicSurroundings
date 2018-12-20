@@ -32,8 +32,8 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
-import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
+import org.orecruncher.dsurround.registry.biome.BiomeUtil;
 import org.orecruncher.lib.Localization;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 
@@ -111,7 +111,7 @@ public class SeasonInfo implements ISeasonInfo {
 
 	@Override
 	public float getFloatTemperature(@Nonnull final Biome biome, @Nonnull final BlockPos pos) {
-		return RegistryManager.BIOME.get(biome).getFloatTemperature(pos);
+		return BiomeUtil.getBiomeData(biome).getFloatTemperature(pos);
 	}
 
 	@Override
@@ -159,7 +159,7 @@ public class SeasonInfo implements ISeasonInfo {
 	public PrecipitationType getPrecipitationType(@Nonnull final BlockPos pos, @Nullable BiomeInfo biome) {
 
 		if (biome == null)
-			biome = RegistryManager.BIOME.get(ClientChunkCache.instance().getBiome(pos));
+			biome = BiomeUtil.getBiomeData(ClientChunkCache.instance().getBiome(pos));
 
 		if (!biome.hasWeatherEffect())
 			return PrecipitationType.NONE;

@@ -36,7 +36,6 @@ import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.client.sound.SoundBuilder;
 import org.orecruncher.dsurround.client.sound.SoundInstance;
 import org.orecruncher.dsurround.client.weather.compat.RandomThings;
-import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.dsurround.registry.biome.BiomeUtil;
 import org.orecruncher.lib.WorldUtils;
 import org.orecruncher.lib.chunk.ClientChunkCache;
@@ -129,7 +128,7 @@ public class StormSplashRenderer {
 
 	protected boolean biomeHasDust(final Biome biome) {
 		return ModOptions.fog.allowDesertFog && !Weather.doVanilla()
-				&& BiomeUtil.<BiomeInfo>getBiomeData(biome).getHasDust();
+				&& BiomeUtil.getBiomeData(biome).getHasDust();
 	}
 
 	protected void playSplashSound(final ISeasonInfo season, final World world, final Entity player, double x, double y,

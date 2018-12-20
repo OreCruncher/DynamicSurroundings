@@ -42,6 +42,7 @@ import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateData;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
+import org.orecruncher.dsurround.registry.blockstate.BlockStateUtil;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
 import org.orecruncher.lib.WorldUtils;
@@ -128,7 +129,7 @@ public class InspectionHUD extends GuiOverlay {
 				}
 			}
 
-			final BlockStateData data = RegistryManager.BLOCK.get(state);
+			final BlockStateData data = BlockStateUtil.getStateData(state);
 			BlockEffect[] effects = data.getEffects();
 			if (effects.length > 0) {
 				text.add(TEXT_BLOCK_EFFECTS);

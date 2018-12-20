@@ -58,7 +58,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public final class BiomeInfo extends BiomeData implements Comparable<BiomeInfo> {
+public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 	private final static float DEFAULT_FOG_DENSITY = 0.4F;
 	private final static Color DEFAULT_FOG_COLOR = new Color(64, 96, 64).asImmutable();

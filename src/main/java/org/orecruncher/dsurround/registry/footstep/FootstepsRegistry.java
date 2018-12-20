@@ -36,6 +36,7 @@ import java.util.stream.StreamSupport;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.footsteps.BlockMap;
@@ -54,6 +55,7 @@ import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
@@ -99,6 +101,37 @@ public final class FootstepsRegistry extends Registry {
 			"minecraft:block.snow.step"
 		);
 	//@formatter:on
+
+	private static final Map<Material, String> materialProfiles = new Reference2ObjectOpenHashMap<>();
+
+	static {
+		materialProfiles.put(Material.ANVIL, "metalcompressed,hardmetal");
+		materialProfiles.put(Material.CACTUS, "grass");
+		materialProfiles.put(Material.CAKE, "organic");
+		materialProfiles.put(Material.CARPET, "rug");
+		materialProfiles.put(Material.CIRCUITS, "stoneutility");
+		materialProfiles.put(Material.CLAY, "dirt");
+		materialProfiles.put(Material.CLOTH, "rug");
+		materialProfiles.put(Material.CRAFTED_SNOW, "snow");
+		materialProfiles.put(Material.GLASS, "glass");
+		materialProfiles.put(Material.GOURD, "organic_dry");
+		materialProfiles.put(Material.GRASS, "grass");
+		materialProfiles.put(Material.GROUND, "dirt");
+		materialProfiles.put(Material.ICE, "ice");
+		materialProfiles.put(Material.IRON, "hardmetal");
+		materialProfiles.put(Material.LEAVES, "leaves");
+		materialProfiles.put(Material.PACKED_ICE, "ice");
+		materialProfiles.put(Material.PISTON, "stonemachine");
+		materialProfiles.put(Material.REDSTONE_LIGHT, "NOT_EMITTER");
+		materialProfiles.put(Material.ROCK, "stone");
+		materialProfiles.put(Material.SAND, "sand");
+		materialProfiles.put(Material.SNOW, "snow");
+		materialProfiles.put(Material.SPONGE, "organic_dry");
+		materialProfiles.put(Material.TNT, "equipment");
+		materialProfiles.put(Material.VINE, "#vine");
+		materialProfiles.put(Material.WEB, "NOT_EMITTER");
+		materialProfiles.put(Material.WOOD, "wood");
+	}
 
 	private BlockMap blockMap;
 
@@ -336,14 +369,12 @@ public final class FootstepsRegistry extends Registry {
 		final SoundType type = MCHelper.getSoundType(state);
 
 		if (type == null)
-			return AcousticRegistry.NOT_EMITTER;
+			return resolveByMaterial(state);
 
 		final String soundName;
-		boolean flag = false;
 
 		if (type.getStepSound() == null || type.getStepSound().getSoundName().getNamespace().isEmpty()) {
-			soundName = "UNDEFINED";
-			flag = true;
+			return resolveByMaterial(state);
 		} else
 			soundName = type.getStepSound().getSoundName().toString();
 
@@ -352,16 +383,21 @@ public final class FootstepsRegistry extends Registry {
 		// Check for primitive in register
 		IAcoustic[] primitive = RegistryManager.ACOUSTICS.getPrimitiveSubstrate(soundName, substrate);
 		if (primitive == null) {
-			if (flag) {
-				// Check sound
-				primitive = RegistryManager.ACOUSTICS.getPrimitiveSubstrate(soundName, "break_" + soundName);
-			}
-			if (primitive == null) {
-				primitive = RegistryManager.ACOUSTICS.getPrimitive(soundName);
-			}
+			primitive = RegistryManager.ACOUSTICS.getPrimitive(soundName);
+			if (primitive == null)
+				primitive = resolveByMaterial(state);
 		}
 
 		return primitive;
+	}
+
+	@Nullable
+	private IAcoustic[] resolveByMaterial(@Nonnull final IBlockState state) {
+		IAcoustic[] result = null;
+		final String profile = materialProfiles.get(state.getMaterial());
+		if (StringUtils.isNotEmpty(profile))
+			result = RegistryManager.ACOUSTICS.compileAcoustics(profile);
+		return result == AcousticRegistry.EMPTY ? null : result;
 	}
 
 	public boolean hasFootprint(@Nonnull final IBlockState state) {
