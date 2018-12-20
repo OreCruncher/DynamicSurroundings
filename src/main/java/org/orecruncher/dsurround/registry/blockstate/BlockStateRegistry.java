@@ -56,8 +56,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class BlockStateRegistry extends Registry {
 
-	private static final BlockStateProfile NO_PROFILE = new BlockStateProfile().setChance(0);
-
 	private Map<BlockStateMatcher, BlockStateProfile> registry;
 	private int blockStates;
 
@@ -71,7 +69,7 @@ public final class BlockStateRegistry extends Registry {
 
 		// Wipe out any cached data
 		getBlockStates().forEach(state -> BlockStateUtil.setStateData(state, null));
-		BlockStateUtil.setStateData(Blocks.AIR.getDefaultState(), NO_PROFILE);
+		BlockStateUtil.setStateData(Blocks.AIR.getDefaultState(), BlockStateData.DEFAULT);
 	}
 
 	@Override
@@ -100,8 +98,8 @@ public final class BlockStateRegistry extends Registry {
 	}
 
 	@Nonnull
-	public BlockStateProfile get(@Nonnull final IBlockState state) {
-		BlockStateProfile profile = BlockStateUtil.getStateData(state);
+	public BlockStateData get(@Nonnull final IBlockState state) {
+		BlockStateData profile = BlockStateUtil.getStateData(state);
 		if (profile == null) {
 			if (this.registry == null) {
 				ModBase.log().warn("Unknown blockstate encountered '%s'", state.toString());
@@ -111,7 +109,7 @@ public final class BlockStateRegistry extends Registry {
 					profile = this.registry.get(BlockStateMatcher.asGeneric(state));
 			}
 			if (profile == null)
-				profile = NO_PROFILE;
+				profile = BlockStateData.DEFAULT;
 			BlockStateUtil.setStateData(state, profile);
 		}
 		return profile;

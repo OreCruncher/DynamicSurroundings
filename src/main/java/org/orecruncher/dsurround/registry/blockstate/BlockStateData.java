@@ -23,9 +23,88 @@
  */
 package org.orecruncher.dsurround.registry.blockstate;
 
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.orecruncher.dsurround.client.fx.BlockEffect;
+import org.orecruncher.dsurround.client.sound.SoundEffect;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 /**
  * Base class for the data being assigned into the IBlockState implementation.
  */
-public abstract class BlockStateData {
+@SideOnly(Side.CLIENT)
+public class BlockStateData {
 
+	public final static BlockEffect[] NO_EFFECTS = {};
+	public final static SoundEffect[] NO_SOUNDS = {};
+	
+	protected static final BlockStateData DEFAULT = new BlockStateData();
+	
+	@Nonnull
+	public BlockStateData setChance(final int chance) {
+		return this;
+	}
+
+	public int getChance() {
+		return 0;
+	}
+
+	@Nonnull
+	public BlockStateData addSound(@Nonnull final SoundEffect sound) {
+		return this;
+	}
+
+	@Nonnull
+	public BlockStateData clearSounds() {
+		return this;
+	}
+
+	@Nonnull
+	public SoundEffect[] getSounds() {
+		return NO_SOUNDS;
+	}
+
+	@Nonnull
+	public BlockStateData addEffect(@Nonnull final BlockEffect effect) {
+		return this;
+	}
+
+	@Nonnull
+	public BlockStateData clearEffects() {
+		return this;
+	}
+
+	@Nonnull
+	public BlockEffect[] getEffects() {
+		return NO_EFFECTS;
+	}
+
+	@Nonnull
+	public BlockEffect[] getAlwaysOnEffects() {
+		return NO_EFFECTS;
+	}
+
+	@Nullable
+	public SoundEffect getSoundToPlay(@Nonnull final Random random) {
+		return null;
+	}
+
+	public boolean hasSoundsOrEffects() {
+		return false;
+	}
+
+	public boolean hasAlwaysOnEffects() {
+		return false;
+	}
+
+	@Override
+	@Nonnull
+	public String toString() {
+		return "<Default BlockStateData>";
+	}
 }

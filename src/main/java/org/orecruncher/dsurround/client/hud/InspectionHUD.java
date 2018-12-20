@@ -40,8 +40,8 @@ import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironStat
 import org.orecruncher.dsurround.client.handlers.FxHandler;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.registry.RegistryManager;
+import org.orecruncher.dsurround.registry.blockstate.BlockStateData;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
-import org.orecruncher.dsurround.registry.blockstate.BlockStateProfile;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
 import org.orecruncher.lib.WorldUtils;
@@ -128,7 +128,7 @@ public class InspectionHUD extends GuiOverlay {
 				}
 			}
 
-			final BlockStateProfile data = RegistryManager.BLOCK.get(state);
+			final BlockStateData data = RegistryManager.BLOCK.get(state);
 			BlockEffect[] effects = data.getEffects();
 			if (effects.length > 0) {
 				text.add(TEXT_BLOCK_EFFECTS);

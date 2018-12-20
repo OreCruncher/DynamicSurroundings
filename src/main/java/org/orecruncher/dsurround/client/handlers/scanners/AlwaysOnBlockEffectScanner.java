@@ -32,12 +32,11 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.fx.BlockEffect;
 import org.orecruncher.dsurround.lib.scanner.CuboidScanner;
 import org.orecruncher.dsurround.lib.scanner.ScanLocus;
-import org.orecruncher.dsurround.registry.RegistryManager;
-import org.orecruncher.dsurround.registry.blockstate.BlockStateProfile;
+import org.orecruncher.dsurround.registry.blockstate.BlockStateData;
+import org.orecruncher.dsurround.registry.blockstate.BlockStateUtil;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -53,7 +52,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 
-	protected BlockStateProfile profile = null;
+	protected BlockStateData profile = null;
 
 	public AlwaysOnBlockEffectScanner(@Nonnull final ScanLocus locus, final int range) {
 		super(locus, "AlwaysOnBlockEffectScanner", range, 0);
@@ -62,16 +61,13 @@ public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 
 	@Override
 	protected boolean interestingBlock(final IBlockState state) {
-		if (state == Blocks.AIR.getDefaultState())
-			return false;
-		this.profile = RegistryManager.BLOCK.get(state);
-		return this.profile.hasAlwaysOnEffects();
+		return BlockStateUtil.getStateData(state).hasAlwaysOnEffects();
 	}
 
 	@Override
 	public void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final Random rand) {
 		final IBlockAccessEx provider = this.locus.getWorld();
-		final BlockEffect[] effects = this.profile.getAlwaysOnEffects();
+		final BlockEffect[] effects = BlockStateUtil.getStateData(state).getAlwaysOnEffects();
 		for (int i = 0; i < effects.length; i++) {
 			final BlockEffect be = effects[i];
 			if (be.canTrigger(provider, state, pos, rand))

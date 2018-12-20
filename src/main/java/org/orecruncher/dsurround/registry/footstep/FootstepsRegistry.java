@@ -52,13 +52,16 @@ import org.orecruncher.dsurround.registry.config.ModConfiguration.ForgeEntry;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
+
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BlockGlass;
 import net.minecraft.block.BlockIce;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLog;
@@ -67,6 +70,7 @@ import net.minecraft.block.BlockOre;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockReed;
 import net.minecraft.block.BlockSapling;
+import net.minecraft.block.BlockVine;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -107,7 +111,7 @@ public final class FootstepsRegistry extends Registry {
 	private Variator playerQuadrupedVariator;
 
 	private Set<IBlockState> missingAcoustics;
-	
+
 	public IAcoustic[] SWIM;
 	public IAcoustic[] JUMP;
 	public IAcoustic[] SPLASH;
@@ -255,10 +259,14 @@ public final class FootstepsRegistry extends Registry {
 					registerBlocks("#reed", blockName);
 				} else if (block instanceof BlockFence) {
 					registerBlocks("#fence", blockName);
+				} else if (block instanceof BlockVine) {
+					registerBlocks("#vine", blockName);
 				} else if (block instanceof BlockFlower || block instanceof BlockMushroom) {
 					registerBlocks("NOT_EMITTER", blockName);
-				} else if (block instanceof BlockLog || block instanceof BlockPlanks) {
+				} else if (block instanceof BlockPlanks) {
 					registerBlocks("wood", blockName);
+				} else if (block instanceof BlockLog) {
+					registerBlocks("log", blockName);
 				} else if (block instanceof BlockDoor) {
 					registerBlocks("bluntwood", blockName);
 				} else if (block instanceof BlockLeaves) {
@@ -267,6 +275,10 @@ public final class FootstepsRegistry extends Registry {
 					registerBlocks("ore", blockName);
 				} else if (block instanceof BlockIce) {
 					registerBlocks("ice", blockName);
+				} else if (block instanceof BlockChest) {
+					registerBlocks("squeakywood", blockName);
+				} else if (block instanceof BlockGlass) {
+					registerBlocks("glass", blockName);
 				}
 			}
 		}
@@ -399,8 +411,9 @@ public final class FootstepsRegistry extends Registry {
 							@SuppressWarnings("deprecation")
 							final IBlockState state = block.getStateFromMeta(meta);
 							blockName = state.toString();
-						} catch(@Nonnull final Throwable t) {
-							ModBase.log().warn("Unable to resolve blockstate for [%s]", stack.toString());
+						} catch (@Nonnull final Throwable t) {
+							ModBase.log().warn("Unable to resolve blockstate for [%s]",
+									ItemStackUtil.getItemName(stack));
 						}
 					} else {
 						blockName = MCHelper.nameOf(block);
@@ -408,7 +421,7 @@ public final class FootstepsRegistry extends Registry {
 					if (blockName != null)
 						getBlockMap().register(blockName, blockClass);
 					else
-						ModBase.log().warn("Unable to obtain registry name for ItemStack [%s]", stack.toString());
+						ModBase.log().warn("Unable to obtain block name for ItemStack [%s]", stack.toString());
 				}
 			}
 		}

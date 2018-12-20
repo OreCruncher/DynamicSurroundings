@@ -43,13 +43,11 @@ import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 import org.orecruncher.lib.BlockNameUtil;
 import org.orecruncher.lib.BlockNameUtil.NameResult;
 
-import com.google.common.base.Optional;
-
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -81,23 +79,21 @@ public class BlockMap {
 		}
 
 		@Nonnull
-		public IBlockState withProperty(@Nonnull final IBlockState state) {
-			if (this.propertyName == null)
-				return state;
-			final IProperty<?> iProp = state.getBlock().getBlockState().getProperty(this.propertyName);
-			if (iProp != null)
-				return setValueHelper(state, iProp, this.propertyValue);
-			return state;
-		}
+		public Tuple<String, String> expand(@Nonnull final String base) {
+			final StringBuilder builder = new StringBuilder();
+			builder.append(base);
+			if (this.propertyName != null) {
+				builder.append('[');
+				builder.append(this.propertyName).append('=').append(this.propertyValue);
+				builder.append(']');
+			}
 
-		private static <T extends Comparable<T>> IBlockState setValueHelper(IBlockState state, IProperty<T> prop,
-				String value) {
-			final Optional<T> optional = prop.parseValue(value);
-			if (optional.isPresent())
-				return state.withProperty(prop, optional.get());
-			return state;
-		}
+			if (this.substrate != null) {
+				builder.append('+').append(this.substrate);
+			}
 
+			return new Tuple<>(builder.toString(), this.value);
+		}
 	}
 
 	private static final Map<String, List<MacroEntry>> macros = new Object2ObjectOpenHashMap<>();
@@ -219,19 +215,7 @@ public class BlockMap {
 		}
 	}
 
-	private void expand(@Nonnull final BlockStateMatcher info, @Nonnull final String value) {
-		final List<MacroEntry> macro = macros.get(value);
-		if (macro != null) {
-			for (final MacroEntry entry : macro) {
-				final IBlockState state = entry.withProperty(info.getBlock().getDefaultState());
-				put(BlockStateMatcher.create(state), entry.substrate, entry.value);
-			}
-		} else {
-			ModBase.log().debug("Unknown macro '%s'", value);
-		}
-	}
-
-	public void register(@Nonnull final String key, @Nonnull final String value) {
+	private void register0(@Nonnull final String key, @Nonnull final String value) {
 		final NameResult name = BlockNameUtil.parseBlockName(key);
 		if (name != null) {
 			final String blockName = name.getBlockName();
@@ -240,15 +224,28 @@ public class BlockMap {
 				ModBase.log().debug("Unable to locate block for blockMap '%s'", blockName);
 			} else {
 				final BlockStateMatcher matcher = BlockStateMatcher.create(name);
-				if (value.startsWith("#")) {
-					expand(matcher, value);
-				} else {
-					final String substrate = name.getExtras();
-					put(matcher, substrate, value);
-				}
+				final String substrate = name.getExtras();
+				put(matcher, substrate, value);
 			}
 		} else {
 			ModBase.log().warn("Malformed key in blockMap '%s'", key);
+		}
+	}
+
+	public void register(@Nonnull final String key, @Nonnull final String value) {
+		if (value.startsWith("#")) {
+			final List<MacroEntry> macro = macros.get(value);
+			if (macro != null) {
+				//@formatter:off
+				macro.stream()
+					.map(m -> m.expand(key))
+					.forEach(t -> register0(t.getFirst(), t.getSecond()));
+				//@formatter:on
+			} else {
+				ModBase.log().debug("Unknown macro '%s'", value);
+			}
+		} else {
+			register0(key, value);
 		}
 	}
 

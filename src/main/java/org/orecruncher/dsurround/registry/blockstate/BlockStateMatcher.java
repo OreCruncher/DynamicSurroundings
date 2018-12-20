@@ -37,7 +37,6 @@ import org.orecruncher.lib.BlockNameUtil;
 import org.orecruncher.lib.BlockNameUtil.NameResult;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
 
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap.Entry;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
@@ -50,7 +49,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class BlockStateMatcher {
+public final class BlockStateMatcher {
+
+	private static final Reference2ObjectOpenHashMap<IProperty<?>, Object> EMPTY = new Reference2ObjectOpenHashMap<>(0);
 
 	// We all know about air...
 	public static final BlockStateMatcher AIR = BlockStateMatcher.create(Blocks.AIR.getDefaultState());
@@ -60,7 +61,7 @@ public class BlockStateMatcher {
 
 	// Sometimes an exact match of state is needed. The state being compared
 	// would have to match all these properties.
-	protected Reference2ObjectOpenHashMap<IProperty<?>, Object> props;
+	protected final Reference2ObjectOpenHashMap<IProperty<?>, Object> props;
 
 	protected BlockStateMatcher(@Nonnull final IBlockState state) {
 		this.block = state.getBlock();
@@ -68,11 +69,11 @@ public class BlockStateMatcher {
 	}
 
 	protected BlockStateMatcher(@Nonnull final Block block) {
-		this(block, null);
+		this(block, EMPTY);
 	}
 
 	protected BlockStateMatcher(@Nonnull final Block block,
-			@Nullable final Reference2ObjectOpenHashMap<IProperty<?>, Object> props) {
+			@Nonnull final Reference2ObjectOpenHashMap<IProperty<?>, Object> props) {
 		this.block = block;
 		this.props = props;
 	}
@@ -82,23 +83,20 @@ public class BlockStateMatcher {
 		return this.block;
 	}
 
-	@Nullable
+	@Nonnull
 	public List<IBlockState> asBlockStates() {
-		final List<IBlockState> states = new ArrayList<>();
-		final ImmutableList<IBlockState> valid = this.block.getBlockState().getValidStates();
-		for (final IBlockState bs : valid) {
-			if (matchProps(bs))
-				states.add(bs);
-		}
-		return states;
+		//@formatter:off
+		return this.block.getBlockState().getValidStates().stream()
+			.filter(bs -> matchProps(bs))
+			.collect(Collectors.toList());
+		//@formatter:on
 	}
 
 	protected boolean matchProps(@Nonnull final IBlockState state) {
-		if (this.props == null)
+		if (this.props.isEmpty())
 			return true;
 		for (final Entry<IProperty<?>, Object> entry : this.props.reference2ObjectEntrySet()) {
-			final Object result;
-			result = state.getValue(entry.getKey());
+			final Object result = state.getValue(entry.getKey());
 			if (!entry.getValue().equals(result))
 				return false;
 		}
@@ -109,13 +107,6 @@ public class BlockStateMatcher {
 	public boolean hasSubtypes() {
 		return this.block.getBlockState().getValidStates().size() > 1;
 	}
-
-	@Nonnull
-	public String getBlockName() {
-		return Block.REGISTRY.getNameForObject(this.block).toString();
-	}
-
-	// private final static int TERM = 769;
 
 	@Override
 	public int hashCode() {
@@ -129,12 +120,16 @@ public class BlockStateMatcher {
 			// If the block types don't match, there will be no match
 			if (this.block != m.block)
 				return false;
-			// If they both are null then they are equal
-			if (this.props == null && m.props == null)
+
+			// If both lists are empty its a match
+			if (this.props.isEmpty() && m.props.isEmpty())
 				return true;
-			// If one has props and the other doesn't no match
-			if (this.props == null && m.props != null || this.props != null && m.props == null)
+
+			// If the other list is larger there isn't a way it's going
+			// to match us.
+			if (this.props.size() < m.props.size())
 				return false;
+
 			// Run 'em down doing compares
 			for (final Entry<IProperty<?>, Object> entry : m.props.reference2ObjectEntrySet()) {
 				final Object v = this.props.get(entry.getKey());
@@ -148,7 +143,8 @@ public class BlockStateMatcher {
 
 	@Nullable
 	protected Reference2ObjectOpenHashMap<IProperty<?>, Object> getPropsFromState(@Nonnull final IBlockState state) {
-		final Reference2ObjectOpenHashMap<IProperty<?>, Object> result = new Reference2ObjectOpenHashMap<>();
+
+		final Reference2ObjectOpenHashMap<IProperty<?>, Object> result = new Reference2ObjectOpenHashMap<>(1);
 
 		for (final IProperty<?> prop : state.getPropertyKeys()) {
 			final Object o = state.getValue(prop);
@@ -157,7 +153,7 @@ public class BlockStateMatcher {
 			}
 		}
 
-		return result.size() > 0 ? result : null;
+		return result.size() == 0 ? EMPTY : result;
 	}
 
 	@Nonnull
@@ -194,7 +190,8 @@ public class BlockStateMatcher {
 				}
 
 				final Map<String, String> properties = result.getProperties();
-				final Reference2ObjectOpenHashMap<IProperty<?>, Object> props = new Reference2ObjectOpenHashMap<>();
+				final Reference2ObjectOpenHashMap<IProperty<?>, Object> props = new Reference2ObjectOpenHashMap<>(
+						properties.size());
 
 				// Blow out the property list
 				for (final java.util.Map.Entry<String, String> entry : properties.entrySet()) {
@@ -239,7 +236,7 @@ public class BlockStateMatcher {
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append(Block.REGISTRY.getNameForObject(this.block));
-		if (this.props != null) {
+		if (!this.props.isEmpty()) {
 			final String txt = this.props.reference2ObjectEntrySet().stream()
 					.map(e -> e.getKey().getName() + "=" + getValue(this.block, e.getKey().getName(), e.getValue()))
 					.collect(Collectors.joining(","));

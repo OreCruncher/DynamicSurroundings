@@ -33,12 +33,11 @@ import org.orecruncher.dsurround.client.fx.BlockEffect;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.lib.scanner.RandomScanner;
 import org.orecruncher.dsurround.lib.scanner.ScanLocus;
-import org.orecruncher.dsurround.registry.RegistryManager;
-import org.orecruncher.dsurround.registry.blockstate.BlockStateProfile;
+import org.orecruncher.dsurround.registry.blockstate.BlockStateData;
+import org.orecruncher.dsurround.registry.blockstate.BlockStateUtil;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -61,8 +60,6 @@ public class RandomBlockEffectScanner extends RandomScanner {
 	public static final int NEAR_RANGE = 16;
 	public static final int FAR_RANGE = 32;
 
-	protected BlockStateProfile profile = null;
-
 	public RandomBlockEffectScanner(@Nonnull final ScanLocus locus, final int range) {
 		super(locus, "RandomBlockScanner: " + range, range, ITERATION_COUNT);
 		setLogger(ModBase.log());
@@ -70,24 +67,22 @@ public class RandomBlockEffectScanner extends RandomScanner {
 
 	@Override
 	protected boolean interestingBlock(@Nonnull final IBlockState state) {
-		if (state == Blocks.AIR.getDefaultState())
-			return false;
-		this.profile = RegistryManager.BLOCK.get(state);
-		return this.profile.hasSoundsOrEffects();
+		return BlockStateUtil.getStateData(state).hasSoundsOrEffects();
 	}
 
 	@Override
 	public void blockScan(@Nonnull final IBlockState state, @Nonnull final BlockPos pos, @Nonnull final Random rand) {
-
 		final IBlockAccessEx provider = this.locus.getWorld();
-		final BlockEffect[] effects = this.profile.getEffects();
-		for (int i = 0; i < effects.length; i++) {
-			final BlockEffect be = effects[i];
-			if (be.canTrigger(provider, state, pos, rand))
-				be.doEffect(provider, state, pos, rand);
-		}
+		final BlockStateData profile = BlockStateUtil.getStateData(state);
+		final BlockEffect[] effects = profile.getEffects();
+		if (effects != BlockStateData.NO_EFFECTS)
+			for (int i = 0; i < effects.length; i++) {
+				final BlockEffect be = effects[i];
+				if (be.canTrigger(provider, state, pos, rand))
+					be.doEffect(provider, state, pos, rand);
+			}
 
-		final SoundEffect sound = this.profile.getSoundToPlay(rand);
+		final SoundEffect sound = profile.getSoundToPlay(rand);
 		if (sound != null)
 			sound.doEffect(provider, state, pos, rand);
 	}

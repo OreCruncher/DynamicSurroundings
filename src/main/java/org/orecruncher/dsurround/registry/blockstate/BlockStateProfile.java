@@ -42,9 +42,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class BlockStateProfile extends BlockStateData {
 
-	public final static BlockEffect[] NO_EFFECTS = {};
-	public final static SoundEffect[] NO_SOUNDS = {};
-
 	protected int chance = 100;
 	protected SoundEffect[] sounds = NO_SOUNDS;
 	protected BlockEffect[] effects = NO_EFFECTS;
@@ -72,6 +69,7 @@ public class BlockStateProfile extends BlockStateData {
 		return this;
 	}
 
+	@Override
 	@Nonnull
 	public SoundEffect[] getSounds() {
 		return this.sounds;
@@ -93,26 +91,31 @@ public class BlockStateProfile extends BlockStateData {
 		return this;
 	}
 
+	@Override
 	@Nonnull
 	public BlockEffect[] getEffects() {
 		return this.effects;
 	}
 
+	@Override
 	@Nonnull
 	public BlockEffect[] getAlwaysOnEffects() {
 		return this.alwaysOn;
 	}
 
+	@Override
 	@Nullable
 	public SoundEffect getSoundToPlay(@Nonnull final Random random) {
 		return this.sounds != NO_SOUNDS && random.nextInt(getChance()) == 0 ? new WeightTable<>(this.sounds).next()
 				: null;
 	}
 
+	@Override
 	public boolean hasSoundsOrEffects() {
 		return this.sounds.length > 0 || this.effects.length > 0;
 	}
 
+	@Override
 	public boolean hasAlwaysOnEffects() {
 		return this.alwaysOn.length > 0;
 	}
