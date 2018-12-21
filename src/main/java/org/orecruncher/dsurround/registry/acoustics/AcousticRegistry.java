@@ -35,18 +35,25 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.client.footsteps.DelayedAcoustic;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
+import org.orecruncher.lib.MCHelper;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectAVLTreeMap;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -65,6 +72,39 @@ public class AcousticRegistry extends Registry {
 
 	private static final float DIVIDE = 100f;
 
+	private static final Map<Material, String> materialProfiles = new Reference2ObjectOpenHashMap<>();
+
+	static {
+		// No macros in this list!
+		materialProfiles.put(Material.ANVIL, "metalcompressed,hardmetal");
+		materialProfiles.put(Material.CACTUS, "grass");
+		materialProfiles.put(Material.CAKE, "organic");
+		materialProfiles.put(Material.CARPET, "rug");
+		materialProfiles.put(Material.CIRCUITS, "stoneutility");
+		materialProfiles.put(Material.CLAY, "dirt");
+		materialProfiles.put(Material.CLOTH, "rug");
+		materialProfiles.put(Material.CRAFTED_SNOW, "snow");
+		materialProfiles.put(Material.GLASS, "glass");
+		materialProfiles.put(Material.GOURD, "organic_dry");
+		materialProfiles.put(Material.GRASS, "grass");
+		materialProfiles.put(Material.GROUND, "dirt");
+		materialProfiles.put(Material.ICE, "ice");
+		materialProfiles.put(Material.IRON, "hardmetal");
+		materialProfiles.put(Material.LEAVES, "leaves");
+		materialProfiles.put(Material.PACKED_ICE, "ice");
+		materialProfiles.put(Material.PISTON, "stonemachine");
+		materialProfiles.put(Material.REDSTONE_LIGHT, "NOT_EMITTER");
+		materialProfiles.put(Material.ROCK, "stone");
+		materialProfiles.put(Material.SAND, "sand");
+		materialProfiles.put(Material.SNOW, "snow");
+		materialProfiles.put(Material.SPONGE, "organic_dry");
+		materialProfiles.put(Material.TNT, "equipment");
+		materialProfiles.put(Material.VINE, "leaves");
+		materialProfiles.put(Material.WEB, "NOT_EMITTER");
+		materialProfiles.put(Material.WOOD, "wood");
+		materialProfiles.put(Material.FIRE, "NOT_EMITTER");
+	}
+
 	/*
 	 * The piece parts that are used to make more complicated sound effects
 	 */
@@ -81,6 +121,8 @@ public class AcousticRegistry extends Registry {
 	public static final IAcoustic[] MESSY_GROUND = { new NullAcoustic("MESSY_GROUND") };
 
 	private int hits;
+	private int primitives;
+	private int material;
 
 	public AcousticRegistry() {
 		super("Acoustic Registry");
@@ -89,6 +131,8 @@ public class AcousticRegistry extends Registry {
 	@Override
 	protected void preInit() {
 		this.hits = 0;
+		this.primitives = 0;
+		this.material = 0;
 		this.acoustics.clear();
 		this.compiled.clear();
 		this.compiled.put("EMPTY", EMPTY);
@@ -122,6 +166,8 @@ public class AcousticRegistry extends Registry {
 	@Override
 	protected void complete() {
 		ModBase.log().info("[%s] %d cache hits during initialization", getName(), this.hits);
+		ModBase.log().info("[%s] %d primitives by material generated", getName(), this.material);
+		ModBase.log().info("[%s] %d primitives by sound generated", getName(), this.primitives);
 	}
 
 	@Nullable
@@ -129,15 +175,74 @@ public class AcousticRegistry extends Registry {
 		IAcoustic[] result = this.compiled.get(primitive);
 		if (result == null) {
 			final IAcoustic a = generateAcoustic(primitive);
-			if (a != null)
+			if (a != null) {
 				this.compiled.put(primitive, result = new IAcoustic[] { a });
+				this.primitives++;
+			}
 		}
 		return result;
 	}
 
+	/**
+	 * Used to determine what acoustics to play based on the block's sound
+	 * attributes. It's a fallback method in case there isn't a configuration
+	 * defined acoustic profile for a block state.
+	 *
+	 * @param state BlockState for which the acoustic profile is being generated
+	 * @return Acoustic profile for the BlockState, if any
+	 */
 	@Nullable
-	public IAcoustic[] getPrimitiveSubstrate(@Nonnull final String primitive, @Nonnull final String substrate) {
-		return this.compiled.get(primitive + "@" + substrate);
+	public IAcoustic[] resolvePrimitive(@Nonnull final IBlockState state) {
+
+		if (state == Blocks.AIR.getDefaultState())
+			return NOT_EMITTER;
+
+		// Get the step sound based on the block's SoundType
+		final String soundName;
+		final SoundType type = MCHelper.getSoundType(state);
+		if (type != null && type.getStepSound() != null
+				&& !type.getStepSound().getSoundName().getNamespace().isEmpty()) {
+			soundName = type.getStepSound().getSoundName().toString();
+		} else {
+			soundName = null;
+		}
+
+		IAcoustic[] acoustics = null;
+
+		// If we don't have a step sound, or the sound belongs to Minecraft
+		// resolve based on material. This lets modded sounds through, like
+		// for Chisel's Laboratory blocks.
+		//
+		// The reason we do Material before SoundType is because Material
+		// is more descriptive of the block. Also, modders have a tendency
+		// to forget to set the SoundType which let's it default to stone.
+		//
+		// Note that the only Material that DS knows about are the ones
+		// defined by Minecraft. Modded Material instances will not be
+		// recognized, meaning that the SoundType will be used eventually.
+		// I figure if the modder is savvy enough to make custom materials
+		// they are savvy enough to set the SoundType.
+		if (soundName == null || soundName.startsWith("minecraft"))
+			acoustics = resolveByMaterial(state);
+
+		if (acoustics != null)
+			this.material++;
+
+		// If we haven't resolved yet and have a sound name resolve it as
+		// a primitive.
+		if (acoustics == null && StringUtils.isNotEmpty(soundName))
+			acoustics = getPrimitive(soundName);
+
+		return acoustics != null ? acoustics : EMPTY;
+	}
+
+	@Nullable
+	private IAcoustic[] resolveByMaterial(@Nonnull final IBlockState state) {
+		IAcoustic[] result = null;
+		final String profile = materialProfiles.get(state.getMaterial());
+		if (StringUtils.isNotEmpty(profile))
+			result = compileAcoustics(profile);
+		return result == EMPTY ? null : result;
 	}
 
 	public void addAcoustic(@Nonnull final IAcoustic acoustic) {

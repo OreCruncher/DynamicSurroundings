@@ -2378,9 +2378,7 @@
 		"minecraft:block.snow.step": "snow",
 		"minecraft:block.ladder.step": "ladder",
 		"minecraft:block.anvil.step": "metalcompressed,hardmetal",
-		"minecraft:block.slime.step": "mud",
-		"minecraft:block.stone.step@1.00_1.50": "hardmetal",
-		"minecraft:block.stone.step@break_random.glass": "glass"
+		"minecraft:block.slime.step": "mud"
 	},
 	"footsteps": {
 		"minecraft:barrier": "NOT_EMITTER",

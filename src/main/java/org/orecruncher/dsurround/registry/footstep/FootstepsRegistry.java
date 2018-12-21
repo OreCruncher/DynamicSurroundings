@@ -27,16 +27,12 @@ package org.orecruncher.dsurround.registry.footstep;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.footsteps.BlockMap;
@@ -55,7 +51,6 @@ import org.orecruncher.lib.ItemStackUtil;
 import org.orecruncher.lib.MCHelper;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
@@ -78,7 +73,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemBlockSpecial;
@@ -101,37 +95,6 @@ public final class FootstepsRegistry extends Registry {
 			"minecraft:block.snow.step"
 		);
 	//@formatter:on
-
-	private static final Map<Material, String> materialProfiles = new Reference2ObjectOpenHashMap<>();
-
-	static {
-		materialProfiles.put(Material.ANVIL, "metalcompressed,hardmetal");
-		materialProfiles.put(Material.CACTUS, "grass");
-		materialProfiles.put(Material.CAKE, "organic");
-		materialProfiles.put(Material.CARPET, "rug");
-		materialProfiles.put(Material.CIRCUITS, "stoneutility");
-		materialProfiles.put(Material.CLAY, "dirt");
-		materialProfiles.put(Material.CLOTH, "rug");
-		materialProfiles.put(Material.CRAFTED_SNOW, "snow");
-		materialProfiles.put(Material.GLASS, "glass");
-		materialProfiles.put(Material.GOURD, "organic_dry");
-		materialProfiles.put(Material.GRASS, "grass");
-		materialProfiles.put(Material.GROUND, "dirt");
-		materialProfiles.put(Material.ICE, "ice");
-		materialProfiles.put(Material.IRON, "hardmetal");
-		materialProfiles.put(Material.LEAVES, "leaves");
-		materialProfiles.put(Material.PACKED_ICE, "ice");
-		materialProfiles.put(Material.PISTON, "stonemachine");
-		materialProfiles.put(Material.REDSTONE_LIGHT, "NOT_EMITTER");
-		materialProfiles.put(Material.ROCK, "stone");
-		materialProfiles.put(Material.SAND, "sand");
-		materialProfiles.put(Material.SNOW, "snow");
-		materialProfiles.put(Material.SPONGE, "organic_dry");
-		materialProfiles.put(Material.TNT, "equipment");
-		materialProfiles.put(Material.VINE, "#vine");
-		materialProfiles.put(Material.WEB, "NOT_EMITTER");
-		materialProfiles.put(Material.WOOD, "wood");
-	}
 
 	private BlockMap blockMap;
 
@@ -280,10 +243,13 @@ public final class FootstepsRegistry extends Registry {
 				if (block instanceof BlockCrops) {
 					final BlockCrops crop = (BlockCrops) block;
 					if (crop.getMaxAge() == 3) {
+						// Like beets
 						registerBlocks("#beets", blockName);
 					} else if (blockName.equals("minecraft:wheat")) {
+						// Wheat is special because it is straw like
 						registerBlocks("#wheat", blockName);
 					} else if (crop.getMaxAge() == 7) {
+						// Like carrots and potatoes
 						registerBlocks("#crop", blockName);
 					}
 				} else if (block instanceof BlockSapling) {
@@ -348,56 +314,7 @@ public final class FootstepsRegistry extends Registry {
 	 */
 	@Nonnull
 	public IAcoustic[] resolve(@Nonnull final IBlockState state) {
-		final IAcoustic[] acoustics = resolvePrimitive(state);
-		return acoustics != null ? acoustics : AcousticRegistry.EMPTY;
-	}
-
-	/**
-	 * Used to determine what acoustics to play based on the block's sound
-	 * attributes. It's a fallback method in case there isn't a configuration
-	 * defined acoustic profile for a block state.
-	 *
-	 * @param state BlockState for which the acoustic profile is being generated
-	 * @return Acoustic profile for the BlockState, if any
-	 */
-	@Nullable
-	private IAcoustic[] resolvePrimitive(@Nonnull final IBlockState state) {
-
-		if (state == Blocks.AIR.getDefaultState())
-			return AcousticRegistry.NOT_EMITTER;
-
-		final SoundType type = MCHelper.getSoundType(state);
-
-		if (type == null)
-			return resolveByMaterial(state);
-
-		final String soundName;
-
-		if (type.getStepSound() == null || type.getStepSound().getSoundName().getNamespace().isEmpty()) {
-			return resolveByMaterial(state);
-		} else
-			soundName = type.getStepSound().getSoundName().toString();
-
-		final String substrate = String.format(Locale.ENGLISH, "%.2f_%.2f", type.getVolume(), type.getPitch());
-
-		// Check for primitive in register
-		IAcoustic[] primitive = RegistryManager.ACOUSTICS.getPrimitiveSubstrate(soundName, substrate);
-		if (primitive == null) {
-			primitive = RegistryManager.ACOUSTICS.getPrimitive(soundName);
-			if (primitive == null)
-				primitive = resolveByMaterial(state);
-		}
-
-		return primitive;
-	}
-
-	@Nullable
-	private IAcoustic[] resolveByMaterial(@Nonnull final IBlockState state) {
-		IAcoustic[] result = null;
-		final String profile = materialProfiles.get(state.getMaterial());
-		if (StringUtils.isNotEmpty(profile))
-			result = RegistryManager.ACOUSTICS.compileAcoustics(profile);
-		return result == AcousticRegistry.EMPTY ? null : result;
+		return RegistryManager.ACOUSTICS.resolvePrimitive(state);
 	}
 
 	public boolean hasFootprint(@Nonnull final IBlockState state) {
