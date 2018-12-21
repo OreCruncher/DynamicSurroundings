@@ -41,23 +41,28 @@ public enum SoundState {
 	 */
 	NONE(false, false),
 	/*
-	 * Currently playing
+	 * The sound is being held in an internal queue waiting for
+	 * space down in the sound engine.
+	 */
+	QUEUED(true, false),
+	/*
+	 * Currently playing in the sound engine.
 	 */
 	PLAYING(true, false),
 	/*
-	 * In the delay queue
+	 * The sound is in the sound engine DELAYED queue waiting to play.
 	 */
 	DELAYED(true, false),
 	/*
-	 * Has been paused
+	 * The sound play has been paused.
 	 */
 	PAUSED(true, false),
 	/*
-	 * Completed play
+	 * The sound has completed it play.
 	 */
 	DONE(false, true),
 	/*
-	 * There was an error of some sort
+	 * There was an error of some sort with the sound.
 	 */
 	ERROR(false, true);
 

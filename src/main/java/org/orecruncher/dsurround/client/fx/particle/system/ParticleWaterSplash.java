@@ -32,6 +32,7 @@ import org.orecruncher.dsurround.client.sound.PositionedEmitter;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.lib.WorldUtils;
+import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.math.MathStuff;
 
 import net.minecraft.util.math.BlockPos;
@@ -87,11 +88,12 @@ public class ParticleWaterSplash extends ParticleJet {
 
 	@Override
 	public boolean shouldDie() {
-		return (this.particleAge % 10) == 0 && !WaterSplashJetEffect.isValidSpawnBlock(WorldUtils.getDefaultBlockStateProvider(), this.location);
+		return (this.particleAge % 10) == 0
+				&& !WaterSplashJetEffect.isValidSpawnBlock(WorldUtils.getDefaultBlockStateProvider(), this.location);
 	}
 
 	private boolean setupSound() {
-		return isAlive() && this.jetStrength >= ModOptions.effects.waterfallCutoff && this.emitter == null
+		return this.emitter == null && isAlive() && this.jetStrength >= ModOptions.effects.waterfallCutoff
 				&& RANDOM.nextInt(6) == 0;
 	}
 
@@ -125,8 +127,10 @@ public class ParticleWaterSplash extends ParticleJet {
 			for (int j = 0; (float) j < splashCount; ++j) {
 				final double xOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
 				final double zOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
-				if (WorldUtils.isSolidBlock(this.world,
-						pos.setPos(this.posX + xOffset, this.posY, this.posZ + zOffset)))
+
+				if (ClientChunkCache.instance()
+						.getBlockState(pos.setPos(this.posX + xOffset, this.posY, this.posZ + zOffset)).getMaterial()
+						.isSolid())
 					continue;
 
 				final int motionStr = this.jetStrength + 3;

@@ -34,5 +34,9 @@ public interface ISoundInstance extends ISound {
 	SoundState getState();
 
 	void setState(@Nonnull final SoundState state);
+	
+	void setQueue(final boolean f);
+	
+	boolean getQueue();
 
 }

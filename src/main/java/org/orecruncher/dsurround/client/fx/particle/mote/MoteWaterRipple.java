@@ -65,9 +65,9 @@ public class MoteWaterRipple extends MoteAgeable {
 		this.posY -= 0.2D;
 
 		final Color waterColor = BiomeUtil.getColorForLiquid(world, this.position);
-		this.red = waterColor.red;
-		this.green = waterColor.green;
-		this.blue = waterColor.blue;
+		this.red = (int) (waterColor.red * 255);
+		this.green = (int) (waterColor.green * 255);
+		this.blue = (int) (waterColor.blue * 255);
 
 		this.texU1 = style.getU1(this.age);
 		this.texU2 = style.getU2(this.age);
@@ -84,7 +84,7 @@ public class MoteWaterRipple extends MoteAgeable {
 		}
 
 		if (style.doAlpha()) {
-			this.alpha = (float) (this.maxAge - this.age) / (float) (this.maxAge + 3);
+			this.alpha = (int) ((float) (this.maxAge - this.age) / (float) (this.maxAge + 3) * 255);
 		}
 
 		this.texU1 = style.getU1(this.age);

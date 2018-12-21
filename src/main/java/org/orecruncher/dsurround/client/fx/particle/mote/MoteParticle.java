@@ -59,10 +59,10 @@ public abstract class MoteParticle implements IParticleMote {
 	protected int slX16;
 	protected int blX16;
 
-	protected float red;
-	protected float green;
-	protected float blue;
-	protected float alpha;
+	protected int red;
+	protected int green;
+	protected int blue;
+	protected int alpha;
 
 	public MoteParticle(@Nonnull final World world, final double x, final double y, final double z) {
 		this.world = world;
@@ -78,7 +78,7 @@ public abstract class MoteParticle implements IParticleMote {
 	}
 
 	public void configureColor() {
-		this.red = this.green = this.blue = this.alpha = 1F;
+		this.red = this.green = this.blue = this.alpha = 255;
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public abstract class MoteParticle implements IParticleMote {
 			return;
 
 		update();
-		
+
 		// The update() may have killed the mote
 		if (isAlive()) {
 			setPosition(this.posX, this.posY, this.posZ);

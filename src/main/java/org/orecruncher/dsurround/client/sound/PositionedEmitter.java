@@ -39,6 +39,7 @@ public class PositionedEmitter extends Emitter {
 
 		this.position = pos.toImmutable();
 		this.activeSound = createSound();
+		this.activeSound.canQueue = true;
 	}
 
 	@Override

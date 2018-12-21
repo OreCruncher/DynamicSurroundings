@@ -77,10 +77,10 @@ public abstract class MoteAnimatedBase extends MoteMotionBase {
 	}
 
 	public void setColor(final int rgb) {
-		this.red = ((rgb & 16711680) >> 16) / 255.0F;
-		this.green = ((rgb & 65280) >> 8) / 255.0F;
-		this.blue = ((rgb & 255) >> 0) / 255.0F;
-		this.alpha = 1.0F;
+		this.red = ((rgb & 16711680) >> 16);
+		this.green = ((rgb & 65280) >> 8);
+		this.blue = ((rgb & 255) >> 0);
+		this.alpha = 255;
 	}
 
 	/**
@@ -115,7 +115,7 @@ public abstract class MoteAnimatedBase extends MoteMotionBase {
 		if (isAlive()) {
 
 			if (this.age > this.maxAge / 2) {
-				this.alpha = (1.0F - ((float) this.age - (float) (this.maxAge / 2)) / this.maxAge);
+				this.alpha = (int) ((1.0F - ((float) this.age - (float) (this.maxAge / 2)) / this.maxAge) * 255);
 
 				if (this.fadingColor) {
 					this.red += (this.fadeTargetRed - this.red) * 0.2F;

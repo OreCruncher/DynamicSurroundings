@@ -53,7 +53,7 @@ public class MoteRainSplash extends MoteWaterSpray {
 
 	@Override
 	public void configureColor() {
-		this.red = this.green = this.blue = this.alpha = 1F;
+		this.red = this.green = this.blue = this.alpha = 255;
 	}
 
 }

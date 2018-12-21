@@ -139,10 +139,10 @@ public class MoteFootprint extends MoteAgeable {
 
 		float f = (this.age + partialTicks) / ((float) this.maxAge + 1);
 		f = f * f;
-		this.alpha = MathStuff.clamp(1.0F - f, 0F, 1F);
+		this.alpha = (int) (MathStuff.clamp(1.0F - f, 0F, 1F) * 255);
 
 		// Sets the alpha
-		this.alpha = this.alpha * 0.4F;
+		this.alpha = (int) (this.alpha * 0.4F);
 
 		final double x = renderX(partialTicks);
 		final double y = renderY(partialTicks);

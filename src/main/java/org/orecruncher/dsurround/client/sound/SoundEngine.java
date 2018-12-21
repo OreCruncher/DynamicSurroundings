@@ -133,7 +133,7 @@ public final class SoundEngine {
 			""
 		);
 	//@formatter:on
-	
+
 	private static final float MUTE_VOLUME = 0.00001F;
 	private static final int MAX_STREAM_CHANNELS = 16;
 	private static final int SOUND_QUEUE_SLACK = 6;
@@ -180,14 +180,7 @@ public final class SoundEngine {
 	}
 
 	private int currentSoundCount() {
-		try {
-			synchronized (SoundSystemConfig.THREAD_SYNC) {
-				return getSoundLibrary().getSources().size();
-			}
-		} catch (final Throwable t) {
-			;
-		}
-		return 0;
+		return getPlayingSounds().size();
 	}
 
 	private boolean canFitSound() {
@@ -234,7 +227,10 @@ public final class SoundEngine {
 	 * @param sound The sound to stop
 	 */
 	public void stopSound(@Nonnull final ISoundInstance sound) {
-		getSoundManager().stopSound(sound);
+		if (sound.getState() == SoundState.QUEUED)
+			sound.setState(SoundState.DONE);
+		else
+			getSoundManager().stopSound(sound);
 	}
 
 	/**
@@ -244,6 +240,8 @@ public final class SoundEngine {
 		getSoundManager().stopAllSounds();
 		flushSoundQueue();
 		clearOrphans();
+		this.queuedSounds.forEach(s -> s.setState(SoundState.DONE));
+		this.queuedSounds.clear();
 	}
 
 	/**
@@ -253,6 +251,7 @@ public final class SoundEngine {
 	 * @return true if sound successfully queued; false if there was an error
 	 */
 	public boolean playSound(@Nonnull final ISoundInstance sound) {
+
 		// If the sound is already queued return it's current active state.
 		if (this.queuedSounds.contains(sound))
 			return sound.getState().isActive();
@@ -260,6 +259,10 @@ public final class SoundEngine {
 		// Looks like a new sound. Assume an error state until otherwise.
 		sound.setState(SoundState.ERROR);
 
+		return playSound0(sound);
+	}
+
+	protected boolean playSound0(@Nonnull final ISoundInstance sound) {
 		if (canFitSound()) {
 			this.playedSoundId = null;
 			try {
@@ -272,11 +275,15 @@ public final class SoundEngine {
 				final String txt = String.format("Unable to play sound [%s]", sound);
 				ModBase.log().error(txt, t);
 			}
+		} else if (sound.getQueue() && sound.getState() != SoundState.QUEUED) {
+			sound.setState(SoundState.QUEUED);
+			this.queuedSounds.add(sound);
 		}
 
 		if (ModBase.log().testTrace(Trace.SOUND_PLAY)) {
 			if (sound.getState().isActive()) {
-				ModBase.log().debug("> QUEUED: [%s]", sound);
+				final String tag = sound.getState() == SoundState.QUEUED ? "WAITING" : "";
+				ModBase.log().debug("> QUEUED: [%s] %s", sound, tag);
 			} else {
 				ModBase.log().debug("> NOT QUEUED: [%s]", sound);
 			}
@@ -333,6 +340,11 @@ public final class SoundEngine {
 			// if the sound is in the playing lists or not.
 			this.queuedSounds.removeIf(sound -> {
 				switch (sound.getState()) {
+				case QUEUED:
+					if (canFitSound()) {
+						playSound0(sound);
+					}
+					break;
 				case DELAYED:
 					if (!delayedSounds.containsKey(sound)) {
 						if (playingInv.containsKey(sound))
@@ -414,7 +426,8 @@ public final class SoundEngine {
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void diagnostics(final DiagnosticEvent.Gather event) {
 
-		event.output.add("SoundSystem: " + currentSoundCount() + "/" + maxSounds);
+		event.output.add(TextFormatting.AQUA + "SoundSystem: " + currentSoundCount() + "/" + maxSounds);
+		event.output.add(TextFormatting.AQUA + "Tracking   : " + this.queuedSounds.size());
 
 		//@formatter:off
 		final List<String> results =

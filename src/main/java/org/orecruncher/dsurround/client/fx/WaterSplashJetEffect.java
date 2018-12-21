@@ -30,12 +30,12 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.client.fx.particle.system.ParticleJet;
 import org.orecruncher.dsurround.client.fx.particle.system.ParticleWaterSplash;
-import org.orecruncher.lib.WorldUtils;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 import org.orecruncher.lib.math.MathStuff;
 
 import net.minecraft.block.BlockDynamicLiquid;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -67,15 +67,23 @@ public class WaterSplashJetEffect extends JetEffect {
 	}
 
 	private static boolean isUnboundedLiquid(final IBlockAccessEx provider, final BlockPos pos) {
+		final IBlockState AIR = Blocks.AIR.getDefaultState();
+		final IBlockState WATER = Blocks.WATER.getDefaultState();
 		final BlockPos.MutableBlockPos tp = new BlockPos.MutableBlockPos();
 		for (int i = 0; i < cardinal_offsets.length; i++) {
 			final Vec3i offset = cardinal_offsets[i];
 			tp.setPos(pos.getX() + offset.getX(), pos.getY(), pos.getZ() + offset.getZ());
 			final IBlockState state = provider.getBlockState(tp);
-			if (state.getBlock() == Blocks.AIR)
+			if (state == AIR)
 				return true;
-			if (state.getMaterial().isLiquid() && !WorldUtils.isFullWaterBlock(state)
-					&& !provider.getBlockState(tp.move(EnumFacing.UP)).getMaterial().isLiquid())
+			if (state.getBlock() instanceof BlockDynamicLiquid)
+				return true;
+			final Material material = state.getMaterial();
+			if (material.isSolid() || state == WATER)
+				continue;
+			if (!material.isLiquid())
+				return true;
+			if (!provider.getBlockState(tp.move(EnumFacing.UP)).getMaterial().isLiquid())
 				return true;
 		}
 
@@ -96,34 +104,61 @@ public class WaterSplashJetEffect extends JetEffect {
 	}
 
 	public static boolean isValidSpawnBlock(final IBlockAccessEx provider, final BlockPos pos) {
-		if (!provider.getBlockState(pos).getMaterial().isLiquid())
+		return isValidSpawnBlock(provider.getBlockState(pos), provider, pos);
+	}
+
+	public static boolean isValidSpawnBlock(final IBlockState state, final IBlockAccessEx provider,
+			final BlockPos pos) {
+		// If the current block under examination is not a liquid block
+		// there can be no splash
+		if (!state.getMaterial().isLiquid())
 			return false;
-		if (isUnboundedLiquid(provider, pos)) {
-			final BlockPos down = pos.down();
-			if (provider.getBlockState(down).getMaterial().isSolid())
-				return true;
-			return !isUnboundedLiquid(provider, down);
-		}
-		return provider.getBlockState(pos.up()).getBlock() instanceof BlockDynamicLiquid;
+		// The block above this one has to be liquid.  If it's not liquid
+		// like being air or solid, the column isn't tall enough to
+		// produce a splash.
+		final BlockPos up = pos.up();
+		final IBlockState upState = provider.getBlockState(up);
+		if (!upState.getMaterial().isLiquid())
+			return false;
+		// Look at the block it is resting on.
+		final BlockPos down = pos.down();
+		final IBlockState downState = provider.getBlockState(down);
+		final Material downMaterial = downState.getMaterial();
+		// If it is solid, it means we have a surface strike and need
+		// to check the adjacent blocks to see if they are full or not.
+		// If not full the block is considered unbounded.
+		if (downMaterial.isSolid())
+			return isUnboundedLiquid(provider, pos);
+		// If the block is not liquid (i.e. gas) then it is
+		// not a valid strike block
+		if (!downMaterial.isLiquid())
+			return false;
+		// The water block is resting on top of another water block.
+		// This gets a little tricky.  If the current block is on top
+		// of another unbounded block we do not want a splash.  This
+		// can occur if the water is flowing downward and hasn't
+		// reached a terminus.
+		if (isUnboundedLiquid(provider, down))
+			return false;
+		// OK the strike block looks to be bounded on all sides.  All
+		// that remains is to ensure that the location block is unbounded.
+		return isUnboundedLiquid(provider, pos);
+		//return provider.getBlockState(pos.up()).getBlock() instanceof BlockDynamicLiquid;
 	}
 
 	@Override
 	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
-		return isValidSpawnBlock(provider, pos) && super.canTrigger(provider, state, pos, random);
+		return isValidSpawnBlock(state, provider, pos) && super.canTrigger(provider, state, pos, random);
 	}
 
 	@Override
 	public void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
-
 		final int strength = liquidBlockCount(provider, pos);
 		if (strength <= 1)
 			return;
-
-		final float height = BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state)) + 0.1F;
-		final double y = height + pos.getY();
-
+		final float y = BlockLiquid.getLiquidHeight(state, provider, pos);
 		final ParticleJet effect = new ParticleWaterSplash(strength, provider.getWorld(), pos, pos.getX() + 0.5D, y,
 				pos.getZ() + 0.5D);
 		addEffect(effect);

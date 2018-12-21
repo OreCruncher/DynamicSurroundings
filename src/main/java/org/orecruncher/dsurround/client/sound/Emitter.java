@@ -49,6 +49,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public abstract class Emitter {
 
+	protected static final int ERROR_DELAY = 10;
+	protected static final int ERROR_DELAY_RANDOM = 6;
 	protected static final Random RANDOM = XorShiftRandom.current();
 	protected static final RecordTitleEmitter.ITimeKeeper timer = () -> EnvironState.getTickCounter();
 
@@ -57,6 +59,8 @@ public abstract class Emitter {
 	protected final SoundEffect effect;
 	protected SoundInstance activeSound;
 	protected boolean done = false;
+
+	protected int errorDelayTicks;
 
 	public Emitter(@Nonnull final SoundEffect sound) {
 		this.effect = sound;
@@ -91,6 +95,7 @@ public abstract class Emitter {
 		// Allocate a new sound to send down if needed
 		if (this.activeSound == null) {
 			this.activeSound = createSound();
+			this.activeSound.setQueue(true);
 		} else if (this.activeSound.getState().isActive()) {
 			if (!this.activeSound.canSoundBeHeard()
 					|| (isFading() && this.activeSound.getState() == SoundState.DELAYED)) {
@@ -108,7 +113,11 @@ public abstract class Emitter {
 		}
 
 		try {
-			SoundEffectHandler.INSTANCE.playSound(this.activeSound);
+			if (this.errorDelayTicks > 0) {
+				this.errorDelayTicks--;
+			} else if (!SoundEffectHandler.INSTANCE.playSound(this.activeSound)) {
+				this.errorDelayTicks = ERROR_DELAY + RANDOM.nextInt(ERROR_DELAY_RANDOM);
+			}
 		} catch (final Throwable t) {
 			ModBase.log().error("Unable to play sound", t);
 		}

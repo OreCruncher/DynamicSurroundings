@@ -66,10 +66,10 @@ public class MoteWaterSpray extends MoteMotionBase {
 	@Override
 	public void configureColor() {
 		final Color waterColor = BiomeUtil.getColorForLiquid(this.world, this.position);
-		this.red = waterColor.red;
-		this.green = waterColor.green;
-		this.blue = waterColor.blue;
-		this.alpha = 1F;
+		this.red = (int) (waterColor.red * 255);
+		this.green = (int) (waterColor.green * 255);
+		this.blue = (int) (waterColor.blue * 255);
+		this.alpha = 255;
 	}
 
 	@Override

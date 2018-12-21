@@ -54,6 +54,7 @@ public class SoundInstance extends PositionedSound implements ISoundInstance {
 
 	protected float volumeThrottle = 1.0F;
 	protected SoundState state = SoundState.NONE;
+	protected boolean canQueue;
 
 	SoundInstance(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
 		this(event.getSoundName(), cat);
@@ -137,6 +138,14 @@ public class SoundInstance extends PositionedSound implements ISoundInstance {
 	public SoundInstance setVolumeThrottle(final float throttle) {
 		this.volumeThrottle = throttle;
 		return this;
+	}
+	
+	public void setQueue(final boolean f) {
+		this.canQueue = f;
+	}
+	
+	public boolean getQueue() {
+		return this.canQueue;
 	}
 
 	@Override
