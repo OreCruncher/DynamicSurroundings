@@ -43,7 +43,7 @@ public final class ItemUtils {
 		new ObjectField<>(
 			Item.class,
 			"dsurround_item_info",
-			""
+			null
 		);
 	//@formatter:on
 

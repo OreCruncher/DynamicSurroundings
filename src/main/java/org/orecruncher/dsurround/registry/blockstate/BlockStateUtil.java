@@ -44,7 +44,7 @@ public final class BlockStateUtil {
 		new ObjectField<>(
 			BlockStateBase.class,
 			"dsurround_blockstate_info",
-			""
+			null
 		);
 	//@formatter:on
 

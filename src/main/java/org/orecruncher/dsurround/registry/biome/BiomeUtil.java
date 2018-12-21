@@ -65,7 +65,7 @@ public final class BiomeUtil {
 		new ObjectField<>(
 			Biome.class,
 			"dsurround_biome_info",
-			""
+			null
 		);
 	private static final ObjectField<Biome, String> biomeName =
 		new ObjectField<>(
@@ -77,13 +77,19 @@ public final class BiomeUtil {
 		new FloatField<>(
 			"biomesoplenty.common.biome.BOPBiome",
 			"fogDensity",
-			""
+			null
 		);
 	private static final IntegerField<Object> bopBiomeFogColor =
 		new IntegerField<>(
 			"biomesoplenty.common.biome.BOPBiome",
 			"fogColor",
-			""
+			null
+		);
+	private static final ObjectField<BiomeDictionary.Type, Map<String, BiomeDictionary.Type>> biomeType =
+		new ObjectField<>(
+			BiomeDictionary.Type.class,
+			"byName",
+			null
 		);
 	//@formatter:on
 
@@ -144,15 +150,8 @@ public final class BiomeUtil {
 	// ===================================
 	@Nonnull
 	public static Set<Type> getBiomeTypes() {
-		//@formatter:off
-		final ObjectField<BiomeDictionary.Type, Map<String, BiomeDictionary.Type>> accessor =
-			new ObjectField<>(
-				BiomeDictionary.Type.class,
-				"byName", "");
-		//@formatter:on
-
-		if (accessor.isAvailable()) {
-			return new ReferenceOpenHashSet<>(accessor.get(null).values());
+		if (biomeType.isAvailable()) {
+			return new ReferenceOpenHashSet<>(biomeType.get(null).values());
 		}
 
 		throw new IllegalStateException("Cannot locate BiomeDictionary.Type table!");

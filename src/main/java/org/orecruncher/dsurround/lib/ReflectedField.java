@@ -43,7 +43,7 @@ public class ReflectedField {
 	protected final Field field;
 
 	protected ReflectedField(@Nonnull final String className, @Nonnull final String fieldName,
-			@Nonnull final String obfName) {
+			@Nullable final String obfName) {
 		this.className = className;
 		this.fieldName = fieldName;
 		this.field = resolve(className, fieldName, obfName);
@@ -64,7 +64,7 @@ public class ReflectedField {
 		try {
 			return resolve(Class.forName(className), fieldName, obfName);
 		} catch (@Nonnull final Throwable t) {
-			;
+			// Left intentionally blank
 		}
 		return null;
 	}
@@ -78,8 +78,9 @@ public class ReflectedField {
 			final Field f = clazz.getDeclaredField(nameToFind);
 			f.setAccessible(true);
 			return f;
-		} catch (final Exception e) {
-			;
+		} catch (final Throwable t) {
+			final String msg = String.format("Unable to locate field [%s::%s]", clazz.getName(), nameToFind);
+			ModBase.log().error(msg, t);
 		}
 
 		return null;

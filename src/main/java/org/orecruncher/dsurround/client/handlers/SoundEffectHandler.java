@@ -147,10 +147,6 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		//@formatter:on
 	}
 
-	public boolean isSoundPlaying(@Nonnull final SoundInstance sound) {
-		return SoundEngine.instance().isSoundPlaying(sound);
-	}
-
 	public void stopSound(@Nonnull final SoundInstance sound) {
 		SoundEngine.instance().stopSound(sound);
 	}

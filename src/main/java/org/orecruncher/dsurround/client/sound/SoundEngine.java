@@ -118,19 +118,19 @@ public final class SoundEngine {
 		new ObjectField<>(
 			SoundSystem.class,
 			"soundLibrary",
-			""
+			null
 		);
 	private static final BooleanField<Source> removed =
 		new BooleanField<>(
 			Source.class,
 			"removed",
-			""
+			null
 		);
 	private static final FloatField<Object> soundPhysicsGlobalVolume =
 		new FloatField<>(
 			"com.sonicether.soundphysics.SoundPhysics",
 			"globalVolumeMultiplier",
-			""
+			null
 		);
 	//@formatter:on
 
@@ -218,7 +218,7 @@ public final class SoundEngine {
 	 * @return true if the sound is currently playing, false otherwise
 	 */
 	public boolean isSoundPlaying(@Nonnull final ISoundInstance sound) {
-		return sound.getState().isActive() && this.queuedSounds.contains(sound);
+		return sound.getState().isActive();
 	}
 
 	/**
