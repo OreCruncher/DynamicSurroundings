@@ -61,11 +61,6 @@ public class ConfigSoundInstance extends SoundInstance {
 	}
 
 	@Override
-	public boolean isDonePlaying() {
-		return getState() == SoundState.DONE;
-	}
-
-	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).addValue(this.positionedSoundLocation.toString())
 				.add("volume", this.volume).add("pitch", this.pitch).add("attenuation", this.attenuationType)

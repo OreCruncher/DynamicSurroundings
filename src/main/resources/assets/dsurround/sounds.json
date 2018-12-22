@@ -1987,6 +1987,15 @@
 			"dsurround:ambient/items/utility_draw"
 		]
 	},
+	"potion.equip": {
+		"category": "player",
+		"sounds": [
+			"dsurround:ambient/items/potion_slosh1",
+			"dsurround:ambient/items/potion_slosh2",
+			"dsurround:ambient/items/potion_slosh3",
+			"dsurround:ambient/items/potion_slosh4"
+		]
+	},
 	"silence": {
 		"category": "ambient",
 		"sounds": [

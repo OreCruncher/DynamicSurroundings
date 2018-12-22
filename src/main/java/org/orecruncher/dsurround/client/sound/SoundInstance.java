@@ -166,7 +166,7 @@ public class SoundInstance extends PositionedSound implements ISoundInstance {
 	}
 
 	public boolean isDonePlaying() {
-		return false;
+		return getState().isTerminal();
 	}
 
 	public boolean canSoundBeHeard() {

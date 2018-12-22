@@ -56,7 +56,8 @@ public enum ItemClass {
 	BOW(Sounds.TOOL_SWING, Sounds.BOW_PULL, Sounds.BOW_EQUIP, false),
 	TOOL(Sounds.TOOL_SWING, null, Sounds.TOOL_EQUIP, false),
 	FOOD(null, null, Sounds.FOOD_EQUIP, false),
-	BOOK(Sounds.BOOK_EQUIP, Sounds.BOOK_EQUIP, Sounds.BOOK_EQUIP, false);
+	BOOK(Sounds.BOOK_EQUIP, Sounds.BOOK_EQUIP, Sounds.BOOK_EQUIP, false),
+	POTION(Sounds.POTION_EQUIP, Sounds.POTION_EQUIP, Sounds.POTION_EQUIP, false);
 	//@formatter:on
 
 	private final SoundEffect swing;

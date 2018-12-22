@@ -341,30 +341,37 @@ public final class SoundEngine {
 			this.queuedSounds.removeIf(sound -> {
 				switch (sound.getState()) {
 				case QUEUED:
+					// The sound is being held in the queue waiting for space
+					// in the Minecraft sound engine. If there is space, send
+					// it down.
 					if (canFitSound()) {
 						playSound0(sound);
 					}
 					break;
 				case DELAYED:
+					// The sound play is delayed. Check to see if Minecraft
+					// transitioned it's state.
 					if (!delayedSounds.containsKey(sound)) {
-						if (playingInv.containsKey(sound))
-							sound.setState(SoundState.PLAYING);
-						else
-							sound.setState(SoundState.DONE);
+						sound.setState(playingInv.containsKey(sound) ? SoundState.PLAYING : SoundState.DONE);
 					}
 					break;
 				case PLAYING:
+					// The sound is playing. Check to see if the Minecraft
+					// sound engine transitioned to a different state.
 					if (!playingInv.containsKey(sound)) {
-						if (delayedSounds.containsKey(sound))
-							sound.setState(SoundState.DELAYED);
-						else
-							sound.setState(SoundState.DONE);
+						sound.setState(delayedSounds.containsKey(sound) ? SoundState.DELAYED : SoundState.DONE);
 					}
+					break;
+				case NONE:
+					// This should not happen, but to be safe
+					sound.setState(SoundState.ERROR);
 					break;
 				default:
 					break;
 				}
-				return !sound.getState().isActive();
+				// Remove all terminal sounds because they no longer
+				// need to be tracked.
+				return sound.getState().isTerminal();
 			});
 		}
 	}

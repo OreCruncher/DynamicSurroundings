@@ -735,6 +735,9 @@
 			"net.minecraft.item.ItemBook",
 			"net.minecraft.item.ItemWritableBook",
 			"net.minecraft.item.ItemEnchantedBook"
+		],
+		"POTION": [
+			"net.minecraft.item.ItemPotion"
 		]
 	},
 	"dimensions": [
