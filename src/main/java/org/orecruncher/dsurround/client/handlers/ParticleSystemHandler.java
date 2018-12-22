@@ -31,7 +31,7 @@ import org.orecruncher.dsurround.client.fx.particle.system.ParticleSystem;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.lib.BlockPosHelper;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,8 +39,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ParticleSystemHandler extends EffectHandlerBase {
+	
+	private static ParticleSystemHandler _instance = null;
 
-	private final Long2ObjectOpenHashMap<ParticleSystem> systems = new Long2ObjectOpenHashMap<>();
+	private final Object2ObjectOpenHashMap<BlockPos, ParticleSystem> systems = new Object2ObjectOpenHashMap<>();
 
 	public ParticleSystemHandler() {
 		super("Particle Systems");
@@ -57,7 +59,7 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 		final BlockPos min = EnvironState.getPlayerPosition().add(-range, -range, -range);
 		final BlockPos max = EnvironState.getPlayerPosition().add(range, range, range);
 
-		this.systems.long2ObjectEntrySet().removeIf(entry -> {
+		this.systems.object2ObjectEntrySet().removeIf(entry -> {
 			final ParticleSystem system = entry.getValue();
 			if (BlockPosHelper.notContains(system.getPos(), min, max)) {
 				system.setExpired();
@@ -70,22 +72,24 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 
 	@Override
 	public void onConnect() {
+		_instance = this;
 		this.systems.clear();
 	}
 
 	@Override
 	public void onDisconnect() {
 		this.systems.clear();
+		_instance = null;
 	}
 
 	// Determines if it is OK to spawn a particle system at the specified
 	// location. Generally only a single system can occupy a block.
-	public boolean okToSpawn(@Nonnull final BlockPos pos) {
-		return !this.systems.containsKey(pos.toLong());
+	public static boolean okToSpawn(@Nonnull final BlockPos pos) {
+		return !_instance.systems.containsKey(pos);
 	}
 
-	public void addSystem(@Nonnull final ParticleSystem system) {
-		this.systems.put(system.getPos().toLong(), system);
+	public static void addSystem(@Nonnull final ParticleSystem system) {
+		_instance.systems.put(system.getPos().toImmutable(), system);
 	}
 
 }

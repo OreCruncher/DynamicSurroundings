@@ -30,7 +30,6 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.client.fx.particle.system.ParticleJet;
-import org.orecruncher.dsurround.client.handlers.EffectManager;
 import org.orecruncher.dsurround.client.handlers.ParticleSystemHandler;
 import org.orecruncher.dsurround.expression.ExpressionEngine;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
@@ -63,15 +62,13 @@ public abstract class JetEffect extends BlockEffect {
 	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		if (alwaysExecute() || random.nextInt(getChance()) == 0) {
-			final ParticleSystemHandler ps = EffectManager.instance().lookupService(ParticleSystemHandler.class);
-			return ps.okToSpawn(pos) && ExpressionEngine.instance().check(getConditions());
+			return ParticleSystemHandler.okToSpawn(pos) && ExpressionEngine.instance().check(getConditions());
 		}
 		return false;
 	}
 
 	protected void addEffect(final ParticleJet fx) {
-		final ParticleSystemHandler ps = EffectManager.instance().lookupService(ParticleSystemHandler.class);
-		ps.addSystem(fx);
+		ParticleSystemHandler.addSystem(fx);
 	}
 
 }
