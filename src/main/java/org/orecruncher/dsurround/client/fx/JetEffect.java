@@ -25,6 +25,7 @@
 package org.orecruncher.dsurround.client.fx;
 
 import java.util.Random;
+import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 
@@ -34,8 +35,6 @@ import org.orecruncher.dsurround.client.handlers.ParticleSystemHandler;
 import org.orecruncher.dsurround.expression.ExpressionEngine;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
@@ -46,24 +45,14 @@ public abstract class JetEffect extends BlockEffect {
 
 	protected static final int MAX_STRENGTH = 10;
 
-	protected static int countBlocks(final IBlockAccessEx provider, final BlockPos pos, final IBlockState state,
-			final int dir) {
+	protected static int countBlocks(final IBlockAccessEx provider, final BlockPos pos,
+			final Predicate<IBlockState> pred, final int step) {
 		int count = 0;
 		int idx = pos.getY();
-		while (count < MAX_STRENGTH) {
-			final Block block = provider.getBlockState(pos.getX(), idx, pos.getZ()).getBlock();
-			if (block != state.getBlock())
-				return count;
-			count++;
-			idx += dir;
-		}
+		for (; count < MAX_STRENGTH
+				&& pred.test(provider.getBlockState(pos.getX(), idx, pos.getZ())); count++, idx += step)
+			;
 		return count;
-	}
-
-	// Takes into account partial blocks because of flow
-	protected static double jetSpawnHeight(final IBlockState state, final BlockPos pos) {
-		final int meta = state.getBlock().getMetaFromState(state);
-		return 1.1D - BlockLiquid.getLiquidHeightPercent(meta) + pos.getY();
 	}
 
 	public JetEffect(final int chance) {

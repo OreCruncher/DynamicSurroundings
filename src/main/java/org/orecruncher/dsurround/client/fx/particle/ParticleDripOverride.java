@@ -65,9 +65,9 @@ public class ParticleDripOverride extends ParticleDrip {
 	}
 
 	private boolean doSteamHiss(@Nonnull final IBlockState state) {
-		if (this.materialType == Material.LAVA && state.getMaterial() == Material.WATER)
-			return true;
-		return this.materialType == Material.WATER && ParticleSteamCloud.isHotBlock(state.getBlock());
+		if (this.materialType == Material.LAVA)
+			return state.getMaterial() == Material.WATER;
+		return ParticleSteamCloud.isHotBlock(state);
 	}
 
 	@Override
@@ -120,7 +120,7 @@ public class ParticleDripOverride extends ParticleDrip {
 			} else {
 				this.pos.move(EnumFacing.DOWN);
 				state = ClientChunkCache.instance().getBlockState(this.pos);
-				doSteam = ParticleSteamCloud.isHotBlock(state.getBlock());
+				doSteam = ParticleSteamCloud.isHotBlock(state);
 			}
 
 			if (doSteam) {

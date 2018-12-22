@@ -32,6 +32,7 @@ import org.orecruncher.dsurround.client.fx.particle.system.ParticleFireJet;
 import org.orecruncher.dsurround.client.fx.particle.system.ParticleJet;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -54,16 +55,14 @@ public class FireJetEffect extends JetEffect {
 	@Override
 	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
-		final boolean isAirBlock = provider.getBlockState(pos.getX(), pos.getY() + 1, pos.getZ())
-				.getMaterial() == Material.AIR;
-		return isAirBlock && super.canTrigger(provider, state, pos, random);
+		return provider.isAirBlock(pos.up()) && super.canTrigger(provider, state, pos, random);
 	}
 
 	@Override
 	public void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
-		final int lavaBlocks = countBlocks(provider, pos, state, -1);
-		final double spawnHeight = jetSpawnHeight(state, pos);
+		final int lavaBlocks = countBlocks(provider, pos, s -> s.getMaterial() == Material.LAVA, -1);
+		final float spawnHeight = BlockLiquid.getLiquidHeight(state, provider, pos);
 		final ParticleJet effect = new ParticleFireJet(lavaBlocks, provider.getWorld(), pos.getX() + 0.5D, spawnHeight,
 				pos.getZ() + 0.5D);
 		addEffect(effect);

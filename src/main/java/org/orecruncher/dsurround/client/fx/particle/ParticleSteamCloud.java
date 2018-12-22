@@ -24,14 +24,12 @@
 
 package org.orecruncher.dsurround.client.fx.particle;
 
-import java.util.Set;
-
 import javax.annotation.Nonnull;
 
 import org.orecruncher.lib.random.XorShiftRandom;
 
-import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
-import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleCloud;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -41,17 +39,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleSteamCloud extends ParticleCloud {
 
-	private static final Set<Block> hotBlocks = new ReferenceOpenHashSet<>();
-
-	static {
-		hotBlocks.add(Blocks.LAVA);
-		hotBlocks.add(Blocks.MAGMA);
+	public static boolean isHotBlock(@Nonnull final IBlockState state) {
+		return state.getMaterial() == Material.LAVA || state.getBlock() == Blocks.MAGMA;
 	}
 
-	public static boolean isHotBlock(@Nonnull final Block block) {
-		return hotBlocks.contains(block);
-	}
-	
 	public ParticleSteamCloud(final World world, final double x, final double y, final double z, final double dY) {
 		super(world, x, y, z, XorShiftRandom.current().nextGaussian() * 0.02D, dY,
 				XorShiftRandom.current().nextGaussian() * 0.02D);

@@ -25,6 +25,7 @@
 package org.orecruncher.dsurround.client.fx;
 
 import java.util.Random;
+
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.client.fx.particle.ParticleSteamCloud;
@@ -32,8 +33,7 @@ import org.orecruncher.dsurround.client.fx.particle.system.ParticleJet;
 import org.orecruncher.dsurround.client.fx.particle.system.ParticleSteamJet;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
@@ -46,15 +46,17 @@ public class SteamJetEffect extends JetEffect {
 		super(chance);
 	}
 
-	protected static int lavaCount(final IBlockAccessEx provider, final BlockPos pos) {
+	protected static int lavaCount(final IBlockAccessEx provider, final BlockPos pos, final boolean fastCheck) {
 		int blockCount = 0;
 		for (int i = -1; i <= 1; i++)
 			for (int j = -1; j <= 1; j++)
 				for (int k = -1; k <= 1; k++) {
-					final Block theBlock = provider.getBlockState(pos.getX() + i, pos.getY() + j, pos.getZ() + k)
-							.getBlock();
-					if (ParticleSteamCloud.isHotBlock(theBlock))
+					final IBlockState theBlock = provider.getBlockState(pos.getX() + i, pos.getY() + j, pos.getZ() + k);
+					if (ParticleSteamCloud.isHotBlock(theBlock)) {
+						if (fastCheck)
+							return 1;
 						blockCount++;
+					}
 				}
 		return blockCount;
 	}
@@ -66,26 +68,27 @@ public class SteamJetEffect extends JetEffect {
 	}
 
 	public static boolean isValidSpawnBlock(@Nonnull final IBlockAccessEx provider, @Nonnull final BlockPos pos) {
-		if (!provider.getBlockState(pos).getMaterial().isLiquid())
-			return false;
+		return isValidSpawnBlock(provider.getBlockState(pos), provider, pos);
+	}
 
-		if (provider.getBlockState(pos.getX(), pos.getY() + 1, pos.getZ()).getMaterial() != Material.AIR)
+	public static boolean isValidSpawnBlock(@Nonnull final IBlockState state, @Nonnull final IBlockAccessEx provider,
+			@Nonnull final BlockPos pos) {
+		if (!(state.getMaterial().isLiquid() && provider.isAirBlock(pos.up())))
 			return false;
-
-		return lavaCount(provider, pos) > 0;
+		return lavaCount(provider, pos, true) > 0;
 	}
 
 	@Override
 	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
-		return isValidSpawnBlock(provider, pos) && super.canTrigger(provider, state, pos, random);
+		return isValidSpawnBlock(state, provider, pos) && super.canTrigger(provider, state, pos, random);
 	}
 
 	@Override
 	public void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
-		final int strength = lavaCount(provider, pos);
-		final double spawnHeight = jetSpawnHeight(state, pos);
+		final int strength = lavaCount(provider, pos, false);
+		final float spawnHeight = BlockLiquid.getLiquidHeight(state, provider, pos);
 		final ParticleJet effect = new ParticleSteamJet(strength, provider.getWorld(), pos.getX() + 0.5D, spawnHeight,
 				pos.getZ() + 0.5D);
 		addEffect(effect);
