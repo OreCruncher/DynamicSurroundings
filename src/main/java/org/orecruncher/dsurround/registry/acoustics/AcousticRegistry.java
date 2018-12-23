@@ -44,6 +44,7 @@ import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.lib.MCHelper;
 
+import com.google.common.base.MoreObjects;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -170,19 +171,6 @@ public class AcousticRegistry extends Registry {
 		ModBase.log().info("[%s] %d primitives by sound generated", getName(), this.primitives);
 	}
 
-	@Nullable
-	public IAcoustic[] getPrimitive(@Nonnull final String primitive) {
-		IAcoustic[] result = this.compiled.get(primitive);
-		if (result == null) {
-			final IAcoustic a = generateAcoustic(primitive);
-			if (a != null) {
-				this.compiled.put(primitive, result = new IAcoustic[] { a });
-				this.primitives++;
-			}
-		}
-		return result;
-	}
-
 	/**
 	 * Used to determine what acoustics to play based on the block's sound
 	 * attributes. It's a fallback method in case there isn't a configuration
@@ -233,7 +221,20 @@ public class AcousticRegistry extends Registry {
 		if (acoustics == null && StringUtils.isNotEmpty(soundName))
 			acoustics = getPrimitive(soundName);
 
-		return acoustics != null ? acoustics : EMPTY;
+		return MoreObjects.firstNonNull(acoustics, EMPTY);
+	}
+
+	@Nullable
+	private IAcoustic[] getPrimitive(@Nonnull final String primitive) {
+		IAcoustic[] result = this.compiled.get(primitive);
+		if (result == null) {
+			final IAcoustic a = generateAcoustic(primitive);
+			if (a != null) {
+				this.compiled.put(primitive, result = new IAcoustic[] { a });
+				this.primitives++;
+			}
+		}
+		return result;
 	}
 
 	@Nullable
@@ -245,25 +246,13 @@ public class AcousticRegistry extends Registry {
 		return result == EMPTY ? null : result;
 	}
 
-	public void addAcoustic(@Nonnull final IAcoustic acoustic) {
+	private void addAcoustic(@Nonnull final IAcoustic acoustic) {
 		this.acoustics.put(acoustic.getName(), acoustic);
 	}
 
 	@Nullable
 	public IAcoustic getAcoustic(@Nonnull final String name) {
 		return this.acoustics.get(name);
-	}
-
-	@Nonnull
-	public IAcoustic[] compileAcoustics(@Nonnull final SoundEvent evt) {
-		IAcoustic[] result = this.compiled.get(evt.getSoundName().toString());
-		if (result == null) {
-			final IAcoustic a = generateAcoustic(evt);
-			this.compiled.put(a.getName(), result = new IAcoustic[] { a });
-		} else {
-			this.hits++;
-		}
-		return result;
 	}
 
 	@Nonnull

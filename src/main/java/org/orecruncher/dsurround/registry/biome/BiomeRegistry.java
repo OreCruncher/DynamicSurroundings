@@ -171,13 +171,13 @@ public final class BiomeRegistry extends Registry {
 		complete();
 	}
 
-	protected void register(@Nonnull final Biome biome) {
+	private void register(@Nonnull final Biome biome) {
 		final BiomeHandler handler = new BiomeHandler(biome);
 		final BiomeInfo info = new BiomeInfo(handler);
 		BiomeUtil.setBiomeData(biome, info);
 	}
 
-	protected void register(@Nonnull final IBiome biome) {
+	private void register(@Nonnull final IBiome biome) {
 		if (biome.isFake()) {
 			final FakeBiome fb = (FakeBiome) biome;
 			final BiomeInfo info = new BiomeInfo(fb);
@@ -187,7 +187,7 @@ public final class BiomeRegistry extends Registry {
 	}
 
 	@Nullable
-	protected BiomeInfo resolve(@Nonnull final IBiome biome) {
+	private BiomeInfo resolve(@Nonnull final IBiome biome) {
 		if (biome.isFake()) {
 			final FakeBiome fb = (FakeBiome) biome;
 			return (BiomeInfo) fb.getBiomeData();

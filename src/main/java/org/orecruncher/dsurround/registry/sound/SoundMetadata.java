@@ -30,6 +30,7 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.registry.config.SoundMetadataConfig;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.util.SoundCategory;
@@ -40,10 +41,9 @@ public class SoundMetadata {
 	protected final SoundCategory category;
 	protected final List<String> credits;
 
-	public SoundMetadata(@Nonnull final SoundMetadataConfig cfg) {
+	protected SoundMetadata(@Nonnull final SoundMetadataConfig cfg) {
 		this.title = cfg.title;
-		final SoundCategory cat = translate(cfg.category);
-		this.category = cat != null ? cat : SoundCategory.NEUTRAL;
+		this.category = MoreObjects.firstNonNull(translate(cfg.category), SoundCategory.NEUTRAL);
 		this.credits = ImmutableList.copyOf(cfg.credits);
 	}
 

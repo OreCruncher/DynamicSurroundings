@@ -120,7 +120,7 @@ public final class Network {
 		final NetworkDispatcher dispatcher = NetworkDispatcher.get(event.getManager());
 		if (dispatcher != null) {
 			try {
-				final EntityPlayerMP p = (EntityPlayerMP) player.get(dispatcher);
+				final EntityPlayerMP p = player.get(dispatcher);
 				blockList.remove(p.getPersistentID());
 			} catch (@Nonnull final Throwable t) {
 				t.printStackTrace();

@@ -44,6 +44,8 @@ import org.orecruncher.lib.WeightTable.IItem;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 import org.orecruncher.lib.random.XorShiftRandom;
 
+import com.google.common.base.MoreObjects;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.audio.ISound.AttenuationType;
 import net.minecraft.entity.Entity;
@@ -88,7 +90,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 		this.conditions = StringUtils.EMPTY;
 		this.weight = 10;
 		this.type = SoundType.SPOT;
-		this.category = category == null ? SoundCategory.BLOCKS : category;
+		this.category = MoreObjects.firstNonNull(category, SoundCategory.BLOCKS);
 		this.variable = variable;
 		this.repeatDelayRandom = 0;
 		this.repeatDelay = repeatDelay;
