@@ -24,11 +24,18 @@
 
 package org.orecruncher.dsurround.asm;
 
+import java.lang.reflect.Field;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+
 import org.objectweb.asm.tree.ClassNode;
 
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
+@SuppressWarnings("deprecation")
 public class SoundCategoryAdditions extends Transmorgrifier {
 
 	public SoundCategoryAdditions() {
@@ -43,9 +50,27 @@ public class SoundCategoryAdditions extends Transmorgrifier {
 	@Override
 	public boolean transmorgrify(final ClassNode cn) {
 
-		// Add our new sound categories
-		EnumHelper.addEnum(SoundCategory.class, "DS_FOOTSTEPS", new Class<?>[] { String.class }, "ds_footsteps");
-		EnumHelper.addEnum(SoundCategory.class, "DS_BIOME", new Class<?>[] { String.class }, "ds_biome");
+		if (SoundCategory.getByName("ds_footsteps") == null) {
+			// Add our new sound categories
+			final SoundCategory fs = EnumHelper.addEnum(SoundCategory.class, "DS_FOOTSTEPS",
+					new Class<?>[] { String.class }, "ds_footsteps");
+			final SoundCategory b = EnumHelper.addEnum(SoundCategory.class, "DS_BIOME", new Class<?>[] { String.class },
+					"ds_biome");
+
+			// Update the internal cached list
+			try {
+				final Field f = ReflectionHelper.findField(SoundCategory.class, "SOUND_CATEGORIES", "field_187961_k");
+				@SuppressWarnings("unchecked")
+				final Map<String, SoundCategory> theMap = (Map<String, SoundCategory>) f.get(null);
+				theMap.put(fs.getName(), fs);
+				theMap.put(b.getName(), b);
+			} catch (@Nonnull final Throwable t) {
+				Transformer.log().error("Unable to update SoundCategory map: {}", t.toString());
+				return false;
+			}
+		} else {
+			Transformer.log().warn("Attempt to transmorgrify SoundCategory a second time");
+		}
 
 		return true;
 	}
