@@ -57,8 +57,6 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class Proxy {
 
-	protected long connectionTime = 0;
-
 	protected void registerLanguage() {
 		Localization.initialize(Side.SERVER, ModInfo.MOD_ID);
 	}
@@ -71,10 +69,6 @@ public class Proxy {
 	protected void eventBusRegistrations() {
 		register(CapabilityEntityData.EventHandler.class);
 		register(RegistryManager.class);
-	}
-
-	public long currentSessionDuration() {
-		return System.currentTimeMillis() - this.connectionTime;
 	}
 
 	public boolean isRunningAsServer() {

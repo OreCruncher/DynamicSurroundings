@@ -167,7 +167,6 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 			EffectManager.connect();
 			GuiHUDHandler.register();
 			Weather.register(ModBase.isInstalledOnServer());
-			ProxyClient.this.connectionTime = System.currentTimeMillis();
 		});
 	}
 
@@ -177,7 +176,6 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 			EffectManager.disconnect();
 			GuiHUDHandler.unregister();
 			Weather.unregister();
-			ProxyClient.this.connectionTime = 0;
 		});
 	}
 
