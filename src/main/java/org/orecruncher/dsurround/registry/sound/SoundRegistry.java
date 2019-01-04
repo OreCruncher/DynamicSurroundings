@@ -183,7 +183,7 @@ public final class SoundRegistry extends Registry {
 
 	public float getVolumeScale(@Nonnull final ISound sound) {
 		return (sound.getSoundLocation() == null || sound instanceof ConfigSoundInstance) ? 1F
-				: this.volumeControl.getFloat(sound.getSoundLocation().toString());
+				: this.volumeControl.getFloat(sound.getSoundLocation());
 	}
 
 	@Nullable
