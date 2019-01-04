@@ -67,13 +67,13 @@ dependencies {
 	compile "cosmetic-armor-reworked:CosmeticArmorReworked:1.12.2:v3"
 	compile "littletiles:LittleTiles_v1.5.0:pre122_mc1.12.2"
 	compile "iron-chests:ironchest:1.12.2:7.0.54.838"
+    compile "biomes-o-plenty:BiomesOPlenty-1.12.2:7.0.1.2422:universal"
 	
 	if (fileTree(dir: 'libs').filter { it.name.startsWith('OreLib') }.getFiles().size() == 0)
 		compile "orelib:OreLib-1.12.2:3.5.1.3BETA:deobf"
 
 	//compile "creativecore:CreativeCore_v1.9.35_mc1.12.2"
 	
-    //compile "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:1.12.2-7.0.1.2399:deobf"
     deobfCompile "mezz.jei:jei_${project.mcVersion}:${project.jeiVersion}:api"
     runtime "mezz.jei:jei_${project.mcVersion}:${project.jeiVersion}"
     deobfCompile "team.chisel:Chisel:MC${project.mcVersion}-${project.chiselVersion}"    

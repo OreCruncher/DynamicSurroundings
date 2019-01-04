@@ -1,3 +1,21 @@
+### DynamicSurroundings-1.12.2-3.5.4.1
+**What's New**
+* Bottle slosh sound when equipping a potion (or anything derived from ItemPotion).
+
+**Requirements**
+* OreLib-1.12.2-3.5.1.3+
+* If upgrading from version 3.4.x or earlier you should delete your dsurround.cfg and let it regenerate.	
+
+**Fixes**
+* Defensive code for invalid ItemStacks in ore dictionary
+* Individual sound scaling should work again
+* Workaround re-entrant ASM transform of SoundCategroy
+
+**Changes**
+* Performance enhancements for waterfalls and other effects
+    * On my i7/GTX 980 rig near a large fall generating 4000 particles and 200+ sounds I had 110 - 120FPS
+* Other internal changes to squeeze out more performance per tick (improved map indexing, etc.)
+
 ### DynamicSurroundings-1.12.2-3.5.4.0
 **Requires OreLib-1.12.2-3.5.1.3!**
 
@@ -17,7 +35,7 @@
 
 ### DynamicSurroundings-1.12.2-3.5.3.0
 **Fixes**
-* Fixed compatiblity with Vivecraft
+* Fixed compatibility with Vivecraft
 * Fixed occasional waterfall sound errors
 
 **Changes**
