@@ -185,7 +185,16 @@ public final class BiomeUtil {
 
 	@Nonnull
 	public static Set<Type> getBiomeTypes(@Nonnull final Biome biome) {
-		return new ReferenceOpenHashSet<>(BiomeDictionary.getTypes(biome));
+		// It's possible to have a biome that is not registered come through here
+		// There is an internal check that will throw an exception if that is the
+		// case.  Seen this with OTG installed.
+		try {
+			return new ReferenceOpenHashSet<>(BiomeDictionary.getTypes(biome));
+		} catch (@Nonnull final Throwable t) {
+			final String name = biomeName.get(biome);
+			ModBase.log().warn("Unable to get biome type data for biome '%s'", name);
+		}
+		return new ReferenceOpenHashSet<>();
 	}
 
 	public static boolean areBiomesSimilar(@Nonnull final Biome b1, @Nonnull final Biome b2) {
