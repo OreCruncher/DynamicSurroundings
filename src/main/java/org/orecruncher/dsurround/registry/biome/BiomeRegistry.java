@@ -36,7 +36,6 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.registry.Registry;
-import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.dimension.DimensionData;
 import org.orecruncher.lib.math.MathStuff;
@@ -160,15 +159,6 @@ public final class BiomeRegistry extends Registry {
 
 		// Free memory because we no longer need
 		this.biomeAliases.clear();
-	}
-
-	public void reload() {
-		ModBase.log().info("Reloading biome registry...");
-		preInit();
-		for (final ModConfiguration mcf : RegistryManager.DATA.get())
-			init(mcf);
-		postInit();
-		complete();
 	}
 
 	private void register(@Nonnull final Biome biome) {

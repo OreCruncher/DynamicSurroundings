@@ -96,5 +96,18 @@ public abstract class Registry {
 		postInit();
 		MinecraftForge.EVENT_BUS.post(new RegistryDataEvent.Reload(this));
 	}
+	
+	/**
+	 * Called to initialize the registry in the case something wierd during
+	 * execution.
+	 */
+	public void reload() {
+		ModBase.log().info("Reloading registry [%s]...", this.getName());
+		preInit();
+		for (final ModConfiguration mcf : RegistryManager.DATA.get())
+			init(mcf);
+		postInit();
+		complete();
+	}
 
 }

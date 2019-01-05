@@ -40,7 +40,6 @@ import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.registry.Registry;
-import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.item.compat.ItemDataProducer;
 import org.orecruncher.lib.ItemStackUtil;
@@ -120,15 +119,6 @@ public final class ItemRegistry extends Registry {
 		// Free up resources that are no longer needed
 		this.items = null;
 		this.classMap = null;
-	}
-
-	public void reload() {
-		ModBase.log().info("Reloading item registry...");
-		preInit();
-		for (final ModConfiguration mcf : RegistryManager.DATA.get())
-			init(mcf);
-		postInit();
-		complete();
 	}
 
 	private ItemClass resolveClass(@Nonnull final Item item) {

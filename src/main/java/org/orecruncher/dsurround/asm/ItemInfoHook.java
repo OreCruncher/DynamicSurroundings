@@ -41,7 +41,11 @@ public class ItemInfoHook extends Transmorgrifier {
 
 	@Override
 	public boolean transmorgrify(final ClassNode cn) {
-		cn.fields.add(new FieldNode(Opcodes.ACC_PUBLIC, "dsurround_item_info", "Ljava/lang/Object;", null, null));
+		if (findField(cn, new String[] { "dsurround_item_info" }) == null) {
+			cn.fields.add(new FieldNode(Opcodes.ACC_PUBLIC, "dsurround_item_info", "Ljava/lang/Object;", null, null));
+		} else {
+			Transformer.log().warn("Attempt to transmorgrify Item a second time");
+		}
 		return true;
 	}
 

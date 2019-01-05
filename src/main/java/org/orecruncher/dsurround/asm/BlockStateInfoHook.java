@@ -36,13 +36,17 @@ public class BlockStateInfoHook extends Transmorgrifier {
 
 	@Override
 	public String name() {
-		return "BlockState Info Hook";
+		return "BlockStateBase Info Hook";
 	}
 
 	@Override
 	public boolean transmorgrify(final ClassNode cn) {
-
-		cn.fields.add(new FieldNode(Opcodes.ACC_PUBLIC, "dsurround_blockstate_info", "Ljava/lang/Object;", null, null));
+		if (findField(cn, new String[] { "dsurround_blockstate_info" }) == null) {
+			cn.fields.add(
+					new FieldNode(Opcodes.ACC_PUBLIC, "dsurround_blockstate_info", "Ljava/lang/Object;", null, null));
+		} else {
+			Transformer.log().warn("Attempt to transmorgrify BlockStateBase a second time");
+		}
 		return true;
 	}
 

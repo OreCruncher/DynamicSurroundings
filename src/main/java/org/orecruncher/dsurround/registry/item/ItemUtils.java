@@ -53,14 +53,13 @@ public final class ItemUtils {
 		if (result == null) {
 			RegistryManager.ITEMS.reload();
 			result = itemInfo.get(item);
+			if (result == null) {
+				ModBase.log().warn("Unable to find IItemData for item [%s]", item.toString());
+				result = SimpleItemData.CACHE.get(ItemClass.NONE);
+				setItemData(item, result);
+			}
 		}
-
-		if (result == null) {
-			ModBase.log().warn("Unable to find IItemData for item [%s]", item.toString());
-			result = SimpleItemData.CACHE.get(ItemClass.NONE);
-			setItemData(item, result);
-		}
-
+		
 		return result;
 	}
 

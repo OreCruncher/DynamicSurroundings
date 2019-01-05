@@ -27,7 +27,9 @@ package org.orecruncher.dsurround.registry.blockstate;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.lib.ReflectedField.ObjectField;
+import org.orecruncher.dsurround.registry.RegistryManager;
 
 import net.minecraft.block.state.BlockStateBase;
 import net.minecraft.block.state.IBlockState;
@@ -51,6 +53,23 @@ public final class BlockStateUtil {
 	@SuppressWarnings("unchecked")
 	@Nullable
 	public static <T extends BlockStateData> T getStateData(@Nonnull final IBlockState state) {
+		final BlockStateBase base = (BlockStateBase) state;
+		BlockStateData result = blockStateInfo.get(base);
+		if (result == null) {
+			RegistryManager.BLOCK.reload();
+			result = blockStateInfo.get(base);
+			if (result == null) {
+				ModBase.log().warn("Unable to find BlockStateData for state [%s]", state.toString());
+				result = BlockStateData.DEFAULT;
+				blockStateInfo.set(base, result);
+			}
+		}
+		
+		return (T) result;
+	}
+
+	@SuppressWarnings("unchecked")
+	static <T extends BlockStateData> T getStateDataRaw(@Nonnull final IBlockState state) {
 		return (T) blockStateInfo.get((BlockStateBase) state);
 	}
 

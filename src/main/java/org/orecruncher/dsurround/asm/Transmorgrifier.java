@@ -25,9 +25,11 @@
 package org.orecruncher.dsurround.asm;
 
 import javax.annotation.Nonnull;
+
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
 /**
@@ -96,6 +98,13 @@ public abstract class Transmorgrifier {
 		for (final MethodNode m : cn.methods)
 			if (isOneOf(m.name, names) && isOneOf(m.desc, signatures))
 				return m;
+		return null;
+	}
+
+	protected FieldNode findField(@Nonnull final ClassNode cn, @Nonnull final String[] names) {
+		for (final FieldNode f : cn.fields)
+			if (isOneOf(f.name, names))
+				return f;
 		return null;
 	}
 

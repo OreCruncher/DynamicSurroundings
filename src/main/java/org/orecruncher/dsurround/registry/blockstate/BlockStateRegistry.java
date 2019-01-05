@@ -99,7 +99,7 @@ public final class BlockStateRegistry extends Registry {
 
 	@Nonnull
 	private BlockStateData get(@Nonnull final IBlockState state) {
-		BlockStateData profile = BlockStateUtil.getStateData(state);
+		BlockStateData profile = BlockStateUtil.getStateDataRaw(state);
 		if (profile == null) {
 			if (this.registry == null) {
 				ModBase.log().warn("Unknown blockstate encountered '%s'", state.toString());

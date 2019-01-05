@@ -41,8 +41,11 @@ public class BiomeInfoHook extends Transmorgrifier {
 
 	@Override
 	public boolean transmorgrify(final ClassNode cn) {
-
-		cn.fields.add(new FieldNode(Opcodes.ACC_PUBLIC, "dsurround_biome_info", "Ljava/lang/Object;", null, null));
+		if (findField(cn, new String[] { "dsurround_biome_info" }) == null) {
+			cn.fields.add(new FieldNode(Opcodes.ACC_PUBLIC, "dsurround_biome_info", "Ljava/lang/Object;", null, null));
+		} else {
+			Transformer.log().warn("Attempt to transmorgrify Biome a second time");
+		}
 		return true;
 	}
 
