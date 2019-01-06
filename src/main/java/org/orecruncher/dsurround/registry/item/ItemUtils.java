@@ -59,7 +59,7 @@ public final class ItemUtils {
 				setItemData(item, result);
 			}
 		}
-		
+
 		return result;
 	}
 

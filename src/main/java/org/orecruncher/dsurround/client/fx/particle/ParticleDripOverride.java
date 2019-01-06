@@ -113,7 +113,7 @@ public class ParticleDripOverride extends ParticleDrip {
 			boolean doSteam = false;
 			IBlockState state = ClientChunkCache.instance().getBlockState(this.pos);
 			if (state.getBlock() == Blocks.LAVA) {
-				doSteam  = true;
+				doSteam = true;
 			} else if (state.getMaterial().isLiquid()) {
 				doSteam = ParticleCollections.addWaterRipple(this.world, this.posX, this.pos.getY() + 1,
 						this.posZ) != null && this.materialType == Material.LAVA;

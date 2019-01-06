@@ -40,7 +40,7 @@ public interface ISeasonInfo {
 
 	@Nonnull
 	World getWorld();
-	
+
 	@Nonnull
 	SeasonType getSeasonType();
 

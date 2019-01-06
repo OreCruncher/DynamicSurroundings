@@ -85,8 +85,8 @@ public class PatchSoundManagerClampVolume extends Transmorgrifier {
 			return true;
 		} else {
 			Transformer.log().error("Unable to locate method {}{}", names[0], sig[0]);
-			
-			for(final MethodNode mn: cn.methods) {
+
+			for (final MethodNode mn : cn.methods) {
 				Transformer.log().info("Discovered method {}{}", mn.name, mn.desc);
 			}
 		}

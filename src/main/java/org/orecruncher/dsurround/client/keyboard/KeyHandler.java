@@ -27,6 +27,7 @@ package org.orecruncher.dsurround.client.keyboard;
 import org.lwjgl.input.Keyboard;
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
+
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;

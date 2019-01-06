@@ -38,14 +38,14 @@ public interface IEntityData extends INBTSerializable<NBTTagCompound> {
 
 	/**
 	 * Indicates if the entity is attacking something
-	 * 
+	 *
 	 * @return true if the entity is attacking; false otherwise
 	 */
 	boolean isAttacking();
 
 	/**
 	 * Indicates if the entity is fleeing from something
-	 * 
+	 *
 	 * @return true if the entity is fleeing; false otherwise
 	 */
 	boolean isFleeing();

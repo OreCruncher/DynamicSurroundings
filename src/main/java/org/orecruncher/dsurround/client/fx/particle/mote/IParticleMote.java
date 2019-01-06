@@ -41,7 +41,7 @@ public interface IParticleMote {
 
 	/**
 	 * Kills a mote. It will stop displaying and be released from collections.
-	 * 
+	 *
 	 * @return
 	 */
 	void kill();

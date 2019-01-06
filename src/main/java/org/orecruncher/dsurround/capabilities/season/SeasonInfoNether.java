@@ -37,7 +37,7 @@ public class SeasonInfoNether extends SeasonInfo {
 	public SeasonInfoNether(@Nonnull final World world) {
 		super(world);
 	}
-	
+
 	@Override
 	@Nonnull
 	public BlockPos getPrecipitationHeight(@Nonnull final BlockPos pos) {

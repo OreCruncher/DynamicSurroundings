@@ -33,13 +33,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public interface IEntityFX {
-	
+
 	void set(@Nullable final EntityEffectHandler handler);
-	
+
 	EntityEffectHandler get();
-	
+
 	default void clear() {
 		set(null);
 	}
-	
+
 }

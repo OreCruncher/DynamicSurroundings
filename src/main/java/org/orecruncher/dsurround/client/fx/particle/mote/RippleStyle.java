@@ -39,27 +39,27 @@ public enum RippleStyle {
 	SQUARE("textures/particles/ripple2.png"),
 	PIXELATED("textures/particles/pixel_ripples.png") {
 		private final int FRAMES = 7;
-		private final float DELTA = 1F / FRAMES;
-		private final int MAX_AGE = FRAMES * 2;
-		
+		private final float DELTA = 1F / this.FRAMES;
+		private final int MAX_AGE = this.FRAMES * 2;
+
 		@Override
 		public float getU1(final int age) {
-			return (age / 2) * DELTA;
+			return (age / 2) * this.DELTA;
 		}
-		
+
 		@Override
 		public float getU2(final int age) {
-			return getU1(age) + DELTA;
+			return getU1(age) + this.DELTA;
 		}
-		
+
 		@Override
 		public boolean doScaling() {
 			return false;
 		}
-		
+
 		@Override
 		public int getMaxAge() {
-			return MAX_AGE;
+			return this.MAX_AGE;
 		}
 	};
 	//@formatter:on
@@ -74,31 +74,31 @@ public enum RippleStyle {
 	public ResourceLocation getTexture() {
 		return this.resource;
 	}
-	
+
 	public float getU1(final int age) {
 		return 0F;
 	}
-	
+
 	public float getU2(final int age) {
 		return 1F;
 	}
-	
+
 	public float getV1(final int age) {
 		return 0F;
 	}
-	
+
 	public float getV2(final int age) {
 		return 1F;
 	}
-	
+
 	public boolean doScaling() {
 		return true;
 	}
-	
+
 	public boolean doAlpha() {
 		return true;
 	}
-	
+
 	public int getMaxAge() {
 		return 12 + XorShiftRandom.current().nextInt(8);
 	}
@@ -109,10 +109,9 @@ public enum RippleStyle {
 			return CIRCLE;
 		return values()[v];
 	}
-	
+
 	@Nonnull
 	public static RippleStyle get() {
 		return getStyle(ModOptions.rain.rainRippleStyle);
 	}
 }
-

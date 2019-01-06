@@ -39,7 +39,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ParticleSystemHandler extends EffectHandlerBase {
-	
+
 	private static ParticleSystemHandler _instance = null;
 
 	private final Object2ObjectOpenHashMap<BlockPos, ParticleSystem> systems = new Object2ObjectOpenHashMap<>();

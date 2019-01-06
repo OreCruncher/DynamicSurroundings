@@ -187,7 +187,7 @@ public final class BiomeUtil {
 	public static Set<Type> getBiomeTypes(@Nonnull final Biome biome) {
 		// It's possible to have a biome that is not registered come through here
 		// There is an internal check that will throw an exception if that is the
-		// case.  Seen this with OTG installed.
+		// case. Seen this with OTG installed.
 		try {
 			return new ReferenceOpenHashSet<>(BiomeDictionary.getTypes(biome));
 		} catch (@Nonnull final Throwable t) {

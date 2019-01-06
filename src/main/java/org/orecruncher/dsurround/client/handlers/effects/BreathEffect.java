@@ -85,13 +85,13 @@ public class BreathEffect extends EntityEffect {
 					}
 				} else if (air == 0) {
 					// Need to generate a bunch of bubbles due to drowning
-					for(int i = 0; i < 8; i++) {
+					for (int i = 0; i < 8; i++) {
 						final Particle particle = new ParticleBubbleBreath(subject, true);
 						getState().addParticle(particle);
 					}
 				}
 			} else {
-				final int interval = ( c / 10) % 8;
+				final int interval = (c / 10) % 8;
 				if (interval < 3 && showFrostBreath(subject, state)) {
 					getState().addParticle(new ParticleFrostBreath(subject));
 				}

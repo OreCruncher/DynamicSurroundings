@@ -139,11 +139,13 @@ public class SoundInstance extends PositionedSound implements ISoundInstance {
 		this.volumeThrottle = throttle;
 		return this;
 	}
-	
+
+	@Override
 	public void setQueue(final boolean f) {
 		this.canQueue = f;
 	}
-	
+
+	@Override
 	public boolean getQueue() {
 		return this.canQueue;
 	}

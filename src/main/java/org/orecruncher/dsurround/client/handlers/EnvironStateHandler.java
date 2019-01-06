@@ -25,6 +25,7 @@
 package org.orecruncher.dsurround.client.handlers;
 
 import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;

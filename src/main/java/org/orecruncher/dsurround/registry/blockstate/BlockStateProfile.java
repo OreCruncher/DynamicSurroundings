@@ -47,22 +47,26 @@ public class BlockStateProfile extends BlockStateData {
 	protected BlockEffect[] effects = NO_EFFECTS;
 	protected BlockEffect[] alwaysOn = NO_EFFECTS;
 
+	@Override
 	@Nonnull
 	public BlockStateProfile setChance(final int chance) {
 		this.chance = chance;
 		return this;
 	}
 
+	@Override
 	public int getChance() {
 		return this.chance;
 	}
 
+	@Override
 	@Nonnull
 	public BlockStateProfile addSound(@Nonnull final SoundEffect sound) {
 		this.sounds = MyUtils.append(this.sounds, sound);
 		return this;
 	}
 
+	@Override
 	@Nonnull
 	public BlockStateProfile clearSounds() {
 		this.sounds = NO_SOUNDS;
@@ -75,6 +79,7 @@ public class BlockStateProfile extends BlockStateData {
 		return this.sounds;
 	}
 
+	@Override
 	@Nonnull
 	public BlockStateProfile addEffect(@Nonnull final BlockEffect effect) {
 		if (effect.getChance() > 0)
@@ -84,6 +89,7 @@ public class BlockStateProfile extends BlockStateData {
 		return this;
 	}
 
+	@Override
 	@Nonnull
 	public BlockStateProfile clearEffects() {
 		this.effects = NO_EFFECTS;

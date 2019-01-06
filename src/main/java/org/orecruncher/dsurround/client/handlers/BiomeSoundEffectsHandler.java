@@ -58,14 +58,15 @@ public class BiomeSoundEffectsHandler extends EffectHandlerBase {
 	}
 
 	private boolean doBiomeSounds() {
-		return EnvironState.isPlayerUnderground() || EnvironState.getDimensionInfo().getAlwaysOutside() || !EnvironState.isPlayerInside();
+		return EnvironState.isPlayerUnderground() || EnvironState.getDimensionInfo().getAlwaysOutside()
+				|| !EnvironState.isPlayerInside();
 	}
 
 	private void getBiomeSounds(@Nonnull final Object2FloatOpenHashMap<SoundEffect> result) {
 		// Need to collect sounds from all the applicable biomes
 		// along with their weights.
 		this.biomes.getBiomes().reference2FloatEntrySet().stream()
-			.forEach(e -> e.getKey().findSoundMatches().forEach(fx -> result.addTo(fx, e.getFloatValue())));
+				.forEach(e -> e.getKey().findSoundMatches().forEach(fx -> result.addTo(fx, e.getFloatValue())));
 
 		// Scale the volumes in the resulting list based on the weights
 		final float area = this.biomes.getBiomeArea();

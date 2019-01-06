@@ -65,7 +65,8 @@ public final class Network {
 	// Need to track player/clients that have connected and do not have the
 	// mod installed. We do not want to send packets to those clients and
 	// cause Mayhem.
-	private static final ObjectField<NetworkDispatcher, EntityPlayerMP> player = new ObjectField<>(NetworkDispatcher.class, "player", null);
+	private static final ObjectField<NetworkDispatcher, EntityPlayerMP> player = new ObjectField<>(
+			NetworkDispatcher.class, "player", null);
 	private static final Set<UUID> blockList = new ObjectOpenHashSet<>();
 	private static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.MOD_ID);
 

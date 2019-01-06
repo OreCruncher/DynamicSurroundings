@@ -44,7 +44,7 @@ public final class EntityData implements IEntityDataSettable {
 	public EntityData() {
 		this.entity = null;
 	}
-	
+
 	public EntityData(@Nonnull final Entity entity) {
 		this.entity = entity;
 	}

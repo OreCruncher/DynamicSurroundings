@@ -54,7 +54,7 @@ public final class AreaBlockEffectsHandler extends EffectHandlerBase {
 		ModOptions.effects.specialEffectRange
 	);
 	//@formatter:on
-	
+
 	public AreaBlockEffectsHandler() {
 		super("Area Block Effects");
 	}

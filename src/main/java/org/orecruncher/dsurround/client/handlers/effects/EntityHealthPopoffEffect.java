@@ -114,7 +114,7 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 				final Color color = adjustment > 0 ? HEAL_TEXT_COLOR : DAMAGE_TEXT_COLOR;
 
 				final World world = EnvironState.getWorld();
-				
+
 				ParticleTextPopOff particle = null;
 				if (ModOptions.effects.showCritWords && adjustment < 0 && delta >= criticalAmount) {
 					particle = new ParticleTextPopOff(world, getPowerWord(), CRITICAL_TEXT_COLOR, posX, posY + 0.5D,

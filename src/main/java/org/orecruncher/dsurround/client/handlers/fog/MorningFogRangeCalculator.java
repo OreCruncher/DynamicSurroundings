@@ -90,7 +90,8 @@ public class MorningFogRangeCalculator extends VanillaFogRangeCalculator {
 				final float factor = 1F - MathStuff.abs(ca - mid) / (mid - this.type.getStart());
 				final float shift = this.cache.getStart() * factor;
 				final float newEnd = this.cache.getEnd() - shift;
-				final float newStart = MathStuff.clamp(this.cache.getStart() - shift * 2, this.type.getReserve() + 1, newEnd);
+				final float newStart = MathStuff.clamp(this.cache.getStart() - shift * 2, this.type.getReserve() + 1,
+						newEnd);
 				this.cache.set(newStart, newEnd);
 			}
 		}
@@ -119,5 +120,5 @@ public class MorningFogRangeCalculator extends VanillaFogRangeCalculator {
 	protected FogType getFogType() {
 		return FogType.NORMAL;
 	}
-	
+
 }

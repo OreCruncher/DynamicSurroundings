@@ -127,8 +127,7 @@ public class StormSplashRenderer {
 	}
 
 	protected boolean biomeHasDust(final Biome biome) {
-		return ModOptions.fog.allowDesertFog && !Weather.doVanilla()
-				&& BiomeUtil.getBiomeData(biome).getHasDust();
+		return ModOptions.fog.allowDesertFog && !Weather.doVanilla() && BiomeUtil.getBiomeData(biome).getHasDust();
 	}
 
 	protected void playSplashSound(final ISeasonInfo season, final World world, final Entity player, double x, double y,

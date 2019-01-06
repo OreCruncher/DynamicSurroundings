@@ -135,7 +135,8 @@ public class WorldEventDetector implements IWorldEventListener {
 		try {
 			event.getWorld().addEventListener(new WorldEventDetector(event.getWorld()));
 		} catch (@Nonnull final Throwable t) {
-			ModBase.log().warn("Unable to add world listener - is world fake? [%s]", event.getWorld().getClass().getName());
+			ModBase.log().warn("Unable to add world listener - is world fake? [%s]",
+					event.getWorld().getClass().getName());
 		}
 	}
 

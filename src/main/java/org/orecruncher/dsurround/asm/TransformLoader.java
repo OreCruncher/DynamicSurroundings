@@ -49,10 +49,10 @@ public class TransformLoader implements IFMLLoadingPlugin {
 	public static final String MOD_NAME = "DynamicSurroundingsCore";
 
 	public static final Logger logger = LogManager.getLogger(MOD_ID);
-	
+
 	public static boolean enableWeatherASM = true;
 	public static boolean enableArrowPatch = true;
-	
+
 	@Override
 	public String getModContainerClass() {
 		return "org.orecruncher.dsurround.asm.TransformLoader$Container";

@@ -126,7 +126,7 @@ public class StormRenderer {
 		if (rainStrength <= 0.0F)
 			return;
 
-		final float alphaRatio = rainStrength / Weather.getMaxIntensityLevel();//world.getRainStrength(partialTicks);
+		final float alphaRatio = rainStrength / Weather.getMaxIntensityLevel();// world.getRainStrength(partialTicks);
 
 		renderer.enableLightmap();
 

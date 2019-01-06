@@ -143,7 +143,7 @@ public final class BiomeRegistry extends Registry {
 			getCombinedStream().filter(i -> matcher.match(i)).forEach(i -> i.update(entry));
 		});
 
-		// Make sure the default PLAINS biome is set.  OTG can do some squirrelly things
+		// Make sure the default PLAINS biome is set. OTG can do some squirrelly things
 		final ResourceLocation plainsLoc = new ResourceLocation("plains");
 		final Biome plains = ForgeRegistries.BIOMES.getValue(plainsLoc);
 		final BiomeInfo info = BiomeUtil.getBiomeData(plains);
@@ -180,7 +180,7 @@ public final class BiomeRegistry extends Registry {
 	private BiomeInfo resolve(@Nonnull final IBiome biome) {
 		if (biome.isFake()) {
 			final FakeBiome fb = (FakeBiome) biome;
-			return (BiomeInfo) fb.getBiomeData();
+			return fb.getBiomeData();
 		}
 		return null;
 	}
@@ -221,8 +221,8 @@ public final class BiomeRegistry extends Registry {
 
 	private Stream<BiomeInfo> getCombinedStream() {
 		final Stream<BiomeInfo> s1 = ForgeRegistries.BIOMES.getValuesCollection().stream()
-				.map(biome -> (BiomeInfo) BiomeUtil.getBiomeData(biome)).filter(Objects::nonNull);
-		final Stream<BiomeInfo> s2 = this.theFakes.stream().map(fb -> (BiomeInfo) fb.getBiomeData());
+				.map(biome -> BiomeUtil.getBiomeData(biome)).filter(Objects::nonNull);
+		final Stream<BiomeInfo> s2 = this.theFakes.stream().map(fb -> fb.getBiomeData());
 		return Stream.of(s1, s2).flatMap(i -> i);
 	}
 }

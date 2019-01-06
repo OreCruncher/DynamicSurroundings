@@ -113,7 +113,7 @@ public class WaterSplashJetEffect extends JetEffect {
 		// there can be no splash
 		if (!state.getMaterial().isLiquid())
 			return false;
-		// The block above this one has to be liquid.  If it's not liquid
+		// The block above this one has to be liquid. If it's not liquid
 		// like being air or solid, the column isn't tall enough to
 		// produce a splash.
 		final BlockPos up = pos.up();
@@ -134,16 +134,17 @@ public class WaterSplashJetEffect extends JetEffect {
 		if (!downMaterial.isLiquid())
 			return false;
 		// The water block is resting on top of another water block.
-		// This gets a little tricky.  If the current block is on top
-		// of another unbounded block we do not want a splash.  This
+		// This gets a little tricky. If the current block is on top
+		// of another unbounded block we do not want a splash. This
 		// can occur if the water is flowing downward and hasn't
 		// reached a terminus.
 		if (isUnboundedLiquid(provider, down))
 			return false;
-		// OK the strike block looks to be bounded on all sides.  All
+		// OK the strike block looks to be bounded on all sides. All
 		// that remains is to ensure that the location block is unbounded.
 		return isUnboundedLiquid(provider, pos);
-		//return provider.getBlockState(pos.up()).getBlock() instanceof BlockDynamicLiquid;
+		// return provider.getBlockState(pos.up()).getBlock() instanceof
+		// BlockDynamicLiquid;
 	}
 
 	@Override

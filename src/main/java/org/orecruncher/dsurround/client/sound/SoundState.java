@@ -41,8 +41,8 @@ public enum SoundState {
 	 */
 	NONE(false, false),
 	/*
-	 * The sound is being held in an internal queue waiting for
-	 * space down in the sound engine.
+	 * The sound is being held in an internal queue waiting for space down in the
+	 * sound engine.
 	 */
 	QUEUED(true, false),
 	/*

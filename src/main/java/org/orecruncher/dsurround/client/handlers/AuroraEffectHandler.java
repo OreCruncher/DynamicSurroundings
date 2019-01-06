@@ -74,7 +74,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		final DayCycle dc = EnvironState.getDayCycle();
 		return dc == DayCycle.SUNSET || dc == DayCycle.NIGHTTIME;
 	}
-	
+
 	private boolean spawnAurora(@Nonnull final World world) {
 		if (!ModOptions.aurora.auroraEnable)
 			return false;

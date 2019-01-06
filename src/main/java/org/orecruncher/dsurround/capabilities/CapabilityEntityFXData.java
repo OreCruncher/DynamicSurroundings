@@ -48,7 +48,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class CapabilityEntityFXData {
-	
+
 	@CapabilityInject(IEntityFX.class)
 	public static final Capability<IEntityFX> FX_INFO = null;
 	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModInfo.MOD_ID, "entityfx");

@@ -33,14 +33,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class EntityFXData implements IEntityFX {
-	
+
 	protected EntityEffectHandler handler;
 
 	@Override
 	public void set(@Nullable EntityEffectHandler handler) {
 		this.handler = handler;
 	}
-	
+
 	@Override
 	@Nullable
 	public EntityEffectHandler get() {

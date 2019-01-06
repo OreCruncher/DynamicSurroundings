@@ -28,8 +28,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.sound.SoundInstance;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
+import org.orecruncher.dsurround.client.sound.SoundInstance;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -86,8 +86,8 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	}
 
 	/**
-	 * Creates a SoundInstance<> object for the specified SoundEffect centered at the
-	 * Entity. If the Entity is the current active player the sound will be
+	 * Creates a SoundInstance<> object for the specified SoundEffect centered at
+	 * the Entity. If the Entity is the current active player the sound will be
 	 * non-attenuated.
 	 *
 	 * @param se     SoundEffect to use as the basis of the sound

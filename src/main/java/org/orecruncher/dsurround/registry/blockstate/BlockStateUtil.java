@@ -64,7 +64,7 @@ public final class BlockStateUtil {
 				blockStateInfo.set(base, result);
 			}
 		}
-		
+
 		return (T) result;
 	}
 

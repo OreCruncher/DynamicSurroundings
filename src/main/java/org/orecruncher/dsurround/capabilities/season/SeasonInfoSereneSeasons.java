@@ -48,7 +48,7 @@ public class SeasonInfoSereneSeasons extends SeasonInfo {
 	public SeasonInfoSereneSeasons(@Nonnull final World world) {
 		super(world);
 	}
-	
+
 	@Override
 	@Nonnull
 	public SeasonType getSeasonType() {
@@ -121,7 +121,7 @@ public class SeasonInfoSereneSeasons extends SeasonInfo {
 
 		return super.getPrecipitationType(pos, biome);
 	}
-	
+
 	public static boolean isWorldWhitelisted(@Nonnull final World world) {
 		return SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension());
 	}

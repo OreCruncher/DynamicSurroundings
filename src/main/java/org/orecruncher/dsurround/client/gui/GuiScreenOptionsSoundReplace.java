@@ -59,8 +59,8 @@ public class GuiScreenOptionsSoundReplace extends GuiScreenOptionsSounds {
 
 	private static final int SLIDER_HEIGHT = 22; // 24
 
-	private static final ReflectedField.ObjectField<GuiScreenOptionsSounds, GuiScreen> parent = new ReflectedField.ObjectField<>(GuiScreenOptionsSounds.class, "parent",
-			"field_146505_f");
+	private static final ReflectedField.ObjectField<GuiScreenOptionsSounds, GuiScreen> parent = new ReflectedField.ObjectField<>(
+			GuiScreenOptionsSounds.class, "parent", "field_146505_f");
 
 	private final GameSettings settings;
 	private String offDisplayString;

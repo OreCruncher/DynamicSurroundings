@@ -24,8 +24,9 @@
 package org.orecruncher.dsurround.client.effects;
 
 import javax.annotation.Nonnull;
-import org.orecruncher.dsurround.client.sound.SoundEffect;
+
 import org.orecruncher.dsurround.client.sound.ISoundInstance;
+import org.orecruncher.dsurround.client.sound.SoundEffect;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
@@ -62,8 +63,8 @@ public interface IEffectState {
 	void stopSound(@Nonnull final ISoundInstance sound);
 
 	/**
-	 * Creates a SoundInstance<> object for the specified SoundEffect centered at the
-	 * Entity. If the Entity is the current active player the sound will be
+	 * Creates a SoundInstance<> object for the specified SoundEffect centered at
+	 * the Entity. If the Entity is the current active player the sound will be
 	 * non-attenuated.
 	 *
 	 * @param se     SoundEffect to use as the basis of the sound

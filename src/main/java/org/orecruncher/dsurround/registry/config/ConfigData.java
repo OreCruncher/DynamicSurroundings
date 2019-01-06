@@ -187,7 +187,7 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 
 	public static ConfigData load() {
 
-		final FastByteArrayOutputStream  bits = new FastByteArrayOutputStream(16 * 1024);
+		final FastByteArrayOutputStream bits = new FastByteArrayOutputStream(16 * 1024);
 
 		try (final OutputStreamWriter output = new OutputStreamWriter(new GZIPOutputStream(bits))) {
 
@@ -289,7 +289,7 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 			String line = null;
 
 			try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
-					new GZIPInputStream(new FastByteArrayInputStream (demBytes)), StandardCharsets.UTF_8))) {
+					new GZIPInputStream(new FastByteArrayInputStream(demBytes)), StandardCharsets.UTF_8))) {
 				while ((line = bufferedReader.readLine()) != null) {
 					ModBase.log().info(line);
 				}
