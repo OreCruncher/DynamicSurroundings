@@ -96,7 +96,6 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 
 		final EntityLivingBase entity = (EntityLivingBase) subject;
 		if (this.lastHealth != entity.getHealth()) {
-			final World world = EnvironState.getWorld();
 			final int adjustment = MathHelper.ceil(entity.getHealth() - this.lastHealth);
 
 			this.lastHealth = entity.getHealth();
@@ -114,6 +113,8 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 				final String text = String.valueOf(delta);
 				final Color color = adjustment > 0 ? HEAL_TEXT_COLOR : DAMAGE_TEXT_COLOR;
 
+				final World world = EnvironState.getWorld();
+				
 				ParticleTextPopOff particle = null;
 				if (ModOptions.effects.showCritWords && adjustment < 0 && delta >= criticalAmount) {
 					particle = new ParticleTextPopOff(world, getPowerWord(), CRITICAL_TEXT_COLOR, posX, posY + 0.5D,

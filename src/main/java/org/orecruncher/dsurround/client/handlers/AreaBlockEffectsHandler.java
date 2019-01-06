@@ -39,14 +39,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class AreaBlockEffectsHandler extends EffectHandlerBase {
 
+	//@formatter:off
 	protected final ClientPlayerLocus locus = new ClientPlayerLocus();
-	protected final RandomBlockEffectScanner nearEffects = new RandomBlockEffectScanner(this.locus,
-			RandomBlockEffectScanner.NEAR_RANGE);
-	protected final RandomBlockEffectScanner farEffects = new RandomBlockEffectScanner(this.locus,
-			RandomBlockEffectScanner.FAR_RANGE);
-	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(this.locus,
-			ModOptions.effects.specialEffectRange);
-
+	protected final RandomBlockEffectScanner nearEffects = new RandomBlockEffectScanner(
+		this.locus,
+		RandomBlockEffectScanner.NEAR_RANGE
+	);
+	protected final RandomBlockEffectScanner farEffects = new RandomBlockEffectScanner(
+		this.locus,
+		RandomBlockEffectScanner.FAR_RANGE
+	);
+	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(
+		this.locus,
+		ModOptions.effects.specialEffectRange
+	);
+	//@formatter:on
+	
 	public AreaBlockEffectsHandler() {
 		super("Area Block Effects");
 	}

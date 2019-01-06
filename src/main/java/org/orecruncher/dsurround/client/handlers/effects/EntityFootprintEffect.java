@@ -42,6 +42,7 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -51,11 +52,6 @@ public class EntityFootprintEffect extends EntityEffect {
 	protected static final Random RANDOM = XorShiftRandom.current();
 
 	protected Generator generator;
-	protected int lastStyle;
-
-	public EntityFootprintEffect() {
-
-	}
 
 	@Override
 	public String name() {
@@ -65,21 +61,13 @@ public class EntityFootprintEffect extends EntityEffect {
 	@Override
 	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
 		super.intitialize(state);
-
 		final EntityLivingBase entity = (EntityLivingBase) getState().subject().get();
 		this.generator = RegistryManager.FOOTSTEPS.createGenerator(entity);
-		this.lastStyle = ModOptions.effects.footprintStyle;
 	}
 
 	@Override
 	public void update(@Nonnull final Entity subject) {
-		final EntityLivingBase entity = (EntityLivingBase) subject;
-		if (this.lastStyle != ModOptions.effects.footprintStyle && getState().isActivePlayer(entity)) {
-			this.generator = RegistryManager.FOOTSTEPS.createGenerator(entity);
-			this.lastStyle = ModOptions.effects.footprintStyle;
-		}
-
-		this.generator.generateFootsteps(entity);
+		this.generator.generateFootsteps((EntityLivingBase) subject);
 	}
 
 	@Override
@@ -94,8 +82,36 @@ public class EntityFootprintEffect extends EntityEffect {
 
 		@Override
 		public List<EntityEffect> create(@Nonnull final Entity entity, @Nonnull final EntityEffectInfo eei) {
-			return ImmutableList.of(new EntityFootprintEffect());
+			return ImmutableList
+					.of(entity instanceof EntityPlayer ? new PlayerFootprintEffect() : new EntityFootprintEffect());
 		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private static class PlayerFootprintEffect extends EntityFootprintEffect {
+
+		protected int lastStyle;
+
+		@Override
+		public String name() {
+			return "Player Footstep/Prints";
+		}
+
+		@Override
+		public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
+			super.intitialize(state);
+			this.lastStyle = ModOptions.effects.footprintStyle;
+		}
+
+		@Override
+		public void update(@Nonnull final Entity subject) {
+			if (this.lastStyle != ModOptions.effects.footprintStyle) {
+				this.generator = RegistryManager.FOOTSTEPS.createGenerator((EntityLivingBase) subject);
+				this.lastStyle = ModOptions.effects.footprintStyle;
+			}
+			super.update(subject);
+		}
+
 	}
 
 }

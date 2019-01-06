@@ -25,8 +25,6 @@
 package org.orecruncher.dsurround.client.handlers;
 
 import java.util.List;
-import java.util.UUID;
-
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
@@ -159,7 +157,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			EnvironState.lightLevel = Math.max(blockLight, skyLight);
 
 			EnvironState.dayCycle = DiurnalUtils.getCycle(world);
-			
+
 			// Trigger the battle scanner
 			EnvironState.battle.update();
 
@@ -212,8 +210,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static World getWorld() {
-			final EntityPlayer player = getPlayer();
-			return player != null ? player.getEntityWorld() : null;
+			return getPlayer().getEntityWorld();
 		}
 
 		public static BlockPos getPlayerPosition() {
@@ -221,99 +218,60 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static boolean isPlayer(final Entity entity) {
-			if (entity instanceof EntityPlayer) {
-				final EntityPlayer player = getPlayer();
-				final EntityPlayer ep = (EntityPlayer) entity;
-				return player == null || ep.getUniqueID().equals(player.getUniqueID());
-			}
-			return false;
-		}
-
-		public static boolean isPlayer(final UUID id) {
-			final EntityPlayer player = getPlayer();
-			return player == null || player.getUniqueID().equals(id);
-		}
-
-		public static boolean isPlayer(final int id) {
-			final EntityPlayer player = getPlayer();
-			return player == null || player.getEntityId() == id;
-		}
-
-		public static boolean isCreative() {
-			final EntityPlayer player = getPlayer();
-			return player != null && player.capabilities.isCreativeMode;
+			return entity instanceof EntityPlayer && entity.getPersistentID().equals(getPlayer().getPersistentID());
 		}
 
 		public static boolean isPlayerHurt() {
 			final EntityPlayer player = getPlayer();
-			return player != null && ModOptions.player.playerHurtThreshold != 0 && !isCreative()
+			return ModOptions.player.playerHurtThreshold != 0 && !player.isCreative()
 					&& player.getHealth() <= (ModOptions.player.playerHurtThreshold * player.getMaxHealth());
 		}
 
 		public static boolean isPlayerHungry() {
 			final EntityPlayer player = getPlayer();
-			return player != null && ModOptions.player.playerHungerThreshold != 0 && !isCreative()
+			return ModOptions.player.playerHungerThreshold != 0 && !player.isCreative()
 					&& player.getFoodStats().getFoodLevel() <= ModOptions.player.playerHungerThreshold;
 		}
 
 		public static boolean isPlayerBurning() {
-			final EntityPlayer player = getPlayer();
-			return player != null && player.isBurning();
+			return getPlayer().isBurning();
 		}
 
 		public static boolean isPlayerSuffocating() {
-			final EntityPlayer player = getPlayer();
-			return player != null && player.getAir() <= 0;
+			return getPlayer().getAir() <= 0;
 		}
 
 		public static boolean isPlayerFlying() {
-			final EntityPlayer player = getPlayer();
-			return player != null && player.capabilities.isFlying;
+			return getPlayer().capabilities.isFlying;
 		}
 
 		public static boolean isPlayerSprinting() {
-			final EntityPlayer player = getPlayer();
-			return player != null && player.isSprinting();
+			return getPlayer().isSprinting();
 		}
 
 		public static boolean isPlayerInLava() {
-			final EntityPlayer player = getPlayer();
-			return player != null && player.isInLava();
+			return getPlayer().isInLava();
 		}
 
 		public static boolean isPlayerInvisible() {
-			final EntityPlayer player = getPlayer();
-			return player != null && player.isInvisible();
+			return getPlayer().isInvisible();
 		}
 
 		public static boolean isPlayerBlind() {
-			final EntityPlayer player = getPlayer();
-			return player != null && player.isPotionActive(MobEffects.BLINDNESS);
+			return getPlayer().isPotionActive(MobEffects.BLINDNESS);
 		}
 
 		public static boolean isPlayerInWater() {
-			final EntityPlayer player = getPlayer();
-			return player != null && player.isInWater();
+			return getPlayer().isInWater();
 		}
 
 		public static boolean isPlayerRiding() {
-			final EntityPlayer player = getPlayer();
-			return player != null && player.isRiding();
-		}
-
-		public static boolean isPlayerOnGround() {
-			final EntityPlayer player = getPlayer();
-			return player != null && player.onGround;
+			return getPlayer().isRiding();
 		}
 
 		public static boolean isPlayerMoving() {
 			final EntityPlayer player = getPlayer();
-			return player != null && player.distanceWalkedModified != player.prevDistanceWalkedModified;
-		}
-
-		public static boolean isPlayerSneaking() {
-			final EntityPlayer player = getPlayer();
-			return player != null && player.isSneaking();
+			return player.distanceWalkedModified != player.prevDistanceWalkedModified;
 		}
 
 		public static boolean isPlayerInside() {
@@ -355,7 +313,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		public static int getTickCounter() {
 			return tickCounter;
 		}
-		
+
 		public static DayCycle getDayCycle() {
 			return dayCycle;
 		}

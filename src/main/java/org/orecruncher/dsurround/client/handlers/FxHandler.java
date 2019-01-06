@@ -62,7 +62,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -160,15 +159,12 @@ public class FxHandler extends EffectHandlerBase {
 	}
 
 	protected void clearHandlers() {
-		final World world = EnvironState.getWorld();
-		if (world != null) {
-			//@formatter:off
-			EnvironState.getWorld().getLoadedEntityList().stream()
-				.map(e -> CapabilityEntityFXData.getCapability(e))
-				.filter(Objects::nonNull)
-				.forEach(c -> c.clear());
-			//@formatter:on
-		}
+		//@formatter:off
+		EnvironState.getWorld().getLoadedEntityList().stream()
+			.map(e -> CapabilityEntityFXData.getCapability(e))
+			.filter(Objects::nonNull)
+			.forEach(c -> c.clear());
+		//@formatter:on
 	}
 
 	/**
@@ -194,14 +190,12 @@ public class FxHandler extends EffectHandlerBase {
 
 	@Override
 	public void onConnect() {
-		clearHandlers();
 		this.eventLibrary.register(new CraftingSoundEffect());
 		((DiagnosticHandler) EffectManager.instance().lookupService(DiagnosticHandler.class)).addTimer(this.compute);
 	}
 
 	@Override
 	public void onDisconnect() {
-		clearHandlers();
 		this.eventLibrary.cleanup();
 	}
 
