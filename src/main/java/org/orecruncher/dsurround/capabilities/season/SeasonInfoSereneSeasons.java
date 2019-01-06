@@ -40,6 +40,7 @@ import sereneseasons.api.season.BiomeHooks;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
+import sereneseasons.config.SeasonsConfig;
 
 @SideOnly(Side.CLIENT)
 public class SeasonInfoSereneSeasons extends SeasonInfo {
@@ -119,6 +120,10 @@ public class SeasonInfoSereneSeasons extends SeasonInfo {
 		}
 
 		return super.getPrecipitationType(pos, biome);
+	}
+	
+	public static boolean isWorldWhitelisted(@Nonnull final World world) {
+		return SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension());
 	}
 
 }

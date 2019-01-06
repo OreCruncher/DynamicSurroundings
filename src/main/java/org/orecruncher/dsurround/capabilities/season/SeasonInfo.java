@@ -65,7 +65,7 @@ public class SeasonInfo implements ISeasonInfo {
 	public World getWorld() {
 		return this.world;
 	}
-	
+
 	@Override
 	@Nonnull
 	public SeasonType getSeasonType() {
@@ -173,18 +173,22 @@ public class SeasonInfo implements ISeasonInfo {
 
 	public static SeasonInfo factory(@Nonnull final World world) {
 
+		final String dimName = world.provider.getDimensionType().getName();
+
 		if (world.provider.getDimension() == -1) {
-			ModBase.log().info("Creating Nether SeasonInfo");
+			ModBase.log().info("Creating Nether SeasonInfo for dimension %s", dimName);
 			return new SeasonInfoNether(world);
 		}
 
 		if (ModEnvironment.SereneSeasons.isLoaded()) {
-			ModBase.log().info("Creating Serene Seasons SeasonInfo for dimension %s",
-					world.provider.getDimensionType().getName());
-			return new SeasonInfoSereneSeasons(world);
+			if (SeasonInfoSereneSeasons.isWorldWhitelisted(world)) {
+				ModBase.log().info("Creating Serene Seasons SeasonInfo for dimension %s", dimName);
+				return new SeasonInfoSereneSeasons(world);
+			}
+			ModBase.log().info("Serene Seasons is installed but the dimension %s is not whitelisted", dimName);
 		}
 
-		ModBase.log().info("Creating default SeasonInfo for dimension %s", world.provider.getDimensionType().getName());
+		ModBase.log().info("Creating default SeasonInfo for dimension %s", dimName);
 		return new SeasonInfo(world);
 	}
 
