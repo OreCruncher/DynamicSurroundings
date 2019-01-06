@@ -24,14 +24,18 @@
 
 package org.orecruncher.dsurround.client.gui;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.sound.SoundInstance;
 import org.orecruncher.dsurround.client.sound.SoundBuilder;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
+import org.orecruncher.dsurround.client.sound.SoundInstance;
 import org.orecruncher.lib.random.XorShiftRandom;
 import org.orecruncher.lib.task.Scheduler;
 
@@ -53,10 +57,15 @@ public final class HumDinger {
 	public static void onGuiOpen(@Nonnull final GuiOpenEvent event) {
 		if (!hasPlayed && event.getGui() instanceof GuiMainMenu) {
 			hasPlayed = true;
-			final String[] possibles = ModOptions.general.startupSoundList;
-			if (possibles == null || possibles.length == 0)
+			//@formatter:off
+			final List<String> possibles = Arrays.stream(ModOptions.general.startupSoundList)
+				.map(s -> StringUtils.trim(s))
+				.filter(s -> s.length() > 0)
+				.collect(Collectors.toList());
+			//@formatter:on
+			if (possibles.size() == 0)
 				return;
-			final String res = possibles[XorShiftRandom.current().nextInt(possibles.length)];
+			final String res = possibles.get(XorShiftRandom.current().nextInt(possibles.size()));
 			if (!StringUtils.isEmpty(res)) {
 				final SoundEvent se = SoundEvent.REGISTRY.getObject(new ResourceLocation(res));
 				if (se != null) {
