@@ -32,12 +32,12 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.lib.ReflectedField;
-import org.orecruncher.dsurround.lib.ReflectedField.FloatField;
-import org.orecruncher.dsurround.lib.ReflectedField.IntegerField;
-import org.orecruncher.dsurround.lib.ReflectedField.ObjectField;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.lib.Color;
+import org.orecruncher.lib.ReflectedField;
+import org.orecruncher.lib.ReflectedField.FloatField;
+import org.orecruncher.lib.ReflectedField.IntegerField;
+import org.orecruncher.lib.ReflectedField.ObjectField;
 import org.orecruncher.lib.WorldUtils;
 
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;

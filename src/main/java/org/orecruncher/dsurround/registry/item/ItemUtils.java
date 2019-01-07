@@ -28,8 +28,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
-import org.orecruncher.dsurround.lib.ReflectedField.ObjectField;
 import org.orecruncher.dsurround.registry.RegistryManager;
+import org.orecruncher.lib.ReflectedField.ObjectField;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;

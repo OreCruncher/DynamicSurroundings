@@ -34,7 +34,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
-import org.orecruncher.dsurround.lib.ReflectedField.ObjectField;
+import org.orecruncher.lib.ReflectedField.ObjectField;
 import org.orecruncher.lib.task.Scheduler;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;

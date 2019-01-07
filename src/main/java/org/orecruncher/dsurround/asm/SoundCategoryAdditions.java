@@ -35,7 +35,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
-@SuppressWarnings("deprecation")
 public class SoundCategoryAdditions extends Transmorgrifier {
 
 	public SoundCategoryAdditions() {

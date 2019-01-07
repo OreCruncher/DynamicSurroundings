@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
-import org.orecruncher.dsurround.lib.ReflectedField;
+import org.orecruncher.lib.ReflectedField.ObjectField;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -59,7 +59,7 @@ public class GuiScreenOptionsSoundReplace extends GuiScreenOptionsSounds {
 
 	private static final int SLIDER_HEIGHT = 22; // 24
 
-	private static final ReflectedField.ObjectField<GuiScreenOptionsSounds, GuiScreen> parent = new ReflectedField.ObjectField<>(
+	private static final ObjectField<GuiScreenOptionsSounds, GuiScreen> parent = new ObjectField<>(
 			GuiScreenOptionsSounds.class, "parent", "field_146505_f");
 
 	private final GameSettings settings;

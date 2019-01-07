@@ -26,7 +26,7 @@ package org.orecruncher.dsurround.client.fx.particle;
 
 import java.util.Random;
 
-import org.orecruncher.dsurround.lib.ReflectedField.FloatField;
+import org.orecruncher.lib.ReflectedField.FloatField;
 import org.orecruncher.lib.random.XorShiftRandom;
 
 import net.minecraft.client.particle.ParticleCloud;
