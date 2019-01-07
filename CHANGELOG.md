@@ -1,3 +1,18 @@
+### DynamicSurroundings-1.12.2-3.5.4.2
+**Requirements**
+* Forge 2768+
+* OreLib-1.12.2-3.5.2.1+
+* If upgrading from version 3.4.x or earlier you should delete your dsurround.cfg and let it regenerate
+
+**Fixes**
+* Patch up IBlockState data on the fly.  For some reason it was not present during load complete event processing
+* More defensive code for reentrant ASM processing
+
+**Changes**
+* Use Serene Seasons dimension whitelist to determine what dims to apply Serene Seasons handling to
+    * If you use Serene Seasons it must be at least version 1.2.13
+    * Information comes from local config
+
 ### DynamicSurroundings-1.12.2-3.5.4.1
 **What's New**
 * Bottle slosh sound when equipping a potion (or anything derived from ItemPotion).
@@ -9,7 +24,7 @@
 **Fixes**
 * Defensive code for invalid ItemStacks in ore dictionary
 * Individual sound scaling should work again
-* Workaround re-entrant ASM transform of SoundCategroy
+* Workaround re-entrant ASM transform of SoundCategory
 
 **Changes**
 * Performance enhancements for waterfalls and other effects
