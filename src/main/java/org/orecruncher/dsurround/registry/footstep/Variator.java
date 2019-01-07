@@ -26,7 +26,6 @@ package org.orecruncher.dsurround.registry.footstep;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.footsteps.FootprintStyle;
 import org.orecruncher.dsurround.registry.config.VariatorConfig;
 
 import net.minecraftforge.fml.relauncher.Side;

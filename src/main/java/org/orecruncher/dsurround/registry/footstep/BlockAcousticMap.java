@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.footsteps;
+package org.orecruncher.dsurround.registry.footstep;
 
 import java.util.Map;
 
@@ -32,7 +32,6 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
 import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
-
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.block.state.IBlockState;

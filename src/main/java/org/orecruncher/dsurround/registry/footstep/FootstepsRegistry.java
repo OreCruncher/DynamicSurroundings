@@ -36,7 +36,6 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.footsteps.BlockMap;
 import org.orecruncher.dsurround.client.footsteps.Generator;
 import org.orecruncher.dsurround.client.footsteps.GeneratorQP;
 import org.orecruncher.dsurround.registry.Registry;

@@ -29,7 +29,6 @@ import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
-import org.orecruncher.dsurround.client.footsteps.FootprintStyle;
 import org.orecruncher.dsurround.client.fx.particle.mote.IParticleMote;
 import org.orecruncher.dsurround.client.fx.particle.mote.MoteFireFly;
 import org.orecruncher.dsurround.client.fx.particle.mote.MoteFootprint;
@@ -40,6 +39,7 @@ import org.orecruncher.dsurround.client.fx.particle.mote.ParticleCollectionFireF
 import org.orecruncher.dsurround.client.fx.particle.mote.ParticleCollectionFootprint;
 import org.orecruncher.dsurround.client.fx.particle.mote.ParticleCollectionRipples;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
+import org.orecruncher.dsurround.registry.footstep.FootprintStyle;
 
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.util.ResourceLocation;

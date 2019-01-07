@@ -27,6 +27,8 @@ package org.orecruncher.dsurround.client.footsteps;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.orecruncher.dsurround.registry.footstep.FootprintStyle;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;

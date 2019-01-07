@@ -21,29 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.orecruncher.dsurround.client.footsteps;
+
+package org.orecruncher.dsurround.registry.footstep;
+
+import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public enum FootprintStyle {
+public enum Substrate {
 	//@formatter:off
-	SHOE,
-	SQUARE,
-	HORSESHOE,
-	BIRD,
-	PAW,
-	SQUARE_SOLID,
-	LOWRES_SQUARE;
+	CARPET("carpet"),
+	FOLIAGE("foliage"),
+	MESSY("messy"),
+	FENCE("bigger");
 	//@formatter:on
 
-	@Nonnull
-	public static FootprintStyle getStyle(final int v) {
-		if (v >= values().length)
-			return LOWRES_SQUARE;
-		return values()[v];
+	private static final Map<String, Substrate> lookup = new Object2ObjectOpenHashMap<>();
+	static {
+		for (final Substrate s : Substrate.values())
+			lookup.put(s.name, s);
+	}
+
+	private final String name;
+
+	Substrate(@Nonnull final String name) {
+		this.name = name;
+	}
+
+	@Nullable
+	public static Substrate get(@Nonnull final String name) {
+		return lookup.get(name);
 	}
 }

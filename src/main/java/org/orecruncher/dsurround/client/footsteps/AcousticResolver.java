@@ -29,6 +29,8 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.client.footsteps.facade.FacadeHelper;
 import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
 import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
+import org.orecruncher.dsurround.registry.footstep.BlockMap;
+import org.orecruncher.dsurround.registry.footstep.Substrate;
 import org.orecruncher.lib.MyUtils;
 import org.orecruncher.lib.math.MathStuff;
 
